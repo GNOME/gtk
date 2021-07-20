@@ -24,6 +24,7 @@ cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
 
+fs = import('fs')
 gnome = import('gnome')
 pkg_config = import('pkgconfig')
 
@@ -496,46 +497,34 @@ if x11_enabled
   xrender_dep    = dependency('xrender')
   xi_dep         = dependency('xi')
   xext_dep       = dependency('xext')
-  xcursor_dep    = dependency('xcursor', required: false)
-  xdamage_dep    = dependency('xdamage', required: false)
-  xfixes_dep     = dependency('xfixes', required: false)
-  xcomposite_dep = dependency('xcomposite', required: false)
+  xcursor_dep    = dependency('xcursor')
+  xdamage_dep    = dependency('xdamage')
+  xfixes_dep     = dependency('xfixes')
   fontconfig_dep = dependency('fontconfig')
 
-  x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr']
+  x11_pkgs = ['fontconfig', 'x11', 'xext', 'xi', 'xrandr', 'xcursor', 'xdamage', 'xfixes', 'xinerama']
 
-  if xcursor_dep.found()
-    x11_pkgs += ['xcursor']
-  endif
-  if xdamage_dep.found()
-    x11_pkgs += ['xdamage']
-  endif
-  if xfixes_dep.found()
-    x11_pkgs += ['xfixes']
-  endif
-  if xcomposite_dep.found()
-    x11_pkgs += ['xcomposite']
-  endif
+  cdata.set('HAVE_XCURSOR', 1)
+  cdata.set('HAVE_XDAMAGE', 1)
+  cdata.set('HAVE_XFIXES', 1)
 
-  cdata.set('HAVE_XCURSOR', xcursor_dep.found())
-  cdata.set('HAVE_XDAMAGE', xdamage_dep.found())
-  cdata.set('HAVE_XCOMPOSITE', xcomposite_dep.found())
-  cdata.set('HAVE_XFIXES', xfixes_dep.found())
-
-  if cc.has_function('XkbQueryExtension', dependencies: x11_dep,
-                     prefix : '#include <X11/XKBlib.h>')
-    cdata.set('HAVE_XKB', 1)
+  if not cc.has_function('XkbQueryExtension', dependencies: x11_dep,
+                         prefix : '#include <X11/XKBlib.h>')
+    error('X11 backend enabled, but Xkb not found.')
   endif
+  cdata.set('HAVE_XKB', 1)
 
-  if cc.has_function('XSyncQueryExtension', dependencies: xext_dep,
-                     prefix: '''#include <X11/Xlib.h>
-                                #include <X11/extensions/sync.h>''')
-    cdata.set('HAVE_XSYNC', 1)
+  if not cc.has_function('XSyncQueryExtension', dependencies: xext_dep,
+                         prefix: '''#include <X11/Xlib.h>
+                                    #include <X11/extensions/sync.h>''')
+    error('X11 backend enabled, but Xsync not found.')
   endif
+  cdata.set('HAVE_XSYNC', 1)
 
-  if cc.has_function('XGetEventData', dependencies: x11_dep)
-    cdata.set('HAVE_XGENERICEVENTS', 1)
+  if not cc.has_function('XGetEventData', dependencies: x11_dep)
+    error('X11 backend enabled, but no generic event support.')
   endif
+  cdata.set('HAVE_XGENERICEVENTS', 1)
 
   if not xi_dep.found() or not cc.has_header('X11/extensions/XInput2.h', dependencies: xi_dep)
     error('X11 backend enabled, but XInput2 not found.')
@@ -548,15 +537,16 @@ if x11_enabled
   has_scroll_class_info = cc.has_member('XIScrollClassInfo', 'number', dependencies: xi_dep,
                                         prefix: '''#include <X11/Xlib.h>
                                                    #include <X11/extensions/XInput2.h>''')
-  if has_allow_touch_events and has_scroll_class_info
-    cdata.set('XINPUT_2_2', 1)
+  if not has_allow_touch_events or not has_scroll_class_info
+    error('X11 backend enabled, but XInput2.2 not found.')
   endif
+  cdata.set('XINPUT_2_2', 1)
 
-  xinerama_dep = dependency('xinerama', required: get_option('xinerama'))
-  if xinerama_dep.found() and cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies: xinerama_dep)
-    cdata.set('HAVE_XFREE_XINERAMA', 1)
-    x11_pkgs += ['xinerama']
+  xinerama_dep = dependency('xinerama')
+  if not cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies: xinerama_dep)
+    error('X11 backend enabled, but Xinerama extension does not work.')
   endif
+  cdata.set('HAVE_XFREE_XINERAMA', 1)
 
   cdata.set('HAVE_RANDR', xrandr_dep.found())
   cdata.set('HAVE_RANDR15', xrandr15_dep.found())

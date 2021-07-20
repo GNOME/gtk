@@ -45,9 +45,6 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/extensions/shape.h>
-#ifdef HAVE_XCOMPOSITE
-#include <X11/extensions/Xcomposite.h>
-#endif
 
 #include <string.h>
 

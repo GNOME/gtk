@@ -65,14 +65,6 @@
 #include <X11/XKBlib.h>
 #endif
 
-#ifdef HAVE_XCOMPOSITE
-#include <X11/extensions/Xcomposite.h>
-#endif
-
-#ifdef HAVE_XFIXES
-#include <X11/extensions/Xfixes.h>
-#endif
-
 const int _gdk_x11_event_mask_table[21] =
 {
   ExposureMask,
