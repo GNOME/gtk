@@ -171,13 +171,14 @@
  * ```xml
  * <interface>
  *   <object class="GtkDialog" id="dialog1">
- *     <child internal-child="vbox">
+ *     <child internal-child="content_area">
  *       <object class="GtkBox" id="vbox1">
  *         <child internal-child="action_area">
  *           <object class="GtkBox" id="hbuttonbox1">
  *             <child>
  *               <object class="GtkButton" id="ok_button">
- *                 <property name="label">gtk-ok</property>
+ *                 <property name="label" translatable="yes">_Ok</property>
+ *                 <property name="use-underline">True</property>
  *                 <signal name="clicked" handler="ok_button_clicked"/>
  *               </object>
  *             </child>
