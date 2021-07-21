@@ -137,6 +137,7 @@ struct _GdkWin32Display
   HDC hdc_egl_temp;
 #endif
 
+  GdkKeymap *keymap;
   GListModel *monitors;
 
   guint hasWglARBCreateContext : 1;

@@ -645,7 +645,7 @@ build_key_event_state (GdkDisplay *display,
   if (key_state[VK_XBUTTON2] & 0x80)
     state |= GDK_BUTTON5_MASK;
 
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
+  keymap = GDK_WIN32_KEYMAP (gdk_display_get_keymap (display));
 
   if (_gdk_win32_keymap_has_altgr (keymap) &&
       (key_state[VK_LCONTROL] & 0x80) &&
@@ -673,7 +673,7 @@ get_active_group (GdkDisplay *display)
 {
   GdkWin32Keymap *keymap;
 
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
+  keymap = GDK_WIN32_KEYMAP (gdk_display_get_keymap (display));
 
   return _gdk_win32_keymap_get_active_group (keymap);
 }
@@ -1829,7 +1829,7 @@ gdk_event_translate (MSG *msg,
     {
     case WM_INPUTLANGCHANGE:
       _gdk_input_locale = (HKL) msg->lParam;
-      _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display)), _gdk_input_locale);
+      _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (gdk_display_get_keymap (display)), _gdk_input_locale);
       GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		     LOCALE_IDEFAULTANSICODEPAGE,
 		     buf, sizeof (buf));
@@ -1960,7 +1960,7 @@ gdk_event_translate (MSG *msg,
 	    }
 	}
       else if (msg->wParam == VK_SHIFT &&
-	       LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display))))
+	       LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (GDK_WIN32_KEYMAP (gdk_display_get_keymap (display))))
 	keycode = VK_RSHIFT;
 
       is_modifier = (msg->wParam == VK_CONTROL ||
@@ -1995,7 +1995,7 @@ gdk_event_translate (MSG *msg,
 	}
       else
 	{
-	  gdk_keymap_translate_keyboard_state (_gdk_win32_display_get_keymap (display),
+	  gdk_keymap_translate_keyboard_state (gdk_display_get_keymap (display),
 					       keycode,
 					       state,
 					       group,

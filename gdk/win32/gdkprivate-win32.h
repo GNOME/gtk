@@ -370,9 +370,6 @@ guint8     _gdk_win32_keymap_get_rshift_scancode (GdkWin32Keymap *keymap);
 void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
                                                   HKL             hkl);
 
-
-GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
-
 GdkSurface *_gdk_win32_display_create_surface  (GdkDisplay    *display,
                                                 GdkSurfaceType surface_type,
                                                 GdkSurface     *parent,

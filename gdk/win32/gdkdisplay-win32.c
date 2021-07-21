@@ -519,7 +519,6 @@ _gdk_win32_display_open (const char *display_name)
 
   gdk_win32_display_init_monitors (win32_display);
   
-  _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display)), _gdk_input_locale);
   _gdk_events_init (display);
 
   _gdk_input_ignore_core = 0;
@@ -529,7 +528,9 @@ _gdk_win32_display_open (const char *display_name)
   _gdk_win32_lang_notification_init ();
   _gdk_drag_init ();
   _gdk_drop_init ();
-
+  
+  win32_display->keymap = g_object_new (GDK_TYPE_WIN32_KEYMAP, NULL);
+  _gdk_win32_keymap_set_active_layout (win32_display->keymap, _gdk_input_locale);
   display->clipboard = gdk_win32_clipboard_new (display);
   display->primary_clipboard = gdk_clipboard_new (display);
 
@@ -680,6 +681,7 @@ gdk_win32_display_finalize (GObject *object)
 
   g_list_store_remove_all (G_LIST_STORE (display_win32->monitors));
   g_object_unref (display_win32->monitors);
+  g_object_unref (display_win32->keymap);
 
   while (display_win32->filters)
     _gdk_win32_message_filter_unref (display_win32, display_win32->filters->data);
@@ -1054,6 +1056,14 @@ gdk_win32_display_get_monitors (GdkDisplay *display)
   return self->monitors;
 }
 
+static GdkKeymap *
+gdk_win32_display_get_keymap (GdkDisplay *display)
+{
+  GdkWin32Display *self = GDK_WIN32_DISPLAY (display);
+
+  return self->keymap;
+}
+
 guint
 gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
                                             GdkSurface      *surface,
@@ -1240,8 +1250,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->notify_startup_complete = gdk_win32_display_notify_startup_complete;
   display_class->create_surface = _gdk_win32_display_create_surface;
 
-  display_class->get_keymap = _gdk_win32_display_get_keymap;
-
+  display_class->get_keymap = gdk_win32_display_get_keymap;
   display_class->get_monitors = gdk_win32_display_get_monitors;
 
 #ifdef GDK_RENDERING_VULKAN

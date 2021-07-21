@@ -180,8 +180,6 @@ G_DEFINE_TYPE (GdkWin32Keymap, gdk_win32_keymap, GDK_TYPE_KEYMAP)
 
 guint _gdk_keymap_serial = 0;
 
-static GdkKeymap *default_keymap = NULL;
-
 #define KEY_STATE_SIZE 256
 
 static void update_keymap (GdkKeymap *gdk_keymap);
@@ -1178,17 +1176,6 @@ _gdk_win32_keymap_get_active_group (GdkWin32Keymap *keymap)
   return 0;
 }
 
-GdkKeymap*
-_gdk_win32_display_get_keymap (GdkDisplay *display)
-{
-  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
-
-  if (default_keymap == NULL)
-    default_keymap = g_object_new (gdk_win32_keymap_get_type (), NULL);
-
-  return default_keymap;
-}
-
 static PangoDirection
 get_hkl_direction (HKL hkl)
 {
@@ -1211,14 +1198,8 @@ get_hkl_direction (HKL hkl)
 static PangoDirection
 gdk_win32_keymap_get_direction (GdkKeymap *gdk_keymap)
 {
+  GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
   HKL active_hkl;
-  GdkWin32Keymap *keymap;
-  GdkKeymap *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
-
-  if (gdk_keymap == NULL || gdk_keymap != default_keymap)
-    keymap = GDK_WIN32_KEYMAP (default_keymap);
-  else
-    keymap = GDK_WIN32_KEYMAP (gdk_keymap);
 
   update_keymap (GDK_KEYMAP (keymap));
 
@@ -1233,16 +1214,10 @@ gdk_win32_keymap_get_direction (GdkKeymap *gdk_keymap)
 static gboolean
 gdk_win32_keymap_have_bidi_layouts (GdkKeymap *gdk_keymap)
 {
-  GdkWin32Keymap *keymap;
-  gboolean        have_rtl = FALSE;
+  GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
+  gboolean have_rtl = FALSE;
   gboolean        have_ltr = FALSE;
   int             group;
-  GdkKeymap      *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
-
-  if (gdk_keymap == NULL || gdk_keymap != default_keymap)
-    keymap = GDK_WIN32_KEYMAP (default_keymap);
-  else
-    keymap = GDK_WIN32_KEYMAP (gdk_keymap);
 
   update_keymap (GDK_KEYMAP (keymap));
 
@@ -1286,48 +1261,34 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
                                          guint          keyval,
                                          GArray        *retval)
 {
-  GdkKeymap *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
+  GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
   guint len = retval->len;
+  int vk;
 
-  g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
-  g_return_val_if_fail (keyval != 0, FALSE);
+  update_keymap (gdk_keymap);
 
-  /* Accept only the default keymap */
-  if (gdk_keymap == NULL || gdk_keymap == default_keymap)
+  for (vk = 0; vk < KEY_STATE_SIZE; vk++)
     {
-      int vk;
-      GdkWin32Keymap *keymap;
+      int group;
 
-      if (gdk_keymap == NULL)
-        keymap = GDK_WIN32_KEYMAP (default_keymap);
-      else
-        keymap = GDK_WIN32_KEYMAP (gdk_keymap);
-
-      update_keymap (gdk_keymap);
-
-      for (vk = 0; vk < KEY_STATE_SIZE; vk++)
+      for (group = 0; group < keymap->layout_handles->len; group++)
         {
-          int group;
+          GdkWin32KeyLevelState level;
 
-          for (group = 0; group < keymap->layout_handles->len; group++)
+          for (level = GDK_WIN32_LEVEL_NONE; level < GDK_WIN32_LEVEL_COUNT; level++)
             {
-              GdkWin32KeyLevelState    level;
+              guint *keygroup;
 
-              for (level = GDK_WIN32_LEVEL_NONE; level < GDK_WIN32_LEVEL_COUNT; level++)
+              keygroup = &keymap->keysym_tab[(vk * keymap->layout_handles->len + group) * GDK_WIN32_LEVEL_COUNT];
+
+              if (keygroup[level] == keyval)
                 {
-                  guint *keygroup;
+                  GdkKeymapKey key;
 
-                  keygroup = &keymap->keysym_tab[(vk * keymap->layout_handles->len + group) * GDK_WIN32_LEVEL_COUNT];
-
-                  if (keygroup[level] == keyval)
-                    {
-                      GdkKeymapKey key;
-
-                      key.keycode = vk;
-                      key.group = group;
-                      key.level = level;
-                      g_array_append_val (retval, key);
-                    }
+                  key.keycode = vk;
+                  key.group = group;
+                  key.level = level;
+                  g_array_append_val (retval, key);
                 }
             }
         }
@@ -1359,19 +1320,14 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
                                           guint        **keyvals,
                                           int           *n_entries)
 {
-  GArray         *key_array;
-  GArray         *keyval_array;
-  int             group;
-  GdkWin32Keymap *keymap;
-  GdkKeymap      *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
-
-  g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
-  g_return_val_if_fail (n_entries != NULL, FALSE);
+  GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
+  GArray *key_array;
+  GArray *keyval_array;
+  int group;
 
   if (hardware_keycode <= 0 ||
       hardware_keycode >= KEY_STATE_SIZE ||
-      (keys == NULL && keyvals == NULL) ||
-      (gdk_keymap != NULL && gdk_keymap != default_keymap))
+      (keys == NULL && keyvals == NULL))
     {
       /* Wrong keycode or NULL output arrays or wrong keymap */
       if (keys)
@@ -1393,7 +1349,6 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
   else
     keyval_array = NULL;
 
-  keymap = GDK_WIN32_KEYMAP (default_keymap);
   update_keymap (GDK_KEYMAP (keymap));
 
   for (group = 0; group < keymap->layout_handles->len; group++)
@@ -1453,18 +1408,12 @@ static guint
 gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
                              const GdkKeymapKey *key)
 {
+  GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
   guint sym;
-  GdkWin32Keymap *keymap;
-  GdkKeymap      *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
 
   g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), 0);
   g_return_val_if_fail (key != NULL, 0);
 
-  /* Accept only the default keymap */
-  if (gdk_keymap != NULL && gdk_keymap != default_keymap)
-    return 0;
-
-  keymap = GDK_WIN32_KEYMAP (default_keymap);
   update_keymap (GDK_KEYMAP (keymap));
 
   if (key->keycode >= KEY_STATE_SIZE ||
@@ -1490,14 +1439,11 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
                                            int             *level,
                                            GdkModifierType *consumed_modifiers)
 {
-  GdkWin32Keymap *keymap;
+  GdkWin32Keymap *keymap = GDK_WIN32_KEYMAP (gdk_keymap);
   guint tmp_keyval;
   guint *keygroup;
   GdkWin32KeyLevelState shift_level;
   GdkModifierType modifiers = GDK_SHIFT_MASK | GDK_LOCK_MASK | GDK_MOD2_MASK;
-  GdkKeymap *default_keymap = gdk_display_get_keymap (gdk_display_get_default ());
-
-  g_return_val_if_fail (gdk_keymap == NULL || GDK_IS_KEYMAP (gdk_keymap), FALSE);
 
 #if 0
   GDK_NOTE (EVENTS, g_print ("gdk_keymap_translate_keyboard_state: keycode=%#x state=%#x group=%d\n",
@@ -1512,14 +1458,9 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   if (consumed_modifiers)
     *consumed_modifiers = 0;
 
-  /* Accept only the default keymap */
-  if (gdk_keymap != NULL && gdk_keymap != default_keymap)
-    return FALSE;
-
   if (hardware_keycode >= KEY_STATE_SIZE)
     return FALSE;
 
-  keymap = GDK_WIN32_KEYMAP (default_keymap);
   update_keymap (GDK_KEYMAP (keymap));
 
   if (group < 0 || group >= keymap->layout_handles->len)
