@@ -620,7 +620,8 @@ find_window_for_mouse_event (GdkSurface* reported_window,
 }
 
 static GdkModifierType
-build_key_event_state (BYTE *key_state)
+build_key_event_state (GdkDisplay *display,
+                       BYTE       *key_state)
 {
   GdkModifierType state;
   GdkWin32Keymap *keymap;
@@ -644,7 +645,7 @@ build_key_event_state (BYTE *key_state)
   if (key_state[VK_XBUTTON2] & 0x80)
     state |= GDK_BUTTON5_MASK;
 
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
+  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
 
   if (_gdk_win32_keymap_has_altgr (keymap) &&
       (key_state[VK_LCONTROL] & 0x80) &&
@@ -668,11 +669,11 @@ build_key_event_state (BYTE *key_state)
 }
 
 static guint8
-get_active_group (void)
+get_active_group (GdkDisplay *display)
 {
   GdkWin32Keymap *keymap;
 
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
+  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
 
   return _gdk_win32_keymap_get_active_group (keymap);
 }
@@ -1828,7 +1829,7 @@ gdk_event_translate (MSG *msg,
     {
     case WM_INPUTLANGCHANGE:
       _gdk_input_locale = (HKL) msg->lParam;
-      _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
+      _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display)), _gdk_input_locale);
       GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		     LOCALE_IDEFAULTANSICODEPAGE,
 		     buf, sizeof (buf));
@@ -1959,7 +1960,7 @@ gdk_event_translate (MSG *msg,
 	    }
 	}
       else if (msg->wParam == VK_SHIFT &&
-	       LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display))))
+	       LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display))))
 	keycode = VK_RSHIFT;
 
       is_modifier = (msg->wParam == VK_CONTROL ||
@@ -1967,8 +1968,8 @@ gdk_event_translate (MSG *msg,
                      msg->wParam == VK_MENU);
       /* g_print ("ctrl:%02x lctrl:%02x rctrl:%02x alt:%02x lalt:%02x ralt:%02x\n", key_state[VK_CONTROL], key_state[VK_LCONTROL], key_state[VK_RCONTROL], key_state[VK_MENU], key_state[VK_LMENU], key_state[VK_RMENU]); */
 
-      state = build_key_event_state (key_state);
-      group = get_active_group ();
+      state = build_key_event_state (display, key_state);
+      group = get_active_group (display);
 
       if (msg->wParam == VK_PACKET && ccount == 1)
 	{
@@ -2122,14 +2123,14 @@ gdk_event_translate (MSG *msg,
           /* Build a key press event */
           translated.keyval = gdk_unicode_to_keyval (wbuf[i]);
           translated.consumed = 0;
-          translated.layout = get_active_group ();
+          translated.layout = get_active_group (display);
           translated.level = 0;
           event = gdk_key_event_new (GDK_KEY_PRESS,
                                      window,
                                      device_manager_win32->core_keyboard,
                                      _gdk_win32_get_next_tick (msg->time),
                                      0,
-                                     build_key_event_state (key_state),
+                                     build_key_event_state (display, key_state),
                                      FALSE,
                                      &translated,
                                      &translated);
@@ -2142,7 +2143,7 @@ gdk_event_translate (MSG *msg,
                                      device_manager_win32->core_keyboard,
                                      _gdk_win32_get_next_tick (msg->time),
                                      0,
-                                     build_key_event_state (key_state),
+                                     build_key_event_state (display, key_state),
                                      FALSE,
                                      &translated,
                                      &translated);

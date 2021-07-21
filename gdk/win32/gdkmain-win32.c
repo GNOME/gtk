@@ -64,7 +64,6 @@ _gdk_win32_surfaceing_init (void)
 
   _gdk_app_hmodule = GetModuleHandle (NULL);
   _gdk_input_locale = GetKeyboardLayout (0);
-  _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
 		 LOCALE_IDEFAULTANSICODEPAGE,
 		 buf, sizeof (buf));
