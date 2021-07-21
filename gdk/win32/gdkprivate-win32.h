@@ -176,10 +176,6 @@ void _gdk_win32_surface_move_region (GdkSurface       *window,
 void _gdk_win32_selection_init (void);
 void _gdk_win32_dnd_exit (void);
 
-void     gdk_win32_handle_table_insert  (HANDLE   *handle,
-                                         gpointer data);
-void     gdk_win32_handle_table_remove  (HANDLE handle);
-
 HRGN      _gdk_win32_cairo_region_to_hrgn (const cairo_region_t *region,
                                            int                   x_origin,
                                            int                   y_origin);

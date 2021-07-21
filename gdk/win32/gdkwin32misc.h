@@ -69,21 +69,21 @@ G_BEGIN_DECLS
 #endif
 
 /* Return true if the GdkSurface is a win32 implemented window */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_4_FOR (GDK_IS_WIN32_SURFACE)
 gboolean      gdk_win32_surface_is_win32 (GdkSurface *window);
-GDK_AVAILABLE_IN_ALL
-HWND          gdk_win32_surface_get_impl_hwnd (GdkSurface *window);
+GDK_DEPRECATED_IN_4_4_FOR (gdk_win32_surface_get_handle)
+HWND gdk_win32_surface_get_impl_hwnd (GdkSurface *window);
 
 /* Return the Gdk* for a particular HANDLE */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_4
 gpointer      gdk_win32_handle_table_lookup (HWND handle);
 /* Translate from window to Windows handle */
 GDK_AVAILABLE_IN_ALL
 HGDIOBJ       gdk_win32_surface_get_handle (GdkSurface *window);
 
-GDK_AVAILABLE_IN_ALL
-GdkSurface *   gdk_win32_surface_lookup_for_display (GdkDisplay *display,
-                                                     HWND        anid);
+GDK_DEPRECATED_IN_4_4
+GdkSurface *  gdk_win32_surface_lookup_for_display (GdkDisplay *display,
+                                                    HWND        anid);
 
 #if defined (INSIDE_GDK_WIN32) || defined (GTK_COMPILATION) || defined (GTK_COMPILATION)
 

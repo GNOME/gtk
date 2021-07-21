@@ -259,15 +259,7 @@ inner_window_procedure (HWND   hwnd,
         {
           surface = (UNALIGNED GdkSurface *) (((LPCREATESTRUCTW) lparam)->lpCreateParams);
           GDK_SURFACE_HWND (surface) = hwnd;
-	  /* Take note: we're inserting a pointer into a heap-allocated
-	   * object (impl). Inserting a pointer to a stack variable
-	   * will break the logic, since stack variables are short-lived.
-	   * We insert a pointer to the handle instead of the handle itsel
-	   * probably because we need to hash them differently depending
-	   * on the bitness of the OS. That pointer is still unique,
-	   * so this works out in the end.
-	   */
-	  gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (surface), surface);
+          SetWindowLongPtr (hwnd, GWLP_USERDATA, (LONG_PTR) surface);
         }
       else
         {
@@ -407,7 +399,7 @@ low_level_keyboard_proc (int    code,
     if (kbd_focus_owner == NULL)
       break;
 
-    gdk_kbd_focus_owner = gdk_win32_handle_table_lookup (kbd_focus_owner);
+    gdk_kbd_focus_owner = GDK_SURFACE (GetWindowLongPtr (kbd_focus_owner, GWLP_USERDATA));
 
     if (gdk_kbd_focus_owner == NULL)
       break;
@@ -636,7 +628,7 @@ find_window_for_mouse_event (GdkDisplay *display,
 	  ScreenToClient (hwnd, &client_pt);
 	  GetClientRect (hwnd, &rect);
 	  if (PtInRect (&rect, client_pt))
-	    event_surface = gdk_win32_handle_table_lookup (hwnd);
+	    event_surface = GDK_SURFACE (GetWindowLongPtr (hwnd, GWLP_USERDATA));
 	}
       if (event_surface == NULL)
 	event_surface = grab->surface;
@@ -1814,7 +1806,7 @@ gdk_event_translate (GdkDisplay *display,
 	return TRUE;
     }
 
-  window = gdk_win32_handle_table_lookup (msg->hwnd);
+  window = GDK_SURFACE (GetWindowLongPtr (msg->hwnd, GWLP_USERDATA));
 
   keyboard_grab = _gdk_display_get_last_device_grab (display,
                                                      device_manager_win32->core_keyboard);
@@ -2248,7 +2240,7 @@ gdk_event_translate (GdkDisplay *display,
 		  ScreenToClient (hwnd, &client_pt);
 		  GetClientRect (hwnd, &rect);
 		  if (PtInRect (&rect, client_pt))
-		    new_window = gdk_win32_handle_table_lookup (hwnd);
+		    new_window = GDK_SURFACE (GetWindowLongPtr (hwnd, GWLP_USERDATA));
 		}
 
 	      synthesize_crossing_events (display,
@@ -2301,8 +2293,8 @@ gdk_event_translate (GdkDisplay *display,
 
 	      ScreenToClient (hwnd, &client_pt);
 	      GetClientRect (hwnd, &rect);
-	      if (PtInRect (&rect, client_pt))
-		new_window = gdk_win32_handle_table_lookup (hwnd);
+              if (PtInRect (&rect, client_pt))
+                new_window = gdk_win32_surface_lookup_for_display (display, hwnd);
 	    }
 
 	  if (!pointer_grab->owner_events &&
@@ -2403,8 +2395,8 @@ gdk_event_translate (GdkDisplay *display,
 
 	  ScreenToClient (hwnd, &client_pt);
 	  GetClientRect (hwnd, &rect);
-	  if (PtInRect (&rect, client_pt))
-	    new_window = gdk_win32_handle_table_lookup (hwnd);
+          if (PtInRect (&rect, client_pt))
+            new_window = gdk_win32_surface_lookup_for_display (display, hwnd);
 	}
 
       if (!ignore_leave)
@@ -2462,7 +2454,7 @@ gdk_event_translate (GdkDisplay *display,
       }
 
       msg->hwnd = hwnd;
-      if ((new_window = gdk_win32_handle_table_lookup (msg->hwnd)) == NULL)
+      if ((new_window = gdk_win32_surface_lookup_for_display (display, hwnd)) == NULL)
 	break;
 
       if (new_window != window)
@@ -3023,7 +3015,7 @@ gdk_event_translate (GdkDisplay *display,
         {
           if (msg->lParam != 0)
             {
-               GdkSurface *other_surface = gdk_win32_handle_table_lookup ((HWND) msg->lParam);
+               GdkSurface *other_surface = gdk_win32_surface_lookup_for_display (display, (HWND) msg->lParam);
                if (other_surface != NULL &&
                    (GDK_IS_POPUP (other_surface) || GDK_IS_DRAG_SURFACE (other_surface)))
                 {

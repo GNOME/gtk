@@ -72,6 +72,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
                               double           *win_y,
                               GdkModifierType  *mask)
 {
+  GdkDisplay *display = gdk_device_get_display (device);
   POINT point;
   HWND hwnd, hwndc;
   int scale;
@@ -83,8 +84,6 @@ gdk_device_win32_query_state (GdkDevice        *device,
     }
   else
     {
-      GdkDisplay *display = gdk_device_get_display (device);
-
       scale = GDK_WIN32_DISPLAY (display)->surface_scale;
       hwnd = NULL;
     }
@@ -105,7 +104,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
       hwndc = ChildWindowFromPoint (hwnd, point);
 
       if (hwndc && hwndc != hwnd)
-        *child_window = gdk_win32_handle_table_lookup (hwndc);
+        *child_window = gdk_win32_surface_lookup_for_display (display, hwndc);
       else
         *child_window = NULL; /* Direct child unknown to gdk */
     }
@@ -162,6 +161,7 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
                                        double          *win_y,
                                        GdkModifierType *mask)
 {
+  GdkDisplay *display = gdk_device_get_display (device);
   GdkSurface *window = NULL;
   GdkWin32Surface *impl = NULL;
   POINT screen_pt, client_pt;
@@ -183,7 +183,8 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
   if (!PtInRect (&rect, client_pt))
     hwnd = NULL;
 
-  window = gdk_win32_handle_table_lookup (hwnd);
+  if (hwnd)
+    window = gdk_win32_surface_lookup_for_display (display, hwnd);
 
   if (window && (win_x || win_y))
     {

@@ -177,11 +177,6 @@ gdk_surface_win32_finalize (GObject *object)
 
   surface = GDK_WIN32_SURFACE (object);
 
-  if (!GDK_SURFACE_DESTROYED (surface))
-    {
-      gdk_win32_handle_table_remove (surface->handle);
-    }
-
   g_clear_pointer (&surface->snap_stash, g_free);
   g_clear_pointer (&surface->snap_stash_int, g_free);
 
@@ -317,127 +312,6 @@ get_default_title (void)
     title = g_get_prgname ();
 
   return title;
-}
-
-/* RegisterGdkClass
- *   is a wrapper function for RegisterWindowClassEx.
- *   It creates at least one unique class for every
- *   GdkSurfaceType. If support for single window-specific icons
- *   is ever needed (e.g Dialog specific), every such window should
- *   get its own class
- */
-static ATOM
-RegisterGdkClass (GdkSurfaceType wtype)
-{
-  static ATOM klassTOPLEVEL = 0;
-  static ATOM klassTEMP     = 0;
-  static HICON hAppIcon = NULL;
-  static HICON hAppIconSm = NULL;
-  static WNDCLASSEXW wcl;
-  ATOM klass = 0;
-
-  wcl.cbSize = sizeof (WNDCLASSEX);
-  wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
-                  * on WM_SIZE and WM_MOVE. Flicker, Performance!
-                  */
-  wcl.lpfnWndProc = _gdk_win32_surface_procedure;
-  wcl.cbClsExtra = 0;
-  wcl.cbWndExtra = 0;
-  wcl.hInstance = _gdk_dll_hinstance;
-  wcl.hIcon = 0;
-  wcl.hIconSm = 0;
-
-  /* initialize once! */
-  if (0 == hAppIcon && 0 == hAppIconSm)
-    {
-      char sLoc [MAX_PATH+1];
-
-      // try to load first icon of executable program
-      if (0 != GetModuleFileName (NULL, sLoc, MAX_PATH))
-        {
-          ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
-
-          if (0 == hAppIcon && 0 == hAppIconSm)
-            {
-              // fallback : load icon from GTK DLL
-              if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
-		{
-		  ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
-		}
-            }
-        }
-
-      if (0 == hAppIcon && 0 == hAppIconSm)
-        {
-          hAppIcon = LoadImage (NULL, IDI_APPLICATION, IMAGE_ICON,
-                                GetSystemMetrics (SM_CXICON),
-                                GetSystemMetrics (SM_CYICON), 0);
-          hAppIconSm = LoadImage (NULL, IDI_APPLICATION, IMAGE_ICON,
-                                  GetSystemMetrics (SM_CXSMICON),
-                                  GetSystemMetrics (SM_CYSMICON), 0);
-        }
-    }
-
-  if (0 == hAppIcon)
-    hAppIcon = hAppIconSm;
-  else if (0 == hAppIconSm)
-    hAppIconSm = hAppIcon;
-
-  wcl.lpszMenuName = NULL;
-
-  /* initialize once per class */
-  /*
-   * HB: Setting the background brush leads to flicker, because we
-   * don't get asked how to clear the background. This is not what
-   * we want, at least not for input_only windows ...
-   */
-#define ONCE_PER_CLASS() \
-  wcl.hIcon = CopyIcon (hAppIcon); \
-  wcl.hIconSm = CopyIcon (hAppIconSm); \
-  wcl.hbrBackground = NULL; \
-  wcl.hCursor = LoadCursor (NULL, IDC_ARROW);
-
-  /* MSDN: CS_OWNDC is needed for OpenGL contexts */
-  wcl.style |= CS_OWNDC;
-
-  switch (wtype)
-    {
-    case GDK_SURFACE_TOPLEVEL:
-    case GDK_SURFACE_POPUP:
-      if (0 == klassTOPLEVEL)
-        {
-          wcl.lpszClassName = L"gdkSurfaceToplevel";
-
-          ONCE_PER_CLASS ();
-          klassTOPLEVEL = RegisterClassExW (&wcl);
-        }
-      klass = klassTOPLEVEL;
-      break;
-
-    case GDK_SURFACE_TEMP:
-      if (klassTEMP == 0)
-        {
-          wcl.lpszClassName = L"gdkSurfaceTemp";
-          wcl.style |= CS_SAVEBITS;
-          ONCE_PER_CLASS ();
-          klassTEMP = RegisterClassExW (&wcl);
-        }
-
-      klass = klassTEMP;
-
-      break;
-
-    default:
-      g_assert_not_reached ();
-      break;
-    }
-
-  if (klass == 0)
-    {
-      WIN32_API_FAILED ("RegisterClassExW");
-      g_error ("That is a fatal error");
-    }
-  return klass;
 }
 
 /*
@@ -578,16 +452,24 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   title = get_default_title ();
   if (!title || !*title)
     title = "";
-
-  /* WS_EX_TRANSPARENT means "try draw this window last, and ignore input".
-   * It's the last part we're after. We don't want DND indicator to accept
-   * input, because that will make it a potential drop target, and if it's
-   * under the mouse cursor, this will kill any DND.
-   */
-
-  klass = RegisterGdkClass (surface_type);
-
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
+
+  switch (surface_type)
+    {
+    case GDK_SURFACE_TOPLEVEL:
+    case GDK_SURFACE_POPUP:
+      klass = display_win32->toplevel_class;
+      break;
+
+    case GDK_SURFACE_TEMP:
+      klass = display_win32->temp_class;
+      break;
+
+    default:
+      g_assert_not_reached ();
+      klass = 0;
+      break;
+    }
 
   hwndNew = CreateWindowExW (dwExStyle,
 			     MAKEINTRESOURCEW (klass),
@@ -615,15 +497,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
     }
 
   g_object_ref (impl);
-  /* Take note: we're inserting a pointer into a heap-allocated
-   * object (impl). Inserting a pointer to a stack variable
-   * will break the logic, since stack variables are short-lived.
-   * We insert a pointer to the handle instead of the handle itself
-   * probably because we need to hash them differently depending
-   * on the bitness of the OS. That pointer is still unique,
-   * so this works out in the end.
-   */
-  gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (impl), impl);
 
   GDK_NOTE (MISC, g_print ("... \"%s\" %dx%d@%+d%+d %p = %p\n",
 			   title,
@@ -734,7 +607,6 @@ gdk_win32_surface_destroy_notify (GdkSurface *window)
       _gdk_surface_destroy (window, TRUE);
     }
 
-  gdk_win32_handle_table_remove (GDK_SURFACE_HWND (window));
   g_object_unref (window);
 }
 
@@ -4242,13 +4114,41 @@ gdk_win32_surface_focus (GdkSurface *window,
   SetFocus (GDK_SURFACE_HWND (window));
 }
 
+/* Yay for nobody cleaning up the win32 API.
+   At least there's no documentation for this crap,
+   so there's nothing we can break.*/
+gpointer
+gdk_win32_handle_table_lookup (HWND handle)
+{
+  return NULL;
+}
+
+/**
+ * gdk_win32_surface_lookup_for_display:
+ * @display: A display
+ * @hwnd: A HWND maybe belonging to a `GdkSurface`
+ * 
+ * Looks up the `GdkSurface` that created the given @hwnd.
+ * 
+ * Returns: (transfer none) (nullable) (type GdkWin32Surface):
+ *   The surface belonging to @hwnd or %NULL
+ */
 GdkSurface *
 gdk_win32_surface_lookup_for_display (GdkDisplay *display,
-                                     HWND        anid)
+                                      HWND        anid)
 {
-  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
+  GdkWin32Display *self;
+  ATOM class;
 
-  return (GdkSurface*) gdk_win32_handle_table_lookup (anid);
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
+
+  self = GDK_WIN32_DISPLAY (display);
+
+  class = GetWindowLong (anid, GCW_ATOM);
+  if (class != self->toplevel_class && class != self->temp_class)
+    return NULL;
+
+  return GDK_SURFACE (GetWindowLongPtr (anid, GWLP_USERDATA));
 }
 
 gboolean

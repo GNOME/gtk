@@ -24,7 +24,6 @@ gdk_win32_sources = files([
   'gdkvulkancontext-win32.c',
   'gdkwin32cursor.h',
   'gdkwin32display.h',
-  'gdkwin32id.c',
   'gdksurface-win32.c',
 ])
 
