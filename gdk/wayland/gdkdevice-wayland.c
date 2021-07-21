@@ -3093,6 +3093,11 @@ seat_handle_capabilities (void                    *data,
     }
   else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && seat->wl_pointer)
     {
+      g_clear_pointer (&seat->wp_pointer_gesture_swipe,
+                       zwp_pointer_gesture_swipe_v1_destroy);
+      g_clear_pointer (&seat->wp_pointer_gesture_pinch,
+                       zwp_pointer_gesture_pinch_v1_destroy);
+
       wl_pointer_release (seat->wl_pointer);
       seat->wl_pointer = NULL;
       gdk_seat_device_removed (GDK_SEAT (seat), seat->pointer);
