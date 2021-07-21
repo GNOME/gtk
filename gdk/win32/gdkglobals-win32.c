@@ -32,7 +32,6 @@ GdkDeviceManagerWin32 *_gdk_device_manager = NULL;
 
 int		  _gdk_offset_x, _gdk_offset_y;
 
-HDC		  _gdk_display_hdc;
 HINSTANCE	  _gdk_dll_hinstance;
 HINSTANCE	  _gdk_app_hmodule;
 

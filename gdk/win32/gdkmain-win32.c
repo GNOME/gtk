@@ -63,7 +63,6 @@ _gdk_win32_surfaceing_init (void)
     GdiSetBatchLimit (1);
 
   _gdk_app_hmodule = GetModuleHandle (NULL);
-  _gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   _gdk_input_locale = GetKeyboardLayout (0);
   _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
@@ -147,27 +146,6 @@ _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
 	       (pep[i].peFlags == PC_NOCOLLAPSE ? " PC_NOCOLLAPSE" :
 		(pep[i].peFlags == PC_RESERVED ? " PC_RESERVED" :
 		 (g_sprintf (buf, " %d", pep[i].peFlags), buf))))));
-}
-
-void
-_gdk_win32_print_system_palette (void)
-{
-  PALETTEENTRY *pe;
-  int k;
-
-  k = GetSystemPaletteEntries (_gdk_display_hdc, 0, 0, NULL);
-  pe = g_new (PALETTEENTRY, k);
-  k = GetSystemPaletteEntries (_gdk_display_hdc, 0, k, pe);
-
-  if (!k)
-    g_print ("GetSystemPaletteEntries failed: %s\n",
-	     g_win32_error_message (GetLastError ()));
-  else
-    {
-      g_print ("System palette: %d entries\n", k);
-      _gdk_win32_print_paletteentries (pe, k);
-    }
-  g_free (pe);
 }
 
 static int

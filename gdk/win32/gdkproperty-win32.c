@@ -34,8 +34,9 @@
 #include "gdkwin32.h"
 
 static char *
-_get_system_font_name (HDC hdc)
+_get_system_font_name (void)
 {
+  HDC hdc;
   NONCLIENTMETRICSW ncm;
   PangoFontDescription *font_desc;
   char *result, *font_desc_string;
@@ -46,7 +47,10 @@ _get_system_font_name (HDC hdc)
   if (!SystemParametersInfoW (SPI_GETNONCLIENTMETRICS, ncm.cbSize, &ncm, 0))
     return NULL;
 
+  hdc = GetDC (NULL);
   logpixelsy = GetDeviceCaps (hdc, LOGPIXELSY);
+  ReleaseDC (NULL, hdc);
+
   font_desc = pango_win32_font_description_from_logfontw (&ncm.lfMessageFont);
   font_desc_string = pango_font_description_to_string (font_desc);
   pango_font_description_free (font_desc);
@@ -188,7 +192,7 @@ _gdk_win32_get_setting (const char *name,
     }
   else if (strcmp ("gtk-font-name", name) == 0)
     {
-      char *font_name = _get_system_font_name (_gdk_display_hdc);
+      char *font_name = _get_system_font_name ();
 
       if (font_name)
         {

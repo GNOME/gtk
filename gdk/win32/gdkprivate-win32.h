@@ -208,7 +208,6 @@ gboolean   _gdk_modal_blocked       (GdkSurface *window);
 #ifdef G_ENABLE_DEBUG
 void   _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
                                         const int           nentries);
-void   _gdk_win32_print_system_palette (void);
 void   _gdk_win32_print_hpalette       (HPALETTE     hpal);
 void   _gdk_win32_print_dc             (HDC          hdc);
 
@@ -272,7 +271,6 @@ extern GdkDeviceManagerWin32 *_gdk_device_manager;
  */
 extern int               _gdk_offset_x, _gdk_offset_y;
 
-extern HDC               _gdk_display_hdc;
 extern HINSTANCE         _gdk_dll_hinstance;
 extern HINSTANCE         _gdk_app_hmodule;
 
