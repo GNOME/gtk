@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g color="#000" fill="#2e3436"><path d="M7 1v7.563L5.719 7.28A1.015 1.015 0 005 7H4v1c0 .265.093.53.281.719l3 3 .282.281h.875l.28-.281 3-3A1.01 1.01 0 0012 8V7h-1c-.265 0-.53.093-.719.281L9 8.563V1z" style="line-height:normal;-inkscape-font-specification:'Bitstream Vera Sans';text-indent:0;text-align:start;text-decoration-line:none;text-transform:none;marker:none" font-weight="400" font-family="Bitstream Vera Sans" overflow="visible"/><path d="M1.994 13L2 15h12l-.006-2z" style="marker:none" overflow="visible" fill-rule="evenodd"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#2e3436">
+        <path d="m 7.007812 0 v 9.5625 l -2.28125 -2.28125 c -0.191406 -0.1875 -0.457031 -0.28125 -0.71875 -0.28125 h -1 v 1 c 0 0.265625 0.089844 0.53125 0.28125 0.71875 l 4.28125 4.28125 h 0.875 l 4.28125 -4.28125 c 0.1875 -0.1875 0.277344 -0.453125 0.28125 -0.71875 v -1 h -1 c -0.265624 0 -0.53125 0.09375 -0.71875 0.28125 l -2.28125 2.28125 v -9.5625 z m 0 0"/>
+        <path d="m 2 14 l 0.007812 2 h 12 l -0.007812 -2 z m 0 0" fill-rule="evenodd"/>
+    </g>
+</svg>

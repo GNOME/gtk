@@ -1,6 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
     <g fill="#2e3436">
-        <path d="M5.525 0C4.433 0 3.61.68 3.295 1.295c-.314.615-.3 1.205-.3 1.205v13.117l5-2.5 5 2.5V11h-2v1.383l-3-1.5-3 1.5V2.5s.013-.16.081-.295c.069-.134.01-.205.45-.205h4.968c.417 0 .35.06.418.197s.082.303.082.303V3h2v-.5s.014-.584-.293-1.197C12.394.689 11.577 0 10.494 0z" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal" color="#000" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible" fill-rule="evenodd"/>
-        <path d="M11 4v2H9v2h2v2h2V8h2V6h-2V4z"/>
+        <path d="m 5.527344 0 c -1.09375 0 -1.917969 0.679688 -2.230469 1.292969 c -0.316406 0.617187 -0.300781 1.207031 -0.300781 1.207031 v 13.117188 l 5 -2.5 l 5 2.5 v -4.617188 h -2 v 1.382812 l -3 -1.5 l -3 1.5 v -9.882812 s 0.011718 -0.160156 0.078125 -0.292969 c 0.070312 -0.136719 0.011719 -0.207031 0.449219 -0.207031 h 4.972656 c 0.414062 0 0.347656 0.0625 0.417968 0.199219 c 0.066407 0.132812 0.082032 0.300781 0.082032 0.300781 v 0.5 h 2 v -0.5 s 0.011718 -0.582031 -0.292969 -1.199219 c -0.308594 -0.613281 -1.125 -1.300781 -2.207031 -1.300781 z m 0 0" fill-rule="evenodd"/>
+        <path d="m 11 4 v 2 h -2 v 2 h 2 v 2 h 2 v -2 h 2 v -2 h -2 v -2 z m 0 0"/>
     </g>
 </svg>

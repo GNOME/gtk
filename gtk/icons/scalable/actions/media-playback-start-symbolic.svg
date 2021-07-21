@@ -1,6 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-    <g color="#000" fill="#474747">
-        <path d="M5.022 3a1 1 0 0 0-1.02 1v8a1 1 0 0 0 1.496.87l6.999-4a1 1 0 0 0 0-1.74l-6.999-4A1 1 0 0 0 5.022 3zm.98 2.725L9.982 8l-3.98 2.275z" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal;marker:none" font-weight="400" font-family="sans-serif" white-space="normal" overflow="visible"/>
-        <path d="M5.002 12h-1v1h1zM5.002 3h-1v1h1zM5.002 4L12 8l-6.998 4z" style="marker:none" overflow="visible"/>
-    </g>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
+    <path d="m 2 1 v 13.992188 h 1.398438 c 0.246093 0.003906 0.488281 -0.050782 0.699218 -0.171876 l 9.796875 -5.597656 c 0.433594 -0.242187 0.65625 -0.734375 0.65625 -1.226562 c 0 -0.492188 -0.222656 -0.984375 -0.65625 -1.222656 l -9.796875 -5.597657 c -0.210937 -0.121093 -0.453125 -0.175781 -0.699218 -0.175781 z m 0 0" fill="#2e3436"/>
 </svg>
