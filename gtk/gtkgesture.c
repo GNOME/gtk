@@ -585,8 +585,6 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
                                           NULL, (gpointer *) &data);
   if (!existed)
     {
-      GtkEventSequenceState group_state;
-
       if (!add)
         return FALSE;
 
@@ -599,9 +597,6 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
 
       data = g_new0 (PointData, 1);
       g_hash_table_insert (priv->points, sequence, data);
-
-      group_state = gtk_gesture_get_group_state (gesture, sequence);
-      gtk_gesture_set_sequence_state (gesture, sequence, group_state);
     }
 
   if (data->event)
@@ -611,13 +606,24 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
   _update_touchpad_deltas (data);
   _update_widget_coordinates (gesture, data);
 
-  /* Deny the sequence right away if the expected
-   * number of points is exceeded, so this sequence
-   * can be tracked with gtk_gesture_handles_sequence().
-   */
-  if (!existed && _gtk_gesture_get_n_physical_points (gesture, FALSE) > priv->n_points)
-    gtk_gesture_set_sequence_state (gesture, sequence,
-                                    GTK_EVENT_SEQUENCE_DENIED);
+  if (!existed)
+    {
+      GtkEventSequenceState state;
+
+      /* Deny the sequence right away if the expected
+       * number of points is exceeded, so this sequence
+       * can be tracked with gtk_gesture_handles_sequence().
+       *
+       * Otherwise, make the sequence inherit the same state
+       * from other gestures in the same group.
+       */
+      if (_gtk_gesture_get_n_physical_points (gesture, FALSE) > priv->n_points)
+        state = GTK_EVENT_SEQUENCE_DENIED;
+      else
+        state = gtk_gesture_get_group_state (gesture, sequence);
+
+      gtk_gesture_set_sequence_state (gesture, sequence, state);
+    }
 
   return TRUE;
 }
