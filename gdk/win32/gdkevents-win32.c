@@ -100,7 +100,8 @@
 
 #define SYNAPSIS_ICON_WINDOW_CLASS "SynTrackCursorWindowClass"
 
-static gboolean gdk_event_translate (MSG        *msg,
+static gboolean gdk_event_translate (GdkDisplay *display,
+                                     MSG        *msg,
 				     int        *ret_valp);
 static gboolean gdk_event_prepare  (GSource     *source,
 				    int         *timeout);
@@ -239,10 +240,42 @@ inner_window_procedure (HWND   hwnd,
 			WPARAM wparam,
 			LPARAM lparam)
 {
+  GdkSurface *surface;
+  GdkDisplay *display;
   MSG msg;
   DWORD pos;
   int ret_val = 0;
 
+  surface = GDK_SURFACE (GetWindowLongPtr (hwnd, GWLP_USERDATA));
+  if (surface == NULL)
+    {
+      /* XXX Handle WM_QUIT here ? */
+      if (message == WM_QUIT)
+        {
+          GDK_NOTE (EVENTS, g_print (" %d", (int) wparam));
+          exit (wparam);
+        }
+      else if (message == WM_CREATE)
+        {
+          surface = (UNALIGNED GdkSurface *) (((LPCREATESTRUCTW) lparam)->lpCreateParams);
+          GDK_SURFACE_HWND (surface) = hwnd;
+	  /* Take note: we're inserting a pointer into a heap-allocated
+	   * object (impl). Inserting a pointer to a stack variable
+	   * will break the logic, since stack variables are short-lived.
+	   * We insert a pointer to the handle instead of the handle itsel
+	   * probably because we need to hash them differently depending
+	   * on the bitness of the OS. That pointer is still unique,
+	   * so this works out in the end.
+	   */
+	  gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (surface), surface);
+        }
+      else
+        {
+          GDK_NOTE (EVENTS, g_print (" (no GdkSurface)"));
+        }
+      return DefWindowProcW (hwnd, message, wparam, lparam);
+    }
+  display = gdk_surface_get_display (surface);
   msg.hwnd = hwnd;
   msg.message = message;
   msg.wParam = wparam;
@@ -252,7 +285,7 @@ inner_window_procedure (HWND   hwnd,
   msg.pt.x = GET_X_LPARAM (pos);
   msg.pt.y = GET_Y_LPARAM (pos);
 
-  if (gdk_event_translate (&msg, &ret_val))
+  if (gdk_event_translate (display, &msg, &ret_val))
     {
       /* If gdk_event_translate() returns TRUE, we return ret_val from
        * the window procedure.
@@ -571,18 +604,17 @@ event_mask_string (GdkEventMask mask)
 #endif
 
 static GdkSurface *
-find_window_for_mouse_event (GdkSurface* reported_window,
-			     MSG*       msg)
+find_window_for_mouse_event (GdkDisplay *display,
+                             GdkSurface *reported_window,
+			     MSG        *msg)
 {
   POINT pt;
-  GdkDisplay *display;
   GdkDeviceManagerWin32 *device_manager;
   GdkSurface *event_surface;
   HWND hwnd;
   RECT rect;
   GdkDeviceGrabInfo *grab;
 
-  display = gdk_display_get_default ();
   device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
   
   grab = _gdk_display_get_last_device_grab (display, device_manager->core_pointer);
@@ -886,8 +918,8 @@ _gdk_win32_append_event (GdkEvent *event)
   GdkDisplay *display;
   GList *link;
 
-  display = gdk_display_get_default ();
-
+  display = gdk_event_get_display (event);
+  
   fixup_event (event);
 #if 1
   link = _gdk_event_queue_append (display, event);
@@ -1471,7 +1503,7 @@ handle_dpi_changed (GdkSurface *window,
                     MSG       *msg)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-  GdkDisplay *display = gdk_display_get_default ();
+  GdkDisplay *display = gdk_surface_get_display (window);
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
   RECT *rect = (RECT *)msg->lParam;
   guint old_scale = impl->surface_scale;
@@ -1725,8 +1757,9 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface  *window,
 			     GDK_BUTTON5_MASK)
 
 static gboolean
-gdk_event_translate (MSG *msg,
-		     int *ret_valp)
+gdk_event_translate (GdkDisplay *display,
+                     MSG        *msg,
+		     int        *ret_valp)
 {
   RECT rect;
   POINT point;
@@ -1742,7 +1775,6 @@ gdk_event_translate (MSG *msg,
   wchar_t wbuf[100];
   int ccount;
 
-  GdkDisplay *display;
   GdkSurface *window = NULL;
   GdkWin32Surface *impl;
   GdkWin32Display *win32_display;
@@ -1772,7 +1804,6 @@ gdk_event_translate (MSG *msg,
   GdkScrollDirection direction;
   GdkTranslatedKey translated;
 
-  display = gdk_display_get_default ();
   win32_display = GDK_WIN32_DISPLAY (display);
   device_manager_win32 = win32_display->device_manager;
 
@@ -1786,26 +1817,6 @@ gdk_event_translate (MSG *msg,
     }
 
   window = gdk_win32_handle_table_lookup (msg->hwnd);
-
-  if (window == NULL)
-    {
-      /* XXX Handle WM_QUIT here ? */
-      if (msg->message == WM_QUIT)
-	{
-	  GDK_NOTE (EVENTS, g_print (" %d", (int) msg->wParam));
-	  exit (msg->wParam);
-	}
-      else if (msg->message == WM_CREATE)
-	{
-	  window = (UNALIGNED GdkSurface*) (((LPCREATESTRUCTW) msg->lParam)->lpCreateParams);
-	  GDK_SURFACE_HWND (window) = msg->hwnd;
-	}
-      else
-	{
-	  GDK_NOTE (EVENTS, g_print (" (no GdkSurface)"));
-	}
-      return FALSE;
-    }
 
   keyboard_grab = _gdk_display_get_last_device_grab (display,
                                                      device_manager_win32->core_keyboard);
@@ -2035,7 +2046,7 @@ gdk_event_translate (MSG *msg,
             fake_release.lParam = both_shift_pressed[0];
 
           both_shift_pressed[0] = both_shift_pressed[1] = 0;
-          gdk_event_translate (&fake_release, &tmp_retval);
+          gdk_event_translate (display, &fake_release, &tmp_retval);
         }
       both_shift_pressed[0] = both_shift_pressed[1] = 0;
     }
@@ -2176,7 +2187,7 @@ gdk_event_translate (MSG *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
-      g_set_object (&window, find_window_for_mouse_event (window, msg));
+      g_set_object (&window, find_window_for_mouse_event (display, window, msg));
       /* TODO_CSW?: there used to some synthesize and propagate */
       if (GDK_SURFACE_DESTROYED (window))
 	break;
@@ -2219,7 +2230,7 @@ gdk_event_translate (MSG *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
-      g_set_object (&window, find_window_for_mouse_event (window, msg));
+      g_set_object (&window, find_window_for_mouse_event (display, window, msg));
 
       if (pointer_grab == NULL && implicit_grab_surface != NULL)
 	{
@@ -2329,7 +2340,7 @@ gdk_event_translate (MSG *msg,
 	  track_mouse_event (TME_LEAVE, GDK_SURFACE_HWND (new_window));
 	}
 
-      g_set_object (&window, find_window_for_mouse_event (window, msg));
+      g_set_object (&window, find_window_for_mouse_event (display, window, msg));
       impl = GDK_WIN32_SURFACE (window);
 
       /* If we haven't moved, don't create any GDK event. Windows

@@ -601,7 +601,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 			     NULL,
 			     _gdk_dll_hinstance,
 			     surface);
-  impl->handle = hwndNew;
+  g_assert (impl->handle == hwndNew);
 
   GetWindowRect (hwndNew, &rect);
   impl->initial_x = rect.left;
