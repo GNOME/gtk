@@ -28,7 +28,6 @@
 #include "gdkprivate-win32.h"
 
 GdkDisplay	 *_gdk_display = NULL;
-GdkDeviceManagerWin32 *_gdk_device_manager = NULL;
 
 int		  _gdk_offset_x, _gdk_offset_y;
 

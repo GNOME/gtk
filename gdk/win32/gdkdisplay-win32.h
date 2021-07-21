@@ -24,6 +24,9 @@
 
 #include "gdkwin32cursor.h"
  
+#include "gdkdevicemanager-win32.h"
+#include "gdkprivate-win32.h"
+
 #ifdef GDK_WIN32_ENABLE_EGL
 # include <epoxy/egl.h>
 #endif
@@ -115,7 +118,7 @@ struct _GdkWin32Display
 {
   GdkDisplay display;
 
-    Win32CursorTheme *cursor_theme;
+  Win32CursorTheme *cursor_theme;
   char *cursor_theme_name;
   int cursor_theme_size;
 
@@ -157,6 +160,8 @@ struct _GdkWin32Display
   GdkWin32ShcoreFuncs shcore_funcs;
   GdkWin32User32DPIFuncs user32_dpi_funcs;
   
+  GdkDeviceManagerWin32 *device_manager;
+
   /* Cursor Items (GdkCursor->GdkWin32HCursor) */
   GHashTable *cursors;
   /* The cursor that is used by current grab (if any) */

@@ -583,8 +583,8 @@ find_window_for_mouse_event (GdkSurface* reported_window,
   GdkDeviceGrabInfo *grab;
 
   display = gdk_display_get_default ();
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
-
+  device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
+  
   grab = _gdk_display_get_last_device_grab (display, device_manager->core_pointer);
   if (grab == NULL)
     return reported_window;
@@ -1050,8 +1050,8 @@ send_crossing_event (GdkDisplay                 *display,
   POINT pt;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
 
-  device_manager = _gdk_device_manager;
-
+  device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
+  
   grab = _gdk_display_has_device_grab (display, device_manager->core_pointer, 0);
 
   if (grab != NULL &&
@@ -1508,19 +1508,17 @@ handle_dpi_changed (GdkSurface *window,
 }
 
 static void
-generate_button_event (GdkEventType      type,
-                       int               button,
-                       GdkSurface        *window,
-                       MSG              *msg)
+generate_button_event (GdkDeviceManagerWin32 *device_manager,
+                       GdkEventType           type,
+                       int                    button,
+                       GdkSurface            *window,
+                       MSG                   *msg)
 {
   GdkEvent *event;
-  GdkDeviceManagerWin32 *device_manager;
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
 
   if (_gdk_input_ignore_core > 0)
     return;
-
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
 
   current_x = (gint16) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
   current_y = (gint16) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
@@ -1775,6 +1773,7 @@ gdk_event_translate (MSG *msg,
 
   display = gdk_display_get_default ();
   win32_display = GDK_WIN32_DISPLAY (display);
+  device_manager_win32 = win32_display->device_manager;
 
   if (win32_display->filters)
     {
@@ -1806,8 +1805,6 @@ gdk_event_translate (MSG *msg,
 	}
       return FALSE;
     }
-
-  device_manager_win32 = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
 
   keyboard_grab = _gdk_display_get_last_device_grab (display,
                                                      device_manager_win32->core_keyboard);
@@ -2191,7 +2188,8 @@ gdk_event_translate (MSG *msg,
       else
 	g_set_object (&implicit_grab_surface, NULL);
 
-      generate_button_event (GDK_BUTTON_PRESS, button,
+      generate_button_event (device_manager_win32,
+	                     GDK_BUTTON_PRESS, button,
 			     window, msg);
 
       return_val = TRUE;
@@ -2258,7 +2256,8 @@ gdk_event_translate (MSG *msg,
       else
 	g_set_object (&implicit_grab_surface, NULL);
 
-      generate_button_event (GDK_BUTTON_RELEASE, button,
+      generate_button_event (device_manager_win32,
+	                     GDK_BUTTON_RELEASE, button,
 			     window, msg);
 
       impl = GDK_WIN32_SURFACE (window);
@@ -2568,7 +2567,7 @@ gdk_event_translate (MSG *msg,
 	  !GDK_SURFACE_DESTROYED (keyboard_grab->surface) &&
 	  (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND) == 0)
 	{
-	  generate_grab_broken_event (_gdk_device_manager, keyboard_grab->surface, TRUE, NULL);
+          generate_grab_broken_event (device_manager_win32, keyboard_grab->surface, TRUE, NULL);
 	}
       G_GNUC_FALLTHROUGH;
 
@@ -2580,7 +2579,7 @@ gdk_event_translate (MSG *msg,
       if (GDK_SURFACE_DESTROYED (window))
 	break;
 
-      generate_focus_event (_gdk_device_manager, window, (msg->message == WM_SETFOCUS));
+      generate_focus_event (device_manager_win32, window, (msg->message == WM_SETFOCUS));
       return_val = TRUE;
       break;
 

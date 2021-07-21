@@ -21,14 +21,16 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <gdk/gdk.h>
-#include "gdkwin32.h"
-#include "gdkprivate-win32.h"
 #include "gdkdevicemanager-win32.h"
-#include "gdkdeviceprivate.h"
-#include "gdkdevice-win32.h"
+
 #include "gdkdevice-virtual.h"
+#include "gdkdevice-win32.h"
 #include "gdkdevice-wintab.h"
+#include "gdkdisplay-win32.h"
+#include "gdkprivate-win32.h"
+#include "gdkwin32misc.h"
+
+#include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkseatdefaultprivate.h"
 
@@ -80,7 +82,7 @@ create_pointer (GdkDeviceManagerWin32 *device_manager,
                        "name", name,
                        "source", GDK_SOURCE_MOUSE,
                        "has-cursor", has_cursor,
-                       "display", _gdk_display,
+                       "display", device_manager->display,
                        NULL);
 }
 
@@ -93,7 +95,7 @@ create_keyboard (GdkDeviceManagerWin32 *device_manager,
                        "name", name,
                        "source", GDK_SOURCE_KEYBOARD,
                        "has-cursor", FALSE,
-                       "display", _gdk_display,
+                       "display", device_manager->display,
                        NULL);
 }
 
@@ -673,7 +675,7 @@ wintab_default_display_notify_cb (GdkDisplayManager *display_manager)
 
   g_assert (display != NULL);
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
+  device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
   g_assert (display_manager != NULL);
 
   default_display_opened = TRUE;
@@ -681,15 +683,17 @@ wintab_default_display_notify_cb (GdkDisplayManager *display_manager)
   wintab_init_check (device_manager);
 }
 
-static void
-gdk_device_manager_win32_constructed (GObject *object)
+GdkDeviceManagerWin32 *
+gdk_device_manager_win32_new (GdkDisplay *display)
 {
   GdkDeviceManagerWin32 *device_manager;
   GdkSeat *seat;
   GdkDisplayManager *display_manager = NULL;
   GdkDisplay *default_display = NULL;
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
+  device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_WIN32, NULL);
+  device_manager->display = display; /* no ref, the display owns us */
+
   device_manager->core_pointer =
     create_pointer (device_manager,
 		    GDK_TYPE_DEVICE_VIRTUAL,
@@ -723,7 +727,7 @@ gdk_device_manager_win32_constructed (GObject *object)
 
   seat = gdk_seat_default_new_for_logical_pair (device_manager->core_pointer,
                                                 device_manager->core_keyboard);
-  gdk_display_add_seat (_gdk_display, seat);
+  gdk_display_add_seat (display, seat);
   gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_pointer);
   gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
@@ -740,6 +744,8 @@ gdk_device_manager_win32_constructed (GObject *object)
   g_signal_connect (display_manager, "notify::default-display",
                     G_CALLBACK (wintab_default_display_notify_cb),
                     NULL);
+
+  return device_manager;
 }
 
 static void
@@ -748,7 +754,6 @@ gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gdk_device_manager_win32_finalize;
-  object_class->constructed = gdk_device_manager_win32_constructed;
 }
 
 void
@@ -898,7 +903,7 @@ gdk_input_other_event (GdkDisplay *display,
       return NULL;
     }
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
+  device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
   window = gdk_device_get_surface_at_position (device_manager->core_pointer, &x, &y);
 
   if (window)

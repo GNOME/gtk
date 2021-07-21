@@ -18,6 +18,10 @@
 #ifndef __GDK_DEVICE_MANAGER_WIN32_H__
 #define __GDK_DEVICE_MANAGER_WIN32_H__
 
+#include <gdk/gdkdisplay.h>
+
+#include <windows.h>
+
 G_BEGIN_DECLS
 
 #define GDK_TYPE_DEVICE_MANAGER_WIN32         (gdk_device_manager_win32_get_type ())
@@ -54,12 +58,15 @@ struct _GdkDeviceManagerWin32Class
   GObjectClass parent_class;
 };
 
-GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
+GType                   gdk_device_manager_win32_get_type       (void) G_GNUC_CONST;
 
-void     _gdk_input_set_tablet_active (void);
-GdkEvent * gdk_input_other_event      (GdkDisplay *display,
-                                       MSG        *msg,
-                                       GdkSurface  *window);
+void                    _gdk_input_set_tablet_active            (void);
+
+GdkDeviceManagerWin32 * gdk_device_manager_win32_new            (GdkDisplay             *display);
+
+GdkEvent *              gdk_input_other_event                   (GdkDisplay             *display,
+                                                                 MSG                    *msg,
+                                                                 GdkSurface             *window);
 
 G_END_DECLS
 
