@@ -160,10 +160,6 @@ struct _GdkSurfaceClass
 
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);
-  GdkGLContext *(*create_gl_context)      (GdkSurface      *surface,
-                                           gboolean        attached,
-                                           GdkGLContext   *share,
-                                           GError        **error);
   void         (* request_layout)         (GdkSurface     *surface);
   gboolean     (* compute_size)           (GdkSurface     *surface);
 };
@@ -266,7 +262,6 @@ void       _gdk_surface_update_size       (GdkSurface      *surface);
 
 GdkGLContext * gdk_surface_get_paint_gl_context (GdkSurface *surface,
                                                  GError   **error);
-GdkGLContext * gdk_surface_get_shared_data_gl_context (GdkSurface *surface);
 
 gboolean gdk_surface_handle_event (GdkEvent       *event);
 GdkSeat * gdk_surface_get_seat_from_event (GdkSurface *surface,

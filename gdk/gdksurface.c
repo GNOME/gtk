@@ -1066,86 +1066,22 @@ gdk_surface_get_mapped (GdkSurface *surface)
 }
 
 GdkGLContext *
-gdk_surface_get_shared_data_gl_context (GdkSurface *surface)
-{
-  static int in_shared_data_creation;
-  GdkDisplay *display;
-  GdkGLContext *context;
-
-  if (in_shared_data_creation)
-    return NULL;
-
-  in_shared_data_creation = 1;
-
-  display = gdk_surface_get_display (surface);
-  context = (GdkGLContext *)g_object_get_data (G_OBJECT (display), "gdk-gl-shared-data-context");
-  if (context == NULL)
-    {
-      GError *error = NULL;
-      context = GDK_SURFACE_GET_CLASS (surface)->create_gl_context (surface, FALSE, NULL, &error);
-      if (context == NULL)
-        {
-          g_warning ("Failed to create shared context: %s", error->message);
-          g_clear_error (&error);
-        }
-
-      gdk_gl_context_realize (context, &error);
-      if (context == NULL)
-        {
-          g_warning ("Failed to realize shared context: %s", error->message);
-          g_clear_error (&error);
-        }
-
-
-      g_object_set_data (G_OBJECT (display), "gdk-gl-shared-data-context", context);
-    }
-
-  in_shared_data_creation = 0;
-
-  return context;
-}
-
-GdkGLContext *
 gdk_surface_get_paint_gl_context (GdkSurface  *surface,
-                                  GError    **error)
+                                  GError     **error)
 {
-  GError *internal_error = NULL;
-
-  if (GDK_DISPLAY_DEBUG_CHECK (surface->display, GL_DISABLE))
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("GL support disabled via GDK_DEBUG"));
-      return NULL;
-    }
+  if (!gdk_display_prepare_gl (surface->display, error))
+    return NULL;
 
   if (surface->gl_paint_context == NULL)
     {
-      GdkSurfaceClass *class = GDK_SURFACE_GET_CLASS (surface);
-
-      if (class->create_gl_context == NULL)
-        {
-          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("The current backend does not support OpenGL"));
-          return NULL;
-        }
-
-      surface->gl_paint_context =
-        class->create_gl_context (surface, TRUE, NULL, &internal_error);
+      surface->gl_paint_context = gdk_surface_create_gl_context (surface, error);
+      if (surface->gl_paint_context == NULL)
+        return NULL;
     }
 
-  if (internal_error != NULL)
+  if (!gdk_gl_context_realize (surface->gl_paint_context, error))
     {
-      g_propagate_error (error, internal_error);
-      g_clear_object (&(surface->gl_paint_context));
-      return NULL;
-    }
-
-  gdk_gl_context_realize (surface->gl_paint_context, &internal_error);
-  if (internal_error != NULL)
-    {
-      g_propagate_error (error, internal_error);
-      g_clear_object (&(surface->gl_paint_context));
+      g_clear_object (&surface->gl_paint_context);
       return NULL;
     }
 
@@ -1170,19 +1106,13 @@ GdkGLContext *
 gdk_surface_create_gl_context (GdkSurface   *surface,
                                GError      **error)
 {
-  GdkGLContext *paint_context;
-
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  paint_context = gdk_surface_get_paint_gl_context (surface, error);
-  if (paint_context == NULL)
+  if (!gdk_display_prepare_gl (surface->display, error))
     return NULL;
 
-  return GDK_SURFACE_GET_CLASS (surface)->create_gl_context (surface,
-                                                             FALSE,
-                                                             paint_context,
-                                                             error);
+  return gdk_gl_context_new_for_surface (surface);
 }
 
 /**

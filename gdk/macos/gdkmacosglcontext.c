@@ -170,12 +170,12 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 {
   GdkMacosGLContext *self = (GdkMacosGLContext *)context;
   GdkSurface *surface;
+  GdkDisplay *display;
   NSOpenGLContext *shared_gl_context = nil;
   NSOpenGLContext *gl_context;
   NSOpenGLPixelFormat *pixelFormat;
   CGLContextObj cgl_context;
   GdkGLContext *shared;
-  GdkGLContext *shared_data;
   NSOpenGLContext *existing;
   GLint sync_to_framerate = 1;
   GLint validate = 0;
@@ -192,21 +192,16 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   gdk_gl_context_get_required_version (context, &major, &minor);
 
   surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
-  shared = gdk_gl_context_get_shared_context (context);
-  shared_data = gdk_surface_get_shared_data_gl_context (surface);
+  display = gdk_gl_context_get_display (context);
+  shared = gdk_display_get_gl_context (display);
 
   if (shared != NULL)
     {
       if (!(shared_gl_context = get_ns_open_gl_context (GDK_MACOS_GL_CONTEXT (shared), error)))
         return FALSE;
     }
-  else if (shared_data != NULL)
-    {
-      if (!(shared_gl_context = get_ns_open_gl_context (GDK_MACOS_GL_CONTEXT (shared_data), error)))
-        return FALSE;
-    }
 
-  GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)),
+  GDK_DISPLAY_NOTE (display,
                     OPENGL,
                     g_message ("Creating NSOpenGLContext (version %d.%d)",
                                major, minor));
@@ -253,7 +248,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   GLint renderer_id = 0;
   [gl_context getValues:&renderer_id forParameter:NSOpenGLContextParameterCurrentRendererID];
-  GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)),
+  GDK_DISPLAY_NOTE (display,
                     OPENGL,
                     g_message ("Created NSOpenGLContext[%p] using %s",
                                gl_context,
@@ -315,9 +310,7 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
    * want to replace our damage region for the next frame (to avoid
    * doing it multiple times).
    */
-  if (!self->is_attached &&
-      gdk_gl_context_get_shared_context (GDK_GL_CONTEXT (context)))
-    ensure_gl_view (self);
+  ensure_gl_view (self);
 
   if (self->needs_resize)
     {
@@ -410,6 +403,57 @@ gdk_macos_gl_context_surface_resized (GdkDrawContext *draw_context)
   g_clear_pointer (&self->damage, cairo_region_destroy);
 }
 
+static gboolean
+gdk_macos_gl_context_clear_current (GdkGLContext *context)
+{
+  GdkMacosGLContext *self = GDK_MACOS_GL_CONTEXT (context);
+  NSOpenGLContext *current;
+
+  g_return_val_if_fail (GDK_IS_MACOS_GL_CONTEXT (self), FALSE);
+
+  current = [NSOpenGLContext currentContext];
+
+  if (self->gl_context == current)
+    {
+      /* The OpenGL mac programming guide suggests that glFlush() is called
+       * before switching current contexts to ensure that the drawing commands
+       * are submitted.
+       */
+      if (current != NULL)
+        glFlush ();
+
+      [NSOpenGLContext clearCurrentContext];
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gdk_macos_gl_context_make_current (GdkGLContext *context,
+                                   gboolean      surfaceless)
+{
+  GdkMacosGLContext *self = GDK_MACOS_GL_CONTEXT (context);
+  NSOpenGLContext *current;
+
+  g_return_val_if_fail (GDK_IS_MACOS_GL_CONTEXT (self), FALSE);
+
+  current = [NSOpenGLContext currentContext];
+
+  if (self->gl_context != current)
+    {
+      /* The OpenGL mac programming guide suggests that glFlush() is called
+       * before switching current contexts to ensure that the drawing commands
+       * are submitted.
+       */
+      if (current != NULL)
+        glFlush ();
+
+      [self->gl_context makeCurrentContext];
+    }
+
+  return TRUE;
+}
+
 static cairo_region_t *
 gdk_macos_gl_context_get_damage (GdkGLContext *context)
 {
@@ -476,54 +520,6 @@ gdk_macos_gl_context_class_init (GdkMacosGLContextClass *klass)
 static void
 gdk_macos_gl_context_init (GdkMacosGLContext *self)
 {
-}
-
-GdkGLContext *
-_gdk_macos_gl_context_new (GdkMacosSurface  *surface,
-                           gboolean          attached,
-                           GdkGLContext     *share,
-                           GError          **error)
-{
-  GdkMacosGLContext *context;
-
-  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (surface), NULL);
-  g_return_val_if_fail (!share || GDK_IS_MACOS_GL_CONTEXT (share), NULL);
-
-  context = g_object_new (GDK_TYPE_MACOS_GL_CONTEXT,
-                          "surface", surface,
-                          "shared-context", share,
-                          NULL);
-
-  context->is_attached = !!attached;
-
-  return GDK_GL_CONTEXT (context);
-}
-
-gboolean
-_gdk_macos_gl_context_make_current (GdkMacosGLContext *self)
-{
-  NSOpenGLContext *current;
-
-  g_return_val_if_fail (GDK_IS_MACOS_GL_CONTEXT (self), FALSE);
-
-  if (self->gl_context == NULL)
-    return FALSE;
-
-  current = [NSOpenGLContext currentContext];
-
-  if (self->gl_context != current)
-    {
-      /* The OpenGL mac programming guide suggests that glFlush() is called
-       * before switching current contexts to ensure that the drawing commands
-       * are submitted.
-       */
-      if (current != NULL)
-        glFlush ();
-
-      [self->gl_context makeCurrentContext];
-    }
-
-  return TRUE;
 }
 
 G_GNUC_END_IGNORE_DEPRECATIONS

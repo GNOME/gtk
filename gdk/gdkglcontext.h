@@ -45,8 +45,8 @@ GType gdk_gl_context_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *            gdk_gl_context_get_display              (GdkGLContext  *context);
 GDK_AVAILABLE_IN_ALL
-GdkSurface *             gdk_gl_context_get_surface               (GdkGLContext  *context);
-GDK_AVAILABLE_IN_ALL
+GdkSurface *            gdk_gl_context_get_surface               (GdkGLContext  *context);
+GDK_DEPRECATED_IN_4_4_FOR(gdk_gl_context_is_shared)
 GdkGLContext *          gdk_gl_context_get_shared_context       (GdkGLContext  *context);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_get_version              (GdkGLContext  *context,
@@ -54,6 +54,9 @@ void                    gdk_gl_context_get_version              (GdkGLContext  *
                                                                  int           *minor);
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_is_legacy                (GdkGLContext  *context);
+GDK_AVAILABLE_IN_4_4
+gboolean                gdk_gl_context_is_shared                (GdkGLContext  *self,
+                                                                 GdkGLContext  *other);
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_set_required_version     (GdkGLContext  *context,

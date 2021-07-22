@@ -13,6 +13,7 @@ gdk_win32_sources = files([
   'gdkdrop-win32.c',
   'gdkevents-win32.c',
   'gdkglcontext-win32.c',
+  'gdkglcontext-win32-wgl.c',
   'gdkglobals-win32.c',
   'gdkhdataoutputstream-win32.c',
   'gdkkeys-win32.c',
@@ -47,6 +48,7 @@ GDK_WIN32_EGL_CFLAGS = []
 
 if win32_has_egl
   GDK_WIN32_EGL_CFLAGS = ['-DGDK_WIN32_ENABLE_EGL']
+  gdk_win32_sources += ['gdkglcontext-win32-egl.c']
 endif
 
 gdk_win32_deps = [ # FIXME

@@ -19,7 +19,6 @@
 #include "gdkx11glcontext.h"
 #include "gdkx11screen.h"
 #include "gdkx11surface.h"
-#include "gdkvisual-x11.h"
 #include "gdkx11property.h"
 #include <X11/Xatom.h>
 
@@ -36,70 +35,47 @@ struct _GdkX11GLContextGLX
   GdkX11GLContext parent_instance;
 
   GLXContext glx_context;
-  GLXFBConfig glx_config;
-  GLXDrawable attached_drawable;
-  GLXDrawable unattached_drawable;
 
 #ifdef HAVE_XDAMAGE
   GLsync frame_fence;
   Damage xdamage;
 #endif
 
-  guint is_direct : 1;
+  guint do_frame_sync : 1;
 };
 
 typedef struct _GdkX11GLContextClass    GdkX11GLContextGLXClass;
 
-typedef struct {
-  GdkDisplay *display;
-
-  GLXDrawable glx_drawable;
-
-  Window dummy_xwin;
-  GLXWindow dummy_glx;
-
-  guint32 last_frame_counter;
-} DrawableInfo;
-
 G_DEFINE_TYPE (GdkX11GLContextGLX, gdk_x11_gl_context_glx, GDK_TYPE_X11_GL_CONTEXT)
 
-static void
-drawable_info_free (gpointer data_)
+static GLXDrawable
+gdk_x11_surface_get_glx_drawable (GdkSurface *surface)
 {
-  DrawableInfo *data = data_;
-  Display *dpy;
+  GdkX11Surface *self = GDK_X11_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
-  gdk_x11_display_error_trap_push (data->display);
+  if (self->glx_drawable)
+    return self->glx_drawable;
 
-  dpy = gdk_x11_display_get_xdisplay (data->display);
+  self->glx_drawable = glXCreateWindow (gdk_x11_display_get_xdisplay (display),
+                                        display_x11->glx_config,
+                                        gdk_x11_surface_get_xid (surface),
+                                        NULL);
 
-  if (data->glx_drawable)
-    glXDestroyWindow (dpy, data->glx_drawable);
-
-  if (data->dummy_glx)
-    glXDestroyWindow (dpy, data->dummy_glx);
-
-  if (data->dummy_xwin)
-    XDestroyWindow (dpy, data->dummy_xwin);
-
-  gdk_x11_display_error_trap_pop_ignored (data->display);
-
-  g_slice_free (DrawableInfo, data);
+  return self->glx_drawable;
 }
 
-static DrawableInfo *
-get_glx_drawable_info (GdkSurface *surface)
+void
+gdk_x11_surface_destroy_glx_drawable (GdkX11Surface *self)
 {
-  return g_object_get_data (G_OBJECT (surface), "-gdk-x11-surface-glx-info");
-}
+  if (self->glx_drawable == None)
+    return;
 
-static void
-set_glx_drawable_info (GdkSurface    *surface,
-                       DrawableInfo *info)
-{
-  g_object_set_data_full (G_OBJECT (surface), "-gdk-x11-surface-glx-info",
-                          info,
-                          drawable_info_free);
+  glXDestroyWindow (gdk_x11_display_get_xdisplay (gdk_surface_get_display (GDK_SURFACE (self))),
+                    self->glx_drawable);
+
+  self->glx_drawable = None;
 }
 
 static void
@@ -127,35 +103,44 @@ maybe_wait_for_vblank (GdkDisplay  *display,
     }
 }
 
+static GLXDrawable
+gdk_x11_gl_context_glx_get_drawable (GdkX11GLContextGLX *self)
+{
+  GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (self);
+  GdkSurface *surface;
+
+  if (gdk_draw_context_is_in_frame (draw_context))
+    surface = gdk_draw_context_get_surface (draw_context);
+  else
+    surface = GDK_X11_DISPLAY (gdk_draw_context_get_display (draw_context))->leader_gdk_surface;
+
+  return gdk_x11_surface_get_glx_drawable (surface);
+}
+
 static void
 gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
 {
+  GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (draw_context);
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
-  GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
+  GdkX11Surface *x11_surface = GDK_X11_SURFACE (surface);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  DrawableInfo *info;
   GLXDrawable drawable;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->end_frame (draw_context, painted);
-  if (gdk_gl_context_get_shared_context (context) != NULL)
-    return;
 
   gdk_gl_context_make_current (context);
 
-  info = get_glx_drawable_info (surface);
-
-  drawable = context_glx->attached_drawable;
+  drawable = gdk_x11_surface_get_glx_drawable (surface);
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("Flushing GLX buffers for drawable %lu (window: %lu), frame sync: %s",
                        (unsigned long) drawable,
                        (unsigned long) gdk_x11_surface_get_xid (surface),
-                       context_x11->do_frame_sync ? "yes" : "no"));
+                       self->do_frame_sync ? "yes" : "no"));
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "x11", "swap buffers");
 
@@ -167,7 +152,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
    * GLX_SGI_swap_control, and we ask the driver to do the right
    * thing.
    */
-  if (context_x11->do_frame_sync)
+  if (self->do_frame_sync)
     {
       guint32 end_frame_counter = 0;
       gboolean has_counter = display_x11->has_glx_video_sync;
@@ -176,15 +161,13 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
       if (display_x11->has_glx_video_sync)
         glXGetVideoSyncSGI (&end_frame_counter);
 
-      if (context_x11->do_frame_sync && !display_x11->has_glx_swap_interval)
+      if (self->do_frame_sync && !display_x11->has_glx_swap_interval)
         {
           glFinish ();
 
           if (has_counter && can_wait)
             {
-              guint32 last_counter = info != NULL ? info->last_frame_counter : 0;
-
-              if (last_counter == end_frame_counter)
+              if (x11_surface->glx_frame_counter == end_frame_counter)
                 maybe_wait_for_vblank (display, drawable);
             }
           else if (can_wait)
@@ -195,11 +178,11 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
   gdk_x11_surface_pre_damage (surface);
 
 #ifdef HAVE_XDAMAGE
-  if (context_glx->xdamage != 0 && _gdk_x11_surface_syncs_frames (surface))
+  if (self->xdamage != 0 && _gdk_x11_surface_syncs_frames (surface))
     {
-      g_assert (context_glx->frame_fence == 0);
+      g_assert (self->frame_fence == 0);
 
-      context_glx->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+      self->frame_fence = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
       /* We consider the frame still getting painted until the GL operation is
        * finished, and the window gets damage reported from the X server.
@@ -212,8 +195,67 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
 
   glXSwapBuffers (dpy, drawable);
 
-  if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
-    glXGetVideoSyncSGI (&info->last_frame_counter);
+  if (self->do_frame_sync && display_x11->has_glx_video_sync)
+    glXGetVideoSyncSGI (&x11_surface->glx_frame_counter);
+}
+
+static gboolean
+gdk_x11_gl_context_glx_clear_current (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+
+  glXMakeContextCurrent (dpy, None, None, NULL);
+  return TRUE;
+}
+
+static gboolean
+gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
+                                     gboolean      surfaceless)
+                                     
+{
+  GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+  gboolean do_frame_sync = FALSE;
+  GdkSurface *surface;
+  GLXWindow drawable;
+
+  drawable = gdk_x11_gl_context_glx_get_drawable (self);
+
+  if (!surfaceless)
+    surface = gdk_gl_context_get_surface (context);
+  else
+    surface = GDK_X11_DISPLAY (display)->leader_gdk_surface;
+  drawable = gdk_x11_surface_get_glx_drawable (surface);
+
+  GDK_DISPLAY_NOTE (display, OPENGL,
+                    g_message ("Making GLX context %p current to drawable %lu",
+                               context, (unsigned long) drawable));
+
+  if (!glXMakeContextCurrent (dpy, drawable, drawable, self->glx_context))
+    return FALSE;
+
+  if (!surfaceless && GDK_X11_DISPLAY (display)->has_glx_swap_interval)
+    {
+      /* If the WM is compositing there is no particular need to delay
+       * the swap when drawing on the offscreen, rendering to the screen
+       * happens later anyway, and its up to the compositor to sync that
+       * to the vblank. */
+      do_frame_sync = ! gdk_display_is_composited (display);
+
+      if (do_frame_sync != self->do_frame_sync)
+        {
+          self->do_frame_sync = do_frame_sync;
+
+          if (do_frame_sync)
+            glXSwapIntervalSGI (1);
+          else
+            glXSwapIntervalSGI (0);
+        }
+    }
+
+  return TRUE;
 }
 
 static cairo_region_t *
@@ -226,17 +268,10 @@ gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
 
   if (display_x11->has_glx_buffer_age)
     {
-      GdkGLContext *shared;
-      GdkX11GLContextGLX *shared_glx;
+      GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (context);
 
-      shared = gdk_gl_context_get_shared_context (context);
-      if (shared == NULL)
-        shared = context;
-
-      shared_glx = GDK_X11_GL_CONTEXT_GLX (shared);
-
-      gdk_gl_context_make_current (shared);
-      glXQueryDrawable (dpy, shared_glx->attached_drawable,
+      gdk_gl_context_make_current (context);
+      glXQueryDrawable (dpy, gdk_x11_gl_context_glx_get_drawable (self),
                         GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
 
       switch (buffer_age)
@@ -266,15 +301,6 @@ gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
     }
 
   return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->get_damage (context);
-}
-
-static XVisualInfo *
-find_xvisinfo_for_fbconfig (GdkDisplay  *display,
-                            GLXFBConfig  config)
-{
-  Display *dpy = gdk_x11_display_get_xdisplay (display);
-
-  return glXGetVisualFromFBConfig (dpy, config);
 }
 
 static GLXContext
@@ -405,11 +431,7 @@ on_gl_surface_xevent (GdkGLContext   *context,
                       GdkX11Display  *display_x11)
 {
   GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
   XDamageNotifyEvent *damage_xevent;
-
-  if (!context_x11->is_attached)
-    return FALSE;
 
   if (xevent->type != (display_x11->damage_event_base + XDamageNotify))
     return FALSE;
@@ -495,22 +517,18 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   GdkX11Display *display_x11;
   GdkDisplay *display;
   GdkX11GLContextGLX *context_glx;
-  XVisualInfo *xvisinfo;
   Display *dpy;
-  DrawableInfo *info;
-  GdkGLContext *share;
-  GdkGLContext *shared_data_context;
   GdkSurface *surface;
+  GdkGLContext *share;
   gboolean debug_bit, compat_bit, legacy_bit, es_bit;
   int major, minor, flags;
 
-  surface = gdk_gl_context_get_surface (context);
-  display = gdk_surface_get_display (surface);
+  display = gdk_gl_context_get_display (context);
   dpy = gdk_x11_display_get_xdisplay (display);
   context_glx = GDK_X11_GL_CONTEXT_GLX (context);
   display_x11 = GDK_X11_DISPLAY (display);
-  share = gdk_gl_context_get_shared_context (context);
-  shared_data_context = gdk_surface_get_shared_data_gl_context (surface);
+  share = gdk_display_get_gl_context (display);
+  surface = gdk_gl_context_get_surface (context);
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
@@ -550,7 +568,7 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   if (legacy_bit && !GDK_X11_DISPLAY (display)->has_glx_create_context)
     {
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating legacy GL context on request"));
-      context_glx->glx_context = create_legacy_context (display, context_glx->glx_config, share ? share : shared_data_context);
+      context_glx->glx_context = create_legacy_context (display, display_x11->glx_config, share);
     }
   else
     {
@@ -574,15 +592,15 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
 
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating GL3 context"));
       context_glx->glx_context = create_gl3_context (display,
-                                                     context_glx->glx_config,
-                                                     share ? share : shared_data_context,
+                                                     display_x11->glx_config,
+                                                     share,
                                                      profile, flags, major, minor);
 
       /* Fall back to legacy in case the GL3 context creation failed */
       if (context_glx->glx_context == NULL)
         {
           GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating fallback legacy context"));
-          context_glx->glx_context = create_legacy_context (display, context_glx->glx_config, share ? share : shared_data_context);
+          context_glx->glx_context = create_legacy_context (display, display_x11->glx_config, share);
           legacy_bit = TRUE;
           es_bit = FALSE;
         }
@@ -602,70 +620,10 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   /* Ensure that any other context is created with an ES bit set */
   gdk_gl_context_set_use_es (context, es_bit);
 
-  xvisinfo = find_xvisinfo_for_fbconfig (display, context_glx->glx_config);
-
-  info = get_glx_drawable_info (surface);
-  if (info == NULL)
-    {
-      XSetWindowAttributes attrs;
-      unsigned long mask;
-
-      gdk_x11_display_error_trap_push (display);
-
-      info = g_slice_new0 (DrawableInfo);
-      info->display = display;
-      info->last_frame_counter = 0;
-
-      attrs.override_redirect = True;
-      attrs.colormap = XCreateColormap (dpy, DefaultRootWindow (dpy), xvisinfo->visual, AllocNone);
-      attrs.border_pixel = 0;
-      mask = CWOverrideRedirect | CWColormap | CWBorderPixel;
-      info->dummy_xwin = XCreateWindow (dpy, DefaultRootWindow (dpy),
-                                        -100, -100, 1, 1,
-                                        0,
-                                        xvisinfo->depth,
-                                        CopyFromParent,
-                                        xvisinfo->visual,
-                                        mask,
-                                        &attrs);
-      XMapWindow(dpy, info->dummy_xwin);
-
-      if (display_x11->glx_version >= 13)
-        {
-          info->glx_drawable = glXCreateWindow (dpy, context_glx->glx_config,
-                                                gdk_x11_surface_get_xid (surface),
-                                                NULL);
-          info->dummy_glx = glXCreateWindow (dpy, context_glx->glx_config, info->dummy_xwin, NULL);
-        }
-
-      if (gdk_x11_display_error_trap_pop (display))
-        {
-          g_set_error_literal (error, GDK_GL_ERROR,
-                               GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("Unable to create a GL context"));
-
-          XFree (xvisinfo);
-          drawable_info_free (info);
-          glXDestroyContext (dpy, context_glx->glx_context);
-          context_glx->glx_context = NULL;
-
-          return FALSE;
-        }
-
-      set_glx_drawable_info (surface, info);
-    }
-
-  XFree (xvisinfo);
-
-  context_glx->attached_drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_surface_get_xid (surface);
-  context_glx->unattached_drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
-
-  context_glx->is_direct = glXIsDirect (dpy, context_glx->glx_context);
-
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("Realized GLX context[%p], %s, version: %d.%d",
                        context_glx->glx_context,
-                       context_glx->is_direct ? "direct" : "indirect",
+                       glXIsDirect (dpy, context_glx->glx_context) ? "direct" : "indirect",
                        display_x11->glx_version / 10,
                        display_x11->glx_version % 10));
 
@@ -735,6 +693,8 @@ gdk_x11_gl_context_glx_class_init (GdkX11GLContextGLXClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->realize = gdk_x11_gl_context_glx_realize;
+  context_class->make_current = gdk_x11_gl_context_glx_make_current;
+  context_class->clear_current = gdk_x11_gl_context_glx_clear_current;
   context_class->get_damage = gdk_x11_gl_context_glx_get_damage;
 
   draw_context_class->end_frame = gdk_x11_gl_context_glx_end_frame;
@@ -745,23 +705,42 @@ gdk_x11_gl_context_glx_class_init (GdkX11GLContextGLXClass *klass)
 static void
 gdk_x11_gl_context_glx_init (GdkX11GLContextGLX *self)
 {
+  self->do_frame_sync = TRUE;
+}
+
+static gboolean
+visual_is_rgba (XVisualInfo *visinfo)
+{
+  return
+    visinfo->depth == 32 &&
+    visinfo->visual->red_mask   == 0xff0000 &&
+    visinfo->visual->green_mask == 0x00ff00 &&
+    visinfo->visual->blue_mask  == 0x0000ff;
 }
 
 #define MAX_GLX_ATTRS   30
 
 static gboolean
-find_fbconfig (GdkDisplay   *display,
-               GLXFBConfig  *fb_config_out,
-               GError      **error)
+gdk_x11_display_create_glx_config (GdkX11Display  *self,
+                                   Visual        **out_visual,
+                                   int            *out_depth,
+                                   GError        **error)
 {
-  static int attrs[MAX_GLX_ATTRS];
+  GdkDisplay *display = GDK_DISPLAY (self);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
+  int attrs[MAX_GLX_ATTRS];
   GLXFBConfig *configs;
-  int n_configs, i;
-  gboolean retval = FALSE;
-  VisualID xvisual_id = XVisualIDFromVisual (gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (display)));
+  int count;
+  enum {
+    NO_VISUAL_FOUND,
+    WITH_MULTISAMPLING,
+    WITH_STENCIL_AND_DEPTH_BUFFER,
+    NO_ALPHA,
+    NO_ALPHA_VISUAL,
+    PERFECT
+  } best_features;
+  int i = 0;
 
-  i = 0;
   attrs[i++] = GLX_DRAWABLE_TYPE;
   attrs[i++] = GLX_WINDOW_BIT;
 
@@ -777,407 +756,98 @@ find_fbconfig (GdkDisplay   *display,
   attrs[i++] = 1;
   attrs[i++] = GLX_BLUE_SIZE;
   attrs[i++] = 1;
-
-  if (gdk_display_is_rgba (display))
-    {
-      attrs[i++] = GLX_ALPHA_SIZE;
-      attrs[i++] = 1;
-    }
-  else
-    {
-      attrs[i++] = GLX_ALPHA_SIZE;
-      attrs[i++] = GLX_DONT_CARE;
-    }
+  attrs[i++] = GLX_ALPHA_SIZE;
+  attrs[i++] = 1;
 
   attrs[i++] = None;
-
   g_assert (i < MAX_GLX_ATTRS);
 
-  configs = glXChooseFBConfig (dpy, DefaultScreen (dpy), attrs, &n_configs);
-  if (configs == NULL || n_configs == 0)
+  configs = glXChooseFBConfig (dpy, DefaultScreen (dpy), attrs, &count);
+  if (configs == NULL || count == 0)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-                           _("No available configurations for the given pixel format"));
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No GLX configurations available"));
       return FALSE;
     }
 
-  for (i = 0; i < n_configs; i++)
+  best_features = NO_VISUAL_FOUND;
+
+  for (i = 0; i < count; i++)
     {
       XVisualInfo *visinfo;
+      int tmp;
 
       visinfo = glXGetVisualFromFBConfig (dpy, configs[i]);
       if (visinfo == NULL)
         continue;
 
-      if (visinfo->visualid != xvisual_id)
+      if (glXGetFBConfigAttrib (dpy, configs[i], GLX_SAMPLE_BUFFERS_ARB, &tmp) != Success || tmp != 0)
         {
+          if (best_features < WITH_MULTISAMPLING)
+            {
+              GDK_NOTE (OPENGL, g_message ("Best GLX config is %u for visual 0x%lX with multisampling", i, visinfo->visualid));
+              best_features = WITH_MULTISAMPLING;
+              *out_visual = visinfo->visual;
+              *out_depth = visinfo->depth;
+              self->glx_config = configs[i];
+            }
           XFree (visinfo);
           continue;
         }
 
-      if (fb_config_out != NULL)
-        *fb_config_out = configs[i];
+      if (glXGetFBConfigAttrib (dpy, configs[i], GLX_DEPTH_SIZE, &tmp) != Success || tmp != 0 ||
+          glXGetFBConfigAttrib (dpy, configs[i], GLX_STENCIL_SIZE, &tmp) != Success || tmp != 0)
+        {
+          if (best_features < WITH_STENCIL_AND_DEPTH_BUFFER)
+            {
+              GDK_NOTE (OPENGL, g_message ("Best GLX config is %u for visual 0x%lX with a stencil or depth buffer", i, visinfo->visualid));
+              best_features = WITH_STENCIL_AND_DEPTH_BUFFER;
+              *out_visual = visinfo->visual;
+              *out_depth = visinfo->depth;
+              self->glx_config = configs[i];
+            }
+          XFree (visinfo);
+          continue;
+        }
+    
+      if (!visual_is_rgba (visinfo))
+        {
+          if (best_features < NO_ALPHA_VISUAL)
+            {
+              GDK_NOTE (OPENGL, g_message ("Best GLX config is %u for visual 0x%lX with no RGBA Visual", i, visinfo->visualid));
+              best_features = NO_ALPHA_VISUAL;
+              *out_visual = visinfo->visual;
+              *out_depth = visinfo->depth;
+              self->glx_config = configs[i];
+            }
+          XFree (visinfo);
+          continue;
+        }
 
+      GDK_NOTE (OPENGL, g_message ("GLX config %u for visual 0x%lX is the perfect choice", i, visinfo->visualid));
+      best_features = PERFECT;
+      *out_visual = visinfo->visual;
+      *out_depth = visinfo->depth;
+      self->glx_config = configs[i];
       XFree (visinfo);
-      retval = TRUE;
-      goto out;
+      break;
     }
 
-  g_set_error (error, GDK_GL_ERROR,
-               GDK_GL_ERROR_UNSUPPORTED_FORMAT,
-               _("No available configurations for the given RGBA pixel format"));
-
-out:
   XFree (configs);
 
-  return retval;
-}
-
-#undef MAX_GLX_ATTRS
-
-struct glvisualinfo {
-  int supports_gl;
-  int double_buffer;
-  int stereo;
-  int alpha_size;
-  int depth_size;
-  int stencil_size;
-  int num_multisample;
-  int visual_caveat;
-};
-
-static gboolean
-visual_compatible (const GdkX11Visual *a, const GdkX11Visual *b)
-{
-  return a->type == b->type &&
-    a->depth == b->depth &&
-    a->red_mask == b->red_mask &&
-    a->green_mask == b->green_mask &&
-    a->blue_mask == b->blue_mask &&
-    a->colormap_size == b->colormap_size &&
-    a->bits_per_rgb == b->bits_per_rgb;
-}
-
-static gboolean
-visual_is_rgba (const GdkX11Visual *visual)
-{
-  return
-    visual->depth == 32 &&
-    visual->red_mask   == 0xff0000 &&
-    visual->green_mask == 0x00ff00 &&
-    visual->blue_mask  == 0x0000ff;
-}
-
-/* This picks a compatible (as in has the same X visual details) visual
-   that has "better" characteristics on the GL side */
-static GdkX11Visual *
-pick_better_visual_for_gl (GdkX11Screen *x11_screen,
-                           struct glvisualinfo *gl_info,
-                           GdkX11Visual *compatible)
-{
-  GdkX11Visual *visual;
-  int i;
-  gboolean want_alpha = visual_is_rgba (compatible);
-
-  /* First look for "perfect match", i.e:
-   * supports gl
-   * double buffer
-   * alpha iff visual is an rgba visual
-   * no unnecessary stuff
-   */
-  for (i = 0; i < x11_screen->nvisuals; i++)
+  if (best_features == NO_VISUAL_FOUND)
     {
-      visual = x11_screen->visuals[i];
-      if (visual_compatible (visual, compatible) &&
-          gl_info[i].supports_gl &&
-          gl_info[i].double_buffer &&
-          !gl_info[i].stereo &&
-          (want_alpha ? (gl_info[i].alpha_size > 0) : (gl_info[i].alpha_size == 0)) &&
-          (gl_info[i].depth_size == 0) &&
-          (gl_info[i].stencil_size == 0) &&
-          (gl_info[i].num_multisample == 0) &&
-          (gl_info[i].visual_caveat == GLX_NONE_EXT))
-        return visual;
-    }
-
-  if (!want_alpha)
-    {
-      /* Next, allow alpha even if we don't want it: */
-      for (i = 0; i < x11_screen->nvisuals; i++)
-        {
-          visual = x11_screen->visuals[i];
-          if (visual_compatible (visual, compatible) &&
-              gl_info[i].supports_gl &&
-              gl_info[i].double_buffer &&
-              !gl_info[i].stereo &&
-              (gl_info[i].depth_size == 0) &&
-              (gl_info[i].stencil_size == 0) &&
-              (gl_info[i].num_multisample == 0) &&
-              (gl_info[i].visual_caveat == GLX_NONE_EXT))
-            return visual;
-        }
-    }
-
-  /* Next, allow depth and stencil buffers: */
-  for (i = 0; i < x11_screen->nvisuals; i++)
-    {
-      visual = x11_screen->visuals[i];
-      if (visual_compatible (visual, compatible) &&
-          gl_info[i].supports_gl &&
-          gl_info[i].double_buffer &&
-          !gl_info[i].stereo &&
-          (gl_info[i].num_multisample == 0) &&
-          (gl_info[i].visual_caveat == GLX_NONE_EXT))
-        return visual;
-    }
-
-  /* Next, allow multisample: */
-  for (i = 0; i < x11_screen->nvisuals; i++)
-    {
-      visual = x11_screen->visuals[i];
-      if (visual_compatible (visual, compatible) &&
-          gl_info[i].supports_gl &&
-          gl_info[i].double_buffer &&
-          !gl_info[i].stereo &&
-          (gl_info[i].visual_caveat == GLX_NONE_EXT))
-        return visual;
-    }
-
-  return compatible;
-}
-
-static gboolean
-get_cached_gl_visuals (GdkDisplay *display, int *system, int *rgba)
-{
-  gboolean found;
-  Atom type_return;
-  int format_return;
-  gulong nitems_return;
-  gulong bytes_after_return;
-  guchar *data = NULL;
-  Display *dpy;
-
-  dpy = gdk_x11_display_get_xdisplay (display);
-
-  found = FALSE;
-
-  gdk_x11_display_error_trap_push (display);
-  if (XGetWindowProperty (dpy, DefaultRootWindow (dpy),
-                          gdk_x11_get_xatom_by_name_for_display (display, "GDK_VISUALS"),
-                          0, 2, False, XA_INTEGER, &type_return,
-                          &format_return, &nitems_return,
-                          &bytes_after_return, &data) == Success)
-    {
-      if (type_return == XA_INTEGER &&
-          format_return == 32 &&
-          nitems_return == 2 &&
-          data != NULL)
-        {
-          long *visuals = (long *) data;
-
-          *system = (int)visuals[0];
-          *rgba = (int)visuals[1];
-          found = TRUE;
-        }
-    }
-  gdk_x11_display_error_trap_pop_ignored (display);
-
-  if (data)
-    XFree (data);
-
-  return found;
-}
-
-static void
-save_cached_gl_visuals (GdkDisplay *display, int system, int rgba)
-{
-  long visualdata[2];
-  Display *dpy;
-
-  dpy = gdk_x11_display_get_xdisplay (display);
-
-  visualdata[0] = system;
-  visualdata[1] = rgba;
-
-  gdk_x11_display_error_trap_push (display);
-  XChangeProperty (dpy, DefaultRootWindow (dpy),
-                   gdk_x11_get_xatom_by_name_for_display (display, "GDK_VISUALS"),
-                   XA_INTEGER, 32, PropModeReplace,
-                   (unsigned char *)visualdata, 2);
-  gdk_x11_display_error_trap_pop_ignored (display);
-}
-
-void
-gdk_x11_screen_update_visuals_for_glx (GdkX11Screen *x11_screen)
-{
-  GdkDisplay *display;
-  GdkX11Display *display_x11;
-  Display *dpy;
-  struct glvisualinfo *gl_info;
-  int i;
-  int system_visual_id, rgba_visual_id;
-
-  display = x11_screen->display;
-  display_x11 = GDK_X11_DISPLAY (display);
-  dpy = gdk_x11_display_get_xdisplay (display);
-
-  if (display_x11->have_egl)
-    return;
-
-  /* We save the default visuals as a property on the root window to avoid
-     having to initialize GL each time, as it may not be used later. */
-  if (get_cached_gl_visuals (display, &system_visual_id, &rgba_visual_id))
-    {
-      for (i = 0; i < x11_screen->nvisuals; i++)
-        {
-          GdkX11Visual *visual = x11_screen->visuals[i];
-          int visual_id = gdk_x11_visual_get_xvisual (visual)->visualid;
-
-          if (visual_id == system_visual_id)
-            x11_screen->system_visual = visual;
-          if (visual_id == rgba_visual_id)
-            x11_screen->rgba_visual = visual;
-        }
-
-      return;
-    }
-
-  if (!gdk_x11_screen_init_glx (x11_screen))
-    return;
-
-  gl_info = g_new0 (struct glvisualinfo, x11_screen->nvisuals);
-
-  for (i = 0; i < x11_screen->nvisuals; i++)
-    {
-      XVisualInfo *visual_list;
-      XVisualInfo visual_template;
-      int nxvisuals;
-
-      visual_template.screen = x11_screen->screen_num;
-      visual_template.visualid = gdk_x11_visual_get_xvisual (x11_screen->visuals[i])->visualid;
-      visual_list = XGetVisualInfo (x11_screen->xdisplay, VisualIDMask| VisualScreenMask, &visual_template, &nxvisuals);
-
-      if (visual_list == NULL)
-        continue;
-
-      glXGetConfig (dpy, &visual_list[0], GLX_USE_GL, &gl_info[i].supports_gl);
-      glXGetConfig (dpy, &visual_list[0], GLX_DOUBLEBUFFER, &gl_info[i].double_buffer);
-      glXGetConfig (dpy, &visual_list[0], GLX_STEREO, &gl_info[i].stereo);
-      glXGetConfig (dpy, &visual_list[0], GLX_ALPHA_SIZE, &gl_info[i].alpha_size);
-      glXGetConfig (dpy, &visual_list[0], GLX_DEPTH_SIZE, &gl_info[i].depth_size);
-      glXGetConfig (dpy, &visual_list[0], GLX_STENCIL_SIZE, &gl_info[i].stencil_size);
-
-      if (display_x11->has_glx_multisample)
-        glXGetConfig(dpy, &visual_list[0], GLX_SAMPLE_BUFFERS_ARB, &gl_info[i].num_multisample);
-
-      if (display_x11->has_glx_visual_rating)
-        glXGetConfig(dpy, &visual_list[0], GLX_VISUAL_CAVEAT_EXT, &gl_info[i].visual_caveat);
-      else
-        gl_info[i].visual_caveat = GLX_NONE_EXT;
-
-      XFree (visual_list);
-    }
-
-  x11_screen->system_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->system_visual);
-  if (x11_screen->rgba_visual)
-    x11_screen->rgba_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->rgba_visual);
-
-  g_free (gl_info);
-
-  save_cached_gl_visuals (display,
-                          gdk_x11_visual_get_xvisual (x11_screen->system_visual)->visualid,
-                          x11_screen->rgba_visual
-                            ? gdk_x11_visual_get_xvisual (x11_screen->rgba_visual)->visualid
-                            : 0);
-}
-
-GdkX11GLContext *
-gdk_x11_gl_context_glx_new (GdkSurface    *surface,
-                            gboolean       attached,
-                            GdkGLContext  *share,
-                            GError       **error)
-{
-  GdkDisplay *display;
-  GdkX11GLContextGLX *context;
-  GLXFBConfig config;
-
-  display = gdk_surface_get_display (surface);
-  if (!find_fbconfig (display, &config, error))
-    return NULL;
-
-  context = g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX,
-                          "surface", surface,
-                          "shared-context", share,
-                          NULL);
-
-  context->glx_config = config;
-
-  return GDK_X11_GL_CONTEXT (context);
-}
-
-gboolean
-gdk_x11_gl_context_glx_make_current (GdkDisplay   *display,
-                                     GdkGLContext *context)
-{
-  GdkX11GLContextGLX *context_glx;
-  GdkX11GLContext *context_x11;
-  Display *dpy = gdk_x11_display_get_xdisplay (display);
-  gboolean do_frame_sync = FALSE;
-  GLXWindow drawable;
-
-  if (context == NULL)
-    {
-      glXMakeContextCurrent (dpy, None, None, NULL);
-      return TRUE;
-    }
-
-  context_glx = GDK_X11_GL_CONTEXT_GLX (context);
-  if (context_glx->glx_context == NULL)
-    {
-      g_critical ("No GLX context associated to the GdkGLContext; you must "
-                  "call gdk_gl_context_realize() first.");
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No GLX configuration with required features found"));
       return FALSE;
-    }
-
-  context_x11 = GDK_X11_GL_CONTEXT (context);
-  if (context_x11->is_attached || gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)))
-    drawable = context_glx->attached_drawable;
-  else
-    drawable = context_glx->unattached_drawable;
-
-  GDK_DISPLAY_NOTE (display, OPENGL,
-                    g_message ("Making GLX context %p current to drawable %lu",
-                               context, (unsigned long) drawable));
-
-  if (!glXMakeContextCurrent (dpy, drawable, drawable, context_glx->glx_context))
-    {
-      GDK_DISPLAY_NOTE (display, OPENGL,
-                        g_message ("Making GLX context current failed"));
-      return FALSE;
-    }
-
-  if (context_x11->is_attached && GDK_X11_DISPLAY (display)->has_glx_swap_interval)
-    {
-      /* If the WM is compositing there is no particular need to delay
-       * the swap when drawing on the offscreen, rendering to the screen
-       * happens later anyway, and its up to the compositor to sync that
-       * to the vblank. */
-      do_frame_sync = ! gdk_display_is_composited (display);
-
-      if (do_frame_sync != context_x11->do_frame_sync)
-        {
-          context_x11->do_frame_sync = do_frame_sync;
-
-          if (do_frame_sync)
-            glXSwapIntervalSGI (1);
-          else
-            glXSwapIntervalSGI (0);
-        }
     }
 
   return TRUE;
 }
+
+#undef MAX_GLX_ATTRS
 
 /**
  * gdk_x11_display_get_glx_version:
@@ -1201,7 +871,7 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
 
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
-  if (!gdk_x11_screen_init_glx (display_x11->screen))
+  if (display_x11->glx_config == NULL)
     return FALSE;
 
   if (major != NULL)
@@ -1213,42 +883,41 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
 }
 
 /*< private >
- * gdk_x11_screen_init_glx:
- * @screen: an X11 screen
+ * gdk_x11_display_init_glx:
+ * @display_x11: an X11 display that has not been inited yet. 
+ * @out_visual: set to the Visual to be used with the returned config
+ * @out_depth: set to the depth to be used with the returned config
+ * @error: Return location for error
  *
  * Initializes the cached GLX state for the given @screen.
  *
- * It's safe to call this function multiple times.
+ * This function must be called exactly once during initialization.
  *
  * Returns: %TRUE if GLX was initialized
  */
 gboolean
-gdk_x11_screen_init_glx (GdkX11Screen *screen)
+gdk_x11_display_init_glx (GdkX11Display  *display_x11,
+                          Visual        **out_visual,
+                          int            *out_depth,
+                          GError        **error)
 {
-  GdkDisplay *display = GDK_SCREEN_DISPLAY (screen);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  GdkDisplay *display = GDK_DISPLAY (display_x11);
   Display *dpy;
-  int error_base, event_base;
   int screen_num;
-
-  if (display_x11->have_glx)
-    return TRUE;
 
   dpy = gdk_x11_display_get_xdisplay (display);
 
   if (!epoxy_has_glx (dpy))
-    return FALSE;
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("GLX is not supported"));
+      return FALSE;
+    }
 
-  if (!glXQueryExtension (dpy, &error_base, &event_base))
-    return FALSE;
-
-  screen_num = screen->screen_num;
-
-  display_x11->have_glx = TRUE;
+  screen_num = display_x11->screen->screen_num;
 
   display_x11->glx_version = epoxy_glx_version (dpy, screen_num);
-  display_x11->glx_error_base = error_base;
-  display_x11->glx_event_base = event_base;
 
   display_x11->has_glx_create_context =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_ARB_create_context_profile");
@@ -1305,6 +974,9 @@ gdk_x11_screen_init_glx (GdkX11Screen *screen)
       if (data)
         XFree (data);
     }
+
+  if (!gdk_x11_display_create_glx_config (display_x11, out_visual, out_depth, error))
+    return FALSE;
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("GLX version %d.%d found\n"

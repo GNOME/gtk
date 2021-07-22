@@ -23,7 +23,6 @@
 #define __GDK_X11_SCREEN__
 
 #include "gdkx11screen.h"
-#include "gdkvisual-x11.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
@@ -71,16 +70,6 @@ struct _GdkX11Screen
   guint xft_antialias : 1;
   guint xft_hinting : 1;
 
-  /* Visual Part */
-  int nvisuals;
-  GdkX11Visual **visuals;
-  GdkX11Visual *system_visual;
-  int available_depths[7];
-  GdkVisualType available_types[6];
-  gint16 navailable_depths;
-  gint16 navailable_types;
-  GdkX11Visual *rgba_visual;
-
   /* cache for window->translate vfunc */
   GC subwindow_gcs[32];
 };
@@ -94,8 +83,7 @@ struct _GdkX11ScreenClass
 
 GType       _gdk_x11_screen_get_type (void);
 GdkX11Screen *_gdk_x11_screen_new           (GdkDisplay   *display,
-                                             int           screen_number,
-                                             gboolean      setup_display);
+                                             int           screen_number);
 
 void _gdk_x11_screen_window_manager_changed (GdkX11Screen *screen);
 void _gdk_x11_screen_size_changed           (GdkX11Screen *screen,
@@ -119,9 +107,6 @@ gboolean
 _gdk_x11_screen_get_xft_setting             (GdkX11Screen *screen,
                                              const char   *name,
                                              GValue       *value);
-
-void _gdk_x11_screen_init_visuals           (GdkX11Screen *screen,
-                                             gboolean      setup_display);
 
 G_END_DECLS
 

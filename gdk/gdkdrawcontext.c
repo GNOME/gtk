@@ -43,6 +43,7 @@
 typedef struct _GdkDrawContextPrivate GdkDrawContextPrivate;
 
 struct _GdkDrawContextPrivate {
+  GdkDisplay *display;
   GdkSurface *surface;
 
   cairo_region_t *frame_region;
@@ -77,6 +78,7 @@ gdk_draw_context_dispose (GObject *gobject)
       priv->surface->draw_contexts = g_slist_remove (priv->surface->draw_contexts, context);
       g_clear_object (&priv->surface);
     }
+  g_clear_object (&priv->display);
 
   G_OBJECT_CLASS (gdk_draw_context_parent_class)->dispose (gobject);
 }
@@ -92,10 +94,31 @@ gdk_draw_context_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
+    case PROP_DISPLAY:
+      if (priv->display != NULL)
+        {
+          g_assert (g_value_get_object (value) == NULL);
+        }
+      else
+        {
+          priv->display = g_value_dup_object (value);
+        }
+      break;
+
     case PROP_SURFACE:
       priv->surface = g_value_dup_object (value);
-      g_assert (priv->surface != NULL);
-      priv->surface->draw_contexts = g_slist_prepend (priv->surface->draw_contexts, context);
+      if (priv->surface)
+        {
+          priv->surface->draw_contexts = g_slist_prepend (priv->surface->draw_contexts, context);
+          if (priv->display)
+            {
+              g_assert (priv->display == gdk_surface_get_display (priv->surface));
+            }
+          else
+            {
+              priv->display = g_object_ref (gdk_surface_get_display (priv->surface));
+            }
+        }
       break;
 
     default:
@@ -148,7 +171,8 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
                          P_("Display"),
                          P_("The GDK display used to create the context"),
                          GDK_TYPE_DISPLAY,
-                         G_PARAM_READABLE |
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
 
   /**
@@ -228,7 +252,7 @@ gdk_draw_context_get_display (GdkDrawContext *context)
 
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
-  return priv->surface ? gdk_surface_get_display (priv->surface) : NULL;
+  return priv->display;
 }
 
 /**

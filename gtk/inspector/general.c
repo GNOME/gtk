@@ -87,7 +87,10 @@ struct _GtkInspectorGeneral
   GtkWidget *pango_fontmap;
   GtkWidget *media_backend;
   GtkWidget *gl_version;
+  GtkWidget *gl_error;
+  GtkWidget *gl_error_row;
   GtkWidget *gl_vendor;
+  GtkWidget *gl_vendor_row;
   GtkWidget *vk_device;
   GtkWidget *vk_api_version;
   GtkWidget *vk_driver_version;
@@ -298,6 +301,17 @@ get_egl_display (GdkDisplay *display)
 static void
 init_gl (GtkInspectorGeneral *gen)
 {
+  GError *error = NULL;
+
+  if (!gdk_display_prepare_gl (gen->display, &error))
+    {
+      gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "None"));
+      gtk_widget_set_visible (gen->gl_vendor_row, FALSE);
+      gtk_widget_set_visible (gen->gl_error_row, TRUE);
+      gtk_label_set_text (GTK_LABEL (gen->gl_error), error->message);
+      g_error_free (error);
+    }
+
   if (gdk_display_get_debug_flags (gen->display) & GDK_DEBUG_GL_DISABLE)
     {
       gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "Disabled"));
@@ -1053,7 +1067,10 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, pango_fontmap);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, media_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_vendor);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_vendor_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_device);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_api_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_driver_version);

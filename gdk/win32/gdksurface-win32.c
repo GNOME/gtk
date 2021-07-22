@@ -655,6 +655,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
                     impl);
 
   g_object_unref (frame_clock);
+  impl->hdc = GetDC (impl->handle);
 
   return surface;
 }
@@ -4623,7 +4624,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
 
   impl_class->destroy_notify = gdk_win32_surface_destroy_notify;
   impl_class->drag_begin = _gdk_win32_surface_drag_begin;
-  impl_class->create_gl_context = _gdk_win32_surface_create_gl_context;
   impl_class->get_scale_factor = _gdk_win32_surface_get_scale_factor;
   impl_class->request_layout = _gdk_win32_surface_request_layout;
   impl_class->compute_size = _gdk_win32_surface_compute_size;
@@ -5045,9 +5045,9 @@ gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
 
 #ifdef GDK_WIN32_ENABLE_EGL
 EGLSurface
-_gdk_win32_surface_get_egl_surface (GdkSurface *surface,
-                                    EGLConfig   config,
-                                    gboolean    is_dummy)
+gdk_win32_surface_get_egl_surface (GdkSurface *surface,
+                                   EGLConfig   config,
+                                   gboolean    is_dummy)
 {
   GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
@@ -5151,4 +5151,21 @@ gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context)
     }
 
   return queued_window_rect;
+}
+
+void
+_gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
+{
+/* If we are using ANGLE, we need to force redraw of the whole Window and its child windows
+ *  as we need to re-acquire the EGL surfaces that we rendered to upload to Cairo explicitly,
+ *  using gdk_window_invalidate_rect (), when we maximize or restore or use aerosnap
+ */
+#ifdef GDK_WIN32_ENABLE_EGL
+  if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
+    {
+      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+
+      impl->egl_force_redraw_all = TRUE;
+    }
+#endif
 }

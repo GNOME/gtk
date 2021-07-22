@@ -358,20 +358,6 @@ gdk_macos_surface_drag_begin (GdkSurface         *surface,
   return GDK_DRAG (g_steal_pointer (&drag));
 }
 
-static GdkGLContext *
-gdk_macos_surface_create_gl_context (GdkSurface    *surface,
-                                     gboolean       attached,
-                                     GdkGLContext  *share,
-                                     GError       **error)
-{
-  GdkMacosSurface *self = (GdkMacosSurface *)surface;
-
-  g_assert (GDK_IS_MACOS_SURFACE (self));
-  g_assert (!share || GDK_IS_GL_CONTEXT (share));
-
-  return _gdk_macos_gl_context_new (self, attached, share, error);
-}
-
 static void
 gdk_macos_surface_destroy (GdkSurface *surface,
                            gboolean    foreign_destroy)
@@ -495,7 +481,6 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   object_class->get_property = gdk_macos_surface_get_property;
   object_class->set_property = gdk_macos_surface_set_property;
 
-  surface_class->create_gl_context = gdk_macos_surface_create_gl_context;
   surface_class->destroy = gdk_macos_surface_destroy;
   surface_class->drag_begin = gdk_macos_surface_drag_begin;
   surface_class->get_device_state = gdk_macos_surface_get_device_state;

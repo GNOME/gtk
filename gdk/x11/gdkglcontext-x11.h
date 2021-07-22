@@ -34,8 +34,7 @@
 #include <epoxy/glx.h>
 
 #include "gdkglcontextprivate.h"
-#include "gdkdisplayprivate.h"
-#include "gdkvisual-x11.h"
+#include "gdkdisplay-x11.h"
 #include "gdksurface.h"
 #include "gdkinternals.h"
 
@@ -48,26 +47,12 @@ G_BEGIN_DECLS
 struct _GdkX11GLContext
 {
   GdkGLContext parent_instance;
-
-  guint do_frame_sync : 1;
-  guint is_attached : 1;
 };
 
 struct _GdkX11GLContextClass
 {
   GdkGLContextClass parent_class;
-
-  void (* bind_for_frame_fence) (GdkX11GLContext *self);
 };
-
-gboolean        gdk_x11_screen_init_gl                  (GdkX11Screen  *screen);
-
-GdkGLContext *  gdk_x11_surface_create_gl_context       (GdkSurface    *window,
-                                                         gboolean       attached,
-                                                         GdkGLContext  *share,
-                                                         GError       **error);
-gboolean        gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
-                                                         GdkGLContext  *context);
 
 /* GLX */
 #define GDK_TYPE_X11_GL_CONTEXT_GLX     (gdk_x11_gl_context_glx_get_type())
@@ -76,16 +61,13 @@ gboolean        gdk_x11_display_make_gl_context_current (GdkDisplay    *display,
 
 typedef struct _GdkX11GLContextGLX      GdkX11GLContextGLX;
 
-gboolean                gdk_x11_screen_init_glx                 (GdkX11Screen  *screen);
-void                    gdk_x11_screen_update_visuals_for_glx   (GdkX11Screen  *screen);
+gboolean                gdk_x11_display_init_glx                (GdkX11Display *display_x11,
+                                                                 Visual       **out_visual,
+                                                                 int           *out_depth,
+                                                                 GError       **error);
+void                    gdk_x11_surface_destroy_glx_drawable    (GdkX11Surface *self);
 
 GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CONST;
-GdkX11GLContext *       gdk_x11_gl_context_glx_new              (GdkSurface    *surface,
-                                                                 gboolean       attached,
-                                                                 GdkGLContext  *share,
-                                                                 GError       **error);
-gboolean                gdk_x11_gl_context_glx_make_current     (GdkDisplay    *display,
-                                                                 GdkGLContext  *context);
 
 
 /* EGL */
@@ -95,14 +77,14 @@ gboolean                gdk_x11_gl_context_glx_make_current     (GdkDisplay    *
 
 typedef struct _GdkX11GLContextEGL      GdkX11GLContextEGL;
 
-gboolean                gdk_x11_screen_init_egl                 (GdkX11Screen  *screen);
-GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
-GdkX11GLContext *       gdk_x11_gl_context_egl_new              (GdkSurface    *surface,
-                                                                 gboolean       attached,
-                                                                 GdkGLContext  *share,
+gboolean                gdk_x11_display_init_egl                (GdkX11Display *display_x11,
+                                                                 gboolean       force,
+                                                                 Visual       **out_visual,
+                                                                 int           *out_depth,
                                                                  GError       **error);
-gboolean                gdk_x11_gl_context_egl_make_current     (GdkDisplay    *display,
-                                                                 GdkGLContext  *context);
+void                    gdk_x11_surface_destroy_egl_surface     (GdkX11Surface *self);
+
+GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
 
 G_END_DECLS
 

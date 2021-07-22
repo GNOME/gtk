@@ -55,11 +55,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (const XEvent *xevent,
 void _gdk_x11_error_handler_push (void);
 void _gdk_x11_error_handler_pop  (void);
 
-void          gdk_display_setup_window_visual            (GdkDisplay     *display,
-                                                          int             depth,
-                                                          Visual         *visual,
-                                                          Colormap        colormap,
-                                                          gboolean        rgba);
 int           gdk_x11_display_get_window_depth           (GdkX11Display  *display);
 Visual *      gdk_x11_display_get_window_visual          (GdkX11Display  *display);
 Colormap      gdk_x11_display_get_window_colormap        (GdkX11Display  *display);

@@ -35,24 +35,13 @@
 
 G_BEGIN_DECLS
 
+#define GDK_WIN32_GL_CONTEXT_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_GL_CONTEXT, GdkWin32GLContextClass))
+#define GDK_WIN32_GL_CONTEXT_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_GL_CONTEXT, GdkWin32GLContextClass))
+#define GDK_WIN32_IS_GL_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_GL_CONTEXT))
+
 struct _GdkWin32GLContext
 {
   GdkGLContext parent_instance;
-
-  /* WGL Context Items */
-  HGLRC hglrc;
-  HDC gl_hdc;
-  guint need_alpha_bits : 1;
-
-  /* other items */
-  guint is_attached : 1;
-  guint do_frame_sync : 1;
-
-#ifdef GDK_WIN32_ENABLE_EGL
-  /* EGL (Angle) Context Items */
-  EGLContext egl_context;
-  EGLConfig egl_config;
-#endif
 };
 
 struct _GdkWin32GLContextClass
@@ -60,15 +49,33 @@ struct _GdkWin32GLContextClass
   GdkGLContextClass parent_class;
 };
 
-GdkGLContext *
-_gdk_win32_surface_create_gl_context (GdkSurface *window,
-                                     gboolean attached,
-                                     GdkGLContext *share,
-                                     GError **error);
+/* WGL */
+#define GDK_TYPE_WIN32_GL_CONTEXT_WGL     (gdk_win32_gl_context_wgl_get_type())
+#define GDK_WIN32_GL_CONTEXT_WGL(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_WIN32_GL_CONTEXT_WGL, GdkWin32GLContextWGL))
+#define GDK_IS_WIN32_GL_CONTEXT_WGL(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_WIN32_GL_CONTEXT_WGL))
 
-gboolean
-_gdk_win32_display_make_gl_context_current (GdkDisplay *display,
-                                            GdkGLContext *context);
+typedef struct _GdkWin32GLContextWGL      GdkWin32GLContextWGL;
+
+gboolean  gdk_win32_display_init_wgl                (GdkDisplay *display,
+                                                     GError    **error);
+void      gdk_win32_gl_context_wgl_bind_surface     (GdkWin32GLContextWGL *ctx,
+                                                     GdkWin32Surface      *win32_surface);
+
+GType     gdk_win32_gl_context_wgl_get_type         (void) G_GNUC_CONST;
+
+/* EGL */
+#define GDK_TYPE_WIN32_GL_CONTEXT_EGL     (gdk_win32_gl_context_egl_get_type())
+#define GDK_WIN32_GL_CONTEXT_EGL(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_WIN32_GL_CONTEXT_EGL, GdkWin32GLContextEGL))
+#define GDK_IS_WIN32_GL_CONTEXT_EGL(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_WIN32_GL_CONTEXT_EGL))
+
+typedef struct _GdkWin32GLContextEGL      GdkWin32GLContextEGL;
+
+gboolean  gdk_win32_display_init_egl                (GdkDisplay  *display,
+                                                     GError     **error);
+void      gdk_win32_surface_destroy_egl_surface     (GdkWin32Surface *self);
+
+GType     gdk_win32_gl_context_egl_get_type         (void) G_GNUC_CONST;
+
 void
 _gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface);
 

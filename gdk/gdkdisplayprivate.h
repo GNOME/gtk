@@ -102,11 +102,6 @@ struct _GdkDisplay
 
   guint vulkan_refcount;
 #endif /* GDK_RENDERING_VULKAN */
-  guint rgba : 1;
-  guint composited : 1;
-  guint input_shapes : 1;
-
-  GdkDebugFlags debug_flags;
 
   GList *seats;
 };
@@ -145,8 +140,8 @@ struct _GdkDisplayClass
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
-  gboolean               (*make_gl_context_current)    (GdkDisplay        *display,
-                                                        GdkGLContext      *context);
+  GdkGLContext *         (*init_gl)                    (GdkDisplay        *display,
+                                                        GError           **error);
 
   GdkSeat *              (*get_default_seat)           (GdkDisplay     *display);
 
@@ -211,8 +206,7 @@ GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display
                                                        int               width,
                                                        int               height);
 
-gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
-                                                          GdkGLContext      *context);
+GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
                                                        gboolean          rgba);

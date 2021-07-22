@@ -103,7 +103,6 @@ struct _GdkWaylandSurface
 
     struct gtk_surface1  *gtk_surface;
     struct wl_egl_window *egl_window;
-    struct wl_egl_window *dummy_egl_window;
     struct zxdg_exported_v1 *xdg_exported;
     struct org_kde_kwin_server_decoration *server_decoration;
   } display_server;
@@ -111,7 +110,6 @@ struct _GdkWaylandSurface
   struct wl_event_queue *event_queue;
 
   EGLSurface egl_surface;
-  EGLSurface dummy_egl_surface;
 
   uint32_t reposition_token;
   uint32_t received_reposition_token;
@@ -2901,18 +2899,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
   if (impl->display_server.wl_surface)
     {
-      if (impl->dummy_egl_surface)
-        {
-          eglDestroySurface (display_wayland->egl_display, impl->dummy_egl_surface);
-          impl->dummy_egl_surface = NULL;
-        }
-
-      if (impl->display_server.dummy_egl_window)
-        {
-          wl_egl_window_destroy (impl->display_server.dummy_egl_window);
-          impl->display_server.dummy_egl_window = NULL;
-        }
-
       if (impl->egl_surface)
         {
           eglDestroySurface (display_wayland->egl_display, impl->egl_surface);
@@ -4238,7 +4224,6 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   impl_class->drag_begin = _gdk_wayland_surface_drag_begin;
   impl_class->get_scale_factor = gdk_wayland_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
-  impl_class->create_gl_context = gdk_wayland_surface_create_gl_context;
   impl_class->request_layout = gdk_wayland_surface_request_layout;
   impl_class->compute_size = gdk_wayland_surface_compute_size;
 }
@@ -4304,8 +4289,7 @@ gdk_wayland_surface_get_wl_egl_window (GdkSurface *surface)
 }
 
 EGLSurface
-gdk_wayland_surface_get_egl_surface (GdkSurface *surface,
-                                     EGLConfig   config)
+gdk_wayland_surface_get_egl_surface (GdkSurface *surface)
 {
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl;
@@ -4320,33 +4304,10 @@ gdk_wayland_surface_get_egl_surface (GdkSurface *surface,
       egl_window = gdk_wayland_surface_get_wl_egl_window (surface);
 
       impl->egl_surface =
-        eglCreateWindowSurface (display->egl_display, config, egl_window, NULL);
+        eglCreateWindowSurface (display->egl_display, display->egl_config, egl_window, NULL);
     }
 
   return impl->egl_surface;
-}
-
-EGLSurface
-gdk_wayland_surface_get_dummy_egl_surface (GdkSurface *surface,
-                                           EGLConfig   config)
-{
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  GdkWaylandSurface *impl;
-
-  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), NULL);
-
-  impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (impl->dummy_egl_surface == NULL)
-    {
-      impl->display_server.dummy_egl_window =
-        wl_egl_window_create (impl->display_server.wl_surface, 1, 1);
-
-      impl->dummy_egl_surface =
-        eglCreateWindowSurface (display->egl_display, config, impl->display_server.dummy_egl_window, NULL);
-    }
-
-  return impl->dummy_egl_surface;
 }
 
 struct gtk_surface1 *

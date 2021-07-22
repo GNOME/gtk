@@ -31,7 +31,6 @@
 #include "gdkpopupprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkdragsurfaceprivate.h"
-#include "gdkvisual-x11.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-xi2-private.h"
@@ -1161,15 +1160,11 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
   GdkX11Display *display_x11;
 
   Window xparent;
-  Visual *xvisual;
   Display *xdisplay;
 
   XSetWindowAttributes xattributes;
   long xattributes_mask;
   XClassHint *class_hint;
-
-  unsigned int class;
-  int depth;
 
   int abs_x;
   int abs_y;
@@ -1223,11 +1218,7 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
 
   xattributes_mask = 0;
 
-  xvisual = gdk_x11_display_get_window_visual (display_x11);
-
   impl->override_redirect = FALSE;
-
-  class = InputOutput;
 
   xattributes.background_pixmap = None;
   xattributes_mask |= CWBackPixmap;
@@ -1252,8 +1243,6 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
       impl->override_redirect = TRUE;
     }
 
-  depth = gdk_x11_display_get_window_depth (display_x11);
-
   if (surface->width * impl->surface_scale > 32767 ||
       surface->height * impl->surface_scale > 32767)
     {
@@ -1276,7 +1265,10 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
                              (surface->y + abs_y) * impl->surface_scale,
                              MAX (1, surface->width * impl->surface_scale),
                              MAX (1, surface->height * impl->surface_scale),
-                             0, depth, class, xvisual,
+                             0,
+                             gdk_x11_display_get_window_depth (display_x11),
+                             InputOutput,
+                             gdk_x11_display_get_window_visual (display_x11),
                              xattributes_mask, &xattributes);
 
   g_object_ref (surface);
@@ -1367,7 +1359,12 @@ gdk_x11_surface_destroy (GdkSurface *surface,
     }
 
   if (!foreign_destroy)
-    XDestroyWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));
+    {
+      gdk_x11_surface_destroy_egl_surface (impl);
+      gdk_x11_surface_destroy_glx_drawable (impl);
+
+      XDestroyWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));
+    }
 }
 
 /* This function is called when the XWindow is really gone.
@@ -1636,6 +1633,8 @@ gdk_x11_surface_hide (GdkSurface *surface)
   g_clear_pointer (&impl->toplevel_layout, gdk_toplevel_layout_unref);
 
   gdk_x11_surface_withdraw (surface);
+
+  impl->glx_frame_counter = 0;
 }
 
 static inline void
@@ -4813,7 +4812,6 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->drag_begin = _gdk_x11_surface_drag_begin;
   impl_class->get_scale_factor = gdk_x11_surface_get_scale_factor;
   impl_class->set_opaque_region = gdk_x11_surface_set_opaque_region;
-  impl_class->create_gl_context = gdk_x11_surface_create_gl_context;
   impl_class->request_layout = gdk_x11_surface_request_layout;
   impl_class->compute_size = gdk_x11_surface_compute_size;
 }

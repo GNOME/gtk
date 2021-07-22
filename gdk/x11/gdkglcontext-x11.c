@@ -29,7 +29,6 @@
 #include "gdkx11glcontext.h"
 #include "gdkx11screen.h"
 #include "gdkx11surface.h"
-#include "gdkvisual-x11.h"
 #include "gdkx11property.h"
 #include <X11/Xatom.h>
 
@@ -51,78 +50,5 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
 static void
 gdk_x11_gl_context_init (GdkX11GLContext *self)
 {
-  self->do_frame_sync = TRUE;
 }
 
-gboolean
-gdk_x11_screen_init_gl (GdkX11Screen *screen)
-{
-  GdkDisplay *display G_GNUC_UNUSED = GDK_SCREEN_DISPLAY (screen);
-
-  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_DISABLE))
-    return FALSE;
-
-  if (!GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
-    {
-      /* We favour EGL */
-      if (gdk_x11_screen_init_egl (screen))
-        return TRUE;
-    }
-
-  if (gdk_x11_screen_init_glx (screen))
-    return TRUE;
-
-  return FALSE;
-}
-
-GdkGLContext *
-gdk_x11_surface_create_gl_context (GdkSurface    *surface,
-                                   gboolean       attached,
-                                   GdkGLContext  *share,
-                                   GError       **error)
-{
-  GdkX11GLContext *context = NULL;
-  GdkX11Display *display_x11;
-  GdkDisplay *display;
-
-  display = gdk_surface_get_display (surface);
-
-  if (!gdk_x11_screen_init_gl (GDK_SURFACE_SCREEN (surface)))
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("No GL implementation is available"));
-      return NULL;
-    }
-
-  display_x11 = GDK_X11_DISPLAY (display);
-  if (display_x11->have_egl)
-    context = gdk_x11_gl_context_egl_new (surface, attached, share, error);
-  else if (display_x11->have_glx)
-    context = gdk_x11_gl_context_glx_new (surface, attached, share, error);
-  else
-    g_assert_not_reached ();
-
-  if (context == NULL)
-    return NULL;
-
-  context->is_attached = attached;
-
-  return GDK_GL_CONTEXT (context);
-}
-
-gboolean
-gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
-                                         GdkGLContext *context)
-{
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-
-  if (display_x11->have_egl)
-    return gdk_x11_gl_context_egl_make_current (display, context);
-  else if (display_x11->have_glx)
-    return gdk_x11_gl_context_glx_make_current (display, context);
-  else
-    g_assert_not_reached ();
-
-  return FALSE;
-}

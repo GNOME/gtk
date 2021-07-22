@@ -153,14 +153,12 @@ struct _GdkWaylandDisplay
 
   /* egl info */
   EGLDisplay egl_display;
+  EGLConfig egl_config;
   int egl_major_version;
   int egl_minor_version;
 
-  guint have_egl : 1;
-  guint have_egl_khr_create_context : 1;
   guint have_egl_buffer_age : 1;
   guint have_egl_swap_buffers_with_damage : 1;
-  guint have_egl_surfaceless_context : 1;
 };
 
 struct _GdkWaylandDisplayClass
