@@ -1376,7 +1376,7 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
 
   bpp = gdk_memory_format_bytes_per_pixel (data_format);
 
-  /* Swtich to texture0 as 2D. We'll restore it later. */
+  /* Switch to texture0 as 2D. We'll restore it later. */
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
