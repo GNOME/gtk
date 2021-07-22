@@ -125,7 +125,7 @@ failure:
   g_clear_object (&driver);
   g_clear_object (&context);
 
-  gdk_profiler_end_mark (start_time, "GskNglRenderer realize", NULL);
+  gdk_profiler_end_mark (start_time, "realize GskNglRenderer", NULL);
 
   return ret;
 }
