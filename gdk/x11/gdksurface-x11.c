@@ -1633,6 +1633,8 @@ gdk_x11_surface_hide (GdkSurface *surface)
   g_clear_pointer (&impl->toplevel_layout, gdk_toplevel_layout_unref);
 
   gdk_x11_surface_withdraw (surface);
+
+  impl->glx_frame_counter = 0;
 }
 
 static inline void

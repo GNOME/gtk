@@ -46,12 +46,6 @@ struct _GdkX11GLContextGLX
 
 typedef struct _GdkX11GLContextClass    GdkX11GLContextGLXClass;
 
-typedef struct {
-  GdkDisplay *display;
-
-  guint32 last_frame_counter;
-} DrawableInfo;
-
 G_DEFINE_TYPE (GdkX11GLContextGLX, gdk_x11_gl_context_glx, GDK_TYPE_X11_GL_CONTEXT)
 
 static GLXDrawable
@@ -82,27 +76,6 @@ gdk_x11_surface_destroy_glx_drawable (GdkX11Surface *self)
                     self->glx_drawable);
 
   self->glx_drawable = None;
-}
-
-static void
-drawable_info_free (gpointer data_)
-{
-  g_slice_free (DrawableInfo, data_);
-}
-
-static DrawableInfo *
-get_glx_drawable_info (GdkSurface *surface)
-{
-  return g_object_get_data (G_OBJECT (surface), "-gdk-x11-surface-glx-info");
-}
-
-static void
-set_glx_drawable_info (GdkSurface    *surface,
-                       DrawableInfo *info)
-{
-  g_object_set_data_full (G_OBJECT (surface), "-gdk-x11-surface-glx-info",
-                          info,
-                          drawable_info_free);
 }
 
 static void
@@ -151,17 +124,15 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
   GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (draw_context);
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
+  GdkX11Surface *x11_surface = GDK_X11_SURFACE (surface);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  DrawableInfo *info;
   GLXDrawable drawable;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->end_frame (draw_context, painted);
 
   gdk_gl_context_make_current (context);
-
-  info = get_glx_drawable_info (surface);
 
   drawable = gdk_x11_surface_get_glx_drawable (surface);
 
@@ -196,9 +167,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
 
           if (has_counter && can_wait)
             {
-              guint32 last_counter = info != NULL ? info->last_frame_counter : 0;
-
-              if (last_counter == end_frame_counter)
+              if (x11_surface->glx_frame_counter == end_frame_counter)
                 maybe_wait_for_vblank (display, drawable);
             }
           else if (can_wait)
@@ -226,8 +195,8 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
 
   glXSwapBuffers (dpy, drawable);
 
-  if (self->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
-    glXGetVideoSyncSGI (&info->last_frame_counter);
+  if (self->do_frame_sync && display_x11->has_glx_video_sync)
+    glXGetVideoSyncSGI (&x11_surface->glx_frame_counter);
 }
 
 static gboolean
@@ -550,7 +519,6 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   GdkX11GLContextGLX *context_glx;
   Display *dpy;
   GdkSurface *surface;
-  DrawableInfo *info;
   GdkGLContext *share;
   gboolean debug_bit, compat_bit, legacy_bit, es_bit;
   int major, minor, flags;
@@ -651,16 +619,6 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
 
   /* Ensure that any other context is created with an ES bit set */
   gdk_gl_context_set_use_es (context, es_bit);
-
-  info = get_glx_drawable_info (surface);
-  if (info == NULL)
-    {
-      info = g_slice_new0 (DrawableInfo);
-      info->display = display;
-      info->last_frame_counter = 0;
-
-      set_glx_drawable_info (surface, info);
-    }
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("Realized GLX context[%p], %s, version: %d.%d",

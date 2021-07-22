@@ -89,6 +89,7 @@ struct _GdkX11Surface
   cairo_surface_t *cairo_surface;
   /* EGLSurface */ gpointer egl_surface;
   /* GLXDrawable */ XID glx_drawable;
+  guint32 glx_frame_counter;
 
   int abs_x;
   int abs_y;
