@@ -26,6 +26,7 @@
 
 #include "gdk/gdk.h"
 #include "gdk/gdk-private.h"
+#include "gdk/gdkprofilerprivate.h"
 #include "gsk/gskprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 #include "gtknative.h"
@@ -520,9 +521,12 @@ static void
 do_post_parse_initialization (void)
 {
   GdkDisplayManager *display_manager;
+  gint64 before G_GNUC_UNUSED;
 
   if (gtk_initialized)
     return;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   gettext_initialization ();
 
@@ -533,21 +537,28 @@ do_post_parse_initialization (void)
   gtk_widget_set_default_direction (gtk_get_locale_direction ());
 
   gdk_event_init_types ();
+
   gsk_ensure_resources ();
   gsk_render_node_init_types ();
   _gtk_ensure_resources ();
 
+  gdk_profiler_end_mark (before, "basic initialization", NULL);
+
   gtk_initialized = TRUE;
 
+  before = GDK_PROFILER_CURRENT_TIME;
 #ifdef G_OS_UNIX
   gtk_print_backends_init ();
 #endif
   gtk_im_modules_init ();
   gtk_media_file_extension_init ();
+  gdk_profiler_end_mark (before, "init modules", NULL);
 
+  before = GDK_PROFILER_CURRENT_TIME;
   display_manager = gdk_display_manager_get ();
   if (gdk_display_manager_get_default_display (display_manager) != NULL)
     default_display_notify_cb (display_manager);
+  gdk_profiler_end_mark (before, "create display", NULL);
 
   g_signal_connect (display_manager, "notify::default-display",
                     G_CALLBACK (default_display_notify_cb),
@@ -579,6 +590,9 @@ gtk_init_check (void)
 
   if (gtk_initialized)
     return TRUE;
+
+  if (gdk_profiler_is_running ())
+    g_info ("Profiling is active");
 
   gettext_initialization ();
 

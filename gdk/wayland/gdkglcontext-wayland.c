@@ -62,6 +62,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   int major, minor, flags;
   gboolean debug_bit, forward_bit, legacy_bit, use_es;
   int i = 0;
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
@@ -196,6 +197,8 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
 
   gdk_gl_context_set_is_legacy (context, legacy_bit);
   gdk_gl_context_set_use_es (context, use_es);
+
+  gdk_profiler_end_mark (start_time, "realize GdkWaylandGLContext", NULL);
 
   return TRUE;
 }
@@ -467,8 +470,13 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLint major, minor;
   EGLDisplay dpy;
+  GdkGLContext *ctx;
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+  G_GNUC_UNUSED gint64 start_time2;
 
+  start_time2 = GDK_PROFILER_CURRENT_TIME;
   dpy = get_egl_display (display_wayland);
+  gdk_profiler_end_mark (start_time, "get_egl_display", NULL);
   if (dpy == NULL)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
@@ -477,6 +485,7 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
       return NULL;
     }
 
+  start_time2 = GDK_PROFILER_CURRENT_TIME;
   if (!eglInitialize (dpy, &major, &minor))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
@@ -484,6 +493,8 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
                            _("Could not initialize EGL display"));
       return NULL;
     }
+  gdk_profiler_end_mark (start_time2, "eglInitialize", NULL);
+
   if (major < GDK_EGL_MIN_VERSION_MAJOR ||
       (major == GDK_EGL_MIN_VERSION_MAJOR && minor < GDK_EGL_MIN_VERSION_MINOR))
     {
@@ -495,6 +506,7 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
       return NULL;
     }
 
+  start_time2 = GDK_PROFILER_CURRENT_TIME;
   if (!eglBindAPI (EGL_OPENGL_API))
     {
       eglTerminate (dpy);
@@ -503,6 +515,7 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
                            _("No GL implementation is available"));
       return NULL;
     }
+  gdk_profiler_end_mark (start_time2, "eglBindAPI", NULL);
 
   if (!epoxy_has_egl_extension (dpy, "EGL_KHR_create_context"))
     {
@@ -522,7 +535,9 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
       return NULL;
     }
 
+  start_time2 = GDK_PROFILER_CURRENT_TIME;
   display_wayland->egl_config = get_eglconfig (dpy);
+  gdk_profiler_end_mark (start_time2, "get_eglconfig", NULL);
   if (!display_wayland->egl_config)
     {
       eglTerminate (dpy);
@@ -556,9 +571,13 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
                        eglQueryString (dpy, EGL_CLIENT_APIS),
                        eglQueryString (dpy, EGL_EXTENSIONS)));
 
-  return g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
-                       "display", display,
-                       NULL);
+  ctx = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
+                      "display", display,
+                      NULL);
+
+  gdk_profiler_end_mark (start_time, "init Wayland GL", NULL);
+
+  return ctx;
 }
 
 static void

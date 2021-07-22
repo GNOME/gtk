@@ -1200,6 +1200,10 @@ gdk_display_init_gl (GdkDisplay *self)
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
   GdkGLContext *context;
+  gint64 before G_GNUC_UNUSED;
+  gint64 before2 G_GNUC_UNUSED;
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   if (GDK_DISPLAY_DEBUG_CHECK (self, GL_DISABLE))
     {
@@ -1213,17 +1217,23 @@ gdk_display_init_gl (GdkDisplay *self)
   if (context == NULL)
     return;
 
+  before2 = GDK_PROFILER_CURRENT_TIME;
+
   if (!gdk_gl_context_realize (context, &priv->gl_error))
     {
       g_object_unref (context);
       return;
     }
 
+  gdk_profiler_end_mark (before2, "realize OpenGL context", NULL);
+
   /* Only assign after realize, so GdkGLContext::realize() can use
    * gdk_display_get_gl_context() == NULL to differentiate between
    * the display's context and any other context.
    */
   priv->gl_context = context;
+
+  gdk_profiler_end_mark (before, "initialize OpenGL", NULL);
 }
 
 /**
@@ -1268,6 +1278,8 @@ gdk_display_prepare_gl (GdkDisplay  *self,
         {
           if (error)
             *error = g_error_copy (priv->gl_error);
+
+
           return FALSE;
         }
 
