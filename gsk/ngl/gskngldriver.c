@@ -26,6 +26,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkdisplayprivate.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdkprofilerprivate.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskglshaderprivate.h>
 #include <gsk/gskrendererprivate.h>
@@ -329,6 +330,7 @@ gsk_ngl_driver_load_programs (GskNglDriver  *self,
 {
   GskNglCompiler *compiler;
   gboolean ret = FALSE;
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
   g_assert (GSK_IS_NGL_DRIVER (self));
   g_assert (GSK_IS_NGL_COMMAND_QUEUE (self->command_queue));
@@ -396,6 +398,8 @@ gsk_ngl_driver_load_programs (GskNglDriver  *self,
 failure:
   g_clear_object (&compiler);
 
+  gdk_profiler_end_mark (start_time, "load programs", NULL);
+
   return ret;
 }
 
@@ -422,8 +426,11 @@ gsk_ngl_driver_new (GskNglCommandQueue  *command_queue,
 {
   GskNglDriver *self;
   GdkGLContext *context;
+  gint64 before G_GNUC_UNUSED;
 
   g_return_val_if_fail (GSK_IS_NGL_COMMAND_QUEUE (command_queue), NULL);
+
+  before = GDK_PROFILER_CURRENT_TIME;
 
   context = gsk_ngl_command_queue_get_context (command_queue);
 
@@ -443,6 +450,8 @@ gsk_ngl_driver_new (GskNglCommandQueue  *command_queue,
   self->glyphs = gsk_ngl_glyph_library_new (self);
   self->icons = gsk_ngl_icon_library_new (self);
   self->shadows = gsk_ngl_shadow_library_new (self);
+
+  gdk_profiler_end_mark (before, "create GskNglDriver", NULL);
 
   return g_steal_pointer (&self);
 }
