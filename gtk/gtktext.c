@@ -2662,24 +2662,19 @@ in_selection (GtkText *self,
   return retval;
 }
 
-static void
+static int
 gesture_get_current_point_in_layout (GtkGestureSingle *gesture,
-                                     GtkText          *self,
-                                     int              *x,
-                                     int              *y)
+                                     GtkText          *self)
 {
-  int tx, ty;
+  int tx;
   GdkEventSequence *sequence;
-  double px, py;
+  double px;
 
   sequence = gtk_gesture_single_get_current_sequence (gesture);
-  gtk_gesture_get_point (GTK_GESTURE (gesture), sequence, &px, &py);
-  gtk_text_get_layout_offsets (self, &tx, &ty);
+  gtk_gesture_get_point (GTK_GESTURE (gesture), sequence, &px, NULL);
+  gtk_text_get_layout_offsets (self, &tx, NULL);
 
-  if (x)
-    *x = px - tx;
-  if (y)
-    *y = py - ty;
+  return px - tx;
 }
 
 static void
@@ -2737,7 +2732,8 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), current);
 
-  gesture_get_current_point_in_layout (GTK_GESTURE_SINGLE (gesture), self, &x, &y);
+  x = gesture_get_current_point_in_layout (GTK_GESTURE_SINGLE (gesture), self);
+  y = widget_y;
   gtk_text_reset_blink_time (self);
 
   if (!gtk_widget_has_focus (widget))
@@ -2989,10 +2985,14 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
   GdkEventSequence *sequence;
   GdkEvent *event;
   int x, y;
+  double start_y;
 
   gtk_text_selection_bubble_popup_unset (self);
 
-  gesture_get_current_point_in_layout (GTK_GESTURE_SINGLE (gesture), self, &x, &y);
+  x = gesture_get_current_point_in_layout (GTK_GESTURE_SINGLE (gesture), self);
+  gtk_gesture_drag_get_start_point (gesture, NULL, &start_y);
+  y = start_y + offset_y;
+
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
 
