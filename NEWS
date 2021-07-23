@@ -1,3 +1,110 @@
+Overview of Changes in 4.3.2
+============================
+
+* GtkToggleButton:
+ - Fix the actionable implementation
+
+* GtkCheckButton:
+ - Fix the actionable implementation
+ - Cancel activation on when the pointer leaves
+
+* GtkMenuButton:
+ - Make activatable again
+ - Add a way to have an icon + arrow
+
+* GtkColorButton:
+ - Make activatable again
+
+* GtkFontButton:
+ - Make activatable again
+
+* GtkAppChooserButton:
+ - Make activatable again
+
+* GtkColumnView:
+ - Fix double activation
+
+* GtkLabel:
+ - Fix mnemonics without markup
+
+* GtkTreeView:
+ - Clip header buttons
+
+* GtkTextView:
+ - Add api to get the RTL and LTR contexts
+ - Fix some errors in text history grouping
+
+* GtkText:
+ - Don't show placeholder text on top of entry text
+ - Add api to compute the cursor extents
+ - Fix y coordinates for text selection
+
+* GtkFileChooser:
+ - Don't show Trash in the side bar
+
+* GtkPopoverMenu:
+ - Add scrollbars to long menus
+
+* GtkActionMuxer:
+ - Fix propagation of accel changes
+
+* Introspection:
+ - Annotate all filename arguments
+ - Rename GtkMediaStream apis to avoid name collisions
+ - Rename GtkDropTarget properties to avoid name collisions
+ - Make GtkPasswordEntryBuffer introspectable
+
+* Printing:
+ - Remove the Google Cloud Print backend
+
+* Theme:
+ - Sync included icons with the Adwaita icon theme
+
+* GSK:
+ - Avoid overflowing the vertex counter
+ - Handle negative scales correctly in the ngl renderer
+
+* GDK:
+ - Cleanup and simplify OpenGL setup code
+ - Add a GdkDisplay::init_gl vfunc and gdk_display_prepare_gl() api
+ - Require EGL 1.4
+ - Fix EGL + NVidia
+
+* Build:
+ - Enable gstreamer by default
+ - Disable Vulkan by default
+ - Remove the sassc option
+ - Remove options and checks for X11 extensions
+
+* X11:
+ - Stop using XComposite
+ - Remove the Visual cache
+
+* Wayland:
+ - Fix some DND corner cases
+ - Work with version 2 of pointer-gestures-v1
+ - Look for cursor themes in $HOME/.icons
+
+* Windows:
+ - Fix SIGILL on x64 due to popcnt
+ - Fix popup placement
+ - Fix drag icon placement
+ - Clean up HiDPI and WGL support
+ - Default to WGL
+
+* MacOs:
+ - Fix input method support
+ - Register known clipboard types for drop targets
+ - Add initial DND support
+
+* Translation updates:
+ Brazilian Portuguese
+ Portuguese
+ Romanian
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.3.1
 ============================
 
