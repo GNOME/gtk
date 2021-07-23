@@ -1153,7 +1153,7 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
        * whether the window (widget) in question actually accepts files
        * (in gtk, data of type text/uri-list) or not.
        */
-      gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (gdk_display_get_default ()), gdk_dropfiles_filter, NULL);
+      gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (gdk_surface_get_display (window)), gdk_dropfiles_filter, NULL);
       DragAcceptFiles (GDK_SURFACE_HWND (window), TRUE);
     }
   else
