@@ -81,8 +81,8 @@ tab_sort_func (gconstpointer a,
   GtkTextDirection text_direction = GPOINTER_TO_INT (user_data);
   float y1, y2;
 
-  if (!gtk_widget_compute_bounds (child1, gtk_widget_get_parent (child1), &child_bounds1) ||
-      !gtk_widget_compute_bounds (child2, gtk_widget_get_parent (child2), &child_bounds2))
+  if (!gtk_widget_compute_bounds (child1, _gtk_widget_get_parent (child1), &child_bounds1) ||
+      !gtk_widget_compute_bounds (child2, _gtk_widget_get_parent (child2), &child_bounds2))
     return 0;
 
   y1 = child_bounds1.origin.y + (child_bounds1.size.height / 2.0f);
@@ -136,7 +136,7 @@ find_old_focus (GtkWidget *widget,
 
           parent = _gtk_widget_get_parent (child_ptr);
 
-          if (parent && (gtk_widget_get_focus_child (parent) != child_ptr))
+          if (parent && (_gtk_widget_get_focus_child (parent) != child_ptr))
             {
               child = NULL;
               break;
@@ -210,7 +210,7 @@ focus_sort_left_right (GtkWidget        *widget,
                        GPtrArray        *focus_order)
 {
   CompareInfo compare_info;
-  GtkWidget *old_focus = gtk_widget_get_focus_child (widget);
+  GtkWidget *old_focus = _gtk_widget_get_focus_child (widget);
   graphene_rect_t old_bounds;
 
   compare_info.widget = widget;
@@ -312,7 +312,7 @@ focus_sort_up_down (GtkWidget        *widget,
                     GPtrArray        *focus_order)
 {
   CompareInfo compare_info;
-  GtkWidget *old_focus = gtk_widget_get_focus_child (widget);
+  GtkWidget *old_focus = _gtk_widget_get_focus_child (widget);
   graphene_rect_t old_bounds;
 
   compare_info.widget = widget;
@@ -455,7 +455,7 @@ gtk_widget_focus_move (GtkWidget        *widget,
                        GtkDirectionType  direction)
 {
   GPtrArray *focus_order;
-  GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
+  GtkWidget *focus_child = _gtk_widget_get_focus_child (widget);
   int i;
   gboolean ret = FALSE;
 

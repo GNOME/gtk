@@ -623,7 +623,6 @@ static GQuark           quark_pango_context = 0;
 static GQuark           quark_mnemonic_labels = 0;
 static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
-static GQuark           quark_action_muxer = 0;
 static GQuark           quark_font_options = 0;
 static GQuark           quark_font_map = 0;
 static GQuark           quark_builder_set_id = 0;
@@ -1147,7 +1146,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
   quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
-  quark_action_muxer = g_quark_from_static_string ("gtk-widget-action-muxer");
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
   quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
 
@@ -7367,12 +7365,10 @@ gtk_widget_dispose (GObject *object)
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GSList *sizegroups;
-  GtkActionMuxer *muxer;
   GtkATContext *at_context;
 
-  muxer = g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
-  if (muxer != NULL)
-    g_object_run_dispose (G_OBJECT (muxer));
+  if (priv->muxer != NULL)
+    g_object_run_dispose (G_OBJECT (priv->muxer));
 
   if (priv->children_observer)
     gtk_list_list_model_clear (priv->children_observer);
@@ -7423,7 +7419,7 @@ gtk_widget_dispose (GObject *object)
   if (at_context != NULL)
     gtk_at_context_unrealize (at_context);
 
-  g_object_set_qdata (object, quark_action_muxer, NULL);
+  g_clear_object (&priv->muxer);
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
@@ -10781,7 +10777,7 @@ gtk_widget_get_parent_muxer (GtkWidget *widget,
   GtkWidget *parent;
 
   if (GTK_IS_WINDOW (widget))
-    return gtk_application_get_parent_muxer_for_window (GTK_WINDOW (widget));
+    return gtk_application_get_parent_muxer_for_window ((GtkWindow *)widget);
 
   parent = _gtk_widget_get_parent (widget);
 
@@ -10794,14 +10790,13 @@ gtk_widget_get_parent_muxer (GtkWidget *widget,
 void
 _gtk_widget_update_parent_muxer (GtkWidget *widget)
 {
-  GtkActionMuxer *muxer;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
 
-  muxer = (GtkActionMuxer*)g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
-  if (muxer == NULL)
+  if (priv->muxer == NULL)
     return;
 
-  gtk_action_muxer_set_parent (muxer,
+  gtk_action_muxer_set_parent (priv->muxer,
                                gtk_widget_get_parent_muxer (widget, FALSE));
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
@@ -10813,24 +10808,18 @@ GtkActionMuxer *
 _gtk_widget_get_action_muxer (GtkWidget *widget,
                               gboolean   create)
 {
-  GtkActionMuxer *muxer;
   GtkWidgetClass *widget_class = GTK_WIDGET_GET_CLASS (widget);
-  GtkWidgetClassPrivate *priv = widget_class->priv;
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  muxer = (GtkActionMuxer*)g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
-  if (muxer)
-    return muxer;
+  if (priv->muxer)
+    return priv->muxer;
 
-  if (create || priv->actions)
+  if (create || widget_class->priv->actions)
     {
-      muxer = gtk_action_muxer_new (widget);
-      g_object_set_qdata_full (G_OBJECT (widget),
-                               quark_action_muxer,
-                               muxer,
-                               g_object_unref);
+      priv->muxer = gtk_action_muxer_new (widget);
       _gtk_widget_update_parent_muxer (widget);
 
-      return muxer;
+      return priv->muxer;
     }
   else
     return gtk_widget_get_parent_muxer (widget, FALSE);
