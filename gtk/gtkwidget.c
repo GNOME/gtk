@@ -6781,7 +6781,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
 int
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
-  GtkRoot *root;
+  GtkWidget *root;
   GdkDisplay *display;
   GdkMonitor *monitor;
 
@@ -6795,9 +6795,9 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
         return gdk_surface_get_scale_factor (surface);
     }
 
-  root = _gtk_widget_get_root (widget);
-  if (root && GTK_WIDGET (root) != widget)
-    return gtk_widget_get_scale_factor (GTK_WIDGET (root));
+  root = (GtkWidget *)_gtk_widget_get_root (widget);
+  if (root && root != widget)
+    return gtk_widget_get_scale_factor (root);
 
   /* else fall back to something that is more likely to be right than
    * just returning 1:
@@ -10525,11 +10525,6 @@ gtk_widget_set_alloc_needed (GtkWidget *widget)
 
       if (GTK_IS_NATIVE (widget))
         gtk_native_queue_relayout (GTK_NATIVE (widget));
-
-      if (!priv->parent && GTK_IS_ROOT (widget))
-        {
-          break;
-        }
 
       widget = priv->parent;
       if (widget == NULL)
