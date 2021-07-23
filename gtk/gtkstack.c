@@ -428,7 +428,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          P_("Name"),
                          P_("The name of the child page"),
                          NULL,
-                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+                         GTK_PARAM_READWRITE);
 
   /**
    * GtkStackPage:title: (attributes org.gtk.Property.get=gtk_stack_page_get_title org.gtk.Property.set=gtk_stack_page_set_title)
