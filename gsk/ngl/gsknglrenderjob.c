@@ -347,31 +347,38 @@ intersect_rounded_rectilinear (const graphene_rect_t *non_rounded,
   corners[0] = rounded_rect_has_corner (rounded, 0) &&
                rect_intersects (non_rounded,
                                 &rounded_rect_corner (rounded, 0));
-  /* top right? */
+  if (corners[0] && !rect_contains_rect (non_rounded,
+                                         &rounded_rect_corner (rounded, 0)))
+    return FALSE;
+
+  /* top right ? */
   corners[1] = rounded_rect_has_corner (rounded, 1) &&
                rect_intersects (non_rounded,
                                 &rounded_rect_corner (rounded, 1));
-  /* bottom right? */
+  if (corners[1] && !rect_contains_rect (non_rounded,
+                                         &rounded_rect_corner (rounded, 1)))
+    return FALSE;
+
+  /* bottom right ? */
   corners[2] = rounded_rect_has_corner (rounded, 2) &&
                rect_intersects (non_rounded,
                                 &rounded_rect_corner (rounded, 2));
-  /* bottom left */
+  if (corners[2] && !rect_contains_rect (non_rounded,
+                                         &rounded_rect_corner (rounded, 2)))
+    return FALSE;
+
+  /* bottom left ? */
   corners[3] = rounded_rect_has_corner (rounded, 3) &&
                rect_intersects (non_rounded,
                                 &rounded_rect_corner (rounded, 3));
-
-  if (corners[0] && !rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
-    return FALSE;
-  if (corners[1] && !rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 1)))
-    return FALSE;
-  if (corners[2] && !rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 2)))
-    return FALSE;
-  if (corners[3] && !rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 3)))
+  if (corners[3] && !rect_contains_rect (non_rounded,
+                                         &rounded_rect_corner (rounded, 3)))
     return FALSE;
 
   /* We do intersect with at least one of the corners, but in such a way that the
    * intersection between the two clips can still be represented by a single rounded
-   * rect in a trivial way. do that. */
+   * rect in a trivial way. do that.
+   */
   graphene_rect_intersection (non_rounded, &rounded->bounds, &result->bounds);
 
   for (guint i = 0; i < 4; i++)
