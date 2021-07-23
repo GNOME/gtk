@@ -128,10 +128,6 @@ struct _GdkWin32Clipdrop
 {
   GObject *parent_instance;
 
-  /* interned strings for well-known image formats */
-  const char **known_pixbuf_formats;
-  int n_known_pixbuf_formats;
-
   /* GArray of GdkAtoms for various known Selection and DnD strings.
    * Size is guaranteed to be at least GDK_WIN32_ATOM_INDEX_LAST
    */

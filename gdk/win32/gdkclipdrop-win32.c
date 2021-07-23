@@ -1605,34 +1605,6 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 
   win32_clipdrop->active_source_drags = g_hash_table_new_full (NULL, NULL, (GDestroyNotify) g_object_unref, NULL);
 
-  pixbuf_formats = gdk_pixbuf_get_formats ();
-
-  win32_clipdrop->n_known_pixbuf_formats = 0;
-  for (rover = pixbuf_formats; rover != NULL; rover = rover->next)
-    {
-      char **mime_types =
-	gdk_pixbuf_format_get_mime_types ((GdkPixbufFormat *) rover->data);
-      char **mime_type;
-
-      for (mime_type = mime_types; *mime_type != NULL; mime_type++)
-	win32_clipdrop->n_known_pixbuf_formats++;
-    }
-
-  win32_clipdrop->known_pixbuf_formats = g_new (const char *, win32_clipdrop->n_known_pixbuf_formats);
-
-  i = 0;
-  for (rover = pixbuf_formats; rover != NULL; rover = rover->next)
-    {
-      char **mime_types =
-	gdk_pixbuf_format_get_mime_types ((GdkPixbufFormat *) rover->data);
-      char **mime_type;
-
-      for (mime_type = mime_types; *mime_type != NULL; mime_type++)
-	win32_clipdrop->known_pixbuf_formats[i++] = g_intern_string (*mime_type);
-    }
-
-  g_slist_free (pixbuf_formats);
-
   win32_clipdrop->compatibility_w32formats = g_hash_table_new_full (NULL, NULL, NULL, (GDestroyNotify) g_array_unref);
 
   /* GTK actually has more text formats, but it's unlikely that we'd
@@ -1952,32 +1924,6 @@ _gdk_win32_get_clipboard_format_name_as_interned_mimetype (char *w32format_name)
   mime_type = g_strdup_printf ("application/x.windows.%s", w32format_name);
   result = g_intern_string (mime_type);
   g_free (mime_type);
-
-  return result;
-}
-
-static GArray *
-get_compatibility_w32formats_for_contentformat (const char *contentformat)
-{
-  GArray *result = NULL;
-  int i;
-  GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
-
-  result = g_hash_table_lookup (clipdrop->compatibility_w32formats, contentformat);
-
-  if (result != NULL)
-    return result;
-
-  for (i = 0; i < clipdrop->n_known_pixbuf_formats; i++)
-    {
-      if (contentformat != clipdrop->known_pixbuf_formats[i])
-        continue;
-
-      /* Any format known to gdk-pixbuf can be presented as PNG or BMP */
-      result = g_hash_table_lookup (clipdrop->compatibility_w32formats,
-                                    _gdk_win32_clipdrop_atom (GDK_WIN32_ATOM_INDEX_IMAGE_PNG));
-      break;
-    }
 
   return result;
 }
@@ -2741,7 +2687,7 @@ _gdk_win32_add_contentformat_to_pairs (const char *contentformat,
   g_array_append_val (array, fmt);
   added_count += 1;
 
-  comp_pairs = get_compatibility_w32formats_for_contentformat (contentformat);
+  comp_pairs = g_hash_table_lookup (_win32_clipdrop->compatibility_w32formats, contentformat);
   for (i = 0; comp_pairs != NULL && i < comp_pairs->len; i++)
     {
       int j;
