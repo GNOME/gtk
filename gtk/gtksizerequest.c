@@ -272,13 +272,13 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               gtk_widget_measure (widget, OPPOSITE_ORIENTATION (orientation), -1,
                                   &minimum_for_size, &natural_for_size, NULL, NULL);
 
-              /* TODO: Warn if the given for_size is too small? */
               if (for_size < MAX (minimum_for_size, css_min_for_size))
                 for_size = MAX (minimum_for_size, css_min_for_size);
 
               adjusted_for_size = for_size - widget_margins_for_size;
-
               adjusted_for_size -= css_extra_for_size;
+              if (adjusted_for_size < 0)
+                adjusted_for_size = MAX (minimum_for_size, css_min_for_size);
 
               push_recursion_check (widget, orientation);
               widget_class->measure (widget,
