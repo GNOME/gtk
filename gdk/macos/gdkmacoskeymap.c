@@ -141,6 +141,29 @@ const static struct {
   { 92, GDK_KEY_9, GDK_KEY_KP_9 }
 };
 
+/* Keys only in JIS layout.
+ * The rationale of these key codes is <HIToolbox/Events.h> in Carbon.
+ */
+const static struct {
+  guint keycode;
+  guint keyval;
+} jis_keys[] = {
+#if 0
+  /* Although These keys are also defined in <HIToolbox/Events.h>, they can be
+   * translated by UCKeyTranslate correctly.
+   */
+  { 0x5D, GDK_KEY_yen },
+  { 0x5E, GDK_KEY_underscore },
+  { 0x5F, GDK_KEY_comma },
+#endif
+  /* These keys are unexpectedly translated to Space key by UCKeyTranslate,
+   * and there is no suitable ucs value for them to add to special_ucs_table.
+   * So we should translate them particularly.
+   */
+  { 0x66 /* 102 */, GDK_KEY_Eisu_toggle },
+  { 0x68 /* 104 */, GDK_KEY_Hiragana }
+};
+
 /* These values aren't covered by gdk_unicode_to_keyval */
 const static struct {
   gunichar ucs_value;
@@ -345,6 +368,13 @@ gdk_macos_keymap_update (GdkMacosKeymap *self)
 
       if (p[0] == known_numeric_keys[i].normal_keyval)
         p[0] = known_numeric_keys[i].keypad_keyval;
+    }
+      
+  for (i = 0; i < G_N_ELEMENTS (jis_keys); i++)
+    {
+      p = keyval_array + jis_keys[i].keycode * KEYVALS_PER_KEYCODE;
+      p[0] = jis_keys[i].keyval;
+      p[1] = p[2] = p[3] = 0;
     }
 
   g_signal_emit_by_name (self, "keys-changed");
