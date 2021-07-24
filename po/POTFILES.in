@@ -33,6 +33,8 @@ gdk/win32/gdkclipdrop-win32.c
 gdk/win32/gdkcursor-win32.c
 gdk/win32/gdkdrop-win32.c
 gdk/win32/gdkglcontext-win32.c
+gdk/win32/gdkglcontext-win32-egl.c
+gdk/win32/gdkglcontext-win32-wgl.c
 gdk/win32/gdkhdataoutputstream-win32.c
 gdk/win32/gdkmain-win32.c
 gdk/x11/gdkapplaunchcontext-x11.c
