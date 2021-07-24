@@ -3536,18 +3536,21 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
 
     case GSK_CONTAINER_NODE:
       {
-        guint n_children = gsk_container_node_get_n_children (node);
+        GskRenderNode **children;
+        guint n_children;
+
+        children = gsk_container_node_get_children (node, &n_children);
 
         for (guint i = 0; i < n_children; i++)
           {
-            const GskRenderNode *child = gsk_container_node_get_child (node, i);
+            const GskRenderNode *child = children[i];
 
             if (i + 1 < n_children &&
                 job->current_clip->is_fully_contained &&
                 gsk_render_node_get_node_type (child) == GSK_ROUNDED_CLIP_NODE)
               {
                 const GskRenderNode *grandchild = gsk_rounded_clip_node_get_child (child);
-                const GskRenderNode *child2 = gsk_container_node_get_child (node, i + 1);
+                const GskRenderNode *child2 = children[i + 1];
                 if (gsk_render_node_get_node_type (grandchild) == GSK_COLOR_NODE &&
                     gsk_render_node_get_node_type (child2) == GSK_BORDER_NODE &&
                     gsk_border_node_get_uniform_color (child2) &&

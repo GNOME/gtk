@@ -2780,6 +2780,17 @@ gsk_container_node_get_child (const GskRenderNode *node,
   return self->children[idx];
 }
 
+GskRenderNode **
+gsk_container_node_get_children (const GskRenderNode *node,
+                                 guint               *n_children)
+{
+  const GskContainerNode *self = (const GskContainerNode *) node;
+
+  *n_children = self->n_children;
+
+  return self->children;
+}
+
 /*** GSK_TRANSFORM_NODE ***/
 
 /**

@@ -103,6 +103,10 @@ bool            gsk_border_node_get_uniform_color       (const GskRenderNode    
 void            gsk_text_node_serialize_glyphs          (GskRenderNode               *self,
                                                          GString                     *str);
 
+GskRenderNode ** gsk_container_node_get_children        (const GskRenderNode *node,
+                                                         guint               *n_children);
+
+
 G_END_DECLS
 
 #endif /* __GSK_RENDER_NODE_PRIVATE_H__ */
