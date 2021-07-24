@@ -3332,7 +3332,7 @@ gsk_ngl_render_job_upload_texture (GskNglRenderJob       *job,
                                    GdkTexture            *texture,
                                    GskNglRenderOffscreen *offscreen)
 {
-  if (gsk_ngl_texture_library_can_cache (GSK_NGL_TEXTURE_LIBRARY (job->driver->icons),
+  if (gsk_ngl_texture_library_can_cache ((GskNglTextureLibrary *)job->driver->icons,
                                         texture->width,
                                         texture->height) &&
       !GDK_IS_GL_TEXTURE (texture))

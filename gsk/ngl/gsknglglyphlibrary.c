@@ -88,7 +88,7 @@ gsk_ngl_glyph_library_begin_frame (GskNglTextureLibrary *library,
                                    gint64                frame_id,
                                    GPtrArray            *removed_atlases)
 {
-  GskNglGlyphLibrary *self = GSK_NGL_GLYPH_LIBRARY (library);
+  GskNglGlyphLibrary *self = (GskNglGlyphLibrary *)library;
 
   memset (self->front, 0, sizeof self->front);
 }
@@ -117,8 +117,10 @@ gsk_ngl_glyph_library_class_init (GskNglGlyphLibraryClass *klass)
 static void
 gsk_ngl_glyph_library_init (GskNglGlyphLibrary *self)
 {
-  GSK_NGL_TEXTURE_LIBRARY (self)->max_entry_size = MAX_GLYPH_SIZE;
-  gsk_ngl_texture_library_set_funcs (GSK_NGL_TEXTURE_LIBRARY (self),
+  GskNglTextureLibrary *tl = (GskNglTextureLibrary *)self;
+
+  tl->max_entry_size = MAX_GLYPH_SIZE;
+  gsk_ngl_texture_library_set_funcs (tl,
                                      gsk_ngl_glyph_key_hash,
                                      gsk_ngl_glyph_key_equal,
                                      gsk_ngl_glyph_key_free,
@@ -200,6 +202,7 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
                                     int                     height,
                                     double                  device_scale)
 {
+  GskNglTextureLibrary *tl = (GskNglTextureLibrary *)self;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   cairo_scaled_font_t *scaled_font;
   cairo_surface_t *surface;
@@ -264,7 +267,7 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
 
   gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
 
-  GSK_NGL_TEXTURE_LIBRARY (self)->driver->command_queue->n_uploads++;
+  tl->driver->command_queue->n_uploads++;
 
   if (gdk_profiler_is_running ())
     {
@@ -279,6 +282,7 @@ gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
                            GskNglGlyphKey          *key,
                            const GskNglGlyphValue **out_value)
 {
+  GskNglTextureLibrary *tl = (GskNglTextureLibrary *)self;
   PangoRectangle ink_rect;
   GskNglGlyphValue *value;
   int width;
@@ -301,7 +305,7 @@ gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
   width = (int) ceil (ink_rect.width * key->scale / 1024.0);
   height = (int) ceil (ink_rect.height * key->scale / 1024.0);
 
-  value = gsk_ngl_texture_library_pack (GSK_NGL_TEXTURE_LIBRARY (self),
+  value = gsk_ngl_texture_library_pack (tl,
                                         key,
                                         sizeof *value,
                                         width,

@@ -63,8 +63,10 @@ gsk_ngl_icon_library_class_init (GskNglIconLibraryClass *klass)
 static void
 gsk_ngl_icon_library_init (GskNglIconLibrary *self)
 {
-  GSK_NGL_TEXTURE_LIBRARY (self)->max_entry_size = 128;
-  gsk_ngl_texture_library_set_funcs (GSK_NGL_TEXTURE_LIBRARY (self),
+  GskNglTextureLibrary *tl = (GskNglTextureLibrary *)self;
+
+  tl->max_entry_size = 128;
+  gsk_ngl_texture_library_set_funcs (tl,
                                      NULL, NULL, NULL,
                                      gsk_ngl_icon_data_free);
 }
@@ -74,6 +76,7 @@ gsk_ngl_icon_library_add (GskNglIconLibrary     *self,
                           GdkTexture            *key,
                           const GskNglIconData **out_value)
 {
+  GskNglTextureLibrary *tl = (GskNglTextureLibrary *)self;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   cairo_surface_t *surface;
   GskNglIconData *icon_data;
@@ -95,7 +98,7 @@ gsk_ngl_icon_library_add (GskNglIconLibrary     *self,
   width = key->width;
   height = key->height;
 
-  icon_data = gsk_ngl_texture_library_pack (GSK_NGL_TEXTURE_LIBRARY (self),
+  icon_data = gsk_ngl_texture_library_pack (tl,
                                             key,
                                             sizeof (GskNglIconData),
                                             width, height, 1,
@@ -202,7 +205,7 @@ gsk_ngl_icon_library_add (GskNglIconLibrary     *self,
   cairo_surface_destroy (surface);
   g_free (free_data);
 
-  GSK_NGL_TEXTURE_LIBRARY (self)->driver->command_queue->n_uploads++;
+  tl->driver->command_queue->n_uploads++;
 
   if (gdk_profiler_is_running ())
     {
