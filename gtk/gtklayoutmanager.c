@@ -517,7 +517,7 @@ gtk_layout_manager_get_layout_child (GtkLayoutManager *manager,
   g_return_val_if_fail (GTK_IS_LAYOUT_MANAGER (manager), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
 
-  parent = gtk_widget_get_parent (child);
+  parent = _gtk_widget_get_parent (child);
   g_return_val_if_fail (parent != NULL, NULL);
 
   if (priv->widget != parent)

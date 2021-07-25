@@ -89,6 +89,8 @@ typedef struct _GskNglRenderModelview
   GskTransform *transform;
   float scale_x;
   float scale_y;
+  float dx;
+  float dy;
   float offset_x_before;
   float offset_y_before;
   graphene_matrix_t matrix;
@@ -347,31 +349,38 @@ intersect_rounded_rectilinear (const graphene_rect_t *non_rounded,
   corners[0] = rounded_rect_has_corner (rounded, 0) &&
                rect_intersects (non_rounded,
                                 &rounded_rect_corner (rounded, 0));
-  /* top right? */
+  if (corners[0] && !rect_contains_rect (non_rounded,
+                                         &rounded_rect_corner (rounded, 0)))
+    return FALSE;
+
+  /* top right ? */
   corners[1] = rounded_rect_has_corner (rounded, 1) &&
                rect_intersects (non_rounded,
                                 &rounded_rect_corner (rounded, 1));
-  /* bottom right? */
+  if (corners[1] && !rect_contains_rect (non_rounded,
+                                         &rounded_rect_corner (rounded, 1)))
+    return FALSE;
+
+  /* bottom right ? */
   corners[2] = rounded_rect_has_corner (rounded, 2) &&
                rect_intersects (non_rounded,
                                 &rounded_rect_corner (rounded, 2));
-  /* bottom left */
+  if (corners[2] && !rect_contains_rect (non_rounded,
+                                         &rounded_rect_corner (rounded, 2)))
+    return FALSE;
+
+  /* bottom left ? */
   corners[3] = rounded_rect_has_corner (rounded, 3) &&
                rect_intersects (non_rounded,
                                 &rounded_rect_corner (rounded, 3));
-
-  if (corners[0] && !rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 0)))
-    return FALSE;
-  if (corners[1] && !rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 1)))
-    return FALSE;
-  if (corners[2] && !rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 2)))
-    return FALSE;
-  if (corners[3] && !rect_contains_rect (non_rounded, &rounded_rect_corner (rounded, 3)))
+  if (corners[3] && !rect_contains_rect (non_rounded,
+                                         &rounded_rect_corner (rounded, 3)))
     return FALSE;
 
   /* We do intersect with at least one of the corners, but in such a way that the
    * intersection between the two clips can still be represented by a single rounded
-   * rect in a trivial way. do that. */
+   * rect in a trivial way. do that.
+   */
   graphene_rect_intersection (non_rounded, &rounded->bounds, &result->bounds);
 
   for (guint i = 0; i < 4; i++)
@@ -417,22 +426,28 @@ gsk_ngl_render_job_set_alpha (GskNglRenderJob *job,
 static void
 extract_matrix_metadata (GskNglRenderModelview *modelview)
 {
-  float dummy;
-
   gsk_transform_to_matrix (modelview->transform, &modelview->matrix);
 
   switch (gsk_transform_get_category (modelview->transform))
     {
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
+      modelview->scale_x = 1;
+      modelview->scale_y = 1;
+      modelview->dx = 0;
+      modelview->dy = 0;
+      break;
+
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
       modelview->scale_x = 1;
       modelview->scale_y = 1;
+      gsk_transform_to_translate (modelview->transform,
+                                  &modelview->dx, &modelview->dy);
       break;
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       gsk_transform_to_affine (modelview->transform,
                                &modelview->scale_x, &modelview->scale_y,
-                               &dummy, &dummy);
+                               &modelview->dx, &modelview->dy);
       break;
 
     case GSK_TRANSFORM_CATEGORY_UNKNOWN:
@@ -457,6 +472,8 @@ extract_matrix_metadata (GskNglRenderModelview *modelview)
 
         modelview->scale_x = graphene_vec3_length (&col1);
         modelview->scale_y = graphene_vec3_length (&col2);
+        modelview->dx = 0;
+        modelview->dy = 0;
       }
       break;
 
@@ -736,9 +753,10 @@ gsk_ngl_render_job_transform_bounds (GskNglRenderJob       *job,
    */
   if G_LIKELY (category >= GSK_TRANSFORM_CATEGORY_2D_AFFINE)
     {
-      float dx, dy, scale_x, scale_y;
-
-      gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
+      float scale_x = job->current_modelview->scale_x;
+      float scale_y = job->current_modelview->scale_y;
+      float dx = job->current_modelview->dx;
+      float dy = job->current_modelview->dy;
 
       /* Init directly into out rect */
       out_rect->origin.x = ((rect->origin.x + job->offset_x) * scale_x) + dx;
@@ -1949,7 +1967,7 @@ gsk_ngl_render_job_visit_transform_node (GskNglRenderJob     *job,
       {
         float dx, dy;
 
-        gsk_transform_to_translate (transform, &dx, &dy);
+        gsk_transform_node_get_translate (node, &dx, &dy);
         gsk_ngl_render_job_offset (job, dx, dy);
         gsk_ngl_render_job_visit_node (job, child);
         gsk_ngl_render_job_offset (job, -dx, -dy);
@@ -3325,7 +3343,7 @@ gsk_ngl_render_job_upload_texture (GskNglRenderJob       *job,
                                    GdkTexture            *texture,
                                    GskNglRenderOffscreen *offscreen)
 {
-  if (gsk_ngl_texture_library_can_cache (GSK_NGL_TEXTURE_LIBRARY (job->driver->icons),
+  if (gsk_ngl_texture_library_can_cache ((GskNglTextureLibrary *)job->driver->icons,
                                         texture->width,
                                         texture->height) &&
       !GDK_IS_GL_TEXTURE (texture))
@@ -3529,18 +3547,21 @@ gsk_ngl_render_job_visit_node (GskNglRenderJob     *job,
 
     case GSK_CONTAINER_NODE:
       {
-        guint n_children = gsk_container_node_get_n_children (node);
+        GskRenderNode **children;
+        guint n_children;
+
+        children = gsk_container_node_get_children (node, &n_children);
 
         for (guint i = 0; i < n_children; i++)
           {
-            const GskRenderNode *child = gsk_container_node_get_child (node, i);
+            const GskRenderNode *child = children[i];
 
             if (i + 1 < n_children &&
                 job->current_clip->is_fully_contained &&
                 gsk_render_node_get_node_type (child) == GSK_ROUNDED_CLIP_NODE)
               {
                 const GskRenderNode *grandchild = gsk_rounded_clip_node_get_child (child);
-                const GskRenderNode *child2 = gsk_container_node_get_child (node, i + 1);
+                const GskRenderNode *child2 = children[i + 1];
                 if (gsk_render_node_get_node_type (grandchild) == GSK_COLOR_NODE &&
                     gsk_render_node_get_node_type (child2) == GSK_BORDER_NODE &&
                     gsk_border_node_get_uniform_color (child2) &&

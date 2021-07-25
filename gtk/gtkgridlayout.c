@@ -462,7 +462,7 @@ get_grid_child (GtkGridLayout *self,
 {
   GtkLayoutManager *manager = GTK_LAYOUT_MANAGER (self);
 
-  return GTK_GRID_LAYOUT_CHILD (gtk_layout_manager_get_layout_child (manager, child));
+  return (GtkGridLayoutChild *) gtk_layout_manager_get_layout_child (manager, child);
 }
 
 static int
@@ -496,9 +496,9 @@ grid_request_count_lines (GridRequest *request)
   min[0] = min[1] = G_MAXINT;
   max[0] = max[1] = G_MININT;
 
-  for (child = gtk_widget_get_first_child (request->widget);
+  for (child = _gtk_widget_get_first_child (request->widget);
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child))
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
       GridChildAttach *attach = grid_child->attach;
@@ -541,9 +541,9 @@ grid_request_init (GridRequest    *request,
     }
 
 
-  for (child = gtk_widget_get_first_child (request->widget);
+  for (child = _gtk_widget_get_first_child (request->widget);
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child))
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
       GridChildAttach *attach;
@@ -637,9 +637,9 @@ grid_request_non_spanning (GridRequest    *request,
 
   lines = &request->lines[orientation];
 
-  for (child = gtk_widget_get_first_child (request->widget);
+  for (child = _gtk_widget_get_first_child (request->widget);
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child))
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
       GridChildAttach *attach;
@@ -776,9 +776,9 @@ grid_request_spanning (GridRequest    *request,
   lines = &request->lines[orientation];
   spacing = get_spacing (request->layout, request->widget, orientation);
 
-  for (child = gtk_widget_get_first_child (request->widget);
+  for (child = _gtk_widget_get_first_child (request->widget);
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child))
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
 
@@ -915,9 +915,9 @@ grid_request_compute_expand (GridRequest    *request,
       lines->lines[i].empty = TRUE;
     }
 
-  for (child = gtk_widget_get_first_child (request->widget);
+  for (child = _gtk_widget_get_first_child (request->widget);
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child))
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
 
@@ -937,9 +937,9 @@ grid_request_compute_expand (GridRequest    *request,
         line->expand = TRUE;
     }
 
-  for (child = gtk_widget_get_first_child (request->widget);
+  for (child = _gtk_widget_get_first_child (request->widget);
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child))
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
 
@@ -1365,7 +1365,7 @@ gtk_grid_layout_get_size (GtkGridLayout  *self,
   if (natural_baseline)
     *natural_baseline = -1;
 
-  if (gtk_widget_get_first_child (widget) == NULL)
+  if (_gtk_widget_get_first_child (widget) == NULL)
     return;
 
   request.layout = self;
@@ -1405,7 +1405,7 @@ gtk_grid_layout_get_size_for_size (GtkGridLayout  *self,
   if (natural_baseline)
     *natural_baseline = -1;
 
-  if (gtk_widget_get_first_child (widget) == NULL)
+  if (_gtk_widget_get_first_child (widget) == NULL)
     return;
 
   request.layout = self;
@@ -1495,9 +1495,9 @@ grid_request_allocate_children (GridRequest *request,
   int x, y, width, height, baseline, ignore;
 
 
-  for (child = gtk_widget_get_first_child (request->widget);
+  for (child = _gtk_widget_get_first_child (request->widget);
        child != NULL;
-       child = gtk_widget_get_next_sibling (child))
+       child = _gtk_widget_get_next_sibling (child))
     {
       GtkGridLayoutChild *grid_child = get_grid_child (request->layout, child);
 
@@ -1533,7 +1533,7 @@ gtk_grid_layout_allocate (GtkLayoutManager *manager,
   GridLines *lines;
   GtkOrientation orientation;
 
-  if (gtk_widget_get_first_child (widget) == NULL)
+  if (_gtk_widget_get_first_child (widget) == NULL)
     return;
 
   request.layout = self;

@@ -115,13 +115,12 @@ struct _GtkWidgetPrivate
   guint8 verifying_invariants_count;
 #endif
 
-  guint8 n_active;
-
   int width_request;
   int height_request;
 
   /* Animations and other things to update on clock ticks */
   guint clock_tick_id;
+  guint8 n_active;
   GList *tick_callbacks;
 
   void (* resize_func) (GtkWidget *);
@@ -185,6 +184,7 @@ struct _GtkWidgetPrivate
   /* only created on-demand */
   GtkListListModel *children_observer;
   GtkListListModel *controller_observer;
+  GtkActionMuxer *muxer;
 
   GtkWidget *focus_child;
 
@@ -196,8 +196,8 @@ struct _GtkWidgetPrivate
   char *tooltip_text;
 
   /* Accessibility */
-  GtkAccessibleRole accessible_role;
   GtkATContext *at_context;
+  GtkAccessibleRole accessible_role;
 };
 
 typedef struct
@@ -211,11 +211,11 @@ struct _GtkWidgetClassPrivate
 {
   GtkWidgetTemplate *template;
   GListStore *shortcuts;
-  GQuark css_name;
   GType layout_manager_type;
   GtkWidgetAction *actions;
   GtkAccessibleRole accessible_role;
   guint activate_signal;
+  GQuark css_name;
 };
 
 void          gtk_widget_root               (GtkWidget *widget);
@@ -376,6 +376,12 @@ static inline GtkWidget *
 _gtk_widget_get_parent (GtkWidget *widget)
 {
   return widget->priv->parent;
+}
+
+static inline GtkWidget *
+_gtk_widget_get_focus_child (GtkWidget *widget)
+{
+  return widget->priv->focus_child;
 }
 
 static inline gboolean

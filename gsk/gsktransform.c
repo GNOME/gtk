@@ -1487,21 +1487,21 @@ gsk_transform_to_2d (GskTransform *self,
                      float        *out_dx,
                      float        *out_dy)
 {
-  if (self == NULL ||
-      self->category < GSK_TRANSFORM_CATEGORY_2D)
+  *out_xx = 1.0f;
+  *out_yx = 0.0f;
+  *out_xy = 0.0f;
+  *out_yy = 1.0f;
+  *out_dx = 0.0f;
+  *out_dy = 0.0f;
+
+  if (self == NULL)
+    return;
+
+  if (G_UNLIKELY (self->category < GSK_TRANSFORM_CATEGORY_2D))
     {
-      if (self != NULL)
-        {
-          char *s = gsk_transform_to_string (self);
-          g_warning ("Given transform \"%s\" is not a 2D transform.", s);
-          g_free (s);
-        }
-      *out_xx = 1.0f;
-      *out_yx = 0.0f;
-      *out_xy = 0.0f;
-      *out_yy = 1.0f;
-      *out_dx = 0.0f;
-      *out_dy = 0.0f;
+      char *s = gsk_transform_to_string (self);
+      g_warning ("Given transform \"%s\" is not a 2D transform.", s);
+      g_free (s);
       return;
     }
 
@@ -1544,41 +1544,25 @@ gsk_transform_to_affine (GskTransform *self,
                          float        *out_dx,
                          float        *out_dy)
 {
+  *out_scale_x = 1.0f;
+  *out_scale_y = 1.0f;
+  *out_dx = 0.0f;
+  *out_dy = 0.0f;
+
   if (self == NULL)
-    {
-      *out_scale_x = 1.0f;
-      *out_scale_y = 1.0f;
-      *out_dx = 0.0f;
-      *out_dy = 0.0f;
-      return;
-    }
+    return;
 
   if (G_UNLIKELY (self->category < GSK_TRANSFORM_CATEGORY_2D_AFFINE))
     {
       char *s = gsk_transform_to_string (self);
       g_warning ("Given transform \"%s\" is not an affine 2D transform.", s);
       g_free (s);
-
-      *out_scale_x = 1.0f;
-      *out_scale_y = 1.0f;
-      *out_dx = 0.0f;
-      *out_dy = 0.0f;
       return;
     }
 
-  if (self->next != NULL)
-    {
-      gsk_transform_to_affine (self->next,
-                               out_scale_x, out_scale_y,
-                               out_dx, out_dy);
-    }
-  else
-    {
-      *out_scale_x = 1.0f;
-      *out_scale_y = 1.0f;
-      *out_dx = 0.0f;
-      *out_dy = 0.0f;
-    }
+  gsk_transform_to_affine (self->next,
+                           out_scale_x, out_scale_y,
+                           out_dx, out_dy);
 
   self->transform_class->apply_affine (self,
                                        out_scale_x, out_scale_y,
@@ -1607,12 +1591,11 @@ gsk_transform_to_translate (GskTransform *self,
                             float        *out_dx,
                             float        *out_dy)
 {
+  *out_dx = 0.0f;
+  *out_dy = 0.0f;
+
   if (self == NULL)
-    {
-      *out_dx = 0.0f;
-      *out_dy = 0.0f;
-      return;
-    }
+    return;
 
   if (G_UNLIKELY (self->category < GSK_TRANSFORM_CATEGORY_2D_TRANSLATE))
     {
@@ -1620,24 +1603,12 @@ gsk_transform_to_translate (GskTransform *self,
       g_warning ("Given transform \"%s\" is not an affine 2D translation.", s);
       g_free (s);
 
-      *out_dx = 0.0f;
-      *out_dy = 0.0f;
       return;
     }
 
-  if (self->next != NULL)
-    {
-      gsk_transform_to_translate (self->next,
-                                  out_dx, out_dy);
-    }
-  else
-    {
-      *out_dx = 0.0f;
-      *out_dy = 0.0f;
-    }
+  gsk_transform_to_translate (self->next, out_dx, out_dy);
 
-  self->transform_class->apply_translate (self,
-                                          out_dx, out_dy);
+  self->transform_class->apply_translate (self, out_dx, out_dy);
 }
 
 /**
