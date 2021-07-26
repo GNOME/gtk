@@ -13,6 +13,7 @@ tests = [
   'array',
   'cairo',
   'clipboard',
+  'contentformats',
   'contentserializer',
   'cursor',
   'display',
