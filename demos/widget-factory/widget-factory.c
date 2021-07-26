@@ -1182,7 +1182,7 @@ populate_flowbox (GtkWidget *flowbox)
   GtkWidget *child;
   int i;
   const char *resources[] = {
-    "sunset.jpg", "snowy.jpg", "portland-rose.jpg"
+    "sunset.jpg", "portland-rose.jpg", "beach.jpg", "nyc.jpg"
   };
 
   if (GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (flowbox), "populated")))
