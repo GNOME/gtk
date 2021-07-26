@@ -2242,6 +2242,23 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               ret = FALSE;
             }
         }
+      else if (G_VALUE_HOLDS (value, GDK_TYPE_CONTENT_FORMATS))
+        {
+          GdkContentFormats *formats;
+
+          formats = gdk_content_formats_parse (string);
+          if (formats)
+            g_value_take_boxed (value, formats);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse GdkContentFormats '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
       else if (G_VALUE_HOLDS (value, GSK_TYPE_TRANSFORM))
         {
           GskTransform *transform;
