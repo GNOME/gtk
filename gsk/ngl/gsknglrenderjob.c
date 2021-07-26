@@ -1397,7 +1397,7 @@ gsk_ngl_render_job_visit_color_node (GskNglRenderJob     *job,
   GskNglCommandBatch *batch;
 
   rgba = gsk_color_node_get_color (node);
-  if (gdk_rgba_is_clear (rgba))
+  if (RGBA_IS_CLEAR (rgba))
     return;
 
   rgba_to_half (rgba, color);
@@ -2869,7 +2869,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
    */
   if (force_color || !gsk_text_node_has_color_glyphs (node))
     {
-      if (gdk_rgba_is_clear (color))
+      if (RGBA_IS_CLEAR (color))
         return;
 
       rgba_to_half (color, c);
