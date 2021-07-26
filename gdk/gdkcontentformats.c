@@ -241,20 +241,18 @@ gdk_content_formats_print (GdkContentFormats *formats,
   g_return_if_fail (formats != NULL);
   g_return_if_fail (string != NULL);
 
-  g_string_append (string, "{ ");
   for (i = 0; i < formats->n_gtypes; i++)
     {
       if (i > 0)
-        g_string_append (string, ", ");
+        g_string_append (string, " ");
       g_string_append (string, g_type_name (formats->gtypes[i]));
     }
   for (i = 0; i < formats->n_mime_types; i++)
     {
       if (i > 0 || formats->n_gtypes > 0)
-        g_string_append (string, ", ");
+        g_string_append (string, " ");
       g_string_append (string, formats->mime_types[i]);
     }
-  g_string_append (string, " }");
 }
 
 /**
