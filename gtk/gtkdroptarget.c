@@ -344,7 +344,7 @@ gtk_drop_target_accept (GtkDropTarget *self,
   if (self->formats == NULL)
     return TRUE;
 
-  return gdk_content_formats_match (self->formats, gdk_drop_get_formats (drop));
+  return gdk_content_formats_match_gtype (self->formats, gdk_drop_get_formats (drop)) != G_TYPE_INVALID;
 }
 
 static GdkDragAction
@@ -544,6 +544,12 @@ gtk_drop_target_set_property (GObject      *object,
       gtk_drop_target_set_actions (self, g_value_get_flags (value));
       break;
 
+    case PROP_FORMATS:
+      self->formats = g_value_dup_boxed (value);
+      if (self->formats == NULL)
+        self->formats = gdk_content_formats_new (NULL, 0);
+      break;
+
     case PROP_PRELOAD:
       gtk_drop_target_set_preload (self, g_value_get_boolean (value));
       break;
@@ -661,7 +667,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            P_("Formats"),
                            P_("The supported formats"),
                            GDK_TYPE_CONTENT_FORMATS,
-                           GTK_PARAM_READABLE);
+                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   /**
    * GtkDropTarget:preload: (attributes org.gtk.Property.get=gtk_drop_target_get_preload org.gtk.Property.set=gtk_drop_target_set_preload)
@@ -843,7 +849,6 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
 static void
 gtk_drop_target_init (GtkDropTarget *self)
 {
-  self->formats = gdk_content_formats_new (NULL, 0);
 }
 
 /**
@@ -864,13 +869,19 @@ gtk_drop_target_new (GType         type,
                      GdkDragAction actions)
 {
   GtkDropTarget *result;
+  GdkContentFormats *formats;
+
+  if (type != G_TYPE_INVALID)
+    formats = gdk_content_formats_new_for_gtype (type);
+  else
+    formats = NULL;
 
   result = g_object_new (GTK_TYPE_DROP_TARGET,
+                         "formats", formats,
                          "actions", actions,
                          NULL);
 
-  if (type != G_TYPE_INVALID)
-    gtk_drop_target_set_gtypes (result, &type, 1);
+  g_clear_pointer (&formats, gdk_content_formats_unref);
 
   return result;
 }
