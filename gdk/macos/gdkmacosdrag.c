@@ -242,9 +242,11 @@ gdk_macos_drag_drop_performed (GdkDrag *drag,
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
+  g_object_ref (self);
   drag_ungrab (self);
   g_signal_emit_by_name (drag, "dnd-finished");
   gdk_drag_drop_done (drag, TRUE);
+  g_object_unref (self);
 }
 
 static void
