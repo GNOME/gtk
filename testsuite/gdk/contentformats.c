@@ -1,6 +1,51 @@
 #include <gdk/gdk.h>
 
 static void
+test_contentformats_parse (void)
+{
+  struct {
+    const char *test;
+    const char *output;
+  } tests[] = {
+    { "", "" },
+    { "text/plain;charset=utf8", "text/plain;charset=utf8" },
+    { "text/plain GdkRGBA", "GdkRGBA text/plain" },
+    { "text/plain\nGdkRGBA", "GdkRGBA text/plain" },
+    { "text/plain\t\nGdkRGBA", "GdkRGBA text/plain" },
+    { "UUU", NULL },
+    { "GdkFileList", "GdkFileList" },
+  };
+
+  for (int i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      GdkContentFormats *formats;
+      char *s;
+
+      formats = gdk_content_formats_parse (tests[i].test);
+      if (tests[i].output == NULL)
+        {
+          g_assert_null (formats);
+          continue;
+        }
+
+      s = gdk_content_formats_to_string (formats);
+
+      g_assert_cmpstr (s, ==, tests[i].output);
+
+      gdk_content_formats_unref (formats);
+      g_free (s);
+
+      formats = gdk_content_formats_parse (tests[i].output);
+      s = gdk_content_formats_to_string (formats);
+
+      g_assert_cmpstr (s, ==, tests[i].output);
+
+      gdk_content_formats_unref (formats);
+      g_free (s);
+    }
+}
+
+static void
 test_contentformats_types (void)
 {
   GdkContentFormats *formats;
@@ -63,6 +108,7 @@ main (int argc, char *argv[])
   g_type_ensure (GDK_TYPE_RGBA);
   g_type_ensure (GDK_TYPE_FILE_LIST);
 
+  g_test_add_func ("/contentformats/parse", test_contentformats_parse);
   g_test_add_func ("/contentformats/types", test_contentformats_types);
   g_test_add_func ("/contentformats/union", test_contentformats_union);
 
