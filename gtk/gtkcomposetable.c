@@ -28,30 +28,85 @@
 
 
 #define GTK_COMPOSE_TABLE_MAGIC "GtkComposeTable"
-#define GTK_COMPOSE_TABLE_VERSION (2)
+#define GTK_COMPOSE_TABLE_VERSION (3)
+
+extern const GtkComposeTable builtin_compose_table;
 
 /* Maximum length of sequences we parse */
 
 #define MAX_COMPOSE_LEN 20
 
-typedef struct {
-  gunichar *sequence;
-  char *value;
-} GtkComposeData;
-
-
-static void
-gtk_compose_data_free (GtkComposeData *compose_data)
+/* Implemented from g_str_hash() */
+static guint32
+data_hash (gconstpointer v, int length)
 {
-  g_free (compose_data->sequence);
-  g_free (compose_data->value);
-  g_slice_free (GtkComposeData, compose_data);
+  const guint16 *p, *head;
+  unsigned char c;
+  guint32 h = 5381;
+
+  for (p = v, head = v; (p - head) < length; p++)
+    {
+      c = 0x00ff & (*p >> 8);
+      h = (h << 5) + h + c;
+      c = 0x00ff & *p;
+      h = (h << 5) + h + c;
+    }
+
+  return h;
+}
+
+static guint32
+sequence_hash (gconstpointer v)
+{
+  const gunichar *p = v;
+  int i;
+
+  for (i = 0; p[i]; i++) ;
+
+  return data_hash (v, i);
+}
+
+static gboolean
+sequence_equal (gconstpointer v1,
+                gconstpointer v2)
+{
+  const gunichar *p1 = v1;
+  const gunichar *p2 = v2;
+  int i;
+
+  for (i = 0; p1[i] && p2[i] && p1[i] == p2[i]; i++) ;
+
+  return p1[i] == p2[i];
+}
+
+typedef struct {
+  GHashTable *sequences;
+  GList *files;
+  const char *compose_file;
+  gboolean found_include;
+} GtkComposeParser;
+
+static GtkComposeParser *
+parser_new (void)
+{
+  GtkComposeParser *parser;
+
+  parser = g_new (GtkComposeParser, 1);
+
+  parser->sequences = g_hash_table_new_full (sequence_hash, sequence_equal, g_free, g_free);
+  parser->files = NULL;
+  parser->compose_file = NULL;
+  parser->found_include = FALSE;
+
+  return parser;
 }
 
 static void
-gtk_compose_list_element_free (GtkComposeData *compose_data, gpointer data)
+parser_free (GtkComposeParser *parser)
 {
-  gtk_compose_data_free (compose_data);
+  g_hash_table_unref (parser->sequences);
+  g_list_free_full (parser->files, g_free);
+  g_free (parser);
 }
 
 static gboolean
@@ -72,10 +127,9 @@ is_codepoint (const char *str)
   return TRUE;
 }
 
-static gboolean
-parse_compose_value (GtkComposeData *compose_data,
-                     const char     *val,
-                     const char     *line)
+static char *
+parse_compose_value (const char *val,
+                     const char *line)
 {
   const char *p;
   GString *value;
@@ -95,8 +149,7 @@ parse_compose_value (GtkComposeData *compose_data,
     {
       if (*p == '\"')
         {
-          compose_data->value = g_string_free (value, FALSE);
-          return TRUE;
+          return g_string_free (value, FALSE);
         }
 
       if (p[1] == '\0')
@@ -154,18 +207,17 @@ parse_compose_value (GtkComposeData *compose_data,
 
 fail:
   g_string_free (value, TRUE);
-
-  return FALSE;
+  return NULL;
 }
 
-static gboolean
-parse_compose_sequence (GtkComposeData *compose_data,
-                        const char     *seq,
-                        const char     *line)
+static gunichar *
+parse_compose_sequence (const char *seq,
+                        const char *line)
 {
   char **words = g_strsplit (seq, "<", -1);
   int i;
   int n = 0;
+  gunichar *sequence = NULL;
 
   if (g_strv_length (words) < 2)
     {
@@ -191,22 +243,19 @@ parse_compose_sequence (GtkComposeData *compose_data,
 
       match = g_strndup (start, end - start);
 
-      if (compose_data->sequence == NULL)
-        compose_data->sequence = g_malloc (sizeof (gunichar) * 2);
-      else
-        compose_data->sequence = g_realloc (compose_data->sequence, sizeof (gunichar) * (n + 2));
+      sequence = g_realloc (sequence, sizeof (gunichar) * (n + 2));
 
       if (is_codepoint (match))
         {
           codepoint = (gunichar) g_ascii_strtoll (match + 1, NULL, 16);
-          compose_data->sequence[n] = codepoint;
-          compose_data->sequence[n + 1] = 0;
+          sequence[n] = codepoint;
+          sequence[n + 1] = 0;
         }
       else
         {
           codepoint = (gunichar) gdk_keyval_from_name (match);
-          compose_data->sequence[n] = codepoint;
-          compose_data->sequence[n + 1] = 0;
+          sequence[n] = codepoint;
+          sequence[n + 1] = 0;
         }
 
       if (codepoint == GDK_KEY_VoidSymbol)
@@ -215,33 +264,165 @@ parse_compose_sequence (GtkComposeData *compose_data,
       n++;
     }
 
-  g_strfreev (words);
   if (0 == n || n > MAX_COMPOSE_LEN)
     {
       g_warning ("Suspicious compose sequence length (%d). Are you sure this is right?: %s",
                  n, line);
-      return FALSE;
+      goto fail;
     }
 
-  return TRUE;
+  g_strfreev (words);
+
+  return sequence;
 
 fail:
   g_strfreev (words);
-  return FALSE;
+  g_free (sequence);
+  return NULL;
+}
+
+static void parser_parse_file (GtkComposeParser *parser,
+                               const char       *path);
+
+/* Substitute %H, %L and %S */
+static char *
+handle_substitutions (const char *start,
+                      int         length)
+{
+  GString *s;
+  const char *locale_name;
+   const char *p;
+
+  s = g_string_new ("");
+
+  locale_name = getenv ("LANG");
+
+  for (p = start; *p && p < start + length; p++)
+    {
+      if (*p != '%')
+        {
+          g_string_append_c (s, *p);
+        }
+      else
+        {
+          switch (p[1])
+            {
+            case 'H':
+              p++;
+              g_string_append (s, g_get_home_dir ());
+              break;
+            case 'L':
+              p++;
+              g_string_append_printf (s, "/usr/share/X11/locale/%s/Compose", locale_name);
+              break;
+            case 'S':
+              p++;
+              g_string_append (s, "/usr/share/X11/locale");
+              break;
+            default: ;
+              /* do nothing, next iteration handles p[1] */
+            }
+        }
+    }
+
+  return g_string_free (s, FALSE);
 }
 
 static void
-parse_compose_line (GList       **compose_list,
-                    const char   *line)
+add_sequence (gunichar   *sequence,
+              int         len,
+              const char *value,
+              gpointer    data)
+{
+  GtkComposeParser *parser = data;
+  gunichar *seq;
+
+  seq = g_new (gunichar, len + 1);
+  memcpy (seq, sequence, (len + 1) * sizeof (gunichar));
+
+  g_hash_table_replace (parser->sequences, seq, g_strdup (value));
+}
+
+static void
+parser_add_default_sequences (GtkComposeParser *parser)
+{
+  const GtkComposeTable *table = &builtin_compose_table;
+
+  gtk_compose_table_foreach (table, add_sequence, parser);
+}
+
+static void
+parser_handle_include (GtkComposeParser *parser,
+                       const char       *line)
+{
+  const char *p;
+  const char *start, *end;
+  char *path;
+
+  parser->found_include = TRUE;
+
+  p = line + strlen ("include ");
+
+  while (g_ascii_isspace (*p))
+    p++;
+
+  if (*p != '"')
+    goto error;
+
+  p++;
+
+  start = p;
+
+  while (*p && *p != '"')
+    p++;
+
+  if (*p != '"')
+    goto error;
+
+  end = p;
+
+  p++;
+
+  while (g_ascii_isspace (*p))
+    p++;
+
+  if (*p && *p != '#')
+    goto error;
+
+  if (end - start == 2 &&
+      strncmp ("%L", start, end - start) == 0)
+    {
+      parser_add_default_sequences (parser);
+    }
+  else
+    {
+      path = handle_substitutions (start, end - start);
+      parser_parse_file (parser, path);
+      g_free (path);
+    }
+
+  return;
+
+error:
+  g_warning ("Could not parse include: %s", line);
+}
+
+static void
+parser_parse_line (GtkComposeParser *parser,
+                   const char       *line)
 {
   char **components = NULL;
-  GtkComposeData *compose_data = NULL;
+  gunichar *sequence = NULL;
+  char *value = NULL;
 
   if (line[0] == '\0' || line[0] == '#')
     return;
 
   if (g_str_has_prefix (line, "include "))
-    return;
+    {
+      parser_handle_include (parser, line);
+      return;
+    }
 
   components = g_strsplit (line, ":", 2);
 
@@ -251,203 +432,193 @@ parse_compose_line (GList       **compose_list,
       goto fail;
     }
 
-  compose_data = g_slice_new0 (GtkComposeData);
-
-  if (!parse_compose_sequence (compose_data, g_strstrip (components[0]), line))
+  sequence = parse_compose_sequence (g_strstrip (components[0]), line);
+  if (sequence == NULL)
     goto fail;
 
-  if (!parse_compose_value (compose_data, g_strstrip (components[1]), line))
+  value = parse_compose_value (g_strstrip (components[1]), line);
+  if (value == NULL)
     goto fail;
 
   g_strfreev (components);
 
-  *compose_list = g_list_append (*compose_list, compose_data);
+  g_hash_table_replace (parser->sequences, sequence, value);
 
   return;
 
 fail:
   g_strfreev (components);
-  if (compose_data)
-    gtk_compose_data_free (compose_data);
+  g_free (sequence);
+  g_free (value);
 }
 
-extern const GtkComposeTableCompact gtk_compose_table_compact;
-
-static GList *
-gtk_compose_list_parse_file (const char *compose_file)
+static void
+parser_read_file (GtkComposeParser *parser,
+                  const char       *compose_file)
 {
   char *contents = NULL;
   char **lines = NULL;
   gsize length = 0;
   GError *error = NULL;
-  GList *compose_list = NULL;
-  int i;
 
   if (!g_file_get_contents (compose_file, &contents, &length, &error))
     {
       g_warning ("%s", error->message);
       g_error_free (error);
-      return NULL;
+      return;
     }
 
   lines = g_strsplit (contents, "\n", -1);
-  g_free (contents);
-  for (i = 0; lines[i] != NULL; i++)
-    parse_compose_line (&compose_list, lines[i]);
-  g_strfreev (lines);
+  for (int i = 0; lines[i] != NULL; i++)
+    parser_parse_line (parser, lines[i]);
 
-  return compose_list;
+  g_strfreev (lines);
+  g_free (contents);
 }
 
-static GList *
-gtk_compose_list_check_duplicated (GList *compose_list)
+/* Remove sequences that can be handled algorithmically,
+ * sequences with non-BMP keys, and sequences that produce
+ * empty strings.
+ */
+static void
+parser_remove_duplicates (GtkComposeParser *parser)
 {
-  GList *list;
-  GList *removed_list = NULL;
-  GtkComposeData *compose_data;
+  GHashTableIter iter;
+  gunichar *sequence;
+  char *value;
 
-  for (list = compose_list; list != NULL; list = list->next)
+  g_hash_table_iter_init (&iter, parser->sequences);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&sequence, (gpointer *)&value))
     {
       static guint16 keysyms[MAX_COMPOSE_LEN + 1];
       int i;
       int n_compose = 0;
-      gboolean compose_finish;
       gunichar output_char;
       char buf[8] = { 0, };
+      gboolean remove_sequence = FALSE;
 
-      compose_data = list->data;
+      if (value[0] == '\0')
+        {
+          remove_sequence = TRUE;
+          goto next;
+        }
+
+      if (sequence[1] == 0)
+        {
+          remove_sequence = TRUE;
+          goto next;
+        }
 
       for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         keysyms[i] = 0;
 
       for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         {
-          gunichar codepoint = compose_data->sequence[i];
+          gunichar codepoint = sequence[i];
           keysyms[i] = (guint16) codepoint;
-
-          if (codepoint == 0)
-            break;
-
-          n_compose++;
-        }
-
-      if (gtk_compose_table_compact_check (&gtk_compose_table_compact,
-                                           keysyms, n_compose,
-                                           &compose_finish,
-                                           NULL,
-                                           &output_char) &&
-          compose_finish)
-        {
-          g_unichar_to_utf8 (output_char, buf);
-          if (strcmp (compose_data->value, buf) == 0)
-            removed_list = g_list_prepend (removed_list, compose_data);
-        }
-      else if (gtk_check_algorithmically (keysyms, n_compose, &output_char))
-        {
-          g_unichar_to_utf8 (output_char, buf);
-          if (strcmp (compose_data->value, buf) == 0)
-            removed_list = g_list_prepend (removed_list, compose_data);
-        }
-    }
-
-  for (list = removed_list; list != NULL; list = list->next)
-    {
-      compose_data = list->data;
-      compose_list = g_list_remove (compose_list, compose_data);
-      gtk_compose_data_free (compose_data);
-    }
-
-  g_list_free (removed_list);
-
-  return compose_list;
-}
-
-static GList *
-gtk_compose_list_check_uint16 (GList *compose_list)
-{
-  GList *list;
-  GList *removed_list = NULL;
-  GtkComposeData *compose_data;
-
-  for (list = compose_list; list != NULL; list = list->next)
-    {
-      int i;
-
-      compose_data = list->data;
-      for (i = 0; i < MAX_COMPOSE_LEN; i++)
-        {
-          gunichar codepoint = compose_data->sequence[i];
 
           if (codepoint == 0)
             break;
 
           if (codepoint > 0xffff)
             {
-              removed_list = g_list_prepend (removed_list, compose_data);
-              break;
+              remove_sequence = TRUE;
+              goto next;
             }
+
+          n_compose++;
         }
+
+      if (gtk_check_algorithmically (keysyms, n_compose, &output_char))
+        {
+          g_unichar_to_utf8 (output_char, buf);
+          if (strcmp (value, buf) == 0)
+            remove_sequence = TRUE;
+        }
+
+next:
+      if (remove_sequence)
+        g_hash_table_iter_remove (&iter);
     }
-
-  for (list = removed_list; list != NULL; list = list->next)
-    {
-      compose_data = list->data;
-      compose_list = g_list_remove (compose_list, compose_data);
-      gtk_compose_data_free (compose_data);
-    }
-
-  g_list_free (removed_list);
-
-  return compose_list;
 }
 
-static GList *
-gtk_compose_list_format_for_gtk (GList *compose_list,
-                                 int   *p_max_compose_len,
-                                 int   *p_n_index_stride)
+static void
+parser_compute_max_compose_len (GtkComposeParser *parser,
+                                int              *max_compose_len,
+                                int              *n_first,
+                                int              *size)
 {
-  GList *list;
-  GtkComposeData *compose_data;
-  int max_compose_len = 0;
-  int i;
-  gunichar codepoint;
+  GHashTableIter iter;
+  gunichar *sequence;
+  char *value;
+  int max = 0;
+  int count = 0;
+  GHashTable *first;
 
-  for (list = compose_list; list != NULL; list = list->next)
+  first = g_hash_table_new (NULL, NULL);
+
+  g_hash_table_iter_init (&iter, parser->sequences);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&sequence, (gpointer *)&value))
     {
-      compose_data = list->data;
-      for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
+      g_hash_table_add (first, GUINT_TO_POINTER (sequence[0]));
+
+      for (int i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         {
-          codepoint = compose_data->sequence[i];
-          if (codepoint == 0)
+          if (sequence[i] == 0)
             {
-              if (max_compose_len < i)
-                max_compose_len = i;
+              count += i;
+              if (max < i)
+                max = i;
               break;
             }
         }
     }
 
-  if (p_max_compose_len)
-    *p_max_compose_len = max_compose_len;
-  if (p_n_index_stride)
-    *p_n_index_stride = max_compose_len + 2;
+  *max_compose_len = max;
+  *n_first = g_hash_table_size (first);
+  *size = count;
 
-  return compose_list;
+  g_hash_table_unref (first);
+}
+
+static inline int
+sequence_length (gpointer a)
+{
+  gunichar *seq = a;
+  int i;
+
+  for (i = 0; seq[i]; i++) ;
+
+  return i;
 }
 
 static int
-gtk_compose_data_compare (gpointer a,
-                          gpointer b,
-                          gpointer data)
+sequence_compare (gpointer a,
+                  gpointer b,
+                  gpointer data)
 {
-  GtkComposeData *compose_data_a = a;
-  GtkComposeData *compose_data_b = b;
-  int max_compose_len = GPOINTER_TO_INT (data);
+  gunichar *seq_a = a;
+  gunichar *seq_b = b;
   int i;
-  for (i = 0; i < max_compose_len; i++)
+  gunichar code_a, code_b;
+  int len_a, len_b;
+
+  code_a = seq_a[0];
+  code_b = seq_b[0];
+
+  if (code_a != code_b)
+    return code_a - code_b;
+
+  len_a = sequence_length (a);
+  len_b = sequence_length (b);
+
+  if (len_a != len_b)
+    return len_a - len_b;
+
+  for (i = 1; i < len_a; i++)
     {
-      gunichar code_a = compose_data_a->sequence[i];
-      gunichar code_b = compose_data_b->sequence[i];
+      code_a = seq_a[i];
+      code_b = seq_b[i];
 
       if (code_a != code_b)
         return code_a - code_b;
@@ -456,23 +627,22 @@ gtk_compose_data_compare (gpointer a,
   return 0;
 }
 
-/* Implemented from g_str_hash() */
-static guint32
-gtk_compose_table_data_hash (gconstpointer v, int length)
+guint32
+gtk_compose_table_data_hash (const guint16 *data,
+                             int            max_seq_len,
+                             int            n_seqs)
 {
-  const guint16 *p, *head;
-  unsigned char c;
-  guint32 h = 5381;
+  gsize n_index_stride;
+  gsize length;
 
-  for (p = v, head = v; (p - head) < length; p++)
+  n_index_stride = max_seq_len + 2;
+  if (!g_size_checked_mul (&length, n_index_stride, n_seqs))
     {
-      c = 0x00ff & (*p >> 8);
-      h = (h << 5) + h + c;
-      c = 0x00ff & *p;
-      h = (h << 5) + h + c;
+      g_critical ("Overflow in the compose sequences");
+      return 0;
     }
 
-  return h;
+  return data_hash (data, length);
 }
 
 static char *
@@ -504,29 +674,29 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
                              gsize           *count)
 {
   char *p, *contents;
-  gsize length, total_length;
+  gsize header_length, total_length;
   guint16 bytes;
   const char *header = GTK_COMPOSE_TABLE_MAGIC;
   const guint16 version = GTK_COMPOSE_TABLE_VERSION;
   guint16 max_seq_len = compose_table->max_seq_len;
-  guint16 index_stride = max_seq_len + 2;
-  guint16 n_seqs = compose_table->n_seqs;
+  guint16 n_index_size = compose_table->n_index_size;
+  guint16 data_size = compose_table->data_size;
   guint16 n_chars = compose_table->n_chars;
   guint32 i;
 
   g_return_val_if_fail (compose_table != NULL, NULL);
   g_return_val_if_fail (max_seq_len > 0, NULL);
-  g_return_val_if_fail (index_stride > 0, NULL);
+  g_return_val_if_fail (n_index_size > 0, NULL);
 
-  length = strlen (header);
-  total_length = length + sizeof (guint16) * (4 + index_stride * n_seqs) + n_chars;
+  header_length = strlen (header);
+  total_length = header_length + sizeof (guint16) * (5 + data_size) + n_chars;
   if (count)
     *count = total_length;
 
   p = contents = g_malloc (total_length);
 
-  memcpy (p, header, length);
-  p += length;
+  memcpy (p, header, header_length);
+  p += header_length;
 
 #define APPEND_GUINT16(elt) \
   bytes = GUINT16_TO_BE (elt); \
@@ -535,10 +705,11 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
 
   APPEND_GUINT16 (version);
   APPEND_GUINT16 (max_seq_len);
-  APPEND_GUINT16 (n_seqs);
+  APPEND_GUINT16 (n_index_size);
+  APPEND_GUINT16 (data_size);
   APPEND_GUINT16 (n_chars);
 
-  for (i = 0; i < (guint32) index_stride * n_seqs; i++)
+  for (i = 0; i < data_size; i++)
     {
       APPEND_GUINT16 (compose_table->data[i]);
     }
@@ -551,17 +722,9 @@ gtk_compose_table_serialize (GtkComposeTable *compose_table,
   return contents;
 }
 
-static int
-gtk_compose_table_find (gconstpointer data1,
-                        gconstpointer data2)
-{
-  const GtkComposeTable *compose_table = (const GtkComposeTable *) data1;
-  guint32 hash = (guint32) GPOINTER_TO_INT (data2);
-  return compose_table->id != hash;
-}
-
 static GtkComposeTable *
-gtk_compose_table_load_cache (const char *compose_file)
+gtk_compose_table_load_cache (const char *compose_file,
+                              gboolean   *found_old_cache)
 {
   guint32 hash;
   char *path = NULL;
@@ -574,13 +737,15 @@ gtk_compose_table_load_cache (const char *compose_file)
   guint16 bytes;
   guint16 version;
   guint16 max_seq_len;
-  guint16 index_stride;
-  guint16 n_seqs;
+  guint16 n_index_size;
+  guint16 data_size;
   guint16 n_chars;
   guint32 i;
-  guint16 *gtk_compose_seqs = NULL;
-  GtkComposeTable *retval;
+  guint16 *data = NULL;
   char *char_data = NULL;
+  GtkComposeTable *retval;
+
+  *found_old_cache = FALSE;
 
   hash = g_str_hash (compose_file);
   if ((path = gtk_compose_hash_get_cache_path (hash)) == NULL)
@@ -622,27 +787,27 @@ gtk_compose_table_load_cache (const char *compose_file)
   GET_GUINT16 (version);
   if (version != GTK_COMPOSE_TABLE_VERSION)
     {
-      g_warning ("cache version is different %u != %u",
-                 version, GTK_COMPOSE_TABLE_VERSION);
+      if (version < GTK_COMPOSE_TABLE_VERSION)
+        *found_old_cache = TRUE;
       goto out_load_cache;
     }
 
   GET_GUINT16 (max_seq_len);
-  GET_GUINT16 (n_seqs);
+  GET_GUINT16 (n_index_size);
+  GET_GUINT16 (data_size);
   GET_GUINT16 (n_chars);
 
-  if (max_seq_len == 0 || n_seqs == 0)
+  if (max_seq_len == 0 || data_size == 0)
     {
-      g_warning ("cache size is not correct %d %d", max_seq_len, n_seqs);
+      g_warning ("cache size is not correct %d %d", max_seq_len, data_size);
       goto out_load_cache;
     }
 
-  index_stride = max_seq_len + 2;
-  gtk_compose_seqs = g_new0 (guint16, n_seqs * index_stride);
+  data = g_new0 (guint16, data_size);
 
-  for (i = 0; i < (guint32) index_stride * n_seqs; i++)
+  for (i = 0; i < data_size; i++)
     {
-      GET_GUINT16 (gtk_compose_seqs[i]);
+      GET_GUINT16 (data[i]);
     }
 
   if (n_chars > 0)
@@ -653,9 +818,10 @@ gtk_compose_table_load_cache (const char *compose_file)
     }
 
   retval = g_new0 (GtkComposeTable, 1);
-  retval->data = gtk_compose_seqs;
+  retval->data = data;
   retval->max_seq_len = max_seq_len;
-  retval->n_seqs = n_seqs;
+  retval->n_index_size = n_index_size;
+  retval->data_size = data_size;
   retval->char_data = char_data;
   retval->n_chars = n_chars;
   retval->id = hash;
@@ -668,7 +834,7 @@ gtk_compose_table_load_cache (const char *compose_file)
 #undef GET_GUINT16
 
 out_load_cache:
-  g_free (gtk_compose_seqs);
+  g_free (data);
   g_free (char_data);
   g_free (contents);
   g_free (path);
@@ -705,174 +871,344 @@ out_save_cache:
 }
 
 static GtkComposeTable *
-gtk_compose_table_new_with_list (GList   *compose_list,
-                                 int      max_compose_len,
-                                 int      n_index_stride,
-                                 guint32  hash)
+parser_get_compose_table (GtkComposeParser *parser)
 {
-  guint length;
-  guint n = 0;
-  int i, j;
-  guint16 *gtk_compose_seqs = NULL;
-  GList *list;
-  GtkComposeData *compose_data;
-  GtkComposeTable *retval = NULL;
-  gunichar codepoint;
+  guint16 *data;
+  GtkComposeTable *table;
+  guint16 encoded_value;
   GString *char_data;
+  int max_compose_len;
+  GList *sequences;
+  GList *list;
+  int i;
+  int size;
+  int n_first;
+  int first_pos;
+  int rest_pos;
+  int index_rowstride;
+  int n_sequences;
+  gunichar current_first;
 
-  g_return_val_if_fail (compose_list != NULL, NULL);
+  parser_remove_duplicates (parser);
 
-  length = g_list_length (compose_list);
+  if (g_hash_table_size (parser->sequences) == 0)
+    return NULL;
 
-  gtk_compose_seqs = g_new0 (guint16, length * n_index_stride);
+  parser_compute_max_compose_len (parser, &max_compose_len, &n_first, &size);
+
+  sequences = g_hash_table_get_keys (parser->sequences);
+
+  sequences = g_list_sort_with_data (sequences,
+                                     (GCompareDataFunc) sequence_compare,
+                                     NULL);
+
+  index_rowstride = max_compose_len + 1;
+  data = g_new0 (guint16, n_first * index_rowstride + size);
 
   char_data = g_string_new ("");
 
-  for (list = compose_list; list != NULL; list = list->next)
+  n_sequences = 0;
+  current_first = 0;
+  first_pos = 0;
+  rest_pos = n_first * index_rowstride;
+
+  for (list = sequences; list != NULL; list = list->next)
     {
-      compose_data = list->data;
-      for (i = 0; i < max_compose_len; i++)
+      gunichar *sequence = list->data;
+      char *value = g_hash_table_lookup (parser->sequences, sequence);
+      int len = sequence_length (sequence);
+
+      g_assert (2 <= len && len <= max_compose_len);
+
+      /* Encode the value. If the value is a single
+       * character with a value smaller than 1 << 15,
+       * we just use it directly.
+       * Otherwise, we store the value as string and
+       * put the offset into the table, with the high
+       * bit set.
+       */
+      if (g_utf8_strlen (value, -1) == 1 &&
+          g_utf8_get_char (value) < 0x8000)
         {
-          if (compose_data->sequence[i] == 0)
-            {
-              for (j = i; j < max_compose_len; j++)
-                gtk_compose_seqs[n++] = 0;
-              break;
-            }
-          gtk_compose_seqs[n++] = (guint16) compose_data->sequence[i];
-        }
-
-      if (g_utf8_strlen (compose_data->value, -1) > 1)
-        {
-          if (char_data->len > 0)
-            g_string_append_c (char_data, 0);
-
-          codepoint = char_data->len | (1 << 31);
-
-          g_string_append (char_data, compose_data->value);
+          encoded_value = (guint16) g_utf8_get_char (value);
         }
       else
         {
-          codepoint = g_utf8_get_char (compose_data->value);
-          g_assert ((codepoint & (1 << 31)) == 0);
+          g_assert (strlen (value) < 20);
+
+          if (char_data->len > 0)
+            g_string_append_c (char_data, 0);
+
+          g_assert (char_data->len < 0x8000);
+
+          encoded_value = (guint16) (char_data->len | 0x8000);
+          g_string_append (char_data, value);
         }
 
-      gtk_compose_seqs[n++] = (codepoint & 0xffff0000) >> 16;
-      gtk_compose_seqs[n++] = codepoint & 0xffff;
+      if (sequence[0] != current_first)
+        {
+          g_assert (sequence[0] <= 0xffff);
+          if (current_first != 0)
+            first_pos += index_rowstride;
+          current_first = (guint16)sequence[0];
+
+          data[first_pos] = (guint16)sequence[0];
+          for (i = 1; i < index_rowstride; i++)
+            data[first_pos + i] = rest_pos;
+        }
+
+      for (i = 1; i < len; i++)
+        {
+          g_assert (sequence[i] != 0);
+          g_assert (sequence[i] <= 0xffff);
+          data[rest_pos + i - 1] = (guint16) sequence[i];
+        }
+
+      g_assert (encoded_value != 0);
+      data[rest_pos + len - 1] = encoded_value;
+
+      n_sequences++;
+
+      rest_pos += len;
+
+      for (i = len; i <= max_compose_len; i++)
+        data[first_pos + i] = rest_pos;
+
+      for (i = 1; i < max_compose_len; i++)
+        g_assert (data[first_pos + i] <= data[first_pos + i + 1]);
     }
 
-  retval = g_new0 (GtkComposeTable, 1);
-  retval->data = gtk_compose_seqs;
-  retval->max_seq_len = max_compose_len;
-  retval->n_seqs = length;
-  retval->id = hash;
-  retval->n_chars = char_data->len;
-  retval->char_data = g_string_free (char_data, FALSE);
+  g_assert (first_pos + index_rowstride == n_first * index_rowstride);
+  g_assert (rest_pos == n_first * index_rowstride + size);
+
+  if (char_data->len > 0)
+    g_string_append_c (char_data, 0);
+
+  table = g_new0 (GtkComposeTable, 1);
+  table->data = data;
+  table->data_size = n_first * index_rowstride + size;
+  table->max_seq_len = max_compose_len;
+  table->n_index_size = n_first;
+  table->n_chars = char_data->len;
+  table->char_data = g_string_free (char_data, FALSE);
+  table->n_sequences = n_sequences;
+  table->id = g_str_hash (parser->compose_file);
+
+  g_list_free (sequences);
+
+  return table;
+}
+
+static char *
+canonicalize_filename (const char *parent_path,
+                       const char *path)
+{
+  GFile *file;
+  char *retval;
+
+  if (path[0] != '/' && parent_path)
+    {
+      GFile *orig = g_file_new_for_path (parent_path);
+      GFile *parent = g_file_get_parent (orig);
+      file = g_file_resolve_relative_path (parent, path);
+      g_object_unref (parent);
+      g_object_unref (orig);
+    }
+  else
+    {
+      file = g_file_new_for_path (path);
+    }
+
+  retval = g_file_get_path (file);
+
+  g_object_unref (file);
 
   return retval;
+}
+
+static void
+parser_parse_file (GtkComposeParser *parser,
+                   const char       *compose_file)
+{
+  char *path;
+
+  // stash the name for the table hash
+  if (parser->compose_file == NULL)
+    parser->compose_file = compose_file;
+
+  path = canonicalize_filename (parser->compose_file, compose_file);
+
+  if (g_list_find_custom (parser->files, path, (GCompareFunc)strcmp))
+    {
+      g_warning ("include cycle detected: %s", compose_file);
+      g_free (path);
+      return;
+    }
+
+  parser->files = g_list_prepend (parser->files, path);
+
+  parser_read_file (parser, path);
+
+  parser->files = g_list_remove (parser->files, path);
+}
+
+GtkComposeTable *
+gtk_compose_table_parse (const char *compose_file,
+                         gboolean   *found_include)
+{
+  GtkComposeParser *parser;
+  GtkComposeTable *compose_table;
+
+  parser = parser_new ();
+  parser_parse_file (parser, compose_file);
+  compose_table = parser_get_compose_table (parser);
+  if (found_include)
+    *found_include = parser->found_include;
+  parser_free (parser);
+
+  return compose_table;
+}
+
+static const char *prefix =
+  "# GTK has rewritten this file to add the line:\n"
+  "\n"
+  "include \"%L\"\n"
+  "\n"
+  "# This is necessary to add your own Compose sequences\n"
+  "# in addition to the builtin sequences of GTK. If this\n"
+  "# is not what you want, just remove that line.\n"
+  "#\n"
+  "# A backup of the previous file contents has been made.\n"
+  "\n"
+  "\n";
+
+static gboolean
+rewrite_compose_file (const char *compose_file)
+{
+  char *path = NULL;
+  char *content = NULL;
+  gsize content_len;
+  GFile *file = NULL;
+  GOutputStream *stream = NULL;
+  gboolean ret = FALSE;
+
+  path = canonicalize_filename (NULL, compose_file);
+
+  if (!g_file_get_contents (path, &content, &content_len, NULL))
+    goto out;
+
+  file = g_file_new_for_path (path);
+  stream = G_OUTPUT_STREAM (g_file_replace (file, NULL, TRUE, 0, NULL, NULL));
+
+  if (stream == NULL)
+    goto out;
+
+  if (!g_output_stream_write (stream, prefix, strlen (prefix), NULL, NULL))
+    goto out;
+
+  if (!g_output_stream_write (stream, content, content_len, NULL, NULL))
+    goto out;
+
+  if (!g_output_stream_close (stream, NULL, NULL))
+    goto out;
+
+  ret = TRUE;
+
+out:
+  g_clear_object (&stream);
+  g_clear_object (&file);
+  g_clear_pointer (&path, g_free);
+  g_clear_pointer (&content, g_free);
+
+  return ret;
 }
 
 GtkComposeTable *
 gtk_compose_table_new_with_file (const char *compose_file)
 {
-  GList *compose_list = NULL;
   GtkComposeTable *compose_table;
-  int max_compose_len = 0;
-  int n_index_stride = 0;
+  gboolean found_old_cache = FALSE;
+  gboolean found_include = FALSE;
 
   g_assert (compose_file != NULL);
 
-  compose_list = gtk_compose_list_parse_file (compose_file);
-  if (compose_list == NULL)
-    return NULL;
-  compose_list = gtk_compose_list_check_duplicated (compose_list);
-  compose_list = gtk_compose_list_check_uint16 (compose_list);
-  compose_list = gtk_compose_list_format_for_gtk (compose_list,
-                                                  &max_compose_len,
-                                                  &n_index_stride);
-  compose_list = g_list_sort_with_data (compose_list,
-                                        (GCompareDataFunc) gtk_compose_data_compare,
-                                        GINT_TO_POINTER (max_compose_len));
-  if (compose_list == NULL)
+  compose_table = gtk_compose_table_load_cache (compose_file, &found_old_cache);
+  if (compose_table != NULL)
+    return compose_table;
+
+parse:
+  compose_table = gtk_compose_table_parse (compose_file, &found_include);
+
+  /* This is where we apply heuristics to avoid breaking users existing configurations
+   * with the change to not always add the default sequences.
+   *
+   * If we find a cache that was generated before 4.4, and the Compose file
+   * does not have an include, and doesn't contain so many sequences that it
+   * is probably a copy of the system one, we take steps to keep things working,
+   * and thell the user about it.
+   */
+  if (found_old_cache && !found_include && compose_table->n_sequences < 100)
     {
-      g_warning ("compose file %s does not include any keys besides keys in en-us compose file", compose_file);
-      return NULL;
+      if (rewrite_compose_file (compose_file))
+        {
+          g_warning ("\nSince GTK 4.4, Compose files replace the builtin\n"
+                     "compose sequences. To keep them and add your own\n"
+                     "sequences on top, the line:\n"
+                     "\n"
+                     "  include \"%%L\"\n"
+                     "\n"
+                     "has been added to the Compose file\n%s.\n", compose_file);
+          goto parse;
+        }
+      else
+        {
+          g_warning ("\nSince GTK 4.4, Compose files replace the builtin\n"
+                     "compose sequences. To keep them and add your own\n"
+                     "sequences on top, you need to add the line:\n"
+                     "\n"
+                     "  include \"%%L\"\n"
+                     "\n"
+                     "to the Compose file\n%s.\n", compose_file);
+        }
     }
 
-  compose_table = gtk_compose_table_new_with_list (compose_list,
-                                                   max_compose_len,
-                                                   n_index_stride,
-                                                   g_str_hash (compose_file));
-  g_list_free_full (compose_list, (GDestroyNotify) gtk_compose_list_element_free);
+  if (compose_table != NULL)
+    gtk_compose_table_save_cache (compose_table);
+
   return compose_table;
 }
 
-GSList *
-gtk_compose_table_list_add_array (GSList        *compose_tables,
-                                  const guint16 *data,
-                                  int            max_seq_len,
-                                  int            n_seqs)
+GtkComposeTable *
+gtk_compose_table_new_with_data (const guint16 *data,
+                                 int            max_seq_len,
+                                 int            n_seqs)
 {
-  guint32 hash;
+  GtkComposeParser *parser;
   GtkComposeTable *compose_table;
-  gsize n_index_stride;
-  gsize length;
   int i;
-  guint16 *gtk_compose_seqs = NULL;
 
-  g_return_val_if_fail (data != NULL, compose_tables);
-  g_return_val_if_fail (max_seq_len >= 0, compose_tables);
-  g_return_val_if_fail (n_seqs >= 0, compose_tables);
+  parser = parser_new ();
 
-  n_index_stride = max_seq_len + 2;
-  if (!g_size_checked_mul (&length, n_index_stride, n_seqs))
+  for (i = 0; i < n_seqs; i++)
     {
-      g_critical ("Overflow in the compose sequences");
-      return compose_tables;
+      const guint16 *seq = data + i * (max_seq_len + 2);
+      guint16 *sequence;
+      gunichar ch;
+      char buf[8] = { 0, };
+
+      sequence = g_new0 (guint16, max_seq_len + 1);
+      memcpy (sequence, seq, sizeof (guint16) * max_seq_len);
+
+      ch = ((gunichar)seq[max_seq_len]) << 16 | (gunichar)seq[max_seq_len + 1];
+      g_unichar_to_utf8 (ch, buf);
+
+      g_hash_table_replace (parser->sequences, sequence, g_strdup (buf));
     }
 
-  hash = gtk_compose_table_data_hash (data, length);
+  compose_table = parser_get_compose_table (parser);
+  parser_free (parser);
 
-  if (g_slist_find_custom (compose_tables, GINT_TO_POINTER (hash), gtk_compose_table_find) != NULL)
-    return compose_tables;
-
-  gtk_compose_seqs = g_new0 (guint16, length);
-  for (i = 0; i < length; i++)
-    gtk_compose_seqs[i] = data[i];
-
-  compose_table = g_new (GtkComposeTable, 1);
-  compose_table->data = gtk_compose_seqs;
-  compose_table->max_seq_len = max_seq_len;
-  compose_table->n_seqs = n_seqs;
-  compose_table->id = hash;
-  compose_table->char_data = NULL;
-  compose_table->n_chars = 0;
-
-  return g_slist_prepend (compose_tables, compose_table);
-}
-
-GSList *
-gtk_compose_table_list_add_file (GSList     *compose_tables,
-                                 const char *compose_file)
-{
-  guint32 hash;
-  GtkComposeTable *compose_table;
-
-  g_return_val_if_fail (compose_file != NULL, compose_tables);
-
-  hash = g_str_hash (compose_file);
-  if (g_slist_find_custom (compose_tables, GINT_TO_POINTER (hash), gtk_compose_table_find) != NULL)
-    return compose_tables;
-
-  compose_table = gtk_compose_table_load_cache (compose_file);
-  if (compose_table != NULL)
-    return g_slist_prepend (compose_tables, compose_table);
-
-  if ((compose_table = gtk_compose_table_new_with_file (compose_file)) == NULL)
-    return compose_tables;
-
-  gtk_compose_table_save_cache (compose_table);
-  return g_slist_prepend (compose_tables, compose_table);
+  return compose_table;
 }
 
 static int
@@ -891,6 +1227,20 @@ compare_seq (const void *key, const void *value)
 
       i++;
     }
+
+  return 0;
+}
+
+static int
+compare_seq_index (const void *key, const void *value)
+{
+  const guint16 *keysyms = key;
+  const guint16 *seq = value;
+
+  if (keysyms[0] < seq[0])
+    return -1;
+  else if (keysyms[0] > seq[0])
+    return 1;
 
   return 0;
 }
@@ -916,97 +1266,6 @@ gtk_compose_table_check (const GtkComposeTable *table,
                          gboolean              *compose_match,
                          GString               *output)
 {
-  int row_stride = table->max_seq_len + 2;
-  guint16 *seq;
-
-  *compose_finish = FALSE;
-  *compose_match = FALSE;
-
-  g_string_set_size (output, 0);
-
-  /* Will never match, if the sequence in the compose buffer is longer
-   * than the sequences in the table.  Further, compare_seq (key, val)
-   * will overrun val if key is longer than val.
-   */
-  if (n_compose > table->max_seq_len)
-    return FALSE;
-
-  seq = bsearch (compose_buffer,
-                 table->data, table->n_seqs,
-                 sizeof (guint16) * row_stride,
-                 compare_seq);
-
-  if (seq)
-    {
-      guint16 *prev_seq;
-
-      /* Back up to the first sequence that matches to make sure
-       * we find the exact match if there is one.
-       */
-      while (seq > table->data)
-        {
-          prev_seq = seq - row_stride;
-          if (compare_seq (compose_buffer, prev_seq) != 0)
-            break;
-          seq = prev_seq;
-        }
-
-      if (n_compose == table->max_seq_len ||
-          seq[n_compose] == 0) /* complete sequence */
-        {
-          guint16 *next_seq;
-          gunichar value;
-
-          value = (seq[table->max_seq_len] << 16) | seq[table->max_seq_len + 1];
-          if ((value & (1 << 31)) != 0)
-            g_string_append (output, &table->char_data[value & ~(1 << 31)]);
-          else
-            g_string_append_unichar (output, value);
-
-          *compose_match = TRUE;
-
-          /* We found a tentative match. See if there are any longer
-           * sequences containing this subsequence
-           */
-          next_seq = seq + row_stride;
-          if (next_seq < table->data + row_stride * table->n_seqs)
-            {
-              if (compare_seq (compose_buffer, next_seq) == 0)
-                return TRUE;
-            }
-
-          *compose_finish = TRUE;
-          return TRUE;
-        }
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static int
-compare_seq_index (const void *key, const void *value)
-{
-  const guint16 *keysyms = key;
-  const guint16 *seq = value;
-
-  if (keysyms[0] < seq[0])
-    return -1;
-  else if (keysyms[0] > seq[0])
-    return 1;
-
-  return 0;
-}
-
-gboolean
-gtk_compose_table_compact_check (const GtkComposeTableCompact  *table,
-                                 const guint16                 *compose_buffer,
-                                 int                            n_compose,
-                                 gboolean                      *compose_finish,
-                                 gboolean                      *compose_match,
-                                 gunichar                      *output_char)
-{
   int row_stride;
   guint16 *seq_index;
   guint16 *seq;
@@ -1018,8 +1277,6 @@ gtk_compose_table_compact_check (const GtkComposeTableCompact  *table,
     *compose_finish = FALSE;
   if (compose_match)
     *compose_match = FALSE;
-  if (output_char)
-    *output_char = 0;
 
   /* Will never match, if the sequence in the compose buffer is longer
    * than the sequences in the table.  Further, compare_seq (key, val)
@@ -1031,7 +1288,7 @@ gtk_compose_table_compact_check (const GtkComposeTableCompact  *table,
   seq_index = bsearch (compose_buffer,
                        table->data,
                        table->n_index_size,
-                       sizeof (guint16) * table->n_index_stride,
+                       sizeof (guint16) * (table->max_seq_len + 1),
                        compare_seq_index);
 
   if (!seq_index)
@@ -1053,7 +1310,7 @@ gtk_compose_table_compact_check (const GtkComposeTableCompact  *table,
           seq = bsearch (compose_buffer + 1,
                          table->data + seq_index[i],
                          (seq_index[i + 1] - seq_index[i]) / row_stride,
-                         sizeof (guint16) *  row_stride,
+                         sizeof (guint16) * row_stride,
                          compare_seq);
 
           if (seq)
@@ -1061,12 +1318,15 @@ gtk_compose_table_compact_check (const GtkComposeTableCompact  *table,
               if (i == n_compose - 1)
                 {
                   value = seq[row_stride - 1];
+
+                  if ((value & (1 << 15)) != 0)
+                    g_string_append (output, &table->char_data[value & ~(1 << 15)]);
+                  else
+                    g_string_append_unichar (output, value);
                   match = TRUE;
                 }
               else
                 {
-                  if (output_char)
-                    *output_char = value;
                   if (match)
                     {
                       if (compose_match)
@@ -1085,13 +1345,70 @@ gtk_compose_table_compact_check (const GtkComposeTableCompact  *table,
         *compose_match = TRUE;
       if (compose_finish)
         *compose_finish = TRUE;
-      if (output_char)
-        *output_char = value;
 
       return TRUE;
     }
 
   return FALSE;
+}
+
+void
+gtk_compose_table_foreach (const GtkComposeTable      *table,
+                           GtkComposeSequenceCallback  callback,
+                           gpointer                    data)
+{
+  int index_stride = table->max_seq_len + 1;
+  gunichar *sequence;
+  int seqno;
+
+  sequence = g_new0 (gunichar, table->max_seq_len + 1);
+
+  seqno = 0;
+  for (int idx = 0; idx < table->n_index_size; idx++)
+    {
+      const guint16 *seq_index = table->data + (idx * index_stride);
+
+      for (int i = 1; i < table->max_seq_len; i++)
+        {
+          int len = i + 1;
+
+          g_assert (seq_index[i] <= seq_index[i + 1]);
+          g_assert (seq_index[i + 1] <= table->data_size);
+          g_assert ((seq_index[i + 1] - seq_index[i]) % len == 0);
+
+          for (int j = seq_index[i]; j < seq_index[i + 1]; j += len)
+            {
+              char buf[8] = { 0, };
+              guint16 encoded_value;
+              char *value;
+
+              sequence[0] = seq_index[0];
+              for (int k = 0; k < len - 1; k++)
+                sequence[k + 1] = (gunichar) table->data[j + k];
+              sequence[len] = 0;
+
+              encoded_value = table->data[j + len - 1];
+              g_assert (encoded_value != 0);
+              if ((encoded_value & (1 << 15)) != 0)
+                {
+                  int char_offset = encoded_value & ~(1 << 15);
+                  g_assert (char_offset < table->n_chars);
+                  value = &table->char_data[char_offset];
+                  g_assert (strlen (value) < 20);
+                }
+              else
+                {
+                  g_unichar_to_utf8 ((gunichar)encoded_value, buf);
+                  value = buf;
+                }
+
+              callback (sequence, len, value, data);
+              seqno++;
+            }
+        }
+    }
+
+  g_free (sequence);
 }
 
 /* Checks if a keysym is a dead key.
@@ -1285,4 +1602,3 @@ gtk_check_algorithmically (const guint16 *compose_buffer,
 
   return FALSE;
 }
-

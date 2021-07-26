@@ -84,6 +84,8 @@ for f in get_files('inspector', '.ui'):
 xml += '''
     <file>inspector/inspector.css</file>
     <file>emoji/en.data</file>
+    <file>compose/sequences</file>
+    <file>compose/chars</file>
   </gresource>
 </gresources>'''
 

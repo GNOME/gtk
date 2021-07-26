@@ -1,6 +1,8 @@
 #include <gtk/gtk.h>
 #include <locale.h>
 
+#include <glib/gstdio.h>
+
 #include "../gtk/gtkcomposetable.h"
 #include "../gtk/gtkimcontextsimpleseqs.h"
 #include "testsuite/testutils.h"
@@ -33,43 +35,45 @@ append_escaped (GString    *str,
     }
 }
 
+static void
+print_sequence (gunichar   *sequence,
+                int         len,
+                const char *value,
+                gpointer    data)
+{
+  GString *str = data;
+
+  for (int j = 0; j < len; j++)
+    g_string_append_printf (str, "<U%x> ", sequence[j]);
+
+  g_string_append (str, ": \"");
+  append_escaped (str, value);
+  g_string_append (str, "\"");
+
+  if (g_utf8_strlen (value, -1) == 1)
+    {
+      gunichar ch = g_utf8_get_char (value);
+      g_string_append_printf (str, " # U%x", ch);
+    }
+
+  g_string_append_c (str, '\n');
+}
+
 static char *
 gtk_compose_table_print (GtkComposeTable *table)
 {
-  int i, j;
-  guint16 *seq;
   GString *str;
 
   str = g_string_new ("");
 
-  g_string_append_printf (str, "# n_seqs: %d\n# max_seq_len: %d\n",
-                          table->n_seqs,
-                          table->max_seq_len);
+  g_string_append_printf (str, "# n_sequences: %d\n# max_seq_len: %d\n# n_index_size: %d\n# data_size: %d\n# n_chars: %d\n",
+                          table->n_sequences,
+                          table->max_seq_len,
+                          table->n_index_size,
+                          table->data_size,
+                          table->n_chars);
 
-  for (i = 0, seq = table->data; i < table->n_seqs; i++, seq += table->max_seq_len + 2)
-    {
-      gunichar value;
-      char buf[8] = { 0 };
-
-      for (j = 0; j < table->max_seq_len; j++)
-        g_string_append_printf (str, "<U%x> ", seq[j]);
-
-      value = (seq[table->max_seq_len] << 16) | seq[table->max_seq_len + 1];
-      if ((value & (1 << 31)) != 0)
-        {
-          const char *out = &table->char_data[value & ~(1 << 31)];
-
-          g_string_append (str, ": \"");
-          append_escaped (str, out);
-          g_string_append (str, "\"\n");
-        }
-      else
-        {
-          g_unichar_to_utf8 (value, buf);
-          g_string_append_printf (str, ": \"%s\" # U%x\n", buf, value);
-        }
-
-    }
+  gtk_compose_table_foreach (table, print_sequence, str);
 
   return g_string_free (str, FALSE);
 }
@@ -77,12 +81,10 @@ gtk_compose_table_print (GtkComposeTable *table)
 static void
 generate_output (const char *file)
 {
-  GSList *tables = NULL;
   GtkComposeTable *table;
   char *output;
 
-  tables = gtk_compose_table_list_add_file (tables, file);
-  table = tables->data;
+  table = gtk_compose_table_parse (file, NULL);
   output = gtk_compose_table_print (table);
 
   g_print ("%s", output);
@@ -92,7 +94,6 @@ static void
 compose_table_compare (gconstpointer data)
 {
   const char *basename = data;
-  GSList *tables = NULL;
   GtkComposeTable *table;
   char *file;
   char *expected;
@@ -100,16 +101,12 @@ compose_table_compare (gconstpointer data)
   char *diff;
   GError *error = NULL;
 
-  file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", basename, NULL);
+  file = g_test_build_filename (G_TEST_DIST, "compose", basename, NULL);
   expected = g_strconcat (file, ".expected", NULL);
 
-  tables = gtk_compose_table_list_add_file (tables, file);
-
-  g_assert_true (g_slist_length (tables) == 1);
-
-  table = tables->data;
-
+  table = gtk_compose_table_parse (file, NULL);
   output = gtk_compose_table_print (table);
+
   diff = diff_with_file (expected, output, -1, &error);
   g_assert_no_error (error);
 
@@ -124,11 +121,54 @@ compose_table_compare (gconstpointer data)
   g_free (expected);
 }
 
+static void
+compose_table_cycle (void)
+{
+  if (g_test_subprocess ())
+    {
+      char *file;
+      GtkComposeTable *table;
+
+      file = g_test_build_filename (G_TEST_DIST, "compose", "cycle", NULL);
+
+      table = gtk_compose_table_parse (file, NULL);
+      g_assert_nonnull (table);
+      g_free (file);
+
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*include cycle detected*");
+  g_test_trap_assert_failed ();
+}
+
+static void
+compose_table_nofile (void)
+{
+  if (g_test_subprocess ())
+    {
+      char *file;
+      GtkComposeTable *table;
+
+      file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "nofile", NULL);
+
+      table = gtk_compose_table_parse (file, NULL);
+      g_assert_nonnull (table);
+      g_free (file);
+
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*No such file or directory*");
+  g_test_trap_assert_failed ();
+}
+
 /* Check matching against a small table */
 static void
 compose_table_match (void)
 {
-  GSList *tables = NULL;
   GtkComposeTable *table;
   char *file;
   guint16 buffer[8] = { 0, };
@@ -139,11 +179,7 @@ compose_table_match (void)
 
   file = g_build_filename (g_test_get_dir (G_TEST_DIST), "compose", "match", NULL);
 
-  tables = gtk_compose_table_list_add_file (tables, file);
-
-  g_assert_true (g_slist_length (tables) == 1);
-
-  table = tables->data;
+  table = gtk_compose_table_parse (file, NULL);
 
   buffer[0] = GDK_KEY_Multi_key;
   buffer[1] = 0;
@@ -197,39 +233,38 @@ compose_table_match (void)
   g_free (file);
 }
 
+extern const GtkComposeTable builtin_compose_table;
+
 /* just check some random sequences */
 static void
-compose_table_match_compact (void)
+compose_table_match_builtin (void)
 {
-  const GtkComposeTableCompact table = {
-    gtk_compose_seqs_compact,
-    5,
-    30,
-    6
-  };
+  const GtkComposeTable *table = &builtin_compose_table;
   guint16 buffer[8] = { 0, };
   gboolean finish, match, ret;
-  gunichar ch;
+  GString *s;
 
   buffer[0] = GDK_KEY_Multi_key;
   buffer[1] = 0;
 
-  ret = gtk_compose_table_compact_check (&table, buffer, 1, &finish, &match, &ch);
+  s = g_string_new ("");
+
+  ret = gtk_compose_table_check (table, buffer, 1, &finish, &match, s);
   g_assert_true (ret);
   g_assert_false (finish);
   g_assert_false (match);
-  g_assert_true (ch == 0);
+  g_assert_true (s->len == 0);
 
   buffer[0] = GDK_KEY_a;
   buffer[1] = GDK_KEY_b;
   buffer[2] = GDK_KEY_c;
   buffer[3] = 0;
 
-  ret = gtk_compose_table_compact_check (&table, buffer, 3, &finish, &match, &ch);
+  ret = gtk_compose_table_check (table, buffer, 3, &finish, &match, s);
   g_assert_false (ret);
   g_assert_false (finish);
   g_assert_false (match);
-  g_assert_true (ch == 0);
+  g_assert_true (s->len == 0);
 
   buffer[0] = GDK_KEY_Multi_key;
   buffer[1] = GDK_KEY_parenleft;
@@ -237,31 +272,37 @@ compose_table_match_compact (void)
   buffer[3] = GDK_KEY_parenright;
   buffer[4] = 0;
 
-  ret = gtk_compose_table_compact_check (&table, buffer, 4, &finish, &match, &ch);
+  ret = gtk_compose_table_check (table, buffer, 4, &finish, &match, s);
   g_assert_true (ret);
   g_assert_true (finish);
   g_assert_true (match);
-  g_assert_true (ch == 0x24d9); /* CIRCLED LATIN SMALL LETTER J */
+  g_assert_cmpstr (s->str, ==, "ⓙ"); /* CIRCLED LATIN SMALL LETTER J */
 
   buffer[0] = GDK_KEY_dead_acute;
   buffer[1] = GDK_KEY_space;
   buffer[2] = 0;
 
-  ret = gtk_compose_table_compact_check (&table, buffer, 2, &finish, &match, &ch);
+  g_string_set_size (s, 0);
+
+  ret = gtk_compose_table_check (table, buffer, 2, &finish, &match, s);
   g_assert_true (ret);
   g_assert_true (finish);
   g_assert_true (match);
-  g_assert_true (ch == 0x27);
+  g_assert_cmpstr (s->str, ==, "'");
 
   buffer[0] = GDK_KEY_dead_acute;
   buffer[1] = GDK_KEY_dead_acute;
   buffer[2] = 0;
 
-  ret = gtk_compose_table_compact_check (&table, buffer, 2, &finish, &match, &ch);
+  g_string_set_size (s, 0);
+
+  ret = gtk_compose_table_check (table, buffer, 2, &finish, &match, s);
   g_assert_true (ret);
   g_assert_true (finish);
   g_assert_true (match);
-  g_assert_true (ch == 0xb4);
+  g_assert_cmpstr (s->str, ==, "´");
+
+  g_string_free (s, TRUE);
 }
 
 static void
@@ -349,21 +390,26 @@ match_algorithmic (void)
 int
 main (int argc, char *argv[])
 {
-  char *dir;
-
-  dir = g_dir_make_tmp ("composetableXXXXXX", NULL);
-  g_setenv ("XDG_CACHE_HOME", dir, TRUE);
-  g_free (dir);
-
   if (argc == 3 && strcmp (argv[1], "--generate") == 0)
     {
-      setlocale (LC_ALL, "");
+      gtk_disable_setlocale();
+      setlocale (LC_ALL, "en_US.UTF-8");
+
+      gtk_init ();
+
+      /* Ensure that the builtin table is initialized */
+      GtkIMContext *ctx = gtk_im_context_simple_new ();
+      g_object_unref (ctx);
 
       generate_output (argv[2]);
       return 0;
     }
 
   gtk_test_init (&argc, &argv, NULL);
+
+  /* Ensure that the builtin table is initialized */
+  GtkIMContext *ctx = gtk_im_context_simple_new ();
+  g_object_unref (ctx);
 
   g_test_add_data_func ("/compose-table/basic", "basic", compose_table_compare);
   g_test_add_data_func ("/compose-table/long", "long", compose_table_compare);
@@ -372,8 +418,12 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/codepoint", "codepoint", compose_table_compare);
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
   g_test_add_data_func ("/compose-table/strings", "strings", compose_table_compare);
+  g_test_add_data_func ("/compose-table/include", "include", compose_table_compare);
+  g_test_add_data_func ("/compose-table/system", "system", compose_table_compare);
+  g_test_add_func ("/compose-table/include-cycle", compose_table_cycle);
+  g_test_add_func ("/compose-table/include-nofile", compose_table_nofile);
   g_test_add_func ("/compose-table/match", compose_table_match);
-  g_test_add_func ("/compose-table/match-compact", compose_table_match_compact);
+  g_test_add_func ("/compose-table/match-builtin", compose_table_match_builtin);
   g_test_add_func ("/compose-table/match-algorithmic", match_algorithmic);
 
   return g_test_run ();

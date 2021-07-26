@@ -40,14 +40,20 @@
  *
  * `GtkIMContextSimple` is an input method supporting table-based input methods.
  *
- * `GtkIMContextSimple` has a built-in table of compose sequences that is
- * derived from the X11 Compose files.
+ * ## Compose sequences
  *
- * `GtkIMContextSimple` reads additional compose sequences from the first of the
+ * `GtkIMContextSimple` reads compose sequences from the first of the
  * following files that is found: ~/.config/gtk-4.0/Compose, ~/.XCompose,
  * /usr/share/X11/locale/$locale/Compose (for locales that have a nontrivial
  * Compose file). The syntax of these files is described in the Compose(5)
  * manual page.
+ *
+ * If none of these files is found, `GtkIMContextSimple` uses a built-in table
+ * of compose sequences that is derived from the X11 Compose files.
+ *
+ * Note that compose sequences typically start with the Compose_key, which is
+ * often not available as a dedicated key on keyboards. Keyboard layouts may
+ * map this keysym to other keys, such as the right Control key.
  *
  * ## Unicode characters
  *
@@ -60,6 +66,15 @@
  *     Ctrl-Shift-u 1 2 3 Enter
  *
  * yields U+0123 LATIN SMALL LETTER G WITH CEDILLA, i.e. ģ.
+ *
+ * ## Dead keys
+ *
+ * `GtkIMContextSimple` supports dead keys. For example, typing
+ *
+ *     dead_acute a
+ *
+ *  yields U+00E! LATIN SMALL LETTER_A WITH ACUTE, i.e. á. Note that this
+ *  depends on the keyboard layout including dead keys.
  */
 
 struct _GtkIMContextSimplePrivate
@@ -74,17 +89,31 @@ struct _GtkIMContextSimplePrivate
   guint          modifiers_dropped : 1;
 };
 
-/* From the values below, the value 30 means the number of different first keysyms
- * that exist in the Compose file (from Xorg). When running compose-parse.py without
- * parameters, you get the count that you can put here. Needed when updating the
- * gtkimcontextsimpleseqs.h header file (contains the compose sequences).
- */
-const GtkComposeTableCompact gtk_compose_table_compact = {
-  gtk_compose_seqs_compact,
-  5,
-  30,
-  6
+#include "gtk/compose/gtkcomposedata.h"
+
+GtkComposeTable builtin_compose_table = {
+  NULL,
+  NULL,
+  MAX_SEQ_LEN,
+  N_INDEX_SIZE,
+  DATA_SIZE,
+  N_CHARS,
+  0
 };
+
+static void
+init_builtin_table (void)
+{
+  GBytes *bytes;
+
+  bytes = g_resources_lookup_data ("/org/gtk/libgtk/compose/sequences", 0, NULL);
+  builtin_compose_table.data = (guint16 *) g_bytes_get_data (bytes, NULL);
+  g_bytes_unref (bytes);
+
+  bytes = g_resources_lookup_data ("/org/gtk/libgtk/compose/chars", 0, NULL);
+  builtin_compose_table.char_data = (char *) g_bytes_get_data (bytes, NULL);
+  g_bytes_unref (bytes);
+}
 
 G_LOCK_DEFINE_STATIC (global_tables);
 static GSList *global_tables;
@@ -146,6 +175,7 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   im_context_class->get_preedit_string = gtk_im_context_simple_get_preedit_string;
   gobject_class->finalize = gtk_im_context_simple_finalize;
 
+  init_builtin_table ();
   init_compose_table_async (NULL, NULL, NULL);
 }
 
@@ -163,6 +193,75 @@ get_x11_compose_file_dir (void)
   return compose_file_dir;
 }
 
+static int
+gtk_compose_table_find (gconstpointer data1,
+                        gconstpointer data2)
+{
+  const GtkComposeTable *compose_table = (const GtkComposeTable *) data1;
+  guint32 hash = (guint32) GPOINTER_TO_INT (data2);
+  return compose_table->id != hash;
+}
+
+static gboolean
+add_compose_table_from_file (const char *compose_file)
+{
+  guint hash;
+  gboolean ret = FALSE;
+
+  G_LOCK (global_tables);
+
+  hash = g_str_hash (compose_file);
+  if (!g_slist_find_custom (global_tables, GINT_TO_POINTER (hash), gtk_compose_table_find))
+    {
+      GtkComposeTable *table;
+
+      table = gtk_compose_table_new_with_file (compose_file);
+
+      if (table)
+        {
+          ret = TRUE;
+          global_tables = g_slist_prepend (global_tables, table);
+        }
+    }
+
+  G_UNLOCK (global_tables);
+
+  return ret;
+}
+
+static void
+add_builtin_compose_table (void)
+{
+  G_LOCK (global_tables);
+
+  global_tables = g_slist_prepend (global_tables, &builtin_compose_table);
+
+  G_UNLOCK (global_tables);
+}
+
+static void
+add_compose_table_from_data (guint16 *data,
+                             int      max_seq_len,
+                             int      n_seqs)
+{
+  guint hash;
+
+  G_LOCK (global_tables);
+
+  hash = gtk_compose_table_data_hash (data, max_seq_len, n_seqs);
+  if (!g_slist_find_custom (global_tables, GINT_TO_POINTER (hash), gtk_compose_table_find))
+    {
+      GtkComposeTable *table;
+
+      table = gtk_compose_table_new_with_data (data, max_seq_len, n_seqs);
+
+      if (table)
+        global_tables = g_slist_prepend (global_tables, table);
+    }
+
+  G_UNLOCK (global_tables);
+}
+
 static void
 gtk_im_context_simple_init_compose_table (void)
 {
@@ -171,6 +270,7 @@ gtk_im_context_simple_init_compose_table (void)
   const char *locale;
   char **langs = NULL;
   char **lang = NULL;
+  gboolean added;
   const char * const sys_langs[] = { "el_gr", "fi_fi", "pt_br", NULL };
   const char * const *sys_lang = NULL;
   char *x11_compose_file_dir = get_x11_compose_file_dir ();
@@ -178,12 +278,10 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      G_LOCK (global_tables);
-      global_tables = gtk_compose_table_list_add_file (global_tables, path);
-      G_UNLOCK (global_tables);
-
+      added = add_compose_table_from_file (path);
       g_free (path);
-      return;
+      if (added)
+        return;
     }
   g_clear_pointer (&path, g_free);
 
@@ -194,11 +292,10 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (home, ".XCompose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      G_LOCK (global_tables);
-      global_tables = gtk_compose_table_list_add_file (global_tables, path);
-      G_UNLOCK (global_tables);
+      added = add_compose_table_from_file (path);
       g_free (path);
-      return;
+      if (added)
+        return;
     }
   g_clear_pointer (&path, g_free);
 
@@ -241,11 +338,13 @@ gtk_im_context_simple_init_compose_table (void)
 
   if (path != NULL)
     {
-      G_LOCK (global_tables);
-      global_tables = gtk_compose_table_list_add_file (global_tables, path);
-      G_UNLOCK (global_tables);
+      added = add_compose_table_from_file (path);
+      g_free (path);
     }
-  g_clear_pointer (&path, g_free);
+  if (added)
+    return;
+
+  add_builtin_compose_table ();
 }
 
 static void
@@ -284,7 +383,7 @@ gtk_im_context_simple_init (GtkIMContextSimple *context_simple)
 
   priv = context_simple->priv = gtk_im_context_simple_get_instance_private (context_simple);
 
-  priv->compose_buffer_len = gtk_compose_table_compact.max_seq_len + 1;
+  priv->compose_buffer_len = builtin_compose_table.max_seq_len + 1;
   priv->compose_buffer = g_new0 (guint16, priv->compose_buffer_len);
   priv->tentative_match = g_string_new ("");
   priv->tentative_match_len = 0;
@@ -1021,36 +1120,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       if (success)
         return TRUE;
 
-      if (gtk_compose_table_compact_check (&gtk_compose_table_compact,
-                                           priv->compose_buffer, n_compose,
-                                           &compose_finish, &compose_match,
-                                           &output_char))
-        {
-          if (!priv->in_compose_sequence)
-            {
-              priv->in_compose_sequence = TRUE;
-              g_signal_emit_by_name (context_simple, "preedit-start");
-            }
-
-          if (compose_finish)
-            {
-              if (compose_match)
-                gtk_im_context_simple_commit_char (context_simple, output_char);
-            }
-          else
-            {
-              if (compose_match)
-                {
-                  g_string_set_size (priv->tentative_match, 0);
-                  g_string_append_unichar (priv->tentative_match, output_char);
-                  priv->tentative_match_len = n_compose;
-                }
-              g_signal_emit_by_name (context_simple, "preedit-changed");
-            }
-
-          return TRUE;
-        }
-
       if (gtk_check_algorithmically (priv->compose_buffer, n_compose, &output_char))
         {
           if (!priv->in_compose_sequence)
@@ -1203,21 +1272,18 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
  * The table must be sorted in dictionary order on the
  * numeric value of the key symbol fields. (Values beyond
  * the length of the sequence should be zero.)
- **/
+ *
+ * Deprecated: 4.4: Use gtk_im_context_simple_add_compose_file()
+ */
 void
 gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
-				 guint16            *data,
-				 int                 max_seq_len,
-				 int                 n_seqs)
+                                 guint16            *data,
+                                 int                 max_seq_len,
+                                 int                 n_seqs)
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
-  G_LOCK (global_tables);
-
-  global_tables = gtk_compose_table_list_add_array (global_tables,
-                                                    data, max_seq_len, n_seqs);
-
-  G_UNLOCK (global_tables);
+  add_compose_table_from_data (data, max_seq_len, n_seqs);
 }
 
 /**
@@ -1233,9 +1299,5 @@ gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
 {
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
 
-  G_LOCK (global_tables);
-
-  global_tables = gtk_compose_table_list_add_file (global_tables, compose_file);
-
-  G_UNLOCK (global_tables);
+  add_compose_table_from_file (compose_file);
 }
