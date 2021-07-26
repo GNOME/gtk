@@ -30,6 +30,7 @@
 #include "gtktreednd.h"
 #include "gtktreemodel.h"
 #include "gtkfilter.h"
+#include "gtkprivate.h"
 
 /*** Structure: how GtkFileSystemModel works
  *
@@ -1095,7 +1096,7 @@ gtk_file_system_model_got_files (GObject *object, GAsyncResult *res, gpointer da
                                                        thaw_func,
                                                        model,
                                                        NULL);
-          g_source_set_name_by_id (model->dir_thaw_source, "[gtk] thaw_func");
+          gdk_source_set_static_name_by_id (model->dir_thaw_source, "[gtk] thaw_func");
         }
 
       for (walk = files; walk; walk = walk->next)

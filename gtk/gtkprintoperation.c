@@ -631,7 +631,7 @@ preview_ready (GtkPrintOperationPreview *preview,
                         preview_print_idle,
                         pop,
                         preview_print_idle_done);
-  g_source_set_name_by_id (id, "[gtk] preview_print_idle");
+  gdk_source_set_static_name_by_id (id, "[gtk] preview_print_idle");
 }
 
 
@@ -2895,7 +2895,7 @@ print_pages (GtkPrintOperation       *op,
 	g_timeout_add (SHOW_PROGRESS_TIME,
                        (GSourceFunc) show_progress_timeout,
                        data);
-      g_source_set_name_by_id (priv->show_progress_timeout_id, "[gtk] show_progress_timeout");
+      gdk_source_set_static_name_by_id (priv->show_progress_timeout_id, "[gtk] show_progress_timeout");
 
       data->progress = progress;
     }
@@ -2964,7 +2964,7 @@ print_pages (GtkPrintOperation       *op,
                                                print_pages_idle,
                                                data,
                                                print_pages_idle_done);
-  g_source_set_name_by_id (priv->print_pages_idle_id, "[gtk] print_pages_idle");
+  gdk_source_set_static_name_by_id (priv->print_pages_idle_id, "[gtk] print_pages_idle");
   
   /* Recursive main loop to make sure we don't exit  on sync operations  */
   if (priv->is_sync)

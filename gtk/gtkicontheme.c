@@ -1342,7 +1342,7 @@ queue_theme_changed (GtkIconTheme *self)
                                                   theme_changed_idle__mainthread_unlocked,
                                                   gtk_icon_theme_ref_ref (self->ref),
                                                   (GDestroyNotify)gtk_icon_theme_ref_unref);
-      g_source_set_name_by_id (self->theme_changed_idle, "[gtk] theme_changed_idle");
+      gdk_source_set_static_name_by_id (self->theme_changed_idle, "[gtk] theme_changed_idle");
     }
 }
 

@@ -715,7 +715,7 @@ gtk_popover_schedule_mnemonics_visible (GtkPopover *popover)
 
   priv->mnemonics_display_timeout_id =
     g_timeout_add (MNEMONICS_DELAY, schedule_mnemonics_visible_cb, popover);
-  g_source_set_name_by_id (priv->mnemonics_display_timeout_id, "[gtk] popover_schedule_mnemonics_visible_cb");
+  gdk_source_set_static_name_by_id (priv->mnemonics_display_timeout_id, "[gtk] popover_schedule_mnemonics_visible_cb");
 }
 
 static void

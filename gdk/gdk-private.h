@@ -57,4 +57,11 @@ guint gdk_parse_debug_var (const char        *variable,
 # define g_memdup2(mem,size)    g_memdup((mem),(size))
 #endif
 
+void gdk_source_set_static_name_by_id (guint       tag,
+                                       const char *name);
+
+#if !GLIB_CHECK_VERSION(2, 69, 1)
+#define g_source_set_static_name(source, name) g_source_set_name ((source), (name))
+#endif
+
 #endif /* __GDK__PRIVATE_H__ */

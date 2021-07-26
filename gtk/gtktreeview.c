@@ -3467,7 +3467,7 @@ do_prelight (GtkTreeView   *tree_view,
     {
       priv->auto_expand_timeout = 
         g_timeout_add (AUTO_EXPAND_TIMEOUT, auto_expand_timeout, tree_view);
-      g_source_set_name_by_id (priv->auto_expand_timeout, "[gtk] auto_expand_timeout");
+      gdk_source_set_static_name_by_id (priv->auto_expand_timeout, "[gtk] auto_expand_timeout");
     }
 }
 
@@ -6413,7 +6413,7 @@ install_presize_handler (GtkTreeView *tree_view)
     {
       priv->validate_rows_timer =
 	g_idle_add_full (GTK_TREE_VIEW_PRIORITY_VALIDATE, (GSourceFunc) validate_rows, tree_view, NULL);
-      g_source_set_name_by_id (priv->validate_rows_timer, "[gtk] validate_rows");
+      gdk_source_set_static_name_by_id (priv->validate_rows_timer, "[gtk] validate_rows");
     }
 }
 
@@ -6446,7 +6446,7 @@ install_scroll_sync_handler (GtkTreeView *tree_view)
     {
       priv->scroll_sync_timer =
 	g_idle_add_full (GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC, (GSourceFunc) scroll_sync_handler, tree_view, NULL);
-      g_source_set_name_by_id (priv->scroll_sync_timer, "[gtk] scroll_sync_handler");
+      gdk_source_set_static_name_by_id (priv->scroll_sync_timer, "[gtk] scroll_sync_handler");
     }
 }
 
@@ -6752,7 +6752,7 @@ add_scroll_timeout (GtkTreeView *tree_view)
   if (priv->scroll_timeout == 0)
     {
       priv->scroll_timeout = g_timeout_add (150, scroll_row_timeout, tree_view);
-      g_source_set_name_by_id (priv->scroll_timeout, "[gtk] scroll_row_timeout");
+      gdk_source_set_static_name_by_id (priv->scroll_timeout, "[gtk] scroll_row_timeout");
     }
 }
 
@@ -7240,7 +7240,7 @@ gtk_tree_view_drag_motion (GtkDropTargetAsync *dest,
         {
           priv->open_dest_timeout =
             g_timeout_add (AUTO_EXPAND_TIMEOUT, open_row_timeout, tree_view);
-          g_source_set_name_by_id (priv->open_dest_timeout, "[gtk] open_row_timeout");
+          gdk_source_set_static_name_by_id (priv->open_dest_timeout, "[gtk] open_row_timeout");
         }
       else
         {
@@ -10130,7 +10130,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
     g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
                    (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
                    tree_view);
-  g_source_set_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
+  gdk_source_set_static_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
 
   /* search first matching iter */
   gtk_tree_view_search_init (priv->search_entry, tree_view);
@@ -13616,7 +13616,7 @@ gtk_tree_view_search_preedit_changed (GtkText      *text,
 	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
                        (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
-      g_source_set_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
+      gdk_source_set_static_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
     }
 
 }
@@ -13690,7 +13690,7 @@ gtk_tree_view_search_scroll_event (GtkWidget   *widget,
 	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
-      g_source_set_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
+      gdk_source_set_static_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
     }
 
   return GDK_EVENT_STOP;
@@ -13766,7 +13766,7 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
 	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
-      g_source_set_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
+      gdk_source_set_static_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
     }
 
   if (!retval)
@@ -14024,7 +14024,7 @@ gtk_tree_view_search_init (GtkWidget   *entry,
 	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
 		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
 		       tree_view);
-      g_source_set_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
+      gdk_source_set_static_name_by_id (priv->typeselect_flush_timeout, "[gtk] gtk_tree_view_search_entry_flush_timeout");
     }
 
   if (*text == '\0')

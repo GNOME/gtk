@@ -244,7 +244,7 @@ gtk_expander_drag_enter (GtkDropControllerMotion *motion,
   if (!expander->expanded && !expander->expand_timer)
     {
       expander->expand_timer = g_timeout_add (TIMEOUT_EXPAND, (GSourceFunc) expand_timeout, expander);
-      g_source_set_name_by_id (expander->expand_timer, "[gtk] expand_timeout");
+      gdk_source_set_static_name_by_id (expander->expand_timer, "[gtk] expand_timeout");
     }
 }
 

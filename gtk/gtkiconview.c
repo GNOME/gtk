@@ -1831,7 +1831,7 @@ gtk_icon_view_motion (GtkEventController *controller,
 
 	  if (icon_view->priv->scroll_timeout_id == 0) {
 	    icon_view->priv->scroll_timeout_id = g_timeout_add (30, rubberband_scroll_timeout, icon_view);
-	    g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk] rubberband_scroll_timeout");
+	    gdk_source_set_static_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk] rubberband_scroll_timeout");
 	  }
  	}
       else
@@ -6065,7 +6065,7 @@ gtk_icon_view_drag_motion (GtkDropTargetAsync *dest,
       if (icon_view->priv->scroll_timeout_id == 0)
 	{
 	  icon_view->priv->scroll_timeout_id = g_timeout_add (50, drag_scroll_timeout, icon_view);
-	  g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk] drag_scroll_timeout");
+	  gdk_source_set_static_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk] drag_scroll_timeout");
 	}
 
       if (target == GTK_TYPE_TREE_ROW_DATA)

@@ -46,6 +46,7 @@
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcut.h"
 #include "gtkaccessibleprivate.h"
+#include "gtkprivate.h"
 
 /*< private >
  * GtkModelButton:
@@ -1363,7 +1364,7 @@ start_open (GtkModelButton *button)
     return;
 
   button->open_timeout = g_timeout_add (OPEN_TIMEOUT, open_submenu, button);
-  g_source_set_name_by_id (button->open_timeout, "[gtk] open_submenu");
+  gdk_source_set_static_name_by_id (button->open_timeout, "[gtk] open_submenu");
 }
 
 static void

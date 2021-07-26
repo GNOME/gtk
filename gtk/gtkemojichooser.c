@@ -1016,7 +1016,7 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
   populate_recent_section (chooser);
 
   chooser->populate_idle = g_idle_add (populate_emoji_chooser, chooser);
-  g_source_set_name_by_id (chooser->populate_idle, "[gtk] populate_emoji_chooser");
+  gdk_source_set_static_name_by_id (chooser->populate_idle, "[gtk] populate_emoji_chooser");
 }
 
 static void

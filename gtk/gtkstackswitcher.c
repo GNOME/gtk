@@ -245,7 +245,7 @@ gtk_stack_switcher_drag_enter (GtkDropControllerMotion *motion,
       guint switch_timer = g_timeout_add (TIMEOUT_EXPAND,
                                           gtk_stack_switcher_switch_timeout,
                                           button);
-      g_source_set_name_by_id (switch_timer, "[gtk] gtk_stack_switcher_switch_timeout");
+      gdk_source_set_static_name_by_id (switch_timer, "[gtk] gtk_stack_switcher_switch_timeout");
       g_object_set_data_full (G_OBJECT (button), "-gtk-switch-timer", GUINT_TO_POINTER (switch_timer), clear_timer);
     }
 }

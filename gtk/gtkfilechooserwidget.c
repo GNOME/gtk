@@ -2234,7 +2234,7 @@ location_entry_changed_cb (GtkEditable          *editable,
       impl->location_changed_id = g_timeout_add (LOCATION_CHANGED_TIMEOUT,
                                                 location_changed_timeout_cb,
                                                 impl);
-      g_source_set_name_by_id (impl->location_changed_id, "[gtk] location_changed_timeout_cb");
+      gdk_source_set_static_name_by_id (impl->location_changed_id, "[gtk] location_changed_timeout_cb");
     }
 }
 
@@ -3822,7 +3822,7 @@ load_setup_timer (GtkFileChooserWidget *impl)
   g_assert (impl->load_state != LOAD_PRELOAD);
 
   impl->load_timeout_id = g_timeout_add (MAX_LOADING_TIME, load_timeout_cb, impl);
-  g_source_set_name_by_id (impl->load_timeout_id, "[gtk] load_timeout_cb");
+  gdk_source_set_static_name_by_id (impl->load_timeout_id, "[gtk] load_timeout_cb");
   impl->load_state = LOAD_PRELOAD;
 }
 

@@ -2758,7 +2758,7 @@ initial_timeout (gpointer data)
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
   priv->timer->timeout_id = g_timeout_add (TIMEOUT_REPEAT, second_timeout, range);
-  g_source_set_name_by_id (priv->timer->timeout_id, "[gtk] second_timeout");
+  gdk_source_set_static_name_by_id (priv->timer->timeout_id, "[gtk] second_timeout");
   return G_SOURCE_REMOVE;
 }
 
@@ -2774,7 +2774,7 @@ gtk_range_add_step_timer (GtkRange      *range,
   priv->timer = g_new (GtkRangeStepTimer, 1);
 
   priv->timer->timeout_id = g_timeout_add (TIMEOUT_INITIAL, initial_timeout, range);
-  g_source_set_name_by_id (priv->timer->timeout_id, "[gtk] initial_timeout");
+  gdk_source_set_static_name_by_id (priv->timer->timeout_id, "[gtk] initial_timeout");
   priv->timer->step = step;
 
   gtk_range_scroll (range, priv->timer->step);

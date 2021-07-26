@@ -868,7 +868,7 @@ gtk_main_sync (void)
 
   store.store_loop = g_main_loop_new (NULL, TRUE);
   store.timeout_id = g_timeout_add_seconds (10, (GSourceFunc) sync_timed_out_cb, &store);
-  g_source_set_name_by_id (store.timeout_id, "[gtk] gtk_main_sync clipboard store timeout");
+  gdk_source_set_static_name_by_id (store.timeout_id, "[gtk] gtk_main_sync clipboard store timeout");
 
   if (g_main_loop_is_running (store.store_loop))
     g_main_loop_run (store.store_loop);

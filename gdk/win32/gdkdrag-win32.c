@@ -27,6 +27,8 @@
 #include "config.h"
 #include <string.h>
 
+#include "gdk-private.h"
+
 #include <io.h>
 #include <fcntl.h>
 #include <math.h>
@@ -2196,7 +2198,7 @@ gdk_win32_drag_drop_done (GdkDrag  *drag,
   id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
                            gdk_drag_anim_timeout, anim,
                            (GDestroyNotify) gdk_drag_anim_destroy);
-  g_source_set_name_by_id (id, "[gtk] gdk_drag_anim_timeout");
+  gdk_source_set_static_name_by_id (id, "[gtk] gdk_drag_anim_timeout");
 }
 
 static gboolean
