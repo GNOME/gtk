@@ -1565,10 +1565,6 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_BMP) = g_intern_static_string ("image/bmp");
   _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_IMAGE_GIF) = g_intern_static_string ("image/gif");
 
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_LOCAL_DND_SELECTION) = g_intern_static_string ("LocalDndSelection");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_DROPFILES_DND) = g_intern_static_string ("DROPFILES_DND");
-  _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_OLE2_DND) = g_intern_static_string ("OLE2_DND");
-
   _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_PNG)= g_intern_static_string ("PNG");
   _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_JFIF) = g_intern_static_string ("JFIF");
   _gdk_atom_array_index (atoms, GDK_WIN32_ATOM_INDEX_GIF) = g_intern_static_string ("GIF");
