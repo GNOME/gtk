@@ -27,6 +27,10 @@
 
 #include "demo_conf.h"
 
+#ifdef GDK_WINDOWING_WIN32
+#include <windows.h>
+#endif
+
 static void
 change_dark_state (GSimpleAction *action,
                     GVariant      *state,
@@ -2463,6 +2467,15 @@ main (int argc, char *argv[])
     { "radio-x-disabled", NULL, "s", "'x'", NULL },
   };
   int status;
+
+#ifdef GDK_WINDOWING_WIN32
+  if (AttachConsole (ATTACH_PARENT_PROCESS))
+    {
+      freopen("CONOUT$", "w", stdout);
+      freopen("CONOUT$", "w", stderr);
+      freopen("CONIN$", "r", stdin);
+    }
+#endif
 
   app = gtk_application_new ("org.gtk.WidgetFactory4", G_APPLICATION_NON_UNIQUE);
 
