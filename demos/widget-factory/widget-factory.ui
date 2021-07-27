@@ -1251,8 +1251,21 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkNotebookPage">
                                 <property name="child">
-                                  <object class="GtkBox" id="box6">
-                                    <property name="orientation">vertical</property>
+                                  <object class="GtkPicture">
+                                    <property name="file">resource:///org/gtk/WidgetFactory4/sunset.jpg</property>
+                                    <child>
+                                      <object class="GtkDragSource">
+                                        <property name="actions">copy</property>
+                                        <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkDropTarget">
+                                        <property name="actions">copy</property>
+                                        <property name="formats">GdkTexture</property>
+                                        <signal name="drop" handler="on_picture_drop" swapped="no"/>
+                                      </object>
+                                    </child>
                                   </object>
                                 </property>
                                 <property name="tab">
@@ -1265,8 +1278,21 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkNotebookPage">
                                 <property name="child">
-                                  <object class="GtkBox" id="box7">
-                                    <property name="orientation">vertical</property>
+                                  <object class="GtkPicture">
+                                    <property name="file">resource:///org/gtk/WidgetFactory4/nyc.jpg</property>
+                                    <child>
+                                      <object class="GtkDragSource">
+                                        <property name="actions">copy</property>
+                                        <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkDropTarget">
+                                        <property name="actions">copy</property>
+                                        <property name="formats">GdkTexture</property>
+                                        <signal name="drop" handler="on_picture_drop" swapped="no"/>
+                                      </object>
+                                    </child>
                                   </object>
                                 </property>
                                 <property name="tab">
@@ -1278,10 +1304,22 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkNotebookPage">
-                                <property name="position">2</property>
                                 <property name="child">
-                                  <object class="GtkBox" id="box8">
-                                    <property name="orientation">vertical</property>
+                                  <object class="GtkPicture">
+                                    <property name="file">resource:///org/gtk/WidgetFactory4/beach.jpg</property>
+                                    <child>
+                                      <object class="GtkDragSource">
+                                        <property name="actions">copy</property>
+                                        <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkDropTarget">
+                                        <property name="actions">copy</property>
+                                        <property name="formats">GdkTexture</property>
+                                        <signal name="drop" handler="on_picture_drop" swapped="no"/>
+                                      </object>
+                                    </child>
                                   </object>
                                 </property>
                                 <property name="tab">
@@ -1299,7 +1337,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkNotebookPage">
                                 <property name="child">
-                                  <object class="GtkBox" id="box9">
+                                  <object class="GtkBox" id="box8">
                                     <property name="orientation">vertical</property>
                                   </object>
                                 </property>

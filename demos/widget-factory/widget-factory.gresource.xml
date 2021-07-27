@@ -115,7 +115,8 @@
   <gresource prefix="/org/gtk/WidgetFactory4">
     <file>gtk-logo.webm</file>
     <file>sunset.jpg</file>
-    <file>snowy.jpg</file>
     <file>portland-rose.jpg</file>
+    <file>nyc.jpg</file>
+    <file>beach.jpg</file>
   </gresource>
 </gresources>

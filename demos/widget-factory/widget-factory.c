@@ -696,6 +696,37 @@ on_range_to_changed (GtkSpinButton *to)
     gtk_spin_button_set_value (from, v2);
 }
 
+static GdkContentProvider *
+on_picture_drag_prepare (GtkDragSource *source,
+                         double         x,
+                         double         y,
+                         gpointer       unused)
+{
+  GtkWidget *picture;
+
+  picture = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+
+  return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, gtk_picture_get_paintable (GTK_PICTURE (picture)));
+}
+
+static gboolean
+on_picture_drop (GtkDropTarget *dest,
+                 const GValue  *value,
+                 double         x,
+                 double         y,
+                 gpointer       unused)
+{
+  GtkWidget *picture;
+  GdkPaintable *paintable;
+
+  picture = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (dest));
+  paintable = g_value_get_object (value);
+
+  gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+
+  return TRUE;
+}
+
 static void
 info_bar_response (GtkWidget *infobar, int response_id)
 {
@@ -1182,7 +1213,7 @@ populate_flowbox (GtkWidget *flowbox)
   GtkWidget *child;
   int i;
   const char *resources[] = {
-    "sunset.jpg", "snowy.jpg", "portland-rose.jpg"
+    "sunset.jpg", "portland-rose.jpg", "beach.jpg", "nyc.jpg"
   };
 
   if (GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (flowbox), "populated")))
@@ -2040,6 +2071,8 @@ activate (GApplication *app)
           "on_page_combo_changed", (GCallback)on_page_combo_changed,
           "on_range_from_changed", (GCallback)on_range_from_changed,
           "on_range_to_changed", (GCallback)on_range_to_changed,
+          "on_picture_drag_prepare", (GCallback)on_picture_drag_prepare,
+          "on_picture_drop", (GCallback)on_picture_drop,
           "tab_close_cb", (GCallback)tab_close_cb,
           "increase_icon_size", (GCallback)increase_icon_size,
           "decrease_icon_size", (GCallback)decrease_icon_size,

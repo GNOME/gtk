@@ -290,8 +290,10 @@ data_source_dnd_finished (void                  *data,
 {
   GdkDrag *drag = data;
 
+  g_object_ref (drag);
   g_signal_emit_by_name (drag, "dnd-finished");
   gdk_drag_drop_done (drag, TRUE);
+  g_object_unref (drag);
 }
 
 static void

@@ -180,6 +180,76 @@ gdk_content_formats_new_for_gtype (GType type)
 }
 
 /**
+ * gdk_content_formats_parse:
+ * @string: the string to parse
+ *
+ * Parses the given @string into `GdkContentFormats` and
+ * returns the formats. 
+ *
+ * Strings printed via [method@Gdk.ContentFormats.to_string]
+ * can be read in again successfully using this function.
+ *
+ * If @string does not describe valid content formats, %NULL
+ * is returned.
+ *
+ * Returns: (nullable): the content formats if @string is valid
+ *
+ * Since: 4.4
+ */
+GdkContentFormats *
+gdk_content_formats_parse (const char *string)
+{
+  GdkContentFormatsBuilder *builder;
+  char **split;
+  gsize i;
+
+  g_return_val_if_fail (string != NULL, NULL);
+
+  split = g_strsplit_set (string, "\t\n\f\r ", -1); /* same as g_ascii_isspace() */
+  builder = gdk_content_formats_builder_new ();
+
+  /* first the GTypes */
+  for (i = 0; split[i] != NULL; i++)
+    {
+      GType type;
+
+      if (split[i][0] == 0)
+        continue;
+
+      type = g_type_from_name (split[i]);
+      if (type != 0)
+        gdk_content_formats_builder_add_gtype (builder, type);
+      else
+        break;
+    }
+
+  /* then the mime types */
+  for (; split[i] != NULL; i++)
+    {
+      const char *mime_type;
+
+      if (split[i][0] == 0)
+        continue;
+
+      mime_type = gdk_intern_mime_type (split[i]);
+      if (mime_type)
+        gdk_content_formats_builder_add_mime_type (builder, mime_type);
+      else
+        break;
+    }
+
+  if (split[i] != NULL)
+    {
+      g_strfreev (split);
+      gdk_content_formats_builder_unref (builder);
+      return NULL;
+    }
+
+  g_strfreev (split);
+  return gdk_content_formats_builder_free_to_formats (builder);
+}
+
+/**
  * gdk_content_formats_ref:
  * @formats:  a `GdkContentFormats`
  *
@@ -227,10 +297,8 @@ gdk_content_formats_unref (GdkContentFormats *formats)
  *
  * Prints the given @formats into a string for human consumption.
  *
- * This is meant for debugging and logging.
- *
- * The form of the representation may change at any time and is
- * not guaranteed to stay identical.
+ * The result of this function can later be parsed with
+ * [func@Gdk.ContentFormats.parse].
  */
 void
 gdk_content_formats_print (GdkContentFormats *formats,
@@ -241,20 +309,18 @@ gdk_content_formats_print (GdkContentFormats *formats,
   g_return_if_fail (formats != NULL);
   g_return_if_fail (string != NULL);
 
-  g_string_append (string, "{ ");
   for (i = 0; i < formats->n_gtypes; i++)
     {
       if (i > 0)
-        g_string_append (string, ", ");
+        g_string_append (string, " ");
       g_string_append (string, g_type_name (formats->gtypes[i]));
     }
   for (i = 0; i < formats->n_mime_types; i++)
     {
       if (i > 0 || formats->n_gtypes > 0)
-        g_string_append (string, ", ");
+        g_string_append (string, " ");
       g_string_append (string, formats->mime_types[i]);
     }
-  g_string_append (string, " }");
 }
 
 /**
@@ -262,6 +328,8 @@ gdk_content_formats_print (GdkContentFormats *formats,
  * @formats: a `GdkContentFormats`
  *
  * Prints the given @formats into a human-readable string.
+ *
+ * The resulting string can be parsed with [func@Gdk.ContentFormats.parse].
  *
  * This is a small wrapper around [method@Gdk.ContentFormats.print]
  * to help when debugging.
