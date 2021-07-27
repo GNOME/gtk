@@ -856,6 +856,8 @@ gdk_gl_context_set_is_legacy (GdkGLContext *context,
  * is not, this function will return %FALSE.
  *
  * Returns: %TRUE if the two GL contexts are compatible.
+ *
+ * Since: 4.4
  */
 gboolean
 gdk_gl_context_is_shared (GdkGLContext *self,
