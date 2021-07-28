@@ -23,6 +23,7 @@ if bash.found()
       workdir: meson.current_build_dir(),
       protocol: 'tap',
       env: [
+        'TEST_RESULT_DIR=@0@'.format(join_paths(meson.current_build_dir(), 'output')),
         'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
         'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
         'GTK_A11Y=test',
