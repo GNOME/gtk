@@ -1139,11 +1139,6 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
 
   g_return_if_fail (window != NULL);
 
-  if (g_object_get_data (G_OBJECT (window), "gdk-dnd-registered") != NULL)
-    return;
-  else
-    g_object_set_data (G_OBJECT (window), "gdk-dnd-registered", GINT_TO_POINTER (TRUE));
-
   GDK_NOTE (DND, g_print ("gdk_win32_surface_register_dnd: %p\n", GDK_SURFACE_HWND (window)));
 
   if (!use_ole2_dnd)

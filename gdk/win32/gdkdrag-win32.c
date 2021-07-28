@@ -237,7 +237,6 @@ typedef struct
   /* Cached here, so that we don't have to look in
    * the context every time.
    */
-  HWND                            source_window_handle;
   guint                           scale;
 
   /* We get this from the OS via IDropSourceNotify and pass it to the
@@ -1604,7 +1603,6 @@ source_context_new (GdkDrag           *drag,
   result->ids.lpVtbl = &ids_vtbl;
   result->idsn.lpVtbl = &idsn_vtbl;
   result->ref_count = 1;
-  result->source_window_handle = GDK_SURFACE_HWND (surface);
   result->scale = drag_win32->scale;
   result->util_data.state = GDK_WIN32_DND_PENDING; /* Implicit */
   result->dest_window_handle = INVALID_HANDLE_VALUE;
