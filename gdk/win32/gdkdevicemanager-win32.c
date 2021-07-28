@@ -1148,15 +1148,10 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
       if (!(lc.lcOptions & CXO_SYSTEM))
         {
           lc.lcOptions |= CXO_SYSTEM;
-          if (!p_WTSetA (hctx, &lc))
-            {
-              g_warning ("Could not set the CXO_SYSTEM option in the WINTAB context");
-            }
+          if (!p_WTSetA (*hctx, &lc))
+            g_warning ("Could not set the CXO_SYSTEM option in the WINTAB context");
         }
 
-#if 0
-      (*p_WTEnable) (*hctx, TRUE);
-#endif
       (*p_WTOverlap) (*hctx, TRUE);
 
 #if DEBUG_WINTAB
