@@ -6304,8 +6304,8 @@ gdk_win32_window_get_handle (GdkWindow *window)
 #ifdef GDK_WIN32_ENABLE_EGL
 EGLSurface
 _gdk_win32_window_get_egl_surface (GdkWindow *window,
-                                  EGLConfig  config,
-                                  gboolean   is_dummy)
+                                   EGLConfig  config,
+                                   gboolean   is_dummy)
 {
   EGLSurface surface;
   GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_window_get_display (window));
@@ -6325,7 +6325,10 @@ _gdk_win32_window_get_egl_surface (GdkWindow *window,
   else
     {
       if (impl->egl_surface == EGL_NO_SURFACE)
-        impl->egl_surface = eglCreateWindowSurface (display->egl_disp, config, display->gl_hwnd, NULL);
+        impl->egl_surface = eglCreateWindowSurface (display->egl_disp,
+                                                    config,
+                                                    GDK_WINDOW_HWND (window),
+                                                    NULL);
 
       return impl->egl_surface;
     }

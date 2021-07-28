@@ -84,7 +84,6 @@ struct _GdkWin32Display
   /* WGL/OpenGL Items */
   guint have_wgl : 1;
   guint gl_version;
-  HWND gl_hwnd;
 
 #ifdef GDK_WIN32_ENABLE_EGL
   /* EGL (Angle) Items */

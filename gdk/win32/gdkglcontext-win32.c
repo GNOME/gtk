@@ -66,7 +66,7 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
       wglDeleteContext (context_win32->hglrc);
       context_win32->hglrc = NULL;
 
-      ReleaseDC (display_win32->gl_hwnd, context_win32->gl_hdc);
+      ReleaseDC (GDK_WINDOW_HWND (window), context_win32->gl_hdc);
     }
 
 #ifdef GDK_WIN32_ENABLE_EGL
@@ -84,7 +84,7 @@ _gdk_win32_gl_context_dispose (GObject *gobject)
 
       impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
 
-      ReleaseDC (display_win32->gl_hwnd, context_win32->gl_hdc);
+      ReleaseDC (GDK_WINDOW_HWND (window), context_win32->gl_hdc);
     }
 #endif
 
@@ -1192,8 +1192,7 @@ _gdk_win32_window_create_gl_context (GdkWindow *window,
   EGLConfig config;
 #endif
 
-  display_win32->gl_hwnd = GDK_WINDOW_HWND (window);
-  hdc = GetDC (display_win32->gl_hwnd);
+  hdc = GetDC (GDK_WINDOW_HWND (window));
 
 #ifdef GDK_WIN32_ENABLE_EGL
   /* display_win32->hdc_egl_temp should *not* be destroyed here!  It is destroyed at dispose()! */
