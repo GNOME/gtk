@@ -1281,19 +1281,10 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
   surface = gdk_x11_surface_lookup_for_display (display, xid);
   if (surface)
     {
-      if (g_object_get_data (G_OBJECT (surface), "gdk-dnd-registered") != NULL)
-        {
-          *protocol = GDK_DRAG_PROTO_XDND;
-          *version = 5;
-          GDK_DISPLAY_NOTE (display, DND, g_message ("Entering local Xdnd window %#x\n", (guint) xid));
-          return xid;
-        }
-      else if (_gdk_x11_display_is_root_window (display, xid))
-        {
-          *protocol = GDK_DRAG_PROTO_ROOTWIN;
-          GDK_DISPLAY_NOTE (display, DND, g_message ("Entering root window\n"));
-          return xid;
-        }
+      *protocol = GDK_DRAG_PROTO_XDND;
+      *version = 5;
+      GDK_DISPLAY_NOTE (display, DND, g_message ("Entering local Xdnd window %#x\n", (guint) xid));
+      return xid;
     }
   else if ((retval = xdnd_check_dest (display, xid, version)))
     {
@@ -1572,11 +1563,6 @@ _gdk_x11_surface_register_dnd (GdkSurface *surface)
   GdkDisplay *display = gdk_surface_get_display (surface);
 
   g_return_if_fail (surface != NULL);
-
-  if (g_object_get_data (G_OBJECT (surface), "gdk-dnd-registered") != NULL)
-    return;
-  else
-    g_object_set_data (G_OBJECT (surface), "gdk-dnd-registered", GINT_TO_POINTER (TRUE));
 
   /* Set XdndAware */
 
