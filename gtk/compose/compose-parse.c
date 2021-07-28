@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include "gtk/gtkcomposetable.h"
 #include <locale.h>
+#include <stdlib.h>
 
 /* This program reads a Compose file and generates files with sequences,
  * character data, and definitions for the builtin compose table of GTK.
