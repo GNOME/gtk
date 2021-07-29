@@ -1353,6 +1353,47 @@ gtk_compose_table_check (const GtkComposeTable *table,
 }
 
 void
+gtk_compose_table_get_prefix (const GtkComposeTable *table,
+                              const guint16         *compose_buffer,
+                              int                    n_compose,
+                              int                   *prefix)
+{
+  int index_stride = table->max_seq_len + 1;
+  int p = 0;
+
+  for (int idx = 0; idx < table->n_index_size; idx++)
+    {
+      const guint16 *seq_index = table->data + (idx * index_stride);
+
+      if (seq_index[0] == compose_buffer[0])
+        {
+          p = 1;
+
+          for (int i = 1; i < table->max_seq_len; i++)
+            {
+              int len = i + 1;
+
+              for (int j = seq_index[i]; j < seq_index[i + 1]; j += len)
+                {
+                  int k;
+
+                  for (k = 0; k < MIN (len, n_compose) - 1; k++)
+                    {
+                      if (compose_buffer[k + 1] != (gunichar) table->data[j + k])
+                        break;
+                    }
+                  p = MAX (p, k + 1);
+                }
+            }
+
+          break;
+        }
+    }
+
+  *prefix = p;
+}
+
+void
 gtk_compose_table_foreach (const GtkComposeTable      *table,
                            GtkComposeSequenceCallback  callback,
                            gpointer                    data)
