@@ -1195,12 +1195,14 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
               if (priv->compose_buffer[i] == GDK_KEY_Multi_key)
                 {
                   /* We only show the Compose key visibly when it is the
-                   * only glyph in the preedit, or when it occurs in the
+                   * only glyph in the preedit, or when the sequence contains
+                   * multiple Compose keys, or when it occurs in the
                    * middle of the sequence. Sadly, the official character,
                    * U+2384, COMPOSITION SYMBOL, is bit too distracting, so
                    * we use U+00B7, MIDDLE DOT.
                    */
-                  if (priv->compose_buffer[1] == 0 || i > 0)
+                  if (priv->compose_buffer[1] == 0 || i > 0 ||
+                      priv->compose_buffer[i + 1] == GDK_KEY_Multi_key)
                     g_string_append (s, "·");
                 }
               else
