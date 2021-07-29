@@ -1069,22 +1069,22 @@ gtk_compose_table_parse (const char *compose_file,
   return compose_table;
 }
 
-static const char *prefix =
-  "# GTK has rewritten this file to add the line:\n"
-  "\n"
-  "include \"%L\"\n"
-  "\n"
-  "# This is necessary to add your own Compose sequences\n"
-  "# in addition to the builtin sequences of GTK. If this\n"
-  "# is not what you want, just remove that line.\n"
-  "#\n"
-  "# A backup of the previous file contents has been made.\n"
-  "\n"
-  "\n";
-
 static gboolean
 rewrite_compose_file (const char *compose_file)
 {
+  static const char *prefix =
+    "# GTK has rewritten this file to add the line:\n"
+    "\n"
+    "include \"%L\"\n"
+    "\n"
+    "# This is necessary to add your own Compose sequences\n"
+    "# in addition to the builtin sequences of GTK. If this\n"
+    "# is not what you want, just remove that line.\n"
+    "#\n"
+    "# A backup of the previous file contents has been made.\n"
+    "\n"
+    "\n";
+
   char *path = NULL;
   char *content = NULL;
   gsize content_len;
