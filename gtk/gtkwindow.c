@@ -10678,7 +10678,7 @@ gtk_window_stick (GtkWindow *window)
  * window is definitely unstuck afterward, because other entities
  * (e.g. the user or [window manager][gtk-X11-arch]) could
  * stick it again. But normally the window will
- * end up stuck. Just don’t write code that crashes if not.
+ * end up unstuck. Just don’t write code that crashes if not.
  *
  * You can track stickiness via the “window-state-event” signal
  * on #GtkWidget.
