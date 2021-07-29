@@ -544,18 +544,22 @@ is_dead_key (guint keysym)
   return GDK_KEY_dead_grave <= keysym && keysym <= GDK_KEY_dead_greek;
 }
 
-static gunichar
-dead_key_to_unicode (guint     keysym,
-                     gboolean *need_space)
+static void
+append_dead_key (GString *string,
+                 guint    keysym)
 {
   /* Sadly, not all the dead keysyms have spacing mark equivalents
-   * in Unicode. For those that don't, we use space + the non-spacing
-   * mark as an approximation
+   * in Unicode. For those that don't, we use NBSP + the non-spacing
+   * mark as an approximation.
    */
   switch (keysym)
     {
-#define CASE(keysym, unicode, sp) \
-    case GDK_KEY_dead_##keysym: *need_space = sp; return unicode;
+#define CASE(keysym, unicode, sp)                \
+    case GDK_KEY_dead_##keysym:                  \
+      if (sp)                                    \
+        g_string_append_unichar (string, 0xA0);  \
+      g_string_append_unichar (string, unicode); \
+      break;
 
     CASE (grave, 0x60, 0);
     CASE (acute, 0xb4, 0);
@@ -606,8 +610,7 @@ dead_key_to_unicode (guint     keysym,
     CASE (capital_schwa, 0x1dea, 1);
 #undef CASE
     default:
-      *need_space = FALSE;
-      return gdk_keyval_to_unicode (keysym);
+      g_string_append_unichar (string, gdk_keyval_to_unicode (keysym));
     }
 }
 
@@ -675,7 +678,6 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 
       if (n_compose > 1 && i >= n_compose - 1)
         {
-          gboolean need_space;
           GString *s;
 
           s = g_string_new ("");
@@ -684,15 +686,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
             {
               /* dead keys are never *really* dead */
               for (int j = 0; j < i; j++)
-                {
-                  ch = dead_key_to_unicode (priv->compose_buffer[j], &need_space);
-                  if (ch)
-                    {
-                      if (need_space)
-                        g_string_append_c (s, ' ');
-                      g_string_append_unichar (s, ch);
-                    }
-                }
+                append_dead_key (s, priv->compose_buffer[j]);
 
               ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
               if (ch != 0 && ch != ' ' && !g_unichar_iscntrl (ch))
@@ -702,14 +696,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
             }
           else
             {
-              ch = dead_key_to_unicode (priv->compose_buffer[0], &need_space);
-              if (ch)
-                {
-                  if (need_space)
-                    g_string_append_c (s, ' ');
-                  g_string_append_unichar (s, ch);
-                }
-
+              append_dead_key (s, priv->compose_buffer[0]);
               gtk_im_context_simple_commit_string (context_simple, s->str);
 
               for (i = 1; i < n_compose; i++)
@@ -1244,17 +1231,10 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
               else
                 {
                   gunichar ch;
-                  gboolean need_space;
 
                   if (is_dead_key (priv->compose_buffer[i]))
                     {
-                      ch = dead_key_to_unicode (priv->compose_buffer[i], &need_space);
-                      if (ch)
-                        {
-                          if (need_space)
-                            g_string_append_c (s, ' ');
-                          g_string_append_unichar (s, ch);
-                        }
+                      append_dead_key (s, priv->compose_buffer[i]);
                     }
                   else
                     {
