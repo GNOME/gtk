@@ -4191,6 +4191,65 @@ gdk_wayland_surface_show_window_menu (GdkSurface *surface,
 }
 
 static gboolean
+translate_gesture (GdkTitlebarGesture         gesture,
+                   enum gtk_surface1_gesture *out_gesture)
+{
+  switch (gesture)
+    {
+    case GDK_TITLEBAR_GESTURE_DOUBLE_CLICK:
+      *out_gesture = GTK_SURFACE1_GESTURE_DOUBLE_CLICK;
+      break;
+
+    case GDK_TITLEBAR_GESTURE_RIGHT_CLICK:
+      *out_gesture = GTK_SURFACE1_GESTURE_RIGHT_CLICK;
+      break;
+
+    case GDK_TITLEBAR_GESTURE_MIDDLE_CLICK:
+      *out_gesture = GTK_SURFACE1_GESTURE_MIDDLE_CLICK;
+      break;
+
+    default:
+      g_warning ("Not handling unknown titlebar gesture %u", gesture);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gdk_wayland_surface_titlebar_gesture (GdkSurface         *surface,
+                                      GdkTitlebarGesture  gesture)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
+  enum gtk_surface1_gesture gtk_gesture;
+  GdkSeat *seat;
+  struct wl_seat *wl_seat;
+  uint32_t serial;
+
+  if (!gtk_surface)
+    return FALSE;
+
+  if (gtk_surface1_get_version (gtk_surface) < GTK_SURFACE1_TITLEBAR_GESTURE_SINCE_VERSION)
+    return FALSE;
+
+  if (!translate_gesture (gesture, &gtk_gesture))
+    return FALSE;
+
+  seat = gdk_display_get_default_seat (surface->display);
+  wl_seat = gdk_wayland_seat_get_wl_seat (seat);
+
+  serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (seat), NULL);
+
+  gtk_surface1_titlebar_gesture (impl->display_server.gtk_surface,
+                                 serial,
+                                 wl_seat,
+                                 gtk_gesture);
+
+  return TRUE;
+}
+
+static gboolean
 gdk_wayland_surface_supports_edge_constraints (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
@@ -4988,6 +5047,13 @@ gdk_wayland_toplevel_show_window_menu (GdkToplevel *toplevel,
 }
 
 static gboolean
+gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
+                                       GdkTitlebarGesture  gesture)
+{
+  return gdk_wayland_surface_titlebar_gesture (GDK_SURFACE (toplevel), gesture);
+}
+
+static gboolean
 gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 {
   return gdk_wayland_surface_supports_edge_constraints (GDK_SURFACE (toplevel));
@@ -5065,6 +5131,7 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
   iface->lower = gdk_wayland_toplevel_lower;
   iface->focus = gdk_wayland_toplevel_focus;
   iface->show_window_menu = gdk_wayland_toplevel_show_window_menu;
+  iface->titlebar_gesture = gdk_wayland_toplevel_titlebar_gesture;
   iface->supports_edge_constraints = gdk_wayland_toplevel_supports_edge_constraints;
   iface->inhibit_system_shortcuts = gdk_wayland_toplevel_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_wayland_toplevel_restore_system_shortcuts;

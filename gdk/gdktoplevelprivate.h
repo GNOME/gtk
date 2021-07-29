@@ -38,6 +38,8 @@ struct _GdkToplevelInterface
                                          double             x,
                                          double             y,
                                          guint32            timestamp);
+  gboolean      (* titlebar_gesture)    (GdkToplevel       *toplevel,
+                                         GdkTitlebarGesture gesture);
 };
 
 typedef enum
