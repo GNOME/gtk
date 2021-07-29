@@ -821,7 +821,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   int i;
   gboolean compose_finish;
   gboolean compose_match;
-  gunichar output_char;
   guint keyval, state;
 
   while (priv->compose_buffer[n_compose] != 0 && n_compose < priv->compose_buffer_len)
@@ -1132,12 +1131,13 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
       G_UNLOCK (global_tables);
 
-      g_string_free (output, TRUE);
-
       if (success)
-        return TRUE;
+        {
+          g_string_free (output, TRUE);
+          return TRUE;
+        }
 
-      if (gtk_check_algorithmically (priv->compose_buffer, n_compose, &output_char))
+      if (gtk_check_algorithmically (priv->compose_buffer, n_compose, output))
         {
           if (!priv->in_compose_sequence)
             {
@@ -1145,13 +1145,17 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
               g_signal_emit_by_name (context_simple, "preedit-start");
             }
 
-          if (output_char)
-            gtk_im_context_simple_commit_char (context_simple, output_char);
+          if (output->len > 0)
+            gtk_im_context_simple_commit_string (context_simple, output->str);
           else
             g_signal_emit_by_name (context_simple, "preedit-changed");
 
+          g_string_free (output, TRUE);
+
           return TRUE;
         }
+
+      g_string_free (output, TRUE);
 
       /* If we get here, no Compose sequence matched.
        * Only beep if we were in a sequence before.

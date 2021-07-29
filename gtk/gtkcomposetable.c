@@ -486,6 +486,9 @@ parser_remove_duplicates (GtkComposeParser *parser)
   GHashTableIter iter;
   gunichar *sequence;
   char *value;
+  GString *output;
+
+  output = g_string_new ("");
 
   g_hash_table_iter_init (&iter, parser->sequences);
   while (g_hash_table_iter_next (&iter, (gpointer *)&sequence, (gpointer *)&value))
@@ -493,8 +496,6 @@ parser_remove_duplicates (GtkComposeParser *parser)
       static guint16 keysyms[MAX_COMPOSE_LEN + 1];
       int i;
       int n_compose = 0;
-      gunichar output_char;
-      char buf[8] = { 0, };
       gboolean remove_sequence = FALSE;
 
       if (value[0] == '\0')
@@ -529,10 +530,9 @@ parser_remove_duplicates (GtkComposeParser *parser)
           n_compose++;
         }
 
-      if (gtk_check_algorithmically (keysyms, n_compose, &output_char))
+      if (gtk_check_algorithmically (keysyms, n_compose, output))
         {
-          g_unichar_to_utf8 (output_char, buf);
-          if (strcmp (value, buf) == 0)
+          if (strcmp (value, output->str) == 0)
             remove_sequence = TRUE;
         }
 
@@ -540,6 +540,8 @@ next:
       if (remove_sequence)
         g_hash_table_iter_remove (&iter);
     }
+
+  g_string_free (output, TRUE);
 }
 
 static void
@@ -1534,7 +1536,7 @@ check_normalize_nfc (gunichar *combination_buffer,
 gboolean
 gtk_check_algorithmically (const guint16 *compose_buffer,
                            int            n_compose,
-                           gunichar      *output_char)
+                           GString       *output)
 
 {
   int i;
@@ -1543,8 +1545,7 @@ gtk_check_algorithmically (const guint16 *compose_buffer,
 
   combination_buffer = alloca (sizeof (gunichar) * (n_compose + 1));
 
-  if (output_char)
-    *output_char = 0;
+  g_string_set_size (output, 0);
 
   for (i = 0; i < n_compose && IS_DEAD_KEY (compose_buffer[i]); i++)
     ;
@@ -1631,8 +1632,7 @@ gtk_check_algorithmically (const guint16 *compose_buffer,
           combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
           nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
 
-          if (output_char)
-            *output_char = g_utf8_get_char (nfc);
+          g_string_assign (output, nfc);
 
           g_free (combination_utf8);
           g_free (nfc);
