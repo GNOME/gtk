@@ -622,7 +622,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
   guint keyval;
 
   context = GTK_IM_CONTEXT (context_simple);
-  
+
   priv->in_compose_sequence = FALSE;
 
   /* No compose sequences found, check first if we have a partial
@@ -1071,6 +1071,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   else /* Then, check for compose sequences */
     {
       gboolean success = FALSE;
+      int prefix = 0;
       GString *output;
 
       output = g_string_new ("");
@@ -1109,6 +1110,16 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
               success = TRUE;
               break;
             }
+          else
+            {
+              int table_prefix;
+
+              gtk_compose_table_get_prefix ((GtkComposeTable *)tmp_list->data,
+                                            priv->compose_buffer, n_compose,
+                                            &table_prefix);
+
+              prefix = MAX (prefix, table_prefix);
+            }
 
           tmp_list = tmp_list->next;
         }
@@ -1132,6 +1143,21 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
             gtk_im_context_simple_commit_char (context_simple, output_char);
           else
             g_signal_emit_by_name (context_simple, "preedit-changed");
+
+          return TRUE;
+        }
+
+      /* If we get here, no Compose sequence matched.
+       * Only beep if we were in a sequence before.
+       */
+      if (prefix > 0)
+        {
+          for (i = prefix; i < n_compose; i++)
+            priv->compose_buffer[i] = 0;
+
+          beep_surface (gdk_event_get_surface (event));
+
+          g_signal_emit_by_name (context_simple, "preedit-changed");
 
           return TRUE;
         }
