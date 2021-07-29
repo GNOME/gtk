@@ -1001,16 +1001,22 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   
       return TRUE;
     }
-  
+
+  if (is_escape)
+    {
+      if (priv->in_hex_sequence || priv->in_compose_sequence)
+        {
+	  gtk_im_context_simple_reset (context);
+	  return TRUE;
+        }
+
+      return FALSE;
+    }
+
   if (priv->in_hex_sequence)
     {
       if (hex_keyval && n_compose < 6)
 	priv->compose_buffer[n_compose++] = hex_keyval;
-      else if (is_escape)
-	{
-	  gtk_im_context_simple_reset (context);
-	  return TRUE;
-	}
       else if (!is_hex_end)
 	{
 	  /* non-hex character in hex sequence, or sequence too long */
