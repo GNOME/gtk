@@ -3636,7 +3636,7 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
           password_hint->source_id = g_timeout_add (password_hint_timeout,
                                                     (GSourceFunc)gtk_text_remove_password_hint,
                                                     self);
-          g_source_set_name_by_id (password_hint->source_id, "[gtk] gtk_text_remove_password_hint");
+          gdk_source_set_static_name_by_id (password_hint->source_id, "[gtk] gtk_text_remove_password_hint");
         }
     }
 }
@@ -6285,7 +6285,7 @@ gtk_text_selection_bubble_popup_set (GtkText *self)
 
   priv->selection_bubble_timeout_id =
     g_timeout_add (50, gtk_text_selection_bubble_popup_show, self);
-  g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk] gtk_text_selection_bubble_popup_cb");
+  gdk_source_set_static_name_by_id (priv->selection_bubble_timeout_id, "[gtk] gtk_text_selection_bubble_popup_cb");
 }
 
 static void

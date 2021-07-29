@@ -29,6 +29,7 @@
 #include "gtkgestureclick.h"
 #include "gtkintl.h"
 #include "gtktreelistmodel.h"
+#include "gtkprivate.h"
 
 /**
  * GtkTreeExpander:
@@ -648,7 +649,7 @@ gtk_tree_expander_drag_enter (GtkDropControllerMotion *motion,
       !self->expand_timer)
     {
       self->expand_timer = g_timeout_add (TIMEOUT_EXPAND, (GSourceFunc) gtk_tree_expander_expand_timeout, self);
-      g_source_set_name_by_id (self->expand_timer, "[gtk] gtk_tree_expander_expand_timeout");
+      gdk_source_set_static_name_by_id (self->expand_timer, "[gtk] gtk_tree_expander_expand_timeout");
     }
 }
 

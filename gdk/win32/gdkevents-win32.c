@@ -61,6 +61,7 @@
 #include "gdkdisplay-win32.h"
 //#include "gdkselection-win32.h"
 #include "gdkdragprivate.h"
+#include "gdk-private.h"
 
 #include <windowsx.h>
 
@@ -502,7 +503,7 @@ _gdk_events_init (GdkDisplay *display)
 #endif
 
   source = g_source_new (&event_funcs, sizeof (GdkWin32EventSource));
-  g_source_set_name (source, "GDK Win32 event source");
+  g_source_set_static_name (source, "GDK Win32 event source");
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
 
   event_source = (GdkWin32EventSource *)source;

@@ -21,6 +21,7 @@
 
 #include "gdkdeviceprivate.h"
 #include "gdkintl.h"
+#include "gdk-private.h"
 
 #include "gdkmacosdevice-private.h"
 #include "gdkmacoscursor-private.h"
@@ -161,7 +162,7 @@ gdk_macos_drag_drop_done (GdkDrag  *drag,
                            gdk_macos_zoomback_timeout,
                            zb,
                            (GDestroyNotify) gdk_macos_zoomback_destroy);
-  g_source_set_name_by_id (id, "[gtk] gdk_macos_zoomback_timeout");
+  gdk_source_set_static_name_by_id (id, "[gtk] gdk_macos_zoomback_timeout");
   g_object_unref (drag);
 }
 

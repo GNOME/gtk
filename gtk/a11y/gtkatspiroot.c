@@ -30,6 +30,7 @@
 
 #include "gtkdebug.h"
 #include "gtkwindow.h"
+#include "gtkprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-application.h"
@@ -612,7 +613,7 @@ gtk_at_spi_root_queue_register (GtkAtSpiRoot    *self,
     return;
 
   self->register_id = g_idle_add (root_register, self);
-  g_source_set_name_by_id (self->register_id, "[gtk] ATSPI root registration");
+  gdk_source_set_static_name_by_id (self->register_id, "[gtk] ATSPI root registration");
 }
 
 void

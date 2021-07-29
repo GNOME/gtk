@@ -29,6 +29,7 @@
 #include "gdkinternals.h"
 #include "gdkframeclockprivate.h"
 #include "gdk.h"
+#include "gdk-private.h"
 #include "gdkprofilerprivate.h"
 
 #ifdef G_OS_WIN32
@@ -307,12 +308,15 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle,
 
       if (priv->flush_idle_id == 0 && RUN_FLUSH_IDLE (priv))
         {
+          GSource *source;
+
           priv->flush_idle_id = g_timeout_add_full (GDK_PRIORITY_EVENTS + 1,
                                                     min_interval,
                                                     gdk_frame_clock_flush_idle,
                                                     g_object_ref (clock_idle),
                                                     (GDestroyNotify) g_object_unref);
-          g_source_set_name_by_id (priv->flush_idle_id, "[gtk] gdk_frame_clock_flush_idle");
+          source = g_main_context_find_source_by_id (NULL, priv->flush_idle_id);
+          g_source_set_static_name (source, "[gtk] gdk_frame_clock_flush_idle");
         }
 
       if (!priv->in_paint_idle &&
@@ -324,7 +328,7 @@ maybe_start_idle (GdkFrameClockIdle *clock_idle,
                                                     gdk_frame_clock_paint_idle,
                                                     g_object_ref (clock_idle),
                                                     (GDestroyNotify) g_object_unref);
-          g_source_set_name_by_id (priv->paint_idle_id, "[gtk] gdk_frame_clock_paint_idle");
+          gdk_source_set_static_name_by_id (priv->paint_idle_id, "[gtk] gdk_frame_clock_paint_idle");
         }
     }
 }

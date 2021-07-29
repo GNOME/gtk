@@ -1388,7 +1388,7 @@ gtk_recent_manager_changed (GtkRecentManager *manager)
   if (manager->priv->changed_timeout == 0)
     {
       manager->priv->changed_timeout = g_timeout_add (250, emit_manager_changed, manager);
-      g_source_set_name_by_id (manager->priv->changed_timeout, "[gtk] emit_manager_changed");
+      gdk_source_set_static_name_by_id (manager->priv->changed_timeout, "[gtk] emit_manager_changed");
     }
   else
     {

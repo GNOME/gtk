@@ -267,7 +267,7 @@ gtk_filter_list_model_start_filtering (GtkFilterListModel *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
   g_assert (self->pending_cb == 0);
   self->pending_cb = g_idle_add (gtk_filter_list_model_run_filter_cb, self);
-  g_source_set_name_by_id (self->pending_cb, "[gtk] gtk_filter_list_model_run_filter_cb");
+  gdk_source_set_static_name_by_id (self->pending_cb, "[gtk] gtk_filter_list_model_run_filter_cb");
 }
 
 static void

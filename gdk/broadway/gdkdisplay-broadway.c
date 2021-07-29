@@ -33,6 +33,7 @@
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include <gdk/gdktextureprivate.h>
+#include "gdk-private.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -463,7 +464,7 @@ gdk_broadway_display_flush_in_idle (GdkDisplay *display)
   if (broadway_display->idle_flush_id == 0)
     {
       broadway_display->idle_flush_id = g_idle_add (flush_idle, g_object_ref (display));
-      g_source_set_name_by_id (broadway_display->idle_flush_id, "[gtk] flush_idle");
+      gdk_source_set_static_name_by_id (broadway_display->idle_flush_id, "[gtk] flush_idle");
     }
 }
 

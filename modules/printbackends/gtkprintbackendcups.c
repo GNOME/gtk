@@ -56,6 +56,7 @@
 #include "gtkcupssecretsutils.h"
 
 #include <gtkprintutils.h>
+#include "gtkprivate.h"
 
 #ifdef HAVE_COLORD
 #include <colord.h>
@@ -1690,7 +1691,7 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
 
   dispatch = (GtkPrintCupsDispatchWatch *) g_source_new (&_cups_dispatch_watch_funcs,
                                                          sizeof (GtkPrintCupsDispatchWatch));
-  g_source_set_name (&dispatch->source, "GTK CUPS backend");
+  g_source_set_static_name (&dispatch->source, "GTK CUPS backend");
 
   GTK_NOTE (PRINTING,
             g_print ("CUPS Backend: %s <source %p> - Executing cups request on server '%s' and resource '%s'\n", G_STRFUNC, dispatch, request->server, request->resource));

@@ -519,7 +519,7 @@ reset_timeout (GtkSearchEntry *entry)
   entry->delayed_changed_id = g_timeout_add (DELAYED_TIMEOUT_ID,
                                             gtk_search_entry_changed_timeout_cb,
                                             entry);
-  g_source_set_name_by_id (entry->delayed_changed_id, "[gtk] gtk_search_entry_changed_timeout_cb");
+  gdk_source_set_static_name_by_id (entry->delayed_changed_id, "[gtk] gtk_search_entry_changed_timeout_cb");
 }
 
 static void

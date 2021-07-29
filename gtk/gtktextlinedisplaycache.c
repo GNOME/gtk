@@ -23,6 +23,7 @@
 #include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtktextlinedisplaycacheprivate.h"
+#include "gtkprivate.h"
 
 #define DEFAULT_MRU_SIZE         250
 #define BLOW_CACHE_TIMEOUT_SEC   20
@@ -141,7 +142,7 @@ gtk_text_line_display_cache_delay_eviction (GtkTextLineDisplayCache *cache)
                                    gtk_text_line_display_cache_blow_cb,
                                    cache);
       cache->evict_source = g_main_context_find_source_by_id (NULL, tag);
-      g_source_set_name (cache->evict_source, "[gtk+] gtk_text_line_display_cache_blow_cb");
+      g_source_set_static_name (cache->evict_source, "[gtk+] gtk_text_line_display_cache_blow_cb");
     }
 }
 

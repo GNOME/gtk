@@ -414,3 +414,17 @@ gdk_find_base_dir (const char *text,
   return dir;
 }
 
+void
+gdk_source_set_static_name_by_id (guint           tag,
+                                  const char     *name)
+{
+  GSource *source;
+
+  g_return_if_fail (tag > 0);
+
+  source = g_main_context_find_source_by_id (NULL, tag);
+  if (source == NULL)
+    return;
+
+  g_source_set_static_name (source, name);
+}

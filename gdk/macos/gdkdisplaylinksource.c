@@ -197,7 +197,7 @@ gdk_display_link_source_new (void)
                                   gdk_display_link_source_frame_cb,
                                   source);
 
-  g_source_set_name (source, "[gdk] quartz frame clock");
+  g_source_set_static_name (source, "[gdk] quartz frame clock");
 
   return source;
 }

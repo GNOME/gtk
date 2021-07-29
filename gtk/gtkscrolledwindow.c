@@ -1216,7 +1216,7 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
   else if (indicator_close && !on_other_scrollbar)
     {
       indicator->over_timeout_id = g_timeout_add (30, enable_over_timeout_cb, indicator);
-      g_source_set_name_by_id (indicator->over_timeout_id, "[gtk] enable_over_timeout_cb");
+      gdk_source_set_static_name_by_id (indicator->over_timeout_id, "[gtk] enable_over_timeout_cb");
     }
   else
     indicator_set_over (indicator, FALSE);
@@ -1412,8 +1412,8 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
     {
       priv->scroll_events_overshoot_id =
         g_timeout_add (50, start_scroll_deceleration_cb, scrolled_window);
-      g_source_set_name_by_id (priv->scroll_events_overshoot_id,
-                               "[gtk] start_scroll_deceleration_cb");
+      gdk_source_set_static_name_by_id (priv->scroll_events_overshoot_id,
+                                      "[gtk] start_scroll_deceleration_cb");
     }
 }
 
@@ -3638,7 +3638,7 @@ indicator_set_fade (Indicator *indicator,
   if (visible && indicator->conceil_timer == 0)
     {
       indicator->conceil_timer = g_timeout_add (INDICATOR_FADE_OUT_TIME, maybe_hide_indicator, indicator);
-      g_source_set_name_by_id (indicator->conceil_timer, "[gtk] maybe_hide_indicator");
+      gdk_source_set_static_name_by_id (indicator->conceil_timer, "[gtk] maybe_hide_indicator");
     }
   if (!visible && indicator->conceil_timer != 0)
     {
