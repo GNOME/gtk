@@ -776,7 +776,9 @@ gtk_at_spi_root_to_ref (GtkAtSpiRoot *self)
   if (self->desktop_path == NULL)
     return gtk_at_spi_null_ref ();
 
-  return g_variant_new ("(so)", self->desktop_name, self->desktop_path);
+  return g_variant_new ("(so)",
+                        g_dbus_connection_get_unique_name (self->connection),
+                        self->root_path);
 }
 
 const char *
