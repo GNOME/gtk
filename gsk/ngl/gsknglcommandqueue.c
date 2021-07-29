@@ -978,9 +978,6 @@ gsk_ngl_command_queue_execute (GskNglCommandQueue   *self,
   gsk_profiler_timer_begin (self->profiler, self->metrics.cpu_time);
 #endif
 
-  glEnable (GL_DEPTH_TEST);
-  glDepthFunc (GL_LEQUAL);
-
   /* Pre-multiplied alpha */
   glEnable (GL_BLEND);
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);

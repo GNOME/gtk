@@ -4289,9 +4289,6 @@ gsk_gl_renderer_do_render (GskRenderer           *renderer,
   gsk_gl_renderer_setup_render_mode (self);
   gsk_gl_renderer_clear (self);
 
-  glEnable (GL_DEPTH_TEST);
-  glDepthFunc (GL_LEQUAL);
-
   /* Pre-multiplied alpha! */
   glEnable (GL_BLEND);
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
