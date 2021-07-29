@@ -3,7 +3,7 @@
 
 #define MAX_SEQ_LEN 5
 #define N_INDEX_SIZE 30
-#define DATA_SIZE 16521
-#define N_CHARS 1572
+#define DATA_SIZE 16447
+#define N_CHARS 1241
 
 #endif

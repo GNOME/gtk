@@ -341,7 +341,7 @@ match_algorithmic (void)
 
   ret = gtk_check_algorithmically (buffer, 3, output);
   g_assert_true (ret);
-  g_assert_cmpstr (output->str, ==, "ἇ");
+  g_assert_cmpstr (output->str, ==, "ᾶ\xcc\x94");
 
   buffer[0] = GDK_KEY_dead_perispomeni;
   buffer[1] = GDK_KEY_dead_dasia;
@@ -379,7 +379,8 @@ match_algorithmic (void)
   buffer[2] = GDK_KEY_dead_grave;
 
   ret = gtk_check_algorithmically (buffer, 3, output);
-  g_assert_false (ret);
+  g_assert_true (ret);
+  g_assert_cmpstr (output->str, ==, "");
 
   buffer[0] = GDK_KEY_dead_diaeresis;
   buffer[1] = GDK_KEY_a;
