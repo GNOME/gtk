@@ -243,6 +243,9 @@ endif
 
 # Compiler flags
 if cc.get_id() == 'msvc'
+  if cc.version().version_compare('<19.00.23918') and meson.version().version_compare('<0.59.0')
+    error('Meson 0.59.0 or later is required for building with pre-Visual Studio 2015 Update 2')
+  endif
   # Compiler options taken from msvc_recommended_pragmas.h
   # in GLib, based on _Win32_Programming_ by Rector and Newcomer
   test_cflags = [
