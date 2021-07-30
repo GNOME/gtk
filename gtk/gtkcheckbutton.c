@@ -420,9 +420,6 @@ gtk_check_button_focus (GtkWidget         *widget,
                         GtkDirectionType   direction)
 {
   GtkCheckButton *self = GTK_CHECK_BUTTON (widget);
-  GtkCheckButton *active_button;
-
-  active_button = get_group_active_button (self);
 
   if (gtk_widget_is_focus (widget))
     {
@@ -471,9 +468,7 @@ gtk_check_button_focus (GtkWidget         *widget,
       if (new_focus)
         {
           gtk_widget_grab_focus (new_focus);
-          gtk_check_button_set_active (GTK_CHECK_BUTTON (new_focus), TRUE);
-          if (active_button && active_button != (GtkCheckButton *)new_focus)
-            gtk_check_button_set_active (GTK_CHECK_BUTTON (active_button), FALSE);
+          gtk_widget_activate (new_focus);
         }
 
       g_ptr_array_free (child_array, TRUE);
@@ -482,6 +477,9 @@ gtk_check_button_focus (GtkWidget         *widget,
     }
   else
     {
+      GtkCheckButton *active_button;
+
+      active_button = get_group_active_button (self);
       if (active_button && active_button != self)
         return FALSE;
 
@@ -498,7 +496,10 @@ gtk_check_button_real_activate (GtkCheckButton *self)
   if (priv->active && (priv->group_prev || priv->group_next))
     return;
 
-  gtk_check_button_set_active (self, !gtk_check_button_get_active (self));
+  if (priv->action_helper)
+    gtk_action_helper_activate (priv->action_helper);
+  else
+    gtk_check_button_set_active (self, !gtk_check_button_get_active (self));
 }
 
 static void
