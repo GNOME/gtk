@@ -1298,8 +1298,6 @@ _gdk_win32_get_window_rect (GdkSurface *window,
   if (GDK_IS_TOPLEVEL (window))
     {
       ClientToScreen (hwnd, &point);
-      point.x += _gdk_offset_x * impl->surface_scale;
-      point.y += _gdk_offset_y * impl->surface_scale;
     }
 
   rect->left = point.x;
@@ -2347,12 +2345,12 @@ gdk_event_translate (GdkDisplay *display,
        * sends WM_MOUSEMOVE messages after a new window is shows under
        * the mouse, even if the mouse hasn't moved. This disturbs gtk.
        */
-      if ((msg->pt.x + _gdk_offset_x) / impl->surface_scale == current_root_x &&
-	  (msg->pt.y + _gdk_offset_y) / impl->surface_scale == current_root_y)
+      if (msg->pt.x / impl->surface_scale == current_root_x &&
+	  msg->pt.y / impl->surface_scale == current_root_y)
 	break;
 
-      current_root_x = (msg->pt.x + _gdk_offset_x) / impl->surface_scale;
-      current_root_y = (msg->pt.y + _gdk_offset_y) / impl->surface_scale;
+      current_root_x = msg->pt.x / impl->surface_scale;
+      current_root_y = msg->pt.y / impl->surface_scale;
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         gdk_win32_surface_do_move_resize_drag (window, current_root_x, current_root_y);

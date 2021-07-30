@@ -558,8 +558,8 @@ idroptarget_dragenter (LPDROPTARGET This,
                                               grfKeyState);
 
   set_data_object (&ctx->data_object, pDataObj);
-  pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
-  pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
+  pt_x = pt.x / drop_win32->scale;
+  pt_y = pt.y / drop_win32->scale;
   gdk_drop_emit_enter_event (drop, TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
   drop_win32->last_key_state = grfKeyState;
   drop_win32->last_x = pt_x;
@@ -642,8 +642,8 @@ idroptarget_dragover (LPDROPTARGET This,
 {
   drop_target_context *ctx = (drop_target_context *) This;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
-  int pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
-  int pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
+  int pt_x = pt.x / drop_win32->scale;
+  int pt_y = pt.y / drop_win32->scale;
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
 
@@ -746,8 +746,8 @@ idroptarget_drop (LPDROPTARGET This,
 {
   drop_target_context *ctx = (drop_target_context *) This;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
-  int pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
-  int pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
+  int pt_x = pt.x / drop_win32->scale;
+  int pt_y = pt.y / drop_win32->scale;
   GdkDragAction dest_action;
 
   GDK_NOTE (DND, g_print ("idroptarget_drop %p ", This));
@@ -1049,8 +1049,8 @@ gdk_dropfiles_filter (GdkWin32Display *display,
 
   gdk_drop_emit_drop_event (drop,
                             FALSE, 
-                            pt.x / drop_win32->scale + _gdk_offset_x,
-                            pt.y / drop_win32->scale + _gdk_offset_y,
+                            pt.x / drop_win32->scale,
+                            pt.y / drop_win32->scale,
                             _gdk_win32_get_next_tick (msg->time));
 
   DragFinish (hdrop);

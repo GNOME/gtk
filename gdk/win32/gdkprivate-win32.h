@@ -260,13 +260,6 @@ void    _gdk_other_api_failed        (const char *where,
 
 extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM);
 
-/* Offsets to add to Windows coordinates (which are relative to the
- * primary monitor's origin, and thus might be negative for monitors
- * to the left and/or above the primary monitor) to get GDK
- * coordinates, which should be non-negative on the whole screen.
- */
-extern int               _gdk_offset_x, _gdk_offset_y;
-
 extern HINSTANCE         _gdk_dll_hinstance;
 extern HINSTANCE         _gdk_app_hmodule;
 

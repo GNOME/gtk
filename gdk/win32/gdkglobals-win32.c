@@ -27,8 +27,6 @@
 #include "gdktypes.h"
 #include "gdkprivate-win32.h"
 
-int		  _gdk_offset_x, _gdk_offset_y;
-
 HINSTANCE	  _gdk_dll_hinstance;
 HINSTANCE	  _gdk_app_hmodule;
 

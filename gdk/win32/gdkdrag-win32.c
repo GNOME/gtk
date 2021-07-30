@@ -1845,8 +1845,8 @@ gdk_win32_drag_find_window (GdkDrag    *drag,
   g_assert (_win32_main_thread == NULL ||
             _win32_main_thread == g_thread_self ());
 
-  a.x = x_root * drag_win32->scale - _gdk_offset_x;
-  a.y = y_root * drag_win32->scale - _gdk_offset_y;
+  a.x = x_root * drag_win32->scale;
+  a.y = y_root * drag_win32->scale;
   a.ignore = drag_surface ? GDK_SURFACE_HWND (drag_surface) : NULL;
   a.result = INVALID_HANDLE_VALUE;
 
