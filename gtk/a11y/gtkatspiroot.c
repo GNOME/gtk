@@ -773,9 +773,6 @@ gtk_at_spi_root_to_ref (GtkAtSpiRoot *self)
 {
   g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), NULL);
 
-  if (self->desktop_path == NULL)
-    return gtk_at_spi_null_ref ();
-
   return g_variant_new ("(so)",
                         g_dbus_connection_get_unique_name (self->connection),
                         self->root_path);
