@@ -1041,14 +1041,15 @@ gdk_win32_surface_do_move (GdkSurface *window,
 }
 
 void
-gdk_win32_surface_resize (GdkSurface *window,
-			 int width, int height)
+gdk_win32_surface_resize (GdkSurface *surface,
+                          int width,
+                          int height)
 {
   RECT outer_rect;
 
-  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   if (width < 1)
@@ -1057,29 +1058,29 @@ gdk_win32_surface_resize (GdkSurface *window,
     height = 1;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_surface_resize: %p: %dx%d\n",
-                           GDK_SURFACE_HWND (window), width, height));
+                           GDK_SURFACE_HWND (surface), width, height));
 
-  if (window->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
+  if (surface->state & GDK_TOPLEVEL_STATE_FULLSCREEN)
     return;
 
-  get_outer_rect (window, width, height, &outer_rect);
+  get_outer_rect (surface, width, height, &outer_rect);
 
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,0,0,%ld,%ld,"
                            "NOACTIVATE|NOMOVE|NOZORDER)\n",
-                           GDK_SURFACE_HWND (window),
+                           GDK_SURFACE_HWND (surface),
                            outer_rect.right - outer_rect.left,
                            outer_rect.bottom - outer_rect.top));
 
-  API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window),
+  API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface),
                            SWP_NOZORDER_SPECIFIED,
                            0, 0,
                            outer_rect.right - outer_rect.left,
                            outer_rect.bottom - outer_rect.top,
                            SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER));
-  window->resize_count += 1;
+  surface->resize_count += 1;
 
-  if (!GDK_WIN32_SURFACE (window)->force_recompute_size)
-    gdk_surface_request_layout (window);
+  if (!GDK_WIN32_SURFACE (surface)->force_recompute_size)
+    gdk_surface_request_layout (surface);
 }
 
 static void
@@ -2495,40 +2496,40 @@ _gdk_win32_surface_handle_aerosnap (GdkSurface            *window,
 }
 
 static void
-apply_snap (GdkSurface             *window,
-            GdkWin32AeroSnapState  snap)
+apply_snap (GdkSurface             *surface,
+            GdkWin32AeroSnapState   snap)
 {
   GdkMonitor *monitor;
   GdkDisplay *display;
 
-  display = gdk_surface_get_display (window);
-  monitor = gdk_display_get_monitor_at_surface (display, window);
+  display = gdk_surface_get_display (surface);
+  monitor = gdk_display_get_monitor_at_surface (display, surface);
 
   switch (snap)
     {
     case GDK_WIN32_AEROSNAP_STATE_UNDETERMINED:
       break;
     case GDK_WIN32_AEROSNAP_STATE_MAXIMIZE:
-      unsnap (window, monitor);
-      gdk_win32_surface_maximize (window);
+      unsnap (surface, monitor);
+      gdk_win32_surface_maximize (surface);
       break;
     case GDK_WIN32_AEROSNAP_STATE_HALFLEFT:
-      unsnap (window, monitor);
-      snap_left (window, monitor, monitor);
+      unsnap (surface, monitor);
+      snap_left (surface, monitor, monitor);
       break;
     case GDK_WIN32_AEROSNAP_STATE_HALFRIGHT:
-      unsnap (window, monitor);
-      snap_right (window, monitor, monitor);
+      unsnap (surface, monitor);
+      snap_right (surface, monitor, monitor);
       break;
     case GDK_WIN32_AEROSNAP_STATE_FULLUP:
-      snap_up (window);
+      snap_up (surface);
       break;
     }
 
   if (snap != GDK_WIN32_AEROSNAP_STATE_UNDETERMINED)
     {
-      GDK_WIN32_SURFACE (window)->inhibit_configure = TRUE;
-      GDK_WIN32_SURFACE (window)->force_recompute_size = FALSE;
+      GDK_WIN32_SURFACE (surface)->inhibit_configure = TRUE;
+      GDK_WIN32_SURFACE (surface)->force_recompute_size = FALSE;
     }
 }
 
@@ -3409,10 +3410,10 @@ get_cursor_name_from_op (GdkW32WindowDragOp op,
 }
 
 static void
-setup_drag_move_resize_context (GdkSurface                   *window,
+setup_drag_move_resize_context (GdkSurface                  *surface,
                                 GdkW32DragMoveResizeContext *context,
                                 GdkW32WindowDragOp           op,
-                                GdkSurfaceEdge                edge,
+                                GdkSurfaceEdge               edge,
                                 GdkDevice                   *device,
                                 int                          button,
                                 double                       x,
@@ -3421,13 +3422,13 @@ setup_drag_move_resize_context (GdkSurface                   *window,
 {
   RECT rect;
   const char *cursor_name;
-  GdkSurface *pointer_window;
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-  gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (window)) & GDK_TOPLEVEL_STATE_MAXIMIZED;
+  GdkSurface *pointer_surface;
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+  gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (surface)) & GDK_TOPLEVEL_STATE_MAXIMIZED;
   int root_x, root_y;
   gboolean restore_configure = FALSE;
 
-  gdk_win32_surface_get_root_coords (window, x, y, &root_x, &root_y);
+  gdk_win32_surface_get_root_coords (surface, x, y, &root_x, &root_y);
 
   /* Before we drag, we need to undo any maximization or snapping.
    * AeroSnap behaviour:
@@ -3450,7 +3451,7 @@ setup_drag_move_resize_context (GdkSurface                   *window,
    *       resize
    *       don't unsnap
    *       apply new width and x position to unsnapped cache,
-   *         so that unsnapped window only regains its height
+   *         so that unsnapped surface only regains its height
    *         and y position, but inherits x and width from
    *         the fullup snapped state
    *     vertical resize:
@@ -3465,7 +3466,7 @@ setup_drag_move_resize_context (GdkSurface                   *window,
    *
    * TODO: make this implementation behave as AeroSnap on resizes?
    * There's also the case where
-   * a halfleft/halfright window isn't unsnapped when it's
+   * a halfleft/halfright surface isn't unsnapped when it's
    * being moved horizontally, but it's more difficult to implement.
    */
   if (op == GDK_WIN32_DRAGOP_RESIZE &&
@@ -3473,7 +3474,7 @@ setup_drag_move_resize_context (GdkSurface                   *window,
        impl->snap_state == GDK_WIN32_AEROSNAP_STATE_HALFLEFT ||
        impl->snap_state == GDK_WIN32_AEROSNAP_STATE_FULLUP))
     {
-      discard_snapinfo (window);
+      discard_snapinfo (surface);
       restore_configure = TRUE;
     }
   else if (maximized ||
@@ -3484,25 +3485,25 @@ setup_drag_move_resize_context (GdkSurface                   *window,
       GdkMonitor *monitor;
       int wx, wy, wwidth, wheight;
       int swx, swy, swwidth, swheight;
-      gboolean pointer_outside_of_window;
+      gboolean pointer_outside_of_surface;
       int offsetx, offsety;
       gboolean left_half;
       GdkDisplay *display;
 
       restore_configure = TRUE;
-      display = gdk_surface_get_display (window);
-      monitor = gdk_display_get_monitor_at_surface (display, window);
-      gdk_surface_get_geometry (window, &wx, &wy, &wwidth, &wheight);
+      display = gdk_surface_get_display (surface);
+      monitor = gdk_display_get_monitor_at_surface (display, surface);
+      gdk_surface_get_geometry (surface, &wx, &wy, &wwidth, &wheight);
 
       swx = wx;
       swy = wy;
       swwidth = wwidth;
       swheight = wheight;
 
-      /* Subtract window shadow. We don't want pointer to go outside of
-       * the visible window during drag-move. For drag-resize it's OK.
-       * Don't take shadow into account if the window is maximized -
-       * maximized windows don't have shadows.
+      /* Subtract surface shadow. We don't want pointer to go outside of
+       * the visible surface during drag-move. For drag-resize it's OK.
+       * Don't take shadow into account if the surface is maximized -
+       * maximized surfaces don't have shadows.
        */
       if (op == GDK_WIN32_DRAGOP_MOVE && !maximized)
         {
@@ -3512,16 +3513,16 @@ setup_drag_move_resize_context (GdkSurface                   *window,
           swheight -= impl->shadow_y;
         }
 
-      pointer_outside_of_window = root_x < swx || root_x > swx + swwidth ||
+      pointer_outside_of_surface = root_x < swx || root_x > swx + swwidth ||
                                   root_y < swy || root_y > swy + swheight;
-      /* Calculate the offset of the pointer relative to the window */
+      /* Calculate the offset of the pointer relative to the surface */
       offsetx = root_x - swx;
       offsety = root_y - swy;
 
-      /* Figure out in which half of the window the pointer is.
+      /* Figure out in which half of the surface the pointer is.
        * The code currently only concerns itself with horizontal
        * dimension (left/right halves).
-       * There's no upper/lower half, because usually window
+       * There's no upper/lower half, because usually surface
        * is dragged by its upper half anyway. If that changes, adjust
        * accordingly.
        */
@@ -3531,26 +3532,26 @@ setup_drag_move_resize_context (GdkSurface                   *window,
       if (!left_half)
         offsetx = swwidth - offsetx;
 
-      GDK_NOTE (MISC, g_print ("Pointer at %d : %d, this is %d : %d relative to the window's %s\n",
+      GDK_NOTE (MISC, g_print ("Pointer at %d : %d, this is %d : %d relative to the surface's %s\n",
                                root_x, root_y, offsetx, offsety,
                                left_half ? "left half" : "right half"));
 
-      /* Move window in such a way that on unmaximization/unsnapping the pointer
-       * is still pointing at the appropriate half of the window,
+      /* Move surface in such a way that on unmaximization/unsnapping the pointer
+       * is still pointing at the appropriate half of the surface,
        * with the same offset from the left or right edge. If the new
-       * window size is too small, and adding that offset puts the pointer
+       * surface size is too small, and adding that offset puts the pointer
        * into the other half or even beyond, move the pointer to the middle.
        */
-      if (!pointer_outside_of_window && maximized)
+      if (!pointer_outside_of_surface && maximized)
         {
           WINDOWPLACEMENT placement;
           int unmax_width, unmax_height;
           int shadow_unmax_width, shadow_unmax_height;
 
           placement.length = sizeof (placement);
-          API_CALL (GetWindowPlacement, (GDK_SURFACE_HWND (window), &placement));
+          API_CALL (GetWindowPlacement, (GDK_SURFACE_HWND (surface), &placement));
 
-          GDK_NOTE (MISC, g_print ("W32 WM unmaximized window placement is %ld x %ld @ %ld : %ld\n",
+          GDK_NOTE (MISC, g_print ("W32 WM unmaximized surface placement is %ld x %ld @ %ld : %ld\n",
                                    placement.rcNormalPosition.right - placement.rcNormalPosition.left,
                                    placement.rcNormalPosition.bottom - placement.rcNormalPosition.top,
                                    placement.rcNormalPosition.left,
@@ -3596,9 +3597,9 @@ setup_drag_move_resize_context (GdkSurface                   *window,
                                    placement.rcNormalPosition.left,
                                    placement.rcNormalPosition.top));
 
-          API_CALL (SetWindowPlacement, (GDK_SURFACE_HWND (window), &placement));
+          API_CALL (SetWindowPlacement, (GDK_SURFACE_HWND (surface), &placement));
         }
-      else if (!pointer_outside_of_window && impl->snap_stash_int)
+      else if (!pointer_outside_of_surface && impl->snap_stash_int)
         {
           GdkRectangle new_pos;
           GdkRectangle snew_pos;
@@ -3628,22 +3629,22 @@ setup_drag_move_resize_context (GdkSurface                   *window,
               new_pos.y = root_y - new_pos.height / 2;
             }
 
-          GDK_NOTE (MISC, g_print ("Unsnapped window to %d : %d\n",
+          GDK_NOTE (MISC, g_print ("Unsnapped surface to %d : %d\n",
                                    new_pos.x, new_pos.y));
-          discard_snapinfo (window);
-          gdk_win32_surface_move_resize (window, new_pos.x, new_pos.y,
+          discard_snapinfo (surface);
+          gdk_win32_surface_move_resize (surface, new_pos.x, new_pos.y,
                                          new_pos.width, new_pos.height);
         }
 
 
       if (maximized)
-        gdk_win32_surface_unmaximize (window);
+        gdk_win32_surface_unmaximize (surface);
       else
-        unsnap (window, monitor);
+        unsnap (surface, monitor);
 
-      if (pointer_outside_of_window)
+      if (pointer_outside_of_surface)
         {
-          /* Pointer outside of the window, move pointer into window */
+          /* Pointer outside of the surface, move pointer into surface */
           GDK_NOTE (MISC, g_print ("Pointer at %d : %d is outside of %d x %d @ %d : %d, move it to %d : %d\n",
                                    root_x, root_y, wwidth, wheight, wx, wy, wx + wwidth / 2, wy + wheight / 2));
           root_x = wx + wwidth / 2;
@@ -3659,26 +3660,26 @@ setup_drag_move_resize_context (GdkSurface                   *window,
   if (restore_configure)
     impl->inhibit_configure = FALSE;
 
-  _gdk_win32_get_window_rect (window, &rect);
+  _gdk_win32_get_window_rect (surface, &rect);
 
   cursor_name = get_cursor_name_from_op (op, edge);
 
   context->cursor = gdk_cursor_new_from_name (cursor_name, NULL);
 
-  pointer_window = window;
+  pointer_surface = surface;
 
   /* Note: This triggers a WM_CAPTURECHANGED, which will trigger
    * gdk_win32_surface_end_move_resize_drag(), which will end
    * our op before it even begins, but only if context->op is not NONE.
    * This is why we first do the grab, *then* set the op.
    */
-  gdk_device_grab (device, pointer_window,
+  gdk_device_grab (device, pointer_surface,
                    FALSE,
                    GDK_ALL_EVENTS_MASK,
                    context->cursor,
                    timestamp);
 
-  context->window = g_object_ref (window);
+  context->window = g_object_ref (surface);
   context->op = op;
   context->edge = edge;
   context->device = device;
@@ -3698,10 +3699,10 @@ setup_drag_move_resize_context (GdkSurface                   *window,
   calculate_aerosnap_regions (context);
 
   GDK_NOTE (EVENTS,
-            g_print ("begin drag moveresize: window %p, toplevel %p, "
+            g_print ("begin drag moveresize: surface %p, toplevel %p, "
                      "op %u, edge %d, device %p, "
                      "button %d, coord %d:%d, time %u\n",
-                     pointer_window, window,
+                     pointer_surface, surface,
                      context->op, context->edge, context->device,
                      context->button, context->start_root_x,
                      context->start_root_y, context->timestamp));
@@ -4096,55 +4097,55 @@ gdk_win32_surface_minimize (GdkSurface *window)
 }
 
 static void
-gdk_win32_surface_maximize (GdkSurface *window)
+gdk_win32_surface_maximize (GdkSurface *surface)
 {
   GdkWin32Surface *impl;
 
-  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   GDK_NOTE (MISC, g_print ("gdk_surface_maximize: %p: %s\n",
-			   GDK_SURFACE_HWND (window),
-			   _gdk_win32_surface_state_to_string (window->state)));
+			   GDK_SURFACE_HWND (surface),
+			   _gdk_win32_surface_state_to_string (surface->state)));
 
-  impl = GDK_WIN32_SURFACE (window);
+  impl = GDK_WIN32_SURFACE (surface);
   impl->inhibit_configure = TRUE;
   impl->force_recompute_size = FALSE;
 
-  if (GDK_SURFACE_IS_MAPPED (window))
-    GtkShowWindow (window, SW_MAXIMIZE);
+  if (GDK_SURFACE_IS_MAPPED (surface))
+    GtkShowWindow (surface, SW_MAXIMIZE);
   else
-    gdk_synthesize_surface_state (window,
+    gdk_synthesize_surface_state (surface,
 				 0,
 				 GDK_TOPLEVEL_STATE_MAXIMIZED);
 }
 
 static void
-gdk_win32_surface_unmaximize (GdkSurface *window)
+gdk_win32_surface_unmaximize (GdkSurface *surface)
 {
   GdkWin32Surface *impl;
 
-  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (GDK_IS_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   GDK_NOTE (MISC, g_print ("gdk_surface_unmaximize: %p: %s\n",
-			   GDK_SURFACE_HWND (window),
-			   _gdk_win32_surface_state_to_string (window->state)));
+			   GDK_SURFACE_HWND (surface),
+			   _gdk_win32_surface_state_to_string (surface->state)));
 
-  _gdk_win32_surface_invalidate_egl_framebuffer (window);
+  _gdk_win32_surface_invalidate_egl_framebuffer (surface);
 
-  if (GDK_SURFACE_IS_MAPPED (window))
-    GtkShowWindow (window, SW_RESTORE);
+  if (GDK_SURFACE_IS_MAPPED (surface))
+    GtkShowWindow (surface, SW_RESTORE);
   else
-    gdk_synthesize_surface_state (window,
+    gdk_synthesize_surface_state (surface,
 				 GDK_TOPLEVEL_STATE_MAXIMIZED,
 				 0);
 
-  impl = GDK_WIN32_SURFACE (window);
+  impl = GDK_WIN32_SURFACE (surface);
 
   if (impl->inhibit_configure)
     {
