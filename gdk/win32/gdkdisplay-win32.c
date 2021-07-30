@@ -527,7 +527,6 @@ _gdk_win32_display_open (const char *display_name)
 
   _gdk_win32_lang_notification_init ();
   _gdk_drag_init ();
-  _gdk_drop_init ();
   
   win32_display->keymap = g_object_new (GDK_TYPE_WIN32_KEYMAP, NULL);
   _gdk_win32_keymap_set_active_layout (win32_display->keymap, _gdk_input_locale);

@@ -149,14 +149,6 @@ typedef enum {
   GDK_WIN32_PE_INUSE
 } GdkWin32PalEntryState;
 
-typedef enum
-{
-  GDK_DRAG_PROTO_NONE = 0,
-  GDK_DRAG_PROTO_WIN32_DROPFILES,
-  GDK_DRAG_PROTO_OLE2,
-  GDK_DRAG_PROTO_LOCAL,
-} GdkDragProtocol;
-
 GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
@@ -211,7 +203,6 @@ void   _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
 void   _gdk_win32_print_hpalette       (HPALETTE     hpal);
 void   _gdk_win32_print_dc             (HDC          hdc);
 
-char *_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol);
 char *_gdk_win32_surface_state_to_string (GdkToplevelState state);
 char *_gdk_win32_surface_style_to_string (LONG style);
 char *_gdk_win32_surface_exstyle_to_string (LONG style);
@@ -426,7 +417,6 @@ BOOL WINAPI GtkShowWindow (GdkSurface *window,
 /* Initialization */
 void _gdk_win32_surfaceing_init (void);
 void _gdk_drag_init    (void);
-void _gdk_drop_init    (void);
 void _gdk_events_init (GdkDisplay *display);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */

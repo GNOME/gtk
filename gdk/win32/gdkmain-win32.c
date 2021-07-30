@@ -222,23 +222,6 @@ _gdk_win32_print_dc (HDC hdc)
 }
 
 char *
-_gdk_win32_drag_protocol_to_string (GdkDragProtocol protocol)
-{
-  switch (protocol)
-    {
-#define CASE(x) case GDK_DRAG_PROTO_##x: return #x
-      CASE (NONE);
-      CASE (WIN32_DROPFILES);
-      CASE (OLE2);
-      CASE (LOCAL);
-#undef CASE
-    default: return static_printf ("illegal_%d", protocol);
-    }
-  /* NOTREACHED */
-  return NULL;
-}
-
-char *
 _gdk_win32_surface_state_to_string (GdkToplevelState state)
 {
   char buf[100];
