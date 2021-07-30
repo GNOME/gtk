@@ -498,7 +498,10 @@ gtk_check_button_real_activate (GtkCheckButton *self)
   if (priv->active && (priv->group_prev || priv->group_next))
     return;
 
-  gtk_check_button_set_active (self, !gtk_check_button_get_active (self));
+  if (priv->action_helper)
+    gtk_action_helper_activate (priv->action_helper);
+  else
+    gtk_check_button_set_active (self, !gtk_check_button_get_active (self));
 }
 
 static void
