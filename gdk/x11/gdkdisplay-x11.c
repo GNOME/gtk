@@ -204,6 +204,9 @@ static void
 gdk_x11_display_init (GdkX11Display *self)
 {
   self->monitors = g_list_store_new (GDK_TYPE_MONITOR);
+  self->program_class = g_strdup (g_get_prgname ());
+  if (self->program_class && self->program_class[0])
+    self->program_class[0] = g_ascii_toupper (self->program_class[0]);
 }
 
 static void
