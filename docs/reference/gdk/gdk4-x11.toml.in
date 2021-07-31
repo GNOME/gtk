@@ -13,7 +13,7 @@ devhelp = true
   [dependencies."GObject-2.0"]
   name = "GObject"
   description = "The base type system library"
-  docs_url = "https://developer.gnome.org/gobject/stable"
+  docs_url = "https://docs.gtk.org/gobject/"
 
 [theme]
 name = "basic"

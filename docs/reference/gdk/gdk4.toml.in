@@ -14,7 +14,7 @@ search_index = true
   [dependencies."GObject-2.0"]
   name = "GObject"
   description = "The base type system library"
-  docs_url = "https://developer.gnome.org/gobject/stable"
+  docs_url = "https://docs.gtk.org/gobject/"
 
   [dependencies."cairo-1.0"]
   name = "Cairo"
