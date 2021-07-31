@@ -294,7 +294,7 @@ gtk_icon_helper_paintable_get_current_image (GdkPaintable *paintable)
   if (self->paintable == NULL)
     return NULL;
 
-  return gtk_icon_helper_paintable_get_current_image (self->paintable);
+  return gdk_paintable_get_current_image (self->paintable);
 }
 
 static int
