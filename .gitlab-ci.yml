@@ -2,10 +2,6 @@ stages:
   - docs
   - deploy
 
-.cache-paths: &cache-paths
-  paths:
-    - docs
-
 # Common variables
 variables:
   FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v32"
@@ -25,13 +21,13 @@ reference:
     paths:
       - docs
 
-#pages:
-#  stage: deploy
-#  needs: ['reference']
-#  script:
-#    - mkdir public
-#    - mv docs/* public/
-#    - cp static/* public/
-#  artifacts:
-#    paths:
-#      - public
+pages:
+  stage: deploy
+  needs: ['reference']
+  script:
+    - mkdir public
+    - mv docs/* public/
+    - cp static/* public/
+  artifacts:
+    paths:
+      - public
