@@ -1282,7 +1282,10 @@ _gdk_x11_display_create_surface (GdkDisplay     *display,
 
   class_hint = XAllocClassHint ();
   class_hint->res_name = (char *) g_get_prgname ();
-  class_hint->res_class = (char *) display_x11->program_class;
+  if (display_x11->program_class)
+    class_hint->res_class = (char *) display_x11->program_class;
+  else
+    class_hint->res_class = class_hint->res_name;
   XSetClassHint (xdisplay, impl->xid, class_hint);
   XFree (class_hint);
 
