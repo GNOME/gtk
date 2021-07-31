@@ -304,7 +304,7 @@ inner_window_procedure (HWND   hwnd,
 }
 
 LRESULT CALLBACK
-_gdk_win32_surface_procedure (HWND   hwnd,
+gdk_win32_surface_procedure (HWND   hwnd,
                              UINT   message,
                              WPARAM wparam,
                              LPARAM lparam)

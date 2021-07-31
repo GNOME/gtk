@@ -118,6 +118,9 @@ struct _GdkWin32Display
 {
   GdkDisplay display;
 
+  ATOM toplevel_class;
+  ATOM temp_class;
+
   Win32CursorTheme *cursor_theme;
   char *cursor_theme_name;
   int cursor_theme_size;

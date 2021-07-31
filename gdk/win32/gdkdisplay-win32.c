@@ -497,6 +497,92 @@ gdk_win32_display_create_hwnd (GdkWin32Display *self)
     }
 }
 
+static void
+gdk_win32_display_register_classes (GdkWin32Display *self)
+{
+  HICON hAppIcon = NULL;
+  HICON hAppIconSm = NULL;
+  WNDCLASSEXW wcl;
+
+  wcl.cbSize = sizeof (WNDCLASSEX);
+  wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
+                  * on WM_SIZE and WM_MOVE. Flicker, Performance!
+                  */
+  wcl.lpfnWndProc = gdk_win32_surface_procedure;
+  wcl.cbClsExtra = 0;
+  wcl.cbWndExtra = 0;
+  wcl.hInstance = _gdk_dll_hinstance;
+  wcl.hIcon = 0;
+  wcl.hIconSm = 0;
+
+  /* initialize once! */
+  if (0 == hAppIcon && 0 == hAppIconSm)
+    {
+      char sLoc[MAX_PATH + 1];
+
+      // try to load first icon of executable program
+      if (0 != GetModuleFileName (NULL, sLoc, MAX_PATH))
+        {
+          ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
+
+          if (0 == hAppIcon && 0 == hAppIconSm)
+            {
+              // fallback : load icon from GTK DLL
+              if (0 != GetModuleFileName (_gdk_dll_hinstance, sLoc, MAX_PATH))
+                {
+                  ExtractIconEx (sLoc, 0, &hAppIcon, &hAppIconSm, 1);
+                }
+            }
+        }
+
+      if (0 == hAppIcon && 0 == hAppIconSm)
+        {
+          hAppIcon = LoadImage (NULL, IDI_APPLICATION, IMAGE_ICON,
+                                GetSystemMetrics (SM_CXICON),
+                                GetSystemMetrics (SM_CYICON), 0);
+          hAppIconSm = LoadImage (NULL, IDI_APPLICATION, IMAGE_ICON,
+                                  GetSystemMetrics (SM_CXSMICON),
+                                  GetSystemMetrics (SM_CYSMICON), 0);
+        }
+    }
+
+  if (0 == hAppIcon)
+    hAppIcon = hAppIconSm;
+  else if (0 == hAppIconSm)
+    hAppIconSm = hAppIcon;
+
+  wcl.lpszMenuName = NULL;
+  wcl.hbrBackground = NULL;
+  wcl.hCursor = LoadCursor (NULL, IDC_ARROW);
+  /* MSDN: CS_OWNDC is needed for OpenGL contexts */
+  wcl.style |= CS_OWNDC;
+
+  wcl.lpszClassName = L"gdkSurfaceToplevel";
+  wcl.hIcon = CopyIcon (hAppIcon);
+  wcl.hIconSm = CopyIcon (hAppIconSm);
+  self->toplevel_class = RegisterClassExW (&wcl);
+  if (self->toplevel_class == 0)
+    {
+      WIN32_API_FAILED ("RegisterClassExW");
+      g_error ("That is a fatal error");
+    }
+
+  wcl.lpszClassName = L"gdkSurfaceTemp";
+  wcl.hIcon = CopyIcon (hAppIcon);
+  wcl.hIconSm = CopyIcon (hAppIconSm);
+  wcl.style |= CS_SAVEBITS;
+  self->temp_class = RegisterClassExW (&wcl);
+  if (self->temp_class == 0)
+    {
+      WIN32_API_FAILED ("RegisterClassExW");
+      g_error ("That is a fatal error");
+    }
+
+  if (hAppIcon != hAppIconSm)
+    DestroyIcon (hAppIconSm);
+  DestroyIcon (hAppIcon);
+}
+
 GdkDisplay *
 _gdk_win32_display_open (const char *display_name)
 {
@@ -517,6 +603,7 @@ _gdk_win32_display_open (const char *display_name)
   display = g_object_new (GDK_TYPE_WIN32_DISPLAY, NULL);
   win32_display = GDK_WIN32_DISPLAY (display);
 
+  gdk_win32_display_register_classes (win32_display);
   gdk_win32_display_init_monitors (win32_display);
   
   _gdk_events_init (display);

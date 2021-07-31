@@ -249,7 +249,7 @@ void    _gdk_other_api_failed        (const char *where,
 #define GDI_CALL(api, arglist) (api arglist ? 1 : (WIN32_GDI_FAILED (#api), 0))
 #define API_CALL(api, arglist) (api arglist ? 1 : (WIN32_API_FAILED (#api), 0))
 
-extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM);
+extern LRESULT CALLBACK gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM);
 
 extern HINSTANCE         _gdk_dll_hinstance;
 extern HINSTANCE         _gdk_app_hmodule;
