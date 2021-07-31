@@ -1,0 +1,37 @@
+stages:
+  - docs
+  - deploy
+
+.cache-paths: &cache-paths
+  paths:
+    - docs
+
+# Common variables
+variables:
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v32"
+
+reference:
+  image: $FEDORA_IMAGE
+  stage: docs
+  needs: []
+  script:
+    - sh -x ./download-reference.sh
+    - meson setup  _build
+    - meson compile -C _build
+    - mv _build/glib/glib/glib/ docs/glib/
+    - mv _build/glib/gobject/gobject/ docs/gobject/
+    - mv _build/glib/gio/gio/ docs/gio/
+  artifacts:
+    paths:
+      - docs
+
+#pages:
+#  stage: deploy
+#  needs: ['reference']
+#  script:
+#    - mkdir public
+#    - mv docs/* public/
+#    - cp static/* public/
+#  artifacts:
+#    paths:
+#      - public
