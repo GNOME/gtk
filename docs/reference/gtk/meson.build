@@ -27,9 +27,15 @@ expand_content_md_files = [
   'visual_index.md'
 ]
 
-gtk4_toml = configure_file(input: 'gtk4.toml.in', output: 'gtk4.toml', configuration: toml_conf)
-
 if get_option('gtk_doc')
+  gtk4_toml = configure_file(
+    input: 'gtk4.toml.in',
+    output: 'gtk4.toml',
+    configuration: toml_conf,
+    install: true,
+    install_dir: docs_dir / 'gtk4',
+  )
+
   custom_target('gtk4-doc',
     input: [ gtk4_toml, gtk_gir[0] ],
     output: 'gtk4',
