@@ -4461,6 +4461,46 @@ glyph_has_color (FT_Face face,
   return FALSE;
 }
 
+static GHashTable *
+ensure_color_glyph_cache (const PangoFont *font)
+{
+  GHashTable *cache;
+
+  cache = (GHashTable *) g_object_get_data (G_OBJECT (font), "gsk-color-glyph-cache");
+  if (!cache)
+    {
+      cache = g_hash_table_new (NULL, NULL);
+      g_object_set_data_full (G_OBJECT (font), "gsk-color-glyph-cache",
+                              cache, (GDestroyNotify) g_hash_table_unref);
+    }
+
+  return cache;
+}
+
+static inline gboolean
+lookup_color_glyph_cache (GHashTable *cache,
+                          PangoGlyph  glyph,
+                          gboolean   *has_color)
+{
+  gpointer value;
+
+  if (g_hash_table_lookup_extended (cache, GUINT_TO_POINTER (glyph), NULL, &value))
+    {
+      *has_color = GPOINTER_TO_UINT (value);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static inline void
+insert_color_glyph_cache (GHashTable *cache,
+                          PangoGlyph  glyph,
+                          gboolean has_color)
+{
+  g_hash_table_insert (cache, GUINT_TO_POINTER (glyph), GUINT_TO_POINTER (has_color));
+}
+
 static void
 mark_color_glyphs (const PangoFont *font,
                    PangoGlyphInfo  *glyphs,
@@ -4468,6 +4508,7 @@ mark_color_glyphs (const PangoFont *font,
 {
   cairo_scaled_font_t *scaled_font;
   FT_Face ft_face;
+  GHashTable *cache;
 
   scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
   if (cairo_scaled_font_get_type (scaled_font) != CAIRO_FONT_TYPE_FT)
@@ -4477,9 +4518,19 @@ mark_color_glyphs (const PangoFont *font,
   if (!FT_HAS_COLOR (ft_face))
     goto out;
 
+  cache = ensure_color_glyph_cache (font);
+
   for (int i = 0; i < num_glyphs; i++)
     {
-      if (glyph_has_color (ft_face, glyphs[i].glyph))
+      gboolean has_color;
+
+      if (!lookup_color_glyph_cache (cache, glyphs[i].glyph, &has_color))
+        {
+          has_color = glyph_has_color (ft_face, glyphs[i].glyph);
+          insert_color_glyph_cache (cache, glyphs[i].glyph, has_color);
+        }
+
+      if (has_color)
         GLYPH_SET_COLOR (&glyphs[i]);
     }
 
