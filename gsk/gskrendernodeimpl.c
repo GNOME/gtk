@@ -30,7 +30,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdk-private.h"
 
-#include <cairo-ft.h>
+#include <hb-ot.h>
 
 static inline void
 gsk_cairo_rectangle (cairo_t               *cr,
@@ -4377,6 +4377,15 @@ gsk_text_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
+/* We steal one of the bits in PangoGlyphVisAttr */
+
+G_STATIC_ASSERT (sizeof (PangoGlyphVisAttr) == 4);
+
+#define COLOR_GLYPH_BIT 2
+#define GLYPH_IS_COLOR(g)  (((*(guint32*)&(g)->attr) & COLOR_GLYPH_BIT) != 0)
+#define GLYPH_SET_COLOR(g)  (*(guint32*)(&(g)->attr) |= COLOR_GLYPH_BIT)
+#define GLYPH_CLEAR_COLOR(g)  (*(guint32*)(&(g)->attr) &= ~COLOR_GLYPH_BIT)
+
 static void
 gsk_text_node_diff (GskRenderNode  *node1,
                     GskRenderNode  *node2,
@@ -4401,7 +4410,8 @@ gsk_text_node_diff (GskRenderNode  *node1,
               info1->geometry.width == info2->geometry.width &&
               info1->geometry.x_offset == info2->geometry.x_offset &&
               info1->geometry.y_offset == info2->geometry.y_offset &&
-              info1->attr.is_cluster_start == info2->attr.is_cluster_start)
+              info1->attr.is_cluster_start == info2->attr.is_cluster_start &&
+              GLYPH_IS_COLOR (info1) == GLYPH_IS_COLOR (info2))
             continue;
 
           gsk_render_node_diff_impossible (node1, node2, region);
@@ -4415,20 +4425,43 @@ gsk_text_node_diff (GskRenderNode  *node1,
 }
 
 static gboolean
-font_has_color_glyphs (const PangoFont *font)
+font_has_color_glyphs (PangoFont *font)
 {
-  cairo_scaled_font_t *scaled_font;
-  gboolean has_color = FALSE;
+  hb_face_t *face = hb_font_get_face (pango_font_get_hb_font (font));
 
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
+  return hb_ot_color_has_layers (face) ||
+         hb_ot_color_has_png (face) ||
+         hb_ot_color_has_svg (face);
+}
+
+static gboolean
+glyph_has_color (PangoFont *font,
+                 guint      glyph)
+{
+  hb_font_t *hb_font = pango_font_get_hb_font (font);
+  hb_face_t *face = hb_font_get_face (hb_font);
+  hb_blob_t *blob;
+
+  if (hb_ot_color_glyph_get_layers (face, glyph, 0, NULL, NULL) > 0)
+    return TRUE;
+
+  blob = hb_ot_color_glyph_reference_png (hb_font, glyph);
+  if (blob)
     {
-      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
-      has_color = (FT_HAS_COLOR (ft_face) != 0);
-      cairo_ft_scaled_font_unlock_face (scaled_font);
+      guint length = hb_blob_get_length (blob);
+      hb_blob_destroy (blob);
+      return length > 0;
     }
 
-  return has_color;
+  blob = hb_ot_color_glyph_reference_svg (face, glyph);
+  if (blob)
+    {
+      guint length = hb_blob_get_length (blob);
+      hb_blob_destroy (blob);
+      return length > 0;
+    }
+
+  return FALSE;
 }
 
 /**
@@ -4454,6 +4487,9 @@ gsk_text_node_new (PangoFont              *font,
   GskTextNode *self;
   GskRenderNode *node;
   PangoRectangle ink_rect;
+  PangoGlyphInfo *glyph_infos;
+  gboolean has_color_glyphs;
+  int n;
 
   pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
@@ -4466,18 +4502,35 @@ gsk_text_node_new (PangoFont              *font,
   node = (GskRenderNode *) self;
 
   self->font = g_object_ref (font);
-  self->has_color_glyphs = font_has_color_glyphs (font);
   self->color = *color;
   self->offset = *offset;
-  self->glyphs = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
+  self->has_color_glyphs = FALSE;
 
-  /* skip empty glyphs */
-  self->num_glyphs = 0;
+  glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
+  has_color_glyphs = font_has_color_glyphs (font);
+
+  n = 0;
   for (int i = 0; i < glyphs->num_glyphs; i++)
     {
-      if (glyphs->glyphs[i].glyph != PANGO_GLYPH_EMPTY)
-        self->glyphs[self->num_glyphs++] = glyphs->glyphs[i];
+      /* skip empty glyphs */
+      if (glyphs->glyphs[i].glyph == PANGO_GLYPH_EMPTY)
+        continue;
+
+      glyph_infos[n] = glyphs->glyphs[i];
+      GLYPH_CLEAR_COLOR (&glyph_infos[n]);
+
+      if (has_color_glyphs &&
+          glyph_has_color (font, glyph_infos[n].glyph))
+        {
+          self->has_color_glyphs = TRUE;
+          GLYPH_SET_COLOR (&glyph_infos[n]);
+        }
+
+      n++;
     }
+
+  self->glyphs = glyph_infos;
+  self->num_glyphs = n;
 
   graphene_rect_init (&node->bounds,
                       offset->x + ink_rect.x - 1,

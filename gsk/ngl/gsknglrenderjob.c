@@ -2835,6 +2835,9 @@ compute_phase_and_pos (float value, float *pos)
     }
 }
 
+#define COLOR_GLYPH_BIT 2
+#define GLYPH_IS_COLOR(g)  (((*(guint32*)&(g)->attr) & COLOR_GLYPH_BIT) != 0)
+
 static inline void
 gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
                                     const GskRenderNode *node,
@@ -2855,7 +2858,9 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   guint last_texture = 0;
   GskNglDrawVertex *vertices;
   guint used = 0;
-  guint16 c[4] = { FP16_MINUS_ONE, FP16_MINUS_ONE, FP16_MINUS_ONE, FP16_MINUS_ONE };
+  guint16 nc[4] = { FP16_MINUS_ONE, FP16_MINUS_ONE, FP16_MINUS_ONE, FP16_MINUS_ONE };
+  guint16 cc[4];
+  const guint16 *c;
   const PangoGlyphInfo *gi;
   guint i;
   int yshift;
@@ -2864,16 +2869,11 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
   if (num_glyphs == 0)
     return;
 
-  /* If the font has color glyphs, we don't need to recolor anything.
-   * We tell the shader by setting the color to vec4(-1).
-   */
-  if (force_color || !gsk_text_node_has_color_glyphs (node))
-    {
-      if (RGBA_IS_CLEAR (color))
-        return;
+  if ((force_color || !gsk_text_node_has_color_glyphs (node)) &&
+      RGBA_IS_CLEAR (color))
+    return;
 
-      rgba_to_half (color, c);
-    }
+  rgba_to_half (color, cc);
 
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
@@ -2896,6 +2896,14 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       guint texture_id;
 
       lookup.glyph = gi->glyph;
+
+      /* If the glyph has color, we don't need to recolor anything.
+       * We tell the shader by setting the color to vec4(-1).
+       */
+      if (!force_color && GLYPH_IS_COLOR (gi))
+        c = nc;
+      else
+        c = cc;
 
       cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
       lookup.xshift = compute_phase_and_pos (x + cx, &cx);
