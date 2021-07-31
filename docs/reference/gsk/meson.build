@@ -1,6 +1,12 @@
-gsk4_toml = configure_file(input: 'gsk4.toml.in', output: 'gsk4.toml', configuration: toml_conf)
-
 if get_option('gtk_doc')
+  gsk4_toml = configure_file(
+    input: 'gsk4.toml.in',
+    output: 'gsk4.toml',
+    configuration: toml_conf,
+    install: true,
+    install_dir: docs_dir / 'gsk4',
+  )
+
   custom_target('gsk4-doc',
     input: [ gsk4_toml, gsk_gir[0] ],
     output: 'gsk4',
