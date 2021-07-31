@@ -19,3 +19,6 @@ gidocgen = find_program('gi-docgen', required: true)
 subdir('glib/glib')
 subdir('glib/gobject')
 subdir('glib/gio')
+
+subdir('gtk3/gdk')
+subdir('gtk3/gtk')

@@ -17,6 +17,9 @@ reference:
     - mv _build/glib/glib/glib/ docs/glib/
     - mv _build/glib/gobject/gobject/ docs/gobject/
     - mv _build/glib/gio/gio/ docs/gio/
+    - mv _build/gtk3/gdk/gdk3/ docs/gdk3/
+    - mv _build/gtk3/gdk/gdk3-x11/ docs/gdk3-x11/
+    - mv _build/gtk3/gtk/gtk3/ docs/gtk3/
   artifacts:
     paths:
       - docs
