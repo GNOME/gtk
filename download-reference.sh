@@ -17,6 +17,14 @@ gdk4-x11
 gdk4-wayland
 gsk4
 gtk4
+Pango
+PangoCairo
+PangoFc
+PangoFT2
+PangoOT
+PangoXft
+gdk-pixbuf
+gdk-pixdata
 "
 
 IFS='
