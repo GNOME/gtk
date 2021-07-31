@@ -7,6 +7,7 @@ stages:
   - analysis
   - docs
   - flatpak
+  - publish
   - deploy
 
 .cache-paths: &cache-paths
@@ -337,14 +338,11 @@ reference:
     paths:
       - _reference
 
-pages:
-  stage: deploy
+publish-docs:
+  stage: publish
   needs: ['reference']
   script:
-    - mv _reference/ public/
-    - cp .gitlab-ci/pages/* public/
-  artifacts:
-    paths:
-      - public
+    - "curl -X POST -F token=${PAGES_TRIGGER_TOKEN} -F ref=docs-gtk-org https://gitlab.gnome.org/api/v4/projects/665/trigger/pipeline"
   only:
-    - master
+    refs:
+      - master
