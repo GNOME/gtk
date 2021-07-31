@@ -1908,13 +1908,13 @@ gtk_tree_store_iter_is_valid_helper (GtkTreeIter *iter,
 
 /**
  * gtk_tree_store_iter_is_valid:
- * @tree_store: A `GtkTreeStore`.
- * @iter: A `GtkTreeIter`.
- *
- * WARNING: This function is slow. Only use it for debugging and/or testing
- * purposes.
+ * @tree_store: a tree store 
+ * @iter: the iterator to check
  *
  * Checks if the given iter is a valid iter for this `GtkTreeStore`.
+ *
+ * This function is slow. Only use it for debugging and/or testing
+ * purposes.
  *
  * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
  **/

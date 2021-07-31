@@ -1433,13 +1433,13 @@ gtk_list_store_clear (GtkListStore *list_store)
 
 /**
  * gtk_list_store_iter_is_valid:
- * @list_store: A `GtkListStore`.
- * @iter: A `GtkTreeIter`
- *
- * > This function is slow. Only use it for debugging and/or testing
- * > purposes.
+ * @list_store: a list store
+ * @iter: the iterator to check
  *
  * Checks if the given iter is a valid iter for this `GtkListStore`.
+ *
+ * This function is slow. Only use it for debugging and/or testing
+ * purposes.
  *
  * Returns: %TRUE if the iter is valid, %FALSE if the iter is invalid.
  **/
