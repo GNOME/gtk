@@ -30,7 +30,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdk-private.h"
 
-#include <cairo-ft.h>
+#include <hb-ot.h>
 
 static inline void
 gsk_cairo_rectangle (cairo_t               *cr,
@@ -4425,117 +4425,43 @@ gsk_text_node_diff (GskRenderNode  *node1,
 }
 
 static gboolean
-font_has_color_glyphs (const PangoFont *font)
+font_has_color_glyphs (PangoFont *font)
 {
-  cairo_scaled_font_t *scaled_font;
-  gboolean has_color = FALSE;
+  hb_face_t *face = hb_font_get_face (pango_font_get_hb_font (font));
 
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (cairo_scaled_font_get_type (scaled_font) == CAIRO_FONT_TYPE_FT)
-    {
-      FT_Face ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
-      has_color = (FT_HAS_COLOR (ft_face) != 0);
-      cairo_ft_scaled_font_unlock_face (scaled_font);
-    }
-
-  return has_color;
+  return hb_ot_color_has_layers (face) ||
+         hb_ot_color_has_png (face) ||
+         hb_ot_color_has_svg (face);
 }
 
 static gboolean
-glyph_has_color (FT_Face face,
-                 guint   glyph)
+glyph_has_color (PangoFont *font,
+                 guint      glyph)
 {
-  FT_Error error;
+  hb_font_t *hb_font = pango_font_get_hb_font (font);
+  hb_face_t *face = hb_font_get_face (hb_font);
+  hb_blob_t *blob;
 
-  error = FT_Load_Glyph (face, glyph, FT_LOAD_COLOR);
-  if (error != 0)
-    return FALSE;
-
-  error = FT_Render_Glyph (face->glyph, FT_RENDER_MODE_NORMAL);
-  if (error != 0)
-    return FALSE;
-
-  if (face->glyph->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA)
+  if (hb_ot_color_glyph_get_layers (face, glyph, 0, NULL, NULL) > 0)
     return TRUE;
 
-  return FALSE;
-}
-
-static GHashTable *
-ensure_color_glyph_cache (const PangoFont *font)
-{
-  GHashTable *cache;
-
-  cache = (GHashTable *) g_object_get_data (G_OBJECT (font), "gsk-color-glyph-cache");
-  if (!cache)
+  blob = hb_ot_color_glyph_reference_png (hb_font, glyph);
+  if (blob)
     {
-      cache = g_hash_table_new (NULL, NULL);
-      g_object_set_data_full (G_OBJECT (font), "gsk-color-glyph-cache",
-                              cache, (GDestroyNotify) g_hash_table_unref);
+      guint length = hb_blob_get_length (blob);
+      hb_blob_destroy (blob);
+      return length > 0;
     }
 
-  return cache;
-}
-
-static inline gboolean
-lookup_color_glyph_cache (GHashTable *cache,
-                          PangoGlyph  glyph,
-                          gboolean   *has_color)
-{
-  gpointer value;
-
-  if (g_hash_table_lookup_extended (cache, GUINT_TO_POINTER (glyph), NULL, &value))
+  blob = hb_ot_color_glyph_reference_svg (face, glyph);
+  if (blob)
     {
-      *has_color = GPOINTER_TO_UINT (value);
-      return TRUE;
+      guint length = hb_blob_get_length (blob);
+      hb_blob_destroy (blob);
+      return length > 0;
     }
 
   return FALSE;
-}
-
-static inline void
-insert_color_glyph_cache (GHashTable *cache,
-                          PangoGlyph  glyph,
-                          gboolean has_color)
-{
-  g_hash_table_insert (cache, GUINT_TO_POINTER (glyph), GUINT_TO_POINTER (has_color));
-}
-
-static void
-mark_color_glyphs (const PangoFont *font,
-                   PangoGlyphInfo  *glyphs,
-                   int              num_glyphs)
-{
-  cairo_scaled_font_t *scaled_font;
-  FT_Face ft_face;
-  GHashTable *cache;
-
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)font);
-  if (cairo_scaled_font_get_type (scaled_font) != CAIRO_FONT_TYPE_FT)
-    return;
-
-  ft_face = cairo_ft_scaled_font_lock_face (scaled_font);
-  if (!FT_HAS_COLOR (ft_face))
-    goto out;
-
-  cache = ensure_color_glyph_cache (font);
-
-  for (int i = 0; i < num_glyphs; i++)
-    {
-      gboolean has_color;
-
-      if (!lookup_color_glyph_cache (cache, glyphs[i].glyph, &has_color))
-        {
-          has_color = glyph_has_color (ft_face, glyphs[i].glyph);
-          insert_color_glyph_cache (cache, glyphs[i].glyph, has_color);
-        }
-
-      if (has_color)
-        GLYPH_SET_COLOR (&glyphs[i]);
-    }
-
-out:
-  cairo_ft_scaled_font_unlock_face (scaled_font);
 }
 
 /**
@@ -4561,6 +4487,9 @@ gsk_text_node_new (PangoFont              *font,
   GskTextNode *self;
   GskRenderNode *node;
   PangoRectangle ink_rect;
+  PangoGlyphInfo *glyph_infos;
+  gboolean has_color_glyphs;
+  int n;
 
   pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
@@ -4573,24 +4502,35 @@ gsk_text_node_new (PangoFont              *font,
   node = (GskRenderNode *) self;
 
   self->font = g_object_ref (font);
-  self->has_color_glyphs = font_has_color_glyphs (font);
   self->color = *color;
   self->offset = *offset;
-  self->glyphs = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
+  self->has_color_glyphs = FALSE;
 
-  /* skip empty glyphs */
-  self->num_glyphs = 0;
+  glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
+  has_color_glyphs = font_has_color_glyphs (font);
+
+  n = 0;
   for (int i = 0; i < glyphs->num_glyphs; i++)
     {
-      if (glyphs->glyphs[i].glyph != PANGO_GLYPH_EMPTY)
+      /* skip empty glyphs */
+      if (glyphs->glyphs[i].glyph == PANGO_GLYPH_EMPTY)
+        continue;
+
+      glyph_infos[n] = glyphs->glyphs[i];
+      GLYPH_CLEAR_COLOR (&glyph_infos[n]);
+
+      if (has_color_glyphs &&
+          glyph_has_color (font, glyph_infos[n].glyph))
         {
-          self->glyphs[self->num_glyphs] = glyphs->glyphs[i];
-          GLYPH_CLEAR_COLOR (&self->glyphs[self->num_glyphs]);
-          self->num_glyphs++;
+          self->has_color_glyphs = TRUE;
+          GLYPH_SET_COLOR (&glyph_infos[n]);
         }
+
+      n++;
     }
 
-  mark_color_glyphs (font, self->glyphs, self->num_glyphs);
+  self->glyphs = glyph_infos;
+  self->num_glyphs = n;
 
   graphene_rect_init (&node->bounds,
                       offset->x + ink_rect.x - 1,
