@@ -10,6 +10,7 @@ custom_target('gobject-doc',
   command: [
     gidocgen,
     'generate',
+    '--quiet',
     '--config=@INPUT0@',
     '--output-dir=@OUTPUT@',
     '--no-namespace-dir',
