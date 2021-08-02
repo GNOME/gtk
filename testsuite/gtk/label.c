@@ -218,6 +218,41 @@ test_label_underline (void)
   gtk_window_destroy (GTK_WINDOW (window));
 }
 
+static void
+test_label_parse_more (void)
+{
+  struct {
+    const char *input;
+    gboolean use_underline;
+    gboolean use_markup;
+    const char *text;
+    guint accel;
+  } tests[] = {
+    { "tes_t m__e mo_re", TRUE, FALSE, "test m_e more", GDK_KEY_t },
+    { "test m__e mo_re", TRUE, FALSE, "test m_e more", GDK_KEY_r },
+    { "tes_t m__e mo_re", FALSE, FALSE, "tes_t m__e mo_re", GDK_KEY_VoidSymbol },
+    { "<span font='test_font'>test <a href='bla'>w_ith</a> bla</span>", TRUE, TRUE, "test with bla", GDK_KEY_i },
+    { "<span font='test_font'>test <a href='bla'>w_ith</a> bla</span>", FALSE, TRUE, "test w_ith bla", GDK_KEY_VoidSymbol },
+  };
+  GtkWidget *label;
+
+  label = gtk_label_new ("");
+
+  for (int i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      gtk_label_set_use_underline (GTK_LABEL (label), tests[i].use_underline);
+      gtk_label_set_use_markup (GTK_LABEL (label), tests[i].use_markup);
+      gtk_label_set_label (GTK_LABEL (label), tests[i].input);
+
+      g_assert_cmpstr (gtk_label_get_label (GTK_LABEL (label)), ==, tests[i].input);
+      g_assert_cmpstr (gtk_label_get_text (GTK_LABEL (label)), ==, tests[i].text);
+      g_assert_cmpuint (gtk_label_get_mnemonic_keyval (GTK_LABEL (label)), ==, tests[i].accel);
+    }
+
+  g_object_ref_sink (label);
+  g_object_unref (label);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -225,6 +260,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/label/markup-parse", test_label_markup);
   g_test_add_func ("/label/underline-parse", test_label_underline);
+  g_test_add_func ("/label/parse-more", test_label_parse_more);
 
   return g_test_run ();
 }
