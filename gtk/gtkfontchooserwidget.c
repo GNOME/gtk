@@ -386,15 +386,18 @@ user_filter_cb (gpointer item,
 
           ret = FALSE;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           langs = pango_fc_font_get_languages (PANGO_FC_FONT (font));
-          for (i = 0; langs[i]; i++)
-            {
-              if (langs[i] == self->filter_language)
-                {
-                  ret = TRUE;
-                  break;
-                }
-            }
+G_GNUC_END_IGNORE_DEPRECATIONS
+          if (langs)
+            for (i = 0; langs[i]; i++)
+              {
+                if (langs[i] == self->filter_language)
+                  {
+                    ret = TRUE;
+                    break;
+                  }
+              }
         }
 
       g_object_unref (font);
@@ -600,17 +603,20 @@ maybe_update_preview_text (GtkFontChooserWidget *self,
           alt_default = pango_language_from_string (q);
         }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       languages = pango_fc_font_get_languages (PANGO_FC_FONT (font));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       /* If the font supports the default language, just use it. */
-      for (i = 0; languages[i]; i++)
-        {
-          if (languages[i] == default_lang || languages[i] == alt_default)
-            {
-              lang = default_lang;
-              goto found;
-            }
-        }
+      if (languages)
+        for (i = 0; languages[i]; i++)
+          {
+            if (languages[i] == default_lang || languages[i] == alt_default)
+              {
+                lang = default_lang;
+                goto found;
+              }
+          }
 
       /* Otherwise, we make a list of representative languages */
       langs = g_hash_table_new (NULL, NULL);
@@ -1066,28 +1072,31 @@ add_languages_from_font (GtkFontChooserWidget *self,
       PangoLanguage **langs;
       int i;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       langs = pango_fc_font_get_languages (PANGO_FC_FONT (font));
-      for (i = 0; langs[i]; i++)
-        {
-          if (!g_hash_table_contains (self->language_table, langs[i]))
-            {
-              g_hash_table_add (self->language_table, langs[i]);
-              if (get_language_name (langs[i]))
-                {
-                  const char *l = pango_language_to_string (langs[i]);
-                  gulong id = 0;
+G_GNUC_END_IGNORE_DEPRECATIONS
+      if (langs)
+        for (i = 0; langs[i]; i++)
+          {
+            if (!g_hash_table_contains (self->language_table, langs[i]))
+              {
+                g_hash_table_add (self->language_table, langs[i]);
+                if (get_language_name (langs[i]))
+                  {
+                    const char *l = pango_language_to_string (langs[i]);
+                    gulong id = 0;
 
-                  /* Pre-select the default language */
-                  if (pango_language_matches (default_lang, l))
-                    id = g_signal_connect (model, "items-changed", G_CALLBACK (select_added), NULL);
+                    /* Pre-select the default language */
+                    if (pango_language_matches (default_lang, l))
+                      id = g_signal_connect (model, "items-changed", G_CALLBACK (select_added), NULL);
 
-                  gtk_string_list_append (self->languages, l);
+                    gtk_string_list_append (self->languages, l);
 
-                  if (id)
-                    g_signal_handler_disconnect (model, id);
-                }
-            }
-        }
+                    if (id)
+                      g_signal_handler_disconnect (model, id);
+                  }
+              }
+          }
     }
 
   g_object_unref (font);
