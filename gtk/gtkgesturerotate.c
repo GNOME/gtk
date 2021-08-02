@@ -95,13 +95,13 @@ _gtk_gesture_rotate_get_angle (GtkGestureRotate *rotate,
     goto out;
 
   last_event = gtk_gesture_get_last_event (gesture, sequences->data);
-  phase = gdk_touchpad_event_get_gesture_phase (last_event);
 
-  if (gdk_event_get_event_type (last_event) == GDK_TOUCHPAD_PINCH &&
-      (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
-       phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE ||
-       phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
+  if (gdk_event_get_event_type (last_event) == GDK_TOUCHPAD_PINCH)
     {
+      phase = gdk_touchpad_event_get_gesture_phase (last_event);
+      if (phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL)
+        goto out;
+
       *angle = priv->accum_touchpad_angle;
     }
   else
