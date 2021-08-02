@@ -44,3 +44,7 @@ content_images = [
   "gtk-logo.svg",
 ]
 urlmap_file = "urlmap.js"
+
+[[object]]
+pattern = "DEPRECATED_IN_3_*"
+hidden = true
