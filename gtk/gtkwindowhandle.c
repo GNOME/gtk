@@ -266,26 +266,24 @@ do_popup (GtkWindowHandle *self,
 }
 
 static gboolean
-perform_titlebar_action (GtkWindowHandle *self,
-                         GdkEvent        *event,
-                         guint            button,
-                         int              n_press)
+perform_titlebar_action_fallback (GtkWindowHandle    *self,
+                                  GdkEvent           *event,
+                                  GdkTitlebarGesture  gesture)
 {
   GtkSettings *settings;
   char *action = NULL;
   gboolean retval = TRUE;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (self));
-  switch (button)
+  switch (gesture)
     {
-    case GDK_BUTTON_PRIMARY:
-      if (n_press == 2)
-        g_object_get (settings, "gtk-titlebar-double-click", &action, NULL);
+    case GDK_TITLEBAR_GESTURE_DOUBLE_CLICK:
+      g_object_get (settings, "gtk-titlebar-double-click", &action, NULL);
       break;
-    case GDK_BUTTON_MIDDLE:
+    case GDK_TITLEBAR_GESTURE_MIDDLE_CLICK:
       g_object_get (settings, "gtk-titlebar-middle-click", &action, NULL);
       break;
-    case GDK_BUTTON_SECONDARY:
+    case GDK_TITLEBAR_GESTURE_RIGHT_CLICK:
       g_object_get (settings, "gtk-titlebar-right-click", &action, NULL);
       break;
     default:
@@ -318,6 +316,40 @@ perform_titlebar_action (GtkWindowHandle *self,
   g_free (action);
 
   return retval;
+}
+
+static gboolean
+perform_titlebar_action (GtkWindowHandle *self,
+                         GdkEvent        *event,
+                         guint            button,
+                         int              n_press)
+{
+  GdkSurface *surface =
+    gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (self)));
+  GdkTitlebarGesture gesture;
+
+  switch (button)
+    {
+    case GDK_BUTTON_PRIMARY:
+      if (n_press == 2)
+        gesture = GDK_TITLEBAR_GESTURE_DOUBLE_CLICK;
+      else
+        return FALSE;
+      break;
+    case GDK_BUTTON_MIDDLE:
+      gesture = GDK_TITLEBAR_GESTURE_MIDDLE_CLICK;
+      break;
+    case GDK_BUTTON_SECONDARY:
+      gesture = GDK_TITLEBAR_GESTURE_RIGHT_CLICK;
+      break;
+    default:
+      break;
+    }
+
+  if (gdk_toplevel_titlebar_gesture (GDK_TOPLEVEL (surface), gesture))
+    return TRUE;
+
+  return perform_titlebar_action_fallback (self, event, gesture);
 }
 
 static void

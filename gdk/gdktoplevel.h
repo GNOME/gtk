@@ -115,6 +115,13 @@ typedef enum
   GDK_TOPLEVEL_STATE_LEFT_RESIZABLE   = 1 << 15
 } GdkToplevelState;
 
+typedef enum
+{
+  GDK_TITLEBAR_GESTURE_DOUBLE_CLICK   = 1,
+  GDK_TITLEBAR_GESTURE_RIGHT_CLICK    = 2,
+  GDK_TITLEBAR_GESTURE_MIDDLE_CLICK   = 3
+} GdkTitlebarGesture;
+
 
 #define GDK_TYPE_TOPLEVEL (gdk_toplevel_get_type ())
 
@@ -195,6 +202,10 @@ void          gdk_toplevel_begin_move                (GdkToplevel    *toplevel,
                                                       double          x,
                                                       double          y,
                                                       guint32         timestamp);
+
+GDK_AVAILABLE_IN_4_4
+gboolean      gdk_toplevel_titlebar_gesture          (GdkToplevel        *toplevel,
+                                                      GdkTitlebarGesture  gesture);
 
 G_END_DECLS
 

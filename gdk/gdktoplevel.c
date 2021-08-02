@@ -79,6 +79,13 @@ gdk_toplevel_default_show_window_menu (GdkToplevel *toplevel,
 }
 
 static gboolean
+gdk_toplevel_default_titlebar_gesture (GdkToplevel        *toplevel,
+                                       GdkTitlebarGesture  gesture)
+{
+  return FALSE;
+}
+
+static gboolean
 gdk_toplevel_default_supports_edge_constraints (GdkToplevel *toplevel)
 {
   return FALSE;
@@ -114,6 +121,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
   iface->supports_edge_constraints = gdk_toplevel_default_supports_edge_constraints;
   iface->inhibit_system_shortcuts = gdk_toplevel_default_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_toplevel_default_restore_system_shortcuts;
+  iface->titlebar_gesture = gdk_toplevel_default_titlebar_gesture;
 
   /**
    * GdkToplevel:state: (attributes org.gtk.Property.get=gdk_toplevel_get_state)
@@ -715,4 +723,14 @@ gdk_toplevel_begin_move (GdkToplevel *toplevel,
                                                  button,
                                                  x, y,
                                                  timestamp);
+}
+
+gboolean
+gdk_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
+                               GdkTitlebarGesture  gesture)
+{
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), FALSE);
+
+  return GDK_TOPLEVEL_GET_IFACE (toplevel)->titlebar_gesture (toplevel,
+                                                              gesture);
 }

@@ -1,6 +1,6 @@
 <protocol name="gtk">
 
-  <interface name="gtk_shell1" version="4">
+  <interface name="gtk_shell1" version="5">
     <description summary="gtk specific extensions">
       gtk_shell is a protocol extension providing additional features for
       clients implementing it.
@@ -35,7 +35,7 @@
     </request>
   </interface>
 
-  <interface name="gtk_surface1" version="4">
+  <interface name="gtk_surface1" version="5">
     <request name="set_dbus_properties">
       <arg name="application_id" type="string" allow-null="true"/>
       <arg name="app_menu_path" type="string" allow-null="true"/>
@@ -85,6 +85,23 @@
 
     <!-- Version 4 additions -->
     <request name="release" type="destructor" since="4"/>
+
+    <!-- Version 5 additions -->
+    <enum name="gesture" since="5">
+      <entry name="double_click" value="1"/>
+      <entry name="right_click" value="2"/>
+      <entry name="middle_click" value="3"/>
+    </enum>
+
+    <enum name="error" since="5">
+      <entry name="invalid_gesture" value="0"/>
+    </enum>
+
+    <request name="titlebar_gesture" since="5">
+      <arg name="serial" type="uint"/>
+      <arg name="seat" type="object" interface="wl_seat"/>
+      <arg name="gesture" type="uint" enum="gesture"/>
+    </request>
   </interface>
 
 </protocol>
