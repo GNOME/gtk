@@ -38,7 +38,6 @@ How does this work
 The CI pipeline for the main development branch of GTK builds the API
 references for the following projects:
 
- - gdk
  - gtk
  - pango
  - gdk-pixbuf
