@@ -24,7 +24,7 @@
         <child type="overlay">
           <object class="GtkRevealer" id="controls_revealer">
             <property name="valign">end</property>
-            <property name="transition-type">slide-up</property>
+            <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkMediaControls" id="controls">
                 <style>
