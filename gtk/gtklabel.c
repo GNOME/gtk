@@ -3187,7 +3187,7 @@ strip_ulines (const char *text,
         }
 
       *q = *p;
-      if (after_uline && *accel_key == 0)
+      if (after_uline && *p != '_' && *accel_key == 0)
         *accel_key = g_utf8_get_char (p);
 
       q++;
