@@ -34,3 +34,26 @@ urlmap_file = "urlmap.js"
 # The same order will be used when generating the index
 content_files = []
 
+[[object]]
+pattern = "DEPRECATED_IN_2_*"
+hidden = true
+
+[[object]]
+pattern = "DEPRECATED_MACRO_IN_2_*"
+hidden = true
+
+[[object]]
+pattern = "DEPRECATED_ENUMERATOR_IN_2_*"
+hidden = true
+
+[[object]]
+pattern = "DEPRECATED_TYPE_IN_2_*"
+hidden = true
+
+[[object]]
+name = "test_assert_expected_messages_internal"
+hidden = true
+
+[[object]]
+pattern = "macro__has_*"
+hidden = true
