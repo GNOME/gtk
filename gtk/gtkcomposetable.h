@@ -80,9 +80,14 @@ gboolean          gtk_compose_table_check   (const GtkComposeTable *table,
                                              gboolean              *compose_match,
                                              GString               *output);
 
+void              gtk_compose_table_get_prefix (const GtkComposeTable *table,
+                                                const guint16         *compose_buffer,
+                                                int                    n_compose,
+                                                int                   *prefix);
+
 gboolean          gtk_check_algorithmically (const guint16         *compose_buffer,
                                              int                    n_compose,
-                                             gunichar              *output);
+                                             GString               *output);
 
 guint32           gtk_compose_table_data_hash (const guint16 *data,
                                                int            max_seq_len,

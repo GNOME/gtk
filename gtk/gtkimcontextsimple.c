@@ -544,18 +544,22 @@ is_dead_key (guint keysym)
   return GDK_KEY_dead_grave <= keysym && keysym <= GDK_KEY_dead_greek;
 }
 
-static gunichar
-dead_key_to_unicode (guint     keysym,
-                     gboolean *need_space)
+static void
+append_dead_key (GString *string,
+                 guint    keysym)
 {
   /* Sadly, not all the dead keysyms have spacing mark equivalents
-   * in Unicode. For those that don't, we use space + the non-spacing
-   * mark as an approximation
+   * in Unicode. For those that don't, we use NBSP + the non-spacing
+   * mark as an approximation.
    */
   switch (keysym)
     {
-#define CASE(keysym, unicode, sp) \
-    case GDK_KEY_dead_##keysym: *need_space = sp; return unicode;
+#define CASE(keysym, unicode, sp)                \
+    case GDK_KEY_dead_##keysym:                  \
+      if (sp)                                    \
+        g_string_append_unichar (string, 0xA0);  \
+      g_string_append_unichar (string, unicode); \
+      break;
 
     CASE (grave, 0x60, 0);
     CASE (acute, 0xb4, 0);
@@ -606,8 +610,7 @@ dead_key_to_unicode (guint     keysym,
     CASE (capital_schwa, 0x1dea, 1);
 #undef CASE
     default:
-      *need_space = FALSE;
-      return gdk_keyval_to_unicode (keysym);
+      g_string_append_unichar (string, gdk_keyval_to_unicode (keysym));
     }
 }
 
@@ -622,7 +625,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
   guint keyval;
 
   context = GTK_IM_CONTEXT (context_simple);
-  
+
   priv->in_compose_sequence = FALSE;
 
   /* No compose sequences found, check first if we have a partial
@@ -675,7 +678,6 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
 
       if (n_compose > 1 && i >= n_compose - 1)
         {
-          gboolean need_space;
           GString *s;
 
           s = g_string_new ("");
@@ -684,15 +686,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
             {
               /* dead keys are never *really* dead */
               for (int j = 0; j < i; j++)
-                {
-                  ch = dead_key_to_unicode (priv->compose_buffer[j], &need_space);
-                  if (ch)
-                    {
-                      if (need_space)
-                        g_string_append_c (s, ' ');
-                      g_string_append_unichar (s, ch);
-                    }
-                }
+                append_dead_key (s, priv->compose_buffer[j]);
 
               ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
               if (ch != 0 && ch != ' ' && !g_unichar_iscntrl (ch))
@@ -702,14 +696,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
             }
           else
             {
-              ch = dead_key_to_unicode (priv->compose_buffer[0], &need_space);
-              if (ch)
-                {
-                  if (need_space)
-                    g_string_append_c (s, ' ');
-                  g_string_append_unichar (s, ch);
-                }
-
+              append_dead_key (s, priv->compose_buffer[0]);
               gtk_im_context_simple_commit_string (context_simple, s->str);
 
               for (i = 1; i < n_compose; i++)
@@ -821,7 +808,6 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   int i;
   gboolean compose_finish;
   gboolean compose_match;
-  gunichar output_char;
   guint keyval, state;
 
   while (priv->compose_buffer[n_compose] != 0 && n_compose < priv->compose_buffer_len)
@@ -1001,16 +987,22 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   
       return TRUE;
     }
-  
+
+  if (is_escape)
+    {
+      if (priv->in_hex_sequence || priv->in_compose_sequence)
+        {
+	  gtk_im_context_simple_reset (context);
+	  return TRUE;
+        }
+
+      return FALSE;
+    }
+
   if (priv->in_hex_sequence)
     {
       if (hex_keyval && n_compose < 6)
 	priv->compose_buffer[n_compose++] = hex_keyval;
-      else if (is_escape)
-	{
-	  gtk_im_context_simple_reset (context);
-	  return TRUE;
-	}
       else if (!is_hex_end)
 	{
 	  /* non-hex character in hex sequence, or sequence too long */
@@ -1071,6 +1063,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   else /* Then, check for compose sequences */
     {
       gboolean success = FALSE;
+      int prefix = 0;
       GString *output;
 
       output = g_string_new ("");
@@ -1109,18 +1102,29 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
               success = TRUE;
               break;
             }
+          else
+            {
+              int table_prefix;
+
+              gtk_compose_table_get_prefix ((GtkComposeTable *)tmp_list->data,
+                                            priv->compose_buffer, n_compose,
+                                            &table_prefix);
+
+              prefix = MAX (prefix, table_prefix);
+            }
 
           tmp_list = tmp_list->next;
         }
 
       G_UNLOCK (global_tables);
 
-      g_string_free (output, TRUE);
-
       if (success)
-        return TRUE;
+        {
+          g_string_free (output, TRUE);
+          return TRUE;
+        }
 
-      if (gtk_check_algorithmically (priv->compose_buffer, n_compose, &output_char))
+      if (gtk_check_algorithmically (priv->compose_buffer, n_compose, output))
         {
           if (!priv->in_compose_sequence)
             {
@@ -1128,10 +1132,29 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
               g_signal_emit_by_name (context_simple, "preedit-start");
             }
 
-          if (output_char)
-            gtk_im_context_simple_commit_char (context_simple, output_char);
+          if (output->len > 0)
+            gtk_im_context_simple_commit_string (context_simple, output->str);
           else
             g_signal_emit_by_name (context_simple, "preedit-changed");
+
+          g_string_free (output, TRUE);
+
+          return TRUE;
+        }
+
+      g_string_free (output, TRUE);
+
+      /* If we get here, no Compose sequence matched.
+       * Only beep if we were in a sequence before.
+       */
+      if (prefix > 0)
+        {
+          for (i = prefix; i < n_compose; i++)
+            priv->compose_buffer[i] = 0;
+
+          beep_surface (gdk_event_get_surface (event));
+
+          g_signal_emit_by_name (context_simple, "preedit-changed");
 
           return TRUE;
         }
@@ -1195,28 +1218,23 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
               if (priv->compose_buffer[i] == GDK_KEY_Multi_key)
                 {
                   /* We only show the Compose key visibly when it is the
-                   * only glyph in the preedit, or when it occurs in the
+                   * only glyph in the preedit, or when the sequence contains
+                   * multiple Compose keys, or when it occurs in the
                    * middle of the sequence. Sadly, the official character,
                    * U+2384, COMPOSITION SYMBOL, is bit too distracting, so
                    * we use U+00B7, MIDDLE DOT.
                    */
-                  if (priv->compose_buffer[1] == 0 || i > 0)
+                  if (priv->compose_buffer[1] == 0 || i > 0 ||
+                      priv->compose_buffer[i + 1] == GDK_KEY_Multi_key)
                     g_string_append (s, "·");
                 }
               else
                 {
                   gunichar ch;
-                  gboolean need_space;
 
                   if (is_dead_key (priv->compose_buffer[i]))
                     {
-                      ch = dead_key_to_unicode (priv->compose_buffer[i], &need_space);
-                      if (ch)
-                        {
-                          if (need_space)
-                            g_string_append_c (s, ' ');
-                          g_string_append_unichar (s, ch);
-                        }
+                      append_dead_key (s, priv->compose_buffer[i]);
                     }
                   else
                     {

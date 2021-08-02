@@ -1,14 +1,12 @@
-# n_sequences: 4909
+# n_sequences: 4874
 # max_seq_len: 5
 # n_index_size: 30
-# data_size: 16521
-# n_chars: 1572
+# data_size: 16447
+# n_chars: 1241
 <U7ae> <U7e9> : "ΐ" # U390
 <U7ae> <U7f5> : "ΰ" # U3b0
 <Ufe50> <U20> : "`" # U60
-<Ufe50> <U4d> : "M̀"
 <Ufe50> <U56> : "Ǜ" # U1db
-<Ufe50> <U6d> : "m̀"
 <Ufe50> <U76> : "ǜ" # U1dc
 <Ufe50> <Ua0> : "̀" # U300
 <Ufe50> <U186> : "Ɔ̀"
@@ -23,16 +21,6 @@
 <Ufe50> <U269> : "ɩ̀"
 <Ufe50> <U28a> : "ʊ̀"
 <Ufe50> <U28b> : "ʋ̀"
-<Ufe50> <U3bd> : "Ŋ̀"
-<Ufe50> <U3bf> : "ŋ̀"
-<Ufe50> <U6c1> : "а̀"
-<Ufe50> <U6cf> : "о̀"
-<Ufe50> <U6d2> : "р̀"
-<Ufe50> <U6d5> : "у̀"
-<Ufe50> <U6e1> : "А̀"
-<Ufe50> <U6ef> : "О̀"
-<Ufe50> <U6f2> : "Р̀"
-<Ufe50> <U6f5> : "У̀"
 <Ufe50> <U1f00> : "ἂ" # U1f02
 <Ufe50> <U1f01> : "ἃ" # U1f03
 <Ufe50> <U1f08> : "Ἂ" # U1f0a
@@ -131,9 +119,7 @@
 <Ufe50> <Uff20> <Uaf> <U65> : "ḕ" # U1e15
 <Ufe50> <Uff20> <Uaf> <U6f> : "ṑ" # U1e51
 <Ufe51> <U20> : "'" # U27
-<Ufe51> <U4a> : "J́"
 <Ufe51> <U56> : "Ǘ" # U1d7
-<Ufe51> <U6a> : "j́"
 <Ufe51> <U76> : "ǘ" # U1d8
 <Ufe51> <Ua0> : "́" # U301
 <Ufe51> <U186> : "Ɔ́"
@@ -148,28 +134,7 @@
 <Ufe51> <U269> : "ɩ́"
 <Ufe51> <U28a> : "ʊ́"
 <Ufe51> <U28b> : "ʋ́"
-<Ufe51> <U3bd> : "Ŋ́"
-<Ufe51> <U3bf> : "ŋ́"
-<Ufe51> <U6c0> : "ю́"
-<Ufe51> <U6c1> : "а́"
-<Ufe51> <U6c5> : "е́"
-<Ufe51> <U6c9> : "и́"
-<Ufe51> <U6cf> : "о́"
-<Ufe51> <U6d1> : "я́"
-<Ufe51> <U6d2> : "р́"
-<Ufe51> <U6d5> : "у́"
-<Ufe51> <U6d9> : "ы́"
-<Ufe51> <U6dc> : "э́"
 <Ufe51> <U6e0> : "Ю́́"
-<Ufe51> <U6e1> : "А́"
-<Ufe51> <U6e5> : "Е́"
-<Ufe51> <U6e9> : "И́"
-<Ufe51> <U6ef> : "О́"
-<Ufe51> <U6f1> : "Я́"
-<Ufe51> <U6f2> : "Р́"
-<Ufe51> <U6f5> : "У́"
-<Ufe51> <U6f9> : "Ы́"
-<Ufe51> <U6fc> : "Э́"
 <Ufe51> <U1f00> : "ἄ" # U1f04
 <Ufe51> <U1f01> : "ἅ" # U1f05
 <Ufe51> <U1f08> : "Ἄ" # U1f0c
@@ -210,6 +175,8 @@
 <Ufe51> <Ufe53> <U1dd> : "ǝ̃́"
 <Ufe51> <Ufe53> <U254> : "ɔ̃́"
 <Ufe51> <Ufe53> <U25b> : "ɛ̃́"
+<Ufe51> <Ufe56> <U53> : "Ṥ" # U1e64
+<Ufe51> <Ufe56> <U73> : "ṥ" # U1e65
 <Ufe51> <Ufe57> <U20> : "΅" # U385
 <Ufe51> <Ufe63> <U4f> : "Ǿ" # U1fe
 <Ufe51> <Ufe63> <U6f> : "ǿ" # U1ff
@@ -327,18 +294,6 @@
 <Ufe52> <U269> : "ɩ̂"
 <Ufe52> <U28a> : "ʊ̂"
 <Ufe52> <U28b> : "ʋ̂"
-<Ufe52> <U6c1> : "а̂"
-<Ufe52> <U6c5> : "е̂"
-<Ufe52> <U6c9> : "и̂"
-<Ufe52> <U6cf> : "о̂"
-<Ufe52> <U6d2> : "р̂"
-<Ufe52> <U6d5> : "у̂"
-<Ufe52> <U6e1> : "А̂"
-<Ufe52> <U6e5> : "Е̂"
-<Ufe52> <U6e9> : "И̂"
-<Ufe52> <U6ef> : "О̂"
-<Ufe52> <U6f2> : "Р̂"
-<Ufe52> <U6f5> : "У̂"
 <Ufe52> <U1ea0> : "Ậ" # U1eac
 <Ufe52> <U1ea1> : "ậ" # U1ead
 <Ufe52> <U1eb8> : "Ệ" # U1ec6
@@ -374,6 +329,30 @@
 <Ufe52> <Uffb8> : "⁸" # U2078
 <Ufe52> <Uffb9> : "⁹" # U2079
 <Ufe52> <Uffbd> : "⁼" # U207c
+<Ufe52> <Ufe50> <U41> : "Ầ" # U1ea6
+<Ufe52> <Ufe50> <U45> : "Ề" # U1ec0
+<Ufe52> <Ufe50> <U4f> : "Ồ" # U1ed2
+<Ufe52> <Ufe50> <U61> : "ầ" # U1ea7
+<Ufe52> <Ufe50> <U65> : "ề" # U1ec1
+<Ufe52> <Ufe50> <U6f> : "ồ" # U1ed3
+<Ufe52> <Ufe51> <U41> : "Ấ" # U1ea4
+<Ufe52> <Ufe51> <U45> : "Ế" # U1ebe
+<Ufe52> <Ufe51> <U4f> : "Ố" # U1ed0
+<Ufe52> <Ufe51> <U61> : "ấ" # U1ea5
+<Ufe52> <Ufe51> <U65> : "ế" # U1ebf
+<Ufe52> <Ufe51> <U6f> : "ố" # U1ed1
+<Ufe52> <Ufe53> <U41> : "Ẫ" # U1eaa
+<Ufe52> <Ufe53> <U45> : "Ễ" # U1ec4
+<Ufe52> <Ufe53> <U4f> : "Ỗ" # U1ed6
+<Ufe52> <Ufe53> <U61> : "ẫ" # U1eab
+<Ufe52> <Ufe53> <U65> : "ễ" # U1ec5
+<Ufe52> <Ufe53> <U6f> : "ỗ" # U1ed7
+<Ufe52> <Ufe61> <U41> : "Ẩ" # U1ea8
+<Ufe52> <Ufe61> <U45> : "Ể" # U1ec2
+<Ufe52> <Ufe61> <U4f> : "Ổ" # U1ed4
+<Ufe52> <Ufe61> <U61> : "ẩ" # U1ea9
+<Ufe52> <Ufe61> <U65> : "ể" # U1ec3
+<Ufe52> <Ufe61> <U6f> : "ổ" # U1ed5
 <Ufe52> <Uff20> <U21> <U41> : "Ậ" # U1eac
 <Ufe52> <Uff20> <U21> <U45> : "Ệ" # U1ec6
 <Ufe52> <Uff20> <U21> <U4f> : "Ộ" # U1ed8
@@ -463,6 +442,14 @@
 <Ufe53> <U1f68> : "Ὦ" # U1f6e
 <Ufe53> <U1f69> : "Ὧ" # U1f6f
 <Ufe53> <Ufe53> : "~" # U7e
+<Ufe53> <Ufe51> <U4f> : "Ṍ" # U1e4c
+<Ufe53> <Ufe51> <U55> : "Ṹ" # U1e78
+<Ufe53> <Ufe51> <U6f> : "ṍ" # U1e4d
+<Ufe53> <Ufe51> <U75> : "ṹ" # U1e79
+<Ufe53> <Ufe54> <U4f> : "Ȭ" # U22c
+<Ufe53> <Ufe54> <U6f> : "ȭ" # U22d
+<Ufe53> <Ufe57> <U4f> : "Ṏ" # U1e4e
+<Ufe53> <Ufe57> <U6f> : "ṏ" # U1e4f
 <Ufe53> <Uff20> <U22> <U7e9> : "ῗ" # U1fd7
 <Ufe53> <Uff20> <U22> <U7f5> : "ῧ" # U1fe7
 <Ufe53> <Uff20> <U28> <U7c1> : "Ἇ" # U1f0f
@@ -528,21 +515,19 @@
 <Ufe54> <U269> : "ɩ̄"
 <Ufe54> <U28a> : "ʊ̄"
 <Ufe54> <U28b> : "ʋ̄"
-<Ufe54> <U6c1> : "а̄"
-<Ufe54> <U6c5> : "е̄"
-<Ufe54> <U6cf> : "о̄"
-<Ufe54> <U6d2> : "р̄"
-<Ufe54> <U6e1> : "А̄"
-<Ufe54> <U6e5> : "Е̄"
-<Ufe54> <U6ef> : "О̄"
-<Ufe54> <U6f2> : "Р̄"
 <Ufe54> <U1e36> : "Ḹ" # U1e38
 <Ufe54> <U1e37> : "ḹ" # U1e39
 <Ufe54> <U1e5a> : "Ṝ" # U1e5c
 <Ufe54> <U1e5b> : "ṝ" # U1e5d
 <Ufe54> <Ufe54> : "¯" # Uaf
-<Ufe54> <Ufe57> <U55> : "Ǖ" # U1d5
-<Ufe54> <Ufe57> <U75> : "ǖ" # U1d6
+<Ufe54> <Ufe50> <U45> : "Ḕ" # U1e14
+<Ufe54> <Ufe50> <U4f> : "Ṑ" # U1e50
+<Ufe54> <Ufe50> <U65> : "ḕ" # U1e15
+<Ufe54> <Ufe50> <U6f> : "ṑ" # U1e51
+<Ufe54> <Ufe51> <U45> : "Ḗ" # U1e16
+<Ufe54> <Ufe51> <U4f> : "Ṓ" # U1e52
+<Ufe54> <Ufe51> <U65> : "ḗ" # U1e17
+<Ufe54> <Ufe51> <U6f> : "ṓ" # U1e53
 <Ufe54> <Ufe8c> <U41> : "Ᾱ" # U1fb9
 <Ufe54> <Ufe8c> <U49> : "Ῑ" # U1fd9
 <Ufe54> <Ufe8c> <U55> : "Ῡ" # U1fe9
@@ -580,6 +565,14 @@
 <Ufe55> <U1ea0> : "Ặ" # U1eb6
 <Ufe55> <U1ea1> : "ặ" # U1eb7
 <Ufe55> <Ufe55> : "˘" # U2d8
+<Ufe55> <Ufe50> <U41> : "Ằ" # U1eb0
+<Ufe55> <Ufe50> <U61> : "ằ" # U1eb1
+<Ufe55> <Ufe51> <U41> : "Ắ" # U1eae
+<Ufe55> <Ufe51> <U61> : "ắ" # U1eaf
+<Ufe55> <Ufe53> <U41> : "Ẵ" # U1eb4
+<Ufe55> <Ufe53> <U61> : "ẵ" # U1eb5
+<Ufe55> <Ufe61> <U41> : "Ẳ" # U1eb2
+<Ufe55> <Ufe61> <U61> : "ẳ" # U1eb3
 <Ufe55> <Uff20> <U21> <U41> : "Ặ" # U1eb6
 <Ufe55> <Uff20> <U21> <U61> : "ặ" # U1eb7
 <Ufe55> <Uff20> <U2c> <U45> : "Ḝ" # U1e1c
@@ -600,6 +593,10 @@
 <Ufe56> <U1e62> : "Ṩ" # U1e68
 <Ufe56> <U1e63> : "ṩ" # U1e69
 <Ufe56> <Ufe56> : "˙" # U2d9
+<Ufe56> <Ufe54> <U41> : "Ǡ" # U1e0
+<Ufe56> <Ufe54> <U4f> : "Ȱ" # U230
+<Ufe56> <Ufe54> <U61> : "ǡ" # U1e1
+<Ufe56> <Ufe54> <U6f> : "ȱ" # U231
 <Ufe56> <Ufe63> <U6a> : "ɟ" # U25f
 <Ufe56> <Uff20> <U21> <U53> : "Ṩ" # U1e68
 <Ufe56> <Uff20> <U21> <U73> : "ṩ" # U1e69
@@ -631,9 +628,21 @@
 <Ufe57> <U4e8> : "Ӫ" # U4ea
 <Ufe57> <U4e9> : "ӫ" # U4eb
 <Ufe57> <Ufe57> : "¨" # Ua8
+<Ufe57> <Ufe50> <U55> : "Ǜ" # U1db
+<Ufe57> <Ufe50> <U75> : "ǜ" # U1dc
 <Ufe57> <Ufe51> <U20> : "΅" # U385
-<Ufe57> <Ufe54> <U55> : "Ṻ" # U1e7a
-<Ufe57> <Ufe54> <U75> : "ṻ" # U1e7b
+<Ufe57> <Ufe51> <U49> : "Ḯ" # U1e2e
+<Ufe57> <Ufe51> <U55> : "Ǘ" # U1d7
+<Ufe57> <Ufe51> <U69> : "ḯ" # U1e2f
+<Ufe57> <Ufe51> <U75> : "ǘ" # U1d8
+<Ufe57> <Ufe51> <U7e9> : "ΐ" # U390
+<Ufe57> <Ufe51> <U7f5> : "ΰ" # U3b0
+<Ufe57> <Ufe54> <U41> : "Ǟ" # U1de
+<Ufe57> <Ufe54> <U4f> : "Ȫ" # U22a
+<Ufe57> <Ufe54> <U61> : "ǟ" # U1df
+<Ufe57> <Ufe54> <U6f> : "ȫ" # U22b
+<Ufe57> <Ufe5a> <U55> : "Ǚ" # U1d9
+<Ufe57> <Ufe5a> <U75> : "ǚ" # U1da
 <Ufe57> <Ufe6c> <U3d> : "⩷" # U2a77
 <Ufe57> <Uff20> <U5f> <U55> : "Ṻ" # U1e7a
 <Ufe57> <Uff20> <U5f> <U75> : "ṻ" # U1e7b
@@ -646,6 +655,8 @@
 <Ufe58> <Uc1> : "Ǻ" # U1fa
 <Ufe58> <Ue1> : "ǻ" # U1fb
 <Ufe58> <Ufe58> : "°" # Ub0
+<Ufe58> <Ufe51> <U41> : "Ǻ" # U1fa
+<Ufe58> <Ufe51> <U61> : "ǻ" # U1fb
 <Ufe59> <U20> : "˝" # U2dd
 <Ufe59> <Ua0> : "̋" # U30b
 <Ufe59> <Ufe59> : "˝" # U2dd
@@ -682,6 +693,8 @@
 <Ufe5a> <U28a> : "ʊ̌"
 <Ufe5a> <U28b> : "ʋ̌"
 <Ufe5a> <Ufe5a> : "ˇ" # U2c7
+<Ufe5a> <Ufe56> <U53> : "Ṧ" # U1e66
+<Ufe5a> <Ufe56> <U73> : "ṧ" # U1e67
 <Ufe5a> <Uff20> <U22> <U55> : "Ǚ" # U1d9
 <Ufe5a> <Uff20> <U22> <U75> : "ǚ" # U1da
 <Ufe5b> <U20> : "¸" # Ub8
@@ -787,42 +800,6 @@
 <Ufe5d> <Ufe53> <U1f61> : "ᾧ" # U1fa7
 <Ufe5d> <Ufe53> <U1f68> : "ᾮ" # U1fae
 <Ufe5d> <Ufe53> <U1f69> : "ᾯ" # U1faf
-<Ufe5d> <Ufe50> <Ufe64> <U7c1> : "ᾊ" # U1f8a
-<Ufe5d> <Ufe50> <Ufe64> <U7c7> : "ᾚ" # U1f9a
-<Ufe5d> <Ufe50> <Ufe64> <U7d9> : "ᾪ" # U1faa
-<Ufe5d> <Ufe50> <Ufe64> <U7e1> : "ᾂ" # U1f82
-<Ufe5d> <Ufe50> <Ufe64> <U7e7> : "ᾒ" # U1f92
-<Ufe5d> <Ufe50> <Ufe64> <U7f9> : "ᾢ" # U1fa2
-<Ufe5d> <Ufe50> <Ufe65> <U7c1> : "ᾋ" # U1f8b
-<Ufe5d> <Ufe50> <Ufe65> <U7c7> : "ᾛ" # U1f9b
-<Ufe5d> <Ufe50> <Ufe65> <U7d9> : "ᾫ" # U1fab
-<Ufe5d> <Ufe50> <Ufe65> <U7e1> : "ᾃ" # U1f83
-<Ufe5d> <Ufe50> <Ufe65> <U7e7> : "ᾓ" # U1f93
-<Ufe5d> <Ufe50> <Ufe65> <U7f9> : "ᾣ" # U1fa3
-<Ufe5d> <Ufe51> <Ufe64> <U7c1> : "ᾌ" # U1f8c
-<Ufe5d> <Ufe51> <Ufe64> <U7c7> : "ᾜ" # U1f9c
-<Ufe5d> <Ufe51> <Ufe64> <U7d9> : "ᾬ" # U1fac
-<Ufe5d> <Ufe51> <Ufe64> <U7e1> : "ᾄ" # U1f84
-<Ufe5d> <Ufe51> <Ufe64> <U7e7> : "ᾔ" # U1f94
-<Ufe5d> <Ufe51> <Ufe64> <U7f9> : "ᾤ" # U1fa4
-<Ufe5d> <Ufe51> <Ufe65> <U7c1> : "ᾍ" # U1f8d
-<Ufe5d> <Ufe51> <Ufe65> <U7c7> : "ᾝ" # U1f9d
-<Ufe5d> <Ufe51> <Ufe65> <U7d9> : "ᾭ" # U1fad
-<Ufe5d> <Ufe51> <Ufe65> <U7e1> : "ᾅ" # U1f85
-<Ufe5d> <Ufe51> <Ufe65> <U7e7> : "ᾕ" # U1f95
-<Ufe5d> <Ufe51> <Ufe65> <U7f9> : "ᾥ" # U1fa5
-<Ufe5d> <Ufe53> <Ufe64> <U7c1> : "ᾎ" # U1f8e
-<Ufe5d> <Ufe53> <Ufe64> <U7c7> : "ᾞ" # U1f9e
-<Ufe5d> <Ufe53> <Ufe64> <U7d9> : "ᾮ" # U1fae
-<Ufe5d> <Ufe53> <Ufe64> <U7e1> : "ᾆ" # U1f86
-<Ufe5d> <Ufe53> <Ufe64> <U7e7> : "ᾖ" # U1f96
-<Ufe5d> <Ufe53> <Ufe64> <U7f9> : "ᾦ" # U1fa6
-<Ufe5d> <Ufe53> <Ufe65> <U7c1> : "ᾏ" # U1f8f
-<Ufe5d> <Ufe53> <Ufe65> <U7c7> : "ᾟ" # U1f9f
-<Ufe5d> <Ufe53> <Ufe65> <U7d9> : "ᾯ" # U1faf
-<Ufe5d> <Ufe53> <Ufe65> <U7e1> : "ᾇ" # U1f87
-<Ufe5d> <Ufe53> <Ufe65> <U7e7> : "ᾗ" # U1f97
-<Ufe5d> <Ufe53> <Ufe65> <U7f9> : "ᾧ" # U1fa7
 <Ufe5d> <Uff20> <U27> <U7e1> : "ᾴ" # U1fb4
 <Ufe5d> <Uff20> <U27> <U7e7> : "ῄ" # U1fc4
 <Ufe5d> <Uff20> <U27> <U7f9> : "ῴ" # U1ff4
@@ -1175,18 +1152,6 @@
 <Ufe63> <Ufe8c> <U72> : "ϼ" # U3fc
 <Ufe66> <U474> : "Ѷ" # U476
 <Ufe66> <U475> : "ѷ" # U477
-<Ufe66> <U6c1> : "а̏"
-<Ufe66> <U6c5> : "е̏"
-<Ufe66> <U6c9> : "и̏"
-<Ufe66> <U6cf> : "о̏"
-<Ufe66> <U6d2> : "р̏"
-<Ufe66> <U6d5> : "у̏"
-<Ufe66> <U6e1> : "А̏"
-<Ufe66> <U6e5> : "Е̏"
-<Ufe66> <U6e9> : "И̏"
-<Ufe66> <U6ef> : "О̏"
-<Ufe66> <U6f2> : "Р̏"
-<Ufe66> <U6f5> : "У̏"
 <Ufe67> <U7c> : "⫰" # U2af0
 <Ufe6a> <U2b> : "⨦" # U2a26
 <Ufe6c> <Ufe57> <U3d> : "⩷" # U2a77

@@ -486,6 +486,9 @@ parser_remove_duplicates (GtkComposeParser *parser)
   GHashTableIter iter;
   gunichar *sequence;
   char *value;
+  GString *output;
+
+  output = g_string_new ("");
 
   g_hash_table_iter_init (&iter, parser->sequences);
   while (g_hash_table_iter_next (&iter, (gpointer *)&sequence, (gpointer *)&value))
@@ -493,8 +496,6 @@ parser_remove_duplicates (GtkComposeParser *parser)
       static guint16 keysyms[MAX_COMPOSE_LEN + 1];
       int i;
       int n_compose = 0;
-      gunichar output_char;
-      char buf[8] = { 0, };
       gboolean remove_sequence = FALSE;
 
       if (value[0] == '\0')
@@ -529,10 +530,9 @@ parser_remove_duplicates (GtkComposeParser *parser)
           n_compose++;
         }
 
-      if (gtk_check_algorithmically (keysyms, n_compose, &output_char))
+      if (gtk_check_algorithmically (keysyms, n_compose, output))
         {
-          g_unichar_to_utf8 (output_char, buf);
-          if (strcmp (value, buf) == 0)
+          if (strcmp (value, output->str) == 0)
             remove_sequence = TRUE;
         }
 
@@ -540,6 +540,8 @@ next:
       if (remove_sequence)
         g_hash_table_iter_remove (&iter);
     }
+
+  g_string_free (output, TRUE);
 }
 
 static void
@@ -1069,22 +1071,22 @@ gtk_compose_table_parse (const char *compose_file,
   return compose_table;
 }
 
-static const char *prefix =
-  "# GTK has rewritten this file to add the line:\n"
-  "\n"
-  "include \"%L\"\n"
-  "\n"
-  "# This is necessary to add your own Compose sequences\n"
-  "# in addition to the builtin sequences of GTK. If this\n"
-  "# is not what you want, just remove that line.\n"
-  "#\n"
-  "# A backup of the previous file contents has been made.\n"
-  "\n"
-  "\n";
-
 static gboolean
 rewrite_compose_file (const char *compose_file)
 {
+  static const char *prefix =
+    "# GTK has rewritten this file to add the line:\n"
+    "\n"
+    "include \"%L\"\n"
+    "\n"
+    "# This is necessary to add your own Compose sequences\n"
+    "# in addition to the builtin sequences of GTK. If this\n"
+    "# is not what you want, just remove that line.\n"
+    "#\n"
+    "# A backup of the previous file contents has been made.\n"
+    "\n"
+    "\n";
+
   char *path = NULL;
   char *content = NULL;
   gsize content_len;
@@ -1353,6 +1355,47 @@ gtk_compose_table_check (const GtkComposeTable *table,
 }
 
 void
+gtk_compose_table_get_prefix (const GtkComposeTable *table,
+                              const guint16         *compose_buffer,
+                              int                    n_compose,
+                              int                   *prefix)
+{
+  int index_stride = table->max_seq_len + 1;
+  int p = 0;
+
+  for (int idx = 0; idx < table->n_index_size; idx++)
+    {
+      const guint16 *seq_index = table->data + (idx * index_stride);
+
+      if (seq_index[0] == compose_buffer[0])
+        {
+          p = 1;
+
+          for (int i = 1; i < table->max_seq_len; i++)
+            {
+              int len = i + 1;
+
+              for (int j = seq_index[i]; j < seq_index[i + 1]; j += len)
+                {
+                  int k;
+
+                  for (k = 0; k < MIN (len, n_compose) - 1; k++)
+                    {
+                      if (compose_buffer[k + 1] != (gunichar) table->data[j + k])
+                        break;
+                    }
+                  p = MAX (p, k + 1);
+                }
+            }
+
+          break;
+        }
+    }
+
+  *prefix = p;
+}
+
+void
 gtk_compose_table_foreach (const GtkComposeTable      *table,
                            GtkComposeSequenceCallback  callback,
                            gpointer                    data)
@@ -1419,119 +1462,56 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
 #define IS_DEAD_KEY(k) \
     ((k) >= GDK_KEY_dead_grave && (k) <= GDK_KEY_dead_greek)
 
-/* This function receives a sequence of Unicode characters and tries to
- * normalize it (NFC). We check for the case where the resulting string
- * has length 1 (single character).
- * NFC normalisation normally rearranges diacritic marks, unless these
- * belong to the same Canonical Combining Class.
- * If they belong to the same canonical combining class, we produce all
- * permutations of the diacritic marks, then attempt to normalize.
- */
-static gboolean
-check_normalize_nfc (gunichar *combination_buffer,
-                     int       n_compose)
-{
-  gunichar *combination_buffer_temp;
-  char *combination_utf8_temp = NULL;
-  char *nfc_temp = NULL;
-  int n_combinations;
-  gunichar temp_swap;
-  int i;
-
-  combination_buffer_temp = g_alloca (n_compose * sizeof (gunichar));
-
-  n_combinations = 1;
-
-  for (i = 1; i < n_compose; i++)
-     n_combinations *= i;
-
-  /* Xorg reuses dead_tilde for the perispomeni diacritic mark.
-   * We check if base character belongs to Greek Unicode block,
-   * and if so, we replace tilde with perispomeni.
-   */
-  if (combination_buffer[0] >= 0x390 && combination_buffer[0] <= 0x3FF)
-    {
-      for (i = 1; i < n_compose; i++ )
-        if (combination_buffer[i] == 0x303)
-          combination_buffer[i] = 0x342;
-    }
-
-  memcpy (combination_buffer_temp, combination_buffer, n_compose * sizeof (gunichar) );
-
-  for (i = 0; i < n_combinations; i++)
-    {
-      g_unicode_canonical_ordering (combination_buffer_temp, n_compose);
-      combination_utf8_temp = g_ucs4_to_utf8 (combination_buffer_temp, n_compose, NULL, NULL, NULL);
-      nfc_temp = g_utf8_normalize (combination_utf8_temp, -1, G_NORMALIZE_NFC);
-
-      if (g_utf8_strlen (nfc_temp, -1) == 1)
-        {
-          memcpy (combination_buffer, combination_buffer_temp, n_compose * sizeof (gunichar) );
-
-          g_free (combination_utf8_temp);
-          g_free (nfc_temp);
-
-          return TRUE;
-        }
-
-      g_free (combination_utf8_temp);
-      g_free (nfc_temp);
-
-      if (n_compose > 2)
-        {
-          temp_swap = combination_buffer_temp[i % (n_compose - 1) + 1];
-          combination_buffer_temp[i % (n_compose - 1) + 1] = combination_buffer_temp[(i+1) % (n_compose - 1) + 1];
-          combination_buffer_temp[(i+1) % (n_compose - 1) + 1] = temp_swap;
-        }
-      else
-        break;
-    }
-
-  return FALSE;
-}
-
 gboolean
 gtk_check_algorithmically (const guint16 *compose_buffer,
                            int            n_compose,
-                           gunichar      *output_char)
+                           GString       *output)
 
 {
   int i;
-  gunichar *combination_buffer;
-  char *combination_utf8, *nfc;
 
-  combination_buffer = alloca (sizeof (gunichar) * (n_compose + 1));
-
-  if (output_char)
-    *output_char = 0;
+  g_string_set_size (output, 0);
 
   for (i = 0; i < n_compose && IS_DEAD_KEY (compose_buffer[i]); i++)
     ;
 
-  /* Allow at most 2 dead keys */
-  if (i > 2)
-    return FALSE;
-
-  /* Can't combine if there's no base character */
+  /* Can't combine if there's no base character: incomplete sequence */
   if (i == n_compose)
     return TRUE;
 
   if (i > 0 && i == n_compose - 1)
     {
-      combination_buffer[0] = gdk_keyval_to_unicode (compose_buffer[i]);
-      combination_buffer[n_compose] = 0;
+      GString *input;
+      char *nfc;
+      gunichar ch;
+
+      ch = gdk_keyval_to_unicode (compose_buffer[i]);
+
+      /* We don't allow combining with non-letters */
+      if (!g_unichar_isalpha (ch))
+        return FALSE;
+
+      input = g_string_sized_new (4 * n_compose);
+
+      g_string_append_unichar (input, ch);
+
       i--;
       while (i >= 0)
         {
           switch (compose_buffer[i])
             {
 #define CASE(keysym, unicode) \
-            case GDK_KEY_dead_##keysym: combination_buffer[i+1] = unicode; break
+            case GDK_KEY_dead_##keysym: g_string_append_unichar (input, unicode); break
 
             CASE (grave, 0x0300);
             CASE (acute, 0x0301);
             CASE (circumflex, 0x0302);
-            CASE (tilde, 0x0303);       /* Also used with perispomeni, 0x342. */
+            case GDK_KEY_dead_tilde:
+              if (g_unichar_get_script (ch) == G_UNICODE_SCRIPT_GREEK)
+                g_string_append_unichar (input, 0x342); /* combining perispomeni */
+              else
+                g_string_append_unichar (input, 0x303); /* combining tilde */
+              break;
             CASE (macron, 0x0304);
             CASE (breve, 0x0306);
             CASE (abovedot, 0x0307);
@@ -1549,7 +1529,7 @@ gtk_check_algorithmically (const guint16 *compose_buffer,
             CASE (horn, 0x031B);        /* Legacy use for psili, 0x313 (or 0x343). */
             CASE (stroke, 0x335);
             CASE (abovecomma, 0x0313);  /* Equivalent to psili */
-            CASE (abovereversedcomma, 0x0314); /* Equivalent to dasia */
+            CASE (abovereversedcomma, 0x0314);   /* Equivalent to dasia */
             CASE (doublegrave, 0x30F);
             CASE (belowring, 0x325);
             CASE (belowmacron, 0x331);
@@ -1577,27 +1557,20 @@ gtk_check_algorithmically (const guint16 *compose_buffer,
             CASE (capital_schwa, 0x1DEA);
 #undef CASE
             default:
-              combination_buffer[i+1] = gdk_keyval_to_unicode (compose_buffer[i]);
+              g_string_append_unichar (input, gdk_keyval_to_unicode (compose_buffer[i]));
             }
           i--;
         }
 
-      /* If the buffer normalizes to a single character, then modify the order
-       * of combination_buffer accordingly, if necessary, and return TRUE.
-       */
-      if (check_normalize_nfc (combination_buffer, n_compose))
-        {
-          combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
-          nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
+      nfc = g_utf8_normalize (input->str, input->len, G_NORMALIZE_NFC);
 
-          if (output_char)
-            *output_char = g_utf8_get_char (nfc);
+      g_string_assign (output, nfc);
 
-          g_free (combination_utf8);
-          g_free (nfc);
+      g_free (nfc);
 
-          return TRUE;
-        }
+      g_string_free (input, TRUE);
+
+      return TRUE;
     }
 
   return FALSE;

@@ -310,81 +310,86 @@ match_algorithmic (void)
 {
   guint16 buffer[8] = { 0, };
   gboolean ret;
-  gunichar ch;
+  GString *output;
+
+  output = g_string_new ("");
 
   buffer[0] = GDK_KEY_a;
   buffer[1] = GDK_KEY_b;
 
-  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  ret = gtk_check_algorithmically (buffer, 2, output);
   g_assert_false (ret);
-  g_assert_true (ch == 0);
+  g_assert_cmpstr (output->str, ==, "");
 
   buffer[0] = GDK_KEY_dead_abovering;
   buffer[1] = GDK_KEY_A;
 
-  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  ret = gtk_check_algorithmically (buffer, 2, output);
   g_assert_true (ret);
-  g_assert_true (ch == 0xc5);
+  g_assert_cmpstr (output->str, ==, "Å");
 
   buffer[0] = GDK_KEY_A;
   buffer[1] = GDK_KEY_dead_abovering;
 
-  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  ret = gtk_check_algorithmically (buffer, 2, output);
   g_assert_false (ret);
-  g_assert_true (ch == 0);
+  g_assert_cmpstr (output->str, ==, "");
 
   buffer[0] = GDK_KEY_dead_dasia;
   buffer[1] = GDK_KEY_dead_perispomeni;
   buffer[2] = GDK_KEY_Greek_alpha;
 
-  ret = gtk_check_algorithmically (buffer, 3, &ch);
+  ret = gtk_check_algorithmically (buffer, 3, output);
   g_assert_true (ret);
-  g_assert_true (ch == 0x1f07);
+  g_assert_cmpstr (output->str, ==, "ᾶ\xcc\x94");
 
   buffer[0] = GDK_KEY_dead_perispomeni;
   buffer[1] = GDK_KEY_dead_dasia;
   buffer[2] = GDK_KEY_Greek_alpha;
 
-  ret = gtk_check_algorithmically (buffer, 3, &ch);
+  ret = gtk_check_algorithmically (buffer, 3, output);
   g_assert_true (ret);
-  g_assert_true (ch == 0x1f07);
+  g_assert_cmpstr (output->str, ==, "ἇ");
 
   buffer[0] = GDK_KEY_dead_acute;
   buffer[1] = GDK_KEY_dead_cedilla;
   buffer[2] = GDK_KEY_c;
 
-  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  ret = gtk_check_algorithmically (buffer, 2, output);
   g_assert_true (ret);
-  g_assert_cmphex (ch, ==, 0);
+  g_assert_cmpstr (output->str, ==, "");
 
-  ret = gtk_check_algorithmically (buffer, 3, &ch);
+  ret = gtk_check_algorithmically (buffer, 3, output);
   g_assert_true (ret);
-  g_assert_cmphex (ch, ==, 0x1e09);
+  g_assert_cmpstr (output->str, ==, "ḉ");
 
   buffer[0] = GDK_KEY_dead_cedilla;
   buffer[1] = GDK_KEY_dead_acute;
   buffer[2] = GDK_KEY_c;
 
-  ret = gtk_check_algorithmically (buffer, 3, &ch);
+  ret = gtk_check_algorithmically (buffer, 3, output);
   g_assert_true (ret);
-  g_assert_cmphex (ch, ==, 0x1e09);
+  g_assert_cmpstr (output->str, ==, "ḉ");
 
-  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  ret = gtk_check_algorithmically (buffer, 2, output);
   g_assert_true (ret);
 
   buffer[0] = GDK_KEY_dead_acute;
   buffer[1] = GDK_KEY_dead_cedilla;
   buffer[2] = GDK_KEY_dead_grave;
 
-  ret = gtk_check_algorithmically (buffer, 3, &ch);
-  g_assert_false (ret);
+  ret = gtk_check_algorithmically (buffer, 3, output);
+  g_assert_true (ret);
+  g_assert_cmpstr (output->str, ==, "");
 
   buffer[0] = GDK_KEY_dead_diaeresis;
   buffer[1] = GDK_KEY_a;
 
-  ret = gtk_check_algorithmically (buffer, 2, &ch);
+  ret = gtk_check_algorithmically (buffer, 2, output);
   g_assert_true (ret);
-  g_assert_cmphex (ch, ==, 0xe4);
+  g_assert_cmpstr (output->str, ==, "ä");
+
+  g_string_free (output, TRUE);
 }
 
 int
