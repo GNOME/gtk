@@ -74,18 +74,18 @@ void              gtk_compose_table_foreach (const GtkComposeTable      *table,
                                              gpointer                    data);
 
 gboolean          gtk_compose_table_check   (const GtkComposeTable *table,
-                                             const guint16         *compose_buffer,
+                                             const guint           *compose_buffer,
                                              int                    n_compose,
                                              gboolean              *compose_finish,
                                              gboolean              *compose_match,
                                              GString               *output);
 
 void              gtk_compose_table_get_prefix (const GtkComposeTable *table,
-                                                const guint16         *compose_buffer,
+                                                const guint           *compose_buffer,
                                                 int                    n_compose,
                                                 int                   *prefix);
 
-gboolean          gtk_check_algorithmically (const guint16         *compose_buffer,
+gboolean          gtk_check_algorithmically (const guint           *compose_buffer,
                                              int                    n_compose,
                                              GString               *output);
 

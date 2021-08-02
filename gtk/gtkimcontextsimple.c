@@ -79,7 +79,7 @@
 
 struct _GtkIMContextSimplePrivate
 {
-  guint16       *compose_buffer;
+  guint         *compose_buffer;
   int            compose_buffer_len;
   GString       *tentative_match;
   int            tentative_match_len;
@@ -118,7 +118,7 @@ init_builtin_table (void)
 G_LOCK_DEFINE_STATIC (global_tables);
 static GSList *global_tables;
 
-static const guint16 gtk_compose_ignore[] = {
+static const guint gtk_compose_ignore[] = {
   0, /* Yes, XKB will send us key press events with NoSymbol :( */
   GDK_KEY_Overlay1_Enable,
   GDK_KEY_Overlay2_Enable,
@@ -384,7 +384,7 @@ gtk_im_context_simple_init (GtkIMContextSimple *context_simple)
   priv = context_simple->priv = gtk_im_context_simple_get_instance_private (context_simple);
 
   priv->compose_buffer_len = builtin_compose_table.max_seq_len + 1;
-  priv->compose_buffer = g_new0 (guint16, priv->compose_buffer_len);
+  priv->compose_buffer = g_new0 (guint, priv->compose_buffer_len);
   priv->tentative_match = g_string_new ("");
   priv->tentative_match_len = 0;
 }
@@ -635,12 +635,12 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
     {
       int len = priv->tentative_match_len;
       int i;
-      guint16 *compose_buffer;
+      guint *compose_buffer;
       char *str;
 
-      compose_buffer = alloca (sizeof (guint16) * priv->compose_buffer_len);
+      compose_buffer = alloca (sizeof (guint) * priv->compose_buffer_len);
 
-      memcpy (compose_buffer, priv->compose_buffer, sizeof (guint16) * priv->compose_buffer_len);
+      memcpy (compose_buffer, priv->compose_buffer, sizeof (guint) * priv->compose_buffer_len);
 
       str = g_strdup (priv->tentative_match->str);
       gtk_im_context_simple_commit_string (context_simple, str);
@@ -1015,7 +1015,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       if (n_compose + 1 == priv->compose_buffer_len)
         {
           priv->compose_buffer_len += 1;
-          priv->compose_buffer = g_renew (guint16, priv->compose_buffer, priv->compose_buffer_len);
+          priv->compose_buffer = g_renew (guint, priv->compose_buffer, priv->compose_buffer_len);
         }
 
       priv->compose_buffer[n_compose++] = keyval;
