@@ -4425,9 +4425,21 @@ gtk_widget_class_add_shortcut (GtkWidgetClass *widget_class,
 
   priv = widget_class->priv;
 
+  for (int i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (priv->shortcuts)); i++)
+    {
+      GObject *s = g_list_model_get_item (G_LIST_MODEL (priv->shortcuts), i);
+
+      g_object_unref (s);
+      if (gtk_shortcut_trigger_equal (gtk_shortcut_get_trigger (GTK_SHORTCUT (s)),
+                                      gtk_shortcut_get_trigger (shortcut)))
+        {
+          g_list_store_remove (priv->shortcuts, i);
+          break;
+        }
+    }
+
   g_list_store_append (priv->shortcuts, shortcut);
 }
-
 /**
  * gtk_widget_mnemonic_activate:
  * @widget: a `GtkWidget`
