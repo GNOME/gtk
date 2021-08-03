@@ -171,7 +171,7 @@ compose_table_match (void)
 {
   GtkComposeTable *table;
   char *file;
-  guint16 buffer[8] = { 0, };
+  guint buffer[8] = { 0, };
   gboolean finish, match, ret;
   GString *output;
 
@@ -240,7 +240,7 @@ static void
 compose_table_match_builtin (void)
 {
   const GtkComposeTable *table = &builtin_compose_table;
-  guint16 buffer[8] = { 0, };
+  guint buffer[8] = { 0, };
   gboolean finish, match, ret;
   GString *s;
 
@@ -308,7 +308,7 @@ compose_table_match_builtin (void)
 static void
 match_algorithmic (void)
 {
-  guint16 buffer[8] = { 0, };
+  guint buffer[8] = { 0, };
   gboolean ret;
   GString *output;
 

@@ -493,7 +493,7 @@ parser_remove_duplicates (GtkComposeParser *parser)
   g_hash_table_iter_init (&iter, parser->sequences);
   while (g_hash_table_iter_next (&iter, (gpointer *)&sequence, (gpointer *)&value))
     {
-      static guint16 keysyms[MAX_COMPOSE_LEN + 1];
+      static guint keysyms[MAX_COMPOSE_LEN + 1];
       int i;
       int n_compose = 0;
       gboolean remove_sequence = FALSE;
@@ -515,8 +515,8 @@ parser_remove_duplicates (GtkComposeParser *parser)
 
       for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         {
-          gunichar codepoint = sequence[i];
-          keysyms[i] = (guint16) codepoint;
+          guint codepoint = sequence[i];
+          keysyms[i] = codepoint;
 
           if (codepoint == 0)
             break;
@@ -1217,7 +1217,7 @@ static int
 compare_seq (const void *key, const void *value)
 {
   int i = 0;
-  const guint16 *keysyms = key;
+  const guint *keysyms = key;
   const guint16 *seq = value;
 
   while (keysyms[i])
@@ -1236,7 +1236,7 @@ compare_seq (const void *key, const void *value)
 static int
 compare_seq_index (const void *key, const void *value)
 {
-  const guint16 *keysyms = key;
+  const guint *keysyms = key;
   const guint16 *seq = value;
 
   if (keysyms[0] < seq[0])
@@ -1262,7 +1262,7 @@ compare_seq_index (const void *key, const void *value)
  */
 gboolean
 gtk_compose_table_check (const GtkComposeTable *table,
-                         const guint16         *compose_buffer,
+                         const guint           *compose_buffer,
                          int                    n_compose,
                          gboolean              *compose_finish,
                          gboolean              *compose_match,
@@ -1356,7 +1356,7 @@ gtk_compose_table_check (const GtkComposeTable *table,
 
 void
 gtk_compose_table_get_prefix (const GtkComposeTable *table,
-                              const guint16         *compose_buffer,
+                              const guint           *compose_buffer,
                               int                    n_compose,
                               int                   *prefix)
 {
@@ -1381,7 +1381,7 @@ gtk_compose_table_get_prefix (const GtkComposeTable *table,
 
                   for (k = 0; k < MIN (len, n_compose) - 1; k++)
                     {
-                      if (compose_buffer[k + 1] != (gunichar) table->data[j + k])
+                      if (compose_buffer[k + 1] != table->data[j + k])
                         break;
                     }
                   p = MAX (p, k + 1);
@@ -1463,9 +1463,9 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
     ((k) >= GDK_KEY_dead_grave && (k) <= GDK_KEY_dead_greek)
 
 gboolean
-gtk_check_algorithmically (const guint16 *compose_buffer,
-                           int            n_compose,
-                           GString       *output)
+gtk_check_algorithmically (const guint *compose_buffer,
+                           int          n_compose,
+                           GString     *output)
 
 {
   int i;
