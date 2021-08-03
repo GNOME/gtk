@@ -8436,7 +8436,7 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
   start1 = start;
   end1 = end;
 
-  gtk_text_iter_set_line_offset (&start, 0);
+  gtk_text_iter_set_line_offset (&start1, 0);
   gtk_text_iter_forward_to_line_end (&end1);
 
   pre = gtk_text_iter_get_slice (&start1, &start);
