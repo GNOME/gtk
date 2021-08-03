@@ -10016,3 +10016,9 @@ gtk_text_view_get_rtl_context (GtkTextView *text_view)
 
   return text_view->priv->layout->rtl_context;
 }
+
+GtkEventController *
+gtk_text_view_get_key_controller (GtkTextView *text_view)
+{
+  return text_view->priv->key_controller;
+}

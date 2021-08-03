@@ -30,6 +30,8 @@ GtkCssNode *    gtk_text_view_get_selection_node        (GtkTextView *text_view)
 
 GtkTextAttributes * gtk_text_view_get_default_attributes (GtkTextView *text_view);
 
+GtkEventController *gtk_text_view_get_key_controller    (GtkTextView *text_view);
+
 
 G_END_DECLS
 
