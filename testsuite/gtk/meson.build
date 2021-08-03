@@ -113,6 +113,7 @@ internal_tests = [
       '../testutils.c'
     ],
   },
+  { 'name': 'imcontext' },
   { 'name': 'constraint-solver' },
   { 'name': 'rbtree-crash' },
   { 'name': 'propertylookuplistmodel' },

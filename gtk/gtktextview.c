@@ -8436,7 +8436,7 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
   start1 = start;
   end1 = end;
 
-  gtk_text_iter_set_line_offset (&start, 0);
+  gtk_text_iter_set_line_offset (&start1, 0);
   gtk_text_iter_forward_to_line_end (&end1);
 
   pre = gtk_text_iter_get_slice (&start1, &start);
@@ -10015,4 +10015,10 @@ gtk_text_view_get_rtl_context (GtkTextView *text_view)
   gtk_text_view_ensure_layout (text_view);
 
   return text_view->priv->layout->rtl_context;
+}
+
+GtkEventController *
+gtk_text_view_get_key_controller (GtkTextView *text_view)
+{
+  return text_view->priv->key_controller;
 }
