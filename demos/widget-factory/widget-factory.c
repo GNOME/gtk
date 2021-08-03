@@ -2609,6 +2609,20 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");
   set_up_context_popover (widget, model);
 
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "video");
+
+  GFile *file;
+  GInputStream *input_stream;
+  GtkMediaStream *media_stream;
+
+  file = g_file_new_for_uri ("resource:///org/gtk/WidgetFactory4/gtk-logo.webm");
+  input_stream = G_INPUT_STREAM (g_file_read (file, NULL, NULL));
+  media_stream = gtk_media_file_new_for_input_stream (input_stream);
+  gtk_video_set_media_stream (GTK_VIDEO (widget), media_stream);
+  g_object_unref (media_stream);
+  g_object_unref (input_stream);
+  g_object_unref (file);
+
   gtk_window_present (window);
 
   g_object_unref (builder);

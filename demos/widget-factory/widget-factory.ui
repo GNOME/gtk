@@ -1057,10 +1057,9 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkFrame">
                                 <property name="child">
-                                  <object class="GtkVideo">
+                                  <object class="GtkVideo" id="video">
                                     <property name="autoplay">1</property>
                                     <property name="loop">1</property>
-                                    <property name="file">resource:///org/gtk/WidgetFactory4/gtk-logo.webm</property>
                                   </object>
                                 </property>
                               </object>
