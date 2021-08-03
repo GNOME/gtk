@@ -28,6 +28,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkgizmoprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkbuiltiniconprivate.h"
 
 // TODO
@@ -563,20 +564,15 @@ gtk_tree_popover_set_area (GtkTreePopover *popover,
 }
 
 static void
-item_activated_cb (GtkGesture     *gesture,
-                   guint           n_press,
-                   double          x,
-                   double          y,
-                   GtkTreePopover *popover)
+activate_item (GtkWidget      *item,
+               GtkTreePopover *popover)
 {
-  GtkWidget *item;
   GtkCellView *view;
   GtkTreePath *path;
   char *path_str;
   gboolean is_header = FALSE;
   gboolean has_submenu = FALSE;
 
-  item = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   is_header = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (item), "is-header"));
 
   view = GTK_CELL_VIEW (g_object_get_data (G_OBJECT (item), "view"));
@@ -614,6 +610,17 @@ item_activated_cb (GtkGesture     *gesture,
 }
 
 static void
+item_activated_cb (GtkGesture     *gesture,
+                   guint           n_press,
+                   double          x,
+                   double          y,
+                   GtkTreePopover *popover)
+{
+  GtkWidget *item = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
+  activate_item (item, popover);
+}
+
+static void
 enter_cb (GtkEventController   *controller,
           double                x,
           double                y,
@@ -623,6 +630,24 @@ enter_cb (GtkEventController   *controller,
   item = gtk_event_controller_get_widget (controller);
 
   gtk_tree_popover_set_active_item (popover, item);
+}
+
+static void
+enter_focus_cb (GtkEventController   *controller,
+                GtkTreePopover       *popover)
+{
+  GtkWidget *item = gtk_event_controller_get_widget (controller);
+
+  gtk_tree_popover_set_active_item (popover, item);
+}
+
+static gboolean
+activate_shortcut (GtkWidget *widget,
+                   GVariant  *args,
+                   gpointer   user_data)
+{
+  activate_item (widget, user_data);
+  return TRUE;
 }
 
 static GtkWidget *
@@ -660,8 +685,11 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
       gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (view), path);
       gtk_widget_set_hexpand (view, TRUE);
 
-      item = gtk_gizmo_new ("modelbutton", NULL, NULL, NULL, NULL, NULL, NULL);
+      item = gtk_gizmo_new ("modelbutton", NULL, NULL, NULL, NULL,
+                            (GtkGizmoFocusFunc)gtk_widget_focus_self,
+                            (GtkGizmoGrabFocusFunc)gtk_widget_grab_focus_self);
       gtk_widget_set_layout_manager (item, gtk_box_layout_new (GTK_ORIENTATION_HORIZONTAL));
+      gtk_widget_set_focusable (item, TRUE);
       gtk_widget_add_css_class (item, "flat");
 
       if (header_item)
@@ -684,6 +712,27 @@ gtk_tree_popover_create_item (GtkTreePopover *popover,
       controller = gtk_event_controller_motion_new ();
       g_signal_connect (controller, "enter", G_CALLBACK (enter_cb), popover);
       gtk_widget_add_controller (item, controller);
+
+      controller = gtk_event_controller_focus_new ();
+      g_signal_connect (controller, "enter", G_CALLBACK (enter_focus_cb), popover);
+      gtk_widget_add_controller (item, controller);
+
+      {
+        const guint activate_keyvals[] = { GDK_KEY_space, GDK_KEY_KP_Space,
+                                           GDK_KEY_Return, GDK_KEY_ISO_Enter,
+                                           GDK_KEY_KP_Enter };
+        GtkShortcutTrigger *trigger;
+        GtkShortcut *shortcut;
+
+        trigger = g_object_ref (gtk_never_trigger_get ());
+        for (int i = 0; i < G_N_ELEMENTS (activate_keyvals); i++)
+          trigger = gtk_alternative_trigger_new (gtk_keyval_trigger_new (activate_keyvals[i], 0), trigger);
+
+        shortcut = gtk_shortcut_new (trigger, gtk_callback_action_new (activate_shortcut, popover, NULL));
+        controller = gtk_shortcut_controller_new ();
+        gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+        gtk_widget_add_controller (item, controller);
+      }
 
       g_object_set_data (G_OBJECT (item), "is-header", GINT_TO_POINTER (header_item));
       g_object_set_data (G_OBJECT (item), "view", view);
