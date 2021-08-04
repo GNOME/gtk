@@ -21,6 +21,11 @@
 
 #include "gtkgstbinprivate.h"
 
+static GstStaticPadTemplate src_templ = GST_STATIC_PAD_TEMPLATE ("src",
+    GST_PAD_SRC,
+    GST_PAD_ALWAYS,
+    GST_STATIC_CAPS_ANY);
+
 struct _GtkGstBin {
   GstBin parent;
 
@@ -82,13 +87,17 @@ G_DEFINE_TYPE_WITH_CODE (GtkGstBin, gtk_gst_bin, GST_TYPE_BIN,
 static void
 gtk_gst_bin_init (GtkGstBin *self)
 {
+  GstPadTemplate *templ;
+  GstPad *pad;
+
   self->src = gst_element_factory_make ("giostreamsrc", "src");
-  g_object_ref_sink (self->src);
   gst_bin_add (GST_BIN (self), self->src);
 
+  templ = gst_element_get_pad_template (GST_ELEMENT (self), "src");
+  pad = gst_element_get_static_pad (self->src, "src");
   gst_element_add_pad (GST_ELEMENT (self),
-                       gst_ghost_pad_new ("src", gst_element_get_static_pad (self->src, "src")));
-
+                       gst_ghost_pad_new_from_template ("src", pad, templ));
+  gst_object_unref (pad);
 }
 
 static void
@@ -98,6 +107,8 @@ gtk_gst_bin_class_init (GtkGstBinClass *class)
                                          "GtkGstBin",
                                          "Source", "Handles GtkMediaFile sources",
                                          "Matthias Clasen");
+
+  gst_element_class_add_static_pad_template (GST_ELEMENT_CLASS (class), &src_templ);
 }
 
 void
