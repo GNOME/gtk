@@ -542,8 +542,8 @@ gtk_css_shadow_value_get_extents (const GtkCssValue *value,
 
       spread = _gtk_css_number_value_get (shadow->spread, 0);
       radius = _gtk_css_number_value_get (shadow->radius, 0);
-      if (value->is_filter)
-        radius = radius * 2;
+      if (!value->is_filter)
+        radius = radius / 2.0;
       clip_radius = gsk_cairo_blur_compute_pixels (radius);
       hoffset = _gtk_css_number_value_get (shadow->hoffset, 0);
       voffset = _gtk_css_number_value_get (shadow->voffset, 0);
