@@ -34,7 +34,11 @@ urlmap_file = "urlmap.js"
 # The same order will be used when generating the index
 content_files = [
   "error-reporting.md",
+  "main-loop.md",
   "reference-counting.md",
+]
+content_images = [
+  "mainloop-states.gif",
 ]
 
 [[object]]

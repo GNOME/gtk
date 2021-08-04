@@ -1,5 +1,6 @@
 expand_content_files = [
   'error-reporting.md',
+  'main-loop.md',
   'reference-counting.md',
 ]
 
