@@ -1,5 +1,7 @@
 Title: Error Reporting
 
+# Error Reporting
+
 GLib provides a standard method of reporting errors from a called function
 to the calling code. (This is the same problem solved by exceptions in other
 languages.) It's important to understand that this method is both a data
@@ -256,7 +258,6 @@ Error domains and codes are conventionally named as follows:
 
 - The error domain is called `<NAMESPACE>_<MODULE>_ERROR`, for example
   `G_SPAWN_ERROR` or `G_THREAD_ERROR`:
-
   ```c
   #define G_SPAWN_ERROR g_spawn_error_quark ()
 
