@@ -32,7 +32,9 @@ base_url = "https://gitlab.gnome.org/GNOME/glib/-/blob/master/"
 [extra]
 urlmap_file = "urlmap.js"
 # The same order will be used when generating the index
-content_files = []
+content_files = [
+  "error-reporting.md"
+]
 
 [[object]]
 pattern = "DEPRECATED_IN_2_*"
