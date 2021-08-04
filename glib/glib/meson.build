@@ -1,5 +1,6 @@
 expand_content_files = [
   'error-reporting.md',
+  'reference-counting.md',
 ]
 
 glib_gir = meson.current_source_dir() / 'GLib-2.0.gir'
