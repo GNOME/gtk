@@ -972,6 +972,59 @@ gtk_popover_unrealize (GtkWidget *widget)
   g_clear_object (&priv->surface);
 }
 
+static gboolean
+gtk_popover_focus (GtkWidget        *widget,
+                   GtkDirectionType  direction)
+{
+  if (!gtk_widget_get_visible (widget))
+    return FALSE;
+
+  /* This code initially comes from gtkpopovermenu.c */
+  if (gtk_widget_get_first_child (widget) == NULL)
+    {
+      /* Empty popover, so nothing to Tab through. */
+      return FALSE;
+    }
+  else
+    {
+      /* Move focus normally, but when nothing can be focused in this direction then we cycle around. */
+      if (gtk_widget_focus_move (widget, direction))
+        return TRUE;
+
+      if (gtk_popover_get_autohide (GTK_POPOVER (widget)))
+        {
+          GtkWidget *p = gtk_root_get_focus (gtk_widget_get_root (widget));
+
+          /* In the case where the popover doesn't have any focusable child (like
+           * the GtkTreePopover for combo boxes) then the focus will end up out of
+           * the popover, hence creating an infinite loop below. To avoid this, just
+           * say we had focus and stop here.
+           */
+          if (!gtk_widget_is_ancestor (p, widget) && p != widget)
+            return TRUE;
+
+          /* Cycle around with (Shift+)Tab */
+          if (direction == GTK_DIR_TAB_FORWARD || direction == GTK_DIR_TAB_BACKWARD)
+            {
+              for (;
+                   p != widget;
+                   p = gtk_widget_get_parent (p))
+                {
+                  /* Unfocus everything in the popover. */
+                  gtk_widget_set_focus_child (p, NULL);
+                }
+            }
+          /* Focus again from scratch */
+          gtk_widget_focus_move (widget, direction);
+          return TRUE;
+        }
+      else
+        {
+          return FALSE;
+        }
+    }
+}
+
 static void
 gtk_popover_show (GtkWidget *widget)
 {
@@ -1734,6 +1787,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->unrealize = gtk_popover_unrealize;
   widget_class->map = gtk_popover_map;
   widget_class->unmap = gtk_popover_unmap;
+  widget_class->focus = gtk_popover_focus;
   widget_class->show = gtk_popover_show;
   widget_class->hide = gtk_popover_hide;
   widget_class->measure = gtk_popover_measure;
@@ -2175,8 +2229,8 @@ gtk_popover_get_position (GtkPopover *popover)
  * Sets whether @popover is modal.
  *
  * A modal popover will grab the keyboard focus on it when being
- * displayed. Clicking outside the popover area or pressing Esc
- * will dismiss the popover.
+ * displayed. Focus will wrap around within the popover. Clicking
+ * outside the popover area or pressing Esc will dismiss the popover.
  *
  * Called this function on an already showing popup with a new
  * autohide value different from the current one, will cause the

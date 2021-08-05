@@ -480,12 +480,21 @@ gtk_popover_menu_focus (GtkWidget        *widget,
           else
             return TRUE;
         }
-      else if (direction == GTK_DIR_UP || direction == GTK_DIR_DOWN)
+      /* Cycle around with up/down arrows and (Shift+)Tab when modal */
+      else if (gtk_popover_get_autohide (GTK_POPOVER (menu)))
         {
-          GtkWidget *p;
+          GtkWidget *p = gtk_root_get_focus (gtk_widget_get_root (widget));
+
+          /* In the case where the popover doesn't have any focusable child, if
+           * the menu doesn't have any item for example, then the focus will end
+           * up out of the popover, hence creating an infinite loop below. To
+           * avoid this, just say we had focus and stop here.
+           */
+          if (!gtk_widget_is_ancestor (p, widget) && p != widget)
+            return TRUE;
 
           /* cycle around */
-          for (p = gtk_root_get_focus (gtk_widget_get_root (widget));
+          for (;
                p != widget;
                p = gtk_widget_get_parent (p))
             {
@@ -493,7 +502,7 @@ gtk_popover_menu_focus (GtkWidget        *widget,
             }
           if (gtk_widget_focus_move (widget, direction))
             return TRUE;
-       }
+        }
     }
 
   return FALSE;
