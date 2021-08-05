@@ -2146,7 +2146,7 @@ gsk_outset_shadow_get_extents (GskOutsetShadowNode *self,
 {
   float clip_radius;
 
-  clip_radius = gsk_cairo_blur_compute_pixels (self->blur_radius);
+  clip_radius = gsk_cairo_blur_compute_pixels (self->blur_radius / 2.0);
   *top = MAX (0, clip_radius + self->spread - self->dy);
   *right = MAX (0, ceil (clip_radius + self->spread + self->dx));
   *bottom = MAX (0, ceil (clip_radius + self->spread + self->dy));
@@ -3852,7 +3852,7 @@ gsk_shadow_node_diff (GskRenderNode  *node1,
           return;
         }
 
-      clip_radius = gsk_cairo_blur_compute_pixels (shadow1->radius);
+      clip_radius = gsk_cairo_blur_compute_pixels (shadow1->radius / 2.0);
       top = MAX (top, ceil (clip_radius - shadow1->dy));
       right = MAX (right, ceil (clip_radius + shadow1->dx));
       bottom = MAX (bottom, ceil (clip_radius + shadow1->dy));
@@ -3886,7 +3886,7 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
 
   for (i = 0; i < self->n_shadows; i++)
     {
-      float clip_radius = gsk_cairo_blur_compute_pixels (self->shadows[i].radius);
+      float clip_radius = gsk_cairo_blur_compute_pixels (self->shadows[i].radius / 2.0);
       top = MAX (top, clip_radius - self->shadows[i].dy);
       right = MAX (right, clip_radius + self->shadows[i].dx);
       bottom = MAX (bottom, clip_radius + self->shadows[i].dy);
@@ -4866,7 +4866,7 @@ gsk_blur_node_diff (GskRenderNode  *node1,
       cairo_region_t *sub;
       int i, n, clip_radius;
 
-      clip_radius = ceil (gsk_cairo_blur_compute_pixels (self1->radius));
+      clip_radius = ceil (gsk_cairo_blur_compute_pixels (self1->radius / 2.0));
       sub = cairo_region_create ();
       gsk_render_node_diff (self1->child, self2->child, sub);
 
@@ -4913,7 +4913,7 @@ gsk_blur_node_new (GskRenderNode *child,
   self->child = gsk_render_node_ref (child);
   self->radius = radius;
 
-  clip_radius = gsk_cairo_blur_compute_pixels (radius);
+  clip_radius = gsk_cairo_blur_compute_pixels (radius / 2.0);
 
   graphene_rect_init_from_rect (&node->bounds, &child->bounds);
   graphene_rect_inset (&self->render_node.bounds,
