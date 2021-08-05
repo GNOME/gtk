@@ -414,7 +414,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_boolean ("gtk-split-cursor",
                                                                    P_("Split Cursor"),
                                                                    P_("Whether two cursors should be displayed for mixed left-to-right and right-to-left text"),
-                                                                   TRUE,
+                                                                   FALSE,
                                                                    GTK_PARAM_READWRITE));
   g_assert (result == PROP_SPLIT_CURSOR);
 
