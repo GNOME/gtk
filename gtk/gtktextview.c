@@ -4892,7 +4892,7 @@ changed_handler (GtkTextLayout     *layout,
 
       gtk_text_layout_get_line_yrange (layout, &first, &new_first_para_top, NULL);
 
-      old_first_para_top = priv->yoffset - priv->first_para_pixels;
+      old_first_para_top = priv->yoffset - priv->first_para_pixels + priv->top_margin;
 
       if (new_first_para_top != old_first_para_top)
         {
