@@ -601,7 +601,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkTextag:line-spacing:
+   * GtkTexTag:line-spacing:
    *
    * The line spacing factor that is applied between consecutive lines.
    *
@@ -610,10 +610,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_LINE_SPACING,
                                    g_param_spec_float ("line-spacing",
-                                                     P_("Linespacing"),
-                                                     P_("The factor for spacing between lines"),
-                                                     0.0, 10.0, 0.0,
-                                                     GTK_PARAM_READWRITE));
+                                                       P_("Line spacing"),
+                                                       P_("The factor for spacing between lines"),
+                                                       0.0, 10.0, 0.0,
+                                                       GTK_PARAM_READWRITE));
 
   /**
    * GtkTextTag:strikethrough:
@@ -2052,6 +2052,10 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_int (value,  priv->values->pixels_inside_wrap);
       break;
 
+    case PROP_LINE_SPACING:
+      g_value_set_float (value,  priv->values->line_spacing);
+      break;
+
     case PROP_EDITABLE:
       g_value_set_boolean (value, priv->values->editable);
       break;
@@ -2197,6 +2201,10 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_PIXELS_INSIDE_WRAP_SET:
       g_value_set_boolean (value, priv->pixels_inside_wrap_set);
+      break;
+
+    case PROP_LINE_SPACING_SET:
+      g_value_set_boolean (value, priv->line_spacing_set);
       break;
 
     case PROP_EDITABLE_SET:
