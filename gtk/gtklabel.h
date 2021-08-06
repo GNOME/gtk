@@ -172,6 +172,12 @@ void         gtk_label_set_extra_menu (GtkLabel   *self,
 GDK_AVAILABLE_IN_ALL
 GMenuModel * gtk_label_get_extra_menu (GtkLabel   *self);
 
+GDK_AVAILABLE_IN_4_4
+void         gtk_label_set_line_spacing (GtkLabel *self,
+                                         float     factor);
+
+GDK_AVAILABLE_IN_4_4
+float        gtk_label_get_line_spacing (GtkLabel *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)
 

@@ -264,6 +264,7 @@ struct _GtkLabel
 
   float    xalign;
   float    yalign;
+  float    line_spacing;
 
   guint    mnemonics_visible  : 1;
   guint    jtype              : 2;
@@ -391,6 +392,7 @@ enum {
   PROP_XALIGN,
   PROP_YALIGN,
   PROP_EXTRA_MENU,
+  PROP_LINE_SPACING,
   NUM_PROPERTIES
 };
 
@@ -514,6 +516,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_EXTRA_MENU:
       gtk_label_set_extra_menu (self, g_value_get_object (value));
       break;
+    case PROP_LINE_SPACING:
+      gtk_label_set_line_spacing (self, g_value_get_float (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -584,6 +589,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_EXTRA_MENU:
       g_value_set_object (value, gtk_label_get_extra_menu (self));
       break;
+    case PROP_LINE_SPACING:
+      g_value_set_float (value, gtk_label_get_line_spacing (self));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -600,6 +608,7 @@ gtk_label_init (GtkLabel *self)
 
   self->xalign = 0.5;
   self->yalign = 0.5;
+  self->line_spacing = 0.0;
 
   self->jtype = GTK_JUSTIFY_LEFT;
   self->wrap = FALSE;
@@ -2457,6 +2466,20 @@ gtk_label_class_init (GtkLabelClass *class)
                           G_TYPE_MENU_MODEL,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkLabel:line-spacing: (attributes org.gtk.Property.get=gtk_label_get_line_spacing org.gtk.Property.set=gtk_label_set_line_spacing)
+   *
+   * The line spacing factor that is applied between consecutive lines.
+   *
+   * Since: 4.4
+   */
+  label_props[PROP_LINE_SPACING] =
+      g_param_spec_float ("line-spacing",
+                          P_("Linespacing"),
+                          P_("The factor for spacing between lines"),
+                          0.0, 10.0, 0.0,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
 
   /**
@@ -4005,6 +4028,7 @@ gtk_label_ensure_layout (GtkLabel *self)
   pango_layout_set_alignment (self->layout, align);
   pango_layout_set_ellipsize (self->layout, self->ellipsize);
   pango_layout_set_wrap (self->layout, self->wrap_mode);
+  pango_layout_set_line_spacing (self->layout, self->line_spacing);
   pango_layout_set_single_paragraph_mode (self->layout, self->single_line_mode);
   if (self->lines > 0)
     pango_layout_set_height (self->layout, - self->lines);
@@ -5777,4 +5801,57 @@ gtk_label_get_extra_menu (GtkLabel *self)
   g_return_val_if_fail (GTK_IS_LABEL (self), NULL);
 
   return self->extra_menu;
+}
+
+/**
+ * gtk_label_set_line_spacing: (attributes org.gtk.Method.set_property=line-spacing)
+ * @self: a `GtkLabel`
+ * @factor: the new line spacing factor
+ *
+ * Sets a factor for line spacing.
+ *
+ * Typical values are: 0, 1, 1.5, 2. The default values is 0.
+ *
+ * If @factor is non-zero, lines are placed so that
+ *
+ *     baseline2 = baseline1 + factor * height2
+ *
+ * where height2 is the line height of the second line
+ * (as determined by the font(s)).
+ *
+ * If @factor is zero (the default), no spacing is applied.
+ *
+ * Since: 4.4
+ */
+void
+gtk_label_set_line_spacing (GtkLabel *self,
+                            float     factor)
+{
+  g_return_if_fail (GTK_IS_LABEL (self));
+
+  if (self->line_spacing == factor)
+    return;
+
+  self->line_spacing = factor;
+
+  gtk_label_clear_layout (self);
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_LINE_SPACING]);
+}
+
+/**
+ * gtk_label_get_line_spacing: (attributes org.gtk.Method.get_property=line-spacing)
+ * @self: a `GtkLabel`
+ *
+ * Gets the line spacing factor of @self.
+ *
+ * Since: 4.4
+ */
+float
+gtk_label_get_line_spacing (GtkLabel *self)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (self), 0.0);
+
+  return self->line_spacing;
 }
