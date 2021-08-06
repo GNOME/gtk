@@ -387,6 +387,9 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->priv->pixels_inside_wrap_set)
         dest->pixels_inside_wrap = vals->pixels_inside_wrap;
 
+      if (tag->priv->line_spacing_set)
+        dest->line_spacing = vals->line_spacing;
+
       if (tag->priv->tabs_set)
         {
           if (dest->tabs)
@@ -457,6 +460,7 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
     priv->pixels_above_lines_set ||
     priv->pixels_below_lines_set ||
     priv->pixels_inside_wrap_set ||
+    priv->line_spacing_set ||
     priv->tabs_set ||
     priv->underline_set ||
     priv->overline_set ||

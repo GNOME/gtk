@@ -173,6 +173,8 @@ struct _GtkTextViewPrivate
   GtkWidget *selection_bubble;
   guint selection_bubble_timeout_id;
 
+  float line_spacing;
+
   GtkWidget *magnifier_popover;
   GtkWidget *magnifier;
 
@@ -359,7 +361,8 @@ enum
   PROP_INPUT_PURPOSE,
   PROP_INPUT_HINTS,
   PROP_MONOSPACE,
-  PROP_EXTRA_MENU
+  PROP_EXTRA_MENU,
+  PROP_LINE_SPACING
 };
 
 static GQuark quark_text_selection_data = 0;
@@ -1152,6 +1155,21 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                         P_("Menu model to append to the context menu"),
                                                         G_TYPE_MENU_MODEL,
                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkTextView:line-spacing: (attributes org.gtk.Property.get=gtk_text_view_get_line_spacing org.gtk.Property.set=gtk_text_view_set_line_spacing)
+   *
+   * The line spacing factor that is applied between consecutive lines.
+   *
+   * Since: 4.4
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_LINE_SPACING,
+                                   g_param_spec_float ("line-spacing",
+                                                       P_("Linespacing"),
+                                                       P_("The factor for spacing between lines"),
+                                                       0.0, 10.0, 0.0,
+                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /* GtkScrollable interface */
    g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
@@ -3391,6 +3409,65 @@ gtk_text_view_get_pixels_inside_wrap (GtkTextView *text_view)
 }
 
 /**
+ * gtk_text_view_set_line_spacing: (attributes org.gtk.Method.set_property=line-spacing)
+ * @self: a `GtkTextView`
+ * @factor: the new line spacing factor
+ *
+ * Sets the default factor for line spacing.
+ *
+ * Typical values are: 0, 1, 1.5, 2. The default values is 0.
+ *
+ * If @factor is non-zero, lines are placed so that
+ *
+ *     baseline2 = baseline1 + factor * height2
+ *
+ * where height2 is the line height of the second line
+ * (as determined by the font(s)).
+ *
+ * If @factor is zero (the default), the pixels-inside-wrap value
+ * is used.
+ *
+ * Since: 4.4
+ */
+void
+gtk_text_view_set_line_spacing (GtkTextView *text_view,
+                                float        line_spacing)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  if (priv->line_spacing == line_spacing)
+    return;
+
+  priv->line_spacing = line_spacing;
+
+  if (priv->layout && priv->layout->default_style)
+    {
+      priv->layout->default_style->line_spacing = line_spacing;
+      gtk_text_layout_default_style_changed (priv->layout);
+    }
+
+  g_object_notify (G_OBJECT (text_view), "line-spacing");
+}
+
+/**
+ * gtk_text_view_get_line_spacing: (attributes org.gtk.Method.get_property=line-spacing)
+ * @self: a `GtkTextView`
+ *
+ * Gets the default line spacing factor of @text_view.
+ *
+ * Since: 4.4
+ */
+float
+gtk_text_view_get_line_spacing (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0.0);
+
+  return text_view->priv->line_spacing;
+}
+
+/**
  * gtk_text_view_set_justification: (attributes org.gtk.Method.set_property=justification)
  * @text_view: a `GtkTextView`
  * @justification: justification
@@ -4105,6 +4182,10 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_extra_menu (text_view, g_value_get_object (value));
       break;
 
+    case PROP_LINE_SPACING:
+      gtk_text_view_set_line_spacing (text_view, g_value_get_float (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -4223,6 +4304,10 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_EXTRA_MENU:
       g_value_set_object (value, gtk_text_view_get_extra_menu (text_view));
+      break;
+
+    case PROP_LINE_SPACING:
+      g_value_set_float (value, gtk_text_view_get_line_spacing (text_view));
       break;
 
     default:

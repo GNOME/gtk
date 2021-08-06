@@ -107,6 +107,7 @@ enum {
   PROP_PIXELS_ABOVE_LINES,
   PROP_PIXELS_BELOW_LINES,
   PROP_PIXELS_INSIDE_WRAP,
+  PROP_LINE_SPACING,
   PROP_EDITABLE,
   PROP_WRAP_MODE,
   PROP_JUSTIFICATION,
@@ -150,6 +151,7 @@ enum {
   PROP_PIXELS_ABOVE_LINES_SET,
   PROP_PIXELS_BELOW_LINES_SET,
   PROP_PIXELS_INSIDE_WRAP_SET,
+  PROP_LINE_SPACING_SET,
   PROP_EDITABLE_SET,
   PROP_WRAP_MODE_SET,
   PROP_JUSTIFICATION_SET,
@@ -585,6 +587,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * GtkTextTag:pixels-inside-wrap:
    *
    * Pixels of blank space between wrapped lines in a paragraph.
+   *
+   * Ignored if line-spacing is set.
    */
   g_object_class_install_property (object_class,
                                    PROP_PIXELS_INSIDE_WRAP,
@@ -594,6 +598,21 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      0,
                                                      G_MAXINT,
                                                      0,
+                                                     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkTextag:line-spacing:
+   *
+   * The line spacing factor that is applied between consecutive lines.
+   *
+   * Since: 4.4
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_LINE_SPACING,
+                                   g_param_spec_float ("line-spacing",
+                                                     P_("Linespacing"),
+                                                     P_("The factor for spacing between lines"),
+                                                     0.0, 10.0, 0.0,
                                                      GTK_PARAM_READWRITE));
 
   /**
@@ -935,6 +954,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("pixels-inside-wrap-set", PROP_PIXELS_INSIDE_WRAP_SET,
                 P_("Pixels inside wrap set"),
                 P_("Whether this tag affects the number of pixels between wrapped lines"));
+
+  ADD_SET_PROP ("line-spacing-set", PROP_LINE_SPACING_SET,
+                P_("Linespacing set"),
+                P_("Whether this tag affects spacing between wrapped lines"));
 
   ADD_SET_PROP ("strikethrough-set", PROP_STRIKETHROUGH_SET,
                 P_("Strikethrough set"),
@@ -1570,6 +1593,13 @@ gtk_text_tag_set_property (GObject      *object,
       priv->pixels_inside_wrap_set = TRUE;
       priv->values->pixels_inside_wrap = g_value_get_int (value);
       g_object_notify (object, "pixels-inside-wrap-set");
+      size_changed = TRUE;
+      break;
+
+    case PROP_LINE_SPACING:
+      priv->line_spacing_set = TRUE;
+      priv->values->line_spacing = g_value_get_float (value);
+      g_object_notify (object, "line-spacing-set");
       size_changed = TRUE;
       break;
 
