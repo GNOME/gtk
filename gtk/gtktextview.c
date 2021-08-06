@@ -57,6 +57,7 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkjoinedmenuprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 
 /**
  * GtkTextView:
@@ -7640,6 +7641,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                          GtkTextAttributes  *values)
 {
   GtkCssStyle *style;
+  GtkCssStyleProperty *prop;
   const GdkRGBA black = { 0, };
   const GdkRGBA *color;
 
@@ -7659,6 +7661,13 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
     pango_font_description_free (values->font);
 
   values->font = gtk_css_style_get_pango_font (style);
+
+  prop = _gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_LINE_HEIGHT);
+
+  if (style->font->line_height == _gtk_css_style_property_get_initial_value (prop))
+    values->line_spacing = 0.0;
+  else
+    values->line_spacing = _gtk_css_number_value_get (style->font->line_height, 1.0);
 }
 
 static void
