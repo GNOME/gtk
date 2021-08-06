@@ -40,6 +40,7 @@ GtkCssValue *   _gtk_css_string_value_parse         (GtkCssParser           *par
 
 const char *    _gtk_css_string_value_get           (const GtkCssValue      *string);
 
+GtkCssValue *   gtk_css_line_height_value_get_default (void);
 
 G_END_DECLS
 

@@ -1425,5 +1425,5 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_TEXT_SIZE,
                                           parse_line_height,
-                                          _gtk_css_ident_value_new ("normal"));
+                                          _gtk_css_value_ref (gtk_css_line_height_value_get_default ()));
 }

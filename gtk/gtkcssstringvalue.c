@@ -226,3 +226,13 @@ _gtk_css_ident_value_get (const GtkCssValue *value)
   return value->string;
 }
 
+GtkCssValue *
+gtk_css_line_height_value_get_default (void)
+{
+  static GtkCssValue *normal_line_height;
+
+  if (normal_line_height == NULL)
+    normal_line_height = _gtk_css_ident_value_new_take ("normal");
+
+  return normal_line_height;
+}
