@@ -78,6 +78,7 @@ gtk_private_sources = files([
   'gtkcssinheritvalue.c',
   'gtkcssinitialvalue.c',
   'gtkcsskeyframes.c',
+  'gtkcsslineheightvalue.c',
   'gtkcsslookup.c',
   'gtkcssnode.c',
   'gtkcssnodedeclaration.c',
