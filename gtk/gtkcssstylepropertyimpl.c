@@ -812,6 +812,25 @@ transform_origin_parse (GtkCssStyleProperty *property,
   return _gtk_css_position_value_parse (parser);
 }
 
+static GtkCssValue *
+parse_line_height (GtkCssStyleProperty *property,
+                   GtkCssParser        *parser)
+{
+  GtkCssValue *value = NULL;
+
+  if (gtk_css_parser_try_ident (parser, "normal"))
+    value = _gtk_css_ident_value_new ("normal");
+  else
+    value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER |
+                                                 GTK_CSS_PARSE_PERCENT |
+                                                 GTK_CSS_POSITIVE_ONLY);
+
+  if (value == NULL)
+    gtk_css_parser_error_syntax (parser, "Not a valid line-height value");
+
+  return value;
+}
+
 /*** REGISTRATION ***/
 
 G_STATIC_ASSERT (GTK_CSS_PROPERTY_COLOR == 0);
@@ -1401,4 +1420,10 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           parse_font_variation_settings,
                                           gtk_css_font_variations_value_new_default ());
+  gtk_css_style_property_register        ("line-height",
+                                          GTK_CSS_PROPERTY_LINE_HEIGHT,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT_SIZE,
+                                          parse_line_height,
+                                          _gtk_css_ident_value_new ("normal"));
 }

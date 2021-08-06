@@ -117,6 +117,8 @@ gtk_css_style_get_value (GtkCssStyle *style,
       return style->font->font_stretch;
     case GTK_CSS_PROPERTY_LETTER_SPACING:
       return style->font->letter_spacing;
+    case GTK_CSS_PROPERTY_LINE_HEIGHT:
+      return style->font->line_height;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
       return style->font_variant->text_decoration_line;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
