@@ -844,7 +844,7 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
 }
 
 static void
-gtk_label_update_layout_line_spacing (GtkLabel *self)
+gtk_label_update_layout (GtkLabel *self)
 {
   GtkCssStyle *style;
   GtkCssStyleProperty *prop;
@@ -854,9 +854,8 @@ gtk_label_update_layout_line_spacing (GtkLabel *self)
     return;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (self)));
-  prop = _gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_LINE_HEIGHT);
 
-  if (style->font->line_height == _gtk_css_style_property_get_initial_value (prop))
+  if (_gtk_css_value_equal (style->font->line_height, gtk_css_line_height_value_get_default ()))
     line_spacing = 0.0;
   else
     line_spacing = _gtk_css_number_value_get (style->font->line_height, 1.0);
@@ -876,7 +875,7 @@ gtk_label_css_changed (GtkWidget         *widget,
 
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_SIZE))
     {
-      gtk_label_update_layout_line_spacing (self);
+      gtk_label_update_layout (self);
     }
 
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS))
@@ -4010,7 +4009,7 @@ gtk_label_ensure_layout (GtkLabel *self)
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), self->text);
 
   gtk_label_update_layout_attributes (self, NULL);
-  gtk_label_update_layout_line_spacing (self);
+  gtk_label_update_layout (self);
 
   switch (self->jtype)
     {
