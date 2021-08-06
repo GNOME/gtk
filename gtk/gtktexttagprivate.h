@@ -71,6 +71,7 @@ struct _GtkTextTagPrivate
   guint pixels_above_lines_set : 1;
   guint pixels_below_lines_set : 1;
   guint pixels_inside_wrap_set : 1;
+  guint line_spacing_set : 1;
   guint tabs_set : 1;
   guint underline_set : 1;
   guint overline_set : 1;

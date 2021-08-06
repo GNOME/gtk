@@ -1277,6 +1277,8 @@ set_para_values (GtkTextLayout      *layout,
   pango_layout_set_spacing (display->layout,
                             style->pixels_inside_wrap * PANGO_SCALE);
 
+  pango_layout_set_line_spacing (display->layout, style->line_spacing);
+
   if (style->tabs)
     pango_layout_set_tabs (display->layout, style->tabs);
 
