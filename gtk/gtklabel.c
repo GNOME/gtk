@@ -53,6 +53,8 @@
 #include "gtkdragicon.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkjoinedmenuprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 
 #include <math.h>
 #include <string.h>
@@ -842,6 +844,27 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
 }
 
 static void
+gtk_label_update_layout_line_spacing (GtkLabel *self)
+{
+  GtkCssStyle *style;
+  GtkCssStyleProperty *prop;
+  float line_spacing;
+
+  if (self->layout == NULL)
+    return;
+
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (self)));
+  prop = _gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_LINE_HEIGHT);
+
+  if (style->font->line_height == _gtk_css_style_property_get_initial_value (prop))
+    line_spacing = 0.0;
+  else
+    line_spacing = _gtk_css_number_value_get (style->font->line_height, 1.0);
+
+  pango_layout_set_line_spacing (self->layout, line_spacing);
+}
+
+static void
 gtk_label_css_changed (GtkWidget         *widget,
                        GtkCssStyleChange *change)
 {
@@ -850,6 +873,11 @@ gtk_label_css_changed (GtkWidget         *widget,
   PangoAttrList *new_attrs = NULL;
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->css_changed (widget, change);
+
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_SIZE))
+    {
+      gtk_label_update_layout_line_spacing (self);
+    }
 
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS))
     {
@@ -860,7 +888,7 @@ gtk_label_css_changed (GtkWidget         *widget,
   else
     attrs_affected = FALSE;
 
-  if (change == NULL || attrs_affected  || (self->select_info && self->select_info->links))
+  if (change == NULL || attrs_affected || (self->select_info && self->select_info->links))
     {
       gtk_label_update_layout_attributes (self, new_attrs);
 
@@ -3982,6 +4010,7 @@ gtk_label_ensure_layout (GtkLabel *self)
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), self->text);
 
   gtk_label_update_layout_attributes (self, NULL);
+  gtk_label_update_layout_line_spacing (self);
 
   switch (self->jtype)
     {
