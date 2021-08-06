@@ -147,6 +147,8 @@ struct _GtkTextAttributes
   int pixels_below_lines;
   int pixels_inside_wrap;
 
+  float line_height;
+
   int letter_spacing;
 
   guint invisible : 1;
