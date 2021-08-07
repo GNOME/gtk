@@ -106,7 +106,7 @@ gtk_css_dimension_value_parse (GtkCssParser           *parser,
 
       if (i >= G_N_ELEMENTS (units))
         {
-          gtk_css_parser_error_syntax (parser, "'%s' is not a valid unit.", token->dimension.dimension);
+          gtk_css_parser_error_syntax (parser, "'%s' is not a valid unit", token->dimension.dimension);
           return NULL;
         }
 
@@ -122,7 +122,7 @@ gtk_css_dimension_value_parse (GtkCssParser           *parser,
   if (flags & GTK_CSS_POSITIVE_ONLY &&
       number < 0)
     {
-      gtk_css_parser_error_value (parser, "negative values are not allowed.");
+      gtk_css_parser_error_value (parser, "Negative values are not allowed");
       return NULL;
     }
 
