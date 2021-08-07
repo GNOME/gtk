@@ -84,6 +84,12 @@ static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
+
+/* Fast way of knowing that further checks are necessary because at least
+ * one inspector window has been constructed. */
+static gboolean any_inspector_window_constructed = FALSE;
+
+
 static gboolean
 set_selected_object (GtkInspectorWindow *iw,
                      GObject            *selected)
@@ -286,6 +292,7 @@ gtk_inspector_window_constructed (GObject *object)
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->constructed (object);
 
   g_object_set_data (G_OBJECT (iw->inspected_display), "-gtk-inspector", iw);
+  any_inspector_window_constructed = TRUE;
 
   gtk_inspector_object_tree_set_display (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), iw->inspected_display);
   gtk_inspector_css_editor_set_display (GTK_INSPECTOR_CSS_EDITOR (iw->css_editor), iw->inspected_display);
@@ -836,6 +843,9 @@ gtk_inspector_is_recording (GtkWidget *widget)
 {
   GtkInspectorWindow *iw;
 
+  if (!any_inspector_window_constructed)
+    return FALSE;
+
   iw = gtk_inspector_window_get_for_display (gtk_widget_get_display (widget));
   if (iw == NULL)
     return FALSE;
@@ -852,6 +862,9 @@ gtk_inspector_handle_event (GdkEvent *event)
 {
   GtkInspectorWindow *iw;
   gboolean handled = FALSE;
+
+  if (!any_inspector_window_constructed)
+    return FALSE;
 
   iw = gtk_inspector_window_get_for_display (gdk_event_get_display (event));
   if (iw == NULL)
