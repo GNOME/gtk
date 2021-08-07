@@ -1641,7 +1641,10 @@ add_text_attrs (GtkTextLayout      *layout,
 #if PANGO_VERSION_CHECK(1, 49, 0)
   if (style->line_height != 0.0)
     {
-      attr = pango_attr_line_height_new (style->line_height);
+      if (style->line_height_is_absolute)
+        attr = pango_attr_line_height_new_absolute (style->line_height * PANGO_SCALE);
+      else
+        attr = pango_attr_line_height_new (style->line_height);
       attr->start_index = start;
       attr->end_index = start + byte_count;
 
