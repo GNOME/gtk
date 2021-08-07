@@ -4689,6 +4689,12 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           INT_ATTR (letter_spacing);
           break;
 
+#if PANGO_VERSION_CHECK(1, 49, 0)
+        case PANGO_ATTR_LINE_HEIGHT:
+        case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
+          break;
+#endif
+
         case PANGO_ATTR_FONT_FEATURES:
           STRING_ATTR (font_features);
           break;

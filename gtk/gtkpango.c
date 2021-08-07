@@ -249,6 +249,16 @@ attribute_from_text (GtkBuilder  *builder,
                                                      color->blue * 65535);
         }
       break;
+#if PANGO_VERSION_CHECK(1, 49, 0)
+    case PANGO_ATTR_LINE_HEIGHT:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_DOUBLE, value, &val, error))
+        attribute = pango_attr_line_height_new (g_value_get_double (&val));
+      break;
+    case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_line_height_new_absolute (g_value_get_int (&val) * PANGO_SCALE);
+      break;
+#endif
     case PANGO_ATTR_INVALID:
     default:
       break;
