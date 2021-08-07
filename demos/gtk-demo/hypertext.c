@@ -61,12 +61,26 @@ show_page (GtkTextView *text_view,
            int          page)
 {
   GtkTextBuffer *buffer;
-  GtkTextIter iter;
+  GtkTextIter iter, start;
+  GtkTextMark *mark;
   GtkWidget *child;
   GtkTextChildAnchor *anchor;
   GtkEventController *controller;
+  GtkTextTag *bold, *mono, *nobreaks;
 
   buffer = gtk_text_view_get_buffer (text_view);
+
+  bold = gtk_text_buffer_create_tag (buffer, NULL,
+                                     "weight", PANGO_WEIGHT_BOLD,
+                                     "scale", PANGO_SCALE_X_LARGE,
+                                     NULL);
+  mono = gtk_text_buffer_create_tag (buffer, NULL,
+                                     "family", "monospace",
+                                     NULL);
+  nobreaks = gtk_text_buffer_create_tag (buffer, NULL,
+                                         "allow-breaks", FALSE,
+                                         NULL);
+
   gtk_text_buffer_set_text (buffer, "", 0);
   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
   gtk_text_buffer_begin_irreversible_action (buffer);
@@ -104,17 +118,22 @@ show_page (GtkTextView *text_view,
     }
   else if (page == 2)
     {
-      GtkTextTag *tag;
+      mark = gtk_text_buffer_create_mark (buffer, "mark", &iter, TRUE);
 
-      tag = gtk_text_buffer_create_tag (buffer, NULL,
-                                        "weight", PANGO_WEIGHT_BOLD,
-                                        "scale", PANGO_SCALE_X_LARGE,
-                                        NULL);
-      gtk_text_buffer_insert_with_tags (buffer, &iter, "tag", -1, tag, NULL);
-      tag = gtk_text_buffer_create_tag (buffer, NULL,
-                                        "family", "monospace",
-                                        NULL);
-      gtk_text_buffer_insert_with_tags (buffer, &iter, " / tag / ", -1, tag, NULL);
+      gtk_text_buffer_insert_with_tags (buffer, &iter, "tag", -1, bold, NULL);
+      gtk_text_buffer_insert (buffer, &iter, " /", -1);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &start, mark);
+      gtk_text_buffer_apply_tag (buffer, nobreaks, &start, &iter);
+      gtk_text_buffer_insert (buffer, &iter, " ", -1);
+
+      gtk_text_buffer_move_mark (buffer, mark, &iter);
+      gtk_text_buffer_insert_with_tags (buffer, &iter, "tag", -1, mono, NULL);
+      gtk_text_buffer_insert (buffer, &iter, " /", -1);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &start, mark);
+      gtk_text_buffer_apply_tag (buffer, nobreaks, &start, &iter);
+      gtk_text_buffer_insert (buffer, &iter, " ", -1);
 
       anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
       child = gtk_image_new_from_icon_name ("audio-volume-high-symbolic");
@@ -132,20 +151,26 @@ show_page (GtkTextView *text_view,
           "behavior of mouse and key presses, “lock” a range of text so the "
           "user can't edit it, or countless other things.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
+
+      gtk_text_buffer_delete_mark (buffer, mark);
     }
   else if (page == 3)
     {
-      GtkTextTag *tag;
+      mark = gtk_text_buffer_create_mark (buffer, "mark", &iter, TRUE);
 
-      tag = gtk_text_buffer_create_tag (buffer, NULL,
-                                        "weight", PANGO_WEIGHT_BOLD,
-                                        "scale", PANGO_SCALE_X_LARGE,
-                                        NULL);
-      gtk_text_buffer_insert_with_tags (buffer, &iter, "hypertext", -1, tag, NULL);
-      tag = gtk_text_buffer_create_tag (buffer, NULL,
-                                        "family", "monospace",
-                                        NULL);
-      gtk_text_buffer_insert_with_tags (buffer, &iter, " / ˈhaɪ pərˌtɛkst / ", -1, tag, NULL);
+      gtk_text_buffer_insert_with_tags (buffer, &iter, "hypertext", -1, bold, NULL);
+      gtk_text_buffer_insert (buffer, &iter, " /", -1);
+
+      gtk_text_buffer_get_iter_at_mark (buffer, &start, mark);
+      gtk_text_buffer_apply_tag (buffer, nobreaks, &start, &iter);
+      gtk_text_buffer_insert (buffer, &iter, " ", -1);
+
+      gtk_text_buffer_move_mark (buffer, mark, &iter);
+      gtk_text_buffer_insert_with_tags (buffer, &iter, "ˈhaɪ pərˌtɛkst", -1, mono, NULL);
+      gtk_text_buffer_insert (buffer, &iter, " /", -1);
+      gtk_text_buffer_get_iter_at_mark (buffer, &start, mark);
+      gtk_text_buffer_apply_tag (buffer, nobreaks, &start, &iter);
+      gtk_text_buffer_insert (buffer, &iter, " ", -1);
 
       anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
       child = gtk_image_new_from_icon_name ("audio-volume-high-symbolic");
@@ -159,6 +184,8 @@ show_page (GtkTextView *text_view,
           "Machine-readable text that is not sequential but is organized "
           "so that related items of information are connected.\n", -1);
       insert_link (buffer, &iter, "Go back", 1);
+
+      gtk_text_buffer_delete_mark (buffer, mark);
     }
   gtk_text_buffer_end_irreversible_action (buffer);
 }
@@ -358,7 +385,7 @@ do_hypertext (GtkWidget *do_widget)
 
       sw = gtk_scrolled_window_new ();
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                      GTK_POLICY_AUTOMATIC,
+                                      GTK_POLICY_NEVER,
                                       GTK_POLICY_AUTOMATIC);
       gtk_window_set_child (GTK_WINDOW (window), sw);
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), view);
