@@ -1010,7 +1010,7 @@ msgstr "Тэкст можа не паказвацца ўнутры <%s>"
 #.
 #: gtk/gtkcalendar.c:766
 msgid "calendar:MY"
-msgstr "каляндар:MY"
+msgstr ""
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
