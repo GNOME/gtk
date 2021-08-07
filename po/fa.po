@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-01-21 18:17+0000\n"
-"PO-Revision-Date: 2021-01-22 14:55+0000\n"
+"POT-Creation-Date: 2021-08-06 20:30+0000\n"
+"PO-Revision-Date: 2021-08-07 19:13+0430\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -25,51 +25,51 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Generator: Poedit 2.4.2\n"
 
-#: gdk/broadway/gdkbroadway-server.c:133
+#: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "نوع نمایشگر broadway پشتیبانی نمی‌شود: %s"
 
-#: gdk/gdkclipboard.c:239
+#: gdk/gdkclipboard.c:231
 msgid "This clipboard cannot store data."
 msgstr "اینت تخته‌گیره نمی‌تواند داده ذخیره کند."
 
-#: gdk/gdkclipboard.c:294 gdk/gdkclipboard.c:789 gdk/gdkclipboard.c:1087
+#: gdk/gdkclipboard.c:286 gdk/gdkclipboard.c:792 gdk/gdkclipboard.c:1092
 msgid "Cannot read from empty clipboard."
 msgstr "نمی‌توان از تخته‌گیرهٔ خالی خواند."
 
-#: gdk/gdkclipboard.c:325 gdk/gdkclipboard.c:1137 gdk/gdkdrag.c:638
+#: gdk/gdkclipboard.c:317 gdk/gdkclipboard.c:1142 gdk/gdkdrag.c:632
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "هیچ قالب سازگاری برای انتقال محتویات تخته‌گیره وجود ندارد."
 
-#: gdk/gdkcontentprovider.c:108 gdk/gdkcontentproviderimpl.c:311
-#: gdk/gdkcontentproviderimpl.c:531
+#: gdk/gdkcontentprovider.c:105 gdk/gdkcontentproviderimpl.c:313
+#: gdk/gdkcontentproviderimpl.c:532
 #, c-format
 msgid "Cannot provide contents as “%s”"
 msgstr "نمی‌توان محتوا را به شکل «%s» فراهم کرد"
 
-#: gdk/gdkcontentprovider.c:129
+#: gdk/gdkcontentprovider.c:126
 #, c-format
 msgid "Cannot provide contents as %s"
 msgstr "نمی‌توان محتوا را به شکل %s فراهم کرد"
 
-#: gdk/gdkdrop.c:118
+#: gdk/gdkdrop.c:130
 msgid "Drag’n’drop from other applications is not supported."
 msgstr "کشیدن و رها کردن از دیگر برنامه‌ها پشتیبانی نمی‌شود."
 
-#: gdk/gdkdrop.c:151
+#: gdk/gdkdrop.c:163
 msgid "No compatible formats to transfer contents."
 msgstr "هیچ قالب سازگاری برای انتقال محتویات وجود ندارد."
 
-#: gdk/gdksurface.c:1102
+#: gdk/gdksurface.c:1118
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "پشتیبانی از GL به دست GDK_DEBUG از کار افتاده"
 
-#: gdk/gdksurface.c:1113
+#: gdk/gdksurface.c:1129
 msgid "The current backend does not support OpenGL"
 msgstr "پسانه در حال حاضر از OpenGL پشتیبانی نمی‌کند"
 
-#: gdk/gdksurface.c:1221
+#: gdk/gdksurface.c:1235
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "پشتیبانی از ولکان به دست GDK_DEBUG از کار افتاده"
 
@@ -149,12 +149,12 @@ msgctxt "keyboard label"
 msgid "Down"
 msgstr "پایین"
 
-#: gdk/keyname-table.h:6856 gtk/gtkshortcutlabel.c:214
+#: gdk/keyname-table.h:6856 gtk/gtkshortcutlabel.c:212
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "صفحه‌_بالا"
 
-#: gdk/keyname-table.h:6857 gtk/gtkshortcutlabel.c:217
+#: gdk/keyname-table.h:6857 gtk/gtkshortcutlabel.c:215
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "صفحه‌_پایین"
@@ -450,152 +450,152 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "تعلیق"
 
-#: gdk/macos/gdkmacosclipboard.c:251 gdk/wayland/gdkclipboard-wayland.c:231
+#: gdk/macos/gdkmacosclipboard.c:252 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:1279 gdk/win32/gdkdrop-win32.c:1324
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:196
+#: gdk/win32/gdkdrop-win32.c:1282 gdk/win32/gdkdrop-win32.c:1327
+#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:237
 msgid "No compatible transfer format found"
 msgstr "هیچ قالب انتقال سازگاری پیدا نشد"
 
-#: gdk/macos/gdkmacosclipboard.c:337
+#: gdk/macos/gdkmacosclipboard.c:338
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "شکست در رمزگشایی محتوا با mime از گونهٔ %s"
 
-#: gdk/wayland/gdkglcontext-wayland.c:151 gdk/win32/gdkglcontext-win32.c:934
-#: gdk/win32/gdkglcontext-win32.c:975 gdk/x11/gdkglcontext-x11.c:581
+#: gdk/wayland/gdkglcontext-wayland.c:191 gdk/win32/gdkglcontext-win32.c:944
+#: gdk/win32/gdkglcontext-win32.c:985 gdk/x11/gdkglcontext-x11.c:581
 #: gdk/x11/gdkglcontext-x11.c:631
 msgid "Unable to create a GL context"
 msgstr "امکان ساخت زمینه مناسب برای GL نبود"
 
-#: gdk/wayland/gdkglcontext-wayland.c:423 gdk/win32/gdkglcontext-win32.c:775
-#: gdk/win32/gdkglcontext-win32.c:785 gdk/win32/gdkglcontext-win32.c:900
+#: gdk/wayland/gdkglcontext-wayland.c:463 gdk/win32/gdkglcontext-win32.c:785
+#: gdk/win32/gdkglcontext-win32.c:795 gdk/win32/gdkglcontext-win32.c:910
 #: gdk/x11/gdkglcontext-x11.c:879
 msgid "No available configurations for the given pixel format"
 msgstr "هیچ پیکربندی برای قالب نقطه‌ای ارائه شده موجود نیست"
 
-#: gdk/wayland/gdkglcontext-wayland.c:448 gdk/win32/gdkglcontext-win32.c:1048
+#: gdk/wayland/gdkglcontext-wayland.c:488 gdk/win32/gdkglcontext-win32.c:1058
 #: gdk/x11/gdkglcontext-x11.c:1182
 msgid "No GL implementation is available"
 msgstr "هیچ پیاده‌سازی GLای پیدا نشد"
 
-#: gdk/wayland/gdkglcontext-wayland.c:456
+#: gdk/wayland/gdkglcontext-wayland.c:496
 msgid "Core GL is not available on EGL implementation"
 msgstr "Core GL روی پیاده‌سازی EGL موجود نیست"
 
-#: gdk/win32/gdkclipdrop-win32.c:717
+#: gdk/win32/gdkclipdrop-win32.c:718
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr "نتوانست مدّعی مالکیت تخته‌گیره شود. زمان ‪OpenClipboard()‬ تمام شد."
 
-#: gdk/win32/gdkclipdrop-win32.c:727
+#: gdk/win32/gdkclipdrop-win32.c:728
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr "نتوانست مدّعی مالکیت تخته‌گیره شود. فرایند دیگری پیش از ما مدّعیش شد."
 
-#: gdk/win32/gdkclipdrop-win32.c:741
+#: gdk/win32/gdkclipdrop-win32.c:742
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr "نتوانست مدّعی مالکیت تخته‌گیره شود. ‪OpenClipboard()‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:753
+#: gdk/win32/gdkclipdrop-win32.c:754
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr "نتوانست مدّعی مالکیت تخته‌گیره شود. ‪EmptyClipboard()‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:796
+#: gdk/win32/gdkclipdrop-win32.c:797
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "نتوانست دادهٔ تخته‌گیره را تنظیم کند. زمان ‪OpenClipboard()‬ تمام شد."
 
-#: gdk/win32/gdkclipdrop-win32.c:806 gdk/win32/gdkclipdrop-win32.c:837
+#: gdk/win32/gdkclipdrop-win32.c:807 gdk/win32/gdkclipdrop-win32.c:838
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr "نتوانست دادهٔ تخته‌گیره را تنظیم کند. فرایند دیگری پیش از ما مدّعیش شد."
 
-#: gdk/win32/gdkclipdrop-win32.c:820
+#: gdk/win32/gdkclipdrop-win32.c:821
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "نتوانست دادهٔ تخته‌گیره را تنظیم کند. ‪OpenClipboard()‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:872
+#: gdk/win32/gdkclipdrop-win32.c:873
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. ‪GlobalLock(0x%p)‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:883
+#: gdk/win32/gdkclipdrop-win32.c:884
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. ‪GlobalSize(0x%p)‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:896
+#: gdk/win32/gdkclipdrop-win32.c:897
 #, c-format
 msgid "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. تخصیص %s بایت برای ذخیرهٔ داده شکست خورد."
 
-#: gdk/win32/gdkclipdrop-win32.c:928
+#: gdk/win32/gdkclipdrop-win32.c:929
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. زمان ‪OpenClipboard()‬ تمام شد."
 
-#: gdk/win32/gdkclipdrop-win32.c:938
+#: gdk/win32/gdkclipdrop-win32.c:939
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "نتوانست دادهٔ تخته‌گیره را تنظیم کند. مالکیت تخته‌گیره تغییر کرد."
 
-#: gdk/win32/gdkclipdrop-win32.c:948
+#: gdk/win32/gdkclipdrop-win32.c:949
 #, c-format
 msgid "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
-"نتوانست دادهٔ تخته‌گیره را بگیرد. داده‌ّای تخته‌گیره پیش از این که بتوانیم بگیریمشان عوض "
-"شدند."
+"نتوانست دادهٔ تخته‌گیره را بگیرد. داده‌ّای تخته‌گیره پیش از این که بتوانیم بگیریمشان "
+"عوض شدند."
 
-#: gdk/win32/gdkclipdrop-win32.c:965
+#: gdk/win32/gdkclipdrop-win32.c:966
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. ‪OpenClipboard()‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:990
+#: gdk/win32/gdkclipdrop-win32.c:991
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. هیچ قالب انتقال سازگاری پیدا نشد."
 
-#: gdk/win32/gdkclipdrop-win32.c:1000
+#: gdk/win32/gdkclipdrop-win32.c:1001
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. ‪GetClipboardData()‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1210
+#: gdk/win32/gdkdrop-win32.c:1213
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "نتوانست دادهٔ ک‌ور را بگیرد. ‪GlobalLock(0x%p)‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1219
+#: gdk/win32/gdkdrop-win32.c:1222
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "نتوانست دادهٔ ک‌ور را بگیرد. ‪GlobalSize(0x%p)‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1230
+#: gdk/win32/gdkdrop-win32.c:1233
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr "نتوانست دادهٔ ک‌ور را بگیرد.. تخصیص %s بایت برای ذخیرهٔ داده شکست خورد."
 
-#: gdk/win32/gdkdrop-win32.c:1298
+#: gdk/win32/gdkdrop-win32.c:1301
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "سطح GTK 0x%p به عنوان یک مقصد رها کردن ثبت نشده"
 
-#: gdk/win32/gdkdrop-win32.c:1305
+#: gdk/win32/gdkdrop-win32.c:1308
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "رکورد زمینهٔ مقصد  0x%p هیچ شی داده‌ای ندارد"
 
-#: gdk/win32/gdkdrop-win32.c:1343
+#: gdk/win32/gdkdrop-win32.c:1346
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) شکست خورد. 0x%lx را برگرداند"
 
-#: gdk/win32/gdkdrop-win32.c:1375
+#: gdk/win32/gdkdrop-win32.c:1378
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "شکست در تغییر شکل قالب W32 دادهٔ ک‌ور 0x%x به %p (%s)"
@@ -608,7 +608,8 @@ msgstr "در حال نوشتن روی جریان بسته‌شده"
 msgid "g_try_realloc () failed"
 msgstr "g_try_realloc () شکست خورد"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:94 gdk/win32/gdkhdataoutputstream-win32.c:232
+#: gdk/win32/gdkhdataoutputstream-win32.c:94
+#: gdk/win32/gdkhdataoutputstream-win32.c:232
 msgid "GlobalReAlloc() failed: "
 msgstr "GlobalReAlloc() شکست خورد: "
 
@@ -633,17 +634,17 @@ msgstr "GlobalLock() شکست خورد: "
 msgid "GlobalAlloc() failed: "
 msgstr "GlobalAlloc() شکست خورد: "
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:290
+#: gdk/x11/gdkapplaunchcontext-x11.c:293
 #, c-format
 msgid "Starting “%s”"
 msgstr "در حال آغاز %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:303
+#: gdk/x11/gdkapplaunchcontext-x11.c:306
 #, c-format
 msgid "Opening “%s”"
 msgstr "درحال گشودن «%s»."
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -688,105 +689,105 @@ msgstr "قالب نامعتبر در تبدیل متن ترکیبی."
 msgid "Unsupported encoding “%s”"
 msgstr "رمزنگاری پشتیبانی‌نشدهٔ %s"
 
-#: gtk/a11y/gtkatspiaction.c:243
+#: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
 msgid "Click"
 msgstr "کلیک"
 
-#: gtk/a11y/gtkatspiaction.c:244
+#: gtk/a11y/gtkatspiaction.c:240
 msgctxt "accessibility"
 msgid "Clicks the button"
 msgstr "کلیک کردن دکمخ"
 
-#: gtk/a11y/gtkatspiaction.c:294
+#: gtk/a11y/gtkatspiaction.c:290
 msgctxt "accessibility"
 msgid "Toggle"
 msgstr "تغییر وضعیت"
 
-#: gtk/a11y/gtkatspiaction.c:295
+#: gtk/a11y/gtkatspiaction.c:291
 msgctxt "accessibility"
 msgid "Toggles the switch"
 msgstr "تغییر وضعیت کلید"
 
-#: gtk/a11y/gtkatspiaction.c:375
+#: gtk/a11y/gtkatspiaction.c:371
 msgctxt "accessibility"
 msgid "Select"
 msgstr "گزینش"
 
-#: gtk/a11y/gtkatspiaction.c:376
+#: gtk/a11y/gtkatspiaction.c:372
 msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "گزینش رنگ"
 
-#: gtk/a11y/gtkatspiaction.c:383 gtk/a11y/gtkatspiaction.c:443
-#: gtk/a11y/gtkatspiaction.c:499 gtk/a11y/gtkatspiaction.c:607
-#: gtk/a11y/gtkatspiaction.c:694
+#: gtk/a11y/gtkatspiaction.c:379 gtk/a11y/gtkatspiaction.c:439
+#: gtk/a11y/gtkatspiaction.c:495 gtk/a11y/gtkatspiaction.c:603
+#: gtk/a11y/gtkatspiaction.c:690
 msgctxt "accessibility"
 msgid "Activate"
 msgstr "فعّال‌سازی"
 
-#: gtk/a11y/gtkatspiaction.c:384
+#: gtk/a11y/gtkatspiaction.c:380
 msgctxt "accessibility"
 msgid "Activates the color"
 msgstr "فعّال‌سازی رنگ"
 
-#: gtk/a11y/gtkatspiaction.c:391
+#: gtk/a11y/gtkatspiaction.c:387
 msgctxt "accessibility"
 msgid "Customize"
 msgstr "سفارشی‌سازی"
 
-#: gtk/a11y/gtkatspiaction.c:392
+#: gtk/a11y/gtkatspiaction.c:388
 msgctxt "accessibility"
 msgid "Customizes the color"
 msgstr "سفارشی‌سازی رنگ"
 
-#: gtk/a11y/gtkatspiaction.c:444
+#: gtk/a11y/gtkatspiaction.c:440
 msgctxt "accessibility"
 msgid "Activates the expander"
 msgstr "فعّال‌سازی گسترنده"
 
-#: gtk/a11y/gtkatspiaction.c:500 gtk/a11y/gtkatspiaction.c:608
-#: gtk/a11y/gtkatspiaction.c:695
+#: gtk/a11y/gtkatspiaction.c:496 gtk/a11y/gtkatspiaction.c:604
+#: gtk/a11y/gtkatspiaction.c:691
 msgctxt "accessibility"
 msgid "Activates the entry"
 msgstr "فعّال‌سازی ورودی"
 
-#: gtk/a11y/gtkatspiaction.c:507
+#: gtk/a11y/gtkatspiaction.c:503
 msgctxt "accessibility"
 msgid "Activate primary icon"
 msgstr "فعّال‌سازی نقشک نخستین"
 
-#: gtk/a11y/gtkatspiaction.c:508
+#: gtk/a11y/gtkatspiaction.c:504
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
 msgstr "فعّال‌سازی نقشک نخستین ورودی"
 
-#: gtk/a11y/gtkatspiaction.c:515
+#: gtk/a11y/gtkatspiaction.c:511
 msgctxt "accessibility"
 msgid "Activate secondary icon"
 msgstr "فعّال‌سازی نقشک ثانویه"
 
-#: gtk/a11y/gtkatspiaction.c:516
+#: gtk/a11y/gtkatspiaction.c:512
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
 msgstr "فعّال‌سازی نقشک ثانویهٔ ورودی"
 
-#: gtk/a11y/gtkatspiaction.c:615
+#: gtk/a11y/gtkatspiaction.c:611
 msgctxt "accessibility"
 msgid "Peek"
 msgstr "نگاه"
 
-#: gtk/a11y/gtkatspiaction.c:616
+#: gtk/a11y/gtkatspiaction.c:612
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
 msgstr "نمایش محتوای ورودی گذرواژه"
 
-#: gtk/a11y/gtkatspiaction.c:702
+#: gtk/a11y/gtkatspiaction.c:698
 msgctxt "accessibility"
 msgid "Clear"
 msgstr "پاک‌سازی"
 
-#: gtk/a11y/gtkatspiaction.c:703
+#: gtk/a11y/gtkatspiaction.c:699
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "پاک‌سازی محتوای ورودی"
@@ -796,122 +797,122 @@ msgctxt "accessibility"
 msgid "application"
 msgstr "برنامه"
 
-#: gtk/css/gtkcssdataurl.c:70
+#: gtk/css/gtkcssdataurl.c:69
 #, c-format
 msgid "Not a data: URL"
 msgstr "داده نیست: URL"
 
-#: gtk/css/gtkcssdataurl.c:83
+#: gtk/css/gtkcssdataurl.c:82
 #, c-format
 msgid "Malformed data: URL"
 msgstr "دادهٔ بدریخت: URL"
 
-#: gtk/css/gtkcssdataurl.c:141
+#: gtk/css/gtkcssdataurl.c:140
 #, c-format
 msgid "Could not unescape string"
 msgstr "نمی‌توان رشته را ناگریز کرد"
 
-#: gtk/gtkaboutdialog.c:120 gtk/ui/gtkaboutdialog.ui:163
+#: gtk/gtkaboutdialog.c:124 gtk/ui/gtkaboutdialog.ui:163
 msgid "License"
 msgstr "پروانه"
 
-#: gtk/gtkaboutdialog.c:121
+#: gtk/gtkaboutdialog.c:125
 msgid "Custom License"
 msgstr "پروانهٔ سفارشی"
 
-#: gtk/gtkaboutdialog.c:122
+#: gtk/gtkaboutdialog.c:126
 msgid "GNU General Public License, version 2 or later"
 msgstr "نگارش ۲ یا بالاتر پروانهٔ جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:123
+#: gtk/gtkaboutdialog.c:127
 msgid "GNU General Public License, version 3 or later"
 msgstr "نگارش ۳ یا بالاتر پروانهٔ جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:128
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "نگارش ۲٫۱ یا بالاتر پروانهٔ کم‌تر جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:129
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "نگارش ۳ یا بالاتر پروانهٔ کم‌تر جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:130
 msgid "BSD 2-Clause License"
 msgstr "پروانهٔ دو بندی BSD"
 
-#: gtk/gtkaboutdialog.c:127
+#: gtk/gtkaboutdialog.c:131
 msgid "The MIT License (MIT)"
 msgstr "پروانهٔ MIT"
 
-#: gtk/gtkaboutdialog.c:128
+#: gtk/gtkaboutdialog.c:132
 msgid "Artistic License 2.0"
 msgstr "پروانهٔ Artistic 2.0"
 
-#: gtk/gtkaboutdialog.c:129
+#: gtk/gtkaboutdialog.c:133
 msgid "GNU General Public License, version 2 only"
 msgstr "فقط نگارش ۲ پروانهٔ جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:130
+#: gtk/gtkaboutdialog.c:134
 msgid "GNU General Public License, version 3 only"
 msgstr "فقط نگارش ۳ پروانهٔ جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:131
+#: gtk/gtkaboutdialog.c:135
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "فقط نگارش ۲٫۱ پروانهٔ کم‌تر جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:132
+#: gtk/gtkaboutdialog.c:136
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "فقط نگارش ۳ پروانهٔ کم‌تر جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:133
+#: gtk/gtkaboutdialog.c:137
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "نگارش ۳ یا بالاتر پروانهٔ Affero جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:134
+#: gtk/gtkaboutdialog.c:138
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "فقط نگارش ۳ پروانهٔ Affero جامع همگانی گنو"
 
-#: gtk/gtkaboutdialog.c:135
+#: gtk/gtkaboutdialog.c:139
 msgid "BSD 3-Clause License"
 msgstr "پروانهٔ سه‌بندی BSD"
 
-#: gtk/gtkaboutdialog.c:136
+#: gtk/gtkaboutdialog.c:140
 msgid "Apache License, Version 2.0"
 msgstr "نگارش ۲٫۰ پروانهٔ آپاچی"
 
-#: gtk/gtkaboutdialog.c:137
+#: gtk/gtkaboutdialog.c:141
 msgid "Mozilla Public License 2.0"
 msgstr "پروانهٔ عمومی موزیلا ۲٫۰"
 
-#: gtk/gtkaboutdialog.c:946
+#: gtk/gtkaboutdialog.c:968
 msgid "Website"
 msgstr "پایگاه وب"
 
-#: gtk/gtkaboutdialog.c:983 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1005 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "دربارهٔ %s"
 
-#: gtk/gtkaboutdialog.c:2087
+#: gtk/gtkaboutdialog.c:2114
 msgid "Created by"
 msgstr "ایجاد شده به دست"
 
-#: gtk/gtkaboutdialog.c:2090
+#: gtk/gtkaboutdialog.c:2117
 msgid "Documented by"
 msgstr "مستند شده به دست"
 
-#: gtk/gtkaboutdialog.c:2100
+#: gtk/gtkaboutdialog.c:2127
 msgid "Translated by"
 msgstr "بازگردانی به دست"
 
-#: gtk/gtkaboutdialog.c:2105
+#: gtk/gtkaboutdialog.c:2132
 msgid "Design by"
 msgstr "طرّاحی به دست"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2268
+#: gtk/gtkaboutdialog.c:2297
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -925,7 +926,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:834 gtk/gtkshortcutlabel.c:102 gtk/gtkshortcutlabel.c:138
+#: gtk/gtkaccelgroup.c:829 gtk/gtkshortcutlabel.c:100 gtk/gtkshortcutlabel.c:136
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "تبدیل"
@@ -935,7 +936,7 @@ msgstr "تبدیل"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:853 gtk/gtkshortcutlabel.c:105 gtk/gtkshortcutlabel.c:140
+#: gtk/gtkaccelgroup.c:848 gtk/gtkshortcutlabel.c:103 gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "مهار"
@@ -945,7 +946,7 @@ msgstr "مهار"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:872 gtk/gtkshortcutlabel.c:108 gtk/gtkshortcutlabel.c:142
+#: gtk/gtkaccelgroup.c:867 gtk/gtkshortcutlabel.c:106 gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "دگرساز"
@@ -955,7 +956,7 @@ msgstr "دگرساز"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:890 gtk/gtkshortcutlabel.c:114 gtk/gtkshortcutlabel.c:144
+#: gtk/gtkaccelgroup.c:885 gtk/gtkshortcutlabel.c:112 gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "سوپر"
@@ -965,7 +966,7 @@ msgstr "سوپر"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:904 gtk/gtkshortcutlabel.c:117 gtk/gtkshortcutlabel.c:146
+#: gtk/gtkaccelgroup.c:899 gtk/gtkshortcutlabel.c:115 gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "فوق"
@@ -975,7 +976,7 @@ msgstr "فوق"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:919 gtk/gtkshortcutlabel.c:111 gtk/gtkshortcutlabel.c:148
+#: gtk/gtkaccelgroup.c:914 gtk/gtkshortcutlabel.c:109 gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "فرا"
@@ -984,443 +985,443 @@ msgstr "فرا"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:939
+#: gtk/gtkaccelgroup.c:934
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "ص‌ش"
 
-#: gtk/gtkaccelgroup.c:946
+#: gtk/gtkaccelgroup.c:941
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "فاصله"
 
-#: gtk/gtkaccelgroup.c:949 gtk/gtkshortcutlabel.c:173
+#: gtk/gtkaccelgroup.c:944 gtk/gtkshortcutlabel.c:171
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "ممیز وارونه"
 
-#: gtk/gtkaccessible.c:558
+#: gtk/gtkaccessible.c:561
 msgctxt "accessibility"
 msgid "alert"
 msgstr "هشدار"
 
-#: gtk/gtkaccessible.c:559
+#: gtk/gtkaccessible.c:562
 msgctxt "accessibility"
 msgid "alert dialog"
 msgstr "گفت‌وگوی هشدار"
 
-#: gtk/gtkaccessible.c:560
+#: gtk/gtkaccessible.c:563
 msgctxt "accessibility"
 msgid "banner"
 msgstr "بیرق"
 
-#: gtk/gtkaccessible.c:561
+#: gtk/gtkaccessible.c:564
 msgctxt "accessibility"
 msgid "button"
 msgstr "دکمه"
 
-#: gtk/gtkaccessible.c:562
+#: gtk/gtkaccessible.c:565
 msgctxt "accessibility"
 msgid "caption"
 msgstr "عنوان"
 
-#: gtk/gtkaccessible.c:563
+#: gtk/gtkaccessible.c:566
 msgctxt "accessibility"
 msgid "cell"
 msgstr "سلول"
 
-#: gtk/gtkaccessible.c:564
+#: gtk/gtkaccessible.c:567
 msgctxt "accessibility"
 msgid "checkbox"
 msgstr "جعبهٔ تیکی"
 
-#: gtk/gtkaccessible.c:565
+#: gtk/gtkaccessible.c:568
 msgctxt "accessibility"
 msgid "column header"
 msgstr "سرایند ستون"
 
-#: gtk/gtkaccessible.c:566
+#: gtk/gtkaccessible.c:569
 msgctxt "accessibility"
 msgid "combo box"
 msgstr "جعبهٔ بازشونده"
 
-#: gtk/gtkaccessible.c:567
+#: gtk/gtkaccessible.c:570
 msgctxt "accessibility"
 msgid "command"
 msgstr "فرمان"
 
-#: gtk/gtkaccessible.c:568
+#: gtk/gtkaccessible.c:571
 msgctxt "accessibility"
 msgid "composite"
 msgstr "مرکب"
 
-#: gtk/gtkaccessible.c:569
+#: gtk/gtkaccessible.c:572
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "گفت‌وگو"
 
-#: gtk/gtkaccessible.c:570
+#: gtk/gtkaccessible.c:573
 msgctxt "accessibility"
 msgid "document"
 msgstr "سند"
 
-#: gtk/gtkaccessible.c:571
+#: gtk/gtkaccessible.c:574
 msgctxt "accessibility"
 msgid "feed"
 msgstr "خوراک"
 
-#: gtk/gtkaccessible.c:572
+#: gtk/gtkaccessible.c:575
 msgctxt "accessibility"
 msgid "form"
 msgstr "از"
 
-#: gtk/gtkaccessible.c:573
+#: gtk/gtkaccessible.c:576
 msgctxt "accessibility"
 msgid "generic"
 msgstr "عمومی"
 
-#: gtk/gtkaccessible.c:574
+#: gtk/gtkaccessible.c:577
 msgctxt "accessibility"
 msgid "grid"
 msgstr "شبکه"
 
-#: gtk/gtkaccessible.c:575
+#: gtk/gtkaccessible.c:578
 msgctxt "accessibility"
 msgid "grid cell"
 msgstr "سلول شبکه"
 
-#: gtk/gtkaccessible.c:576
+#: gtk/gtkaccessible.c:579
 msgctxt "accessibility"
 msgid "group"
 msgstr "گروه"
 
-#: gtk/gtkaccessible.c:577
+#: gtk/gtkaccessible.c:580
 msgctxt "accessibility"
 msgid "heading"
 msgstr "سرایند"
 
-#: gtk/gtkaccessible.c:578
+#: gtk/gtkaccessible.c:581
 msgctxt "accessibility"
 msgid "image"
 msgstr "تصویر"
 
-#: gtk/gtkaccessible.c:579
+#: gtk/gtkaccessible.c:582
 msgctxt "accessibility"
 msgid "input"
 msgstr "ورودی"
 
-#: gtk/gtkaccessible.c:580
+#: gtk/gtkaccessible.c:583
 msgctxt "accessibility"
 msgid "label"
 msgstr "برچسب"
 
-#: gtk/gtkaccessible.c:581
+#: gtk/gtkaccessible.c:584
 msgctxt "accessibility"
 msgid "landmark"
 msgstr "نشانه"
 
-#: gtk/gtkaccessible.c:582
+#: gtk/gtkaccessible.c:585
 msgctxt "accessibility"
 msgid "legend"
 msgstr "راهنما"
 
-#: gtk/gtkaccessible.c:583
+#: gtk/gtkaccessible.c:586
 msgctxt "accessibility"
 msgid "link"
 msgstr "پیوند"
 
-#: gtk/gtkaccessible.c:584
+#: gtk/gtkaccessible.c:587
 msgctxt "accessibility"
 msgid "list"
 msgstr "فهرست"
 
-#: gtk/gtkaccessible.c:585
+#: gtk/gtkaccessible.c:588
 msgctxt "accessibility"
 msgid "list box"
 msgstr "جعبهٔ فهرست"
 
-#: gtk/gtkaccessible.c:586
+#: gtk/gtkaccessible.c:589
 msgctxt "accessibility"
 msgid "list item"
 msgstr "مورد فرست"
 
-#: gtk/gtkaccessible.c:587
+#: gtk/gtkaccessible.c:590
 msgctxt "accessibility"
 msgid "log"
 msgstr "گزارش"
 
-#: gtk/gtkaccessible.c:588
+#: gtk/gtkaccessible.c:591
 msgctxt "accessibility"
 msgid "main"
 msgstr "اصلی"
 
-#: gtk/gtkaccessible.c:589
+#: gtk/gtkaccessible.c:592
 msgctxt "accessibility"
 msgid "marquee"
 msgstr "چادر"
 
-#: gtk/gtkaccessible.c:590
+#: gtk/gtkaccessible.c:593
 msgctxt "accessibility"
 msgid "math"
 msgstr "ریاضی"
 
-#: gtk/gtkaccessible.c:591
+#: gtk/gtkaccessible.c:594
 msgctxt "accessibility"
 msgid "meter"
 msgstr "متر"
 
-#: gtk/gtkaccessible.c:592
+#: gtk/gtkaccessible.c:595
 msgctxt "accessibility"
 msgid "menu"
 msgstr "فهرست"
 
-#: gtk/gtkaccessible.c:593
+#: gtk/gtkaccessible.c:596
 msgctxt "accessibility"
 msgid "menu bar"
 msgstr "نوار فهرست"
 
-#: gtk/gtkaccessible.c:594
+#: gtk/gtkaccessible.c:597
 msgctxt "accessibility"
 msgid "menu item"
 msgstr "مورد فرست"
 
-#: gtk/gtkaccessible.c:595
+#: gtk/gtkaccessible.c:598
 msgctxt "accessibility"
 msgid "menu item checkbox"
 msgstr "مورد فهرست جعبه تیکی"
 
-#: gtk/gtkaccessible.c:596
+#: gtk/gtkaccessible.c:599
 msgctxt "accessibility"
 msgid "menu item radio"
 msgstr "مورد فهرست رادیویی"
 
-#: gtk/gtkaccessible.c:597
+#: gtk/gtkaccessible.c:600
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "ناوبری"
 
-#: gtk/gtkaccessible.c:598
+#: gtk/gtkaccessible.c:601
 msgctxt "accessibility"
 msgid "none"
 msgstr "هیچ"
 
-#: gtk/gtkaccessible.c:599
+#: gtk/gtkaccessible.c:602
 msgctxt "accessibility"
 msgid "note"
 msgstr "یاداشت"
 
-#: gtk/gtkaccessible.c:600
+#: gtk/gtkaccessible.c:603
 msgctxt "accessibility"
 msgid "option"
 msgstr "گزینه"
 
-#: gtk/gtkaccessible.c:601
+#: gtk/gtkaccessible.c:604
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "ارائه"
 
-#: gtk/gtkaccessible.c:602
+#: gtk/gtkaccessible.c:605
 msgctxt "accessibility"
 msgid "progress bar"
 msgstr "نوار پیشرفت"
 
-#: gtk/gtkaccessible.c:603
+#: gtk/gtkaccessible.c:606
 msgctxt "accessibility"
 msgid "radio"
 msgstr "رادیویی"
 
-#: gtk/gtkaccessible.c:604
+#: gtk/gtkaccessible.c:607
 msgctxt "accessibility"
 msgid "radio group"
 msgstr "گروه رادیویی"
 
-#: gtk/gtkaccessible.c:605
+#: gtk/gtkaccessible.c:608
 msgctxt "accessibility"
 msgid "range"
 msgstr "دامنه"
 
-#: gtk/gtkaccessible.c:606
+#: gtk/gtkaccessible.c:609
 msgctxt "accessibility"
 msgid "region"
 msgstr "ناحیه"
 
-#: gtk/gtkaccessible.c:607
+#: gtk/gtkaccessible.c:610
 msgctxt "accessibility"
 msgid "row"
 msgstr "ردیف"
 
-#: gtk/gtkaccessible.c:608
+#: gtk/gtkaccessible.c:611
 msgctxt "accessibility"
 msgid "row group"
 msgstr "گروه ردیف"
 
-#: gtk/gtkaccessible.c:609
+#: gtk/gtkaccessible.c:612
 msgctxt "accessibility"
 msgid "row header"
 msgstr "سرایند ردیف"
 
-#: gtk/gtkaccessible.c:610
+#: gtk/gtkaccessible.c:613
 msgctxt "accessibility"
 msgid "scroll bar"
 msgstr "نوار لغزش"
 
-#: gtk/gtkaccessible.c:611
+#: gtk/gtkaccessible.c:614
 msgctxt "accessibility"
 msgid "search"
 msgstr "جست‌وجو"
 
-#: gtk/gtkaccessible.c:612
+#: gtk/gtkaccessible.c:615
 msgctxt "accessibility"
 msgid "search box"
 msgstr "جعبهٔ جست‌وجو"
 
-#: gtk/gtkaccessible.c:613
+#: gtk/gtkaccessible.c:616
 msgctxt "accessibility"
 msgid "section"
 msgstr "بخش"
 
-#: gtk/gtkaccessible.c:614
+#: gtk/gtkaccessible.c:617
 msgctxt "accessibility"
 msgid "section head"
 msgstr "سر بخش"
 
-#: gtk/gtkaccessible.c:615
+#: gtk/gtkaccessible.c:618
 msgctxt "accessibility"
 msgid "select"
 msgstr "گزینش"
 
-#: gtk/gtkaccessible.c:616
+#: gtk/gtkaccessible.c:619
 msgctxt "accessibility"
 msgid "separator"
 msgstr "جداگر"
 
-#: gtk/gtkaccessible.c:617
+#: gtk/gtkaccessible.c:620
 msgctxt "accessibility"
 msgid "slider"
 msgstr "سرنده"
 
-#: gtk/gtkaccessible.c:618
+#: gtk/gtkaccessible.c:621
 msgctxt "accessibility"
 msgid "spin button"
 msgstr "دکمهٔ مقداری"
 
-#: gtk/gtkaccessible.c:619
+#: gtk/gtkaccessible.c:622
 msgctxt "accessibility"
 msgid "status"
 msgstr "وضعیت"
 
-#: gtk/gtkaccessible.c:620
+#: gtk/gtkaccessible.c:623
 msgctxt "accessibility"
 msgid "structure"
 msgstr "ساختار"
 
-#: gtk/gtkaccessible.c:621
+#: gtk/gtkaccessible.c:624
 msgctxt "accessibility"
 msgid "switch"
 msgstr "کلید"
 
-#: gtk/gtkaccessible.c:622
+#: gtk/gtkaccessible.c:625
 msgctxt "accessibility"
 msgid "tab"
 msgstr "زبانه"
 
-#: gtk/gtkaccessible.c:623
+#: gtk/gtkaccessible.c:626
 msgctxt "accessibility"
 msgid "table"
 msgstr "جدول"
 
-#: gtk/gtkaccessible.c:624
+#: gtk/gtkaccessible.c:627
 msgctxt "accessibility"
 msgid "tab list"
 msgstr "فهرست زبانه"
 
-#: gtk/gtkaccessible.c:625
+#: gtk/gtkaccessible.c:628
 msgctxt "accessibility"
 msgid "tab panel"
 msgstr "تابلوی زبانه"
 
-#: gtk/gtkaccessible.c:626
+#: gtk/gtkaccessible.c:629
 msgctxt "accessibility"
 msgid "text box"
 msgstr "جعبهٔ متنی"
 
-#: gtk/gtkaccessible.c:627
+#: gtk/gtkaccessible.c:630
 msgctxt "accessibility"
 msgid "time"
 msgstr "زمان"
 
-#: gtk/gtkaccessible.c:628
+#: gtk/gtkaccessible.c:631
 msgctxt "accessibility"
 msgid "timer"
 msgstr "زمان‌سنج"
 
-#: gtk/gtkaccessible.c:629
+#: gtk/gtkaccessible.c:632
 msgctxt "accessibility"
 msgid "tool bar"
 msgstr "نوار ابزار"
 
-#: gtk/gtkaccessible.c:630
+#: gtk/gtkaccessible.c:633
 msgctxt "accessibility"
 msgid "tool tip"
 msgstr "راهنمای ابزار"
 
-#: gtk/gtkaccessible.c:631
+#: gtk/gtkaccessible.c:634
 msgctxt "accessibility"
 msgid "tree"
 msgstr "درخت"
 
-#: gtk/gtkaccessible.c:632
+#: gtk/gtkaccessible.c:635
 msgctxt "accessibility"
 msgid "tree grid"
 msgstr "شبکهٔ درختی"
 
-#: gtk/gtkaccessible.c:633
+#: gtk/gtkaccessible.c:636
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "مورد درخت"
 
-#: gtk/gtkaccessible.c:634
+#: gtk/gtkaccessible.c:637
 msgctxt "accessibility"
 msgid "widget"
 msgstr "ابزارگ"
 
-#: gtk/gtkaccessible.c:635
+#: gtk/gtkaccessible.c:638
 msgctxt "accessibility"
 msgid "window"
 msgstr "پنجره"
 
-#: gtk/gtkappchooserbutton.c:315
+#: gtk/gtkappchooserbutton.c:314
 msgid "Other application…"
 msgstr "برنامهٔ دیگر…"
 
-#: gtk/gtkappchooserdialog.c:204 gtk/gtkappchooserdialog.c:255
+#: gtk/gtkappchooserdialog.c:205 gtk/gtkappchooserdialog.c:256
 #: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select Application"
 msgstr "گزینش برنامه"
 
 #. Translators: %s is a filename
-#: gtk/gtkappchooserdialog.c:211
+#: gtk/gtkappchooserdialog.c:212
 #, c-format
 msgid "Opening “%s”."
 msgstr "درحال گشودن «%s»."
 
-#: gtk/gtkappchooserdialog.c:212
+#: gtk/gtkappchooserdialog.c:213
 #, c-format
 msgid "No applications found for “%s”"
 msgstr "هیچ برنامه‌ای برای «%s» پیدا نشد"
 
 #. Translators: %s is a file type description
-#: gtk/gtkappchooserdialog.c:217
+#: gtk/gtkappchooserdialog.c:218
 #, c-format
 msgid "Opening “%s” files."
 msgstr "در حال گشودن پرونده‌های «%s»."
 
-#: gtk/gtkappchooserdialog.c:219
+#: gtk/gtkappchooserdialog.c:220
 #, c-format
 msgid "No applications found for “%s” files"
 msgstr "هیچ برنامه‌ای برای پرونده‌های «%s» پیدا نشد"
 
-#: gtk/gtkappchooserdialog.c:421
+#: gtk/gtkappchooserdialog.c:422
 msgid "Failed to start GNOME Software"
 msgstr "شکست در اجرای نرم‌افزارهای گنوم"
 
@@ -1488,7 +1489,7 @@ msgstr "متن ممکن است درون «%s» نمایان نشود"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:766
+#: gtk/gtkcalendar.c:771
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1496,7 +1497,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:804
+#: gtk/gtkcalendar.c:809
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:6"
 
@@ -1506,7 +1507,7 @@ msgstr "calendar:week_start:6"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1400
+#: gtk/gtkcalendar.c:1405
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1521,7 +1522,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1437
+#: gtk/gtkcalendar.c:1442
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1535,7 +1536,7 @@ msgstr "%Id"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1501
+#: gtk/gtkcalendar.c:1506
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1572,261 +1573,261 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkcolorbutton.c:172 gtk/gtkcolorbutton.c:274
+#: gtk/gtkcolorbutton.c:172 gtk/gtkcolorbutton.c:279
 msgid "Pick a Color"
 msgstr "یک رنگ بردارید"
 
-#: gtk/gtkcolorbutton.c:463 gtk/gtkcolorchooserwidget.c:307
+#: gtk/gtkcolorbutton.c:468 gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "قرمز ٪%Id، سبز ٪%Id، آبی ٪%Id، آلفا ٪%Id"
 
-#: gtk/gtkcolorbutton.c:469 gtk/gtkcolorchooserwidget.c:313
+#: gtk/gtkcolorbutton.c:474 gtk/gtkcolorchooserwidget.c:314
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "قرمز ٪%Id، سبز ٪%Id، آبی ٪%Id"
 
-#: gtk/gtkcolorchooserwidget.c:370
+#: gtk/gtkcolorchooserwidget.c:371
 #, c-format
 msgid "Color: %s"
 msgstr "رنگ: %s"
 
-#: gtk/gtkcolorchooserwidget.c:435
+#: gtk/gtkcolorchooserwidget.c:436
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "آبی خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:436
+#: gtk/gtkcolorchooserwidget.c:437
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "آبی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:437
+#: gtk/gtkcolorchooserwidget.c:438
 msgctxt "Color name"
 msgid "Blue"
 msgstr "آبی"
 
-#: gtk/gtkcolorchooserwidget.c:438
+#: gtk/gtkcolorchooserwidget.c:439
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "آبی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:439
+#: gtk/gtkcolorchooserwidget.c:440
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "آبی خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:440
+#: gtk/gtkcolorchooserwidget.c:441
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "سبز خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:441
+#: gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "سبز روشن"
 
-#: gtk/gtkcolorchooserwidget.c:442
+#: gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Green"
 msgstr "سبز"
 
-#: gtk/gtkcolorchooserwidget.c:443
+#: gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "سبز تیره"
 
-#: gtk/gtkcolorchooserwidget.c:444
+#: gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "سبز خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:445
+#: gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "زرد خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:446
+#: gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "زرد روشن"
 
-#: gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "زرد"
 
-#: gtk/gtkcolorchooserwidget.c:448
+#: gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "زرد تیره"
 
-#: gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:450
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "زرد خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "نارنجی خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "نارنجی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Orange"
 msgstr "نارنجی"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "نارنجی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:454
+#: gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "نارنجی خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:455
+#: gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "قرمز خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:456
+#: gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "قرمز روشن"
 
-#: gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Red"
 msgstr "قرمز"
 
-#: gtk/gtkcolorchooserwidget.c:458
+#: gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "قرمز تیره"
 
-#: gtk/gtkcolorchooserwidget.c:459
+#: gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "قرمز خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:460
+#: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "بنفش خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:461
+#: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "بنفش روشن"
 
-#: gtk/gtkcolorchooserwidget.c:462
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Purple"
 msgstr "بنفش"
 
-#: gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "بنفش تیره"
 
-#: gtk/gtkcolorchooserwidget.c:464
+#: gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "بنفش خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:465
+#: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "قهوه‌ای خیلی روشن"
 
-#: gtk/gtkcolorchooserwidget.c:466
+#: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "قهوه‌ای روشن"
 
-#: gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Brown"
 msgstr "قهوه‌ای"
 
-#: gtk/gtkcolorchooserwidget.c:468
+#: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "قهوه‌ای تیره"
 
-#: gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "قهوه‌ای خیلی تیره"
 
-#: gtk/gtkcolorchooserwidget.c:470
+#: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "White"
 msgstr "سفید"
 
-#: gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "خاکستری روشن ۱"
 
-#: gtk/gtkcolorchooserwidget.c:472
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "خاکستری روشن ۲"
 
-#: gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "خاکستری روشن ۳"
 
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:475
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "خاکستری روشن ۴"
 
-#: gtk/gtkcolorchooserwidget.c:475
+#: gtk/gtkcolorchooserwidget.c:476
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "خاکستری تیره ۱"
 
-#: gtk/gtkcolorchooserwidget.c:476
+#: gtk/gtkcolorchooserwidget.c:477
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "خاکستری تیره ۲"
 
-#: gtk/gtkcolorchooserwidget.c:477
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "خاکستری تیره ۳"
 
-#: gtk/gtkcolorchooserwidget.c:478
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "خاکستری تیره ۴"
 
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
 msgid "Black"
 msgstr "مشکی"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:551
+#: gtk/gtkcolorchooserwidget.c:552
 msgid "Custom"
 msgstr "سفارشی"
 
-#: gtk/gtkcolorchooserwidget.c:584
+#: gtk/gtkcolorchooserwidget.c:585
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "رنگ سفارشی %Id: %s"
 
-#: gtk/gtkcolorswatch.c:230
+#: gtk/gtkcolorswatch.c:229
 msgid "Customize"
 msgstr "سفارشی سازی"
 
@@ -1844,13 +1845,13 @@ msgstr "default:mm"
 msgid "Margins from Printer…"
 msgstr "حاشیه‌ها از چاپگر…"
 
-#: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:161
+#: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:162
 #: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_بستن"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:2988
+#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:3029
 msgid "Manage Custom Sizes"
 msgstr "مدیریت اندازه‌های سفارشی"
 
@@ -1899,11 +1900,11 @@ msgstr "_راست:"
 msgid "Paper Margins"
 msgstr "حاشیه‌های کاغذ"
 
-#: gtk/gtkentry.c:3637
+#: gtk/gtkentry.c:3736
 msgid "Insert Emoji"
 msgstr "درج ایموجی"
 
-#: gtk/gtkfilechooserdialog.c:558
+#: gtk/gtkfilechooserdialog.c:551
 msgid "_Name"
 msgstr "_نام"
 
@@ -1963,24 +1964,24 @@ msgstr "یک پوشه با همان نام در حال حاضر وجود دار�
 msgid "A file with that name already exists"
 msgstr "یک پرونده با همان نام در حال حاضر وجود دارد"
 
-#: gtk/gtkfilechoosernative.c:504 gtk/gtkfilechoosernative.c:575
-#: gtk/gtkfilechooserwidget.c:1212 gtk/gtkfilechooserwidget.c:5762
-#: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:174 gtk/gtkmountoperation.c:608
+#: gtk/gtkfilechoosernative.c:511 gtk/gtkfilechoosernative.c:582
+#: gtk/gtkfilechooserwidget.c:1209 gtk/gtkfilechooserwidget.c:5767
+#: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175 gtk/gtkmountoperation.c:616
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:643
-#: gtk/gtkprinteroptionwidget.c:713 gtk/gtkprintunixdialog.c:626
-#: gtk/gtkprintunixdialog.c:782 gtk/gtkwindow.c:5950 gtk/inspector/css-editor.c:248
+#: gtk/gtkprinteroptionwidget.c:713 gtk/gtkprintunixdialog.c:667
+#: gtk/gtkprintunixdialog.c:823 gtk/gtkwindow.c:6136 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1241 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "_انصراف"
 
-#: gtk/gtkfilechoosernative.c:505 gtk/gtkfilechoosernative.c:569
-#: gtk/gtkplacessidebar.c:3126 gtk/gtkplacessidebar.c:3211 gtk/gtkplacesview.c:1650
+#: gtk/gtkfilechoosernative.c:512 gtk/gtkfilechoosernative.c:576
+#: gtk/gtkplacessidebar.c:3127 gtk/gtkplacessidebar.c:3212 gtk/gtkplacesview.c:1658
 msgid "_Open"
 msgstr "_گشودن"
 
-#: gtk/gtkfilechoosernative.c:569 gtk/inspector/css-editor.c:249
+#: gtk/gtkfilechoosernative.c:576 gtk/inspector/css-editor.c:249
 #: gtk/inspector/recorder.c:1242
 msgid "_Save"
 msgstr "_ذخیره"
@@ -1998,268 +1999,270 @@ msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش 
 msgid "%1$s on %2$s"
 msgstr "%1$s روی %2$s"
 
-#: gtk/gtkfilechooserwidget.c:321
+#: gtk/gtkfilechooserwidget.c:318
 msgid "Type name of new folder"
 msgstr "نام پوشهٔ جدید را وارد کنید"
 
-#: gtk/gtkfilechooserwidget.c:726
+#: gtk/gtkfilechooserwidget.c:723
 msgid "The folder could not be created"
 msgstr "نمی‌توان پوشه را ایجاد کرد"
 
-#: gtk/gtkfilechooserwidget.c:739
+#: gtk/gtkfilechooserwidget.c:736
 msgid "You need to choose a valid filename."
 msgstr "شما باید یک نام معتبر انتخاب کنید."
 
-#: gtk/gtkfilechooserwidget.c:742
+#: gtk/gtkfilechooserwidget.c:739
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "از آنجایی که %s یک پوشه نیست، نمی‌توان یک پرونده در آن ساخت"
 
-#: gtk/gtkfilechooserwidget.c:752
+#: gtk/gtkfilechooserwidget.c:749
 msgid "Cannot create file as the filename is too long"
 msgstr "باتوجه به اینکه نام پرونده بسیار بزرگ است، نمی‌توان پرونده را ساخت"
 
-#: gtk/gtkfilechooserwidget.c:753
+#: gtk/gtkfilechooserwidget.c:750
 msgid "Try using a shorter name."
 msgstr "سعی کنید نامی کوتاه‌تر انتخاب کنید."
 
-#: gtk/gtkfilechooserwidget.c:763
+#: gtk/gtkfilechooserwidget.c:760
 msgid "You may only select folders"
 msgstr "شما می‌توانید از پوشه‌ها انتخاب کنید"
 
-#: gtk/gtkfilechooserwidget.c:764
+#: gtk/gtkfilechooserwidget.c:761
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "موردی که شما انتخاب کرده‌اید، پوشه نیست، سعی کنید مورد دیگری استفاده کنید."
 
-#: gtk/gtkfilechooserwidget.c:772
+#: gtk/gtkfilechooserwidget.c:769
 msgid "Invalid file name"
 msgstr "نام پروندهٔ نامعتبر"
 
-#: gtk/gtkfilechooserwidget.c:781
+#: gtk/gtkfilechooserwidget.c:778
 msgid "The folder contents could not be displayed"
 msgstr "نمی‌توان محتویات پوشه را نمایش داد"
 
-#: gtk/gtkfilechooserwidget.c:789
+#: gtk/gtkfilechooserwidget.c:786
 msgid "The file could not be deleted"
 msgstr "نمی‌توان پوشه را حذف کرد"
 
-#: gtk/gtkfilechooserwidget.c:797
+#: gtk/gtkfilechooserwidget.c:794
 msgid "The file could not be moved to the Trash"
 msgstr "پرونده را نمی‌توان به زباله‌دان منتقل کرد"
 
-#: gtk/gtkfilechooserwidget.c:1208
+#: gtk/gtkfilechooserwidget.c:1205
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "آیا مطمئنید که می‌خواهید برای همیشه «%s» را پاک کنید؟"
 
-#: gtk/gtkfilechooserwidget.c:1211
+#: gtk/gtkfilechooserwidget.c:1208
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
-#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1829 gtk/gtklabel.c:5408
-#: gtk/gtktext.c:5960 gtk/gtktextview.c:8564
+#: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
+#: gtk/gtklabel.c:5459 gtk/gtktext.c:6045 gtk/gtktextview.c:8753
 msgid "_Delete"
 msgstr "_حذف"
 
-#: gtk/gtkfilechooserwidget.c:1336
+#: gtk/gtkfilechooserwidget.c:1333
 msgid "The file could not be renamed"
 msgstr "نمی‌توان نام پرونده را تغییر داد"
 
-#: gtk/gtkfilechooserwidget.c:1596
+#: gtk/gtkfilechooserwidget.c:1593
 msgid "Could not select file"
 msgstr "انتخاب پرونده ممکن نیست"
 
-#: gtk/gtkfilechooserwidget.c:1809
+#: gtk/gtkfilechooserwidget.c:1806
 msgid "_Visit File"
 msgstr "_مشاهده پرونده"
 
-#: gtk/gtkfilechooserwidget.c:1813
+#: gtk/gtkfilechooserwidget.c:1810
 msgid "_Open With File Manager"
 msgstr "_گشودن با مدیر پرونده‌ها"
 
-#: gtk/gtkfilechooserwidget.c:1817
+#: gtk/gtkfilechooserwidget.c:1814
 msgid "_Copy Location"
 msgstr "_رونوشت از مکان"
 
-#: gtk/gtkfilechooserwidget.c:1821
+#: gtk/gtkfilechooserwidget.c:1818
 msgid "_Add to Bookmarks"
 msgstr "_افزودن به نشانک‌ها"
 
-#: gtk/gtkfilechooserwidget.c:1825 gtk/gtkplacessidebar.c:2308
-#: gtk/gtkplacessidebar.c:3247 gtk/ui/gtkfilechooserwidget.ui:464
+#: gtk/gtkfilechooserwidget.c:1822 gtk/gtkplacessidebar.c:2309
+#: gtk/gtkplacessidebar.c:3248 gtk/ui/gtkfilechooserwidget.ui:464
 msgid "_Rename"
 msgstr "_تغییر نام"
 
-#: gtk/gtkfilechooserwidget.c:1833
+#: gtk/gtkfilechooserwidget.c:1830
 msgid "_Move to Trash"
 msgstr "_انتقال به زباله‌دان"
 
-#: gtk/gtkfilechooserwidget.c:1842
+#: gtk/gtkfilechooserwidget.c:1839
 msgid "Show _Hidden Files"
 msgstr "نمایش پرونده‌های _مخفی"
 
-#: gtk/gtkfilechooserwidget.c:1846
+#: gtk/gtkfilechooserwidget.c:1843
 msgid "Show _Size Column"
 msgstr "نمایش ستون _اندازه"
 
-#: gtk/gtkfilechooserwidget.c:1850
+#: gtk/gtkfilechooserwidget.c:1847
 msgid "Show T_ype Column"
 msgstr "نمایش ستون _گونه"
 
-#: gtk/gtkfilechooserwidget.c:1854
+#: gtk/gtkfilechooserwidget.c:1851
 msgid "Show _Time"
 msgstr "نمایش _زمان"
 
-#: gtk/gtkfilechooserwidget.c:1858
+#: gtk/gtkfilechooserwidget.c:1855
 msgid "Sort _Folders Before Files"
 msgstr "مرتب کردن _شاخه‌ها پیش از پرونده‌ها"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2256 gtk/inspector/css-node-tree.ui:135
+#: gtk/gtkfilechooserwidget.c:2253 gtk/inspector/css-node-tree.ui:135
 #: gtk/ui/gtkfilechooserwidget.ui:185 gtk/ui/gtkprintunixdialog.ui:116
 msgid "Location"
 msgstr "مکان"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2344
+#: gtk/gtkfilechooserwidget.c:2341
 msgid "_Name:"
 msgstr "_نام:"
 
-#: gtk/gtkfilechooserwidget.c:2881 gtk/gtkfilechooserwidget.c:2895
+#: gtk/gtkfilechooserwidget.c:2878 gtk/gtkfilechooserwidget.c:2892
 #, c-format
 msgid "Searching in %s"
 msgstr "در حال جست‌وجو در %s"
 
-#: gtk/gtkfilechooserwidget.c:2901
+#: gtk/gtkfilechooserwidget.c:2898
 msgid "Searching"
 msgstr "درحال جست‌وجو"
 
-#: gtk/gtkfilechooserwidget.c:2907
+#: gtk/gtkfilechooserwidget.c:2904
 msgid "Enter location or URL"
 msgstr "وارد کردن مکان یا URL"
 
-#: gtk/gtkfilechooserwidget.c:3795 gtk/gtkfilechooserwidget.c:6597
+#: gtk/gtkfilechooserwidget.c:3792 gtk/gtkfilechooserwidget.c:6604
 #: gtk/ui/gtkfilechooserwidget.ui:225
 msgid "Modified"
 msgstr "تغییریافته"
 
-#: gtk/gtkfilechooserwidget.c:4054
+#: gtk/gtkfilechooserwidget.c:4051
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "محتوای %s قابل خواندن نبود"
 
-#: gtk/gtkfilechooserwidget.c:4058
+#: gtk/gtkfilechooserwidget.c:4055
 msgid "Could not read the contents of the folder"
 msgstr "محتوای پوشه قابل خواندن نبود"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4198 gtk/gtkfilechooserwidget.c:4241
+#: gtk/gtkfilechooserwidget.c:4195 gtk/gtkfilechooserwidget.c:4238
 msgid "%H:%M"
 msgstr "%OH:%OM"
 
-#: gtk/gtkfilechooserwidget.c:4200 gtk/gtkfilechooserwidget.c:4243
+#: gtk/gtkfilechooserwidget.c:4197 gtk/gtkfilechooserwidget.c:4240
 msgid "%l:%M %p"
 msgstr "%OI:%OM %p"
 
-#: gtk/gtkfilechooserwidget.c:4204
+#: gtk/gtkfilechooserwidget.c:4201
 msgid "Yesterday"
 msgstr "دیروز"
 
-#: gtk/gtkfilechooserwidget.c:4212
+#: gtk/gtkfilechooserwidget.c:4209
 msgid "%-e %b"
 msgstr "%O-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4216
+#: gtk/gtkfilechooserwidget.c:4213
 msgid "%-e %b %Y"
 msgstr "%O-e %b %OY"
 
-#: gtk/gtkfilechooserwidget.c:4305 gtk/gtkfilechooserwidget.c:4313
+#: gtk/gtkfilechooserwidget.c:4302 gtk/gtkfilechooserwidget.c:4310
 msgid "Program"
 msgstr "برنامه"
 
-#: gtk/gtkfilechooserwidget.c:4306
+#: gtk/gtkfilechooserwidget.c:4303
 msgid "Audio"
 msgstr "صدا"
 
-#: gtk/gtkfilechooserwidget.c:4307 gtk/gtkfontbutton.c:556 gtk/inspector/visual.ui:187
+#: gtk/gtkfilechooserwidget.c:4304 gtk/gtkfontbutton.c:560
+#: gtk/inspector/visual.ui:187
 msgid "Font"
 msgstr "قلم"
 
-#: gtk/gtkfilechooserwidget.c:4308
+#: gtk/gtkfilechooserwidget.c:4305
 msgid "Image"
 msgstr "تصویر"
 
-#: gtk/gtkfilechooserwidget.c:4309
+#: gtk/gtkfilechooserwidget.c:4306
 msgid "Archive"
 msgstr "بایگانی"
 
-#: gtk/gtkfilechooserwidget.c:4310
+#: gtk/gtkfilechooserwidget.c:4307
 msgid "Markup"
 msgstr "نشانه‌گذاری"
 
-#: gtk/gtkfilechooserwidget.c:4311 gtk/gtkfilechooserwidget.c:4312
+#: gtk/gtkfilechooserwidget.c:4308 gtk/gtkfilechooserwidget.c:4309
 msgid "Text"
 msgstr "متن"
 
-#: gtk/gtkfilechooserwidget.c:4314
+#: gtk/gtkfilechooserwidget.c:4311
 msgid "Video"
 msgstr "ویدیو"
 
-#: gtk/gtkfilechooserwidget.c:4315
+#: gtk/gtkfilechooserwidget.c:4312
 msgid "Contacts"
 msgstr "آشنایان"
 
-#: gtk/gtkfilechooserwidget.c:4316
+#: gtk/gtkfilechooserwidget.c:4313
 msgid "Calendar"
 msgstr "تقویم"
 
-#: gtk/gtkfilechooserwidget.c:4317
+#: gtk/gtkfilechooserwidget.c:4314
 msgid "Document"
 msgstr "سند"
 
-#: gtk/gtkfilechooserwidget.c:4318
+#: gtk/gtkfilechooserwidget.c:4315
 msgid "Presentation"
 msgstr "ارائه‌"
 
-#: gtk/gtkfilechooserwidget.c:4319
+#: gtk/gtkfilechooserwidget.c:4316
 msgid "Spreadsheet"
 msgstr "صفحهٔ گسترده"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4350 gtk/gtkfilechooserwidget.c:4537
+#: gtk/gtkfilechooserwidget.c:4347 gtk/gtkfilechooserwidget.c:4540
 #: modules/printbackends/gtkprintbackendcloudprint.c:729
 msgid "Unknown"
 msgstr "نامعلوم"
 
-#: gtk/gtkfilechooserwidget.c:4576 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:4579 gtk/gtkplacessidebar.c:1026
 msgid "Home"
 msgstr "خانه"
 
-#: gtk/gtkfilechooserwidget.c:5755 gtk/gtkprintunixdialog.c:617
+#: gtk/gtkfilechooserwidget.c:5760 gtk/gtkprintunixdialog.c:658
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "پرونده‌ای با نام «%s» از قبل وجود دارد.  می‌خواهید آن را جایگزین کنید؟"
 
-#: gtk/gtkfilechooserwidget.c:5758 gtk/gtkprintunixdialog.c:621
+#: gtk/gtkfilechooserwidget.c:5763 gtk/gtkprintunixdialog.c:662
 #, c-format
 msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "پرونده از قبل در «%s» وجود دارد.  با جایگزینی آن تمام محتوایش بازنویسی می‌شود."
+msgstr ""
+"پرونده از قبل در «%s» وجود دارد.  با جایگزینی آن تمام محتوایش بازنویسی می‌شود."
 
-#: gtk/gtkfilechooserwidget.c:5763 gtk/gtkprintunixdialog.c:629
+#: gtk/gtkfilechooserwidget.c:5768 gtk/gtkprintunixdialog.c:670
 msgid "_Replace"
 msgstr "_جایگزینی"
 
-#: gtk/gtkfilechooserwidget.c:5924
+#: gtk/gtkfilechooserwidget.c:5929
 msgid "You do not have access to the specified folder."
 msgstr "شما دسترسی به پوشه مشخص شده را ندارید."
 
-#: gtk/gtkfilechooserwidget.c:6526
+#: gtk/gtkfilechooserwidget.c:6533
 msgid "Could not send the search request"
 msgstr "نمی‌توان درخواست جست‌وجو را ارسال کرد"
 
-#: gtk/gtkfilechooserwidget.c:6836
+#: gtk/gtkfilechooserwidget.c:6843
 msgid "Accessed"
 msgstr "در دسترس"
 
@@ -2267,109 +2270,109 @@ msgstr "در دسترس"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:486 gtk/gtkfontbutton.c:580
+#: gtk/gtkfontbutton.c:486 gtk/gtkfontbutton.c:584
 msgid "Pick a Font"
 msgstr "یک قلم بردارید"
 
 # farmaan
-#: gtk/gtkfontbutton.c:1300
+#: gtk/gtkfontbutton.c:1308
 msgctxt "font"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/gtkfontchooserwidget.c:1551
+#: gtk/gtkfontchooserwidget.c:1559
 msgid "Width"
 msgstr "پهنا"
 
-#: gtk/gtkfontchooserwidget.c:1552
+#: gtk/gtkfontchooserwidget.c:1560
 msgid "Weight"
 msgstr "وزن"
 
-#: gtk/gtkfontchooserwidget.c:1553
+#: gtk/gtkfontchooserwidget.c:1561
 msgid "Italic"
 msgstr "کج"
 
-#: gtk/gtkfontchooserwidget.c:1554
+#: gtk/gtkfontchooserwidget.c:1562
 msgid "Slant"
 msgstr "شکافتن"
 
-#: gtk/gtkfontchooserwidget.c:1555
+#: gtk/gtkfontchooserwidget.c:1563
 msgid "Optical Size"
 msgstr "اندازهٔ نوری"
 
-#: gtk/gtkfontchooserwidget.c:2101
+#: gtk/gtkfontchooserwidget.c:2109
 msgid "Default"
 msgstr "پیش‌گزیده"
 
-#: gtk/gtkfontchooserwidget.c:2147
+#: gtk/gtkfontchooserwidget.c:2155
 msgid "Ligatures"
 msgstr "جایگزین‌ها"
 
-#: gtk/gtkfontchooserwidget.c:2148
+#: gtk/gtkfontchooserwidget.c:2156
 msgid "Letter Case"
 msgstr "حالت حرف"
 
-#: gtk/gtkfontchooserwidget.c:2149
+#: gtk/gtkfontchooserwidget.c:2157
 msgid "Number Case"
 msgstr "حالت عدد"
 
-#: gtk/gtkfontchooserwidget.c:2150
+#: gtk/gtkfontchooserwidget.c:2158
 msgid "Number Spacing"
 msgstr "فاصله‌گذاری عدد"
 
-#: gtk/gtkfontchooserwidget.c:2151
+#: gtk/gtkfontchooserwidget.c:2159
 msgid "Number Formatting"
 msgstr "قالب‌بندی عدد"
 
-#: gtk/gtkfontchooserwidget.c:2152
+#: gtk/gtkfontchooserwidget.c:2160
 msgid "Character Variants"
 msgstr "دگرگونه‌های نویسه"
 
-#: gtk/gtkglarea.c:288
+#: gtk/gtkglarea.c:284
 msgid "OpenGL context creation failed"
 msgstr "ساخت زمینه OpenGL شکست خورد"
 
-#: gtk/gtklabel.c:5405 gtk/gtktext.c:5948 gtk/gtktextview.c:8552
+#: gtk/gtklabel.c:5456 gtk/gtktext.c:6033 gtk/gtktextview.c:8741
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5406 gtk/gtktext.c:5952 gtk/gtktextview.c:8556
+#: gtk/gtklabel.c:5457 gtk/gtktext.c:6037 gtk/gtktextview.c:8745
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: gtk/gtklabel.c:5407 gtk/gtktext.c:5956 gtk/gtktextview.c:8560
+#: gtk/gtklabel.c:5458 gtk/gtktext.c:6041 gtk/gtktextview.c:8749
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5413 gtk/gtktext.c:5969 gtk/gtktextview.c:8585
+#: gtk/gtklabel.c:5464 gtk/gtktext.c:6054 gtk/gtktextview.c:8774
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtklabel.c:5418
+#: gtk/gtklabel.c:5469
 msgid "_Open Link"
 msgstr "_گشودن پیوند"
 
-#: gtk/gtklabel.c:5422
+#: gtk/gtklabel.c:5473
 msgid "Copy _Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
-#: gtk/gtklinkbutton.c:258
+#: gtk/gtklinkbutton.c:259
 msgid "_Copy URL"
 msgstr "_رونوشت از نشانی"
 
-#: gtk/gtklinkbutton.c:543
+#: gtk/gtklinkbutton.c:544
 msgid "Invalid URI"
 msgstr "نشانی نامعتبر"
 
-#: gtk/gtklockbutton.c:274 gtk/ui/gtklockbutton.ui:20
+#: gtk/gtklockbutton.c:289 gtk/ui/gtklockbutton.ui:20
 msgid "Lock"
 msgstr "قفل"
 
-#: gtk/gtklockbutton.c:283 gtk/ui/gtklockbutton.ui:26
+#: gtk/gtklockbutton.c:303 gtk/ui/gtklockbutton.ui:26
 msgid "Unlock"
 msgstr "قفل‌گشایی"
 
-#: gtk/gtklockbutton.c:292
+#: gtk/gtklockbutton.c:317
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
@@ -2377,7 +2380,7 @@ msgstr ""
 "محاوره باز شده است.\n"
 "جهت جلوگیری از تغییرات آتی کلیک کنید"
 
-#: gtk/gtklockbutton.c:301
+#: gtk/gtklockbutton.c:331
 msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
@@ -2385,7 +2388,7 @@ msgstr ""
 "محاوره قفل شده است.\n"
 "جهت ایجاد تغییرات کلیک کنید"
 
-#: gtk/gtklockbutton.c:310
+#: gtk/gtklockbutton.c:345
 msgid ""
 "System policy prevents changes.\n"
 "Contact your system administrator"
@@ -2398,7 +2401,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:817
+#: gtk/gtkmain.c:751
 msgid "default:LTR"
 msgstr "default:RTL"
 
@@ -2450,86 +2453,86 @@ msgctxt "short time format"
 msgid "%d:%02d"
 msgstr "%Id:%I02d"
 
-#: gtk/gtkmessagedialog.c:157 gtk/gtkmessagedialog.c:175 gtk/gtkprintbackend.c:644
-#: gtk/gtkwindow.c:5951
+#: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176 gtk/gtkprintbackend.c:644
+#: gtk/gtkwindow.c:6137
 msgid "_OK"
 msgstr "_تأیید"
 
-#: gtk/gtkmessagedialog.c:169
+#: gtk/gtkmessagedialog.c:170
 msgid "_No"
 msgstr "_خیر"
 
-#: gtk/gtkmessagedialog.c:170
+#: gtk/gtkmessagedialog.c:171
 msgid "_Yes"
 msgstr "_بله"
 
-#: gtk/gtkmountoperation.c:609
+#: gtk/gtkmountoperation.c:617
 msgid "Co_nnect"
 msgstr "اتّ_صال"
 
-#: gtk/gtkmountoperation.c:672
+#: gtk/gtkmountoperation.c:680
 msgid "Connect As"
 msgstr "اتّصال به عنوان"
 
-#: gtk/gtkmountoperation.c:681
+#: gtk/gtkmountoperation.c:689
 msgid "_Anonymous"
 msgstr "_ناشناس"
 
-#: gtk/gtkmountoperation.c:687
+#: gtk/gtkmountoperation.c:695
 msgid "Registered U_ser"
 msgstr "_کاربرِ ثبت شده"
 
-#: gtk/gtkmountoperation.c:697
+#: gtk/gtkmountoperation.c:705
 msgid "_Username"
 msgstr "نام _کاربری"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:710
 msgid "_Domain"
 msgstr "_دامنه"
 
-#: gtk/gtkmountoperation.c:711
+#: gtk/gtkmountoperation.c:719
 msgid "Volume type"
 msgstr "گونهٔ حجم"
 
-#: gtk/gtkmountoperation.c:721
+#: gtk/gtkmountoperation.c:729
 msgid "_Hidden"
 msgstr "_پنهان"
 
-#: gtk/gtkmountoperation.c:724
+#: gtk/gtkmountoperation.c:732
 msgid "_Windows system"
 msgstr "_سامانهٔ ویندوزی"
 
-#: gtk/gtkmountoperation.c:727
+#: gtk/gtkmountoperation.c:735
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:733
+#: gtk/gtkmountoperation.c:741
 msgid "_Password"
 msgstr "_گذر‌واژه"
 
-#: gtk/gtkmountoperation.c:755
+#: gtk/gtkmountoperation.c:763
 msgid "Forget password _immediately"
 msgstr "گذرواژه _بی‌درنگ فراموش شود"
 
-#: gtk/gtkmountoperation.c:765
+#: gtk/gtkmountoperation.c:773
 msgid "Remember password until you _logout"
 msgstr "گذرواژه تا هنگام _خروج  به‌خاطر سپرده شود"
 
-#: gtk/gtkmountoperation.c:776
+#: gtk/gtkmountoperation.c:784
 msgid "Remember _forever"
 msgstr "برای _همیشه به‌خاطر سپرده شود"
 
-#: gtk/gtkmountoperation.c:1202
+#: gtk/gtkmountoperation.c:1210
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "برنامهٔ ناشناخته (شناسهٔ فرآیند %Id)"
 
-#: gtk/gtkmountoperation.c:1401
+#: gtk/gtkmountoperation.c:1409
 #, c-format
 msgid "Unable to end process"
 msgstr "ناتوان در پایان دادن به فرایند"
 
-#: gtk/gtkmountoperation.c:1431
+#: gtk/gtkmountoperation.c:1439
 msgid "_End Process"
 msgstr "_پایان دادن به فرایند"
 
@@ -2568,32 +2571,32 @@ msgstr "نمی‌توان فرایند با شناسهٔ %Id را به پایا�
 msgid "GTK could not find a media module. Check your installation."
 msgstr "GTK نتوانست پیمانه‌ٔ رسانه‌ای بیابد. نصبتان را بررسی کنید."
 
-#: gtk/gtknotebook.c:1428
+#: gtk/gtknotebook.c:1527
 msgid "Tab list"
 msgstr "فهرست زبانه"
 
-#: gtk/gtknotebook.c:3147
+#: gtk/gtknotebook.c:3249
 msgid "Previous tab"
 msgstr "زبانهٔ پیشین"
 
-#: gtk/gtknotebook.c:3151
+#: gtk/gtknotebook.c:3253
 msgid "Next tab"
 msgstr "_زبانهٔ بعدی"
 
-#: gtk/gtknotebook.c:3971
+#: gtk/gtknotebook.c:4073
 msgid "Tab"
 msgstr "جهش"
 
-#: gtk/gtknotebook.c:4269 gtk/gtknotebook.c:6473
+#: gtk/gtknotebook.c:4371 gtk/gtknotebook.c:6579
 #, c-format
 msgid "Page %u"
 msgstr "صفحهٔ %Iu"
 
-#: gtk/gtkpagesetup.c:606 gtk/gtkpapersize.c:944 gtk/gtkpapersize.c:984
+#: gtk/gtkpagesetup.c:609 gtk/gtkpapersize.c:943 gtk/gtkpapersize.c:983
 msgid "Not a valid page setup file"
 msgstr "پروندهٔ برپایی صفحهٔ نامعتبر"
 
-#: gtk/gtkpagesetupunixdialog.c:201 gtk/gtkprintunixdialog.c:711
+#: gtk/gtkpagesetupunixdialog.c:201 gtk/gtkprintunixdialog.c:752
 msgid "Manage Custom Sizes…"
 msgstr "مدیریت اندازه‌های سفارشی…"
 
@@ -2629,98 +2632,99 @@ msgstr ""
 msgid "Page Setup"
 msgstr "برپایی صفحه"
 
-#: gtk/gtkpasswordentry.c:165
+#: gtk/gtkpasswordentry.c:166
 msgid "Hide text"
 msgstr "نهفتن متن"
 
-#: gtk/gtkpasswordentry.c:170 gtk/gtkpasswordentry.c:586
+#: gtk/gtkpasswordentry.c:171 gtk/gtkpasswordentry.c:605
 msgid "Show text"
 msgstr "نمایش متن"
 
-#: gtk/gtkpasswordentry.c:197
+#: gtk/gtkpasswordentry.c:198
 msgid "Caps Lock is on"
 msgstr "قفل تبدیل روشن است"
 
-#: gtk/gtkpasswordentry.c:658
+#: gtk/gtkpasswordentry.c:677
 msgid "_Show Text"
 msgstr "_نمایش متن"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:913
+#: gtk/gtkplacessidebar.c:914
 #, c-format
 msgid "Open %s"
 msgstr "گشودن %s"
 
-#: gtk/gtkplacessidebar.c:1003
+#: gtk/gtkplacessidebar.c:1004
 msgid "Recent"
 msgstr "موارد اخیر"
 
-#: gtk/gtkplacessidebar.c:1005
+#: gtk/gtkplacessidebar.c:1006
 msgid "Recent files"
 msgstr "پرونده‌های اخیر"
 
-#: gtk/gtkplacessidebar.c:1014
+#: gtk/gtkplacessidebar.c:1015
 msgid "Starred"
 msgstr "ستاره‌دار"
 
-#: gtk/gtkplacessidebar.c:1016
+#: gtk/gtkplacessidebar.c:1017
 msgid "Starred files"
 msgstr "پرونده‌های ستاره‌دار"
 
-#: gtk/gtkplacessidebar.c:1027
+#: gtk/gtkplacessidebar.c:1028
 msgid "Open your personal folder"
 msgstr "گشودن شاخهٔ شخصیتان"
 
-#: gtk/gtkplacessidebar.c:1040
+#: gtk/gtkplacessidebar.c:1041
 msgid "Desktop"
 msgstr "رومیزی"
 
-#: gtk/gtkplacessidebar.c:1042
+#: gtk/gtkplacessidebar.c:1043
 msgid "Open the contents of your desktop in a folder"
 msgstr "گشودن محتوای میزکارتان در یک شاخه"
 
-#: gtk/gtkplacessidebar.c:1056
+#: gtk/gtkplacessidebar.c:1057
 msgid "Enter Location"
 msgstr "ورود موقعیت"
 
-#: gtk/gtkplacessidebar.c:1058
+#: gtk/gtkplacessidebar.c:1059
 msgid "Manually enter a location"
 msgstr "به‌طور دستی یک مکان وارد کنید"
 
-#: gtk/gtkplacessidebar.c:1068
+#: gtk/gtkplacessidebar.c:1069
 msgid "Trash"
 msgstr "زباله‌دان"
 
-#: gtk/gtkplacessidebar.c:1070
+#: gtk/gtkplacessidebar.c:1071
 msgid "Open the trash"
 msgstr "گشودن زباله‌دان"
 
-#: gtk/gtkplacessidebar.c:1181 gtk/gtkplacessidebar.c:1209 gtk/gtkplacessidebar.c:1409
+#: gtk/gtkplacessidebar.c:1182 gtk/gtkplacessidebar.c:1210
+#: gtk/gtkplacessidebar.c:1410
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "سوار و گشودن «%s»"
 
-#: gtk/gtkplacessidebar.c:1304
+#: gtk/gtkplacessidebar.c:1305
 msgid "Open the contents of the file system"
 msgstr "گشودن محتوای سامانهٔ پرونده"
 
-#: gtk/gtkplacessidebar.c:1387
+#: gtk/gtkplacessidebar.c:1388
 msgid "New bookmark"
 msgstr "نشانک جدید"
 
-#: gtk/gtkplacessidebar.c:1389
+#: gtk/gtkplacessidebar.c:1390
 msgid "Add a new bookmark"
 msgstr "اضافه کردن یک نشانک جدید"
 
-#: gtk/gtkplacessidebar.c:1454
+#: gtk/gtkplacessidebar.c:1455
 msgid "Other Locations"
 msgstr "دیگر مکان‌ها"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1456
 msgid "Show other locations"
 msgstr "نمایش دیگر مکان‌ها"
 
-#: gtk/gtkplacessidebar.c:1960 gtk/gtkplacessidebar.c:2961
+#: gtk/gtkplacessidebar.c:1961 gtk/gtkplacessidebar.c:2962
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "نتوانست %s را شروع کند"
@@ -2728,212 +2732,212 @@ msgstr "نتوانست %s را شروع کند"
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
 #.
-#: gtk/gtkplacessidebar.c:1996
+#: gtk/gtkplacessidebar.c:1997
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "خطا در قفل‌گشایی %s"
 
-#: gtk/gtkplacessidebar.c:1998
+#: gtk/gtkplacessidebar.c:1999
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "نتوانست به %s دسترسی یابد"
 
-#: gtk/gtkplacessidebar.c:2229
+#: gtk/gtkplacessidebar.c:2230
 msgid "This name is already taken"
 msgstr "این نام از پیش گرفته شده"
 
-#: gtk/gtkplacessidebar.c:2302 gtk/inspector/actions.ui:19
+#: gtk/gtkplacessidebar.c:2303 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
 #: gtk/ui/gtkfilechooserwidget.ui:167 gtk/ui/gtkfilechooserwidget.ui:439
 #: gtk/ui/gtkprintunixdialog.ui:85
 msgid "Name"
 msgstr "نام"
 
-#: gtk/gtkplacessidebar.c:2502
+#: gtk/gtkplacessidebar.c:2503
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "نتوانست %s را پیاده کند"
 
-#: gtk/gtkplacessidebar.c:2678
+#: gtk/gtkplacessidebar.c:2679
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "نتوانست %s را متوقّف کند"
 
-#: gtk/gtkplacessidebar.c:2707
+#: gtk/gtkplacessidebar.c:2708
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "نتوانست %s را بیرون دهد"
 
-#: gtk/gtkplacessidebar.c:2736 gtk/gtkplacessidebar.c:2765
+#: gtk/gtkplacessidebar.c:2737 gtk/gtkplacessidebar.c:2766
 #, c-format
 msgid "Unable to eject %s"
 msgstr "نتوانست %s را بیرون دهد"
 
-#: gtk/gtkplacessidebar.c:2913
+#: gtk/gtkplacessidebar.c:2914
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "نتوانست %s را برای تغییرات رسانه‌ای بررسی کند"
 
-#: gtk/gtkplacessidebar.c:3132 gtk/gtkplacessidebar.c:3219 gtk/gtkplacesview.c:1654
+#: gtk/gtkplacessidebar.c:3133 gtk/gtkplacessidebar.c:3220 gtk/gtkplacesview.c:1662
 msgid "Open in New _Tab"
 msgstr "گشودن در _زبانهٔ جدید"
 
-#: gtk/gtkplacessidebar.c:3138 gtk/gtkplacessidebar.c:3228 gtk/gtkplacesview.c:1659
+#: gtk/gtkplacessidebar.c:3139 gtk/gtkplacessidebar.c:3229 gtk/gtkplacesview.c:1667
 msgid "Open in New _Window"
 msgstr "گشودن در _پنجرهٔ جدید"
 
-#: gtk/gtkplacessidebar.c:3239
+#: gtk/gtkplacessidebar.c:3240
 msgid "_Add Bookmark"
 msgstr "_افزودن نشانک"
 
-#: gtk/gtkplacessidebar.c:3243
+#: gtk/gtkplacessidebar.c:3244
 msgid "_Remove"
 msgstr "_برداشتن"
 
-#: gtk/gtkplacessidebar.c:3259 gtk/gtkplacesview.c:1684
+#: gtk/gtkplacessidebar.c:3260 gtk/gtkplacesview.c:1692
 msgid "_Mount"
 msgstr "_سوار کردن"
 
-#: gtk/gtkplacessidebar.c:3268 gtk/gtkplacesview.c:1673
+#: gtk/gtkplacessidebar.c:3269 gtk/gtkplacesview.c:1681
 msgid "_Unmount"
 msgstr "_پیاده کردن"
 
-#: gtk/gtkplacessidebar.c:3275
+#: gtk/gtkplacessidebar.c:3276
 msgid "_Eject"
 msgstr "_بیرون دادن"
 
-#: gtk/gtkplacessidebar.c:3285
+#: gtk/gtkplacessidebar.c:3286
 msgid "_Detect Media"
 msgstr "_تشخیص رسانه"
 
-#: gtk/gtkplacessidebar.c:3294
+#: gtk/gtkplacessidebar.c:3295
 msgid "_Start"
 msgstr "_شروع"
 
-#: gtk/gtkplacessidebar.c:3296
+#: gtk/gtkplacessidebar.c:3297
 msgid "_Power On"
 msgstr "_روشن کردن"
 
-#: gtk/gtkplacessidebar.c:3297
+#: gtk/gtkplacessidebar.c:3298
 msgid "_Connect Drive"
 msgstr "_وصل کردن گرداننده"
 
-#: gtk/gtkplacessidebar.c:3298
+#: gtk/gtkplacessidebar.c:3299
 msgid "_Start Multi-disk Device"
 msgstr "_شروع افزارهٔ چنددیسکه"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3300
 msgid "_Unlock Device"
 msgstr "قفل‌_گشایی افزاره"
 
-#: gtk/gtkplacessidebar.c:3309
+#: gtk/gtkplacessidebar.c:3310
 msgid "_Stop"
 msgstr "_توقّف"
 
-#: gtk/gtkplacessidebar.c:3311
+#: gtk/gtkplacessidebar.c:3312
 msgid "_Safely Remove Drive"
 msgstr "_برداشتن امن گرداننده"
 
-#: gtk/gtkplacessidebar.c:3312
+#: gtk/gtkplacessidebar.c:3313
 msgid "_Disconnect Drive"
 msgstr "_قطع کردن گرداننده"
 
-#: gtk/gtkplacessidebar.c:3313
+#: gtk/gtkplacessidebar.c:3314
 msgid "_Stop Multi-disk Device"
 msgstr "_توقف افزارهٔ چنددیسکه"
 
-#: gtk/gtkplacessidebar.c:3314
+#: gtk/gtkplacessidebar.c:3315
 msgid "_Lock Device"
 msgstr "_قفل افزاره"
 
-#: gtk/gtkplacessidebar.c:3802 gtk/gtkplacesview.c:1106
+#: gtk/gtkplacessidebar.c:3803 gtk/gtkplacesview.c:1103
 msgid "Computer"
 msgstr "رایانه"
 
-#: gtk/gtkplacesview.c:892
+#: gtk/gtkplacesview.c:889
 msgid "Searching for network locations"
 msgstr "جست‌وجو برای مکان‌های شبکه"
 
-#: gtk/gtkplacesview.c:899
+#: gtk/gtkplacesview.c:896
 msgid "No network locations found"
 msgstr "هیچ مکان شبکه‌ای پیدا نشد"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1213 gtk/gtkplacesview.c:1299
+#: gtk/gtkplacesview.c:1210 gtk/gtkplacesview.c:1307
 msgid "Unable to access location"
 msgstr "نتوانست به موقعیت دسترسی یابد"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1229 gtk/ui/gtkplacesview.ui:262
+#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
 msgid "Con_nect"
 msgstr "اتّ_صال"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1358
+#: gtk/gtkplacesview.c:1366
 msgid "Unable to unmount volume"
 msgstr "نتوانست حجم را پیاده کند"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1450
+#: gtk/gtkplacesview.c:1458
 msgid "Cance_l"
 msgstr "_لغو"
 
-#: gtk/gtkplacesview.c:1597
+#: gtk/gtkplacesview.c:1605
 msgid "AppleTalk"
 msgstr "اپل‌تاک"
 
-#: gtk/gtkplacesview.c:1603
+#: gtk/gtkplacesview.c:1611
 msgid "File Transfer Protocol"
 msgstr "قرارداد انتقال پرونده"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1605
+#: gtk/gtkplacesview.c:1613
 msgid "ftp:// or ftps://"
 msgstr "ftp:// یا ftps://"
 
-#: gtk/gtkplacesview.c:1611
+#: gtk/gtkplacesview.c:1619
 msgid "Network File System"
 msgstr "سامانهٔ پروندهٔ شبکه"
 
-#: gtk/gtkplacesview.c:1617
+#: gtk/gtkplacesview.c:1625
 msgid "Samba"
 msgstr "سامبا"
 
-#: gtk/gtkplacesview.c:1623
+#: gtk/gtkplacesview.c:1631
 msgid "SSH File Transfer Protocol"
 msgstr "قرارداد انتقال پروندهٔ SSH"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1625
+#: gtk/gtkplacesview.c:1633
 msgid "sftp:// or ssh://"
 msgstr "sftp:// یا ssh://"
 
-#: gtk/gtkplacesview.c:1631
+#: gtk/gtkplacesview.c:1639
 msgid "WebDAV"
 msgstr "وب‌دو"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkplacesview.c:1641
 msgid "dav:// or davs://"
 msgstr "dav:// یا davs://"
 
-#: gtk/gtkplacesview.c:1668
+#: gtk/gtkplacesview.c:1676
 msgid "_Disconnect"
 msgstr "_قطع ارتباط"
 
-#: gtk/gtkplacesview.c:1679
+#: gtk/gtkplacesview.c:1687
 msgid "_Connect"
 msgstr "اتّ_صال"
 
-#: gtk/gtkplacesview.c:1863
+#: gtk/gtkplacesview.c:1871
 msgid "Unable to get remote server location"
 msgstr "نتوانست موقعیت کارساز دوردست را بگیرد"
 
-#: gtk/gtkplacesview.c:2006 gtk/gtkplacesview.c:2015
+#: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
 msgid "Networks"
 msgstr "شبکه"
 
-#: gtk/gtkplacesview.c:2006 gtk/gtkplacesview.c:2015
+#: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
 msgid "On This Computer"
 msgstr "روی این رایانه"
 
@@ -2951,7 +2955,8 @@ msgstr[0] "%s / %s در دسترس"
 msgid "Disconnect"
 msgstr "قطع ارتباط"
 
-#: gtk/gtkplacesviewrow.c:485 gtk/ui/gtkplacesviewrow.ui:53 gtk/ui/gtksidebarrow.ui:50
+#: gtk/gtkplacesviewrow.c:485 gtk/ui/gtkplacesviewrow.ui:53
+#: gtk/ui/gtksidebarrow.ui:50
 msgid "Unmount"
 msgstr "پیاده کردن"
 
@@ -2980,84 +2985,84 @@ msgstr "در دسترس نیست"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:255
+#: gtk/gtkprintoperation.c:253
 #, c-format
 msgid "%s job #%d"
 msgstr "%s کار شماره %Id"
 
-#: gtk/gtkprintoperation.c:1697
+#: gtk/gtkprintoperation.c:1719
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "وضعیت نخستین"
 
-#: gtk/gtkprintoperation.c:1698
+#: gtk/gtkprintoperation.c:1720
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "در حال آماده‌سازی برای چاپ"
 
-#: gtk/gtkprintoperation.c:1699
+#: gtk/gtkprintoperation.c:1721
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "درحال تولید داده"
 
-#: gtk/gtkprintoperation.c:1700
+#: gtk/gtkprintoperation.c:1722
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "در حال فرستادن داده"
 
-#: gtk/gtkprintoperation.c:1701
+#: gtk/gtkprintoperation.c:1723
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "منتظر"
 
-#: gtk/gtkprintoperation.c:1702
+#: gtk/gtkprintoperation.c:1724
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "در حال مسدود کردن بدلیل یک مشکل"
 
-#: gtk/gtkprintoperation.c:1703
+#: gtk/gtkprintoperation.c:1725
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "در حال چاپ"
 
-#: gtk/gtkprintoperation.c:1704
+#: gtk/gtkprintoperation.c:1726
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "پایان یافت"
 
-#: gtk/gtkprintoperation.c:1705
+#: gtk/gtkprintoperation.c:1727
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "با خطا پایان یافت"
 
-#: gtk/gtkprintoperation.c:2239
+#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "در حال آماده‌سازی %Id"
 
-#: gtk/gtkprintoperation.c:2241 gtk/gtkprintoperation.c:2857
+#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2890
 #, c-format
 msgid "Preparing"
 msgstr "در حال آماده‌سازی"
 
-#: gtk/gtkprintoperation.c:2244
+#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "در حال چاپ %Id"
 
-#: gtk/gtkprintoperation.c:2888
+#: gtk/gtkprintoperation.c:2921
 #, c-format
 msgid "Error creating print preview"
 msgstr "خطا در ایجاد پیش‌نمایش چاپ"
 
-#: gtk/gtkprintoperation.c:2891
+#: gtk/gtkprintoperation.c:2924
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "محتمل‌ترین دلیل این‌است که نمی‌توان یک پروندهٔ موقت ایجاد کرد."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3028
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3069
 msgid "Print"
 msgstr "چاپ"
 
@@ -3074,7 +3079,8 @@ msgid "Out of paper"
 msgstr "بدون کاغذ"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:638 modules/printbackends/gtkprintbackendcups.c:2607
+#: gtk/gtkprintoperation-win32.c:638
+#: modules/printbackends/gtkprintbackendcups.c:2659
 msgid "Paused"
 msgstr "مکث شده"
 
@@ -3119,19 +3125,19 @@ msgstr "تصدی نامعتبر به PrintDlgEx"
 msgid "Unspecified error"
 msgstr "خطای نامشخص"
 
-#: gtk/gtkprintunixdialog.c:781
+#: gtk/gtkprintunixdialog.c:822
 msgid "Pre_view"
 msgstr "_پیش‌نمایش"
 
-#: gtk/gtkprintunixdialog.c:783
+#: gtk/gtkprintunixdialog.c:824
 msgid "_Print"
 msgstr "_چاپ"
 
-#: gtk/gtkprintunixdialog.c:911
+#: gtk/gtkprintunixdialog.c:952
 msgid "Getting printer information failed"
 msgstr "گرفتن اطلاعات چاپگر شکست خورد"
 
-#: gtk/gtkprintunixdialog.c:1847
+#: gtk/gtkprintunixdialog.c:1888
 msgid "Getting printer information…"
 msgstr "در حال گرفتن اطلاعاتِ چاپگر…"
 
@@ -3141,81 +3147,82 @@ msgstr "در حال گرفتن اطلاعاتِ چاپگر…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:2773 modules/printbackends/gtkprintbackendcups.c:5465
+#: gtk/gtkprintunixdialog.c:2814 modules/printbackends/gtkprintbackendcups.c:5674
 msgid "Left to right, top to bottom"
 msgstr "از چپ به راست، از بالا به پایین"
 
-#: gtk/gtkprintunixdialog.c:2773 modules/printbackends/gtkprintbackendcups.c:5465
+#: gtk/gtkprintunixdialog.c:2814 modules/printbackends/gtkprintbackendcups.c:5674
 msgid "Left to right, bottom to top"
 msgstr "از چپ به راست، از پایین به ابتدا"
 
-#: gtk/gtkprintunixdialog.c:2774 modules/printbackends/gtkprintbackendcups.c:5466
+#: gtk/gtkprintunixdialog.c:2815 modules/printbackends/gtkprintbackendcups.c:5675
 msgid "Right to left, top to bottom"
 msgstr "از راست به چپ، از بالا به پایین"
 
-#: gtk/gtkprintunixdialog.c:2774 modules/printbackends/gtkprintbackendcups.c:5466
+#: gtk/gtkprintunixdialog.c:2815 modules/printbackends/gtkprintbackendcups.c:5675
 msgid "Right to left, bottom to top"
 msgstr "از راست به چپ، از پایین به بالا"
 
-#: gtk/gtkprintunixdialog.c:2775 modules/printbackends/gtkprintbackendcups.c:5467
+#: gtk/gtkprintunixdialog.c:2816 modules/printbackends/gtkprintbackendcups.c:5676
 msgid "Top to bottom, left to right"
 msgstr "از بالا به پایین، از چپ به راست"
 
-#: gtk/gtkprintunixdialog.c:2775 modules/printbackends/gtkprintbackendcups.c:5467
+#: gtk/gtkprintunixdialog.c:2816 modules/printbackends/gtkprintbackendcups.c:5676
 msgid "Top to bottom, right to left"
 msgstr "از بالا به پایین، از راست به چپ"
 
-#: gtk/gtkprintunixdialog.c:2776 modules/printbackends/gtkprintbackendcups.c:5468
+#: gtk/gtkprintunixdialog.c:2817 modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Bottom to top, left to right"
 msgstr "از انتها به ابتدا، از چپ به راست"
 
-#: gtk/gtkprintunixdialog.c:2776 modules/printbackends/gtkprintbackendcups.c:5468
+#: gtk/gtkprintunixdialog.c:2817 modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Bottom to top, right to left"
 msgstr "از پایین به بالا، از راست به چپ"
 
-#: gtk/gtkprintunixdialog.c:2780 gtk/gtkprintunixdialog.c:2793
+#: gtk/gtkprintunixdialog.c:2821 gtk/gtkprintunixdialog.c:2834
 msgid "Page Ordering"
 msgstr "ترتیب صفحه‌ها"
 
-#: gtk/gtkprintunixdialog.c:2809
+#: gtk/gtkprintunixdialog.c:2850
 msgid "Left to right"
 msgstr "چپ به راست"
 
-#: gtk/gtkprintunixdialog.c:2810
+#: gtk/gtkprintunixdialog.c:2851
 msgid "Right to left"
 msgstr "راست به چپ"
 
-#: gtk/gtkprintunixdialog.c:2822
+#: gtk/gtkprintunixdialog.c:2863
 msgid "Top to bottom"
 msgstr "از بالا به پایین"
 
-#: gtk/gtkprintunixdialog.c:2823
+#: gtk/gtkprintunixdialog.c:2864
 msgid "Bottom to top"
 msgstr "از پایین به بالا"
 
-#: gtk/gtkprogressbar.c:599
+#: gtk/gtkprogressbar.c:619
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%I.0f ٪"
 
-#: gtk/gtkrecentmanager.c:1030 gtk/gtkrecentmanager.c:1043 gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1191 gtk/gtkrecentmanager.c:1241 gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1027 gtk/gtkrecentmanager.c:1040
+#: gtk/gtkrecentmanager.c:1178 gtk/gtkrecentmanager.c:1188
+#: gtk/gtkrecentmanager.c:1238 gtk/gtkrecentmanager.c:1247
 #, c-format
 msgid "Unable to find an item with URI “%s”"
 msgstr "نمی‌توان موردی با نشانی «%s» یافت"
 
-#: gtk/gtkrecentmanager.c:1265
+#: gtk/gtkrecentmanager.c:1262
 #, c-format
 msgid "Unable to move the item with URI “%s” to “%s”"
 msgstr "نمی‌توان مورد با نشانی «%s» را به %s منتقل کرد"
 
-#: gtk/gtkrecentmanager.c:2317
+#: gtk/gtkrecentmanager.c:2323
 #, c-format
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "هیچ برنامهٔ ثبت شده‌ای با نام «%s» برای موردی با آدرس «%s» یافت نشد"
 
-#: gtk/gtksearchentry.c:578
+#: gtk/gtksearchentry.c:599
 msgid "Clear entry"
 msgstr "پاک‌سازی ورودی"
 
@@ -3224,7 +3231,7 @@ msgstr "پاک‌سازی ورودی"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/gtkshortcutlabel.c:80
+#: gtk/gtkshortcutlabel.c:78
 msgctxt "keyboard side marker"
 msgid "L"
 msgstr "چ"
@@ -3234,12 +3241,12 @@ msgstr "چ"
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
 #.
-#: gtk/gtkshortcutlabel.c:93
+#: gtk/gtkshortcutlabel.c:91
 msgctxt "keyboard side marker"
 msgid "R"
 msgstr "ر"
 
-#: gtk/gtkshortcutssection.c:397
+#: gtk/gtkshortcutssection.c:404
 msgid "_Show All"
 msgstr "_نمایش همه"
 
@@ -3276,26 +3283,26 @@ msgid "Swipe right"
 msgstr "کشیدن به راست"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:875 gtk/inspector/window.ui:517
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:517
 msgid "Shortcuts"
 msgstr "میانبرها"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:880
+#: gtk/gtkshortcutswindow.c:879
 msgid "Search Results"
 msgstr "نتایج جست‌وجو"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:910
+#: gtk/gtkshortcutswindow.c:909
 msgid "Search Shortcuts"
 msgstr "میانبرهای جست‌وجو"
 
-#: gtk/gtkshortcutswindow.c:969 gtk/ui/gtkemojichooser.ui:346
+#: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:348
 #: gtk/ui/gtkfilechooserwidget.ui:296
 msgid "No Results Found"
 msgstr "هیچ نتیجه‌ای پیدا نشد"
 
-#: gtk/gtkshortcutswindow.c:975 gtk/ui/gtkemojichooser.ui:359
+#: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:361
 #: gtk/ui/gtkfilechooserwidget.ui:309 gtk/ui/gtkplacesview.ui:230
 msgid "Try a different search"
 msgstr "جست‌وجو دیگری را امتحان کنید"
@@ -3304,27 +3311,27 @@ msgstr "جست‌وجو دیگری را امتحان کنید"
 msgid "Could not show link"
 msgstr "نتوانست پیوند را نشان دهد"
 
-#: gtk/gtktext.c:5974 gtk/gtktextview.c:8590
+#: gtk/gtktext.c:6059 gtk/gtktextview.c:8779
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
-#: gtk/gtktextview.c:8572
+#: gtk/gtktextview.c:8761
 msgid "_Undo"
 msgstr "بر_گردان"
 
-#: gtk/gtktextview.c:8576
+#: gtk/gtktextview.c:8765
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
-#: gtk/gtktreeexpander.c:194
+#: gtk/gtktreeexpander.c:195
 msgid "Expand"
 msgstr "گسترش"
 
-#: gtk/gtkvolumebutton.c:229
+#: gtk/gtkvolumebutton.c:230
 msgid "Muted"
 msgstr "بی‌صدا"
 
-#: gtk/gtkvolumebutton.c:233
+#: gtk/gtkvolumebutton.c:234
 msgid "Full Volume"
 msgstr "نهایت صدا"
 
@@ -3333,56 +3340,56 @@ msgstr "نهایت صدا"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:246
+#: gtk/gtkvolumebutton.c:247
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkwindow.c:5938
+#: gtk/gtkwindow.c:6124
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "می‌خواهید از بازرس +GTK استفاده کنید؟"
 
-#: gtk/gtkwindow.c:5940
+#: gtk/gtkwindow.c:6126
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify the "
 "internals of any GTK application. Using it may cause the application to break or "
 "crash."
 msgstr ""
-"بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK را "
-"می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
+"بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK "
+"را می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
 
-#: gtk/gtkwindow.c:5945
+#: gtk/gtkwindow.c:6131
 msgid "Don’t show this message again"
 msgstr "این پیام را دوباره نشان نده"
 
-#: gtk/gtkwindowcontrols.c:307 gtk/gtkwindowhandle.c:232
+#: gtk/gtkwindowcontrols.c:309 gtk/gtkwindowhandle.c:230
 msgid "Minimize"
 msgstr "حداقل کردن"
 
-#: gtk/gtkwindowcontrols.c:309
+#: gtk/gtkwindowcontrols.c:311
 msgid "Minimize the window"
 msgstr "کمینه کردن پنجره"
 
-#: gtk/gtkwindowcontrols.c:333 gtk/gtkwindowhandle.c:238
+#: gtk/gtkwindowcontrols.c:335 gtk/gtkwindowhandle.c:236
 msgid "Maximize"
 msgstr "حداکثر کردن"
 
-#: gtk/gtkwindowcontrols.c:335
+#: gtk/gtkwindowcontrols.c:337
 msgid "Maximize the window"
 msgstr "بیشینه کردن پنجره"
 
-#: gtk/gtkwindowcontrols.c:355 gtk/gtkwindowhandle.c:248
+#: gtk/gtkwindowcontrols.c:357 gtk/gtkwindowhandle.c:246
 msgid "Close"
 msgstr "بستن"
 
-#: gtk/gtkwindowcontrols.c:357
+#: gtk/gtkwindowcontrols.c:359
 msgid "Close the window"
 msgstr "بستن پنجره"
 
-#: gtk/gtkwindowhandle.c:225
+#: gtk/gtkwindowhandle.c:223
 msgid "Restore"
 msgstr "بازآوری"
 
@@ -3456,7 +3463,8 @@ msgstr "در این‌جا می‌توانید هر قاعدهٔ CSS قابل ش
 
 #: gtk/inspector/css-editor.c:130
 msgid ""
-"You can temporarily disable this custom CSS by clicking on the “Pause” button above."
+"You can temporarily disable this custom CSS by clicking on the “Pause” button "
+"above."
 msgstr ""
 "می‌توانید با کلیک روی دکمهٔ «مکث» در بالا، این CSS سفارشی را موقّتاً از کار بیندازید."
 
@@ -3489,26 +3497,46 @@ msgstr "سبک کلاس‌ها"
 msgid "CSS Property"
 msgstr "مشخصه CSS"
 
+#: gtk/inspector/general.c:299
+msgctxt "GL version"
+msgid "Disabled"
+msgstr "از کار افتاده"
+
+#: gtk/inspector/general.c:300
+msgctxt "GL vendor"
+msgid "Disabled"
+msgstr "از کار افتاده"
+
 # farmaan
-#: gtk/inspector/general.c:345
+#: gtk/inspector/general.c:340 gtk/inspector/general.c:358
 msgctxt "GL version"
 msgid "None"
 msgstr "هیچ‌کدام"
 
 # farmaan
-#: gtk/inspector/general.c:346
+#: gtk/inspector/general.c:341 gtk/inspector/general.c:359
 msgctxt "GL vendor"
 msgid "None"
 msgstr "هیچ‌کدام"
 
+#: gtk/inspector/general.c:410
+msgctxt "Vulkan device"
+msgid "Disabled"
+msgstr "از کار افتاده"
+
+#: gtk/inspector/general.c:411 gtk/inspector/general.c:412
+msgctxt "Vulkan version"
+msgid "Disabled"
+msgstr "از کار افتاده"
+
 # farmaan
-#: gtk/inspector/general.c:447
+#: gtk/inspector/general.c:468
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "هیچ‌کدام"
 
 # farmaan
-#: gtk/inspector/general.c:448 gtk/inspector/general.c:449
+#: gtk/inspector/general.c:469 gtk/inspector/general.c:470
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "هیچ‌کدام"
@@ -3627,8 +3655,8 @@ msgid "Surface"
 msgstr "سطح"
 
 #: gtk/inspector/misc-info.ui:316 gtk/inspector/misc-info.ui:355
-#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1054
-#: gtk/inspector/prop-editor.c:1414 gtk/inspector/window.ui:415
+#: gtk/inspector/misc-info.ui:394 gtk/inspector/prop-editor.c:1111
+#: gtk/inspector/prop-editor.c:1471 gtk/inspector/window.ui:415
 msgid "Properties"
 msgstr "ویژگی‌ها"
 
@@ -3705,67 +3733,67 @@ msgstr "%s برای %s %p"
 msgid "%s with value type %s"
 msgstr "%s با گونهٔ مقدار %s"
 
-#: gtk/inspector/prop-editor.c:1122
+#: gtk/inspector/prop-editor.c:1179
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "مشخصه غیرقابل ویرایش: %s"
 
 # farmaan
-#: gtk/inspector/prop-editor.c:1266
+#: gtk/inspector/prop-editor.c:1323
 msgctxt "column number"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/inspector/prop-editor.c:1303
+#: gtk/inspector/prop-editor.c:1360
 msgid "Attribute:"
 msgstr "ویژگی:"
 
-#: gtk/inspector/prop-editor.c:1306
+#: gtk/inspector/prop-editor.c:1363
 msgid "Model"
 msgstr "مدل"
 
-#: gtk/inspector/prop-editor.c:1311
+#: gtk/inspector/prop-editor.c:1368
 msgid "Column:"
 msgstr "ستون:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1410
+#: gtk/inspector/prop-editor.c:1467
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "کنش از: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1465
+#: gtk/inspector/prop-editor.c:1522
 msgid "Reset"
 msgstr "تنظیم‌مجدد"
 
-#: gtk/inspector/prop-editor.c:1473
+#: gtk/inspector/prop-editor.c:1530
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "پیش‌گزیده"
 
-#: gtk/inspector/prop-editor.c:1476
+#: gtk/inspector/prop-editor.c:1533
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "زمینه"
 
-#: gtk/inspector/prop-editor.c:1479
+#: gtk/inspector/prop-editor.c:1536
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "تنظیمات X"
 
-#: gtk/inspector/prop-editor.c:1483
+#: gtk/inspector/prop-editor.c:1540
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "برنامه"
 
-#: gtk/inspector/prop-editor.c:1486
+#: gtk/inspector/prop-editor.c:1543
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "ناشناخته"
 
-#: gtk/inspector/prop-editor.c:1489
+#: gtk/inspector/prop-editor.c:1546
 msgid "Source:"
 msgstr "منبع:"
 
@@ -6517,281 +6545,6 @@ msgctxt "Script"
 msgid "Yezidi"
 msgstr "یزیدی"
 
-#: gtk/tools/encodesymbolic.c:41
-msgid "Output to this directory instead of cwd"
-msgstr "به‌جای شاخه فعلی در این شاخه خارج شود"
-
-#: gtk/tools/encodesymbolic.c:42
-msgid "Generate debug output"
-msgstr "ایجاد برون‌داد رفع‌اشکال"
-
-#: gtk/tools/encodesymbolic.c:94
-#, c-format
-msgid "Invalid size %s\n"
-msgstr "اندازه نامعتبر: %s\n"
-
-#: gtk/tools/encodesymbolic.c:106 gtk/tools/encodesymbolic.c:115
-#, c-format
-msgid "Can’t load file: %s\n"
-msgstr "نمی‌توان پرونده را بار کرد: %s\n"
-
-#: gtk/tools/encodesymbolic.c:143 gtk/tools/encodesymbolic.c:149
-#, c-format
-msgid "Can’t save file %s: %s\n"
-msgstr "نمی‌توان پروندهٔ %s را ذخیره کرد: %s\n"
-
-#: gtk/tools/encodesymbolic.c:155
-#, c-format
-msgid "Can’t close stream"
-msgstr "نمی‌توان جریان را بست"
-
-#: gtk/tools/gtk-builder-tool.c:34
-#, c-format
-msgid ""
-"Usage:\n"
-"  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-"\n"
-"Commands:\n"
-"  validate     Validate the file\n"
-"  simplify     Simplify the file\n"
-"  enumerate    List all named objects\n"
-"  preview      Preview the file\n"
-"\n"
-"Simplify Options:\n"
-"  --replace    Replace the file\n"
-"  --3to4       Convert from GTK 3 to GTK 4\n"
-"\n"
-"Preview Options:\n"
-"  --id=ID      Preview only the named object\n"
-"  --css=FILE   Use style from CSS file\n"
-"\n"
-"Perform various tasks on GtkBuilder .ui files.\n"
-msgstr ""
-"استفاده:\n"
-"  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-"\n"
-"دستورات:\n"
-"  validate     تصدیق پرونده\n"
-"  simplify     ساده‌سازی پرونده\n"
-"  enumerate    فهرست کردن تمام اشیای نام‌دار\n"
-"  preview      پیش‌نمایش پرونده\n"
-"\n"
-"گزینه‌های ساده‌سازی:\n"
-"  --replace    جایگزینی پرونده\n"
-"  --3to4       ‫تبدیل از GTK 3 به GTK 4‬\n"
-"\n"
-"گزینه‌های پیش‌نمایش:\n"
-"  --id=ID      فقط پیش‌نمایش شی نام‌دار\n"
-"  --css=FILE   ‫استفادهٔ سبک از پروندهٔ CSS‬\n"
-"\n"
-"انجام وظایف محتلف روی پرونده‌های ‪.ui‬ مربوط به GtkBuilder\n"
-
-#: gtk/tools/gtk-builder-tool-simplify.c:436
-#, c-format
-msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
-msgstr ""
-"%s:%Id: نمی‌توان مقدار ویژگی «%s» را تجزیه کرد: %s\n"
-"\n"
-
-#: gtk/tools/gtk-builder-tool-simplify.c:591
-#, c-format
-msgid "%s:%d: %sproperty %s::%s not found\n"
-msgstr "%s:%d: %sویژگی %s::%s پیدا نشد\n"
-
-#: gtk/tools/gtk-builder-tool-simplify.c:2203
-#, c-format
-msgid "Can’t load “%s”: %s\n"
-msgstr "نمی‌توان «%s» را بار کرد: %s\n"
-
-#: gtk/tools/gtk-builder-tool-simplify.c:2214
-#, c-format
-msgid "Can’t parse “%s”: %s\n"
-msgstr "نمی‌توان «%s» را تجزیه کرد: %s\n"
-
-#: gtk/tools/gtk-builder-tool-simplify.c:2238
-#, c-format
-msgid "Failed to read “%s”: %s\n"
-msgstr "نمی‌توان «%s» را خواند: %s\n"
-
-#: gtk/tools/gtk-builder-tool-simplify.c:2244
-#, c-format
-msgid "Failed to write %s: “%s”\n"
-msgstr "نمی‌توان «%s» را نوشت: %s\n"
-
-#: gtk/tools/gtk-builder-tool-simplify.c:2284
-#, c-format
-msgid "No .ui file specified\n"
-msgstr "هیچ پروندهٔ ‪.ui‬ ای مشخّص نشده\n"
-
-#: gtk/tools/gtk-builder-tool-simplify.c:2290
-#, c-format
-msgid "Can only simplify a single .ui file without --replace\n"
-msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.ui‬ را بدون ‪--replace‬ ساده‌سازی کند\n"
-
-#: gtk/tools/gtk-launch.c:40
-msgid "Show program version"
-msgstr "نمایش نسخه برنامه"
-
-#. Translators: this message will appear immediately after the
-#. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
-#: gtk/tools/gtk-launch.c:74
-msgid "APPLICATION [URI…] — launch an APPLICATION"
-msgstr "APPLICATION [URI…] — اجرای یک برنامه"
-
-#. Translators: this message will appear after the usage string
-#. and before the list of options.
-#: gtk/tools/gtk-launch.c:78
-msgid ""
-"Launch an application (specified by its desktop file name),\n"
-"optionally passing one or more URIs as arguments."
-msgstr ""
-"اجرا یک برنامه مشخص (با استفاده از اطلاعات پرونده رومیزی‌اش)\n"
-"به‌طور اختیاری ارسال فهرست URIها به‌عنوان آرگومان."
-
-#: gtk/tools/gtk-launch.c:88
-#, c-format
-msgid "Error parsing commandline options: %s\n"
-msgstr "خطا در تجزیه گزینه‌های خط فرمان: %s\n"
-
-#: gtk/tools/gtk-launch.c:90 gtk/tools/gtk-launch.c:111
-#, c-format
-msgid "Try “%s --help” for more information."
-msgstr "برای اطّلاعات بیش‌تر \"%s --help\" را بیازمایید."
-
-#. Translators: the %s is the program name. This error message
-#. means the user is calling gtk-launch without any argument.
-#: gtk/tools/gtk-launch.c:109
-#, c-format
-msgid "%s: missing application name"
-msgstr "%s: نام برنامه پیدا نمی‌شود"
-
-#: gtk/tools/gtk-launch.c:138
-#, c-format
-msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr "ایجاد AppInfo از طریق شناسه روی سیستم‌های غیریونیکسی پشتیبانی نمی‌شود"
-
-#. Translators: the first %s is the program name, the second one
-#. is the application name.
-#: gtk/tools/gtk-launch.c:146
-#, c-format
-msgid "%s: no such application %s"
-msgstr "%s: همچین برنامه‌ای وجود ندارد %s"
-
-#. Translators: the first %s is the program name, the second one
-#. is the error message.
-#: gtk/tools/gtk-launch.c:164
-#, c-format
-msgid "%s: error launching application: %s\n"
-msgstr "%s: خطا در اجرا برنامه: %s\n"
-
-#: gtk/tools/updateiconcache.c:1392
-#, c-format
-msgid "Failed to write header\n"
-msgstr "نوشتن سرآیند خراب شد\n"
-
-#: gtk/tools/updateiconcache.c:1398
-#, c-format
-msgid "Failed to write hash table\n"
-msgstr "نوشتن جدول درهم خراب شد \n"
-
-#: gtk/tools/updateiconcache.c:1404
-#, c-format
-msgid "Failed to write folder index\n"
-msgstr "نوشتن نمایهٔ پوشه خراب شد\n"
-
-#: gtk/tools/updateiconcache.c:1412
-#, c-format
-msgid "Failed to rewrite header\n"
-msgstr "بازنویسی سرآیند خراب شد\n"
-
-#: gtk/tools/updateiconcache.c:1506
-#, c-format
-msgid "Failed to open file %s : %s\n"
-msgstr "گشودن پروندهٔ%s : %s خراب شد\n"
-
-#: gtk/tools/updateiconcache.c:1514 gtk/tools/updateiconcache.c:1544
-#, c-format
-msgid "Failed to write cache file: %s\n"
-msgstr "نوشتن پروندهٔ حافظه‌نهان «‎%s» خراب شد\n"
-
-#: gtk/tools/updateiconcache.c:1554
-#, c-format
-msgid "The generated cache was invalid.\n"
-msgstr "حافظه‌نهان تولید شده نامعتبر بود\n"
-
-#: gtk/tools/updateiconcache.c:1568
-#, c-format
-msgid "Could not rename %s to %s: %s, removing %s then.\n"
-msgstr "تغییر نما %s به %s ممکن نبود:  %s، پس %s پاک می‌شود.\n"
-
-#: gtk/tools/updateiconcache.c:1582
-#, c-format
-msgid "Could not rename %s to %s: %s\n"
-msgstr "تغییر نام «%s» به %s ممکن نبود: %s \n"
-
-#: gtk/tools/updateiconcache.c:1592
-#, c-format
-msgid "Could not rename %s back to %s: %s.\n"
-msgstr "برگشت تغییر نام پوشهٔ %s به %s ممکن نبود: %s \n"
-
-#: gtk/tools/updateiconcache.c:1619
-#, c-format
-msgid "Cache file created successfully.\n"
-msgstr "پروندهٔ حافظه‌نهان با موفقیت ایجاد شد.\n"
-
-#: gtk/tools/updateiconcache.c:1658
-msgid "Overwrite an existing cache, even if up to date"
-msgstr "جای‌نوشتن یک حافظه‌نهان موجود، حتی اگر به‌روز باشد"
-
-#: gtk/tools/updateiconcache.c:1659
-msgid "Don’t check for the existence of index.theme"
-msgstr "وجود index.theme بررسی نشود"
-
-#: gtk/tools/updateiconcache.c:1660
-msgid "Don’t include image data in the cache"
-msgstr "انباره شامل داده‌های تصویر نشود"
-
-#: gtk/tools/updateiconcache.c:1661
-msgid "Include image data in the cache"
-msgstr "حافظه‌نهان، داده‌های تصویر را شامل شود"
-
-#: gtk/tools/updateiconcache.c:1662
-msgid "Output a C header file"
-msgstr "خروج یک سر‌آیند C"
-
-#: gtk/tools/updateiconcache.c:1663
-msgid "Turn off verbose output"
-msgstr "خروجی مفصل را خاموش کن"
-
-#: gtk/tools/updateiconcache.c:1664
-msgid "Validate existing icon cache"
-msgstr "حافظه‌نهان نشان موجود اعتبارسنجی شود"
-
-#: gtk/tools/updateiconcache.c:1731
-#, c-format
-msgid "File not found: %s\n"
-msgstr "پرونده پیدا نشد: %s\n"
-
-#: gtk/tools/updateiconcache.c:1737
-#, c-format
-msgid "Not a valid icon cache: %s\n"
-msgstr "این یک حافظه نهان شمایل معتبر نیست: %s\n"
-
-#: gtk/tools/updateiconcache.c:1750
-#, c-format
-msgid "No theme index file.\n"
-msgstr "پروندهٔ نمایهٔ چهره‌ای نیست.\n"
-
-#: gtk/tools/updateiconcache.c:1754
-#, c-format
-msgid ""
-"No theme index file in “%s”.\n"
-"If you really want to create an icon cache here, use --ignore-theme-index.\n"
-msgstr ""
-"پروندهٔ نمایهٔ زمینه در «%s» نیست.\n"
-"اگر به‌راستی می‌خواهید این‌جا انبارهٔ نقشکی ایجاد کنید، از ‪--ignore-theme-index‬ استفاده "
-"کنید.\n"
-
 #: gtk/ui/gtkaboutdialog.ui:62
 msgid "About"
 msgstr "درباره"
@@ -6907,52 +6660,52 @@ msgstr "(هیچ‌کدام)"
 msgid "Search…"
 msgstr "جست‌وجو…"
 
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:236
+#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:238
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "شکلک‌ها و افراد"
 
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:245
+#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:247
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "بدن و لباس‌ها"
 
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:254
+#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:256
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "حیوانات و طبعیت"
 
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:263
+#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:265
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "غذا و نوشیدنی"
 
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:272
+#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:274
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "سفر و مکان‌ها"
 
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:281
+#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:283
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "فعّالیت‌ها"
 
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:290
+#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:292
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "اشیاء"
 
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:299
+#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:301
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "نمادها"
 
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:308
+#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:310
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "پرچم‌ها"
 
-#: gtk/ui/gtkemojichooser.ui:227
+#: gtk/ui/gtkemojichooser.ui:229
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "اخیر"
@@ -7298,404 +7051,404 @@ msgstr "ساکت"
 msgid "Pages per _sheet:"
 msgstr "تعداد صفحات در _برگه:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1123
-#: modules/printbackends/gtkprintbackendcups.c:1432
+#: modules/printbackends/gtkprintbackendcups.c:1151
+#: modules/printbackends/gtkprintbackendcups.c:1460
 msgid "Username:"
 msgstr "نام کاربری:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1124
-#: modules/printbackends/gtkprintbackendcups.c:1441
+#: modules/printbackends/gtkprintbackendcups.c:1152
+#: modules/printbackends/gtkprintbackendcups.c:1469
 msgid "Password:"
 msgstr "گذرواژه:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1163
-#: modules/printbackends/gtkprintbackendcups.c:1454
+#: modules/printbackends/gtkprintbackendcups.c:1191
+#: modules/printbackends/gtkprintbackendcups.c:1482
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "تصدیق هویت برای چاپ سند «%s» برروی چاپگر %s لازم است"
 
-#: modules/printbackends/gtkprintbackendcups.c:1165
+#: modules/printbackends/gtkprintbackendcups.c:1193
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "نیاز به تأیید هویت برای چاپ یک سند روی %s"
 
-#: modules/printbackends/gtkprintbackendcups.c:1169
+#: modules/printbackends/gtkprintbackendcups.c:1197
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "تصدیق هویت برای گرفتن ویژگی‌های مربوط به کار «%s» لازم است"
 
-#: modules/printbackends/gtkprintbackendcups.c:1171
+#: modules/printbackends/gtkprintbackendcups.c:1199
 msgid "Authentication is required to get attributes of a job"
 msgstr "نیاز به تأیید هویت برای گرفتن خصیصه‌های کاری"
 
-#: modules/printbackends/gtkprintbackendcups.c:1175
+#: modules/printbackends/gtkprintbackendcups.c:1203
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "نیاز به تأیید هویت برای گرفتن خصیصه‌های چاپگر %s"
 
-#: modules/printbackends/gtkprintbackendcups.c:1177
+#: modules/printbackends/gtkprintbackendcups.c:1205
 msgid "Authentication is required to get attributes of a printer"
 msgstr "نیاز به تأیید هویت برای گرفتن خصیصه‌های چاپگر"
 
-#: modules/printbackends/gtkprintbackendcups.c:1180
+#: modules/printbackends/gtkprintbackendcups.c:1208
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "نیاز به تأیید هویت برای گرفتن چاپگر پیش‌گزیدهٔ %s"
 
-#: modules/printbackends/gtkprintbackendcups.c:1183
+#: modules/printbackends/gtkprintbackendcups.c:1211
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "نیاز به تأیید هویت برای گرفتن چاپگر‌ها از %s"
 
-#: modules/printbackends/gtkprintbackendcups.c:1188
+#: modules/printbackends/gtkprintbackendcups.c:1216
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "نیاز به تأیید هویت برای گرفتن یک پرونده از %s"
 
-#: modules/printbackends/gtkprintbackendcups.c:1190
+#: modules/printbackends/gtkprintbackendcups.c:1218
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "نیاز به تأیید هویت روی %s"
 
-#: modules/printbackends/gtkprintbackendcups.c:1426
+#: modules/printbackends/gtkprintbackendcups.c:1454
 msgid "Domain:"
 msgstr "دامنه:"
 
-#: modules/printbackends/gtkprintbackendcups.c:1456
+#: modules/printbackends/gtkprintbackendcups.c:1484
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "تصدیق هویت برای چاپ سند‌ «%s» لازم است"
 
-#: modules/printbackends/gtkprintbackendcups.c:1461
+#: modules/printbackends/gtkprintbackendcups.c:1489
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "نیاز به تأیید هویت برای چاپ این سند روی چاپگر %s"
 
-#: modules/printbackends/gtkprintbackendcups.c:1463
+#: modules/printbackends/gtkprintbackendcups.c:1491
 msgid "Authentication is required to print this document"
 msgstr "تصدیق هویت برای چاپ این سند لازم است"
 
-#: modules/printbackends/gtkprintbackendcups.c:2536
+#: modules/printbackends/gtkprintbackendcups.c:2588
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "چاپگر «%s» جوهر کم دارد."
 
-#: modules/printbackends/gtkprintbackendcups.c:2540
+#: modules/printbackends/gtkprintbackendcups.c:2592
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "چاپگر «%s» هیچ جوهری ندارد."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2545
+#: modules/printbackends/gtkprintbackendcups.c:2597
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "چاپگر «%s» توسعه‌دهنده کم دارد."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/gtkprintbackendcups.c:2550
+#: modules/printbackends/gtkprintbackendcups.c:2602
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "چاپگر «%s» هیچ توسعه‌دهنده‌ای ندارد."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2555
+#: modules/printbackends/gtkprintbackendcups.c:2607
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "چاپگر «%s» دست‌کم یک منبع نشانگر کم دارد."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/gtkprintbackendcups.c:2560
+#: modules/printbackends/gtkprintbackendcups.c:2612
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "چاپگر «%s» دست‌کم از یک منبع نشانگر خالی است."
 
-#: modules/printbackends/gtkprintbackendcups.c:2564
+#: modules/printbackends/gtkprintbackendcups.c:2616
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "روکش روی چاپگر «%s» باز است."
 
-#: modules/printbackends/gtkprintbackendcups.c:2568
+#: modules/printbackends/gtkprintbackendcups.c:2620
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "در چاپگر «%s» باز است."
 
-#: modules/printbackends/gtkprintbackendcups.c:2572
+#: modules/printbackends/gtkprintbackendcups.c:2624
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "چاپگر «%s» کاغذ کم دارد."
 
-#: modules/printbackends/gtkprintbackendcups.c:2576
+#: modules/printbackends/gtkprintbackendcups.c:2628
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "چاپگر «%s» هیچ کاغذی ندارد."
 
-#: modules/printbackends/gtkprintbackendcups.c:2580
+#: modules/printbackends/gtkprintbackendcups.c:2632
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "چاپگر «%s» هم‌اکنون برون‌خط است."
 
-#: modules/printbackends/gtkprintbackendcups.c:2584
+#: modules/printbackends/gtkprintbackendcups.c:2636
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "چاپگر «%s» مشکلی دارد."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2604
+#: modules/printbackends/gtkprintbackendcups.c:2656
 msgid "Paused; Rejecting Jobs"
 msgstr "مکث؛ در حال رد کردن کار‌ها"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcups.c:2610
+#: modules/printbackends/gtkprintbackendcups.c:2662
 msgid "Rejecting Jobs"
 msgstr "در حال رد کردن کار‌ها"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/gtkprintbackendcups.c:2651
+#: modules/printbackends/gtkprintbackendcups.c:2703
 msgid "; "
 msgstr "؛ "
 
-#: modules/printbackends/gtkprintbackendcups.c:4402
-#: modules/printbackends/gtkprintbackendcups.c:4469
+#: modules/printbackends/gtkprintbackendcups.c:4611
+#: modules/printbackends/gtkprintbackendcups.c:4678
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "دو رو"
 
-#: modules/printbackends/gtkprintbackendcups.c:4403
+#: modules/printbackends/gtkprintbackendcups.c:4612
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "نوع کاغذ"
 
-#: modules/printbackends/gtkprintbackendcups.c:4404
+#: modules/printbackends/gtkprintbackendcups.c:4613
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "منبع کاغذ"
 
-#: modules/printbackends/gtkprintbackendcups.c:4405
-#: modules/printbackends/gtkprintbackendcups.c:4470
+#: modules/printbackends/gtkprintbackendcups.c:4614
+#: modules/printbackends/gtkprintbackendcups.c:4679
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "خروجی کاغذ"
 
-#: modules/printbackends/gtkprintbackendcups.c:4406
+#: modules/printbackends/gtkprintbackendcups.c:4615
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "تفکیک‌پذیری"
 
-#: modules/printbackends/gtkprintbackendcups.c:4407
+#: modules/printbackends/gtkprintbackendcups.c:4616
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "پیش‌پالایش GhostScript"
 
-#: modules/printbackends/gtkprintbackendcups.c:4416
+#: modules/printbackends/gtkprintbackendcups.c:4625
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "یک رو"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4418
+#: modules/printbackends/gtkprintbackendcups.c:4627
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "لبه بلند (استاندارد)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4420
+#: modules/printbackends/gtkprintbackendcups.c:4629
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "لبه کوتاه (برگشته)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4422
-#: modules/printbackends/gtkprintbackendcups.c:4424
-#: modules/printbackends/gtkprintbackendcups.c:4432
+#: modules/printbackends/gtkprintbackendcups.c:4631
+#: modules/printbackends/gtkprintbackendcups.c:4633
+#: modules/printbackends/gtkprintbackendcups.c:4641
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "گزینش خودکار"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4426
-#: modules/printbackends/gtkprintbackendcups.c:4428
-#: modules/printbackends/gtkprintbackendcups.c:4430
-#: modules/printbackends/gtkprintbackendcups.c:4434
+#: modules/printbackends/gtkprintbackendcups.c:4635
+#: modules/printbackends/gtkprintbackendcups.c:4637
+#: modules/printbackends/gtkprintbackendcups.c:4639
+#: modules/printbackends/gtkprintbackendcups.c:4643
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "پیش‌فرض چاپگر"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4436
+#: modules/printbackends/gtkprintbackendcups.c:4645
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "تنها قلم‌های GhostScript نهفته شوند"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4438
+#: modules/printbackends/gtkprintbackendcups.c:4647
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "تبدیل به سطح ۱ از PS"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4440
+#: modules/printbackends/gtkprintbackendcups.c:4649
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "تبدیل به سطح ۲ از PS"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4442
+#: modules/printbackends/gtkprintbackendcups.c:4651
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "بدون پیش‌پالایش"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4451
+#: modules/printbackends/gtkprintbackendcups.c:4660
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "متفرّقه"
 
-#: modules/printbackends/gtkprintbackendcups.c:4478
+#: modules/printbackends/gtkprintbackendcups.c:4687
 msgctxt "sides"
 msgid "One Sided"
 msgstr "یک رو"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4480
+#: modules/printbackends/gtkprintbackendcups.c:4689
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "لبه بلند (استاندارد)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4482
+#: modules/printbackends/gtkprintbackendcups.c:4691
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "لبه کوتاه (برگشته)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4485
+#: modules/printbackends/gtkprintbackendcups.c:4694
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "محفظه بالایی"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4487
+#: modules/printbackends/gtkprintbackendcups.c:4696
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "محفظه وسط"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4489
+#: modules/printbackends/gtkprintbackendcups.c:4698
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "محفظه پایین"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4491
+#: modules/printbackends/gtkprintbackendcups.c:4700
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "محفظه کنار"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4493
+#: modules/printbackends/gtkprintbackendcups.c:4702
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "محفظه چپ"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4495
+#: modules/printbackends/gtkprintbackendcups.c:4704
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "محفظه راست"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4497
+#: modules/printbackends/gtkprintbackendcups.c:4706
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "محفظه مرکزی"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4499
+#: modules/printbackends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "محفظه عقب"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4501
+#: modules/printbackends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "محفظه رو به بالا"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4503
+#: modules/printbackends/gtkprintbackendcups.c:4712
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "محفطه رو به پایین"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4505
+#: modules/printbackends/gtkprintbackendcups.c:4714
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "محفظه با گنجایش بالا"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4527
+#: modules/printbackends/gtkprintbackendcups.c:4736
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "پشته‌ساز %Id"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4531
+#: modules/printbackends/gtkprintbackendcups.c:4740
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "صندوق پستی %Id"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4535
+#: modules/printbackends/gtkprintbackendcups.c:4744
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "صندوق پستی من"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4539
+#: modules/printbackends/gtkprintbackendcups.c:4748
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "سینی %Id"
 
-#: modules/printbackends/gtkprintbackendcups.c:5016
+#: modules/printbackends/gtkprintbackendcups.c:5225
 msgid "Printer Default"
 msgstr "پیش‌فرض چاپگر"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: modules/printbackends/gtkprintbackendcups.c:5669
 msgid "Urgent"
 msgstr "فوری"
 
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: modules/printbackends/gtkprintbackendcups.c:5669
 msgid "High"
 msgstr "بالا"
 
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: modules/printbackends/gtkprintbackendcups.c:5669
 msgid "Medium"
 msgstr "متوسط"
 
-#: modules/printbackends/gtkprintbackendcups.c:5460
+#: modules/printbackends/gtkprintbackendcups.c:5669
 msgid "Low"
 msgstr "پایین"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5490
+#: modules/printbackends/gtkprintbackendcups.c:5699
 msgid "Job Priority"
 msgstr "اولویت کار"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5501
+#: modules/printbackends/gtkprintbackendcups.c:5710
 msgid "Billing Info"
 msgstr "اطلاعات صورتحساب"
 
@@ -7703,37 +7456,37 @@ msgstr "اطلاعات صورتحساب"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5525
+#: modules/printbackends/gtkprintbackendcups.c:5734
 msgctxt "cover page"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: modules/printbackends/gtkprintbackendcups.c:5526
+#: modules/printbackends/gtkprintbackendcups.c:5735
 msgctxt "cover page"
 msgid "Classified"
 msgstr "طبقه‌بندی شده"
 
-#: modules/printbackends/gtkprintbackendcups.c:5527
+#: modules/printbackends/gtkprintbackendcups.c:5736
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "محرمانه"
 
-#: modules/printbackends/gtkprintbackendcups.c:5528
+#: modules/printbackends/gtkprintbackendcups.c:5737
 msgctxt "cover page"
 msgid "Secret"
 msgstr "سری"
 
-#: modules/printbackends/gtkprintbackendcups.c:5529
+#: modules/printbackends/gtkprintbackendcups.c:5738
 msgctxt "cover page"
 msgid "Standard"
 msgstr "استاندارد"
 
-#: modules/printbackends/gtkprintbackendcups.c:5530
+#: modules/printbackends/gtkprintbackendcups.c:5739
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "فوق سری"
 
-#: modules/printbackends/gtkprintbackendcups.c:5531
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "طبقه‌بندی نشده"
@@ -7741,7 +7494,7 @@ msgstr "طبقه‌بندی نشده"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5543
+#: modules/printbackends/gtkprintbackendcups.c:5752
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "تعداد صفحه‌ها در برگه"
@@ -7749,7 +7502,7 @@ msgstr "تعداد صفحه‌ها در برگه"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5560
+#: modules/printbackends/gtkprintbackendcups.c:5769
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "ترتیب صفحه‌ها"
@@ -7757,7 +7510,7 @@ msgstr "ترتیب صفحه‌ها"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5602
+#: modules/printbackends/gtkprintbackendcups.c:5811
 msgctxt "printer option"
 msgid "Before"
 msgstr "پیش از"
@@ -7765,7 +7518,7 @@ msgstr "پیش از"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5617
+#: modules/printbackends/gtkprintbackendcups.c:5826
 msgctxt "printer option"
 msgid "After"
 msgstr "پس از"
@@ -7774,7 +7527,7 @@ msgstr "پس از"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5637
+#: modules/printbackends/gtkprintbackendcups.c:5846
 msgctxt "printer option"
 msgid "Print at"
 msgstr "زمان چاپ"
@@ -7782,7 +7535,7 @@ msgstr "زمان چاپ"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5857
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "چاپ در زمان مشخص"
@@ -7792,19 +7545,19 @@ msgstr "چاپ در زمان مشخص"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5695
+#: modules/printbackends/gtkprintbackendcups.c:5904
 #, c-format
 msgid "Custom %s×%s"
 msgstr "سفارشی %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5806
+#: modules/printbackends/gtkprintbackendcups.c:6015
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "نمایهٔ چاپگر"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5813
+#: modules/printbackends/gtkprintbackendcups.c:6022
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "خارج از دسترس"
@@ -7845,7 +7598,7 @@ msgstr "چاپ به صورت LPR"
 msgid "Pages Per Sheet"
 msgstr "تعداد صفحات در برگه"
 
-#: modules/printbackends/gtkprintbackendlpr.c:413
+#: modules/printbackends/gtkprintbackendlpr.c:412
 msgid "Command Line"
 msgstr "خط فرمان"
 
@@ -7864,6 +7617,281 @@ msgstr "مجموعه تنظیماتی موجود نیست"
 #: modules/printbackends/gtkprintercups.c:298
 msgid "Unspecified profile"
 msgstr "مجموعه تنطیمات نامشخص"
+
+#: tools/encodesymbolic.c:41
+msgid "Output to this directory instead of cwd"
+msgstr "به‌جای شاخه فعلی در این شاخه خارج شود"
+
+#: tools/encodesymbolic.c:42
+msgid "Generate debug output"
+msgstr "ایجاد برون‌داد رفع‌اشکال"
+
+#: tools/encodesymbolic.c:94
+#, c-format
+msgid "Invalid size %s\n"
+msgstr "اندازه نامعتبر: %s\n"
+
+#: tools/encodesymbolic.c:106 tools/encodesymbolic.c:115
+#, c-format
+msgid "Can’t load file: %s\n"
+msgstr "نمی‌توان پرونده را بار کرد: %s\n"
+
+#: tools/encodesymbolic.c:143 tools/encodesymbolic.c:149
+#, c-format
+msgid "Can’t save file %s: %s\n"
+msgstr "نمی‌توان پروندهٔ %s را ذخیره کرد: %s\n"
+
+#: tools/encodesymbolic.c:155
+#, c-format
+msgid "Can’t close stream"
+msgstr "نمی‌توان جریان را بست"
+
+#: tools/gtk-builder-tool.c:34
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
+"\n"
+"Commands:\n"
+"  validate     Validate the file\n"
+"  simplify     Simplify the file\n"
+"  enumerate    List all named objects\n"
+"  preview      Preview the file\n"
+"\n"
+"Simplify Options:\n"
+"  --replace    Replace the file\n"
+"  --3to4       Convert from GTK 3 to GTK 4\n"
+"\n"
+"Preview Options:\n"
+"  --id=ID      Preview only the named object\n"
+"  --css=FILE   Use style from CSS file\n"
+"\n"
+"Perform various tasks on GtkBuilder .ui files.\n"
+msgstr ""
+"استفاده:\n"
+"  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
+"\n"
+"دستورات:\n"
+"  validate     تصدیق پرونده\n"
+"  simplify     ساده‌سازی پرونده\n"
+"  enumerate    فهرست کردن تمام اشیای نام‌دار\n"
+"  preview      پیش‌نمایش پرونده\n"
+"\n"
+"گزینه‌های ساده‌سازی:\n"
+"  --replace    جایگزینی پرونده\n"
+"  --3to4       ‫تبدیل از GTK 3 به GTK 4‬\n"
+"\n"
+"گزینه‌های پیش‌نمایش:\n"
+"  --id=ID      فقط پیش‌نمایش شی نام‌دار\n"
+"  --css=FILE   ‫استفادهٔ سبک از پروندهٔ CSS‬\n"
+"\n"
+"انجام وظایف محتلف روی پرونده‌های ‪.ui‬ مربوط به GtkBuilder\n"
+
+#: tools/gtk-builder-tool-simplify.c:436
+#, c-format
+msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
+msgstr ""
+"%s:%Id: نمی‌توان مقدار ویژگی «%s» را تجزیه کرد: %s\n"
+"\n"
+
+#: tools/gtk-builder-tool-simplify.c:591
+#, c-format
+msgid "%s:%d: %sproperty %s::%s not found\n"
+msgstr "%s:%d: %sویژگی %s::%s پیدا نشد\n"
+
+#: tools/gtk-builder-tool-simplify.c:2206
+#, c-format
+msgid "Can’t load “%s”: %s\n"
+msgstr "نمی‌توان «%s» را بار کرد: %s\n"
+
+#: tools/gtk-builder-tool-simplify.c:2217
+#, c-format
+msgid "Can’t parse “%s”: %s\n"
+msgstr "نمی‌توان «%s» را تجزیه کرد: %s\n"
+
+#: tools/gtk-builder-tool-simplify.c:2241
+#, c-format
+msgid "Failed to read “%s”: %s\n"
+msgstr "نمی‌توان «%s» را خواند: %s\n"
+
+#: tools/gtk-builder-tool-simplify.c:2247
+#, c-format
+msgid "Failed to write %s: “%s”\n"
+msgstr "نمی‌توان «%s» را نوشت: %s\n"
+
+#: tools/gtk-builder-tool-simplify.c:2287
+#, c-format
+msgid "No .ui file specified\n"
+msgstr "هیچ پروندهٔ ‪.ui‬ ای مشخّص نشده\n"
+
+#: tools/gtk-builder-tool-simplify.c:2293
+#, c-format
+msgid "Can only simplify a single .ui file without --replace\n"
+msgstr "تنها می‌تواند یک تک‌پروندهٔ ‪.ui‬ را بدون ‪--replace‬ ساده‌سازی کند\n"
+
+#: tools/gtk-launch.c:40
+msgid "Show program version"
+msgstr "نمایش نسخه برنامه"
+
+#. Translators: this message will appear immediately after the
+#. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
+#: tools/gtk-launch.c:74
+msgid "APPLICATION [URI…] — launch an APPLICATION"
+msgstr "APPLICATION [URI…] — اجرای یک برنامه"
+
+#. Translators: this message will appear after the usage string
+#. and before the list of options.
+#: tools/gtk-launch.c:78
+msgid ""
+"Launch an application (specified by its desktop file name),\n"
+"optionally passing one or more URIs as arguments."
+msgstr ""
+"اجرا یک برنامه مشخص (با استفاده از اطلاعات پرونده رومیزی‌اش)\n"
+"به‌طور اختیاری ارسال فهرست URIها به‌عنوان آرگومان."
+
+#: tools/gtk-launch.c:88
+#, c-format
+msgid "Error parsing commandline options: %s\n"
+msgstr "خطا در تجزیه گزینه‌های خط فرمان: %s\n"
+
+#: tools/gtk-launch.c:90 tools/gtk-launch.c:111
+#, c-format
+msgid "Try “%s --help” for more information."
+msgstr "برای اطّلاعات بیش‌تر \"%s --help\" را بیازمایید."
+
+#. Translators: the %s is the program name. This error message
+#. means the user is calling gtk-launch without any argument.
+#: tools/gtk-launch.c:109
+#, c-format
+msgid "%s: missing application name"
+msgstr "%s: نام برنامه پیدا نمی‌شود"
+
+#: tools/gtk-launch.c:138
+#, c-format
+msgid "Creating AppInfo from id not supported on non unix operating systems"
+msgstr "ایجاد AppInfo از طریق شناسه روی سیستم‌های غیریونیکسی پشتیبانی نمی‌شود"
+
+#. Translators: the first %s is the program name, the second one
+#. is the application name.
+#: tools/gtk-launch.c:146
+#, c-format
+msgid "%s: no such application %s"
+msgstr "%s: همچین برنامه‌ای وجود ندارد %s"
+
+#. Translators: the first %s is the program name, the second one
+#. is the error message.
+#: tools/gtk-launch.c:164
+#, c-format
+msgid "%s: error launching application: %s\n"
+msgstr "%s: خطا در اجرا برنامه: %s\n"
+
+#: tools/updateiconcache.c:1392
+#, c-format
+msgid "Failed to write header\n"
+msgstr "نوشتن سرآیند خراب شد\n"
+
+#: tools/updateiconcache.c:1398
+#, c-format
+msgid "Failed to write hash table\n"
+msgstr "نوشتن جدول درهم خراب شد \n"
+
+#: tools/updateiconcache.c:1404
+#, c-format
+msgid "Failed to write folder index\n"
+msgstr "نوشتن نمایهٔ پوشه خراب شد\n"
+
+#: tools/updateiconcache.c:1412
+#, c-format
+msgid "Failed to rewrite header\n"
+msgstr "بازنویسی سرآیند خراب شد\n"
+
+#: tools/updateiconcache.c:1506
+#, c-format
+msgid "Failed to open file %s : %s\n"
+msgstr "گشودن پروندهٔ%s : %s خراب شد\n"
+
+#: tools/updateiconcache.c:1514 tools/updateiconcache.c:1544
+#, c-format
+msgid "Failed to write cache file: %s\n"
+msgstr "نوشتن پروندهٔ حافظه‌نهان «‎%s» خراب شد\n"
+
+#: tools/updateiconcache.c:1554
+#, c-format
+msgid "The generated cache was invalid.\n"
+msgstr "حافظه‌نهان تولید شده نامعتبر بود\n"
+
+#: tools/updateiconcache.c:1568
+#, c-format
+msgid "Could not rename %s to %s: %s, removing %s then.\n"
+msgstr "تغییر نما %s به %s ممکن نبود:  %s، پس %s پاک می‌شود.\n"
+
+#: tools/updateiconcache.c:1582
+#, c-format
+msgid "Could not rename %s to %s: %s\n"
+msgstr "تغییر نام «%s» به %s ممکن نبود: %s \n"
+
+#: tools/updateiconcache.c:1592
+#, c-format
+msgid "Could not rename %s back to %s: %s.\n"
+msgstr "برگشت تغییر نام پوشهٔ %s به %s ممکن نبود: %s \n"
+
+#: tools/updateiconcache.c:1619
+#, c-format
+msgid "Cache file created successfully.\n"
+msgstr "پروندهٔ حافظه‌نهان با موفقیت ایجاد شد.\n"
+
+#: tools/updateiconcache.c:1658
+msgid "Overwrite an existing cache, even if up to date"
+msgstr "جای‌نوشتن یک حافظه‌نهان موجود، حتی اگر به‌روز باشد"
+
+#: tools/updateiconcache.c:1659
+msgid "Don’t check for the existence of index.theme"
+msgstr "وجود index.theme بررسی نشود"
+
+#: tools/updateiconcache.c:1660
+msgid "Don’t include image data in the cache"
+msgstr "انباره شامل داده‌های تصویر نشود"
+
+#: tools/updateiconcache.c:1661
+msgid "Include image data in the cache"
+msgstr "حافظه‌نهان، داده‌های تصویر را شامل شود"
+
+#: tools/updateiconcache.c:1662
+msgid "Output a C header file"
+msgstr "خروج یک سر‌آیند C"
+
+#: tools/updateiconcache.c:1663
+msgid "Turn off verbose output"
+msgstr "خروجی مفصل را خاموش کن"
+
+#: tools/updateiconcache.c:1664
+msgid "Validate existing icon cache"
+msgstr "حافظه‌نهان نشان موجود اعتبارسنجی شود"
+
+#: tools/updateiconcache.c:1731
+#, c-format
+msgid "File not found: %s\n"
+msgstr "پرونده پیدا نشد: %s\n"
+
+#: tools/updateiconcache.c:1737
+#, c-format
+msgid "Not a valid icon cache: %s\n"
+msgstr "این یک حافظه نهان شمایل معتبر نیست: %s\n"
+
+#: tools/updateiconcache.c:1750
+#, c-format
+msgid "No theme index file.\n"
+msgstr "پروندهٔ نمایهٔ چهره‌ای نیست.\n"
+
+#: tools/updateiconcache.c:1754
+#, c-format
+msgid ""
+"No theme index file in “%s”.\n"
+"If you really want to create an icon cache here, use --ignore-theme-index.\n"
+msgstr ""
+"پروندهٔ نمایهٔ زمینه در «%s» نیست.\n"
+"اگر به‌راستی می‌خواهید این‌جا انبارهٔ نقشکی ایجاد کنید، از ‪--ignore-theme-index‬ "
+"استفاده کنید.\n"
 
 #~ msgid "Unable to create a GL pixel format"
 #~ msgstr "ناتوان در ایجاد قالب پیکسلی GL نبود"
@@ -8449,8 +8477,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ "The folder could not be created, as a file with the same name already exists.  "
 #~ "Try using a different name for the folder, or rename the file first."
 #~ msgstr ""
-#~ "پوشه نمی‌تواند ایجاد شود، چون پرونده‌ای با همین نام از قبل وجود دارد.  از نام‌ دیگری "
-#~ "برای پوشه استفاده کنید، یا نام پرونده را تغییر دهید."
+#~ "پوشه نمی‌تواند ایجاد شود، چون پرونده‌ای با همین نام از قبل وجود دارد.  از نام‌ "
+#~ "دیگری برای پوشه استفاده کنید، یا نام پرونده را تغییر دهید."
 
 #~ msgid "Enter location"
 #~ msgstr "وارد کردن مکان"
@@ -8504,18 +8532,18 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "در حال باز کردن %s"
 
 #~ msgid ""
-#~ "Select the color you want from the outer ring. Select the darkness or lightness "
-#~ "of that color using the inner triangle."
+#~ "Select the color you want from the outer ring. Select the darkness or "
+#~ "lightness of that color using the inner triangle."
 #~ msgstr ""
 #~ "رنگی را که می‌خواهید از حلقه‌ی خارجی انتخاب کنید. تیرگی یا روشنی آن رنگ را با "
 #~ "استفاده از مثلث داخلی انتخاب کنید."
 
 #~ msgid ""
-#~ "Click the eyedropper, then click a color anywhere on your screen to select that "
-#~ "color."
+#~ "Click the eyedropper, then click a color anywhere on your screen to select "
+#~ "that color."
 #~ msgstr ""
-#~ "روی قطره‌چکان کلیک کنید، سپس روی رنگی در هر جای صفحه‌تان کلیک کنید تا آن رنگ انتخاب "
-#~ "شود"
+#~ "روی قطره‌چکان کلیک کنید، سپس روی رنگی در هر جای صفحه‌تان کلیک کنید تا آن رنگ "
+#~ "انتخاب شود"
 
 #~ msgid "_Hue:"
 #~ msgstr "_پرده:"
@@ -8557,8 +8585,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "_نام رنگ:"
 
 #~ msgid ""
-#~ "You can enter an HTML-style hexadecimal color value, or simply a color name such "
-#~ "as “orange” in this entry."
+#~ "You can enter an HTML-style hexadecimal color value, or simply a color name "
+#~ "such as “orange” in this entry."
 #~ msgstr ""
 #~ "می‌توانید یک مقدار رنگ شانزده‌شانزدهی به سبک HTML وارد کنید، یا به سادگی نام "
 #~ "انگلیسی یک رنگ مثل «orange» را برای نارنجی را وارد کنید."
@@ -8570,13 +8598,13 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "چرخ رنگ"
 
 #~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re selecting now. "
-#~ "You can drag this color to a palette entry, or select this color as current by "
-#~ "dragging it to the other color swatch alongside."
+#~ "The previously-selected color, for comparison to the color you’re selecting "
+#~ "now. You can drag this color to a palette entry, or select this color as "
+#~ "current by dragging it to the other color swatch alongside."
 #~ msgstr ""
-#~ "رنگی که پیش‌تر انتخاب شده بود، برای مقایسه با رنگی که حالا انتخاب کردید. می‌توانید "
-#~ "این رنگ را تا یک مدخل تخته‌رنگ بکشید، یا با کشیدنش به نمونه‌ی دیگر در کنار آن، این "
-#~ "رنگ را به عنوان رنگ فعلی انتخاب کنید."
+#~ "رنگی که پیش‌تر انتخاب شده بود، برای مقایسه با رنگی که حالا انتخاب کردید. "
+#~ "می‌توانید این رنگ را تا یک مدخل تخته‌رنگ بکشید، یا با کشیدنش به نمونه‌ی دیگر در "
+#~ "کنار آن، این رنگ را به عنوان رنگ فعلی انتخاب کنید."
 
 #~ msgid ""
 #~ "The color you’ve chosen. You can drag this color to a palette entry to save it "
@@ -8586,7 +8614,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ "استفاده در آینده ذخیره شود."
 
 #~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re selecting now."
+#~ "The previously-selected color, for comparison to the color you’re selecting "
+#~ "now."
 #~ msgstr "رنگ انتخابی پیشین، برای مقایسه با رنگی که اکنون انتخاب می‌کنید."
 
 #~ msgid "The color you’ve chosen."
@@ -8596,12 +8625,12 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "_ذخیره‌ی رنگ در اینجا"
 
 #~ msgid ""
-#~ "Click this palette entry to make it the current color. To change this entry, drag "
-#~ "a color swatch here or right-click it and select “Save color here.”"
+#~ "Click this palette entry to make it the current color. To change this entry, "
+#~ "drag a color swatch here or right-click it and select “Save color here.”"
 #~ msgstr ""
 #~ "روی این مدخل تخته‌رنگ کلیک کنید تا رنگ فعلی شود. برای تغییر این مدخل، یک نمونه‌ی "
-#~ "رنگ را به اینجا بکشید یا روی آن کلیک راست کنید و «ذخیره‌ی رنگ در اینجا» را انتخاب "
-#~ "کنید."
+#~ "رنگ را به اینجا بکشید یا روی آن کلیک راست کنید و «ذخیره‌ی رنگ در اینجا» را "
+#~ "انتخاب کنید."
 
 #~ msgid "_Help"
 #~ msgstr "_راهنما"
@@ -8873,7 +8902,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgid "\"%s\" is not a valid attribute name"
 #~ msgstr "«%s» نام خصیصه‌ی معتبری نیست"
 
-#~ msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+#~ msgid ""
+#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 #~ msgstr "«%s» نمی‌تواند به یک مقدار معتبر از نوع «%s» برای خصیصه‌ی «%s» تبدیل شود"
 
 #~ msgid "\"%s\" is not a valid value for attribute \"%s\""
@@ -8897,7 +8927,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgid "Serialized data is malformed"
 #~ msgstr "داده‌ی متوالی شده بد‌ریخت است"
 
-#~ msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+#~ msgid ""
+#~ "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 #~ msgstr "داده‌ی متوالی شده بد‌ریخت است. اولین بخش GTKTEXTBUFFERCONTENTS-0001 نیست"
 
 #~ msgid "LRE Left-to-right _embedding"
@@ -8985,9 +9016,6 @@ msgstr "مجموعه تنطیمات نامشخص"
 
 #~ msgid "Always"
 #~ msgstr "همیشه"
-
-#~ msgid "Disabled"
-#~ msgstr "غیرفعال"
 
 #~ msgid "Software Surfaces"
 #~ msgstr "سطوح نرم‌افزارها"
@@ -9097,8 +9125,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ "The program was not able to create a connection to the indexer daemon. Please "
 #~ "make sure it is running."
 #~ msgstr ""
-#~ "برنامه نتوانست اتصالی به شبح نمایه‌گذار برقرار کند. لطفا مطمئن شوید که در حال اجرا "
-#~ "است."
+#~ "برنامه نتوانست اتصالی به شبح نمایه‌گذار برقرار کند. لطفا مطمئن شوید که در حال "
+#~ "اجرا است."
 
 #~ msgid "smb://foo.example.com, ssh://192.168.0.1"
 #~ msgstr "smb://foo.example.com, ssh://192.168.0.1"
@@ -9107,7 +9135,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ "The GLX_ARB_create_context_profile extension needed to create core profiles is "
 #~ "not available"
 #~ msgstr ""
-#~ "افزونه GLX_ARB_create_context_profile که برای ساخت نمایه هسته لازم است، موجود نیست"
+#~ "افزونه GLX_ARB_create_context_profile که برای ساخت نمایه هسته لازم است، موجود "
+#~ "نیست"
 
 #~ msgid "Error launching preview"
 #~ msgstr "خطا هنگام راه‌اندازی پیش‌نمایش"
@@ -9310,8 +9339,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 
 #~ msgid "No fonts matched your search. You can revise your search and try again."
 #~ msgstr ""
-#~ "هیچ قلمی با جستجو شما تطابق ندارد. می‌توانید در جستجو خود تجدید نظر کنید و مجددا "
-#~ "تلاش کنید."
+#~ "هیچ قلمی با جستجو شما تطابق ندارد. می‌توانید در جستجو خود تجدید نظر کنید و "
+#~ "مجددا تلاش کنید."
 
 #~ msgid "Failed to look for applications online"
 #~ msgstr "جستجو برای برنامه بصورت برخط شکست خورد"
@@ -9325,8 +9354,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "هیچ برنامه‌ای برای باز کردن پرونده‌های «%s» موجود نیست"
 
 #~ msgid ""
-#~ "Click \"Show other applications\", for more options, or \"Find applications online"
-#~ "\" to install a new application"
+#~ "Click \"Show other applications\", for more options, or \"Find applications "
+#~ "online\" to install a new application"
 #~ msgstr ""
 #~ "برای گزینه‌های بیشتر بر روی «نمایش برنامه‌های دیگر»، یا برای نصب یک برنامه جدید "
 #~ "«پیدا کردن برنامه‌ها بصورت برخط» را کلیک کنید"
@@ -9504,9 +9533,11 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgid "Failed to open file '%s': %s"
 #~ msgstr "باز کردن پرونده‌ی «%s» شکست خورد: %s"
 
-#~ msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+#~ msgid ""
+#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
 #~ msgstr ""
-#~ "بار کردن تصویر «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی تصویری خراب است"
+#~ "بار کردن تصویر «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی تصویری خراب "
+#~ "است"
 
 #~ msgid "_Browse for other folders"
 #~ msgstr "_مرور برای سایر پوشه‌ها"
@@ -9568,20 +9599,21 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "پرونده‌ی تصویری «%s» هیچ داده‌ای ندارد"
 
 #~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt animation file"
+#~ "Failed to load animation '%s': reason not known, probably a corrupt animation "
+#~ "file"
 #~ msgstr ""
-#~ "بار کردن پویانمایی «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی پویانمایی "
-#~ "خراب است"
+#~ "بار کردن پویانمایی «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی "
+#~ "پویانمایی خراب است"
 
 #~ msgid "Unable to load image-loading module: %s: %s"
 #~ msgstr "نمی‌توان پیمانه‌ی تصویربارکن را بار کرد: %s: %s"
 
 #~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps it's from a "
-#~ "different GTK version?"
+#~ "Image-loading module %s does not export the proper interface; perhaps it's "
+#~ "from a different GTK version?"
 #~ msgstr ""
-#~ "پیمانه‌ی بار کردن پرونده %s رابط مناسب را صادر نمی‌کند؛ شاید از نسخه‌ی دیگری از GTK "
-#~ "است؟"
+#~ "پیمانه‌ی بار کردن پرونده %s رابط مناسب را صادر نمی‌کند؛ شاید از نسخه‌ی دیگری از "
+#~ "GTK است؟"
 
 #~ msgid "Couldn't recognize the image file format for file '%s'"
 #~ msgstr "قالب پرونده‌ی تصویر برای پرونده‌ی «%s» تشخیص داده نشد"
@@ -9610,7 +9642,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgid ""
 #~ "Failed to close '%s' while writing image, all data may not have been saved: %s"
 #~ msgstr ""
-#~ "بستن «%s» هنگام نوشتن تصویر شکست خورد، ممکن است همه‌ی داده‌ها ذخیره نشده باشند: %s"
+#~ "بستن «%s» هنگام نوشتن تصویر شکست خورد، ممکن است همه‌ی داده‌ها ذخیره نشده باشند: "
+#~ "%s"
 
 #~ msgid "Insufficient memory to save image into a buffer"
 #~ msgstr "حافظه برای ذخیره کردن تصویر در میان‌گیر کافی نیست"
@@ -9624,8 +9657,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ "Internal error: Image loader module '%s' failed to complete an operation, but "
 #~ "didn't give a reason for the failure"
 #~ msgstr ""
-#~ "خطای داخلی: پیمانه‌ی بارکننده‌ی تصویر «%s» در بار کردن یک تصویر شکست خورد،ولی دلیلی "
-#~ "برای این شکست اعلام نکرد"
+#~ "خطای داخلی: پیمانه‌ی بارکننده‌ی تصویر «%s» در بار کردن یک تصویر شکست خورد،ولی "
+#~ "دلیلی برای این شکست اعلام نکرد"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr "بار کردن افزایشی تصویر نوع «%s» پشتیبانی نمی‌شود"
@@ -9688,7 +9721,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "شکست در خواندن GIF: %s"
 
 #~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr "بعضی از داده‌های پرونده‌ی GIF مفقود شده‌اند (شاید پرونده به شکلی قطع شده است؟)‏"
+#~ msgstr ""
+#~ "بعضی از داده‌های پرونده‌ی GIF مفقود شده‌اند (شاید پرونده به شکلی قطع شده است؟)‏"
 
 #~ msgid "Internal error in the GIF loader (%s)"
 #~ msgstr "خطای داخلی در بارگذار GIF (%s)"
@@ -9724,7 +9758,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgid ""
 #~ "GIF image has no global colormap, and a frame inside it has no local colormap."
 #~ msgstr ""
-#~ "تصویر GIF نقشه‌رنگ سراسری‌ای ندارد، و یکی از چارچوب‌های داخل آن نقشه‌رنگ محلی ندارد."
+#~ "تصویر GIF نقشه‌رنگ سراسری‌ای ندارد، و یکی از چارچوب‌های داخل آن نقشه‌رنگ محلی "
+#~ "ندارد."
 
 #~ msgid "GIF image was truncated or incomplete."
 #~ msgstr "تصویر GIF قطع شده یا ناقص است."
@@ -9812,8 +9847,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgid ""
 #~ "Insufficient memory to load image, try exiting some applications to free memory"
 #~ msgstr ""
-#~ "حافظه برای بار کردن تصویر کافی نیست، برای آزاد کردن حافظه خروج از بعضی برنامه‌ها "
-#~ "را امتحان کنید"
+#~ "حافظه برای بار کردن تصویر کافی نیست، برای آزاد کردن حافظه خروج از بعضی "
+#~ "برنامه‌ها را امتحان کنید"
 
 #~ msgid "Unsupported JPEG color space (%s)"
 #~ msgstr "فضای رنگ JPEG پشتیبانی نمی‌شود (%s)"
@@ -9829,7 +9864,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%s» قابل درک نیست."
 
-#~ msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%Id» مجاز نیست."
 
 #~ msgid "The JPEG image format"
@@ -9890,11 +9926,11 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "حافظه برای بار کردن پرونده‌ی PNG کافی نیست"
 
 #~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some applications to "
-#~ "reduce memory usage"
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some applications "
+#~ "to reduce memory usage"
 #~ msgstr ""
-#~ "حافظه برای ذخیره‌ی یک تصویر %Ild در %Ild کافی نیست؛ برای کاهش مصرف حافظه خروج از "
-#~ "بعضی برنامه‌ها را امتحان کنید"
+#~ "حافظه برای ذخیره‌ی یک تصویر %Ild در %Ild کافی نیست؛ برای کاهش مصرف حافظه خروج "
+#~ "از بعضی برنامه‌ها را امتحان کنید"
 
 #~ msgid "Fatal error reading PNG image file"
 #~ msgstr "خطای مهلک در خواندن پرونده‌ی تصویری PNG"
@@ -9916,7 +9952,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 
 #, fuzzy
 #~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%Id» مجاز نیست."
 
 #~ msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
@@ -10198,8 +10235,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "پوشه قابل خواندن نیست: %s"
 
 #~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be available "
-#~ "to this program.\n"
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
 #~ "پرونده‌ی «%s» روی دستگاه دیگری (به نام %s) است و ممکن است برای این برنامه قابل "
@@ -10256,8 +10293,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "تغییر نام پرونده‌ی «%s» به:"
 
 #~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment "
-#~ "variable G_FILENAME_ENCODING): %s"
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
 #~ msgstr ""
 #~ "نام پرونده‌ی «%s» را نمی‌توان به UTF-8 تبدیل کرد. (تنظیم متغیر محیطی "
 #~ "G_FILENAME_ENCODING را امتحان کنید): %s"
@@ -10386,8 +10423,8 @@ msgstr "مجموعه تنطیمات نامشخص"
 #~ msgstr "این سیستم پرونده‌ها از سوار شدن پشتیبانی نمی‌کند"
 
 #~ msgid ""
-#~ "The name \"%s\" is not valid because it contains the character \"%s\". Please use "
-#~ "a different name."
+#~ "The name \"%s\" is not valid because it contains the character \"%s\". Please "
+#~ "use a different name."
 #~ msgstr ""
 #~ "نام «%s» معتبر نیست چون شامل نویسه‌ی «%s» است. لطفاً از نام دیگری استفاده کنید."
 
