@@ -137,9 +137,11 @@ gsk_ngl_renderer_unrealize (GskRenderer *renderer)
 
   g_assert (GSK_IS_NGL_RENDERER (renderer));
 
+  gdk_gl_context_make_current (self->context);
+
   g_clear_object (&self->driver);
-  g_clear_object (&self->context);
   g_clear_object (&self->command_queue);
+  g_clear_object (&self->context);
 }
 
 static cairo_region_t *
