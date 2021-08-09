@@ -40,7 +40,15 @@ show_class_hierarchy = true
 base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/"
 
 [extra]
+content_files = [
+  "treeview-tutorial.md",
+]
 content_images = [
   "gtk-logo.svg",
+
+  "images/cell-renderer-properties.png",
+  "images/renderer.png",
+  "images/treepath.png",
+  "images/tree-view-column.png",
 ]
 urlmap_file = "urlmap.js"

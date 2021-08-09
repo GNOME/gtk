@@ -1,4 +1,5 @@
 expand_content_files = [
+  'treeview-tutorial.md',
 ]
 
 gtk_gir = meson.current_source_dir() / 'Gtk-3.0.gir'
