@@ -4,7 +4,8 @@ Title: Tree View Tutorial
 
 This is a tutorial on how to use the GTK `GtkTreeView` widget through its C interface.
 
-This tutorial is based on the GTK 2.0 Tree View Tutorial by Tim-Philipp Müller.
+This tutorial is based on the [GTK 2.0 Tree View
+Tutorial](http://scentric.net/tutorial) by Tim-Philipp Müller.
 
 ## Lists and Trees: the `GtkTreeView` Widget
 
