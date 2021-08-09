@@ -58,7 +58,7 @@ do_markup (GtkWidget *do_widget)
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_default_size (GTK_WINDOW (window), 450, 450);
+      gtk_window_set_default_size (GTK_WINDOW (window), 600, 680);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       stack = gtk_stack_new ();
