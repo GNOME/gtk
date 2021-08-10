@@ -4,6 +4,7 @@ expand_content_files = [
   'main-loop.md',
   'reference-counting.md',
   'testing.md',
+  'threads.md',
 ]
 
 glib_gir = meson.current_source_dir() / 'GLib-2.0.gir'
