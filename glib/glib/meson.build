@@ -1,4 +1,5 @@
 expand_content_files = [
+  'compiling.md',
   'error-reporting.md',
   'logging.md',
   'main-loop.md',
