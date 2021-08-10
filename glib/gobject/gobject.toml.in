@@ -32,7 +32,12 @@ base_url = "https://gitlab.gnome.org/GNOME/glib/-/blob/master/"
 [extra]
 urlmap_file = "urlmap.js"
 # The same order will be used when generating the index
-content_files = []
+content_files = [
+  "concepts.md",
+]
+content_images = [
+  "images/glue.png",
+]
 
 # This is the anonymous union inside GValue; we don't need it
 # as a type, and including it just generates a dummy union
