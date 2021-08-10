@@ -34,6 +34,7 @@ urlmap_file = "urlmap.js"
 # The same order will be used when generating the index
 content_files = [
   "error-reporting.md",
+  "logging.md",
   "main-loop.md",
   "reference-counting.md",
   "testing.md",
