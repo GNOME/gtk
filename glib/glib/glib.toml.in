@@ -36,6 +36,7 @@ content_files = [
   "error-reporting.md",
   "main-loop.md",
   "reference-counting.md",
+  "testing.md",
 ]
 content_images = [
   "mainloop-states.gif",
