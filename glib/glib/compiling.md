@@ -65,5 +65,7 @@ separately:
 
 - `gmodule.h`
 - `glib-unix.h`
-- `glib/gi18n-lib.h` or `glib/gi18n.h` (see the section on Internationalization)
-- `glib/gprintf.h` and `glib/gstdio.h` (we don't want to pull in all of stdio)
+- `glib/gi18n-lib.h` or `glib/gi18n.h` (see the section on
+  [Internationalization](i18n.html))
+- `glib/gprintf.h` and `glib/gstdio.h` (we don't want to pull in all of
+  stdio)
