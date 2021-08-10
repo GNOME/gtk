@@ -41,6 +41,9 @@ print_attribute (PangoAttribute *attr, GString *string)
     case PANGO_ATTR_ALLOW_BREAKS:
     case PANGO_ATTR_INSERT_HYPHENS:
     case PANGO_ATTR_SHOW:
+#if PANGO_VERSION_CHECK(1, 49, 0)
+    case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
+#endif
       g_string_append_printf (string, "%d", ((PangoAttrInt *)attr)->value);
       break;
     case PANGO_ATTR_FONT_DESC:
@@ -65,6 +68,9 @@ print_attribute (PangoAttribute *attr, GString *string)
       g_string_append_printf (string, "shape");
       break;
     case PANGO_ATTR_SCALE:
+#if PANGO_VERSION_CHECK(1, 49, 0)
+    case PANGO_ATTR_LINE_HEIGHT:
+#endif
       {
         char val[20];
 

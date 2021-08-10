@@ -255,6 +255,12 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           INT_ATTR (insert_hyphens);
           break;
 
+#if PANGO_VERSION_CHECK(1,49,0)
+        case PANGO_ATTR_LINE_HEIGHT:
+        case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
+          break;
+#endif
+
         case PANGO_ATTR_SHAPE:
         case PANGO_ATTR_ABSOLUTE_SIZE:
         case PANGO_ATTR_GRAVITY:
