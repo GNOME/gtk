@@ -97,35 +97,6 @@ G_DEFINE_TYPE_EXTENDED (GtkGstMediaFile, gtk_gst_media_file, GTK_TYPE_MEDIA_FILE
                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
                                                gtk_gst_media_file_paintable_init))
 
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_GST_MEDIA_FILE,
-                                  "gstreamer",
-                                  10);
-}
-
-G_GNUC_NORETURN
-void
-g_io_module_unload (GIOModule *module)
-{
-  g_assert_not_reached ();
-}
-
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    (char *) GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
-
 static void
 gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)
 {

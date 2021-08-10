@@ -26,6 +26,13 @@
 #include "gtkmodulesprivate.h"
 #include "gtknomediafileprivate.h"
 
+#ifdef HAVE_FFMPEG
+#include "modules/media/gtkffmediafileprivate.h"
+#endif
+#ifdef HAVE_GSTREAMER
+#include "modules/media/gtkgstmediafileprivate.h"
+#endif
+
 /**
  * GtkMediaFile:
  *
@@ -620,6 +627,19 @@ gtk_media_file_extension_init (void)
   g_io_extension_point_set_required_type (ep, GTK_TYPE_MEDIA_FILE);
 
   g_type_ensure (GTK_TYPE_NO_MEDIA_FILE);
+
+#ifdef HAVE_FFMPEG
+  g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_FF_MEDIA_FILE,
+                                  "ffmpeg",
+                                  0);
+#endif
+#ifdef HAVE_GSTREAMER
+  g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
+                                  GTK_TYPE_GST_MEDIA_FILE,
+                                  "gstreamer",
+                                  10);
+#endif
 
   scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
 

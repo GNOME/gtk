@@ -4,5 +4,3 @@ if os_unix
 else
   print_backends = []
 endif
-
-subdir('media')

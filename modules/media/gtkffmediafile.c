@@ -171,42 +171,6 @@ G_DEFINE_TYPE_EXTENDED (GtkFfMediaFile, gtk_ff_media_file, GTK_TYPE_MEDIA_FILE, 
                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
                                                gtk_ff_media_file_paintable_init))
 
-G_MODULE_EXPORT
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT (58, 9, 100)
-  av_register_all ();
-#endif
-
-  g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_FF_MEDIA_FILE,
-                                  "ffmpeg",
-                                  0);
-}
-
-G_MODULE_EXPORT
-G_GNUC_NORETURN
-void
-g_io_module_unload (GIOModule *module)
-{
-  g_assert_not_reached ();
-}
-
-G_MODULE_EXPORT
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    (char *) GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
-
 static void
 gtk_ff_media_file_set_ffmpeg_error (GtkFfMediaFile *video,
                                     int           av_errnum)
@@ -762,6 +726,10 @@ gtk_ff_media_file_class_init (GtkFfMediaFileClass *klass)
   stream_class->seek = gtk_ff_media_file_seek;
 
   gobject_class->dispose = gtk_ff_media_file_dispose;
+
+#if LIBAVCODEC_VERSION_INT < AV_VERSION_INT (58, 9, 100)
+  av_register_all ();
+#endif
 }
 
 static void

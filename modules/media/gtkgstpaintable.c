@@ -22,7 +22,7 @@
 #include "gtkgstpaintableprivate.h"
 #include "gtkgstsinkprivate.h"
 
-#include <gtk/gtk.h>
+#include <gdk/gdk.h>
 #include <gst/player/gstplayer-video-renderer.h>
 #include <gsk/gl/gskglrenderer.h>
 

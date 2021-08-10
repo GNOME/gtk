@@ -1,6 +1,5 @@
-media_subdir = 'gtk-4.0/@0@/media'.format(gtk_binary_version)
-media_install_dir = join_paths(get_option('libdir'), media_subdir)
 media_backends = []
+media_modules = []
 
 extra_c_args = [
   '-DGTK_COMPILATION',
@@ -31,13 +30,11 @@ endforeach
 if ffmpeg_found
   media_backends += 'ffmpeg'
   cdata.set('HAVE_FFMPEG', 1)
-  shared_module('media-ffmpeg',
+  media_modules += static_library('media-ffmpeg',
     sources: 'gtkffmediafile.c',
+    include_directories: [ confinc, gtkinc ],
     c_args: extra_c_args,
-    dependencies: [ libgtk_dep, ffmpeg_deps ],
-    name_suffix: module_suffix,
-    install_dir: media_install_dir,
-    install: true,
+    dependencies: [ libgdk_dep, ffmpeg_deps ],
   )
 endif
 
@@ -64,16 +61,15 @@ if gstplayer_dep.found() and gstgl_dep.found()
 
   media_backends += 'gstreamer'
   cdata.set('HAVE_GSTREAMER', 1)
-  shared_module('media-gstreamer',
+
+  media_modules += static_library('media-gstreamer',
     sources: [
       'gtkgstmediafile.c',
       'gtkgstpaintable.c',
       'gtkgstsink.c',
     ],
+    include_directories: [ confinc, gtkinc ],
     c_args: extra_c_args + extra_win_cflags,
-    dependencies: [ libm, libgtk_dep, gstplayer_dep, gstgl_dep ],
-    name_suffix: module_suffix,
-    install_dir: media_install_dir,
-    install: true,
+    dependencies: [ libm, libgdk_dep, gstplayer_dep, gstgl_dep ],
   )
 endif

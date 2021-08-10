@@ -1114,7 +1114,7 @@ libgtk_static = static_library('gtk',
   c_args: gtk_cargs + common_cflags,
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
   dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-  link_with: [libgtk_css, libgdk, libgsk ],
+  link_with: [libgtk_css, libgdk, libgsk ] + media_modules
 )
 
 # `link_whole:` is actually only supported on Visual Studio 2015 Update 2
@@ -1126,7 +1126,7 @@ whole_archives = []
 gtk4_objs = []
 
 if cc.get_id() == 'msvc' and cc.version().split('.').get(0) < '19'
-  foreach target : [ libgtk_static, libgtk_css, libgdk, libgdk_win32, libgsk, libgsk_f16c ]
+  foreach target : [ libgtk_static, libgtk_css, libgdk, libgdk_win32, libgsk, libgsk_f16c, media_ffmpeg, media_gstreamer ]
     gtk4_objs += target.extract_all_objects(recursive: false)
   endforeach
 else
