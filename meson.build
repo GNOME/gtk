@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: 2021 GNOME Foundation
 # SPDX-License-Identifier: LGPL-2.1-or-later
 
-project('glib-docs',
-  version: '2.68.0',
+project('gtk-docs',
+  version: '1.0',
   meson_version: '>= 0.55.0',
   license: 'LGPL-2.1-or-later',
 )
