@@ -1,4 +1,5 @@
 expand_content_files = [
+  'building.md',
   'compiling.md',
   'error-reporting.md',
   'i18n.md',
