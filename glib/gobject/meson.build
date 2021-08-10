@@ -1,5 +1,6 @@
 expand_content_files = [
   'concepts.md',
+  'tutorial.md',
 ]
 
 gobject_gir = meson.current_source_dir() / 'GObject-2.0.gir'
