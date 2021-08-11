@@ -542,7 +542,7 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
 
   context = xkb_context_new (0);
 
-  map_str = mmap (NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+  map_str = mmap (NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
   if (map_str == MAP_FAILED)
     {
       close(fd);
