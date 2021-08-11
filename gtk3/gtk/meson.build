@@ -1,5 +1,10 @@
 expand_content_files = [
+  'broadway.md',
+  'macos.md',
   'treeview-tutorial.md',
+  'wayland.md',
+  'windows.md',
+  'x11.md',
 ]
 
 gtk_gir = meson.current_source_dir() / 'Gtk-3.0.gir'
