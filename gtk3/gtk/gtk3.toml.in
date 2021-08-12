@@ -50,6 +50,11 @@ content_files = [
   "wayland.md",
   "macos.md",
   "broadway.md",
+
+  "migrating-2to3.md",
+  "migrating-themes.md",
+  "migrating-libunique.md",
+  "migrating-smclient.md",
 ]
 content_images = [
   "gtk-logo.svg",
