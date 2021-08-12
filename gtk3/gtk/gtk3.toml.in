@@ -55,6 +55,8 @@ content_files = [
   "migrating-themes.md",
   "migrating-libunique.md",
   "migrating-smclient.md",
+
+  "changes.md",
 ]
 content_images = [
   "gtk-logo.svg",
