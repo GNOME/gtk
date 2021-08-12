@@ -117,104 +117,104 @@ gdk_vulkan_strerror (VkResult result)
   switch (result)
   {
     case VK_SUCCESS:
-      return "Command successfully completed.";
+      return "Command successfully completed. (VK_SUCCESS)";
     case VK_NOT_READY:
-      return "A fence or query has not yet completed.";
+      return "A fence or query has not yet completed. (VK_NOT_READY)";
     case VK_TIMEOUT:
-      return "A wait operation has not completed in the specified time.";
+      return "A wait operation has not completed in the specified time. (VK_TIMEOUT)";
     case VK_EVENT_SET:
-      return "An event is signaled.";
+      return "An event is signaled. (VK_EVENT_SET)";
     case VK_EVENT_RESET:
-      return "An event is unsignaled.";
+      return "An event is unsignaled. (VK_EVENT_RESET)";
     case VK_INCOMPLETE:
-      return "A return array was too small for the result.";
+      return "A return array was too small for the result. (VK_INCOMPLETE)";
     case VK_SUBOPTIMAL_KHR:
-      return "A swapchain no longer matches the surface properties exactly, but can still be used to present to the surface successfully.";
+      return "A swapchain no longer matches the surface properties exactly, but can still be used to present to the surface successfully. (VK_SUBOPTIMAL_KHR)";
     case VK_ERROR_OUT_OF_HOST_MEMORY:
-      return "A host memory allocation has failed.";
+      return "A host memory allocation has failed. (VK_ERROR_OUT_OF_HOST_MEMORY)";
     case VK_ERROR_OUT_OF_DEVICE_MEMORY:
-      return "A device memory allocation has failed.";
+      return "A device memory allocation has failed. (VK_ERROR_OUT_OF_DEVICE_MEMORY)";
     case VK_ERROR_INITIALIZATION_FAILED:
-      return "Initialization of an object could not be completed for implementation-specific reasons.";
+      return "Initialization of an object could not be completed for implementation-specific reasons. (VK_ERROR_INITIALIZATION_FAILED)";
     case VK_ERROR_DEVICE_LOST:
-      return "The logical or physical device has been lost.";
+      return "The logical or physical device has been lost. (VK_ERROR_DEVICE_LOST)";
     case VK_ERROR_MEMORY_MAP_FAILED:
-      return "Mapping of a memory object has failed.";
+      return "Mapping of a memory object has failed. (VK_ERROR_MEMORY_MAP_FAILED)";
     case VK_ERROR_LAYER_NOT_PRESENT:
-      return "A requested layer is not present or could not be loaded.";
+      return "A requested layer is not present or could not be loaded. (VK_ERROR_LAYER_NOT_PRESENT)";
     case VK_ERROR_EXTENSION_NOT_PRESENT:
-      return "A requested extension is not supported.";
+      return "A requested extension is not supported. (VK_ERROR_EXTENSION_NOT_PRESENT)";
     case VK_ERROR_FEATURE_NOT_PRESENT:
-      return "A requested feature is not supported.";
+      return "A requested feature is not supported. (VK_ERROR_FEATURE_NOT_PRESENT)";
     case VK_ERROR_INCOMPATIBLE_DRIVER:
-      return "The requested version of Vulkan is not supported by the driver or is otherwise incompatible for implementation-specific reasons.";
+      return "The requested version of Vulkan is not supported by the driver or is otherwise incompatible for implementation-specific reasons. (VK_ERROR_INCOMPATIBLE_DRIVER)";
     case VK_ERROR_TOO_MANY_OBJECTS:
-      return "Too many objects of the type have already been created.";
+      return "Too many objects of the type have already been created. (VK_ERROR_TOO_MANY_OBJECTS)";
     case VK_ERROR_FORMAT_NOT_SUPPORTED:
-      return "A requested format is not supported on this device.";
+      return "A requested format is not supported on this device. (VK_ERROR_FORMAT_NOT_SUPPORTED)";
 #if VK_HEADER_VERSION >= 24
     case VK_ERROR_FRAGMENTED_POOL:
-      return "A requested pool allocation has failed due to fragmentation of the pool’s memory.";
+      return "A requested pool allocation has failed due to fragmentation of the pool’s memory. (VK_ERROR_FRAGMENTED_POOL)";
 #endif
     case VK_ERROR_SURFACE_LOST_KHR:
-      return "A surface is no longer available.";
+      return "A surface is no longer available. (VK_ERROR_SURFACE_LOST_KHR)";
     case VK_ERROR_NATIVE_WINDOW_IN_USE_KHR:
-      return "The requested window is already in use by Vulkan or another API in a manner which prevents it from being used again.";
+      return "The requested window is already in use by Vulkan or another API in a manner which prevents it from being used again. (VK_ERROR_NATIVE_WINDOW_IN_USE_KHR)";
     case VK_ERROR_OUT_OF_DATE_KHR:
-      return "A surface has changed in such a way that it is no longer compatible with the swapchain.";
+      return "A surface has changed in such a way that it is no longer compatible with the swapchain. (VK_ERROR_OUT_OF_DATE_KHR)";
     case VK_ERROR_INCOMPATIBLE_DISPLAY_KHR:
-      return "The display used by a swapchain does not use the same presentable image layout, or is incompatible in a way that prevents sharing an image.";
+      return "The display used by a swapchain does not use the same presentable image layout, or is incompatible in a way that prevents sharing an image. (VK_ERROR_INCOMPATIBLE_DISPLAY_KHR)";
     case VK_ERROR_VALIDATION_FAILED_EXT:
-      return "The application caused the validation layer to fail.";
+      return "The application caused the validation layer to fail. (VK_ERROR_VALIDATION_FAILED_EXT)";
     case VK_ERROR_INVALID_SHADER_NV:
-      return "One or more shaders failed to compile or link.";
+      return "One or more shaders failed to compile or link. (VK_ERROR_INVALID_SHADER_NV)";
 #if VK_HEADER_VERSION >= 39
     case VK_ERROR_OUT_OF_POOL_MEMORY_KHR:
-      return "A pool memory allocation has failed.";
+      return "A pool memory allocation has failed. (VK_ERROR_OUT_OF_POOL_MEMORY_KHR)";
 #endif
 #if VK_HEADER_VERSION >= 54
     case VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR:
-      return "An external handle is not a valid handle of the specified type.";
+      return "An external handle is not a valid handle of the specified type. (VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR)";
 #endif
 #if VK_HEADER_VERSION >= 64
     case VK_ERROR_NOT_PERMITTED_EXT:
-      return "The caller does not have sufficient privileges.";
+      return "The caller does not have sufficient privileges. (VK_ERROR_NOT_PERMITTED_EXT)";
 #endif
 #if VK_HEADER_VERSION >= 72
     case VK_ERROR_FRAGMENTATION_EXT:
-      return "A descriptor pool creation has failed due to fragmentation";
+      return "A descriptor pool creation has failed due to fragmentation. (VK_ERROR_FRAGMENTATION_EXT)";
 #endif
 #if VK_HEADER_VERSION >= 89
     case VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT:
-      return "Invalid DRM format modifier plane layout";
+      return "Invalid DRM format modifier plane layout (VK_ERROR_INVALID_DRM_FORMAT_MODIFIER_PLANE_LAYOUT_EXT)";
 #endif
 #if VK_HEADER_VERSION >= 97
     case VK_ERROR_INVALID_DEVICE_ADDRESS_EXT:
-      return "Invalid device address";
+      return "Invalid device address (VK_ERROR_INVALID_DEVICE_ADDRESS_EXT)";
 #endif
 #if VK_HEADER_VERSION >= 105
     case VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT:
-      return "An operation on a swapchain created with VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT failed as it did not have exclusive full-screen access.";
+      return "An operation on a swapchain created with VK_FULL_SCREEN_EXCLUSIVE_APPLICATION_CONTROLLED_EXT failed as it did not have exclusive full-screen access. (VK_ERROR_FULL_SCREEN_EXCLUSIVE_MODE_LOST_EXT)";
 #endif
 #if VK_HEADER_VERSION >= 131
     case VK_ERROR_UNKNOWN:
-      return "An unknown error has occurred; either the application has provided invalid input, or an implementation failure has occurred.";
+      return "An unknown error has occurred; either the application has provided invalid input, or an implementation failure has occurred. (VK_ERROR_UNKNOWN)";
 #endif
 #if VK_HEADER_VERSION >= 135
 #if VK_HEADER_VERSION < 162
     case VK_ERROR_INCOMPATIBLE_VERSION_KHR:
-      return "This error was removed by the Vulkan gods.";
+      return "This error was removed by the Vulkan gods. (VK_ERROR_INCOMPATIBLE_VERSION_KHR)";
 #endif
     case VK_THREAD_IDLE_KHR:
-      return "A deferred operation is not complete but there is currently no work for this thread to do at the time of this call.";
+      return "A deferred operation is not complete but there is currently no work for this thread to do at the time of this call. (VK_THREAD_IDLE_KHR)";
     case VK_THREAD_DONE_KHR:
-      return "A deferred operation is not complete but there is no work remaining to assign to additional threads.";
+      return "A deferred operation is not complete but there is no work remaining to assign to additional threads. (VK_THREAD_DONE_KHR)";
     case VK_OPERATION_DEFERRED_KHR:
-      return "A deferred operation was requested and at least some of the work was deferred.";
+      return "A deferred operation was requested and at least some of the work was deferred. (VK_OPERATION_DEFERRED_KHR)";
     case VK_OPERATION_NOT_DEFERRED_KHR:
-      return "A deferred operation was requested and no operations were deferred.";
+      return "A deferred operation was requested and no operations were deferred. (VK_OPERATION_NOT_DEFERRED_KHR)";
     case VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT:
-      return "A requested pipeline creation would have required compilation, but the application requested compilation to not be performed.";
+      return "A requested pipeline creation would have required compilation, but the application requested compilation to not be performed. (VK_ERROR_PIPELINE_COMPILE_REQUIRED_EXT)";
 #endif
 #if VK_HEADER_VERSION < 140
     case VK_RESULT_RANGE_SIZE:
