@@ -2,6 +2,7 @@ expand_content_files = [
   'broadway.md',
   'key-bindings.md',
   'macos.md',
+  'running.md',
   'treeview-tutorial.md',
   'wayland.md',
   'windows.md',
