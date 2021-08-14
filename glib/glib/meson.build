@@ -2,6 +2,8 @@ expand_content_files = [
   'building.md',
   'compiling.md',
   'error-reporting.md',
+  'gvariant-format-strings.md',
+  'gvariant-text.md',
   'i18n.md',
   'logging.md',
   'main-loop.md',
