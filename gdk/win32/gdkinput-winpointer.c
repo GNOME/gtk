@@ -60,6 +60,8 @@ typedef BOOL
 (WINAPI *getPointerTouchInfoHistory_t)(UINT32 pointerId, UINT32 *entriesCount, POINTER_TOUCH_INFO *touchInfo);
 typedef BOOL
 (WINAPI *setGestureConfig_t)(HWND hwnd, DWORD dwReserved, UINT cIDs, PGESTURECONFIG pGestureConfig, UINT cbSize);
+typedef BOOL
+(WINAPI *setWindowFeedbackSetting_t)(HWND hwnd, FEEDBACK_TYPE feedback, DWORD dwFlags, UINT32 size, const VOID *configuration);
 
 static registerPointerDeviceNotifications_t registerPointerDeviceNotifications;
 static getPointerDevices_t getPointerDevices;
@@ -72,6 +74,7 @@ static getPointerTouchInfo_t getPointerTouchInfo;
 static getPointerPenInfoHistory_t getPointerPenInfoHistory;
 static getPointerTouchInfoHistory_t getPointerTouchInfoHistory;
 static setGestureConfig_t setGestureConfig;
+static setWindowFeedbackSetting_t setWindowFeedbackSetting;
 
 static ATOM notifications_window_class;
 static HWND notifications_window_handle;
@@ -1059,6 +1062,8 @@ winpointer_ensure_procedures (void)
         GetProcAddress (user32_dll, "GetPointerTouchInfoHistory");
       setGestureConfig = (setGestureConfig_t)
         GetProcAddress (user32_dll, "SetGestureConfig");
+      setWindowFeedbackSetting = (setWindowFeedbackSetting_t)
+        GetProcAddress (user32_dll, "SetWindowFeedbackSetting");
     }
 
   return registerPointerDeviceNotifications &&
@@ -1128,6 +1133,31 @@ gdk_winpointer_initialize_surface (GdkSurface *surface)
       gesture_config.dwBlock = GC_ALLGESTURES;
 
       API_CALL (setGestureConfig, (hwnd, 0, 1, &gesture_config, sizeof (gesture_config)));
+    }
+
+  if (setWindowFeedbackSetting != NULL)
+    {
+      FEEDBACK_TYPE feedbacks[] = {
+        FEEDBACK_TOUCH_CONTACTVISUALIZATION,
+        FEEDBACK_PEN_BARRELVISUALIZATION,
+        FEEDBACK_PEN_TAP,
+        FEEDBACK_PEN_DOUBLETAP,
+        FEEDBACK_PEN_PRESSANDHOLD,
+        FEEDBACK_PEN_RIGHTTAP,
+        FEEDBACK_TOUCH_TAP,
+        FEEDBACK_TOUCH_DOUBLETAP,
+        FEEDBACK_TOUCH_PRESSANDHOLD,
+        FEEDBACK_TOUCH_RIGHTTAP,
+        FEEDBACK_GESTURE_PRESSANDTAP
+      };
+      gsize i = 0;
+
+      for (i = 0; i < G_N_ELEMENTS (feedbacks); i++)
+        {
+          BOOL setting = FALSE;
+
+          API_CALL (setWindowFeedbackSetting, (hwnd, feedbacks[i], 0, sizeof (BOOL), &setting));
+        }
     }
 }
 
