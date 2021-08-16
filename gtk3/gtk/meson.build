@@ -10,6 +10,7 @@ expand_content_files = [
   'migrating-smclient.md',
   'migrating-themes.md',
   'running.md',
+  'text-widget-overview.md',
   'treeview-tutorial.md',
   'wayland.md',
   'windows.md',

@@ -45,6 +45,7 @@ content_files = [
   "drawing-model.md",
   "input-handling.md",
   "key-bindings.md",
+  "text-widget-overview.md",
   "treeview-tutorial.md",
 
   "x11.md",
