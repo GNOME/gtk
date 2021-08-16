@@ -50,6 +50,7 @@ gdk_public_sources = files([
   'gdktoplevelsize.c',
   'gdktoplevel.c',
   'gdkdragsurface.c',
+  'gnewlineconverter.c',
 ])
 
 gdk_public_headers = files([
@@ -110,6 +111,7 @@ gdk_private_h_sources = files([
   'gdkmonitorprivate.h',
   'gdkseatdefaultprivate.h',
   'gdktoplevelsizeprivate.h',
+  'gnewlineconverter.h'
 ])
 
 gdk_gresource_xml = configure_file(output: 'gdk.gresource.xml',
