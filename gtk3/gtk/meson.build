@@ -1,6 +1,7 @@
 expand_content_files = [
   'broadway.md',
   'changes.md',
+  'drawing-model.md',
   'key-bindings.md',
   'macos.md',
   'migrating-2to3.md',
