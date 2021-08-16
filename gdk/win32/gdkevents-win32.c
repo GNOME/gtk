@@ -2379,7 +2379,7 @@ gdk_event_translate (MSG *msg,
 
       if (mouse_window != new_window)
 	{
-	  GDK_NOTE (EVENTS, g_print (" mouse_sinwod %p -> %p",
+	  GDK_NOTE (EVENTS, g_print (" mouse_window %p -> %p",
 				     mouse_window ? GDK_SURFACE_HWND (mouse_window) : NULL,
 				     new_window ? GDK_SURFACE_HWND (new_window) : NULL));
 	  synthesize_crossing_events (display,
