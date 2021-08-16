@@ -168,6 +168,7 @@ static UINT aerosnap_message;
 
 static gboolean pen_touch_input;
 static POINT pen_touch_cursor_position;
+static LONG last_digitizer_time;
 
 static void
 track_mouse_event (DWORD dwFlags,
@@ -2334,6 +2335,21 @@ gdk_event_translate (MSG *msg,
 			 (gpointer) msg->wParam,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
+      /* Even if we handle WM_POINTER messages, synthetic WM_MOUSEMOVE messages
+       * are still sent occasionally by the OS, e.g. when a surface is hidden
+       * or shown. Discard spurious WM_MOUSEMOVE messages while handling pen or
+       * touch input
+       *
+       * See the article
+       * "Why do I get spurious WM_MOUSEMOVE messages?" by Raymond Chen:
+       * https://devblogs.microsoft.com/oldnewthing/20031001-00/?p=42343
+       *
+       */
+      if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER &&
+          ( (msg->time - last_digitizer_time) < 200 ||
+           -(msg->time - last_digitizer_time) < 200 ))
+        break;
+
       pen_touch_input = FALSE;
 
       new_window = window;
@@ -2492,6 +2508,7 @@ gdk_event_translate (MSG *msg,
           current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
           current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
         }
 
       if (pointer_grab != NULL &&
@@ -2521,6 +2538,7 @@ gdk_event_translate (MSG *msg,
           current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
           current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
         }
 
       if (pointer_grab != NULL &&
@@ -2553,6 +2571,7 @@ gdk_event_translate (MSG *msg,
           current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
           current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
         }
 
       if (pointer_grab != NULL &&
@@ -2591,6 +2610,7 @@ gdk_event_translate (MSG *msg,
           current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
           current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
         }
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) &&
@@ -2625,6 +2645,7 @@ gdk_event_translate (MSG *msg,
           current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
           current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
         }
 
       if (pointer_grab != NULL &&
@@ -2654,6 +2675,7 @@ gdk_event_translate (MSG *msg,
           current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
           current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
+          last_digitizer_time = msg->time;
         }
 
       if (!IS_POINTER_INRANGE_WPARAM (msg->wParam))
