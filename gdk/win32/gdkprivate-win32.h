@@ -157,6 +157,8 @@ GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
 
+BOOL _gdk_win32_get_cursor_pos (LPPOINT lpPoint);
+
 void _gdk_surface_init_position     (GdkSurface *window);
 void _gdk_surface_move_resize_child (GdkSurface *window,
                                      int        x,

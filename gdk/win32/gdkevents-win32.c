@@ -166,6 +166,9 @@ static int both_shift_pressed[2]; /* to store keycodes for shift keys */
 static HHOOK keyboard_hook = NULL;
 static UINT aerosnap_message;
 
+static gboolean pen_touch_input;
+static POINT pen_touch_cursor_position;
+
 static void
 track_mouse_event (DWORD dwFlags,
 		   HWND  hwnd)
@@ -198,6 +201,18 @@ _gdk_win32_get_next_tick (gulong suggested_tick)
     return cur_tick;
   else
     return cur_tick = suggested_tick;
+}
+
+BOOL
+_gdk_win32_get_cursor_pos (LPPOINT lpPoint)
+{
+  if (pen_touch_input)
+    {
+      *lpPoint = pen_touch_cursor_position;
+      return TRUE;
+    }
+  else
+    return GetCursorPos (lpPoint);
 }
 
 static void
@@ -2215,6 +2230,8 @@ gdk_event_translate (MSG *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
+      pen_touch_input = FALSE;
+
       g_set_object (&window, find_window_for_mouse_event (window, msg));
       /* TODO_CSW?: there used to some synthesize and propagate */
       if (GDK_SURFACE_DESTROYED (window))
@@ -2256,6 +2273,8 @@ gdk_event_translate (MSG *msg,
       GDK_NOTE (EVENTS,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
+
+      pen_touch_input = FALSE;
 
       g_set_object (&window, find_window_for_mouse_event (window, msg));
 
@@ -2314,6 +2333,8 @@ gdk_event_translate (MSG *msg,
 		g_print (" %p (%d,%d)",
 			 (gpointer) msg->wParam,
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
+
+      pen_touch_input = FALSE;
 
       new_window = window;
 
@@ -2417,6 +2438,8 @@ gdk_event_translate (MSG *msg,
       GDK_NOTE (EVENTS, g_print (" %d (%ld,%ld)",
 				 HIWORD (msg->wParam), msg->pt.x, msg->pt.y));
 
+      pen_touch_input = FALSE;
+
       new_window = NULL;
       hwnd = WindowFromPoint (msg->pt);
       ignore_leave = FALSE;
@@ -2464,6 +2487,13 @@ gdk_event_translate (MSG *msg,
           break;
         }
 
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+        }
+
       if (pointer_grab != NULL &&
           !pointer_grab->implicit &&
           !pointer_grab->owner_events)
@@ -2484,6 +2514,13 @@ gdk_event_translate (MSG *msg,
         {
           return_val = FALSE;
           break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
         }
 
       if (pointer_grab != NULL &&
@@ -2509,6 +2546,13 @@ gdk_event_translate (MSG *msg,
         {
           return_val = FALSE;
           break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
         }
 
       if (pointer_grab != NULL &&
@@ -2542,6 +2586,13 @@ gdk_event_translate (MSG *msg,
           break;
         }
 
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+        }
+
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) &&
           !IS_POINTER_INCONTACT_WPARAM (msg->wParam) &&
           mouse_window != NULL)
@@ -2553,7 +2604,7 @@ gdk_event_translate (MSG *msg,
             {
               make_crossing_event(event_device,
                                   NULL,
-                                  &msg->pt,
+                                  &pen_touch_cursor_position,
                                   event_time);
             }
         }
@@ -2567,6 +2618,13 @@ gdk_event_translate (MSG *msg,
         {
           return_val = FALSE;
           break;
+        }
+
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
         }
 
       if (pointer_grab != NULL &&
@@ -2591,6 +2649,13 @@ gdk_event_translate (MSG *msg,
           break;
         }
 
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
+        {
+          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          pen_touch_input = TRUE;
+        }
+
       if (!IS_POINTER_INRANGE_WPARAM (msg->wParam))
         {
           gdk_winpointer_input_events (window, NULL, msg);
@@ -2604,7 +2669,7 @@ gdk_event_translate (MSG *msg,
             {
               make_crossing_event(event_device,
                                   NULL,
-                                  &msg->pt,
+                                  &pen_touch_cursor_position,
                                   event_time);
             }
         }

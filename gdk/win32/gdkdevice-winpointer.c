@@ -80,7 +80,7 @@ gdk_device_winpointer_query_state (GdkDevice        *device,
       hwnd = NULL;
     }
 
-  GetCursorPos (&point);
+  _gdk_win32_get_cursor_pos (&point);
 
   if (hwnd)
     ScreenToClient (hwnd, &point);
@@ -154,7 +154,7 @@ gdk_device_winpointer_surface_at_position (GdkDevice       *device,
   HWND hwnd;
   RECT rect;
 
-  if (!GetCursorPos (&screen_pt))
+  if (!_gdk_win32_get_cursor_pos (&screen_pt))
     return NULL;
 
   /* Use WindowFromPoint instead of ChildWindowFromPoint(Ex).
