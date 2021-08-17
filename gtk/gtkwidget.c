@@ -12603,10 +12603,10 @@ gtk_widget_action_set_enabled (GtkWidget  *widget,
  * gtk_widget_class_query_action:
  * @widget_class: a `GtkWidget` class
  * @index_: position of the action to query
- * @owner: (out): return location for the type where the action was defined
- * @action_name: (out): return location for the action name
- * @parameter_type: (out) (nullable): return location for the parameter type
- * @property_name: (out) (nullable): return location for the property name
+ * @owner: (out) (transfer none): return location for the type where the action was defined
+ * @action_name: (out) (transfer none): return location for the action name
+ * @parameter_type: (out) (transfer none) (nullable): return location for the parameter type
+ * @property_name: (out) (transfer none) (nullable): return location for the property name
  *
  * Returns details about the @index_-th action that has been
  * installed for @widget_class during class initialization.
