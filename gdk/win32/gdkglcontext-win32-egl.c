@@ -277,7 +277,7 @@ gdk_win32_display_init_egl (GdkDisplay  *display,
   display_win32->egl_disp = egl_disp;
   display_win32->egl_version = epoxy_egl_version (egl_disp);
 
-  eglBindAPI(EGL_OPENGL_ES_API);
+  eglBindAPI (EGL_OPENGL_ES_API);
 
   display_win32->hasEglSurfacelessContext =
     epoxy_has_egl_extension (egl_disp, "EGL_KHR_surfaceless_context");
