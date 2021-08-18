@@ -11,6 +11,7 @@ expand_content_files = [
   'migrating-themes.md',
   'running.md',
   'text-widget-overview.md',
+  'tree-widget-overview.md',
   'treeview-tutorial.md',
   'wayland.md',
   'windows.md',
