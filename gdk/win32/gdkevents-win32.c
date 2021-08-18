@@ -3348,7 +3348,7 @@ gdk_event_translate (MSG  *msg,
 	  do_show_window (window, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
 
     if (msg->wParam == SC_RESTORE)
-      _gdk_win32_window_invalidate_egl_framebuffer (window);
+      gdk_win32_window_invalidate_egl_framebuffer (window);
 	  break;
         case SC_MAXIMIZE:
           impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
@@ -3436,7 +3436,7 @@ gdk_event_translate (MSG  *msg,
             {
               MINMAXINFO our_mmi;
 
-              _gdk_win32_window_invalidate_egl_framebuffer (window);
+              gdk_win32_window_invalidate_egl_framebuffer (window);
 
               if (_gdk_win32_window_fill_min_max_info (window, &our_mmi))
                 {

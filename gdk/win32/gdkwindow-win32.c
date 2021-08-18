@@ -1690,7 +1690,7 @@ gdk_win32_window_move_resize (GdkWindow *window,
     }
   else
     {
-      _gdk_win32_window_invalidate_egl_framebuffer (window);
+      gdk_win32_window_invalidate_egl_framebuffer (window);
       if (with_move)
 	{
 	  gdk_win32_window_move_resize_internal (window, x, y, width, height);
@@ -4758,7 +4758,7 @@ gdk_win32_window_end_move_resize_drag (GdkWindow *window)
   GdkW32DragMoveResizeContext *context = &impl->drag_move_resize_context;
 
   if (context->op == GDK_WIN32_DRAGOP_RESIZE)
-    _gdk_win32_window_invalidate_egl_framebuffer (window);
+    gdk_win32_window_invalidate_egl_framebuffer (window);
 
   context->op = GDK_WIN32_DRAGOP_NONE;
 
@@ -5279,7 +5279,7 @@ gdk_win32_window_unmaximize (GdkWindow *window)
 			   GDK_WINDOW_HWND (window),
 			   _gdk_win32_window_state_to_string (window->state)));
 
-  _gdk_win32_window_invalidate_egl_framebuffer (window);
+  gdk_win32_window_invalidate_egl_framebuffer (window);
 
   if (GDK_WINDOW_IS_MAPPED (window))
     GtkShowWindow (window, SW_RESTORE);
@@ -5376,7 +5376,7 @@ gdk_win32_window_unfullscreen (GdkWindow *window)
 
       impl->hint_flags = fi->hint_flags;
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, fi->style);
-      _gdk_win32_window_invalidate_egl_framebuffer (window);
+      gdk_win32_window_invalidate_egl_framebuffer (window);
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), HWND_NOTOPMOST,
 			       fi->r.left, fi->r.top,
 			       fi->r.right - fi->r.left, fi->r.bottom - fi->r.top,
@@ -6279,8 +6279,8 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->get_property = _gdk_win32_window_get_property;
   impl_class->change_property = _gdk_win32_window_change_property;
   impl_class->delete_property = _gdk_win32_window_delete_property;
-  impl_class->create_gl_context = _gdk_win32_window_create_gl_context;
-  impl_class->invalidate_for_new_frame = _gdk_win32_window_invalidate_for_new_frame;
+  impl_class->create_gl_context = gdk_win32_window_create_gl_context;
+  impl_class->invalidate_for_new_frame = gdk_win32_window_invalidate_for_new_frame;
   impl_class->get_scale_factor = _gdk_win32_window_get_scale_factor;
   impl_class->get_unscaled_size = _gdk_win32_window_get_unscaled_size;
 }
