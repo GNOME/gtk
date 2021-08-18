@@ -2635,6 +2635,23 @@ touch_handle_cancel (void            *data,
 }
 
 static void
+touch_handle_shape (void            *data,
+                    struct wl_touch *touch,
+                    int32_t         id,
+                    wl_fixed_t      major,
+                    wl_fixed_t      minor)
+{
+}
+
+static void
+touch_handle_orientation (void            *data,
+                          struct wl_touch *touch,
+                          int32_t         id,
+                          wl_fixed_t      orientation)
+{
+}
+
+static void
 emit_gesture_swipe_event (GdkWaylandSeat          *seat,
                           GdkTouchpadGesturePhase  phase,
                           guint32                  _time,
@@ -3021,7 +3038,9 @@ static const struct wl_touch_listener touch_listener = {
   touch_handle_up,
   touch_handle_motion,
   touch_handle_frame,
-  touch_handle_cancel
+  touch_handle_cancel,
+  touch_handle_shape,
+  touch_handle_orientation,
 };
 
 static const struct zwp_pointer_gesture_swipe_v1_listener gesture_swipe_listener = {
