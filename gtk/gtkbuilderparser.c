@@ -573,6 +573,8 @@ parse_object (GtkBuildableParseContext  *context,
   const char *object_id = NULL;
   char *internal_id = NULL;
   int line;
+  gpointer line_ptr;
+  gboolean has_duplicate;
 
   child_info = state_peek_info (data, ChildInfo);
   if (child_info && child_info->tag_type == TAG_OBJECT)
@@ -673,14 +675,14 @@ parse_object (GtkBuildableParseContext  *context,
   object_info->parent = (CommonInfo*)child_info;
   state_push (data, object_info);
 
-  line = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_id));
-  if (line != 0)
+  has_duplicate = g_hash_table_lookup_extended (data->object_ids, object_id, NULL, &line_ptr);
+  if (has_duplicate != 0)
     {
       g_set_error (error,
                    GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_DUPLICATE_ID,
                    "Duplicate object ID '%s' (previously on line %d)",
-                   object_id, line);
+                   object_id, GPOINTER_TO_INT (line_ptr));
       _gtk_builder_prefix_error (data->builder, context, error);
       return;
     }
@@ -701,6 +703,8 @@ parse_template (GtkBuildableParseContext  *context,
   const char *object_class = NULL;
   const char *parent_class = NULL;
   int line;
+  gpointer line_ptr;
+  gboolean has_duplicate;
   GType template_type;
   GType parsed_type;
 
@@ -777,14 +781,14 @@ parse_template (GtkBuildableParseContext  *context,
   object_info->object = gtk_builder_get_object (data->builder, object_class);
   state_push (data, object_info);
 
-  line = GPOINTER_TO_INT (g_hash_table_lookup (data->object_ids, object_class));
-  if (line != 0)
+  has_duplicate = g_hash_table_lookup_extended (data->object_ids, object_class, NULL, &line_ptr);
+  if (has_duplicate != 0)
     {
       g_set_error (error,
                    GTK_BUILDER_ERROR,
                    GTK_BUILDER_ERROR_DUPLICATE_ID,
                    "Duplicate object ID '%s' (previously on line %d)",
-                   object_class, line);
+                   object_class, GPOINTER_TO_INT (line_ptr));
       _gtk_builder_prefix_error (data->builder, context, error);
       return;
     }
