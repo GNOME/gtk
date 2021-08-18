@@ -49,6 +49,7 @@ content_files = [
   "tree-widget-overview.md",
   "treeview-tutorial.md",
   "css-overview.md",
+  "css-properties.md",
 
   "x11.md",
   "windows.md",
