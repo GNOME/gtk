@@ -2,6 +2,7 @@ expand_content_files = [
   'broadway.md',
   'building.md',
   'changes.md',
+  'compiling.md',
   'css-overview.md',
   'css-properties.md',
   'drawing-model.md',
