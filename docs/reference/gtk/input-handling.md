@@ -137,6 +137,14 @@ capture phase, and key bindings locally, during the target phase.
 Under the hood, all shortcuts are represented as instances of `GtkShortcut`,
 and they are managed by `GtkShortcutController`.
 
+## Text input
+
+When actual text input is needed (i.e. not just keyboard shortcuts),
+input method support can be added to a widget by connecting an input
+method context and listening to its `::commit` signal. To create a new
+input method context, use gtk_im_multicontext_new(), to provide it with
+input, use gtk_event_controller_key_set_im_context().
+
 ## Event controllers and gestures
 
 Event controllers are standalone objects that can perform
