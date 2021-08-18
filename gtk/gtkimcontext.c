@@ -31,27 +31,16 @@
  * `GtkIMContext` is used by GTK text input widgets like `GtkText`
  * to map from key events to Unicode character strings.
  *
- * By default, GTK uses a platform-dependent default input method.
- * On Windows, the default implementation is IME-based and on Wayland,
- * it is using the Wayland text protocol. The choice can be overridden
- * programmatically via the [property@Gtk.Settings:gtk-im-module] setting.
- * Users may set the `GTK_IM_MODULE` environment variable to override the
- * default.
- *
- * Text widgets have a :im-module property (e.g. [property@Gtk.TextView:im-module])
- * that may also be used to set input methods for specific widget instances.
- * For instance, a certain entry widget might be expected to contain
- * certain characters which would be easier to input with a specific
- * input method.
- *
  * An input method may consume multiple key events in sequence before finally
  * outputting the composed result. This is called *preediting*, and an input
  * method may provide feedback about this process by displaying the intermediate
- * composition states as preedit text.
+ * composition states as preedit text. To do so, the `GtkIMContext` will emit
+ * [signal@Gtk.IMContext::preedit-start], [signal@Gtk.IMContext::preedit-changed]
+ * and [signal@Gtk.IMContext::preedit-end] signals.
  *
- * For instance, the built-in GTK input method `GtkIMContextSimple` implements
- * the input of arbitrary Unicode code points by holding down the
- * <kbd>Control</kbd> and <kbd>Shift</kbd> keys and then typing <kbd>U</kbd>
+ * For instance, the built-in GTK input method [class@Gtk.IMContextSimple]
+ * implements the input of arbitrary Unicode code points by holding down the
+ * <kbd>Control</kbd> and <kbd>Shift</kbd> keys and then typing <kbd>u</kbd>
  * followed by the hexadecimal digits of the code point. When releasing the
  * <kbd>Control</kbd> and <kbd>Shift</kbd> keys, preediting ends and the
  * character is inserted as text. For example,
@@ -63,6 +52,9 @@
  * Additional input methods can be made available for use by GTK widgets as
  * loadable modules. An input method module is a small shared library which
  * provides a `GIOExtension` for the extension point named "gtk-im-module".
+ *
+ * To connect a widget to the users preferred input method, you should use
+ * [class@Gtk.IMMulticontext].
  */
 
 enum {
@@ -123,72 +115,74 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
 
 /**
  * GtkIMContextClass:
- * @preedit_start: Default handler of the `GtkIMContext::preedit-start` signal.
- * @preedit_end: Default handler of the `GtkIMContext::preedit-end` signal.
- * @preedit_changed: Default handler of the `GtkIMContext::preedit-changed`
+ * @preedit_start: Default handler of the [signal@Gtk.IMContext::preedit-start] signal.
+ * @preedit_end: Default handler of the [signal@Gtk.IMContext::preedit-end] signal.
+ * @preedit_changed: Default handler of the [signal@Gtk.IMContext::preedit-changed]
  *   signal.
- * @commit: Default handler of the `GtkIMContext::commit` signal.
+ * @commit: Default handler of the [signal@Gtk.IMContext::commit] signal.
  * @retrieve_surrounding: Default handler of the
- *   `GtkIMContext::retrieve-surrounding` signal.
+ *   [signal@Gtk.IMContext::retrieve-surrounding] signal.
  * @delete_surrounding: Default handler of the
- *   `GtkIMContext::delete-surrounding` signal.
- * @set_client_widget: Called via gtk_im_context_set_client_widget() when the
- *   input window where the entered text will appear changes. Override this to
- *   keep track of the current input window, for instance for the purpose of
+ *   [signal@Gtk.IMContext::delete-surrounding] signal.
+ * @set_client_widget: Called via [method@Gtk.IMContext.set_client_widget] when
+ *   the input window where the entered text will appear changes. Override this
+ *   to keep track of the current input window, for instance for the purpose of
  *   positioning a status display of your input method.
- * @get_preedit_string: Called via gtk_im_context_get_preedit_string() to
- *   retrieve the text currently being preedited for display at the cursor
+ * @get_preedit_string: Called via [method@Gtk.IMContext.get_preedit_string]
+ *   to retrieve the text currently being preedited for display at the cursor
  *   position. Any input method which composes complex characters or any
  *   other compositions from multiple sequential key presses should override
  *   this method to provide feedback.
- * @filter_keypress: Called via gtk_im_context_filter_keypress() on every
+ * @filter_keypress: Called via [method@Gtk.IMContext.filter_keypress] on every
  *   key press or release event. Every non-trivial input method needs to
  *   override this in order to implement the mapping from key events to text.
  *   A return value of %TRUE indicates to the caller that the event was
- *   consumed by the input method. In that case, the `GtkIMContext::commit`
+ *   consumed by the input method. In that case, the [signal@Gtk.IMContext::commit]
  *   signal should be emitted upon completion of a key sequence to pass the
  *   resulting text back to the input widget. Alternatively, %FALSE may be
  *   returned to indicate that the event wasn’t handled by the input method.
  *   If a builtin mapping exists for the key, it is used to produce a
  *   character.
- * @focus_in: Called via gtk_im_context_focus_in() when the input widget
+ * @focus_in: Called via [method@Gtk.IMContext.focus_in] when the input widget
  *   has gained focus. May be overridden to keep track of the current focus.
- * @focus_out: Called via gtk_im_context_focus_out() when the input widget
+ * @focus_out: Called via [method@Gtk.IMContext.focus_out] when the input widget
  *   has lost focus. May be overridden to keep track of the current focus.
- * @reset: Called via gtk_im_context_reset() to signal a change such as a
+ * @reset: Called via [method@Gtk.IMContext.reset] to signal a change such as a
  *   change in cursor position. An input method that implements preediting
  *   should override this method to clear the preedit state on reset.
- * @set_cursor_location: Called via gtk_im_context_set_cursor_location()
+ * @set_cursor_location: Called via [method@Gtk.IMContext.set_cursor_location]
  *   to inform the input method of the current cursor location relative to
  *   the client window. May be overridden to implement the display of popup
  *   windows at the cursor position.
- * @set_use_preedit: Called via gtk_im_context_set_use_preedit() to control
+ * @set_use_preedit: Called via [method@Gtk.IMContext.set_use_preedit] to control
  *   the use of the preedit string. Override this to display feedback by some
  *   other means if turned off.
- * @set_surrounding: Called via gtk_im_context_set_surrounding() in response
- *   to signal `GtkIMContext::retrieve-surrounding` to update the input
+ * @set_surrounding: Called via [method@Gtk.IMContext.set_surrounding] in
+ *   response to [signal@Gtk.IMContext::retrieve-surrounding] signal to update
+ *   the input method’s idea of the context around the cursor. It is not necessary
+ *   to override this method even with input methods which implement
+ *   context-dependent behavior. The base implementation is sufficient for
+ *   [method@Gtk.IMContext.get_surrounding] to work.
+ * @get_surrounding: Called via [method@Gtk.IMContext.get_surrounding] to update
+ *   the context around the cursor location. It is not necessary to override this
+ *   method even with input methods which implement context-dependent behavior.
+ *   The base implementation emits [signal@Gtk.IMContext::retrieve-surrounding]
+ *   and records the context received by the subsequent invocation of
+ *   [vfunc@Gtk.IMContext.get_surrounding].
+ * @set_surrounding_with_selection: Called via
+ *   [method@Gtk.IMContext.set_surrounding_with_selection] in response to the
+ *   [signal@Gtk.IMContext::retrieve-surrounding] signal to update the input
  *   method’s idea of the context around the cursor. It is not necessary to
  *   override this method even with input methods which implement
  *   context-dependent behavior. The base implementation is sufficient for
- *   gtk_im_context_get_surrounding() to work.
- * @get_surrounding: Called via gtk_im_context_get_surrounding() to update
- *   the context around the cursor location. It is not necessary to override
+ *   [method@Gtk.IMContext.get_surrounding] to work.
+ * @get_surrounding_with_selection: Called via
+ *   [method@Gtk.IMContext.get_surrounding_with_selection] to update the
+ *   context around the cursor location. It is not necessary to override
  *   this method even with input methods which implement context-dependent
  *   behavior. The base implementation emits
- *   `GtkIMContext::retrieve-surrounding` and records the context received
- *   by the subsequent invocation of @get_surrounding.
- * @set_surrounding_with_selection: Called via gtk_im_context_set_surrounding_with_selection()
- *   in response to signal `GtkIMContext::retrieve-surrounding` to update the input
- *   method’s idea of the context around the cursor. It is not necessary to
- *   override this method even with input methods which implement
- *   context-dependent behavior. The base implementation is sufficient for
- *   gtk_im_context_get_surrounding() to work.
- * @get_surrounding_with_selection: Called via gtk_im_context_get_surrounding_with_selection()
- *   to update the context around the cursor location. It is not necessary to override
- *   this method even with input methods which implement context-dependent
- *   behavior. The base implementation emits
- *   `GtkIMContext::retrieve-surrounding` and records the context received
- *   by the subsequent invocation of @get_surrounding.
+ *   [signal@Gtk.IMContext::retrieve-surrounding] and records the context
+ *   received by the subsequent invocation of [vfunc@Gtk.IMContext.get_surrounding].
  */
 static void
 gtk_im_context_class_init (GtkIMContextClass *klass)
@@ -218,6 +212,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 0);
+
   /**
    * GtkIMContext::preedit-end:
    * @context: the object on which the signal is emitted
@@ -233,14 +228,16 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 0);
+
   /**
    * GtkIMContext::preedit-changed:
    * @context: the object on which the signal is emitted
    *
    * The ::preedit-changed signal is emitted whenever the preedit sequence
-   * currently being entered has changed.  It is also emitted at the end of
-   * a preedit sequence, in which case
-   * gtk_im_context_get_preedit_string() returns the empty string.
+   * currently being entered has changed.
+   *
+   * It is also emitted at the end of a preedit sequence, in which case
+   * [method@Gtk.IMContext.get_preedit_string] returns the empty string.
    */
   im_context_signals[PREEDIT_CHANGED] =
     g_signal_new (I_("preedit-changed"),
@@ -250,14 +247,20 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		  NULL, NULL,
 		  NULL,
 		  G_TYPE_NONE, 0);
+
   /**
    * GtkIMContext::commit:
    * @context: the object on which the signal is emitted
    * @str: the completed character(s) entered by the user
    *
    * The ::commit signal is emitted when a complete input sequence
-   * has been entered by the user. This can be a single character
-   * immediately after a key press or the final result of preediting.
+   * has been entered by the user.
+   *
+   * If the commit comes after a preediting sequence, the
+   * ::commit signal is emitted after ::preedit-end.
+   *
+   * This can be a single character immediately after a key press or
+   * the final result of preediting.
    */
   im_context_signals[COMMIT] =
     g_signal_new (I_("commit"),
@@ -268,14 +271,16 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
 		  NULL,
 		  G_TYPE_NONE, 1,
 		  G_TYPE_STRING);
+
   /**
    * GtkIMContext::retrieve-surrounding:
    * @context: the object on which the signal is emitted
    *
    * The ::retrieve-surrounding signal is emitted when the input method
-   * requires the context surrounding the cursor.  The callback should set
-   * the input method surrounding context by calling the
-   * gtk_im_context_set_surrounding() method.
+   * requires the context surrounding the cursor.
+   *
+   * The callback should set the input method surrounding context by
+   * calling the [method@Gtk.IMContext.set_surrounding] method.
    *
    * Returns: %TRUE if the signal was handled.
    */
@@ -290,12 +295,13 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
   g_signal_set_va_marshaller (im_context_signals[RETRIEVE_SURROUNDING],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__VOIDv);
+
   /**
    * GtkIMContext::delete-surrounding:
    * @context: the object on which the signal is emitted
-   * @offset:  the character offset from the cursor position of the text
-   *           to be deleted. A negative value indicates a position before
-   *           the cursor.
+   * @offset: the character offset from the cursor position of the text
+   *   to be deleted. A negative value indicates a position before
+   *   the cursor.
    * @n_chars: the number of characters to be deleted
    *
    * The ::delete-surrounding signal is emitted when the input method
@@ -317,6 +323,14 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__INT_INTv);
 
+  /**
+   * GtkIMContext:input-purpose:
+   *
+   * The purpose of the text field that the `GtkIMContext is connected to.
+   *
+   * This property can be used by on-screen keyboards and other input
+   * methods to adjust their behaviour.
+   */
   properties[PROP_INPUT_PURPOSE] =
     g_param_spec_enum ("input-purpose",
                          P_("Purpose"),
@@ -325,6 +339,12 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
                          GTK_INPUT_PURPOSE_FREE_FORM,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkIMContext:input-hints:
+   *
+   * Additional hints that allow input methods to fine-tune
+   * their behaviour.
+   */
   properties[PROP_INPUT_HINTS] =
     g_param_spec_flags ("input-hints",
                          P_("hints"),
@@ -465,9 +485,9 @@ gtk_im_context_set_client_widget (GtkIMContext *context,
  *   string. The string retrieved must be freed with g_free().
  * @attrs: (out) (transfer full): location to store the retrieved
  *   attribute list. When you are done with this list, you
- *   must unreference it with pango_attr_list_unref().
- * @cursor_pos: (out): location to store position of cursor (in characters)
- *   within the preedit string.
+ *   must unreference it with [method@Pango.AttrList.unref].
+ * @cursor_pos: (out): location to store position of cursor
+ *   (in characters) within the preedit string.
  *
  * Retrieve the current preedit string for the input context,
  * and a list of attributes to apply to the string.
@@ -527,7 +547,7 @@ gtk_im_context_filter_keypress (GtkIMContext *context,
  * @group: the active keyboard group for the event
  *
  * Allow an input method to forward key press and release events
- * to another input methodm without necessarily having a `GdkEvent`
+ * to another input method without necessarily having a `GdkEvent`
  * available.
  *
  * Returns: %TRUE if the input method handled the key event.
@@ -673,7 +693,7 @@ gtk_im_context_reset (GtkIMContext   *context)
  * Notify the input method that a change in cursor
  * position has been made.
  *
- * The location is relative to the client window.
+ * The location is relative to the client widget.
  */
 void
 gtk_im_context_set_cursor_location (GtkIMContext       *context,
@@ -750,8 +770,8 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
  *
  * Sets surrounding context around the insertion point and preedit
  * string. This function is expected to be called in response to the
- * GtkIMContext::retrieve_surrounding signal, and will likely have no
- * effect if called at other times.
+ * [signal@Gtk.IMContext::retrieve_surrounding] signal, and will likely
+ * have no effect if called at other times.
  *
  * Since: 4.2
  */
@@ -902,24 +922,24 @@ gtk_im_context_get_surrounding_with_selection (GtkIMContext  *context,
  *
  * Asks the widget that the input context is attached to delete
  * characters around the cursor position by emitting the
- * GtkIMContext::delete_surrounding signal.
+ * `::delete_surrounding` signal.
  *
  * Note that @offset and @n_chars are in characters not in bytes
  * which differs from the usage other places in `GtkIMContext`.
  *
  * In order to use this function, you should first call
- * gtk_im_context_get_surrounding() to get the current context, and
- * call this function immediately afterwards to make sure that you
+ * [method@Gtk.IMContext.get_surrounding] to get the current context,
+ * and call this function immediately afterwards to make sure that you
  * know what you are deleting. You should also account for the fact
  * that even if the signal was handled, the input context might not
  * have deleted all the characters that were requested to be deleted.
  *
  * This function is used by an input method that wants to make
- * subsitutions in the existing text in response to new input. It is
- * not useful for applications.
- * 
+ * subsitutions in the existing text in response to new input.
+ * It is not useful for applications.
+ *
  * Returns: %TRUE if the signal was handled.
- **/
+ */
 gboolean
 gtk_im_context_delete_surrounding (GtkIMContext *context,
 				   int           offset,

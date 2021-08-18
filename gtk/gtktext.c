@@ -867,7 +867,7 @@ gtk_text_class_init (GtkTextClass *class)
    *
    * Which IM (input method) module should be used for this self.
    *
-   * See [class@Gtk.IMContext].
+   * See [class@Gtk.IMMulticontext].
    *
    * Setting this to a non-%NULL value overrides the system-wide
    * IM module setting. See the [property@Gtk.Settings:gtk-im-module]
