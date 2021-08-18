@@ -251,10 +251,6 @@ struct _GdkWin32Surface
    * For OLE2 protocol only.
    */
   drop_target_context *drop_target;
-  /* Temporarily holds the GdkDrop currently associated with this window.
-   * For LOCAL protocol only.
-   */
-  GdkDrop             *drop;
 
   GdkSurface *transient_owner;
   GSList    *transient_children;

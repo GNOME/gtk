@@ -535,7 +535,6 @@ _gdk_win32_display_open (const char *display_name)
 
   _gdk_win32_lang_notification_init ();
   _gdk_drag_init ();
-  _gdk_drop_init ();
 
   _gdk_display->clipboard = gdk_win32_clipboard_new (_gdk_display);
   _gdk_display->primary_clipboard = gdk_clipboard_new (_gdk_display);

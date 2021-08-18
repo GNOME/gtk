@@ -140,9 +140,6 @@ struct _drop_target_context
   IDataObject                    *data_object;
 };
 
-/* TRUE to use OLE2 protocol, FALSE to use local protocol */
-static gboolean use_ole2_dnd = TRUE;
-
 static void
 gdk_win32_drop_init (GdkWin32Drop *drop)
 {
@@ -194,28 +191,6 @@ gdk_drop_new (GdkDisplay        *display,
   drop_win32->protocol = protocol;
 
   return GDK_DROP (drop_win32);
-}
-
-/* Gets the GdkDrop that corresponds to a particular GdkSurface.
- * Will be NULL for surfaces that are not registered as drop targets,
- * or for surfaces that are currently not under the drag cursor.
- * This function is only used for local DnD, where we do have
- * a real GdkSurface that corresponds to the HWND under cursor.
- */
-GdkDrop *
-_gdk_win32_get_drop_for_dest_surface (GdkSurface *dest)
-{
-  GdkWin32Surface *impl;
-
-  if (dest == NULL)
-    return NULL;
-
-  impl = GDK_WIN32_SURFACE (dest);
-
-  if (impl->drop_target != NULL)
-    return impl->drop_target->drop;
-
-  return impl->drop;
 }
 
 
@@ -451,51 +426,6 @@ set_source_actions_helper (GdkDrop       *drop,
   return actions;
 }
 
-void
-_gdk_win32_local_drop_target_dragenter (GdkDrag        *drag,
-                                        GdkSurface     *dest_surface,
-                                        int             x_root,
-                                        int             y_root,
-                                        DWORD           grfKeyState,
-                                        guint32         time_,
-                                        GdkDragAction  *actions)
-{
-  GdkDrop *drop;
-  GdkWin32Drop *drop_win32;
-  GdkDisplay *display;
-  GdkDragAction source_actions;
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (dest_surface);
-
-  GDK_NOTE (DND, g_print ("_gdk_win32_local_drop_target_dragenter %p @ %d : %d"
-                          " for dest window 0x%p"
-                          ". actions = %s\n",
-                          drag, x_root, y_root,
-                          dest_surface,
-                          _gdk_win32_drag_action_to_string (*actions)));
-
-  display = gdk_surface_get_display (dest_surface);
-  drop = gdk_drop_new (display,
-                       gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
-                       drag,
-                       gdk_drag_get_formats (drag),
-                       dest_surface,
-                       GDK_DRAG_PROTO_LOCAL);
-  drop_win32 = GDK_WIN32_DROP (drop);
-
-  impl->drop = drop;
-
-  source_actions = set_source_actions_helper (drop, *actions, grfKeyState);
-
-  gdk_drop_emit_enter_event (drop, TRUE, x_root, y_root, time_);
-  drop_win32->last_key_state = grfKeyState;
-  drop_win32->last_x = x_root;
-  drop_win32->last_y = y_root;
-  *actions = filter_actions (drop_win32->actions, source_actions);
-
-  GDK_NOTE (DND, g_print ("_gdk_win32_local_drop_target_dragenter returns with actions %s\n",
-                          _gdk_win32_drag_action_to_string (*actions)));
-}
-
 /* The pdwEffect here initially points
  * to a DWORD that contains the value of dwOKEffects argument in DoDragDrop,
  * i.e. the drag action that the drag source deems acceptable.
@@ -575,55 +505,6 @@ idroptarget_dragenter (LPDROPTARGET This,
   return S_OK;
 }
 
-gboolean
-_gdk_win32_local_drop_target_will_emit_motion (GdkDrop *drop,
-                                               int      x_root,
-                                               int      y_root,
-                                               DWORD    grfKeyState)
-{
-  GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (drop);
-
-  if (x_root != drop_win32->last_x ||
-      y_root != drop_win32->last_y ||
-      grfKeyState != drop_win32->last_key_state)
-    return TRUE;
-
-  return FALSE;
-}
-
-void
-_gdk_win32_local_drop_target_dragover (GdkDrop        *drop,
-                                       GdkDrag        *drag,
-                                       int             x_root,
-                                       int             y_root,
-                                       DWORD           grfKeyState,
-                                       guint32         time_,
-                                       GdkDragAction  *actions)
-{
-  GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (drop);
-  GdkDragAction source_actions;
-
-  source_actions = set_source_actions_helper (drop, *actions, grfKeyState);
-
-  GDK_NOTE (DND, g_print ("_gdk_win32_local_drop_target_dragover %p @ %d : %d"
-                          ", actions = %s\n",
-                          drop, x_root, y_root,
-                          _gdk_win32_drag_action_to_string (*actions)));
-
-  if (_gdk_win32_local_drop_target_will_emit_motion (drop, x_root, y_root, grfKeyState))
-    {
-      gdk_drop_emit_motion_event (drop, TRUE, x_root, y_root, time_);
-      drop_win32->last_key_state = grfKeyState;
-      drop_win32->last_x = x_root;
-      drop_win32->last_y = y_root;
-    }
-
-  *actions = filter_actions (drop_win32->actions, source_actions);
-
-  GDK_NOTE (DND, g_print ("_gdk_win32_local_drop_target_dragover returns with actions %s\n",
-                          _gdk_win32_drag_action_to_string (*actions)));
-}
-
 /* NOTE: This method is called continuously, even if nothing is
  * happening, as long as the drag operation is in progress and
  * the cursor is above our window.
@@ -681,18 +562,6 @@ idroptarget_dragover (LPDROPTARGET This,
   return S_OK;
 }
 
-void
-_gdk_win32_local_drop_target_dragleave (GdkDrop *drop,
-                                        guint32  time_)
-{
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (gdk_drop_get_surface (drop));
-  GDK_NOTE (DND, g_print ("_gdk_win32_local_drop_target_dragleave %p\n", drop));
-
-  gdk_drop_emit_leave_event (drop, TRUE, time_);
-
-  g_clear_object (&impl->drop);
-}
-
 static HRESULT STDMETHODCALLTYPE
 idroptarget_dragleave (LPDROPTARGET This)
 {
@@ -706,35 +575,6 @@ idroptarget_dragleave (LPDROPTARGET This)
   set_data_object (&ctx->data_object, NULL);
 
   return S_OK;
-}
-
-void
-_gdk_win32_local_drop_target_drop (GdkDrop        *drop,
-                                   GdkDrag        *drag,
-                                   guint32         time_,
-                                   GdkDragAction  *actions)
-{
-  GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (drop);
-
-  GDK_NOTE (DND, g_print ("_gdk_win32_local_drop_target_drop %p ", drop));
-
-  set_source_actions_helper (drop,
-                             *actions,
-                             drop_win32->last_key_state);
-
-  drop_win32->drop_finished = FALSE;
-  gdk_drop_emit_drop_event (drop, TRUE, drop_win32->last_x, drop_win32->last_y, time_);
-
-  while (!drop_win32->drop_finished)
-    g_main_context_iteration (NULL, FALSE);
-
-  /* Notify local source of the DnD result
-   * Special case:
-   * drop_win32->actions is guaranteed to contain 1 action after gdk_drop_finish ()
-   */
-  *actions = drop_win32->actions;
-
-  GDK_NOTE (DND, g_print ("drop with action %s\n", _gdk_win32_drag_action_to_string (*actions)));
 }
 
 static HRESULT STDMETHODCALLTYPE
@@ -1078,14 +918,6 @@ gdk_win32_drop_status (GdkDrop       *drop,
                           _gdk_win32_drag_action_to_string (preferred)));
 
   drop_win32->actions = actions;
-
-  if (drop_win32->protocol == GDK_DRAG_PROTO_OLE2)
-    return;
-
-  drag = gdk_drop_get_drag (drop);
-
-  if (drag != NULL)
-    _gdk_win32_local_drag_give_feedback (drag, actions);
 }
 
 static void
@@ -1101,9 +933,6 @@ gdk_win32_drop_finish (GdkDrop       *drop,
 
   drop_win32->actions = action;
   drop_win32->drop_finished = TRUE;
-
-  if (drop_win32->protocol == GDK_DRAG_PROTO_OLE2)
-    return;
 }
 
 #if 0
@@ -1136,6 +965,7 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
 {
   drop_target_context *ctx;
   HRESULT hr;
+  GdkWin32Surface *impl;
 
   g_return_if_fail (window != NULL);
 
@@ -1146,43 +976,30 @@ _gdk_win32_surface_register_dnd (GdkSurface *window)
 
   GDK_NOTE (DND, g_print ("gdk_win32_surface_register_dnd: %p\n", GDK_SURFACE_HWND (window)));
 
-  if (!use_ole2_dnd)
-    {
-      /* We always claim to accept dropped files, but in fact we might not,
-       * of course. This function is called in such a way that it cannot know
-       * whether the window (widget) in question actually accepts files
-       * (in gtk, data of type text/uri-list) or not.
-       */
-      gdk_win32_display_add_filter (GDK_WIN32_DISPLAY (gdk_display_get_default ()), gdk_dropfiles_filter, NULL);
-      DragAcceptFiles (GDK_SURFACE_HWND (window), TRUE);
-    }
+  impl = GDK_WIN32_SURFACE (window);
+
+  /* Return if window is already setup for DND. */
+  if (impl->drop_target != NULL)
+    return;
+
+  ctx = target_context_new (window);
+
+  hr = CoLockObjectExternal ((IUnknown *) &ctx->idt, TRUE, FALSE);
+  if (!SUCCEEDED (hr))
+    OTHER_API_FAILED ("CoLockObjectExternal");
   else
     {
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-
-      /* Return if window is already setup for DND. */
-      if (impl->drop_target != NULL)
-        return;
-
-      ctx = target_context_new (window);
-
-      hr = CoLockObjectExternal ((IUnknown *) &ctx->idt, TRUE, FALSE);
-      if (!SUCCEEDED (hr))
-        OTHER_API_FAILED ("CoLockObjectExternal");
+      hr = RegisterDragDrop (GDK_SURFACE_HWND (window), &ctx->idt);
+      if (hr == DRAGDROP_E_ALREADYREGISTERED)
+        {
+          g_print ("DRAGDROP_E_ALREADYREGISTERED\n");
+          CoLockObjectExternal ((IUnknown *) &ctx->idt, FALSE, FALSE);
+        }
+      else if (!SUCCEEDED (hr))
+        OTHER_API_FAILED ("RegisterDragDrop");
       else
         {
-          hr = RegisterDragDrop (GDK_SURFACE_HWND (window), &ctx->idt);
-          if (hr == DRAGDROP_E_ALREADYREGISTERED)
-            {
-              g_print ("DRAGDROP_E_ALREADYREGISTERED\n");
-              CoLockObjectExternal ((IUnknown *) &ctx->idt, FALSE, FALSE);
-            }
-          else if (!SUCCEEDED (hr))
-            OTHER_API_FAILED ("RegisterDragDrop");
-          else
-            {
-              impl->drop_target = ctx;
-            }
+          impl->drop_target = ctx;
         }
     }
 }
@@ -1417,11 +1234,4 @@ gdk_win32_drop_class_init (GdkWin32DropClass *klass)
   drop_class->finish = gdk_win32_drop_finish;
   drop_class->read_async = gdk_win32_drop_read_async;
   drop_class->read_finish = gdk_win32_drop_read_finish;
-}
-
-void
-_gdk_drop_init (void)
-{
-  if (g_strcmp0 (getenv ("GDK_WIN32_OLE2_DND"), "0") == 0)
-    use_ole2_dnd = FALSE;
 }
