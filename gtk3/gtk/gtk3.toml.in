@@ -41,6 +41,7 @@ base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/"
 
 [extra]
 content_files = [
+  "building.md",
   "running.md",
   "drawing-model.md",
   "input-handling.md",
