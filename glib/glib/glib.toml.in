@@ -35,6 +35,7 @@ urlmap_file = "urlmap.js"
 content_files = [
   "building.md",
   "compiling.md",
+  "cross-compiling.md",
   "error-reporting.md",
   "gvariant-format-strings.md",
   "gvariant-text.md",

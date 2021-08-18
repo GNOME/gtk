@@ -1,6 +1,7 @@
 expand_content_files = [
   'building.md',
   'compiling.md',
+  'cross-compiling.md',
   'error-reporting.md',
   'gvariant-format-strings.md',
   'gvariant-text.md',
