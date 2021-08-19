@@ -100,7 +100,11 @@ prepare_drag (GtkDragSource *source,
   DemoImage *demo = DEMO_IMAGE (widget);
   GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (demo->image));
 
-  return gdk_content_provider_new_typed (GDK_TYPE_PAINTABLE, paintable);
+  /* Textures can be serialized, paintables can't, so special case the textures */
+  if (GDK_IS_TEXTURE (paintable))
+    return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, paintable);
+  else
+    return gdk_content_provider_new_typed (GDK_TYPE_PAINTABLE, paintable);
 }
 
 static gboolean
@@ -129,7 +133,11 @@ copy_image (GtkWidget *widget,
   GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (demo->image));
   GValue value = G_VALUE_INIT;
 
-  g_value_init (&value, GDK_TYPE_PAINTABLE);
+  /* Textures can be serialized, paintables can't, so special case the textures */
+  if (GDK_IS_TEXTURE (paintable))
+    g_value_init (&value, GDK_TYPE_TEXTURE);
+  else
+    g_value_init (&value, GDK_TYPE_PAINTABLE);
   g_value_set_object (&value, paintable);
   gdk_clipboard_set_value (clipboard, &value);
   g_value_unset (&value);
@@ -139,23 +147,45 @@ copy_image (GtkWidget *widget,
 }
 
 static void
+paste_image_cb (GObject      *source,
+                GAsyncResult *result,
+                gpointer      data)
+{
+  GdkClipboard *clipboard = GDK_CLIPBOARD (source);
+  DemoImage *demo = DEMO_IMAGE (data);
+  const GValue *value;
+
+  value = gdk_clipboard_read_value_finish (clipboard, result, NULL);
+  if (value == NULL)
+    {
+      gtk_widget_error_bell (GTK_WIDGET (demo));
+      g_object_unref (demo);
+      return;
+    }
+
+  gtk_image_set_from_paintable (GTK_IMAGE (demo->image), g_value_get_object (value));
+  g_object_unref (demo);
+}
+
+static void
 paste_image (GtkWidget *widget,
              const char *action_name,
              GVariant *parameter)
 {
   GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
-  DemoImage *demo = DEMO_IMAGE (widget);
-  GdkContentProvider *content = gdk_clipboard_get_content (clipboard);
-  GValue value = G_VALUE_INIT;
-  GdkPaintable *paintable;
+  GType type;
 
-  g_value_init (&value, GDK_TYPE_PAINTABLE);
-  if (!gdk_content_provider_get_value (content, &value, NULL))
-    return;
+  if (gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), GDK_TYPE_TEXTURE))
+    type = GDK_TYPE_TEXTURE;
+  else
+    type = GDK_TYPE_PAINTABLE;
 
-  paintable = GDK_PAINTABLE (g_value_get_object (&value));
-  gtk_image_set_from_paintable (GTK_IMAGE (demo->image), paintable);
-  g_value_unset (&value);
+  gdk_clipboard_read_value_async (clipboard, 
+                                  type,
+                                  G_PRIORITY_DEFAULT,
+                                  NULL,
+                                  paste_image_cb,
+                                  g_object_ref (widget));
 }
 
 static void
