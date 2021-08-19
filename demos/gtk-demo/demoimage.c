@@ -100,7 +100,11 @@ prepare_drag (GtkDragSource *source,
   DemoImage *demo = DEMO_IMAGE (widget);
   GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (demo->image));
 
-  return gdk_content_provider_new_typed (GDK_TYPE_PAINTABLE, paintable);
+  /* Textures can be serialized, paintables can't, so special case the textures */
+  if (GDK_IS_TEXTURE (paintable))
+    return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, paintable);
+  else
+    return gdk_content_provider_new_typed (GDK_TYPE_PAINTABLE, paintable);
 }
 
 static gboolean
@@ -129,7 +133,11 @@ copy_image (GtkWidget *widget,
   GdkPaintable *paintable = get_image_paintable (GTK_IMAGE (demo->image));
   GValue value = G_VALUE_INIT;
 
-  g_value_init (&value, GDK_TYPE_PAINTABLE);
+  /* Textures can be serialized, paintables can't, so special case the textures */
+  if (GDK_IS_TEXTURE (paintable))
+    g_value_init (&value, GDK_TYPE_TEXTURE);
+  else
+    g_value_init (&value, GDK_TYPE_PAINTABLE);
   g_value_set_object (&value, paintable);
   gdk_clipboard_set_value (clipboard, &value);
   g_value_unset (&value);
