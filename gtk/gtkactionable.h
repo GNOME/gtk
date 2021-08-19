@@ -55,7 +55,7 @@ GDK_AVAILABLE_IN_ALL
 GType                   gtk_actionable_get_type                         (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-const char *           gtk_actionable_get_action_name                  (GtkActionable *actionable);
+const char *            gtk_actionable_get_action_name                  (GtkActionable *actionable);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_actionable_set_action_name                  (GtkActionable *actionable,
                                                                          const char    *action_name);
