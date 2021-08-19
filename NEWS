@@ -1,3 +1,64 @@
+Overview of Changes in 4.4.0
+============================
+
+* Input:
+ - Match IBus for display of Compose sequences
+ - Match IBus for handling of mismatches
+ - Handle Escape in Compose sequences
+ - Allow multiple dead keys
+ - Support 32bit keysyms
+
+* GtkCheckButton:
+ - Activate when moving focus
+
+* GtkLabel:
+ - Propertly ignore double underscores for mnemonics
+
+* GtkPopoverMenu:
+ - Fix focus cycling
+
+* GtkTextView:
+ - Improve word selection
+
+* GdkToplevel:
+ - Support the gnome-shell titlebar gesture protocol
+
+* GdkDropTarget:
+ - Allow creating drop targets in ui files
+
+* gsk:
+ - Handle partial color fonts correctly
+ - Use harfbuzz for color font information
+ - Avoid pango for glyph cache rendering
+ - Shrink shadow extents
+
+* Settings:
+ - Change the default for gtk-split-cursor to FALSE
+
+* Demos:
+ - Small improvements to widget-factory
+ - gtk-demo: Improve the hypertext demo
+ - gtk-dem: Improve the clipboard demo
+
+* X11:
+ - Set WM_CLASS on toplevels
+
+* Wayland:
+ - Support wl_seat v7
+
+* Windows:
+ - Drop the local DND protocol
+ - Avoid WGL if shaders don't work
+
+* Translation updates:
+ Belarusian
+ Friulian
+ Hebrew
+ Khmer
+ Persian
+ Polish
+
+
 Overview of Changes in 4.3.2
 ============================
 
