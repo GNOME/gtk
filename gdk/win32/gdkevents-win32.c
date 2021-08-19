@@ -2345,7 +2345,7 @@ gdk_event_translate (MSG *msg,
        * https://devblogs.microsoft.com/oldnewthing/20031001-00/?p=42343
        *
        */
-      if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER &&
+      if (win32_display->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER &&
           ( (msg->time - last_digitizer_time) < 200 ||
            -(msg->time - last_digitizer_time) < 200 ))
         break;
@@ -2496,7 +2496,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_POINTERDOWN:
-      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+      if (win32_display->tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
           gdk_winpointer_should_forward_message (msg))
         {
           return_val = FALSE;
@@ -2526,7 +2526,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_POINTERUP:
-      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+      if (win32_display->tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
           gdk_winpointer_should_forward_message (msg))
         {
           return_val = FALSE;
@@ -2559,7 +2559,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_POINTERUPDATE:
-      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+      if (win32_display->tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
           gdk_winpointer_should_forward_message (msg))
         {
           return_val = FALSE;
@@ -2598,7 +2598,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_NCPOINTERUPDATE:
-      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+      if (win32_display->tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
           gdk_winpointer_should_forward_message (msg))
         {
           return_val = FALSE;
@@ -2633,7 +2633,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_POINTERENTER:
-      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+      if (win32_display->tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
           gdk_winpointer_should_forward_message (msg))
         {
           return_val = FALSE;
@@ -2663,7 +2663,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_POINTERLEAVE:
-      if (_gdk_win32_tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
+      if (win32_display->tablet_input_api != GDK_WIN32_TABLET_INPUT_API_WINPOINTER ||
           gdk_winpointer_should_forward_message (msg))
         {
           return_val = FALSE;
@@ -3219,7 +3219,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_DESTROY:
-      if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+      if (win32_display->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
         gdk_winpointer_finalize_surface (window);
 
       return_val = FALSE;
@@ -3305,7 +3305,7 @@ gdk_event_translate (MSG *msg,
         {
           gdk_synthesize_surface_state (window, 0, GDK_TOPLEVEL_STATE_FOCUSED);
 
-          if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
+          if (win32_display->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
             {
               /* Bring any tablet contexts to the top of the overlap order when
                * one of our windows is activated.
@@ -3362,7 +3362,7 @@ gdk_event_translate (MSG *msg,
       /* Fall through */
     wintab:
 
-      if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
+      if (win32_display->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
         {
           event = gdk_wintab_make_event (display, msg, window);
           if (event)

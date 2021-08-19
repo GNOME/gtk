@@ -31,6 +31,7 @@
 #include "gdkdevice-wintab.h"
 #include "gdkinput-winpointer.h"
 #include "gdkdisplayprivate.h"
+#include "gdkdisplay-win32.h"
 #include "gdkseatdefaultprivate.h"
 
 #define WINTAB32_DLL "Wintab32.dll"
@@ -682,12 +683,13 @@ wintab_default_display_notify_cb (GdkDisplayManager *display_manager)
 static void
 gdk_device_manager_win32_constructed (GObject *object)
 {
+  GdkWin32Display *display_win32;
   GdkDeviceManagerWin32 *device_manager;
   GdkSeat *seat;
-  GdkDisplayManager *display_manager = NULL;
-  GdkDisplay *default_display = NULL;
-  const char *tablet_input_api_user_preference = NULL;
-  gboolean have_tablet_input_api_preference = FALSE;
+  const char *api_preference = NULL;
+  gboolean have_api_preference = TRUE;
+
+  display_win32 = GDK_WIN32_DISPLAY (_gdk_display);
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
   device_manager->core_pointer =
@@ -730,35 +732,44 @@ gdk_device_manager_win32_constructed (GObject *object)
 
   _gdk_device_manager = device_manager;
 
-  tablet_input_api_user_preference = g_getenv ("GDK_WIN32_TABLET_INPUT_API");
-  if (g_strcmp0 (tablet_input_api_user_preference, "none") == 0)
+  api_preference = g_getenv ("GDK_WIN32_TABLET_INPUT_API");
+  if (g_strcmp0 (api_preference, "none") == 0)
     {
-      have_tablet_input_api_preference = TRUE;
-      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_NONE;
+      display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_NONE;
     }
-  else if (g_strcmp0 (tablet_input_api_user_preference, "wintab") == 0)
+  else if (g_strcmp0 (api_preference, "wintab") == 0)
     {
-      have_tablet_input_api_preference = TRUE;
-      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+      display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
     }
-  else if (g_strcmp0 (tablet_input_api_user_preference, "winpointer") == 0)
+  else if (g_strcmp0 (api_preference, "winpointer") == 0)
     {
-      have_tablet_input_api_preference = TRUE;
-      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINPOINTER;
+      display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINPOINTER;
     }
   else
     {
-      have_tablet_input_api_preference = FALSE;
-      _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINPOINTER;
+      /* No user preference, default to WinPointer. If unsuccessful,
+       * try to initialize other API's in sequence until one succeeds.
+       */
+      display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINPOINTER;
+      have_api_preference = FALSE;
     }
 
-  if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+  if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
     {
-      if (!gdk_winpointer_initialize () && !have_tablet_input_api_preference)
-        _gdk_win32_tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+      gboolean init_successful = gdk_winpointer_initialize ();
+
+      if (!init_successful && !have_api_preference)
+        {
+          /* Try Wintab */
+          display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+        }
     }
-  if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
+
+  if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
     {
+      GdkDisplayManager *display_manager = NULL;
+      GdkDisplay *default_display = NULL;
+
       /* Only call Wintab init stuff after the default display
        * is globally known and accessible through the display manager
        * singleton. Approach lifted from gtkmodules.c.

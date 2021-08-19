@@ -147,12 +147,6 @@ typedef enum
   GDK_DRAG_PROTO_OLE2,
 } GdkDragProtocol;
 
-typedef enum {
-  GDK_WIN32_TABLET_INPUT_API_NONE = 0,
-  GDK_WIN32_TABLET_INPUT_API_WINTAB,
-  GDK_WIN32_TABLET_INPUT_API_WINPOINTER
-} GdkWin32TabletInputAPI;
-
 GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
@@ -277,7 +271,6 @@ extern HINSTANCE         _gdk_dll_hinstance;
 extern HINSTANCE         _gdk_app_hmodule;
 
 extern int               _gdk_input_ignore_core;
-extern GdkWin32TabletInputAPI _gdk_win32_tablet_input_api;
 
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.

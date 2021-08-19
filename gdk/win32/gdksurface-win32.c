@@ -646,7 +646,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
       return NULL;
     }
 
-  if (_gdk_win32_tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+  if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
     gdk_winpointer_initialize_surface (surface);
 
   _gdk_win32_surface_enable_transparency (surface);

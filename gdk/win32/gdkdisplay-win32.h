@@ -99,6 +99,12 @@ typedef struct _GdkWin32User32DPIFuncs
   funcADACE areDACEqual;
 } GdkWin32User32DPIFuncs;
 
+typedef enum {
+  GDK_WIN32_TABLET_INPUT_API_NONE,
+  GDK_WIN32_TABLET_INPUT_API_WINTAB,
+  GDK_WIN32_TABLET_INPUT_API_WINPOINTER
+} GdkWin32TabletInputAPI;
+
 /* Detect running architecture */
 typedef BOOL (WINAPI *funcIsWow64Process2) (HANDLE, USHORT *, USHORT *);
 typedef struct _GdkWin32KernelCPUFuncs
@@ -159,7 +165,9 @@ struct _GdkWin32Display
 
   GdkWin32ShcoreFuncs shcore_funcs;
   GdkWin32User32DPIFuncs user32_dpi_funcs;
-  
+
+  GdkWin32TabletInputAPI tablet_input_api;
+
   /* Cursor Items (GdkCursor->GdkWin32HCursor) */
   GHashTable *cursors;
   /* The cursor that is used by current grab (if any) */
