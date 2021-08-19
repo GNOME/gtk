@@ -7265,8 +7265,6 @@ gtk_text_view_extend_selection (GtkTextView            *text_view,
 
 	  if (gtk_text_iter_get_line (&tmp) == gtk_text_iter_get_line (end))
 	    *end = tmp;
-	  else
-	    gtk_text_iter_forward_to_line_end (end);
 	}
       break;
 
