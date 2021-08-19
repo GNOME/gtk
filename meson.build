@@ -21,6 +21,7 @@ subdir('glib/gobject')
 subdir('glib/gio')
 
 subdir('atk/atk')
+subdir('atk/atspi2')
 
 subdir('gtk3/gdk')
 subdir('gtk3/gtk')

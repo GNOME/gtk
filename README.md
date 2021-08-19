@@ -9,6 +9,9 @@ Contents
 
 ```
 .
+├── atk
+│   ├── atk
+│   └── atspi2
 ├── glib
 │   ├── gio
 │   ├── glib
@@ -22,6 +25,9 @@ Contents
 ```
 
 The landing page is store inside the [`static`](./static) directory.
+
+The [`atk`](./atk) directory contains the introspection data and gi-docgen
+project files for ATK and AT-SPI2.
 
 The [`glib`](./glib) directory contains the introspection data and gi-docgen
 project files for GLib, GObject, and GIO.
@@ -53,16 +59,17 @@ The CI pipeline for the `docs-gtk-org` branch will:
  - extract the various API references
  - run gi-docgen on the introspection data of the following projects:
    - glib
+   - atk
    - gtk3
  - publish the static landing page
  - publish all the API references
 
- Notes
- -----
+Notes
+-----
 
- The token for the pipeline trigger is stored in the `PAGES_TRIGGER_TOKEN`
- environment variable, which is exposed to the CI pipelines of the GTK
- project.
+The token for the pipeline trigger is stored in the `PAGES_TRIGGER_TOKEN`
+environment variable, which is exposed to the CI pipelines of the GTK
+project.
 
- Only the `docs-gtk-org` branch can publish the contents of the docs.gtk.org
- website.
+Only the `docs-gtk-org` branch can publish the contents of the docs.gtk.org
+website.

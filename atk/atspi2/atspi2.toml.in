@@ -1,0 +1,31 @@
+[library]
+version = "2.40"
+browse_url = "https://gitlab.gnome.org/GNOME/at-spi2-core/"
+repository_url = "https://gitlab.gnome.org/GNOME/at-spi2-core.git"
+website_url = "https://www.gtk.org"
+authors = "The AT-SPI2 maintainers"
+license = "LGPL-2.1-or-later"
+description = "The Assistive Technology Service Provider Interface, version 2"
+dependencies = [ "GObject-2.0", ]
+devhelp = true
+search_index = true
+
+  [dependencies."GObject-2.0"]
+  name = "GObject"
+  description = "The base type system library"
+  docs_url = "https://docs.gtk.org/gobject/"
+
+[theme]
+name = "basic"
+show_index_summary = true
+show_class_hierarchy = true
+
+[source-location]
+base_url = "https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/HEAD/"
+
+[extra]
+content_files = [
+]
+content_images = [
+]
+urlmap_file = "urlmap.js"
