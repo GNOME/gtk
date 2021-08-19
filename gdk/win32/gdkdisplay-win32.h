@@ -18,10 +18,7 @@
  */
 
 #include "gdkdisplayprivate.h"
-
-#ifdef GDK_WIN32_ENABLE_EGL
-# include <epoxy/egl.h>
-#endif
+#include "gdkglcontext-win32.h"
 
 #ifndef __GDK_DISPLAY__WIN32_H__
 #define __GDK_DISPLAY__WIN32_H__

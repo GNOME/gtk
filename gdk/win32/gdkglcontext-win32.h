@@ -35,10 +35,6 @@
 
 G_BEGIN_DECLS
 
-#define GDK_WIN32_GL_CONTEXT_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WIN32_GL_CONTEXT, GdkWin32GLContextClass))
-#define GDK_WIN32_GL_CONTEXT_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WIN32_GL_CONTEXT, GdkWin32GLContextClass))
-#define GDK_WIN32_IS_GL_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WIN32_GL_CONTEXT)
-
 void
 gdk_win32_window_invalidate_egl_framebuffer (GdkWindow      *window);
 

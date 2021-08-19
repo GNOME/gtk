@@ -31,10 +31,6 @@
 #include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
 
-#ifdef GDK_WIN32_ENABLE_EGL
-# include <epoxy/egl.h>
-#endif
-
 #include "gdkwin32langnotification.h"
 
 #ifndef IMAGE_FILE_MACHINE_ARM64

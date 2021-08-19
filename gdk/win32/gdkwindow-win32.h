@@ -26,14 +26,11 @@
 #define __GDK_WINDOW_WIN32_H__
 
 #include "gdk/win32/gdkprivate-win32.h"
+#include "gdk/win32/gdkglcontext-win32.h"
 #include "gdk/gdkwindowimpl.h"
 #include "gdk/gdkcursor.h"
 
 #include <windows.h>
-
-#ifdef GDK_WIN32_ENABLE_EGL
-#include <epoxy/egl.h>
-#endif
 
 G_BEGIN_DECLS
 
