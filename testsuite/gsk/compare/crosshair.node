@@ -1,0 +1,13 @@
+transform {
+  child: container {
+    color {
+      bounds: 1 1 200 1;
+      color: black;
+    }
+    color {
+      bounds: 100 -100 1 200;
+      color: black;
+    }    
+  }
+  transform: scale(0.5,0.5);
+}
