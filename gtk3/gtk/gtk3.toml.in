@@ -7,7 +7,7 @@ authors = "GTK Development Team"
 logo_url = "gtk-logo.svg"
 license = "LGPL-2.1-or-later"
 description = "The GTK toolkit"
-dependencies = [ "GObject-2.0", "cairo-1.0", "Pango-1.0", "Gdk-3.0" ]
+dependencies = [ "GObject-2.0", "cairo-1.0", "Pango-1.0", "Gdk-3.0", "Atk-1.0" ]
 devhelp = true
 search_index = true
 
@@ -30,6 +30,11 @@ search_index = true
   name = "Gdk"
   description = "The GTK windowing system backend"
   docs_url = "https://docs.gtk.org/gdk3/"
+
+  [dependencies."Atk-1.0"]
+  name = "Atk"
+  description = "The Accessibility toolkit"
+  docs_url = "https://docs.gtk.org/atk/"
 
 [theme]
 name = "basic"
