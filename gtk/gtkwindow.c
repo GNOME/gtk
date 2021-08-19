@@ -5580,6 +5580,9 @@ gtk_window_set_resizable (GtkWindow *window,
 
       update_window_actions (window);
 
+      gtk_window_update_toplevel (window,
+                                  gtk_window_compute_base_layout (window));
+
       gtk_widget_queue_resize (GTK_WIDGET (window));
 
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_RESIZABLE]);
