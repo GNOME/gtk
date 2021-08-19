@@ -80,7 +80,7 @@ gdk_content_provider_value_get_value (GdkContentProvider  *provider,
 {
   GdkContentProviderValue *content = GDK_CONTENT_PROVIDER_VALUE (provider);
 
-  if (G_VALUE_HOLDS (value, G_VALUE_TYPE (&content->value)))
+  if (G_VALUE_HOLDS (&content->value, G_VALUE_TYPE (value)))
     {
       g_value_copy (&content->value, value);
       return TRUE;
