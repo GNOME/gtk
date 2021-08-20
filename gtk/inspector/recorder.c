@@ -21,6 +21,8 @@
 
 #include <gtk/gtkbinlayout.h>
 #include <gtk/gtkbox.h>
+#include <gtk/gtkdragsource.h>
+#include <gtk/gtkeventcontroller.h>
 #include <gtk/gtkfilechooserdialog.h>
 #include <gtk/gtksignallistitemfactory.h>
 #include <gtk/gtklabel.h>
@@ -344,15 +346,39 @@ node_name (GskRenderNode *node)
     }
 }
 
+static GdkContentProvider *
+prepare_render_node_drag (GtkDragSource  *source,
+                          double          x,
+                          double          y,
+                          GtkListItem    *list_item)
+{
+  GtkTreeListRow *row_item;
+  GdkPaintable *paintable;
+  GskRenderNode *node;
+
+  row_item = gtk_list_item_get_item (list_item);
+  if (row_item == NULL)
+    return NULL;
+
+  paintable = gtk_tree_list_row_get_item (row_item);
+  node = gtk_render_node_paintable_get_render_node (GTK_RENDER_NODE_PAINTABLE (paintable));
+
+  return gdk_content_provider_new_typed (GSK_TYPE_RENDER_NODE, node);
+}
+
 static void
 setup_widget_for_render_node (GtkSignalListItemFactory *factory,
                               GtkListItem              *list_item)
 {
   GtkWidget *expander, *box, *child;
+  GtkDragSource *source;
 
   /* expander */
   expander = gtk_tree_expander_new ();
   gtk_list_item_set_child (list_item, expander);
+  source = gtk_drag_source_new ();
+  g_signal_connect (source, "prepare", G_CALLBACK (prepare_render_node_drag), list_item);
+  gtk_widget_add_controller (expander, GTK_EVENT_CONTROLLER (source));
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
   gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), box);
