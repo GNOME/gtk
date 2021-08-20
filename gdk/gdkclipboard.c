@@ -635,7 +635,7 @@ gdk_clipboard_read_internal (GdkClipboard        *clipboard,
 /**
  * gdk_clipboard_read_async:
  * @clipboard: a `GdkClipboard`
- * @mime_types: a %NULL-terminated array of mime types to choose from
+ * @mime_types: (array zero-terminated=1): a %NULL-terminated array of mime types to choose from
  * @io_priority: the I/O priority of the request
  * @cancellable: (nullable): optional `GCancellable` object
  * @callback: (scope async): callback to call when the request is satisfied
