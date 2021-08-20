@@ -4213,7 +4213,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
           if (line_display->node == NULL &&
               (pango_layout_get_character_count (line_display->layout) > 0 ||
-               selection_start_index != -1 || selection_end_index != -1))
+               selection_start_index != -1 || selection_end_index != -1 ||
+               line_display->has_block_cursor))
             {
               gtk_snapshot_push_collect (snapshot);
               render_para (crenderer, line_display,
