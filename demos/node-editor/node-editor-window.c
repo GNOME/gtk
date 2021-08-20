@@ -60,7 +60,7 @@ struct _NodeEditorWindow
 
   GtkWidget *renderer_listbox;
   GListStore *renderers;
-  GdkPaintable *paintable;
+  GskRenderNode *node;
 
   GFileMonitor *file_monitor;
 
@@ -167,7 +167,6 @@ static void
 text_changed (GtkTextBuffer    *buffer,
               NodeEditorWindow *self)
 {
-  GskRenderNode *node;
   char *text;
   GBytes *bytes;
   GtkTextIter iter;
@@ -178,10 +177,12 @@ text_changed (GtkTextBuffer    *buffer,
   text_buffer_remove_all_tags (self->text_buffer);
   bytes = g_bytes_new_take (text, strlen (text));
 
+  g_clear_pointer (&self->node, gsk_render_node_unref);
+
   /* If this is too slow, go fix the parser performance */
-  node = gsk_render_node_deserialize (bytes, deserialize_error_func, self);
+  self->node = gsk_render_node_deserialize (bytes, deserialize_error_func, self);
   g_bytes_unref (bytes);
-  if (node)
+  if (self->node)
     {
       /* XXX: Is this code necessary or can we have API to turn nodes into paintables? */
       GtkSnapshot *snapshot;
@@ -190,10 +191,9 @@ text_changed (GtkTextBuffer    *buffer,
       guint i;
 
       snapshot = gtk_snapshot_new ();
-      gsk_render_node_get_bounds (node, &bounds);
+      gsk_render_node_get_bounds (self->node, &bounds);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- bounds.origin.x, - bounds.origin.y));
-      gtk_snapshot_append_node (snapshot, node);
-      gsk_render_node_unref (node);
+      gtk_snapshot_append_node (snapshot, self->node);
       paintable = gtk_snapshot_free_to_paintable (snapshot, &bounds.size);
       gtk_picture_set_paintable (GTK_PICTURE (self->picture), paintable);
       for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i++)
@@ -337,15 +337,9 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
 }
 
 static gboolean
-load_file_contents (NodeEditorWindow *self,
-                    GFile            *file)
+load_bytes (NodeEditorWindow *self,
+            GBytes           *bytes)
 {
-  GBytes *bytes;
-
-  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
-  if (bytes == NULL)
-    return FALSE;
-
   if (!g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
     {
       g_bytes_unref (bytes);
@@ -357,6 +351,105 @@ load_file_contents (NodeEditorWindow *self,
                             g_bytes_get_size (bytes));
 
   g_bytes_unref (bytes);
+
+  return TRUE;
+}
+
+static gboolean
+load_file_contents (NodeEditorWindow *self,
+                    GFile            *file)
+{
+  GBytes *bytes;
+
+  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+  if (bytes == NULL)
+    return FALSE;
+
+  return load_bytes (self, bytes);
+}
+
+static GdkContentProvider *
+on_picture_drag_prepare_cb (GtkDragSource    *source,
+                            double            x,
+                            double            y,
+                            NodeEditorWindow *self)
+{
+  if (self->node == NULL)
+    return NULL;
+
+  return gdk_content_provider_new_typed (GSK_TYPE_RENDER_NODE, self->node);
+}
+
+static void
+on_picture_drop_read_done_cb (GObject      *source,
+                              GAsyncResult *res,
+                              gpointer      data)
+{
+  NodeEditorWindow *self = data;
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GdkDrop *drop = g_object_get_data (source, "drop");
+  GdkDragAction action = 0;
+  GBytes *bytes;
+
+  if (g_output_stream_splice_finish (stream, res, NULL) >= 0)
+    {
+      bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (stream));
+      if (load_bytes (self, bytes))
+        action = GDK_ACTION_COPY;
+    }
+
+  g_object_unref (self);
+  gdk_drop_finish (drop, action);
+  g_object_unref (drop);
+  return;
+}
+
+static void
+on_picture_drop_read_cb (GObject      *source,
+                         GAsyncResult *res,
+                         gpointer      data)
+{
+  NodeEditorWindow *self = data;
+  GdkDrop *drop = GDK_DROP (source);
+  GInputStream *input;
+  GOutputStream *output;
+
+  input = gdk_drop_read_finish (drop, res, NULL, NULL);
+  if (input == NULL)
+    {
+      g_object_unref (self);
+      gdk_drop_finish (drop, 0);
+      return;
+    }
+
+  output = g_memory_output_stream_new_resizable ();
+  g_object_set_data (G_OBJECT (output), "drop", drop);
+  g_object_ref (drop);
+
+  g_output_stream_splice_async (output,
+                                input,
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                G_PRIORITY_DEFAULT,
+                                NULL,
+                                on_picture_drop_read_done_cb,
+                                self);
+  g_object_unref (output);
+  g_object_unref (input);
+}
+
+static gboolean
+on_picture_drop_cb (GtkDropTargetAsync *dest,
+                    GdkDrop            *drop,
+                    double              x,
+                    double              y,
+                    NodeEditorWindow   *self)
+{
+  gdk_drop_read_async (drop,
+                       (const char *[2]) { "application/x-gtk-render-node", NULL },
+                       G_PRIORITY_DEFAULT,
+                       NULL,
+                       on_picture_drop_read_cb,
+                       g_object_ref (self));
 
   return TRUE;
 }
@@ -735,6 +828,7 @@ node_editor_window_finalize (GObject *object)
 
   g_array_free (self->errors, TRUE);
 
+  g_clear_pointer (&self->node, gsk_render_node_unref);
   g_clear_object (&self->renderers);
 
   G_OBJECT_CLASS (node_editor_window_parent_class)->finalize (object);
@@ -844,6 +938,8 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, testcase_save_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, testcase_name_entry_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, dark_mode_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_picture_drag_prepare_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_picture_drop_cb);
 }
 
 static GtkWidget *
