@@ -310,7 +310,14 @@ gtk_shortcut_controller_run_controllers (GtkEventController *controller,
       GtkWidget *widget;
       GtkNative *native;
 
-      index = (self->last_activated + 1 + i) % g_list_model_get_n_items (self->shortcuts);
+      /* This is not entirely right, but we only want to do round-robin cycling
+       * for mnemonics.
+       */
+      if (enable_mnemonics)
+        index = (self->last_activated + 1 + i) % g_list_model_get_n_items (self->shortcuts);
+      else
+        index = i;
+
       shortcut = g_list_model_get_item (self->shortcuts, index);
       if (!GTK_IS_SHORTCUT (shortcut))
         {
