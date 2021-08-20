@@ -19,6 +19,7 @@ Overview of Changes in 4.4.0
 
 * GtkTextView:
  - Improve word selection
+ - Fix block cursors on empty lines
 
 * GdkToplevel:
  - Support the gnome-shell titlebar gesture protocol
@@ -49,6 +50,7 @@ Overview of Changes in 4.4.0
 * Windows:
  - Drop the local DND protocol
  - Avoid WGL if shaders don't work
+ - Use WinPointer API
 
 * Translation updates:
  Belarusian
