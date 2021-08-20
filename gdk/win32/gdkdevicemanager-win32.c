@@ -29,7 +29,9 @@
 #include "gdkdevice-win32.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
+#include "gdkinput-winpointer.h"
 #include "gdkdisplayprivate.h"
+#include "gdkdisplay-win32.h"
 #include "gdkseatdefaultprivate.h"
 
 #define WINTAB32_DLL "Wintab32.dll"
@@ -371,9 +373,6 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 
   wintab_contexts = NULL;
 
-  if (_gdk_input_ignore_wintab)
-    return;
-
   n = GetSystemDirectory (&dummy, 0);
 
   if (n <= 0)
@@ -684,10 +683,13 @@ wintab_default_display_notify_cb (GdkDisplayManager *display_manager)
 static void
 gdk_device_manager_win32_constructed (GObject *object)
 {
+  GdkWin32Display *display_win32;
   GdkDeviceManagerWin32 *device_manager;
   GdkSeat *seat;
-  GdkDisplayManager *display_manager = NULL;
-  GdkDisplay *default_display = NULL;
+  const char *api_preference = NULL;
+  gboolean have_api_preference = TRUE;
+
+  display_win32 = GDK_WIN32_DISPLAY (_gdk_display);
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
   device_manager->core_pointer =
@@ -728,18 +730,59 @@ gdk_device_manager_win32_constructed (GObject *object)
   gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
 
-  /* Only call Wintab init stuff after the default display
-   * is globally known and accessible through the display manager
-   * singleton. Approach lifted from gtkmodules.c.
-   */
-  display_manager = gdk_display_manager_get ();
-  g_assert (display_manager != NULL);
-  default_display = gdk_display_manager_get_default_display (display_manager);
-  g_assert (default_display == NULL);
+  _gdk_device_manager = device_manager;
 
-  g_signal_connect (display_manager, "notify::default-display",
-                    G_CALLBACK (wintab_default_display_notify_cb),
-                    NULL);
+  api_preference = g_getenv ("GDK_WIN32_TABLET_INPUT_API");
+  if (g_strcmp0 (api_preference, "none") == 0)
+    {
+      display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_NONE;
+    }
+  else if (g_strcmp0 (api_preference, "wintab") == 0)
+    {
+      display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+    }
+  else if (g_strcmp0 (api_preference, "winpointer") == 0)
+    {
+      display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINPOINTER;
+    }
+  else
+    {
+      /* No user preference, default to WinPointer. If unsuccessful,
+       * try to initialize other API's in sequence until one succeeds.
+       */
+      display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINPOINTER;
+      have_api_preference = FALSE;
+    }
+
+  if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+    {
+      gboolean init_successful = gdk_winpointer_initialize ();
+
+      if (!init_successful && !have_api_preference)
+        {
+          /* Try Wintab */
+          display_win32->tablet_input_api = GDK_WIN32_TABLET_INPUT_API_WINTAB;
+        }
+    }
+
+  if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINTAB)
+    {
+      GdkDisplayManager *display_manager = NULL;
+      GdkDisplay *default_display = NULL;
+
+      /* Only call Wintab init stuff after the default display
+       * is globally known and accessible through the display manager
+       * singleton. Approach lifted from gtkmodules.c.
+       */
+      display_manager = gdk_display_manager_get ();
+      g_assert (display_manager != NULL);
+      default_display = gdk_display_manager_get_default_display (display_manager);
+      g_assert (default_display == NULL);
+
+      g_signal_connect (display_manager, "notify::default-display",
+                        G_CALLBACK (wintab_default_display_notify_cb),
+                        NULL);
+    }
 }
 
 static void
@@ -752,7 +795,7 @@ gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
 }
 
 void
-_gdk_input_set_tablet_active (void)
+_gdk_wintab_set_tablet_active (void)
 {
   GList *tmp_list;
   HCTX *hctx;
@@ -763,7 +806,7 @@ _gdk_input_set_tablet_active (void)
   if (!wintab_contexts)
     return; /* No tablet devices found, or Wintab not initialized yet */
 
-  GDK_NOTE (INPUT, g_print ("_gdk_input_set_tablet_active: "
+  GDK_NOTE (INPUT, g_print ("_gdk_wintab_set_tablet_active: "
                             "Bringing Wintab contexts to the top of the overlap order\n"));
 
   tmp_list = wintab_contexts;
@@ -866,7 +909,7 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
 }
 
 GdkEvent *
-gdk_input_other_event (GdkDisplay *display,
+gdk_wintab_make_event (GdkDisplay *display,
                        MSG        *msg,
                        GdkSurface  *window)
 {
@@ -894,7 +937,7 @@ gdk_input_other_event (GdkDisplay *display,
 
   if (window != wintab_window)
     {
-      g_warning ("gdk_input_other_event: not wintab_window?");
+      g_warning ("gdk_wintab_make_event: not wintab_window?");
       return NULL;
     }
 
@@ -905,7 +948,7 @@ gdk_input_other_event (GdkDisplay *display,
     g_object_ref (window);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("gdk_input_other_event: window=%p %+g%+g\n",
+	    g_print ("gdk_wintab_make_event: window=%p %+g%+g\n",
                window ? GDK_SURFACE_HWND (window) : NULL, x, y));
 
   if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)

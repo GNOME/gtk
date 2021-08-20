@@ -88,7 +88,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
       hwnd = NULL;
     }
 
-  GetCursorPos (&point);
+  _gdk_win32_get_cursor_pos (&point);
 
   if (hwnd)
     ScreenToClient (hwnd, &point);

@@ -25,15 +25,6 @@
 #ifndef __GDK_PRIVATE_WIN32_H__
 #define __GDK_PRIVATE_WIN32_H__
 
-#ifndef WINVER
-/* Vista or newer */
-#define WINVER 0x0600
-#endif
-
-#ifndef _WIN32_WINNT
-#define _WIN32_WINNT WINVER
-#endif
-
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/win32/gdksurface-win32.h>
 #include <gdk/win32/gdkwin32display.h>
@@ -160,6 +151,8 @@ GType _gdk_gc_win32_get_type (void);
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
 
+BOOL _gdk_win32_get_cursor_pos (LPPOINT lpPoint);
+
 void _gdk_surface_init_position     (GdkSurface *window);
 void _gdk_surface_move_resize_child (GdkSurface *window,
                                      int        x,
@@ -249,6 +242,8 @@ void    _gdk_other_api_failed        (const char *where,
 #define WIN32_GDI_FAILED(api) WIN32_API_FAILED (api)
 #define OTHER_API_FAILED(api) _gdk_other_api_failed (G_STRLOC, api)
 
+#define WIN32_API_FAILED_LOG_ONCE(api) G_STMT_START { static gboolean logged = 0; if (!logged) { _gdk_win32_api_failed (G_STRLOC , api); logged = 1; }} G_STMT_END
+
 /* These two macros call a GDI or other Win32 API and if the return
  * value is zero or NULL, print a warning message. The majority of GDI
  * calls return zero or NULL on failure. The value of the macros is nonzero
@@ -311,11 +306,6 @@ extern HWND             _modal_move_resize_window;
 
 void  _gdk_win32_begin_modal_call (GdkWin32ModalOpKind kind);
 void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
-
-
-/* Options */
-extern gboolean          _gdk_input_ignore_wintab;
-extern int               _gdk_max_colors;
 
 /* Convert a pixbuf to an HICON (or HCURSOR).  Supports alpha under
  * Windows XP, thresholds alpha otherwise.

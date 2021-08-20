@@ -15,22 +15,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if defined (_WIN32_WINNT) && WIN32_WINNT < 0x0601
-#  undef _WIN32_WINNT
-
-#  define _WIN32_WINNT 0x0601
-#  ifdef WINVER
-#    undef WINVER
-#  endif
-#  define WINVER _WIN32_WINNT
-#elif !defined (_WIN32_WINNT)
-#  define _WIN32_WINNT 0x0601
-#  ifdef WINVER
-#    undef WINVER
-#  endif
-#  define WINVER _WIN32_WINNT
-#endif
-
 #include "config.h"
 
 #include "gdkprivate-win32.h"

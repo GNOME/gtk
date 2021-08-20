@@ -18,7 +18,6 @@
 
 #include "config.h"
 
-#define _WIN32_WINNT 0x0600
 #define VK_USE_PLATFORM_WIN32_KHR
 
 #include "gdk.h"

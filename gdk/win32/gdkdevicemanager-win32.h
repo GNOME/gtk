@@ -40,6 +40,8 @@ struct _GdkDeviceManagerWin32
   /* Fake physical devices */
   GdkDevice *system_pointer;
   GdkDevice *system_keyboard;
+
+  GList *winpointer_devices;
   GList *wintab_devices;
 
   /* Bumped up every time a wintab device enters the proximity
@@ -56,8 +58,8 @@ struct _GdkDeviceManagerWin32Class
 
 GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
 
-void     _gdk_input_set_tablet_active (void);
-GdkEvent * gdk_input_other_event      (GdkDisplay *display,
+void     _gdk_wintab_set_tablet_active (void);
+GdkEvent * gdk_wintab_make_event      (GdkDisplay *display,
                                        MSG        *msg,
                                        GdkSurface  *window);
 
