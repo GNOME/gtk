@@ -147,6 +147,8 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
 
+  g_object_set (gtk_settings_get_default (), "gtk-im-module", "gtk-im-context-simple", NULL);
+
   g_test_add_func ("/im-context/text-surrounding", test_text_surrounding);
   g_test_add_func ("/im-context/textview-surrounding", test_textview_surrounding);
 
