@@ -126,6 +126,8 @@ gtk_css_style_get_value (GtkCssStyle *style,
       return style->font_variant->text_decoration_color ? style->font_variant->text_decoration_color : style->core->color;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE:
       return style->font_variant->text_decoration_style;
+    case GTK_CSS_PROPERTY_TEXT_TRANSFORM:
+      return style->font_variant->text_transform;
     case GTK_CSS_PROPERTY_FONT_KERNING:
       return style->font_variant->font_kerning;
     case GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES:
@@ -400,6 +402,24 @@ get_pango_underline_from_style (GtkTextDecorationStyle style)
   g_return_val_if_reached (PANGO_UNDERLINE_SINGLE);
 }
 
+static PangoTextTransform
+get_pango_text_transform_from_style (GtkTextTransform transform)
+{
+  switch (transform)
+    {
+    case GTK_CSS_TEXT_TRANSFORM_NONE:
+      return PANGO_TEXT_TRANSFORM_NONE;
+    case GTK_CSS_TEXT_TRANSFORM_LOWERCASE:
+      return PANGO_TEXT_TRANSFORM_LOWERCASE;
+    case GTK_CSS_TEXT_TRANSFORM_UPPERCASE:
+      return PANGO_TEXT_TRANSFORM_UPPERCASE;
+    case GTK_CSS_TEXT_TRANSFORM_CAPITALIZE:
+      return PANGO_TEXT_TRANSFORM_CAPITALIZE;
+    default:
+      return PANGO_TEXT_TRANSFORM_NONE;
+    }
+}
+
 static PangoOverline
 get_pango_overline_from_style (GtkTextDecorationStyle style)
 {
@@ -445,6 +465,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkCssFontVariantEastAsian east_asian;
   GString *s;
   char *settings;
+  GtkTextTransform transform;
 
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
@@ -654,6 +675,11 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
       attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
       g_string_free (s, TRUE);
     }
+
+  transform = _gtk_css_text_transform_value_get (style->font_variant->text_transform);
+
+  if (transform != GTK_CSS_TEXT_TRANSFORM_NONE)
+    attrs = add_pango_attr (attrs, pango_attr_text_transform_new (get_pango_text_transform_from_style (transform)));
 
   return attrs;
 }

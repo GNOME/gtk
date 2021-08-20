@@ -162,6 +162,7 @@ done with
 |caret-color|[CSS Basic User Interface Level 3](https://www.w3.org/TR/css3-ui/#caret-color) | CSS allows an auto value |
 |-gtk-secondary-caret-color|[Color](https://www.w3.org/TR/css-color-3/#valuea-def-color) | used for the secondary caret in bidirectional text |
 |letter-spacing| [CSS Text Level 3](https://www.w3.org/TR/css3-text/#letter-spacing) | |
+|text-transform| [CSS Text Level 3](https://www.w3.org/TR/css-text-3/#text-transform-property) | CSS allows full-width and full-size-kana. Since 4.6 |
 |line-height| [CSS Inline Layout Level 3](https://www.w3.org/TR/css-inline-3/#line-height-property) | Since 4.6 |
 |text-decoration-line| [CSS Text Decoration Level 3](https://www.w3.org/TR/css-text-decor-3/#text-decoration-line-property) | |
 |text-decoration-color| [CSS Text Decoration Level 3](https://www.w3.org/TR/css-text-decor-3/#text-decoration-color-property) | |

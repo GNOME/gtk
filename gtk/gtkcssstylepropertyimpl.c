@@ -367,6 +367,18 @@ parse_text_decoration_style (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_text_transform (GtkCssStyleProperty *property,
+                      GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_text_transform_value_try_parse (parser);
+
+  if (value == NULL)
+    gtk_css_parser_error_syntax (parser, "unknown text transform value");
+
+  return value;
+}
+
+static GtkCssValue *
 parse_font_kerning (GtkCssStyleProperty *property,
                     GtkCssParser        *parser)
 {
@@ -917,6 +929,12 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           parse_text_decoration_style,
                                           _gtk_css_text_decoration_style_value_new (GTK_CSS_TEXT_DECORATION_STYLE_SOLID));
+  gtk_css_style_property_register        ("text-transform",
+                                          GTK_CSS_PROPERTY_TEXT_TRANSFORM,
+                                          0,
+                                          GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
+                                          parse_text_transform,
+                                          _gtk_css_text_transform_value_new (GTK_CSS_TEXT_TRANSFORM_NONE));
   gtk_css_style_property_register        ("font-kerning",
                                           GTK_CSS_PROPERTY_FONT_KERNING,
                                           0,

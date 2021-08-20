@@ -220,6 +220,10 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       unshare_font_variant (animated);
       gtk_css_take_value (&style->font_variant->text_decoration_style, value);
       break;
+    case GTK_CSS_PROPERTY_TEXT_TRANSFORM:
+      unshare_font_variant (animated);
+      gtk_css_take_value (&style->font_variant->text_transform, value);
+      break;
     case GTK_CSS_PROPERTY_FONT_KERNING:
       unshare_font_variant (animated);
       gtk_css_take_value (&style->font_variant->font_kerning, value);
