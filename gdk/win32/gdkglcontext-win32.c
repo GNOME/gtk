@@ -210,7 +210,7 @@ get_dummy_window_hwnd (GdkWGLDummy *dummy)
 
 static gint
 gdk_init_dummy_context (GdkWGLDummy    *dummy,
-                         const gboolean  need_alpha_bits);
+                        const gboolean  need_alpha_bits);
 
 #define PIXEL_ATTRIBUTES 19
 
@@ -455,6 +455,28 @@ gdk_win32_gl_context_end_frame_wgl (GdkGLContext   *context,
     SwapBuffers (context_win32->gl_hdc);
 }
 
+/*
+ * We need to check whether the OpenGL driver is capable of delvering
+ * what we need to use in GdkGLContext.  This function in the future
+ * will also check for blacklisted drivers, if needed.  If things fail
+ * here, we can try falling back to OpenGL/ES (libANGLE) if that is enabled.
+ */
+static gboolean
+gdk_win32_gl_context_wgl_check_capabilities (GdkWin32Display *display_win32,
+                                             GdkWGLDummy      dummy)
+{
+  if (!wglMakeCurrent (dummy.hdc, dummy.hglrc))
+    return FALSE;
+
+  display_win32->gl_version = epoxy_gl_version ();
+
+  /* We must have OpenGL/WGL 2.0 or later, or have the GL_ARB_shader_objects extension */
+  if (display_win32->gl_version < 20 && !epoxy_has_gl_extension ("GL_ARB_shader_objects"))
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 gdk_win32_display_init_wgl (GdkWin32Display *display_win32,
                             const gboolean   need_alpha_bits)
@@ -465,56 +487,61 @@ gdk_win32_display_init_wgl (GdkWin32Display *display_win32,
    */
   GdkWGLDummy dummy;
   gint best_idx = 0;
+  gboolean proceed = TRUE;
 
   memset (&dummy, 0, sizeof (GdkWGLDummy));
 
   best_idx = gdk_init_dummy_context (&dummy, need_alpha_bits);
 
-  if (best_idx == 0 || !wglMakeCurrent (dummy.hdc, dummy.hglrc))
+  if (best_idx != 0)
+    proceed = gdk_win32_gl_context_wgl_check_capabilities (display_win32, dummy);
+
+  if (best_idx != 0 && proceed)
     {
-      display_win32->gl_type = GDK_WIN32_GL_NONE;
-      return;
+      display_win32->hasWglARBCreateContext =
+        epoxy_has_wgl_extension (dummy.hdc, "WGL_ARB_create_context");
+      display_win32->hasWglEXTSwapControl =
+        epoxy_has_wgl_extension (dummy.hdc, "WGL_EXT_swap_control");
+      display_win32->hasWglOMLSyncControl =
+        epoxy_has_wgl_extension (dummy.hdc, "WGL_OML_sync_control");
+      display_win32->hasWglARBPixelFormat =
+        epoxy_has_wgl_extension (dummy.hdc, "WGL_ARB_pixel_format");
+      display_win32->hasWglARBmultisample =
+        epoxy_has_wgl_extension (dummy.hdc, "WGL_ARB_multisample");
+      display_win32->needIntelGLWorkaround =
+        (g_ascii_strcasecmp (glGetString (GL_VENDOR), "intel") == 0);
+
+      GDK_NOTE (OPENGL,
+                g_print ("WGL API version %d.%d found\n"
+                         " - Vendor: %s\n"
+                         " - Intel OpenGL workaround: %s\n"
+                         " - Checked extensions:\n"
+                         "\t* WGL_ARB_pixel_format: %s\n"
+                         "\t* WGL_ARB_create_context: %s\n"
+                         "\t* WGL_EXT_swap_control: %s\n"
+                         "\t* WGL_OML_sync_control: %s\n"
+                         "\t* WGL_ARB_multisample: %s\n",
+                         display_win32->gl_version / 10,
+                         display_win32->gl_version % 10,
+                         glGetString (GL_VENDOR),
+                         display_win32->needIntelGLWorkaround ? "yes" : "no",
+                         display_win32->hasWglARBPixelFormat ? "yes" : "no",
+                         display_win32->hasWglARBCreateContext ? "yes" : "no",
+                         display_win32->hasWglEXTSwapControl ? "yes" : "no",
+                         display_win32->hasWglOMLSyncControl ? "yes" : "no",
+                         display_win32->hasWglARBmultisample ? "yes" : "no"));
+
+      display_win32->gl_type = GDK_WIN32_GL_WGL;
     }
+  else
+    display_win32->gl_type = GDK_WIN32_GL_NONE;
 
-  display_win32->gl_version = epoxy_gl_version ();
-
-  display_win32->hasWglARBCreateContext =
-    epoxy_has_wgl_extension (dummy.hdc, "WGL_ARB_create_context");
-  display_win32->hasWglEXTSwapControl =
-    epoxy_has_wgl_extension (dummy.hdc, "WGL_EXT_swap_control");
-  display_win32->hasWglOMLSyncControl =
-    epoxy_has_wgl_extension (dummy.hdc, "WGL_OML_sync_control");
-  display_win32->hasWglARBPixelFormat =
-    epoxy_has_wgl_extension (dummy.hdc, "WGL_ARB_pixel_format");
-  display_win32->hasWglARBmultisample =
-    epoxy_has_wgl_extension (dummy.hdc, "WGL_ARB_multisample");
-  display_win32->needIntelGLWorkaround =
-    (g_ascii_strcasecmp (glGetString (GL_VENDOR), "intel") == 0);
-
-  GDK_NOTE (OPENGL,
-            g_print ("WGL API version %d.%d found\n"
-                     " - Vendor: %s\n"
-                     " - Intel OpenGL workaround: %s\n"
-                     " - Checked extensions:\n"
-                     "\t* WGL_ARB_pixel_format: %s\n"
-                     "\t* WGL_ARB_create_context: %s\n"
-                     "\t* WGL_EXT_swap_control: %s\n"
-                     "\t* WGL_OML_sync_control: %s\n"
-                     "\t* WGL_ARB_multisample: %s\n",
-                     display_win32->gl_version / 10,
-                     display_win32->gl_version % 10,
-                     glGetString (GL_VENDOR),
-                     display_win32->needIntelGLWorkaround ? "yes" : "no",
-                     display_win32->hasWglARBPixelFormat ? "yes" : "no",
-                     display_win32->hasWglARBCreateContext ? "yes" : "no",
-                     display_win32->hasWglEXTSwapControl ? "yes" : "no",
-                     display_win32->hasWglOMLSyncControl ? "yes" : "no",
-                     display_win32->hasWglARBmultisample ? "yes" : "no"));
-
-  wglMakeCurrent (NULL, NULL);
-  destroy_dummy_gl_context (dummy);
-
-  display_win32->gl_type = GDK_WIN32_GL_WGL;
+  /* clean up things if we indeed created our dummy WGL context */
+  if (best_idx != 0)
+    {
+      wglMakeCurrent (NULL, NULL);
+      destroy_dummy_gl_context (dummy);
+    }
 }
 
 /* Setup the legacy WGL context after creating it */
@@ -733,6 +760,9 @@ gdk_win32_gl_context_realize_wgl (GdkGLContext  *context,
       share != NULL && gdk_gl_context_is_legacy (share))
     legacy_bit = TRUE;
 
+  /* say early enough that we are not using GLES, so that we acquire the correct versions */
+  gdk_gl_context_set_use_es (context, FALSE);
+
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   compat_bit = gdk_gl_context_get_forward_compatible (context);
@@ -786,9 +816,6 @@ gdk_win32_gl_context_realize_wgl (GdkGLContext  *context,
 
   GDK_WIN32_GL_CONTEXT_WGL (context)->wgl_context = hglrc;
 
-  /* set whether we are using GLES */
-  gdk_gl_context_set_use_es (context, FALSE);
-
   /* OpenGL does not work with WS_EX_LAYERED enabled, so we need to
    * disable WS_EX_LAYERED when we acquire a valid HGLRC
    */
@@ -824,10 +851,10 @@ gdk_win32_display_make_wgl_context_current (GdkDisplay   *display,
   context_win32 = GDK_WIN32_GL_CONTEXT (context);
   window = gdk_gl_context_get_window (context);
 
-  if (!wglMakeCurrent (context_win32->gl_hdc, GDK_WIN32_GL_CONTEXT_WGL (context)->wgl_context))
+  if (!wglMakeCurrent (context_win32->gl_hdc,
+                       GDK_WIN32_GL_CONTEXT_WGL (context)->wgl_context))
     {
-      GDK_NOTE (OPENGL,
-                g_print ("Making WGL context current failed\n"));
+      GDK_NOTE (OPENGL, g_print ("Making WGL context current failed\n"));
       return FALSE;
     }
 
@@ -1011,7 +1038,12 @@ gdk_win32_gl_context_end_frame_egl (GdkGLContext *context,
 static void
 gdk_win32_display_init_egl (GdkWin32Display *display_win32)
 {
-  EGLDisplay egl_disp = gdk_win32_get_egl_display (display_win32);
+  EGLDisplay egl_disp;
+
+  if (display_win32->gl_type == GDK_WIN32_GL_NONE)
+    GDK_NOTE (OPENGL, g_message ("Falling back to GLES..."));
+
+  egl_disp = gdk_win32_get_egl_display (display_win32);
 
   if (egl_disp == EGL_NO_DISPLAY ||
      !eglInitialize (egl_disp, NULL, NULL))
@@ -1195,6 +1227,9 @@ gdk_win32_gl_context_realize_egl (GdkGLContext  *context,
   gint major = 0;
   gint minor = 0;
 
+  /* we are using GLES, so set early so that we get the correct GLES versions to request */
+  gdk_gl_context_set_use_es (context, TRUE);
+
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   compat_bit = gdk_gl_context_get_forward_compatible (context);
@@ -1230,9 +1265,6 @@ gdk_win32_gl_context_realize_egl (GdkGLContext  *context,
                      ctx));
 
   GDK_WIN32_GL_CONTEXT_EGL (context)->egl_context = ctx;
-  
-  /* set whether we are using GLES */
-  gdk_gl_context_set_use_es (context, TRUE);
 
   /* OpenGL does not work with WS_EX_LAYERED enabled, so we need to
    * disable WS_EX_LAYERED when we acquire a valid HGLRC
@@ -1328,7 +1360,15 @@ gdk_win32_gl_context_egl_init (GdkWin32GLContextEGL *egl_context)
 #else /* GDK_WIN32_ENABLE_EGL */
 /* define EGL stuff as no-op macros or functions if it is not enabled */
 
-#define gdk_win32_display_init_egl(disp) disp->gl_type = GDK_WIN32_GL_NONE
+static void
+gdk_win32_display_init_egl (GdkWin32Display *display_win32)
+{
+  GDK_NOTE (OPENGL, g_message ("Cannot %s GLES contexts: no GLES support",
+                               display_win32->gl_type == GDK_WIN32_GL_PENDING ?
+                               "create" : "fallback to"));
+  display_win32->gl_type = GDK_WIN32_GL_NONE;
+}
+
 #define gdk_win32_display_make_egl_context_current(disp,ctx) FALSE
 
 void
@@ -1396,6 +1436,7 @@ gdk_win32_window_invalidate_for_new_frame (GdkWindow      *window,
 
 static void
 gdk_win32_display_init_gl (GdkDisplay     *display,
+                           GdkGLContext   *share,
                            const gboolean  need_alpha_bits)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
@@ -1406,13 +1447,18 @@ gdk_win32_display_init_gl (GdkDisplay     *display,
       display_win32->gl_type == GDK_WIN32_GL_EGL)
     return;
 
+  /*
+   * We must disable WGL if we are using GDK_GL=gles or if the
+   * existing shared GLContext is a GLES context
+   */
   disable_wgl = ((_gdk_gl_flags & GDK_GL_GLES) != 0) ||
-                 display_win32->running_on_arm64;
+                (share != NULL && gdk_gl_context_get_use_es (share));
 
   if (!disable_wgl)
     gdk_win32_display_init_wgl (display_win32, need_alpha_bits);
 
-  else
+  if (display_win32->gl_type == GDK_WIN32_GL_PENDING ||
+      display_win32->gl_type == GDK_WIN32_GL_NONE)
     gdk_win32_display_init_egl (display_win32);
 }
 
@@ -1434,7 +1480,9 @@ gdk_win32_window_create_gl_context (GdkWindow *window,
 
   /* display_win32->hdc_egl_temp should *not* be destroyed here!  It is destroyed at dispose()! */
   display_win32->hdc_egl_temp = hdc;
-  gdk_win32_display_init_gl (display, need_alpha_bits);
+  gdk_win32_display_init_gl (display,
+                             share,
+                             need_alpha_bits);
 
   if (display_win32->gl_type == GDK_WIN32_GL_NONE)
     {
@@ -1515,7 +1563,7 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
   display_win32 = GDK_WIN32_DISPLAY (display);
 
   if (display_win32->gl_type == GDK_WIN32_GL_PENDING)
-    gdk_win32_display_init_gl (display, FALSE);
+    gdk_win32_display_init_gl (display, NULL, FALSE);
 
   if (display_win32->gl_type == GDK_WIN32_GL_NONE)
     return FALSE;

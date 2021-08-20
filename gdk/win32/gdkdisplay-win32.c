@@ -1034,6 +1034,8 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
     }
 }
 
+#if 0
+/* Keep code around in case we need to check for running on ARM64 in the future */
 static void
 _gdk_win32_check_on_arm64 (GdkWin32Display *display)
 {
@@ -1067,6 +1069,7 @@ _gdk_win32_check_on_arm64 (GdkWin32Display *display)
       g_once_init_leave (&checked, 1);
     }
 }
+#endif
 
 static void
 gdk_win32_display_init (GdkWin32Display *display)
@@ -1076,7 +1079,6 @@ gdk_win32_display_init (GdkWin32Display *display)
   display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
 
   _gdk_win32_enable_hidpi (display);
-  _gdk_win32_check_on_arm64 (display);
 
   /* if we have DPI awareness, set up fixed scale if set */
   if (display->dpi_aware_type != PROCESS_DPI_UNAWARE &&

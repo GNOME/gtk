@@ -124,7 +124,6 @@ struct _GdkWin32Display
   GdkWin32User32DPIFuncs user32_dpi_funcs;
 
   /* Running CPU items */
-  guint running_on_arm64 : 1;
   GdkWin32KernelCPUFuncs cpu_funcs;
 };
 
