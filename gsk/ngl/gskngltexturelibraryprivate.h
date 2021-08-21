@@ -24,7 +24,7 @@
 #include "gskngltypesprivate.h"
 #include "gskngltexturepoolprivate.h"
 
-#include "../gl/stb_rect_pack.h"
+#include "stb_rect_pack.h"
 
 G_BEGIN_DECLS
 

@@ -30,7 +30,7 @@
 
 #include "inlinearray.h"
 
-#include "../gl/gskglprofilerprivate.h"
+#include "gskglprofilerprivate.h"
 
 G_BEGIN_DECLS
 
