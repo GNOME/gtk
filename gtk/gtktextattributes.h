@@ -159,6 +159,7 @@ struct _GtkTextAttributes
   guint show_spaces : 3; /* PangoShowFlags */
   guint no_hyphens : 1;
   guint line_height_is_absolute : 1;
+  guint text_transform : 3; /* PangoTextTransform */
 };
 
 GtkTextAttributes* gtk_text_attributes_new         (void);

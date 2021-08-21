@@ -87,6 +87,7 @@ struct _GtkTextTagPrivate
   guint allow_breaks_set : 1;
   guint show_spaces_set : 1;
   guint insert_hyphens_set : 1;
+  guint text_transform_set : 1;
 
   /* Whether these margins accumulate or override */
   guint accumulative_margin : 1;

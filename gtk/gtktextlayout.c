@@ -1685,6 +1685,15 @@ add_text_attrs (GtkTextLayout      *layout,
 
       pango_attr_list_insert (attrs, attr);
     }
+
+  if (style->text_transform != PANGO_TEXT_TRANSFORM_NONE)
+    {
+      attr = pango_attr_text_transform_new (style->text_transform);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
 }
 
 static void

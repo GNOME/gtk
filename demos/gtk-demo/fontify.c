@@ -271,6 +271,7 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           break;
 
         case PANGO_ATTR_TEXT_TRANSFORM:
+          INT_ATTR (text_transform);
           break;
 
         case PANGO_ATTR_INVALID:
