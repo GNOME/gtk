@@ -4691,6 +4691,9 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
 
 #if PANGO_VERSION_CHECK(1, 49, 0)
         case PANGO_ATTR_LINE_HEIGHT:
+          FLOAT_ATTR (line_height);
+          break;
+
         case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
           break;
 #endif
