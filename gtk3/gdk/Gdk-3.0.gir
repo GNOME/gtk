@@ -1318,6 +1318,7 @@ sufficently new version of the X Render extension.</doc>
       </constructor>
       <method name="get_cursor_type"
               c:identifier="gdk_cursor_get_cursor_type"
+              glib:get-property="cursor-type"
               version="2.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkcursor.c"
@@ -1340,6 +1341,7 @@ sufficently new version of the X Render extension.</doc>
       </method>
       <method name="get_display"
               c:identifier="gdk_cursor_get_display"
+              glib:get-property="display"
               version="2.2">
         <doc xml:space="preserve"
              filename="../gdk/gdkcursor.c"
@@ -1487,13 +1489,15 @@ if no references remain.</doc>
       <property name="cursor-type"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_cursor_type">
         <type name="CursorType"/>
       </property>
       <property name="display"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_display">
         <type name="Display"/>
       </property>
     </class>
@@ -2533,6 +2537,7 @@ This is not public API and must not be used by applications.</doc>
       </function>
       <method name="get_associated_device"
               c:identifier="gdk_device_get_associated_device"
+              glib:get-property="associated-device"
               version="3.0">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -2564,6 +2569,7 @@ returned, as there is no associated device.</doc>
       </method>
       <method name="get_axes"
               c:identifier="gdk_device_get_axes"
+              glib:get-property="axes"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -2727,6 +2733,7 @@ by gdk_device_list_axes()</doc>
       </method>
       <method name="get_display"
               c:identifier="gdk_device_get_display"
+              glib:get-property="display"
               version="3.0">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -2750,6 +2757,7 @@ by gdk_device_list_axes()</doc>
       </method>
       <method name="get_has_cursor"
               c:identifier="gdk_device_get_has_cursor"
+              glib:get-property="has-cursor"
               version="2.20">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -2943,6 +2951,7 @@ application's windows.</doc>
       </method>
       <method name="get_n_axes"
               c:identifier="gdk_device_get_n_axes"
+              glib:get-property="n-axes"
               version="3.0">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -2987,6 +2996,7 @@ application's windows.</doc>
       </method>
       <method name="get_name"
               c:identifier="gdk_device_get_name"
+              glib:get-property="name"
               version="2.20">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -3121,6 +3131,7 @@ unless there is an ongoing grab on them. See gdk_device_grab().</doc>
       </method>
       <method name="get_product_id"
               c:identifier="gdk_device_get_product_id"
+              glib:get-property="product-id"
               version="3.16">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -3145,6 +3156,7 @@ it. See gdk_device_get_vendor_id() for more information.</doc>
       </method>
       <method name="get_seat"
               c:identifier="gdk_device_get_seat"
+              glib:get-property="seat"
               version="3.20">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -3241,6 +3253,7 @@ the axes of @device in, or %NULL.</doc>
       </method>
       <method name="get_vendor_id"
               c:identifier="gdk_device_get_vendor_id"
+              glib:get-property="vendor-id"
               version="3.16">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
@@ -3715,14 +3728,18 @@ for the color picker in the #GtkColorSelectionDialog.</doc>
       </method>
       <property name="associated-device"
                 version="3.0"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_associated_device">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="173">Associated pointer or keyboard with this device, if any. Devices of type #GDK_DEVICE_TYPE_MASTER
 always come in keyboard/pointer pairs. Other device types will have a %NULL associated device.</doc>
         <type name="Device"/>
       </property>
-      <property name="axes" version="3.22" transfer-ownership="none">
+      <property name="axes"
+                version="3.22"
+                transfer-ownership="none"
+                getter="get_axes">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="312">The axes currently available for this device.</doc>
@@ -3742,7 +3759,8 @@ always come in keyboard/pointer pairs. Other device types will have a %NULL asso
                 version="3.0"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_display">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="114">The #GdkDisplay the #GdkDevice pertains to.</doc>
@@ -3752,7 +3770,8 @@ always come in keyboard/pointer pairs. Other device types will have a %NULL asso
                 version="3.0"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_has_cursor">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="219">Whether the device is represented by a cursor on the screen. Devices of type
@@ -3772,7 +3791,10 @@ always come in keyboard/pointer pairs. Other device types will have a %NULL asso
              line="188">Source type for the device.</doc>
         <type name="InputSource"/>
       </property>
-      <property name="n-axes" version="3.0" transfer-ownership="none">
+      <property name="n-axes"
+                version="3.0"
+                transfer-ownership="none"
+                getter="get_n_axes">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="235">Number of axes in the device.</doc>
@@ -3782,7 +3804,8 @@ always come in keyboard/pointer pairs. Other device types will have a %NULL asso
                 version="3.0"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_name">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="143">The device name.</doc>
@@ -3804,7 +3827,8 @@ of touches is unknown.</doc>
                 version="3.16"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_product_id">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="265">Product ID of this device, see gdk_device_get_product_id().</doc>
@@ -3813,7 +3837,8 @@ of touches is unknown.</doc>
       <property name="seat"
                 version="3.20"
                 writable="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_seat">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="280">#GdkSeat of this device.</doc>
@@ -3836,7 +3861,8 @@ of touches is unknown.</doc>
                 version="3.16"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_vendor_id">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevice.c"
              line="250">Vendor ID of this device, see gdk_device_get_vendor_id().</doc>
@@ -4030,6 +4056,7 @@ and there aren’t other means to get a meaningful #GdkDevice to operate on.</do
       </method>
       <method name="get_display"
               c:identifier="gdk_device_manager_get_display"
+              glib:get-property="display"
               version="3.0">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevicemanager.c"
@@ -4093,7 +4120,8 @@ and there aren’t other means to get a meaningful #GdkDevice to operate on.</do
       <property name="display"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_display">
         <type name="Display"/>
       </property>
       <glib:signal name="device-added" when="last">
@@ -4351,6 +4379,7 @@ current mode.</doc>
            glib:get-type="gdk_device_tool_get_type">
       <method name="get_hardware_id"
               c:identifier="gdk_device_tool_get_hardware_id"
+              glib:get-property="hardware-id"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevicetool.c"
@@ -4381,6 +4410,7 @@ but having different hardware identificators.</doc>
       </method>
       <method name="get_serial"
               c:identifier="gdk_device_tool_get_serial"
+              glib:get-property="serial"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevicetool.c"
@@ -4404,6 +4434,7 @@ physical tool (eg. a tablet pen) across program executions.</doc>
       </method>
       <method name="get_tool_type"
               c:identifier="gdk_device_tool_get_tool_type"
+              glib:get-property="tool-type"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkdevicetool.c"
@@ -4434,19 +4465,22 @@ sort of pen is being used, such as an airbrush or a pencil.</doc>
       <property name="hardware-id"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_hardware_id">
         <type name="guint64" c:type="guint64"/>
       </property>
       <property name="serial"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_serial">
         <type name="guint64" c:type="guint64"/>
       </property>
       <property name="tool-type"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_tool_type">
         <type name="DeviceToolType"/>
       </property>
     </class>
@@ -6116,6 +6150,7 @@ to limit what backends can be used.</doc>
       </function>
       <method name="get_default_display"
               c:identifier="gdk_display_manager_get_default_display"
+              glib:get-property="default-display"
               version="2.2">
         <doc xml:space="preserve"
              filename="../gdk/gdkdisplaymanager.c"
@@ -6194,6 +6229,7 @@ to limit what backends can be used.</doc>
       </method>
       <method name="set_default_display"
               c:identifier="gdk_display_manager_set_default_display"
+              glib:set-property="default-display"
               version="2.2">
         <doc xml:space="preserve"
              filename="../gdk/gdkdisplaymanager.c"
@@ -6217,7 +6253,11 @@ to limit what backends can be used.</doc>
           </parameter>
         </parameters>
       </method>
-      <property name="default-display" writable="1" transfer-ownership="none">
+      <property name="default-display"
+                writable="1"
+                transfer-ownership="none"
+                setter="set_default_display"
+                getter="get_default_display">
         <type name="Display"/>
       </property>
       <glib:signal name="display-opened" when="last" version="2.2">
@@ -6860,6 +6900,7 @@ gdk_window_begin_draw_frame() and gdk_window_end_draw_frame().</doc>
       </method>
       <method name="get_clip"
               c:identifier="gdk_drawing_context_get_clip"
+              glib:get-property="clip"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkdrawingcontext.c"
@@ -6882,6 +6923,7 @@ gdk_window_begin_draw_frame() and gdk_window_end_draw_frame().</doc>
       </method>
       <method name="get_window"
               c:identifier="gdk_drawing_context_get_window"
+              glib:get-property="window"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkdrawingcontext.c"
@@ -6928,7 +6970,8 @@ gdk_window_begin_draw_frame() and gdk_window_end_draw_frame().</doc>
                 version="3.22"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_clip">
         <doc xml:space="preserve"
              filename="../gdk/gdkdrawingcontext.c"
              line="165">The clip region applied to the drawing context.</doc>
@@ -6938,7 +6981,8 @@ gdk_window_begin_draw_frame() and gdk_window_end_draw_frame().</doc>
                 version="3.22"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_window">
         <doc xml:space="preserve"
              filename="../gdk/gdkdrawingcontext.c"
              line="152">The #GdkWindow that created the drawing context.</doc>
@@ -11557,6 +11601,7 @@ until gdk_gl_context_make_current() is called.</doc>
       </method>
       <method name="get_display"
               c:identifier="gdk_gl_context_get_display"
+              glib:get-property="display"
               version="3.16">
         <doc xml:space="preserve"
              filename="../gdk/gdkglcontext.c"
@@ -11641,6 +11686,7 @@ gdk_gl_context_set_required_version().</doc>
       </method>
       <method name="get_shared_context"
               c:identifier="gdk_gl_context_get_shared_context"
+              glib:get-property="shared-context"
               version="3.16">
         <doc xml:space="preserve"
              filename="../gdk/gdkglcontext.c"
@@ -11724,6 +11770,7 @@ The @context must be realized prior to calling this function.</doc>
       </method>
       <method name="get_window"
               c:identifier="gdk_gl_context_get_window"
+              glib:get-property="window"
               version="3.16">
         <doc xml:space="preserve"
              filename="../gdk/gdkglcontext.c"
@@ -11965,7 +12012,8 @@ OpenGL ES API, extensions, or shaders.</doc>
                 version="3.16"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_display">
         <doc xml:space="preserve"
              filename="../gdk/gdkglcontext.c"
              line="308">The #GdkDisplay used to create the #GdkGLContext.</doc>
@@ -11975,7 +12023,8 @@ OpenGL ES API, extensions, or shaders.</doc>
                 version="3.16"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_shared_context">
         <doc xml:space="preserve"
              filename="../gdk/gdkglcontext.c"
              line="340">The #GdkGLContext that this context is sharing data with, or %NULL</doc>
@@ -11985,7 +12034,8 @@ OpenGL ES API, extensions, or shaders.</doc>
                 version="3.16"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_window">
         <doc xml:space="preserve"
              filename="../gdk/gdkglcontext.c"
              line="324">The #GdkWindow the gl context is bound to.</doc>
@@ -25097,6 +25147,7 @@ APIs in GdkScreen to obtain monitor-related information.</doc>
       <source-position filename="../gdk/gdkmonitor.h" line="40"/>
       <method name="get_display"
               c:identifier="gdk_monitor_get_display"
+              glib:get-property="display"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
@@ -25119,6 +25170,7 @@ APIs in GdkScreen to obtain monitor-related information.</doc>
       </method>
       <method name="get_geometry"
               c:identifier="gdk_monitor_get_geometry"
+              glib:get-property="geometry"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
@@ -25149,6 +25201,7 @@ not in ”device pixels” (see gdk_monitor_get_scale_factor()).</doc>
       </method>
       <method name="get_height_mm"
               c:identifier="gdk_monitor_get_height_mm"
+              glib:get-property="height-mm"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
@@ -25170,7 +25223,8 @@ not in ”device pixels” (see gdk_monitor_get_scale_factor()).</doc>
         </parameters>
       </method>
       <method name="get_manufacturer"
-              c:identifier="gdk_monitor_get_manufacturer">
+              c:identifier="gdk_monitor_get_manufacturer"
+              glib:get-property="manufacturer">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
              line="374">Gets the name or PNP ID of the monitor's manufacturer, if available.
@@ -25195,7 +25249,9 @@ PNP ID registry is located at https://uefi.org/pnp_id_list</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="get_model" c:identifier="gdk_monitor_get_model">
+      <method name="get_model"
+              c:identifier="gdk_monitor_get_model"
+              glib:get-property="model">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
              line="395">Gets the a string identifying the monitor model, if available.</doc>
@@ -25217,6 +25273,7 @@ PNP ID registry is located at https://uefi.org/pnp_id_list</doc>
       </method>
       <method name="get_refresh_rate"
               c:identifier="gdk_monitor_get_refresh_rate"
+              glib:get-property="refresh-rate"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
@@ -25242,6 +25299,7 @@ is returned as 60000.</doc>
       </method>
       <method name="get_scale_factor"
               c:identifier="gdk_monitor_get_scale_factor"
+              glib:get-property="scale-factor"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
@@ -25270,6 +25328,7 @@ where it is better to use gdk_window_get_scale_factor() instead.</doc>
       </method>
       <method name="get_subpixel_layout"
               c:identifier="gdk_monitor_get_subpixel_layout"
+              glib:get-property="subpixel-layout"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
@@ -25293,6 +25352,7 @@ primaries for each pixel in this monitor, if available.</doc>
       </method>
       <method name="get_width_mm"
               c:identifier="gdk_monitor_get_width_mm"
+              glib:get-property="width-mm"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
@@ -25315,6 +25375,7 @@ primaries for each pixel in this monitor, if available.</doc>
       </method>
       <method name="get_workarea"
               c:identifier="gdk_monitor_get_workarea"
+              glib:get-property="workarea"
               version="3.22">
         <doc xml:space="preserve"
              filename="../gdk/gdkmonitor.c"
@@ -25379,34 +25440,51 @@ available, or does not apply.</doc>
       <property name="display"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_display">
         <type name="Display"/>
       </property>
-      <property name="geometry" transfer-ownership="none">
+      <property name="geometry"
+                transfer-ownership="none"
+                getter="get_geometry">
         <type name="Rectangle"/>
       </property>
-      <property name="height-mm" transfer-ownership="none">
+      <property name="height-mm"
+                transfer-ownership="none"
+                getter="get_height_mm">
         <type name="gint" c:type="gint"/>
       </property>
-      <property name="manufacturer" transfer-ownership="none">
+      <property name="manufacturer"
+                transfer-ownership="none"
+                getter="get_manufacturer">
         <type name="utf8" c:type="gchar*"/>
       </property>
-      <property name="model" transfer-ownership="none">
+      <property name="model" transfer-ownership="none" getter="get_model">
         <type name="utf8" c:type="gchar*"/>
       </property>
-      <property name="refresh-rate" transfer-ownership="none">
+      <property name="refresh-rate"
+                transfer-ownership="none"
+                getter="get_refresh_rate">
         <type name="gint" c:type="gint"/>
       </property>
-      <property name="scale-factor" transfer-ownership="none">
+      <property name="scale-factor"
+                transfer-ownership="none"
+                getter="get_scale_factor">
         <type name="gint" c:type="gint"/>
       </property>
-      <property name="subpixel-layout" transfer-ownership="none">
+      <property name="subpixel-layout"
+                transfer-ownership="none"
+                getter="get_subpixel_layout">
         <type name="SubpixelLayout"/>
       </property>
-      <property name="width-mm" transfer-ownership="none">
+      <property name="width-mm"
+                transfer-ownership="none"
+                getter="get_width_mm">
         <type name="gint" c:type="gint"/>
       </property>
-      <property name="workarea" transfer-ownership="none">
+      <property name="workarea"
+                transfer-ownership="none"
+                getter="get_workarea">
         <type name="Rectangle"/>
       </property>
       <glib:signal name="invalidate" when="first">
@@ -26150,6 +26228,7 @@ no longer needed.</doc>
       </method>
       <method name="get_font_options"
               c:identifier="gdk_screen_get_font_options"
+              glib:get-property="font-options"
               version="2.10">
         <doc xml:space="preserve"
              filename="../gdk/gdkscreen.c"
@@ -26619,6 +26698,7 @@ will be 0, defaulting to the first monitor.</doc>
       </method>
       <method name="get_resolution"
               c:identifier="gdk_screen_get_resolution"
+              glib:get-property="resolution"
               version="2.10">
         <doc xml:space="preserve"
              filename="../gdk/gdkscreen.c"
@@ -26972,6 +27052,7 @@ a #GdkDisplay with this screen as the default screen.</doc>
       </method>
       <method name="set_font_options"
               c:identifier="gdk_screen_set_font_options"
+              glib:set-property="font-options"
               version="2.10">
         <doc xml:space="preserve"
              filename="../gdk/gdkscreen.c"
@@ -27006,6 +27087,7 @@ have already been created.</doc>
       </method>
       <method name="set_resolution"
               c:identifier="gdk_screen_set_resolution"
+              glib:set-property="resolution"
               version="2.10">
         <doc xml:space="preserve"
              filename="../gdk/gdkscreen.c"
@@ -27033,10 +27115,18 @@ font will be 13 units high. (10 * 96. / 72. = 13.3).</doc>
           </parameter>
         </parameters>
       </method>
-      <property name="font-options" writable="1" transfer-ownership="none">
+      <property name="font-options"
+                writable="1"
+                transfer-ownership="none"
+                setter="set_font_options"
+                getter="get_font_options">
         <type name="gpointer" c:type="gpointer"/>
       </property>
-      <property name="resolution" writable="1" transfer-ownership="none">
+      <property name="resolution"
+                writable="1"
+                transfer-ownership="none"
+                setter="set_resolution"
+                getter="get_resolution">
         <type name="gdouble" c:type="gdouble"/>
       </property>
       <glib:signal name="composited-changed" when="last" version="2.10">
@@ -27157,7 +27247,9 @@ that belong to a user.</doc>
           </instance-parameter>
         </parameters>
       </method>
-      <method name="get_display" c:identifier="gdk_seat_get_display">
+      <method name="get_display"
+              c:identifier="gdk_seat_get_display"
+              glib:get-property="display">
         <doc xml:space="preserve"
              filename="../gdk/gdkseat.c"
              line="417">Returns the #GdkDisplay this seat belongs to.</doc>
@@ -27387,7 +27479,8 @@ events that are emitted when the grab ends unvoluntarily.</doc>
                 version="3.20"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                getter="get_display">
         <doc xml:space="preserve"
              filename="../gdk/gdkseat.c"
              line="193">#GdkDisplay of this seat.</doc>
@@ -30118,6 +30211,7 @@ See gdk_window_set_composited().</doc>
       </method>
       <method name="get_cursor"
               c:identifier="gdk_window_get_cursor"
+              glib:get-property="cursor"
               version="2.18">
         <doc xml:space="preserve"
              filename="../gdk/gdkwindow.c"
@@ -32587,7 +32681,9 @@ attempting to do so.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="set_cursor" c:identifier="gdk_window_set_cursor">
+      <method name="set_cursor"
+              c:identifier="gdk_window_set_cursor"
+              glib:set-property="cursor">
         <doc xml:space="preserve"
              filename="../gdk/gdkwindow.c"
              line="6572">Sets the default mouse pointer for a #GdkWindow.
@@ -34047,7 +34143,9 @@ withdraws toplevel windows before hiding them.</doc>
       <property name="cursor"
                 version="2.18"
                 writable="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                setter="set_cursor"
+                getter="get_cursor">
         <doc xml:space="preserve"
              filename="../gdk/gdkwindow.c"
              line="344">The mouse pointer for a #GdkWindow. See gdk_window_set_cursor() and
