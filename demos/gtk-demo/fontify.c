@@ -269,6 +269,11 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
         case PANGO_ATTR_BACKGROUND_ALPHA:
           break;
 
+#if PANGO_VERSION_CHECK(1,49,0)
+        case PANGO_ATTR_TEXT_TRANSFORM:
+          break;
+#endif
+
         case PANGO_ATTR_INVALID:
         default:
           g_assert_not_reached ();
