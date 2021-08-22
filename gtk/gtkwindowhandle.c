@@ -343,7 +343,7 @@ perform_titlebar_action (GtkWindowHandle *self,
       gesture = GDK_TITLEBAR_GESTURE_RIGHT_CLICK;
       break;
     default:
-      break;
+      return FALSE;
     }
 
   if (gdk_toplevel_titlebar_gesture (GDK_TOPLEVEL (surface), gesture))
