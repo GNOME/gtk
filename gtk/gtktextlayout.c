@@ -1551,7 +1551,7 @@ add_generic_attrs (GtkTextLayout      *layout,
       
       pango_attr_list_insert (attrs, attr);
     }
-  
+
   if (!size_only)
     {
       attr = gtk_text_attr_appearance_new (appearance);
@@ -1638,6 +1638,20 @@ add_text_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
+#if PANGO_VERSION_CHECK(1, 49, 0)
+  if (style->line_height != 0.0)
+    {
+      if (style->line_height_is_absolute)
+        attr = pango_attr_line_height_new_absolute (style->line_height * PANGO_SCALE);
+      else
+        attr = pango_attr_line_height_new (style->line_height);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
+#endif
+
   if (style->font_features)
     {
       attr = pango_attr_font_features_new (style->font_features);
@@ -1673,7 +1687,6 @@ add_text_attrs (GtkTextLayout      *layout,
 
       pango_attr_list_insert (attrs, attr);
     }
-
 }
 
 static void

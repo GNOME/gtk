@@ -147,6 +147,8 @@ struct _GtkTextAttributes
   int pixels_below_lines;
   int pixels_inside_wrap;
 
+  float line_height;
+
   int letter_spacing;
 
   guint invisible : 1;
@@ -156,6 +158,7 @@ struct _GtkTextAttributes
   guint no_breaks : 1;
   guint show_spaces : 3; /* PangoShowFlags */
   guint no_hyphens : 1;
+  guint line_height_is_absolute : 1;
 };
 
 GtkTextAttributes* gtk_text_attributes_new         (void);

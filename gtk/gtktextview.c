@@ -57,6 +57,7 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkjoinedmenuprivate.h"
+#include "gtkcsslineheightvalueprivate.h"
 
 /**
  * GtkTextView:
@@ -7640,6 +7641,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   GtkCssStyle *style;
   const GdkRGBA black = { 0, };
   const GdkRGBA *color;
+  double height;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
@@ -7657,6 +7659,17 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
     pango_font_description_free (values->font);
 
   values->font = gtk_css_style_get_pango_font (style);
+
+  values->line_height = 0.0;
+  values->line_height_is_absolute = FALSE;
+
+  height = gtk_css_line_height_value_get (style->font->line_height);
+  if (height != 0.0)
+    {
+      values->line_height = height;
+      if (gtk_css_number_value_get_dimension (style->font->line_height) == GTK_CSS_DIMENSION_LENGTH)
+        values->line_height_is_absolute = TRUE;
+    }
 }
 
 static void

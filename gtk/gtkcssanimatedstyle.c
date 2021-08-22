@@ -204,6 +204,10 @@ gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *animated,
       unshare_font (animated);
       gtk_css_take_value (&style->font->letter_spacing, value);
       break;
+    case GTK_CSS_PROPERTY_LINE_HEIGHT:
+      unshare_font (animated);
+      gtk_css_take_value (&style->font->line_height, value);
+      break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
       unshare_font_variant (animated);
       gtk_css_take_value (&style->font_variant->text_decoration_line, value);

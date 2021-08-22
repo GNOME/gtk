@@ -107,6 +107,7 @@ enum {
   PROP_PIXELS_ABOVE_LINES,
   PROP_PIXELS_BELOW_LINES,
   PROP_PIXELS_INSIDE_WRAP,
+  PROP_LINE_HEIGHT,
   PROP_EDITABLE,
   PROP_WRAP_MODE,
   PROP_JUSTIFICATION,
@@ -150,6 +151,7 @@ enum {
   PROP_PIXELS_ABOVE_LINES_SET,
   PROP_PIXELS_BELOW_LINES_SET,
   PROP_PIXELS_INSIDE_WRAP_SET,
+  PROP_LINE_HEIGHT_SET,
   PROP_EDITABLE_SET,
   PROP_WRAP_MODE_SET,
   PROP_JUSTIFICATION_SET,
@@ -597,6 +599,21 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
+   * GtkTexTag:line-height:
+   *
+   * Factor to scale line height by.
+   *
+   * Since: 4.6
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_LINE_HEIGHT,
+                                   g_param_spec_float ("line-height",
+                                                       P_("Line height factor"),
+                                                       P_("The factor to apply to line height"),
+                                                       0.0, 10.0, 0.0,
+                                                       GTK_PARAM_READWRITE));
+
+  /**
    * GtkTextTag:strikethrough:
    *
    * Whether to strike through the text.
@@ -935,6 +952,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("pixels-inside-wrap-set", PROP_PIXELS_INSIDE_WRAP_SET,
                 P_("Pixels inside wrap set"),
                 P_("Whether this tag affects the number of pixels between wrapped lines"));
+
+  ADD_SET_PROP ("line-height-set", PROP_LINE_HEIGHT_SET,
+                P_("Line height set"),
+                P_("Whether this tag affects the height of lines"));
 
   ADD_SET_PROP ("strikethrough-set", PROP_STRIKETHROUGH_SET,
                 P_("Strikethrough set"),
@@ -1573,6 +1594,13 @@ gtk_text_tag_set_property (GObject      *object,
       size_changed = TRUE;
       break;
 
+    case PROP_LINE_HEIGHT:
+      priv->line_height_set = TRUE;
+      priv->values->line_height = g_value_get_float (value);
+      g_object_notify (object, "line-height-set");
+      size_changed = TRUE;
+      break;
+
     case PROP_EDITABLE:
       priv->editable_set = TRUE;
       priv->values->editable = g_value_get_boolean (value);
@@ -2022,6 +2050,10 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_int (value,  priv->values->pixels_inside_wrap);
       break;
 
+    case PROP_LINE_HEIGHT:
+      g_value_set_float (value, priv->values->line_height);
+      break;
+
     case PROP_EDITABLE:
       g_value_set_boolean (value, priv->values->editable);
       break;
@@ -2167,6 +2199,10 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_PIXELS_INSIDE_WRAP_SET:
       g_value_set_boolean (value, priv->pixels_inside_wrap_set);
+      break;
+
+    case PROP_LINE_HEIGHT_SET:
+      g_value_set_boolean (value, priv->line_height_set);
       break;
 
     case PROP_EDITABLE_SET:

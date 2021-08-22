@@ -107,11 +107,12 @@ static const int font_props[] = {
   GTK_CSS_PROPERTY_FONT_WEIGHT,
   GTK_CSS_PROPERTY_FONT_STRETCH,
   GTK_CSS_PROPERTY_LETTER_SPACING,
-  GTK_CSS_PROPERTY_TEXT_SHADOW,  
+  GTK_CSS_PROPERTY_TEXT_SHADOW,
   GTK_CSS_PROPERTY_CARET_COLOR,
   GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR,
   GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS,
   GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS,
+  GTK_CSS_PROPERTY_LINE_HEIGHT,
 };
 static const int font_variant_props[] = {
   GTK_CSS_PROPERTY_TEXT_DECORATION_LINE,
@@ -416,6 +417,9 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       break;
     case GTK_CSS_PROPERTY_LETTER_SPACING:
       gtk_css_take_value (&style->font->letter_spacing, value);
+      break;
+    case GTK_CSS_PROPERTY_LINE_HEIGHT:
+      gtk_css_take_value (&style->font->line_height, value);
       break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
       gtk_css_take_value (&style->font_variant->text_decoration_line, value);

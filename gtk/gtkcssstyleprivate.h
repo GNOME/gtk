@@ -151,6 +151,7 @@ struct _GtkCssFontValues {
   GtkCssValue *secondary_caret_color; // NULL if currentColor
   GtkCssValue *font_feature_settings;
   GtkCssValue *font_variation_settings;
+  GtkCssValue *line_height;
 };
 
 struct _GtkCssFontVariantValues {
