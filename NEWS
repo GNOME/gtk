@@ -1,3 +1,9 @@
+Overview of Changes
+===================
+
+* gsk: Drop the GL renderer in favor of NGL
+
+
 Overview of Changes in 4.4.0
 ============================
 
