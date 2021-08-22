@@ -54,6 +54,7 @@
  * #GdkPixbufs stored.
  *
  * An example for creating a simple list store:
+ *
  * |[<!-- language="C" -->
  * enum {
  *   COLUMN_STRING,
@@ -134,14 +135,14 @@
  * # GtkListStore as GtkBuildable
  *
  * The GtkListStore implementation of the GtkBuildable interface allows
- * to specify the model columns with a <columns> element that may contain
- * multiple <column> elements, each specifying one model column. The “type”
+ * to specify the model columns with a `<columns>` element that may contain
+ * multiple `<column>` elements, each specifying one model column. The “type”
  * attribute specifies the data type for the column.
  *
  * Additionally, it is possible to specify content for the list store
- * in the UI definition, with the <data> element. It can contain multiple
- * <row> elements, each specifying to content for one row of the list model.
- * Inside a <row>, the <col> elements specify the content for individual cells.
+ * in the UI definition, with the `<data>` element. It can contain multiple
+ * `<row>` elements, each specifying to content for one row of the list model.
+ * Inside a `<row>`, the `<col>` elements specify the content for individual cells.
  *
  * Note that it is probably more common to define your models in the code,
  * and one might consider it a layering violation to specify the content of
@@ -149,7 +150,8 @@
  * is to separate the two, as far as possible.
  *
  * An example of a UI Definition fragment for a list store:
- * |[<!-- language="C" -->
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkListStore">
  *   <columns>
  *     <column type="gchararray"/>

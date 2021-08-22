@@ -43,14 +43,16 @@
  * ## GtkRecentFilter as GtkBuildable
  *
  * The GtkRecentFilter implementation of the GtkBuildable interface
- * supports adding rules using the <mime-types>, <patterns> and
- * <applications> elements and listing the rules within. Specifying
- * a <mime-type>, <pattern> or <application> has the same effect as
+ * supports adding rules using the `<mime-types>`, `<patterns>` and
+ * `<applications>` elements and listing the rules within. Specifying
+ * a `<mime-type>`, `<pattern>` or `<application>` has the same effect as
  * calling gtk_recent_filter_add_mime_type(),
  * gtk_recent_filter_add_pattern() or gtk_recent_filter_add_application().
  *
- * An example of a UI definition fragment specifying GtkRecentFilter rules:
- * |[
+ * An example of a UI definition fragment specifying `GtkRecentFilter`
+ * rules:
+ * 
+ * |[<!-- language="xml" -->
  * <object class="GtkRecentFilter">
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>

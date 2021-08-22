@@ -241,19 +241,20 @@
  * # GtkContainer as GtkBuildable
  *
  * The GtkContainer implementation of the GtkBuildable interface supports
- * a <packing> element for children, which can contain multiple <property>
+ * a `<packing>` element for children, which can contain multiple `<property>`
  * elements that specify child properties for the child.
  * 
  * Since 2.16, child properties can also be marked as translatable using
  * the same “translatable”, “comments” and “context” attributes that are used
  * for regular properties.
  *
- * Since 3.16, containers can have a <focus-chain> element containing multiple
- * <widget> elements, one for each child that should be added to the focus
+ * Since 3.16, containers can have a `<focus-chain>` element containing multiple
+ * `<widget>` elements, one for each child that should be added to the focus
  * chain. The ”name” attribute gives the id of the widget.
  *
  * An example of these properties in UI definitions:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkBox">
  *   <child>
  *     <object class="GtkEntry" id="entry1"/>

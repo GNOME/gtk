@@ -275,23 +275,25 @@
  * # GtkWidget as GtkBuildable
  *
  * The GtkWidget implementation of the GtkBuildable interface supports a
- * custom <accelerator> element, which has attributes named ”key”, ”modifiers”
+ * custom `<accelerator>` element, which has attributes named ”key”, ”modifiers”
  * and ”signal” and allows to specify accelerators.
  *
  * An example of a UI definition fragment specifying an accelerator:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkButton">
  *   <accelerator key="q" modifiers="GDK_CONTROL_MASK" signal="clicked"/>
  * </object>
  * ]|
  *
- * In addition to accelerators, GtkWidget also support a custom <accessible>
+ * In addition to accelerators, GtkWidget also support a custom `<accessible>`
  * element, which supports actions and relations. Properties on the accessible
  * implementation of an object can be set by accessing the internal child
  * “accessible” of a #GtkWidget.
  *
  * An example of a UI definition fragment specifying an accessible:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkLabel" id="label1"/>
  *   <property name="label">I am a Label for a Button</property>
  * </object>
@@ -309,8 +311,9 @@
  * ]|
  *
  * Finally, GtkWidget allows style information such as style classes to
- * be associated with widgets, using the custom <style> element:
- * |[
+ * be associated with widgets, using the custom `<style>` element:
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkButton" id="button1">
  *   <style>
  *     <class name="my-special-button-class"/>
@@ -333,27 +336,28 @@
  * is slightly different from regular #GtkBuilder XML.
  *
  * Unlike regular interface descriptions, gtk_widget_class_set_template() will
- * expect a <template> tag as a direct child of the toplevel <interface>
- * tag. The <template> tag must specify the “class” attribute which must be
+ * expect a `<template>` tag as a direct child of the toplevel `<interface>`
+ * tag. The `<template>` tag must specify the “class” attribute which must be
  * the type name of the widget. Optionally, the “parent” attribute may be
  * specified to specify the direct parent type of the widget type, this is
  * ignored by the GtkBuilder but required for Glade to introspect what kind
  * of properties and internal children exist for a given type when the actual
  * type does not exist.
  *
- * The XML which is contained inside the <template> tag behaves as if it were
- * added to the <object> tag defining @widget itself. You may set properties
- * on @widget by inserting <property> tags into the <template> tag, and also
- * add <child> tags to add children and extend @widget in the normal way you
- * would with <object> tags.
+ * The XML which is contained inside the `<template>` tag behaves as if it were
+ * added to the `<object>` tag defining "widget" itself. You may set properties
+ * on @widget by inserting `<property>` tags into the `<template>` tag, and also
+ * add `<child>` tags to add children and extend "widget" in the normal way you
+ * would with `<object>` tags.
  *
- * Additionally, <object> tags can also be added before and after the initial
- * <template> tag in the normal way, allowing one to define auxiliary objects
+ * Additionally, `<object>` tags can also be added before and after the initial
+ * `<template>` tag in the normal way, allowing one to define auxiliary objects
  * which might be referenced by other widgets declared as children of the
- * <template> tag.
+ * `<template>` tag.
  *
  * An example of a GtkBuilder Template Definition:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <interface>
  *   <template class="FooWidget" parent="GtkBox">
  *     <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>

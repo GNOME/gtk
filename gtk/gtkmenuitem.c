@@ -70,6 +70,7 @@
  * For more advanced label settings, you can fetch the child widget from the GtkBin.
  *
  * An example for setting markup and accelerator on a MenuItem:
+ *
  * |[<!-- language="C" -->
  * GtkWidget *menu_item = gtk_menu_item_new_with_label ("Example Menu Item");
  *
@@ -82,10 +83,11 @@
  *
  * The GtkMenuItem implementation of the #GtkBuildable interface supports
  * adding a submenu by specifying “submenu” as the “type” attribute of
- * a <child> element.
+ * a `<child>` element.
  *
  * An example of UI definition fragment with submenus:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkMenuItem">
  *   <child type="submenu">
  *     <object class="GtkMenu"/>

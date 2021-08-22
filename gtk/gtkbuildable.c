@@ -236,7 +236,7 @@ gtk_buildable_construct_child (GtkBuildable *buildable,
  * @data: (out): return location for user data that will be passed in 
  *   to parser functions
  *
- * This is called for each unknown element under <child>.
+ * This is called for each unknown element under `<child>`.
  * 
  * Returns: %TRUE if a object has a custom implementation, %FALSE
  *          if it doesn't.
