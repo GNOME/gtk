@@ -18,3 +18,6 @@ Shortcuts: <tt>Monospace</tt> – <b>Bold</b> – <i>Italic</i> – <big>Big</bi
 <span allow_breaks="false">A</span> hy­phen­ation al­go­rithm is a set of rules, espe­ci­ally one co­di­fied for im­ple­men­tation in a com­pu­ter pro­gram, that de­ci­des at which points a word can be bro­ken over two lines with a hy­phen. For ex­am­ple, a hy­phen­ation al­go­rithm might de­cide that im­peach­ment can be broken as <span allow_breaks="false">impeach‧ment</span> or <span allow_breaks="false">im‧peachment</span> but not <span allow_breaks="false">impe‧achment.</span>
 
 <span insert_hyphens="false">one/two three/four five/six seven/eight nine/ten</span>
+
+<span line_height='1.33'>Line height: This is an example of widely spaced text. It was achieved by setting the line-height factor to 1.33. You can set the line-height factor to any value between 0 and 10.
+Note that the line height affects the spacing between paragraphs as well as between the wrapped lines inside a paragraph.</span>
