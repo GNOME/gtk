@@ -443,8 +443,6 @@ gsk_matrix_transform_rect (const graphene_matrix_t *m,
  * determine if transforming an axis-aligned rectangle produces
  * axis-aligned output, to decide whether to use linear
  * interpolation or not.
- *
- * Keep this in sync with gsk/gl/gskglrenderer.c
  */
 static gboolean
 result_is_axis_aligned (GskTransform          *transform,
