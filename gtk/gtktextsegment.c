@@ -426,6 +426,12 @@ char_segment_check_func (GtkTextLineSegment *segPtr, GtkTextLine *line)
 GtkTextLineSegment*
 _gtk_toggle_segment_new (GtkTextTagInfo *info, gboolean on)
 {
+  /* gcc-11 issues a diagnostic here because the size allocated
+     for SEG does not cover the entire size of a GtkTextLineSegment
+     and gcc has no way to know that the union will only be used
+     for limited types and the additional space is not needed.  */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
   GtkTextLineSegment *seg;
 
   seg = g_slice_alloc (TSEG_SIZE);
@@ -441,6 +447,7 @@ _gtk_toggle_segment_new (GtkTextTagInfo *info, gboolean on)
   seg->body.toggle.inNodeCounts = 0;
 
   return seg;
+#pragma GCC diagnostic pop
 }
 
 void
