@@ -24,7 +24,6 @@
 
 #include <gtk/gtk.h>
 #include <gst/player/gstplayer-video-renderer.h>
-#include <gsk/gl/gskglrenderer.h>
 
 #include <math.h>
 
