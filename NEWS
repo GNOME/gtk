@@ -1,7 +1,19 @@
 Overview of Changes
 ===================
 
-* gsk: Drop the GL renderer in favor of NGL
+* gsk:
+ - Drop the GL renderer in favor of NGL
+
+* css:
+ - Add support for line-height
+ - Add support for text-transform
+
+* GtkTextView:
+ - Add support for line height
+ - Add support for text transforms
+
+* Build:
+ - Require Pango 1.49
 
 
 Overview of Changes in 4.4.0
