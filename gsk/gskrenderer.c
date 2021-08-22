@@ -38,7 +38,6 @@
 
 #include "gskcairorenderer.h"
 #include "gskdebugprivate.h"
-#include "gl/gskglrenderer.h"
 #include "ngl/gsknglrenderer.h"
 #include "gskprofilerprivate.h"
 #include "gskrendernodeprivate.h"
@@ -508,8 +507,6 @@ get_renderer_for_name (const char *renderer_name)
   else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0 ||
            g_ascii_strcasecmp (renderer_name, "ngl") == 0)
     return GSK_TYPE_NGL_RENDERER;
-  else if (g_ascii_strcasecmp (renderer_name, "gl") == 0)
-    return GSK_TYPE_GL_RENDERER;
 #ifdef GDK_RENDERING_VULKAN
   else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
     return GSK_TYPE_VULKAN_RENDERER;
@@ -520,12 +517,11 @@ get_renderer_for_name (const char *renderer_name)
 #ifdef GDK_WINDOWING_BROADWAY
       g_print ("broadway - Use the Broadway specific renderer\n");
 #else
-      g_print ("broadway - disabled during GTK build\n");
+      g_print ("broadway - Disabled during GTK build\n");
 #endif
       g_print ("   cairo - Use the Cairo fallback renderer\n");
       g_print ("  opengl - Use the default OpenGL renderer\n");
-      g_print ("      gl - An OpenGL renderer\n");
-      g_print ("     ngl - Another OpenGL renderer\n");
+      g_print ("     ngl - An OpenGL renderer\n");
 #ifdef GDK_RENDERING_VULKAN
       g_print ("  vulkan - Use the Vulkan renderer\n");
 #else
