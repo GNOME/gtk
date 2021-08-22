@@ -1253,9 +1253,15 @@ gdk_clipboard_set_content (GdkClipboard       *clipboard,
  * @...: value contents conforming to @type
  *
  * Sets the clipboard to contain the value collected from the given varargs.
+ * 
+ * Values should be passed the same way they are passed to other value
+ * collecting APIs, such as [`method@GObject.Object.set`] or
+ * [`id@g_signal_emit`].
  *
  * ```c
- * gdk_clipboard_set (clipboard, GTK_TYPE_TEXT_BUFFER, buffer);
+ * gdk_clipboard_set (clipboard, GTK_TYPE_STRING, "Hello World");
+ * 
+ * gdk_clipboard_set (clipboard, GDK_TYPE_TEXTURE, some_texture);
  * ```
  */
 void
