@@ -255,14 +255,12 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           INT_ATTR (insert_hyphens);
           break;
 
-#if PANGO_VERSION_CHECK(1,49,0)
         case PANGO_ATTR_LINE_HEIGHT:
           FLOAT_ATTR (line_height);
           break;
 
         case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
           break;
-#endif
 
         case PANGO_ATTR_SHAPE:
         case PANGO_ATTR_ABSOLUTE_SIZE:
@@ -272,10 +270,8 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
         case PANGO_ATTR_BACKGROUND_ALPHA:
           break;
 
-#if PANGO_VERSION_CHECK(1,49,0)
         case PANGO_ATTR_TEXT_TRANSFORM:
           break;
-#endif
 
         case PANGO_ATTR_INVALID:
         default:

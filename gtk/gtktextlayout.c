@@ -1638,7 +1638,6 @@ add_text_attrs (GtkTextLayout      *layout,
       pango_attr_list_insert (attrs, attr);
     }
 
-#if PANGO_VERSION_CHECK(1, 49, 0)
   if (style->line_height != 0.0)
     {
       if (style->line_height_is_absolute)
@@ -1650,7 +1649,6 @@ add_text_attrs (GtkTextLayout      *layout,
 
       pango_attr_list_insert (attrs, attr);
     }
-#endif
 
   if (style->font_features)
     {

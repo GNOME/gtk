@@ -40,7 +40,7 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 # https://gitlab.gnome.org/GNOME/gtk/-/issues/2243
 # https://gitlab.gnome.org/GNOME/gtk/-/issues/3002
 
-if ! pkg-config --atleast-version=2.65.0 glib-2.0; then
+if ! pkg-config --atleast-version=2.66.0 glib-2.0; then
     git clone https://gitlab.gnome.org/GNOME/glib.git _glib
     meson setup _glib_build _glib
     meson compile -C _glib_build
@@ -48,7 +48,7 @@ if ! pkg-config --atleast-version=2.65.0 glib-2.0; then
 fi
 pkg-config --modversion glib-2.0
 
-if ! pkg-config --atleast-version=1.47.0 pango; then
+if ! pkg-config --atleast-version=1.49.0 pango; then
     git clone https://gitlab.gnome.org/GNOME/pango.git _pango
     meson setup _pango_build _pango
     meson compile -C _pango_build

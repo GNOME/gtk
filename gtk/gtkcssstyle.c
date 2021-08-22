@@ -486,7 +486,6 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
       attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
     }
 
-#if PANGO_VERSION_CHECK(1, 49, 0)
   /* line-height */
   {
     double height = gtk_css_line_height_value_get (style->font->line_height);
@@ -498,7 +497,6 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
           attrs = add_pango_attr (attrs, pango_attr_line_height_new (height));
       }
    }
-#endif
 
   /* OpenType features */
 
