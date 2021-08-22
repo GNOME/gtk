@@ -99,11 +99,12 @@
  * # GtkTreeView as GtkBuildable
  *
  * The GtkTreeView implementation of the GtkBuildable interface accepts
- * #GtkTreeViewColumn objects as <child> elements and exposes the internal
+ * #GtkTreeViewColumn objects as `<child>` elements and exposes the internal
  * #GtkTreeSelection in UI definitions.
  *
  * An example of a UI definition fragment with GtkTreeView:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkTreeView" id="treeview">
  *   <property name="model">liststore1</property>
  *   <child>

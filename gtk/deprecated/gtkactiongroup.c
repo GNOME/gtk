@@ -56,19 +56,20 @@
  * # GtkActionGroup as GtkBuildable # {#GtkActionGroup-BUILDER-UI}
  *
  * The #GtkActionGroup implementation of the #GtkBuildable interface accepts
- * #GtkAction objects as <child> elements in UI definitions.
+ * #GtkAction objects as `<child>` elements in UI definitions.
  *
  * Note that it is probably more common to define actions and action groups
  * in the code, since they are directly related to what the code can do.
  *
  * The GtkActionGroup implementation of the GtkBuildable interface supports
- * a custom <accelerator> element, which has attributes named “key“ and
+ * a custom `<accelerator>` element, which has attributes named “key“ and
  * “modifiers“ and allows to specify accelerators. This is similar to the
- * <accelerator> element of #GtkWidget, the main difference is that
+ * `<accelerator>` element of #GtkWidget, the main difference is that
  * it doesn’t allow you to specify a signal.
  *
  * ## A #GtkDialog UI definition fragment. ##
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkActionGroup" id="actiongroup">
  *   <child>
  *       <object class="GtkAction" id="About">

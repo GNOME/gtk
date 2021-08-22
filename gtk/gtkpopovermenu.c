@@ -48,7 +48,7 @@
  *
  * # Example
  *
- * |[
+ * |[<!-- language="xml" -->
  * <object class="GtkPopoverMenu">
  *   <child>
  *     <object class="GtkBox">

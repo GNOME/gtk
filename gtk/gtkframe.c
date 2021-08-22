@@ -53,13 +53,14 @@
  *
  * # GtkFrame as GtkBuildable
  *
- * The GtkFrame implementation of the GtkBuildable interface supports
+ * The GtkFrame implementation of the #GtkBuildable interface supports
  * placing a child in the label position by specifying “label” as the
- * “type” attribute of a <child> element. A normal content child can
- * be specified without specifying a <child> type attribute.
+ * “type” attribute of a `<child>` element. A normal content child can
+ * be specified without specifying a `<child>` type attribute.
  *
- * An example of a UI definition fragment with GtkFrame:
- * |[
+ * An example of a UI definition fragment with `GtkFrame`:
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkFrame">
  *   <child type="label">
  *     <object class="GtkLabel" id="frame-label"/>

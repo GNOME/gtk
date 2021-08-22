@@ -98,13 +98,14 @@
  * # GtkLabel as GtkBuildable
  *
  * The GtkLabel implementation of the GtkBuildable interface supports a
- * custom <attributes> element, which supports any number of <attribute>
- * elements. The <attribute> element has attributes named “name“, “value“,
+ * custom `<attributes>` element, which supports any number of `<attribute>`
+ * elements. The `<attribute>` element has attributes named “name“, “value“,
  * “start“ and “end“ and allows you to specify #PangoAttribute values for
  * this label.
  *
  * An example of a UI definition fragment specifying Pango attributes:
- * |[
+ *
+ * |[<!-- language="xml" -->
  * <object class="GtkLabel">
  *   <attributes>
  *     <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
