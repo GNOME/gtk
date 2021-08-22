@@ -118,6 +118,7 @@ static const int font_variant_props[] = {
   GTK_CSS_PROPERTY_TEXT_DECORATION_LINE,
   GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR,
   GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE,
+  GTK_CSS_PROPERTY_TEXT_TRANSFORM,
   GTK_CSS_PROPERTY_FONT_KERNING,
   GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES,
   GTK_CSS_PROPERTY_FONT_VARIANT_POSITION,
@@ -429,6 +430,9 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       break;
     case GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE:
       gtk_css_take_value (&style->font_variant->text_decoration_style, value);
+      break;
+    case GTK_CSS_PROPERTY_TEXT_TRANSFORM:
+      gtk_css_take_value (&style->font_variant->text_transform, value);
       break;
     case GTK_CSS_PROPERTY_FONT_KERNING:
       gtk_css_take_value (&style->font_variant->font_kerning, value);
@@ -810,6 +814,7 @@ gtk_css_font_variant_create_initial_values (void)
   values->text_decoration_line = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_LINE, NULL, NULL, NULL);
   values->text_decoration_color = NULL;
   values->text_decoration_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE, NULL, NULL, NULL);
+  values->text_transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_TRANSFORM, NULL, NULL, NULL);
   values->font_kerning = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_KERNING, NULL, NULL, NULL);
   values->font_variant_ligatures = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES, NULL, NULL, NULL);
   values->font_variant_position = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_VARIANT_POSITION, NULL, NULL, NULL);

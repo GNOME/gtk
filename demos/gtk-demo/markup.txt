@@ -21,3 +21,5 @@ Shortcuts: <tt>Monospace</tt> – <b>Bold</b> – <i>Italic</i> – <big>Big</bi
 
 <span line_height='1.33'>Line height: This is an example of widely spaced text. It was achieved by setting the line-height factor to 1.33. You can set the line-height factor to any value between 0 and 10.
 Note that the line height affects the spacing between paragraphs as well as between the wrapped lines inside a paragraph.</span>
+
+Transforms: <span text_transform='uppercase'>straße</span> <span text_transform='capitalize'>up, up and away</span>

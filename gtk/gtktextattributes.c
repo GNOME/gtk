@@ -438,6 +438,9 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
       if (tag->priv->insert_hyphens_set)
         dest->no_hyphens = vals->no_hyphens;
+
+      if (tag->priv->text_transform_set)
+        dest->text_transform = vals->text_transform;
     }
 
   dest->left_margin += left_margin_accumulative;
@@ -467,7 +470,8 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
     priv->wrap_mode_set ||
     priv->invisible_set ||
     priv->font_features_set ||
-    priv->letter_spacing_set;
+    priv->letter_spacing_set ||
+    priv->text_transform_set;
 }
 
 gboolean

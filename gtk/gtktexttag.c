@@ -134,6 +134,7 @@ enum {
   PROP_ALLOW_BREAKS,
   PROP_SHOW_SPACES,
   PROP_INSERT_HYPHENS,
+  PROP_TEXT_TRANSFORM,
 
   /* Behavior args */
   PROP_ACCUMULATIVE_MARGIN,
@@ -176,6 +177,7 @@ enum {
   PROP_ALLOW_BREAKS_SET,
   PROP_SHOW_SPACES_SET,
   PROP_INSERT_HYPHENS_SET,
+  PROP_TEXT_TRANSFORM_SET,
 
   LAST_ARG
 };
@@ -857,6 +859,22 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
+   * GtkTextTag:text-transform:
+   *
+   * How to transform the text for display.
+   *
+   * Since: 4.6
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_TEXT_TRANSFORM,
+                                   g_param_spec_enum ("text-transform",
+                                                         P_("Text Transform"),
+                                                         P_("Whether to transform text for display."),
+                                                         PANGO_TYPE_TEXT_TRANSFORM,
+                                                         PANGO_TEXT_TRANSFORM_NONE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
    * GtkTextTag:accumulative-margin:
    *
    * Whether the margins accumulate or override each other.
@@ -1034,6 +1052,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("insert-hyphens-set", PROP_INSERT_HYPHENS_SET,
                 P_("Insert hyphens set"),
                 P_("Whether this tag affects insertion of hyphens"));
+
+  ADD_SET_PROP ("text-transform-set", PROP_TEXT_TRANSFORM_SET,
+                P_("Text transform set"),
+                P_("Whether this tag affects text transformation"));
 }
 
 static void
@@ -1783,6 +1805,12 @@ gtk_text_tag_set_property (GObject      *object,
       g_object_notify (object, "insert-hyphens-set");
       break;
 
+    case PROP_TEXT_TRANSFORM:
+      priv->text_transform_set = TRUE;
+      priv->values->text_transform = g_value_get_enum (value);
+      g_object_notify (object, "text-transform-set");
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       priv->accumulative_margin = g_value_get_boolean (value);
       g_object_notify (object, "accumulative-margin");
@@ -1945,6 +1973,10 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_INSERT_HYPHENS_SET:
       priv->insert_hyphens_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_TEXT_TRANSFORM_SET:
+      priv->text_transform_set = g_value_get_boolean (value);
       break;
 
     default:
@@ -2159,6 +2191,10 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, !priv->values->no_hyphens);
       break;
 
+    case PROP_TEXT_TRANSFORM:
+      g_value_set_enum (value, priv->values->text_transform);
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       g_value_set_boolean (value, priv->accumulative_margin);
       break;
@@ -2299,6 +2335,10 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_INSERT_HYPHENS_SET:
       g_value_set_boolean (value, priv->insert_hyphens_set);
+      break;
+
+    case PROP_TEXT_TRANSFORM_SET:
+      g_value_set_boolean (value, priv->text_transform_set);
       break;
 
     case PROP_BACKGROUND:

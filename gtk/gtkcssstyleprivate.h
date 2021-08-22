@@ -159,6 +159,7 @@ struct _GtkCssFontVariantValues {
   GtkCssValue *text_decoration_line;
   GtkCssValue *text_decoration_color; // NULL if currentColor
   GtkCssValue *text_decoration_style;
+  GtkCssValue *text_transform;
   GtkCssValue *font_kerning;
   GtkCssValue *font_variant_ligatures;
   GtkCssValue *font_variant_position;

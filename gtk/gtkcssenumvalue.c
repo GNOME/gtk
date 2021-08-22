@@ -1568,3 +1568,55 @@ _gtk_css_font_variant_east_asian_value_get (const GtkCssValue *value)
 
   return value->value;
 }
+
+/* GtkTextTransform */
+
+static const GtkCssValueClass GTK_CSS_VALUE_TEXT_TRANSFORM = {
+  "GtkCssTextTransformValue",
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  NULL,
+  NULL,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue text_transform_values[] = {
+  { &GTK_CSS_VALUE_TEXT_TRANSFORM, 1, TRUE, GTK_CSS_TEXT_TRANSFORM_NONE, "none" },
+  { &GTK_CSS_VALUE_TEXT_TRANSFORM, 1, TRUE, GTK_CSS_TEXT_TRANSFORM_LOWERCASE, "lowercase" },
+  { &GTK_CSS_VALUE_TEXT_TRANSFORM, 1, TRUE, GTK_CSS_TEXT_TRANSFORM_UPPERCASE, "uppercase" },
+  { &GTK_CSS_VALUE_TEXT_TRANSFORM, 1, TRUE, GTK_CSS_TEXT_TRANSFORM_CAPITALIZE, "capitalize" },
+};
+
+GtkCssValue *
+_gtk_css_text_transform_value_new (GtkTextTransform transform)
+{
+  g_return_val_if_fail (transform < G_N_ELEMENTS (text_transform_values), NULL);
+
+  return _gtk_css_value_ref (&text_transform_values[transform]);
+}
+
+GtkCssValue *
+_gtk_css_text_transform_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (text_transform_values); i++)
+    {
+      if (gtk_css_parser_try_ident (parser, text_transform_values[i].name))
+        return _gtk_css_value_ref (&text_transform_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkTextTransform
+_gtk_css_text_transform_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_TEXT_TRANSFORM, GTK_CSS_TEXT_TRANSFORM_NONE);
+
+  return value->value;
+}
