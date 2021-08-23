@@ -580,10 +580,20 @@ activate_cb (GtkText  *text,
 }
 
 static void
+catchall_click_press (GtkGestureClick *gesture,
+                      int              n_press,
+                      double           x,
+                      double           y,
+                      gpointer         user_data)
+{
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
 gtk_search_entry_init (GtkSearchEntry *entry)
 {
   GtkWidget *icon;
-  GtkGesture *press;
+  GtkGesture *press, *catchall;
 
   /* The search icon is purely presentational */
   icon = g_object_new (GTK_TYPE_IMAGE,
@@ -614,6 +624,12 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   g_signal_connect (press, "pressed", G_CALLBACK (gtk_search_entry_icon_press), entry);
   g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
   gtk_widget_add_controller (entry->icon, GTK_EVENT_CONTROLLER (press));
+
+  catchall = gtk_gesture_click_new ();
+  g_signal_connect (catchall, "pressed",
+                    G_CALLBACK (catchall_click_press), entry);
+  gtk_widget_add_controller (GTK_WIDGET (entry),
+                             GTK_EVENT_CONTROLLER (catchall));
 
   gtk_widget_add_css_class (GTK_WIDGET (entry), I_("search"));
 }
