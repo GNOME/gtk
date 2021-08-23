@@ -2773,6 +2773,8 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       GdkDevice *source;
       guint state;
 
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
       sel_start = priv->selection_bound;
       sel_end = priv->current_pos;
       have_selection = sel_start != sel_end;
