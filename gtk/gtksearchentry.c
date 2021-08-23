@@ -491,6 +491,16 @@ gtk_search_entry_accessible_init (GtkAccessibleInterface *iface)
 }
 
 static void
+gtk_search_entry_icon_press (GtkGestureClick *press,
+                             int              n_press,
+                             double           x,
+                             double           y,
+                             GtkSearchEntry  *entry)
+{
+  gtk_gesture_set_state (GTK_GESTURE (press), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
 gtk_search_entry_icon_release (GtkGestureClick *press,
                                int              n_press,
                                double           x,
@@ -601,6 +611,7 @@ gtk_search_entry_init (GtkSearchEntry *entry)
   gtk_widget_set_child_visible (entry->icon, FALSE);
 
   press = gtk_gesture_click_new ();
+  g_signal_connect (press, "pressed", G_CALLBACK (gtk_search_entry_icon_press), entry);
   g_signal_connect (press, "released", G_CALLBACK (gtk_search_entry_icon_release), entry);
   gtk_widget_add_controller (entry->icon, GTK_EVENT_CONTROLLER (press));
 
