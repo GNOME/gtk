@@ -553,6 +553,8 @@ gdk_content_deserialize_async (GInputStream        *stream,
   Deserializer *deserializer;
 
   g_return_if_fail (G_IS_INPUT_STREAM (stream));
+  g_return_if_fail (mime_type != NULL);
+  g_return_if_fail (G_TYPE_IS_VALUE_TYPE (type));
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (callback != NULL);
 
@@ -591,7 +593,10 @@ gdk_content_deserialize_finish (GAsyncResult  *result,
   g_return_val_if_fail (GDK_IS_CONTENT_DESERIALIZER (result), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
   deserializer = GDK_CONTENT_DESERIALIZER (result);
-  g_return_val_if_fail (G_VALUE_HOLDS (value, G_VALUE_TYPE (&deserializer->value)), FALSE);
+  if (G_VALUE_TYPE (value) == 0)
+    g_value_init (value, G_VALUE_TYPE (&deserializer->value));
+  else
+    g_return_val_if_fail (G_VALUE_HOLDS (value, G_VALUE_TYPE (&deserializer->value)), FALSE);
 
   if (deserializer->error)
     {
