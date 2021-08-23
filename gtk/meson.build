@@ -842,7 +842,7 @@ gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
 
 theme_deps = []
 # For git checkouts, but not for tarballs...
-if not fs.exists('theme/Adwaita/Adwaita.css')
+if not fs.exists('theme/Default/Default-light.css')
   # ... build the theme files
   sassc = find_program('sassc', required: false)
   if not sassc.found()
