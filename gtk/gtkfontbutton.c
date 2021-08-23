@@ -462,6 +462,16 @@ gtk_font_button_activate (GtkFontButton *self)
 }
 
 static void
+gtk_font_button_unrealize (GtkWidget *widget)
+{
+  GtkFontButton *font_button = GTK_FONT_BUTTON (widget);
+
+  g_clear_pointer ((GtkWindow **) &font_button->font_dialog, gtk_window_destroy);
+
+  GTK_WIDGET_CLASS (gtk_font_button_parent_class)->unrealize (widget);
+}
+
+static void
 gtk_font_button_class_init (GtkFontButtonClass *klass)
 {
   GObjectClass *gobject_class;
@@ -476,6 +486,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
 
   widget_class->grab_focus = gtk_widget_grab_focus_child;
   widget_class->focus = gtk_widget_focus_child;
+  widget_class->unrealize = gtk_font_button_unrealize;
 
   klass->font_set = NULL;
   klass->activate = gtk_font_button_activate;
@@ -627,9 +638,6 @@ static void
 gtk_font_button_finalize (GObject *object)
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (object);
-
-  if (font_button->font_dialog != NULL)
-    gtk_window_destroy (GTK_WINDOW (font_button->font_dialog));
 
   g_free (font_button->title);
 
