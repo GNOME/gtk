@@ -968,6 +968,7 @@ gtk_font_button_clicked (GtkButton *button,
       font_button->font_dialog = gtk_font_chooser_dialog_new (font_button->title, NULL);
       gtk_window_set_hide_on_close (GTK_WINDOW (font_button->font_dialog), TRUE);
       gtk_window_set_modal (GTK_WINDOW (font_button->font_dialog), font_button->modal);
+      gtk_window_set_display (GTK_WINDOW (font_button->font_dialog), gtk_widget_get_display (GTK_WIDGET (button)));
 
       font_dialog = GTK_FONT_CHOOSER (font_button->font_dialog);
 
