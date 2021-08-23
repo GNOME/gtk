@@ -20,31 +20,16 @@
 #include "gtkstylecontextprivate.h"
 
 #include <gdk/gdk.h>
-#include <math.h>
-#include <stdlib.h>
-#include <gobject/gvaluecollector.h>
 
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssenumvalueprivate.h"
-#include "gtkcssimagevalueprivate.h"
-#include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnumbervalueprivate.h"
-#include "gtkcsscolorvalueprivate.h"
-#include "gtkcsscolorvalueprivate.h"
-#include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransientnodeprivate.h"
-#include "gtkcsswidgetnodeprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtkrenderbackgroundprivate.h"
-#include "gtkrendericonprivate.h"
 #include "gtksettings.h"
 #include "gtksettingsprivate.h"
-#include "gtkstylecascadeprivate.h"
-#include "gtkstyleproviderprivate.h"
-#include "gtktypebuiltins.h"
-#include "gtkwidgetprivate.h"
+#include "gtksnapshot.h"
 
 
 /**
