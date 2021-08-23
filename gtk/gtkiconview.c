@@ -6516,10 +6516,10 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
  * @icon_view: a `GtkIconView`
  * @path: a `GtkTreePath` in @icon_view
  *
- * Creates a `cairo_surface_t` representation of the item at @path.  
+ * Creates a `GdkPaintable` representation of the item at @path.
  * This image is used for a drag icon.
  *
- * Returns: (transfer full): a newly-allocated surface of the drag icon.
+ * Returns: (transfer full): a newly-allocated `GdkPaintable` of the drag icon.
  **/
 GdkPaintable *
 gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
