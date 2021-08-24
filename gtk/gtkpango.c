@@ -261,6 +261,12 @@ attribute_from_text (GtkBuilder  *builder,
       if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_TEXT_TRANSFORM, value, &val, error))
         attribute = pango_attr_text_transform_new (g_value_get_enum (&val));
       break;
+    case PANGO_ATTR_WORD:
+      attribute = pango_attr_word_new ();
+      break;
+    case PANGO_ATTR_SENTENCE:
+      attribute = pango_attr_sentence_new ();
+      break;
     case PANGO_ATTR_INVALID:
     default:
       break;
