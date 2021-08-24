@@ -32,6 +32,7 @@
 #include "gdkprivate-wayland.h"
 
 #include "gdkinternals.h"
+#include "gdk-private.h"
 #include "gdksurfaceprivate.h"
 #include "gdkprofilerprivate.h"
 
@@ -474,14 +475,28 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   G_GNUC_UNUSED gint64 start_time2;
 
+  if (!epoxy_has_egl ())
+    {
+      gboolean sandboxed = gdk_running_in_sandbox ();
+
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           sandboxed ? _("libEGL not available in this sandbox")
+                                     : _("libEGL not available"));
+      return NULL;
+    }
+
   start_time2 = GDK_PROFILER_CURRENT_TIME;
   dpy = get_egl_display (display_wayland);
   gdk_profiler_end_mark (start_time, "get_egl_display", NULL);
   if (dpy == NULL)
     {
+      gboolean sandboxed = gdk_running_in_sandbox ();
+
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("Failed to create EGL display"));
+                           sandboxed ? _("Sandbox does not provide an OpenGL implementation")
+                                     : _("No OpenGL implementation available"));
       return NULL;
     }
 
