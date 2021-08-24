@@ -131,6 +131,19 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
       gtk_text_buffer_apply_tag (buffer, tag, start, end); \
     }
 
+#define VOID_ATTR(attr_name) \
+    { \
+      tag = gtk_text_tag_table_lookup (table, #attr_name); \
+      if (!tag) \
+        { \
+          tag = gtk_text_tag_new (#attr_name); \
+          g_object_set (tag, #attr_name, TRUE, NULL); \
+          gtk_text_tag_table_add (table, tag); \
+          g_object_unref (tag); \
+        } \
+      gtk_text_buffer_apply_tag (buffer, tag, start, end); \
+    }
+
   fg_alpha = bg_alpha = 1.;
 
   attrs = pango_attr_iterator_get_attrs (iter);
@@ -260,6 +273,14 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           break;
 
         case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
+          break;
+
+        case PANGO_ATTR_WORD:
+          VOID_ATTR (word);
+          break;
+
+        case PANGO_ATTR_SENTENCE:
+          VOID_ATTR (sentence);
           break;
 
         case PANGO_ATTR_SHAPE:
