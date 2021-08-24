@@ -582,6 +582,10 @@ gtk_expander_dispose (GObject *object)
       expander->expand_timer = 0;
     }
 
+  /* If the expander is not expanded, we own the child */
+  if (!expander->expanded)
+    g_clear_object (&expander->child);
+
   if (expander->box)
     {
       gtk_widget_unparent (expander->box);
@@ -900,6 +904,9 @@ gtk_expander_set_expanded (GtkExpander *expander,
 
   if (child)
     {
+      /* Transfer the ownership of the child to the box when
+       * expanded is set, and then back to us when it is unset
+       */
       if (expander->expanded)
         {
           gtk_box_append (GTK_BOX (expander->box), child);
@@ -1196,25 +1203,31 @@ gtk_expander_set_child (GtkExpander *expander,
   g_return_if_fail (GTK_IS_EXPANDER (expander));
   g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
 
+  if (expander->child == child)
+    return;
+
   if (expander->child)
     {
-      gtk_box_remove (GTK_BOX (expander->box), expander->child);
       if (!expander->expanded)
         g_object_unref (expander->child);
+      else
+        gtk_box_remove (GTK_BOX (expander->box), expander->child);
     }
 
   expander->child = child;
 
   if (expander->child)
     {
+      /* We only add the child to the box if the expander is
+       * expanded; otherwise we just claim ownership of the
+       * child by sinking its floating reference, or acquiring
+       * an additional reference to it. The reference will be
+       * dropped once the expander is expanded
+       */
       if (expander->expanded)
         gtk_box_append (GTK_BOX (expander->box), expander->child);
       else
-        {
-          if (g_object_is_floating (expander->child))
-            g_object_ref_sink (expander->child);
-          g_object_ref (expander->child);
-        }
+        g_object_ref_sink (expander->child);
 
       gtk_accessible_update_relation (GTK_ACCESSIBLE (expander),
                                       GTK_ACCESSIBLE_RELATION_CONTROLS, expander->child, NULL,
