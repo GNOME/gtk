@@ -7,7 +7,7 @@ website_url = "https://www.gtk.org"
 authors = "GTK Development Team"
 license = "GPL-2.1-or-later"
 description = "The base type system and object class"
-dependencies = [ "GLib-2.0", "Gio-2.0" ]
+dependencies = [ "GLib-2.0", "GModule-2.0", "Gio-2.0" ]
 devhelp = true
 search_index = true
 
@@ -15,6 +15,11 @@ search_index = true
   name = "GLib"
   description = "The base utility library"
   docs_url = "https://docs.gtk.org/glib/"
+
+  [dependencies."GModule-2.0"]
+  name = "GModule"
+  description = "Portable API for dynamically loading modules"
+  docs_url = "https://docs.gtk.org/gmodule/"
 
   [dependencies."Gio-2.0"]
   name = "GIO"

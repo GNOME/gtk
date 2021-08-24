@@ -7,9 +7,14 @@ website_url = "https://www.gtk.org"
 authors = "GTK Development Team"
 license = "GPL-2.1-or-later"
 description = "GLib is a general-purpose, portable utility library, which provides many useful data types, macros, type conversions, string utilities, file utilities, a mainloop abstraction, and so on."
-dependencies = [ "GObject-2.0", "Gio-2.0" ]
+dependencies = [ "GModule-2.0", "GObject-2.0", "Gio-2.0" ]
 devhelp = true
 search_index = true
+
+  [dependencies."GModule-2.0"]
+  name = "GModule"
+  description = "Portable API for dynamically loading modules"
+  docs_url = "https://docs.gtk.org/gmodule/"
 
   [dependencies."GObject-2.0"]
   name = "GObject"
