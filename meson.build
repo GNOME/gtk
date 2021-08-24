@@ -17,6 +17,7 @@ toml_conf.set('VERSION', meson.project_version())
 gidocgen = find_program('gi-docgen', required: true)
 
 subdir('glib/glib')
+subdir('glib/gmodule')
 subdir('glib/gobject')
 subdir('glib/gio')
 

@@ -15,6 +15,7 @@ reference:
     - meson setup  _build
     - meson compile -C _build
     - mv _build/glib/glib/glib/ docs/glib/
+    - mv _build/glib/gmodule/gmodule/ docs/gmodule/
     - mv _build/glib/gobject/gobject/ docs/gobject/
     - mv _build/glib/gio/gio/ docs/gio/
     - mv _build/gtk3/gdk/gdk3/ docs/gdk3/
