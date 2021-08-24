@@ -1465,14 +1465,31 @@ disconnect_text_signals (GtkEntry *entry)
 }
 
 static void
+catchall_click_press (GtkGestureClick *gesture,
+                      int              n_press,
+                      double           x,
+                      double           y,
+                      gpointer         user_data)
+{
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
 gtk_entry_init (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  GtkGesture *catchall;
 
   priv->text = gtk_text_new ();
   gtk_widget_set_parent (priv->text, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   connect_text_signals (entry);
+
+  catchall = gtk_gesture_click_new ();
+  g_signal_connect (catchall, "pressed",
+                    G_CALLBACK (catchall_click_press), entry);
+  gtk_widget_add_controller (GTK_WIDGET (entry),
+                             GTK_EVENT_CONTROLLER (catchall));
 
   priv->editing_canceled = FALSE;
 }

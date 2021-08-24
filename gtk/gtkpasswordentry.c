@@ -141,6 +141,12 @@ focus_changed (GtkWidget *widget)
     caps_lock_state_changed (entry->keyboard, NULL, widget);
 }
 
+static void
+gtk_password_entry_icon_press (GtkGesture *gesture)
+{
+  gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
 /*< private >
  * gtk_password_entry_toggle_peek:
  * @entry: a `GtkPasswordEntry`
@@ -183,8 +189,19 @@ activate_cb (GtkPasswordEntry *entry)
 }
 
 static void
+catchall_click_press (GtkGestureClick *gesture,
+                      int              n_press,
+                      double           x,
+                      double           y,
+                      gpointer         user_data)
+{
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
 gtk_password_entry_init (GtkPasswordEntry *entry)
 {
+  GtkGesture *catchall;
   GtkEntryBuffer *buffer = gtk_password_entry_buffer_new ();
 
   entry->entry = gtk_text_new ();
@@ -200,6 +217,12 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   gtk_widget_add_css_class (entry->icon, "caps-lock-indicator");
   gtk_widget_set_cursor (entry->icon, gtk_widget_get_cursor (entry->entry));
   gtk_widget_set_parent (entry->icon, GTK_WIDGET (entry));
+
+  catchall = gtk_gesture_click_new ();
+  g_signal_connect (catchall, "pressed",
+                    G_CALLBACK (catchall_click_press), entry);
+  gtk_widget_add_controller (GTK_WIDGET (entry),
+                             GTK_EVENT_CONTROLLER (catchall));
 
   gtk_widget_add_css_class (GTK_WIDGET (entry), I_("password"));
 
@@ -607,6 +630,8 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
       gtk_widget_set_parent (entry->peek_icon, GTK_WIDGET (entry));
 
       press = gtk_gesture_click_new ();
+      g_signal_connect (press, "pressed",
+                        G_CALLBACK (gtk_password_entry_icon_press), entry);
       g_signal_connect_swapped (press, "released",
                                 G_CALLBACK (gtk_password_entry_toggle_peek), entry);
       gtk_widget_add_controller (entry->peek_icon, GTK_EVENT_CONTROLLER (press));
