@@ -571,38 +571,6 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
     }
 }
 
-/* We want a unified experience between GtkIMContextSimple and IBus / Wayland
- * when it comes to Compose sequences. IBus initial implementation of preedit
- * for Compose sequences shows U+2384, which has been described as 'distracting'.
- * This function tries to detect this case, and tweaks the text to match what
- * GtkIMContextSimple produces.
- */
-static char *
-tweak_preedit (const char *text)
-{
-  GString *s;
-  guint len;
-
-  s = g_string_new ("");
-
-  len = g_utf8_strlen (text, -1);
-
-  for (const char *p = text; *p; p = g_utf8_next_char (p))
-    {
-      gunichar ch = g_utf8_get_char (p);
-
-      if (ch == 0x2384)
-        {
-          if (len == 1 || p > text)
-            g_string_append (s, "·");
-        }
-      else
-        g_string_append_unichar (s, ch);
-    }
-
-  return g_string_free (s, FALSE);
-}
-
 static void
 gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
                                            char          **str,
@@ -610,7 +578,7 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
                                            int            *cursor_pos)
 {
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
-  char *preedit_str;
+  const char *preedit_str;
 
   if (attrs)
     *attrs = NULL;
@@ -629,12 +597,14 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
     }
 
   preedit_str =
-    tweak_preedit (context_wayland->current_preedit.text ? context_wayland->current_preedit.text : "");
+    context_wayland->current_preedit.text ? context_wayland->current_preedit.text : "";
 
   if (cursor_pos)
     *cursor_pos = g_utf8_strlen (preedit_str,
                                  context_wayland->current_preedit.cursor_begin);
 
+  if (str)
+    *str = g_strdup (preedit_str);
   if (attrs)
     {
       PangoAttribute *attr;
@@ -664,10 +634,6 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
           pango_attr_list_insert (*attrs, cursor);
         }
     }
-  if (str)
-    *str = preedit_str;
-  else
-    g_free (preedit_str);
 }
 
 static gboolean
