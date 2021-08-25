@@ -441,6 +441,12 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
       if (tag->priv->text_transform_set)
         dest->text_transform = vals->text_transform;
+
+      if (tag->priv->word_set)
+        dest->word = vals->word;
+
+      if (tag->priv->sentence_set)
+        dest->sentence = vals->sentence;
     }
 
   dest->left_margin += left_margin_accumulative;

@@ -1694,6 +1694,24 @@ add_text_attrs (GtkTextLayout      *layout,
 
       pango_attr_list_insert (attrs, attr);
     }
+
+  if (style->word)
+    {
+      attr = pango_attr_word_new ();
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
+
+  if (style->sentence)
+    {
+      attr = pango_attr_sentence_new ();
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
 }
 
 static void

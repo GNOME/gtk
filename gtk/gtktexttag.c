@@ -135,6 +135,8 @@ enum {
   PROP_SHOW_SPACES,
   PROP_INSERT_HYPHENS,
   PROP_TEXT_TRANSFORM,
+  PROP_WORD,
+  PROP_SENTENCE,
 
   /* Behavior args */
   PROP_ACCUMULATIVE_MARGIN,
@@ -178,6 +180,8 @@ enum {
   PROP_SHOW_SPACES_SET,
   PROP_INSERT_HYPHENS_SET,
   PROP_TEXT_TRANSFORM_SET,
+  PROP_WORD_SET,
+  PROP_SENTENCE_SET,
 
   LAST_ARG
 };
@@ -875,6 +879,40 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
+   * GtkTextTag:word:
+   *
+   * Whether this tag represents a single word.
+   *
+   * This affects line breaks and cursor movement.
+   *
+   * Since: 4.6
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_WORD,
+                                   g_param_spec_boolean ("word",
+                                                         P_("Word"),
+                                                         P_("Whether this is a word."),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkTextTag:sentence:
+   *
+   * Whether this tag represents a single sentence.
+   *
+   * This affects cursor movement.
+   *
+   * Since: 4.6
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_SENTENCE,
+                                   g_param_spec_boolean ("sentence",
+                                                         P_("Sentence"),
+                                                         P_("Whether this is a sentence."),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
    * GtkTextTag:accumulative-margin:
    *
    * Whether the margins accumulate or override each other.
@@ -1056,6 +1094,14 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("text-transform-set", PROP_TEXT_TRANSFORM_SET,
                 P_("Text transform set"),
                 P_("Whether this tag affects text transformation"));
+
+  ADD_SET_PROP ("word-set", PROP_WORD_SET,
+                P_("Word set"),
+                P_("Whether this tag represents a single word"));
+
+  ADD_SET_PROP ("sentence-set", PROP_WORD_SET,
+                P_("Sentence set"),
+                P_("Whether this tag represents a single sentence"));
 }
 
 static void
@@ -1811,6 +1857,18 @@ gtk_text_tag_set_property (GObject      *object,
       g_object_notify (object, "text-transform-set");
       break;
 
+    case PROP_WORD:
+      priv->word_set = TRUE;
+      priv->values->word = g_value_get_boolean (value);
+      g_object_notify (object, "word-set");
+      break;
+
+    case PROP_SENTENCE:
+      priv->sentence_set = TRUE;
+      priv->values->sentence = g_value_get_boolean (value);
+      g_object_notify (object, "sentence-set");
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       priv->accumulative_margin = g_value_get_boolean (value);
       g_object_notify (object, "accumulative-margin");
@@ -1977,6 +2035,14 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_TEXT_TRANSFORM_SET:
       priv->text_transform_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_WORD_SET:
+      priv->word_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_SENTENCE_SET:
+      priv->sentence_set = g_value_get_boolean (value);
       break;
 
     default:
@@ -2195,6 +2261,14 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_enum (value, priv->values->text_transform);
       break;
 
+    case PROP_WORD:
+      g_value_set_boolean (value, priv->values->word);
+      break;
+
+    case PROP_SENTENCE:
+      g_value_set_boolean (value, priv->values->sentence);
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       g_value_set_boolean (value, priv->accumulative_margin);
       break;
@@ -2339,6 +2413,14 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_TEXT_TRANSFORM_SET:
       g_value_set_boolean (value, priv->text_transform_set);
+      break;
+
+    case PROP_WORD_SET:
+      g_value_set_boolean (value, priv->word_set);
+      break;
+
+    case PROP_SENTENCE_SET:
+      g_value_set_boolean (value, priv->sentence_set);
       break;
 
     case PROP_BACKGROUND:
