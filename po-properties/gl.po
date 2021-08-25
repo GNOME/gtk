@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-08-21 08:46+0000\n"
-"PO-Revision-Date: 2021-08-25 09:33+0200\n"
+"POT-Creation-Date: 2021-08-25 08:13+0000\n"
+"PO-Revision-Date: 2021-08-25 21:11+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -6409,22 +6409,18 @@ msgstr ""
 "contrasinal»)"
 
 #: gtk/gtktext.c:810
-#| msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgid "Number of pixels of the text scrolled off the screen to the left"
 msgstr "Número de píxeles do texto desprazados fóra da pantalla á esquerda"
 
 #: gtk/gtktext.c:860
-#| msgid "Show text in the entry when it’s empty and unfocused"
 msgid "Show text in the GtkText when it’s empty and unfocused"
 msgstr "Mostrar texto no GtkText cando esta está baleiro ou non ten o foco"
 
 #: gtk/gtktext.c:929
-#| msgid "A list of style attributes to apply to the text of the entry"
 msgid "A list of style attributes to apply to the text of the GtkText"
 msgstr "Unha lista de atributos de estilo para aplicar ao texto do GtkText"
 
 #: gtk/gtktext.c:941
-#| msgid "A list of tabstop locations to apply to the text of the entry"
 msgid "A list of tabstop locations to apply to the text of the GtkText"
 msgstr ""
 "Unha lista de localizacións de paradas de tabulación para aplicar no texto "
@@ -7741,12 +7737,10 @@ msgid "The focus widget"
 msgstr "O trebello de foco"
 
 #: gtk/gtkwindow.c:1053
-#, fuzzy
 msgid "Handle Menubar accels"
 msgstr "Aceleradores dos xestores da Menubar"
 
 #: gtk/gtkwindow.c:1054
-#| msgid "Whether the window frame should have a close button"
 msgid "Whether the window should handle F10"
 msgstr "Indica se a xenela debería xestionar o F10"
 
@@ -7777,12 +7771,10 @@ msgid "Paintable providing the picture"
 msgstr "Pintábel fornecendo a imaxe"
 
 #: modules/media/gtkgstsink.c:539
-#| msgid "Context"
 msgid "gl-context"
 msgstr "Contexto GL"
 
 #: modules/media/gtkgstsink.c:540
-#| msgid "The icon name to use for the printer"
 msgid "GL context to use for rendering"
 msgstr "Contexto GL a usar para renderizar"
 
