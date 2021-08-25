@@ -885,13 +885,13 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   if (impl->type_hint == GDK_WINDOW_TYPE_HINT_UTILITY)
     dwExStyle |= WS_EX_TOOLWINDOW;
 
-  /* WS_EX_TRANSPARENT means "try draw this window last, and ignore input".
-   * It's the last part we're after. We don't want DND indicator to accept
-   * input, because that will make it a potential drop target, and if it's
-   * under the mouse cursor, this will kill any DND.
+  /* WS_EX_LAYERED | WS_EX_TRANSPARENT makes the window transparent w.r.t.
+   * pointer input: the system will direct all pointer input to the window
+   * below. We don't want a DND indicator to accept pointer input, because
+   * that will make it a potential drop target.
    */
   if (impl->type_hint == GDK_WINDOW_TYPE_HINT_DND)
-    dwExStyle |= WS_EX_TRANSPARENT;
+    dwExStyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
 
   klass = RegisterGdkClass (window->window_type, impl->type_hint);
 
@@ -1277,10 +1277,10 @@ show_window_internal (GdkWindow *window,
 
   exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
 
-  /* Use SetWindowPos to show transparent windows so automatic redraws
-   * in other windows can be suppressed.
+  /* If we have to show an input-only window,
+   * redraws can be safely skipped.
    */
-  if (exstyle & WS_EX_TRANSPARENT)
+  if (window->input_only)
     {
       UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER;
 
@@ -1416,7 +1416,6 @@ show_window_internal (GdkWindow *window,
 	}
     }
 
-
   if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
     {
       gdk_window_fullscreen (window);
@@ -1489,10 +1488,10 @@ gdk_win32_window_hide (GdkWindow *window)
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
     ShowOwnedPopups (GDK_WINDOW_HWND (window), FALSE);
 
-  /* Use SetWindowPos to hide transparent windows so automatic redraws
-   * in other windows can be suppressed.
+  /* If we have to hide an input-only window,
+   * readraws can be safely skipped.
    */
-  if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
+  if (window->input_only)
     {
       SetWindowPos (GDK_WINDOW_HWND (window), SWP_NOZORDER_SPECIFIED,
 		    0, 0, 0, 0,
@@ -2787,6 +2786,7 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
   GdkWindowImplWin32 *impl = (GdkWindowImplWin32 *)window->impl;
   GdkWMDecoration decorations;
   LONG old_style, new_style, old_exstyle, new_exstyle;
+  gboolean needs_basic_layering = FALSE;
   gboolean all;
   RECT rect, before, after;
   gboolean was_topmost;
@@ -2842,7 +2842,18 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
   else
     impl->layered = FALSE;
 
-  if (impl->layered)
+  /* DND windows need to have the WS_EX_TRANSPARENT | WS_EX_LAYERED styles
+   * set so to behave in input passthrough mode. That's essential for DND
+   * indicators.
+   */
+  if (!impl->layered &&
+      GDK_WINDOW_HWND (window) != NULL &&
+      impl->type_hint == GDK_WINDOW_TYPE_HINT_DND)
+    {
+      needs_basic_layering = TRUE;
+    }
+
+  if (impl->layered || needs_basic_layering)
     new_exstyle |= WS_EX_LAYERED;
   else
     new_exstyle &= ~WS_EX_LAYERED;
@@ -2857,6 +2868,19 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
       update_single_bit (&new_style, all, decorations & GDK_DECOR_MENU, WS_SYSMENU);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_MINIMIZE, WS_MINIMIZEBOX);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
+    }
+
+  if (needs_basic_layering)
+    {
+      /* SetLayeredWindowAttributes may have been already called, e.g. to set an opacity level.
+       * We only have to call the API in case it has never been called before on the window.
+       */
+      if (SetLastError(0),
+          !GetLayeredWindowAttributes (GDK_WINDOW_HWND (window), NULL, NULL, NULL) &&
+          GetLastError() == 0)
+        {
+          API_CALL (SetLayeredWindowAttributes, (GDK_WINDOW_HWND (window), 0, 255, LWA_ALPHA));
+        }
     }
 
   if (old_style == new_style && old_exstyle == new_exstyle )

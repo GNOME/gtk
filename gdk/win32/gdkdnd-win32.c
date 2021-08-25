@@ -2204,43 +2204,6 @@ _gdk_win32_window_get_drag_protocol (GdkWindow *window,
   return protocol;
 }
 
-typedef struct {
-  gint x;
-  gint y;
-  HWND ignore;
-  HWND result;
-} find_window_enum_arg;
-
-static BOOL CALLBACK
-find_window_enum_proc (HWND   hwnd,
-                       LPARAM lparam)
-{
-  RECT rect;
-  POINT tl, br;
-  find_window_enum_arg *a = (find_window_enum_arg *) lparam;
-
-  if (hwnd == a->ignore)
-    return TRUE;
-
-  if (!IsWindowVisible (hwnd))
-    return TRUE;
-
-  tl.x = tl.y = 0;
-  ClientToScreen (hwnd, &tl);
-  GetClientRect (hwnd, &rect);
-  br.x = rect.right;
-  br.y = rect.bottom;
-  ClientToScreen (hwnd, &br);
-
-  if (a->x >= tl.x && a->y >= tl.y && a->x < br.x && a->y < br.y)
-    {
-      a->result = hwnd;
-      return FALSE;
-    }
-  else
-    return TRUE;
-}
-
 static GdkWindow *
 gdk_win32_drag_context_find_window (GdkDragContext  *context,
 				    GdkWindow       *drag_window,
@@ -2250,51 +2213,47 @@ gdk_win32_drag_context_find_window (GdkDragContext  *context,
 				    GdkDragProtocol *protocol)
 {
   GdkWin32DragContext *context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
-  GdkWindow *dest_window, *dw;
-  find_window_enum_arg a;
+  GdkWindow *toplevel = NULL;
+  HWND hwnd = NULL;
+  POINT pt;
 
-  a.x = x_root * context_win32->scale - _gdk_offset_x;
-  a.y = y_root * context_win32->scale - _gdk_offset_y;
-  a.ignore = drag_window ? GDK_WINDOW_HWND (drag_window) : NULL;
-  a.result = NULL;
+  pt.x = x_root * context_win32->scale - _gdk_offset_x;
+  pt.y = y_root * context_win32->scale - _gdk_offset_y;
 
   GDK_NOTE (DND,
-	    g_print ("gdk_drag_find_window_real: %p %+d%+d\n",
-		     (drag_window ? GDK_WINDOW_HWND (drag_window) : NULL),
-		     a.x, a.y));
+            g_print ("gdk_drag_find_window_real: %+d%+d\n",
+            (int) pt.x, (int) pt.y));
 
-  EnumWindows (find_window_enum_proc, (LPARAM) &a);
+  hwnd = WindowFromPoint (pt);
 
-  if (a.result == NULL)
-    dest_window = NULL;
-  else
+  if (hwnd)
     {
-      dw = gdk_win32_handle_table_lookup (a.result);
-      if (dw)
+      GdkWindow *window = gdk_win32_handle_table_lookup (hwnd);
+
+      if (window)
         {
-          dest_window = gdk_window_get_toplevel (dw);
-          g_object_ref (dest_window);
+          toplevel = gdk_window_get_toplevel (window);
+          g_object_ref (toplevel);
         }
       else
-        dest_window = gdk_win32_window_foreign_new_for_display (gdk_screen_get_display (screen), a.result);
-
-      if (use_ole2_dnd)
-        *protocol = GDK_DRAG_PROTO_OLE2;
-      else if (context->source_window)
-        *protocol = GDK_DRAG_PROTO_LOCAL;
-      else
-        *protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
+        toplevel = gdk_win32_window_foreign_new_for_display (gdk_screen_get_display (screen), hwnd);
     }
 
-  GDK_NOTE (DND,
-	    g_print ("gdk_drag_find_window: %p %+d%+d: %p: %p %s\n",
-		     (drag_window ? GDK_WINDOW_HWND (drag_window) : NULL),
-		     x_root, y_root,
-		     a.result,
-		     (dest_window ? GDK_WINDOW_HWND (dest_window) : NULL),
-		     _gdk_win32_drag_protocol_to_string (*protocol)));
+  if (use_ole2_dnd)
+    *protocol = GDK_DRAG_PROTO_OLE2;
+  else if (context->source_window)
+    *protocol = GDK_DRAG_PROTO_LOCAL;
+  else
+    *protocol = GDK_DRAG_PROTO_WIN32_DROPFILES;
 
-  return dest_window;
+  GDK_NOTE (DND,
+            g_print ("gdk_drag_find_window: %+d%+d: %p: %p %s\n",
+                     x_root, y_root,
+                     hwnd,
+                     (toplevel ? GDK_WINDOW_HWND (toplevel) : NULL),
+                     _gdk_win32_drag_protocol_to_string (*protocol)));
+
+  return toplevel;
 }
 
 static gboolean
