@@ -1,6 +1,10 @@
 
 Text sizes: <span size="xx-small">tiny </span><span size="x-small">very small </span><span size="small">small </span><span size="medium">normal </span><span size="large">large </span><span size="x-large">very large </span><span size="xx-large">huge</span>
 
+Text styles: <span style="normal">Normal</span> <span style="italic">Italic</span> <span style="oblique">Olique</span>
+
+Text weights: <span weight="thin">thin</span> <span weight="light">light</span> <span weight="normal">normal</span> <span weight="bold">bold</span> <span weight="ultraheavy">ultraheavy</span>
+
 Text <span color="gray">c<span color="green">o</span>l<span color="tomato">o</span>rs</span> and <span background="pink">backgrounds</span>
 
 Colorful <span underline="low" underline-color="blue"><span underline="double" underline-color="red">under</span>lines</span> and <span background="pink"><span underline="error">mo</span><span underline="error" underline-color="green">re</span></span>
@@ -15,7 +19,7 @@ OpenType font features: <span font_desc="sans regular" font_features="dlig=0">fe
 
 Shortcuts: <tt>Monospace</tt> – <b>Bold</b> – <i>Italic</i> – <big>Big</big> – <small>Small</small> – <u>Underlined</u> – <s>Strikethrough</s> – Super<sup>script</sup> – Sub<sub>script</sub>
 
-<span allow_breaks="false">A</span> hy­phen­ation al­go­rithm is a set of rules, espe­ci­ally one co­di­fied for im­ple­men­tation in a com­pu­ter pro­gram, that de­ci­des at which points a word can be bro­ken over two lines with a hy­phen. For ex­am­ple, a hy­phen­ation al­go­rithm might de­cide that im­peach­ment can be broken as <span allow_breaks="false">impeach‧ment</span> or <span allow_breaks="false">im‧peachment</span> but not <span allow_breaks="false">impe‧achment.</span>
+hy­phen­ation al­go­rithm is a <span allow_breaks="false" style="italic">set of rules</span>, espe­ci­ally one co­di­fied for im­ple­men­tation in a com­pu­ter pro­gram, that de­ci­des at which points a word can be bro­ken over two lines with a hy­phen. For ex­am­ple, a hy­phen­ation al­go­rithm might de­cide that im­peach­ment can be broken as impeach‧ment or im‧peachment but not impe‧achment.
 
 <span insert_hyphens="false">one/two three/four five/six seven/eight nine/ten</span>
 
@@ -23,3 +27,4 @@ Shortcuts: <tt>Monospace</tt> – <b>Bold</b> – <i>Italic</i> – <big>Big</bi
 Note that the line height affects the spacing between paragraphs as well as between the wrapped lines inside a paragraph.</span>
 
 Transforms: <span text_transform='uppercase'>straße</span> <span text_transform='capitalize'>up, up and away</span>
+
