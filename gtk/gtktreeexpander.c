@@ -119,6 +119,8 @@ gtk_tree_expander_click_gesture_pressed (GtkGestureClick *gesture,
   gtk_widget_set_state_flags (widget,
                               GTK_STATE_FLAG_ACTIVE,
                               FALSE);
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
@@ -130,6 +132,8 @@ gtk_tree_expander_click_gesture_released (GtkGestureClick *gesture,
 {
   gtk_widget_unset_state_flags (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
                                 GTK_STATE_FLAG_ACTIVE);
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
@@ -139,6 +143,8 @@ gtk_tree_expander_click_gesture_canceled (GtkGestureClick  *gesture,
 {
   gtk_widget_unset_state_flags (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
                                 GTK_STATE_FLAG_ACTIVE);
+
+  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
