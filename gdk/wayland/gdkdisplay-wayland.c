@@ -945,6 +945,10 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
+  /* Will be signaled with focus activation */
+  if (display_wayland->xdg_activation)
+    return;
+
   if (startup_id == NULL)
     {
       startup_id = display_wayland->startup_notification_id;

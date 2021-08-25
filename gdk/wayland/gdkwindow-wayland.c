@@ -3832,6 +3832,7 @@ gdk_wayland_window_focus (GdkWindow *window,
               xdg_activation_v1_activate (display_wayland->xdg_activation,
                                           display_wayland->startup_notification_id,
                                           impl->display_server.wl_surface);
+              gdk_wayland_display_set_startup_notification_id (GDK_DISPLAY (display_wayland), NULL);
             }
           else if (display_wayland->gtk_shell_version >= 3)
             {
