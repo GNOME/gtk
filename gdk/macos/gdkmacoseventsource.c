@@ -32,6 +32,8 @@
 #include "gdkmacoseventsource-private.h"
 #include "gdkmacosdisplay-private.h"
 
+#include "gdk-private.h"
+
 /*
  * This file implementations integration between the GLib main loop and
  * the native system of the Core Foundation run loop and Cocoa event
