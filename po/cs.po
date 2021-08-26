@@ -500,7 +500,7 @@ msgstr "Základní GL není dostupné v implementaci EGL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:534 gdk/x11/gdkglcontext-egl.c:718
 msgid "Surfaceless contexts are not supported on this EGL implementation"
-msgstr "V této implementaci EGL není bezpovrchový kontext podporován"
+msgstr "V této implementaci EGL není podporován bezpovrchový kontext"
 
 #: gdk/wayland/gdkglcontext-wayland.c:546
 #: gdk/win32/gdkglcontext-win32-egl.c:216
