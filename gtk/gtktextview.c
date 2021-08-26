@@ -7660,6 +7660,24 @@ get_pango_overline_from_style (GtkTextDecorationStyle style)
   return PANGO_OVERLINE_SINGLE;
 }
 
+static PangoTextTransform
+get_pango_text_transform_from_style (GtkTextTransform transform)
+{
+  switch (transform)
+    {
+    case GTK_CSS_TEXT_TRANSFORM_NONE:
+      return PANGO_TEXT_TRANSFORM_NONE;
+    case GTK_CSS_TEXT_TRANSFORM_LOWERCASE:
+      return PANGO_TEXT_TRANSFORM_LOWERCASE;
+    case GTK_CSS_TEXT_TRANSFORM_UPPERCASE:
+      return PANGO_TEXT_TRANSFORM_UPPERCASE;
+    case GTK_CSS_TEXT_TRANSFORM_CAPITALIZE:
+      return PANGO_TEXT_TRANSFORM_CAPITALIZE;
+    default:
+      return PANGO_TEXT_TRANSFORM_NONE;
+    }
+}
+
 static void
 gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                          GtkTextAttributes  *values)
@@ -7671,6 +7689,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   double height;
   GtkTextDecorationLine decoration_line;
   GtkTextDecorationStyle decoration_style;
+  GtkTextTransform transform;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
@@ -7754,6 +7773,11 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
       gdk_rgba_free (values->appearance.strikethrough_rgba);
       values->appearance.strikethrough_rgba = NULL;
     }
+
+  /* text-transform */
+
+  transform = _gtk_css_text_transform_value_get (style->font_variant->text_transform);
+  values->text_transform = get_pango_text_transform_from_style (transform);
 }
 
 static void
