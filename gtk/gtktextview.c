@@ -7670,6 +7670,9 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
       if (gtk_css_number_value_get_dimension (style->font->line_height) == GTK_CSS_DIMENSION_LENGTH)
         values->line_height_is_absolute = TRUE;
     }
+
+  values->letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
+
 }
 
 static void
