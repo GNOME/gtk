@@ -724,7 +724,7 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
             context_ime->priv->pretend_empty_preedit = FALSE;
             g_free (utf8str);
           }
-        /* fallthrough */
+        G_GNUC_FALLTHROUGH;
       case GTK_WIN32_IME_FOCUS_BEHAVIOR_DISCARD:
         gtk_im_context_ime_reset (context);
 
@@ -1054,7 +1054,7 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
         default:
           break;
         }
-
+      break;
     default:
       break;
     }
