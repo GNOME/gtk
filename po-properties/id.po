@@ -7691,7 +7691,7 @@ msgstr "Tangani aksel. Bilah Menu"
 
 #: gtk/gtkwindow.c:1055
 msgid "Whether the window should handle F10"
-msgstr "Apakah jendela mesti menangni F10"
+msgstr "Apakah jendela mesti menangani F10"
 
 #: gtk/gtkwindowcontrols.c:519
 msgid "Side"
