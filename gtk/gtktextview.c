@@ -7657,6 +7657,8 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
     pango_font_description_free (values->font);
 
   values->font = gtk_css_style_get_pango_font (style);
+
+  values->letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
 }
 
 static void
