@@ -57,6 +57,8 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkjoinedmenuprivate.h"
+#include "gtkcsslineheightvalueprivate.h"
+#include "gtkcssenumvalueprivate.h"
 
 /**
  * GtkTextView:
@@ -4990,6 +4992,7 @@ gtk_text_view_css_changed (GtkWidget         *widget,
 
   if ((change == NULL ||
        gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT |
+                                             GTK_CSS_AFFECTS_TEXT_ATTRS |
                                              GTK_CSS_AFFECTS_BACKGROUND |
                                              GTK_CSS_AFFECTS_CONTENT)) &&
       priv->layout && priv->layout->default_style)
@@ -7633,6 +7636,29 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view)
  * Layout utils
  */
 
+static PangoUnderline
+get_pango_underline_from_style (GtkTextDecorationStyle style)
+{
+  switch (style)
+    {
+    case GTK_CSS_TEXT_DECORATION_STYLE_DOUBLE:
+      return PANGO_UNDERLINE_DOUBLE;
+    case GTK_CSS_TEXT_DECORATION_STYLE_WAVY:
+      return PANGO_UNDERLINE_ERROR;
+    case GTK_CSS_TEXT_DECORATION_STYLE_SOLID:
+    default:
+      return PANGO_UNDERLINE_SINGLE;
+    }
+
+  g_return_val_if_reached (PANGO_UNDERLINE_SINGLE);
+}
+
+static PangoOverline
+get_pango_overline_from_style (GtkTextDecorationStyle style)
+{
+  return PANGO_OVERLINE_SINGLE;
+}
+
 static void
 gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                          GtkTextAttributes  *values)
@@ -7640,6 +7666,10 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   GtkCssStyle *style;
   const GdkRGBA black = { 0, };
   const GdkRGBA *color;
+  const GdkRGBA *decoration_color;
+  double height;
+  GtkTextDecorationLine decoration_line;
+  GtkTextDecorationStyle decoration_style;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
@@ -7659,6 +7689,59 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   values->font = gtk_css_style_get_pango_font (style);
 
   values->letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
+
+  /* text-decoration */
+  decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
+  decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
+  color = gtk_css_color_value_get_rgba (style->core->color);
+  decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
+                                                   ? style->font_variant->text_decoration_color
+                                                   : style->core->color);
+
+  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)
+    {
+      values->appearance.underline = get_pango_underline_from_style (decoration_style);
+      if (values->appearance.underline_rgba)
+        *values->appearance.underline_rgba = *decoration_color;
+      else
+        values->appearance.underline_rgba = gdk_rgba_copy (decoration_color);
+    }
+  else
+    {
+      values->appearance.underline = PANGO_UNDERLINE_NONE;
+      gdk_rgba_free (values->appearance.underline_rgba);
+      values->appearance.underline_rgba = NULL;
+    }
+
+  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_OVERLINE)
+    {
+      values->appearance.overline = get_pango_overline_from_style (decoration_style);
+      if (values->appearance.overline_rgba)
+        *values->appearance.overline_rgba = *decoration_color;
+      else
+        values->appearance.overline_rgba = gdk_rgba_copy (decoration_color);
+    }
+  else
+    {
+      values->appearance.overline = PANGO_OVERLINE_NONE;
+      gdk_rgba_free (values->appearance.overline_rgba);
+      values->appearance.overline_rgba = NULL;
+    }
+
+  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH)
+    {
+      values->appearance.strikethrough = TRUE;
+      if (values->appearance.strikethrough_rgba)
+        *values->appearance.strikethrough_rgba = *decoration_color;
+      else
+        values->appearance.strikethrough_rgba = gdk_rgba_copy (decoration_color);
+    }
+  else
+    {
+      values->appearance.strikethrough = FALSE;
+      gdk_rgba_free (values->appearance.strikethrough_rgba);
+      values->appearance.strikethrough_rgba = NULL;
+    }
 }
 
 static void
