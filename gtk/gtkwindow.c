@@ -5796,16 +5796,14 @@ gtk_window_activate_menubar (GtkWidget *widget,
   GtkWidget *focus;
   GtkWidget *first;
 
-  focus = gtk_window_get_focus (window);
-
-  if (priv->title_box != NULL &&
-      (focus == NULL || !gtk_widget_is_ancestor (focus, priv->title_box)) &&
-      gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD))
-    return TRUE;
-
   tmp_menubars = gtk_popover_menu_bar_get_viewable_menu_bars (window);
   if (tmp_menubars == NULL)
-    return FALSE;
+    {
+      focus = gtk_window_get_focus (window);
+      return priv->title_box != NULL &&
+             (focus == NULL || !gtk_widget_is_ancestor (focus, priv->title_box)) &&
+             gtk_widget_child_focus (priv->title_box, GTK_DIR_TAB_FORWARD);
+    }
 
   menubars = g_ptr_array_sized_new (g_list_length (tmp_menubars));;
   for (l = tmp_menubars; l; l = l->next)
