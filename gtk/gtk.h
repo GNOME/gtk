@@ -248,6 +248,7 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
+#include <gtk/gtksymbolicpaintable.h>
 #include <gtk/gtktext.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextchild.h>
