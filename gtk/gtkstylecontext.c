@@ -984,6 +984,7 @@ draw_insertion_cursor (GtkStyleContext *context,
   int stem_width;
   double angle;
   double dx, dy;
+  double xx1, yy1, xx2, yy2;
 
   cairo_save (cr);
   cairo_new_path (cr);
@@ -992,10 +993,22 @@ draw_insertion_cursor (GtkStyleContext *context,
   gdk_cairo_set_source_rgba (cr, is_primary ? &primary_color : &secondary_color);
 
   stem_width = height * aspect_ratio + 1;
-  if (width < 0)
-    stem_width = - stem_width;
 
-  angle = atan (height / width);
+  yy1 = y;
+  yy2 = y + height;
+
+  if (width < 0)
+    {
+      xx1 = x;
+      xx2 = x - width;
+    }
+  else
+    {
+      xx1 = x + width;
+      xx2 = x;
+    }
+
+  angle = atan2 (height, width);
 
   dx = (stem_width/2.0) * cos (M_PI/2 - angle);
   dy = (stem_width/2.0) * sin (M_PI/2 - angle);
@@ -1006,47 +1019,47 @@ draw_insertion_cursor (GtkStyleContext *context,
         {
           double x0, y0, x1, y1, x2, y2;
 
-          x0 = x - dx + 2 * dy;
-          y0 = y + height - dy - 2 * dx;
+          x0 = xx2 - dx + 2 * dy;
+          y0 = yy2 - dy - 2 * dx;
 
           x1 = x0 + 4 * dy;
           y1 = y0 - 4 * dx;
           x2 = x0 + 2 * dy - 3 * dx;
           y2 = y0 - 2 * dx - 3 * dy;
 
-          cairo_move_to (cr, x + width + dx, y + dy);
-          cairo_line_to (cr, x + dx, y + height + dy);
+          cairo_move_to (cr, xx1 + dx, yy1 + dy);
+          cairo_line_to (cr, xx2 + dx, yy2 + dy);
           cairo_line_to (cr, x2, y2);
           cairo_line_to (cr, x1, y1);
-          cairo_line_to (cr, x + width - dx, y - dy);
+          cairo_line_to (cr, xx1 - dx, yy1 - dy);
         }
       else if (direction == PANGO_DIRECTION_LTR)
         {
           double x0, y0, x1, y1, x2, y2;
 
-          x0 = x + dx + 2 * dy;
-          y0 = y + height + dy - 2 * dx;
+          x0 = xx2 + dx + 2 * dy;
+          y0 = yy2 + dy - 2 * dx;
 
           x1 = x0 + 4 * dy;
           y1 = y0 - 4 * dx;
           x2 = x0 + 2 * dy + 3 * dx;
           y2 = y0 - 2 * dx + 3 * dy;
 
-          cairo_move_to (cr, x + width - dx, y - dy);
-          cairo_line_to (cr, x - dx, y + height - dy);
+          cairo_move_to (cr, xx1 - dx, yy1 - dy);
+          cairo_line_to (cr, xx2 - dx, yy2 - dy);
           cairo_line_to (cr, x2, y2);
           cairo_line_to (cr, x1, y1);
-          cairo_line_to (cr, x + width + dx, y + dy);
+          cairo_line_to (cr, xx1 + dx, yy1 + dy);
         }
       else
         g_assert_not_reached();
     }
   else
     {
-      cairo_move_to (cr, x + width + dx, y + dy);
-      cairo_line_to (cr, x + dx, y + height + dy);
-      cairo_line_to (cr, x - dx, y + height - dy);
-      cairo_line_to (cr, x + width - dx, y - dy);
+      cairo_move_to (cr, xx1 + dx, yy1 + dy);
+      cairo_line_to (cr, xx2 + dx, yy2 + dy);
+      cairo_line_to (cr, xx2 - dx, yy2 - dy);
+      cairo_line_to (cr, xx1 - dx, yy1 - dy);
     }
 
   cairo_fill (cr);
@@ -1063,6 +1076,9 @@ get_insertion_cursor_bounds (double           width,
                              graphene_rect_t *bounds)
 {
   int stem_width;
+
+  if (width < 0)
+    width = - width;
 
   stem_width = height * aspect_ratio + 1;
 
@@ -1189,7 +1205,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
     }
 
   gtk_snapshot_save (snapshot);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + PANGO_PIXELS (cursor1->x), y + PANGO_PIXELS (cursor1->y)));
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + PANGO_PIXELS (MIN (cursor1->x, cursor1->x + cursor1->width)), y + PANGO_PIXELS (cursor1->y)));
   snapshot_insertion_cursor (snapshot,
                              context,
                              PANGO_PIXELS (cursor1->width),
@@ -1203,7 +1219,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
   if (direction2 != PANGO_DIRECTION_NEUTRAL)
     {
       gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + PANGO_PIXELS (cursor2->x), y + PANGO_PIXELS (cursor2->y)));
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x + PANGO_PIXELS (MIN (cursor2->x, cursor2->x + cursor2->width)), y + PANGO_PIXELS (cursor2->y)));
       snapshot_insertion_cursor (snapshot,
                                  context,
                                  PANGO_PIXELS (cursor2->width),
