@@ -32,14 +32,6 @@ void gtk_icon_theme_lookup_symbolic_colors   (GtkCssStyle      *style,
                                               GdkRGBA          *success_out,
                                               GdkRGBA          *warning_out,
                                               GdkRGBA          *error_out);
-void gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
-                                              GtkSnapshot      *snapshot,
-                                              double            width,
-                                              double            height,
-                                              const GdkRGBA    *foreground_color,
-                                              const GdkRGBA    *success_color,
-                                              const GdkRGBA    *warning_color,
-                                              const GdkRGBA    *error_color);
 
 int gtk_icon_theme_get_serial (GtkIconTheme *self);
 

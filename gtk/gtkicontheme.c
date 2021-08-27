@@ -45,11 +45,12 @@
 #include "gtkiconcacheprivate.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtksettingsprivate.h"
+#include "gtksnapshot.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkstyleproviderprivate.h"
-#include "gtkprivate.h"
-#include "gtksnapshot.h"
+#include "gtksymbolicpaintable.h"
 #include "gtkwidgetprivate.h"
 #include "gdkpixbufutilsprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -3481,6 +3482,7 @@ theme_subdir_load (GtkIconTheme *self,
  */
 
 static void icon_paintable_init (GdkPaintableInterface *iface);
+static void icon_symbolic_paintable_init (GtkSymbolicPaintableInterface *iface);
 
 enum
 {
@@ -3492,7 +3494,9 @@ enum
 
 G_DEFINE_TYPE_WITH_CODE (GtkIconPaintable, gtk_icon_paintable, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                                icon_paintable_init))
+                                                icon_paintable_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SYMBOLIC_PAINTABLE,
+                                                icon_symbolic_paintable_init))
 
 static void
 gtk_icon_paintable_init (GtkIconPaintable *icon)
@@ -3954,43 +3958,18 @@ icon_paintable_snapshot (GdkPaintable *paintable,
                          double        width,
                          double        height)
 {
-  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
-
-  gtk_icon_paintable_snapshot_with_colors (icon, snapshot, width, height,
-                                           NULL, NULL, NULL, NULL);
+  gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, NULL, 0);
 }
 
-/**
- * gtk_icon_paintable_snapshot_with_colors:
- * @icon: a `GtkIconPaintable`
- * @snapshot: a `GdkSnapshot` to snapshot to
- * @width: width to snapshot in
- * @height: height to snapshot in
- * @foreground_color: (nullable): a `GdkRGBA` representing the foreground color
- *   of the icon or %NULL to use the default color.
- * @success_color: (nullable): a `GdkRGBA` representing the warning color
- *   of the icon or %NULL to use the default color
- * @warning_color: (nullable): a `GdkRGBA` representing the warning color
- *   of the icon or %NULL to use the default color
- * @error_color: (nullable): a `GdkRGBA` representing the error color
- *   of the icon or %NULL to use the default color
- *
- * Snapshots the `GtkIconPaintable`.
- *
- * This is similar to the implementation of [method@Gdk.Paintable.snapshot],
- * but if the icon is symbolic it will be recolored with the specified colors
- * (which usually comes from the theme).
- */
-void
-gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
-                                         GtkSnapshot       *snapshot,
-                                         double             width,
-                                         double             height,
-                                         const GdkRGBA     *foreground_color,
-                                         const GdkRGBA     *success_color,
-                                         const GdkRGBA     *warning_color,
-                                         const GdkRGBA     *error_color)
+static void
+gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
+                                      GtkSnapshot          *snapshot,
+                                      double                width,
+                                      double                height,
+                                      const GdkRGBA        *colors,
+                                      gsize                 n_colors)
 {
+  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
   GdkTexture *texture;
   int texture_width, texture_height;
   double render_width;
@@ -4006,8 +3985,8 @@ gtk_icon_paintable_snapshot_with_colors (GtkIconPaintable *icon,
       graphene_vec4_t offset;
 
       init_color_matrix (&matrix, &offset,
-                         foreground_color, success_color,
-                         warning_color, error_color);
+                         &colors[0], &colors[3],
+                         &colors[2], &colors[1]);
 
       gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
     }
@@ -4066,6 +4045,12 @@ icon_paintable_init (GdkPaintableInterface *iface)
   iface->get_flags = icon_paintable_get_flags;
   iface->get_intrinsic_width = icon_paintable_get_intrinsic_width;
   iface->get_intrinsic_height = icon_paintable_get_intrinsic_height;
+}
+
+static void
+icon_symbolic_paintable_init (GtkSymbolicPaintableInterface *iface)
+{
+  iface->snapshot_symbolic = gtk_icon_paintable_snapshot_symbolic;
 }
 
 /**
