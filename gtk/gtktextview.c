@@ -57,7 +57,6 @@
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
 #include "gtkjoinedmenuprivate.h"
-#include "gtkcsslineheightvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 
 /**
@@ -7667,7 +7666,6 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   const GdkRGBA black = { 0, };
   const GdkRGBA *color;
   const GdkRGBA *decoration_color;
-  double height;
   GtkTextDecorationLine decoration_line;
   GtkTextDecorationStyle decoration_style;
 
@@ -7691,6 +7689,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   values->letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
 
   /* text-decoration */
+
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
   decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
   color = gtk_css_color_value_get_rgba (style->core->color);
@@ -7742,6 +7741,13 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
       gdk_rgba_free (values->appearance.strikethrough_rgba);
       values->appearance.strikethrough_rgba = NULL;
     }
+
+  /* letter-spacing */
+  values->letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
+
+  /* OpenType features */
+  g_free (values->font_features);
+  values->font_features = gtk_css_style_compute_font_features (style);
 }
 
 static void

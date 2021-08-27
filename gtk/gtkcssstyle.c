@@ -428,64 +428,14 @@ append_separated (GString    **s,
   g_string_append (*s, text);
 }
 
-PangoAttrList *
-gtk_css_style_get_pango_attributes (GtkCssStyle *style)
+char *
+gtk_css_style_compute_font_features (GtkCssStyle *style)
 {
-  PangoAttrList *attrs = NULL;
-  GtkTextDecorationLine decoration_line;
-  GtkTextDecorationStyle decoration_style;
-  const GdkRGBA *color;
-  const GdkRGBA *decoration_color;
-  int letter_spacing;
   GtkCssFontVariantLigature ligatures;
   GtkCssFontVariantNumeric numeric;
   GtkCssFontVariantEastAsian east_asian;
-  GString *s;
   char *settings;
-
-  /* text-decoration */
-  decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
-  decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
-  color = gtk_css_color_value_get_rgba (style->core->color);
-  decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
-                                                   ? style->font_variant->text_decoration_color
-                                                   : style->core->color);
-
-  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)
-    {
-      attrs = add_pango_attr (attrs, pango_attr_underline_new (get_pango_underline_from_style (decoration_style)));
-      if (!gdk_rgba_equal (color, decoration_color))
-        attrs = add_pango_attr (attrs, pango_attr_underline_color_new (decoration_color->red * 65535. + 0.5,
-                                                                       decoration_color->green * 65535. + 0.5,
-                                                                       decoration_color->blue * 65535. + 0.5));
-    }
-  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_OVERLINE)
-    {
-      attrs = add_pango_attr (attrs, pango_attr_overline_new (get_pango_overline_from_style (decoration_style)));
-      if (!gdk_rgba_equal (color, decoration_color))
-        attrs = add_pango_attr (attrs, pango_attr_overline_color_new (decoration_color->red * 65535. + 0.5,
-                                                                      decoration_color->green * 65535. + 0.5,
-                                                                      decoration_color->blue * 65535. + 0.5));
-    }
-  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH)
-    {
-      attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
-      if (!gdk_rgba_equal (color, decoration_color))
-        attrs = add_pango_attr (attrs, pango_attr_strikethrough_color_new (decoration_color->red * 65535. + 0.5,
-                                                                           decoration_color->green * 65535. + 0.5,
-                                                                           decoration_color->blue * 65535. + 0.5));
-    }
-
-  /* letter-spacing */
-  letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100);
-  if (letter_spacing != 0)
-    {
-      attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
-    }
-
-  /* OpenType features */
-
-  s = NULL;
+  GString *s = NULL;
 
   switch (_gtk_css_font_kerning_value_get (style->font_variant->font_kerning))
     {
@@ -635,10 +585,71 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     }
 
   if (s)
+    return g_string_free (s, FALSE);
+  else
+    return NULL;
+}
+
+PangoAttrList *
+gtk_css_style_get_pango_attributes (GtkCssStyle *style)
+{
+  PangoAttrList *attrs = NULL;
+  GtkTextDecorationLine decoration_line;
+  GtkTextDecorationStyle decoration_style;
+  const GdkRGBA *color;
+  const GdkRGBA *decoration_color;
+  int letter_spacing;
+
+  /* text-decoration */
+  decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
+  decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
+  color = gtk_css_color_value_get_rgba (style->core->color);
+  decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
+                                                   ? style->font_variant->text_decoration_color
+                                                   : style->core->color);
+
+  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)
     {
-      attrs = add_pango_attr (attrs, pango_attr_font_features_new (s->str));
-      g_string_free (s, TRUE);
+      attrs = add_pango_attr (attrs, pango_attr_underline_new (get_pango_underline_from_style (decoration_style)));
+      if (!gdk_rgba_equal (color, decoration_color))
+        attrs = add_pango_attr (attrs, pango_attr_underline_color_new (decoration_color->red * 65535. + 0.5,
+                                                                       decoration_color->green * 65535. + 0.5,
+                                                                       decoration_color->blue * 65535. + 0.5));
     }
+  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_OVERLINE)
+    {
+      attrs = add_pango_attr (attrs, pango_attr_overline_new (get_pango_overline_from_style (decoration_style)));
+      if (!gdk_rgba_equal (color, decoration_color))
+        attrs = add_pango_attr (attrs, pango_attr_overline_color_new (decoration_color->red * 65535. + 0.5,
+                                                                      decoration_color->green * 65535. + 0.5,
+                                                                      decoration_color->blue * 65535. + 0.5));
+    }
+  if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH)
+    {
+      attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
+      if (!gdk_rgba_equal (color, decoration_color))
+        attrs = add_pango_attr (attrs, pango_attr_strikethrough_color_new (decoration_color->red * 65535. + 0.5,
+                                                                           decoration_color->green * 65535. + 0.5,
+                                                                           decoration_color->blue * 65535. + 0.5));
+    }
+
+  /* letter-spacing */
+  letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100);
+  if (letter_spacing != 0)
+    {
+      attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
+    }
+
+  /* OpenType features */
+  {
+    char *font_features = gtk_css_style_compute_font_features (style);
+
+    if (font_features)
+      {
+        attrs = add_pango_attr (attrs, pango_attr_font_features_new (font_features));
+        g_free (font_features);
+      }
+  }
 
   return attrs;
 }
