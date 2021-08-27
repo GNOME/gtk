@@ -7708,20 +7708,8 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   values->font = gtk_css_style_get_pango_font (style);
 
-  values->line_height = 0.0;
-  values->line_height_is_absolute = FALSE;
-
-  height = gtk_css_line_height_value_get (style->font->line_height);
-  if (height != 0.0)
-    {
-      values->line_height = height;
-      if (gtk_css_number_value_get_dimension (style->font->line_height) == GTK_CSS_DIMENSION_LENGTH)
-        values->line_height_is_absolute = TRUE;
-    }
-
-  values->letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
-
   /* text-decoration */
+
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
   decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
   color = gtk_css_color_value_get_rgba (style->core->color);
@@ -7774,10 +7762,25 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
       values->appearance.strikethrough_rgba = NULL;
     }
 
-  /* text-transform */
+  /* letter-spacing */
+  values->letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
 
-  transform = _gtk_css_text_transform_value_get (style->font_variant->text_transform);
-  values->text_transform = get_pango_text_transform_from_style (transform);
+  /* line-height */
+
+  values->line_height = gtk_css_line_height_value_get (style->font->line_height);
+  values->line_height_is_absolute = FALSE;
+  if (values->line_height != 0.0)
+    {
+      if (gtk_css_number_value_get_dimension (style->font->line_height) == GTK_CSS_DIMENSION_LENGTH)
+        values->line_height_is_absolute = TRUE;
+    }
+
+  /* OpenType features */
+  g_free (values->font_features);
+  values->font_features = gtk_css_style_compute_font_features (style);
+
+  /* text-transform */
+  values->text_transform = gtk_css_style_get_pango_text_transform (style);
 }
 
 static void
