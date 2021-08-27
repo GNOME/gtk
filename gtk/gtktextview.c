@@ -7637,47 +7637,6 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view)
  * Layout utils
  */
 
-static PangoUnderline
-get_pango_underline_from_style (GtkTextDecorationStyle style)
-{
-  switch (style)
-    {
-    case GTK_CSS_TEXT_DECORATION_STYLE_DOUBLE:
-      return PANGO_UNDERLINE_DOUBLE;
-    case GTK_CSS_TEXT_DECORATION_STYLE_WAVY:
-      return PANGO_UNDERLINE_ERROR;
-    case GTK_CSS_TEXT_DECORATION_STYLE_SOLID:
-    default:
-      return PANGO_UNDERLINE_SINGLE;
-    }
-
-  g_return_val_if_reached (PANGO_UNDERLINE_SINGLE);
-}
-
-static PangoOverline
-get_pango_overline_from_style (GtkTextDecorationStyle style)
-{
-  return PANGO_OVERLINE_SINGLE;
-}
-
-static PangoTextTransform
-get_pango_text_transform_from_style (GtkTextTransform transform)
-{
-  switch (transform)
-    {
-    case GTK_CSS_TEXT_TRANSFORM_NONE:
-      return PANGO_TEXT_TRANSFORM_NONE;
-    case GTK_CSS_TEXT_TRANSFORM_LOWERCASE:
-      return PANGO_TEXT_TRANSFORM_LOWERCASE;
-    case GTK_CSS_TEXT_TRANSFORM_UPPERCASE:
-      return PANGO_TEXT_TRANSFORM_UPPERCASE;
-    case GTK_CSS_TEXT_TRANSFORM_CAPITALIZE:
-      return PANGO_TEXT_TRANSFORM_CAPITALIZE;
-    default:
-      return PANGO_TEXT_TRANSFORM_NONE;
-    }
-}
-
 static void
 gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                          GtkTextAttributes  *values)
@@ -7686,10 +7645,8 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   const GdkRGBA black = { 0, };
   const GdkRGBA *color;
   const GdkRGBA *decoration_color;
-  double height;
   GtkTextDecorationLine decoration_line;
   GtkTextDecorationStyle decoration_style;
-  GtkTextTransform transform;
 
   if (!values->appearance.bg_rgba)
     values->appearance.bg_rgba = gdk_rgba_copy (&black);
@@ -7719,7 +7676,20 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)
     {
-      values->appearance.underline = get_pango_underline_from_style (decoration_style);
+      switch (decoration_style)
+        {
+        case GTK_CSS_TEXT_DECORATION_STYLE_DOUBLE:
+          values->appearance.underline = PANGO_UNDERLINE_DOUBLE;
+          break;
+        case GTK_CSS_TEXT_DECORATION_STYLE_WAVY:
+          values->appearance.underline = PANGO_UNDERLINE_ERROR;
+          break;
+        case GTK_CSS_TEXT_DECORATION_STYLE_SOLID:
+        default:
+          values->appearance.underline = PANGO_UNDERLINE_SINGLE;
+          break;
+        }
+
       if (values->appearance.underline_rgba)
         *values->appearance.underline_rgba = *decoration_color;
       else
@@ -7734,7 +7704,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_OVERLINE)
     {
-      values->appearance.overline = get_pango_overline_from_style (decoration_style);
+      values->appearance.overline = PANGO_OVERLINE_SINGLE;
       if (values->appearance.overline_rgba)
         *values->appearance.overline_rgba = *decoration_color;
       else
