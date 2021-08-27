@@ -273,6 +273,8 @@ add_child (guint             position,
 
   button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
                          "accessible-role", GTK_ACCESSIBLE_ROLE_TAB,
+                         "hexpand", TRUE,
+                         "vexpand", TRUE,
                          NULL);
   gtk_widget_set_focus_on_click (button, FALSE);
 
