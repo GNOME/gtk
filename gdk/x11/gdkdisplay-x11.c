@@ -1037,8 +1037,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       if (xevent->type - display_x11->xrandr_event_base == RRScreenChangeNotify ||
           xevent->type - display_x11->xrandr_event_base == RRNotify)
 	{
-          if (x11_screen)
-            _gdk_x11_screen_size_changed (x11_screen, xevent);
+          if (display_x11->screen)
+            _gdk_x11_screen_size_changed (display_x11->screen, xevent);
 	}
       else
 #endif
