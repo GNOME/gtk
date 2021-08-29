@@ -282,8 +282,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__POINTER_POINTER_BOOLEAN,
 		  G_TYPE_NONE, 3,
-		  G_TYPE_POINTER,
-		  G_TYPE_POINTER,
+		  G_TYPE_FILE,
+		  G_TYPE_FILE,
 		  G_TYPE_BOOLEAN);
 
   gtk_widget_class_set_css_name (widget_class, "pathbar");
