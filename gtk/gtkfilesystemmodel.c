@@ -1041,7 +1041,7 @@ _gtk_file_system_model_class_init (GtkFileSystemModelClass *class)
 		  G_STRUCT_OFFSET (GtkFileSystemModelClass, finished_loading),
 		  NULL, NULL,
 		  NULL,
-		  G_TYPE_NONE, 1, G_TYPE_POINTER);
+		  G_TYPE_NONE, 1, G_TYPE_ERROR);
 }
 
 static void
