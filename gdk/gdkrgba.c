@@ -30,6 +30,7 @@
 #include <errno.h>
 #include <math.h>
 
+#include "gdkhslaprivate.h"
 
 G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
                      gdk_rgba_copy, gdk_rgba_free)
@@ -186,6 +187,7 @@ gdk_rgba_parse (GdkRGBA    *rgba,
                 const char *spec)
 {
   gboolean has_alpha;
+  gboolean is_hsl;
   double r, g, b, a;
   char *str = (char *) spec;
   char *p;
@@ -196,11 +198,26 @@ gdk_rgba_parse (GdkRGBA    *rgba,
   if (strncmp (str, "rgba", 4) == 0)
     {
       has_alpha = TRUE;
+      is_hsl = FALSE;
       str += 4;
     }
   else if (strncmp (str, "rgb", 3) == 0)
     {
       has_alpha = FALSE;
+      is_hsl = FALSE;
+      a = 1;
+      str += 3;
+    }
+  else if (strncmp (str, "hsla", 4) == 0)
+    {
+      has_alpha = TRUE;
+      is_hsl = TRUE;
+      str += 4;
+    }
+  else if (strncmp (str, "hsl", 3) == 0)
+    {
+      has_alpha = FALSE;
+      is_hsl = TRUE;
       a = 1;
       str += 3;
     }
@@ -291,10 +308,22 @@ gdk_rgba_parse (GdkRGBA    *rgba,
 
   if (rgba)
     {
-      rgba->red = CLAMP (r, 0, 1);
-      rgba->green = CLAMP (g, 0, 1);
-      rgba->blue = CLAMP (b, 0, 1);
-      rgba->alpha = CLAMP (a, 0, 1);
+      if (is_hsl)
+        {
+          GdkHSLA hsla;
+          hsla.hue = r * 255;
+          hsla.saturation = CLAMP (g, 0, 1);
+          hsla.lightness = CLAMP (b, 0, 1);
+          hsla.alpha = CLAMP (a, 0, 1);
+          _gdk_rgba_init_from_hsla (rgba, &hsla);
+        }
+      else
+        {
+          rgba->red = CLAMP (r, 0, 1);
+          rgba->green = CLAMP (g, 0, 1);
+          rgba->blue = CLAMP (b, 0, 1);
+          rgba->alpha = CLAMP (a, 0, 1);
+        }
     }
 
   return TRUE;
@@ -462,6 +491,47 @@ parse_color_channel (GtkCssParser *parser,
   }
 }
 
+static guint
+parse_hsla_color_channel (GtkCssParser *parser,
+                          guint         arg,
+                          gpointer      data)
+{
+  GdkHSLA *hsla = data;
+  double dvalue;
+
+  switch (arg)
+  {
+    case 0:
+      if (!gtk_css_parser_consume_number (parser, &dvalue))
+        return 0;
+      hsla->hue = dvalue;
+      return 1;
+
+    case 1:
+      if (!gtk_css_parser_consume_percentage (parser, &dvalue))
+        return 0;
+      hsla->saturation = CLAMP (dvalue, 0.0, 100.0) / 100.0;
+      return 1;
+
+    case 2:
+      if (!gtk_css_parser_consume_percentage (parser, &dvalue))
+        return 0;
+      hsla->lightness = CLAMP (dvalue, 0.0, 100.0) / 100.0;
+      return 1;
+
+    case 3:
+      if (!gtk_css_parser_consume_number (parser, &dvalue))
+        return 0;
+
+      hsla->alpha = CLAMP (dvalue, 0.0, 1.0) / 1.0;
+      return 1;
+
+    default:
+      g_assert_not_reached ();
+      return 0;
+  }
+}
+
 static gboolean
 rgba_init_chars (GdkRGBA    *rgba,
                  const char  s[8])
@@ -500,6 +570,18 @@ gdk_rgba_parser_parse (GtkCssParser *parser,
   else if (gtk_css_token_is_function (token, "rgba"))
     {
       return gtk_css_parser_consume_function (parser, 4, 4, parse_color_channel, rgba);
+    }
+  else if (gtk_css_token_is_function (token, "hsl") || gtk_css_token_is_function (token, "hsla"))
+    {
+      GdkHSLA hsla;
+
+      hsla.alpha = 1.0;
+
+      if (!gtk_css_parser_consume_function (parser, 3, 4, parse_hsla_color_channel, &hsla))
+        return FALSE;
+
+      _gdk_rgba_init_from_hsla (rgba, &hsla);
+      return TRUE;
     }
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_ID) ||
            gtk_css_token_is (token, GTK_CSS_TOKEN_HASH_UNRESTRICTED))

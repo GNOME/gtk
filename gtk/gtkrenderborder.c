@@ -33,10 +33,10 @@
 #include "gtkcssrepeatvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstyleprivate.h"
-#include "gtkhslaprivate.h"
 #include "gtkroundedboxprivate.h"
 #include "gtksnapshotprivate.h"
 
+#include "gdk/gdkhslaprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 
 typedef struct _GtkBorderImage GtkBorderImage;
@@ -513,10 +513,10 @@ color_shade (const GdkRGBA *color,
              double         factor,
              GdkRGBA       *color_return)
 {
-  GtkHSLA hsla;
+  GdkHSLA hsla;
 
-  _gtk_hsla_init_from_rgba (&hsla, color);
-  _gtk_hsla_shade (&hsla, &hsla, factor);
+  _gdk_hsla_init_from_rgba (&hsla, color);
+  _gdk_hsla_shade (&hsla, &hsla, factor);
   _gdk_rgba_init_from_hsla (color_return, &hsla);
 }
 

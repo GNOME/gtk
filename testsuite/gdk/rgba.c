@@ -65,6 +65,30 @@ test_color_parse (void)
   res = gdk_rgba_parse (&color, "#0080ff88");
   g_assert_true (res);
   g_assert_true (gdk_rgba_equal (&color, &expected));
+
+  expected.red = 1.0;
+  expected.green = 0.0;
+  expected.blue = 0.0;
+  expected.alpha = 1.0;
+  res = gdk_rgba_parse (&color, "hsl (0, 100%, 50%)");
+  g_assert_true (res);
+  g_assert_true (gdk_rgba_equal (&color, &expected));
+
+  expected.red = 0.0;
+  expected.green = 1.0;
+  expected.blue = 0.0;
+  expected.alpha = 0.1;
+  res = gdk_rgba_parse (&color, "hsla (120, 255, 50%, 0.1)");
+  g_assert_true (res);
+  g_assert_true (gdk_rgba_equal (&color, &expected));
+
+  expected.red = 0.0;
+  expected.green = 0.5;
+  expected.blue = 0.5;
+  expected.alpha = 1.0;
+  res = gdk_rgba_parse (&color, "hsl(180, 100%, 25%)");
+  g_assert_true (res);
+  g_assert_true (gdk_rgba_equal (&color, &expected));
 }
 
 static void
