@@ -24,7 +24,7 @@
 #ifndef __GTK_SEARCH_ENGINE_TRACKER3_H__
 #define __GTK_SEARCH_ENGINE_TRACKER3_H__
 
-#include "gtksearchengine.h"
+#include "gtksearchengineprivate.h"
 
 G_BEGIN_DECLS
 

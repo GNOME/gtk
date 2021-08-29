@@ -23,7 +23,7 @@
 #include "gtkfilesystemmodel.h"
 #include "gtkliststore.h"
 #include "gtkrecentmanager.h"
-#include "gtksearchengine.h"
+#include "gtksearchengineprivate.h"
 #include "gtkquery.h"
 #include "gtksizegroup.h"
 #include "gtktreemodelsort.h"

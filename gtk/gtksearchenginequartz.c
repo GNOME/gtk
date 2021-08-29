@@ -18,7 +18,7 @@
 #include <Cocoa/Cocoa.h>
 #include <macos/gdkmacos.h>
 
-#include "gtksearchenginequartz.h"
+#include "gtksearchenginequartzprivate.h"
 
 /* This file is a mixture of an objective-C object and a GObject,
  * so be careful to not confuse yourself.
