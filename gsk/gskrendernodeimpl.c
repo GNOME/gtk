@@ -5721,6 +5721,116 @@ gsk_render_node_init_types_once (void)
     gsk_render_node_types[GSK_DEBUG_NODE] = node_type;
   }
 }
+
+static void
+gsk_render_node_content_serializer_finish (GObject      *source,
+                                           GAsyncResult *result,
+                                           gpointer      serializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+
+  if (!g_output_stream_write_bytes_finish (stream, result, &error))
+    gdk_content_serializer_return_error (serializer, error);
+  else
+    gdk_content_serializer_return_success (serializer);
+}
+
+static void
+gsk_render_node_content_serializer (GdkContentSerializer *serializer)
+{
+  const GValue *value;
+  GskRenderNode *node;
+  GBytes *bytes;
+
+  value = gdk_content_serializer_get_value (serializer);
+  node = gsk_value_get_render_node (value);
+  bytes = gsk_render_node_serialize (node);
+
+  g_output_stream_write_bytes_async (gdk_content_serializer_get_output_stream (serializer),
+                                     bytes,
+                                     gdk_content_serializer_get_priority (serializer),
+                                     gdk_content_serializer_get_cancellable (serializer),
+                                     gsk_render_node_content_serializer_finish,
+                                     serializer);
+  g_bytes_unref (bytes);
+}
+
+static void
+gsk_render_node_content_deserializer_finish (GObject      *source,
+                              GAsyncResult *result,
+                              gpointer      deserializer)
+{
+  GOutputStream *stream = G_OUTPUT_STREAM (source);
+  GError *error = NULL;
+  gssize written;
+  GValue *value;
+  GskRenderNode *node;
+  GBytes *bytes;
+
+  written = g_output_stream_splice_finish (stream, result, &error);
+  if (written < 0)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (stream));
+
+  /* For now, we ignore any parsing errors. We might want to revisit that if it turns
+   * out copy/paste leads to too many errors */
+  node = gsk_render_node_deserialize (bytes, NULL, NULL);
+
+  value = gdk_content_deserializer_get_value (deserializer);
+  gsk_value_take_render_node (value, node);
+
+  gdk_content_deserializer_return_success (deserializer);
+}
+
+static void
+gsk_render_node_content_deserializer (GdkContentDeserializer *deserializer)
+{
+  GOutputStream *output;
+
+  output = g_memory_output_stream_new_resizable ();
+
+  g_output_stream_splice_async (output,
+                                gdk_content_deserializer_get_input_stream (deserializer),
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
+                                gdk_content_deserializer_get_priority (deserializer),
+                                gdk_content_deserializer_get_cancellable (deserializer),
+                                gsk_render_node_content_deserializer_finish,
+                                deserializer);
+  g_object_unref (output);
+}
+
+static void
+gsk_render_node_init_content_serializers (void)
+{
+  gdk_content_register_serializer (GSK_TYPE_RENDER_NODE,
+                                   "application/x-gtk-render-node",
+                                   gsk_render_node_content_serializer,
+                                   NULL,
+                                   NULL);
+  gdk_content_register_serializer (GSK_TYPE_RENDER_NODE,
+                                   "text/plain;charset=utf-8",
+                                   gsk_render_node_content_serializer,
+                                   NULL,
+                                   NULL);
+  /* The serialization format only outputs ASCII, so we can do this */
+  gdk_content_register_serializer (GSK_TYPE_RENDER_NODE,
+                                   "text/plain",
+                                   gsk_render_node_content_serializer,
+                                   NULL,
+                                   NULL);
+
+  gdk_content_register_deserializer ("application/x-gtk-render-node",
+                                     GSK_TYPE_RENDER_NODE,
+                                     gsk_render_node_content_deserializer,
+                                     NULL,
+                                     NULL);
+}
+
 /*< private >
  * gsk_render_node_init_types:
  *
@@ -5735,6 +5845,7 @@ gsk_render_node_init_types (void)
     {
       gboolean initialized = TRUE;
       gsk_render_node_init_types_once ();
+      gsk_render_node_init_content_serializers ();
       g_once_init_leave (&register_types__volatile, initialized);
     }
 }

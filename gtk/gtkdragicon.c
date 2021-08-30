@@ -31,7 +31,9 @@
 
 /* for the drag icons */
 #include "gtkcolorswatchprivate.h"
+#include "gtkimage.h"
 #include "gtklabel.h"
+#include "gtkrendernodepaintableprivate.h"
 #include "gtktextutil.h"
 
 
@@ -554,6 +556,25 @@ gtk_drag_icon_create_widget_for_value (const GValue *value)
       g_object_unref (paintable);
 
       return picture;
+    }
+  else if (G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE))
+    {
+      GskRenderNode *node;
+      GdkPaintable *paintable;
+      graphene_rect_t bounds;
+      GtkWidget *image;
+
+      node = gsk_value_get_render_node (value);
+      if (node == NULL)
+        return NULL;
+      
+      gsk_render_node_get_bounds (node, &bounds);
+      paintable = gtk_render_node_paintable_new (node, &bounds);
+      image = gtk_image_new_from_paintable (paintable);
+      gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+      g_object_unref (paintable);
+
+      return image;
     }
   else
     {

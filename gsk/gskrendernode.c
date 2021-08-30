@@ -17,7 +17,7 @@
  */
 
 /**
- * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref)
+ * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref) (set-value-func gsk_value_set_render_node) (get-value-func gsk_value_get_render_node)
  *
  * `GskRenderNode` is the basic block in a scene graph to be
  * rendered using `GskRenderer`.
@@ -620,3 +620,108 @@ gsk_render_node_deserialize (GBytes            *bytes,
 
   return node;
 }
+
+/**
+ * gsk_value_set_render_node:
+ * @value: a `GValue` initialized with type `GSK_TYPE_RENDER_NODE`
+ * @node: a `GskRenderNode`
+ *
+ * Stores the given `GskRenderNode` inside `value`.
+ *
+ * The `GValue` will acquire a reference to the `node`.
+ */
+void
+gsk_value_set_render_node (GValue        *value,
+                           GskRenderNode *node)
+{
+  GskRenderNode *old_node;
+
+  g_return_if_fail (G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE));
+
+  old_node = value->data[0].v_pointer;
+
+  if (node != NULL)
+    {
+      g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+      value->data[0].v_pointer = gsk_render_node_ref (node);
+    }
+  else
+    {
+      value->data[0].v_pointer = NULL;
+    }
+
+  if (old_node != NULL)
+    gsk_render_node_unref (old_node);
+}
+
+/**
+ * gsk_value_take_render_node:
+ * @value: a `GValue` initialized with type `GSK_TYPE_RENDER_NODE`
+ * @node: (transfer full) (nullable): a `GskRenderNode`
+ *
+ * Stores the given `GskRenderNode` inside `value`.
+ *
+ * This function transfers the ownership of the `node` to the `GValue`.
+ */
+void
+gsk_value_take_render_node (GValue        *value,
+                            GskRenderNode *node)
+{
+  GskRenderNode *old_node;
+
+  g_return_if_fail (G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE));
+
+  old_node = value->data[0].v_pointer;
+
+  if (node != NULL)
+    {
+      g_return_if_fail (GSK_IS_RENDER_NODE (node));
+
+      value->data[0].v_pointer = node;
+    }
+  else
+    {
+      value->data[0].v_pointer = NULL;
+    }
+
+  if (old_node != NULL)
+    gsk_render_node_unref (old_node);
+}
+
+/**
+ * gsk_value_get_render_node:
+ * @value: a `GValue` initialized with type `GSK_TYPE_RENDER_NODE`
+ *
+ * Retrieves the `GskRenderNode` stored inside the given `value`.
+ *
+ * Returns: (transfer none) (nullable): a `GskRenderNode`
+ */
+GskRenderNode *
+gsk_value_get_render_node (const GValue *value)
+{
+  g_return_val_if_fail (G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE), NULL);
+
+  return value->data[0].v_pointer;
+}
+
+/**
+ * gsk_value_dup_render_node:
+ * @value: a `GValue` initialized with type `GSK_TYPE_RENDER_NODE`
+ *
+ * Retrieves the `GskRenderNode` stored inside the given `value`, and acquires
+ * a reference to it.
+ *
+ * Returns: (transfer full) (nullable): a `GskRenderNode`
+ */
+GskRenderNode *
+gsk_value_dup_render_node (const GValue *value)
+{
+  g_return_val_if_fail (G_VALUE_HOLDS (value, GSK_TYPE_RENDER_NODE), NULL);
+
+  if (value->data[0].v_pointer == NULL)
+    return NULL;
+
+  return gsk_render_node_ref (value->data[0].v_pointer);
+}
+

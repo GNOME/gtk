@@ -200,6 +200,19 @@
                         <property name="can-shrink">0</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
+                        <child>
+                          <object class="GtkDragSource">
+                            <property name="actions">copy</property>
+                            <signal name="prepare" handler="on_picture_drag_prepare_cb" swapped="no"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkDropTargetAsync">
+                        <property name="actions">copy</property>
+                        <property name="formats">application/x-gtk-render-node</property>
+                        <signal name="drop" handler="on_picture_drop_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
