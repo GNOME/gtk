@@ -7,6 +7,7 @@
  * character data, and definitions for the builtin compose table of GTK.
  * Run it like this:
  *
+ *   cpp -DXCOMM='#' Compose.pre | sed -e 's/^ *#/#/' > Compose
  *   compose-parse Compose sequences-little-endian sequences-big-endian chars gtkcomposedata.h
  *
  * The GTK build expects the output files to be in the source tree, in
