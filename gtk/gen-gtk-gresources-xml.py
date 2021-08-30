@@ -21,6 +21,7 @@ def replace_if_changed(new, old):
     os.remove(new)
 
 srcdir = sys.argv[1]
+endian = sys.argv[2]
 
 xml = '''<?xml version='1.0' encoding='UTF-8'?>
 <gresources>
@@ -84,13 +85,13 @@ for f in get_files('inspector', '.ui'):
 xml += '''
     <file>inspector/inspector.css</file>
     <file>emoji/en.data</file>
-    <file>compose/sequences</file>
+    <file alias="compose/sequences">compose/sequences-{0}-endian</file>
     <file>compose/chars</file>
   </gresource>
-</gresources>'''
+</gresources>'''.format(endian)
 
-if len(sys.argv) > 2:
-  outfile = sys.argv[2]
+if len(sys.argv) > 3:
+  outfile = sys.argv[3]
   tmpfile = outfile + '~'
   with open(tmpfile, 'w') as f:
     f.write(xml)
