@@ -2543,35 +2543,29 @@ gtk_icon_theme_error_quark (void)
 
 void
 gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
-                                       GdkRGBA     *color_out,
-                                       GdkRGBA     *success_out,
-                                       GdkRGBA     *warning_out,
-                                       GdkRGBA     *error_out)
+                                       GdkRGBA      color_out[4])
 {
   GtkCssValue *palette, *color;
+  const char *names[4] = {
+    [GTK_SYMBOLIC_COLOR_ERROR] = "error",
+    [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
+    [GTK_SYMBOLIC_COLOR_SUCCESS] = "success"
+  };
   const GdkRGBA *lookup;
+  gsize i;
 
   color = style->core->color;
   palette = style->core->icon_palette;
-  *color_out = *gtk_css_color_value_get_rgba (color);
+  color_out[GTK_SYMBOLIC_COLOR_FOREGROUND] = *gtk_css_color_value_get_rgba (color);
 
-  lookup = gtk_css_palette_value_get_color (palette, "success");
-  if (lookup)
-    *success_out = *lookup;
-  else
-    *success_out = *color_out;
-
-  lookup = gtk_css_palette_value_get_color (palette, "warning");
-  if (lookup)
-    *warning_out = *lookup;
-  else
-    *warning_out = *color_out;
-
-  lookup = gtk_css_palette_value_get_color (palette, "error");
-  if (lookup)
-    *error_out = *lookup;
-  else
-    *error_out = *color_out;
+  for (i = 1; i < 4; i++)
+    {
+      lookup = gtk_css_palette_value_get_color (palette, names[i]);
+      if (lookup)
+        color_out[i] = *lookup;
+      else
+        color_out[i] = color_out[GTK_SYMBOLIC_COLOR_FOREGROUND];
+    }
 }
 
 

@@ -156,7 +156,7 @@ gtk_css_image_icon_theme_compute (GtkCssImage      *image,
   copy->icon_theme = gtk_icon_theme_get_for_display (display);
   copy->serial = gtk_icon_theme_get_serial (copy->icon_theme);
   copy->scale = gtk_style_provider_get_scale (provider);
-  gtk_icon_theme_lookup_symbolic_colors (style, &copy->colors[0], &copy->colors[3], &copy->colors[2], &copy->colors[1]);
+  gtk_icon_theme_lookup_symbolic_colors (style, copy->colors);
 
   return GTK_CSS_IMAGE (copy);
 }
