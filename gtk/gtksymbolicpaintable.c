@@ -21,6 +21,8 @@
 
 #include "gtksymbolicpaintable.h"
 
+#include "gtkenums.h"
+
 /**
  * GtkSymbolicPaintable:
  *
@@ -68,7 +70,7 @@ gtk_symbolic_paintable_default_init (GtkSymbolicPaintableInterface *iface)
  *
  * Snapshots the paintable with the given colors.
  *
- * If not at least 4 colors are provided, GTK will pad the array with default
+ * If less than 4 colors are provided, GTK will pad the array with default
  * colors.
  */
 void
@@ -97,16 +99,15 @@ gtk_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable   *paintable,
   else
     {
       /* Taken from GTK3, no idea where it got those from */
-      GdkRGBA fg_default = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0 };
-      GdkRGBA error_default = { 0.796887159533074, 0, 0, 1.0 };
-      GdkRGBA warning_default = {0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 };
-      GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0 };
+      GdkRGBA real_colors[4] = {
+        [GTK_SYMBOLIC_COLOR_FOREGROUND] = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0 },
+        [GTK_SYMBOLIC_COLOR_ERROR] = { 0.796887159533074, 0, 0, 1.0 },
+        [GTK_SYMBOLIC_COLOR_WARNING] = { 0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 },
+        [GTK_SYMBOLIC_COLOR_SUCCESS] = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0 }
+      };
 
-      iface->snapshot_symbolic (paintable, snapshot, width, height, (GdkRGBA[4]) {
-                                  n_colors > 0 ? colors[0] : fg_default,
-                                  n_colors > 1 ? colors[1] : error_default,
-                                  n_colors > 2 ? colors[2] : warning_default,
-                                  success_default,
-                                }, 4);
+      memcpy (real_colors, colors, sizeof (GdkRGBA) * n_colors);
+
+      iface->snapshot_symbolic (paintable, snapshot, width, height, real_colors, 4);
     }
 }
