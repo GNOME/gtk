@@ -836,6 +836,7 @@ gtk_gresources_xml = configure_file(output: 'gtk.gresources.xml',
   command: [
     gen_gtk_gresources_xml,
     meson.current_source_dir(),
+    host_machine.endian(),
     '@OUTPUT@'
   ],
 )
