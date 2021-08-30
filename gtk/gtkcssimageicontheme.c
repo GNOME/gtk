@@ -27,6 +27,7 @@
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtksymbolicpaintable.h"
 #include "gtkiconthemeprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageIconTheme, _gtk_css_image_icon_theme, GTK_TYPE_CSS_IMAGE)
@@ -88,13 +89,12 @@ gtk_css_image_icon_theme_snapshot (GtkCssImage *image,
       gtk_snapshot_save (snapshot);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
     }
-  gtk_icon_paintable_snapshot_with_colors (icon, snapshot,
-                                           icon_width,
-                                           icon_height,
-                                           &icon_theme->color,
-                                           &icon_theme->success,
-                                           &icon_theme->warning,
-                                           &icon_theme->error);
+  gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (icon),
+                                            snapshot,
+                                            icon_width,
+                                            icon_height,
+                                            icon_theme->colors,
+                                            G_N_ELEMENTS (icon_theme->colors));
   if (x != 0 || y != 0)
     gtk_snapshot_restore (snapshot);
 }
@@ -156,7 +156,7 @@ gtk_css_image_icon_theme_compute (GtkCssImage      *image,
   copy->icon_theme = gtk_icon_theme_get_for_display (display);
   copy->serial = gtk_icon_theme_get_serial (copy->icon_theme);
   copy->scale = gtk_style_provider_get_scale (provider);
-  gtk_icon_theme_lookup_symbolic_colors (style, &copy->color, &copy->success, &copy->warning, &copy->error);
+  gtk_icon_theme_lookup_symbolic_colors (style, copy->colors);
 
   return GTK_CSS_IMAGE (copy);
 }

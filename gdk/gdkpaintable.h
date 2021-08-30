@@ -70,17 +70,17 @@ typedef enum {
  *   snapshot at or 0 if none. This is purely a hint. The object must still
  *   be able to render at any size.
  * @get_intrinsic_aspect_ratio: The preferred aspect ratio for this object
- *   or 0 if none. If both [vfunc@Gdk.PaintableInterface.get_intrinsic_width]
- *   and [vfunc@Gdk.PaintableInterface.get_intrinsic_height] return non-zero
+ *   or 0 if none. If both [vfunc@Gdk.Paintable.get_intrinsic_width]
+ *   and [vfunc@Gdk.Paintable.get_intrinsic_height] return non-zero
  *   values, this function should return the aspect ratio computed from those.
  *
  * The list of functions that can be implemented for the `GdkPaintable`
  * interface.
  *
- * Note that apart from the [vfunc@Gdk.PaintableInterface.snapshot] function,
+ * Note that apart from the [vfunc@Gdk.Paintable.snapshot] function,
  * no virtual function of this interface is mandatory to implement, though it
- * is a good idea to implement [vfunc@Gdk.PaintableInterface.get_current_image]
- * for non-static paintables and [vfunc@Gdk.PaintableInterface.get_flags] if the
+ * is a good idea to implement [vfunc@Gdk.Paintable.get_current_image]
+ * for non-static paintables and [vfunc@Gdk.Paintable.get_flags] if the
  * image is not dynamic as the default implementation returns no flags and
  * that will make the implementation likely quite slow.
  */

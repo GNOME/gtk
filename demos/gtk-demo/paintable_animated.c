@@ -65,9 +65,12 @@ gtk_nuclear_animation_snapshot (GdkPaintable *paintable,
 
   /* We call the function from the previous example here. */
   gtk_nuclear_snapshot (snapshot,
+                        &(GdkRGBA) { 0, 0, 0, 1 }, /* black */
+                        nuclear->draw_background
+                          ? &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 } /* yellow */
+                          : &(GdkRGBA) { 0, 0, 0, 0 }, /* transparent */
                         width, height,
-                        2 * G_PI * nuclear->progress / MAX_PROGRESS,
-                        nuclear->draw_background);
+                        2 * G_PI * nuclear->progress / MAX_PROGRESS);
 }
 
 static GdkPaintable *

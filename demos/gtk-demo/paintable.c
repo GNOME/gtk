@@ -45,26 +45,27 @@ struct _GtkNuclearIconClass
  * so that it can be called from all the other demos, too.
  */
 void
-gtk_nuclear_snapshot (GtkSnapshot *snapshot,
-                      double       width,
-                      double       height,
-                      double       rotation,
-                      gboolean     draw_background)
+gtk_nuclear_snapshot (GtkSnapshot   *snapshot,
+                      const GdkRGBA *foreground,
+                      const GdkRGBA *background,
+                      double         width,
+                      double         height,
+                      double         rotation)
 {
 #define RADIUS 0.3
   cairo_t *cr;
   double size;
 
-  if (draw_background)
-    gtk_snapshot_append_color (snapshot,
-                               &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 },
-                               &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gtk_snapshot_append_color (snapshot,
+                             background,
+                             &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   size = MIN (width, height);
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT ((width - size) / 2.0,
                                                        (height - size) / 2.0,
                                                        size, size));
+  gdk_cairo_set_source_rgba (cr, foreground);
   cairo_translate (cr, width / 2.0, height / 2.0);
   cairo_scale (cr, size, size);
   cairo_rotate (cr, rotation);
@@ -94,9 +95,10 @@ gtk_nuclear_icon_snapshot (GdkPaintable *paintable,
    */
 
   gtk_nuclear_snapshot (snapshot,
+                        &(GdkRGBA) { 0, 0, 0, 1 }, /* black */
+                        &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 }, /* yellow */
                         width, height,
-                        nuclear->rotation,
-                        TRUE);
+                        nuclear->rotation);
 }
 
 static GdkPaintableFlags

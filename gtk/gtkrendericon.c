@@ -28,6 +28,7 @@
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkiconthemeprivate.h"
 #include "gtksnapshot.h"
+#include "gtksymbolicpaintable.h"
 #include "gsktransform.h"
 
 #include <math.h>
@@ -97,8 +98,8 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
 {
   GskTransform *transform;
   gboolean has_shadow;
-  gboolean is_icon_paintable;
-  GdkRGBA fg, sc, wc, ec;
+  gboolean is_symbolic_paintable;
+  GdkRGBA colors[4];
 
   g_return_if_fail (GTK_IS_CSS_STYLE (style));
   g_return_if_fail (snapshot != NULL);
@@ -112,19 +113,19 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
 
   has_shadow = gtk_css_shadow_value_push_snapshot (style->icon->icon_shadow, snapshot);
 
-  is_icon_paintable = GTK_IS_ICON_PAINTABLE (paintable);
-  if (is_icon_paintable)
+  is_symbolic_paintable = GTK_IS_SYMBOLIC_PAINTABLE (paintable);
+  if (is_symbolic_paintable)
     {
-      gtk_icon_theme_lookup_symbolic_colors (style, &fg, &sc, &wc, &ec);
+      gtk_icon_theme_lookup_symbolic_colors (style, colors);
 
-      if (fg.alpha == 0.0f)
+      if (gdk_rgba_is_clear (&colors[0]))
         goto transparent;
     }
 
   if (transform == NULL)
     {
-      if (is_icon_paintable)
-        gtk_icon_paintable_snapshot_with_colors (GTK_ICON_PAINTABLE (paintable), snapshot, width, height, &fg, &sc, &wc, &ec);
+      if (is_symbolic_paintable)
+        gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, colors, G_N_ELEMENTS (colors));
       else
         gdk_paintable_snapshot (paintable, snapshot, width, height);
     }
@@ -137,8 +138,8 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
       gtk_snapshot_transform (snapshot, transform);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- width / 2.0, - height / 2.0));
 
-      if (is_icon_paintable)
-        gtk_icon_paintable_snapshot_with_colors (GTK_ICON_PAINTABLE (paintable), snapshot, width, height, &fg, &sc, &wc, &ec);
+      if (is_symbolic_paintable)
+        gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, colors, G_N_ELEMENTS (colors));
       else
         gdk_paintable_snapshot (paintable, snapshot, width, height);
 
