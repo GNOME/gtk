@@ -20,15 +20,15 @@
  */
 
 #include "config.h"
-#include "gtksearchengine.h"
-#include "gtksearchenginemodel.h"
-#include "gtksearchenginequartz.h"
+#include "gtksearchengineprivate.h"
+#include "gtksearchenginemodelprivate.h"
+#include "gtksearchenginequartzprivate.h"
 #include "gtkintl.h"
 
 #include <gdk/gdk.h> /* for GDK_WINDOWING_MACOS */
 
 #if defined(HAVE_TRACKER3)
-#include "gtksearchenginetracker3.h"
+#include "gtksearchenginetracker3private.h"
 #endif
 
 struct _GtkSearchEnginePrivate {

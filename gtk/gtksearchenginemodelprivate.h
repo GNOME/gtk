@@ -20,7 +20,7 @@
 #ifndef __GTK_SEARCH_ENGINE_MODEL_H__
 #define __GTK_SEARCH_ENGINE_MODEL_H__
 
-#include "gtksearchengine.h"
+#include "gtksearchengineprivate.h"
 #include "gtkfilesystemmodel.h"
 
 G_BEGIN_DECLS

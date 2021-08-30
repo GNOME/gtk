@@ -32,7 +32,7 @@
 #include <gtk/gtk.h>
 #include <libtracker-sparql/tracker-sparql.h>
 
-#include "gtksearchenginetracker3.h"
+#include "gtksearchenginetracker3private.h"
 
 #define MINER_FS_BUS_NAME "org.freedesktop.Tracker3.Miner.Files"
 

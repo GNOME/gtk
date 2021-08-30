@@ -4191,7 +4191,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         _gtk_marshal_INT__OBJECT_OBJECT_POINTER,
                         GDK_TYPE_DRAG_ACTION, 2,
                         G_TYPE_OBJECT,
-                        G_TYPE_POINTER /* GSList of GFile */ );
+                        GDK_TYPE_FILE_LIST);
 
   /*
    * GtkPlacesSidebar::drag-action-ask:
@@ -4237,7 +4237,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         _gtk_marshal_VOID__OBJECT_POINTER_INT,
                         G_TYPE_NONE, 3,
                         G_TYPE_OBJECT,
-                        G_TYPE_POINTER, /* GSList of GFile */
+                        GDK_TYPE_FILE_LIST,
                         GDK_TYPE_DRAG_ACTION);
 
   /*

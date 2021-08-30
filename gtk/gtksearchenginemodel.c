@@ -23,7 +23,7 @@
 
 #include <gdk/gdk.h>
 
-#include "gtksearchenginemodel.h"
+#include "gtksearchenginemodelprivate.h"
 #include "gtkprivate.h"
 
 #include <string.h>
