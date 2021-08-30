@@ -61,10 +61,10 @@ gtk_nuclear_symbolic_snapshot_symbolic (GtkSymbolicPaintable *paintable,
       bg_color = &transparent;
       break;
     case WARNING_ALERT:
-      bg_color = &colors[2]; /* warning color */
+      bg_color = &colors[GTK_SYMBOLIC_COLOR_WARNING];
       break;
     case WARNING_EMERGENCY:
-      bg_color = &colors[1]; /* error color */
+      bg_color = &colors[GTK_SYMBOLIC_COLOR_ERROR];
       break;
     default:
       /* This should never happen, but we better do defensive coding
@@ -76,7 +76,7 @@ gtk_nuclear_symbolic_snapshot_symbolic (GtkSymbolicPaintable *paintable,
 
   /* Draw the icon with the selected warning color */
   gtk_nuclear_snapshot (snapshot,
-                        &colors[0], /* foreground color */
+                        &colors[GTK_SYMBOLIC_COLOR_FOREGROUND],
                         bg_color,
                         width, height,
                         0);

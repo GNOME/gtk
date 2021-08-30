@@ -1132,6 +1132,25 @@ typedef enum {
 } GtkSystemSetting;
 
 /**
+ * GtkSymbolicColor:
+ * @GTK_SYMBOLIC_COLOR_FOREGROUND: The default foreground color
+ * @GTK_SYMBOLIC_COLOR_ERROR: Indication color for errors
+ * @GTK_SYMBOLIC_COLOR_WARNING: Indication color for warnings
+ * @GTK_SYMBOLIC_COLOR_SUCCESS: Indication color for success
+ *
+ * The indexes of colors passed to symbolic color rendering, such as
+ * [vfunc.GtkSymbolicPaintable.snapshot_symbolic].
+ *
+ * More values may be added over time.
+ */
+typedef enum {
+  GTK_SYMBOLIC_COLOR_FOREGROUND = 0,
+  GTK_SYMBOLIC_COLOR_ERROR = 1,
+  GTK_SYMBOLIC_COLOR_WARNING = 2,
+  GTK_SYMBOLIC_COLOR_SUCCESS = 3
+} GtkSymbolicColor;
+
+/**
  * GtkAccessibleRole:
  * @GTK_ACCESSIBLE_ROLE_ALERT: An element with important, and usually
  *   time-sensitive, information
