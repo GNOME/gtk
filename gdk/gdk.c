@@ -132,7 +132,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows" },
   { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support" },
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer" },
-  { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings" },
+  { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings", TRUE },
 };
 
 

@@ -89,7 +89,7 @@ get_boolean_default (GdkX11Screen *x11_screen,
   char *v;
   int i;
 
-  if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
+  if (gdk_display_get_debug_flags (GDK_SCREEN_DISPLAY (x11_screen)) & GDK_DEBUG_DEFAULT_SETTINGS)
       return FALSE;
 
   v = XGetDefault (dpy, "Xft", option);
@@ -114,7 +114,7 @@ get_double_default (GdkX11Screen *x11_screen,
   Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
   char     *v, *e;
 
-  if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
+  if (gdk_display_get_debug_flags (GDK_SCREEN_DISPLAY (x11_screen)) & GDK_DEBUG_DEFAULT_SETTINGS)
       return FALSE;
 
   v = XGetDefault (dpy, "Xft", option);
@@ -141,7 +141,7 @@ get_integer_default (GdkX11Screen *x11_screen,
   Display *dpy = GDK_SCREEN_XDISPLAY (x11_screen);
   char *v, *e;
 
-  if (GDK_DISPLAY_DEBUG_CHECK (GDK_SCREEN_DISPLAY (x11_screen), DEFAULT_SETTINGS))
+  if (gdk_display_get_debug_flags (GDK_SCREEN_DISPLAY (x11_screen)) & GDK_DEBUG_DEFAULT_SETTINGS)
       return FALSE;
 
   v = XGetDefault (dpy, "Xft", option);

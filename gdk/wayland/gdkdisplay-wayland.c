@@ -2117,7 +2117,7 @@ gdk_wayland_display_get_setting (GdkDisplay *display,
 {
   TranslationEntry *entry;
 
-  if (GDK_DISPLAY_DEBUG_CHECK (display, DEFAULT_SETTINGS))
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS)
       return FALSE;
 
   if (GDK_WAYLAND_DISPLAY (display)->settings != NULL &&
