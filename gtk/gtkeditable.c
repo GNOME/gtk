@@ -945,10 +945,14 @@ gtk_editable_set_enable_undo (GtkEditable *editable,
  * @object_class: a `GObjectClass`
  * @first_prop: property ID to use for the first property
  *
- * Installs the `GtkEditable` properties for @class.
+ * Overrides the `GtkEditable` properties for @class.
  *
  * This is a helper function that should be called in class_init,
  * after installing your own properties.
+ *
+ * Note that your class must have "text", "cursor-position",
+ * "selection-bound", "editable", "width-chars", "max-width-chars",
+ * "xalign" and "enable-undo" properties for this function to work.
  *
  * To handle the properties in your set_property and get_property
  * functions, you can either use [func@Gtk.Editable.delegate_set_property]
