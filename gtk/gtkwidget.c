@@ -6441,8 +6441,16 @@ update_pango_context (GtkWidget    *widget,
   pango_context_set_font_description (context, font_desc);
   pango_font_description_free (font_desc);
 
-  if (cairo_version () >= CAIRO_VERSION_ENCODE (1, 17, 4))
-    pango_context_set_round_glyph_positions (context, FALSE);
+  settings = gtk_widget_get_settings (widget);
+
+  if (settings &&
+      cairo_version () >= CAIRO_VERSION_ENCODE (1, 17, 4))
+    {
+      gboolean hint_font_metrics;
+
+      g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
+      pango_context_set_round_glyph_positions (context, hint_font_metrics);
+    }
 
   pango_context_set_base_dir (context,
                               _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
@@ -6450,7 +6458,6 @@ update_pango_context (GtkWidget    *widget,
 
   pango_cairo_context_set_resolution (context, _gtk_css_number_value_get (style->core->dpi, 100));
 
-  settings = gtk_widget_get_settings (widget);
   font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
   if (settings && font_options)
     {

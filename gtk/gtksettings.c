@@ -166,6 +166,7 @@ enum {
   PROP_XFT_HINTSTYLE,
   PROP_XFT_RGBA,
   PROP_XFT_DPI,
+  PROP_HINT_FONT_METRICS,
   PROP_CURSOR_THEME_NAME,
   PROP_CURSOR_THEME_SIZE,
   PROP_ALTERNATIVE_BUTTON_ORDER,
@@ -556,6 +557,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   g_assert (result == PROP_XFT_RGBA);
 
+  
   /**
    * GtkSettings:gtk-xft-dpi:
    *
@@ -571,6 +573,25 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                GTK_PARAM_READWRITE));
 
   g_assert (result == PROP_XFT_DPI);
+
+  /**
+   * GtkSettings:gtk-hint-font-metrics:
+   *
+   * Whether hinting should be applied to font metrics.
+   *
+   * Note that this also turns off subpixel positioning of glyphs,
+   * since it conflicts with metrics hinting.
+   *
+   * Since: 4.6
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-hint-font-metrics",
+                                                                   P_("Hint Font Metrics"),
+                                                                   P_("Whether hinting should be applied to font metrics"),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE));
+
+  g_assert (result == PROP_HINT_FONT_METRICS);
 
   /**
    * GtkSettings:gtk-cursor-theme-name:
@@ -1439,6 +1460,7 @@ gtk_settings_notify (GObject    *object,
     case PROP_XFT_HINTING:
     case PROP_XFT_HINTSTYLE:
     case PROP_XFT_RGBA:
+    case PROP_HINT_FONT_METRICS:
       settings_update_font_options (settings);
       gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_FONT_CONFIG);
       break;
@@ -1678,6 +1700,7 @@ settings_update_font_options (GtkSettings *settings)
   cairo_antialias_t antialias_mode;
   char *rgba_str;
   cairo_subpixel_order_t subpixel_order;
+  gboolean hint_font_metrics;
 
   if (settings->font_options)
     cairo_font_options_destroy (settings->font_options);
@@ -1687,11 +1710,14 @@ settings_update_font_options (GtkSettings *settings)
                 "gtk-xft-hinting", &hinting,
                 "gtk-xft-hintstyle", &hint_style_str,
                 "gtk-xft-rgba", &rgba_str,
+                "gtk-hint-font-metrics", &hint_font_metrics,
                 NULL);
 
   settings->font_options = cairo_font_options_create ();
 
-  cairo_font_options_set_hint_metrics (settings->font_options, CAIRO_HINT_METRICS_OFF);
+  cairo_font_options_set_hint_metrics (settings->font_options,
+                                       hint_font_metrics ? CAIRO_HINT_METRICS_ON
+                                                         : CAIRO_HINT_METRICS_OFF);
 
   hint_style = CAIRO_HINT_STYLE_DEFAULT;
   if (hinting == 0)
