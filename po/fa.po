@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-08-05 02:08+0000\n"
-"PO-Revision-Date: 2021-08-07 19:18+0430\n"
+"POT-Creation-Date: 2021-09-01 09:04+0000\n"
+"PO-Revision-Date: 2021-09-01 14:13+0430\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -452,7 +452,7 @@ msgstr "تعلیق"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:1282 gdk/win32/gdkdrop-win32.c:1327
+#: gdk/win32/gdkdrop-win32.c:1099 gdk/win32/gdkdrop-win32.c:1144
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:234
 msgid "No compatible transfer format found"
 msgstr "هیچ قالب انتقال سازگاری پیدا نشد"
@@ -463,7 +463,7 @@ msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "شکست در رمزگشایی محتوا با mime از گونهٔ %s"
 
 #: gdk/wayland/gdkglcontext-wayland.c:190 gdk/win32/gdkglcontext-win32-egl.c:399
-#: gdk/win32/gdkglcontext-win32-wgl.c:609 gdk/x11/gdkglcontext-egl.c:600
+#: gdk/win32/gdkglcontext-win32-wgl.c:628 gdk/x11/gdkglcontext-egl.c:600
 #: gdk/x11/gdkglcontext-glx.c:613
 msgid "Unable to create a GL context"
 msgstr "امکان ساخت زمینه مناسب برای GL نبود"
@@ -474,15 +474,15 @@ msgstr "شکست در ایجاد نمایشگر EGL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:493 gdk/x11/gdkglcontext-egl.c:697
 msgid "Could not initialize EGL display"
-msgstr ""
+msgstr "نتوانست نمایشگر EGL را راه‌اندازی کند"
 
 #: gdk/wayland/gdkglcontext-wayland.c:504 gdk/x11/gdkglcontext-egl.c:707
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
-msgstr ""
+msgstr "EGL نگارش %Id. %Id بیش از حد قدیمی است. GTK به %Id.%Id نیاز دارد"
 
 #: gdk/wayland/gdkglcontext-wayland.c:515 gdk/win32/gdkglcontext-win32-egl.c:273
-#: gdk/win32/gdkglcontext-win32-wgl.c:283
+#: gdk/win32/gdkglcontext-win32-wgl.c:286 gdk/win32/gdkglcontext-win32-wgl.c:304
 msgid "No GL implementation is available"
 msgstr "هیچ پیاده‌سازی GLای پیدا نشد"
 
@@ -492,10 +492,10 @@ msgstr "Core GL روی پیاده‌سازی EGL موجود نیست"
 
 #: gdk/wayland/gdkglcontext-wayland.c:534 gdk/x11/gdkglcontext-egl.c:718
 msgid "Surfaceless contexts are not supported on this EGL implementation"
-msgstr ""
+msgstr "در این پیاده‌سازی EGL زمینه‌های بی‌سطح پشتیبانی نمی‌شوند"
 
 #: gdk/wayland/gdkglcontext-wayland.c:546 gdk/win32/gdkglcontext-win32-egl.c:216
-#: gdk/win32/gdkglcontext-win32-egl.c:226 gdk/win32/gdkglcontext-win32-wgl.c:575
+#: gdk/win32/gdkglcontext-win32-egl.c:226 gdk/win32/gdkglcontext-win32-wgl.c:594
 msgid "No available configurations for the given pixel format"
 msgstr "هیچ پیکربندی برای قالب نقطه‌ای ارائه شده موجود نیست"
 
@@ -581,37 +581,37 @@ msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. هیچ ق
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "نتوانست دادهٔ تخته‌گیره را بگیرد. ‪GetClipboardData()‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1213
+#: gdk/win32/gdkdrop-win32.c:1030
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "نتوانست دادهٔ ک‌ور را بگیرد. ‪GlobalLock(0x%p)‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1222
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "نتوانست دادهٔ ک‌ور را بگیرد. ‪GlobalSize(0x%p)‬ شکست خورد: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1233
+#: gdk/win32/gdkdrop-win32.c:1050
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr "نتوانست دادهٔ ک‌ور را بگیرد.. تخصیص %s بایت برای ذخیرهٔ داده شکست خورد."
 
-#: gdk/win32/gdkdrop-win32.c:1301
+#: gdk/win32/gdkdrop-win32.c:1118
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "سطح GTK 0x%p به عنوان یک مقصد رها کردن ثبت نشده"
 
-#: gdk/win32/gdkdrop-win32.c:1308
+#: gdk/win32/gdkdrop-win32.c:1125
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "رکورد زمینهٔ مقصد  0x%p هیچ شی داده‌ای ندارد"
 
-#: gdk/win32/gdkdrop-win32.c:1346
+#: gdk/win32/gdkdrop-win32.c:1163
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) شکست خورد. 0x%lx را برگرداند"
 
-#: gdk/win32/gdkdrop-win32.c:1378
+#: gdk/win32/gdkdrop-win32.c:1195
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "شکست در تغییر شکل قالب W32 دادهٔ ک‌ور 0x%x به %p (%s)"
@@ -680,11 +680,11 @@ msgstr "هیچ پیکربندی‌ای برای EGL موجود نیست"
 
 #: gdk/x11/gdkglcontext-egl.c:188
 msgid "Failed to get EGL configurations"
-msgstr ""
+msgstr "شکست در گرفتن پیکربندی EGL"
 
 #: gdk/x11/gdkglcontext-egl.c:266
 msgid "No EGL configuration with required features found"
-msgstr ""
+msgstr "هیچ پیکربندی‌ای با ویژگی‌های موردنیاز برای EGL موجود نیست"
 
 #: gdk/x11/gdkglcontext-egl.c:273
 msgid "No perfect EGL configuration found"
@@ -700,7 +700,7 @@ msgstr "هیچ پیکربندی‌ای برای GLX موجود نیست"
 
 #: gdk/x11/gdkglcontext-glx.c:843
 msgid "No GLX configuration with required features found"
-msgstr ""
+msgstr "هیچ پیکربندی‌ای با ویژگی‌های موردنیاز برای GLX موجود نیست"
 
 #: gdk/x11/gdkglcontext-glx.c:914
 msgid "GLX is not supported"
@@ -2012,7 +2012,7 @@ msgstr "یک پرونده با همان نام در حال حاضر وجود د�
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175 gtk/gtkmountoperation.c:610
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:642
 #: gtk/gtkprinteroptionwidget.c:713 gtk/gtkprintunixdialog.c:667
-#: gtk/gtkprintunixdialog.c:823 gtk/gtkwindow.c:6139 gtk/inspector/css-editor.c:248
+#: gtk/gtkprintunixdialog.c:823 gtk/gtkwindow.c:6142 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1245 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2102,7 +2102,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6059 gtk/gtktextview.c:8758
+#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8756
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2372,19 +2372,19 @@ msgstr "دگرگونه‌های نویسه"
 msgid "OpenGL context creation failed"
 msgstr "ساخت زمینه OpenGL شکست خورد"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6047 gtk/gtktextview.c:8746
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8744
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6051 gtk/gtktextview.c:8750
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8748
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6055 gtk/gtktextview.c:8754
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8752
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6068 gtk/gtktextview.c:8779
+#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8777
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
@@ -2494,7 +2494,7 @@ msgid "%d:%02d"
 msgstr "%Id:%I02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176 gtk/gtkprintbackend.c:643
-#: gtk/gtkwindow.c:6140
+#: gtk/gtkwindow.c:6143
 msgid "_OK"
 msgstr "_تأیید"
 
@@ -3351,15 +3351,15 @@ msgstr "جست‌وجو دیگری را امتحان کنید"
 msgid "Could not show link"
 msgstr "نتوانست پیوند را نشان دهد"
 
-#: gtk/gtktext.c:6073 gtk/gtktextview.c:8784
+#: gtk/gtktext.c:6074 gtk/gtktextview.c:8782
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
-#: gtk/gtktextview.c:8766
+#: gtk/gtktextview.c:8764
 msgid "_Undo"
 msgstr "بر_گردان"
 
-#: gtk/gtktextview.c:8770
+#: gtk/gtktextview.c:8768
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
@@ -3386,12 +3386,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkwindow.c:6127
+#: gtk/gtkwindow.c:6130
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "می‌خواهید از بازرس +GTK استفاده کنید؟"
 
-#: gtk/gtkwindow.c:6129
+#: gtk/gtkwindow.c:6132
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify the "
@@ -3401,7 +3401,7 @@ msgstr ""
 "بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK "
 "را می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
 
-#: gtk/gtkwindow.c:6134
+#: gtk/gtkwindow.c:6137
 msgid "Don’t show this message again"
 msgstr "این پیام را دوباره نشان نده"
 
