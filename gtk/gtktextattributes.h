@@ -108,7 +108,7 @@ struct _GtkTextAppearance
  * @wrap_mode: `GtkWrapMode` for text.
  * @language: `PangoLanguage` for text.
  * @invisible: Hide the text.
- * @bg_full_height: Background is fit to full line height rather than
+ * @bg_full_height: Background is fit to full line height rather than:
  *    baseline +/- ascent/descent (font height).
  * @editable: Can edit this text.
  * @no_fallback: Whether to disable font fallback.
@@ -162,6 +162,7 @@ struct _GtkTextAttributes
   guint text_transform : 3; /* PangoTextTransform */
   guint word : 1;
   guint sentence : 1;
+  guint baseline_shift : 2; /* PangoFontScale / PangoBaselineShift */
 };
 
 GtkTextAttributes* gtk_text_attributes_new         (void);

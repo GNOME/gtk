@@ -447,6 +447,9 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
       if (tag->priv->sentence_set)
         dest->sentence = vals->sentence;
+
+      if (tag->priv->baseline_shift_set)
+        dest->baseline_shift = vals->baseline_shift;
     }
 
   dest->left_margin += left_margin_accumulative;
@@ -477,7 +480,8 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
     priv->invisible_set ||
     priv->font_features_set ||
     priv->letter_spacing_set ||
-    priv->text_transform_set;
+    priv->text_transform_set ||
+    priv->baseline_shift_set;
 }
 
 gboolean

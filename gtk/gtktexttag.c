@@ -137,6 +137,7 @@ enum {
   PROP_TEXT_TRANSFORM,
   PROP_WORD,
   PROP_SENTENCE,
+  PROP_BASELINE_SHIFT,
 
   /* Behavior args */
   PROP_ACCUMULATIVE_MARGIN,
@@ -182,6 +183,7 @@ enum {
   PROP_TEXT_TRANSFORM_SET,
   PROP_WORD_SET,
   PROP_SENTENCE_SET,
+  PROP_BASELINE_SHIFT_SET,
 
   LAST_ARG
 };
@@ -913,6 +915,23 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
+   * GtkTextTag:baseline-shift:
+   *
+   * Whether the tag contents should be shifted to superscript or subscript position,
+   * relative to the previous content. This also changes the font to a smaller size.
+   *
+   * Since: 4.6
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_BASELINE_SHIFT,
+                                   g_param_spec_enum ("baseline-shift",
+                                                      P_("Baseline Shift"),
+                                                      P_("Whether to shift the baseline."),
+                                                      PANGO_TYPE_BASELINE_SHIFT,
+                                                      PANGO_BASELINE_SHIFT_NONE,
+                                                      GTK_PARAM_READWRITE));
+
+  /**
    * GtkTextTag:accumulative-margin:
    *
    * Whether the margins accumulate or override each other.
@@ -1102,6 +1121,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("sentence-set", PROP_WORD_SET,
                 P_("Sentence set"),
                 P_("Whether this tag represents a single sentence"));
+
+  ADD_SET_PROP ("baseline-shift-set", PROP_BASELINE_SHIFT_SET,
+                P_("Baseline Shift set"),
+                P_("Whether this tag represents a baseline shift"));
 }
 
 static void
@@ -1869,6 +1892,12 @@ gtk_text_tag_set_property (GObject      *object,
       g_object_notify (object, "sentence-set");
       break;
 
+    case PROP_BASELINE_SHIFT:
+      priv->baseline_shift_set = TRUE;
+      priv->values->baseline_shift = g_value_get_enum (value);
+      g_object_notify (object, "baseline-shift-set");
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       priv->accumulative_margin = g_value_get_boolean (value);
       g_object_notify (object, "accumulative-margin");
@@ -2043,6 +2072,10 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_SENTENCE_SET:
       priv->sentence_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_BASELINE_SHIFT_SET:
+      priv->baseline_shift_set = g_value_get_boolean (value);
       break;
 
     default:
@@ -2269,6 +2302,10 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, priv->values->sentence);
       break;
 
+    case PROP_BASELINE_SHIFT:
+      g_value_set_boolean (value, priv->values->baseline_shift);
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       g_value_set_boolean (value, priv->accumulative_margin);
       break;
@@ -2421,6 +2458,10 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_SENTENCE_SET:
       g_value_set_boolean (value, priv->sentence_set);
+      break;
+
+    case PROP_BASELINE_SHIFT_SET:
+      g_value_set_boolean (value, priv->baseline_shift_set);
       break;
 
     case PROP_BACKGROUND:

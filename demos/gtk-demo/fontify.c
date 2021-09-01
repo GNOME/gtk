@@ -287,10 +287,11 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           INT_ATTR (baseline_shift);
           break;
 
+        /* Ignore font scale, since we treat baseline-shift as indicating
+         * both. And in practice, they will basically always occur together
+         * (from a <sup> or <sub>)
+         */
         case PANGO_ATTR_FONT_SCALE:
-          INT_ATTR (font_scale);
-          break;
-
         case PANGO_ATTR_SHAPE:
         case PANGO_ATTR_ABSOLUTE_SIZE:
         case PANGO_ATTR_GRAVITY:

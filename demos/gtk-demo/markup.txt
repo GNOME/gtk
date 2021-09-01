@@ -11,7 +11,7 @@ Colorful <span underline="low" underline-color="blue"><span underline="double" u
 
 Colorful <span strikethrough="true" strikethrough-color="magenta">strikethroughs</span> and <span overline="single" overline_color="green">overlines</span>
 
-Superscripts and subscripts: 𝜀<span rise="-6000" size="x-small" font_desc="italic">0</span> = 𝜔<span rise="8000" size="smaller">𝜔<span rise="14000" size="smaller">𝜔<span rise="20000">.<span rise="23000">.<span rise="26000">.</span></span></span></span></span>
+Superscripts and subscripts: <span font="italic">ε<sub><span size='smaller'>0</span></sub> = ω<sup>ω<sup>ω<sup>.<sup>.<sup>.</sup></sup></sup></sup></sup></span>
 
 <span letter_spacing="3000">Letterspacing</span>
 

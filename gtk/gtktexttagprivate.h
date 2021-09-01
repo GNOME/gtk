@@ -90,6 +90,7 @@ struct _GtkTextTagPrivate
   guint text_transform_set : 1;
   guint word_set : 1;
   guint sentence_set : 1;
+  guint baseline_shift_set : 1;
 
   /* Whether these margins accumulate or override */
   guint accumulative_margin : 1;

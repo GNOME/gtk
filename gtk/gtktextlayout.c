@@ -1712,6 +1712,21 @@ add_text_attrs (GtkTextLayout      *layout,
 
       pango_attr_list_insert (attrs, attr);
     }
+
+  if (style->baseline_shift)
+    {
+      attr = pango_attr_baseline_shift_new (style->baseline_shift);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+
+      attr = pango_attr_font_scale_new (style->baseline_shift);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
 }
 
 static void
