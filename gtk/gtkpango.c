@@ -267,6 +267,21 @@ attribute_from_text (GtkBuilder  *builder,
     case PANGO_ATTR_SENTENCE:
       attribute = pango_attr_sentence_new ();
       break;
+    case PANGO_ATTR_BASELINE_SHIFT:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_BASELINE_SHIFT, value, &val, NULL))
+        attribute = pango_attr_baseline_shift_new (g_value_get_enum (&val));
+      else if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, NULL))
+        attribute = pango_attr_baseline_shift_new (g_value_get_enum (&val));
+      else
+        g_set_error (error,
+                     GTK_BUILDER_ERROR,
+                     GTK_BUILDER_ERROR_INVALID_VALUE,
+                     "Could not parse '%s' as baseline shift value", value);
+      break;
+    case PANGO_ATTR_FONT_SCALE:
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_FONT_SCALE, value, &val, error))
+        attribute = pango_attr_font_scale_new (g_value_get_enum (&val));
+      break;
     case PANGO_ATTR_INVALID:
     default:
       break;
