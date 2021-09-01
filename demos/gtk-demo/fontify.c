@@ -283,6 +283,14 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           VOID_ATTR (sentence);
           break;
 
+        case PANGO_ATTR_BASELINE_SHIFT:
+          INT_ATTR (baseline_shift);
+          break;
+
+        case PANGO_ATTR_FONT_SCALE:
+          INT_ATTR (font_scale);
+          break;
+
         case PANGO_ATTR_SHAPE:
         case PANGO_ATTR_ABSOLUTE_SIZE:
         case PANGO_ATTR_GRAVITY:
