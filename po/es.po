@@ -11,21 +11,22 @@
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2011-2021.
+# Daniel Mustieles García <daniel.mustieles@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-08-25 13:47+0000\n"
-"PO-Revision-Date: 2021-08-25 17:32+0200\n"
-"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
+"POT-Creation-Date: 2021-08-29 17:12+0000\n"
+"PO-Revision-Date: 2021-09-01 10:46+0200\n"
+"Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Gtranslator 40.0\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -473,7 +474,6 @@ msgid "Unable to create a GL context"
 msgstr "No se pudo crear un contexto GL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:484 gdk/x11/gdkglcontext-egl.c:688
-#| msgid "Unable to create a GL pixel format"
 msgid "Failed to create EGL display"
 msgstr "Falló al crear la pantalla EGL"
 
@@ -721,12 +721,10 @@ msgstr ""
 "activo."
 
 #: gdk/x11/gdkglcontext-egl.c:180
-#| msgid "No GL implementation is available"
 msgid "No EGL configuration available"
 msgstr "No hay ninguna configuración de EGL disponible"
 
 #: gdk/x11/gdkglcontext-egl.c:188
-#| msgid "Failed to get contents as “%s”"
 msgid "Failed to get EGL configurations"
 msgstr "Falló al obtener la configuración de EGL"
 
@@ -737,17 +735,14 @@ msgstr ""
 "requeridas"
 
 #: gdk/x11/gdkglcontext-egl.c:273
-#| msgid "No network locations found"
 msgid "No perfect EGL configuration found"
 msgstr "No se han encontrado ninguna configuración perfecta de EGL"
 
 #: gdk/x11/gdkglcontext-egl.c:679
-#| msgid "Format %s not supported"
 msgid "EGL is not supported"
 msgstr "EGL no está soportado"
 
 #: gdk/x11/gdkglcontext-glx.c:770
-#| msgid "No GL implementation is available"
 msgid "No GLX configurations available"
 msgstr "No hay ninguna configuración de GLX disponible"
 
@@ -758,7 +753,6 @@ msgstr ""
 "requeridas"
 
 #: gdk/x11/gdkglcontext-glx.c:914
-#| msgid "Format %s not supported"
 msgid "GLX is not supported"
 msgstr "GLX no está soportado"
 
@@ -2744,12 +2738,10 @@ msgid "Page Setup"
 msgstr "Configuración de página"
 
 #: gtk/gtkpasswordentry.c:167
-#| msgid "Hide text"
 msgid "Hide Text"
 msgstr "Ocultar texto"
 
 #: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
-#| msgid "_Show Text"
 msgid "Show Text"
 msgstr "Mostrar texto"
 
@@ -3421,7 +3413,7 @@ msgstr "Resultados de búsqueda"
 #. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:909
 msgid "Search Shortcuts"
-msgstr "Atajos de búsqueda"
+msgstr "Buscar atajos"
 
 #: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:297
@@ -3580,7 +3572,6 @@ msgid "Target"
 msgstr "Objetivo"
 
 #: gtk/inspector/controllers.c:156
-#| msgid "Cumulative"
 msgctxt "propagation limit"
 msgid "Native"
 msgstr "Nativo"
@@ -3634,13 +3625,11 @@ msgid "None"
 msgstr "Ninguna"
 
 #: gtk/inspector/general.c:317
-#| msgid "Disabled"
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Desactivado"
 
 #: gtk/inspector/general.c:318
-#| msgid "Disabled"
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Desactivado"
@@ -3652,13 +3641,11 @@ msgid "None"
 msgstr "Ninguno"
 
 #: gtk/inspector/general.c:440
-#| msgid "Disabled"
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Desactivado"
 
 #: gtk/inspector/general.c:441 gtk/inspector/general.c:442
-#| msgid "Disabled"
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Desactivado"
@@ -3765,7 +3752,6 @@ msgid "Reference Count"
 msgstr "Cuenta de referencias"
 
 #: gtk/inspector/misc-info.ui:151
-#| msgid "Text Direction"
 msgid "Direction"
 msgstr "Dirección"
 
@@ -4156,17 +4142,14 @@ msgid "CSS Padding"
 msgstr "Espaciado CSS"
 
 #: gtk/inspector/visual.ui:554
-#| msgid "CSS Nodes"
 msgid "CSS Border"
 msgstr "Borde CSS"
 
 #: gtk/inspector/visual.ui:564
-#| msgid "Paper Margins"
 msgid "CSS Margin"
 msgstr "Margen CSS"
 
 #: gtk/inspector/visual.ui:574
-#| msgid "Paper Margins"
 msgid "Widget Margin"
 msgstr "Anchura del widget"
 
