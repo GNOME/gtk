@@ -11,21 +11,22 @@
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2011-2021.
+# Daniel Mustieles García <daniel.mustieles@gmail.com>, 2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-06-11 00:18+0000\n"
-"PO-Revision-Date: 2021-06-15 13:00+0200\n"
-"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
+"POT-Creation-Date: 2021-08-31 14:46+0000\n"
+"PO-Revision-Date: 2021-09-01 10:47+0200\n"
+"Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Gtranslator 40.0\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -2113,7 +2114,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si elimina un elemento, se perderña definitivamente."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5449 gtk/gtktext.c:6045 gtk/gtktextview.c:8753
+#: gtk/gtklabel.c:5459 gtk/gtktext.c:6045 gtk/gtktextview.c:8753
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2387,27 +2388,27 @@ msgstr "Variantes de caracteres"
 msgid "OpenGL context creation failed"
 msgstr "Falló al crear el contexto de OpenGL"
 
-#: gtk/gtklabel.c:5446 gtk/gtktext.c:6033 gtk/gtktextview.c:8741
+#: gtk/gtklabel.c:5456 gtk/gtktext.c:6033 gtk/gtktextview.c:8741
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtklabel.c:5447 gtk/gtktext.c:6037 gtk/gtktextview.c:8745
+#: gtk/gtklabel.c:5457 gtk/gtktext.c:6037 gtk/gtktextview.c:8745
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5448 gtk/gtktext.c:6041 gtk/gtktextview.c:8749
+#: gtk/gtklabel.c:5458 gtk/gtktext.c:6041 gtk/gtktextview.c:8749
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtklabel.c:5454 gtk/gtktext.c:6054 gtk/gtktextview.c:8774
+#: gtk/gtklabel.c:5464 gtk/gtktext.c:6054 gtk/gtktextview.c:8774
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtklabel.c:5459
+#: gtk/gtklabel.c:5469
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
-#: gtk/gtklabel.c:5463
+#: gtk/gtklabel.c:5473
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -3364,7 +3365,7 @@ msgstr "Resultados de búsqueda"
 #. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:909
 msgid "Search Shortcuts"
-msgstr "Atajos de búsqueda"
+msgstr "Buscar atajos"
 
 #: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:348
 #: gtk/ui/gtkfilechooserwidget.ui:296
@@ -3523,7 +3524,6 @@ msgid "Target"
 msgstr "Objetivo"
 
 #: gtk/inspector/controllers.c:156
-#| msgid "Cumulative"
 msgctxt "propagation limit"
 msgid "Native"
 msgstr "Nativo"
@@ -3571,13 +3571,11 @@ msgid "CSS Property"
 msgstr "Propiedad CSS"
 
 #: gtk/inspector/general.c:299
-#| msgid "Disabled"
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Desactivado"
 
 #: gtk/inspector/general.c:300
-#| msgid "Disabled"
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Desactivado"
@@ -3595,13 +3593,11 @@ msgid "None"
 msgstr "Ninguno"
 
 #: gtk/inspector/general.c:410
-#| msgid "Disabled"
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Desactivado"
 
 #: gtk/inspector/general.c:411 gtk/inspector/general.c:412
-#| msgid "Disabled"
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Desactivada"
@@ -4090,17 +4086,14 @@ msgid "CSS Padding"
 msgstr "Espaciado CSS"
 
 #: gtk/inspector/visual.ui:554
-#| msgid "CSS Nodes"
 msgid "CSS Border"
 msgstr "Borde CSS"
 
 #: gtk/inspector/visual.ui:564
-#| msgid "Paper Margins"
 msgid "CSS Margin"
 msgstr "Margen  CSS"
 
 #: gtk/inspector/visual.ui:574
-#| msgid "Paper Margins"
 msgid "Widget Margin"
 msgstr "Margen del widget"
 
