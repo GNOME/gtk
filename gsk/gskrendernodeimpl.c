@@ -4424,46 +4424,6 @@ gsk_text_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
-static gboolean
-font_has_color_glyphs (PangoFont *font)
-{
-  hb_face_t *face = hb_font_get_face (pango_font_get_hb_font (font));
-
-  return hb_ot_color_has_layers (face) ||
-         hb_ot_color_has_png (face) ||
-         hb_ot_color_has_svg (face);
-}
-
-static gboolean
-glyph_has_color (PangoFont *font,
-                 guint      glyph)
-{
-  hb_font_t *hb_font = pango_font_get_hb_font (font);
-  hb_face_t *face = hb_font_get_face (hb_font);
-  hb_blob_t *blob;
-
-  if (hb_ot_color_glyph_get_layers (face, glyph, 0, NULL, NULL) > 0)
-    return TRUE;
-
-  blob = hb_ot_color_glyph_reference_png (hb_font, glyph);
-  if (blob)
-    {
-      guint length = hb_blob_get_length (blob);
-      hb_blob_destroy (blob);
-      return length > 0;
-    }
-
-  blob = hb_ot_color_glyph_reference_svg (face, glyph);
-  if (blob)
-    {
-      guint length = hb_blob_get_length (blob);
-      hb_blob_destroy (blob);
-      return length > 0;
-    }
-
-  return FALSE;
-}
-
 /**
  * gsk_text_node_new:
  * @font: the `PangoFont` containing the glyphs
@@ -4488,7 +4448,6 @@ gsk_text_node_new (PangoFont              *font,
   GskRenderNode *node;
   PangoRectangle ink_rect;
   PangoGlyphInfo *glyph_infos;
-  gboolean has_color_glyphs;
   int n;
 
   pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
@@ -4507,7 +4466,6 @@ gsk_text_node_new (PangoFont              *font,
   self->has_color_glyphs = FALSE;
 
   glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
-  has_color_glyphs = font_has_color_glyphs (font);
 
   n = 0;
   for (int i = 0; i < glyphs->num_glyphs; i++)
@@ -4517,14 +4475,9 @@ gsk_text_node_new (PangoFont              *font,
         continue;
 
       glyph_infos[n] = glyphs->glyphs[i];
-      GLYPH_CLEAR_COLOR (&glyph_infos[n]);
 
-      if (has_color_glyphs &&
-          glyph_has_color (font, glyph_infos[n].glyph))
-        {
-          self->has_color_glyphs = TRUE;
-          GLYPH_SET_COLOR (&glyph_infos[n]);
-        }
+      if (glyphs->glyphs[i].attr.is_color)
+        self->has_color_glyphs = TRUE;
 
       n++;
     }

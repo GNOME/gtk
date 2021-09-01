@@ -2838,9 +2838,6 @@ compute_phase_and_pos (float value, float *pos)
     }
 }
 
-#define COLOR_GLYPH_BIT 2
-#define GLYPH_IS_COLOR(g)  (((*(guint32*)&(g)->attr) & COLOR_GLYPH_BIT) != 0)
-
 static inline void
 gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
                                     const GskRenderNode *node,
@@ -2903,7 +2900,7 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
       /* If the glyph has color, we don't need to recolor anything.
        * We tell the shader by setting the color to vec4(-1).
        */
-      if (!force_color && GLYPH_IS_COLOR (gi))
+      if (!force_color && gi->attr.is_color)
         c = nc;
       else
         c = cc;
