@@ -44,6 +44,10 @@ print_attribute (PangoAttribute *attr, GString *string)
 #if PANGO_VERSION_CHECK(1, 49, 0)
     case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
     case PANGO_ATTR_TEXT_TRANSFORM:
+    case PANGO_ATTR_WORD:
+    case PANGO_ATTR_SENTENCE:
+    case PANGO_ATTR_BASELINE_SHIFT:
+    case PANGO_ATTR_FONT_SCALE:
 #endif
       g_string_append_printf (string, "%d", ((PangoAttrInt *)attr)->value);
       break;
