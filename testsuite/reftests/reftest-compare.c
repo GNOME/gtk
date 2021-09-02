@@ -104,7 +104,12 @@ buffer_diff_core (const guchar *buf_a,
           /* check if the pixels are the same */
           if (row_a[x] == row_b[x])
             continue;
-        
+
+          /* even if they're not literally the same, fully-transparent
+           * pixels are effectively the same regardless of colour */
+          if ((row_a[x] & 0xff000000) == 0 && (row_b[x] & 0xff000000) == 0)
+            continue;
+
           if (diff == NULL)
             {
               diff = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
