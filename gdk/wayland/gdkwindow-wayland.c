@@ -3330,6 +3330,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
           impl->display_server.xdg_popup = NULL;
           display_wayland->current_popups =
             g_list_remove (display_wayland->current_popups, window);
+
+          if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
+            {
+              window->x = 0;
+              window->y = 0;
+            }
         }
       if (impl->display_server.xdg_surface)
         {
@@ -3352,6 +3358,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
           impl->display_server.zxdg_popup_v6 = NULL;
           display_wayland->current_popups =
             g_list_remove (display_wayland->current_popups, window);
+
+          if (impl->position_method == POSITION_METHOD_MOVE_TO_RECT)
+            {
+              window->x = 0;
+              window->y = 0;
+            }
         }
       if (impl->display_server.zxdg_surface_v6)
         {
