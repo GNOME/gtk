@@ -10,6 +10,7 @@ static GtkWidget *font_button = NULL;
 static GtkWidget *entry = NULL;
 static GtkWidget *image = NULL;
 static GtkWidget *hinting = NULL;
+static GtkWidget *anti_alias = NULL;
 static GtkWidget *hint_metrics = NULL;
 static GtkWidget *up_button = NULL;
 static GtkWidget *down_button = NULL;
@@ -37,6 +38,7 @@ update_image (void)
   cairo_font_options_t *fopt;
   cairo_hint_style_t hintstyle;
   cairo_hint_metrics_t hintmetrics;
+  cairo_antialias_t antialias;
 
   if (!context)
     context = gtk_widget_create_pango_context (image);
@@ -65,6 +67,13 @@ update_image (void)
     hintmetrics = CAIRO_HINT_METRICS_OFF;
   cairo_font_options_set_hint_metrics (fopt, hintmetrics);
 
+  if (gtk_check_button_get_active (GTK_CHECK_BUTTON (anti_alias)))
+    antialias = CAIRO_ANTIALIAS_GRAY;
+  else
+    antialias = CAIRO_ANTIALIAS_NONE;
+  cairo_font_options_set_antialias (fopt, antialias);
+
+  pango_context_set_round_glyph_positions (context, hintmetrics == CAIRO_HINT_METRICS_ON);
   pango_cairo_context_set_font_options (context, fopt);
   cairo_font_options_destroy (fopt);
   pango_context_changed (context);
@@ -252,6 +261,7 @@ do_fontrendering (GtkWidget *do_widget)
       entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
       image = GTK_WIDGET (gtk_builder_get_object (builder, "image"));
       hinting = GTK_WIDGET (gtk_builder_get_object (builder, "hinting"));
+      anti_alias = GTK_WIDGET (gtk_builder_get_object (builder, "antialias"));
       hint_metrics = GTK_WIDGET (gtk_builder_get_object (builder, "hint_metrics"));
       text_radio = GTK_WIDGET (gtk_builder_get_object (builder, "text_radio"));
       show_grid = GTK_WIDGET (gtk_builder_get_object (builder, "show_grid"));
@@ -262,6 +272,7 @@ do_fontrendering (GtkWidget *do_widget)
       g_signal_connect (entry, "notify::text", G_CALLBACK (update_image), NULL);
       g_signal_connect (font_button, "notify::font-desc", G_CALLBACK (update_image), NULL);
       g_signal_connect (hinting, "notify::active", G_CALLBACK (update_image), NULL);
+      g_signal_connect (anti_alias, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (hint_metrics, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (text_radio, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (show_grid, "notify::active", G_CALLBACK (update_image), NULL);

@@ -35,7 +35,10 @@ typedef struct _GskNglGlyphKey
   PangoGlyph glyph;
   guint xshift : 2;
   guint yshift : 2;
-  guint scale  : 28; /* times 1024 */
+  guint hint_metrics : 1;
+  guint antialias : 1;
+  guint hint_style : 3;
+  guint scale  : 23; /* times 1024 */
 } GskNglGlyphKey;
 
 typedef struct _GskNglGlyphValue
