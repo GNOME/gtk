@@ -121,6 +121,12 @@ void          gtk_menu_button_set_primary (GtkMenuButton *menu_button,
 GDK_AVAILABLE_IN_4_4
 gboolean      gtk_menu_button_get_primary (GtkMenuButton *menu_button);
 
+GDK_AVAILABLE_IN_4_6
+void          gtk_menu_button_set_child   (GtkMenuButton *menu_button,
+                                           GtkWidget     *child);
+GDK_AVAILABLE_IN_4_6
+GtkWidget *   gtk_menu_button_get_child   (GtkMenuButton *menu_button);
+
 G_END_DECLS
 
 #endif /* __GTK_MENU_BUTTON_H__ */
