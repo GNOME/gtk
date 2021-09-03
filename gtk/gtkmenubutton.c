@@ -66,8 +66,9 @@
  * `GtkMenuButton` has a single CSS node with name `menubutton`
  * which contains a `button` node with a `.toggle` style class.
  *
- * If the button contains only an icon or an arrow, it will have the
- * `.image-button` style class, if it contains both, it will have the
+ * If the button contains an icon, it will have the `.image-button` style class,
+ * if it contains text, it will have `.text-button` style class. If an arrow is
+ * visible in addition to an icon, text or a custom child, it will also have
  * `.arrow-button` style class.
  *
  * Inside the toggle button content, there is an `arrow` node for
@@ -87,6 +88,7 @@
 #include "config.h"
 
 #include "gtkactionable.h"
+#include "gtkbuildable.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkintl.h"
 #include "gtkimage.h"
@@ -122,6 +124,7 @@ struct _GtkMenuButton
   GtkWidget *label_widget;
   GtkWidget *image_widget;
   GtkWidget *arrow_widget;
+  GtkWidget *child;
   GtkArrowType arrow_type;
   gboolean always_show_arrow;
 
@@ -147,6 +150,7 @@ enum
   PROP_USE_UNDERLINE,
   PROP_HAS_FRAME,
   PROP_PRIMARY,
+  PROP_CHILD,
   LAST_PROP
 };
 
@@ -158,7 +162,10 @@ enum {
 static GParamSpec *menu_button_props[LAST_PROP];
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkMenuButton, gtk_menu_button, GTK_TYPE_WIDGET)
+static void gtk_menu_button_buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkMenuButton, gtk_menu_button, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_menu_button_buildable_iface_init))
 
 static void gtk_menu_button_dispose (GObject *object);
 
@@ -198,6 +205,9 @@ gtk_menu_button_set_property (GObject      *object,
         break;
       case PROP_PRIMARY:
         gtk_menu_button_set_primary (self, g_value_get_boolean (value));
+        break;
+      case PROP_CHILD:
+        gtk_menu_button_set_child (self, g_value_get_object (value));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -240,6 +250,9 @@ gtk_menu_button_get_property (GObject    *object,
         break;
       case PROP_PRIMARY:
         g_value_set_boolean (value, gtk_menu_button_get_primary (GTK_MENU_BUTTON (object)));
+        break;
+      case PROP_CHILD:
+        g_value_set_object (value, gtk_menu_button_get_child (self));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -444,14 +457,14 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   /**
    * GtkMenuButton:always-show-arrow: (attributes org.gtk.Property.get=gtk_menu_button_get_always_show_arrow org.gtk.Property.set=gtk_menu_button_set_always_show_arrow)
    *
-   * Whether to show a dropdown arrow even when using an icon.
+   * Whether to show a dropdown arrow even when using an icon or a custom child.
    *
    * Since: 4.4
    */
   menu_button_props[PROP_ALWAYS_SHOW_ARROW] =
       g_param_spec_boolean ("always-show-arrow",
                             P_("Always Show Arrow"),
-                            P_("Whether to show a dropdown arrow even when using an icon"),
+                            P_("Whether to show a dropdown arrow even when using an icon or a custom child"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -506,6 +519,20 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                           P_("Whether the menubutton acts as a primary menu"),
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkMenuButton:child: (attributes org.gtk.Property.get=gtk_menu_button_get_child org.gtk.Property.set=gtk_menu_button_set_child)
+   *
+   * The child widget.
+   *
+   * Since: 4.6
+   */
+  menu_button_props[PROP_CHILD] =
+    g_param_spec_object ("child",
+                         P_("Child"),
+                         P_("The child widget"),
+                         GTK_TYPE_WIDGET,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
@@ -575,13 +602,22 @@ set_arrow_type (GtkWidget    *arrow,
 static void
 update_style_classes (GtkMenuButton *menu_button)
 {
-  if (menu_button->arrow_widget == gtk_button_get_child (GTK_BUTTON (menu_button->button)) ||
-      (menu_button->image_widget && !menu_button->always_show_arrow))
+  gboolean has_icon = menu_button->image_widget != NULL;
+  gboolean has_label = menu_button->label_widget != NULL;
+  gboolean has_only_arrow = menu_button->arrow_widget == gtk_button_get_child (GTK_BUTTON (menu_button->button));
+  gboolean has_arrow = gtk_widget_get_visible (menu_button->arrow_widget);
+
+  if (has_only_arrow || has_icon)
     gtk_widget_add_css_class (menu_button->button, "image-button");
   else
     gtk_widget_remove_css_class (menu_button->button, "image-button");
 
-  if (menu_button->image_widget && menu_button->always_show_arrow)
+  if (has_label)
+    gtk_widget_add_css_class (menu_button->button, "text-button");
+  else
+    gtk_widget_remove_css_class (menu_button->button, "text-button");
+
+  if (has_arrow && !has_only_arrow)
     gtk_widget_add_css_class (menu_button->button, "arrow-button");
   else
     gtk_widget_remove_css_class (menu_button->button, "arrow-button");
@@ -633,6 +669,28 @@ gtk_menu_button_init (GtkMenuButton *self)
   gtk_widget_set_sensitive (self->button, FALSE);
 
   gtk_widget_add_css_class (GTK_WIDGET (self), "popup");
+}
+
+static GtkBuildableIface *parent_buildable_iface;
+
+static void
+gtk_menu_button_buildable_add_child (GtkBuildable *buildable,
+                                     GtkBuilder   *builder,
+                                     GObject      *child,
+                                     const char   *type)
+{
+  if (GTK_IS_WIDGET (child))
+    gtk_menu_button_set_child (GTK_MENU_BUTTON (buildable), GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_menu_button_buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+
+  iface->add_child = gtk_menu_button_buildable_add_child;
 }
 
 /**
@@ -932,6 +990,13 @@ gtk_menu_button_get_popover (GtkMenuButton *menu_button)
  * @icon_name: the icon name
  *
  * Sets the name of an icon to show inside the menu button.
+ *
+ * Setting icon name resets [property@Gtk.MenuButton:label] and
+ * [property@Gtk.MenuButton:child].
+ *
+ * If [property@Gtk.MenuButton:always-show-arrow] is set to `TRUE` and
+ * [property@Gtk.MenuButton:direction] is not `GTK_ARROW_NONE`, a dropdown arrow
+ * will be shown next to the icon.
  */
 void
 gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
@@ -945,6 +1010,9 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
 
   if (gtk_menu_button_get_label (menu_button))
     g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_LABEL]);
+
+  if (gtk_menu_button_get_child (menu_button))
+    g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_CHILD]);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
@@ -963,6 +1031,7 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
   gtk_button_set_child (GTK_BUTTON (menu_button->button), box);
 
   menu_button->label_widget = NULL;
+  menu_button->child = NULL;
 
   update_arrow (menu_button);
 
@@ -995,7 +1064,8 @@ gtk_menu_button_get_icon_name (GtkMenuButton *menu_button)
  * @menu_button: a `GtkMenuButton`
  * @always_show_arrow: hether to show a dropdown arrow even when using an icon
  *
- * Sets whether to show a dropdown arrow even when using an icon.
+ * Sets whether to show a dropdown arrow even when using an icon or a custom
+ * child.
  *
  * Since: 4.4
  */
@@ -1041,6 +1111,12 @@ gtk_menu_button_get_always_show_arrow (GtkMenuButton *menu_button)
  * @label: the label
  *
  * Sets the label to show inside the menu button.
+ *
+ * Setting a label resets [property@Gtk.MenuButton:icon-name] and
+ * [property@Gtk.MenuButton:child].
+ *
+ * If [property@Gtk.MenuButton:direction] is not `GTK_ARROW_NONE`, a dropdown
+ * arrow will be shown next to the label.
  */
 void
 gtk_menu_button_set_label (GtkMenuButton *menu_button,
@@ -1056,6 +1132,8 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
 
   if (gtk_menu_button_get_icon_name (menu_button))
     g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ICON_NAME]);
+  if (gtk_menu_button_get_child (menu_button))
+    g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_CHILD]);
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   label_widget = gtk_label_new (label);
@@ -1072,6 +1150,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   menu_button->label_widget = label_widget;
 
   menu_button->image_widget = NULL;
+  menu_button->child = NULL;
 
   update_arrow (menu_button);
 
@@ -1353,4 +1432,76 @@ gtk_menu_button_get_primary (GtkMenuButton *menu_button)
   g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), FALSE);
 
   return menu_button->primary;
+}
+
+/**
+ * gtk_menu_button_set_child: (attributes org.gtk.Method.set_property=child)
+ * @menu_button: a `GtkMenuButton`
+ * @child: (nullable): the child widget
+ *
+ * Sets the child widget of @menu_button.
+ *
+ * Setting a child resets [property@Gtk.MenuButton:label] and
+ * [property@Gtk.MenuButton:icon-name].
+ *
+ * If [property@Gtk.MenuButton:always-show-arrow] is set to `TRUE` and
+ * [property@Gtk.MenuButton:direction] is not `GTK_ARROW_NONE`, a dropdown arrow
+ * will be shown next to the child.
+ *
+ * Since: 4.6
+ */
+void
+gtk_menu_button_set_child (GtkMenuButton *menu_button,
+                           GtkWidget     *child)
+{
+  GtkWidget *box, *arrow;
+
+  g_return_if_fail (GTK_IS_MENU_BUTTON (menu_button));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  g_object_freeze_notify (G_OBJECT (menu_button));
+
+  if (gtk_menu_button_get_label (menu_button))
+    g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_LABEL]);
+  if (gtk_menu_button_get_icon_name (menu_button))
+    g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ICON_NAME]);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
+
+  arrow = gtk_builtin_icon_new ("arrow");
+  menu_button->arrow_widget = arrow;
+
+  gtk_box_append (GTK_BOX (box), child);
+  gtk_box_append (GTK_BOX (box), arrow);
+  gtk_button_set_child (GTK_BUTTON (menu_button->button), box);
+
+  menu_button->child = child;
+
+  menu_button->image_widget = NULL;
+  menu_button->label_widget = NULL;
+
+  update_arrow (menu_button);
+
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_CHILD]);
+
+  g_object_thaw_notify (G_OBJECT (menu_button));
+}
+
+/**
+ * gtk_menu_button_get_child: (attributes org.gtk.Method.get_property=child)
+ * @menu_button: a `GtkMenuButton`
+ *
+ * Gets the child widget of @menu_button.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @menu_button
+ *
+ * Since: 4.6
+ */
+GtkWidget *
+gtk_menu_button_get_child (GtkMenuButton *menu_button)
+{
+  g_return_val_if_fail (GTK_IS_MENU_BUTTON (menu_button), NULL);
+
+  return menu_button->child;
 }

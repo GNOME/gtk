@@ -566,6 +566,15 @@ button {
       }
     }
 
+    &.arrow-button {
+      padding-left: 10px;
+      padding-right: 10px;
+
+      > box {
+        border-spacing: 4px;
+      }
+    }
+
     @at-root %button_basic_drop_active,
     &:drop(active) {
       color: $drop_target_color;
