@@ -100,6 +100,7 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
   gtk_snapshot_append_text (crenderer->snapshot,
+                            crenderer->options,
                             glyph_item->item->analysis.font,
                             glyph_item->glyphs,
                             &color,
@@ -467,14 +468,18 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
                             const GdkRGBA *color)
 {
   GskPangoRenderer *crenderer;
+  PangoContext *context;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
   crenderer = gsk_pango_renderer_acquire ();
 
+  context = pango_layout_get_context (layout);
+
   crenderer->snapshot = snapshot;
   crenderer->fg_color = color;
+  crenderer->options = pango_cairo_context_get_font_options (context);
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
 

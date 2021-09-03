@@ -24,12 +24,13 @@
 
 G_BEGIN_DECLS
 
-void                    gtk_snapshot_append_text                (GtkSnapshot            *snapshot,
-                                                                 PangoFont              *font,
-                                                                 PangoGlyphString       *glyphs,
-                                                                 const GdkRGBA          *color,
-                                                                 float                   x,
-                                                                 float                   y);
+void                    gtk_snapshot_append_text                (GtkSnapshot                *snapshot,
+                                                                 const cairo_font_options_t *options,
+                                                                 PangoFont                  *font,
+                                                                 PangoGlyphString           *glyphs,
+                                                                 const GdkRGBA              *color,
+                                                                 float                       x,
+                                                                 float                       y);
 
 void                    gtk_snapshot_push_collect               (GtkSnapshot            *snapshot);
 GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot            *snapshot);
