@@ -263,6 +263,12 @@ attribute_from_text (GtkBuilder  *builder,
         attribute = pango_attr_text_transform_new (g_value_get_enum (&val));
       break;
 #endif
+#if PANGO_VERSION_CHECK(1, 49, 1)
+    case PANGO_ATTR_WORD:
+    case PANGO_ATTR_SENTENCE:
+    case PANGO_ATTR_BASELINE_SHIFT:
+    case PANGO_ATTR_FONT_SCALE:
+#endif
     case PANGO_ATTR_INVALID:
     default:
       break;

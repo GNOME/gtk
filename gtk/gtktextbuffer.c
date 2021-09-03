@@ -4713,6 +4713,12 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
 
 #if PANGO_VERSION_CHECK(1, 49, 0)
         case PANGO_ATTR_TEXT_TRANSFORM:
+#endif
+#if PANGO_VERSION_CHECK(1, 49, 1)
+        case PANGO_ATTR_WORD:
+        case PANGO_ATTR_SENTENCE:
+        case PANGO_ATTR_BASELINE_SHIFT:
+        case PANGO_ATTR_FONT_SCALE:
           break;
 #endif
 

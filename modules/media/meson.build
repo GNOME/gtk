@@ -49,17 +49,9 @@ gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3',
 if gstplayer_dep.found() and gstgl_dep.found()
   extra_win_cflags = []
 
-  if host_machine.system() == 'windows'
-    new_gst_gl_display_code = \
-                '''#include <gst/gl/gstgldisplay.h>
-                   int main (int a, char ** g) {
-                     GstGLDisplay *d = gst_gl_display_new_with_type (GST_GL_DISPLAY_TYPE_WIN32);
-                     return 0;
-                   }'''
-    if cc.links(new_gst_gl_display_code, dependencies : gstgl_dep)
-      message('libgstgl has gst_gl_display_new_with_type()')
-      extra_win_cflags += '-DHAVE_GST_GL_DISPLAY_NEW_WITH_TYPE'
-    endif
+  if host_machine.system() == 'windows' and gstgl_dep.version().version_compare('>=1.19.1')
+    message('libgstgl has gst_gl_display_new_with_type()')
+    extra_win_cflags += '-DHAVE_GST_GL_DISPLAY_NEW_WITH_TYPE'
   endif
 
   media_backends += 'gstreamer'

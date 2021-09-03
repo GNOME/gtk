@@ -254,17 +254,17 @@ GtkCssValue *           gtk_css_style_get_value                 (GtkCssStyle    
 GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle            *style,
                                                                  guint                   id) G_GNUC_PURE;
 gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style) G_GNUC_PURE;
+GtkCssStaticStyle *     gtk_css_style_get_static_style          (GtkCssStyle            *style);
 
 char *                  gtk_css_style_to_string                 (GtkCssStyle            *style);
 gboolean                gtk_css_style_print                     (GtkCssStyle            *style,
                                                                  GString                *string,
                                                                  guint                   indent,
                                                                  gboolean                skip_initial);
+
+char *                  gtk_css_style_compute_font_features     (GtkCssStyle            *style);
 PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
-
 PangoFontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
-GtkCssStaticStyle *     gtk_css_style_get_static_style          (GtkCssStyle            *style);
-
 
 GtkCssValues *gtk_css_values_new   (GtkCssValuesType  type);
 GtkCssValues *gtk_css_values_ref   (GtkCssValues     *values);
