@@ -105,7 +105,6 @@ struct _GdkWaylandSurface
     struct gtk_surface1  *gtk_surface;
     struct wl_egl_window *egl_window;
     struct zxdg_exported_v1 *xdg_exported;
-    struct org_kde_kwin_server_decoration *server_decoration;
   } display_server;
 
   struct wl_event_queue *event_queue;
@@ -250,6 +249,8 @@ struct _GdkWaylandToplevel
   GdkWaylandSurface parent_instance;
 
   GdkWaylandToplevel *transient_for;
+
+  struct org_kde_kwin_server_decoration *server_decoration;
 };
 
 typedef struct
@@ -2238,36 +2239,38 @@ void
 gdk_wayland_toplevel_announce_csd (GdkToplevel *toplevel)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+  GdkWaylandToplevel *toplevel_wayland;
 
   g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+  toplevel_wayland = GDK_WAYLAND_TOPLEVEL (toplevel);
 
   if (!display_wayland->server_decoration_manager)
     return;
-  impl->display_server.server_decoration =
-    org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
-                                                  impl->display_server.wl_surface);
-  if (impl->display_server.server_decoration)
-    org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
-                                                ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
+  toplevel_wayland->server_decoration =
+      org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
+                                                     gdk_wayland_surface_get_wl_surface (GDK_SURFACE (toplevel_wayland)));
+  if (toplevel_wayland->server_decoration)
+    org_kde_kwin_server_decoration_request_mode (toplevel_wayland->server_decoration,
+                                                 ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
 }
 
 void
 gdk_wayland_toplevel_announce_ssd (GdkToplevel *toplevel)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+  GdkWaylandToplevel *toplevel_wayland;
 
   g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+  toplevel_wayland = GDK_WAYLAND_TOPLEVEL (toplevel);
 
   if (!display_wayland->server_decoration_manager)
     return;
-  impl->display_server.server_decoration =
-    org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
-                                                  impl->display_server.wl_surface);
-  if (impl->display_server.server_decoration)
-    org_kde_kwin_server_decoration_request_mode (impl->display_server.server_decoration,
-                                                ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER);
+  toplevel_wayland->server_decoration =
+      org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
+                                                     gdk_wayland_surface_get_wl_surface (GDK_SURFACE (toplevel_wayland)));
+  if (toplevel_wayland->server_decoration)
+    org_kde_kwin_server_decoration_request_mode (toplevel_wayland->server_decoration,
+                                                 ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER);
 }
 
 gboolean
