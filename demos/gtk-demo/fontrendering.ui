@@ -99,6 +99,15 @@
               </object>
             </child>
             <child>
+              <object class="GtkCheckButton" id="antialias">
+                <property name="label">Antialias</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
               <object class="GtkComboBoxText" id="hinting">
                 <property name="active">0</property>
                 <property name="valign">center</property>
