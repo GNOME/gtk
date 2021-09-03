@@ -1026,8 +1026,7 @@ is_realized_popup (GdkWaylandSurface *impl)
           impl->display_server.zxdg_popup_v6);
 }
 
-static void gdk_wayland_surface_show (GdkSurface *surface,
-                                      gboolean    already_mapped);
+static void gdk_wayland_surface_show (GdkSurface *surface);
 static void gdk_wayland_surface_hide (GdkSurface *surface);
 
 static void
@@ -1060,7 +1059,7 @@ gdk_wayland_surface_maybe_resize (GdkSurface *surface,
   gdk_wayland_surface_update_size (surface, width, height, scale);
 
   if (is_xdg_popup && is_visible && !impl->initial_configure_received)
-    gdk_wayland_surface_show (surface, FALSE);
+    gdk_wayland_surface_show (surface);
 }
 
 static void
@@ -2858,8 +2857,7 @@ gdk_wayland_surface_map_toplevel (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_show (GdkSurface *surface,
-                          gboolean    already_mapped)
+gdk_wayland_surface_show (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -5005,7 +5003,7 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
   g_clear_pointer (&impl->toplevel.layout, gdk_toplevel_layout_unref);
   impl->toplevel.layout = gdk_toplevel_layout_copy (layout);
 
-  gdk_wayland_surface_show (surface, FALSE);
+  gdk_wayland_surface_show (surface);
 
   if (!pending_configure)
     {
@@ -5153,7 +5151,7 @@ gdk_wayland_drag_surface_present (GdkDragSurface *drag_surface,
   GdkSurface *surface = GDK_SURFACE (drag_surface);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  gdk_wayland_surface_show (surface, FALSE);
+  gdk_wayland_surface_show (surface);
 
   impl->next_layout.configured_width = width;
   impl->next_layout.configured_height = height;
