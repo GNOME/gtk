@@ -224,9 +224,6 @@ struct _GdkWaylandSurface
 
   struct zxdg_imported_v1 *imported_transient_for;
   GHashTable *shortcuts_inhibitors;
-
-  struct zwp_idle_inhibitor_v1 *idle_inhibitor;
-  size_t idle_inhibitor_refcount;
 };
 
 typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
@@ -251,6 +248,9 @@ struct _GdkWaylandToplevel
     gpointer user_data;
     GDestroyNotify destroy_func;
   } exported;
+
+  struct zwp_idle_inhibitor_v1 *idle_inhibitor;
+  size_t idle_inhibitor_refcount;
 };
 
 typedef struct
@@ -2274,21 +2274,24 @@ gboolean
 gdk_wayland_toplevel_inhibit_idle (GdkToplevel *toplevel)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+  GdkWaylandToplevel *wayland_toplevel;
 
   g_return_val_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel), FALSE);
+  wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
 
   if (!display_wayland->idle_inhibit_manager)
     return FALSE;
 
-  if (!impl->idle_inhibitor)
+  if (!wayland_toplevel->idle_inhibitor)
     {
-      g_assert (impl->idle_inhibitor_refcount == 0);
-      impl->idle_inhibitor =
-        zwp_idle_inhibit_manager_v1_create_inhibitor (display_wayland->idle_inhibit_manager,
-                                                     impl->display_server.wl_surface);
+      g_assert (wayland_toplevel->idle_inhibitor &&
+                wayland_toplevel->idle_inhibitor_refcount > 0);
+
+      wayland_toplevel->idle_inhibitor =
+          zwp_idle_inhibit_manager_v1_create_inhibitor (display_wayland->idle_inhibit_manager,
+                                                        gdk_wayland_surface_get_wl_surface (GDK_SURFACE (wayland_toplevel)));
     }
-  ++impl->idle_inhibitor_refcount;
+  ++wayland_toplevel->idle_inhibitor_refcount;
 
   return TRUE;
 }
@@ -2296,14 +2299,19 @@ gdk_wayland_toplevel_inhibit_idle (GdkToplevel *toplevel)
 void
 gdk_wayland_toplevel_uninhibit_idle (GdkToplevel *toplevel)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
+  GdkWaylandToplevel *wayland_toplevel;
 
   g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
+  wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
 
-  g_assert (impl->idle_inhibitor && impl->idle_inhibitor_refcount > 0);
+  g_assert (wayland_toplevel->idle_inhibitor &&
+            wayland_toplevel->idle_inhibitor_refcount > 0);
 
-  if (--impl->idle_inhibitor_refcount == 0)
-    g_clear_pointer (&impl->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
+  if (--wayland_toplevel->idle_inhibitor_refcount == 0)
+    {
+      g_clear_pointer (&wayland_toplevel->idle_inhibitor,
+                       zwp_idle_inhibitor_v1_destroy);
+    }
 }
 
 static void
