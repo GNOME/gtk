@@ -6427,7 +6427,7 @@ gtk_widget_get_effective_font_map (GtkWidget *widget)
     return pango_cairo_font_map_get_default ();
 }
 
-static void
+static gboolean
 update_pango_context (GtkWidget    *widget,
                       PangoContext *context)
 {
@@ -6436,6 +6436,9 @@ update_pango_context (GtkWidget    *widget,
   PangoFontDescription *font_desc;
   GtkSettings *settings;
   cairo_font_options_t *font_options;
+  guint old_serial;
+
+  old_serial = pango_context_get_serial (context);
 
   font_desc = gtk_css_style_get_pango_font (style);
   pango_context_set_font_description (context, font_desc);
@@ -6468,6 +6471,8 @@ update_pango_context (GtkWidget    *widget,
     }
 
   pango_context_set_font_map (context, gtk_widget_get_effective_font_map (widget));
+
+  return old_serial != pango_context_get_serial (context);
 }
 
 static void
@@ -6475,8 +6480,11 @@ gtk_widget_update_pango_context (GtkWidget *widget)
 {
   PangoContext *context = gtk_widget_peek_pango_context (widget);
 
-  if (context)
-    update_pango_context (widget, context);
+  if (!context)
+    return;
+
+  if (update_pango_context (widget, context))
+    gtk_widget_queue_draw (widget);
 }
 
 /**
