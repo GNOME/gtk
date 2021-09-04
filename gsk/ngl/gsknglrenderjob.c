@@ -2875,15 +2875,8 @@ gsk_ngl_render_job_visit_text_node (GskNglRenderJob     *job,
 
   rgba_to_half (color, cc);
 
-  /* We have 23 bits in the key for the scale */
-  g_assert (text_scale * 1024 < (1 << 24));
-
   lookup.font = (PangoFont *)font;
   lookup.scale = (guint) (text_scale * 1024);
-
-  lookup.hint_metrics = gsk_text_node_get_hint_metrics (node);
-  lookup.antialias = gsk_text_node_get_antialias (node);
-  lookup.hint_style = gsk_text_node_get_hint_style (node);
 
   yshift = compute_phase_and_pos (y, &ypos);
 
