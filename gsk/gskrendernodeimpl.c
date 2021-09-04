@@ -4404,7 +4404,8 @@ gsk_text_node_diff (GskRenderNode  *node1,
   if (self1->font == self2->font &&
       gdk_rgba_equal (&self1->color, &self2->color) &&
       graphene_point_equal (&self1->offset, &self2->offset) &&
-      self1->num_glyphs == self2->num_glyphs)
+      self1->num_glyphs == self2->num_glyphs &&
+      self1->render_flags == self2->render_flags)
     {
       guint i;
 
