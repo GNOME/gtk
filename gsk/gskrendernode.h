@@ -492,19 +492,6 @@ GskRenderNode *         gsk_text_node_new                       (PangoFont      
                                                                  PangoGlyphString         *glyphs,
                                                                  const GdkRGBA            *color,
                                                                  const graphene_point_t   *offset);
-GDK_AVAILABLE_IN_4_6
-GskRenderNode *         gsk_text_node_new_with_font_options     (const cairo_font_options_t *options,
-                                                                 PangoFont                  *font,
-                                                                 PangoGlyphString           *glyphs,
-                                                                 const GdkRGBA              *color,
-                                                                 const graphene_point_t     *offset);
-
-GDK_AVAILABLE_IN_4_6
-gboolean                gsk_text_node_get_hint_metrics          (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_6
-gboolean                gsk_text_node_get_antialias             (const GskRenderNode      *node) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_6
-cairo_hint_style_t      gsk_text_node_get_hint_style            (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 PangoFont *             gsk_text_node_get_font                  (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL

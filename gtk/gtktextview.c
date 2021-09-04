@@ -397,6 +397,8 @@ static void gtk_text_view_css_changed          (GtkWidget           *widget,
                                                 GtkCssStyleChange   *change);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
                                                 GtkTextDirection  previous_direction);
+static void gtk_text_view_system_setting_changed (GtkWidget           *widget,
+                                                  GtkSystemSetting     setting);
 static void gtk_text_view_state_flags_changed  (GtkWidget        *widget,
 					        GtkStateFlags     previous_state);
 
@@ -573,6 +575,7 @@ static void gtk_text_view_update_im_spot_location (GtkTextView *text_view);
 static void gtk_text_view_insert_emoji (GtkTextView *text_view);
 
 static void update_node_ordering (GtkWidget    *widget);
+static void gtk_text_view_update_pango_contexts (GtkTextView *text_view);
 
 /* GtkTextHandle handlers */
 static void gtk_text_view_handle_drag_started  (GtkTextHandle         *handle,
@@ -819,6 +822,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->map = gtk_text_view_map;
   widget_class->css_changed = gtk_text_view_css_changed;
   widget_class->direction_changed = gtk_text_view_direction_changed;
+  widget_class->system_setting_changed = gtk_text_view_system_setting_changed;
   widget_class->state_flags_changed = gtk_text_view_state_flags_changed;
   widget_class->measure = gtk_text_view_measure;
   widget_class->size_allocate = gtk_text_view_size_allocate;
@@ -4984,7 +4988,6 @@ gtk_text_view_css_changed (GtkWidget         *widget,
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  PangoContext *ltr_context, *rtl_context;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -5001,16 +5004,13 @@ gtk_text_view_css_changed (GtkWidget         *widget,
       gtk_text_view_set_attributes_from_style (text_view,
                                                priv->layout->default_style);
       gtk_text_layout_default_style_changed (priv->layout);
+    }
 
-      ltr_context = gtk_widget_create_pango_context (widget);
-      pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
-      rtl_context = gtk_widget_create_pango_context (widget);
-      pango_context_set_base_dir (rtl_context, PANGO_DIRECTION_RTL);
-
-      gtk_text_layout_set_contexts (priv->layout, ltr_context, rtl_context);
-
-      g_object_unref (ltr_context);
-      g_object_unref (rtl_context);
+  if ((change == NULL ||
+       gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT)) &&
+      priv->layout)
+    {
+      gtk_text_view_update_pango_contexts (text_view);
     }
 }
 
@@ -5025,6 +5025,42 @@ gtk_text_view_direction_changed (GtkWidget        *widget,
       priv->layout->default_style->direction = gtk_widget_get_direction (widget);
 
       gtk_text_layout_default_style_changed (priv->layout);
+    }
+}
+
+static void
+gtk_text_view_update_pango_contexts (GtkTextView *text_view)
+{
+  GtkWidget *widget = GTK_WIDGET (text_view);
+  GtkTextViewPrivate *priv = text_view->priv;
+  gboolean update_ltr, update_rtl;
+
+  if (!priv->layout)
+    return;
+
+ update_ltr = gtk_widget_update_pango_context (widget, priv->layout->ltr_context, GTK_TEXT_DIR_LTR);
+
+ update_rtl = gtk_widget_update_pango_context (widget, priv->layout->rtl_context, GTK_TEXT_DIR_RTL);
+
+  if (update_ltr || update_rtl)
+    {
+      GtkTextIter start, end;
+
+      gtk_text_buffer_get_bounds (get_buffer (text_view), &start, &end);
+      gtk_text_layout_invalidate (priv->layout, &start, &end);
+      gtk_widget_queue_draw (widget);
+    }
+}
+
+static void
+gtk_text_view_system_setting_changed (GtkWidget        *widget,
+                                      GtkSystemSetting  setting)
+{
+  if (setting == GTK_SYSTEM_SETTING_DPI ||
+      setting == GTK_SYSTEM_SETTING_FONT_NAME ||
+      setting == GTK_SYSTEM_SETTING_FONT_CONFIG)
+    {
+      gtk_text_view_update_pango_contexts (GTK_TEXT_VIEW (widget));
     }
 }
 
@@ -7809,8 +7845,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
   if (priv->layout == NULL)
     {
       GtkTextAttributes *style;
-      PangoContext *ltr_context, *rtl_context;
       const GList *iter;
+      PangoContext *ltr_context, *rtl_context;
 
       DV(g_print(G_STRLOC"\n"));
       
@@ -7843,14 +7879,14 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 					  priv->overwrite_mode && priv->editable);
 
       ltr_context = gtk_widget_create_pango_context (GTK_WIDGET (text_view));
-      pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
       rtl_context = gtk_widget_create_pango_context (GTK_WIDGET (text_view));
+      pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
       pango_context_set_base_dir (rtl_context, PANGO_DIRECTION_RTL);
-
       gtk_text_layout_set_contexts (priv->layout, ltr_context, rtl_context);
-
       g_object_unref (ltr_context);
       g_object_unref (rtl_context);
+
+      gtk_text_view_update_pango_contexts (text_view);
 
       gtk_text_view_check_keymap_direction (text_view);
 
