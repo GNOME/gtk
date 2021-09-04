@@ -572,7 +572,7 @@ static void             gtk_widget_pop_verify_invariants        (GtkWidget      
 #define                 gtk_widget_pop_verify_invariants(widget)
 #endif
 static PangoContext*    gtk_widget_peek_pango_context           (GtkWidget          *widget);
-static void             gtk_widget_update_pango_context         (GtkWidget          *widget);
+static void             gtk_widget_update_default_pango_context (GtkWidget          *widget);
 static void             gtk_widget_propagate_state              (GtkWidget          *widget,
                                                                  const GtkStateData *data);
 static gboolean         gtk_widget_real_mnemonic_activate       (GtkWidget          *widget,
@@ -4957,7 +4957,7 @@ gtk_widget_real_css_changed (GtkWidget         *widget,
       const gboolean has_text = gtk_widget_peek_pango_context (widget) != NULL;
 
       if (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT))
-        gtk_widget_update_pango_context (widget);
+        gtk_widget_update_default_pango_context (widget);
 
       if (priv->root)
         {
@@ -4980,7 +4980,7 @@ gtk_widget_real_css_changed (GtkWidget         *widget,
     }
   else
     {
-      gtk_widget_update_pango_context (widget);
+      gtk_widget_update_default_pango_context (widget);
 
       if (priv->root)
         gtk_widget_queue_resize (widget);
@@ -4997,7 +4997,7 @@ gtk_widget_real_system_setting_changed (GtkWidget        *widget,
       setting == GTK_SYSTEM_SETTING_FONT_NAME ||
       setting == GTK_SYSTEM_SETTING_FONT_CONFIG)
     {
-      gtk_widget_update_pango_context (widget);
+      gtk_widget_update_default_pango_context (widget);
       if (gtk_widget_peek_pango_context (widget))
         gtk_widget_queue_resize (widget);
     }
@@ -6476,7 +6476,7 @@ update_pango_context (GtkWidget    *widget,
 }
 
 static void
-gtk_widget_update_pango_context (GtkWidget *widget)
+gtk_widget_update_default_pango_context (GtkWidget *widget)
 {
   PangoContext *context = gtk_widget_peek_pango_context (widget);
 
@@ -6515,7 +6515,7 @@ gtk_widget_set_font_options (GtkWidget                  *widget,
                                options ? cairo_font_options_copy (options) : NULL,
                                (GDestroyNotify)cairo_font_options_destroy);
 
-      gtk_widget_update_pango_context (widget);
+      gtk_widget_update_default_pango_context (widget);
     }
 }
 
@@ -6544,7 +6544,7 @@ gtk_widget_set_font_map_recurse (GtkWidget *widget, gpointer user_data)
   if (g_object_get_qdata (G_OBJECT (widget), quark_font_map))
     return;
 
-  gtk_widget_update_pango_context (widget);
+  gtk_widget_update_default_pango_context (widget);
 
   gtk_widget_forall (widget, gtk_widget_set_font_map_recurse, user_data);
 }
@@ -6581,7 +6581,7 @@ gtk_widget_set_font_map (GtkWidget    *widget,
                            g_object_ref (font_map),
                            g_object_unref);
 
-  gtk_widget_update_pango_context (widget);
+  gtk_widget_update_default_pango_context (widget);
 
   gtk_widget_forall (widget, gtk_widget_set_font_map_recurse, NULL);
 }
@@ -7209,7 +7209,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
   GtkTextDirection direction;
   GtkStateFlags state;
 
-  gtk_widget_update_pango_context (widget);
+  gtk_widget_update_default_pango_context (widget);
 
   direction = _gtk_widget_get_direction (widget);
 
