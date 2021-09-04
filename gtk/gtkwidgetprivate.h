@@ -370,6 +370,10 @@ void    gtk_widget_update_orientation   (GtkWidget      *widget,
 void    gtk_widget_realize_at_context   (GtkWidget *widget);
 void    gtk_widget_unrealize_at_context (GtkWidget *widget);
 
+gboolean gtk_widget_update_pango_context (GtkWidget        *widget,
+                                          PangoContext     *context,
+                                          GtkTextDirection  direction);
+
 /* inline getters */
 
 static inline GtkWidget *
