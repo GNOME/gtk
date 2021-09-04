@@ -172,10 +172,9 @@ render_glyph (cairo_surface_t           *surface,
   g_assert (scaled_font != NULL);
 
   cr = cairo_create (surface);
+
   options = cairo_font_options_create ();
-  cairo_font_options_set_hint_metrics (options, key->hint_metrics ? CAIRO_HINT_METRICS_ON : CAIRO_HINT_METRICS_OFF);
-  cairo_font_options_set_antialias (options, key->antialias ? CAIRO_ANTIALIAS_GRAY : CAIRO_ANTIALIAS_NONE);
-  cairo_font_options_set_hint_style (options, key->hint_style);
+  gsk_text_render_flags_to_cairo (key->render_flags, options);
   cairo_set_font_options (cr, options);
   cairo_font_options_destroy (options);
 

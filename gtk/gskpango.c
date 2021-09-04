@@ -100,12 +100,12 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
   gtk_snapshot_append_text (crenderer->snapshot,
-                            crenderer->options,
                             glyph_item->item->analysis.font,
                             glyph_item->glyphs,
                             &color,
                             (float) x / PANGO_SCALE,
-                            (float) y / PANGO_SCALE);
+                            (float) y / PANGO_SCALE,
+                            crenderer->render_flags);
 }
 
 static void
@@ -479,7 +479,7 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
 
   crenderer->snapshot = snapshot;
   crenderer->fg_color = color;
-  crenderer->options = pango_cairo_context_get_font_options (context);
+  crenderer->render_flags = gsk_text_render_flags_from_cairo (pango_cairo_context_get_font_options (context));
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
 

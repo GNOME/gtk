@@ -63,7 +63,7 @@ struct _GskPangoRenderer
   /* Error underline color for this widget */
   GdkRGBA               *error_color;
 
-  const cairo_font_options_t  *options;
+  GskTextRenderFlags     render_flags;
 
   GskPangoRendererState  state;
 

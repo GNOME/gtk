@@ -2122,23 +2122,23 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
 
 void
 gtk_snapshot_append_text (GtkSnapshot                *snapshot,
-                          const cairo_font_options_t *options,
                           PangoFont                  *font,
                           PangoGlyphString           *glyphs,
                           const GdkRGBA              *color,
                           float                       x,
-                          float                       y)
+                          float                       y,
+                          GskTextRenderFlags          flags)
 {
   GskRenderNode *node;
   float dx, dy;
 
   gtk_snapshot_ensure_translate (snapshot, &dx, &dy);
 
-  node = gsk_text_node_new_with_font_options (options,
-                                              font,
-                                              glyphs,
-                                              color,
-                                              &GRAPHENE_POINT_INIT (x + dx, y + dy));
+  node = gsk_text_node_new_with_flags (font,
+                                       glyphs,
+                                       color,
+                                       &GRAPHENE_POINT_INIT (x + dx, y + dy),
+                                       flags);
   if (node == NULL)
     return;
 

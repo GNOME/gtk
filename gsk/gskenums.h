@@ -251,5 +251,31 @@ typedef enum
   GSK_GL_UNIFORM_TYPE_VEC4,
 } GskGLUniformType;
 
+/**
+ * GskTextRenderFlags:
+ * @GSK_TEXT_RENDER_NONE: No antialiasing or hinting
+ * @GSK_TEXT_RENDER_ANTIALIAS: Perform single-color antialiasing
+ * @GSK_TEXT_RENDER_HINT_METRICS: Hint font metrics
+ * @GSK_TEXT_RENDER_HINT_OUTLINES_SLIGHT: Hint outlines slightly to improve
+ *   contrast while retaining good fidelity to original shapes
+ * @GSK_TEXT_RENDER_HINT_OUTLINES_MEDIUM: Hint outlines with medium strength
+ *   giving a compromise between fidelity to the original shapes and contrast
+ * @GSK_TEXT_RENDER_HINT_OUTLINES_FULL: Hint outlines to maximize contrast
+ *
+ * The values of this enumerations describe how font outlines should
+ * be rendered.
+ *
+ * The value passed to [func@Gsk.text_node_new_with_render_flags] can be a
+ * combination of one of the outline values with the antialias and hint
+ * metrics flags.
+ */
+typedef enum {
+  GSK_TEXT_RENDER_NONE                 = 0,
+  GSK_TEXT_RENDER_ANTIALIAS            = 1 << 0,
+  GSK_TEXT_RENDER_HINT_METRICS         = 1 << 1,
+  GSK_TEXT_RENDER_HINT_OUTLINES_SLIGHT = 1 << 2,
+  GSK_TEXT_RENDER_HINT_OUTLINES_MEDIUM = 2 << 2,
+  GSK_TEXT_RENDER_HINT_OUTLINES_FULL   = 3 << 2,
+} GskTextRenderFlags;
 
 #endif /* __GSK_TYPES_H__ */

@@ -4337,9 +4337,7 @@ struct _GskTextNode
 
   PangoFont *font;
   guint has_color_glyphs : 1;
-  guint hint_metrics     : 1;
-  guint antialias        : 1;
-  guint hint_style       : 3;
+  guint render_flags     : 4;
 
   GdkRGBA color;
   graphene_point_t offset;
@@ -4375,9 +4373,7 @@ gsk_text_node_draw (GskRenderNode *node,
   cairo_save (cr);
 
   options = cairo_font_options_create ();
-  cairo_font_options_set_hint_metrics (options, self->hint_metrics ? CAIRO_HINT_METRICS_ON : CAIRO_HINT_METRICS_OFF);
-  cairo_font_options_set_antialias (options, self->antialias ? CAIRO_ANTIALIAS_GRAY : CAIRO_ANTIALIAS_NONE);
-  cairo_font_options_set_hint_style (options, self->hint_style);
+  gsk_text_render_flags_to_cairo (self->render_flags, options);
   cairo_set_font_options (cr, options);
   cairo_font_options_destroy (options);
 
@@ -4435,12 +4431,32 @@ gsk_text_node_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, region);
 }
 
-static GskRenderNode *
-gsk_text_node_new_internal (const cairo_font_options_t *options,
-                            PangoFont                  *font,
-                            PangoGlyphString           *glyphs,
-                            const GdkRGBA              *color,
-                            const graphene_point_t     *offset)
+/**
+ * gsk_text_node_new_with_flags:
+ * @font: the `PangoFont` containing the glyphs
+ * @glyphs: the `PangoGlyphString` to render
+ * @color: the foreground color to render with
+ * @offset: offset of the baseline
+ * @flags: `GskTextRenderFlags`
+ *
+ * Creates a render node that renders the given glyphs.
+ *
+ * Note that @color may not be used if the font contains
+ * color glyphs.
+ *
+ * For best results, the @flags should match the cairo font
+ * options the were used to generated the @glyhs.
+ *
+ * Returns: (nullable) (transfer full) (type GskTextNode): a new `GskRenderNode`
+ *
+ * Since: 4.6
+ */
+GskRenderNode *
+gsk_text_node_new_with_flags (PangoFont                  *font,
+                              PangoGlyphString           *glyphs,
+                              const GdkRGBA              *color,
+                              const graphene_point_t     *offset,
+                              GskTextRenderFlags          flags)
 {
   GskTextNode *self;
   GskRenderNode *node;
@@ -4462,16 +4478,7 @@ gsk_text_node_new_internal (const cairo_font_options_t *options,
   self->color = *color;
   self->offset = *offset;
   self->has_color_glyphs = FALSE;
-  self->antialias = TRUE;
-  self->hint_style = CAIRO_HINT_STYLE_NONE;
-  self->hint_metrics = FALSE;
-
-  if (options)
-    {
-      self->antialias = cairo_font_options_get_antialias (options) != CAIRO_ANTIALIAS_NONE;
-      self->hint_metrics = cairo_font_options_get_hint_metrics (options) == CAIRO_HINT_METRICS_ON;
-      self->hint_style = cairo_font_options_get_hint_style (options);
-    }
+  self->render_flags = flags;
 
   glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
 
@@ -4502,32 +4509,6 @@ gsk_text_node_new_internal (const cairo_font_options_t *options,
   return node;
 }
 
-/**
- * gsk_text_node_new_with_font_options:
- * @options: `cairo_font_options_t` to render with
- * @font: the `PangoFont` containing the glyphs
- * @glyphs: the `PangoGlyphString` to render
- * @color: the foreground color to render with
- * @offset: offset of the baseline
- *
- * Creates a render node that renders the given glyphs.
- *
- * Note that @color may not be used if the font contains
- * color glyphs.
- *
- * Returns: (nullable) (transfer full) (type GskTextNode): a new `GskRenderNode`
- *
- * Since: 4.6
- */
-GskRenderNode *
-gsk_text_node_new_with_font_options (const cairo_font_options_t *options,
-                                     PangoFont                  *font,
-                                     PangoGlyphString           *glyphs,
-                                     const GdkRGBA              *color,
-                                     const graphene_point_t     *offset)
-{
-  return gsk_text_node_new_internal (options, font, glyphs, color, offset);
-}
 
 /**
  * gsk_text_node_new:
@@ -4549,68 +4530,26 @@ gsk_text_node_new (PangoFont              *font,
                    const GdkRGBA          *color,
                    const graphene_point_t *offset)
 {
-  return gsk_text_node_new_internal (NULL, font, glyphs, color, offset);
+  return gsk_text_node_new_with_flags (font, glyphs, color, offset,
+                                       GSK_TEXT_RENDER_ANTIALIAS);
 }
 
 /**
- * gsk_text_node_get_hint_metrics:
+ * gsk_text_node_get_render_flags:
  * @node: (type GskTextNode): a text `GskRenderNode`
  *
- * Retrieves whether metrics hinting is enabled for rendering.
+ * Retrieves render flags for @node.
  *
- * See the cairo [documentation](https://www.cairographics.org/manual/cairo-cairo-font-options-t.html#cairo-hint-metrics-t).
- *
- * Returns: whether metrics hinting is enabled
+ * Returns: the render flags
  *
  * Since: 4.6
  */
-gboolean
-gsk_text_node_get_hint_metrics (const GskRenderNode *node)
+GskTextRenderFlags
+gsk_text_node_get_render_flags (const GskRenderNode *node)
 {
   const GskTextNode *self = (const GskTextNode *) node;
 
-  return self->hint_metrics;
-}
-
-/**
- * gsk_text_node_get_antialias:
- * @node: (type GskTextNode): a text `GskRenderNode`
- *
- * Retrieves whether antialiasing is enabled for rendering.
- *
- * See the cairo [documentation](https://www.cairographics.org/manual/cairo-cairo-t.html#cairo-antialias-t).
- * Note that GSK only supports grayscale antialiasing.
- *
- * Returns: whether antialiasing is enabled
- *
- * Since: 4.6
- */
-gboolean
-gsk_text_node_get_antialias (const GskRenderNode *node)
-{
-  const GskTextNode *self = (const GskTextNode *) node;
-
-  return self->antialias;
-}
-
-/**
- * gsk_text_node_get_hint_style:
- * @node: (type GskTextNode): a text `GskRenderNode`
- *
- * Retrieves what style of font hinting is used for rendering.
- *
- * See the cairo [documentation](https://www.cairographics.org/manual/cairo-cairo-font-options-t.html#cairo-hint-style-t).
- *
- * Returns: what style of hinting is used
- *
- * Since: 4.6
- */
-cairo_hint_style_t
-gsk_text_node_get_hint_style (const GskRenderNode *node)
-{
-  const GskTextNode *self = (const GskTextNode *) node;
-
-  return self->hint_style;
+  return self->render_flags;
 }
 
 /**
