@@ -484,15 +484,26 @@ out:
  *
  * Parses a string representing an accelerator.
  *
- * The format looks like “<Control>a” or “<Shift><Alt>F1”.
+ * The format looks like “`<Control>a`” or “`<Shift><Alt>F1`”.
  *
  * The parser is fairly liberal and allows lower or upper case, and also
- * abbreviations such as “<Ctl>” and “<Ctrl>”. Key names are parsed using
- * [func@Gdk.keyval_from_name]. For character keys the name is not the symbol,
- * but the lowercase name, e.g. one would use “<Ctrl>minus” instead of
- * “<Ctrl>-”.
+ * abbreviations such as “`<Ctl>`” and “`<Ctrl>`”.
  *
- * If the parse fails, @accelerator_key and @accelerator_mods will
+ * Key names are parsed using [func@Gdk.keyval_from_name]. For character keys
+ * the name is not the symbol, but the lowercase name, e.g. one would use
+ * “`<Ctrl>minus`” instead of “`<Ctrl>-`”.
+ *
+ * Modifiers are enclosed in angular brackets `<>`, and match the
+ * [enum@Gdk.ModifierType] mask:
+ *
+ * - `<Shift>` for `GDK_SHIFT_MASK`
+ * - `<Ctrl>` for `GDK_CONTROL_MASK`
+ * - `<Alt>` for `GDK_ALT_MASK`
+ * - `<Meta>` for `GDK_META_MASK`
+ * - `<Super>` for `GDK_SUPER_MASK`
+ * - `<Hyper>` for `GDK_HYPER_MASK`
+ *
+ * If the parse operation fails, @accelerator_key and @accelerator_mods will
  * be set to 0 (zero).
  */
 gboolean
