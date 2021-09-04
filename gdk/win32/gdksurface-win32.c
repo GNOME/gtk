@@ -583,12 +583,6 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
   if (!title || !*title)
     title = "";
 
-  /* WS_EX_TRANSPARENT means "try draw this window last, and ignore input".
-   * It's the last part we're after. We don't want DND indicator to accept
-   * input, because that will make it a potential drop target, and if it's
-   * under the mouse cursor, this will kill any DND.
-   */
-
   klass = RegisterGdkClass (surface_type);
 
   wtitle = g_utf8_to_utf16 (title, -1, NULL, NULL, NULL);
@@ -651,6 +645,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
 
   _gdk_win32_surface_enable_transparency (surface);
   _gdk_win32_surface_register_dnd (surface);
+  _gdk_win32_surface_update_style_bits (surface);
 
   g_signal_connect (frame_clock,
                     "after-paint",
@@ -1841,6 +1836,8 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
   RECT rect, before, after;
   gboolean was_topmost;
   gboolean will_be_topmost;
+  gboolean was_layered;
+  gboolean will_be_layered;
   HWND insert_after;
   UINT flags;
 
@@ -1855,7 +1852,9 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
   AdjustWindowRectEx (&before, old_style, FALSE, old_exstyle);
 
   was_topmost = (old_exstyle & WS_EX_TOPMOST) ? TRUE : FALSE;
+  was_layered = (old_exstyle & WS_EX_LAYERED) ? TRUE : FALSE;
   will_be_topmost = was_topmost;
+  will_be_layered = was_layered;
 
   old_exstyle &= ~WS_EX_TOPMOST;
 
@@ -1865,7 +1864,14 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
   if (GDK_IS_DRAG_SURFACE (window))
     {
       new_exstyle |= WS_EX_TOOLWINDOW;
+
+      /* WS_EX_LAYERED | WS_EX_TRANSPARENT makes the drag surface behave
+       * in pointer input passthrough mode, so it doesn't interfere with
+       * the drag and drop operation.
+       */
+      new_exstyle |= WS_EX_LAYERED | WS_EX_TRANSPARENT;
       will_be_topmost = TRUE;
+      will_be_layered = TRUE;
     }
   else
     {
@@ -1910,6 +1916,14 @@ _gdk_win32_surface_update_style_bits (GdkSurface *window)
 			       _gdk_win32_surface_exstyle_to_string (new_exstyle)));
 
       SetWindowLong (GDK_SURFACE_HWND (window), GWL_EXSTYLE, new_exstyle);
+
+      if (!was_layered && will_be_layered)
+        {
+          /* We have to call SetLayeredWindowAttributes when setting the
+           * WS_EX_LAYERED style anew, otherwise the window won't show up
+           */
+          API_CALL (SetLayeredWindowAttributes, (GDK_SURFACE_HWND (window), 0, 255, LWA_ALPHA));
+        }
     }
 
   AdjustWindowRectEx (&after, new_style, FALSE, new_exstyle);
