@@ -288,20 +288,26 @@ update_buttons (void)
   gtk_widget_set_sensitive (down_button, scale > 1);
 }
 
-static void
-scale_up (void)
+static gboolean
+scale_up (GtkWidget *widget,
+          GVariant  *args,
+          gpointer   user_data)
 {
   scale += 1;
   update_buttons ();
   update_image ();
+  return TRUE;
 }
 
-static void
-scale_down (void)
+static gboolean
+scale_down (GtkWidget *widget,
+            GVariant  *args,
+            gpointer   user_data)
 {
   scale -= 1;
   update_buttons ();
   update_image ();
+  return TRUE;
 }
 
 GtkWidget *
