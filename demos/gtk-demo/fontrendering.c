@@ -17,10 +17,12 @@ static GtkWidget *down_button = NULL;
 static GtkWidget *text_radio = NULL;
 static GtkWidget *show_grid = NULL;
 static GtkWidget *show_extents = NULL;
+static GtkWidget *show_pixels = NULL;
+static GtkWidget *show_outlines = NULL;
 
 static PangoContext *context;
 
-static int scale = 9;
+static int scale = 7;
 
 static void
 update_image (void)
@@ -39,6 +41,7 @@ update_image (void)
   cairo_hint_style_t hintstyle;
   cairo_hint_metrics_t hintmetrics;
   cairo_antialias_t antialias;
+  cairo_path_t *path;
 
   if (!context)
     context = gtk_widget_create_pango_context (image);
@@ -94,9 +97,21 @@ update_image (void)
       cairo_set_source_rgb (cr, 1, 1, 1);
       cairo_paint (cr);
 
-      cairo_set_source_rgb (cr, 0, 0, 0);
+      if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_pixels)))
+        {
+          if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_outlines)))
+            cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
+          else
+            cairo_set_source_rgba (cr, 0, 0, 0, 1);
+        }
+      else
+        cairo_set_source_rgba (cr, 0, 0, 0, 0);
+
       cairo_move_to (cr, 10, 10);
       pango_cairo_show_layout (cr, layout);
+
+      pango_cairo_layout_path (cr, layout);
+      path = cairo_copy_path (cr);
 
       cairo_destroy (cr);
       g_object_unref (layout);
@@ -136,7 +151,7 @@ update_image (void)
 
       if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_extents)))
         {
-          cairo_set_source_rgba (cr, 0, 0, 1, 1);
+          cairo_set_source_rgb (cr, 0, 0, 1);
 
           cairo_rectangle (cr,
                            scale * (10 + pango_units_to_double (logical.x)) - 0.5,
@@ -149,7 +164,7 @@ update_image (void)
           cairo_line_to (cr, scale * (10 + pango_units_to_double (logical.x + logical.width)) + 1,
                              scale * (10 + pango_units_to_double (baseline)) - 0.5);
           cairo_stroke (cr);
-          cairo_set_source_rgba (cr, 1, 0, 0, 1);
+          cairo_set_source_rgb (cr, 1, 0, 0);
           cairo_rectangle (cr,
                            scale * (10 + pango_units_to_double (pink.x)) + 0.5,
                            scale * (10 + pango_units_to_double (pink.y)) + 0.5,
@@ -158,8 +173,39 @@ update_image (void)
           cairo_stroke (cr);
         }
 
+      if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_outlines)))
+        {
+          for (int i = 0; i < path->num_data; i += path->data[i].header.length)
+            {
+              cairo_path_data_t *data = &path->data[i];
+              switch (data->header.type)
+                {
+                case CAIRO_PATH_CURVE_TO:
+                  data[3].point.x *= scale; data[3].point.y *= scale;
+                  data[2].point.x *= scale; data[2].point.y *= scale;
+                  data[1].point.x *= scale; data[1].point.y *= scale;
+                  break;
+                case CAIRO_PATH_LINE_TO:
+                case CAIRO_PATH_MOVE_TO:
+                  data[1].point.x *= scale; data[1].point.y *= scale;
+                  break;
+                case CAIRO_PATH_CLOSE_PATH:
+                  break;
+                default:
+                  g_assert_not_reached ();
+                }
+            }
+
+          cairo_set_source_rgba (cr, 0, 0, 1, 1);
+          cairo_move_to (cr, scale * 20 - 0.5, scale * 20 - 0.5);
+          cairo_append_path (cr, path);
+          cairo_stroke (cr);
+        }
+
       cairo_surface_destroy (surface);
       cairo_destroy (cr);
+
+      cairo_path_destroy (path);
     }
   else
     {
@@ -281,6 +327,8 @@ do_fontrendering (GtkWidget *do_widget)
       text_radio = GTK_WIDGET (gtk_builder_get_object (builder, "text_radio"));
       show_grid = GTK_WIDGET (gtk_builder_get_object (builder, "show_grid"));
       show_extents = GTK_WIDGET (gtk_builder_get_object (builder, "show_extents"));
+      show_pixels = GTK_WIDGET (gtk_builder_get_object (builder, "show_pixels"));
+      show_outlines = GTK_WIDGET (gtk_builder_get_object (builder, "show_outlines"));
 
       g_signal_connect (up_button, "clicked", G_CALLBACK (scale_up), NULL);
       g_signal_connect (down_button, "clicked", G_CALLBACK (scale_down), NULL);
@@ -292,6 +340,8 @@ do_fontrendering (GtkWidget *do_widget)
       g_signal_connect (text_radio, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (show_grid, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (show_extents, "notify::active", G_CALLBACK (update_image), NULL);
+      g_signal_connect (show_pixels, "notify::active", G_CALLBACK (update_image), NULL);
+      g_signal_connect (show_outlines, "notify::active", G_CALLBACK (update_image), NULL);
 
       update_image ();
 

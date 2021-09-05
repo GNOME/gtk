@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window">
-    <property name="default-width">1080</property>
-    <property name="default-height">430</property>
+    <property name="default-width">1024</property>
+    <property name="default-height">768</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <child type="title">
@@ -82,14 +82,51 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="label">Hinting</property>
-                <property name="xalign">1</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
+              <object class="GtkCheckButton" id="show_pixels">
+                <property name="label">Show Pixels</property>
+                <property name="active">1</property>
                 <layout>
                   <property name="column">3</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="show_outlines">
+                <property name="label">Show Outline</property>
+                <layout>
+                  <property name="column">3</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Hinting</property>
+                    <property name="xalign">1</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="hinting">
+                    <property name="active">0</property>
+                    <property name="valign">center</property>
+                    <items>
+                      <item translatable="yes" id="none">None</item>
+                      <item translatable="yes" id="slight">Slight</item>
+                      <item translatable="yes" id="medium">Medium</item>
+                      <item translatable="yes" id="full">Full</item>
+                    </items>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="column-span">2</property>
                 </layout>
               </object>
             </child>
@@ -98,23 +135,8 @@
                 <property name="label">Antialias</property>
                 <property name="active">1</property>
                 <layout>
-                  <property name="column">3</property>
-                  <property name="row">1</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkComboBoxText" id="hinting">
-                <property name="active">0</property>
-                <property name="valign">center</property>
-                <items>
-                  <item translatable="yes" id="none">None</item>
-                  <item translatable="yes" id="slight">Slight</item>
-                  <item translatable="yes" id="medium">Medium</item>
-                  <item translatable="yes" id="full">Full</item>
-                </items>
-                <layout>
                   <property name="column">4</property>
+                  <property name="row">1</property>
                 </layout>
               </object>
             </child>
@@ -122,7 +144,7 @@
               <object class="GtkCheckButton" id="hint_metrics">
                 <property name="label">Hint Metrics</property>
                 <layout>
-                  <property name="column">4</property>
+                  <property name="column">5</property>
                   <property name="row">1</property>
                 </layout>
               </object>
@@ -131,7 +153,7 @@
               <object class="GtkCheckButton" id="show_extents">
                 <property name="label">Show Extents</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="row">0</property>
                 </layout>
               </object>
@@ -140,7 +162,7 @@
               <object class="GtkCheckButton" id="show_grid">
                 <property name="label">Show Grid</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="row">1</property>
                 </layout>
               </object>
@@ -152,7 +174,7 @@
                   <class name="circular"/>
                 </style>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="row">0</property>
                 </layout>
               </object>
@@ -164,7 +186,7 @@
                   <class name="circular"/>
                 </style>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="row">1</property>
                 </layout>
               </object>
@@ -173,7 +195,7 @@
               <object class="GtkLabel">
                 <property name="hexpand">1</property>
                 <layout>
-                  <property name="column">7</property>
+                  <property name="column">8</property>
                 </layout>
               </object>
             </child>
