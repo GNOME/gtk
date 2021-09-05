@@ -28,6 +28,8 @@ static GtkWidget *show_outlines = NULL;
 static PangoContext *context;
 
 static int scale = 7;
+static double pixel_alpha = 1.0;
+static double outline_alpha = 0.0;
 
 static void
 update_image (void)
@@ -102,15 +104,7 @@ update_image (void)
       cairo_set_source_rgb (cr, 1, 1, 1);
       cairo_paint (cr);
 
-      if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_pixels)))
-        {
-          if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_outlines)))
-            cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
-          else
-            cairo_set_source_rgba (cr, 0, 0, 0, 1);
-        }
-      else
-        cairo_set_source_rgba (cr, 0, 0, 0, 0);
+      cairo_set_source_rgba (cr, 0, 0, 0, pixel_alpha);
 
       cairo_move_to (cr, 10, 10);
       pango_cairo_show_layout (cr, layout);
@@ -178,34 +172,31 @@ update_image (void)
           cairo_stroke (cr);
         }
 
-      if (gtk_check_button_get_active (GTK_CHECK_BUTTON (show_outlines)))
+      for (int i = 0; i < path->num_data; i += path->data[i].header.length)
         {
-          for (int i = 0; i < path->num_data; i += path->data[i].header.length)
+          cairo_path_data_t *data = &path->data[i];
+          switch (data->header.type)
             {
-              cairo_path_data_t *data = &path->data[i];
-              switch (data->header.type)
-                {
-                case CAIRO_PATH_CURVE_TO:
-                  data[3].point.x *= scale; data[3].point.y *= scale;
-                  data[2].point.x *= scale; data[2].point.y *= scale;
-                  data[1].point.x *= scale; data[1].point.y *= scale;
-                  break;
-                case CAIRO_PATH_LINE_TO:
-                case CAIRO_PATH_MOVE_TO:
-                  data[1].point.x *= scale; data[1].point.y *= scale;
-                  break;
-                case CAIRO_PATH_CLOSE_PATH:
-                  break;
-                default:
-                  g_assert_not_reached ();
-                }
+            case CAIRO_PATH_CURVE_TO:
+              data[3].point.x *= scale; data[3].point.y *= scale;
+              data[2].point.x *= scale; data[2].point.y *= scale;
+              data[1].point.x *= scale; data[1].point.y *= scale;
+              break;
+            case CAIRO_PATH_LINE_TO:
+            case CAIRO_PATH_MOVE_TO:
+              data[1].point.x *= scale; data[1].point.y *= scale;
+              break;
+            case CAIRO_PATH_CLOSE_PATH:
+              break;
+            default:
+              g_assert_not_reached ();
             }
-
-          cairo_set_source_rgba (cr, 0, 0, 1, 1);
-          cairo_move_to (cr, scale * 20 - 0.5, scale * 20 - 0.5);
-          cairo_append_path (cr, path);
-          cairo_stroke (cr);
         }
+
+      cairo_set_source_rgba (cr, 0, 0, 1, outline_alpha);
+      cairo_move_to (cr, scale * 20 - 0.5, scale * 20 - 0.5);
+      cairo_append_path (cr, path);
+      cairo_stroke (cr);
 
       cairo_surface_destroy (surface);
       cairo_destroy (cr);
@@ -286,6 +277,78 @@ update_image (void)
   pango_font_description_free (desc);
 }
 
+static gboolean fading = FALSE;
+static double start_pixel_alpha;
+static double end_pixel_alpha;
+static double start_outline_alpha;
+static double end_outline_alpha;
+static gint64 start_time;
+static gint64 end_time;
+
+static double
+ease_out_cubic (double t)
+{
+  double p = t - 1;
+  return p * p * p + 1;
+}
+
+static gboolean
+change_alpha (GtkWidget     *widget,
+              GdkFrameClock *clock,
+              gpointer       user_data)
+{
+  gint64 now = g_get_monotonic_time ();
+  double t;
+
+  t = ease_out_cubic ((now - start_time) / (double) (end_time - start_time));
+
+  pixel_alpha = start_pixel_alpha + (end_pixel_alpha - start_pixel_alpha) * t;
+  outline_alpha = start_outline_alpha + (end_outline_alpha - start_outline_alpha) * t;
+
+  update_image ();
+
+  if (now >= end_time)
+    {
+      fading = FALSE;
+      return G_SOURCE_REMOVE;
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+start_alpha_fade (void)
+{
+  gboolean pixels;
+  gboolean outlines;
+
+  if (fading)
+    return;
+
+  pixels = gtk_check_button_get_active (GTK_CHECK_BUTTON (show_pixels));
+  outlines = gtk_check_button_get_active (GTK_CHECK_BUTTON (show_outlines));
+
+  start_pixel_alpha = pixel_alpha;
+  if (pixels && outlines)
+    end_pixel_alpha = 0.5;
+  else if (pixels)
+    end_pixel_alpha = 1;
+  else
+    end_pixel_alpha = 0;
+
+  start_outline_alpha = outline_alpha;
+  if (outlines)
+    end_outline_alpha = 1.0;
+  else
+    end_outline_alpha = 0.0;
+
+  start_time = g_get_monotonic_time ();
+  end_time = start_time + G_TIME_SPAN_SECOND / 2;
+
+  fading = TRUE;
+  gtk_widget_add_tick_callback (window, change_alpha, NULL, NULL);
+}
+
 static void
 update_buttons (void)
 {
@@ -351,8 +414,8 @@ do_fontrendering (GtkWidget *do_widget)
       g_signal_connect (text_radio, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (show_grid, "notify::active", G_CALLBACK (update_image), NULL);
       g_signal_connect (show_extents, "notify::active", G_CALLBACK (update_image), NULL);
-      g_signal_connect (show_pixels, "notify::active", G_CALLBACK (update_image), NULL);
-      g_signal_connect (show_outlines, "notify::active", G_CALLBACK (update_image), NULL);
+      g_signal_connect (show_pixels, "notify::active", G_CALLBACK (start_alpha_fade), NULL);
+      g_signal_connect (show_outlines, "notify::active", G_CALLBACK (start_alpha_fade), NULL);
 
       update_image ();
 
