@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkAdjustment" id="scale_adj">
-    <property name="upper">24</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">4</property>
-  </object>
   <object class="GtkWindow" id="window">
-    <property name="default-width">1080</property>
-    <property name="default-height">430</property>
+    <property name="default-width">1024</property>
+    <property name="default-height">768</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <child type="title">
@@ -87,20 +82,20 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel">
-                <property name="label">Hinting</property>
-                <property name="xalign">1</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
+              <object class="GtkCheckButton" id="show_pixels">
+                <property name="label">Show _Pixels</property>
+                <property name="use-underline">1</property>
+                <property name="active">1</property>
                 <layout>
                   <property name="column">3</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="antialias">
-                <property name="label">Antialias</property>
+              <object class="GtkCheckButton" id="show_outlines">
+                <property name="label">Show _Outline</property>
+                <property name="use-underline">1</property>
                 <layout>
                   <property name="column">3</property>
                   <property name="row">1</property>
@@ -108,45 +103,73 @@
               </object>
             </child>
             <child>
-              <object class="GtkComboBoxText" id="hinting">
-                <property name="active">0</property>
-                <property name="valign">center</property>
-                <items>
-                  <item translatable="yes" id="none">None</item>
-                  <item translatable="yes" id="slight">Slight</item>
-                  <item translatable="yes" id="medium">Medium</item>
-                  <item translatable="yes" id="full">Full</item>
-                </items>
+              <object class="GtkBox">
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">_Hinting</property>
+                    <property name="use-underline">1</property>
+                    <property name="mnemonic-widget">hinting</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="hinting">
+                    <property name="active">0</property>
+                    <property name="valign">center</property>
+                    <items>
+                      <item translatable="yes" id="none">None</item>
+                      <item translatable="yes" id="slight">Slight</item>
+                      <item translatable="yes" id="medium">Medium</item>
+                      <item translatable="yes" id="full">Full</item>
+                    </items>
+                  </object>
+                </child>
                 <layout>
                   <property name="column">4</property>
+                  <property name="column-span">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="antialias">
+                <property name="label">_Antialias</property>
+                <property name="use-underline">1</property>
+                <property name="active">1</property>
+                <layout>
+                  <property name="column">4</property>
+                  <property name="row">1</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="GtkCheckButton" id="hint_metrics">
-                <property name="label">Hint Metrics</property>
+                <property name="label">Hint _Metrics</property>
+                <property name="use-underline">1</property>
                 <layout>
-                  <property name="column">4</property>
+                  <property name="column">5</property>
                   <property name="row">1</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="GtkCheckButton" id="show_extents">
-                <property name="label">Show Extents</property>
-                <property name="active">1</property>
+                <property name="label">Show _Extents</property>
+                <property name="use-underline">1</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
               <object class="GtkCheckButton" id="show_grid">
-                <property name="active">1</property>
-                <property name="label">Show Grid</property>
+                <property name="label">Show _Grid</property>
+                <property name="use-underline">1</property>
                 <layout>
-                  <property name="column">5</property>
+                  <property name="column">6</property>
                   <property name="row">1</property>
                 </layout>
               </object>
@@ -157,8 +180,19 @@
                 <style>
                   <class name="circular"/>
                 </style>
+                <child>
+                  <object class="GtkShortcutController">
+                    <property name="scope">managed</property>
+                    <child>
+                      <object class="GtkShortcut">
+                        <property name="trigger">&lt;Control&gt;plus</property>
+                        <property name="action">activate</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="row">0</property>
                 </layout>
               </object>
@@ -169,8 +203,19 @@
                 <style>
                   <class name="circular"/>
                 </style>
+                <child>
+                  <object class="GtkShortcutController">
+                    <property name="scope">managed</property>
+                    <child>
+                      <object class="GtkShortcut">
+                        <property name="trigger">&lt;Control&gt;minus</property>
+                        <property name="action">activate</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
                 <layout>
-                  <property name="column">6</property>
+                  <property name="column">7</property>
                   <property name="row">1</property>
                 </layout>
               </object>
@@ -179,7 +224,7 @@
               <object class="GtkLabel">
                 <property name="hexpand">1</property>
                 <layout>
-                  <property name="column">7</property>
+                  <property name="column">8</property>
                 </layout>
               </object>
             </child>
