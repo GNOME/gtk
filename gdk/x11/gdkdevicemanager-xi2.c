@@ -1275,6 +1275,26 @@ get_event_surface (GdkEventTranslator *translator,
           }
       }
       break;
+#ifdef XINPUT_2_4
+    case XI_GesturePinchBegin:
+    case XI_GesturePinchUpdate:
+    case XI_GesturePinchEnd:
+      {
+        XIGesturePinchEvent *xev = (XIGesturePinchEvent *) ev;
+
+        surface = gdk_x11_surface_lookup_for_display (display, xev->event);
+      }
+      break;
+    case XI_GestureSwipeBegin:
+    case XI_GestureSwipeUpdate:
+    case XI_GestureSwipeEnd:
+      {
+        XIGestureSwipeEvent *xev = (XIGestureSwipeEvent *) ev;
+
+        surface = gdk_x11_surface_lookup_for_display (display, xev->event);
+      }
+      break;
+#endif /* XINPUT_2_4 */
     case XI_Enter:
     case XI_Leave:
     case XI_FocusIn:
@@ -1881,6 +1901,126 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       break;
 #endif  /* XINPUT_2_2 */
 
+#ifdef XINPUT_2_4
+    case XI_GesturePinchBegin:
+    case XI_GesturePinchUpdate:
+    case XI_GesturePinchEnd:
+      {
+        XIGesturePinchEvent *xev = (XIGesturePinchEvent *) ev;
+        GdkModifierType state;
+        GdkTouchpadGesturePhase phase;
+        double x, y;
+
+#ifdef G_ENABLE_DEBUG
+        const char *event_name = "";
+        switch (xev->evtype)
+          {
+          case XI_GesturePinchBegin:
+            event_name = "begin";
+            break;
+          case XI_GesturePinchUpdate:
+            event_name = "update";
+            break;
+          case XI_GesturePinchEnd:
+            event_name = "end";
+            break;
+          default:
+            break;
+          }
+#endif
+
+        GDK_NOTE (EVENTS,
+                  g_message ("pinch gesture %s:\twindow %ld\n\tfinger_count: %u%s",
+                             event_name,
+                             xev->event,
+                             xev->detail,
+                             xev->flags & XIGesturePinchEventCancelled ? "\n\tcancelled" : ""));
+
+        device = g_hash_table_lookup (device_manager->id_table,
+                                      GINT_TO_POINTER (xev->deviceid));
+
+        state = _gdk_x11_device_xi2_translate_state (&xev->mods, NULL, &xev->group);
+        phase = _gdk_x11_device_xi2_gesture_type_to_phase (xev->evtype, xev->flags);
+
+        x = (double) xev->event_x / scale;
+        y = (double) xev->event_y / scale;
+
+        event = gdk_touchpad_event_new_pinch (surface,
+                                              device,
+                                              xev->time,
+                                              state,
+                                              phase,
+                                              x, y,
+                                              xev->detail,
+                                              xev->delta_x,
+                                              xev->delta_y,
+                                              xev->scale,
+                                              xev->delta_angle * G_PI / 180);
+
+        if (ev->evtype == XI_GesturePinchBegin)
+          set_user_time (event);
+      }
+      break;
+
+    case XI_GestureSwipeBegin:
+    case XI_GestureSwipeUpdate:
+    case XI_GestureSwipeEnd:
+      {
+        XIGestureSwipeEvent *xev = (XIGestureSwipeEvent *) ev;
+        GdkModifierType state;
+        GdkTouchpadGesturePhase phase;
+        double x, y;
+
+#ifdef G_ENABLE_DEBUG
+        const char *event_name = "";
+        switch (xev->evtype)
+          {
+          case XI_GestureSwipeBegin:
+            event_name = "begin";
+            break;
+          case XI_GestureSwipeUpdate:
+            event_name = "update";
+            break;
+          case XI_GestureSwipeEnd:
+            event_name = "end";
+            break;
+          default:
+            break;
+          }
+#endif
+
+        GDK_NOTE (EVENTS,
+                  g_message ("swipe gesture %s:\twindow %ld\n\tfinger_count: %u%s",
+                             event_name,
+                             xev->event,
+                             xev->detail,
+                             xev->flags & XIGestureSwipeEventCancelled ? "\n\tcancelled" : ""));
+
+        device = g_hash_table_lookup (device_manager->id_table,
+                                      GINT_TO_POINTER (xev->deviceid));
+
+        state = _gdk_x11_device_xi2_translate_state (&xev->mods, NULL, &xev->group);
+        phase = _gdk_x11_device_xi2_gesture_type_to_phase (xev->evtype, xev->flags);
+
+        x = (double) xev->event_x / scale;
+        y = (double) xev->event_y / scale;
+
+        event = gdk_touchpad_event_new_swipe (surface,
+                                              device,
+                                              xev->time,
+                                              state,
+                                              phase,
+                                              x, y,
+                                              xev->detail,
+                                              xev->delta_x,
+                                              xev->delta_y);
+
+        if (ev->evtype == XI_GestureSwipeBegin)
+          set_user_time (event);
+      }
+      break;
+#endif /* XINPUT_2_4 */
+
     case XI_Enter:
     case XI_Leave:
       {
@@ -1992,7 +2132,8 @@ gdk_x11_device_manager_xi2_get_handled_events (GdkEventTranslator *translator)
           GDK_BUTTON3_MOTION_MASK |
           GDK_BUTTON_MOTION_MASK |
           GDK_FOCUS_CHANGE_MASK |
-          GDK_TOUCH_MASK);
+          GDK_TOUCH_MASK |
+          GDK_TOUCHPAD_GESTURE_MASK);
 }
 
 static void

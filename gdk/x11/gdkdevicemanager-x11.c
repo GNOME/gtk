@@ -41,7 +41,7 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
       int major, minor;
 
       major = 2;
-      minor = 3;
+      minor = 4;
 
       if (XIQueryVersion (xdisplay, &major, &minor) != BadRequest)
         {
