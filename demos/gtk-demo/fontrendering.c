@@ -1,6 +1,11 @@
 /* Pango/Font Rendering
  *
- * Demonstrates various aspects of font rendering.
+ * Demonstrates various aspects of font rendering,
+ * such as hinting, antialiasing and grid alignment.
+ *
+ * The demo lets you explore font rendering options
+ * interactively to get a feeling for they affect the
+ * shape and positioning of the glyphs.
  */
 
 #include <gtk/gtk.h>
