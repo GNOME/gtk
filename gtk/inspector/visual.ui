@@ -1,29 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
-  <object class="GtkAdjustment" id="scale_adjustment">
-    <property name="lower">1</property>
-    <property name="upper">3</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">1</property>
-  </object>
-  <object class="GtkAdjustment" id="font_scale_adjustment">
-    <property name="lower">0.5</property>
-    <property name="upper">2</property>
-    <property name="step-increment">0.01</property>
-    <property name="page-increment">0.01</property>
-  </object>
-  <object class="GtkAdjustment" id="slowdown_adjustment">
-    <property name="lower">-3</property>
-    <property name="upper">3</property>
-    <property name="step-increment">1</property>
-    <property name="page-increment">1</property>
-  </object>
-  <object class="GtkAdjustment" id="cursor_size_adjustment">
-    <property name="lower">16</property>
-    <property name="upper">128</property>
-    <property name="step-increment">8</property>
-    <property name="page-increment">8</property>
-  </object>
   <template class="GtkInspectorVisual" parent="GtkWidget">
     <child>
       <object class="GtkScrolledWindow" id="swin">
@@ -142,7 +118,14 @@
                                     <property name="valign">baseline</property>
                                     <property name="max-width-chars">2</property>
                                     <property name="width-chars">2</property>
-                                    <property name="adjustment">cursor_size_adjustment</property>
+                                    <property name="adjustment">
+                                      <object class="GtkAdjustment" id="cursor_size_adjustment">
+                                        <property name="lower">16</property>
+                                        <property name="upper">128</property>
+                                        <property name="step-increment">8</property>
+                                        <property name="page-increment">8</property>
+                                      </object>
+                                    </property>
                                     <property name="snap-to-ticks">1</property>
                                     <property name="hexpand">1</property>
                                   </object>
@@ -218,7 +201,14 @@
                                 <child>
                                   <object class="GtkScale" id="font_scale_scale">
                                     <property name="valign">baseline</property>
-                                    <property name="adjustment">font_scale_adjustment</property>
+                                    <property name="adjustment">
+                                      <object class="GtkAdjustment" id="font_scale_adjustment">
+                                        <property name="lower">0.5</property>
+                                        <property name="upper">2</property>
+                                        <property name="step-increment">0.01</property>
+                                        <property name="page-increment">0.01</property>
+                                      </object>
+                                    </property>
                                     <property name="draw-value">0</property>
                                     <property name="hexpand">1</property>
                                     <marks>
@@ -231,6 +221,7 @@
                                     <property name="halign">end</property>
                                     <property name="valign">baseline</property>
                                     <property name="width-chars">4</property>
+                                    <property name="max-width-chars">4</property>
                                     <property name="input-purpose">number</property>
                                   </object>
                                 </child>
@@ -290,7 +281,14 @@
                                   <object class="GtkSpinButton" id="hidpi_spin">
                                     <property name="halign">end</property>
                                     <property name="valign">baseline</property>
-                                    <property name="adjustment">scale_adjustment</property>
+                                    <property name="adjustment">
+                                      <object class="GtkAdjustment" id="scale_adjustment">
+                                        <property name="lower">1</property>
+                                        <property name="upper">3</property>
+                                        <property name="step-increment">1</property>
+                                        <property name="page-increment">1</property>
+                                      </object>
+                                    </property>
                                     <property name="snap-to-ticks">1</property>
                                     <property name="hexpand">1</property>
                                   </object>
@@ -339,7 +337,14 @@
                                 </child>
                                 <child>
                                   <object class="GtkScale" id="slowdown_scale">
-                                    <property name="adjustment">slowdown_adjustment</property>
+                                    <property name="adjustment">
+                                      <object class="GtkAdjustment" id="slowdown_adjustment">
+                                        <property name="lower">-3</property>
+                                        <property name="upper">3</property>
+                                        <property name="step-increment">1</property>
+                                        <property name="page-increment">1</property>
+                                      </object>
+                                    </property>
                                     <property name="valign">baseline</property>
                                     <property name="draw-value">0</property>
                                     <property name="hexpand">1</property>
@@ -353,6 +358,7 @@
                                     <property name="halign">end</property>
                                     <property name="valign">baseline</property>
                                     <property name="width-chars">4</property>
+                                    <property name="max-width-chars">4</property>
                                     <property name="input-purpose">number</property>
                                   </object>
                                 </child>
@@ -716,6 +722,12 @@
       <widget name="focus_label"/>
       <widget name="touchscreen_label"/>
       <widget name="software_gl_label"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="font_scale_label"/>
+      <widget name="slowdown_label"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
