@@ -167,10 +167,26 @@ update_image (void)
       PangoLayoutRun *run;
       PangoGlyphInfo *g;
       int i, j;
+      GString *str;
+      gunichar ch;
+
+      if (*text == '\0')
+        text = " ";
+
+      ch = g_utf8_get_char (text);
+
+      str = g_string_new ("");
+
+      for (i = 0; i < 4; i++)
+        {
+          g_string_append_unichar (str, ch);
+          g_string_append_unichar (str, 0x200c);
+        }
 
       layout = pango_layout_new (context);
       pango_layout_set_font_description (layout, desc);
-      pango_layout_set_text (layout, "aaaa", -1);
+      pango_layout_set_text (layout, str->str, -1);
+      g_string_free (str, TRUE);
       pango_layout_get_extents (layout, &ink, &logical);
       pango_extents_to_pixels (&logical, NULL);
 
@@ -185,7 +201,7 @@ update_image (void)
       cairo_set_source_rgb (cr, 0, 0, 0);
       for (i = 0; i < 4; i++)
         {
-          g = &(run->glyphs->glyphs[i]);
+          g = &(run->glyphs->glyphs[2*i]);
           g->geometry.width = PANGO_UNITS_ROUND (g->geometry.width * 3 / 2);
         }
 
@@ -193,7 +209,7 @@ update_image (void)
         {
           for (i = 0; i < 4; i++)
             {
-              g = &(run->glyphs->glyphs[i]);
+              g = &(run->glyphs->glyphs[2*i]);
               g->geometry.x_offset = i * (PANGO_SCALE / 4);
               g->geometry.y_offset = j * (PANGO_SCALE / 4);
             }
@@ -211,7 +227,6 @@ update_image (void)
       g_object_unref (pixbuf);
       cairo_surface_destroy (surface);
     }
-
 
   gtk_picture_set_pixbuf (GTK_PICTURE (image), pixbuf2);
 
