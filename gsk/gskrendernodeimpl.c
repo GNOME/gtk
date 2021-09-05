@@ -4377,15 +4377,6 @@ gsk_text_node_draw (GskRenderNode *node,
   cairo_restore (cr);
 }
 
-/* We steal one of the bits in PangoGlyphVisAttr */
-
-G_STATIC_ASSERT (sizeof (PangoGlyphVisAttr) == 4);
-
-#define COLOR_GLYPH_BIT 2
-#define GLYPH_IS_COLOR(g)  (((*(guint32*)&(g)->attr) & COLOR_GLYPH_BIT) != 0)
-#define GLYPH_SET_COLOR(g)  (*(guint32*)(&(g)->attr) |= COLOR_GLYPH_BIT)
-#define GLYPH_CLEAR_COLOR(g)  (*(guint32*)(&(g)->attr) &= ~COLOR_GLYPH_BIT)
-
 static void
 gsk_text_node_diff (GskRenderNode  *node1,
                     GskRenderNode  *node2,
@@ -4411,7 +4402,7 @@ gsk_text_node_diff (GskRenderNode  *node1,
               info1->geometry.x_offset == info2->geometry.x_offset &&
               info1->geometry.y_offset == info2->geometry.y_offset &&
               info1->attr.is_cluster_start == info2->attr.is_cluster_start &&
-              GLYPH_IS_COLOR (info1) == GLYPH_IS_COLOR (info2))
+              info1->attr.is_color == info2->attr.is_color)
             continue;
 
           gsk_render_node_diff_impossible (node1, node2, region);
