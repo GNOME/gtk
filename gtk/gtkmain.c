@@ -362,7 +362,7 @@ enum_locale_proc (LPTSTR locale)
   
 #endif
 
-static void
+void
 setlocale_initialization (void)
 {
   static gboolean initialized = FALSE;
