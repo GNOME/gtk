@@ -12,19 +12,9 @@ demo_conf_h = declare_dependency(
 )
 
 # appdata
-today = 'unknown'
-date = find_program('date',
-         required: false)
-if date.found()
-  r = run_command(date, '-I')
-  if r.returncode() == 0
-    today = r.stdout().strip()
-  endif
-endif
 
 appdata_config = configuration_data()
 appdata_config.set('BUILD_VERSION', meson.project_version())
-appdata_config.set('BUILD_DATE', today)
 
 subdir('constraint-editor')
 subdir('gtk-demo')
