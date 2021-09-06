@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gdkmemorytextureprivate.h"
+#include "gsk/ngl/fp16private.h"
 
 /**
  * GdkMemoryTexture:
@@ -66,7 +67,11 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
       return 6;
 
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
       return 8;
+
+    case GDK_MEMORY_R16G16B16_FLOAT:
+      return 6;
 
     case GDK_MEMORY_N_FORMATS:
     default:
@@ -364,6 +369,74 @@ SWIZZLE_16TO8(0,1,2,3)
 SWIZZLE_16TO8(2,1,0,3)
 SWIZZLE_16TO8(1,2,3,0)
 
+#define SWIZZLE_FP16_OPAQUE(A,R,G,B) \
+static void \
+convert_fp16_swizzle_opaque_ ## A ## R ## G ## B (guchar       *dest_data, \
+                                                  gsize         dest_stride, \
+                                                  const guchar *src_data, \
+                                                  gsize         src_stride, \
+                                                  gsize         width, \
+                                                  gsize         height) \
+{ \
+  gsize x, y; \
+  float *c; \
+\
+c = g_malloc (width * sizeof (float)); \
+  for (y = 0; y < height; y++) \
+    { \
+      guint16 *src = (guint16 *)src_data; \
+      half_to_float (src, c, width); \
+      for (x = 0; x < width; x++) \
+        { \
+          dest_data[4 * x + A] = 255; \
+          dest_data[4 * x + R] = (guchar)(255 * c[3 * x + 0]); \
+          dest_data[4 * x + G] = (guchar)(255 * c[3 * x + 1]); \
+          dest_data[4 * x + B] = (guchar)(255 * c[3 * x + 2]); \
+        } \
+      dest_data += dest_stride; \
+      src_data += src_stride; \
+    } \
+  g_free (c); \
+}
+
+SWIZZLE_FP16_OPAQUE(3,2,1,0)
+SWIZZLE_FP16_OPAQUE(0,1,2,3)
+SWIZZLE_FP16_OPAQUE(3,0,1,2)
+
+#define SWIZZLE_FP16(A,R,G,B) \
+static void \
+convert_fp16_swizzle_ ## A ## R ## G ## B (guchar       *dest_data, \
+                                           gsize         dest_stride, \
+                                           const guchar *src_data, \
+                                           gsize         src_stride, \
+                                           gsize         width, \
+                                           gsize         height) \
+{ \
+  gsize x, y; \
+  float *c; \
+\
+  c = g_malloc (width * sizeof (float)); \
+  for (y = 0; y < height; y++) \
+    { \
+      guint16 *src = (guint16 *)src_data; \
+      half_to_float (src, c, width); \
+      for (x = 0; x < width; x++) \
+        { \
+          dest_data[4 * x + A] = (guchar)(255 * c[4 * x + 0]); \
+          dest_data[4 * x + R] = (guchar)(255 * c[4 * x + 1]); \
+          dest_data[4 * x + G] = (guchar)(255 * c[4 * x + 2]); \
+          dest_data[4 * x + B] = (guchar)(255 * c[4 * x + 3]); \
+        } \
+      dest_data += dest_stride; \
+      src_data += src_stride; \
+    } \
+  g_free (c); \
+}
+
+SWIZZLE_FP16(3,2,1,0)
+SWIZZLE_FP16(0,1,2,3)
+SWIZZLE_FP16(3,0,1,2)
+
 typedef void (* ConversionFunc) (guchar       *dest_data,
                                  gsize         dest_stride,
                                  const guchar *src_data,
@@ -383,7 +456,9 @@ static ConversionFunc converters[GDK_MEMORY_N_FORMATS][3] =
   { convert_swizzle_opaque_3210, convert_swizzle_opaque_0123, convert_swizzle_opaque_3012 },
   { convert_swizzle_opaque_3012, convert_swizzle_opaque_0321, convert_swizzle_opaque_3210 },
   { convert_16to8_swizzle_opaque_2103, convert_16to8_swizzle_opaque_1230, convert_16to8_swizzle_opaque_0123 },
-  { convert_16to8_swizzle_2103, convert_16to8_swizzle_1230, convert_16to8_swizzle_0123 }
+  { convert_16to8_swizzle_2103, convert_16to8_swizzle_1230, convert_16to8_swizzle_0123 },
+  { convert_fp16_swizzle_opaque_3210, convert_fp16_swizzle_opaque_0123, convert_fp16_swizzle_opaque_3012 },
+  { convert_fp16_swizzle_3210, convert_fp16_swizzle_0123, convert_fp16_swizzle_3012 }
 };
 
 void

@@ -189,6 +189,10 @@ main (int argc, char *argv[])
 
   for (format = 0; format < GDK_MEMORY_N_FORMATS; format++)
     {
+      if (format == GDK_MEMORY_R16G16B16_FLOAT ||
+          format == GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED)
+        continue;
+
       for (color = 0; color < N_COLORS; color++)
         {
           TestData *test_data = g_new (TestData, 1);
