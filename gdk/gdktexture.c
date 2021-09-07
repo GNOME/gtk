@@ -748,3 +748,35 @@ gdk_texture_save_to_png_bytes (GdkTexture *texture)
 
   return gdk_save_png (texture);
 }
+
+/**
+ * gdk_texture_save_to_tiff:
+ * @texture: a `GdkTexture`
+ * @filename: (type filename): the filename to store to
+ *
+ * Store the given @texture to the @filename as a TIFF file.
+ *
+ * GTK will attempt to store data without loss.
+ * Returns: %TRUE if saving succeeded, %FALSE on failure.
+ *
+ * Since: 4.6
+ */
+gboolean
+gdk_texture_save_to_tiff (GdkTexture  *texture,
+                          const char  *filename)
+{
+  GBytes *bytes;
+  gboolean result;
+
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
+  g_return_val_if_fail (filename != NULL, FALSE);
+
+  bytes = gdk_save_tiff (texture);
+  result = g_file_set_contents (filename,
+                                g_bytes_get_data (bytes, NULL),
+                                g_bytes_get_size (bytes),
+                                NULL);
+  g_bytes_unref (bytes);
+
+  return result;
+}
