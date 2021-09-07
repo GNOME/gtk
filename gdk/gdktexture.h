@@ -90,6 +90,9 @@ gboolean                gdk_texture_save_to_png                (GdkTexture      
                                                                 const char      *filename);
 GDK_AVAILABLE_IN_4_6
 GBytes *                gdk_texture_save_to_png_bytes          (GdkTexture      *texture);
+GDK_AVAILABLE_IN_4_6
+gboolean                gdk_texture_save_to_tiff               (GdkTexture      *texture,
+                                                                const char      *filename);
 
 G_END_DECLS
 
