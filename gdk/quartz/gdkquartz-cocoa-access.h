@@ -25,7 +25,7 @@
 
 #include <AppKit/AppKit.h>
 #include <gdk/gdk.h>
-#include <gdk/gdkquartz.h>
+#include "gdkquartz.h"
 
 GDK_AVAILABLE_IN_ALL
 NSEvent  *gdk_quartz_event_get_nsevent              (GdkEvent  *event);
