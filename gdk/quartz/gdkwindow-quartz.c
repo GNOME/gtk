@@ -31,6 +31,7 @@
 #include "gdkquartzscreen.h"
 #include "gdkquartzcursor.h"
 #include "gdkquartz-cocoa-access.h"
+#include "gdkinternal-quartz.h"
 
 #include <Carbon/Carbon.h>
 #include <AvailabilityMacros.h>

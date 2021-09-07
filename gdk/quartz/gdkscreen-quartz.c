@@ -25,7 +25,7 @@
 #include "gdkprivate-quartz.h"
 #include "gdkdisplay-quartz.h"
 #include "gdkmonitor-quartz.h"
- 
+#include "gdkinternal-quartz.h"
 
 /* A couple of notes about this file are in order.  In GDK, a
  * GdkScreen can contain multiple monitors.  A GdkScreen has an

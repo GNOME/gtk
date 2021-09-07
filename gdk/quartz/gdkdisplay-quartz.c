@@ -32,6 +32,7 @@
 #include "gdkdisplay-quartz.h"
 #include "gdkmonitor-quartz.h"
 #include "gdkglcontext-quartz.h"
+#include "gdkinternal-quartz.h"
 
 /* Note about coordinates: There are three coordinate systems at play:
  *

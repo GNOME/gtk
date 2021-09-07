@@ -20,12 +20,13 @@
 #ifndef __GDK_QUARTZ_DISPLAY__
 #define __GDK_QUARTZ_DISPLAY__
 
+#include <AppKit/AppKit.h>
+
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkmain.h"
-#include "gdkinternal-quartz.h"
 
 G_BEGIN_DECLS
 
