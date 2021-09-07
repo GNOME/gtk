@@ -2,6 +2,7 @@
 #define __GDK_TEXTURE_PRIVATE_H__
 
 #include "gdktexture.h"
+#include "gdkmemorytexture.h"
 
 G_BEGIN_DECLS
 
@@ -28,6 +29,8 @@ struct _GdkTextureClass {
                                                          const GdkRectangle     *area,
                                                          guchar                 *data,
                                                          gsize                   stride);
+  GBytes *              (* download_format)             (GdkTexture             *texture,
+                                                         GdkMemoryFormat         format);
 };
 
 gpointer                gdk_texture_new                 (const GdkTextureClass  *klass,
@@ -47,6 +50,9 @@ gboolean                gdk_texture_set_render_data     (GdkTexture             
 void                    gdk_texture_clear_render_data   (GdkTexture             *self);
 gpointer                gdk_texture_get_render_data     (GdkTexture             *self,
                                                          gpointer                key);
+
+GBytes *                gdk_texture_download_format     (GdkTexture             *texture,
+                                                         GdkMemoryFormat         format);
 
 G_END_DECLS
 

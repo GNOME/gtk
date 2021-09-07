@@ -22,6 +22,8 @@
 
 #include "gdkcairo.h"
 #include "gdktextureprivate.h"
+#include "gdkmemorytextureprivate.h"
+#include "gdkinternals.h"
 
 #include <epoxy/gl.h>
 
@@ -110,6 +112,64 @@ gdk_gl_texture_download (GdkTexture         *texture,
   cairo_surface_destroy (surface);
 }
 
+static int
+type_from_internal_format (int internal_format)
+{
+  switch (internal_format)
+    {
+    case GL_RGB16:
+    case GL_RGBA16:
+      return GL_UNSIGNED_SHORT;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static int
+internal_format_for_format (GdkMemoryFormat format)
+{
+  switch ((int)format)
+    {
+    case GDK_MEMORY_R16G16B16:
+      return GL_RGB16;
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+      return GL_RGBA16;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static GBytes *
+gdk_gl_texture_download_format (GdkTexture      *texture,
+                                GdkMemoryFormat  format)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  GdkSurface *surface;
+  GdkGLContext *context;
+  int internal_format = 0;
+  gpointer data;
+  gsize size;
+
+  surface = gdk_gl_context_get_surface (self->context);
+  context = gdk_surface_get_paint_gl_context (surface, NULL);
+
+  gdk_gl_context_make_current (context);
+  glBindTexture (GL_TEXTURE_2D, self->id);
+  glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
+
+  if (internal_format != internal_format_for_format (format))
+    return NULL;
+
+  size = texture->width * texture->height * gdk_memory_format_bytes_per_pixel (format);
+  data = malloc (size);
+
+  glReadPixels (0, 0, texture->width, texture->height,
+                internal_format, type_from_internal_format (internal_format),
+                 data);
+
+  return g_bytes_new_take (data, size);
+}
+
 static void
 gdk_gl_texture_class_init (GdkGLTextureClass *klass)
 {
@@ -117,6 +177,7 @@ gdk_gl_texture_class_init (GdkGLTextureClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   texture_class->download = gdk_gl_texture_download;
+  texture_class->download_format = gdk_gl_texture_download_format;
   gobject_class->dispose = gdk_gl_texture_dispose;
 }
 

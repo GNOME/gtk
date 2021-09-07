@@ -103,6 +103,18 @@ gdk_memory_texture_download (GdkTexture         *texture,
                       area->width, area->height);
 }
 
+static GBytes *
+gdk_memory_texture_download_format (GdkTexture      *texture,
+                                    GdkMemoryFormat  format)
+{
+  GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
+
+  if (self->format == format)
+    return g_bytes_ref (self->bytes);
+
+  return NULL;
+}
+
 static void
 gdk_memory_texture_class_init (GdkMemoryTextureClass *klass)
 {
@@ -110,6 +122,7 @@ gdk_memory_texture_class_init (GdkMemoryTextureClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   texture_class->download = gdk_memory_texture_download;
+  texture_class->download_format = gdk_memory_texture_download_format;
   gobject_class->dispose = gdk_memory_texture_dispose;
 }
 

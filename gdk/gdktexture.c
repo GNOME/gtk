@@ -124,6 +124,13 @@ gdk_texture_real_download (GdkTexture         *self,
   GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD (self, download);
 }
 
+static GBytes *
+gdk_texture_real_download_format (GdkTexture      *self,
+                                  GdkMemoryFormat  format)
+{
+  return NULL;
+}
+
 static void
 gdk_texture_set_property (GObject      *gobject,
                           guint         prop_id,
@@ -188,6 +195,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   klass->download = gdk_texture_real_download;
+  klass->download_format = gdk_texture_real_download_format;
 
   gobject_class->set_property = gdk_texture_set_property;
   gobject_class->get_property = gdk_texture_get_property;
@@ -489,6 +497,16 @@ gdk_texture_download (GdkTexture *texture,
                              &(GdkRectangle) { 0, 0, texture->width, texture->height },
                              data,
                              stride);
+}
+
+/* Returns the texture data in the requested format if that
+ * can be done without conversion. NULL, otherwise.
+ */
+GBytes *
+gdk_texture_download_format (GdkTexture      *texture,
+                             GdkMemoryFormat  format)
+{
+  return GDK_TEXTURE_GET_CLASS (texture)->download_format (texture, format);
 }
 
 gboolean
