@@ -643,3 +643,32 @@ gdk_texture_save_to_png (GdkTexture *texture,
 
   return result;
 }
+
+/**
+ * gdk_texture_save_to_file:
+ * @texture: a `GdkTexture`
+ * @filename: (type filename): the filename to store to
+ *
+ * Store the given @texture to the @filename.
+ *
+ * GTK will choose a suitable file format to save the data in
+ * depending on the format of the texture.
+ *
+ * This is a utility function intended for debugging and testing.
+ * If you want more control over formats, proper error handling or
+ * want to store to a `GFile` or other location, you might want to
+ * look into using the gdk-pixbuf library.
+ *
+ * Returns: %TRUE if saving succeeded, %FALSE on failure.
+ *
+ * Since: 4.6
+ */
+gboolean
+gdk_texture_save_to_file (GdkTexture  *texture,
+                          const char  *filename)
+{
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
+  g_return_val_if_fail (filename != NULL, FALSE);
+
+  return gdk_texture_save_to_png (texture, filename);
+}

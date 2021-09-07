@@ -62,6 +62,9 @@ void                    gdk_texture_download                   (GdkTexture      
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_texture_save_to_png                (GdkTexture      *texture,
                                                                 const char      *filename);
+GDK_AVAILABLE_IN_4_6
+gboolean                gdk_texture_save_to_file               (GdkTexture      *texture,
+                                                                const char      *filename);
 
 G_END_DECLS
 
