@@ -591,11 +591,177 @@ static ConversionFunc converters_to_rgba[GDK_MEMORY_N_FORMATS] =
   convert_float_swizzle_3012
 };
 
+static void
+convert_rgba_to_hdr (guchar       *dest_data,
+                     gsize         dest_stride,
+                     GdkMemoryFormat  dest_format,
+                     const guchar *src_data,
+                     gsize         src_stride,
+                     GdkMemoryFormat  src_format,
+                     gsize         width,
+                     gsize         height)
+{
+  gsize x, y;
+
+  for (y = 0; y < height; y++)
+    {
+      guint16 *src = (guint16 *)src_data;
+      float *dest = (float *)dest_data;
+      for (x = 0; x < width; x++)
+        {
+          dest[4 * (y * width + x) + 0] = src[3 * (y * width + x) + 0] / 255.f;
+          dest[4 * (y * width + x) + 1] = src[3 * (y * width + x) + 1] / 255.f;
+          dest[4 * (y * width + x) + 2] = src[3 * (y * width + x) + 2] / 255.f;
+          dest[4 * (y * width + x) + 3] = src[3 * (y * width + x) + 3] / 255.f;
+        }
+      dest_data += dest_stride;
+      src_data += src_stride;
+    }
+}
+
+static void
+convert_8bit_to_hdr (guchar       *dest_data,
+                     gsize         dest_stride,
+                     GdkMemoryFormat  dest_format,
+                     const guchar *src_data,
+                     gsize         src_stride,
+                     GdkMemoryFormat  src_format,
+                     gsize         width,
+                     gsize         height)
+{
+  guchar *data;
+
+  /* TODO: this could perhaps be done in-place */
+  data = g_malloc (width * height * 4);
+
+  gdk_memory_convert (data, 4 * width, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                      src_data, src_stride, src_format,
+                      width, height);
+  convert_rgba_to_hdr (dest_data, dest_stride, dest_format,
+                       data, 4 * width, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                       width, height);
+
+  g_free (data);
+}
+
+static void
+convert_16bit_to_hdr (guchar       *dest_data,
+                      gsize         dest_stride,
+                      GdkMemoryFormat  dest_format,
+                      const guchar *src_data,
+                      gsize         src_stride,
+                      GdkMemoryFormat  src_format,
+                      gsize         width,
+                      gsize         height)
+{
+  gsize x, y;
+
+  for (y = 0; y < height; y++)
+    {
+      guint16 *src = (guint16 *)src_data;
+      float *dest = (float *)dest_data;
+      for (x = 0; x < width; x++)
+        {
+          dest[4 * (y * width + x) + 0] = src[3 * (y * width + x) + 0] / 65535.f;
+          dest[4 * (y * width + x) + 1] = src[3 * (y * width + x) + 1] / 65535.f;
+          dest[4 * (y * width + x) + 2] = src[3 * (y * width + x) + 2] / 65535.f;
+          dest[4 * (y * width + x) + 3] = src[3 * (y * width + x) + 3] / 65535.f;
+        }
+      dest_data += dest_stride;
+      src_data += src_stride;
+    }
+}
+
+static void
+convert_fp16_to_hdr (guchar       *dest_data,
+                     gsize         dest_stride,
+                     GdkMemoryFormat  dest_format,
+                     const guchar *src_data,
+                     gsize         src_stride,
+                     GdkMemoryFormat  src_format,
+                     gsize         width,
+                     gsize         height)
+{
+  gsize x, y;
+  int src_bpp;
+
+  if (src_format == GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED)
+    src_bpp = 4;
+  else
+    src_bpp = 3;
+
+  for (y = 0; y < height; y++)
+    {
+      guint16 *src = (guint16 *)src_data;
+      float *dest = (float *)dest_data;
+      for (x = 0; x < width; x++)
+        {
+          guint16 h[4];
+
+          h[0] = src[src_bpp * (y * width + x)];
+          h[1] = src[src_bpp * (y * width + x) + 1];
+          h[2] = src[src_bpp * (y * width + x) + 2];
+          if (src_bpp == 4)
+            h[3] = src[src_bpp * (y * width + x) + 3];
+          else
+            h[3] = FP16_ONE;
+          half_to_float4 (h, &dest[4 * (y * width + x)]);
+        }
+      dest_data += dest_stride;
+      src_data += src_stride;
+    }
+}
+
+static void
+convert_float_to_hdr (guchar       *dest_data,
+                      gsize         dest_stride,
+                      GdkMemoryFormat  dest_format,
+                      const guchar *src_data,
+                      gsize         src_stride,
+                      GdkMemoryFormat  src_format,
+                      gsize         width,
+                      gsize         height)
+{
+  gsize x, y;
+
+  for (y = 0; y < height; y++)
+    {
+      float *src = (float *)src_data;
+      float *dest = (float *)dest_data;
+      for (x = 0; x < width; x++)
+        {
+          dest[4 * (y * width + x) + 0] = src[3 * (y * width + x) + 0];
+          dest[4 * (y * width + x) + 1] = src[3 * (y * width + x) + 1];
+          dest[4 * (y * width + x) + 2] = src[3 * (y * width + x) + 2];
+          dest[4 * (y * width + x) + 3] = 1.0;
+        }
+      dest_data += dest_stride;
+      src_data += src_stride;
+    }
+}
+
+static ConversionFunc converters_to_hdr[GDK_MEMORY_N_FORMATS] =
+{
+  convert_8bit_to_hdr,
+  convert_8bit_to_hdr,
+  convert_rgba_to_hdr,
+  convert_8bit_to_hdr,
+  convert_8bit_to_hdr,
+  convert_8bit_to_hdr,
+  convert_8bit_to_hdr,
+  convert_8bit_to_hdr,
+  convert_8bit_to_hdr,
+  convert_16bit_to_hdr,
+  convert_fp16_to_hdr,
+  convert_fp16_to_hdr,
+  convert_float_to_hdr,
+  convert_memcpy
+};
 static ConversionFunc* converters[GDK_MEMORY_N_FORMATS] = {
   converters_to_bgra, converters_to_argb, converters_to_rgba,
   NULL, NULL, NULL, NULL, NULL, NULL,
   NULL, NULL, NULL, NULL,
-  NULL
+  converters_to_hdr
 };
 
 void
