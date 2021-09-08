@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-03 00:57+0000\n"
-"PO-Revision-Date: 2021-09-04 13:03+0200\n"
+"POT-Creation-Date: 2021-09-05 14:13+0000\n"
+"PO-Revision-Date: 2021-09-08 22:23+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -459,42 +459,54 @@ msgstr "Inget kompatibelt överföringsformat hittades"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Misslyckades med att avkoda innehåll med mime-typen ”%s”"
 
-#: gdk/wayland/gdkglcontext-wayland.c:190
+#: gdk/wayland/gdkglcontext-wayland.c:191
 #: gdk/win32/gdkglcontext-win32-egl.c:399
 #: gdk/win32/gdkglcontext-win32-wgl.c:628 gdk/x11/gdkglcontext-egl.c:600
 #: gdk/x11/gdkglcontext-glx.c:613
 msgid "Unable to create a GL context"
 msgstr "Kan inte skapa en GL-kontext"
 
-#: gdk/wayland/gdkglcontext-wayland.c:484 gdk/x11/gdkglcontext-egl.c:688
-msgid "Failed to create EGL display"
-msgstr "Misslyckades med att skapa EGL-display"
+#: gdk/wayland/gdkglcontext-wayland.c:484
+msgid "libEGL not available in this sandbox"
+msgstr "libEGL är inte tillgängligt i denna sandlåda"
 
-#: gdk/wayland/gdkglcontext-wayland.c:493 gdk/x11/gdkglcontext-egl.c:697
+#: gdk/wayland/gdkglcontext-wayland.c:485
+msgid "libEGL not available"
+msgstr "libEGL inte tillgängligt"
+
+#: gdk/wayland/gdkglcontext-wayland.c:498
+msgid "Sandbox does not provide an OpenGL implementation"
+msgstr "Sandlådan tillhandahåller ingen OpenGL-implementation"
+
+#: gdk/wayland/gdkglcontext-wayland.c:499
+msgid "No OpenGL implementation available"
+msgstr "Ingen OpenGL-implementation tillgänglig"
+
+#: gdk/wayland/gdkglcontext-wayland.c:508 gdk/x11/gdkglcontext-egl.c:697
 msgid "Could not initialize EGL display"
 msgstr "Kunde inte initiera EGL-display"
 
-#: gdk/wayland/gdkglcontext-wayland.c:504 gdk/x11/gdkglcontext-egl.c:707
+#: gdk/wayland/gdkglcontext-wayland.c:519 gdk/x11/gdkglcontext-egl.c:707
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL-version %d.%d är för gammal. GTK kräver %d.%d"
 
-#: gdk/wayland/gdkglcontext-wayland.c:515
+#: gdk/wayland/gdkglcontext-wayland.c:530
 #: gdk/win32/gdkglcontext-win32-egl.c:273
 #: gdk/win32/gdkglcontext-win32-wgl.c:286
 #: gdk/win32/gdkglcontext-win32-wgl.c:304
 msgid "No GL implementation is available"
 msgstr "Ingen GL-implementation tillgänglig"
 
-#: gdk/wayland/gdkglcontext-wayland.c:525
+#: gdk/wayland/gdkglcontext-wayland.c:540
 msgid "Core GL is not available on EGL implementation"
 msgstr "Kärn-GL är inte tillgängligt på EGL-implementation"
 
-#: gdk/wayland/gdkglcontext-wayland.c:534 gdk/x11/gdkglcontext-egl.c:718
+#: gdk/wayland/gdkglcontext-wayland.c:549 gdk/x11/gdkglcontext-egl.c:718
 msgid "Surfaceless contexts are not supported on this EGL implementation"
 msgstr "Ytlösa kontexter stöds inte på denna EGL-implementation"
 
-#: gdk/wayland/gdkglcontext-wayland.c:546
+#: gdk/wayland/gdkglcontext-wayland.c:561
 #: gdk/win32/gdkglcontext-win32-egl.c:216
 #: gdk/win32/gdkglcontext-win32-egl.c:226
 #: gdk/win32/gdkglcontext-win32-wgl.c:594
@@ -716,6 +728,10 @@ msgstr "Ingen perfekt EGL-konfiguration hittades"
 #: gdk/x11/gdkglcontext-egl.c:679
 msgid "EGL is not supported"
 msgstr "EGL stöds inte"
+
+#: gdk/x11/gdkglcontext-egl.c:688
+msgid "Failed to create EGL display"
+msgstr "Misslyckades med att skapa EGL-display"
 
 #: gdk/x11/gdkglcontext-glx.c:770
 msgid "No GLX configurations available"
@@ -994,7 +1010,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:826 gtk/gtkshortcutlabel.c:100
+#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:100
 #: gtk/gtkshortcutlabel.c:136
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1005,7 +1021,7 @@ msgstr "Skift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:845 gtk/gtkshortcutlabel.c:103
+#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:103
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1016,7 +1032,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:864 gtk/gtkshortcutlabel.c:106
+#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:106
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1027,7 +1043,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:882 gtk/gtkshortcutlabel.c:112
+#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:112
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Super"
@@ -1038,7 +1054,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:896 gtk/gtkshortcutlabel.c:115
+#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:115
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1049,7 +1065,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:911 gtk/gtkshortcutlabel.c:109
+#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:109
 #: gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1059,17 +1075,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:931
+#: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "NUM"
 
-#: gtk/gtkaccelgroup.c:938
+#: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Blanksteg"
 
-#: gtk/gtkaccelgroup.c:941 gtk/gtkshortcutlabel.c:171
+#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:171
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Omvänt snedstreck"
@@ -1976,7 +1992,7 @@ msgstr "_Höger:"
 msgid "Paper Margins"
 msgstr "Pappersmarginaler"
 
-#: gtk/gtkentry.c:3726
+#: gtk/gtkentry.c:3743
 msgid "Insert Emoji"
 msgstr "Infoga emoji"
 
@@ -2047,7 +2063,7 @@ msgstr "Det finns redan en fil med det namnet"
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
 #: gtk/gtkwindow.c:6140 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1245 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/inspector/recorder.c:1271 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2060,7 +2076,7 @@ msgid "_Open"
 msgstr "_Öppna"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1246
+#: gtk/inspector/recorder.c:1272
 msgid "_Save"
 msgstr "_Spara"
 
@@ -2138,7 +2154,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Om du tar bort ett objekt är det borta för alltid."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8847
+#: gtk/gtklabel.c:5483 gtk/gtktext.c:6062 gtk/gtktextview.c:8886
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -2410,19 +2426,19 @@ msgstr "Teckenvarianter"
 msgid "OpenGL context creation failed"
 msgstr "Skapande av OpenGL-kontext misslyckades"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8835
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6050 gtk/gtktextview.c:8874
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8839
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6054 gtk/gtktextview.c:8878
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8843
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6058 gtk/gtktextview.c:8882
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8868
+#: gtk/gtklabel.c:5488 gtk/gtktext.c:6071 gtk/gtktextview.c:8907
 msgid "Select _All"
 msgstr "Markera _allt"
 
@@ -2710,19 +2726,19 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Sidinställning"
 
-#: gtk/gtkpasswordentry.c:167
+#: gtk/gtkpasswordentry.c:173
 msgid "Hide Text"
 msgstr "Dölj text"
 
-#: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
+#: gtk/gtkpasswordentry.c:178 gtk/gtkpasswordentry.c:629
 msgid "Show Text"
 msgstr "Visa text"
 
-#: gtk/gtkpasswordentry.c:199
+#: gtk/gtkpasswordentry.c:216
 msgid "Caps Lock is on"
 msgstr "Caps Lock är aktiverad"
 
-#: gtk/gtkpasswordentry.c:680
+#: gtk/gtkpasswordentry.c:705
 msgid "_Show Text"
 msgstr "_Visa text"
 
@@ -3312,7 +3328,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Inget registrerat program med namnet ”%s” hittades för objekt med URI ”%s”"
 
-#: gtk/gtksearchentry.c:599
+#: gtk/gtksearchentry.c:619
 msgid "Clear entry"
 msgstr "Töm sökruta"
 
@@ -3401,19 +3417,19 @@ msgstr "Försök med en annan sökning"
 msgid "Could not show link"
 msgstr "Kunde inte visa länken"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8873
+#: gtk/gtktext.c:6076 gtk/gtktextview.c:8912
 msgid "Insert _Emoji"
 msgstr "Infoga _emoji"
 
-#: gtk/gtktextview.c:8855
+#: gtk/gtktextview.c:8894
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: gtk/gtktextview.c:8859
+#: gtk/gtktextview.c:8898
 msgid "_Redo"
 msgstr "_Gör om"
 
-#: gtk/gtktreeexpander.c:196
+#: gtk/gtktreeexpander.c:205
 msgid "Expand"
 msgstr "Expandera"
 
@@ -3892,7 +3908,7 @@ msgstr "Källa:"
 msgid "Defined At"
 msgstr "Definierad vid"
 
-#: gtk/inspector/recorder.c:1216
+#: gtk/inspector/recorder.c:1242
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Sparande av RenderNode misslyckades"
