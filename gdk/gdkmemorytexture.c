@@ -199,8 +199,10 @@ gdk_memory_texture_get_stride (GdkMemoryTexture *self)
 static void
 convert_memcpy (guchar       *dest_data,
                 gsize         dest_stride,
+                GdkMemoryFormat dest_format,
                 const guchar *src_data,
                 gsize         src_stride,
+                GdkMemoryFormat src_format,
                 gsize         width,
                 gsize         height)
 {
@@ -214,8 +216,10 @@ convert_memcpy (guchar       *dest_data,
 static void \
 convert_swizzle ## A ## R ## G ## B (guchar       *dest_data, \
                                      gsize         dest_stride, \
+                                     GdkMemoryFormat dest_format, \
                                      const guchar *src_data, \
                                      gsize         src_stride, \
+                                     GdkMemoryFormat src_format, \
                                      gsize         width, \
                                      gsize         height) \
 { \
@@ -245,8 +249,10 @@ SWIZZLE(1,2,3,0)
 static void \
 convert_swizzle_opaque_## A ## R ## G ## B (guchar       *dest_data, \
                                             gsize         dest_stride, \
+                                            GdkMemoryFormat dest_format, \
                                             const guchar *src_data, \
                                             gsize         src_stride, \
+                                            GdkMemoryFormat src_format, \
                                             gsize         width, \
                                             gsize         height) \
 { \
@@ -278,8 +284,10 @@ static void \
 convert_swizzle_premultiply_ ## A ## R ## G ## B ## _ ## A2 ## R2 ## G2 ## B2 \
                                     (guchar       *dest_data, \
                                      gsize         dest_stride, \
+                                     GdkMemoryFormat dest_format, \
                                      const guchar *src_data, \
                                      gsize         src_stride, \
+                                     GdkMemoryFormat src_format, \
                                      gsize         width, \
                                      gsize         height) \
 { \
@@ -317,8 +325,10 @@ SWIZZLE_PREMULTIPLY (3,0,1,2, 0,3,2,1)
 static void \
 convert_16to8_swizzle_opaque_ ## A ## R ## G ## B (guchar       *dest_data, \
                                                    gsize         dest_stride, \
+                                                   GdkMemoryFormat dest_format, \
                                                    const guchar *src_data, \
                                                    gsize         src_stride, \
+                                                   GdkMemoryFormat src_format, \
                                                    gsize         width, \
                                                    gsize         height) \
 { \
@@ -348,8 +358,10 @@ SWIZZLE_16TO8_OPAQUE(1,2,3,0)
 static void \
 convert_16to8_swizzle_ ## A ## R ## G ## B (guchar       *dest_data, \
                                             gsize         dest_stride, \
+                                            GdkMemoryFormat dest_format, \
                                             const guchar *src_data, \
                                             gsize         src_stride, \
+                                            GdkMemoryFormat src_format, \
                                             gsize         width, \
                                             gsize         height) \
 { \
@@ -379,8 +391,10 @@ SWIZZLE_16TO8(1,2,3,0)
 static void \
 convert_fp16_swizzle_opaque_ ## A ## R ## G ## B (guchar       *dest_data, \
                                                   gsize         dest_stride, \
+                                                  GdkMemoryFormat dest_format, \
                                                   const guchar *src_data, \
                                                   gsize         src_stride, \
+                                                  GdkMemoryFormat src_format, \
                                                   gsize         width, \
                                                   gsize         height) \
 { \
@@ -413,8 +427,10 @@ SWIZZLE_FP16_OPAQUE(3,0,1,2)
 static void \
 convert_fp16_swizzle_ ## A ## R ## G ## B (guchar       *dest_data, \
                                            gsize         dest_stride, \
+                                           GdkMemoryFormat dest_format, \
                                            const guchar *src_data, \
                                            gsize         src_stride, \
+                                           GdkMemoryFormat src_format, \
                                            gsize         width, \
                                            gsize         height) \
 { \
@@ -447,8 +463,10 @@ SWIZZLE_FP16(3,0,1,2)
 static void \
 convert_float_swizzle_opaque_ ## A ## R ## G ## B (guchar       *dest_data, \
                                                    gsize         dest_stride, \
+                                                   GdkMemoryFormat dest_format, \
                                                    const guchar *src_data, \
                                                    gsize         src_stride, \
+                                                   GdkMemoryFormat src_format, \
                                                    gsize         width, \
                                                    gsize         height) \
 { \
@@ -478,8 +496,10 @@ SWIZZLE_FLOAT_OPAQUE(3,0,1,2)
 static void \
 convert_float_swizzle_ ## A ## R ## G ## B (guchar       *dest_data, \
                                             gsize         dest_stride, \
+                                            GdkMemoryFormat dest_format, \
                                             const guchar *src_data, \
                                             gsize         src_stride, \
+                                            GdkMemoryFormat src_format, \
                                             gsize         width, \
                                             gsize         height) \
 { \
@@ -507,28 +527,75 @@ SWIZZLE_FLOAT(3,0,1,2)
 
 typedef void (* ConversionFunc) (guchar       *dest_data,
                                  gsize         dest_stride,
+                                 GdkMemoryFormat  dest_format,
                                  const guchar *src_data,
                                  gsize         src_stride,
+                                 GdkMemoryFormat  src_format,
                                  gsize         width,
                                  gsize         height);
 
-static ConversionFunc converters[GDK_MEMORY_N_FORMATS][3] =
+static ConversionFunc converters_to_bgra[GDK_MEMORY_N_FORMATS] =
 {
-  { convert_memcpy, convert_swizzle3210, convert_swizzle2103 },
-  { convert_swizzle3210, convert_memcpy, convert_swizzle3012 },
-  { convert_swizzle2103, convert_swizzle1230, convert_memcpy },
-  { convert_swizzle_premultiply_3210_3210, convert_swizzle_premultiply_0123_3210, convert_swizzle_premultiply_3012_3210,  },
-  { convert_swizzle_premultiply_3210_0123, convert_swizzle_premultiply_0123_0123, convert_swizzle_premultiply_3012_0123 },
-  { convert_swizzle_premultiply_3210_3012, convert_swizzle_premultiply_0123_3012, convert_swizzle_premultiply_3012_3012 },
-  { convert_swizzle_premultiply_3210_0321, convert_swizzle_premultiply_0123_0321, convert_swizzle_premultiply_3012_0321 },
-  { convert_swizzle_opaque_3210, convert_swizzle_opaque_0123, convert_swizzle_opaque_3012 },
-  { convert_swizzle_opaque_3012, convert_swizzle_opaque_0321, convert_swizzle_opaque_3210 },
-  { convert_16to8_swizzle_opaque_2103, convert_16to8_swizzle_opaque_1230, convert_16to8_swizzle_opaque_0123 },
-  { convert_16to8_swizzle_2103, convert_16to8_swizzle_1230, convert_16to8_swizzle_0123 },
-  { convert_fp16_swizzle_opaque_3210, convert_fp16_swizzle_opaque_0123, convert_fp16_swizzle_opaque_3012 },
-  { convert_fp16_swizzle_3210, convert_fp16_swizzle_0123, convert_fp16_swizzle_3012 },
-  { convert_float_swizzle_opaque_3210, convert_float_swizzle_opaque_0123, convert_float_swizzle_opaque_3012 },
-  { convert_float_swizzle_3210, convert_float_swizzle_0123, convert_float_swizzle_3012 }
+  convert_memcpy,
+  convert_swizzle3210,
+  convert_swizzle2103,
+  convert_swizzle_premultiply_3210_3210,
+  convert_swizzle_premultiply_3210_0123,
+  convert_swizzle_premultiply_3210_3012,
+  convert_swizzle_premultiply_3210_0321,
+  convert_swizzle_opaque_3210,
+  convert_swizzle_opaque_3012,
+  convert_16to8_swizzle_opaque_2103,
+  convert_16to8_swizzle_2103,
+  convert_fp16_swizzle_opaque_3210,
+  convert_fp16_swizzle_3210,
+  convert_float_swizzle_opaque_3210,
+  convert_float_swizzle_3210,
+};
+
+static ConversionFunc converters_to_argb[GDK_MEMORY_N_FORMATS] =
+{
+  convert_swizzle3210,
+  convert_memcpy,
+  convert_swizzle1230,
+  convert_swizzle_premultiply_0123_3210,
+  convert_swizzle_premultiply_0123_0123,
+  convert_swizzle_premultiply_0123_3012,
+  convert_swizzle_premultiply_0123_0321,
+  convert_swizzle_opaque_0123,
+  convert_swizzle_opaque_0321,
+  convert_16to8_swizzle_opaque_1230,
+  convert_16to8_swizzle_1230,
+  convert_fp16_swizzle_opaque_0123,
+  convert_fp16_swizzle_0123,
+  convert_float_swizzle_opaque_0123,
+  convert_float_swizzle_0123,
+};
+
+static ConversionFunc converters_to_rgba[GDK_MEMORY_N_FORMATS] =
+{
+  convert_swizzle2103,
+  convert_swizzle3012,
+  convert_memcpy,
+  convert_swizzle_premultiply_3012_3210,
+  convert_swizzle_premultiply_3012_0123,
+  convert_swizzle_premultiply_3012_3012,
+  convert_swizzle_premultiply_3012_0321,
+  convert_swizzle_opaque_3012,
+  convert_swizzle_opaque_3210,
+  convert_16to8_swizzle_opaque_0123,
+  convert_16to8_swizzle_0123,
+  convert_fp16_swizzle_opaque_3012,
+  convert_fp16_swizzle_3012,
+  convert_float_swizzle_opaque_3012,
+  convert_float_swizzle_3012
+};
+
+static ConversionFunc* converters[GDK_MEMORY_N_FORMATS] = {
+  converters_to_bgra, converters_to_argb, converters_to_rgba,
+  NULL, NULL, NULL, NULL, NULL, NULL,
+  NULL, NULL, NULL, NULL,
+  NULL
 };
 
 void
@@ -544,5 +611,7 @@ gdk_memory_convert (guchar          *dest_data,
   g_assert (dest_format < 3);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
 
-  converters[src_format][dest_format] (dest_data, dest_stride, src_data, src_stride, width, height);
+  converters[dest_format][src_format] (dest_data, dest_stride, dest_format,
+                                       src_data, src_stride, src_format,
+                                       width, height);
 }
