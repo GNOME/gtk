@@ -53,6 +53,8 @@ gpointer                gdk_texture_get_render_data     (GdkTexture             
 
 GBytes *                gdk_texture_download_format     (GdkTexture             *texture,
                                                          GdkMemoryFormat         format);
+GBytes *                gdk_texture_convert_format      (GdkTexture             *texture,
+                                                         GdkMemoryFormat         format);
 
 G_END_DECLS
 

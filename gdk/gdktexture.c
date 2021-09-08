@@ -540,6 +540,85 @@ gdk_texture_download_format (GdkTexture      *texture,
   return GDK_TEXTURE_GET_CLASS (texture)->download_format (texture, format);
 }
 
+/* Returns the texture data in the requested format, converting
+ * it if necessary. This will only return NULL if we don't know
+ * how to convert from the texture's format to the requested one.
+ */
+GBytes *
+gdk_texture_convert_format (GdkTexture      *texture,
+                            GdkMemoryFormat  format)
+{
+  GdkMemoryFormat src_format;
+  GBytes *bytes;
+  int width, height, stride;
+  guchar *data;
+
+  for (int i = 0; i < GDK_MEMORY_N_FORMATS; i++)
+    {
+      bytes = gdk_texture_download_format (texture, i);
+      if (bytes)
+        {
+          src_format = i;
+          break;
+        }
+    }
+
+  if (!bytes || src_format == format)
+    return bytes;
+
+  /* convert from src_format to format */
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  stride = width * gdk_memory_format_bytes_per_pixel (format);
+  data = g_malloc (height * stride);
+
+  gdk_memory_convert (data, stride, format,
+                      g_bytes_get_data (bytes, NULL),
+                      g_bytes_get_size (bytes) / height,
+                      src_format,
+                      width, height);
+
+  g_bytes_unref (bytes);
+
+  return g_bytes_new_take (data, height * stride);
+}
+
+/*
+ * gdk_texture_download_float:
+ * @texture: a `GdkTexture`
+ * @data: (array): pointer to enough memory to be filled with the
+ *   downloaded data of @texture
+ *
+ * Downloads the @texture into local memory.
+ *
+ * This may be an expensive operation, as the actual texture data
+ * may reside on a GPU or on a remote display server.
+ *
+ * The data format of the downloaded data is equivalent to
+ * GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, so every downloaded
+ * pixel requires 16 bytes of memory.
+ *
+ * Note that the caller is responsible to provide sufficiently
+ * aligned memory to access the resulting data directly as floats.
+ *
+ * Since: 4.6
+ */
+void
+gdk_texture_download_float (GdkTexture *texture,
+                            float      *data)
+{
+  GBytes *bytes;
+
+  bytes = gdk_texture_convert_format (texture, GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED);
+
+  g_assert (bytes);
+
+  memcpy (data, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+
+  g_bytes_unref (bytes);
+}
+
 gboolean
 gdk_texture_set_render_data (GdkTexture     *self,
                              gpointer        key,
