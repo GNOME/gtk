@@ -117,7 +117,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkTexture, gdk_texture, G_TYPE_OBJECT,
 
 static void
 gdk_texture_real_download (GdkTexture         *self,
-                           const GdkRectangle *area,
                            guchar             *data,
                            gsize               stride)
 {
@@ -435,20 +434,6 @@ gdk_texture_download_surface (GdkTexture *texture)
   return surface;
 }
 
-void
-gdk_texture_download_area (GdkTexture         *texture,
-                           const GdkRectangle *area,
-                           guchar             *data,
-                           gsize               stride)
-{
-  g_assert (area->x >= 0);
-  g_assert (area->y >= 0);
-  g_assert (area->x + area->width <= texture->width);
-  g_assert (area->y + area->height <= texture->height);
-
-  GDK_TEXTURE_GET_CLASS (texture)->download (texture, area, data, stride);
-}
-
 /**
  * gdk_texture_download:
  * @texture: a `GdkTexture`
@@ -485,10 +470,7 @@ gdk_texture_download (GdkTexture *texture,
   g_return_if_fail (data != NULL);
   g_return_if_fail (stride >= gdk_texture_get_width (texture) * 4);
 
-  gdk_texture_download_area (texture,
-                             &(GdkRectangle) { 0, 0, texture->width, texture->height },
-                             data,
-                             stride);
+  GDK_TEXTURE_GET_CLASS (texture)->download (texture, data, stride);
 }
 
 gboolean

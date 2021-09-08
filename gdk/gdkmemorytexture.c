@@ -80,21 +80,19 @@ gdk_memory_texture_dispose (GObject *object)
 }
 
 static void
-gdk_memory_texture_download (GdkTexture         *texture,
-                             const GdkRectangle *area,
-                             guchar             *data,
-                             gsize               stride)
+gdk_memory_texture_download (GdkTexture *texture,
+                             guchar     *data,
+                             gsize       stride)
 {
   GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
 
   gdk_memory_convert (data, stride,
                       GDK_MEMORY_CAIRO_FORMAT_ARGB32,
-                      (guchar *) g_bytes_get_data (self->bytes, NULL)
-                        + area->x * gdk_memory_format_bytes_per_pixel (self->format)
-                        + area->y * self->stride,
+                      (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       self->format,
-                      area->width, area->height);
+                      gdk_texture_get_width (texture),
+                      gdk_texture_get_height (texture));
 }
 
 static void
