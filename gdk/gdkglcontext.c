@@ -278,6 +278,20 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
           gl_type = GL_UNSIGNED_BYTE;
           bpp = 3;
         }
+      else if (data_format == GDK_MEMORY_R16G16B16)
+        {
+          gl_internalformat = GL_RGBA16;
+          gl_format = GL_RGB;
+          gl_type = GL_UNSIGNED_SHORT;
+          bpp = 6;
+        }
+      else if (data_format == GDK_MEMORY_R16G16B16A16_PREMULTIPLIED)
+        {
+          gl_internalformat = GL_RGBA16;
+          gl_format = GL_RGBA;
+          gl_type = GL_UNSIGNED_SHORT;
+          bpp = 8;
+        }
       else /* Fall-back, convert to cairo-surface-format */
         {
           copy = g_malloc (width * height * 4);

@@ -42,6 +42,10 @@ G_BEGIN_DECLS
  * @GDK_MEMORY_A8B8G8R8: 4 bytes; for alpha, blue, green, red.
  * @GDK_MEMORY_R8G8B8: 3 bytes; for red, green, blue. The data is opaque.
  * @GDK_MEMORY_B8G8R8: 3 bytes; for blue, green, red. The data is opaque.
+ * @GDK_MEMORY_R16G16B16: 3 guint16 values; for red, green, blue. Since 4.6
+ * @GDK_MEMORY_R16G16B16A16_PREMULTIPLIED: 4 guint16 values; for red, green,
+ *   blue, alpha. The color values are premultiplied with the alpha value.
+ *   Since 4.6
  * @GDK_MEMORY_N_FORMATS: The number of formats. This value will change as
  *   more formats get added, so do not rely on its concrete integer.
  *
@@ -52,6 +56,8 @@ G_BEGIN_DECLS
  * byte each of red, green and blue. It is not endian-dependent, so
  * CAIRO_FORMAT_ARGB32 is represented by different `GdkMemoryFormats`
  * on architectures with different endiannesses.
+ *
+ * Note that color data is assumed to be linear.
  *
  * Its naming is modelled after
  * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat)
@@ -67,6 +73,8 @@ typedef enum {
   GDK_MEMORY_A8B8G8R8,
   GDK_MEMORY_R8G8B8,
   GDK_MEMORY_B8G8R8,
+  GDK_MEMORY_R16G16B16,
+  GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;

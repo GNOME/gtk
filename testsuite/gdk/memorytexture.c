@@ -2,7 +2,7 @@
 #include <gdk/gdk.h>
 
 /* maximum bytes per pixel */
-#define MAX_BPP 4
+#define MAX_BPP 8
 
 typedef enum {
   BLUE,
@@ -33,6 +33,7 @@ typedef struct _TestData {
 } TestData;
 
 #define RGBA(a, b, c, d) { 0x ## a, 0x ## b, 0x ## c, 0x ## d }
+#define RGBA16(a, b, c, d) { 0x ## a, 0x ## a, 0x ## b, 0x ## b, 0x ## c, 0x ## c, 0x ## d, 0x ## d }
 
 static MemoryData tests[GDK_MEMORY_N_FORMATS] = {
   { 4, FALSE, { RGBA(FF,00,00,FF), RGBA(00,FF,00,FF), RGBA(00,00,FF,FF), RGBA(00,00,00,00), RGBA(66,22,44,AA) } },
@@ -44,12 +45,14 @@ static MemoryData tests[GDK_MEMORY_N_FORMATS] = {
   { 4, FALSE, { RGBA(FF,FF,00,00), RGBA(FF,00,FF,00), RGBA(FF,00,00,FF), RGBA(00,00,00,00), RGBA(AA,99,33,66) } },
   { 3, TRUE,  { RGBA(00,00,FF,00), RGBA(00,FF,00,00), RGBA(FF,00,00,00), RGBA(00,00,00,00), RGBA(44,22,66,00) } },
   { 3, TRUE,  { RGBA(FF,00,00,00), RGBA(00,FF,00,00), RGBA(00,00,FF,00), RGBA(00,00,00,00), RGBA(66,22,44,00) } },
+  { 8, FALSE, { RGBA16(00,00,FF,FF), RGBA16(00,FF,00,FF), RGBA16(FF,00,00,FF), RGBA16(00,00,00,00), RGBA16(44,22,66,AA) } },
 };
 
 static void
 compare_textures (GdkTexture *expected,
                   GdkTexture *test,
-                  gboolean    ignore_alpha)
+                  gboolean    ignore_alpha,
+                  int         bpp)
 {
   guchar *expected_data, *test_data;
   int width, height;
@@ -122,7 +125,7 @@ test_download_1x1 (gconstpointer data)
   expected = create_texture (GDK_MEMORY_DEFAULT, test_data->color, 1, 1, tests[test_data->format].bytes_per_pixel);
   test = create_texture (test_data->format, test_data->color, 1, 1, tests[test_data->format].bytes_per_pixel);
 
-  compare_textures (expected, test, tests[test_data->format].opaque);
+  compare_textures (expected, test, tests[test_data->format].opaque, tests[test_data->format].bytes_per_pixel);
 
   g_object_unref (expected);
   g_object_unref (test);
@@ -137,7 +140,7 @@ test_download_1x1_with_stride (gconstpointer data)
   expected = create_texture (GDK_MEMORY_DEFAULT, test_data->color, 1, 1, 4);
   test = create_texture (test_data->format, test_data->color, 1, 1, 2 * MAX_BPP);
 
-  compare_textures (expected, test, tests[test_data->format].opaque);
+  compare_textures (expected, test, tests[test_data->format].opaque, tests[test_data->format].bytes_per_pixel);
 
   g_object_unref (expected);
   g_object_unref (test);
@@ -152,7 +155,7 @@ test_download_4x4 (gconstpointer data)
   expected = create_texture (GDK_MEMORY_DEFAULT, test_data->color, 4, 4, 16);
   test = create_texture (test_data->format, test_data->color, 4, 4, 4 * tests[test_data->format].bytes_per_pixel);
 
-  compare_textures (expected, test, tests[test_data->format].opaque);
+  compare_textures (expected, test, tests[test_data->format].opaque, tests[test_data->format].bytes_per_pixel);
 
   g_object_unref (expected);
   g_object_unref (test);
@@ -167,7 +170,7 @@ test_download_4x4_with_stride (gconstpointer data)
   expected = create_texture (GDK_MEMORY_DEFAULT, test_data->color, 4, 4, 16);
   test = create_texture (test_data->format, test_data->color, 4, 4, 4 * MAX_BPP);
 
-  compare_textures (expected, test, tests[test_data->format].opaque);
+  compare_textures (expected, test, tests[test_data->format].opaque, tests[test_data->format].bytes_per_pixel);
 
   g_object_unref (expected);
   g_object_unref (test);
