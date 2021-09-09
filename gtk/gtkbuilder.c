@@ -65,6 +65,14 @@
  * using `dgettext()` in the domain specified. This can also be done by
  * calling [method@Gtk.Builder.set_translation_domain] on the builder.
  *
+ * The target toolkit version(s) are described by `<requires>` elements,
+ * the “lib” attribute specifies the widget library in question (currently
+ * the only supported value is “gtk”) and the “version” attribute specifies
+ * the target version in the form “`<major>`.`<minor>`”. `GtkBuilder` will
+ * error out if the version requirements are not met.
+ *
+ * ### Objects
+ *
  * Objects are described by `<object>` elements, which can contain
  * `<property>` elements to set properties, `<signal>` elements which
  * connect signals to handlers, and `<child>` elements, which describe
@@ -72,16 +80,10 @@
  * actions in an action group, or columns in a tree model). A `<child>`
  * element contains an `<object>` element which describes the child object.
  *
- * The target toolkit version(s) are described by `<requires>` elements,
- * the “lib” attribute specifies the widget library in question (currently
- * the only supported value is “gtk”) and the “version” attribute specifies
- * the target version in the form “`<major>`.`<minor>`”. `GtkBuilder` will
- * error out if the version requirements are not met.
- *
  * Typically, the specific kind of object represented by an `<object>`
  * element is specified by the “class” attribute. If the type has not
  * been loaded yet, GTK tries to find the `get_type()` function from the
- * class name by applying heuristics. This works in most cases, but if
+ * class name by applying heuristics; this works in most cases, but if
  * necessary, it is possible to specify the name of the `get_type()`
  * function explicitly with the "type-func" attribute.
  *
@@ -91,6 +93,8 @@
  * object as property value in other parts of the UI definition. GTK
  * reserves ids starting and ending with `___` (three consecutive
  * underscores) for its own purposes.
+ *
+ * ### Properties and values
  *
  * Setting properties of objects is pretty straightforward with the
  * `<property>` element: the “name” attribute specifies the name of the
@@ -125,12 +129,27 @@
  * exception to this rule is that an object has to be constructed before
  * it can be used as the value of a construct-only property.
  *
- * It is also possible to bind a property value to another object's
+ * ### Property bindings
+ *
+ * It is possible to bind a property value to another object's
  * property value using the attributes "bind-source" to specify the
  * source object of the binding, and optionally, "bind-property" and
  * "bind-flags" to specify the source property and source binding flags
  * respectively. Internally, `GtkBuilder` implements this using `GBinding`
- * objects. For more information see g_object_bind_property().
+ * objects. For more information see the documentation for
+ * [method@GObject.Object.bind_property].
+ *
+ * ### Settings bindings
+ *
+ * It is possible to bind a property value to a [class@Gio.Settings] key
+ * inside a schema, by using the attributes "bind-settings-schema" to
+ * define the schema, and "bind-settings-key" to define the key. If either
+ * attribute is set, the other is mandatory. Additionally, you can use
+ * the "bind-flags" attribute to specify the [enum@Gio.SettingsBindFlags]
+ * to be used by the binding. For more information see the documentation
+ * for [method@Gio.Settings.bind].
+ *
+ * ### Internal children
  *
  * Sometimes it is necessary to refer to widgets which have implicitly
  * been constructed by GTK as part of a composite widget, to set
@@ -146,7 +165,7 @@
  * The possible values for the “type” attribute are described in the
  * sections describing the widget-specific portions of UI definitions.
  *
- * # Signal handlers and function pointers
+ * ### Signal handlers and function pointers
  *
  * Signal handlers are set up with the `<signal>` element. The “name”
  * attribute specifies the name of the signal, and the “handler” attribute
@@ -161,9 +180,9 @@
  * the following details should be noted:
  *
  * When compiling applications for Windows, you must declare signal callbacks
- * with %G_MODULE_EXPORT, or they will not be put in the symbol table.
+ * with `G_MODULE_EXPORT`, or they will not be put in the symbol table.
  * On Linux and Unix, this is not necessary; applications should instead
- * be compiled with the -Wl,--export-dynamic `CFLAGS`, and linked against
+ * be compiled with the `-Wl,--export-dynamic` `CFLAGS`, and linked against
  * `gmodule-export-2.0`.
  *
  * # A GtkBuilder UI Definition
@@ -191,10 +210,10 @@
  * ```
  *
  * Beyond this general structure, several object classes define their
- * own XML DTD fragments for filling in the ANY placeholders in the DTD
- * above. Note that a custom element in a <child> element gets parsed by
+ * own XML DTD fragments for filling in the `ANY` placeholders in the DTD
+ * above. Note that a custom element in a `<child>` element gets parsed by
  * the custom tag handler of the parent object, while a custom element in
- * an <object> element gets parsed by the custom tag handler of the object.
+ * an `<object>` element gets parsed by the custom tag handler of the object.
  *
  * These XML fragments are explained in the documentation of the
  * respective objects.
