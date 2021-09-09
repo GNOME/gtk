@@ -29,28 +29,26 @@ GdkWindow *_gdk_root = NULL;
 GdkOSXVersion
 gdk_quartz_osx_version (void)
 {
-  static gint32 minor = GDK_OSX_UNSUPPORTED;
+  static gint32 vkey = GDK_OSX_UNSUPPORTED;
 
-  if (minor == GDK_OSX_UNSUPPORTED)
+  if (vkey == GDK_OSX_UNSUPPORTED)
     {
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
-      OSErr err = Gestalt (gestaltSystemVersionMinor, (SInt32*)&minor);
+      OSErr err = Gestalt (gestaltSystemVersionMinor, (SInt32*)&vkey);
 
       g_return_val_if_fail (err == noErr, GDK_OSX_UNSUPPORTED);
 #else
       NSOperatingSystemVersion version;
 
       version = [[NSProcessInfo processInfo] operatingSystemVersion];
-      minor = version.minorVersion;
-      if (version.majorVersion == 11)
-        minor += 16;
+      vkey = version.majorVersion == 10 ? version.minorVersion : version.majorVersion + 5;
 #endif
     }
 
-  if (minor < GDK_OSX_MIN)
+  if (vkey < GDK_OSX_MIN)
     return GDK_OSX_UNSUPPORTED;
-  else if (minor > GDK_OSX_CURRENT)
+  else if (vkey > GDK_OSX_CURRENT)
     return GDK_OSX_NEW;
   else
-    return minor;
+    return vkey;
 }
