@@ -262,7 +262,7 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
   
   texture = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
                                     cairo_image_surface_get_height (surface),
-                                    GDK_MEMORY_CAIRO_FORMAT_ARGB32,
+                                    GDK_MEMORY_DEFAULT,
                                     bytes,
                                     cairo_image_surface_get_stride (surface));
 

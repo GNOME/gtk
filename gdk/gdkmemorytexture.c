@@ -87,7 +87,7 @@ gdk_memory_texture_download (GdkTexture *texture,
   GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
 
   gdk_memory_convert (data, stride,
-                      GDK_MEMORY_CAIRO_FORMAT_ARGB32,
+                      GDK_MEMORY_CONVERT_DOWNLOAD,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       self->format,
@@ -288,7 +288,7 @@ typedef void (* ConversionFunc) (guchar       *dest_data,
                                  gsize         width,
                                  gsize         height);
 
-static ConversionFunc converters[GDK_MEMORY_N_FORMATS][3] =
+static ConversionFunc converters[GDK_MEMORY_N_FORMATS][GDK_MEMORY_N_CONVERSIONS] =
 {
   { convert_memcpy, convert_swizzle3210, convert_swizzle2103 },
   { convert_swizzle3210, convert_memcpy, convert_swizzle3012 },
@@ -302,14 +302,14 @@ static ConversionFunc converters[GDK_MEMORY_N_FORMATS][3] =
 };
 
 void
-gdk_memory_convert (guchar          *dest_data,
-                    gsize            dest_stride,
-                    GdkMemoryFormat  dest_format,
-                    const guchar    *src_data,
-                    gsize            src_stride,
-                    GdkMemoryFormat  src_format,
-                    gsize            width,
-                    gsize            height)
+gdk_memory_convert (guchar              *dest_data,
+                    gsize                dest_stride,
+                    GdkMemoryConversion  dest_format,
+                    const guchar        *src_data,
+                    gsize                src_stride,
+                    GdkMemoryFormat      src_format,
+                    gsize                width,
+                    gsize                height)
 {
   g_assert (dest_format < 3);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);

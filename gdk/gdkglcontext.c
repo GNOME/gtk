@@ -243,7 +243,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
         {
           copy = g_malloc (width * height * 4);
           gdk_memory_convert (copy, width * 4,
-                              GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                              GDK_MEMORY_CONVERT_GLES_RGBA,
                               data, stride, data_format,
                               width, height);
           stride = width * 4;
@@ -282,7 +282,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
         {
           copy = g_malloc (width * height * 4);
           gdk_memory_convert (copy, width * 4,
-                              GDK_MEMORY_DEFAULT,
+                              GDK_MEMORY_CONVERT_DOWNLOAD,
                               data, stride, data_format,
                               width, height);
           stride = width * 4;
