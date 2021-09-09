@@ -27,6 +27,7 @@ enum {
   TAG_PROPERTY,
   TAG_BINDING,
   TAG_BINDING_EXPRESSION,
+  TAG_BINDING_SETTING,
   TAG_REQUIRES,
   TAG_OBJECT,
   TAG_CHILD,
@@ -141,6 +142,18 @@ typedef struct
   int col;
 } BindingExpressionInfo;
 
+typedef struct
+{
+  guint tag_type;
+  GObject *target;
+  GParamSpec *target_pspec;
+  char *schema;
+  char *key;
+  GSettingsBindFlags flags;
+  int line;
+  int col;
+} BindingSettingsInfo;
+
 typedef struct {
   guint    tag_type;
   char    *library;
@@ -228,6 +241,7 @@ void _free_signal_info (SignalInfo *info,
 void _free_binding_info (BindingInfo *info,
                          gpointer user_data);
 void free_binding_expression_info (BindingExpressionInfo *info);
+void free_binding_settings_info (BindingSettingsInfo *info);
 GtkExpression * expression_info_construct (GtkBuilder      *builder,
                                            ExpressionInfo  *info,
                                            GError         **error);

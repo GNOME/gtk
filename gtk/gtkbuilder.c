@@ -719,6 +719,11 @@ gtk_builder_take_bindings (GtkBuilder *builder,
           BindingExpressionInfo *info = l->data;
           info->target = target;
         }
+      else if (common_info->tag_type == TAG_BINDING_SETTING)
+        {
+          BindingSettingsInfo *info = l->data;
+          info->target = target;
+        }
       else
         {
           g_assert_not_reached ();
@@ -1145,6 +1150,17 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
             }
 
           free_binding_expression_info (info);
+        }
+      else if (common_info->tag_type == TAG_BINDING_SETTING)
+        {
+          BindingSettingsInfo *info = l->data;
+          GSettings *settings;
+
+          settings = g_settings_new (info->schema);
+          g_settings_bind (settings, info->key, info->target, info->target_pspec->name, info->flags);
+          g_object_unref (settings);
+
+          free_binding_settings_info (info);
         }
       else
         g_assert_not_reached ();

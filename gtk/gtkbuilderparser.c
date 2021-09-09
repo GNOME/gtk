@@ -874,7 +874,8 @@ parse_property (ParserData   *data,
   const char *bind_source = NULL;
   const char *bind_property = NULL;
   const char *bind_flags_str = NULL;
-  GBindingFlags bind_flags = G_BINDING_DEFAULT;
+  const char *bind_schema = NULL;
+  const char *bind_key = NULL;
   gboolean translatable = FALSE;
   ObjectInfo *object_info;
   GParamSpec *pspec = NULL;
@@ -897,6 +898,8 @@ parse_property (ParserData   *data,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-source", &bind_source,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-property", &bind_property,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-flags", &bind_flags_str,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-settings-schema", &bind_schema,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-settings-key", &bind_key,
                                     G_MARKUP_COLLECT_INVALID))
     {
       _gtk_builder_prefix_error (data->builder, &data->ctx, error);
@@ -916,20 +919,58 @@ parse_property (ParserData   *data,
       return;
     }
 
-  if (bind_flags_str)
+  gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
+
+  if (bind_schema != NULL)
     {
-      if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, NULL, bind_flags_str, &bind_flags, error))
+      GSettingsBindFlags bind_flags = G_SETTINGS_BIND_DEFAULT;
+
+      if (bind_flags_str)
         {
-          _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+          if (!_gtk_builder_flags_from_string (G_TYPE_SETTINGS_BIND_FLAGS, NULL, bind_flags_str, &bind_flags, error))
+            {
+              _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+              return;
+            }
+        }
+
+      if (bind_key != NULL)
+        {
+          BindingSettingsInfo *binfo;
+
+          binfo = g_slice_new0 (BindingSettingsInfo);
+          binfo->tag_type = TAG_BINDING_SETTING;
+          binfo->target = NULL;
+          binfo->target_pspec = pspec;
+          binfo->schema = g_strdup (bind_schema);
+          binfo->key = g_strdup (bind_key);
+          binfo->flags = bind_flags;
+          binfo->line = line;
+          binfo->col = col;
+
+          object_info->bindings = g_slist_prepend (object_info->bindings, binfo);
+        }
+      else
+        {
+          error_missing_attribute (data, element_name,
+                                   "bind-settings-key",
+                                   error);
           return;
         }
     }
-
-  gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);
-
-  if (bind_source)
+  else if (bind_source != NULL)
     {
+      GBindingFlags bind_flags = G_BINDING_DEFAULT;
       BindingInfo *binfo;
+
+      if (bind_flags_str)
+        {
+          if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, NULL, bind_flags_str, &bind_flags, error))
+            {
+              _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+              return;
+            }
+        }
 
       binfo = g_slice_new0 (BindingInfo);
       binfo->tag_type = TAG_BINDING;
@@ -943,7 +984,14 @@ parse_property (ParserData   *data,
 
       object_info->bindings = g_slist_prepend (object_info->bindings, binfo);
     }
-  else if (bind_property)
+  else if (bind_key != NULL)
+    {
+      error_missing_attribute (data, element_name,
+                               "bind-settings-schema",
+                               error);
+      return;
+    }
+  else if (bind_property != NULL)
     {
       error_missing_attribute (data, element_name,
                                "bind-source",
@@ -956,7 +1004,7 @@ parse_property (ParserData   *data,
   info->pspec = pspec;
   info->text = g_string_new ("");
   info->translatable = translatable;
-  info->bound = bind_source != NULL;
+  info->bound = bind_source != NULL || bind_schema != NULL;
   info->context = g_strdup (context);
   info->line = line;
   info->col = col;
@@ -1561,6 +1609,14 @@ free_binding_expression_info (BindingExpressionInfo *info)
     free_expression_info (info->expr);
   g_free (info->object_name);
   g_slice_free (BindingExpressionInfo, info);
+}
+
+void
+free_binding_settings_info (BindingSettingsInfo *info)
+{
+  g_free (info->schema);
+  g_free (info->key);
+  g_slice_free (BindingSettingsInfo, info);
 }
 
 static void
