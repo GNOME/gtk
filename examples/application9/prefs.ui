@@ -28,6 +28,7 @@
             </child>
             <child>
               <object class="GtkFontButton" id="font">
+              <property name="font" bind-settings-schema="org.gtk.exampleapp" bind-settings-key="font"/>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">0</property>
@@ -48,6 +49,7 @@
             </child>
             <child>
               <object class="GtkComboBoxText" id="transition">
+                <property name="active-id" bind-settings-schema="org.gtk.exampleapp" bind-settings-key="transition"/>
                 <items>
                   <item translatable="yes" id="none">None</item>
                   <item translatable="yes" id="crossfade">Fade</item>
