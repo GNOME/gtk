@@ -51,6 +51,11 @@ G_BEGIN_DECLS
  * @GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED: 4 half-float values; for
  *   red, green, blue and alpha. The color values are premultiplied with
  *   the alpha value. Since 4.6
+ * @GDK_MEMORY_B32G32R32_FLOAT: 3 float values; for blue, green, red.
+ *   The data is opaque. Since 4.6
+ * @GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED: 4 float values; for
+ *   red, green, blue and alpha. The color values are premultiplied with
+ *   the alpha value. Since 4.6
  * @GDK_MEMORY_N_FORMATS: The number of formats. This value will change as
  *   more formats get added, so do not rely on its concrete integer.
  *
@@ -82,6 +87,8 @@ typedef enum {
   GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
   GDK_MEMORY_R16G16B16_FLOAT,
   GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+  GDK_MEMORY_R32G32B32_FLOAT,
+  GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;

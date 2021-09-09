@@ -306,6 +306,20 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
           gl_type = GL_HALF_FLOAT;
           bpp = 8;
         }
+      else if (data_format == GDK_MEMORY_R32G32B32_FLOAT)
+        {
+          gl_internalformat = GL_RGB32F;
+          gl_format = GL_RGB;
+          gl_type = GL_FLOAT;
+          bpp = 12;
+        }
+      else if (data_format == GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED)
+        {
+          gl_internalformat = GL_RGBA32F;
+          gl_format = GL_RGBA;
+          gl_type = GL_FLOAT;
+          bpp = 16;
+        }
       else /* Fall-back, convert to cairo-surface-format */
         {
           copy = g_malloc (width * height * 4);

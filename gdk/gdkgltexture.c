@@ -123,6 +123,9 @@ type_from_internal_format (int internal_format)
     case GL_RGB16F:
     case GL_RGBA16F:
       return GL_HALF_FLOAT;
+    case GL_RGB32F:
+    case GL_RGBA32F:
+      return GL_FLOAT;
     default:
       g_assert_not_reached ();
     }
@@ -141,6 +144,10 @@ internal_format_for_format (GdkMemoryFormat format)
       return GL_RGB16F;
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
       return GL_RGB16F;
+    case GDK_MEMORY_R32G32B32_FLOAT:
+      return GL_RGB32F;
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+      return GL_RGB32F;
     default:
       g_assert_not_reached ();
     }
