@@ -21,15 +21,36 @@
 #include "gdkmemorytexture.h"
 #include <gio/gio.h>
 
-GdkTexture *gdk_load_tiff      (GInputStream     *stream,
-                                GError          **error);
+GdkTexture *gdk_load_tiff         (GInputStream     *stream,
+                                   GError          **error);
 
-gboolean gdk_save_tiff         (GOutputStream    *stream,
-                                const guchar     *data,
-                                int               width,
-                                int               height,
-                                int               stride,
-                                GdkMemoryFormat   format,
-                                GError          **error);
+void        gdk_load_tiff_async   (GInputStream           *stream,
+                                   GCancellable           *cancellable,
+                                   GAsyncReadyCallback     callback,
+                                   gpointer                user_data);
+
+GdkTexture *gdk_load_tiff_finish  (GAsyncResult           *result,
+                                   GError                **error);
+
+gboolean    gdk_save_tiff         (GOutputStream    *stream,
+                                   const guchar     *data,
+                                   int               width,
+                                   int               height,
+                                   int               stride,
+                                   GdkMemoryFormat   format,
+                                   GError          **error);
+
+void        gdk_save_tiff_async  (GOutputStream          *stream,
+                                  const guchar           *data,
+                                  int                     width,
+                                  int                     height,
+                                  int                     stride,
+                                  GdkMemoryFormat         format,
+                                  GCancellable           *cancellable,
+                                  GAsyncReadyCallback     callback,
+                                  gpointer                user_data);
+
+gboolean    gdk_save_tiff_finish (GAsyncResult           *result,
+                                  GError                **error);
 
 #endif

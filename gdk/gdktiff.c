@@ -282,6 +282,7 @@ tiff_open (gpointer      stream,
 }
 
 /* }}} */
+/* {{{ Public API */
 
 static struct {
   GdkMemoryFormat format;
@@ -509,5 +510,115 @@ gdk_load_tiff (GInputStream     *stream,
 
   return texture;
 }
+
+/* }}} */
+/* {{{ Async code */
+
+static void
+load_tiff_in_thread (GTask        *task,
+                     gpointer      source_object,
+                     gpointer      task_data,
+                     GCancellable *cancellable)
+{
+  GInputStream *stream = source_object;
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  texture = gdk_load_tiff (stream, &error);
+
+  if (texture)
+    g_task_return_pointer (task, texture, g_object_unref);
+  else
+    g_task_return_error (task, error);
+}
+
+void
+gdk_load_tiff_async (GInputStream         *stream,
+                     GCancellable         *cancellable,
+                     GAsyncReadyCallback   callback,
+                     gpointer              user_data)
+{
+  GTask *task;
+
+  task = g_task_new (stream, cancellable, callback, user_data);
+  g_task_run_in_thread (task, load_tiff_in_thread);
+  g_object_unref (task);
+}
+
+GdkTexture *
+gdk_load_tiff_finish (GAsyncResult  *result,
+                      GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+typedef struct {
+  const guchar *data;
+  int width;
+  int height;
+  int stride;
+  GdkMemoryFormat format;
+} SaveTiffData;
+
+static void
+save_tiff_in_thread (GTask        *task,
+                     gpointer      source_object,
+                     gpointer      task_data,
+                     GCancellable *cancellable)
+{
+  GOutputStream *stream = source_object;
+  SaveTiffData *data = task_data;
+  GError *error = NULL;
+  gboolean result;
+
+  result = gdk_save_tiff (stream,
+                          data->data,
+                          data->width,
+                          data->height,
+                          data->stride,
+                          data->format,
+                          &error);
+
+  if (result)
+    g_task_return_boolean (task, result);
+  else
+    g_task_return_error (task, error);
+}
+
+void
+gdk_save_tiff_async (GOutputStream          *stream,
+                     const guchar           *data,
+                     int                     width,
+                     int                     height,
+                     int                     stride,
+                     GdkMemoryFormat         format,
+                     GCancellable           *cancellable,
+                     GAsyncReadyCallback     callback,
+                     gpointer                user_data)
+{
+  GTask *task;
+  SaveTiffData *save_data;
+
+  save_data = g_new0 (SaveTiffData, 1);
+  save_data->data = data;
+  save_data->width = width;
+  save_data->height = height;
+  save_data->stride = stride;
+  save_data->format = format;
+
+  task = g_task_new (stream, cancellable, callback, user_data);
+  g_task_set_task_data (task, save_data, g_free);
+  g_task_run_in_thread (task, save_tiff_in_thread);
+  g_object_unref (task);
+}
+
+gboolean
+gdk_save_tiff_finish (GAsyncResult  *result,
+                      GError       **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+/* }}} */
 
 /* vim:set foldmethod=marker expandtab: */
