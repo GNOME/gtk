@@ -48,6 +48,7 @@
 #include <graphene.h>
 #include "gdkpng.h"
 #include "gdktiff.h"
+#include "gdkjpeg.h"
 
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 void
@@ -405,6 +406,13 @@ gdk_texture_new_from_file (GFile   *file,
       memcmp (data, "II\x2a\x00", 4) == 0)
     {
       texture = gdk_load_tiff (stream, error);
+      g_object_unref (stream);
+      return texture;
+    }
+
+  if (memcmp (data, "\xff\xd8", 2) == 0)
+    {
+      texture = gdk_load_jpeg (stream, error);
       g_object_unref (stream);
       return texture;
     }
