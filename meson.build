@@ -403,6 +403,9 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 png_dep        = dependency('libpng',
                             fallback: ['libpng', 'libpng_dep'],
                             required: true)
+tiff_dep       = dependency('libtiff-4',
+                            fallback: ['libtiff', 'libtiff4_dep'],
+                            required: true)
 
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
