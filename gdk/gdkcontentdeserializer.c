@@ -25,6 +25,8 @@
 #include "filetransferportalprivate.h"
 #include "gdktexture.h"
 #include "gdkrgbaprivate.h"
+#include "loaders/gdkpngprivate.h"
+#include "loaders/gdktiffprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -656,6 +658,88 @@ pixbuf_deserializer (GdkContentDeserializer *deserializer)
 }
 
 static void
+texture_deserializer_finish (GObject      *source,
+                             GAsyncResult *res,
+                             gpointer      data)
+{
+  GdkContentDeserializer *deserializer = GDK_CONTENT_DESERIALIZER (source);
+  GdkTexture *texture;
+  GValue *value;
+  GError *error = NULL;
+
+  texture = g_task_propagate_pointer (G_TASK (res), &error);
+  if (texture == NULL)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  value = gdk_content_deserializer_get_value (deserializer);
+  g_value_take_object (value, texture);
+  gdk_content_deserializer_return_success (deserializer);
+}
+
+static GBytes *
+read_all_data (GInputStream  *source,
+               GError       **error)
+{
+  GOutputStream *output;
+  gssize size;
+  GBytes *bytes;
+
+  output = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
+  size = g_output_stream_splice (output, source, 0, NULL, error);
+  if (size == -1)
+    {
+      g_object_unref (output);
+      return NULL;
+    }
+
+  g_output_stream_close (output, NULL, NULL);
+  bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (output));
+  g_object_unref (output);
+
+  return bytes;
+}
+
+static void
+deserialize_texture_in_thread (GTask        *task,
+                               gpointer      source_object,
+                               gpointer      task_data,
+                               GCancellable *cancellable)
+{
+  GdkContentDeserializer *deserializer = source_object;
+  GBytes *bytes;
+  GError *error = NULL;
+  GdkTexture *texture = NULL;
+
+  bytes = read_all_data (gdk_content_deserializer_get_input_stream (deserializer), &error);
+  if (bytes)
+    {
+      texture = gdk_texture_new_from_bytes (bytes, &error);
+      g_bytes_unref (bytes);
+    }
+
+  if (texture)
+    g_task_return_pointer (task, texture, g_object_unref);
+  else
+    g_task_return_error (task, error);
+}
+
+static void
+texture_deserializer (GdkContentDeserializer *deserializer)
+{
+  GTask *task;
+
+  task = g_task_new (deserializer,
+                     gdk_content_deserializer_get_cancellable (deserializer),
+                     texture_deserializer_finish,
+                     NULL);
+  g_task_run_in_thread (task, deserialize_texture_in_thread);
+  g_object_unref (task);
+}
+
+static void
 string_deserializer_finish (GObject      *source,
                             GAsyncResult *result,
                             gpointer      deserializer)
@@ -863,48 +947,65 @@ init (void)
 
   initialized = TRUE;
 
+  gdk_content_register_deserializer ("image/png",
+                                     GDK_TYPE_TEXTURE,
+                                     texture_deserializer,
+                                     NULL,
+                                     NULL);
+
+  gdk_content_register_deserializer ("image/tiff",
+                                     GDK_TYPE_TEXTURE,
+                                     texture_deserializer,
+                                     NULL,
+                                     NULL);
+
   formats = gdk_pixbuf_get_formats ();
 
   /* Make sure png comes first */
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
-      char *name; 
- 
+      char *name;
+
       name = gdk_pixbuf_format_get_name (fmt);
       if (g_str_equal (name, "png"))
-	{
-	  formats = g_slist_delete_link (formats, f);
-	  formats = g_slist_prepend (formats, fmt);
+        {
+          formats = g_slist_delete_link (formats, f);
+          formats = g_slist_prepend (formats, fmt);
 
-	  g_free (name);
-
-	  break;
-	}
+          g_free (name);
+          break;
+        }
 
       g_free (name);
-    }  
+    }
 
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
       char **mimes, **m;
+      char *name;
 
+      name = gdk_pixbuf_format_get_name (fmt);
       mimes = gdk_pixbuf_format_get_mime_types (fmt);
       for (m = mimes; *m; m++)
-	{
-          gdk_content_register_deserializer (*m,
-                                             GDK_TYPE_TEXTURE,
-                                             pixbuf_deserializer,
-                                             NULL,
-                                             NULL);
+        {
+          /* Turning pngs and tiffs into textures is handled above */
+          if (!g_str_equal (name, "png") &&
+              !g_str_equal (name, "tiff"))
+            gdk_content_register_deserializer (*m,
+                                               GDK_TYPE_TEXTURE,
+                                               pixbuf_deserializer,
+                                               NULL,
+                                               NULL);
           gdk_content_register_deserializer (*m,
                                              GDK_TYPE_PIXBUF,
                                              pixbuf_deserializer,
                                              NULL,
                                              NULL);
-	}
+        }
       g_strfreev (mimes);
+      g_free (name);
     }
 
   g_slist_free (formats);
