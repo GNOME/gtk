@@ -35,17 +35,41 @@ void float_to_half4 (const float f[4],
 void half_to_float4 (const guint16 h[4],
                      float         f[4]);
 
+void float_to_half (const float *f,
+                    guint16     *h,
+                    int          n);
+
+void half_to_float (const guint16 *h,
+                    float         *f,
+                    int            n);
+
 void float_to_half4_f16c (const float f[4],
                           guint16     h[4]);
 
 void half_to_float4_f16c (const guint16 h[4],
                           float         f[4]);
 
+void float_to_half_f16c (const float *f,
+                         guint16     *h,
+                         int          n);
+
+void half_to_float_f16c (const guint16 *h,
+                         float         *f,
+                         int            n);
+
 void float_to_half4_c (const float f[4],
                        guint16     h[4]);
 
 void half_to_float4_c (const guint16 h[4],
                        float         f[4]);
+
+void float_to_half_c (const float *f,
+                      guint16     *h,
+                      int          n);
+
+void half_to_float_c (const guint16 *h,
+                      float         *f,
+                      int            n);
 
 G_END_DECLS
 
