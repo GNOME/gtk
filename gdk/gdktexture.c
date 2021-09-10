@@ -135,6 +135,18 @@ gdk_texture_real_download (GdkTexture *texture,
 }
 
 static void
+gdk_texture_real_download_float (GdkTexture *self,
+                                 float      *data,
+                                 gsize       stride)
+{
+  GdkTexture *memory_texture;
+
+  memory_texture = gdk_texture_download_texture (self);
+  gdk_texture_download_float (memory_texture, data, stride);
+  g_object_unref (memory_texture);
+}
+
+static void
 gdk_texture_set_property (GObject      *gobject,
                           guint         prop_id,
                           const GValue *value,
@@ -199,6 +211,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
 
   klass->download_texture = gdk_texture_real_download_texture;
   klass->download = gdk_texture_real_download;
+  klass->download_float = gdk_texture_real_download_float;
 
   gobject_class->set_property = gdk_texture_set_property;
   gobject_class->get_property = gdk_texture_get_property;
@@ -483,6 +496,45 @@ gdk_texture_download (GdkTexture *texture,
   g_return_if_fail (stride >= gdk_texture_get_width (texture) * 4);
 
   GDK_TEXTURE_GET_CLASS (texture)->download (texture, data, stride);
+}
+
+/**
+ * gdk_texture_download_float:
+ * @texture: a `GdkTexture`
+ * @data: (array): pointer to enough memory to be filled with the
+ *   downloaded data of @texture
+ * @stride: rowstride in elements, will usually be equal to
+ *   gdk_texture_get_width() * 4
+ *
+ * Downloads the @texture into local memory in a high dynamic range format.
+ *
+ * This may be an expensive operation, as the actual texture data
+ * may reside on a GPU or on a remote display server and because the data
+ * may need to be upsampled if it was not already available in this
+ * format.
+ *
+ * You may want to use [method@Gdk.Texture.download] instead if you don't
+ * need high dynamic range support.
+ *
+ * The data format of the downloaded data is equivalent to
+ * GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, so every downloaded
+ * pixel requires 16 bytes of memory.
+ *
+ * Note that the caller is responsible to provide sufficiently
+ * aligned memory to access the resulting data directly as floats.
+ *
+ * Since: 4.6
+ */
+void
+gdk_texture_download_float (GdkTexture *texture,
+                            float      *data,
+                            gsize       stride)
+{
+  g_return_if_fail (GDK_IS_TEXTURE (texture));
+  g_return_if_fail (data != NULL);
+  g_return_if_fail (stride >= gdk_texture_get_width (texture) * 4);
+
+  GDK_TEXTURE_GET_CLASS (texture)->download_float (texture, data, stride);
 }
 
 GdkTexture *

@@ -180,6 +180,60 @@ gdk_gl_texture_download (GdkTexture *texture,
 }
 
 static void
+gdk_gl_texture_do_download_float (GdkTexture *texture,
+                                  float      *data)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  int active_texture;
+
+  gdk_gl_context_make_current (self->context);
+
+  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
+  glBindTexture (GL_TEXTURE_2D, self->id);
+
+  glGetTexImage (GL_TEXTURE_2D,
+                 0,
+                 GL_RGBA,
+                 GL_FLOAT,
+                 data);
+
+  glBindTexture (GL_TEXTURE_2D, active_texture);
+}
+
+static void
+gdk_gl_texture_download_float (GdkTexture *texture,
+                               float      *data,
+                               gsize       stride)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  int width, height, y;
+  float *copy;
+
+  if (self->saved)
+    {
+      gdk_texture_download_float (self->saved, data, stride);
+      return;
+    }
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+
+  if (stride == width * 4)
+    {
+      gdk_gl_texture_do_download_float (texture, data);
+      return;
+    }
+
+  copy = g_new (float, width * height * 4);
+
+  gdk_gl_texture_do_download_float (texture, copy);
+  for (y = 0; y < height; y++)
+    memcpy (data + y * stride, copy + y * 4 * width, 4 * width);
+
+  g_free (copy);
+}
+
+static void
 gdk_gl_texture_class_init (GdkGLTextureClass *klass)
 {
   GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
@@ -187,6 +241,7 @@ gdk_gl_texture_class_init (GdkGLTextureClass *klass)
 
   texture_class->download_texture = gdk_gl_texture_download_texture;
   texture_class->download = gdk_gl_texture_download;
+  texture_class->download_float = gdk_gl_texture_download_float;
   gobject_class->dispose = gdk_gl_texture_dispose;
 }
 

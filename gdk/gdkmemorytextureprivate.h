@@ -60,6 +60,14 @@ void                    gdk_memory_convert                  (guchar             
                                                              gsize                       width,
                                                              gsize                       height);
 
+void                    gdk_memory_convert_to_float         (float                      *dest_data,
+                                                             gsize                       dest_stride,
+                                                             const guchar               *src_data,
+                                                             gsize                       src_stride,
+                                                             GdkMemoryFormat             src_format,
+                                                             gsize                       width,
+                                                             gsize                       height);
+
 
 G_END_DECLS
 

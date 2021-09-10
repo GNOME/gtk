@@ -30,6 +30,9 @@ struct _GdkTextureClass {
   void                  (* download)                    (GdkTexture             *texture,
                                                          guchar                 *data,
                                                          gsize                   stride);
+  void                  (* download_float)              (GdkTexture             *texture,
+                                                         float                  *data,
+                                                         gsize                   stride);
 };
 
 gpointer                gdk_texture_new                 (const GdkTextureClass  *klass,

@@ -102,6 +102,21 @@ gdk_memory_texture_download (GdkTexture *texture,
 }
 
 static void
+gdk_memory_texture_download_float (GdkTexture *texture,
+                                   float      *data,
+                                   gsize       stride)
+{
+  GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
+
+  gdk_memory_convert_to_float (data, stride,
+                               (guchar *) g_bytes_get_data (self->bytes, NULL),
+                               self->stride,
+                               self->format,
+                               gdk_texture_get_width (texture),
+                               gdk_texture_get_height (texture));
+}
+
+static void
 gdk_memory_texture_class_init (GdkMemoryTextureClass *klass)
 {
   GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
@@ -109,6 +124,7 @@ gdk_memory_texture_class_init (GdkMemoryTextureClass *klass)
 
   texture_class->download_texture = gdk_memory_texture_download_texture;
   texture_class->download = gdk_memory_texture_download;
+  texture_class->download_float = gdk_memory_texture_download_float;
   gobject_class->dispose = gdk_memory_texture_dispose;
 }
 
@@ -322,4 +338,83 @@ gdk_memory_convert (guchar              *dest_data,
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
 
   converters[src_format][dest_format] (dest_data, dest_stride, src_data, src_stride, width, height);
+}
+
+#define CONVERT_FLOAT(R,G,B,A,premultiply) G_STMT_START {\
+  for (y = 0; y < height; y++) \
+    { \
+      for (x = 0; x < width; x++) \
+        { \
+          if (A >= 0) \
+            { \
+              dest_data[4 * x + 0] = src_data[4 * x + R] / 255.0f; \
+              dest_data[4 * x + 1] = src_data[4 * x + G] / 255.0f; \
+              dest_data[4 * x + 2] = src_data[4 * x + B] / 255.0f; \
+              dest_data[4 * x + 3] = src_data[4 * x + A] / 255.0f; \
+              if (premultiply) \
+                { \
+                  dest_data[4 * x + 0] *= dest_data[4 * x + 3]; \
+                  dest_data[4 * x + 1] *= dest_data[4 * x + 3]; \
+                  dest_data[4 * x + 2] *= dest_data[4 * x + 3]; \
+                } \
+            } \
+          else \
+            { \
+              dest_data[4 * x + 0] = src_data[3 * x + R] / 255.0f; \
+              dest_data[4 * x + 1] = src_data[3 * x + G] / 255.0f; \
+              dest_data[4 * x + 2] = src_data[3 * x + B] / 255.0f; \
+              dest_data[4 * x + 3] = 1.0; \
+            } \
+        } \
+\
+      dest_data += dest_stride; \
+      src_data += src_stride; \
+    } \
+}G_STMT_END
+
+void
+gdk_memory_convert_to_float (float           *dest_data,
+                             gsize            dest_stride,
+                             const guchar    *src_data,
+                             gsize            src_stride,
+                             GdkMemoryFormat  src_format,
+                             gsize            width,
+                             gsize            height)
+{
+  gsize x, y;
+
+  switch (src_format)
+  {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+      CONVERT_FLOAT (2, 1, 0, 3, FALSE);
+      break;
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+      CONVERT_FLOAT (1, 2, 3, 0, FALSE);
+      break;
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+      CONVERT_FLOAT (0, 1, 2, 3, FALSE);
+      break;
+    case GDK_MEMORY_B8G8R8A8:
+      CONVERT_FLOAT (2, 1, 0, 3, TRUE);
+      break;
+    case GDK_MEMORY_A8R8G8B8:
+      CONVERT_FLOAT (1, 2, 3, 0, TRUE);
+      break;
+    case GDK_MEMORY_R8G8B8A8:
+      CONVERT_FLOAT (0, 1, 2, 3, TRUE);
+      break;
+    case GDK_MEMORY_A8B8G8R8:
+      CONVERT_FLOAT (3, 2, 1, 0, TRUE);
+      break;
+    case GDK_MEMORY_R8G8B8:
+      CONVERT_FLOAT (0, 1, 2, -1, FALSE);
+      break;
+    case GDK_MEMORY_B8G8R8:
+      CONVERT_FLOAT (2, 1, 0, -1, FALSE);
+      break;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached();
+  }
 }
