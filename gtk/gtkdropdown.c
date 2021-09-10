@@ -126,9 +126,16 @@ enum
   N_PROPS
 };
 
+enum
+{
+  ACTIVATE,
+  LAST_SIGNAL
+};
+
 G_DEFINE_TYPE (GtkDropDown, gtk_drop_down, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static void
 button_toggled (GtkWidget *widget,
@@ -201,6 +208,12 @@ selection_changed (GtkSingleSelection *selection,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
+}
+
+static void
+gtk_drop_down_activate (GtkDropDown *self)
+{
+  gtk_widget_activate (self->button);
 }
 
 static void
@@ -546,6 +559,28 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
+
+  /**
+   * GtkDropDown::activate:
+   * @widget: the object which received the signal.
+   *
+   * Emitted to when the drop down is activated.
+   *
+   * The `::activate` signal on `GtkDropDown` is an action signal and
+   * emitting it causes the drop down to pop up its dropdown.
+   *
+   * Since: 4.6
+   */
+  signals[ACTIVATE] =
+      g_signal_new_class_handler (I_ ("activate"),
+                                  G_OBJECT_CLASS_TYPE (gobject_class),
+                                  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                  G_CALLBACK (gtk_drop_down_activate),
+                                  NULL, NULL,
+                                  NULL,
+                                  G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE]);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkdropdown.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkDropDown, arrow);
