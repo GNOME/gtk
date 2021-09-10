@@ -52,6 +52,7 @@ gdk_public_sources = files([
   'gdkdragsurface.c',
   'gdkpng.c',
   'gdktiff.c',
+  'gdkjpeg.c',
 ])
 
 gdk_public_headers = files([
@@ -256,7 +257,7 @@ endif
 
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
-  dependencies: gdk_deps + [libgtk_css_dep, png_dep, tiff_dep],
+  dependencies: gdk_deps + [libgtk_css_dep, png_dep, tiff_dep, jpeg_dep],
   link_with: [libgtk_css],
   include_directories: [confinc, gdkx11_inc, wlinc],
   c_args: libgdk_c_args + common_cflags,

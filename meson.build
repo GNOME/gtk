@@ -392,6 +392,7 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
 png_dep        = dependency('libpng16')
 tiff_dep        = dependency('libtiff-4')
+jpeg_dep       = dependency('libjpeg')
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 2.1.0', required: false,
