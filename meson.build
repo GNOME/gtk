@@ -207,6 +207,17 @@ foreach func : check_functions
   endif
 endforeach
 
+# We use links() because sigsetjmp() is often a macro hidden behind other macros
+cdata.set('HAVE_SIGSETJMP',
+  cc.links('''#define _POSIX_SOURCE
+              #include <setjmp.h>
+              int main (void) {
+                sigjmp_buf env;
+                sigsetjmp (env, 0);
+                return 0;
+              }''', name: 'sigsetjmp'),
+)
+
 # Check for __uint128_t (gcc) by checking for 128-bit division
 uint128_t_src = '''int main() {
 static __uint128_t v1 = 100;
@@ -394,6 +405,9 @@ png_dep        = dependency('libpng',
                             required: true)
 tiff_dep       = dependency('libtiff-4',
                             fallback: ['libtiff', 'libtiff4_dep'],
+                            required: true)
+jpeg_dep       = dependency('libjpeg',
+                            fallback: ['libjpeg-turbo', 'jpeg_dep'],
                             required: true)
 
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
