@@ -26,6 +26,7 @@
 #include "gdktexture.h"
 #include "gdkrgbaprivate.h"
 #include "gdkpng.h"
+#include "gdktiff.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -687,6 +688,36 @@ png_deserializer (GdkContentDeserializer *deserializer)
 }
 
 static void
+tiff_deserializer_finish (GObject      *source,
+                          GAsyncResult *res,
+                          gpointer      deserializer)
+{
+  GdkTexture *texture;
+  GValue *value;
+  GError *error = NULL;
+
+  texture = gdk_load_tiff_finish (res, &error);
+  if (texture == NULL)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  value = gdk_content_deserializer_get_value (deserializer);
+  g_value_take_object (value, texture);
+  gdk_content_deserializer_return_success (deserializer);
+}
+
+static void
+tiff_deserializer (GdkContentDeserializer *deserializer)
+{
+  gdk_load_tiff_async (gdk_content_deserializer_get_input_stream (deserializer),
+                       gdk_content_deserializer_get_cancellable (deserializer),
+                       tiff_deserializer_finish,
+                       deserializer);
+}
+
+static void
 string_deserializer_finish (GObject      *source,
                             GAsyncResult *result,
                             gpointer      deserializer)
@@ -897,6 +928,12 @@ init (void)
   gdk_content_register_deserializer ("image/png",
                                      GDK_TYPE_TEXTURE,
                                      png_deserializer,
+                                     NULL,
+                                     NULL);
+
+  gdk_content_register_deserializer ("image/tiff",
+                                     GDK_TYPE_TEXTURE,
+                                     tiff_deserializer,
                                      NULL,
                                      NULL);
 

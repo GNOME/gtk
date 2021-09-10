@@ -27,6 +27,7 @@
 #include "gdktextureprivate.h"
 #include "gdkrgba.h"
 #include "gdkpng.h"
+#include "gdktiff.h"
 #include "gdkmemorytextureprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -724,6 +725,69 @@ png_serializer (GdkContentSerializer *serializer)
   g_object_unref (texture);
 }
 
+typedef struct {
+  GdkContentSerializer *serializer;
+  GBytes *bytes;
+} TiffSerializerData;
+
+static void
+tiff_serializer_finish (GObject      *source,
+                        GAsyncResult *res,
+                        gpointer      user_data)
+{
+  TiffSerializerData *data = user_data;
+  GError *error = NULL;
+
+  if (!gdk_save_tiff_finish (res, &error))
+    gdk_content_serializer_return_error (data->serializer, error);
+  else
+    gdk_content_serializer_return_success (data->serializer);
+
+  g_bytes_unref (data->bytes);
+  g_free (data);
+}
+
+static void
+tiff_serializer (GdkContentSerializer *serializer)
+{
+  const GValue *value;
+  GdkTexture *texture;
+  GdkMemoryFormat format;
+  GBytes *bytes = NULL;
+  TiffSerializerData *data;
+
+  value = gdk_content_serializer_get_value (serializer);
+
+  texture = g_value_get_object (value);
+
+  for (int i = 0; i < GDK_MEMORY_N_FORMATS; i++)
+    {
+      bytes = gdk_texture_download_format (texture, i);
+      if (bytes)
+        {
+          format = i;
+          break;
+        }
+    }
+
+  g_assert (bytes != NULL);
+
+  data = g_new0 (TiffSerializerData, 1);
+  data->serializer = serializer;
+  data->bytes = bytes;
+
+  gdk_save_tiff_async (gdk_content_serializer_get_output_stream (serializer),
+                       g_bytes_get_data (bytes, NULL),
+                       gdk_texture_get_width (texture),
+                       gdk_texture_get_height (texture),
+                       gdk_texture_get_width (texture) * gdk_memory_format_bytes_per_pixel (format),
+                       format,
+                       gdk_content_serializer_get_cancellable (serializer),
+                       tiff_serializer_finish,
+                       data);
+  g_object_unref (texture);
+}
+
 static void
 string_serializer_finish (GObject      *source,
                           GAsyncResult *result,
@@ -946,6 +1010,11 @@ init (void)
   gdk_content_register_serializer (GDK_TYPE_TEXTURE,
                                    "image/png",
                                    png_serializer,
+                                   NULL, NULL);
+
+  gdk_content_register_serializer (GDK_TYPE_TEXTURE,
+                                   "image/tiff",
+                                   tiff_serializer,
                                    NULL, NULL);
 
   formats = gdk_pixbuf_get_formats ();
