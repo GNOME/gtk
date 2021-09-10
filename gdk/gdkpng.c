@@ -119,6 +119,7 @@ read_all_data (GInputStream  *source,
 #endif
 
 /* }}} */
+/* {{{ Public API */
 
 GdkTexture *
 gdk_load_png (GInputStream  *stream,
@@ -227,5 +228,115 @@ gdk_save_png (GOutputStream    *stream,
 
   return result;
 }
+
+/* }}} */
+/* {{{ Async code */
+
+static void
+load_png_in_thread (GTask        *task,
+                    gpointer      source_object,
+                    gpointer      task_data,
+                    GCancellable *cancellable)
+{
+  GInputStream *stream = source_object;
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  texture = gdk_load_png (stream, &error);
+
+  if (texture)
+    g_task_return_pointer (task, texture, g_object_unref);
+  else
+    g_task_return_error (task, error);
+}
+
+void
+gdk_load_png_async (GInputStream         *stream,
+                    GCancellable         *cancellable,
+                    GAsyncReadyCallback   callback,
+                    gpointer              user_data)
+{
+  GTask *task;
+
+  task = g_task_new (stream, cancellable, callback, user_data);
+  g_task_run_in_thread (task, load_png_in_thread);
+  g_object_unref (task);
+}
+
+GdkTexture *
+gdk_load_png_finish (GAsyncResult  *result,
+                     GError       **error)
+{
+  return g_task_propagate_pointer (G_TASK (result), error);
+}
+
+typedef struct {
+  const guchar *data;
+  int width;
+  int height;
+  int stride;
+  GdkMemoryFormat format;
+} SavePngData;
+
+static void
+save_png_in_thread (GTask        *task,
+                    gpointer      source_object,
+                    gpointer      task_data,
+                    GCancellable *cancellable)
+{
+  GOutputStream *stream = source_object;
+  SavePngData *data = task_data;
+  GError *error = NULL;
+  gboolean result;
+
+  result = gdk_save_png (stream,
+                         data->data,
+                         data->width,
+                         data->height,
+                         data->stride,
+                         data->format,
+                         &error);
+
+  if (result)
+    g_task_return_boolean (task, result);
+  else
+    g_task_return_error (task, error);
+}
+
+void
+gdk_save_png_async (GOutputStream          *stream,
+                    const guchar           *data,
+                    int                     width,
+                    int                     height,
+                    int                     stride,
+                    GdkMemoryFormat         format,
+                    GCancellable           *cancellable,
+                    GAsyncReadyCallback     callback,
+                    gpointer                user_data)
+{
+  GTask *task;
+  SavePngData *save_data;
+
+  save_data = g_new0 (SavePngData, 1);
+  save_data->data = data;
+  save_data->width = width;
+  save_data->height = height;
+  save_data->stride = stride;
+  save_data->format = format;
+
+  task = g_task_new (stream, cancellable, callback, user_data);
+  g_task_set_task_data (task, save_data, g_free);
+  g_task_run_in_thread (task, save_png_in_thread);
+  g_object_unref (task);
+}
+
+gboolean
+gdk_save_png_finish (GAsyncResult  *result,
+                     GError       **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+/* }}} */
 
 /* vim:set foldmethod=marker expandtab: */

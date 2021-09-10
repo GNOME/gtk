@@ -21,15 +21,36 @@
 #include "gdkmemorytexture.h"
 #include <gio/gio.h>
 
-GdkTexture *gdk_load_png (GInputStream     *stream,
-                          GError          **error);
+GdkTexture *gdk_load_png        (GInputStream           *stream,
+                                 GError                **error);
 
-gboolean    gdk_save_png (GOutputStream    *stream,
-                          const guchar     *data,
-                          int               width,
-                          int               height,
-                          int               stride,
-                          GdkMemoryFormat   format,
-                          GError          **error);
+void        gdk_load_png_async  (GInputStream           *stream,
+                                 GCancellable           *cancellable,
+                                 GAsyncReadyCallback     callback,
+                                 gpointer                user_data);
+
+GdkTexture *gdk_load_png_finish (GAsyncResult           *result,
+                                 GError                **error);
+
+gboolean    gdk_save_png        (GOutputStream          *stream,
+                                 const guchar           *data,
+                                 int                     width,
+                                 int                     height,
+                                 int                     stride,
+                                 GdkMemoryFormat         format,
+                                 GError                **error);
+
+void        gdk_save_png_async  (GOutputStream          *stream,
+                                 const guchar           *data,
+                                 int                     width,
+                                 int                     height,
+                                 int                     stride,
+                                 GdkMemoryFormat         format,
+                                 GCancellable           *cancellable,
+                                 GAsyncReadyCallback     callback,
+                                 gpointer                user_data);
+
+gboolean    gdk_save_png_finish (GAsyncResult           *result,
+                                 GError                **error);
 
 #endif
