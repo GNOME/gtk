@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-09-10 15:44+0000\n"
-"PO-Revision-Date: 2021-09-10 17:55+0200\n"
+"PO-Revision-Date: 2021-09-10 17:57+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -4107,7 +4107,7 @@ msgstr "Glavni"
 
 #: gtk/gtkmenubutton.c:506
 msgid "Whether the menubutton acts as a primary menu"
-msgstr "Sadrži li se tipka izbornika ponašati kao glavni izbornik"
+msgstr "Treba li se tipka izbornika ponašati kao glavni izbornik"
 
 #: gtk/gtkmessagedialog.c:373
 msgid "Message Buttons"
