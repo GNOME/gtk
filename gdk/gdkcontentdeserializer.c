@@ -25,6 +25,7 @@
 #include "filetransferportalprivate.h"
 #include "gdktexture.h"
 #include "gdkrgbaprivate.h"
+#include "gdkpng.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
@@ -656,6 +657,36 @@ pixbuf_deserializer (GdkContentDeserializer *deserializer)
 }
 
 static void
+png_deserializer_finish (GObject      *source,
+                         GAsyncResult *res,
+                         gpointer      deserializer)
+{
+  GdkTexture *texture;
+  GValue *value;
+  GError *error = NULL;
+
+  texture = gdk_load_png_finish (res, &error);
+  if (texture == NULL)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  value = gdk_content_deserializer_get_value (deserializer);
+  g_value_take_object (value, texture);
+  gdk_content_deserializer_return_success (deserializer);
+}
+
+static void
+png_deserializer (GdkContentDeserializer *deserializer)
+{
+  gdk_load_png_async (gdk_content_deserializer_get_input_stream (deserializer),
+                      gdk_content_deserializer_get_cancellable (deserializer),
+                      png_deserializer_finish,
+                      deserializer);
+}
+
+static void
 string_deserializer_finish (GObject      *source,
                             GAsyncResult *result,
                             gpointer      deserializer)
@@ -863,27 +894,32 @@ init (void)
 
   initialized = TRUE;
 
+  gdk_content_register_deserializer ("image/png",
+                                     GDK_TYPE_TEXTURE,
+                                     png_deserializer,
+                                     NULL,
+                                     NULL);
+
   formats = gdk_pixbuf_get_formats ();
 
   /* Make sure png comes first */
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
-      char *name; 
- 
+      char *name;
+
       name = gdk_pixbuf_format_get_name (fmt);
       if (g_str_equal (name, "png"))
-	{
-	  formats = g_slist_delete_link (formats, f);
-	  formats = g_slist_prepend (formats, fmt);
+        {
+          formats = g_slist_delete_link (formats, f);
+          formats = g_slist_prepend (formats, fmt);
 
-	  g_free (name);
-
-	  break;
-	}
+          g_free (name);
+          break;
+        }
 
       g_free (name);
-    }  
+    }
 
   for (f = formats; f; f = f->next)
     {

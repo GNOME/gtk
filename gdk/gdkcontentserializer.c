@@ -26,6 +26,8 @@
 #include "filetransferportalprivate.h"
 #include "gdktextureprivate.h"
 #include "gdkrgba.h"
+#include "gdkpng.h"
+#include "gdkmemorytextureprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <string.h>
@@ -606,6 +608,7 @@ gdk_content_serialize_finish (GAsyncResult  *result,
 
 /*** SERIALIZERS ***/
 
+
 static void
 pixbuf_serializer_finish (GObject      *source,
                           GAsyncResult *res,
@@ -656,6 +659,69 @@ pixbuf_serializer (GdkContentSerializer *serializer)
                                    g_str_equal (name, "png") ? "compression" : NULL, "2",
                                    NULL);
   g_object_unref (pixbuf);
+}
+
+typedef struct {
+  GdkContentSerializer *serializer;
+  GBytes *bytes;
+} PngSerializerData;
+
+static void
+png_serializer_finish (GObject      *source,
+                       GAsyncResult *res,
+                       gpointer      user_data)
+{
+  PngSerializerData *data = user_data;
+  GError *error = NULL;
+
+  if (!gdk_save_png_finish (res, &error))
+    gdk_content_serializer_return_error (data->serializer, error);
+  else
+    gdk_content_serializer_return_success (data->serializer);
+
+  g_bytes_unref (data->bytes);
+  g_free (data);
+}
+
+static void
+png_serializer (GdkContentSerializer *serializer)
+{
+  const GValue *value;
+  GdkTexture *texture;
+  GdkMemoryFormat format;
+  GBytes *bytes = NULL;
+  PngSerializerData *data;
+
+  value = gdk_content_serializer_get_value (serializer);
+
+  texture = g_value_get_object (value);
+
+  for (int i = 0; i < GDK_MEMORY_N_FORMATS; i++)
+    {
+      bytes = gdk_texture_download_format (texture, i);
+      if (bytes)
+        {
+          format = i;
+          break;
+        }
+    }
+
+  g_assert (bytes != NULL);
+
+  data = g_new0 (PngSerializerData, 1);
+  data->serializer = serializer;
+  data->bytes = bytes;
+
+  gdk_save_png_async (gdk_content_serializer_get_output_stream (serializer),
+                      g_bytes_get_data (bytes, NULL),
+                      gdk_texture_get_width (texture),
+                      gdk_texture_get_height (texture),
+                      gdk_texture_get_width (texture) * gdk_memory_format_bytes_per_pixel (format),
+                      format,
+                      gdk_content_serializer_get_cancellable (serializer),
+                      png_serializer_finish,
+                      data);
+  g_object_unref (texture);
 }
 
 static void
@@ -877,27 +943,31 @@ init (void)
 
   initialized = TRUE;
 
+  gdk_content_register_serializer (GDK_TYPE_TEXTURE,
+                                   "image/png",
+                                   png_serializer,
+                                   NULL, NULL);
+
   formats = gdk_pixbuf_get_formats ();
 
   /* Make sure png comes first */
   for (f = formats; f; f = f->next)
     {
       GdkPixbufFormat *fmt = f->data;
-      char *name; 
- 
+      char *name;
+
       name = gdk_pixbuf_format_get_name (fmt);
       if (g_str_equal (name, "png"))
-	{
-	  formats = g_slist_delete_link (formats, f);
-	  formats = g_slist_prepend (formats, fmt);
+        {
+          formats = g_slist_delete_link (formats, f);
+          formats = g_slist_prepend (formats, fmt);
 
-	  g_free (name);
-
-	  break;
-	}
+          g_free (name);
+          break;
+        }
 
       g_free (name);
-    }  
+    }
 
   for (f = formats; f; f = f->next)
     {
