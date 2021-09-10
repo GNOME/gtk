@@ -47,6 +47,7 @@
 
 #include <graphene.h>
 #include "gdkpng.h"
+#include "gdktiff.h"
 
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 void
@@ -400,6 +401,14 @@ gdk_texture_new_from_file (GFile   *file,
       return texture;
     }
 
+  if (memcmp (data, "MM\x00\x2a", 4) == 0 ||
+      memcmp (data, "II\x2a\x00", 4) == 0)
+    {
+      texture = gdk_load_tiff (stream, error);
+      g_object_unref (stream);
+      return texture;
+    }
+
   pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
   g_object_unref (stream);
   if (pixbuf == NULL)
@@ -652,7 +661,8 @@ gdk_texture_save_to_png (GdkTexture *texture,
  * Store the given @texture to the @filename.
  *
  * GTK will choose a suitable file format to save the data in
- * depending on the format of the texture.
+ * depending on the format of the texture. Currently, that is
+ * tiff, for all kinds of textures.
  *
  * This is a utility function intended for debugging and testing.
  * If you want more control over formats, proper error handling or
@@ -667,8 +677,44 @@ gboolean
 gdk_texture_save_to_file (GdkTexture  *texture,
                           const char  *filename)
 {
+  GBytes *bytes = NULL;
+  gboolean result;
+  GdkMemoryFormat format;
+  GFile *file;
+  GOutputStream *stream;
+
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
   g_return_val_if_fail (filename != NULL, FALSE);
 
-  return gdk_texture_save_to_png (texture, filename);
+  for (int i = 0; i < GDK_MEMORY_N_FORMATS; i++)
+    {
+      bytes = gdk_texture_download_format (texture, i);
+      if (bytes)
+        {
+          format = i;
+          break;
+        }
+    }
+
+  if (!bytes)
+    return FALSE;
+
+  file = g_file_new_for_path (filename);
+  stream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE,
+                                            G_FILE_CREATE_NONE,
+                                            NULL, NULL));
+  g_object_unref (file);
+
+  result = gdk_save_tiff (stream,
+                          g_bytes_get_data (bytes, NULL),
+                          gdk_texture_get_width (texture),
+                          gdk_texture_get_height (texture),
+                          gdk_texture_get_width (texture) * gdk_memory_format_bytes_per_pixel (format),
+                          format,
+                          NULL);
+
+  g_clear_object (&stream);
+  g_clear_pointer (&bytes, g_bytes_unref);
+
+  return result;
 }
