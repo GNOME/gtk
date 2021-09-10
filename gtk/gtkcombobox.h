@@ -60,10 +60,11 @@ struct _GtkComboBoxClass
   void     (* changed)           (GtkComboBox *combo_box);
   char    *(* format_entry_text) (GtkComboBox *combo_box,
                                   const char *path);
+  void     (* activate)          (GtkComboBox *combo_box);
 
   /*< private >*/
 
-  gpointer padding[8];
+  gpointer padding[7];
 };
 
 
