@@ -3,7 +3,7 @@
 static const char *format_name[] = {
   "BGRAp", "ARGBp", "RGBAp",
   "BGRA", "ARGB", "RGBA", "ABGR",
-  "RGB", "BGR",
+  "RGB", "BGR", NULL
 };
 
 static const char *
