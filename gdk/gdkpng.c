@@ -21,6 +21,7 @@
 
 #include "gdktexture.h"
 #include "gdkmemorytextureprivate.h"
+#include "gsk/ngl/fp16private.h"
 #include <png.h>
 #include <stdio.h>
 
@@ -119,6 +120,118 @@ read_all_data (GInputStream  *source,
 #endif
 
 /* }}} */
+/* {{{ Format conversion */
+
+static void
+convert_half_float (guchar            *dest_data,
+                    gsize              dest_stride,
+                    GdkMemoryFormat    dest_format,
+                    const guchar      *src_data,
+                    gsize              src_stride,
+                    GdkMemoryFormat    src_format,
+                    gsize              width,
+                    gsize              height)
+{
+  gsize x, y;
+  guint16 *dest;
+  const guint16 *src;
+  float *c;
+
+  c = g_malloc (width * 4 * sizeof (float));
+  for (y = 0; y < height; y++)
+    {
+      dest = (guint16 *)dest_data;
+      src = (const guint16 *)src_data;
+
+      half_to_float (src, c, width);
+      for (x = 0; x < width; x++)
+        {
+          dest[4 * x    ] = (guint16)(65535 * c[4 * x    ]);
+          dest[4 * x + 1] = (guint16)(65535 * c[4 * x + 1]);
+          dest[4 * x + 2] = (guint16)(65535 * c[4 * x + 2]);
+          if (src_format == GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED)
+            dest[4 * x + 3] = (guint16)(65535 * c[4 * x + 3]);
+          else
+            dest[4 * x + 3] = 65535;
+        }
+      dest_data += dest_stride;
+      src_data += src_stride;
+    }
+  g_free (c);
+}
+
+static void
+convert_float (guchar            *dest_data,
+               gsize              dest_stride,
+               GdkMemoryFormat    dest_format,
+               const guchar      *src_data,
+               gsize              src_stride,
+               GdkMemoryFormat    src_format,
+               gsize              width,
+               gsize              height)
+{
+  gsize x, y;
+  guint16 *dest;
+  const float *src;
+
+  for (y = 0; y < height; y++)
+    {
+      dest = (guint16 *)dest_data;
+      src = (const float *)src_data;
+      for (x = 0; x < width; x++)
+        {
+          dest[4 * x    ] = (guint16)(65535 * src[4 * x    ]);
+          dest[4 * x + 1] = (guint16)(65535 * src[4 * x + 1]);
+          dest[4 * x + 2] = (guint16)(65535 * src[4 * x + 2]);
+          if (src_format == GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED)
+            dest[4 * x + 3] = (guint16)(65535 * src[4 * x + 3]);
+          else
+            dest[4 * x + 3] = 65535;
+        }
+      dest_data += dest_stride;
+      src_data += src_stride;
+    }
+}
+
+static void
+convert (guchar            *dest_data,
+         gsize              dest_stride,
+         GdkMemoryFormat    dest_format,
+         const guchar      *src_data,
+         gsize              src_stride,
+         GdkMemoryFormat    src_format,
+         gsize              width,
+         gsize              height)
+{
+  if (dest_format < 3)
+    gdk_memory_convert (dest_data, dest_stride, dest_format,
+                        src_data, src_stride, src_format,
+                        width, height);
+  else
+    {
+      g_assert (dest_format == GDK_MEMORY_R16G16B16A16_PREMULTIPLIED);
+
+      switch ((int)src_format)
+        {
+        case GDK_MEMORY_R16G16B16_FLOAT:
+        case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+          convert_half_float (dest_data, dest_stride, dest_format,
+                              src_data, src_stride, src_format,
+                              width, height);
+          break;
+        case GDK_MEMORY_R32G32B32_FLOAT:
+        case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+          convert_float (dest_data, dest_stride, dest_format,
+                         src_data, src_stride, src_format,
+                         width, height);
+          break;
+        default:
+          g_assert_not_reached ();
+        }
+    }
+}
+
+/* }}} */
 /* {{{ Public API */
 
 GdkTexture *
@@ -185,17 +298,49 @@ gdk_save_png (GOutputStream    *stream,
 {
   png_image image = { NULL, PNG_IMAGE_VERSION, 0, };
   gboolean result;
+  guchar *new_data = NULL;
 
-  if (format == GDK_MEMORY_R16G16B16A16_PREMULTIPLIED)
-    image.format = PNG_FORMAT_LINEAR_RGB_ALPHA;
-  else if (format == GDK_MEMORY_DEFAULT)
-    image.format = PNG_FORMAT_RGBA;
-  else
+  switch ((int)format)
     {
-      g_set_error (error,
-                   G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "Saving memory format %d to png not implemented", format);
-      return FALSE;
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+      image.format = PNG_FORMAT_RGBA;
+      break;
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+      stride = width * 4;
+      new_data = g_malloc (stride * height);
+      convert (new_data, stride, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+               data, width * gdk_memory_format_bytes_per_pixel (format), format,
+               width, height);
+      data = new_data;
+      image.format = PNG_FORMAT_RGBA;
+      break;
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+      image.format = PNG_FORMAT_LINEAR_RGB_ALPHA;
+      break;
+    case GDK_MEMORY_R16G16B16:
+      image.format = PNG_FORMAT_LINEAR_RGB;
+      break;
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+      stride = width * 8;
+      new_data = g_malloc (stride * height);
+      convert (new_data, stride, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+               data, width * gdk_memory_format_bytes_per_pixel (format), format,
+               width, height);
+      image.format = PNG_FORMAT_LINEAR_RGB_ALPHA;
+      break;
+      break;
+    default:
+      g_assert_not_reached ();
     }
 
   if (image.format & PNG_FORMAT_FLAG_LINEAR)
@@ -225,6 +370,8 @@ gdk_save_png (GOutputStream    *stream,
     }
 
   png_image_free (&image);
+
+  g_free (new_data);
 
   return result;
 }
