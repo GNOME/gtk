@@ -52,6 +52,7 @@ gdk_public_sources = files([
   'gdktoplevel.c',
   'gdkdragsurface.c',
   'loaders/gdkpng.c',
+  'loaders/gdktiff.c',
 ])
 
 gdk_public_headers = files([
@@ -203,6 +204,7 @@ gdk_deps = [
   pangocairo_dep,
   vulkan_dep,
   png_dep,
+  tiff_dep,
 ]
 
 if profiler_enabled
