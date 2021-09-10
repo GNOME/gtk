@@ -46,6 +46,7 @@
 #include "gdksnapshot.h"
 
 #include <graphene.h>
+#include "gdkpng.h"
 
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 void
@@ -359,6 +360,10 @@ gdk_texture_new_from_resource (const char *resource_path)
  * The file format is detected automatically. The supported formats
  * are PNG and JPEG, though more formats might be available.
  *
+ * For PNG files, this function supports conversion from SRGB to
+ * linear data (including gamma correction) and can load 16bit
+ * data.
+ *
  * If %NULL is returned, then @error will be set.
  *
  * Return value: A newly-created `GdkTexture`
@@ -370,6 +375,9 @@ gdk_texture_new_from_file (GFile   *file,
   GdkTexture *texture;
   GdkPixbuf *pixbuf;
   GInputStream *stream;
+  GInputStream *buffered;
+  const void *data;
+  gsize size;
 
   g_return_val_if_fail (G_IS_FILE (file), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -377,6 +385,20 @@ gdk_texture_new_from_file (GFile   *file,
   stream = G_INPUT_STREAM (g_file_read (file, NULL, error));
   if (stream == NULL)
     return NULL;
+
+  buffered = g_buffered_input_stream_new (stream);
+  g_object_unref (stream);
+  stream = buffered;
+
+  g_buffered_input_stream_fill (G_BUFFERED_INPUT_STREAM (stream), 8, NULL, NULL);
+  data = g_buffered_input_stream_peek_buffer (G_BUFFERED_INPUT_STREAM (stream), &size);
+
+  if (memcmp (data, "\x89PNG", 4) == 0)
+    {
+      texture = gdk_load_png (stream, error);
+      g_object_unref (stream);
+      return texture;
+    }
 
   pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
   g_object_unref (stream);
@@ -555,6 +577,9 @@ gdk_texture_get_render_data (GdkTexture  *self,
  *
  * Store the given @texture to the @filename as a PNG file.
  *
+ * If the texture contains 16bit data, the generated PNG file
+ * will have linear 16bit data, otherwise it will contain SRGB.
+ *
  * This is a utility function intended for debugging and testing.
  * If you want more control over formats, proper error handling or
  * want to store to a `GFile` or other location, you might want to
@@ -566,30 +591,55 @@ gboolean
 gdk_texture_save_to_png (GdkTexture *texture,
                          const char *filename)
 {
-  cairo_surface_t *surface;
-  cairo_status_t status;
+  int width, height, stride;
+  GBytes *bytes;
+  GdkMemoryFormat format;
   gboolean result;
+  GFile *file;
+  GOutputStream *stream;
 
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
   g_return_val_if_fail (filename != NULL, FALSE);
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gdk_texture_get_width (texture),
-                                        gdk_texture_get_height (texture));
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (surface),
-                        cairo_image_surface_get_stride (surface));
-  cairo_surface_mark_dirty (surface);
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
 
-  status = cairo_surface_write_to_png (surface, filename);
-
-  if (status != CAIRO_STATUS_SUCCESS ||
-      cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
-    result = FALSE;
+  bytes = gdk_texture_download_format (texture, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED);
+  if (bytes)
+    {
+      format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+      stride = width * 8;
+    }
   else
-    result = TRUE;
+    {
+      gpointer data;
 
-  cairo_surface_destroy (surface);
+      stride = width * 4;
+      data = g_malloc (stride * height);
+
+      gdk_texture_download (texture, data, stride);
+
+      bytes = g_bytes_new_take (data, stride * height);
+
+      format = GDK_MEMORY_DEFAULT;
+    }
+
+  file = g_file_new_for_path (filename);
+  stream = G_OUTPUT_STREAM (g_file_replace (file, NULL, FALSE,
+                                            G_FILE_CREATE_NONE,
+                                            NULL, NULL));
+  g_object_unref (file);
+
+  result = gdk_save_png (stream,
+                         g_bytes_get_data (bytes, NULL),
+                         width, height, stride,
+                         format,
+                         NULL);
+
+  g_output_stream_close (stream, NULL, NULL);
+  g_object_unref (stream);
+
+  g_bytes_unref (bytes);
 
   return result;
 }
