@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-07-20 14:57+0000\n"
-"PO-Revision-Date: 2021-09-10 15:54+0200\n"
+"PO-Revision-Date: 2021-09-10 16:02+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -739,7 +739,7 @@ msgstr "Uklj/Isklj"
 #: gtk/a11y/gtkatspiaction.c:291
 msgctxt "accessibility"
 msgid "Toggles the switch"
-msgstr "Uklj/Isklj prebacvanje"
+msgstr "Uklj/Isklj prebacivanje"
 
 #: gtk/a11y/gtkatspiaction.c:371
 msgctxt "accessibility"
@@ -1311,7 +1311,7 @@ msgstr "pretraga"
 #: gtk/gtkaccessible.c:615
 msgctxt "accessibility"
 msgid "search box"
-msgstr "okvir pretrageretraži"
+msgstr "okvir pretrage"
 
 #: gtk/gtkaccessible.c:616
 msgctxt "accessibility"
@@ -1361,7 +1361,7 @@ msgstr "prebacivanje"
 #: gtk/gtkaccessible.c:625
 msgctxt "accessibility"
 msgid "tab"
-msgstr "tab"
+msgstr "kartica"
 
 #: gtk/gtkaccessible.c:626
 msgctxt "accessibility"
@@ -4067,7 +4067,7 @@ msgstr "CSS granica"
 
 #: gtk/inspector/visual.ui:564
 msgid "CSS Margin"
-msgstr "Rubovi rub"
+msgstr "CSS rub"
 
 #: gtk/inspector/visual.ui:574
 msgid "Widget Margin"
