@@ -5674,7 +5674,7 @@ gsk_render_node_content_serializer_finish (GObject      *source,
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
 
-  if (!g_output_stream_write_bytes_finish (stream, result, &error))
+  if (g_output_stream_splice_finish (stream, result, &error) < 0)
     gdk_content_serializer_return_error (serializer, error);
   else
     gdk_content_serializer_return_success (serializer);
@@ -5683,6 +5683,7 @@ gsk_render_node_content_serializer_finish (GObject      *source,
 static void
 gsk_render_node_content_serializer (GdkContentSerializer *serializer)
 {
+  GInputStream *input;
   const GValue *value;
   GskRenderNode *node;
   GBytes *bytes;
@@ -5690,13 +5691,16 @@ gsk_render_node_content_serializer (GdkContentSerializer *serializer)
   value = gdk_content_serializer_get_value (serializer);
   node = gsk_value_get_render_node (value);
   bytes = gsk_render_node_serialize (node);
+  input = g_memory_input_stream_new_from_bytes (bytes);
 
-  g_output_stream_write_bytes_async (gdk_content_serializer_get_output_stream (serializer),
-                                     bytes,
-                                     gdk_content_serializer_get_priority (serializer),
-                                     gdk_content_serializer_get_cancellable (serializer),
-                                     gsk_render_node_content_serializer_finish,
-                                     serializer);
+  g_output_stream_splice_async (gdk_content_serializer_get_output_stream (serializer),
+                                input,
+                                G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE,
+                                gdk_content_serializer_get_priority (serializer),
+                                gdk_content_serializer_get_cancellable (serializer),
+                                gsk_render_node_content_serializer_finish,
+                                serializer);
+  g_object_unref (input);
   g_bytes_unref (bytes);
 }
 
