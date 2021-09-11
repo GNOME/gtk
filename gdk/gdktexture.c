@@ -48,6 +48,7 @@
 #include <graphene.h>
 #include "loaders/gdkpngprivate.h"
 #include "loaders/gdktiffprivate.h"
+#include "loaders/gdkjpegprivate.h"
 
 G_DEFINE_QUARK (gdk-texture-error-quark, gdk_texture_error)
 
@@ -444,6 +445,11 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
             memcmp (data, TIFF_SIGNATURE2, strlen (TIFF_SIGNATURE2)) == 0))
     {
       return gdk_load_tiff (bytes, error);
+    }
+  else if (size > strlen (JPEG_SIGNATURE) &&
+           memcmp (data, JPEG_SIGNATURE, strlen (JPEG_SIGNATURE)) == 0)
+    {
+      return gdk_load_jpeg (bytes, error);
     }
   else
     {
