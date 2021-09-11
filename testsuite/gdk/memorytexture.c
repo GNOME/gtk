@@ -1,7 +1,10 @@
-#include <locale.h>
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+
+#include "gsk/ngl/gsknglrenderer.h"
 
 #define N 50
+
+static GskRenderer *gl_renderer = NULL;
 
 typedef struct _TextureBuilder TextureBuilder;
 
@@ -412,10 +415,26 @@ add_test (const char    *name,
 int
 main (int argc, char *argv[])
 {
-  (g_test_init) (&argc, &argv, NULL);
+  GdkSurface *surface;
+  int result;
+
+  gtk_test_init (&argc, &argv, NULL);
 
   add_test ("/memorytexture/download_1x1", test_download_1x1);
   add_test ("/memorytexture/download_4x4", test_download_4x4);
 
-  return g_test_run ();
+  surface = gdk_surface_new_toplevel (gdk_display_get_default());
+  gl_renderer = gsk_ngl_renderer_new ();
+  if (!gsk_renderer_realize (gl_renderer, surface, NULL))
+    {
+      g_clear_object (&gl_renderer);
+      g_clear_object (&surface);
+    }
+
+  result = g_test_run ();
+
+  g_clear_object (&gl_renderer);
+  g_clear_object (&surface);
+
+  return result;
 }
