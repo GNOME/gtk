@@ -21,6 +21,7 @@
 #include "gdkgltextureprivate.h"
 
 #include "gdkcairo.h"
+#include "gdkmemorytexture.h"
 #include "gdktextureprivate.h"
 
 #include <epoxy/gl.h>
@@ -37,7 +38,7 @@ struct _GdkGLTexture {
   GdkGLContext *context;
   guint id;
 
-  cairo_surface_t *saved;
+  GdkTexture *saved;
 
   GDestroyNotify destroy;
   gpointer data;
@@ -64,11 +65,7 @@ gdk_gl_texture_dispose (GObject *object)
   g_clear_object (&self->context);
   self->id = 0;
 
-  if (self->saved)
-    {
-      cairo_surface_destroy (self->saved);
-      self->saved = NULL;
-    }
+  g_clear_object (&self->saved);
 
   G_OBJECT_CLASS (gdk_gl_texture_parent_class)->dispose (object);
 }
@@ -79,9 +76,16 @@ gdk_gl_texture_download (GdkTexture *texture,
                          gsize       stride)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  GdkSurface *gl_surface;
   cairo_surface_t *surface;
   cairo_t *cr;
   int width, height;
+
+  if (self->saved)
+    {
+      gdk_texture_download (self->saved, data, stride);
+      return;
+    }
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_width (texture);
@@ -92,20 +96,10 @@ gdk_gl_texture_download (GdkTexture *texture,
 
   cr = cairo_create (surface);
 
-  if (self->saved)
-    {
-      cairo_set_source_surface (cr, self->saved, 0, 0);
-      cairo_paint (cr);
-    }
-  else
-    {
-      GdkSurface *gl_surface;
-
-      gl_surface = gdk_gl_context_get_surface (self->context);
-      gdk_cairo_draw_from_gl (cr, gl_surface, self->id, GL_TEXTURE, 1, 
-                              0, 0,
-                              width, height);
-    }
+  gl_surface = gdk_gl_context_get_surface (self->context);
+  gdk_cairo_draw_from_gl (cr, gl_surface, self->id, GL_TEXTURE, 1, 
+                          0, 0,
+                          width, height);
 
   cairo_destroy (cr);
   cairo_surface_finish (surface);
@@ -152,24 +146,24 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
 void
 gdk_gl_texture_release (GdkGLTexture *self)
 {
-  GdkSurface *surface;
-  GdkTexture *texture;
-  cairo_t *cr;
+  GdkTexture *texture = GDK_TEXTURE (self);
+  GBytes *bytes;
+  guchar *data;
+  gsize stride;
 
   g_return_if_fail (GDK_IS_GL_TEXTURE (self));
   g_return_if_fail (self->saved == NULL);
 
-  texture = GDK_TEXTURE (self);
-  self->saved = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                            texture->width, texture->height);
-
-  cr = cairo_create (self->saved);
-
-  surface = gdk_gl_context_get_surface (self->context);
-  gdk_cairo_draw_from_gl (cr, surface, self->id, GL_TEXTURE, 1, 0, 0,
-                          texture->width, texture->height);
-
-  cairo_destroy (cr);
+  stride = texture->width * 4;
+  data = malloc (stride * texture->height);
+  gdk_texture_download (texture, data, stride);
+  bytes = g_bytes_new_take (data, stride * texture->height);
+  self->saved = gdk_memory_texture_new (texture->width,
+                                        texture->height,
+                                        GDK_MEMORY_DEFAULT,
+                                        bytes,
+                                        stride);
+  g_bytes_unref (bytes);
 
   if (self->destroy)
     {
