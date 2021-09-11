@@ -2,11 +2,19 @@
 
 #include "gsk/ngl/gsknglrenderer.h"
 
-#define N 50
+#define N 20
 
 static GskRenderer *gl_renderer = NULL;
 
 typedef struct _TextureBuilder TextureBuilder;
+
+typedef enum {
+  TEXTURE_METHOD_LOCAL,
+  TEXTURE_METHOD_GL,
+  TEXTURE_METHOD_GL_RELEASED,
+
+  N_TEXTURE_METHODS
+} TextureMethod;
 
 struct _TextureBuilder
 {
@@ -89,6 +97,26 @@ gdk_memory_format_has_alpha (GdkMemoryFormat format)
     }
 }
 
+static gpointer
+encode (GdkMemoryFormat format,
+        TextureMethod   method)
+{
+  return GSIZE_TO_POINTER (method * GDK_MEMORY_N_FORMATS + format);
+}
+
+static void
+decode (gconstpointer     data,
+        GdkMemoryFormat *format,
+        TextureMethod   *method)
+{
+  gsize value = GPOINTER_TO_SIZE (data);
+
+  *format = value % GDK_MEMORY_N_FORMATS;
+  value /= GDK_MEMORY_N_FORMATS;
+
+  *method = value;
+}
+        
 static void
 texture_builder_init (TextureBuilder  *builder,
                       GdkMemoryFormat  format,
@@ -326,17 +354,63 @@ compare_textures (GdkTexture *expected,
 }
 
 static GdkTexture *
+upload_to_gl (GdkTexture *texture)
+{
+  GskRenderNode *node;
+  GdkTexture *result;
+
+  if (gl_renderer == NULL)
+    return texture;
+
+  node = gsk_texture_node_new (texture,
+                               &GRAPHENE_RECT_INIT(
+                                 0, 0, 
+                                 gdk_texture_get_width (texture),
+                                 gdk_texture_get_height (texture)
+                               ));
+  result = gsk_renderer_render_texture (gl_renderer, node, NULL);
+  gsk_render_node_unref (node);
+  g_object_unref (texture);
+
+  return result;
+}
+
+static GdkTexture *
 create_texture (GdkMemoryFormat  format,
+                TextureMethod    method,
                 int              width,
                 int              height,
                 const GdkRGBA   *color)
 {
   TextureBuilder builder;
+  GdkTexture *texture;
 
   texture_builder_init (&builder, format, width, height);
   texture_builder_fill (&builder, color);
 
-  return texture_builder_finish (&builder);
+  texture = texture_builder_finish (&builder);
+
+  switch (method)
+  {
+    case TEXTURE_METHOD_LOCAL:
+      break;
+
+    case TEXTURE_METHOD_GL:
+      texture = upload_to_gl (texture);
+      break;
+
+    case TEXTURE_METHOD_GL_RELEASED:
+      texture = upload_to_gl (texture);
+      gdk_gl_texture_release (GDK_GL_TEXTURE (texture));
+      break;
+
+    case N_TEXTURE_METHODS:
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+
+  return texture;
 }
 
 static void
@@ -350,19 +424,22 @@ create_random_color (GdkRGBA *color)
 }
 
 static void
-test_download_1x1 (gconstpointer format_)
+test_download_1x1 (gconstpointer data)
 {
-  GdkMemoryFormat format = GPOINTER_TO_SIZE (format_);
+  GdkMemoryFormat format;
+  TextureMethod method;
   GdkTexture *expected, *test;
   gsize i;
+
+  decode (data, &format, &method);
 
   for (i = 0; i < N; i++)
     {
       GdkRGBA color;
 
       create_random_color (&color);
-      expected = create_texture (GDK_MEMORY_DEFAULT, 1, 1, &color);
-      test = create_texture (format, 1, 1, &color);
+      expected = create_texture (GDK_MEMORY_DEFAULT, TEXTURE_METHOD_LOCAL, 1, 1, &color);
+      test = create_texture (format, method, 1, 1, &color);
       
       compare_textures (expected, test, gdk_memory_format_has_alpha (format));
 
@@ -372,19 +449,22 @@ test_download_1x1 (gconstpointer format_)
 }
 
 static void
-test_download_4x4 (gconstpointer format_)
+test_download_4x4 (gconstpointer data)
 {
-  GdkMemoryFormat format = GPOINTER_TO_SIZE (format_);
+  GdkMemoryFormat format;
+  TextureMethod method;
   GdkTexture *expected, *test;
   gsize i;
+
+  decode (data, &format, &method);
 
   for (i = 0; i < N; i++)
     {
       GdkRGBA color;
 
       create_random_color (&color);
-      expected = create_texture (GDK_MEMORY_DEFAULT, 4, 4, &color);
-      test = create_texture (format, 4, 4, &color);
+      expected = create_texture (GDK_MEMORY_DEFAULT, TEXTURE_METHOD_LOCAL, 4, 4, &color);
+      test = create_texture (format, method, 4, 4, &color);
       
       compare_textures (expected, test, gdk_memory_format_has_alpha (format));
 
@@ -398,17 +478,23 @@ add_test (const char    *name,
           GTestDataFunc  func)
 {
   GdkMemoryFormat format;
+  TextureMethod method;
   GEnumClass *enum_class;
 
   enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
 
   for (format = 0; format < GDK_MEMORY_N_FORMATS; format++)
     {
-      char *test_name = g_strdup_printf ("%s/%s",
-                                         name,
-                                         g_enum_get_value (enum_class, format)->value_nick);
-      g_test_add_data_func_full (test_name, GSIZE_TO_POINTER (format), test_download_1x1, NULL);
-      g_free (test_name);
+      for (method = 0; method < N_TEXTURE_METHODS; method++)
+        {
+          const char *method_names[N_TEXTURE_METHODS] = { "local", "gl", "gl-released" };
+          char *test_name = g_strdup_printf ("%s/%s/%s",
+                                             name,
+                                             g_enum_get_value (enum_class, format)->value_nick,
+                                             method_names[method]);
+          g_test_add_data_func_full (test_name, encode (format, method), test_download_1x1, NULL);
+          g_free (test_name);
+        }
     }
 }
 
@@ -433,7 +519,11 @@ main (int argc, char *argv[])
 
   result = g_test_run ();
 
-  g_clear_object (&gl_renderer);
+  if (gl_renderer)
+    {
+      gsk_renderer_unrealize (gl_renderer);
+      g_clear_object (&gl_renderer);
+    }
   g_clear_object (&surface);
 
   return result;
