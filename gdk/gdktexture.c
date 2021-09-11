@@ -48,6 +48,7 @@
 #include <graphene.h>
 #include "loaders/gdkpngprivate.h"
 #include "loaders/gdktiffprivate.h"
+#include "loaders/gdkjpegprivate.h"
 
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 void
@@ -442,6 +443,11 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
             memcmp (data, TIFF_SIGNATURE2, strlen (TIFF_SIGNATURE2)) == 0))
     {
       return gdk_load_tiff (bytes, error);
+    }
+  else if (size > strlen (JPEG_SIGNATURE) &&
+           memcmp (data, JPEG_SIGNATURE, strlen (JPEG_SIGNATURE)) == 0)
+    {
+      return gdk_load_jpeg (bytes, error);
     }
   else
     {
