@@ -1,33 +1,9 @@
 #include <locale.h>
 #include <gdk/gdk.h>
 
-typedef enum {
-  BLUE,
-  GREEN,
-  RED,
-  TRANSPARENT,
-  ALMOST_OPAQUE_REBECCAPURPLE,
-  N_COLORS
-} Color;
-
-static const char * color_names[N_COLORS] = {
-  "blue",
-  "green",
-  "red",
-  "transparent",
-  "almost_opaque_rebeccapurple"
-};
-
-static const GdkRGBA colors[N_COLORS] = {
-  { 0.0, 0.0, 1.0, 1.0 },
-  { 0.0, 1.0, 0.0, 1.0 },
-  { 1.0, 0.0, 0.0, 1.0 },
-  { 0.0, 0.0, 0.0, 0.0 },
-  { 0.4, 0.2, 0.6, 2.f/3.f },
-};
+#define N 50
 
 typedef struct _TextureBuilder TextureBuilder;
-typedef struct _TestData TestData;
 
 struct _TextureBuilder
 {
@@ -38,12 +14,6 @@ struct _TextureBuilder
   guchar *pixels;
   gsize stride;
   gsize offset;
-};
-
-struct _TestData
-{
-  GdkMemoryFormat format;
-  Color color;
 };
 
 static gsize
@@ -367,33 +337,57 @@ create_texture (GdkMemoryFormat  format,
 }
 
 static void
-test_download_1x1 (gconstpointer data)
+create_random_color (GdkRGBA *color)
 {
-  const TestData *test_data = data;
-  GdkTexture *expected, *test;
-
-  expected = create_texture (GDK_MEMORY_DEFAULT, 1, 1, &colors[test_data->color]);
-  test = create_texture (test_data->format, 1, 1, &colors[test_data->color]);
-
-  compare_textures (expected, test, gdk_memory_format_has_alpha (test_data->format));
-
-  g_object_unref (expected);
-  g_object_unref (test);
+  /* Generate colors so that premultiplying will result in values in steps of 1/15th */
+  color->red = g_test_rand_int_range (0, 6) / 5.f;
+  color->green = g_test_rand_int_range (0, 6) / 5.f;
+  color->blue = g_test_rand_int_range (0, 6) / 5.f;
+  color->alpha = g_test_rand_int_range (0, 4) / 3.f;
 }
 
 static void
-test_download_4x4 (gconstpointer data)
+test_download_1x1 (gconstpointer format_)
 {
-  const TestData *test_data = data;
+  GdkMemoryFormat format = GPOINTER_TO_SIZE (format_);
   GdkTexture *expected, *test;
+  gsize i;
 
-  expected = create_texture (GDK_MEMORY_DEFAULT, 4, 4, &colors[test_data->color]);
-  test = create_texture (test_data->format, 4, 4, &colors[test_data->color]);
+  for (i = 0; i < N; i++)
+    {
+      GdkRGBA color;
 
-  compare_textures (expected, test, gdk_memory_format_has_alpha (test_data->format));
+      create_random_color (&color);
+      expected = create_texture (GDK_MEMORY_DEFAULT, 1, 1, &color);
+      test = create_texture (format, 1, 1, &color);
+      
+      compare_textures (expected, test, gdk_memory_format_has_alpha (format));
 
-  g_object_unref (expected);
-  g_object_unref (test);
+      g_object_unref (expected);
+      g_object_unref (test);
+    }
+}
+
+static void
+test_download_4x4 (gconstpointer format_)
+{
+  GdkMemoryFormat format = GPOINTER_TO_SIZE (format_);
+  GdkTexture *expected, *test;
+  gsize i;
+
+  for (i = 0; i < N; i++)
+    {
+      GdkRGBA color;
+
+      create_random_color (&color);
+      expected = create_texture (GDK_MEMORY_DEFAULT, 4, 4, &color);
+      test = create_texture (format, 4, 4, &color);
+      
+      compare_textures (expected, test, gdk_memory_format_has_alpha (format));
+
+      g_object_unref (expected);
+      g_object_unref (test);
+    }
 }
 
 static void
@@ -401,25 +395,17 @@ add_test (const char    *name,
           GTestDataFunc  func)
 {
   GdkMemoryFormat format;
-  Color color;
   GEnumClass *enum_class;
 
   enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
 
   for (format = 0; format < GDK_MEMORY_N_FORMATS; format++)
     {
-      for (color = 0; color < N_COLORS; color++)
-        {
-          TestData *test_data = g_new (TestData, 1);
-          char *test_name = g_strdup_printf ("%s/%s/%s",
-                                             name,
-                                             g_enum_get_value (enum_class, format)->value_nick,
-                                             color_names[color]);
-          test_data->format = format;
-          test_data->color = color;
-          g_test_add_data_func_full (test_name, test_data, test_download_1x1, g_free);
-          g_free (test_name);
-        }
+      char *test_name = g_strdup_printf ("%s/%s",
+                                         name,
+                                         g_enum_get_value (enum_class, format)->value_nick);
+      g_test_add_data_func_full (test_name, GSIZE_TO_POINTER (format), test_download_1x1, NULL);
+      g_free (test_name);
     }
 }
 
