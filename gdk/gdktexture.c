@@ -46,6 +46,7 @@
 #include "gdksnapshot.h"
 
 #include <graphene.h>
+#include "loaders/gdkpngprivate.h"
 
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 void
@@ -421,24 +422,40 @@ GdkTexture *
 gdk_texture_new_from_bytes (GBytes  *bytes,
                             GError **error)
 {
-  GInputStream *stream;
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture;
+  const char *data;
+  gsize size;
 
   g_return_val_if_fail (bytes != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  stream = g_memory_input_stream_new_from_bytes (bytes);
-  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
-  g_object_unref (stream);
+  data = g_bytes_get_data (bytes, &size);
 
-  if (pixbuf == NULL)
-    return NULL;
+  if (size > strlen (PNG_SIGNATURE) &&
+      memcmp (data, PNG_SIGNATURE, strlen (PNG_SIGNATURE)) == 0)
+    {
+      return gdk_load_png (bytes, error);
+    }
+  else
+    {
+      GInputStream *stream;
+      GdkPixbuf *pixbuf;
 
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
+      stream = g_memory_input_stream_new_from_bytes (bytes);
+      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
+      g_object_unref (stream);
 
-  return texture;
+      if (pixbuf)
+        {
+          GdkTexture *texture;
+
+          texture = gdk_texture_new_for_pixbuf (pixbuf);
+          g_object_unref (pixbuf);
+
+          return texture;
+        }
+    }
+
+  return NULL;
 }
 
 /**
