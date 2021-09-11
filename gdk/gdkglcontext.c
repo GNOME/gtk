@@ -229,6 +229,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   guchar *copy = NULL;
+  guint gl_internalformat;
   guint gl_format;
   guint gl_type;
   guint bpp;
@@ -250,6 +251,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
         }
 
       bpp = 4;
+      gl_internalformat = GL_RGBA8;
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
     }
@@ -257,18 +259,21 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
     {
       if (data_format == GDK_MEMORY_DEFAULT) /* Cairo surface format */
         {
+          gl_internalformat = GL_RGBA8;
           gl_format = GL_BGRA;
           gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
           bpp = 4;
         }
       else if (data_format == GDK_MEMORY_R8G8B8) /* Pixmap non-alpha data */
         {
+          gl_internalformat = GL_RGBA8;
           gl_format = GL_RGB;
           gl_type = GL_UNSIGNED_BYTE;
           bpp = 3;
         }
       else if (data_format == GDK_MEMORY_B8G8R8)
         {
+          gl_internalformat = GL_RGBA8;
           gl_format = GL_BGR;
           gl_type = GL_UNSIGNED_BYTE;
           bpp = 3;
@@ -283,6 +288,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
           stride = width * 4;
           bpp = 4;
           data = copy;
+          gl_internalformat = GL_RGBA8;
           gl_format = GL_BGRA;
           gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
         }
@@ -295,7 +301,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
     {
       glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
 
-      glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, gl_format, gl_type, data);
+      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
       glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
     }
   else if ((!priv->use_es ||
@@ -303,14 +309,14 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
     {
       glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
 
-      glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, gl_format, gl_type, data);
+      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
 
       glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
     }
   else
     {
       int i;
-      glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, gl_format, gl_type, NULL);
+      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, NULL);
       for (i = 0; i < height; i++)
         glTexSubImage2D (texture_target, 0, 0, i, width, 1, gl_format, gl_type, data + (i * stride));
     }

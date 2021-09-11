@@ -37,7 +37,7 @@ as_float (const guint x)
 // IEEE-754 16-bit floating-point format (without infinity): 1-5-10
 
 static inline float
-half_to_float (const guint16 x)
+half_to_float_one (const guint16 x)
 {
   const guint e = (x&0x7C00)>>10; // exponent
   const guint m = (x&0x03FF)<<13; // mantissa
@@ -46,7 +46,7 @@ half_to_float (const guint16 x)
 }
 
 static inline guint16
-float_to_half (const float x)
+float_to_half_one (const float x)
 {
   const guint b = as_uint(x)+0x00001000; // round-to-nearest-even
   const guint e = (b&0x7F800000)>>23; // exponent
@@ -58,20 +58,38 @@ void
 float_to_half4_c (const float f[4],
                   guint16     h[4])
 {
-  h[0] = float_to_half (f[0]);
-  h[1] = float_to_half (f[1]);
-  h[2] = float_to_half (f[2]);
-  h[3] = float_to_half (f[3]);
+  h[0] = float_to_half_one (f[0]);
+  h[1] = float_to_half_one (f[1]);
+  h[2] = float_to_half_one (f[2]);
+  h[3] = float_to_half_one (f[3]);
 }
 
 void
 half_to_float4_c (const guint16 h[4],
                   float         f[4])
 {
-  f[0] = half_to_float (h[0]);
-  f[1] = half_to_float (h[1]);
-  f[2] = half_to_float (h[2]);
-  f[3] = half_to_float (h[3]);
+  f[0] = half_to_float_one (h[0]);
+  f[1] = half_to_float_one (h[1]);
+  f[2] = half_to_float_one (h[2]);
+  f[3] = half_to_float_one (h[3]);
+}
+
+void
+float_to_half_c (const float *f,
+                 guint16     *h,
+                 int          n)
+{
+  for (int i = 0; i < n; i++)
+    h[i] = float_to_half_one (f[i]);
+}
+
+void
+half_to_float_c (const guint16 *h,
+                 float         *f,
+                 int            n)
+{
+  for (int i = 0; i < n; i++)
+    f[i] = half_to_float_one (h[i]);
 }
 
 #ifdef HAVE_F16C
@@ -122,10 +140,30 @@ half_to_float4 (const guint16 h[4], float f[4])
     half_to_float4_c (h, f);
 }
 
+void
+float_to_half (const float *f, guint16 *h, int n)
+{
+  if (have_f16c_msvc ())
+    float_to_half_f16c (f, h, n);
+  else
+    float_to_half4_c (f, h, n);
+}
+
+void
+half_to_float (const guint16 *h, float *f, int n)
+{
+  if (have_f16c_msvc ())
+    half_to_float_f16c (h, f, n);
+  else
+    half_to_float_c (h, f, n);
+}
+
 #else
 
 void float_to_half4 (const float f[4], guint16 h[4]) __attribute__((ifunc ("resolve_float_to_half4")));
 void half_to_float4 (const guint16 h[4], float f[4]) __attribute__((ifunc ("resolve_half_to_float4")));
+void float_to_half (const float *f, guint16 *h, int n) __attribute__((ifunc ("resolve_float_to_half")));
+void half_to_float (const guint16 *h, float *f, int n) __attribute__((ifunc ("resolve_half_to_float")));
 
 static void *
 resolve_float_to_half4 (void)
@@ -145,6 +183,26 @@ resolve_half_to_float4 (void)
     return half_to_float4_f16c;
   else
     return half_to_float4_c;
+}
+
+static void *
+resolve_float_to_half (void)
+{
+  __builtin_cpu_init ();
+  if (__builtin_cpu_supports ("f16c"))
+    return float_to_half_f16c;
+  else
+    return float_to_half_c;
+}
+
+static void *
+resolve_half_to_float (void)
+{
+  __builtin_cpu_init ();
+  if (__builtin_cpu_supports ("f16c"))
+    return half_to_float_f16c;
+  else
+    return half_to_float_c;
 }
 
 #endif
@@ -168,10 +226,28 @@ half_to_float4 (const guint16 h[4],
   half_to_float4_c (h, f);
 }
 
+void
+float_to_half (const float *f,
+               guint16     *h,
+               int          n)
+{
+  float_to_half_c (f, h, n);
+}
+
+void
+half_to_float (const guint16 *h,
+               float         *f,
+               int            n)
+{
+  half_to_float_c (h, f, n);
+}
+
 #else
 
 void float_to_half4 (const float f[4], guint16 h[4]) __attribute__((alias ("float_to_half4_c")));
 void half_to_float4 (const guint16 h[4], float f[4]) __attribute__((alias ("half_to_float4_c")));
+void float_to_half (const float *f, guint16 *h, int n) __attribute__((alias ("float_to_half_c")));
+void half_to_float (const guint16 *h, float *f, int n) __attribute__((alias ("half_to_float_c")));
 
 #endif
 

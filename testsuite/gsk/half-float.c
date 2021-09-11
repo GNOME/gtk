@@ -32,6 +32,23 @@ test_constants (void)
     }
 }
 
+static float
+random_representable_float (void)
+{
+  guint16 h[4];
+  float f[4];
+  do
+    {
+      /* generate a random float thats representable as fp16 */
+      memset (h, 0, sizeof (h));
+      h[0] = g_random_int_range (G_MININT16, G_MAXINT16);
+      half_to_float4 (h, f);
+    }
+  while (!isnormal (f[0])); /* skip nans and infs since they don't compare well */
+
+  return f[0];
+}
+
 static void
 test_roundtrip (void)
 {
@@ -41,15 +58,7 @@ test_roundtrip (void)
       float f2[4];
       guint16 h[4];
 
-      do
-        {
-          /* generate a random float thats representable as fp16 */
-          memset (h, 0, sizeof (h));
-          h[0] = g_random_int_range (G_MININT16, G_MAXINT16);
-          half_to_float4 (h, f2);
-        }
-      while (!isnormal (f2[0])); /* skip nans and infs since they don't compare well */
-
+      f2[0] = random_representable_float ();
       memset (f, 0, sizeof (f));
       f[0] = f2[0];
 
@@ -60,6 +69,32 @@ test_roundtrip (void)
     }
 }
 
+/* Test that the array version work as expected,
+ * in particular with unaligned boundaries.
+ */
+static void
+test_many (void)
+{
+  for (int i = 0; i < 100; i++)
+    {
+      int size = g_random_int_range (100, 200);
+      int offset = g_random_int_range (0, 20);
+
+      guint16 *h = g_new0 (guint16, size);
+      float *f = g_new0 (float, size);
+      float *f2 = g_new0 (float, size);
+
+      for (int j = offset; j < size; j++)
+        f[j] = random_representable_float ();
+
+      float_to_half (f + offset, h + offset, size - offset);
+      half_to_float (h + offset, f2 + offset, size - offset);
+
+      for (int j = offset; j < size; j++)
+        g_assert_cmpfloat (f[j], ==, f2[j]);
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -67,6 +102,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/half-float/constants", test_constants);
   g_test_add_func ("/half-float/roundtrip", test_roundtrip);
+  g_test_add_func ("/half-float/many", test_many);
 
   return g_test_run ();
 }

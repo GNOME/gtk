@@ -150,11 +150,6 @@ cdata.set_quoted('GTK_DATADIR', gtk_datadir)
 cdata.set_quoted('GTK_LIBDIR', gtk_libdir)
 cdata.set_quoted('GTK_SYSCONFDIR', gtk_sysconfdir)
 cdata.set_quoted('GETTEXT_PACKAGE', 'gtk40')
-cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
-cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
-cdata.set('GTK_MICRO_VERSION', gtk_micro_version)
-cdata.set('GTK_BINARY_AGE', gtk_binary_age)
-cdata.set('GTK_INTERFACE_AGE', gtk_interface_age)
 
 check_headers = [
   'crt/externs.h',
@@ -747,8 +742,7 @@ if get_option('build-examples')
 endif
 
 # config.h
-configure_file(input: 'config.h.meson',
-               output: 'config.h',
+configure_file(output: 'config.h',
                configuration: cdata)
 
 # Requires
