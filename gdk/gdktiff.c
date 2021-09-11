@@ -369,6 +369,41 @@ gdk_save_tiff (GOutputStream    *stream,
   return TRUE;
 }
 
+static GdkTexture *
+load_fallback (TIFF    *tif,
+               GError **error)
+{
+  int width, height;
+  guchar *pixels;
+  GBytes *bytes;
+  GdkTexture *texture;
+
+  TIFFGetField (tif, TIFFTAG_IMAGEWIDTH, &width);
+  TIFFGetField (tif, TIFFTAG_IMAGELENGTH, &height);
+
+  pixels = g_malloc (width * height * 4);
+
+  if (!TIFFReadRGBAImageOriented (tif, width, height, (uint32 *)pixels, ORIENTATION_TOPLEFT, 1))
+    {
+      g_set_error_literal (error,
+                           G_IO_ERROR, G_IO_ERROR_FAILED,
+                           "Failed to load RGB data from TIFF file");
+      g_free (pixels);
+      return NULL;
+    }
+
+  bytes = g_bytes_new_take (pixels, width * height * 4);
+
+  texture = gdk_memory_texture_new (width, height,
+                                    GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                                    bytes,
+                                    width * 4);
+
+  g_bytes_unref (bytes);
+
+  return texture;
+}
+
 /* This isn't meant to be a very versatile tiff loader.
  * It just aims to load the subset that we're saving
  * ourselves, above.
@@ -417,11 +452,9 @@ gdk_load_tiff (GInputStream     *stream,
 
       if (extra == 0 || extra_types[0] != EXTRASAMPLE_ASSOCALPHA)
         {
-          g_set_error_literal (error,
-                               G_IO_ERROR, G_IO_ERROR_FAILED,
-                               "Did not find the alpha channel");
+          texture = load_fallback (tif, error);
           TIFFClose (tif);
-          return NULL;
+          return texture;
         }
     }
 
@@ -438,44 +471,15 @@ gdk_load_tiff (GInputStream     *stream,
         }
     }
 
-  if (format == 0)
+  if (format == 0 ||
+      photometric != PHOTOMETRIC_RGB ||
+      planarconfig != PLANARCONFIG_CONTIG ||
+      TIFFIsTiled (tif) ||
+      orientation != ORIENTATION_TOPLEFT)
     {
-      g_set_error (error,
-                   G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "Format %s/%d-bit/%s not handled",
-                   samples_per_pixel == 3 ? "RGB" : "RGBA",
-                   bits_per_sample,
-                   sample_format == SAMPLEFORMAT_UINT ? "int" : "float");
+      texture = load_fallback (tif, error);
       TIFFClose (tif);
-      return NULL;
-    }
-
-  if (photometric != PHOTOMETRIC_RGB)
-    {
-      g_set_error (error,
-                   G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "Photometric %d not handled", photometric);
-      TIFFClose (tif);
-      return NULL;
-    }
-
-  if (planarconfig != PLANARCONFIG_CONTIG ||
-      TIFFIsTiled (tif))
-    {
-      g_set_error_literal (error,
-                           G_IO_ERROR, G_IO_ERROR_FAILED,
-                           "Non-contiguous or tiled tiff not handled");
-      TIFFClose (tif);
-      return NULL;
-    }
-
-  if (orientation != ORIENTATION_TOPLEFT)
-    {
-      g_set_error (error,
-                   G_IO_ERROR, G_IO_ERROR_FAILED,
-                   "Orientation %d not handled", orientation);
-      TIFFClose (tif);
-      return NULL;
+      return texture;
     }
 
   stride = width * gdk_memory_format_bytes_per_pixel (format);
