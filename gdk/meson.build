@@ -27,6 +27,7 @@ gdk_public_sources = files([
   'gdkglcontext.c',
   'gdkglobals.c',
   'gdkgltexture.c',
+  'gdkhsla.c',
   'gdkkeys.c',
   'gdkkeyuni.c',
   'gdkmemorytexture.c',
@@ -107,6 +108,7 @@ gdk_sources = gdk_public_sources
 gdk_private_h_sources = files([
   'gdkeventsprivate.h',
   'gdkdevicetoolprivate.h',
+  'gdkhslaprivate.h',
   'gdkmonitorprivate.h',
   'gdkseatdefaultprivate.h',
   'gdktoplevelsizeprivate.h',

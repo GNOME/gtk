@@ -20,10 +20,10 @@
 #include "gtkcsscolorvalueprivate.h"
 
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkhslaprivate.h"
 #include "gtkprivate.h"
 #include "gtkstylepropertyprivate.h"
 
+#include "gdk/gdkhslaprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 
 typedef enum {
@@ -309,10 +309,10 @@ apply_shade (const GdkRGBA *in,
              GdkRGBA       *out,
              double         factor)
 {
-  GtkHSLA hsla;
+  GdkHSLA hsla;
 
-  _gtk_hsla_init_from_rgba (&hsla, in);
-  _gtk_hsla_shade (&hsla, &hsla, factor);
+  _gdk_hsla_init_from_rgba (&hsla, in);
+  _gdk_hsla_shade (&hsla, &hsla, factor);
 
   _gdk_rgba_init_from_hsla (out, &hsla);
 }
@@ -699,6 +699,8 @@ gtk_css_color_value_can_parse (GtkCssParser *parser)
       || gtk_css_parser_has_function (parser, "shade")
       || gtk_css_parser_has_function (parser, "alpha")
       || gtk_css_parser_has_function (parser, "mix")
+      || gtk_css_parser_has_function (parser, "hsl")
+      || gtk_css_parser_has_function (parser, "hsla")
       || gtk_css_parser_has_function (parser, "rgb")
       || gtk_css_parser_has_function (parser, "rgba");
 }

@@ -22,23 +22,23 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkHSLA GtkHSLA;
+typedef struct _GdkHSLA GdkHSLA;
 
-struct _GtkHSLA {
+struct _GdkHSLA {
   float hue;
   float saturation;
   float lightness;
   float alpha;
 };
 
-void            _gtk_hsla_init_from_rgba    (GtkHSLA          *hsla,
+void            _gdk_hsla_init_from_rgba    (GdkHSLA          *hsla,
                                              const GdkRGBA    *rgba);
 /* Yes, I can name that function like this! */
 void            _gdk_rgba_init_from_hsla    (GdkRGBA          *rgba,
-                                             const GtkHSLA    *hsla);
+                                             const GdkHSLA    *hsla);
 
-void            _gtk_hsla_shade             (GtkHSLA          *dest,
-                                             const GtkHSLA    *src,
+void            _gdk_hsla_shade             (GdkHSLA          *dest,
+                                             const GdkHSLA    *src,
                                              float             factor);
 
 G_END_DECLS
