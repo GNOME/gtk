@@ -20,7 +20,6 @@
 
 #include "gdkgltextureprivate.h"
 
-#include "gdkcairo.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdktextureprivate.h"
 
@@ -145,10 +144,7 @@ gdk_gl_texture_download (GdkTexture *texture,
                          gsize       stride)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-  GdkSurface *gl_surface;
-  cairo_surface_t *surface;
-  cairo_t *cr;
-  int width, height;
+  GLint active_texture;
 
   if (self->saved)
     {
@@ -156,23 +152,31 @@ gdk_gl_texture_download (GdkTexture *texture,
       return;
     }
 
-  width = gdk_texture_get_width (texture);
-  height = gdk_texture_get_width (texture);
-  surface = cairo_image_surface_create_for_data (data,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 width, height,
-                                                 stride);
+  if (gdk_gl_context_get_use_es (self->context) ||
+      stride != texture->width * 4)
+    {
+      GDK_TEXTURE_CLASS (gdk_gl_texture_parent_class)->download (texture, data, stride);
+      return;
+    }
 
-  cr = cairo_create (surface);
+  gdk_gl_context_make_current (self->context);
 
-  gl_surface = gdk_gl_context_get_surface (self->context);
-  gdk_cairo_draw_from_gl (cr, gl_surface, self->id, GL_TEXTURE, 1, 
-                          0, 0,
-                          width, height);
+  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
+  glBindTexture (GL_TEXTURE_2D, self->id);
 
-  cairo_destroy (cr);
-  cairo_surface_finish (surface);
-  cairo_surface_destroy (surface);
+  glGetTexImage (GL_TEXTURE_2D,
+                 0,
+                 GL_BGRA,
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+                 GL_UNSIGNED_INT_8_8_8_8_REV,
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+                 GL_UNSIGNED_BYTE,
+#else
+#error "Unknown byte order for gdk_gl_texture_download()"
+#endif
+                 data);
+
+  glBindTexture (GL_TEXTURE_2D, active_texture);
 }
 
 static void
