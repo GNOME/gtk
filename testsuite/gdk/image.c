@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include "gdk/loaders/gdkpngprivate.h"
 #include "gdk/loaders/gdktiffprivate.h"
+#include "gdk/loaders/gdkjpegprivate.h"
 
 static void
 assert_texture_equal (GdkTexture *t1,
@@ -50,6 +51,8 @@ test_load_image (gconstpointer data)
     texture = gdk_load_png (bytes, &error);
   else if (g_str_has_suffix (filename, ".tiff"))
     texture = gdk_load_tiff (bytes, &error);
+  else if (g_str_has_suffix (filename, ".jpeg"))
+    texture = gdk_load_jpeg (bytes, &error);
   else
     g_assert_not_reached ();
 
@@ -118,6 +121,7 @@ main (int argc, char *argv[])
 
   g_test_add_data_func ("/image/load/png", "image.png", test_load_image);
   g_test_add_data_func ("/image/load/tiff", "image.tiff", test_load_image);
+  g_test_add_data_func ("/image/load/jpeg", "image.jpeg", test_load_image);
   g_test_add_data_func ("/image/save/png", "image.png", test_save_image);
   g_test_add_data_func ("/image/save/tiff", "image.tiff", test_save_image);
 
