@@ -31,6 +31,49 @@ compare_rgba_values (GValue *v1, GValue *v2)
 }
 
 static gboolean
+textures_equal (GdkTexture *t1,  GdkTexture *t2)
+{
+  guchar *d1, *d2;
+  int width, height;
+  gboolean ret;
+
+  width = gdk_texture_get_width (t1);
+  height = gdk_texture_get_height (t1);
+
+  if (width != gdk_texture_get_width (t2))
+    return FALSE;
+  if (height != gdk_texture_get_height (t2))
+    return FALSE;
+
+  d1 = g_malloc (width * height * 4);
+  d2 = g_malloc (width * height * 4);
+
+  gdk_texture_download (t1, d1, width * 4);
+  gdk_texture_download (t2, d2, width * 4);
+
+  ret = memcmp (d1, d2, width * height * 4) == 0;
+
+  if (!ret)
+    {
+      gdk_texture_save_to_png (t1, "texture1.png");
+      gdk_texture_save_to_png (t2, "texture2.png");
+    }
+  g_free (d1);
+  g_free (d2);
+
+  return ret;
+}
+
+static gboolean
+compare_texture_values (GValue *v1, GValue *v2)
+{
+  return G_VALUE_TYPE (v1) == GDK_TYPE_TEXTURE &&
+         G_VALUE_TYPE (v2) == GDK_TYPE_TEXTURE &&
+         textures_equal ((GdkTexture *)g_value_get_object (v1),
+                         (GdkTexture *)g_value_get_object (v2));
+}
+
+static gboolean
 compare_file_values (GValue *v1, GValue *v2)
 {
   return G_VALUE_TYPE (v1) == G_TYPE_FILE &&
@@ -125,7 +168,7 @@ test_content_roundtrip (const GValue     *value,
   TestData data = { 0, };
 
   data.ostream = g_memory_output_stream_new_resizable ();
-  data.mime_type = g_strdup (mime_type);
+  data.mime_type = mime_type;
   g_value_init (&data.value, G_VALUE_TYPE (value));
   g_value_copy (value, &data.value);
   data.compare = compare;
@@ -180,6 +223,30 @@ test_content_color (void)
   g_value_set_boxed (&value, &color);
   test_content_roundtrip (&value, "application/x-color", compare_rgba_values);
   g_value_unset (&value);
+}
+
+static void
+test_content_texture (gconstpointer data)
+{
+  const char *mimetype = data;
+  GValue value = G_VALUE_INIT;
+  char *path;
+  GFile *file;
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  path = g_test_build_filename (G_TEST_DIST, "image-data", "image.png", NULL);
+  file = g_file_new_for_path (path);
+  texture = gdk_texture_new_from_file (file, &error);
+  g_assert_no_error (error);
+  g_object_unref (file);
+  g_free (path);
+
+  g_value_init (&value, GDK_TYPE_TEXTURE);
+  g_value_set_object (&value, texture);
+  test_content_roundtrip (&value, mimetype, compare_texture_values);
+  g_value_unset (&value);
+  g_object_unref (texture);
 }
 
 static void
@@ -406,6 +473,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/content/text_plain_utf8", test_content_text_plain_utf8);
   g_test_add_func ("/content/text_plain", test_content_text_plain);
   g_test_add_func ("/content/color", test_content_color);
+  g_test_add_data_func ("/content/texture/png", "image/png", test_content_texture);
+  g_test_add_data_func ("/content/texture/tiff", "image/tiff", test_content_texture);
   g_test_add_func ("/content/file", test_content_file);
   g_test_add_func ("/content/files", test_content_files);
   g_test_add_func ("/content/custom", test_custom_format);
