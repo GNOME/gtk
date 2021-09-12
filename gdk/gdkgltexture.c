@@ -216,24 +216,10 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
 void
 gdk_gl_texture_release (GdkGLTexture *self)
 {
-  GdkTexture *texture = GDK_TEXTURE (self);
-  GBytes *bytes;
-  guchar *data;
-  gsize stride;
-
   g_return_if_fail (GDK_IS_GL_TEXTURE (self));
   g_return_if_fail (self->saved == NULL);
 
-  stride = texture->width * 4;
-  data = malloc (stride * texture->height);
-  gdk_texture_download (texture, data, stride);
-  bytes = g_bytes_new_take (data, stride * texture->height);
-  self->saved = gdk_memory_texture_new (texture->width,
-                                        texture->height,
-                                        GDK_MEMORY_DEFAULT,
-                                        bytes,
-                                        stride);
-  g_bytes_unref (bytes);
+  self->saved = gdk_texture_download_texture (GDK_TEXTURE (self));
 
   if (self->destroy)
     {
