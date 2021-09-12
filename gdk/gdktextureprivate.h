@@ -24,9 +24,14 @@ struct _GdkTexture
 struct _GdkTextureClass {
   GObjectClass parent_class;
 
+  /* mandatory: Download into a GdkMemoryTexture */
+  GdkTexture *          (* download_texture)            (GdkTexture             *texture);
+  /* optional */
   void                  (* download)                    (GdkTexture             *texture,
-                                                         const GdkRectangle     *area,
                                                          guchar                 *data,
+                                                         gsize                   stride);
+  void                  (* download_float)              (GdkTexture             *texture,
+                                                         float                  *data,
                                                          gsize                   stride);
 };
 
@@ -35,10 +40,8 @@ gpointer                gdk_texture_new                 (const GdkTextureClass  
                                                          int                     height);
 GdkTexture *            gdk_texture_new_for_surface     (cairo_surface_t        *surface);
 cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             *texture);
-void                    gdk_texture_download_area       (GdkTexture             *texture,
-                                                         const GdkRectangle     *area,
-                                                         guchar                 *data,
-                                                         gsize                   stride);
+/* NB: GdkMemoryTexture */
+GdkTexture *            gdk_texture_download_texture    (GdkTexture             *texture);
 
 gboolean                gdk_texture_set_render_data     (GdkTexture             *self,
                                                          gpointer                key,

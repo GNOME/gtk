@@ -20,7 +20,7 @@
 
 #include "gdkgltextureprivate.h"
 
-#include "gdkcairo.h"
+#include "gdkmemorytextureprivate.h"
 #include "gdktextureprivate.h"
 
 #include <epoxy/gl.h>
@@ -37,7 +37,7 @@ struct _GdkGLTexture {
   GdkGLContext *context;
   guint id;
 
-  cairo_surface_t *saved;
+  GdkTexture *saved;
 
   GDestroyNotify destroy;
   gpointer data;
@@ -64,50 +64,209 @@ gdk_gl_texture_dispose (GObject *object)
   g_clear_object (&self->context);
   self->id = 0;
 
-  if (self->saved)
-    {
-      cairo_surface_destroy (self->saved);
-      self->saved = NULL;
-    }
+  g_clear_object (&self->saved);
 
   G_OBJECT_CLASS (gdk_gl_texture_parent_class)->dispose (object);
 }
 
-static void
-gdk_gl_texture_download (GdkTexture         *texture,
-                         const GdkRectangle *area,
-                         guchar             *data,
-                         gsize               stride)
+static GdkTexture *
+gdk_gl_texture_download_texture (GdkTexture *texture)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  GdkTexture *result;
+  int active_texture;
+  GdkMemoryFormat format;
+  GLint internal_format, gl_format, gl_type;
+  guchar *data;
+  gsize stride;
+  GBytes *bytes;
 
-  surface = cairo_image_surface_create_for_data (data,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 area->width, area->height,
-                                                 stride);
+  if (self->saved)
+    return g_object_ref (self->saved);
 
-  cr = cairo_create (surface);
+  gdk_gl_context_make_current (self->context);
+
+  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
+  glBindTexture (GL_TEXTURE_2D, self->id);
+
+  glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
+
+  switch (internal_format)
+  {
+    case GL_RGB8:
+      format = GDK_MEMORY_R8G8B8;
+      gl_format = GL_RGB;
+      gl_type = GL_UNSIGNED_BYTE;
+      break;
+
+    case GL_RGBA8:
+      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_BYTE;
+      break;
+
+    case GL_RGB16:
+      format = GDK_MEMORY_R16G16B16;
+      gl_format = GL_RGB;
+      gl_type = GL_UNSIGNED_SHORT;
+      break;
+
+    case GL_RGBA16:
+      format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_SHORT;
+      break;
+
+    case GL_RGB16F:
+      format = GDK_MEMORY_R16G16B16_FLOAT;
+      gl_format = GL_RGB;
+      gl_type = GL_HALF_FLOAT;
+      break;
+
+    case GL_RGBA16F:
+      format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_HALF_FLOAT;
+      break;
+
+    case GL_RGB32F:
+      format = GDK_MEMORY_R32G32B32_FLOAT;
+      gl_format = GL_RGB;
+      gl_type = GL_FLOAT;
+      break;
+
+    case GL_RGBA32F:
+      format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_FLOAT;
+      break;
+
+    default:
+      g_warning ("Texture in unexpected format 0x%X (%d). File a bug about adding it to GTK", internal_format, internal_format);
+      /* fallback to the dumbest possible format
+       * so that even age old GLES can do it */
+      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_BYTE;
+      break;
+  }
+
+  stride = gdk_memory_format_bytes_per_pixel (format) * texture->width;
+  data = g_malloc (stride * texture->height);
+
+  glGetTexImage (GL_TEXTURE_2D,
+                 0,
+                 gl_format,
+                 gl_type,
+                 data);
+
+  bytes = g_bytes_new_take (data, stride * texture->height);
+  result = gdk_memory_texture_new (texture->width,
+                                   texture->height,
+                                   format,
+                                   bytes,
+                                   stride);
+
+  g_bytes_unref (bytes);
+
+  glBindTexture (GL_TEXTURE_2D, active_texture);
+
+  return result;
+}
+
+static void
+gdk_gl_texture_download (GdkTexture *texture,
+                         guchar     *data,
+                         gsize       stride)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  GLint active_texture;
 
   if (self->saved)
     {
-      cairo_set_source_surface (cr, self->saved, 0, 0);
-      cairo_paint (cr);
+      gdk_texture_download (self->saved, data, stride);
+      return;
     }
-  else
+
+  if (gdk_gl_context_get_use_es (self->context) ||
+      stride != texture->width * 4)
     {
-      GdkSurface *gl_surface;
-
-      gl_surface = gdk_gl_context_get_surface (self->context);
-      gdk_cairo_draw_from_gl (cr, gl_surface, self->id, GL_TEXTURE, 1, 
-                              area->x, area->y,
-                              area->width, area->height);
+      GDK_TEXTURE_CLASS (gdk_gl_texture_parent_class)->download (texture, data, stride);
+      return;
     }
 
-  cairo_destroy (cr);
-  cairo_surface_finish (surface);
-  cairo_surface_destroy (surface);
+  gdk_gl_context_make_current (self->context);
+
+  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
+  glBindTexture (GL_TEXTURE_2D, self->id);
+
+  glGetTexImage (GL_TEXTURE_2D,
+                 0,
+                 GL_BGRA,
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+                 GL_UNSIGNED_INT_8_8_8_8_REV,
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+                 GL_UNSIGNED_BYTE,
+#else
+#error "Unknown byte order for gdk_gl_texture_download()"
+#endif
+                 data);
+
+  glBindTexture (GL_TEXTURE_2D, active_texture);
+}
+
+static void
+gdk_gl_texture_do_download_float (GdkTexture *texture,
+                                  float      *data)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  int active_texture;
+
+  gdk_gl_context_make_current (self->context);
+
+  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
+  glBindTexture (GL_TEXTURE_2D, self->id);
+
+  glGetTexImage (GL_TEXTURE_2D,
+                 0,
+                 GL_RGBA,
+                 GL_FLOAT,
+                 data);
+
+  glBindTexture (GL_TEXTURE_2D, active_texture);
+}
+
+static void
+gdk_gl_texture_download_float (GdkTexture *texture,
+                               float      *data,
+                               gsize       stride)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  int width, height, y;
+  float *copy;
+
+  if (self->saved)
+    {
+      gdk_texture_download_float (self->saved, data, stride);
+      return;
+    }
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+
+  if (stride == width * 4)
+    {
+      gdk_gl_texture_do_download_float (texture, data);
+      return;
+    }
+
+  copy = g_new (float, width * height * 4);
+
+  gdk_gl_texture_do_download_float (texture, copy);
+  for (y = 0; y < height; y++)
+    memcpy (data + y * stride, copy + y * 4 * width, 4 * width);
+
+  g_free (copy);
 }
 
 static void
@@ -116,7 +275,9 @@ gdk_gl_texture_class_init (GdkGLTextureClass *klass)
   GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  texture_class->download_texture = gdk_gl_texture_download_texture;
   texture_class->download = gdk_gl_texture_download;
+  texture_class->download_float = gdk_gl_texture_download_float;
   gobject_class->dispose = gdk_gl_texture_dispose;
 }
 
@@ -150,24 +311,10 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
 void
 gdk_gl_texture_release (GdkGLTexture *self)
 {
-  GdkSurface *surface;
-  GdkTexture *texture;
-  cairo_t *cr;
-
   g_return_if_fail (GDK_IS_GL_TEXTURE (self));
   g_return_if_fail (self->saved == NULL);
 
-  texture = GDK_TEXTURE (self);
-  self->saved = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                            texture->width, texture->height);
-
-  cr = cairo_create (self->saved);
-
-  surface = gdk_gl_context_get_surface (self->context);
-  gdk_cairo_draw_from_gl (cr, surface, self->id, GL_TEXTURE, 1, 0, 0,
-                          texture->width, texture->height);
-
-  cairo_destroy (cr);
+  self->saved = gdk_texture_download_texture (GDK_TEXTURE (self));
 
   if (self->destroy)
     {

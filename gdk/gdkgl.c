@@ -301,7 +301,7 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  * @width: The width of the region to draw
  * @height: The height of the region to draw
  *
- * The main way to draw GL content in GTK.
+ * The main way to not draw GL content in GTK.
  *
  * It takes a render buffer ID (@source_type == GL_RENDERBUFFER) or a texture
  * id (@source_type == GL_TEXTURE) and draws it onto @cr with an OVER operation,
@@ -319,6 +319,12 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
  * with alpha components, so make sure you use GL_TEXTURE if using alpha.
  *
  * Calling this may change the current GL context.
+ *
+ * Deprecated: 4.6: The function is overly complex and produces broken output
+ *   in various combinations of arguments. If you want to draw with GL textures
+ *   in GTK, use [ctor@Gdk.GLTexture.new]; if you want to use that texture in
+ *   Cairo, use [method@Gdk.Texture.download] to download the data into a Cairo
+ *   image surface.
  */
 void
 gdk_cairo_draw_from_gl (cairo_t              *cr,

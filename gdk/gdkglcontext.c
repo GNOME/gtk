@@ -229,70 +229,83 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   guchar *copy = NULL;
-  guint gl_internalformat;
-  guint gl_format;
-  guint gl_type;
-  guint bpp;
+  GLint gl_internalformat;
+  GLint gl_format;
+  GLint gl_type;
+  gsize bpp;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  if (priv->use_es)
+  if (!priv->use_es && data_format == GDK_MEMORY_DEFAULT) /* Cairo surface format */
     {
-      /* GLES only supports rgba, so convert if necessary */
-      if (data_format != GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-        {
-          copy = g_malloc (width * height * 4);
-          gdk_memory_convert (copy, width * 4,
-                              GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                              data, stride, data_format,
-                              width, height);
-          stride = width * 4;
-          data = copy;
-        }
-
-      bpp = 4;
+      gl_internalformat = GL_RGBA8;
+      gl_format = GL_BGRA;
+      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+    }
+  else if (data_format == GDK_MEMORY_R8G8B8) /* Pixmap non-alpha data */
+    {
+      gl_internalformat = GL_RGBA8;
+      gl_format = GL_RGB;
+      gl_type = GL_UNSIGNED_BYTE;
+    }
+  else if (priv->use_es && data_format == GDK_MEMORY_B8G8R8)
+    {
+      gl_internalformat = GL_RGBA8;
+      gl_format = GL_BGR;
+      gl_type = GL_UNSIGNED_BYTE;
+    }
+  else if (data_format == GDK_MEMORY_R16G16B16)
+    {
+      gl_internalformat = GL_RGBA16;
+      gl_format = GL_RGB;
+      gl_type = GL_UNSIGNED_SHORT;
+    }
+  else if (data_format == GDK_MEMORY_R16G16B16A16_PREMULTIPLIED)
+    {
+      gl_internalformat = GL_RGBA16;
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_SHORT;
+    }
+  else if (data_format == GDK_MEMORY_R16G16B16_FLOAT)
+    {
+      gl_internalformat = GL_RGB16F;
+      gl_format = GL_RGB;
+      gl_type = GL_HALF_FLOAT;
+    }
+  else if (data_format == GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED)
+    {
+      gl_internalformat = GL_RGBA16F;
+      gl_format = GL_RGBA;
+      gl_type = GL_HALF_FLOAT;
+    }
+  else if (data_format == GDK_MEMORY_R32G32B32_FLOAT)
+    {
+      gl_internalformat = GL_RGB32F;
+      gl_format = GL_RGB;
+      gl_type = GL_FLOAT;
+    }
+  else if (data_format == GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED)
+    {
+      gl_internalformat = GL_RGBA32F;
+      gl_format = GL_RGBA;
+      gl_type = GL_FLOAT;
+    }
+  else /* Fall-back, convert to GLES format */
+    {
+      copy = g_malloc (width * height * 4);
+      gdk_memory_convert (copy, width * 4,
+                          GDK_MEMORY_CONVERT_GLES_RGBA,
+                          data, stride, data_format,
+                          width, height);
+      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      stride = width * 4;
+      data = copy;
       gl_internalformat = GL_RGBA8;
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
     }
-  else
-    {
-      if (data_format == GDK_MEMORY_DEFAULT) /* Cairo surface format */
-        {
-          gl_internalformat = GL_RGBA8;
-          gl_format = GL_BGRA;
-          gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-          bpp = 4;
-        }
-      else if (data_format == GDK_MEMORY_R8G8B8) /* Pixmap non-alpha data */
-        {
-          gl_internalformat = GL_RGBA8;
-          gl_format = GL_RGB;
-          gl_type = GL_UNSIGNED_BYTE;
-          bpp = 3;
-        }
-      else if (data_format == GDK_MEMORY_B8G8R8)
-        {
-          gl_internalformat = GL_RGBA8;
-          gl_format = GL_BGR;
-          gl_type = GL_UNSIGNED_BYTE;
-          bpp = 3;
-        }
-      else /* Fall-back, convert to cairo-surface-format */
-        {
-          copy = g_malloc (width * height * 4);
-          gdk_memory_convert (copy, width * 4,
-                              GDK_MEMORY_DEFAULT,
-                              data, stride, data_format,
-                              width, height);
-          stride = width * 4;
-          bpp = 4;
-          data = copy;
-          gl_internalformat = GL_RGBA8;
-          gl_format = GL_BGRA;
-          gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-        }
-    }
+
+  bpp = gdk_memory_format_bytes_per_pixel (data_format);
 
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
    * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
