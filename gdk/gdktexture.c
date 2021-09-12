@@ -663,30 +663,21 @@ gboolean
 gdk_texture_save_to_png (GdkTexture *texture,
                          const char *filename)
 {
-  cairo_surface_t *surface;
-  cairo_status_t status;
+  GBytes *bytes;
   gboolean result;
 
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
   g_return_val_if_fail (filename != NULL, FALSE);
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gdk_texture_get_width (texture),
-                                        gdk_texture_get_height (texture));
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (surface),
-                        cairo_image_surface_get_stride (surface));
-  cairo_surface_mark_dirty (surface);
+  bytes = gdk_save_png (texture);
+  if (!bytes)
+    return FALSE;
 
-  status = cairo_surface_write_to_png (surface, filename);
-
-  if (status != CAIRO_STATUS_SUCCESS ||
-      cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
-    result = FALSE;
-  else
-    result = TRUE;
-
-  cairo_surface_destroy (surface);
+  result = g_file_set_contents (filename,
+                                g_bytes_get_data (bytes, NULL),
+                                g_bytes_get_size (bytes),
+                                NULL);
+  g_bytes_unref (bytes);
 
   return result;
 }
