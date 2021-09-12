@@ -79,6 +79,12 @@ gdk_memory_texture_dispose (GObject *object)
   G_OBJECT_CLASS (gdk_memory_texture_parent_class)->dispose (object);
 }
 
+static GdkTexture *
+gdk_memory_texture_download_texture (GdkTexture *texture)
+{
+  return g_object_ref (texture);
+}
+
 static void
 gdk_memory_texture_download (GdkTexture *texture,
                              guchar     *data,
@@ -101,6 +107,7 @@ gdk_memory_texture_class_init (GdkMemoryTextureClass *klass)
   GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  texture_class->download_texture = gdk_memory_texture_download_texture;
   texture_class->download = gdk_memory_texture_download;
   gobject_class->dispose = gdk_memory_texture_dispose;
 }

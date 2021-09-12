@@ -21,7 +21,7 @@
 #include "gdkgltextureprivate.h"
 
 #include "gdkcairo.h"
-#include "gdkmemorytexture.h"
+#include "gdkmemorytextureprivate.h"
 #include "gdktextureprivate.h"
 
 #include <epoxy/gl.h>
@@ -70,6 +70,75 @@ gdk_gl_texture_dispose (GObject *object)
   G_OBJECT_CLASS (gdk_gl_texture_parent_class)->dispose (object);
 }
 
+static GdkTexture *
+gdk_gl_texture_download_texture (GdkTexture *texture)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  GdkTexture *result;
+  int active_texture;
+  GdkMemoryFormat format;
+  GLint internal_format, gl_format, gl_type;
+  guchar *data;
+  gsize stride;
+  GBytes *bytes;
+
+  if (self->saved)
+    return g_object_ref (self->saved);
+
+  gdk_gl_context_make_current (self->context);
+
+  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
+  glBindTexture (GL_TEXTURE_2D, self->id);
+
+  glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
+
+  switch (internal_format)
+  {
+    case GL_RGB8:
+      format = GDK_MEMORY_R8G8B8;
+      gl_format = GL_RGB;
+      gl_type = GL_UNSIGNED_BYTE;
+      break;
+
+    case GL_RGBA8:
+      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_BYTE;
+      break;
+
+    default:
+      g_warning ("Texture in unexpected format 0x%X (%d). File a bug about adding it to GTK", internal_format, internal_format);
+      /* fallback to the dumbest possible format
+       * so that even age old GLES can do it */
+      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_BYTE;
+      break;
+  }
+
+  stride = gdk_memory_format_bytes_per_pixel (format) * texture->width;
+  data = g_malloc (stride * texture->height);
+
+  glGetTexImage (GL_TEXTURE_2D,
+                 0,
+                 gl_format,
+                 gl_type,
+                 data);
+
+  bytes = g_bytes_new_take (data, stride * texture->height);
+  result = gdk_memory_texture_new (texture->width,
+                                   texture->height,
+                                   format,
+                                   bytes,
+                                   stride);
+
+  g_bytes_unref (bytes);
+
+  glBindTexture (GL_TEXTURE_2D, active_texture);
+
+  return result;
+}
+
 static void
 gdk_gl_texture_download (GdkTexture *texture,
                          guchar     *data,
@@ -112,6 +181,7 @@ gdk_gl_texture_class_init (GdkGLTextureClass *klass)
   GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  texture_class->download_texture = gdk_gl_texture_download_texture;
   texture_class->download = gdk_gl_texture_download;
   gobject_class->dispose = gdk_gl_texture_dispose;
 }
