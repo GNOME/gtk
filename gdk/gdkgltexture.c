@@ -105,6 +105,42 @@ gdk_gl_texture_download_texture (GdkTexture *texture)
       gl_type = GL_UNSIGNED_BYTE;
       break;
 
+    case GL_RGB16:
+      format = GDK_MEMORY_R16G16B16;
+      gl_format = GL_RGB;
+      gl_type = GL_UNSIGNED_SHORT;
+      break;
+
+    case GL_RGBA16:
+      format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_SHORT;
+      break;
+
+    case GL_RGB16F:
+      format = GDK_MEMORY_R16G16B16_FLOAT;
+      gl_format = GL_RGB;
+      gl_type = GL_HALF_FLOAT;
+      break;
+
+    case GL_RGBA16F:
+      format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_HALF_FLOAT;
+      break;
+
+    case GL_RGB32F:
+      format = GDK_MEMORY_R32G32B32_FLOAT;
+      gl_format = GL_RGB;
+      gl_type = GL_FLOAT;
+      break;
+
+    case GL_RGBA32F:
+      format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      gl_format = GL_RGBA;
+      gl_type = GL_FLOAT;
+      break;
+
     default:
       g_warning ("Texture in unexpected format 0x%X (%d). File a bug about adding it to GTK", internal_format, internal_format);
       /* fallback to the dumbest possible format
