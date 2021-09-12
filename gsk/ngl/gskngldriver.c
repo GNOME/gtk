@@ -735,8 +735,7 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
                              int           mag_filter)
 {
   GdkGLContext *context;
-  GdkTexture *downloaded_texture = NULL;
-  GdkTexture *source_texture;
+  GdkTexture *downloaded_texture;
   GskNglTexture *t;
   guint texture_id;
   int height;
@@ -760,21 +759,7 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
         }
       else
         {
-          cairo_surface_t *surface;
-
-          /* In this case, we have to temporarily make the texture's
-           * context the current one, download its data into our context
-           * and then create a texture from it. */
-          if (texture_context != NULL)
-            gdk_gl_context_make_current (texture_context);
-
-          surface = gdk_texture_download_surface (texture);
-          downloaded_texture = gdk_texture_new_for_surface (surface);
-          cairo_surface_destroy (surface);
-
-          gdk_gl_context_make_current (context);
-
-          source_texture = downloaded_texture;
+          downloaded_texture = gdk_texture_download_texture (texture);
         }
     }
   else
@@ -785,13 +770,17 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
             return t->texture_id;
         }
 
-      source_texture = texture;
+      downloaded_texture = gdk_texture_download_texture (texture);
     }
+
+  /* The download_texture() call may have switched the GL context. Make sure
+   * the right context is at work again. */
+  gdk_gl_context_make_current (context);
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
   texture_id = gsk_ngl_command_queue_upload_texture (self->command_queue,
-                                                     source_texture,
+                                                     downloaded_texture,
                                                      0,
                                                      0,
                                                      width,
