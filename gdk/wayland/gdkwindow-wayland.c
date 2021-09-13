@@ -1520,6 +1520,14 @@ surface_enter (void              *data,
 {
   GdkWindow *window = GDK_WINDOW (data);
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  gboolean output_is_unmanaged;
+
+  output_is_unmanaged =
+    _gdk_wayland_screen_get_output_scale (display_wayland->screen, output) == 0;
+  if (output_is_unmanaged)
+    return;
 
   GDK_NOTE (EVENTS,
             g_message ("surface enter, window %p output %p", window, output));
