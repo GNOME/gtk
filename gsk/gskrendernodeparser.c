@@ -94,15 +94,8 @@ parse_texture (GtkCssParser *parser,
       bytes = gtk_css_data_url_parse (url, NULL, &error);
       if (bytes)
         {
-          stream = g_memory_input_stream_new_from_bytes (bytes);
+          texture = gdk_texture_new_from_bytes (bytes, &error);
           g_bytes_unref (bytes);
-          pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, &error);
-          g_object_unref (stream);
-          if (pixbuf != NULL)
-            {
-              texture = gdk_texture_new_for_pixbuf (pixbuf);
-              g_object_unref (pixbuf);
-            }
         }
     }
   else
