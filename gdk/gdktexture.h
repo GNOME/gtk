@@ -49,6 +49,9 @@ GdkTexture *            gdk_texture_new_from_resource          (const char      
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_from_file              (GFile           *file,
                                                                 GError         **error);
+GDK_AVAILABLE_IN_4_6
+GdkTexture *            gdk_texture_new_from_bytes             (GBytes          *bytes,
+                                                                GError         **error);
 
 GDK_AVAILABLE_IN_ALL
 int                     gdk_texture_get_width                  (GdkTexture      *texture) G_GNUC_PURE;
