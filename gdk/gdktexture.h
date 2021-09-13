@@ -91,6 +91,8 @@ void                    gdk_texture_download_float             (GdkTexture      
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_texture_save_to_png                (GdkTexture      *texture,
                                                                 const char      *filename);
+GDK_AVAILABLE_IN_4_6
+GBytes *                gdk_texture_save_to_png_bytes          (GdkTexture      *texture);
 
 G_END_DECLS
 

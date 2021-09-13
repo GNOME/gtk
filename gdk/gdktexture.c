@@ -690,7 +690,8 @@ gdk_texture_get_render_data (GdkTexture  *self,
  * This is a utility function intended for debugging and testing.
  * If you want more control over formats, proper error handling or
  * want to store to a `GFile` or other location, you might want to
- * look into using the gdk-pixbuf library.
+ * use [method@Gdk.Texture.save_to_png_bytes] or look into the
+ * gdk-pixbuf library.
  *
  * Returns: %TRUE if saving succeeded, %FALSE on failure.
  */
@@ -712,4 +713,30 @@ gdk_texture_save_to_png (GdkTexture *texture,
   g_bytes_unref (bytes);
 
   return result;
+}
+
+/**
+ * gdk_texture_save_to_png_bytes:
+ * @texture: a `GdkTexture`
+ *
+ * Store the given @texture in memory as a PNG file.
+ * Use [ctor@Gdk.Texture.new_from_bytes] to read it back.
+ *
+ * If you want to serialize a texture, this is a convenient and
+ * portable way to do that.
+ *
+ * If you need more control over the generated image, such as
+ * attaching metadata, you should look into an image handling
+ * library such as the gdk-pixbuf library.
+ *
+ * Returns: a newly allocated `GBytes` containing PNG data
+ *
+ * Since: 4.6
+ */
+GBytes *
+gdk_texture_save_to_png_bytes (GdkTexture *texture)
+{
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+
+  return gdk_save_png (texture);
 }
