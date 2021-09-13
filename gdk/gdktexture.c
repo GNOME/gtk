@@ -681,3 +681,26 @@ gdk_texture_save_to_png (GdkTexture *texture,
 
   return result;
 }
+
+/**
+ * gdk_texture_save_to_png_bytes:
+ * @texture: a `GdkTexture`
+ *
+ * Store the given @texture in memory as a PNG file.
+ *
+ * This is a utility function intended for debugging and testing.
+ * If you want more control over formats, proper error handling or
+ * want to store to a `GFile` or other location, you might want to
+ * look into using the gdk-pixbuf library.
+ *
+ * Returns: a newly allocated `GBytes` containing PNG data
+ *
+ * Since: 4.6
+ */
+GBytes *
+gdk_texture_save_to_png_bytes (GdkTexture *texture)
+{
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+
+  return gdk_save_png (texture);
+}
