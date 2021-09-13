@@ -26,6 +26,7 @@ tests = [
   'rgba',
   'seat',
   'texture',
+  'texture-threads',
 ]
 
 foreach t : tests

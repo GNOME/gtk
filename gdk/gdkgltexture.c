@@ -20,6 +20,7 @@
 
 #include "gdkgltextureprivate.h"
 
+#include "gdkdisplayprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdktextureprivate.h"
 
@@ -69,25 +70,55 @@ gdk_gl_texture_dispose (GObject *object)
   G_OBJECT_CLASS (gdk_gl_texture_parent_class)->dispose (object);
 }
 
-static GdkTexture *
-gdk_gl_texture_download_texture (GdkTexture *texture)
+typedef struct _InvokeData
 {
-  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-  GdkTexture *result;
-  int active_texture;
+  GdkGLTexture *self;
+  volatile int spinlock;
+  GFunc func;
+  gpointer data;
+} InvokeData;
+
+static gboolean
+gdk_gl_texture_invoke_callback (gpointer data)
+{
+  InvokeData *invoke = data;
+  GdkGLContext *context;
+
+  context = gdk_display_get_gl_context (gdk_gl_context_get_display (invoke->self->context));
+
+  gdk_gl_context_make_current (context);
+  glBindTexture (GL_TEXTURE_2D, invoke->self->id);
+
+  invoke->func (invoke->self, invoke->data);
+
+  g_atomic_int_set (&invoke->spinlock, 1);
+
+  return FALSE;
+}
+
+static void
+gdk_gl_texture_run (GdkGLTexture *self,
+                    GFunc         func,
+                    gpointer      data)
+{
+  InvokeData invoke = { self, 0, func, data };
+
+  g_main_context_invoke (NULL, gdk_gl_texture_invoke_callback, &invoke);
+
+  while (g_atomic_int_get (&invoke.spinlock) == 0);
+}
+
+static void
+gdk_gl_texture_do_download_texture (gpointer texture_,
+                                    gpointer result_)
+{
+  GdkTexture *texture = texture_;
+  GdkTexture **result = result_;
   GdkMemoryFormat format;
   GLint internal_format, gl_format, gl_type;
   guchar *data;
   gsize stride;
   GBytes *bytes;
-
-  if (self->saved)
-    return g_object_ref (self->saved);
-
-  gdk_gl_context_make_current (self->context);
-
-  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
-  glBindTexture (GL_TEXTURE_2D, self->id);
 
   glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
 
@@ -161,17 +192,45 @@ gdk_gl_texture_download_texture (GdkTexture *texture)
                  data);
 
   bytes = g_bytes_new_take (data, stride * texture->height);
-  result = gdk_memory_texture_new (texture->width,
-                                   texture->height,
-                                   format,
-                                   bytes,
-                                   stride);
+  *result = gdk_memory_texture_new (texture->width,
+                                    texture->height,
+                                    format,
+                                    bytes,
+                                    stride);
 
   g_bytes_unref (bytes);
+}
 
-  glBindTexture (GL_TEXTURE_2D, active_texture);
+static GdkTexture *
+gdk_gl_texture_download_texture (GdkTexture *texture)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  GdkTexture *result;
+
+  if (self->saved)
+    return g_object_ref (self->saved);
+
+  gdk_gl_texture_run (self, gdk_gl_texture_do_download_texture, &result);
 
   return result;
+}
+
+static void
+gdk_gl_texture_do_download (gpointer texture,
+                            gpointer data)
+{
+  glGetTexImage (GL_TEXTURE_2D,
+                 0,
+                 GL_BGRA,
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+                 GL_UNSIGNED_INT_8_8_8_8_REV,
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+                 GL_UNSIGNED_BYTE,
+#else
+#error "Unknown byte order for gdk_gl_texture_download()"
+#endif
+                 data);
+
 }
 
 static void
@@ -180,7 +239,6 @@ gdk_gl_texture_download (GdkTexture *texture,
                          gsize       stride)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-  GLint active_texture;
 
   if (self->saved)
     {
@@ -195,45 +253,18 @@ gdk_gl_texture_download (GdkTexture *texture,
       return;
     }
 
-  gdk_gl_context_make_current (self->context);
-
-  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
-  glBindTexture (GL_TEXTURE_2D, self->id);
-
-  glGetTexImage (GL_TEXTURE_2D,
-                 0,
-                 GL_BGRA,
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-                 GL_UNSIGNED_INT_8_8_8_8_REV,
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-                 GL_UNSIGNED_BYTE,
-#else
-#error "Unknown byte order for gdk_gl_texture_download()"
-#endif
-                 data);
-
-  glBindTexture (GL_TEXTURE_2D, active_texture);
+  gdk_gl_texture_run (self, gdk_gl_texture_do_download, data);
 }
 
 static void
-gdk_gl_texture_do_download_float (GdkTexture *texture,
-                                  float      *data)
+gdk_gl_texture_do_download_float (gpointer texture,
+                                  gpointer data)
 {
-  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-  int active_texture;
-
-  gdk_gl_context_make_current (self->context);
-
-  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
-  glBindTexture (GL_TEXTURE_2D, self->id);
-
   glGetTexImage (GL_TEXTURE_2D,
                  0,
                  GL_RGBA,
                  GL_FLOAT,
                  data);
-
-  glBindTexture (GL_TEXTURE_2D, active_texture);
 }
 
 static void
@@ -256,13 +287,13 @@ gdk_gl_texture_download_float (GdkTexture *texture,
 
   if (stride == width * 4)
     {
-      gdk_gl_texture_do_download_float (texture, data);
+      gdk_gl_texture_run (self, gdk_gl_texture_do_download_float, data);
       return;
     }
 
   copy = g_new (float, width * height * 4);
 
-  gdk_gl_texture_do_download_float (texture, copy);
+  gdk_gl_texture_run (self, gdk_gl_texture_do_download_float, copy);
   for (y = 0; y < height; y++)
     memcpy (data + y * stride, copy + y * 4 * width, 4 * width);
 
