@@ -690,12 +690,13 @@ gtk_stack_dispose (GObject *obj)
   GtkStack *stack = GTK_STACK (obj);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkWidget *child;
-
-  if (priv->pages)
-    g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, g_list_length (priv->children), 0);
+  guint n_pages = g_list_length (priv->children);
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (stack))))
     stack_remove (stack, child, TRUE);
+
+  if (priv->pages)
+    g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, n_pages, 0);
 
   G_OBJECT_CLASS (gtk_stack_parent_class)->dispose (obj);
 }
