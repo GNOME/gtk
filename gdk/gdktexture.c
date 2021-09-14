@@ -50,6 +50,8 @@
 #include "loaders/gdktiffprivate.h"
 #include "loaders/gdkjpegprivate.h"
 
+G_DEFINE_QUARK (gdk-texture-error-quark, gdk_texture_error)
+
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 void
 gtk_snapshot_append_texture (GdkSnapshot            *snapshot,
