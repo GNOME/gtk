@@ -129,7 +129,7 @@ GtkCssTokenizer *       gtk_css_tokenizer_new                   (GBytes         
 GtkCssTokenizer *       gtk_css_tokenizer_ref                   (GtkCssTokenizer        *tokenizer);
 void                    gtk_css_tokenizer_unref                 (GtkCssTokenizer        *tokenizer);
 
-const GtkCssLocation *  gtk_css_tokenizer_get_location          (GtkCssTokenizer        *tokenizer);
+const GtkCssLocation *  gtk_css_tokenizer_get_location          (GtkCssTokenizer        *tokenizer) G_GNUC_CONST;
 
 gboolean                gtk_css_tokenizer_read_token            (GtkCssTokenizer        *tokenizer,
                                                                  GtkCssToken            *token,
