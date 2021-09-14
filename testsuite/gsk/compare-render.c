@@ -162,6 +162,8 @@ main (int argc, char **argv)
   GError *error = NULL;
   GOptionContext *context;
 
+  (g_test_init) (&argc, &argv, NULL);
+
   context = g_option_context_new ("NODE REF - run GSK node tests");
   g_option_context_add_main_entries (context, options, NULL);
   g_option_context_set_ignore_unknown_options (context, TRUE);
