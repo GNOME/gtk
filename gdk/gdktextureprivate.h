@@ -35,9 +35,6 @@ struct _GdkTextureClass {
                                                          gsize                   stride);
 };
 
-gpointer                gdk_texture_new                 (const GdkTextureClass  *klass,
-                                                         int                     width,
-                                                         int                     height);
 GdkTexture *            gdk_texture_new_for_surface     (cairo_surface_t        *surface);
 cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             *texture);
 /* NB: GdkMemoryTexture */
