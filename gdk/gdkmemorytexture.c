@@ -124,6 +124,7 @@ gdk_memory_texture_dispose (GObject *object)
 {
   GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (object);
 
+  g_print ("freeing %zu bytes\n", g_bytes_get_size (self->bytes));
   g_clear_pointer (&self->bytes, g_bytes_unref);
 
   G_OBJECT_CLASS (gdk_memory_texture_parent_class)->dispose (object);

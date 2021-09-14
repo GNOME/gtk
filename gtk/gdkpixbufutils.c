@@ -610,6 +610,9 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
   GdkTexture *texture;
   GdkPaintable *paintable;
 
+  if (scale_factor == 1)
+    return GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
+
   loader_data.scale_factor = scale_factor;
 
   loader = gdk_pixbuf_loader_new ();

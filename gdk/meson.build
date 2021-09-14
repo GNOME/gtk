@@ -4,6 +4,7 @@ gdk_public_sources = files([
   'gdkcairo.c',
   'gdkcairocontext.c',
   'gdkclipboard.c',
+  'gdkcompressedtexture.c',
   'gdkcontentdeserializer.c',
   'gdkcontentformats.c',
   'gdkcontentprovider.c',
