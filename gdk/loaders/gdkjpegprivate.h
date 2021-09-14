@@ -26,4 +26,16 @@
 GdkTexture *gdk_load_jpeg         (GBytes           *bytes,
                                    GError          **error);
 
+static inline gboolean
+gdk_is_jpeg (GBytes *bytes)
+{
+  const char *data;
+  gsize size;
+
+  data = g_bytes_get_data (bytes, &size);
+
+  return size > strlen (JPEG_SIGNATURE) &&
+         memcmp (data, JPEG_SIGNATURE, strlen (JPEG_SIGNATURE)) == 0;
+}
+
 #endif

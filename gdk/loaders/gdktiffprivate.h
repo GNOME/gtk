@@ -29,4 +29,18 @@ GdkTexture *gdk_load_tiff         (GBytes           *bytes,
 
 GBytes *    gdk_save_tiff         (GdkTexture       *texture);
 
+static inline gboolean
+gdk_is_tiff (GBytes *bytes)
+{
+  const char *data;
+  gsize size;
+
+  data = g_bytes_get_data (bytes, &size);
+
+  return (size > strlen (TIFF_SIGNATURE1) &&
+          memcmp (data, TIFF_SIGNATURE1, strlen (TIFF_SIGNATURE1)) == 0) ||
+         (size > strlen (TIFF_SIGNATURE2) &&
+          memcmp (data, TIFF_SIGNATURE2, strlen (TIFF_SIGNATURE2)) == 0);
+}
+
 #endif

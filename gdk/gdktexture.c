@@ -431,52 +431,38 @@ GdkTexture *
 gdk_texture_new_from_bytes (GBytes  *bytes,
                             GError **error)
 {
-  const char *data;
-  gsize size;
-
   g_return_val_if_fail (bytes != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  data = g_bytes_get_data (bytes, &size);
-
-  if (size > strlen (PNG_SIGNATURE) &&
-      memcmp (data, PNG_SIGNATURE, strlen (PNG_SIGNATURE)) == 0)
+  if (gdk_is_png (bytes))
     {
       return gdk_load_png (bytes, error);
     }
-  else if ((size > strlen (TIFF_SIGNATURE1) &&
-            memcmp (data, TIFF_SIGNATURE1, strlen (TIFF_SIGNATURE1)) == 0) ||
-           (size > strlen (TIFF_SIGNATURE2) &&
-            memcmp (data, TIFF_SIGNATURE2, strlen (TIFF_SIGNATURE2)) == 0))
-    {
-      return gdk_load_tiff (bytes, error);
-    }
-  else if (size > strlen (JPEG_SIGNATURE) &&
-           memcmp (data, JPEG_SIGNATURE, strlen (JPEG_SIGNATURE)) == 0)
+  else if (gdk_is_jpeg (bytes))
     {
       return gdk_load_jpeg (bytes, error);
+    }
+  else if (gdk_is_tiff (bytes))
+    {
+      return gdk_load_tiff (bytes, error);
     }
   else
     {
       GInputStream *stream;
       GdkPixbuf *pixbuf;
+      GdkTexture *texture;
 
       stream = g_memory_input_stream_new_from_bytes (bytes);
       pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
       g_object_unref (stream);
+      if (pixbuf == NULL)
+        return NULL;
 
-      if (pixbuf)
-        {
-          GdkTexture *texture;
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
 
-          texture = gdk_texture_new_for_pixbuf (pixbuf);
-          g_object_unref (pixbuf);
-
-          return texture;
-        }
+      return texture;
     }
-
-  return NULL;
 }
 
 /**

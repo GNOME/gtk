@@ -28,4 +28,16 @@ GdkTexture *gdk_load_png        (GBytes         *bytes,
 
 GBytes     *gdk_save_png        (GdkTexture     *texture);
 
+static inline gboolean
+gdk_is_png (GBytes *bytes)
+{
+  const char *data;
+  gsize size;
+
+  data = g_bytes_get_data (bytes, &size);
+
+  return size > strlen (PNG_SIGNATURE) &&
+         memcmp (data, PNG_SIGNATURE, strlen (PNG_SIGNATURE)) == 0;
+}
+
 #endif
