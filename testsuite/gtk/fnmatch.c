@@ -165,12 +165,14 @@ main (int argc, char *argv[])
     {
       char *path = g_strdup_printf ("/fnmatch/test%d", i);
       g_test_add_data_func (path, &tests[i], test_fnmatch);
+      g_free (path);
     }
 
   for (int i = 0; i < G_N_ELEMENTS (citests); i++)
     {
       char *path = g_strdup_printf ("/ci-glob/test%d", i);
       g_test_add_data_func (path, &citests[i], test_ci_glob);
+      g_free (path);
     }
 
   return g_test_run ();
