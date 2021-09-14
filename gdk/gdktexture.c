@@ -410,6 +410,13 @@ gdk_texture_new_from_file (GFile   *file,
   return texture;
 }
 
+gboolean
+gdk_texture_can_load (GBytes *bytes)
+{
+  return gdk_is_png (bytes) ||
+         gdk_is_jpeg (bytes) ||
+         gdk_is_tiff (bytes);
+}
 
 /**
  * gdk_texture_new_from_bytes:

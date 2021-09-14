@@ -20,6 +20,8 @@
 #include "gdkpixbufutilsprivate.h"
 #include "gtkscalerprivate.h"
 
+#include "gdk/gdktextureprivate.h"
+
 static GdkPixbuf *
 load_from_stream (GdkPixbufLoader  *loader,
                   GInputStream     *stream,
@@ -597,42 +599,44 @@ GdkPaintable *
 gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
                                      int     scale_factor)
 {
-  GdkPixbufLoader *loader;
-  GdkPixbuf *pixbuf = NULL;
   LoaderData loader_data;
   GdkTexture *texture;
   GdkPaintable *paintable;
 
   loader_data.scale_factor = scale_factor;
 
-  loader = gdk_pixbuf_loader_new ();
-  g_signal_connect (loader, "size-prepared",
-                    G_CALLBACK (on_loader_size_prepared), &loader_data);
+  if (gdk_texture_can_load (bytes))
+    {
+      /* We know these formats can't be scaled */
+      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      if (texture == NULL)
+        return NULL;
+    }
+  else
+    {
+      GdkPixbufLoader *loader;
+      gboolean success;
 
-  if (!gdk_pixbuf_loader_write_bytes (loader, bytes, NULL))
-    goto out;
+      loader = gdk_pixbuf_loader_new ();
+      g_signal_connect (loader, "size-prepared",
+                        G_CALLBACK (on_loader_size_prepared), &loader_data);
 
-  if (!gdk_pixbuf_loader_close (loader, NULL))
-    goto out;
+      success = gdk_pixbuf_loader_write_bytes (loader, bytes, NULL);
+      /* close even when writing failed */
+      success &= gdk_pixbuf_loader_close (loader, NULL);
 
-  pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-  if (pixbuf != NULL)
-    g_object_ref (pixbuf);
+      if (!success)
+        return NULL;
 
- out:
-  gdk_pixbuf_loader_close (loader, NULL);
-  g_object_unref (loader);
+      texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
+      g_object_unref (loader);
+    }
 
-  if (!pixbuf)
-    return NULL;
-
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
   if (loader_data.scale_factor != 1)
     paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale_factor);
   else
     paintable = g_object_ref ((GdkPaintable *)texture);
 
-  g_object_unref (pixbuf);
   g_object_unref (texture);
 
   return paintable;
