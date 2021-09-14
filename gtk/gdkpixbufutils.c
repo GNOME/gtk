@@ -505,14 +505,7 @@ gtk_make_symbolic_pixbuf_from_file (GFile       *file,
 GdkTexture *
 gtk_load_symbolic_texture_from_resource (const char *path)
 {
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture;
-
-  pixbuf = _gdk_pixbuf_new_from_resource (path, "png", NULL);
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
-
-  return texture;
+  return gdk_texture_new_from_resource (path);
 }
 
 GdkTexture *
