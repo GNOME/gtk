@@ -63,13 +63,13 @@ GtkCssParser *          gtk_css_parser_new_for_bytes            (GBytes         
 GtkCssParser *          gtk_css_parser_ref                      (GtkCssParser                   *self);
 void                    gtk_css_parser_unref                    (GtkCssParser                   *self);
 
-GFile *                 gtk_css_parser_get_file                 (GtkCssParser                   *self);
+GFile *                 gtk_css_parser_get_file                 (GtkCssParser                   *self) G_GNUC_PURE;
 GFile *                 gtk_css_parser_resolve_url              (GtkCssParser                   *self,
                                                                  const char                     *url);
 
-const GtkCssLocation *  gtk_css_parser_get_start_location       (GtkCssParser                   *self);
-const GtkCssLocation *  gtk_css_parser_get_end_location         (GtkCssParser                   *self);
-const GtkCssLocation *  gtk_css_parser_get_block_location       (GtkCssParser                   *self);
+const GtkCssLocation *  gtk_css_parser_get_start_location       (GtkCssParser                   *self) G_GNUC_PURE;
+const GtkCssLocation *  gtk_css_parser_get_end_location         (GtkCssParser                   *self) G_GNUC_PURE;
+const GtkCssLocation *  gtk_css_parser_get_block_location       (GtkCssParser                   *self) G_GNUC_PURE;
 
 const GtkCssToken *     gtk_css_parser_peek_token               (GtkCssParser                   *self);
 const GtkCssToken *     gtk_css_parser_get_token                (GtkCssParser                   *self);
@@ -132,9 +132,9 @@ gboolean                gtk_css_parser_try_at_keyword           (GtkCssParser   
 gboolean                gtk_css_parser_try_token                (GtkCssParser                   *self,
                                                                  GtkCssTokenType                 token_type);
 
-char *                  gtk_css_parser_consume_ident            (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT;
-char *                  gtk_css_parser_consume_string           (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT;
-char *                  gtk_css_parser_consume_url              (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT;
+char *                  gtk_css_parser_consume_ident            (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT G_GNUC_MALLOC;
+char *                  gtk_css_parser_consume_string           (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT G_GNUC_MALLOC;
+char *                  gtk_css_parser_consume_url              (GtkCssParser                   *self) G_GNUC_WARN_UNUSED_RESULT G_GNUC_MALLOC;
 gboolean                gtk_css_parser_consume_number           (GtkCssParser                   *self,
                                                                  double                         *number);
 gboolean                gtk_css_parser_consume_integer          (GtkCssParser                   *self,
