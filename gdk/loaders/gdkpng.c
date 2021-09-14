@@ -95,13 +95,39 @@ gdk_load_png (GBytes  *bytes,
                                     g_bytes_get_data (bytes, NULL),
                                     g_bytes_get_size (bytes));
 
+  if (PNG_IMAGE_FAILED (image))
+    {
+      g_set_error (error,
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED,
+                   "Failed to parse png image (%s)", image.message);
+      png_image_free (&image);
+      return NULL;
+    }
+
   image.format = PNG_FORMAT_RGBA;
 
   stride = PNG_IMAGE_ROW_STRIDE (image);
   size = PNG_IMAGE_BUFFER_SIZE (image, stride);
-  buffer = g_malloc (size);
+  buffer = g_try_malloc (size);
+  if (!buffer)
+    {
+      g_set_error_literal (error,
+                           GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
+                           "Not enough memory to load png");
+      png_image_free (&image);
+      return NULL;
+    }
 
   png_image_finish_read (&image, NULL, buffer, stride, NULL);
+
+  if (PNG_IMAGE_FAILED (image))
+    {
+      g_set_error (error,
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED,
+                   "Failed to parse png image (%s)", image.message);
+      png_image_free (&image);
+      return NULL;
+    }
 
   if (image.format & PNG_FORMAT_FLAG_LINEAR)
     stride *= 2;
