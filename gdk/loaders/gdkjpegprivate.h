@@ -26,6 +26,8 @@
 GdkTexture *gdk_load_jpeg         (GBytes           *bytes,
                                    GError          **error);
 
+GBytes     *gdk_save_jpeg         (GdkTexture     *texture);
+
 static inline gboolean
 gdk_is_jpeg (GBytes *bytes)
 {
