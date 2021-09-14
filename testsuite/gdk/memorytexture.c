@@ -12,6 +12,8 @@ typedef enum {
   TEXTURE_METHOD_LOCAL,
   TEXTURE_METHOD_GL,
   TEXTURE_METHOD_GL_RELEASED,
+  TEXTURE_METHOD_PNG,
+  TEXTURE_METHOD_TIFF,
 
   N_TEXTURE_METHODS
 } TextureMethod;
@@ -448,6 +450,28 @@ create_texture (GdkMemoryFormat  format,
       gdk_gl_texture_release (GDK_GL_TEXTURE (texture));
       break;
 
+    case TEXTURE_METHOD_PNG:
+      {
+        GBytes *bytes = gdk_texture_save_to_png_bytes (texture);
+        g_assert (bytes);
+        g_object_unref (texture);
+        texture = gdk_texture_new_from_bytes (bytes, NULL);
+        g_assert (texture);
+        g_bytes_unref (bytes);
+      }
+      break;
+
+    case TEXTURE_METHOD_TIFF:
+      {
+        GBytes *bytes = gdk_texture_save_to_tiff_bytes (texture);
+        g_assert (bytes);
+        g_object_unref (texture);
+        texture = gdk_texture_new_from_bytes (bytes, NULL);
+        g_assert (texture);
+        g_bytes_unref (bytes);
+      }
+      break;
+
     case N_TEXTURE_METHODS:
     default:
       g_assert_not_reached ();
@@ -584,7 +608,7 @@ add_test (const char    *name,
     {
       for (method = 0; method < N_TEXTURE_METHODS; method++)
         {
-          const char *method_names[N_TEXTURE_METHODS] = { "local", "gl", "gl-released" };
+          const char *method_names[N_TEXTURE_METHODS] = { "local", "gl", "gl-released", "png", "tiff" };
           char *test_name = g_strdup_printf ("%s/%s/%s",
                                              name,
                                              g_enum_get_value (enum_class, format)->value_nick,
