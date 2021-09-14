@@ -28,6 +28,7 @@
 #include "gdkrgba.h"
 #include "loaders/gdkpngprivate.h"
 #include "loaders/gdktiffprivate.h"
+#include "loaders/gdkjpegprivate.h"
 #include "gdkmemorytextureprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -698,6 +699,8 @@ serialize_texture_in_thread (GTask        *task,
     bytes = gdk_save_png (texture);
   else if (strcmp (gdk_content_serializer_get_mime_type (serializer), "image/tiff") == 0)
     bytes = gdk_save_tiff (texture);
+  else if (strcmp (gdk_content_serializer_get_mime_type (serializer), "image/jpeg") == 0)
+    bytes = gdk_save_jpeg (texture);
   else
     g_assert_not_reached ();
 
@@ -960,6 +963,11 @@ init (void)
                                    texture_serializer,
                                    NULL, NULL);
 
+  gdk_content_register_serializer (GDK_TYPE_TEXTURE,
+                                   "image/jpeg",
+                                   texture_serializer,
+                                   NULL, NULL);
+
   formats = gdk_pixbuf_get_formats ();
 
   /* Make sure png comes first */
@@ -994,9 +1002,10 @@ init (void)
       mimes = gdk_pixbuf_format_get_mime_types (fmt);
       for (m = mimes; *m; m++)
         {
-          /* Turning textures into pngs or tiffs is handled above */
+          /* Turning textures into pngs, tiffs or jpegs is handled above */
           if (!g_str_equal (name, "png") &&
-              !g_str_equal (name, "tiff"))
+              !g_str_equal (name, "tiff") &&
+              !g_str_equal (name, "jpeg"))
             gdk_content_register_serializer (GDK_TYPE_TEXTURE,
                                              *m,
                                              pixbuf_serializer,
