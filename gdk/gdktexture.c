@@ -354,18 +354,23 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
 GdkTexture *
 gdk_texture_new_from_resource (const char *resource_path)
 {
-  GError *error = NULL;
+  GBytes *bytes;
   GdkTexture *texture;
-  GdkPixbuf *pixbuf;
+  GError *error = NULL;
 
   g_return_val_if_fail (resource_path != NULL, NULL);
 
-  pixbuf = gdk_pixbuf_new_from_resource (resource_path, &error);
-  if (pixbuf == NULL)
-    g_error ("Resource path %s is not a valid image: %s", resource_path, error->message);
+  bytes = g_resources_lookup_data (resource_path, 0, &error);
+  if (bytes != NULL)
+    {
+      texture = gdk_texture_new_from_bytes (bytes, &error);
+      g_bytes_unref (bytes);
+    }
+  else
+    texture = NULL;
 
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
+  if (texture == NULL)
+    g_error ("Resource path %s s not a valid image: %s", resource_path, error->message);
 
   return texture;
 }
