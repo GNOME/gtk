@@ -210,7 +210,6 @@
 
 #include "gtkbuilderprivate.h"
 
-#include "gdkpixbufutilsprivate.h"
 #include "gtkbuildableprivate.h"
 #include "gtkbuilderlistitemfactory.h"
 #include "gtkbuilderscopeprivate.h"
@@ -226,7 +225,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkicontheme.h"
 #include "gtkiconthemeprivate.h"
-#include "gdkpixbufutilsprivate.h"
 #include "gtkdebug.h"
 
 
@@ -2401,7 +2399,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               g_warning ("Could not load image '%s': %s", string, tmp_error->message);
               g_error_free (tmp_error);
 
-              pixbuf = _gdk_pixbuf_new_from_resource (IMAGE_MISSING_RESOURCE_PATH, "png", NULL);
+              pixbuf = gdk_pixbuf_new_from_resource (IMAGE_MISSING_RESOURCE_PATH, NULL);
             }
 
           g_value_take_object (value, pixbuf);
