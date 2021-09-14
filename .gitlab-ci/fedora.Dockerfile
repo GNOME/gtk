@@ -53,6 +53,7 @@ RUN dnf -y install \
     libpng-devel \
     librsvg2 \
     libselinux-devel \
+    libtiff-devel \
     libubsan \
     libXcomposite-devel \
     libXcursor-devel \
