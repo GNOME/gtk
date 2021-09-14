@@ -2296,9 +2296,63 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       break;
     case G_TYPE_OBJECT:
     case G_TYPE_INTERFACE:
-      if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF) ||
-          G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) ||
+      if (G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE) ||
           G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
+        {
+          GObject *object = g_hash_table_lookup (priv->objects, string);
+          char *filename;
+          GError *tmp_error = NULL;
+          GdkTexture *texture = NULL;
+
+          if (object)
+            {
+              if (g_type_is_a (G_OBJECT_TYPE (object), G_VALUE_TYPE (value)))
+                {
+                  g_value_set_object (value, object);
+                  return TRUE;
+                }
+              else
+                {
+                  g_set_error (error,
+                               GTK_BUILDER_ERROR,
+                               GTK_BUILDER_ERROR_INVALID_VALUE,
+                               "Could not load image '%s': "
+                               " '%s' is already used as object id for a %s",
+                               string, string, G_OBJECT_TYPE_NAME (object));
+                  return FALSE;
+                }
+            }
+
+          filename = _gtk_builder_get_resource_path (builder, string);
+          if (filename != NULL)
+            {
+              texture = gdk_texture_new_from_resource (filename);
+            }
+          else
+            {
+              GFile *file;
+
+              filename = _gtk_builder_get_absolute_filename (builder, string);
+              file = g_file_new_for_path (filename);
+              texture = gdk_texture_new_from_file (file, &tmp_error);
+              g_object_unref (file);
+            }
+
+          g_free (filename);
+
+          if (!texture)
+            {
+              g_warning ("Could not load image '%s': %s", string, tmp_error->message);
+              g_error_free (tmp_error);
+
+              texture = gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH);
+            }
+
+          g_value_take_object (value, texture);
+
+          ret = TRUE;
+        }
+      else if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
         {
           char *filename;
           GError *tmp_error = NULL;
@@ -2344,28 +2398,13 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
           if (pixbuf == NULL)
             {
-              g_warning ("Could not load image '%s': %s",
-                         string, tmp_error->message);
+              g_warning ("Could not load image '%s': %s", string, tmp_error->message);
               g_error_free (tmp_error);
 
               pixbuf = _gdk_pixbuf_new_from_resource (IMAGE_MISSING_RESOURCE_PATH, "png", NULL);
             }
 
-          if (pixbuf)
-            {
-              if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE) ||
-                  G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE))
-                {
-                  GdkTexture *texture = gdk_texture_new_for_pixbuf (pixbuf);
-                  g_value_set_object (value, texture);
-                  g_object_unref (texture);
-                }
-              else
-                {
-                  g_value_set_object (value, pixbuf);
-                }
-              g_object_unref (G_OBJECT (pixbuf));
-            }
+          g_value_take_object (value, pixbuf);
 
           g_free (filename);
 
