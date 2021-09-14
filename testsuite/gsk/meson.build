@@ -239,31 +239,31 @@ internal_tests = [
   [ 'half-float' ],
 ]
 
-foreach t : internal_tests
-  test_name = t.get(0)
-  test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
-  test_extra_cargs = t.get(2, [])
-  test_extra_ldflags = t.get(3, [])
+if get_option('build-internal-tests')
+  foreach t : internal_tests
+    test_name = t.get(0)
+    test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
+    test_extra_cargs = t.get(2, [])
+    test_extra_ldflags = t.get(3, [])
 
-  test_exe = executable(test_name, test_srcs,
-    c_args : test_cargs + test_extra_cargs + common_cflags,
-    link_args : test_extra_ldflags,
-    dependencies : libgtk_static_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
-  )
+    test_exe = executable(test_name, test_srcs,
+      c_args : test_cargs + test_extra_cargs + common_cflags,
+      link_args : test_extra_ldflags,
+      dependencies : libgtk_static_dep,
+      install: get_option('install-tests'),
+      install_dir: testexecdir,
+    )
 
-  test(test_name, test_exe,
-    args: [ '--tap', '-k' ],
-    protocol: 'tap',
-    env: [
-      'GSK_RENDERER=cairo',
-      'GTK_A11Y=test',
-      'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-    ],
-    suite: 'gsk',
-  )
-endforeach
-
-
+    test(test_name, test_exe,
+      args: [ '--tap', '-k' ],
+      protocol: 'tap',
+      env: [
+        'GSK_RENDERER=cairo',
+        'GTK_A11Y=test',
+        'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+        'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+      ],
+      suite: 'gsk',
+    )
+  endforeach
+endif

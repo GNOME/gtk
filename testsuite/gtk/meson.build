@@ -190,38 +190,40 @@ foreach t : tests
   )
 endforeach
 
-foreach t : internal_tests
-  test_name = t.get('name')
-  test_srcs = ['@0@.c'.format(test_name)] + t.get('sources', [])
-  test_extra_cargs = t.get('c_args', [])
-  test_extra_ldflags = t.get('link_args', [])
-  test_extra_suites = t.get('suites', [])
-  test_timeout = 60
+if get_option('build-internal-tests')
+  foreach t : internal_tests
+    test_name = t.get('name')
+    test_srcs = ['@0@.c'.format(test_name)] + t.get('sources', [])
+    test_extra_cargs = t.get('c_args', [])
+    test_extra_ldflags = t.get('link_args', [])
+    test_extra_suites = t.get('suites', [])
+    test_timeout = 60
 
-  test_exe = executable(test_name,
-    sources: test_srcs,
-    c_args: test_cargs + test_extra_cargs,
-    link_args: test_extra_ldflags,
-    dependencies: libgtk_static_dep,
-    install: get_option('install-tests'),
-    install_dir: testexecdir,
-  )
+    test_exe = executable(test_name,
+      sources: test_srcs,
+      c_args: test_cargs + test_extra_cargs,
+      link_args: test_extra_ldflags,
+      dependencies: libgtk_static_dep,
+      install: get_option('install-tests'),
+      install_dir: testexecdir,
+    )
 
-  expect_fail = xfail.contains(test_name)
+    expect_fail = xfail.contains(test_name)
 
-  if test_extra_suites.contains('slow')
-    test_timeout = 90
-  endif
+    if test_extra_suites.contains('slow')
+      test_timeout = 90
+    endif
 
-  test(test_name, test_exe,
-    args: [ '--tap', '-k' ],
-    protocol: 'tap',
-    timeout: test_timeout,
-    env: test_env,
-    suite: ['gtk'] + test_extra_suites,
-    should_fail: expect_fail,
-  )
-endforeach
+    test(test_name, test_exe,
+      args: [ '--tap', '-k' ],
+      protocol: 'tap',
+      timeout: test_timeout,
+      env: test_env,
+      suite: ['gtk'] + test_extra_suites,
+      should_fail: expect_fail,
+    )
+  endforeach
+endif
 
 # FIXME: if objc autotestkeywords_CPPFLAGS += -DHAVE_OBJC=1 -x objective-c++
 if add_languages('cpp', required: false, native: false)

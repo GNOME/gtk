@@ -30,34 +30,36 @@ test('api', test_api,
   suite: 'css',
 )
 
-test_data = executable('data', 'data.c',
-  c_args: common_cflags,
-  include_directories: [confinc, ],
-  dependencies: libgtk_static_dep,
-  install: get_option('install-tests'),
-  install_dir: testexecdir,
-)
+if get_option('build-internal-tests')
+  test_data = executable('data', 'data.c',
+    c_args: common_cflags,
+    include_directories: [confinc, ],
+    dependencies: libgtk_static_dep,
+    install: get_option('install-tests'),
+    install_dir: testexecdir,
+  )
 
-test('data', test_data,
-  args: ['--tap', '-k' ],
-  protocol: 'tap',
-  env: csstest_env,
-  suite: 'css',
-)
+  test('data', test_data,
+    args: ['--tap', '-k' ],
+    protocol: 'tap',
+    env: csstest_env,
+    suite: 'css',
+  )
 
-transition = executable('transition', 'transition.c',
-  c_args: common_cflags,
-  dependencies: libgtk_static_dep,
-  install: get_option('install-tests'),
-  install_dir: testexecdir,
-)
+  transition = executable('transition', 'transition.c',
+    c_args: common_cflags,
+    dependencies: libgtk_static_dep,
+    install: get_option('install-tests'),
+    install_dir: testexecdir,
+  )
 
-test('transition', transition,
-     args: [ '--tap', '-k' ],
-     protocol: 'tap',
-     env: csstest_env,
-     suite: 'css'
-)
+  test('transition', transition,
+       args: [ '--tap', '-k' ],
+       protocol: 'tap',
+       env: csstest_env,
+       suite: 'css'
+  )
+endif
 
 if get_option('install-tests')
   conf = configuration_data()

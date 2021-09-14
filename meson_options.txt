@@ -119,6 +119,11 @@ option('build-tests',
        value: 'true',
        description : 'Build tests')
 
+option('build-internal-tests',
+       type: 'boolean',
+       value: 'true',
+       description : 'Build tests for internal apis')
+
 option('install-tests',
        type: 'boolean',
        value: 'false',
