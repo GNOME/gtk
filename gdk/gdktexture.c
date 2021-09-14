@@ -747,3 +747,32 @@ gdk_texture_save_to_tiff (GdkTexture  *texture,
 
   return result;
 }
+
+/**
+ * gdk_texture_save_to_tiff_bytes:
+ * @texture: a `GdkTexture`
+ *
+ * Store the given @texture in memory as a TIFF file.
+ * Use gdk_texture_new_from_bytes() to read it back.
+ *
+ * This function is intended to store a representation of the
+ * texture's data that is as accurate as possible. This is
+ * particularly relevant when working with high dynamic range
+ * images and floating-point texture data.
+ *
+ * If that is not your concern and you are interested in a
+ * smaller size and a more portable format, you might want to
+ * use gdk_texture_save_to_png_bytes().
+ *
+ * Returns: a newly allocated `GBytes` containing TIFF data
+ *
+ * Since: 4.6
+ */
+GBytes *
+gdk_texture_save_to_tiff_bytes (GdkTexture *texture)
+{
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+
+  return gdk_save_tiff (texture);
+}
+
