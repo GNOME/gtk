@@ -197,9 +197,10 @@ gsk_ngl_command_queue_capture_png (GskNglCommandQueue *self,
                                    guint               height,
                                    gboolean            flip_y)
 {
-  cairo_surface_t *surface;
-  guint8 *data;
   guint stride;
+  guint8 *data;
+  GBytes *bytes;
+  GdkTexture *texture;
 
   g_assert (GSK_IS_NGL_COMMAND_QUEUE (self));
   g_assert (filename != NULL);
@@ -222,11 +223,12 @@ gsk_ngl_command_queue_capture_png (GskNglCommandQueue *self,
       data = flipped;
     }
 
-  surface = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32, width, height, stride);
-  cairo_surface_write_to_png (surface, filename);
+  bytes = g_bytes_new_take (data, height * stride);
+  texture = gdk_memory_texture_new (width, height, GDK_MEMORY_DEFAULT, bytes, stride);
+  g_bytes_unref (bytes);
 
-  cairo_surface_destroy (surface);
-  g_free (data);
+  gdk_texture_save_to_png (texture, filename);
+  g_object_unref (texture);
 }
 
 static inline gboolean

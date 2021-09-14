@@ -204,25 +204,22 @@ gsk_ngl_shadow_library_lookup (GskNglShadowLibrary  *self,
 
 #if 0
 static void
-write_shadow_to_png (const Shadow *shadow)
+write_shadow_to_png (GskNglDriver *driver,
+                     const Shadow *shadow)
 {
   int width = shadow->outline.bounds.size.width + (shadow->outline.bounds.origin.x * 2);
   int height = shadow->outline.bounds.size.height + (shadow->outline.bounds.origin.y * 2);
-  int stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width);
-  guchar *data = g_malloc (height * stride);
-  cairo_surface_t *s;
   char *filename = g_strdup_printf ("shadow_cache_%d_%d_%d.png",
                                     width, height, shadow->texture_id);
+  GdkTexture *texture;
 
-  glBindTexture (GL_TEXTURE_2D, shadow->texture_id);
-  glGetTexImage (GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
-  s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32,
-                                           width, height,
-                                           stride);
-  cairo_surface_write_to_png (s, filename);
+  texture = gdk_gl_texture_new (gsk_ngl_driver_get_context (driver),
+                                shadow->texture_id,
+                                width, height,
+                                NULL, NULL);
+  gdk_texture_save_to_png (texture, filename);
 
-  cairo_surface_destroy (s);
-  g_free (data);
+  g_object_unref (texture);
   g_free (filename);
 }
 #endif
@@ -240,7 +237,7 @@ gsk_ngl_shadow_library_begin_frame (GskNglShadowLibrary *self)
   for (i = 0, p = self->shadows->len; i < p; i++)
     {
       const Shadow *shadow = &g_array_index (self->shadows, Shadow, i);
-      write_shadow_to_png (shadow);
+      write_shadow_to_png (self->driver, shadow);
     }
 #endif
 
