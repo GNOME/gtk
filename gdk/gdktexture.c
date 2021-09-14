@@ -28,8 +28,8 @@
  * `GdkPixbuf`, or a Cairo surface, or other pixel data.
  *
  * The ownership of the pixel data is transferred to the `GdkTexture`
- * instance; you can only make a copy of it, via
- * [method@Gdk.Texture.download].
+ * instance; you can only make a copy of it, via [method@Gdk.Texture.download]
+ * or [method@Gdk.Texture.download_float].
  *
  * `GdkTexture` is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
