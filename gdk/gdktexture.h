@@ -38,6 +38,25 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkTexture, g_object_unref)
 
 typedef struct _GdkTextureClass        GdkTextureClass;
 
+#define GDK_TEXTURE_ERROR       (gdk_texture_error_quark ())
+
+GDK_AVAILABLE_IN_4_6
+GQuark gdk_texture_error_quark (void);
+
+/**
+ * GdkTextureError:
+ * @GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY: Not enough memory to handle this image
+ * @GDK_TEXTURE_ERROR_CORRUPT_IMAGE: The image data appears corrupted
+ * @GDK_TEXTURE_ERROR_UNSUPPORTED: The image format is not supported
+ *
+ * Possible errors that can be returned by `GdkTexture` constructors.
+ */
+typedef enum
+{
+  GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
+  GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
+  GDK_TEXTURE_ERROR_UNSUPPORTED,
+} GdkTextureError;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_texture_get_type                   (void) G_GNUC_CONST;
