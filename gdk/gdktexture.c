@@ -684,9 +684,6 @@ gdk_texture_save_to_png (GdkTexture *texture,
   g_return_val_if_fail (filename != NULL, FALSE);
 
   bytes = gdk_save_png (texture);
-  if (!bytes)
-    return FALSE;
-
   result = g_file_set_contents (filename,
                                 g_bytes_get_data (bytes, NULL),
                                 g_bytes_get_size (bytes),
