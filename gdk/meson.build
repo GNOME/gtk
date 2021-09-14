@@ -53,6 +53,7 @@ gdk_public_sources = files([
   'gdkdragsurface.c',
   'loaders/gdkpng.c',
   'loaders/gdktiff.c',
+  'loaders/gdkjpeg.c',
 ])
 
 gdk_public_headers = files([
@@ -205,6 +206,7 @@ gdk_deps = [
   vulkan_dep,
   png_dep,
   tiff_dep,
+  jpeg_dep,
 ]
 
 if profiler_enabled
