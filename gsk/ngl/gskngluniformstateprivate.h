@@ -167,7 +167,7 @@ gsk_ngl_uniform_state_get_value (GskNglUniformState    *state,
   return gsk_ngl_uniform_state_init_value (state, program, format, array_count, key, out_mapping);
 }
 
-static inline guint
+G_GNUC_PURE static inline guint
 gsk_ngl_uniform_state_align (guint current_pos,
                              guint size)
 {

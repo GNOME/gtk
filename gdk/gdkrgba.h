@@ -67,7 +67,7 @@ GDK_AVAILABLE_IN_ALL
 gboolean  gdk_rgba_parse     (GdkRGBA       *rgba,
                               const char    *spec);
 GDK_AVAILABLE_IN_ALL
-char *   gdk_rgba_to_string (const GdkRGBA *rgba);
+char *   gdk_rgba_to_string (const GdkRGBA *rgba) G_GNUC_MALLOC;
 
 
 G_END_DECLS

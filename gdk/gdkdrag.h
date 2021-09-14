@@ -69,7 +69,7 @@ GDK_AVAILABLE_IN_ALL
 GdkDragAction    gdk_drag_get_selected_action  (GdkDrag *drag);
 
 GDK_AVAILABLE_IN_ALL
-gboolean         gdk_drag_action_is_unique     (GdkDragAction   action);
+gboolean         gdk_drag_action_is_unique     (GdkDragAction   action) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
 GdkDrag *        gdk_drag_begin                (GdkSurface         *surface,

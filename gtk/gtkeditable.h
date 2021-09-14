@@ -87,7 +87,7 @@ void     gtk_editable_set_text             (GtkEditable *editable,
 GDK_AVAILABLE_IN_ALL
 char *   gtk_editable_get_chars            (GtkEditable *editable,
                                             int          start_pos,
-                                            int          end_pos);
+                                            int          end_pos) G_GNUC_MALLOC;
 GDK_AVAILABLE_IN_ALL
 void     gtk_editable_insert_text          (GtkEditable *editable,
                                             const char  *text,

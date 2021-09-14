@@ -24,7 +24,7 @@ void                     gsk_rounded_rect_scale_affine          (GskRoundedRect 
                                                                  float                 dx,
                                                                  float                 dy);
 
-gboolean                 gsk_rounded_rect_is_circular           (const GskRoundedRect     *self);
+gboolean                 gsk_rounded_rect_is_circular           (const GskRoundedRect     *self) G_GNUC_PURE;
 
 void                     gsk_rounded_rect_path                  (const GskRoundedRect     *self,
                                                                  cairo_t                  *cr);
@@ -33,7 +33,7 @@ void                     gsk_rounded_rect_to_float              (const GskRounde
 
 gboolean                 gsk_rounded_rect_equal                 (gconstpointer             rect1,
                                                                  gconstpointer             rect2) G_GNUC_PURE;
-char *                   gsk_rounded_rect_to_string             (const GskRoundedRect     *self);
+char *                   gsk_rounded_rect_to_string             (const GskRoundedRect     *self) G_GNUC_MALLOC;
 
 
 G_END_DECLS

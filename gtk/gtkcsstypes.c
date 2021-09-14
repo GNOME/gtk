@@ -22,68 +22,6 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
 
-GtkCssChange
-_gtk_css_change_for_sibling (GtkCssChange match)
-{
-#define BASE_STATES ( GTK_CSS_CHANGE_CLASS \
-                    | GTK_CSS_CHANGE_NAME \
-                    | GTK_CSS_CHANGE_ID \
-                    | GTK_CSS_CHANGE_FIRST_CHILD \
-                    | GTK_CSS_CHANGE_LAST_CHILD \
-                    | GTK_CSS_CHANGE_NTH_CHILD \
-                    | GTK_CSS_CHANGE_NTH_LAST_CHILD \
-                    | GTK_CSS_CHANGE_STATE \
-                    | GTK_CSS_CHANGE_HOVER \
-                    | GTK_CSS_CHANGE_DISABLED \
-                    | GTK_CSS_CHANGE_SELECTED \
-                    | GTK_CSS_CHANGE_BACKDROP)
-
-#define KEEP_STATES ( ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE) \
-                    | GTK_CSS_CHANGE_NTH_CHILD \
-                    | GTK_CSS_CHANGE_NTH_LAST_CHILD)
-
-  return (match & KEEP_STATES) | ((match & BASE_STATES) << GTK_CSS_CHANGE_SIBLING_SHIFT);
-
-#undef BASE_STATES
-#undef KEEP_STATES
-}
-
-GtkCssChange
-_gtk_css_change_for_child (GtkCssChange match)
-{
-#define BASE_STATES ( GTK_CSS_CHANGE_CLASS \
-                    | GTK_CSS_CHANGE_NAME \
-                    | GTK_CSS_CHANGE_ID \
-                    | GTK_CSS_CHANGE_FIRST_CHILD \
-                    | GTK_CSS_CHANGE_LAST_CHILD \
-                    | GTK_CSS_CHANGE_NTH_CHILD \
-                    | GTK_CSS_CHANGE_NTH_LAST_CHILD \
-                    | GTK_CSS_CHANGE_STATE \
-                    | GTK_CSS_CHANGE_HOVER \
-                    | GTK_CSS_CHANGE_DISABLED \
-                    | GTK_CSS_CHANGE_BACKDROP \
-                    | GTK_CSS_CHANGE_SELECTED \
-                    | GTK_CSS_CHANGE_SIBLING_CLASS \
-                    | GTK_CSS_CHANGE_SIBLING_NAME \
-                    | GTK_CSS_CHANGE_SIBLING_ID \
-                    | GTK_CSS_CHANGE_SIBLING_FIRST_CHILD \
-                    | GTK_CSS_CHANGE_SIBLING_LAST_CHILD \
-                    | GTK_CSS_CHANGE_SIBLING_NTH_CHILD \
-                    | GTK_CSS_CHANGE_SIBLING_NTH_LAST_CHILD \
-                    | GTK_CSS_CHANGE_SIBLING_STATE \
-                    | GTK_CSS_CHANGE_SIBLING_HOVER \
-                    | GTK_CSS_CHANGE_SIBLING_DISABLED \
-                    | GTK_CSS_CHANGE_SIBLING_BACKDROP \
-                    | GTK_CSS_CHANGE_SIBLING_SELECTED)
-
-#define KEEP_STATES (~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE))
-
-  return (match & KEEP_STATES) | ((match & BASE_STATES) << GTK_CSS_CHANGE_PARENT_SHIFT);
-
-#undef BASE_STATES
-#undef KEEP_STATES
-}
-
 void
 gtk_css_change_print (GtkCssChange  change,
                       GString      *string)
