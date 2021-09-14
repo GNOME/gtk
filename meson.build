@@ -406,6 +406,9 @@ png_dep        = dependency('libpng',
 tiff_dep       = dependency('libtiff-4',
                             fallback: ['libtiff', 'libtiff4_dep'],
                             required: true)
+jpeg_dep       = dependency('libjpeg',
+                            fallback: ['libjpeg-turbo', 'jpeg_dep'],
+                            required: true)
 
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
