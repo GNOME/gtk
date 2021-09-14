@@ -44,8 +44,19 @@ static void
 fatal_error_handler (j_common_ptr cinfo)
 {
   struct error_handler_data *errmgr;
+  char buffer[JMSG_LENGTH_MAX];
 
   errmgr = (struct error_handler_data *) cinfo->err;
+
+  cinfo->err->format_message (cinfo, buffer);
+
+  if (errmgr->error && *errmgr->error == NULL)
+    g_set_error (errmgr->error,
+                 GDK_TEXTURE_ERROR,
+                 cinfo->err->msg_code == JERR_OUT_OF_MEMORY
+                   ? GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY
+                   : GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
+                 "Error interpreting JPEG image file (%s)", buffer);
 
   siglongjmp (errmgr->setjmp_buffer, 1);
 
@@ -100,7 +111,15 @@ gdk_load_jpeg (GBytes  *input_bytes,
   height = info.output_height;
 
   size = width * height * 3;
-  data = g_malloc (size);
+  data = g_try_malloc_n (width * 3, height);
+  if (!data)
+    {
+      g_set_error_literal (error,
+                           GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
+                           "Not enough memory to load jpeg");
+      jpeg_destroy_decompress (&info);
+      return NULL;
+    }
 
   while (info.output_scanline < info.output_height)
     {
