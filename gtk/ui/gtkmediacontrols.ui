@@ -23,6 +23,7 @@
             <property name="receives-default">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
+            <property name="has-frame">0</property>
             <property name="icon-name">media-playback-start-symbolic</property>
             <signal name="clicked" handler="play_button_clicked" object="GtkMediaControls" swapped="no"/>
           </object>
