@@ -250,9 +250,9 @@ const char * _gtk_builder_parser_translate (const char *domain,
                                              const char *context,
                                              const char *text);
 char *   _gtk_builder_get_resource_path (GtkBuilder *builder,
-					  const char *string);
+					  const char *string) G_GNUC_MALLOC;
 char *   _gtk_builder_get_absolute_filename (GtkBuilder *builder,
-					      const char *string);
+					      const char *string) G_GNUC_MALLOC;
 
 void      _gtk_builder_menu_start (ParserData   *parser_data,
                                    const char   *element_name,
