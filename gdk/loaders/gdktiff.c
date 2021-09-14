@@ -38,19 +38,16 @@
 
 typedef struct
 {
-  GObject *stream;
-  GInputStream *input;
-  GOutputStream *output;
-
-  gchar *buffer;
-  gsize allocated;
-  gsize used;
+  GBytes **out_bytes;
+  gchar *data;
+  gsize size;
   gsize position;
 } TiffIO;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
-
+static void
+tiff_io_warning (const char *module,
+                 const char *fmt,
+                 va_list     ap) G_GNUC_PRINTF(2, 0);
 static void
 tiff_io_warning (const char *module,
                  const char *fmt,
@@ -62,12 +59,14 @@ tiff_io_warning (const char *module,
 static void
 tiff_io_error (const char *module,
                const char *fmt,
+               va_list     ap) G_GNUC_PRINTF(2, 0);
+static void
+tiff_io_error (const char *module,
+               const char *fmt,
                va_list     ap)
 {
   g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_MESSAGE, fmt, ap);
 }
-
-#pragma GCC diagnostic pop
 
 static tsize_t
 tiff_io_read (thandle_t handle,
@@ -75,22 +74,23 @@ tiff_io_read (thandle_t handle,
               tsize_t   size)
 {
   TiffIO *io = (TiffIO *) handle;
-  GError *error = NULL;
-  gssize read  = -1;
-  gsize bytes_read = 0;
+  gsize read;
 
-  if (! g_input_stream_read_all (io->input,
-                                 (void *) buffer, (gsize) size,
-                                 &bytes_read,
-                                 NULL, &error))
-    {
-      g_printerr ("%s", error->message);
-      g_clear_error (&error);
-    }
+  read = MIN (size, io->size - io->position);
 
-  read = bytes_read;
+  memcpy (buffer, io->data + io->position, read);
+  io->position += read;
 
   return (tsize_t) read;
+}
+
+static tsize_t
+tiff_io_no_write (thandle_t handle,
+                  tdata_t   buffer,
+                  tsize_t   size)
+{
+  errno = EINVAL;
+  return (tsize_t) -1;
 }
 
 static tsize_t
@@ -99,37 +99,17 @@ tiff_io_write (thandle_t handle,
                tsize_t   size)
 {
   TiffIO *io = (TiffIO *) handle;
-  GError *error = NULL;
-  gssize written = -1;
-  gsize bytes_written = 0;
 
-  if (! g_output_stream_write_all (io->output,
-                                   (void *) buffer, (gsize) size,
-                                   &bytes_written,
-                                   NULL, &error))
+  if (io->size - io->position < size)
     {
-      g_printerr ("%s", error->message);
-      g_clear_error (&error);
+      io->size = io->position + size;
+      io->data = g_realloc (io->data, io->size);
     }
 
-  written = bytes_written;
+  memcpy (io->data + io->position, buffer, size);
+  io->position += size;
 
-  return (tsize_t) written;
-}
-
-static GSeekType
-lseek_to_seek_type (int whence)
-{
-  switch (whence)
-    {
-    default:
-    case SEEK_SET:
-      return G_SEEK_SET;
-    case SEEK_CUR:
-      return G_SEEK_CUR;
-    case SEEK_END:
-      return G_SEEK_END;
-    }
+  return (tsize_t) size;
 }
 
 static toff_t
@@ -138,109 +118,49 @@ tiff_io_seek (thandle_t handle,
               int       whence)
 {
   TiffIO *io = (TiffIO *) handle;
-  GError *error = NULL;
-  gboolean sought = FALSE;
-  goffset position = -1;
 
-  sought = g_seekable_seek (G_SEEKABLE (io->stream),
-                            (goffset) offset, lseek_to_seek_type (whence),
-                            NULL, &error);
-  if (sought)
+  switch (whence)
     {
-      position = g_seekable_tell (G_SEEKABLE (io->stream));
+    default:
+      errno = EINVAL;
+      return -1;
+    case SEEK_SET:
+      break;
+    case SEEK_CUR:
+      offset += io->position;
+      break;
+    case SEEK_END:
+      offset += io->size;
+      break;
     }
-  else
+  if (offset < 0)
     {
-      g_printerr ("%s", error->message);
-      g_clear_error (&error);
+      errno = EINVAL;
+      return -1;
+    }
+  if (offset > io->size)
+    {
+      /* Linux apparently can do that */
+      errno = EINVAL;
+      return -1;
     }
 
-  return (toff_t) position;
+  io->position = offset;
+
+  return offset;
 }
 
 static int
 tiff_io_close (thandle_t handle)
 {
   TiffIO *io = (TiffIO *) handle;
-  GError *error = NULL;
-  gboolean closed = FALSE;
 
-  if (io->input)
-    closed = g_input_stream_close (io->input, NULL, &error);
-  else if (io->output)
-    closed = g_output_stream_close (io->output, NULL, &error);
-
-  if (!closed)
-    {
-      g_printerr ("%s", error->message);
-      g_clear_error (&error);
-    }
-
-  g_clear_object (&io->stream);
-  io->input = NULL;
-  io->output = NULL;
-
-  g_clear_pointer (&io->buffer, g_free);
-
-  io->allocated = 0;
-  io->used = 0;
-  io->position  = 0;
+  if (io->out_bytes)
+    *io->out_bytes = g_bytes_new_take (io->data, io->size);
 
   g_free (io);
 
-  return closed ? 0 : -1;
-}
-
-static goffset
-input_stream_query_size (GInputStream *stream)
-{
-  goffset size = 0;
-
-  while (G_IS_FILTER_INPUT_STREAM (stream))
-    stream = g_filter_input_stream_get_base_stream (G_FILTER_INPUT_STREAM (stream));
-
-  if (G_IS_FILE_INPUT_STREAM (stream))
-    {
-      GFileInfo *info;
-
-      info = g_file_input_stream_query_info (G_FILE_INPUT_STREAM (stream),
-                                             G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                                             NULL,
-                                             NULL);
-      if (info)
-        {
-          size = g_file_info_get_size (info);
-          g_object_unref (info);
-        }
-    }
-
-  return size;
-}
-
-static goffset
-output_stream_query_size (GOutputStream *stream)
-{
-  goffset size = 0;
-
-  while (G_IS_FILTER_OUTPUT_STREAM (stream))
-    stream = g_filter_output_stream_get_base_stream (G_FILTER_OUTPUT_STREAM (stream));
-
-  if (G_IS_FILE_OUTPUT_STREAM (stream))
-    {
-      GFileInfo *info;
-
-      info = g_file_output_stream_query_info (G_FILE_OUTPUT_STREAM (stream),
-                                              G_FILE_ATTRIBUTE_STANDARD_SIZE,
-                                              NULL,
-                                              NULL);
-      if (info)
-        {
-          size = g_file_info_get_size (info);
-          g_object_unref (info);
-        }
-    }
-
-  return size;
+  return 0;
 }
 
 static toff_t
@@ -248,41 +168,44 @@ tiff_io_get_file_size (thandle_t handle)
 {
   TiffIO *io = (TiffIO *) handle;
 
-  if (io->input)
-    return (toff_t) input_stream_query_size (io->input);
-  else if (io->output)
-    return (toff_t) output_stream_query_size (io->output);
-
-  return (toff_t) 0;
+  return io->size;
 }
 
 static TIFF *
-tiff_open (gpointer      stream,
-           const gchar  *mode,
-           GError      **error)
+tiff_open_read (GBytes *bytes)
 {
+  TiffIO *io;
+
   TIFFSetWarningHandler ((TIFFErrorHandler) tiff_io_warning);
   TIFFSetErrorHandler ((TIFFErrorHandler) tiff_io_error);
-  TiffIO *io;
 
   io = g_new0 (TiffIO, 1);
 
-  if (strcmp (mode, "r") == 0)
-    {
-      io->input = G_INPUT_STREAM (stream);
-      io->stream = g_object_ref (G_OBJECT (stream));
-    }
-  else if (strcmp (mode, "w") == 0)
-    {
-      io->output = G_OUTPUT_STREAM (stream);
-      io->stream = g_object_ref (G_OBJECT (stream));
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
+  io->data = (char *) g_bytes_get_data (bytes, &io->size);
 
-  return TIFFClientOpen ("GTK", mode,
+  return TIFFClientOpen ("GTK-read", "r",
+                         (thandle_t) io,
+                         tiff_io_read,
+                         tiff_io_no_write,
+                         tiff_io_seek,
+                         tiff_io_close,
+                         tiff_io_get_file_size,
+                         NULL, NULL);
+}
+
+static TIFF *
+tiff_open_write (GBytes **result)
+{
+  TiffIO *io;
+
+  TIFFSetWarningHandler ((TIFFErrorHandler) tiff_io_warning);
+  TIFFSetErrorHandler ((TIFFErrorHandler) tiff_io_error);
+
+  io = g_new0 (TiffIO, 1);
+
+  io->out_bytes = result;
+
+  return TIFFClientOpen ("GTK-write", "w",
                          (thandle_t) io,
                          tiff_io_read,
                          tiff_io_write,
@@ -338,7 +261,6 @@ static struct {
 GBytes *
 gdk_save_tiff (GdkTexture *texture)
 {
-  GOutputStream *stream;
   TIFF *tif;
   int width, height, stride;
   guint16 bits_per_sample = 0;
@@ -347,17 +269,11 @@ gdk_save_tiff (GdkTexture *texture)
   const guchar *line;
   const guchar *data;
   guchar *new_data = NULL;
-  GBytes *bytes;
+  GBytes *result = NULL;
   GdkTexture *memory_texture;
   GdkMemoryFormat format;
 
-  stream = g_memory_output_stream_new (NULL, 0, g_realloc, g_free);
-  tif = tiff_open (stream, "w", NULL);
-  if (!tif)
-    {
-      g_object_unref (stream);
-      return NULL;
-    }
+  tif = tiff_open_write (&result);
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
@@ -422,7 +338,6 @@ gdk_save_tiff (GdkTexture *texture)
           TIFFClose (tif);
           g_free (new_data);
           g_object_unref (memory_texture);
-          g_object_unref (stream);
           return NULL;
         }
 
@@ -432,13 +347,12 @@ gdk_save_tiff (GdkTexture *texture)
   TIFFFlushData (tif);
   TIFFClose (tif);
 
+  g_assert (result);
+
   g_free (new_data);
   g_object_unref (memory_texture);
 
-  bytes = g_memory_output_stream_steal_as_bytes (G_MEMORY_OUTPUT_STREAM (stream));
-  g_object_unref (stream);
-
-  return bytes;
+  return result;
 }
 
 static GdkTexture *
@@ -480,7 +394,6 @@ GdkTexture *
 gdk_load_tiff (GBytes  *input_bytes,
                GError **error)
 {
-  GInputStream *stream;
   TIFF *tif;
   guint16 samples_per_pixel;
   guint16 bits_per_sample;
@@ -496,12 +409,7 @@ gdk_load_tiff (GBytes  *input_bytes,
   GBytes *bytes;
   GdkTexture *texture;
 
-  stream = g_memory_input_stream_new_from_bytes (input_bytes);
-  tif = tiff_open (stream, "r", error);
-  g_object_unref (stream);
-
-  if (!tif)
-    return NULL;
+  tif = tiff_open_read (input_bytes);
 
   TIFFSetDirectory (tif, 0);
 
