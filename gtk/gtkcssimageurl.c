@@ -26,9 +26,8 @@
 #include "gtkcssimageinvalidprivate.h"
 #include "gtkcssimagepaintableprivate.h"
 #include "gtkstyleproviderprivate.h"
-#include "gdkpixbufutilsprivate.h"
-
 #include "gtk/css/gtkcssdataurlprivate.h"
+
 
 G_DEFINE_TYPE (GtkCssImageUrl, _gtk_css_image_url, GTK_TYPE_CSS_IMAGE)
 
@@ -181,27 +180,27 @@ gtk_css_image_url_parse (GtkCssImage  *image,
   if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
     {
       GBytes *bytes;
-      GdkPaintable *paintable;
       GError *error = NULL;
 
       bytes = gtk_css_data_url_parse (url, NULL, &error);
       if (bytes)
         {
-          paintable = gdk_paintable_new_from_bytes_scaled (bytes, 1);
+          GdkTexture *texture;
+
+          texture = gdk_texture_new_from_bytes (bytes, &error);
           g_bytes_unref (bytes);
-          if (paintable == NULL)
+          if (texture)
             {
-              error = g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED,
-                                   "Failed to load image from '%s'", url);
+              GdkPaintable *paintable = GDK_PAINTABLE (texture);
+              self->loaded_image = gtk_css_image_paintable_new (paintable, paintable);
+            }
+          else
+            {
               gtk_css_parser_emit_error (parser,
                                          gtk_css_parser_get_start_location (parser),
                                          gtk_css_parser_get_end_location (parser),
                                          error);
               g_clear_error (&error);
-            }
-          else
-            {
-              self->loaded_image = gtk_css_image_paintable_new (paintable, paintable);
             }
         }
       else
