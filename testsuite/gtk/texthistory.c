@@ -602,6 +602,8 @@ test14 (void)
   run_test (commands, G_N_ELEMENTS (commands), 0);
 
   g_free (fill);
+  g_free (fill_after);
+  g_free (fill_after_2);
 }
 
 int
