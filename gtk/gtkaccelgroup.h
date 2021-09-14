@@ -67,7 +67,7 @@ char *   gtk_accelerator_get_label_with_keycode (GdkDisplay      *display,
                                                  guint            keycode,
                                                  GdkModifierType  accelerator_mods);
 GDK_AVAILABLE_IN_ALL
-GdkModifierType gtk_accelerator_get_default_mod_mask (void);
+GdkModifierType gtk_accelerator_get_default_mod_mask (void) G_GNUC_CONST;
 
 
 G_END_DECLS
