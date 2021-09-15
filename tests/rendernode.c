@@ -49,6 +49,7 @@ main(int argc, char **argv)
   gsize len;
   int run;
   GOptionContext *context;
+  GdkTexture *texture;
 
   context = g_option_context_new ("NODE-FILE PNG-FILE");
   g_option_context_add_main_entries (context, options, NULL);
@@ -109,9 +110,16 @@ main(int argc, char **argv)
     {
       graphene_rect_t bounds;
       cairo_t *cr;
+      int width, height, stride;
+      guchar *pixels;
 
       gsk_render_node_get_bounds (node, &bounds);
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, ceil (bounds.size.width), ceil (bounds.size.height));
+      width = ceil (bounds.size.width);
+      height = ceil (bounds.size.height);
+      stride = width * 4;
+      pixels = g_malloc0_n (stride, height);
+
+      surface = cairo_image_surface_create_for_data (pixels, CAIRO_FORMAT_ARGB32, width, height, stride);
       cr = cairo_create (surface);
 
       cairo_translate (cr, - bounds.origin.x, - bounds.origin.y);
@@ -132,15 +140,23 @@ main(int argc, char **argv)
         }
 
       cairo_destroy (cr);
+      cairo_surface_destroy (surface);
+
+      bytes = g_bytes_new_take (pixels, stride * height);
+      texture = gdk_memory_texture_new (width, height,
+                                        GDK_MEMORY_DEFAULT,
+                                        bytes,
+                                        stride);
+      g_bytes_unref (bytes);
     }
   else
     {
       GskRenderer *renderer;
       GdkSurface *window;
-      GdkTexture *texture = NULL;
 
       window = gdk_surface_new_toplevel (gdk_display_get_default());
       renderer = gsk_renderer_new_for_surface (window);
+      texture = NULL; /* poor gcc can't see that runs > 0 */
 
       for (run = 0; run < runs; run++)
         {
@@ -153,15 +169,7 @@ main(int argc, char **argv)
             g_print ("Run %u: Rendered using %s in %.4gs\n", run, G_OBJECT_TYPE_NAME (renderer), (double) (end - start) / G_USEC_PER_SEC);
         }
 
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                            gdk_texture_get_width (texture),
-                                            gdk_texture_get_height (texture));
-      gdk_texture_download (texture,
-                            cairo_image_surface_get_data (surface),
-                            cairo_image_surface_get_stride (surface));
-      cairo_surface_mark_dirty (surface);
       gsk_renderer_unrealize (renderer);
-      g_object_unref (texture);
       g_object_unref (window);
       g_object_unref (renderer);
     }
@@ -170,19 +178,15 @@ main(int argc, char **argv)
 
   if (argc > 2)
     {
-      cairo_status_t status;
-      
-      status = cairo_surface_write_to_png (surface, argv[2]);
-
-      if (status != CAIRO_STATUS_SUCCESS)
+      if (!gdk_texture_save_to_png (texture, argv[2]))
         {
-          cairo_surface_destroy (surface);
-          g_print ("Failed to save PNG file: %s\n", cairo_status_to_string (status));
+          g_object_unref (texture);
+          g_print ("Failed to save PNG file\n");
           return 1;
         }
     }
 
-  cairo_surface_destroy (surface);
+  g_object_unref (texture);
 
   return 0;
 }
