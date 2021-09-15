@@ -143,6 +143,8 @@ buffer_diff_core (const guchar *buf_a,
               guint8 alpha = diff_pixel >> 24;
               diff_pixel = alpha * 0x010101;
             }
+          /* make the pixel fully opaque */
+          diff_pixel |= 0xff000000;
           
           row[x] = diff_pixel;
       }
