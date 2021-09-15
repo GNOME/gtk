@@ -99,16 +99,16 @@ get_output_file (const char *file,
 }
 
 static void
-save_image (cairo_surface_t *surface,
-            const char      *test_name,
-            const char      *extension)
+save_image (GdkTexture *texture,
+            const char *test_name,
+            const char *extension)
 {
   char *filename = get_output_file (test_name, ".node", extension);
-  int status;
+  gboolean result;
 
   g_print ("Storing test result image at %s\n", filename);
-  status = cairo_surface_write_to_png (surface, filename);
-  g_assert_true (status == CAIRO_STATUS_SUCCESS);
+  result = gdk_texture_save_to_png (texture, filename);
+  g_assert_true (result);
   g_free (filename);
 }
 
@@ -149,10 +149,8 @@ static const GOptionEntry options[] = {
 int
 main (int argc, char **argv)
 {
-  cairo_surface_t *reference_surface = NULL;
-  cairo_surface_t *rendered_surface = NULL;
-  cairo_surface_t *diff_surface = NULL;
-  GdkTexture *texture;
+  GdkTexture *reference_texture;
+  GdkTexture *rendered_texture;
   GskRenderer *renderer;
   GdkSurface *window;
   GskRenderNode *node;
@@ -215,43 +213,36 @@ main (int argc, char **argv)
   }
 
   /* Render the .node file and download to cairo surface */
-  texture = gsk_renderer_render_texture (renderer, node, NULL);
-  g_assert_nonnull (texture);
-
-  rendered_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                 gdk_texture_get_width (texture),
-                                                 gdk_texture_get_height (texture));
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (rendered_surface),
-                        cairo_image_surface_get_stride (rendered_surface));
-  cairo_surface_mark_dirty (rendered_surface);
+  rendered_texture = gsk_renderer_render_texture (renderer, node, NULL);
+  g_assert_nonnull (rendered_texture);
 
   /* Load the given reference png file */
-  reference_surface = cairo_image_surface_create_from_png (png_file);
-  if (cairo_surface_status (reference_surface))
+  reference_texture = gdk_texture_new_from_filename (png_file, &error);
+  if (reference_texture == NULL)
     {
-      g_print ("Error loading reference surface: %s\n",
-               cairo_status_to_string (cairo_surface_status (reference_surface)));
+      g_print ("Error loading reference surface: %s\n", error->message);
+      g_clear_error (&error);
       success = FALSE;
     }
   else
     {
-      /* Now compare the two */
-      diff_surface = reftest_compare_surfaces (rendered_surface, reference_surface);
+      GdkTexture *diff_texture;
 
-      if (diff_surface)
+      /* Now compare the two */
+      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+
+      if (diff_texture)
         {
-          save_image (diff_surface, node_file, ".diff.png");
-          cairo_surface_destroy (diff_surface);
+          save_image (diff_texture, node_file, ".diff.png");
+          g_object_unref (diff_texture);
           success = FALSE;
         }
     }
 
-  save_image (rendered_surface, node_file, ".out.png");
+  save_image (rendered_texture, node_file, ".out.png");
 
-  cairo_surface_destroy (reference_surface);
-  cairo_surface_destroy (rendered_surface);
-  g_object_unref (texture);
+  g_object_unref (reference_texture);
+  g_object_unref (rendered_texture);
 
   gsk_render_node_unref (node);
 
