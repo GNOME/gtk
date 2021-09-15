@@ -10,10 +10,12 @@ GTK is a multi-platform toolkit for creating graphical user interfaces.
 Offering a complete set of widgets, GTK is suitable for projects ranging
 from small one-off projects to complete application suites.
 
-GTK is free software and part of the GNU Project. However, the
-licensing terms for GTK, the GNU LGPL, allow it to be used by all
-developers, including those developing proprietary software, without any
-license fees or royalties.
+GTK is a free and open-source software project. However, the licensing terms
+for GTK, the GNU LGPL, allow it to be used by all developers, including those
+developing proprietary software, without any license fees or royalties.
+
+GTK is hosted by the GNOME project (thanks!) and used by a wide variety
+of applications and projects.
 
 The official download location
 
@@ -150,6 +152,9 @@ Contributing to GTK
 
 Please, follow the [contribution guide](./CONTRIBUTING.md) to know how to
 start contributing to GTK.
+
+If you want to support GTK financially, please consider donating to
+the GNOME project, which runs the infrastructure hosting GTK.
 
 Release notes
 -------------
