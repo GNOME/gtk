@@ -62,6 +62,7 @@ compare_render_tests = [
   'issue-3615',
   'nested-rounded-clips',
   'opacity_clip',
+  'opacity-overdraw',
   'opacity-overlapping-children',
   'outset_shadow_offset_both',
   'outset_shadow_offset_x',
