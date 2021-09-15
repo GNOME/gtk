@@ -2778,37 +2778,30 @@ gsk_ngl_render_job_visit_opacity_node (GskNglRenderJob     *job,
 
   if (!ALPHA_IS_CLEAR (new_alpha))
     {
+      GskNglRenderOffscreen offscreen = {0};
+
+      offscreen.bounds = &child->bounds;
+      offscreen.force_offscreen = TRUE;
+      offscreen.reset_clip = TRUE;
+
+      /* The semantics of an opacity node mandate that when, e.g., two
+       * color nodes overlap, there may not be any blending between them.
+       */
+      if (!gsk_ngl_render_job_visit_node_with_offscreen (job, child, &offscreen))
+        return;
+
+      g_assert (offscreen.texture_id);
+
       float prev_alpha = gsk_ngl_render_job_set_alpha (job, new_alpha);
 
-      if (gsk_render_node_get_node_type (child) == GSK_CONTAINER_NODE)
-        {
-          GskNglRenderOffscreen offscreen = {0};
-
-          offscreen.bounds = &child->bounds;
-          offscreen.force_offscreen = TRUE;
-          offscreen.reset_clip = TRUE;
-
-          /* The semantics of an opacity node mandate that when, e.g., two
-           * color nodes overlap, there may not be any blending between them.
-           */
-          if (!gsk_ngl_render_job_visit_node_with_offscreen (job, child, &offscreen))
-            return;
-
-          g_assert (offscreen.texture_id);
-
-          gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
-          gsk_ngl_program_set_uniform_texture (job->current_program,
-                                               UNIFORM_SHARED_SOURCE, 0,
-                                               GL_TEXTURE_2D,
-                                               GL_TEXTURE0,
-                                               offscreen.texture_id);
-          gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
-          gsk_ngl_render_job_end_draw (job);
-        }
-      else
-        {
-          gsk_ngl_render_job_visit_node (job, child);
-        }
+      gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
+      gsk_ngl_program_set_uniform_texture (job->current_program,
+                                           UNIFORM_SHARED_SOURCE, 0,
+                                           GL_TEXTURE_2D,
+                                           GL_TEXTURE0,
+                                           offscreen.texture_id);
+      gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+      gsk_ngl_render_job_end_draw (job);
 
       gsk_ngl_render_job_set_alpha (job, prev_alpha);
     }
