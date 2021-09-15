@@ -50,6 +50,9 @@ GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_texture_new_from_file              (GFile           *file,
                                                                 GError         **error);
 GDK_AVAILABLE_IN_4_6
+GdkTexture *            gdk_texture_new_from_filename          (const char      *path,
+                                                                GError         **error);
+GDK_AVAILABLE_IN_4_6
 GdkTexture *            gdk_texture_new_from_bytes             (GBytes          *bytes,
                                                                 GError         **error);
 
