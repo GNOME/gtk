@@ -10,7 +10,7 @@ GTK is a multi-platform toolkit for creating graphical user interfaces.
 Offering a complete set of widgets, GTK is suitable for projects ranging
 from small one-off projects to complete application suites.
 
-GTK is a free and open-source software project. However, the licensing terms
+GTK is a free and open-source software project. The licensing terms
 for GTK, the GNU LGPL, allow it to be used by all developers, including those
 developing proprietary software, without any license fees or royalties.
 
