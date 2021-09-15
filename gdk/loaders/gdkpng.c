@@ -130,8 +130,7 @@ png_simple_warning_callback (png_structp     png,
 static void
 unpremultiply (guchar *data,
                int     width,
-               int     height,
-               int     stride)
+               int     height)
 {
   gsize x, y;
 
@@ -160,7 +159,47 @@ unpremultiply (guchar *data,
               b[3] = alpha;
             }
         }
-      data += stride;
+      data += width * 4;
+    }
+}
+
+static void
+unpremultiply_float_to_16bit (guchar *data,
+                              int     width,
+                              int     height)
+{
+  gsize x, y;
+  float *src = (float *)data;;
+  guint16 *dest = (guint16 *)data;
+
+  for (y = 0; y < height; y++)
+    {
+      for (x = 0; x < width; x++)
+        {
+          float r, g, b, a;
+
+          r = src[0];
+          g = src[1];
+          b = src[2];
+          a = src[3];
+          if (a == 0)
+            {
+              dest[0] = 0;
+              dest[1] = 0;
+              dest[2] = 0;
+              dest[3] = 0;
+            }
+          else
+            {
+              dest[0] = (guint16) CLAMP (65536.f * r / a, 0.f, 65535.f);
+              dest[1] = (guint16) CLAMP (65536.f * g / a, 0.f, 65535.f);
+              dest[2] = (guint16) CLAMP (65536.f * b / a, 0.f, 65535.f);
+              dest[3] = (guint16) CLAMP (65536.f * a,     0.f, 65535.f);
+            }
+
+          dest += 4;
+          src += 4;
+        }
     }
 }
 
@@ -226,6 +265,30 @@ convert_bytes_to_data (png_structp   png,
     }
 }
 
+static void
+premultiply_16bit (guchar *data,
+                   int     width,
+                   int     height,
+                   int     stride)
+{
+  gsize x, y;
+  guint16 *src;
+
+  for (y = 0; y < height; y++)
+    {
+      src = (guint16 *)data;
+      for (x = 0; x < width; x++)
+        {
+          float alpha = src[x * 4 + 3] / 65535.f;
+          src[x * 4    ] = (guint16) CLAMP (src[x * 4    ] * alpha, 0.f, 65535.f);
+          src[x * 4 + 1] = (guint16) CLAMP (src[x * 4 + 1] * alpha, 0.f, 65535.f);
+          src[x * 4 + 2] = (guint16) CLAMP (src[x * 4 + 2] * alpha, 0.f, 65535.f);
+        }
+
+      data += stride;
+    }
+}
+
 /* }}} */
 /* {{{ Public API */
 
@@ -244,6 +307,7 @@ gdk_load_png (GBytes  *bytes,
   guchar **row_pointers = NULL;
   GBytes *out_bytes;
   GdkTexture *texture;
+  int bpp;
 
   io.data = (guchar *)g_bytes_get_data (bytes, &io.size);
   io.position = 0;
@@ -298,6 +362,9 @@ gdk_load_png (GBytes  *bytes,
   if (png_get_valid (png, info, PNG_INFO_tRNS))
     png_set_tRNS_to_alpha (png);
 
+  if (depth == 8)
+    png_set_filler (png, 0xff, PNG_FILLER_AFTER);
+
   if (depth < 8)
     png_set_packing (png);
 
@@ -308,13 +375,11 @@ gdk_load_png (GBytes  *bytes,
   if (interlace != PNG_INTERLACE_NONE)
     png_set_interlace_handling (png);
 
-  png_set_filler (png, 0xff, PNG_FILLER_AFTER);
-
   png_read_update_info (png, info);
   png_get_IHDR (png, info,
                 &width, &height, &depth,
                 &color_type, &interlace, NULL, NULL);
-  if ((depth != 8) ||
+  if ((depth != 8 && depth != 16) ||
       !(color_type == PNG_COLOR_TYPE_RGB ||
         color_type == PNG_COLOR_TYPE_RGB_ALPHA))
     {
@@ -328,20 +393,41 @@ gdk_load_png (GBytes  *bytes,
   switch (color_type)
     {
     case PNG_COLOR_TYPE_RGB_ALPHA:
-      format = GDK_MEMORY_DEFAULT;
-      png_set_read_user_transform_fn (png, premultiply_data);
+      if (depth == 8)
+        {
+          format = GDK_MEMORY_DEFAULT;
+          png_set_read_user_transform_fn (png, premultiply_data);
+        }
+      else
+        {
+          format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+          png_set_swap (png);
+#endif
+        }
       break;
     case PNG_COLOR_TYPE_RGB:
-      format = GDK_MEMORY_DEFAULT;
-      png_set_read_user_transform_fn (png, convert_bytes_to_data);
+      if (depth == 8)
+        {
+          format = GDK_MEMORY_DEFAULT;
+          png_set_read_user_transform_fn (png, convert_bytes_to_data);
+        }
+      else
+        {
+          format = GDK_MEMORY_R16G16B16;
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+          png_set_swap (png);
+#endif
+        }
       break;
     default:
       g_assert_not_reached ();
     }
 
-  stride = width * gdk_memory_format_bytes_per_pixel (format);
-  if (stride % 4)
-    stride += 4 - stride % 4;
+  bpp = gdk_memory_format_bytes_per_pixel (format);
+  stride = width * bpp;
+  if (stride % 8)
+    stride += 8 - stride % 8;
 
   buffer = g_try_malloc_n (height, stride);
   row_pointers = g_try_malloc_n (height, sizeof (char *));
@@ -363,10 +449,11 @@ gdk_load_png (GBytes  *bytes,
   png_read_image (png, row_pointers);
   png_read_end (png, info);
 
+  if (format == GDK_MEMORY_R16G16B16A16_PREMULTIPLIED)
+    premultiply_16bit (buffer, width, height, stride);
+
   out_bytes = g_bytes_new_take (buffer, height * stride);
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    out_bytes, stride);
+  texture = gdk_memory_texture_new (width, height, format, out_bytes, stride);
   g_bytes_unref (out_bytes);
 
   g_free (row_pointers);
@@ -385,14 +472,56 @@ gdk_save_png (GdkTexture *texture)
   guchar *data = NULL;
   guchar *row;
   int y;
+  GdkTexture *mtexture;
+  GdkMemoryFormat format;
+  int png_format;
+  int depth;
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
 
-  stride = width * 4;
-  data = g_malloc_n (stride, height);
-  gdk_texture_download (texture, data, stride);
-  unpremultiply (data, width, height, stride);
+  mtexture = gdk_texture_download_texture (texture);
+  format = gdk_memory_texture_get_format (GDK_MEMORY_TEXTURE (mtexture));
+
+  switch (format)
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+      stride = width * 4;
+      data = g_malloc_n (stride, height);
+      gdk_texture_download (mtexture, data, stride);
+      unpremultiply (data, width, height);
+
+      png_format = PNG_COLOR_TYPE_RGB_ALPHA;
+      depth = 8;
+      break;
+
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+      data = g_malloc_n (width * 16, height);
+      gdk_texture_download_float (mtexture, (float *)data, width * 4);
+      unpremultiply_float_to_16bit (data, width, height);
+
+      png_format = PNG_COLOR_TYPE_RGB_ALPHA;
+      stride = width * 8;
+      depth = 16;
+      break;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+    }
 
   png = png_create_write_struct_2 (PNG_LIBPNG_VER_STRING, NULL,
                                    png_simple_error_callback,
@@ -412,20 +541,25 @@ gdk_save_png (GdkTexture *texture)
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
+      g_free (data);
+      g_free (io.data);
       png_destroy_read_struct (&png, &info, NULL);
       return NULL;
     }
 
   png_set_write_fn (png, &io, png_write_func, png_flush_func);
 
-  png_set_IHDR (png, info, width, height, 8,
-                PNG_COLOR_TYPE_RGB_ALPHA,
+  png_set_IHDR (png, info, width, height, depth,
+                png_format,
                 PNG_INTERLACE_NONE,
-                PNG_COMPRESSION_TYPE_BASE,
-                PNG_FILTER_TYPE_BASE);
+                PNG_COMPRESSION_TYPE_DEFAULT,
+                PNG_FILTER_TYPE_DEFAULT);
 
   png_write_info (png, info);
-  png_set_packing (png);
+
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+  png_set_swap (png);
+#endif
 
   for (y = 0, row = data; y < height; y++, row += stride)
     png_write_rows (png, &row, 1);
@@ -433,6 +567,8 @@ gdk_save_png (GdkTexture *texture)
   png_write_end (png, info);
 
   png_destroy_write_struct (&png, &info);
+
+  g_free (data);
 
   return g_bytes_new_take (io.data, io.size);
 }
