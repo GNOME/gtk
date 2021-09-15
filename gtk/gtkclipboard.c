@@ -2036,7 +2036,8 @@ static gboolean
 gtk_clipboard_store_timeout (GtkClipboard *clipboard)
 {
   g_main_loop_quit (clipboard->store_loop);
-  
+  clipboard->store_timeout = 0;
+
   return G_SOURCE_REMOVE;
 }
 
@@ -2179,8 +2180,12 @@ gtk_clipboard_real_store (GtkClipboard *clipboard)
   g_main_loop_unref (clipboard->store_loop);
   clipboard->store_loop = NULL;
   
-  g_source_remove (clipboard->store_timeout);
-  clipboard->store_timeout = 0;
+  if (clipboard->store_timeout != 0)
+    {
+      g_source_remove (clipboard->store_timeout);
+      clipboard->store_timeout = 0;
+    }
+
   g_signal_handler_disconnect (clipboard_widget, clipboard->notify_signal_id);
   clipboard->notify_signal_id = 0;
   
