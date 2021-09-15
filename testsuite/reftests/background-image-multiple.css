@@ -1,17 +1,17 @@
 @import "reset-to-defaults.css";
 
 #button1 {
-    background-image: linear-gradient(alpha(red, 0.50),alpha(red,0.50)), linear-gradient(lime,lime);
+    background-image: linear-gradient(alpha(red, 0.60),alpha(red,0.60)), linear-gradient(lime,lime);
 }
 
 #button2 {
     background-color: lime;
-    background-image: linear-gradient(alpha(red, 0.50),alpha(red,0.50)), linear-gradient(transparent,transparent);
+    background-image: linear-gradient(alpha(red, 0.60),alpha(red,0.60)), linear-gradient(transparent,transparent);
 }
 
 #button3 {
     padding: 12px;
-    background-image: linear-gradient(alpha(red, 0.50),alpha(red,0.50)), linear-gradient(lime,lime);
+    background-image: linear-gradient(alpha(red, 0.60),alpha(red,0.60)), linear-gradient(lime,lime);
     background-clip: content-box;
 }
 
@@ -30,12 +30,12 @@
 
 #ref1,
 #ref2 {
-    background-color: #807f00;
+    background-color: #996600;
 }
 
 #ref3 {
     padding: 12px;
-    background-color: #807f00;
+    background-color: #996600;
     background-clip: content-box;
 }
 
