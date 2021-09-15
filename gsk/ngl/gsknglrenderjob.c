@@ -2768,6 +2768,58 @@ gsk_ngl_render_job_visit_cross_fade_node (GskNglRenderJob     *job,
   gsk_ngl_render_job_end_draw (job);
 }
 
+static gboolean
+is_non_branching (const GskRenderNode *node)
+{
+  switch ((int)gsk_render_node_get_node_type (node))
+    {
+    case GSK_COLOR_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_BORDER_NODE:
+    case GSK_TEXTURE_NODE:
+    case GSK_INSET_SHADOW_NODE:
+    case GSK_OUTSET_SHADOW_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_CAIRO_NODE:
+      return TRUE;
+
+    case GSK_TRANSFORM_NODE:
+      return is_non_branching (gsk_transform_node_get_child (node));
+
+    case GSK_OPACITY_NODE:
+      return is_non_branching (gsk_opacity_node_get_child (node));
+
+    case GSK_COLOR_MATRIX_NODE:
+      return is_non_branching (gsk_color_matrix_node_get_child (node));
+
+    case GSK_CLIP_NODE:
+      return is_non_branching (gsk_clip_node_get_child (node));
+
+    case GSK_ROUNDED_CLIP_NODE:
+      return is_non_branching (gsk_rounded_clip_node_get_child (node));
+
+    case GSK_SHADOW_NODE:
+      return is_non_branching (gsk_shadow_node_get_child (node));
+
+    case GSK_BLUR_NODE:
+      return is_non_branching (gsk_shadow_node_get_child (node));
+
+    case GSK_DEBUG_NODE:
+      return is_non_branching (gsk_debug_node_get_child (node));
+
+    case GSK_CONTAINER_NODE:
+      return gsk_container_node_get_n_children (node) == 1 &&
+             is_non_branching (gsk_container_node_get_child (node, 0));
+
+    default:
+      return FALSE;
+    }
+}
+
 static inline void
 gsk_ngl_render_job_visit_opacity_node (GskNglRenderJob     *job,
                                        const GskRenderNode *node)
@@ -2780,7 +2832,16 @@ gsk_ngl_render_job_visit_opacity_node (GskNglRenderJob     *job,
     {
       float prev_alpha = gsk_ngl_render_job_set_alpha (job, new_alpha);
 
-      if (gsk_render_node_get_node_type (child) == GSK_CONTAINER_NODE)
+      /* Handle a few easy cases without offscreen. We bail out
+       * as soon as we see nodes with multiple children - in theory,
+       * we would only need offscreens for overlapping children.
+       */
+      if (is_non_branching (child))
+        {
+          gsk_ngl_render_job_visit_node (job, child);
+          gsk_ngl_render_job_set_alpha (job, prev_alpha);
+        }
+      else
         {
           GskNglRenderOffscreen offscreen = {0};
 
@@ -2788,9 +2849,7 @@ gsk_ngl_render_job_visit_opacity_node (GskNglRenderJob     *job,
           offscreen.force_offscreen = TRUE;
           offscreen.reset_clip = TRUE;
 
-          /* The semantics of an opacity node mandate that when, e.g., two
-           * color nodes overlap, there may not be any blending between them.
-           */
+          /* Note: offscreen rendering resets alpha to 1.0 */
           if (!gsk_ngl_render_job_visit_node_with_offscreen (job, child, &offscreen))
             return;
 
@@ -2804,10 +2863,6 @@ gsk_ngl_render_job_visit_opacity_node (GskNglRenderJob     *job,
                                                offscreen.texture_id);
           gsk_ngl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
           gsk_ngl_render_job_end_draw (job);
-        }
-      else
-        {
-          gsk_ngl_render_job_visit_node (job, child);
         }
 
       gsk_ngl_render_job_set_alpha (job, prev_alpha);
@@ -3999,7 +4054,7 @@ gsk_ngl_render_job_new (GskNglDriver          *driver,
   job->scale_y = scale_factor;
   job->viewport = *viewport;
 
-  gsk_ngl_render_job_set_alpha (job, 1.0);
+  gsk_ngl_render_job_set_alpha (job, 1.0f);
   gsk_ngl_render_job_set_projection_from_rect (job, viewport, NULL);
   gsk_ngl_render_job_set_modelview (job, gsk_transform_scale (NULL, scale_factor, scale_factor));
 
