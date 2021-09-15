@@ -179,3 +179,43 @@ reftest_compare_surfaces (cairo_surface_t *surface1,
   return diff;
 }
 
+GdkTexture *
+reftest_compare_textures (GdkTexture *texture1,
+                          GdkTexture *texture2)
+{
+  int w, h;
+  guchar *data1, *data2;
+  GBytes *bytes;
+  cairo_surface_t *surface;
+  GdkTexture *diff;
+  
+  w = MAX (gdk_texture_get_width (texture1), gdk_texture_get_width (texture2));
+  h = MAX (gdk_texture_get_height (texture1), gdk_texture_get_height (texture2));
+
+  data1 = g_malloc_n (w * 4, h);
+  gdk_texture_download (texture1, data1, w * 4);
+  data2 = g_malloc_n (w * 4, h);
+  gdk_texture_download (texture2, data2, w * 4);
+
+  surface = buffer_diff_core (data1, w * 4,
+                              data2, w * 4,
+                              w, h);
+  if (surface == NULL)
+    return NULL;
+
+  bytes = g_bytes_new_with_free_func (cairo_image_surface_get_data (surface),
+                                      cairo_image_surface_get_height (surface)
+                                      * cairo_image_surface_get_stride (surface),
+                                      (GDestroyNotify) cairo_surface_destroy,
+                                      cairo_surface_reference (surface));
+  
+  diff = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
+                                 cairo_image_surface_get_height (surface),
+                                 GDK_MEMORY_DEFAULT,
+                                 bytes,
+                                 cairo_image_surface_get_stride (surface));
+
+  g_bytes_unref (bytes);
+
+  return diff;
+}

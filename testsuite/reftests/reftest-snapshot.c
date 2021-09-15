@@ -215,12 +215,12 @@ reftest_uninhibit_snapshot (void)
 
 static void
 draw_paintable (GdkPaintable *paintable,
-                gpointer      out_surface)
+                gpointer      out_texture)
 {
   GtkSnapshot *snapshot;
   GskRenderNode *node;
-  cairo_surface_t *surface;
-  cairo_t *cr;
+  GdkTexture *texture;
+  GskRenderer *renderer;
 
   if (inhibit_count > 0)
     return;
@@ -238,27 +238,30 @@ draw_paintable (GdkPaintable *paintable,
   if (node == NULL)
     return;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        gdk_paintable_get_intrinsic_width (paintable),
-                                        gdk_paintable_get_intrinsic_height (paintable));
-
-  cr = cairo_create (surface);
-  gsk_render_node_draw (node, cr);
-  cairo_destroy (cr);
+  renderer = gtk_native_get_renderer (
+                 gtk_widget_get_native (
+                     gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (paintable))));
+  texture = gsk_renderer_render_texture (renderer,
+                                         node,
+                                         &GRAPHENE_RECT_INIT (
+                                           0, 0,
+                                           gdk_paintable_get_intrinsic_width (paintable),
+                                           gdk_paintable_get_intrinsic_height (paintable)
+                                         ));
   gsk_render_node_unref (node);
 
-  g_signal_handlers_disconnect_by_func (paintable, draw_paintable, out_surface);
+  g_signal_handlers_disconnect_by_func (paintable, draw_paintable, out_texture);
 
-  *(cairo_surface_t **) out_surface = surface;
+  *(GdkTexture **) out_texture = texture;
 
   g_idle_add (quit_when_idle, loop);
 }
 
-static cairo_surface_t *
+static GdkTexture *
 snapshot_widget (GtkWidget *widget)
 {
   GdkPaintable *paintable;
-  cairo_surface_t *surface;
+  GdkTexture *texture = NULL;
 
   g_assert_true (gtk_widget_get_realized (widget));
 
@@ -270,17 +273,17 @@ snapshot_widget (GtkWidget *widget)
    * to delay the snapshot.
    */
   paintable = gtk_widget_paintable_new (widget);
-  g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), &surface);
+  g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), &texture);
   g_main_loop_run (loop);
 
   g_main_loop_unref (loop);
   g_object_unref (paintable);
   gtk_window_destroy (GTK_WINDOW (widget));
 
-  return surface;
+  return texture;
 }
 
-cairo_surface_t *
+GdkTexture *
 reftest_snapshot_ui_file (const char *ui_file)
 {
   GtkWidget *window;
