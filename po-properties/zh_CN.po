@@ -21,16 +21,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-properties master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-14 21:40+0000\n"
-"PO-Revision-Date: 2021-09-15 16:36+0800\n"
-"Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
+"POT-Creation-Date: 2021-09-15 15:29+0000\n"
+"PO-Revision-Date: 2021-09-15 14:39-0400\n"
+"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0\n"
 
 #: gdk/gdkapplaunchcontext.c:130 gdk/gdkdrawcontext.c:171 gdk/gdkseat.c:189
 #: gdk/gdkseat.c:190 gdk/gdksurface.c:510 gdk/gdksurface.c:511
@@ -4040,7 +4040,7 @@ msgstr "弹出菜单的模型。"
 
 #: gtk/gtkmenubutton.c:428
 msgid "The direction the arrow should point."
-msgstr "箭头所指方向。"
+msgstr "箭头应指向的方向。"
 
 #: gtk/gtkmenubutton.c:440 gtk/gtkmodelbutton.c:1243
 msgid "Popover"
@@ -5756,7 +5756,7 @@ msgstr "允许首项粘贴"
 msgid ""
 "Whether a middle click on a mouse should paste the “PRIMARY” clipboard "
 "content at the cursor location."
-msgstr "点击鼠标中键能否将“首项”剪贴板的内容粘贴至光标所在位置。"
+msgstr "点击鼠标中键能否将“主要”剪贴板的内容粘贴至光标所在位置。"
 
 #: gtk/gtksettings.c:1113
 msgid "Recent Files Enabled"
@@ -6962,7 +6962,7 @@ msgstr "子模型"
 
 #: gtk/gtktreemodelfilter.c:532
 msgid "The model for the filtermodel to filter"
-msgstr "filtermodel 的过滤模型。"
+msgstr "filtermodel 的过滤模型"
 
 #: gtk/gtktreemodelfilter.c:539
 msgid "The virtual root"
