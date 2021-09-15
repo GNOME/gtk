@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-09-13 23:29+0000\n"
-"PO-Revision-Date: 2021-09-14 14:07+0200\n"
+"PO-Revision-Date: 2021-09-01 10:46+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -442,7 +442,7 @@ msgstr "Pantalla"
 #: gdk/keyname-table.h:6914
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
-msgstr "Activar/desactivar el panel táctil"
+msgstr "Activar/desactivar panel táctil"
 
 #: gdk/keyname-table.h:6915
 msgctxt "keyboard label"
