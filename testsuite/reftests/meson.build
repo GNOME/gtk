@@ -150,9 +150,6 @@ testdata = [
   'border-style.ui',
   'boxlayout-invisible-child.ref.ui',
   'boxlayout-invisible-child.ui',
-  'box-order.css',
-  'box-order.ref.ui',
-  'box-order.ui',
   'box-pseudo-classes.css',
   'box-pseudo-classes.ref.ui',
   'box-pseudo-classes.ui',
@@ -466,11 +463,12 @@ xfails = [
   'sizegroups-evolution-identity-page.ui',
   # these depend on details of text layout
   'label-sizing.ui',
+  # the NGL renderer can't deal with non-integer sizes
+  'border-half-pixel.ui'
 ]
 
 reftest_env = environment()
 reftest_env.set('GTK_A11Y', 'test')
-reftest_env.set('GSK_RENDERER', 'opengl')
 reftest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 reftest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
 reftest_env.set('GIO_USE_VFS', 'local')

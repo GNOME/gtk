@@ -802,6 +802,11 @@ parse_glyphs (GtkCssParser *parser,
                 gi.attr.is_cluster_start = 0;
               else
                 gi.attr.is_cluster_start = 1;
+
+              if (gtk_css_parser_try_ident (parser, "color"))
+                gi.attr.is_color = 1;
+              else
+                gi.attr.is_color = 0;
             }
 
           pango_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
@@ -2336,7 +2341,8 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
                   glyphs[i].geometry.width == ascii->glyphs[j].geometry.width &&
                   glyphs[i].geometry.x_offset == 0 &&
                   glyphs[i].geometry.y_offset == 0 &&
-                  glyphs[i].attr.is_cluster_start)
+                  glyphs[i].attr.is_cluster_start &&
+                  !glyphs[i].attr.is_color)
                 {
                   switch (j + MIN_ASCII_GLYPH)
                     {
@@ -2366,6 +2372,7 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
       g_string_append_printf (p, "%u ", glyphs[i].glyph);
       string_append_double (p, (double) glyphs[i].geometry.width / PANGO_SCALE);
       if (!glyphs[i].attr.is_cluster_start ||
+          glyphs[i].attr.is_color ||
           glyphs[i].geometry.x_offset != 0 ||
           glyphs[i].geometry.y_offset != 0)
         {
@@ -2375,6 +2382,8 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
           string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
           if (!glyphs[i].attr.is_cluster_start)
             g_string_append (p, " same-cluster");
+          if (!glyphs[i].attr.is_color)
+            g_string_append (p, " color");
         }
 
       if (i + 1 < n_glyphs)

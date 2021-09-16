@@ -442,6 +442,39 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
 }
 
 /**
+ * gdk_texture_new_from_filename:
+ * @path: (type filename): the filename to load
+ * @error: Return location for an error
+ *
+ * Creates a new texture by loading an image from a file.
+ *
+ * The file format is detected automatically. The supported formats
+ * are PNG and JPEG, though more formats might be available.
+ *
+ * If %NULL is returned, then @error will be set.
+ *
+ * Return value: A newly-created `GdkTexture`
+ */
+GdkTexture *
+gdk_texture_new_from_filename (const char  *path,
+                               GError     **error)
+{
+  GdkTexture *texture;
+  GFile *file;
+
+  g_return_val_if_fail (path, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  file = g_file_new_for_path (path);
+
+  texture = gdk_texture_new_from_file (file, error);
+
+  g_object_unref (file);
+
+  return texture;
+}
+
+/**
  * gdk_texture_get_width: (attributes org.gtk.Method.get_property=width)
  * @texture: a `GdkTexture`
  *

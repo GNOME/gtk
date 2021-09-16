@@ -10,9 +10,9 @@ static gboolean opt_quiet;
 int
 main (int argc, char **argv)
 {
-  cairo_surface_t *image1;
-  cairo_surface_t *image2;
-  cairo_surface_t *diff;
+  GdkTexture *image1;
+  GdkTexture *image2;
+  GdkTexture *diff;
   GOptionEntry entries[] = {
     {"output", 'o', 0, G_OPTION_ARG_FILENAME, &opt_filename, "Output location", "FILE" },
     {"quiet", 'q', 0, G_OPTION_ARG_NONE, &opt_quiet, "Don't talk", NULL },
@@ -38,13 +38,29 @@ main (int argc, char **argv)
       exit (1);
     }
 
-  image1 = cairo_image_surface_create_from_png (argv[1]);
-  image2 = cairo_image_surface_create_from_png (argv[2]);
+  image1 = gdk_texture_new_from_filename (argv[1], &error);
+  if (image1 == NULL)
+    {
+      g_printerr ("Error loading %s: %s\n", argv[1], error->message);
+      exit (1);
+    }
+  image2 = gdk_texture_new_from_filename (argv[2], &error);
+  if (image2 == NULL)
+    {
+      g_printerr ("Error loading %s: %s\n", argv[2], error->message);
+      exit (1);
+    }
 
-  diff = reftest_compare_surfaces (image1, image2);
+  diff = reftest_compare_textures (image1, image2);
 
   if (opt_filename && diff)
-    cairo_surface_write_to_png (diff, opt_filename);
+    {
+      if (!gdk_texture_save_to_png (diff, opt_filename))
+        {
+          g_printerr ("Could not save diff image to %s\n", opt_filename);
+          exit (1);
+        }
+    }
 
   if (!opt_quiet)
     {
@@ -58,8 +74,6 @@ main (int argc, char **argv)
       else
         g_print ("No differences.\n");
     }
-
-      if (!opt_quiet)
 
   return diff != NULL ? 1 : 0;
 }

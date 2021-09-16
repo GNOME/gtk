@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 Red Hat Inc.
+ * Copyright (C) 2011,2021 Red Hat Inc.
  *
  * Author:
  *      Benjamin Otte <otte@gnome.org>
@@ -22,62 +22,14 @@
 
 #include "reftest-compare.h"
 
-static void
-get_surface_size (cairo_surface_t *surface,
-                  int             *width,
-                  int             *height)
-{
-  cairo_t *cr;
-  double x1, x2, y1, y2;
-
-  cr = cairo_create (surface);
-  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
-  cairo_destroy (cr);
-
-  g_assert_true (x1 == 0 && y1 == 0);
-  g_assert_true (x2 > 0 && y2 > 0);
-  g_assert_true ((int) x2 == x2 && (int) y2 == y2);
-
-  *width = x2;
-  *height = y2;
-}
-
-
-static cairo_surface_t *
-coerce_surface_for_comparison (cairo_surface_t *surface,
-                               int              width,
-                               int              height)
-{
-  cairo_surface_t *coerced;
-  cairo_t *cr;
-
-  coerced = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                        width,
-                                        height);
-  cr = cairo_create (coerced);
-  
-  cairo_set_source_surface (cr, surface, 0, 0);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-
-  g_assert_true (cairo_surface_status (coerced) == CAIRO_STATUS_SUCCESS);
-
-  return coerced;
-}
-
-/* Compares two CAIRO_FORMAT_ARGB32 buffers, returning NULL if the
+/* Compares two GDK_MEMORY_DEFAULT buffers, returning NULL if the
  * buffers are equal or a surface containing a diff between the two
  * surfaces.
- *
- * This function should be rewritten to compare all formats supported by
- * cairo_format_t instead of taking a mask as a parameter.
  *
  * This function is originally from cairo:test/buffer-diff.c.
  * Copyright © 2004 Richard D. Worth
  */
-static cairo_surface_t *
+static GdkTexture *
 buffer_diff_core (const guchar *buf_a,
                   int           stride_a,
         	  const guchar *buf_b,
@@ -88,7 +40,7 @@ buffer_diff_core (const guchar *buf_a,
   int x, y;
   guchar *buf_diff = NULL;
   int stride_diff = 0;
-  cairo_surface_t *diff = NULL;
+  GdkTexture *diff = NULL;
 
   for (y = 0; y < height; y++)
     {
@@ -112,12 +64,15 @@ buffer_diff_core (const guchar *buf_a,
 
           if (diff == NULL)
             {
-              diff = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
-                                                 width,
-                                                 height);
-              g_assert_true (cairo_surface_status (diff) == CAIRO_STATUS_SUCCESS);
-              buf_diff = cairo_image_surface_get_data (diff);
-              stride_diff = cairo_image_surface_get_stride (diff);
+              GBytes *bytes;
+
+              stride_diff = 4 * width;
+              buf_diff = g_malloc0_n (stride_diff, height);
+              bytes = g_bytes_new_take (buf_diff, stride_diff * height);
+              diff = gdk_memory_texture_new (width, height,
+                                             GDK_MEMORY_DEFAULT,
+                                             bytes,
+                                             stride_diff);
               row = (guint32 *) (buf_diff + y * stride_diff);
             }
 
@@ -143,6 +98,8 @@ buffer_diff_core (const guchar *buf_a,
               guint8 alpha = diff_pixel >> 24;
               diff_pixel = alpha * 0x010101;
             }
+          /* make the pixel fully opaque */
+          diff_pixel |= 0xff000000;
           
           row[x] = diff_pixel;
       }
@@ -151,29 +108,28 @@ buffer_diff_core (const guchar *buf_a,
   return diff;
 }
 
-cairo_surface_t *
-reftest_compare_surfaces (cairo_surface_t *surface1,
-                          cairo_surface_t *surface2)
+GdkTexture *
+reftest_compare_textures (GdkTexture *texture1,
+                          GdkTexture *texture2)
 {
-  int w1, h1, w2, h2, w, h;
-  cairo_surface_t *coerced1, *coerced2, *diff;
+  int w, h;
+  guchar *data1, *data2;
+  GdkTexture *diff;
   
-  get_surface_size (surface1, &w1, &h1);
-  get_surface_size (surface2, &w2, &h2);
-  w = MAX (w1, w2);
-  h = MAX (h1, h2);
-  coerced1 = coerce_surface_for_comparison (surface1, w, h);
-  coerced2 = coerce_surface_for_comparison (surface2, w, h);
+  w = MAX (gdk_texture_get_width (texture1), gdk_texture_get_width (texture2));
+  h = MAX (gdk_texture_get_height (texture1), gdk_texture_get_height (texture2));
 
-  diff = buffer_diff_core (cairo_image_surface_get_data (coerced1),
-                           cairo_image_surface_get_stride (coerced1),
-                           cairo_image_surface_get_data (coerced2),
-                           cairo_image_surface_get_stride (coerced2),
+  data1 = g_malloc_n (w * 4, h);
+  gdk_texture_download (texture1, data1, w * 4);
+  data2 = g_malloc_n (w * 4, h);
+  gdk_texture_download (texture2, data2, w * 4);
+
+  diff = buffer_diff_core (data1, w * 4,
+                           data2, w * 4,
                            w, h);
 
-  cairo_surface_destroy (coerced1);
-  cairo_surface_destroy (coerced2);
+  g_free (data1);
+  g_free (data2);
 
   return diff;
 }
-
