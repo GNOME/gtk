@@ -302,8 +302,6 @@ gdk_gl_texture_download_float (GdkTexture *texture,
                                gsize       stride)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-  int width, height, y;
-  float *copy;
 
   if (self->saved)
     {
@@ -311,22 +309,14 @@ gdk_gl_texture_download_float (GdkTexture *texture,
       return;
     }
 
-  width = gdk_texture_get_width (texture);
-  height = gdk_texture_get_height (texture);
-
-  if (stride == width * 4)
+  if (gdk_gl_context_get_use_es (self->context) ||
+      stride != texture->width * 4)
     {
-      gdk_gl_texture_run (self, gdk_gl_texture_do_download_float, data);
+      GDK_TEXTURE_CLASS (gdk_gl_texture_parent_class)->download_float (texture, data, stride);
       return;
     }
 
-  copy = g_new (float, width * height * 4);
-
-  gdk_gl_texture_run (self, gdk_gl_texture_do_download_float, copy);
-  for (y = 0; y < height; y++)
-    memcpy (data + y * stride, copy + y * 4 * width, 4 * width);
-
-  g_free (copy);
+  gdk_gl_texture_run (self, gdk_gl_texture_do_download_float, data);
 }
 
 static void
