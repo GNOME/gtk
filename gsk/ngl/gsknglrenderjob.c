@@ -1734,7 +1734,7 @@ gsk_ngl_render_job_visit_rect_border_node (GskNglRenderJob     *job,
     {
       rgba_to_half (&colors[2], color);
       gsk_ngl_render_job_draw_rect_with_color (job,
-                                               &GRAPHENE_RECT_INIT (origin->x + widths[3], origin->y + size->height - widths[2], size->width - widths[1], widths[2]),
+                                               &GRAPHENE_RECT_INIT (origin->x + widths[3], origin->y + size->height - widths[2], size->width - widths[3], widths[2]),
                                                color);
     }
 

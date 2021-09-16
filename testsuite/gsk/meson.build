@@ -23,6 +23,7 @@ compare_render_tests = [
   'blend-difference',
   'blend-invisible-child',
   'blend-normal',
+  'border-bottom-right',
   'borders-rotated',
   'borders-scaled',
   'clip-coordinates-2d',
