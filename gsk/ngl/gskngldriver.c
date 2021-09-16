@@ -1131,20 +1131,18 @@ gsk_ngl_driver_lookup_shader (GskNglDriver  *self,
 
 #ifdef G_ENABLE_DEBUG
 static void
-write_atlas_to_png (GskNglTextureAtlas *atlas,
+write_atlas_to_png (GskNglDriver       *driver,
+                    GskNglTextureAtlas *atlas,
                     const char         *filename)
 {
-  int stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, atlas->width);
-  guchar *data = g_malloc (atlas->height * stride);
-  cairo_surface_t *s;
+  GdkTexture *texture;
 
-  glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
-  glGetTexImage (GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, data);
-  s = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_ARGB32, atlas->width, atlas->height, stride);
-  cairo_surface_write_to_png (s, filename);
-
-  cairo_surface_destroy (s);
-  g_free (data);
+  texture = gdk_gl_texture_new (gsk_ngl_driver_get_context (driver),
+                                atlas->texture_id,
+                                atlas->width, atlas->height,
+                                NULL, NULL);
+  gdk_texture_save_to_png (texture, filename);
+  g_object_unref (texture);
 }
 
 void
@@ -1164,7 +1162,7 @@ gsk_ngl_driver_save_atlases_to_png (GskNglDriver *self,
                                         G_DIR_SEPARATOR_S,
                                         (int)self->current_frame_id,
                                         atlas->texture_id);
-      write_atlas_to_png (atlas, filename);
+      write_atlas_to_png (self, atlas, filename);
       g_free (filename);
     }
 }

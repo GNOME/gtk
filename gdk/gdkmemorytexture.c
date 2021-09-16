@@ -603,7 +603,7 @@ convert_rgba16_to_float (float *dest, const guchar *src_data)
   dest[0] = src[0] / 65535.f;
   dest[1] = src[1] / 65535.f;
   dest[2] = src[2] / 65535.f;
-  dest[3] = 1.0;
+  dest[3] = src[3] / 65535.f;
 }
 
 static inline void
