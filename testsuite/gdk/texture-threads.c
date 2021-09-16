@@ -11,6 +11,7 @@ ensure_texture_access (GdkTexture *texture)
   guint32 pixel = 0;
   float float_pixel[4] = { INFINITY, INFINITY, INFINITY, INFINITY };
 
+  g_test_message ("Checking texture access in thread %p...", g_thread_self());
   /* Just to be sure */
   g_assert_cmpint (gdk_texture_get_width (texture), ==, 1);
   g_assert_cmpint (gdk_texture_get_height (texture), ==, 1);
@@ -25,6 +26,8 @@ ensure_texture_access (GdkTexture *texture)
   g_assert_cmpfloat (float_pixel[1], ==, 0.0);
   g_assert_cmpfloat (float_pixel[2], ==, 0.0);
   g_assert_cmpfloat (float_pixel[3], ==, 1.0);
+
+  g_test_message ("...done in thread %p", g_thread_self());
 }
 
 static void
@@ -43,7 +46,17 @@ texture_download_thread (GTask        *task,
                          gpointer      unused,
                          GCancellable *cancellable)
 {
+  g_test_message ("Starting thread %p.", g_thread_self());
+  /* not sure this can happen, but if it does, we
+   * should clear_current() here. */
+  g_assert_null (gdk_gl_context_get_current ());
+
   ensure_texture_access (GDK_TEXTURE (texture));
+
+  /* Makes sure the GL context is still NULL, because all the
+   * GL stuff should have happened in the main thread. */
+  g_assert_null (gdk_gl_context_get_current ());
+  g_test_message ("Returning from thread %p.", g_thread_self());
 
   g_task_return_boolean (task, TRUE);
 }
