@@ -28,8 +28,8 @@
  * `GdkPixbuf`, or a Cairo surface, or other pixel data.
  *
  * The ownership of the pixel data is transferred to the `GdkTexture`
- * instance; you can only make a copy of it, via
- * [method@Gdk.Texture.download].
+ * instance; you can only make a copy of it, via [method@Gdk.Texture.download]
+ * or [method@Gdk.Texture.download_float].
  *
  * `GdkTexture` is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
@@ -383,19 +383,55 @@ GdkTexture *
 gdk_texture_new_from_file (GFile   *file,
                            GError **error)
 {
+  GBytes *bytes;
   GdkTexture *texture;
-  GdkPixbuf *pixbuf;
-  GInputStream *stream;
 
   g_return_val_if_fail (G_IS_FILE (file), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  stream = G_INPUT_STREAM (g_file_read (file, NULL, error));
-  if (stream == NULL)
+  bytes = g_file_load_bytes (file, NULL, NULL, error);
+  if (bytes == NULL)
     return NULL;
 
+  texture = gdk_texture_new_from_bytes (bytes, error);
+
+  g_bytes_unref (bytes);
+
+  return texture;
+}
+
+
+/**
+ * gdk_texture_new_from_bytes:
+ * @bytes: a `GBytes` containing the data to load
+ * @error: Return location for an error
+ *
+ * Creates a new texture by loading an image from memory,
+ *
+ * The file format is detected automatically. The supported formats
+ * are PNG and JPEG, though more formats might be available.
+ *
+ * If %NULL is returned, then @error will be set.
+ *
+ * Return value: A newly-created `GdkTexture`
+ *
+ * Since: 4.6
+ */
+GdkTexture *
+gdk_texture_new_from_bytes (GBytes  *bytes,
+                            GError **error)
+{
+  GInputStream *stream;
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
+
+  g_return_val_if_fail (bytes != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  stream = g_memory_input_stream_new_from_bytes (bytes);
   pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
   g_object_unref (stream);
+
   if (pixbuf == NULL)
     return NULL;
 
