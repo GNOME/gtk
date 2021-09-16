@@ -3055,20 +3055,23 @@ gsk_ngl_render_job_visit_shadow_node (GskNglRenderJob     *job,
       graphene_rect_t bounds;
       guint16 color[4];
 
-      if (shadow->radius == 0 &&
-          gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
-        {
-          gsk_ngl_render_job_offset (job, dx, dy);
-          gsk_ngl_render_job_visit_text_node (job, shadow_child, &shadow->color, TRUE);
-          gsk_ngl_render_job_offset (job, -dx, -dy);
-          continue;
-        }
-
       if (RGBA_IS_CLEAR (&shadow->color))
         continue;
 
       if (node_is_invisible (shadow_child))
         continue;
+
+      if (shadow->radius == 0 &&
+          gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
+        {
+          if (dx != 0 || dy != 0)
+            {
+              gsk_ngl_render_job_offset (job, dx, dy);
+              gsk_ngl_render_job_visit_text_node (job, shadow_child, &shadow->color, TRUE);
+              gsk_ngl_render_job_offset (job, -dx, -dy);
+            }
+          continue;
+        }
 
       if (shadow->radius > 0)
         {
