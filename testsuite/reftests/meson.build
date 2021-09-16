@@ -463,6 +463,8 @@ xfails = [
   'sizegroups-evolution-identity-page.ui',
   # these depend on details of text layout
   'label-sizing.ui',
+  # the NGL renderer can't deal with non-integer sizes
+  'border-half-pixel.ui'
 ]
 
 reftest_env = environment()
