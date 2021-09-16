@@ -87,11 +87,11 @@ gtk_event_controller_unset_widget (GtkEventController *self)
   priv->widget = NULL;
 }
 
-static gboolean
+static GtkFilterEventStatus
 gtk_event_controller_filter_event_default (GtkEventController *self,
                                            GdkEvent           *event)
 {
-  return FALSE;
+  return GTK_EVENT_SKIP;
 }
 
 static gboolean
@@ -273,7 +273,7 @@ same_native (GtkWidget *widget,
   return native == native2;
 }
 
-static gboolean
+static GtkFilterEventStatus
 gtk_event_controller_filter_event (GtkEventController *controller,
                                    GdkEvent           *event,
                                    GtkWidget          *target)
@@ -284,11 +284,11 @@ gtk_event_controller_filter_event (GtkEventController *controller,
   priv = gtk_event_controller_get_instance_private (controller);
 
   if (priv->widget && !gtk_widget_is_sensitive (priv->widget))
-    return TRUE;
+    return GTK_EVENT_SKIP;
 
   if (priv->limit == GTK_LIMIT_SAME_NATIVE &&
       !same_native (priv->widget, target))
-    return TRUE;
+    return GTK_EVENT_SKIP;
 
   controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
 
@@ -357,7 +357,7 @@ gtk_event_controller_handle_event (GtkEventController *controller,
   g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER (controller), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (gtk_event_controller_filter_event (controller, event, target))
+  if (gtk_event_controller_filter_event (controller, event, target) == GTK_EVENT_SKIP)
     return retval;
 
   controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);

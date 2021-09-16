@@ -22,6 +22,16 @@
 
 #include "gtkeventcontroller.h"
 
+/*
+ * GtkFilterEventStatus:
+ * @GTK_EVENT_HANDLE: the event will be used by the controller
+ * @GTK_EVENT_SKIP: the event will be skipped
+ */
+typedef enum {
+  GTK_EVENT_HANDLE,
+  GTK_EVENT_SKIP
+} GtkFilterEventStatus;
+
 /* GdkCrossingType:
  * @GTK_CROSSING_FOCUS: Focus moved from one widget to another
  * @GTK_CROSSING_ACTIVE: The active window changed (the crossing
@@ -108,11 +118,11 @@ struct _GtkEventControllerClass
 
   /*<private>*/
 
-  /* Tells whether the event is filtered out, %TRUE makes
-   * the event unseen by the handle_event vfunc.
+  /* Tells whether the event will be processed or filtered out.
+   * By default all events are skipped, subclasses will need to list them.
    */
-  gboolean (* filter_event) (GtkEventController *controller,
-                             GdkEvent           *event);
+  GtkFilterEventStatus (* filter_event) (GtkEventController *controller,
+                                         GdkEvent           *event);
 
   gpointer padding[10];
 };

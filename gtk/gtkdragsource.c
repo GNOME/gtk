@@ -243,7 +243,7 @@ gtk_drag_source_get_property (GObject    *object,
     }
 }
 
-static gboolean
+static GtkFilterEventStatus
 gtk_drag_source_filter_event (GtkEventController *controller,
                               GdkEvent           *event)
 {
@@ -257,9 +257,9 @@ gtk_drag_source_filter_event (GtkEventController *controller,
       n_fingers = gdk_touchpad_event_get_n_fingers (event);
 
       if (n_fingers == n_points)
-        return FALSE;
+        return GTK_EVENT_HANDLE;
       else
-        return TRUE;
+        return GTK_EVENT_SKIP;
     }
 
   return GTK_EVENT_CONTROLLER_CLASS (gtk_drag_source_parent_class)->filter_event (controller, event);

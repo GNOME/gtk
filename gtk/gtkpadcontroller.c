@@ -198,7 +198,7 @@ gtk_pad_controller_handle_mode_switch (GtkPadController *controller,
 #endif
 }
 
-static gboolean
+static GtkFilterEventStatus
 gtk_pad_controller_filter_event (GtkEventController *controller,
                                  GdkEvent           *event)
 {
@@ -210,13 +210,13 @@ gtk_pad_controller_filter_event (GtkEventController *controller,
       event_type != GDK_PAD_RING &&
       event_type != GDK_PAD_STRIP &&
       event_type != GDK_PAD_GROUP_MODE)
-    return TRUE;
+    return GTK_EVENT_SKIP;
 
   if (pad_controller->pad &&
       gdk_event_get_device (event) != pad_controller->pad)
-    return TRUE;
+    return GTK_EVENT_SKIP;
 
-  return FALSE;
+  return GTK_EVENT_HANDLE;
 }
 
 static gboolean

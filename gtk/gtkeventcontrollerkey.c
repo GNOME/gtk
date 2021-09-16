@@ -80,6 +80,18 @@ gtk_event_controller_key_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_event_controller_key_parent_class)->finalize (object);
 }
 
+static GtkFilterEventStatus
+gtk_event_controller_key_filter_event (GtkEventController *controller,
+                                       GdkEvent           *event)
+{
+  GdkEventType event_type = gdk_event_get_event_type (event);
+
+  if (event_type == GDK_KEY_PRESS || event_type == GDK_KEY_RELEASE)
+    return GTK_EVENT_HANDLE;
+
+  return GTK_EVENT_SKIP;
+}
+
 static gboolean
 gtk_event_controller_key_handle_event (GtkEventController *controller,
                                        GdkEvent           *event,
@@ -92,9 +104,6 @@ gtk_event_controller_key_handle_event (GtkEventController *controller,
   guint16 keycode;
   guint keyval;
   gboolean handled = FALSE;
-
-  if (event_type != GDK_KEY_PRESS && event_type != GDK_KEY_RELEASE)
-    return FALSE;
 
   if (key->im_context &&
       gtk_im_context_filter_keypress (key->im_context, event))
@@ -186,6 +195,7 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_event_controller_key_finalize;
+  controller_class->filter_event = gtk_event_controller_key_filter_event;
   controller_class->handle_event = gtk_event_controller_key_handle_event;
   controller_class->handle_crossing = gtk_event_controller_key_handle_crossing;
 

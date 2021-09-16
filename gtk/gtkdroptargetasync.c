@@ -183,7 +183,7 @@ gtk_drop_target_async_drop (GtkDropTargetAsync  *self,
   return FALSE;
 }
 
-static gboolean
+static GtkFilterEventStatus
 gtk_drop_target_async_filter_event (GtkEventController *controller,
                                     GdkEvent           *event)
 {
@@ -193,12 +193,12 @@ gtk_drop_target_async_filter_event (GtkEventController *controller,
     case GDK_DRAG_LEAVE:
     case GDK_DRAG_MOTION:
     case GDK_DROP_START:
-      return GTK_EVENT_CONTROLLER_CLASS (gtk_drop_target_async_parent_class)->filter_event (controller, event);
+      return GTK_EVENT_HANDLE;
 
     default:;
     }
 
-  return TRUE;
+  return GTK_EVENT_SKIP;
 }
 
 static gboolean
