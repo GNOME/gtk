@@ -888,13 +888,8 @@ modelbutton.flat arrow {
 
 .toolbar button {
   margin: 1px;
-  @extend %undecorated_button;
 
-  &:hover { @include button('hover'); }
-  &:active { @include button('active'); }
-  &:disabled { @include button('insensitive'); }
-  &:backdrop { @include button('backdrop'); }
-  &:backdrop:disabled { @include button('backdrop-insensitive'); }
+   @extend %button_basic_flat;
 }
 
 button.color {
