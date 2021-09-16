@@ -165,6 +165,7 @@ struct _GtkGesturePrivate
   guint hold_timeout_id;
   guint recognized : 1;
   guint touchpad : 1;
+  guint scrolling : 1;
 };
 
 static guint signals[N_SIGNALS] = { 0 };
@@ -230,6 +231,31 @@ gtk_gesture_finalize (GObject *object)
   g_hash_table_destroy (priv->points);
 
   G_OBJECT_CLASS (gtk_gesture_parent_class)->finalize (object);
+}
+
+static guint
+_gtk_gesture_get_n_scroll_points (GtkGesture *gesture,
+                                  gboolean    only_active)
+{
+  GtkGesturePrivate *priv;
+  PointData *data;
+
+  priv = gtk_gesture_get_instance_private (gesture);
+
+  if (!priv->scrolling)
+    return 0;
+
+  data = g_hash_table_lookup (priv->points, NULL);
+
+  if (!data)
+    return 0;
+
+  if (only_active &&
+      (data->state == GTK_EVENT_SEQUENCE_DENIED ||
+       gdk_scroll_event_is_stop (data->event)))
+    return 0;
+
+  return 1;
 }
 
 static guint
@@ -307,7 +333,9 @@ _gtk_gesture_get_n_physical_points (GtkGesture *gesture,
 
   priv = gtk_gesture_get_instance_private (gesture);
 
-  if (priv->touchpad)
+  if (priv->scrolling)
+    return _gtk_gesture_get_n_scroll_points (gesture, only_active);
+  else if (priv->touchpad)
     return _gtk_gesture_get_n_touchpad_points (gesture, only_active);
   else
     return _gtk_gesture_get_n_touch_points (gesture, only_active);
@@ -417,6 +445,13 @@ _update_touchpad_deltas (PointData *data)
           data->accum_dy += dy;
         }
     }
+  else if (gdk_event_get_event_type (event) == GDK_SCROLL)
+    {
+      gdk_scroll_event_get_deltas (event, &dx, &dy);
+
+      data->accum_dx -= dx;
+      data->accum_dy -= dy;
+    }
 }
 
 static GtkEventSequenceState
@@ -453,7 +488,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
   GdkEventSequence *sequence;
   GtkGesturePrivate *priv;
   GdkDevice *device;
-  gboolean existed, touchpad;
+  gboolean existed, touchpad, scrolling;
   PointData *data;
 
   device = gdk_event_get_device (event);
@@ -463,6 +498,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
 
   priv = gtk_gesture_get_instance_private (gesture);
   touchpad = EVENT_IS_TOUCHPAD_GESTURE (event);
+  scrolling = gdk_event_get_event_type (event) == GDK_SCROLL;
 
   if (add)
     {
@@ -473,9 +509,11 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
         return FALSE;
 
       /* Make touchpad and touchscreen gestures mutually exclusive */
-      if (touchpad && g_hash_table_size (priv->points) > 0)
+      if ((touchpad || scrolling) && g_hash_table_size (priv->points) > 0)
         return FALSE;
       else if (!touchpad && priv->touchpad)
+        return FALSE;
+      else if (!scrolling && priv->scrolling)
         return FALSE;
     }
   else if (!priv->device)
@@ -493,6 +531,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
         {
           priv->device = device;
           priv->touchpad = touchpad;
+          priv->scrolling = scrolling;
         }
 
       data = g_new0 (PointData, 1);
@@ -539,8 +578,13 @@ _gtk_gesture_check_empty (GtkGesture *gesture)
 
   if (g_hash_table_size (priv->points) == 0)
     {
+      if (priv->scrolling)
+        g_object_steal_data (G_OBJECT (priv->device),
+                             "gtk-gesture-is-device-scrolling");
+
       priv->device = NULL;
       priv->touchpad = FALSE;
+      priv->scrolling = FALSE;
     }
 }
 
@@ -615,11 +659,10 @@ gtk_gesture_filter_event (GtkEventController *controller,
 {
   GdkEventType event_type = gdk_event_get_event_type (event);
 
-  /* Even though GtkGesture handles touchpad events, we want to skip them by
-   * default, it will be subclasses which punch the holes in for the events
-   * they can possibly handle.
+  /* Even though GtkGesture handles touchpad and scroll events, we want to skip
+   * them by default, it will be subclasses which punch the holes in for the
+   * events they can possibly handle.
    */
-
   if (event_type == GDK_BUTTON_PRESS ||
       event_type == GDK_BUTTON_RELEASE ||
       event_type == GDK_MOTION_NOTIFY ||
@@ -648,6 +691,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
   GdkTouchpadGesturePhase phase = 0;
   GdkModifierType state;
   GtkWidget *target;
+  gboolean was_scrolling, is_scroll_stop;
 
   source_device = gdk_event_get_device (event);
 
@@ -662,6 +706,19 @@ gtk_gesture_handle_event (GtkEventController *controller,
   if (EVENT_IS_TOUCHPAD_GESTURE (event))
     phase = gdk_touchpad_event_get_gesture_phase (event);
 
+  if (event_type == GDK_SCROLL)
+    {
+      GdkInputSource source = gdk_device_get_source (source_device);
+
+      if (source != GDK_SOURCE_TOUCHPAD &&
+          source != GDK_SOURCE_TRACKPOINT)
+        return FALSE;
+
+      is_scroll_stop = gdk_scroll_event_is_stop (event);
+      was_scrolling = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (source_device),
+                                                          "gtk-gesture-is-device-scrolling"));
+    }
+
   target = gtk_event_controller_get_target (controller);
 
   if (gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_DENIED)
@@ -671,7 +728,8 @@ gtk_gesture_handle_event (GtkEventController *controller,
       event_type == GDK_TOUCH_BEGIN ||
       (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
       (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
-      (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
+      (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
+      (event_type == GDK_SCROLL && !priv->scrolling && !is_scroll_stop && !was_scrolling))
     {
       if ((event_type == GDK_TOUCHPAD_PINCH || event_type == GDK_TOUCHPAD_SWIPE) &&
           _gtk_gesture_has_matching_touchpoints (gesture))
@@ -708,7 +766,8 @@ gtk_gesture_handle_event (GtkEventController *controller,
            event_type == GDK_TOUCH_END ||
            (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
            (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
-           (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
+           (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
+           (event_type == GDK_SCROLL && priv->scrolling && is_scroll_stop))
     {
       gboolean was_claimed = FALSE;
 
@@ -729,7 +788,8 @@ gtk_gesture_handle_event (GtkEventController *controller,
   else if (event_type == GDK_MOTION_NOTIFY ||
            event_type == GDK_TOUCH_UPDATE ||
            (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE) ||
-           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE))
+           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE) ||
+           (event_type == GDK_SCROLL && priv->scrolling))
     {
       if (event_type == GDK_MOTION_NOTIFY)
         {
@@ -743,7 +803,7 @@ gtk_gesture_handle_event (GtkEventController *controller,
     }
   else if (event_type == GDK_TOUCH_CANCEL)
     {
-      if (!priv->touchpad)
+      if (!priv->touchpad && !priv->scrolling)
         _gtk_gesture_cancel_sequence (gesture, sequence);
     }
   else if ((event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL) ||
@@ -1099,6 +1159,15 @@ gtk_gesture_set_sequence_state (GtkGesture            *gesture,
 
   data->state = state;
 
+  if (priv->scrolling && state == GTK_EVENT_SEQUENCE_CLAIMED)
+    {
+      GdkDevice *source_device = gdk_event_get_device (data->event);
+
+      g_object_set_data (G_OBJECT (source_device),
+                         "gtk-gesture-is-device-scrolling",
+                         GINT_TO_POINTER (TRUE));
+    }
+
   gtk_widget_cancel_event_sequence (gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture)),
                                     gesture, sequence, state);
   g_signal_emit (gesture, signals[SEQUENCE_STATE_CHANGED], 0,
@@ -1431,7 +1500,8 @@ gtk_gesture_get_bounding_box_center (GtkGesture *gesture,
   sequence = gtk_gesture_get_last_updated_sequence (gesture);
   last_event = gtk_gesture_get_last_event (gesture, sequence);
 
-  if (EVENT_IS_TOUCHPAD_GESTURE (last_event))
+  if (EVENT_IS_TOUCHPAD_GESTURE (last_event) ||
+      gdk_event_get_event_type (last_event) == GDK_SCROLL)
     return gtk_gesture_get_point (gesture, sequence, x, y);
   else if (!gtk_gesture_get_bounding_box (gesture, &rect))
     return FALSE;
