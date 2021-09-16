@@ -108,6 +108,37 @@ gdk_gl_texture_run (GdkGLTexture *self,
   while (g_atomic_int_get (&invoke.spinlock) == 0);
 }
 
+static inline void
+gdk_gl_texture_get_tex_image (GdkGLTexture *self,
+                              GLenum        gl_format,
+                              GLenum        gl_type,
+                              GLvoid       *data)
+{
+  if (gdk_gl_context_get_use_es (self->context))
+    {
+      GdkTexture *texture = GDK_TEXTURE (self);
+      GLuint fbo;
+
+      glGenFramebuffers (1, &fbo);
+      glBindFramebuffer (GL_FRAMEBUFFER, fbo);
+      glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->id, 0);
+      glReadPixels (0, 0,
+                    texture->width, texture->height, 
+                    gl_format,
+                    gl_type,
+                    data);
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
+      glDeleteFramebuffers (1, &fbo);
+    }
+  else
+    {
+      glGetTexImage (GL_TEXTURE_2D,
+                     0,
+                     gl_format,
+                     gl_type,
+                     data);
+    }
+}
 static void
 gdk_gl_texture_do_download_texture (gpointer texture_,
                                     gpointer result_)
@@ -185,11 +216,10 @@ gdk_gl_texture_do_download_texture (gpointer texture_,
   stride = gdk_memory_format_bytes_per_pixel (format) * texture->width;
   data = g_malloc (stride * texture->height);
 
-  glGetTexImage (GL_TEXTURE_2D,
-                 0,
-                 gl_format,
-                 gl_type,
-                 data);
+  gdk_gl_texture_get_tex_image (texture_,
+                                gl_format,
+                                gl_type,
+                                data);
 
   bytes = g_bytes_new_take (data, stride * texture->height);
   *result = gdk_memory_texture_new (texture->width,
@@ -230,7 +260,6 @@ gdk_gl_texture_do_download (gpointer texture,
 #error "Unknown byte order for gdk_gl_texture_download()"
 #endif
                  data);
-
 }
 
 static void
