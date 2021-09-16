@@ -483,7 +483,6 @@ if wayland_enabled
 
   wayland_pkgs = [
     'wayland-client @0@'.format(wayland_req),
-    'wayland-protocols @0@'.format(wayland_proto_req),
     'xkbcommon @0@'.format(xkbcommon_req),
     'wayland-egl',
   ]
