@@ -557,7 +557,6 @@ if wayland_enabled
 
   wayland_pkgs = [
     'wayland-client', wayland_req,
-    'wayland-protocols', wayland_proto_req,
     'xkbcommon', xkbcommon_req,
     'wayland-cursor', wayland_req,
     'wayland-egl',
