@@ -439,7 +439,8 @@ fi
 
 PKG_PROG_PKG_CONFIG
 
-WAYLAND_DEPENDENCIES="wayland-client >= wayland_required_version wayland-protocols >= wayland_protocols_required_version xkbcommon >= 0.2.0 wayland-cursor >= wayland_required_version wayland-egl"
+WAYLAND_RUNTIME_DEPENDENCIES="wayland-client >= wayland_required_version xkbcommon >= 0.2.0 wayland-cursor >= wayland_required_version wayland-egl"
+WAYLAND_DEPENDENCIES="wayland-protocols >= wayland_protocols_required_version $WAYLAND_RUNTIME_DEPENDENCIES"
 if test "$enable_wayland_backend" = "maybe" ; then
   AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
   PKG_CHECK_EXISTS($WAYLAND_DEPENDENCIES, [have_wayland_deps=yes], [have_wayland_deps=no])
@@ -460,7 +461,7 @@ if test "$enable_wayland_backend" = "yes"; then
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
   backend_immodules="$backend_immodules,wayland"
-  WAYLAND_PACKAGES="$WAYLAND_DEPENDENCIES"
+  WAYLAND_PACKAGES="$WAYLAND_RUNTIME_DEPENDENCIES"
   AC_PATH_PROG([WAYLAND_SCANNER],[wayland-scanner],[no])
   AS_IF([test "x$WAYLAND_SCANNER" = "xno"],
     [AC_MSG_ERROR([Could not find wayland-scanner in your PATH, required for parsing wayland extension protocols])])
