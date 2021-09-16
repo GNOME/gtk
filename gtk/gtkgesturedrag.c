@@ -58,7 +58,7 @@ static guint signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureDrag, gtk_gesture_drag, GTK_TYPE_GESTURE_SINGLE)
 
-static gboolean
+static GtkFilterEventStatus
 gtk_gesture_drag_filter_event (GtkEventController *controller,
                                GdkEvent           *event)
 {
@@ -72,9 +72,9 @@ gtk_gesture_drag_filter_event (GtkEventController *controller,
       n_fingers = gdk_touchpad_event_get_n_fingers (event);
 
       if (n_fingers == n_points)
-        return FALSE;
+        return GTK_EVENT_HANDLE;
       else
-        return TRUE;
+        return GTK_EVENT_SKIP;
     }
 
   return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_drag_parent_class)->filter_event (controller, event);

@@ -337,6 +337,18 @@ gtk_event_controller_scroll_handle_hold_event (GtkEventController *controller,
   return GDK_EVENT_PROPAGATE;
 }
 
+static GtkFilterEventStatus
+gtk_event_controller_scroll_filter_event (GtkEventController *controller,
+                                          GdkEvent           *event)
+{
+  GdkEventType event_type = gdk_event_get_event_type (event);
+
+  if (event_type == GDK_SCROLL || event_type == GDK_TOUCHPAD_HOLD)
+    return GTK_EVENT_HANDLE;
+
+  return GTK_EVENT_SKIP;
+}
+
 static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
                                           GdkEvent           *event,
@@ -354,9 +366,6 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
   if (event_type == GDK_TOUCHPAD_HOLD)
     return gtk_event_controller_scroll_handle_hold_event (controller, event);
-
-  if (event_type != GDK_SCROLL)
-    return FALSE;
 
   if ((scroll->flags & (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL |
                         GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL)) == 0)
@@ -473,6 +482,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
   object_class->set_property = gtk_event_controller_scroll_set_property;
   object_class->get_property = gtk_event_controller_scroll_get_property;
 
+  controller_class->filter_event = gtk_event_controller_scroll_filter_event;
   controller_class->handle_event = gtk_event_controller_scroll_handle_event;
 
   /**

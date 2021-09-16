@@ -55,6 +55,13 @@ static guint signals[N_SIGNALS] = { 0, };
 G_DEFINE_TYPE (GtkEventControllerLegacy, gtk_event_controller_legacy,
                GTK_TYPE_EVENT_CONTROLLER)
 
+static GtkFilterEventStatus
+gtk_event_controller_legacy_filter_event (GtkEventController *controller,
+                                          GdkEvent           *event)
+{
+  return GTK_EVENT_HANDLE;
+}
+
 static gboolean
 gtk_event_controller_legacy_handle_event (GtkEventController *controller,
                                           GdkEvent           *event,
@@ -73,6 +80,7 @@ gtk_event_controller_legacy_class_init (GtkEventControllerLegacyClass *klass)
 {
   GtkEventControllerClass *controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
 
+  controller_class->filter_event = gtk_event_controller_legacy_filter_event;
   controller_class->handle_event = gtk_event_controller_legacy_handle_event;
 
   /**

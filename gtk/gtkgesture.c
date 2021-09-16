@@ -609,19 +609,28 @@ gesture_within_surface (GtkGesture *gesture,
   return surface == gtk_native_get_surface (gtk_widget_get_native (widget));
 }
 
-static gboolean
+static GtkFilterEventStatus
 gtk_gesture_filter_event (GtkEventController *controller,
                           GdkEvent           *event)
 {
-  /* Even though GtkGesture handles these events, we want
-   * touchpad gestures disabled by default, it will be
-   * subclasses which punch the holes in for the events
+  GdkEventType event_type = gdk_event_get_event_type (event);
+
+  /* Even though GtkGesture handles touchpad events, we want to skip them by
+   * default, it will be subclasses which punch the holes in for the events
    * they can possibly handle.
    */
-  if (EVENT_IS_TOUCHPAD_GESTURE (event))
-    return FALSE;
 
-  return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_parent_class)->filter_event (controller, event);
+  if (event_type == GDK_BUTTON_PRESS ||
+      event_type == GDK_BUTTON_RELEASE ||
+      event_type == GDK_MOTION_NOTIFY ||
+      event_type == GDK_TOUCH_BEGIN ||
+      event_type == GDK_TOUCH_UPDATE ||
+      event_type == GDK_TOUCH_END ||
+      event_type == GDK_TOUCH_CANCEL ||
+      event_type == GDK_GRAB_BROKEN)
+    return GTK_EVENT_HANDLE;
+
+  return GTK_EVENT_SKIP;
 }
 
 static gboolean

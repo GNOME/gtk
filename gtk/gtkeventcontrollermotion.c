@@ -73,22 +73,27 @@ static guint signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE (GtkEventControllerMotion, gtk_event_controller_motion, GTK_TYPE_EVENT_CONTROLLER)
 
+static GtkFilterEventStatus
+gtk_event_controller_motion_filter_event (GtkEventController *controller,
+                                          GdkEvent           *event)
+{
+  GdkEventType event_type = gdk_event_get_event_type (event);
+
+  if (event_type == GDK_MOTION_NOTIFY)
+    return GTK_EVENT_HANDLE;
+
+  return GTK_EVENT_SKIP;
+}
+
 static gboolean
 gtk_event_controller_motion_handle_event (GtkEventController *controller,
                                           GdkEvent           *event,
                                           double              x,
                                           double              y)
 {
-  GtkEventControllerClass *parent_class;
-  GdkEventType type;
+  g_signal_emit (controller, signals[MOTION], 0, x, y);
 
-  type = gdk_event_get_event_type (event);
-  if (type == GDK_MOTION_NOTIFY)
-    g_signal_emit (controller, signals[MOTION], 0, x, y);
-
-  parent_class = GTK_EVENT_CONTROLLER_CLASS (gtk_event_controller_motion_parent_class);
-
-  return parent_class->handle_event (controller, event, x, y);
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -191,6 +196,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
 
   object_class->get_property = gtk_event_controller_motion_get_property;
 
+  controller_class->filter_event = gtk_event_controller_motion_filter_event;
   controller_class->handle_event = gtk_event_controller_motion_handle_event;
   controller_class->handle_crossing = gtk_event_controller_motion_handle_crossing;
 
