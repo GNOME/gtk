@@ -252,6 +252,9 @@ node_supports_transform (const GskRenderNode *node)
       case GSK_TEXT_NODE:
         return TRUE;
 
+      case GSK_SHADOW_NODE:
+        return node_supports_transform (gsk_shadow_node_get_child (node));
+
       case GSK_TRANSFORM_NODE:
         return node_supports_transform (gsk_transform_node_get_child (node));
 
