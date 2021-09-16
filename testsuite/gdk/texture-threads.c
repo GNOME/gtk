@@ -89,20 +89,26 @@ texture_threads (void)
   ensure_texture_access (texture);
   g_assert_nonnull (gdk_gl_context_get_current ());
 
-  /* 4. Run a thread trying to download the texture */
+  /* 4. Acquire the main loop, so the run_in_thread() doesn't
+   * try to acquire it if it manages to outrace this thread.
+   */
+  g_assert_true (g_main_context_acquire (NULL));
+
+  /* 5. Run a thread trying to download the texture */
   loop = g_main_loop_new (NULL, TRUE);
   task = g_task_new (texture, NULL, texture_download_done, loop);
   g_task_run_in_thread (task, texture_download_thread);
   g_clear_object (&task);
 
-  /* 5. Run the main loop waiting for the thread to return */
+  /* 6. Run the main loop waiting for the thread to return */
   g_main_loop_run (loop);
 
-  /* 6. All good */
+  /* 7. All good */
   gsk_renderer_unrealize (gl_renderer);
   g_clear_pointer (&loop, g_main_loop_unref);
   g_clear_object (&gl_renderer);
   g_clear_object (&surface);
+  g_main_context_release (NULL);
 }
 
 int
