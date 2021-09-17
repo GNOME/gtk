@@ -290,9 +290,15 @@ gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
   pango_extents_to_pixels (&ink_rect, NULL);
 
   if (key->xshift != 0)
-    ink_rect.width++;
+    {
+      ink_rect.x -= 1;
+      ink_rect.width += 2;
+    }
   if (key->yshift != 0)
-    ink_rect.height++;
+    {
+      ink_rect.y -= 1;
+      ink_rect.height += 2;
+    }
 
   width = (int) ceil (ink_rect.width * key->scale / 1024.0);
   height = (int) ceil (ink_rect.height * key->scale / 1024.0);
