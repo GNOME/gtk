@@ -670,8 +670,9 @@ gtk_menu_button_init (GtkMenuButton *self)
 
   gtk_widget_add_css_class (GTK_WIDGET (self), "popup");
 
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (self->button), GTK_ACCESSIBLE_RELATION_LABELLED_BY, self, NULL,
-  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, self, NULL,
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self->button),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, self, NULL,
+                                  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, self, NULL,
                                   -1);
 }
 
@@ -1021,9 +1022,13 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
 
-  /* Because we are setting only an icon, let the inner button be labeled by us
-  so the accessible label can be overridden from, for example, an UI file using GtkMenuButton as a child of something. */
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (menu_button->button), GTK_ACCESSIBLE_RELATION_LABELLED_BY, menu_button, NULL, -1);
+  /* Because we are setting only an icon, let the inner button be labelled by us
+   * so the accessible label can be overridden from, for example, an UI file
+   * using GtkMenuButton as a child of something.
+   */
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (menu_button->button),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, menu_button, NULL,
+                                  -1);
 
   image_widget = g_object_new (GTK_TYPE_IMAGE,
                                "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
@@ -1157,7 +1162,9 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
   gtk_button_set_child (GTK_BUTTON (menu_button->button), box);
   menu_button->label_widget = label_widget;
 
-  gtk_accessible_update_relation (GTK_ACCESSIBLE (menu_button->button), GTK_ACCESSIBLE_RELATION_LABELLED_BY, menu_button->label_widget, NULL, -1);
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (menu_button->button),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY, menu_button->label_widget, NULL,
+                                  -1);
 
   menu_button->image_widget = NULL;
   menu_button->child = NULL;
