@@ -288,7 +288,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
       return FALSE;
     }
 
-  display_win32->wgl_pixel_format = best_idx;
   display_win32->gl_version = epoxy_gl_version ();
 
   /* We must have OpenGL/WGL 2.0 or later, or have the GL_ARB_shader_objects extension */
@@ -306,6 +305,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
           return FALSE;
         }
     }
+
+  display_win32->wgl_pixel_format = best_idx;
 
   display_win32->hasWglARBCreateContext =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
