@@ -4095,14 +4095,6 @@ gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
                                    int           scale)
 {
   GtkIconPaintable *icon;
-  int width, height;
-
-  if (size <= 0)
-    {
-      width = gdk_pixbuf_get_width (pixbuf);
-      height = gdk_pixbuf_get_height (pixbuf);
-      size = MAX (width, height);
-    }
 
   icon = icon_paintable_new (NULL, size, scale);
   icon->texture = gdk_texture_new_for_pixbuf (pixbuf);
@@ -4139,6 +4131,8 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (G_IS_ICON (gicon), NULL);
+  g_return_val_if_fail (size > 0, NULL);
+  g_return_val_if_fail (scale > 0, NULL);
 
   /* We can't render emblemed icons atm, but at least render the base */
   while (G_IS_EMBLEMED_ICON (gicon))
