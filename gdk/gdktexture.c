@@ -114,9 +114,110 @@ gdk_texture_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_height = gdk_texture_paintable_get_intrinsic_height;
 }
 
+static GVariant *
+gdk_texture_icon_serialize (GIcon *icon)
+{
+  GVariant *result;
+  GBytes *bytes;
+
+  bytes = gdk_texture_save_to_png_bytes (GDK_TEXTURE (icon));
+  result = g_variant_new_from_bytes (G_VARIANT_TYPE_BYTESTRING, bytes, TRUE);
+  g_bytes_unref (bytes);
+
+  return g_variant_new ("(sv)", "bytes", result);
+}
+
+static void
+gdk_texture_icon_init (GIconIface *iface)
+{
+  iface->hash = (guint (*) (GIcon *)) g_direct_hash;
+  iface->equal = (gboolean (*) (GIcon *, GIcon *)) g_direct_equal;
+  iface->serialize = gdk_texture_icon_serialize;
+}
+
+static GInputStream *
+gdk_texture_loadable_icon_load (GLoadableIcon  *icon,
+                                int             size,
+                                char          **type,
+                                GCancellable   *cancellable,
+                                GError        **error)
+{
+  GInputStream *stream;
+  GBytes *bytes;
+
+  bytes = gdk_texture_save_to_png_bytes (GDK_TEXTURE (icon));
+  stream = g_memory_input_stream_new_from_bytes (bytes);
+  g_bytes_unref (bytes);
+
+  if (type)
+    *type = NULL;
+
+  return stream;
+}
+
+static void
+gdk_texture_loadable_icon_load_in_thread (GTask        *task,
+                                          gpointer      source_object,
+                                          gpointer      task_data,
+                                          GCancellable *cancellable)
+{
+  GInputStream *stream;
+  GBytes *bytes;
+
+  bytes = gdk_texture_save_to_png_bytes (source_object);
+  stream = g_memory_input_stream_new_from_bytes (bytes);
+  g_bytes_unref (bytes);
+  g_task_return_pointer (task, stream, g_object_unref);
+}
+
+static void
+gdk_texture_loadable_icon_load_async (GLoadableIcon       *icon,
+                                      int                  size,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  GTask *task;
+
+  task = g_task_new (icon, cancellable, callback, user_data);
+  g_task_run_in_thread (task, gdk_texture_loadable_icon_load_in_thread);
+  g_object_unref (task);
+}
+
+static GInputStream *
+gdk_texture_loadable_icon_load_finish (GLoadableIcon  *icon,
+                                       GAsyncResult   *res,
+                                       char          **type,
+                                       GError        **error)
+{
+  GInputStream *result;
+
+  g_return_val_if_fail (g_task_is_valid (res, icon), NULL);
+
+  result = g_task_propagate_pointer (G_TASK (res), error);
+  if (result == NULL)
+    return NULL;
+
+  if (type)
+    *type = NULL;
+
+  return result;
+}
+
+static void
+gdk_texture_loadable_icon_init (GLoadableIconIface *iface)
+{
+  iface->load = gdk_texture_loadable_icon_load;
+  iface->load_async = gdk_texture_loadable_icon_load_async;
+  iface->load_finish = gdk_texture_loadable_icon_load_finish;
+}
+
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkTexture, gdk_texture, G_TYPE_OBJECT,
                                   G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                                         gdk_texture_paintable_init))
+                                                         gdk_texture_paintable_init)
+                                  G_IMPLEMENT_INTERFACE (G_TYPE_ICON,
+                                                         gdk_texture_icon_init)
+                                  G_IMPLEMENT_INTERFACE (G_TYPE_LOADABLE_ICON, gdk_texture_loadable_icon_init))
 
 #define GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD(obj,method) \
   g_critical ("Texture of type '%s' does not implement GdkTexture::" # method, G_OBJECT_TYPE_NAME (obj))
