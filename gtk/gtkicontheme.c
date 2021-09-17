@@ -4109,7 +4109,7 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
                                 GtkTextDirection    direction,
                                 GtkIconLookupFlags  flags)
 {
-  GtkIconPaintable *icon = NULL;
+  GtkIconPaintable *paintable = NULL;
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (G_IS_ICON (gicon), NULL);
@@ -4123,42 +4123,42 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
   if (GDK_IS_TEXTURE (gicon))
     {
-      icon = icon_paintable_new (NULL, size, scale);
-      icon->texture = g_object_ref (GDK_TEXTURE (icon));
+      paintable = icon_paintable_new (NULL, size, scale);
+      paintable->texture = g_object_ref (GDK_TEXTURE (gicon));
     }
   else if (GDK_IS_PIXBUF (gicon))
     {
-      icon = icon_paintable_new (NULL, size, scale);
-      icon->texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (icon));
+      paintable = icon_paintable_new (NULL, size, scale);
+      paintable->texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (gicon));
     }
   else if (G_IS_FILE_ICON (gicon))
     {
       GFile *file = g_file_icon_get_file (G_FILE_ICON (gicon));
 
-      icon = gtk_icon_paintable_new_for_file (file, size, scale);
+      paintable = gtk_icon_paintable_new_for_file (file, size, scale);
     }
   else if (G_IS_LOADABLE_ICON (gicon))
     {
-      icon = icon_paintable_new (NULL, size, scale);
-      icon->loadable = G_LOADABLE_ICON (g_object_ref (gicon));
-      icon->is_svg = FALSE;
+      paintable = icon_paintable_new (NULL, size, scale);
+      paintable->loadable = G_LOADABLE_ICON (g_object_ref (gicon));
+      paintable->is_svg = FALSE;
     }
   else if (G_IS_THEMED_ICON (gicon))
     {
       const char **names;
 
       names = (const char **) g_themed_icon_get_names (G_THEMED_ICON (gicon));
-      icon = gtk_icon_theme_lookup_icon (self, names[0], &names[1], size, scale, direction, flags);
+      paintable = gtk_icon_theme_lookup_icon (self, names[0], &names[1], size, scale, direction, flags);
     }
   else
     {
       g_debug ("Unhandled GIcon type %s", G_OBJECT_TYPE_NAME (gicon));
-      icon = icon_paintable_new ("image-missing", size, scale);
-      icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
-      icon->is_resource = TRUE;
+      paintable = icon_paintable_new ("image-missing", size, scale);
+      paintable->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
+      paintable->is_resource = TRUE;
     }
 
-  return icon;
+  return paintable;
 }
 
 /**
