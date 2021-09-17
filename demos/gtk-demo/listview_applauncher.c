@@ -46,17 +46,26 @@ static void
 setup_listitem_cb (GtkListItemFactory *factory,
                    GtkListItem        *list_item)
 {
+  GtkWidget *swindow;
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
 
+  swindow = gtk_scrolled_window_new ();
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow),
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (swindow), box);
+  gtk_widget_set_size_request (box, 1000, 200);
   image = gtk_image_new ();
   gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
   gtk_box_append (GTK_BOX (box), image);
   label = gtk_label_new ("");
   gtk_box_append (GTK_BOX (box), label);
-  gtk_list_item_set_child (list_item, box);
+  gtk_list_item_set_child (list_item, swindow);
+
+  g_object_set_data (G_OBJECT (list_item), "image", image);
+  g_object_set_data (G_OBJECT (list_item), "label", label);
 }
 
 /* Here we need to prepare the listitem for displaying its item. We get the
@@ -73,12 +82,12 @@ bind_listitem_cb (GtkListItemFactory *factory,
   GtkWidget *label;
   GAppInfo *app_info;
 
-  image = gtk_widget_get_first_child (gtk_list_item_get_child (list_item));
-  label = gtk_widget_get_next_sibling (image);
+  image = g_object_get_data (G_OBJECT (list_item), "image");
+  label = g_object_get_data (G_OBJECT (list_item), "label");
   app_info = gtk_list_item_get_item (list_item);
 
   gtk_image_set_from_gicon (GTK_IMAGE (image), g_app_info_get_icon (app_info));
-  gtk_label_set_label (GTK_LABEL (label), g_app_info_get_display_name (app_info));
+  gtk_label_set_label (GTK_LABEL (label), g_strdup_printf ("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magnam aliquam quaerat voluptatem. ut enim ad sapientiam perveniri potest, non paranda nobis solum ea, sed fruenda etiam sapientia est; sive hoc difficile est, tamen nec modus ullus nec finis inveniri potest. Quodsi. %s", g_app_info_get_display_name (app_info)));
 }
 
 /* In more complex code, we would also need functions to unbind and teardown
