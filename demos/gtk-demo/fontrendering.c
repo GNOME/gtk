@@ -37,7 +37,7 @@ update_image (void)
   const char *text;
   PangoFontDescription *desc;
   PangoLayout *layout;
-  PangoRectangle ink, pink, logical;
+  PangoRectangle ink, logical;
   int baseline;
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -94,7 +94,6 @@ update_image (void)
       pango_layout_set_font_description (layout, desc);
       pango_layout_set_text (layout, text, -1);
       pango_layout_get_extents (layout, &ink, &logical);
-      pink = ink;
       baseline = pango_layout_get_baseline (layout);
 
       pango_extents_to_pixels (&ink, NULL);
@@ -165,10 +164,10 @@ update_image (void)
           cairo_stroke (cr);
           cairo_set_source_rgb (cr, 1, 0, 0);
           cairo_rectangle (cr,
-                           scale * (10 + pango_units_to_double (pink.x)) + 0.5,
-                           scale * (10 + pango_units_to_double (pink.y)) + 0.5,
-                           scale * pango_units_to_double (pink.width) - 1,
-                           scale * pango_units_to_double (pink.height) - 1);
+                           scale * (10 + ink.x) - 0.5,
+                           scale * (10 + ink.y) - 0.5,
+                           scale * ink.width + 1,
+                           scale * ink.height + 1);
           cairo_stroke (cr);
         }
 
