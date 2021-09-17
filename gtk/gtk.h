@@ -114,6 +114,7 @@
 #include <gtk/gtkeventcontrollerlegacy.h>
 #include <gtk/gtkeventcontrollermotion.h>
 #include <gtk/gtkeventcontrollerscroll.h>
+#include <gtk/gtkeventcontrollerwheel.h>
 #include <gtk/gtkexpander.h>
 #include <gtk/gtkexpression.h>
 #include <gtk/gtkfixed.h>
