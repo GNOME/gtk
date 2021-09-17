@@ -19,9 +19,11 @@
 
 #include "gdktiffprivate.h"
 
+#include "gdkintl.h"
+#include "gdkmemorytextureprivate.h"
 #include "gdktexture.h"
 #include "gdktextureprivate.h"
-#include "gdkmemorytextureprivate.h"
+
 #include <tiffio.h>
 
 /* Our main interest in tiff as an image format is that it is
@@ -374,7 +376,7 @@ load_fallback (TIFF    *tif,
     {
       g_set_error_literal (error,
                            GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
-                           "Failed to load RGB data from TIFF file");
+                           _("Failed to load RGB data from TIFF file"));
       g_free (data);
       return NULL;
     }
@@ -471,8 +473,8 @@ gdk_load_tiff (GBytes  *input_bytes,
   if (!data)
     {
       g_set_error (error,
-                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
-                   "Not enough memory to read tiff");
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_TOO_LARGE,
+                   _("Not enough memory for image size %ux%u"), width, height);
       TIFFClose (tif);
       return NULL;
     }
@@ -484,7 +486,7 @@ gdk_load_tiff (GBytes  *input_bytes,
         {
           g_set_error (error,
                        GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
-                       "Reading data failed at row %d", y);
+                       _("Reading data failed at row %d"), y);
           TIFFClose (tif);
           g_free (data);
           return NULL;

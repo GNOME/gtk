@@ -45,17 +45,22 @@ GQuark gdk_texture_error_quark (void);
 
 /**
  * GdkTextureError:
- * @GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY: Not enough memory to handle this image
+ * @GDK_TEXTURE_ERROR_TOO_LARGE: Not enough memory to handle this image
  * @GDK_TEXTURE_ERROR_CORRUPT_IMAGE: The image data appears corrupted
- * @GDK_TEXTURE_ERROR_UNSUPPORTED: The image format is not supported
+ * @GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT: The image contains features
+ *   that cannot be loaded
+ * @GDK_TEXTURE_ERROR_UNSUPPORTED_FORMAT: The image format is not supported
  *
  * Possible errors that can be returned by `GdkTexture` constructors.
+ *
+ * Since: 4.6
  */
 typedef enum
 {
-  GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
+  GDK_TEXTURE_ERROR_TOO_LARGE,
   GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
-  GDK_TEXTURE_ERROR_UNSUPPORTED,
+  GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
+  GDK_TEXTURE_ERROR_UNSUPPORTED_FORMAT,
 } GdkTextureError;
 
 GDK_AVAILABLE_IN_ALL

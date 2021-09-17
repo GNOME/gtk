@@ -19,9 +19,10 @@
 
 #include "gdkpngprivate.h"
 
+#include "gdkintl.h"
+#include "gdkmemorytextureprivate.h"
 #include "gdktexture.h"
 #include "gdktextureprivate.h"
-#include "gdkmemorytextureprivate.h"
 #include "gsk/ngl/fp16private.h"
 #include <png.h>
 #include <stdio.h>
@@ -113,7 +114,7 @@ png_simple_error_callback (png_structp     png,
   if (error && !*error)
     g_set_error (error,
                  GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
-                 "Error reading png (%s)", error_msg);
+                 _("Error reading png (%s)"), error_msg);
 
   longjmp (png_jmpbuf (png), 1);
 }
@@ -320,22 +321,11 @@ gdk_load_png (GBytes  *bytes,
                                   png_malloc_callback,
                                   png_free_callback);
   if (png == NULL)
-    {
-      g_set_error (error,
-                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
-                   "Failed to parse png image");
-      return NULL;
-    }
+    g_error ("Out of memory");
 
   info = png_create_info_struct (png);
   if (info == NULL)
-    {
-      png_destroy_read_struct (&png, NULL, NULL);
-      g_set_error (error,
-                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
-                   "Failed to parse png image");
-      return NULL;
-    }
+    g_error ("Out of memory");
 
   png_set_read_fn (png, &io, png_read_func);
 
@@ -385,8 +375,8 @@ gdk_load_png (GBytes  *bytes,
     {
       png_destroy_read_struct (&png, &info, NULL);
       g_set_error (error,
-                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED,
-                   "Failed to parse png image");
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
+                   _("Failed to parse png image"));
       return NULL;
     }
 
@@ -437,9 +427,9 @@ gdk_load_png (GBytes  *bytes,
       g_free (buffer);
       g_free (row_pointers);
       png_destroy_read_struct (&png, &info, NULL);
-      g_set_error_literal (error,
-                           GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
-                           "Not enough memory to load png");
+      g_set_error (error,
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_TOO_LARGE,
+                   _("Not enough memory for image size %ux%u"), width, height);
       return NULL;
     }
 

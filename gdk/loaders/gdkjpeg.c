@@ -19,8 +19,10 @@
 
 #include "gdkjpegprivate.h"
 
+#include "gdkintl.h"
 #include "gdktexture.h"
 #include "gdkmemorytextureprivate.h"
+
 #include <jpeglib.h>
 #include <jerror.h>
 #include <setjmp.h>
@@ -53,10 +55,8 @@ fatal_error_handler (j_common_ptr cinfo)
   if (errmgr->error && *errmgr->error == NULL)
     g_set_error (errmgr->error,
                  GDK_TEXTURE_ERROR,
-                 cinfo->err->msg_code == JERR_OUT_OF_MEMORY
-                   ? GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY
-                   : GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
-                 "Error interpreting JPEG image file (%s)", buffer);
+                 GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
+                 _("Error interpreting JPEG image file (%s)"), buffer);
 
   siglongjmp (errmgr->setjmp_buffer, 1);
 
@@ -213,17 +213,17 @@ gdk_load_jpeg (GBytes  *input_bytes,
       break;
     default:
       g_set_error (error,
-                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED,
-                   "Unsupported colorspace in jpeg (%d)", info.out_color_space);
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
+                   _("Unsupported JPEG colorspace (%d)"), info.out_color_space);
       jpeg_destroy_decompress (&info);
       return NULL;
     }
 
   if (!data)
     {
-      g_set_error_literal (error,
-                           GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_INSUFFICIENT_MEMORY,
-                           "Not enough memory to load jpeg");
+      g_set_error (error,
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_TOO_LARGE,
+                   _("Not enough memory for image size %ux%u"), width, height);
       jpeg_destroy_decompress (&info);
       return NULL;
     }
