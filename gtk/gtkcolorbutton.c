@@ -193,7 +193,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    *
    * Note that this signal is only emitted when the user changes the color.
    * If you need to react to programmatic color changes as well, use
-   * the notify::color signal.
+   * the notify::rgba signal.
    */
   color_button_signals[COLOR_SET] = g_signal_new (I_("color-set"),
                                                   G_TYPE_FROM_CLASS (gobject_class),
