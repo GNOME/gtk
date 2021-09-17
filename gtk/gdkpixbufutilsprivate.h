@@ -23,32 +23,26 @@
 G_BEGIN_DECLS
 
 GdkPixbuf *_gdk_pixbuf_new_from_stream              (GInputStream  *stream,
-                                                     const char    *format,
                                                      GCancellable  *cancellable,
                                                      GError       **error);
 GdkPixbuf *_gdk_pixbuf_new_from_stream_at_scale     (GInputStream  *stream,
-                                                     const char    *format,
                                                      int            width,
                                                      int            height,
                                                      gboolean       aspect,
                                                      GCancellable  *cancellable,
                                                      GError       **error);
 GdkPixbuf *_gdk_pixbuf_new_from_stream_scaled       (GInputStream  *stream,
-                                                     const char    *format,
                                                      double         scale,
                                                      GCancellable  *cancellable,
                                                      GError       **error);
 GdkPixbuf *_gdk_pixbuf_new_from_resource            (const char    *resource_path,
-                                                     const char    *format,
                                                      GError       **error);
 GdkPixbuf *_gdk_pixbuf_new_from_resource_at_scale   (const char    *resource_path,
-                                                     const char    *format,
                                                      int            width,
                                                      int            height,
                                                      gboolean       preserve_aspect,
                                                      GError       **error);
 GdkPixbuf *_gdk_pixbuf_new_from_resource_scaled     (const char    *resource_path,
-                                                     const char    *format,
                                                      double         scale,
                                                      GError       **error);
 

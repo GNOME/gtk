@@ -93,7 +93,6 @@ size_prepared_cb (GdkPixbufLoader *loader,
  */
 GdkPixbuf *
 _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
-                                    const char    *format,
                                     double         scale,
                                     GCancellable  *cancellable,
                                     GError       **error)
@@ -101,14 +100,7 @@ _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
   GdkPixbufLoader *loader;
   GdkPixbuf *pixbuf;
 
-  if (format)
-    {
-      loader = gdk_pixbuf_loader_new_with_type (format, error);
-      if (!loader)
-        return NULL;
-    }
-  else
-    loader = gdk_pixbuf_loader_new ();
+  loader = gdk_pixbuf_loader_new ();
 
   if (scale != 0)
     g_signal_connect (loader, "size-prepared",
@@ -155,7 +147,6 @@ size_prepared_cb2 (GdkPixbufLoader *loader,
 
 GdkPixbuf *
 _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
-                                      const char    *format,
                                       int            width,
                                       int            height,
                                       gboolean       aspect,
@@ -166,14 +157,7 @@ _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
   GdkPixbuf *pixbuf;
   int scales[3];
 
-  if (format)
-    {
-      loader = gdk_pixbuf_loader_new_with_type (format, error);
-      if (!loader)
-        return NULL;
-    }
-  else
-    loader = gdk_pixbuf_loader_new ();
+  loader = gdk_pixbuf_loader_new ();
 
   scales[0] = width;
   scales[1] = height;
@@ -190,11 +174,10 @@ _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
 
 GdkPixbuf *
 _gdk_pixbuf_new_from_stream (GInputStream  *stream,
-                             const char    *format,
                              GCancellable  *cancellable,
                              GError       **error)
 {
-  return _gdk_pixbuf_new_from_stream_scaled (stream, format, 0, cancellable, error);
+  return _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
 }
 
 /* Like gdk_pixbuf_new_from_resource_at_scale, but
@@ -203,7 +186,6 @@ _gdk_pixbuf_new_from_stream (GInputStream  *stream,
  */
 GdkPixbuf *
 _gdk_pixbuf_new_from_resource_scaled (const char  *resource_path,
-                                      const char  *format,
                                       double       scale,
                                       GError     **error)
 {
@@ -214,7 +196,7 @@ _gdk_pixbuf_new_from_resource_scaled (const char  *resource_path,
   if (stream == NULL)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, format, scale, NULL, error);
+  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, scale, NULL, error);
   g_object_unref (stream);
 
   return pixbuf;
@@ -222,15 +204,13 @@ _gdk_pixbuf_new_from_resource_scaled (const char  *resource_path,
 
 GdkPixbuf *
 _gdk_pixbuf_new_from_resource (const char   *resource_path,
-                               const char   *format,
                                GError      **error)
 {
-  return _gdk_pixbuf_new_from_resource_scaled (resource_path, format, 0, error);
+  return _gdk_pixbuf_new_from_resource_scaled (resource_path, 0, error);
 }
 
 GdkPixbuf *
 _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
-                                        const char   *format,
                                         int           width,
                                         int           height,
                                         gboolean      preserve_aspect,
@@ -243,7 +223,7 @@ _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
   if (stream == NULL)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, format, width, height, preserve_aspect, NULL, error);
+  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, preserve_aspect, NULL, error);
   g_object_unref (stream);
 
   return pixbuf;
@@ -541,7 +521,7 @@ gtk_load_symbolic_texture_from_file (GFile *file)
   if (stream == NULL)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream (stream, "png", NULL, NULL);
+  pixbuf = _gdk_pixbuf_new_from_stream (stream, NULL, NULL);
   g_object_unref (stream);
   if (pixbuf == NULL)
     return NULL;

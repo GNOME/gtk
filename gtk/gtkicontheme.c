@@ -3789,7 +3789,6 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
                                                                     &load_error);
           else
             source_pixbuf = _gdk_pixbuf_new_from_resource_at_scale (icon->filename,
-                                                                    "svg",
                                                                     pixel_size, pixel_size,
                                                                     TRUE, &load_error);
           if (source_pixbuf)
@@ -3821,7 +3820,6 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
               if (stream)
                 {
                   source_pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                                        "svg",
                                                                         pixel_size, pixel_size,
                                                                         TRUE, NULL,
                                                                         &load_error);
@@ -3860,14 +3858,12 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
           if (icon->is_svg)
             {
               source_pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                                    "svg",
                                                                     pixel_size, pixel_size,
                                                                     TRUE, NULL,
                                                                     &load_error);
             }
           else
             source_pixbuf = _gdk_pixbuf_new_from_stream (stream,
-                                                         g_str_has_suffix (icon->filename, ".xpm") ? "xpm" : "png",
                                                          NULL, &load_error);
           g_object_unref (stream);
           if (source_pixbuf)
