@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-static GdkPixbuf *avatar_pixbuf_other;
+static GdkTexture *avatar_texture_other;
 static GtkWidget *window = NULL;
 
 #define GTK_TYPE_MESSAGE		  (gtk_message_get_type ())
@@ -196,12 +196,9 @@ gtk_message_row_update (GtkMessageRow *row)
     gtk_button_set_label (GTK_BUTTON (priv->resent_by_button), priv->message->resent_by);
 
   if (strcmp (priv->message->sender_nick, "@GTKtoolkit") == 0)
-    {
-      gtk_image_set_from_icon_name (priv->avatar_image, "org.gtk.Demo4");
-      gtk_image_set_icon_size (priv->avatar_image, GTK_ICON_SIZE_LARGE);
-    }
+    gtk_image_set_from_icon_name (priv->avatar_image, "org.gtk.Demo4");
   else
-    gtk_image_set_from_pixbuf (priv->avatar_image, avatar_pixbuf_other);
+    gtk_image_set_from_paintable (priv->avatar_image, GDK_PAINTABLE (avatar_texture_other));
 
 }
 
@@ -344,7 +341,7 @@ do_listbox (GtkWidget *do_widget)
 
   if (!window)
     {
-      avatar_pixbuf_other = gdk_pixbuf_new_from_resource_at_scale ("/listbox/apple-red.png", 32, 32, FALSE, NULL);
+      avatar_texture_other = gdk_texture_new_from_resource ("/listbox/apple-red.png");
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
