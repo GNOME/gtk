@@ -177,6 +177,8 @@
             <child>
               <object class="GtkButton" id="up_button">
                 <property name="icon-name">list-add-symbolic</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
                 <style>
                   <class name="circular"/>
                 </style>
@@ -200,6 +202,8 @@
             <child>
               <object class="GtkButton" id="down_button">
                 <property name="icon-name">list-remove-symbolic</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
                 <style>
                   <class name="circular"/>
                 </style>
