@@ -132,7 +132,8 @@ gsk_ngl_glyph_library_create_surface (GskNglGlyphLibrary *self,
                                       int                 stride,
                                       int                 width,
                                       int                 height,
-                                      double              device_scale)
+                                      int                 uwidth,
+                                      int                 uheight)
 {
   cairo_surface_t *surface;
   gsize n_bytes;
@@ -153,7 +154,7 @@ gsk_ngl_glyph_library_create_surface (GskNglGlyphLibrary *self,
   surface = cairo_image_surface_create_for_data (self->surface_data,
                                                  CAIRO_FORMAT_ARGB32,
                                                  width, height, stride);
-  cairo_surface_set_device_scale (surface, device_scale, device_scale);
+  cairo_surface_set_device_scale (surface, width / (double)uwidth, height / (double)uheight);
 
   return surface;
 }
@@ -192,7 +193,8 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
                                     int                     y,
                                     int                     width,
                                     int                     height,
-                                    double                  device_scale)
+                                    int                     uwidth,
+                                    int                     uheight)
 {
   GskNglTextureLibrary *tl = (GskNglTextureLibrary *)self;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
@@ -220,7 +222,7 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
                                           "Uploading glyph %d",
                                           key->glyph);
 
-  surface = gsk_ngl_glyph_library_create_surface (self, stride, width, height, device_scale);
+  surface = gsk_ngl_glyph_library_create_surface (self, stride, width, height, uwidth, uheight);
   render_glyph (surface, scaled_font, key, value);
 
   texture_id = GSK_NGL_TEXTURE_ATLAS_ENTRY_TEXTURE (value);
@@ -289,16 +291,10 @@ gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
   pango_font_get_glyph_extents (key->font, key->glyph, &ink_rect, NULL);
   pango_extents_to_pixels (&ink_rect, NULL);
 
-  if (key->xshift != 0)
-    {
-      ink_rect.x -= 1;
-      ink_rect.width += 2;
-    }
-  if (key->yshift != 0)
-    {
-      ink_rect.y -= 1;
-      ink_rect.height += 2;
-    }
+  ink_rect.x -= 1;
+  ink_rect.width += 2;
+  ink_rect.y -= 1;
+  ink_rect.height += 2;
 
   width = (int) ceil (ink_rect.width * key->scale / 1024.0);
   height = (int) ceil (ink_rect.height * key->scale / 1024.0);
@@ -321,7 +317,8 @@ gsk_ngl_glyph_library_add (GskNglGlyphLibrary      *self,
                                         packed_y + 1,
                                         width,
                                         height,
-                                        key->scale / 1024.0);
+                                        ink_rect.width,
+                                        ink_rect.height);
 
   *out_value = value;
 
