@@ -3977,7 +3977,6 @@ gtk_label_ensure_layout (GtkLabel *self)
   if (self->layout)
     return;
 
-  align = PANGO_ALIGN_LEFT; /* Quiet gcc */
   rtl = _gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), self->text);
 
