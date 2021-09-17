@@ -196,10 +196,14 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
             }
         }
 
+      if (button == 0)
+        return FALSE;
+
       break;
     case GDK_TOUCH_CANCEL:
     case GDK_GRAB_BROKEN:
     case GDK_TOUCHPAD_SWIPE:
+    case GDK_SCROLL:
       return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_single_parent_class)->handle_event (controller, event, x, y);
       break;
     default:
