@@ -58,6 +58,7 @@ struct _EventData
 struct _GtkGestureSwipePrivate
 {
   GArray *events;
+  gboolean cancelled;
 };
 
 enum {
@@ -150,6 +151,16 @@ gtk_gesture_swipe_append_event (GtkGestureSwipe  *swipe,
 }
 
 static void
+gtk_gesture_swipe_begin (GtkGesture       *gesture,
+                         GdkEventSequence *sequence)
+{
+  GtkGestureSwipe *swipe = GTK_GESTURE_SWIPE (gesture);
+  GtkGestureSwipePrivate *priv = gtk_gesture_swipe_get_instance_private (swipe);
+
+  priv->cancelled = FALSE;
+}
+
+static void
 gtk_gesture_swipe_update (GtkGesture       *gesture,
                           GdkEventSequence *sequence)
 {
@@ -199,9 +210,12 @@ gtk_gesture_swipe_end (GtkGesture       *gesture,
                        GdkEventSequence *sequence)
 {
   GtkGestureSwipe *swipe = GTK_GESTURE_SWIPE (gesture);
-  GtkGestureSwipePrivate *priv;
+  GtkGestureSwipePrivate *priv = gtk_gesture_swipe_get_instance_private (swipe);
   double velocity_x, velocity_y;
   GdkEventSequence *seq;
+
+  if (priv->cancelled)
+    return;
 
   seq = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
@@ -213,12 +227,23 @@ gtk_gesture_swipe_end (GtkGesture       *gesture,
 
   gtk_gesture_swipe_append_event (swipe, sequence);
 
-  priv = gtk_gesture_swipe_get_instance_private (swipe);
   _gtk_gesture_swipe_calculate_velocity (swipe, &velocity_x, &velocity_y);
   g_signal_emit (gesture, signals[SWIPE], 0, velocity_x, velocity_y);
 
   if (priv->events->len > 0)
     g_array_remove_range (priv->events, 0, priv->events->len);
+}
+
+static void
+gtk_gesture_swipe_cancel (GtkGesture       *gesture,
+                          GdkEventSequence *sequence)
+{
+  GtkGestureSwipe *swipe = GTK_GESTURE_SWIPE (gesture);
+  GtkGestureSwipePrivate *priv = gtk_gesture_swipe_get_instance_private (swipe);
+
+  priv->cancelled = TRUE;
+
+  GTK_GESTURE_CLASS (gtk_gesture_swipe_parent_class)->cancel (gesture, sequence);
 }
 
 static void
@@ -232,8 +257,10 @@ gtk_gesture_swipe_class_init (GtkGestureSwipeClass *klass)
 
   event_controller_class->filter_event = gtk_gesture_swipe_filter_event;
 
+  gesture_class->begin = gtk_gesture_swipe_begin;
   gesture_class->update = gtk_gesture_swipe_update;
   gesture_class->end = gtk_gesture_swipe_end;
+  gesture_class->cancel = gtk_gesture_swipe_cancel;
 
   /**
    * GtkGestureSwipe::swipe:
