@@ -453,10 +453,21 @@ extract_matrix_metadata (GskNglRenderModelview *modelview)
                                &modelview->dx, &modelview->dy);
       break;
 
+    case GSK_TRANSFORM_CATEGORY_2D:
+      {
+        float xx, xy, yx, yy, dx, dy;
+
+        gsk_transform_to_2d (modelview->transform,
+                             &xx, &xy, &yx, &yy, &dx, &dy);
+
+        modelview->scale_x = sqrtf (xx * xx + xy * xy);
+        modelview->scale_y = sqrtf (yx * yx + yy * yy);
+      }
+      break;
+
     case GSK_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_TRANSFORM_CATEGORY_ANY:
     case GSK_TRANSFORM_CATEGORY_3D:
-    case GSK_TRANSFORM_CATEGORY_2D:
       {
         graphene_vec3_t col1;
         graphene_vec3_t col2;

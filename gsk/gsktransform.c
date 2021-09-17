@@ -1530,6 +1530,13 @@ gsk_transform_to_2d (GskTransform *self,
  *
  * Converts a `GskTransform` to 2D affine transformation factors.
  *
+ * To recreate an equivalent transform from the factors returned
+ * by this function, use
+ *
+ *     gsk_transform_scale (gsk_transform_translate (NULL,
+ *                                                   &GRAPHENE_POINT_T (dx, dy)),
+ *                          sx, sy)
+ *
  * @self must be a 2D transformation. If you are not
  * sure, use
  *
