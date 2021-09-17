@@ -567,6 +567,25 @@ test_to_affine (void)
   g_assert_cmpfloat (dy, ==, 5.0);
 }
 
+static void
+test_transform_bounds (void)
+{
+  GskTransform *t = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (50, 50));
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 100, 100);
+  graphene_rect_t out;
+
+  gsk_transform_transform_bounds (t, &bounds, &out);
+  g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(50, 50, 100, 100)));
+
+  t = gsk_transform_rotate (t, 180);
+  gsk_transform_transform_bounds (t, &bounds, &out);
+  g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(-50, -50, 100, 100)));
+
+  t = gsk_transform_translate (t, &GRAPHENE_POINT_INIT (-50, -50));
+  gsk_transform_transform_bounds (t, &bounds, &out);
+  g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(0, 0, 100, 100)));
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -581,6 +600,7 @@ main (int   argc,
   g_test_add_func ("/transform/print-parse", test_print_parse);
   g_test_add_func ("/transform/check-axis-aligneness", test_axis_aligned);
   g_test_add_func ("/transform/to-affine", test_to_affine);
+  g_test_add_func ("/transform/bounds", test_transform_bounds);
 
   return g_test_run ();
 }
