@@ -41,6 +41,7 @@
 #include "gdktextureprivate.h"
 
 #include "gdkinternals.h"
+#include "gdkintl.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
 #include "gdksnapshot.h"
@@ -418,6 +419,52 @@ gdk_texture_can_load (GBytes *bytes)
          gdk_is_tiff (bytes);
 }
 
+static GdkTexture *
+gdk_texture_new_from_bytes_internal (GBytes  *bytes,
+                                     GError **error)
+{
+  if (gdk_is_png (bytes))
+    {
+      return gdk_load_png (bytes, error);
+    }
+  else if (gdk_is_jpeg (bytes))
+    {
+      return gdk_load_jpeg (bytes, error);
+    }
+  else if (gdk_is_tiff (bytes))
+    {
+      return gdk_load_tiff (bytes, error);
+    }
+  else
+    {
+      g_set_error_literal (error,
+                           GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_FORMAT,
+                           _("Unknown image format."));
+      return NULL;
+    }
+}
+
+static GdkTexture *
+gdk_texture_new_from_bytes_pixbuf (GBytes  *bytes,
+                                   GError **error)
+{
+  GInputStream *stream;
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
+
+  stream = g_memory_input_stream_new_from_bytes (bytes);
+  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
+  g_object_unref (stream);
+  if (pixbuf == NULL)
+    return NULL;
+
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  g_object_unref (pixbuf);
+
+  return texture;
+}
+
+
 /**
  * gdk_texture_new_from_bytes:
  * @bytes: a `GBytes` containing the data to load
@@ -438,38 +485,26 @@ GdkTexture *
 gdk_texture_new_from_bytes (GBytes  *bytes,
                             GError **error)
 {
+  GdkTexture *texture;
+  GError *internal_error = NULL;
+
   g_return_val_if_fail (bytes != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  if (gdk_is_png (bytes))
-    {
-      return gdk_load_png (bytes, error);
-    }
-  else if (gdk_is_jpeg (bytes))
-    {
-      return gdk_load_jpeg (bytes, error);
-    }
-  else if (gdk_is_tiff (bytes))
-    {
-      return gdk_load_tiff (bytes, error);
-    }
-  else
-    {
-      GInputStream *stream;
-      GdkPixbuf *pixbuf;
-      GdkTexture *texture;
+  texture = gdk_texture_new_from_bytes_internal (bytes, &internal_error);
+  if (texture)
+    return texture;
 
-      stream = g_memory_input_stream_new_from_bytes (bytes);
-      pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, error);
-      g_object_unref (stream);
-      if (pixbuf == NULL)
-        return NULL;
-
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-      g_object_unref (pixbuf);
-
-      return texture;
+  if (!g_error_matches (internal_error, GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT) &&
+      !g_error_matches (internal_error, GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_FORMAT))
+    {
+      g_propagate_error (error, internal_error);
+      return NULL;
     }
+
+  g_clear_error (&internal_error);
+
+  return gdk_texture_new_from_bytes_pixbuf (bytes, error);
 }
 
 /**
