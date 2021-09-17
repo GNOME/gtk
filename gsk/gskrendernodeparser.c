@@ -85,24 +85,17 @@ parse_texture (GtkCssParser *parser,
   scheme = g_uri_parse_scheme (url);
   if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
     {
-      GInputStream *stream;
-      GdkPixbuf *pixbuf;
       GBytes *bytes;
-
-      texture = NULL;
 
       bytes = gtk_css_data_url_parse (url, NULL, &error);
       if (bytes)
         {
-          stream = g_memory_input_stream_new_from_bytes (bytes);
+          texture = gdk_texture_new_from_bytes (bytes, &error);
           g_bytes_unref (bytes);
-          pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, &error);
-          g_object_unref (stream);
-          if (pixbuf != NULL)
-            {
-              texture = gdk_texture_new_for_pixbuf (pixbuf);
-              g_object_unref (pixbuf);
-            }
+        }
+      else
+        {
+          texture = NULL;
         }
     }
   else
@@ -2699,26 +2692,23 @@ render_node_print (Printer       *p,
     case GSK_TEXTURE_NODE:
       {
         GdkTexture *texture = gsk_texture_node_get_texture (node);
-        cairo_surface_t *surface;
-        GByteArray *array;
+        GBytes *bytes;
 
         start_node (p, "texture");
         append_rect_param (p, "bounds", &node->bounds);
 
-        surface = gdk_texture_download_surface (texture);
-        array = g_byte_array_new ();
-        cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
+        bytes = gdk_texture_save_to_png_bytes (texture);
 
         _indent (p);
         g_string_append (p->str, "texture: url(\"data:image/png;base64,");
-        b64 = base64_encode_with_linebreaks (array->data, array->len);
+        b64 = base64_encode_with_linebreaks (g_bytes_get_data (bytes, NULL),
+                                             g_bytes_get_size (bytes));
         append_escaping_newlines (p->str, b64);
         g_free (b64);
         g_string_append (p->str, "\");\n");
         end_node (p);
 
-        g_byte_array_free (array, TRUE);
-        cairo_surface_destroy (surface);
+        g_bytes_unref (bytes);
       }
       break;
 

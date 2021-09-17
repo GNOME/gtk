@@ -49,6 +49,31 @@ foreach t : tests
   )
 endforeach
 
+internal_tests = [
+  'image'
+]
+
+foreach t : internal_tests
+  test_exe = executable(t, '@0@.c'.format(t),
+    c_args: common_cflags,
+    dependencies: libgtk_static_dep,
+    install: get_option('install-tests'),
+    install_dir: testexecdir,
+  )
+
+  test(t, test_exe,
+    args: [ '--tap', '-k' ],
+    protocol: 'tap',
+    env: [
+      'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+      'DBUS_SESSION_BUS_ADDRESS=',
+    ],
+    suite: 'gdk',
+  )
+endforeach
+
+
 if get_option('install-tests')
   foreach t : tests
     test_cdata = configuration_data()
@@ -63,4 +88,5 @@ if get_option('install-tests')
   endforeach
 
   install_subdir('clipboard-data', install_dir: testexecdir)
+  install_subdir('image-data', install_dir: testexecdir)
 endif

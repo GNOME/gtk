@@ -51,6 +51,9 @@ gdk_public_sources = files([
   'gdktoplevelsize.c',
   'gdktoplevel.c',
   'gdkdragsurface.c',
+  'loaders/gdkpng.c',
+  'loaders/gdktiff.c',
+  'loaders/gdkjpeg.c',
 ])
 
 gdk_public_headers = files([
@@ -201,6 +204,9 @@ gdk_deps = [
   platform_gio_dep,
   pangocairo_dep,
   vulkan_dep,
+  png_dep,
+  tiff_dep,
+  jpeg_dep,
 ]
 
 if profiler_enabled
@@ -257,7 +263,7 @@ endif
 libgdk = static_library('gdk',
   sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
   dependencies: gdk_deps + [libgtk_css_dep],
-  link_with: [libgtk_css, ],
+  link_with: [libgtk_css],
   include_directories: [confinc, gdkx11_inc, wlinc],
   c_args: libgdk_c_args + common_cflags,
   link_whole: gdk_backends,

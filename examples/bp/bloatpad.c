@@ -603,8 +603,8 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (icon);
   g_bytes_unref (bytes);
 
-  icon = G_ICON (gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/folder-new.png", NULL));
-  item = g_menu_item_new ("Pixbuf", NULL);
+  icon = G_ICON (gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/folder-new.png"));
+  item = g_menu_item_new ("Texture", NULL);
   g_menu_item_set_icon (item, icon);
   g_menu_append_item (menu, item);
   g_object_unref (item);

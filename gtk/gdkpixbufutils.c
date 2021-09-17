@@ -20,6 +20,8 @@
 #include "gdkpixbufutilsprivate.h"
 #include "gtkscalerprivate.h"
 
+#include "gdk/gdktextureprivate.h"
+
 static GdkPixbuf *
 load_from_stream (GdkPixbufLoader  *loader,
                   GInputStream     *stream,
@@ -91,7 +93,6 @@ size_prepared_cb (GdkPixbufLoader *loader,
  */
 GdkPixbuf *
 _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
-                                    const char    *format,
                                     double         scale,
                                     GCancellable  *cancellable,
                                     GError       **error)
@@ -99,14 +100,7 @@ _gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
   GdkPixbufLoader *loader;
   GdkPixbuf *pixbuf;
 
-  if (format)
-    {
-      loader = gdk_pixbuf_loader_new_with_type (format, error);
-      if (!loader)
-        return NULL;
-    }
-  else
-    loader = gdk_pixbuf_loader_new ();
+  loader = gdk_pixbuf_loader_new ();
 
   if (scale != 0)
     g_signal_connect (loader, "size-prepared",
@@ -153,7 +147,6 @@ size_prepared_cb2 (GdkPixbufLoader *loader,
 
 GdkPixbuf *
 _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
-                                      const char    *format,
                                       int            width,
                                       int            height,
                                       gboolean       aspect,
@@ -164,14 +157,7 @@ _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
   GdkPixbuf *pixbuf;
   int scales[3];
 
-  if (format)
-    {
-      loader = gdk_pixbuf_loader_new_with_type (format, error);
-      if (!loader)
-        return NULL;
-    }
-  else
-    loader = gdk_pixbuf_loader_new ();
+  loader = gdk_pixbuf_loader_new ();
 
   scales[0] = width;
   scales[1] = height;
@@ -188,11 +174,10 @@ _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
 
 GdkPixbuf *
 _gdk_pixbuf_new_from_stream (GInputStream  *stream,
-                             const char    *format,
                              GCancellable  *cancellable,
                              GError       **error)
 {
-  return _gdk_pixbuf_new_from_stream_scaled (stream, format, 0, cancellable, error);
+  return _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
 }
 
 /* Like gdk_pixbuf_new_from_resource_at_scale, but
@@ -201,7 +186,6 @@ _gdk_pixbuf_new_from_stream (GInputStream  *stream,
  */
 GdkPixbuf *
 _gdk_pixbuf_new_from_resource_scaled (const char  *resource_path,
-                                      const char  *format,
                                       double       scale,
                                       GError     **error)
 {
@@ -212,7 +196,7 @@ _gdk_pixbuf_new_from_resource_scaled (const char  *resource_path,
   if (stream == NULL)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, format, scale, NULL, error);
+  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, scale, NULL, error);
   g_object_unref (stream);
 
   return pixbuf;
@@ -220,15 +204,13 @@ _gdk_pixbuf_new_from_resource_scaled (const char  *resource_path,
 
 GdkPixbuf *
 _gdk_pixbuf_new_from_resource (const char   *resource_path,
-                               const char   *format,
                                GError      **error)
 {
-  return _gdk_pixbuf_new_from_resource_scaled (resource_path, format, 0, error);
+  return _gdk_pixbuf_new_from_resource_scaled (resource_path, 0, error);
 }
 
 GdkPixbuf *
 _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
-                                        const char   *format,
                                         int           width,
                                         int           height,
                                         gboolean      preserve_aspect,
@@ -241,7 +223,7 @@ _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
   if (stream == NULL)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, format, width, height, preserve_aspect, NULL, error);
+  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, preserve_aspect, NULL, error);
   g_object_unref (stream);
 
   return pixbuf;
@@ -539,7 +521,7 @@ gtk_load_symbolic_texture_from_file (GFile *file)
   if (stream == NULL)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream (stream, "png", NULL, NULL);
+  pixbuf = _gdk_pixbuf_new_from_stream (stream, NULL, NULL);
   g_object_unref (stream);
   if (pixbuf == NULL)
     return NULL;
@@ -597,42 +579,44 @@ GdkPaintable *
 gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
                                      int     scale_factor)
 {
-  GdkPixbufLoader *loader;
-  GdkPixbuf *pixbuf = NULL;
   LoaderData loader_data;
   GdkTexture *texture;
   GdkPaintable *paintable;
 
   loader_data.scale_factor = scale_factor;
 
-  loader = gdk_pixbuf_loader_new ();
-  g_signal_connect (loader, "size-prepared",
-                    G_CALLBACK (on_loader_size_prepared), &loader_data);
+  if (gdk_texture_can_load (bytes))
+    {
+      /* We know these formats can't be scaled */
+      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      if (texture == NULL)
+        return NULL;
+    }
+  else
+    {
+      GdkPixbufLoader *loader;
+      gboolean success;
 
-  if (!gdk_pixbuf_loader_write_bytes (loader, bytes, NULL))
-    goto out;
+      loader = gdk_pixbuf_loader_new ();
+      g_signal_connect (loader, "size-prepared",
+                        G_CALLBACK (on_loader_size_prepared), &loader_data);
 
-  if (!gdk_pixbuf_loader_close (loader, NULL))
-    goto out;
+      success = gdk_pixbuf_loader_write_bytes (loader, bytes, NULL);
+      /* close even when writing failed */
+      success &= gdk_pixbuf_loader_close (loader, NULL);
 
-  pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-  if (pixbuf != NULL)
-    g_object_ref (pixbuf);
+      if (!success)
+        return NULL;
 
- out:
-  gdk_pixbuf_loader_close (loader, NULL);
-  g_object_unref (loader);
+      texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
+      g_object_unref (loader);
+    }
 
-  if (!pixbuf)
-    return NULL;
-
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
   if (loader_data.scale_factor != 1)
     paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale_factor);
   else
     paintable = g_object_ref ((GdkPaintable *)texture);
 
-  g_object_unref (pixbuf);
   g_object_unref (texture);
 
   return paintable;

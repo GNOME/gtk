@@ -3742,31 +3742,6 @@ gtk_icon_paintable_is_symbolic (GtkIconPaintable *icon)
   return icon->is_symbolic;
 }
 
-static GLoadableIcon *
-icon_get_loadable (GtkIconPaintable *icon)
-{
-  GFile *file;
-  GLoadableIcon *loadable;
-
-  if (icon->loadable)
-    return g_object_ref (icon->loadable);
-
-  if (icon->is_resource)
-    {
-      char *uri = g_strconcat ("resource://", icon->filename, NULL);
-      file = g_file_new_for_uri (uri);
-      g_free (uri);
-    }
-  else
-    file = g_file_new_for_path (icon->filename);
-
-  loadable = G_LOADABLE_ICON (g_file_icon_new (file));
-
-  g_object_unref (file);
-
-  return loadable;
-}
-
 /* This function contains the complicated logic for deciding
  * on the size at which to load the icon and loading it at
  * that size.
@@ -3775,7 +3750,6 @@ static void
 icon_ensure_texture__locked (GtkIconPaintable *icon,
                              gboolean          in_thread)
 {
-  GdkPixbuf *source_pixbuf;
   gint64 before;
   int pixel_size;
   GError *load_error = NULL;
@@ -3795,11 +3769,10 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
   /* At this point, we need to actually get the icon; either from the
    * builtin image or by loading the file
    */
-  source_pixbuf = NULL;
 #ifdef G_OS_WIN32
   if (icon->win32_icon)
     {
-      source_pixbuf = g_object_ref (icon->win32_icon);
+      icon->texture = gdk_texture_new_for_pixbuf (icon->win32_icon);
     }
   else
 #endif
@@ -3807,6 +3780,8 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
     {
       if (icon->is_svg)
         {
+          GdkPixbuf *source_pixbuf;
+
           if (gtk_icon_paintable_is_symbolic (icon))
             source_pixbuf = gtk_make_symbolic_pixbuf_from_resource (icon->filename,
                                                                     pixel_size, pixel_size,
@@ -3814,33 +3789,67 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
                                                                     &load_error);
           else
             source_pixbuf = _gdk_pixbuf_new_from_resource_at_scale (icon->filename,
-                                                                    "svg",
                                                                     pixel_size, pixel_size,
                                                                     TRUE, &load_error);
+          if (source_pixbuf)
+            {
+              icon->texture = gdk_texture_new_for_pixbuf (source_pixbuf);
+              g_object_unref (source_pixbuf);
+            }
         }
       else
-        source_pixbuf = _gdk_pixbuf_new_from_resource (icon->filename,
-                                                       g_str_has_suffix (icon->filename, ".xpm") ? "xpm" : "png",
-                                                       &load_error);
-
-      if (source_pixbuf == NULL)
+        icon->texture = gdk_texture_new_from_resource (icon->filename);
+    }
+  else if (icon->filename)
+    {
+      if (icon->is_svg)
         {
-          g_warning ("Failed to load icon %s: %s", icon->filename, load_error->message);
-          g_clear_error (&load_error);
+          GdkPixbuf *source_pixbuf;
+
+          if (gtk_icon_paintable_is_symbolic (icon))
+            source_pixbuf = gtk_make_symbolic_pixbuf_from_path (icon->filename,
+                                                                pixel_size, pixel_size,
+                                                                icon->desired_scale,
+                                                                &load_error);
+          else
+            {
+              GFile *file = g_file_new_for_path (icon->filename);
+              GInputStream *stream = G_INPUT_STREAM (g_file_read (file, NULL, &load_error));
+
+              g_object_unref (file);
+              if (stream)
+                {
+                  source_pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
+                                                                        pixel_size, pixel_size,
+                                                                        TRUE, NULL,
+                                                                        &load_error);
+                  g_object_unref (stream);
+                }
+              else
+                source_pixbuf = NULL;
+            }
+          if (source_pixbuf)
+            {
+              icon->texture = gdk_texture_new_for_pixbuf (source_pixbuf);
+              g_object_unref (source_pixbuf);
+            }
+        }
+      else
+        {
+          icon->texture = gdk_texture_new_from_filename (icon->filename, &load_error);
         }
     }
   else
     {
-      GLoadableIcon *loadable;
       GInputStream *stream;
+      GdkPixbuf *source_pixbuf;
 
-      loadable = icon_get_loadable (icon);
-      stream = g_loadable_icon_load (loadable,
+      g_assert (icon->loadable);
+
+      stream = g_loadable_icon_load (icon->loadable,
                                      pixel_size,
                                      NULL, NULL,
                                      &load_error);
-      g_object_unref (loadable);
-
       if (stream)
         {
           /* SVG icons are a special case - we just immediately scale them
@@ -3848,45 +3857,31 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
            */
           if (icon->is_svg)
             {
-              if (gtk_icon_paintable_is_symbolic (icon))
-                source_pixbuf = gtk_make_symbolic_pixbuf_from_path (icon->filename,
+              source_pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
                                                                     pixel_size, pixel_size,
-                                                                    icon->desired_scale,
+                                                                    TRUE, NULL,
                                                                     &load_error);
-              else
-                source_pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                                      "svg",
-                                                                      pixel_size, pixel_size,
-                                                                      TRUE, NULL,
-                                                                      &load_error);
             }
           else
             source_pixbuf = _gdk_pixbuf_new_from_stream (stream,
-                                                         g_str_has_suffix (icon->filename, ".xpm") ? "xpm" : "png",
                                                          NULL, &load_error);
           g_object_unref (stream);
-        }
-
-      if (source_pixbuf == NULL)
-        {
-          g_warning ("Failed to load icon %s: %s", icon->filename, load_error->message);
-          g_clear_error (&load_error);
+          if (source_pixbuf)
+            {
+              icon->texture = gdk_texture_new_for_pixbuf (source_pixbuf);
+              g_object_unref (source_pixbuf);
+            }
         }
     }
 
-  if (!source_pixbuf)
+  if (!icon->texture)
     {
-      source_pixbuf = _gdk_pixbuf_new_from_resource (IMAGE_MISSING_RESOURCE_PATH, "png", NULL);
+      g_warning ("Failed to load icon %s: %s", icon->filename, load_error->message);
+      g_clear_error (&load_error);
+      icon->texture = gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH);
       icon->icon_name = g_strdup ("image-missing");
       icon->is_symbolic = FALSE;
-      g_assert (source_pixbuf != NULL);
     }
-
-  /* Actual scaling is done during rendering, so just keep the source pixbuf as a texture */
-  icon->texture = gdk_texture_new_for_pixbuf (source_pixbuf);
-  g_object_unref (source_pixbuf);
-
-  g_assert (icon->texture != NULL);
 
   if (GDK_PROFILER_IS_RUNNING)
     {
@@ -4089,28 +4084,6 @@ gtk_icon_paintable_new_for_file (GFile *file,
   return icon;
 }
 
-static GtkIconPaintable *
-gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
-                                   GdkPixbuf    *pixbuf,
-                                   int           size,
-                                   int           scale)
-{
-  GtkIconPaintable *icon;
-  int width, height;
-
-  if (size <= 0)
-    {
-      width = gdk_pixbuf_get_width (pixbuf);
-      height = gdk_pixbuf_get_height (pixbuf);
-      size = MAX (width, height);
-    }
-
-  icon = icon_paintable_new (NULL, size, scale);
-  icon->texture = gdk_texture_new_for_pixbuf (pixbuf);
-
-  return icon;
-}
-
 /**
  * gtk_icon_theme_lookup_by_gicon:
  * @self: a `GtkIconTheme`
@@ -4140,17 +4113,23 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
   g_return_val_if_fail (GTK_IS_ICON_THEME (self), NULL);
   g_return_val_if_fail (G_IS_ICON (gicon), NULL);
+  g_return_val_if_fail (size > 0, NULL);
+  g_return_val_if_fail (scale > 0, NULL);
 
   /* We can't render emblemed icons atm, but at least render the base */
   while (G_IS_EMBLEMED_ICON (gicon))
     gicon = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (gicon));
   g_assert (gicon); /* shut up gcc -Wnull-dereference */
 
-  if (GDK_IS_PIXBUF (gicon))
+  if (GDK_IS_TEXTURE (gicon))
     {
-      GdkPixbuf *pixbuf = GDK_PIXBUF (gicon);
-
-      icon = gtk_icon_paintable_new_for_pixbuf (self, pixbuf, size, scale);
+      icon = icon_paintable_new (NULL, size, scale);
+      icon->texture = g_object_ref (GDK_TEXTURE (icon));
+    }
+  else if (GDK_IS_PIXBUF (gicon))
+    {
+      icon = icon_paintable_new (NULL, size, scale);
+      icon->texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (icon));
     }
   else if (G_IS_FILE_ICON (gicon))
     {

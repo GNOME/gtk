@@ -207,6 +207,17 @@ foreach func : check_functions
   endif
 endforeach
 
+# We use links() because sigsetjmp() is often a macro hidden behind other macros
+cdata.set('HAVE_SIGSETJMP',
+  cc.links('''#define _POSIX_SOURCE
+              #include <setjmp.h>
+              int main (void) {
+                sigjmp_buf env;
+                sigsetjmp (env, 0);
+                return 0;
+              }''', name: 'sigsetjmp'),
+)
+
 # Check for __uint128_t (gcc) by checking for 128-bit division
 uint128_t_src = '''int main() {
 static __uint128_t v1 = 100;
@@ -389,6 +400,16 @@ pangocairo_dep = dependency('pangocairo', version: pango_req,
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'],
                             default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
+png_dep        = dependency('libpng',
+                            fallback: ['libpng', 'libpng_dep'],
+                            required: true)
+tiff_dep       = dependency('libtiff-4',
+                            fallback: ['libtiff', 'libtiff4_dep'],
+                            required: true)
+jpeg_dep       = dependency('libjpeg',
+                            fallback: ['libjpeg-turbo', 'jpeg_dep'],
+                            required: true)
+
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: '>= 2.1.0', required: false,
