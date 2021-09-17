@@ -4084,20 +4084,6 @@ gtk_icon_paintable_new_for_file (GFile *file,
   return icon;
 }
 
-static GtkIconPaintable *
-gtk_icon_paintable_new_for_pixbuf (GtkIconTheme *icon_theme,
-                                   GdkPixbuf    *pixbuf,
-                                   int           size,
-                                   int           scale)
-{
-  GtkIconPaintable *icon;
-
-  icon = icon_paintable_new (NULL, size, scale);
-  icon->texture = gdk_texture_new_for_pixbuf (pixbuf);
-
-  return icon;
-}
-
 /**
  * gtk_icon_theme_lookup_by_gicon:
  * @self: a `GtkIconTheme`
@@ -4135,11 +4121,15 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
     gicon = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (gicon));
   g_assert (gicon); /* shut up gcc -Wnull-dereference */
 
-  if (GDK_IS_PIXBUF (gicon))
+  if (GDK_IS_TEXTURE (gicon))
     {
-      GdkPixbuf *pixbuf = GDK_PIXBUF (gicon);
-
-      icon = gtk_icon_paintable_new_for_pixbuf (self, pixbuf, size, scale);
+      icon = icon_paintable_new (NULL, size, scale);
+      icon->texture = g_object_ref (GDK_TEXTURE (icon));
+    }
+  else if (GDK_IS_PIXBUF (gicon))
+    {
+      icon = icon_paintable_new (NULL, size, scale);
+      icon->texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (icon));
     }
   else if (G_IS_FILE_ICON (gicon))
     {
