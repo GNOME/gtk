@@ -39,6 +39,8 @@ usage (void)
              "  simplify     Simplify the file\n"
              "  enumerate    List all named objects\n"
              "  preview      Preview the file\n"
+             "  compile      Compile the file\n"
+             "               into a compact format\n"
              "\n"
              "Simplify Options:\n"
              "  --replace    Replace the file\n"
@@ -134,6 +136,8 @@ main (int argc, const char *argv[])
     do_enumerate (&argc, &argv);
   else if (strcmp (argv[0], "preview") == 0)
     do_preview (&argc, &argv);
+  else if (strcmp (argv[0], "compile") == 0)
+    do_compile (&argc, &argv);
   else
     usage ();
 
