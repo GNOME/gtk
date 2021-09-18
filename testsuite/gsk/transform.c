@@ -657,6 +657,84 @@ test_to_2d (void)
   g_assert_cmpfloat (dy, ==, 0.0);
 }
 
+static void
+test_to_2d_components (void)
+{
+  GskTransform *transform, *transform2;
+  float skew_x, skew_y, scale_x, scale_y, angle, dx, dy;
+  graphene_matrix_t m, m2;
+
+  transform = gsk_transform_scale (
+                  gsk_transform_rotate (
+                      gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10, 20)),
+                      22),
+                  3, 3);
+  gsk_transform_to_2d_components (transform,
+                                  &skew_x, &skew_y,
+                                  &scale_x, &scale_y,
+                                  &angle,
+                                  &dx, &dy);
+  g_assert_cmpfloat_with_epsilon (skew_x, 0, 0.0001);
+  g_assert_cmpfloat_with_epsilon (skew_y, 0, 0.0001);
+  g_assert_cmpfloat_with_epsilon (scale_x, 3, 0.0001);
+  g_assert_cmpfloat_with_epsilon (scale_y, 3, 0.0001);
+  g_assert_cmpfloat_with_epsilon (angle, 22, 0.0001);
+  g_assert_cmpfloat_with_epsilon (dx, 10, 0.0001);
+  g_assert_cmpfloat_with_epsilon (dy, 20, 0.0001);
+
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_skew (
+                  gsk_transform_scale (
+                      gsk_transform_rotate (
+                          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10, 20)),
+                          22),
+                      3, 6),
+                  33, 0);
+
+  g_assert_true (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D);
+
+  gsk_transform_to_2d_components (transform,
+                                  &skew_x, &skew_y,
+                                  &scale_x, &scale_y,
+                                  &angle,
+                                  &dx, &dy);
+
+  transform2 = gsk_transform_skew (
+                  gsk_transform_scale (
+                      gsk_transform_rotate (
+                          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, dy)),
+                          angle),
+                      scale_x, scale_y),
+                  skew_x, skew_y);
+
+  gsk_transform_to_matrix (transform, &m);
+  gsk_transform_to_matrix (transform2, &m2);
+  g_assert_true (graphene_matrix_near (&m, &m2, 0.001));
+
+  gsk_transform_unref (transform);
+  gsk_transform_unref (transform2);
+}
+
+static void
+test_transform_point (void)
+{
+  GskTransform *t, *t2;
+  graphene_point_t p;
+
+  t = gsk_transform_scale (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (1, 2)), 2, 2);
+  t2 = gsk_transform_translate (gsk_transform_scale (NULL, 2, 2), &GRAPHENE_POINT_INIT (1, 2));
+
+  gsk_transform_transform_point (t, &GRAPHENE_POINT_INIT (1,1), &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (3, 4)));
+
+  gsk_transform_transform_point (t2, &GRAPHENE_POINT_INIT (1,1), &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (4, 6)));
+
+  gsk_transform_unref (t);
+  gsk_transform_unref (t2);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -672,7 +750,9 @@ main (int   argc,
   g_test_add_func ("/transform/check-axis-aligneness", test_axis_aligned);
   g_test_add_func ("/transform/to-affine", test_to_affine);
   g_test_add_func ("/transform/bounds", test_transform_bounds);
+  g_test_add_func ("/transform/point", test_transform_point);
   g_test_add_func ("/transform/to-2d", test_to_2d);
+  g_test_add_func ("/transform/to-2d-components", test_to_2d_components);
 
   return g_test_run ();
 }

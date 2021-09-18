@@ -121,6 +121,14 @@ gsk_transform_alloc (const GskTransformClass *transform_class,
   return self;
 }
 
+static void
+gsk_transform_finalize (GskTransform *self)
+{
+  self->transform_class->finalize (self);
+
+  gsk_transform_unref (self->next);
+}
+
 /* }}} */
 /* {{{ IDENTITY */
 
@@ -1022,6 +1030,9 @@ gsk_skew_transform_finalize (GskTransform *self)
 {
 }
 
+#define DEG_TO_RAD(x) ((x) / 180.f * G_PI)
+#define RAD_TO_DEG(x) ((x) * 180.f / G_PI)
+
 static void
 gsk_skew_transform_to_matrix (GskTransform      *transform,
                               graphene_matrix_t *out_matrix)
@@ -1029,8 +1040,8 @@ gsk_skew_transform_to_matrix (GskTransform      *transform,
   GskSkewTransform *self = (GskSkewTransform *) transform;
 
   graphene_matrix_init_skew (out_matrix,
-                             self->skew_x / 180.0 * G_PI,
-                             self->skew_y / 180.0 * G_PI);
+                             DEG_TO_RAD (self->skew_x),
+                             DEG_TO_RAD (self->skew_y));
 }
 
 static void
@@ -1104,8 +1115,8 @@ gsk_skew_transform_invert (GskTransform *transform,
   float tx, ty;
   graphene_matrix_t matrix;
 
-  tx = tanf (self->skew_x / 180.0 * G_PI);
-  ty = tanf (self->skew_y / 180.0 * G_PI);
+  tx = tanf (DEG_TO_RAD (self->skew_x));
+  ty = tanf (DEG_TO_RAD (self->skew_y));
 
   graphene_matrix_init_from_2d (&matrix,
                                 1 / (1 - tx * ty),
@@ -1506,14 +1517,6 @@ gsk_transform_perspective (GskTransform *next,
 /* }}} */
 /* {{{ PUBLIC API */
 
-static void
-gsk_transform_finalize (GskTransform *self)
-{
-  self->transform_class->finalize (self);
-
-  gsk_transform_unref (self->next);
-}
-
 /**
  * gsk_transform_ref:
  * @self: (nullable): a `GskTransform`
@@ -1698,6 +1701,95 @@ gsk_transform_to_2d (GskTransform *self,
 }
 
 /**
+ * gsk_transform_to_2d_components:
+ * @self: a `GskTransform`
+ * @out_skew_x: (out): return location for the skew factor
+ *   in the  x direction
+ * @out_skew_y: (out): return location for the skew factor
+ *   in the  y direction
+ * @out_scale_x: (out): return location for the scale
+ *   factor in the x direction
+ * @out_scale_y: (out): return location for the scale
+ *   factor in the y direction
+ * @out_angle: (out): return location for the rotation angle
+ * @out_dx: (out): return location for the translation
+ *   in the x direction
+ * @out_dy: (out): return location for the translation
+ *   in the y direction
+ *
+ * Converts a `GskTransform` to 2D transformation factors.
+ *
+ * To recreate an equivalent transform from the factors returned
+ * by this function, use
+ *
+ *     gsk_transform_skew (
+ *         gsk_transform_scale (
+ *             gsk_transform_rotate (
+ *                 gsk_transform_translate (NULL, &GRAPHENE_POINT_T (dx, dy)),
+ *                 angle),
+ *             scale_x, scale_y),
+ *         skew_x, skew_y)
+ *
+ * @self must be a 2D transformation. If you are not sure, use
+ *
+ *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D
+ *
+ * to check.
+ *
+ * Since: 4.6
+ */
+void
+gsk_transform_to_2d_components (GskTransform *self,
+                                float        *out_skew_x,
+                                float        *out_skew_y,
+                                float        *out_scale_x,
+                                float        *out_scale_y,
+                                float        *out_angle,
+                                float        *out_dx,
+                                float        *out_dy)
+{
+  float a, b, c, d, e, f;
+
+  gsk_transform_to_2d (self, &a, &b, &c, &d, &e, &f);
+
+  *out_dx = e;
+  *out_dy = f;
+
+#define sign(f) ((f) < 0 ? -1 : 1)
+
+  if (a != 0 || b != 0)
+    {
+      float det = a * d - b * c;
+      float r = sqrtf (a*a + b*b);
+
+      *out_angle = RAD_TO_DEG (sign (b) * acosf (a / r));
+      *out_scale_x = r;
+      *out_scale_y = det / r;
+      *out_skew_x = RAD_TO_DEG (atanf ((a*c + b*d) / (r*r)));
+      *out_skew_y = 0;
+    }
+  else if (c != 0 || d != 0)
+    {
+      float det = a * d - b * c;
+      float s = sqrtf (c*c + d*d);
+
+      *out_angle = RAD_TO_DEG (G_PI/2 - sign (d) * acosf (-c / s));
+      *out_scale_x = det / s;
+      *out_scale_y = s;
+      *out_skew_x = 0;
+      *out_skew_y = RAD_TO_DEG (atanf ((a*c + b*d) / (s*s)));
+    }
+  else
+    {
+      *out_angle = 0;
+      *out_scale_x = 0;
+      *out_scale_y = 0;
+      *out_skew_x = 0;
+      *out_skew_y = 0;
+    }
+}
+
+/**
  * gsk_transform_to_affine:
  * @self: a `GskTransform`
  * @out_scale_x: (out): return location for the scale
@@ -1718,7 +1810,7 @@ gsk_transform_to_2d (GskTransform *self,
  *                                                   &GRAPHENE_POINT_T (dx, dy)),
  *                          sx, sy)
  *
- * @self must be a 2D transformation. If you are not
+ * @self must be a 2D affine transformation. If you are not
  * sure, use
  *
  *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D_AFFINE

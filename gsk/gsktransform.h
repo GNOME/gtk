@@ -59,6 +59,15 @@ void                    gsk_transform_to_2d                     (GskTransform   
                                                                  float                          *out_yy,
                                                                  float                          *out_dx,
                                                                  float                          *out_dy);
+GDK_AVAILABLE_IN_4_6
+void                    gsk_transform_to_2d_components          (GskTransform                   *self,
+                                                                 float                          *out_skew_x,
+                                                                 float                          *out_skew_y,
+                                                                 float                          *out_scale_x,
+                                                                 float                          *out_scale_y,
+                                                                 float                          *out_angle,
+                                                                 float                          *out_dx,
+                                                                 float                          *out_dy);
 GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_to_affine                 (GskTransform                   *self,
                                                                  float                          *out_scale_x,
