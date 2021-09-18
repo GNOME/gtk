@@ -19,6 +19,7 @@
 #include <gdk/gdk.h>
 #include "gdkpixbufutilsprivate.h"
 #include "gtkscalerprivate.h"
+#include "gtkloaderprivate.h"
 
 #include "gdk/gdktextureprivate.h"
 
@@ -588,7 +589,7 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
   if (gdk_texture_can_load (bytes))
     {
       /* We know these formats can't be scaled */
-      inner = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
+      inner = GDK_PAINTABLE (gtk_loader_new (bytes));
       if (inner == NULL)
         return NULL;
     }
