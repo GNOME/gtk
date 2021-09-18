@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gtk/WidgetFactory4">
-    <file preprocess="xml-stripblanks">widget-factory.ui</file>
+    <file alias='widget-factory.ui'>widget-factory.uic</file>
   </gresource>
   <gresource prefix="/org/gtk/WidgetFactory4">
     <file>widget-factory.css</file>
