@@ -192,7 +192,7 @@ update_image (void)
             }
         }
 
-      cairo_set_source_rgba (cr, 0, 0, 1, outline_alpha);
+      cairo_set_source_rgba (cr, 0, 0, 0, outline_alpha);
       cairo_move_to (cr, scale * 20 - 0.5, scale * 20 - 0.5);
       cairo_append_path (cr, path);
       cairo_stroke (cr);
