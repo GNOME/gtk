@@ -36,6 +36,8 @@
 
 #include "gsktransformprivate.h"
 
+/* {{{ Boilerplate */
+
 struct _GskTransformClass
 {
   gsize struct_size;
@@ -119,7 +121,8 @@ gsk_transform_alloc (const GskTransformClass *transform_class,
   return self;
 }
 
-/*** IDENTITY ***/
+/* }}} */
+/* {{{ IDENTITY */
 
 static void
 gsk_identity_transform_finalize (GskTransform *transform)
@@ -235,7 +238,8 @@ gsk_transform_is_identity (GskTransform *self)
          (self->transform_class == &GSK_IDENTITY_TRANSFORM_CLASS && gsk_transform_is_identity (self->next));
 }
 
-/*** MATRIX ***/
+/* }}} */
+/* {{{ MATRIX */
 
 typedef struct _GskMatrixTransform GskMatrixTransform;
 
@@ -466,7 +470,8 @@ gsk_transform_matrix (GskTransform            *next,
   return gsk_transform_matrix_with_category (next, matrix, GSK_TRANSFORM_CATEGORY_UNKNOWN);
 }
 
-/*** TRANSLATE ***/
+/* }}} */
+/* {{{ TRANSLATE */
 
 typedef struct _GskTranslateTransform GskTranslateTransform;
 
@@ -662,7 +667,8 @@ gsk_transform_translate_3d (GskTransform             *next,
   return &result->parent;
 }
 
-/*** ROTATE ***/
+/* }}} */
+/* {{{ ROTATE */
 
 typedef struct _GskRotateTransform GskRotateTransform;
 
@@ -873,7 +879,8 @@ gsk_transform_rotate (GskTransform *next,
   return &result->parent;
 }
 
-/*** ROTATE 3D ***/
+/* }}} */
+/* {{{ ROTATE 3D */
 
 typedef struct _GskRotate3dTransform GskRotate3dTransform;
 
@@ -997,7 +1004,8 @@ gsk_transform_rotate_3d (GskTransform          *next,
   return &result->parent;
 }
 
-/*** SCALE ***/
+/* }}} */
+/* {{{ SCALE */
 
 typedef struct _GskScaleTransform GskScaleTransform;
 
@@ -1200,7 +1208,8 @@ gsk_transform_scale_3d (GskTransform *next,
   return &result->parent;
 }
 
-/*** PERSPECTIVE ***/
+/* }}} */
+/* {{{ PERSPECTIVE */
 
 typedef struct _GskPerspectiveTransform GskPerspectiveTransform;
 
@@ -1323,7 +1332,8 @@ gsk_transform_perspective (GskTransform *next,
   return &result->parent;
 }
 
-/*** PUBLIC API ***/
+/* }}} */
+/* {{{ PUBLIC API */
 
 static void
 gsk_transform_finalize (GskTransform *self)
@@ -2226,3 +2236,7 @@ gsk_matrix_transform_bounds (const graphene_matrix_t *m,
   gsk_matrix_transform_rect (m, r, &q);
   graphene_quad_bounds (&q, res);
 }
+
+/* }}} */
+
+/* vim:set foldmethod=marker expandtab: */
