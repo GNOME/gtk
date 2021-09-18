@@ -59,6 +59,15 @@ void                    gsk_transform_to_2d                     (GskTransform   
                                                                  float                          *out_yy,
                                                                  float                          *out_dx,
                                                                  float                          *out_dy);
+GDK_AVAILABLE_IN_4_6
+void                    gsk_transform_to_2d_components          (GskTransform                   *self,
+                                                                 float                          *out_skew_x,
+                                                                 float                          *out_skew_y,
+                                                                 float                          *out_scale_x,
+                                                                 float                          *out_scale_y,
+                                                                 float                          *out_angle,
+                                                                 float                          *out_dx,
+                                                                 float                          *out_dy);
 GDK_AVAILABLE_IN_ALL
 void                    gsk_transform_to_affine                 (GskTransform                   *self,
                                                                  float                          *out_scale_x,
@@ -92,6 +101,10 @@ GskTransform *          gsk_transform_translate                 (GskTransform   
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_translate_3d              (GskTransform                   *next,
                                                                  const graphene_point3d_t       *point) G_GNUC_WARN_UNUSED_RESULT;
+GDK_AVAILABLE_IN_4_6
+GskTransform *          gsk_transform_skew                      (GskTransform                   *next,
+                                                                 float                           skew_x,
+                                                                 float                           skew_y) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_rotate                    (GskTransform                   *next,
                                                                  float                           angle) G_GNUC_WARN_UNUSED_RESULT;

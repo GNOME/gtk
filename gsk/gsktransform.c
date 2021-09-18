@@ -36,6 +36,8 @@
 
 #include "gsktransformprivate.h"
 
+/* {{{ Boilerplate */
+
 struct _GskTransformClass
 {
   gsize struct_size;
@@ -119,7 +121,16 @@ gsk_transform_alloc (const GskTransformClass *transform_class,
   return self;
 }
 
-/*** IDENTITY ***/
+static void
+gsk_transform_finalize (GskTransform *self)
+{
+  self->transform_class->finalize (self);
+
+  gsk_transform_unref (self->next);
+}
+
+/* }}} */
+/* {{{ IDENTITY */
 
 static void
 gsk_identity_transform_finalize (GskTransform *transform)
@@ -235,7 +246,8 @@ gsk_transform_is_identity (GskTransform *self)
          (self->transform_class == &GSK_IDENTITY_TRANSFORM_CLASS && gsk_transform_is_identity (self->next));
 }
 
-/*** MATRIX ***/
+/* }}} */
+/* {{{ MATRIX */
 
 typedef struct _GskMatrixTransform GskMatrixTransform;
 
@@ -466,7 +478,8 @@ gsk_transform_matrix (GskTransform            *next,
   return gsk_transform_matrix_with_category (next, matrix, GSK_TRANSFORM_CATEGORY_UNKNOWN);
 }
 
-/*** TRANSLATE ***/
+/* }}} */
+/* {{{ TRANSLATE */
 
 typedef struct _GskTranslateTransform GskTranslateTransform;
 
@@ -662,7 +675,8 @@ gsk_transform_translate_3d (GskTransform             *next,
   return &result->parent;
 }
 
-/*** ROTATE ***/
+/* }}} */
+/* {{{ ROTATE */
 
 typedef struct _GskRotateTransform GskRotateTransform;
 
@@ -873,7 +887,8 @@ gsk_transform_rotate (GskTransform *next,
   return &result->parent;
 }
 
-/*** ROTATE 3D ***/
+/* }}} */
+/* {{{ ROTATE 3D */
 
 typedef struct _GskRotate3dTransform GskRotate3dTransform;
 
@@ -997,7 +1012,182 @@ gsk_transform_rotate_3d (GskTransform          *next,
   return &result->parent;
 }
 
-/*** SCALE ***/
+/* }}} */
+/* {{{ SKEW */
+
+typedef struct _GskSkewTransform GskSkewTransform;
+
+struct _GskSkewTransform
+{
+  GskTransform parent;
+
+  float skew_x;
+  float skew_y;
+};
+
+static void
+gsk_skew_transform_finalize (GskTransform *self)
+{
+}
+
+#define DEG_TO_RAD(x) ((x) / 180.f * G_PI)
+#define RAD_TO_DEG(x) ((x) * 180.f / G_PI)
+
+static void
+gsk_skew_transform_to_matrix (GskTransform      *transform,
+                              graphene_matrix_t *out_matrix)
+{
+  GskSkewTransform *self = (GskSkewTransform *) transform;
+
+  graphene_matrix_init_skew (out_matrix,
+                             DEG_TO_RAD (self->skew_x),
+                             DEG_TO_RAD (self->skew_y));
+}
+
+static void
+gsk_skew_transform_apply_2d (GskTransform *transform,
+                             float        *out_xx,
+                             float        *out_yx,
+                             float        *out_xy,
+                             float        *out_yy,
+                             float        *out_dx,
+                             float        *out_dy)
+{
+  graphene_matrix_t sm, mat;
+
+  gsk_skew_transform_to_matrix (transform, &sm);
+  graphene_matrix_init_from_2d (&mat, *out_xx, *out_yx,
+                                      *out_xy, *out_yy,
+                                      *out_dx, *out_dy);
+
+  graphene_matrix_multiply (&sm, &mat, &mat);
+
+  *out_xx = graphene_matrix_get_value (&mat, 0, 0);
+  *out_yx = graphene_matrix_get_value (&mat, 0, 1);
+  *out_xy = graphene_matrix_get_value (&mat, 1, 0);
+  *out_yy = graphene_matrix_get_value (&mat, 1, 1);
+  *out_dx = graphene_matrix_get_value (&mat, 3, 0);
+  *out_dy = graphene_matrix_get_value (&mat, 3, 1);
+}
+
+static GskTransform *
+gsk_skew_transform_apply (GskTransform *transform,
+                          GskTransform *apply_to)
+{
+  GskSkewTransform *self = (GskSkewTransform *) transform;
+
+  return gsk_transform_skew (apply_to, self->skew_x, self->skew_y);
+}
+
+static void
+gsk_skew_transform_print (GskTransform *transform,
+                          GString      *string)
+{
+  GskSkewTransform *self = (GskSkewTransform *) transform;
+
+  if (self->skew_y == 0)
+    {
+      g_string_append (string, "skewX(");
+      string_append_double (string, self->skew_x);
+      g_string_append (string, ")");
+    }
+  else if (self->skew_x == 0)
+    {
+      g_string_append (string, "skewY(");
+      string_append_double (string, self->skew_y);
+      g_string_append (string, ")");
+    }
+  else
+    {
+      g_string_append (string, "skew(");
+      string_append_double (string, self->skew_x);
+      g_string_append (string, ", ");
+      string_append_double (string, self->skew_y);
+      g_string_append (string, ")");
+    }
+}
+
+static GskTransform *
+gsk_skew_transform_invert (GskTransform *transform,
+                           GskTransform *next)
+{
+  GskSkewTransform *self = (GskSkewTransform *) transform;
+  float tx, ty;
+  graphene_matrix_t matrix;
+
+  tx = tanf (DEG_TO_RAD (self->skew_x));
+  ty = tanf (DEG_TO_RAD (self->skew_y));
+
+  graphene_matrix_init_from_2d (&matrix,
+                                1 / (1 - tx * ty),
+                                - ty / (1 - tx * ty),
+                                - tx / (1 - tx * ty),
+                                1 / (1 - tx * ty),
+                                0, 0);
+  return gsk_transform_matrix_with_category (next,
+                                             &matrix,
+                                             GSK_TRANSFORM_CATEGORY_2D);
+}
+
+static gboolean
+gsk_skew_transform_equal (GskTransform *first_transform,
+                          GskTransform *second_transform)
+{
+  GskSkewTransform *first = (GskSkewTransform *) first_transform;
+  GskSkewTransform *second = (GskSkewTransform *) second_transform;
+
+  return G_APPROX_VALUE (first->skew_x, second->skew_x, FLT_EPSILON) &&
+         G_APPROX_VALUE (first->skew_y, second->skew_y, FLT_EPSILON);
+}
+
+static const GskTransformClass GSK_SKEW_TRANSFORM_CLASS =
+{
+  sizeof (GskSkewTransform),
+  "GskSkewTransform",
+  gsk_skew_transform_finalize,
+  gsk_skew_transform_to_matrix,
+  gsk_skew_transform_apply_2d,
+  NULL,
+  NULL,
+  gsk_skew_transform_print,
+  gsk_skew_transform_apply,
+  gsk_skew_transform_invert,
+  gsk_skew_transform_equal,
+};
+
+/**
+ * gsk_transform_skew:
+ * @next: (nullable) (transfer full): the next transform
+ * @skew_x: skew factor, in degrees, on the X axis
+ * @skew_y: skew factor, in degrees, on the Y axis
+ *
+ * Applies a skew transform.
+ *
+ * Returns: The new transform
+ *
+ * Since: 4.6
+ */
+GskTransform *
+gsk_transform_skew (GskTransform *next,
+                    float         skew_x,
+                    float         skew_y)
+{
+  GskSkewTransform *result;
+
+  if (skew_x == 0 && skew_y == 0)
+    return next;
+
+  result = gsk_transform_alloc (&GSK_SKEW_TRANSFORM_CLASS,
+                                GSK_TRANSFORM_CATEGORY_2D,
+                                next);
+
+  result->skew_x = skew_x;
+  result->skew_y = skew_y;
+
+  return &result->parent;
+}
+/* }}} */
+/*  {{{ SCALE */
 
 typedef struct _GskScaleTransform GskScaleTransform;
 
@@ -1200,7 +1390,8 @@ gsk_transform_scale_3d (GskTransform *next,
   return &result->parent;
 }
 
-/*** PERSPECTIVE ***/
+/* }}} */
+/* {{{ PERSPECTIVE */
 
 typedef struct _GskPerspectiveTransform GskPerspectiveTransform;
 
@@ -1323,15 +1514,8 @@ gsk_transform_perspective (GskTransform *next,
   return &result->parent;
 }
 
-/*** PUBLIC API ***/
-
-static void
-gsk_transform_finalize (GskTransform *self)
-{
-  self->transform_class->finalize (self);
-
-  gsk_transform_unref (self->next);
-}
+/* }}} */
+/* {{{ PUBLIC API */
 
 /**
  * gsk_transform_ref:
@@ -1517,6 +1701,95 @@ gsk_transform_to_2d (GskTransform *self,
 }
 
 /**
+ * gsk_transform_to_2d_components:
+ * @self: a `GskTransform`
+ * @out_skew_x: (out): return location for the skew factor
+ *   in the  x direction
+ * @out_skew_y: (out): return location for the skew factor
+ *   in the  y direction
+ * @out_scale_x: (out): return location for the scale
+ *   factor in the x direction
+ * @out_scale_y: (out): return location for the scale
+ *   factor in the y direction
+ * @out_angle: (out): return location for the rotation angle
+ * @out_dx: (out): return location for the translation
+ *   in the x direction
+ * @out_dy: (out): return location for the translation
+ *   in the y direction
+ *
+ * Converts a `GskTransform` to 2D transformation factors.
+ *
+ * To recreate an equivalent transform from the factors returned
+ * by this function, use
+ *
+ *     gsk_transform_skew (
+ *         gsk_transform_scale (
+ *             gsk_transform_rotate (
+ *                 gsk_transform_translate (NULL, &GRAPHENE_POINT_T (dx, dy)),
+ *                 angle),
+ *             scale_x, scale_y),
+ *         skew_x, skew_y)
+ *
+ * @self must be a 2D transformation. If you are not sure, use
+ *
+ *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D
+ *
+ * to check.
+ *
+ * Since: 4.6
+ */
+void
+gsk_transform_to_2d_components (GskTransform *self,
+                                float        *out_skew_x,
+                                float        *out_skew_y,
+                                float        *out_scale_x,
+                                float        *out_scale_y,
+                                float        *out_angle,
+                                float        *out_dx,
+                                float        *out_dy)
+{
+  float a, b, c, d, e, f;
+
+  gsk_transform_to_2d (self, &a, &b, &c, &d, &e, &f);
+
+  *out_dx = e;
+  *out_dy = f;
+
+#define sign(f) ((f) < 0 ? -1 : 1)
+
+  if (a != 0 || b != 0)
+    {
+      float det = a * d - b * c;
+      float r = sqrtf (a*a + b*b);
+
+      *out_angle = RAD_TO_DEG (sign (b) * acosf (a / r));
+      *out_scale_x = r;
+      *out_scale_y = det / r;
+      *out_skew_x = RAD_TO_DEG (atanf ((a*c + b*d) / (r*r)));
+      *out_skew_y = 0;
+    }
+  else if (c != 0 || d != 0)
+    {
+      float det = a * d - b * c;
+      float s = sqrtf (c*c + d*d);
+
+      *out_angle = RAD_TO_DEG (G_PI/2 - sign (d) * acosf (-c / s));
+      *out_scale_x = det / s;
+      *out_scale_y = s;
+      *out_skew_x = 0;
+      *out_skew_y = RAD_TO_DEG (atanf ((a*c + b*d) / (s*s)));
+    }
+  else
+    {
+      *out_angle = 0;
+      *out_scale_x = 0;
+      *out_scale_y = 0;
+      *out_skew_x = 0;
+      *out_skew_y = 0;
+    }
+}
+
+/**
  * gsk_transform_to_affine:
  * @self: a `GskTransform`
  * @out_scale_x: (out): return location for the scale
@@ -1537,7 +1810,7 @@ gsk_transform_to_2d (GskTransform *self,
  *                                                   &GRAPHENE_POINT_T (dx, dy)),
  *                          sx, sy)
  *
- * @self must be a 2D transformation. If you are not
+ * @self must be a 2D affine transformation. If you are not
  * sure, use
  *
  *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D_AFFINE
@@ -2047,40 +2320,24 @@ gsk_transform_parser_parse (GtkCssParser  *parser,
         }
       else if (gtk_css_token_is_function (token, "skew"))
         {
-          graphene_matrix_t matrix;
-
           if (!gtk_css_parser_consume_function (parser, 2, 2, gsk_transform_parse_float, f))
             goto fail;
 
-          f[0] = f[0] / 180.0 * G_PI;
-          f[1] = f[1] / 180.0 * G_PI;
-
-          graphene_matrix_init_skew (&matrix, f[0], f[1]);
-          transform = gsk_transform_matrix (transform, &matrix);
+          transform = gsk_transform_skew (transform, f[0], f[1]);
         }
       else if (gtk_css_token_is_function (token, "skewX"))
         {
-          graphene_matrix_t matrix;
-
           if (!gtk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
             goto fail;
 
-          f[0] = f[0] / 180.0 * G_PI;
-
-          graphene_matrix_init_skew (&matrix, f[0], 0);
-          transform = gsk_transform_matrix (transform, &matrix);
+          transform = gsk_transform_skew (transform, f[0], 0);
         }
       else if (gtk_css_token_is_function (token, "skewY"))
         {
-          graphene_matrix_t matrix;
-
           if (!gtk_css_parser_consume_function (parser, 1, 1, gsk_transform_parse_float, f))
             goto fail;
 
-          f[0] = f[0] / 180.0 * G_PI;
-
-          graphene_matrix_init_skew (&matrix, 0, f[0]);
-          transform = gsk_transform_matrix (transform, &matrix);
+          transform = gsk_transform_skew (transform, 0, f[0]);
         }
       else
         {
@@ -2226,3 +2483,7 @@ gsk_matrix_transform_bounds (const graphene_matrix_t *m,
   gsk_matrix_transform_rect (m, r, &q);
   graphene_quad_bounds (&q, res);
 }
+
+/* }}} */
+
+/* vim:set foldmethod=marker expandtab: */
