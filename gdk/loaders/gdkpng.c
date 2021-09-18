@@ -21,6 +21,7 @@
 
 #include "gdkintl.h"
 #include "gdkmemorytextureprivate.h"
+#include "gdkprofilerprivate.h"
 #include "gdktexture.h"
 #include "gdktextureprivate.h"
 #include "gsk/ngl/fp16private.h"
@@ -291,7 +292,7 @@ premultiply_16bit (guchar *data,
 }
 
 /* }}} */
-/* {{{ Public API */
+/* {{{ Public API */ 
 
 GdkTexture *
 gdk_load_png (GBytes  *bytes,
@@ -309,6 +310,7 @@ gdk_load_png (GBytes  *bytes,
   GBytes *out_bytes;
   GdkTexture *texture;
   int bpp;
+  G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
   io.data = (guchar *)g_bytes_get_data (bytes, &io.size);
   io.position = 0;
@@ -448,6 +450,13 @@ gdk_load_png (GBytes  *bytes,
 
   g_free (row_pointers);
   png_destroy_read_struct (&png, &info, NULL);
+
+  if (GDK_PROFILER_IS_RUNNING)
+    {
+      gint64 end = GDK_PROFILER_CURRENT_TIME;
+      if (end - before > 500000)
+        gdk_profiler_add_mark (before, end - before, "png load", NULL);
+    }
 
   return texture;
 }

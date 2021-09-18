@@ -21,6 +21,7 @@
 
 #include "gdkintl.h"
 #include "gdkmemorytextureprivate.h"
+#include "gdkprofilerprivate.h"
 #include "gdktexture.h"
 #include "gdktextureprivate.h"
 
@@ -411,6 +412,7 @@ gdk_load_tiff (GBytes  *input_bytes,
   int bpp;
   GBytes *bytes;
   GdkTexture *texture;
+  G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
   tif = tiff_open_read (input_bytes);
 
@@ -504,6 +506,13 @@ gdk_load_tiff (GBytes  *input_bytes,
   g_bytes_unref (bytes);
 
   TIFFClose (tif);
+
+  if (GDK_PROFILER_IS_RUNNING)
+    {
+      gint64 end = GDK_PROFILER_CURRENT_TIME;
+      if (end - before > 500000)
+        gdk_profiler_add_mark (before, end - before, "tiff load", NULL);
+    }
 
   return texture;
 }

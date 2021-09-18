@@ -23,6 +23,8 @@
 #include "gdktexture.h"
 #include "gdkmemorytextureprivate.h"
 
+#include "gdkprofilerprivate.h"
+
 #include <jpeglib.h>
 #include <jerror.h>
 #include <setjmp.h>
@@ -174,6 +176,7 @@ gdk_load_jpeg (GBytes  *input_bytes,
   GBytes *bytes;
   GdkTexture *texture;
   GdkMemoryFormat format;
+  G_GNUC_UNUSED guint64 before = GDK_PROFILER_CURRENT_TIME;
 
   info.err = jpeg_std_error (&jerr.pub);
   jerr.pub.error_exit = fatal_error_handler;
@@ -260,6 +263,8 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   g_bytes_unref (bytes);
 
+  gdk_profiler_end_mark (before, "jpeg load", NULL);
+ 
   return texture;
 }
 

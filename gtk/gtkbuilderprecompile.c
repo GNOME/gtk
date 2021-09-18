@@ -52,7 +52,9 @@ typedef struct {
 } RecordDataString;
 
 static RecordDataTree *
-record_data_tree_new (RecordDataTree *parent, RecordTreeType type,  const char *data)
+record_data_tree_new (RecordDataTree *parent,
+                      RecordTreeType  type,
+                      const char     *data)
 {
   RecordDataTree *tree = g_slice_new0 (RecordDataTree);
 
@@ -83,7 +85,9 @@ record_data_string_free (RecordDataString *s)
 }
 
 static const char *
-record_data_string_lookup (GHashTable *strings, const char *str, gssize len)
+record_data_string_lookup (GHashTable *strings,
+                           const char *str,
+                           gssize      len)
 {
   char *copy = NULL;
   RecordDataString *s;
@@ -190,7 +194,7 @@ compare_string (gconstpointer _a,
 
 static void
 marshal_uint32 (GString *str,
-                guint32 v)
+                guint32  v)
 {
   /*
     We encode in a variable length format similar to
@@ -237,7 +241,7 @@ marshal_uint32 (GString *str,
 }
 
 static void
-marshal_string (GString *marshaled,
+marshal_string (GString    *marshaled,
                 GHashTable *strings,
                 const char *string)
 {
@@ -250,8 +254,8 @@ marshal_string (GString *marshaled,
 }
 
 static void
-marshal_tree (GString *marshaled,
-              GHashTable *strings,
+marshal_tree (GString        *marshaled,
+              GHashTable     *strings,
               RecordDataTree *tree)
 {
   GList *l;
@@ -303,9 +307,9 @@ marshal_tree (GString *marshaled,
  * returns: A `GBytes` with the precompiled data
  **/
 GBytes *
-_gtk_buildable_parser_precompile (const char          *text,
-                                  gssize               text_len,
-                                  GError             **error)
+_gtk_buildable_parser_precompile (const char  *text,
+                                  gssize       text_len,
+                                  GError     **error)
 {
   GMarkupParseContext *ctx;
   RecordData data = { 0 };
@@ -400,7 +404,8 @@ demarshal_uint32 (const char **tree)
 }
 
 static const char *
-demarshal_string (const char **tree, const char *strings)
+demarshal_string (const char **tree,
+                  const char  *strings)
 {
   guint32 offset = demarshal_uint32 (tree);
 
@@ -417,10 +422,10 @@ propagate_error (GtkBuildableParseContext *context,
 }
 
 static gboolean
-replay_start_element (GtkBuildableParseContext *context,
-                      const char **tree,
-                      const char *strings,
-                      GError **error)
+replay_start_element (GtkBuildableParseContext  *context,
+                      const char               **tree,
+                      const char                *strings,
+                      GError                   **error)
 {
   const char *element_name;
   guint32 i, n_attrs;
@@ -458,10 +463,10 @@ replay_start_element (GtkBuildableParseContext *context,
 }
 
 static gboolean
-replay_end_element (GtkBuildableParseContext *context,
-                    const char **tree,
-                    const char *strings,
-                    GError **error)
+replay_end_element (GtkBuildableParseContext  *context,
+                    const char               **tree,
+                    const char                *strings,
+                    GError                   **error)
 {
   GError *tmp_error = NULL;
 
@@ -479,10 +484,10 @@ replay_end_element (GtkBuildableParseContext *context,
 }
 
 static gboolean
-replay_text (GtkBuildableParseContext *context,
-             const char **tree,
-             const char *strings,
-             GError **error)
+replay_text (GtkBuildableParseContext  *context,
+             const char               **tree,
+             const char                *strings,
+             GError                   **error)
 {
   const char *text;
   GError *tmp_error = NULL;
@@ -505,8 +510,8 @@ replay_text (GtkBuildableParseContext *context,
 }
 
 gboolean
-_gtk_buildable_parser_is_precompiled (const char           *data,
-                                      gssize                data_len)
+_gtk_buildable_parser_is_precompiled (const char *data,
+                                      gssize      data_len)
 {
   return
     data_len > 4 &&
@@ -517,10 +522,10 @@ _gtk_buildable_parser_is_precompiled (const char           *data,
 }
 
 gboolean
-_gtk_buildable_parser_replay_precompiled (GtkBuildableParseContext *context,
-                                          const char           *data,
-                                          gssize                data_len,
-                                          GError              **error)
+_gtk_buildable_parser_replay_precompiled (GtkBuildableParseContext  *context,
+                                          const char                *data,
+                                          gssize                     data_len,
+                                          GError                   **error)
 {
   const char *data_end = data + data_len;
   guint32 type, len;
