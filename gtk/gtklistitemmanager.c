@@ -443,6 +443,7 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
       i = position - i;
       while (i < position + query_n_items)
         {
+          g_assert (item != NULL);
           if (item->widget)
             {
               g_queue_push_tail (released, item->widget);
@@ -459,7 +460,7 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
                     g_assert_not_reached ();
                   item = gtk_rb_tree_node_get_next (next);
                 }
-              else 
+              else
                 {
                   item = next;
                 }
@@ -511,6 +512,7 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
 
       if (offset > 0)
         {
+          g_assert (item != NULL);
           new_item = gtk_rb_tree_insert_before (self->items, item);
           new_item->n_items = offset;
           item->n_items -= offset;
@@ -519,6 +521,7 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
 
       for (i = 0; i < query_n_items; i++)
         {
+          g_assert (item != NULL);
           if (item->n_items > 1)
             {
               new_item = gtk_rb_tree_insert_before (self->items, item);

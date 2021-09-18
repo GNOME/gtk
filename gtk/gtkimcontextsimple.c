@@ -270,7 +270,6 @@ gtk_im_context_simple_init_compose_table (void)
   const char *locale;
   char **langs = NULL;
   char **lang = NULL;
-  gboolean added;
   const char * const sys_langs[] = { "el_gr", "fi_fi", "pt_br", NULL };
   const char * const *sys_lang = NULL;
   char *x11_compose_file_dir = get_x11_compose_file_dir ();
@@ -278,10 +277,11 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      added = add_compose_table_from_file (path);
-      g_free (path);
-      if (added)
-        return;
+      if (add_compose_table_from_file (path))
+        {
+          g_free (path);
+          return;
+        }
     }
   g_clear_pointer (&path, g_free);
 
@@ -292,10 +292,11 @@ gtk_im_context_simple_init_compose_table (void)
   path = g_build_filename (home, ".XCompose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
     {
-      added = add_compose_table_from_file (path);
-      g_free (path);
-      if (added)
-        return;
+      if (add_compose_table_from_file (path))
+        {
+          g_free (path);
+          return;
+        }
     }
   g_clear_pointer (&path, g_free);
 
@@ -336,13 +337,13 @@ gtk_im_context_simple_init_compose_table (void)
   g_free (x11_compose_file_dir);
   g_strfreev (langs);
 
-  if (path != NULL)
+  if (path != NULL &&
+      add_compose_table_from_file (path))
     {
-      added = add_compose_table_from_file (path);
       g_free (path);
+      return;
     }
-  if (added)
-    return;
+  g_clear_pointer (&path, g_free);
 
   add_builtin_compose_table ();
 }
