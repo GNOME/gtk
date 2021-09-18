@@ -8028,15 +8028,15 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
   if (GTK_IS_BOX (widget))
     {
       guint i;
-      const char **choices;
+      const char **options;
       GtkWidget *dropdown;
 
       dropdown = gtk_widget_get_last_child (widget);
 
-      choices = (const char **) g_object_get_data (G_OBJECT (dropdown), "choices");
-      for (i = 0; choices[i]; i++)
+      options = (const char **) g_object_get_data (G_OBJECT (dropdown), "options");
+      for (i = 0; options[i]; i++)
         {
-          if (strcmp (option, choices[i]) == 0)
+          if (strcmp (option, options[i]) == 0)
             {
               gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), i);
               break;
