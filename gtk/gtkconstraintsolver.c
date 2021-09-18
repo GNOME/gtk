@@ -754,7 +754,6 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
       double t_c;
       double objective_coefficient = 0.0;
       double min_ratio;
-      double r;
 
       gtk_constraint_expression_iter_init (&eiter, z_row);
       while (gtk_constraint_expression_iter_prev (&eiter, &t_v, &t_c))
@@ -771,7 +770,6 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
         break;
 
       min_ratio = DBL_MAX;
-      r = 0;
 
       column_vars = gtk_constraint_solver_get_column_set (self, entry);
       gtk_constraint_variable_set_iter_init (&viter, column_vars);
@@ -786,7 +784,7 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
                 {
                   double constant = gtk_constraint_expression_get_constant (expr);
 
-                  r = -1.0 * constant / coeff;
+                  double r = -1.0 * constant / coeff;
                   if (r < min_ratio)
                     {
                       min_ratio = r;

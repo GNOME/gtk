@@ -5892,7 +5892,7 @@ gtk_window_set_auto_startup_notification (gboolean setting)
 }
 
 /**
- * gtk_window_get_mnemonics_visible: (attributes org.gtk.MEthod.get_property=mnemonics-visible)
+ * gtk_window_get_mnemonics_visible: (attributes org.gtk.Method.get_property=mnemonics-visible)
  * @window: a `GtkWindow`
  *
  * Gets whether mnemonics are supposed to be visible.
@@ -5911,7 +5911,7 @@ gtk_window_get_mnemonics_visible (GtkWindow *window)
 }
 
 /**
- * gtk_window_set_mnemonics_visible:
+ * gtk_window_set_mnemonics_visible: (attributes org.gtk.Method.set_property=mnemonics-visible)
  * @window: a `GtkWindow`
  * @setting: the new value
  *

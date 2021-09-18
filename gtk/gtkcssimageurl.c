@@ -59,7 +59,7 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
 
   if (texture == NULL)
     {
-      if (error)
+      if (error && local_error)
         {
           char *uri;
 
@@ -70,7 +70,7 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
                        "Error loading image '%s': %s", uri, local_error->message);
           g_free (uri);
        }
-      
+
       url->loaded_image = gtk_css_image_invalid_new ();
     }
   else
