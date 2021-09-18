@@ -372,7 +372,7 @@ load_fallback (TIFF    *tif,
 
   data = g_malloc (width * height * 4);
 
-  if (!TIFFReadRGBAImageOriented (tif, width, height, (uint32 *)data, ORIENTATION_TOPLEFT, 1))
+  if (!TIFFReadRGBAImageOriented (tif, width, height, (guint32 *)data, ORIENTATION_TOPLEFT, 1))
     {
       g_set_error_literal (error,
                            GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
