@@ -8028,15 +8028,15 @@ gtk_file_chooser_widget_set_choice (GtkFileChooser  *chooser,
   if (GTK_IS_BOX (widget))
     {
       guint i;
-      const char **choices;
+      const char **options;
       GtkWidget *dropdown;
 
       dropdown = gtk_widget_get_last_child (widget);
 
-      choices = (const char **) g_object_get_data (G_OBJECT (dropdown), "choices");
-      for (i = 0; choices[i]; i++)
+      options = (const char **) g_object_get_data (G_OBJECT (dropdown), "options");
+      for (i = 0; options[i]; i++)
         {
-          if (strcmp (option, choices[i]) == 0)
+          if (strcmp (option, options[i]) == 0)
             {
               gtk_drop_down_set_selected (GTK_DROP_DOWN (dropdown), i);
               break;
@@ -8060,10 +8060,13 @@ gtk_file_chooser_widget_get_choice (GtkFileChooser  *chooser,
   widget = (GtkWidget *)g_hash_table_lookup (impl->choices, id);
   if (GTK_IS_DROP_DOWN (widget))
     {
-      gpointer selected = gtk_drop_down_get_selected_item (GTK_DROP_DOWN (widget));
-      if (GTK_IS_STRING_OBJECT (selected))
-        return gtk_string_object_get_string (GTK_STRING_OBJECT (selected));
-      return NULL;
+      const char **options;
+      guint selected;
+
+      options = (const char **) g_object_get_data (G_OBJECT (widget), "options");
+      selected = gtk_drop_down_get_selected (GTK_DROP_DOWN (widget));
+
+      return options[selected];
     }
   else if (GTK_IS_CHECK_BUTTON (widget))
     {
