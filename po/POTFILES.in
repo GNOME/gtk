@@ -19,8 +19,12 @@ gdk/gdkpango.c
 gdk/gdkpopup.c
 gdk/gdkseat.c
 gdk/gdksurface.c
+gdk/gdktexture.c
 gdk/gdktoplevel.c
 gdk/keyname-table.h
+gdk/loaders/gdkjpeg.c
+gdk/loaders/gdkpng.c
+gdk/loaders/gdktiff.c
 gdk/macos/gdkmacosclipboard.c
 gdk/macos/gdkmacosdrag.c
 gdk/macos/gdkmacosglcontext.c
