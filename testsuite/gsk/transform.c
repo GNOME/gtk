@@ -584,6 +584,79 @@ test_transform_bounds (void)
   g_assert_true (graphene_rect_equal (&out, &GRAPHENE_RECT_INIT(0, 0, 100, 100)));
 }
 
+#define DEG_TO_RAD(x) ((x) / 180.0 * G_PI)
+
+static void
+test_to_2d (void)
+{
+  GskTransform *transform;
+  float xx, yx, xy, yy, dx, dy;
+  float s, c;
+  float tx,ty;
+
+  transform = gsk_transform_scale (NULL, 10.0, 5.0);
+  gsk_transform_to_2d (transform, &xx, &yx, &xy, &yy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_cmpfloat (xx, ==, 10.0);
+  g_assert_cmpfloat (yx, ==, 0.0);
+  g_assert_cmpfloat (xy, ==, 0.0);
+  g_assert_cmpfloat (yy, ==, 5.0);
+  g_assert_cmpfloat (dx, ==, 0.0);
+  g_assert_cmpfloat (dy, ==, 0.0);
+
+  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10.0, 5.0));
+  gsk_transform_to_2d (transform, &xx, &yx, &xy, &yy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_cmpfloat (xx, ==, 1.0);
+  g_assert_cmpfloat (yx, ==, 0.0);
+  g_assert_cmpfloat (xy, ==, 0.0);
+  g_assert_cmpfloat (yy, ==, 1.0);
+  g_assert_cmpfloat (dx, ==, 10.0);
+  g_assert_cmpfloat (dy, ==, 5.0);
+
+  transform = gsk_transform_rotate (NULL, 33.0);
+  gsk_transform_to_2d (transform, &xx, &yx, &xy, &yy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  c = cosf (DEG_TO_RAD (33.0));
+  s = sinf (DEG_TO_RAD (33.0));
+
+  g_assert_cmpfloat (xx, ==, c);
+  g_assert_cmpfloat (yx, ==, s);
+  g_assert_cmpfloat (xy, ==, -s);
+  g_assert_cmpfloat (yy, ==, c);
+  g_assert_cmpfloat (dx, ==, 0.0);
+  g_assert_cmpfloat (dy, ==, 0.0);
+
+  transform = gsk_transform_skew (NULL, 33.0, 0);
+  gsk_transform_to_2d (transform, &xx, &yx, &xy, &yy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  tx = tanf (DEG_TO_RAD (33.0));
+
+  g_assert_cmpfloat (xx, ==, 1);
+  g_assert_cmpfloat (yx, ==, 0);
+  g_assert_cmpfloat (xy, ==, tx);
+  g_assert_cmpfloat (yy, ==, 1);
+  g_assert_cmpfloat (dx, ==, 0.0);
+  g_assert_cmpfloat (dy, ==, 0.0);
+
+  transform = gsk_transform_skew (NULL, 0, 66.0);
+  gsk_transform_to_2d (transform, &xx, &yx, &xy, &yy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  ty = tanf (DEG_TO_RAD (66.0));
+
+  g_assert_cmpfloat (xx, ==, 1);
+  g_assert_cmpfloat (yx, ==, ty);
+  g_assert_cmpfloat (xy, ==, 0);
+  g_assert_cmpfloat (yy, ==, 1);
+  g_assert_cmpfloat (dx, ==, 0.0);
+  g_assert_cmpfloat (dy, ==, 0.0);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -599,6 +672,7 @@ main (int   argc,
   g_test_add_func ("/transform/check-axis-aligneness", test_axis_aligned);
   g_test_add_func ("/transform/to-affine", test_to_affine);
   g_test_add_func ("/transform/bounds", test_transform_bounds);
+  g_test_add_func ("/transform/to-2d", test_to_2d);
 
   return g_test_run ();
 }
