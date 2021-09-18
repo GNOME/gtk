@@ -92,6 +92,10 @@ GskTransform *          gsk_transform_translate                 (GskTransform   
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_translate_3d              (GskTransform                   *next,
                                                                  const graphene_point3d_t       *point) G_GNUC_WARN_UNUSED_RESULT;
+GDK_AVAILABLE_IN_4_6
+GskTransform *          gsk_transform_skew                      (GskTransform                   *next,
+                                                                 float                           skew_x,
+                                                                 float                           skew_y) G_GNUC_WARN_UNUSED_RESULT;
 GDK_AVAILABLE_IN_ALL
 GskTransform *          gsk_transform_rotate                    (GskTransform                   *next,
                                                                  float                           angle) G_GNUC_WARN_UNUSED_RESULT;
