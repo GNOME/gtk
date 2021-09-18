@@ -793,7 +793,7 @@ msgstr "No s'ha pogut crear una pantalla EGL"
 
 #: gdk/x11/gdkglcontext-glx.c:770
 msgid "No GLX configurations available"
-msgstr "No hi ha cap configuracions GLX disponibles"
+msgstr "No hi ha cap configuració GLX disponible"
 
 #: gdk/x11/gdkglcontext-glx.c:843
 msgid "No GLX configuration with required features found"
@@ -1175,7 +1175,7 @@ msgstr "cel·la"
 #: gtk/gtkaccessible.c:566
 msgctxt "accessibility"
 msgid "checkbox"
-msgstr "casella"
+msgstr "casella de selecció"
 
 #: gtk/gtkaccessible.c:567
 msgctxt "accessibility"
@@ -1330,7 +1330,7 @@ msgstr "element de menú"
 #: gtk/gtkaccessible.c:597
 msgctxt "accessibility"
 msgid "menu item checkbox"
-msgstr "casella d'element de menú"
+msgstr "casella de selecció d'element de menú"
 
 #: gtk/gtkaccessible.c:598
 msgctxt "accessibility"
