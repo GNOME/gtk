@@ -55,7 +55,7 @@ for f in get_files('theme/Default/assets', '.png'):
 xml += '\n'
 
 for f in get_files('theme/Default/assets', '.svg'):
-  xml += '    <file>theme/Default/assets/{0}</file>\n'.format(f)
+  xml += '    <file preprocess=\'xml-stripblanks\'>theme/Default/assets/{0}</file>\n'.format(f)
 
 for f in get_files('theme/Default/assets-hc', '.png'):
   xml += '    <file>theme/Default/assets-hc/{0}</file>\n'.format(f)
@@ -63,10 +63,10 @@ for f in get_files('theme/Default/assets-hc', '.png'):
 xml += '\n'
 
 for f in get_files('theme/Default/assets-hc', '.svg'):
-  xml += '    <file>theme/Default/assets-hc/{0}</file>\n'.format(f)
+  xml += '    <file preprocess=\'xml-stripblanks\'>theme/Default/assets-hc/{0}</file>\n'.format(f)
 
 for f in get_files('ui', '.ui'):
-  xml += '    <file preprocess=\'xml-stripblanks\'>ui/{0}</file>\n'.format(f)
+  xml += '    <file>ui/{0}</file>\n'.format(f)
 
 xml += '\n'
 
@@ -77,7 +77,7 @@ for s in ['16x16', '32x32', '64x64', 'scalable']:
       for f in get_files(icons_dir, '.png'):
         xml += '    <file>icons/{0}/{1}/{2}</file>\n'.format(s,c,f)
       for f in get_files(icons_dir, '.svg'):
-        xml += '    <file>icons/{0}/{1}/{2}</file>\n'.format(s,c,f)
+        xml += '    <file preprocess=\'xml-stripblanks\'>icons/{0}/{1}/{2}</file>\n'.format(s,c,f)
 
 for f in get_files('inspector', '.ui'):
   xml += '    <file preprocess=\'xml-stripblanks\'>inspector/{0}</file>\n'.format(f)
