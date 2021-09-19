@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-08 20:25+0000\n"
-"PO-Revision-Date: 2021-09-10 09:39+0300\n"
+"POT-Creation-Date: 2021-09-18 15:04+0000\n"
+"PO-Revision-Date: 2021-09-19 20:21+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 3.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -77,6 +77,10 @@ msgstr "İçerikleri aktarmak için uyumlu biçim yok."
 #: gdk/gdksurface.c:1164
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan desteği GDK_DEBUG yoluyla devre dışı bırakılmış"
+
+#: gdk/gdktexture.c:543
+msgid "Unknown image format."
+msgstr "Bilinmeyen resim biçimi."
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -454,6 +458,40 @@ msgstr "Uyan"
 msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Askıya Al"
+
+#: gdk/loaders/gdkjpeg.c:59
+#, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr "JPEG resim dosyası yorumlanırken hata (%s)"
+
+#: gdk/loaders/gdkjpeg.c:217
+#, c-format
+msgid "Unsupported JPEG colorspace (%d)"
+msgstr "Desteklenmeyen JPEG renk uzayı (%d)"
+
+#: gdk/loaders/gdkjpeg.c:226 gdk/loaders/gdkpng.c:432 gdk/loaders/gdktiff.c:477
+#, c-format
+msgid "Not enough memory for image size %ux%u"
+msgstr "%ux%u resim boyutu için yeterli bellek yok"
+
+#: gdk/loaders/gdkpng.c:117
+#, c-format
+msgid "Error reading png (%s)"
+msgstr "PNG okunurken hata (%s)"
+
+#: gdk/loaders/gdkpng.c:379
+#, c-format
+msgid "Failed to parse png image"
+msgstr "PNG resmi ayrıştırılırken hata"
+
+#: gdk/loaders/gdktiff.c:379
+msgid "Failed to load RGB data from TIFF file"
+msgstr "TIFF dosyasından RGB verisi yüklenirken hata"
+
+#: gdk/loaders/gdktiff.c:489
+#, c-format
+msgid "Reading data failed at row %d"
+msgstr "Veri okunurken %d. satırda hata"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
@@ -2141,7 +2179,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6062 gtk/gtktextview.c:8886
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6062 gtk/gtktextview.c:8885
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2413,27 +2451,27 @@ msgstr "Karakter Değişkeleri"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL içerik oluşturulması başarısız oldu"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6050 gtk/gtktextview.c:8874
+#: gtk/gtklabel.c:5479 gtk/gtktext.c:6050 gtk/gtktextview.c:8873
 msgid "Cu_t"
 msgstr "Ke_s"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6054 gtk/gtktextview.c:8878
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6054 gtk/gtktextview.c:8877
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6058 gtk/gtktextview.c:8882
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6058 gtk/gtktextview.c:8881
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6071 gtk/gtktextview.c:8907
+#: gtk/gtklabel.c:5487 gtk/gtktext.c:6071 gtk/gtktextview.c:8906
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
-#: gtk/gtklabel.c:5493
+#: gtk/gtklabel.c:5492
 msgid "_Open Link"
 msgstr "Bağlantı _Aç"
 
-#: gtk/gtklabel.c:5497
+#: gtk/gtklabel.c:5496
 msgid "Copy _Link Address"
 msgstr "_Bağlantı Adresini Kopyala"
 
@@ -3402,15 +3440,15 @@ msgstr "Başka arama deneyin"
 msgid "Could not show link"
 msgstr "Bağlantı gösterilemedi"
 
-#: gtk/gtktext.c:6076 gtk/gtktextview.c:8912
+#: gtk/gtktext.c:6076 gtk/gtktextview.c:8911
 msgid "Insert _Emoji"
 msgstr "_Emoji Ekle"
 
-#: gtk/gtktextview.c:8894
+#: gtk/gtktextview.c:8893
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: gtk/gtktextview.c:8898
+#: gtk/gtktextview.c:8897
 msgid "_Redo"
 msgstr "_Yinele"
 
@@ -9064,9 +9102,6 @@ msgstr ""
 
 #~ msgid "Open '%s'"
 #~ msgstr "'%s' Aç"
-
-#~ msgid "Unknown item"
-#~ msgstr "Bilinmeyen öge"
 
 #~ msgctxt "recent menu label"
 #~ msgid "_%d. %s"
