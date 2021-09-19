@@ -106,7 +106,7 @@ png_free_callback (png_structp o,
   g_free (x);
 }
 
-static void
+G_GNUC_NORETURN static void
 png_simple_error_callback (png_structp     png,
                            png_const_charp error_msg)
 {
