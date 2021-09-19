@@ -899,6 +899,9 @@ summary('Sysprof support', libsysprof_capture_dep.found(), section: 'Features')
 summary('Colord support', colord_dep.found(), section: 'Features')
 summary('Tracker support', tracker3_dep.found(), section: 'Features')
 
+summary('Compiler', cc.get_id(), section: 'Toolchain')
+summary('Linker', cc.get_linker_id(), section: 'Toolchain')
+
 # Build
 summary('Debugging', get_option('debug'), section: 'Build')
 summary('Optimization', get_option('optimization'), section: 'Build')
