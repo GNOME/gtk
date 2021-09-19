@@ -3,16 +3,29 @@
 widgetfactory_resources = gnome.compile_resources('widgetfactory_resources',
   'widget-factory.gresource.xml',
   source_dir: '.',
+  extra_args: ['--external-data'],
+)
+
+custom_target('widget_factory.gresource',
+  build_by_default: true,
+  output: 'widget_factory.gresource',
+  input: ['widget-factory.gresource.xml'],
+  command: [
+    find_program('glib-compile-resources'),
+    '--generate',
+    '--target=@OUTPUT@',
+    '--sourcedir=@CURRENT_SOURCE_DIR@',
+    '@INPUT@']
 )
 
 executable('gtk4-widget-factory',
-  sources: ['widget-factory.c', widgetfactory_resources],
+  sources: ['widget-factory.c', widgetfactory_resources, 'widget-factory-resources.s'],
   c_args: common_cflags,
-  dependencies: [ libgtk_dep, demo_conf_h ],
+  dependencies: [ libgtk_dep, demo_conf_h],
   include_directories: confinc,
   gui_app: true,
   link_args: extra_demo_ldflags,
-  install: true,
+  install: true
 )
 
 # desktop file
