@@ -17,6 +17,7 @@ fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
+lcms2_req          = '>= 2.8'
 wayland_proto_req  = '>= 1.25'
 wayland_req        = '>= 1.21.0'
 graphene_req       = '>= 1.9.1'
@@ -398,6 +399,7 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             fallback: ['harfbuzz', 'libharfbuzz_dep'],
                             default_options: ['coretext=enabled'])
+lcms2_dep      = dependency('lcms2', version: lcms2_req)
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
