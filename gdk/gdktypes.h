@@ -73,6 +73,7 @@ typedef cairo_rectangle_int_t         GdkRectangle;
 
 /* Forward declarations of commonly used types */
 typedef struct _GdkRGBA               GdkRGBA;
+typedef struct _GdkColorSpace       GdkColorSpace;
 typedef struct _GdkContentFormats     GdkContentFormats;
 typedef struct _GdkContentProvider    GdkContentProvider;
 typedef struct _GdkCursor             GdkCursor;
