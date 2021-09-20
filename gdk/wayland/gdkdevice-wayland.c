@@ -112,7 +112,7 @@ struct _GdkWaylandPointerFrameData
 
   /* Specific to the scroll event */
   double delta_x, delta_y;
-  int32_t discrete_x, discrete_y;
+  int32_t value120_x, value120_y;
   gint8 is_scroll_stop;
   enum wl_pointer_axis_source source;
 };
@@ -1383,31 +1383,54 @@ static GdkDevice * get_scroll_device (GdkWaylandSeat              *seat,
 
 static void
 flush_discrete_scroll_event (GdkWaylandSeat     *seat,
-                             gint                discrete_x,
-                             gint                discrete_y)
+                             gint                value120_x,
+                             gint                value120_y)
 {
-  GdkEvent *event;
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkEvent *event = NULL;
   GdkDevice *source;
   GdkScrollDirection direction;
 
-  if (discrete_x > 0)
+  if (value120_x > 0)
     direction = GDK_SCROLL_LEFT;
-  else if (discrete_x < 0)
+  else if (value120_x < 0)
     direction = GDK_SCROLL_RIGHT;
-  else if (discrete_y > 0)
+  else if (value120_y > 0)
     direction = GDK_SCROLL_DOWN;
   else
     direction = GDK_SCROLL_UP;
 
   source = get_scroll_device (seat, seat->pointer_info.frame.source);
-  event = gdk_scroll_event_new_discrete (seat->pointer_info.focus,
-                                         source,
-                                         NULL,
-                                         seat->pointer_info.time,
-                                         device_get_modifiers (seat->logical_pointer),
-                                         direction);
 
-  _gdk_wayland_display_deliver_event (seat->display, event);
+  if (display_wayland->seat_version >= WL_POINTER_AXIS_VALUE120_SINCE_VERSION)
+    {
+      event = gdk_scroll_event_new_value120 (seat->pointer_info.focus,
+                                             source,
+                                             NULL,
+                                             seat->pointer_info.time,
+                                             device_get_modifiers (seat->logical_pointer),
+                                             direction,
+                                             value120_x,
+                                             value120_y);
+    }
+  else
+    {
+      gint discrete_x = value120_x / 120;
+      gint discrete_y = value120_y / 120;
+
+      if (discrete_x != 0 || discrete_y != 0)
+        {
+          event = gdk_scroll_event_new_discrete (seat->pointer_info.focus,
+                                                 source,
+                                                 NULL,
+                                                 seat->pointer_info.time,
+                                                 device_get_modifiers (seat->logical_pointer),
+                                                 direction);
+        }
+    }
+
+  if (event)
+    _gdk_wayland_display_deliver_event (seat->display, event);
 }
 
 static void
@@ -1438,13 +1461,13 @@ flush_scroll_event (GdkWaylandSeat             *seat,
 {
   gboolean is_stop = FALSE;
 
-  if (pointer_frame->discrete_x || pointer_frame->discrete_y)
+  if (pointer_frame->value120_x || pointer_frame->value120_y)
     {
       flush_discrete_scroll_event (seat,
-                                   pointer_frame->discrete_x,
-                                   pointer_frame->discrete_y);
-      pointer_frame->discrete_x = 0;
-      pointer_frame->discrete_y = 0;
+                                   pointer_frame->value120_x,
+                                   pointer_frame->value120_y);
+      pointer_frame->value120_x = 0;
+      pointer_frame->value120_y = 0;
     }
   else if (pointer_frame->is_scroll_stop ||
            pointer_frame->delta_x != 0 ||
@@ -1464,8 +1487,8 @@ flush_scroll_event (GdkWaylandSeat             *seat,
                                  is_stop);
     }
 
-  pointer_frame->discrete_x = 0;
-  pointer_frame->discrete_y = 0;
+  pointer_frame->value120_x = 0;
+  pointer_frame->value120_y = 0;
   pointer_frame->delta_x = 0;
   pointer_frame->delta_y = 0;
   pointer_frame->is_scroll_stop = FALSE;
@@ -1864,10 +1887,10 @@ pointer_handle_axis_discrete (void              *data,
   switch (axis)
     {
     case WL_POINTER_AXIS_VERTICAL_SCROLL:
-      pointer_frame->discrete_y = value;
+      pointer_frame->value120_y = value * 120;
       break;
     case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
-      pointer_frame->discrete_x = value;
+      pointer_frame->value120_x = value * 120;
       break;
     default:
       g_return_if_reached ();
@@ -1875,6 +1898,35 @@ pointer_handle_axis_discrete (void              *data,
 
   GDK_SEAT_NOTE (seat, EVENTS,
             g_message ("discrete scroll, axis %s, value %d, seat %p",
+                       get_axis_name (axis), value, seat));
+}
+
+static void
+pointer_handle_axis_value120 (void              *data,
+                              struct wl_pointer *pointer,
+                              uint32_t           axis,
+                              int32_t            value)
+{
+  GdkWaylandSeat *seat = data;
+  GdkWaylandPointerFrameData *pointer_frame = &seat->pointer_info.frame;
+
+  if (!seat->pointer_info.focus)
+    return;
+
+  switch (axis)
+    {
+    case WL_POINTER_AXIS_VERTICAL_SCROLL:
+      pointer_frame->value120_y = value;
+      break;
+    case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
+      pointer_frame->value120_x = value;
+      break;
+    default:
+      g_return_if_reached ();
+    }
+
+  GDK_SEAT_NOTE (seat, EVENTS,
+            g_message ("value120 scroll, axis %s, value %d, seat %p",
                        get_axis_name (axis), value, seat));
 }
 
@@ -3072,6 +3124,7 @@ static const struct wl_pointer_listener pointer_listener = {
   pointer_handle_axis_source,
   pointer_handle_axis_stop,
   pointer_handle_axis_discrete,
+  pointer_handle_axis_value120,
 };
 
 static const struct wl_keyboard_listener keyboard_listener = {

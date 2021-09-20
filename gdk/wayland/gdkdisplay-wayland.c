@@ -232,7 +232,7 @@ _gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
 {
   struct wl_seat *seat;
 
-  display_wayland->seat_version = MIN (version, 7);
+  display_wayland->seat_version = MIN (version, 8);
   seat = wl_registry_bind (display_wayland->wl_registry,
                            id, &wl_seat_interface,
                            display_wayland->seat_version);
