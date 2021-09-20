@@ -40,6 +40,7 @@
 #include "gdktextureprivate.h"
 
 #include <glib/gi18n-lib.h>
+#include "gdkcolorspace.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
 #include "gdksnapshot.h"
@@ -61,6 +62,7 @@ enum {
   PROP_0,
   PROP_WIDTH,
   PROP_HEIGHT,
+  PROP_COLOR_SPACE,
 
   N_PROPS
 };
@@ -247,6 +249,12 @@ gdk_texture_set_property (GObject      *gobject,
       self->height = g_value_get_int (value);
       break;
 
+    case PROP_COLOR_SPACE:
+      self->color_space = g_value_dup_object (value);
+      if (self->color_space == NULL)
+        self->color_space = g_object_ref (gdk_color_space_get_srgb ());
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -271,6 +279,10 @@ gdk_texture_get_property (GObject    *gobject,
       g_value_set_int (value, self->height);
       break;
 
+    case PROP_COLOR_SPACE:
+      g_value_set_object (value, self->color_space);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -283,6 +295,7 @@ gdk_texture_dispose (GObject *object)
   GdkTexture *self = GDK_TEXTURE (object);
 
   gdk_texture_clear_render_data (self);
+  g_clear_object (&self->color_space);
 
   G_OBJECT_CLASS (gdk_texture_parent_class)->dispose (object);
 }
@@ -305,9 +318,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
    */
   properties[PROP_WIDTH] =
     g_param_spec_int ("width", NULL, NULL,
-                      1,
-                      G_MAXINT,
-                      1,
+                      1, G_MAXINT, 1,
                       G_PARAM_READWRITE |
                       G_PARAM_CONSTRUCT_ONLY |
                       G_PARAM_STATIC_STRINGS |
@@ -320,13 +331,26 @@ gdk_texture_class_init (GdkTextureClass *klass)
    */
   properties[PROP_HEIGHT] =
     g_param_spec_int ("height", NULL, NULL,
-                      1,
-                      G_MAXINT,
-                      1,
+                      1, G_MAXINT, 1,
                       G_PARAM_READWRITE |
                       G_PARAM_CONSTRUCT_ONLY |
                       G_PARAM_STATIC_STRINGS |
                       G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkTexture:color-space: (attributes org.gtk.Property.get=gdk_texture_get_color_space)
+   *
+   * The color space associated with texture.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_COLOR_SPACE] =
+    g_param_spec_object ("color-space", NULL, NULL,
+                         GDK_TYPE_COLOR_SPACE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -361,7 +385,7 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
                                       * cairo_image_surface_get_stride (surface),
                                       (GDestroyNotify) cairo_surface_destroy,
                                       cairo_surface_reference (surface));
-  
+
   texture = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
                                     cairo_image_surface_get_height (surface),
                                     GDK_MEMORY_DEFAULT,
@@ -665,13 +689,31 @@ gdk_texture_get_height (GdkTexture *texture)
   return texture->height;
 }
 
+/**
+ * gdk_texture_get_color_space: (attributes org.gtk.Method.get_property=color-space)
+ * @texture: a `GdkTexture`
+ *
+ * Returns the color space associsated with @texture.
+ *
+ * Returns: (transfer none): the color space of the `GdkTexture`
+ *
+ * Since: 4.10
+ */
+GdkColorSpace *
+gdk_texture_get_color_space (GdkTexture *texture)
+{
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), 0);
+
+  return texture->color_space;
+}
+
 void
 gdk_texture_do_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
                          guchar          *data,
                          gsize            stride)
 {
-  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, data,stride);
+  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, data, stride);
 }
 
 cairo_surface_t *
@@ -751,7 +793,7 @@ gdk_texture_set_render_data (GdkTexture     *self,
                              GDestroyNotify  notify)
 {
   g_return_val_if_fail (data != NULL, FALSE);
- 
+
   if (self->render_key != NULL)
     return FALSE;
 
