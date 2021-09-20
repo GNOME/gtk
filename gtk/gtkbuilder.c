@@ -1955,9 +1955,9 @@ gboolean
 _gtk_builder_finish (GtkBuilder  *builder,
                      GError     **error)
 {
-  return gtk_builder_apply_delayed_properties (builder, error)
-      && gtk_builder_create_bindings (builder, error)
-      && gtk_builder_connect_signals (builder, error);
+  return gtk_builder_apply_delayed_properties (builder, error) &&
+         gtk_builder_create_bindings (builder, error) &&
+         gtk_builder_connect_signals (builder, error);
 }
 
 /**
