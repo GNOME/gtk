@@ -296,7 +296,7 @@ wl_shm_format (void          *data,
 {
   GDK_NOTE (MISC,
             char buf[10];
-            g_message ("supported pixel format %s", get_format_name (format, buf));
+            g_message ("supported pixel format %s (0x%X)", get_format_name (format, buf), (guint) format);
             );
 }
 
