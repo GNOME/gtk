@@ -546,7 +546,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
   for (guint i = 0; i < properties->len; i++)
     {
       PropertyInfo *prop = g_ptr_array_index (properties, i);
-      const char *property_name = g_intern_string (prop->pspec->name);
+      const char *property_name = prop->pspec->name;
       GValue property_value = G_VALUE_INIT;
 
       if (prop->value)
