@@ -26,6 +26,8 @@ struct _GdkColorSpaceClass
 };
 
 
+GdkColorSpace *          gdk_color_space_get_srgb_linear            (void) G_GNUC_CONST;
+
 G_END_DECLS
 
 #endif /* __GDK_COLOR_SPACE_PRIVATE_H__ */

@@ -185,7 +185,7 @@ gdk_color_space_is_linear (GdkColorSpace *self)
 {
   g_return_val_if_fail (GDK_IS_COLOR_SPACE (self), FALSE);
 
-  return FALSE:
+  return self == gdk_color_space_get_srgb_linear ();
 }
 
 int
