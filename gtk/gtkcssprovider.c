@@ -180,7 +180,8 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
     {
       char *s = gtk_css_section_to_string (section);
 
-      g_warning ("Theme parsing error: %s: %s",
+      g_warning ("Theme parser %s: %s: %s",
+                 error->domain == GTK_CSS_PARSER_WARNING ? "warning" : "error",
                  s,
                  error->message);
 
