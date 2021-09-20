@@ -1383,10 +1383,21 @@ static GdkDevice * get_scroll_device (GdkWaylandSeat              *seat,
 
 static void
 flush_discrete_scroll_event (GdkWaylandSeat     *seat,
-                             GdkScrollDirection  direction)
+                             gint                discrete_x,
+                             gint                discrete_y)
 {
   GdkEvent *event;
   GdkDevice *source;
+  GdkScrollDirection direction;
+
+  if (discrete_x > 0)
+    direction = GDK_SCROLL_LEFT;
+  else if (discrete_x < 0)
+    direction = GDK_SCROLL_RIGHT;
+  else if (discrete_y > 0)
+    direction = GDK_SCROLL_DOWN;
+  else
+    direction = GDK_SCROLL_UP;
 
   source = get_scroll_device (seat, seat->pointer_info.frame.source);
   event = gdk_scroll_event_new_discrete (seat->pointer_info.focus,
@@ -1429,18 +1440,9 @@ flush_scroll_event (GdkWaylandSeat             *seat,
 
   if (pointer_frame->discrete_x || pointer_frame->discrete_y)
     {
-      GdkScrollDirection direction;
-
-      if (pointer_frame->discrete_x > 0)
-        direction = GDK_SCROLL_LEFT;
-      else if (pointer_frame->discrete_x < 0)
-        direction = GDK_SCROLL_RIGHT;
-      else if (pointer_frame->discrete_y > 0)
-        direction = GDK_SCROLL_DOWN;
-      else
-        direction = GDK_SCROLL_UP;
-
-      flush_discrete_scroll_event (seat, direction);
+      flush_discrete_scroll_event (seat,
+                                   pointer_frame->discrete_x,
+                                   pointer_frame->discrete_y);
       pointer_frame->discrete_x = 0;
       pointer_frame->discrete_y = 0;
     }
