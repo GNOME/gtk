@@ -918,7 +918,7 @@ parse_property (ParserData   *data,
 
   if (bind_flags_str)
     {
-      if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, NULL, bind_flags_str, &bind_flags, error))
+      if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, bind_flags_str, &bind_flags, error))
         {
           _gtk_builder_prefix_error (data->builder, &data->ctx, error);
           return;

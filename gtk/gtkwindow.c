@@ -211,7 +211,6 @@ typedef struct
    */
   guint    need_default_size         : 1;
 
-  guint    builder_visible           : 1;
   guint    decorated                 : 1;
   guint    deletable                 : 1;
   guint    destroy_with_parent       : 1;
@@ -472,10 +471,6 @@ static void     gtk_window_buildable_add_child              (GtkBuildable       
                                                              GtkBuilder         *builder,
                                                              GObject            *child,
                                                              const char         *type);
-static void     gtk_window_buildable_set_buildable_property (GtkBuildable       *buildable,
-                                                             GtkBuilder         *builder,
-                                                             const char         *name,
-                                                             const GValue       *value);
 
 static void             gtk_window_shortcut_manager_interface_init      (GtkShortcutManagerInterface *iface);
 /* GtkRoot */
@@ -1916,7 +1911,6 @@ static void
 gtk_window_buildable_interface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->set_buildable_property = gtk_window_buildable_set_buildable_property;
   iface->add_child = gtk_window_buildable_add_child;
 }
 
@@ -1932,23 +1926,6 @@ gtk_window_buildable_add_child (GtkBuildable *buildable,
     gtk_window_set_child (GTK_WINDOW (buildable), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
-}
-
-static void
-gtk_window_buildable_set_buildable_property (GtkBuildable *buildable,
-                                             GtkBuilder   *builder,
-                                             const char   *name,
-                                             const GValue *value)
-{
-  GtkWindow *window = GTK_WINDOW (buildable);
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  if (strcmp (name, "visible") == 0 && g_value_get_boolean (value))
-    priv->builder_visible = TRUE;
-  else if (parent_buildable_iface->set_buildable_property)
-    parent_buildable_iface->set_buildable_property (buildable, builder, name, value);
-  else
-    g_object_set_property (G_OBJECT (buildable), name, value);
 }
 
 static void

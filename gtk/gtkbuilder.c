@@ -459,7 +459,6 @@ typedef struct
 {
   GPtrArray *names;
   GArray *values;
-  guint len;
 } ObjectProperties;
 
 
@@ -468,8 +467,6 @@ object_properties_init (ObjectProperties *self)
 {
   self->names = NULL;
   self->values = NULL;
-
-  self->len = 0;
 }
 
 static void
@@ -483,8 +480,6 @@ object_properties_destroy (ObjectProperties *self)
 
   if (self->values)
     g_array_unref (self->values);
-
-  self->len = 0;
 }
 
 static void
@@ -493,10 +488,8 @@ object_properties_add (ObjectProperties *self,
                        const GValue     *value)
 {
   if (!self->names)
-    self->names = g_ptr_array_sized_new (8);
-
-  if (!self->values)
     {
+      self->names = g_ptr_array_sized_new (8);
       self->values = g_array_sized_new (FALSE, FALSE, sizeof (GValue), 8);
       g_array_set_clear_func (self->values, (GDestroyNotify) g_value_unset);
     }
@@ -505,8 +498,6 @@ object_properties_add (ObjectProperties *self,
   g_array_append_vals (self->values, value, 1);
 
   g_assert (self->names->len == self->values->len);
-
-  self->len += 1;
 }
 
 static const char *
@@ -546,7 +537,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
   for (guint i = 0; i < properties->len; i++)
     {
       PropertyInfo *prop = g_ptr_array_index (properties, i);
-      const char *property_name = g_intern_string (prop->pspec->name);
+      const char *property_name = prop->pspec->name;
       GValue property_value = G_VALUE_INIT;
 
       if (prop->value)
@@ -566,12 +557,12 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
           continue;
         }
       else if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
-          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF) &&
-          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_TEXTURE) &&
-          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PAINTABLE) &&
-          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GTK_TYPE_SHORTCUT_TRIGGER) &&
-          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GTK_TYPE_SHORTCUT_ACTION) &&
-          (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
+               (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF) &&
+               (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_TEXTURE) &&
+               (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PAINTABLE) &&
+               (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GTK_TYPE_SHORTCUT_TRIGGER) &&
+               (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GTK_TYPE_SHORTCUT_ACTION) &&
+               (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
         {
           GObject *object = g_hash_table_lookup (priv->objects,
                                                  g_strstrip (prop->text->str));
@@ -751,9 +742,6 @@ _gtk_builder_construct (GtkBuilder  *builder,
   ObjectProperties parameters, construct_parameters;
   GObject *obj;
   int i;
-  GtkBuildableIface *iface;
-  gboolean custom_set_property;
-  GtkBuildable *buildable;
   GParamFlags param_filter_flags;
 
   g_assert (info->type != G_TYPE_INVALID);
@@ -821,7 +809,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
                                            builder,
                                            info->id);
       g_assert (obj != NULL);
-      if (construct_parameters.len > 0)
+      if (construct_parameters.names->len > 0)
         g_warning ("Can't pass in construct-only parameters to %s", info->id);
     }
   else if (info->parent &&
@@ -836,7 +824,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
           object_properties_destroy (&construct_parameters);
           return NULL;
         }
-      if (construct_parameters.len > 0)
+      if (construct_parameters.names)
         g_warning ("Can't pass in construct-only parameters to %s", childname);
       g_object_ref (obj);
     }
@@ -844,9 +832,9 @@ _gtk_builder_construct (GtkBuilder  *builder,
     {
       ensure_special_construct_parameters (builder, info->type, &construct_parameters);
 
-      if (construct_parameters.len > 0)
+      if (construct_parameters.names)
         obj = g_object_new_with_properties (info->type,
-                                            construct_parameters.len,
+                                            construct_parameters.names->len,
                                             (const char **) construct_parameters.names->pdata,
                                             (GValue *) construct_parameters.values->data);
       else
@@ -869,36 +857,60 @@ _gtk_builder_construct (GtkBuilder  *builder,
     }
   object_properties_destroy (&construct_parameters);
 
-  custom_set_property = FALSE;
-  buildable = NULL;
-  iface = NULL;
-  if (GTK_IS_BUILDABLE (obj))
+  if (parameters.names)
     {
-      buildable = GTK_BUILDABLE (obj);
-      iface = GTK_BUILDABLE_GET_IFACE (obj);
-      if (iface->set_buildable_property)
-        custom_set_property = TRUE;
-    }
+      GtkBuildableIface *iface = NULL;
+      gboolean custom_set_property = FALSE;
+      GtkBuildable *buildable = NULL;
 
-  for (i = 0; i < parameters.len; i++)
-    {
-      const char *name = object_properties_get_name (&parameters, i);
-      const GValue *value = object_properties_get_value (&parameters, i);
+      if (GTK_IS_BUILDABLE (obj))
+        {
+          buildable = GTK_BUILDABLE (obj);
+          iface = GTK_BUILDABLE_GET_IFACE (obj);
+          if (iface->set_buildable_property)
+            custom_set_property = TRUE;
+        }
 
       if (custom_set_property)
-        iface->set_buildable_property (buildable, builder, name, value);
-      else
-        g_object_set_property (obj, name, value);
-
-#ifdef G_ENABLE_DEBUG
-      if (GTK_DEBUG_CHECK (BUILDER))
         {
-          char *str = g_strdup_value_contents (value);
-          g_message ("set %s: %s = %s", info->id, name, str);
-          g_free (str);
-        }
+          for (i = 0; i < parameters.names->len; i++)
+            {
+              const char *name = object_properties_get_name (&parameters, i);
+              const GValue *value = object_properties_get_value (&parameters, i);
+
+              iface->set_buildable_property (buildable, builder, name, value);
+#ifdef G_ENABLE_DEBUG
+              if (GTK_DEBUG_CHECK (BUILDER))
+                {
+                  char *str = g_strdup_value_contents (value);
+                  g_message ("set %s: %s = %s", info->id, name, str);
+                  g_free (str);
+                }
 #endif
+            }
+        }
+      else
+        {
+          g_object_setv (obj,
+                         parameters.names->len,
+                         (const char **) parameters.names->pdata,
+                         (GValue *) parameters.values->data);
+#ifdef G_ENABLE_DEBUG
+          if (GTK_DEBUG_CHECK (BUILDER))
+            {
+              for (i = 0; i < parameters.names->len; i++)
+                {
+                  const char *name = object_properties_get_name (&parameters, i);
+                  const GValue *value = object_properties_get_value (&parameters, i);
+                  char *str = g_strdup_value_contents (value);
+                  g_message ("set %s: %s = %s", info->id, name, str);
+                  g_free (str);
+                }
+            }
+#endif
+        }
     }
+
   object_properties_destroy (&parameters);
 
   if (info->bindings)
@@ -919,10 +931,6 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
                                GError     **error)
 {
   ObjectProperties parameters;
-  GtkBuildableIface *iface;
-  GtkBuildable *buildable;
-  gboolean custom_set_property;
-  int i;
 
   g_assert (info->object != NULL);
   g_assert (info->type != G_TYPE_INVALID);
@@ -936,36 +944,60 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
                               G_PARAM_CONSTRUCT_ONLY,
                               &parameters, NULL);
 
-
-  custom_set_property = FALSE;
-  buildable = NULL;
-  iface = NULL;
-  if (GTK_IS_BUILDABLE (info->object))
+  if (parameters.names)
     {
-      buildable = GTK_BUILDABLE (info->object);
-      iface = GTK_BUILDABLE_GET_IFACE (info->object);
-      if (iface->set_buildable_property)
-        custom_set_property = TRUE;
-    }
+      GtkBuildableIface *iface = NULL;
+      GtkBuildable *buildable = NULL;
+      gboolean custom_set_property = FALSE;
+      int i;
 
-  for (i = 0; i < parameters.len; i++)
-    {
-      const char *name = object_properties_get_name (&parameters, i);
-      const GValue *value = object_properties_get_value (&parameters, i);
-      if (custom_set_property)
-        iface->set_buildable_property (buildable, builder, name, value);
-      else
-        g_object_set_property (info->object, name, value);
-
-#ifdef G_ENABLE_DEBUG
-      if (GTK_DEBUG_CHECK (BUILDER))
+      if (GTK_IS_BUILDABLE (info->object))
         {
-          char *str = g_strdup_value_contents (value);
-          g_message ("set %s: %s = %s", info->id, name, str);
-          g_free (str);
+          buildable = GTK_BUILDABLE (info->object);
+          iface = GTK_BUILDABLE_GET_IFACE (info->object);
+          if (iface->set_buildable_property)
+            custom_set_property = TRUE;
         }
+
+      if (custom_set_property)
+        {
+          for (i = 0; i < parameters.names->len; i++)
+            {
+              const char *name = object_properties_get_name (&parameters, i);
+              const GValue *value = object_properties_get_value (&parameters, i);
+              iface->set_buildable_property (buildable, builder, name, value);
+#ifdef G_ENABLE_DEBUG
+              if (GTK_DEBUG_CHECK (BUILDER))
+                {
+                  char *str = g_strdup_value_contents (value);
+                  g_message ("set %s: %s = %s", info->id, name, str);
+                  g_free (str);
+                }
 #endif
+            }
+        }
+      else
+        {
+          g_object_setv (info->object,
+                         parameters.names->len,
+                         (const char **) parameters.names->pdata,
+                         (GValue *) parameters.values->data);
+#ifdef G_ENABLE_DEBUG
+          if (GTK_DEBUG_CHECK (BUILDER))
+            {
+              for (i = 0; i < parameters.names->len; i++)
+                {
+                  const char *name = object_properties_get_name (&parameters, i);
+                  const GValue *value = object_properties_get_value (&parameters, i);
+                  char *str = g_strdup_value_contents (value);
+                  g_message ("set %s: %s = %s", info->id, name, str);
+                  g_free (str);
+                }
+            }
+#endif
+        }
     }
+
   object_properties_destroy (&parameters);
 }
 
@@ -1923,9 +1955,9 @@ gboolean
 _gtk_builder_finish (GtkBuilder  *builder,
                      GError     **error)
 {
-  return gtk_builder_apply_delayed_properties (builder, error)
-      && gtk_builder_create_bindings (builder, error)
-      && gtk_builder_connect_signals (builder, error);
+  return gtk_builder_apply_delayed_properties (builder, error) &&
+         gtk_builder_create_bindings (builder, error) &&
+         gtk_builder_connect_signals (builder, error);
 }
 
 /**
@@ -1971,7 +2003,7 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
     {
       gunichar c;
       g_value_init (value, G_TYPE_UINT);
-      c = g_utf8_get_char_validated (string, strlen (string));
+      c = g_utf8_get_char_validated (string, -1);
       if (c != 0 && c != (gunichar)-1 && c != (gunichar)-2)
         g_value_set_uint (value, c);
       return TRUE;
@@ -2178,7 +2210,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       {
         guint flags_value;
 
-        if (!_gtk_builder_flags_from_string (type, NULL, string, &flags_value, error))
+        if (!_gtk_builder_flags_from_string (type, string, &flags_value, error))
           {
             ret = FALSE;
             break;
@@ -2543,9 +2575,9 @@ _gtk_builder_enum_from_string (GType         type,
   else
     {
       eclass = g_type_class_ref (type);
-      ev = g_enum_get_value_by_name (eclass, string);
+      ev = g_enum_get_value_by_nick (eclass, string);
       if (!ev)
-        ev = g_enum_get_value_by_nick (eclass, string);
+        ev = g_enum_get_value_by_name (eclass, string);
 
       if (ev)
         *enum_value = ev->value;
@@ -2567,14 +2599,13 @@ _gtk_builder_enum_from_string (GType         type,
 
 gboolean
 _gtk_builder_flags_from_string (GType         type,
-                                GFlagsValue  *aliases,
                                 const char   *string,
                                 guint        *flags_value,
                                 GError      **error)
 {
   GFlagsClass *fclass;
   char *endptr, *prevptr;
-  guint i, j, k, value;
+  guint i, j, value;
   char *flagstr;
   GFlagsValue *fv;
   const char *flag;
@@ -2636,18 +2667,6 @@ _gtk_builder_flags_from_string (GType         type,
               *endptr = '\0';
 
               fv = NULL;
-
-              if (aliases)
-                {
-                  for (k = 0; aliases[k].value_nick; k++)
-                    {
-                      if (g_ascii_strcasecmp (aliases[k].value_nick, flag) == 0)
-                        {
-                          fv = &aliases[k];
-                          break;
-                        }
-                    }
-                }
 
               if (!fv)
                 fv = g_flags_get_value_by_name (fclass, flag);
