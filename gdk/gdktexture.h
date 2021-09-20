@@ -84,6 +84,8 @@ GDK_AVAILABLE_IN_ALL
 int                     gdk_texture_get_width                  (GdkTexture      *texture) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 int                     gdk_texture_get_height                 (GdkTexture      *texture) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_6
+GdkColorSpace *         gdk_texture_get_color_space            (GdkTexture      *texture) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 void                    gdk_texture_download                   (GdkTexture      *texture,
