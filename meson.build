@@ -16,6 +16,7 @@ fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
+lcms2_req          = '>= 2.8'
 wayland_proto_req  = '>= 1.23'
 wayland_req        = '>= 1.20.0'
 graphene_req       = '>= 1.9.1'
@@ -393,6 +394,7 @@ pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
                             fallback : ['fribidi', 'libfribidi_dep'])
+lcms2_dep      = dependency('lcms2', version: lcms2_req)
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
