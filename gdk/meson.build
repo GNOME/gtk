@@ -31,6 +31,7 @@ gdk_public_sources = files([
   'gdkhsla.c',
   'gdkkeys.c',
   'gdkkeyuni.c',
+  'gdklcmscolorspace.c',
   'gdkmemoryformat.c',
   'gdkmemorytexture.c',
   'gdkmonitor.c',
