@@ -1035,6 +1035,12 @@ gtk_button_get_action_helper (GtkButton *button)
  * @child: (nullable): the child widget
  *
  * Sets the child widget of @button.
+ *
+ * Note that by using this API, you take full responsibility for setting
+ * up the proper accessibility label and description information for @button.
+ * Most likely, you'll either set the accessibility label or description
+ * for @button explicitly, or you'll set a labelled-by or described-by
+ * relations from @child to @button.
  */
 void
 gtk_button_set_child (GtkButton *button,
