@@ -18,6 +18,7 @@ struct _GdkTexture
   GdkMemoryFormat format;
   int width;
   int height;
+  GdkColorProfile *color_profile;
 
   gpointer render_key;
   gpointer render_data;
