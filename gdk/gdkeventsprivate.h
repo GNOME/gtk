@@ -495,6 +495,15 @@ GdkEvent * gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                           GdkModifierType     state,
                                           GdkScrollDirection  direction);
 
+GdkEvent * gdk_scroll_event_new_value120 (GdkSurface         *surface,
+                                          GdkDevice          *device,
+                                          GdkDeviceTool      *tool,
+                                          guint32             time,
+                                          GdkModifierType     state,
+                                          GdkScrollDirection  direction,
+                                          double              delta_x,
+                                          double              delta_y);
+
 GdkEvent * gdk_touch_event_new          (GdkEventType      type,
                                          GdkEventSequence *sequence,
                                          GdkSurface       *surface,

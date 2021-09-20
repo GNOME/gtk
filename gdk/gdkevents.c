@@ -2377,6 +2377,48 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
   return (GdkEvent *) self;
 }
 
+/*< private >
+ * gtk_scroll_event_new_value120:
+ * @surface: the `GdkSurface` of the event
+ * @device: the `GdkDevice` of the event
+ * @tool: (nullable): the tool that generated to event
+ * @time: the event serial
+ * @state: Flags to indicate the state of modifier keys and mouse buttons
+ *   in events.
+ * @direction: scroll direction.
+ * @delta_x: delta on the X axis in the 120.0 scale
+ * @delta_x: delta on the Y axis in the 120.0 scale
+ *
+ * Creates a new discrete GdkScrollEvent for high resolution mouse wheels.
+ *
+ * Both axes send data in fractions of 120 where each multiple of 120
+ * amounts to one logical scroll event. Fractions of 120 indicate a wheel
+ * movement less than one detent.
+ *
+ * Returns: the newly created scroll event
+ */
+GdkEvent *
+gdk_scroll_event_new_value120 (GdkSurface         *surface,
+                               GdkDevice          *device,
+                               GdkDeviceTool      *tool,
+                               guint32             time,
+                               GdkModifierType     state,
+                               GdkScrollDirection  direction,
+                               double              delta_x,
+                               double              delta_y)
+{
+  GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, time);
+
+  self->tool = tool != NULL ? g_object_ref (tool) : NULL;
+  self->state = state;
+  self->direction = direction;
+  self->delta_x = delta_x / 120.0;
+  self->delta_y = delta_y / 120.0;
+  self->unit = GDK_SCROLL_UNIT_WHEEL;
+
+  return (GdkEvent *) self;
+}
+
 /**
  * gdk_scroll_event_get_direction:
  * @event: (type GdkScrollEvent): a scroll event
