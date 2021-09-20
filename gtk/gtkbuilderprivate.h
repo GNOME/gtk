@@ -238,10 +238,9 @@ gboolean _gtk_builder_enum_from_string (GType         type,
                                         int          *enum_value,
                                         GError      **error);
 gboolean  _gtk_builder_flags_from_string (GType         type,
-                                          GFlagsValue  *aliases,
-					  const char   *string,
-					  guint        *value,
-					  GError      **error);
+                                          const char   *string,
+                                          guint        *value,
+                                          GError      **error);
 gboolean _gtk_builder_boolean_from_string (const char   *string,
                                            gboolean     *value,
                                            GError      **error);

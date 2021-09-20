@@ -1971,7 +1971,7 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
     {
       gunichar c;
       g_value_init (value, G_TYPE_UINT);
-      c = g_utf8_get_char_validated (string, strlen (string));
+      c = g_utf8_get_char_validated (string, -1);
       if (c != 0 && c != (gunichar)-1 && c != (gunichar)-2)
         g_value_set_uint (value, c);
       return TRUE;
@@ -2178,7 +2178,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
       {
         guint flags_value;
 
-        if (!_gtk_builder_flags_from_string (type, NULL, string, &flags_value, error))
+        if (!_gtk_builder_flags_from_string (type, string, &flags_value, error))
           {
             ret = FALSE;
             break;
@@ -2543,9 +2543,9 @@ _gtk_builder_enum_from_string (GType         type,
   else
     {
       eclass = g_type_class_ref (type);
-      ev = g_enum_get_value_by_name (eclass, string);
+      ev = g_enum_get_value_by_nick (eclass, string);
       if (!ev)
-        ev = g_enum_get_value_by_nick (eclass, string);
+        ev = g_enum_get_value_by_name (eclass, string);
 
       if (ev)
         *enum_value = ev->value;
@@ -2567,14 +2567,13 @@ _gtk_builder_enum_from_string (GType         type,
 
 gboolean
 _gtk_builder_flags_from_string (GType         type,
-                                GFlagsValue  *aliases,
                                 const char   *string,
                                 guint        *flags_value,
                                 GError      **error)
 {
   GFlagsClass *fclass;
   char *endptr, *prevptr;
-  guint i, j, k, value;
+  guint i, j, value;
   char *flagstr;
   GFlagsValue *fv;
   const char *flag;
@@ -2636,18 +2635,6 @@ _gtk_builder_flags_from_string (GType         type,
               *endptr = '\0';
 
               fv = NULL;
-
-              if (aliases)
-                {
-                  for (k = 0; aliases[k].value_nick; k++)
-                    {
-                      if (g_ascii_strcasecmp (aliases[k].value_nick, flag) == 0)
-                        {
-                          fv = &aliases[k];
-                          break;
-                        }
-                    }
-                }
 
               if (!fv)
                 fv = g_flags_get_value_by_name (fclass, flag);
