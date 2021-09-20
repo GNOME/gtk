@@ -203,6 +203,7 @@ gdk_deps = [
   fontconfig_dep,
   platform_gio_dep,
   pangocairo_dep,
+  lcms2_dep,
   vulkan_dep,
   png_dep,
   tiff_dep,
