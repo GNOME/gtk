@@ -2368,10 +2368,33 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                GdkScrollDirection  direction)
 {
   GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, time);
+  double delta_x = 0, delta_y = 0;
+
+  switch (direction)
+    {
+    case GDK_SCROLL_UP:
+      delta_y = -1;
+      break;
+    case GDK_SCROLL_DOWN:
+      delta_y = 1;
+      break;
+    case GDK_SCROLL_LEFT:
+      delta_x = -1;
+      break;
+    case GDK_SCROLL_RIGHT:
+      delta_x = 1;
+      break;
+    case GDK_SCROLL_SMOOTH:
+    default:
+      g_assert_not_reached ();
+      break;
+    }
 
   self->tool = tool != NULL ? g_object_ref (tool) : NULL;
   self->state = state;
   self->direction = direction;
+  self->delta_x = delta_x;
+  self->delta_y = delta_y;
   self->unit = GDK_SCROLL_UNIT_WHEEL;
 
   return (GdkEvent *) self;

@@ -416,25 +416,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
     }
   else
     {
-      switch (direction)
-        {
-        case GDK_SCROLL_UP:
-          dy -= 1;
-          break;
-        case GDK_SCROLL_DOWN:
-          dy += 1;
-          break;
-        case GDK_SCROLL_LEFT:
-          dx -= 1;
-          break;
-        case GDK_SCROLL_RIGHT:
-          dx += 1;
-          break;
-        case GDK_SCROLL_SMOOTH:
-        default:
-          g_assert_not_reached ();
-          break;
-        }
+      gdk_scroll_event_get_deltas (event, &dx, &dy);
 
       if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_VERTICAL) == 0)
         dy = 0;
