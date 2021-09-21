@@ -3000,6 +3000,9 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  if (priv->title_box == titlebar)
+    return;
+
   if ((!priv->title_box && titlebar) || (priv->title_box && !titlebar))
     {
       was_mapped = _gtk_widget_get_mapped (widget);
@@ -3020,19 +3023,18 @@ gtk_window_set_titlebar (GtkWindow *window,
       priv->client_decorated = FALSE;
       gtk_widget_remove_css_class (widget, "csd");
       gtk_widget_remove_css_class (widget, "solid-csd");
+    }
+  else
+    {
+      priv->use_client_shadow = gtk_window_supports_client_shadow (window);
 
-      goto out;
+      gtk_window_enable_csd (window);
+      priv->title_box = titlebar;
+      gtk_widget_insert_before (priv->title_box, widget, NULL);
+
+      gtk_widget_add_css_class (titlebar, "titlebar");
     }
 
-  priv->use_client_shadow = gtk_window_supports_client_shadow (window);
-
-  gtk_window_enable_csd (window);
-  priv->title_box = titlebar;
-  gtk_widget_insert_before (priv->title_box, widget, NULL);
-
-  gtk_widget_add_css_class (titlebar, "titlebar");
-
-out:
   if (was_mapped)
     gtk_widget_map (widget);
 }
