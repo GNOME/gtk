@@ -48,7 +48,6 @@ struct RecordDataTree {
   int n_attributes;
   RecordDataString *data;
   RecordDataString **attributes;
-  RecordDataString **values;
   GList *children;
 };
 
@@ -81,7 +80,6 @@ record_data_tree_free (RecordDataTree *tree)
 {
   g_list_free_full (tree->children, (GDestroyNotify)record_data_tree_free);
   g_free (tree->attributes);
-  g_free (tree->values);
   g_slice_free (RecordDataTree, tree);
 }
 
@@ -167,6 +165,7 @@ record_start_element (GMarkupParseContext  *context,
   gsize n_attrs = g_strv_length ((char **)names);
   RecordData *data = user_data;
   RecordDataTree *child;
+  RecordDataString **attr_names, **attr_values;
   int i;
 
   child = record_data_tree_new (data->current, RECORD_TYPE_ELEMENT,
@@ -174,13 +173,14 @@ record_start_element (GMarkupParseContext  *context,
   data->current = child;
 
   child->n_attributes = n_attrs;
-  child->attributes = g_new (RecordDataString *, n_attrs);
-  child->values = g_new (RecordDataString *, n_attrs);
+  child->attributes = g_new (RecordDataString *, n_attrs * 2);
 
+  attr_names = &child->attributes[0];
+  attr_values = &child->attributes[n_attrs];
   for (i = 0; i < n_attrs; i++)
     {
-      child->attributes[i] = record_data_string_lookup (data, names[i], -1);
-      child->values[i] = record_data_string_lookup (data, values[i], -1);
+      attr_names[i] = record_data_string_lookup (data, names[i], -1);
+      attr_values[i] = record_data_string_lookup (data, values[i], -1);
     }
 }
 
@@ -271,6 +271,7 @@ marshal_tree (GString        *marshaled,
 {
   GList *l;
   int i;
+  RecordDataString **attr_names, **attr_values;
 
   /* Special case the root */
   if (tree->parent == NULL)
@@ -286,10 +287,13 @@ marshal_tree (GString        *marshaled,
       marshal_uint32 (marshaled, RECORD_TYPE_ELEMENT);
       marshal_uint32 (marshaled, tree->data->offset);
       marshal_uint32 (marshaled, tree->n_attributes);
+
+      attr_names = &tree->attributes[0];
+      attr_values = &tree->attributes[tree->n_attributes];
       for (i = 0; i < tree->n_attributes; i++)
         {
-          marshal_uint32 (marshaled, tree->attributes[i]->offset);
-          marshal_uint32 (marshaled, tree->values[i]->offset);
+          marshal_uint32 (marshaled, attr_names[i]->offset);
+          marshal_uint32 (marshaled, attr_values[i]->offset);
         }
       for (l = g_list_last (tree->children); l != NULL; l = l->prev)
         marshal_tree (marshaled, l->data);
