@@ -3000,7 +3000,7 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (priv->title_box == titlebar)
+  if (priv->titlebar == titlebar)
     return;
 
   if ((!priv->title_box && titlebar) || (priv->title_box && !titlebar))
@@ -3029,6 +3029,7 @@ gtk_window_set_titlebar (GtkWindow *window,
       priv->use_client_shadow = gtk_window_supports_client_shadow (window);
 
       gtk_window_enable_csd (window);
+      priv->titlebar = titlebar;
       priv->title_box = titlebar;
       gtk_widget_insert_before (priv->title_box, widget, NULL);
 
@@ -3055,11 +3056,7 @@ gtk_window_get_titlebar (GtkWindow *window)
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
-  /* Don't return the internal titlebar */
-  if (priv->title_box == priv->titlebar)
-    return NULL;
-
-  return priv->title_box;
+  return priv->titlebar;
 }
 
 /**
@@ -4284,12 +4281,11 @@ gtk_window_realize (GtkWidget *widget)
 
             if (priv->title_box == NULL)
               {
-                priv->titlebar = gtk_header_bar_new ();
-                gtk_widget_add_css_class (priv->titlebar, "titlebar");
-                gtk_widget_add_css_class (priv->titlebar, "default-decoration");
+                priv->title_box = gtk_header_bar_new ();
+                gtk_widget_add_css_class (priv->title_box, "titlebar");
+                gtk_widget_add_css_class (priv->title_box, "default-decoration");
 
-                gtk_widget_insert_before (priv->titlebar, widget, NULL);
-                priv->title_box = priv->titlebar;
+                gtk_widget_insert_before (priv->title_box, widget, NULL);
               }
 
             update_window_actions (window);
