@@ -6200,7 +6200,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 static void
 gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
 {
-  if (cursor_blinks (text_view))
+  if (cursor_blinks (text_view) && cursor_visible (text_view))
     {
       remove_blink_timeout (text_view);
       add_blink_timeout (text_view, TRUE);
