@@ -53,10 +53,10 @@ struct RecordDataElement {
   RecordDataNode base;
 
   RecordDataElement *parent;
+  GQueue children;
   int n_attributes;
   RecordDataString *name;
-  RecordDataString **attributes;
-  GQueue children;
+  RecordDataString *attributes[];
 };
 
 typedef struct {
@@ -90,15 +90,18 @@ record_data_node_new (RecordDataElement *parent,
 
 static RecordDataElement *
 record_data_element_new (RecordDataElement *parent,
-                         RecordDataString  *name)
+                         RecordDataString  *name,
+                         gsize              n_attributes)
 {
   RecordDataElement *element;
 
   element = record_data_node_new (parent,
                                   RECORD_TYPE_ELEMENT,
-                                  sizeof (RecordDataElement));
+                                  sizeof (RecordDataElement) +
+                                  sizeof (RecordDataString) * n_attributes);
   element->parent = parent;
   element->name = name;
+  element->n_attributes = n_attributes;
 
   return element;
 }
@@ -135,8 +138,8 @@ record_data_node_free (RecordDataNode *node)
           l = next;
         }
 
-      g_free (element->attributes);
-      g_slice_free (RecordDataElement, element);
+      g_slice_free1 (sizeof (RecordDataElement) +
+                     sizeof (RecordDataString) * element->n_attributes, element);
       break;
     case RECORD_TYPE_TEXT:
       text = (RecordDataText *)node;
@@ -237,11 +240,8 @@ record_start_element (GMarkupParseContext  *context,
   int i;
 
   name = record_data_string_lookup (data, element_name, -1);
-  child = record_data_element_new (data->current, name);
+  child = record_data_element_new (data->current, name, n_attrs);
   data->current = child;
-
-  child->n_attributes = n_attrs;
-  child->attributes = g_new (RecordDataString *, n_attrs * 2);
 
   attr_names = &child->attributes[0];
   attr_values = &child->attributes[n_attrs];
@@ -425,7 +425,7 @@ _gtk_buildable_parser_precompile (const char  *text,
   data.strings = g_hash_table_new_full (record_data_string_hash, record_data_string_equal,
                                         (GDestroyNotify)record_data_string_free, NULL);
   data.chunks = g_string_chunk_new (512);
-  data.root = record_data_element_new (NULL, NULL);
+  data.root = record_data_element_new (NULL, NULL, 0);
   data.current = data.root;
 
   ctx = g_markup_parse_context_new (&record_parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
