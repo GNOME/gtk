@@ -50,7 +50,8 @@ struct RecordDataTree {
   int n_attributes;
   RecordDataString *data;
   RecordDataString **attributes;
-  GList *children;
+  GList link;
+  GQueue children;
 };
 
 typedef struct {
@@ -70,9 +71,10 @@ record_data_tree_new (RecordDataTree   *parent,
   tree->parent = parent;
   tree->type = type;
   tree->data = data;
+  tree->link.data = tree;
 
   if (parent)
-    parent->children = g_list_prepend  (parent->children, tree);
+    g_queue_push_tail_link (&parent->children, &tree->link);
 
   return tree;
 }
@@ -80,7 +82,16 @@ record_data_tree_new (RecordDataTree   *parent,
 static void
 record_data_tree_free (RecordDataTree *tree)
 {
-  g_list_free_full (tree->children, (GDestroyNotify)record_data_tree_free);
+  GList *l, *next;
+
+  l = tree->children.head;
+  while (l)
+    {
+      next = l->next;
+      record_data_tree_free (l->data);
+      l = next;
+    }
+
   g_free (tree->attributes);
   g_slice_free (RecordDataTree, tree);
 }
@@ -299,7 +310,7 @@ marshal_tree (GString        *marshaled,
   /* Special case the root */
   if (tree->parent == NULL)
     {
-      for (l = g_list_last (tree->children); l != NULL; l = l->prev)
+      for (l = tree->children.head; l != NULL; l = l->next)
         marshal_tree (marshaled, l->data);
       return;
     }
@@ -318,7 +329,7 @@ marshal_tree (GString        *marshaled,
           marshal_uint32 (marshaled, attr_names[i]->offset);
           marshal_uint32 (marshaled, attr_values[i]->offset);
         }
-      for (l = g_list_last (tree->children); l != NULL; l = l->prev)
+      for (l = tree->children.head; l != NULL; l = l->next)
         marshal_tree (marshaled, l->data);
 
       marshal_uint32 (marshaled, RECORD_TYPE_END_ELEMENT);
