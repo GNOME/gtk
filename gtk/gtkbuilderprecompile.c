@@ -393,7 +393,7 @@ _gtk_buildable_parser_precompile (const char  *text,
       offset += s->len + 1;
     }
 
-  marshaled = g_string_new ("");
+  marshaled = g_string_sized_new (4 + offset + 32);
   /* Magic marker */
   g_string_append_len (marshaled, "GBU\0", 4);
   marshal_uint32 (marshaled, offset);
