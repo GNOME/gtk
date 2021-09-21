@@ -1643,6 +1643,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                    NULL,
                                                    xev->time,
                                                    _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
+                                                   (double) xev->event_x / scale,
+                                                   (double) xev->event_x / scale,
                                                    direction,
                                                    FALSE);
                                                    
@@ -1746,6 +1748,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                        NULL,
                                                        xev->time,
                                                        state,
+                                                       (double) xev->event_x / scale,
+                                                       (double) xev->event_y / scale,
                                                        direction,
                                                        FALSE);
               }
@@ -1756,6 +1760,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                               NULL,
                                               xev->time,
                                               state,
+                                              (double) xev->event_x / scale,
+                                              (double) xev->event_y / scale,
                                               delta_x,
                                               delta_y,
                                               delta_x == 0.0 && delta_y == 0.0);

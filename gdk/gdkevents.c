@@ -603,9 +603,11 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
   GList *l;
   GdkSurface *surface = NULL;
   GdkDevice *device = NULL;
+  double x = 0.0, y = 0.0;
   GdkEvent *last_event = NULL;
   GList *scrolls = NULL;
   double delta_x, delta_y;
+  gboolean has_coords = FALSE;
   GArray *history = NULL;
   GdkTimeCoord hist;
 
@@ -614,6 +616,7 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
   while (l)
     {
       GdkEvent *event = l->data;
+      double event_x, event_y;
 
       if (event->flags & GDK_EVENT_PENDING)
         break;
@@ -630,11 +633,22 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
           device != event->device)
         break;
 
+      gdk_event_get_position (event, &event_x, &event_y);
+
+      if (has_coords && x != event_x)
+        break;
+
+      if (has_coords && y != event_y)
+        break;
+
       if (!last_event)
         last_event = event;
 
       surface = event->surface;
       device = event->device;
+      has_coords = TRUE;
+      x = event_x;
+      y = event_y;
       scrolls = l;
 
       l = l->prev;
@@ -681,6 +695,8 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
                                     gdk_event_get_device_tool (old_event),
                                     gdk_event_get_time (old_event),
                                     gdk_event_get_modifier_state (old_event),
+                                    x,
+                                    y,
                                     delta_x + dx,
                                     delta_y + dy,
                                     gdk_scroll_event_is_stop (old_event));
@@ -2273,6 +2289,19 @@ gdk_scroll_event_get_state (GdkEvent *event)
   return self->state;
 }
 
+static gboolean
+gdk_scroll_event_get_position (GdkEvent *event,
+                               double   *x,
+                               double   *y)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  *x = self->x;
+  *y = self->y;
+
+  return TRUE;
+}
+
 static GdkDeviceTool *
 gdk_scroll_event_get_tool (GdkEvent *event)
 {
@@ -2286,7 +2315,7 @@ static const GdkEventTypeInfo gdk_scroll_event_info = {
   NULL,
   gdk_scroll_event_finalize,
   gdk_scroll_event_get_state,
-  NULL,
+  gdk_scroll_event_get_position,
   NULL,
   gdk_scroll_event_get_tool,
   NULL,
@@ -2302,6 +2331,8 @@ gdk_scroll_event_new (GdkSurface      *surface,
                       GdkDeviceTool   *tool,
                       guint32          time,
                       GdkModifierType  state,
+                      double           x,
+                      double           y,
                       double           delta_x,
                       double           delta_y,
                       gboolean         is_stop)
@@ -2311,6 +2342,8 @@ gdk_scroll_event_new (GdkSurface      *surface,
   self->tool = tool != NULL ? g_object_ref (tool) : NULL;
   self->state = state;
   self->direction = GDK_SCROLL_SMOOTH;
+  self->x = x;
+  self->y = y;
   self->delta_x = delta_x;
   self->delta_y = delta_y;
   self->is_stop = is_stop;
@@ -2324,6 +2357,8 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                GdkDeviceTool      *tool,
                                guint32             time,
                                GdkModifierType     state,
+                               double              x,
+                               double              y,
                                GdkScrollDirection  direction,
                                gboolean            emulated)
 {
@@ -2331,6 +2366,8 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
 
   self->tool = tool != NULL ? g_object_ref (tool) : NULL;
   self->state = state;
+  self->x = x;
+  self->y = y;
   self->direction = direction;
   self->pointer_emulated = emulated;
 

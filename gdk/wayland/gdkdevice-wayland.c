@@ -1392,6 +1392,8 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
                                          NULL,
                                          seat->pointer_info.time,
                                          device_get_modifiers (seat->logical_pointer),
+                                         seat->pointer_info.surface_x,
+                                         seat->pointer_info.surface_y,
                                          direction,
                                          TRUE);
 
@@ -1413,6 +1415,8 @@ flush_smooth_scroll_event (GdkWaylandSeat *seat,
                                 NULL,
                                 seat->pointer_info.time,
                                 device_get_modifiers (seat->logical_pointer),
+                                seat->pointer_info.surface_x,
+                                seat->pointer_info.surface_y,
                                 delta_x, delta_y,
                                 is_stop);
 
@@ -3889,6 +3893,8 @@ tablet_tool_handle_wheel (void                      *data,
                                 tablet->current_tool->tool,
                                 tablet->pointer_info.time,
                                 device_get_modifiers (tablet->logical_device),
+                                tablet->pointer_info.surface_x,
+                                tablet->pointer_info.surface_y,
                                 0, clicks,
                                 FALSE);
 
@@ -3900,6 +3906,8 @@ tablet_tool_handle_wheel (void                      *data,
                                          tablet->current_tool->tool,
                                          tablet->pointer_info.time,
                                          device_get_modifiers (tablet->logical_device),
+                                         tablet->pointer_info.surface_x,
+                                         tablet->pointer_info.surface_y,
                                          clicks > 0 ? GDK_SCROLL_DOWN : GDK_SCROLL_UP,
                                          TRUE);
 

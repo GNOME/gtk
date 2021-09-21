@@ -226,6 +226,8 @@ struct _GdkScrollEvent
 {
   GdkEvent parent_instance;
 
+  double x;
+  double y;
   GdkModifierType state;
   GdkScrollDirection direction;
   double delta_x;
@@ -483,6 +485,8 @@ GdkEvent * gdk_scroll_event_new         (GdkSurface      *surface,
                                          GdkDeviceTool   *tool,
                                          guint32          time,
                                          GdkModifierType  state,
+                                         double           x,
+                                         double           y,
                                          double           delta_x,
                                          double           delta_y,
                                          gboolean         is_stop);
@@ -492,6 +496,8 @@ GdkEvent * gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                           GdkDeviceTool      *tool,
                                           guint32             time,
                                           GdkModifierType     state,
+                                          double              x,
+                                          double              y,
                                           GdkScrollDirection  direction,
                                           gboolean            emulated);
 
