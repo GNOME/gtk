@@ -936,8 +936,6 @@ parser_get_compose_table (GtkComposeParser *parser)
         }
       else
         {
-          g_assert (strlen (value) < 20);
-
           if (char_data->len > 0)
             g_string_append_c (char_data, 0);
 
@@ -1437,7 +1435,6 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
                   int char_offset = encoded_value & ~(1 << 15);
                   g_assert (char_offset < table->n_chars);
                   value = &table->char_data[char_offset];
-                  g_assert (strlen (value) < 20);
                 }
               else
                 {
