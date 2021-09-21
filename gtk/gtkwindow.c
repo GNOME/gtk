@@ -282,6 +282,7 @@ enum {
   PROP_DEFAULT_WIDGET,
   PROP_FOCUS_WIDGET,
   PROP_CHILD,
+  PROP_TITLEBAR,
   PROP_HANDLE_MENUBAR_ACCEL,
 
   /* Readonly properties */
@@ -1033,6 +1034,20 @@ gtk_window_class_init (GtkWindowClass *klass)
       g_param_spec_object ("child",
                            P_("Child"),
                            P_("The child widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWindow:titlebar: (attributes org.gtk.Property.get=gtk_window_get_titlebar org.gtk.Property.set=gtk_window_set_titlebar)
+   *
+   * The titlebar widget.
+   *
+   * Since: 4.6
+   */
+  window_props[PROP_TITLEBAR] =
+      g_param_spec_object ("titlebar",
+                           P_("Titlebar"),
+                           P_("The titlebar widget"),
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1815,6 +1830,9 @@ gtk_window_set_property (GObject      *object,
     case PROP_CHILD:
       gtk_window_set_child (window, g_value_get_object (value));
       break;
+    case PROP_TITLEBAR:
+      gtk_window_set_titlebar (window, g_value_get_object (value));
+      break;
     case PROP_HANDLE_MENUBAR_ACCEL:
       gtk_window_set_handle_menubar_accel (window, g_value_get_boolean (value));
       break;
@@ -1897,6 +1915,9 @@ gtk_window_get_property (GObject      *object,
       break;
     case PROP_CHILD:
       g_value_set_object (value, gtk_window_get_child (window));
+      break;
+    case PROP_TITLEBAR:
+      g_value_set_object (value, gtk_window_get_titlebar (window));
       break;
     case PROP_HANDLE_MENUBAR_ACCEL:
       g_value_set_boolean (value, gtk_window_get_handle_menubar_accel (window));
@@ -2974,7 +2995,7 @@ gtk_window_enable_csd (GtkWindow *window)
 }
 
 /**
- * gtk_window_set_titlebar:
+ * gtk_window_set_titlebar: (attributes org.gtk.Method.set_property=titlebar)
  * @window: a `GtkWindow`
  * @titlebar: (nullable): the widget to use as titlebar
  *
@@ -3038,10 +3059,12 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   if (was_mapped)
     gtk_widget_map (widget);
+
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TITLEBAR]);
 }
 
 /**
- * gtk_window_get_titlebar:
+ * gtk_window_get_titlebar: (attributes org.gtk.Method.get_property=titlebar)
  * @window: a `GtkWindow`
  *
  * Returns the custom titlebar that has been set with
