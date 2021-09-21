@@ -32,6 +32,12 @@ typedef enum
  RECORD_TYPE_TEXT,
 } RecordTreeType;
 
+typedef struct {
+  char *string;
+  int count;
+  int offset;
+} RecordDataString;
+
 typedef struct RecordDataTree RecordDataTree;
 
 /* All strings are owned by the string table */
@@ -39,22 +45,16 @@ struct RecordDataTree {
   RecordDataTree *parent;
   RecordTreeType type;
   int n_attributes;
-  const char *data;
-  const char **attributes;
-  const char **values;
+  RecordDataString *data;
+  RecordDataString **attributes;
+  RecordDataString **values;
   GList *children;
 };
 
-typedef struct {
-  char *string;
-  int count;
-  int offset;
-} RecordDataString;
-
 static RecordDataTree *
-record_data_tree_new (RecordDataTree *parent,
-                      RecordTreeType  type,
-                      const char     *data)
+record_data_tree_new (RecordDataTree   *parent,
+                      RecordTreeType    type,
+                      RecordDataString *data)
 {
   RecordDataTree *tree = g_slice_new0 (RecordDataTree);
 
@@ -84,7 +84,7 @@ record_data_string_free (RecordDataString *s)
   g_slice_free (RecordDataString, s);
 }
 
-static const char *
+static RecordDataString *
 record_data_string_lookup (GHashTable *strings,
                            const char *str,
                            gssize      len)
@@ -104,7 +104,7 @@ record_data_string_lookup (GHashTable *strings,
     {
       g_free (copy);
       s->count++;
-      return s->string;
+      return s;
     }
 
   s = g_slice_new (RecordDataString);
@@ -112,7 +112,7 @@ record_data_string_lookup (GHashTable *strings,
   s->count = 1;
 
   g_hash_table_insert (strings, s->string, s);
-  return s->string;
+  return s;
 }
 
 typedef struct {
@@ -139,8 +139,8 @@ record_start_element (GMarkupParseContext  *context,
   data->current = child;
 
   child->n_attributes = n_attrs;
-  child->attributes = g_new (const char *, n_attrs);
-  child->values = g_new (const char *, n_attrs);
+  child->attributes = g_new (RecordDataString *, n_attrs);
+  child->values = g_new (RecordDataString *, n_attrs);
 
   for (i = 0; i < n_attrs; i++)
     {
@@ -241,21 +241,7 @@ marshal_uint32 (GString *str,
 }
 
 static void
-marshal_string (GString    *marshaled,
-                GHashTable *strings,
-                const char *string)
-{
-  RecordDataString *s;
-
-  s = g_hash_table_lookup (strings, string);
-  g_assert (s != NULL);
-
-  marshal_uint32 (marshaled, s->offset);
-}
-
-static void
 marshal_tree (GString        *marshaled,
-              GHashTable     *strings,
               RecordDataTree *tree)
 {
   GList *l;
@@ -265,7 +251,7 @@ marshal_tree (GString        *marshaled,
   if (tree->parent == NULL)
     {
       for (l = g_list_last (tree->children); l != NULL; l = l->prev)
-        marshal_tree (marshaled, strings, l->data);
+        marshal_tree (marshaled, l->data);
       return;
     }
 
@@ -273,21 +259,21 @@ marshal_tree (GString        *marshaled,
     {
     case RECORD_TYPE_ELEMENT:
       marshal_uint32 (marshaled, RECORD_TYPE_ELEMENT);
-      marshal_string (marshaled, strings, tree->data);
+      marshal_uint32 (marshaled, tree->data->offset);
       marshal_uint32 (marshaled, tree->n_attributes);
       for (i = 0; i < tree->n_attributes; i++)
         {
-          marshal_string (marshaled, strings, tree->attributes[i]);
-          marshal_string (marshaled, strings, tree->values[i]);
+          marshal_uint32 (marshaled, tree->attributes[i]->offset);
+          marshal_uint32 (marshaled, tree->values[i]->offset);
         }
       for (l = g_list_last (tree->children); l != NULL; l = l->prev)
-        marshal_tree (marshaled, strings, l->data);
+        marshal_tree (marshaled, l->data);
 
       marshal_uint32 (marshaled, RECORD_TYPE_END_ELEMENT);
       break;
     case RECORD_TYPE_TEXT:
       marshal_uint32 (marshaled, RECORD_TYPE_TEXT);
-      marshal_string (marshaled, strings, tree->data);
+      marshal_uint32 (marshaled, tree->data->offset);
       break;
     case RECORD_TYPE_END_ELEMENT:
     default:
@@ -359,7 +345,7 @@ _gtk_buildable_parser_precompile (const char  *text,
 
   g_list_free (string_table);
 
-  marshal_tree (marshaled, data.strings, data.root);
+  marshal_tree (marshaled, data.root);
 
   record_data_tree_free (data.root);
   g_hash_table_destroy (data.strings);
