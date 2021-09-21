@@ -32,7 +32,7 @@
 #include "gtkcolorscaleprivate.h"
 #include "gtkenums.h"
 #include "gtkeventcontrollerkey.h"
-#include "gtkeventcontrollerscroll.h"
+#include "gtkeventcontrollerwheel.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturelongpressprivate.h"
 #include "gtkgestureclick.h"
@@ -237,10 +237,10 @@ static void          gtk_range_allocate_trough          (GtkGizmo            *gi
 static void          gtk_range_render_trough            (GtkGizmo     *gizmo,
                                                          GtkSnapshot  *snapshot);
 
-static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                                         double                    dx,
-                                                         double                    dy,
-                                                         GtkRange                 *range);
+static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerWheel *controller,
+                                                         double                   dx,
+                                                         double                   dy,
+                                                         GtkRange                *range);
 
 static void          gtk_range_set_orientation          (GtkRange       *range,
                                                          GtkOrientation  orientation);
@@ -583,7 +583,7 @@ gtk_range_init (GtkRange *range)
   gtk_widget_add_controller (GTK_WIDGET (range), GTK_EVENT_CONTROLLER (gesture));
   gtk_gesture_group (gesture, priv->drag_gesture);
 
-  controller = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_BOTH_AXES);
+  controller = gtk_event_controller_wheel_new ();
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (gtk_range_scroll_controller_scroll), range);
   gtk_widget_add_controller (GTK_WIDGET (range), controller);
@@ -2196,10 +2196,10 @@ stop_scrolling (GtkRange *range)
 }
 
 static gboolean
-gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
-                                    double                    dx,
-                                    double                    dy,
-                                    GtkRange                 *range)
+gtk_range_scroll_controller_scroll (GtkEventControllerWheel *controller,
+                                    double                   dx,
+                                    double                   dy,
+                                    GtkRange                *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   double scroll_unit, delta;
@@ -2282,8 +2282,9 @@ gtk_range_drag_gesture_update (GtkGestureDrag *gesture,
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
   double start_x, start_y;
+  gboolean scroll = gdk_event_get_event_type (gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture))) == GDK_SCROLL;
 
-  if (priv->grab_location == priv->slider_widget)
+  if (priv->grab_location == priv->slider_widget || scroll)
     {
       int mouse_x, mouse_y;
 
@@ -2293,7 +2294,7 @@ gtk_range_drag_gesture_update (GtkGestureDrag *gesture,
       priv->in_drag = TRUE;
       update_autoscroll_mode (range, mouse_x, mouse_y);
 
-      if (priv->autoscroll_mode == GTK_SCROLL_NONE)
+      if (priv->autoscroll_mode == GTK_SCROLL_NONE || scroll)
         update_slider_position (range, mouse_x, mouse_y);
     }
 }
@@ -2306,7 +2307,8 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
 
-  if (priv->grab_location == priv->slider_widget)
+  if (priv->grab_location == priv->slider_widget ||
+      gdk_event_get_event_type (gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture))) == GDK_SCROLL)
     gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
