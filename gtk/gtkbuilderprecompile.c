@@ -38,6 +38,8 @@ typedef struct {
   int len;
   int count;
   int offset;
+  int text_offset;
+  gboolean include_len;
 } RecordDataString;
 
 typedef struct RecordDataTree RecordDataTree;
@@ -130,6 +132,7 @@ record_data_string_lookup (RecordData *data,
                            gssize      len)
 {
   RecordDataString *s, tmp;
+  gboolean include_len = len >= 0;
 
   if (len < 0)
     len = strlen (str);
@@ -141,6 +144,7 @@ record_data_string_lookup (RecordData *data,
   if (s)
     {
       s->count++;
+      s->include_len |= include_len;
       return s;
     }
 
@@ -149,6 +153,7 @@ record_data_string_lookup (RecordData *data,
   s->string = g_string_chunk_insert_len (data->chunks, str, len);
   s->len = len;
   s->count = 1;
+  s->include_len = include_len;
 
   g_hash_table_add (data->strings, s);
   return s;
@@ -265,6 +270,24 @@ marshal_uint32 (GString *str,
     }
 }
 
+static int
+marshal_uint32_len (guint32 v)
+{
+  if (v < 128)
+    return 1;
+
+  if (v < (1<<14))
+    return 2;
+
+  if (v < (1<<21))
+    return 3;
+
+  if (v < (1<<28))
+    return 4;
+
+  return 5;
+}
+
 static void
 marshal_tree (GString        *marshaled,
               RecordDataTree *tree)
@@ -302,7 +325,7 @@ marshal_tree (GString        *marshaled,
       break;
     case RECORD_TYPE_TEXT:
       marshal_uint32 (marshaled, RECORD_TYPE_TEXT);
-      marshal_uint32 (marshaled, tree->data->offset);
+      marshal_uint32 (marshaled, tree->data->text_offset);
       break;
     case RECORD_TYPE_END_ELEMENT:
     default:
@@ -359,6 +382,13 @@ _gtk_buildable_parser_precompile (const char  *text,
   for (l = string_table; l != NULL; l = l->next)
     {
       RecordDataString *s = l->data;
+
+      if (s->include_len)
+        {
+          s->text_offset = offset;
+          offset += marshal_uint32_len (s->len);
+        }
+
       s->offset = offset;
       offset += s->len + 1;
     }
@@ -371,6 +401,10 @@ _gtk_buildable_parser_precompile (const char  *text,
   for (l = string_table; l != NULL; l = l->next)
     {
       RecordDataString *s = l->data;
+
+      if (s->include_len)
+        marshal_uint32 (marshaled, s->len);
+
       g_string_append_len (marshaled, s->string, s->len + 1);
     }
 
@@ -428,6 +462,18 @@ demarshal_string (const char **tree,
   guint32 offset = demarshal_uint32 (tree);
 
   return strings + offset;
+}
+
+static const char *
+demarshal_text (const char **tree,
+                const char  *strings,
+                guint32     *len)
+{
+  guint32 offset = demarshal_uint32 (tree);
+  const char *str = strings + offset;
+
+  *len = demarshal_uint32 (&str);
+  return str;
 }
 
 static void
@@ -507,14 +553,15 @@ replay_text (GtkBuildableParseContext  *context,
              const char                *strings,
              GError                   **error)
 {
+  guint32 len;
   const char *text;
   GError *tmp_error = NULL;
 
-  text = demarshal_string (tree, strings);
+  text = demarshal_text (tree, strings, &len);
 
   (*context->internal_callbacks->text) (NULL,
                                         text,
-                                        strlen (text),
+                                        len,
                                         context,
                                         &tmp_error);
 
