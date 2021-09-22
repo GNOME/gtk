@@ -409,6 +409,10 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
  *
  * Creates a new texture object representing the `GdkPixbuf`.
  *
+ * This function is threadsafe, so that you can e.g. use GTask
+ * and g_task_run_in_thread() to avoid blocking the main thread
+ * while loading a big image.
+ *
  * Returns: a new `GdkTexture`
  */
 GdkTexture *
@@ -451,6 +455,10 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * If you are unsure about the validity of a resource, use
  * [ctor@Gdk.Texture.new_from_file] to load it.
  *
+ * This function is threadsafe, so that you can e.g. use GTask
+ * and g_task_run_in_thread() to avoid blocking the main thread
+ * while loading a big image.
+ *
  * Return value: A newly-created `GdkTexture`
  */
 GdkTexture *
@@ -488,6 +496,10 @@ gdk_texture_new_from_resource (const char *resource_path)
  * are PNG and JPEG, though more formats might be available.
  *
  * If %NULL is returned, then @error will be set.
+ *
+ * This function is threadsafe, so that you can e.g. use GTask
+ * and g_task_run_in_thread() to avoid blocking the main thread
+ * while loading a big image.
  *
  * Return value: A newly-created `GdkTexture`
  */
@@ -578,6 +590,10 @@ gdk_texture_new_from_bytes_pixbuf (GBytes  *bytes,
  *
  * If %NULL is returned, then @error will be set.
  *
+ * This function is threadsafe, so that you can e.g. use GTask
+ * and g_task_run_in_thread() to avoid blocking the main thread
+ * while loading a big image.
+ *
  * Return value: A newly-created `GdkTexture`
  *
  * Since: 4.6
@@ -619,6 +635,10 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
  * are PNG and JPEG, though more formats might be available.
  *
  * If %NULL is returned, then @error will be set.
+ *
+ * This function is threadsafe, so that you can e.g. use GTask
+ * and g_task_run_in_thread() to avoid blocking the main thread
+ * while loading a big image.
  *
  * Return value: A newly-created `GdkTexture`
  */
