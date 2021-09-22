@@ -580,7 +580,7 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
                                      int     scale_factor)
 {
   LoaderData loader_data;
-  GdkPaintable *inner;
+  GdkTexture *texture;
   GdkPaintable *paintable;
 
   loader_data.scale_factor = scale_factor;
@@ -588,8 +588,8 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
   if (gdk_texture_can_load (bytes))
     {
       /* We know these formats can't be scaled */
-      inner = GDK_PAINTABLE (gdk_texture_new_from_bytes (bytes, NULL));
-      if (inner == NULL)
+      texture = gdk_texture_new_from_bytes (bytes, NULL);
+      if (texture == NULL)
         return NULL;
     }
   else
@@ -608,16 +608,16 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
       if (!success)
         return NULL;
 
-      inner = GDK_PAINTABLE (gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader)));
+      texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
       g_object_unref (loader);
     }
 
   if (loader_data.scale_factor != 1)
-    paintable = gtk_scaler_new (inner, loader_data.scale_factor);
+    paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale_factor);
   else
-    paintable = g_object_ref ((GdkPaintable *)inner);
+    paintable = g_object_ref ((GdkPaintable *)texture);
 
-  g_object_unref (inner);
+  g_object_unref (texture);
 
   return paintable;
 }
