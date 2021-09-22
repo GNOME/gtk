@@ -20,6 +20,7 @@
 #include "gdktiffprivate.h"
 
 #include "gdkintl.h"
+#include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexture.h"
