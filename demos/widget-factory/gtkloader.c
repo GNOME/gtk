@@ -17,11 +17,12 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#include "config.h"
-
 #include "gtkloaderprivate.h"
+#include <gtk/gtk.h>
 
-#include "gtksnapshot.h"
+enum {
+  PROP_RESOURCE = 1,
+};
 
 struct _GtkLoader
 {
@@ -67,7 +68,7 @@ gtk_loader_paintable_get_intrinsic_width (GdkPaintable *paintable)
   if (self->texture)
     return gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (self->texture));
 
-  return 16;
+  return 0;
 }
 
 static int
@@ -78,7 +79,7 @@ gtk_loader_paintable_get_intrinsic_height (GdkPaintable *paintable)
   if (self->texture)
     return gdk_paintable_get_intrinsic_height (GDK_PAINTABLE (self->texture));
 
-  return 16;
+  return 0;
 }
 
 static double
@@ -116,12 +117,40 @@ gtk_loader_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_loader_parent_class)->dispose (object);
 }
 
+static void gtk_loader_set_resource (GtkLoader *self, const char *resource);
+
+static void
+gtk_loader_set_property (GObject      *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GtkLoader *self = (GtkLoader *)object;
+
+  switch (prop_id)
+    {
+    case PROP_RESOURCE:
+      gtk_loader_set_resource (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 static void
 gtk_loader_class_init (GtkLoaderClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->dispose = gtk_loader_dispose;
+  gobject_class->set_property = gtk_loader_set_property;
+
+  g_object_class_install_property (gobject_class, PROP_RESOURCE,
+      g_param_spec_string ("resource", "", "",
+                           NULL,
+                           G_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void
@@ -135,11 +164,11 @@ load_texture_in_thread (GTask        *task,
                         gpointer      task_data,
                         GCancellable *cancellable)
 {
-  GBytes *bytes = task_data;
+  const char *resource = task_data;
   GdkTexture *texture;
   GError *error = NULL;
 
-  texture = gdk_texture_new_from_bytes (bytes, &error);
+  texture = gdk_texture_new_from_resource (resource);
 
   if (texture)
     g_task_return_pointer (task, texture, g_object_unref);
@@ -167,20 +196,20 @@ texture_finished (GObject      *source,
     }
 }
 
-GdkPaintable *
-gtk_loader_new (GBytes *bytes)
+static void
+gtk_loader_set_resource (GtkLoader  *self,
+                         const char *resource)
 {
-  GtkLoader *self;
   GTask *task;
 
-  g_return_val_if_fail (bytes != NULL, NULL);
-
-  self = g_object_new (GTK_TYPE_LOADER, NULL);
-
   task = g_task_new (self, NULL, texture_finished, NULL);
-  g_task_set_task_data (task, g_bytes_ref (bytes), (GDestroyNotify)g_bytes_unref);
+  g_task_set_task_data (task, g_strdup (resource), (GDestroyNotify)g_free);
   g_task_run_in_thread (task, load_texture_in_thread);
   g_object_unref (task);
+}
 
-  return GDK_PAINTABLE (self);
+GdkPaintable *
+gtk_loader_new (void)
+{
+  return g_object_new (GTK_TYPE_LOADER, NULL);
 }

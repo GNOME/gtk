@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GtkLoader, gtk_loader, GTK, LOADER, GObject)
 
-GdkPaintable *  gtk_loader_new          (GBytes *bytes);
+GdkPaintable *  gtk_loader_new          (void);
 
 G_END_DECLS
 
