@@ -146,3 +146,8 @@ gdk_color_space_new_from_icc_profile (GBytes  *icc_profile,
   return gdk_lcms_color_space_new_from_lcms_profile (lcms_profile);
 }
 
+cmsHPROFILE
+gdk_lcms_color_space_get_lcms_profile (GdkLcmsColorSpace *self)
+{
+  return self->lcms_profile;
+}

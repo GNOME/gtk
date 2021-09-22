@@ -21,6 +21,7 @@
 
 #include "gdkmemorytextureprivate.h"
 
+#include "gdkcolorspace.h"
 #include "gdkmemoryformatprivate.h"
 #include "gsk/gl/fp16private.h"
 
@@ -65,9 +66,11 @@ gdk_memory_texture_download (GdkTexture      *texture,
 
   gdk_memory_convert (data, stride,
                       format,
+                      gdk_color_space_get_srgb (),
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       texture->format,
+                      gdk_texture_get_color_space (texture),
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }

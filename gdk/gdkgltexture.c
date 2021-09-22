@@ -20,6 +20,7 @@
 
 #include "gdkgltextureprivate.h"
 
+#include "gdkcolorspace.h"
 #include "gdkdisplayprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
@@ -202,9 +203,11 @@ gdk_gl_texture_do_download (gpointer texture_,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              gdk_color_space_get_srgb (),
                               pixels,
                               texture->width * actual_bpp,
                               actual_format,
+                              texture->color_space,
                               texture->width,
                               texture->height);
 

@@ -42,6 +42,8 @@ GType                   gdk_lcms_color_space_get_type                   (void) G
 
 GdkColorSpace *         gdk_lcms_color_space_new_from_lcms_profile      (cmsHPROFILE             lcms_profile);
 
+cmsHPROFILE             gdk_lcms_color_space_get_lcms_profile           (GdkLcmsColorSpace      *self);
+
 G_END_DECLS
 
 #endif /* __GDK_LCMS_COLOR_SPACE_PRIVATE_H__ */

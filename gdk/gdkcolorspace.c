@@ -34,6 +34,7 @@
 #include "gdkcolorspaceprivate.h"
 
 #include "gdkintl.h"
+#include "gdklcmscolorspaceprivate.h"
 
 enum {
   PROP_0,
@@ -141,8 +142,7 @@ gdk_color_space_get_srgb (void)
     {
       GdkColorSpace *new_profile;
 
-      new_profile = NULL; //gdk_color_space_new_from_lcms_profile (cmsCreate_sRGBProfile (), NULL);
-      g_assert (new_profile);
+      new_profile = gdk_lcms_color_space_new_from_lcms_profile (cmsCreate_sRGBProfile ());
 
       g_once_init_leave (&srgb_profile, new_profile);
     }
