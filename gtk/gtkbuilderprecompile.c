@@ -40,6 +40,7 @@ typedef struct {
   int offset;
   int text_offset;
   gboolean include_len;
+  GList link;
 } RecordDataString;
 
 typedef struct {
@@ -68,6 +69,7 @@ typedef struct {
 typedef struct {
   GHashTable *strings;
   GStringChunk *chunks;
+  GQueue string_list;
   RecordDataElement *root;
   RecordDataElement *current;
 } RecordData;
@@ -184,7 +186,8 @@ record_data_string_hash (gconstpointer _a)
 
 static int
 record_data_string_compare (gconstpointer _a,
-                            gconstpointer _b)
+                            gconstpointer _b,
+                            gpointer      user_data)
 {
   const RecordDataString *a = _a;
   const RecordDataString *b = _b;
@@ -220,8 +223,12 @@ record_data_string_lookup (RecordData *data,
   s->len = len;
   s->count = 1;
   s->include_len = include_len;
+  s->link.data = s;
+  s->link.next = NULL;
+  s->link.prev = NULL;
 
   g_hash_table_add (data->strings, s);
+  g_queue_push_tail_link (&data->string_list, &s->link);
   return s;
 }
 
@@ -418,7 +425,7 @@ _gtk_buildable_parser_precompile (const char  *text,
 {
   GMarkupParseContext *ctx;
   RecordData data = { 0 };
-  GList *string_table, *l;
+  GList *l;
   GString *marshaled;
   int offset;
 
@@ -442,11 +449,10 @@ _gtk_buildable_parser_precompile (const char  *text,
 
   g_markup_parse_context_free (ctx);
 
-  string_table = g_hash_table_get_values (data.strings);
-  string_table = g_list_sort (string_table, record_data_string_compare);
+  g_queue_sort (&data.string_list, record_data_string_compare, NULL);
 
   offset = 0;
-  for (l = string_table; l != NULL; l = l->next)
+  for (l = data.string_list.head; l != NULL; l = l->next)
     {
       RecordDataString *s = l->data;
 
@@ -465,7 +471,7 @@ _gtk_buildable_parser_precompile (const char  *text,
   g_string_append_len (marshaled, "GBU\0", 4);
   marshal_uint32 (marshaled, offset);
 
-  for (l = string_table; l != NULL; l = l->next)
+  for (l = data.string_list.head; l != NULL; l = l->next)
     {
       RecordDataString *s = l->data;
 
@@ -474,8 +480,6 @@ _gtk_buildable_parser_precompile (const char  *text,
 
       g_string_append_len (marshaled, s->string, s->len + 1);
     }
-
-  g_list_free (string_table);
 
   marshal_tree (marshaled, &data.root->base);
 
