@@ -31,6 +31,41 @@ struct _TextureBuilder
   gsize offset;
 };
 
+static float
+gdk_memory_format_precsion (GdkMemoryFormat format)
+{
+  switch (format)
+    {
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_A8B8G8R8:
+      return 1/256.f;
+
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+      return 1/65536.f;
+
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+      return 0.0009765625f;
+
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+      return FLT_EPSILON;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+
 static gsize
 gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
 {
@@ -602,7 +637,7 @@ test_download_float_1x1 (gconstpointer data)
       test = create_texture (format, method, 1, 1, &color);
       
       compare_textures_float (expected, test,
-                              G_MINFLOAT,
+                              gdk_memory_format_precsion (format),
                               gdk_memory_format_has_alpha (format));
 
       g_object_unref (expected);
@@ -628,7 +663,9 @@ test_download_float_4x4 (gconstpointer data)
       expected = create_texture (GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, TEXTURE_METHOD_LOCAL, 4, 4, &color);
       test = create_texture (format, method, 4, 4, &color);
       
-      compare_textures_float (expected, test, G_MINFLOAT, gdk_memory_format_has_alpha (format));
+      compare_textures_float (expected, test,
+                              gdk_memory_format_precsion (format),
+                              gdk_memory_format_has_alpha (format));
 
       g_object_unref (expected);
       g_object_unref (test);
@@ -655,7 +692,7 @@ add_test (const char    *name,
                                              name,
                                              g_enum_get_value (enum_class, format)->value_nick,
                                              method_names[method]);
-          g_test_add_data_func_full (test_name, encode (format, method), test_download_1x1, NULL);
+          g_test_add_data_func_full (test_name, encode (format, method), func, NULL);
           g_free (test_name);
         }
     }
