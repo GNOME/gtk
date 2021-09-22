@@ -1251,7 +1251,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="child">
                                   <object class="GtkPicture">
-                                    <property name="file">resource:///org/gtk/WidgetFactory4/sunset.jpg</property>
+                                    <property name="paintable">
+                                      <object class="GtkLoader">
+                                        <property name="resource">/org/gtk/WidgetFactory4/sunset.jpg</property>
+                                      </object>
+                                    </property> 
                                     <child>
                                       <object class="GtkDragSource">
                                         <property name="actions">copy</property>
@@ -1278,7 +1282,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="child">
                                   <object class="GtkPicture">
-                                    <property name="file">resource:///org/gtk/WidgetFactory4/nyc.jpg</property>
+                                    <property name="paintable">
+                                      <object class="GtkLoader">
+                                        <property name="resource">/org/gtk/WidgetFactory4/nyc.jpg</property>
+                                      </object>
+                                    </property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <property name="actions">copy</property>
@@ -1305,7 +1313,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="child">
                                   <object class="GtkPicture">
-                                    <property name="file">resource:///org/gtk/WidgetFactory4/beach.jpg</property>
+                                    <property name="paintable">
+                                      <object class="GtkLoader">
+                                        <property name="resource">/org/gtk/WidgetFactory4/beach.jpg</property>
+                                      </object>
+                                    </property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <property name="actions">copy</property>
