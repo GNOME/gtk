@@ -26,6 +26,7 @@
 #include <string.h>
 
 #include <gdk/gdkglcontextprivate.h>
+#include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gsk/gskdebugprivate.h>

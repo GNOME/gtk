@@ -79,6 +79,7 @@
 #include "gdkdebug.h"
 #include "gdkdisplayprivate.h"
 #include "gdkintl.h"
+#include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 
@@ -303,7 +304,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
     {
       copy = g_malloc (width * height * 4);
       gdk_memory_convert (copy, width * 4,
-                          GDK_MEMORY_CONVERT_GLES_RGBA,
+                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
                           data, stride, data_format,
                           width, height);
       data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;

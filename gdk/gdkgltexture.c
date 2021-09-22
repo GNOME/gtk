@@ -21,6 +21,7 @@
 #include "gdkgltextureprivate.h"
 
 #include "gdkdisplayprivate.h"
+#include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdktextureprivate.h"
 
