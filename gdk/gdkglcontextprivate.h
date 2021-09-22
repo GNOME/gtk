@@ -111,6 +111,7 @@ void                    gdk_gl_context_upload_texture           (GdkGLContext   
                                                                  int              height,
                                                                  int              stride,
                                                                  GdkMemoryFormat  data_format,
+                                                                 GdkColorProfile *color_profile,
                                                                  guint            texture_target);
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,

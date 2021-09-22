@@ -235,6 +235,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
                                int              height,
                                int              stride,
                                GdkMemoryFormat  data_format,
+                               GdkColorProfile *color_profile,
                                guint            texture_target)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
@@ -305,7 +306,10 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
       copy = g_malloc (width * height * 4);
       gdk_memory_convert (copy, width * 4,
                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                          data, stride, data_format,
+                          gdk_color_profile_get_srgb (),
+                          data, stride,
+                          data_format,
+                          color_profile,
                           width, height);
       data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       stride = width * 4;

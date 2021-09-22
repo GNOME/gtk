@@ -21,6 +21,7 @@
 
 #include "gdkmemoryformatprivate.h"
 
+#include "gdkcolorprofileprivate.h"
 #include "gsk/ngl/fp16private.h"
 
 typedef struct _GdkMemoryFormatDescription GdkMemoryFormatDescription;
@@ -44,6 +45,7 @@ name ## _to_float (float        *dest, \
       dest[1] = (float) src[G] / scale; \
       dest[2] = (float) src[B] / scale; \
       if (A >= 0) dest[3] = (float) src[A] / scale; else dest[3] = 1.0; \
+      dest += 4; \
     } \
 } \
 \
@@ -59,6 +61,7 @@ name ## _from_float (guchar      *dest_data, \
       dest[G] = CLAMP (src[1] * (scale + 1), 0, scale); \
       dest[B] = CLAMP (src[2] * (scale + 1), 0, scale); \
       if (A >= 0) dest[A] = CLAMP (src[3] * (scale + 1), 0, scale); \
+      src += 4; \
     } \
 }
 
@@ -318,11 +321,13 @@ unpremultiply (float *rgba,
 {
   for (gsize i = 0; i < n; i++)
     {
-      if (rgba[3] <= 1/255.0)
-        continue;
-      rgba[0] /= rgba[3];
-      rgba[1] /= rgba[3];
-      rgba[2] /= rgba[3];
+      if (rgba[3] > 1/255.0)
+        {
+          rgba[0] /= rgba[3];
+          rgba[1] /= rgba[3];
+          rgba[2] /= rgba[3];
+        }
+      rgba += 4;
     }
 }
 
@@ -330,14 +335,17 @@ void
 gdk_memory_convert (guchar              *dest_data,
                     gsize                dest_stride,
                     GdkMemoryFormat      dest_format,
+                    GdkColorProfile     *dest_profile,
                     const guchar        *src_data,
                     gsize                src_stride,
                     GdkMemoryFormat      src_format,
+                    GdkColorProfile     *src_profile,
                     gsize                width,
                     gsize                height)
 {
   const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
   const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+  cmsHTRANSFORM transform;
   float *tmp;
   gsize y;
 
@@ -346,17 +354,46 @@ gdk_memory_convert (guchar              *dest_data,
 
   tmp = g_new (float, width * 4);
 
+  if (gdk_color_profile_equal (src_profile, dest_profile))
+    {
+      transform = NULL;
+    }
+  else
+    {
+      transform = cmsCreateTransform (gdk_color_profile_get_lcms_profile (src_profile),
+                                      TYPE_RGBA_FLT,
+                                      gdk_color_profile_get_lcms_profile (dest_profile),
+                                      TYPE_RGBA_FLT,
+                                      INTENT_PERCEPTUAL,
+                                      cmsFLAGS_COPY_ALPHA);
+    }
+
   for (y = 0; y < height; y++)
     {
       src_desc->to_float (tmp, src_data, width);
-      if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
-        unpremultiply (tmp, width);
-      else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
-        premultiply (tmp, width);
+      if (transform)
+        {
+          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+            unpremultiply (tmp, width);
+          cmsDoTransform (transform,
+                          tmp,
+                          tmp,
+                          width);
+          if (dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+            premultiply (tmp, width);
+        }
+      else
+        {
+          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
+            unpremultiply (tmp, width);
+          else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+            premultiply (tmp, width);
+        }
       dest_desc->from_float (dest_data, tmp, width);
       src_data += src_stride;
       dest_data += dest_stride;
     }
 
   g_free (tmp);
+  g_clear_pointer (&transform, cmsDeleteTransform);
 }

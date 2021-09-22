@@ -21,6 +21,7 @@
 
 #include "gdkmemorytextureprivate.h"
 
+#include "gdkcolorprofile.h"
 #include "gdkmemoryformatprivate.h"
 #include "gsk/ngl/fp16private.h"
 
@@ -72,9 +73,11 @@ gdk_memory_texture_download (GdkTexture *texture,
 
   gdk_memory_convert (data, stride,
                       GDK_MEMORY_DEFAULT,
+                      gdk_color_profile_get_srgb (),
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       self->format,
+                      gdk_texture_get_color_profile (texture),
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }
@@ -89,9 +92,11 @@ gdk_memory_texture_download_float (GdkTexture *texture,
   gdk_memory_convert ((guchar *) data,
                       stride * sizeof (float),
                       GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+                      gdk_color_profile_get_srgb (),
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       self->format,
+                      gdk_texture_get_color_profile (texture),
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }

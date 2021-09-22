@@ -1386,7 +1386,9 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
   gdk_gl_context_upload_texture (gdk_gl_context_get_current (),
                                  data + x_offset * bpp + y_offset * data_stride,
                                  width, height, data_stride,
-                                 data_format, GL_TEXTURE_2D);
+                                 data_format,
+                                 gdk_color_profile_get_srgb (),
+                                 GL_TEXTURE_2D);
 
   /* Restore previous texture state if any */
   if (self->attachments->textures[0].id > 0)
