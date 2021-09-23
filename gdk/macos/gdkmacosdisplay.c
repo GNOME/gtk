@@ -641,6 +641,9 @@ static GdkGLContext *
 gdk_macos_display_init_gl (GdkDisplay  *display,
                            GError     **error)
 {
+  if (!gdk_gl_backend_can_be_used (GDK_GL_CGL, error))
+    return FALSE;
+
   return g_object_new (GDK_TYPE_MACOS_GL_CONTEXT,
                        "display", display,
                        NULL);
