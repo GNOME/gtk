@@ -23,9 +23,11 @@
     <file>sRGB_Gray.jpg</file>
     <file>sRGB_Gray.png</file>
     <file>sRGB_Gray.tif</file>
-    <file>ICC Rendering Intent Test (cLUT only).jpg</file>
-    <file>ICC Rendering Intent Test (cLUT only).png</file>
-    <file>ICC Rendering Intent Test (cLUT only).tif</file>
+    <file>sRGB_Gray-expected-result-no-cm.png</file>
+    <file>ICC-Rendering-Intent-Test.png</file>
+    <file>ICC-Rendering-Intent-Test.jpg</file>
+    <file>ICC-Rendering-Intent-Test.tif</file>
+    <file>ICC-Rendering-Intent-Test-expected-result-no-cm.png</file>
   </gresource>
   <gresource prefix="/constraints_builder">
     <file>constraints_builder.ui</file>

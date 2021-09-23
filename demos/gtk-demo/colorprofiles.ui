@@ -5,167 +5,85 @@
     <property name="resizable">false</property>
     <property name="title">Color Profiles</property>
     <child>
-      <object class="GtkBox">
-        <property name="orientation">vertical</property>
+      <object class="GtkScrolledWindow">
         <child>
-          <object class="GtkStackSwitcher">
-            <property name="stack">stack</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkStack" id="stack">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">10</property>
+            <property name="margin-top">10</property>
+            <property name="margin-bottom">10</property>
+            <property name="margin-start">10</property>
+            <property name="margin-end">10</property>
             <child>
-              <object class="GtkStackPage">
-                <property name="name">page1</property>
-                <property name="title">JPEG</property>
-                <property name="child">
-                  <object class="GtkScrolledWindow">
-                    <child>
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">10</property>
-                        <property name="margin-top">10</property>
-                        <property name="margin-bottom">10</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Test 1: Matrix-based profile</property>
-                            <style>
-                              <class name="title-3"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkPicture">
-                            <property name="hexpand">1</property>
-                            <property name="vexpand">1</property>
-                            <property name="can-shrink">1</property>
-                            <property name="keep-aspect-ratio">1</property>
-                            <property name="file">resource:///colorprofiles/sRGB_Gray.jpg</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Test 2: Lookup table-based profile</property>
-                            <style>
-                              <class name="title-3"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkPicture">
-                            <property name="hexpand">1</property>
-                            <property name="vexpand">1</property>
-                            <property name="can-shrink">1</property>
-                            <property name="keep-aspect-ratio">1</property>
-                            <property name="file">resource:///colorprofiles/ICC Rendering Intent Test (cLUT only).jpg</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+              <object class="GtkBox">
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">File format:</property>
                   </object>
-                </property>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="jpeg">
+                    <property name="label">JPEG</property>
+                    <property name="active">1</property>
+                    <signal name="notify::active" handler="on_changed"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="png">
+                    <property name="label">PNG</property>
+                    <property name="group">jpeg</property>
+                    <signal name="notify::active" handler="on_changed"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="tiff">
+                    <property name="label">TIFF</property>
+                    <property name="group">png</property>
+                    <signal name="notify::active" handler="on_changed"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="noprofile">
+                    <property name="label">No profile</property>
+                    <property name="group">tiff</property>
+                    <signal name="notify::active" handler="on_changed"/>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
-              <object class="GtkStackPage">
-                <property name="name">page2</property>
-                <property name="title">PNG</property>
-                <property name="child">
-                  <object class="GtkScrolledWindow">
-                    <child>
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">10</property>
-                        <property name="margin-top">10</property>
-                        <property name="margin-bottom">10</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Test 1: Matrix-based profile</property>
-                            <style>
-                              <class name="title-3"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkPicture">
-                            <property name="hexpand">1</property>
-                            <property name="vexpand">1</property>
-                            <property name="can-shrink">1</property>
-                            <property name="keep-aspect-ratio">1</property>
-                            <property name="file">resource:///colorprofiles/sRGB_Gray.png</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Test 2: Lookup table-based profile</property>
-                            <style>
-                              <class name="title-3"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkPicture">
-                            <property name="hexpand">1</property>
-                            <property name="vexpand">1</property>
-                            <property name="can-shrink">1</property>
-                            <property name="keep-aspect-ratio">1</property>
-                            <property name="file">resource:///colorprofiles/ICC Rendering Intent Test (cLUT only).png</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </property>
+              <object class="GtkLabel">
+                <property name="label">Test 1: Matrix-based profile</property>
+                <style>
+                  <class name="title-3"/>
+                </style>
               </object>
             </child>
             <child>
-              <object class="GtkStackPage">
-                <property name="name">page3</property>
-                <property name="title">TIFF</property>
-                <property name="child">
-                  <object class="GtkScrolledWindow">
-                    <child>
-                      <object class="GtkBox">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">10</property>
-                        <property name="margin-top">10</property>
-                        <property name="margin-bottom">10</property>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Test 1: Matrix-based profile</property>
-                            <style>
-                              <class name="title-3"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkPicture">
-                            <property name="hexpand">1</property>
-                            <property name="can-shrink">1</property>
-                            <property name="keep-aspect-ratio">1</property>
-                            <property name="file">resource:///colorprofiles/sRGB_Gray.tif</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel">
-                            <property name="label">Test 2: Lookup table-based profile</property>
-                            <style>
-                              <class name="title-3"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkPicture">
-                            <property name="hexpand">1</property>
-                            <property name="can-shrink">1</property>
-                            <property name="keep-aspect-ratio">1</property>
-                            <property name="file">resource:///colorprofiles/ICC Rendering Intent Test (cLUT only).tif</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </property>
+              <object class="GtkPicture" id="test1">
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <property name="can-shrink">1</property>
+                <property name="keep-aspect-ratio">1</property>
+                <property name="file">resource:///colorprofiles/sRGB_Gray.jpg</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Test 2: Lookup table-based profile</property>
+                <style>
+                  <class name="title-3"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkPicture" id="test2">
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <property name="can-shrink">1</property>
+                <property name="keep-aspect-ratio">1</property>
+                <property name="file">resource:///colorprofiles/ICC-Rendering-Intent-Test.jpg</property>
               </object>
             </child>
           </object>
