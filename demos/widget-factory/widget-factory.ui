@@ -1347,13 +1347,173 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkNotebookPage">
                                 <property name="child">
-                                  <object class="GtkBox" id="box8">
-                                    <property name="orientation">1</property>
+                                  <object class="GtkGrid">
+                                    <property name="hexpand">0</property>
+                                    <property name="row-spacing">6</property>
+                                    <property name="column-spacing">6</property>
+                                    <property name="margin-start">6</property>
+                                    <property name="margin-end">6</property>
+                                    <property name="margin-top">6</property>
+                                    <property name="margin-bottom">6</property>
+                                    <property name="row-homogeneous">1</property>
+                                    <property name="valign">start</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">color</property>
+                                        <style>
+                                          <class name="caption-heading"/>
+                                        </style>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
+                                          <property name="column-span">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">sRGB</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPicture">
+                                        <property name="file">resource:///org/gtk/WidgetFactory4/srgb-gradient-color.png</property>
+                                        <property name="can-shrink">0</property>
+                                        <property name="keep-aspect-ratio">0</property>
+                                        <property name="hexpand">1</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">GTK</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPicture">
+                                        <property name="width-request">128</property>
+                                        <property name="keep-aspect-ratio">0</property>
+                                        <style>
+                                          <class name="gtk-gradient-color"/>
+                                        </style>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">linear</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPicture">
+                                        <property name="file">resource:///org/gtk/WidgetFactory4/linear-gradient-color.png</property>
+                                        <property name="can-shrink">0</property>
+                                        <property name="keep-aspect-ratio">0</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">monochrome</property>
+                                        <style>
+                                          <class name="caption-heading"/>
+                                        </style>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">4</property>
+                                          <property name="column-span">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">sRGB</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">5</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPicture">
+                                        <property name="file">resource:///org/gtk/WidgetFactory4/srgb-gradient-monochrome.png</property>
+                                        <property name="can-shrink">0</property>
+                                        <property name="keep-aspect-ratio">0</property>
+                                        <property name="hexpand">1</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">5</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">GTK</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">6</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPicture">
+                                        <property name="width-request">128</property>
+                                        <property name="keep-aspect-ratio">0</property>
+                                        <style>
+                                          <class name="gtk-gradient-monochrome"/>
+                                        </style>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">6</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">linear</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">7</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkPicture">
+                                        <property name="file">resource:///org/gtk/WidgetFactory4/linear-gradient-monochrome.png</property>
+                                        <property name="can-shrink">0</property>
+                                        <property name="keep-aspect-ratio">0</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">7</property>
+                                        </layout>
+                                      </object>
+                                    </child>
                                   </object>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label8">
-                                    <property name="label" translatable="1">page 1</property>
+                                    <property name="label" translatable="1">Gradients</property>
                                   </object>
                                 </property>
                               </object>
