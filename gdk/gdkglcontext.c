@@ -76,6 +76,7 @@
 
 #include "gdkglcontextprivate.h"
 
+#include "gdkcolorprofile.h"
 #include "gdkdebug.h"
 #include "gdkdisplayprivate.h"
 #include "gdkintl.h"
@@ -230,24 +231,40 @@ gdk_gl_context_get_property (GObject    *gobject,
 
 void
 gdk_gl_context_upload_texture (GdkGLContext    *context,
-                               const guchar    *data,
+                               GdkTexture      *texture,
+                               int              x,
+                               int              y,
                                int              width,
                                int              height,
-                               int              stride,
-                               GdkMemoryFormat  data_format,
-                               GdkColorProfile *color_profile,
                                guint            texture_target)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkMemoryTexture *memory_texture;
+  GdkMemoryFormat data_format;
+  GdkColorProfile *color_profile;
   guchar *copy = NULL;
   GLint gl_internalformat;
   GLint gl_format;
   GLint gl_type;
-  gsize bpp;
+  gsize bpp, stride;
+  const guchar *data;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  if (!priv->use_es && data_format == GDK_MEMORY_DEFAULT) /* Cairo surface format */
+  color_profile = gdk_texture_get_color_profile (texture);
+  memory_texture = GDK_MEMORY_TEXTURE (gdk_texture_download_texture (texture));
+  data_format = gdk_memory_texture_get_format (memory_texture);
+  bpp = gdk_memory_format_bytes_per_pixel (data_format);
+  stride = gdk_memory_texture_get_stride (memory_texture);
+  data = gdk_memory_texture_get_data (memory_texture);
+
+  data += x * bpp + y * stride;
+
+  if (color_profile != gdk_color_profile_get_srgb ())
+    {
+      goto fallback;
+    }
+  else if (!priv->use_es && data_format == GDK_MEMORY_DEFAULT) /* Cairo surface format */
     {
       gl_internalformat = GL_RGBA8;
       gl_format = GL_BGRA;
@@ -303,6 +320,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
     }
   else /* Fall-back, convert to GLES format */
     {
+fallback:
       copy = g_malloc (width * height * 4);
       gdk_memory_convert (copy, width * 4,
                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
@@ -314,12 +332,11 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
       data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       stride = width * 4;
       data = copy;
+      bpp = 4;
       gl_internalformat = GL_RGBA8;
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
     }
-
-  bpp = gdk_memory_format_bytes_per_pixel (data_format);
 
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
    * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
@@ -349,6 +366,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
     }
 
   g_free (copy);
+  g_clear_object (&memory_texture);
 }
 
 #define N_EGL_ATTRS     16

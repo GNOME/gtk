@@ -1331,11 +1331,6 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
                                       int                 mag_filter)
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
-  cairo_surface_t *surface = NULL;
-  GdkMemoryFormat data_format;
-  const guchar *data;
-  gsize data_stride;
-  gsize bpp;
   int texture_id;
 
   g_assert (GSK_IS_NGL_COMMAND_QUEUE (self));
@@ -1358,44 +1353,22 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
   if (texture_id == -1)
     return texture_id;
 
-  if (GDK_IS_MEMORY_TEXTURE (texture))
-    {
-      GdkMemoryTexture *memory_texture = GDK_MEMORY_TEXTURE (texture);
-      data = gdk_memory_texture_get_data (memory_texture);
-      data_format = gdk_memory_texture_get_format (memory_texture);
-      data_stride = gdk_memory_texture_get_stride (memory_texture);
-    }
-  else
-    {
-      /* Fall back to downloading to a surface */
-      surface = gdk_texture_download_surface (texture);
-      cairo_surface_flush (surface);
-      data = cairo_image_surface_get_data (surface);
-      data_format = GDK_MEMORY_DEFAULT;
-      data_stride = cairo_image_surface_get_stride (surface);
-    }
-
   self->n_uploads++;
-
-  bpp = gdk_memory_format_bytes_per_pixel (data_format);
 
   /* Switch to texture0 as 2D. We'll restore it later. */
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
   gdk_gl_context_upload_texture (gdk_gl_context_get_current (),
-                                 data + x_offset * bpp + y_offset * data_stride,
-                                 width, height, data_stride,
-                                 data_format,
-                                 gdk_color_profile_get_srgb (),
+                                 texture,
+                                 x_offset, y_offset,
+                                 width, height,
                                  GL_TEXTURE_2D);
 
   /* Restore previous texture state if any */
   if (self->attachments->textures[0].id > 0)
     glBindTexture (self->attachments->textures[0].target,
                    self->attachments->textures[0].id);
-
-  g_clear_pointer (&surface, cairo_surface_destroy);
 
   if (gdk_profiler_is_running ())
     gdk_profiler_add_markf (start_time, GDK_PROFILER_CURRENT_TIME-start_time,
