@@ -118,5 +118,9 @@
     <file>portland-rose.jpg</file>
     <file>nyc.jpg</file>
     <file>beach.jpg</file>
+    <file>linear-gradient-color.png</file>
+    <file>linear-gradient-monochrome.png</file>
+    <file>srgb-gradient-color.png</file>
+    <file>srgb-gradient-monochrome.png</file>
   </gresource>
 </gresources>

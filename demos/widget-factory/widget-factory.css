@@ -6,3 +6,10 @@
 .toolbar {
   -gtk-icon-style: symbolic;
 }
+
+.gtk-gradient-color {
+  background: linear-gradient(to right, lime, red);
+}
+.gtk-gradient-monochrome {
+  background: linear-gradient(to right, black, white);
+}
