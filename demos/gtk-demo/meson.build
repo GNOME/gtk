@@ -5,6 +5,7 @@ demos = files([
   'assistant.c',
   'builder.c',
   'clipboard.c',
+  'colorspaces.c',
   'combobox.c',
   'constraints.c',
   'constraints_interactive.c',
