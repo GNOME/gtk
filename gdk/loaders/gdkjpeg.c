@@ -24,6 +24,8 @@
 #include <glib/gi18n-lib.h>
 #include "gdktexture.h"
 #include "gdktexturedownloaderprivate.h"
+#include "gdkcolorstate.h"
+#include "gdkmemorytextureprivate.h"
 
 #include "gdkprofilerprivate.h"
 
@@ -143,9 +145,12 @@ gdk_load_jpeg (GBytes  *input_bytes,
   guint width, height, stride;
   unsigned char *data = NULL;
   unsigned char *row[1];
+  JOCTET *icc_data;
+  unsigned int icc_len;
   GBytes *bytes;
   GdkTexture *texture;
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   G_GNUC_UNUSED guint64 before = GDK_PROFILER_CURRENT_TIME;
 
   info.err = jpeg_std_error (&jerr.pub);
@@ -168,6 +173,9 @@ gdk_load_jpeg (GBytes  *input_bytes,
   jpeg_mem_src (&info,
                 g_bytes_get_data (input_bytes, NULL),
                 g_bytes_get_size (input_bytes));
+
+  /* save color space */
+  jpeg_save_markers (&info, JPEG_APP0 + 2, 0xFFFF);
 
   jpeg_read_header (&info, TRUE);
   jpeg_start_decompress (&info);
@@ -226,19 +234,35 @@ gdk_load_jpeg (GBytes  *input_bytes,
       g_assert_not_reached ();
     }
 
+  if (jpeg_read_icc_profile (&info, &icc_data, &icc_len))
+    {
+      GBytes *icc_bytes = g_bytes_new_with_free_func (icc_data, icc_len, free, icc_data);
+      color_state = gdk_color_state_new_from_icc_profile (icc_bytes, error);
+      g_bytes_unref (icc_bytes);
+    }
+  else
+    color_state = gdk_color_state_get_srgb ();
+
   jpeg_finish_decompress (&info);
   jpeg_destroy_decompress (&info);
 
   bytes = g_bytes_new_take (data, stride * height);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    bytes, stride);
+  if (color_state)
+    {
+      texture = gdk_memory_texture_new_with_color_state (width, height,
+                                                         format,
+                                                         color_state,
+                                                         bytes, stride);
+    }
+  else
+    texture = NULL;
 
+  g_clear_pointer (&color_state, gdk_color_state_unref);
   g_bytes_unref (bytes);
 
   gdk_profiler_end_mark (before, "Load jpeg", NULL);
- 
+
   return texture;
 }
 
@@ -257,9 +281,12 @@ gdk_save_jpeg (GdkTexture *texture)
   gsize texstride;
   guchar *row;
   int width, height;
+  GdkColorState *color_state;
+  GBytes *bytes;
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
+  color_state = gdk_texture_get_color_state (texture);
 
   info.err = jpeg_std_error (&jerr.pub);
   jerr.pub.error_exit = fatal_error_handler;
@@ -297,6 +324,15 @@ gdk_save_jpeg (GdkTexture *texture)
   texdata = g_bytes_get_data (texbytes, NULL);
 
   jpeg_start_compress (&info, TRUE);
+
+  bytes = gdk_color_state_save_to_icc_profile (color_state, NULL);
+  if (bytes)
+    {
+      jpeg_write_icc_profile (&info,
+                              g_bytes_get_data (bytes, NULL),
+                              g_bytes_get_size (bytes));
+      g_bytes_unref (bytes);
+    }
 
   while (info.next_scanline < info.image_height)
     {
