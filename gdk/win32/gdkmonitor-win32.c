@@ -888,13 +888,15 @@ _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
     {
       GdkWin32Monitor *m;
       GdkRectangle rect;
+      int scale;
 
       m = g_ptr_array_index (data.monitors, i);
+      gdk_monitor_get_geometry (GDK_MONITOR (m), &rect);
+      scale = gdk_monitor_get_scale_factor (GDK_MONITOR (m));
 
       /* Calculate offset */
-      gdk_monitor_get_geometry (GDK_MONITOR (m), &rect);
-      _gdk_offset_x = MAX (_gdk_offset_x, -rect.x);
-      _gdk_offset_y = MAX (_gdk_offset_y, -rect.y);
+      _gdk_offset_x = MAX (_gdk_offset_x, -rect.x * scale);
+      _gdk_offset_y = MAX (_gdk_offset_y, -rect.y * scale);
     }
 
   GDK_NOTE (MISC, g_print ("Multi-monitor offset: (%d,%d)\n",
