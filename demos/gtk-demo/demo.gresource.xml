@@ -19,6 +19,17 @@
     <file>demoimage.c</file>
     <file>demoimage.h</file>
   </gresource>
+  <gresource prefix="/colorspaces">
+    <file>colorspaces.ui</file>
+    <file>sRGB_Gray.jpg</file>
+    <file>sRGB_Gray.png</file>
+    <file>sRGB_Gray.tif</file>
+    <file>sRGB_Gray-expected-result-no-cm.png</file>
+    <file>ICC-Rendering-Intent-Test.png</file>
+    <file>ICC-Rendering-Intent-Test.jpg</file>
+    <file>ICC-Rendering-Intent-Test.tif</file>
+    <file>ICC-Rendering-Intent-Test-expected-result-no-cm.png</file>
+  </gresource>
   <gresource prefix="/constraints_builder">
     <file>constraints_builder.ui</file>
   </gresource>
@@ -255,6 +266,7 @@
     <file>assistant.c</file>
     <file>builder.c</file>
     <file>clipboard.c</file>
+    <file>colorspaces.c</file>
     <file>combobox.c</file>
     <file>constraints.c</file>
     <file>constraints_interactive.c</file>
