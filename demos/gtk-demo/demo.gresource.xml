@@ -18,6 +18,15 @@
     <file>demoimage.c</file>
     <file>demoimage.h</file>
   </gresource>
+  <gresource prefix="/colorprofiles">
+    <file>colorprofiles.ui</file>
+    <file>sRGB_Gray.jpg</file>
+    <file>sRGB_Gray.png</file>
+    <file>sRGB_Gray.tif</file>
+    <file>ICC Rendering Intent Test (cLUT only).jpg</file>
+    <file>ICC Rendering Intent Test (cLUT only).png</file>
+    <file>ICC Rendering Intent Test (cLUT only).tif</file>
+  </gresource>
   <gresource prefix="/constraints_builder">
     <file>constraints_builder.ui</file>
   </gresource>
@@ -254,6 +263,7 @@
     <file>assistant.c</file>
     <file>builder.c</file>
     <file>clipboard.c</file>
+    <file>colorprofiles.c</file>
     <file>combobox.c</file>
     <file>constraints.c</file>
     <file>constraints_interactive.c</file>
