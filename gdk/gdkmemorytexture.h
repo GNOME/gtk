@@ -26,6 +26,7 @@
 
 #include <gdk/gdkenums.h>
 #include <gdk/gdktexture.h>
+#include <gdk/gdkcolorspace.h>
 
 G_BEGIN_DECLS
 
@@ -66,6 +67,14 @@ GDK_AVAILABLE_IN_ALL
 GdkTexture *            gdk_memory_texture_new              (int                width,
                                                              int                height,
                                                              GdkMemoryFormat    format,
+                                                             GBytes            *bytes,
+                                                             gsize              stride);
+GDK_AVAILABLE_IN_4_10
+GdkTexture *            gdk_memory_texture_new_with_color_space
+                                                            (int                width,
+                                                             int                height,
+                                                             GdkMemoryFormat    format,
+                                                             GdkColorSpace     *color_space,
                                                              GBytes            *bytes,
                                                              gsize              stride);
 
