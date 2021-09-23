@@ -358,6 +358,8 @@ gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
   context_class->make_current = gdk_wayland_gl_context_make_current;
   context_class->clear_current = gdk_wayland_gl_context_clear_current;
   context_class->get_damage = gdk_wayland_gl_context_get_damage;
+
+  context_class->backend_type = GDK_GL_EGL;
 }
 
 static void
@@ -474,6 +476,9 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
   GdkGLContext *ctx;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   G_GNUC_UNUSED gint64 start_time2;
+
+  if (!gdk_gl_backend_can_be_used (GDK_GL_EGL, error))
+    return FALSE;
 
   if (!epoxy_has_egl ())
     {

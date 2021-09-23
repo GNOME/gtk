@@ -515,6 +515,8 @@ gdk_macos_gl_context_class_init (GdkMacosGLContextClass *klass)
 
   gl_class->get_damage = gdk_macos_gl_context_get_damage;
   gl_class->realize = gdk_macos_gl_context_real_realize;
+
+  gl_class->backend_type = GDK_GL_CGL;
 }
 
 static void

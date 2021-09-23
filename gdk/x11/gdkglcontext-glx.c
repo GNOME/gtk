@@ -692,6 +692,8 @@ gdk_x11_gl_context_glx_class_init (GdkX11GLContextGLXClass *klass)
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  context_class->backend_type = GDK_GL_GLX;
+
   context_class->realize = gdk_x11_gl_context_glx_realize;
   context_class->make_current = gdk_x11_gl_context_glx_make_current;
   context_class->clear_current = gdk_x11_gl_context_glx_clear_current;
@@ -904,6 +906,9 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
   GdkDisplay *display = GDK_DISPLAY (display_x11);
   Display *dpy;
   int screen_num;
+
+  if (!gdk_gl_backend_can_be_used (GDK_GL_GLX, error))
+    return FALSE;
 
   dpy = gdk_x11_display_get_xdisplay (display);
 

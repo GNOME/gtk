@@ -1233,6 +1233,8 @@ gdk_display_init_gl (GdkDisplay *self)
    */
   priv->gl_context = context;
 
+  gdk_gl_backend_use (GDK_GL_CONTEXT_GET_CLASS (context)->backend_type);
+
   gdk_profiler_end_mark (before, "initialize OpenGL", NULL);
 }
 

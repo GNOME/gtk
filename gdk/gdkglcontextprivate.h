@@ -34,6 +34,14 @@ G_BEGIN_DECLS
 #define GDK_EGL_MIN_VERSION_MAJOR (1)
 #define GDK_EGL_MIN_VERSION_MINOR (4)
 
+typedef enum {
+  GDK_GL_NONE = 0,
+  GDK_GL_EGL,
+  GDK_GL_GLX,
+  GDK_GL_WGL,
+  GDK_GL_CGL
+} GdkGLBackend;
+
 #define GDK_GL_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GL_CONTEXT, GdkGLContextClass))
 #define GDK_IS_GL_CONTEXT_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GL_CONTEXT))
 #define GDK_GL_CONTEXT_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GL_CONTEXT, GdkGLContextClass))
@@ -51,6 +59,8 @@ struct _GdkGLContext
 struct _GdkGLContextClass
 {
   GdkDrawContextClass parent_class;
+
+  GdkGLBackend        backend_type;
 
   gboolean              (* realize)                             (GdkGLContext          *context,
                                                                  GError               **error);
@@ -85,6 +95,10 @@ typedef struct {
   guint is_legacy : 1;
   guint use_es : 1;
 } GdkGLContextPaintData;
+
+gboolean                gdk_gl_backend_can_be_used              (GdkGLBackend     backend_type,
+                                                                 GError         **error);
+void                    gdk_gl_backend_use                      (GdkGLBackend     backend_type);
 
 GdkGLContext *          gdk_gl_context_new_for_surface          (GdkSurface      *surface);
 
