@@ -8401,17 +8401,32 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
 {
   GtkTextViewPrivate *priv;
   gboolean had_selection;
+  GtkTextIter begin, end;
+  guint length;
 
   priv = text_view->priv;
 
   gtk_text_view_obscure_mouse_cursor (text_view);
   gtk_text_buffer_begin_user_action (get_buffer (text_view));
 
-  had_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
-                                                        NULL, NULL);
-  
-  gtk_text_buffer_delete_selection (get_buffer (text_view), TRUE,
-                                    priv->editable);
+  had_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view), &begin, &end);
+  gtk_text_iter_order (&begin, &end);
+  length = gtk_text_iter_get_offset (&end) - gtk_text_iter_get_offset (&begin);
+
+  if (gtk_text_buffer_delete_selection (get_buffer (text_view), TRUE, priv->editable))
+    {
+      /* If something was deleted, create a second group for the insert. This
+       * ensures that there are two undo operations. One for the deletion, and
+       * one for the insertion of new text. However, if there is only a single
+       * character overwritten, that isn't very useful, just keep the single
+       * undo group.
+       */
+      if (length > 1)
+        {
+          gtk_text_buffer_end_user_action (get_buffer (text_view));
+          gtk_text_buffer_begin_user_action (get_buffer (text_view));
+        }
+    }
 
   if (!strcmp (str, "\n"))
     {
