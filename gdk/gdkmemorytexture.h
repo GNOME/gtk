@@ -60,14 +60,21 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkMemoryTexture, g_object_unref)
 
 
 GDK_AVAILABLE_IN_ALL
-GType                   gdk_memory_texture_get_type         (void) G_GNUC_CONST;
+GType                   gdk_memory_texture_get_type             (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GdkTexture *            gdk_memory_texture_new              (int                width,
-                                                             int                height,
-                                                             GdkMemoryFormat    format,
-                                                             GBytes            *bytes,
-                                                             gsize              stride);
+GdkTexture *            gdk_memory_texture_new                  (int                width,
+                                                                 int                height,
+                                                                 GdkMemoryFormat    format,
+                                                                 GBytes            *bytes,
+                                                                 gsize              stride);
+GDK_AVAILABLE_IN_4_6
+GdkTexture *            gdk_memory_texture_new_with_color_space (int                width,
+                                                                 int                height,
+                                                                 GdkMemoryFormat    format,
+                                                                 GdkColorSpace     *color_space,
+                                                                 GBytes            *bytes,
+                                                                 gsize              stride);
 
 
 G_END_DECLS
