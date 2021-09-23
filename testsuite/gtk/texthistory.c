@@ -604,6 +604,23 @@ test14 (void)
   g_free (fill);
 }
 
+static void
+test_issue_4276 (void)
+{
+  const Command commands[] = {
+    { INSERT, 0, -1, "this is some text", "this is some text", SET, UNSET, UNSET },
+    { SELECT, 0, 17, NULL, "this is some text", SET, UNSET, UNSET },
+    { BEGIN_USER, -1, -1, NULL, NULL, UNSET, UNSET, UNSET },
+    { DELETE_KEY, 0, 17, "this is some text", "", UNSET, UNSET, UNSET },
+    { INSERT, 0, -1, "z", "z", UNSET, UNSET, UNSET },
+    { END_USER, -1, -1, NULL, NULL, SET, UNSET, UNSET },
+    { INSERT, 1, -1, "zzz", "zzzz", SET, UNSET, UNSET },
+    { UNDO, -1, -1, NULL, "z", SET, SET, UNSET },
+  };
+
+  run_test (commands, G_N_ELEMENTS (commands), 0);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -624,6 +641,7 @@ main (int   argc,
   g_test_add_func ("/Gtk/TextHistory/test12", test12);
   g_test_add_func ("/Gtk/TextHistory/test13", test13);
   g_test_add_func ("/Gtk/TextHistory/test14", test14);
+  g_test_add_func ("/Gtk/TextHistory/issue_4276", test_issue_4276);
 
   return g_test_run ();
 }
