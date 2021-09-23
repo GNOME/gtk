@@ -71,5 +71,8 @@ gboolean           _gdk_broadway_server_window_move_resize       (GdkBroadwaySer
 								  int                 y,
 								  int                 width,
 								  int                 height);
+void               _gdk_broadway_server_window_set_modal_hint    (GdkBroadwayServer  *server,
+								  gint                id,
+								  gboolean            modal_hint);
 
 #endif /* __GDK_BROADWAY_SERVER__ */

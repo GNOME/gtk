@@ -584,6 +584,15 @@ static void
 gdk_broadway_window_set_modal_hint (GdkWindow *window,
 				    gboolean   modal)
 {
+  GdkBroadwayDisplay *display;
+  GdkWindowImplBroadway *impl;
+
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+  impl->modal_hint = modal;
+
+  display = GDK_BROADWAY_DISPLAY (gdk_window_get_display (impl->wrapper));
+  _gdk_broadway_server_window_set_modal_hint (display->server, impl->id, impl->modal_hint);
 }
 
 static void

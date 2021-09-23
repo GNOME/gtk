@@ -89,6 +89,24 @@ gdk_event_source_check (GSource *source)
   return retval;
 }
 
+static void
+handle_focus_change (GdkEventCrossing *event)
+{
+  gboolean focus_in = (event->type != GDK_ENTER_NOTIFY);
+  GdkEvent *focus_event;
+
+  if (event->window->parent) {
+      focus_event = gdk_event_new (GDK_FOCUS_CHANGE);
+      focus_event->focus_change.window = g_object_ref (event->window->parent);
+      focus_event->focus_change.send_event = FALSE;
+      focus_event->focus_change.in = focus_in;
+      gdk_event_set_device (focus_event, gdk_event_get_device ((GdkEvent *) event));
+
+      gdk_event_put (focus_event);
+      gdk_event_free (focus_event);
+  }
+}
+
 void
 _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 {
@@ -159,6 +177,8 @@ _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 	event->crossing.detail = GDK_NOTIFY_ANCESTOR;
 	gdk_event_set_device (event, device_manager->core_pointer);
 	gdk_event_set_seat (event, gdk_device_get_seat (device_manager->core_pointer));
+
+	handle_focus_change (&event->crossing);
 
 	node = _gdk_event_queue_append (display, event);
 	_gdk_windowing_got_event (display, node, event, message->base.serial);

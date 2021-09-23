@@ -157,7 +157,8 @@ typedef enum {
   BROADWAY_REQUEST_GRAB_POINTER,
   BROADWAY_REQUEST_UNGRAB_POINTER,
   BROADWAY_REQUEST_FOCUS_WINDOW,
-  BROADWAY_REQUEST_SET_SHOW_KEYBOARD
+  BROADWAY_REQUEST_SET_SHOW_KEYBOARD,
+  BROADWAY_REQUEST_SET_MODAL_HINT
 } BroadwayRequestType;
 
 typedef struct {
@@ -231,6 +232,12 @@ typedef struct {
   guint32 show_keyboard;
 } BroadwayRequestSetShowKeyboard;
 
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  gboolean modal_hint;
+} BroadwayRequestSetModalHint;
+
 typedef union {
   BroadwayRequestBase base;
   BroadwayRequestNewWindow new_window;
@@ -248,6 +255,7 @@ typedef union {
   BroadwayRequestTranslate translate;
   BroadwayRequestFocusWindow focus_window;
   BroadwayRequestSetShowKeyboard set_show_keyboard;
+  BroadwayRequestSetModalHint set_modal_hint;
 } BroadwayRequest;
 
 typedef enum {
