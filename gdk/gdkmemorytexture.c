@@ -21,6 +21,7 @@
 
 #include "gdkmemorytextureprivate.h"
 
+#include "gdkcolorprofileprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gsk/gl/fp16private.h"
 
@@ -136,6 +137,9 @@ gdk_memory_sanitize (GBytes          *bytes,
  * The `GBytes` must contain @stride × @height pixels
  * in the given format.
  *
+ * This function calls [ctor@Gdk.MemoryTexture.new_with_color_profile]
+ * with the sRGB profile.
+ *
  * Returns: (type GdkMemoryTexture): A newly-created `GdkTexture`
  */
 GdkTexture *
@@ -145,18 +149,58 @@ gdk_memory_texture_new (int              width,
                         GBytes          *bytes,
                         gsize            stride)
 {
-  GdkMemoryTexture *self;
-
   g_return_val_if_fail (width > 0, NULL);
   g_return_val_if_fail (height > 0, NULL);
   g_return_val_if_fail (bytes != NULL, NULL);
   g_return_val_if_fail (stride >= width * gdk_memory_format_bytes_per_pixel (format), NULL);
+
+  return gdk_memory_texture_new_with_color_profile (width, height,
+                                                    format,
+                                                    gdk_color_profile_get_srgb (),
+                                                    bytes, stride);
+}
+
+/**
+ * gdk_memory_texture_new_with_color_profile:
+ * @width: the width of the texture
+ * @height: the height of the texture
+ * @format: the format of the data
+ * @profile: a `GdkColorProfile`
+ * @bytes: the `GBytes` containing the pixel data
+ * @stride: rowstride for the data
+ *
+ * Creates a new texture for a blob of image data with a given color profile.
+ *
+ * The `GBytes` must contain @stride x @height pixels
+ * in the given format.
+ *
+ * Returns: A newly-created `GdkTexture`
+ *
+ * Since: 4.8
+ */
+GdkTexture *
+gdk_memory_texture_new_with_color_profile (int              width,
+                                           int              height,
+                                           GdkMemoryFormat  format,
+                                           GdkColorProfile *profile,
+                                           GBytes          *bytes,
+                                           gsize            stride)
+{
+  GdkMemoryTexture *self;
+
+  g_return_val_if_fail (width > 0, NULL);
+  g_return_val_if_fail (height > 0, NULL);
+  g_return_val_if_fail (GDK_IS_COLOR_PROFILE (profile), NULL);
+  g_return_val_if_fail (bytes != NULL, NULL);
+  g_return_val_if_fail (stride >= width * gdk_memory_format_bytes_per_pixel (format), NULL);
+  g_return_val_if_fail (gdk_color_profile_supports_memory_format (profile, format), NULL);
 
   bytes = gdk_memory_sanitize (bytes, width, height, format, stride, &stride);
 
   self = g_object_new (GDK_TYPE_MEMORY_TEXTURE,
                        "width", width,
                        "height", height,
+                       "color-profile", profile,
                        NULL);
 
   GDK_TEXTURE (self)->format = format;
