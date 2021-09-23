@@ -19,9 +19,10 @@
 
 #include "gdkjpegprivate.h"
 
+#include "gdkcolorprofile.h"
 #include "gdkintl.h"
-#include "gdktexture.h"
 #include "gdkmemorytextureprivate.h"
+#include "gdktexture.h"
 
 #include "gdkprofilerprivate.h"
 
@@ -173,9 +174,12 @@ gdk_load_jpeg (GBytes  *input_bytes,
   guint width, height, stride;
   unsigned char *data;
   unsigned char *row[1];
+  JOCTET *icc_data;
+  unsigned int icc_len;
   GBytes *bytes;
   GdkTexture *texture;
   GdkMemoryFormat format;
+  GdkColorProfile *color_profile;
   G_GNUC_UNUSED guint64 before = GDK_PROFILER_CURRENT_TIME;
 
   info.err = jpeg_std_error (&jerr.pub);
@@ -194,6 +198,9 @@ gdk_load_jpeg (GBytes  *input_bytes,
   jpeg_mem_src (&info,
                 g_bytes_get_data (input_bytes, NULL),
                 g_bytes_get_size (input_bytes));
+
+  /* save color profile */
+  jpeg_save_markers (&info, JPEG_APP0 + 2, 0xFFFF);
 
   jpeg_read_header (&info, TRUE);
   jpeg_start_decompress (&info);
@@ -252,14 +259,29 @@ gdk_load_jpeg (GBytes  *input_bytes,
       g_assert_not_reached ();
     }
 
+  if (jpeg_read_icc_profile (&info, &icc_data, &icc_len))
+    {
+      GBytes *icc_bytes = g_bytes_new_with_free_func (icc_data, icc_len, free, icc_data);
+      color_profile = gdk_color_profile_new_from_icc_bytes (icc_bytes, error);
+      g_bytes_unref (icc_bytes);
+    }
+  else
+    color_profile = g_object_ref (gdk_color_profile_get_srgb ());
+
   jpeg_finish_decompress (&info);
   jpeg_destroy_decompress (&info);
 
   bytes = g_bytes_new_take (data, stride * height);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    bytes, stride);
+  if (color_profile)
+    {
+      texture = gdk_memory_texture_new_with_color_profile (width, height,
+                                                           format,
+                                                           color_profile,
+                                                           bytes, stride);
+    }
+  else
+    texture = NULL;
 
   g_bytes_unref (bytes);
 
