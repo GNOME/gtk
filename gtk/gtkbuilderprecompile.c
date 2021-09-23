@@ -34,13 +34,15 @@ typedef enum
 
 /* All strings are owned by the string chunk */
 typedef struct {
+  /* Must be first for g_slice_free_chain() */
+  GList link;
+
   const char *string;
   int len;
   int count;
   int offset;
   int text_offset;
   gboolean include_len;
-  GList link;
 } RecordDataString;
 
 typedef struct {
@@ -151,12 +153,6 @@ record_data_node_free (RecordDataNode *node)
     default:
       g_assert_not_reached ();
     }
-}
-
-static void
-record_data_string_free (RecordDataString *s)
-{
-  g_slice_free (RecordDataString, s);
 }
 
 static gboolean
@@ -435,8 +431,7 @@ _gtk_buildable_parser_precompile (const char  *text,
   GString *marshaled;
   int offset;
 
-  data.strings = g_hash_table_new_full (record_data_string_hash, record_data_string_equal,
-                                        (GDestroyNotify)record_data_string_free, NULL);
+  data.strings = g_hash_table_new (record_data_string_hash, record_data_string_equal);
   data.chunks = g_string_chunk_new (512);
   data.root = record_data_element_new (NULL, NULL, 0);
   data.current = data.root;
@@ -489,6 +484,9 @@ _gtk_buildable_parser_precompile (const char  *text,
 
   marshal_root (marshaled, &data.root->base);
 
+  g_slice_free_chain (RecordDataString,
+                      (RecordDataString *)data.string_list.head,
+                      link.next);
   record_data_node_free (&data.root->base);
   g_string_chunk_free (data.chunks);
   g_hash_table_destroy (data.strings);
