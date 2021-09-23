@@ -374,27 +374,22 @@ marshal_tree (GString        *marshaled,
     case RECORD_TYPE_ELEMENT:
       element = (RecordDataElement *)node;
 
-      /* Special case the root */
-      if (element->parent != NULL)
-        {
-          marshal_uint32 (marshaled, RECORD_TYPE_ELEMENT);
-          marshal_uint32 (marshaled, element->name->offset);
-          marshal_uint32 (marshaled, element->n_attributes);
+      marshal_uint32 (marshaled, RECORD_TYPE_ELEMENT);
+      marshal_uint32 (marshaled, element->name->offset);
+      marshal_uint32 (marshaled, element->n_attributes);
 
-          attr_names = &element->attributes[0];
-          attr_values = &element->attributes[element->n_attributes];
-          for (i = 0; i < element->n_attributes; i++)
-            {
-              marshal_uint32 (marshaled, attr_names[i]->offset);
-              marshal_uint32 (marshaled, attr_values[i]->offset);
-            }
+      attr_names = &element->attributes[0];
+      attr_values = &element->attributes[element->n_attributes];
+      for (i = 0; i < element->n_attributes; i++)
+        {
+          marshal_uint32 (marshaled, attr_names[i]->offset);
+          marshal_uint32 (marshaled, attr_values[i]->offset);
         }
 
       for (l = element->children.head; l != NULL; l = l->next)
         marshal_tree (marshaled, l->data);
 
-      if (element->parent != NULL)
-        marshal_uint32 (marshaled, RECORD_TYPE_END_ELEMENT);
+      marshal_uint32 (marshaled, RECORD_TYPE_END_ELEMENT);
       break;
     case RECORD_TYPE_TEXT:
       text = (RecordDataText *)node;
@@ -405,6 +400,17 @@ marshal_tree (GString        *marshaled,
     default:
       g_assert_not_reached ();
     }
+}
+
+static void
+marshal_root (GString        *marshaled,
+              RecordDataNode *node)
+{
+  GList *l;
+  RecordDataElement *element = (RecordDataElement *)node;
+
+  for (l = element->children.head; l != NULL; l = l->next)
+    marshal_tree (marshaled, l->data);
 }
 
 /**
@@ -481,7 +487,7 @@ _gtk_buildable_parser_precompile (const char  *text,
       g_string_append_len (marshaled, s->string, s->len + 1);
     }
 
-  marshal_tree (marshaled, &data.root->base);
+  marshal_root (marshaled, &data.root->base);
 
   record_data_node_free (&data.root->base);
   g_string_chunk_free (data.chunks);
