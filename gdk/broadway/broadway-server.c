@@ -281,8 +281,6 @@ update_event_state (BroadwayServer *server,
 	if (server->focused_window_id != message->configure_notify.id &&
 	    server->pointer_grab_window_id == -1 && window->modal_hint)
 	{
-	  server->mouse_in_toplevel_id = message->configure_notify.id;
-	  server->real_mouse_in_toplevel_id = message->configure_notify.id;
 	  broadway_server_window_raise (server, message->configure_notify.id);
 	  broadway_server_focus_window (server, message->configure_notify.id);
 	  broadway_server_flush (server);
