@@ -30,6 +30,7 @@
 #include "gdksurface.h"
 
 #include "gdk-private.h"
+#include "gdkcolorprofile.h"
 #include "gdkcontentprovider.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
@@ -88,13 +89,14 @@ enum {
 
 enum {
   PROP_0,
+  PROP_COLOR_PROFILE,
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_FRAME_CLOCK,
-  PROP_MAPPED,
-  PROP_WIDTH,
   PROP_HEIGHT,
+  PROP_MAPPED,
   PROP_SCALE_FACTOR,
+  PROP_WIDTH,
   LAST_PROP
 };
 
@@ -485,6 +487,8 @@ gdk_surface_init (GdkSurface *surface)
 
   surface->alpha = 255;
 
+  surface->color_profile = g_object_ref (gdk_color_profile_get_srgb ());
+
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
 }
@@ -499,6 +503,26 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->get_property = gdk_surface_get_property;
 
   klass->beep = gdk_surface_real_beep;
+
+  /**
+   * GdkSurface:color-profile: (attributes org.gtk.Property.get=gdk_surface_get_color_profile)
+   *
+   * The preferred color profile for rendering to the surface
+   *
+   * This profile is negotiated between GTK and the compositor.
+   *
+   * The profile may change as the surface gets moved around - for example to different
+   * monitors or when the compositor gets reconfigured. As long as the surface isn't show, the
+   * profile may not represent the actual color profile that is going to be used.
+   *
+   * Since: 4.8
+   */
+  properties[PROP_COLOR_PROFILE] =
+      g_param_spec_object ("color-profile",
+                           P_("Color profile"),
+                           P_("The preferred color profile of the surface"),
+                           GDK_TYPE_COLOR_PROFILE,
+                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -732,6 +756,7 @@ gdk_surface_finalize (GObject *object)
   g_clear_object (&surface->cursor);
   g_clear_pointer (&surface->device_cursor, g_hash_table_destroy);
   g_clear_pointer (&surface->devices_inside, g_list_free);
+  g_clear_object (&surface->color_profile);
 
   g_clear_object (&surface->display);
 
@@ -786,6 +811,10 @@ gdk_surface_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_COLOR_PROFILE:
+      g_value_set_object (value, gdk_surface_get_color_profile (surface));
+      break;
+
     case PROP_CURSOR:
       g_value_set_object (value, gdk_surface_get_cursor (surface));
       break;
@@ -2052,6 +2081,36 @@ gdk_surface_get_height (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
 
   return surface->height;
+}
+
+void
+gdk_surface_set_color_profile (GdkSurface      *self,
+                               GdkColorProfile *color_profile)
+{
+  if (gdk_color_profile_equal (self->color_profile, color_profile))
+    return;
+
+  g_set_object (&self->color_profile, color_profile);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_PROFILE]);
+}
+
+/**
+ * gdk_surface_get_color_profile: (attributes org.gtk.Method.get_property=color-profile)
+ * @self: a `GdkSurface`
+ *
+ * Returns the preferred color profile for rendering to the given @surface.
+ *
+ * Returns: (transfer none): The color profile of @surface
+ *
+ * Since: 4.8
+ */
+GdkColorProfile *
+gdk_surface_get_color_profile (GdkSurface *self)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (self), gdk_color_profile_get_srgb ());
+
+  return self->color_profile;
 }
 
 /*
