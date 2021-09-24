@@ -25,7 +25,6 @@
 #include "gdkpixbuf.h"
 
 #include "gdksurface.h"
-#include "gdkinternals.h"
 #include "gdktextureprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>

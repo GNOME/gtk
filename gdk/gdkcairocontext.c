@@ -25,7 +25,6 @@
 #include "gdkcairocontextprivate.h"
 
 #include "gdkcairo.h"
-#include "gdkinternals.h"
 
 /**
  * GdkCairoContext:

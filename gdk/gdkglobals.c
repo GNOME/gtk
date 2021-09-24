@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include "gdktypes.h"
-#include "gdkinternals.h"
 
 #include <stdio.h>
 

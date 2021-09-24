@@ -20,7 +20,7 @@
 #include <math.h>
 
 #include "gdkdevicetoolprivate.h"
-#include "gdkinternals.h"
+#include "gdkenumtypes.h"
 #include "gdkintl.h"
 
 /**

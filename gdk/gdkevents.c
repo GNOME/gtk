@@ -28,7 +28,6 @@
 #include "gdkdragprivate.h"
 #include "gdkdropprivate.h"
 #include "gdkeventsprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"

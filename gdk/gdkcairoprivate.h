@@ -18,6 +18,8 @@
 #ifndef __GDK_CAIRO_PRIVATE_H__
 #define __GDK_CAIRO_PRIVATE_H__
 
+#include "gdkcairo.h"
+
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <cairo.h>
 

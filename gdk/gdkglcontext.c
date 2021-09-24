@@ -78,7 +78,6 @@
 
 #include "gdkdebug.h"
 #include "gdkdisplayprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkmemorytextureprivate.h"
 

@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include "gdkkeysyms.h"
-#include "gdkinternals.h"
 
 /* Key handling not part of the keymap */
 
