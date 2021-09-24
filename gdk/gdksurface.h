@@ -86,17 +86,19 @@ GDK_AVAILABLE_IN_ALL
 GdkCursor    *gdk_surface_get_device_cursor (GdkSurface     *surface,
                                              GdkDevice     *device);
 GDK_AVAILABLE_IN_ALL
-int           gdk_surface_get_width       (GdkSurface       *surface);
+int                     gdk_surface_get_width                   (GdkSurface             *surface);
 GDK_AVAILABLE_IN_ALL
-int           gdk_surface_get_height      (GdkSurface       *surface);
+int                     gdk_surface_get_height                  (GdkSurface             *surface);
 GDK_AVAILABLE_IN_ALL
-gboolean gdk_surface_translate_coordinates (GdkSurface *from,
-                                            GdkSurface *to,
-                                            double     *x,
-                                            double     *y);
+int                     gdk_surface_get_scale_factor            (GdkSurface             *surface);
+GDK_AVAILABLE_IN_4_10
+GdkColorSpace *         gdk_surface_get_color_space             (GdkSurface             *self);
+GDK_AVAILABLE_IN_ALL
+gboolean                gdk_surface_translate_coordinates       (GdkSurface             *from,
+                                                                 GdkSurface             *to,
+                                                                 double                 *x,
+                                                                 double                 *y);
 
-GDK_AVAILABLE_IN_ALL
-int           gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_ALL
 gboolean      gdk_surface_get_device_position (GdkSurface      *surface,

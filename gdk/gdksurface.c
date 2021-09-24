@@ -30,6 +30,7 @@
 #include "gdksurface.h"
 
 #include "gdkprivate.h"
+#include "gdkcolorspace.h"
 #include "gdkcontentprovider.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
@@ -88,13 +89,14 @@ enum {
 
 enum {
   PROP_0,
+  PROP_COLOR_SPACE,
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_FRAME_CLOCK,
-  PROP_MAPPED,
-  PROP_WIDTH,
   PROP_HEIGHT,
+  PROP_MAPPED,
   PROP_SCALE_FACTOR,
+  PROP_WIDTH,
   LAST_PROP
 };
 
@@ -485,6 +487,8 @@ gdk_surface_init (GdkSurface *surface)
 
   surface->alpha = 255;
 
+  surface->color_space = g_object_ref (gdk_color_space_get_srgb ());
+
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
 }
@@ -499,6 +503,25 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->get_property = gdk_surface_get_property;
 
   klass->beep = gdk_surface_real_beep;
+
+  /**
+   * GdkSurface:color-space: (attributes org.gtk.Property.get=gdk_surface_get_color_space)
+   *
+   * The preferred color space for rendering to the surface
+   *
+   * This color space is negotiated between GTK and the compositor.
+   *
+   * The color space may change as the surface gets moved around - for example
+   * to different monitors or when the compositor gets reconfigured. As long as
+   * the surface isn't shown, the color space may not represent the actual color
+   * space that is going to be used.
+   *
+   * Since: 4.10
+   */
+  properties[PROP_COLOR_SPACE] =
+      g_param_spec_object ("color-space", NULL, NULL,
+                           GDK_TYPE_COLOR_SPACE,
+                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -718,6 +741,7 @@ gdk_surface_finalize (GObject *object)
   g_clear_object (&surface->cursor);
   g_clear_pointer (&surface->device_cursor, g_hash_table_destroy);
   g_clear_pointer (&surface->devices_inside, g_list_free);
+  g_clear_object (&surface->color_space);
 
   g_clear_object (&surface->display);
 
@@ -772,6 +796,10 @@ gdk_surface_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_COLOR_SPACE:
+      g_value_set_object (value, gdk_surface_get_color_space (surface));
+      break;
+
     case PROP_CURSOR:
       g_value_set_object (value, gdk_surface_get_cursor (surface));
       break;
@@ -2038,6 +2066,36 @@ gdk_surface_get_height (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
 
   return surface->height;
+}
+
+void
+gdk_surface_set_color_space (GdkSurface    *self,
+                             GdkColorSpace *color_space)
+{
+  if (gdk_color_space_equal (self->color_space, color_space))
+    return;
+
+  g_set_object (&self->color_space, color_space);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_SPACE]);
+}
+
+/**
+ * gdk_surface_get_color_space: (attributes org.gtk.Method.get_property=color-space)
+ * @self: a `GdkSurface`
+ *
+ * Returns the preferred color space for rendering to the given @surface.
+ *
+ * Returns: (transfer none): The color space of @surface
+ *
+ * Since: 4.10
+ */
+GdkColorSpace *
+gdk_surface_get_color_space (GdkSurface *self)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (self), gdk_color_space_get_srgb ());
+
+  return self->color_space;
 }
 
 /*
