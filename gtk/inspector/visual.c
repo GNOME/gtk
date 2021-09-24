@@ -59,7 +59,7 @@
 #include "broadway/gdkbroadway.h"
 #endif
 
-#include "gdk/gdk-private.h"
+#include "gdk/gdkdebug.h"
 
 #define EPSILON               1e-10
 

@@ -23,6 +23,8 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 
+#include "gdk/gdkeventsprivate.h"
+
 /**
  * GtkIMContext:
  *

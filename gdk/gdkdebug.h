@@ -18,8 +18,11 @@
 #ifndef __GDK_DEBUG_H__
 #define __GDK_DEBUG_H__
 
-G_BEGIN_DECLS
+#include <glib.h>
 
+#include "gdktypes.h"
+
+G_BEGIN_DECLS
 
 typedef enum {
   GDK_DEBUG_MISC            = 1 <<  0,

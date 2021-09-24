@@ -48,8 +48,8 @@
 #include "general.h"
 #include "logs.h"
 
+#include "gdkdebug.h"
 #include "gdkmarshalers.h"
-#include "gdk-private.h"
 #include "gskrendererprivate.h"
 #include "gtkbutton.h"
 #include "gtkcsswidgetnodeprivate.h"

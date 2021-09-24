@@ -1,7 +1,7 @@
 #ifndef __GDK__PRIVATE_H__
 #define __GDK__PRIVATE_H__
 
-#include "gdk/gdkinternals.h"
+#include "gdk/gdktypes.h"
 
 /* Private API for use in GTK+ */
 
