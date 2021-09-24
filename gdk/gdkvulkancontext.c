@@ -25,7 +25,6 @@
 #include "gdkvulkancontextprivate.h"
 
 #include "gdkdisplayprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 
 /**

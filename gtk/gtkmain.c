@@ -70,6 +70,9 @@
 
 #include "inspector/window.h"
 
+#include "gdk/gdkeventsprivate.h"
+#include "gdk/gdksurfaceprivate.h"
+
 #define GDK_ARRAY_ELEMENT_TYPE GtkWidget *
 #define GDK_ARRAY_TYPE_NAME GtkWidgetStack
 #define GDK_ARRAY_NAME gtk_widget_stack

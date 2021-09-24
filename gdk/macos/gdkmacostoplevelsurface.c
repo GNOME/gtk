@@ -21,12 +21,13 @@
 
 #import "GdkMacosWindow.h"
 
-#include "gdkinternals.h"
+#include "gdkmacostoplevelsurface-private.h"
+
+#include "gdkseatprivate.h"
 #include "gdktoplevelprivate.h"
 
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosmonitor-private.h"
-#include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 
 static void

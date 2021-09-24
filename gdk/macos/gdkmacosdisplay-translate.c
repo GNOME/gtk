@@ -30,6 +30,8 @@
 #include "gdkmacossurface-private.h"
 #include "gdkmacosseat-private.h"
 
+#include "gdk/gdkeventsprivate.h"
+
 #define GDK_MOD2_MASK (1 << 4)
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15

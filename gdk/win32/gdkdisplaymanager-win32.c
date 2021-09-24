@@ -24,7 +24,6 @@
 #include "gdkprivate-win32.h"
 
 #include "gdkdisplaymanagerprivate.h"
-#include "gdkinternals.h"
 
 struct _GdkWin32DisplayManager
 {

@@ -33,6 +33,8 @@
 #include "gtkimmoduleprivate.h"
 
 #include "gtkimcontextsimpleseqs.h"
+
+#include "gdk/gdkeventsprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
 /**

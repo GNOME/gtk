@@ -27,12 +27,12 @@
 #include <unistd.h>
 
 #include "gdkdisplayprivate.h"
-#include "gdkinternals.h"
 
 #include "gdkmacoseventsource-private.h"
 #include "gdkmacosdisplay-private.h"
 
-#include "gdk-private.h"
+#include "gdk/gdkeventsprivate.h"
+#include "gdk/gdk-private.h"
 
 /*
  * This file implementations integration between the GLib main loop and

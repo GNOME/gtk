@@ -29,10 +29,10 @@
 
 #include "gdkasync.h"
 #include "gdkdisplay.h"
+#include "gdkeventsprivate.h"
 #include "gdkeventsource.h"
 #include "gdkeventtranslator.h"
 #include "gdkframeclockprivate.h"
-#include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdksurfaceprivate.h"
 #include "gdkkeysprivate.h"

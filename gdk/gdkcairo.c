@@ -17,9 +17,7 @@
 
 #include "config.h"
 
-#include "gdkcairo.h"
-
-#include "gdkinternals.h"
+#include "gdkcairoprivate.h"
 
 #include <math.h>
 

@@ -35,13 +35,12 @@
 #include "gdkdragsurfaceprivate.h"
 #include "gdkeventsource.h"
 #include "gdkframeclockidleprivate.h"
-#include "gdkinternals.h"
 #include "gdkpopupprivate.h"
 #include "gdkprivate-broadway.h"
+#include "gdkseatprivate.h"
 #include "gdksurfaceprivate.h"
 #include "gdktextureprivate.h"
 #include "gdktoplevelprivate.h"
-#include "gdk-private.h"
 
 #include <graphene.h>
 #include <stdlib.h>

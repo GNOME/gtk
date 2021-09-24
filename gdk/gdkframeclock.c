@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include "gdkframeclockprivate.h"
-#include "gdkinternals.h"
 
 /**
  * GdkFrameClock:

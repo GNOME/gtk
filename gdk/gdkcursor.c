@@ -31,7 +31,6 @@
 #include "gdkcursorprivate.h"
 #include "gdktexture.h"
 #include "gdkintl.h"
-#include "gdkinternals.h"
 
 #include <math.h>
 #include <errno.h>

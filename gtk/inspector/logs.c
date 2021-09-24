@@ -36,12 +36,12 @@
 #include "gtkprivate.h"
 #include "gtkroot.h"
 #include "gtkdebug.h"
-#include "gdkinternals.h"
 #include "gtknative.h"
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gtkboxlayout.h"
 
+#include "gdk/gdkdebug.h"
 
 struct _GtkInspectorLogs
 {

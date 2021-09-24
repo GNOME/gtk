@@ -34,7 +34,6 @@
 #include <gdk/win32/gdkclipdrop-win32.h>
 //#include <gdk/win32/gdkselection-win32.h>
 
-#include "gdkinternals.h"
 
 #include "config.h"
 

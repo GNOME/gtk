@@ -26,7 +26,6 @@
 
 #include "gdkvulkancontext-x11.h"
 
-#include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
 #include "gdksurface-x11.h"
 

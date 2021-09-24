@@ -25,10 +25,13 @@
 
 #import "GdkMacosCairoView.h"
 
+#include "gdkmacossurface-private.h"
+
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay.h"
+#include "gdkeventsprivate.h"
 #include "gdkframeclockidleprivate.h"
-#include "gdkinternals.h"
+#include "gdkseatprivate.h"
 #include "gdksurfaceprivate.h"
 
 #include "gdkmacosdevice.h"
@@ -39,7 +42,6 @@
 #include "gdkmacosglcontext-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdkmacospopupsurface-private.h"
-#include "gdkmacossurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 

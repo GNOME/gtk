@@ -19,9 +19,11 @@
 
 #include "config.h"
 
-#include "gdkintl.h"
-#include "gdk-private.h"
 #include "gdktoplevelprivate.h"
+
+#include "gdkdisplay.h"
+#include "gdkenumtypes.h"
+#include "gdkintl.h"
 
 #include <graphene-gobject.h>
 #include <math.h>
@@ -670,7 +672,7 @@ gdk_toplevel_begin_resize (GdkToplevel    *toplevel,
 
   if (device == NULL)
     {
-      GdkSeat *seat = gdk_display_get_default_seat (GDK_SURFACE (toplevel)->display);
+      GdkSeat *seat = gdk_display_get_default_seat (gdk_surface_get_display (GDK_SURFACE (toplevel)));
       if (button == 0)
         device = gdk_seat_get_keyboard (seat);
       else
@@ -711,7 +713,7 @@ gdk_toplevel_begin_move (GdkToplevel *toplevel,
 
   if (device == NULL)
     {
-      GdkSeat *seat = gdk_display_get_default_seat (GDK_SURFACE (toplevel)->display);
+      GdkSeat *seat = gdk_display_get_default_seat (gdk_surface_get_display (GDK_SURFACE (toplevel)));
       if (button == 0)
         device = gdk_seat_get_keyboard (seat);
       else

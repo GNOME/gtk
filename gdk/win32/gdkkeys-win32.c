@@ -23,20 +23,22 @@
  */
 #include "config.h"
 
+#include "gdkwin32keys.h"
+
+#include "gdk.h"
+
+#include "gdkprivate-win32.h"
+#include "gdkdebug.h"
+#include "gdkdisplayprivate.h"
+#include "gdkkeysyms.h"
+#include "gdkkeysprivate.h"
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
 #include <errno.h>
-
-#include "gdk.h"
-
-#include "gdkprivate-win32.h"
-#include "gdkinternals.h"
-#include "gdkkeysyms.h"
-#include "gdkkeysprivate.h"
-#include "gdkwin32keys.h"
 
 #define GDK_MOD2_MASK (1 << 4)
 

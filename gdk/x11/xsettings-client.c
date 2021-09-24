@@ -33,8 +33,6 @@
 #include <gdk/x11/gdkdisplay-x11.h>
 #include <gdk/x11/gdkscreen-x11.h>
 
-#include <gdkinternals.h>
-
 #include <string.h>
 
 #include <X11/Xlib.h>

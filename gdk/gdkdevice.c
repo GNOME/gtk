@@ -22,7 +22,6 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevicetool.h"
 #include "gdkdisplayprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkkeysprivate.h"
 

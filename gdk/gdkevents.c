@@ -24,13 +24,13 @@
 
 #include "config.h"
 
-#include "gdkintl.h"
-#include "gdkeventsprivate.h"
-#include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdragprivate.h"
 #include "gdkdropprivate.h"
+#include "gdkeventsprivate.h"
+#include "gdkintl.h"
 #include "gdkkeysprivate.h"
+#include "gdkkeysyms.h"
 #include "gdk-private.h"
 
 #include <gobject/gvaluecollector.h>

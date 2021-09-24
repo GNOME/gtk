@@ -23,7 +23,6 @@
 #include <AppKit/AppKit.h>
 #include <cairo.h>
 
-#include "gdkinternals.h"
 #include "gdksurfaceprivate.h"
 
 #include "gdkmacosdisplay.h"

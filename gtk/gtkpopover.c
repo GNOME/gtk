@@ -132,6 +132,8 @@
 #include "gsk/gskroundedrectprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 
+#include "gdk/gdksurfaceprivate.h"
+
 #define MNEMONICS_DELAY 300 /* ms */
 
 #define TAIL_GAP_WIDTH  24

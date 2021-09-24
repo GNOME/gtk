@@ -19,8 +19,9 @@
 
 #include "gdkeventsource.h"
 
-#include "gdksurfaceprivate.h"
+#include "gdkeventsprivate.h"
 #include "gdkframeclockprivate.h"
+#include "gdksurfaceprivate.h"
 
 #include <stdlib.h>
 

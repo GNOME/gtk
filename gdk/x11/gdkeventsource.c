@@ -19,7 +19,8 @@
 
 #include "gdkeventsource.h"
 
-#include "gdkinternals.h"
+#include "gdk/gdkeventsprivate.h"
+
 #include "gdksurface-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"

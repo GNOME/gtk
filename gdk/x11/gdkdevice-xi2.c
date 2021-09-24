@@ -279,6 +279,27 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
 }
 
 static GdkGrabStatus
+gdk_x11_convert_grab_status (int status)
+{
+  switch (status)
+    {
+    case GrabSuccess:
+      return GDK_GRAB_SUCCESS;
+    case AlreadyGrabbed:
+      return GDK_GRAB_ALREADY_GRABBED;
+    case GrabInvalidTime:
+      return GDK_GRAB_INVALID_TIME;
+    case GrabNotViewable:
+      return GDK_GRAB_NOT_VIEWABLE;
+    case GrabFrozen:
+      return GDK_GRAB_FROZEN;
+    default:
+      g_assert_not_reached();
+      return 0;
+    }
+}
+
+static GdkGrabStatus
 gdk_x11_device_xi2_grab (GdkDevice    *device,
                          GdkSurface    *surface,
                          gboolean      owner_events,
@@ -332,7 +353,7 @@ gdk_x11_device_xi2_grab (GdkDevice    *device,
 
   _gdk_x11_display_update_grab_info (display, device, status);
 
-  return _gdk_x11_convert_grab_status (status);
+  return gdk_x11_convert_grab_status (status);
 }
 
 static void

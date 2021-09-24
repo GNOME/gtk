@@ -22,9 +22,9 @@
 
 #include "gdkdrawcontextprivate.h"
 
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkprofilerprivate.h"
+#include "gdksurfaceprivate.h"
 
 /**
  * GdkDrawContext:

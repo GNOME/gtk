@@ -25,7 +25,6 @@
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
 #include "gdksurface.h"
-#include "gdkinternals.h"
 #include "gdkx11devicemanager.h"
 #include "gdkx11display.h"
 #include "gdkx11screen.h"

@@ -34,6 +34,7 @@
 #include "gtkbinlayout.h"
 #include "gtkmediafileprivate.h"
 
+#include "gdk/gdkdebug.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"

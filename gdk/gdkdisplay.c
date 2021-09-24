@@ -27,16 +27,16 @@
 #include "gdkintl.h"
 #include "gdk-private.h"
 
+#include "gdkapplaunchcontext.h"
 #include "gdkclipboardprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
-#include "gdkevents.h"
-#include "gdkinternals.h"
-#include "gdkmonitorprivate.h"
 #include "gdkframeclockidleprivate.h"
+#include "gdkeventsprivate.h"
+#include "gdkglcontextprivate.h"
+#include "gdkmonitorprivate.h"
 
 #include <math.h>
-#include <glib.h>
 
 /**
  * GdkDisplay:

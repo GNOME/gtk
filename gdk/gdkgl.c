@@ -18,9 +18,9 @@
 #include "config.h"
 
 #include "gdkcairo.h"
-#include "gdkglcontextprivate.h"
 
-#include "gdkinternals.h"
+#include "gdkglcontextprivate.h"
+#include "gdksurfaceprivate.h"
 
 #include <epoxy/gl.h>
 #include <math.h>

@@ -26,18 +26,13 @@
 
 #include "gdkversionmacros.h"
 
-#include "gdkinternals.h"
-#include "gdkintl.h"
-
 #include "gdkresources.h"
 
-#include "gdk-private.h"
-
 #include "gdkconstructor.h"
-
-#ifndef HAVE_XCONVERTCASE
-#include "gdkkeysyms.h"
-#endif
+#include "gdkdebug.h"
+#include "gdkdisplay.h"
+#include "gdkintl.h"
+#include "gdk-private.h"
 
 #include <string.h>
 #include <stdlib.h>

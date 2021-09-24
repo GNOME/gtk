@@ -68,9 +68,9 @@
 
 #include "inspector/window.h"
 
-#include "gdk/gdktextureprivate.h"
-#include "gdk/gdk-private.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gdk/gdksurfaceprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #include <cairo-gobject.h>
 #include <errno.h>

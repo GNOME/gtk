@@ -27,7 +27,6 @@
 #include "gdkdisplayprivate.h"
 #include "gdkkeys.h"
 #include "gdksurface.h"
-#include "gdkinternals.h"
 #include "gdkbroadway-server.h"
 #include "gdkmonitorprivate.h"
 

@@ -29,6 +29,7 @@
 #include "gdkdevice-win32.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
+#include "gdkeventsprivate.h"
 #include "gdkinput-winpointer.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdisplay-win32.h"

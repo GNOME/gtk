@@ -30,26 +30,23 @@
 #include "gdksurface.h"
 
 #include "gdk-private.h"
+#include "gdkcontentprovider.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdragsurfaceprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkglcontextprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkmarshalers.h"
 #include "gdkpopupprivate.h"
 #include "gdkrectangle.h"
 #include "gdktoplevelprivate.h"
+#include "gdkvulkancontext.h"
 
 #include <math.h>
 
 #include <epoxy/gl.h>
-
-#ifdef GDK_WINDOWING_WAYLAND
-#include "wayland/gdkwayland.h"
-#endif
 
 /**
  * GdkSurface:

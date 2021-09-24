@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include "gdkprivate-broadway.h"
-#include "gdkinternals.h"
 #include "gdkdisplay-broadway.h"
 #include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"

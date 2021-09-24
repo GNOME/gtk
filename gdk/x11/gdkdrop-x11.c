@@ -33,7 +33,6 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-x11.h"
 #include "gdkdragprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"

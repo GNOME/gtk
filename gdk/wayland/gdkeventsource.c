@@ -17,8 +17,9 @@
 
 #include "config.h"
 
-#include "gdkinternals.h"
 #include "gdkprivate-wayland.h"
+
+#include "gdkeventsprivate.h"
 
 #include <unistd.h>
 #include <errno.h>

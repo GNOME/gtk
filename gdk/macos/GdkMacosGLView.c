@@ -23,7 +23,6 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <OpenGL/gl.h>
 
-#include "gdkinternals.h"
 #include "gdkmacossurface-private.h"
 
 #import "GdkMacosGLView.h"
