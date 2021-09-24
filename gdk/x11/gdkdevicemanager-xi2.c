@@ -23,13 +23,13 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevicetoolprivate.h"
 #include "gdkdisplayprivate.h"
+#include "gdkeventsprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkkeys-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkintl.h"
 #include "gdkkeysyms.h"
-#include "gdkinternals.h"
 #include "gdkseatdefaultprivate.h"
 
 #include <X11/Xlib.h>

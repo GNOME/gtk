@@ -20,7 +20,8 @@
 
 #include "gdktypes.h"
 #include "gdkdisplay.h"
-#include "gdkinternals.h"
+
+#include "gdk/gdkdeviceprivate.h"
 
 #include <X11/Xlib.h>
 

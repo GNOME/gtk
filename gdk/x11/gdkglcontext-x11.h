@@ -36,7 +36,6 @@
 #include "gdkglcontextprivate.h"
 #include "gdkdisplay-x11.h"
 #include "gdksurface.h"
-#include "gdkinternals.h"
 
 G_BEGIN_DECLS
 

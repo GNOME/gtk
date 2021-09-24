@@ -18,7 +18,6 @@
 #include "config.h"
 
 #include "gdkx11devicemanager-xi2.h"
-#include "gdkinternals.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 

@@ -31,7 +31,6 @@
 #include "gdkpopupprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkdragsurfaceprivate.h"
-#include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-xi2-private.h"
 #include "gdkframeclockidleprivate.h"
@@ -41,6 +40,8 @@
 #include "gdkglcontext-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdktextureprivate.h"
+
+#include "gdkseatprivate.h"
 #include "gdk-private.h"
 
 #include <graphene.h>

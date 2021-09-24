@@ -25,7 +25,6 @@
 #include "config.h"
 
 #include "gdkdeviceprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkasync.h"
 #include "gdkdisplay-x11.h"
@@ -65,27 +64,6 @@ _gdk_x11_surfaceing_init (void)
 {
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
-}
-
-GdkGrabStatus
-_gdk_x11_convert_grab_status (int status)
-{
-  switch (status)
-    {
-    case GrabSuccess:
-      return GDK_GRAB_SUCCESS;
-    case AlreadyGrabbed:
-      return GDK_GRAB_ALREADY_GRABBED;
-    case GrabInvalidTime:
-      return GDK_GRAB_INVALID_TIME;
-    case GrabNotViewable:
-      return GDK_GRAB_NOT_VIEWABLE;
-    case GrabFrozen:
-      return GDK_GRAB_FROZEN;
-    default:
-      g_assert_not_reached();
-      return 0;
-    }
 }
 
 /*

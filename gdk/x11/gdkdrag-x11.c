@@ -34,11 +34,12 @@
 #include "gdkdevice-xi2-private.h"
 #include "gdkdisplay-x11.h"
 #include "gdkdragprivate.h"
+#include "gdkeventsprivate.h"
 #include "gdksurfaceprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkseatprivate.h"
 #include "gdkselectioninputstream-x11.h"
 #include "gdkselectionoutputstream-x11.h"
 
