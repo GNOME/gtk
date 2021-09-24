@@ -47,12 +47,13 @@
 #include <cairo-win32.h>
 
 #include "gdk.h"
+#include "gdkdevicemanager-win32.h"
 #include "gdkdisplayprivate.h"
+#include "gdkeventsprivate.h"
+#include "gdkglcontext-win32.h"
+#include "gdkkeysyms.h"
 #include "gdkmonitorprivate.h"
 #include "gdkwin32.h"
-#include "gdkkeysyms.h"
-#include "gdkglcontext-win32.h"
-#include "gdkdevicemanager-win32.h"
 #include "gdkdisplay-win32.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-virtual.h"

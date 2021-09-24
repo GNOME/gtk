@@ -35,7 +35,6 @@
 
 #include "gdkglcontext.h"
 #include "gdksurface.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 
 #include <cairo.h>

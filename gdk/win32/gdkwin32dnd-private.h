@@ -24,6 +24,8 @@
 
 #include <gdk/gdk.h>
 
+#include "gdk/gdkdragprivate.h"
+
 G_BEGIN_DECLS
 
 typedef struct _GdkWin32DragUtilityData GdkWin32DragUtilityData;

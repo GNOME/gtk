@@ -25,13 +25,17 @@
  */
 
 #include "config.h"
-#include <string.h>
 
+#include "gdkwin32dnd.h"
+
+#include "gdkeventsprivate.h"
+#include "gdkseatprivate.h"
 #include "gdk-private.h"
 
-#include <io.h>
 #include <fcntl.h>
+#include <io.h>
 #include <math.h>
+#include <string.h>
 
 /*
  * Support for OLE-2 drag and drop added at Archaeopteryx Software, 2001
@@ -192,7 +196,6 @@
 #define COBJMACROS
 
 #include "gdkdrag.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"
 #include "gdkwin32dnd.h"

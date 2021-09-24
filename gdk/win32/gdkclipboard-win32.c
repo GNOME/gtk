@@ -20,6 +20,7 @@
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-win32.h"
 
+#include "gdkdebug.h"
 #include "gdkintl.h"
 #include "gdkprivate-win32.h"
 #include "gdkhdataoutputstream-win32.h"

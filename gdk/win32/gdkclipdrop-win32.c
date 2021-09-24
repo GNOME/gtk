@@ -273,18 +273,21 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 /* for CIDA */
 #include <shlobj.h>
 
+#include "gdkdebug.h"
 #include "gdkdisplay.h"
 #include "gdkprivate-win32.h"
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-win32.h"
 #include "gdkclipdrop-win32.h"
 #include "gdkhdataoutputstream-win32.h"
-#include "gdk/gdkdragprivate.h"
 #include "gdkwin32dnd.h"
 #include "gdkwin32dnd-private.h"
 #include "gdkwin32.h"
-#include "gdkintl.h"
-#include "gdk-private.h"
+
+#include "gdk/gdkdebug.h"
+#include "gdk/gdkdragprivate.h"
+#include "gdk/gdkintl.h"
+#include "gdk/gdk-private.h"
 
 #define HIDA_GetPIDLFolder(pida) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[0])
 #define HIDA_GetPIDLItem(pida, i) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[i+1])

@@ -32,8 +32,8 @@
 #include <io.h>
 
 #include "gdk.h"
+#include "gdkdebug.h"
 #include "gdkkeysyms.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"

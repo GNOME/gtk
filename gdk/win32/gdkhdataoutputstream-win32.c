@@ -31,7 +31,6 @@
 #include "gdkwin32display.h"
 #include "gdkwin32surface.h"
 
-#include "gdkinternals.h"
 
 typedef struct _GdkWin32HDataOutputStreamPrivate  GdkWin32HDataOutputStreamPrivate;
 
