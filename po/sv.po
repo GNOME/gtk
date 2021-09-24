@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-03 00:57+0000\n"
-"PO-Revision-Date: 2021-09-04 13:03+0200\n"
+"POT-Creation-Date: 2021-09-24 13:24+0000\n"
+"PO-Revision-Date: 2021-09-24 16:38+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -64,6 +64,13 @@ msgstr "Dra-och-släpp från andra program stöds inte."
 #: gdk/gdkdrop.c:163
 msgid "No compatible formats to transfer contents."
 msgstr "Inga kompatibla format för att överföra innehåll."
+
+#. translators: This is about OpenGL backend names, like
+#. * "Trying to use X11 GLX, but EGL is already in use"
+#: gdk/gdkglcontext.c:1374
+#, c-format
+msgid "Trying to use %s, but %s is already in use"
+msgstr "Försöker använda %s, men %s används redan"
 
 #: gdk/gdksurface.c:1164
 msgid "Vulkan support disabled via GDK_DEBUG"
@@ -459,45 +466,57 @@ msgstr "Inget kompatibelt överföringsformat hittades"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Misslyckades med att avkoda innehåll med mime-typen ”%s”"
 
-#: gdk/wayland/gdkglcontext-wayland.c:190
-#: gdk/win32/gdkglcontext-win32-egl.c:399
-#: gdk/win32/gdkglcontext-win32-wgl.c:628 gdk/x11/gdkglcontext-egl.c:600
+#: gdk/wayland/gdkglcontext-wayland.c:191
+#: gdk/win32/gdkglcontext-win32-egl.c:402
+#: gdk/win32/gdkglcontext-win32-wgl.c:632 gdk/x11/gdkglcontext-egl.c:600
 #: gdk/x11/gdkglcontext-glx.c:613
 msgid "Unable to create a GL context"
 msgstr "Kan inte skapa en GL-kontext"
 
-#: gdk/wayland/gdkglcontext-wayland.c:484 gdk/x11/gdkglcontext-egl.c:688
-msgid "Failed to create EGL display"
-msgstr "Misslyckades med att skapa EGL-display"
+#: gdk/wayland/gdkglcontext-wayland.c:489
+msgid "libEGL not available in this sandbox"
+msgstr "libEGL är inte tillgängligt i denna sandlåda"
 
-#: gdk/wayland/gdkglcontext-wayland.c:493 gdk/x11/gdkglcontext-egl.c:697
+#: gdk/wayland/gdkglcontext-wayland.c:490
+msgid "libEGL not available"
+msgstr "libEGL inte tillgängligt"
+
+#: gdk/wayland/gdkglcontext-wayland.c:503
+msgid "Sandbox does not provide an OpenGL implementation"
+msgstr "Sandlådan tillhandahåller ingen OpenGL-implementation"
+
+#: gdk/wayland/gdkglcontext-wayland.c:504
+msgid "No OpenGL implementation available"
+msgstr "Ingen OpenGL-implementation tillgänglig"
+
+#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
 msgid "Could not initialize EGL display"
 msgstr "Kunde inte initiera EGL-display"
 
-#: gdk/wayland/gdkglcontext-wayland.c:504 gdk/x11/gdkglcontext-egl.c:707
+#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL-version %d.%d är för gammal. GTK kräver %d.%d"
 
-#: gdk/wayland/gdkglcontext-wayland.c:515
-#: gdk/win32/gdkglcontext-win32-egl.c:273
-#: gdk/win32/gdkglcontext-win32-wgl.c:286
-#: gdk/win32/gdkglcontext-win32-wgl.c:304
+#: gdk/wayland/gdkglcontext-wayland.c:535
+#: gdk/win32/gdkglcontext-win32-egl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:289
+#: gdk/win32/gdkglcontext-win32-wgl.c:306
 msgid "No GL implementation is available"
 msgstr "Ingen GL-implementation tillgänglig"
 
-#: gdk/wayland/gdkglcontext-wayland.c:525
+#: gdk/wayland/gdkglcontext-wayland.c:545
 msgid "Core GL is not available on EGL implementation"
 msgstr "Kärn-GL är inte tillgängligt på EGL-implementation"
 
-#: gdk/wayland/gdkglcontext-wayland.c:534 gdk/x11/gdkglcontext-egl.c:718
+#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
 msgid "Surfaceless contexts are not supported on this EGL implementation"
 msgstr "Ytlösa kontexter stöds inte på denna EGL-implementation"
 
-#: gdk/wayland/gdkglcontext-wayland.c:546
+#: gdk/wayland/gdkglcontext-wayland.c:566
 #: gdk/win32/gdkglcontext-win32-egl.c:216
 #: gdk/win32/gdkglcontext-win32-egl.c:226
-#: gdk/win32/gdkglcontext-win32-wgl.c:594
+#: gdk/win32/gdkglcontext-win32-wgl.c:598
 msgid "No available configurations for the given pixel format"
 msgstr "Inga tillgängliga inställningar för det givna bildpunktsformatet"
 
@@ -713,19 +732,23 @@ msgstr "Ingen EGL-konfiguration med funktionerna som krävdes hittades"
 msgid "No perfect EGL configuration found"
 msgstr "Ingen perfekt EGL-konfiguration hittades"
 
-#: gdk/x11/gdkglcontext-egl.c:679
+#: gdk/x11/gdkglcontext-egl.c:684
 msgid "EGL is not supported"
 msgstr "EGL stöds inte"
 
-#: gdk/x11/gdkglcontext-glx.c:770
+#: gdk/x11/gdkglcontext-egl.c:693
+msgid "Failed to create EGL display"
+msgstr "Misslyckades med att skapa EGL-display"
+
+#: gdk/x11/gdkglcontext-glx.c:772
 msgid "No GLX configurations available"
 msgstr "Inga GLX-konfigurationer tillgängliga"
 
-#: gdk/x11/gdkglcontext-glx.c:843
+#: gdk/x11/gdkglcontext-glx.c:845
 msgid "No GLX configuration with required features found"
 msgstr "Ingen GLX-konfiguration med funktionerna som krävdes hittades"
 
-#: gdk/x11/gdkglcontext-glx.c:914
+#: gdk/x11/gdkglcontext-glx.c:919
 msgid "GLX is not supported"
 msgstr "GLX stöds inte"
 
