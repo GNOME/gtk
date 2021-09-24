@@ -59,24 +59,15 @@ if get_option('gtk_doc')
   )
 endif
 
-xsltproc = find_program('xsltproc', required: false)
-if get_option('man-pages') and not xsltproc.found()
-  error('No xsltproc found, but man pages were explicitly enabled')
+rst2man = find_program('rst2man', required: false)
+if get_option('man-pages') and not rst2man.found()
+  error('No rst2man found, but man pages were explicitly enabled')
 endif
 
-if get_option('man-pages') and xsltproc.found()
-  xlstproc_flags = [
-    '--nonet',
-    '--stringparam', 'man.output.quietly', '1',
-    '--stringparam', 'funcsynopsis.style', 'ansi',
-    '--stringparam', 'man.th.extra1.suppress', '1',
-    '--stringparam', 'man.authors.section.enabled', '0',
-    '--stringparam', 'man.copyright.section.enabled', '0',
-  ]
-
-  man_files = [
-    [ 'gtk4-broadwayd', '1', ],
-    [ 'gtk4-builder-tool', '1', ],
+if get_option('man-pages') and rst2man.found()
+  rst_files = [
+    [ 'gtk4-broadwayd', '1' ],
+    [ 'gtk4-builder-tool', '1' ],
     [ 'gtk4-encode-symbolic-svg', '1', ],
     [ 'gtk4-launch', '1', ],
     [ 'gtk4-query-settings', '1', ],
@@ -84,7 +75,7 @@ if get_option('man-pages') and xsltproc.found()
   ]
 
   if get_option('demos')
-    man_files += [
+    rst_files += [
       [ 'gtk4-demo', '1', ],
       [ 'gtk4-demo-application', '1', ],
       [ 'gtk4-widget-factory', '1', ],
@@ -92,21 +83,25 @@ if get_option('man-pages') and xsltproc.found()
     ]
   endif
 
-  foreach man: man_files
-    man_name = man.get(0)
-    man_section = man.get(1, '1')
-    custom_target('@0@.@1@'.format(man_name, man_section),
-      input: '@0@.xml'.format(man_name),
+  rst2man_flags = [
+    '--syntax-highlight=none',
+  ]
+
+  foreach rst: rst_files
+    man_name = rst[0]
+    man_section = rst.get(1, '1')
+
+    custom_target('man-@0@'.format(man_name),
+      input: '@0@.rst'.format(man_name),
       output: '@0@.@1@'.format(man_name, man_section),
       command: [
-        xsltproc,
-        xlstproc_flags,
-        '-o', '@OUTPUT@',
-        'http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl',
+        rst2man,
+        rst2man_flags,
         '@INPUT@',
       ],
+      capture: true,
       install: true,
-      install_dir: join_paths(get_option('mandir'), 'man@0@'.format(man_section)),
+      install_dir: get_option('mandir') / 'man@0@'.format(man_section),
     )
   endforeach
 endif
