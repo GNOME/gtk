@@ -372,10 +372,10 @@ init_gl (GtkInspectorGeneral *gen)
       char *version;
 
       gl_version = epoxy_gl_version ();
-      version = g_strdup_printf ("WGL %d.%d", gl_version / 10, gl_version % 10, NULL);
+      version = g_strdup_printf ("WGL %d.%d", gl_version / 10, gl_version % 10);
       gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
       g_free (version);
-      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), glGetString (GL_VENDOR));
+      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), (const char *) glGetString (GL_VENDOR));
 
       append_wgl_extension_row (gen, "WGL_EXT_create_context");
       append_wgl_extension_row (gen, "WGL_EXT_swap_control");

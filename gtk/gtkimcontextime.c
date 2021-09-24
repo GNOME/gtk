@@ -684,6 +684,9 @@ gtk_im_context_ime_focus_in (GtkIMContext *context)
           g_free (utf8str);
         }
         break;
+      default:
+        g_assert_not_reached ();
+        break;
     }
 
   /* clean */
@@ -695,8 +698,6 @@ static void
 gtk_im_context_ime_focus_out (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime = GTK_IM_CONTEXT_IME (context);
-  HWND hwnd;
-  HIMC himc;
   gboolean was_preediting;
 
   if (!GDK_IS_SURFACE (context_ime->client_surface))
@@ -975,16 +976,16 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
         get_window_position (context_ime->client_surface, &wx, &wy);
         /* FIXME! */
         {
-          HWND hwnd;
+          HWND impl_hwnd;
           POINT pt;
           RECT rc;
 
-          hwnd =
+          impl_hwnd =
             gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
-          GetWindowRect (hwnd, &rc);
+          GetWindowRect (impl_hwnd, &rc);
           pt.x = wx;
           pt.y = wy;
-          ClientToScreen (hwnd, &pt);
+          ClientToScreen (impl_hwnd, &pt);
           wx = pt.x - rc.left;
           wy = pt.y - rc.top;
         }
