@@ -26,7 +26,6 @@
 #include "gdkwayland.h"
 #include "gdkprivate-wayland.h"
 #include "gdkapplaunchcontextprivate.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
 
 typedef struct {

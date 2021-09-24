@@ -26,7 +26,6 @@
 
 #include "gdkvulkancontext-wayland.h"
 
-#include "gdkinternals.h"
 #include "gdkwaylanddisplay.h"
 #include "gdkwaylandsurface.h"
 #include "gdkprivate-wayland.h"

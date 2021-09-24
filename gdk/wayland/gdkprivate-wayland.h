@@ -38,7 +38,6 @@
 
 #include <xkbcommon/xkbcommon.h>
 
-#include "gdkinternals.h"
 
 #define WL_SURFACE_HAS_BUFFER_SCALE 3
 #define WL_POINTER_HAS_FRAME 5

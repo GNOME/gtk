@@ -22,6 +22,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkdragsurfaceprivate.h"
+#include "gdkeventsprivate.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkglcontext-wayland.h"
 #include "gdkmonitor-wayland.h"

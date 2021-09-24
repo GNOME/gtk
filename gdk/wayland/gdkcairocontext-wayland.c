@@ -22,7 +22,6 @@
 
 #include "gdkprivate-wayland.h"
 
-#include "gdkinternals.h"
 #include "gdkprofilerprivate.h"
 
 static const cairo_user_data_key_t gdk_wayland_cairo_context_key;

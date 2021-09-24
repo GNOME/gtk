@@ -17,28 +17,25 @@
 
 #include "config.h"
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
+#include "gdkdevice-wayland-private.h"
 
-#include <string.h>
-#include "gdksurfaceprivate.h"
-#include "gdktypes.h"
 #include "gdkclipboard-wayland.h"
 #include "gdkclipboardprivate.h"
-#include "gdkprivate-wayland.h"
-#include "gdkseat-wayland.h"
-#include "gdkwayland.h"
-#include "gdkkeysyms.h"
-#include "gdkkeysprivate.h"
 #include "gdkcursorprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicepadprivate.h"
 #include "gdkdevicetoolprivate.h"
-#include "gdkdevice-wayland-private.h"
 #include "gdkdropprivate.h"
+#include "gdkeventsprivate.h"
+#include "gdkkeysprivate.h"
+#include "gdkkeysyms.h"
 #include "gdkprimary-wayland.h"
+#include "gdkprivate-wayland.h"
+#include "gdkseat-wayland.h"
 #include "gdkseatprivate.h"
+#include "gdksurfaceprivate.h"
+#include "gdktypes.h"
+#include "gdkwayland.h"
 #include "gdk-private.h"
 
 #include "pointer-gestures-unstable-v1-client-protocol.h"
@@ -46,6 +43,10 @@
 
 #include <xkbcommon/xkbcommon.h>
 
+#include <errno.h>
+#include <fcntl.h>
+#include <string.h>
+#include <unistd.h>
 #include <sys/time.h>
 #include <sys/mman.h>
 #if defined(HAVE_DEV_EVDEV_INPUT_H)
