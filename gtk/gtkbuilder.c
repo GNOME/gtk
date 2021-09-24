@@ -540,6 +540,9 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
       const char *property_name = prop->pspec->name;
       GValue property_value = G_VALUE_INIT;
 
+      if (prop->applied)
+        continue;
+
       if (prop->value)
         {
           g_value_init (&property_value, G_PARAM_SPEC_VALUE_TYPE (prop->pspec));
@@ -582,6 +585,9 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
                   continue;
                 }
               /* Delay setting property */
+
+              prop->applied = TRUE;
+
               property = g_slice_new (DelayedProperty);
               property->pspec = prop->pspec;
               property->object = g_strdup (object_name);
@@ -612,9 +618,15 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
       g_assert (G_IS_VALUE (&property_value));
 
       if ((prop->pspec->flags & filter_flags) != 0 && filtered_parameters)
-        object_properties_add (filtered_parameters, property_name, &property_value);
+        {
+          object_properties_add (filtered_parameters, property_name, &property_value);
+          prop->applied = TRUE;
+        }
       else if ((prop->pspec->flags & filter_flags) == 0 && parameters)
-        object_properties_add (parameters, property_name, &property_value);
+        {
+          object_properties_add (parameters, property_name, &property_value);
+          prop->applied = TRUE;
+        }
       else
         g_value_unset (&property_value);
     }

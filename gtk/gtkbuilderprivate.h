@@ -53,7 +53,6 @@ typedef struct {
 
   GObject *object;
   CommonInfo *parent;
-  gboolean applied_properties;
 } ObjectInfo;
 
 typedef struct {
@@ -71,8 +70,9 @@ typedef struct {
   GParamSpec *pspec;
   gpointer value;
   GString *text;
-  gboolean translatable:1;
-  gboolean bound:1;
+  gboolean translatable : 1;
+  gboolean bound        : 1;
+  gboolean applied      : 1;
   char *context;
   int line;
   int col;
