@@ -75,11 +75,13 @@
 #include "config.h"
 
 #include "gdkglcontextprivate.h"
-#include "gdkdisplayprivate.h"
-#include "gdkmemorytextureprivate.h"
-#include "gdkinternals.h"
 
+#include "gdkdebug.h"
+#include "gdkdisplayprivate.h"
+#include "gdkinternals.h"
 #include "gdkintl.h"
+#include "gdkmemorytextureprivate.h"
+
 #include "gdk-private.h"
 
 #ifdef GDK_WINDOWING_WIN32
@@ -1334,4 +1336,69 @@ gdk_gl_context_use_es_bgra (GdkGLContext *context)
 #endif
 
   return FALSE;
+}
+
+static GdkGLBackend the_gl_backend_type = GDK_GL_NONE;
+
+static const char *gl_backend_names[] = {
+  [GDK_GL_NONE] = "No GL (You should never read this)",
+  [GDK_GL_EGL] = "EGL",
+  [GDK_GL_GLX] = "X11 GLX",
+  [GDK_GL_WGL] = "Windows WGL",
+  [GDK_GL_CGL] = "Apple CGL"
+};
+
+/*<private>
+ * gdk_gl_backend_can_be_used:
+ * @backend_type: Type of backend to check
+ * @error: Return location for an error
+ *
+ * Checks if this backend type can be used. When multiple displays
+ * are opened that use different GL backends, conflicts can arise,
+ * so this function checks that all displays use compatible GL
+ * backends.
+ *
+ * Returns: %TRUE if the backend can still be used
+ */
+gboolean
+gdk_gl_backend_can_be_used (GdkGLBackend   backend_type,
+                            GError       **error)
+{
+  if (the_gl_backend_type == GDK_GL_NONE || 
+      the_gl_backend_type == backend_type)
+    return TRUE;
+
+  g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+               /* translators: This is about OpenGL backend names, like
+                * "Trying to use X11 GLX, but EGL is already in use" */
+               _("Trying to use %s, but %s is already in use"),
+               gl_backend_names[backend_type],
+               gl_backend_names[the_gl_backend_type]);
+  return FALSE;
+}
+
+/*<private>
+ * gdk_gl_backend_use:
+ * @backend_type: Type of backend
+ *
+ * Ensures that the backend in use is the given one. If another backend
+ * is already in use, this function will abort the program. It should
+ * have previously checked via gdk_gl_backend_can_be_used().
+ **/
+void
+gdk_gl_backend_use (GdkGLBackend backend_type)
+{
+  /* Check that the context class is properly initializing its backend type */
+  g_assert (backend_type != GDK_GL_NONE);
+
+  if (the_gl_backend_type == GDK_GL_NONE)
+    {
+      the_gl_backend_type = backend_type;
+      /* This is important!!!11eleven
+       * (But really: How do I print a message in 2 categories?) */
+      GDK_NOTE (OPENGL, g_print ("Using OpenGL backend %s\n", gl_backend_names[the_gl_backend_type]));
+      GDK_NOTE (MISC, g_message ("Using Opengl backend %s", gl_backend_names[the_gl_backend_type]));
+    }
+
+  g_assert (the_gl_backend_type == backend_type);
 }
