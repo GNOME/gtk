@@ -1208,7 +1208,9 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
 gpointer
 gdk_win32_display_get_egl_display (GdkDisplay *display)
 {
+#ifdef GDK_WIN32_ENABLE_EGL
   GdkWin32Display *display_win32;
+#endif
 
   g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
 

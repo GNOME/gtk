@@ -80,14 +80,12 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkWin32Display *display_win32 = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
-  cairo_rectangle_int_t whole_window;
   gboolean can_wait = display_win32->hasWglOMLSyncControl;
   HDC hdc;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, painted);
 
   gdk_gl_context_make_current (context);
-  whole_window = (GdkRectangle) { 0, 0, gdk_surface_get_width (surface), gdk_surface_get_height (surface) };
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "win32", "swap buffers");
 
@@ -122,11 +120,6 @@ static void
 gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext *draw_context,
                                       cairo_region_t *update_area)
 {
-  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkSurface *surface;
-
-  surface = gdk_gl_context_get_surface (context);
-
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, update_area);
@@ -563,7 +556,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   HGLRC hglrc;
   int pixel_format;
   HDC hdc;
-  HWND hwnd;
 
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);

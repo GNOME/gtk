@@ -2006,8 +2006,6 @@ static void
 gdk_win32_drag_cancel (GdkDrag             *drag,
                        GdkDragCancelReason  reason)
 {
-  GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
-
   const char *reason_str = NULL;
   switch (reason)
     {
