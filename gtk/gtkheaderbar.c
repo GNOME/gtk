@@ -467,8 +467,7 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
     }
   else if (pack_type == GTK_PACK_END)
     {
-      gtk_box_append (GTK_BOX (bar->end_box), widget);
-      gtk_box_reorder_child_after (GTK_BOX (bar->end_box), widget, NULL);
+      gtk_box_prepend (GTK_BOX (bar->end_box), widget);
     }
 
   if (bar->track_default_decoration)
