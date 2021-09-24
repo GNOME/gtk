@@ -18,7 +18,7 @@
 #ifndef __GTK_HSLA_PRIVATE_H__
 #define __GTK_HSLA_PRIVATE_H__
 
-#include <gdk/gdk.h>
+#include <gdk/gdkrgba.h>
 
 G_BEGIN_DECLS
 
