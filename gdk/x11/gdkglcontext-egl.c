@@ -642,6 +642,8 @@ gdk_x11_gl_context_egl_class_init (GdkX11GLContextEGLClass *klass)
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  context_class->backend_type = GDK_GL_EGL;
+
   context_class->realize = gdk_x11_gl_context_egl_realize;
   context_class->make_current = gdk_x11_gl_context_egl_make_current;
   context_class->clear_current = gdk_x11_gl_context_egl_clear_current;
@@ -669,6 +671,9 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
   GdkDisplay *display = GDK_DISPLAY (self);
   Display *dpy;
   int major, minor;
+
+  if (!gdk_gl_backend_can_be_used (GDK_GL_EGL, error))
+    return FALSE;
 
   dpy = gdk_x11_display_get_xdisplay (display);
 

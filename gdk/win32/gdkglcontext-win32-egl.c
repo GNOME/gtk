@@ -256,6 +256,9 @@ gdk_win32_display_init_egl (GdkDisplay  *display,
   int best_idx = 0;
   EGLDisplay egl_disp;
 
+  if (!gdk_gl_backend_can_be_used (GDK_GL_EGL, error))
+    return FALSE;
+
   if (display_win32->egl_disp != EGL_NO_DISPLAY)
     return TRUE;
   
@@ -487,6 +490,8 @@ gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS(klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS(klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  context_class->backend_type = GDK_GL_EGL;
 
   context_class->realize = gdk_win32_gl_context_egl_realize;
   context_class->make_current = gdk_win32_gl_context_egl_make_current;

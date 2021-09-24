@@ -265,6 +265,9 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   HDC hdc;
 
+  if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
+    return FALSE;
+
   if (display_win32->wgl_pixel_format != 0)
     return TRUE;
 
@@ -696,6 +699,8 @@ gdk_win32_gl_context_wgl_class_init (GdkWin32GLContextWGLClass *klass)
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  context_class->backend_type = GDK_GL_WGL;
 
   context_class->realize = gdk_win32_gl_context_wgl_realize;
   context_class->make_current = gdk_win32_gl_context_wgl_make_current;
