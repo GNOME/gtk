@@ -23,7 +23,6 @@
 #include "gdkmacossurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 
-#include "gdkinternals.h"
 #include "gdkintl.h"
 
 #include <OpenGL/gl.h>

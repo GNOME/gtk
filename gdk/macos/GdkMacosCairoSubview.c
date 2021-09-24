@@ -23,7 +23,6 @@
 #include <CoreGraphics/CoreGraphics.h>
 #include <cairo-quartz.h>
 
-#include "gdkinternals.h"
 
 #import "GdkMacosCairoSubview.h"
 #import "GdkMacosCairoView.h"

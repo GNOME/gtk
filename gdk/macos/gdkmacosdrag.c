@@ -19,15 +19,18 @@
 
 #include "config.h"
 
-#include "gdkdeviceprivate.h"
-#include "gdkintl.h"
-#include "gdk-private.h"
+#include "gdkmacosdrag-private.h"
 
 #include "gdkmacosdevice-private.h"
 #include "gdkmacoscursor-private.h"
 #include "gdkmacosdisplay-private.h"
-#include "gdkmacosdrag-private.h"
 #include "gdkmacosdragsurface-private.h"
+
+#include "gdk/gdkdeviceprivate.h"
+#include "gdk/gdkeventsprivate.h"
+#include "gdk/gdkintl.h"
+#include "gdk/gdkseatprivate.h"
+#include "gdk/gdk-private.h"
 
 #define BIG_STEP 20
 #define SMALL_STEP 1

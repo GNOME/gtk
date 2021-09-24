@@ -21,12 +21,13 @@
 
 #import "GdkMacosWindow.h"
 
-#include "gdkinternals.h"
+#include "gdkmacospopupsurface-private.h"
+
 #include "gdkpopupprivate.h"
+#include "gdkseatprivate.h"
 
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosmonitor.h"
-#include "gdkmacospopupsurface-private.h"
 #include "gdkmacosutils-private.h"
 
 struct _GdkMacosPopupSurface

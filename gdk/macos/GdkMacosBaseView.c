@@ -25,10 +25,10 @@
 #import "GdkMacosBaseView.h"
 #import "GdkMacosWindow.h"
 
-#include "gdkinternals.h"
-
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacossurface-private.h"
+
+#include "gdkdebug.h"
 
 @implementation GdkMacosBaseView
 

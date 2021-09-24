@@ -37,6 +37,7 @@
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
 
+#include "gdkeventsprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdksurfaceprivate.h"
 
