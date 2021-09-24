@@ -30,6 +30,7 @@
 #include "gdksurface.h"
 
 #include "gdk-private.h"
+#include "gdkcolorspace.h"
 #include "gdkcontentprovider.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
@@ -74,6 +75,8 @@ struct _GdkSurfacePrivate
   gboolean egl_surface_high_depth;
 #endif
 
+  GdkColorSpace *color_space;
+
   gpointer widget;
 };
 
@@ -88,13 +91,14 @@ enum {
 
 enum {
   PROP_0,
+  PROP_COLOR_SPACE,
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_FRAME_CLOCK,
-  PROP_MAPPED,
-  PROP_WIDTH,
   PROP_HEIGHT,
+  PROP_MAPPED,
   PROP_SCALE_FACTOR,
+  PROP_WIDTH,
   LAST_PROP
 };
 
@@ -476,7 +480,7 @@ gdk_surface_event_marshallerv (GClosure *closure,
 static void
 gdk_surface_init (GdkSurface *surface)
 {
-  /* 0-initialization is good for all other fields. */
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
 
   surface->state = 0;
   surface->fullscreen_mode = GDK_FULLSCREEN_ON_CURRENT_MONITOR;
@@ -485,8 +489,10 @@ gdk_surface_init (GdkSurface *surface)
 
   surface->alpha = 255;
 
+  priv->color_space = g_object_ref (gdk_color_space_get_srgb ());
+
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
-                                                 NULL, g_object_unref);
+                                                  NULL, g_object_unref);
 }
 
 static void
@@ -499,6 +505,24 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   object_class->get_property = gdk_surface_get_property;
 
   klass->beep = gdk_surface_real_beep;
+
+  /**
+   * GdkSurface:color-space: (attributes org.gtk.Property.get=gdk_surface_get_color_space)
+   *
+   * The color space for rendering to the surface
+   *
+   * This space is negotiated between GTK and the compositor.
+   *
+   * The color space may change as the surface gets moved around - for example to different
+   * monitors or when the compositor gets reconfigured. As long as the surface isn't shown,
+   * the color space may not represent the actual color space that is going to be used.
+   */
+  properties[PROP_COLOR_SPACE] =
+      g_param_spec_object ("color-space",
+                           P_("Color space"),
+                           P_("The preferred color space of the surface"),
+                           GDK_TYPE_COLOR_SPACE,
+                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -713,6 +737,7 @@ static void
 gdk_surface_finalize (GObject *object)
 {
   GdkSurface *surface = GDK_SURFACE (object);
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
 
   g_clear_handle_id (&surface->request_motion_id, g_source_remove);
 
@@ -729,6 +754,7 @@ gdk_surface_finalize (GObject *object)
   g_clear_object (&surface->cursor);
   g_clear_pointer (&surface->device_cursor, g_hash_table_destroy);
   g_clear_pointer (&surface->devices_inside, g_list_free);
+  g_clear_object (&priv->color_space);
 
   g_clear_object (&surface->display);
 
@@ -783,6 +809,10 @@ gdk_surface_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_COLOR_SPACE:
+      g_value_set_object (value, gdk_surface_get_color_space (surface));
+      break;
+
     case PROP_CURSOR:
       g_value_set_object (value, gdk_surface_get_cursor (surface));
       break;
@@ -2047,6 +2077,40 @@ gdk_surface_get_height (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_SURFACE (surface), 0);
 
   return surface->height;
+}
+
+void
+gdk_surface_set_color_space (GdkSurface    *self,
+                             GdkColorSpace *color_space)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  if (gdk_color_space_equal (priv->color_space, color_space))
+    return;
+
+  g_set_object (&priv->color_space, color_space);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_SPACE]);
+}
+
+/**
+ * gdk_surface_get_color_space: (attributes org.gtk.Method.get_property=color-space)
+ * @self: a `GdkSurface`
+ *
+ * Returns the color space for rendering to the given @surface.
+ *
+ * Renderers will need to provide data in this color space.
+ *
+ * Returns: (transfer none): The color space of @surface
+ */
+GdkColorSpace *
+gdk_surface_get_color_space (GdkSurface *self)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_SURFACE (self), gdk_color_space_get_srgb ());
+
+  return priv->color_space;
 }
 
 /*

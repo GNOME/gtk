@@ -171,6 +171,8 @@ void gdk_surface_set_state (GdkSurface      *surface,
 
 void gdk_surface_set_is_mapped (GdkSurface *surface,
                                 gboolean    is_mapped);
+void gdk_surface_set_color_space (GdkSurface    *self,
+                                  GdkColorSpace *color_space);
 
 GdkMonitor * gdk_surface_get_layout_monitor (GdkSurface      *surface,
                                              GdkPopupLayout  *layout,
