@@ -27,7 +27,6 @@
 
 #include <gdk/gdksurfaceprivate.h>
 #include "gdkbroadwaysurface.h"
-#include "gdkinternals.h"
 
 G_BEGIN_DECLS
 

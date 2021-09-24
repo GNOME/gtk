@@ -30,7 +30,6 @@
 #include "gdkmonitor-broadway.h"
 #include "gdkseatdefaultprivate.h"
 #include "gdkdevice-broadway.h"
-#include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include <gdk/gdktextureprivate.h>
 #include "gdk-private.h"

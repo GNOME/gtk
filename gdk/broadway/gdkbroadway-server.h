@@ -2,8 +2,10 @@
 #define __GDK_BROADWAY_SERVER__
 
 #include <gdk/gdktypes.h>
+
+#include "gdkdeviceprivate.h"
+
 #include "broadway-protocol.h"
-#include "gdkinternals.h"
 
 typedef struct _GdkBroadwayServer GdkBroadwayServer;
 typedef struct _GdkBroadwayServerClass GdkBroadwayServerClass;

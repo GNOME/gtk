@@ -28,7 +28,6 @@
 
 #include "gdksurfaceprivate.h"
 #include "gdkprivate-broadway.h"
-#include "gdkinternals.h"
 #include "gdkdisplay-broadway.h"
 
 #include <string.h>

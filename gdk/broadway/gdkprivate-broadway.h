@@ -30,7 +30,6 @@
 #define __GDK_PRIVATE_BROADWAY_H__
 
 #include <gdk/gdkcursor.h>
-#include <gdk/gdkinternals.h>
 #include "gdksurface-broadway.h"
 #include "gdkdisplay-broadway.h"
 #include "gdkdrawcontext-broadway.h"
