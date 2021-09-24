@@ -710,22 +710,14 @@ gdk_surface_finalize (GObject *object)
       _gdk_surface_destroy (surface, FALSE);
     }
 
-  if (surface->input_region)
-    cairo_region_destroy (surface->input_region);
-
-  if (surface->cursor)
-    g_object_unref (surface->cursor);
-
-  if (surface->device_cursor)
-    g_hash_table_destroy (surface->device_cursor);
-
-  if (surface->devices_inside)
-    g_list_free (surface->devices_inside);
+  g_clear_pointer (&surface->input_region, cairo_region_destroy);
+  g_clear_object (&surface->cursor);
+  g_clear_pointer (&surface->device_cursor, g_hash_table_destroy);
+  g_clear_pointer (&surface->devices_inside, g_list_free);
 
   g_clear_object (&surface->display);
 
-  if (surface->opaque_region)
-    cairo_region_destroy (surface->opaque_region);
+  g_clear_pointer (&surface->opaque_region, cairo_region_destroy);
 
   if (surface->parent)
     surface->parent->children = g_list_remove (surface->parent->children, surface);
