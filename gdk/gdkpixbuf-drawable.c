@@ -24,6 +24,9 @@
 
 #include "gdkpixbuf.h"
 
+#include "gdkcolorprofile.h"
+#include "gdkmemoryformatprivate.h"
+#include "gdkmemorytextureprivate.h"
 #include "gdksurface.h"
 #include "gdktextureprivate.h"
 
@@ -214,6 +217,13 @@ gdk_pixbuf_get_from_surface (cairo_surface_t *surface,
   return dest;
 }
 
+static void
+pixbuf_texture_unref_cb (guchar   *pixels,
+                         gpointer  texture)
+{
+  g_object_unref (texture);
+}
+
 /**
  * gdk_pixbuf_get_from_texture:
  * @texture: a `GdkTexture`
@@ -229,17 +239,24 @@ gdk_pixbuf_get_from_surface (cairo_surface_t *surface,
 GdkPixbuf *
 gdk_pixbuf_get_from_texture (GdkTexture *texture)
 {
-  GdkPixbuf *pixbuf;
-  cairo_surface_t *surface;
-  int width, height;
+  GdkMemoryTexture *memtex;
+  gboolean alpha;
 
-  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+  memtex = GDK_MEMORY_TEXTURE (gdk_texture_download_texture (texture));
+  alpha = gdk_memory_format_alpha (gdk_memory_texture_get_format (memtex)) != GDK_MEMORY_ALPHA_OPAQUE;
 
-  width = gdk_texture_get_width (texture);
-  height = gdk_texture_get_height (texture);
-  surface = gdk_texture_download_surface (texture);
-  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-  cairo_surface_destroy (surface);
-
-  return pixbuf;
+  memtex = gdk_memory_texture_convert (memtex,
+                                       alpha ? GDK_MEMORY_GDK_PIXBUF_ALPHA
+                                             : GDK_MEMORY_GDK_PIXBUF_OPAQUE,
+                                       gdk_color_profile_get_srgb (),
+                                       NULL);
+  return gdk_pixbuf_new_from_data (gdk_memory_texture_get_data (memtex),
+                                   GDK_COLORSPACE_RGB,
+                                   alpha,
+                                   8,
+                                   gdk_texture_get_width (GDK_TEXTURE (memtex)),
+                                   gdk_texture_get_height (GDK_TEXTURE (memtex)),
+                                   gdk_memory_texture_get_stride (memtex),
+                                   pixbuf_texture_unref_cb,
+                                   memtex);
 }
