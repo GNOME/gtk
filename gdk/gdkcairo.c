@@ -21,6 +21,7 @@
 
 #include "gdkrgba.h"
 #include "gdktexture.h"
+#include "gdkcolorstate.h"
 
 #include <math.h>
 
@@ -302,4 +303,99 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
   cairo_region_translate (region, extents.x, extents.y);
 
   return region;
+}
+
+static cairo_user_data_key_t color_state_key;
+
+/**
+ * gdk_cairo_surface_set_color_state:
+ * @surface: a surface
+ * @color_state: the color state to attach to the surface
+ *
+ * Attaches a `GdkColorState` to the Cairo surface.
+ *
+ * This is just auxiliary data for use by GTK, no Cairo functions
+ * do interact with this information.
+ *
+ * Note that all Cairo compositing operations are assumed to happen
+ * in a linear RGB color state, so if you want to use the surface
+ * as a target for rendering in a color managed way, you should use
+ * such a color state.
+ *
+ * The default color state is assumed to be sRGB, which is not
+ * linear.
+ *
+ * Since: 4.16
+ */
+void
+gdk_cairo_surface_set_color_state (cairo_surface_t *surface,
+                                   GdkColorState   *color_state)
+{
+  g_return_if_fail (surface != NULL);
+  g_return_if_fail (GDK_IS_COLOR_STATE (color_state));
+
+  cairo_surface_set_user_data (surface,
+                               &color_state_key,
+                               g_object_ref (color_state),
+                               g_object_unref);
+}
+
+/**
+ * gdk_cairo_surface_get_color_state:
+ * @surface: a surface
+ *
+ * Gets the color state GTK assumes for the surface.
+ *
+ * See [method@Gdk.CairoSurface.set_color_state] for details.
+ *
+ * Returns: (transfer none): the color state
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_cairo_surface_get_color_state (cairo_surface_t *surface)
+{
+  GdkColorState *color_state;
+
+  g_return_val_if_fail (surface != NULL, gdk_color_state_get_srgb ());
+
+  color_state = cairo_surface_get_user_data (surface, &color_state_key);
+  if (color_state == NULL)
+    color_state = gdk_color_state_get_srgb ();
+
+  return color_state;
+}
+
+/**
+ * gdk_cairo_get_color_state:
+ * @cr: a cairo context
+ *
+ * Gets the color state GTK assumes for the cairo context.
+ *
+ * Returns: (transfer none): the color state
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_cairo_get_color_state (cairo_t *cr)
+{
+  GdkColorState *color_state;
+  cairo_surface_t *surface;
+
+  g_return_val_if_fail (cr != NULL, gdk_color_state_get_srgb ());
+
+  surface = cairo_get_group_target (cr);
+  color_state = cairo_surface_get_user_data (surface, &color_state_key);
+  if (color_state != NULL)
+    return color_state;
+
+  /* theoretically, we should walk the whole group stack, but I don't
+   * think Cairo lets us do that
+   */
+  surface = cairo_get_target (cr);
+  color_state = cairo_surface_get_user_data (surface, &color_state_key);
+  if (color_state != NULL)
+    return color_state;
+
+  return gdk_color_state_get_srgb ();
 }

@@ -46,9 +46,10 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext *draw_context,
   width = gdk_surface_get_width (surface);
   height = gdk_surface_get_height (surface);
   scale = gdk_surface_get_scale_factor (surface);
-  self->paint_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                                    width * scale, height * scale);
-  cairo_surface_set_device_scale (self->paint_surface, scale, scale);
+
+  self->paint_surface = gdk_surface_create_similar_surface (surface,
+                                                            CAIRO_CONTENT_COLOR_ALPHA,
+                                                            width * scale, height *scale);
 
   repaint_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, width, height });
   cairo_region_union (region, repaint_region);
