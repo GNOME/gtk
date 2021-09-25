@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-01 09:05+0000\n"
-"PO-Revision-Date: 2021-09-01 14:11+0430\n"
+"POT-Creation-Date: 2021-09-24 17:07+0000\n"
+"PO-Revision-Date: 2021-09-25 13:54+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -69,9 +69,20 @@ msgstr "کشیدن و رها کردن از دیگر برنامه‌ها پشتی
 msgid "No compatible formats to transfer contents."
 msgstr "هیچ قالب سازگاری برای انتقال محتویات وجود ندارد."
 
+#. translators: This is about OpenGL backend names, like
+#. * "Trying to use X11 GLX, but EGL is already in use"
+#: gdk/gdkglcontext.c:1393
+#, c-format
+msgid "Trying to use %s, but %s is already in use"
+msgstr "تلاش شد از %s استفاده شود، ولی %s از پیش در حال استفاده است"
+
 #: gdk/gdksurface.c:1164
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "پشتیبانی از ولکان به دست GDK_DEBUG از کار افتاده"
+
+#: gdk/gdktexture.c:555
+msgid "Unknown image format."
+msgstr "قالب تصویر ناشناخته."
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -450,6 +461,40 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "تعلیق"
 
+#: gdk/loaders/gdkjpeg.c:61
+#, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr "خطا در تفسیر پرونده‌ی JPEG ‏(%s)"
+
+#: gdk/loaders/gdkjpeg.c:220
+#, c-format
+msgid "Unsupported JPEG colorspace (%d)"
+msgstr "فضای رنگ JPEG پشتیبانی نشده (%Id)"
+
+#: gdk/loaders/gdkjpeg.c:229 gdk/loaders/gdkpng.c:434 gdk/loaders/gdktiff.c:479
+#, c-format
+msgid "Not enough memory for image size %ux%u"
+msgstr "حافظهٔ ناکافی برای اندازهٔ تصویر %Iu×%Iu"
+
+#: gdk/loaders/gdkpng.c:118
+#, c-format
+msgid "Error reading png (%s)"
+msgstr "خطای خواندن png) %s)"
+
+#: gdk/loaders/gdkpng.c:381
+#, c-format
+msgid "Failed to parse png image"
+msgstr "شکست در تجزیهٔ تصویر png"
+
+#: gdk/loaders/gdktiff.c:380
+msgid "Failed to load RGB data from TIFF file"
+msgstr "نمی‌توان داده‌های RGB را از پرونده‌ی TIFF بار کرد"
+
+#: gdk/loaders/gdktiff.c:491
+#, c-format
+msgid "Reading data failed at row %d"
+msgstr "خواندن داده‌ها در ردیف %Id شکست خورد"
+
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
 #: gdk/win32/gdkdrop-win32.c:1099 gdk/win32/gdkdrop-win32.c:1144
@@ -462,52 +507,52 @@ msgstr "هیچ قالب انتقال سازگاری پیدا نشد"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "شکست در رمزگشایی محتوا با mime از گونهٔ %s"
 
-#: gdk/wayland/gdkglcontext-wayland.c:191 gdk/win32/gdkglcontext-win32-egl.c:399
-#: gdk/win32/gdkglcontext-win32-wgl.c:628 gdk/x11/gdkglcontext-egl.c:600
+#: gdk/wayland/gdkglcontext-wayland.c:191 gdk/win32/gdkglcontext-win32-egl.c:402
+#: gdk/win32/gdkglcontext-win32-wgl.c:631 gdk/x11/gdkglcontext-egl.c:600
 #: gdk/x11/gdkglcontext-glx.c:613
 msgid "Unable to create a GL context"
 msgstr "امکان ساخت زمینه مناسب برای GL نبود"
 
-#: gdk/wayland/gdkglcontext-wayland.c:484
+#: gdk/wayland/gdkglcontext-wayland.c:489
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL در این قرنطینه موجود نیست"
 
-#: gdk/wayland/gdkglcontext-wayland.c:485
+#: gdk/wayland/gdkglcontext-wayland.c:490
 msgid "libEGL not available"
 msgstr "libEGL موجود نیست"
 
-#: gdk/wayland/gdkglcontext-wayland.c:498
+#: gdk/wayland/gdkglcontext-wayland.c:503
 msgid "Sandbox does not provide an OpenGL implementation"
 msgstr "قرنطینه پیاده‌سازی OpenGLای را فراهم نمی‌کند"
 
-#: gdk/wayland/gdkglcontext-wayland.c:499
+#: gdk/wayland/gdkglcontext-wayland.c:504
 msgid "No OpenGL implementation available"
 msgstr "هیچ پیاده‌سازی OpenGLای موجود نیست"
 
-#: gdk/wayland/gdkglcontext-wayland.c:508 gdk/x11/gdkglcontext-egl.c:697
+#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
 msgid "Could not initialize EGL display"
 msgstr "نتوانست نمایشگر EGL را راه‌اندازی کند"
 
-#: gdk/wayland/gdkglcontext-wayland.c:519 gdk/x11/gdkglcontext-egl.c:707
+#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL نگارش %Id. %Id بیش از حد قدیمی است. GTK به %Id.%Id نیاز دارد"
 
-#: gdk/wayland/gdkglcontext-wayland.c:530 gdk/win32/gdkglcontext-win32-egl.c:273
-#: gdk/win32/gdkglcontext-win32-wgl.c:286 gdk/win32/gdkglcontext-win32-wgl.c:304
+#: gdk/wayland/gdkglcontext-wayland.c:535 gdk/win32/gdkglcontext-win32-egl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:289 gdk/win32/gdkglcontext-win32-wgl.c:307
 msgid "No GL implementation is available"
 msgstr "هیچ پیاده‌سازی GLای پیدا نشد"
 
-#: gdk/wayland/gdkglcontext-wayland.c:540
+#: gdk/wayland/gdkglcontext-wayland.c:545
 msgid "Core GL is not available on EGL implementation"
 msgstr "Core GL روی پیاده‌سازی EGL موجود نیست"
 
-#: gdk/wayland/gdkglcontext-wayland.c:549 gdk/x11/gdkglcontext-egl.c:718
+#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
 msgid "Surfaceless contexts are not supported on this EGL implementation"
 msgstr "در این پیاده‌سازی EGL زمینه‌های بی‌سطح پشتیبانی نمی‌شوند"
 
-#: gdk/wayland/gdkglcontext-wayland.c:561 gdk/win32/gdkglcontext-win32-egl.c:216
-#: gdk/win32/gdkglcontext-win32-egl.c:226 gdk/win32/gdkglcontext-win32-wgl.c:594
+#: gdk/wayland/gdkglcontext-wayland.c:566 gdk/win32/gdkglcontext-win32-egl.c:216
+#: gdk/win32/gdkglcontext-win32-egl.c:226 gdk/win32/gdkglcontext-win32-wgl.c:597
 msgid "No available configurations for the given pixel format"
 msgstr "هیچ پیکربندی برای قالب نقطه‌ای ارائه شده موجود نیست"
 
@@ -702,23 +747,23 @@ msgstr "هیچ پیکربندی‌ای با ویژگی‌های موردنیاز
 msgid "No perfect EGL configuration found"
 msgstr "هیچ پیکربندی بی‌نظیری برایEGL موجود نیست"
 
-#: gdk/x11/gdkglcontext-egl.c:679
+#: gdk/x11/gdkglcontext-egl.c:684
 msgid "EGL is not supported"
 msgstr "EGL پشتیبانی نمی‌شود"
 
-#: gdk/x11/gdkglcontext-egl.c:688
+#: gdk/x11/gdkglcontext-egl.c:693
 msgid "Failed to create EGL display"
 msgstr "شکست در ایجاد نمایشگر EGL"
 
-#: gdk/x11/gdkglcontext-glx.c:770
+#: gdk/x11/gdkglcontext-glx.c:772
 msgid "No GLX configurations available"
 msgstr "هیچ پیکربندی‌ای برای GLX موجود نیست"
 
-#: gdk/x11/gdkglcontext-glx.c:843
+#: gdk/x11/gdkglcontext-glx.c:845
 msgid "No GLX configuration with required features found"
 msgstr "هیچ پیکربندی‌ای با ویژگی‌های موردنیاز برای GLX موجود نیست"
 
-#: gdk/x11/gdkglcontext-glx.c:914
+#: gdk/x11/gdkglcontext-glx.c:919
 msgid "GLX is not supported"
 msgstr "GLX پشتیبانی نمی‌شود"
 
@@ -985,7 +1030,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:826 gtk/gtkshortcutlabel.c:100 gtk/gtkshortcutlabel.c:136
+#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:100 gtk/gtkshortcutlabel.c:136
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "تبدیل"
@@ -995,7 +1040,7 @@ msgstr "تبدیل"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:845 gtk/gtkshortcutlabel.c:103 gtk/gtkshortcutlabel.c:138
+#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:103 gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "مهار"
@@ -1005,7 +1050,7 @@ msgstr "مهار"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:864 gtk/gtkshortcutlabel.c:106 gtk/gtkshortcutlabel.c:140
+#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:106 gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "دگرساز"
@@ -1015,7 +1060,7 @@ msgstr "دگرساز"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:882 gtk/gtkshortcutlabel.c:112 gtk/gtkshortcutlabel.c:142
+#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:112 gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "سوپر"
@@ -1025,7 +1070,7 @@ msgstr "سوپر"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:896 gtk/gtkshortcutlabel.c:115 gtk/gtkshortcutlabel.c:144
+#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:115 gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "فوق"
@@ -1035,7 +1080,7 @@ msgstr "فوق"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:911 gtk/gtkshortcutlabel.c:109 gtk/gtkshortcutlabel.c:146
+#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:109 gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "فرا"
@@ -1044,17 +1089,17 @@ msgstr "فرا"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:931
+#: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "ص‌ش"
 
-#: gtk/gtkaccelgroup.c:938
+#: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "فاصله"
 
-#: gtk/gtkaccelgroup.c:941 gtk/gtkshortcutlabel.c:171
+#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:171
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "ممیز وارونه"
@@ -2028,7 +2073,7 @@ msgstr "یک پرونده با همان نام در حال حاضر وجود د�
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175 gtk/gtkmountoperation.c:610
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:642
 #: gtk/gtkprinteroptionwidget.c:713 gtk/gtkprintunixdialog.c:667
-#: gtk/gtkprintunixdialog.c:823 gtk/gtkwindow.c:6140 gtk/inspector/css-editor.c:248
+#: gtk/gtkprintunixdialog.c:823 gtk/gtkwindow.c:6138 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1271 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2118,7 +2163,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6062 gtk/gtktextview.c:8850
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6062 gtk/gtktextview.c:8900
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2243,7 +2288,7 @@ msgid "Audio"
 msgstr "صدا"
 
 #: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
-#: gtk/inspector/visual.ui:187
+#: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "قلم"
 
@@ -2388,27 +2433,27 @@ msgstr "دگرگونه‌های نویسه"
 msgid "OpenGL context creation failed"
 msgstr "ساخت زمینه OpenGL شکست خورد"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6050 gtk/gtktextview.c:8838
+#: gtk/gtklabel.c:5479 gtk/gtktext.c:6050 gtk/gtktextview.c:8888
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6054 gtk/gtktextview.c:8842
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6054 gtk/gtktextview.c:8892
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6058 gtk/gtktextview.c:8846
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6058 gtk/gtktextview.c:8896
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6071 gtk/gtktextview.c:8871
+#: gtk/gtklabel.c:5487 gtk/gtktext.c:6071 gtk/gtktextview.c:8921
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtklabel.c:5493
+#: gtk/gtklabel.c:5492
 msgid "_Open Link"
 msgstr "_گشودن پیوند"
 
-#: gtk/gtklabel.c:5497
+#: gtk/gtklabel.c:5496
 msgid "Copy _Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
@@ -2510,7 +2555,7 @@ msgid "%d:%02d"
 msgstr "%Id:%I02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176 gtk/gtkprintbackend.c:643
-#: gtk/gtkwindow.c:6141
+#: gtk/gtkwindow.c:6139
 msgid "_OK"
 msgstr "_تأیید"
 
@@ -3367,15 +3412,15 @@ msgstr "جست‌وجو دیگری را امتحان کنید"
 msgid "Could not show link"
 msgstr "نتوانست پیوند را نشان دهد"
 
-#: gtk/gtktext.c:6076 gtk/gtktextview.c:8876
+#: gtk/gtktext.c:6076 gtk/gtktextview.c:8926
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
-#: gtk/gtktextview.c:8858
+#: gtk/gtktextview.c:8908
 msgid "_Undo"
 msgstr "بر_گردان"
 
-#: gtk/gtktextview.c:8862
+#: gtk/gtktextview.c:8912
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
@@ -3402,12 +3447,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkwindow.c:6128
+#: gtk/gtkwindow.c:6126
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "می‌خواهید از بازرس +GTK استفاده کنید؟"
 
-#: gtk/gtkwindow.c:6130
+#: gtk/gtkwindow.c:6128
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify the "
@@ -3417,7 +3462,7 @@ msgstr ""
 "بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK "
 "را می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
 
-#: gtk/gtkwindow.c:6135
+#: gtk/gtkwindow.c:6133
 msgid "Don’t show this message again"
 msgstr "این پیام را دوباره نشان نده"
 
@@ -4004,99 +4049,99 @@ msgstr "پسانه از تغییر اندازه پنجره پشتیبانی نم
 msgid "GL rendering is disabled"
 msgstr "پرداخت GL از کار افتاده"
 
-#: gtk/inspector/visual.ui:59
+#: gtk/inspector/visual.ui:35
 msgid "GTK Theme"
 msgstr "زمینهٔ GTK"
 
-#: gtk/inspector/visual.ui:83
+#: gtk/inspector/visual.ui:59
 msgid "Dark Variant"
 msgstr "طیف تاریک"
 
-#: gtk/inspector/visual.ui:108
+#: gtk/inspector/visual.ui:84
 msgid "Cursor Theme"
 msgstr "تم مکان‌نما"
 
-#: gtk/inspector/visual.ui:133
+#: gtk/inspector/visual.ui:109
 msgid "Cursor Size"
 msgstr "اندازهٔ مکان‌نما"
 
-#: gtk/inspector/visual.ui:162
+#: gtk/inspector/visual.ui:145
 msgid "Icon Theme"
 msgstr "تم شمایل‌ها"
 
-#: gtk/inspector/visual.ui:212
+#: gtk/inspector/visual.ui:195
 msgid "Font Scale"
 msgstr "مقیاس قلم"
 
-#: gtk/inspector/visual.ui:249
+#: gtk/inspector/visual.ui:240
 msgid "Text Direction"
 msgstr "جهت متن"
 
-#: gtk/inspector/visual.ui:264
+#: gtk/inspector/visual.ui:255
 msgid "Left-to-Right"
 msgstr "چپ به راست"
 
-#: gtk/inspector/visual.ui:265
+#: gtk/inspector/visual.ui:256
 msgid "Right-to-Left"
 msgstr "راست به چپ"
 
-#: gtk/inspector/visual.ui:283
+#: gtk/inspector/visual.ui:274
 msgid "Window Scaling"
 msgstr "مقیاس‌دهی پنجره"
 
-#: gtk/inspector/visual.ui:309
+#: gtk/inspector/visual.ui:307
 msgid "Animations"
 msgstr "پویانمایی‌ها"
 
-#: gtk/inspector/visual.ui:334
+#: gtk/inspector/visual.ui:332
 msgid "Slowdown"
 msgstr "کاهش سرعت"
 
-#: gtk/inspector/visual.ui:384
+#: gtk/inspector/visual.ui:390
 msgid "Show fps overlay"
 msgstr "نمایش ق‌دث"
 
-#: gtk/inspector/visual.ui:409
+#: gtk/inspector/visual.ui:415
 msgid "Show Graphic Updates"
 msgstr "نمایش بروزرسانی‌های گرافیکی"
 
-#: gtk/inspector/visual.ui:434
+#: gtk/inspector/visual.ui:440
 msgid "Show Fallback Rendering"
 msgstr "نمایش پرداخت جایگزین"
 
-#: gtk/inspector/visual.ui:459
+#: gtk/inspector/visual.ui:465
 msgid "Show Baselines"
 msgstr "نمایش مبناها"
 
-#: gtk/inspector/visual.ui:487
+#: gtk/inspector/visual.ui:493
 msgid "Show Layout Borders"
 msgstr "نمایش حاشیه‌های چیدمان"
 
-#: gtk/inspector/visual.ui:544
+#: gtk/inspector/visual.ui:550
 msgid "CSS Padding"
 msgstr "فاصله‌دهی CSS"
 
-#: gtk/inspector/visual.ui:554
+#: gtk/inspector/visual.ui:560
 msgid "CSS Border"
 msgstr "لبهٔ CSS"
 
-#: gtk/inspector/visual.ui:564
+#: gtk/inspector/visual.ui:570
 msgid "CSS Margin"
 msgstr "حاشیهٔ CSS"
 
-#: gtk/inspector/visual.ui:574
+#: gtk/inspector/visual.ui:580
 msgid "Widget Margin"
 msgstr "حاشیهٔ ابزارک"
 
-#: gtk/inspector/visual.ui:609
+#: gtk/inspector/visual.ui:615
 msgid "Show Focus"
 msgstr "نمایش تمرکز"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:654
 msgid "Simulate Touchscreen"
 msgstr "شبیه‌سازی صفحهٔ لمسی"
 
-#: gtk/inspector/visual.ui:672
+#: gtk/inspector/visual.ui:678
 msgid "Software GL"
 msgstr "GL نرم‌افزاری"
 
@@ -9674,9 +9719,6 @@ msgstr ""
 #~ msgid "Couldn't recognize the image file format for file '%s'"
 #~ msgstr "قالب پرونده‌ی تصویر برای پرونده‌ی «%s» تشخیص داده نشد"
 
-#~ msgid "Unrecognized image file format"
-#~ msgstr "قالب پرونده‌ی تصویری ناشناخته"
-
 #~ msgid "Failed to load image '%s': %s"
 #~ msgstr "بار کردن تصویر «%s» شکست خورد: %s"
 
@@ -9854,10 +9896,6 @@ msgstr ""
 #~ msgstr "قالب تصویر ICO"
 
 #, fuzzy
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "خطای مهلک در خواندن پرونده‌ی تصویری PNG‏: %s"
-
-#, fuzzy
 #~ msgid "Could not decode ICNS file"
 #~ msgstr "نمی‌توان مورد را انتخاب کرد"
 
@@ -9897,17 +9935,11 @@ msgstr ""
 #~ msgid "The JPEG 2000 image format"
 #~ msgstr "قالب تصویر JPEG"
 
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "خطا در تفسیر پرونده‌ی JPEG ‏(%s)"
-
 #~ msgid ""
 #~ "Insufficient memory to load image, try exiting some applications to free memory"
 #~ msgstr ""
 #~ "حافظه برای بار کردن تصویر کافی نیست، برای آزاد کردن حافظه خروج از بعضی "
 #~ "برنامه‌ها را امتحان کنید"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "فضای رنگ JPEG پشتیبانی نمی‌شود (%s)"
 
 #~ msgid "Couldn't allocate memory for loading JPEG file"
 #~ msgstr "نمی‌توان برای بار کردن پرونده‌ی JPEG حافظه تخصیص داد"
@@ -10161,12 +10193,6 @@ msgstr ""
 #~ msgid "Insufficient memory to open TIFF file"
 #~ msgstr "حافظه برای بار کردن پرونده‌ی TIFF کافی نیست"
 
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "نمی‌توان داده‌های RGB را از پرونده‌ی TIFF بار کرد"
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "باز کردن پرونده‌ی TIFF شکست خورد"
-
 #~ msgid "TIFFClose operation failed"
 #~ msgstr "عملیات TIFFClose شکست خورد"
 
@@ -10193,9 +10219,6 @@ msgstr ""
 
 #~ msgid "Image has zero height"
 #~ msgstr "ارتفاع تصویر صفر است"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "حافظه برای بار کردن تصویر کافی نیست"
 
 #~ msgid "Couldn't save the rest"
 #~ msgstr "نمی‌توان بقیه را ذخیره کرد"
