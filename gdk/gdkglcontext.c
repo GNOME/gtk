@@ -243,9 +243,9 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
   GdkMemoryFormat data_format;
   GdkColorProfile *color_profile;
   guchar *copy = NULL;
-  GLint gl_internalformat;
-  GLint gl_format;
-  GLint gl_type;
+  GLenum gl_internalformat;
+  GLenum gl_format;
+  GLenum gl_type;
   gsize bpp, stride;
   const guchar *data;
 
@@ -260,82 +260,40 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
 
   data += x * bpp + y * stride;
 
-  if (color_profile != gdk_color_profile_get_srgb ())
+  if (!gdk_memory_format_gl_format (data_format,
+                                    priv->use_es,
+                                    &gl_internalformat,
+                                    &gl_format,
+                                    &gl_type))
     {
-      goto fallback;
-    }
-  else if (!priv->use_es && data_format == GDK_MEMORY_DEFAULT) /* Cairo surface format */
-    {
+      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       gl_internalformat = GL_RGBA8;
-      gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-    }
-  else if (data_format == GDK_MEMORY_R8G8B8) /* Pixmap non-alpha data */
-    {
-      gl_internalformat = GL_RGBA8;
-      gl_format = GL_RGB;
+      gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
+      bpp = 4;
+
+      copy = g_malloc_n (width * 4, height);
     }
-  else if (priv->use_es && data_format == GDK_MEMORY_B8G8R8)
+  else if (color_profile != gdk_color_profile_get_srgb ())
     {
-      gl_internalformat = GL_RGBA8;
-      gl_format = GL_BGR;
-      gl_type = GL_UNSIGNED_BYTE;
+      copy = g_malloc_n (width * bpp, height);
     }
-  else if (data_format == GDK_MEMORY_R16G16B16)
+  else
     {
-      gl_internalformat = GL_RGBA16;
-      gl_format = GL_RGB;
-      gl_type = GL_UNSIGNED_SHORT;
+      copy = NULL;
     }
-  else if (data_format == GDK_MEMORY_R16G16B16A16_PREMULTIPLIED)
+
+  if (copy)
     {
-      gl_internalformat = GL_RGBA16;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_SHORT;
-    }
-  else if (data_format == GDK_MEMORY_R16G16B16_FLOAT)
-    {
-      gl_internalformat = GL_RGB16F;
-      gl_format = GL_RGB;
-      gl_type = GL_HALF_FLOAT;
-    }
-  else if (data_format == GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED)
-    {
-      gl_internalformat = GL_RGBA16F;
-      gl_format = GL_RGBA;
-      gl_type = GL_HALF_FLOAT;
-    }
-  else if (data_format == GDK_MEMORY_R32G32B32_FLOAT)
-    {
-      gl_internalformat = GL_RGB32F;
-      gl_format = GL_RGB;
-      gl_type = GL_FLOAT;
-    }
-  else if (data_format == GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED)
-    {
-      gl_internalformat = GL_RGBA32F;
-      gl_format = GL_RGBA;
-      gl_type = GL_FLOAT;
-    }
-  else /* Fall-back, convert to GLES format */
-    {
-fallback:
-      copy = g_malloc (width * height * 4);
-      gdk_memory_convert (copy, width * 4,
-                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+      gdk_memory_convert (copy, width * bpp,
+                          data_format,
                           gdk_color_profile_get_srgb (),
                           data, stride,
-                          data_format,
+                          gdk_memory_texture_get_format (memory_texture),
                           color_profile,
                           width, height);
-      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      stride = width * 4;
       data = copy;
-      bpp = 4;
-      gl_internalformat = GL_RGBA8;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_BYTE;
+      stride = width * 4;
     }
 
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
