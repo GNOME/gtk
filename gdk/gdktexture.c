@@ -42,6 +42,7 @@
 #include <glib/gi18n-lib.h>
 #include "gdkcolorspace.h"
 #include "gdkcairo.h"
+#include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
 #include "gdksnapshot.h"
@@ -720,23 +721,45 @@ gdk_texture_do_download (GdkTexture      *texture,
   GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, color_space, data, stride);
 }
 
+/*<private>
+ * gdk_texture_download_surface:
+ * @texture: the texture to download
+ * @color_space: (nullable): The target color space or %NULL for the default sRGB
+ *
+ * Downloads the texture into a newly created Cairo surface.
+ *
+ * Returns: A new Cairo surface.
+ **/
 cairo_surface_t *
-gdk_texture_download_surface (GdkTexture *texture)
+gdk_texture_download_surface (GdkTexture    *texture,
+                              GdkColorSpace *color_space)
 {
   cairo_surface_t *surface;
   cairo_status_t surface_status;
 
+
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         texture->width, texture->height);
+  if (color_space != NULL)
+    gdk_cairo_surface_set_color_space (surface, color_space);
+  else
+    color_space = gdk_color_space_get_srgb ();
 
   surface_status = cairo_surface_status (surface);
   if (surface_status != CAIRO_STATUS_SUCCESS)
-    g_warning ("%s: surface error: %s", __FUNCTION__,
-               cairo_status_to_string (surface_status));
+    {
+      g_warning ("%s: surface error: %s", __FUNCTION__,
+                 cairo_status_to_string (surface_status));
+    }
+  else
+    {
+      gdk_texture_do_download (texture,
+                               GDK_MEMORY_DEFAULT,
+                               color_space,
+                               cairo_image_surface_get_data (surface),
+                               cairo_image_surface_get_stride (surface));
+    }
 
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (surface),
-                        cairo_image_surface_get_stride (surface));
   cairo_surface_mark_dirty (surface);
 
   return surface;

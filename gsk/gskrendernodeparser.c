@@ -1416,7 +1416,7 @@ parse_cairo_node (GtkCssParser *parser)
   else if (pixels != NULL)
     {
       cairo_t *cr = gsk_cairo_node_get_draw_context (node);
-      surface = gdk_texture_download_surface (pixels);
+      surface = gdk_texture_download_surface (pixels, gdk_texture_get_color_space (pixels));
       cairo_set_source_surface (cr, surface, 0, 0);
       cairo_paint (cr);
       cairo_destroy (cr);
