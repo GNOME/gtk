@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 2005 Red Hat, Inc. 
+ * Copyright (C) 2005 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,8 @@
 #include "config.h"
 
 #include "gdkcairoprivate.h"
+
+#include "gdkcolorspace.h"
 
 #include <math.h>
 
@@ -334,4 +336,98 @@ gdk_cairo_region_from_clip (cairo_t *cr)
   cairo_rectangle_list_destroy (rectangles);
 
   return region;
+}
+
+static cairo_user_data_key_t color_space_key;
+
+/**
+ * gdk_cairo_surface_set_color_space:
+ * @surface: a surface
+ * @color_space: the color space to attach to the surface
+ *
+ * Attaches a `GdkColorSpace` to the Cairo surface.
+ *
+ * This is just auxiliary data for use by GTK, no Cairo functions
+ * do interact with this information.
+ *
+ * Note that all Cairo compositing operations are assumed to happen
+ * in a linear RGB color space, so if you want to use the surface
+ * as a target for rendering in a color managed way, you should use
+ * such a color space.
+ *
+ * The default color space is assumed to be sRGB, which is not
+ * linear.
+ *
+ * Since: 4.10
+ */
+void
+gdk_cairo_surface_set_color_space (cairo_surface_t *surface,
+                                   GdkColorSpace   *color_space)
+{
+  g_return_if_fail (surface != NULL);
+  g_return_if_fail (GDK_IS_COLOR_SPACE (color_space));
+
+  cairo_surface_set_user_data (surface,
+                               &color_space_key,
+                               g_object_ref (color_space),
+                               g_object_unref);
+}
+
+/**
+ * gdk_cairo_surface_get_color_space:
+ * @surface: a surface
+ *
+ * Gets the color space GTK assumes for the surface. See
+ * [method@Gdk.CairoSurface.set_color_space] for details.
+ *
+ * Returns: (transfer none): the color space
+ *
+ * Since: 4.10
+ */
+GdkColorSpace *
+gdk_cairo_surface_get_color_space (cairo_surface_t *surface)
+{
+  GdkColorSpace *color_space;
+
+  g_return_val_if_fail (surface != NULL, gdk_color_space_get_srgb ());
+
+  color_space = cairo_surface_get_user_data (surface, &color_space_key);
+  if (color_space == NULL)
+    color_space = gdk_color_space_get_srgb ();
+
+  return color_space;
+}
+
+/**
+ * gdk_cairo_get_color_space:
+ * @cr: a cairo context
+ *
+ * Gets the color space GTK assumes for the cairo context.
+ *
+ * Returns: (transfer none): the color space
+ *
+ * Since: 4.10
+ */
+GdkColorSpace *
+gdk_cairo_get_color_space (cairo_t *cr)
+{
+  GdkColorSpace *color_space;
+  cairo_surface_t *surface;
+
+  g_return_val_if_fail (cr != NULL, gdk_color_space_get_srgb ());
+
+  surface = cairo_get_group_target (cr);
+  color_space = cairo_surface_get_user_data (surface, &color_space_key);
+  if (color_space != NULL)
+    return color_space;
+
+  /* theoretically, we should walk the whole group stack, but I don't
+   * think Cairo lets us do that
+   */
+  surface = cairo_get_target (cr);
+  color_space = cairo_surface_get_user_data (surface, &color_space_key);
+  if (color_space != NULL)
+    return color_space;
+
+  return gdk_color_space_get_srgb ();
 }

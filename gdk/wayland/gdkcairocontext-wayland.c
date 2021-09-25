@@ -157,6 +157,9 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext *draw_context,
   else
     self->paint_surface = gdk_wayland_cairo_context_create_surface (self);
 
+  gdk_cairo_surface_set_color_space (self->paint_surface,
+                                     gdk_surface_get_color_space (gdk_draw_context_get_surface (draw_context)));
+
   surface_region = gdk_wayland_cairo_context_surface_get_region (self->paint_surface);
   if (surface_region)
     cairo_region_union (region, surface_region);
