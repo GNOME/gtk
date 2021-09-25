@@ -49,6 +49,8 @@ create_cairo_surface_for_surface (GdkSurface *surface)
                                              gdk_surface_get_width (surface) * scale,
                                              gdk_surface_get_height (surface) * scale);
   cairo_surface_set_device_scale (cairo_surface, scale, scale);
+  gdk_cairo_surface_set_color_profile (cairo_surface,
+                                       gdk_surface_get_color_profile (surface));
 
   return cairo_surface;
 }

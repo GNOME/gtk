@@ -46,9 +46,15 @@ void       gdk_cairo_region             (cairo_t              *cr,
                                          const cairo_region_t *region);
 
 GDK_AVAILABLE_IN_ALL
-cairo_region_t *
-           gdk_cairo_region_create_from_surface
-                                        (cairo_surface_t      *surface);
+cairo_region_t *        gdk_cairo_region_create_from_surface    (cairo_surface_t        *surface);
+
+GDK_AVAILABLE_IN_4_6
+void                    gdk_cairo_surface_set_color_profile     (cairo_surface_t        *surface,
+                                                                 GdkColorProfile        *profile);
+GDK_AVAILABLE_IN_4_6
+GdkColorProfile *       gdk_cairo_surface_get_color_profile     (cairo_surface_t        *surface);
+GDK_AVAILABLE_IN_4_6
+GdkColorProfile *       gdk_cairo_get_color_profile             (cairo_t                *cr);
 
 GDK_DEPRECATED_IN_4_6_FOR(gdk_gl_texture_new)
 void       gdk_cairo_draw_from_gl (cairo_t              *cr,
