@@ -235,10 +235,86 @@ gdk_memory_texture_new_with_color_profile (int              width,
   return GDK_TEXTURE (self);
 }
 
+GdkMemoryTexture *
+gdk_memory_texture_convert (GdkMemoryTexture   *source,
+                            GdkMemoryFormat     to_format,
+                            GdkColorProfile    *to_profile,
+                            const GdkRectangle *rect_or_null)
+{
+  GdkTexture *texture = GDK_TEXTURE (source);
+  GdkTexture *result;
+  GBytes *to_bytes;
+  int width, height;
+  gsize offset, stride;
+
+  width = texture->width;
+  height = texture->height;
+  if (rect_or_null)
+    {
+      g_assert (rect_or_null->x + rect_or_null->width <= width);
+      g_assert (rect_or_null->y + rect_or_null->height <= height);
+
+      offset = rect_or_null->y * source->stride +
+               rect_or_null->x * gdk_memory_format_bytes_per_pixel (source->format);
+      width = rect_or_null->width;
+      height = rect_or_null->height;
+    }
+  else
+    offset = 0;
+
+  if (to_format == source->format &&
+      gdk_color_profile_equal (texture->color_profile, to_profile))
+    {
+      if (offset == 0 && width == texture->width && height == texture->height)
+        return source;
+
+      to_bytes = g_bytes_new_from_bytes (source->bytes,
+                                         offset,
+                                         source->stride * height);
+      stride = source->stride;
+    }
+  else
+    {
+      guchar *data;
+
+      stride = gdk_memory_format_bytes_per_pixel (to_format) * width;
+      data = g_malloc_n (stride, height);
+      gdk_memory_convert (data,
+                          stride,
+                          to_format,
+                          to_profile,
+                          (guchar *) g_bytes_get_data (source->bytes, NULL) + offset,
+                          source->stride,
+                          source->format,
+                          texture->color_profile,
+                          width,
+                          height);
+      to_bytes = g_bytes_new_take (data, stride * height);
+    }
+
+  result = gdk_memory_texture_new_with_color_profile (width,
+                                                      height,
+                                                      to_format,
+                                                      to_profile,
+                                                      to_bytes,
+                                                      stride);
+
+  g_bytes_unref (to_bytes);
+  g_object_unref (source);
+
+  return GDK_MEMORY_TEXTURE (result);
+}
+
 GdkMemoryFormat 
 gdk_memory_texture_get_format (GdkMemoryTexture *self)
 {
   return self->format;
+}
+
+GBytes *
+gdk_memory_texture_get_bytes (GdkMemoryTexture *self)
+{
+  return self->bytes;
 }
 
 const guchar *
