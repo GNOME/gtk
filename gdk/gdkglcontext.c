@@ -229,104 +229,6 @@ gdk_gl_context_get_property (GObject    *gobject,
     }
 }
 
-void
-gdk_gl_context_upload_texture (GdkGLContext    *context,
-                               GdkTexture      *texture,
-                               int              x,
-                               int              y,
-                               int              width,
-                               int              height,
-                               guint            texture_target)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  GdkMemoryTexture *memory_texture;
-  GdkMemoryFormat data_format;
-  GdkColorProfile *color_profile;
-  guchar *copy = NULL;
-  GLenum gl_internalformat;
-  GLenum gl_format;
-  GLenum gl_type;
-  gsize bpp, stride;
-  const guchar *data;
-
-  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-
-  color_profile = gdk_texture_get_color_profile (texture);
-  memory_texture = GDK_MEMORY_TEXTURE (gdk_texture_download_texture (texture));
-  data_format = gdk_memory_texture_get_format (memory_texture);
-  bpp = gdk_memory_format_bytes_per_pixel (data_format);
-  stride = gdk_memory_texture_get_stride (memory_texture);
-  data = gdk_memory_texture_get_data (memory_texture);
-
-  data += x * bpp + y * stride;
-
-  if (!gdk_memory_format_gl_format (data_format,
-                                    priv->use_es,
-                                    &gl_internalformat,
-                                    &gl_format,
-                                    &gl_type))
-    {
-      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      gl_internalformat = GL_RGBA8;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_BYTE;
-      bpp = 4;
-
-      copy = g_malloc_n (width * 4, height);
-    }
-  else if (color_profile != gdk_color_profile_get_srgb ())
-    {
-      copy = g_malloc_n (width * bpp, height);
-    }
-  else
-    {
-      copy = NULL;
-    }
-
-  if (copy)
-    {
-      gdk_memory_convert (copy, width * bpp,
-                          data_format,
-                          gdk_color_profile_get_srgb (),
-                          data, stride,
-                          gdk_memory_texture_get_format (memory_texture),
-                          color_profile,
-                          width, height);
-      data = copy;
-      stride = width * 4;
-    }
-
-  /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
-   * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
-   */
-  if (stride == width * bpp)
-    {
-      glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-
-      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
-      glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
-    }
-  else if ((!priv->use_es ||
-            (priv->use_es && (priv->gl_version >= 30 || priv->has_unpack_subimage))))
-    {
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
-
-      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
-
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
-    }
-  else
-    {
-      int i;
-      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, NULL);
-      for (i = 0; i < height; i++)
-        glTexSubImage2D (texture_target, 0, 0, i, width, 1, gl_format, gl_type, data + (i * stride));
-    }
-
-  g_free (copy);
-  g_clear_object (&memory_texture);
-}
-
 #define N_EGL_ATTRS     16
 
 static gboolean
@@ -1537,6 +1439,19 @@ gdk_gl_context_get_version (GdkGLContext *context,
     *major = priv->gl_version / 10;
   if (minor != NULL)
     *minor = priv->gl_version % 10;
+}
+
+gboolean
+gdk_gl_context_has_version (GdkGLContext *context,
+                            int           major,
+                            int           minor)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
+  g_return_val_if_fail (minor < 10, FALSE);
+
+  return priv->gl_version >= major * 10 + minor;
 }
 
 /**

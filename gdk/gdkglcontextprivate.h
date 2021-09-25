@@ -105,13 +105,6 @@ GdkGLContext *          gdk_gl_context_new_for_surface          (GdkSurface     
 void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
                                                                  gboolean         is_legacy);
 
-void                    gdk_gl_context_upload_texture           (GdkGLContext    *context,
-                                                                 GdkTexture      *texture,
-                                                                 int              x,
-                                                                 int              y,
-                                                                 int              width,
-                                                                 int              height,
-                                                                 guint            texture_target);
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
                                                                  const char      *message);
@@ -129,6 +122,9 @@ void                    gdk_gl_context_label_object_printf      (GdkGLContext   
                                                                  const char      *format,
                                                                 ...)  G_GNUC_PRINTF (4, 5);
 
+gboolean                gdk_gl_context_has_version              (GdkGLContext    *context,
+                                                                 int              major,
+                                                                 int              minor);
 gboolean                gdk_gl_context_has_debug                (GdkGLContext    *self) G_GNUC_PURE;
 
 gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);
