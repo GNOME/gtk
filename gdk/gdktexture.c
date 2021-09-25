@@ -43,6 +43,7 @@
 #include "gdkcairo.h"
 #include "gdkcolorprofile.h"
 #include "gdkintl.h"
+#include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
 #include "gdksnapshot.h"
@@ -742,23 +743,55 @@ gdk_texture_get_color_profile (GdkTexture *texture)
   return texture->color_profile;
 }
 
+/*<private>
+ * gdk_texture_download_surface:
+ * @texture: the texture to download
+ * @target_profile: (nullable): The target color profile or %NULL for the
+ *   default sRGB.
+ *
+ * Downloads the texture into a newly created Cairo surface.
+ *
+ * Returns: A new Cairo surface.
+ **/
 cairo_surface_t *
-gdk_texture_download_surface (GdkTexture *texture)
+gdk_texture_download_surface (GdkTexture      *texture,
+                              GdkColorProfile *target_profile)
 {
   cairo_surface_t *surface;
   cairo_status_t surface_status;
 
+
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         texture->width, texture->height);
+  if (target_profile != NULL)
+    gdk_cairo_surface_set_color_profile (surface, target_profile);
+  else
+    target_profile = gdk_color_profile_get_srgb ();
 
   surface_status = cairo_surface_status (surface);
   if (surface_status != CAIRO_STATUS_SUCCESS)
-    g_warning ("%s: surface error: %s", __FUNCTION__,
-               cairo_status_to_string (surface_status));
+    {
+      g_warning ("%s: surface error: %s", __FUNCTION__,
+                 cairo_status_to_string (surface_status));
+    }
+  else
+    {
+      GdkTexture *download = gdk_texture_download_texture (texture);
+      GdkMemoryTexture *memdownload = GDK_MEMORY_TEXTURE (download);
 
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (surface),
-                        cairo_image_surface_get_stride (surface));
+      gdk_memory_convert (cairo_image_surface_get_data (surface),
+                          cairo_image_surface_get_stride (surface),
+                          GDK_MEMORY_DEFAULT,
+                          target_profile,
+                          gdk_memory_texture_get_data (memdownload),
+                          gdk_memory_texture_get_stride (memdownload),
+                          gdk_memory_texture_get_format (memdownload),
+                          download->color_profile,
+                          download->width,
+                          download->height);
+      g_object_unref (download);
+    }
+
   cairo_surface_mark_dirty (surface);
 
   return surface;
