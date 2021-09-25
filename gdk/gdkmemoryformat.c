@@ -27,12 +27,6 @@
 
 typedef struct _GdkMemoryFormatDescription GdkMemoryFormatDescription;
 
-typedef enum {
-  GDK_MEMORY_ALPHA_PREMULTIPLIED,
-  GDK_MEMORY_ALPHA_STRAIGHT,
-  GDK_MEMORY_ALPHA_OPAQUE
-} GdkMemoryAlpha;
-
 #define TYPED_FUNCS(name, T, R, G, B, A, bpp, scale) \
 static void \
 name ## _to_float (float        *dest, \
@@ -384,6 +378,12 @@ gsize
 gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
 {
   return memory_formats[format].bytes_per_pixel;
+}
+
+GdkMemoryAlpha
+gdk_memory_format_alpha (GdkMemoryFormat format)
+{
+  return memory_formats[format].alpha;
 }
 
 gsize
