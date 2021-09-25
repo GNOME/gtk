@@ -106,7 +106,7 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
   icon_data->source_texture = g_object_ref (key);
 
   /* actually upload the texture */
-  surface = gdk_texture_download_surface (key);
+  surface = gdk_texture_download_surface (key, NULL);
   surface_data = cairo_image_surface_get_data (surface);
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Uploading texture");

@@ -449,7 +449,7 @@ get_colorized_texture (GdkTexture *texture,
                        const graphene_matrix_t *color_matrix,
                        const graphene_vec4_t *color_offset)
 {
-  cairo_surface_t *surface = gdk_texture_download_surface (texture);
+  cairo_surface_t *surface = gdk_texture_download_surface (texture, NULL);
   cairo_surface_t *image_surface;
   graphene_vec4_t pixel;
   guint32* pixel_data;
