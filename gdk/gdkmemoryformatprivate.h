@@ -26,6 +26,11 @@ G_BEGIN_DECLS
 
 gsize                   gdk_memory_format_alignment         (GdkMemoryFormat             format) G_GNUC_CONST;
 gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat             format) G_GNUC_CONST;
+gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat             format,
+                                                             gboolean                    gles,
+                                                             guint                      *out_internal_format,
+                                                             guint                      *out_format,
+                                                             guint                      *out_type);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,
