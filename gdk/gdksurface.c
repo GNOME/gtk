@@ -30,6 +30,8 @@
 #include "gdksurface.h"
 
 #include "gdkprivate.h"
+#include "gdkcolorstate.h"
+#include "gdkcairo.h"
 #include "gdkcontentprovider.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
@@ -2361,6 +2363,7 @@ gdk_surface_create_similar_surface (GdkSurface      *surface,
                                                 content == CAIRO_CONTENT_ALPHA ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32,
                                                 width * scale, height * scale);
   cairo_surface_set_device_scale (similar_surface, scale, scale);
+  gdk_cairo_surface_set_color_state (similar_surface, gdk_surface_get_color_state (surface));
 
   return similar_surface;
 }
