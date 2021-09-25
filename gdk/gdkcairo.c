@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 2005 Red Hat, Inc. 
+ * Copyright (C) 2005 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,8 @@
 #include "config.h"
 
 #include "gdkcairoprivate.h"
+
+#include "gdkcolorprofile.h"
 
 #include <math.h>
 
@@ -334,4 +336,98 @@ gdk_cairo_region_from_clip (cairo_t *cr)
   cairo_rectangle_list_destroy (rectangles);
 
   return region;
+}
+
+static cairo_user_data_key_t color_profile_key;
+
+/**
+ * gdk_cairo_surface_set_color_profile:
+ * @surface: a surface
+ * @profile: the profile to attach to the surface
+ *
+ * Attaches a `GdkColorProfile` to the Cairo surface.
+ *
+ * This is just auxiliary data for use by GTK, no Cairo functions
+ * do interact with this information.
+ *
+ * Note that all Cairo compositing operations are assumed to happen
+ * in a linear RGB color space, so if you want to use the surface
+ * as a target for rendering in a color managed way, you should use
+ * such a color profile.
+ *
+ * The default color profile is assumed to be sRGB, which is not
+ * linear.
+ *
+ * Since: 4.8
+ */
+void
+gdk_cairo_surface_set_color_profile (cairo_surface_t *surface,
+                                     GdkColorProfile *profile)
+{
+  g_return_if_fail (surface != NULL);
+  g_return_if_fail (GDK_IS_COLOR_PROFILE (profile));
+
+  cairo_surface_set_user_data (surface,
+                               &color_profile_key,
+                               g_object_ref (profile),
+                               g_object_unref);
+}
+
+/**
+ * gdk_cairo_surface_get_color_profile:
+ * @surface: a surface
+ *
+ * Gets the color profile GTK assumes for the surface. See
+ * gdk_cairo_surface_set_color_profile() for details.
+ *
+ * Returns: (transfer none): the assumed profile
+ *
+ * Since: 4.8
+ */
+GdkColorProfile *
+gdk_cairo_surface_get_color_profile (cairo_surface_t *surface)
+{
+  GdkColorProfile *profile;
+
+  g_return_val_if_fail (surface != NULL, gdk_color_profile_get_srgb ());
+
+  profile = cairo_surface_get_user_data (surface, &color_profile_key);
+  if (profile == NULL)
+    profile = gdk_color_profile_get_srgb ();
+
+  return profile;
+}
+
+/**
+ * gdk_cairo_get_color_profile:
+ * @cr: a cairo context
+ *
+ * Gets the color profile GTK assumes for the cairo context.
+ *
+ * Returns: (transfer none): the assumed profile
+ *
+ * Since: 4.8
+ */
+GdkColorProfile *
+gdk_cairo_get_color_profile (cairo_t *cr)
+{
+  GdkColorProfile *profile;
+  cairo_surface_t *surface;
+
+  g_return_val_if_fail (cr != NULL, gdk_color_profile_get_srgb ());
+
+  surface = cairo_get_group_target (cr);
+  profile = cairo_surface_get_user_data (surface, &color_profile_key);
+  if (profile != NULL)
+    return profile;
+
+  /* theoretically, we should walk the whole group stack, but I don't
+   * think Cairo lets us do that
+   */
+  surface = cairo_get_target (cr);
+  profile = cairo_surface_get_user_data (surface, &color_profile_key);
+  if (profile != NULL)
+    return profile;
+
+  return gdk_color_profile_get_srgb ();
 }

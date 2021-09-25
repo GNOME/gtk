@@ -39,6 +39,7 @@
 
 #include "gdktextureprivate.h"
 
+#include "gdkcairo.h"
 #include "gdkcolorprofile.h"
 #include "gdkintl.h"
 #include "gdkmemorytextureprivate.h"
@@ -396,11 +397,12 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
                                       (GDestroyNotify) cairo_surface_destroy,
                                       cairo_surface_reference (surface));
 
-  texture = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
-                                    cairo_image_surface_get_height (surface),
-                                    GDK_MEMORY_DEFAULT,
-                                    bytes,
-                                    cairo_image_surface_get_stride (surface));
+  texture = gdk_memory_texture_new_with_color_profile (cairo_image_surface_get_width (surface),
+                                                       cairo_image_surface_get_height (surface),
+                                                       GDK_MEMORY_DEFAULT,
+                                                       gdk_cairo_surface_get_color_profile (surface),
+                                                       bytes,
+                                                       cairo_image_surface_get_stride (surface));
 
   g_bytes_unref (bytes);
 
