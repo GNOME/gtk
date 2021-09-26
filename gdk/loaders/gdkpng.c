@@ -206,68 +206,6 @@ unpremultiply_float_to_16bit (guchar *data,
     }
 }
 
-static inline int
-multiply_alpha (int alpha, int color)
-{
-  int temp = (alpha * color) + 0x80;
-  return ((temp + (temp >> 8)) >> 8);
-}
-
-static void
-premultiply_data (png_structp   png,
-                  png_row_infop row_info,
-                  png_bytep     data)
-{
-  unsigned int i;
-
-  for (i = 0; i < row_info->rowbytes; i += 4)
-    {
-      uint8_t *base  = &data[i];
-      uint8_t  alpha = base[3];
-      uint32_t p;
-
-      if (alpha == 0)
-        {
-          p = 0;
-        }
-      else
-        {
-          uint8_t  red   = base[0];
-          uint8_t  green = base[1];
-          uint8_t  blue  = base[2];
-
-          if (alpha != 0xff)
-            {
-              red   = multiply_alpha (alpha, red);
-              green = multiply_alpha (alpha, green);
-              blue  = multiply_alpha (alpha, blue);
-            }
-          p = ((uint32_t)alpha << 24) | (red << 16) | (green << 8) | (blue << 0);
-        }
-      memcpy (base, &p, sizeof (uint32_t));
-  }
-}
-
-static void
-convert_bytes_to_data (png_structp   png,
-                       png_row_infop row_info,
-                       png_bytep     data)
-{
-  unsigned int i;
-
-  for (i = 0; i < row_info->rowbytes; i += 4)
-    {
-      uint8_t *base  = &data[i];
-      uint8_t  red   = base[0];
-      uint8_t  green = base[1];
-      uint8_t  blue  = base[2];
-      uint32_t pixel;
-
-      pixel = (0xffu << 24) | (red << 16) | (green << 8) | (blue << 0);
-      memcpy (base, &pixel, sizeof (uint32_t));
-    }
-}
-
 static void
 premultiply_16bit (guchar *data,
                    int     width,
@@ -355,9 +293,6 @@ gdk_load_png (GBytes  *bytes,
   if (png_get_valid (png, info, PNG_INFO_tRNS))
     png_set_tRNS_to_alpha (png);
 
-  if (depth == 8)
-    png_set_filler (png, 0xff, PNG_FILLER_AFTER);
-
   if (depth < 8)
     png_set_packing (png);
 
@@ -368,18 +303,20 @@ gdk_load_png (GBytes  *bytes,
   if (interlace != PNG_INTERLACE_NONE)
     png_set_interlace_handling (png);
 
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+  png_set_swap (png);
+#endif
+
   png_read_update_info (png, info);
   png_get_IHDR (png, info,
                 &width, &height, &depth,
                 &color_type, &interlace, NULL, NULL);
-  if ((depth != 8 && depth != 16) ||
-      !(color_type == PNG_COLOR_TYPE_RGB ||
-        color_type == PNG_COLOR_TYPE_RGB_ALPHA))
+  if (depth != 8 && depth != 16)
     {
       png_destroy_read_struct (&png, &info, NULL);
       g_set_error (error,
                    GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
-                   _("Failed to parse png image"));
+                   _("Unsupported depth %u in png image"), depth);
       return NULL;
     }
 
@@ -388,33 +325,37 @@ gdk_load_png (GBytes  *bytes,
     case PNG_COLOR_TYPE_RGB_ALPHA:
       if (depth == 8)
         {
-          format = GDK_MEMORY_DEFAULT;
-          png_set_read_user_transform_fn (png, premultiply_data);
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+          format = GDK_MEMORY_R8G8B8A8;
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+          format = GDK_MEMORY_A8B8G8R8;
+#endif
         }
       else
         {
           format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-          png_set_swap (png);
-#endif
         }
       break;
     case PNG_COLOR_TYPE_RGB:
       if (depth == 8)
         {
-          format = GDK_MEMORY_DEFAULT;
-          png_set_read_user_transform_fn (png, convert_bytes_to_data);
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+          format = GDK_MEMORY_R8G8B8;
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+          format = GDK_MEMORY_B8G8R8;
+#endif
         }
-      else
+      else if (depth == 16)
         {
           format = GDK_MEMORY_R16G16B16;
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-          png_set_swap (png);
-#endif
         }
       break;
     default:
-      g_assert_not_reached ();
+      png_destroy_read_struct (&png, &info, NULL);
+      g_set_error (error,
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
+                   _("Unsupportd color type %u in png image"), color_type);
+      return NULL;
     }
 
   bpp = gdk_memory_format_bytes_per_pixel (format);
