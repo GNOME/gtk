@@ -206,30 +206,6 @@ unpremultiply_float_to_16bit (guchar *data,
     }
 }
 
-static void
-premultiply_16bit (guchar *data,
-                   int     width,
-                   int     height,
-                   int     stride)
-{
-  gsize x, y;
-  guint16 *src;
-
-  for (y = 0; y < height; y++)
-    {
-      src = (guint16 *)data;
-      for (x = 0; x < width; x++)
-        {
-          float alpha = src[x * 4 + 3] / 65535.f;
-          src[x * 4    ] = (guint16) CLAMP (src[x * 4    ] * alpha, 0.f, 65535.f);
-          src[x * 4 + 1] = (guint16) CLAMP (src[x * 4 + 1] * alpha, 0.f, 65535.f);
-          src[x * 4 + 2] = (guint16) CLAMP (src[x * 4 + 2] * alpha, 0.f, 65535.f);
-        }
-
-      data += stride;
-    }
-}
-
 /* }}} */
 /* {{{ Public API */ 
 
@@ -333,7 +309,7 @@ gdk_load_png (GBytes  *bytes,
         }
       else
         {
-          format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+          format = GDK_MEMORY_R16G16B16A16;
         }
       break;
     case PNG_COLOR_TYPE_RGB:
@@ -382,9 +358,6 @@ gdk_load_png (GBytes  *bytes,
 
   png_read_image (png, row_pointers);
   png_read_end (png, info);
-
-  if (format == GDK_MEMORY_R16G16B16A16_PREMULTIPLIED)
-    premultiply_16bit (buffer, width, height, stride);
 
   out_bytes = g_bytes_new_take (buffer, height * stride);
   texture = gdk_memory_texture_new (width, height, format, out_bytes, stride);
@@ -445,10 +418,13 @@ gdk_save_png (GdkTexture *texture)
       break;
 
     case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16A16:
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
     case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
       data = g_malloc_n (width * 16, height);
       gdk_texture_download_float (mtexture, (float *)data, width * 4);

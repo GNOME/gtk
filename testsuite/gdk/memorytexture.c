@@ -49,14 +49,17 @@ gdk_memory_format_precsion (GdkMemoryFormat format)
 
     case GDK_MEMORY_R16G16B16:
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16:
       return 1/65536.f;
 
     case GDK_MEMORY_R16G16B16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
       return 0.0009765625f;
 
     case GDK_MEMORY_R32G32B32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
       return FLT_EPSILON;
 
     case GDK_MEMORY_N_FORMATS:
@@ -89,13 +92,16 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
       return 6;
 
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
       return 8;
 
     case GDK_MEMORY_R32G32B32_FLOAT:
       return 12;
 
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
       return 16;
 
     case GDK_MEMORY_N_FORMATS:
@@ -125,8 +131,11 @@ gdk_memory_format_has_alpha (GdkMemoryFormat format)
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
       return TRUE;
 
     case GDK_MEMORY_N_FORMATS:
@@ -296,6 +305,17 @@ texture_builder_set_pixel (TextureBuilder  *builder,
         memcpy (data, pixels, 4 * sizeof (guint16));
       }
       break;
+    case GDK_MEMORY_R16G16B16A16:
+      {
+        guint16 pixels[4] = {
+          CLAMP (color->red * 65536.f, 0, 65535.f),
+          CLAMP (color->green * 65536.f, 0, 65535.f),
+          CLAMP (color->blue * 65536.f, 0, 65535.f),
+          CLAMP (color->alpha * 65536.f, 0, 65535.f),
+        };
+        memcpy (data, pixels, 4 * sizeof (guint16));
+      }
+      break;
     case GDK_MEMORY_R16G16B16_FLOAT:
       {
         guint16 pixels[3] = {
@@ -317,6 +337,17 @@ texture_builder_set_pixel (TextureBuilder  *builder,
         memcpy (data, pixels, 4 * sizeof (guint16));
       }
       break;
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+      {
+        guint16 pixels[4] = {
+          float_to_half (color->red),
+          float_to_half (color->green),
+          float_to_half (color->blue),
+          float_to_half (color->alpha)
+        };
+        memcpy (data, pixels, 4 * sizeof (guint16));
+      }
+      break;
     case GDK_MEMORY_R32G32B32_FLOAT:
       {
         float pixels[3] = {
@@ -333,6 +364,17 @@ texture_builder_set_pixel (TextureBuilder  *builder,
           color->red * color->alpha,
           color->green * color->alpha,
           color->blue * color->alpha,
+          color->alpha
+        };
+        memcpy (data, pixels, 4 * sizeof (float));
+      }
+      break;
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+      {
+        float pixels[4] = {
+          color->red,
+          color->green,
+          color->blue,
           color->alpha
         };
         memcpy (data, pixels, 4 * sizeof (float));
