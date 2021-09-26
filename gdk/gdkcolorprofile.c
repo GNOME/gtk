@@ -214,6 +214,49 @@ gdk_color_profile_get_srgb (void)
   return srgb_profile;
 }
 
+/*<private>
+ * gdk_color_profile_get_srgb_linear:
+ *
+ * Returns the linear color profile corresponding to the sRGB
+ * color space.
+ *
+ * It can display the same colors, but it does not have a gamma curve.
+ *
+ * Returns: (transfer none): the color profile for the linear sRGB
+ *   color space.
+ */
+GdkColorProfile *
+gdk_color_profile_get_srgb_linear (void)
+{
+  static GdkColorProfile *srgb_linear_profile;
+
+  if (g_once_init_enter (&srgb_linear_profile))
+    {
+      cmsToneCurve *curve;
+      cmsHPROFILE lcms_profile;
+      GdkColorProfile *new_profile;
+
+      curve = cmsBuildGamma (NULL, 1.0);
+      lcms_profile = cmsCreateRGBProfile (&(cmsCIExyY) {
+                                            0.3127, 0.3290, 1.0
+                                          },
+                                          &(cmsCIExyYTRIPLE) {
+                                            { 0.6400, 0.3300, 1.0 },
+                                            { 0.3000, 0.6000, 1.0 },
+                                            { 0.1500, 0.0600, 1.0 }
+                                          },
+                                          (cmsToneCurve*[3]) { curve, curve, curve });
+      cmsFreeToneCurve (curve);
+
+      new_profile = gdk_color_profile_new_from_lcms_profile (lcms_profile, NULL);
+      g_assert (new_profile);
+
+      g_once_init_leave (&srgb_linear_profile, new_profile);
+    }
+
+  return srgb_linear_profile;
+}
+
 /**
  * gdk_color_profile_new_from_icc_bytes:
  * @icc_profile: The ICC profiles given as a `GBytes`
@@ -296,6 +339,32 @@ gdk_color_profile_get_lcms_profile (GdkColorProfile *self)
   g_return_val_if_fail (GDK_IS_COLOR_PROFILE (self), NULL);
 
   return self->lcms_profile;
+}
+
+/**
+ * gdk_color_profile_is_linear:
+ * @profile: a `GdkColorProfile`
+ *
+ * Checks if the given profile is linear.
+ * GTK tries to do compositing in a linear profile.
+ *
+ * Some profiles may be linear, but it is not possible to
+ * determine this easily. In those cases %FALSE will be returned.
+ *
+ * Returns: %TRUE if the profile can be proven linear
+ *
+ * Since: 4.6
+ */
+gboolean
+gdk_color_profile_is_linear (GdkColorProfile *self)
+{
+  g_return_val_if_fail (GDK_IS_COLOR_PROFILE (self), FALSE);
+
+  /* FIXME: Make this useful */
+  if (self == gdk_color_profile_get_srgb_linear ())
+    return TRUE;
+
+  return FALSE;
 }
 
 /**
