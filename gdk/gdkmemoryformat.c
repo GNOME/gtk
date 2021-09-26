@@ -343,6 +343,36 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA32F, GL_RGBA, GL_FLOAT },
     r32g32b32a32_float_to_float,
     r32g32b32a32_float_from_float,
+  },
+  [GDK_MEMORY_R16G16B16A16] = {
+    "R16G16B16A16",
+    GDK_MEMORY_ALPHA_STRAIGHT,
+    8,
+    G_ALIGNOF (guint16),
+    TRUE,
+    { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT },
+    r16g16b16a16_to_float,
+    r16g16b16a16_from_float,
+  },
+  [GDK_MEMORY_R16G16B16A16_FLOAT] = {
+    "R16G16B16A16_FLOAT",
+    GDK_MEMORY_ALPHA_STRAIGHT,
+    8,
+    G_ALIGNOF (guint16),
+    TRUE,
+    { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT },
+    r16g16b16a16_float_to_float,
+    r16g16b16a16_float_from_float,
+  },
+  [GDK_MEMORY_R32G32B32A32_FLOAT] = {
+    "R32G32B32A32_FLOAT",
+    GDK_MEMORY_ALPHA_STRAIGHT,
+    16,
+    G_ALIGNOF (float),
+    TRUE,
+    { GL_RGBA32F, GL_RGBA, GL_FLOAT },
+    r32g32b32a32_float_to_float,
+    r32g32b32a32_float_from_float,
   }
 };
 
