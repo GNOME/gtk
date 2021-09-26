@@ -18,6 +18,11 @@ cmsHPROFILE *                gdk_color_profile_get_lcms_profile           (GdkCo
 gboolean                     gdk_color_profile_supports_memory_format     (GdkColorProfile      *profile,
                                                                            GdkMemoryFormat       format);
 
+cmsHTRANSFORM *              gdk_color_profile_lookup_transform           (GdkColorProfile      *source,
+                                                                           guint                 source_type,
+                                                                           GdkColorProfile      *dest,
+                                                                           guint                 dest_type);
+
 G_END_DECLS
 
 #endif /* __GDK_COLOR_PROFILE_PRIVATE_H__ */

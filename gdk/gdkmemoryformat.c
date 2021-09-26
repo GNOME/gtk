@@ -847,12 +847,11 @@ gdk_memory_convert_transform (guchar              *dest_data,
   guchar *src_tmp, *dest_tmp;
   gsize y;
 
-  transform = cmsCreateTransform (gdk_color_profile_get_lcms_profile (src_profile),
-                                  src_desc->lcms.type,
-                                  gdk_color_profile_get_lcms_profile (dest_profile),
-                                  dest_desc->lcms.type,
-                                  INTENT_PERCEPTUAL,
-                                  cmsFLAGS_COPY_ALPHA);
+  transform = gdk_color_profile_lookup_transform (src_profile,
+                                                  src_desc->lcms.type,
+                                                  dest_profile,
+                                                  dest_desc->lcms.type);
+
   if (src_desc->to_lcms)
     src_tmp = g_malloc_n (src_desc->lcms.bpp, width);
   else
@@ -881,7 +880,6 @@ gdk_memory_convert_transform (guchar              *dest_data,
 
   g_free (src_tmp);
   g_free (dest_tmp);
-  cmsDeleteTransform (transform);
 }
 
 void
