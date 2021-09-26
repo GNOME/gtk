@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-07-30 13:42+0000\n"
-"PO-Revision-Date: 2021-08-01 14:14+0200\n"
+"POT-Creation-Date: 2021-09-26 12:22+0000\n"
+"PO-Revision-Date: 2021-09-26 17:21+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -70,6 +70,13 @@ msgstr "Przeciąganie z innych programów nie jest obsługiwane."
 #: gdk/gdkdrop.c:163
 msgid "No compatible formats to transfer contents."
 msgstr "Brak zgodnych formatów do przesłania zawartości."
+
+#. translators: This is about OpenGL backend names, like
+#. * "Trying to use X11 GLX, but EGL is already in use"
+#: gdk/gdkglcontext.c:1374
+#, c-format
+msgid "Trying to use %s, but %s is already in use"
+msgstr "Próbowanie użycia %s, ale %s jest już używane"
 
 #: gdk/gdksurface.c:1164
 msgid "Vulkan support disabled via GDK_DEBUG"
@@ -454,7 +461,7 @@ msgstr "Uśpienie"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:1282 gdk/win32/gdkdrop-win32.c:1327
+#: gdk/win32/gdkdrop-win32.c:1099 gdk/win32/gdkdrop-win32.c:1144
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:234
 msgid "No compatible transfer format found"
 msgstr "Nie odnaleziono zgodnego formatu przesyłania"
@@ -464,45 +471,58 @@ msgstr "Nie odnaleziono zgodnego formatu przesyłania"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Dekodowanie treści o typie MIME „%s” się nie powiodło"
 
-#: gdk/wayland/gdkglcontext-wayland.c:190
-#: gdk/win32/gdkglcontext-win32-egl.c:399
-#: gdk/win32/gdkglcontext-win32-wgl.c:609 gdk/x11/gdkglcontext-egl.c:600
+#: gdk/wayland/gdkglcontext-wayland.c:191
+#: gdk/win32/gdkglcontext-win32-egl.c:402
+#: gdk/win32/gdkglcontext-win32-wgl.c:632 gdk/x11/gdkglcontext-egl.c:600
 #: gdk/x11/gdkglcontext-glx.c:613
 msgid "Unable to create a GL context"
 msgstr "Nie można utworzyć kontekstu GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:484 gdk/x11/gdkglcontext-egl.c:688
-msgid "Failed to create EGL display"
-msgstr "Utworzenie ekranu EGL się nie powiodło"
+#: gdk/wayland/gdkglcontext-wayland.c:489
+msgid "libEGL not available in this sandbox"
+msgstr "libEGL nie jest dostępne w tej izolacji"
 
-#: gdk/wayland/gdkglcontext-wayland.c:493 gdk/x11/gdkglcontext-egl.c:697
+#: gdk/wayland/gdkglcontext-wayland.c:490
+msgid "libEGL not available"
+msgstr "libEGL jest niedostępne"
+
+#: gdk/wayland/gdkglcontext-wayland.c:503
+msgid "Sandbox does not provide an OpenGL implementation"
+msgstr "Izolacja nie dostarcza implementacji OpenGL"
+
+#: gdk/wayland/gdkglcontext-wayland.c:504
+msgid "No OpenGL implementation available"
+msgstr "Brak dostępnej implementacji OpenGL"
+
+#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
 msgid "Could not initialize EGL display"
 msgstr "Nie można zainicjować ekranu EGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:504 gdk/x11/gdkglcontext-egl.c:707
+#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Wersja EGL, %d.%d, jest za stara. GTK wymaga wersji %d.%d"
 
-#: gdk/wayland/gdkglcontext-wayland.c:515
-#: gdk/win32/gdkglcontext-win32-egl.c:273
-#: gdk/win32/gdkglcontext-win32-wgl.c:283
+#: gdk/wayland/gdkglcontext-wayland.c:535
+#: gdk/win32/gdkglcontext-win32-egl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:289
+#: gdk/win32/gdkglcontext-win32-wgl.c:306
 msgid "No GL implementation is available"
 msgstr "Brak dostępnej implementacji GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:525
+#: gdk/wayland/gdkglcontext-wayland.c:545
 msgid "Core GL is not available on EGL implementation"
 msgstr "GL „Core” nie jest dostępne w implementacji EGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:534 gdk/x11/gdkglcontext-egl.c:718
+#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
 msgid "Surfaceless contexts are not supported on this EGL implementation"
 msgstr ""
 "Bezpowierzchniowe konteksty nie są obsługiwane na tej implementacji EGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:546
+#: gdk/wayland/gdkglcontext-wayland.c:566
 #: gdk/win32/gdkglcontext-win32-egl.c:216
 #: gdk/win32/gdkglcontext-win32-egl.c:226
-#: gdk/win32/gdkglcontext-win32-wgl.c:575
+#: gdk/win32/gdkglcontext-win32-wgl.c:598
 msgid "No available configurations for the given pixel format"
 msgstr "Brak dostępnych konfiguracji dla podanego formatu pikseli"
 
@@ -612,43 +632,43 @@ msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Nie można pobrać danych schowka. GetClipboardData() się nie powiodło: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1213
+#: gdk/win32/gdkdrop-win32.c:1030
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Nie można pobrać danych przeciągania. GlobalLock(0x%p) się nie powiodło: 0x"
 "%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1222
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Nie można pobrać danych przeciągania. GlobalSize(0x%p) się nie powiodło: 0x"
 "%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1233
+#: gdk/win32/gdkdrop-win32.c:1050
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Nie można pobrać danych przeciągania. Przydzielenie %s B do przechowania "
 "danych się nie powiodło."
 
-#: gdk/win32/gdkdrop-win32.c:1301
+#: gdk/win32/gdkdrop-win32.c:1118
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Powierzchnia GDK 0x%p nie jest zarejestrowana jako cel upuszczania"
 
-#: gdk/win32/gdkdrop-win32.c:1308
+#: gdk/win32/gdkdrop-win32.c:1125
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Docelowy wpisu kontekstu 0x%p nie ma obiektu danych"
 
-#: gdk/win32/gdkdrop-win32.c:1346
+#: gdk/win32/gdkdrop-win32.c:1163
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) się nie powiodło, zwracanie 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1378
+#: gdk/win32/gdkdrop-win32.c:1195
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
@@ -731,19 +751,23 @@ msgstr "Nie odnaleziono konfiguracji EGL z wymaganymi funkcjami"
 msgid "No perfect EGL configuration found"
 msgstr "Nie odnaleziono doskonałej konfiguracji EGL"
 
-#: gdk/x11/gdkglcontext-egl.c:679
+#: gdk/x11/gdkglcontext-egl.c:684
 msgid "EGL is not supported"
 msgstr "EGL jest nieobsługiwane"
 
-#: gdk/x11/gdkglcontext-glx.c:770
+#: gdk/x11/gdkglcontext-egl.c:693
+msgid "Failed to create EGL display"
+msgstr "Utworzenie ekranu EGL się nie powiodło"
+
+#: gdk/x11/gdkglcontext-glx.c:772
 msgid "No GLX configurations available"
 msgstr "Brak dostępnych konfiguracji GLX"
 
-#: gdk/x11/gdkglcontext-glx.c:843
+#: gdk/x11/gdkglcontext-glx.c:845
 msgid "No GLX configuration with required features found"
 msgstr "Nie odnaleziono konfiguracji GLX z wymaganymi funkcjami"
 
-#: gdk/x11/gdkglcontext-glx.c:914
+#: gdk/x11/gdkglcontext-glx.c:919
 msgid "GLX is not supported"
 msgstr "GLX jest nieobsługiwane"
 
@@ -2062,7 +2086,7 @@ msgstr "Plik o tej nazwie już istnieje"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6139 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6140 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1245 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2154,7 +2178,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jeśli element zostanie usunięty, to zostanie on bezpowrotnie utracony."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6059 gtk/gtktextview.c:8758
+#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8862
 msgid "_Delete"
 msgstr "_Usuń"
 
@@ -2278,7 +2302,7 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Dźwięk"
 
-#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:591
+#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
 #: gtk/inspector/visual.ui:187
 msgid "Font"
 msgstr "Czcionka"
@@ -2364,60 +2388,60 @@ msgstr "Dostęp"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:495 gtk/gtkfontbutton.c:615
+#: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:626
 msgid "Pick a Font"
 msgstr "Wybór czcionki"
 
-#: gtk/gtkfontbutton.c:1339
+#: gtk/gtkfontbutton.c:1348
 msgctxt "font"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/gtkfontchooserwidget.c:1559
+#: gtk/gtkfontchooserwidget.c:1568
 msgid "Width"
 msgstr "Szerokość"
 
-#: gtk/gtkfontchooserwidget.c:1560
+#: gtk/gtkfontchooserwidget.c:1569
 msgid "Weight"
 msgstr "Waga"
 
-#: gtk/gtkfontchooserwidget.c:1561
+#: gtk/gtkfontchooserwidget.c:1570
 msgid "Italic"
 msgstr "Pochylenie"
 
-#: gtk/gtkfontchooserwidget.c:1562
+#: gtk/gtkfontchooserwidget.c:1571
 msgid "Slant"
 msgstr "Nachylenie"
 
-#: gtk/gtkfontchooserwidget.c:1563
+#: gtk/gtkfontchooserwidget.c:1572
 msgid "Optical Size"
 msgstr "Rozmiar wizualny"
 
-#: gtk/gtkfontchooserwidget.c:2109
+#: gtk/gtkfontchooserwidget.c:2118
 msgid "Default"
 msgstr "Domyślne"
 
-#: gtk/gtkfontchooserwidget.c:2155
+#: gtk/gtkfontchooserwidget.c:2164
 msgid "Ligatures"
 msgstr "Ligatury"
 
-#: gtk/gtkfontchooserwidget.c:2156
+#: gtk/gtkfontchooserwidget.c:2165
 msgid "Letter Case"
 msgstr "Wielkość liter"
 
-#: gtk/gtkfontchooserwidget.c:2157
+#: gtk/gtkfontchooserwidget.c:2166
 msgid "Number Case"
 msgstr "Wielkość cyfr"
 
-#: gtk/gtkfontchooserwidget.c:2158
+#: gtk/gtkfontchooserwidget.c:2167
 msgid "Number Spacing"
 msgstr "Odstępy cyfr"
 
-#: gtk/gtkfontchooserwidget.c:2159
+#: gtk/gtkfontchooserwidget.c:2168
 msgid "Number Formatting"
 msgstr "Formatowanie cyfr"
 
-#: gtk/gtkfontchooserwidget.c:2160
+#: gtk/gtkfontchooserwidget.c:2169
 msgid "Character Variants"
 msgstr "Warianty znaku"
 
@@ -2425,19 +2449,19 @@ msgstr "Warianty znaku"
 msgid "OpenGL context creation failed"
 msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6047 gtk/gtktextview.c:8746
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8850
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6051 gtk/gtktextview.c:8750
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8854
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6055 gtk/gtktextview.c:8754
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8858
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6068 gtk/gtktextview.c:8779
+#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8883
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
@@ -2547,7 +2571,7 @@ msgid "%d:%02d"
 msgstr "%d∶%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6140
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6141
 msgid "_OK"
 msgstr "_OK"
 
@@ -3421,15 +3445,15 @@ msgstr "Proszę spróbować innych słów"
 msgid "Could not show link"
 msgstr "Nie można wyświetlić odnośnika"
 
-#: gtk/gtktext.c:6073 gtk/gtktextview.c:8784
+#: gtk/gtktext.c:6074 gtk/gtktextview.c:8888
 msgid "Insert _Emoji"
 msgstr "Wstaw _emoji"
 
-#: gtk/gtktextview.c:8766
+#: gtk/gtktextview.c:8870
 msgid "_Undo"
 msgstr "Cof_nij"
 
-#: gtk/gtktextview.c:8770
+#: gtk/gtktextview.c:8874
 msgid "_Redo"
 msgstr "P_onów"
 
@@ -3456,12 +3480,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:6127
+#: gtk/gtkwindow.c:6128
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Użyć Inspektora GTK?"
 
-#: gtk/gtkwindow.c:6129
+#: gtk/gtkwindow.c:6130
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3472,7 +3496,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK. Jego użycie może spowodować awarię lub "
 "uszkodzenie programu."
 
-#: gtk/gtkwindow.c:6134
+#: gtk/gtkwindow.c:6135
 msgid "Don’t show this message again"
 msgstr "Bez wyświetlania ponownie"
 
