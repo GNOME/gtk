@@ -14,6 +14,11 @@ GdkColorProfile *            gdk_color_profile_new_from_lcms_profile      (cmsHP
 
 cmsHPROFILE *                gdk_color_profile_get_lcms_profile           (GdkColorProfile      *self);
 
+cmsHTRANSFORM *              gdk_color_profile_lookup_transform           (GdkColorProfile      *source,
+                                                                           guint                 source_type,
+                                                                           GdkColorProfile      *dest,
+                                                                           guint                 dest_type);
+
 G_END_DECLS
 
 #endif /* __GDK_COLOR_PROFILE_PRIVATE_H__ */
