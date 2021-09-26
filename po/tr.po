@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-07 18:20+0000\n"
-"PO-Revision-Date: 2021-09-10 09:28+0300\n"
+"POT-Creation-Date: 2021-09-26 05:53+0000\n"
+"PO-Revision-Date: 2021-09-26 15:19+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -73,6 +73,13 @@ msgstr "Diğer uygulamalardan sürükle ve bırak desteklenmemektedir."
 #: gdk/gdkdrop.c:163
 msgid "No compatible formats to transfer contents."
 msgstr "İçerikleri aktarmak için uyumlu biçim yok."
+
+#. translators: This is about OpenGL backend names, like
+#. * "Trying to use X11 GLX, but EGL is already in use"
+#: gdk/gdkglcontext.c:1374
+#, c-format
+msgid "Trying to use %s, but %s is already in use"
+msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
 
 #: gdk/gdksurface.c:1164
 msgid "Vulkan support disabled via GDK_DEBUG"
@@ -467,45 +474,57 @@ msgstr "Uyumlu aktarım biçimi bulunamadı"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "'%s' mime türü içeriklerinin kodu çözülemedi"
 
-#: gdk/wayland/gdkglcontext-wayland.c:190
-#: gdk/win32/gdkglcontext-win32-egl.c:399
-#: gdk/win32/gdkglcontext-win32-wgl.c:628 gdk/x11/gdkglcontext-egl.c:600
+#: gdk/wayland/gdkglcontext-wayland.c:191
+#: gdk/win32/gdkglcontext-win32-egl.c:402
+#: gdk/win32/gdkglcontext-win32-wgl.c:632 gdk/x11/gdkglcontext-egl.c:600
 #: gdk/x11/gdkglcontext-glx.c:613
 msgid "Unable to create a GL context"
 msgstr "GL bağlamı oluşturulamadı"
 
-#: gdk/wayland/gdkglcontext-wayland.c:484 gdk/x11/gdkglcontext-egl.c:688
-msgid "Failed to create EGL display"
-msgstr "EGL ekranı oluşturulamadı"
+#: gdk/wayland/gdkglcontext-wayland.c:489
+msgid "libEGL not available in this sandbox"
+msgstr "Bu kum havuzunda libEGL kullanılamaz"
 
-#: gdk/wayland/gdkglcontext-wayland.c:493 gdk/x11/gdkglcontext-egl.c:697
+#: gdk/wayland/gdkglcontext-wayland.c:490
+msgid "libEGL not available"
+msgstr "libEGL kullanılamaz"
+
+#: gdk/wayland/gdkglcontext-wayland.c:503
+msgid "Sandbox does not provide an OpenGL implementation"
+msgstr "Kum havuzu, OpenGL uyarlaması sağlamıyor"
+
+#: gdk/wayland/gdkglcontext-wayland.c:504
+msgid "No OpenGL implementation available"
+msgstr "Kullanılabilir OpenGL uyarlaması yok"
+
+#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
 msgid "Could not initialize EGL display"
 msgstr "EGL ekranı ilklendirilemedi"
 
-#: gdk/wayland/gdkglcontext-wayland.c:504 gdk/x11/gdkglcontext-egl.c:707
+#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL sürümü %d.%d çok eski. GTK, %d.%d gerektiriyor"
 
-#: gdk/wayland/gdkglcontext-wayland.c:515
-#: gdk/win32/gdkglcontext-win32-egl.c:273
-#: gdk/win32/gdkglcontext-win32-wgl.c:286
-#: gdk/win32/gdkglcontext-win32-wgl.c:304
+#: gdk/wayland/gdkglcontext-wayland.c:535
+#: gdk/win32/gdkglcontext-win32-egl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:289
+#: gdk/win32/gdkglcontext-win32-wgl.c:306
 msgid "No GL implementation is available"
 msgstr "Kullanılabilir GL uygulaması yok"
 
-#: gdk/wayland/gdkglcontext-wayland.c:525
+#: gdk/wayland/gdkglcontext-wayland.c:545
 msgid "Core GL is not available on EGL implementation"
 msgstr "Çekirdek GL, EGL uygulamasında kullanılabilir değil"
 
-#: gdk/wayland/gdkglcontext-wayland.c:534 gdk/x11/gdkglcontext-egl.c:718
+#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
 msgid "Surfaceless contexts are not supported on this EGL implementation"
 msgstr "Bu EGL gerçeklemesinde yüzeysiz bağlamlar desteklenmiyor"
 
-#: gdk/wayland/gdkglcontext-wayland.c:546
+#: gdk/wayland/gdkglcontext-wayland.c:566
 #: gdk/win32/gdkglcontext-win32-egl.c:216
 #: gdk/win32/gdkglcontext-win32-egl.c:226
-#: gdk/win32/gdkglcontext-win32-wgl.c:594
+#: gdk/win32/gdkglcontext-win32-wgl.c:598
 msgid "No available configurations for the given pixel format"
 msgstr "Verilen piksel biçimi için kullanılabilir yapılandırma yok"
 
@@ -702,19 +721,23 @@ msgstr "Gerekli özellikleri olan EGL yapılandırması bulunamadı"
 msgid "No perfect EGL configuration found"
 msgstr "Kusursuz EGL yapılandırması bulunamadı"
 
-#: gdk/x11/gdkglcontext-egl.c:679
+#: gdk/x11/gdkglcontext-egl.c:684
 msgid "EGL is not supported"
 msgstr "EGL desteklenmiyor"
 
-#: gdk/x11/gdkglcontext-glx.c:770
+#: gdk/x11/gdkglcontext-egl.c:693
+msgid "Failed to create EGL display"
+msgstr "EGL ekranı oluşturulamadı"
+
+#: gdk/x11/gdkglcontext-glx.c:772
 msgid "No GLX configurations available"
 msgstr "Kullanılabilir GLX yapılandırması yok"
 
-#: gdk/x11/gdkglcontext-glx.c:843
+#: gdk/x11/gdkglcontext-glx.c:845
 msgid "No GLX configuration with required features found"
 msgstr "Gerekli özellikleri olan GLX yapılandırması bulunamadı"
 
-#: gdk/x11/gdkglcontext-glx.c:914
+#: gdk/x11/gdkglcontext-glx.c:919
 msgid "GLX is not supported"
 msgstr "GLX desteklenmiyor"
 
@@ -2123,7 +2146,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8847
+#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8862
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2395,19 +2418,19 @@ msgstr "Karakter Değişkeleri"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL içerik oluşturulması başarısız oldu"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8835
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8850
 msgid "Cu_t"
 msgstr "Ke_s"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8839
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8854
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8843
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8858
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8868
+#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8883
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
@@ -3384,15 +3407,15 @@ msgstr "Başka arama deneyin"
 msgid "Could not show link"
 msgstr "Bağlantı gösterilemedi"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8873
+#: gtk/gtktext.c:6074 gtk/gtktextview.c:8888
 msgid "Insert _Emoji"
 msgstr "_Emoji Ekle"
 
-#: gtk/gtktextview.c:8855
+#: gtk/gtktextview.c:8870
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: gtk/gtktextview.c:8859
+#: gtk/gtktextview.c:8874
 msgid "_Redo"
 msgstr "_Yinele"
 
