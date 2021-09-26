@@ -25,6 +25,9 @@
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
+
+#include "gdk/gdkcolorprofileprivate.h"
+#include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdktextureprivate.h"
 
 #ifdef G_ENABLE_DEBUG
@@ -40,6 +43,7 @@ struct _GskCairoRenderer
 
   GdkCairoContext *cairo_context;
 
+  gboolean color_managed;
 #ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
 #endif
@@ -77,8 +81,8 @@ gsk_cairo_renderer_do_render (GskRenderer   *renderer,
                               cairo_t       *cr,
                               GskRenderNode *root)
 {
-#ifdef G_ENABLE_DEBUG
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
+#ifdef G_ENABLE_DEBUG
   GskProfiler *profiler;
   gint64 cpu_time;
 #endif
@@ -103,11 +107,15 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
                                    GskRenderNode         *root,
                                    const graphene_rect_t *viewport)
 {
+  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   GdkTexture *texture;
   cairo_surface_t *surface;
   cairo_t *cr;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, ceil (viewport->size.width), ceil (viewport->size.height));
+  if (self->color_managed)
+      gdk_cairo_surface_set_color_profile (surface, gdk_color_profile_get_srgb_linear ());
+
   cr = cairo_create (surface);
 
   cairo_translate (cr, - viewport->origin.x, - viewport->origin.y);
@@ -152,7 +160,65 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
     }
 #endif
 
-  gsk_cairo_renderer_do_render (renderer, cr, root);
+  if (!self->color_managed ||
+      gdk_color_profile_is_linear (gdk_cairo_get_color_profile (cr)))
+    {
+      gsk_cairo_renderer_do_render (renderer, cr, root);
+    }
+  else
+    {
+      GdkSurface *surface = gsk_renderer_get_surface (renderer);
+      GdkColorProfile *target_profile = gdk_cairo_get_color_profile (cr);
+      cairo_surface_t *cairo_surface;
+      cairo_t *cr2;
+      GdkTexture *color_correct;
+      const cairo_region_t *frame_region;
+      cairo_rectangle_int_t extents;
+      guint i, n;
+
+      frame_region = gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->cairo_context));
+      cairo_region_get_extents (frame_region, &extents);
+      /* We can't use cairo_push_group() here, because we'd lose the
+       * color profile information. */
+      cairo_surface = gdk_surface_create_similar_surface (surface,
+                                                          CAIRO_CONTENT_COLOR_ALPHA,
+                                                          extents.width,
+                                                          extents.height);
+      gdk_cairo_surface_set_color_profile (cairo_surface,
+                                           gdk_color_profile_get_srgb_linear ());
+
+      cr2 = cairo_create (cairo_surface);
+      cairo_translate (cr2, -extents.x, -extents.y);
+      gdk_cairo_region (cr2, frame_region);
+      cairo_clip (cr2);
+      gsk_cairo_renderer_do_render (renderer, cr2, root);
+      cairo_destroy (cr2);
+
+      color_correct = gdk_texture_new_for_surface (cairo_surface);
+      cairo_surface_destroy (cairo_surface);
+      n = cairo_region_num_rectangles (frame_region);
+      for (i = 0; i < n; i++)
+        {
+          cairo_rectangle_int_t rect;
+          GdkMemoryTexture *sub;
+
+          cairo_region_get_rectangle (frame_region, i, &rect);
+          rect.x -= extents.x;
+          rect.y -= extents.y;
+
+          sub = gdk_memory_texture_convert (g_object_ref (GDK_MEMORY_TEXTURE (color_correct)),
+                                            GDK_MEMORY_DEFAULT,
+                                            target_profile,
+                                            &rect);
+          cairo_surface = gdk_texture_download_surface (GDK_TEXTURE (sub), target_profile);
+          cairo_set_source_surface (cr, cairo_surface, rect.x + extents.x, rect.y + extents.y);
+          cairo_paint (cr);
+          cairo_surface_destroy (cairo_surface);
+          g_object_unref (sub);
+        }
+      g_object_unref (color_correct);
+
+    }
 
   cairo_destroy (cr);
 
@@ -173,6 +239,8 @@ gsk_cairo_renderer_class_init (GskCairoRendererClass *klass)
 static void
 gsk_cairo_renderer_init (GskCairoRenderer *self)
 {
+  self->color_managed = TRUE;
+
 #ifdef G_ENABLE_DEBUG
   GskProfiler *profiler = gsk_renderer_get_profiler (GSK_RENDERER (self));
 
