@@ -64,7 +64,7 @@ libgdk_broadway = static_library('gdk-broadway',
 
 # gtk4-broadwayd
 
-broadwayd_syslib = os_win32 ? find_library('ws2_32') : shmlib
+broadwayd_syslib = os_win32 ? cc.find_library('ws2_32') : shmlib
 
 executable('gtk4-broadwayd',
   sources: [
