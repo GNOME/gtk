@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-09-26 14:23+0000\n"
-"PO-Revision-Date: 2021-09-26 18:36+0200\n"
+"PO-Revision-Date: 2021-09-26 18:37+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -472,7 +472,7 @@ msgstr "Nemoguće stvaranje GL sadržaja"
 
 #: gdk/wayland/gdkglcontext-wayland.c:489
 msgid "libEGL not available in this sandbox"
-msgstr "libEGL nije dostupan u sigurnom okružtenju"
+msgstr "libEGL nije dostupan u sigurnom okruženju"
 
 #: gdk/wayland/gdkglcontext-wayland.c:490
 msgid "libEGL not available"
