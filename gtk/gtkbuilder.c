@@ -617,16 +617,12 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
           continue;
         }
 
-      if (prop->pspec->flags & filter_flags)
-        {
-          if (filtered_parameters)
-            object_properties_add (filtered_parameters, property_name, &property_value);
-        }
+      if ((prop->pspec->flags & filter_flags) != 0 && filtered_parameters)
+        object_properties_add (filtered_parameters, property_name, &property_value);
+      else if ((prop->pspec->flags & filter_flags) == 0 && parameters)
+        object_properties_add (parameters, property_name, &property_value);
       else
-        {
-          if (parameters)
-            object_properties_add (parameters, property_name, &property_value);
-        }
+        g_value_unset (&property_value);
     }
 }
 
