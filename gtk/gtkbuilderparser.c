@@ -1713,9 +1713,7 @@ parse_custom (GtkBuildableParseContext  *context,
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
         {
-          object_info->object = _gtk_builder_construct (data->builder,
-                                                        object_info,
-                                                        error);
+          object_info->object = builder_construct (data, object_info, error);
           if (!object_info->object)
             return TRUE; /* A GError is already set */
         }
