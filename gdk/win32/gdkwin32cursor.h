@@ -29,9 +29,9 @@
 #error "Only <gdk/gdkwin32.h> can be included directly."
 #endif
 
-#include <Windows.h>
 #include <gdk/gdk.h>
 #include <gdk/win32/gdkwin32display.h>
+#include <windows.h>
 
 G_BEGIN_DECLS
 
