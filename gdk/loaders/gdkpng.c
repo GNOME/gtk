@@ -19,6 +19,7 @@
 
 #include "gdkpngprivate.h"
 
+#include "gdkcolorprofileprivate.h"
 #include "gdkintl.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
@@ -26,6 +27,7 @@
 #include "gdktexture.h"
 #include "gdktextureprivate.h"
 #include "gsk/ngl/fp16private.h"
+
 #include <png.h>
 #include <stdio.h>
 
@@ -206,6 +208,100 @@ unpremultiply_float_to_16bit (guchar *data,
     }
 }
 
+static GdkColorProfile *
+gdk_png_get_color_profile (png_struct *png,
+                           png_info   *info)
+{
+  GdkColorProfile *profile;
+  guchar *icc_data;
+  png_uint_32 icc_len;
+  char *name;
+  double gamma;
+  cmsCIExyY whitepoint;
+  cmsCIExyYTRIPLE primaries;
+  cmsToneCurve *curve;
+  cmsHPROFILE lcms_profile;
+  int intent;
+
+  if (png_get_iCCP (png, info, &name, NULL, &icc_data, &icc_len))
+    {
+      GBytes *bytes = g_bytes_new (icc_data, icc_len);
+
+      profile = gdk_color_profile_new_from_icc_bytes (bytes, NULL);
+      g_bytes_unref (bytes);
+      if (profile)
+        return profile;
+    }
+
+  if (png_get_sRGB (png, info, &intent))
+    return g_object_ref (gdk_color_profile_get_srgb ());
+
+  /* If neither of those is valid, the result is sRGB */
+  if (!png_get_valid (png, info, PNG_INFO_gAMA) &&
+      !png_get_valid (png, info, PNG_INFO_cHRM))
+    return g_object_ref (gdk_color_profile_get_srgb ());
+
+  if (!png_get_gAMA (png, info, &gamma))
+    gamma = 2.4;
+
+  if (!png_get_cHRM (png, info,
+                     &whitepoint.x, &whitepoint.y,
+                     &primaries.Red.x, &primaries.Red.y,
+                     &primaries.Green.x, &primaries.Green.y,
+                     &primaries.Blue.x, &primaries.Blue.y))
+    {
+      if (gamma == 2.4)
+        return g_object_ref (gdk_color_profile_get_srgb ());
+
+      whitepoint = (cmsCIExyY) { 0.3127, 0.3290, 1.0 };
+      primaries = (cmsCIExyYTRIPLE) {
+                    { 0.6400, 0.3300, 1.0 },
+                    { 0.3000, 0.6000, 1.0 },
+                    { 0.1500, 0.0600, 1.0 }
+                  };
+    }
+  else
+    {
+      primaries.Red.Y = 1.0;
+      primaries.Green.Y = 1.0;
+      primaries.Blue.Y = 1.0;
+    }
+
+  curve = cmsBuildGamma (NULL, 1.0 / gamma);
+  lcms_profile = cmsCreateRGBProfile (&whitepoint,
+                                      &primaries,
+                                      (cmsToneCurve*[3]) { curve, curve, curve });
+  profile = gdk_color_profile_new_from_lcms_profile (lcms_profile, NULL);
+  /* FIXME: errors? */
+  if (profile == NULL)
+    profile = g_object_ref (gdk_color_profile_get_srgb ());
+  cmsFreeToneCurve (curve);
+
+  return profile;
+}
+
+static void
+gdk_png_set_color_profile (png_struct      *png,
+                           png_info        *info,
+                           GdkColorProfile *profile)
+{
+  /* FIXME: allow deconstructing RGB profiles into gAMA and cHRM instead of
+   * falling back to iCCP */
+  if (profile == gdk_color_profile_get_srgb ())
+    {
+      png_set_sRGB_gAMA_and_cHRM (png, info, /* FIXME */ PNG_sRGB_INTENT_PERCEPTUAL);
+    }
+  else
+    {
+      GBytes *bytes = gdk_color_profile_get_icc_profile (profile);
+      png_set_iCCP (png, info,
+                    "ICC profile",
+                    0,
+                    g_bytes_get_data (bytes, NULL),
+                    g_bytes_get_size (bytes));
+    }
+}
+
 /* }}} */
 /* {{{ Public API */ 
 
@@ -223,6 +319,7 @@ gdk_load_png (GBytes  *bytes,
   guchar *buffer = NULL;
   guchar **row_pointers = NULL;
   GBytes *out_bytes;
+  GdkColorProfile *color_profile;
   GdkTexture *texture;
   int bpp;
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
@@ -334,6 +431,8 @@ gdk_load_png (GBytes  *bytes,
       return NULL;
     }
 
+  color_profile = gdk_png_get_color_profile (png, info);
+
   bpp = gdk_memory_format_bytes_per_pixel (format);
   stride = width * bpp;
   if (stride % 8)
@@ -344,6 +443,7 @@ gdk_load_png (GBytes  *bytes,
 
   if (!buffer || !row_pointers)
     {
+      g_object_unref (color_profile);
       g_free (buffer);
       g_free (row_pointers);
       png_destroy_read_struct (&png, &info, NULL);
@@ -360,8 +460,12 @@ gdk_load_png (GBytes  *bytes,
   png_read_end (png, info);
 
   out_bytes = g_bytes_new_take (buffer, height * stride);
-  texture = gdk_memory_texture_new (width, height, format, out_bytes, stride);
+  texture = gdk_memory_texture_new_with_color_profile (width, height,
+                                                       format,
+                                                       color_profile,
+                                                       out_bytes, stride);
   g_bytes_unref (out_bytes);
+  g_object_unref (color_profile);
 
   g_free (row_pointers);
   png_destroy_read_struct (&png, &info, NULL);
@@ -388,11 +492,13 @@ gdk_save_png (GdkTexture *texture)
   int y;
   GdkTexture *mtexture;
   GdkMemoryFormat format;
+  GdkColorProfile *color_profile;
   int png_format;
   int depth;
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
+  color_profile = gdk_color_profile_get_srgb (); /* FIXME: refactor saving */
 
   mtexture = gdk_texture_download_texture (texture);
   format = gdk_memory_texture_get_format (GDK_MEMORY_TEXTURE (mtexture));
@@ -471,6 +577,8 @@ gdk_save_png (GdkTexture *texture)
                 PNG_INTERLACE_NONE,
                 PNG_COMPRESSION_TYPE_DEFAULT,
                 PNG_FILTER_TYPE_DEFAULT);
+
+  gdk_png_set_color_profile (png, info, color_profile);
 
   png_write_info (png, info);
 
