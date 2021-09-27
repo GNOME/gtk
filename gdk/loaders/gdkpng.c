@@ -129,85 +129,6 @@ png_simple_warning_callback (png_structp     png,
 {
 }
 
-/* }}} */
-/* {{{ Format conversion */
-
-static void
-unpremultiply (guchar *data,
-               int     width,
-               int     height)
-{
-  gsize x, y;
-
-  for (y = 0; y < height; y++)
-    {
-      for (x = 0; x < width; x++)
-        {
-          guchar *b = &data[x * 4];
-          guint32 pixel;
-          guchar alpha;
-
-          memcpy (&pixel, b, sizeof (guint32));
-          alpha = (pixel & 0xff000000) >> 24;
-          if (alpha == 0)
-            {
-              b[0] = 0;
-              b[1] = 0;
-              b[2] = 0;
-              b[3] = 0;
-            }
-          else
-            {
-              b[0] = (((pixel & 0x00ff0000) >> 16) * 255 + alpha / 2) / alpha;
-              b[1] = (((pixel & 0x0000ff00) >>  8) * 255 + alpha / 2) / alpha;
-              b[2] = (((pixel & 0x000000ff) >>  0) * 255 + alpha / 2) / alpha;
-              b[3] = alpha;
-            }
-        }
-      data += width * 4;
-    }
-}
-
-static void
-unpremultiply_float_to_16bit (guchar *data,
-                              int     width,
-                              int     height)
-{
-  gsize x, y;
-  float *src = (float *)data;;
-  guint16 *dest = (guint16 *)data;
-
-  for (y = 0; y < height; y++)
-    {
-      for (x = 0; x < width; x++)
-        {
-          float r, g, b, a;
-
-          r = src[0];
-          g = src[1];
-          b = src[2];
-          a = src[3];
-          if (a == 0)
-            {
-              dest[0] = 0;
-              dest[1] = 0;
-              dest[2] = 0;
-              dest[3] = 0;
-            }
-          else
-            {
-              dest[0] = (guint16) CLAMP (65536.f * r / a, 0.f, 65535.f);
-              dest[1] = (guint16) CLAMP (65536.f * g / a, 0.f, 65535.f);
-              dest[2] = (guint16) CLAMP (65536.f * b / a, 0.f, 65535.f);
-              dest[3] = (guint16) CLAMP (65536.f * a,     0.f, 65535.f);
-            }
-
-          dest += 4;
-          src += 4;
-        }
-    }
-}
-
 static GdkColorProfile *
 gdk_png_get_color_profile (png_struct *png,
                            png_info   *info)
@@ -486,11 +407,11 @@ gdk_save_png (GdkTexture *texture)
   png_struct *png = NULL;
   png_info *info;
   png_io io = { NULL, 0, 0 };
-  guint width, height, stride;
-  guchar *data = NULL;
-  guchar *row;
+  int width, height;
+  gsize stride;
+  const guchar *data;
   int y;
-  GdkTexture *mtexture;
+  GdkMemoryTexture *memtex;
   GdkMemoryFormat format;
   GdkColorProfile *color_profile;
   int png_format;
@@ -498,10 +419,10 @@ gdk_save_png (GdkTexture *texture)
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
-  color_profile = gdk_color_profile_get_srgb (); /* FIXME: refactor saving */
+  color_profile = gdk_texture_get_color_profile (texture);
 
-  mtexture = gdk_texture_download_texture (texture);
-  format = gdk_memory_texture_get_format (GDK_MEMORY_TEXTURE (mtexture));
+  memtex = GDK_MEMORY_TEXTURE (gdk_texture_download_texture (texture));
+  format = gdk_memory_texture_get_format (memtex);
 
   switch (format)
     {
@@ -512,32 +433,42 @@ gdk_save_png (GdkTexture *texture)
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
-    case GDK_MEMORY_R8G8B8:
-    case GDK_MEMORY_B8G8R8:
-      stride = width * 4;
-      data = g_malloc_n (stride, height);
-      gdk_texture_download (mtexture, data, stride);
-      unpremultiply (data, width, height);
-
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+      format = GDK_MEMORY_R8G8B8A8;
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+      format = GDK_MEMORY_A8B8G8R8;
+#endif
       png_format = PNG_COLOR_TYPE_RGB_ALPHA;
       depth = 8;
       break;
 
-    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R8G8B8:
+    case GDK_MEMORY_B8G8R8:
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+      format = GDK_MEMORY_R8G8B8;
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+      format = GDK_MEMORY_B8G8R8;
+#endif
+      png_format = PNG_COLOR_TYPE_RGB;
+      depth = 8;
+      break;
+
     case GDK_MEMORY_R16G16B16A16:
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R32G32B32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-      data = g_malloc_n (width * 16, height);
-      gdk_texture_download_float (mtexture, (float *)data, width * 4);
-      unpremultiply_float_to_16bit (data, width, height);
-
+      format = GDK_MEMORY_R16G16B16A16;
       png_format = PNG_COLOR_TYPE_RGB_ALPHA;
-      stride = width * 8;
+      depth = 16;
+      break;
+
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+      format = GDK_MEMORY_R16G16B16;
+      png_format = PNG_COLOR_TYPE_RGB;
       depth = 16;
       break;
 
@@ -564,11 +495,16 @@ gdk_save_png (GdkTexture *texture)
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
-      g_free (data);
+      g_object_unref (memtex);
       g_free (io.data);
       png_destroy_read_struct (&png, &info, NULL);
       return NULL;
     }
+
+  memtex = gdk_memory_texture_convert (memtex,
+                                       format,
+                                       color_profile,
+                                       NULL);
 
   png_set_write_fn (png, &io, png_write_func, png_flush_func);
 
@@ -586,14 +522,16 @@ gdk_save_png (GdkTexture *texture)
   png_set_swap (png);
 #endif
 
-  for (y = 0, row = data; y < height; y++, row += stride)
-    png_write_rows (png, &row, 1);
+  data = gdk_memory_texture_get_data (memtex);
+  stride = gdk_memory_texture_get_stride (memtex);
+  for (y = 0; y < height; y++)
+    png_write_row (png, data + y * stride);
 
   png_write_end (png, info);
 
   png_destroy_write_struct (&png, &info);
 
-  g_free (data);
+  g_object_unref (memtex);
 
   return g_bytes_new_take (io.data, io.size);
 }
