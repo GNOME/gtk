@@ -699,7 +699,7 @@ _gtk_builder_add_object (GtkBuilder  *builder,
   g_hash_table_insert (priv->objects, g_strdup (id), g_object_ref (object));
 }
 
-static void
+void
 gtk_builder_take_bindings (GtkBuilder *builder,
                            GObject    *target,
                            GSList     *bindings)
@@ -925,9 +925,6 @@ _gtk_builder_construct (GtkBuilder  *builder,
     }
 
   object_properties_destroy (&parameters);
-
-  if (info->bindings)
-    gtk_builder_take_bindings (builder, obj, info->bindings);
 
   /* put it in the hash table. */
   _gtk_builder_add_object (builder, info->id, obj);

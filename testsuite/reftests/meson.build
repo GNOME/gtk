@@ -331,6 +331,8 @@ testdata = [
   # that are not valid with subpixel positioning
   #'label-wrap-justify.ref.ui',
   #'label-wrap-justify.ui',
+  'late-binding.ui',
+  'late-binding.ref.ui',
   'late-property.ui',
   'late-property.ref.ui',
   'letter-spacing.css',

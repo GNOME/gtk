@@ -1962,6 +1962,12 @@ end_element (GtkBuildableParseContext  *context,
           object_info->signals = NULL;
         }
 
+      if (object_info->bindings)
+        {
+          gtk_builder_take_bindings (data->builder, object_info->object, object_info->bindings);
+          object_info->bindings = NULL;
+        }
+
       free_object_info (object_info);
     }
   else if (strcmp (element_name, "child") == 0)

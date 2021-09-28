@@ -221,6 +221,10 @@ void      _gtk_builder_add (GtkBuilder *builder,
                             ChildInfo *child_info);
 void      _gtk_builder_add_signals (GtkBuilder *builder,
                                     GPtrArray  *signals);
+void       gtk_builder_take_bindings (GtkBuilder *builder,
+                                      GObject    *target,
+                                      GSList     *bindings);
+
 gboolean  _gtk_builder_finish (GtkBuilder  *builder,
                                GError     **error);
 void _free_signal_info (SignalInfo *info,
