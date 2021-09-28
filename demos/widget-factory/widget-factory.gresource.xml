@@ -124,5 +124,8 @@
     <file>linear-gradient-monochrome.png</file>
     <file>srgb-gradient-color.png</file>
     <file>srgb-gradient-monochrome.png</file>
+    <file>color-profile-check.png</file>
+    <file>color-profile-check.jpeg</file>
+    <file>color-profile-check.tiff</file>
   </gresource>
 </gresources>
