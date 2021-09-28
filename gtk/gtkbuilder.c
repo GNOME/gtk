@@ -539,8 +539,17 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
       PropertyInfo *prop = g_ptr_array_index (properties, i);
       const char *property_name = prop->pspec->name;
       GValue property_value = G_VALUE_INIT;
+      ObjectProperties *params;
 
       if (prop->applied)
+        continue;
+
+      if ((prop->pspec->flags & filter_flags) != 0)
+        params = filtered_parameters;
+      else
+        params = parameters;
+
+      if (!params)
         continue;
 
       if (prop->value)
@@ -616,19 +625,8 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
        * copy it to one of the two arrays, or unset it.
        */
       g_assert (G_IS_VALUE (&property_value));
-
-      if ((prop->pspec->flags & filter_flags) != 0 && filtered_parameters)
-        {
-          object_properties_add (filtered_parameters, property_name, &property_value);
-          prop->applied = TRUE;
-        }
-      else if ((prop->pspec->flags & filter_flags) == 0 && parameters)
-        {
-          object_properties_add (parameters, property_name, &property_value);
-          prop->applied = TRUE;
-        }
-      else
-        g_value_unset (&property_value);
+      object_properties_add (params, property_name, &property_value);
+      prop->applied = TRUE;
     }
 }
 
