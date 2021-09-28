@@ -2278,7 +2278,7 @@ gtk_entry_get_overwrite_mode (GtkEntry *entry)
  * Sets the maximum allowed length of the contents of the widget.
  *
  * If the current contents are longer than the given length, then
- * they will be truncated to fit.
+ * they will be truncated to fit. The length is is in characters.
  *
  * This is equivalent to getting @entry's `GtkEntryBuffer` and
  * calling [method@Gtk.EntryBuffer.set_max_length] on it.
