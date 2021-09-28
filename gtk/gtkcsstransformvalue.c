@@ -239,6 +239,8 @@ gtk_css_transform_apply (const GtkCssTransform   *transform,
       g_assert_not_reached ();
       break;
     }
+
+  return NULL;
 }
 
 /* NB: The returned matrix may be invalid */
