@@ -1521,13 +1521,91 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="position">1</property>
                                 <property name="child">
-                                  <object class="GtkBox" id="box10">
-                                    <property name="orientation">1</property>
+                                  <object class="GtkGrid">
+                                    <property name="hexpand">0</property>
+                                    <property name="row-spacing">6</property>
+                                    <property name="column-spacing">6</property>
+                                    <property name="margin-start">6</property>
+                                    <property name="margin-end">6</property>
+                                    <property name="margin-top">6</property>
+                                    <property name="margin-bottom">6</property>
+                                    <property name="row-homogeneous">1</property>
+                                    <property name="valign">start</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label" translatable="yes">image loading</property>
+                                        <style>
+                                          <class name="caption-heading"/>
+                                        </style>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">0</property>
+                                          <property name="column-span">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="paintable">resource:///org/gtk/WidgetFactory4/color-profile-check.png</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">PNG</property>
+                                        <property name="hexpand">1</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">1</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="paintable">resource:///org/gtk/WidgetFactory4/color-profile-check.jpeg</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">JPEG</property>
+                                        <property name="hexpand">1</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">2</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="paintable">resource:///org/gtk/WidgetFactory4/color-profile-check.tiff</property>
+                                        <layout>
+                                          <property name="column">0</property>
+                                          <property name="row">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="label">TIFF</property>
+                                        <property name="hexpand">1</property>
+                                        <layout>
+                                          <property name="column">1</property>
+                                          <property name="row">3</property>
+                                        </layout>
+                                      </object>
+                                    </child>
                                   </object>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label9">
-                                    <property name="label" translatable="1">page 2</property>
+                                    <property name="label" translatable="1">Images</property>
                                   </object>
                                 </property>
                               </object>
