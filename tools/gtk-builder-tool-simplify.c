@@ -1723,7 +1723,6 @@ rewrite_toolbar (Element      *element,
                  MyParserData *data)
 {
   GList *l, *ll;
-  Element *style = NULL;
 
   set_attribute_value (element, "class", "GtkBox");
 
@@ -1746,9 +1745,6 @@ rewrite_toolbar (Element      *element,
       Element *child = l->data;
       Element *object = NULL;
       Element *packing = NULL;
-
-      if (g_str_equal (child->element_name, "style"))
-        style = child;
 
       if (!g_str_equal (child->element_name, "child"))
         continue;
@@ -1794,10 +1790,13 @@ rewrite_toolbar (Element      *element,
         child->children = g_list_remove (child->children, packing);
     }
 
-  if (!style)
-    style = add_element (element, "style");
+  {
+    Element *child;
 
-  set_attribute_value (add_element (style, "class"), "name", "toolbar");
+    child = add_element (element, "property");
+    set_attribute_value (child, "name", "css-classes");
+    child->data = g_strdup ("toolbar");
+  }
 }
 
 static void

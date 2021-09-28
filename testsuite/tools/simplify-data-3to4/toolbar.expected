@@ -2,9 +2,7 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <object class="GtkBox">
-    <style>
-      <class name="toolbar"/>
-    </style>
+    <property name="css-classes">toolbar</property>
     <child>
       <object class="GtkButton">
         <property name="label" translatable="yes">New</property>
