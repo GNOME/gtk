@@ -1332,6 +1332,18 @@ pointer coordinates as inout arguments any more, but as normal in ones.
 
 See: [method@Gtk.TreeView.get_tooltip_context], [method@Gtk.IconView.get_tooltip_context]
 
+### Adapt to GtkPopover changes
+
+In GTK 3, a `GtkPopover` could be attached to any widget, using the `relative-to`
+property. This is no longer possible in GTK 4. The parent widget has to be aware
+of its popover children, and manage their size allocation. Therefore, only widgets
+with dedicated popover support can have them, such as [class@Gtk.MenuButton] or
+[class@Gtk.PopoverMenuBar].
+
+If you want to make a custom widget that has an attached popover, you need to call
+[method@Gtk.Popover.present] in your [vfunc@Gtk.Widget.size_allocate] vfunc, in order
+to update the positioning of the popover.
+
 ### Stop using GtkFileChooserButton
 
 The `GtkFileChooserButton` widget was removed, due to its shortcomings in
