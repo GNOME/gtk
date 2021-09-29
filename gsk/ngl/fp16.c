@@ -146,7 +146,7 @@ float_to_half (const float *f, guint16 *h, int n)
   if (have_f16c_msvc ())
     float_to_half_f16c (f, h, n);
   else
-    float_to_half4_c (f, h, n);
+    float_to_half_c (f, h, n);
 }
 
 void
