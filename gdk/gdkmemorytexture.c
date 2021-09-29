@@ -194,10 +194,11 @@ gdk_memory_texture_new (int              width,
  * @width: the width of the texture
  * @height: the height of the texture
  * @format: the format of the data
+ * @color_profile: a `GdkColorProfile`
  * @bytes: the `GBytes` containing the pixel data
  * @stride: rowstride for the data
  *
- * Creates a new texture for a blob of image data.
+ * Creates a new texture for a blob of image data with a given color profile.
  *
  * The `GBytes` must contain @stride x @height pixels
  * in the given format.
