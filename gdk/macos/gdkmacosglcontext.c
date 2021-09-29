@@ -226,8 +226,8 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   swapRect[0] = 0;
   swapRect[1] = 0;
-  swapRect[2] = surface->width;
-  swapRect[3] = surface->height;
+  swapRect[2] = surface ? surface->width : 0;
+  swapRect[3] = surface ? surface->height : 0;
 
   CGLSetParameter (cgl_context, kCGLCPSwapRectangle, swapRect);
   CGLSetParameter (cgl_context, kCGLCPSwapInterval, &sync_to_framerate);
