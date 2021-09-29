@@ -159,6 +159,9 @@ void                  gtk_flow_box_insert                       (GtkFlowBox     
 GDK_AVAILABLE_IN_ALL
 void                  gtk_flow_box_remove                       (GtkFlowBox        *box,
                                                                  GtkWidget         *widget);
+GDK_AVAILABLE_IN_4_12
+void                  gtk_flow_box_remove_all                   (GtkFlowBox        *box);
+
 GDK_AVAILABLE_IN_ALL
 GtkFlowBoxChild      *gtk_flow_box_get_child_at_index           (GtkFlowBox        *box,
                                                                  int                idx);

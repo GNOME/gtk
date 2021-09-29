@@ -3098,6 +3098,32 @@ gtk_flow_box_remove (GtkFlowBox *box,
     g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
 }
 
+/**
+ * gtk_flow_box_remove_all:
+ * @box: a `GtkFlowBox`
+ *
+ * Removes all children from @box.
+ *
+ * This function does nothing if @box is backed by a model.
+ *
+ * Since: 4.12
+ */
+void
+gtk_flow_box_remove_all (GtkFlowBox *box)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  GtkWidget *widget = GTK_WIDGET (box);
+  GtkWidget *child;
+
+  g_return_if_fail (GTK_IS_FLOW_BOX (box));
+
+  if (priv->bound_model)
+    return;
+
+  while ((child = gtk_widget_get_first_child (widget)) != NULL)
+    gtk_flow_box_remove (box, child);
+}
+
 /* Keynav {{{2 */
 
 static gboolean
