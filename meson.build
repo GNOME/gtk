@@ -399,7 +399,8 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             fallback: ['harfbuzz', 'libharfbuzz_dep'],
                             default_options: ['coretext=enabled'])
-lcms2_dep      = dependency('lcms2', version: lcms2_req)
+lcms2_dep      = dependency('lcms2', version: lcms2_req,
+                            fallback : ['lcms2', 'liblcms2_dep'])
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
