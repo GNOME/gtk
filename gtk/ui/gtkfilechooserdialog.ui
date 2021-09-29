@@ -5,7 +5,7 @@
     <signal name="response" handler="response_cb" swapped="no"/>
     <child internal-child="content_area">
       <object class="GtkBox">
-        <property name="orientation">vertical</property>
+        <property name="orientation">1</property>
         <child internal-child="action_area">
           <object class="GtkBox" id="dialog-action_area1">
             <property name="margin-start">6</property>
@@ -13,7 +13,7 @@
             <property name="margin-top">6</property>
             <property name="margin-bottom">6</property>
             <property name="hexpand">1</property>
-            <property name="halign">end</property>
+            <property name="halign">2</property>
           </object>
         </child>
         <child>
@@ -26,6 +26,6 @@
     </child>
   </template>
   <object class="GtkSizeGroup" id="buttons">
-    <property name="mode">vertical</property>
+    <property name="mode">2</property>
   </object>
 </interface>

@@ -17,7 +17,7 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="orientation">vertical</property>
+        <property name="orientation">1</property>
         <property name="spacing">2</property>
         <property name="margin-start">5</property>
         <property name="margin-end">5</property>
@@ -25,7 +25,7 @@
         <property name="margin-bottom">5</property>
         <child>
           <object class="GtkBox" id="box">
-            <property name="orientation">vertical</property>
+            <property name="orientation">1</property>
             <property name="spacing">12</property>
             <property name="margin-start">5</property>
             <property name="margin-end">5</property>
@@ -35,7 +35,7 @@
             <child>
               <object class="GtkImage" id="logo_image">
                 <property name="icon-name">image-missing</property>
-                <property name="icon-size">large</property>
+                <property name="icon-size">2</property>
                 <style>
                   <class name="icon-dropshadow"/>
                 </style>
@@ -44,7 +44,7 @@
             <child>
               <object class="GtkLabel" id="name_label">
                 <property name="label">name label</property>
-                <property name="justify">center</property>
+                <property name="justify">2</property>
                 <property name="selectable">1</property>
               </object>
             </child>
@@ -52,23 +52,23 @@
               <object class="GtkStack" id="stack">
                 <property name="width-request">400</property>
                 <property name="height-request">100</property>
-                <property name="transition-type">over-up-down</property>
+                <property name="transition-type">16</property>
                 <property name="transition-duration">600</property>
                 <property name="vexpand">1</property>
                 <signal name="notify::visible-child" handler="stack_visible_child_notify" swapped="no"/>
                 <child>
                   <object class="GtkStackPage">
                     <property name="name">main</property>
-                    <property name="title" translatable="yes">About</property>
+                    <property name="title" translatable="1">About</property>
                     <property name="child">
                       <object class="GtkBox" id="page_vbox">
-                        <property name="orientation">vertical</property>
+                        <property name="orientation">1</property>
                         <property name="spacing">8</property>
                         <child>
                           <object class="GtkLabel" id="version_label">
                             <property name="visible">0</property>
                             <property name="label">version 1.0</property>
-                            <property name="justify">center</property>
+                            <property name="justify">2</property>
                             <property name="selectable">1</property>
                           </object>
                         </child>
@@ -76,7 +76,7 @@
                           <object class="GtkLabel" id="comments_label">
                             <property name="visible">0</property>
                             <property name="label">comments</property>
-                            <property name="justify">center</property>
+                            <property name="justify">2</property>
                             <property name="wrap">1</property>
                             <property name="selectable">1</property>
                             <property name="max-width-chars">60</property>
@@ -94,7 +94,7 @@
                           <object class="GtkLabel" id="copyright_label">
                             <property name="visible">0</property>
                             <property name="label">copyright</property>
-                            <property name="justify">center</property>
+                            <property name="justify">2</property>
                             <property name="wrap">1</property>
                             <property name="selectable">1</property>
                             <property name="max-width-chars">60</property>
@@ -105,7 +105,7 @@
                             <property name="visible">0</property>
                             <property name="label">license</property>
                             <property name="use-markup">1</property>
-                            <property name="justify">center</property>
+                            <property name="justify">2</property>
                             <property name="wrap">1</property>
                             <property name="selectable">1</property>
                             <property name="max-width-chars">60</property>
@@ -120,14 +120,14 @@
                   <object class="GtkStackPage">
                     <property name="name">credits</property>
                     <property name="visible">0</property>
-                    <property name="title" translatable="yes">Credits</property>
+                    <property name="title" translatable="1">Credits</property>
                     <property name="child">
                       <object class="GtkBox" id="credits_page">
-                        <property name="orientation">vertical</property>
+                        <property name="orientation">1</property>
                         <property name="spacing">8</property>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow1">
-                            <property name="hscrollbar-policy">never</property>
+                            <property name="hscrollbar-policy">2</property>
                             <property name="has-frame">1</property>
                             <property name="vexpand">1</property>
                             <child>
@@ -137,9 +137,9 @@
                                 </style>
                                 <child>
                                   <object class="GtkGrid" id="credits_grid">
-                                    <property name="halign">center</property>
-                                    <property name="valign">start</property>
-                                    <property name="orientation">vertical</property>
+                                    <property name="halign">3</property>
+                                    <property name="valign">1</property>
+                                    <property name="orientation">1</property>
                                     <property name="row-spacing">2</property>
                                     <property name="column-spacing">8</property>
                                     <property name="margin-start">5</property>
@@ -160,14 +160,14 @@
                   <object class="GtkStackPage">
                     <property name="name">license</property>
                     <property name="visible">0</property>
-                    <property name="title" translatable="yes">License</property>
+                    <property name="title" translatable="1">License</property>
                     <property name="child">
                       <object class="GtkBox" id="license_page">
-                        <property name="orientation">vertical</property>
+                        <property name="orientation">1</property>
                         <property name="spacing">8</property>
                         <child>
                           <object class="GtkScrolledWindow" id="scrolledwindow2">
-                            <property name="hscrollbar-policy">never</property>
+                            <property name="hscrollbar-policy">2</property>
                             <property name="has-frame">1</property>
                             <property name="vexpand">1</property>
                             <child>
@@ -203,14 +203,14 @@
                   <object class="GtkStackPage">
                     <property name="name">system</property>
                     <property name="visible">0</property>
-                    <property name="title" translatable="yes">System</property>
+                    <property name="title" translatable="1">System</property>
                     <property name="child">
                       <object class="GtkBox" id="system_page">
-                        <property name="orientation">vertical</property>
+                        <property name="orientation">1</property>
                         <property name="spacing">8</property>
                         <child>
                           <object class="GtkScrolledWindow">
-                            <property name="hscrollbar-policy">never</property>
+                            <property name="hscrollbar-policy">2</property>
                             <property name="has-frame">1</property>
                             <property name="vexpand">1</property>
                             <child>

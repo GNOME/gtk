@@ -8,7 +8,7 @@
     </style>
     <child>
       <object class="GtkListBox" id="list">
-        <property name="selection-mode">none</property>
+        <property name="selection-mode">0</property>
         <signal name="row-activated" handler="row_activated"/>
       </object>
     </child>

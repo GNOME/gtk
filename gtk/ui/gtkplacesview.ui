@@ -13,10 +13,10 @@
     <property name="popup-completion">0</property>
   </object>
   <object class="GtkPopover" id="server_adresses_popover">
-    <property name="position">top</property>
+    <property name="position">2</property>
     <child>
       <object class="GtkBox">
-        <property name="orientation">vertical</property>
+        <property name="orientation">1</property>
         <property name="spacing">6</property>
         <property name="margin-start">18</property>
         <property name="margin-end">18</property>
@@ -25,7 +25,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="yes">Server Addresses</property>
+            <property name="label" translatable="1">Server Addresses</property>
             <attributes>
               <attribute name="weight" value="bold"></attribute>
             </attributes>
@@ -37,7 +37,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="yes">Server addresses are made up of a protocol prefix and an address. Examples:</property>
+            <property name="label" translatable="1">Server addresses are made up of a protocol prefix and an address. Examples:</property>
             <property name="wrap">1</property>
             <property name="width-chars">40</property>
             <property name="max-width-chars">40</property>
@@ -63,7 +63,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="hexpand">1</property>
-                <property name="label" translatable="yes">Available Protocols</property>
+                <property name="label" translatable="1">Available Protocols</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"></attribute>
@@ -76,7 +76,7 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="yes">Prefix</property>
+                <property name="label" translatable="1">Prefix</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"></attribute>
@@ -101,8 +101,8 @@
             <property name="child">
               <object class="GtkBox">
                 <property name="vexpand">1</property>
-                <property name="valign">center</property>
-                <property name="orientation">vertical</property>
+                <property name="valign">3</property>
+                <property name="orientation">1</property>
                 <property name="spacing">18</property>
                 <child>
                   <object class="GtkImage">
@@ -115,7 +115,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
+                    <property name="label" translatable="1" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -130,7 +130,7 @@
             <property name="name">list</property>
             <property name="child">
               <object class="GtkBox">
-                <property name="orientation">vertical</property>
+                <property name="orientation">1</property>
                 <property name="spacing">12</property>
                 <property name="margin-start">12</property>
                 <property name="margin-end">12</property>
@@ -138,7 +138,7 @@
                 <property name="margin-bottom">12</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Recent Servers</property>
+                    <property name="label" translatable="1">Recent Servers</property>
                     <attributes>
                       <attribute name="weight" value="bold"></attribute>
                     </attributes>
@@ -154,7 +154,7 @@
                       <object class="GtkViewport">
                         <child>
                           <object class="GtkListBox" id="recent_servers_listbox">
-                            <property name="selection-mode">none</property>
+                            <property name="selection-mode">0</property>
                             <signal name="row-activated" handler="on_recent_servers_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                           </object>
                         </child>
@@ -170,11 +170,11 @@
     </child>
   </object>
   <template class="GtkPlacesView" parent="GtkBox">
-    <property name="orientation">vertical</property>
+    <property name="orientation">1</property>
     <child>
       <object class="GtkStack" id="stack">
         <property name="vhomogeneous">0</property>
-        <property name="transition-type">crossfade</property>
+        <property name="transition-type">1</property>
         <child>
           <object class="GtkStackPage">
             <property name="name">browse</property>
@@ -186,7 +186,7 @@
                   <object class="GtkViewport">
                     <child>
                       <object class="GtkListBox" id="listbox">
-                        <property name="selection-mode">none</property>
+                        <property name="selection-mode">0</property>
                         <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                       </object>
                     </child>
@@ -201,11 +201,11 @@
             <property name="name">empty-search</property>
             <property name="child">
               <object class="GtkBox">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="halign">3</property>
+                <property name="valign">3</property>
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
-                <property name="orientation">vertical</property>
+                <property name="orientation">1</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkImage">
@@ -218,7 +218,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">No results found</property>
+                    <property name="label" translatable="1">No results found</property>
                     <attributes>
                       <attribute name="weight" value="bold"></attribute>
                       <attribute name="scale" value="1.44"></attribute>
@@ -227,7 +227,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Try a different search</property>
+                    <property name="label" translatable="1">Try a different search</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -249,7 +249,7 @@
           <object class="GtkLabel">
             <property name="hexpand">1</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Connect to _Server</property>
+            <property name="label" translatable="1">Connect to _Server</property>
             <property name="mnemonic-widget">address_entry</property>
             <property name="use-underline">1</property>
             <attributes>
@@ -259,11 +259,11 @@
         </child>
         <child type="end">
           <object class="GtkButton" id="connect_button">
-            <property name="label" translatable="yes">Con_nect</property>
+            <property name="label" translatable="1">Con_nect</property>
             <property name="use-underline">1</property>
             <property name="sensitive">0</property>
             <property name="receives-default">1</property>
-            <property name="valign">center</property>
+            <property name="valign">3</property>
             <signal name="clicked" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
           </object>
         </child>
@@ -274,7 +274,7 @@
               <object class="GtkEntry" id="address_entry">
                 <property name="hexpand">1</property>
                 <property name="width-chars">20</property>
-                <property name="placeholder-text" translatable="yes">Enter server address…</property>
+                <property name="placeholder-text" translatable="1">Enter server address…</property>
                 <property name="secondary-icon-name">dialog-question-symbolic</property>
                 <property name="completion">address_entry_completion</property>
                 <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes"/>
@@ -285,7 +285,7 @@
             <child>
               <object class="GtkMenuButton" id="server_list_button">
                 <property name="receives-default">1</property>
-                <property name="direction">up</property>
+                <property name="direction">0</property>
                 <property name="popover">recent_servers_popover</property>
                 <property name="icon-name">pan-down-symbolic</property>
                 <style>

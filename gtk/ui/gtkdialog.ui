@@ -6,7 +6,7 @@
     </child>
     <child>
       <object class="GtkBox">
-        <property name="orientation">vertical</property>
+        <property name="orientation">1</property>
         <style>
           <class name="dialog-vbox"/>
         </style>
@@ -21,7 +21,7 @@
             <child>
               <object class="GtkBox" id="action_area">
                 <property name="hexpand">1</property>
-                <property name="halign">end</property>
+                <property name="halign">2</property>
                 <style>
                   <class name="dialog-action-area"/>
                 </style>

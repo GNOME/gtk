@@ -16,12 +16,10 @@ audio-volume-medium</property>
     <signal name="query-tooltip" handler="cb_query_tooltip" swapped="no"/>
     <signal name="value-changed" handler="cb_value_changed" swapped="no"/>
     <child internal-child="plus_button">
-      <object class="GtkButton" id="scalebutton-plus_button1">
-      </object>
+      <object class="GtkButton" id="scalebutton-plus_button1"/>
     </child>
     <child internal-child="minus_button">
-      <object class="GtkButton" id="scalebutton-minus_button1">
-      </object>
+      <object class="GtkButton" id="scalebutton-minus_button1"/>
     </child>
   </template>
 </interface>
