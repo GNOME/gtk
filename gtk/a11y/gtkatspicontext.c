@@ -90,9 +90,6 @@ struct _GtkAtSpiContext
   /* The root object, used as a entry point */
   GtkAtSpiRoot *root;
 
-  /* The address for the ATSPI accessibility bus */
-  char *bus_address;
-
   /* The object path of the ATContext on the bus */
   char *context_path;
 
@@ -110,15 +107,6 @@ struct _GtkAtSpiContext
   guint registration_ids[20];
   guint n_registered_objects;
 };
-
-enum
-{
-  PROP_BUS_ADDRESS = 1,
-
-  N_PROPS
-};
-
-static GParamSpec *obj_props[N_PROPS];
 
 G_DEFINE_TYPE (GtkAtSpiContext, gtk_at_spi_context, GTK_TYPE_AT_CONTEXT)
 
@@ -1437,48 +1425,9 @@ gtk_at_spi_context_finalize (GObject *gobject)
 
   g_clear_object (&self->root);
 
-  g_free (self->bus_address);
   g_free (self->context_path);
 
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->finalize (gobject);
-}
-
-static void
-gtk_at_spi_context_set_property (GObject      *gobject,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
-{
-  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
-
-  switch (prop_id)
-    {
-    case PROP_BUS_ADDRESS:
-      self->bus_address = g_value_dup_string (value);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-    }
-}
-
-static void
-gtk_at_spi_context_get_property (GObject    *gobject,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
-{
-  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (gobject);
-
-  switch (prop_id)
-    {
-    case PROP_BUS_ADDRESS:
-      g_value_set_string (value, self->bus_address);
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
-    }
 }
 
 static void
@@ -1486,11 +1435,10 @@ gtk_at_spi_context_constructed (GObject *gobject)
 {
   GtkAtSpiContext *self G_GNUC_UNUSED = GTK_AT_SPI_CONTEXT (gobject);
 
-  /* Make sure that we were properly constructed */
-  g_assert (self->bus_address);
-
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
 }
+
+static const char *get_bus_address (GdkDisplay *display);
 
 static void
 gtk_at_spi_context_realize (GtkATContext *context)
@@ -1508,7 +1456,7 @@ gtk_at_spi_context_realize (GtkATContext *context)
 
   if (self->root == NULL)
     {
-      self->root = gtk_at_spi_root_new (self->bus_address);
+      self->root = gtk_at_spi_root_new (get_bus_address (display));
       g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-root",
                               g_object_ref (self->root),
                               g_object_unref);
@@ -1594,8 +1542,6 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   GtkATContextClass *context_class = GTK_AT_CONTEXT_CLASS (klass);
 
   gobject_class->constructed = gtk_at_spi_context_constructed;
-  gobject_class->set_property = gtk_at_spi_context_set_property;
-  gobject_class->get_property = gtk_at_spi_context_get_property;
   gobject_class->finalize = gtk_at_spi_context_finalize;
 
   context_class->realize = gtk_at_spi_context_realize;
@@ -1604,15 +1550,6 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   context_class->platform_change = gtk_at_spi_context_platform_change;
   context_class->bounds_change = gtk_at_spi_context_bounds_change;
   context_class->child_change = gtk_at_spi_context_child_change;
-
-  obj_props[PROP_BUS_ADDRESS] =
-    g_param_spec_string ("bus-address", NULL, NULL,
-                         NULL,
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_READWRITE |
-                         G_PARAM_STATIC_STRINGS);
-
-  g_object_class_install_properties (gobject_class, N_PROPS, obj_props);
 }
 
 static void
@@ -1766,6 +1703,7 @@ get_bus_address (GdkDisplay *display)
 out:
   return bus_address;
 }
+
 /* }}} */
 /* {{{ API */
 GtkATContext *
@@ -1773,18 +1711,15 @@ gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
                            GtkAccessible     *accessible,
                            GdkDisplay        *display)
 {
+  const char *bus_address;
+
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (accessible), NULL);
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  static const char *bus_address;
+  bus_address = get_bus_address (display);
 
   if (bus_address == NULL)
-    {
-      bus_address = get_bus_address (display);
-
-      if (bus_address == NULL)
-        bus_address = "";
-    }
+    bus_address = "";
 
   if (*bus_address == '\0')
     return NULL;
@@ -1795,7 +1730,6 @@ gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
                          "accessible-role", accessible_role,
                          "accessible", accessible,
                          "display", display,
-                         "bus-address", bus_address,
                          NULL);
 #endif
 #if defined(GDK_WINDOWING_X11)
@@ -1804,7 +1738,6 @@ gtk_at_spi_create_context (GtkAccessibleRole  accessible_role,
                          "accessible-role", accessible_role,
                          "accessible", accessible,
                          "display", display,
-                         "bus-address", bus_address,
                          NULL);
 #endif
 
