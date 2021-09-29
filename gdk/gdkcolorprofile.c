@@ -346,6 +346,7 @@ gdk_color_profile_get_lcms_profile (GdkColorProfile *self)
  * @profile: a `GdkColorProfile`
  *
  * Checks if the given profile is linear.
+ *
  * GTK tries to do compositing in a linear profile.
  *
  * Some profiles may be linear, but it is not possible to
@@ -469,4 +470,17 @@ gdk_color_profile_lookup_transform (GdkColorProfile *source,
     }
   
   return transform;
+}
+
+/* Check if the color profile and the memory format have the
+ * same color components.
+ */
+gboolean
+gdk_color_profile_supports_memory_format (GdkColorProfile *profile,
+                                          GdkMemoryFormat  format)
+{
+  /* Currently, all our memory formats are RGB (with or without alpha).
+   * Update this when that changes.
+   */
+  return cmsGetColorSpace (profile->lcms_profile) == cmsSigRgbData;
 }
