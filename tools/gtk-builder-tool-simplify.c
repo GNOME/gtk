@@ -255,6 +255,7 @@ is_pcdata_element (Element *element)
     "col",
     "item",
     "mark",
+    "lookup",
     NULL,
   };
 
