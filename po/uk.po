@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-24 12:22+0000\n"
-"PO-Revision-Date: 2021-09-24 20:05+0300\n"
+"POT-Creation-Date: 2021-09-28 20:00+0000\n"
+"PO-Revision-Date: 2021-09-29 14:34+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -68,15 +68,19 @@ msgstr "Немає сумісних форматів для передаванн
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1374
+#: gdk/gdkglcontext.c:1392
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
-msgstr ""
-"Намагаємося скористатися %s, але %s вже використано"
+msgstr "Намагаємося скористатися %s, але %s вже використано"
 
-#: gdk/gdksurface.c:1164
+#: gdk/gdksurface.c:1161
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Вимкнено підтримування Vulkan через GDK_DEBUG"
+
+#: gdk/gdktexture.c:554
+msgid "Unknown image format."
+msgstr ""
+"Невідомий формат зображення."
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -455,10 +459,51 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
+#: gdk/loaders/gdkjpeg.c:61
+#, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr ""
+"Помилка інтерпретації файлу зображення JPEG (%s)"
+
+#: gdk/loaders/gdkjpeg.c:220
+#, c-format
+msgid "Unsupported JPEG colorspace (%d)"
+msgstr ""
+"Непідтримуваний простір кольорів JPEG (%d)"
+
+#: gdk/loaders/gdkjpeg.c:229 gdk/loaders/gdkpng.c:434 gdk/loaders/gdktiff.c:479
+#, c-format
+#| msgid "Not enough memory"
+msgid "Not enough memory for image size %ux%u"
+msgstr "Недостатньо пам'яті для зображення розміром %ux%u"
+
+#: gdk/loaders/gdkpng.c:118
+#, c-format
+#| msgid "Error creating print preview"
+msgid "Error reading png (%s)"
+msgstr "Помилка читання png (%s)"
+
+#: gdk/loaders/gdkpng.c:381
+#, c-format
+#| msgid "Failed to write header\n"
+msgid "Failed to parse png image"
+msgstr "Не вдалося обробити дані зображення png"
+
+#: gdk/loaders/gdktiff.c:380
+msgid "Failed to load RGB data from TIFF file"
+msgstr ""
+"Не вдалося завантажити дані RGB з файлу формату TIFF"
+
+#: gdk/loaders/gdktiff.c:491
+#, c-format
+msgid "Reading data failed at row %d"
+msgstr ""
+"Помилка читання даних у рядку %d"
+
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
-#: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:1099 gdk/win32/gdkdrop-win32.c:1144
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:234
+#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
+#: gdk/win32/gdkdrop-win32.c:967 gdk/win32/gdkdrop-win32.c:1012
+#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Не знайдено сумісного формату передавання даних"
 
@@ -467,125 +512,121 @@ msgstr "Не знайдено сумісного формату передава
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Не вдалося декодувати дані з типом MIME «%s»"
 
-#: gdk/wayland/gdkglcontext-wayland.c:191
-#: gdk/win32/gdkglcontext-win32-egl.c:402
-#: gdk/win32/gdkglcontext-win32-wgl.c:632 gdk/x11/gdkglcontext-egl.c:600
-#: gdk/x11/gdkglcontext-glx.c:613
+#: gdk/wayland/gdkglcontext-wayland.c:190
+#: gdk/win32/gdkglcontext-win32-egl.c:401
+#: gdk/win32/gdkglcontext-win32-wgl.c:622 gdk/x11/gdkglcontext-egl.c:599
+#: gdk/x11/gdkglcontext-glx.c:612
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:489
+#: gdk/wayland/gdkglcontext-wayland.c:488
 msgid "libEGL not available in this sandbox"
-msgstr ""
-"libEGL є недоступною у цій пісочниці"
+msgstr "libEGL є недоступною у цій пісочниці"
 
-#: gdk/wayland/gdkglcontext-wayland.c:490
-#| msgid "Not available"
+#: gdk/wayland/gdkglcontext-wayland.c:489
 msgid "libEGL not available"
 msgstr "libEGL є недоступною"
 
-#: gdk/wayland/gdkglcontext-wayland.c:503
-#| msgid "Core GL is not available on EGL implementation"
+#: gdk/wayland/gdkglcontext-wayland.c:502
 msgid "Sandbox does not provide an OpenGL implementation"
 msgstr "Пісочниця не надає реалізації OpenGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:504
-#| msgid "No GL implementation is available"
+#: gdk/wayland/gdkglcontext-wayland.c:503
 msgid "No OpenGL implementation available"
 msgstr "Немає доступних реалізацій OpenGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
+#: gdk/wayland/gdkglcontext-wayland.c:512 gdk/x11/gdkglcontext-egl.c:701
 msgid "Could not initialize EGL display"
 msgstr "Не вдалося ініціалізувати дисплей EGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
+#: gdk/wayland/gdkglcontext-wayland.c:523 gdk/x11/gdkglcontext-egl.c:711
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Версія EGL %d.%d є надто давньою. Для роботи GTK потрібна версія %d.%d"
 
-#: gdk/wayland/gdkglcontext-wayland.c:535
-#: gdk/win32/gdkglcontext-win32-egl.c:276
-#: gdk/win32/gdkglcontext-win32-wgl.c:289
-#: gdk/win32/gdkglcontext-win32-wgl.c:306
+#: gdk/wayland/gdkglcontext-wayland.c:534
+#: gdk/win32/gdkglcontext-win32-egl.c:275
+#: gdk/win32/gdkglcontext-win32-wgl.c:281
+#: gdk/win32/gdkglcontext-win32-wgl.c:299
 msgid "No GL implementation is available"
 msgstr "Немає жодної реалізації GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:545
+#: gdk/wayland/gdkglcontext-wayland.c:544
 msgid "Core GL is not available on EGL implementation"
 msgstr "«Core GL» недоступний у реалізації EGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
+#: gdk/wayland/gdkglcontext-wayland.c:553 gdk/x11/gdkglcontext-egl.c:722
 msgid "Surfaceless contexts are not supported on this EGL implementation"
 msgstr ""
 "Підтримки безповерхневих контекстів у цій реалізації EGL не передбачено"
 
-#: gdk/wayland/gdkglcontext-wayland.c:566
-#: gdk/win32/gdkglcontext-win32-egl.c:216
-#: gdk/win32/gdkglcontext-win32-egl.c:226
-#: gdk/win32/gdkglcontext-win32-wgl.c:598
+#: gdk/wayland/gdkglcontext-wayland.c:565
+#: gdk/win32/gdkglcontext-win32-egl.c:215
+#: gdk/win32/gdkglcontext-win32-egl.c:225
+#: gdk/win32/gdkglcontext-win32-wgl.c:588
 msgid "No available configurations for the given pixel format"
 msgstr "Немає доступних налаштувань для заданого формату точок"
 
-#: gdk/win32/gdkclipdrop-win32.c:718
+#: gdk/win32/gdkclipdrop-win32.c:721
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Не вдалося отримати буфер обміну у власність. Перевищено час очікування на "
 "завершення OpenClipboard()."
 
-#: gdk/win32/gdkclipdrop-win32.c:728
+#: gdk/win32/gdkclipdrop-win32.c:731
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Не вдалося отримати буфер обміну у власність. Інший процес пов'язав його із "
 "собою до нас."
 
-#: gdk/win32/gdkclipdrop-win32.c:742
+#: gdk/win32/gdkclipdrop-win32.c:745
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати буфер обміну у власність. Помилка OpenClipboard(): 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:754
+#: gdk/win32/gdkclipdrop-win32.c:757
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати буфер обміну у власність. Помилка EmptyClipboard(): 0x"
 "%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:797
+#: gdk/win32/gdkclipdrop-win32.c:800
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Не вдалося встановити дані буфера обміну. Перевищено час очікування на дані "
 "від OpenClipboard()."
 
-#: gdk/win32/gdkclipdrop-win32.c:807 gdk/win32/gdkclipdrop-win32.c:838
+#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Не вдалося встановити дані буфера обміну. Інший процес пов'язав його із "
 "собою до нас."
 
-#: gdk/win32/gdkclipdrop-win32.c:821
+#: gdk/win32/gdkclipdrop-win32.c:824
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Не вдалося встановити дані буфера обміну. Помилка OpenClipboard(): 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:873
+#: gdk/win32/gdkclipdrop-win32.c:876
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані буфера обміну. Помилка GlobalLock(x%p): 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:884
+#: gdk/win32/gdkclipdrop-win32.c:887
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані буфера обміну. Помилка GlobalSize(0x%p): 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:897
+#: gdk/win32/gdkclipdrop-win32.c:900
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -593,20 +634,20 @@ msgstr ""
 "Не вдалося отримати дані з буфера обміну. Не вдалося отримати %s байтів "
 "пам'яті для зберігання даних."
 
-#: gdk/win32/gdkclipdrop-win32.c:929
+#: gdk/win32/gdkclipdrop-win32.c:932
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Не вдалося отримати дані буфера обміну. Перевищено час очікування на дані "
 "від OpenClipboard()."
 
-#: gdk/win32/gdkclipdrop-win32.c:939
+#: gdk/win32/gdkclipdrop-win32.c:942
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 "Не вдалося отримати дані буфера обміну. Змінено власника буфера обміну."
 
-#: gdk/win32/gdkclipdrop-win32.c:949
+#: gdk/win32/gdkclipdrop-win32.c:952
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -614,99 +655,99 @@ msgstr ""
 "Не вдалося отримати дані буфера обміну. Дані у буфері обміну було змінено до "
 "того, як ми змогли їх отримати."
 
-#: gdk/win32/gdkclipdrop-win32.c:966
+#: gdk/win32/gdkclipdrop-win32.c:969
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані буфера обміну. Помилка OpenClipboard(): 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:991
+#: gdk/win32/gdkclipdrop-win32.c:994
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Не вдалося отримати дані буфера обміну. Не знайдено сумісного формату "
 "передавання даних."
 
-#: gdk/win32/gdkclipdrop-win32.c:1001
+#: gdk/win32/gdkclipdrop-win32.c:1004
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані буфера обміну. Помилка GetClipboardData(): 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1030
+#: gdk/win32/gdkdrop-win32.c:898
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані перетягування зі скиданням. Помилка GlobalLock(x"
 "%p): 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1039
+#: gdk/win32/gdkdrop-win32.c:907
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані перетягування зі скиданням. Помилка GlobalSize(0x"
 "%p): 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1050
+#: gdk/win32/gdkdrop-win32.c:918
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Не вдалося отримати дані перетягування зі скиданням. Не вдалося отримати %s "
 "байтів пам'яті для зберігання даних."
 
-#: gdk/win32/gdkdrop-win32.c:1118
+#: gdk/win32/gdkdrop-win32.c:986
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Площину GDK 0x%p не зареєстровано як ціль скидання"
 
-#: gdk/win32/gdkdrop-win32.c:1125
+#: gdk/win32/gdkdrop-win32.c:993
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Запис контексту цілі 0x%p не містить об'єкта даних"
 
-#: gdk/win32/gdkdrop-win32.c:1163
+#: gdk/win32/gdkdrop-win32.c:1031
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "Помилка IDataObject_GetData (0x%x), повернуто 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1195
+#: gdk/win32/gdkdrop-win32.c:1063
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 "Не вдалося перетворити формат W32 даних перетягування зі скиданням 0x%x до "
 "%p (%s)"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:64
+#: gdk/win32/gdkhdataoutputstream-win32.c:63
 msgid "writing a closed stream"
 msgstr "запис до закритого потоку"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:86
+#: gdk/win32/gdkhdataoutputstream-win32.c:85
 msgid "g_try_realloc () failed"
 msgstr "помилка g_try_realloc ()"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:94
-#: gdk/win32/gdkhdataoutputstream-win32.c:232
+#: gdk/win32/gdkhdataoutputstream-win32.c:93
+#: gdk/win32/gdkhdataoutputstream-win32.c:231
 msgid "GlobalReAlloc() failed: "
 msgstr "Помилка GlobalReAlloc(): "
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:106
+#: gdk/win32/gdkhdataoutputstream-win32.c:105
 msgid "Ran out of buffer space (buffer size is fixed)"
 msgstr "Не вистачає місця у буфері (розмір буфера є фіксованим)"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:204
+#: gdk/win32/gdkhdataoutputstream-win32.c:203
 msgid "Can’t transmute a single handle"
 msgstr "Не можна перетворювати один дескриптор"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:216
+#: gdk/win32/gdkhdataoutputstream-win32.c:215
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
 msgstr "Не вдалося перетворити %zu байтів даних з %s на %u"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:251
+#: gdk/win32/gdkhdataoutputstream-win32.c:250
 msgid "GlobalLock() failed: "
 msgstr "Помилка GlobalLock(): "
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:365
+#: gdk/win32/gdkhdataoutputstream-win32.c:364
 msgid "GlobalAlloc() failed: "
 msgstr "Помилка GlobalAlloc(): "
 
@@ -738,39 +779,39 @@ msgstr ""
 "Не вдалося зберегти буфер обміну. Немає активної програми для керування "
 "буфером обміну."
 
-#: gdk/x11/gdkglcontext-egl.c:180
+#: gdk/x11/gdkglcontext-egl.c:179
 msgid "No EGL configuration available"
 msgstr "Немає доступних налаштувань EGL"
 
-#: gdk/x11/gdkglcontext-egl.c:188
+#: gdk/x11/gdkglcontext-egl.c:187
 msgid "Failed to get EGL configurations"
 msgstr "Не вдалося отримати налаштування EGL"
 
-#: gdk/x11/gdkglcontext-egl.c:266
+#: gdk/x11/gdkglcontext-egl.c:265
 msgid "No EGL configuration with required features found"
 msgstr "Не знайдено налаштувань EGL із потрібними можливостями"
 
-#: gdk/x11/gdkglcontext-egl.c:273
+#: gdk/x11/gdkglcontext-egl.c:272
 msgid "No perfect EGL configuration found"
 msgstr "Не знайдено ідеальних налаштувань EGL"
 
-#: gdk/x11/gdkglcontext-egl.c:684
+#: gdk/x11/gdkglcontext-egl.c:683
 msgid "EGL is not supported"
 msgstr "Підтримки EGL не передбачено"
 
-#: gdk/x11/gdkglcontext-egl.c:693
+#: gdk/x11/gdkglcontext-egl.c:692
 msgid "Failed to create EGL display"
 msgstr "Не вдалося створити запис дисплея EGL"
 
-#: gdk/x11/gdkglcontext-glx.c:772
+#: gdk/x11/gdkglcontext-glx.c:771
 msgid "No GLX configurations available"
 msgstr "Немає доступних налаштувань GLX"
 
-#: gdk/x11/gdkglcontext-glx.c:845
+#: gdk/x11/gdkglcontext-glx.c:844
 msgid "No GLX configuration with required features found"
 msgstr "Не знайдено налаштувань GLX із потрібними можливостями"
 
-#: gdk/x11/gdkglcontext-glx.c:919
+#: gdk/x11/gdkglcontext-glx.c:918
 msgid "GLX is not supported"
 msgstr "Підтримки GLX не передбачено"
 
@@ -1040,7 +1081,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:826 gtk/gtkshortcutlabel.c:100
+#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:100
 #: gtk/gtkshortcutlabel.c:136
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1051,7 +1092,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:845 gtk/gtkshortcutlabel.c:103
+#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:103
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1062,7 +1103,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:864 gtk/gtkshortcutlabel.c:106
+#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:106
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1073,7 +1114,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:882 gtk/gtkshortcutlabel.c:112
+#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:112
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Super"
@@ -1084,7 +1125,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:896 gtk/gtkshortcutlabel.c:115
+#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:115
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1095,7 +1136,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:911 gtk/gtkshortcutlabel.c:109
+#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:109
 #: gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1105,17 +1146,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:931
+#: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "ЦБ"
 
-#: gtk/gtkaccelgroup.c:938
+#: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Пробіл"
 
-#: gtk/gtkaccelgroup.c:941 gtk/gtkshortcutlabel.c:171
+#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:171
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -2020,7 +2061,7 @@ msgstr "_Праве:"
 msgid "Paper Margins"
 msgstr "Поля сторінки"
 
-#: gtk/gtkentry.c:3726
+#: gtk/gtkentry.c:3743
 msgid "Insert Emoji"
 msgstr "Вставити емодзі"
 
@@ -2090,8 +2131,8 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6140 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1245 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkwindow.c:6138 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1271 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2104,7 +2145,7 @@ msgid "_Open"
 msgstr "_Відкрити"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1246
+#: gtk/inspector/recorder.c:1272
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -2181,7 +2222,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8847
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6062 gtk/gtktextview.c:8900
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2306,7 +2347,7 @@ msgid "Audio"
 msgstr "Звук"
 
 #: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
-#: gtk/inspector/visual.ui:187
+#: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "Шрифт"
 
@@ -2450,27 +2491,27 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8835
+#: gtk/gtklabel.c:5479 gtk/gtktext.c:6050 gtk/gtktextview.c:8888
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8839
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6054 gtk/gtktextview.c:8892
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8843
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6058 gtk/gtktextview.c:8896
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8868
+#: gtk/gtklabel.c:5487 gtk/gtktext.c:6071 gtk/gtktextview.c:8921
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5493
+#: gtk/gtklabel.c:5492
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5497
+#: gtk/gtklabel.c:5496
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
@@ -2519,7 +2560,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:765
+#: gtk/gtkmain.c:768
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2572,7 +2613,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6141
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6139
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -2752,19 +2793,19 @@ msgstr ""
 msgid "Page Setup"
 msgstr "Параметри сторінки"
 
-#: gtk/gtkpasswordentry.c:167
+#: gtk/gtkpasswordentry.c:173
 msgid "Hide Text"
 msgstr "Сховати текст"
 
-#: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
+#: gtk/gtkpasswordentry.c:178 gtk/gtkpasswordentry.c:629
 msgid "Show Text"
 msgstr "Показати текст"
 
-#: gtk/gtkpasswordentry.c:199
+#: gtk/gtkpasswordentry.c:216
 msgid "Caps Lock is on"
 msgstr "Caps Lock увімкнено"
 
-#: gtk/gtkpasswordentry.c:680
+#: gtk/gtkpasswordentry.c:705
 msgid "_Show Text"
 msgstr "По_казати текст"
 
@@ -3355,7 +3396,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Не знайдено зареєстрованої програми з назвою «%s» для пункту з URI «%s»"
 
-#: gtk/gtksearchentry.c:599
+#: gtk/gtksearchentry.c:619
 msgid "Clear entry"
 msgstr "Спорожнити запис"
 
@@ -3444,19 +3485,19 @@ msgstr "Спробуйте пошукати по-інакшому"
 msgid "Could not show link"
 msgstr "Не вдалось показати посилання"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8873
+#: gtk/gtktext.c:6076 gtk/gtktextview.c:8926
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
-#: gtk/gtktextview.c:8855
+#: gtk/gtktextview.c:8908
 msgid "_Undo"
 msgstr "_Скасувати"
 
-#: gtk/gtktextview.c:8859
+#: gtk/gtktextview.c:8912
 msgid "_Redo"
 msgstr "Пов_торити"
 
-#: gtk/gtktreeexpander.c:196
+#: gtk/gtktreeexpander.c:205
 msgid "Expand"
 msgstr "Розгорнути"
 
@@ -3479,12 +3520,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6128
+#: gtk/gtkwindow.c:6126
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Бажаєте використовувати інспектор GTK?"
 
-#: gtk/gtkwindow.c:6130
+#: gtk/gtkwindow.c:6128
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3495,7 +3536,7 @@ msgstr ""
 "редагувати внутрішні частини будь-які програми GTK. Його використання може "
 "спричинити збої в програмі."
 
-#: gtk/gtkwindow.c:6135
+#: gtk/gtkwindow.c:6133
 msgid "Don’t show this message again"
 msgstr "Не показувати це повідомлення надалі"
 
@@ -3630,42 +3671,42 @@ msgstr "Класи стилів"
 msgid "CSS Property"
 msgstr "Властивість CSS"
 
-#: gtk/inspector/general.c:308 gtk/inspector/general.c:388
+#: gtk/inspector/general.c:309 gtk/inspector/general.c:389
 msgctxt "GL version"
 msgid "None"
 msgstr "Немає"
-
-#: gtk/inspector/general.c:317
-msgctxt "GL version"
-msgid "Disabled"
-msgstr "Вимкнено"
 
 #: gtk/inspector/general.c:318
+msgctxt "GL version"
+msgid "Disabled"
+msgstr "Вимкнено"
+
+#: gtk/inspector/general.c:319
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:389
+#: gtk/inspector/general.c:390
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:440
+#: gtk/inspector/general.c:441
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:441 gtk/inspector/general.c:442
+#: gtk/inspector/general.c:442 gtk/inspector/general.c:443
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:498
+#: gtk/inspector/general.c:499
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:499 gtk/inspector/general.c:500
+#: gtk/inspector/general.c:500 gtk/inspector/general.c:501
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Немає"
@@ -3933,7 +3974,7 @@ msgstr "Джерело:"
 msgid "Defined At"
 msgstr "Визначено в"
 
-#: gtk/inspector/recorder.c:1216
+#: gtk/inspector/recorder.c:1242
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Не вдалося зберегти RenderNode"
@@ -4075,99 +4116,99 @@ msgstr "Модуль не підтримує масштабування вікн
 msgid "GL rendering is disabled"
 msgstr "Відтворення GL вимкнено"
 
-#: gtk/inspector/visual.ui:59
+#: gtk/inspector/visual.ui:35
 msgid "GTK Theme"
 msgstr "Тема GTK"
 
-#: gtk/inspector/visual.ui:83
+#: gtk/inspector/visual.ui:59
 msgid "Dark Variant"
 msgstr "Темний варіант"
 
-#: gtk/inspector/visual.ui:108
+#: gtk/inspector/visual.ui:84
 msgid "Cursor Theme"
 msgstr "Тема курсора"
 
-#: gtk/inspector/visual.ui:133
+#: gtk/inspector/visual.ui:109
 msgid "Cursor Size"
 msgstr "Розмір курсора"
 
-#: gtk/inspector/visual.ui:162
+#: gtk/inspector/visual.ui:145
 msgid "Icon Theme"
 msgstr "Тема піктограм"
 
-#: gtk/inspector/visual.ui:212
+#: gtk/inspector/visual.ui:195
 msgid "Font Scale"
 msgstr "Масштаб шрифту"
 
-#: gtk/inspector/visual.ui:249
+#: gtk/inspector/visual.ui:240
 msgid "Text Direction"
 msgstr "Напрям тексту"
 
-#: gtk/inspector/visual.ui:264
+#: gtk/inspector/visual.ui:255
 msgid "Left-to-Right"
 msgstr "Зліва направо"
 
-#: gtk/inspector/visual.ui:265
+#: gtk/inspector/visual.ui:256
 msgid "Right-to-Left"
 msgstr "Справа наліво"
 
-#: gtk/inspector/visual.ui:283
+#: gtk/inspector/visual.ui:274
 msgid "Window Scaling"
 msgstr "Масштабування вікон"
 
-#: gtk/inspector/visual.ui:309
+#: gtk/inspector/visual.ui:307
 msgid "Animations"
 msgstr "Анімація"
 
-#: gtk/inspector/visual.ui:334
+#: gtk/inspector/visual.ui:332
 msgid "Slowdown"
 msgstr "Уповільнення"
 
-#: gtk/inspector/visual.ui:384
+#: gtk/inspector/visual.ui:390
 msgid "Show fps overlay"
 msgstr "Показувати накладку з частотою кадрів"
 
-#: gtk/inspector/visual.ui:409
+#: gtk/inspector/visual.ui:415
 msgid "Show Graphic Updates"
 msgstr "Показувати графічні оновлення"
 
-#: gtk/inspector/visual.ui:434
+#: gtk/inspector/visual.ui:440
 msgid "Show Fallback Rendering"
 msgstr "Показувати дані щодо резервної обробки"
 
-#: gtk/inspector/visual.ui:459
+#: gtk/inspector/visual.ui:465
 msgid "Show Baselines"
 msgstr "Показати базову лінію"
 
-#: gtk/inspector/visual.ui:487
+#: gtk/inspector/visual.ui:493
 msgid "Show Layout Borders"
 msgstr "Показати межі шару"
 
-#: gtk/inspector/visual.ui:544
+#: gtk/inspector/visual.ui:550
 msgid "CSS Padding"
 msgstr "Фаска CSS"
 
-#: gtk/inspector/visual.ui:554
+#: gtk/inspector/visual.ui:560
 msgid "CSS Border"
 msgstr "Рамка CSS"
 
-#: gtk/inspector/visual.ui:564
+#: gtk/inspector/visual.ui:570
 msgid "CSS Margin"
 msgstr "Поле CSS"
 
-#: gtk/inspector/visual.ui:574
+#: gtk/inspector/visual.ui:580
 msgid "Widget Margin"
 msgstr "Поле віджета"
 
-#: gtk/inspector/visual.ui:609
+#: gtk/inspector/visual.ui:615
 msgid "Show Focus"
 msgstr "Показувати фокус"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:654
 msgid "Simulate Touchscreen"
 msgstr "Емулювати сенсорну панель"
 
-#: gtk/inspector/visual.ui:672
+#: gtk/inspector/visual.ui:678
 msgid "Software GL"
 msgstr "Програмний GL"
 
