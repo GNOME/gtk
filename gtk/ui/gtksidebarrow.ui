@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <template class="GtkSidebarRow" parent="GtkListBoxRow">
-    <property name="focus-on-click">False</property>
+    <property name="focus-on-click">0</property>
     <style>
       <class name="sidebar-row"/>
     </style>
@@ -34,8 +34,8 @@
               <object class="GtkImage" id="end_icon_widget">
                 <property name="visible">0</property>
                 <property name="hexpand">1</property>
-                <property name="halign">end</property>
-                <property name="valign">center</property>
+                <property name="halign">2</property>
+                <property name="valign">3</property>
                 <style>
                   <class name="sidebar-icon"/>
                 </style>
@@ -43,11 +43,11 @@
             </child>
             <child>
               <object class="GtkButton" id="eject_button">
-                <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="halign">3</property>
+                <property name="valign">3</property>
                 <property name="margin-start">4px</property>
                 <property name="icon-name">media-eject-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Unmount</property>
+                <property name="tooltip-text" translatable="1">Unmount</property>
                 <style>
                   <class name="sidebar-button"/>
                 </style>
@@ -56,8 +56,8 @@
             <child>
               <object class="GtkSpinner" id="busy_spinner">
                 <property name="spinning">1</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
+                <property name="halign">3</property>
+                <property name="valign">3</property>
                 <property name="margin-start">4px</property>
                 <property name="visible">0</property>
               </object>

@@ -7,32 +7,32 @@
         <child>
           <object class="GtkBox">
             <property name="hexpand">1</property>
-            <property name="orientation">vertical</property>
+            <property name="orientation">1</property>
             <child>
               <object class="GtkBox">
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="hexpand">1</property>
                 <property name="vexpand">0</property>
                 <child>
                   <object class="GtkButton">
-                    <property name="halign">center</property>
-                    <property name="label" translatable="yes">_</property>
+                    <property name="halign">3</property>
+                    <property name="label" translatable="1">_</property>
                     <property name="focusable">1</property>
                     <property name="receives_default">1</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="label" translatable="yes">F</property>
+                    <property name="label" translatable="1">F</property>
                     <property name="focusable">1</property>
                     <property name="receives_default">1</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="halign">center</property>
+                    <property name="halign">3</property>
                     <property name="hexpand">1</property>
-                    <property name="label" translatable="yes">E</property>
+                    <property name="label" translatable="1">E</property>
                     <property name="focusable">1</property>
                     <property name="receives_default">1</property>
                   </object>
@@ -40,7 +40,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="hexpand">1</property>
-                    <property name="label" translatable="yes">FE</property>
+                    <property name="label" translatable="1">FE</property>
                     <property name="focusable">1</property>
                     <property name="receives_default">1</property>
                   </object>
@@ -50,29 +50,29 @@
             <child>
               <object class="GtkBox">
                 <property name="can_focus">0</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="hexpand">1</property>
                 <property name="vexpand">0</property>
                 <child>
                   <object class="GtkButton">
-                    <property name="halign">center</property>
-                    <property name="label" translatable="yes">_</property>
+                    <property name="halign">3</property>
+                    <property name="label" translatable="1">_</property>
                     <property name="focusable">1</property>
                     <property name="receives_default">1</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="label" translatable="yes">F</property>
+                    <property name="label" translatable="1">F</property>
                     <property name="focusable">1</property>
                     <property name="receives_default">1</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
-                    <property name="halign">center</property>
+                    <property name="halign">3</property>
                     <property name="hexpand">1</property>
-                    <property name="label" translatable="yes">E</property>
+                    <property name="label" translatable="1">E</property>
                     <property name="focusable">1</property>
                     <property name="receives_default">1</property>
                   </object>
@@ -80,7 +80,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="hexpand">1</property>
-                    <property name="label" translatable="yes">FE</property>
+                    <property name="label" translatable="1">FE</property>
                     <property name="focusable">1</property>
                     <property name="receives_default">1</property>
                   </object>
@@ -91,30 +91,30 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="halign">center</property>
-            <property name="orientation">vertical</property>
+            <property name="halign">3</property>
+            <property name="orientation">1</property>
             <property name="can_focus">0</property>
             <property name="vexpand">1</property>
             <child>
               <object class="GtkButton">
-                <property name="valign">center</property>
-                <property name="label" translatable="yes">_</property>
+                <property name="valign">3</property>
+                <property name="label" translatable="1">_</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">F</property>
+                <property name="label" translatable="1">F</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">E</property>
+                <property name="label" translatable="1">E</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
               </object>
@@ -122,7 +122,7 @@
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">FE</property>
+                <property name="label" translatable="1">FE</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
               </object>
@@ -133,173 +133,173 @@
           <object class="GtkBox">
             <property name="hexpand">0</property>
             <property name="vexpand">1</property>
-            <property name="orientation">vertical</property>
+            <property name="orientation">1</property>
             <child>
               <object class="GtkButton">
-                <property name="valign">center</property>
-                <property name="label" translatable="yes">_I</property>
+                <property name="valign">3</property>
+                <property name="label" translatable="1">_I</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FI</property>
+                <property name="label" translatable="1">FI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">EI</property>
+                <property name="label" translatable="1">EI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="vexpand">1</property>
-                <property name="label" translatable="yes">FEI</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_S</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-                <property name="valign">center</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">FS</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-                <property name="valign">start</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">ES</property>
+                <property name="label" translatable="1">FEI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="1">_S</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="1">FS</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">FES</property>
+                <property name="label" translatable="1">ES</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">start</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_N</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-                <property name="valign">center</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">FN</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-                <property name="valign">end</property>
+                <property name="valign">3</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">EN</property>
+                <property name="label" translatable="1">FES</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="1">_N</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="1">FN</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">2</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">FEN</property>
+                <property name="label" translatable="1">EN</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">end</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_C</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-                <property name="valign">center</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">FC</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">EC</property>
+                <property name="label" translatable="1">FEN</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">2</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="1">_C</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="1">FC</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">3</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">FEC</property>
+                <property name="label" translatable="1">EC</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_B</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-                <property name="valign">center</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">FB</property>
-                <property name="focusable">1</property>
-                <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">3</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">EB</property>
+                <property name="label" translatable="1">FEC</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="1">_B</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="label" translatable="1">FB</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">4</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
                 <property name="vexpand">1</property>
-                <property name="label" translatable="yes">FEB</property>
+                <property name="label" translatable="1">EB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="vexpand">1</property>
+                <property name="label" translatable="1">FEB</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">4</property>
               </object>
             </child>
           </object>
@@ -308,11 +308,11 @@
           <object class="GtkBox">
             <property name="hexpand">0</property>
             <property name="vexpand">1</property>
-            <property name="orientation">vertical</property>
+            <property name="orientation">1</property>
             <child>
               <object class="GtkButton">
-                <property name="valign">center</property>
-                <property name="label" translatable="yes">_I</property>
+                <property name="valign">3</property>
+                <property name="label" translatable="1">_I</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
                 <property name="vexpand">0</property>
@@ -320,7 +320,7 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FI</property>
+                <property name="label" translatable="1">FI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
                 <property name="vexpand">0</property>
@@ -328,8 +328,8 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="valign">center</property>
-                <property name="label" translatable="yes">EI</property>
+                <property name="valign">3</property>
+                <property name="label" translatable="1">EI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
                 <property name="vexpand">1</property>
@@ -337,7 +337,7 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FEI</property>
+                <property name="label" translatable="1">FEI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
                 <property name="vexpand">1</property>
@@ -345,145 +345,145 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">_S</property>
+                <property name="label" translatable="1">_S</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FS</property>
+                <property name="label" translatable="1">FS</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">start</property>
+                <property name="valign">1</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">ES</property>
+                <property name="label" translatable="1">ES</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FES</property>
+                <property name="label" translatable="1">FES</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">start</property>
+                <property name="valign">1</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">_N</property>
+                <property name="label" translatable="1">_N</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FN</property>
+                <property name="label" translatable="1">FN</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">end</property>
+                <property name="valign">2</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">EN</property>
+                <property name="label" translatable="1">EN</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FEN</property>
+                <property name="label" translatable="1">FEN</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">end</property>
+                <property name="valign">2</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">_C</property>
+                <property name="label" translatable="1">_C</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FC</property>
+                <property name="label" translatable="1">FC</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">EC</property>
+                <property name="label" translatable="1">EC</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FEC</property>
+                <property name="label" translatable="1">FEC</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">_B</property>
+                <property name="label" translatable="1">_B</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FB</property>
+                <property name="label" translatable="1">FB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">4</property>
                 <property name="vexpand">0</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">EB</property>
+                <property name="label" translatable="1">EB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FEB</property>
+                <property name="label" translatable="1">FEB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">4</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
@@ -493,11 +493,11 @@
           <object class="GtkBox">
             <property name="hexpand">0</property>
             <property name="vexpand">1</property>
-            <property name="orientation">vertical</property>
+            <property name="orientation">1</property>
             <child>
               <object class="GtkButton">
-                <property name="valign">center</property>
-                <property name="label" translatable="yes">_I</property>
+                <property name="valign">3</property>
+                <property name="label" translatable="1">_I</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
                 <property name="vexpand">1</property>
@@ -505,7 +505,7 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FI</property>
+                <property name="label" translatable="1">FI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
                 <property name="vexpand">1</property>
@@ -513,8 +513,8 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="valign">center</property>
-                <property name="label" translatable="yes">EI</property>
+                <property name="valign">3</property>
+                <property name="label" translatable="1">EI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
                 <property name="vexpand">1</property>
@@ -522,7 +522,7 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FEI</property>
+                <property name="label" translatable="1">FEI</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
                 <property name="vexpand">1</property>
@@ -530,145 +530,145 @@
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">_S</property>
+                <property name="label" translatable="1">_S</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FS</property>
+                <property name="label" translatable="1">FS</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">start</property>
+                <property name="valign">1</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">ES</property>
+                <property name="label" translatable="1">ES</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FES</property>
+                <property name="label" translatable="1">FES</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">start</property>
+                <property name="valign">1</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">_N</property>
+                <property name="label" translatable="1">_N</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FN</property>
+                <property name="label" translatable="1">FN</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">end</property>
+                <property name="valign">2</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">EN</property>
+                <property name="label" translatable="1">EN</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FEN</property>
+                <property name="label" translatable="1">FEN</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">end</property>
+                <property name="valign">2</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">_C</property>
+                <property name="label" translatable="1">_C</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FC</property>
+                <property name="label" translatable="1">FC</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">EC</property>
+                <property name="label" translatable="1">EC</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FEC</property>
+                <property name="label" translatable="1">FEC</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">_B</property>
+                <property name="label" translatable="1">_B</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FB</property>
+                <property name="label" translatable="1">FB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">4</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">EB</property>
+                <property name="label" translatable="1">EB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">center</property>
+                <property name="valign">3</property>
                 <property name="vexpand">1</property>
               </object>
             </child>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">FEB</property>
+                <property name="label" translatable="1">FEB</property>
                 <property name="focusable">1</property>
                 <property name="receives_default">1</property>
-                <property name="valign">baseline</property>
+                <property name="valign">4</property>
                 <property name="vexpand">1</property>
               </object>
             </child>

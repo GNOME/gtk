@@ -20,7 +20,7 @@
                 <property name="needs-attention">1</property>
                 <property name="child">
                   <object class="GtkButton" id="page1">
-                    <property name="label" translatable="yes">Yes</property>
+                    <property name="label" translatable="1">Yes</property>
                   </object>
                 </property>
               </object>
@@ -32,7 +32,7 @@
                 <property name="icon-name">page2-icon</property>
                 <property name="child">
                   <object class="GtkButton" id="page2">
-                    <property name="label" translatable="yes">No</property>
+                    <property name="label" translatable="1">No</property>
                   </object>
                 </property>
               </object>

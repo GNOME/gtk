@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkSingleSelection" id="selection">
-    <signal name="notify::selected-item" handler="selection_changed_cb" object="GtkFontChooserWidget" swapped="0" />
-    <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1" />
+    <signal name="notify::selected-item" handler="selection_changed_cb" object="GtkFontChooserWidget" swapped="0"/>
+    <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1"/>
     <property name="model">
       <object class="GtkFilterListModel" id="filter_model">
-        <signal name="notify::pending" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1" />
+        <signal name="notify::pending" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1"/>
         <property name="incremental">1</property>
         <property name="filter">
           <object class="GtkEveryFilter">
@@ -15,7 +15,7 @@
                   <lookup name="text">search_entry</lookup>
                 </binding>
                 <property name="expression">
-                  <closure type="gchararray" swapped="1" function="get_font_name" />
+                  <closure type="gchararray" swapped="1" function="get_font_name"/>
                 </property>
               </object>
             </child>
@@ -61,7 +61,7 @@
                       <object class="GtkSearchEntry" id="search_entry">
                         <property name="hexpand">1</property>
                         <property name="activates-default">1</property>
-                        <property name="placeholder-text" translatable="yes">Search font name</property>
+                        <property name="placeholder-text" translatable="1">Search font name</property>
                         <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
                       </object>
                     </child>
@@ -72,11 +72,11 @@
                           <object class="GtkPopover">
                             <child>
                               <object class="GtkBox">
-                                <property name="orientation">vertical</property>
+                                <property name="orientation">1</property>
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="yes">Filter by</property>
+                                    <property name="label" translatable="1">Filter by</property>
                                     <property name="width-chars">20</property>
                                     <property name="margin-bottom">10</property>
                                     <style>
@@ -86,13 +86,13 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="monospace_button">
-                                    <property name="label" translatable="yes">Monospace</property>
+                                    <property name="label" translatable="1">Monospace</property>
                                     <signal name="notify::active" handler="monospace_check_changed"/>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="language_button">
-                                    <property name="label" translatable="yes">Language</property>
+                                    <property name="label" translatable="1">Language</property>
                                     <signal name="notify::active" handler="language_check_changed"/>
                                   </object>
                                 </child>
@@ -102,11 +102,9 @@
                                     <child>
                                       <object class="GtkScrolledWindow">
                                         <property name="min-content-height">200</property>
-                                        <property name="hscrollbar-policy">never</property>
-                                        <property name="vscrollbar-policy">automatic</property>
+                                        <property name="hscrollbar-policy">2</property>
                                         <child>
-                                          <object class="GtkListView" id="language_list">
-                                          </object>
+                                          <object class="GtkListView" id="language_list"/>
                                         </child>
                                       </object>
                                     </child>
@@ -139,11 +137,10 @@
                                 <property name="height-request">300</property>
                                 <property name="hexpand">1</property>
                                 <property name="vexpand">1</property>
-                                <property name="hscrollbar-policy">never</property>
+                                <property name="hscrollbar-policy">2</property>
                                 <property name="has-frame">1</property>
                                 <child>
                                   <object class="GtkListView" id="family_face_list">
-                                    <property name="can-focus">1</property>
                                     <property name="model">selection</property>
                                     <signal name="activate" handler="row_activated_cb" swapped="no"/>
                                     <property name="factory">
@@ -188,10 +185,10 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="preview">
-                                <property name="placeholder-text" translatable="yes">Preview text</property>
+                                <property name="placeholder-text" translatable="1">Preview text</property>
                                 <child>
                                   <object class="GtkEventControllerScroll">
-                                    <property name="flags" translatable="yes">horizontal</property>
+                                    <property name="flags" translatable="1">horizontal</property>
                                     <signal name="scroll" handler="resize_by_scroll_cb"/>
                                   </object>
                                 </child>
@@ -204,9 +201,9 @@
                             </child>
                             <child>
                               <object class="GtkLabel" id="size_label">
-                                <property name="label" translatable="yes">Size</property>
+                                <property name="label" translatable="1">Size</property>
                                 <property name="xalign">0</property>
-                                <property name="valign">baseline</property>
+                                <property name="valign">4</property>
                                 <layout>
                                   <property name="column">0</property>
                                   <property name="row">3</property>
@@ -217,11 +214,10 @@
                               <object class="GtkScale" id="size_slider">
                                 <property name="hexpand">1</property>
                                 <property name="adjustment">slider_adjustment</property>
-                                <property name="draw-value">0</property>
                                 <property name="round-digits">0</property>
                                 <child>
                                   <object class="GtkEventControllerScroll">
-                                    <property name="flags" translatable="yes">horizontal</property>
+                                    <property name="flags" translatable="1">horizontal</property>
                                     <signal name="scroll" handler="resize_by_scroll_cb"/>
                                   </object>
                                 </child>
@@ -234,7 +230,7 @@
                             <child>
                               <object class="GtkSpinButton" id="size_spin">
                                 <property name="adjustment">spin_adjustment</property>
-                                <property name="valign">center</property>
+                                <property name="valign">3</property>
                                 <signal name="output" handler="output_cb"/>
                                 <layout>
                                   <property name="column">2</property>
@@ -254,8 +250,8 @@
                             <property name="row-spacing">12</property>
                             <property name="hexpand">1</property>
                             <property name="vexpand">1</property>
-                            <property name="halign">center</property>
-                            <property name="valign">center</property>
+                            <property name="halign">3</property>
+                            <property name="valign">3</property>
                             <style>
                               <class name="dim-label"/>
                             </style>
@@ -271,7 +267,7 @@
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="yes">No Fonts Found</property>
+                                <property name="label" translatable="1">No Fonts Found</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
                                   <attribute name="scale" value="1.2"></attribute>
@@ -301,7 +297,7 @@
             <property name="name">tweaks</property>
             <property name="child">
               <object class="GtkBox">
-                <property name="orientation">vertical</property>
+                <property name="orientation">1</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkLabel" id="font_name_label">
@@ -309,7 +305,7 @@
                     <property name="margin-bottom">6</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
-                    <property name="ellipsize">end</property>
+                    <property name="ellipsize">3</property>
                     <property name="xalign">0</property>
                     <binding name="label" object="GtkFontChooserWidget">
                       <closure type="gchararray" function="get_font_name">
@@ -325,14 +321,14 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="preview2">
-                    <property name="placeholder-text" translatable="yes">Preview text</property>
+                    <property name="placeholder-text" translatable="1">Preview text</property>
                     <property name="text" bind-source="preview" bind-property="text" bind-flags="bidirectional"/>
                     <property name="attributes" bind-source="preview" bind-property="attributes" bind-flags="bidirectional"/>
                   </object>
                 </child>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="hscrollbar-policy">never</property>
+                    <property name="hscrollbar-policy">2</property>
                     <property name="has-frame">1</property>
                     <property name="vexpand">1</property>
                     <style>
@@ -340,7 +336,7 @@
                     </style>
                     <child>
                       <object class="GtkBox">
-                        <property name="orientation">vertical</property>
+                        <property name="orientation">1</property>
                         <property name="spacing">12</property>
                         <property name="margin-start">12</property>
                         <property name="margin-end">12</property>
@@ -352,9 +348,9 @@
                             <property name="column-spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="size_label2">
-                                <property name="label" translatable="yes">Size</property>
+                                <property name="label" translatable="1">Size</property>
                                 <property name="xalign">0</property>
-                                <property name="valign">baseline</property>
+                                <property name="valign">4</property>
                                 <layout>
                                   <property name="column">0</property>
                                   <property name="row">0</property>
@@ -365,7 +361,6 @@
                               <object class="GtkScale" id="size_slider2">
                                 <property name="hexpand">1</property>
                                 <property name="adjustment">slider_adjustment</property>
-                                <property name="draw-value">0</property>
                                 <property name="round-digits">0</property>
                                 <layout>
                                   <property name="column">1</property>
@@ -376,7 +371,7 @@
                             <child>
                               <object class="GtkSpinButton" id="size_spin2">
                                 <property name="adjustment">spin_adjustment</property>
-                                <property name="valign">center</property>
+                                <property name="valign">3</property>
                                 <signal name="output" handler="output_cb"/>
                                 <layout>
                                   <property name="column">2</property>
@@ -388,7 +383,7 @@
                         </child>
                         <child>
                           <object class="GtkBox" id="feature_box">
-                            <property name="orientation">vertical</property>
+                            <property name="orientation">1</property>
                             <property name="spacing">12</property>
                           </object>
                         </child>

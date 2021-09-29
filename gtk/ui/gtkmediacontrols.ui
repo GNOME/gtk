@@ -21,8 +21,8 @@
         <child>
           <object class="GtkButton" id="play_button">
             <property name="receives-default">1</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
+            <property name="halign">3</property>
+            <property name="valign">3</property>
             <property name="has-frame">0</property>
             <property name="icon-name">media-playback-start-symbolic</property>
             <signal name="clicked" handler="play_button_clicked" object="GtkMediaControls" swapped="no"/>
@@ -33,14 +33,13 @@
             <child>
               <object class="GtkLabel" id="time_label">
                 <attributes>
-                  <attribute name="font-features" value="tnum=1"/>
+                  <attribute name="font-features" value="tnum=1"></attribute>
                 </attributes>
               </object>
             </child>
             <child>
               <object class="GtkScale" id="seek_scale">
                 <property name="adjustment">time_adjustment</property>
-                <property name="draw_value">0</property>
                 <property name="restrict-to-fill-level">0</property>
                 <property name="hexpand">1</property>
               </object>
@@ -48,7 +47,7 @@
             <child>
               <object class="GtkLabel" id="duration_label">
                 <attributes>
-                  <attribute name="font-features" value="tnum=1"/>
+                  <attribute name="font-features" value="tnum=1"></attribute>
                 </attributes>
               </object>
             </child>

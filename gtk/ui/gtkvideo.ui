@@ -12,10 +12,10 @@
               <class name="osd"/>
               <class name="circular"/>
             </style>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
+            <property name="halign">3</property>
+            <property name="valign">3</property>
             <property name="icon-name">media-playback-start-symbolic</property>
-            <property name="icon-size">large</property>
+            <property name="icon-size">2</property>
             <layout>
               <property name="measure">1</property>
             </layout>
@@ -23,8 +23,8 @@
         </child>
         <child type="overlay">
           <object class="GtkRevealer" id="controls_revealer">
-            <property name="valign">end</property>
-            <property name="transition-type">crossfade</property>
+            <property name="valign">2</property>
+            <property name="transition-type">1</property>
             <child>
               <object class="GtkMediaControls" id="controls">
                 <style>

@@ -23,19 +23,21 @@
       </object>
     </child>
     <child>
-  <object class="GtkTreePopover" id="popup_widget">
-    <property name="cell-area"><object class="GtkCellAreaBox" id="area"/></property>
-    <property name="has-arrow">0</property>
-    <signal name="menu-activate" handler="gtk_combo_box_menu_activate" swapped="no"/>
-    <signal name="show" handler="gtk_combo_box_menu_show" swapped="no"/>
-    <signal name="hide" handler="gtk_combo_box_menu_hide" swapped="no"/>
-    <child>
-      <object class="GtkEventControllerKey">
-        <signal name="key-pressed" handler="gtk_combo_box_menu_key" swapped="no"/>
-        <signal name="key-released" handler="gtk_combo_box_menu_key" swapped="no"/>
+      <object class="GtkTreePopover" id="popup_widget">
+        <property name="cell-area">
+          <object class="GtkCellAreaBox" id="area"/>
+        </property>
+        <property name="has-arrow">0</property>
+        <signal name="menu-activate" handler="gtk_combo_box_menu_activate" swapped="no"/>
+        <signal name="show" handler="gtk_combo_box_menu_show" swapped="no"/>
+        <signal name="hide" handler="gtk_combo_box_menu_hide" swapped="no"/>
+        <child>
+          <object class="GtkEventControllerKey">
+            <signal name="key-pressed" handler="gtk_combo_box_menu_key" swapped="no"/>
+            <signal name="key-released" handler="gtk_combo_box_menu_key" swapped="no"/>
+          </object>
+        </child>
       </object>
     </child>
-  </object>
-  </child>
   </template>
 </interface>

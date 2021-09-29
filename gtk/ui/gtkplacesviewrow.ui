@@ -18,7 +18,7 @@
           <object class="GtkLabel" id="name_label">
             <property name="hexpand">1</property>
             <property name="xalign">0</property>
-            <property name="ellipsize">end</property>
+            <property name="ellipsize">3</property>
           </object>
         </child>
         <child>
@@ -31,8 +31,8 @@
         </child>
         <child>
           <object class="GtkLabel" id="path_label">
-            <property name="justify">right</property>
-            <property name="ellipsize">middle</property>
+            <property name="justify">1</property>
+            <property name="ellipsize">2</property>
             <property name="xalign">0</property>
             <property name="max-width-chars">15</property>
             <style>
@@ -48,9 +48,9 @@
                 <property name="child">
                   <object class="GtkButton" id="eject_button">
                     <property name="visible">0</property>
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
-                    <property name="tooltip-text" translatable="yes">Unmount</property>
+                    <property name="halign">3</property>
+                    <property name="valign">3</property>
+                    <property name="tooltip-text" translatable="1">Unmount</property>
                     <child>
                       <object class="GtkImage" id="eject_icon">
                         <property name="icon-name">media-eject-symbolic</property>
@@ -69,8 +69,8 @@
                 <property name="name">spinner</property>
                 <property name="child">
                   <object class="GtkSpinner" id="busy_spinner">
-                    <property name="halign">center</property>
-                    <property name="valign">center</property>
+                    <property name="halign">3</property>
+                    <property name="valign">3</property>
                   </object>
                 </property>
               </object>

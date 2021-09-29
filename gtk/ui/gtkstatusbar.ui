@@ -7,9 +7,9 @@
         <property name="spacing">4</property>
         <child>
           <object class="GtkLabel" id="label">
-            <property name="halign">start</property>
-            <property name="valign">center</property>
-            <property name="ellipsize">end</property>
+            <property name="halign">1</property>
+            <property name="valign">3</property>
+            <property name="ellipsize">3</property>
             <property name="single-line-mode">1</property>
           </object>
         </child>
