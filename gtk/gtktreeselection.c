@@ -541,9 +541,12 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * @selection: A #GtkTreeSelection.
  * @model: (out) (allow-none) (transfer none): A pointer to set to the #GtkTreeModel, or %NULL.
  *
- * Creates a list of path of all selected rows. Additionally, if you are
- * planning on modifying the model after calling this function, you may
- * want to convert the returned list into a list of #GtkTreeRowReferences.
+ * Creates a list of path of all selected rows.
+ *
+ * Additionally, if you are planning on modifying the model after calling
+ * this function, you may want to convert the returned list into a list
+ * of #GtkTreeRowReferences.
+ *
  * To do this, you can use gtk_tree_row_reference_new().
  *
  * To free the return value, use:
@@ -552,7 +555,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
  * ]|
  *
- * Returns: (element-type GtkTreePath) (transfer full): A #GList containing a #GtkTreePath for each selected row.
+ * Returns: (element-type GtkTreePath) (transfer full): the selected paths
  *
  * Since: 2.2
  **/
