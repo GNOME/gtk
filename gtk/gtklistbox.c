@@ -433,10 +433,7 @@ gtk_list_box_set_property (GObject      *obj,
 static void
 gtk_list_box_dispose (GObject *object)
 {
-  GtkWidget *child;
-
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (object))))
-    gtk_list_box_remove (GTK_LIST_BOX (object), child);
+  gtk_list_box_remove_all (GTK_LIST_BOX (object));
 
   G_OBJECT_CLASS (gtk_list_box_parent_class)->dispose (object);
 }
@@ -2420,6 +2417,31 @@ gtk_list_box_remove (GtkListBox *box,
       g_signal_emit (box, signals[ROW_SELECTED], 0, NULL);
       g_signal_emit (box, signals[SELECTED_ROWS_CHANGED], 0);
     }
+}
+
+/**
+ * gtk_list_box_remove_all:
+ * @box: a `GtkListBox`
+ *
+ * Removes all rows from @box.
+ *
+ * This function does nothing if @box is backed by a model.
+ *
+ * Since: 4.12
+ */
+void
+gtk_list_box_remove_all (GtkListBox *box)
+{
+  GtkWidget *widget = GTK_WIDGET (box);
+  GtkWidget *child;
+
+  g_return_if_fail (GTK_IS_LIST_BOX (box));
+
+  if (box->bound_model)
+    return;
+
+  while ((child = gtk_widget_get_first_child (widget)) != NULL)
+    gtk_list_box_remove (box, child);
 }
 
 static void
