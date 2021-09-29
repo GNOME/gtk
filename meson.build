@@ -394,7 +394,8 @@ pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
                             fallback : ['fribidi', 'libfribidi_dep'])
-lcms2_dep      = dependency('lcms2', version: lcms2_req)
+lcms2_dep      = dependency('lcms2', version: lcms2_req,
+                            fallback : ['lcms2', 'liblcms2_dep'])
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
