@@ -8,22 +8,22 @@
 # Andika Triwidada <andika@gmail.com>, 2010-2014, 2021.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2010.
 # Dirgita Devina <dirgitadevina@yahoo.co.id>, 2010, 2012.
-# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2020.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2021.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-4-4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-08-26 12:37+0000\n"
-"PO-Revision-Date: 2021-08-26 20:36+0700\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
-"Language-Team: Indonesian <gnome@i15n.org>\n"
+"POT-Creation-Date: 2021-09-26 19:59+0000\n"
+"PO-Revision-Date: 2021-09-27 08:39+0700\n"
+"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
+"Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n!=1;\n"
-"X-Generator: Poedit 2.4.2\n"
+"Plural-Forms: nplurals=2; plural= n!=1\n"
+"X-Generator: Gtranslator 40.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -68,6 +68,13 @@ msgstr "Seret dan jatuhkan dari aplikasi lain tidak didukung."
 #: gdk/gdkdrop.c:163
 msgid "No compatible formats to transfer contents."
 msgstr "Tidak ada format yang kompatibel untuk mentransfer konten."
+
+#. translators: This is about OpenGL backend names, like
+#. * "Trying to use X11 GLX, but EGL is already in use"
+#: gdk/gdkglcontext.c:1374
+#, c-format
+msgid "Trying to use %s, but %s is already in use"
+msgstr "Mencoba menggunakan %s, tetapi %s sudah digunakan"
 
 #: gdk/gdksurface.c:1164
 msgid "Vulkan support disabled via GDK_DEBUG"
@@ -462,45 +469,57 @@ msgstr "Tidak ditemukan format transfer yang kompatibel"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Gagal mendekode isi dengan tipe mime '%s'"
 
-#: gdk/wayland/gdkglcontext-wayland.c:190
-#: gdk/win32/gdkglcontext-win32-egl.c:399
-#: gdk/win32/gdkglcontext-win32-wgl.c:628 gdk/x11/gdkglcontext-egl.c:600
+#: gdk/wayland/gdkglcontext-wayland.c:191
+#: gdk/win32/gdkglcontext-win32-egl.c:402
+#: gdk/win32/gdkglcontext-win32-wgl.c:632 gdk/x11/gdkglcontext-egl.c:600
 #: gdk/x11/gdkglcontext-glx.c:613
 msgid "Unable to create a GL context"
 msgstr "Tak dapat membuat sebuah konteks GL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:484 gdk/x11/gdkglcontext-egl.c:688
-msgid "Failed to create EGL display"
-msgstr "Gagal membuat tampilan EGL"
+#: gdk/wayland/gdkglcontext-wayland.c:489
+msgid "libEGL not available in this sandbox"
+msgstr "libEGL tidak tersedia di sandbox ini"
 
-#: gdk/wayland/gdkglcontext-wayland.c:493 gdk/x11/gdkglcontext-egl.c:697
+#: gdk/wayland/gdkglcontext-wayland.c:490
+msgid "libEGL not available"
+msgstr "libEGL tidak tersedia"
+
+#: gdk/wayland/gdkglcontext-wayland.c:503
+msgid "Sandbox does not provide an OpenGL implementation"
+msgstr "Sandbox tidak menyediakan implementasi OpenGL"
+
+#: gdk/wayland/gdkglcontext-wayland.c:504
+msgid "No OpenGL implementation available"
+msgstr "Tak ada implementasi OpenGL yang tersedia"
+
+#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
 msgid "Could not initialize EGL display"
 msgstr "Tidak bisa menginisialisasi tampilan EGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:504 gdk/x11/gdkglcontext-egl.c:707
+#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL versi %d.%d terlalu tua. GTK memerlukan %d.%d"
 
-#: gdk/wayland/gdkglcontext-wayland.c:515
-#: gdk/win32/gdkglcontext-win32-egl.c:273
-#: gdk/win32/gdkglcontext-win32-wgl.c:286
-#: gdk/win32/gdkglcontext-win32-wgl.c:304
+#: gdk/wayland/gdkglcontext-wayland.c:535
+#: gdk/win32/gdkglcontext-win32-egl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:289
+#: gdk/win32/gdkglcontext-win32-wgl.c:306
 msgid "No GL implementation is available"
 msgstr "Tak ada implementasi GL yang tersedia"
 
-#: gdk/wayland/gdkglcontext-wayland.c:525
+#: gdk/wayland/gdkglcontext-wayland.c:545
 msgid "Core GL is not available on EGL implementation"
 msgstr "GL inti tak tersedia pada implementasi EGL"
 
-#: gdk/wayland/gdkglcontext-wayland.c:534 gdk/x11/gdkglcontext-egl.c:718
+#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
 msgid "Surfaceless contexts are not supported on this EGL implementation"
 msgstr "Konteks tanpa permukaan tidak didukung pada implementasi EGL ini"
 
-#: gdk/wayland/gdkglcontext-wayland.c:546
+#: gdk/wayland/gdkglcontext-wayland.c:566
 #: gdk/win32/gdkglcontext-win32-egl.c:216
 #: gdk/win32/gdkglcontext-win32-egl.c:226
-#: gdk/win32/gdkglcontext-win32-wgl.c:594
+#: gdk/win32/gdkglcontext-win32-wgl.c:598
 msgid "No available configurations for the given pixel format"
 msgstr "Tak ada konfigurasi yang tersedia bagi format piksel yang diberikan"
 
@@ -718,19 +737,23 @@ msgstr "Tidak ditemukan konfigurasi EGL dengan fitur yang diperlukan"
 msgid "No perfect EGL configuration found"
 msgstr "Tak ditemukan konfigurasi EGL yang sempurna"
 
-#: gdk/x11/gdkglcontext-egl.c:679
+#: gdk/x11/gdkglcontext-egl.c:684
 msgid "EGL is not supported"
 msgstr "EGL tidak didukung"
 
-#: gdk/x11/gdkglcontext-glx.c:770
+#: gdk/x11/gdkglcontext-egl.c:693
+msgid "Failed to create EGL display"
+msgstr "Gagal membuat tampilan EGL"
+
+#: gdk/x11/gdkglcontext-glx.c:772
 msgid "No GLX configurations available"
 msgstr "Tak ada konfigurasi GLX yang tersedia"
 
-#: gdk/x11/gdkglcontext-glx.c:843
+#: gdk/x11/gdkglcontext-glx.c:845
 msgid "No GLX configuration with required features found"
 msgstr "Tidak ditemukan konfigurasi GLX dengan fitur yang diperlukan"
 
-#: gdk/x11/gdkglcontext-glx.c:914
+#: gdk/x11/gdkglcontext-glx.c:919
 msgid "GLX is not supported"
 msgstr "GLX tidak didukung"
 
@@ -2050,7 +2073,7 @@ msgstr "Berkas dengan nama itu sudah ada"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6142 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6140 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1245 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2141,7 +2164,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jika Anda menghapus suatu butir, itu akan hilang selamanya."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8756
+#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8862
 msgid "_Delete"
 msgstr "_Hapus"
 
@@ -2265,7 +2288,7 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Audio"
 
-#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:591
+#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
 #: gtk/inspector/visual.ui:187
 msgid "Font"
 msgstr "Fonta"
@@ -2351,11 +2374,11 @@ msgstr "Diakses"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:495 gtk/gtkfontbutton.c:615
+#: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:626
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
-#: gtk/gtkfontbutton.c:1339
+#: gtk/gtkfontbutton.c:1348
 msgctxt "font"
 msgid "None"
 msgstr "Nihil"
@@ -2412,19 +2435,19 @@ msgstr "Varian Karakter"
 msgid "OpenGL context creation failed"
 msgstr "Pembuatan konteks OpenGL gagal"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8744
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8850
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8748
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8854
 msgid "_Copy"
 msgstr "_Salin"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8752
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8858
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8777
+#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8883
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
@@ -2534,7 +2557,7 @@ msgid "%d:%02d"
 msgstr "%d: %02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6143
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6141
 msgid "_OK"
 msgstr "_Ok"
 
@@ -3405,15 +3428,15 @@ msgstr "Cobalah pencarian lain"
 msgid "Could not show link"
 msgstr "Tidak dapat menampilkan tautan"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8782
+#: gtk/gtktext.c:6074 gtk/gtktextview.c:8888
 msgid "Insert _Emoji"
 msgstr "Sisipkan _Emoji"
 
-#: gtk/gtktextview.c:8764
+#: gtk/gtktextview.c:8870
 msgid "_Undo"
 msgstr "_Tidak Jadi"
 
-#: gtk/gtktextview.c:8768
+#: gtk/gtktextview.c:8874
 msgid "_Redo"
 msgstr "_Jadi Lagi"
 
@@ -3440,12 +3463,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6130
+#: gtk/gtkwindow.c:6128
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Apakah Anda ingin memakai GTK Inspector?"
 
-#: gtk/gtkwindow.c:6132
+#: gtk/gtkwindow.c:6130
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3456,7 +3479,7 @@ msgstr ""
 "mengeksplorasi dan mengubah internal dari sebarang aplikasi GTK. Memakainya "
 "dapat menyebabkan aplikasi rusak atau remuk."
 
-#: gtk/gtkwindow.c:6137
+#: gtk/gtkwindow.c:6135
 msgid "Don’t show this message again"
 msgstr "Jangan tampilkan pesan ini lagi"
 
