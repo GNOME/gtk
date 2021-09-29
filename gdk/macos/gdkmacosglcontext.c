@@ -514,6 +514,8 @@ gdk_macos_gl_context_class_init (GdkMacosGLContextClass *klass)
   draw_context_class->surface_resized = gdk_macos_gl_context_surface_resized;
 
   gl_class->get_damage = gdk_macos_gl_context_get_damage;
+  gl_class->clear_current = gdk_macos_gl_context_clear_current;
+  gl_class->make_current = gdk_macos_gl_context_make_current;
   gl_class->realize = gdk_macos_gl_context_real_realize;
 
   gl_class->backend_type = GDK_GL_CGL;
