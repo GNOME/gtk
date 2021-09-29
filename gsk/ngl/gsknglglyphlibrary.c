@@ -23,6 +23,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
+#include <gdk/gdkcolorprofileprivate.h>
 
 #include "gsknglcommandqueueprivate.h"
 #include "gskngldriverprivate.h"
@@ -238,11 +239,11 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
       gdk_memory_convert (pixel_data,
                           width * 4,
                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                          gdk_color_profile_get_srgb (),
+                          gdk_color_profile_get_srgb_linear (),
                           cairo_image_surface_get_data (surface),
                           width * 4,
                           GDK_MEMORY_DEFAULT,
-                          gdk_color_profile_get_srgb (),
+                          gdk_color_profile_get_srgb_linear (),
                           width, height);
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;

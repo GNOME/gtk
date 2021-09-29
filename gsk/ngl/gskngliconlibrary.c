@@ -25,6 +25,7 @@
 #include <gdk/gdkmemorytextureprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdkcolorprofileprivate.h>
 
 #include "gsknglcommandqueueprivate.h"
 #include "gskngldriverprivate.h"
@@ -104,7 +105,7 @@ gsk_ngl_texture_prepare_upload (GdkGLContext *context,
 
   return gdk_memory_texture_convert (memtex,
                                      format,
-                                     gdk_color_profile_get_srgb (),
+                                     gdk_color_profile_get_srgb_linear (),
                                      NULL);
 }
 

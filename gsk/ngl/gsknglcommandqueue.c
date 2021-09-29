@@ -28,6 +28,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
+#include <gdk/gdkcolorprofileprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskroundedrectprivate.h>
@@ -1361,7 +1362,7 @@ gsk_ngl_command_queue_do_upload_texture (GdkGLContext    *context,
 
   memory_texture = gdk_memory_texture_convert (memory_texture,
                                                data_format,
-                                               gdk_color_profile_get_srgb (),
+                                               gdk_color_profile_get_srgb_linear (),
                                                &(GdkRectangle) { x, y, width, height });
 
   bpp = gdk_memory_format_bytes_per_pixel (data_format);

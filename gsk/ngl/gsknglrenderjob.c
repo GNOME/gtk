@@ -29,6 +29,7 @@
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskglshaderprivate.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdkcolorprofileprivate.h>
 #include <gsk/gsktransformprivate.h>
 #include <gsk/gskroundedrectprivate.h>
 #include <math.h>
@@ -1161,6 +1162,9 @@ gsk_ngl_render_job_visit_as_fallback (GskNglRenderJob     *job,
     rendered_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                    surface_width,
                                                    surface_height);
+
+    gdk_cairo_surface_set_color_profile (rendered_surface,
+                                         gdk_color_profile_get_srgb_linear ());
 
     cairo_surface_set_device_scale (rendered_surface, scale_x, scale_y);
     cr = cairo_create (rendered_surface);
@@ -3533,7 +3537,8 @@ gsk_ngl_render_job_visit_repeat_node (GskNglRenderJob     *job,
 
   /* If the size of the repeat node is smaller than the size of the
    * child node, we don't repeat at all and can just draw that part
-   * of the child texture... */
+   * of the child texture...
+   */
   if (rect_contains_rect (child_bounds, &node->bounds))
     {
       gsk_ngl_render_job_visit_clipped_child (job, child, &node->bounds);
