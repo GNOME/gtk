@@ -401,6 +401,30 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
   return texture;
 }
 
+static GdkColorSpace *
+gdk_color_space_from_pixbuf (GdkPixbuf *pixbuf)
+{
+  const char *icc_profile_base64;
+  GdkColorSpace *color_space = NULL;
+
+  icc_profile_base64 = gdk_pixbuf_get_option (pixbuf, "icc-profile");
+  if (icc_profile_base64)
+    {
+      guchar *icc_data;
+      gsize icc_len;
+      GBytes *bytes;
+
+      icc_data = g_base64_decode (icc_profile_base64, &icc_len);
+      bytes = g_bytes_new_take (icc_data, icc_len);
+      color_space = gdk_color_space_new_from_icc_profile (bytes, NULL);
+      g_bytes_unref (bytes);
+    }
+  if (!color_space)
+    color_space = g_object_ref (gdk_color_space_get_srgb ());
+
+  return color_space;
+}
+
 /**
  * gdk_texture_new_for_pixbuf:
  * @pixbuf: a `GdkPixbuf`
@@ -418,23 +442,30 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
 {
   GdkTexture *texture;
   GBytes *bytes;
+  GdkColorSpace *color_space;
 
   g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+
+  color_space = gdk_color_space_from_pixbuf (pixbuf);
 
   bytes = g_bytes_new_with_free_func (gdk_pixbuf_get_pixels (pixbuf),
                                       gdk_pixbuf_get_height (pixbuf)
                                       * gdk_pixbuf_get_rowstride (pixbuf),
                                       g_object_unref,
                                       g_object_ref (pixbuf));
-  texture = gdk_memory_texture_new (gdk_pixbuf_get_width (pixbuf),
-                                    gdk_pixbuf_get_height (pixbuf),
-                                    gdk_pixbuf_get_has_alpha (pixbuf)
-                                    ? GDK_MEMORY_GDK_PIXBUF_ALPHA
-                                    : GDK_MEMORY_GDK_PIXBUF_OPAQUE,
-                                    bytes,
-                                    gdk_pixbuf_get_rowstride (pixbuf));
+
+  texture = gdk_memory_texture_new_with_color_space (gdk_pixbuf_get_width (pixbuf),
+                                                     gdk_pixbuf_get_height (pixbuf),
+                                                     gdk_pixbuf_get_has_alpha (pixbuf)
+                                                     ? GDK_MEMORY_GDK_PIXBUF_ALPHA
+                                                     : GDK_MEMORY_GDK_PIXBUF_OPAQUE,
+                                                     color_space,
+                                                     bytes,
+                                                     gdk_pixbuf_get_rowstride (pixbuf));
 
   g_bytes_unref (bytes);
+
+  g_object_unref (color_space);
 
   return texture;
 }
