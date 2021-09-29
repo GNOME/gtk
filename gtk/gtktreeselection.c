@@ -460,16 +460,21 @@ gtk_tree_selection_get_tree_view (GtkTreeSelection *selection)
 /**
  * gtk_tree_selection_get_selected:
  * @selection: A #GtkTreeSelection.
- * @model: (out) (allow-none) (transfer none): A pointer to set to the #GtkTreeModel, or NULL.
- * @iter: (out) (allow-none): The #GtkTreeIter, or NULL.
+ * @model: (out) (optional) (transfer none): the model
+ * @iter: (out) (optional): the iterator for the selected row
  *
- * Sets @iter to the currently selected node if @selection is set to
- * #GTK_SELECTION_SINGLE or #GTK_SELECTION_BROWSE.  @iter may be NULL if you
- * just want to test if @selection has any selected nodes.  @model is filled
- * with the current model as a convenience.  This function will not work if you
- * use @selection is #GTK_SELECTION_MULTIPLE.
+ * Sets @iter to the currently selected node, if @selection is set to
+ * %GTK_SELECTION_SINGLE or %GTK_SELECTION_BROWSE.
  *
- * Returns: TRUE, if there is a selected node.
+ * The @iter argument may be %NULL if you just want to test if @selection
+ * has any selected nodes.
+ *
+ * The @model argument is filled with the current model as a convenience.
+ *
+ * This function will not work with %GTK_SELECTION_MULTIPLE. See
+ * gtk_tree_selection_get_selected_rows() instead.
+ *
+ * Returns: %TRUE, if there is a selected node.
  **/
 gboolean
 gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
@@ -542,6 +547,7 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
  * To do this, you can use gtk_tree_row_reference_new().
  *
  * To free the return value, use:
+ *
  * |[<!-- language="C" -->
  * g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
  * ]|
