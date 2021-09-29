@@ -3085,6 +3085,23 @@ gtk_flow_box_remove (GtkFlowBox *box,
     g_signal_emit (box, signals[SELECTED_CHILDREN_CHANGED], 0);
 }
 
+/**
+ * gtk_flow_box_remove_all:
+ * @box: a `GtkFlowBox`
+ *
+ * Removes all children from @box.
+ */
+void
+gtk_flow_box_remove_all (GtkFlowBox *box)
+{
+  GtkWidget *child;
+
+  g_return_if_fail (GTK_IS_FLOW_BOX (box));
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (box))))
+    gtk_flow_box_remove (box, child);
+}
+
 /* Keynav {{{2 */
 
 static gboolean
