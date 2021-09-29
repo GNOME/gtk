@@ -301,9 +301,12 @@ gdk_save_jpeg (GdkTexture *texture)
   guchar *input = NULL;
   guchar *row;
   int width, height, stride;
+  GdkColorProfile *color_profile;
+  GBytes *bytes;
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
+  color_profile = gdk_texture_get_color_profile (texture);
 
   info.err = jpeg_std_error (&jerr.pub);
   jerr.pub.error_exit = fatal_error_handler;
@@ -336,6 +339,12 @@ gdk_save_jpeg (GdkTexture *texture)
   convert_rgba_to_rgb (data, width, height, stride);
 
   jpeg_start_compress (&info, TRUE);
+
+  bytes = gdk_color_profile_get_icc_profile (color_profile);
+  jpeg_write_icc_profile (&info,
+                          g_bytes_get_data (bytes, NULL),
+                          g_bytes_get_size (bytes));
+  g_bytes_unref (bytes);
 
   while (info.next_scanline < info.image_height)
     {
