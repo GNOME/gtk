@@ -19,6 +19,7 @@
 
 #include "gdktiffprivate.h"
 
+#include "gdkcolorprofileprivate.h"
 #include "gdkintl.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
@@ -245,6 +246,44 @@ flip_02 (guchar *data,
 }
 
 /* }}} */
+/* {{{ Color profile handling */
+
+static GdkColorProfile *
+gdk_tiff_get_color_profile (TIFF *tiff)
+{
+  const char *icc_data;
+  guint icc_len;
+
+  if (TIFFGetField (tiff, TIFFTAG_ICCPROFILE, &icc_len, &icc_data))
+    {
+      GBytes *icc_bytes;
+      GdkColorProfile *profile;
+
+      icc_bytes = g_bytes_new (icc_data, icc_len);
+      profile = gdk_color_profile_new_from_icc_bytes (icc_bytes, NULL);
+      g_bytes_unref (icc_bytes);
+
+      if (profile)
+        return profile;
+    }
+
+  return g_object_ref (gdk_color_profile_get_srgb ());
+}
+
+static void
+gdk_tiff_set_color_profile (TIFF            *tiff,
+                            GdkColorProfile *profile)
+{
+  GBytes *bytes = gdk_color_profile_get_icc_profile (profile);
+
+  TIFFSetField (tiff, TIFFTAG_ICCPROFILE,
+                g_bytes_get_size (bytes),
+                g_bytes_get_data (bytes, NULL));
+
+  g_bytes_unref (bytes);
+}
+
+/* }}} */
 /* {{{ Public API */
 
 static struct {
@@ -277,11 +316,13 @@ gdk_save_tiff (GdkTexture *texture)
   GBytes *result = NULL;
   GdkTexture *memory_texture;
   GdkMemoryFormat format;
+  GdkColorProfile *color_profile;
 
   tif = tiff_open_write (&result);
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
+  color_profile = gdk_texture_get_color_profile (texture);
 
   memory_texture = gdk_texture_download_texture (texture);
   format = gdk_memory_texture_get_format (GDK_MEMORY_TEXTURE (memory_texture));
@@ -324,7 +365,8 @@ gdk_save_tiff (GdkTexture *texture)
   TIFFSetField (tif, TIFFTAG_SAMPLEFORMAT, sample_format);
   TIFFSetField (tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
   TIFFSetField (tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  // TODO: save gamma / colorspace
+
+  gdk_tiff_set_color_profile (tif, color_profile);
 
   if (samples_per_pixel > 3)
     {
@@ -361,12 +403,13 @@ gdk_save_tiff (GdkTexture *texture)
 }
 
 static GdkTexture *
-load_fallback (TIFF    *tif,
-               GError **error)
+load_fallback (TIFF             *tif,
+               GError          **error)
 {
   int width, height;
   guchar *data;
   GBytes *bytes;
+  GdkColorProfile *profile;
   GdkTexture *texture;
 
   TIFFGetField (tif, TIFFTAG_IMAGEWIDTH, &width);
@@ -383,14 +426,18 @@ load_fallback (TIFF    *tif,
       return NULL;
     }
 
+  profile = gdk_tiff_get_color_profile (tif);
+
   bytes = g_bytes_new_take (data, width * height * 4);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                                    bytes,
-                                    width * 4);
+  texture = gdk_memory_texture_new_with_color_profile (width, height,
+                                                       GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                                                       profile,
+                                                       bytes,
+                                                       width * 4);
 
   g_bytes_unref (bytes);
+  g_object_unref (profile);
 
   return texture;
 }
@@ -412,6 +459,7 @@ gdk_load_tiff (GBytes  *input_bytes,
   gsize stride;
   int bpp;
   GBytes *bytes;
+  GdkColorProfile *profile;
   GdkTexture *texture;
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
@@ -498,13 +546,17 @@ gdk_load_tiff (GBytes  *input_bytes,
       line += stride;
     }
 
+  profile = gdk_tiff_get_color_profile (tif);
+
   bpp = gdk_memory_format_bytes_per_pixel (format);
   bytes = g_bytes_new_take (data, width * height * bpp);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    bytes, width * bpp);
+  texture = gdk_memory_texture_new_with_color_profile (width, height,
+                                                       format, profile,
+                                                       bytes, width * bpp);
   g_bytes_unref (bytes);
+
+  g_object_unref (profile);
 
   TIFFClose (tif);
 
