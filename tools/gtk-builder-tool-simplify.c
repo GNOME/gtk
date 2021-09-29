@@ -579,6 +579,52 @@ property_is_boolean (Element      *element,
   return FALSE;
 }
 
+static gboolean
+property_is_enum (Element      *element,
+                  MyParserData *data,
+                  GType        *type)
+{
+  GParamSpec *pspec = NULL;
+  const char *class_name;
+  const char *property_name;
+  int i;
+  PropKind kind;
+
+  kind = get_prop_kind (element);
+  class_name = get_class_name (element);
+  property_name = "";
+
+  for (i = 0; element->attribute_names[i]; i++)
+    {
+      if (strcmp (element->attribute_names[i], "name") == 0)
+        property_name = (const char *)element->attribute_values[i];
+    }
+
+  if (class_name && property_name)
+    pspec = get_property_pspec (data, class_name, property_name, kind);
+  if (pspec && G_TYPE_IS_ENUM (G_PARAM_SPEC_VALUE_TYPE (pspec)))
+    {
+      *type = G_PARAM_SPEC_VALUE_TYPE (pspec);
+      return TRUE;
+    }
+
+  *type = G_TYPE_NONE;
+  return FALSE;
+}
+
+static char *
+canonical_enum_value (MyParserData *data,
+                      GType         type,
+                      const char   *string)
+{
+  GValue value = G_VALUE_INIT;
+
+  if (gtk_builder_value_from_string_type (data->builder, type, string, &value, NULL))
+    return g_strdup_printf ("%d", g_value_get_enum (&value));
+
+  return NULL;
+}
+
 static void
 warn_missing_property (Element      *element,
                        MyParserData *data,
@@ -1871,16 +1917,38 @@ simplify_element (Element      *element,
                   MyParserData *data)
 {
   GList *l;
+  GType type;
 
   if (!is_pcdata_element (element))
-    g_clear_pointer (&element->data, g_free);
-  else if (g_str_equal (element->element_name, "property") &&
-           property_is_boolean (element, data))
     {
-      const char *b = canonical_boolean_value (data, element->data);
-      g_free (element->data);
-      element->data = g_strdup (b);
+      g_clear_pointer (&element->data, g_free);
     }
+  else if (g_str_equal (element->element_name, "property"))
+    {
+      if (property_is_boolean (element, data))
+        {
+          const char *b = canonical_boolean_value (data, element->data);
+          g_free (element->data);
+          element->data = g_strdup (b);
+        }
+      else if (property_is_enum (element, data, &type))
+        {
+          char *e = canonical_enum_value (data, type, element->data);
+          g_free (element->data);
+          element->data = e;
+        }
+
+      for (int i = 0; element->attribute_names[i]; i++)
+        {
+          if (g_str_equal (element->attribute_names[i], "translatable"))
+            {
+              const char *b = canonical_boolean_value (data, element->attribute_values[i]);
+              g_free (element->attribute_values[i]);
+              element->attribute_values[i] = g_strdup (b);
+              break;
+            }
+        }
+     }
 
   l = element->children;
   while (l)

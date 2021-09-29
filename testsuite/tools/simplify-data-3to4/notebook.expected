@@ -8,12 +8,12 @@
           <object class="GtkNotebookPage">
             <property name="child">
               <object class="GtkButton" id="page1">
-                <property name="label" translatable="yes">Yes</property>
+                <property name="label" translatable="1">Yes</property>
               </object>
             </property>
             <property name="tab">
               <object class="GtkLabel" id="tab1">
-                <property name="label" translatable="yes">Tab 1</property>
+                <property name="label" translatable="1">Tab 1</property>
               </object>
             </property>
           </object>
@@ -22,12 +22,12 @@
           <object class="GtkNotebookPage">
             <property name="child">
               <object class="GtkButton" id="page2">
-                <property name="label" translatable="yes">No</property>
+                <property name="label" translatable="1">No</property>
               </object>
             </property>
             <property name="tab">
               <object class="GtkLabel" id="tab2">
-                <property name="label" translatable="yes">Tab 2</property>
+                <property name="label" translatable="1">Tab 2</property>
               </object>
             </property>
           </object>

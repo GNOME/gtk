@@ -5,14 +5,14 @@
     <property name="css-classes">toolbar</property>
     <child>
       <object class="GtkButton">
-        <property name="label" translatable="yes">New</property>
+        <property name="label" translatable="1">New</property>
         <property name="icon-name">document-new</property>
-        <property name="tooltip-text" translatable="yes">Create a new document</property>
+        <property name="tooltip-text" translatable="1">Create a new document</property>
       </object>
     </child>
     <child>
       <object class="GtkSeparator">
-        <property name="orientation">vertical</property>
+        <property name="orientation">1</property>
       </object>
     </child>
     <child>
