@@ -29,6 +29,13 @@
 #include "gskngldriverprivate.h"
 #include "gsknglglyphlibraryprivate.h"
 
+#ifdef HAVE_PANGOFT
+#include <cairo-ft.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_PARAMETER_TAGS_H
+#endif
+
 #define MAX_GLYPH_SIZE 128
 
 G_DEFINE_TYPE (GskNglGlyphLibrary, gsk_ngl_glyph_library, GSK_TYPE_GL_TEXTURE_LIBRARY)
@@ -162,15 +169,25 @@ gsk_ngl_glyph_library_create_surface (GskNglGlyphLibrary *self,
 
 static void
 render_glyph (cairo_surface_t           *surface,
-              const cairo_scaled_font_t *scaled_font,
+              cairo_scaled_font_t       *scaled_font,
               const GskNglGlyphKey      *key,
               const GskNglGlyphValue    *value)
 {
   cairo_t *cr;
   cairo_glyph_t glyph;
+#ifdef HAVE_PANGOFT
+  FT_Face face;
+  FT_Bool darken = 1;
+  FT_Parameter property = { FT_PARAM_TAG_STEM_DARKENING, &darken };
+#endif
 
   g_assert (surface != NULL);
   g_assert (scaled_font != NULL);
+
+#ifdef HAVE_PANGOFT
+  face = cairo_ft_scaled_font_lock_face (scaled_font);
+  FT_Face_Properties (face, 1, &property);
+#endif
 
   cr = cairo_create (surface);
   cairo_set_scaled_font (cr, scaled_font);
@@ -184,6 +201,10 @@ render_glyph (cairo_surface_t           *surface,
   cairo_destroy (cr);
 
   cairo_surface_flush (surface);
+
+#ifdef HAVE_PANGOFT
+  cairo_ft_scaled_font_unlock_face (scaled_font);
+#endif
 }
 
 static void
