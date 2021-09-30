@@ -715,6 +715,74 @@ gsk_ngl_driver_cache_texture (GskNglDriver        *self,
   g_hash_table_insert (self->texture_id_to_key, GUINT_TO_POINTER (texture_id), k);
 }
 
+static void
+draw_offscreen (GskNglCommandQueue *command_queue,
+                float               min_x,
+                float               min_y,
+                float               max_x,
+                float               max_y)
+{
+  GskNglDrawVertex *vertices = gsk_ngl_command_queue_add_vertices (command_queue);
+  float min_u = 0;
+  float min_v = 1;
+  float max_u = 1;
+  float max_v = 0;
+  guint16 c[4] = { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO };
+
+  vertices[0] = (GskNglDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[1] = (GskNglDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[2] = (GskNglDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[3] = (GskNglDrawVertex) { .position = { max_x, max_y }, .uv = { max_u, max_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[4] = (GskNglDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices[5] = (GskNglDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c[0], c[1], c[2], c[3] } };
+}
+
+static void
+set_viewport_for_size (GskNglProgram *program,
+                         float         width,
+                         float         height)
+{
+  float viewport[4] = { 0, 0, width, height };
+
+  gsk_ngl_uniform_state_set4fv (program->uniforms,
+                                program->program_info,
+                                UNIFORM_SHARED_VIEWPORT, 0,
+                                1,
+                                (const float *)&viewport);
+}
+
+#define ORTHO_NEAR_PLANE   -10000
+#define ORTHO_FAR_PLANE     10000
+
+static void
+set_projection_for_size (GskNglProgram *program,
+                       float            width,
+                       float            height)
+{
+  graphene_matrix_t projection;
+
+  graphene_matrix_init_ortho (&projection, 0, width, 0, height, ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+  graphene_matrix_scale (&projection, 1, -1, 1);
+
+  gsk_ngl_uniform_state_set_matrix (program->uniforms,
+                                    program->program_info,
+                                    UNIFORM_SHARED_PROJECTION, 0,
+                                    &projection);
+}
+
+static void
+reset_modelview (GskNglProgram *program)
+{
+  graphene_matrix_t modelview;
+
+  graphene_matrix_init_identity (&modelview);
+
+  gsk_ngl_uniform_state_set_matrix (program->uniforms,
+                                    program->program_info,
+                                    UNIFORM_SHARED_MODELVIEW, 0,
+                                    &modelview);
+}
+
 /**
  * gsk_ngl_driver_load_texture:
  * @self: a `GdkTexture`
@@ -764,8 +832,57 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
 
       if (gdk_gl_context_is_shared (context, texture_context))
         {
+          guint gl_texture_id;
+
+          gl_texture_id = gdk_gl_texture_get_id (gl_texture);
+
           /* A GL texture from the same GL context is a simple task... */
-          return gdk_gl_texture_get_id (gl_texture);
+          if (gdk_color_profile_is_linear (gdk_texture_get_color_profile (texture)))
+            {
+              return gl_texture_id;
+            }
+          else
+            {
+              GskNglRenderTarget *target;
+              guint prev_fbo;
+
+              /* The GL texture isn't linear sRGB, so we need to convert
+               * it before we can use it. For now, we just assume that it
+               * is nonlinear sRGB. Eventually, we should figure out how
+               * to convert from other color spaces to linear sRGB
+               */
+              gdk_gl_context_make_current (context);
+
+              width = gdk_texture_get_width (texture);
+              height = gdk_texture_get_height (texture);
+
+              gsk_ngl_driver_create_render_target (self,
+                                                   width, height,
+                                                   min_filter, mag_filter,
+                                                   &target);
+
+              prev_fbo = gsk_ngl_command_queue_bind_framebuffer (self->command_queue, target->framebuffer_id);
+              gsk_ngl_command_queue_clear (self->command_queue, 0, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+              gsk_ngl_command_queue_begin_draw (self->command_queue,
+                                                self->linearize_no_clip->program_info,
+                                                width, height);
+
+              set_projection_for_size (self->linearize_no_clip, width, height);
+              set_viewport_for_size (self->linearize_no_clip, width, height);
+              reset_modelview (self->linearize_no_clip);
+
+              gsk_ngl_program_set_uniform_texture (self->linearize_no_clip,
+                                                   UNIFORM_SHARED_SOURCE, 0,
+                                                   GL_TEXTURE_2D, GL_TEXTURE0, gl_texture_id);
+              draw_offscreen (self->command_queue, 0, 0, width, height);
+
+              gsk_ngl_command_queue_end_draw (self->command_queue);
+
+              gsk_ngl_command_queue_bind_framebuffer (self->command_queue, prev_fbo);
+
+              return gsk_ngl_driver_release_render_target (self, target, FALSE);
+            }
         }
       else
         {

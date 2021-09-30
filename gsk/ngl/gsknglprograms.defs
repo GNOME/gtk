@@ -86,3 +86,7 @@ GSK_NGL_DEFINE_PROGRAM (unblurred_outset_shadow,
 GSK_NGL_DEFINE_PROGRAM (postprocessing,
                         "/org/gtk/libgsk/ngl/postprocessing.glsl",
                         GSK_NGL_NO_UNIFORMS)
+
+GSK_NGL_DEFINE_PROGRAM (linearize,
+                        "/org/gtk/libgsk/ngl/linearize.glsl",
+                        GSK_NGL_NO_UNIFORMS)
