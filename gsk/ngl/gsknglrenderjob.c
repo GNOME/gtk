@@ -3993,6 +3993,21 @@ gsk_ngl_render_job_render_flipped (GskNglRenderJob *job,
   glDeleteTextures (1, &texture_id);
 }
 
+static void
+gsk_ngl_render_job_postprocess (GskNglRenderJob *job,
+                                guint            texture_id)
+{
+  gsk_ngl_command_queue_bind_framebuffer (job->command_queue, job->framebuffer);
+  gsk_ngl_command_queue_clear (job->command_queue, 0, &job->viewport);
+
+  gsk_ngl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, postprocessing));
+  gsk_ngl_program_set_uniform_texture (job->current_program,
+                                       UNIFORM_SHARED_SOURCE, 0,
+                                       GL_TEXTURE_2D, GL_TEXTURE0, texture_id);
+  gsk_ngl_render_job_draw_offscreen_rect (job, &job->viewport);
+  gsk_ngl_render_job_end_draw (job);
+}
+
 void
 gsk_ngl_render_job_render (GskNglRenderJob *job,
                            GskRenderNode   *root)
@@ -4000,6 +4015,8 @@ gsk_ngl_render_job_render (GskNglRenderJob *job,
   G_GNUC_UNUSED gint64 start_time;
   guint scale_factor;
   guint surface_height;
+  GskNglRenderTarget *render_target;
+  guint texture_id;
 
   g_return_if_fail (job != NULL);
   g_return_if_fail (root != NULL);
@@ -4010,15 +4027,26 @@ gsk_ngl_render_job_render (GskNglRenderJob *job,
 
   gsk_ngl_command_queue_make_current (job->command_queue);
 
+  gsk_ngl_driver_create_render_target (job->driver,
+                                       job->viewport.size.width,
+                                       job->viewport.size.height,
+                                       GL_NEAREST,
+                                       GL_NEAREST,
+                                       &render_target);
+
   /* Build the command queue using the shared GL context for all renderers
    * on the same display.
    */
   start_time = GDK_PROFILER_CURRENT_TIME;
   gdk_gl_context_push_debug_group (job->command_queue->context, "Building command queue");
-  gsk_ngl_command_queue_bind_framebuffer (job->command_queue, job->framebuffer);
+  gsk_ngl_command_queue_bind_framebuffer (job->command_queue, render_target->framebuffer_id);
   gsk_ngl_command_queue_clear (job->command_queue, 0, &job->viewport);
   gsk_ngl_render_job_visit_node (job, root);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
+
+  texture_id = gsk_ngl_driver_release_render_target (job->driver, render_target, FALSE);
+  gsk_ngl_render_job_postprocess (job, texture_id);
+
   gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Build GL command queue", "");
 
 #if 0

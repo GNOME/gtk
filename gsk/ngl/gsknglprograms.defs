@@ -82,3 +82,7 @@ GSK_NGL_DEFINE_PROGRAM (unblurred_outset_shadow,
                         GSK_NGL_ADD_UNIFORM (1, UNBLURRED_OUTSET_SHADOW_SPREAD, u_spread)
                         GSK_NGL_ADD_UNIFORM (2, UNBLURRED_OUTSET_SHADOW_OFFSET, u_offset)
                         GSK_NGL_ADD_UNIFORM (3, UNBLURRED_OUTSET_SHADOW_OUTLINE_RECT, u_outline_rect))
+
+GSK_NGL_DEFINE_PROGRAM (postprocessing,
+                        "/org/gtk/libgsk/ngl/postprocessing.glsl",
+                        GSK_NGL_NO_UNIFORMS)
