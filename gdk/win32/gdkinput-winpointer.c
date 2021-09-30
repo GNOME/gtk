@@ -24,9 +24,11 @@
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-winpointer.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdisplayprivate.h"
-#include "gdkseatdefaultprivate.h"
 #include "gdkdevicetoolprivate.h"
+#include "gdkdisplayprivate.h"
+#include "gdkeventsprivate.h"
+#include "gdkseatdefaultprivate.h"
+
 #include "gdkinput-winpointer.h"
 
 #include <windows.h>

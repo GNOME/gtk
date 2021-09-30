@@ -400,7 +400,7 @@ pangocairo_dep = dependency('pangocairo', version: pango_req,
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'],
                             default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
-png_dep        = dependency('libpng',
+png_dep        = dependency(cc.get_argument_syntax() == 'msvc' ? 'png' : 'libpng',
                             fallback: ['libpng', 'libpng_dep'],
                             required: true)
 tiff_dep       = dependency('libtiff-4',
