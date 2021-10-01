@@ -2088,6 +2088,10 @@ void
 gdk_surface_set_color_profile (GdkSurface      *self,
                                GdkColorProfile *color_profile)
 {
+  /* This way we support unsetting, too */ 
+  if (GDK_DISPLAY_DEBUG_CHECK (self->display, SRGB))
+    color_profile = gdk_color_profile_get_srgb();
+
   if (gdk_color_profile_equal (self->color_profile, color_profile))
     return;
 
