@@ -164,6 +164,11 @@ struct _GskNglRenderJob
 
   /* If we should be rendering red zones over fallback nodes */
   guint debug_fallback : 1;
+
+  /* Format of the framebuffer we are rendering on, used in
+   * determining the format for intermediate textures
+   */
+  int framebuffer_format;
 };
 
 typedef struct _GskNglRenderOffscreen
@@ -199,6 +204,16 @@ static void     gsk_ngl_render_job_visit_node                (GskNglRenderJob   
 static gboolean gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
                                                               const GskRenderNode  *node,
                                                               GskNglRenderOffscreen *offscreen);
+
+static inline int
+get_target_format (GskNglRenderJob     *job,
+                   const GskRenderNode *node)
+{
+  if (!gsk_render_node_is_hdr (node))
+    return GL_RGBA8;
+
+  return job->framebuffer_format;
+}
 
 static inline void
 init_full_texture_region (GskNglRenderOffscreen *offscreen)
@@ -1276,7 +1291,7 @@ blur_offscreen (GskNglRenderJob       *job,
   if (!gsk_ngl_driver_create_render_target (job->driver,
                                              MAX (texture_to_blur_width, 1),
                                              MAX (texture_to_blur_height, 1),
-                                             GL_RGBA8,
+                                             job->framebuffer_format,
                                              GL_NEAREST, GL_NEAREST,
                                              &pass1))
     return 0;
@@ -1287,7 +1302,7 @@ blur_offscreen (GskNglRenderJob       *job,
   if (!gsk_ngl_driver_create_render_target (job->driver,
                                              texture_to_blur_width,
                                              texture_to_blur_height,
-                                             GL_RGBA8,
+                                             job->framebuffer_format,
                                              GL_NEAREST, GL_NEAREST,
                                              &pass2))
     return gsk_ngl_driver_release_render_target (job->driver, pass1, FALSE);
@@ -2199,7 +2214,7 @@ gsk_ngl_render_job_visit_blurred_inset_shadow_node (GskNglRenderJob     *job,
 
       if (!gsk_ngl_driver_create_render_target (job->driver,
                                                  texture_width, texture_height,
-                                                 GL_RGBA8,
+                                                 get_target_format (job, node),
                                                  GL_NEAREST, GL_NEAREST,
                                                  &render_target))
         g_assert_not_reached ();
@@ -2470,7 +2485,7 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
 
       gsk_ngl_driver_create_render_target (job->driver,
                                            texture_width, texture_height,
-                                           GL_RGBA8,
+                                           get_target_format (job, node),
                                            GL_NEAREST, GL_NEAREST,
                                            &render_target);
 
@@ -3879,7 +3894,7 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
 
   if (!gsk_ngl_driver_create_render_target (job->driver,
                                              scaled_width, scaled_height,
-                                             GL_RGBA8,
+                                             get_target_format (job, node),
                                              filter, filter,
                                              &render_target))
     g_assert_not_reached ();
@@ -3978,7 +3993,7 @@ gsk_ngl_render_job_render_flipped (GskNglRenderJob *job,
   if (!gsk_ngl_command_queue_create_render_target (job->command_queue,
                                                   MAX (1, job->viewport.size.width),
                                                   MAX (1, job->viewport.size.height),
-                                                  GL_RGBA8,
+                                                  job->framebuffer_format,
                                                   GL_NEAREST, GL_NEAREST,
                                                   &framebuffer_id, &texture_id))
     return;
@@ -4050,7 +4065,7 @@ gsk_ngl_render_job_render (GskNglRenderJob *job,
   gsk_ngl_driver_create_render_target (job->driver,
                                        job->viewport.size.width,
                                        job->viewport.size.height,
-                                       GL_RGBA8,
+                                       job->framebuffer_format,
                                        GL_NEAREST,
                                        GL_NEAREST,
                                        &render_target);
@@ -4098,6 +4113,23 @@ gsk_ngl_render_job_set_debug_fallback (GskNglRenderJob *job,
   job->debug_fallback = !!debug_fallback;
 }
 
+static int
+get_framebuffer_format (guint framebuffer)
+{
+  int type, size;
+
+  glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);
+  glGetFramebufferAttachmentParameteriv (GL_FRAMEBUFFER,  GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE, &type);
+  glGetFramebufferAttachmentParameteriv (GL_FRAMEBUFFER,  GL_COLOR_ATTACHMENT0, GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &size);
+
+  if (type == GL_FLOAT && size == 32)
+    return GL_RGBA32F;
+  else if (size > 8)
+    return GL_RGBA16F;
+  else
+    return GL_RGBA8;
+}
+
 GskNglRenderJob *
 gsk_ngl_render_job_new (GskNglDriver          *driver,
                         const graphene_rect_t *viewport,
@@ -4124,6 +4156,7 @@ gsk_ngl_render_job_new (GskNglDriver          *driver,
   job->scale_x = scale_factor;
   job->scale_y = scale_factor;
   job->viewport = *viewport;
+  job->framebuffer_format = get_framebuffer_format (framebuffer);
 
   gsk_ngl_render_job_set_alpha (job, 1.0f);
   gsk_ngl_render_job_set_projection_from_rect (job, viewport, NULL);
