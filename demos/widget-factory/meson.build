@@ -1,9 +1,68 @@
 # demos/widget-factory
 
-widgetfactory_resources = gnome.compile_resources('widgetfactory_resources',
-  'widget-factory.gresource.xml',
-  source_dir: '.',
-)
+objcopy_supports_add_symbol = false
+objcopy = find_program('objcopy', required : false)
+if objcopy.found()
+  objcopy_supports_add_symbol = run_command(objcopy, '--help').stdout().contains('--add-symbol')
+endif
+
+ld = find_program('ld', required : false)
+
+if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
+  glib_compile_resources = find_program('glib-compile-resources')
+
+  # Create the resource blob
+  widgetfactory_gresource = custom_target('widgetfactory.gresource',
+      input : 'widget-factory.gresource.xml',
+      output : 'widgetfactory.gresource',
+      command : [glib_compile_resources,
+                 '--target=@OUTPUT@',
+                 '--sourcedir=' + meson.current_source_dir(),
+                 '--sourcedir=' + meson.current_build_dir(),
+                 '@INPUT@'])
+
+  # Create resource data file
+  widgetfactory_resources_c = custom_target('widgetfactory_resources.c',
+      input : 'widget-factory.gresource.xml',
+      output : 'widgetfactory_resources.c',
+      command : [glib_compile_resources,
+                 '--target=@OUTPUT@',
+                 '--sourcedir=' + meson.current_source_dir(),
+                 '--sourcedir=' + meson.current_build_dir(),
+                 '--generate-source',
+                 '--external-data',
+                 '--c-name', '_g_binary_widgetfactory',
+                 '@INPUT@'])
+
+  # Create object file containing resource data
+  widgetfactory_resources_binary = custom_target('widgetfactory_resources.o',
+      input : widgetfactory_gresource,
+      output : 'widgetfactory_resources.o',
+      command : [ld,
+                 '-r',
+                 '-b','binary',
+                 '@INPUT@',
+                 '-o','@OUTPUT@'])
+
+  # Rename symbol to match the one in the C file
+  widgetfactory_resources_o = custom_target('widgetfactory_resources2.o',
+    input : widgetfactory_resources_binary,
+    output : 'widgetfactory_resources2.o',
+    command : [objcopy,
+                 '--add-symbol','_g_binary_widgetfactory_resource_data=.data:0',
+                 '@INPUT@',
+                 '@OUTPUT@'])
+
+  widgetfactory_resources = [
+      widgetfactory_resources_c,
+      widgetfactory_resources_o,
+    ]
+else
+  widgetfactory_resources = gnome.compile_resources('widgetfactory_resources',
+    'widget-factory.gresource.xml',
+    source_dir: '.',
+  )
+endif
 
 executable('gtk4-widget-factory',
   sources: ['widget-factory.c', 'gtkloader.c', widgetfactory_resources],
