@@ -130,6 +130,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer" },
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings", TRUE },
   { "hdr",             GDK_DEBUG_HDR, "Use HDR rendering if possible", TRUE },
+  { "srgb",            GDK_DEBUG_SRGB, "Force sRRGB rendering and turn off color profiles" },
 };
 
 
