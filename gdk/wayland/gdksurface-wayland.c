@@ -3009,6 +3009,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
   impl->has_uncommitted_ack_configure = FALSE;
   impl->input_region_dirty = TRUE;
+  impl->opaque_region_dirty = TRUE;
 
   unset_transient_for_exported (surface);
 
