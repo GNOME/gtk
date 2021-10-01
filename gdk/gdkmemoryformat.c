@@ -691,6 +691,20 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
   return TRUE;
 }
 
+gboolean
+gdk_memory_format_is_hdr (GdkMemoryFormat format)
+{
+  switch (memory_formats[format].gl.type)
+    {
+    case GL_FLOAT:
+    case GL_HALF_FLOAT:
+    case GL_UNSIGNED_SHORT:
+      return TRUE;
+    default:
+      return FALSE;
+    }
+}
+
 static void
 premultiply (float *rgba,
              gsize  n)

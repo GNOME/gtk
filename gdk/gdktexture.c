@@ -325,6 +325,12 @@ gdk_texture_dispose (GObject *object)
   G_OBJECT_CLASS (gdk_texture_parent_class)->dispose (object);
 }
 
+static gboolean
+gdk_texture_real_is_hdr (GdkTexture *texture)
+{
+  return FALSE;
+}
+
 static void
 gdk_texture_class_init (GdkTextureClass *klass)
 {
@@ -333,6 +339,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   klass->download_texture = gdk_texture_real_download_texture;
   klass->download = gdk_texture_real_download;
   klass->download_float = gdk_texture_real_download_float;
+  klass->is_hdr = gdk_texture_real_is_hdr;
 
   gobject_class->set_property = gdk_texture_set_property;
   gobject_class->get_property = gdk_texture_get_property;
@@ -1087,3 +1094,10 @@ gdk_texture_save_to_tiff_bytes (GdkTexture *texture)
   return gdk_save_tiff (texture);
 }
 
+gboolean
+gdk_texture_is_hdr (GdkTexture *texture)
+{
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
+
+  return GDK_TEXTURE_GET_CLASS (texture)->is_hdr (texture);
+}

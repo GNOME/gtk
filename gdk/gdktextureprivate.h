@@ -34,9 +34,12 @@ struct _GdkTextureClass {
   void                  (* download_float)              (GdkTexture             *texture,
                                                          float                  *data,
                                                          gsize                   stride);
+  gboolean              (* is_hdr)                      (GdkTexture             *texture);
 };
 
 gboolean                gdk_texture_can_load            (GBytes                 *bytes);
+
+gboolean                gdk_texture_is_hdr              (GdkTexture             *self);
 
 GdkTexture *            gdk_texture_new_for_surface     (cairo_surface_t        *surface);
 cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             *texture,

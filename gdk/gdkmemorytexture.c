@@ -101,6 +101,14 @@ gdk_memory_texture_download_float (GdkTexture *texture,
                       gdk_texture_get_height (texture));
 }
 
+static gboolean
+gdk_memory_texture_is_hdr (GdkTexture *texture)
+{
+  GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
+
+  return gdk_memory_format_is_hdr (self->format);
+}
+
 static void
 gdk_memory_texture_class_init (GdkMemoryTextureClass *klass)
 {
@@ -110,6 +118,7 @@ gdk_memory_texture_class_init (GdkMemoryTextureClass *klass)
   texture_class->download_texture = gdk_memory_texture_download_texture;
   texture_class->download = gdk_memory_texture_download;
   texture_class->download_float = gdk_memory_texture_download_float;
+  texture_class->is_hdr = gdk_memory_texture_is_hdr;
   gobject_class->dispose = gdk_memory_texture_dispose;
 }
 

@@ -38,6 +38,7 @@ gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat    
                                                              guint                      *out_internal_format,
                                                              guint                      *out_format,
                                                              guint                      *out_type);
+gboolean                gdk_memory_format_is_hdr            (GdkMemoryFormat             format);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,
