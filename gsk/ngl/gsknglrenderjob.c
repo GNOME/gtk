@@ -1276,6 +1276,7 @@ blur_offscreen (GskNglRenderJob       *job,
   if (!gsk_ngl_driver_create_render_target (job->driver,
                                              MAX (texture_to_blur_width, 1),
                                              MAX (texture_to_blur_height, 1),
+                                             GL_RGBA8,
                                              GL_NEAREST, GL_NEAREST,
                                              &pass1))
     return 0;
@@ -1286,6 +1287,7 @@ blur_offscreen (GskNglRenderJob       *job,
   if (!gsk_ngl_driver_create_render_target (job->driver,
                                              texture_to_blur_width,
                                              texture_to_blur_height,
+                                             GL_RGBA8,
                                              GL_NEAREST, GL_NEAREST,
                                              &pass2))
     return gsk_ngl_driver_release_render_target (job->driver, pass1, FALSE);
@@ -2197,6 +2199,7 @@ gsk_ngl_render_job_visit_blurred_inset_shadow_node (GskNglRenderJob     *job,
 
       if (!gsk_ngl_driver_create_render_target (job->driver,
                                                  texture_width, texture_height,
+                                                 GL_RGBA8,
                                                  GL_NEAREST, GL_NEAREST,
                                                  &render_target))
         g_assert_not_reached ();
@@ -2467,6 +2470,7 @@ gsk_ngl_render_job_visit_blurred_outset_shadow_node (GskNglRenderJob     *job,
 
       gsk_ngl_driver_create_render_target (job->driver,
                                            texture_width, texture_height,
+                                           GL_RGBA8,
                                            GL_NEAREST, GL_NEAREST,
                                            &render_target);
 
@@ -3875,6 +3879,7 @@ gsk_ngl_render_job_visit_node_with_offscreen (GskNglRenderJob       *job,
 
   if (!gsk_ngl_driver_create_render_target (job->driver,
                                              scaled_width, scaled_height,
+                                             GL_RGBA8,
                                              filter, filter,
                                              &render_target))
     g_assert_not_reached ();
@@ -3973,6 +3978,7 @@ gsk_ngl_render_job_render_flipped (GskNglRenderJob *job,
   if (!gsk_ngl_command_queue_create_render_target (job->command_queue,
                                                   MAX (1, job->viewport.size.width),
                                                   MAX (1, job->viewport.size.height),
+                                                  GL_RGBA8,
                                                   GL_NEAREST, GL_NEAREST,
                                                   &framebuffer_id, &texture_id))
     return;
@@ -4044,6 +4050,7 @@ gsk_ngl_render_job_render (GskNglRenderJob *job,
   gsk_ngl_driver_create_render_target (job->driver,
                                        job->viewport.size.width,
                                        job->viewport.size.height,
+                                       GL_RGBA8,
                                        GL_NEAREST,
                                        GL_NEAREST,
                                        &render_target);

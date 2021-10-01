@@ -228,7 +228,7 @@ gsk_ngl_texture_library_pack_one (GskNglTextureLibrary *self,
       height = MIN (height, self->driver->command_queue->max_texture_size);
     }
 
-  texture = gsk_ngl_driver_create_texture (self->driver, width, height, GL_LINEAR, GL_LINEAR);
+  texture = gsk_ngl_driver_create_texture (self->driver, width, height, GL_RGBA8, GL_LINEAR, GL_LINEAR);
   texture->permanent = TRUE;
 
   return texture;

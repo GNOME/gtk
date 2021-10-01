@@ -1233,6 +1233,7 @@ gboolean
 gsk_ngl_command_queue_create_render_target (GskNglCommandQueue *self,
                                             int                 width,
                                             int                 height,
+                                            int                 format,
                                             int                 min_filter,
                                             int                 mag_filter,
                                             guint              *out_fbo_id,
@@ -1249,6 +1250,7 @@ gsk_ngl_command_queue_create_render_target (GskNglCommandQueue *self,
 
   texture_id = gsk_ngl_command_queue_create_texture (self,
                                                      width, height,
+                                                     format,
                                                      min_filter, mag_filter);
 
   if (texture_id == -1)
@@ -1274,6 +1276,7 @@ int
 gsk_ngl_command_queue_create_texture (GskNglCommandQueue *self,
                                       int                 width,
                                       int                 height,
+                                      int                 format,
                                       int                 min_filter,
                                       int                 mag_filter)
 {
@@ -1298,9 +1301,9 @@ gsk_ngl_command_queue_create_texture (GskNglCommandQueue *self,
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
   if (gdk_gl_context_get_use_es (self->context))
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
   else
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+    glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
 
   /* Restore the previous texture if it was set */
   if (self->attachments->textures[0].id != 0)
@@ -1430,7 +1433,7 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
       height = MAX (height, self->max_texture_size);
     }
 
-  texture_id = gsk_ngl_command_queue_create_texture (self, width, height, min_filter, mag_filter);
+  texture_id = gsk_ngl_command_queue_create_texture (self, width, height, GL_RGBA8, min_filter, mag_filter);
   if (texture_id == -1)
     return texture_id;
 
