@@ -3,13 +3,13 @@ Slug: gtk-getting-started
 
 GTK is a [widget toolkit](http://en.wikipedia.org/wiki/Widget_toolkit).
 Each user interface created by GTK consists of widgets. This is implemented
-in C using [GObject](#gobject), an object-oriented framework for C. Widgets
+in C using [class@GObject.Object], an object-oriented framework for C. Widgets
 are organized in a hierarchy. The window widget is the main container.
 The user interface is then built by adding buttons, drop-down menus, input
 fields, and other widgets to the window. If you are creating complex user
 interfaces it is recommended to use GtkBuilder and its GTK-specific markup
 description language, instead of assembling the interface manually. You can
-also use a visual user interface editor, like [glade](https://glade.gnome.org/).
+also use a visual user interface editor, like [Glade](https://glade.gnome.org/).
 
 GTK is event-driven. The toolkit listens for events such as a click
 on a button, and passes the event to your application.
@@ -17,7 +17,7 @@ on a button, and passes the event to your application.
 This chapter contains some tutorial information to get you started with
 GTK programming. It assumes that you have GTK, its dependencies and a C
 compiler installed and ready to use. If you need to build GTK itself first,
-refer to the [Compiling the GTK libraries](#gtk-compiling) section in this
+refer to the [Compiling the GTK libraries](building.html) section in this
 reference.
 
 ## Basics
@@ -68,7 +68,7 @@ gcc $( pkg-config --cflags gtk4 ) -o example-0 example-0.c $( pkg-config --libs 
 ```
 
 For more information on how to compile a GTK application, please
-refer to the [Compiling GTK Applications](#gtk-compiling)
+refer to the [Compiling GTK Applications](compiling.html)
 section in this reference.
 
 All GTK applications will, of course, include `gtk/gtk.h`, which declares
@@ -106,16 +106,16 @@ The call to [ctor@Gtk.ApplicationWindow.new] will create a new
 window will have a frame, a title bar, and window controls depending on the
 platform.
 
-A window title is set using [method@Gtk.Window.set_title]. This function
+A window title is set using [`method@Gtk.Window.set_title`]. This function
 takes a `GtkWindow` pointer and a string as input. As our `window` pointer
 is a `GtkWidget` pointer, we need to cast it to `GtkWindow`; instead of
 casting `window` via a typical C cast like `(GtkWindow*)`, `window` can be
 cast using the macro `GTK_WINDOW()`. `GTK_WINDOW()` will check if the
 pointer is an instance of the `GtkWindow` class, before casting, and emit a
 warning if the check fails. More information about this convention can be
-found [here](https://developer.gnome.org/gobject/stable/gtype-conventions.html).
+found [in the GObject documentation](https://docs.gtk.org/gobject/concepts.html#conventions).
 
-Finally the window size is set using [method@Gtk.Window.set_default_size]
+Finally the window size is set using [`method@Gtk.Window.set_default_size`]
 and the window is then shown by GTK via [method@Gtk.Widget.show].
 
 When you close the window, by (for example) pressing the X button, the
@@ -212,10 +212,10 @@ The `GtkBox` widget is created with [ctor@Gtk.Box.new], which takes a
 this box will contain can either be laid out horizontally or vertically.
 This does not matter in this particular case, as we are dealing with only
 one button. After initializing box with the newly created `GtkBox`, the code
-adds the box widget to the window widget using [method@Gtk.Window.set_child].
+adds the box widget to the window widget using [`method@Gtk.Window.set_child`].
 
 Next the `button` variable is initialized in similar manner.
-[ctor@Gtk.Button.new_with_label] is called which returns a
+[`ctor@Gtk.Button.new_with_label`] is called which returns a
 [class@Gtk.Button] to be stored in `button`. Afterwards `button` is added to
 our `box`.
 
@@ -241,8 +241,8 @@ More information about creating buttons can be found
 [here](https://wiki.gnome.org/HowDoI/Buttons).
 
 The rest of the code in `example-1.c` is identical to `example-0.c`. The next
-section will elaborate further on how to add several GtkWidgets to your GTK
-application.
+section will elaborate further on how to add several [class@Gtk.Widget]s to your
+GTK application.
 
 ## Packing
 
@@ -251,10 +251,18 @@ a window. When you do so, it becomes important to control how each widget is
 positioned and sized. This is where packing comes in.
 
 GTK comes with a large variety of _layout containers_ whose purpose it
-is to control the layout of the child widgets that are added to them.
-See [Layout containers](#LayoutContainers) for an overview.
+is to control the layout of the child widgets that are added to them, like:
 
-The following example shows how the GtkGrid container lets you
+- [class@Gtk.Box]
+- [class@Gtk.Grid]
+- [class@Gtk.Revealer]
+- [class@Gtk.Stack]
+- [class@Gtk.Overlay]
+- [class@Gtk.Paned]
+- [class@Gtk.Expander]
+- [class@Gtk.Fixed]
+
+The following example shows how the [class@Gtk.Grid] container lets you
 arrange several buttons:
 
 ![Grid packing](grid-packing.png)
@@ -353,11 +361,11 @@ draw function.
 The contents of a widget often need to be partially or fully redrawn, e.g.
 when another window is moved and uncovers part of the widget, or when the
 window containing it is resized. It is also possible to explicitly cause a
-widget to be redrawn, by calling [method@Gtk.Widget.queue_draw]. GTK takes
+widget to be redrawn, by calling [`method@Gtk.Widget.queue_draw`]. GTK takes
 care of most of the details by providing a ready-to-use cairo context to the
 draw function.
 
-The following example shows how to use a draw function with GtkDrawingArea.
+The following example shows how to use a draw function with [class@Gtk.DrawingArea].
 It is a bit more complicated than the previous examples, since it also
 demonstrates input event handling with event controllers.
 
@@ -402,9 +410,9 @@ resize_cb (GtkWidget *widget,
   if (gtk_native_get_surface (gtk_widget_get_native (widget)))
     {
       surface = gdk_surface_create_similar_surface (gtk_native_get_surface (gtk_widget_get_native (widget)),
-                                                   CAIRO_CONTENT_COLOR,
-                                                   gtk_widget_get_width (widget),
-                                                   gtk_widget_get_height (widget));
+                                                    CAIRO_CONTENT_COLOR,
+                                                    gtk_widget_get_width (widget),
+                                                    gtk_widget_get_height (widget));
 
       /* Initialize the surface to white */
       clear_surface ();
@@ -690,16 +698,16 @@ gcc $( pkg-config --cflags gtk4 ) -o example-3 example-3.c $( pkg-config --libs 
 
 Note that `GtkBuilder` can also be used to construct objects that are
 not widgets, such as tree models, adjustments, etc. That is the reason
-the method we use here is called [method@Gtk.Builder.get_object] and returns
-a `GObject` instead of a `GtkWidget`.
+the method we use here is called [`method@Gtk.Builder.get_object`] and
+returns a `GObject` instead of a `GtkWidget`.
 
-Normally, you would pass a full path to [method@Gtk.Builder.add_from_file] to
+Normally, you would pass a full path to [`method@Gtk.Builder.add_from_file`] to
 make the execution of your program independent of the current directory.
 A common location to install UI descriptions and similar data is
 `/usr/share/appname`.
 
 It is also possible to embed the UI description in the source code as a
-string and use [method@Gtk.Builder.add_from_string] to load it. But keeping the
+string and use [`method@Gtk.Builder.add_from_string`] to load it. But keeping the
 UI description in a separate file has several advantages: It is then possible
 to make minor adjustments to the UI without recompiling your program, and,
 more importantly, graphical UI editors such as [Glade](http://glade.gnome.org)
@@ -762,17 +770,17 @@ main (int argc, char *argv[])
 ```
 
 All the application logic is in the application class, which is a subclass of
-GtkApplication. Our example does not yet have any interesting functionality.
+`GtkApplication`. Our example does not yet have any interesting functionality.
 All it does is open a window when it is activated without arguments, and open
 the files it is given, if it is started with arguments.
 
-To handle these two cases, we override the activate() vfunc, which gets
+To handle these two cases, we override the `activate()` vfunc, which gets
 called when the application is launched without commandline arguments, and
 the `open()` virtual function, which gets called when the application is
 launched with commandline arguments.
 
 To learn more about `GApplication` entry points, consult the GIO
-[documentation](https://developer.gnome.org/gio/stable/GApplication.html#GApplication.description).
+[documentation](https://docs.gtk.org/gio/class.Application.html).
 
 ```c
 #include <gtk/gtk.h>
@@ -841,8 +849,8 @@ example_app_new (void)
 ```
 
 Another important class that is part of the application support in GTK is
-`GtkApplicationWindow`. It is typically subclassed as well. Our subclass does
-not do anything yet, so we will just get an empty window.
+[class@Gtk.ApplicationWindow]. It is typically subclassed as well. Our
+subclass does not do anything yet, so we will just get an empty window.
 
 ```c
 #include <gtk/gtk.h>
@@ -907,10 +915,10 @@ and it accepts files as commandline arguments.
 
 ### Populating the window
 
-In this step, we use a GtkBuilder template to associate a
-GtkBuilder ui file with our application window class.
+In this step, we use a `GtkBuilder` template to associate a
+`GtkBuilder` ui file with our application window class.
 
-Our simple ui file gives the window a title, and puts a GtkStack
+Our simple ui file gives the window a title, and puts a `GtkStack`
 widget as the main content.
 
 ```xml
@@ -934,9 +942,9 @@ widget as the main content.
 
 To make use of this file in our application, we revisit our
 `GtkApplicationWindow` subclass, and call
-`gtk_widget_class_set_template_from_resource()` from the class init
+[`method@Gtk.WidgetClass.set_template_from_resource`] from the class init
 function to set the ui file as template for this class. We also
-add a call to `gtk_widget_init_template()` in the instance init
+add a call to [`method@Gtk.Widget.init_template`] in the instance init
 function to instantiate the template for each instance of our
 class.
 
@@ -963,7 +971,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 
 You may have noticed that we used the `_from_resource()` variant of the function
 that sets a template. Now we need to use
-[GLib's resource functionality](https://developer.gnome.org/gio/stable/GResource.html)
+[GLib's resource functionality](https://docs.gtk.org/gio/struct.Resource.html)
 to include the ui file in the binary. This is commonly done by listing all resources
 in a `.gresource.xml` file, such as this:
 
@@ -985,7 +993,7 @@ glib-compile-resources exampleapp.gresource.xml --target=resources.c --generate-
 ```
 
 The gnome module of the [Meson build system](https://mesonbuild.com)
-provides the [gnome.compile_resources()](https://mesonbuild.com/Gnome-module.html#gnomecompile_resources)
+provides the [`gnome.compile_resources()`](https://mesonbuild.com/Gnome-module.html#gnomecompile_resources)
 method for this task.
 
 Our application now looks like this:
@@ -1001,7 +1009,7 @@ To this end, we add a member to the struct of our application window subclass
 and keep a reference to the `GtkStack` there. The first member of the struct
 should be the parent type from which the class is derived. Here,
 `ExampleAppWindow` is derived from `GtkApplicationWindow`. The
-`gtk_widget_class_bind_template_child()` function arranges things so that after
+[`func@Gtk.widget_class_bind_template_child`] function arranges things so that after
 instantiating the template, the `stack` member of the struct will point to the
 widget of the same name from the template.
 
@@ -1081,7 +1089,7 @@ tell it to display information about our stack.
 
 The stack switcher gets all its information it needs to display tabs from
 the stack that it belongs to. Here, we are passing the label to show for
-each file as the last argument to the [method@Gtk.Stack.add_titled]
+each file as the last argument to the [`method@Gtk.Stack.add_titled`]
 function.
 
 Our application is beginning to take shape:
@@ -1121,7 +1129,7 @@ resulting menu model with the menu button that we've added to the headerbar.
 Since menus work by activating GActions, we also have to add a suitable set
 of actions to our application.
 
-Adding the actions is best done in the startup() vfunc, which is guaranteed
+Adding the actions is best done in the `startup()` vfunc, which is guaranteed
 to be called once for each primary application instance:
 
 ```c
@@ -1179,7 +1187,7 @@ example_app_class_init (ExampleAppClass *class)
 
 Our preferences menu item does not do anything yet, but the Quit menu item
 is fully functional. Note that it can also be activated by the usual Ctrl-Q
-shortcut. The shortcut was added with `gtk_application_set_accels_for_action()`.
+shortcut. The shortcut was added with [`method@Gtk.Application.set_accels_for_action`].
 
 The application menu looks like this:
 
@@ -1191,7 +1199,7 @@ A typical application will have a some preferences that should be remembered
 from one run to the next. Even for our simple example application, we may
 want to change the font that is used for the content.
 
-We are going to use `GSettings` to store our preferences. `GSettings` requires
+We are going to use [class@Gio.Settings] to store our preferences. `GSettings` requires
 a schema that describes our settings:
 
 ```xml
@@ -1218,10 +1226,9 @@ a schema that describes our settings:
 ```
 
 Before we can make use of this schema in our application, we need to compile
-it into the binary form that GSettings expects. GIO provides
-[macros](https://developer.gnome.org/gio/2.36/ch31s06.html) to do this in
-autotools-based projects, and the gnome module of the Meson build system
-provides the [gnome.compile_schemas()](https://mesonbuild.com/Gnome-module.html#gnomecompile_schemas)
+it into the binary form that GSettings expects. GIO provides macros to do
+this in Autotools-based projects, and the gnome module of the Meson build
+system provides the [`gnome.compile_schemas()`](https://mesonbuild.com/Gnome-module.html#gnomecompile_schemas)
 method for this task.
 
 Next, we need to connect our settings to the widgets that they are supposed
@@ -1681,7 +1688,8 @@ What our application looks like now:
 Widgets and other objects have many useful properties.
 
 Here we show some ways to use them in new and flexible ways, by wrapping
-them in actions with `GPropertyAction` or by binding them with `GBinding`.
+them in actions with [class@Gio.PropertyAction] or by binding them with
+[class@GObject.Binding].
 
 To set this up, we add two labels to the header bar in our window template,
 named `lines_label` and `lines`, and bind them to struct members in the
