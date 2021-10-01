@@ -3112,6 +3112,10 @@ void
 gdk_surface_set_color_state (GdkSurface    *surface,
                              GdkColorState *color_state)
 {
+  /* This way we support unsetting, too */
+  if (G_UNLIKELY (gdk_display_get_debug_flags (surface->display) & GDK_DEBUG_SRGB))
+    color_state = gdk_color_state_get_srgb ();
+
   if (gdk_color_state_equal (surface->color_state, color_state))
     return;
 
