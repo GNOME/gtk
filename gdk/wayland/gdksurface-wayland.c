@@ -150,7 +150,6 @@ struct _GdkWaylandSurface
   int shadow_right;
   int shadow_top;
   int shadow_bottom;
-  gboolean shadow_dirty;
 
   struct wl_output *initial_fullscreen_output;
 
@@ -168,8 +167,6 @@ struct _GdkWaylandSurface
 
   int saved_width;
   int saved_height;
-
-  gulong parent_surface_committed_handler;
 
   struct {
     GdkToplevelLayout *layout;
