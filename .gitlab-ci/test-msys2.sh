@@ -33,6 +33,10 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-gst-plugins-bad-libs \
     mingw-w64-$MSYS2_ARCH-shared-mime-info \
     mingw-w64-$MSYS2_ARCH-python-gobject
+    mingw-w64-$MSYS2_ARCH-libpng \
+    mingw-w64-$MSYS2_ARCH-libjpeg-turbo \
+    mingw-w64-$MSYS2_ARCH-libtiff \
+    mingw-w64-$MSYS2_ARCH-lcms2
 
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"
