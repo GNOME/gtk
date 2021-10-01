@@ -1011,6 +1011,8 @@ setup_toplevel_window (GdkSurface    *surface,
   
   /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
   XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
+
+  gdk_surface_set_color_space (surface, GDK_X11_DISPLAY (display)->color_space);
   
   if (!gdk_running_in_sandbox ())
     {

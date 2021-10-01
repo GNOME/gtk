@@ -1402,6 +1402,71 @@ gdk_x11_display_init_leader_surface (GdkX11Display *self)
   self->leader_window_title_set = FALSE;
 }
 
+static void
+voidXFree (gpointer data)
+{
+  XFree (data);
+}
+
+static void
+gdk_x11_display_check_color_space (GdkX11Display *self)
+{
+  GdkDisplay *display = GDK_DISPLAY (self);
+  GdkX11Screen *screen;
+  char *atom_name;
+  Atom type;
+  int result;
+  int format;
+  gulong nitems;
+  gulong bytes_after;
+  guchar *data;
+  GBytes *bytes;
+
+  screen = self->screen;
+  if (screen->screen_num > 0)
+    atom_name = g_strdup_printf ("_ICC_PROFILE_%d", screen->screen_num);
+  else
+    atom_name = g_strdup ("_ICC_PROFILE");
+
+  g_clear_object (&self->color_space);
+  self->color_space = g_object_ref (gdk_color_space_get_srgb ());
+
+  gdk_x11_display_error_trap_push (display);
+  result = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
+                               screen->xroot_window,
+                               gdk_x11_get_xatom_by_name_for_display (display, atom_name),
+                               0, G_MAXLONG, False, XA_CARDINAL, &type,
+                               &format, &nitems,
+                               &bytes_after, &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  g_free (atom_name);
+
+  if (result != Success || type != XA_CARDINAL || nitems <= 0)
+    return;
+
+  switch (format)
+    {
+    case 8:
+      bytes = g_bytes_new_with_free_func (data, nitems, voidXFree, data);
+      break;
+    case 16:
+      bytes = g_bytes_new_with_free_func (data, sizeof (short) * nitems, voidXFree, data);
+      break;
+    case 32:
+      bytes = g_bytes_new_with_free_func (data, sizeof (long) * nitems, voidXFree, data);
+      break;
+    default:
+      XFree (data);
+      return;
+    }
+
+  g_clear_object (&self->color_space);
+  self->color_space = gdk_color_space_new_from_icc_profile (bytes, NULL);
+  if (!self->color_space)
+    self->color_space = g_object_ref (gdk_color_space_get_srgb ());
+}
+
 /**
  * gdk_x11_display_open:
  * @display_name: (nullable): name of the X display.
@@ -1468,6 +1533,9 @@ gdk_x11_display_open (const char *display_name)
 
   /* initialize the display's screens */ 
   display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay));
+
+  /* We want this for the leader surface already */
+  gdk_x11_display_check_color_space (display_x11);
 
   /* If GL is available we want to pick better default/rgba visuals,
    * as we care about GLX details such as alpha/depth/stencil depth,
@@ -1915,14 +1983,16 @@ gdk_x11_display_ungrab (GdkDisplay *display)
 static void
 gdk_x11_display_dispose (GObject *object)
 {
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (object);
+  GdkX11Display *self = GDK_X11_DISPLAY (object);
 
-  if (display_x11->event_source)
+  if (self->event_source)
     {
-      g_source_destroy (display_x11->event_source);
-      g_source_unref (display_x11->event_source);
-      display_x11->event_source = NULL;
+      g_source_destroy (self->event_source);
+      g_source_unref (self->event_source);
+      self->event_source = NULL;
     }
+
+  g_clear_object (&self->color_space);
 
   G_OBJECT_CLASS (gdk_x11_display_parent_class)->dispose (object);
 }
