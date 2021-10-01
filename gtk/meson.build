@@ -863,17 +863,80 @@ if not fs.exists('theme/Default/Default-light.css')
   endif
 endif
 
-gtkresources = gnome.compile_resources('gtkresources',
-  gtk_gresources_xml,
-  dependencies: theme_deps,
-  source_dir: [
-    # List in order of preference
-    meson.current_build_dir(),
-    meson.current_source_dir(),
-  ],
-  c_name: '_gtk',
-  extra_args: '--manual-register',
-)
+
+objcopy_supports_add_symbol = false
+objcopy = find_program('objcopy', required : false)
+if objcopy.found()
+  objcopy_supports_add_symbol = run_command(objcopy, '--help').stdout().contains('--add-symbol')
+endif
+
+ld = find_program('ld', required : false)
+
+if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
+  glib_compile_resources = find_program('glib-compile-resources')
+
+  # Create the resource blob
+  gtk_gresource = custom_target('gtk.gresource',
+      input : gtk_gresources_xml,
+      depends : theme_deps,
+      output : 'gtk.gresource',
+      command : [glib_compile_resources,
+                 '--target=@OUTPUT@',
+                 '--sourcedir=' + meson.current_source_dir(),
+                 '--sourcedir=' + meson.current_build_dir(),
+                 '@INPUT@'])
+
+  # Create resource data file
+  gtk_resources_c = custom_target('gtk_resources.c',
+      input : gtk_gresources_xml,
+      depends : theme_deps,
+      output : 'gtk_resources.c',
+      command : [glib_compile_resources,
+                 '--target=@OUTPUT@',
+                 '--sourcedir=' + meson.current_source_dir(),
+                 '--sourcedir=' + meson.current_build_dir(),
+                 '--generate-source',
+                 '--external-data',
+                 '--c-name', '_gtk',
+                 '--manual-register',
+                 '@INPUT@'])
+
+  # Create object file containing resource data
+  gtk_resources_binary = custom_target('gtk_resources.o',
+      input : gtk_gresource,
+      output : 'gtk_resources.o',
+      command : [ld,
+                 '-r',
+                 '-b','binary',
+                 '@INPUT@',
+                 '-o','@OUTPUT@'])
+
+  # Rename symbol to match the one in the C file
+  gtk_resources_o = custom_target('gtk_resources2.o',
+    input : gtk_resources_binary,
+    output : 'gtk_resources2.o',
+    command : [objcopy,
+                 '--add-symbol','_gtk_resource_data=.data:0',
+                 '@INPUT@',
+                 '@OUTPUT@'])
+
+  gtkresources = [
+      gtk_resources_c,
+      gtk_resources_o,
+    ]
+else
+  gtkresources = gnome.compile_resources('gtkresources',
+    gtk_gresources_xml,
+    dependencies: theme_deps,
+    source_dir: [
+      # List in order of preference
+      meson.current_build_dir(),
+      meson.current_source_dir(),
+    ],
+    c_name: '_gtk',
+    extra_args: '--manual-register',
+  )
+endif
 
 foreach lang : [ 'de', 'fr', 'es', 'zh' ]
   conf = configuration_data()
