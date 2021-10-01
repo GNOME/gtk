@@ -128,6 +128,9 @@ struct _GdkX11Display
   guint have_damage;
 #endif
 
+  /* Stored in the ICC_PROFILE rootwindow prop */
+  GdkColorProfile *color_profile;
+
   /* If GL is not supported, store the error here */
   GError *gl_error;
 
