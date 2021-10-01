@@ -156,10 +156,69 @@ demos_h = custom_target('gtk4 demo header',
   command: [ find_program('geninclude.py'), '@OUTPUT@', '@INPUT@' ],
 )
 
-gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
-  'demo.gresource.xml',
-  source_dir: '.',
-)
+objcopy_supports_add_symbol = false
+objcopy = find_program('objcopy', required : false)
+if objcopy.found()
+  objcopy_supports_add_symbol = run_command(objcopy, '--help').stdout().contains('--add-symbol')
+endif
+
+ld = find_program('ld', required : false)
+
+if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
+  glib_compile_resources = find_program('glib-compile-resources')
+
+  # Create the resource blob
+  gtkdemo_gresource = custom_target('gtkdemo.gresource',
+      input : 'demo.gresource.xml',
+      output : 'gtkdemo.gresource',
+      command : [glib_compile_resources,
+                 '--target=@OUTPUT@',
+                 '--sourcedir=' + meson.current_source_dir(),
+                 '--sourcedir=' + meson.current_build_dir(),
+                 '@INPUT@'])
+
+  # Create resource data file
+  gtkdemo_resources_c = custom_target('gtkdemo_resources.c',
+      input : 'demo.gresource.xml',
+      output : 'gtkdemo_resources.c',
+      command : [glib_compile_resources,
+                 '--target=@OUTPUT@',
+                 '--sourcedir=' + meson.current_source_dir(),
+                 '--sourcedir=' + meson.current_build_dir(),
+                 '--generate-source',
+                 '--external-data',
+                 '--c-name', '_g_binary_gtkdemo',
+                 '@INPUT@'])
+
+  # Create object file containing resource data
+  gtkdemo_resources_binary = custom_target('gtkdemo_resources.o',
+      input : gtkdemo_gresource,
+      output : 'gtkdemo_resources.o',
+      command : [ld,
+                 '-r',
+                 '-b','binary',
+                 '@INPUT@',
+                 '-o','@OUTPUT@'])
+
+  # Rename symbol to match the one in the C file
+  gtkdemo_resources_o = custom_target('gtkdemo_resources2.o',
+    input : gtkdemo_resources_binary,
+    output : 'gtkdemo_resources2.o',
+    command : [objcopy,
+                 '--add-symbol','_g_binary_gtkdemo_resource_data=.data:0',
+                 '@INPUT@',
+                 '@OUTPUT@'])
+
+  gtkdemo_resources = [
+      gtkdemo_resources_c,
+      gtkdemo_resources_o,
+    ]
+else
+  gtkdemo_resources = gnome.compile_resources('gtkdemo_resources',
+    'demo.gresource.xml',
+    source_dir: '.',
+  )
+endif
 
 # Use a subset of compiler flags
 demo_cflags = []
