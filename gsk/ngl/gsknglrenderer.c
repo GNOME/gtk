@@ -22,8 +22,11 @@
 
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdkdisplayprivate.h>
+#include <gdk/gdkglcontextprivate.h>
+#include <gdk/gdksurfaceprivate.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskrendererprivate.h>
+#include <gsk/gskrendernodeprivate.h>
 
 #include "gsknglcommandqueueprivate.h"
 #include "gskngldriverprivate.h"
