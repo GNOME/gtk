@@ -1150,6 +1150,8 @@ static gboolean
 gdk_win32_display_init_gl_backend (GdkDisplay  *display,
                                    GError     **error)
 {
+  gboolean result = FALSE;
+
 #ifdef GDK_WIN32_ENABLE_EGL
   if (GDK_DISPLAY_DEBUG_CHECK (display, GL_EGL))
     return gdk_win32_display_init_egl (display, error);
@@ -1161,17 +1163,17 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
    * as WGL is the more tried-and-tested configuration.
    */
 
-  if (gdk_win32_display_init_wgl (display, error))
-    return TRUE;
-  g_clear_error (error);
+  result = gdk_win32_display_init_wgl (display, error);
 
 #ifdef GDK_WIN32_ENABLE_EGL
-  if (gdk_win32_display_init_egl (display, error))
-    return TRUE;
+  if (!result)
+    {
+      g_clear_error (error);
+      result = gdk_win32_display_init_egl (display, error);
+    }
 #endif
-  g_clear_error (error);
 
-  return gdk_win32_display_init_wgl (display, error);
+  return result;
 }
 
 static GdkGLContext *
