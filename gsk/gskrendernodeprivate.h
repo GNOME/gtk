@@ -27,6 +27,8 @@ struct _GskRenderNode
   gatomicrefcount ref_count;
 
   graphene_rect_t bounds;
+
+  guint is_hdr : 1;
 };
 
 struct _GskRenderNodeClass
@@ -109,6 +111,7 @@ GskRenderNode ** gsk_container_node_get_children        (const GskRenderNode *no
 void             gsk_transform_node_get_translate       (const GskRenderNode *node,
                                                          float               *dx,
                                                          float               *dy);
+gboolean       gsk_render_node_is_hdr                   (const GskRenderNode *node);
 
 
 G_END_DECLS

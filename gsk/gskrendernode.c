@@ -725,3 +725,8 @@ gsk_value_dup_render_node (const GValue *value)
   return gsk_render_node_ref (value->data[0].v_pointer);
 }
 
+gboolean
+gsk_render_node_is_hdr (const GskRenderNode *node)
+{
+  return node->is_hdr;
+}
