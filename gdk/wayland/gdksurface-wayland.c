@@ -2303,10 +2303,7 @@ gdk_wayland_toplevel_uninhibit_idle (GdkToplevel *toplevel)
   g_assert (impl->idle_inhibitor && impl->idle_inhibitor_refcount > 0);
 
   if (--impl->idle_inhibitor_refcount == 0)
-    {
-      zwp_idle_inhibitor_v1_destroy (impl->idle_inhibitor);
-      impl->idle_inhibitor = NULL;
-    }
+    g_clear_pointer (&impl->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
 }
 
 static void
