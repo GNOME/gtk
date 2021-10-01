@@ -140,17 +140,20 @@ gdk_gl_texture_get_tex_image (GdkGLTexture *self,
                      data);
     }
 }
-static void
-gdk_gl_texture_do_download_texture (gpointer texture_,
-                                    gpointer result_)
-{
-  GdkTexture *texture = texture_;
-  GdkTexture **result = result_;
+
+typedef struct {
   GdkMemoryFormat format;
+  GLint gl_format;
+  GLint gl_type;
+} GdkGLTextureFormat;
+
+static void
+gdk_gl_texture_get_format (gpointer texture_,
+                           gpointer result_)
+{
+  GdkGLTextureFormat *result = result_;
   GLint internal_format, gl_format, gl_type;
-  guchar *data;
-  gsize stride;
-  GBytes *bytes;
+  GdkMemoryFormat format;
 
   glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
 
@@ -214,18 +217,36 @@ gdk_gl_texture_do_download_texture (gpointer texture_,
       break;
   }
 
-  stride = gdk_memory_format_bytes_per_pixel (format) * texture->width;
+  result->format = format;
+  result->gl_format = gl_format;
+  result->gl_type = gl_type;
+}
+
+static void
+gdk_gl_texture_do_download_texture (gpointer texture_,
+                                    gpointer result_)
+{
+  GdkTexture *texture = texture_;
+  GdkTexture **result = result_;
+  GdkGLTextureFormat format;
+  gsize stride;
+  guchar *data;
+  GBytes *bytes;
+
+  gdk_gl_texture_get_format (texture, &format);
+
+  stride = gdk_memory_format_bytes_per_pixel (format.format) * texture->width;
   data = g_malloc (stride * texture->height);
 
   gdk_gl_texture_get_tex_image (texture_,
-                                gl_format,
-                                gl_type,
+                                format.gl_format,
+                                format.gl_type,
                                 data);
 
   bytes = g_bytes_new_take (data, stride * texture->height);
   *result = gdk_memory_texture_new (texture->width,
                                     texture->height,
-                                    format,
+                                    format.format,
                                     bytes,
                                     stride);
 
@@ -320,6 +341,17 @@ gdk_gl_texture_download_float (GdkTexture *texture,
   gdk_gl_texture_run (self, gdk_gl_texture_do_download_float, data);
 }
 
+static gboolean
+gdk_gl_texture_is_hdr (GdkTexture *texture)
+{
+  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  GdkGLTextureFormat result;
+
+  gdk_gl_texture_run (self, gdk_gl_texture_get_format, &result);
+
+  return gdk_memory_format_is_hdr (result.format);
+}
+
 static void
 gdk_gl_texture_class_init (GdkGLTextureClass *klass)
 {
@@ -329,6 +361,7 @@ gdk_gl_texture_class_init (GdkGLTextureClass *klass)
   texture_class->download_texture = gdk_gl_texture_download_texture;
   texture_class->download = gdk_gl_texture_download;
   texture_class->download_float = gdk_gl_texture_download_float;
+  texture_class->is_hdr = gdk_gl_texture_is_hdr;
   gobject_class->dispose = gdk_gl_texture_dispose;
 }
 
