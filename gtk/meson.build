@@ -901,6 +901,20 @@ if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_ad
                  '--manual-register',
                  '@INPUT@'])
 
+  gtk_resources_h = custom_target('gtk_resources.h',
+      input : gtk_gresources_xml,
+      depends : theme_deps,
+      output : 'gtk_resources.h',
+      command : [glib_compile_resources,
+                 '--target=@OUTPUT@',
+                 '--sourcedir=' + meson.current_source_dir(),
+                 '--sourcedir=' + meson.current_build_dir(),
+                 '--generate-header',
+                 '--external-data',
+                 '--c-name', '_gtk',
+                 '--manual-register',
+                 '@INPUT@'])
+
   # Create object file containing resource data
   gtk_resources_binary = custom_target('gtk_resources.o',
       input : gtk_gresource,
@@ -922,6 +936,7 @@ if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_ad
 
   gtkresources = [
       gtk_resources_c,
+      gtk_resources_h,
       gtk_resources_o,
     ]
 else
