@@ -161,6 +161,9 @@ struct _GdkSurfaceClass
                                            cairo_region_t *region);
   void         (* request_layout)         (GdkSurface     *surface);
   gboolean     (* compute_size)           (GdkSurface     *surface);
+
+  void         (* set_hdr)                (GdkSurface     *surface,
+                                           gboolean        hdr);
 };
 
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
@@ -347,6 +350,8 @@ void       gdk_surface_request_compute_size (GdkSurface      *surface);
 GDK_AVAILABLE_IN_ALL
 void           gdk_surface_request_motion (GdkSurface *surface);
 
+void       gdk_surface_set_hdr            (GdkSurface *surface,
+                                           gboolean    hdr);
 
 G_END_DECLS
 
