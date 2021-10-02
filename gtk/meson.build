@@ -887,10 +887,10 @@ if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_ad
                  '@INPUT@'])
 
   # Create resource data file
-  gtk_resources_c = custom_target('gtk_resources.c',
+  gtk_resources_c = custom_target('gtkresources.c',
       input : gtk_gresources_xml,
       depends : theme_deps,
-      output : 'gtk_resources.c',
+      output : 'gtkresources.c',
       command : [glib_compile_resources,
                  '--target=@OUTPUT@',
                  '--sourcedir=' + meson.current_source_dir(),
@@ -901,10 +901,10 @@ if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_ad
                  '--manual-register',
                  '@INPUT@'])
 
-  gtk_resources_h = custom_target('gtk_resources.h',
+  gtk_resources_h = custom_target('gtkresources.h',
       input : gtk_gresources_xml,
       depends : theme_deps,
-      output : 'gtk_resources.h',
+      output : 'gtkresources.h',
       command : [glib_compile_resources,
                  '--target=@OUTPUT@',
                  '--sourcedir=' + meson.current_source_dir(),
@@ -916,9 +916,9 @@ if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_ad
                  '@INPUT@'])
 
   # Create object file containing resource data
-  gtk_resources_binary = custom_target('gtk_resources.o',
+  gtk_resources_binary = custom_target('gtkresources_blob.o',
       input : gtk_gresource,
-      output : 'gtk_resources.o',
+      output : 'gtkresources_blob.o',
       command : [ld,
                  '-r',
                  '-b','binary',
@@ -926,9 +926,9 @@ if build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_ad
                  '-o','@OUTPUT@'])
 
   # Rename symbol to match the one in the C file
-  gtk_resources_o = custom_target('gtk_resources2.o',
+  gtk_resources_o = custom_target('gtkresources_blob2.o',
     input : gtk_resources_binary,
-    output : 'gtk_resources2.o',
+    output : 'gtkresources_blob2.o',
     command : [objcopy,
                  '--add-symbol','_gtk_resource_data=.data:0',
                  '@INPUT@',
