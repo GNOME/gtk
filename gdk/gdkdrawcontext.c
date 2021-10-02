@@ -307,10 +307,38 @@ void
 gdk_draw_context_begin_frame (GdkDrawContext       *context,
                               const cairo_region_t *region)
 {
-  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
-
   g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
   g_return_if_fail (region != NULL);
+
+  gdk_draw_context_begin_frame_full (context, FALSE, region);
+}
+
+/*
+ * @request_hdr: %TRUE to request high dynamic range.
+ *
+ * If HDR is requested, GDK will see about providing a rendering target
+ * that supports high dynamic range. Typically this means a target supporting
+ * 16bit floating point pixels, but that is not guaranteed.
+ *
+ * This is only a request and if the GDK backend does not support HDR rendering
+ * or does not consider it worthwhile, it may choose to not honor the request.
+ * It may also choose to provide HDR even if it was not requested.
+ * Typically the steps undertaken by a backend are:
+ * 1. Check if HDR is supported by this drawing backend.
+ * 2. Check if the compositor supports HDR.
+ * 3. Check if the compositor prefers SDR. This is usually the case when the attached
+ *    monitors do not support HDR content or when the system is resource constrained.
+ * In either of those cases, the context will usually choose to not honor the request.
+ *
+ * The rendering code must be able to deal with HDR and SDR content, no matter if HDR
+ * was requested. The request is only a hint and GDK is free to choose.
+ */
+void
+gdk_draw_context_begin_frame_full (GdkDrawContext       *context,
+                                   gboolean              request_hdr,
+                                   const cairo_region_t *region)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
   if (GDK_SURFACE_DESTROYED (priv->surface))
     return;
@@ -336,7 +364,7 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
   priv->frame_region = cairo_region_copy (region);
   priv->surface->paint_context = g_object_ref (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, priv->frame_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, request_hdr, priv->frame_region);
 }
 
 #ifdef HAVE_SYSPROF

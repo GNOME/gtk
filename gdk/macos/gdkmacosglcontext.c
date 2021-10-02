@@ -291,6 +291,7 @@ opaque_region_covers_surface (GdkMacosGLContext *self)
 
 static void
 gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
+                                  gboolean        request_hdr,
                                   cairo_region_t *painted)
 {
   GdkMacosGLContext *self = (GdkMacosGLContext *)context;
@@ -344,7 +345,7 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext *context,
       [self->gl_context update];
     }
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, request_hdr, painted);
 
   if (!self->is_attached)
     {

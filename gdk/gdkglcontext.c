@@ -629,6 +629,7 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
 
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
+                                 gboolean        request_hdr,
                                  cairo_region_t *region)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);

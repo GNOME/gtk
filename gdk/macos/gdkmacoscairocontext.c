@@ -82,6 +82,7 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
 
 static void
 _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
+                                      gboolean        request_hdr,
                                       cairo_region_t *region)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;

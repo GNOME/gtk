@@ -425,6 +425,7 @@ device_supports_incremental_present (VkPhysicalDevice device)
 
 static void
 gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
+                                gboolean        request_hdr,
                                 cairo_region_t *region)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);

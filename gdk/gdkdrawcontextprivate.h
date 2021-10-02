@@ -41,6 +41,7 @@ struct _GdkDrawContextClass
   GObjectClass parent_class;
 
   void                  (* begin_frame)                         (GdkDrawContext         *context,
+                                                                 gboolean                request_hdr,
                                                                  cairo_region_t         *update_area);
   void                  (* end_frame)                           (GdkDrawContext         *context,
                                                                  cairo_region_t         *painted);
@@ -49,6 +50,9 @@ struct _GdkDrawContextClass
 
 void                    gdk_draw_context_surface_resized        (GdkDrawContext         *context);
 
+void                    gdk_draw_context_begin_frame_full       (GdkDrawContext         *context,
+                                                                 gboolean                request_hdr,
+                                                                 const cairo_region_t   *region);
 G_END_DECLS
 
 #endif /* __GDK__DRAW_CONTEXT_PRIVATE__ */
