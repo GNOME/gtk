@@ -739,9 +739,10 @@ draw_offscreen (GskNglCommandQueue *command_queue,
 }
 
 static void
-set_viewport_for_size (GskNglProgram *program,
-                         float         width,
-                         float         height)
+set_viewport_for_size (GskNglDriver  *self,
+                       GskNglProgram *program,
+                       float          width,
+                       float          height)
 {
   float viewport[4] = { 0, 0, width, height };
 
@@ -750,15 +751,17 @@ set_viewport_for_size (GskNglProgram *program,
                                 UNIFORM_SHARED_VIEWPORT, 0,
                                 1,
                                 (const float *)&viewport);
+  self->stamps[UNIFORM_SHARED_VIEWPORT]++;
 }
 
 #define ORTHO_NEAR_PLANE   -10000
 #define ORTHO_FAR_PLANE     10000
 
 static void
-set_projection_for_size (GskNglProgram *program,
-                       float            width,
-                       float            height)
+set_projection_for_size (GskNglDriver  *self,
+                         GskNglProgram *program,
+                         float          width,
+                         float          height)
 {
   graphene_matrix_t projection;
 
@@ -769,10 +772,12 @@ set_projection_for_size (GskNglProgram *program,
                                     program->program_info,
                                     UNIFORM_SHARED_PROJECTION, 0,
                                     &projection);
+  self->stamps[UNIFORM_SHARED_PROJECTION]++;
 }
 
 static void
-reset_modelview (GskNglProgram *program)
+reset_modelview (GskNglDriver  *self,
+                 GskNglProgram *program)
 {
   graphene_matrix_t modelview;
 
@@ -782,25 +787,38 @@ reset_modelview (GskNglProgram *program)
                                     program->program_info,
                                     UNIFORM_SHARED_MODELVIEW, 0,
                                     &modelview);
+  self->stamps[UNIFORM_SHARED_MODELVIEW]++;
 }
 
 static GskNglTexture *
-gsk_ngl_driver_convert_texture (GskNglDriver *self,
-                                int           texture_id,
-                                int           width,
-                                int           height,
-                                int           format)
+gsk_ngl_driver_convert_texture (GskNglDriver  *self,
+                                int            texture_id,
+                                int            width,
+                                int            height,
+                                int            format,
+                                int            min_filter,
+                                int            mag_filter,
+                                GskConversion  conversion)
 {
   GskNglRenderTarget *target;
   int prev_fbo;
-  GskNglProgram *program = self->linearize_no_clip;
+  GskNglProgram *program;
+
+  if (conversion == (GSK_CONVERSION_LINEARIZE | GSK_CONVERSION_PREMULTIPLY))
+    program = self->linearize_premultiply_no_clip;
+  else if (conversion & GSK_CONVERSION_LINEARIZE)
+    program = self->linearize_no_clip;
+  else if (conversion & GSK_CONVERSION_PREMULTIPLY)
+    program = self->premultiply_no_clip;
+  else
+    g_assert_not_reached ();
 
   gdk_gl_context_make_current (self->command_queue->context);
 
   gsk_ngl_driver_create_render_target (self,
                                        width, height,
                                        format,
-                                       GL_LINEAR, GL_LINEAR,
+                                       min_filter, mag_filter,
                                        &target);
 
   prev_fbo = gsk_ngl_command_queue_bind_framebuffer (self->command_queue, target->framebuffer_id);
@@ -810,14 +828,13 @@ gsk_ngl_driver_convert_texture (GskNglDriver *self,
                                     program->program_info,
                                     width, height);
 
-  set_projection_for_size (program, width, height);
-  set_viewport_for_size (program, width, height);
-  reset_modelview (program);
+  set_projection_for_size (self, program, width, height);
+  set_viewport_for_size (self, program, width, height);
+  reset_modelview (self, program);
 
   gsk_ngl_program_set_uniform_texture (program,
                                        UNIFORM_SHARED_SOURCE, 0,
                                        GL_TEXTURE_2D, GL_TEXTURE0, texture_id);
-
   draw_offscreen (self->command_queue, 0, 0, width, height);
 
   gsk_ngl_command_queue_end_draw (self->command_queue);
@@ -865,6 +882,7 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
   int height;
   int width;
   int format;
+  GskConversion conversion;
 
   g_return_val_if_fail (GSK_IS_NGL_DRIVER (self), 0);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), 0);
@@ -904,10 +922,14 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
                * is nonlinear sRGB. Eventually, we should figure out how
                * to convert from other color spaces to linear sRGB
                */
+              t = gsk_ngl_driver_convert_texture (self,
+                                                  gl_texture_id,
+                                                  width, height, format,
+                                                  min_filter, mag_filter,
+                                                  GSK_CONVERSION_LINEARIZE);
 
-              t = gsk_ngl_driver_convert_texture (self, gl_texture_id, width, height, format);
 
-              if (gdk_texture_set_render_data (texture, self, t, (GDestroyNotify)gsk_ngl_texture_destroyed))
+              if (gdk_texture_set_render_data (texture, self, t, gsk_ngl_texture_destroyed))
                 t->user = texture;
 
               return t->texture_id;
@@ -918,7 +940,8 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
   downloaded_texture = gdk_texture_download_texture (texture);
 
   /* The download_texture() call may have switched the GL context. Make sure
-   * the right context is at work again. */
+   * the right context is at work again.
+   */
   gdk_gl_context_make_current (context);
 
   texture_id = gsk_ngl_command_queue_upload_texture (self->command_queue,
@@ -928,15 +951,23 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
                                                      width,
                                                      height,
                                                      min_filter,
-                                                     mag_filter);
-
-  g_clear_object (&downloaded_texture);
+                                                     mag_filter,
+                                                     &conversion);
 
   t = gsk_ngl_texture_new (texture_id,
                            width, height, format, min_filter, mag_filter,
                            self->current_frame_id);
 
   g_hash_table_insert (self->textures, GUINT_TO_POINTER (texture_id), t);
+
+  g_clear_object (&downloaded_texture);
+
+  if (conversion)
+    t = gsk_ngl_driver_convert_texture (self,
+                                        texture_id,
+                                        width, height, format,
+                                        min_filter, mag_filter,
+                                        conversion);
 
   if (gdk_texture_set_render_data (texture, self, t, gsk_ngl_texture_destroyed))
     t->user = texture;
@@ -991,6 +1022,8 @@ gsk_ngl_driver_create_texture (GskNglDriver *self,
   g_hash_table_insert (self->textures,
                        GUINT_TO_POINTER (texture->texture_id),
                        texture);
+
+  texture->last_used_in_frame = self->current_frame_id;
 
   return texture;
 }
@@ -1352,6 +1385,7 @@ gsk_ngl_driver_add_texture_slices (GskNglDriver        *self,
   int tex_width;
   int tex_height;
   int x = 0, y = 0;
+  int format;
 
   g_assert (GSK_IS_NGL_DRIVER (self));
   g_assert (GDK_IS_TEXTURE (texture));
@@ -1363,6 +1397,9 @@ gsk_ngl_driver_add_texture_slices (GskNglDriver        *self,
 
   tex_width = texture->width;
   tex_height = texture->height;
+
+  format = gdk_texture_is_hdr (texture) ? GL_RGBA16F : GL_RGBA8;
+
   cols = (texture->width / max_texture_size) + 1;
   rows = (texture->height / max_texture_size) + 1;
 
@@ -1385,12 +1422,37 @@ gsk_ngl_driver_add_texture_slices (GskNglDriver        *self,
           int slice_height = MIN (max_texture_size, texture->height - y);
           int slice_index = (col * rows) + row;
           guint texture_id;
+          GskConversion conversion;
 
           texture_id = gsk_ngl_command_queue_upload_texture (self->command_queue,
                                                              texture,
                                                              x, y,
                                                              slice_width, slice_height,
-                                                             GL_NEAREST, GL_NEAREST);
+                                                             GL_NEAREST, GL_NEAREST,
+                                                             &conversion);
+
+
+          if (conversion)
+            {
+              t = gsk_ngl_texture_new (texture_id,
+                                       slice_width, slice_height,
+                                       format,
+                                       GL_NEAREST, GL_NEAREST,
+                                       0);
+              g_hash_table_insert (self->textures, GUINT_TO_POINTER (texture_id), t);
+
+              t = gsk_ngl_driver_convert_texture (self,
+                                                  texture_id,
+                                                  slice_width, slice_height,
+                                                  format,
+                                                  GL_NEAREST, GL_NEAREST,
+                                                  conversion);
+
+              texture_id = t->texture_id;
+              t->texture_id = 0;
+              g_hash_table_steal (self->textures, GUINT_TO_POINTER (texture_id));
+              gsk_ngl_texture_free (t);
+            }
 
           slices[slice_index].rect.x = x;
           slices[slice_index].rect.y = y;

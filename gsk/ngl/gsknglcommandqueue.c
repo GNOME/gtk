@@ -530,7 +530,7 @@ gsk_ngl_command_queue_begin_draw (GskNglCommandQueue   *self,
   GskNglCommandBatch *batch;
 
   g_assert (GSK_IS_NGL_COMMAND_QUEUE (self));
-  g_assert (self->in_draw == FALSE);
+  g_assert (!self->in_draw);
   g_assert (width <= G_MAXUINT16);
   g_assert (height <= G_MAXUINT16);
 
@@ -568,6 +568,7 @@ gsk_ngl_command_queue_end_draw (GskNglCommandQueue *self)
   GskNglCommandBatch *batch;
 
   g_assert (GSK_IS_NGL_COMMAND_QUEUE (self));
+  g_assert (self->in_draw);
   g_assert (self->batches.len > 0);
 
   if (will_ignore_batch (self))
@@ -1331,20 +1332,31 @@ gsk_ngl_command_queue_do_upload_texture (GdkGLContext    *context,
                                          int              y,
                                          int              width,
                                          int              height,
-                                         guint            texture_target)
+                                         guint            texture_target,
+                                         GskConversion   *conversion)
 {
   GdkMemoryTexture *memory_texture;
   GdkMemoryFormat data_format;
+  GdkColorProfile *data_profile;
   GLenum gl_internalformat;
   GLenum gl_format;
   GLenum gl_type;
   gsize bpp, stride;
   const guchar *data;
+  gboolean convert_locally = FALSE;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   memory_texture = GDK_MEMORY_TEXTURE (gdk_texture_download_texture (texture));
   data_format = gdk_memory_texture_get_format (memory_texture);
+  data_profile = gdk_texture_get_color_profile (GDK_TEXTURE (memory_texture));
+
+  if (data_profile == gdk_color_profile_get_srgb ())
+    *conversion = GSK_CONVERSION_LINEARIZE;
+  else if (data_profile == gdk_color_profile_get_srgb_linear ())
+    *conversion = 0;
+  else
+    convert_locally = TRUE;
 
   if (!gdk_memory_format_gl_format (data_format,
                                     gdk_gl_context_get_use_es (context),
@@ -1352,21 +1364,33 @@ gsk_ngl_command_queue_do_upload_texture (GdkGLContext    *context,
                                     &gl_format,
                                     &gl_type))
     {
-      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      if (!gdk_memory_format_gl_format (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                                        gdk_gl_context_get_use_es (context),
-                                        &gl_internalformat,
-                                        &gl_format,
-                                        &gl_type))
+      if (!gdk_gl_context_get_use_es (context))
         {
-          g_assert_not_reached ();
+          *conversion |= GSK_CONVERSION_PREMULTIPLY;
+        }
+      else
+        {
+          convert_locally = TRUE;
+          data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+          if (!gdk_memory_format_gl_format (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                                            gdk_gl_context_get_use_es (context),
+                                            &gl_internalformat,
+                                            &gl_format,
+                                            &gl_type))
+            {
+              g_assert_not_reached ();
+            }
         }
     }
 
-  memory_texture = gdk_memory_texture_convert (memory_texture,
-                                               data_format,
-                                               gdk_color_profile_get_srgb_linear (),
-                                               &(GdkRectangle) { x, y, width, height });
+  if (convert_locally)
+    {
+      memory_texture = gdk_memory_texture_convert (memory_texture,
+                                                   data_format,
+                                                   gdk_color_profile_get_srgb_linear (),
+                                                   &(GdkRectangle) { x, y, width, height });
+      *conversion = 0;
+    }
 
   bpp = gdk_memory_format_bytes_per_pixel (data_format);
   stride = gdk_memory_texture_get_stride (memory_texture);
@@ -1412,9 +1436,11 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
                                       guint               width,
                                       guint               height,
                                       int                 min_filter,
-                                      int                 mag_filter)
+                                      int                 mag_filter,
+                                      GskConversion      *conversion)
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+  int format;
   int texture_id;
 
   g_assert (GSK_IS_NGL_COMMAND_QUEUE (self));
@@ -1423,6 +1449,8 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
   g_assert (y_offset + height <= gdk_texture_get_height (texture));
   g_assert (min_filter == GL_LINEAR || min_filter == GL_NEAREST);
   g_assert (mag_filter == GL_LINEAR || min_filter == GL_NEAREST);
+
+  *conversion = 0;
 
   if (width > self->max_texture_size || height > self->max_texture_size)
     {
@@ -1433,7 +1461,12 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
       height = MAX (height, self->max_texture_size);
     }
 
-  texture_id = gsk_ngl_command_queue_create_texture (self, width, height, GL_RGBA8, min_filter, mag_filter);
+  format = gdk_texture_is_hdr (texture) ? GL_RGBA16F : GL_RGBA8;
+
+  texture_id = gsk_ngl_command_queue_create_texture (self,
+                                                     width, height,
+                                                     format,
+                                                     min_filter, mag_filter);
   if (texture_id == -1)
     return texture_id;
 
@@ -1443,11 +1476,12 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
-  gsk_ngl_command_queue_do_upload_texture (gdk_gl_context_get_current (),
+  gsk_ngl_command_queue_do_upload_texture (self->context,
                                            texture,
                                            x_offset, y_offset,
                                            width, height,
-                                           GL_TEXTURE_2D);
+                                           GL_TEXTURE_2D,
+                                           conversion);
 
   /* Restore previous texture state if any */
   if (self->attachments->textures[0].id > 0)

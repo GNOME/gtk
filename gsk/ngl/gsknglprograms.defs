@@ -90,3 +90,11 @@ GSK_NGL_DEFINE_PROGRAM (postprocessing,
 GSK_NGL_DEFINE_PROGRAM (linearize,
                         "/org/gtk/libgsk/ngl/linearize.glsl",
                         GSK_NGL_NO_UNIFORMS)
+
+GSK_NGL_DEFINE_PROGRAM (premultiply,
+                        "/org/gtk/libgsk/ngl/premultiply.glsl",
+                        GSK_NGL_NO_UNIFORMS)
+
+GSK_NGL_DEFINE_PROGRAM (linearize_premultiply,
+                        "/org/gtk/libgsk/ngl/linearize_premultiply.glsl",
+                        GSK_NGL_NO_UNIFORMS)

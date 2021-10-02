@@ -279,6 +279,12 @@ void                gsk_ngl_command_queue_execute              (GskNglCommandQue
                                                                 guint                  surface_height,
                                                                 guint                  scale_factor,
                                                                 const cairo_region_t  *scissor);
+
+typedef enum {
+  GSK_CONVERSION_LINEARIZE   = 1 << 0,
+  GSK_CONVERSION_PREMULTIPLY = 1 << 1,
+} GskConversion;
+
 int                 gsk_ngl_command_queue_upload_texture       (GskNglCommandQueue    *self,
                                                                 GdkTexture            *texture,
                                                                 guint                  x_offset,
@@ -286,7 +292,8 @@ int                 gsk_ngl_command_queue_upload_texture       (GskNglCommandQue
                                                                 guint                  width,
                                                                 guint                  height,
                                                                 int                    min_filter,
-                                                                int                    mag_filter);
+                                                                int                    mag_filter,
+                                                                GskConversion         *remaining);
 int                 gsk_ngl_command_queue_create_texture       (GskNglCommandQueue    *self,
                                                                 int                    width,
                                                                 int                    height,
