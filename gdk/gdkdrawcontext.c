@@ -22,6 +22,7 @@
 
 #include "gdkdrawcontextprivate.h"
 
+#include "gdkdebug.h"
 #include "gdkintl.h"
 #include "gdkprofilerprivate.h"
 #include "gdksurfaceprivate.h"
@@ -360,6 +361,9 @@ gdk_draw_context_begin_frame_full (GdkDrawContext       *context,
         }
       return;
     }
+
+  if (GDK_DISPLAY_DEBUG_CHECK (priv->display, HDR))
+    request_hdr = TRUE;
 
   priv->frame_region = cairo_region_copy (region);
   priv->surface->paint_context = g_object_ref (context);
