@@ -1152,13 +1152,6 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
 {
   gboolean result = FALSE;
 
-#ifdef GDK_WIN32_ENABLE_EGL
-  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_EGL))
-    return gdk_win32_display_init_egl (display, error);
-#endif
-  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_WGL))
-    return gdk_win32_display_init_wgl (display, error);
-
   /* No env vars set, do the regular GL initialization, first WGL and then EGL,
    * as WGL is the more tried-and-tested configuration.
    */

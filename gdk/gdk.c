@@ -31,6 +31,7 @@
 #include "gdkconstructor.h"
 #include "gdkdebug.h"
 #include "gdkdisplay.h"
+#include "gdkglcontextprivate.h"
 #include "gdkintl.h"
 #include "gdk-private.h"
 
@@ -293,6 +294,14 @@ gdk_pre_parse (void)
   _gdk_debug_flags = gdk_parse_debug_var ("GDK_DEBUG",
                                           gdk_debug_keys,
                                           G_N_ELEMENTS (gdk_debug_keys));
+
+  /* These are global */
+  if (GDK_DEBUG_CHECK (GL_EGL))
+    gdk_gl_backend_use (GDK_GL_EGL);
+  else if (GDK_DEBUG_CHECK (GL_GLX))
+    gdk_gl_backend_use (GDK_GL_GLX);
+  else if (GDK_DEBUG_CHECK (GL_WGL))
+    gdk_gl_backend_use (GDK_GL_WGL);
 
 #ifndef G_HAS_CONSTRUCTORS
   stash_desktop_startup_notification_id ();

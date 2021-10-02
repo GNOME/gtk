@@ -2893,11 +2893,6 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
 {
   GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
 
-  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_EGL))
-    return gdk_x11_display_init_egl (self, TRUE, out_visual, out_depth, error);
-  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_GLX))
-    return gdk_x11_display_init_glx (self, out_visual, out_depth, error);
-
   /* No env vars set, do the regular GL initialization.
    * 
    * We try EGL first, but are very picky about what we accept.
