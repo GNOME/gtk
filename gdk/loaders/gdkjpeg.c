@@ -44,7 +44,7 @@ struct error_handler_data {
         GError **error;
 };
 
-static void
+G_GNUC_NORETURN static void
 fatal_error_handler (j_common_ptr cinfo)
 {
   struct error_handler_data *errmgr;
