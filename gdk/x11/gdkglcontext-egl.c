@@ -660,6 +660,66 @@ gdk_x11_gl_context_egl_init (GdkX11GLContextEGL *self)
   self->do_frame_sync = TRUE;
 }
 
+#ifdef G_ENABLE_DEBUG
+
+static int
+strvcmp (gconstpointer p1,
+         gconstpointer p2)
+{
+  const char * const *s1 = p1;
+  const char * const *s2 = p2;
+
+  return strcmp (*s1, *s2);
+}
+
+static char *
+describe_extensions (EGLDisplay dpy)
+{
+  const char *extensions;
+  char **exts;
+  char *ext;
+
+  extensions = eglQueryString (dpy, EGL_EXTENSIONS);
+
+  exts = g_strsplit (extensions, " ", -1);
+  qsort (exts, g_strv_length (exts), sizeof (char *), strvcmp);
+
+  ext = g_strjoinv ("\n\t", exts);
+  if (ext[0] == '\n')
+    ext[0] = ' ';
+
+  g_strfreev (exts);
+
+  return g_strstrip (ext);
+}
+
+static char *
+describe_egl_config (EGLDisplay dpy,
+                     EGLConfig  config)
+{
+  EGLint red, green, blue, alpha, type;
+
+  if (!config)
+    return g_strdup ("-");
+
+  if (!eglGetConfigAttrib (dpy, config, EGL_RED_SIZE, &red) ||
+      !eglGetConfigAttrib (dpy, config, EGL_GREEN_SIZE, &green) ||
+      !eglGetConfigAttrib (dpy, config, EGL_BLUE_SIZE, &blue) ||
+      !eglGetConfigAttrib (dpy, config, EGL_ALPHA_SIZE, &alpha))
+    return g_strdup ("Unknown");
+
+  if (epoxy_has_egl_extension (dpy, "EGL_EXT_pixel_format_float"))
+    {
+      if (!eglGetConfigAttrib (dpy, config, EGL_COLOR_COMPONENT_TYPE_EXT, &type))
+        type = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+    }
+  else
+    type = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+
+  return g_strdup_printf ("R%dG%dB%dA%d%s", red, green, blue, alpha, type == EGL_COLOR_COMPONENT_TYPE_FIXED_EXT ? "" : " float");
+}
+#endif
+
 gboolean
 gdk_x11_display_init_egl (GdkX11Display  *self,
                           gboolean        force,
@@ -739,21 +799,23 @@ gdk_x11_display_init_egl (GdkX11Display  *self,
   self->has_egl_swap_buffers_with_damage =
     epoxy_has_egl_extension (self->egl_display, "EGL_EXT_swap_buffers_with_damage");
 
-  GDK_DISPLAY_NOTE (display, OPENGL,
+  GDK_DISPLAY_NOTE (display, OPENGL, {
+                    char *ext = describe_extensions (self->egl_display);
+                    char *cfg = describe_egl_config (self->egl_display, self->egl_config);
                     g_message ("EGL found\n"
                                " - Version: %s\n"
                                " - Vendor: %s\n"
                                " - Client API: %s\n"
-                               " - Checked extensions:\n"
-                               "\t* EGL_KHR_create_context: %s\n"
-                               "\t* EGL_EXT_buffer_age: %s\n"
-                               "\t* EGL_EXT_swap_buffers_with_damage: %s\n",
+                               " - Extensions:\n"
+                               "\t%s\n"
+                               " - Config: %s",
                                eglQueryString (self->egl_display, EGL_VERSION),
                                eglQueryString (self->egl_display, EGL_VENDOR),
                                eglQueryString (self->egl_display, EGL_CLIENT_APIS),
-                               self->has_egl_khr_create_context ? "yes" : "no",
-                               self->has_egl_buffer_age ? "yes" : "no",
-                               self->has_egl_swap_buffers_with_damage ? "yes" : "no"));
+                               ext, cfg);
+                    g_free (ext);
+                    g_free (cfg);
+  });
 
   return TRUE;
 }
