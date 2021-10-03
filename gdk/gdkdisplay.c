@@ -1570,6 +1570,50 @@ gdk_display_create_egl_config (GdkDisplay               *self,
 
 #undef MAX_EGL_ATTRS
 
+static gboolean
+gdk_display_check_egl_extensions (EGLDisplay   egl_display,
+                                  const char **extensions,
+                                  GError     **error)
+{
+  GString *missing = NULL;
+  gsize i, n_missing;
+
+  n_missing = 0;
+
+  for (i = 0; extensions[i] != NULL; i++)
+    {
+      if (!epoxy_has_egl_extension (egl_display, extensions[i]))
+        {
+          if (missing == NULL)
+            {
+              missing = g_string_new (extensions[i]);
+            }
+          else
+            {
+              g_string_append (missing, ", ");
+              g_string_append (missing, extensions[i]);
+            }
+          n_missing++;
+        }
+    }
+
+  if (n_missing)
+    {
+      g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                   /* translators: Arguments are the number of missing extensions
+                    * followed by a comma-separated list of their names */
+                   g_dngettext (GETTEXT_PACKAGE,
+                                "EGL implementation is missing extension %2$s",
+                                "EGL implementation is missing %d extensions: %s",
+                                n_missing),
+                   (int) n_missing, missing->str);
+
+      g_string_free (missing, TRUE);
+      return FALSE;
+    }
+
+  return TRUE;
+}
 
 gboolean
 gdk_display_init_egl (GdkDisplay  *self,
@@ -1629,12 +1673,14 @@ gdk_display_init_egl (GdkDisplay  *self,
       return FALSE;
     }
 
-  if (!epoxy_has_egl_extension (priv->egl_display, "EGL_KHR_surfaceless_context"))
+  if (!gdk_display_check_egl_extensions (priv->egl_display,
+                                         (const char *[]) {
+                                           "EGL_KHR_surfaceless_context",
+                                           NULL
+                                         },
+                                         error))
     {
       g_clear_pointer (&priv->egl_display, eglTerminate);
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
-                           _("Surfaceless contexts are not supported on this EGL implementation"));
       return FALSE;
     }
 
