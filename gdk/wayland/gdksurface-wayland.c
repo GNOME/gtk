@@ -110,8 +110,6 @@ struct _GdkWaylandSurface
 
   struct wl_event_queue *event_queue;
 
-  EGLSurface egl_surface;
-
   uint32_t reposition_token;
   uint32_t received_reposition_token;
 
@@ -2901,14 +2899,9 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
   if (impl->display_server.wl_surface)
     {
-      if (impl->egl_surface)
-        {
-          eglDestroySurface (gdk_display_get_egl_display (display), impl->egl_surface);
-          impl->egl_surface = NULL;
-        }
-
       if (impl->display_server.egl_window)
         {
+          gdk_surface_set_egl_native_window (surface, NULL);
           wl_egl_window_destroy (impl->display_server.egl_window);
           impl->display_server.egl_window = NULL;
         }
@@ -4332,8 +4325,8 @@ gdk_wayland_surface_get_wl_output (GdkSurface *surface)
   return NULL;
 }
 
-static struct wl_egl_window *
-gdk_wayland_surface_get_wl_egl_window (GdkSurface *surface)
+void
+gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
@@ -4344,33 +4337,9 @@ gdk_wayland_surface_get_wl_egl_window (GdkSurface *surface)
                               surface->width * impl->scale,
                               surface->height * impl->scale);
       wl_surface_set_buffer_scale (impl->display_server.wl_surface, impl->scale);
+
+      gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
     }
-
-  return impl->display_server.egl_window;
-}
-
-EGLSurface
-gdk_wayland_surface_get_egl_surface (GdkSurface *surface)
-{
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkWaylandSurface *impl;
-  struct wl_egl_window *egl_window;
-
-  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), NULL);
-
-  impl = GDK_WAYLAND_SURFACE (surface);
-
-  if (impl->egl_surface == NULL)
-    {
-      egl_window = gdk_wayland_surface_get_wl_egl_window (surface);
-
-      impl->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
-                                                  gdk_display_get_egl_config (display),
-                                                  egl_window,
-                                                  NULL);
-    }
-
-  return impl->egl_surface;
 }
 
 struct gtk_surface1 *

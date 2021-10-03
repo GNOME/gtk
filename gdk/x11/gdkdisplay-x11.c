@@ -2995,8 +2995,6 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
 
   self->egl_version = epoxy_egl_version (egl_display);
 
-  self->has_egl_khr_create_context =
-    epoxy_has_egl_extension (egl_display, "EGL_KHR_create_context");
   self->has_egl_buffer_age =
     epoxy_has_egl_extension (egl_display, "EGL_EXT_buffer_age");
   self->has_egl_swap_buffers_with_damage =

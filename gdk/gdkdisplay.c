@@ -1675,6 +1675,7 @@ gdk_display_init_egl (GdkDisplay  *self,
 
   if (!gdk_display_check_egl_extensions (priv->egl_display,
                                          (const char *[]) {
+                                           "EGL_KHR_create_context",
                                            "EGL_KHR_surfaceless_context",
                                            NULL
                                          },

@@ -18,7 +18,6 @@
 #include "gdkx11display.h"
 #include "gdkx11glcontext.h"
 #include "gdkx11screen.h"
-#include "gdkx11surface.h"
 #include "gdkx11property.h"
 #include <X11/Xatom.h>
 
@@ -62,38 +61,6 @@ gdk_x11_display_get_egl_display (GdkDisplay *display)
   return gdk_display_get_egl_display (display);
 }
 
-static EGLSurface
-gdk_x11_surface_get_egl_surface (GdkSurface *surface)
-{
-  GdkX11Surface *self = GDK_X11_SURFACE (surface);
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
-
-  if (self->egl_surface)
-    return self->egl_surface;
-
-  self->egl_surface =
-    eglCreateWindowSurface (gdk_display_get_egl_display (display), 
-                            gdk_display_get_egl_config (display),
-                            (EGLNativeWindowType) gdk_x11_surface_get_xid (surface),
-                            NULL);
-
-  return self->egl_surface;
-}
-
-void
-gdk_x11_surface_destroy_egl_surface (GdkX11Surface *self)
-{
-  GdkDisplay *display;
-
-  if (self->egl_surface == NULL)
-    return;
-
-  display = gdk_surface_get_display (GDK_SURFACE (self));
-
-  eglDestroySurface (gdk_display_get_egl_display (display), self->egl_surface);
-  self->egl_surface = NULL;
-}
-
 static void
 gdk_x11_gl_context_egl_begin_frame (GdkDrawContext *draw_context,
                                     cairo_region_t *region)
@@ -117,7 +84,7 @@ gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
 
   gdk_gl_context_make_current (context);
 
-  egl_surface = gdk_x11_surface_get_egl_surface (surface);
+  egl_surface = gdk_surface_get_egl_surface (surface);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "x11", "swap buffers");
   if (display_x11->has_egl_swap_buffers_with_damage)
@@ -184,7 +151,7 @@ gdk_x11_gl_context_egl_make_current (GdkGLContext *context,
     }
 
   surface = gdk_gl_context_get_surface (context);
-  egl_surface = gdk_x11_surface_get_egl_surface (surface);
+  egl_surface = gdk_surface_get_egl_surface (surface);
 
   GDK_DISPLAY_NOTE (display, OPENGL,
                     g_message ("Making EGL context %p current to surface %p",
@@ -227,7 +194,7 @@ gdk_x11_gl_context_egl_get_damage (GdkGLContext *context)
       EGLSurface egl_surface;
       int buffer_age = 0;
 
-      egl_surface = gdk_x11_surface_get_egl_surface (surface);
+      egl_surface = gdk_surface_get_egl_surface (surface);
       gdk_gl_context_make_current (context);
 
       eglQuerySurface (gdk_display_get_egl_display (display),
@@ -268,20 +235,18 @@ static gboolean
 gdk_x11_gl_context_egl_realize (GdkGLContext  *context,
                                 GError       **error)
 {
-  GdkX11Display *display_x11;
   GdkDisplay *display;
   GdkX11GLContextEGL *context_egl;
   GdkGLContext *share;
   EGLDisplay egl_display;
   EGLConfig egl_config;
   gboolean debug_bit, forward_bit, legacy_bit, use_es;
-  int major, minor, i = 0;
+  int major, minor, flags, i = 0;
   EGLint context_attrs[N_EGL_ATTRS];
 
   display = gdk_gl_context_get_display (context);
 
   context_egl = GDK_X11_GL_CONTEXT_EGL (context);
-  display_x11 = GDK_X11_DISPLAY (display);
   share = gdk_display_get_gl_context (display);
   egl_display = gdk_display_get_egl_display (display),
   egl_config = gdk_display_get_egl_config (display),
@@ -294,35 +259,28 @@ gdk_x11_gl_context_egl_realize (GdkGLContext  *context,
   use_es = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES) ||
            (share != NULL && gdk_gl_context_get_use_es (share));
 
+  flags = 0;
+  if (debug_bit)
+    flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
+  if (forward_bit)
+    flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+
   if (!use_es)
     {
       eglBindAPI (EGL_OPENGL_API);
 
-      if (display_x11->has_egl_khr_create_context)
-        {
-          int flags = 0;
+      /* We want a core profile, unless in legacy mode */
+      context_attrs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+      context_attrs[i++] = legacy_bit
+                         ? EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR
+                         : EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
 
-          if (debug_bit)
-            flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
-          if (forward_bit)
-            flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
-
-          context_attrs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
-          context_attrs[i++] = legacy_bit
-                             ? EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR
-                             : EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
-          context_attrs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
-          context_attrs[i++] = legacy_bit ? 3 : major;
-          context_attrs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
-          context_attrs[i++] = legacy_bit ? 0 : minor;
-          context_attrs[i++] = EGL_CONTEXT_FLAGS_KHR;
-          context_attrs[i++] = flags;
-          context_attrs[i++] = EGL_NONE;
-        }
-      else
-        {
-          context_attrs[i++] = EGL_NONE;
-        }
+      /* Specify the version */
+      context_attrs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
+      context_attrs[i++] = legacy_bit ? 3 : major;
+      context_attrs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
+      context_attrs[i++] = legacy_bit ? 0 : minor;
+      context_attrs[i++] = EGL_CONTEXT_FLAGS_KHR;
     }
   else
     {
@@ -334,6 +292,9 @@ gdk_x11_gl_context_egl_realize (GdkGLContext  *context,
       else
         context_attrs[i++] = 2;
     }
+
+  context_attrs[i++] = EGL_CONTEXT_FLAGS_KHR;
+  context_attrs[i++] = flags;
 
   context_attrs[i++] = EGL_NONE;
   g_assert (i < N_EGL_ATTRS);

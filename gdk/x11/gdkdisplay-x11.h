@@ -157,7 +157,6 @@ struct _GdkX11Display
   guint has_async_glx_swap_buffers : 1;
 
   /* EGL extensions we check */
-  guint has_egl_khr_create_context : 1;
   guint has_egl_buffer_age : 1;
   guint has_egl_swap_buffers_with_damage : 1;
 };

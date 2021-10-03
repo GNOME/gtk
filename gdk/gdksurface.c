@@ -46,6 +46,10 @@
 
 #include <math.h>
 
+#ifdef HAVE_EGL
+#include <epoxy/egl.h>
+#endif
+
 /**
  * GdkSurface:
  *
@@ -64,6 +68,11 @@ typedef struct _GdkSurfacePrivate GdkSurfacePrivate;
 
 struct _GdkSurfacePrivate
 {
+  gpointer egl_native_window;
+#ifdef HAVE_EGL
+  EGLSurface egl_surface;
+#endif
+
   gpointer widget;
 };
 
@@ -920,14 +929,19 @@ surface_remove_from_pointer_info (GdkSurface  *surface,
  */
 static void
 _gdk_surface_destroy_hierarchy (GdkSurface *surface,
-                                gboolean   foreign_destroy)
+                                gboolean    foreign_destroy)
 {
+  G_GNUC_UNUSED GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
   g_return_if_fail (GDK_IS_SURFACE (surface));
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
+
+  /* backend must have unset this */
+  g_assert (priv->egl_native_window == NULL);
 
   if (surface->gl_paint_context)
     {
@@ -1061,6 +1075,48 @@ gdk_surface_get_mapped (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
 
   return GDK_SURFACE_IS_MAPPED (surface);
+}
+
+void
+gdk_surface_set_egl_native_window (GdkSurface *self,
+                                   gpointer    native_window)
+{
+#ifdef HAVE_EGL
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  /* This checks that all EGL platforms we support conform to the same struct sizes.
+   * When this ever fails, there will be some fun times happening for whoever tries
+   * this weird EGL backend... */
+  G_STATIC_ASSERT (sizeof (gpointer) == sizeof (EGLNativeWindowType));
+
+  if (priv->egl_surface != NULL)
+    {
+      eglDestroySurface (gdk_surface_get_display (self), priv->egl_surface);
+      priv->egl_surface = NULL;
+    }
+
+  priv->egl_native_window = native_window;
+}
+
+gpointer /* EGLSurface */
+gdk_surface_get_egl_surface (GdkSurface *self)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  g_return_val_if_fail (priv->egl_native_window != NULL, NULL);
+
+  if (priv->egl_surface == NULL)
+    {
+      GdkDisplay *display = gdk_surface_get_display (self);
+
+      priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
+                                                  gdk_display_get_egl_config (display),
+                                                  (EGLNativeWindowType) priv->egl_native_window,
+                                                  NULL);
+    }
+
+  return priv->egl_surface;
+#endif
 }
 
 GdkGLContext *

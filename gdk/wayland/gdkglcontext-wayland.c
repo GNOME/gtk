@@ -215,7 +215,7 @@ gdk_wayland_gl_context_get_damage (GdkGLContext *context)
 
   if (display_wayland->have_egl_buffer_age)
     {
-      egl_surface = gdk_wayland_surface_get_egl_surface (surface);
+      egl_surface = gdk_surface_get_egl_surface (surface);
       gdk_gl_context_make_current (context);
       eglQuerySurface (gdk_display_get_egl_display (display), egl_surface,
                        EGL_BUFFER_AGE_EXT, &buffer_age);
@@ -269,7 +269,7 @@ gdk_wayland_gl_context_make_current (GdkGLContext *context,
   EGLSurface egl_surface;
 
   if (!surfaceless)
-    egl_surface = gdk_wayland_surface_get_egl_surface (gdk_gl_context_get_surface (context));
+    egl_surface = gdk_surface_get_egl_surface (gdk_gl_context_get_surface (context));
   else
     egl_surface = EGL_NO_SURFACE;
 
@@ -283,6 +283,8 @@ static void
 gdk_wayland_gl_context_begin_frame (GdkDrawContext *draw_context,
                                     cairo_region_t *region)
 {
+  gdk_wayland_surface_ensure_wl_egl_window (gdk_draw_context_get_surface (draw_context));
+
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, region);
 
   glDrawBuffers (1, (GLenum[1]) { GL_BACK });
@@ -302,7 +304,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
 
   gdk_gl_context_make_current (context);
 
-  egl_surface = gdk_wayland_surface_get_egl_surface (surface);
+  egl_surface = gdk_surface_get_egl_surface (surface);
   gdk_wayland_surface_sync (surface);
   gdk_wayland_surface_request_frame (surface);
 

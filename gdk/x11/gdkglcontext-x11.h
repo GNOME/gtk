@@ -76,8 +76,6 @@ GType                   gdk_x11_gl_context_glx_get_type         (void) G_GNUC_CO
 
 typedef struct _GdkX11GLContextEGL      GdkX11GLContextEGL;
 
-void                    gdk_x11_surface_destroy_egl_surface     (GdkX11Surface *self);
-
 GType                   gdk_x11_gl_context_egl_get_type         (void) G_GNUC_CONST;
 
 G_END_DECLS
