@@ -12,17 +12,7 @@ reference:
   needs: []
   script:
     - sh -x ./download-reference.sh
-    - meson setup  _build
-    - meson compile -C _build
-    - mv _build/glib/glib/glib/ docs/glib/
-    - mv _build/glib/gmodule/gmodule/ docs/gmodule/
-    - mv _build/glib/gobject/gobject/ docs/gobject/
-    - mv _build/glib/gio/gio/ docs/gio/
-    - mv _build/gtk3/gdk/gdk3/ docs/gdk3/
-    - mv _build/gtk3/gdk/gdk3-x11/ docs/gdk3-x11/
-    - mv _build/gtk3/gtk/gtk3/ docs/gtk3/
-    - mv _build/atk/atk/atk/ docs/atk/
-    - mv _build/atk/atspi2/atspi2/ docs/atspi2/
+    - sh -x ./prepare-docs.sh docs
   artifacts:
     paths:
       - docs
@@ -31,9 +21,7 @@ pages:
   stage: deploy
   needs: ['reference']
   script:
-    - mkdir public
-    - mv docs/* public/
-    - cp static/* public/
+    - sh -x ./publish.sh docs static public
   artifacts:
     paths:
       - public
