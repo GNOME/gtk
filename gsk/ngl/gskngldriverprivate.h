@@ -24,7 +24,7 @@
 #include <gdk/gdkgltextureprivate.h>
 
 #include "gskngltypesprivate.h"
-#include "gskngltexturepoolprivate.h"
+#include "gskngltextureprivate.h"
 
 G_BEGIN_DECLS
 
@@ -99,12 +99,11 @@ struct _GskNglDriver
   GskNglCommandQueue *shared_command_queue;
   GskNglCommandQueue *command_queue;
 
-  GskNglTexturePool texture_pool;
-
   GskNglGlyphLibrary *glyphs;
   GskNglIconLibrary *icons;
   GskNglShadowLibrary *shadows;
 
+  GArray *texture_pool;
   GHashTable *textures;
   GHashTable *key_to_texture_id;
   GHashTable *texture_id_to_key;

@@ -51,7 +51,7 @@ gsk_private_sources = files([
   'ngl/gsknglshadowlibrary.c',
   'ngl/gskngltexturelibrary.c',
   'ngl/gskngluniformstate.c',
-  'ngl/gskngltexturepool.c',
+  'ngl/gskngltexture.c',
   'ngl/gskglprofiler.c',
   'ngl/stb_rect_pack.c',
   'ngl/fp16.c',

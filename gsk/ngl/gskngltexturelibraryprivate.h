@@ -22,7 +22,7 @@
 #define __GSK_NGL_TEXTURE_LIBRARY_PRIVATE_H__
 
 #include "gskngltypesprivate.h"
-#include "gskngltexturepoolprivate.h"
+#include "gskngltextureprivate.h"
 
 #include "stb_rect_pack.h"
 

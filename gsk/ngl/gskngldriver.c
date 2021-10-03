@@ -38,7 +38,8 @@
 #include "gskngliconlibraryprivate.h"
 #include "gsknglprogramprivate.h"
 #include "gsknglshadowlibraryprivate.h"
-#include "gskngltexturepoolprivate.h"
+#include "gskngltextureprivate.h"
+#include "fp16private.h"
 
 #define ATLAS_SIZE 512
 #define MAX_OLD_RATIO 0.5
@@ -102,6 +103,15 @@ gsk_ngl_texture_destroyed (gpointer data)
   ((GskNglTexture *)data)->user = NULL;
 }
 
+static void
+gsk_ngl_driver_autorelease_texture (GskNglDriver *self,
+                                    guint         texture_id)
+{
+  g_assert (GSK_IS_NGL_DRIVER (self));
+
+  g_array_append_val (self->texture_pool, texture_id);
+}
+
 static guint
 gsk_ngl_driver_collect_unused_textures (GskNglDriver *self,
                                         gint64        watermark)
@@ -131,9 +141,10 @@ gsk_ngl_driver_collect_unused_textures (GskNglDriver *self,
           g_assert (t->link.next == NULL);
           g_assert (t->link.data == t);
 
-          /* Steal this texture and put it back into the pool */
           remove_texture_key_for_id (self, t->texture_id);
-          gsk_ngl_texture_pool_put (&self->texture_pool, t);
+          gsk_ngl_driver_autorelease_texture (self, t->texture_id);
+          t->texture_id = 0;
+          gsk_ngl_texture_free (t);
         }
     }
 
@@ -268,7 +279,7 @@ gsk_ngl_driver_dispose (GObject *object)
       self->autorelease_framebuffers->len = 0;
     }
 
-  gsk_ngl_texture_pool_clear (&self->texture_pool);
+  g_clear_pointer (&self->texture_pool, g_array_unref);
 
   g_assert (!self->textures || g_hash_table_size (self->textures) == 0);
   g_assert (!self->texture_id_to_key || g_hash_table_size (self->texture_id_to_key) == 0);
@@ -313,7 +324,7 @@ gsk_ngl_driver_init (GskNglDriver *self)
                                                    g_free,
                                                    NULL);
   self->shader_cache = g_hash_table_new_full (NULL, NULL, NULL, remove_program);
-  gsk_ngl_texture_pool_init (&self->texture_pool);
+  self->texture_pool = g_array_new (FALSE, FALSE, sizeof (guint));
   self->render_targets = g_ptr_array_new ();
   self->atlases = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_ngl_texture_atlas_free);
 }
@@ -634,7 +645,7 @@ gsk_ngl_driver_after_frame (GskNglDriver *self)
       GskNglRenderTarget *render_target = g_ptr_array_index (self->render_targets, self->render_targets->len - 1);
 
       gsk_ngl_driver_autorelease_framebuffer (self, render_target->framebuffer_id);
-      glDeleteTextures (1, &render_target->texture_id);
+      gsk_ngl_driver_autorelease_texture (self, render_target->texture_id);
       g_slice_free (GskNglRenderTarget, render_target);
 
       self->render_targets->len--;
@@ -649,7 +660,12 @@ gsk_ngl_driver_after_frame (GskNglDriver *self)
     }
 
   /* Release any cached textures we used during the frame */
-  gsk_ngl_texture_pool_clear (&self->texture_pool);
+  if (self->texture_pool->len > 0)
+    {
+      glDeleteTextures (self->texture_pool->len,
+                        (GLuint *)(gpointer)self->texture_pool->data);
+      self->texture_pool->len = 0;
+    }
 
   /* Reset command queue to our shared queue incase we have operations
    * that need to be processed outside of a frame (such as callbacks
@@ -825,16 +841,21 @@ gsk_ngl_driver_create_texture (GskNglDriver *self,
                                int           mag_filter)
 {
   GskNglTexture *texture;
+  guint texture_id;
 
   g_return_val_if_fail (GSK_IS_NGL_DRIVER (self), NULL);
 
-  texture = gsk_ngl_texture_pool_get (&self->texture_pool,
-                                      width, height,
-                                      min_filter, mag_filter);
+  texture_id = gsk_ngl_command_queue_create_texture (self->command_queue,
+                                                     width, height,
+                                                     min_filter, mag_filter);
+  texture = gsk_ngl_texture_new (texture_id,
+                                 width, height,
+                                 min_filter, mag_filter,
+                                 self->current_frame_id);
   g_hash_table_insert (self->textures,
                        GUINT_TO_POINTER (texture->texture_id),
                        texture);
-  texture->last_used_in_frame = self->current_frame_id;
+
   return texture;
 }
 
@@ -851,8 +872,8 @@ gsk_ngl_driver_create_texture (GskNglDriver *self,
  * to free additional VRAM back to the system.
  */
 void
-gsk_ngl_driver_release_texture (GskNglDriver *self,
-                                 GskNglTexture  *texture)
+gsk_ngl_driver_release_texture (GskNglDriver  *self,
+                                GskNglTexture *texture)
 {
   guint texture_id;
 
@@ -860,12 +881,14 @@ gsk_ngl_driver_release_texture (GskNglDriver *self,
   g_assert (texture != NULL);
 
   texture_id = texture->texture_id;
+  texture->texture_id = 0;
+  gsk_ngl_texture_free (texture);
 
   if (texture_id > 0)
     remove_texture_key_for_id (self, texture_id);
 
   g_hash_table_steal (self->textures, GUINT_TO_POINTER (texture_id));
-  gsk_ngl_texture_pool_put (&self->texture_pool, texture);
+  gsk_ngl_driver_autorelease_texture (self, texture_id);
 }
 
 /**
@@ -1312,6 +1335,7 @@ gsk_ngl_driver_create_gdk_texture (GskNglDriver *self,
 {
   GskNglTextureState *state;
   GskNglTexture *texture;
+  int width, height;
 
   g_return_val_if_fail (GSK_IS_NGL_DRIVER (self), NULL);
   g_return_val_if_fail (self->command_queue != NULL, NULL);
@@ -1329,10 +1353,16 @@ gsk_ngl_driver_create_gdk_texture (GskNglDriver *self,
 
   g_hash_table_steal (self->textures, GUINT_TO_POINTER (texture_id));
 
+  width = texture->width;
+  height = texture->height;
+
+  texture->texture_id = 0;
+  gsk_ngl_texture_free (texture);
+
   return gdk_gl_texture_new (self->command_queue->context,
                              texture_id,
-                             texture->width,
-                             texture->height,
+                             width,
+                             height,
                              create_texture_from_texture_destroy,
                              state);
 }
