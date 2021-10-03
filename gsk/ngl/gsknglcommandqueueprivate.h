@@ -283,6 +283,7 @@ void                gsk_ngl_command_queue_execute              (GskNglCommandQue
 typedef enum {
   GSK_CONVERSION_LINEARIZE   = 1 << 0,
   GSK_CONVERSION_PREMULTIPLY = 1 << 1,
+  GSK_CONVERSION_FLIP        = 1 << 2,
 } GskConversion;
 
 int                 gsk_ngl_command_queue_upload_texture       (GskNglCommandQueue    *self,
