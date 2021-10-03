@@ -137,9 +137,6 @@ gsk_ngl_program_add_uniform (GskNglProgram *self,
  * @self: a `GskNglProgram`
  *
  * Deletes the GLSL program.
- *
- * You must call gsk_ngl_program_use() before and
- * gsk_ngl_program_unuse() after this function.
  */
 void
 gsk_ngl_program_delete (GskNglProgram *self)
