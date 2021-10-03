@@ -259,7 +259,7 @@ gdk_color_profile_get_srgb_linear (void)
 
 /**
  * gdk_color_profile_new_from_icc_bytes:
- * @icc_profile: The ICC profiles given as a `GBytes`
+ * @bytes: The ICC profiles given as a `GBytes`
  * @error: Return location for an error
  *
  * Creates a new color profile for the given ICC profile data.
@@ -343,7 +343,7 @@ gdk_color_profile_get_lcms_profile (GdkColorProfile *self)
 
 /**
  * gdk_color_profile_is_linear:
- * @profile: a `GdkColorProfile`
+ * @self: a `GdkColorProfile`
  *
  * Checks if the given profile is linear.
  *
