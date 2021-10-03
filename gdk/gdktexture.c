@@ -762,7 +762,7 @@ gdk_texture_get_height (GdkTexture *texture)
  *
  * Returns the color profile associsated with @texture.
  *
- * Returns: the color profile of the `GdkTexture`
+ * Returns: (transfer none): the color profile of the `GdkTexture`
  *
  * Since: 4.6
  */
