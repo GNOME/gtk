@@ -26,7 +26,6 @@
 #include <gtk/gtk.h>
 
 #include "demo_conf.h"
-#include "gtkloaderprivate.h"
 
 static void
 change_dark_state (GSimpleAction *action,
@@ -2055,7 +2054,6 @@ activate (GApplication *app)
   GtkEventController *controller;
 
   g_type_ensure (my_text_view_get_type ());
-  g_type_ensure (gtk_loader_get_type ());
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory4/widget-factory.css");

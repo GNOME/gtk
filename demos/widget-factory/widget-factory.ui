@@ -1260,11 +1260,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="child">
                                   <object class="GtkPicture">
-                                    <property name="paintable">
-                                      <object class="GtkLoader">
-                                        <property name="resource">/org/gtk/WidgetFactory4/sunset.jpg</property>
-                                      </object>
-                                    </property>
+                                    <property name="file">resource:///org/gtk/WidgetFactory4/sunset.jpg</property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
@@ -1290,11 +1286,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="child">
                                   <object class="GtkPicture">
-                                    <property name="paintable">
-                                      <object class="GtkLoader">
-                                        <property name="resource">/org/gtk/WidgetFactory4/nyc.jpg</property>
-                                      </object>
-                                    </property>
+                                    <property name="file">resource:///org/gtk/WidgetFactory4/nyc.jpg</property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
@@ -1320,11 +1312,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="child">
                                   <object class="GtkPicture">
-                                    <property name="paintable">
-                                      <object class="GtkLoader">
-                                        <property name="resource">/org/gtk/WidgetFactory4/beach.jpg</property>
-                                      </object>
-                                    </property>
+                                    <property name="file">resource:///org/gtk/WidgetFactory4/beach.jpg</property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
