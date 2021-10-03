@@ -56,6 +56,8 @@
 #include <errno.h>
 #include <unistd.h>
 
+#include <epoxy/egl.h>
+
 #include <X11/Xatom.h>
 #include <X11/Xlibint.h>
 
@@ -2885,13 +2887,73 @@ gdk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
   return continue_emission;
 }
 
+static XVisualInfo *
+gdk_x11_display_get_visual_info_for_visual (GdkX11Display  *self,
+                                            VisualID        visualid)
+{
+  XVisualInfo template, *visinfo;
+  int nvisuals;
+
+  template.screen = self->screen->screen_num;
+  template.visualid = visualid;
+
+  visinfo = XGetVisualInfo (gdk_x11_display_get_xdisplay (GDK_DISPLAY (self)),
+                            VisualScreenMask | VisualIDMask,
+                            &template,
+                            &nvisuals);
+  g_warn_if_fail (nvisuals == 1);
+  
+  return visinfo;
+}
+
+static gboolean
+visual_is_rgba (XVisualInfo *visinfo)
+{
+  return
+    visinfo->depth == 32 &&
+    visinfo->visual->red_mask   == 0xff0000 &&
+    visinfo->visual->green_mask == 0x00ff00 &&
+    visinfo->visual->blue_mask  == 0x0000ff;
+}
+
+static guint
+gdk_x11_display_rate_egl_config (GdkDisplay *display,
+                                 gpointer    egl_display,
+                                 gpointer    config)
+{
+  GdkX11Display *self = GDK_X11_DISPLAY (display);
+  XVisualInfo *visinfo;
+  guint distance;
+  int visualid;
+
+  if (!eglGetConfigAttrib (egl_display, config, EGL_NATIVE_VISUAL_ID, &visualid))
+    return G_MAXUINT;
+
+  visinfo = gdk_x11_display_get_visual_info_for_visual (self, visualid);
+  if (visinfo == NULL)
+    return G_MAXUINT;
+
+  distance = GDK_DISPLAY_CLASS (gdk_x11_display_parent_class)->rate_egl_config (display, egl_display, config);
+
+  if (!visual_is_rgba (visinfo))
+    distance += 0x100;
+
+  XFree (visinfo);
+
+  return distance;
+}
+
 static gboolean
 gdk_x11_display_init_gl_backend (GdkX11Display  *self,
                                  Visual        **out_visual,
                                  int            *out_depth,
                                  GError        **error)
 {
-  GdkDisplay *display G_GNUC_UNUSED = GDK_DISPLAY (self);
+  GdkDisplay *display = GDK_DISPLAY (self);
+  Display *dpy = gdk_x11_display_get_xdisplay (GDK_DISPLAY (self));
+  EGLDisplay egl_display;
+  XVisualInfo *visinfo;
+  int visualid;
 
   /* No env vars set, do the regular GL initialization.
    * 
@@ -2904,15 +2966,43 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
    * EGL, we want to avoid using it in favor of GLX.
    */
 
-  if (gdk_x11_display_init_egl (self, FALSE, out_visual, out_depth, error))
-    return TRUE;
-  g_clear_error (error);
+  if (!gdk_display_init_egl (display, EGL_PLATFORM_X11_KHR, dpy, FALSE, error))
+    {
+      g_clear_error (error);
 
-  if (gdk_x11_display_init_glx (self, out_visual, out_depth, error))
-    return TRUE;
-  g_clear_error (error);
+      if (gdk_x11_display_init_glx (self, out_visual, out_depth, error))
+        return TRUE;
+      
+      g_clear_error (error);
+      if (!gdk_display_init_egl (display, EGL_PLATFORM_X11_KHR, dpy, TRUE, error))
+        return FALSE;
+    }
 
-  return gdk_x11_display_init_egl (self, TRUE, out_visual, out_depth, error);
+  if (!eglGetConfigAttrib (gdk_display_get_egl_display (display),
+                           gdk_display_get_egl_config (display),
+                           EGL_NATIVE_VISUAL_ID,
+                           &visualid))
+    {
+      /* We guarantee this when rating configs */
+      g_assert_not_reached ();
+    }
+  visinfo = gdk_x11_display_get_visual_info_for_visual (self, visualid);
+  g_assert (visinfo);
+  *out_visual = visinfo->visual;
+  *out_depth = visinfo->depth;
+
+  egl_display = gdk_display_get_egl_display (display);
+
+  self->egl_version = epoxy_egl_version (egl_display);
+
+  self->has_egl_khr_create_context =
+    epoxy_has_egl_extension (egl_display, "EGL_KHR_create_context");
+  self->has_egl_buffer_age =
+    epoxy_has_egl_extension (egl_display, "EGL_EXT_buffer_age");
+  self->has_egl_swap_buffers_with_damage =
+    epoxy_has_egl_extension (egl_display, "EGL_EXT_swap_buffers_with_damage");
+
+  return TRUE;
 }
 
 static GdkGLContext *
@@ -2926,10 +3016,10 @@ gdk_x11_display_init_gl (GdkDisplay  *display,
 
   gdk_x11_display_init_leader_surface (self);
 
-  if (self->egl_display)
-    return g_object_new (GDK_TYPE_X11_GL_CONTEXT_EGL, "surface", self->leader_gdk_surface, NULL);
-  else if (self->glx_config != NULL)
+  if (self->glx_config != NULL)
     return g_object_new (GDK_TYPE_X11_GL_CONTEXT_GLX, "surface", self->leader_gdk_surface, NULL);
+  else if (gdk_display_get_egl_display (display))
+    return g_object_new (GDK_TYPE_X11_GL_CONTEXT_EGL, "surface", self->leader_gdk_surface, NULL);
   else
     g_return_val_if_reached (NULL);
 }
@@ -2965,6 +3055,7 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->get_keymap = gdk_x11_display_get_keymap;
 
   display_class->init_gl = gdk_x11_display_init_gl;
+  display_class->rate_egl_config = gdk_x11_display_rate_egl_config;
 
   display_class->get_default_seat = gdk_x11_display_get_default_seat;
 

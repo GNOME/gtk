@@ -136,9 +136,6 @@ struct _GdkX11Display
   int glx_version;
 
   /* EGL information */
-  /* We use gpointer here so we don't have to pull in EGL headers (which glx doesn't like) */
-  /* EGLDisplay */ gpointer egl_display;
-  /* EGLConfig */ gpointer egl_config;
   int egl_version;
 
   /* Translation between X server time and system-local monotonic time */
