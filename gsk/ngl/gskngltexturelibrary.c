@@ -172,24 +172,41 @@ gsk_ngl_texture_library_begin_frame (GskNglTextureLibrary *self,
 
       GSK_NOTE (GLYPH_CACHE,
                 if (dropped > 0)
-                  g_message ("%s: Dropped %d icons",
+                  g_message ("%s: Dropped %d items",
                              G_OBJECT_TYPE_NAME (self), dropped));
     }
 
   if (frame_id % MAX_FRAME_AGE == 0)
     {
       GskNglTextureAtlasEntry *entry;
+      int atlased = 0;
+      int dropped = 0;
 
       g_hash_table_iter_init (&iter, self->hash_table);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&entry))
         {
+          if (!entry->is_atlased && !entry->accessed)
+            {
+              gsk_ngl_driver_release_texture (self->driver, entry->texture);
+              g_hash_table_iter_remove (&iter);
+              dropped++;
+              continue;
+            }
+
           gsk_ngl_texture_atlas_entry_mark_unused (entry);
           entry->accessed = FALSE;
+          if (entry->is_atlased)
+            atlased++;
         }
 
-      GSK_NOTE (GLYPH_CACHE, g_message ("%s: %d atlas items cached",
+      GSK_NOTE (GLYPH_CACHE, g_message ("%s: Dropped %d individual items",
                                         G_OBJECT_TYPE_NAME (self),
-                                        g_hash_table_size (self->hash_table)));
+                                        dropped);
+                             g_message ("%s: %d items cached (%d atlased, %d individually)",
+                                        G_OBJECT_TYPE_NAME (self),
+                                        g_hash_table_size (self->hash_table),
+                                        atlased,
+                                        g_hash_table_size (self->hash_table) - atlased));
     }
 }
 
