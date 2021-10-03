@@ -928,11 +928,13 @@ init (void)
   if (!g_get_charset (&charset))
     {
       char *mime = g_strdup_printf ("text/plain;charset=%s", charset);
+
       gdk_content_register_deserializer (mime,
                                          G_TYPE_STRING,
                                          string_deserializer,
                                          (gpointer) charset,
                                          g_free);
+      g_free (mime);
     }
   gdk_content_register_deserializer ("text/plain",
                                      G_TYPE_STRING,
