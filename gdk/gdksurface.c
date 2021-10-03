@@ -46,8 +46,6 @@
 
 #include <math.h>
 
-#include <epoxy/gl.h>
-
 /**
  * GdkSurface:
  *
@@ -61,6 +59,13 @@
  * API to interact with these surfaces. Other, more specialized surface
  * types exist, but you will rarely interact with them directly.
  */
+
+typedef struct _GdkSurfacePrivate GdkSurfacePrivate;
+
+struct _GdkSurfacePrivate
+{
+  gpointer widget;
+};
 
 enum {
   LAYOUT,
@@ -109,7 +114,7 @@ static void gdk_surface_queue_set_is_mapped (GdkSurface *surface,
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
-G_DEFINE_ABSTRACT_TYPE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
 
 static gboolean
 gdk_surface_real_beep (GdkSurface *surface)
@@ -994,16 +999,20 @@ gdk_surface_destroy (GdkSurface *surface)
 }
 
 void
-gdk_surface_set_widget (GdkSurface *surface,
+gdk_surface_set_widget (GdkSurface *self,
                         gpointer    widget)
 {
-  surface->widget = widget;
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  priv->widget = widget;
 }
 
 gpointer
-gdk_surface_get_widget (GdkSurface *surface)
+gdk_surface_get_widget (GdkSurface *self)
 {
-  return surface->widget;
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  return priv->widget;
 }
 
 /**

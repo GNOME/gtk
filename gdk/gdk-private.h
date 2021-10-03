@@ -32,10 +32,6 @@ PangoDirection gdk_unichar_direction (gunichar    ch) G_GNUC_CONST;
 PangoDirection gdk_find_base_dir     (const char *text,
                                       int         len);
 
-void           gdk_surface_set_widget (GdkSurface *surface,
-                                       gpointer    widget);
-gpointer       gdk_surface_get_widget (GdkSurface *surface);
-
 typedef struct
 {
   const char *key;

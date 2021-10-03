@@ -21,10 +21,10 @@
 
 #include "gtknativeprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gdk/gdk-private.h"
-#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkcssnodeprivate.h"
+
+#include "gdk/gdksurfaceprivate.h"
 
 typedef struct _GtkNativePrivate
 {

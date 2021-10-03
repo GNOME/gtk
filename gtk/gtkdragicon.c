@@ -19,7 +19,6 @@
 
 #include "gtkdragicon.h"
 
-#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssstyleprivate.h"
@@ -28,6 +27,8 @@
 #include "gtkpicture.h"
 #include "gtkcssboxesimplprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+
+#include "gdk/gdksurfaceprivate.h"
 
 /* for the drag icons */
 #include "gtkcolorswatchprivate.h"
