@@ -2304,7 +2304,7 @@ gtk_combo_box_mnemonic_activate (GtkWidget *widget,
         gtk_widget_grab_focus (priv->child);
     }
   else
-    gtk_widget_grab_focus (priv->button);
+    gtk_widget_mnemonic_activate (priv->button, group_cycling);
 
   return TRUE;
 }
