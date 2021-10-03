@@ -204,6 +204,8 @@ gdk_memory_texture_new (int              width,
  * in the given format.
  *
  * Returns: A newly-created `GdkTexture`
+ *
+ * Since: 4.6
  */
 GdkTexture *
 gdk_memory_texture_new_with_color_profile (int              width,

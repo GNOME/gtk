@@ -140,7 +140,7 @@ GdkTexture *            gdk_memory_texture_new_with_color_profile
                                                             (int                width,
                                                              int                height,
                                                              GdkMemoryFormat    format,
-                                                             GdkColorProfile   *profile,
+                                                             GdkColorProfile   *color_profile,
                                                              GBytes            *bytes,
                                                              gsize              stride);
 
