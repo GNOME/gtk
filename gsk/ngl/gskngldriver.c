@@ -1335,6 +1335,7 @@ gsk_ngl_driver_create_gdk_texture (GskNglDriver *self,
 {
   GskNglTextureState *state;
   GskNglTexture *texture;
+  int width, height;
 
   g_return_val_if_fail (GSK_IS_NGL_DRIVER (self), NULL);
   g_return_val_if_fail (self->command_queue != NULL, NULL);
@@ -1352,10 +1353,16 @@ gsk_ngl_driver_create_gdk_texture (GskNglDriver *self,
 
   g_hash_table_steal (self->textures, GUINT_TO_POINTER (texture_id));
 
+  width = texture->width;
+  height = texture->height;
+
+  texture->texture_id = 0;
+  gsk_ngl_texture_free (texture);
+
   return gdk_gl_texture_new (self->command_queue->context,
                              texture_id,
-                             texture->width,
-                             texture->height,
+                             width,
+                             height,
                              create_texture_from_texture_destroy,
                              state);
 }
