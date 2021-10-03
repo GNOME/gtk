@@ -43,12 +43,6 @@
 #define ATLAS_SIZE 512
 #define MAX_OLD_RATIO 0.5
 
-typedef struct _GskNglTextureState
-{
-  GdkGLContext *context;
-  GLuint        texture_id;
-} GskNglTextureState;
-
 G_DEFINE_TYPE (GskNglDriver, gsk_ngl_driver, G_TYPE_OBJECT)
 
 static guint
@@ -1292,6 +1286,11 @@ gsk_ngl_driver_release_texture_by_id (GskNglDriver *self,
     gsk_ngl_driver_release_texture (self, texture);
 }
 
+typedef struct _GskNglTextureState
+{
+  GdkGLContext *context;
+  GLuint        texture_id;
+} GskNglTextureState;
 
 static void
 create_texture_from_texture_destroy (gpointer data)
