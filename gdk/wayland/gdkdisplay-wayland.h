@@ -151,10 +151,6 @@ struct _GdkWaylandDisplay
   gint64 last_bell_time_ms;
 
   /* egl info */
-  EGLDisplay egl_display;
-  EGLConfig egl_config;
-  int egl_major_version;
-  int egl_minor_version;
 
   guint have_egl_buffer_age : 1;
   guint have_egl_swap_buffers_with_damage : 1;

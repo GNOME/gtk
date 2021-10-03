@@ -2893,7 +2893,8 @@ unmap_popups_for_surface (GdkSurface *surface)
 static void
 gdk_wayland_surface_hide_surface (GdkSurface *surface)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   unmap_popups_for_surface (surface);
@@ -2902,7 +2903,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
     {
       if (impl->egl_surface)
         {
-          eglDestroySurface (display_wayland->egl_display, impl->egl_surface);
+          eglDestroySurface (gdk_display_get_egl_display (display), impl->egl_surface);
           impl->egl_surface = NULL;
         }
 
@@ -4351,7 +4352,7 @@ gdk_wayland_surface_get_wl_egl_window (GdkSurface *surface)
 EGLSurface
 gdk_wayland_surface_get_egl_surface (GdkSurface *surface)
 {
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandSurface *impl;
   struct wl_egl_window *egl_window;
 
@@ -4363,8 +4364,10 @@ gdk_wayland_surface_get_egl_surface (GdkSurface *surface)
     {
       egl_window = gdk_wayland_surface_get_wl_egl_window (surface);
 
-      impl->egl_surface =
-        eglCreateWindowSurface (display->egl_display, display->egl_config, egl_window, NULL);
+      impl->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
+                                                  gdk_display_get_egl_config (display),
+                                                  egl_window,
+                                                  NULL);
     }
 
   return impl->egl_surface;

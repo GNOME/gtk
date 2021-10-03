@@ -140,10 +140,15 @@ struct _GdkDisplayClass
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
-  GdkGLContext *         (*init_gl)                    (GdkDisplay        *display,
+  GdkGLContext *         (* init_gl)                   (GdkDisplay        *display,
                                                         GError           **error);
+  /* Returns the distance from a perfect score EGL config.
+   * GDK chooses the one with the *LOWEST* score */
+  guint                  (* rate_egl_config)           (GdkDisplay        *display,
+                                                        gpointer           egl_display,
+                                                        gpointer           egl_config);
 
-  GdkSeat *              (*get_default_seat)           (GdkDisplay     *display);
+  GdkSeat *              (*get_default_seat)           (GdkDisplay        *display);
 
   GListModel *           (*get_monitors)               (GdkDisplay     *self);
   GdkMonitor *           (*get_monitor_at_surface)     (GdkDisplay     *display,
@@ -207,6 +212,14 @@ GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display
                                                        int               height);
 
 GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
+
+gboolean            gdk_display_init_egl              (GdkDisplay       *display,
+                                                       int /*EGLenum*/   platform,
+                                                       gpointer          native_display,
+                                                       gboolean          allow_any,
+                                                       GError          **error);
+gpointer            gdk_display_get_egl_display       (GdkDisplay       *display);
+gpointer            gdk_display_get_egl_config        (GdkDisplay       *display);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
                                                        gboolean          rgba);

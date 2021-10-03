@@ -36,6 +36,9 @@
 #include "gdkglcontextprivate.h"
 #include "gdkmonitorprivate.h"
 
+#ifdef HAVE_EGL
+#include <epoxy/egl.h>
+#endif
 #include <math.h>
 
 /**
@@ -86,6 +89,11 @@ struct _GdkDisplayPrivate {
    */
   GdkGLContext *gl_context;
   GError *gl_error;
+
+#ifdef HAVE_EGL
+  EGLDisplay egl_display;
+  EGLConfig egl_config;
+#endif
 
   guint rgba : 1;
   guint composited : 1;
@@ -146,6 +154,26 @@ gdk_display_default_init_gl (GdkDisplay  *display,
   return NULL;
 }
 
+static guint
+gdk_display_default_rate_egl_config (GdkDisplay *display,
+                                     gpointer    egl_display,
+                                     gpointer    config)
+{
+  guint distance = 0;
+#ifdef HAVE_EGL
+  int tmp;
+
+  if (!eglGetConfigAttrib (egl_display, config, EGL_SAMPLE_BUFFERS, &tmp) || tmp != 0)
+    distance += 0x20000;
+
+  if (!eglGetConfigAttrib (egl_display, config, EGL_DEPTH_SIZE, &tmp) || tmp != 0 ||
+      !eglGetConfigAttrib (egl_display, config, EGL_STENCIL_SIZE, &tmp) || tmp != 0)
+    distance += 0x10000;
+#endif
+
+  return distance;
+}
+    
 static GdkSeat *
 gdk_display_real_get_default_seat (GdkDisplay *display)
 {
@@ -173,6 +201,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->make_default = gdk_display_real_make_default;
   class->get_app_launch_context = gdk_display_real_get_app_launch_context;
   class->init_gl = gdk_display_default_init_gl;
+  class->rate_egl_config = gdk_display_default_rate_egl_config;
   class->get_default_seat = gdk_display_real_get_default_seat;
   class->opened = gdk_display_real_opened;
 
@@ -352,6 +381,9 @@ gdk_display_dispose (GObject *object)
   g_queue_clear (&display->queued_events);
 
   g_clear_object (&priv->gl_context);
+#ifdef HAVE_EGL
+  g_clear_pointer (&priv->egl_display, eglTerminate);
+#endif
   g_clear_error (&priv->gl_error);
 
   G_OBJECT_CLASS (gdk_display_parent_class)->dispose (object);
@@ -1311,6 +1343,335 @@ gdk_display_get_gl_context (GdkDisplay *self)
 
   return priv->gl_context;
 }
+
+#ifdef HAVE_EGL
+#ifdef G_ENABLE_DEBUG
+static int
+strvcmp (gconstpointer p1,
+         gconstpointer p2)
+{
+  const char * const *s1 = p1;
+  const char * const *s2 = p2;
+
+  return strcmp (*s1, *s2);
+}
+
+static char *
+describe_extensions (EGLDisplay egl_display)
+{
+  const char *extensions;
+  char **exts;
+  char *ext;
+
+  extensions = eglQueryString (egl_display, EGL_EXTENSIONS);
+
+  exts = g_strsplit (extensions, " ", -1);
+  qsort (exts, g_strv_length (exts), sizeof (char *), strvcmp);
+
+  ext = g_strjoinv ("\n\t", exts);
+  if (ext[0] == '\n')
+    ext[0] = ' ';
+
+  g_strfreev (exts);
+
+  return g_strstrip (ext);
+}
+
+static char *
+describe_egl_config (EGLDisplay egl_display,
+                     EGLConfig  egl_config)
+{
+  EGLint red, green, blue, alpha, type;
+
+  if (egl_config == NULL)
+    return g_strdup ("-");
+
+  if (!eglGetConfigAttrib (egl_display, egl_config, EGL_RED_SIZE, &red) ||
+      !eglGetConfigAttrib (egl_display, egl_config, EGL_GREEN_SIZE, &green) ||
+      !eglGetConfigAttrib (egl_display, egl_config, EGL_BLUE_SIZE, &blue) ||
+      !eglGetConfigAttrib (egl_display, egl_config, EGL_ALPHA_SIZE, &alpha))
+    return g_strdup ("Unknown");
+
+  if (epoxy_has_egl_extension (egl_display, "EGL_EXT_pixel_format_float"))
+    {
+      if (!eglGetConfigAttrib (egl_display, egl_config, EGL_COLOR_COMPONENT_TYPE_EXT, &type))
+        type = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+    }
+  else
+    type = EGL_COLOR_COMPONENT_TYPE_FIXED_EXT;
+
+  return g_strdup_printf ("R%dG%dB%dA%d%s", red, green, blue, alpha, type == EGL_COLOR_COMPONENT_TYPE_FIXED_EXT ? "" : " float");
+}
+#endif
+
+/*<private>
+ * gdk_display_get_egl_display:
+ * @self: a display
+ *
+ * Retrieves the EGL display connection object for the given GDK display.
+ *
+ * This function returns `NULL` if GL is not supported or GDK is using
+ * a different OpenGL framework than EGL.
+ *
+ * Returns: (nullable): the EGL display object
+ */
+gpointer
+gdk_display_get_egl_display (GdkDisplay *self)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
+
+  if (!priv->egl_display &&
+      !gdk_display_prepare_gl (self, NULL))
+    return NULL;
+
+  return priv->egl_display;
+}
+
+gpointer
+gdk_display_get_egl_config (GdkDisplay *self)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  return priv->egl_config;
+}
+
+static EGLDisplay
+gdk_display_create_egl_display (EGLenum  platform,
+                                gpointer native_display)
+{
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+  EGLDisplay egl_display = NULL;
+
+  if (epoxy_has_egl_extension (NULL, "EGL_KHR_platform_base"))
+    {
+      PFNEGLGETPLATFORMDISPLAYPROC getPlatformDisplay =
+        (void *) eglGetProcAddress ("eglGetPlatformDisplay");
+
+      if (getPlatformDisplay != NULL)
+        egl_display = getPlatformDisplay (platform, native_display, NULL);
+      if (egl_display != NULL)
+        goto out;
+    }
+
+  if (epoxy_has_egl_extension (NULL, "EGL_EXT_platform_base"))
+    {
+      PFNEGLGETPLATFORMDISPLAYEXTPROC getPlatformDisplay =
+        (void *) eglGetProcAddress ("eglGetPlatformDisplayEXT");
+
+      if (getPlatformDisplay != NULL)
+        egl_display = getPlatformDisplay (platform, native_display, NULL);
+      if (egl_display != NULL)
+        goto out;
+    }
+
+  egl_display = eglGetDisplay ((EGLNativeDisplayType) native_display);
+
+out:
+  gdk_profiler_end_mark (start_time, "Create EGL display", NULL);
+
+  return egl_display;
+}
+
+#define MAX_EGL_ATTRS 30
+
+typedef enum {
+  GDK_EGL_CONFIG_PERFECT = (1 << 0)
+} GdkEGLConfigCreateFlags;
+
+static EGLConfig
+gdk_display_create_egl_config (GdkDisplay               *self,
+                               GdkEGLConfigCreateFlags   flags,
+                               GError                  **error)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+  EGLint attrs[MAX_EGL_ATTRS];
+  EGLConfig *configs;
+  EGLint count, alloced;
+  EGLConfig best_config;
+  guint best_score;
+
+  int i = 0;
+
+  attrs[i++] = EGL_SURFACE_TYPE;
+  attrs[i++] = EGL_WINDOW_BIT;
+
+  attrs[i++] = EGL_COLOR_BUFFER_TYPE;
+  attrs[i++] = EGL_RGB_BUFFER;
+
+  attrs[i++] = EGL_RED_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_GREEN_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_BLUE_SIZE;
+  attrs[i++] = 8;
+  attrs[i++] = EGL_ALPHA_SIZE;
+  attrs[i++] = 8;
+
+  attrs[i++] = EGL_NONE;
+  g_assert (i < MAX_EGL_ATTRS);
+
+  if (!eglChooseConfig (priv->egl_display, attrs, NULL, -1, &alloced) || alloced == 0)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No EGL configuration available"));
+      return NULL;
+    }
+
+  configs = g_new (EGLConfig, alloced);
+  if (!eglChooseConfig (priv->egl_display, attrs, configs, alloced, &count))
+    {
+      g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Failed to get EGL configurations"));
+      return NULL;
+    }
+  g_warn_if_fail (alloced == count);
+
+  best_score = G_MAXUINT;
+  best_config = NULL;
+
+  for (i = 0; i < count; i++)
+    {
+      guint score = GDK_DISPLAY_GET_CLASS (self)->rate_egl_config (self, priv->egl_display, configs[i]);
+
+      if (score < best_score)
+        {
+          best_score = score;
+          best_config = configs[i];
+        }
+
+      if (score == 0)
+        break;
+    }
+
+  g_free (configs);
+
+  gdk_profiler_end_mark (start_time, "Create EGL config", NULL);
+
+  if (best_score == G_MAXUINT)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No EGL configuration with required features found"));
+      return NULL;
+    }
+  else if ((flags & GDK_EGL_CONFIG_PERFECT) && best_score != 0)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No perfect EGL configuration found"));
+      return NULL;
+    }
+
+  return best_config;
+}
+
+#undef MAX_EGL_ATTRS
+
+
+gboolean
+gdk_display_init_egl (GdkDisplay  *self,
+                      int          platform,
+                      gpointer     native_display,
+                      gboolean     allow_any,
+                      GError     **error)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+  G_GNUC_UNUSED gint64 start_time2;
+  int major, minor;
+
+  if (!gdk_gl_backend_can_be_used (GDK_GL_EGL, error))
+    return FALSE;
+
+  if (!epoxy_has_egl ())
+    {
+      gboolean sandboxed = gdk_running_in_sandbox ();
+
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           sandboxed ? _("libEGL not available in this sandbox")
+                                     : _("libEGL not available"));
+      return FALSE;
+    }
+
+  priv->egl_display = gdk_display_create_egl_display (platform, native_display);
+
+  if (priv->egl_display == NULL)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Failed to create EGL display"));
+      return FALSE;
+    }
+
+  start_time2 = GDK_PROFILER_CURRENT_TIME;
+  if (!eglInitialize (priv->egl_display, &major, &minor))
+    {
+      priv->egl_display = NULL;
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Could not initialize EGL display"));
+      return FALSE;
+    }
+  gdk_profiler_end_mark (start_time2, "eglInitialize", NULL);
+
+  if (major < GDK_EGL_MIN_VERSION_MAJOR ||
+      (major == GDK_EGL_MIN_VERSION_MAJOR && minor < GDK_EGL_MIN_VERSION_MINOR))
+    {
+      g_clear_pointer (&priv->egl_display, eglTerminate);
+      g_set_error (error, GDK_GL_ERROR,
+                   GDK_GL_ERROR_NOT_AVAILABLE,
+                   _("EGL version %d.%d is too old. GTK requires %d.%d"),
+                   major, minor, GDK_EGL_MIN_VERSION_MAJOR, GDK_EGL_MIN_VERSION_MINOR);
+      return FALSE;
+    }
+
+  if (!epoxy_has_egl_extension (priv->egl_display, "EGL_KHR_surfaceless_context"))
+    {
+      g_clear_pointer (&priv->egl_display, eglTerminate);
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                           _("Surfaceless contexts are not supported on this EGL implementation"));
+      return FALSE;
+    }
+
+  priv->egl_config = gdk_display_create_egl_config (self,
+                                                    allow_any ? 0 : GDK_EGL_CONFIG_PERFECT,
+                                                    error);
+  if (priv->egl_config == NULL)
+    {
+      g_clear_pointer (&priv->egl_display, eglTerminate);
+      return FALSE;
+    }
+
+  GDK_DISPLAY_NOTE (self, OPENGL, {
+      char *ext = describe_extensions (priv->egl_display);
+      char *cfg = describe_egl_config (priv->egl_display, priv->egl_config);
+      g_message ("EGL API version %d.%d found\n"
+                 " - Vendor: %s\n"
+                 " - Version: %s\n"
+                 " - Client APIs: %s\n"
+                 " - Extensions:\n"
+                 "\t%s"
+                 " - Selected fbconfig: %s",
+                 major, minor,
+                 eglQueryString (priv->egl_display, EGL_VENDOR),
+                 eglQueryString (priv->egl_display, EGL_VERSION),
+                 eglQueryString (priv->egl_display, EGL_CLIENT_APIS),
+                 ext, cfg);
+      g_free (cfg);
+      g_free (ext);
+  });
+
+
+  gdk_profiler_end_mark (start_time, "init EGL", NULL);
+
+  return TRUE;
+}
+#endif
 
 GdkDebugFlags
 gdk_display_get_debug_flags (GdkDisplay *display)
