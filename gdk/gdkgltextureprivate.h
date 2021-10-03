@@ -9,6 +9,7 @@ G_BEGIN_DECLS
 
 GdkGLContext *          gdk_gl_texture_get_context      (GdkGLTexture           *self);
 guint                   gdk_gl_texture_get_id           (GdkGLTexture           *self);
+GdkGLTextureFlags       gdk_gl_texture_get_flags        (GdkGLTexture           *self);
 
 G_END_DECLS
 

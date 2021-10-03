@@ -49,6 +49,28 @@ GdkTexture *            gdk_gl_texture_new                     (GdkGLContext    
                                                                 GDestroyNotify   destroy,
                                                                 gpointer         data);
 
+/**
+ * GdkGLTextureFlags:
+ * @GDK_GL_TEXTURE_FLAGS_PREMULTIPLIED: The alpha in the data is not premultiplied
+ * @GDK_GL_TEXTURE_FLAGS_FLIPPED: The data has the origin at the bottom
+ *
+ * Flags that describe the content of a GL texture.
+ */
+typedef enum {
+  GDK_GL_TEXTURE_PREMULTIPLIED = 1 << 0,
+  GDK_GL_TEXTURE_FLIPPED       = 1 << 1,
+} GdkGLTextureFlags;
+
+GDK_AVAILABLE_IN_4_8
+GdkTexture *            gdk_gl_texture_new_with_color_profile  (GdkGLContext      *context,
+                                                                guint              id,
+                                                                int                width,
+                                                                int                height,
+                                                                GdkGLTextureFlags  flags,
+                                                                GdkColorProfile   *color_profile,
+                                                                GDestroyNotify     destroy,
+                                                                gpointer           data);
+
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_texture_release                 (GdkGLTexture    *self);
 

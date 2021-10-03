@@ -25,6 +25,7 @@
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdktextureprivate.h"
+#include "gdkcolorprofile.h"
 
 #include <epoxy/gl.h>
 
@@ -38,6 +39,7 @@ struct _GdkGLTexture {
   GdkTexture parent_instance;
 
   GdkGLContext *context;
+  GdkGLTextureFlags flags;
   guint id;
 
   GdkTexture *saved;
@@ -280,6 +282,12 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
   return self->id;
 }
 
+GdkGLTextureFlags
+gdk_gl_texture_get_flags (GdkGLTexture *self)
+{
+  return self->flags;
+}
+
 /**
  * gdk_gl_texture_release:
  * @self: a `GdkTexture` wrapping a GL texture
@@ -445,6 +453,45 @@ gdk_gl_texture_new (GdkGLContext   *context,
                     GDestroyNotify  destroy,
                     gpointer        data)
 {
+  return gdk_gl_texture_new_with_color_profile (context, id,
+                                                width, height,
+                                                GDK_GL_TEXTURE_PREMULTIPLIED,
+                                                gdk_color_profile_get_srgb (),
+                                                destroy, data);
+}
+
+/**
+ * gdk_gl_texture_new_with_color_profile:
+ * @context: a `GdkGLContext`
+ * @id: the ID of a texture that was created with @context
+ * @width: the nominal width of the texture
+ * @height: the nominal height of the texture
+ * @flags: flags that describe the content of the texture
+ * @color_profile: the `GdkColorProfile` for the content of the texture
+ * @destroy: a destroy notify that will be called when the GL resources
+ *   are released
+ * @data: data that gets passed to @destroy
+ *
+ * Creates a new texture for an existing GL texture with a given color profile.
+ *
+ * Note that the GL texture must not be modified until @destroy is called,
+ * which will happen when the GdkTexture object is finalized, or due to
+ * an explicit call of [method@Gdk.GLTexture.release].
+ *
+ * Return value: (transfer full): A newly-created `GdkTexture`
+ *
+ * Since: 4.8
+ */
+GdkTexture *
+gdk_gl_texture_new_with_color_profile (GdkGLContext      *context,
+                                       guint              id,
+                                       int                width,
+                                       int                height,
+                                       GdkGLTextureFlags  flags,
+                                       GdkColorProfile   *color_profile,
+                                       GDestroyNotify     destroy,
+                                       gpointer           data)
+{
   GdkGLTexture *self;
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
@@ -455,10 +502,12 @@ gdk_gl_texture_new (GdkGLContext   *context,
   self = g_object_new (GDK_TYPE_GL_TEXTURE,
                        "width", width,
                        "height", height,
+                       "color-profile", color_profile,
                        NULL);
 
   self->context = g_object_ref (context);
   self->id = id;
+  self->flags = flags;
   self->destroy = destroy;
   self->data = data;
 
