@@ -22,7 +22,7 @@
 #ifndef __NINE_SLICE_PRIVATE_H__
 #define __NINE_SLICE_PRIVATE_H__
 
-#include "gskngltexturepoolprivate.h"
+#include "gskngltextureprivate.h"
 
 #if 0
 # define DEBUG_NINE_SLICE

@@ -1,4 +1,4 @@
-/* gskngltexturepoolprivate.h
+/* gskngltextureprivate.h
  *
  * Copyright 2020 Christian Hergert <chergert@redhat.com>
  *
@@ -18,17 +18,12 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#ifndef _GSK_NGL_TEXTURE_POOL_PRIVATE_H__
-#define _GSK_NGL_TEXTURE_POOL_PRIVATE_H__
+#ifndef _GSK_NGL_TEXTURE_PRIVATE_H__
+#define _GSK_NGL_TEXTURE_PRIVATE_H__
 
 #include "gskngltypesprivate.h"
 
 G_BEGIN_DECLS
-
-typedef struct _GskNglTexturePool
-{
-  GQueue queue;
-} GskNglTexturePool;
 
 struct _GskNglTextureSlice
 {
@@ -77,15 +72,6 @@ struct _GskNglTexture
   guint              permanent : 1;
 };
 
-void                          gsk_ngl_texture_pool_init      (GskNglTexturePool    *self);
-void                          gsk_ngl_texture_pool_clear     (GskNglTexturePool    *self);
-GskNglTexture                *gsk_ngl_texture_pool_get       (GskNglTexturePool    *self,
-                                                              int                   width,
-                                                              int                   height,
-                                                              int                   min_filter,
-                                                              int                   mag_filter);
-void                          gsk_ngl_texture_pool_put       (GskNglTexturePool    *self,
-                                                              GskNglTexture        *texture);
 GskNglTexture                *gsk_ngl_texture_new            (guint                 texture_id,
                                                               int                   width,
                                                               int                   height,
@@ -100,4 +86,4 @@ void                          gsk_ngl_texture_free           (GskNglTexture     
 
 G_END_DECLS
 
-#endif /* _GSK_NGL_TEXTURE_POOL_PRIVATE_H__ */
+#endif /* _GSK_NGL_TEXTURE_PRIVATE_H__ */

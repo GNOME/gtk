@@ -1,4 +1,4 @@
-/* gskngltexturepool.c
+/* gskngltexture.c
  *
  * Copyright 2020 Christian Hergert <chergert@redhat.com>
  *
@@ -22,7 +22,7 @@
 
 #include <gdk/gdktextureprivate.h>
 
-#include "gskngltexturepoolprivate.h"
+#include "gskngltextureprivate.h"
 #include "ninesliceprivate.h"
 
 void
@@ -53,96 +53,6 @@ gsk_ngl_texture_free (GskNglTexture *texture)
 
       g_slice_free (GskNglTexture, texture);
     }
-}
-
-void
-gsk_ngl_texture_pool_init (GskNglTexturePool *self)
-{
-  g_queue_init (&self->queue);
-}
-
-void
-gsk_ngl_texture_pool_clear (GskNglTexturePool *self)
-{
-  guint *free_me = NULL;
-  guint *texture_ids;
-  guint i = 0;
-
-  if G_LIKELY (self->queue.length <= 1024)
-    texture_ids = g_newa (guint, self->queue.length);
-  else
-    texture_ids = free_me = g_new (guint, self->queue.length);
-
-  while (self->queue.length > 0)
-    {
-      GskNglTexture *head = g_queue_peek_head (&self->queue);
-
-      g_queue_unlink (&self->queue, &head->link);
-
-      texture_ids[i++] = head->texture_id;
-      head->texture_id = 0;
-
-      gsk_ngl_texture_free (head);
-    }
-
-  g_assert (self->queue.length == 0);
-
-  if (i > 0)
-    glDeleteTextures (i, texture_ids);
-
-  g_free (free_me);
-}
-
-void
-gsk_ngl_texture_pool_put (GskNglTexturePool *self,
-                          GskNglTexture     *texture)
-{
-  g_assert (self != NULL);
-  g_assert (texture != NULL);
-  g_assert (texture->user == NULL);
-  g_assert (texture->link.prev == NULL);
-  g_assert (texture->link.next == NULL);
-  g_assert (texture->link.data == texture);
-
-  if (texture->permanent)
-    gsk_ngl_texture_free (texture);
-  else
-    g_queue_push_tail_link (&self->queue, &texture->link);
-}
-
-GskNglTexture *
-gsk_ngl_texture_pool_get (GskNglTexturePool *self,
-                          int                width,
-                          int                height,
-                          int                min_filter,
-                          int                mag_filter)
-{
-  GskNglTexture *texture;
-
-  g_assert (self != NULL);
-
-  texture = g_slice_new0 (GskNglTexture);
-  texture->link.data = texture;
-  texture->min_filter = min_filter;
-  texture->mag_filter = mag_filter;
-
-  glGenTextures (1, &texture->texture_id);
-
-  glActiveTexture (GL_TEXTURE0);
-  glBindTexture (GL_TEXTURE_2D, texture->texture_id);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-  else
-    glTexImage2D (GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
-
-  glBindTexture (GL_TEXTURE_2D, 0);
-
-  return texture;
 }
 
 GskNglTexture *
