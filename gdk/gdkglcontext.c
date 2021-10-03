@@ -164,13 +164,8 @@ static void
 gdk_gl_context_dispose (GObject *gobject)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (gobject);
-  MaskedContext *current;
 
   gdk_gl_context_clear_old_updated_area (context);
-
-  current = g_private_get (&thread_current_context);
-  if (unmask_context (current) == context)
-    g_private_replace (&thread_current_context, NULL);
 
   G_OBJECT_CLASS (gdk_gl_context_parent_class)->dispose (gobject);
 }
