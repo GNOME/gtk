@@ -36,7 +36,7 @@ fedora-meson:
       - "_build/testsuite/reftests/output"
 
 debian-meson:
-  image: registry.gitlab.gnome.org/gnome/gtk/debian-gtk3:v1
+  image: registry.gitlab.gnome.org/gnome/gtk/debian-gtk3:v2
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "-Ddefault_library=both"
