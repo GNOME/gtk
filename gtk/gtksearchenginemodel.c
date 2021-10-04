@@ -81,6 +81,7 @@ do_search (gpointer data)
   GtkSearchEngineModel *model = data;
   GtkTreeIter iter;
   GList *hits = NULL;
+  gboolean got_results = FALSE;
 
   if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (model->model), &iter))
     {
@@ -107,10 +108,13 @@ do_search (gpointer data)
         {
           _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (model), hits);
           g_list_free_full (hits, (GDestroyNotify)_gtk_search_hit_free);
+          got_results = TRUE;
         }
     }
 
   model->idle = 0;
+
+  _gtk_search_engine_finished (GTK_SEARCH_ENGINE (model), got_results);
 
   return G_SOURCE_REMOVE;
 }
