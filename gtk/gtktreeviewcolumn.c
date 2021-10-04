@@ -46,16 +46,16 @@
 /**
  * GtkTreeViewColumn:
  *
- * A visible column in a GtkTreeView widget
+ * A visible column in a [class@Gtk.TreeView] widget
  *
- * The GtkTreeViewColumn object represents a visible column in a `GtkTreeView` widget.
+ * The `GtkTreeViewColumn` object represents a visible column in a `GtkTreeView` widget.
  * It allows to set properties of the column header, and functions as a holding pen
  * for the cell renderers which determine how the data in the column is displayed.
  *
- * Please refer to the [tree widget conceptual overview][TreeWidget]
+ * Please refer to the [tree widget conceptual overview](section-tree-widget.html)
  * for an overview of all the objects and data types related to the tree widget and
- * how they work together, and to the `GtkTreeView` documentation for specifics about
- * the CSS node structure for treeviews and their headers.
+ * how they work together, and to the [class@Gtk.TreeView] documentation for specifics
+ * about the CSS node structure for treeviews and their headers.
  */
 
 
