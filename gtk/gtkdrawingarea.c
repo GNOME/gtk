@@ -129,9 +129,10 @@ static guint signals[LAST_SIGNAL] = { 0, };
  * drawing area’s window using [method@Gtk.Widget.queue_draw].
  * This will cause the drawing area to call the draw function again.
  *
- * The available routines for drawing are documented on the
- * [GDK Drawing Primitives][gdk4-Cairo-Interaction] page
- * and the cairo documentation.
+ * The available routines for drawing are documented in the
+ * [Cairo documentation](https://www.cairographics.org/manual/); GDK
+ * offers additional API to integrate with Cairo, like [func@Gdk.cairo_set_source_rgba]
+ * or [func@Gdk.cairo_set_source_pixbuf].
  *
  * To receive mouse events on a drawing area, you will need to use
  * event controllers. To receive keyboard events, you will need to set

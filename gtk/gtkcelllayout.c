@@ -39,33 +39,34 @@
  * Implementations of GtkCellLayout which also implement the GtkBuildable
  * interface (`GtkCellView`, `GtkIconView`, `GtkComboBox`,
  * `GtkEntryCompletion`, `GtkTreeViewColumn`) accept `GtkCellRenderer` objects
- * as <child> elements in UI definitions. They support a custom <attributes>
- * element for their children, which can contain multiple <attribute>
- * elements. Each <attribute> element has a name attribute which specifies
+ * as `<child>` elements in UI definitions. They support a custom `<attributes>`
+ * element for their children, which can contain multiple `<attribute>`
+ * elements. Each `<attribute>` element has a name attribute which specifies
  * a property of the cell renderer; the content of the element is the
  * attribute value.
  *
  * This is an example of a UI definition fragment specifying attributes:
- * |[
+ *
+ * ```xml
  * <object class="GtkCellView">
  *   <child>
  *     <object class="GtkCellRendererText"/>
  *     <attributes>
  *       <attribute name="text">0</attribute>
  *     </attributes>
- *   </child>"
+ *   </child>
  * </object>
- * ]|
+ * ```
  *
- * Furthermore for implementations of GtkCellLayout that use a `GtkCellArea`
- * to lay out cells (all GtkCellLayouts in GTK use a GtkCellArea)
- * [cell properties][cell-properties] can also be defined in the format by
- * specifying the custom <cell-packing> attribute which can contain multiple
- * <property> elements defined in the normal way.
+ * Furthermore for implementations of `GtkCellLayout` that use a `GtkCellArea`
+ * to lay out cells (all `GtkCellLayout`s in GTK use a `GtkCellArea`)
+ * [cell properties](class.CellArea.html#cell-properties) can also be defined
+ * in the format by specifying the custom `<cell-packing>` attribute which can
+ * contain multiple `<property>` elements.
  *
  * Here is a UI definition fragment specifying cell properties:
  *
- * |[
+ * ```xml
  * <object class="GtkTreeViewColumn">
  *   <child>
  *     <object class="GtkCellRendererText"/>
@@ -73,9 +74,9 @@
  *       <property name="align">True</property>
  *       <property name="expand">False</property>
  *     </cell-packing>
- *   </child>"
+ *   </child>
  * </object>
- * ]|
+ * ```
  *
  * # Subclassing GtkCellLayout implementations
  *
@@ -85,25 +86,27 @@
  * The cell area is exposed as a construct-only property by these
  * widgets. This means that it is possible to e.g. do
  *
- * |[<!-- language="C" -->
- * combo = g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", my_cell_area, NULL);
- * ]|
+ * ```c
+ * GtkWIdget *combo =
+ *   g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", my_cell_area, NULL);
+ * ```
  *
  * to use a custom cell area with a combo box. But construct properties
- * are only initialized after instance init()
+ * are only initialized after instance `init()`
  * functions have run, which means that using functions which rely on
- * the existence of the cell area in your subclass’ init() function will
+ * the existence of the cell area in your subclass `init()` function will
  * cause the default cell area to be instantiated. In this case, a provided
  * construct property value will be ignored (with a warning, to alert
  * you to the problem).
  *
- * |[<!-- language="C" -->
+ * ```c
  * static void
  * my_combo_box_init (MyComboBox *b)
  * {
  *   GtkCellRenderer *cell;
  *
  *   cell = gtk_cell_renderer_pixbuf_new ();
+ *
  *   // The following call causes the default cell area for combo boxes,
  *   // a GtkCellAreaBox, to be instantiated
  *   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (b), cell, FALSE);
@@ -116,12 +119,12 @@
  *   // This call is going to cause a warning about area being ignored
  *   return g_object_new (MY_TYPE_COMBO_BOX, "cell-area", area, NULL);
  * }
- * ]|
+ * ```
  *
  * If supporting alternative cell areas with your derived widget is
  * not important, then this does not have to concern you. If you want
  * to support alternative cell areas, you can do so by moving the
- * problematic calls out of init() and into a constructor()
+ * problematic calls out of `init()` and into a `constructor()`
  * for your class.
  */
 

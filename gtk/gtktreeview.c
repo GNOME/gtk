@@ -1170,17 +1170,18 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * @column: (nullable): the `GtkTreeViewColumn` in which the activation occurred
    *
    * The "row-activated" signal is emitted when the method
-   * gtk_tree_view_row_activated() is called.
+   * [`method@Gtk.TreeView.row_activated`] is called.
    *
    * This signal is emitted when the user double-clicks a treeview row with the
    * [property@Gtk.TreeView:activate-on-single-click] property set to %FALSE,
    * or when the user single-clicks a row when that property set to %TRUE.
    *
    * This signal is also emitted when a non-editable row is selected and one
-   * of the keys: <kbd>Space</kbd>, <kbd>Shift</kbd>+<kbd>Space</kbd>, <kbd>Return</kbd> or <kbd>Enter</kbd> is pressed.
+   * of the keys: <kbd>Space</kbd>, <kbd>Shift</kbd>+<kbd>Space</kbd>,
+   * <kbd>Return</kbd> or <kbd>Enter</kbd> is pressed.
    *
    * For selection handling refer to the
-   * [tree widget conceptual overview][TreeWidget]
+   * [tree widget conceptual overview](section-tree-widget.html)
    * as well as `GtkTreeSelection`.
    */
   tree_view_signals[ROW_ACTIVATED] =
