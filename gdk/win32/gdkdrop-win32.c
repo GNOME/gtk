@@ -654,6 +654,8 @@ target_context_new (GdkSurface *window)
   return result;
 }
 
+#if 0
+
 /* From MS Knowledge Base article Q130698 */
 
 static gboolean
@@ -729,8 +731,6 @@ resolve_link (HWND     hWnd,
 
   return SUCCEEDED (hr);
 }
-
-#if 0
 
 /* Check for filenames like C:\Users\tml\AppData\Local\Temp\d5qtkvvs.bmp */
 static gboolean
