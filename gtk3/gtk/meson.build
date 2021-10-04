@@ -17,6 +17,7 @@ expand_content_files = [
   'text-widget-overview.md',
   'tree-widget-overview.md',
   'treeview-tutorial.md',
+  'visual_index.md',
   'wayland.md',
   'windows.md',
   'x11.md',
