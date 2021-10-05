@@ -396,14 +396,6 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
                              error))
     return NULL;
 
-  if (!eglBindAPI (EGL_OPENGL_API))
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("No GL implementation is available"));
-      return NULL;
-    }
-
   return g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
                        "display", display,
                        NULL);
