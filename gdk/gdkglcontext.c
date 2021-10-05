@@ -95,7 +95,6 @@ typedef struct {
   int gl_version;
 
   guint realized : 1;
-  guint use_texture_rectangle : 1;
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
   guint has_unpack_subimage : 1;
@@ -108,8 +107,6 @@ typedef struct {
   int use_es;
 
   int max_debug_label_length;
-
-  GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
 
 enum {
@@ -168,16 +165,6 @@ gdk_gl_context_dispose (GObject *gobject)
   gdk_gl_context_clear_old_updated_area (context);
 
   G_OBJECT_CLASS (gdk_gl_context_parent_class)->dispose (gobject);
-}
-
-static void
-gdk_gl_context_finalize (GObject *gobject)
-{
-  GdkGLContext *context = GDK_GL_CONTEXT (gobject);
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  g_clear_pointer (&priv->paint_data, g_free);
-  G_OBJECT_CLASS (gdk_gl_context_parent_class)->finalize (gobject);
 }
 
 static void
@@ -453,7 +440,6 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   gobject_class->set_property = gdk_gl_context_set_property;
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
-  gobject_class->finalize = gdk_gl_context_finalize;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_pspecs);
 }
@@ -479,29 +465,6 @@ gdk_gl_context_new_for_surface (GdkSurface *surface)
   return g_object_new (G_OBJECT_TYPE (shared),
                        "surface", surface,
                        NULL);
-}
-
-GdkGLContextPaintData *
-gdk_gl_context_get_paint_data (GdkGLContext *context)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  if (priv->paint_data == NULL)
-    {
-      priv->paint_data = g_new0 (GdkGLContextPaintData, 1);
-      priv->paint_data->is_legacy = priv->is_legacy;
-      priv->paint_data->use_es = priv->use_es;
-    }
-
-  return priv->paint_data;
-}
-
-gboolean
-gdk_gl_context_use_texture_rectangle (GdkGLContext *context)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  return priv->use_texture_rectangle;
 }
 
 void
@@ -1066,7 +1029,6 @@ static void
 gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  gboolean has_npot, has_texture_rectangle;
   gboolean gl_debug = FALSE;
 #ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
@@ -1105,17 +1067,11 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   if (priv->use_es)
     {
-      has_npot = priv->gl_version >= 20;
-      has_texture_rectangle = FALSE;
-
       priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
     }
   else
     {
-      has_npot = priv->gl_version >= 20 || epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
-      has_texture_rectangle = priv->gl_version >= 31 || epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
-
       priv->has_unpack_subimage = TRUE;
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
 
@@ -1129,33 +1085,19 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->use_khr_debug = TRUE;
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
     }
-  if (!priv->use_es && GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_TEXTURE_RECT))
-    priv->use_texture_rectangle = TRUE;
-  else if (has_npot)
-    priv->use_texture_rectangle = FALSE;
-  else if (has_texture_rectangle)
-    priv->use_texture_rectangle = TRUE;
-  else
-    g_warning ("GL implementation doesn't support any form of non-power-of-two textures");
 
   GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
     g_message ("%s version: %d.%d (%s)\n"
                        "* GLSL version: %s\n"
                        "* Extensions checked:\n"
-                       " - GL_ARB_texture_non_power_of_two: %s\n"
-                       " - GL_ARB_texture_rectangle: %s\n"
                        " - GL_KHR_debug: %s\n"
-                       " - GL_EXT_unpack_subimage: %s\n"
-                       "* Using texture rectangle: %s",
+                       " - GL_EXT_unpack_subimage: %s",
                        priv->use_es ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
                        priv->is_legacy ? "legacy" : "core",
                        glGetString (GL_SHADING_LANGUAGE_VERSION),
-                       has_npot ? "yes" : "no",
-                       has_texture_rectangle ? "yes" : "no",
                        priv->has_khr_debug ? "yes" : "no",
-                       priv->has_unpack_subimage ? "yes" : "no",
-                       priv->use_texture_rectangle ? "yes" : "no"));
+                       priv->has_unpack_subimage ? "yes" : "no"));
 
   priv->extensions_checked = TRUE;
 }

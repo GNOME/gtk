@@ -112,8 +112,6 @@ void                    gdk_gl_context_upload_texture           (GdkGLContext   
                                                                  int              stride,
                                                                  GdkMemoryFormat  data_format,
                                                                  guint            texture_target);
-GdkGLContextPaintData * gdk_gl_context_get_paint_data           (GdkGLContext    *context);
-gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
                                                                  const char      *message);
