@@ -77,7 +77,6 @@ gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   EGLSurface egl_surface;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_egl_parent_class)->end_frame (draw_context, painted);
@@ -87,7 +86,7 @@ gdk_x11_gl_context_egl_end_frame (GdkDrawContext *draw_context,
   egl_surface = gdk_surface_get_egl_surface (surface);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "x11", "swap buffers");
-  if (display_x11->has_egl_swap_buffers_with_damage)
+  if (display->have_egl_swap_buffers_with_damage)
     {
       int i, j, n_rects = cairo_region_num_rectangles (painted);
       int surface_height = gdk_surface_get_height (surface);
@@ -186,9 +185,8 @@ static cairo_region_t *
 gdk_x11_gl_context_egl_get_damage (GdkGLContext *context)
 {
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
-  if (display_x11->has_egl_buffer_age)
+  if (display->have_egl_buffer_age)
     {
       GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
       EGLSurface egl_surface;

@@ -92,6 +92,8 @@ struct _GdkDisplay
   guint double_click_time;  /* Maximum time between clicks in msecs */
   guint double_click_distance;   /* Maximum distance between clicks in pixels */
 
+  GList *seats;
+
 #ifdef GDK_RENDERING_VULKAN
   VkInstance vk_instance;
   VkDebugReportCallbackEXT vk_debug_callback;
@@ -103,7 +105,9 @@ struct _GdkDisplay
   guint vulkan_refcount;
 #endif /* GDK_RENDERING_VULKAN */
 
-  GList *seats;
+  /* egl info */
+  guint have_egl_buffer_age : 1;
+  guint have_egl_swap_buffers_with_damage : 1;
 };
 
 struct _GdkDisplayClass

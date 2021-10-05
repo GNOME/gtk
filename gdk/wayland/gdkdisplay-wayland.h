@@ -149,11 +149,6 @@ struct _GdkWaylandDisplay
   GListStore *monitors;
 
   gint64 last_bell_time_ms;
-
-  /* egl info */
-
-  guint have_egl_buffer_age : 1;
-  guint have_egl_swap_buffers_with_damage : 1;
 };
 
 struct _GdkWaylandDisplayClass

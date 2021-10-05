@@ -208,12 +208,11 @@ static cairo_region_t *
 gdk_wayland_gl_context_get_damage (GdkGLContext *context)
 {
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLSurface egl_surface;
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   int buffer_age = 0;
 
-  if (display_wayland->have_egl_buffer_age)
+  if (display->have_egl_buffer_age)
     {
       egl_surface = gdk_surface_get_egl_surface (surface);
       gdk_gl_context_make_current (context);
@@ -297,7 +296,6 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLSurface egl_surface;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted);
@@ -309,7 +307,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   gdk_wayland_surface_request_frame (surface);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "swap buffers");
-  if (display_wayland->have_egl_swap_buffers_with_damage)
+  if (display->have_egl_swap_buffers_with_damage)
     {
       EGLint stack_rects[4 * 4]; /* 4 rects */
       EGLint *heap_rects = NULL;
@@ -390,7 +388,6 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
                              GError     **error)
 {
   GdkWaylandDisplay *self = GDK_WAYLAND_DISPLAY (display);
-  EGLDisplay egl_display;
 
   if (!gdk_display_init_egl (display, 
                              EGL_PLATFORM_WAYLAND_EXT,
@@ -406,14 +403,6 @@ gdk_wayland_display_init_gl (GdkDisplay  *display,
                            _("No GL implementation is available"));
       return NULL;
     }
-
-  egl_display = gdk_display_get_egl_display (display);
-
-  self->have_egl_buffer_age =
-    epoxy_has_egl_extension (egl_display, "EGL_EXT_buffer_age");
-
-  self->have_egl_swap_buffers_with_damage =
-    epoxy_has_egl_extension (egl_display, "EGL_EXT_swap_buffers_with_damage");
 
   return g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
                        "display", display,

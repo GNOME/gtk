@@ -1694,6 +1694,11 @@ gdk_display_init_egl (GdkDisplay  *self,
       return FALSE;
     }
 
+  self->have_egl_buffer_age =
+    epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_buffer_age");
+  self->have_egl_swap_buffers_with_damage =
+    epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_swap_buffers_with_damage");
+
   GDK_DISPLAY_NOTE (self, OPENGL, {
       char *ext = describe_extensions (priv->egl_display);
       char *cfg = describe_egl_config (priv->egl_display, priv->egl_config);
@@ -1712,7 +1717,6 @@ gdk_display_init_egl (GdkDisplay  *self,
       g_free (cfg);
       g_free (ext);
   });
-
 
   gdk_profiler_end_mark (start_time, "init EGL", NULL);
 
