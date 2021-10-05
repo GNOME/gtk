@@ -33,8 +33,6 @@ G_BEGIN_DECLS
 struct _GdkWaylandGLContext
 {
   GdkGLContext parent_instance;
-
-  EGLContext egl_context;
 };
 
 struct _GdkWaylandGLContextClass
