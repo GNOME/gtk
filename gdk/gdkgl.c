@@ -355,10 +355,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   es_use_bgra = gdk_gl_context_use_es_bgra (paint_context);
 
   gdk_gl_context_make_current (paint_context);
-  paint_data = gdk_gl_context_get_paint_data (paint_context);
 
-  if (paint_data->tmp_framebuffer == 0)
-    glGenFramebuffers (1, &paint_data->tmp_framebuffer);
+  glGenFramebuffers (1, &framebuffer);
 
   if (source_type == GL_RENDERBUFFER)
     {
@@ -397,7 +395,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   cairo_surface_set_device_scale (image, buffer_scale, buffer_scale);
 
-  framebuffer = paint_data->tmp_framebuffer;
   glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);
 
   if (source_type == GL_RENDERBUFFER)
@@ -427,6 +424,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   glPixelStorei (GL_PACK_ROW_LENGTH, 0);
 
   glBindFramebuffer (GL_FRAMEBUFFER, 0);
+
+  glDeleteFramebuffers (1, &framebuffer);
 
   cairo_surface_mark_dirty (image);
 
