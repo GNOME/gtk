@@ -245,6 +245,7 @@ gsk_ngl_renderer_render_texture (GskRenderer           *renderer,
 
   if (gsk_ngl_driver_create_render_target (self->driver,
                                            width, height,
+                                           GL_RGBA8,
                                            GL_NEAREST, GL_NEAREST,
                                            &render_target))
     {

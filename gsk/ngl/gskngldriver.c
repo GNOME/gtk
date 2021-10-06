@@ -183,6 +183,7 @@ gsk_ngl_driver_create_atlas (GskNglDriver *self)
   atlas->texture_id = gsk_ngl_command_queue_create_texture (self->command_queue,
                                                             atlas->width,
                                                             atlas->height,
+                                                            GL_RGBA8,
                                                             GL_LINEAR,
                                                             GL_LINEAR);
 
@@ -750,12 +751,15 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
   guint texture_id;
   int height;
   int width;
+  int format;
 
   g_return_val_if_fail (GSK_IS_NGL_DRIVER (self), 0);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), 0);
   g_return_val_if_fail (GSK_IS_NGL_COMMAND_QUEUE (self->command_queue), 0);
 
   context = self->command_queue->context;
+
+  format = GL_RGBA8;
 
   if (GDK_IS_GL_TEXTURE (texture))
     {
@@ -799,7 +803,7 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
                                                      mag_filter);
 
   t = gsk_ngl_texture_new (texture_id,
-                           width, height, min_filter, mag_filter,
+                           width, height, format, min_filter, mag_filter,
                            self->current_frame_id);
 
   g_hash_table_insert (self->textures, GUINT_TO_POINTER (texture_id), t);
@@ -820,12 +824,15 @@ gsk_ngl_driver_load_texture (GskNglDriver *self,
  * @self: a `GskNglDriver`
  * @width: the width of the texture
  * @height: the height of the texture
+ * @format: format for the texture
  * @min_filter: GL_NEAREST or GL_LINEAR
  * @mag_filter: GL_NEAREST or GL_FILTER
  *
  * Creates a new texture immediately that can be used by the caller
  * to upload data, map to a framebuffer, or other uses which may
  * modify the texture immediately.
+ *
+ * Typical examples for @format are GK_RGBA8, GL_RGBA16F or GL_RGBA32F.
  *
  * Use gsk_ngl_driver_release_texture() to release this texture back into
  * the pool so it may be reused later in the pipeline.
@@ -837,6 +844,7 @@ GskNglTexture *
 gsk_ngl_driver_create_texture (GskNglDriver *self,
                                float         width,
                                float         height,
+                               int           format,
                                int           min_filter,
                                int           mag_filter)
 {
@@ -847,9 +855,11 @@ gsk_ngl_driver_create_texture (GskNglDriver *self,
 
   texture_id = gsk_ngl_command_queue_create_texture (self->command_queue,
                                                      width, height,
+                                                     format,
                                                      min_filter, mag_filter);
   texture = gsk_ngl_texture_new (texture_id,
                                  width, height,
+                                 format,
                                  min_filter, mag_filter,
                                  self->current_frame_id);
   g_hash_table_insert (self->textures,
@@ -896,6 +906,7 @@ gsk_ngl_driver_release_texture (GskNglDriver  *self,
  * @self: a `GskNglDriver`
  * @width: the width for the render target
  * @height: the height for the render target
+ * @format: the format to use
  * @min_filter: the min filter to use for the texture
  * @mag_filter: the mag filter to use for the texture
  * @out_render_target: (out): a location for the render target
@@ -903,6 +914,8 @@ gsk_ngl_driver_release_texture (GskNglDriver  *self,
  * Creates a new render target which contains a framebuffer and a texture
  * bound to that framebuffer of the size @width x @height and using the
  * appropriate filters.
+ *
+ * Typical examples for @format are GK_RGBA8, GL_RGBA16F or GL_RGBA32F.
  *
  * Use gsk_ngl_driver_release_render_target() when you are finished with
  * the render target to release it. You may steal the texture from the
@@ -915,6 +928,7 @@ gboolean
 gsk_ngl_driver_create_render_target (GskNglDriver        *self,
                                      int                  width,
                                      int                  height,
+                                     int                  format,
                                      int                  min_filter,
                                      int                  mag_filter,
                                      GskNglRenderTarget **out_render_target)
@@ -947,6 +961,7 @@ gsk_ngl_driver_create_render_target (GskNglDriver        *self,
 
   if (gsk_ngl_command_queue_create_render_target (self->command_queue,
                                                   width, height,
+                                                  format,
                                                   min_filter, mag_filter,
                                                   &framebuffer_id, &texture_id))
     {
@@ -955,6 +970,7 @@ gsk_ngl_driver_create_render_target (GskNglDriver        *self,
       render_target = g_slice_new0 (GskNglRenderTarget);
       render_target->min_filter = min_filter;
       render_target->mag_filter = mag_filter;
+      render_target->format = format;
       render_target->width = width;
       render_target->height = height;
       render_target->framebuffer_id = framebuffer_id;
@@ -1014,6 +1030,7 @@ gsk_ngl_driver_release_render_target (GskNglDriver       *self,
       texture = gsk_ngl_texture_new (render_target->texture_id,
                                      render_target->width,
                                      render_target->height,
+                                     render_target->format,
                                      render_target->min_filter,
                                      render_target->mag_filter,
                                      self->current_frame_id);
@@ -1266,6 +1283,7 @@ gsk_ngl_driver_add_texture_slices (GskNglDriver        *self,
   /* Allocate one Texture for the entire thing. */
   t = gsk_ngl_texture_new (0,
                            tex_width, tex_height,
+                           GL_RGBA8,
                            GL_NEAREST, GL_NEAREST,
                            self->current_frame_id);
 

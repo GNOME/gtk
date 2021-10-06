@@ -88,6 +88,7 @@ struct _GskNglRenderTarget
   guint texture_id;
   int min_filter;
   int mag_filter;
+  int format;
   int width;
   int height;
 };
@@ -144,6 +145,7 @@ GdkGLContext       *gsk_ngl_driver_get_context            (GskNglDriver         
 gboolean            gsk_ngl_driver_create_render_target   (GskNglDriver         *self,
                                                            int                   width,
                                                            int                   height,
+                                                           int                   format,
                                                            int                   min_filter,
                                                            int                   mag_filter,
                                                            GskNglRenderTarget  **render_target);
@@ -166,6 +168,7 @@ guint               gsk_ngl_driver_load_texture           (GskNglDriver         
 GskNglTexture      *gsk_ngl_driver_create_texture         (GskNglDriver         *self,
                                                            float                 width,
                                                            float                 height,
+                                                           int                   format,
                                                            int                   min_filter,
                                                            int                   mag_filter);
 void                gsk_ngl_driver_release_texture        (GskNglDriver         *self,
