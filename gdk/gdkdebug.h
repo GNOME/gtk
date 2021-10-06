@@ -50,6 +50,7 @@ typedef enum {
   GDK_DEBUG_VULKAN_DISABLE  = 1 << 21,
   GDK_DEBUG_VULKAN_VALIDATE = 1 << 22,
   GDK_DEBUG_DEFAULT_SETTINGS= 1 << 23,
+  GDK_DEBUG_HDR             = 1 << 24,
 } GdkDebugFlags;
 
 extern guint _gdk_debug_flags;

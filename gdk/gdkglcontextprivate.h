@@ -112,8 +112,6 @@ void                    gdk_gl_context_upload_texture           (GdkGLContext   
                                                                  int              stride,
                                                                  GdkMemoryFormat  data_format,
                                                                  guint            texture_target);
-GdkGLContextPaintData * gdk_gl_context_get_paint_data           (GdkGLContext    *context);
-gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
                                                                  const char      *message);
@@ -134,18 +132,6 @@ void                    gdk_gl_context_label_object_printf      (GdkGLContext   
 gboolean                gdk_gl_context_has_debug                (GdkGLContext    *self) G_GNUC_PURE;
 
 gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);
-
-typedef struct {
-  float x1, y1, x2, y2;
-  float u1, v1, u2, v2;
-} GdkTexturedQuad;
-
-void                    gdk_gl_texture_quads                    (GdkGLContext    *context,
-                                                                 guint            texture_target,
-                                                                 int              n_quads,
-                                                                 GdkTexturedQuad *quads,
-                                                                 gboolean         flip_colors);
-
 
 G_END_DECLS
 

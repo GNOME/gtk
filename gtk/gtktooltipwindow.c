@@ -26,19 +26,19 @@
 
 #include "gtktooltipwindowprivate.h"
 
-#include "gtkprivate.h"
-#include "gtkintl.h"
-
 #include "gtkbox.h"
 #include "gtkimage.h"
+#include "gtkintl.h"
 #include "gtklabel.h"
-#include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtksizerequest.h"
 #include "gtkwindowprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtknativeprivate.h"
 #include "gtkcssboxesimplprivate.h"
+
+#include "gdk/gdksurfaceprivate.h"
 
 struct _GtkTooltipWindow
 {

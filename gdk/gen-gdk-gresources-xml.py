@@ -31,9 +31,6 @@ xml = '''<?xml version='1.0' encoding='UTF-8'?>
 def get_files(subdir,extension):
   return sorted(filter(lambda x: x.endswith((extension)), os.listdir(os.path.join(srcdir,subdir))))
 
-for f in get_files('resources/glsl', '.glsl'):
-  xml += '    <file alias=\'glsl/{0}\'>resources/glsl/{0}</file>\n'.format(f)
-
 xml += '''
   </gresource>
 </gresources>'''

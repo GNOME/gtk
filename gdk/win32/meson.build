@@ -48,7 +48,7 @@ install_headers(gdk_win32_public_headers, 'gdkwin32.h', subdir: 'gtk-4.0/gdk/win
 
 GDK_WIN32_EGL_CFLAGS = []
 
-if win32_has_egl
+if have_egl
   GDK_WIN32_EGL_CFLAGS = ['-DGDK_WIN32_ENABLE_EGL']
   gdk_win32_sources += ['gdkglcontext-win32-egl.c']
 endif

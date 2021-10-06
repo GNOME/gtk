@@ -136,9 +136,6 @@ struct _GdkX11Display
   int glx_version;
 
   /* EGL information */
-  /* We use gpointer here so we don't have to pull in EGL headers (which glx doesn't like) */
-  /* EGLDisplay */ gpointer egl_display;
-  /* EGLConfig */ gpointer egl_config;
   int egl_version;
 
   /* Translation between X server time and system-local monotonic time */
@@ -158,11 +155,6 @@ struct _GdkX11Display
   guint has_glx_visual_rating : 1;
   guint has_glx_create_es2_context : 1;
   guint has_async_glx_swap_buffers : 1;
-
-  /* EGL extensions we check */
-  guint has_egl_khr_create_context : 1;
-  guint has_egl_buffer_age : 1;
-  guint has_egl_swap_buffers_with_damage : 1;
 };
 
 struct _GdkX11DisplayClass

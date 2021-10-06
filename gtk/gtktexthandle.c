@@ -17,21 +17,22 @@
 
 #include "config.h"
 
-#include "gtkbinlayout.h"
-#include "gtkgizmoprivate.h"
-#include "gtkprivatetypebuiltins.h"
 #include "gtktexthandleprivate.h"
-#include "gtkmarshalers.h"
-#include "gtkprivate.h"
-#include "gtkwindowprivate.h"
-#include "gtkwidgetprivate.h"
-#include "gtkrendericonprivate.h"
+
+#include "gtkbinlayout.h"
 #include "gtkcssboxesimplprivate.h"
 #include "gtkcssnodeprivate.h"
-#include "gtknativeprivate.h"
+#include "gtkgesturedrag.h"
+#include "gtkgizmoprivate.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
+#include "gtknativeprivate.h"
+#include "gtkprivatetypebuiltins.h"
+#include "gtkrendericonprivate.h"
+#include "gtkwidgetprivate.h"
+#include "gtkwindowprivate.h"
 
-#include <gtk/gtk.h>
+#include "gdk/gdksurfaceprivate.h"
 
 enum {
   DRAG_STARTED,

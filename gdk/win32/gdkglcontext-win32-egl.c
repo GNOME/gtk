@@ -471,16 +471,12 @@ gdk_win32_gl_context_egl_make_current (GdkGLContext *context,
 
 static void
 gdk_win32_gl_context_egl_begin_frame (GdkDrawContext *draw_context,
+                                      gboolean        request_hdr,
                                       cairo_region_t *update_area)
 {
-  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkSurface *surface;
-
-  surface = gdk_gl_context_get_surface (context);
-
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, update_area);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, request_hdr, update_area);
 }
 
 static void

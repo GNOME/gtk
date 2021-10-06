@@ -80,6 +80,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkintl.h"
 #include "gdkmemorytextureprivate.h"
+#include "gdkprofilerprivate.h"
 
 #include "gdk-private.h"
 
@@ -88,6 +89,9 @@
 #endif
 
 #include <epoxy/gl.h>
+#ifdef HAVE_EGL
+#include <epoxy/egl.h>
+#endif
 
 typedef struct {
   int major;
@@ -95,7 +99,6 @@ typedef struct {
   int gl_version;
 
   guint realized : 1;
-  guint use_texture_rectangle : 1;
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
   guint has_unpack_subimage : 1;
@@ -109,7 +112,9 @@ typedef struct {
 
   int max_debug_label_length;
 
-  GdkGLContextPaintData *paint_data;
+#ifdef HAVE_EGL
+  EGLContext egl_context;
+#endif
 } GdkGLContextPrivate;
 
 enum {
@@ -164,25 +169,28 @@ static void
 gdk_gl_context_dispose (GObject *gobject)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (gobject);
-  MaskedContext *current;
+#ifdef HAVE_EGL
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->egl_context != NULL)
+    {
+      GdkSurface *surface = gdk_gl_context_get_surface (context);
+      GdkDisplay *display = gdk_surface_get_display (surface);
+      EGLDisplay *egl_display = gdk_display_get_egl_display (display);
+
+      if (eglGetCurrentContext () == priv->egl_context)
+        eglMakeCurrent(egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+
+      GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Destroying EGL context"));
+
+      eglDestroyContext (egl_display, priv->egl_context);
+      priv->egl_context = NULL;
+    }
+#endif
 
   gdk_gl_context_clear_old_updated_area (context);
 
-  current = g_private_get (&thread_current_context);
-  if (unmask_context (current) == context)
-    g_private_replace (&thread_current_context, NULL);
-
   G_OBJECT_CLASS (gdk_gl_context_parent_class)->dispose (gobject);
-}
-
-static void
-gdk_gl_context_finalize (GObject *gobject)
-{
-  GdkGLContext *context = GDK_GL_CONTEXT (gobject);
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  g_clear_pointer (&priv->paint_data, g_free);
-  G_OBJECT_CLASS (gdk_gl_context_parent_class)->finalize (gobject);
 }
 
 static void
@@ -338,20 +346,222 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
   g_free (copy);
 }
 
+#define N_EGL_ATTRS     16
+
 static gboolean
-gdk_gl_context_real_realize (GdkGLContext  *self,
+gdk_gl_context_real_realize (GdkGLContext  *context,
                              GError       **error)
 {
-  g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                       "The current backend does not support OpenGL");
+#if HAVE_EGL
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  EGLDisplay egl_display = gdk_display_get_egl_display (display);
 
+  if (egl_display)
+    {
+      EGLConfig egl_config;
+      GdkGLContext *share = gdk_display_get_gl_context (display);
+      GdkGLContextPrivate *share_priv = gdk_gl_context_get_instance_private (share);
+      EGLContext ctx;
+      EGLint context_attribs[N_EGL_ATTRS];
+      int major, minor, flags;
+      gboolean debug_bit, forward_bit, legacy_bit, use_es;
+      int i = 0;
+      G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+
+      gdk_gl_context_get_required_version (context, &major, &minor);
+      debug_bit = gdk_gl_context_get_debug_enabled (context);
+      forward_bit = gdk_gl_context_get_forward_compatible (context);
+      legacy_bit = GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY) ||
+                   (share != NULL && gdk_gl_context_is_legacy (share));
+      use_es = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES) ||
+               (share != NULL && gdk_gl_context_get_use_es (share));
+
+      if (display->have_egl_no_config_context)
+        egl_config = NULL;
+      else
+        egl_config = gdk_display_get_egl_config (display);
+
+      flags = 0;
+
+      if (debug_bit)
+        flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
+      if (forward_bit)
+        flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+
+      if (!use_es && eglBindAPI (EGL_OPENGL_API))
+        {
+          /* We want a core profile, unless in legacy mode */
+          context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+          context_attribs[i++] = legacy_bit
+                               ? EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR
+                               : EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
+
+          /* Specify the version */
+          context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
+          context_attribs[i++] = legacy_bit ? 3 : major;
+          context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
+          context_attribs[i++] = legacy_bit ? 0 : minor;
+        }
+      else if (eglBindAPI (EGL_OPENGL_ES_API))
+        {
+          context_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
+          if (major == 3)
+            context_attribs[i++] = 3;
+          else
+            context_attribs[i++] = 2;
+        }
+      else
+        {
+          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("The EGL implementation supports neither OpenGL nor GLES"));
+          return FALSE;
+        }
+
+      /* Specify the flags */
+      context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
+      context_attribs[i++] = flags;
+
+      context_attribs[i++] = EGL_NONE;
+      g_assert (i < N_EGL_ATTRS);
+
+      GDK_DISPLAY_NOTE (display, OPENGL,
+                g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
+                                   major, minor,
+                                   debug_bit ? "yes" : "no",
+                                   forward_bit ? "yes" : "no",
+                                   legacy_bit ? "yes" : "no",
+                                   use_es ? "yes" : "no"));
+
+      ctx = eglCreateContext (egl_display,
+                              egl_config,
+                              share != NULL ? share_priv->egl_context
+                                            : EGL_NO_CONTEXT,
+                              context_attribs);
+
+      /* If context creation failed without the ES bit, let's try again with it */
+      if (ctx == NULL && eglBindAPI (EGL_OPENGL_ES_API))
+        {
+          i = 0;
+          context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
+          context_attribs[i++] = 2;
+          context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
+          context_attribs[i++] = 0;
+          context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
+          context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+          context_attribs[i++] = EGL_NONE;
+          g_assert (i < N_EGL_ATTRS);
+
+          legacy_bit = FALSE;
+          use_es = TRUE;
+
+          GDK_DISPLAY_NOTE (display, OPENGL,
+                    g_message ("eglCreateContext failed, switching to OpenGL ES"));
+          ctx = eglCreateContext (egl_display,
+                                  egl_config,
+                                  share != NULL ? share_priv->egl_context
+                                                : EGL_NO_CONTEXT,
+                                  context_attribs);
+        }
+
+      /* If context creation failed without the legacy bit, let's try again with it */
+      if (ctx == NULL && eglBindAPI (EGL_OPENGL_API))
+        {
+          i = 0;
+          context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+          context_attribs[i++] = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR;
+          context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
+          context_attribs[i++] = 3;
+          context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
+          context_attribs[i++] = 0;
+          context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
+          context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+          context_attribs[i++] = EGL_NONE;
+          g_assert (i < N_EGL_ATTRS);
+
+          legacy_bit = TRUE;
+          use_es = FALSE;
+
+          GDK_DISPLAY_NOTE (display, OPENGL,
+                    g_message ("eglCreateContext failed, switching to legacy"));
+          ctx = eglCreateContext (egl_display,
+                                  egl_config,
+                                  share != NULL ? share_priv->egl_context
+                                                : EGL_NO_CONTEXT,
+                                  context_attribs);
+        }
+
+      if (ctx == NULL)
+        {
+          g_set_error_literal (error, GDK_GL_ERROR,
+                               GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("Unable to create a GL context"));
+          return FALSE;
+        }
+
+      GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Created EGL context[%p]", ctx));
+
+      priv->egl_context = ctx;
+
+      gdk_gl_context_set_is_legacy (context, legacy_bit);
+      gdk_gl_context_set_use_es (context, use_es);
+
+      gdk_profiler_end_mark (start_time, "realize GdkWaylandGLContext", NULL);
+
+      return TRUE;
+    }
+#endif
+
+  g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                       _("The current backend does not support OpenGL"));
   return FALSE;
 }
+
+#undef N_EGL_ATTRS
 
 static cairo_region_t *
 gdk_gl_context_real_get_damage (GdkGLContext *context)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
+#ifdef HAVE_EGL
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+
+  if (priv->egl_context && display->have_egl_buffer_age)
+    {
+      EGLSurface egl_surface;
+      int buffer_age = 0;
+      egl_surface = gdk_surface_get_egl_surface (surface);
+      gdk_gl_context_make_current (context);
+      eglQuerySurface (gdk_display_get_egl_display (display), egl_surface,
+                       EGL_BUFFER_AGE_EXT, &buffer_age);
+
+      switch (buffer_age)
+        {
+          case 1:
+            return cairo_region_create ();
+            break;
+
+          case 2:
+            if (context->old_updated_area[0])
+              return cairo_region_copy (context->old_updated_area[0]);
+            break;
+
+          case 3:
+            if (context->old_updated_area[0] &&
+                context->old_updated_area[1])
+              {
+                cairo_region_t *damage = cairo_region_copy (context->old_updated_area[0]);
+                cairo_region_union (damage, context->old_updated_area[1]);
+                return damage;
+              }
+            break;
+
+          default:
+            ;
+        }
+    }
+#endif
 
   return cairo_region_create_rectangle (&(GdkRectangle) {
                                             0, 0,
@@ -372,14 +582,68 @@ gdk_gl_context_real_is_shared (GdkGLContext *self,
   return TRUE;
 }
 
+static gboolean
+gdk_gl_context_real_clear_current (GdkGLContext *context)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+#ifdef HAVE_EGL
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->egl_context == NULL)
+    return FALSE;
+
+  return eglMakeCurrent (gdk_display_get_egl_display (display),
+                         EGL_NO_SURFACE,
+                         EGL_NO_SURFACE,
+                         EGL_NO_CONTEXT);
+#else
+  return FALSE;
+#endif
+}
+
+static gboolean
+gdk_gl_context_real_make_current (GdkGLContext *context,
+                                  gboolean      surfaceless)
+{
+#ifdef HAVE_EGL
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  EGLSurface egl_surface;
+
+  if (priv->egl_context == NULL)
+    return FALSE;
+
+  if (!surfaceless)
+    egl_surface = gdk_surface_get_egl_surface (gdk_gl_context_get_surface (context));
+  else
+    egl_surface = EGL_NO_SURFACE;
+
+  return eglMakeCurrent (gdk_display_get_egl_display (display),
+                         egl_surface,
+                         egl_surface,
+                         priv->egl_context);
+#else
+  return FALSE;
+#endif
+}
+
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
+                                 gboolean        request_hdr,
                                  cairo_region_t *region)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
+  G_GNUC_UNUSED GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkSurface *surface;
   cairo_region_t *damage;
   int ww, wh;
+
+  surface = gdk_draw_context_get_surface (draw_context);
+
+#ifdef HAVE_EGL
+  if (priv->egl_context)
+    gdk_surface_ensure_egl_surface (surface, request_hdr);
+#endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
 
@@ -391,7 +655,6 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
-  surface = gdk_draw_context_get_surface (draw_context);
   ww = gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface);
   wh = gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface);
 
@@ -410,6 +673,52 @@ static void
 gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
                                cairo_region_t *painted)
 {
+#ifdef HAVE_EGL
+  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  EGLSurface egl_surface;
+
+  if (priv->egl_context == NULL)
+    return;
+
+  gdk_gl_context_make_current (context);
+
+  egl_surface = gdk_surface_get_egl_surface (surface);
+
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "EGL", "swap buffers");
+
+  if (display->have_egl_swap_buffers_with_damage)
+    {
+      EGLint stack_rects[4 * 4]; /* 4 rects */
+      EGLint *heap_rects = NULL;
+      int i, j, n_rects = cairo_region_num_rectangles (painted);
+      int surface_height = gdk_surface_get_height (surface);
+      int scale = gdk_surface_get_scale_factor (surface);
+      EGLint *rects;
+
+      if (n_rects < G_N_ELEMENTS (stack_rects) / 4)
+        rects = (EGLint *)&stack_rects;
+      else
+        heap_rects = rects = g_new (EGLint, n_rects * 4);
+
+      for (i = 0, j = 0; i < n_rects; i++)
+        {
+          cairo_rectangle_int_t rect;
+
+          cairo_region_get_rectangle (painted, i, &rect);
+          rects[j++] = rect.x * scale;
+          rects[j++] = (surface_height - rect.height - rect.y) * scale;
+          rects[j++] = rect.width * scale;
+          rects[j++] = rect.height * scale;
+        }
+      eglSwapBuffersWithDamageEXT (gdk_display_get_egl_display (display), egl_surface, rects, n_rects);
+      g_free (heap_rects);
+    }
+  else
+    eglSwapBuffers (gdk_display_get_egl_display (display), egl_surface);
+#endif
 }
 
 static void
@@ -429,6 +738,8 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   klass->realize = gdk_gl_context_real_realize;
   klass->get_damage = gdk_gl_context_real_get_damage;
   klass->is_shared = gdk_gl_context_real_is_shared;
+  klass->make_current = gdk_gl_context_real_make_current;
+  klass->clear_current = gdk_gl_context_real_clear_current;
 
   draw_context_class->begin_frame = gdk_gl_context_real_begin_frame;
   draw_context_class->end_frame = gdk_gl_context_real_end_frame;
@@ -458,7 +769,6 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   gobject_class->set_property = gdk_gl_context_set_property;
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
-  gobject_class->finalize = gdk_gl_context_finalize;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_pspecs);
 }
@@ -484,29 +794,6 @@ gdk_gl_context_new_for_surface (GdkSurface *surface)
   return g_object_new (G_OBJECT_TYPE (shared),
                        "surface", surface,
                        NULL);
-}
-
-GdkGLContextPaintData *
-gdk_gl_context_get_paint_data (GdkGLContext *context)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  if (priv->paint_data == NULL)
-    {
-      priv->paint_data = g_new0 (GdkGLContextPaintData, 1);
-      priv->paint_data->is_legacy = priv->is_legacy;
-      priv->paint_data->use_es = priv->use_es;
-    }
-
-  return priv->paint_data;
-}
-
-gboolean
-gdk_gl_context_use_texture_rectangle (GdkGLContext *context)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  return priv->use_texture_rectangle;
 }
 
 void
@@ -1071,7 +1358,6 @@ static void
 gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  gboolean has_npot, has_texture_rectangle;
   gboolean gl_debug = FALSE;
 #ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
@@ -1110,17 +1396,11 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   if (priv->use_es)
     {
-      has_npot = priv->gl_version >= 20;
-      has_texture_rectangle = FALSE;
-
       priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
     }
   else
     {
-      has_npot = priv->gl_version >= 20 || epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
-      has_texture_rectangle = priv->gl_version >= 31 || epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
-
       priv->has_unpack_subimage = TRUE;
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
 
@@ -1134,33 +1414,19 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->use_khr_debug = TRUE;
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
     }
-  if (!priv->use_es && GDK_DISPLAY_DEBUG_CHECK (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), GL_TEXTURE_RECT))
-    priv->use_texture_rectangle = TRUE;
-  else if (has_npot)
-    priv->use_texture_rectangle = FALSE;
-  else if (has_texture_rectangle)
-    priv->use_texture_rectangle = TRUE;
-  else
-    g_warning ("GL implementation doesn't support any form of non-power-of-two textures");
 
   GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
     g_message ("%s version: %d.%d (%s)\n"
                        "* GLSL version: %s\n"
                        "* Extensions checked:\n"
-                       " - GL_ARB_texture_non_power_of_two: %s\n"
-                       " - GL_ARB_texture_rectangle: %s\n"
                        " - GL_KHR_debug: %s\n"
-                       " - GL_EXT_unpack_subimage: %s\n"
-                       "* Using texture rectangle: %s",
+                       " - GL_EXT_unpack_subimage: %s",
                        priv->use_es ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
                        priv->is_legacy ? "legacy" : "core",
                        glGetString (GL_SHADING_LANGUAGE_VERSION),
-                       has_npot ? "yes" : "no",
-                       has_texture_rectangle ? "yes" : "no",
                        priv->has_khr_debug ? "yes" : "no",
-                       priv->has_unpack_subimage ? "yes" : "no",
-                       priv->use_texture_rectangle ? "yes" : "no"));
+                       priv->has_unpack_subimage ? "yes" : "no"));
 
   priv->extensions_checked = TRUE;
 }
@@ -1420,3 +1686,4 @@ gdk_gl_backend_use (GdkGLBackend backend_type)
 
   g_assert (the_gl_backend_type == backend_type);
 }
+

@@ -1160,8 +1160,6 @@ gdk_win32_surface_move_resize_internal (GdkSurface *window,
                                         int         width,
                                         int         height)
 {
-  GdkWin32Surface *surface = GDK_WIN32_SURFACE (window);
-
   /* We ignore changes to the window being moved or resized by the
      user, as we don't want to fight the user */
   if (GDK_SURFACE_HWND (window) == _modal_move_resize_window)
@@ -1219,7 +1217,6 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
                                 int             height,
                                 GdkPopupLayout *layout)
 {
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   GdkMonitor *monitor;
   GdkRectangle bounds;
   GdkRectangle final_rect;
@@ -1835,7 +1832,6 @@ _gdk_win32_surface_lacks_wm_decorations (GdkSurface *window)
 void
 _gdk_win32_surface_update_style_bits (GdkSurface *window)
 {
-  GdkWin32Surface *impl = (GdkWin32Surface *)window;
   GdkWMDecoration decorations;
   LONG old_style, new_style, old_exstyle, new_exstyle;
   gboolean all;
@@ -4117,8 +4113,6 @@ gdk_win32_surface_minimize (GdkSurface *window)
 static void
 gdk_win32_surface_maximize (GdkSurface *window)
 {
-  GdkWin32Surface *impl;
-
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window))
@@ -4127,8 +4121,6 @@ gdk_win32_surface_maximize (GdkSurface *window)
   GDK_NOTE (MISC, g_print ("gdk_surface_maximize: %p: %s\n",
 			   GDK_SURFACE_HWND (window),
 			   _gdk_win32_surface_state_to_string (window->state)));
-
-  impl = GDK_WIN32_SURFACE (window);
 
   if (GDK_SURFACE_IS_MAPPED (window))
     GtkShowWindow (window, SW_MAXIMIZE);

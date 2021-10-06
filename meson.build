@@ -481,7 +481,15 @@ if not cairo_csi_dep.found()
   cairo_csi_dep = cc.find_library('cairo-script-interpreter', required: get_option('build-tests'))
 endif
 
+have_egl = epoxy_dep.get_variable(
+  pkgconfig: 'epoxy_has_egl',
+  internal: 'epoxy_has_egl',
+  default_value: '0') == '1'
+
 cdata.set('HAVE_CAIRO_SCRIPT_INTERPRETER', cairo_csi_dep.found())
+if have_egl
+  cdata.set('HAVE_EGL', 1)
+endif
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
 cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
@@ -589,10 +597,6 @@ if win32_enabled
   pc_gdk_extra_libs += ['-lwinmm', '-ldwmapi', '-lsetupapi', '-lcfgmgr32']
 
   # Check whether libepoxy is built with EGL support on Windows
-  win32_has_egl = epoxy_dep.get_variable(
-    pkgconfig: 'epoxy_has_egl',
-    internal: 'epoxy_has_egl',
-    default_value: '0') == '1'
 endif
 
 # Check for bind_textdomain_codeset, including -lintl if GLib brings it in by

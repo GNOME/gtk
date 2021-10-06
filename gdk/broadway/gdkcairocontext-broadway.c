@@ -34,6 +34,7 @@ gdk_broadway_cairo_context_dispose (GObject *object)
 
 static void
 gdk_broadway_cairo_context_begin_frame (GdkDrawContext *draw_context,
+                                        gboolean        request_hdr,
                                         cairo_region_t *region)
 {
   GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (draw_context);

@@ -92,6 +92,8 @@ struct _GdkDisplay
   guint double_click_time;  /* Maximum time between clicks in msecs */
   guint double_click_distance;   /* Maximum distance between clicks in pixels */
 
+  GList *seats;
+
 #ifdef GDK_RENDERING_VULKAN
   VkInstance vk_instance;
   VkDebugReportCallbackEXT vk_debug_callback;
@@ -103,7 +105,11 @@ struct _GdkDisplay
   guint vulkan_refcount;
 #endif /* GDK_RENDERING_VULKAN */
 
-  GList *seats;
+  /* egl info */
+  guint have_egl_buffer_age : 1;
+  guint have_egl_swap_buffers_with_damage : 1;
+  guint have_egl_no_config_context : 1;
+  guint have_egl_pixel_format_float : 1;
 };
 
 struct _GdkDisplayClass
@@ -140,10 +146,15 @@ struct _GdkDisplayClass
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
 
-  GdkGLContext *         (*init_gl)                    (GdkDisplay        *display,
+  GdkGLContext *         (* init_gl)                   (GdkDisplay        *display,
                                                         GError           **error);
+  /* Returns the distance from a perfect score EGL config.
+   * GDK chooses the one with the *LOWEST* score */
+  guint                  (* rate_egl_config)           (GdkDisplay        *display,
+                                                        gpointer           egl_display,
+                                                        gpointer           egl_config);
 
-  GdkSeat *              (*get_default_seat)           (GdkDisplay     *display);
+  GdkSeat *              (*get_default_seat)           (GdkDisplay        *display);
 
   GListModel *           (*get_monitors)               (GdkDisplay     *self);
   GdkMonitor *           (*get_monitor_at_surface)     (GdkDisplay     *display,
@@ -207,6 +218,15 @@ GdkSurface *        gdk_display_create_surface        (GdkDisplay       *display
                                                        int               height);
 
 GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
+
+gboolean            gdk_display_init_egl              (GdkDisplay       *display,
+                                                       int /*EGLenum*/   platform,
+                                                       gpointer          native_display,
+                                                       gboolean          allow_any,
+                                                       GError          **error);
+gpointer            gdk_display_get_egl_display       (GdkDisplay       *display);
+gpointer            gdk_display_get_egl_config        (GdkDisplay       *display);
+gpointer            gdk_display_get_egl_config_hdr    (GdkDisplay       *display);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
                                                        gboolean          rgba);

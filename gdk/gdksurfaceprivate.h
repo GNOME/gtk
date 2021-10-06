@@ -48,8 +48,6 @@ struct _GdkSurface
   gboolean pending_is_mapped;
   gboolean is_mapped;
 
-  gpointer widget;
-
   int x;
   int y;
 
@@ -294,8 +292,18 @@ void gdk_surface_get_geometry (GdkSurface *surface,
                                int        *width,
                                int        *height);
 
-void       gdk_surface_freeze_updates      (GdkSurface    *surface);
-void       gdk_surface_thaw_updates        (GdkSurface    *surface);
+void                    gdk_surface_set_egl_native_window       (GdkSurface             *self,
+                                                                 gpointer                native_window);
+void                    gdk_surface_ensure_egl_surface          (GdkSurface             *self,
+                                                                 gboolean                hdr);
+gpointer /*EGLSurface*/ gdk_surface_get_egl_surface             (GdkSurface             *self);
+
+void                    gdk_surface_set_widget                  (GdkSurface             *self,
+                                                                 gpointer                widget);
+gpointer                gdk_surface_get_widget                  (GdkSurface             *self);
+
+void                    gdk_surface_freeze_updates              (GdkSurface             *surface);
+void                    gdk_surface_thaw_updates                (GdkSurface             *surface);
 
 
 typedef enum
