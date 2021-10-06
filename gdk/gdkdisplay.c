@@ -1698,6 +1698,8 @@ gdk_display_init_egl (GdkDisplay  *self,
     epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_buffer_age");
   self->have_egl_swap_buffers_with_damage =
     epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_swap_buffers_with_damage");
+  self->have_egl_no_config_context =
+    epoxy_has_egl_extension (priv->egl_display, "EGL_KHR_no_config_context");
 
   GDK_DISPLAY_NOTE (self, OPENGL, {
       char *ext = describe_extensions (priv->egl_display);

@@ -359,7 +359,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
 
   if (egl_display)
     {
-      EGLConfig egl_config = gdk_display_get_egl_config (display);
+      EGLConfig egl_config;
       GdkGLContext *share = gdk_display_get_gl_context (display);
       GdkGLContextPrivate *share_priv = gdk_gl_context_get_instance_private (share);
       EGLContext ctx;
@@ -376,6 +376,11 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
                    (share != NULL && gdk_gl_context_is_legacy (share));
       use_es = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES) ||
                (share != NULL && gdk_gl_context_get_use_es (share));
+
+      if (display->have_egl_no_config_context)
+        egl_config = NULL;
+      else
+        egl_config = gdk_display_get_egl_config (display);
 
       flags = 0;
 
