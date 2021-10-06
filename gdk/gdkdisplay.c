@@ -1443,7 +1443,7 @@ gdk_display_get_egl_config_hdr (GdkDisplay *self)
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
 
-  return priv->egl_config;
+  return priv->egl_config_hdr;
 }
 
 static EGLDisplay
