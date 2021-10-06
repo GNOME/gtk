@@ -93,6 +93,7 @@ struct _GdkDisplayPrivate {
 #ifdef HAVE_EGL
   EGLDisplay egl_display;
   EGLConfig egl_config;
+  EGLConfig egl_config_hdr;
 #endif
 
   guint rgba : 1;
@@ -1437,6 +1438,14 @@ gdk_display_get_egl_config (GdkDisplay *self)
   return priv->egl_config;
 }
 
+gpointer
+gdk_display_get_egl_config_hdr (GdkDisplay *self)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  return priv->egl_config;
+}
+
 static EGLDisplay
 gdk_display_create_egl_display (EGLenum  platform,
                                 gpointer native_display)
@@ -1477,7 +1486,8 @@ out:
 #define MAX_EGL_ATTRS 30
 
 typedef enum {
-  GDK_EGL_CONFIG_PERFECT = (1 << 0)
+  GDK_EGL_CONFIG_PERFECT = (1 << 0),
+  GDK_EGL_CONFIG_HDR     = (1 << 1),
 } GdkEGLConfigCreateFlags;
 
 static EGLConfig
@@ -1502,13 +1512,20 @@ gdk_display_create_egl_config (GdkDisplay               *self,
   attrs[i++] = EGL_RGB_BUFFER;
 
   attrs[i++] = EGL_RED_SIZE;
-  attrs[i++] = 8;
+  attrs[i++] = (flags & GDK_EGL_CONFIG_HDR) ? 9 : 8;
   attrs[i++] = EGL_GREEN_SIZE;
-  attrs[i++] = 8;
+  attrs[i++] = (flags & GDK_EGL_CONFIG_HDR) ? 9 : 8;
   attrs[i++] = EGL_BLUE_SIZE;
-  attrs[i++] = 8;
+  attrs[i++] = (flags & GDK_EGL_CONFIG_HDR) ? 9 : 8;
   attrs[i++] = EGL_ALPHA_SIZE;
   attrs[i++] = 8;
+
+  if (flags & GDK_EGL_CONFIG_HDR &&
+      self->have_egl_pixel_format_float)
+    {
+      attrs[i++] = EGL_COLOR_COMPONENT_TYPE_EXT;
+      attrs[i++] = EGL_DONT_CARE;
+    }
 
   attrs[i++] = EGL_NONE;
   g_assert (i < MAX_EGL_ATTRS);
@@ -1700,23 +1717,36 @@ gdk_display_init_egl (GdkDisplay  *self,
     epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_swap_buffers_with_damage");
   self->have_egl_no_config_context =
     epoxy_has_egl_extension (priv->egl_display, "EGL_KHR_no_config_context");
+  self->have_egl_pixel_format_float =
+    epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_pixel_format_float");
+
+  if (self->have_egl_no_config_context)
+    priv->egl_config_hdr = gdk_display_create_egl_config (self,
+                                                          GDK_EGL_CONFIG_HDR,
+                                                          error);
+  if (priv->egl_config_hdr == NULL)
+    priv->egl_config_hdr = priv->egl_config;
 
   GDK_DISPLAY_NOTE (self, OPENGL, {
       char *ext = describe_extensions (priv->egl_display);
-      char *cfg = describe_egl_config (priv->egl_display, priv->egl_config);
+      char *sdr_cfg = describe_egl_config (priv->egl_display, priv->egl_config);
+      char *hdr_cfg = describe_egl_config (priv->egl_display, priv->egl_config_hdr);
       g_message ("EGL API version %d.%d found\n"
                  " - Vendor: %s\n"
                  " - Version: %s\n"
                  " - Client APIs: %s\n"
                  " - Extensions:\n"
-                 "\t%s"
-                 " - Selected fbconfig: %s",
+                 "\t%s\n"
+                 " - Selected fbconfig: %s\n"
+                 "        HDR fbconfig: %s",
                  major, minor,
                  eglQueryString (priv->egl_display, EGL_VENDOR),
                  eglQueryString (priv->egl_display, EGL_VERSION),
                  eglQueryString (priv->egl_display, EGL_CLIENT_APIS),
-                 ext, cfg);
-      g_free (cfg);
+                 ext, sdr_cfg,
+                 priv->egl_config_hdr == priv->egl_config ? "none" : hdr_cfg);
+      g_free (hdr_cfg);
+      g_free (sdr_cfg);
       g_free (ext);
   });
 

@@ -109,6 +109,7 @@ struct _GdkDisplay
   guint have_egl_buffer_age : 1;
   guint have_egl_swap_buffers_with_damage : 1;
   guint have_egl_no_config_context : 1;
+  guint have_egl_pixel_format_float : 1;
 };
 
 struct _GdkDisplayClass
@@ -225,6 +226,7 @@ gboolean            gdk_display_init_egl              (GdkDisplay       *display
                                                        GError          **error);
 gpointer            gdk_display_get_egl_display       (GdkDisplay       *display);
 gpointer            gdk_display_get_egl_config        (GdkDisplay       *display);
+gpointer            gdk_display_get_egl_config_hdr    (GdkDisplay       *display);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
                                                        gboolean          rgba);

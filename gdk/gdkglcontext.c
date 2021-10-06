@@ -633,9 +633,17 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
                                  cairo_region_t *region)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
+  G_GNUC_UNUSED GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkSurface *surface;
   cairo_region_t *damage;
   int ww, wh;
+
+  surface = gdk_draw_context_get_surface (draw_context);
+
+#ifdef HAVE_EGL
+  if (priv->egl_context)
+    gdk_surface_ensure_egl_surface (surface, request_hdr);
+#endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
 
@@ -647,7 +655,6 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
-  surface = gdk_draw_context_get_surface (draw_context);
   ww = gdk_surface_get_width (surface) * gdk_surface_get_scale_factor (surface);
   wh = gdk_surface_get_height (surface) * gdk_surface_get_scale_factor (surface);
 

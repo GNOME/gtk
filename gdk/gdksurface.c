@@ -71,6 +71,7 @@ struct _GdkSurfacePrivate
   gpointer egl_native_window;
 #ifdef HAVE_EGL
   EGLSurface egl_surface;
+  gboolean egl_surface_hdr;
 #endif
 
   gpointer widget;
@@ -1103,19 +1104,35 @@ gdk_surface_get_egl_surface (GdkSurface *self)
 {
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
 
-  g_return_val_if_fail (priv->egl_native_window != NULL, NULL);
+  return priv->egl_surface;
+}
+
+void
+gdk_surface_ensure_egl_surface (GdkSurface *self,
+                                gboolean    hdr)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  GdkDisplay *display = gdk_surface_get_display (self);
+
+  g_return_if_fail (priv->egl_native_window != NULL);
+
+  if (priv->egl_surface_hdr != hdr &&
+      priv->egl_surface != NULL &&
+      gdk_display_get_egl_config_hdr (display) != gdk_display_get_egl_config (display))
+    {
+      eglDestroySurface (gdk_surface_get_display (self), priv->egl_surface);
+      priv->egl_surface = NULL;
+    }
 
   if (priv->egl_surface == NULL)
     {
-      GdkDisplay *display = gdk_surface_get_display (self);
-
       priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
-                                                  gdk_display_get_egl_config (display),
+                                                  hdr ? gdk_display_get_egl_config_hdr (display)
+                                                      : gdk_display_get_egl_config (display),
                                                   (EGLNativeWindowType) priv->egl_native_window,
                                                   NULL);
+      priv->egl_surface_hdr = hdr;
     }
-
-  return priv->egl_surface;
 #endif
 }
 
