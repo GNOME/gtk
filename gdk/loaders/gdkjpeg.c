@@ -19,7 +19,7 @@
 
 #include "gdkjpegprivate.h"
 
-#include "gdkcolorprofile.h"
+#include "gdkiccprofile.h"
 #include "gdkintl.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdktexture.h"
@@ -262,7 +262,7 @@ gdk_load_jpeg (GBytes  *input_bytes,
   if (jpeg_read_icc_profile (&info, &icc_data, &icc_len))
     {
       GBytes *icc_bytes = g_bytes_new_with_free_func (icc_data, icc_len, free, icc_data);
-      color_profile = gdk_color_profile_new_from_icc_bytes (icc_bytes, error);
+      color_profile = GDK_COLOR_PROFILE (gdk_icc_profile_new_from_icc_bytes (icc_bytes, error));
       g_bytes_unref (icc_bytes);
     }
   else
@@ -340,7 +340,7 @@ gdk_save_jpeg (GdkTexture *texture)
 
   jpeg_start_compress (&info, TRUE);
 
-  bytes = gdk_color_profile_get_icc_profile (color_profile);
+  bytes = gdk_icc_profile_get_icc_profile (GDK_ICC_PROFILE (color_profile));
   jpeg_write_icc_profile (&info,
                           g_bytes_get_data (bytes, NULL),
                           g_bytes_get_size (bytes));

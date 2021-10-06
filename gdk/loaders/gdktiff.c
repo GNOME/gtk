@@ -19,7 +19,7 @@
 
 #include "gdktiffprivate.h"
 
-#include "gdkcolorprofileprivate.h"
+#include "gdkiccprofileprivate.h"
 #include "gdkintl.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
@@ -249,7 +249,7 @@ flip_02 (guchar *data,
 /* {{{ Color profile handling */
 
 static GdkColorProfile *
-gdk_tiff_get_color_profile (TIFF *tiff)
+gdk_tiff_get_icc_profile (TIFF *tiff)
 {
   const char *icc_data;
   guint icc_len;
@@ -260,7 +260,7 @@ gdk_tiff_get_color_profile (TIFF *tiff)
       GdkColorProfile *profile;
 
       icc_bytes = g_bytes_new (icc_data, icc_len);
-      profile = gdk_color_profile_new_from_icc_bytes (icc_bytes, NULL);
+      profile = GDK_COLOR_PROFILE (gdk_icc_profile_new_from_icc_bytes (icc_bytes, NULL));
       g_bytes_unref (icc_bytes);
 
       if (profile)
@@ -271,10 +271,10 @@ gdk_tiff_get_color_profile (TIFF *tiff)
 }
 
 static void
-gdk_tiff_set_color_profile (TIFF            *tiff,
-                            GdkColorProfile *profile)
+gdk_tiff_set_icc_profile (TIFF          *tiff,
+                          GdkICCProfile *profile)
 {
-  GBytes *bytes = gdk_color_profile_get_icc_profile (profile);
+  GBytes *bytes = gdk_icc_profile_get_icc_profile (profile);
 
   TIFFSetField (tiff, TIFFTAG_ICCPROFILE,
                 g_bytes_get_size (bytes),
@@ -316,13 +316,13 @@ gdk_save_tiff (GdkTexture *texture)
   GBytes *result = NULL;
   GdkTexture *memory_texture;
   GdkMemoryFormat format;
-  GdkColorProfile *color_profile;
+  GdkICCProfile *icc_profile;
 
   tif = tiff_open_write (&result);
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
-  color_profile = gdk_texture_get_color_profile (texture);
+  icc_profile = GDK_ICC_PROFILE (gdk_texture_get_color_profile (texture));
 
   memory_texture = gdk_texture_download_texture (texture);
   format = gdk_memory_texture_get_format (GDK_MEMORY_TEXTURE (memory_texture));
@@ -366,7 +366,7 @@ gdk_save_tiff (GdkTexture *texture)
   TIFFSetField (tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
   TIFFSetField (tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
 
-  gdk_tiff_set_color_profile (tif, color_profile);
+  gdk_tiff_set_icc_profile (tif, icc_profile);
 
   if (samples_per_pixel > 3)
     {
@@ -426,7 +426,7 @@ load_fallback (TIFF             *tif,
       return NULL;
     }
 
-  profile = gdk_tiff_get_color_profile (tif);
+  profile = gdk_tiff_get_icc_profile (tif);
 
   bytes = g_bytes_new_take (data, width * height * 4);
 
@@ -546,7 +546,7 @@ gdk_load_tiff (GBytes  *input_bytes,
       line += stride;
     }
 
-  profile = gdk_tiff_get_color_profile (tif);
+  profile = gdk_tiff_get_icc_profile (tif);
 
   bpp = gdk_memory_format_bytes_per_pixel (format);
   bytes = g_bytes_new_take (data, width * height * bpp);

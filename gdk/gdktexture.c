@@ -41,7 +41,7 @@
 #include "gdktextureprivate.h"
 
 #include "gdkcairo.h"
-#include "gdkcolorprofile.h"
+#include "gdkiccprofile.h"
 #include "gdkintl.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
@@ -457,7 +457,7 @@ gdk_color_profile_from_pixbuf (GdkPixbuf *pixbuf)
 
       icc_data = g_base64_decode (icc_profile_base64, &icc_len);
       bytes = g_bytes_new_take (icc_data, icc_len);
-      profile = gdk_color_profile_new_from_icc_bytes (bytes, NULL);
+      profile = GDK_COLOR_PROFILE (gdk_icc_profile_new_from_icc_bytes (bytes, NULL));
       g_bytes_unref (bytes);
     }
   if (!profile)

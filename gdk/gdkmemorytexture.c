@@ -231,7 +231,6 @@ gdk_memory_texture_new_with_color_profile (int              width,
   g_return_val_if_fail (GDK_IS_COLOR_PROFILE (color_profile), NULL);
   g_return_val_if_fail (bytes != NULL, NULL);
   g_return_val_if_fail (stride >= width * gdk_memory_format_bytes_per_pixel (format), NULL);
-  g_return_val_if_fail (gdk_color_profile_supports_memory_format (color_profile, format), NULL);
 
   bytes = gdk_memory_sanitize (bytes, width, height, format, stride, &stride);
 

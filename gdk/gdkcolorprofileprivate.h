@@ -8,19 +8,24 @@
 
 G_BEGIN_DECLS
 
+struct _GdkColorProfile
+{
+  GObject parent_instance;
+};
+
+struct _GdkColorProfileClass
+{
+  GObjectClass parent_class;
+
+  gboolean (* is_linear)        (GdkColorProfile *profile);
+  gsize    (* get_n_components) (GdkColorProfile *profile);
+  gboolean (* equal)            (gconstpointer    profile1,
+                                 gconstpointer    profile2);
+};
+
 GdkColorProfile *            gdk_color_profile_get_srgb_linear            (void) G_GNUC_CONST;
-
-GdkColorProfile *            gdk_color_profile_new_from_lcms_profile      (cmsHPROFILE           lcms_profile,
-                                                                           GError              **error);
-
-cmsHPROFILE *                gdk_color_profile_get_lcms_profile           (GdkColorProfile      *self);
-
-cmsHTRANSFORM *              gdk_color_profile_lookup_transform           (GdkColorProfile      *source,
-                                                                           guint                 source_type,
-                                                                           GdkColorProfile      *dest,
-                                                                           guint                 dest_type);
-gboolean                     gdk_color_profile_supports_memory_format     (GdkColorProfile      *profile,
-                                                                           GdkMemoryFormat       format);
+GdkColorProfile *            gdk_color_profile_get_hsl                    (void) G_GNUC_CONST;
+GdkColorProfile *            gdk_color_profile_get_hwb                    (void) G_GNUC_CONST;
 
 G_END_DECLS
 

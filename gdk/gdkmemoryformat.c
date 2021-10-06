@@ -21,7 +21,7 @@
 
 #include "gdkmemoryformatprivate.h"
 
-#include "gdkcolorprofileprivate.h"
+#include "gdkiccprofileprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gsk/ngl/fp16private.h"
 
@@ -822,10 +822,10 @@ gdk_memory_convert_transform (guchar              *dest_data,
   guchar *src_tmp, *dest_tmp;
   gsize y;
 
-  transform = gdk_color_profile_lookup_transform (src_profile,
-                                                  src_desc->lcms.type,
-                                                  dest_profile,
-                                                  dest_desc->lcms.type);
+  transform = gdk_icc_profile_lookup_transform (GDK_ICC_PROFILE (src_profile),
+                                                src_desc->lcms.type,
+                                                GDK_ICC_PROFILE (dest_profile),
+                                                dest_desc->lcms.type);
 
   if (src_desc->to_lcms)
     src_tmp = g_malloc_n (src_desc->lcms.bpp, width);

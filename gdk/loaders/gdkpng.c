@@ -19,7 +19,7 @@
 
 #include "gdkpngprivate.h"
 
-#include "gdkcolorprofileprivate.h"
+#include "gdkiccprofileprivate.h"
 #include "gdkintl.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
@@ -148,7 +148,7 @@ gdk_png_get_color_profile (png_struct *png,
     {
       GBytes *bytes = g_bytes_new (icc_data, icc_len);
 
-      profile = gdk_color_profile_new_from_icc_bytes (bytes, NULL);
+      profile = GDK_COLOR_PROFILE (gdk_icc_profile_new_from_icc_bytes (bytes, NULL));
       g_bytes_unref (bytes);
       if (profile)
         return profile;
@@ -192,7 +192,7 @@ gdk_png_get_color_profile (png_struct *png,
   lcms_profile = cmsCreateRGBProfile (&whitepoint,
                                       &primaries,
                                       (cmsToneCurve*[3]) { curve, curve, curve });
-  profile = gdk_color_profile_new_from_lcms_profile (lcms_profile, NULL);
+  profile = GDK_COLOR_PROFILE (gdk_icc_profile_new_from_lcms_profile (lcms_profile, NULL));
   /* FIXME: errors? */
   if (profile == NULL)
     profile = g_object_ref (gdk_color_profile_get_srgb ());
@@ -202,25 +202,28 @@ gdk_png_get_color_profile (png_struct *png,
 }
 
 static void
-gdk_png_set_color_profile (png_struct      *png,
-                           png_info        *info,
-                           GdkColorProfile *profile)
+gdk_png_set_icc_profile (png_struct    *png,
+                         png_info      *info,
+                         GdkICCProfile *profile)
 {
   /* FIXME: allow deconstructing RGB profiles into gAMA and cHRM instead of
-   * falling back to iCCP */
+   * falling back to iCCP
+   */
   if (profile == gdk_color_profile_get_srgb ())
     {
       png_set_sRGB_gAMA_and_cHRM (png, info, /* FIXME */ PNG_sRGB_INTENT_PERCEPTUAL);
     }
-  else
+  else if (GDK_IS_ICC_PROFILE (profile))
     {
-      GBytes *bytes = gdk_color_profile_get_icc_profile (profile);
+      GBytes *bytes = gdk_icc_profile_get_icc_profile (profile);
       png_set_iCCP (png, info,
                     "ICC profile",
                     0,
                     g_bytes_get_data (bytes, NULL),
                     g_bytes_get_size (bytes));
     }
+  else
+    g_assert_not_reached ();
 }
 
 /* }}} */
@@ -419,7 +422,7 @@ gdk_save_png (GdkTexture *texture)
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
-  color_profile = gdk_texture_get_color_profile (texture);
+  color_profile = GDK_ICC_PROFILE (gdk_texture_get_color_profile (texture));
 
   memtex = GDK_MEMORY_TEXTURE (gdk_texture_download_texture (texture));
   format = gdk_memory_texture_get_format (memtex);
@@ -501,10 +504,7 @@ gdk_save_png (GdkTexture *texture)
       return NULL;
     }
 
-  memtex = gdk_memory_texture_convert (memtex,
-                                       format,
-                                       color_profile,
-                                       NULL);
+  memtex = gdk_memory_texture_convert (memtex, format, color_profile, NULL);
 
   png_set_write_fn (png, &io, png_write_func, png_flush_func);
 
@@ -514,7 +514,7 @@ gdk_save_png (GdkTexture *texture)
                 PNG_COMPRESSION_TYPE_DEFAULT,
                 PNG_FILTER_TYPE_DEFAULT);
 
-  gdk_png_set_color_profile (png, info, color_profile);
+  gdk_png_set_icc_profile (png, info, GDK_ICC_PROFILE (color_profile));
 
   png_write_info (png, info);
 

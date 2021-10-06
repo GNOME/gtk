@@ -19,22 +19,22 @@
 #include "config.h"
 
 #include "gdkcolorprivate.h"
-
-#include "gdkcolorprofileprivate.h"
+#include "gdkiccprofileprivate.h"
+#include "gdkderivedprofile.h"
 
 static inline cmsHTRANSFORM *
-gdk_color_get_transform (GdkColorProfile *src,
-                         GdkColorProfile *dest)
+gdk_color_get_transform (GdkICCProfile *src,
+                         GdkICCProfile *dest)
 {
   cmsHPROFILE *src_profile, *dest_profile;
 
-  src_profile = gdk_color_profile_get_lcms_profile (src);
-  dest_profile = gdk_color_profile_get_lcms_profile (dest);
+  src_profile = gdk_icc_profile_get_lcms_profile (GDK_ICC_PROFILE (src));
+  dest_profile = gdk_icc_profile_get_lcms_profile (GDK_ICC_PROFILE (dest));
 
-  return gdk_color_profile_lookup_transform (src,
-                                             cmsFormatterForColorspaceOfProfile (src_profile, 4, 1),
-                                             dest,
-                                             cmsFormatterForColorspaceOfProfile (dest_profile, 4, 1));
+  return gdk_icc_profile_lookup_transform (src,
+                                           cmsFormatterForColorspaceOfProfile (src_profile, 4, 1),
+                                           dest,
+                                           cmsFormatterForColorspaceOfProfile (dest_profile, 4, 1));
 }
 
 void
@@ -42,16 +42,43 @@ gdk_color_convert (GdkColor        *self,
                    GdkColorProfile *profile,
                    const GdkColor  *other)
 {
-  gdk_color_init (self,
-                  profile,
-                  other->alpha,
-                  NULL,
-                  gdk_color_profile_get_n_components (profile));
+  GdkColorProfile *src_profile, *dest_profile;
+  gsize n_components;
+  float *in;
 
-  cmsDoTransform (gdk_color_get_transform (other->profile, profile),
-                  gdk_color_get_components (other),
+  n_components = gdk_color_profile_get_n_components (profile);
+
+  gdk_color_init (self, profile, other->alpha, NULL, n_components);
+
+  if (GDK_IS_DERIVED_PROFILE (other->profile))
+    {
+      in = g_alloca (sizeof (float) * n_components);
+      gdk_derived_profile_convert_to_base_profile (GDK_DERIVED_PROFILE (other->profile),
+                                                   gdk_color_get_components (other),
+                                                   in);
+      src_profile = gdk_derived_profile_get_base_profile (GDK_DERIVED_PROFILE (other->profile));
+    }
+  else
+    {
+      in = (float *)gdk_color_get_components (other);
+      src_profile = other->profile;
+    }
+
+  if (GDK_IS_DERIVED_PROFILE (profile))
+    dest_profile = gdk_derived_profile_get_base_profile (GDK_DERIVED_PROFILE (profile));
+  else
+    dest_profile = profile;
+
+  cmsDoTransform (gdk_color_get_transform (GDK_ICC_PROFILE (src_profile),
+                                           GDK_ICC_PROFILE (dest_profile)),
+                  in,
                   (float *) gdk_color_get_components (self),
                   1);
+
+  if (GDK_IS_DERIVED_PROFILE (profile))
+    gdk_derived_profile_convert_from_base_profile (GDK_DERIVED_PROFILE (profile),
+                                                   gdk_color_get_components (self),
+                                                   (float *)gdk_color_get_components (self));
 }
 
 void
@@ -59,16 +86,27 @@ gdk_color_convert_rgba (GdkColor        *self,
                         GdkColorProfile *profile,
                         const GdkRGBA   *rgba)
 {
-  gdk_color_init (self,
-                  profile,
-                  rgba->alpha,
-                  NULL,
-                  gdk_color_profile_get_n_components (profile));
+  GdkColorProfile *dest_profile;
+  gsize n_components;
 
-  cmsDoTransform (gdk_color_get_transform (gdk_color_profile_get_srgb (), profile),
+  n_components = gdk_color_profile_get_n_components (profile);
+  gdk_color_init (self, profile, rgba->alpha, NULL, n_components);
+
+  if (GDK_IS_DERIVED_PROFILE (profile))
+    dest_profile = gdk_derived_profile_get_base_profile (GDK_DERIVED_PROFILE (profile));
+  else
+    dest_profile = profile;
+
+  cmsDoTransform (gdk_color_get_transform (GDK_ICC_PROFILE (gdk_color_profile_get_srgb ()),
+                                           GDK_ICC_PROFILE (dest_profile)),
                   (float[3]) { rgba->red, rgba->green, rgba->blue },
                   (float *) gdk_color_get_components (self),
                   1);
+
+  if (GDK_IS_DERIVED_PROFILE (profile))
+    gdk_derived_profile_convert_from_base_profile (GDK_DERIVED_PROFILE (profile),
+                                                   gdk_color_get_components (self),
+                                                   (float *)gdk_color_get_components (self));
 }
 
 void

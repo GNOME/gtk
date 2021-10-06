@@ -39,6 +39,7 @@
 #include <gdk/gdkcontentproviderimpl.h>
 #include <gdk/gdkcontentserializer.h>
 #include <gdk/gdkcursor.h>
+#include <gdk/gdkderivedprofile.h>
 #include <gdk/gdkdevice.h>
 #include <gdk/gdkdevicepad.h>
 #include <gdk/gdkdevicetool.h>
@@ -54,6 +55,7 @@
 #include <gdk/gdkframetimings.h>
 #include <gdk/gdkglcontext.h>
 #include <gdk/gdkgltexture.h>
+#include <gdk/gdkiccprofile.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkmemorytexture.h>

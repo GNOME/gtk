@@ -63,6 +63,7 @@ GDK_AVAILABLE_IN_4_6
 gboolean                     gdk_color_profile_equal                      (gconstpointer         profile1,
                                                                            gconstpointer         profile2);
 
+
 G_END_DECLS
 
 #endif /* __GDK_COLOR_PROFILE_H__ */

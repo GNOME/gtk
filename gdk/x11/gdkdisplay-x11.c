@@ -38,6 +38,7 @@
 #include "gdkkeysprivate.h"
 #include "gdkmarshalers.h"
 #include "xsettings-client.h"
+#include "gdkiccprofileprivate.h"
 
 #include "gdkcairocontext-x11.h"
 #include "gdkclipboard-x11.h"
@@ -1463,7 +1464,7 @@ gdk_x11_display_check_color_profile (GdkX11Display *self)
     }
 
   g_clear_object (&self->color_profile);
-  self->color_profile = gdk_color_profile_new_from_icc_bytes (bytes, NULL);
+  self->color_profile = GDK_COLOR_PROFILE (gdk_icc_profile_new_from_icc_bytes (bytes, NULL));
   if (!self->color_profile)
     self->color_profile = g_object_ref (gdk_color_profile_get_srgb ());
 }
