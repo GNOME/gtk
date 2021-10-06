@@ -91,11 +91,7 @@ void
 gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
                                 const GdkPixbuf *pixbuf)
 {
-  int width, height;
-  guchar *gdk_pixels, *cairo_pixels;
-  int gdk_rowstride, cairo_stride;
-  int n_channels;
-  int j;
+  GdkTexture *texture;
 
   if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
     return;
@@ -111,71 +107,11 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
 
   cairo_surface_flush (surface);
 
-  width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf);
-  gdk_pixels = gdk_pixbuf_get_pixels (pixbuf);
-  gdk_rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  n_channels = gdk_pixbuf_get_n_channels (pixbuf);
-  cairo_stride = cairo_image_surface_get_stride (surface);
-  cairo_pixels = cairo_image_surface_get_data (surface);
-
-  for (j = height; j; j--)
-    {
-      guchar *p = gdk_pixels;
-      guchar *q = cairo_pixels;
-
-      if (n_channels == 3)
-        {
-          guchar *end = p + 3 * width;
-
-          while (p < end)
-            {
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-              q[0] = p[2];
-              q[1] = p[1];
-              q[2] = p[0];
-              q[3] = 0xFF;
-#else
-              q[0] = 0xFF;
-              q[1] = p[0];
-              q[2] = p[1];
-              q[3] = p[2];
-#endif
-              p += 3;
-              q += 4;
-            }
-        }
-      else
-        {
-          guchar *end = p + 4 * width;
-          guint t1,t2,t3;
-
-#define MULT(d,c,a,t) G_STMT_START { t = c * a + 0x80; d = ((t >> 8) + t) >> 8; } G_STMT_END
-
-          while (p < end)
-            {
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-              MULT(q[0], p[2], p[3], t1);
-              MULT(q[1], p[1], p[3], t2);
-              MULT(q[2], p[0], p[3], t3);
-              q[3] = p[3];
-#else
-              q[0] = p[3];
-              MULT(q[1], p[0], p[3], t1);
-              MULT(q[2], p[1], p[3], t2);
-              MULT(q[3], p[2], p[3], t3);
-#endif
-
-              p += 4;
-              q += 4;
-            }
-
-#undef MULT
-        }
-
-      gdk_pixels += gdk_rowstride;
-      cairo_pixels += cairo_stride;
-    }
+  texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (pixbuf));
+  gdk_texture_download (texture,
+                        cairo_image_surface_get_data (surface),
+                        cairo_image_surface_get_stride (surface));
+  g_object_unref (texture);
 
   cairo_surface_mark_dirty (surface);
 }
