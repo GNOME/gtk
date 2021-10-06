@@ -33,7 +33,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkBuiltinIcon">
+              <object class="GtkBuiltinIcon" id="arrow">
                 <property name="css-name">arrow</property>
               </object>
             </child>

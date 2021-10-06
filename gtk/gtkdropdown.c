@@ -91,6 +91,7 @@ struct _GtkDropDown
 
   GtkWidget *popup;
   GtkWidget *button;
+  GtkWidget *arrow;
 
   GtkWidget *popup_list;
   GtkWidget *button_stack;
@@ -99,8 +100,10 @@ struct _GtkDropDown
   GtkWidget *search_box;
   GtkWidget *search_entry;
 
-  gboolean enable_search;
   GtkExpression *expression;
+
+  guint enable_search : 1;
+  guint show_arrow : 1;
 };
 
 struct _GtkDropDownClass
@@ -118,6 +121,7 @@ enum
   PROP_SELECTED_ITEM,
   PROP_ENABLE_SEARCH,
   PROP_EXPRESSION,
+  PROP_SHOW_ARROW,
 
   N_PROPS
 };
@@ -307,6 +311,10 @@ gtk_drop_down_get_property (GObject    *object,
       gtk_value_set_expression (value, self->expression);
       break;
 
+    case PROP_SHOW_ARROW:
+      g_value_set_boolean (value, gtk_drop_down_get_show_arrow (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -345,6 +353,10 @@ gtk_drop_down_set_property (GObject      *object,
 
     case PROP_EXPRESSION:
       gtk_drop_down_set_expression (self, gtk_value_get_expression (value));
+      break;
+
+    case PROP_SHOW_ARROW:
+      gtk_drop_down_set_show_arrow (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -519,9 +531,24 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
                                P_("Expression to determine strings to search for"),
                                G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkDropDown:show-arrow: (attributes org.gtk.Property.get=gtk_drop_down_get_show_arrow org.gtk.Property.set=gtk_drop_down_set_show_arrow)
+   *
+   * Whether to show an arrow within the GtkDropDown widget.
+   *
+   * Since: 4.6
+   */
+  properties[PROP_SHOW_ARROW] =
+    g_param_spec_boolean  ("show-arrow",
+                           P_("Show arrow"),
+                           P_("Whether to show an arrow within the widget"),
+                           TRUE,
+                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkdropdown.ui");
+  gtk_widget_class_bind_template_child (widget_class, GtkDropDown, arrow);
   gtk_widget_class_bind_template_child (widget_class, GtkDropDown, button);
   gtk_widget_class_bind_template_child (widget_class, GtkDropDown, button_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkDropDown, button_item);
@@ -657,6 +684,8 @@ gtk_drop_down_init (GtkDropDown *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  self->show_arrow = gtk_widget_get_visible (self->arrow);
+
   set_default_factory (self);
 }
 
@@ -671,7 +700,7 @@ gtk_drop_down_init (GtkDropDown *self)
  * to set up a way to map its items to widgets.
  *
  * Returns: a new `GtkDropDown`
- **/
+ */
 GtkWidget *
 gtk_drop_down_new (GListModel    *model,
                    GtkExpression *expression)
@@ -801,7 +830,7 @@ gtk_drop_down_get_factory (GtkDropDown *self)
  * @factory: (nullable) (transfer none): the factory to use
  *
  * Sets the `GtkListItemFactory` to use for populating list items.
- **/
+ */
 void
 gtk_drop_down_set_factory (GtkDropDown        *self,
                            GtkListItemFactory *factory)
@@ -826,7 +855,7 @@ gtk_drop_down_set_factory (GtkDropDown        *self,
  * Gets the factory that's currently used to populate list items in the popup.
  *
  * Returns: (nullable) (transfer none): The factory in use
- **/
+ */
 GtkListItemFactory *
 gtk_drop_down_get_list_factory (GtkDropDown *self)
 {
@@ -851,7 +880,7 @@ gtk_drop_down_set_list_factory (GtkDropDown        *self,
 
   if (!g_set_object (&self->list_factory, factory))
     return;
- 
+
   if (self->list_factory != NULL)
     gtk_list_view_set_factory (GTK_LIST_VIEW (self->popup_list), self->list_factory);
   else
@@ -938,6 +967,8 @@ gtk_drop_down_set_enable_search (GtkDropDown *self,
 {
   g_return_if_fail (GTK_IS_DROP_DOWN (self));
 
+  enable_search = !!enable_search;
+
   if (self->enable_search == enable_search)
     return;
 
@@ -945,7 +976,7 @@ gtk_drop_down_set_enable_search (GtkDropDown *self,
 
   gtk_editable_set_text (GTK_EDITABLE (self->search_entry), "");
   gtk_widget_set_visible (self->search_box, enable_search);
-  
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ENABLE_SEARCH]);
 }
 
@@ -956,7 +987,7 @@ gtk_drop_down_set_enable_search (GtkDropDown *self,
  * Returns whether search is enabled.
  *
  * Returns: %TRUE if the popup includes a search entry
- **/
+ */
 gboolean
 gtk_drop_down_get_enable_search (GtkDropDown *self)
 {
@@ -1013,4 +1044,48 @@ gtk_drop_down_get_expression (GtkDropDown *self)
   g_return_val_if_fail (GTK_IS_DROP_DOWN (self), NULL);
 
   return self->expression;
+}
+
+/**
+ * gtk_drop_down_set_show_arrow: (attributes org.gtk.Method.set_property=show-arrow)
+ * @self: a `GtkDropDown`
+ * @show_arrow: whether to show an arrow within the widget
+ *
+ * Sets whether an arrow will be displayed within the widget.
+ *
+ * Since: 4.6
+ */
+void
+gtk_drop_down_set_show_arrow (GtkDropDown *self,
+                              gboolean     show_arrow)
+{
+  g_return_if_fail (GTK_IS_DROP_DOWN (self));
+
+  show_arrow = !!show_arrow;
+
+  if (self->show_arrow == show_arrow)
+    return;
+
+  self->show_arrow = show_arrow;
+
+  gtk_widget_set_visible (self->arrow, show_arrow);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_ARROW]);
+}
+
+/**
+ * gtk_drop_down_get_show_arrow: (attributes org.gtk.Method.set_property=show-arrow)
+ * @self: a `GtkDropDown`
+ *
+ * Returns whether to show an arrow within the widget.
+ *
+ * Returns: %TRUE if an arrow will be shown.
+ *
+ * Since: 4.6
+ */
+gboolean
+gtk_drop_down_get_show_arrow (GtkDropDown *self)
+{
+  g_return_val_if_fail (GTK_IS_DROP_DOWN (self), FALSE);
+
+  return self->show_arrow;
 }
