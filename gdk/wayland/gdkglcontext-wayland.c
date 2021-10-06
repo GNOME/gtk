@@ -47,12 +47,12 @@ G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void
 gdk_wayland_gl_context_begin_frame (GdkDrawContext *draw_context,
-                                    gboolean        request_hdr,
+                                    gboolean        prefers_high_depth,
                                     cairo_region_t *region)
 {
   gdk_wayland_surface_ensure_wl_egl_window (gdk_draw_context_get_surface (draw_context));
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, request_hdr, region);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, prefers_high_depth, region);
 
   glDrawBuffers (1, (GLenum[1]) { GL_BACK });
 }

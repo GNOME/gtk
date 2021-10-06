@@ -61,10 +61,10 @@ gdk_x11_display_get_egl_display (GdkDisplay *display)
 
 static void
 gdk_x11_gl_context_egl_begin_frame (GdkDrawContext *draw_context,
-                                    gboolean        request_hdr,
+                                    gboolean        prefers_high_depth,
                                     cairo_region_t *region)
 {
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_egl_parent_class)->begin_frame (draw_context, request_hdr, region);
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_egl_parent_class)->begin_frame (draw_context, prefers_high_depth, region);
 
   glDrawBuffers (1, (GLenum[1]) { GL_BACK });
 }

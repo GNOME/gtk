@@ -226,7 +226,8 @@ gboolean            gdk_display_init_egl              (GdkDisplay       *display
                                                        GError          **error);
 gpointer            gdk_display_get_egl_display       (GdkDisplay       *display);
 gpointer            gdk_display_get_egl_config        (GdkDisplay       *display);
-gpointer            gdk_display_get_egl_config_hdr    (GdkDisplay       *display);
+gpointer            gdk_display_get_egl_config_high_depth
+                                                      (GdkDisplay       *display);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
                                                        gboolean          rgba);

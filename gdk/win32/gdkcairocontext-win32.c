@@ -53,7 +53,7 @@ create_cairo_surface_for_surface (GdkSurface *surface,
 
 static void
 gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
-                                     gboolean        request_hdr,
+                                     gboolean        prefers_high_depth,
                                      cairo_region_t *region)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);

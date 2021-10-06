@@ -93,7 +93,7 @@ struct _GdkDisplayPrivate {
 #ifdef HAVE_EGL
   EGLDisplay egl_display;
   EGLConfig egl_config;
-  EGLConfig egl_config_hdr;
+  EGLConfig egl_config_high_depth;
 #endif
 
   guint rgba : 1;
@@ -1439,11 +1439,11 @@ gdk_display_get_egl_config (GdkDisplay *self)
 }
 
 gpointer
-gdk_display_get_egl_config_hdr (GdkDisplay *self)
+gdk_display_get_egl_config_high_depth (GdkDisplay *self)
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
 
-  return priv->egl_config_hdr;
+  return priv->egl_config_high_depth;
 }
 
 static EGLDisplay
@@ -1721,16 +1721,16 @@ gdk_display_init_egl (GdkDisplay  *self,
     epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_pixel_format_float");
 
   if (self->have_egl_no_config_context)
-    priv->egl_config_hdr = gdk_display_create_egl_config (self,
+    priv->egl_config_high_depth = gdk_display_create_egl_config (self,
                                                           GDK_EGL_CONFIG_HDR,
                                                           error);
-  if (priv->egl_config_hdr == NULL)
-    priv->egl_config_hdr = priv->egl_config;
+  if (priv->egl_config_high_depth == NULL)
+    priv->egl_config_high_depth = priv->egl_config;
 
   GDK_DISPLAY_NOTE (self, OPENGL, {
       char *ext = describe_extensions (priv->egl_display);
-      char *sdr_cfg = describe_egl_config (priv->egl_display, priv->egl_config);
-      char *hdr_cfg = describe_egl_config (priv->egl_display, priv->egl_config_hdr);
+      char *std_cfg = describe_egl_config (priv->egl_display, priv->egl_config);
+      char *hd_cfg = describe_egl_config (priv->egl_display, priv->egl_config_high_depth);
       g_message ("EGL API version %d.%d found\n"
                  " - Vendor: %s\n"
                  " - Version: %s\n"
@@ -1738,15 +1738,15 @@ gdk_display_init_egl (GdkDisplay  *self,
                  " - Extensions:\n"
                  "\t%s\n"
                  " - Selected fbconfig: %s\n"
-                 "        HDR fbconfig: %s",
+                 "          high depth: %s",
                  major, minor,
                  eglQueryString (priv->egl_display, EGL_VENDOR),
                  eglQueryString (priv->egl_display, EGL_VERSION),
                  eglQueryString (priv->egl_display, EGL_CLIENT_APIS),
-                 ext, sdr_cfg,
-                 priv->egl_config_hdr == priv->egl_config ? "none" : hdr_cfg);
-      g_free (hdr_cfg);
-      g_free (sdr_cfg);
+                 ext, std_cfg,
+                 priv->egl_config_high_depth == priv->egl_config ? "none" : hd_cfg);
+      g_free (hd_cfg);
+      g_free (std_cfg);
       g_free (ext);
   });
 

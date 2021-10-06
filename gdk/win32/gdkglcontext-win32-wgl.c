@@ -118,12 +118,12 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
 
 static void
 gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext *draw_context,
-                                      gboolean        request_hdr,
+                                      gboolean        prefers_high_depth,
                                       cairo_region_t *update_area)
 {
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, request_hdr, update_area);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, prefers_high_depth, update_area);
 }
 
 static int

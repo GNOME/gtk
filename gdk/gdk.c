@@ -129,7 +129,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support" },
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer" },
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings", TRUE },
-  { "hdr",             GDK_DEBUG_HDR, "Use HDR rendering if possible", TRUE },
+  { "high-depth",      GDK_DEBUG_HIGH_DEPTH, "Use high bit depth rendering if possible", TRUE },
 };
 
 

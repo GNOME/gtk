@@ -589,7 +589,7 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
 
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
-                                 gboolean        request_hdr,
+                                 gboolean        prefers_high_depth,
                                  cairo_region_t *region)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
@@ -602,7 +602,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
 
 #ifdef HAVE_EGL
   if (priv->egl_context)
-    gdk_surface_ensure_egl_surface (surface, request_hdr);
+    gdk_surface_ensure_egl_surface (surface, prefers_high_depth);
 #endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);
