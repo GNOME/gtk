@@ -822,6 +822,9 @@ gdk_memory_convert_transform (guchar              *dest_data,
   guchar *src_tmp, *dest_tmp;
   gsize y;
 
+  g_assert (GDK_IS_ICC_PROFILE (src_profile));
+  g_assert (GDK_IS_ICC_PROFILE (dest_profile));
+
   transform = gdk_icc_profile_lookup_transform (GDK_ICC_PROFILE (src_profile),
                                                 src_desc->lcms.type,
                                                 GDK_ICC_PROFILE (dest_profile),
