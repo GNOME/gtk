@@ -241,6 +241,7 @@ gsk_ngl_renderer_render_texture (GskRenderer           *renderer,
   guint texture_id;
   int width;
   int height;
+  int format;
 
   g_assert (GSK_IS_NGL_RENDERER (renderer));
   g_assert (root != NULL);
@@ -248,9 +249,11 @@ gsk_ngl_renderer_render_texture (GskRenderer           *renderer,
   width = ceilf (viewport->size.width);
   height = ceilf (viewport->size.height);
 
+  format = gsk_render_node_prefers_high_depth (root) ? GL_RGBA32F : GL_RGBA8;
+
   if (gsk_ngl_driver_create_render_target (self->driver,
                                            width, height,
-                                           GL_RGBA8,
+                                           format,
                                            GL_NEAREST, GL_NEAREST,
                                            &render_target))
     {
