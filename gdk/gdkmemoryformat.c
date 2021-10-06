@@ -177,6 +177,7 @@ struct _GdkMemoryFormatDescription
   GdkMemoryAlpha alpha;
   gsize bytes_per_pixel;
   gsize alignment;
+  gboolean prefers_high_depth;
   gboolean supports_gles;
   struct {
     guint internal_format;
@@ -202,6 +203,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     4,
     G_ALIGNOF (guchar),
     FALSE,
+    FALSE,
     { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE },
     b8g8r8a8_premultiplied_to_float,
     b8g8r8a8_premultiplied_from_float,
@@ -211,6 +213,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     4,
     G_ALIGNOF (guchar),
     FALSE,
+    FALSE,
     { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
     a8r8g8b8_premultiplied_to_float,
     a8r8g8b8_premultiplied_from_float,
@@ -219,6 +222,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
     G_ALIGNOF (guchar),
+    FALSE,
     TRUE,
     { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE },
     r8g8b8a8_premultiplied_to_float,
@@ -229,6 +233,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     4,
     G_ALIGNOF (guchar),
     FALSE,
+    FALSE,
     { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE },
     b8g8r8a8_to_float,
     b8g8r8a8_from_float,
@@ -238,6 +243,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     4,
     G_ALIGNOF (guchar),
     FALSE,
+    FALSE,
     { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
     a8r8g8b8_to_float,
     a8r8g8b8_from_float,
@@ -246,6 +252,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
+    FALSE,
     TRUE,
     { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE },
     r8g8b8a8_to_float,
@@ -256,6 +263,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     4,
     G_ALIGNOF (guchar),
     FALSE,
+    FALSE,
     { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
     a8b8g8r8_to_float,
     a8b8g8r8_from_float,
@@ -264,6 +272,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     3,
     G_ALIGNOF (guchar),
+    FALSE,
     TRUE,
     { GL_RGBA8, GL_RGB, GL_UNSIGNED_BYTE },
     r8g8b8_to_float,
@@ -274,6 +283,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     3,
     G_ALIGNOF (guchar),
     FALSE,
+    FALSE,
     { GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE },
     b8g8r8_to_float,
     b8g8r8_from_float,
@@ -282,6 +292,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     6,
     G_ALIGNOF (guint16),
+    TRUE,
     TRUE,
     { GL_RGB16, GL_RGB, GL_UNSIGNED_SHORT },
     r16g16b16_to_float,
@@ -292,6 +303,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     8,
     G_ALIGNOF (guint16),
     TRUE,
+    TRUE,
     { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT },
     r16g16b16a16_to_float,
     r16g16b16a16_from_float,
@@ -300,6 +312,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_OPAQUE,
     6,
     G_ALIGNOF (guint16),
+    TRUE,
     TRUE,
     { GL_RGB16F, GL_RGB, GL_HALF_FLOAT },
     r16g16b16_float_to_float,
@@ -310,6 +323,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     8,
     G_ALIGNOF (guint16),
     TRUE,
+    TRUE,
     { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT },
     r16g16b16a16_float_to_float,
     r16g16b16a16_float_from_float,
@@ -319,6 +333,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     12,
     G_ALIGNOF (float),
     TRUE,
+    TRUE,
     { GL_RGB32F, GL_RGB, GL_FLOAT },
     r32g32b32_float_to_float,
     r32g32b32_float_from_float,
@@ -327,6 +342,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     16,
     G_ALIGNOF (float),
+    TRUE,
     TRUE,
     { GL_RGBA32F, GL_RGBA, GL_FLOAT },
     r32g32b32a32_float_to_float,
@@ -344,6 +360,26 @@ gsize
 gdk_memory_format_alignment (GdkMemoryFormat format)
 {
   return memory_formats[format].alignment;
+}
+
+/*<private>
+ * gdk_memory_format_prefers_high_depth:
+ * @format: a memory format
+ *
+ * Checks if the given format benefits from being rendered
+ * in bit depths higher than 8bits per pixel. See
+ * gsk_render_node_prefers_high_depth() for more information
+ * on this.
+ * Usually this is the case when
+ * gdk_memory_format_bytes_per_pixel() is larger than 4.
+ *
+ * Returns: %TRUE if the format benefits from being
+ *     composited in hgiher bit depths.
+ **/
+gboolean
+gdk_memory_format_prefers_high_depth (GdkMemoryFormat format)
+{
+  return memory_formats[format].prefers_high_depth;
 }
 
 gboolean
