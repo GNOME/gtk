@@ -700,7 +700,7 @@ gtk_drop_down_init (GtkDropDown *self)
  * to set up a way to map its items to widgets.
  *
  * Returns: a new `GtkDropDown`
- **/
+ */
 GtkWidget *
 gtk_drop_down_new (GListModel    *model,
                    GtkExpression *expression)
@@ -830,7 +830,7 @@ gtk_drop_down_get_factory (GtkDropDown *self)
  * @factory: (nullable) (transfer none): the factory to use
  *
  * Sets the `GtkListItemFactory` to use for populating list items.
- **/
+ */
 void
 gtk_drop_down_set_factory (GtkDropDown        *self,
                            GtkListItemFactory *factory)
@@ -855,7 +855,7 @@ gtk_drop_down_set_factory (GtkDropDown        *self,
  * Gets the factory that's currently used to populate list items in the popup.
  *
  * Returns: (nullable) (transfer none): The factory in use
- **/
+ */
 GtkListItemFactory *
 gtk_drop_down_get_list_factory (GtkDropDown *self)
 {
