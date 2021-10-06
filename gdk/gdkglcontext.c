@@ -384,10 +384,8 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
       if (forward_bit)
         flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
 
-      if (!use_es)
+      if (!use_es && eglBindAPI (EGL_OPENGL_API))
         {
-          eglBindAPI (EGL_OPENGL_API);
-
           /* We want a core profile, unless in legacy mode */
           context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
           context_attribs[i++] = legacy_bit
@@ -400,15 +398,19 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
           context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
           context_attribs[i++] = legacy_bit ? 0 : minor;
         }
-      else
+      else if (eglBindAPI (EGL_OPENGL_ES_API))
         {
-          eglBindAPI (EGL_OPENGL_ES_API);
-
           context_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
           if (major == 3)
             context_attribs[i++] = 3;
           else
             context_attribs[i++] = 2;
+        }
+      else
+        {
+          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("The EGL implementation supports neither OpenGL nor GLES"));
+          return FALSE;
         }
 
       /* Specify the flags */
@@ -433,7 +435,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
                               context_attribs);
 
       /* If context creation failed without the ES bit, let's try again with it */
-      if (ctx == NULL)
+      if (ctx == NULL && eglBindAPI (EGL_OPENGL_ES_API))
         {
           i = 0;
           context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
@@ -444,8 +446,6 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
           context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
           context_attribs[i++] = EGL_NONE;
           g_assert (i < N_EGL_ATTRS);
-
-          eglBindAPI (EGL_OPENGL_ES_API);
 
           legacy_bit = FALSE;
           use_es = TRUE;
@@ -460,7 +460,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
         }
 
       /* If context creation failed without the legacy bit, let's try again with it */
-      if (ctx == NULL)
+      if (ctx == NULL && eglBindAPI (EGL_OPENGL_API))
         {
           i = 0;
           context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
@@ -473,8 +473,6 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
           context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
           context_attribs[i++] = EGL_NONE;
           g_assert (i < N_EGL_ATTRS);
-
-          eglBindAPI (EGL_OPENGL_API);
 
           legacy_bit = TRUE;
           use_es = FALSE;
@@ -510,7 +508,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
 #endif
 
   g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                       "The current backend does not support OpenGL");
+                       _("The current backend does not support OpenGL"));
   return FALSE;
 }
 
