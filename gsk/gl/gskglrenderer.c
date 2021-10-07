@@ -320,3 +320,24 @@ gsk_gl_renderer_try_compile_gl_shader (GskGLRenderer  *renderer,
 
   return program != NULL;
 }
+
+GType
+gsk_ngl_renderer_get_type (void)
+{
+  return gsk_gl_renderer_get_type ();
+}
+
+/**
+ * gsk_ngl_renderer_new:
+ *
+ * Same as gsk_gl_renderer_new().
+ *
+ * Returns: (transfer full): a new GL renderer
+ *
+ * Deprecated: 4.4: Use gsk_gl_renderer_new()
+ */
+GskRenderer *
+gsk_ngl_renderer_new (void)
+{
+  return gsk_gl_renderer_new ();
+}
