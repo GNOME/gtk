@@ -38,7 +38,7 @@
 #include <dwmapi.h>
 
 #include "gdkwin32langnotification.h"
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
 
@@ -645,7 +645,7 @@ gdk_win32_display_dispose (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   if (display_win32->egl_disp != EGL_NO_DISPLAY)
     {
       eglTerminate (display_win32->egl_disp);
@@ -1158,7 +1158,7 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
 
   result = gdk_win32_display_init_wgl (display, error);
 
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   if (!result)
     {
       g_clear_error (error);
@@ -1179,7 +1179,7 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
   if (!gdk_win32_display_init_gl_backend (display, error))
     return NULL;
 
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   if (display_win32->egl_disp)
     gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL, "display", display, NULL);
   else
@@ -1203,13 +1203,13 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
 gpointer
 gdk_win32_display_get_egl_display (GdkDisplay *display)
 {
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   GdkWin32Display *display_win32;
 #endif
 
   g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
 
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   display_win32 = GDK_WIN32_DISPLAY (display);
 
   if (display_win32->wgl_pixel_format != 0)

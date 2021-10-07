@@ -25,7 +25,7 @@
 #include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
  
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
 
@@ -135,7 +135,7 @@ struct _GdkWin32Display
   int wgl_pixel_format;
   guint gl_version;
 
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   /* EGL (Angle) Items */
   guint egl_version;
   EGLDisplay egl_disp;
@@ -151,7 +151,7 @@ struct _GdkWin32Display
   guint hasWglARBPixelFormat : 1;
   guint hasWglARBmultisample : 1;
 
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   guint hasEglKHRCreateContext : 1;
   guint hasEglSurfacelessContext : 1;
   EGLint egl_min_swap_interval;

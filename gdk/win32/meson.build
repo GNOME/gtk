@@ -46,10 +46,7 @@ gdk_win32_public_headers = files([
 
 install_headers(gdk_win32_public_headers, 'gdkwin32.h', subdir: 'gtk-4.0/gdk/win32/')
 
-GDK_WIN32_EGL_CFLAGS = []
-
 if have_egl
-  GDK_WIN32_EGL_CFLAGS = ['-DGDK_WIN32_ENABLE_EGL']
   gdk_win32_sources += ['gdkglcontext-win32-egl.c']
 endif
 
@@ -67,6 +64,6 @@ libgdk_win32 = static_library('gdk-win32',
     '-DINSIDE_GDK_WIN32',
     '-D_WIN32_WINNT=0x0601',
     '-DWINVER=0x0601',
-  ] + GDK_WIN32_EGL_CFLAGS,
+  ],
   dependencies: [ gdk_deps, gdk_win32_deps ],
 )

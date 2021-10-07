@@ -688,7 +688,7 @@ gdk_win32_surface_destroy (GdkSurface *window,
       gdk_win32_surface_set_transient_for (child, NULL);
     }
 
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (window));
 
   /* Get rid of any EGLSurfaces that we might have created */
@@ -5053,7 +5053,7 @@ gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
   iface->present = gdk_win32_drag_surface_present;
 }
 
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
 EGLSurface
 gdk_win32_surface_get_egl_surface (GdkSurface *surface,
                                    EGLConfig   config,
@@ -5170,7 +5170,7 @@ _gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
  *  as we need to re-acquire the EGL surfaces that we rendered to upload to Cairo explicitly,
  *  using gdk_window_invalidate_rect (), when we maximize or restore or use aerosnap
  */
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
     {
       GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
