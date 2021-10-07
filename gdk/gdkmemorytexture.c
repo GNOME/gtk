@@ -34,8 +34,6 @@ struct _GdkMemoryTexture
 {
   GdkTexture parent_instance;
 
-  GdkMemoryFormat format;
-
   GBytes *bytes;
   gsize stride;
 };
@@ -74,7 +72,7 @@ gdk_memory_texture_download (GdkTexture *texture,
                       GDK_MEMORY_DEFAULT,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
-                      self->format,
+                      texture->format,
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }
@@ -91,7 +89,7 @@ gdk_memory_texture_download_float (GdkTexture *texture,
                       GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
-                      self->format,
+                      texture->format,
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }
@@ -184,17 +182,11 @@ gdk_memory_texture_new (int              width,
                        "height", height,
                        NULL);
 
-  self->format = format;
+  GDK_TEXTURE (self)->format = format;
   self->bytes = bytes;
   self->stride = stride;
 
   return GDK_TEXTURE (self);
-}
-
-GdkMemoryFormat 
-gdk_memory_texture_get_format (GdkMemoryTexture *self)
-{
-  return self->format;
 }
 
 const guchar *

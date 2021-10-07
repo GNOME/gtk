@@ -3,6 +3,8 @@
 
 #include "gdktexture.h"
 
+#include "gdkmemorytexture.h"
+
 G_BEGIN_DECLS
 
 #define GDK_TEXTURE_CLASS(klass)            (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_TEXTURE, GdkTextureClass))
@@ -13,6 +15,7 @@ struct _GdkTexture
 {
   GObject parent_instance;
 
+  GdkMemoryFormat format;
   int width;
   int height;
 
@@ -42,6 +45,7 @@ cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             
 /* NB: GdkMemoryTexture */
 GdkTexture *            gdk_texture_download_texture    (GdkTexture             *texture);
 
+GdkMemoryFormat         gdk_texture_get_format          (GdkTexture             *self);
 gboolean                gdk_texture_set_render_data     (GdkTexture             *self,
                                                          gpointer                key,
                                                          gpointer                data,

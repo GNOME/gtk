@@ -1362,7 +1362,7 @@ gsk_ngl_command_queue_upload_texture (GskNglCommandQueue *self,
     {
       GdkMemoryTexture *memory_texture = GDK_MEMORY_TEXTURE (texture);
       data = gdk_memory_texture_get_data (memory_texture);
-      data_format = gdk_memory_texture_get_format (memory_texture);
+      data_format = gdk_texture_get_format (texture);
       data_stride = gdk_memory_texture_get_stride (memory_texture);
     }
   else

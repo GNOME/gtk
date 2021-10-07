@@ -481,7 +481,7 @@ gdk_save_png (GdkTexture *texture)
   height = gdk_texture_get_height (texture);
 
   mtexture = gdk_texture_download_texture (texture);
-  format = gdk_memory_texture_get_format (GDK_MEMORY_TEXTURE (mtexture));
+  format = gdk_texture_get_format (mtexture);
 
   switch (format)
     {

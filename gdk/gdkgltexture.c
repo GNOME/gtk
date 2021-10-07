@@ -140,82 +140,29 @@ gdk_gl_texture_get_tex_image (GdkGLTexture *self,
                      data);
     }
 }
+
 static void
 gdk_gl_texture_do_download_texture (gpointer texture_,
                                     gpointer result_)
 {
   GdkTexture *texture = texture_;
   GdkTexture **result = result_;
-  GdkMemoryFormat format;
-  GLint internal_format, gl_format, gl_type;
+  guint gl_internalformat, gl_format, gl_type;
   guchar *data;
   gsize stride;
   GBytes *bytes;
 
-  glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
+  if (!gdk_memory_format_gl_format (texture->format,
+                                    gdk_gl_context_get_use_es (gdk_gl_context_get_current ()),
+                                    &gl_internalformat,
+                                    &gl_format,
+                                    &gl_type))
+    {
+      g_assert_not_reached ();
+    }
 
-  switch (internal_format)
-  {
-    case GL_RGB8:
-      format = GDK_MEMORY_R8G8B8;
-      gl_format = GL_RGB;
-      gl_type = GL_UNSIGNED_BYTE;
-      break;
-
-    case GL_RGBA8:
-      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_BYTE;
-      break;
-
-    case GL_RGB16:
-      format = GDK_MEMORY_R16G16B16;
-      gl_format = GL_RGB;
-      gl_type = GL_UNSIGNED_SHORT;
-      break;
-
-    case GL_RGBA16:
-      format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_SHORT;
-      break;
-
-    case GL_RGB16F:
-      format = GDK_MEMORY_R16G16B16_FLOAT;
-      gl_format = GL_RGB;
-      gl_type = GL_HALF_FLOAT;
-      break;
-
-    case GL_RGBA16F:
-      format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
-      gl_format = GL_RGBA;
-      gl_type = GL_HALF_FLOAT;
-      break;
-
-    case GL_RGB32F:
-      format = GDK_MEMORY_R32G32B32_FLOAT;
-      gl_format = GL_RGB;
-      gl_type = GL_FLOAT;
-      break;
-
-    case GL_RGBA32F:
-      format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-      gl_format = GL_RGBA;
-      gl_type = GL_FLOAT;
-      break;
-
-    default:
-      g_warning ("Texture in unexpected format 0x%X (%d). File a bug about adding it to GTK", internal_format, internal_format);
-      /* fallback to the dumbest possible format
-       * so that even age old GLES can do it */
-      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_BYTE;
-      break;
-  }
-
-  stride = gdk_memory_format_bytes_per_pixel (format) * texture->width;
-  data = g_malloc (stride * texture->height);
+  stride = gdk_memory_format_bytes_per_pixel (texture->format) * texture->width;
+  data = g_malloc_n (stride, texture->height);
 
   gdk_gl_texture_get_tex_image (texture_,
                                 gl_format,
@@ -225,7 +172,7 @@ gdk_gl_texture_do_download_texture (gpointer texture_,
   bytes = g_bytes_new_take (data, stride * texture->height);
   *result = gdk_memory_texture_new (texture->width,
                                     texture->height,
-                                    format,
+                                    texture->format,
                                     bytes,
                                     stride);
 
@@ -378,6 +325,58 @@ gdk_gl_texture_release (GdkGLTexture *self)
   self->id = 0;
 }
 
+static void
+gdk_gl_texture_do_determine_format (gpointer texture_,
+                                    gpointer unused)
+{
+  GdkTexture *texture = texture_;
+  GLint internal_format;
+
+  glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
+
+  switch (internal_format)
+  {
+    case GL_RGB8:
+      texture->format = GDK_MEMORY_R8G8B8;
+      break;
+
+    case GL_RGBA8:
+      texture->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      break;
+
+    case GL_RGB16:
+      texture->format = GDK_MEMORY_R16G16B16;
+      break;
+
+    case GL_RGBA16:
+      texture->format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+      break;
+
+    case GL_RGB16F:
+      texture->format = GDK_MEMORY_R16G16B16_FLOAT;
+      break;
+
+    case GL_RGBA16F:
+      texture->format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+      break;
+
+    case GL_RGB32F:
+      texture->format = GDK_MEMORY_R32G32B32_FLOAT;
+      break;
+
+    case GL_RGBA32F:
+      texture->format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      break;
+
+    default:
+      g_warning ("Texture in unexpected format 0x%X (%d). File a bug about adding it to GTK", internal_format, internal_format);
+      /* fallback to the dumbest possible format
+       * so that even age old GLES can do it */
+      texture->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      break;
+  }
+}
+
 /**
  * gdk_gl_texture_new:
  * @context: a `GdkGLContext`
@@ -420,6 +419,8 @@ gdk_gl_texture_new (GdkGLContext   *context,
   self->id = id;
   self->destroy = destroy;
   self->data = data;
+
+  gdk_gl_texture_run (self, gdk_gl_texture_do_determine_format, NULL);
 
   return GDK_TEXTURE (self);
 }

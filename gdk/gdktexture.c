@@ -808,6 +808,12 @@ gdk_texture_download_texture (GdkTexture *texture)
   return texture;
 }
 
+GdkMemoryFormat
+gdk_texture_get_format (GdkTexture *self)
+{
+  return self->format;
+}
+
 gboolean
 gdk_texture_set_render_data (GdkTexture     *self,
                              gpointer        key,
@@ -972,4 +978,3 @@ gdk_texture_save_to_tiff_bytes (GdkTexture *texture)
 
   return gdk_save_tiff (texture);
 }
-

@@ -284,7 +284,7 @@ gdk_save_tiff (GdkTexture *texture)
   height = gdk_texture_get_height (texture);
 
   memory_texture = gdk_texture_download_texture (texture);
-  format = gdk_memory_texture_get_format (GDK_MEMORY_TEXTURE (memory_texture));
+  format = gdk_texture_get_format (memory_texture);
 
   for (int i = 0; i < G_N_ELEMENTS (format_data); i++)
     {
