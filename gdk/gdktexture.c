@@ -221,35 +221,13 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkTexture, gdk_texture, G_TYPE_OBJECT,
 #define GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD(obj,method) \
   g_critical ("Texture of type '%s' does not implement GdkTexture::" # method, G_OBJECT_TYPE_NAME (obj))
 
-static GdkTexture *
-gdk_texture_real_download_texture (GdkTexture *self)
-{
-  GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD (self, download_texture);
-  return NULL;
-}
-
 static void
-gdk_texture_real_download (GdkTexture *texture,
-                           guchar     *data,
-                           gsize      stride)
+gdk_texture_default_download (GdkTexture      *texture,
+                              GdkMemoryFormat  format,
+                              guchar          *data,
+                              gsize            stride)
 {
-  GdkTexture *memory_texture;
-
-  memory_texture = gdk_texture_download_texture (texture);
-  gdk_texture_download (memory_texture, data, stride);
-  g_object_unref (memory_texture);
-}
-
-static void
-gdk_texture_real_download_float (GdkTexture *self,
-                                 float      *data,
-                                 gsize       stride)
-{
-  GdkTexture *memory_texture;
-
-  memory_texture = gdk_texture_download_texture (self);
-  gdk_texture_download_float (memory_texture, data, stride);
-  g_object_unref (memory_texture);
+  GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD (texture, download);
 }
 
 static void
@@ -315,9 +293,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  klass->download_texture = gdk_texture_real_download_texture;
-  klass->download = gdk_texture_real_download;
-  klass->download_float = gdk_texture_real_download_float;
+  klass->download = gdk_texture_default_download;
 
   gobject_class->set_property = gdk_texture_set_property;
   gobject_class->get_property = gdk_texture_get_property;
@@ -692,6 +668,15 @@ gdk_texture_get_height (GdkTexture *texture)
   return texture->height;
 }
 
+void
+gdk_texture_do_download (GdkTexture      *texture,
+                         GdkMemoryFormat  format,
+                         guchar          *data,
+                         gsize            stride)
+{
+  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, data,stride);
+}
+
 cairo_surface_t *
 gdk_texture_download_surface (GdkTexture *texture)
 {
@@ -750,7 +735,10 @@ gdk_texture_download (GdkTexture *texture,
   g_return_if_fail (data != NULL);
   g_return_if_fail (stride >= gdk_texture_get_width (texture) * 4);
 
-  GDK_TEXTURE_GET_CLASS (texture)->download (texture, data, stride);
+  gdk_texture_do_download (texture,
+                           GDK_MEMORY_DEFAULT,
+                           data,
+                           stride);
 }
 
 /**
@@ -789,23 +777,10 @@ gdk_texture_download_float (GdkTexture *texture,
   g_return_if_fail (data != NULL);
   g_return_if_fail (stride >= gdk_texture_get_width (texture) * 4);
 
-  GDK_TEXTURE_GET_CLASS (texture)->download_float (texture, data, stride);
-}
-
-GdkTexture *
-gdk_texture_download_texture (GdkTexture *texture)
-{
-  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
-
-  g_object_ref (texture);
-  while (!GDK_IS_MEMORY_TEXTURE (texture))
-    {
-      GdkTexture *downloaded = GDK_TEXTURE_GET_CLASS (texture)->download_texture (texture);
-      g_object_unref (texture);
-      texture = downloaded;
-    }
-
-  return texture;
+  gdk_texture_do_download (texture,
+                           GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+                           (guchar *) data,
+                           stride);
 }
 
 GdkMemoryFormat
