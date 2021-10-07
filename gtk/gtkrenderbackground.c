@@ -210,26 +210,16 @@ gtk_theming_background_snapshot_layer (GtkCssBoxes *bg,
       else
         repeat_height = round (image_height);
 
+      fill_rect = clip->bounds;
       if (hrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
         {
           fill_rect.origin.x = _gtk_css_position_value_get_x (pos, width - image_width);
           fill_rect.size.width = image_width;
         }
-      else
-        {
-          fill_rect.origin.x = 0;
-          fill_rect.size.width = width;
-        }
-
       if (vrepeat == GTK_CSS_REPEAT_STYLE_NO_REPEAT)
         {
           fill_rect.origin.y = _gtk_css_position_value_get_y (pos, height - image_height);
           fill_rect.size.height = image_height;
-        }
-      else
-        {
-          fill_rect.origin.y = 0;
-          fill_rect.size.height = height;
         }
 
       gtk_snapshot_push_repeat (snapshot,
