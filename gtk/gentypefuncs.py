@@ -79,6 +79,8 @@ for f in funcs:
     file_output += ['#ifdef GDK_RENDERING_VULKAN']
     file_output += ['*tp++ = {0}();'.format(f)]
     file_output += ['#endif']
+  elif f.startswith('gsk_ngl'):
+    file_output += ['']
   else:
     file_output += ['*tp++ = {0}();'.format(f)]
 
