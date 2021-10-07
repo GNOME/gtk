@@ -79,6 +79,8 @@ filechooser_portal_data_free (FilechooserPortalData *data)
   if (data->exported_window)
     gtk_window_unexport_handle (data->exported_window);
 
+  g_clear_object (&data->exported_window);
+
   g_free (data->portal_handle);
 
   g_free (data);
@@ -501,7 +503,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
         }
       else
         {
-          data->exported_window = transient_for;
+          data->exported_window = g_object_ref (transient_for);
         }
     }
   else
