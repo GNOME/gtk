@@ -21,7 +21,7 @@
 
 #include "gdkmemoryformatprivate.h"
 
-#include "gsk/ngl/fp16private.h"
+#include "gsk/gl/fp16private.h"
 
 #include <epoxy/gl.h>
 

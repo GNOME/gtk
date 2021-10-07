@@ -40,7 +40,7 @@
 #include <gtk/gtk.h>
 #define GTK_COMPILATION
 
-#include <gsk/ngl/gsknglrenderer.h>
+#include <gsk/gl/gskglrenderer.h>
 
 #ifdef GDK_WINDOWING_BROADWAY
 #include <gsk/broadway/gskbroadwayrenderer.h>

@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-#include "gsk/ngl/fp16private.h"
+#include "gsk/gl/fp16private.h"
 
 static void
 test_constants (void)
