@@ -464,6 +464,7 @@ gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
   GtkAllocation block_area;
   int num_blocks, i;
   int block_width, block_height;
+  int extra_space;
 
   gtk_level_bar_get_min_block_size (self, &block_width, &block_height);
   num_blocks = gtk_level_bar_get_num_blocks (self);
@@ -473,13 +474,21 @@ gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
 
   if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      block_width = MAX (block_width, (int) floor (width / num_blocks));
+      block_width = MAX (block_width, (int) floor ((double) width / num_blocks));
       block_height = height;
+      extra_space = width - block_width * num_blocks;
+
+      if (extra_space > 0)
+        block_width++;
     }
   else
     {
       block_width = width;
-      block_height = MAX (block_height, (int) floor (height / num_blocks));
+      block_height = MAX (block_height, (int) floor ((double) height / num_blocks));
+      extra_space = height - block_height * num_blocks;
+
+      if (extra_space > 0)
+        block_height++;
     }
 
   block_area.x = 0;
@@ -489,6 +498,14 @@ gtk_level_bar_allocate_trough_discrete (GtkLevelBar *self,
 
   for (i = 0; i < num_blocks; i++)
     {
+      if (extra_space > 0 && i == extra_space)
+        {
+          if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+            block_area.width--;
+          else
+            block_area.height--;
+        }
+
       gtk_widget_size_allocate (self->block_widget[i],
                                 &block_area,
                                 baseline);
