@@ -135,14 +135,6 @@ struct _GdkWin32Display
   int wgl_pixel_format;
   guint gl_version;
 
-#ifdef HAVE_EGL
-  /* EGL (Angle) Items */
-  guint egl_version;
-  EGLDisplay egl_disp;
-  EGLConfig egl_config;
-  HDC hdc_egl_temp;
-#endif
-
   GListModel *monitors;
 
   guint hasWglARBCreateContext : 1;
