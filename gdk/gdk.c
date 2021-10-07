@@ -121,7 +121,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "gl-software",     GDK_DEBUG_GL_SOFTWARE, "Force OpenGL software rendering" },
   { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT, "Use OpenGL texture rectangle extension" },
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
-  { "gl-gles",         GDK_DEBUG_GL_GLES, "Use a GLES OpenGL context" },
+  { "gl-gles",         GDK_DEBUG_GL_GLES, "Only allow OpenGL GLES API" },
   { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
   { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows" },
   { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11" },
