@@ -94,6 +94,8 @@
 #include <epoxy/egl.h>
 #endif
 
+#define DEFAULT_ALLOWED_APIS GDK_GL_API_GL | GDK_GL_API_GLES
+
 typedef struct {
   int major;
   int minor;
@@ -109,6 +111,7 @@ typedef struct {
   guint forward_compatible : 1;
   guint is_legacy : 1;
 
+  GdkGLAPI allowed_apis;
   int use_es;
 
   int max_debug_label_length;
@@ -121,12 +124,13 @@ typedef struct {
 enum {
   PROP_0,
 
+  PROP_ALLOWED_APIS,
   PROP_SHARED_CONTEXT,
 
   LAST_PROP
 };
 
-static GParamSpec *obj_pspecs[LAST_PROP] = { NULL, };
+static GParamSpec *properties[LAST_PROP] = { NULL, };
 
 G_DEFINE_QUARK (gdk-gl-error-quark, gdk_gl_error)
 
@@ -195,36 +199,49 @@ gdk_gl_context_dispose (GObject *gobject)
 }
 
 static void
-gdk_gl_context_set_property (GObject      *gobject,
+gdk_gl_context_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
+  GdkGLContext *self = GDK_GL_CONTEXT (object);
+
   switch (prop_id)
     {
+    case PROP_ALLOWED_APIS:
+      gdk_gl_context_set_allowed_apis (self, g_value_get_flags (value));
+      break;
+
     case PROP_SHARED_CONTEXT:
       g_assert (g_value_get_object (value) == NULL);
       break;
 
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
 static void
-gdk_gl_context_get_property (GObject    *gobject,
+gdk_gl_context_get_property (GObject    *object,
                              guint       prop_id,
                              GValue     *value,
                              GParamSpec *pspec)
 {
+  GdkGLContext *self = GDK_GL_CONTEXT (object);
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
   switch (prop_id)
     {
+    case PROP_ALLOWED_APIS:
+      g_value_set_flags (value, priv->allowed_apis);
+      break;
+
     case PROP_SHARED_CONTEXT:
       g_value_set_object (value, NULL);
       break;
 
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -716,7 +733,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    * Deprecated: 4.4: Use [method@Gdk.GLContext.is_shared] to check if contexts
    *   can be shared.
    */
-  obj_pspecs[PROP_SHARED_CONTEXT] =
+  properties[PROP_SHARED_CONTEXT] =
     g_param_spec_object ("shared-context",
                          P_("Shared context"),
                          P_("The GL context this context shares data with"),
@@ -726,11 +743,28 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_DEPRECATED);
 
+  /**
+   * GdkGLContext:allowed-apis: (attributes org.gtk.Property.get=gdk_gl_context_get_allowed_apis org.gtk.Property.gdk_gl_context_set_allowed_apis)
+   *
+   * The allowed APIs.
+   *
+   * Since: 4.6
+   */
+  properties[PROP_ALLOWED_APIS] =
+    g_param_spec_flags ("allowed-apis",
+                        P_("Allowed APIs"),
+                        P_("The list of allowed APIs for this context"),
+                        GDK_TYPE_GL_API,
+                        DEFAULT_ALLOWED_APIS,
+                        G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
   gobject_class->set_property = gdk_gl_context_set_property;
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_pspecs);
+  g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 }
 
 static void
@@ -738,7 +772,7 @@ gdk_gl_context_init (GdkGLContext *self)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
-  priv->use_es = -1;
+  priv->allowed_apis = DEFAULT_ALLOWED_APIS;
 }
 
 /* Must have called gdk_display_prepare_gl() before */
@@ -1140,6 +1174,57 @@ gdk_gl_context_is_shared (GdkGLContext *self,
     return FALSE;
 
   return GDK_GL_CONTEXT_GET_CLASS (self)->is_shared (self, other);
+}
+
+/**
+ * gdk_gl_context_set_allowed_apis: (attributes org.gtk.Method.set_property=allowed-apis)
+ * @self: a GL context
+ * @apis: the allowed APIs
+ *
+ * Sets the allowed APIs. When gdk_gl_context_realize() is called, only the
+ * allowed APIs will be tried. If you set this to 0, realizing will always fail.
+ *
+ * If you set it on a realized context, the property will not have any effect.
+ * It is only relevant during gdk_gl_context_realize().
+ *
+ * By default, all APIs are allowed.
+ *
+ * Since: 4.6
+ **/
+void
+gdk_gl_context_set_allowed_apis (GdkGLContext *self,
+                                 GdkGLAPI      apis)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (self));
+
+  if (priv->allowed_apis == apis)
+    return;
+
+  priv->allowed_apis = apis;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ALLOWED_APIS]);
+}
+
+/**
+ * gdk_gl_context_get_allowed_apis: (attributes org.gtk.Method.get_property=allowed-apis)
+ * @self: a GL context
+ *
+ * Gets the allowed APIs set via gdk_gl_context_set_allowed_apis().
+ *
+ * Returns: the allowed APIs
+ *
+ * Since: 4.6
+ **/
+GdkGLAPI
+gdk_gl_context_get_allowed_apis (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), 0);
+
+  return priv->allowed_apis;
 }
 
 /**
