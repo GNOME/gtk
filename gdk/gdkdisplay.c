@@ -40,6 +40,7 @@
 #include <epoxy/egl.h>
 #endif
 #include <math.h>
+#include <stdlib.h>
 
 /**
  * GdkDisplay:
