@@ -106,6 +106,7 @@ enum {
   PROP_0,
   PROP_IS_SEPARATOR,
   PROP_LABEL,
+  PROP_USE_MARKUP,
   PROP_ICON,
   PROP_VERB_ICON,
   PROP_SENSITIVE,
@@ -161,6 +162,9 @@ gtk_menu_tracker_item_get_property (GObject    *object,
       break;
     case PROP_LABEL:
       g_value_set_string (value, gtk_menu_tracker_item_get_label (self));
+      break;
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, gtk_menu_tracker_item_get_use_markup (self));
       break;
     case PROP_ICON:
       g_value_take_object (value, gtk_menu_tracker_item_get_icon (self));
@@ -223,6 +227,8 @@ gtk_menu_tracker_item_class_init (GtkMenuTrackerItemClass *class)
     g_param_spec_boolean ("is-separator", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_LABEL] =
     g_param_spec_string ("label", "", "", NULL, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
+  gtk_menu_tracker_item_pspecs[PROP_USE_MARKUP] =
+    g_param_spec_boolean ("use-markup", "", "", FALSE, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_ICON] =
     g_param_spec_object ("icon", "", "", G_TYPE_ICON, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE);
   gtk_menu_tracker_item_pspecs[PROP_VERB_ICON] =
@@ -626,6 +632,12 @@ gtk_menu_tracker_item_get_label (GtkMenuTrackerItem *self)
   g_menu_item_get_attribute (self->item, G_MENU_ATTRIBUTE_LABEL, "&s", &label);
 
   return label;
+}
+
+gboolean
+gtk_menu_tracker_item_get_use_markup (GtkMenuTrackerItem *self)
+{
+  return g_menu_item_get_attribute (self->item, "use-markup", "&s", NULL);
 }
 
 /*< private >

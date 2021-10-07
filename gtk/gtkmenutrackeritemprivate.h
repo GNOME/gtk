@@ -66,6 +66,8 @@ gboolean                gtk_menu_tracker_item_get_has_link              (GtkMenu
 
 const char *           gtk_menu_tracker_item_get_label                 (GtkMenuTrackerItem *self);
 
+gboolean               gtk_menu_tracker_item_get_use_markup            (GtkMenuTrackerItem *self);
+
 GIcon *                 gtk_menu_tracker_item_get_icon                  (GtkMenuTrackerItem *self);
 
 GIcon *                 gtk_menu_tracker_item_get_verb_icon             (GtkMenuTrackerItem *self);
