@@ -124,6 +124,7 @@ enum {
   PROP_0,
 
   PROP_ALLOWED_APIS,
+  PROP_API,
   PROP_SHARED_CONTEXT,
 
   LAST_PROP
@@ -233,6 +234,10 @@ gdk_gl_context_get_property (GObject    *object,
     {
     case PROP_ALLOWED_APIS:
       g_value_set_flags (value, priv->allowed_apis);
+      break;
+
+    case PROP_API:
+      g_value_set_flags (value, priv->api);
       break;
 
     case PROP_SHARED_CONTEXT:
@@ -761,6 +766,23 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GdkGLContext:api: (attributes org.gtk.Property.get=gdk_gl_context_get_api)
+   *
+   * The API currently in use.
+   *
+   * Since: 4.6
+   */
+  properties[PROP_API] =
+    g_param_spec_flags ("api",
+                        P_("API"),
+                        P_("The API currently in use"),
+                        GDK_TYPE_GL_API,
+                        0,
+                        G_PARAM_READABLE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
   gobject_class->set_property = gdk_gl_context_set_property;
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
@@ -1234,6 +1256,28 @@ gdk_gl_context_get_allowed_apis (GdkGLContext *self)
   return priv->allowed_apis;
 }
 
+/**
+ * gdk_gl_context_get_api: (attributes org.gtk.Method.get_property=api)
+ * @self: a GL context
+ *
+ * Gets the API currently in use.
+ *
+ * If the renderer has not been realized yet, 0 is returned.
+ *
+ * Returns: the currently used API
+ *
+ * Since: 4.6
+ **/
+GdkGLAPI
+gdk_gl_context_get_api (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), 0);
+
+  return priv->api;
+}
+
 gboolean
 gdk_gl_context_is_api_allowed (GdkGLContext  *self,
                                GdkGLAPI       api,
@@ -1437,6 +1481,9 @@ gdk_gl_context_realize (GdkGLContext  *context,
     return TRUE;
 
   priv->api = GDK_GL_CONTEXT_GET_CLASS (context)->realize (context, error);
+
+  if (priv->api)
+    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_API]);
 
   return priv->api;
 }
