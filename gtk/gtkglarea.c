@@ -319,7 +319,7 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
       return NULL;
     }
 
-  gdk_gl_context_set_use_es (context, priv->use_es);
+  gdk_gl_context_set_allowed_apis (context, priv->use_es ? GDK_GL_API_GLES : GDK_GL_API_GL);
   gdk_gl_context_set_required_version (context,
                                        priv->required_gl_version / 10,
                                        priv->required_gl_version % 10);

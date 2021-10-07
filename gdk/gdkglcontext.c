@@ -1246,6 +1246,8 @@ gdk_gl_context_get_allowed_apis (GdkGLContext *self)
  * You should check the return value of [method@Gdk.GLContext.get_use_es]
  * after calling [method@Gdk.GLContext.realize] to decide whether to use
  * the OpenGL or OpenGL ES API, extensions, or shaders.
+ *
+ * Deprecated: 4.6: Use gdk_gl_context_set_allowed_apis() instead.
  */
 void
 gdk_gl_context_set_use_es (GdkGLContext *context,
@@ -1256,8 +1258,21 @@ gdk_gl_context_set_use_es (GdkGLContext *context,
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!priv->realized);
 
-  if (priv->use_es != use_es)
-    priv->use_es = use_es;
+  switch (use_es)
+  {
+    case -1:
+      gdk_gl_context_set_allowed_apis (context, DEFAULT_ALLOWED_APIS);
+      break;
+    case 0:
+      gdk_gl_context_set_allowed_apis (context, GDK_GL_API_GL);
+      break;
+    case 1:
+      gdk_gl_context_set_allowed_apis (context, GDK_GL_API_GLES);
+      break;
+    default:
+      /* Just ignore the call */
+      break;
+  }
 }
 
 /**
