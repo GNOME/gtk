@@ -1,6 +1,6 @@
 #include <gtk.h>
 
-static gboolean
+static void
 compare_pixels (int     width,
                 int     height,
                 guchar *data1,
@@ -8,15 +8,17 @@ compare_pixels (int     width,
                 guchar *data2,
                 gsize   stride2)
 {
-  int i;
-  for (i = 0; i < height; i++)
+  int x, y;
+  for (y = 0; y < height; y++)
     {
-      gconstpointer p1 = data1 + i * stride1;
-      gconstpointer p2 = data2 + i * stride2;
-      if (memcmp (p1, p2, width * 4) != 0)
-        return FALSE;
+      const guint32 *p1 = (const guint32*) (data1 + y * stride1);
+      const guint32 *p2 = (const guint32*) (data2 + y * stride2);
+
+      for (x = 0; x < width; x++)
+        {
+          g_assert_cmphex (p1[x], ==, p2[x]);
+        }
     }
-  return TRUE;
 }
 
 static void
@@ -55,10 +57,10 @@ test_texture_from_pixbuf (void)
   cairo_paint (cr);
   cairo_destroy (cr);
 
-  g_assert_true (compare_pixels (width, height,
-                                 data, stride,
-                                 cairo_image_surface_get_data (surface),
-                                 cairo_image_surface_get_stride (surface)));
+  compare_pixels (width, height,
+                  data, stride,
+                  cairo_image_surface_get_data (surface),
+                  cairo_image_surface_get_stride (surface));
 
   g_free (data);
 

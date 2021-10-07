@@ -22,8 +22,11 @@
 
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdkdisplayprivate.h>
+#include <gdk/gdkglcontextprivate.h>
+#include <gdk/gdksurfaceprivate.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskrendererprivate.h>
+#include <gsk/gskrendernodeprivate.h>
 
 #include "gsknglcommandqueueprivate.h"
 #include "gskngldriverprivate.h"
@@ -201,7 +204,9 @@ gsk_ngl_renderer_render (GskRenderer          *renderer,
   viewport.size.height = gdk_surface_get_height (surface) * scale_factor;
 
   gdk_gl_context_make_current (self->context);
-  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->context), update_area);
+  gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->context),
+                                     gsk_render_node_prefers_high_depth (root),
+                                     update_area);
 
   /* Must be called *AFTER* gdk_draw_context_begin_frame() */
   render_region = get_render_region (surface, self->context);
@@ -236,6 +241,7 @@ gsk_ngl_renderer_render_texture (GskRenderer           *renderer,
   guint texture_id;
   int width;
   int height;
+  int format;
 
   g_assert (GSK_IS_NGL_RENDERER (renderer));
   g_assert (root != NULL);
@@ -243,8 +249,11 @@ gsk_ngl_renderer_render_texture (GskRenderer           *renderer,
   width = ceilf (viewport->size.width);
   height = ceilf (viewport->size.height);
 
+  format = gsk_render_node_prefers_high_depth (root) ? GL_RGBA32F : GL_RGBA8;
+
   if (gsk_ngl_driver_create_render_target (self->driver,
                                            width, height,
+                                           format,
                                            GL_NEAREST, GL_NEAREST,
                                            &render_target))
     {

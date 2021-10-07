@@ -21,7 +21,7 @@
 #include "config.h"
 
 #include <gdk/gdkglcontextprivate.h>
-#include <gdk/gdkmemorytextureprivate.h>
+#include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 
 #include "gsknglcommandqueueprivate.h"
@@ -237,7 +237,7 @@ gsk_ngl_glyph_library_upload_glyph (GskNglGlyphLibrary     *self,
       pixel_data = free_data = g_malloc (width * height * 4);
       gdk_memory_convert (pixel_data,
                           width * 4,
-                          GDK_MEMORY_CONVERT_GLES_RGBA,
+                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
                           cairo_image_surface_get_data (surface),
                           width * 4,
                           GDK_MEMORY_DEFAULT,

@@ -79,6 +79,7 @@
 #include "gdkdebug.h"
 #include "gdkdisplayprivate.h"
 #include "gdkintl.h"
+#include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 
@@ -238,80 +239,39 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   guchar *copy = NULL;
-  GLint gl_internalformat;
-  GLint gl_format;
-  GLint gl_type;
+  GLenum gl_internalformat;
+  GLenum gl_format;
+  GLenum gl_type;
   gsize bpp;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  if (!priv->use_es && data_format == GDK_MEMORY_DEFAULT) /* Cairo surface format */
+  if (!gdk_memory_format_gl_format (data_format,
+                                    priv->use_es,
+                                    &gl_internalformat,
+                                    &gl_format,
+                                    &gl_type))
     {
-      gl_internalformat = GL_RGBA8;
-      gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-    }
-  else if (data_format == GDK_MEMORY_R8G8B8) /* Pixmap non-alpha data */
-    {
-      gl_internalformat = GL_RGBA8;
-      gl_format = GL_RGB;
-      gl_type = GL_UNSIGNED_BYTE;
-    }
-  else if (priv->use_es && data_format == GDK_MEMORY_B8G8R8)
-    {
-      gl_internalformat = GL_RGBA8;
-      gl_format = GL_BGR;
-      gl_type = GL_UNSIGNED_BYTE;
-    }
-  else if (data_format == GDK_MEMORY_R16G16B16)
-    {
-      gl_internalformat = GL_RGBA16;
-      gl_format = GL_RGB;
-      gl_type = GL_UNSIGNED_SHORT;
-    }
-  else if (data_format == GDK_MEMORY_R16G16B16A16_PREMULTIPLIED)
-    {
-      gl_internalformat = GL_RGBA16;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_SHORT;
-    }
-  else if (data_format == GDK_MEMORY_R16G16B16_FLOAT)
-    {
-      gl_internalformat = GL_RGB16F;
-      gl_format = GL_RGB;
-      gl_type = GL_HALF_FLOAT;
-    }
-  else if (data_format == GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED)
-    {
-      gl_internalformat = GL_RGBA16F;
-      gl_format = GL_RGBA;
-      gl_type = GL_HALF_FLOAT;
-    }
-  else if (data_format == GDK_MEMORY_R32G32B32_FLOAT)
-    {
-      gl_internalformat = GL_RGB32F;
-      gl_format = GL_RGB;
-      gl_type = GL_FLOAT;
-    }
-  else if (data_format == GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED)
-    {
-      gl_internalformat = GL_RGBA32F;
-      gl_format = GL_RGBA;
-      gl_type = GL_FLOAT;
-    }
-  else /* Fall-back, convert to GLES format */
-    {
-      copy = g_malloc (width * height * 4);
+      copy = g_malloc_n (width * 4, height);
       gdk_memory_convert (copy, width * 4,
-                          GDK_MEMORY_CONVERT_GLES_RGBA,
-                          data, stride, data_format,
+                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                          data, stride,
+                          data_format,
                           width, height);
-      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      stride = width * 4;
       data = copy;
-      gl_internalformat = GL_RGBA8;
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_BYTE;
+      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      if (!gdk_memory_format_gl_format (data_format,
+                                        priv->use_es,
+                                        &gl_internalformat,
+                                        &gl_format,
+                                        &gl_type))
+        {
+          g_assert_not_reached ();
+        }
+    }
+  else
+    {
+      copy = NULL;
     }
 
   bpp = gdk_memory_format_bytes_per_pixel (data_format);
@@ -629,7 +589,7 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
 
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
-                                 gboolean        request_hdr,
+                                 gboolean        prefers_high_depth,
                                  cairo_region_t *region)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
@@ -642,7 +602,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
 
 #ifdef HAVE_EGL
   if (priv->egl_context)
-    gdk_surface_ensure_egl_surface (surface, request_hdr);
+    gdk_surface_ensure_egl_surface (surface, prefers_high_depth);
 #endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);

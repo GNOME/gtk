@@ -28,6 +28,7 @@
 #include "gsktransformprivate.h"
 
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdk-private.h"
 
 #include <hb-ot.h>
@@ -1560,6 +1561,8 @@ gsk_texture_node_new (GdkTexture            *texture,
   self->texture = g_object_ref (texture);
   graphene_rect_init_from_rect (&node->bounds, bounds);
 
+  node->prefers_high_depth = gdk_memory_format_prefers_high_depth (gdk_texture_get_format (texture));
+
   return node;
 }
 
@@ -2730,11 +2733,13 @@ gsk_container_node_new (GskRenderNode **children,
 
       self->children[0] = gsk_render_node_ref (children[0]);
       graphene_rect_init_from_rect (&bounds, &(children[0]->bounds));
+      node->prefers_high_depth = gsk_render_node_prefers_high_depth (children[0]);
 
       for (guint i = 1; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
           graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
+          node->prefers_high_depth |= gsk_render_node_prefers_high_depth (children[i]);
         }
 
       graphene_rect_init_from_rect (&node->bounds, &bounds);
@@ -2965,6 +2970,8 @@ gsk_transform_node_new (GskRenderNode *child,
                                   &child->bounds,
                                   &node->bounds);
 
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+
   return node;
 }
 
@@ -3099,6 +3106,8 @@ gsk_opacity_node_new (GskRenderNode *child,
   self->opacity = CLAMP (opacity, 0.0, 1.0);
 
   graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
 
   return node;
 }
@@ -3302,6 +3311,8 @@ gsk_color_matrix_node_new (GskRenderNode           *child,
 
   graphene_rect_init_from_rect (&node->bounds, &child->bounds);
 
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+
   return node;
 }
 
@@ -3451,6 +3462,8 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
   else
     graphene_rect_init_from_rect (&self->child_bounds, &child->bounds);
 
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+
   return node;
 }
 
@@ -3582,6 +3595,8 @@ gsk_clip_node_new (GskRenderNode         *child,
 
   graphene_rect_intersection (&self->clip, &child->bounds, &node->bounds);
 
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+
   return node;
 }
 
@@ -3712,6 +3727,8 @@ gsk_rounded_clip_node_new (GskRenderNode         *child,
   gsk_rounded_rect_init_copy (&self->clip, clip);
 
   graphene_rect_intersection (&self->clip.bounds, &child->bounds, &node->bounds);
+
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
 
   return node;
 }
@@ -3932,6 +3949,8 @@ gsk_shadow_node_new (GskRenderNode   *child,
 
   gsk_shadow_node_get_bounds (self, &node->bounds);
 
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+
   return node;
 }
 
@@ -4125,6 +4144,8 @@ gsk_blend_node_new (GskRenderNode *bottom,
 
   graphene_rect_union (&bottom->bounds, &top->bounds, &node->bounds);
 
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (bottom) || gsk_render_node_prefers_high_depth (top);
+
   return node;
 }
 
@@ -4272,6 +4293,8 @@ gsk_cross_fade_node_new (GskRenderNode *start,
   self->progress = CLAMP (progress, 0.0, 1.0);
 
   graphene_rect_union (&start->bounds, &end->bounds, &node->bounds);
+
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (start) || gsk_render_node_prefers_high_depth (end);
 
   return node;
 }
@@ -4864,6 +4887,8 @@ gsk_blur_node_new (GskRenderNode *child,
                        - clip_radius,
                        - clip_radius);
 
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+
   return node;
 }
 
@@ -4985,6 +5010,8 @@ gsk_debug_node_new (GskRenderNode *child,
   self->message = message;
 
   graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
 
   return node;
 }
@@ -5150,7 +5177,10 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
     {
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
       for (guint i = 0; i < n_children; i++)
-        self->children[i] = gsk_render_node_ref (children[i]);
+        {
+          self->children[i] = gsk_render_node_ref (children[i]);
+          node->prefers_high_depth |= gsk_render_node_prefers_high_depth (children[i]);
+        }
     }
 
   return node;

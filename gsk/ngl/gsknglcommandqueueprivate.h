@@ -290,12 +290,14 @@ int                 gsk_ngl_command_queue_upload_texture       (GskNglCommandQue
 int                 gsk_ngl_command_queue_create_texture       (GskNglCommandQueue    *self,
                                                                 int                    width,
                                                                 int                    height,
+                                                                int                    format,
                                                                 int                    min_filter,
                                                                 int                    mag_filter);
 guint               gsk_ngl_command_queue_create_framebuffer   (GskNglCommandQueue    *self);
 gboolean            gsk_ngl_command_queue_create_render_target (GskNglCommandQueue    *self,
                                                                 int                    width,
                                                                 int                    height,
+                                                                int                    format,
                                                                 int                    min_filter,
                                                                 int                    mag_filter,
                                                                 guint                 *out_fbo_id,

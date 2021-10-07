@@ -315,28 +315,30 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
 }
 
 /*
- * @request_hdr: %TRUE to request high dynamic range.
+ * @prefers_high_depth: %TRUE to request a higher bit depth
  *
- * If HDR is requested, GDK will see about providing a rendering target
- * that supports high dynamic range. Typically this means a target supporting
- * 16bit floating point pixels, but that is not guaranteed.
+ * If high depth is preferred, GDK will see about providing a rendering target
+ * that supports higher bit depth than 8 bits per channel. Typically this means
+ * a target supporting 16bit floating point pixels, but that is not guaranteed.
  *
  * This is only a request and if the GDK backend does not support HDR rendering
  * or does not consider it worthwhile, it may choose to not honor the request.
- * It may also choose to provide HDR even if it was not requested.
+ * It may also choose to provide high depth even if it was not requested.
  * Typically the steps undertaken by a backend are:
- * 1. Check if HDR is supported by this drawing backend.
- * 2. Check if the compositor supports HDR.
- * 3. Check if the compositor prefers SDR. This is usually the case when the attached
- *    monitors do not support HDR content or when the system is resource constrained.
+ * 1. Check if high depth is supported by this drawing backend.
+ * 2. Check if the compositor supports high depth.
+ * 3. Check if the compositor prefers regular bit depth. This is usually the case
+ *    when the attached monitors do not support high depth content or when the
+ *    system is resource constrained.
  * In either of those cases, the context will usually choose to not honor the request.
  *
- * The rendering code must be able to deal with HDR and SDR content, no matter if HDR
- * was requested. The request is only a hint and GDK is free to choose.
+ * The rendering code must be able to deal with content in any bit depth, no matter
+ * the preference. The prefers_high_depth argument is only a hint and GDK is free
+ * to choose.
  */
 void
 gdk_draw_context_begin_frame_full (GdkDrawContext       *context,
-                                   gboolean              request_hdr,
+                                   gboolean              prefers_high_depth,
                                    const cairo_region_t *region)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
@@ -362,13 +364,13 @@ gdk_draw_context_begin_frame_full (GdkDrawContext       *context,
       return;
     }
 
-  if (GDK_DISPLAY_DEBUG_CHECK (priv->display, HDR))
-    request_hdr = TRUE;
+  if (GDK_DISPLAY_DEBUG_CHECK (priv->display, HIGH_DEPTH))
+    prefers_high_depth = TRUE;
 
   priv->frame_region = cairo_region_copy (region);
   priv->surface->paint_context = g_object_ref (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, request_hdr, priv->frame_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, prefers_high_depth, priv->frame_region);
 }
 
 #ifdef HAVE_SYSPROF
