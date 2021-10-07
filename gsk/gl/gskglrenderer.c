@@ -321,10 +321,36 @@ gsk_gl_renderer_try_compile_gl_shader (GskGLRenderer  *renderer,
   return program != NULL;
 }
 
-GType
-gsk_ngl_renderer_get_type (void)
+typedef struct {
+  GskRenderer parent_instance;
+} GskNglRenderer;
+
+typedef struct {
+  GskRendererClass parent_class;
+} GskNglRendererClass;
+
+G_DEFINE_TYPE (GskNglRenderer, gsk_ngl_renderer, GSK_TYPE_RENDERER)
+
+static void
+gsk_ngl_renderer_init (GskNglRenderer *renderer)
 {
-  return gsk_gl_renderer_get_type ();
+}
+
+static gboolean
+gsk_ngl_renderer_realize (GskRenderer  *renderer,
+                          GdkSurface   *surface,
+                          GError      **error)
+{
+  g_set_error_literal (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "please use the GL renderer instead");
+  return FALSE;
+}
+
+static void
+gsk_ngl_renderer_class_init (GskNglRendererClass *class)
+{
+  GSK_RENDERER_CLASS (class)->realize = gsk_ngl_renderer_realize;
 }
 
 /**
@@ -339,5 +365,7 @@ gsk_ngl_renderer_get_type (void)
 GskRenderer *
 gsk_ngl_renderer_new (void)
 {
-  return gsk_gl_renderer_new ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  return g_object_new (gsk_ngl_renderer_get_type (), NULL);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
