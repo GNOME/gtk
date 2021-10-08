@@ -30,6 +30,18 @@ if wayland_enabled
                         'TEST_OUTPUT_SUBDIR=wayland',
                         ])
 
+  if get_option('debug')
+    gdk_debug = 'GDK_DEBUG=gl-gles,default-settings'
+  else
+    gdk_debug = 'GDK_DEBUG=gl-gles'
+  endif
+  add_test_setup ('waylandgles',
+                  env: common_env + [
+                        'GDK_BACKEND=wayland',
+                        'TEST_OUTPUT_SUBDIR=waylandgles',
+                        gdk_debug,
+                        ])
+
 endif
 
 if os_win32
