@@ -618,6 +618,27 @@ test_download_4x4 (gconstpointer data)
     }
 }
 
+/* larger than what NGL puts into the icon cache */
+static void
+test_download_192x192 (gconstpointer data)
+{
+  GdkMemoryFormat format;
+  TextureMethod method;
+  GdkTexture *expected, *test;
+  GdkRGBA color;
+
+  decode (data, &format, &method);
+
+  create_random_color (&color);
+  expected = create_texture (GDK_MEMORY_DEFAULT, TEXTURE_METHOD_LOCAL, 192, 192, &color);
+  test = create_texture (format, method, 192, 192, &color);
+  
+  compare_textures (expected, test, gdk_memory_format_has_alpha (format));
+
+  g_object_unref (expected);
+  g_object_unref (test);
+}
+
 static void
 test_download_float_1x1 (gconstpointer data)
 {
@@ -708,6 +729,7 @@ main (int argc, char *argv[])
 
   add_test ("/memorytexture/download_1x1", test_download_1x1);
   add_test ("/memorytexture/download_4x4", test_download_4x4);
+  add_test ("/memorytexture/download_192x192", test_download_192x192);
   add_test ("/memorytexture/download_float_1x1", test_download_float_1x1);
   add_test ("/memorytexture/download_float_4x4", test_download_float_4x4);
 
