@@ -241,8 +241,8 @@ static void
 gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
                                    const GskGLGlyphKey   *key,
                                    const GskGLGlyphValue *value,
-                                   int                    x,
-                                   int                    y,
+                                   int                    packed_x,
+                                   int                    packed_y,
                                    int                    width,
                                    int                    height,
                                    int                    uwidth,
@@ -275,19 +275,16 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
 
   g_assert (texture_id > 0);
 
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / 4);
-  glBindTexture (GL_TEXTURE_2D, texture_id);
-
   if G_UNLIKELY (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
     {
       pixel_data = free_data = g_malloc (width * height * 4);
-      gdk_memory_convert (pixel_data,
-                          width * 4,
+      gdk_memory_convert (pixel_data, width * 4,
                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
                           cairo_image_surface_get_data (surface),
-                          width * 4,
+                          stride,
                           GDK_MEMORY_DEFAULT,
                           width, height);
+      stride = width * 4;
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
     }
@@ -298,9 +295,74 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
       gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
     }
 
-  glTexSubImage2D (GL_TEXTURE_2D, 0, x, y, width, height,
-                   gl_format, gl_type, pixel_data);
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / 4);
+  glBindTexture (GL_TEXTURE_2D, texture_id);
+
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x + 1, packed_y + 1,
+                   width, height,
+                   gl_format, gl_type,
+                   pixel_data);
+
+  /* Padding top */
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x + 1, packed_y,
+                   width, 1,
+                   gl_format, gl_type,
+                   pixel_data);
+  /* Padding left */
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x, packed_y + 1,
+                   1, height,
+                   gl_format, gl_type,
+                   pixel_data);
+  /* Padding top left */
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x, packed_y,
+                   1, 1,
+                   gl_format, gl_type,
+                   pixel_data);
+  /* Padding right */
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, width);
+  glPixelStorei (GL_UNPACK_SKIP_PIXELS, width - 1);
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x + width + 1, packed_y + 1,
+                   1, height,
+                   gl_format, gl_type,
+                   pixel_data);
+  /* Padding top right */
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x + width + 1, packed_y,
+                   1, 1,
+                   gl_format, gl_type,
+                   pixel_data);
+  /* Padding bottom */
+  glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
   glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
+  glPixelStorei (GL_UNPACK_SKIP_ROWS, height - 1);
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x + 1, packed_y + 1 + height,
+                   width, 1,
+                   gl_format, gl_type,
+                   pixel_data);
+  /* Padding bottom left */
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x, packed_y + 1 + height,
+                   1, 1,
+                   gl_format, gl_type,
+                   pixel_data);
+  /* Padding bottom right */
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, width);
+  glPixelStorei (GL_UNPACK_SKIP_PIXELS, width - 1);
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   packed_x + 1 + width, packed_y + 1 + height,
+                   1, 1,
+                   gl_format, gl_type,
+                   pixel_data);
+  /* Reset this */
+  glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
+  glPixelStorei (GL_UNPACK_SKIP_ROWS, 0);
 
   cairo_surface_destroy (surface);
   g_free (free_data);
@@ -359,8 +421,8 @@ gsk_gl_glyph_library_add (GskGLGlyphLibrary      *self,
     gsk_gl_glyph_library_upload_glyph (self,
                                        key,
                                        value,
-                                       packed_x + 1,
-                                       packed_y + 1,
+                                       packed_x,
+                                       packed_y,
                                        width,
                                        height,
                                        ink_rect.width,
