@@ -98,7 +98,7 @@ msgstr "Tabulazioa"
 #: gdk/keyname-table.h:6845
 msgctxt "keyboard label"
 msgid "Return"
-msgstr "Itzuli"
+msgstr "Sartu"
 
 #: gdk/keyname-table.h:6846
 msgctxt "keyboard label"
