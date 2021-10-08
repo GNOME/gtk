@@ -1305,10 +1305,10 @@ gsk_ngl_command_queue_create_texture (GskNglCommandQueue *self,
       glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
       break;
     case GL_RGBA16F:
-      glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_BGRA, GL_HALF_FLOAT, NULL);
+      glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_HALF_FLOAT, NULL);
       break;
     case GL_RGBA32F:
-      glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_BGRA, GL_FLOAT, NULL);
+      glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_FLOAT, NULL);
       break;
     default:
       /* If you add new formats, make sure to set the correct format and type here
