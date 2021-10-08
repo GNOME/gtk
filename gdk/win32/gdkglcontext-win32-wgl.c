@@ -543,7 +543,7 @@ set_wgl_pixformat_for_hdc (HDC              hdc,
   return TRUE;
 }
 
-static gboolean
+static GdkGLAPI
 gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
                                   GError **error)
 {
@@ -563,6 +563,9 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   GdkGLContext *share = gdk_display_get_gl_context (display);
+
+  if (!gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, error))
+    return 0;
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
@@ -589,7 +592,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
                            GDK_GL_ERROR_UNSUPPORTED_FORMAT,
                            _("No available configurations for the given pixel format"));
 
-      return FALSE;
+      return 0;
     }
 
   /* if there isn't wglCreateContextAttribsARB() on WGL, use a legacy context */
@@ -622,7 +625,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            _("Unable to create a GL context"));
-      return FALSE;
+      return 0;
     }
 
   GDK_NOTE (OPENGL,
@@ -632,13 +635,10 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
   context_wgl->wgl_context = hglrc;
 
-  /* No GLES, WGL does not support using EGL contexts */
-  gdk_gl_context_set_use_es (context, FALSE);
-
   /* Ensure that any other context is created with a legacy bit set */
   gdk_gl_context_set_is_legacy (context, legacy_bit);
 
-  return TRUE;
+  return GDK_GL_API_GL;
 }
 
 static gboolean

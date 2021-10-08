@@ -184,7 +184,10 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
 
   if (self->gl_context != nil)
-    return TRUE;
+    return GDK_GL_API_GL;
+
+  if (!gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, error))
+    return 0;
 
   existing = [NSOpenGLContext currentContext];
 
@@ -197,7 +200,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   if (shared != NULL)
     {
       if (!(shared_gl_context = get_ns_open_gl_context (GDK_MACOS_GL_CONTEXT (shared), error)))
-        return FALSE;
+        return 0;
     }
 
   GDK_DISPLAY_NOTE (display,
@@ -206,7 +209,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
                                major, minor));
 
   if (!(pixelFormat = create_pixel_format (major, minor, error)))
-    return FALSE;
+    return 0;
 
   gl_context = [[NSOpenGLContext alloc] initWithFormat:pixelFormat
                                           shareContext:shared_gl_context];
@@ -219,7 +222,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
                            GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            "Failed to create NSOpenGLContext");
-      return FALSE;
+      return 0;
     }
 
   cgl_context = [gl_context CGLContextObj];
@@ -258,7 +261,7 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
   if (existing != NULL)
     [existing makeCurrentContext];
 
-  return TRUE;
+  return GDK_GL_API_GL;
 }
 
 static gboolean

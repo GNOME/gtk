@@ -94,12 +94,13 @@
 #include <epoxy/egl.h>
 #endif
 
+#define DEFAULT_ALLOWED_APIS GDK_GL_API_GL | GDK_GL_API_GLES
+
 typedef struct {
   int major;
   int minor;
   int gl_version;
 
-  guint realized : 1;
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
   guint has_unpack_subimage : 1;
@@ -109,7 +110,8 @@ typedef struct {
   guint forward_compatible : 1;
   guint is_legacy : 1;
 
-  int use_es;
+  GdkGLAPI allowed_apis;
+  GdkGLAPI api;
 
   int max_debug_label_length;
 
@@ -121,12 +123,14 @@ typedef struct {
 enum {
   PROP_0,
 
+  PROP_ALLOWED_APIS,
+  PROP_API,
   PROP_SHARED_CONTEXT,
 
   LAST_PROP
 };
 
-static GParamSpec *obj_pspecs[LAST_PROP] = { NULL, };
+static GParamSpec *properties[LAST_PROP] = { NULL, };
 
 G_DEFINE_QUARK (gdk-gl-error-quark, gdk_gl_error)
 
@@ -195,36 +199,53 @@ gdk_gl_context_dispose (GObject *gobject)
 }
 
 static void
-gdk_gl_context_set_property (GObject      *gobject,
+gdk_gl_context_set_property (GObject      *object,
                              guint         prop_id,
                              const GValue *value,
                              GParamSpec   *pspec)
 {
+  GdkGLContext *self = GDK_GL_CONTEXT (object);
+
   switch (prop_id)
     {
+    case PROP_ALLOWED_APIS:
+      gdk_gl_context_set_allowed_apis (self, g_value_get_flags (value));
+      break;
+
     case PROP_SHARED_CONTEXT:
       g_assert (g_value_get_object (value) == NULL);
       break;
 
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
 static void
-gdk_gl_context_get_property (GObject    *gobject,
+gdk_gl_context_get_property (GObject    *object,
                              guint       prop_id,
                              GValue     *value,
                              GParamSpec *pspec)
 {
+  GdkGLContext *self = GDK_GL_CONTEXT (object);
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
   switch (prop_id)
     {
+    case PROP_ALLOWED_APIS:
+      g_value_set_flags (value, priv->allowed_apis);
+      break;
+
+    case PROP_API:
+      g_value_set_flags (value, priv->api);
+      break;
+
     case PROP_SHARED_CONTEXT:
       g_value_set_object (value, NULL);
       break;
 
     default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
 }
 
@@ -247,7 +268,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   if (!gdk_memory_format_gl_format (data_format,
-                                    priv->use_es,
+                                    gdk_gl_context_get_use_es (context),
                                     &gl_internalformat,
                                     &gl_format,
                                     &gl_type))
@@ -261,7 +282,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
       data = copy;
       data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       if (!gdk_memory_format_gl_format (data_format,
-                                        priv->use_es,
+                                        gdk_gl_context_get_use_es (context),
                                         &gl_internalformat,
                                         &gl_format,
                                         &gl_type))
@@ -286,8 +307,8 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
       glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
       glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
     }
-  else if ((!priv->use_es ||
-            (priv->use_es && (priv->gl_version >= 30 || priv->has_unpack_subimage))))
+  else if ((!gdk_gl_context_get_use_es (context) ||
+            (priv->gl_version >= 30 || priv->has_unpack_subimage)))
     {
       glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
 
@@ -308,7 +329,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
 
 #define N_EGL_ATTRS     16
 
-static gboolean
+static GdkGLAPI
 gdk_gl_context_real_realize (GdkGLContext  *context,
                              GError       **error)
 {
@@ -325,7 +346,8 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
       EGLContext ctx;
       EGLint context_attribs[N_EGL_ATTRS];
       int major, minor, flags;
-      gboolean debug_bit, forward_bit, legacy_bit, use_es;
+      gboolean debug_bit, forward_bit, legacy_bit;
+      GdkGLAPI api;
       int i = 0;
       G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
@@ -334,8 +356,6 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
       forward_bit = gdk_gl_context_get_forward_compatible (context);
       legacy_bit = GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY) ||
                    (share != NULL && gdk_gl_context_is_legacy (share));
-      use_es = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES) ||
-               (share != NULL && gdk_gl_context_get_use_es (share));
 
       if (display->have_egl_no_config_context)
         egl_config = NULL;
@@ -349,7 +369,8 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
       if (forward_bit)
         flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
 
-      if (!use_es && eglBindAPI (EGL_OPENGL_API))
+      if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL) &&
+          eglBindAPI (EGL_OPENGL_API))
         {
           /* We want a core profile, unless in legacy mode */
           context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
@@ -362,20 +383,23 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
           context_attribs[i++] = legacy_bit ? 3 : major;
           context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
           context_attribs[i++] = legacy_bit ? 0 : minor;
+          api = GDK_GL_API_GL;
         }
-      else if (eglBindAPI (EGL_OPENGL_ES_API))
+      else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL) &&
+               eglBindAPI (EGL_OPENGL_ES_API))
         {
           context_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
           if (major == 3)
             context_attribs[i++] = 3;
           else
             context_attribs[i++] = 2;
+          api = GDK_GL_API_GLES;
         }
       else
         {
           g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("The EGL implementation supports neither OpenGL nor GLES"));
-          return FALSE;
+                               _("The EGL implementation does not support any allowed APIs"));
+          return 0;
         }
 
       /* Specify the flags */
@@ -391,7 +415,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
                                    debug_bit ? "yes" : "no",
                                    forward_bit ? "yes" : "no",
                                    legacy_bit ? "yes" : "no",
-                                   use_es ? "yes" : "no"));
+                                   api == GDK_GL_API_GLES ? "yes" : "no"));
 
       ctx = eglCreateContext (egl_display,
                               egl_config,
@@ -400,7 +424,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
                               context_attribs);
 
       /* If context creation failed without the ES bit, let's try again with it */
-      if (ctx == NULL && eglBindAPI (EGL_OPENGL_ES_API))
+      if (ctx == NULL && gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL) && eglBindAPI (EGL_OPENGL_ES_API))
         {
           i = 0;
           context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
@@ -413,7 +437,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
           g_assert (i < N_EGL_ATTRS);
 
           legacy_bit = FALSE;
-          use_es = TRUE;
+          api = GDK_GL_API_GLES;
 
           GDK_DISPLAY_NOTE (display, OPENGL,
                     g_message ("eglCreateContext failed, switching to OpenGL ES"));
@@ -425,7 +449,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
         }
 
       /* If context creation failed without the legacy bit, let's try again with it */
-      if (ctx == NULL && eglBindAPI (EGL_OPENGL_API))
+      if (ctx == NULL && gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL) && eglBindAPI (EGL_OPENGL_API))
         {
           i = 0;
           context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
@@ -440,7 +464,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
           g_assert (i < N_EGL_ATTRS);
 
           legacy_bit = TRUE;
-          use_es = FALSE;
+          api = GDK_GL_API_GL;
 
           GDK_DISPLAY_NOTE (display, OPENGL,
                     g_message ("eglCreateContext failed, switching to legacy"));
@@ -456,7 +480,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
           g_set_error_literal (error, GDK_GL_ERROR,
                                GDK_GL_ERROR_NOT_AVAILABLE,
                                _("Unable to create a GL context"));
-          return FALSE;
+          return 0;
         }
 
       GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Created EGL context[%p]", ctx));
@@ -464,17 +488,16 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
       priv->egl_context = ctx;
 
       gdk_gl_context_set_is_legacy (context, legacy_bit);
-      gdk_gl_context_set_use_es (context, use_es);
 
       gdk_profiler_end_mark (start_time, "realize GdkWaylandGLContext", NULL);
 
-      return TRUE;
+      return api;
     }
 #endif
 
   g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
                        _("The current backend does not support OpenGL"));
-  return FALSE;
+  return 0;
 }
 
 #undef N_EGL_ATTRS
@@ -716,7 +739,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    * Deprecated: 4.4: Use [method@Gdk.GLContext.is_shared] to check if contexts
    *   can be shared.
    */
-  obj_pspecs[PROP_SHARED_CONTEXT] =
+  properties[PROP_SHARED_CONTEXT] =
     g_param_spec_object ("shared-context",
                          P_("Shared context"),
                          P_("The GL context this context shares data with"),
@@ -726,11 +749,45 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_DEPRECATED);
 
+  /**
+   * GdkGLContext:allowed-apis: (attributes org.gtk.Property.get=gdk_gl_context_get_allowed_apis org.gtk.Property.gdk_gl_context_set_allowed_apis)
+   *
+   * The allowed APIs.
+   *
+   * Since: 4.6
+   */
+  properties[PROP_ALLOWED_APIS] =
+    g_param_spec_flags ("allowed-apis",
+                        P_("Allowed APIs"),
+                        P_("The list of allowed APIs for this context"),
+                        GDK_TYPE_GL_API,
+                        DEFAULT_ALLOWED_APIS,
+                        G_PARAM_READWRITE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkGLContext:api: (attributes org.gtk.Property.get=gdk_gl_context_get_api)
+   *
+   * The API currently in use.
+   *
+   * Since: 4.6
+   */
+  properties[PROP_API] =
+    g_param_spec_flags ("api",
+                        P_("API"),
+                        P_("The API currently in use"),
+                        GDK_TYPE_GL_API,
+                        0,
+                        G_PARAM_READABLE |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
   gobject_class->set_property = gdk_gl_context_set_property;
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, obj_pspecs);
+  g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 }
 
 static void
@@ -738,7 +795,7 @@ gdk_gl_context_init (GdkGLContext *self)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
-  priv->use_es = -1;
+  priv->allowed_apis = DEFAULT_ALLOWED_APIS;
 }
 
 /* Must have called gdk_display_prepare_gl() before */
@@ -845,6 +902,14 @@ gdk_gl_context_has_unpack_subimage (GdkGLContext *context)
   return priv->has_unpack_subimage;
 }
 
+static gboolean
+gdk_gl_context_is_realized (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->api != 0;
+}
+
 /**
  * gdk_gl_context_set_debug_enabled:
  * @context: a `GdkGLContext`
@@ -865,7 +930,7 @@ gdk_gl_context_set_debug_enabled (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (!priv->realized);
+  g_return_if_fail (gdk_gl_context_is_realized (context));
 
   enabled = !!enabled;
 
@@ -914,7 +979,7 @@ gdk_gl_context_set_forward_compatible (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (!priv->realized);
+  g_return_if_fail (gdk_gl_context_is_realized (context));
 
   compatible = !!compatible;
 
@@ -967,7 +1032,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
 #endif
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (!priv->realized);
+  g_return_if_fail (gdk_gl_context_is_realized (context));
 
   /* this will take care of the default */
   if (major == 0 && minor == 0)
@@ -986,7 +1051,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   /* Enforce a minimum context version number of 3.2 for desktop GL,
    * and 2.0 for GLES
    */
-  if (priv->use_es > 0 || force_gles)
+  if (gdk_gl_context_get_use_es (context) || force_gles)
     min_ver = 200;
   else
     min_ver = 302;
@@ -1034,7 +1099,7 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
    * enforce a context version number of 3.2 for desktop GL,
    * and 2.0 for GLES
    */
-  if (priv->use_es > 0 || force_gles)
+  if (gdk_gl_context_get_use_es (context) || force_gles)
     {
       default_major = 2;
       default_minor = 0;
@@ -1090,7 +1155,7 @@ gdk_gl_context_is_legacy (GdkGLContext *context)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
-  g_return_val_if_fail (priv->realized, FALSE);
+  g_return_val_if_fail (gdk_gl_context_is_realized (context), FALSE);
 
   return priv->is_legacy;
 }
@@ -1130,16 +1195,114 @@ gboolean
 gdk_gl_context_is_shared (GdkGLContext *self,
                           GdkGLContext *other)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
-  GdkGLContextPrivate *priv_other = gdk_gl_context_get_instance_private (other);
-
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), FALSE);
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (other), FALSE);
 
-  if (!priv->realized || !priv_other->realized)
+  if (!gdk_gl_context_is_realized (self) ||
+      !gdk_gl_context_is_realized (other))
     return FALSE;
 
   return GDK_GL_CONTEXT_GET_CLASS (self)->is_shared (self, other);
+}
+
+/**
+ * gdk_gl_context_set_allowed_apis: (attributes org.gtk.Method.set_property=allowed-apis)
+ * @self: a GL context
+ * @apis: the allowed APIs
+ *
+ * Sets the allowed APIs. When gdk_gl_context_realize() is called, only the
+ * allowed APIs will be tried. If you set this to 0, realizing will always fail.
+ *
+ * If you set it on a realized context, the property will not have any effect.
+ * It is only relevant during gdk_gl_context_realize().
+ *
+ * By default, all APIs are allowed.
+ *
+ * Since: 4.6
+ **/
+void
+gdk_gl_context_set_allowed_apis (GdkGLContext *self,
+                                 GdkGLAPI      apis)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (self));
+
+  if (priv->allowed_apis == apis)
+    return;
+
+  priv->allowed_apis = apis;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ALLOWED_APIS]);
+}
+
+/**
+ * gdk_gl_context_get_allowed_apis: (attributes org.gtk.Method.get_property=allowed-apis)
+ * @self: a GL context
+ *
+ * Gets the allowed APIs set via gdk_gl_context_set_allowed_apis().
+ *
+ * Returns: the allowed APIs
+ *
+ * Since: 4.6
+ **/
+GdkGLAPI
+gdk_gl_context_get_allowed_apis (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), 0);
+
+  return priv->allowed_apis;
+}
+
+/**
+ * gdk_gl_context_get_api: (attributes org.gtk.Method.get_property=api)
+ * @self: a GL context
+ *
+ * Gets the API currently in use.
+ *
+ * If the renderer has not been realized yet, 0 is returned.
+ *
+ * Returns: the currently used API
+ *
+ * Since: 4.6
+ **/
+GdkGLAPI
+gdk_gl_context_get_api (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), 0);
+
+  return priv->api;
+}
+
+gboolean
+gdk_gl_context_is_api_allowed (GdkGLContext  *self,
+                               GdkGLAPI       api,
+                               GError       **error)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_gl_context_get_display (self), GL_GLES))
+    {
+      if (!(api & GDK_GL_API_GLES))
+        {
+          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("Anything but OpenGL ES disabled via GDK_DEBUG"));
+          return FALSE;
+        }
+    }
+
+  if (priv->allowed_apis & api)
+    return TRUE;
+
+  g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+               _("Application does not support %s API"),
+               api == GDK_GL_API_GL ? "OpenGL" : "OpenGL ES");
+
+  return FALSE;
 }
 
 /**
@@ -1166,13 +1329,24 @@ void
 gdk_gl_context_set_use_es (GdkGLContext *context,
                            int           use_es)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (!priv->realized);
+  g_return_if_fail (gdk_gl_context_is_realized (context));
 
-  if (priv->use_es != use_es)
-    priv->use_es = use_es;
+  switch (use_es)
+  {
+    case -1:
+      gdk_gl_context_set_allowed_apis (context, DEFAULT_ALLOWED_APIS);
+      break;
+    case 0:
+      gdk_gl_context_set_allowed_apis (context, GDK_GL_API_GL);
+      break;
+    case 1:
+      gdk_gl_context_set_allowed_apis (context, GDK_GL_API_GLES);
+      break;
+    default:
+      /* Just ignore the call */
+      break;
+  }
 }
 
 /**
@@ -1190,10 +1364,7 @@ gdk_gl_context_get_use_es (GdkGLContext *context)
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
 
-  if (!priv->realized)
-    return FALSE;
-
-  return priv->use_es > 0;
+  return priv->api == GDK_GL_API_GLES;
 }
 
 static void APIENTRY
@@ -1306,12 +1477,15 @@ gdk_gl_context_realize (GdkGLContext  *context,
 
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
 
-  if (priv->realized)
+  if (priv->api)
     return TRUE;
 
-  priv->realized = GDK_GL_CONTEXT_GET_CLASS (context)->realize (context, error);
+  priv->api = GDK_GL_CONTEXT_GET_CLASS (context)->realize (context, error);
 
-  return priv->realized;
+  if (priv->api)
+    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_API]);
+
+  return priv->api;
 }
 
 static void
@@ -1323,16 +1497,13 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   GdkDisplay *display;
 #endif
 
-  if (!priv->realized)
+  if (!gdk_gl_context_is_realized (context))
     return;
 
   if (priv->extensions_checked)
     return;
 
   priv->gl_version = epoxy_gl_version ();
-
-  if (priv->use_es < 0)
-    priv->use_es = !epoxy_is_desktop_gl ();
 
   priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output") ||
                            epoxy_has_gl_extension ("GL_KHR_debug");
@@ -1354,7 +1525,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       glDebugMessageCallback (gl_debug_message_callback, NULL);
     }
 
-  if (priv->use_es)
+  if (gdk_gl_context_get_use_es (context))
     {
       priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
@@ -1381,7 +1552,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        "* Extensions checked:\n"
                        " - GL_KHR_debug: %s\n"
                        " - GL_EXT_unpack_subimage: %s",
-                       priv->use_es ? "OpenGL ES" : "OpenGL",
+                       gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
                        priv->is_legacy ? "legacy" : "core",
                        glGetString (GL_SHADING_LANGUAGE_VERSION),
@@ -1400,7 +1571,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 void
 gdk_gl_context_make_current (GdkGLContext *context)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   MaskedContext *current, *masked_context;
   gboolean surfaceless;
 
@@ -1414,7 +1584,7 @@ gdk_gl_context_make_current (GdkGLContext *context)
     return;
 
   /* we need to realize the GdkGLContext if it wasn't explicitly realized */
-  if (!priv->realized)
+  if (!gdk_gl_context_is_realized (context))
     {
       GError *error = NULL;
 
@@ -1510,7 +1680,7 @@ gdk_gl_context_get_version (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (priv->realized);
+  g_return_if_fail (gdk_gl_context_is_realized (context));
 
   if (major != NULL)
     *major = priv->gl_version / 10;

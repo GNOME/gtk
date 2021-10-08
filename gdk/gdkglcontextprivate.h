@@ -62,7 +62,7 @@ struct _GdkGLContextClass
 
   GdkGLBackend        backend_type;
 
-  gboolean              (* realize)                             (GdkGLContext          *context,
+  GdkGLAPI              (* realize)                             (GdkGLContext          *context,
                                                                  GError               **error);
 
   gboolean              (* make_current)                        (GdkGLContext          *context,
@@ -102,6 +102,9 @@ void                    gdk_gl_backend_use                      (GdkGLBackend   
 
 GdkGLContext *          gdk_gl_context_new_for_surface          (GdkSurface      *surface);
 
+gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext    *self,
+                                                                 GdkGLAPI         api,
+                                                                 GError         **error);
 void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
                                                                  gboolean         is_legacy);
 

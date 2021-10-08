@@ -30,6 +30,20 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GdkGLAPI:
+ * @GDK_GL_API_GL: The OpenGL API
+ * @GDK_GL_API_GLES: The OpenGL ES API
+ *
+ * The list of the different APIs that GdkGLContext can potentially support.
+ *
+ * Since: 4.6
+ */
+typedef enum { /*< underscore_name=GDK_GL_API >*/
+  GDK_GL_API_GL   = 1 << 0,
+  GDK_GL_API_GLES = 1 << 1
+} GdkGLAPI;
+
 #define GDK_TYPE_GL_CONTEXT             (gdk_gl_context_get_type ())
 #define GDK_GL_CONTEXT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_GL_CONTEXT, GdkGLContext))
 #define GDK_IS_GL_CONTEXT(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_GL_CONTEXT))
@@ -76,7 +90,14 @@ void                    gdk_gl_context_set_forward_compatible   (GdkGLContext  *
                                                                  gboolean       compatible);
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_gl_context_get_forward_compatible   (GdkGLContext  *context);
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_6
+void                    gdk_gl_context_set_allowed_apis         (GdkGLContext  *self,
+                                                                 GdkGLAPI       apis);
+GDK_AVAILABLE_IN_4_6
+GdkGLAPI                gdk_gl_context_get_allowed_apis         (GdkGLContext  *self);
+GDK_AVAILABLE_IN_4_6
+GdkGLAPI                gdk_gl_context_get_api                  (GdkGLContext  *self);
+GDK_DEPRECATED_IN_4_6_FOR(gdk_gl_context_set_allowed_apis)
 void                    gdk_gl_context_set_use_es               (GdkGLContext  *context,
                                                                  int            use_es);
 GDK_AVAILABLE_IN_ALL
