@@ -109,8 +109,19 @@ void                    gdk_content_formats_builder_add_gtype   (GdkContentForma
 /* dunno where else to put this */
 #define GDK_TYPE_FILE_LIST (gdk_file_list_get_type ())
 GDK_AVAILABLE_IN_ALL
-GType     gdk_file_list_get_type  (void) G_GNUC_CONST;
+GType gdk_file_list_get_type (void) G_GNUC_CONST;
 
+/**
+ * GdkFileList:
+ *
+ * An opaque type representing a list of files.
+ *
+ * Since: 4.6
+ */
+typedef struct _GdkFileList GdkFileList;
+
+GDK_AVAILABLE_IN_4_6
+GSList *        gdk_file_list_get_files (GdkFileList *file_list);
 
 G_END_DECLS
 

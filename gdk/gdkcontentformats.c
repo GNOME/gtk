@@ -808,8 +808,13 @@ gdk_content_formats_builder_add_mime_type (GdkContentFormatsBuilder *builder,
   builder->n_mime_types++;
 }
 
-/* G_DEFINE_BOXED wants this */
-typedef gpointer GdkFileList;
+/* {{{ GdkFileList */
+
+/* We're using GdkFileList* and GSList* interchangeably, counting on the
+ * fact that we're just passing around gpointers; the only reason why we
+ * have a GdkFileList opaque type is for language bindings, because they
+ * can have no idea what a GSList of GFiles is.
+ */
 
 static gpointer
 gdk_file_list_copy (gpointer list)
@@ -824,3 +829,23 @@ gdk_file_list_free (gpointer list)
 }
 
 G_DEFINE_BOXED_TYPE (GdkFileList, gdk_file_list, gdk_file_list_copy, gdk_file_list_free)
+
+/**
+ * gdk_file_list_get_files:
+ * @file_list: the file list
+ *
+ * Retrieves the list of files inside a `GdkFileList`.
+ *
+ * This function is meant for language bindings.
+ *
+ * Returns: (transfer container) (element-type GFile): the files inside the list
+ *
+ * Since: 4.6
+ */
+GSList *
+gdk_file_list_get_files (GdkFileList *file_list)
+{
+  return g_slist_copy ((GSList *) file_list);
+}
+
+/* }}} */
