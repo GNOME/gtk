@@ -1299,10 +1299,26 @@ gsk_ngl_command_queue_create_texture (GskNglCommandQueue *self,
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-  if (gdk_gl_context_get_use_es (self->context))
-    glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-  else
-    glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
+  switch (format)
+  {
+    case GL_RGBA8:
+      glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+      break;
+    case GL_RGBA16F:
+      glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_BGRA, GL_HALF_FLOAT, NULL);
+      break;
+    case GL_RGBA32F:
+      glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_BGRA, GL_FLOAT, NULL);
+      break;
+    default:
+      /* If you add new formats, make sure to set the correct format and type here
+       * so that GLES doesn't barf invalid operations at you.
+       * Because it is very important that these 3 values match when data is set to
+       * NULL, do you hear me?
+       */
+      g_assert_not_reached ();
+      break;
+  }
 
   /* Restore the previous texture if it was set */
   if (self->attachments->textures[0].id != 0)
