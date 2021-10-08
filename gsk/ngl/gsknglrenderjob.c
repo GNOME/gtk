@@ -4076,9 +4076,9 @@ get_framebuffer_format (guint framebuffer)
                                                      : GL_BACK,
                                          GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &size);
 
-  if (size >= 32)
+  if (size > 16)
     return GL_RGBA32F;
-  else if (size >= 16)
+  else if (size > 8)
     return GL_RGBA16F;
   else
     return GL_RGBA8;
