@@ -308,7 +308,8 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
       glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
       glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
     }
-  else if ((!gdk_gl_context_get_use_es (context) ||
+  else if (stride % bpp == 0 &&
+           (!gdk_gl_context_get_use_es (context) ||
             (priv->gl_version >= 30 || priv->has_unpack_subimage)))
     {
       glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
