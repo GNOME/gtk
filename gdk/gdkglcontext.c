@@ -298,15 +298,14 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
 
   bpp = gdk_memory_format_bytes_per_pixel (data_format);
 
+  glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (data_format));
+
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
    * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
    */
   if (stride == width * bpp)
     {
-      glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-
       glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
-      glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
     }
   else if (stride % bpp == 0 &&
            (!gdk_gl_context_get_use_es (context) ||
@@ -325,6 +324,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
       for (i = 0; i < height; i++)
         glTexSubImage2D (texture_target, 0, 0, i, width, 1, gl_format, gl_type, data + (i * stride));
     }
+  glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
 
   g_free (copy);
 }
