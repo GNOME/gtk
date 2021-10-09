@@ -13,4 +13,5 @@ baseURLs = [
     [ 'Gtk', 'https://docs.gtk.org/gtk4/' ],
     [ 'Pango', 'https://docs.gtk.org/Pango/' ],
     [ 'PangoCairo', 'https://docs.gtk.org/PangoCairo/' ],
+    [ 'GdkPixbuf', 'https://docs.gtk.org/gdk-pixbuf/' ],
 ]
