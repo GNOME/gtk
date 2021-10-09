@@ -281,6 +281,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
                           width, height);
       data = copy;
       data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      stride = width * 4;
       if (!gdk_memory_format_gl_format (data_format,
                                         gdk_gl_context_get_use_es (context),
                                         &gl_internalformat,
