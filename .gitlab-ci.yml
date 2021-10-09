@@ -91,6 +91,7 @@ fedora-x86_64:
     - meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build x11
     - .gitlab-ci/run-tests.sh _build wayland
+    - .gitlab-ci/run-tests.sh _build waylandgles
     - .gitlab-ci/run-tests.sh _build broadway
 
 release-build:

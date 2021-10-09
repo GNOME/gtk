@@ -44,6 +44,24 @@ case "${backend}" in
     kill ${compositor}
     ;;
 
+  waylandgles)
+    export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
+
+    weston --backend=headless-backend.so --socket=wayland-6 --idle-time=0 &
+    compositor=$!
+    export WAYLAND_DISPLAY=wayland-6
+
+    meson test -C ${builddir} \
+                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --print-errorlogs \
+                --setup=${backend} \
+                --suite=gtk \
+                --no-suite=gsk-compare-broadway
+
+    exit_code=$?
+    kill ${compositor}
+    ;;
+
   broadway)
     export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 
@@ -62,6 +80,12 @@ case "${backend}" in
     exit_code=0
     kill ${server}
     ;;
+
+  *)
+    echo "Failed to add ${backend} to .gitlab-ci/run-tests.sh"
+    exit 1
+    ;;
+
 esac
 
 cd ${builddir}

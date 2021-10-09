@@ -274,7 +274,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     G_ALIGNOF (guchar),
     FALSE,
     TRUE,
-    { GL_RGBA8, GL_RGB, GL_UNSIGNED_BYTE },
+    { GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE },
     r8g8b8_to_float,
     r8g8b8_from_float,
   },
