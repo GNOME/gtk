@@ -28,6 +28,7 @@
 #include "gdk/macos/gdkmacos.h"
 #include "gdk/macos/gdkmacosdisplay-private.h"
 #include "gdk/macos/gdkmacossurface-private.h"
+#include "gdk/gdksurfaceprivate.h"
 
 #import "gdk/macos/GdkMacosBaseView.h"
 
@@ -304,6 +305,7 @@ static void
 quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
+  GtkWidget* surface_widget = GTK_WIDGET (gdk_surface_get_widget (qc->client_surface));
   int sx, sy;
   double wx, wy;
 
@@ -316,8 +318,9 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
     return;
 
   gdk_surface_get_origin (qc->client_surface, &sx, &sy);
-  gtk_widget_translate_coordinates(qc->client_widget, qc->client_surface->widget, area->x, area->y, &wx, &wy);
-  
+  gtk_widget_translate_coordinates(qc->client_widget, surface_widget,
+                                   area->x, area->y, &wx, &wy);
+
   qc->cursor_rect->x = sx + (int) wx;
   qc->cursor_rect->y = sy + (int) wy;
   qc->cursor_rect->width = area->width;
