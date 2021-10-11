@@ -23,7 +23,7 @@
 
 #include "config.h"
 
-#include "gskngldriverprivate.h"
+#include "gskgldriverprivate.h"
 
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskglshaderprivate.h>
