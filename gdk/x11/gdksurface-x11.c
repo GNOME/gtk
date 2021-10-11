@@ -1923,8 +1923,13 @@ gdk_x11_surface_update_popups (GdkSurface *parent)
     {
       GdkX11Surface *popup_impl = l->data;
       GdkSurface *popup = GDK_SURFACE (popup_impl);
-      int new_x = GDK_X11_SURFACE (parent)->abs_x + popup->x;
-      int new_y = GDK_X11_SURFACE (parent)->abs_y + popup->y;
+      int new_x, new_y;
+
+      if (GDK_SURFACE_DESTROYED (popup))
+        continue;
+
+      new_x = GDK_X11_SURFACE (parent)->abs_x + popup->x;
+      new_y = GDK_X11_SURFACE (parent)->abs_y + popup->y;
 
       if (new_x != popup_impl->abs_x || new_y != popup_impl->abs_y)
         x11_surface_move (popup, new_x, new_y);
