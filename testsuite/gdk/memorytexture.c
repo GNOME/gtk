@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-#include "gsk/ngl/gsknglrenderer.h"
+#include "gsk/gl/gskglrenderer.h"
 
 #define N 20
 
@@ -734,7 +734,7 @@ main (int argc, char *argv[])
   add_test ("/memorytexture/download_float_4x4", test_download_float_4x4);
 
   surface = gdk_surface_new_toplevel (gdk_display_get_default());
-  gl_renderer = gsk_ngl_renderer_new ();
+  gl_renderer = gsk_gl_renderer_new ();
   if (!gsk_renderer_realize (gl_renderer, surface, NULL))
     {
       g_clear_object (&gl_renderer);

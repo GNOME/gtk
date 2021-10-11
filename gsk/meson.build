@@ -1,24 +1,24 @@
-gsk_private_ngl_shaders = [
-  'ngl/resources/preamble.glsl',
-  'ngl/resources/preamble.fs.glsl',
-  'ngl/resources/preamble.vs.glsl',
-  'ngl/resources/border.glsl',
-  'ngl/resources/blit.glsl',
-  'ngl/resources/coloring.glsl',
-  'ngl/resources/color.glsl',
-  'ngl/resources/linear_gradient.glsl',
-  'ngl/resources/radial_gradient.glsl',
-  'ngl/resources/conic_gradient.glsl',
-  'ngl/resources/color_matrix.glsl',
-  'ngl/resources/blur.glsl',
-  'ngl/resources/inset_shadow.glsl',
-  'ngl/resources/outset_shadow.glsl',
-  'ngl/resources/unblurred_outset_shadow.glsl',
-  'ngl/resources/cross_fade.glsl',
-  'ngl/resources/blend.glsl',
-  'ngl/resources/repeat.glsl',
-  'ngl/resources/custom.glsl',
-  'ngl/resources/filled_border.glsl',
+gsk_private_gl_shaders = [
+  'gl/resources/preamble.glsl',
+  'gl/resources/preamble.fs.glsl',
+  'gl/resources/preamble.vs.glsl',
+  'gl/resources/border.glsl',
+  'gl/resources/blit.glsl',
+  'gl/resources/coloring.glsl',
+  'gl/resources/color.glsl',
+  'gl/resources/linear_gradient.glsl',
+  'gl/resources/radial_gradient.glsl',
+  'gl/resources/conic_gradient.glsl',
+  'gl/resources/color_matrix.glsl',
+  'gl/resources/blur.glsl',
+  'gl/resources/inset_shadow.glsl',
+  'gl/resources/outset_shadow.glsl',
+  'gl/resources/unblurred_outset_shadow.glsl',
+  'gl/resources/cross_fade.glsl',
+  'gl/resources/blend.glsl',
+  'gl/resources/repeat.glsl',
+  'gl/resources/custom.glsl',
+  'gl/resources/filled_border.glsl',
 ]
 
 gsk_public_sources = files([
@@ -31,7 +31,7 @@ gsk_public_sources = files([
   'gskrendernodeparser.c',
   'gskroundedrect.c',
   'gsktransform.c',
-  'ngl/gsknglrenderer.c',
+  'gl/gskglrenderer.c',
 ])
 
 gsk_private_sources = files([
@@ -39,26 +39,26 @@ gsk_private_sources = files([
   'gskdebug.c',
   'gskprivate.c',
   'gskprofiler.c',
-  'ngl/gsknglattachmentstate.c',
-  'ngl/gsknglbuffer.c',
-  'ngl/gsknglcommandqueue.c',
-  'ngl/gsknglcompiler.c',
-  'ngl/gskngldriver.c',
-  'ngl/gsknglglyphlibrary.c',
-  'ngl/gskngliconlibrary.c',
-  'ngl/gsknglprogram.c',
-  'ngl/gsknglrenderjob.c',
-  'ngl/gsknglshadowlibrary.c',
-  'ngl/gskngltexturelibrary.c',
-  'ngl/gskngluniformstate.c',
-  'ngl/gskngltexture.c',
-  'ngl/gskglprofiler.c',
-  'ngl/stb_rect_pack.c',
-  'ngl/fp16.c',
+  'gl/gskglattachmentstate.c',
+  'gl/gskglbuffer.c',
+  'gl/gskglcommandqueue.c',
+  'gl/gskglcompiler.c',
+  'gl/gskgldriver.c',
+  'gl/gskglglyphlibrary.c',
+  'gl/gskgliconlibrary.c',
+  'gl/gskglprogram.c',
+  'gl/gskglrenderjob.c',
+  'gl/gskglshadowlibrary.c',
+  'gl/gskgltexturelibrary.c',
+  'gl/gskgluniformstate.c',
+  'gl/gskgltexture.c',
+  'gl/gskglprofiler.c',
+  'gl/stb_rect_pack.c',
+  'gl/fp16.c',
 ])
 
 gsk_f16c_sources = files([
-  'ngl/fp16i.c',
+  'gl/fp16i.c',
 ])
 
 gsk_public_headers = files([
@@ -75,7 +75,7 @@ gsk_public_headers = files([
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
 
 gsk_public_gl_headers = files([
-  'ngl/gsknglrenderer.h',
+  'gl/gskglrenderer.h',
 ])
 install_headers(gsk_public_gl_headers, subdir: 'gtk-4.0/gsk/gl')
 gsk_public_headers += gsk_public_gl_headers
@@ -145,7 +145,7 @@ gsk_resources_xml = configure_file(output: 'gsk.resources.xml',
   command: [
     find_program('gen-gsk-gresources-xml.py'),
     '@OUTPUT@',
-    gsk_private_ngl_shaders,
+    gsk_private_gl_shaders,
     gsk_private_vulkan_compiled_shaders,
     gsk_private_vulkan_shaders
   ],
