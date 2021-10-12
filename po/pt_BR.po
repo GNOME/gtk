@@ -27,9 +27,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-24 12:22+0000\n"
-"PO-Revision-Date: 2021-09-25 10:51-0300\n"
-"Last-Translator: Enrico Nicoletto <liverig@gmail.com>\n"
+"POT-Creation-Date: 2021-10-11 19:47+0000\n"
+"PO-Revision-Date: 2021-10-12 14:30-0300\n"
+"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -2200,7 +2200,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Se você excluir um item, ele será permanentemente perdido."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8847
+#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8862
 msgid "_Delete"
 msgstr "E_xcluir"
 
@@ -2359,7 +2359,7 @@ msgstr "Calendário"
 
 #: gtk/gtkfilechooserwidget.c:4313
 msgid "Document"
-msgstr "Documentado"
+msgstr "Documento"
 
 #: gtk/gtkfilechooserwidget.c:4314
 msgid "Presentation"
@@ -2472,19 +2472,19 @@ msgstr "Variantes de caractere"
 msgid "OpenGL context creation failed"
 msgstr "Criação de contexto OpenGL falhou"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8835
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8850
 msgid "Cu_t"
 msgstr "Recor_tar"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8839
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8854
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8843
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8858
 msgid "_Paste"
 msgstr "C_olar"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8868
+#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8883
 msgid "Select _All"
 msgstr "_Selecionar tudo"
 
@@ -3493,15 +3493,15 @@ msgstr "Tente uma pesquisa diferente"
 msgid "Could not show link"
 msgstr "Não foi possível mostrar o link"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8873
+#: gtk/gtktext.c:6074 gtk/gtktextview.c:8888
 msgid "Insert _Emoji"
 msgstr "Inserir _emoji"
 
-#: gtk/gtktextview.c:8855
+#: gtk/gtktextview.c:8870
 msgid "_Undo"
 msgstr "_Desfazer"
 
-#: gtk/gtktextview.c:8859
+#: gtk/gtktextview.c:8874
 msgid "_Redo"
 msgstr "_Refazer"
 
