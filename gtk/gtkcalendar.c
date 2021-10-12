@@ -684,7 +684,7 @@ gtk_calendar_init (GtkCalendar *calendar)
     for (i=0; i<7; i++)
       {
 #ifndef G_OS_WIN32
-        tmp_time= (i+3)*86400;
+        tmp_time= (i+3)*86400; /* epoch was a Thursday, so add 3 days for Sunday */
         strftime (buffer, sizeof (buffer), "%a", gmtime (&tmp_time));
         default_abbreviated_dayname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
 #else
