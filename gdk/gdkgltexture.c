@@ -298,11 +298,23 @@ gdk_gl_texture_release (GdkGLTexture *self)
 }
 
 static void
-gdk_gl_texture_do_determine_format (gpointer texture_,
-                                    gpointer unused)
+gdk_gl_texture_determine_format (GdkGLTexture *self)
 {
-  GdkTexture *texture = texture_;
+  GdkTexture *texture = GDK_TEXTURE (self);
+  GLint active_texture;
   GLint internal_format;
+
+  if (self->context != gdk_gl_context_get_current ())
+    {
+      /* Somebody else is GL-ing here, abort! */
+      texture->format = GDK_MEMORY_DEFAULT;
+      return;
+    }
+
+  /* We need to be careful about modifying the GL context, as this is not
+   * expected during construction */
+  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
+  glBindTexture (GL_TEXTURE_2D, self->id);
 
   glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
 
@@ -347,6 +359,8 @@ gdk_gl_texture_do_determine_format (gpointer texture_,
       texture->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       break;
   }
+
+  glBindTexture (GL_TEXTURE_2D, active_texture);
 }
 
 /**
@@ -392,7 +406,7 @@ gdk_gl_texture_new (GdkGLContext   *context,
   self->destroy = destroy;
   self->data = data;
 
-  gdk_gl_texture_run (self, gdk_gl_texture_do_determine_format, NULL);
+  gdk_gl_texture_determine_format (self);
 
   return GDK_TEXTURE (self);
 }
