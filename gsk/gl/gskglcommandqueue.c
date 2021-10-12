@@ -1339,6 +1339,86 @@ gsk_gl_command_queue_create_framebuffer (GskGLCommandQueue *self)
   return fbo_id;
 }
 
+static void
+gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
+                                        const guchar      *data,
+                                        int                width,
+                                        int                height,
+                                        int                stride,
+                                        GdkMemoryFormat    data_format)
+{
+  GdkGLContext *context;
+  guchar *copy = NULL;
+  GLenum gl_internalformat;
+  GLenum gl_format;
+  GLenum gl_type;
+  gsize bpp;
+  gboolean use_es;
+
+  context = gdk_gl_context_get_current ();
+  use_es = gdk_gl_context_get_use_es (context);
+
+  if (!gdk_memory_format_gl_format (data_format,
+                                    use_es,
+                                    &gl_internalformat,
+                                    &gl_format,
+                                    &gl_type))
+    {
+      copy = g_malloc_n (width * 4, height);
+      gdk_memory_convert (copy, width * 4,
+                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                          data, stride,
+                          data_format,
+                          width, height);
+      data = copy;
+      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      stride = width * 4;
+      if (!gdk_memory_format_gl_format (data_format,
+                                        use_es,
+                                        &gl_internalformat,
+                                        &gl_format,
+                                        &gl_type))
+        {
+          g_assert_not_reached ();
+        }
+    }
+  else
+    {
+      copy = NULL;
+    }
+
+  bpp = gdk_memory_format_bytes_per_pixel (data_format);
+
+  glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (data_format));
+
+  /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
+   * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
+   */
+  if (stride == width * bpp)
+    {
+      glTexImage2D (GL_TEXTURE_2D, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
+    }
+  else if (stride % bpp == 0 &&
+           (!use_es || gdk_gl_context_check_version (context, 3, 0) || gdk_gl_context_has_unpack_subimage (context)))
+    {
+      glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
+
+      glTexImage2D (GL_TEXTURE_2D, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
+
+      glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
+    }
+  else
+    {
+      int i;
+      glTexImage2D (GL_TEXTURE_2D, 0, gl_internalformat, width, height, 0, gl_format, gl_type, NULL);
+      for (i = 0; i < height; i++)
+        glTexSubImage2D (GL_TEXTURE_2D, 0, 0, i, width, 1, gl_format, gl_type, data + (i * stride));
+    }
+  glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
+
+  g_free (copy);
+}
+
 int
 gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
                                      GdkTexture        *texture,
@@ -1402,10 +1482,10 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
-  gdk_gl_context_upload_texture (gdk_gl_context_get_current (),
-                                 data + x_offset * bpp + y_offset * data_stride,
-                                 width, height, data_stride,
-                                 data_format, GL_TEXTURE_2D);
+  gsk_gl_command_queue_do_upload_texture (self,
+                                          data + x_offset * bpp + y_offset * data_stride,
+                                          width, height, data_stride,
+                                          data_format);
 
   /* Restore previous texture state if any */
   if (self->attachments->textures[0].id > 0)

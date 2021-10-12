@@ -108,13 +108,10 @@ gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext   
 void                    gdk_gl_context_set_is_legacy            (GdkGLContext    *context,
                                                                  gboolean         is_legacy);
 
-void                    gdk_gl_context_upload_texture           (GdkGLContext    *context,
-                                                                 const guchar    *data,
-                                                                 int              width,
-                                                                 int              height,
-                                                                 int              stride,
-                                                                 GdkMemoryFormat  data_format,
-                                                                 guint            texture_target);
+gboolean                gdk_gl_context_check_version            (GdkGLContext    *context,
+                                                                 int              required_major,
+                                                                 int              required_minor);
+
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
                                                                  const char      *message);
