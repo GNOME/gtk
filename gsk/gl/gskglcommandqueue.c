@@ -1341,14 +1341,14 @@ gsk_gl_command_queue_create_framebuffer (GskGLCommandQueue *self)
 
 static void
 gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
-                                        const guchar      *data,
-                                        int                width,
-                                        int                height,
-                                        int                stride,
-                                        GdkMemoryFormat    data_format)
+                                        GdkTexture        *texture)
 {
   GdkGLContext *context;
-  guchar *copy = NULL;
+  const guchar *data;
+  gsize stride;
+  GdkMemoryTexture *memtex;
+  GdkMemoryFormat data_format;
+  int width, height;
   GLenum gl_internalformat;
   GLenum gl_format;
   GLenum gl_type;
@@ -1357,6 +1357,9 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
 
   context = gdk_gl_context_get_current ();
   use_es = gdk_gl_context_get_use_es (context);
+  data_format = gdk_texture_get_format (texture);
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
 
   if (!gdk_memory_format_gl_format (data_format,
                                     use_es,
@@ -1364,15 +1367,10 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
                                     &gl_format,
                                     &gl_type))
     {
-      copy = g_malloc_n (width * 4, height);
-      gdk_memory_convert (copy, width * 4,
-                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                          data, stride,
-                          data_format,
-                          width, height);
-      data = copy;
-      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      stride = width * 4;
+      if (gdk_memory_format_prefers_high_depth (data_format))
+        data_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      else
+        data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       if (!gdk_memory_format_gl_format (data_format,
                                         use_es,
                                         &gl_internalformat,
@@ -1382,11 +1380,10 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
           g_assert_not_reached ();
         }
     }
-  else
-    {
-      copy = NULL;
-    }
 
+  memtex = gdk_memory_texture_from_texture (texture, data_format);
+  data = gdk_memory_texture_get_data (memtex);
+  stride = gdk_memory_texture_get_stride (memtex);
   bpp = gdk_memory_format_bytes_per_pixel (data_format);
 
   glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (data_format));
@@ -1416,7 +1413,7 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
     }
   glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
 
-  g_free (copy);
+  g_object_unref (memtex);
 }
 
 int
@@ -1427,9 +1424,6 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   cairo_surface_t *surface = NULL;
-  GdkMemoryFormat data_format;
-  const guchar *data;
-  gsize data_stride;
   int width, height;
   int texture_id;
 
@@ -1440,7 +1434,6 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
-
   if (width > self->max_texture_size || height > self->max_texture_size)
     {
       g_warning ("Attempt to create texture of size %ux%u but max size is %d. "
@@ -1449,27 +1442,9 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
       width = MAX (width, self->max_texture_size);
       height = MAX (height, self->max_texture_size);
     }
-
   texture_id = gsk_gl_command_queue_create_texture (self, width, height, GL_RGBA8, min_filter, mag_filter);
   if (texture_id == -1)
     return texture_id;
-
-  if (GDK_IS_MEMORY_TEXTURE (texture))
-    {
-      GdkMemoryTexture *memory_texture = GDK_MEMORY_TEXTURE (texture);
-      data = gdk_memory_texture_get_data (memory_texture);
-      data_format = gdk_texture_get_format (texture);
-      data_stride = gdk_memory_texture_get_stride (memory_texture);
-    }
-  else
-    {
-      /* Fall back to downloading to a surface */
-      surface = gdk_texture_download_surface (texture);
-      cairo_surface_flush (surface);
-      data = cairo_image_surface_get_data (surface);
-      data_format = GDK_MEMORY_DEFAULT;
-      data_stride = cairo_image_surface_get_stride (surface);
-    }
 
   self->n_uploads++;
 
@@ -1477,10 +1452,7 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
-  gsk_gl_command_queue_do_upload_texture (self,
-                                          data,
-                                          width, height, data_stride,
-                                          data_format);
+  gsk_gl_command_queue_do_upload_texture (self, texture);
 
   /* Restore previous texture state if any */
   if (self->attachments->textures[0].id > 0)
