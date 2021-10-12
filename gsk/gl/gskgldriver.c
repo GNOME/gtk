@@ -798,10 +798,6 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
   height = gdk_texture_get_height (texture);
   texture_id = gsk_gl_command_queue_upload_texture (self->command_queue,
                                                     GDK_TEXTURE (downloaded_texture),
-                                                    0,
-                                                    0,
-                                                    width,
-                                                    height,
                                                     min_filter,
                                                     mag_filter);
 
@@ -1230,6 +1226,7 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   int tex_width;
   int tex_height;
   int x = 0, y = 0;
+  GdkMemoryTexture *memtex;
 
   g_assert (GSK_IS_GL_DRIVER (self));
   g_assert (GDK_IS_TEXTURE (texture));
@@ -1253,6 +1250,8 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
 
   n_slices = cols * rows;
   slices = g_new0 (GskGLTextureSlice, n_slices);
+  memtex = gdk_memory_texture_from_texture (texture,
+                                            gdk_texture_get_format (texture));
 
   for (guint col = 0; col < cols; col ++)
     {
@@ -1262,13 +1261,16 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
         {
           int slice_height = MIN (max_texture_size, texture->height - y);
           int slice_index = (col * rows) + row;
+          GdkTexture *subtex;
           guint texture_id;
 
+          subtex = gdk_memory_texture_new_subtexture (memtex,
+                                                      x, y,
+                                                      slice_width, slice_height);
           texture_id = gsk_gl_command_queue_upload_texture (self->command_queue,
-                                                            texture,
-                                                            x, y,
-                                                            slice_width, slice_height,
+                                                            subtex,
                                                             GL_NEAREST, GL_NEAREST);
+          g_object_unref (subtex);
 
           slices[slice_index].rect.x = x;
           slices[slice_index].rect.y = y;
@@ -1282,6 +1284,8 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
       y = 0;
       x += slice_width;
     }
+
+  g_object_unref (memtex);
 
   /* Allocate one Texture for the entire thing. */
   t = gsk_gl_texture_new (0,

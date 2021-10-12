@@ -281,10 +281,6 @@ void                gsk_gl_command_queue_execute              (GskGLCommandQueue
                                                                const cairo_region_t *scissor);
 int                 gsk_gl_command_queue_upload_texture       (GskGLCommandQueue    *self,
                                                                GdkTexture           *texture,
-                                                               guint                 x_offset,
-                                                               guint                 y_offset,
-                                                               guint                 width,
-                                                               guint                 height,
                                                                int                   min_filter,
                                                                int                   mag_filter);
 int                 gsk_gl_command_queue_create_texture       (GskGLCommandQueue    *self,

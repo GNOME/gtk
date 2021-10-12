@@ -1422,10 +1422,6 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
 int
 gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
                                      GdkTexture        *texture,
-                                     guint              x_offset,
-                                     guint              y_offset,
-                                     guint              width,
-                                     guint              height,
                                      int                min_filter,
                                      int                mag_filter)
 {
@@ -1434,15 +1430,16 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
   GdkMemoryFormat data_format;
   const guchar *data;
   gsize data_stride;
-  gsize bpp;
+  int width, height;
   int texture_id;
 
   g_assert (GSK_IS_GL_COMMAND_QUEUE (self));
   g_assert (!GDK_IS_GL_TEXTURE (texture));
-  g_assert (x_offset + width <= gdk_texture_get_width (texture));
-  g_assert (y_offset + height <= gdk_texture_get_height (texture));
   g_assert (min_filter == GL_LINEAR || min_filter == GL_NEAREST);
   g_assert (mag_filter == GL_LINEAR || min_filter == GL_NEAREST);
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
 
   if (width > self->max_texture_size || height > self->max_texture_size)
     {
@@ -1476,14 +1473,12 @@ gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
 
   self->n_uploads++;
 
-  bpp = gdk_memory_format_bytes_per_pixel (data_format);
-
   /* Switch to texture0 as 2D. We'll restore it later. */
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
   gsk_gl_command_queue_do_upload_texture (self,
-                                          data + x_offset * bpp + y_offset * data_stride,
+                                          data,
                                           width, height, data_stride,
                                           data_format);
 

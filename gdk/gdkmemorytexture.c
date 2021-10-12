@@ -166,6 +166,39 @@ gdk_memory_texture_new (int              width,
   return GDK_TEXTURE (self);
 }
 
+GdkTexture *
+gdk_memory_texture_new_subtexture (GdkMemoryTexture  *source,
+                                   int                x,
+                                   int                y,
+                                   int                width,
+                                   int                height)
+{
+  GdkTexture *texture, *result;
+  gsize bpp, offset, size;
+  GBytes *bytes;
+
+  g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE (source), NULL);
+  g_return_val_if_fail (x < 0 || x >= GDK_TEXTURE (source)->width, NULL);
+  g_return_val_if_fail (y < 0 || y >= GDK_TEXTURE (source)->height, NULL);
+  g_return_val_if_fail (width <= 0 || x + width > GDK_TEXTURE (source)->width, NULL);
+  g_return_val_if_fail (height <= 0 || y + height > GDK_TEXTURE (source)->height, NULL);
+
+  texture = GDK_TEXTURE (source);
+  bpp = gdk_memory_format_bytes_per_pixel (texture->format);
+  offset = y * source->stride + x * bpp;
+  size = source->stride * (height - 1) + x * bpp;
+  bytes = g_bytes_new_from_bytes (source->bytes, offset, size);
+
+  result = gdk_memory_texture_new (texture->width,
+                                   texture->height,
+                                   texture->format,
+                                   bytes,
+                                   source->stride);
+  g_bytes_unref (bytes);
+
+  return result;
+}
+
 GdkMemoryTexture *
 gdk_memory_texture_from_texture (GdkTexture      *texture,
                                  GdkMemoryFormat  format)
