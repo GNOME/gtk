@@ -4,21 +4,21 @@
 # This file is distributed under the same license as the GTK package.
 #
 # Richard Allen <ra@ra.is>, 2003.
-# Sveinn í Felli <sv1@fellsnet.is>, 2015, 2017, 2018, 2019, 2020.
+# Sveinn í Felli <sv1@fellsnet.is>, 2015, 2017, 2018, 2019, 2020, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.is\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-22 12:36+0000\n"
-"PO-Revision-Date: 2020-03-25 16:48+0000\n"
-"Last-Translator: Sveinn í Felli <sv@fellsnet.is>\n"
+"POT-Creation-Date: 2021-10-12 17:37+0000\n"
+"PO-Revision-Date: 2021-10-12 22:43+0000\n"
+"Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=1;\n"
-"X-Generator: Lokalize 2.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Lokalize 19.12.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -75,7 +75,7 @@ msgstr "GDK aflúsunarflögg sem þú vilt nota"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:241 gdk/gdk.c:244 gtk/gtkmain.c:471 gtk/gtkmain.c:474
+#: gdk/gdk.c:241 gdk/gdk.c:244 gtk/gtkmain.c:469 gtk/gtkmain.c:472
 msgid "FLAGS"
 msgstr "FLÖGG"
 
@@ -470,26 +470,25 @@ msgid "Suspend"
 msgstr "Hvíla"
 
 #: gdk/quartz/gdkglcontext-quartz.c:123
-#, fuzzy
 #| msgid "Unable to create a GL context"
 msgid "Unable to create a GL pixel format"
-msgstr "Gat ekki búið til GL-umhverfi"
+msgstr "Gat ekki búið til GL-mynddílasnið"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1070 gdk/win32/gdkglcontext-win32.c:1110
-#: gdk/x11/gdkglcontext-x11.c:720 gdk/x11/gdkglcontext-x11.c:770
+#: gdk/win32/gdkglcontext-win32.c:1100 gdk/win32/gdkglcontext-win32.c:1140
+#: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Gat ekki búið til GL-umhverfi"
 
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:908
-#: gdk/win32/gdkglcontext-win32.c:918 gdk/win32/gdkglcontext-win32.c:1035
-#: gdk/x11/gdkglcontext-x11.c:971
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:938
+#: gdk/win32/gdkglcontext-win32.c:948 gdk/win32/gdkglcontext-win32.c:1065
+#: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Engar tiltækar uppsetningar fyrir uppgefið snið mynddíla"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1177
-#: gdk/x11/gdkglcontext-x11.c:1277
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1206
+#: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Engin GL-uppsetning tiltæk"
 
@@ -497,54 +496,24 @@ msgstr "Engin GL-uppsetning tiltæk"
 msgid "Core GL is not available on EGL implementation"
 msgstr "Core-GL er ekki tiltækt í EGL-uppsetningu"
 
-#. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:56
-msgid "Don't batch GDI requests"
-msgstr "Ekki magnvinna GDI beiðnir"
-
-#. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
-msgid "Don't use the Wintab API for tablet support"
-msgstr "Ekki nota Wintab API fyrir spjaldtölvustuðning"
-
-#. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
-msgid "Same as --no-wintab"
-msgstr "Sama og --no-wintab"
-
-#. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:62
-msgid "Do use the Wintab API [default]"
-msgstr "Nota Wintab API [sjálfgefið]"
-
-#. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:64
-msgid "Size of the palette in 8 bit mode"
-msgstr "Stærð litaspjalds í 8 bita ham"
-
-#. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:65
-msgid "COLORS"
-msgstr "LITIR"
-
-#: gdk/x11/gdkapplaunchcontext-x11.c:295
+#: gdk/x11/gdkapplaunchcontext-x11.c:298
 #, c-format
 msgid "Starting %s"
 msgstr "Ræsi %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
 msgid "Opening %s"
 msgstr "Opna %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:313
+#: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Opna %d hlut"
 msgstr[1] "Opna %d hluti"
 
-#: gdk/x11/gdkglcontext-x11.c:999
+#: gdk/x11/gdkglcontext-x11.c:1003
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Engar tiltækar uppsetningar fyrir uppgefið snið RGBA mynddíla"
@@ -646,6 +615,17 @@ msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "Virkjar útvíkkarann"
 
+#: gtk/a11y/gtkfilechooserwidgetaccessible.c:101
+#| msgid "Show other locations"
+msgctxt "Action name"
+msgid "Show location"
+msgstr "Sýna staðsetningu"
+
+#: gtk/a11y/gtkfilechooserwidgetaccessible.c:110
+msgctxt "Action description"
+msgid "Show the File Chooser's Location text field"
+msgstr ""
+
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
@@ -679,15 +659,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Loka"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9319
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9320
 msgid "Minimize"
 msgstr "Lágmarka"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9328
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9329
 msgid "Maximize"
 msgstr "Hámarka"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9285
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9286
 msgid "Restore"
 msgstr "Endurheimta"
 
@@ -1230,13 +1210,13 @@ msgstr ""
 "spjaldið og veldu „Vista lit hér.“"
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechoosernative.c:544 gtk/gtkfilechoosernative.c:636
-#: gtk/gtkfilechooserwidget.c:1494 gtk/gtkfilechooserwidget.c:6554
+#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
+#: gtk/gtkfilechooserwidget.c:1499 gtk/gtkfilechooserwidget.c:6573
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12789 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12790 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1286,7 +1266,7 @@ msgid "_Apply"
 msgstr "Virkj_a"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12790
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12791
 msgid "_OK"
 msgstr "Í _lagi"
 
@@ -1510,53 +1490,67 @@ msgstr "GNU Affero General Public notkunarskilmálar, útgáfa 3 eða síðar"
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero General Public notkunarleyfi, einungis útgáfa 3"
 
-#: gtk/gtkaboutdialog.c:697
+#: gtk/gtkaboutdialog.c:129
+#| msgid "BSD 2-Clause License"
+msgid "BSD 3-Clause License"
+msgstr "BSD 3-Clause notkunarleyfi"
+
+#: gtk/gtkaboutdialog.c:130
+msgid "Apache License, Version 2.0"
+msgstr "Apache-notkunarleyfi, útgáfa 2.0"
+
+#: gtk/gtkaboutdialog.c:131
+#| msgid "Artistic License 2.0"
+msgid "Mozilla Public License 2.0"
+msgstr "Mozilla notkunarleyfið (Public License, v 2.0)."
+
+#: gtk/gtkaboutdialog.c:703
 msgid "C_redits"
 msgstr "F_ramlög"
 
-#: gtk/gtkaboutdialog.c:705
+#: gtk/gtkaboutdialog.c:711
 msgid "_License"
 msgstr "_Notkunarleyfi"
 
-#: gtk/gtkaboutdialog.c:714 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkaboutdialog.c:720 gtk/gtkcustompaperunixdialog.c:329
 #: gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "_Loka"
 
-#: gtk/gtkaboutdialog.c:998
+#: gtk/gtkaboutdialog.c:1004
 msgid "Could not show link"
 msgstr "Gat ekki sýnt tengil"
 
-#: gtk/gtkaboutdialog.c:1037
+#: gtk/gtkaboutdialog.c:1043
 msgid "Website"
 msgstr "Vefsvæði"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
-#: gtk/gtkaboutdialog.c:1087 gtk/ui/gtkapplication-quartz.ui:7
+#: gtk/gtkaboutdialog.c:1093 gtk/ui/gtkapplication-quartz.ui:7
 #, c-format
 msgid "About %s"
 msgstr "Um %s"
 
-#: gtk/gtkaboutdialog.c:2314
+#: gtk/gtkaboutdialog.c:2320
 msgid "Created by"
 msgstr "Búið til af"
 
-#: gtk/gtkaboutdialog.c:2317
+#: gtk/gtkaboutdialog.c:2323
 msgid "Documented by"
 msgstr "Skjalað af"
 
-#: gtk/gtkaboutdialog.c:2327
+#: gtk/gtkaboutdialog.c:2333
 msgid "Translated by"
 msgstr "Þýtt af"
 
-#: gtk/gtkaboutdialog.c:2332
+#: gtk/gtkaboutdialog.c:2338
 msgid "Artwork by"
 msgstr "Myndir eftir"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2494
+#: gtk/gtkaboutdialog.c:2500
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1645,38 +1639,38 @@ msgstr "Öfugt skástrik"
 msgid "Other application…"
 msgstr "Annað forrit…"
 
-#: gtk/gtkappchooserdialog.c:204 gtk/gtkappchooserdialog.c:211
-#: gtk/gtkappchooserdialog.c:228 gtk/ui/gtkappchooserdialog.ui:5
+#: gtk/gtkappchooserdialog.c:202 gtk/gtkappchooserdialog.c:230
+#: gtk/ui/gtkappchooserdialog.ui:5
 msgid "Select Application"
 msgstr "Veldu forrit"
 
 #. Translators: %s is a filename
-#: gtk/gtkappchooserdialog.c:206
+#: gtk/gtkappchooserdialog.c:209
 #, c-format
 msgid "Opening “%s”."
 msgstr "Opna “%s”."
 
-#: gtk/gtkappchooserdialog.c:207
+#: gtk/gtkappchooserdialog.c:210
 #, c-format
 msgid "No applications found for “%s”"
 msgstr "Engin forrit fundust fyrir \"%s\""
 
 #. Translators: %s is a file type description
-#: gtk/gtkappchooserdialog.c:213
+#: gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "Opening “%s” files."
 msgstr "Opna \"%s\" skrár."
 
-#: gtk/gtkappchooserdialog.c:215
+#: gtk/gtkappchooserdialog.c:217
 #, c-format
 msgid "No applications found for “%s” files"
 msgstr "Engin forrit fundust fyrir \"%s\" skrár"
 
-#: gtk/gtkappchooserdialog.c:308
+#: gtk/gtkappchooserdialog.c:310
 msgid "Forget association"
 msgstr "Gleyma skráatengslum"
 
-#: gtk/gtkappchooserdialog.c:451
+#: gtk/gtkappchooserdialog.c:453
 msgid "Failed to start GNOME Software"
 msgstr "Mistókst að ræsa GNOME hugbúnað"
 
@@ -1702,7 +1696,7 @@ msgid "Other Applications"
 msgstr "Önnur forrit"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
-#: gtk/gtkprintoperation-win32.c:1495 gtk/inspector/prop-editor.c:1686
+#: gtk/gtkprintoperation-win32.c:1521 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Forrit"
 
@@ -1915,199 +1909,316 @@ msgid "Color: %s"
 msgstr "Litur: %s"
 
 #: gtk/gtkcolorchooserwidget.c:446
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
 msgctxt "Color name"
-msgid "Light Scarlet Red"
-msgstr "Ljósskarlatsrautt"
+msgid "Very Light Blue"
+msgstr "Mjög ljósblátt"
 
 #: gtk/gtkcolorchooserwidget.c:447
+#| msgctxt "Color name"
+#| msgid "Light Sky Blue"
 msgctxt "Color name"
-msgid "Scarlet Red"
-msgstr "Skarlatsrautt"
+msgid "Light Blue"
+msgstr "Ljósblátt"
 
 #: gtk/gtkcolorchooserwidget.c:448
+#| msgid "_Blue:"
 msgctxt "Color name"
-msgid "Dark Scarlet Red"
-msgstr "Dökkskarlatsrautt"
+msgid "Blue"
+msgstr "Blátt"
 
 #: gtk/gtkcolorchooserwidget.c:449
+#| msgctxt "Color name"
+#| msgid "Dark Sky Blue"
+msgctxt "Color name"
+msgid "Dark Blue"
+msgstr "Dökkblátt"
+
+#: gtk/gtkcolorchooserwidget.c:450
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Blue"
+msgstr "Mjög dökkblátt"
+
+#: gtk/gtkcolorchooserwidget.c:451
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Green"
+msgstr "Mjög ljósgrænt"
+
+#: gtk/gtkcolorchooserwidget.c:452
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Green"
+msgstr "Ljósgrænt"
+
+#: gtk/gtkcolorchooserwidget.c:453
+#| msgid "_Green:"
+msgctxt "Color name"
+msgid "Green"
+msgstr "Grænt"
+
+#: gtk/gtkcolorchooserwidget.c:454
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Green"
+msgstr "Dökkgrænt"
+
+#: gtk/gtkcolorchooserwidget.c:455
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Green"
+msgstr "Mjög dökkgrænt"
+
+#: gtk/gtkcolorchooserwidget.c:456
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
+msgctxt "Color name"
+msgid "Very Light Yellow"
+msgstr "Mjög ljósgult"
+
+#: gtk/gtkcolorchooserwidget.c:457
+#| msgctxt "Color name"
+#| msgid "Light Chameleon"
+msgctxt "Color name"
+msgid "Light Yellow"
+msgstr "Ljósgult"
+
+#: gtk/gtkcolorchooserwidget.c:458
+msgctxt "Color name"
+msgid "Yellow"
+msgstr "Gult"
+
+#: gtk/gtkcolorchooserwidget.c:459
+#| msgctxt "Color name"
+#| msgid "Dark Chameleon"
+msgctxt "Color name"
+msgid "Dark Yellow"
+msgstr "Dökkgult"
+
+#: gtk/gtkcolorchooserwidget.c:460
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
+msgctxt "Color name"
+msgid "Very Dark Yellow"
+msgstr "Mjög dökkgult"
+
+#: gtk/gtkcolorchooserwidget.c:461
+#| msgctxt "Color name"
+#| msgid "Light Orange"
+msgctxt "Color name"
+msgid "Very Light Orange"
+msgstr "Mjög ljósappelsínugult"
+
+#: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "Ljósappelsínugult"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Orange"
 msgstr "Appelsínugult"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "Dökkappelsínugult"
 
-#: gtk/gtkcolorchooserwidget.c:452
-msgctxt "Color name"
-msgid "Light Butter"
-msgstr "Ljóst smjör"
-
-#: gtk/gtkcolorchooserwidget.c:453
-msgctxt "Color name"
-msgid "Butter"
-msgstr "Smjör"
-
-#: gtk/gtkcolorchooserwidget.c:454
-msgctxt "Color name"
-msgid "Dark Butter"
-msgstr "Dökkt smjör"
-
-#: gtk/gtkcolorchooserwidget.c:455
-msgctxt "Color name"
-msgid "Light Chameleon"
-msgstr "Ljóst kameljón"
-
-#: gtk/gtkcolorchooserwidget.c:456
-msgctxt "Color name"
-msgid "Chameleon"
-msgstr "Kamelljón"
-
-#: gtk/gtkcolorchooserwidget.c:457
-msgctxt "Color name"
-msgid "Dark Chameleon"
-msgstr "Dökkt kameljón"
-
-#: gtk/gtkcolorchooserwidget.c:458
-msgctxt "Color name"
-msgid "Light Sky Blue"
-msgstr "Ljóshiminblátt"
-
-#: gtk/gtkcolorchooserwidget.c:459
-msgctxt "Color name"
-msgid "Sky Blue"
-msgstr "Himinblátt"
-
-#: gtk/gtkcolorchooserwidget.c:460
-msgctxt "Color name"
-msgid "Dark Sky Blue"
-msgstr "Dökkhiminblátt"
-
-#: gtk/gtkcolorchooserwidget.c:461
-msgctxt "Color name"
-msgid "Light Plum"
-msgstr "Ljós plóma"
-
-#: gtk/gtkcolorchooserwidget.c:462
-msgctxt "Color name"
-msgid "Plum"
-msgstr "Plóma"
-
-#: gtk/gtkcolorchooserwidget.c:463
-msgctxt "Color name"
-msgid "Dark Plum"
-msgstr "Dökk plóma"
-
-#: gtk/gtkcolorchooserwidget.c:464
-msgctxt "Color name"
-msgid "Light Chocolate"
-msgstr "Ljóst súkkulaði"
-
 #: gtk/gtkcolorchooserwidget.c:465
+#| msgctxt "Color name"
+#| msgid "Dark Orange"
 msgctxt "Color name"
-msgid "Chocolate"
-msgstr "Súkkulaði"
+msgid "Very Dark Orange"
+msgstr "Mjög dökkappelsínugult"
 
 #: gtk/gtkcolorchooserwidget.c:466
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
 msgctxt "Color name"
-msgid "Dark Chocolate"
-msgstr "Dökkt súkkulaði"
+msgid "Very Light Red"
+msgstr "Mjög ljósrautt"
 
 #: gtk/gtkcolorchooserwidget.c:467
+#| msgctxt "Color name"
+#| msgid "Light Scarlet Red"
 msgctxt "Color name"
-msgid "Light Aluminum 1"
-msgstr "Ljóst ál 1"
+msgid "Light Red"
+msgstr "Ljósrautt"
 
 #: gtk/gtkcolorchooserwidget.c:468
+#| msgid "_Red:"
 msgctxt "Color name"
-msgid "Aluminum 1"
-msgstr "Ál 1"
+msgid "Red"
+msgstr "Rautt"
 
 #: gtk/gtkcolorchooserwidget.c:469
+#| msgctxt "Color name"
+#| msgid "Dark Scarlet Red"
 msgctxt "Color name"
-msgid "Dark Aluminum 1"
-msgstr "Dökkt ál 1"
+msgid "Dark Red"
+msgstr "Dökkrautt"
 
 #: gtk/gtkcolorchooserwidget.c:470
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
 msgctxt "Color name"
-msgid "Light Aluminum 2"
-msgstr "Ljóst ál 2"
+msgid "Very Dark Red"
+msgstr "Mjög dökkrautt"
 
 #: gtk/gtkcolorchooserwidget.c:471
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
 msgctxt "Color name"
-msgid "Aluminum 2"
-msgstr "Ál 2"
+msgid "Very Light Purple"
+msgstr "Mjög ljóspurpuralitað"
 
 #: gtk/gtkcolorchooserwidget.c:472
+#| msgctxt "Color name"
+#| msgid "Light Plum"
 msgctxt "Color name"
-msgid "Dark Aluminum 2"
-msgstr "Dökkt ál 2"
+msgid "Light Purple"
+msgstr "Ljóspurpuralitað"
 
-#: gtk/gtkcolorchooserwidget.c:486
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
-msgid "Black"
-msgstr "Svart"
+msgid "Purple"
+msgstr "Fjólublátt"
 
-#: gtk/gtkcolorchooserwidget.c:487
+#: gtk/gtkcolorchooserwidget.c:474
+#| msgctxt "Color name"
+#| msgid "Dark Plum"
 msgctxt "Color name"
-msgid "Very Dark Gray"
-msgstr "Mjög dökkgrátt"
+msgid "Dark Purple"
+msgstr "Dökkpurpuralitað"
 
-#: gtk/gtkcolorchooserwidget.c:488
+#: gtk/gtkcolorchooserwidget.c:475
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
 msgctxt "Color name"
-msgid "Darker Gray"
-msgstr "Dekkra grátt"
+msgid "Very Dark Purple"
+msgstr "Mjög dökkpurpuralitað"
 
-#: gtk/gtkcolorchooserwidget.c:489
+#: gtk/gtkcolorchooserwidget.c:476
+#| msgctxt "Color name"
+#| msgid "Very Light Gray"
 msgctxt "Color name"
-msgid "Dark Gray"
-msgstr "Dökkgrátt"
+msgid "Very Light Brown"
+msgstr "Mjög ljósbrúnt"
 
-#: gtk/gtkcolorchooserwidget.c:490
+#: gtk/gtkcolorchooserwidget.c:477
+#| msgctxt "output-bin"
+#| msgid "Right Bin"
 msgctxt "Color name"
-msgid "Medium Gray"
-msgstr "Miðlungsgrátt"
+msgid "Light Brown"
+msgstr "Ljósbrúnt"
 
-#: gtk/gtkcolorchooserwidget.c:491
+#: gtk/gtkcolorchooserwidget.c:478
+#| msgid "Browse"
 msgctxt "Color name"
-msgid "Light Gray"
-msgstr "Ljósgrátt"
+msgid "Brown"
+msgstr "Brúnt"
 
-#: gtk/gtkcolorchooserwidget.c:492
+#: gtk/gtkcolorchooserwidget.c:479
+#| msgctxt "Color name"
+#| msgid "Dark Butter"
 msgctxt "Color name"
-msgid "Lighter Gray"
-msgstr "Ljósara grátt"
+msgid "Dark Brown"
+msgstr "Dökkbrúnt"
 
-#: gtk/gtkcolorchooserwidget.c:493
+#: gtk/gtkcolorchooserwidget.c:480
+#| msgctxt "Color name"
+#| msgid "Very Dark Gray"
 msgctxt "Color name"
-msgid "Very Light Gray"
-msgstr "Mjög ljósgrátt"
+msgid "Very Dark Brown"
+msgstr "Mjög dökkbrúnt"
 
-#: gtk/gtkcolorchooserwidget.c:494
+#: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
 msgid "White"
 msgstr "Hvítt"
 
+#: gtk/gtkcolorchooserwidget.c:482
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 1"
+msgstr "Ljósgrátt 1"
+
+#: gtk/gtkcolorchooserwidget.c:483
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 2"
+msgstr "Ljósgrátt 2"
+
+#: gtk/gtkcolorchooserwidget.c:484
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 3"
+msgstr "Ljósgrátt 3"
+
+#: gtk/gtkcolorchooserwidget.c:485
+#| msgctxt "Color name"
+#| msgid "Light Gray"
+msgctxt "Color name"
+msgid "Light Gray 4"
+msgstr "Ljósgrátt 4"
+
+#: gtk/gtkcolorchooserwidget.c:486
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 1"
+msgstr "Dökkgrátt 1"
+
+#: gtk/gtkcolorchooserwidget.c:487
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 2"
+msgstr "Dökkgrátt 2"
+
+#: gtk/gtkcolorchooserwidget.c:488
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 3"
+msgstr "Dökkgrátt 3"
+
+#: gtk/gtkcolorchooserwidget.c:489
+#| msgctxt "Color name"
+#| msgid "Dark Gray"
+msgctxt "Color name"
+msgid "Dark Gray 4"
+msgstr "Dökkgrátt 4"
+
+#: gtk/gtkcolorchooserwidget.c:490
+msgctxt "Color name"
+msgid "Black"
+msgstr "Svart"
+
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:543
+#: gtk/gtkcolorchooserwidget.c:534
 msgid "Custom"
 msgstr "Sérsniðið"
 
-#: gtk/gtkcolorchooserwidget.c:550
+#: gtk/gtkcolorchooserwidget.c:541
 msgid "Custom color"
 msgstr "Sérsniðinn litur"
 
-#: gtk/gtkcolorchooserwidget.c:551
+#: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
 msgstr "Búa til sérsniðinn lit"
 
-#: gtk/gtkcolorchooserwidget.c:570
+#: gtk/gtkcolorchooserwidget.c:561
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "Sérsniðinn litur %d: %s"
@@ -2198,52 +2309,52 @@ msgstr "_Hægri"
 msgid "Paper Margins"
 msgstr "Spássía blaðsins"
 
-#: gtk/gtkentry.c:9590 gtk/gtklabel.c:6680 gtk/gtktextview.c:9502
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6687 gtk/gtktextview.c:9520
 msgid "Cu_t"
 msgstr "_Klippa"
 
-#: gtk/gtkentry.c:9594 gtk/gtklabel.c:6681 gtk/gtktextview.c:9506
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6688 gtk/gtktextview.c:9524
 msgid "_Copy"
 msgstr "_Afrita"
 
-#: gtk/gtkentry.c:9598 gtk/gtklabel.c:6682 gtk/gtktextview.c:9508
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6689 gtk/gtktextview.c:9526
 msgid "_Paste"
 msgstr "_Líma"
 
-#: gtk/gtkentry.c:9601 gtk/gtkfilechooserwidget.c:1495
-#: gtk/gtkfilechooserwidget.c:2321 gtk/gtklabel.c:6684 gtk/gtktextview.c:9511
+#: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1500
+#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9529
 msgid "_Delete"
 msgstr "_Eyða"
 
-#: gtk/gtkentry.c:9612 gtk/gtklabel.c:6693 gtk/gtktextview.c:9525
+#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6700 gtk/gtktextview.c:9543
 msgid "Select _All"
 msgstr "Velja _Allt"
 
-#: gtk/gtkentry.c:9622 gtk/gtktextview.c:9535
+#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9553
 msgid "Insert _Emoji"
 msgstr "S_etja inn tjáningartákn"
 
-#: gtk/gtkentry.c:9798 gtk/gtktextview.c:9755
+#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9777
 msgid "Select all"
 msgstr "Velja allt"
 
-#: gtk/gtkentry.c:9801 gtk/gtktextview.c:9758
+#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9780
 msgid "Cut"
 msgstr "Klippa"
 
-#: gtk/gtkentry.c:9804 gtk/gtktextview.c:9761
+#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9783
 msgid "Copy"
 msgstr "Afrita"
 
-#: gtk/gtkentry.c:9807 gtk/gtktextview.c:9764
+#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9786
 msgid "Paste"
 msgstr "Líma"
 
-#: gtk/gtkentry.c:10879
+#: gtk/gtkentry.c:10880
 msgid "Caps Lock is on"
 msgstr "Caps Lock er á"
 
-#: gtk/gtkentry.c:11157
+#: gtk/gtkentry.c:11158
 msgid "Insert Emoji"
 msgstr "Setja inn tjáningartákn"
 
@@ -2269,17 +2380,17 @@ msgid "_Name"
 msgstr "_Heiti"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:630
+#: gtk/gtkfilechoosernative.c:546 gtk/gtkfilechoosernative.c:631
 #: gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693
-#: gtk/gtkplacesview.c:1682
+#: gtk/gtkplacesview.c:1705
 msgid "_Open"
 msgstr "_Opna"
 
-#: gtk/gtkfilechoosernative.c:630 gtk/inspector/css-editor.c:202
+#: gtk/gtkfilechoosernative.c:631 gtk/inspector/css-editor.c:202
 msgid "_Save"
 msgstr "Vi_sta"
 
-#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:404
+#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:435
 msgid "Select which types of files are shown"
 msgstr "Veldu hvaða skráategundir á að sýna"
 
@@ -2292,284 +2403,294 @@ msgstr "Veldu hvaða skráategundir á að sýna"
 msgid "%1$s on %2$s"
 msgstr "%1$s á %2$s"
 
-#: gtk/gtkfilechooserwidget.c:383
+#: gtk/gtkfilechooserwidget.c:386
 msgid "Type name of new folder"
 msgstr "Settu inn nafn nýrrar möppu"
 
-#: gtk/gtkfilechooserwidget.c:807
+#: gtk/gtkfilechooserwidget.c:810
 msgid "The folder could not be created"
 msgstr "Það tókst ekki að búa til möppu"
 
-#: gtk/gtkfilechooserwidget.c:820
+#: gtk/gtkfilechooserwidget.c:822
+#, fuzzy
+#| msgid ""
+#| "The folder could not be created, as a file with the same name already "
+#| "exists.  Try using a different name for the folder, or rename the file "
+#| "first."
 msgid ""
-"The folder could not be created, as a file with the same name already "
-"exists.  Try using a different name for the folder, or rename the file first."
+"The folder could not be created, as a file with the same name already exists."
 msgstr ""
 "Ekki tókst að búa til möppu, þar sem skrá með sama nafni er þegar til. "
 "Reyndu að nota annað nafn fyrir möppuna eða endurnefndu skrána fyrst."
 
-#: gtk/gtkfilechooserwidget.c:835
+#: gtk/gtkfilechooserwidget.c:824
+#, fuzzy
+#| msgid ""
+#| "The folder could not be created, as a file with the same name already "
+#| "exists.  Try using a different name for the folder, or rename the file "
+#| "first."
+msgid "Try using a different name for the folder, or rename the file first."
+msgstr ""
+"Ekki tókst að búa til möppu, þar sem skrá með sama nafni er þegar til. "
+"Reyndu að nota annað nafn fyrir möppuna eða endurnefndu skrána fyrst."
+
+#: gtk/gtkfilechooserwidget.c:837
 msgid "You need to choose a valid filename."
 msgstr "Þú verður að velja gilt skráarheiti."
 
-#: gtk/gtkfilechooserwidget.c:838
+#: gtk/gtkfilechooserwidget.c:840
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Get ekki búið til skrá undir %s vegna þess að þetta er ekki mappa"
 
-#: gtk/gtkfilechooserwidget.c:848
+#: gtk/gtkfilechooserwidget.c:850
 msgid "Cannot create file as the filename is too long"
 msgstr "Gat ekki búið til skrá þar sem skráarheitið er of langt"
 
-#: gtk/gtkfilechooserwidget.c:849
+#: gtk/gtkfilechooserwidget.c:851
 msgid "Try using a shorter name."
 msgstr "Reyndu að nota styttra heiti."
 
-#: gtk/gtkfilechooserwidget.c:859
+#: gtk/gtkfilechooserwidget.c:861
 msgid "You may only select folders"
 msgstr "Þú getur aðeins valið möppur"
 
-#: gtk/gtkfilechooserwidget.c:860
+#: gtk/gtkfilechooserwidget.c:862
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Atriðið sem þú valdir er ekki mappa, reyndu að velja eitthvað annað."
 
-#: gtk/gtkfilechooserwidget.c:868
+#: gtk/gtkfilechooserwidget.c:870
 msgid "Invalid file name"
 msgstr "Ógilt skráarheiti"
 
-#: gtk/gtkfilechooserwidget.c:877
+#: gtk/gtkfilechooserwidget.c:879
 msgid "The folder contents could not be displayed"
 msgstr "Gat ekki birt innihald möppunnar"
 
-#: gtk/gtkfilechooserwidget.c:885
+#: gtk/gtkfilechooserwidget.c:887
 msgid "The file could not be deleted"
 msgstr "Ekki var hægt að eyða skránni"
 
-#: gtk/gtkfilechooserwidget.c:893
+#: gtk/gtkfilechooserwidget.c:895
 msgid "The file could not be moved to the Trash"
 msgstr "Ekki var hægt að setja valda skrá í ruslið"
 
-#: gtk/gtkfilechooserwidget.c:1038
+#: gtk/gtkfilechooserwidget.c:1040
 msgid "A folder with that name already exists"
 msgstr "Mappa með sama heiti er þegar til"
 
-#: gtk/gtkfilechooserwidget.c:1040
+#: gtk/gtkfilechooserwidget.c:1042
 msgid "A file with that name already exists"
 msgstr "Skrá með sama heiti er þegar til"
 
-#: gtk/gtkfilechooserwidget.c:1075
+#: gtk/gtkfilechooserwidget.c:1077
 msgid "A folder cannot be called “.”"
 msgstr "Mappa má ekki heita “.”"
 
-#: gtk/gtkfilechooserwidget.c:1076
+#: gtk/gtkfilechooserwidget.c:1078
 msgid "A file cannot be called “.”"
 msgstr "Skrá má ekki heita “.”"
 
-#: gtk/gtkfilechooserwidget.c:1079
+#: gtk/gtkfilechooserwidget.c:1081
 msgid "A folder cannot be called “..”"
 msgstr "Mappa má ekki heita “..”"
 
-#: gtk/gtkfilechooserwidget.c:1080
+#: gtk/gtkfilechooserwidget.c:1082
 msgid "A file cannot be called “..”"
 msgstr "Skrá má ekki heita “..”"
 
-#: gtk/gtkfilechooserwidget.c:1083
+#: gtk/gtkfilechooserwidget.c:1085
 msgid "Folder names cannot contain “/”"
 msgstr "Möppunöfn mega ekki innihalda \"/\""
 
-#: gtk/gtkfilechooserwidget.c:1084
+#: gtk/gtkfilechooserwidget.c:1086
 msgid "File names cannot contain “/”"
 msgstr "Skráaheiti mega ekki innihalda \"/\""
 
-#: gtk/gtkfilechooserwidget.c:1110
+#: gtk/gtkfilechooserwidget.c:1112
 msgid "Folder names should not begin with a space"
 msgstr "Möppuheiti mega ekki byrja á bili"
 
-#: gtk/gtkfilechooserwidget.c:1111
+#: gtk/gtkfilechooserwidget.c:1113
 msgid "File names should not begin with a space"
 msgstr "Skráaheiti mega ekki byrja á bili"
 
-#: gtk/gtkfilechooserwidget.c:1115
+#: gtk/gtkfilechooserwidget.c:1117
 msgid "Folder names should not end with a space"
 msgstr "Möppuheiti mega ekki enda á bili"
 
-#: gtk/gtkfilechooserwidget.c:1116
+#: gtk/gtkfilechooserwidget.c:1118
 msgid "File names should not end with a space"
 msgstr "Skráaheiti mega ekki enda á bili"
 
-#: gtk/gtkfilechooserwidget.c:1119
+#: gtk/gtkfilechooserwidget.c:1121
 msgid "Folder names starting with a “.” are hidden"
 msgstr "Möppuheiti sem byrja á \".\" eru falin"
 
-#: gtk/gtkfilechooserwidget.c:1120
+#: gtk/gtkfilechooserwidget.c:1122
 msgid "File names starting with a “.” are hidden"
 msgstr "Skráaheiti sem byrja á \".\" eru falin"
 
-#: gtk/gtkfilechooserwidget.c:1490
+#: gtk/gtkfilechooserwidget.c:1495
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Ertu viss um að þú viljir endanlega eyða \"“%s\"?"
 
-#: gtk/gtkfilechooserwidget.c:1493
+#: gtk/gtkfilechooserwidget.c:1498
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Ef þú eyðir hlut, hverfur hann fyrir fullt og allt."
 
-#: gtk/gtkfilechooserwidget.c:1630
+#: gtk/gtkfilechooserwidget.c:1635
 msgid "The file could not be renamed"
 msgstr "Ekki var hægt að endurnefna skrána"
 
-#: gtk/gtkfilechooserwidget.c:1966
+#: gtk/gtkfilechooserwidget.c:1980
 msgid "Could not select file"
 msgstr "Gat ekki valið skrá"
 
-#: gtk/gtkfilechooserwidget.c:2316
+#: gtk/gtkfilechooserwidget.c:2330
 msgid "_Visit File"
 msgstr "S_koða skrá"
 
-#: gtk/gtkfilechooserwidget.c:2317
+#: gtk/gtkfilechooserwidget.c:2331
 msgid "_Open With File Manager"
 msgstr "_Opna með skráastjóra"
 
-#: gtk/gtkfilechooserwidget.c:2318
+#: gtk/gtkfilechooserwidget.c:2332
 msgid "_Copy Location"
 msgstr "_Afrita staðsetningu"
 
-#: gtk/gtkfilechooserwidget.c:2319
+#: gtk/gtkfilechooserwidget.c:2333
 msgid "_Add to Bookmarks"
 msgstr "_Bæta við sem bókamerki"
 
-#: gtk/gtkfilechooserwidget.c:2320 gtk/gtkplacessidebar.c:2741
-#: gtk/ui/gtkfilechooserwidget.ui:538
+#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2741
+#: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
 msgstr "Endu_rnefna"
 
-#: gtk/gtkfilechooserwidget.c:2322
+#: gtk/gtkfilechooserwidget.c:2336
 msgid "_Move to Trash"
 msgstr "_Henda í ruslið"
 
-#: gtk/gtkfilechooserwidget.c:2326
+#: gtk/gtkfilechooserwidget.c:2340
 msgid "Show _Hidden Files"
 msgstr "Sýna _faldar skrár"
 
-#: gtk/gtkfilechooserwidget.c:2327
+#: gtk/gtkfilechooserwidget.c:2341
 msgid "Show _Size Column"
 msgstr "Sýna dálk fyrir _stærð"
 
-#: gtk/gtkfilechooserwidget.c:2328
-#| msgid "Show _Size Column"
+#: gtk/gtkfilechooserwidget.c:2342
 msgid "Show T_ype Column"
 msgstr "Sýna _dálk fyrir tegund"
 
-#: gtk/gtkfilechooserwidget.c:2329
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "Show _Time"
 msgstr "Birta _tíma"
 
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2344
 msgid "Sort _Folders before Files"
 msgstr "Raða _möppum á undan skrám"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2609 gtk/inspector/css-node-tree.ui:141
-#: gtk/ui/gtkfilechooserwidget.ui:207 gtk/ui/gtkprintunixdialog.ui:123
+#: gtk/gtkfilechooserwidget.c:2626 gtk/inspector/css-node-tree.ui:141
+#: gtk/ui/gtkfilechooserwidget.ui:238 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "Staðsetning"
 
 #  Name entry
 #. Label
-#: gtk/gtkfilechooserwidget.c:2702
+#: gtk/gtkfilechooserwidget.c:2719
 msgid "_Name:"
 msgstr "_Nafn:"
 
-#: gtk/gtkfilechooserwidget.c:3327 gtk/gtkfilechooserwidget.c:3341
+#: gtk/gtkfilechooserwidget.c:3344 gtk/gtkfilechooserwidget.c:3358
 #, c-format
 msgid "Searching in %s"
 msgstr "Leita í %s"
 
-#: gtk/gtkfilechooserwidget.c:3347
+#: gtk/gtkfilechooserwidget.c:3364
 msgid "Searching"
 msgstr "Leita"
 
-#: gtk/gtkfilechooserwidget.c:3354
+#: gtk/gtkfilechooserwidget.c:3371
 msgid "Enter location"
 msgstr "Settu inn staðsetningu"
 
-#: gtk/gtkfilechooserwidget.c:3356
+#: gtk/gtkfilechooserwidget.c:3373
 msgid "Enter location or URL"
 msgstr "Settu inn staðsetningu eða slóð"
 
-#: gtk/gtkfilechooserwidget.c:4432 gtk/gtkfilechooserwidget.c:7469
-#: gtk/ui/gtkfilechooserwidget.ui:247
+#: gtk/gtkfilechooserwidget.c:4451 gtk/gtkfilechooserwidget.c:7493
+#: gtk/ui/gtkfilechooserwidget.ui:278
 msgid "Modified"
 msgstr "Breytt"
 
-#: gtk/gtkfilechooserwidget.c:4710
+#: gtk/gtkfilechooserwidget.c:4729
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Gat ekki lesið innihald %s"
 
-#: gtk/gtkfilechooserwidget.c:4714
+#: gtk/gtkfilechooserwidget.c:4733
 msgid "Could not read the contents of the folder"
 msgstr "Gat ekki lesið innihald möppunnar"
 
-#: gtk/gtkfilechooserwidget.c:4874 gtk/gtkfilechooserwidget.c:4922
+#: gtk/gtkfilechooserwidget.c:4893 gtk/gtkfilechooserwidget.c:4941
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4876 gtk/gtkfilechooserwidget.c:4924
+#: gtk/gtkfilechooserwidget.c:4895 gtk/gtkfilechooserwidget.c:4943
 msgid "%l:%M %p"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4880
+#: gtk/gtkfilechooserwidget.c:4899
 msgid "Yesterday"
 msgstr "Í gær"
 
-#: gtk/gtkfilechooserwidget.c:4888
+#: gtk/gtkfilechooserwidget.c:4907
 msgid "%-e %b"
 msgstr "%-e. %b"
 
-#: gtk/gtkfilechooserwidget.c:4892
+#: gtk/gtkfilechooserwidget.c:4911
 msgid "%-e %b %Y"
 msgstr "%-e. %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:4991 gtk/gtkfilechooserwidget.c:4999
+#: gtk/gtkfilechooserwidget.c:5010 gtk/gtkfilechooserwidget.c:5018
 msgid "Program"
 msgstr "Forrit"
 
-#: gtk/gtkfilechooserwidget.c:4992
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
+#: gtk/gtkfilechooserwidget.c:5011
 msgid "Audio"
 msgstr "Hljóð"
 
-#: gtk/gtkfilechooserwidget.c:4993 gtk/inspector/visual.ui:230
+#: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "Letur"
 
-#: gtk/gtkfilechooserwidget.c:4994 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:5013 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "Mynd"
 
-#: gtk/gtkfilechooserwidget.c:4995
-#| msgctxt "paper size"
-#| msgid "Arch A"
+#: gtk/gtkfilechooserwidget.c:5014
 msgid "Archive"
 msgstr "Safnskrá"
 
-#: gtk/gtkfilechooserwidget.c:4996
+#: gtk/gtkfilechooserwidget.c:5015
 msgid "Markup"
 msgstr "Merking"
 
-#: gtk/gtkfilechooserwidget.c:4997 gtk/gtkfilechooserwidget.c:4998
+#: gtk/gtkfilechooserwidget.c:5016 gtk/gtkfilechooserwidget.c:5017
 msgid "Text"
 msgstr "Texti"
 
-#: gtk/gtkfilechooserwidget.c:5000
+#: gtk/gtkfilechooserwidget.c:5019
 msgid "Video"
 msgstr "Myndskeið"
 
-#: gtk/gtkfilechooserwidget.c:5001
+#: gtk/gtkfilechooserwidget.c:5020
 msgid "Contacts"
 msgstr "Tengiliðir"
 
@@ -2581,47 +2702,41 @@ msgstr "Tengiliðir"
 #  * Note that this flipping is in top the text direction flipping,
 #  * so if you have a default text direction of RTL and YM, then
 #  * the year will appear on the right.
-#: gtk/gtkfilechooserwidget.c:5002
-#| msgid "calendar:MY"
+#: gtk/gtkfilechooserwidget.c:5021
 msgid "Calendar"
 msgstr "Dagatal"
 
-#: gtk/gtkfilechooserwidget.c:5003
-#| msgid "Documented by"
+#: gtk/gtkfilechooserwidget.c:5022
 msgid "Document"
 msgstr "Skjal"
 
-#: gtk/gtkfilechooserwidget.c:5004
-#| msgid "_Orientation:"
+#: gtk/gtkfilechooserwidget.c:5023
 msgid "Presentation"
 msgstr "Kynning"
 
-#: gtk/gtkfilechooserwidget.c:5005
+#: gtk/gtkfilechooserwidget.c:5024
 msgid "Spreadsheet"
 msgstr "Töflureiknir"
 
-#. Translators: We don't know whether this printer is
-#. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5036 gtk/gtkfilechooserwidget.c:5225
+#: gtk/gtkfilechooserwidget.c:5055 gtk/gtkfilechooserwidget.c:5244
 #: gtk/inspector/prop-editor.c:1689
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Óþekkt"
 
-#: gtk/gtkfilechooserwidget.c:5264 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1094
 msgid "Home"
 msgstr "Heimasvæði"
 
-#: gtk/gtkfilechooserwidget.c:5761
+#: gtk/gtkfilechooserwidget.c:5780
 msgid "Cannot change to folder because it is not local"
 msgstr "Get ekki skipt yfir í möppu þar sem hún er ekki staðvær"
 
-#: gtk/gtkfilechooserwidget.c:6547 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6566 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Það er þegar til skrá sem heitir „“%s“. Viltu skipta henni út?"
 
-#: gtk/gtkfilechooserwidget.c:6550 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6569 gtk/gtkprintunixdialog.c:669
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2629,24 +2744,24 @@ msgstr ""
 "Þess skrá er þegar til í „“%s“”. Verði henni skipt út verður skrifað yfir "
 "innihaldið."
 
-#: gtk/gtkfilechooserwidget.c:6555 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6574 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "_Skipta út"
 
-#: gtk/gtkfilechooserwidget.c:6769
+#: gtk/gtkfilechooserwidget.c:6793
 msgid "You do not have access to the specified folder."
 msgstr "Þú hefur ekki aðgangsheimildir í tilgreinda möppu."
 
-#: gtk/gtkfilechooserwidget.c:7392
+#: gtk/gtkfilechooserwidget.c:7416
 msgid "Could not send the search request"
 msgstr "Gat ekki sent leitarbeiðni"
 
-#: gtk/gtkfilechooserwidget.c:7680
+#: gtk/gtkfilechooserwidget.c:7704
 msgid "Accessed"
 msgstr "Notað"
 
 #  Create Folder
-#: gtk/gtkfilechooserwidget.c:8799 gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/gtkfilechooserwidget.c:8824 gtk/ui/gtkfilechooserwidget.ui:89
 msgid "Create Folder"
 msgstr "Búa til möppu"
 
@@ -2673,54 +2788,54 @@ msgctxt "font"
 msgid "None"
 msgstr "Ekkert"
 
-#: gtk/gtkfontchooserwidget.c:1525
+#: gtk/gtkfontchooserwidget.c:1556
 msgid "Width"
 msgstr "Breidd"
 
-#: gtk/gtkfontchooserwidget.c:1526
+#: gtk/gtkfontchooserwidget.c:1557
 msgid "Weight"
 msgstr "Þykkt"
 
-#: gtk/gtkfontchooserwidget.c:1527
+#: gtk/gtkfontchooserwidget.c:1558
 msgid "Italic"
 msgstr "Skáletrað"
 
-#: gtk/gtkfontchooserwidget.c:1528
+#: gtk/gtkfontchooserwidget.c:1559
 msgid "Slant"
 msgstr "Hallandi"
 
-#: gtk/gtkfontchooserwidget.c:1529
+#: gtk/gtkfontchooserwidget.c:1560
 msgid "Optical Size"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2066 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2097 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Sjálfgefið"
 
-#: gtk/gtkfontchooserwidget.c:2113
+#: gtk/gtkfontchooserwidget.c:2144
 msgid "Ligatures"
 msgstr "Staftengi (ligatures)"
 
-#: gtk/gtkfontchooserwidget.c:2114
+#: gtk/gtkfontchooserwidget.c:2145
 #, fuzzy
 #| msgctxt "paper size"
 #| msgid "US Letter Plus"
 msgid "Letter Case"
 msgstr "US bréfsefni Plus"
 
-#: gtk/gtkfontchooserwidget.c:2115
+#: gtk/gtkfontchooserwidget.c:2146
 msgid "Number Case"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2116
+#: gtk/gtkfontchooserwidget.c:2147
 msgid "Number Spacing"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2117
+#: gtk/gtkfontchooserwidget.c:2148
 msgid "Number Formatting"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:2118
+#: gtk/gtkfontchooserwidget.c:2149
 msgid "Character Variants"
 msgstr "Stafatilbrigði"
 
@@ -2732,7 +2847,7 @@ msgstr "Mistókst að búa til OpenGL umhverfi"
 msgid "Application menu"
 msgstr "Forritavalmynd"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9355
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9356
 msgid "Close"
 msgstr "Loka"
 
@@ -2783,12 +2898,12 @@ msgid "Error"
 msgstr "Villa"
 
 #. Open Link
-#: gtk/gtklabel.c:6661
+#: gtk/gtklabel.c:6668
 msgid "_Open Link"
 msgstr "_Opna tengil"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6670
+#: gtk/gtklabel.c:6677
 msgid "Copy _Link Address"
 msgstr "A_frita vistfang tengils"
 
@@ -2888,40 +3003,40 @@ msgstr ""
 "Hafðu sambandi við kerfisstjórann"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:464
+#: gtk/gtkmain.c:462
 msgid "Load additional GTK+ modules"
 msgstr "Hlaða inn viðbótar GTK+ forritseiningum"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:465
+#: gtk/gtkmain.c:463
 msgid "MODULES"
 msgstr "FORRITSEININGAR"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:467
+#: gtk/gtkmain.c:465
 msgid "Make all warnings fatal"
 msgstr "Túlka allar aðvaranir sem banvænar"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:470
+#: gtk/gtkmain.c:468
 msgid "GTK+ debugging flags to set"
 msgstr "Setja GTK+ aflúsunarrofa"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:473
+#: gtk/gtkmain.c:471
 msgid "GTK+ debugging flags to unset"
 msgstr "Fjarlægja GTK+ aflúsunarrofa"
 
-#: gtk/gtkmain.c:810 gtk/gtkmain.c:1004
+#: gtk/gtkmain.c:811 gtk/gtkmain.c:1005
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Get ekki birt: %s"
 
-#: gtk/gtkmain.c:922
+#: gtk/gtkmain.c:923
 msgid "GTK+ Options"
 msgstr "GTK+ valkostir"
 
-#: gtk/gtkmain.c:922
+#: gtk/gtkmain.c:923
 msgid "Show GTK+ Options"
 msgstr "Birta GTK+ valkosti"
 
@@ -2934,7 +3049,7 @@ msgstr "Birta GTK+ valkosti"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1272
+#: gtk/gtkmain.c:1276
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2950,72 +3065,69 @@ msgstr "_Já"
 msgid "Co_nnect"
 msgstr "Te_ngjast"
 
-#: gtk/gtkmountoperation.c:671
+#: gtk/gtkmountoperation.c:668
 msgid "Connect As"
 msgstr "Tengjast sem"
 
-#: gtk/gtkmountoperation.c:680
+#: gtk/gtkmountoperation.c:677
 msgid "_Anonymous"
 msgstr "N_afnlaus"
 
-#: gtk/gtkmountoperation.c:689
+#: gtk/gtkmountoperation.c:686
 msgid "Registered U_ser"
 msgstr "_Skráður notandi"
 
-#: gtk/gtkmountoperation.c:700
+#: gtk/gtkmountoperation.c:697
 msgid "_Username"
 msgstr "_Notandanafn"
 
-#: gtk/gtkmountoperation.c:705
+#: gtk/gtkmountoperation.c:702
 msgid "_Domain"
 msgstr "_Lén"
 
-#: gtk/gtkmountoperation.c:714
-#| msgid "Volume Up"
+#: gtk/gtkmountoperation.c:711
 msgid "Volume type"
 msgstr "Gerð gagnamiðils"
 
-#: gtk/gtkmountoperation.c:724
+#: gtk/gtkmountoperation.c:721
 msgid "_Hidden"
 msgstr "_Falið"
 
-#: gtk/gtkmountoperation.c:727
-#| msgctxt "input method menu"
-#| msgid "Windows IME"
+#: gtk/gtkmountoperation.c:724
 msgid "_Windows system"
 msgstr "_Windows stýrikerfi"
 
-#: gtk/gtkmountoperation.c:730
+#: gtk/gtkmountoperation.c:727
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:736
+#: gtk/gtkmountoperation.c:733
 msgid "_Password"
 msgstr "_Lykilorð"
 
-#: gtk/gtkmountoperation.c:758
+#: gtk/gtkmountoperation.c:755
 msgid "Forget password _immediately"
 msgstr "Gleyma lykilorði _strax"
 
-#: gtk/gtkmountoperation.c:768
+#: gtk/gtkmountoperation.c:765
 msgid "Remember password until you _logout"
 msgstr "_Muna lykilorð þangað til þú skráir þig út"
 
-#: gtk/gtkmountoperation.c:778
+#: gtk/gtkmountoperation.c:775
 msgid "Remember _forever"
 msgstr "Muna að _eilífu"
 
-#: gtk/gtkmountoperation.c:1173
+#: gtk/gtkmountoperation.c:1170
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Óþekkt forrit (PID %d)"
 
-#: gtk/gtkmountoperation.c:1358
+#: gtk/gtkmountoperation.c:1355
 #, c-format
 msgid "Unable to end process"
 msgstr "Tókst ekki að ljúka ferli"
 
-#: gtk/gtkmountoperation.c:1392
+#: gtk/gtkmountoperation.c:1389
 msgid "_End Process"
 msgstr "_Ljúka ferli"
 
@@ -3050,7 +3162,7 @@ msgstr "Z skelin"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Get ekki slökkt á ferli með PID %d: %s"
 
-#: gtk/gtknotebook.c:5150 gtk/gtknotebook.c:7428
+#: gtk/gtknotebook.c:5151 gtk/gtknotebook.c:7429
 #, c-format
 msgid "Page %u"
 msgstr "Síða %u"
@@ -3240,7 +3352,7 @@ msgstr "Þetta nafn er þegar í notkun"
 
 #: gtk/gtkplacessidebar.c:2735 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
-#: gtk/ui/gtkfilechooserwidget.ui:189 gtk/ui/gtkfilechooserwidget.ui:512
+#: gtk/ui/gtkfilechooserwidget.ui:220 gtk/ui/gtkfilechooserwidget.ui:543
 msgid "Name"
 msgstr "Heiti"
 
@@ -3270,12 +3382,12 @@ msgid "Unable to poll “%s” for media changes"
 msgstr "Ekki náðist að kanna \"%s\" til að sjá breytingar á miðlum"
 
 #: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696
-#: gtk/gtkplacesview.c:1692
+#: gtk/gtkplacesview.c:1715
 msgid "Open in New _Tab"
 msgstr "Opna í nýjum _flipa"
 
 #: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699
-#: gtk/gtkplacesview.c:1703
+#: gtk/gtkplacesview.c:1726
 msgid "Open in New _Window"
 msgstr "Opna í nýjum _glugga"
 
@@ -3291,11 +3403,11 @@ msgstr "Fja_rlægja"
 msgid "Rename…"
 msgstr "Endurnefna…"
 
-#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1737
+#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1760
 msgid "_Mount"
 msgstr "_Tengja"
 
-#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1727
+#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1750
 msgid "_Unmount"
 msgstr "_Aftengja"
 
@@ -3320,7 +3432,7 @@ msgid "No network locations found"
 msgstr "Engar staðsetningar fundust á neti"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1307
+#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1330
 msgid "Unable to access location"
 msgstr "Getur ekki tengst staðsetningu"
 
@@ -3330,71 +3442,71 @@ msgid "Con_nect"
 msgstr "Te_ngjast"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1370
+#: gtk/gtkplacesview.c:1393
 msgid "Unable to unmount volume"
 msgstr "Get ekki aftengt gagnageymslu"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1471
+#: gtk/gtkplacesview.c:1494
 msgid "Cance_l"
 msgstr "_Hætta við"
 
-#: gtk/gtkplacesview.c:1634
+#: gtk/gtkplacesview.c:1657
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1638
+#: gtk/gtkplacesview.c:1661
 msgid "File Transfer Protocol"
 msgstr "FTP - File Transfer Protocol"
 
-#: gtk/gtkplacesview.c:1638
+#: gtk/gtkplacesview.c:1661
 msgid "ftp:// or ftps://"
 msgstr "ftp:// eða ftps://"
 
-#: gtk/gtkplacesview.c:1641
+#: gtk/gtkplacesview.c:1664
 msgid "Network File System"
 msgstr "Netskráakerfi - Network File System"
 
-#: gtk/gtkplacesview.c:1644
+#: gtk/gtkplacesview.c:1667
 msgid "Samba"
 msgstr "Samba"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1671
 msgid "SSH File Transfer Protocol"
 msgstr "SSH File Transfer Protocol"
 
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1671
 msgid "sftp:// or ssh://"
 msgstr "sftp:// eða ssh://"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1675
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1675
 msgid "dav:// or davs://"
 msgstr "dav:// eða davs://"
 
-#: gtk/gtkplacesview.c:1727
+#: gtk/gtkplacesview.c:1750
 msgid "_Disconnect"
 msgstr "_Aftengjast"
 
-#: gtk/gtkplacesview.c:1737
+#: gtk/gtkplacesview.c:1760
 msgid "_Connect"
 msgstr "_Tengjast"
 
-#: gtk/gtkplacesview.c:1878
+#: gtk/gtkplacesview.c:1901
 msgid "Unable to get remote server location"
 msgstr "Get ekki nálgast staðsetningu fjarlægs netþjóns"
 
-#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
+#: gtk/gtkplacesview.c:2096 gtk/gtkplacesview.c:2105
 msgid "Networks"
 msgstr "Netkerfi"
 
-#: gtk/gtkplacesview.c:2073 gtk/gtkplacesview.c:2082
+#: gtk/gtkplacesview.c:2096 gtk/gtkplacesview.c:2105
 msgid "On This Computer"
 msgstr "Á þessari tölvu"
 
@@ -3414,7 +3526,7 @@ msgid "Disconnect"
 msgstr "Aftengjast"
 
 #: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
-#: gtk/ui/gtksidebarrow.ui:61
+#: gtk/ui/gtksidebarrow.ui:62
 msgid "Unmount"
 msgstr "Aftengja úr skráakerfi"
 
@@ -3514,63 +3626,63 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Sennilega tókst ekki að búa til bráðabirgðaskrá."
 
 #. window
-#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:542
-#: gtk/gtkprintoperation-portal.c:611 gtk/gtkprintunixdialog.c:3415
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:549
+#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3415
 msgid "Print"
 msgstr "Prenta"
 
-#: gtk/gtkprintoperation-win32.c:617
+#: gtk/gtkprintoperation-win32.c:631
 msgid "Printer offline"
 msgstr "Prentari er aftengdur"
 
-#: gtk/gtkprintoperation-win32.c:619
+#: gtk/gtkprintoperation-win32.c:633
 msgid "Out of paper"
 msgstr "Pappír búinn"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:621
-#: modules/printbackends/cups/gtkprintbackendcups.c:2624
+#: gtk/gtkprintoperation-win32.c:635
+#: modules/printbackends/cups/gtkprintbackendcups.c:2680
 msgid "Paused"
 msgstr "Í bið"
 
-#: gtk/gtkprintoperation-win32.c:623
+#: gtk/gtkprintoperation-win32.c:637
 msgid "Need user intervention"
 msgstr "Notandinn þarf að skerast í leikinn"
 
-#: gtk/gtkprintoperation-win32.c:728
+#: gtk/gtkprintoperation-win32.c:742
 msgid "Custom size"
 msgstr "Sérsniðin stærð"
 
-#: gtk/gtkprintoperation-win32.c:1587
+#: gtk/gtkprintoperation-win32.c:1613
 msgid "No printer found"
 msgstr "Fann enga prentara"
 
-#: gtk/gtkprintoperation-win32.c:1614
+#: gtk/gtkprintoperation-win32.c:1640
 msgid "Invalid argument to CreateDC"
 msgstr "Ógild breyta í CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1650 gtk/gtkprintoperation-win32.c:1896
+#: gtk/gtkprintoperation-win32.c:1676 gtk/gtkprintoperation-win32.c:1922
 msgid "Error from StartDoc"
 msgstr "Villa frá StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1751 gtk/gtkprintoperation-win32.c:1774
-#: gtk/gtkprintoperation-win32.c:1822
+#: gtk/gtkprintoperation-win32.c:1777 gtk/gtkprintoperation-win32.c:1800
+#: gtk/gtkprintoperation-win32.c:1848
 msgid "Not enough free memory"
 msgstr "Ekki nógu mikið laust minni"
 
-#: gtk/gtkprintoperation-win32.c:1827
+#: gtk/gtkprintoperation-win32.c:1853
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Ógild breyta í PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1832
+#: gtk/gtkprintoperation-win32.c:1858
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Ógild ábending (pointer) í PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1837
+#: gtk/gtkprintoperation-win32.c:1863
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Ógild hald í PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1842
+#: gtk/gtkprintoperation-win32.c:1868
 msgid "Unspecified error"
 msgstr "Óskilgreind villa"
 
@@ -3598,42 +3710,42 @@ msgstr "Sæki upplýsingar um prentara…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5493
+#: modules/printbackends/cups/gtkprintbackendcups.c:5709
 msgid "Left to right, top to bottom"
 msgstr "Vinstri til hægri, ofan og niður"
 
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5493
+#: modules/printbackends/cups/gtkprintbackendcups.c:5709
 msgid "Left to right, bottom to top"
 msgstr "Vinstri til hægri, neðan og upp"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5494
+#: modules/printbackends/cups/gtkprintbackendcups.c:5710
 msgid "Right to left, top to bottom"
 msgstr "Hægri til vinstri, ofan og niður"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5494
+#: modules/printbackends/cups/gtkprintbackendcups.c:5710
 msgid "Right to left, bottom to top"
 msgstr "Hægri til vinstri, neðan og upp"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5495
+#: modules/printbackends/cups/gtkprintbackendcups.c:5711
 msgid "Top to bottom, left to right"
 msgstr "Ofan og niður, vinstri til hægri"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5495
+#: modules/printbackends/cups/gtkprintbackendcups.c:5711
 msgid "Top to bottom, right to left"
 msgstr "Ofan og niður, hægri til vinstri"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5496
+#: modules/printbackends/cups/gtkprintbackendcups.c:5712
 msgid "Bottom to top, left to right"
 msgstr "Neðan og upp, vinstri til hægri"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5496
+#: modules/printbackends/cups/gtkprintbackendcups.c:5712
 msgid "Bottom to top, right to left"
 msgstr "Neðan og upp, hægri til vinstri"
 
@@ -3826,12 +3938,12 @@ msgid "Search Shortcuts"
 msgstr "Flýtillyklar fyrir vistaðar leitir"
 
 #: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
-#: gtk/ui/gtkfilechooserwidget.ui:322
+#: gtk/ui/gtkfilechooserwidget.ui:353
 msgid "No Results Found"
 msgstr "Engar niðurstöður fundust"
 
 #: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
-#: gtk/ui/gtkfilechooserwidget.ui:336 gtk/ui/gtkplacesview.ui:274
+#: gtk/ui/gtkfilechooserwidget.ui:367 gtk/ui/gtkplacesview.ui:274
 msgid "Try a different search"
 msgstr "Reyndu aðra leit"
 
@@ -4016,24 +4128,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9303
+#: gtk/gtkwindow.c:9304
 msgid "Move"
 msgstr "Færa"
 
-#: gtk/gtkwindow.c:9311
+#: gtk/gtkwindow.c:9312
 msgid "Resize"
 msgstr "Breyta stærð"
 
-#: gtk/gtkwindow.c:9342
+#: gtk/gtkwindow.c:9343
 msgid "Always on Top"
 msgstr "Alltaf efst"
 
-#: gtk/gtkwindow.c:12777
+#: gtk/gtkwindow.c:12778
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Viltu nota GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:12779
+#: gtk/gtkwindow.c:12780
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -4044,7 +4156,7 @@ msgstr ""
 "innviðum allra GTK+ forrita. Notkun þess getur valdið því að forrit bili eða "
 "hrynji."
 
-#: gtk/gtkwindow.c:12784
+#: gtk/gtkwindow.c:12785
 msgid "Don't show this message again"
 msgstr "Ekki sýna þessi skilaboð aftur"
 
@@ -4381,7 +4493,7 @@ msgid "Property"
 msgstr "Eiginleiki"
 
 #: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
-#: gtk/ui/gtkfilechooserwidget.ui:235
+#: gtk/ui/gtkfilechooserwidget.ui:266
 msgid "Type"
 msgstr "Tegund"
 
@@ -4401,7 +4513,7 @@ msgstr "Slóð"
 msgid "Count"
 msgstr "Fjöldi"
 
-#: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:223
+#: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:254
 #: gtk/ui/gtkfontchooserwidget.ui:134 gtk/ui/gtkfontchooserwidget.ui:276
 msgid "Size"
 msgstr "Stærð"
@@ -4729,7 +4841,6 @@ msgid "General"
 msgstr "Almennt"
 
 #: gtk/open-type-layout.h:13
-#| msgid "Accessible name"
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
 msgstr ""
@@ -4996,8 +5107,6 @@ msgid "Kerning"
 msgstr "Hnikun (stafþjöppun)"
 
 #: gtk/open-type-layout.h:64
-#| msgctxt "output-bin"
-#| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
 msgstr "Vinstri mörk"
@@ -5023,13 +5132,11 @@ msgid "Localized Forms"
 msgstr "Staðfærð form"
 
 #: gtk/open-type-layout.h:69
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
 msgstr "Vinstri-til-hægri tilbrigði"
 
 #: gtk/open-type-layout.h:70
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
 msgstr "Vinstri-til-hægri spegluð form"
@@ -5182,20 +5289,16 @@ msgid "Reph Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:100
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
 msgstr "Hægri mörk"
 
 #: gtk/open-type-layout.h:101
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
 msgstr "Hægri-til-vinstri tilbrigði"
 
 #: gtk/open-type-layout.h:102
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
 msgstr "Hægri-til-vinstri spegluð form"
@@ -5331,7 +5434,6 @@ msgid "Stylistic Set 19"
 msgstr "Stílgert sett 19"
 
 #: gtk/open-type-layout.h:129
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
 msgstr "Stílgert sett 20"
@@ -5402,14 +5504,11 @@ msgid "Alternate Vertical Metrics"
 msgstr ""
 
 #: gtk/open-type-layout.h:143
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
 msgstr "Vattu-tilbrigði"
 
 #: gtk/open-type-layout.h:144
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
 msgstr "Lóðrétt skrift"
@@ -7209,19 +7308,55 @@ msgstr "Tákn"
 msgid "Flags"
 msgstr "Fánar"
 
-#: gtk/ui/gtkfilechooserwidget.ui:168
+#: gtk/ui/gtkfilechooserdialog.ui:32
+#, fuzzy
+#| msgid "Focus Widget"
+msgid "File Chooser Widget"
+msgstr "Viðmótshluti (widget) fær virkni"
+
+#: gtk/ui/gtkfilechooserwidget.ui:22
+msgid "Places"
+msgstr "Staðir"
+
+#: gtk/ui/gtkfilechooserwidget.ui:47
+msgid "Browse Header Revealer"
+msgstr ""
+
+#: gtk/ui/gtkfilechooserwidget.ui:65
+#, fuzzy
+#| msgid "Browse Network"
+msgid "Browse Header Stack"
+msgstr "Flakka um net"
+
+#: gtk/ui/gtkfilechooserwidget.ui:75
+msgid "PathBar Layer"
+msgstr ""
+
+#: gtk/ui/gtkfilechooserwidget.ui:121
+#, fuzzy
+#| msgid "Location"
+msgid "Location Layer"
+msgstr "Staðsetning"
+
+#: gtk/ui/gtkfilechooserwidget.ui:137
+#, fuzzy
+#| msgid "Search"
+msgid "Search Layer"
+msgstr "Leita"
+
+#: gtk/ui/gtkfilechooserwidget.ui:199
 msgid "Files"
 msgstr "Skrár"
 
-#: gtk/ui/gtkfilechooserwidget.ui:273
+#: gtk/ui/gtkfilechooserwidget.ui:304
 msgid "Remote location — only searching the current folder"
 msgstr "Fjartengd staðsetning — leita einungis í þessari möppu"
 
-#: gtk/ui/gtkfilechooserwidget.ui:445
+#: gtk/ui/gtkfilechooserwidget.ui:476
 msgid "Folder Name"
 msgstr "Heiti möppu"
 
-#: gtk/ui/gtkfilechooserwidget.ui:473
+#: gtk/ui/gtkfilechooserwidget.ui:504
 msgid "_Create"
 msgstr "_Búa til"
 
@@ -7550,105 +7685,105 @@ msgstr "Lækka hljóðstyrk"
 msgid "Decreases the volume"
 msgstr "Lækkar styrk hljóðs"
 
-#: gtk/updateiconcache.c:1388
+#: gtk/updateiconcache.c:1396
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Mistókst að skrifa haus\n"
 
-#: gtk/updateiconcache.c:1394
+#: gtk/updateiconcache.c:1402
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Mistókst að búa til tætitöflu\n"
 
-#: gtk/updateiconcache.c:1400
+#: gtk/updateiconcache.c:1408
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Mistókst að skrifa möppuyfirlit\n"
 
-#: gtk/updateiconcache.c:1408
+#: gtk/updateiconcache.c:1416
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Mistókst að  endurskrifa haus\n"
 
-#: gtk/updateiconcache.c:1502
+#: gtk/updateiconcache.c:1510
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Mistókst að opna skrá %s: %s\n"
 
-#: gtk/updateiconcache.c:1510 gtk/updateiconcache.c:1540
+#: gtk/updateiconcache.c:1518 gtk/updateiconcache.c:1548
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Mistókst að skrifa í skyndiminnisskrá: %s\n"
 
-#: gtk/updateiconcache.c:1550
+#: gtk/updateiconcache.c:1558
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Útbúið skyndiminni er ógilt.\n"
 
-#: gtk/updateiconcache.c:1564
+#: gtk/updateiconcache.c:1572
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Gat ekki breytt nafninu á %s í %s: %s, fjarlægi þá %s.\n"
 
-#: gtk/updateiconcache.c:1578
+#: gtk/updateiconcache.c:1586
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Gat ekki breytt nafninu á %s í %s: %s\n"
 
-#: gtk/updateiconcache.c:1588
+#: gtk/updateiconcache.c:1596
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Gat ekki breytt nafninu á %s aftur í %s: %s.\n"
 
-#: gtk/updateiconcache.c:1615
+#: gtk/updateiconcache.c:1623
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Það tókst að búa til skyndiminnisskrá.\n"
 
-#: gtk/updateiconcache.c:1654
+#: gtk/updateiconcache.c:1662
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Skrifa yfir skyndiminni, jafnvel þó það sé ekki úrelt"
 
-#: gtk/updateiconcache.c:1655
+#: gtk/updateiconcache.c:1663
 msgid "Don't check for the existence of index.theme"
 msgstr "Ekki athuga hvort index.theme er til"
 
-#: gtk/updateiconcache.c:1656
+#: gtk/updateiconcache.c:1664
 msgid "Don't include image data in the cache"
 msgstr "Ekki setja myndagögn í skyndiminni"
 
-#: gtk/updateiconcache.c:1657
+#: gtk/updateiconcache.c:1665
 msgid "Include image data in the cache"
 msgstr "Hafa myndagögn með í skyndiminni"
 
-#: gtk/updateiconcache.c:1658
+#: gtk/updateiconcache.c:1666
 msgid "Output a C header file"
 msgstr "Gefa út C-haus skrá"
 
-#: gtk/updateiconcache.c:1659
+#: gtk/updateiconcache.c:1667
 msgid "Turn off verbose output"
 msgstr "Slökkva á nákvæmu úttaki"
 
-#: gtk/updateiconcache.c:1660
+#: gtk/updateiconcache.c:1668
 msgid "Validate existing icon cache"
 msgstr "Gera táknmyndaskyndiminnið gilt"
 
-#: gtk/updateiconcache.c:1727
+#: gtk/updateiconcache.c:1735
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Skrá fannst ekki: %s\n"
 
-#: gtk/updateiconcache.c:1733
+#: gtk/updateiconcache.c:1741
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ekki gilt táknmyndaskyndiminni: %s\n"
 
-#: gtk/updateiconcache.c:1746
+#: gtk/updateiconcache.c:1754
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Engin þemayfirlitsskrá.\n"
 
-#: gtk/updateiconcache.c:1750
+#: gtk/updateiconcache.c:1758
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -7710,7 +7845,7 @@ msgctxt "input method menu"
 msgid "Multipress"
 msgstr "Multipress"
 
-#: modules/input/imquartz.c:61
+#: modules/input/imquartz.c:69
 msgctxt "input method menu"
 msgid "Mac OS X Quartz"
 msgstr "Mac OS X Quartz"
@@ -7761,463 +7896,438 @@ msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "X inntaksaðferð"
 
-#. Translators: The printer status is online, i.e. it is
-#. * ready to print.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
-msgid "Online"
-msgstr "Tengt"
-
-#. Translators: The printer is offline.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:751
-msgid "Offline"
-msgstr "Ótengt"
-
-#. We shouldn't get here because the query omits dormant
-#. * printers by default.
-#. Translators: Printer has been offline for a long time.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:757
-msgid "Dormant"
-msgstr "Dormandi"
-
-#. How many document pages to go onto one side of paper.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:939
-#: modules/printbackends/file/gtkprintbackendfile.c:676
-#: modules/printbackends/test/gtkprintbackendtest.c:501
-msgid "Pages per _sheet:"
-msgstr "Síður á hvert _blað"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1129
-#: modules/printbackends/cups/gtkprintbackendcups.c:1438
+#: modules/printbackends/cups/gtkprintbackendcups.c:1159
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "Username:"
 msgstr "Notandanafn:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1130
-#: modules/printbackends/cups/gtkprintbackendcups.c:1447
+#: modules/printbackends/cups/gtkprintbackendcups.c:1160
+#: modules/printbackends/cups/gtkprintbackendcups.c:1477
 msgid "Password:"
 msgstr "Lykilorð:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1169
-#: modules/printbackends/cups/gtkprintbackendcups.c:1460
+#: modules/printbackends/cups/gtkprintbackendcups.c:1199
+#: modules/printbackends/cups/gtkprintbackendcups.c:1490
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "Auðkenningar er krafist til að prenta skjalið “%s” á prentaranum %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1171
+#: modules/printbackends/cups/gtkprintbackendcups.c:1201
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Auðkenningar er krafist til að prenta skjalið með %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1175
+#: modules/printbackends/cups/gtkprintbackendcups.c:1205
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "Auðkenningar er krafist til að sækja upplýsingar um verkið '%s'"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1177
+#: modules/printbackends/cups/gtkprintbackendcups.c:1207
 msgid "Authentication is required to get attributes of a job"
 msgstr "Auðkenningar er krafist til að sækja upplýsingar um þetta verk"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1181
+#: modules/printbackends/cups/gtkprintbackendcups.c:1211
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Auðkenningar er krafist til að sækja upplýsingar um prentara %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1183
+#: modules/printbackends/cups/gtkprintbackendcups.c:1213
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Auðkenningar er krafist til að sækja upplýsingar prentara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1186
+#: modules/printbackends/cups/gtkprintbackendcups.c:1216
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Auðkenningar er krafist til að fá sjálfgefinn prentara frá %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1189
+#: modules/printbackends/cups/gtkprintbackendcups.c:1219
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Auðkenningar er krafist til að fá prentara frá %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1194
+#: modules/printbackends/cups/gtkprintbackendcups.c:1224
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Auðkenningar er krafist til að sækja skrá úr %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1196
+#: modules/printbackends/cups/gtkprintbackendcups.c:1226
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Auðkenningar er krafist fyrir %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1432
+#: modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "Domain:"
 msgstr "Lén:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1462
+#: modules/printbackends/cups/gtkprintbackendcups.c:1492
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Auðkenningar er krafist til að prenta skjalið \"%s\""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1467
+#: modules/printbackends/cups/gtkprintbackendcups.c:1497
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Auðkenningar er krafist til að prenta þetta skjal með prentaranum %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1469
+#: modules/printbackends/cups/gtkprintbackendcups.c:1499
 msgid "Authentication is required to print this document"
 msgstr "Auðkenningar er krafist til að prenta þetta skjal"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2553
+#: modules/printbackends/cups/gtkprintbackendcups.c:2609
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "Prentarinn '%s' er að verða búinn með prentduft."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2557
+#: modules/printbackends/cups/gtkprintbackendcups.c:2613
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "Prentarinn '%s' hefur klárað prentduftið."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2562
+#: modules/printbackends/cups/gtkprintbackendcups.c:2618
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "Prentarinn ‚%s‘ er að verða búinn með framköllunarvökvann."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2567
+#: modules/printbackends/cups/gtkprintbackendcups.c:2623
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "Prentarinn ‚%s‘ er búinn með framköllunarvökvann."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2572
+#: modules/printbackends/cups/gtkprintbackendcups.c:2628
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Prentarinn ‚%s‘ er að fara að klára einn lit."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2577
+#: modules/printbackends/cups/gtkprintbackendcups.c:2633
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Prentarinn ‚%s‘ er búinn að klára að minnsta kosti einn lit."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2581
+#: modules/printbackends/cups/gtkprintbackendcups.c:2637
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Lokið er opið á prentaranum '%s'."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2585
+#: modules/printbackends/cups/gtkprintbackendcups.c:2641
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Hurðin er opin á prentaranum '%s'."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2589
+#: modules/printbackends/cups/gtkprintbackendcups.c:2645
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Prentarinn '%s' er að verða pappírslaus."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2593
+#: modules/printbackends/cups/gtkprintbackendcups.c:2649
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Prentarinn '%s' er pappírslaus."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2597
+#: modules/printbackends/cups/gtkprintbackendcups.c:2653
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Prentarinn ‚%s‘ er ótengdur."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2601
+#: modules/printbackends/cups/gtkprintbackendcups.c:2657
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Það er vandamál með prentarann ‚%s‘."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2621
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "Paused; Rejecting Jobs"
 msgstr "Í bið; tekur ekki við verkum"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2627
+#: modules/printbackends/cups/gtkprintbackendcups.c:2683
 msgid "Rejecting Jobs"
 msgstr "Hafna verkum"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2668
+#: modules/printbackends/cups/gtkprintbackendcups.c:2724
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4439
-#: modules/printbackends/cups/gtkprintbackendcups.c:4506
+#: modules/printbackends/cups/gtkprintbackendcups.c:4655
+#: modules/printbackends/cups/gtkprintbackendcups.c:4722
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Báðar hliðar"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4440
+#: modules/printbackends/cups/gtkprintbackendcups.c:4656
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Tegund pappírs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4441
+#: modules/printbackends/cups/gtkprintbackendcups.c:4657
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Uppruni pappírs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4442
-#: modules/printbackends/cups/gtkprintbackendcups.c:4507
+#: modules/printbackends/cups/gtkprintbackendcups.c:4658
+#: modules/printbackends/cups/gtkprintbackendcups.c:4723
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Úttaksbakki"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4443
+#: modules/printbackends/cups/gtkprintbackendcups.c:4659
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Upplausn"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4444
+#: modules/printbackends/cups/gtkprintbackendcups.c:4660
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Ghostscript forsíun"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4453
+#: modules/printbackends/cups/gtkprintbackendcups.c:4669
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Einhliða"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4455
+#: modules/printbackends/cups/gtkprintbackendcups.c:4671
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Langhlið (venjulegt)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4457
+#: modules/printbackends/cups/gtkprintbackendcups.c:4673
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Styttri brún (snúa)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4459
-#: modules/printbackends/cups/gtkprintbackendcups.c:4461
-#: modules/printbackends/cups/gtkprintbackendcups.c:4469
+#: modules/printbackends/cups/gtkprintbackendcups.c:4675
+#: modules/printbackends/cups/gtkprintbackendcups.c:4677
+#: modules/printbackends/cups/gtkprintbackendcups.c:4685
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Velja sjálfvirkt"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4463
-#: modules/printbackends/cups/gtkprintbackendcups.c:4465
-#: modules/printbackends/cups/gtkprintbackendcups.c:4467
-#: modules/printbackends/cups/gtkprintbackendcups.c:4471
+#: modules/printbackends/cups/gtkprintbackendcups.c:4679
+#: modules/printbackends/cups/gtkprintbackendcups.c:4681
+#: modules/printbackends/cups/gtkprintbackendcups.c:4683
+#: modules/printbackends/cups/gtkprintbackendcups.c:4687
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Sjálfgefnar stillingar prentara"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4473
+#: modules/printbackends/cups/gtkprintbackendcups.c:4689
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Ígræða GhostScript letur"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4475
+#: modules/printbackends/cups/gtkprintbackendcups.c:4691
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Breyta í PS-stig 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4477
+#: modules/printbackends/cups/gtkprintbackendcups.c:4693
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Breyta í PS-stig 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4479
+#: modules/printbackends/cups/gtkprintbackendcups.c:4695
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Engin forsíun"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4488
+#: modules/printbackends/cups/gtkprintbackendcups.c:4704
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Ýmislegt"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4515
+#: modules/printbackends/cups/gtkprintbackendcups.c:4731
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Einhliða"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4517
+#: modules/printbackends/cups/gtkprintbackendcups.c:4733
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Langhlið (venjulegt)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4519
+#: modules/printbackends/cups/gtkprintbackendcups.c:4735
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Styttri brún (snúið)"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4522
+#: modules/printbackends/cups/gtkprintbackendcups.c:4738
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Efsti bakki"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4524
+#: modules/printbackends/cups/gtkprintbackendcups.c:4740
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Miðjubakki"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4526
+#: modules/printbackends/cups/gtkprintbackendcups.c:4742
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Neðsti bakki"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4528
+#: modules/printbackends/cups/gtkprintbackendcups.c:4744
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Hliðarbakki"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4530
+#: modules/printbackends/cups/gtkprintbackendcups.c:4746
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Vinstri bakki"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4532
+#: modules/printbackends/cups/gtkprintbackendcups.c:4748
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Hægri bakki"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4534
+#: modules/printbackends/cups/gtkprintbackendcups.c:4750
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Miðjubakki"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4536
+#: modules/printbackends/cups/gtkprintbackendcups.c:4752
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Afturbakki"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4538
+#: modules/printbackends/cups/gtkprintbackendcups.c:4754
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Bakki - síða upp"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4540
+#: modules/printbackends/cups/gtkprintbackendcups.c:4756
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Bakki - síða niður"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4542
+#: modules/printbackends/cups/gtkprintbackendcups.c:4758
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Bakki fyrir mörg blöð"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4564
+#: modules/printbackends/cups/gtkprintbackendcups.c:4780
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Raðari %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4568
+#: modules/printbackends/cups/gtkprintbackendcups.c:4784
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Pósthólf %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4572
+#: modules/printbackends/cups/gtkprintbackendcups.c:4788
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Pósthólfið mitt"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4576
+#: modules/printbackends/cups/gtkprintbackendcups.c:4792
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Bakki %d"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5047
+#: modules/printbackends/cups/gtkprintbackendcups.c:5263
 msgid "Printer Default"
 msgstr "Sjálfgefnar stillingar prentara"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5488
+#: modules/printbackends/cups/gtkprintbackendcups.c:5704
 msgid "Urgent"
 msgstr "Áríðandi"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5488
+#: modules/printbackends/cups/gtkprintbackendcups.c:5704
 msgid "High"
 msgstr "Hár"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5488
+#: modules/printbackends/cups/gtkprintbackendcups.c:5704
 msgid "Medium"
 msgstr "Miðlungs"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5488
+#: modules/printbackends/cups/gtkprintbackendcups.c:5704
 msgid "Low"
 msgstr "Lítill"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5518
+#: modules/printbackends/cups/gtkprintbackendcups.c:5734
 msgid "Job Priority"
 msgstr "Forgangur verks"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5529
+#: modules/printbackends/cups/gtkprintbackendcups.c:5745
 msgid "Billing Info"
 msgstr "Greiðsluupplýsingar"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5553
+#: modules/printbackends/cups/gtkprintbackendcups.c:5769
 msgctxt "cover page"
 msgid "None"
 msgstr "Ekkert"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5554
+#: modules/printbackends/cups/gtkprintbackendcups.c:5770
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Leynilegt"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5555
+#: modules/printbackends/cups/gtkprintbackendcups.c:5771
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Trúnaðarmál"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5556
+#: modules/printbackends/cups/gtkprintbackendcups.c:5772
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Leyndarmál"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5557
+#: modules/printbackends/cups/gtkprintbackendcups.c:5773
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Staðlað"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5558
+#: modules/printbackends/cups/gtkprintbackendcups.c:5774
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Algjört leyndarmál"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5559
+#: modules/printbackends/cups/gtkprintbackendcups.c:5775
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Óflokkað"
@@ -8225,7 +8335,7 @@ msgstr "Óflokkað"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5571
+#: modules/printbackends/cups/gtkprintbackendcups.c:5787
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Síður á blað"
@@ -8233,7 +8343,7 @@ msgstr "Síður á blað"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5588
+#: modules/printbackends/cups/gtkprintbackendcups.c:5804
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Röð blaðsíðna"
@@ -8241,7 +8351,7 @@ msgstr "Röð blaðsíðna"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5630
+#: modules/printbackends/cups/gtkprintbackendcups.c:5846
 msgctxt "printer option"
 msgid "Before"
 msgstr "Á undan"
@@ -8249,7 +8359,7 @@ msgstr "Á undan"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5645
+#: modules/printbackends/cups/gtkprintbackendcups.c:5861
 msgctxt "printer option"
 msgid "After"
 msgstr "Á eftir"
@@ -8258,7 +8368,7 @@ msgstr "Á eftir"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5665
+#: modules/printbackends/cups/gtkprintbackendcups.c:5881
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Prenta"
@@ -8266,7 +8376,7 @@ msgstr "Prenta"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5676
+#: modules/printbackends/cups/gtkprintbackendcups.c:5892
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Prenta á tíma"
@@ -8276,18 +8386,18 @@ msgstr "Prenta á tíma"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5721
+#: modules/printbackends/cups/gtkprintbackendcups.c:5937
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Sérsniðið %sx%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5831
+#: modules/printbackends/cups/gtkprintbackendcups.c:6047
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Snið fyrir prentara"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5838
+#: modules/printbackends/cups/gtkprintbackendcups.c:6054
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Ófáanlegt"
@@ -8328,6 +8438,11 @@ msgstr "Postscript"
 msgid "SVG"
 msgstr "SVG"
 
+#: modules/printbackends/file/gtkprintbackendfile.c:676
+#: modules/printbackends/test/gtkprintbackendtest.c:501
+msgid "Pages per _sheet:"
+msgstr "Síður á hvert _blað"
+
 #: modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "File"
 msgstr "Skrá"
@@ -8336,15 +8451,15 @@ msgstr "Skrá"
 msgid "_Output format"
 msgstr "Útta_kssnið"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:393
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:394
 msgid "Print to LPR"
 msgstr "Prenta með LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:419
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:423
 msgid "Pages Per Sheet"
 msgstr "Síður á örk"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:426
+#: modules/printbackends/lpr/gtkprintbackendlpr.c:430
 msgid "Command Line"
 msgstr "Skipanalína"
 
@@ -8382,6 +8497,105 @@ msgstr "tilrauna-úttak.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Prenta til að prófa prentara"
+
+#~ msgid "Don't batch GDI requests"
+#~ msgstr "Ekki magnvinna GDI beiðnir"
+
+#~ msgid "Don't use the Wintab API for tablet support"
+#~ msgstr "Ekki nota Wintab API fyrir spjaldtölvustuðning"
+
+#~ msgid "Same as --no-wintab"
+#~ msgstr "Sama og --no-wintab"
+
+#~ msgid "Do use the Wintab API [default]"
+#~ msgstr "Nota Wintab API [sjálfgefið]"
+
+#~ msgid "Size of the palette in 8 bit mode"
+#~ msgstr "Stærð litaspjalds í 8 bita ham"
+
+#~ msgid "COLORS"
+#~ msgstr "LITIR"
+
+#~ msgctxt "Color name"
+#~ msgid "Scarlet Red"
+#~ msgstr "Skarlatsrautt"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Butter"
+#~ msgstr "Ljóst smjör"
+
+#~ msgctxt "Color name"
+#~ msgid "Butter"
+#~ msgstr "Smjör"
+
+#~ msgctxt "Color name"
+#~ msgid "Chameleon"
+#~ msgstr "Kamelljón"
+
+#~ msgctxt "Color name"
+#~ msgid "Sky Blue"
+#~ msgstr "Himinblátt"
+
+#~ msgctxt "Color name"
+#~ msgid "Plum"
+#~ msgstr "Plóma"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Chocolate"
+#~ msgstr "Ljóst súkkulaði"
+
+#~ msgctxt "Color name"
+#~ msgid "Chocolate"
+#~ msgstr "Súkkulaði"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Chocolate"
+#~ msgstr "Dökkt súkkulaði"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 1"
+#~ msgstr "Ljóst ál 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 1"
+#~ msgstr "Ál 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 1"
+#~ msgstr "Dökkt ál 1"
+
+#~ msgctxt "Color name"
+#~ msgid "Light Aluminum 2"
+#~ msgstr "Ljóst ál 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Aluminum 2"
+#~ msgstr "Ál 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Dark Aluminum 2"
+#~ msgstr "Dökkt ál 2"
+
+#~ msgctxt "Color name"
+#~ msgid "Darker Gray"
+#~ msgstr "Dekkra grátt"
+
+#~ msgctxt "Color name"
+#~ msgid "Medium Gray"
+#~ msgstr "Miðlungsgrátt"
+
+#~ msgctxt "Color name"
+#~ msgid "Lighter Gray"
+#~ msgstr "Ljósara grátt"
+
+#~ msgid "Online"
+#~ msgstr "Tengt"
+
+#~ msgid "Offline"
+#~ msgstr "Ótengt"
+
+#~ msgid "Dormant"
+#~ msgstr "Dormandi"
 
 #~ msgid "3.2 core GL profile is not available on EGL implementation"
 #~ msgstr "3.2 Core-GL snið er ekki tiltækt í EGL-uppsetningu"
@@ -8443,9 +8657,6 @@ msgstr "Prenta til að prófa prentara"
 #~ msgid "Bookmarks"
 #~ msgstr "Bókamerki"
 
-#~ msgid "Browse Network"
-#~ msgstr "Flakka um net"
-
 #~ msgid "Browse the contents of the network"
 #~ msgstr "Skoða efni á netkerfinu"
 
@@ -8496,10 +8707,6 @@ msgstr "Prenta til að prófa prentara"
 #~ msgstr ""
 #~ "Ekkert letur samsvaraði leitinni. Þú getur endurskoðað leitarstrenginn og "
 #~ "reynt aftur."
-
-#~| msgid "Browse Network"
-#~ msgid "Browse"
-#~ msgstr "Flakka"
 
 #~ msgid "_Location:"
 #~ msgstr "_Staðsetning:"
