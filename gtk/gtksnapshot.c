@@ -1125,7 +1125,7 @@ gtk_snapshot_clear_shadow (GtkSnapshotState *state)
 /**
  * gtk_snapshot_push_shadow:
  * @snapshot: a `GtkSnapshot`
- * @shadow: the first shadow specification
+ * @shadow: (array length=n_shadows): the first shadow specification
  * @n_shadows: number of shadow specifications
  *
  * Applies a shadow to an image.
