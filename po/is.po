@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.is\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-26 12:22+0000\n"
-"PO-Revision-Date: 2021-09-29 12:02+0000\n"
+"POT-Creation-Date: 2021-10-11 19:47+0000\n"
+"PO-Revision-Date: 2021-10-12 22:40+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
-"Language-Team: Icelandic\n"
+"Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=1;\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 19.12.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
@@ -40,13 +40,11 @@ msgstr ""
 #: gdk/gdkcontentprovider.c:105 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
 #, c-format
-#| msgid "Could not read the contents of %s"
 msgid "Cannot provide contents as “%s”"
 msgstr "Get ekki sett fram efnið sem “%s”"
 
 #: gdk/gdkcontentprovider.c:126
 #, c-format
-#| msgid "Could not read the contents of %s"
 msgid "Cannot provide contents as %s"
 msgstr "Get ekki sett fram efnið sem %s"
 
@@ -355,7 +353,6 @@ msgid "AudioMedia"
 msgstr "AudioMedia"
 
 #: gdk/keyname-table.h:6897
-#| msgid "_Eject"
 msgctxt "keyboard label"
 msgid "Eject"
 msgstr "Spýta út"
@@ -381,7 +378,6 @@ msgid "WWW"
 msgstr "Veraldarvefur"
 
 #: gdk/keyname-table.h:6902
-#| msgid "Search"
 msgctxt "keyboard label"
 msgid "Search"
 msgstr "Leita"
@@ -480,7 +476,6 @@ msgid "libEGL not available in this sandbox"
 msgstr ""
 
 #: gdk/wayland/gdkglcontext-wayland.c:490
-#| msgid "Not available"
 msgid "libEGL not available"
 msgstr "libEGL ekki tiltækt"
 
@@ -489,7 +484,6 @@ msgid "Sandbox does not provide an OpenGL implementation"
 msgstr ""
 
 #: gdk/wayland/gdkglcontext-wayland.c:504
-#| msgid "No GL implementation is available"
 msgid "No OpenGL implementation available"
 msgstr "Engin OpenGL-uppsetning tiltæk"
 
@@ -642,7 +636,6 @@ msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:64
-#| msgid "Can’t close stream"
 msgid "writing a closed stream"
 msgstr "skrifa lokað streymi"
 
@@ -678,13 +671,11 @@ msgstr ""
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:296
 #, c-format
-#| msgid "Starting %s"
 msgid "Starting “%s”"
 msgstr "Ræsi „%s“"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:309
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Opening “%s”"
 msgstr "Opna „%s“"
 
@@ -704,10 +695,9 @@ msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 
 #: gdk/x11/gdkglcontext-egl.c:180
-#, fuzzy
 #| msgid "No GL implementation is available"
 msgid "No EGL configuration available"
-msgstr "Engin GL-uppsetning tiltæk"
+msgstr "Engin EGL-uppsetning tiltæk"
 
 #: gdk/x11/gdkglcontext-egl.c:188
 msgid "Failed to get EGL configurations"
@@ -718,14 +708,13 @@ msgid "No EGL configuration with required features found"
 msgstr ""
 
 #: gdk/x11/gdkglcontext-egl.c:273
-#, fuzzy
 #| msgid "No network locations found"
 msgid "No perfect EGL configuration found"
-msgstr "Engar staðsetningar fundust á neti"
+msgstr "Engin fullkomin EGL-uppsetning fannst"
 
 #: gdk/x11/gdkglcontext-egl.c:684
 msgid "EGL is not supported"
-msgstr ""
+msgstr "EGL er ekki stutt"
 
 #: gdk/x11/gdkglcontext-egl.c:693
 #, fuzzy
@@ -745,7 +734,7 @@ msgstr ""
 
 #: gdk/x11/gdkglcontext-glx.c:919
 msgid "GLX is not supported"
-msgstr ""
+msgstr "GLX er ekki stutt"
 
 #: gdk/x11/gdkselectioninputstream-x11.c:462
 #, c-format
@@ -771,48 +760,35 @@ msgstr ""
 
 #: gdk/x11/gdktextlistconverter-x11.c:259
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Unsupported encoding “%s”"
 msgstr "Óstudd kóðun “%s”"
 
 #: gtk/a11y/gtkatspiaction.c:239
-#| msgctxt "Action name"
-#| msgid "Click"
 msgctxt "accessibility"
 msgid "Click"
 msgstr "Smella"
 
 #: gtk/a11y/gtkatspiaction.c:240
-#| msgctxt "Action description"
-#| msgid "Clicks the button"
 msgctxt "accessibility"
 msgid "Clicks the button"
 msgstr "Smellir á hnappinn"
 
 #: gtk/a11y/gtkatspiaction.c:290
-#| msgctxt "Action name"
-#| msgid "Toggle"
 msgctxt "accessibility"
 msgid "Toggle"
 msgstr "Víxla"
 
 #: gtk/a11y/gtkatspiaction.c:291
-#| msgctxt "Action description"
-#| msgid "Toggles the switch"
 msgctxt "accessibility"
 msgid "Toggles the switch"
 msgstr "Víxlar rofanum"
 
 #: gtk/a11y/gtkatspiaction.c:371
-#| msgctxt "Action name"
-#| msgid "Select"
 msgctxt "accessibility"
 msgid "Select"
 msgstr "Velja"
 
 #: gtk/a11y/gtkatspiaction.c:372
-#| msgctxt "Action description"
-#| msgid "Selects the color"
 msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "Velur litinn"
@@ -820,43 +796,32 @@ msgstr "Velur litinn"
 #: gtk/a11y/gtkatspiaction.c:379 gtk/a11y/gtkatspiaction.c:439
 #: gtk/a11y/gtkatspiaction.c:495 gtk/a11y/gtkatspiaction.c:603
 #: gtk/a11y/gtkatspiaction.c:690
-#| msgid "Activate"
 msgctxt "accessibility"
 msgid "Activate"
 msgstr "Virkja"
 
 #: gtk/a11y/gtkatspiaction.c:380
-#| msgctxt "Action description"
-#| msgid "Activates the color"
 msgctxt "accessibility"
 msgid "Activates the color"
 msgstr "Virkjar litinn"
 
 #: gtk/a11y/gtkatspiaction.c:387
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgctxt "accessibility"
 msgid "Customize"
 msgstr "Sérsníða"
 
 #: gtk/a11y/gtkatspiaction.c:388
-#| msgctxt "Action description"
-#| msgid "Customizes the color"
 msgctxt "accessibility"
 msgid "Customizes the color"
 msgstr "Sérsníður litinn"
 
 #: gtk/a11y/gtkatspiaction.c:440
-#| msgctxt "Action description"
-#| msgid "Activates the expander"
 msgctxt "accessibility"
 msgid "Activates the expander"
 msgstr "Virkjar útvíkkarann"
 
 #: gtk/a11y/gtkatspiaction.c:496 gtk/a11y/gtkatspiaction.c:604
 #: gtk/a11y/gtkatspiaction.c:691
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the entry"
 msgstr "Virkjar færsluna"
@@ -875,8 +840,6 @@ msgid "Activates the primary icon of the entry"
 msgstr "Virkjar færsluna"
 
 #: gtk/a11y/gtkatspiaction.c:511
-#| msgctxt "Action description"
-#| msgid "Activates the color"
 msgctxt "accessibility"
 msgid "Activate secondary icon"
 msgstr "Virkja aukatáknmynd"
@@ -902,8 +865,6 @@ msgid "Shows the contents of the password entry"
 msgstr "Skoða efni á netkerfinu"
 
 #: gtk/a11y/gtkatspiaction.c:698
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgctxt "accessibility"
 msgid "Clear"
 msgstr "Hreinsa"
@@ -916,7 +877,6 @@ msgid "Clears the contents of the entry"
 msgstr "Skoða efni á netkerfinu"
 
 #: gtk/a11y/gtkatspiroot.c:255
-#| msgid "Application"
 msgctxt "accessibility"
 msgid "application"
 msgstr "forrit"
@@ -994,12 +954,10 @@ msgid "GNU Affero General Public License, version 3 or later"
 msgstr "GNU Affero General Public notkunarskilmálar, útgáfa 3 eða síðar"
 
 #: gtk/gtkaboutdialog.c:138
-#| msgid "GNU General Public License, version 3 only"
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero General Public notkunarleyfi, einungis útgáfa 3"
 
 #: gtk/gtkaboutdialog.c:139
-#| msgid "BSD 2-Clause License"
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-Clause notkunarleyfi"
 
@@ -1008,7 +966,6 @@ msgid "Apache License, Version 2.0"
 msgstr "Apache-notkunarleyfi, útgáfa 2.0"
 
 #: gtk/gtkaboutdialog.c:141
-#| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla notkunarleyfið (Public License, v 2.0)."
 
@@ -1145,8 +1102,6 @@ msgid "alert dialog"
 msgstr ""
 
 #: gtk/gtkaccessible.c:562
-#| msgctxt "throbbing progress animation widget"
-#| msgid "Spinner"
 msgctxt "accessibility"
 msgid "banner"
 msgstr "borði"
@@ -1157,7 +1112,6 @@ msgid "button"
 msgstr ""
 
 #: gtk/gtkaccessible.c:564
-#| msgid "Location"
 msgctxt "accessibility"
 msgid "caption"
 msgstr "skýringatexti"
@@ -1183,13 +1137,11 @@ msgid "combo box"
 msgstr ""
 
 #: gtk/gtkaccessible.c:569
-#| msgid "Top Command"
 msgctxt "accessibility"
 msgid "command"
 msgstr "skipun"
 
 #: gtk/gtkaccessible.c:570
-#| msgid "Composited"
 msgctxt "accessibility"
 msgid "composite"
 msgstr "samsetning"
@@ -1200,7 +1152,6 @@ msgid "dialog"
 msgstr ""
 
 #: gtk/gtkaccessible.c:572
-#| msgid "Documented by"
 msgctxt "accessibility"
 msgid "document"
 msgstr "skjal"
@@ -1236,13 +1187,11 @@ msgid "group"
 msgstr ""
 
 #: gtk/gtkaccessible.c:579
-#| msgid "Recording"
 msgctxt "accessibility"
 msgid "heading"
 msgstr "fyrirsögn"
 
 #: gtk/gtkaccessible.c:580
-#| msgid "Image"
 msgctxt "accessibility"
 msgid "image"
 msgstr "mynd"
@@ -1253,7 +1202,6 @@ msgid "input"
 msgstr ""
 
 #: gtk/gtkaccessible.c:582
-#| msgid "Label"
 msgctxt "accessibility"
 msgid "label"
 msgstr "merki"
@@ -1284,8 +1232,6 @@ msgid "list box"
 msgstr ""
 
 #: gtk/gtkaccessible.c:588
-#| msgctxt "Action description"
-#| msgid "Clicks the menuitem"
 msgctxt "accessibility"
 msgid "list item"
 msgstr "listafærsla"
@@ -1296,7 +1242,6 @@ msgid "log"
 msgstr ""
 
 #: gtk/gtkaccessible.c:590
-#| msgid "_Domain"
 msgctxt "accessibility"
 msgid "main"
 msgstr "aðal"
@@ -1342,7 +1287,6 @@ msgid "menu item radio"
 msgstr ""
 
 #: gtk/gtkaccessible.c:599
-#| msgid "Animations"
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "uppbygging"
@@ -1358,13 +1302,11 @@ msgid "note"
 msgstr ""
 
 #: gtk/gtkaccessible.c:602
-#| msgid "Location"
 msgctxt "accessibility"
 msgid "option"
 msgstr "rofi"
 
 #: gtk/gtkaccessible.c:603
-#| msgid "_Orientation:"
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "kynning"
@@ -1385,8 +1327,6 @@ msgid "radio group"
 msgstr ""
 
 #: gtk/gtkaccessible.c:607
-#| msgctxt "Color name"
-#| msgid "Orange"
 msgctxt "accessibility"
 msgid "range"
 msgstr "svið"
@@ -1397,7 +1337,6 @@ msgid "region"
 msgstr ""
 
 #: gtk/gtkaccessible.c:609
-#| msgid "Low"
 msgctxt "accessibility"
 msgid "row"
 msgstr "röð"
@@ -1418,19 +1357,16 @@ msgid "scroll bar"
 msgstr ""
 
 #: gtk/gtkaccessible.c:613
-#| msgid "Search"
 msgctxt "accessibility"
 msgid "search"
 msgstr "leita"
 
 #: gtk/gtkaccessible.c:614
-#| msgid "Search"
 msgctxt "accessibility"
 msgid "search box"
 msgstr "leitarreitur"
 
 #: gtk/gtkaccessible.c:615
-#| msgid "Action"
 msgctxt "accessibility"
 msgid "section"
 msgstr "hluti"
@@ -1441,8 +1377,6 @@ msgid "section head"
 msgstr ""
 
 #: gtk/gtkaccessible.c:617
-#| msgctxt "Action name"
-#| msgid "Select"
 msgctxt "accessibility"
 msgid "select"
 msgstr "velja"
@@ -1463,7 +1397,6 @@ msgid "spin button"
 msgstr ""
 
 #: gtk/gtkaccessible.c:621
-#| msgid "Status"
 msgctxt "accessibility"
 msgid "status"
 msgstr "staða"
@@ -1479,14 +1412,11 @@ msgid "switch"
 msgstr ""
 
 #: gtk/gtkaccessible.c:624
-#| msgctxt "keyboard label"
-#| msgid "Tab"
 msgctxt "accessibility"
 msgid "tab"
 msgstr "flipi"
 
 #: gtk/gtkaccessible.c:625
-#| msgid "Enabled"
 msgctxt "accessibility"
 msgid "table"
 msgstr "tafla"
@@ -1537,7 +1467,6 @@ msgid "tree grid"
 msgstr ""
 
 #: gtk/gtkaccessible.c:635
-#| msgid "Could not remove item"
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "atriði í grein"
@@ -1548,8 +1477,6 @@ msgid "widget"
 msgstr "viðmótshluti"
 
 #: gtk/gtkaccessible.c:637
-#| msgctxt "Stock label, media"
-#| msgid "R_ewind"
 msgctxt "accessibility"
 msgid "window"
 msgstr "gluggi"
@@ -1765,83 +1692,61 @@ msgid "Color: %s"
 msgstr "Litur: %s"
 
 #: gtk/gtkcolorchooserwidget.c:436
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "Mjög ljósblátt"
 
 #: gtk/gtkcolorchooserwidget.c:437
-#| msgctxt "Color name"
-#| msgid "Light Sky Blue"
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "Ljósblátt"
 
 #: gtk/gtkcolorchooserwidget.c:438
-#| msgid "_Blue:"
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Blátt"
 
 #: gtk/gtkcolorchooserwidget.c:439
-#| msgctxt "Color name"
-#| msgid "Dark Sky Blue"
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "Dökkblátt"
 
 #: gtk/gtkcolorchooserwidget.c:440
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "Mjög dökkblátt"
 
 #: gtk/gtkcolorchooserwidget.c:441
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "Mjög ljósgrænt"
 
 #: gtk/gtkcolorchooserwidget.c:442
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "Ljósgrænt"
 
 #: gtk/gtkcolorchooserwidget.c:443
-#| msgid "_Green:"
 msgctxt "Color name"
 msgid "Green"
 msgstr "Grænt"
 
 #: gtk/gtkcolorchooserwidget.c:444
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "Dökkgrænt"
 
 #: gtk/gtkcolorchooserwidget.c:445
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "Mjög dökkgrænt"
 
 #: gtk/gtkcolorchooserwidget.c:446
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "Mjög ljósgult"
 
 #: gtk/gtkcolorchooserwidget.c:447
-#| msgctxt "Color name"
-#| msgid "Light Chameleon"
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "Ljósgult"
@@ -1852,22 +1757,16 @@ msgid "Yellow"
 msgstr "Gult"
 
 #: gtk/gtkcolorchooserwidget.c:449
-#| msgctxt "Color name"
-#| msgid "Dark Chameleon"
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "Dökkgult"
 
 #: gtk/gtkcolorchooserwidget.c:450
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "Mjög dökkgult"
 
 #: gtk/gtkcolorchooserwidget.c:451
-#| msgctxt "Color name"
-#| msgid "Light Orange"
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "Mjög ljósappelsínugult"
@@ -1888,56 +1787,41 @@ msgid "Dark Orange"
 msgstr "Dökkappelsínugult"
 
 #: gtk/gtkcolorchooserwidget.c:455
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "Mjög dökkappelsínugult"
 
 #: gtk/gtkcolorchooserwidget.c:456
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "Mjög ljósrautt"
 
 #: gtk/gtkcolorchooserwidget.c:457
-#| msgctxt "Color name"
-#| msgid "Light Scarlet Red"
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "Ljósrautt"
 
 #: gtk/gtkcolorchooserwidget.c:458
-#| msgid "_Red:"
 msgctxt "Color name"
 msgid "Red"
 msgstr "Rautt"
 
 #: gtk/gtkcolorchooserwidget.c:459
-#| msgctxt "Color name"
-#| msgid "Dark Scarlet Red"
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "Dökkrautt"
 
 #: gtk/gtkcolorchooserwidget.c:460
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "Mjög dökkrautt"
 
 #: gtk/gtkcolorchooserwidget.c:461
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "Mjög ljóspurpuralitað"
 
 #: gtk/gtkcolorchooserwidget.c:462
-#| msgctxt "Color name"
-#| msgid "Light Plum"
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "Ljóspurpuralitað"
@@ -1948,49 +1832,36 @@ msgid "Purple"
 msgstr "Fjólublátt"
 
 #: gtk/gtkcolorchooserwidget.c:464
-#| msgctxt "Color name"
-#| msgid "Dark Plum"
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "Dökkpurpuralitað"
 
 #: gtk/gtkcolorchooserwidget.c:465
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "Mjög dökkpurpuralitað"
 
 #: gtk/gtkcolorchooserwidget.c:466
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "Mjög ljósbrúnt"
 
 #: gtk/gtkcolorchooserwidget.c:467
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "Ljósbrúnt"
 
 #: gtk/gtkcolorchooserwidget.c:468
-#| msgid "Browse"
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Brúnt"
 
 #: gtk/gtkcolorchooserwidget.c:469
-#| msgctxt "Color name"
-#| msgid "Dark Butter"
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "Dökkbrúnt"
 
 #: gtk/gtkcolorchooserwidget.c:470
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "Mjög dökkbrúnt"
@@ -2001,57 +1872,41 @@ msgid "White"
 msgstr "Hvítt"
 
 #: gtk/gtkcolorchooserwidget.c:472
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "Ljósgrátt 1"
 
 #: gtk/gtkcolorchooserwidget.c:473
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "Ljósgrátt 2"
 
 #: gtk/gtkcolorchooserwidget.c:474
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "Ljósgrátt 3"
 
 #: gtk/gtkcolorchooserwidget.c:475
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "Ljósgrátt 4"
 
 #: gtk/gtkcolorchooserwidget.c:476
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "Dökkgrátt 1"
 
 #: gtk/gtkcolorchooserwidget.c:477
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "Dökkgrátt 2"
 
 #: gtk/gtkcolorchooserwidget.c:478
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "Dökkgrátt 3"
 
 #: gtk/gtkcolorchooserwidget.c:479
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "Dökkgrátt 4"
@@ -2072,8 +1927,6 @@ msgid "Custom color %d: %s"
 msgstr "Sérsniðinn litur %d: %s"
 
 #: gtk/gtkcolorswatch.c:229
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgid "Customize"
 msgstr "Sérsníða"
 
@@ -2151,8 +2004,6 @@ msgid "Paper Margins"
 msgstr "Spássía blaðsins"
 
 #: gtk/gtkentry.c:3726
-#| msgctxt "keyboard label"
-#| msgid "Insert"
 msgid "Insert Emoji"
 msgstr "Setja inn tjáningartákn"
 
@@ -2360,7 +2211,6 @@ msgid "Show _Size Column"
 msgstr "Sýna dálk fyrir _stærð"
 
 #: gtk/gtkfilechooserwidget.c:1847
-#| msgid "Show _Size Column"
 msgid "Show T_ype Column"
 msgstr "Sýna _dálk fyrir tegund"
 
@@ -2369,7 +2219,6 @@ msgid "Show _Time"
 msgstr "Birta _tíma"
 
 #: gtk/gtkfilechooserwidget.c:1855
-#| msgid "Sort _Folders before Files"
 msgid "Sort _Folders Before Files"
 msgstr "Raða mö_ppum á undan skrám"
 
@@ -2438,8 +2287,6 @@ msgid "Program"
 msgstr "Forrit"
 
 #: gtk/gtkfilechooserwidget.c:4302
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgid "Audio"
 msgstr "Hljóð"
 
@@ -2453,8 +2300,6 @@ msgid "Image"
 msgstr "Mynd"
 
 #: gtk/gtkfilechooserwidget.c:4305
-#| msgctxt "paper size"
-#| msgid "Arch A"
 msgid "Archive"
 msgstr "Safnskrá"
 
@@ -2483,17 +2328,14 @@ msgstr "Tengiliðir"
 #  * so if you have a default text direction of RTL and YM, then
 #  * the year will appear on the right.
 #: gtk/gtkfilechooserwidget.c:4312
-#| msgid "calendar:MY"
 msgid "Calendar"
 msgstr "Dagatal"
 
 #: gtk/gtkfilechooserwidget.c:4313
-#| msgid "Documented by"
 msgid "Document"
 msgstr "Skjal"
 
 #: gtk/gtkfilechooserwidget.c:4314
-#| msgid "_Orientation:"
 msgid "Presentation"
 msgstr "Kynning"
 
@@ -2553,19 +2395,14 @@ msgid "None"
 msgstr "Ekkert"
 
 #: gtk/gtkfontchooserwidget.c:1568
-#| msgid "_Width:"
 msgid "Width"
 msgstr "Breidd"
 
 #: gtk/gtkfontchooserwidget.c:1569
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgid "Weight"
 msgstr "Þykkt"
 
 #: gtk/gtkfontchooserwidget.c:1570
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgid "Italic"
 msgstr "Skáletrað"
 
@@ -2582,8 +2419,6 @@ msgid "Default"
 msgstr "Sjálfgefið"
 
 #: gtk/gtkfontchooserwidget.c:2164
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
 msgstr "Staftengi (ligatures)"
 
@@ -2607,7 +2442,6 @@ msgid "Number Formatting"
 msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2169
-#| msgid "Dark Variant"
 msgid "Character Variants"
 msgstr "Stafatilbrigði"
 
@@ -2640,7 +2474,6 @@ msgid "Copy _Link Address"
 msgstr "A_frita vistfang tengils"
 
 #: gtk/gtklinkbutton.c:259
-#| msgid "Copy URL"
 msgid "_Copy URL"
 msgstr "_Afrita slóð (URL)"
 
@@ -2779,7 +2612,6 @@ msgid "_Domain"
 msgstr "_Lén"
 
 #: gtk/gtkmountoperation.c:716
-#| msgid "Volume Up"
 msgid "Volume type"
 msgstr "Gerð gagnamiðils"
 
@@ -2788,8 +2620,6 @@ msgid "_Hidden"
 msgstr "_Falið"
 
 #: gtk/gtkmountoperation.c:729
-#| msgctxt "input method menu"
-#| msgid "Windows IME"
 msgid "_Windows system"
 msgstr "_Windows stýrikerfi"
 
@@ -2867,13 +2697,10 @@ msgid "Tab list"
 msgstr ""
 
 #: gtk/gtknotebook.c:3249
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous tab"
 msgstr "Fyrri flipi"
 
 #: gtk/gtknotebook.c:3253
-#| msgid "_Next"
 msgid "Next tab"
 msgstr "Næsti flipi"
 
@@ -2930,12 +2757,10 @@ msgid "Page Setup"
 msgstr "Uppsetning síðu"
 
 #: gtk/gtkpasswordentry.c:167
-#| msgid "Hide %s"
 msgid "Hide Text"
 msgstr "Fela texta"
 
 #: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
-#| msgid "Show _Time"
 msgid "Show Text"
 msgstr "Birta texta"
 
@@ -2944,14 +2769,12 @@ msgid "Caps Lock is on"
 msgstr "Caps Lock er á"
 
 #: gtk/gtkpasswordentry.c:680
-#| msgid "Show _Time"
 msgid "_Show Text"
 msgstr "_Sýna texta"
 
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:914
 #, c-format
-#| msgid "Open '%s'"
 msgid "Open %s"
 msgstr "Opna %s"
 
@@ -2964,7 +2787,6 @@ msgid "Recent files"
 msgstr "Nýlegar skrár"
 
 #: gtk/gtkplacessidebar.c:1015
-#| msgid "_Start"
 msgid "Starred"
 msgstr "Stjörnumerkt"
 
@@ -3036,7 +2858,6 @@ msgstr "Get ekki ræst „%s“"
 #.
 #: gtk/gtkplacessidebar.c:1997
 #, c-format
-#| msgid "Opening “%s”."
 msgid "Error unlocking “%s”"
 msgstr "Villa við að aflæsa “%s”"
 
@@ -3539,7 +3360,6 @@ msgstr ""
 "Ekkert skráð forrit með heitinu „%s“ fyrir atriði með URI-slóðina „%s“ fannst"
 
 #: gtk/gtksearchentry.c:599
-#| msgid "_Clear List"
 msgid "Clear entry"
 msgstr "Hreinsa færslu"
 
@@ -3629,20 +3449,14 @@ msgid "Could not show link"
 msgstr "Gat ekki sýnt tengil"
 
 #: gtk/gtktext.c:6074 gtk/gtktextview.c:8888
-#| msgctxt "keyboard label"
-#| msgid "Insert"
 msgid "Insert _Emoji"
 msgstr "S_etja inn tjáningartákn"
 
 #: gtk/gtktextview.c:8870
-#| msgctxt "Stock label"
-#| msgid "_Undo"
 msgid "_Undo"
 msgstr "_Afturkalla"
 
 #: gtk/gtktextview.c:8874
-#| msgctxt "Stock label"
-#| msgid "_Redo"
 msgid "_Redo"
 msgstr "_Endurtaka"
 
@@ -3671,7 +3485,6 @@ msgstr "%d %%"
 
 #: gtk/gtkwindow.c:6128
 #, c-format
-#| msgid "Do you want to use GTK+ Inspector?"
 msgid "Do you want to use GTK Inspector?"
 msgstr "Viltu nota GTK Inspector?"
 
@@ -3723,7 +3536,6 @@ msgid "Role"
 msgstr "Hlutverk"
 
 #: gtk/inspector/a11y.ui:40
-#| msgid "Object"
 msgid "Object path"
 msgstr "Slóð á hlut"
 
@@ -3741,7 +3553,6 @@ msgid "Activate"
 msgstr "Virkja"
 
 #: gtk/inspector/action-editor.c:135
-#| msgid "State"
 msgid "Set State"
 msgstr "Setja stöðu"
 
@@ -3779,13 +3590,11 @@ msgid "Target"
 msgstr "Beinist að"
 
 #: gtk/inspector/controllers.c:156
-#| msgid "Cumulative"
 msgctxt "propagation limit"
 msgid "Native"
 msgstr "Innbyggt"
 
 #: gtk/inspector/css-editor.c:129
-#| msgid "You can type here any CSS rule recognized by GTK+."
 msgid "You can type here any CSS rule recognized by GTK."
 msgstr "Þú getur skrifað hér hverja þá CSS reglu sem GTK þekkir."
 
@@ -3832,13 +3641,11 @@ msgid "None"
 msgstr "Ekkert"
 
 #: gtk/inspector/general.c:317
-#| msgid "Disabled"
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Óvirkt"
 
 #: gtk/inspector/general.c:318
-#| msgid "Disabled"
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Óvirkt"
@@ -3849,33 +3656,26 @@ msgid "None"
 msgstr "Ekkert"
 
 #: gtk/inspector/general.c:440
-#| msgid "Disabled"
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Óvirkt"
 
 #: gtk/inspector/general.c:441 gtk/inspector/general.c:442
-#| msgid "Disabled"
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Óvirkt"
 
 #: gtk/inspector/general.c:498
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Ekkert"
 
 #: gtk/inspector/general.c:499 gtk/inspector/general.c:500
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Ekkert"
 
 #: gtk/inspector/general.ui:32
-#| msgid "GTK+ Version"
 msgid "GTK Version"
 msgstr "GTK útgáfa"
 
@@ -3884,7 +3684,6 @@ msgid "GDK Backend"
 msgstr "GDK bakendi"
 
 #: gtk/inspector/general.ui:84
-#| msgid "GL Rendering"
 msgid "GSK Renderer"
 msgstr "GSK myndgerð"
 
@@ -3923,17 +3722,16 @@ msgid "GL Vendor"
 msgstr "GL framleiðandi"
 
 #: gtk/inspector/general.ui:572
-#| msgid "_Unlock Device"
 msgid "Vulkan Device"
 msgstr "Vulkan tæki"
 
 #: gtk/inspector/general.ui:599
 msgid "Vulkan API version"
-msgstr ""
+msgstr "Útgáfa Vulkan API-forritsviðmóts"
 
 #: gtk/inspector/general.ui:626
 msgid "Vulkan driver version"
-msgstr ""
+msgstr "Útgáfa Vulkan-rekils"
 
 #: gtk/inspector/menu.c:95
 msgid "Unnamed section"
@@ -3969,7 +3767,6 @@ msgid "Reference Count"
 msgstr "Fjöldi tilvísana"
 
 #: gtk/inspector/misc-info.ui:151
-#| msgid "Text Direction"
 msgid "Direction"
 msgstr "Stefna"
 
@@ -4004,7 +3801,6 @@ msgid "Properties"
 msgstr "Eiginleikar"
 
 #: gtk/inspector/misc-info.ui:366
-#| msgid "Rendering Mode"
 msgid "Renderer"
 msgstr "Myndgerðarvél"
 
@@ -4083,19 +3879,15 @@ msgid "Uneditable property type: %s"
 msgstr "Óbreytanleg gerð eiginleika: %s"
 
 #: gtk/inspector/prop-editor.c:1323
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "column number"
 msgid "None"
 msgstr "Ekkert"
 
 #: gtk/inspector/prop-editor.c:1360
-#| msgid "Attribute"
 msgid "Attribute:"
 msgstr "Eigindi:"
 
 #: gtk/inspector/prop-editor.c:1363
-#| msgid "Model:"
 msgid "Model"
 msgstr "Gerð"
 
@@ -4108,7 +3900,6 @@ msgstr "Dálkur:"
 #.
 #: gtk/inspector/prop-editor.c:1467
 #, c-format
-#| msgid "Object: %p (%s)"
 msgid "Action from: %p (%s)"
 msgstr "Aðgerð frá: %p (%s)"
 
@@ -4117,31 +3908,26 @@ msgid "Reset"
 msgstr "Endurstilla"
 
 #: gtk/inspector/prop-editor.c:1530
-#| msgid "Default"
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Sjálfgefið"
 
 #: gtk/inspector/prop-editor.c:1533
-#| msgid "Theme"
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Þema"
 
 #: gtk/inspector/prop-editor.c:1536
-#| msgid "XSettings"
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
 #: gtk/inspector/prop-editor.c:1540
-#| msgid "Application"
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Forrit"
 
 #: gtk/inspector/prop-editor.c:1543
-#| msgid "Unknown"
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Óþekkt"
@@ -4160,7 +3946,6 @@ msgid "Saving RenderNode failed"
 msgstr "Tókst ekki að vista RenderNode"
 
 #: gtk/inspector/recorder.ui:18
-#| msgid "Recorder"
 msgid "Record frames"
 msgstr "Skrá ramma"
 
@@ -4279,7 +4064,6 @@ msgid "Show data"
 msgstr "Sýna gögn"
 
 #: gtk/inspector/type-info.ui:14
-#| msgid "Class Hierarchy"
 msgid "Hierarchy"
 msgstr "Stigskipun"
 
@@ -4300,7 +4084,6 @@ msgid "GL rendering is disabled"
 msgstr "GL myndgerð er óvirk"
 
 #: gtk/inspector/visual.ui:59
-#| msgid "GTK+ Theme"
 msgid "GTK Theme"
 msgstr "GTK-þema"
 
@@ -4373,17 +4156,14 @@ msgid "CSS Padding"
 msgstr "CSS fylling"
 
 #: gtk/inspector/visual.ui:554
-#| msgid "CSS Nodes"
 msgid "CSS Border"
 msgstr "CSS jaðar"
 
 #: gtk/inspector/visual.ui:564
-#| msgid "Paper Margins"
 msgid "CSS Margin"
 msgstr "CSS spássía"
 
 #: gtk/inspector/visual.ui:574
-#| msgid "Paper Margins"
 msgid "Widget Margin"
 msgstr "Spássía viðmótshluta (widget)"
 
@@ -4424,8 +4204,6 @@ msgid "Objects"
 msgstr "Hlutir"
 
 #: gtk/inspector/window.ui:220
-#| msgctxt "printing option"
-#| msgid "Two Sided"
 msgid "Toggle Sidebar"
 msgstr "Víxla hliðarspjaldi af/á"
 
@@ -4434,19 +4212,14 @@ msgid "Refresh action state"
 msgstr ""
 
 #: gtk/inspector/window.ui:337
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous object"
 msgstr "Fyrri hlutur"
 
 #: gtk/inspector/window.ui:347
-#| msgid "Child Properties"
 msgid "Child object"
 msgstr "Afleiðuhlutur"
 
 #: gtk/inspector/window.ui:357
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous sibling"
 msgstr "Fyrra með sama forvera"
 
@@ -4495,7 +4268,6 @@ msgid "Magnifier"
 msgstr "Skjástækkun"
 
 #: gtk/inspector/window.ui:527
-#| msgid "Accessible Role"
 msgid "Accessibility"
 msgstr "Aðgengi"
 
@@ -4508,7 +4280,6 @@ msgid "Information"
 msgstr "Upplýsingar"
 
 #: gtk/inspector/window.ui:573
-#| msgid "XSettings"
 msgid "Settings"
 msgstr "Stillingar"
 
@@ -4696,13 +4467,11 @@ msgid "Flattened accent forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:44
-#| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
 msgstr "Tölubrot"
 
 #: gtk/open-type-layout.h:45
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
 msgstr "Fullbreiddir"
@@ -4766,8 +4535,6 @@ msgid "Isolated Forms"
 msgstr "Einangruð form"
 
 #: gtk/open-type-layout.h:57
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
 msgstr "Skáletrað"
@@ -4798,21 +4565,16 @@ msgid "JIS2004 Forms"
 msgstr "JIS2004 form"
 
 #: gtk/open-type-layout.h:63
-#| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
 msgstr "Hnikun (stafþjöppun)"
 
 #: gtk/open-type-layout.h:64
-#| msgctxt "output-bin"
-#| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
 msgstr "Vinstri mörk"
 
 #: gtk/open-type-layout.h:65
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
 msgstr "Stöðluð staftengi (ligatures)"
@@ -4833,13 +4595,11 @@ msgid "Localized Forms"
 msgstr "Staðfærð form"
 
 #: gtk/open-type-layout.h:69
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
 msgstr "Vinstri-til-hægri tilbrigði"
 
 #: gtk/open-type-layout.h:70
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
 msgstr "Vinstri-til-hægri spegluð form"
@@ -4905,7 +4665,6 @@ msgid "Optical Bounds"
 msgstr ""
 
 #: gtk/open-type-layout.h:83
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
 msgstr "Raðtölur"
@@ -4993,20 +4752,16 @@ msgid "Reph Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:100
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
 msgstr "Hægri mörk"
 
 #: gtk/open-type-layout.h:101
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
 msgstr "Hægri-til-vinstri tilbrigði"
 
 #: gtk/open-type-layout.h:102
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
 msgstr "Hægri-til-vinstri spegluð form"
@@ -5142,7 +4897,6 @@ msgid "Stylistic Set 19"
 msgstr "Stílgert sett 19"
 
 #: gtk/open-type-layout.h:129
-#| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
 msgstr "Stílgert sett 20"
@@ -5158,14 +4912,11 @@ msgid "Stretching Glyph Decomposition"
 msgstr ""
 
 #: gtk/open-type-layout.h:132
-#| msgid "PostScript"
 msgctxt "OpenType layout"
 msgid "Subscript"
 msgstr "Lágletur"
 
 #: gtk/open-type-layout.h:133
-#| msgctxt "keyboard label"
-#| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
 msgstr "Háletur"
@@ -5216,14 +4967,11 @@ msgid "Alternate Vertical Metrics"
 msgstr ""
 
 #: gtk/open-type-layout.h:143
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
 msgstr "Vattu-tilbrigði"
 
 #: gtk/open-type-layout.h:144
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
 msgstr "Lóðrétt skrift"
@@ -5244,8 +4992,6 @@ msgid "Vertical Kana Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:148
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
 msgstr "Lóðrétt hnikun"
@@ -6241,7 +5987,6 @@ msgid "Gothic"
 msgstr "Gotneskt"
 
 #: gtk/script-names.c:28
-#| msgid "_Green:"
 msgctxt "Script"
 msgid "Greek"
 msgstr "Gríska"
@@ -6292,7 +6037,6 @@ msgid "Khmer"
 msgstr "Kmer"
 
 #: gtk/script-names.c:38
-#| msgid "Low"
 msgctxt "Script"
 msgid "Lao"
 msgstr "Laó"
@@ -6323,8 +6067,6 @@ msgid "Ogham"
 msgstr "Ógam"
 
 #: gtk/script-names.c:44
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "Script"
 msgid "Old Italic"
 msgstr "Forn-ítalska"
@@ -6350,7 +6092,6 @@ msgid "Syriac"
 msgstr "Sýrlensk skrift"
 
 #: gtk/script-names.c:49
-#| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
 msgstr "Tamílsk skrift"
@@ -6366,8 +6107,6 @@ msgid "Thaana"
 msgstr "Tana"
 
 #: gtk/script-names.c:52
-#| msgctxt "input method menu"
-#| msgid "Thai-Lao"
 msgctxt "Script"
 msgid "Thai"
 msgstr "Tælensk skrift"
@@ -6433,8 +6172,6 @@ msgid "Shavian"
 msgstr "Shavíska"
 
 #: gtk/script-names.c:65
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
 msgstr "Línulegt B"
@@ -6485,13 +6222,11 @@ msgid "Kharoshthi"
 msgstr "Kharoshthi"
 
 #: gtk/script-names.c:75
-#| msgid "Unknown"
 msgctxt "Script"
 msgid "Unknown"
 msgstr "Óþekkt"
 
 #: gtk/script-names.c:76
-#| msgid "Baseline"
 msgctxt "Script"
 msgid "Balinese"
 msgstr "Balískt"
@@ -6542,8 +6277,6 @@ msgid "Saurashtra"
 msgstr "Saurashtra"
 
 #: gtk/script-names.c:86
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
 msgstr "Cham"
@@ -6754,7 +6487,6 @@ msgid "Mende Kikakui"
 msgstr "Mende Kikakui"
 
 #: gtk/script-names.c:128
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
 msgstr "Modi"
@@ -6830,8 +6562,6 @@ msgid "Hatran"
 msgstr "Hatran"
 
 #: gtk/script-names.c:143
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
 msgstr "Multani"
@@ -6842,8 +6572,6 @@ msgid "Old Hungarian"
 msgstr "Forn-ungverska"
 
 #: gtk/script-names.c:145
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
 msgstr "Táknskrift"
@@ -6859,7 +6587,6 @@ msgid "Bhaiksuki"
 msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:148
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
 msgstr "Marchen"
@@ -7053,12 +6780,10 @@ msgid "Hue"
 msgstr "Litblær H"
 
 #: gtk/ui/gtkcoloreditor.ui:114
-#| msgid "Alpha"
 msgid "Alpha value"
 msgstr "Alfa-gegnsæisgildi"
 
 #: gtk/ui/gtkcoloreditor.ui:132
-#| msgid "Saturation"
 msgid "Saturation and value"
 msgstr "Litmettun og litgildi"
 
@@ -7087,7 +6812,6 @@ msgid "(None)"
 msgstr "(Ekkert)"
 
 #: gtk/ui/gtkdropdown.ui:70
-#| msgid "Search"
 msgid "Search…"
 msgstr "Leita…"
 
@@ -7117,13 +6841,11 @@ msgid "Travel & Places"
 msgstr "Staðir og ferðalög"
 
 #: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
-#| msgid "Activate"
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "Athafnir"
 
 #: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
-#| msgid "Objects"
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Hlutir"
@@ -7139,7 +6861,6 @@ msgid "Flags"
 msgstr "Fánar"
 
 #: gtk/ui/gtkemojichooser.ui:230
-#| msgid "Recent"
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "Nýlegt"
@@ -7187,8 +6908,6 @@ msgid "Preview text"
 msgstr "Forskoða texta"
 
 #: gtk/ui/gtkfontchooserwidget.ui:194 gtk/ui/gtkfontchooserwidget.ui:224
-#| msgctxt "sizegroup mode"
-#| msgid "Horizontal"
 msgid "horizontal"
 msgstr "lárétt"
 
@@ -7452,17 +7171,14 @@ msgstr "Einhverjar stillingarnar í glugganum rekast á hvora aðra"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
-#| msgid "Unspecified error"
 msgid "Unspecified error decoding video"
 msgstr "Óskilgreind villa við að afkóða myndmerki"
 
 #: modules/media/gtkffmediafile.c:322 modules/media/gtkffmediafile.c:496
-#| msgid "Not enough free memory"
 msgid "Not enough memory"
 msgstr "Ekki nægilegt minni"
 
 #: modules/media/gtkffmediafile.c:519
-#| msgid "Not a valid page setup file"
 msgid "Not a video file"
 msgstr "Er ekki myndskeiðsskrá"
 
@@ -8093,37 +7809,31 @@ msgstr ""
 
 #: tools/gtk-builder-tool-simplify.c:436
 #, c-format
-#| msgid "Couldn’t parse value for %s::%s: %s\n"
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: Gat ekki þáttað gildið fyrir eigindið '%s': %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:591
 #, c-format
-#| msgid "Property %s::%s not found\n"
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %seigindið %s::%s fannst ekki\n"
 
 #: tools/gtk-builder-tool-simplify.c:2207
 #, c-format
-#| msgid "Can’t load file: %s\n"
 msgid "Can’t load “%s”: %s\n"
 msgstr "Get ekki hlaðið inn “%s”: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2218
 #, c-format
-#| msgid "Can’t parse file: %s\n"
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Gat ekki þáttað “%s”: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2242
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to read “%s”: %s\n"
 msgstr "Gat ekki lesið “%s”: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2248
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to write %s: “%s”\n"
 msgstr "Gat ekki skrifað %s: “%s”\n"
 
