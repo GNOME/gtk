@@ -1,5 +1,5 @@
-#include <winuser.h>
-#include <winver.h>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 
 GTK_ICON		ICON			"gtk.ico"
 
