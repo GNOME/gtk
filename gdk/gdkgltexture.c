@@ -109,162 +109,131 @@ gdk_gl_texture_run (GdkGLTexture *self,
   while (g_atomic_int_get (&invoke.spinlock) == 0);
 }
 
-static inline void
-gdk_gl_texture_get_tex_image (GdkGLTexture *self,
-                              GLenum        gl_format,
-                              GLenum        gl_type,
-                              GLvoid       *data)
-{
-  if (gdk_gl_context_get_use_es (self->context))
-    {
-      GdkTexture *texture = GDK_TEXTURE (self);
-      GLuint fbo;
+typedef struct _Download Download;
 
-      glGenFramebuffers (1, &fbo);
-      glBindFramebuffer (GL_FRAMEBUFFER, fbo);
-      glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->id, 0);
-      glReadPixels (0, 0,
-                    texture->width, texture->height, 
-                    gl_format,
-                    gl_type,
-                    data);
-      glBindFramebuffer (GL_FRAMEBUFFER, 0);
-      glDeleteFramebuffers (1, &fbo);
+struct _Download
+{
+  GdkMemoryFormat format;
+  guchar *data;
+  gsize stride;
+};
+
+static gboolean
+gdk_gl_texture_find_format (gboolean         use_es,
+                            GLint            gl_format,
+                            GLint            gl_type,
+                            GdkMemoryFormat *out_format)
+{
+  GdkMemoryFormat format;
+
+  for (format = 0; format < GDK_MEMORY_N_FORMATS; format++)
+    {
+      GLenum q_internal_format, q_format, q_type;
+
+      if (!gdk_memory_format_gl_format (format, use_es, &q_internal_format, &q_format, &q_type))
+        continue;
+
+      if (q_format != gl_format || q_type != gl_type)
+        continue;
+
+      *out_format = format;
+      return TRUE;
     }
-  else
+
+  return FALSE;
+}
+
+static inline void
+gdk_gl_texture_do_download (gpointer texture_,
+                            gpointer download_)
+{
+  gsize expected_stride;
+  GdkGLTexture *self = texture_;
+  GdkTexture *texture = texture_;
+  Download *download = download_;
+  GLenum gl_internal_format, gl_format, gl_type;
+
+  expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
+
+  if (download->stride != expected_stride &&
+      !gdk_memory_format_gl_format (download->format, gdk_gl_context_get_use_es (self->context), &gl_internal_format, &gl_format, &gl_type))
     {
       glGetTexImage (GL_TEXTURE_2D,
                      0,
                      gl_format,
                      gl_type,
-                     data);
+                     download->data);
     }
-}
-
-static void
-gdk_gl_texture_do_download_texture (gpointer texture_,
-                                    gpointer result_)
-{
-  GdkTexture *texture = texture_;
-  GdkTexture **result = result_;
-  guint gl_internalformat, gl_format, gl_type;
-  guchar *data;
-  gsize stride;
-  GBytes *bytes;
-
-  if (!gdk_memory_format_gl_format (texture->format,
-                                    gdk_gl_context_get_use_es (gdk_gl_context_get_current ()),
-                                    &gl_internalformat,
-                                    &gl_format,
-                                    &gl_type))
+  else
     {
-      g_assert_not_reached ();
+      GdkMemoryFormat actual_format;
+      GLint gl_read_format, gl_read_type;
+      GLuint fbo;
+
+      glGenFramebuffers (1, &fbo);
+      glBindFramebuffer (GL_FRAMEBUFFER, fbo);
+      glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->id, 0);
+      glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &gl_read_format);
+      glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &gl_read_type);
+      if (!gdk_gl_texture_find_format (gdk_gl_context_get_use_es (self->context), gl_read_format, gl_read_type, &actual_format))
+        actual_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED; /* pray */
+
+      if (download->format == actual_format &&
+          (download->stride == expected_stride))
+        {
+          glReadPixels (0, 0,
+                        texture->width, texture->height, 
+                        gl_read_format,
+                        gl_read_type,
+                        download->data);
+        }
+      else
+        {
+          gsize actual_bpp = gdk_memory_format_bytes_per_pixel (actual_format);
+          guchar *pixels = g_malloc_n (texture->width * actual_bpp, texture->height);
+
+          glReadPixels (0, 0,
+                        texture->width, texture->height, 
+                        gl_read_format,
+                        gl_read_type,
+                        pixels);
+
+          gdk_memory_convert (download->data,
+                              download->stride,
+                              download->format,
+                              pixels,
+                              texture->width * actual_bpp,
+                              actual_format,
+                              texture->width,
+                              texture->height);
+
+          g_free (pixels);
+        }
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
+      glDeleteFramebuffers (1, &fbo);
     }
-
-  stride = gdk_memory_format_bytes_per_pixel (texture->format) * texture->width;
-  data = g_malloc_n (stride, texture->height);
-
-  gdk_gl_texture_get_tex_image (texture_,
-                                gl_format,
-                                gl_type,
-                                data);
-
-  bytes = g_bytes_new_take (data, stride * texture->height);
-  *result = gdk_memory_texture_new (texture->width,
-                                    texture->height,
-                                    texture->format,
-                                    bytes,
-                                    stride);
-
-  g_bytes_unref (bytes);
-}
-
-static GdkTexture *
-gdk_gl_texture_download_texture (GdkTexture *texture)
-{
-  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-  GdkTexture *result;
-
-  if (self->saved)
-    return g_object_ref (self->saved);
-
-  gdk_gl_texture_run (self, gdk_gl_texture_do_download_texture, &result);
-
-  return result;
 }
 
 static void
-gdk_gl_texture_do_download (gpointer texture,
-                            gpointer data)
-{
-  glGetTexImage (GL_TEXTURE_2D,
-                 0,
-                 GL_BGRA,
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-                 GL_UNSIGNED_INT_8_8_8_8_REV,
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-                 GL_UNSIGNED_BYTE,
-#else
-#error "Unknown byte order for gdk_gl_texture_download()"
-#endif
-                 data);
-}
-
-static void
-gdk_gl_texture_download (GdkTexture *texture,
-                         guchar     *data,
-                         gsize       stride)
+gdk_gl_texture_download (GdkTexture      *texture,
+                         GdkMemoryFormat  format,
+                         guchar          *data,
+                         gsize            stride)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
+  Download download;
 
   if (self->saved)
     {
-      gdk_texture_download (self->saved, data, stride);
+      gdk_texture_do_download (self->saved, format, data, stride);
       return;
     }
 
-  if (gdk_gl_context_get_use_es (self->context) ||
-      stride != texture->width * 4)
-    {
-      GDK_TEXTURE_CLASS (gdk_gl_texture_parent_class)->download (texture, data, stride);
-      return;
-    }
+  download.format = format;
+  download.data = data;
+  download.stride = stride;
 
-  gdk_gl_texture_run (self, gdk_gl_texture_do_download, data);
-}
-
-static void
-gdk_gl_texture_do_download_float (gpointer texture,
-                                  gpointer data)
-{
-  glGetTexImage (GL_TEXTURE_2D,
-                 0,
-                 GL_RGBA,
-                 GL_FLOAT,
-                 data);
-}
-
-static void
-gdk_gl_texture_download_float (GdkTexture *texture,
-                               float      *data,
-                               gsize       stride)
-{
-  GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-
-  if (self->saved)
-    {
-      gdk_texture_download_float (self->saved, data, stride);
-      return;
-    }
-
-  if (gdk_gl_context_get_use_es (self->context) ||
-      stride != texture->width * 4)
-    {
-      GDK_TEXTURE_CLASS (gdk_gl_texture_parent_class)->download_float (texture, data, stride);
-      return;
-    }
-
-  gdk_gl_texture_run (self, gdk_gl_texture_do_download_float, data);
+  gdk_gl_texture_run (self, gdk_gl_texture_do_download, &download);
 }
 
 static void
@@ -273,9 +242,8 @@ gdk_gl_texture_class_init (GdkGLTextureClass *klass)
   GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  texture_class->download_texture = gdk_gl_texture_download_texture;
   texture_class->download = gdk_gl_texture_download;
-  texture_class->download_float = gdk_gl_texture_download_float;
+
   gobject_class->dispose = gdk_gl_texture_dispose;
 }
 
@@ -309,10 +277,14 @@ gdk_gl_texture_get_id (GdkGLTexture *self)
 void
 gdk_gl_texture_release (GdkGLTexture *self)
 {
+  GdkTexture *texture;
+
   g_return_if_fail (GDK_IS_GL_TEXTURE (self));
   g_return_if_fail (self->saved == NULL);
 
-  self->saved = gdk_texture_download_texture (GDK_TEXTURE (self));
+  texture = GDK_TEXTURE (self);
+  self->saved = GDK_TEXTURE (gdk_memory_texture_from_texture (texture,
+                                                              gdk_texture_get_format (texture)));
 
   if (self->destroy)
     {
@@ -326,11 +298,23 @@ gdk_gl_texture_release (GdkGLTexture *self)
 }
 
 static void
-gdk_gl_texture_do_determine_format (gpointer texture_,
-                                    gpointer unused)
+gdk_gl_texture_determine_format (GdkGLTexture *self)
 {
-  GdkTexture *texture = texture_;
+  GdkTexture *texture = GDK_TEXTURE (self);
+  GLint active_texture;
   GLint internal_format;
+
+  if (self->context != gdk_gl_context_get_current ())
+    {
+      /* Somebody else is GL-ing here, abort! */
+      texture->format = GDK_MEMORY_DEFAULT;
+      return;
+    }
+
+  /* We need to be careful about modifying the GL context, as this is not
+   * expected during construction */
+  glGetIntegerv (GL_TEXTURE_BINDING_2D, &active_texture);
+  glBindTexture (GL_TEXTURE_2D, self->id);
 
   glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
 
@@ -375,6 +359,8 @@ gdk_gl_texture_do_determine_format (gpointer texture_,
       texture->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       break;
   }
+
+  glBindTexture (GL_TEXTURE_2D, active_texture);
 }
 
 /**
@@ -420,7 +406,7 @@ gdk_gl_texture_new (GdkGLContext   *context,
   self->destroy = destroy;
   self->data = data;
 
-  gdk_gl_texture_run (self, gdk_gl_texture_do_determine_format, NULL);
+  gdk_gl_texture_determine_format (self);
 
   return GDK_TEXTURE (self);
 }

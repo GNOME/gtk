@@ -249,86 +249,6 @@ gdk_gl_context_get_property (GObject    *object,
     }
 }
 
-void
-gdk_gl_context_upload_texture (GdkGLContext    *context,
-                               const guchar    *data,
-                               int              width,
-                               int              height,
-                               int              stride,
-                               GdkMemoryFormat  data_format,
-                               guint            texture_target)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  guchar *copy = NULL;
-  GLenum gl_internalformat;
-  GLenum gl_format;
-  GLenum gl_type;
-  gsize bpp;
-
-  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-
-  if (!gdk_memory_format_gl_format (data_format,
-                                    gdk_gl_context_get_use_es (context),
-                                    &gl_internalformat,
-                                    &gl_format,
-                                    &gl_type))
-    {
-      copy = g_malloc_n (width * 4, height);
-      gdk_memory_convert (copy, width * 4,
-                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                          data, stride,
-                          data_format,
-                          width, height);
-      data = copy;
-      data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      stride = width * 4;
-      if (!gdk_memory_format_gl_format (data_format,
-                                        gdk_gl_context_get_use_es (context),
-                                        &gl_internalformat,
-                                        &gl_format,
-                                        &gl_type))
-        {
-          g_assert_not_reached ();
-        }
-    }
-  else
-    {
-      copy = NULL;
-    }
-
-  bpp = gdk_memory_format_bytes_per_pixel (data_format);
-
-  glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (data_format));
-
-  /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
-   * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
-   */
-  if (stride == width * bpp)
-    {
-      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
-    }
-  else if (stride % bpp == 0 &&
-           (!gdk_gl_context_get_use_es (context) ||
-            (priv->gl_version >= 30 || priv->has_unpack_subimage)))
-    {
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
-
-      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
-
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
-    }
-  else
-    {
-      int i;
-      glTexImage2D (texture_target, 0, gl_internalformat, width, height, 0, gl_format, gl_type, NULL);
-      for (i = 0; i < height; i++)
-        glTexSubImage2D (texture_target, 0, 0, i, width, 1, gl_format, gl_type, data + (i * stride));
-    }
-  glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
-
-  g_free (copy);
-}
-
 #define N_EGL_ATTRS     16
 
 static GdkGLAPI
@@ -1065,6 +985,19 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
     }
   priv->major = version / 100;
   priv->minor = version % 100;
+}
+
+gboolean
+gdk_gl_context_check_version (GdkGLContext *context,
+                              int           required_major,
+                              int           required_minor)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
+  g_return_val_if_fail (required_minor < 10, FALSE);
+
+  return priv->gl_version >= required_major * 10 + required_minor;
 }
 
 /**

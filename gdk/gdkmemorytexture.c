@@ -55,38 +55,16 @@ gdk_memory_texture_dispose (GObject *object)
   G_OBJECT_CLASS (gdk_memory_texture_parent_class)->dispose (object);
 }
 
-static GdkTexture *
-gdk_memory_texture_download_texture (GdkTexture *texture)
-{
-  return g_object_ref (texture);
-}
-
 static void
-gdk_memory_texture_download (GdkTexture *texture,
-                             guchar     *data,
-                             gsize       stride)
+gdk_memory_texture_download (GdkTexture      *texture,
+                             GdkMemoryFormat  format,
+                             guchar          *data,
+                             gsize            stride)
 {
   GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
 
   gdk_memory_convert (data, stride,
-                      GDK_MEMORY_DEFAULT,
-                      (guchar *) g_bytes_get_data (self->bytes, NULL),
-                      self->stride,
-                      texture->format,
-                      gdk_texture_get_width (texture),
-                      gdk_texture_get_height (texture));
-}
-
-static void
-gdk_memory_texture_download_float (GdkTexture *texture,
-                                   float      *data,
-                                   gsize       stride)
-{
-  GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
-
-  gdk_memory_convert ((guchar *) data,
-                      stride * sizeof (float),
-                      GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+                      format,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       texture->format,
@@ -100,9 +78,8 @@ gdk_memory_texture_class_init (GdkMemoryTextureClass *klass)
   GdkTextureClass *texture_class = GDK_TEXTURE_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  texture_class->download_texture = gdk_memory_texture_download_texture;
   texture_class->download = gdk_memory_texture_download;
-  texture_class->download_float = gdk_memory_texture_download_float;
+
   gobject_class->dispose = gdk_memory_texture_dispose;
 }
 
@@ -187,6 +164,73 @@ gdk_memory_texture_new (int              width,
   self->stride = stride;
 
   return GDK_TEXTURE (self);
+}
+
+GdkTexture *
+gdk_memory_texture_new_subtexture (GdkMemoryTexture  *source,
+                                   int                x,
+                                   int                y,
+                                   int                width,
+                                   int                height)
+{
+  GdkTexture *texture, *result;
+  gsize bpp, offset, size;
+  GBytes *bytes;
+
+  g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE (source), NULL);
+  g_return_val_if_fail (x < 0 || x >= GDK_TEXTURE (source)->width, NULL);
+  g_return_val_if_fail (y < 0 || y >= GDK_TEXTURE (source)->height, NULL);
+  g_return_val_if_fail (width <= 0 || x + width > GDK_TEXTURE (source)->width, NULL);
+  g_return_val_if_fail (height <= 0 || y + height > GDK_TEXTURE (source)->height, NULL);
+
+  texture = GDK_TEXTURE (source);
+  bpp = gdk_memory_format_bytes_per_pixel (texture->format);
+  offset = y * source->stride + x * bpp;
+  size = source->stride * (height - 1) + x * bpp;
+  bytes = g_bytes_new_from_bytes (source->bytes, offset, size);
+
+  result = gdk_memory_texture_new (texture->width,
+                                   texture->height,
+                                   texture->format,
+                                   bytes,
+                                   source->stride);
+  g_bytes_unref (bytes);
+
+  return result;
+}
+
+GdkMemoryTexture *
+gdk_memory_texture_from_texture (GdkTexture      *texture,
+                                 GdkMemoryFormat  format)
+{
+  GdkTexture *result;
+  GBytes *bytes;
+  guchar *data;
+  gsize stride;
+
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+
+  if (GDK_IS_MEMORY_TEXTURE (texture))
+    {
+      GdkMemoryTexture *memtex = GDK_MEMORY_TEXTURE (texture);
+
+      if (gdk_texture_get_format (texture) == format)
+        return g_object_ref (memtex);
+    }
+
+  stride = texture->width * gdk_memory_format_bytes_per_pixel (format);
+  data = g_malloc_n (stride, texture->height);
+
+  gdk_texture_do_download (texture, format, data, stride);
+  bytes = g_bytes_new_take (data, stride);
+  result = gdk_memory_texture_new (texture->width,
+                                   texture->height,
+                                   format,
+                                   bytes,
+                                   stride);
+  g_bytes_unref (bytes);
+
+  return GDK_MEMORY_TEXTURE (result);
 }
 
 const guchar *
