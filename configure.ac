@@ -1941,6 +1941,7 @@ win32/vs12/Makefile
 win32/vs14/Makefile
 win32/vs15/Makefile
 win32/vs16/Makefile
+win32/vs17/Makefile
 gdk/Makefile
 gdk/broadway/Makefile
 gdk/x11/Makefile

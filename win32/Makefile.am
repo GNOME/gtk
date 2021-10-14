@@ -33,7 +33,8 @@ SUBDIRS =	\
 	vs12	\
 	vs14	\
 	vs15	\
-	vs16
+	vs16	\
+	vs17
 
 EXTRA_DIST +=	\
 	config-msvc.mak		\
