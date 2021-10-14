@@ -807,7 +807,7 @@ _gdk_macos_surface_acquire_context (GdkMacosSurface *self,
       scale = CGSizeMake (1.0, 1.0);
       scale = CGContextConvertSizeToDeviceSpace (cg_context, scale);
 
-      CGContextScaleCTM (cg_context, 1.0 / scale.width, 1.0 / scale.height);
+      CGContextScaleCTM (cg_context, 1.0 / fabs (scale.width), 1.0 / fabs (scale.height));
     }
 
   return cg_context;
