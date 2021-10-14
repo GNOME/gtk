@@ -183,8 +183,7 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
    * in gdk_quartz_ref_cairo_surface () */
   scale = CGContextConvertSizeToDeviceSpace (cg_context,
                                              CGSizeMake (1.0, 1.0));
-  CGContextScaleCTM (cg_context, 1.0 / scale.width, 1.0 / scale.height);
-
+  CGContextScaleCTM (cg_context, 1.0 / fabs(scale.width), 1.0 / fabs(scale.height));
   return cg_context;
 }
 
