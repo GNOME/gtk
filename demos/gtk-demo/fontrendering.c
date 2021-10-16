@@ -59,16 +59,18 @@ update_image (void)
   fopt = cairo_font_options_copy (pango_cairo_context_get_font_options (context));
 
   hint = gtk_combo_box_get_active_id (GTK_COMBO_BOX (hinting));
-  if (strcmp (hint, "none") == 0)
-    hintstyle = CAIRO_HINT_STYLE_NONE;
-  else if (strcmp (hint, "slight") == 0)
-    hintstyle = CAIRO_HINT_STYLE_SLIGHT;
-  else if (strcmp (hint, "medium") == 0)
-    hintstyle = CAIRO_HINT_STYLE_MEDIUM;
-  else if (strcmp (hint, "full") == 0)
-    hintstyle = CAIRO_HINT_STYLE_FULL;
-  else
-    hintstyle = CAIRO_HINT_STYLE_DEFAULT;
+  hintstyle = CAIRO_HINT_STYLE_DEFAULT;
+  if (hint)
+    {
+      if (strcmp (hint, "none") == 0)
+        hintstyle = CAIRO_HINT_STYLE_NONE;
+      else if (strcmp (hint, "slight") == 0)
+        hintstyle = CAIRO_HINT_STYLE_SLIGHT;
+      else if (strcmp (hint, "medium") == 0)
+        hintstyle = CAIRO_HINT_STYLE_MEDIUM;
+      else if (strcmp (hint, "full") == 0)
+        hintstyle = CAIRO_HINT_STYLE_FULL;
+    }
   cairo_font_options_set_hint_style (fopt, hintstyle);
 
   if (gtk_check_button_get_active (GTK_CHECK_BUTTON (hint_metrics)))
