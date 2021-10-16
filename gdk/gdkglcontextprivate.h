@@ -23,7 +23,6 @@
 
 #include "gdkglcontext.h"
 #include "gdkdrawcontextprivate.h"
-#include "gdkmemorytexture.h"
 
 G_BEGIN_DECLS
 

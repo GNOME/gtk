@@ -3,8 +3,6 @@
 
 #include "gdktexture.h"
 
-#include "gdkmemorytexture.h"
-
 G_BEGIN_DECLS
 
 #define GDK_TEXTURE_CLASS(klass)            (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_TEXTURE, GdkTextureClass))
