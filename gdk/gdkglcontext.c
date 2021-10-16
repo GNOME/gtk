@@ -852,7 +852,7 @@ gdk_gl_context_set_debug_enabled (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (gdk_gl_context_is_realized (context));
+  g_return_if_fail (!gdk_gl_context_is_realized (context));
 
   enabled = !!enabled;
 
@@ -901,7 +901,7 @@ gdk_gl_context_set_forward_compatible (GdkGLContext *context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (gdk_gl_context_is_realized (context));
+  g_return_if_fail (!gdk_gl_context_is_realized (context));
 
   compatible = !!compatible;
 
@@ -1265,7 +1265,7 @@ gdk_gl_context_set_use_es (GdkGLContext *context,
                            int           use_es)
 {
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (gdk_gl_context_is_realized (context));
+  g_return_if_fail (!gdk_gl_context_is_realized (context));
 
   switch (use_es)
   {
