@@ -425,6 +425,31 @@ set_source_actions_helper (GdkDrop       *drop,
   return actions;
 }
 
+/* Utility function to translate win32 screen coordinates to
+ * client coordinates (i.e. relative to the surface origin)
+ *
+ * Note that input is expected to be:
+ * a) NOT scaled by dpi_scale
+ * b) NOT translated by the GDK screen offset (gdk_offset_x / y)
+ *
+ * This utility function preserves subpixel precision
+ */
+static void
+unscaled_screen_to_client (GdkSurface* surface,
+                           double screen_x,
+                           double screen_y,
+                           double *client_x,
+                           double *client_y)
+{
+  POINT client_origin;
+
+  client_origin.x = 0;
+  client_origin.y = 0;
+  ClientToScreen (GDK_SURFACE_HWND (surface), &client_origin);
+  *client_x = screen_x - client_origin.x;
+  *client_y = screen_y - client_origin.y;
+}
+
 /* The pdwEffect here initially points
  * to a DWORD that contains the value of dwOKEffects argument in DoDragDrop,
  * i.e. the drag action that the drag source deems acceptable.
@@ -445,6 +470,8 @@ idroptarget_dragenter (LPDROPTARGET This,
   GdkDisplay *display;
   int pt_x;
   int pt_y;
+  double x = 0.0;
+  double y = 0.0;
   GdkDrag *drag;
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
@@ -489,7 +516,12 @@ idroptarget_dragenter (LPDROPTARGET This,
   set_data_object (&ctx->data_object, pDataObj);
   pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
   pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
-  gdk_drop_emit_enter_event (drop, TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
+
+  unscaled_screen_to_client (ctx->surface, pt.x, pt.y, &x, &y);
+  x /= drop_win32->scale;
+  y /= drop_win32->scale;
+
+  gdk_drop_emit_enter_event (drop, TRUE, x, y, GDK_CURRENT_TIME);
   drop_win32->last_key_state = grfKeyState;
   drop_win32->last_x = pt_x;
   drop_win32->last_y = pt_y;
@@ -544,7 +576,14 @@ idroptarget_dragover (LPDROPTARGET This,
       pt_y != drop_win32->last_y ||
       grfKeyState != drop_win32->last_key_state)
     {
-      gdk_drop_emit_motion_event (ctx->drop, TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
+      double x = 0.0;
+      double y = 0.0;
+
+      unscaled_screen_to_client (ctx->surface, pt.x, pt.y, &x, &y);
+      x /= drop_win32->scale;
+      y /= drop_win32->scale;
+
+      gdk_drop_emit_motion_event (ctx->drop, TRUE, x, y, GDK_CURRENT_TIME);
       drop_win32->last_key_state = grfKeyState;
       drop_win32->last_x = pt_x;
       drop_win32->last_y = pt_y;
@@ -587,6 +626,8 @@ idroptarget_drop (LPDROPTARGET This,
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
   int pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
   int pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
+  double x = 0.0;
+  double y = 0.0;
   GdkDragAction dest_action;
 
   GDK_NOTE (DND, g_print ("idroptarget_drop %p ", This));
@@ -606,7 +647,12 @@ idroptarget_drop (LPDROPTARGET This,
                              grfKeyState);
 
   drop_win32->drop_finished = FALSE;
-  gdk_drop_emit_drop_event (ctx->drop, TRUE, pt_x, pt_y, GDK_CURRENT_TIME);
+
+  unscaled_screen_to_client (ctx->surface, pt.x, pt.y, &x, &y);
+  x /= drop_win32->scale;
+  y /= drop_win32->scale;
+
+  gdk_drop_emit_drop_event (ctx->drop, TRUE, x, y, GDK_CURRENT_TIME);
 
   while (!drop_win32->drop_finished)
     g_main_context_iteration (NULL, FALSE);
