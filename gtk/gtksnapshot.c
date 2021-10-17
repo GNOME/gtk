@@ -51,7 +51,7 @@
  * It functions in a similar way to a cairo context, and maintains a stack
  * of render nodes and their associated transformations.
  *
- * The node at the top of the stack is the the one that gtk_snapshot_append_…
+ * The node at the top of the stack is the one that gtk_snapshot_append_…
  * functions operate on. Use the gtk_snapshot_push_… functions and
  * gtk_snapshot_pop() to change the current node.
  *

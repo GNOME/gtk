@@ -35,7 +35,7 @@
  *
  * `GdkVulkanContext`s are created for a surface using
  * [method@Gdk.Surface.create_vulkan_context], and the context will match
- * the the characteristics of the surface.
+ * the characteristics of the surface.
  *
  * Support for `GdkVulkanContext` is platform-specific and context creation
  * can fail, returning %NULL context.
