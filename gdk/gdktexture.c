@@ -868,6 +868,7 @@ gdk_texture_save_to_png (GdkTexture *texture,
  * @texture: a `GdkTexture`
  *
  * Store the given @texture in memory as a PNG file.
+ *
  * Use [ctor@Gdk.Texture.new_from_bytes] to read it back.
  *
  * If you want to serialize a texture, this is a convenient and
