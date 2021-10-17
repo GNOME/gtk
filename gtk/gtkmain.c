@@ -1290,19 +1290,15 @@ is_key_event (GdkEvent *event)
 }
 
 static inline void
-set_widget_active_state (GtkWidget       *target,
-                         const gboolean   release)
+set_widget_active_state (GtkWidget      *target,
+                         const gboolean  is_active)
 {
   GtkWidget *w;
 
   w = target;
   while (w)
     {
-      if (release)
-        gtk_widget_set_active_state (w, FALSE);
-      else
-        gtk_widget_set_active_state (w, TRUE);
-
+      gtk_widget_set_active_state (w, is_active);
       w = _gtk_widget_get_parent (w);
     }
 }
@@ -1353,7 +1349,7 @@ handle_pointing_event (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
       if (type == GDK_TOUCH_END || type == GDK_TOUCH_CANCEL)
-        set_widget_active_state (old_target, TRUE);
+        set_widget_active_state (old_target, FALSE);
       else if (type == GDK_LEAVE_NOTIFY)
         gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, old_target, NULL,
                                         event, gdk_crossing_event_get_mode (event), NULL);
@@ -1408,7 +1404,7 @@ handle_pointing_event (GdkEvent *event)
       else if (type == GDK_TOUCH_BEGIN)
         {
           gtk_window_set_pointer_focus_grab (toplevel, device, sequence, target);
-          set_widget_active_state (target, FALSE);
+          set_widget_active_state (target, TRUE);
         }
 
       /* Let it take the effective pointer focus anyway, as it may change due
@@ -1453,9 +1449,9 @@ handle_pointing_event (GdkEvent *event)
         }
 
       if (type == GDK_BUTTON_PRESS)
-        set_widget_active_state (target, FALSE);
-      else if (has_implicit)
         set_widget_active_state (target, TRUE);
+      else if (has_implicit)
+        set_widget_active_state (target, FALSE);
 
       break;
     case GDK_SCROLL:
@@ -1468,7 +1464,7 @@ handle_pointing_event (GdkEvent *event)
           target = gtk_window_lookup_effective_pointer_focus_widget (toplevel,
                                                                      device,
                                                                      sequence);
-          set_widget_active_state (target, TRUE);
+          set_widget_active_state (target, FALSE);
         }
       break;
     default:
