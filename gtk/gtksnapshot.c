@@ -520,6 +520,9 @@ gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
   if (radius == 0.0)
     return node;
 
+  if (radius < 0)
+    return node;
+
   blur_node = gsk_blur_node_new (node, radius);
 
   gsk_render_node_unref (node);
@@ -530,7 +533,7 @@ gtk_snapshot_collect_blur (GtkSnapshot      *snapshot,
 /**
  * gtk_snapshot_push_blur:
  * @snapshot: a `GtkSnapshot`
- * @radius: the blur radius to use
+ * @radius: the blur radius to use. Must be positive
  *
  * Blurs an image.
  *
