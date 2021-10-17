@@ -774,10 +774,6 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
           /* A GL texture from the same GL context is a simple task... */
           return gdk_gl_texture_get_id (gl_texture);
         }
-      else
-        {
-          downloaded_texture = gdk_memory_texture_from_texture (texture, gdk_texture_get_format (texture));
-        }
     }
   else
     {
@@ -786,9 +782,11 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
           if (t->min_filter == min_filter && t->mag_filter == mag_filter)
             return t->texture_id;
         }
-
-      downloaded_texture = gdk_memory_texture_from_texture (texture, gdk_texture_get_format (texture));
     }
+
+  downloaded_texture = gdk_memory_texture_from_texture (texture,
+                                                        gdk_texture_get_format (texture),
+                                                        gdk_texture_get_color_space (texture));
 
   /* The download_texture() call may have switched the GL context. Make sure
    * the right context is at work again. */
@@ -1251,7 +1249,8 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   n_slices = cols * rows;
   slices = g_new0 (GskGLTextureSlice, n_slices);
   memtex = gdk_memory_texture_from_texture (texture,
-                                            gdk_texture_get_format (texture));
+                                            gdk_texture_get_format (texture),
+                                            gdk_texture_get_color_space (texture));
 
   for (guint col = 0; col < cols; col ++)
     {

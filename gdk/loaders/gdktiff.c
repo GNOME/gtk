@@ -19,6 +19,7 @@
 
 #include "gdktiffprivate.h"
 
+#include "gdkcolorspace.h"
 #include "gdkintl.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
@@ -292,7 +293,9 @@ gdk_save_tiff (GdkTexture *texture)
   TIFFSetField (tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
   TIFFSetField (tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 
-  memtex = gdk_memory_texture_from_texture (texture, fdata->format);
+  memtex = gdk_memory_texture_from_texture (texture,
+                                            fdata->format,
+                                            gdk_color_space_get_srgb ());
   data = gdk_memory_texture_get_data (memtex);
   stride = gdk_memory_texture_get_stride (memtex);
 

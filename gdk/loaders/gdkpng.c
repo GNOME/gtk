@@ -19,13 +19,13 @@
 
 #include "gdkpngprivate.h"
 
+#include "gdkcolorspace.h"
 #include "gdkintl.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexture.h"
 #include "gdktextureprivate.h"
-#include "gsk/gl/fp16private.h"
 #include <png.h>
 #include <stdio.h>
 
@@ -385,7 +385,7 @@ gdk_save_png (GdkTexture *texture)
       return NULL;
     }
 
-  memtex = gdk_memory_texture_from_texture (texture, format);
+  memtex = gdk_memory_texture_from_texture (texture, format, gdk_color_space_get_srgb ());
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
