@@ -115,6 +115,7 @@ typedef struct _Download Download;
 struct _Download
 {
   GdkMemoryFormat format;
+  GdkColorSpace *color_space;
   guchar *data;
   gsize stride;
 };
@@ -157,6 +158,7 @@ gdk_gl_texture_do_download (gpointer texture_,
   expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
 
   if (download->stride == expected_stride &&
+      download->color_space == texture->color_space &&
       !gdk_gl_context_get_use_es (self->context) && 
       gdk_memory_format_gl_format (download->format, TRUE, &gl_internal_format, &gl_format, &gl_type))
     {
@@ -181,6 +183,7 @@ gdk_gl_texture_do_download (gpointer texture_,
         actual_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED; /* pray */
 
       if (download->format == actual_format &&
+          download->color_space == texture->color_space &&
           (download->stride == expected_stride))
         {
           glReadPixels (0, 0,
@@ -203,7 +206,7 @@ gdk_gl_texture_do_download (gpointer texture_,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
-                              gdk_color_space_get_srgb (),
+                              download->color_space,
                               pixels,
                               texture->width * actual_bpp,
                               actual_format,
@@ -221,6 +224,7 @@ gdk_gl_texture_do_download (gpointer texture_,
 static void
 gdk_gl_texture_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
+                         GdkColorSpace   *color_space,
                          guchar          *data,
                          gsize            stride)
 {
@@ -229,11 +233,12 @@ gdk_gl_texture_download (GdkTexture      *texture,
 
   if (self->saved)
     {
-      gdk_texture_do_download (self->saved, format, data, stride);
+      gdk_texture_do_download (self->saved, format, color_space, data, stride);
       return;
     }
 
   download.format = format;
+  download.color_space = color_space;
   download.data = data;
   download.stride = stride;
 
