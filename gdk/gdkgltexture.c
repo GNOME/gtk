@@ -155,8 +155,9 @@ gdk_gl_texture_do_download (gpointer texture_,
 
   expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
 
-  if (download->stride != expected_stride &&
-      !gdk_memory_format_gl_format (download->format, gdk_gl_context_get_use_es (self->context), &gl_internal_format, &gl_format, &gl_type))
+  if (download->stride == expected_stride &&
+      !gdk_gl_context_get_use_es (self->context) && 
+      gdk_memory_format_gl_format (download->format, TRUE, &gl_internal_format, &gl_format, &gl_type))
     {
       glGetTexImage (GL_TEXTURE_2D,
                      0,
