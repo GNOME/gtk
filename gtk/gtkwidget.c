@@ -3841,29 +3841,42 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
   if (priv->halign == GTK_ALIGN_FILL && priv->valign == GTK_ALIGN_FILL)
     return;
 
+  /* Note that adjust_for_align removes any margins from the
+   * allocated sizes and possibly limits them to the natural sizes */
+
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     {
-      /* Go ahead and request the height for allocated width, note that the internals
-       * of get_height_for_width will internally limit the for_size to natural size
-       * when aligning implicitly.
-       */
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
-                          &min_width, &natural_width, NULL, NULL);
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
-                          allocation->width + priv->margin.left + priv->margin.right,
-                          &min_height, &natural_height, NULL, NULL);
-    }
-  else
-    {
-      /* Go ahead and request the width for allocated height, note that the internals
-       * of get_width_for_height will internally limit the for_size to natural size
-       * when aligning implicitly.
-       */
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
-                          &min_height, &natural_height, NULL, NULL);
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
                           allocation->height + priv->margin.top + priv->margin.bottom,
                           &min_width, &natural_width, NULL, NULL);
+      adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
+                        natural_width - priv->margin.left - priv->margin.right,
+                        &allocation->x,
+                        &allocation->width);
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+                          allocation->width,
+                          &min_height, &natural_height, NULL, NULL);
+      adjust_for_align (priv->valign,
+                        natural_height - priv->margin.top - priv->margin.bottom,
+                        &allocation->y,
+                        &allocation->height);
+    }
+  else
+    {
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+                          allocation->width + priv->margin.left + priv->margin.right,
+                          &min_height, &natural_height, NULL, NULL);
+      adjust_for_align (priv->valign,
+                        natural_height - priv->margin.top - priv->margin.bottom,
+                        &allocation->y,
+                        &allocation->height);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+                          allocation->height,
+                          &min_width, &natural_width, NULL, NULL);
+      adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
+                        natural_width - priv->margin.left - priv->margin.right,
+                        &allocation->x,
+                        &allocation->width);
     }
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
@@ -3877,16 +3890,6 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                allocation->width, allocation->height,
                min_width, min_height);
 #endif
-  /* Now that we have the right natural height and width, go ahead and remove any margins from the
-   * allocated sizes and possibly limit them to the natural sizes */
-  adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
-                    natural_width - priv->margin.left - priv->margin.right,
-                    &allocation->x,
-                    &allocation->width);
-  adjust_for_align (priv->valign,
-                    natural_height - priv->margin.top - priv->margin.bottom,
-                    &allocation->y,
-                    &allocation->height);
 }
 
 /**
