@@ -1083,7 +1083,7 @@ gtk_css_parser_consume_any (GtkCssParser            *parser,
   g_return_val_if_fail (n_options < sizeof (gsize) * 8 - 1, 0);
 
   result = 0;
-  while (result != (1 << n_options) - 1)
+  while (result != (1u << n_options) - 1u)
     {
       for (i = 0; i < n_options; i++)
         {

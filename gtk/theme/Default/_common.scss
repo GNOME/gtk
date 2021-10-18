@@ -3443,6 +3443,7 @@ expander-widget {
 calendar {
   color: $text_color;
   border: 1px solid $borders_color;
+  font-feature-settings: "tnum";
 
   > header {
     border-bottom: 1px solid $borders_color;

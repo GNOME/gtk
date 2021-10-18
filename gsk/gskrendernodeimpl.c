@@ -4858,7 +4858,7 @@ gsk_blur_node_diff (GskRenderNode  *node1,
 /**
  * gsk_blur_node_new:
  * @child: the child node to blur
- * @radius: the blur radius
+ * @radius: the blur radius. Must be positive
  *
  * Creates a render node that blurs the child.
  *
@@ -4873,6 +4873,7 @@ gsk_blur_node_new (GskRenderNode *child,
   float clip_radius;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+  g_return_val_if_fail (radius >= 0, NULL);
 
   self = gsk_render_node_alloc (GSK_BLUR_NODE);
   node = (GskRenderNode *) self;
