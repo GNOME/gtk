@@ -618,7 +618,7 @@ enum_monitor (HMONITOR hmonitor,
           GdkWin32Monitor *w32mon;
           GdkMonitor *mon;
           GdkRectangle rect;
-          guint scale;
+          int scale;
 
           memset (&dd_monitor, 0, sizeof (dd_monitor));
           dd_monitor.cb = sizeof (dd_monitor);
@@ -888,13 +888,15 @@ _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
     {
       GdkWin32Monitor *m;
       GdkRectangle rect;
+      int scale;
 
       m = g_ptr_array_index (data.monitors, i);
+      gdk_monitor_get_geometry (GDK_MONITOR (m), &rect);
+      scale = gdk_monitor_get_scale_factor (GDK_MONITOR (m));
 
       /* Calculate offset */
-      gdk_monitor_get_geometry (GDK_MONITOR (m), &rect);
-      _gdk_offset_x = MAX (_gdk_offset_x, -rect.x);
-      _gdk_offset_y = MAX (_gdk_offset_y, -rect.y);
+      _gdk_offset_x = MAX (_gdk_offset_x, -rect.x * scale);
+      _gdk_offset_y = MAX (_gdk_offset_y, -rect.y * scale);
     }
 
   GDK_NOTE (MISC, g_print ("Multi-monitor offset: (%d,%d)\n",
@@ -905,16 +907,19 @@ _gdk_win32_display_get_monitor_list (GdkWin32Display *win32_display)
     {
       GdkWin32Monitor *m;
       GdkRectangle rect;
+      int scale = 0;
 
       m = g_ptr_array_index (data.monitors, i);
 
       gdk_monitor_get_geometry (GDK_MONITOR (m), &rect);
-      rect.x += _gdk_offset_x;
-      rect.y += _gdk_offset_y;
+      scale = gdk_monitor_get_scale_factor (GDK_MONITOR (m));
+
+      rect.x += _gdk_offset_x / scale;
+      rect.y += _gdk_offset_y / scale;
       gdk_monitor_set_position (GDK_MONITOR (m), rect.x, rect.y);
 
-      m->work_rect.x += _gdk_offset_x;
-      m->work_rect.y += _gdk_offset_y;
+      m->work_rect.x += _gdk_offset_x / scale;
+      m->work_rect.y += _gdk_offset_y / scale;
 
       GDK_NOTE (MISC, g_print ("Monitor %d: %dx%d@%+d%+d\n", i,
                                rect.width, rect.height, rect.x, rect.y));

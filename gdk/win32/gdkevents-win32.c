@@ -1628,8 +1628,8 @@ _gdk_win32_get_window_rect (GdkWindow *window,
   if (gdk_window_get_parent (window) == gdk_get_default_root_window ())
     {
       ClientToScreen (hwnd, &point);
-      point.x += _gdk_offset_x * window_impl->window_scale;
-      point.y += _gdk_offset_y * window_impl->window_scale;
+      point.x += _gdk_offset_x;
+      point.y += _gdk_offset_y;
     }
 
   rect->left = point.x;

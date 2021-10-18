@@ -588,8 +588,8 @@ idroptarget_dragenter (LPDROPTARGET This,
 
   ctx->context->suggested_action = get_suggested_action (grfKeyState);
   set_data_object (&sel_win32->dnd_data_object_target, pDataObj);
-  pt_x = pt.x / context_win32->scale + _gdk_offset_x;
-  pt_y = pt.y / context_win32->scale + _gdk_offset_y;
+  pt_x = (pt.x + _gdk_offset_x) / context_win32->scale;
+  pt_y = (pt.y + _gdk_offset_y) / context_win32->scale;
   dnd_event_put (GDK_DRAG_ENTER, ctx->context, pt_x, pt_y, TRUE);
   dnd_event_put (GDK_DRAG_MOTION, ctx->context, pt_x, pt_y, TRUE);
   context_win32->last_key_state = grfKeyState;
@@ -611,8 +611,8 @@ idroptarget_dragover (LPDROPTARGET This,
 {
   target_drag_context *ctx = (target_drag_context *) This;
   GdkWin32DragContext *context_win32 = GDK_WIN32_DRAG_CONTEXT (ctx->context);
-  gint pt_x = pt.x / context_win32->scale + _gdk_offset_x;
-  gint pt_y = pt.y / context_win32->scale + _gdk_offset_y;
+  gint pt_x = (pt.x + _gdk_offset_x) / context_win32->scale;
+  gint pt_y = (pt.y + _gdk_offset_y) / context_win32->scale;
 
   ctx->context->suggested_action = get_suggested_action (grfKeyState);
 
@@ -664,8 +664,8 @@ idroptarget_drop (LPDROPTARGET This,
 {
   target_drag_context *ctx = (target_drag_context *) This;
   GdkWin32DragContext *context_win32 = GDK_WIN32_DRAG_CONTEXT (ctx->context);
-  gint pt_x = pt.x / context_win32->scale + _gdk_offset_x;
-  gint pt_y = pt.y / context_win32->scale + _gdk_offset_y;
+  gint pt_x = (pt.x + _gdk_offset_x) / context_win32->scale;
+  gint pt_y = (pt.y + _gdk_offset_y) / context_win32->scale;
   GdkWin32Selection *sel_win32 = _gdk_win32_selection_get ();
 
   GDK_NOTE (DND, g_print ("idroptarget_drop %p ", This));
@@ -789,8 +789,8 @@ send_change_events (GdkDragContext *context,
   if (!API_CALL (ScreenToClient, (hwnd, &pt_client)))
     return FALSE;
 
-  pt_x = pt.x / context_win32->scale + _gdk_offset_x;
-  pt_y = pt.y / context_win32->scale + _gdk_offset_y;
+  pt_x = (pt.x + _gdk_offset_x) / context_win32->scale;
+  pt_y = (pt.y + _gdk_offset_y) / context_win32->scale;
 
   if (pt_x != context_win32->last_x || pt_y != context_win32->last_y ||
       key_state != context_win32->last_key_state)
@@ -909,8 +909,8 @@ idropsource_givefeedback (LPDROPSOURCE This,
   else if (ctx->context->dest_window == NULL)
     ctx->context->dest_window = g_object_ref (gdk_get_default_root_window ());
 
-  context_win32->last_x = pt.x / context_win32->scale + _gdk_offset_x;
-  context_win32->last_y = pt.y / context_win32->scale + _gdk_offset_y;
+  context_win32->last_x = (pt.x + _gdk_offset_x) / context_win32->scale;
+  context_win32->last_y = (pt.y + _gdk_offset_y) / context_win32->scale;
 
   e = gdk_event_new (GDK_DRAG_STATUS);
 
@@ -1708,8 +1708,8 @@ gdk_dropfiles_filter (GdkXEvent *xev,
       DragQueryPoint (hdrop, &pt);
       ClientToScreen (msg->hwnd, &pt);
 
-      event->dnd.x_root = pt.x / context_win32->scale + _gdk_offset_x;
-      event->dnd.y_root = pt.y / context_win32->scale + _gdk_offset_y;
+      event->dnd.x_root = (pt.x + _gdk_offset_x) / context_win32->scale;
+      event->dnd.y_root = (pt.y + _gdk_offset_y) / context_win32->scale;
       event->dnd.time = _gdk_win32_get_next_tick (msg->time);
 
       nfiles = DragQueryFile (hdrop, 0xFFFFFFFF, NULL, 0);

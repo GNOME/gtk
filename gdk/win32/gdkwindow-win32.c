@@ -303,10 +303,10 @@ gdk_win32_window_get_queued_window_rect (GdkWindow *window,
   _gdk_win32_adjust_client_rect (window, &window_rect);
 
   /* Convert GDK screen coordinates to W32 desktop coordinates */
-  window_rect.left -= _gdk_offset_x * impl->window_scale;
-  window_rect.right -= _gdk_offset_x * impl->window_scale;
-  window_rect.top -= _gdk_offset_y * impl->window_scale;
-  window_rect.bottom -= _gdk_offset_y * impl->window_scale;
+  window_rect.left -= _gdk_offset_x;
+  window_rect.right -= _gdk_offset_x;
+  window_rect.top -= _gdk_offset_y;
+  window_rect.bottom -= _gdk_offset_y;
 
   *return_window_rect = window_rect;
 }
@@ -841,8 +841,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
       AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
 
-      real_x = (window->x - offset_x) * impl->window_scale;
-      real_y = (window->y - offset_y) * impl->window_scale;
+      real_x = window->x * impl->window_scale - offset_x;
+      real_y = window->y * impl->window_scale - offset_y;
 
       if (window->window_type == GDK_WINDOW_TOPLEVEL)
 	{
@@ -866,8 +866,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
       window_width = impl->unscaled_width;
       window_height = impl->unscaled_height;
       /* use given position for initial placement, native coordinates */
-      x = (window->x + window->parent->abs_x - offset_x) * impl->window_scale;
-      y = (window->y + window->parent->abs_y - offset_y) * impl->window_scale;
+      x = (window->x + window->parent->abs_x) * impl->window_scale;
+      y = (window->y + window->parent->abs_y) * impl->window_scale;
     }
 
   if (attributes_mask & GDK_WA_TITLE)
@@ -952,8 +952,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   GDK_NOTE (MISC, g_print ("... \"%s\" %dx%d@%+d%+d %p = %p\n",
 			   title,
 			   window_width, window_height,
-			   window->x - offset_x,
-			   window->y - offset_y,
+                           window->x,
+                           window->y,
 			   hparent,
 			   GDK_WINDOW_HWND (window)));
 
@@ -1338,8 +1338,8 @@ show_window_internal (GdkWindow *window,
 	{
 	  GdkWindow *owner = window_impl->transient_owner;
 	  /* Center on transient parent */
-	  center_on_rect.left = (owner->x - _gdk_offset_x) * window_impl->window_scale;
-	  center_on_rect.top = (owner->y - _gdk_offset_y) * window_impl->window_scale;
+	  center_on_rect.left = owner->x * window_impl->window_scale - _gdk_offset_x;
+	  center_on_rect.top = owner->y * window_impl->window_scale - _gdk_offset_y;
 	  center_on_rect.right = center_on_rect.left + owner->width * window_impl->window_scale;
 	  center_on_rect.bottom = center_on_rect.top + owner->height * window_impl->window_scale;
 
@@ -1552,13 +1552,13 @@ gdk_win32_window_move (GdkWindow *window,
       GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,0,0,"
                                "NOACTIVATE|NOSIZE|NOZORDER)\n",
                                GDK_WINDOW_HWND (window),
-                               (x - _gdk_offset_x) * impl->window_scale,
-                               (y - _gdk_offset_y) * impl->window_scale));
+                               x * impl->window_scale - _gdk_offset_x,
+                               y * impl->window_scale - _gdk_offset_y));
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       SWP_NOZORDER_SPECIFIED,
-                               (x - _gdk_offset_x) * impl->window_scale,
-                               (y - _gdk_offset_y) * impl->window_scale,
+                               x * impl->window_scale - _gdk_offset_x,
+                               y * impl->window_scale - _gdk_offset_y,
                                0, 0,
                                SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
     }
@@ -1651,15 +1651,15 @@ gdk_win32_window_move_resize_internal (GdkWindow *window,
       GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%ld,%ld,"
                                "NOACTIVATE|NOZORDER)\n",
                                GDK_WINDOW_HWND (window),
-                               (x - _gdk_offset_x) * impl->window_scale,
-                               (y - _gdk_offset_y) * impl->window_scale,
+                               x * impl->window_scale - _gdk_offset_x,
+                               y * impl->window_scale - _gdk_offset_y,
                                outer_rect.right - outer_rect.left,
                                outer_rect.bottom - outer_rect.top));
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window),
 			       SWP_NOZORDER_SPECIFIED,
-                               (x - _gdk_offset_x) * impl->window_scale,
-                               (y - _gdk_offset_y) * impl->window_scale,
+                               x * impl->window_scale - _gdk_offset_x,
+                               y * impl->window_scale - _gdk_offset_y,
                                outer_rect.right - outer_rect.left,
                                outer_rect.bottom - outer_rect.top,
                                SWP_NOACTIVATE | SWP_NOZORDER));
@@ -2321,10 +2321,10 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 
 	  if (gdk_screen_get_root_window (screen) == parent)
 	    {
-	      rect.left += _gdk_offset_x * impl->window_scale;
-	      rect.top += _gdk_offset_y * impl->window_scale;
-	      rect.right += _gdk_offset_x * impl->window_scale;
-	      rect.bottom += _gdk_offset_y * impl->window_scale;
+              rect.left += _gdk_offset_x;
+              rect.top += _gdk_offset_y;
+              rect.right += _gdk_offset_x;
+              rect.bottom += _gdk_offset_y;
 	    }
 	}
 
@@ -2421,19 +2421,19 @@ gdk_win32_window_get_frame_extents (GdkWindow    *window,
   hwnd = GDK_WINDOW_HWND (window);
   API_CALL (GetWindowRect, (hwnd, &r));
 
-  /* Initialize to real, unscaled size */
-  rect->x = r.left + _gdk_offset_x * impl->window_scale;
-  rect->y = r.top + _gdk_offset_y * impl->window_scale;
+  /* Initialize GdkRectangle to unscaled coordinates */
+  rect->x = r.left + _gdk_offset_x;
+  rect->y = r.top + _gdk_offset_y;
   rect->width = (r.right - r.left);
   rect->height = (r.bottom - r.top);
 
   /* Extend width and height to ensure that they cover the real size when de-scaled,
-   * and replace everyting with scaled values
+   * and replace everything with scaled values
    */
   rect->width = (rect->width + rect->x % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
   rect->height = (rect->height + rect->y % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
-  rect->x = r.left / impl->window_scale + _gdk_offset_x;
-  rect->y = r.top / impl->window_scale + _gdk_offset_y;
+  rect->x = r.left / impl->window_scale;
+  rect->y = r.top / impl->window_scale;
 
   GDK_NOTE (MISC, g_print ("gdk_window_get_frame_extents: %p: %ldx%ld@%+ld%+ld\n",
                            GDK_WINDOW_HWND (window),
@@ -3937,8 +3937,8 @@ redraw_indicator (gpointer user_data)
 
   last_draw = draw_indicator (context, context->draw_timestamp);
 
-  window_position.x = (context->indicator_window_rect.x - _gdk_offset_x) * impl->window_scale;
-  window_position.y = (context->indicator_window_rect.y - _gdk_offset_y) * impl->window_scale;
+  window_position.x = context->indicator_window_rect.x * impl->window_scale - _gdk_offset_x;
+  window_position.y = context->indicator_window_rect.y * impl->window_scale - _gdk_offset_y;
   window_size.cx = context->indicator_window_rect.width * impl->window_scale;
   window_size.cy = context->indicator_window_rect.height * impl->window_scale;
 
@@ -4595,8 +4595,8 @@ setup_drag_move_resize_context (GdkWindow                   *window,
           GDK_NOTE (MISC, g_print ("W32 WM unmaximized window placement is %ld x %ld @ %ld : %ld\n",
                                    placement.rcNormalPosition.right - placement.rcNormalPosition.left,
                                    placement.rcNormalPosition.bottom - placement.rcNormalPosition.top,
-                                   placement.rcNormalPosition.left + _gdk_offset_x * impl->window_scale,
-                                   placement.rcNormalPosition.top + _gdk_offset_y * impl->window_scale));
+                                   placement.rcNormalPosition.left + _gdk_offset_x,
+                                   placement.rcNormalPosition.top + _gdk_offset_y));
 
           unmax_width = placement.rcNormalPosition.right - placement.rcNormalPosition.left;
           unmax_height = placement.rcNormalPosition.bottom - placement.rcNormalPosition.top;
@@ -4607,17 +4607,17 @@ setup_drag_move_resize_context (GdkWindow                   *window,
           if (offsetx * impl->window_scale < (shadow_unmax_width / 2) &&
               offsety * impl->window_scale < (shadow_unmax_height / 2))
             {
-              placement.rcNormalPosition.top = (root_y - offsety + impl->margins.top - _gdk_offset_y) * impl->window_scale;
+              placement.rcNormalPosition.top = (root_y - offsety + impl->margins.top) * impl->window_scale - _gdk_offset_y;
               placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + unmax_height;
 
               if (left_half)
                 {
-                  placement.rcNormalPosition.left = (root_x - offsetx + impl->margins.left - _gdk_offset_x) * impl->window_scale;
+                  placement.rcNormalPosition.left = (root_x - offsetx + impl->margins.left) * impl->window_scale - _gdk_offset_x;
                   placement.rcNormalPosition.right = placement.rcNormalPosition.left + unmax_width;
                 }
               else
                 {
-                  placement.rcNormalPosition.right = (root_x + offsetx + impl->margins.right - _gdk_offset_x) * impl->window_scale;
+                  placement.rcNormalPosition.right = (root_x + offsetx + impl->margins.right) * impl->window_scale - _gdk_offset_x;
                   placement.rcNormalPosition.left = placement.rcNormalPosition.right - unmax_width;
                 }
             }
@@ -4625,22 +4625,22 @@ setup_drag_move_resize_context (GdkWindow                   *window,
             {
               placement.rcNormalPosition.left = (root_x * impl->window_scale) -
                                                 (unmax_width / 2) -
-                                                (_gdk_offset_x * impl->window_scale);
+                                                _gdk_offset_x;
 
               if (offsety * impl->window_scale < shadow_unmax_height / 2)
-                placement.rcNormalPosition.top = (root_y - offsety + impl->margins.top - _gdk_offset_y) * impl->window_scale;
+                placement.rcNormalPosition.top = (root_y - offsety + impl->margins.top) * impl->window_scale - _gdk_offset_y;
               else
                 placement.rcNormalPosition.top = (root_y * impl->window_scale) -
                                                  (unmax_height / 2) -
-                                                 (_gdk_offset_y * impl->window_scale);
+                                                 _gdk_offset_y;
 
               placement.rcNormalPosition.right = placement.rcNormalPosition.left + unmax_width;
               placement.rcNormalPosition.bottom = placement.rcNormalPosition.top + unmax_height;
             }
 
           GDK_NOTE (MISC, g_print ("Unmaximized window will be at %ld : %ld\n",
-                                   placement.rcNormalPosition.left + _gdk_offset_x * impl->window_scale,
-                                   placement.rcNormalPosition.top + _gdk_offset_y * impl->window_scale));
+                                   placement.rcNormalPosition.left + _gdk_offset_x,
+                                   placement.rcNormalPosition.top + _gdk_offset_y));
 
           API_CALL (SetWindowPlacement, (GDK_WINDOW_HWND (window), &placement));
         }
@@ -4823,10 +4823,10 @@ gdk_win32_get_window_size_and_position_from_client_rect (GdkWindow *window,
   _gdk_win32_adjust_client_rect (window, window_rect);
 
   /* Convert GDK screen coordinates to W32 desktop coordinates */
-  window_rect->left -= _gdk_offset_x * impl->window_scale;
-  window_rect->right -= _gdk_offset_x * impl->window_scale;
-  window_rect->top -= _gdk_offset_y * impl->window_scale;
-  window_rect->bottom -= _gdk_offset_y * impl->window_scale;
+  window_rect->left -= _gdk_offset_x;
+  window_rect->right -= _gdk_offset_x;
+  window_rect->top -= _gdk_offset_y;
+  window_rect->bottom -= _gdk_offset_y;
 
   window_position->x = window_rect->left;
   window_position->y = window_rect->top;
@@ -5798,13 +5798,13 @@ gdk_win32_window_show_window_menu (GdkWindow *window,
     }
 
   gdk_event_get_root_coords (event, &event_x, &event_y);
-  x = event_x - _gdk_offset_x;
-  y = event_y - _gdk_offset_y;
+  x = event_x * impl->window_scale - _gdk_offset_x;
+  y = event_y * impl->window_scale - _gdk_offset_y;
 
   SendMessage (GDK_WINDOW_HWND (window),
                WM_SYSMENU,
                0,
-               MAKELPARAM (x * impl->window_scale, y * impl->window_scale));
+               MAKELPARAM (x, y));
 
   return TRUE;
 }

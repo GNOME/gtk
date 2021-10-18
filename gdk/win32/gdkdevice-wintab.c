@@ -131,26 +131,28 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   _gdk_win32_get_cursor_pos (&point);
 
   if (root_x)
-    *root_x = point.x / impl->window_scale;
+    *root_x = (point.x + _gdk_offset_x) / impl->window_scale;
 
   if (root_y)
-    *root_y = point.y / impl->window_scale;
+    *root_y = (point.y + _gdk_offset_y) / impl->window_scale;
 
-  ScreenToClient (hwnd, &point);
-
-  if (win_x)
-    *win_x = point.x / impl->window_scale;
-
-  if (win_y)
-    *win_y = point.y / impl->window_scale;
-
-  if (window == gdk_get_default_root_window ())
+  if (window == gdk_screen_get_root_window (screen))
     {
       if (win_x)
-        *win_x += _gdk_offset_x;
+        *win_x = (point.x + _gdk_offset_x) / impl->window_scale;
 
       if (win_y)
-        *win_y += _gdk_offset_y;
+        *win_y = (point.y + _gdk_offset_y) / impl->window_scale;
+    }
+  else
+    {
+      ScreenToClient (hwnd, &point);
+
+      if (win_x)
+        *win_x = point.x / impl->window_scale;
+
+      if (win_y)
+        *win_y = point.y / impl->window_scale;
     }
 
   if (child_window)
