@@ -314,6 +314,8 @@ testdata = [
   'label-fonts.css',
   'label-fonts.ref.ui',
   'label-fonts.ui',
+  'label-max-width-chars-and-halign-and-infinite-width.ui',
+  'label-max-width-chars-and-halign-and-infinite-width.ref.ui',
   'label-shadows.css',
   'label-shadows.ref.ui',
   'label-shadows.ui',
