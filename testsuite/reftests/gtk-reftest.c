@@ -293,6 +293,36 @@ save_image (GdkTexture *texture,
 }
 
 static void
+save_node (GskRenderNode *node,
+           const char    *test_name,
+           const char    *extension)
+{
+  GError *error = NULL;
+  char *filename;
+  gboolean ret;
+  GBytes *bytes;
+  
+  filename = get_output_file (test_name, extension, &error);
+  if (filename == NULL)
+    {
+      g_test_message ("Not storing test result node: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  g_test_message ("Storing test result node at %s", filename);
+  bytes = gsk_render_node_serialize (node);
+  ret = g_file_set_contents (filename,
+                             g_bytes_get_data (bytes, NULL),
+                             g_bytes_get_size (bytes),
+                             NULL);
+  g_assert_true (ret);
+
+  g_bytes_unref (bytes);
+  g_free (filename);
+}
+
+static void
 test_ui_file (GFile *file)
 {
   char *ui_file, *reference_file;
@@ -335,6 +365,8 @@ test_ui_file (GFile *file)
   save_image (reference_image, ui_file, ".ref.png");
   if (diff_image)
     {
+      save_node (g_object_get_data (G_OBJECT (ui_image), "source-render-node"), ui_file, ".out.node");
+      save_node (g_object_get_data (G_OBJECT (reference_image), "source-render-node"), ui_file, ".ref.node");
       save_image (diff_image, ui_file, ".diff.png");
       g_object_unref (diff_image);
       g_test_fail ();
