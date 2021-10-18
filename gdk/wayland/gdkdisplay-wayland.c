@@ -697,11 +697,7 @@ gdk_wayland_display_finalize (GObject *object)
   g_free (display_wayland->cursor_theme_name);
   xkb_context_unref (display_wayland->xkb_context);
 
-  if (display_wayland->cursor_theme)
-    {
-      wl_cursor_theme_destroy (display_wayland->cursor_theme);
-      display_wayland->cursor_theme = NULL;
-    }
+  g_clear_pointer (&display_wayland->cursor_theme, wl_cursor_theme_destroy);
 
   g_list_store_remove_all (display_wayland->monitors);
   g_object_unref (display_wayland->monitors);
