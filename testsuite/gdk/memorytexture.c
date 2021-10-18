@@ -526,7 +526,8 @@ create_texture (GdkMemoryFormat  format,
 
     case TEXTURE_METHOD_GL_RELEASED:
       texture = upload_to_gl (texture);
-      gdk_gl_texture_release (GDK_GL_TEXTURE (texture));
+      if (GDK_IS_GL_TEXTURE (texture))
+        gdk_gl_texture_release (GDK_GL_TEXTURE (texture));
       break;
 
     case TEXTURE_METHOD_PNG:

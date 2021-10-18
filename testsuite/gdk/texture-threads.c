@@ -70,11 +70,20 @@ texture_threads (void)
   GMainLoop *loop;
   GdkTexture *texture;
   GTask *task;
+  GError *error = NULL;
 
   /* 1. Get a GL renderer */
   surface = gdk_surface_new_toplevel (gdk_display_get_default());
   gl_renderer = gsk_gl_renderer_new ();
-  g_assert_true (gsk_renderer_realize (gl_renderer, surface, NULL));
+  if (!gsk_renderer_realize (gl_renderer, surface, &error))
+    {
+      g_test_skip (error->message);
+
+      g_clear_error (&error);
+      g_clear_object (&gl_renderer);
+      g_clear_object (&surface);
+      return;
+    }
 
   /* 2. Get a GL texture */
   node = gsk_color_node_new (&(GdkRGBA) { 1, 0, 0, 1 }, &GRAPHENE_RECT_INIT(0, 0, 1, 1));

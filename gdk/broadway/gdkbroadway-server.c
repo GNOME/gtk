@@ -609,56 +609,39 @@ open_shared_memory (void)
   return ret;
 }
 
-typedef struct {
-  int fd;
-  gsize size;
-} PngData;
-
-static cairo_status_t
-write_png_cb (void         *closure,
-              const guchar *data,
-              unsigned int  length)
-{
-  PngData *png_data = closure;
-  int fd = png_data->fd;
-
-  while (length)
-    {
-      gssize ret = write (fd, data, length);
-
-      if (ret <= 0)
-        return CAIRO_STATUS_WRITE_ERROR;
-
-      png_data->size += ret;
-      length -= ret;
-      data += ret;
-    }
-
-  return CAIRO_STATUS_SUCCESS;
-}
-
 guint32
 gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
                                     GdkTexture        *texture)
 {
   guint32 id;
-  cairo_surface_t *surface = gdk_texture_download_surface (texture);
   BroadwayRequestUploadTexture msg;
-  PngData data;
+  GBytes *bytes;
+  const guchar *data;
+  gsize size;
+  int fd;
 
   id = server->next_texture_id++;
 
-  data.fd = open_shared_memory ();
-  data.size = 0;
-  cairo_surface_write_to_png_stream (surface, write_png_cb, &data);
+  bytes = gdk_texture_save_to_png_bytes (texture);
+  fd = open_shared_memory ();
+  data = g_bytes_get_data (bytes, &size);
 
-  msg.id = id;
-  msg.offset = 0;
-  msg.size = data.size;
+  while (size)
+    {
+      gssize ret = write (fd, data, size);
+
+      if (ret <= 0)
+        break;
+
+      size -= ret;
+      data += ret;
+    }
+
+  g_bytes_unref (bytes);
 
   /* This passes ownership of fd */
   gdk_broadway_server_send_fd_message (server, msg,
-                                       BROADWAY_REQUEST_UPLOAD_TEXTURE, data.fd);
+                                       BROADWAY_REQUEST_UPLOAD_TEXTURE, fd);
 
   return id;
 }

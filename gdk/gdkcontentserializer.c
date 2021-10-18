@@ -641,11 +641,7 @@ pixbuf_serializer (GdkContentSerializer *serializer)
   else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
     {
       GdkTexture *texture = g_value_get_object (value);
-      cairo_surface_t *surface = gdk_texture_download_surface (texture);
-      pixbuf = gdk_pixbuf_get_from_surface (surface,
-                                            0, 0,
-                                            gdk_texture_get_width (texture), gdk_texture_get_height (texture));
-      cairo_surface_destroy (surface);
+      pixbuf = gdk_pixbuf_get_from_texture (texture);
     }
   else
     {

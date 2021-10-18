@@ -75,38 +75,6 @@ output_message_handler (j_common_ptr cinfo)
 /* {{{ Format conversion */
 
 static void
-convert_rgba_to_rgb (guchar *data,
-                     int     width,
-                     int     height,
-                     int     stride)
-{
-  gsize x, y;
-  guchar *src, *dest;
-
-  for (y = 0; y < height; y++)
-    {
-      src = data;
-      dest = data;
-
-      for (x = 0; x < width; x++)
-        {
-          guint32 pixel;
-
-          memcpy (&pixel, src, sizeof (guint32));
-
-          dest[0] = (pixel & 0x00ff0000) >> 16;
-          dest[1] = (pixel & 0x0000ff00) >>  8;
-          dest[2] = (pixel & 0x000000ff) >>  0;
-
-          dest += 3;
-          src += 4;
-        }
-
-      data += stride;
-    }
-}
-
-static void
 convert_grayscale_to_rgb (guchar *data,
                           int     width,
                           int     height,
@@ -274,11 +242,14 @@ gdk_save_jpeg (GdkTexture *texture)
   struct jpeg_compress_struct info;
   struct error_handler_data jerr;
   struct jpeg_error_mgr err;
-  guchar *data = NULL;
+  guchar *data;
   gulong size = 0;
   guchar *input = NULL;
+  GdkMemoryTexture *memtex = NULL;
+  const guchar *texdata;
+  gsize texstride;
   guchar *row;
-  int width, height, stride;
+  int width, height;
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
@@ -293,6 +264,7 @@ gdk_save_jpeg (GdkTexture *texture)
       free (data);
       g_free (input);
       jpeg_destroy_compress (&info);
+      g_clear_object (&memtex);
       return NULL;
     }
 
@@ -308,21 +280,22 @@ gdk_save_jpeg (GdkTexture *texture)
 
   jpeg_mem_dest (&info, &data, &size);
 
-  stride = width * 4;
-  input = g_malloc (stride * height);
-  gdk_texture_download (texture, input, stride);
-  convert_rgba_to_rgb (data, width, height, stride);
+  memtex = gdk_memory_texture_from_texture (texture,
+                                            GDK_MEMORY_R8G8B8);
+  texdata = gdk_memory_texture_get_data (memtex);
+  texstride = gdk_memory_texture_get_stride (memtex);
 
   jpeg_start_compress (&info, TRUE);
 
   while (info.next_scanline < info.image_height)
     {
-      row = &input[info.next_scanline * stride];
+      row = (guchar *) texdata + info.next_scanline * texstride;
       jpeg_write_scanlines (&info, &row, 1);
     }
 
   jpeg_finish_compress (&info);
 
+  g_object_unref (memtex);
   g_free (input);
   jpeg_destroy_compress (&info);
 

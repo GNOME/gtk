@@ -221,119 +221,80 @@ tiff_open_write (GBytes **result)
 }
 
 /* }}} */
-/* {{{ Format conversion */
-
-static void
-flip_02 (guchar *data,
-         int     width,
-         int     height,
-         int     stride)
-{ 
-  gsize x, y;
-  
-  for (y = 0; y < height; y++)
-    {
-      for (x = 0; x < width; x++)
-        {
-          guchar tmp;
-          tmp = data[x * 4];
-          data[x * 4] = data[x * 4 + 2];
-          data[x * 4 + 2] = tmp;
-        }
-      data += stride;
-    }
-}
-
-/* }}} */
 /* {{{ Public API */
 
-static struct {
+typedef struct _FormatData FormatData;
+struct _FormatData {
   GdkMemoryFormat format;
   guint16 bits_per_sample;
   guint16 samples_per_pixel;
   guint16 sample_format;
-} format_data[] = {
-  { GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,            8, 4, SAMPLEFORMAT_UINT   },
-  { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT   },
-  { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT   },
-  { GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,       16, 4, SAMPLEFORMAT_UINT   },
-  { GDK_MEMORY_R16G16B16_FLOAT,                  16, 3, SAMPLEFORMAT_IEEEFP },
-  { GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, 16, 4, SAMPLEFORMAT_IEEEFP },
-  { GDK_MEMORY_R32G32B32_FLOAT,                  32, 3, SAMPLEFORMAT_IEEEFP },
-  { GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, 32, 4, SAMPLEFORMAT_IEEEFP },
+  guint16 alpha_samples;
 };
+
+static const FormatData format_data[] = {
+  [GDK_MEMORY_B8G8R8A8_PREMULTIPLIED]           = { GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,            8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA },
+  [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED]           = { GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,            8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA },
+  [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED]           = { GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,            8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA },
+  [GDK_MEMORY_B8G8R8A8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA },
+  [GDK_MEMORY_A8R8G8B8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA },
+  [GDK_MEMORY_R8G8B8A8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA },
+  [GDK_MEMORY_A8B8G8R8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA },
+  [GDK_MEMORY_R8G8B8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0                      }, 
+  [GDK_MEMORY_B8G8R8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0                      },
+  [GDK_MEMORY_R16G16B16]                        = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   0                      },
+  [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED]       = { GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,       16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA },
+  [GDK_MEMORY_R16G16B16A16]                     = { GDK_MEMORY_R16G16B16A16,                     16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA },
+  [GDK_MEMORY_R16G16B16_FLOAT]                  = { GDK_MEMORY_R16G16B16_FLOAT,                  16, 3, SAMPLEFORMAT_IEEEFP, 0                      },
+  [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = { GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, 16, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA },
+  [GDK_MEMORY_R16G16B16A16_FLOAT]               = { GDK_MEMORY_R16G16B16A16_FLOAT,               16, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_UNASSALPHA },
+  [GDK_MEMORY_R32G32B32_FLOAT]                  = { GDK_MEMORY_R32G32B32_FLOAT,                  32, 3, SAMPLEFORMAT_IEEEFP, 0                      },
+  [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = { GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, 32, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA },
+  [GDK_MEMORY_R32G32B32A32_FLOAT]               = { GDK_MEMORY_R32G32B32A32_FLOAT,               32, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_UNASSALPHA },
+};
+
+/* if this fails, somebody forgot to add formats above */
+G_STATIC_ASSERT (G_N_ELEMENTS (format_data) == GDK_MEMORY_N_FORMATS);
 
 GBytes *
 gdk_save_tiff (GdkTexture *texture)
 {
   TIFF *tif;
   int width, height, stride;
-  guint16 bits_per_sample = 0;
-  guint16 samples_per_pixel = 0;
-  guint16 sample_format = 0;
   const guchar *line;
   const guchar *data;
-  guchar *new_data = NULL;
   GBytes *result = NULL;
-  GdkTexture *memory_texture;
+  GdkMemoryTexture *memtex;
   GdkMemoryFormat format;
+  const FormatData *fdata = NULL;
 
   tif = tiff_open_write (&result);
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
-
   format = gdk_texture_get_format (texture);
-  memory_texture = GDK_TEXTURE (gdk_memory_texture_from_texture (texture, format));
+  fdata = &format_data[format];
 
-  for (int i = 0; i < G_N_ELEMENTS (format_data); i++)
-    {
-      if (format == format_data[i].format)
-        {
-          data = gdk_memory_texture_get_data (GDK_MEMORY_TEXTURE (memory_texture));
-          stride = gdk_memory_texture_get_stride (GDK_MEMORY_TEXTURE (memory_texture));
-          bits_per_sample = format_data[i].bits_per_sample;
-          samples_per_pixel = format_data[i].samples_per_pixel;
-          sample_format = format_data[i].sample_format;
-          break;
-        }
-    }
-
-  if (bits_per_sample == 0)
-    {
-      /* An 8-bit format we don't have in the table, handle
-       * it by converting to R8G8B8A8_PREMULTIPLIED
-       */
-      stride = width * 4;
-      new_data = g_malloc (stride * height);
-      gdk_texture_download (memory_texture, new_data, stride);
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
-      flip_02 (new_data, width, height, stride);
-#endif
-      data = new_data;
-      bits_per_sample = 8;
-      samples_per_pixel = 4;
-      sample_format = SAMPLEFORMAT_UINT;
-    }
+  if (fdata == NULL)
+    fdata = &format_data[0];
 
   TIFFSetField (tif, TIFFTAG_SOFTWARE, "GTK");
   TIFFSetField (tif, TIFFTAG_IMAGEWIDTH, width);
   TIFFSetField (tif, TIFFTAG_IMAGELENGTH, height);
-  TIFFSetField (tif, TIFFTAG_BITSPERSAMPLE, bits_per_sample);
-  TIFFSetField (tif, TIFFTAG_SAMPLESPERPIXEL, samples_per_pixel);
-  TIFFSetField (tif, TIFFTAG_SAMPLEFORMAT, sample_format);
+  TIFFSetField (tif, TIFFTAG_BITSPERSAMPLE, fdata->bits_per_sample);
+  TIFFSetField (tif, TIFFTAG_SAMPLESPERPIXEL, fdata->samples_per_pixel);
+  TIFFSetField (tif, TIFFTAG_SAMPLEFORMAT, fdata->sample_format);
   TIFFSetField (tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
   TIFFSetField (tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  // TODO: save gamma / colorspace
-
-  if (samples_per_pixel > 3)
-    {
-      guint16 extra_samples[] = { EXTRASAMPLE_ASSOCALPHA };
-      TIFFSetField (tif, TIFFTAG_EXTRASAMPLES, 1, extra_samples);
-    }
+  if (fdata->alpha_samples)
+    TIFFSetField (tif, TIFFTAG_EXTRASAMPLES, 1, &fdata->alpha_samples);
 
   TIFFSetField (tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
   TIFFSetField (tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+
+  memtex = gdk_memory_texture_from_texture (texture, fdata->format);
+  data = gdk_memory_texture_get_data (memtex);
+  stride = gdk_memory_texture_get_stride (memtex);
 
   line = (const guchar *)data;
   for (int y = 0; y < height; y++)
@@ -341,8 +302,7 @@ gdk_save_tiff (GdkTexture *texture)
       if (TIFFWriteScanline (tif, (void *)line, y, 0) == -1)
         {
           TIFFClose (tif);
-          g_free (new_data);
-          g_object_unref (memory_texture);
+          g_object_unref (memtex);
           return NULL;
         }
 
@@ -354,8 +314,7 @@ gdk_save_tiff (GdkTexture *texture)
 
   g_assert (result);
 
-  g_free (new_data);
-  g_object_unref (memory_texture);
+  g_object_unref (memtex);
 
   return result;
 }
@@ -407,6 +366,7 @@ gdk_load_tiff (GBytes  *input_bytes,
   guint16 sample_format;
   guint16 orientation;
   guint32 width, height;
+  guint16 alpha_samples;
   GdkMemoryFormat format;
   guchar *data, *line;
   gsize stride;
@@ -434,30 +394,35 @@ gdk_load_tiff (GBytes  *input_bytes,
       guint16 *extra_types;
 
       if (!TIFFGetField (tif, TIFFTAG_EXTRASAMPLES, &extra, &extra_types))
-        extra = 0;
+        alpha_samples = 0;
 
-      if (extra == 0 || extra_types[0] != EXTRASAMPLE_ASSOCALPHA)
+      alpha_samples = extra_types[0];
+      if (alpha_samples != 0 && alpha_samples != EXTRASAMPLE_ASSOCALPHA && alpha_samples != EXTRASAMPLE_UNASSALPHA)
         {
           texture = load_fallback (tif, error);
           TIFFClose (tif);
           return texture;
         }
     }
+  else
+    alpha_samples = 0;
 
-  format = 0;
-
-  for (int i = 0; i < G_N_ELEMENTS (format_data); i++)
+  for (format = 0; format < G_N_ELEMENTS (format_data); format++)
     {
-      if (format_data[i].sample_format == sample_format &&
-          format_data[i].bits_per_sample == bits_per_sample &&
-          format_data[i].samples_per_pixel == samples_per_pixel)
+      /* not a native format */
+      if (format_data[format].format != format)
+        continue;
+
+      if (format_data[format].sample_format == sample_format &&
+          format_data[format].bits_per_sample == bits_per_sample &&
+          format_data[format].samples_per_pixel == samples_per_pixel &&
+          format_data[format].alpha_samples == alpha_samples)
         {
-          format = format_data[i].format;
           break;
         }
     }
 
-  if (format == 0 ||
+  if (format == G_N_ELEMENTS(format_data) ||
       photometric != PHOTOMETRIC_RGB ||
       planarconfig != PLANARCONFIG_CONTIG ||
       TIFFIsTiled (tif) ||

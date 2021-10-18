@@ -954,7 +954,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
 #endif
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
-  g_return_if_fail (gdk_gl_context_is_realized (context));
+  g_return_if_fail (!gdk_gl_context_is_realized (context));
 
   /* this will take care of the default */
   if (major == 0 && minor == 0)
