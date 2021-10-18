@@ -696,7 +696,7 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
    */
   properties[PROP_GL_CONTEXT] =
     g_param_spec_object ("gl-context",
-                         P_("gl-context"),
+                         P_("GL context"),
                          P_("GL context to use for rendering"),
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
