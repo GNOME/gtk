@@ -1017,31 +1017,6 @@ gtk_label_get_measuring_layout (GtkLabel    *self,
   return copy;
 }
 
-static void
-get_height_for_width (GtkLabel *self,
-                      int       width,
-                      int      *minimum_height,
-                      int      *natural_height,
-                      int      *minimum_baseline,
-                      int      *natural_baseline)
-{
-  PangoLayout *layout;
-  int text_height, baseline;
-
-  layout = gtk_label_get_measuring_layout (self, NULL, width * PANGO_SCALE);
-
-  pango_layout_get_pixel_size (layout, NULL, &text_height);
-
-  *minimum_height = text_height;
-  *natural_height = text_height;
-
-  baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
-  *minimum_baseline = baseline;
-  *natural_baseline = baseline;
-
-  g_object_unref (layout);
-}
-
 static int
 get_char_pixels (GtkWidget   *self,
                  PangoLayout *layout)
@@ -1057,6 +1032,44 @@ get_char_pixels (GtkWidget   *self,
   pango_font_metrics_unref (metrics);
 
   return MAX (char_width, digit_width);
+}
+
+static void
+get_height_for_width (GtkLabel *self,
+                      int       width,
+                      int      *minimum_height,
+                      int      *natural_height,
+                      int      *minimum_baseline,
+                      int      *natural_baseline)
+{
+  PangoLayout *layout;
+  int text_height, baseline;
+
+  width *= PANGO_SCALE;
+  if (self->max_width_chars > -1)
+    {
+      int char_pixels, width_chars;
+
+      layout = gtk_label_get_measuring_layout (self, NULL, -1);
+      char_pixels = get_char_pixels (GTK_WIDGET (self), layout);
+      if (self->width_chars > self->max_width_chars)
+        width_chars = self->width_chars;
+      else
+        width_chars = self->max_width_chars;
+      width = MIN (char_pixels * width_chars, width);
+    }
+  layout = gtk_label_get_measuring_layout (self, NULL, width);
+
+  pango_layout_get_pixel_size (layout, NULL, &text_height);
+
+  *minimum_height = text_height;
+  *natural_height = text_height;
+
+  baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
+  *minimum_baseline = baseline;
+  *natural_baseline = baseline;
+
+  g_object_unref (layout);
 }
 
 static void
