@@ -633,11 +633,58 @@ gtk_calendar_init (GtkCalendar *calendar)
                     calendar);
   gtk_widget_add_controller (GTK_WIDGET (calendar), controller);
 
+#ifdef G_OS_WIN32
+  calendar->week_start = 0;
+  week_start = NULL;
+
+  if (GetLocaleInfoW (GetThreadLocale (), LOCALE_IFIRSTDAYOFWEEK,
+                      wbuffer, G_N_ELEMENTS (wbuffer)))
+    week_start = g_utf16_to_utf8 (wbuffer, -1, NULL, NULL, NULL);
+
+  if (week_start != NULL)
+    {
+      calendar->week_start = (week_start[0] - '0' + 1) % 7;
+      g_free(week_start);
+    }
+#else
+#ifdef HAVE__NL_TIME_FIRST_WEEKDAY
+  langinfo.string = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
+  first_weekday = langinfo.string[0];
+  langinfo.string = nl_langinfo (_NL_TIME_WEEK_1STDAY);
+  week_origin = langinfo.word;
+  if (week_origin == 19971130) /* Sunday */
+    week_1stday = 0;
+  else if (week_origin == 19971201) /* Monday */
+    week_1stday = 1;
+  else
+    g_warning ("Unknown value of _NL_TIME_WEEK_1STDAY.");
+
+  calendar->week_start = (week_1stday + first_weekday - 1) % 7;
+#else
+  /* Translate to calendar:week_start:0 if you want Sunday to be the
+   * first day of the week to calendar:week_start:1 if you want Monday
+   * to be the first day of the week, and so on.
+   */
+  week_start = _("calendar:week_start:0");
+
+  if (strncmp (week_start, "calendar:week_start:", 20) == 0)
+    calendar->week_start = *(week_start + 20) - '0';
+  else
+    calendar->week_start = -1;
+
+  if (calendar->week_start < 0 || calendar->week_start > 6)
+    {
+      g_warning ("Whoever translated calendar:week_start:0 did so wrongly.");
+      calendar->week_start = 0;
+    }
+#endif
+#endif
+
   if (!default_abbreviated_dayname[0])
     for (i=0; i<7; i++)
       {
 #ifndef G_OS_WIN32
-        tmp_time= (i+3)*86400;
+        tmp_time= (i+3)*86400; /* epoch was a Thursday, so add 3 days for Sunday */
         strftime (buffer, sizeof (buffer), "%a", gmtime (&tmp_time));
         default_abbreviated_dayname[i] = g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
 #else
@@ -692,7 +739,11 @@ gtk_calendar_init (GtkCalendar *calendar)
   /* Day name labels */
   for (i = 0; i < 7; i ++)
     {
-      GtkWidget *label = gtk_label_new (default_abbreviated_dayname[i]);
+      int day;
+      GtkWidget *label;
+
+      day = (i + calendar->week_start) % 7;
+      label = gtk_label_new (default_abbreviated_dayname[day]);
 
       gtk_widget_set_hexpand (label, TRUE);
       gtk_widget_set_vexpand (label, TRUE);
@@ -770,53 +821,6 @@ gtk_calendar_init (GtkCalendar *calendar)
     calendar->year_before = 1;
   else if (strcmp (year_before, "calendar:MY") != 0)
     g_warning ("Whoever translated calendar:MY did so wrongly.");
-
-#ifdef G_OS_WIN32
-  calendar->week_start = 0;
-  week_start = NULL;
-
-  if (GetLocaleInfoW (GetThreadLocale (), LOCALE_IFIRSTDAYOFWEEK,
-                      wbuffer, G_N_ELEMENTS (wbuffer)))
-    week_start = g_utf16_to_utf8 (wbuffer, -1, NULL, NULL, NULL);
-
-  if (week_start != NULL)
-    {
-      calendar->week_start = (week_start[0] - '0' + 1) % 7;
-      g_free(week_start);
-    }
-#else
-#ifdef HAVE__NL_TIME_FIRST_WEEKDAY
-  langinfo.string = nl_langinfo (_NL_TIME_FIRST_WEEKDAY);
-  first_weekday = langinfo.string[0];
-  langinfo.string = nl_langinfo (_NL_TIME_WEEK_1STDAY);
-  week_origin = langinfo.word;
-  if (week_origin == 19971130) /* Sunday */
-    week_1stday = 0;
-  else if (week_origin == 19971201) /* Monday */
-    week_1stday = 1;
-  else
-    g_warning ("Unknown value of _NL_TIME_WEEK_1STDAY.");
-
-  calendar->week_start = (week_1stday + first_weekday - 1) % 7;
-#else
-  /* Translate to calendar:week_start:0 if you want Sunday to be the
-   * first day of the week to calendar:week_start:1 if you want Monday
-   * to be the first day of the week, and so on.
-   */
-  week_start = _("calendar:week_start:0");
-
-  if (strncmp (week_start, "calendar:week_start:", 20) == 0)
-    calendar->week_start = *(week_start + 20) - '0';
-  else
-    calendar->week_start = -1;
-
-  if (calendar->week_start < 0 || calendar->week_start > 6)
-    {
-      g_warning ("Whoever translated calendar:week_start:0 did so wrongly.");
-      calendar->week_start = 0;
-    }
-#endif
-#endif
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (gtk_widget_get_layout_manager (GTK_WIDGET (calendar))),
                                   GTK_ORIENTATION_VERTICAL);
