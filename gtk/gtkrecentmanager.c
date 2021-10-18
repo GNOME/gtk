@@ -1649,7 +1649,7 @@ gtk_recent_info_get_mime_type (GtkRecentInfo *info)
  * gtk_recent_info_get_added:
  * @info: a `GtkRecentInfo`
  *
- * Gets the the time when the resource
+ * Gets the time when the resource
  * was added to the recently used resources list.
  *
  * Returns: (transfer none): a `GDateTime` for the time

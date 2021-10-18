@@ -96,7 +96,7 @@
  * uniform sampler2D u_texture2;
  * ```
  *
- * GTK uses the the "gsk" namespace in the symbols it uses in the
+ * GTK uses the "gsk" namespace in the symbols it uses in the
  * shader, so your code should not use any symbols with the prefix gsk
  * or GSK. There are some helper functions declared that you can use:
  *

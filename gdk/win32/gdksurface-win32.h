@@ -149,7 +149,7 @@ struct _GdkW32DragMoveResizeContext
    * that is being dragged. It indicates the shape the dragged window
    * will take if released at a particular point.
    * Indicator window size always matches the target indicator shape,
-   * the the actual indicator drawn on it might not, depending on
+   * the actual indicator drawn on it might not, depending on
    * how much time elapsed since the animation started.
    */
   HWND               shape_indicator;

@@ -158,6 +158,7 @@ msys2-mingw64:
     CHERE_INVOKING: "yes"
 
 macos:
+  allow_failure: true
   extends: .only-default
   only:
     - branches@GNOME/gtk

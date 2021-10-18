@@ -26,7 +26,7 @@
  *
  * `GdkGLContext`s are created for a surface using
  * [method@Gdk.Surface.create_gl_context], and the context will match
- * the the characteristics of the surface.
+ * the characteristics of the surface.
  *
  * A `GdkGLContext` is not tied to any particular normal framebuffer.
  * For instance, it cannot draw to the surface back buffer. The GDK

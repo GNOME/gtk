@@ -2620,7 +2620,7 @@ gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
  * @display: (type GdkWaylandDisplay): a `GdkDisplay`
  * @global: global interface to query in the registry
  *
- * Returns %TRUE if the the interface was found in the display
+ * Returns %TRUE if the interface was found in the display
  * `wl_registry.global` handler.
  *
  * Returns: %TRUE if the global is offered by the compositor

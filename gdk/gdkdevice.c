@@ -330,7 +330,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice::changed:
    * @device: the `GdkDevice`
    *
-   * Emitted either when the the number of either axes or keys changes.
+   * Emitted either when the number of either axes or keys changes.
    *
    * On X11 this will normally happen when the physical device
    * routing events through the logical device changes (for
