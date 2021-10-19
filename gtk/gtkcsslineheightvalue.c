@@ -52,19 +52,11 @@ gtk_css_value_line_height_compute (GtkCssValue      *value,
   if (gtk_css_number_value_get_dimension (height) == GTK_CSS_DIMENSION_PERCENTAGE)
     {
       double factor;
-      GtkCssValue *val;
       GtkCssValue *computed;
 
-      factor =  _gtk_css_number_value_get (height, 1);
-      val = gtk_css_dimension_value_new (factor, GTK_CSS_EM);
+      factor = _gtk_css_number_value_get (height, 1);
+      computed = gtk_css_number_value_multiply (style->core->font_size, factor);
 
-      computed = _gtk_css_value_compute (val,
-                                         GTK_CSS_PROPERTY_FONT_SIZE,
-                                         provider,
-                                         style,
-                                         parent_style);
-
-      _gtk_css_value_unref (val);
       _gtk_css_value_unref (height);
 
       return computed;
