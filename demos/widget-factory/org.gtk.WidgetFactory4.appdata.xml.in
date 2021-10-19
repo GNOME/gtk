@@ -34,7 +34,7 @@
   <developer_name>Matthias Clasen and others</developer_name>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release version="@BUILD_VERSION@" date="@BUILD_DATE@">
+    <release version="@BUILD_VERSION@">
       <description>
         <p>A new build of GTK.</p>
       </description>
