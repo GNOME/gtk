@@ -294,6 +294,9 @@ gtk_application_local_command_line (GApplication   *application,
                                     char         ***arguments,
                                     int            *exit_status)
 {
+  /* We need to call setlocale() here so --help output works */
+  setlocale_initialization ();
+
   return G_APPLICATION_CLASS (gtk_application_parent_class)->local_command_line (application, arguments, exit_status);
 }
 
