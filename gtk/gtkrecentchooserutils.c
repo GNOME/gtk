@@ -358,7 +358,7 @@ get_is_recent_filtered (GtkRecentFilter *filter,
       filter_info.contains |= GTK_RECENT_FILTER_DISPLAY_NAME;
     }
   else
-    filter_info.uri = NULL;
+    filter_info.display_name = NULL;
   
   if (needed & GTK_RECENT_FILTER_APPLICATION)
     {
