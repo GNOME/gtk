@@ -248,7 +248,10 @@ draw_paintable (GdkPaintable *paintable,
                                            gdk_paintable_get_intrinsic_width (paintable),
                                            gdk_paintable_get_intrinsic_height (paintable)
                                          ));
-  gsk_render_node_unref (node);
+  g_object_set_data_full (G_OBJECT (texture),
+                          "source-render-node",
+                          node,
+                          (GDestroyNotify) gsk_render_node_unref);
 
   g_signal_handlers_disconnect_by_func (paintable, draw_paintable, out_texture);
 

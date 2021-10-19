@@ -314,6 +314,8 @@ testdata = [
   'label-fonts.css',
   'label-fonts.ref.ui',
   'label-fonts.ui',
+  'label-max-width-chars-and-halign-and-infinite-width.ui',
+  'label-max-width-chars-and-halign-and-infinite-width.ref.ui',
   'label-shadows.css',
   'label-shadows.ref.ui',
   'label-shadows.ui',
@@ -478,8 +480,6 @@ testdata = [
 # These need to be fixed but the issue hasn't been tracked down.
 xfails = [
   'sizegroups-evolution-identity-page.ui',
-  # these depend on details of text layout
-  'label-sizing.ui',
   # the NGL renderer can't deal with non-integer sizes
   'border-half-pixel.ui'
 ]
