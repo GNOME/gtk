@@ -24,7 +24,7 @@ def main():
                         help='require admin access to application')
     parser.add_argument('--input-resource-file', dest='resource',
                         default=None,
-                        help='existing .rc file to embed UAC manifest (do not generate a new .rc file), must have included winuser.h in it')
+                        help='existing .rc file to embed UAC manifest (do not generate a new .rc file), must have included windows.h in it')
     parser.add_argument('--output-dir', dest='outdir',
                         default=None,
                         help='directory to output resulting files')
@@ -92,7 +92,8 @@ def write_rc_file(name, resource, outdir):
 
     if resource is None:
         outfile = open(output_file_base_name + '.rc', 'w+')
-        outfile.write('#include <winuser.h>')
+        outfile.write('#define WIN32_LEAN_AND_MEAN\n')
+        outfile.write('#include <windows.h>\n')
     else:
         if resource != output_file_base_name + '.rc':
             outfile = open(output_file_base_name + '.rc', 'w+')
