@@ -71,6 +71,9 @@ gboolean    gdk_display_supports_input_shapes (GdkDisplay    *display);
 GDK_AVAILABLE_IN_4_4
 gboolean    gdk_display_prepare_gl         (GdkDisplay  *self,
                                             GError     **error);
+GDK_AVAILABLE_IN_4_6
+GdkGLContext *gdk_display_create_gl_context(GdkDisplay  *self,
+                                            GError     **error);
 
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *gdk_display_get_default (void);

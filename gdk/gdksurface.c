@@ -1183,7 +1183,7 @@ gdk_surface_create_gl_context (GdkSurface   *surface,
   if (!gdk_display_prepare_gl (surface->display, error))
     return NULL;
 
-  return gdk_gl_context_new_for_surface (surface);
+  return gdk_gl_context_new (surface->display, surface);
 }
 
 /**

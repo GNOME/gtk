@@ -99,7 +99,8 @@ gboolean                gdk_gl_backend_can_be_used              (GdkGLBackend   
                                                                  GError         **error);
 void                    gdk_gl_backend_use                      (GdkGLBackend     backend_type);
 
-GdkGLContext *          gdk_gl_context_new_for_surface          (GdkSurface      *surface);
+GdkGLContext *          gdk_gl_context_new                      (GdkDisplay      *display,
+                                                                 GdkSurface      *surface);
 
 gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext    *self,
                                                                  GdkGLAPI         api,
