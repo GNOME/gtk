@@ -64,7 +64,6 @@ texture_download_thread (GTask        *task,
 static void
 texture_threads (void)
 {
-  GdkSurface *surface;
   GskRenderer *gl_renderer;
   GskRenderNode *node;
   GMainLoop *loop;
@@ -73,15 +72,13 @@ texture_threads (void)
   GError *error = NULL;
 
   /* 1. Get a GL renderer */
-  surface = gdk_surface_new_toplevel (gdk_display_get_default());
   gl_renderer = gsk_gl_renderer_new ();
-  if (!gsk_renderer_realize (gl_renderer, surface, &error))
+  if (!gsk_renderer_realize (gl_renderer, NULL, &error))
     {
       g_test_skip (error->message);
 
       g_clear_error (&error);
       g_clear_object (&gl_renderer);
-      g_clear_object (&surface);
       return;
     }
 
@@ -116,7 +113,6 @@ texture_threads (void)
   gsk_renderer_unrealize (gl_renderer);
   g_clear_pointer (&loop, g_main_loop_unref);
   g_clear_object (&gl_renderer);
-  g_clear_object (&surface);
   g_main_context_release (NULL);
 }
 
