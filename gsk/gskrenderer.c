@@ -103,7 +103,7 @@ static GParamSpec *gsk_renderer_properties[N_PROPS];
 
 static gboolean
 gsk_renderer_real_realize (GskRenderer  *self,
-                           GdkSurface    *surface,
+                           GdkSurface   *surface,
                            GError      **error)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, realize);
@@ -189,12 +189,12 @@ gsk_renderer_class_init (GskRendererClass *klass)
   /**
    * GskRenderer:realized: (attributes org.gtk.Property.get=gsk_renderer_is_realized)
    *
-   * Whether the renderer has been associated with a surface.
+   * Whether the renderer has been associated with a surface or draw context.
    */
   gsk_renderer_properties[PROP_REALIZED] =
     g_param_spec_boolean ("realized",
                           "Realized",
-                          "The renderer has been associated with a surface",
+                          "The renderer has been associated with a surface or draw context",
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -281,11 +281,14 @@ gsk_renderer_is_realized (GskRenderer *renderer)
 /**
  * gsk_renderer_realize:
  * @renderer: a `GskRenderer`
- * @surface: the `GdkSurface` renderer will be used on
+ * @surface: (nullable): the `GdkSurface` renderer will be used on
  * @error: return location for an error
  *
  * Creates the resources needed by the @renderer to render the scene
  * graph.
+ *
+ * Since GTK 4.6, the surface may be `NULL`, which allows using
+ * renderers without having to create a surface.
  */
 gboolean
 gsk_renderer_realize (GskRenderer  *renderer,
@@ -296,10 +299,11 @@ gsk_renderer_realize (GskRenderer  *renderer,
 
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
   g_return_val_if_fail (!gsk_renderer_is_realized (renderer), FALSE);
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
+  g_return_val_if_fail (surface == NULL || GDK_IS_SURFACE (surface), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  priv->surface = g_object_ref (surface);
+  if (surface)
+    priv->surface = g_object_ref (surface);
 
   if (!GSK_RENDERER_GET_CLASS (renderer)->realize (renderer, surface, error))
     {
@@ -399,13 +403,15 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
 
 /**
  * gsk_renderer_render:
- * @renderer: a `GskRenderer`
+ * @renderer: a realized `GskRenderer`
  * @root: a `GskRenderNode`
  * @region: (nullable): the `cairo_region_t` that must be redrawn or %NULL
  *   for the whole window
  *
- * Renders the scene graph, described by a tree of `GskRenderNode` instances,
- * ensuring that the given @region gets redrawn.
+ * Renders the scene graph, described by a tree of `GskRenderNode` instances
+ * to the renderer's surface,  ensuring that the given @region gets redrawn.
+ *
+ * If the renderer has no associated surface, this function does nothing.
  *
  * Renderers must ensure that changes of the contents given by the @root
  * node as well as the area given by @region are redrawn. They are however
@@ -427,6 +433,9 @@ gsk_renderer_render (GskRenderer          *renderer,
   g_return_if_fail (priv->is_realized);
   g_return_if_fail (GSK_IS_RENDER_NODE (root));
   g_return_if_fail (priv->root_node == NULL);
+
+  if (priv->surface == NULL)
+    return;
 
   if (region == NULL || priv->prev_node == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {

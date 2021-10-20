@@ -114,12 +114,19 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
 
 static gboolean
 gsk_vulkan_renderer_realize (GskRenderer  *renderer,
-                             GdkSurface    *window,
+                             GdkSurface   *surface,
                              GError      **error)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
 
-  self->vulkan = gdk_surface_create_vulkan_context (window, error);
+  if (surface == NULL)
+    {
+      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+                   "The Vulkan renderer does not support surfaceless rendering yet.");
+      return FALSE;
+    }
+
+  self->vulkan = gdk_surface_create_vulkan_context (surface, error);
   if (self->vulkan == NULL)
     return FALSE;
 
