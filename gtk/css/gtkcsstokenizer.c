@@ -55,7 +55,8 @@ gtk_css_token_clear (GtkCssToken *token)
 
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
-    case GTK_CSS_TOKEN_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
       g_free (token->dimension.dimension);
       break;
 
@@ -206,7 +207,8 @@ gtk_css_token_is_finite (const GtkCssToken *token)
     case GTK_CSS_TOKEN_BAD_URL:
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
-    case GTK_CSS_TOKEN_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
       return FALSE;
     }
 }
@@ -281,7 +283,8 @@ gtk_css_token_is_preserved (const GtkCssToken *token,
     case GTK_CSS_TOKEN_BAD_URL:
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
-    case GTK_CSS_TOKEN_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
       if (out_closing)
         *out_closing = GTK_CSS_TOKEN_EOF;
       return TRUE;
@@ -372,11 +375,12 @@ gtk_css_token_print (const GtkCssToken *token,
       break;
 
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_DIMENSION:
       if (token->dimension.value >= 0)
         g_string_append_c (string, '+');
       G_GNUC_FALLTHROUGH;
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
-    case GTK_CSS_TOKEN_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
       g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, token->dimension.value);
       g_string_append (string, buf);
       append_ident (string, token->dimension.dimension);
@@ -549,7 +553,8 @@ gtk_css_token_init_dimension (GtkCssToken     *token,
     {
     case GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION:
     case GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION:
-    case GTK_CSS_TOKEN_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNED_DIMENSION:
+    case GTK_CSS_TOKEN_SIGNLESS_DIMENSION:
       token->dimension.value = value;
       token->dimension.dimension = dimension;
       break;
@@ -1122,7 +1127,7 @@ gtk_css_tokenizer_read_numeric (GtkCssTokenizer *tokenizer,
       if (is_int)
         type = has_sign ? GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION : GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION;
       else
-        type = GTK_CSS_TOKEN_DIMENSION;
+        type = has_sign ? GTK_CSS_TOKEN_SIGNED_DIMENSION : GTK_CSS_TOKEN_SIGNLESS_DIMENSION;
 
       gtk_css_token_init_dimension (token, type, value, gtk_css_tokenizer_read_name (tokenizer));
     }

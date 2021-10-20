@@ -93,7 +93,8 @@ gtk_css_dimension_value_parse (GtkCssParser           *parser,
     }
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION) ||
            gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION) ||
-           gtk_css_token_is (token, GTK_CSS_TOKEN_DIMENSION))
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_DIMENSION) ||
+           gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_DIMENSION))
     {
       guint i;
 
