@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow">
+    <property name="width_request">1200</property>
+    <property name="height_request">500</property>
+    <property name="decorated">0</property>
+    <child>
+      <object class="GtkLabel">
+        <!-- long label, but shorter than 1200px -->
+        <property name="label">1234567890&#8203;1234567890&#8203;1234567890&#8203;1234567890&#8203;1234567890 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</property>
+        <property name="max-width-chars">50</property>
+        <property name="wrap">1</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <attributes>
+          <attribute name="font-desc" value="Monospace"></attribute>
+        </attributes>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow">
+    <property name="width_request">1200</property>
+    <property name="height_request">500</property>
+    <property name="decorated">0</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</property>
+        <attributes>
+          <attribute name="font-desc" value="Monospace"></attribute>
+        </attributes>
+      </object>
+    </child>
+  </object>
+</interface>
