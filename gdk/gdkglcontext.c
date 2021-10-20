@@ -722,15 +722,19 @@ gdk_gl_context_init (GdkGLContext *self)
 
 /* Must have called gdk_display_prepare_gl() before */
 GdkGLContext *
-gdk_gl_context_new_for_surface (GdkSurface *surface)
+gdk_gl_context_new (GdkDisplay *display,
+                    GdkSurface *surface)
 {
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkGLContext *shared = gdk_display_get_gl_context (display);
+  GdkGLContext *shared;
+
+  g_assert (surface == NULL || display == gdk_surface_get_display (surface));
 
   /* assert gdk_display_prepare_gl() had been called */
+  shared = gdk_display_get_gl_context (display);
   g_assert (shared);
 
   return g_object_new (G_OBJECT_TYPE (shared),
+                       "display", display,
                        "surface", surface,
                        NULL);
 }

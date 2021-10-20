@@ -90,11 +90,9 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   GskGLRenderer *self = (GskGLRenderer *)renderer;
   GdkGLContext *context = NULL;
   GskGLDriver *driver = NULL;
+  GdkDisplay *display;
   gboolean ret = FALSE;
   gboolean debug_shaders = FALSE;
-
-  g_assert (GSK_IS_GL_RENDERER (self));
-  g_assert (GDK_IS_SURFACE (surface));
 
   if (self->context != NULL)
     return TRUE;
@@ -103,8 +101,18 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   g_assert (self->context == NULL);
   g_assert (self->command_queue == NULL);
 
-  if (!(context = gdk_surface_create_gl_context (surface, error)) ||
-      !gdk_gl_context_realize (context, error))
+  if (surface == NULL)
+    {
+      display = gdk_display_get_default (); /* FIXME: allow different displays somehow ? */
+      context = gdk_display_create_gl_context (display, error);
+    }
+  else
+    {
+      display = gdk_surface_get_display (surface);
+      context = gdk_surface_create_gl_context (surface, error);
+    }
+
+  if (!context || !gdk_gl_context_realize (context, error))
     goto failure;
 
 #ifdef G_ENABLE_DEBUG
@@ -112,7 +120,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
     debug_shaders = TRUE;
 #endif
 
-  if (!(driver = gsk_gl_driver_for_display (gdk_surface_get_display (surface), debug_shaders, error)))
+  if (!(driver = gsk_gl_driver_for_display (display, debug_shaders, error)))
     goto failure;
 
   self->command_queue = gsk_gl_driver_create_command_queue (driver, context);

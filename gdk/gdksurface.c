@@ -1171,7 +1171,7 @@ gdk_surface_get_paint_gl_context (GdkSurface  *surface,
  * Before using the returned `GdkGLContext`, you will need to
  * call [method@Gdk.GLContext.make_current] or [method@Gdk.GLContext.realize].
  *
- * Returns: (transfer full) (nullable): the newly created `GdkGLContext`
+ * Returns: (transfer full): the newly created `GdkGLContext`
  */
 GdkGLContext *
 gdk_surface_create_gl_context (GdkSurface   *surface,
@@ -1183,7 +1183,7 @@ gdk_surface_create_gl_context (GdkSurface   *surface,
   if (!gdk_display_prepare_gl (surface->display, error))
     return NULL;
 
-  return gdk_gl_context_new_for_surface (surface);
+  return gdk_gl_context_new (surface->display, surface);
 }
 
 /**

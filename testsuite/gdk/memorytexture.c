@@ -765,7 +765,6 @@ add_test (const char    *name,
 int
 main (int argc, char *argv[])
 {
-  GdkSurface *surface;
   int result;
 
   gtk_test_init (&argc, &argv, NULL);
@@ -776,12 +775,10 @@ main (int argc, char *argv[])
   add_test ("/memorytexture/download_float_1x1", test_download_float_1x1);
   add_test ("/memorytexture/download_float_4x4", test_download_float_4x4);
 
-  surface = gdk_surface_new_toplevel (gdk_display_get_default());
   gl_renderer = gsk_gl_renderer_new ();
-  if (!gsk_renderer_realize (gl_renderer, surface, NULL))
+  if (!gsk_renderer_realize (gl_renderer, NULL, NULL))
     {
       g_clear_object (&gl_renderer);
-      g_clear_object (&surface);
     }
 
   result = g_test_run ();
@@ -791,7 +788,6 @@ main (int argc, char *argv[])
       gsk_renderer_unrealize (gl_renderer);
       g_clear_object (&gl_renderer);
     }
-  g_clear_object (&surface);
 
   return result;
 }

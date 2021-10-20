@@ -1325,6 +1325,38 @@ gdk_display_prepare_gl (GdkDisplay  *self,
     }
 }
 
+/**
+ * gdk_display_create_gl_context:
+ * @self: a `GdkDisplay`
+ * @error: return location for an error
+ *
+ * Creates a new `GdkGLContext` for the `GdkDisplay`.
+ *
+ * The context is disconnected from any particular surface or surface
+ * and cannot be used to draw to any surface. It can only be used to
+ * draw to non-surface framebuffers like textures.
+ *
+ * If the creation of the `GdkGLContext` failed, @error will be set.
+ * Before using the returned `GdkGLContext`, you will need to
+ * call [method@Gdk.GLContext.make_current] or [method@Gdk.GLContext.realize].
+ *
+ * Returns: (transfer full) (nullable): the newly created `GdkGLContext`
+ *
+ * Since: 4.6
+ */
+GdkGLContext *
+gdk_display_create_gl_context (GdkDisplay  *self,
+                               GError     **error)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  if (!gdk_display_prepare_gl (self, error))
+    return NULL;
+
+  return gdk_gl_context_new (self, NULL);
+}
+
 /*< private >
  * gdk_display_get_gl_context:
  * @self: the `GdkDisplay`

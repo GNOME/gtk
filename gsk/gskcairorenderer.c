@@ -59,7 +59,8 @@ gsk_cairo_renderer_realize (GskRenderer  *renderer,
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
 
-  self->cairo_context = gdk_surface_create_cairo_context (surface);
+  if (surface)
+    self->cairo_context = gdk_surface_create_cairo_context (surface);
 
   return TRUE;
 }

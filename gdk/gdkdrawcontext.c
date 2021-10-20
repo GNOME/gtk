@@ -276,7 +276,8 @@ gdk_draw_context_get_surface (GdkDrawContext *context)
 
 /**
  * gdk_draw_context_begin_frame:
- * @context: the `GdkDrawContext` used to draw the frame
+ * @context: the `GdkDrawContext` used to draw the frame. The context must
+ *   have a surface.
  * @region: minimum region that should be drawn
  *
  * Indicates that you are beginning the process of redrawing @region
@@ -308,7 +309,10 @@ void
 gdk_draw_context_begin_frame (GdkDrawContext       *context,
                               const cairo_region_t *region)
 {
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+
   g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
+  g_return_if_fail (priv->surface != NULL);
   g_return_if_fail (region != NULL);
 
   gdk_draw_context_begin_frame_full (context, FALSE, region);
@@ -411,6 +415,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
+  g_return_if_fail (priv->surface != NULL);
 
   if (GDK_SURFACE_DESTROYED (priv->surface))
     return;
