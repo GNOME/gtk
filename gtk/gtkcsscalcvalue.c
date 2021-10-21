@@ -166,6 +166,14 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
         }
       else
         {
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+              gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+              gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION) ||
+              gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_DIMENSION))
+            {
+              gtk_css_parser_error_syntax (parser, "Unexpected signed number, did you forget a space between sign and number?");
+              gtk_css_parser_consume_token (parser);
+            }
           break;
         }
 

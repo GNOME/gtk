@@ -704,7 +704,8 @@ gtk_css_number_value_can_parse (GtkCssParser *parser)
       || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_PERCENTAGE)
       || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_INTEGER_DIMENSION)
       || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_INTEGER_DIMENSION)
-      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_DIMENSION)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_DIMENSION)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_DIMENSION)
       || gtk_css_parser_has_function (parser, "calc");
 }
 
