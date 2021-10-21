@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-05 20:22+0000\n"
-"PO-Revision-Date: 2021-09-04 19:14+0200\n"
+"POT-Creation-Date: 2021-10-18 11:37+0000\n"
+"PO-Revision-Date: 2021-10-21 12:33+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -484,7 +484,7 @@ msgstr "Nemoguće stvaranje GL sadržaja"
 msgid "No available configurations for the given pixel format"
 msgstr "Nema dostupnih podešavanja za dani format piksela"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1207
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1206
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Nema dostupne GL primjene"
@@ -655,15 +655,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zatvori"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9319
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9320
 msgid "Minimize"
 msgstr "Smanji"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9328
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9329
 msgid "Maximize"
 msgstr "Uvećaj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9285
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9286
 msgid "Restore"
 msgstr "Vrati"
 
@@ -1212,7 +1212,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12789 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12790 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1261,7 +1261,7 @@ msgid "_Apply"
 msgstr "_Primijeni"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12790
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12791
 msgid "_OK"
 msgstr "_U redu"
 
@@ -2235,24 +2235,24 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Rubovi papira"
 
-#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6686 gtk/gtktextview.c:9520
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6687 gtk/gtktextview.c:9520
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6687 gtk/gtktextview.c:9524
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6688 gtk/gtktextview.c:9524
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6688 gtk/gtktextview.c:9526
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6689 gtk/gtktextview.c:9526
 msgid "_Paste"
 msgstr "_Zalijepi"
 
 #: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1500
-#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6690 gtk/gtktextview.c:9529
+#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9529
 msgid "_Delete"
 msgstr "_Obriši"
 
-#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6699 gtk/gtktextview.c:9543
+#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6700 gtk/gtktextview.c:9543
 msgid "Select _All"
 msgstr "Odaberi _sve"
 
@@ -2694,7 +2694,7 @@ msgstr "Širina"
 
 #: gtk/gtkfontchooserwidget.c:1557
 msgid "Weight"
-msgstr "Težina"
+msgstr "Debljina"
 
 #: gtk/gtkfontchooserwidget.c:1558
 msgid "Italic"
@@ -2718,11 +2718,11 @@ msgstr "Ligature"
 
 #: gtk/gtkfontchooserwidget.c:2145
 msgid "Letter Case"
-msgstr "Malo slovo"
+msgstr "Mala slova"
 
 #: gtk/gtkfontchooserwidget.c:2146
 msgid "Number Case"
-msgstr "Broj slučaja"
+msgstr "Male brojke"
 
 #: gtk/gtkfontchooserwidget.c:2147
 msgid "Number Spacing"
@@ -2734,7 +2734,7 @@ msgstr "Format brojeva"
 
 #: gtk/gtkfontchooserwidget.c:2149
 msgid "Character Variants"
-msgstr "Varijante znaka"
+msgstr "Varijanta znakova"
 
 #: gtk/gtkglarea.c:314
 msgid "OpenGL context creation failed"
@@ -2744,7 +2744,7 @@ msgstr "Neuspjelo stvaranje OpenGL sadržaja"
 msgid "Application menu"
 msgstr "Izbornik aplikacije"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9355
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9356
 msgid "Close"
 msgstr "Zatvori"
 
@@ -2795,12 +2795,12 @@ msgid "Error"
 msgstr "Greška"
 
 #. Open Link
-#: gtk/gtklabel.c:6667
+#: gtk/gtklabel.c:6668
 msgid "_Open Link"
 msgstr "_Otvori poveznicu"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6676
+#: gtk/gtklabel.c:6677
 msgid "Copy _Link Address"
 msgstr "Kopiraj _adresu poveznice"
 
@@ -3056,7 +3056,7 @@ msgstr "Z ljuska"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nemoguće zaustavljanje procesa PID %d: %s"
 
-#: gtk/gtknotebook.c:5150 gtk/gtknotebook.c:7428
+#: gtk/gtknotebook.c:5151 gtk/gtknotebook.c:7429
 #, c-format
 msgid "Page %u"
 msgstr "Stranica %u"
@@ -4025,24 +4025,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9303
+#: gtk/gtkwindow.c:9304
 msgid "Move"
 msgstr "Pomakni"
 
-#: gtk/gtkwindow.c:9311
+#: gtk/gtkwindow.c:9312
 msgid "Resize"
 msgstr "Promijeni veličinu"
 
-#: gtk/gtkwindow.c:9342
+#: gtk/gtkwindow.c:9343
 msgid "Always on Top"
 msgstr "Uvijek na vrhu"
 
-#: gtk/gtkwindow.c:12777
+#: gtk/gtkwindow.c:12778
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Želite li koristiti GTK+ Inspektora?"
 
-#: gtk/gtkwindow.c:12779
+#: gtk/gtkwindow.c:12780
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -4053,7 +4053,7 @@ msgstr ""
 "otkrivanje i promjenu unutrašnjosti bilo koje GTK+ aplikacije. Njegovo "
 "korištenje može uzrokovati rušenje ili prekid u radu aplikacije."
 
-#: gtk/gtkwindow.c:12784
+#: gtk/gtkwindow.c:12785
 msgid "Don't show this message again"
 msgstr "Ne prikazuj više ovu poruku"
 
@@ -4934,7 +4934,7 @@ msgstr "Povijesne ligature"
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr "Hangul"
+msgstr "Hangulsko"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
@@ -6349,152 +6349,152 @@ msgstr "ROC 8k"
 #: gtk/script-names.c:18
 msgctxt "Script"
 msgid "Arabic"
-msgstr "Arapski"
+msgstr "Arapsko"
 
 #: gtk/script-names.c:19
 msgctxt "Script"
 msgid "Armenian"
-msgstr "Armenski"
+msgstr "Armensko"
 
 #: gtk/script-names.c:20
 msgctxt "Script"
 msgid "Bengali"
-msgstr "Bengalski"
+msgstr "Bengalsko"
 
 #: gtk/script-names.c:21
 msgctxt "Script"
 msgid "Bopomofo"
-msgstr "Bopomofo"
+msgstr "Bopomofosko"
 
 #: gtk/script-names.c:22
 msgctxt "Script"
 msgid "Cherokee"
-msgstr "Čirokijski"
+msgstr "Čirokejsko"
 
 #: gtk/script-names.c:23
 msgctxt "Script"
 msgid "Coptic"
-msgstr "Koptski"
+msgstr "Koptsko"
 
 #: gtk/script-names.c:24
 msgctxt "Script"
 msgid "Cyrillic"
-msgstr "Ćirilica"
+msgstr "Ćirilično"
 
 #: gtk/script-names.c:25
 msgctxt "Script"
 msgid "Deseret"
-msgstr "Deseret"
+msgstr "Deseretsko"
 
 #: gtk/script-names.c:26
 msgctxt "Script"
 msgid "Devanagari"
-msgstr "Devanagarski"
+msgstr "Devanagarsko"
 
 #: gtk/script-names.c:27
 msgctxt "Script"
 msgid "Ethiopic"
-msgstr "Etipijski"
+msgstr "Etiopsko"
 
 #: gtk/script-names.c:28
 msgctxt "Script"
 msgid "Georgian"
-msgstr "Gruzijski"
+msgstr "Gruzijsko"
 
 #: gtk/script-names.c:29
 msgctxt "Script"
 msgid "Gothic"
-msgstr "Gotički"
+msgstr "Gotičko"
 
 #: gtk/script-names.c:30
 msgctxt "Script"
 msgid "Greek"
-msgstr "Grčki"
+msgstr "Grčko"
 
 #: gtk/script-names.c:31
 msgctxt "Script"
 msgid "Gujarati"
-msgstr "Gudžaratski"
+msgstr "Gudžaratsko"
 
 #: gtk/script-names.c:32
 msgctxt "Script"
 msgid "Gurmukhi"
-msgstr "Gurmuki"
+msgstr "Gurmukhsko"
 
 #: gtk/script-names.c:33
 msgctxt "Script"
 msgid "Han"
-msgstr "Han"
+msgstr "Hansko"
 
 #: gtk/script-names.c:34
 msgctxt "Script"
 msgid "Hangul"
-msgstr "Hangul"
+msgstr "Hangulsko"
 
 #: gtk/script-names.c:35
 msgctxt "Script"
 msgid "Hebrew"
-msgstr "Hebrejski"
+msgstr "Hebrejsko"
 
 #: gtk/script-names.c:36
 msgctxt "Script"
 msgid "Hiragana"
-msgstr "Hiragana"
+msgstr "Hiragansko"
 
 #: gtk/script-names.c:37
 msgctxt "Script"
 msgid "Kannada"
-msgstr "Kanarski"
+msgstr "Kanarsko"
 
 #: gtk/script-names.c:38
 msgctxt "Script"
 msgid "Katakana"
-msgstr "Katakana"
+msgstr "Katakansko"
 
 #: gtk/script-names.c:39
 msgctxt "Script"
 msgid "Khmer"
-msgstr "Kmerski"
+msgstr "Kmersko"
 
 #: gtk/script-names.c:40
 msgctxt "Script"
 msgid "Lao"
-msgstr "Laoski"
+msgstr "Laosko"
 
 #: gtk/script-names.c:41
 msgctxt "Script"
 msgid "Latin"
-msgstr "Latinski"
+msgstr "Latinično"
 
 #: gtk/script-names.c:42
 msgctxt "Script"
 msgid "Malayalam"
-msgstr "Malajalamski"
+msgstr "Malajalamsko"
 
 #: gtk/script-names.c:43
 msgctxt "Script"
 msgid "Mongolian"
-msgstr "Mongolski"
+msgstr "Mongolsko"
 
 #: gtk/script-names.c:44
 msgctxt "Script"
 msgid "Myanmar"
-msgstr "Mianmarski"
+msgstr "Mianmarsko"
 
 #: gtk/script-names.c:45
 msgctxt "Script"
 msgid "Ogham"
-msgstr "Oghamski"
+msgstr "Oghamsko"
 
 #: gtk/script-names.c:46
 msgctxt "Script"
 msgid "Old Italic"
-msgstr "Staro talijanski"
+msgstr "Staro talijansko"
 
 #: gtk/script-names.c:47
 msgctxt "Script"
 msgid "Oriya"
-msgstr "Orijski"
+msgstr "Orijsko"
 
 #: gtk/script-names.c:48
 msgctxt "Script"
@@ -6504,22 +6504,22 @@ msgstr "Runsko"
 #: gtk/script-names.c:49
 msgctxt "Script"
 msgid "Sinhala"
-msgstr "Singaleški"
+msgstr "Singaleško"
 
 #: gtk/script-names.c:50
 msgctxt "Script"
 msgid "Syriac"
-msgstr "Sirijski"
+msgstr "Sirijsko"
 
 #: gtk/script-names.c:51
 msgctxt "Script"
 msgid "Tamil"
-msgstr "Tamilski"
+msgstr "Tamilsko"
 
 #: gtk/script-names.c:52
 msgctxt "Script"
 msgid "Telugu"
-msgstr "Teluški"
+msgstr "Teluško"
 
 #: gtk/script-names.c:53
 msgctxt "Script"
@@ -6529,12 +6529,12 @@ msgstr "Thaansko"
 #: gtk/script-names.c:54
 msgctxt "Script"
 msgid "Thai"
-msgstr "Tajlandski"
+msgstr "Tajlandsko"
 
 #: gtk/script-names.c:55
 msgctxt "Script"
 msgid "Tibetan"
-msgstr "Tibetski"
+msgstr "Tibetansko"
 
 #: gtk/script-names.c:56
 msgctxt "Script"
@@ -6549,7 +6549,7 @@ msgstr "Ji"
 #: gtk/script-names.c:58
 msgctxt "Script"
 msgid "Tagalog"
-msgstr "Tagaloški"
+msgstr "Tagaloško"
 
 #: gtk/script-names.c:59
 msgctxt "Script"
@@ -6604,7 +6604,7 @@ msgstr "Tai Le"
 #: gtk/script-names.c:69
 msgctxt "Script"
 msgid "Ugaritic"
-msgstr "Ugaritski"
+msgstr "Ugaritsko"
 
 #: gtk/script-names.c:70
 msgctxt "Script"
@@ -6624,7 +6624,7 @@ msgstr "Glagoljično"
 #: gtk/script-names.c:73
 msgctxt "Script"
 msgid "Tifinagh"
-msgstr "Tifinagh"
+msgstr "Tifinagško"
 
 #: gtk/script-names.c:74
 msgctxt "Script"
@@ -6634,7 +6634,7 @@ msgstr "Siletsko Nagri"
 #: gtk/script-names.c:75
 msgctxt "Script"
 msgid "Old Persian"
-msgstr "Staro perzijski"
+msgstr "Staro perzijsko"
 
 #: gtk/script-names.c:76
 msgctxt "Script"
@@ -6729,7 +6729,7 @@ msgstr "Lidijsko"
 #: gtk/script-names.c:94
 msgctxt "Script"
 msgid "Avestan"
-msgstr "Avestički"
+msgstr "Avestansko"
 
 #: gtk/script-names.c:95
 msgctxt "Script"
@@ -6779,12 +6779,12 @@ msgstr "Meetei Mayek"
 #: gtk/script-names.c:104
 msgctxt "Script"
 msgid "Old South Arabian"
-msgstr "Stari južnoarapski"
+msgstr "Staro južnoarapsko"
 
 #: gtk/script-names.c:105
 msgctxt "Script"
 msgid "Old Turkic"
-msgstr "Staro turski"
+msgstr "Staro tursko"
 
 #: gtk/script-names.c:106
 msgctxt "Script"
@@ -6989,7 +6989,7 @@ msgstr "Multansko"
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Old Hungarian"
-msgstr "Staro mađarski"
+msgstr "Staro Mađarsko"
 
 #: gtk/script-names.c:147
 msgctxt "Script"
@@ -7024,7 +7024,7 @@ msgstr "Osageško"
 #: gtk/script-names.c:153
 msgctxt "Script"
 msgid "Tangut"
-msgstr "Tangutski"
+msgstr "Tangutsko"
 
 #: gtk/script-names.c:154
 msgctxt "Script"
