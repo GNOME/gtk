@@ -311,7 +311,10 @@ save_node (GskRenderNode *node,
     }
 
   g_test_message ("Storing test result node at %s", filename);
-  bytes = gsk_render_node_serialize (node);
+  if (node)
+    bytes = gsk_render_node_serialize (node);
+  else
+    bytes = g_bytes_new ("", 0);
   ret = g_file_set_contents (filename,
                              g_bytes_get_data (bytes, NULL),
                              g_bytes_get_size (bytes),
