@@ -5192,9 +5192,8 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
  *
  * Presents a window to the user.
  *
- * This function should not be used as when it is called,
- * it is too late to gather a valid timestamp to allow focus
- * stealing prevention to work correctly.
+ * This should be used when you want to present a window
+ * and do not have an event timestamp.
  */
 void
 gtk_window_present (GtkWindow *window)
