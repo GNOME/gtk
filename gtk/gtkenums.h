@@ -1142,6 +1142,8 @@ typedef enum {
  * [vfunc.GtkSymbolicPaintable.snapshot_symbolic].
  *
  * More values may be added over time.
+ *
+ * Since: 4.6
  */
 typedef enum {
   GTK_SYMBOLIC_COLOR_FOREGROUND = 0,

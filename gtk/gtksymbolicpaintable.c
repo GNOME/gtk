@@ -38,6 +38,8 @@
  * and success information in that order.
  *
  * More colors may be added in the future.
+ *
+ * Since: 4.6
  */
 
 G_DEFINE_INTERFACE (GtkSymbolicPaintable, gtk_symbolic_paintable, GDK_TYPE_PAINTABLE)
@@ -72,6 +74,8 @@ gtk_symbolic_paintable_default_init (GtkSymbolicPaintableInterface *iface)
  *
  * If less than 4 colors are provided, GTK will pad the array with default
  * colors.
+ *
+ * Since: 4.6
  */
 void
 gtk_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable   *paintable,
