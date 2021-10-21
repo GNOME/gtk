@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-18 11:37+0000\n"
-"PO-Revision-Date: 2021-10-21 12:33+0200\n"
+"PO-Revision-Date: 2021-10-21 12:36+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -6989,7 +6989,7 @@ msgstr "Multansko"
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Old Hungarian"
-msgstr "Staro Mađarsko"
+msgstr "Staro mađarsko"
 
 #: gtk/script-names.c:147
 msgctxt "Script"
