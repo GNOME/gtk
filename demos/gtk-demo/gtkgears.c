@@ -874,8 +874,8 @@ gtk_gears_tick (GtkWidget     *widget,
 {
   GtkGears *gears = GTK_GEARS (widget);
   GtkGearsPrivate *priv = gtk_gears_get_instance_private (gears);
-  GdkFrameTimings *timings, *previous_timings;
-  gint64 previous_frame_time = 0;
+  GdkFrameTimings *previous_timings;
+  gint64 previous_frame_time;
   gint64 frame_time;
   gint64 history_start, history_len;
   gint64 frame;
@@ -914,12 +914,6 @@ gtk_gears_tick (GtkWidget     *widget,
           g_free (s);
         }
     }
-
-  timings = gdk_frame_clock_get_current_timings (frame_clock);
-  previous_timings = gdk_frame_clock_get_timings (frame_clock,
-                                                  gdk_frame_timings_get_frame_counter (timings) - 1);
-  if (previous_timings != NULL)
-    previous_frame_time = gdk_frame_timings_get_frame_time (previous_timings);
 
   return G_SOURCE_CONTINUE;
 }
