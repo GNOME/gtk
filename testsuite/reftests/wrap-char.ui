@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow">
+    <!-- large enough for Hello World wrapped any which way -->
+    <property name="width_request">200</property>
+    <property name="height_request">100</property>
+    <property name="decorated">0</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Hello World</property>
+        <!-- "Hello" and "World" are 5 characters each, so it should break perfectly -->
+        <property name="max-width-chars">5</property>
+        <property name="wrap">1</property>
+        <property name="wrap-mode">char</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        <attributes>
+          <attribute name="font-desc" value="Monospace"></attribute>
+        </attributes>
+      </object>
+    </child>
+  </object>
+</interface>

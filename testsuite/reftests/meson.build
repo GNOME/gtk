@@ -566,6 +566,8 @@ testdata = [
   # it is not in xfail since it succeeds on some platforms
   #'window-show-contents-on-map.ref.ui',
   #'window-show-contents-on-map.ui',
+  'wrap-char.ref.ui',
+  'wrap-char.ui',
   'wrap-margin-align-critical.ref.ui',
   'wrap-margin-align-critical.ui',
   'wrapping-in-boxes-in-boxes.ref.ui',
