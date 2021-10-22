@@ -211,10 +211,11 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   viewport.size.width = gdk_surface_get_width (surface) * scale_factor;
   viewport.size.height = gdk_surface_get_height (surface) * scale_factor;
 
-  gdk_gl_context_make_current (self->context);
   gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->context),
                                      gsk_render_node_prefers_high_depth (root),
                                      update_area);
+
+  gdk_gl_context_make_current (self->context);
 
   /* Must be called *AFTER* gdk_draw_context_begin_frame() */
   render_region = get_render_region (surface, self->context);
@@ -229,7 +230,6 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   gsk_gl_driver_end_frame (self->driver);
   gsk_gl_render_job_free (job);
 
-  gdk_gl_context_make_current (self->context);
   gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->context));
 
   gsk_gl_driver_after_frame (self->driver);
@@ -258,6 +258,8 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   height = ceilf (viewport->size.height);
 
   format = gsk_render_node_prefers_high_depth (root) ? GL_RGBA32F : GL_RGBA8;
+
+  gdk_gl_context_make_current (self->context);
 
   if (gsk_gl_driver_create_render_target (self->driver,
                                           width, height,
