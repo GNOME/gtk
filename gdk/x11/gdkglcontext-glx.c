@@ -220,8 +220,6 @@ gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
   GdkSurface *surface;
   GLXWindow drawable;
 
-  drawable = gdk_x11_gl_context_glx_get_drawable (self);
-
   if (!surfaceless)
     surface = gdk_gl_context_get_surface (context);
   else
