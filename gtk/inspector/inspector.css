@@ -1,31 +1,5 @@
 /* some style for the inspector */
 
-.list header {
-  background: white;
-  border: 1px solid lightgray;
-}
-
-.list header button {
-  background: none;
-}
-
-.list header button.dnd {
-  background: gray;
-}
-
-.list header>* {
-  padding: 2px;
-  font-weight: bold;
-}
-
-.list header sort_indicator {
-  min-width: 16px;
-}
-
-.list header>*:not(:last-child) {
-  border-right: 1px solid lightgray;
-}
-
 .list .cell {
   font-size: smaller;
   padding: 0 2px;
