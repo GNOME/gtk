@@ -69,9 +69,6 @@
               <object class="GtkScrolledWindow">
                 <property name="hscrollbar-policy">never</property>
                 <property name="propagate-natural-width">1</property>
-                <style>
-                  <class name="sidebar"/>
-                </style>
                 <child>
                   <object class="GtkListBox" id="recordings_list">
                     <property name="vexpand">1</property>
@@ -81,12 +78,12 @@
               </object>
             </child>
             <child>
+              <object class="GtkSeparator"/>
+            </child>
+            <child>
               <object class="GtkScrolledWindow">
                 <property name="hscrollbar-policy">never</property>
                 <property name="propagate-natural-width">1</property>
-                <style>
-                  <class name="sidebar"/>
-                </style>
                 <child>
                   <object class="GtkListView" id="render_node_list">
                     <property name="vexpand">1</property>
@@ -94,6 +91,9 @@
                   </object>
                 </child>
               </object>
+            </child>
+            <child>
+              <object class="GtkSeparator"/>
             </child>
             <child>
               <object class="GtkPaned" id="render_paned">
