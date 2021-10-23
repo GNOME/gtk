@@ -56,6 +56,8 @@
             <property name="monospace">1</property>
             <property name="left-margin">6</property>
             <property name="right-margin">6</property>
+            <property name="top-margin">6</property>
+            <property name="bottom-margin">6</property>
             <property name="has-tooltip">1</property>
             <signal name="query-tooltip" handler="query_tooltip_cb"/>
           </object>

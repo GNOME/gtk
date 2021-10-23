@@ -201,6 +201,10 @@
                               <object class="GtkTextView">
                                 <property name="editable">0</property>
                                 <property name="buffer">buffer</property>
+                                <property name="left-margin">6</property>
+                                <property name="right-margin">6</property>
+                                <property name="top-margin">6</property>
+                                <property name="bottom-margin">6</property>
                               </object>
                             </child>
                           </object>
