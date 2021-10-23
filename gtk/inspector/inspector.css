@@ -22,10 +22,6 @@
   padding: 0 4px;
 }
 
-stacksidebar.object-details {
-  border-top: 1px solid lightgray;
-}
-
 picture.dark {
   background: gray;
 }
