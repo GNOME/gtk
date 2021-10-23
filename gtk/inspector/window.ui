@@ -337,6 +337,9 @@
                                     <child>
                                       <object class="GtkLabel" id="list_position_label">
                                         <property name="tooltip-text" translatable="yes">List Position</property>
+                                        <attributes>
+                                          <attribute name="font-features" value="tnum=1"/>
+                                        </attributes>
                                       </object>
                                     </child>
                                     <child>
