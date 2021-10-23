@@ -2,14 +2,11 @@
   <template class="GtkInspectorTreeData" parent="GtkWidget">
     <child>
       <object class="GtkBox">
-        <property name="spacing">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
+        <style>
+          <class name="toolbar"/>
+        </style>
         <child>
           <object class="GtkToggleButton" id="show_button">
-            <property name="has-frame">0</property>
             <property name="tooltip-text" translatable="yes">Show data</property>
             <property name="icon-name">view-refresh-symbolic</property>
             <signal name="toggled" handler="toggle_show"/>

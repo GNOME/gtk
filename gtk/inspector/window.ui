@@ -214,16 +214,13 @@
                               <object class="GtkCenterBox">
                                 <child type="start">
                                   <object class="GtkBox">
+                                    <style>
+                                      <class name="toolbar"/>
+                                    </style>
                                     <child>
                                       <object class="GtkToggleButton" id="sidebar_toggle">
                                         <property name="icon-name">open-menu-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Toggle Sidebar</property>
-                                        <property name="margin-start">6</property>
-                                        <property name="margin-end">6</property>
-                                        <property name="margin-top">6</property>
-                                        <property name="margin-bottom">6</property>
-                                        <property name="halign">center</property>
-                                        <property name="valign">center</property>
                                         <property name="active">1</property>
                                       </object>
                                     </child>
@@ -244,13 +241,8 @@
                                             <property name="name">actions</property>
                                             <property name="child">
                                               <object class="GtkButton" id="refresh_actions_button">
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="icon-name">view-refresh-symbolic</property>
                                                 <property name="tooltip-text" translatable="yes">Refresh action state</property>
-                                                <property name="has-frame">0</property>
                                               </object>
                                             </property>
                                           </object>
@@ -260,10 +252,6 @@
                                             <property name="name">magnifier</property>
                                             <property name="child">
                                               <object class="GtkScale">
-                                                <property name="margin-start">6</property>
-                                                <property name="margin-end">6</property>
-                                                <property name="margin-top">6</property>
-                                                <property name="margin-bottom">6</property>
                                                 <property name="width-request">150</property>
                                                 <property name="draw-value">0</property>
                                                 <property name="adjustment">magnification_adjustment</property>
@@ -302,11 +290,8 @@
                                         <property name="name">prop-search</property>
                                         <property name="child">
                                           <object class="GtkSearchEntry" id="prop_search_entry">
-                                            <property name="margin-start">6</property>
-                                            <property name="margin-end">6</property>
-                                            <property name="margin-top">6</property>
-                                            <property name="margin-bottom">6</property>
                                             <property name="max-width-chars">40</property>
+                                            <property name="valign">center</property>
                                           </object>
                                         </property>
                                       </object>
@@ -316,10 +301,6 @@
                                         <property name="name">layout-prop-search</property>
                                         <property name="child">
                                           <object class="GtkSearchEntry" id="layout_prop_search_entry">
-                                            <property name="margin-start">6</property>
-                                            <property name="margin-end">6</property>
-                                            <property name="margin-top">6</property>
-                                            <property name="margin-bottom">6</property>
                                             <property name="max-width-chars">40</property>
                                           </object>
                                         </property>
@@ -329,15 +310,13 @@
                                 </child>
                                 <child type="end">
                                   <object class="GtkBox">
-                                    <property name="margin-start">6</property>
-                                    <property name="margin-end">6</property>
+                                    <style>
+                                      <class name="toolbar"/>
+                                    </style>
                                     <child>
                                       <object class="GtkButton" id="go_up_button">
                                         <property name="icon-name">go-up-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Previous object</property>
-                                        <property name="has-frame">0</property>
-                                        <property name="halign">center</property>
-                                        <property name="valign">center</property>
                                         <signal name="clicked" handler="go_up_cb"/>
                                       </object>
                                     </child>
@@ -345,9 +324,6 @@
                                       <object class="GtkButton" id="go_down_button">
                                         <property name="icon-name">go-down-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Child object</property>
-                                        <property name="has-frame">0</property>
-                                        <property name="halign">center</property>
-                                        <property name="valign">center</property>
                                         <signal name="clicked" handler="go_down_cb"/>
                                       </object>
                                     </child>
@@ -355,9 +331,6 @@
                                       <object class="GtkButton" id="go_previous_button">
                                         <property name="icon-name">go-previous-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Previous sibling</property>
-                                        <property name="has-frame">0</property>
-                                        <property name="halign">center</property>
-                                        <property name="valign">center</property>
                                         <signal name="clicked" handler="go_previous_cb"/>
                                       </object>
                                     </child>
@@ -370,9 +343,6 @@
                                       <object class="GtkButton" id="go_next_button">
                                         <property name="icon-name">go-next-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Next sibling</property>
-                                        <property name="has-frame">0</property>
-                                        <property name="halign">center</property>
-                                        <property name="valign">center</property>
                                         <signal name="clicked" handler="go_next_cb"/>
                                       </object>
                                     </child>
