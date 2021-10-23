@@ -385,6 +385,8 @@ gdk_save_png (GdkTexture *texture)
       return NULL;
     }
 
+  memtex = gdk_memory_texture_from_texture (texture, format);
+
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
       g_object_unref (memtex);
@@ -392,8 +394,6 @@ gdk_save_png (GdkTexture *texture)
       png_destroy_read_struct (&png, &info, NULL);
       return NULL;
     }
-
-  memtex = gdk_memory_texture_from_texture (texture, format);
 
   png_set_write_fn (png, &io, png_write_func, png_flush_func);
 

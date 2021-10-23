@@ -393,10 +393,11 @@ gdk_load_tiff (GBytes  *input_bytes,
       guint16 extra;
       guint16 *extra_types;
 
-      if (!TIFFGetField (tif, TIFFTAG_EXTRASAMPLES, &extra, &extra_types))
+      if (TIFFGetField (tif, TIFFTAG_EXTRASAMPLES, &extra, &extra_types))
+        alpha_samples = extra_types[0];
+      else
         alpha_samples = 0;
 
-      alpha_samples = extra_types[0];
       if (alpha_samples != 0 && alpha_samples != EXTRASAMPLE_ASSOCALPHA && alpha_samples != EXTRASAMPLE_UNASSALPHA)
         {
           texture = load_fallback (tif, error);
