@@ -1,55 +1,27 @@
 /* some style for the inspector */
 
-.list header {
-  background: white;
-  border: 1px solid lightgray;
-}
-
-.list header button {
-  background: none;
-}
-
-.list header button.dnd {
-  background: gray;
-}
-
-.list header>* {
-  padding: 2px;
-  font-weight: bold;
-}
-
-.list header sort_indicator {
-  min-width: 16px;
-}
-
-.list header>*:not(:last-child) {
-  border-right: 1px solid lightgray;
-}
-
-.list .cell {
+.list cell {
   font-size: smaller;
-  padding: 0 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
   min-height: 24px;
 }
 
-.list .cell entry,
-.list .cell spinbutton,
-.list .cell button,
-.list .cell dropdown
-.list .cell combobox {
+.list cell entry,
+.list cell spinbutton,
+.list cell button,
+.list cell dropdown
+.list cell combobox {
   min-height: 24px;
   min-width: 0;
 }
 
-.list .cell entry,
-.list .cell button,
-.list .cell dropdown
-.list .cell combobox {
+.list cell entry,
+.list cell spinbutton text,
+.list cell button,
+.list cell dropdown
+.list cell combobox {
   padding: 0 4px;
-}
-
-stacksidebar.object-details {
-  border-top: 1px solid lightgray;
 }
 
 picture.dark {

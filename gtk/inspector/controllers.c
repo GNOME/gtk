@@ -182,6 +182,7 @@ gtk_inspector_controllers_init (GtkInspectorControllers *self)
   g_signal_connect (factory, "bind", G_CALLBACK (bind_name), NULL);
 
   column = gtk_column_view_column_new ("Name", factory);
+  gtk_column_view_column_set_expand (column, TRUE);
   gtk_column_view_append_column (GTK_COLUMN_VIEW (self->view), column);
   g_object_unref (column);
 
