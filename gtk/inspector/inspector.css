@@ -1,24 +1,26 @@
 /* some style for the inspector */
 
-.list .cell {
+.list cell {
   font-size: smaller;
-  padding: 0 2px;
+  padding-top: 1px;
+  padding-bottom: 1px;
   min-height: 24px;
 }
 
-.list .cell entry,
-.list .cell spinbutton,
-.list .cell button,
-.list .cell dropdown
-.list .cell combobox {
+.list cell entry,
+.list cell spinbutton,
+.list cell button,
+.list cell dropdown
+.list cell combobox {
   min-height: 24px;
   min-width: 0;
 }
 
-.list .cell entry,
-.list .cell button,
-.list .cell dropdown
-.list .cell combobox {
+.list cell entry,
+.list cell spinbutton text,
+.list cell button,
+.list cell dropdown
+.list cell combobox {
   padding: 0 4px;
 }
 
