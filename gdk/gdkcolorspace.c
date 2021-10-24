@@ -63,6 +63,14 @@ gdk_color_space_default_save_to_icc_profile (GdkColorSpace  *self,
 }
 
 static void
+gdk_color_space_default_convert_color (GdkColorSpace  *self,
+                                       float          *components,
+                                       const GdkColor *source)
+{
+  g_assert_not_reached ();
+}
+
+static void
 gdk_color_space_set_property (GObject      *gobject,
                               guint         prop_id,
                               const GValue *value,
@@ -109,6 +117,7 @@ gdk_color_space_class_init (GdkColorSpaceClass *klass)
 
   klass->supports_format = gdk_color_space_default_supports_format;
   klass->save_to_icc_profile = gdk_color_space_default_save_to_icc_profile;
+  klass->convert_color = gdk_color_space_default_convert_color;
 
   gobject_class->set_property = gdk_color_space_set_property;
   gobject_class->get_property = gdk_color_space_get_property;
