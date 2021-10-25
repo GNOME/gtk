@@ -114,7 +114,7 @@ can be found in the file:
 docs/reference/gtk/html/gtk-building.html
 ```
 
-Or [online](https://developer.gnome.org/gtk4/stable/gtk-building.html)
+Or [online](https://docs.gtk.org/gtk4/building.html)
 
 How to report bugs
 ------------------
