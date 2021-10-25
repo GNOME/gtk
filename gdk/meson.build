@@ -78,6 +78,7 @@ gdk_public_headers = files([
   'gdkdrag.h',
   'gdkdrawcontext.h',
   'gdkdrop.h',
+  'gdkenums.h',
   'gdkevents.h',
   'gdkframeclock.h',
   'gdkframetimings.h',

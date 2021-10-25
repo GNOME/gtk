@@ -29,9 +29,10 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
-#include <gdk/gdktypes.h>
 #include <gdk/gdkdevice.h>
+#include <gdk/gdkenums.h>
 #include <gdk/gdkevents.h>
+#include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS
 

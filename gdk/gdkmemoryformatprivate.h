@@ -20,7 +20,7 @@
 #ifndef __GDK_MEMORY_CONVERT_PRIVATE_H__
 #define __GDK_MEMORY_CONVERT_PRIVATE_H__
 
-#include "gdktypes.h"
+#include "gdkenums.h"
 
 G_BEGIN_DECLS
 
