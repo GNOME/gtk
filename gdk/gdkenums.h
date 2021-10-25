@@ -331,6 +331,50 @@ typedef enum {
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;
 
+/**
+ * GdkNamedColorSpace:
+ * @GDK_NAMED_COLOR_SPACE_SRGB: the sRGB color space,
+ *   see gdk_color_space_get_srgb() for details
+ * @GDK_NAMED_COLOR_SPACE_SRGB_LINEAR: the same sRGB color space, but
+ *   with a linear light tone curve
+ * @GDK_NAMED_COLOR_SPACE_XYZ_D50: the CIE XYZ color space, with the D50
+ *   white point
+ * @GDK_NAMED_COLOR_SPACE_XYZ_D65: the CIE CYZ color space, with the D65
+ *   white point
+ * @GDK_NAMED_COLOR_SPACE_DISPLAY_P3: the [DCI P3](https://en.wikipedia.org/wiki/DCI-P3)
+ *   color space with a D65 whitepoint as created by Apple
+ * @GDK_NAMED_COLOR_SPACE_A98_RGB: the [Adobe 1998 RGB](https://en.wikipedia.org/wiki/Adobe_RGB_color_space)
+ *   color space
+ * @GDK_NAMED_COLOR_SPACE_PROPHOTO_RGB: the [ProPhoto RGB](https://en.wikipedia.org/wiki/ProPhoto_RGB_color_space)
+ *   color space
+ * @GDK_NAMED_COLOR_SPACE_REC2020: the [Rec 2020](https://en.wikipedia.org/wiki/Rec._2020)
+ *   color space
+ * @GDK_NAMED_COLOR_SPACE_N_SPACES: The number of named color spaces.
+ *   This value will change as more color spaces get added, so do not
+ *   rely on its concrete integer.
+ * 
+ *
+ * The list of predefined color spaces. GDK provides the common
+ * color spaces used by CSS and other standards so applications can make
+ * use of them.
+ *
+ * More color spaces may be added in the future.
+ *
+ * Since: 4.6
+ **/
+typedef enum {
+  GDK_NAMED_COLOR_SPACE_SRGB,
+  GDK_NAMED_COLOR_SPACE_SRGB_LINEAR,
+  GDK_NAMED_COLOR_SPACE_XYZ_D50,
+  GDK_NAMED_COLOR_SPACE_XYZ_D65,
+  GDK_NAMED_COLOR_SPACE_DISPLAY_P3,
+  GDK_NAMED_COLOR_SPACE_A98_RGB,
+  GDK_NAMED_COLOR_SPACE_PROPHOTO_RGB,
+  GDK_NAMED_COLOR_SPACE_REC2020,
+
+  GDK_NAMED_COLOR_SPACE_N_SPACES
+} GdkNamedColorSpace;
+
 G_END_DECLS
 
 #endif /* __GDK_ENUMS_H__ */

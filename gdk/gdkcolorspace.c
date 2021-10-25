@@ -159,6 +159,89 @@ gdk_color_space_get_srgb (void)
   return srgb_profile;
 }
 
+GdkColorSpace *
+gdk_color_space_get_named (GdkNamedColorSpace name)
+{
+  static GdkColorSpace *space_array[GDK_NAMED_COLOR_SPACE_N_SPACES];
+  static GdkColorSpace **color_spaces;
+
+  g_return_val_if_fail (name < GDK_NAMED_COLOR_SPACE_N_SPACES, gdk_color_space_get_srgb ());
+
+  if (g_once_init_enter (&color_spaces))
+    {
+      static const cmsCIExyY D65 = { 0.3127, 0.3290, 1.0 };
+      static const cmsFloat64Number srgb_tonecurve[5] = { 2.4, 1. / 1.055, 0.055 / 1.055, 1. / 12.92, 0.04045 };
+      static const cmsFloat64Number rec709_tonecurve[5] = { 1.0 / 0.45, 1.0 / 1.099, 0.099 / 1.099, 1.0 / 4.5, 0.081 };
+      cmsToneCurve *curve;
+      cmsHPROFILE lcms_profile;
+
+      space_array[GDK_NAMED_COLOR_SPACE_SRGB] = g_object_ref (gdk_color_space_get_srgb ());
+
+      curve = cmsBuildGamma (NULL, 1.0);
+      lcms_profile = cmsCreateRGBProfile (&D65,
+                                          &(cmsCIExyYTRIPLE) {
+                                            { 0.640, 0.330, 1.0 },
+                                            { 0.300, 0.600, 1.0 },
+                                            { 0.150, 0.060, 1.0 }
+                                          },
+                                          (cmsToneCurve*[3]) { curve, curve, curve });
+      cmsFreeToneCurve (curve);
+      space_array[GDK_NAMED_COLOR_SPACE_SRGB_LINEAR] = gdk_lcms_color_space_new_from_lcms_profile (lcms_profile);
+
+      space_array[GDK_NAMED_COLOR_SPACE_XYZ_D50] = gdk_lcms_color_space_new_from_lcms_profile (cmsCreateXYZProfile ());
+      /* XXX: This needs a D65 whitepoint here */
+      space_array[GDK_NAMED_COLOR_SPACE_XYZ_D65] = gdk_lcms_color_space_new_from_lcms_profile (cmsCreateXYZProfile ());
+
+      curve = cmsBuildParametricToneCurve (NULL, 4, srgb_tonecurve);
+      lcms_profile = cmsCreateRGBProfile (&D65,
+                                          &(cmsCIExyYTRIPLE) {
+                                            { 0.680, 0.320, 1.0 },
+                                            { 0.265, 0.690, 1.0 },
+                                            { 0.150, 0.060, 1.0 }
+                                          },
+                                          (cmsToneCurve*[3]) { curve, curve, curve });
+      cmsFreeToneCurve (curve);
+      space_array[GDK_NAMED_COLOR_SPACE_DISPLAY_P3] = gdk_lcms_color_space_new_from_lcms_profile (lcms_profile);
+
+      curve = cmsBuildGamma(NULL, 2.19921875);
+      lcms_profile = cmsCreateRGBProfile (&D65,
+                                          &(cmsCIExyYTRIPLE) {
+                                            { 0.640, 0.330, 1.0 },
+                                            { 0.210, 0.710, 1.0 },
+                                            { 0.150, 0.060, 1.0 }
+                                          },
+                                          (cmsToneCurve*[3]) { curve, curve, curve });
+      cmsFreeToneCurve (curve);
+      space_array[GDK_NAMED_COLOR_SPACE_A98_RGB] = gdk_lcms_color_space_new_from_lcms_profile (lcms_profile);
+
+      curve = cmsBuildParametricToneCurve (NULL, 4, rec709_tonecurve);
+      lcms_profile = cmsCreateRGBProfile (cmsD50_xyY (),
+                                          &(cmsCIExyYTRIPLE) {
+                                            { 0.734699,	0.265301, 1.0 },
+                                            { 0.159597, 0.840403, 1.0 },
+                                            { 0.036598, 0.000105, 1.0 }
+                                          },
+                                          (cmsToneCurve*[3]) { curve, curve, curve });
+      cmsFreeToneCurve (curve);
+      space_array[GDK_NAMED_COLOR_SPACE_PROPHOTO_RGB] = gdk_lcms_color_space_new_from_lcms_profile (lcms_profile);
+
+      curve = cmsBuildParametricToneCurve (NULL, 4, rec709_tonecurve);
+      lcms_profile = cmsCreateRGBProfile (&D65,
+                                          &(cmsCIExyYTRIPLE) {
+                                            { 0.708, 0.292, 1.0 },
+                                            { 0.170, 0.797, 1.0 },
+                                            { 0.131, 0.046, 1.0 }
+                                          },
+                                          (cmsToneCurve*[3]) { curve, curve, curve });
+      cmsFreeToneCurve (curve);
+      space_array[GDK_NAMED_COLOR_SPACE_REC2020] = gdk_lcms_color_space_new_from_lcms_profile (lcms_profile);
+
+      g_once_init_leave (&color_spaces, space_array);
+    }
+
+  return color_spaces[name];
+}
+
 /**
  * gdk_color_space_supports_format:
  * @self: a `GdkColorSpace`

@@ -47,6 +47,8 @@ GType                   gdk_color_space_get_type                (void) G_GNUC_CO
 
 GDK_AVAILABLE_IN_4_6
 GdkColorSpace *         gdk_color_space_get_srgb                (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_4_6
+GdkColorSpace *         gdk_color_space_get_named               (GdkNamedColorSpace    name) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_4_6
 GdkColorSpace *         gdk_color_space_new_from_icc_profile    (GBytes               *icc_profile,
