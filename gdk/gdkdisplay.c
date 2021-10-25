@@ -1340,7 +1340,7 @@ gdk_display_prepare_gl (GdkDisplay  *self,
  * Before using the returned `GdkGLContext`, you will need to
  * call [method@Gdk.GLContext.make_current] or [method@Gdk.GLContext.realize].
  *
- * Returns: (transfer full) (nullable): the newly created `GdkGLContext`
+ * Returns: (transfer full): the newly created `GdkGLContext`
  *
  * Since: 4.6
  */
