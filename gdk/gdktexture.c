@@ -616,6 +616,8 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
  * while loading a big image.
  *
  * Return value: A newly-created `GdkTexture`
+ *
+ * Since: 4.6
  */
 GdkTexture *
 gdk_texture_new_from_filename (const char  *path,

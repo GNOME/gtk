@@ -629,6 +629,8 @@ gsk_render_node_deserialize (GBytes            *bytes,
  * Stores the given `GskRenderNode` inside `value`.
  *
  * The `GValue` will acquire a reference to the `node`.
+ *
+ * Since: 4.6
  */
 void
 gsk_value_set_render_node (GValue        *value,
@@ -663,6 +665,8 @@ gsk_value_set_render_node (GValue        *value,
  * Stores the given `GskRenderNode` inside `value`.
  *
  * This function transfers the ownership of the `node` to the `GValue`.
+ *
+ * Since: 4.6
  */
 void
 gsk_value_take_render_node (GValue        *value,
@@ -696,6 +700,8 @@ gsk_value_take_render_node (GValue        *value,
  * Retrieves the `GskRenderNode` stored inside the given `value`.
  *
  * Returns: (transfer none) (nullable): a `GskRenderNode`
+ *
+ * Since: 4.6
  */
 GskRenderNode *
 gsk_value_get_render_node (const GValue *value)
@@ -713,6 +719,8 @@ gsk_value_get_render_node (const GValue *value)
  * a reference to it.
  *
  * Returns: (transfer full) (nullable): a `GskRenderNode`
+ *
+ * Since: 4.6
  */
 GskRenderNode *
 gsk_value_dup_render_node (const GValue *value)
