@@ -25,6 +25,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdevicetool.h>
+#include <gdk/gdkenums.h>
 
 
 G_BEGIN_DECLS

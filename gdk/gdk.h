@@ -47,6 +47,7 @@
 #include <gdk/gdkdragsurface.h>
 #include <gdk/gdkdrawcontext.h>
 #include <gdk/gdkdrop.h>
+#include <gdk/gdkenums.h>
 #include <gdk/gdkenumtypes.h>
 #include <gdk/gdkevents.h>
 #include <gdk/gdkframeclock.h>

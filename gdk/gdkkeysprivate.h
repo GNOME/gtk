@@ -20,6 +20,8 @@
 
 #include "gdkkeys.h"
 
+#include "gdkenums.h"
+
 G_BEGIN_DECLS
 
 #define GDK_TYPE_KEYMAP              (gdk_keymap_get_type ())

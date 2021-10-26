@@ -24,6 +24,7 @@
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
 
+#include <gdk/gdkenums.h>
 #include <gdk/gdktexture.h>
 
 G_BEGIN_DECLS
