@@ -42,6 +42,12 @@ gtk_css_image_url_load_image (GtkCssImageUrl  *url,
   if (url->loaded_image)
     return url->loaded_image;
 
+  if (url->file == NULL)
+    {
+      url->loaded_image = gtk_css_image_invalid_new ();
+      return url->loaded_image;
+    }
+
   /* We special case resources here so we can use gdk_texture_new_from_resource. */
   if (g_file_has_uri_scheme (url->file, "resource"))
     {
@@ -148,6 +154,10 @@ gtk_css_image_url_equal (GtkCssImage *image1,
 {
   GtkCssImageUrl *url1 = GTK_CSS_IMAGE_URL (image1);
   GtkCssImageUrl *url2 = GTK_CSS_IMAGE_URL (image2);
+  
+  /* FIXME: We don't save data: urls, so we can't compare them here */
+  if (url1->file == NULL || url2->file == NULL)
+    return FALSE;
 
   return g_file_equal (url1->file, url2->file);
 }
