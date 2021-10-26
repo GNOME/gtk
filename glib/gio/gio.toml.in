@@ -35,4 +35,8 @@ show_class_hierarchy = true
 urlmap_file = "urlmap.js"
 # The same order will be used when generating the index
 content_files = []
-
+content_images = [
+  "gvfs-overview.png",
+  "menu-example.png",
+  "menu-model.png",
+]
