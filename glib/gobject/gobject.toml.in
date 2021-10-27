@@ -37,6 +37,7 @@ urlmap_file = "urlmap.js"
 content_files = [
   "concepts.md",
   "tutorial.md",
+  "floating-refs.md",
 ]
 content_images = [
   "images/glue.png",
