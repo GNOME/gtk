@@ -165,7 +165,7 @@ parse_rgb_value (const char   *str,
  *
  * The string can be either one of:
  *
- * - A standard name (Taken from the X11 rgb.txt file).
+ * - A standard name (Taken from the Css specification).
  * - A hexadecimal value in the form “\#rgb”, “\#rrggbb”,
  *   “\#rrrgggbbb” or ”\#rrrrggggbbbb”
  * - A hexadecimal value in the form “\#rgba”, “\#rrggbbaa”,
