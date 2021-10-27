@@ -367,10 +367,10 @@ gtk_event_controller_handle_event (GtkEventController *controller,
 
   g_object_ref (controller);
   retval = controller_class->handle_event (controller, event, x, y);
-  g_object_unref (controller);
 
   g_clear_object (&priv->target);
   g_clear_pointer (&priv->event, gdk_event_unref);
+  g_object_unref (controller);
 
   return retval;
 }
