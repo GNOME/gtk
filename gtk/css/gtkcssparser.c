@@ -55,7 +55,6 @@ struct _GtkCssParserBlock
 static GtkCssParser *
 gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
                     GFile                 *file,
-                    GFile                 *base_directory,
                     GtkCssParserErrorFunc  error_func,
                     gpointer               user_data,
                     GDestroyNotify         user_destroy)
@@ -67,11 +66,11 @@ gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
   self->ref_count = 1;
   self->tokenizer = gtk_css_tokenizer_ref (tokenizer);
   if (file)
-    self->file = g_object_ref (file);
-  if (base_directory)
-    self->directory = g_object_ref (base_directory);
-  else if (file)
-    self->directory = g_file_get_parent (file);
+    {
+      self->file = g_object_ref (file);
+      self->directory = g_file_get_parent (file);
+    }
+
   self->error_func = error_func;
   self->user_data = user_data;
   self->user_destroy = user_destroy;
@@ -94,7 +93,7 @@ gtk_css_parser_new_for_file (GFile                 *file,
   if (bytes == NULL)
     return NULL;
 
-  result = gtk_css_parser_new_for_bytes (bytes, file, NULL, error_func, user_data, user_destroy);
+  result = gtk_css_parser_new_for_bytes (bytes, file, error_func, user_data, user_destroy);
 
   g_bytes_unref (bytes);
 
@@ -104,7 +103,6 @@ gtk_css_parser_new_for_file (GFile                 *file,
 GtkCssParser *
 gtk_css_parser_new_for_bytes (GBytes                *bytes,
                               GFile                 *file,
-                              GFile                 *base_directory,
                               GtkCssParserErrorFunc  error_func,
                               gpointer               user_data,
                               GDestroyNotify         user_destroy)
@@ -113,7 +111,7 @@ gtk_css_parser_new_for_bytes (GBytes                *bytes,
   GtkCssParser *result;
   
   tokenizer = gtk_css_tokenizer_new (bytes);
-  result = gtk_css_parser_new (tokenizer, file, base_directory, error_func, user_data, user_destroy);
+  result = gtk_css_parser_new (tokenizer, file, error_func, user_data, user_destroy);
   gtk_css_tokenizer_unref (tokenizer);
 
   return result;

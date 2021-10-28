@@ -2391,7 +2391,7 @@ gsk_transform_parse (const char    *string,
   g_return_val_if_fail (out_transform != NULL, FALSE);
 
   bytes = g_bytes_new_static (string, strlen (string));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL, NULL);
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
 
   result = gsk_transform_parser_parse (parser, out_transform);
 

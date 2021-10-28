@@ -1918,7 +1918,7 @@ gsk_render_node_deserialize_from_bytes (GBytes            *bytes,
     gpointer user_data;
   } error_func_pair = { error_func, user_data };
 
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, gsk_render_node_parser_error,
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, gsk_render_node_parser_error,
                                          &error_func_pair, NULL);
   root = parse_container_node (parser);
 

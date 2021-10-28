@@ -365,7 +365,6 @@ gtk_css_scanner_new (GtkCssProvider *provider,
 
   scanner->parser = gtk_css_parser_new_for_bytes (bytes,
                                                   file,
-                                                  NULL,
                                                   gtk_css_scanner_parser_error,
                                                   scanner,
                                                   NULL);
