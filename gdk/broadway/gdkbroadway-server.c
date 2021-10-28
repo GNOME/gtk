@@ -620,21 +620,28 @@ gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
   gsize size;
   int fd;
 
-  id = server->next_texture_id++;
-
   bytes = gdk_texture_save_to_png_bytes (texture);
   fd = open_shared_memory ();
   data = g_bytes_get_data (bytes, &size);
 
-  while (size)
+  id = server->next_texture_id++;
+
+  msg.id = id;
+  msg.offset = 0;
+  msg.size = 0;
+
+  while (msg.size < size)
     {
-      gssize ret = write (fd, data, size);
+      gssize ret = write (fd, data + msg.size, size - msg.size);
 
       if (ret <= 0)
-        break;
+        {
+          if (errno == EINTR)
+            continue;
+          break;
+        }
 
-      size -= ret;
-      data += ret;
+      msg.size += ret;
     }
 
   g_bytes_unref (bytes);
