@@ -565,6 +565,13 @@ if x11_enabled
   endif
   cdata.set('XINPUT_2_2', 1)
 
+  has_gesture_pinch_event = cc.has_member('XIGesturePinchEvent', 'type', dependencies: xi_dep,
+                                          prefix: '''#include <X11/Xlib.h>
+                                                     #include <X11/extensions/XInput2.h>''')
+  if has_gesture_pinch_event
+    cdata.set('XINPUT_2_4', 1)
+  endif
+
   xinerama_dep = dependency('xinerama')
   if not cc.has_header_symbol('X11/extensions/Xinerama.h', 'XineramaQueryExtension', dependencies: xinerama_dep)
     error('X11 backend enabled, but Xinerama extension does not work.')
