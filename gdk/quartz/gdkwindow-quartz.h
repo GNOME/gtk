@@ -103,6 +103,8 @@ typedef struct _GdkRootWindowImplQuartzClass GdkRootWindowImplQuartzClass;
 struct _GdkRootWindowImplQuartz
 {
   GdkWindowImplQuartz parent_instance;
+  CGContextRef cg_context;
+  GList* cg_layers;
 };
  
 struct _GdkRootWindowImplQuartzClass 

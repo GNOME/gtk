@@ -24,6 +24,8 @@
 #include "gdkprivate-quartz.h"
 #include "gdkquartz.h"
 #include "gdkinternal-quartz.h"
+#include <cairo/cairo-quartz.h>
+#import <AppKit/AppKit.h>
 
 @implementation GdkQuartzView
 
@@ -185,7 +187,7 @@
 
 -(void)doCommandBySelector: (SEL)aSelector
 {
-  GDK_NOTE (EVENTS, g_message ("doCommandBySelector %s", aSelector));
+     GDK_NOTE (EVENTS, g_message ("doCommandBySelector %s", [NSStringFromSelector (aSelector) UTF8String]));
   g_object_set_data (G_OBJECT (gdk_window), GIC_FILTER_KEY,
                      GUINT_TO_POINTER (GIC_FILTER_PASSTHRU));
 }
@@ -307,42 +309,31 @@
   [super viewWillDraw];
 }
 
--(void)drawRect: (NSRect)rect
+-(BOOL)wantsUpdateLayer
 {
-  GdkRectangle gdk_rect;
+     return YES;
+}
+
+static void
+provider_release_cb (void* info, const void* data, size_t size)
+{
+  g_free (info);
+}
+
+-(void)updateLayer
+{
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (gdk_window->impl);
-  const NSRect *drawn_rects;
-  NSInteger count;
-  int i;
-  cairo_region_t *region;
+  CALayer *ca_layer = [self layer];
+  CGRect layer_bounds = [ca_layer bounds];
+  CGRect backing_bounds = [self convertRectToBacking: layer_bounds];
+  cairo_rectangle_int_t surface_extents = { layer_bounds.origin.x,
+                                            layer_bounds.origin.y,
+                                            backing_bounds.size.width,
+                                            backing_bounds.size.height };
+  cairo_surface_t *image_surface = NULL;
 
   if (GDK_WINDOW_DESTROYED (gdk_window))
     return;
-
-  if (! (gdk_window->event_mask & GDK_EXPOSURE_MASK))
-    return;
-
-  if (NSEqualRects (rect, NSZeroRect))
-    return;
-
-  if (!GDK_WINDOW_IS_MAPPED (gdk_window))
-    {
-      /* If the window is not yet mapped, clip_region_with_children
-       * will be empty causing the usual code below to draw nothing.
-       * To not see garbage on the screen, we draw an aesthetic color
-       * here. The garbage would be visible if any widget enabled
-       * the NSView's CALayer in order to add sublayers for custom
-       * native rendering.
-       */
-      [NSGraphicsContext saveGraphicsState];
-
-      [[NSColor windowBackgroundColor] setFill];
-      [NSBezierPath fillRect: rect];
-
-      [NSGraphicsContext restoreGraphicsState];
-
-      return;
-    }
 
   if (impl->needs_display_region)
     {
@@ -352,31 +343,66 @@
     }
   else
     {
-      [self getRectsBeingDrawn: &drawn_rects count: &count];
-      cairo_region_t* region = cairo_region_create ();
-
-      for (i = 0; i < count; i++)
-        {
-          gdk_rect.x = drawn_rects[i].origin.x;
-          gdk_rect.y = drawn_rects[i].origin.y;
-          gdk_rect.width = drawn_rects[i].size.width;
-          gdk_rect.height = drawn_rects[i].size.height;
-
-          cairo_region_union_rectangle (region, &gdk_rect);
-        }
-
-      impl->in_paint_rect_count++;
+      cairo_region_t *region = cairo_region_create_rectangle (&surface_extents);
+      ++impl->in_paint_rect_count;
       _gdk_window_process_updates_recurse (gdk_window, region);
-      impl->in_paint_rect_count--;
-
       cairo_region_destroy (region);
     }
+  
+  if (!impl || !impl->cairo_surface)
+    return;
 
-  if (needsInvalidateShadow)
+  image_surface = cairo_surface_map_to_image (impl->cairo_surface,
+                                              &surface_extents);
+  if (!cairo_surface_status (image_surface))
     {
-      [[self window] invalidateShadow];
-      needsInvalidateShadow = NO;
+      cairo_format_t image_format = cairo_image_surface_get_format (image_surface);
+      if (image_format == CAIRO_FORMAT_ARGB32)
+        {
+          int image_width = cairo_image_surface_get_width (image_surface);
+          int image_height = cairo_image_surface_get_height (image_surface);
+          int image_stride = cairo_image_surface_get_stride (image_surface);
+          void* image_data = g_malloc (image_height * image_stride);
+          int color_bits = 8;
+          int pixel_bits = 32;
+          CGColorSpaceRef color_space = CGColorSpaceCreateDeviceRGB ();
+	  CGBitmapInfo bitinfo =
+            kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst;
+          CGDataProviderRef provider =
+            CGDataProviderCreateWithData (image_data, image_data,
+                                          image_height * image_stride,
+                                          provider_release_cb);
+          const CGFloat *decode = NULL;
+          bool interpolate = YES;
+          CGSize image_size = {image_height, image_width};
+          NSImage* ns_image = NULL;
+
+          if (ca_layer.contents)
+            [(NSImage*)ca_layer.contents release];
+
+          memcpy (image_data, cairo_image_surface_get_data (image_surface),
+                  image_height * image_stride);
+
+          ns_image = [[NSImage alloc]
+                      initWithCGImage:CGImageCreate (image_width,
+                                                                   image_height,
+                                                                   color_bits,
+                                                                   pixel_bits,
+                                                                   image_stride,
+                                                                   color_space,
+                                                                   bitinfo,
+                                                                   provider,
+                                                                   decode,
+                                                                   interpolate,
+                                                                   kCGRenderingIntentDefault)
+                      size:image_size];
+          ca_layer.contents = ns_image;
+        }
     }
+  cairo_surface_unmap_image (impl->cairo_surface, image_surface);
+  cairo_surface_destroy (impl->cairo_surface);
+  --impl->in_paint_rect_count;
+
 }
 
 -(void)setNeedsInvalidateShadow: (BOOL)invalidate

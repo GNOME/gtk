@@ -148,7 +148,7 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
 				    gboolean             antialias)
 {
   CGContextRef cg_context = NULL;
-  CGSize scale;
+  //  CGSize scale;
 
   if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
     return NULL;
@@ -186,9 +186,8 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
 
   /* Undo the default scaling transform, since we apply our own
    * in gdk_quartz_ref_cairo_surface () */
-  scale = CGContextConvertSizeToDeviceSpace (cg_context,
-                                             CGSizeMake (1.0, 1.0));
-  CGContextScaleCTM (cg_context, 1.0 / fabs(scale.width), 1.0 / fabs(scale.height));
+  //  scale = CGContextConvertSizeToDeviceSpace (cg_context, CGSizeMake (1.0, 1.0));
+  //  CGContextScaleCTM (cg_context, 1.0 / fabs(scale.width), 1.0 / fabs(scale.height));
   return cg_context;
 }
 
@@ -247,10 +246,6 @@ gdk_quartz_cairo_surface_destroy (void *data)
 
   surface_data->window_impl->cairo_surface = NULL;
 
-  if (surface_data->cg_context)
-       gdk_quartz_window_release_context (surface_data->window_impl,
-                                          surface_data->cg_context);
-
   g_free (surface_data);
 }
 
@@ -259,21 +254,15 @@ gdk_quartz_create_cairo_surface (GdkWindowImplQuartz *impl,
 				 int                  width,
 				 int                  height)
 {
-  CGContextRef cg_context;
   GdkQuartzCairoSurfaceData *surface_data;
   cairo_surface_t *surface;
 
-  cg_context = gdk_quartz_window_get_context (impl, TRUE);
 
   surface_data = g_new (GdkQuartzCairoSurfaceData, 1);
   surface_data->window_impl = impl;
-  surface_data->cg_context = cg_context;
+  surface_data->cg_context = NULL;
 
-  if (cg_context)
-    surface = cairo_quartz_surface_create_for_cg_context (cg_context,
-                                                          width, height);
-  else
-    surface = cairo_quartz_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 
   cairo_surface_set_user_data (surface, &gdk_quartz_cairo_key,
                                surface_data,
@@ -286,19 +275,17 @@ static cairo_surface_t *
 gdk_quartz_ref_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  gint scale = gdk_window_get_scale_factor (impl->wrapper);
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
   if (!impl->cairo_surface)
     {
-      gint scale = gdk_window_get_scale_factor (impl->wrapper);
-
-      impl->cairo_surface = 
-          gdk_quartz_create_cairo_surface (impl,
-                                           gdk_window_get_width (impl->wrapper) * scale,
-                                           gdk_window_get_height (impl->wrapper) * scale);
-
+      impl->cairo_surface =
+        gdk_quartz_create_cairo_surface (impl,
+                                         gdk_window_get_width (impl->wrapper) * scale,
+                                         gdk_window_get_height (impl->wrapper) * scale);
       cairo_surface_set_device_scale (impl->cairo_surface, scale, scale);
     }
   else
@@ -316,6 +303,7 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 static gboolean
 gdk_window_impl_quartz_begin_paint (GdkWindow *window)
 {
+  gdk_quartz_ref_cairo_surface (window);
   return FALSE;
 }
 
@@ -3204,37 +3192,15 @@ gdk_quartz_window_release_context (GdkWindowImplQuartz  *window,
   GDK_WINDOW_IMPL_QUARTZ_GET_CLASS (window)->release_context (window, cg_context);
 }
 
+/* macOS doesn't define a root window, but Gdk needs one for two
+ * purposes: To be a parent reference for some toplevels and to be a
+ * fallback window when gdk_window_create_image_surface is called with
+ * a NULL GdkWindow.
+ *
+ */
 
-
-static CGContextRef
-gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window,
-                                         gboolean             antialias)
-{
-  CGColorSpaceRef colorspace;
-  CGContextRef cg_context;
-  GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (window);
-
-  if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
-    return NULL;
-
-  /* We do not have the notion of a root window on OS X.  We fake this
-   * by creating a 1x1 bitmap and return a context to that.
-   */
-  colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
-  cg_context = CGBitmapContextCreate (NULL,
-                                      1, 1, 8, 4, colorspace,
-                                      (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
-  CGColorSpaceRelease (colorspace);
-
-  return cg_context;
-}
-
-static void
-gdk_root_window_impl_quartz_release_context (GdkWindowImplQuartz *window,
-                                             CGContextRef         cg_context)
-{
-  CGContextRelease (cg_context);
-}
+static CGContextRef gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window, gboolean antialias);
+static void gdk_root_window_impl_quartz_release_context (GdkWindowImplQuartz *window, CGContextRef cg_context);
 
 static void
 gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
@@ -3250,6 +3216,22 @@ gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
 static void
 gdk_root_window_impl_quartz_init (GdkRootWindowImplQuartz *impl)
 {
+  CGColorSpaceRef colorspace =  CGColorSpaceCreateDeviceRGB ();
+  /* Alpha channel Info: Cairo, CGImage, and CVPixelBuffer all use
+   * kCGImageAlphaPremultipliedFirst, CALayer.contents wants
+   * kCGImageAlphaPremultipliedLast.
+   */
+  CGBitmapInfo info = (CGBitmapInfo)kCGImageAlphaPremultipliedLast;
+  impl->cg_context = CGBitmapContextCreate (NULL, 1, 1, 8, 4,
+                                            colorspace, info);
+  CGColorSpaceRelease (colorspace);
+  impl->cg_layers = NULL;
+}
+
+static void
+gdk_root_window_impl_quartz_dispose (GdkRootWindowImplQuartz *impl)
+{
+  g_list_free_full (impl->cg_layers, (GDestroyNotify)CGLayerRelease);
 }
 
 GType
@@ -3278,4 +3260,31 @@ _gdk_root_window_impl_quartz_get_type (void)
     }
 
   return object_type;
+}
+
+
+static CGContextRef
+gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window,
+                                         gboolean             antialias)
+{
+   GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (window);
+   GdkRootWindowImplQuartz *impl = GDK_ROOT_WINDOW_IMPL_QUARTZ (window);
+   CGSize size;
+   CGLayerRef layer;
+
+  if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
+    return NULL;
+
+  size.width = gdk_window_get_width (window_impl->wrapper);
+  size.height = gdk_window_get_height (window_impl->wrapper);
+  layer = CGLayerCreateWithContext(impl->cg_context, size, NULL);
+  impl->cg_layers = g_list_prepend(impl->cg_layers, CGLayerRetain (layer));
+  return CGContextRetain (CGLayerGetContext (layer));
+}
+
+static void
+gdk_root_window_impl_quartz_release_context (GdkWindowImplQuartz *window,
+                                             CGContextRef         cg_context)
+{
+  CGContextRelease (cg_context);
 }
