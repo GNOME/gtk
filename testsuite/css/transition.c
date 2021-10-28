@@ -142,7 +142,7 @@ value_from_string (GtkStyleProperty *prop,
   GtkCssValue *value;
 
   bytes = g_bytes_new_static (str, strlen (str));
-  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL, NULL);
+  parser = gtk_css_parser_new_for_bytes (bytes, NULL, NULL, NULL, NULL);
   value = _gtk_style_property_parse_value (prop, parser);
   gtk_css_parser_unref (parser);
   g_bytes_unref (bytes);

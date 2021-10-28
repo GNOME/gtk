@@ -56,7 +56,6 @@ GtkCssParser *          gtk_css_parser_new_for_file             (GFile          
                                                                  GError                        **error);
 GtkCssParser *          gtk_css_parser_new_for_bytes            (GBytes                         *bytes,
                                                                  GFile                          *file,
-                                                                 GFile                          *base_directory,
                                                                  GtkCssParserErrorFunc           error_func,
                                                                  gpointer                        user_data,
                                                                  GDestroyNotify                  user_destroy);
