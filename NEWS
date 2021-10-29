@@ -1,5 +1,5 @@
-Overview of Changes
-===================
+Overview of Changes in 4.5.0
+============================
 
 * gsk:
  - Drop the GL renderer in favor of NGL
