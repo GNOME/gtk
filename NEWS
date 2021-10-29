@@ -3,17 +3,125 @@ Overview of Changes
 
 * gsk:
  - Drop the GL renderer in favor of NGL
+ - Rename NGL to GL
+ - Fix some coordinate overflow issues
+ - Reimplement texture upload and download for better
+   support of image formats and color spaces
+ - New api:
+   gsk_transform_skew
+   gsk_transform_to_2d_components
+
+* gdk:
+ - Support HSL in gdk_rgba_parse
+ - Use libpng, libjpeg and libtiff directly when loading
+   textures, and support more image formats (including 16bit
+   and float formats)
+ - New apis:
+   gdk_texture_new_from_bytes
+   gdk_texture_new_from_filename
+   gdk_texture_download_float
+   gdk_texture_save_to_png_bytes
+   gdk_texture_save_to_tiff
+   gdk_texture_save_to_tiff_bytes
+   gdk_display_create_gl_context
+ - Implement GIcon and GLoadableIcon in GdkTexture
+ - Move EGL initialization to the frontend
+ - Use configless EGL contexts, if supported
+ - Use >8bit pixel formats, if supported and requested
 
 * css:
  - Add support for line-height
  - Add support for text-transform
 
+* theme:
+ - Fixes for buttons in toolbars
+
+* input:
+ - Update compose sequences from libX11 1.7.2
+ - Accept replacement string longer than 20 characters
+
+* text:
+ - Implement sloped caret drawing
+ - Add a gtk-hint-font-metrics setting to switch
+   font rendering to be more similar to GTK3
+
 * GtkTextView:
  - Add support for line height
  - Add support for text transforms
+ - Misc fixes for css->pango attribute translations
+ - Invalidate pango contexts when font settings change
+ - Improve undo grouping when overwriting
+
+* GtkListView:
+ - Make tree indentation more flexible with
+   GtkTreeExpander:indent-for-icon
+
+* GtkMenuButton:
+ - Support custom children
+
+* GtkFlowBox:
+ - Add prepend and append
+
+* GtkCalendar:
+ - Fix handling of weeks starting on Monday
+
+* GtkWindow:
+ - Add a titlebar property
+
+* GtkDropDown:
+ - Add a show-arrow property
+
+* GtkPopoverMenu:
+ - Support a use-markup attribute in menu models
+
+* Add GtkSymbolicPaintable
+
+* Tools:
+ - Support DND in gtk4-node-editor and the inspector's recorder
+
+* Demos:
+ - Improve the font rendering demo
 
 * Build:
  - Require Pango 1.49
+ - Require libpng, libtiff and libjpeg
+ - Speed up handling of resources during build
+
+* X11:
+ - Support touchpad gestures with XInput 2.4
+
+* Windows:
+ - Fix DND coordinates
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Chinese (China)
+ Croatian
+ Czech
+ Dutch
+ Finnish
+ French
+ Galician
+ German
+ Hebrew
+ Hungarian
+ Icelandic
+ Indonesian
+ Kazakh
+ Korean
+ Latvian
+ Lithuanian
+ Persian
+ Portuguese
+ Romanian
+ Serbian
+ Slovak
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
 
 
 Overview of Changes in 4.4.0
