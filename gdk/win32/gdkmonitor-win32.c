@@ -563,7 +563,7 @@ enum_monitor (HMONITOR hmonitor,
           GdkWin32Monitor *w32mon;
           GdkMonitor *mon;
           GdkRectangle rect;
-          guint scale;
+          int scale;
 
           memset (&dd_monitor, 0, sizeof (dd_monitor));
           dd_monitor.cb = sizeof (dd_monitor);
