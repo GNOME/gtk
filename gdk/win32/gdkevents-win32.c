@@ -1290,13 +1290,12 @@ make_crossing_event (GdkDevice *physical_device,
 }
 
 /* Acquires actual client area size of the underlying native window.
- * Rectangle is in GDK screen coordinates (_gdk_offset_* is added).
  * Returns FALSE if configure events should be inhibited,
  * TRUE otherwise.
  */
 gboolean
 _gdk_win32_get_window_rect (GdkSurface *window,
-                            RECT      *rect)
+                            RECT       *rect)
 {
   RECT client_rect;
   POINT point;
@@ -1311,11 +1310,7 @@ _gdk_win32_get_window_rect (GdkSurface *window,
 
   /* top level windows need screen coords */
   if (GDK_IS_TOPLEVEL (window))
-    {
-      ClientToScreen (hwnd, &point);
-      point.x += _gdk_offset_x * impl->surface_scale;
-      point.y += _gdk_offset_y * impl->surface_scale;
-    }
+    ClientToScreen (hwnd, &point);
 
   rect->left = point.x;
   rect->top = point.y;
@@ -2409,15 +2404,15 @@ gdk_event_translate (MSG *msg,
       impl = GDK_WIN32_SURFACE (window);
 
       /* If we haven't moved, don't create any GDK event. Windows
-       * sends WM_MOUSEMOVE messages after a new window is shows under
+       * sends WM_MOUSEMOVE messages after a new window is shown under
        * the mouse, even if the mouse hasn't moved. This disturbs gtk.
        */
-      if ((msg->pt.x + _gdk_offset_x) / impl->surface_scale == current_root_x &&
-	  (msg->pt.y + _gdk_offset_y) / impl->surface_scale == current_root_y)
-	break;
+      if (msg->pt.x / impl->surface_scale == current_root_x &&
+          msg->pt.y / impl->surface_scale == current_root_y)
+        break;
 
-      current_root_x = (msg->pt.x + _gdk_offset_x) / impl->surface_scale;
-      current_root_y = (msg->pt.y + _gdk_offset_y) / impl->surface_scale;
+      current_root_x = msg->pt.x / impl->surface_scale;
+      current_root_y = msg->pt.y / impl->surface_scale;
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         gdk_win32_surface_do_move_resize_drag (window, current_root_x, current_root_y);

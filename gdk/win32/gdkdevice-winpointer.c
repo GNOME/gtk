@@ -91,15 +91,6 @@ gdk_device_winpointer_query_state (GdkDevice        *device,
   if (win_y)
     *win_y = point.y / scale;
 
-  if (!window)
-    {
-      if (win_x)
-        *win_x += _gdk_offset_x;
-
-      if (win_y)
-        *win_y += _gdk_offset_y;
-    }
-
   if (hwnd && child_window)
     {
       hwndc = ChildWindowFromPoint (hwnd, point);
