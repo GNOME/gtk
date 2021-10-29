@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-10-18 11:37+0000\n"
-"PO-Revision-Date: 2021-10-21 12:36+0200\n"
+"PO-Revision-Date: 2021-10-29 17:22+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -1061,7 +1061,7 @@ msgstr "Odpusti"
 #: gtk/a11y/gtkspinneraccessible.c:39
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "Pulsirajuće"
+msgstr "Puls okretanja"
 
 #: gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
