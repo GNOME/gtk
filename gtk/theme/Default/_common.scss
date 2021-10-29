@@ -606,7 +606,7 @@ button {
     min-width: 26px;
     min-height: 32px;
 
-    &.image-button { 
+    &.image-button {
       min-width: 30px;
       &:only-child {
         margin: 4px;
@@ -895,7 +895,15 @@ modelbutton.flat arrow {
 
 /* oldstyle toolbar buttons */
 
-.toolbar button {
+.toolbar > button,
+.toolbar > :not(.linked) > button,
+.toolbar :not(.linked) > menubutton > button,
+.toolbar :not(.linked) > scalebutton > button,
+.toolbar :not(.linked) > dropdown > button,
+.toolbar :not(.linked) > colorbutton > button,
+.toolbar :not(.linked) > fontbutton > button,
+.toolbar :not(.linked) > appchooserbutton > button,
+.toolbar :not(.linked) > combobox > box > button {
   margin: 1px;
 
    @extend %button_basic_flat;
@@ -2401,7 +2409,7 @@ switch {
     border-radius: 50%;
     transition: $button_transition;
   }
-  
+
   > image { color: transparent; } /* only show i / o for the accessible theme */
 
   &:hover > slider {
@@ -2510,7 +2518,7 @@ radio {
       }
     }
   }
-  
+
   @if $variant == 'light' {
     // the borders of the light variant versions of checks and radios are too similar in luminosity to the selected background
     // color, hence we need special casing.
