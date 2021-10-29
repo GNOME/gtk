@@ -1304,8 +1304,7 @@ combobox {
   background-color: $bg_color;
 }
 
-.toolbar,
-toolbar {
+.toolbar {
   @extend %toolbar;
 
   // on OSD
@@ -1854,7 +1853,7 @@ popover.background {
 
     > list,
     > .view,
-    > toolbar {
+    > .toolbar {
       border-style: none;
       background-color: transparent;
     }
