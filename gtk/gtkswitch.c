@@ -586,7 +586,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    * default handler from running.
    *
    * Visually, the underlying state is represented by the trough color of
-   * the switch, while the [property@Gtk.Switch`:active] property is
+   * the switch, while the [property@Gtk.Switch:active] property is
    * represented by the position of the switch.
    *
    * Returns: %TRUE to stop the signal emission
