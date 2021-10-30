@@ -641,7 +641,7 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * GtkIconView::select-all:
    * @iconview: the object on which the signal is emitted
    *
-   * A [keybinding signal][class.Gtk.SignalAction]
+   * A [keybinding signal][class@Gtk.SignalAction]
    * which gets emitted when the user selects all items.
    *
    * Applications should not connect to it, but may emit it with
