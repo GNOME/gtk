@@ -1,3 +1,91 @@
+Overview of Changes in 4.4.1
+============================
+
+* input:
+ - Fix compose data on bigendian systems
+ - Accept long replacement strings for compose sequences
+
+* a11y:
+ - Fix accessible relations for menu buttons
+ - Fix accessible descriptions in some cases
+ - Simplify atspi context a bit
+
+* Theme:
+ - Improve styling for toggle buttons in toolbars
+
+*  gsk:
+ - Avoid coordinate overflow with big text selections
+
+* GtkTextView:
+ - Fix applying css properties such as
+   letterspacing, line decoration, font
+   features, etc
+ - Improve grouping for undo
+ - Invalidate Pango contexts when font settings change
+ - Fix a crash
+
+* GtkFileChooser:
+ - Fix handling of choices
+
+* GtkStackSwitcher:
+ - Expand child buttons
+
+* GtkCalendar:
+ - Fix day names for weeks that start on monday
+
+* GtkWindow:
+ - Prefer menubars when handling F10
+
+* GtkFontButton:
+ - Make sure the dialog is on the same display
+
+* X11:
+ - Fix handling of randr events
+
+* Windows:
+ - Fix DND coordinates
+ - Fix build
+
+* macOS:
+ - Fix handling of scale on macOS 12
+
+* build:
+ - Fix detection of pre-compiled css files
+
+* Translation updates
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Chinese (China)
+ Croatian
+ Czech
+ Danish
+ Finnish
+ French
+ Galician
+ German
+ Hebrew
+ Hungarian
+ Icelandic
+ Indonesian
+ Kazakh
+ Korean
+ Latvian
+ Lithuanian
+ Persian
+ Polish
+ Portuguese
+ Romanian
+ Russian
+ Serbian
+ Slovak
+ Slovenian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.4.0
 ============================
 
