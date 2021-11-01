@@ -13,12 +13,10 @@ if get_option('gtk_doc')
     command: [
       gidocgen,
       'generate',
-      '--quiet',
-      '--fatal-warnings',
+      gidocgen_common_args,
       '--add-include-path=@0@'.format(meson.current_build_dir() / '../../../gtk'),
       '--config=@INPUT0@',
       '--output-dir=@OUTPUT@',
-      '--no-namespace-dir',
       '--content-dir=@0@'.format(meson.current_source_dir()),
       '@INPUT1@',
     ],

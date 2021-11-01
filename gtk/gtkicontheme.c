@@ -2748,7 +2748,7 @@ add_key_to_hash (gpointer key,
  *
  * Lists the names of icons in the current icon theme.
  *
- * Returns: (element-type utf8) (transfer full): a string array
+ * Returns: (array zero-terminated=1) (element-type utf8) (transfer full): a string array
  *   holding the names of all the icons in the theme. You must
  *   free the array using g_strfreev().
  */
