@@ -49,8 +49,10 @@ main (int argc, char *argv[])
   GOptionContext *context = NULL;
   char *summary;
   char *app_name;
-#ifdef G_OS_UNIX
+#if defined(HAVE_GIO_UNIX) && !defined(__APPLE__)
   char *desktop_file_name;
+#endif
+#ifdef G_OS_UNIX
   char *bus_name = NULL;
 #endif
   GAppInfo *info = NULL;
