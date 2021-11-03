@@ -255,7 +255,7 @@ static GdkGLAPI
 gdk_gl_context_real_realize (GdkGLContext  *context,
                              GError       **error)
 {
-#if HAVE_EGL
+#ifdef HAVE_EGL
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
@@ -572,6 +572,11 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
   glViewport (0, 0, ww, wh);
+
+#ifdef HAVE_EGL
+  if (priv->egl_context)
+    glDrawBuffers (1, (GLenum[1]) { GL_BACK_LEFT });
+#endif
 }
 
 static void
