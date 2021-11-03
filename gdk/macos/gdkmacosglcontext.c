@@ -163,7 +163,7 @@ ensure_gl_view (GdkMacosGLContext *self)
   return [nswindow contentView];
 }
 
-static gboolean
+static GdkGLAPI
 gdk_macos_gl_context_real_realize (GdkGLContext  *context,
                                    GError       **error)
 {
