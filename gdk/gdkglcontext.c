@@ -255,7 +255,7 @@ static GdkGLAPI
 gdk_gl_context_real_realize (GdkGLContext  *context,
                              GError       **error)
 {
-#if HAVE_EGL
+#ifdef HAVE_EGL
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
