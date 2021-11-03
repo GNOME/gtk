@@ -4073,7 +4073,7 @@ get_framebuffer_format (guint framebuffer)
   glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);
   glGetFramebufferAttachmentParameteriv (GL_FRAMEBUFFER,
                                          framebuffer ? GL_COLOR_ATTACHMENT0
-                                                     : GL_BACK,
+                                                     : GL_BACK_LEFT,
                                          GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &size);
 
   if (size > 16)
