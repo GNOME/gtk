@@ -206,7 +206,7 @@ macos:
     - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
     - export MESON_FORCE_BACKTRACE=1
   script:
-    - meson setup
+    - meson setup ${COMMON_MESON_FLAGS}
             -Dx11-backend=false
             -Dbroadway-backend=true
             -Dmacos-backend=true
