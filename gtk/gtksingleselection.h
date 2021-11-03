@@ -54,6 +54,11 @@ gboolean                gtk_single_selection_get_can_unselect   (GtkSingleSelect
 GDK_AVAILABLE_IN_ALL
 void                    gtk_single_selection_set_can_unselect   (GtkSingleSelection     *self,
                                                                  gboolean                can_unselect);
+GDK_AVAILABLE_IN_4_6
+gboolean                gtk_single_selection_get_hide_selection (GtkSingleSelection     *self);
+GDK_AVAILABLE_IN_4_6
+void                    gtk_single_selection_set_hide_selection (GtkSingleSelection     *self,
+                                                                 gboolean                hide_selection);
 
 G_END_DECLS
 

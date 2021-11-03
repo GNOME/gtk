@@ -46,6 +46,7 @@ struct _GtkSingleSelection
 
   guint autoselect : 1;
   guint can_unselect : 1;
+  guint hide_selection : 1;
 };
 
 struct _GtkSingleSelectionClass
@@ -57,6 +58,7 @@ enum {
   PROP_0,
   PROP_AUTOSELECT,
   PROP_CAN_UNSELECT,
+  PROP_HIDE_SELECTION,
   PROP_SELECTED,
   PROP_SELECTED_ITEM,
   PROP_MODEL,
@@ -108,6 +110,9 @@ gtk_single_selection_is_selected (GtkSelectionModel *model,
 {
   GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
 
+  if (self->hide_selection)
+    return FALSE;
+
   return self->selected == position;
 }
 
@@ -120,7 +125,8 @@ gtk_single_selection_get_selection_in_range (GtkSelectionModel *model,
   GtkBitset *result;
 
   result = gtk_bitset_new_empty ();
-  if (self->selected != GTK_INVALID_LIST_POSITION)
+  if (self->selected != GTK_INVALID_LIST_POSITION &&
+      !self->hide_selection)
     gtk_bitset_add (result, self->selected);
 
   return result;
@@ -306,6 +312,9 @@ gtk_single_selection_set_property (GObject      *object,
       gtk_single_selection_set_can_unselect (self, g_value_get_boolean (value));
       break;
 
+    case PROP_HIDE_SELECTION:
+      gtk_single_selection_set_hide_selection (self, g_value_get_boolean (value));
+      break;
     case PROP_MODEL:
       gtk_single_selection_set_model (self, g_value_get_object (value));
       break;
@@ -337,6 +346,11 @@ gtk_single_selection_get_property (GObject    *object,
     case PROP_CAN_UNSELECT:
       g_value_set_boolean (value, self->can_unselect);
       break;
+
+    case PROP_HIDE_SELECTION:
+      g_value_set_boolean (value, self->hide_selection);
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
       break;
@@ -398,6 +412,18 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
     g_param_spec_boolean ("can-unselect",
                           P_("Can unselect"),
                           P_("If unselecting the selected item is allowed"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkSingleSelection:hide-selection: (attributes org.gtk.Property.get=gtk_single_selection_get_hide_selection org.gtk.Property.set=gtk_single_selection_set_hide_selection)
+   *
+   * If the selected item is not reported to the view.
+   */
+  properties[PROP_HIDE_SELECTION] =
+    g_param_spec_boolean ("hide-selection",
+                          P_("Hide Selection"),
+                          P_("If the selected item is not reported to the view"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -603,14 +629,17 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
   g_clear_object (&self->selected_item);
   self->selected_item = new_selected;
 
-  if (old_position == GTK_INVALID_LIST_POSITION)
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, 1);
-  else if (position == GTK_INVALID_LIST_POSITION)
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), old_position, 1);
-  else if (position < old_position)
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, old_position - position + 1);
-  else
-    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), old_position, position - old_position + 1);
+  if (!self->hide_selection)
+    {
+      if (old_position == GTK_INVALID_LIST_POSITION)
+        gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, 1);
+      else if (position == GTK_INVALID_LIST_POSITION)
+        gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), old_position, 1);
+      else if (position < old_position)
+        gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), position, old_position - position + 1);
+      else
+        gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), old_position, position - old_position + 1);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
@@ -724,4 +753,52 @@ gtk_single_selection_set_can_unselect (GtkSingleSelection *self,
   self->can_unselect = can_unselect;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CAN_UNSELECT]);
+}
+
+/**
+ * gtk_single_selection_get_hide_selection: (attributes org.gtk.Method.get_property=hide-selection)
+ * @self: a `GtkSingleSelection`
+ *
+ * If %TRUE, the selection is hidden and gtk_selection_model_is_selected()
+ * will return %FALSE even for the selected item.
+ *
+ * Returns: %TRUE to hide the selection
+ */
+gboolean
+gtk_single_selection_get_hide_selection (GtkSingleSelection *self)
+{
+  g_return_val_if_fail (GTK_IS_SINGLE_SELECTION (self), FALSE);
+
+  return self->hide_selection;
+}
+
+/**
+ * gtk_single_selection_set_hide_selection: (attributes org.gtk.Method.set_property=hide-selection)
+ * @self: a `GtkSingleSelection`
+ * @hide_selection: %TRUE to hide the selection
+ *
+ * If %TRUE, the selection is hidden and gtk_selection_model_is_selected()
+ * will return %FALSE for all items, even for the selected item.
+ *
+ * However, it will still update [property@Gtk.SingleSelection:selected] internally
+ * so that when this property gets set to %FALSE again, the selected item will be
+ * reported as that item.
+ *
+ * So this function in essence allows turning off visibility of the selection in views.
+ */
+void
+gtk_single_selection_set_hide_selection (GtkSingleSelection *self,
+                                         gboolean            hide_selection)
+{
+  g_return_if_fail (GTK_IS_SINGLE_SELECTION (self));
+
+  if (self->hide_selection == hide_selection)
+    return;
+
+  self->hide_selection = hide_selection;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HIDE_SELECTION]);
+
+  if (self->selected != GTK_INVALID_LIST_POSITION)
+    gtk_selection_model_selection_changed (GTK_SELECTION_MODEL (self), self->selected, 1);
 }
