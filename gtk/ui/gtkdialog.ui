@@ -11,7 +11,9 @@
           <class name="dialog-vbox"/>
         </style>
         <child>
-          <object class="GtkBox" id="content_area"/>
+          <object class="GtkBox" id="content_area">
+            <property name="orientation">vertical</property>
+          </object>
         </child>
         <child>
           <object class="GtkBox" id="action_box">
