@@ -12,7 +12,7 @@
         </style>
         <child>
           <object class="GtkBox" id="content_area">
-            <property name="orientation">1</property>
+            <property name="orientation">vertical</property>
           </object>
         </child>
         <child>
