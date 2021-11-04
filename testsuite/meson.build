@@ -19,6 +19,7 @@ setups = [
     'env': ['GDK_DEBUG=gl-gles,default-settings'], },
   { 'backend': 'win32', 'if': os_win32 },
   { 'backend': 'broadway', 'if': broadway_enabled, },
+  { 'backend': 'macos', 'if': macos_enabled, },
 ]
 
 foreach setup : setups

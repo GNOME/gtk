@@ -90,6 +90,17 @@ case "${backend}" in
     kill ${compositor}
     ;;
 
+  macos)
+    meson test -C ${builddir} \
+                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                --print-errorlogs \
+                --setup=${backend} \
+                --suite=gtk \
+                --no-suite=gsk-compare-opengl
+    exit_code=$?
+    ;;
+
+
   broadway)
     export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 

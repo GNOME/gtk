@@ -217,6 +217,7 @@ macos:
             -Dlibjpeg-turbo:simd=disabled
             _build
     - meson compile -C _build
+    - .gitlab-ci/run-tests.sh _build macos
   artifacts:
     when: always
     paths:
