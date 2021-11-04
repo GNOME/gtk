@@ -8,11 +8,8 @@ common_env = [
   'GTK_CSD=1',
   'G_ENABLE_DIAGNOSTIC=0',
   'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
+  'GDK_DEBUG=default-settings',
 ]
-
-if get_option('debug')
-  common_env += [ 'GDK_DEBUG=default-settings' ]
-endif
 
 if x11_enabled
   add_test_setup ('x11',
@@ -30,16 +27,11 @@ if wayland_enabled
                         'TEST_OUTPUT_SUBDIR=wayland',
                         ])
 
-  if get_option('debug')
-    gdk_debug = 'GDK_DEBUG=gl-gles,default-settings'
-  else
-    gdk_debug = 'GDK_DEBUG=gl-gles'
-  endif
   add_test_setup ('waylandgles',
                   env: common_env + [
                         'GDK_BACKEND=wayland',
                         'TEST_OUTPUT_SUBDIR=waylandgles',
-                        gdk_debug,
+                        'GDK_DEBUG=gl-gles,default-settings',
                         ])
 
 endif

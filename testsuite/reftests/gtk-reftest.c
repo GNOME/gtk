@@ -157,7 +157,7 @@ get_components_of_test_file (const char  *test_file,
   if (basename)
     {
       char *base = g_path_get_basename (test_file);
-      
+
       if (g_str_has_suffix (base, ".ui"))
         base[strlen (base) - strlen (".ui")] = '\0';
 
@@ -241,7 +241,7 @@ add_extra_css (const char *testname,
 {
   GtkStyleProvider *provider = NULL;
   char *css_file;
-  
+
   css_file = get_test_file (testname, extension, TRUE);
   if (css_file == NULL)
     return NULL;
@@ -254,7 +254,7 @@ add_extra_css (const char *testname,
                                               GTK_STYLE_PROVIDER_PRIORITY_FORCE);
 
   g_free (css_file);
-  
+
   return provider;
 }
 
@@ -276,7 +276,7 @@ save_image (GdkTexture *texture,
   GError *error = NULL;
   char *filename;
   gboolean ret;
-  
+
   filename = get_output_file (test_name, extension, &error);
   if (filename == NULL)
     {
@@ -301,7 +301,7 @@ save_node (GskRenderNode *node,
   char *filename;
   gboolean ret;
   GBytes *bytes;
-  
+
   filename = get_output_file (test_name, extension, &error);
   if (filename == NULL)
     {
@@ -444,7 +444,7 @@ add_test_for_file (GFile *file)
 
       g_object_unref (info);
     }
-  
+
   g_assert_no_error (error);
   g_object_unref (enumerator);
 
@@ -505,15 +505,16 @@ main (int argc, char **argv)
 {
   const char *basedir;
   int result;
-  
-  /* I don't want to fight fuzzy scaling algorithms in GPUs,
-   * so unless you explicitly set it to something else, we
-   * will use Cairo's image surface.
-   */
-  g_setenv ("GDK_RENDERING", "image", FALSE);
 
   if (!parse_command_line (&argc, &argv))
     return 1;
+
+  /* Override some settings that otherwise might affect
+   * the reliability of our output.
+   */
+  g_object_set (gtk_settings_get_default (),
+                "gtk-cursor-blink", FALSE,
+                NULL);
 
   if (arg_base_dir)
     basedir = arg_base_dir;
@@ -525,7 +526,7 @@ main (int argc, char **argv)
       GFile *dir;
 
       dir = g_file_new_for_path (basedir);
-      
+
       add_test_for_file (dir);
 
       g_object_unref (dir);
