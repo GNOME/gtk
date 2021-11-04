@@ -509,6 +509,13 @@ main (int argc, char **argv)
   if (!parse_command_line (&argc, &argv))
     return 1;
 
+  /* Override some settings that otherwise might affect
+   * the reliability of our output.
+   */
+  g_object_set (gtk_settings_get_default (),
+                "gtk-cursor-blink", FALSE,
+                NULL);
+
   if (arg_base_dir)
     basedir = arg_base_dir;
   else
