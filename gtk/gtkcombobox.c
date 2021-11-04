@@ -172,6 +172,7 @@ typedef struct
  */
 
 enum {
+  ACTIVATE,
   CHANGED,
   MOVE_ACTIVE,
   POPUP,
@@ -347,6 +348,14 @@ gtk_combo_box_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_combo_box_activate (GtkComboBox *combo_box)
+{
+  GtkComboBoxPrivate *priv = gtk_combo_box_get_instance_private (combo_box);
+
+  gtk_widget_activate (priv->button);
+}
+
+static void
 gtk_combo_box_size_allocate (GtkWidget *widget,
                              int        width,
                              int        height,
@@ -419,9 +428,32 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   object_class->set_property = gtk_combo_box_set_property;
   object_class->get_property = gtk_combo_box_get_property;
 
+  klass->activate = gtk_combo_box_activate;
   klass->format_entry_text = gtk_combo_box_format_entry_text;
 
   /* signals */
+  /**
+   * GtkComboBox::activate:
+   * @widget: the object which received the signal.
+   *
+   * Emitted to when the combo box is activated.
+   *
+   * The `::activate` signal on `GtkComboBox` is an action signal and
+   * emitting it causes the combo box to pop up its dropdown.
+   *
+   * Since: 4.6
+   */
+  combo_box_signals[ACTIVATE] =
+      g_signal_new (I_ ("activate"),
+                    G_OBJECT_CLASS_TYPE (object_class),
+                    G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                    G_STRUCT_OFFSET (GtkComboBoxClass, activate),
+                    NULL, NULL,
+                    NULL,
+                    G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, combo_box_signals[ACTIVATE]);
+
   /**
    * GtkComboBox::changed:
    * @widget: the object which received the signal
@@ -2272,7 +2304,7 @@ gtk_combo_box_mnemonic_activate (GtkWidget *widget,
         gtk_widget_grab_focus (priv->child);
     }
   else
-    gtk_widget_grab_focus (priv->button);
+    gtk_widget_mnemonic_activate (priv->button, group_cycling);
 
   return TRUE;
 }
