@@ -1045,20 +1045,7 @@ get_height_for_width (GtkLabel *self,
   PangoLayout *layout;
   int text_height, baseline;
 
-  width *= PANGO_SCALE;
-  if (self->max_width_chars > -1)
-    {
-      int char_pixels, width_chars;
-
-      layout = gtk_label_get_measuring_layout (self, NULL, -1);
-      char_pixels = get_char_pixels (GTK_WIDGET (self), layout);
-      if (self->width_chars > self->max_width_chars)
-        width_chars = self->width_chars;
-      else
-        width_chars = self->max_width_chars;
-      width = MIN (char_pixels * width_chars, width);
-    }
-  layout = gtk_label_get_measuring_layout (self, NULL, width);
+  layout = gtk_label_get_measuring_layout (self, NULL, width * PANGO_SCALE);
 
   pango_layout_get_pixel_size (layout, NULL, &text_height);
 
