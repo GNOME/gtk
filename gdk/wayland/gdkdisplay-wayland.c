@@ -124,10 +124,6 @@ xdg_wm_base_ping (void               *data,
                   struct xdg_wm_base *xdg_wm_base,
                   uint32_t            serial)
 {
-  GdkWaylandDisplay *display_wayland = data;
-
-  _gdk_wayland_display_update_serial (display_wayland, serial);
-
   GDK_NOTE (EVENTS,
             g_message ("ping, shell %p, serial %u\n", xdg_wm_base, serial));
 
