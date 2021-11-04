@@ -217,7 +217,7 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
     side_across = GTK_PACK_END;
   else
     side_across = GTK_PACK_START;
-  
+
   if (cell_area.y < area.y && cell_area.y + cell_area.height <= area.y + area.height)
     side_along = GTK_PACK_END;
   else if (cell_area.y >= area.y && cell_area.y + cell_area.height > area.y + area.height)
@@ -241,7 +241,7 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
                             pos,
                             align_across, side_across,
                             align_along, side_along);
-  
+
   gtk_widget_queue_allocate (GTK_WIDGET (self));
 }
 
@@ -1042,7 +1042,7 @@ gtk_list_base_move_cursor (GtkWidget *widget,
   gboolean select, modify, extend;
 
   g_variant_get (args, "(ubbbi)", &orientation, &select, &modify, &extend, &amount);
- 
+
   pos = gtk_list_base_get_focus_position (self);
   pos = gtk_list_base_move_focus (self, pos, orientation, amount);
 
@@ -1583,7 +1583,7 @@ gtk_list_base_stop_rubberband (GtkListBase *self,
           gtk_bitset_unref (current);
           gtk_bitset_intersect (selected, rubberband_selection);
           gtk_bitset_difference (selected, rubberband_selection);
-                                                              
+
           mask = gtk_bitset_ref (rubberband_selection);
         }
       else if (modify) /* Ctrl */
@@ -1647,7 +1647,7 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
           else
             gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
         }
-      
+
       pos += item->n_items;
     }
 
@@ -1710,7 +1710,7 @@ gtk_list_base_drag_update (GtkGestureDrag *gesture,
     {
       if (!gtk_drag_check_threshold_double (GTK_WIDGET (self), 0, 0, offset_x, offset_y))
         return;
-      
+
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
       gtk_list_base_start_rubberband (self, start_x, start_y);
     }
@@ -1803,7 +1803,9 @@ gtk_list_base_init_real (GtkListBase      *self,
   priv->focus = gtk_list_item_tracker_new (priv->item_manager);
 
   priv->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  g_object_ref_sink (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
   priv->adjustment[GTK_ORIENTATION_VERTICAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  g_object_ref_sink (priv->adjustment[GTK_ORIENTATION_VERTICAL]);
 
   priv->orientation = GTK_ORIENTATION_VERTICAL;
 
