@@ -884,6 +884,9 @@ gtk_picture_set_can_shrink (GtkPicture *self,
     return;
 
   self->can_shrink = can_shrink;
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CAN_SHRINK]);
 }
 
