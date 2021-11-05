@@ -9,15 +9,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-28 20:00+0000\n"
-"PO-Revision-Date: 2021-09-29 14:34+0300\n"
+"POT-Creation-Date: 2021-11-01 15:23+0000\n"
+"PO-Revision-Date: 2021-11-05 20:45+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 20.12.0\n"
 "X-Project-Style: gnome\n"
 
@@ -49,13 +49,58 @@ msgstr "Не вдалося надати дані як «%s»"
 msgid "Cannot provide contents as %s"
 msgstr "Не вдалося надати дані як %s"
 
-#: gdk/gdkdisplay.c:144
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:421
 msgid "The current backend does not support OpenGL"
 msgstr "Цей модуль не підтримує OpenGL"
 
-#: gdk/gdkdisplay.c:1212
+#: gdk/gdkdisplay.c:1246
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Вимкнено підтримування GL через GDK_DEBUG"
+
+#: gdk/gdkdisplay.c:1569
+msgid "No EGL configuration available"
+msgstr "Немає доступних налаштувань EGL"
+
+#: gdk/gdkdisplay.c:1577
+msgid "Failed to get EGL configurations"
+msgstr "Не вдалося отримати налаштування EGL"
+
+#: gdk/gdkdisplay.c:1607
+msgid "No EGL configuration with required features found"
+msgstr "Не знайдено налаштувань EGL із потрібними можливостями"
+
+#: gdk/gdkdisplay.c:1614
+msgid "No perfect EGL configuration found"
+msgstr "Не знайдено ідеальних налаштувань EGL"
+
+#: gdk/gdkdisplay.c:1656
+msgid "EGL implementation is missing extension %2$s"
+msgid_plural "EGL implementation is missing %d extensions: %s"
+msgstr[0] "У реалізації EGL не вистачає %d розширення %2$s"
+msgstr[1] "У реалізації EGL не вистачає %d розширень %2$s"
+msgstr[2] "У реалізації EGL не вистачає %d розширень %2$s"
+msgstr[3] "У реалізації EGL не вистачає розширення %2$s"
+
+#: gdk/gdkdisplay.c:1689
+msgid "libEGL not available in this sandbox"
+msgstr "libEGL є недоступною у цій пісочниці"
+
+#: gdk/gdkdisplay.c:1690
+msgid "libEGL not available"
+msgstr "libEGL є недоступною"
+
+#: gdk/gdkdisplay.c:1700
+msgid "Failed to create EGL display"
+msgstr "Не вдалося створити запис дисплея EGL"
+
+#: gdk/gdkdisplay.c:1710
+msgid "Could not initialize EGL display"
+msgstr "Не вдалося ініціалізувати дисплей EGL"
+
+#: gdk/gdkdisplay.c:1721
+#, c-format
+msgid "EGL version %d.%d is too old. GTK requires %d.%d"
+msgstr "Версія EGL %d.%d є надто давньою. Для роботи GTK потрібна версія %d.%d"
 
 #: gdk/gdkdrop.c:130
 msgid "Drag’n’drop from other applications is not supported."
@@ -66,21 +111,41 @@ msgstr ""
 msgid "No compatible formats to transfer contents."
 msgstr "Немає сумісних форматів для передавання даних."
 
+#: gdk/gdkglcontext.c:323
+msgid "The EGL implementation does not support any allowed APIs"
+msgstr ""
+"У реалізації EGL не передбачено підтримки жодного з дозволених програмних інтерфейсів"
+
+#: gdk/gdkglcontext.c:404 gdk/win32/gdkglcontext-win32-egl.c:401
+#: gdk/win32/gdkglcontext-win32-wgl.c:627 gdk/x11/gdkglcontext-glx.c:622
+msgid "Unable to create a GL context"
+msgstr "Неможливо створити вміст GL"
+
+#: gdk/gdkglcontext.c:1232
+#| msgid "GL support disabled via GDK_DEBUG"
+msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
+msgstr "За допомогою GDK_DEBUG вимкнено усе, окрім OpenGL ES"
+
+#: gdk/gdkglcontext.c:1241
+#, c-format
+msgid "Application does not support %s API"
+msgstr ""
+"У програмі не передбачено підтримки програмного інтерфейсу %s"
+
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1392
+#: gdk/gdkglcontext.c:1727
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Намагаємося скористатися %s, але %s вже використано"
 
-#: gdk/gdksurface.c:1161
+#: gdk/gdksurface.c:1235
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Вимкнено підтримування Vulkan через GDK_DEBUG"
 
-#: gdk/gdktexture.c:554
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
-msgstr ""
-"Невідомий формат зображення."
+msgstr "Невідомий формат зображення."
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -462,47 +527,47 @@ msgstr "Suspend"
 #: gdk/loaders/gdkjpeg.c:61
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
-"Помилка інтерпретації файлу зображення JPEG (%s)"
+msgstr "Помилка інтерпретації файлу зображення JPEG (%s)"
 
-#: gdk/loaders/gdkjpeg.c:220
+#: gdk/loaders/gdkjpeg.c:188
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
-msgstr ""
-"Непідтримуваний простір кольорів JPEG (%d)"
+msgstr "Непідтримуваний простір кольорів JPEG (%d)"
 
-#: gdk/loaders/gdkjpeg.c:229 gdk/loaders/gdkpng.c:434 gdk/loaders/gdktiff.c:479
+#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:273 gdk/loaders/gdktiff.c:446
 #, c-format
-#| msgid "Not enough memory"
 msgid "Not enough memory for image size %ux%u"
 msgstr "Недостатньо пам'яті для зображення розміром %ux%u"
 
-#: gdk/loaders/gdkpng.c:118
+#: gdk/loaders/gdkpng.c:119
 #, c-format
-#| msgid "Error creating print preview"
 msgid "Error reading png (%s)"
 msgstr "Помилка читання png (%s)"
 
-#: gdk/loaders/gdkpng.c:381
+#: gdk/loaders/gdkpng.c:216
 #, c-format
-#| msgid "Failed to write header\n"
-msgid "Failed to parse png image"
-msgstr "Не вдалося обробити дані зображення png"
-
-#: gdk/loaders/gdktiff.c:380
-msgid "Failed to load RGB data from TIFF file"
+msgid "Unsupported depth %u in png image"
 msgstr ""
-"Не вдалося завантажити дані RGB з файлу формату TIFF"
+"Непідтримувана глибина, %u, у зображенні png"
 
-#: gdk/loaders/gdktiff.c:491
+#: gdk/loaders/gdkpng.c:254
+#, c-format
+msgid "Unsupportd color type %u in png image"
+msgstr ""
+"Непідтримуваний тип кольору, %u, у зображенні png"
+
+#: gdk/loaders/gdktiff.c:340
+msgid "Failed to load RGB data from TIFF file"
+msgstr "Не вдалося завантажити дані RGB з файлу формату TIFF"
+
+#: gdk/loaders/gdktiff.c:458
 #, c-format
 msgid "Reading data failed at row %d"
-msgstr ""
-"Помилка читання даних у рядку %d"
+msgstr "Помилка читання даних у рядку %d"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:967 gdk/win32/gdkdrop-win32.c:1012
+#: gdk/win32/gdkdrop-win32.c:1013 gdk/win32/gdkdrop-win32.c:1058
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Не знайдено сумісного формату передавання даних"
@@ -511,61 +576,6 @@ msgstr "Не знайдено сумісного формату передава
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Не вдалося декодувати дані з типом MIME «%s»"
-
-#: gdk/wayland/gdkglcontext-wayland.c:190
-#: gdk/win32/gdkglcontext-win32-egl.c:401
-#: gdk/win32/gdkglcontext-win32-wgl.c:622 gdk/x11/gdkglcontext-egl.c:599
-#: gdk/x11/gdkglcontext-glx.c:612
-msgid "Unable to create a GL context"
-msgstr "Неможливо створити вміст GL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:488
-msgid "libEGL not available in this sandbox"
-msgstr "libEGL є недоступною у цій пісочниці"
-
-#: gdk/wayland/gdkglcontext-wayland.c:489
-msgid "libEGL not available"
-msgstr "libEGL є недоступною"
-
-#: gdk/wayland/gdkglcontext-wayland.c:502
-msgid "Sandbox does not provide an OpenGL implementation"
-msgstr "Пісочниця не надає реалізації OpenGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:503
-msgid "No OpenGL implementation available"
-msgstr "Немає доступних реалізацій OpenGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:512 gdk/x11/gdkglcontext-egl.c:701
-msgid "Could not initialize EGL display"
-msgstr "Не вдалося ініціалізувати дисплей EGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:523 gdk/x11/gdkglcontext-egl.c:711
-#, c-format
-msgid "EGL version %d.%d is too old. GTK requires %d.%d"
-msgstr "Версія EGL %d.%d є надто давньою. Для роботи GTK потрібна версія %d.%d"
-
-#: gdk/wayland/gdkglcontext-wayland.c:534
-#: gdk/win32/gdkglcontext-win32-egl.c:275
-#: gdk/win32/gdkglcontext-win32-wgl.c:281
-#: gdk/win32/gdkglcontext-win32-wgl.c:299
-msgid "No GL implementation is available"
-msgstr "Немає жодної реалізації GL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:544
-msgid "Core GL is not available on EGL implementation"
-msgstr "«Core GL» недоступний у реалізації EGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:553 gdk/x11/gdkglcontext-egl.c:722
-msgid "Surfaceless contexts are not supported on this EGL implementation"
-msgstr ""
-"Підтримки безповерхневих контекстів у цій реалізації EGL не передбачено"
-
-#: gdk/wayland/gdkglcontext-wayland.c:565
-#: gdk/win32/gdkglcontext-win32-egl.c:215
-#: gdk/win32/gdkglcontext-win32-egl.c:225
-#: gdk/win32/gdkglcontext-win32-wgl.c:588
-msgid "No available configurations for the given pixel format"
-msgstr "Немає доступних налаштувань для заданого формату точок"
 
 #: gdk/win32/gdkclipdrop-win32.c:721
 #, c-format
@@ -674,48 +684,60 @@ msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані буфера обміну. Помилка GetClipboardData(): 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:898
+#: gdk/win32/gdkdrop-win32.c:944
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані перетягування зі скиданням. Помилка GlobalLock(x"
 "%p): 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:907
+#: gdk/win32/gdkdrop-win32.c:953
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Не вдалося отримати дані перетягування зі скиданням. Помилка GlobalSize(0x"
 "%p): 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:918
+#: gdk/win32/gdkdrop-win32.c:964
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Не вдалося отримати дані перетягування зі скиданням. Не вдалося отримати %s "
 "байтів пам'яті для зберігання даних."
 
-#: gdk/win32/gdkdrop-win32.c:986
+#: gdk/win32/gdkdrop-win32.c:1032
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Площину GDK 0x%p не зареєстровано як ціль скидання"
 
-#: gdk/win32/gdkdrop-win32.c:993
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Запис контексту цілі 0x%p не містить об'єкта даних"
 
-#: gdk/win32/gdkdrop-win32.c:1031
+#: gdk/win32/gdkdrop-win32.c:1077
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "Помилка IDataObject_GetData (0x%x), повернуто 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1063
+#: gdk/win32/gdkdrop-win32.c:1109
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 "Не вдалося перетворити формат W32 даних перетягування зі скиданням 0x%x до "
 "%p (%s)"
+
+#: gdk/win32/gdkglcontext-win32-egl.c:215
+#: gdk/win32/gdkglcontext-win32-egl.c:225
+#: gdk/win32/gdkglcontext-win32-wgl.c:593
+msgid "No available configurations for the given pixel format"
+msgstr "Немає доступних налаштувань для заданого формату точок"
+
+#: gdk/win32/gdkglcontext-win32-egl.c:275
+#: gdk/win32/gdkglcontext-win32-wgl.c:282
+#: gdk/win32/gdkglcontext-win32-wgl.c:299
+msgid "No GL implementation is available"
+msgstr "Немає жодної реалізації GL"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:63
 msgid "writing a closed stream"
@@ -768,6 +790,7 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Відкривається %d пункт"
 msgstr[1] "Відкривається %d пункти"
 msgstr[2] "Відкривається %d пунктів"
+msgstr[3] "Відкривається %d пункт"
 
 #: gdk/x11/gdkclipboard-x11.c:433
 msgid "Clipboard manager could not store selection."
@@ -779,39 +802,15 @@ msgstr ""
 "Не вдалося зберегти буфер обміну. Немає активної програми для керування "
 "буфером обміну."
 
-#: gdk/x11/gdkglcontext-egl.c:179
-msgid "No EGL configuration available"
-msgstr "Немає доступних налаштувань EGL"
-
-#: gdk/x11/gdkglcontext-egl.c:187
-msgid "Failed to get EGL configurations"
-msgstr "Не вдалося отримати налаштування EGL"
-
-#: gdk/x11/gdkglcontext-egl.c:265
-msgid "No EGL configuration with required features found"
-msgstr "Не знайдено налаштувань EGL із потрібними можливостями"
-
-#: gdk/x11/gdkglcontext-egl.c:272
-msgid "No perfect EGL configuration found"
-msgstr "Не знайдено ідеальних налаштувань EGL"
-
-#: gdk/x11/gdkglcontext-egl.c:683
-msgid "EGL is not supported"
-msgstr "Підтримки EGL не передбачено"
-
-#: gdk/x11/gdkglcontext-egl.c:692
-msgid "Failed to create EGL display"
-msgstr "Не вдалося створити запис дисплея EGL"
-
-#: gdk/x11/gdkglcontext-glx.c:771
+#: gdk/x11/gdkglcontext-glx.c:778
 msgid "No GLX configurations available"
 msgstr "Немає доступних налаштувань GLX"
 
-#: gdk/x11/gdkglcontext-glx.c:844
+#: gdk/x11/gdkglcontext-glx.c:851
 msgid "No GLX configuration with required features found"
 msgstr "Не знайдено налаштувань GLX із потрібними можливостями"
 
-#: gdk/x11/gdkglcontext-glx.c:918
+#: gdk/x11/gdkglcontext-glx.c:925
 msgid "GLX is not supported"
 msgstr "Підтримки GLX не передбачено"
 
@@ -965,7 +964,7 @@ msgstr "Помилкове форматування даних: адреса"
 msgid "Could not unescape string"
 msgstr "Не вдалося вилучити екранування символів у рядку"
 
-#: gtk/gtkaboutdialog.c:124 gtk/ui/gtkaboutdialog.ui:163
+#: gtk/gtkaboutdialog.c:124
 msgid "License"
 msgstr "Ліцензія"
 
@@ -1556,7 +1555,6 @@ msgid "Other application…"
 msgstr "Інша програма…"
 
 #: gtk/gtkappchooserdialog.c:205 gtk/gtkappchooserdialog.c:256
-#: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select Application"
 msgstr "Виберіть програму"
 
@@ -1640,6 +1638,14 @@ msgstr "Елемент <%s> не допустимий на верхньому р
 msgid "Text may not appear inside <%s>"
 msgstr "Текст може не показуватись усередині «%s»"
 
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
+#.
+#: gtk/gtkcalendar.c:668
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:1"
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1650,17 +1656,9 @@ msgstr "Текст може не показуватись усередині «%
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:768
+#: gtk/gtkcalendar.c:819
 msgid "calendar:MY"
 msgstr "calendar:MY"
-
-#. Translate to calendar:week_start:0 if you want Sunday to be the
-#. * first day of the week to calendar:week_start:1 if you want Monday
-#. * to be the first day of the week, and so on.
-#.
-#: gtk/gtkcalendar.c:806
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1668,7 +1666,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1402
+#: gtk/gtkcalendar.c:1406
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1683,7 +1681,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1439
+#: gtk/gtkcalendar.c:1443
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1697,7 +1695,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1503
+#: gtk/gtkcalendar.c:1507
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2007,7 +2005,6 @@ msgid "Margins from Printer…"
 msgstr "Поля з принтера…"
 
 #: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:162
-#: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_Закрити"
 
@@ -2132,9 +2129,7 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
 #: gtk/gtkwindow.c:6138 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1271 gtk/ui/gtkappchooserdialog.ui:45
-#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
-#: gtk/ui/gtkfontchooserdialog.ui:24
+#: gtk/inspector/recorder.c:1271
 msgid "_Cancel"
 msgstr "_Скасувати"
 
@@ -2149,7 +2144,7 @@ msgstr "_Відкрити"
 msgid "_Save"
 msgstr "З_берегти"
 
-#: gtk/gtkfilechoosernativequartz.c:338 gtk/ui/gtkfilechooserwidget.ui:346
+#: gtk/gtkfilechoosernativequartz.c:338
 msgid "Select which types of files are shown"
 msgstr "Виберіть типи файлів, які слід показувати"
 
@@ -2222,7 +2217,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6062 gtk/gtktextview.c:8900
+#: gtk/gtklabel.c:5495 gtk/gtktext.c:6062 gtk/gtktextview.c:8900
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2251,7 +2246,7 @@ msgid "_Add to Bookmarks"
 msgstr "_Додати до закладок"
 
 #: gtk/gtkfilechooserwidget.c:1822 gtk/gtkplacessidebar.c:2309
-#: gtk/gtkplacessidebar.c:3248 gtk/ui/gtkfilechooserwidget.ui:465
+#: gtk/gtkplacessidebar.c:3248
 msgid "_Rename"
 msgstr "Пере_йменувати"
 
@@ -2279,9 +2274,7 @@ msgstr "Показувати _час"
 msgid "Sort _Folders Before Files"
 msgstr "Впорядковувати _теки перед файлами"
 
-#. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2253 gtk/inspector/css-node-tree.ui:135
-#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkprintunixdialog.ui:116
 msgid "Location"
 msgstr "Адреса"
 
@@ -2304,7 +2297,6 @@ msgid "Enter location or URL"
 msgstr "Увести адресу або URL"
 
 #: gtk/gtkfilechooserwidget.c:3791 gtk/gtkfilechooserwidget.c:6604
-#: gtk/ui/gtkfilechooserwidget.ui:226
 msgid "Modified"
 msgstr "Змінено"
 
@@ -2491,27 +2483,27 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/gtklabel.c:5479 gtk/gtktext.c:6050 gtk/gtktextview.c:8888
+#: gtk/gtklabel.c:5492 gtk/gtktext.c:6050 gtk/gtktextview.c:8888
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6054 gtk/gtktextview.c:8892
+#: gtk/gtklabel.c:5493 gtk/gtktext.c:6054 gtk/gtktextview.c:8892
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6058 gtk/gtktextview.c:8896
+#: gtk/gtklabel.c:5494 gtk/gtktext.c:6058 gtk/gtktextview.c:8896
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5487 gtk/gtktext.c:6071 gtk/gtktextview.c:8921
+#: gtk/gtklabel.c:5500 gtk/gtktext.c:6071 gtk/gtktextview.c:8921
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5492
+#: gtk/gtklabel.c:5505
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5496
+#: gtk/gtklabel.c:5509
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
@@ -2523,11 +2515,11 @@ msgstr "_Копіювати адресу"
 msgid "Invalid URI"
 msgstr "Неправильний URI"
 
-#: gtk/gtklockbutton.c:289 gtk/ui/gtklockbutton.ui:20
+#: gtk/gtklockbutton.c:289
 msgid "Lock"
 msgstr "Заблокувати"
 
-#: gtk/gtklockbutton.c:303 gtk/ui/gtklockbutton.ui:26
+#: gtk/gtklockbutton.c:303
 msgid "Unlock"
 msgstr "Розблокувати"
 
@@ -2761,7 +2753,7 @@ msgstr "Некоректний файл налаштування друку"
 msgid "Manage Custom Sizes…"
 msgstr "Організувати власні розміри…"
 
-#: gtk/gtkpagesetupunixdialog.c:284 gtk/ui/gtkassistant.ui:98
+#: gtk/gtkpagesetupunixdialog.c:284
 msgid "_Apply"
 msgstr "Заст_осувати"
 
@@ -2788,8 +2780,7 @@ msgstr ""
 " Верхнє: %s %s\n"
 " Нижнє: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
-#: gtk/ui/gtkprintunixdialog.ui:711
+#: gtk/gtkpagesetupunixdialog.c:784
 msgid "Page Setup"
 msgstr "Параметри сторінки"
 
@@ -2908,9 +2899,7 @@ msgid "This name is already taken"
 msgstr "Цю назву вже вжито"
 
 #: gtk/gtkplacessidebar.c:2303 gtk/inspector/actions.ui:19
-#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
-#: gtk/ui/gtkfilechooserwidget.ui:168 gtk/ui/gtkfilechooserwidget.ui:440
-#: gtk/ui/gtkprintunixdialog.ui:85
+#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:24
 msgid "Name"
 msgstr "Назва"
 
@@ -3031,7 +3020,7 @@ msgid "Unable to access location"
 msgstr "Неможливо доступитись до адреси"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
+#: gtk/gtkplacesview.c:1228
 msgid "Con_nect"
 msgstr "З'_єднатись"
 
@@ -3115,13 +3104,13 @@ msgid_plural "%s / %s available"
 msgstr[0] "%s / %s доступно"
 msgstr[1] "%s / %s доступно"
 msgstr[2] "%s / %s доступно"
+msgstr[3] "%s / %s доступно"
 
 #: gtk/gtkplacesviewrow.c:485
 msgid "Disconnect"
 msgstr "Від'єднати"
 
-#: gtk/gtkplacesviewrow.c:485 gtk/ui/gtkplacesviewrow.ui:53
-#: gtk/ui/gtksidebarrow.ui:50
+#: gtk/gtkplacesviewrow.c:485
 msgid "Unmount"
 msgstr "Демонтувати"
 
@@ -3137,8 +3126,7 @@ msgstr "_Запам'ятати пароль"
 msgid "Select a filename"
 msgstr "Вибрати назву файла"
 
-#: gtk/gtkprinteroptionwidget.c:714 gtk/ui/gtkappchooserdialog.ui:50
-#: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
+#: gtk/gtkprinteroptionwidget.c:714
 msgid "_Select"
 msgstr "_Вибрати"
 
@@ -3457,7 +3445,7 @@ msgid "Swipe right"
 msgstr "Проведення праворуч"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:517
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:490
 msgid "Shortcuts"
 msgstr "Скорочення"
 
@@ -3471,13 +3459,11 @@ msgstr "Результати пошуку"
 msgid "Search Shortcuts"
 msgstr "Скорочення пошуку"
 
-#: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
-#: gtk/ui/gtkfilechooserwidget.ui:297
+#: gtk/gtkshortcutswindow.c:968
 msgid "No Results Found"
 msgstr "Безрезультатно"
 
-#: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:362
-#: gtk/ui/gtkfilechooserwidget.ui:310 gtk/ui/gtkplacesview.ui:230
+#: gtk/gtkshortcutswindow.c:974
 msgid "Try a different search"
 msgstr "Спробуйте пошукати по-інакшому"
 
@@ -3581,7 +3567,7 @@ msgid "Attribute"
 msgstr "Атрибут"
 
 #: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:132
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:124
 msgid "Value"
 msgstr "Значення"
 
@@ -3651,11 +3637,11 @@ msgstr "Зміни застосовуються миттєво і повсюдн
 msgid "Saving CSS failed"
 msgstr "Не вдалося зберегти CSS"
 
-#: gtk/inspector/css-editor.ui:33
+#: gtk/inspector/css-editor.ui:30
 msgid "Disable this custom CSS"
 msgstr "Вимкнутий цей CSS"
 
-#: gtk/inspector/css-editor.ui:41
+#: gtk/inspector/css-editor.ui:37
 msgid "Save the current CSS"
 msgstr "Зберегти поточний CSS"
 
@@ -3671,42 +3657,42 @@ msgstr "Класи стилів"
 msgid "CSS Property"
 msgstr "Властивість CSS"
 
-#: gtk/inspector/general.c:309 gtk/inspector/general.c:389
+#: gtk/inspector/general.c:307 gtk/inspector/general.c:387
 msgctxt "GL version"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:318
+#: gtk/inspector/general.c:316
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:319
+#: gtk/inspector/general.c:317
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:390
+#: gtk/inspector/general.c:388
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:441
+#: gtk/inspector/general.c:439
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:442 gtk/inspector/general.c:443
+#: gtk/inspector/general.c:440 gtk/inspector/general.c:441
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:499
+#: gtk/inspector/general.c:497
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:500 gtk/inspector/general.c:501
+#: gtk/inspector/general.c:498 gtk/inspector/general.c:499
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Немає"
@@ -3731,7 +3717,7 @@ msgstr "Мапа шрифтів Pango"
 msgid "Media Backend"
 msgstr "Мультимедійний модуль"
 
-#: gtk/inspector/general.ui:175 gtk/ui/gtkplacesview.ui:79
+#: gtk/inspector/general.ui:175
 msgid "Prefix"
 msgstr "Префікс"
 
@@ -3791,8 +3777,8 @@ msgstr "Піктограма"
 msgid "Address"
 msgstr "Адреса"
 
-#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:34
-#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:214
+#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
+#: gtk/inspector/statistics.ui:46
 msgid "Type"
 msgstr "Тип"
 
@@ -3830,7 +3816,7 @@ msgstr "Поверхня"
 
 #: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
 #: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1111
-#: gtk/inspector/prop-editor.c:1471 gtk/inspector/window.ui:415
+#: gtk/inspector/prop-editor.c:1471 gtk/inspector/window.ui:388
 msgid "Properties"
 msgstr "Властивості"
 
@@ -3970,7 +3956,7 @@ msgstr "Невідоме"
 msgid "Source:"
 msgstr "Джерело:"
 
-#: gtk/inspector/prop-list.ui:45
+#: gtk/inspector/prop-list.ui:46
 msgid "Defined At"
 msgstr "Визначено в"
 
@@ -3979,31 +3965,31 @@ msgstr "Визначено в"
 msgid "Saving RenderNode failed"
 msgstr "Не вдалося зберегти RenderNode"
 
-#: gtk/inspector/recorder.ui:18
+#: gtk/inspector/recorder.ui:15
 msgid "Record frames"
 msgstr "Запис кадрів"
 
-#: gtk/inspector/recorder.ui:26
+#: gtk/inspector/recorder.ui:22
 msgid "Clear recorded frames"
 msgstr "Вилучити записані кадри"
 
-#: gtk/inspector/recorder.ui:34
+#: gtk/inspector/recorder.ui:29
 msgid "Add debug nodes"
 msgstr "Додати діагностичні вузли"
 
-#: gtk/inspector/recorder.ui:44
+#: gtk/inspector/recorder.ui:38
 msgid "Use a dark background"
 msgstr "Використовувати темне тло"
 
-#: gtk/inspector/recorder.ui:53
+#: gtk/inspector/recorder.ui:46
 msgid "Save selected node"
 msgstr "Зберегти позначений вузол"
 
-#: gtk/inspector/recorder.ui:62
+#: gtk/inspector/recorder.ui:54
 msgid "Copy to clipboard"
 msgstr "Скопіювати до буфера"
 
-#: gtk/inspector/recorder.ui:119
+#: gtk/inspector/recorder.ui:111
 msgid "Property"
 msgstr "Властивість"
 
@@ -4015,8 +4001,7 @@ msgstr "Шлях"
 msgid "Count"
 msgstr "Підрахунок"
 
-#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:202
-#: gtk/ui/gtkfontchooserwidget.ui:207 gtk/ui/gtkfontchooserwidget.ui:355
+#: gtk/inspector/resource-list.ui:82
 msgid "Size"
 msgstr "Розмір"
 
@@ -4092,7 +4077,7 @@ msgstr "Нагромаджений"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Увімкнути статистику з GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/tree-data.ui:13
+#: gtk/inspector/tree-data.ui:10
 msgid "Show data"
 msgstr "Показати дані"
 
@@ -4236,103 +4221,103 @@ msgstr "Збирати статистику"
 msgid "Objects"
 msgstr "Об'єкти"
 
-#: gtk/inspector/window.ui:220
+#: gtk/inspector/window.ui:223
 msgid "Toggle Sidebar"
 msgstr "Увімкнути або вимкнути бічну панель"
 
-#: gtk/inspector/window.ui:252
+#: gtk/inspector/window.ui:245
 msgid "Refresh action state"
 msgstr "Оновити стан дії"
 
-#: gtk/inspector/window.ui:337
+#: gtk/inspector/window.ui:319
 msgid "Previous object"
 msgstr "Попередній об'єкт"
 
-#: gtk/inspector/window.ui:347
+#: gtk/inspector/window.ui:326
 msgid "Child object"
 msgstr "Дочірній об'єкт"
 
-#: gtk/inspector/window.ui:357
+#: gtk/inspector/window.ui:333
 msgid "Previous sibling"
 msgstr "Попередній споріднений об'єкт"
 
-#: gtk/inspector/window.ui:366
+#: gtk/inspector/window.ui:339
 msgid "List Position"
 msgstr "Позиція у списку"
 
-#: gtk/inspector/window.ui:372
+#: gtk/inspector/window.ui:348
 msgid "Next sibling"
 msgstr "Наступний споріднений об'єкт"
 
-#: gtk/inspector/window.ui:405
+#: gtk/inspector/window.ui:378
 msgid "Miscellaneous"
 msgstr "Додатково"
 
-#: gtk/inspector/window.ui:426 gtk/ui/gtkprintunixdialog.ui:395
+#: gtk/inspector/window.ui:399
 msgid "Layout"
 msgstr "Компонування"
 
-#: gtk/inspector/window.ui:437
+#: gtk/inspector/window.ui:410
 msgid "CSS Nodes"
 msgstr "Вузли CSS"
 
-#: gtk/inspector/window.ui:448
+#: gtk/inspector/window.ui:421
 msgid "Size Groups"
 msgstr "Групи розмірів"
 
-#: gtk/inspector/window.ui:457 gtk/inspector/window.ui:466
+#: gtk/inspector/window.ui:430 gtk/inspector/window.ui:439
 msgid "Data"
 msgstr "Дата"
 
-#: gtk/inspector/window.ui:476
+#: gtk/inspector/window.ui:449
 msgid "Actions"
 msgstr "Дії"
 
-#: gtk/inspector/window.ui:487
+#: gtk/inspector/window.ui:460
 msgid "Menu"
 msgstr "Меню"
 
-#: gtk/inspector/window.ui:496
+#: gtk/inspector/window.ui:469
 msgid "Controllers"
 msgstr "Контролери"
 
-#: gtk/inspector/window.ui:506
+#: gtk/inspector/window.ui:479
 msgid "Magnifier"
 msgstr "Лупа"
 
-#: gtk/inspector/window.ui:527
+#: gtk/inspector/window.ui:500
 msgid "Accessibility"
 msgstr "Доступність"
 
-#: gtk/inspector/window.ui:551
+#: gtk/inspector/window.ui:524
 msgid "Global"
 msgstr "Загальна"
 
-#: gtk/inspector/window.ui:564
+#: gtk/inspector/window.ui:537
 msgid "Information"
 msgstr "Інформація"
 
-#: gtk/inspector/window.ui:573
+#: gtk/inspector/window.ui:546
 msgid "Settings"
 msgstr "Параметри"
 
-#: gtk/inspector/window.ui:582
+#: gtk/inspector/window.ui:555
 msgid "Resources"
 msgstr "Ресурси"
 
-#: gtk/inspector/window.ui:593
+#: gtk/inspector/window.ui:566
 msgid "Statistics"
 msgstr "Статистика"
 
-#: gtk/inspector/window.ui:604
+#: gtk/inspector/window.ui:577
 msgid "Logging"
 msgstr "Журналювання"
 
-#: gtk/inspector/window.ui:619
+#: gtk/inspector/window.ui:592
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:628
+#: gtk/inspector/window.ui:601
 msgid "Recorder"
 msgstr "Записувач"
 
@@ -6721,30 +6706,6 @@ msgctxt "Script"
 msgid "Yezidi"
 msgstr "Єзидська"
 
-#: gtk/ui/gtkaboutdialog.ui:62
-msgid "About"
-msgstr "Про програму"
-
-#: gtk/ui/gtkaboutdialog.ui:123
-msgid "Credits"
-msgstr "Подяки"
-
-#: gtk/ui/gtkaboutdialog.ui:206
-msgid "System"
-msgstr "Система"
-
-#: gtk/ui/gtkappchooserdialog.ui:60
-msgid "_View All Applications"
-msgstr "_Переглянути всі програми"
-
-#: gtk/ui/gtkappchooserdialog.ui:66
-msgid "_Find New Applications"
-msgstr "_Знайти нові програми"
-
-#: gtk/ui/gtkappchooserwidget.ui:100
-msgid "No applications found."
-msgstr "Не знайдено програм."
-
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "Параметри"
@@ -6771,420 +6732,33 @@ msgstr "Показати всі"
 msgid "Quit %s"
 msgstr "Вийти з %s"
 
-#: gtk/ui/gtkassistant.ui:64
-msgid "_Finish"
-msgstr "_Завершити"
-
-#: gtk/ui/gtkassistant.ui:75
-msgid "_Back"
-msgstr "_Назад"
-
-#: gtk/ui/gtkassistant.ui:86
-msgid "_Next"
-msgstr "_Далі"
-
-#: gtk/ui/gtkcolorchooserdialog.ui:4
-msgid "Select a Color"
-msgstr "Виберіть колір"
-
-#: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
-msgid "Pick a color from the screen"
-msgstr "Вибрати колір з екрана"
-
-#: gtk/ui/gtkcoloreditor.ui:80
-msgid "Hexadecimal color or color name"
-msgstr "Шістнадцятковий код кольору або назва кольору"
-
-#: gtk/ui/gtkcoloreditor.ui:95
-msgid "Hue"
-msgstr "Відтінок"
-
-#: gtk/ui/gtkcoloreditor.ui:114
-msgid "Alpha value"
-msgstr "Рівень прозорості"
-
-#: gtk/ui/gtkcoloreditor.ui:132
-msgid "Saturation and value"
-msgstr "Насиченість і значення"
-
-#: gtk/ui/gtkcoloreditor.ui:156
-msgctxt "Color channel"
-msgid "A"
-msgstr "A"
-
-#: gtk/ui/gtkcoloreditor.ui:192
-msgctxt "Color channel"
-msgid "H"
-msgstr "H"
-
-#: gtk/ui/gtkcoloreditor.ui:229
-msgctxt "Color Channel"
-msgid "S"
-msgstr "S"
-
-#: gtk/ui/gtkcoloreditor.ui:238
-msgctxt "Color Channel"
-msgid "V"
-msgstr "V"
-
-#: gtk/ui/gtkdropdown.ui:20
-msgid "(None)"
-msgstr "(Немає)"
-
-#: gtk/ui/gtkdropdown.ui:70
-msgid "Search…"
-msgstr "Пошук…"
-
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
-msgctxt "emoji category"
-msgid "Smileys & People"
-msgstr "Емоції та люди"
-
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
-msgctxt "emoji category"
-msgid "Body & Clothing"
-msgstr "Тіло і одяг"
-
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
-msgctxt "emoji category"
-msgid "Animals & Nature"
-msgstr "Тварини і природа"
-
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
-msgctxt "emoji category"
-msgid "Food & Drink"
-msgstr "Їжа і напої"
-
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
-msgctxt "emoji category"
-msgid "Travel & Places"
-msgstr "Подорожі і місця"
-
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
-msgctxt "emoji category"
-msgid "Activities"
-msgstr "Дії"
-
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
-msgctxt "emoji category"
-msgid "Objects"
-msgstr "Об'єкти"
-
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
-msgctxt "emoji category"
-msgid "Symbols"
-msgstr "Символи"
-
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
-msgctxt "emoji category"
-msgid "Flags"
-msgstr "Прапори"
-
-#: gtk/ui/gtkemojichooser.ui:230
-msgctxt "emoji category"
-msgid "Recent"
-msgstr "Нещодавні"
-
-#: gtk/ui/gtkfilechooserwidget.ui:64
-msgid "Create Folder"
-msgstr "Створити теку"
-
-#: gtk/ui/gtkfilechooserwidget.ui:249
-msgid "Remote location — only searching the current folder"
-msgstr "Віддалена адреса — пошук можливий лише в поточній теці"
-
-#: gtk/ui/gtkfilechooserwidget.ui:378
-msgid "Folder Name"
-msgstr "Назва теки"
-
-#: gtk/ui/gtkfilechooserwidget.ui:404
-msgid "_Create"
-msgstr "_Створити"
-
-#: gtk/ui/gtkfontchooserdialog.ui:4
-msgid "Select Font"
-msgstr "Виберіть шрифт"
-
-#: gtk/ui/gtkfontchooserwidget.ui:64
-msgid "Search font name"
-msgstr "Пошук за назвою шрифту"
-
-#: gtk/ui/gtkfontchooserwidget.ui:79
-msgid "Filter by"
-msgstr "Критерій фільтрування"
-
-#: gtk/ui/gtkfontchooserwidget.ui:89
-msgid "Monospace"
-msgstr "Моноширинний"
-
-#: gtk/ui/gtkfontchooserwidget.ui:95
-msgid "Language"
-msgstr "Мова"
-
-#: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:328
-msgid "Preview text"
-msgstr "Переглянути текст"
-
-#: gtk/ui/gtkfontchooserwidget.ui:194 gtk/ui/gtkfontchooserwidget.ui:224
-msgid "horizontal"
-msgstr "горизонтальна"
-
-#: gtk/ui/gtkfontchooserwidget.ui:274
-msgid "No Fonts Found"
-msgstr "Не знайдено жодного шрифту"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:27
-msgid "_Format for:"
-msgstr "_Формат для:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:637
-msgid "_Paper size:"
-msgstr "Розмір _паперу:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:86
-msgid "_Orientation:"
-msgstr "_Розташування:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:98 gtk/ui/gtkprintunixdialog.ui:677
-msgid "Portrait"
-msgstr "Книжкова"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:109 gtk/ui/gtkprintunixdialog.ui:679
-msgid "Reverse portrait"
-msgstr "Обернена книжкова"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:121 gtk/ui/gtkprintunixdialog.ui:678
-msgid "Landscape"
-msgstr "Альбомна"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:132 gtk/ui/gtkprintunixdialog.ui:680
-msgid "Reverse landscape"
-msgstr "Обернена альбомна"
-
-#: gtk/ui/gtkplacesview.ui:28
-msgid "Server Addresses"
-msgstr "Серверні адреси"
-
-#: gtk/ui/gtkplacesview.ui:40
-msgid ""
-"Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr "Серверні адреси складаються з префіксу протоколу та адреси. Наприклад:"
-
-#: gtk/ui/gtkplacesview.ui:66
-msgid "Available Protocols"
-msgstr "Доступні протоколи"
-
-#. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:118
-msgid "No recent servers found"
-msgstr "Не знайдено жодного недавнього сервера"
-
-#: gtk/ui/gtkplacesview.ui:141
-msgid "Recent Servers"
-msgstr "Недавні сервери"
-
-#: gtk/ui/gtkplacesview.ui:221
-msgid "No results found"
-msgstr "Безрезультатно"
-
-#: gtk/ui/gtkplacesview.ui:252
-msgid "Connect to _Server"
-msgstr "З'єднатись із _сервером"
-
-#: gtk/ui/gtkplacesview.ui:277
-msgid "Enter server address…"
-msgstr "Увести адресу сервера…"
-
-#. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:147
-msgid "Status"
-msgstr "Стан"
-
-#: gtk/ui/gtkprintunixdialog.ui:201
-msgid "Range"
-msgstr "Діапазон"
-
-#: gtk/ui/gtkprintunixdialog.ui:214
-msgid "_All Pages"
-msgstr "_Усі сторінки"
-
-#: gtk/ui/gtkprintunixdialog.ui:226
-msgid "C_urrent Page"
-msgstr "_Теперішню сторінку"
-
-#: gtk/ui/gtkprintunixdialog.ui:239
-msgid "Se_lection"
-msgstr "_Вибір"
-
-#: gtk/ui/gtkprintunixdialog.ui:252
-msgid "Pag_es:"
-msgstr "_Сторінки:"
-
-#: gtk/ui/gtkprintunixdialog.ui:253 gtk/ui/gtkprintunixdialog.ui:266
-msgid ""
-"Specify one or more page ranges,\n"
-" e.g. 1–3, 7, 11"
-msgstr ""
-"Вкажіть один або більше діапазонів,\n"
-" наприклад, 1–3,7,11"
-
-#: gtk/ui/gtkprintunixdialog.ui:289
-msgid "Copies"
-msgstr "Копії"
-
-#: gtk/ui/gtkprintunixdialog.ui:304
-msgid "Copie_s:"
-msgstr "Ко_пій:"
-
-#: gtk/ui/gtkprintunixdialog.ui:327
-msgid "C_ollate"
-msgstr "_Впорядкувати"
-
-#: gtk/ui/gtkprintunixdialog.ui:338
-msgid "_Reverse"
-msgstr "_Обернено"
-
-#: gtk/ui/gtkprintunixdialog.ui:368
-msgid "General"
-msgstr "Загальне"
-
-#: gtk/ui/gtkprintunixdialog.ui:410
-msgid "T_wo-sided:"
-msgstr "З _двох сторін:"
-
-#: gtk/ui/gtkprintunixdialog.ui:432
-msgid "Pages per _side:"
-msgstr "Сторінок на с_торону:"
-
-#: gtk/ui/gtkprintunixdialog.ui:456
-msgid "Page or_dering:"
-msgstr "_Порядок сторінок:"
-
-#: gtk/ui/gtkprintunixdialog.ui:479
-msgid "_Only print:"
-msgstr "Друкувати _лише:"
-
-#: gtk/ui/gtkprintunixdialog.ui:495
+#: gtk/ui/gtkprintunixdialog.ui:493
 msgid "All sheets"
 msgstr "Усі сторінки"
 
-#: gtk/ui/gtkprintunixdialog.ui:496
+#: gtk/ui/gtkprintunixdialog.ui:494
 msgid "Even sheets"
 msgstr "Парні сторінки"
 
-#: gtk/ui/gtkprintunixdialog.ui:497
+#: gtk/ui/gtkprintunixdialog.ui:495
 msgid "Odd sheets"
 msgstr "Непарні сторінки"
 
-#: gtk/ui/gtkprintunixdialog.ui:511
-msgid "Sc_ale:"
-msgstr "_Масштаб:"
+#: gtk/ui/gtkprintunixdialog.ui:675
+msgid "Portrait"
+msgstr "Книжкова"
 
-#: gtk/ui/gtkprintunixdialog.ui:556
-msgid "Paper"
-msgstr "Папір"
+#: gtk/ui/gtkprintunixdialog.ui:676
+msgid "Landscape"
+msgstr "Альбомна"
 
-#: gtk/ui/gtkprintunixdialog.ui:571
-msgid "Paper _type:"
-msgstr "_Тип паперу:"
+#: gtk/ui/gtkprintunixdialog.ui:677
+msgid "Reverse portrait"
+msgstr "Обернена книжкова"
 
-#: gtk/ui/gtkprintunixdialog.ui:593
-msgid "Paper _source:"
-msgstr "Д_жерело паперу:"
-
-#: gtk/ui/gtkprintunixdialog.ui:615
-msgid "Output t_ray:"
-msgstr "_Лоток виводу:"
-
-#: gtk/ui/gtkprintunixdialog.ui:660
-msgid "Or_ientation:"
-msgstr "_Орієнтація:"
-
-#: gtk/ui/gtkprintunixdialog.ui:734
-msgid "Job Details"
-msgstr "Подробиці про завдання"
-
-#: gtk/ui/gtkprintunixdialog.ui:749
-msgid "Pri_ority:"
-msgstr "_Пріоритет:"
-
-#: gtk/ui/gtkprintunixdialog.ui:770
-msgid "_Billing info:"
-msgstr "_Підсумкові дані:"
-
-#: gtk/ui/gtkprintunixdialog.ui:803
-msgid "Print Document"
-msgstr "Друкувати документ"
-
-#. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:816
-msgid "_Now"
-msgstr "_Зараз"
-
-#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:830
-msgid "A_t:"
-msgstr "_о:"
-
-#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:832 gtk/ui/gtkprintunixdialog.ui:834
-#: gtk/ui/gtkprintunixdialog.ui:850 gtk/ui/gtkprintunixdialog.ui:852
-msgid ""
-"Specify the time of print,\n"
-" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-msgstr ""
-"Вкажіть час друку,\n"
-"наприклад, 15∶30, 14∶15∶20, 7∶20"
-
-#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:864
-msgid "On _hold"
-msgstr "О_чікування"
-
-#: gtk/ui/gtkprintunixdialog.ui:866 gtk/ui/gtkprintunixdialog.ui:867
-msgid "Hold the job until it is explicitly released"
-msgstr "Затримати завдання до додаткової команди"
-
-#: gtk/ui/gtkprintunixdialog.ui:894
-msgid "Add Cover Page"
-msgstr "Додати титульну сторінку"
-
-#. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:909
-msgid "Be_fore:"
-msgstr "_До:"
-
-#. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:930
-msgid "_After:"
-msgstr "_Після:"
-
-#: gtk/ui/gtkprintunixdialog.ui:959
-msgid "Job"
-msgstr "Завдання"
-
-#. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:989
-msgid "Image Quality"
-msgstr "Якість зображення"
-
-#. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1018
-msgid "Color"
-msgstr "Колір"
-
-#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1047
-msgid "Finishing"
-msgstr "Завершення"
-
-#: gtk/ui/gtkprintunixdialog.ui:1076
-msgid "Advanced"
-msgstr "Додатково"
-
-#: gtk/ui/gtkprintunixdialog.ui:1092
-msgid "Some of the settings in the dialog conflict"
-msgstr "Деякі параметри у діалоговому вікні конфліктують"
+#: gtk/ui/gtkprintunixdialog.ui:678
+msgid "Reverse landscape"
+msgstr "Обернена альбомна"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
@@ -7844,42 +7418,42 @@ msgstr ""
 "\n"
 "Виконати різні завдання на файлах GtkBuilder .ui.\n"
 
-#: tools/gtk-builder-tool-simplify.c:436
+#: tools/gtk-builder-tool-simplify.c:437
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: не вдалося обробити значення для властивості «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:591
+#: tools/gtk-builder-tool-simplify.c:638
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %sвластивість %s::%s не знайдено\n"
 
-#: tools/gtk-builder-tool-simplify.c:2207
+#: tools/gtk-builder-tool-simplify.c:2275
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Не вдалося завантажити «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2218
+#: tools/gtk-builder-tool-simplify.c:2286
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Не вдалося обробити «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2242
+#: tools/gtk-builder-tool-simplify.c:2310
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Не вдалося прочитати «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2248
+#: tools/gtk-builder-tool-simplify.c:2316
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Не вдалося записати %s: «%s»\n"
 
-#: tools/gtk-builder-tool-simplify.c:2288
+#: tools/gtk-builder-tool-simplify.c:2356
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Не вказано файла .ui\n"
 
-#: tools/gtk-builder-tool-simplify.c:2294
+#: tools/gtk-builder-tool-simplify.c:2362
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Без --replace можна спрощувати лише один файл .ui\n"
@@ -8049,6 +7623,333 @@ msgstr ""
 "Немає індексного файла теми в «%s».\n"
 "Якщо ви дійсно бажаєте створити тут кеш значків, використовуйте --ignore-"
 "theme-index.\n"
+
+#~| msgid "Failed to write header\n"
+#~ msgid "Failed to parse png image"
+#~ msgstr "Не вдалося обробити дані зображення png"
+
+#~ msgid "Sandbox does not provide an OpenGL implementation"
+#~ msgstr "Пісочниця не надає реалізації OpenGL"
+
+#~ msgid "No OpenGL implementation available"
+#~ msgstr "Немає доступних реалізацій OpenGL"
+
+#~ msgid "Core GL is not available on EGL implementation"
+#~ msgstr "«Core GL» недоступний у реалізації EGL"
+
+#~ msgid "Surfaceless contexts are not supported on this EGL implementation"
+#~ msgstr ""
+#~ "Підтримки безповерхневих контекстів у цій реалізації EGL не передбачено"
+
+#~ msgid "EGL is not supported"
+#~ msgstr "Підтримки EGL не передбачено"
+
+#~ msgid "About"
+#~ msgstr "Про програму"
+
+#~ msgid "Credits"
+#~ msgstr "Подяки"
+
+#~ msgid "System"
+#~ msgstr "Система"
+
+#~ msgid "_View All Applications"
+#~ msgstr "_Переглянути всі програми"
+
+#~ msgid "_Find New Applications"
+#~ msgstr "_Знайти нові програми"
+
+#~ msgid "No applications found."
+#~ msgstr "Не знайдено програм."
+
+#~ msgid "_Finish"
+#~ msgstr "_Завершити"
+
+#~ msgid "_Back"
+#~ msgstr "_Назад"
+
+#~ msgid "_Next"
+#~ msgstr "_Далі"
+
+#~ msgid "Select a Color"
+#~ msgstr "Виберіть колір"
+
+#~ msgid "Pick a color from the screen"
+#~ msgstr "Вибрати колір з екрана"
+
+#~ msgid "Hexadecimal color or color name"
+#~ msgstr "Шістнадцятковий код кольору або назва кольору"
+
+#~ msgid "Hue"
+#~ msgstr "Відтінок"
+
+#~ msgid "Alpha value"
+#~ msgstr "Рівень прозорості"
+
+#~ msgid "Saturation and value"
+#~ msgstr "Насиченість і значення"
+
+#~ msgctxt "Color channel"
+#~ msgid "A"
+#~ msgstr "A"
+
+#~ msgctxt "Color channel"
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgctxt "Color Channel"
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgctxt "Color Channel"
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "(None)"
+#~ msgstr "(Немає)"
+
+#~ msgid "Search…"
+#~ msgstr "Пошук…"
+
+#~ msgctxt "emoji category"
+#~ msgid "Smileys & People"
+#~ msgstr "Емоції та люди"
+
+#~ msgctxt "emoji category"
+#~ msgid "Body & Clothing"
+#~ msgstr "Тіло і одяг"
+
+#~ msgctxt "emoji category"
+#~ msgid "Animals & Nature"
+#~ msgstr "Тварини і природа"
+
+#~ msgctxt "emoji category"
+#~ msgid "Food & Drink"
+#~ msgstr "Їжа і напої"
+
+#~ msgctxt "emoji category"
+#~ msgid "Travel & Places"
+#~ msgstr "Подорожі і місця"
+
+#~ msgctxt "emoji category"
+#~ msgid "Activities"
+#~ msgstr "Дії"
+
+#~ msgctxt "emoji category"
+#~ msgid "Objects"
+#~ msgstr "Об'єкти"
+
+#~ msgctxt "emoji category"
+#~ msgid "Symbols"
+#~ msgstr "Символи"
+
+#~ msgctxt "emoji category"
+#~ msgid "Flags"
+#~ msgstr "Прапори"
+
+#~ msgctxt "emoji category"
+#~ msgid "Recent"
+#~ msgstr "Нещодавні"
+
+#~ msgid "Create Folder"
+#~ msgstr "Створити теку"
+
+#~ msgid "Remote location — only searching the current folder"
+#~ msgstr "Віддалена адреса — пошук можливий лише в поточній теці"
+
+#~ msgid "Folder Name"
+#~ msgstr "Назва теки"
+
+#~ msgid "_Create"
+#~ msgstr "_Створити"
+
+#~ msgid "Select Font"
+#~ msgstr "Виберіть шрифт"
+
+#~ msgid "Search font name"
+#~ msgstr "Пошук за назвою шрифту"
+
+#~ msgid "Filter by"
+#~ msgstr "Критерій фільтрування"
+
+#~ msgid "Monospace"
+#~ msgstr "Моноширинний"
+
+#~ msgid "Language"
+#~ msgstr "Мова"
+
+#~ msgid "Preview text"
+#~ msgstr "Переглянути текст"
+
+#~ msgid "horizontal"
+#~ msgstr "горизонтальна"
+
+#~ msgid "No Fonts Found"
+#~ msgstr "Не знайдено жодного шрифту"
+
+#~ msgid "_Format for:"
+#~ msgstr "_Формат для:"
+
+#~ msgid "_Paper size:"
+#~ msgstr "Розмір _паперу:"
+
+#~ msgid "_Orientation:"
+#~ msgstr "_Розташування:"
+
+#~ msgid "Server Addresses"
+#~ msgstr "Серверні адреси"
+
+#~ msgid ""
+#~ "Server addresses are made up of a protocol prefix and an address. "
+#~ "Examples:"
+#~ msgstr ""
+#~ "Серверні адреси складаються з префіксу протоколу та адреси. Наприклад:"
+
+#~ msgid "Available Protocols"
+#~ msgstr "Доступні протоколи"
+
+#~ msgid "No recent servers found"
+#~ msgstr "Не знайдено жодного недавнього сервера"
+
+#~ msgid "Recent Servers"
+#~ msgstr "Недавні сервери"
+
+#~ msgid "No results found"
+#~ msgstr "Безрезультатно"
+
+#~ msgid "Connect to _Server"
+#~ msgstr "З'єднатись із _сервером"
+
+#~ msgid "Enter server address…"
+#~ msgstr "Увести адресу сервера…"
+
+#~ msgid "Status"
+#~ msgstr "Стан"
+
+#~ msgid "Range"
+#~ msgstr "Діапазон"
+
+#~ msgid "_All Pages"
+#~ msgstr "_Усі сторінки"
+
+#~ msgid "C_urrent Page"
+#~ msgstr "_Теперішню сторінку"
+
+#~ msgid "Se_lection"
+#~ msgstr "_Вибір"
+
+#~ msgid "Pag_es:"
+#~ msgstr "_Сторінки:"
+
+#~ msgid ""
+#~ "Specify one or more page ranges,\n"
+#~ " e.g. 1–3, 7, 11"
+#~ msgstr ""
+#~ "Вкажіть один або більше діапазонів,\n"
+#~ " наприклад, 1–3,7,11"
+
+#~ msgid "Copies"
+#~ msgstr "Копії"
+
+#~ msgid "Copie_s:"
+#~ msgstr "Ко_пій:"
+
+#~ msgid "C_ollate"
+#~ msgstr "_Впорядкувати"
+
+#~ msgid "_Reverse"
+#~ msgstr "_Обернено"
+
+#~ msgid "General"
+#~ msgstr "Загальне"
+
+#~ msgid "T_wo-sided:"
+#~ msgstr "З _двох сторін:"
+
+#~ msgid "Pages per _side:"
+#~ msgstr "Сторінок на с_торону:"
+
+#~ msgid "Page or_dering:"
+#~ msgstr "_Порядок сторінок:"
+
+#~ msgid "_Only print:"
+#~ msgstr "Друкувати _лише:"
+
+#~ msgid "Sc_ale:"
+#~ msgstr "_Масштаб:"
+
+#~ msgid "Paper"
+#~ msgstr "Папір"
+
+#~ msgid "Paper _type:"
+#~ msgstr "_Тип паперу:"
+
+#~ msgid "Paper _source:"
+#~ msgstr "Д_жерело паперу:"
+
+#~ msgid "Output t_ray:"
+#~ msgstr "_Лоток виводу:"
+
+#~ msgid "Or_ientation:"
+#~ msgstr "_Орієнтація:"
+
+#~ msgid "Job Details"
+#~ msgstr "Подробиці про завдання"
+
+#~ msgid "Pri_ority:"
+#~ msgstr "_Пріоритет:"
+
+#~ msgid "_Billing info:"
+#~ msgstr "_Підсумкові дані:"
+
+#~ msgid "Print Document"
+#~ msgstr "Друкувати документ"
+
+#~ msgid "_Now"
+#~ msgstr "_Зараз"
+
+#~ msgid "A_t:"
+#~ msgstr "_о:"
+
+#~ msgid ""
+#~ "Specify the time of print,\n"
+#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+#~ msgstr ""
+#~ "Вкажіть час друку,\n"
+#~ "наприклад, 15∶30, 14∶15∶20, 7∶20"
+
+#~ msgid "On _hold"
+#~ msgstr "О_чікування"
+
+#~ msgid "Hold the job until it is explicitly released"
+#~ msgstr "Затримати завдання до додаткової команди"
+
+#~ msgid "Add Cover Page"
+#~ msgstr "Додати титульну сторінку"
+
+#~ msgid "Be_fore:"
+#~ msgstr "_До:"
+
+#~ msgid "_After:"
+#~ msgstr "_Після:"
+
+#~ msgid "Job"
+#~ msgstr "Завдання"
+
+#~ msgid "Image Quality"
+#~ msgstr "Якість зображення"
+
+#~ msgid "Color"
+#~ msgstr "Колір"
+
+#~ msgid "Finishing"
+#~ msgstr "Завершення"
+
+#~ msgid "Advanced"
+#~ msgstr "Додатково"
+
+#~ msgid "Some of the settings in the dialog conflict"
+#~ msgstr "Деякі параметри у діалоговому вікні конфліктують"
 
 #~ msgid "No available configurations for the given RGBA pixel format"
 #~ msgstr "Немає доступних налаштувань для заданого формату точок RGBA"
