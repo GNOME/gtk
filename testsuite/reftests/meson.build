@@ -498,6 +498,8 @@ testdata = [
   'unresolvable.css',
   'unresolvable.ref.ui',
   'unresolvable.ui',
+  'vbox-with-max-width-chars-label.ref.ui',
+  'vbox-with-max-width-chars-label.ui',
   'window-border-width.ref.ui',
   'window-border-width.ui',
   'window-default-size.ref.ui',
