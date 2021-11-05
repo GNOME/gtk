@@ -26,23 +26,10 @@
 
 G_BEGIN_DECLS
 
-void            _gtk_window_internal_set_focus (GtkWindow *window,
-                                                GtkWidget *focus);
 void            _gtk_window_group_add_grab    (GtkWindowGroup *window_group,
                                                GtkWidget      *widget);
 void            _gtk_window_group_remove_grab (GtkWindowGroup *window_group,
                                                GtkWidget      *widget);
-void            _gtk_window_group_add_device_grab    (GtkWindowGroup   *window_group,
-                                                      GtkWidget        *widget,
-                                                      GdkDevice        *device,
-                                                      gboolean          block_others);
-void            _gtk_window_group_remove_device_grab (GtkWindowGroup   *window_group,
-                                                      GtkWidget        *widget,
-                                                      GdkDevice        *device);
-
-gboolean        _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
-                                                                GtkWidget      *widget,
-                                                                GdkDevice      *device);
 
 void            _gtk_window_unset_focus_and_default (GtkWindow *window,
                                                      GtkWidget *widget);
