@@ -4409,6 +4409,8 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
     {
       const AnchoredChild *child = iter->data;
       GtkTextIter child_loc;
+      GtkRequisition child_req;
+      GtkAllocation allocation;
 
       /* We need to force-validate the regions containing children. */
       gtk_text_buffer_get_iter_at_child_anchor (get_buffer (text_view),
@@ -4429,6 +4431,15 @@ gtk_text_view_allocate_children (GtkTextView *text_view)
         }
 
       gtk_text_layout_validate_yrange (priv->layout, &child_loc, 0, 1);
+
+      gtk_widget_get_preferred_size (child->widget, &child_req, NULL);
+
+      allocation.x = - child_req.width;
+      allocation.y = - child_req.height;
+      allocation.width = child_req.width;
+      allocation.height = child_req.height;
+
+      gtk_widget_size_allocate (child->widget, &allocation, -1);
     }
 }
 
