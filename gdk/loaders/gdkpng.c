@@ -251,7 +251,7 @@ gdk_load_png (GBytes  *bytes,
       png_destroy_read_struct (&png, &info, NULL);
       g_set_error (error,
                    GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
-                   _("Unsupportd color type %u in png image"), color_type);
+                   _("Unsupported color type %u in png image"), color_type);
       return NULL;
     }
 
