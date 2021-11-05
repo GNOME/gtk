@@ -256,11 +256,46 @@ gtk_box_layout_compute_size (GtkBoxLayout *self,
 static void
 gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
                                       GtkWidget    *widget,
-                                      int           for_size,
                                       int          *minimum,
                                       int          *natural,
                                       int          *min_baseline,
                                       int          *nat_baseline)
+{
+  GtkWidget *child;
+  int largest_min = 0, largest_nat = 0;
+
+  for (child = gtk_widget_get_first_child (widget);
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      int child_min = 0;
+      int child_nat = 0;
+
+      if (!gtk_widget_should_layout (child))
+        continue;
+
+      gtk_widget_measure (child,
+                          OPPOSITE_ORIENTATION (self->orientation),
+                          -1,
+                          &child_min, &child_nat,
+                          NULL, NULL);
+
+      largest_min = MAX (largest_min, child_min);
+      largest_nat = MAX (largest_nat, child_nat);
+    }
+
+  *minimum = largest_min;
+  *natural = largest_nat;
+}
+
+static void
+gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
+                                               GtkWidget    *widget,
+                                               int           for_size,
+                                               int          *minimum,
+                                               int          *natural,
+                                               int          *min_baseline,
+                                               int          *nat_baseline)
 {
   GtkWidget *child;
   int nvis_children;
@@ -437,9 +472,18 @@ gtk_box_layout_measure (GtkLayoutManager *layout_manager,
 
   if (self->orientation != orientation)
     {
-      gtk_box_layout_compute_opposite_size (self, widget, for_size,
-                                            minimum, natural,
-                                            min_baseline, nat_baseline);
+      if (for_size < 0)
+        {
+          gtk_box_layout_compute_opposite_size (self, widget,
+                                                minimum, natural,
+                                                min_baseline, nat_baseline);
+        }
+      else
+        {
+          gtk_box_layout_compute_opposite_size_for_size (self, widget, for_size,
+                                                         minimum, natural,
+                                                         min_baseline, nat_baseline);
+        }
     }
   else
     {
