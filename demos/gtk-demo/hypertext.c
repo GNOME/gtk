@@ -94,13 +94,12 @@ show_page (GtkTextView *text_view,
       gtk_text_buffer_insert (buffer, &iter, " can easily be realized with ", -1);
       insert_link (buffer, &iter, "tags", 2);
       gtk_text_buffer_insert (buffer, &iter, ".\n", -1);
-      gtk_text_buffer_insert (buffer, &iter,
-          "Of course you can also embed Emoji 😋, "
-          "icons ", -1);
+      gtk_text_buffer_insert (buffer, &iter, "Of course you can also embed Emoji 😋, ", -1);
+      gtk_text_buffer_insert (buffer, &iter, "icons ", -1);
 
       theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)));
       icon = gtk_icon_theme_lookup_icon (theme,
-                                         "microphone-sensitivity-high-symbolic",
+                                         "eye-not-looking-symbolic",
                                          NULL,
                                          16,
                                          1,
