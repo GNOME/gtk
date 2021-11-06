@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-11-01 15:23+0000\n"
-"PO-Revision-Date: 2021-11-05 20:45+0200\n"
+"POT-Creation-Date: 2021-11-06 03:54+0000\n"
+"PO-Revision-Date: 2021-11-06 06:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -114,27 +114,26 @@ msgstr "Немає сумісних форматів для передаванн
 #: gdk/gdkglcontext.c:323
 msgid "The EGL implementation does not support any allowed APIs"
 msgstr ""
-"У реалізації EGL не передбачено підтримки жодного з дозволених програмних інтерфейсів"
+"У реалізації EGL не передбачено підтримки жодного з дозволених програмних "
+"інтерфейсів"
 
 #: gdk/gdkglcontext.c:404 gdk/win32/gdkglcontext-win32-egl.c:401
 #: gdk/win32/gdkglcontext-win32-wgl.c:627 gdk/x11/gdkglcontext-glx.c:622
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
-#: gdk/gdkglcontext.c:1232
-#| msgid "GL support disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1237
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "За допомогою GDK_DEBUG вимкнено усе, окрім OpenGL ES"
 
-#: gdk/gdkglcontext.c:1241
+#: gdk/gdkglcontext.c:1246
 #, c-format
 msgid "Application does not support %s API"
-msgstr ""
-"У програмі не передбачено підтримки програмного інтерфейсу %s"
+msgstr "У програмі не передбачено підтримки програмного інтерфейсу %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1727
+#: gdk/gdkglcontext.c:1732
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Намагаємося скористатися %s, але %s вже використано"
@@ -547,14 +546,13 @@ msgstr "Помилка читання png (%s)"
 #: gdk/loaders/gdkpng.c:216
 #, c-format
 msgid "Unsupported depth %u in png image"
-msgstr ""
-"Непідтримувана глибина, %u, у зображенні png"
+msgstr "Непідтримувана глибина, %u, у зображенні png"
 
 #: gdk/loaders/gdkpng.c:254
 #, c-format
-msgid "Unsupportd color type %u in png image"
-msgstr ""
-"Непідтримуваний тип кольору, %u, у зображенні png"
+#| msgid "Unsupportd color type %u in png image"
+msgid "Unsupported color type %u in png image"
+msgstr "Непідтримуваний тип кольору, %u, у зображенні png"
 
 #: gdk/loaders/gdktiff.c:340
 msgid "Failed to load RGB data from TIFF file"
@@ -2217,7 +2215,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5495 gtk/gtktext.c:6062 gtk/gtktextview.c:8900
+#: gtk/gtklabel.c:5514 gtk/gtktext.c:6062 gtk/gtktextview.c:8900
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2483,27 +2481,27 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/gtklabel.c:5492 gtk/gtktext.c:6050 gtk/gtktextview.c:8888
+#: gtk/gtklabel.c:5511 gtk/gtktext.c:6050 gtk/gtktextview.c:8888
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5493 gtk/gtktext.c:6054 gtk/gtktextview.c:8892
+#: gtk/gtklabel.c:5512 gtk/gtktext.c:6054 gtk/gtktextview.c:8892
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5494 gtk/gtktext.c:6058 gtk/gtktextview.c:8896
+#: gtk/gtklabel.c:5513 gtk/gtktext.c:6058 gtk/gtktextview.c:8896
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5500 gtk/gtktext.c:6071 gtk/gtktextview.c:8921
+#: gtk/gtklabel.c:5519 gtk/gtktext.c:6071 gtk/gtktextview.c:8921
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5505
+#: gtk/gtklabel.c:5524
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5509
+#: gtk/gtklabel.c:5528
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
