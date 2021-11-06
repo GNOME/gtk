@@ -54,7 +54,7 @@ example_rectangle_free (ExampleRectangle *r);
 // In the source
 G_DEFINE_BOXED_TYPE (ExampleRectangle, example_rectangle,
                      example_rectangle_copy,
-		     example_rectangle_free)
+                     example_rectangle_free)
 ```
 
 Just like `G_DEFINE_TYPE` and `G_DEFINE_INTERFACE_TYPE`, the
@@ -74,7 +74,7 @@ register the property using [`func@GObject.param_spec_boxed`], e.g.
 obj_props[PROP_BOUNDS] =
   g_param_spec_boxed ("bounds", NULL, NULL,
                       EXAMPLE_TYPE_RECTANGLE,
-		      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                      G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 ```
 
 In the `set_property` implementation you can use `g_value_get_boxed()` to
