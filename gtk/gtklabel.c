@@ -1077,14 +1077,15 @@ get_static_size (GtkLabel       *self,
                  int            *minimum_baseline,
                  int            *natural_baseline)
 {
+  int minimum_default, natural_default;
   PangoLayout *layout;
 
-  layout = gtk_label_get_measuring_layout (self, NULL, -1);
+  get_default_widths (self, &minimum_default, &natural_default);
+
+  layout = gtk_label_get_measuring_layout (self, NULL, natural_default);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      int minimum_default, natural_default;
-
       pango_layout_get_size (layout, natural, NULL);
       if (self->ellipsize)
         {
@@ -1096,11 +1097,8 @@ get_static_size (GtkLabel       *self,
       else
         *minimum = *natural;
 
-      get_default_widths (self, &minimum_default, &natural_default);
       if (minimum_default > *minimum)
         *minimum = minimum_default;
-      if (natural_default > -1)
-        *natural = natural_default;
       *natural = MAX (*minimum, *natural);
     }
   else
@@ -1180,7 +1178,6 @@ get_width_for_height (GtkLabel *self,
       /* Natural width is natural width - or as wide as possible */
       layout = gtk_label_get_measuring_layout (self, layout, natural_default);
       pango_layout_get_size (layout, natural_width, NULL);
-      *natural_width = MAX (*natural_width, natural_default);
       *natural_width = MAX (*natural_width, *minimum_width);
     }
   else

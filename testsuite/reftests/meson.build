@@ -347,6 +347,8 @@ testdata = [
   'label-fonts.css',
   'label-fonts.ref.ui',
   'label-fonts.ui',
+  'label-huge-max-width-chars.ref.ui',
+  'label-huge-max-width-chars.ui',
   'label-max-width-chars-and-halign-and-infinite-width.ui',
   'label-max-width-chars-and-halign-and-infinite-width.ref.ui',
   'label-shadows.css',
@@ -365,6 +367,8 @@ testdata = [
   'label-text-shadow-changes-modify-clip.ui',
   'label-width-chars-dont-shrink.ref.ui',
   'label-width-chars-dont-shrink.ui',
+  'label-wrapped-huge-max-width-chars.ref.ui',
+  'label-wrapped-huge-max-width-chars.ui',
   # this seems to make assumptions on text positioning
   # that are not valid with subpixel positioning
   #'label-wrap-justify.ref.ui',
