@@ -359,6 +359,8 @@ testdata = [
   'label-sizing.ui',
   'label-small-ellipsized.ref.ui',
   'label-small-ellipsized.ui',
+  'label-small-max-width-chars.ref.ui',
+  'label-small-max-width-chars.ui',
   'label-text-shadow-clipping.css',
   'label-text-shadow-clipping.ref.ui',
   'label-text-shadow-clipping.ui',

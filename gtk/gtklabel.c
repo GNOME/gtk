@@ -1082,7 +1082,7 @@ get_static_size (GtkLabel       *self,
 
   get_default_widths (self, &minimum_default, &natural_default);
 
-  layout = gtk_label_get_measuring_layout (self, NULL, natural_default);
+  layout = gtk_label_get_measuring_layout (self, NULL, self->ellipsize ? natural_default : -1);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
