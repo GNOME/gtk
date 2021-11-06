@@ -327,6 +327,8 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
+      int min_opposite, nat_for_min;
+
       if (!gtk_widget_should_layout (child))
         continue;
 
@@ -335,6 +337,22 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                           -1,
                           &sizes[i].minimum_size, &sizes[i].natural_size,
                           NULL, NULL);
+      /* Don't just use the natural size as the max size,
+       * the natural size is the ideal size, not necessarily
+       * the maximum size.
+       * Also check the nat size for opposite min size.
+       */
+      gtk_widget_measure (child,
+                          OPPOSITE_ORIENTATION (self->orientation),
+                          -1,
+                          &min_opposite, NULL,
+                          NULL, NULL);
+      gtk_widget_measure (child,
+                          self->orientation,
+                          min_opposite,
+                          NULL, &nat_for_min,
+                          NULL, NULL);
+      sizes[i].natural_size = MAX (sizes[i].natural_size, nat_for_min);
 
       children_minimum_size += sizes[i].minimum_size;
       i += 1;

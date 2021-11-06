@@ -385,6 +385,8 @@ testdata = [
   'link-coloring.css',
   'link-coloring.ref.ui',
   'link-coloring.ui',
+  'listview-with-wrapped-labels.ref.ui',
+  'listview-with-wrapped-labels.ui',
   'marble.xpm',
   'messagedialog-secondarytext.ui',
   'messagedialog-secondarytext.ref.ui',
