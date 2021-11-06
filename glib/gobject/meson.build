@@ -1,5 +1,7 @@
 expand_content_files = [
+  'boxed.md',
   'concepts.md',
+  'floating-refs.md',
   'tutorial.md',
 ]
 

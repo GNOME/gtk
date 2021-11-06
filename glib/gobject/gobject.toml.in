@@ -38,6 +38,7 @@ content_files = [
   "concepts.md",
   "tutorial.md",
   "floating-refs.md",
+  "boxed.md",
 ]
 content_images = [
   "images/glue.png",
