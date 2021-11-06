@@ -1203,7 +1203,7 @@ get_width_for_height (GtkLabel *self,
           if (text_height > height)
             min = mid + 1;
           else
-            max = text_width;
+            max = mid;
         }
 
       *minimum_width = min;
