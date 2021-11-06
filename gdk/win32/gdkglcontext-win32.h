@@ -32,62 +32,25 @@
 #include "gdkdisplayprivate.h"
 #include "gdkvisual.h"
 #include "gdkwindow.h"
-#include "gdkinternals.h"
-#include "gdkmain.h"
 
 G_BEGIN_DECLS
 
-struct _GdkWin32GLContext
-{
-  GdkGLContext parent_instance;
-
-  /* WGL Context Items */
-  HGLRC hglrc;
-  HDC gl_hdc;
-  guint need_alpha_bits : 1;
-
-  /* other items */
-  guint is_attached : 1;
-  guint do_frame_sync : 1;
-  guint do_blit_swap : 1;
-
-#ifdef GDK_WIN32_ENABLE_EGL
-  /* EGL (Angle) Context Items */
-  EGLContext egl_context;
-  EGLConfig egl_config;
-#endif
-};
-
-struct _GdkWin32GLContextClass
-{
-  GdkGLContextClass parent_class;
-};
+void
+gdk_win32_window_invalidate_egl_framebuffer (GdkWindow      *window);
 
 GdkGLContext *
-_gdk_win32_window_create_gl_context (GdkWindow *window,
-                                     gboolean attached,
-                                     GdkGLContext *share,
-                                     GError **error);
+gdk_win32_window_create_gl_context          (GdkWindow      *window,
+                                             gboolean        attached,
+                                             GdkGLContext   *share,
+                                             GError        **error);
 
 void
-_gdk_win32_window_invalidate_for_new_frame (GdkWindow *window,
-                                            cairo_region_t *update_area);
-
-void
-_gdk_win32_gl_context_end_frame (GdkGLContext *context,
-                                 cairo_region_t *painted,
-                                 cairo_region_t *damage);
+gdk_win32_window_invalidate_for_new_frame   (GdkWindow      *window,
+                                             cairo_region_t *update_area);
 
 gboolean
-_gdk_win32_display_make_gl_context_current (GdkDisplay *display,
-                                            GdkGLContext *context);
-
-gboolean
-_gdk_win32_gl_context_realize (GdkGLContext *context,
-                               GError **error);
-
-void
-_gdk_win32_window_invalidate_egl_framebuffer (GdkWindow *window);
+gdk_win32_display_make_gl_context_current   (GdkDisplay     *display,
+                                             GdkGLContext   *context);
 
 G_END_DECLS
 

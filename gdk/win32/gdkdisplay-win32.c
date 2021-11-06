@@ -31,10 +31,6 @@
 #include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
 
-#ifdef GDK_WIN32_ENABLE_EGL
-# include <epoxy/egl.h>
-#endif
-
 #include "gdkwin32langnotification.h"
 
 #ifndef IMAGE_FILE_MACHINE_ARM64
@@ -1038,6 +1034,8 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
     }
 }
 
+#if 0
+/* Keep code around in case we need to check for running on ARM64 in the future */
 static void
 _gdk_win32_check_on_arm64 (GdkWin32Display *display)
 {
@@ -1071,6 +1069,7 @@ _gdk_win32_check_on_arm64 (GdkWin32Display *display)
       g_once_init_leave (&checked, 1);
     }
 }
+#endif
 
 static void
 gdk_win32_display_init (GdkWin32Display *display)
@@ -1080,7 +1079,6 @@ gdk_win32_display_init (GdkWin32Display *display)
   display->monitors = g_ptr_array_new_with_free_func (g_object_unref);
 
   _gdk_win32_enable_hidpi (display);
-  _gdk_win32_check_on_arm64 (display);
 
   /* if we have DPI awareness, set up fixed scale if set */
   if (display->dpi_aware_type != PROCESS_DPI_UNAWARE &&
@@ -1299,7 +1297,7 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->convert_selection = _gdk_win32_display_convert_selection;
   display_class->text_property_to_utf8_list = _gdk_win32_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_win32_display_utf8_to_string_target;
-  display_class->make_gl_context_current = _gdk_win32_display_make_gl_context_current;
+  display_class->make_gl_context_current = gdk_win32_display_make_gl_context_current;
 
   display_class->get_n_monitors = gdk_win32_display_get_n_monitors;
   display_class->get_monitor = gdk_win32_display_get_monitor;
