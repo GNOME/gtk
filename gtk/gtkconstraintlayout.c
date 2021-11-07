@@ -2141,7 +2141,7 @@ gtk_constraint_layout_add_constraints_from_descriptionv (GtkConstraintLayout *la
  * @error: return location for a `GError`
  * @first_view: the name of a view in the VFL description, followed by the
  *   [iface@Gtk.ConstraintTarget] to which it maps
- * @...: a `NULL`-terminated list of view names and [class@Gtk.ConstraintTarget]s
+ * @...: a `NULL`-terminated list of view names and [iface@Gtk.ConstraintTarget]s
  *
  * Creates a list of constraints from a VFL description.
  *
@@ -2209,10 +2209,10 @@ gtk_constraint_layout_add_constraints_from_description (GtkConstraintLayout *lay
 /**
  * gtk_constraint_layout_observe_constraints:
  * @layout: a `GtkConstraintLayout`
- * 
+ *
  * Returns a `GListModel` to track the constraints that are
  * part of the layout.
- * 
+ *
  * Calling this function will enable extra internal bookkeeping
  * to track constraints and emit signals on the returned listmodel.
  * It may slow down operations a lot.
@@ -2249,10 +2249,10 @@ gtk_constraint_layout_observe_constraints (GtkConstraintLayout *layout)
 /**
  * gtk_constraint_layout_observe_guides:
  * @layout: a `GtkConstraintLayout`
- * 
+ *
  * Returns a `GListModel` to track the guides that are
  * part of the layout.
- * 
+ *
  * Calling this function will enable extra internal bookkeeping
  * to track guides and emit signals on the returned listmodel.
  * It may slow down operations a lot.
