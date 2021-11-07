@@ -494,7 +494,7 @@ out:
  * “`<Ctrl>minus`” instead of “`<Ctrl>-`”.
  *
  * Modifiers are enclosed in angular brackets `<>`, and match the
- * [enum@Gdk.ModifierType] mask:
+ * [flags@Gdk.ModifierType] mask:
  *
  * - `<Shift>` for `GDK_SHIFT_MASK`
  * - `<Ctrl>` for `GDK_CONTROL_MASK`
