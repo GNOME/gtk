@@ -59,8 +59,8 @@
  * It’s a low-level object, used to implement high-level objects
  * such as [class@Gtk.Window] or [class@Gtk.Dialog] in GTK.
  *
- * The surfaces you see in practice are either [class@Gdk.Toplevel] or
- * [class@Gdk.Popup], and those interfaces provide much of the required
+ * The surfaces you see in practice are either [iface@Gdk.Toplevel] or
+ * [iface@Gdk.Popup], and those interfaces provide much of the required
  * API to interact with these surfaces. Other, more specialized surface
  * types exist, but you will rarely interact with them directly.
  */
@@ -2028,7 +2028,7 @@ gdk_surface_get_root_coords (GdkSurface *surface,
       *root_y = 0;
       return;
     }
-  
+
   GDK_SURFACE_GET_CLASS (surface)->get_root_coords (surface, x, y, root_x, root_y);
 }
 

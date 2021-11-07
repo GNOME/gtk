@@ -315,7 +315,7 @@ have been added to `GdkDisplay`.
 
 The root window is an X11-centric concept that is no longer exposed in the
 backend-neutral GDK API. If you need to interact with the X11 root window,
-you can use [method@GdkX11.Display.get_xrootwindow] to get its XID.
+you can use [`method@GdkX11.Display.get_xrootwindow`] to get its XID.
 
 ### Stop using `GdkVisual`
 
@@ -333,9 +333,9 @@ had replacements in GTK 3 and were deprecated in favor of `GdkSeat`.
 
 In GTK 4, the two roles of a standalone toplevel window and of a popup that
 is placed relative to a parent window have been separated out into two
-interfaces, [class@Gdk.Toplevel] and [class@Gdk.Popup]. Surfaces
-implementing these interfaces are created with [ctor@Gdk.Surface.new_toplevel]
-and [ctor@Gdk.Surface.new_popup], respectively, and they are presented on
+interfaces, [iface@Gdk.Toplevel] and [iface@Gdk.Popup]. Surfaces
+implementing these interfaces are created with [`ctor@Gdk.Surface.new_toplevel`]
+and [`ctor@Gdk.Surface.new_popup`], respectively, and they are presented on
 screen using [method@Gdk.Toplevel.present] and [method@Gdk.Popup.present].
 The `present()` functions take parameters in the form of an auxiliary layout
 struct, [struct@Gdk.PopupLayout] or [struct@Gdk.ToplevelLayout].
@@ -362,9 +362,9 @@ windows, you you will have to use Xlib apis.
 
 A number of minor API cleanups have happened in `GdkSurface`
 as well. For example, `gdk_surface_input_shape_combine_region()`
-has been renamed to [method@Gdk.Surface.set_input_region], and
+has been renamed to [`method@Gdk.Surface.set_input_region`], and
 `gdk_surface_begin_resize_drag()` has been renamed to
-[method@Gdk.Toplevel.begin_resize].
+`[method@Gdk.Toplevel.begin_resize`].
 
 ### The "iconified" window state has been renamed to "minimized"
 
@@ -388,7 +388,7 @@ have accessors that you will have to use.
 
 Event compression is always enabled in GTK 4, for both motion and
 scroll events. If you need to see the uncoalesced motion or scroll
-history, use [method@Gdk.Event.get_history] on the latest event.
+history, use [`method@Gdk.Event.get_history`] on the latest event.
 
 ### Stop using grabs
 
@@ -1051,7 +1051,7 @@ Observing widget contents and widget size is now done by using the
 
 ### Monitor handling has changed
 
-Instead of a monitor number, [class@Gdk.Monitor] is now used throughout. 
+Instead of a monitor number, [class@Gdk.Monitor] is now used throughout.
 [method@Gdk.Display.get_monitors] returns the list of monitors that can be queried
 or observed for monitors to pass to APIs like [method@Gtk.Window.fullscreen_on_monitor].
 
