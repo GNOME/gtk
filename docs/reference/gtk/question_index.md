@@ -14,7 +14,7 @@ the question you have, this list is a good place to start.
     (most of it about GTK 2.x and 3.x, but still somewhat applicable). This
     reference manual also contains a introductory
     [Getting Started](#gtk-getting-started) part.
-    
+
     More documentation ranging from whitepapers to online books can be found at
     the [GNOME developer's site](https://developer.gnome.org). After studying these
     materials you should be well prepared to come back to this reference manual for details.
@@ -93,11 +93,11 @@ the question you have, this list is a good place to start.
 
     `gi18n.h` provides the following shorthand macros for convenience.
     Conventionally, people define macros as follows for convenience:
-    
+
         #define  _(x)     gettext (x)
         #define N_(x)     x
         #define C_(ctx,x) pgettext (ctx, x)
-        
+
     You use `N_()` (N stands for no-op) to mark a string for translation in
     a location where a function call to gettext() is not allowed, such as
     in an array initializer. You eventually have to call gettext() on the
@@ -205,14 +205,14 @@ the question you have, this list is a good place to start.
     Here is an example showing the three approaches using the copyright
     sign © which has Unicode and ISO-8859-1 codepoint 169 and is represented
     in UTF-8 by the two bytes 194, 169, or `"\302\251"` as a string literal:
-    
+
         g_print ("direct UTF-8: ©");
         g_print ("escaped UTF-8: \302\251");
         text = g_convert ("runtime conversion: ©", -1,
                           "ISO-8859-1", "UTF-8", NULL, NULL, NULL);
         g_print (text);
         g_free (text);
-        
+
     If you are using gettext() to localize your application, you need
     to call bind_textdomain_codeset() to ensure that translated strings
     are returned in UTF-8 encoding.
@@ -432,10 +432,10 @@ the question you have, this list is a good place to start.
 
 26. How do I associate some data with a row in the tree?
 
-    Remember that the [class@Gtk.TreeModel] columns don't necessarily have to be
+    Remember that the [iface@Gtk.TreeModel] columns don't necessarily have to be
     displayed. So you can put non-user-visible data in your model just
     like any other data, and retrieve it with [method@Gtk.TreeModel.get].
-    See the [tree widget overview](#TreeWidget).        
+    See the [tree widget overview](#TreeWidget).
 
 27. How do I put an image and some text in the same column?
 
@@ -447,7 +447,7 @@ the question you have, this list is a good place to start.
 28. I can set data easily on my [class@Gtk.TreeStore] or [class@Gtk.ListStore] models using
     [method@Gtk.ListStore.set] and [method@Gtk.TreeStore.set], but can't read it back?
 
-    Both the [class@Gtk.TreeStore] and the [class@Gtk.ListStore] implement the [class@Gtk.TreeModel]
+    Both the [class@Gtk.TreeStore] and the [class@Gtk.ListStore] implement the [iface@Gtk.TreeModel]
     interface. As a consequence, you can use any function this interface
     implements. The easiest way to read a set of data back is to use
     [method@Gtk.TreeModel.get].

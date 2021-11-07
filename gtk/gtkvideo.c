@@ -47,7 +47,7 @@
  * etc. It supports autoplay, looping, and simple media controls. It does
  * not have support for video overlays, multichannel audio, device
  * selection, or input. If you are writing a full-fledged video player,
- * you may want to use the [class@Gdk.Paintable] API and a media framework
+ * you may want to use the [iface@Gdk.Paintable] API and a media framework
  * such as Gstreamer directly.
  */
 
