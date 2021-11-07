@@ -105,7 +105,7 @@ struct _GdkDeleteEvent
  * GdkMotionEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) set during the motion
- *   event. See [enum@Gdk.ModifierType]
+ *   event. See [flags@Gdk.ModifierType]
  * @x: the x coordinate of the pointer relative to the surface.
  * @y: the y coordinate of the pointer relative to the surface.
  * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
@@ -132,7 +132,7 @@ struct _GdkMotionEvent
  * GdkButtonEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See [enum@Gdk.ModifierType]
+ *   buttons. See [flags@Gdk.ModifierType]
  * @button: the button which was pressed or released, numbered from 1 to 5.
  *   Normally button 1 is the left mouse button, 2 is the middle button,
  *   and 3 is the right button. On 2-button mice, the middle button can
@@ -162,7 +162,7 @@ struct _GdkButtonEvent
  * GdkTouchEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See [enum@Gdk.ModifierType]
+ *   buttons. See [flags@Gdk.ModifierType]
  * @x: the x coordinate of the pointer relative to the surface
  * @y: the y coordinate of the pointer relative to the surface
  * @axes: @x, @y translated to the axes of the event's device, or %NULL
@@ -200,7 +200,7 @@ struct _GdkTouchEvent
  * @y: the y coordinate of the pointer relative to the surface.
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See [enum@Gdk.ModifierType]
+ *   buttons. See [flags@Gdk.ModifierType]
  * @direction: the direction to scroll to (one of %GDK_SCROLL_UP,
  *   %GDK_SCROLL_DOWN, %GDK_SCROLL_LEFT, %GDK_SCROLL_RIGHT or
  *   %GDK_SCROLL_SMOOTH).
@@ -256,7 +256,7 @@ typedef struct {
  * GdkKeyEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See [enum@Gdk.ModifierType]
+ *   buttons. See [flags@Gdk.ModifierType]
  * @keycode: the raw code of the key that was pressed or released.
  * @translated: the result of translating @keycode. First with the full
  *   @state, then while ignoring Caps Lock.
@@ -277,7 +277,7 @@ struct _GdkKeyEvent
  * GdkCrossingEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See [enum@Gdk.ModifierType]
+ *   buttons. See [flags@Gdk.ModifierType]
  * @mode: the crossing mode (%GDK_CROSSING_NORMAL, %GDK_CROSSING_GRAB,
  *  %GDK_CROSSING_UNGRAB, %GDK_CROSSING_GTK_GRAB, %GDK_CROSSING_GTK_UNGRAB or
  *  %GDK_CROSSING_STATE_CHANGED).  %GDK_CROSSING_GTK_GRAB, %GDK_CROSSING_GTK_UNGRAB,
@@ -383,7 +383,7 @@ struct _GdkDNDEvent
  * GdkTouchpadEvent:
  * @state: (type GdkModifierType): a bit-mask representing the state of
  *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
- *   buttons. See [enum@Gdk.ModifierType]
+ *   buttons. See [flags@Gdk.ModifierType]
  * @phase: (type GdkTouchpadGesturePhase): the current phase of the gesture
  * @n_fingers: The number of fingers triggering the pinch
  * @time: the time of the event in milliseconds
