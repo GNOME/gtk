@@ -364,7 +364,7 @@ A number of minor API cleanups have happened in `GdkSurface`
 as well. For example, `gdk_surface_input_shape_combine_region()`
 has been renamed to [`method@Gdk.Surface.set_input_region`], and
 `gdk_surface_begin_resize_drag()` has been renamed to
-`[method@Gdk.Toplevel.begin_resize`].
+[`method@Gdk.Toplevel.begin_resize`].
 
 ### The "iconified" window state has been renamed to "minimized"
 
