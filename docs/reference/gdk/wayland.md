@@ -23,7 +23,7 @@ calls to different backends, and error out on unsupported windowing systems:
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
-  if (GTK_IS_WAYLAND_DISPLAY (display))
+  if (GDK_IS_WAYLAND_DISPLAY (display))
     {
       // make Wayland-specific calls here
     }
