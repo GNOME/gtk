@@ -2,7 +2,7 @@ Title: Key Bindings
 
 # Key Bindings
 
-[`class@Gtk.BindingSet`] provides a mechanism for configuring GTK key bindings
+[`struct@Gtk.BindingSet`] provides a mechanism for configuring GTK key bindings
 through CSS files. This eases key binding adjustments for application
 developers as well as users and provides GTK users or administrators with
 high key binding configurability which requires no application or toolkit

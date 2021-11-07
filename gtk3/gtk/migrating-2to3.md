@@ -154,7 +154,7 @@ on the circumstances:
   `gio-unix-2.0` pkg-config file when using [`ctor@Gio.DesktopAppInfo.new`].
 
 - If you are launching a custom commandline, you can still use [`method@Gio.AppInfo.launch`]
-  with a [`class@Gio.AppInfo`] that is constructed with [`func@Gio.AppInfo.create_from_commandline`],
+  with a [`iface@Gio.AppInfo`] that is constructed with [`func@Gio.AppInfo.create_from_commandline`],
   or you can use the more lowlevel `g_spawn` family of functions (e.g.
   [`func@GLib.spawn_command_line_async`], and pass `DISPLAY` in the environment.
   [`method@Gdk.Screen.make_display_name`] can be used to find the right value for
