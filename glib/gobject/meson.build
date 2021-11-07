@@ -2,6 +2,7 @@ expand_content_files = [
   'boxed.md',
   'concepts.md',
   'floating-refs.md',
+  'gvalue.md',
   'tutorial.md',
 ]
 

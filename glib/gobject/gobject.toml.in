@@ -39,6 +39,7 @@ content_files = [
   "tutorial.md",
   "floating-refs.md",
   "boxed.md",
+  "gvalue.md",
 ]
 content_images = [
   "images/glue.png",
