@@ -1,6 +1,7 @@
 expand_content_files = [
   'boxed.md',
   'concepts.md',
+  'enum-types.md',
   'floating-refs.md',
   'gvalue.md',
   'tutorial.md',
