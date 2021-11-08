@@ -48,7 +48,7 @@ if ! pkg-config --atleast-version=2.66.0 glib-2.0; then
 fi
 pkg-config --modversion glib-2.0
 
-if ! pkg-config --atleast-version=1.49.1 pango; then
+if ! pkg-config --atleast-version=1.49.3 pango; then
     git clone https://gitlab.gnome.org/GNOME/pango.git _pango
     meson setup _pango_build _pango
     meson compile -C _pango_build

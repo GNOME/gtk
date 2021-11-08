@@ -11,7 +11,7 @@ project('gtk', 'c',
         license: 'LGPL-2.1-or-later')
 
 glib_req           = '>= 2.66.0'
-pango_req          = '>= 1.49.1' # keep this in sync with .gitlab-ci/test-msys.sh
+pango_req          = '>= 1.49.3' # keep this in sync with .gitlab-ci/test-msys.sh
 fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
