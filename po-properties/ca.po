@@ -40,210 +40,227 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-08-25 20:12+0000\n"
-"PO-Revision-Date: 2020-12-19 16:14+0100\n"
-"Last-Translator: Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail.com>\n"
+"POT-Creation-Date: 2021-11-06 03:55+0000\n"
+"PO-Revision-Date: 2021-11-08 16:39+0100\n"
+"Last-Translator: maite guix <maite.guix@me.com>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 3.0\n"
 
-#: gdk/gdkapplaunchcontext.c:130 gdk/gdkdrawcontext.c:171 gdk/gdkseat.c:189
-#: gdk/gdkseat.c:190 gdk/gdksurface.c:510 gdk/gdksurface.c:511
-#: gdk/win32/gdkcursor-win32.c:235 gtk/gtkicontheme.c:991
-#: gtk/gtkicontheme.c:992 gtk/gtkmountoperation.c:199
-#: gtk/gtkstylecontext.c:139 gtk/gtkwindow.c:899
+#: gdk/gdkapplaunchcontext.c:130 gdk/gdkdrawcontext.c:172 gdk/gdkseat.c:188
+#: gdk/gdkseat.c:189 gdk/gdksurface.c:522 gdk/gdksurface.c:523
+#: gdk/win32/gdkcursor-win32.c:235 gtk/gtkicontheme.c:992
+#: gtk/gtkicontheme.c:993 gtk/gtkmountoperation.c:199 gtk/gtkstylecontext.c:124
+#: gtk/gtkwindow.c:895
 msgid "Display"
 msgstr "Pantalla"
 
-#: gdk/gdkcursor.c:180 gtk/gtktexttag.c:794
+#: gdk/gdkcursor.c:179 gtk/gtktexttag.c:794
 msgid "Fallback"
 msgstr "Sistema alternatiu"
 
-#: gdk/gdkcursor.c:181
+#: gdk/gdkcursor.c:180
 msgid "Cursor image to fall back to if this cursor cannot be displayed"
 msgstr "Imatge de cursor alternativa si aquest cursor no es pot mostrar"
 
-#: gdk/gdkcursor.c:194
+#: gdk/gdkcursor.c:193
 msgid "Hotspot X"
 msgstr "Àrea rellevant X"
 
-#: gdk/gdkcursor.c:195
+#: gdk/gdkcursor.c:194
 msgid "Horizontal offset of the cursor hotspot"
 msgstr "Desplaçament horitzontal de l'àrea rellevant del cursor"
 
-#: gdk/gdkcursor.c:208
+#: gdk/gdkcursor.c:207
 msgid "Hotspot Y"
 msgstr "Àrea rellevant Y"
 
-#: gdk/gdkcursor.c:209
+#: gdk/gdkcursor.c:208
 msgid "Vertical offset of the cursor hotspot"
 msgstr "Desplaçament vertical de l'àrea rellevant del cursor"
 
-#: gdk/gdkcursor.c:224 gtk/gtkcssnode.c:612 gtk/gtkeventcontroller.c:242
+#: gdk/gdkcursor.c:223 gtk/gtkcssnode.c:612 gtk/gtkeventcontroller.c:242
 #: gtk/gtkfilefilter.c:239 gtk/gtkprinter.c:123 gtk/gtkstack.c:428
 #: gtk/gtktextmark.c:137
 msgid "Name"
 msgstr "Nom"
 
-#: gdk/gdkcursor.c:225
+#: gdk/gdkcursor.c:224
 msgid "Name of this cursor"
 msgstr "Nom d'aquest cursor"
 
-#: gdk/gdkcursor.c:240 gtk/gtkcellrendererpixbuf.c:225
+#: gdk/gdkcursor.c:239 gtk/gtkcellrendererpixbuf.c:225
 msgid "Texture"
 msgstr "Textura"
 
-#: gdk/gdkcursor.c:241
+#: gdk/gdkcursor.c:240
 msgid "The texture displayed by this cursor"
 msgstr "La textura mostrada per aquest cursor"
 
-#: gdk/gdkdevice.c:114
+#: gdk/gdkdevice.c:113
 msgid "Device Display"
 msgstr "Pantalla del dispositiu"
 
-#: gdk/gdkdevice.c:115
+#: gdk/gdkdevice.c:114
 msgid "Display which the device belongs to"
 msgstr "Pantalla a la qual pertany el dispositiu"
 
-#: gdk/gdkdevice.c:126 gdk/gdkdevice.c:127
+#: gdk/gdkdevice.c:125 gdk/gdkdevice.c:126
 msgid "Device name"
 msgstr "Nom del dispositiu"
 
-#: gdk/gdkdevice.c:139
+#: gdk/gdkdevice.c:138
 msgid "Input source"
 msgstr "Font d'entrada"
 
-#: gdk/gdkdevice.c:140
+#: gdk/gdkdevice.c:139
 msgid "Source type for the device"
 msgstr "Tipus de font del dispositiu"
 
-#: gdk/gdkdevice.c:153
+#: gdk/gdkdevice.c:152
 msgid "Whether the device has a cursor"
 msgstr "Si el dispositiu té un cursor"
 
-#: gdk/gdkdevice.c:154
+#: gdk/gdkdevice.c:153
 msgid "Whether there is a visible cursor following device motion"
 msgstr "Si hi ha un cursor visible que segueix el moviment del dispositiu"
 
-#: gdk/gdkdevice.c:166 gdk/gdkdevice.c:167
+#: gdk/gdkdevice.c:165 gdk/gdkdevice.c:166
 msgid "Number of axes in the device"
 msgstr "Nombre d'eixos del dispositiu"
 
-#: gdk/gdkdevice.c:181 gdk/gdkdevice.c:182
+#: gdk/gdkdevice.c:180 gdk/gdkdevice.c:181
 msgid "Vendor ID"
 msgstr "ID del fabricant"
 
-#: gdk/gdkdevice.c:196 gdk/gdkdevice.c:197
+#: gdk/gdkdevice.c:195 gdk/gdkdevice.c:196
 msgid "Product ID"
 msgstr "ID del producte"
 
-#: gdk/gdkdevice.c:209 gdk/gdkdevice.c:210
+#: gdk/gdkdevice.c:208 gdk/gdkdevice.c:209
 msgid "Seat"
 msgstr "Seient"
 
-#: gdk/gdkdevice.c:225 gdk/gdkdevice.c:226
+#: gdk/gdkdevice.c:224 gdk/gdkdevice.c:225
 msgid "Number of concurrent touches"
 msgstr "Nombre de tocs concurrents"
 
-#: gdk/gdkdevice.c:239
+#: gdk/gdkdevice.c:238
 msgid "Tool"
 msgstr "Eina"
 
-#: gdk/gdkdevice.c:240
+#: gdk/gdkdevice.c:239
 msgid "The tool that is currently used with this device"
 msgstr "L'eina que usa actualment amb aquest dispositiu"
 
-#: gdk/gdkdevice.c:253 gtk/gtkmenubutton.c:414 gtk/gtkshortcutsshortcut.c:699
+#: gdk/gdkdevice.c:252 gtk/gtkmenubutton.c:427 gtk/gtkshortcutsshortcut.c:699
 msgid "Direction"
 msgstr "Direcció"
 
-#: gdk/gdkdevice.c:254
+#: gdk/gdkdevice.c:253
 msgid "The direction of the current layout of the keyboard"
 msgstr "La direcció de la disposició actual del teclat"
 
-#: gdk/gdkdevice.c:267
+#: gdk/gdkdevice.c:266
 msgid "Has bidi layouts"
 msgstr "Té disposicions bidi"
 
-#: gdk/gdkdevice.c:268
+#: gdk/gdkdevice.c:267
 msgid "Whether the keyboard has bidi layouts"
 msgstr "Si el teclat té disposicions bidi"
 
-#: gdk/gdkdevice.c:281
+#: gdk/gdkdevice.c:280
 msgid "Caps lock state"
 msgstr "Estat del bloqueig de majúscules"
 
-#: gdk/gdkdevice.c:282
+#: gdk/gdkdevice.c:281
 msgid "Whether the keyboard caps lock is on"
 msgstr "Si el bloqueig de majúscules del teclat està activat"
 
-#: gdk/gdkdevice.c:295
+#: gdk/gdkdevice.c:294
 msgid "Num lock state"
 msgstr "Estat del bloqueig numèric"
 
-#: gdk/gdkdevice.c:296
+#: gdk/gdkdevice.c:295
 msgid "Whether the keyboard num lock is on"
 msgstr "Si el bloqueig del teclat numèric està activat"
 
-#: gdk/gdkdevice.c:309
+#: gdk/gdkdevice.c:308
 msgid "Scroll lock state"
 msgstr "Estat del bloqueig de desplaçament"
 
-#: gdk/gdkdevice.c:310
+#: gdk/gdkdevice.c:309
 msgid "Whether the keyboard scroll lock is on"
 msgstr "Si el bloqueig de desplaçament del teclat està activat"
 
-#: gdk/gdkdevice.c:323
+#: gdk/gdkdevice.c:322
 msgid "Modifier state"
 msgstr "Estat del modificador"
 
-#: gdk/gdkdevice.c:324
+#: gdk/gdkdevice.c:323
 msgid "The modifier state of the keyboard"
 msgstr "L'estat del modificador del teclat"
 
-#: gdk/gdkdisplay.c:186 gdk/gdkdisplay.c:187
+#: gdk/gdkdisplay.c:217 gdk/gdkdisplay.c:218
 msgid "Composited"
 msgstr "Composta"
 
-#: gdk/gdkdisplay.c:198 gdk/gdkdisplay.c:199
+#: gdk/gdkdisplay.c:229 gdk/gdkdisplay.c:230
 msgid "RGBA"
 msgstr "RGBA"
 
-#: gdk/gdkdisplay.c:210 gdk/gdkdisplay.c:211
+#: gdk/gdkdisplay.c:241 gdk/gdkdisplay.c:242
 msgid "Input shapes"
 msgstr "Formes d'entrada"
 
-#: gdk/gdkdisplaymanager.c:160
+#: gdk/gdkdisplaymanager.c:159
 msgid "Default Display"
 msgstr "Pantalla per defecte"
 
-#: gdk/gdkdisplaymanager.c:161
+#: gdk/gdkdisplaymanager.c:160
 msgid "The default display for GDK"
 msgstr "La pantalla per defecte per al GDK"
 
-#: gdk/gdkdrawcontext.c:172
+#: gdk/gdkdrawcontext.c:173
 msgid "The GDK display used to create the context"
 msgstr "La pantalla GDK utilitzada per a crear el context"
 
-#: gdk/gdkdrawcontext.c:185
+#: gdk/gdkdrawcontext.c:186
 msgid "Surface"
 msgstr "Superfície"
 
-#: gdk/gdkdrawcontext.c:186
+#: gdk/gdkdrawcontext.c:187
 msgid "The GDK surface bound to the context"
 msgstr "La superfície GDK vinculada al context"
 
-#: gdk/gdkglcontext.c:430
+#: gdk/gdkglcontext.c:671
 msgid "Shared context"
 msgstr "Context compartit"
 
-#: gdk/gdkglcontext.c:431
+#: gdk/gdkglcontext.c:672
 msgid "The GL context this context shares data with"
 msgstr "El context GL amb què aquest context comparteix dades"
+
+# FIXME (josep)
+#: gdk/gdkglcontext.c:688
+msgid "Allowed APIs"
+msgstr "API permeses"
+
+#: gdk/gdkglcontext.c:689
+msgid "The list of allowed APIs for this context"
+msgstr "Llista d'API permeses per a aquest context"
+
+#: gdk/gdkglcontext.c:705
+msgid "API"
+msgstr "API"
+
+#: gdk/gdkglcontext.c:706
+msgid "The API currently in use"
+msgstr "L'API que s'està utilitzant actualment"
 
 #: gdk/gdkpopup.c:89 gtk/gtkmountoperation.c:173
 msgid "Parent"
@@ -253,7 +270,7 @@ msgstr "Pare"
 msgid "The parent surface"
 msgstr "La superfície pare"
 
-#: gdk/gdkpopup.c:101 gtk/gtkpopover.c:1832
+#: gdk/gdkpopup.c:101 gtk/gtkpopover.c:1834
 msgid "Autohide"
 msgstr "Amaga automàticament"
 
@@ -261,36 +278,36 @@ msgstr "Amaga automàticament"
 msgid "Whether to hide on outside clicks"
 msgstr "Si s'ha d'amagar en fer clics externs"
 
-#: gdk/gdksurface.c:498 gdk/gdksurface.c:499 gtk/gtkwidget.c:1372
+#: gdk/gdksurface.c:510 gdk/gdksurface.c:511 gtk/gtkwidget.c:1372
 msgid "Cursor"
 msgstr "Cursor"
 
-#: gdk/gdksurface.c:522 gdk/gdksurface.c:523
+#: gdk/gdksurface.c:534 gdk/gdksurface.c:535
 msgid "Frame Clock"
 msgstr "Rellotge del fotograma"
 
-#: gdk/gdksurface.c:534 gdk/gdksurface.c:535
+#: gdk/gdksurface.c:546 gdk/gdksurface.c:547
 msgid "Mapped"
 msgstr "Mapat"
 
-#: gdk/gdksurface.c:546 gdk/gdksurface.c:547 gtk/gtktreeviewcolumn.c:298
+#: gdk/gdksurface.c:558 gdk/gdksurface.c:559 gtk/gtktreeviewcolumn.c:298
 msgid "Width"
 msgstr "Amplada"
 
-#: gdk/gdksurface.c:558 gdk/gdksurface.c:559 gtk/gtkshortcutsgroup.c:334
+#: gdk/gdksurface.c:570 gdk/gdksurface.c:571 gtk/gtkshortcutsgroup.c:334
 msgid "Height"
 msgstr "Alçada"
 
-#: gdk/gdksurface.c:570 gdk/gdksurface.c:571 gtk/gtkwidget.c:1624
+#: gdk/gdksurface.c:582 gdk/gdksurface.c:583 gtk/gtkwidget.c:1624
 msgid "Scale factor"
 msgstr "Factor d'escalat"
 
-#: gdk/gdktoplevel.c:133 gdk/gdktoplevel.c:134 gtk/gtkcssnode.c:617
+#: gdk/gdktoplevel.c:135 gdk/gdktoplevel.c:136 gtk/gtkcssnode.c:617
 #: gtk/gtkswitch.c:536
 msgid "State"
 msgstr "Estat"
 
-#: gdk/macos/gdkmacosdrag.c:602 gdk/macos/gdkmacosdrag.c:603
+#: gdk/macos/gdkmacosdrag.c:605 gdk/macos/gdkmacosdrag.c:606
 msgid "Drag Surface"
 msgstr "Superfície per a arrossegar"
 
@@ -582,7 +599,7 @@ msgid "The text to show at the top of the dialog"
 msgstr "El text que es mostra a dalt de tot del diàleg"
 
 #: gtk/gtkappchooserbutton.c:726 gtk/gtkcolorbutton.c:251
-#: gtk/gtkfontbutton.c:532 gtk/gtknativedialog.c:224 gtk/gtkwindow.c:793
+#: gtk/gtkfontbutton.c:543 gtk/gtknativedialog.c:224 gtk/gtkwindow.c:789
 msgid "Modal"
 msgstr "Modal"
 
@@ -654,35 +671,35 @@ msgstr "Text per defecte del giny"
 msgid "The default text appearing when there are no applications"
 msgstr "El text per defecte que apareixerà quan no hi hagi aplicacions"
 
-#: gtk/gtkapplication.c:599
+#: gtk/gtkapplication.c:602
 msgid "Register session"
 msgstr "Registra la sessió"
 
-#: gtk/gtkapplication.c:600
+#: gtk/gtkapplication.c:603
 msgid "Register with the session manager"
 msgstr "Registra la sessió amb el gestor de sessions"
 
-#: gtk/gtkapplication.c:618
+#: gtk/gtkapplication.c:621
 msgid "Screensaver Active"
 msgstr "Estalvi de pantalla actiu"
 
-#: gtk/gtkapplication.c:619
+#: gtk/gtkapplication.c:622
 msgid "Whether the screensaver is active"
 msgstr "Si l'estalvi de pantalla és actiu"
 
-#: gtk/gtkapplication.c:630
+#: gtk/gtkapplication.c:633
 msgid "Menubar"
 msgstr "Barra de menú"
 
-#: gtk/gtkapplication.c:631
+#: gtk/gtkapplication.c:634
 msgid "The GMenuModel for the menubar"
 msgstr "El GMenuModel per la barra de menú"
 
-#: gtk/gtkapplication.c:642
+#: gtk/gtkapplication.c:645
 msgid "Active window"
 msgstr "Finestra activa"
 
-#: gtk/gtkapplication.c:643
+#: gtk/gtkapplication.c:646
 msgid "The window which most recently had focus"
 msgstr "L'última finestra que ha tingut el focus"
 
@@ -728,21 +745,21 @@ msgstr "Obeeix el fill"
 msgid "Force aspect ratio to match that of the frame’s child"
 msgstr "Força la proporció perquè coincideixi amb el marc del fill"
 
-#: gtk/gtkaspectframe.c:195 gtk/gtkbutton.c:271 gtk/gtkcombobox.c:791
-#: gtk/gtkdragicon.c:373 gtk/gtkexpander.c:399 gtk/gtkflowbox.c:534
+#: gtk/gtkaspectframe.c:195 gtk/gtkbutton.c:271 gtk/gtkcombobox.c:823
+#: gtk/gtkdragicon.c:376 gtk/gtkexpander.c:399 gtk/gtkflowbox.c:534
 #: gtk/gtkframe.c:207 gtk/gtklistbox.c:3582 gtk/gtklistitem.c:181
-#: gtk/gtknotebook.c:586 gtk/gtkoverlay.c:321 gtk/gtkpopover.c:1880
-#: gtk/gtkrevealer.c:368 gtk/gtkscrolledwindow.c:798 gtk/gtksearchbar.c:333
-#: gtk/gtkstack.c:416 gtk/gtktreeexpander.c:532 gtk/gtkviewport.c:388
-#: gtk/gtkwindow.c:1039 gtk/gtkwindowhandle.c:537
+#: gtk/gtkmenubutton.c:532 gtk/gtknotebook.c:586 gtk/gtkoverlay.c:321
+#: gtk/gtkpopover.c:1882 gtk/gtkrevealer.c:368 gtk/gtkscrolledwindow.c:798
+#: gtk/gtksearchbar.c:333 gtk/gtkstack.c:416 gtk/gtktreeexpander.c:532
+#: gtk/gtkviewport.c:388 gtk/gtkwindow.c:1035 gtk/gtkwindowhandle.c:537
 msgid "Child"
 msgstr "Fill"
 
 #: gtk/gtkaspectframe.c:196 gtk/gtkbutton.c:272 gtk/gtkexpander.c:400
 #: gtk/gtkflowbox.c:535 gtk/gtkframe.c:208 gtk/gtklistbox.c:3583
-#: gtk/gtkoverlay.c:322 gtk/gtkpopover.c:1881 gtk/gtkrevealer.c:369
-#: gtk/gtkscrolledwindow.c:799 gtk/gtksearchbar.c:334 gtk/gtkviewport.c:389
-#: gtk/gtkwindow.c:1040 gtk/gtkwindowhandle.c:538
+#: gtk/gtkmenubutton.c:533 gtk/gtkoverlay.c:322 gtk/gtkpopover.c:1883
+#: gtk/gtkrevealer.c:369 gtk/gtkscrolledwindow.c:799 gtk/gtksearchbar.c:334
+#: gtk/gtkviewport.c:389 gtk/gtkwindow.c:1036 gtk/gtkwindowhandle.c:538
 msgid "The child widget"
 msgstr "El giny fill"
 
@@ -786,7 +803,7 @@ msgstr "Utilitza la barra de títol"
 msgid "Use Header Bar for actions."
 msgstr "Fes servir la barra de títol per a les accions."
 
-#: gtk/gtkassistant.c:621 gtk/gtknotebook.c:1212 gtk/gtkstack.c:900
+#: gtk/gtkassistant.c:621 gtk/gtknotebook.c:1212 gtk/gtkstack.c:901
 msgid "Pages"
 msgstr "Pàgines"
 
@@ -803,7 +820,7 @@ msgid "Bookmark file to load"
 msgstr "Fitxer d'adreces d'interès a carregar"
 
 #: gtk/gtkbookmarklist.c:228 gtk/gtkcellrenderertext.c:267 gtk/gtkentry.c:965
-#: gtk/gtklabel.c:2209 gtk/gtktext.c:929
+#: gtk/gtklabel.c:2241 gtk/gtktext.c:929
 msgid "Attributes"
 msgstr "Atributs"
 
@@ -827,7 +844,7 @@ msgstr "s'està carregant"
 msgid "TRUE if files are being loaded"
 msgstr "TRUE si s'estan carregant els fitxers"
 
-#: gtk/gtkboolfilter.c:163 gtk/gtkdropdown.c:518 gtk/gtknumericsorter.c:548
+#: gtk/gtkboolfilter.c:163 gtk/gtkdropdown.c:543 gtk/gtknumericsorter.c:548
 #: gtk/gtkstringfilter.c:257 gtk/gtkstringsorter.c:295
 msgid "Expression"
 msgstr "Expressió"
@@ -844,7 +861,7 @@ msgstr "Inverteix"
 msgid "If the expression result should be inverted"
 msgstr "Si s'ha d'invertir el resultat de l'expressió"
 
-#: gtk/gtkbox.c:262 gtk/gtkboxlayout.c:720 gtk/gtkcellareabox.c:316
+#: gtk/gtkbox.c:262 gtk/gtkboxlayout.c:782 gtk/gtkcellareabox.c:316
 #: gtk/gtkiconview.c:464 gtk/gtktreeviewcolumn.c:306
 msgid "Spacing"
 msgstr "Espaiament"
@@ -853,7 +870,7 @@ msgstr "Espaiament"
 msgid "The amount of space between children"
 msgstr "La quantitat d'espai entre fills"
 
-#: gtk/gtkbox.c:274 gtk/gtkboxlayout.c:707 gtk/gtkflowbox.c:3651
+#: gtk/gtkbox.c:274 gtk/gtkboxlayout.c:769 gtk/gtkflowbox.c:3651
 msgid "Homogeneous"
 msgstr "Homogeni"
 
@@ -861,47 +878,47 @@ msgstr "Homogeni"
 msgid "Whether the children should all be the same size"
 msgstr "Si tots els fills han de tenir la mateixa mida"
 
-#: gtk/gtkbox.c:286 gtk/gtkboxlayout.c:737 gtk/gtkcenterbox.c:212
+#: gtk/gtkbox.c:286 gtk/gtkboxlayout.c:799 gtk/gtkcenterbox.c:212
 msgid "Baseline position"
 msgstr "Posició del punt de referència"
 
-#: gtk/gtkbox.c:287 gtk/gtkboxlayout.c:738 gtk/gtkcenterbox.c:213
+#: gtk/gtkbox.c:287 gtk/gtkboxlayout.c:800 gtk/gtkcenterbox.c:213
 msgid ""
 "The position of the baseline aligned widgets if extra space is available"
 msgstr ""
 "La posició dels ginys alineats al punt de referència si hi ha espai "
 "addicional disponible"
 
-#: gtk/gtkboxlayout.c:708
+#: gtk/gtkboxlayout.c:770
 msgid "Distribute space homogeneously"
 msgstr "Distribueix l'espai de manera homogènia"
 
-#: gtk/gtkboxlayout.c:721
+#: gtk/gtkboxlayout.c:783
 msgid "Spacing between widgets"
 msgstr "Espaiat entre ginys"
 
-#: gtk/gtkbuilder.c:311
+#: gtk/gtkbuilder.c:309
 msgid "Translation Domain"
 msgstr "Domini de la traducció"
 
-#: gtk/gtkbuilder.c:312
+#: gtk/gtkbuilder.c:310
 msgid "The translation domain used by gettext"
 msgstr "El domini de la traducció que utilitzarà el gettext"
 
-#: gtk/gtkbuilder.c:323
+#: gtk/gtkbuilder.c:321
 msgid "Current object"
 msgstr "Objecte actual"
 
-#: gtk/gtkbuilder.c:324
+#: gtk/gtkbuilder.c:322
 msgid "The object the builder is evaluating for"
 msgstr "L'objecte pel qual està avaluant el constructor"
 
-#: gtk/gtkbuilder.c:335 gtk/gtkbuilderlistitemfactory.c:292
+#: gtk/gtkbuilder.c:333 gtk/gtkbuilderlistitemfactory.c:292
 #: gtk/gtkshortcutcontroller.c:597
 msgid "Scope"
 msgstr "Àmbit"
 
-#: gtk/gtkbuilder.c:336
+#: gtk/gtkbuilder.c:334
 msgid "The scope the builder is operating in"
 msgstr "L'àmbit en què opera el constructor"
 
@@ -926,7 +943,7 @@ msgid "scope to use when instantiating listitems"
 msgstr "àmbit a usar quan s'instancia la llista d'elements"
 
 #: gtk/gtkbutton.c:222 gtk/gtkcheckbutton.c:562 gtk/gtkexpander.c:333
-#: gtk/gtkframe.c:170 gtk/gtklabel.c:2197 gtk/gtkmenubutton.c:465
+#: gtk/gtkframe.c:170 gtk/gtklabel.c:2229 gtk/gtkmenubutton.c:478
 msgid "Label"
 msgstr "Etiqueta"
 
@@ -937,34 +954,34 @@ msgid ""
 msgstr "Text de l'etiqueta dins del botó, si el botó conté una etiqueta"
 
 #: gtk/gtkbutton.c:235 gtk/gtkcheckbutton.c:590 gtk/gtkexpander.c:346
-#: gtk/gtklabel.c:2235 gtk/gtkmenubutton.c:477 gtk/gtkstack.c:492
+#: gtk/gtklabel.c:2267 gtk/gtkmenubutton.c:490 gtk/gtkstack.c:492
 msgid "Use underline"
 msgstr "Utilitza subratllat"
 
 #: gtk/gtkbutton.c:236 gtk/gtkcheckbutton.c:591 gtk/gtkexpander.c:347
-#: gtk/gtklabel.c:2236 gtk/gtkmenubutton.c:478
+#: gtk/gtklabel.c:2268 gtk/gtkmenubutton.c:491
 msgid ""
-"If set, an underline in the text indicates the next character should be used"
-" for the mnemonic accelerator key"
+"If set, an underline in the text indicates the next character should be used "
+"for the mnemonic accelerator key"
 msgstr ""
 "Si s'habilita, un subratllat en el text indica que el caràcter següent "
 "s'hauria d'utilitzar per a la tecla de drecera"
 
-#: gtk/gtkbutton.c:247 gtk/gtkcombobox.c:670 gtk/gtkentry.c:525
+#: gtk/gtkbutton.c:247 gtk/gtkcombobox.c:702 gtk/gtkentry.c:525
 #: gtk/gtkscrolledwindow.c:673
 msgid "Has Frame"
 msgstr "Té marc"
 
-#: gtk/gtkbutton.c:248 gtk/gtkmenubutton.c:490
+#: gtk/gtkbutton.c:248 gtk/gtkmenubutton.c:503
 msgid "Whether the button has a frame"
 msgstr "Si el botó té un marc"
 
 #: gtk/gtkbutton.c:259 gtk/gtkcellrendererpixbuf.c:253 gtk/gtkimage.c:234
-#: gtk/gtkmenubutton.c:439 gtk/gtkprinter.c:214 gtk/gtkwindow.c:887
+#: gtk/gtkmenubutton.c:452 gtk/gtkprinter.c:214 gtk/gtkwindow.c:883
 msgid "Icon Name"
 msgstr "Nom de la icona"
 
-#: gtk/gtkbutton.c:260 gtk/gtkmenubutton.c:440
+#: gtk/gtkbutton.c:260 gtk/gtkmenubutton.c:453
 msgid "The name of the icon used to automatically populate the button"
 msgstr ""
 "El nom de la icona que s'utilitza automàticament per a emplenar el botó"
@@ -1055,8 +1072,8 @@ msgid ""
 "A GtkPackType indicating whether the cell is packed with reference to the "
 "start or end of the cell area"
 msgstr ""
-"Un GtkPackType que indica si la cel·la s'empaqueta en referència a l'inici o"
-" al final de l'àrea de la cel·la"
+"Un GtkPackType que indica si la cel·la s'empaqueta en referència a l'inici o "
+"al final de l'àrea de la cel·la"
 
 #: gtk/gtkcellarea.c:778
 msgid "Focus Cell"
@@ -1174,7 +1191,7 @@ msgstr "Mostra la cel·la de manera sensible"
 
 #: gtk/gtkcellrenderer.c:305
 msgid "xalign"
-msgstr "Alineació X"
+msgstr "alineació X"
 
 #: gtk/gtkcellrenderer.c:306
 msgid "The x-align"
@@ -1182,7 +1199,7 @@ msgstr "L'alineació X"
 
 #: gtk/gtkcellrenderer.c:315
 msgid "yalign"
-msgstr "Alineació Y"
+msgstr "alineació Y"
 
 #: gtk/gtkcellrenderer.c:316
 msgid "The y-align"
@@ -1268,13 +1285,12 @@ msgstr "Fons de la cel·la definit"
 msgid "Whether the cell background color is set"
 msgstr "Si s'ha definit el color de fons de la cel·la"
 
-#: gtk/gtkcellrenderercombo.c:134 gtk/gtkcolumnview.c:694
-#: gtk/gtkdropdown.c:459 gtk/gtkfilterlistmodel.c:585
-#: gtk/gtkflattenlistmodel.c:409 gtk/gtkgridview.c:1098 gtk/gtklistview.c:831
-#: gtk/gtkmaplistmodel.c:373 gtk/gtkmultiselection.c:353
-#: gtk/gtkselectionfiltermodel.c:230 gtk/gtkshortcutcontroller.c:585
-#: gtk/gtkslicelistmodel.c:260 gtk/gtksortlistmodel.c:793
-#: gtk/gtktreelistmodel.c:702
+#: gtk/gtkcellrenderercombo.c:134 gtk/gtkcolumnview.c:694 gtk/gtkdropdown.c:484
+#: gtk/gtkfilterlistmodel.c:585 gtk/gtkflattenlistmodel.c:409
+#: gtk/gtkgridview.c:1098 gtk/gtklistview.c:831 gtk/gtkmaplistmodel.c:373
+#: gtk/gtkmultiselection.c:353 gtk/gtkselectionfiltermodel.c:230
+#: gtk/gtkshortcutcontroller.c:585 gtk/gtkslicelistmodel.c:260
+#: gtk/gtksortlistmodel.c:800 gtk/gtktreelistmodel.c:702
 msgid "Model"
 msgstr "Model"
 
@@ -1290,7 +1306,7 @@ msgstr "Columna de text"
 msgid "A column in the data source model to get the strings from"
 msgstr "Una columna del model de font de dades per a obtenir les cadenes"
 
-#: gtk/gtkcellrenderercombo.c:171 gtk/gtkcombobox.c:715
+#: gtk/gtkcellrenderercombo.c:171 gtk/gtkcombobox.c:747
 msgid "Has Entry"
 msgstr "Té una entrada"
 
@@ -1341,8 +1357,8 @@ msgstr ""
 msgid "The name of the icon from the icon theme"
 msgstr "El nom de la icona del tema d'icones"
 
-#: gtk/gtkcellrendererpixbuf.c:268 gtk/gtkimage.c:249
-#: gtk/gtkmodelbutton.c:1185 gtk/gtkshortcutsshortcut.c:601
+#: gtk/gtkcellrendererpixbuf.c:268 gtk/gtkimage.c:249 gtk/gtkmodelbutton.c:1185
+#: gtk/gtkshortcutsshortcut.c:601
 msgid "Icon"
 msgstr "Icona"
 
@@ -1385,8 +1401,8 @@ msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
 msgstr ""
-"L'alineació horitzontal del text, des de 0 (esquerre) a 1 (dreta). Només per"
-" a formats RTL (dreta a esquerra)."
+"L'alineació horitzontal del text, des de 0 (esquerre) a 1 (dreta). Només per "
+"a formats RTL (dreta a esquerra)."
 
 #: gtk/gtkcellrendererprogress.c:689
 msgid "Text y alignment"
@@ -1396,7 +1412,7 @@ msgstr "Alineació y text"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "L'alineació vertical, des de 0 (a dalt) fins a 1 (a baix)."
 
-#: gtk/gtkcellrendererprogress.c:701 gtk/gtklevelbar.c:1006
+#: gtk/gtkcellrendererprogress.c:701 gtk/gtklevelbar.c:1023
 #: gtk/gtkprogressbar.c:188 gtk/gtkrange.c:384
 msgid "Inverted"
 msgstr "Invertit"
@@ -1513,11 +1529,11 @@ msgid "Foreground color as a GdkRGBA"
 msgstr "Color de primer pla com a GdkRGBA"
 
 #: gtk/gtkcellrenderertext.c:319 gtk/gtkeditable.c:433 gtk/gtktexttag.c:316
-#: gtk/gtktextview.c:889
+#: gtk/gtktextview.c:895
 msgid "Editable"
 msgstr "Editable"
 
-#: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:317 gtk/gtktextview.c:890
+#: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:317 gtk/gtktextview.c:896
 msgid "Whether the text can be modified by the user"
 msgstr "Si el text pot ser modificat per l'usuari"
 
@@ -1528,8 +1544,7 @@ msgstr "Tipus de lletra"
 
 #: gtk/gtkcellrenderertext.c:327 gtk/gtkfontchooser.c:63 gtk/gtktexttag.c:333
 msgid "Font description as a string, e.g. “Sans Italic 12”"
-msgstr ""
-"Descripció del tipus de lletra com una cadena, p. ex. «Sans Italic 12»"
+msgstr "Descripció del tipus de lletra com una cadena, p. ex. «Sans Italic 12»"
 
 #: gtk/gtkcellrenderertext.c:334 gtk/gtkfontchooser.c:76 gtk/gtktexttag.c:346
 msgid "Font description as a PangoFontDescription struct"
@@ -1627,7 +1642,7 @@ msgstr ""
 "indicació en representar el text. Si no enteneu aquest paràmetre, "
 "probablement no el necessitareu"
 
-#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:2370 gtk/gtkprogressbar.c:267
+#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:2402 gtk/gtkprogressbar.c:267
 msgid "Ellipsize"
 msgstr "Punts suspensius"
 
@@ -1640,15 +1655,15 @@ msgstr ""
 "representador de cel·les no conté espai suficient per a mostrar tota la "
 "cadena"
 
-#: gtk/gtkcellrenderertext.c:461 gtk/gtklabel.c:2389
+#: gtk/gtkcellrenderertext.c:461 gtk/gtklabel.c:2421
 msgid "Width In Characters"
 msgstr "Amplada en caràcters"
 
-#: gtk/gtkcellrenderertext.c:462 gtk/gtklabel.c:2390
+#: gtk/gtkcellrenderertext.c:462 gtk/gtklabel.c:2422
 msgid "The desired width of the label, in characters"
 msgstr "L'amplada desitjada de l'etiqueta, en caràcters"
 
-#: gtk/gtkcellrenderertext.c:481 gtk/gtklabel.c:2425
+#: gtk/gtkcellrenderertext.c:481 gtk/gtklabel.c:2457
 msgid "Maximum Width In Characters"
 msgstr "Amplada màxima en caràcters"
 
@@ -1918,7 +1933,7 @@ msgid "If the check button is in an “in between” state"
 msgstr "Si el botó de commutació és en un estat «intermedi»"
 
 #: gtk/gtkcolorbutton.c:179 gtk/gtkcolumnviewcolumn.c:265
-#: gtk/gtkfontbutton.c:493 gtk/gtkprintjob.c:147 gtk/gtkshortcutsgroup.c:279
+#: gtk/gtkfontbutton.c:504 gtk/gtkprintjob.c:147 gtk/gtkshortcutsgroup.c:279
 #: gtk/gtkshortcutssection.c:326 gtk/gtkshortcutsshortcut.c:628
 #: gtk/gtkstack.c:440 gtk/gtktreeviewcolumn.c:346
 msgid "Title"
@@ -1936,7 +1951,7 @@ msgstr "Mostra l'editor"
 msgid "Whether to show the color editor right away"
 msgstr "Si es mostra el botó de l'editor de colors immediatament"
 
-#: gtk/gtkcolorbutton.c:252 gtk/gtkfontbutton.c:533
+#: gtk/gtkcolorbutton.c:252 gtk/gtkfontbutton.c:544
 msgid "Whether the dialog is modal"
 msgstr "Si el diàleg és modal"
 
@@ -1972,7 +1987,7 @@ msgstr "Color RGBA"
 msgid "Color as RGBA"
 msgstr "Color com a RGBA"
 
-#: gtk/gtkcolorswatch.c:507 gtk/gtklabel.c:2324 gtk/gtklistbox.c:3570
+#: gtk/gtkcolorswatch.c:507 gtk/gtklabel.c:2356 gtk/gtklistbox.c:3570
 #: gtk/gtklistitem.c:217
 msgid "Selectable"
 msgstr "Seleccionable"
@@ -2026,7 +2041,7 @@ msgid "Show separators between columns"
 msgstr "Mostra els separadors entre columnes"
 
 #: gtk/gtkcolumnview.c:730 gtk/gtkcolumnviewcolumn.c:277
-#: gtk/gtksortlistmodel.c:817 gtk/gtktreelistrowsorter.c:544
+#: gtk/gtksortlistmodel.c:824 gtk/gtktreelistrowsorter.c:544
 msgid "Sorter"
 msgstr "Ordenador"
 
@@ -2036,7 +2051,7 @@ msgstr "Ordenador amb opcions d'ordenació de l'usuari"
 
 #: gtk/gtkcolumnview.c:742 gtk/gtkgridview.c:1110 gtk/gtklistview.c:855
 msgid "Single click activate"
-msgstr "Activació d'un sol clic"
+msgstr "Activació amb un sol clic"
 
 #: gtk/gtkcolumnview.c:743 gtk/gtkgridview.c:1111 gtk/gtklistview.c:856
 msgid "Activate rows on single click"
@@ -2067,12 +2082,12 @@ msgstr "Vista de columna"
 msgid "Column view this column is a part of"
 msgstr "Vista de columna aquesta columna forma part de"
 
-#: gtk/gtkcolumnviewcolumn.c:253 gtk/gtkdropdown.c:433 gtk/gtkgridview.c:1058
+#: gtk/gtkcolumnviewcolumn.c:253 gtk/gtkdropdown.c:458 gtk/gtkgridview.c:1058
 #: gtk/gtklistview.c:819
 msgid "Factory"
 msgstr "Fàbrica"
 
-#: gtk/gtkcolumnviewcolumn.c:254 gtk/gtkdropdown.c:434 gtk/gtkdropdown.c:448
+#: gtk/gtkcolumnviewcolumn.c:254 gtk/gtkdropdown.c:459 gtk/gtkdropdown.c:473
 #: gtk/gtkgridview.c:1059 gtk/gtklistview.c:820
 msgid "Factory for populating list items"
 msgstr "Fàbrica per als elements de llista desplegables"
@@ -2085,9 +2100,8 @@ msgstr "Títol mostrat a la capçalera"
 msgid "Sorter for sorting items according to this column"
 msgstr "Ordenador per a ordenar els elements segons aquesta columna"
 
-#: gtk/gtkcolumnviewcolumn.c:289 gtk/gtkcssnode.c:623
-#: gtk/gtknativedialog.c:236 gtk/gtkstack.c:480 gtk/gtktreeviewcolumn.c:276
-#: gtk/gtkwidget.c:1258
+#: gtk/gtkcolumnviewcolumn.c:289 gtk/gtkcssnode.c:623 gtk/gtknativedialog.c:236
+#: gtk/gtkstack.c:480 gtk/gtktreeviewcolumn.c:276 gtk/gtkwidget.c:1258
 msgid "Visible"
 msgstr "Visible"
 
@@ -2104,7 +2118,7 @@ msgid "Menu to use on the title of this column"
 msgstr "Menú a usar en el títol d'aquesta columna"
 
 #: gtk/gtkcolumnviewcolumn.c:313 gtk/gtktreeviewcolumn.c:283
-#: gtk/gtkwindow.c:781
+#: gtk/gtkwindow.c:777
 msgid "Resizable"
 msgstr "Redimensionable"
 
@@ -2125,64 +2139,64 @@ msgstr "Amplada fixa"
 msgid "Fixed width of this column"
 msgstr "Amplada fixa d'aquesta columna"
 
-#: gtk/gtkcombobox.c:636
+#: gtk/gtkcombobox.c:668
 msgid "ComboBox model"
 msgstr "Model quadre combinat"
 
-#: gtk/gtkcombobox.c:637
+#: gtk/gtkcombobox.c:669
 msgid "The model for the combo box"
 msgstr "El model per al quadre combinat"
 
-#: gtk/gtkcombobox.c:655
+#: gtk/gtkcombobox.c:687
 msgid "Active item"
 msgstr "Element actiu"
 
-#: gtk/gtkcombobox.c:656
+#: gtk/gtkcombobox.c:688
 msgid "The item which is currently active"
 msgstr "L'element que actualment està seleccionat"
 
-#: gtk/gtkcombobox.c:671
+#: gtk/gtkcombobox.c:703
 msgid "Whether the combo box draws a frame around the child"
 msgstr "Si el quadre combinat ha de dibuixar un marc al voltant del fill"
 
-#: gtk/gtkcombobox.c:686
+#: gtk/gtkcombobox.c:718
 msgid "Popup shown"
 msgstr "Es mostra la part desplegable"
 
-#: gtk/gtkcombobox.c:687
+#: gtk/gtkcombobox.c:719
 msgid "Whether the combo’s dropdown is shown"
 msgstr "Si s'està mostrant la part desplegable del quadre combinat"
 
-#: gtk/gtkcombobox.c:701
+#: gtk/gtkcombobox.c:733
 msgid "Button Sensitivity"
 msgstr "Sensibilitat del botó"
 
-#: gtk/gtkcombobox.c:702
+#: gtk/gtkcombobox.c:734
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Si el botó desplegable és sensible quan el model és buit"
 
-#: gtk/gtkcombobox.c:716
+#: gtk/gtkcombobox.c:748
 msgid "Whether combo box has an entry"
 msgstr "Si el quadre combinat conté una entrada"
 
-#: gtk/gtkcombobox.c:731
+#: gtk/gtkcombobox.c:763
 msgid "Entry Text Column"
 msgstr "Columna d'entrada de text"
 
-#: gtk/gtkcombobox.c:732
+#: gtk/gtkcombobox.c:764
 msgid ""
-"The column in the combo box’s model to associate with strings from the entry"
-" if the combo was created with GtkComboBox:has-entry = %TRUE"
+"The column in the combo box’s model to associate with strings from the entry "
+"if the combo was created with GtkComboBox:has-entry = %TRUE"
 msgstr ""
 "La columna en el model del quadre combinat que s'ha d'associar amb les "
 "cadenes de l'entrada si el quadre combinat es va crear amb «GtkComboBox:has-"
 "entry = %TRUE»"
 
-#: gtk/gtkcombobox.c:747
+#: gtk/gtkcombobox.c:779
 msgid "ID Column"
 msgstr "Id. de la columna"
 
-#: gtk/gtkcombobox.c:748
+#: gtk/gtkcombobox.c:780
 msgid ""
 "The column in the combo box’s model that provides string IDs for the values "
 "in the model"
@@ -2190,19 +2204,19 @@ msgstr ""
 "La columna en el model del quadre combinat que proporciona els "
 "identificadors de cadenes dels valors del model"
 
-#: gtk/gtkcombobox.c:761
+#: gtk/gtkcombobox.c:793
 msgid "Active id"
 msgstr "Id. actiu"
 
-#: gtk/gtkcombobox.c:762
+#: gtk/gtkcombobox.c:794
 msgid "The value of the id column for the active row"
 msgstr "El valor de la columna d'identificadors per a la fila activa"
 
-#: gtk/gtkcombobox.c:776
+#: gtk/gtkcombobox.c:808
 msgid "Popup Fixed Width"
 msgstr "Amplada fixa de la finestra emergent"
 
-#: gtk/gtkcombobox.c:777
+#: gtk/gtkcombobox.c:809
 msgid ""
 "Whether the popup’s width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -2210,7 +2224,7 @@ msgstr ""
 "Si l'amplada de la finestra emergent hauria de ser una amplada fixa que "
 "coincideixi amb l'amplada ubicada per al quadre combinat"
 
-#: gtk/gtkcombobox.c:792
+#: gtk/gtkcombobox.c:824
 msgid "The child_widget"
 msgstr "El giny_fill"
 
@@ -2375,7 +2389,7 @@ msgstr "monitorat"
 msgid "TRUE if the directory is monitored for changes"
 msgstr "«TRUE» (cert) si el directori és monitora per als canvis"
 
-#: gtk/gtkdragicon.c:374
+#: gtk/gtkdragicon.c:377
 msgid "The widget to display as drag icon."
 msgstr "El giny a mostrar com a icona d'arrossegament."
 
@@ -2387,8 +2401,7 @@ msgstr "Contingut"
 msgid "The content provider for the dragged data"
 msgstr "El proveïdor de contingut per a les dades arrossegades"
 
-#: gtk/gtkdragsource.c:342 gtk/gtkdroptargetasync.c:388
-#: gtk/gtkdroptarget.c:627
+#: gtk/gtkdragsource.c:342 gtk/gtkdroptargetasync.c:388 gtk/gtkdroptarget.c:627
 msgid "Actions"
 msgstr "Accions"
 
@@ -2396,19 +2409,19 @@ msgstr "Accions"
 msgid "Supported actions"
 msgstr "Accions compatibles"
 
-#: gtk/gtkdrawingarea.c:290
+#: gtk/gtkdrawingarea.c:291
 msgid "Content Width"
 msgstr "Amplada del contingut"
 
-#: gtk/gtkdrawingarea.c:291
+#: gtk/gtkdrawingarea.c:292
 msgid "Desired width for displayed content"
 msgstr "Amplada desitjada per a mostrar contingut"
 
-#: gtk/gtkdrawingarea.c:302
+#: gtk/gtkdrawingarea.c:303
 msgid "Content Height"
 msgstr "Alçada del contingut"
 
-#: gtk/gtkdrawingarea.c:303
+#: gtk/gtkdrawingarea.c:304
 msgid "Desired height for displayed content"
 msgstr "Alçada desitjada per a mostrar contingut"
 
@@ -2436,41 +2449,49 @@ msgstr "És punter"
 msgid "Whether the pointer is in the controllers widget"
 msgstr "Si el punter està als controladors del giny"
 
-#: gtk/gtkdropdown.c:447
+#: gtk/gtkdropdown.c:472
 msgid "List Factory"
 msgstr "Fàbrica de la llista"
 
-#: gtk/gtkdropdown.c:460
+#: gtk/gtkdropdown.c:485
 msgid "Model for the displayed items"
 msgstr "Model per als elements mostrats"
 
-#: gtk/gtkdropdown.c:474 gtk/gtklistitem.c:229 gtk/gtksingleselection.c:411
+#: gtk/gtkdropdown.c:499 gtk/gtklistitem.c:229 gtk/gtksingleselection.c:411
 msgid "Selected"
 msgstr "Seleccionat"
 
-#: gtk/gtkdropdown.c:475 gtk/gtksingleselection.c:412
+#: gtk/gtkdropdown.c:500 gtk/gtksingleselection.c:412
 msgid "Position of the selected item"
 msgstr "Posició de l'element seleccionat"
 
-#: gtk/gtkdropdown.c:486 gtk/gtksingleselection.c:423
+#: gtk/gtkdropdown.c:511 gtk/gtksingleselection.c:423
 msgid "Selected Item"
 msgstr "Element seleccionat"
 
-#: gtk/gtkdropdown.c:487 gtk/gtksingleselection.c:424
+#: gtk/gtkdropdown.c:512 gtk/gtksingleselection.c:424
 msgid "The selected item"
 msgstr "L'element seleccionat"
 
-#: gtk/gtkdropdown.c:501
+#: gtk/gtkdropdown.c:526
 msgid "Enable search"
 msgstr "Habilita la cerca"
 
-#: gtk/gtkdropdown.c:502
+#: gtk/gtkdropdown.c:527
 msgid "Whether to show a search entry in the popup"
 msgstr "Si s'ha de mostrar una entrada de cerca a la finestra emergent"
 
-#: gtk/gtkdropdown.c:519
+#: gtk/gtkdropdown.c:544
 msgid "Expression to determine strings to search for"
 msgstr "Expressió per a determinar les cadenes a cercar"
+
+#: gtk/gtkdropdown.c:556
+msgid "Show arrow"
+msgstr "Mostra la fletxa"
+
+#: gtk/gtkdropdown.c:557
+msgid "Whether to show an arrow within the widget"
+msgstr "Si mostrar una fletxa dins del giny"
 
 #: gtk/gtkdroptargetasync.c:398 gtk/gtkdroptarget.c:667
 msgid "Formats"
@@ -2529,8 +2550,7 @@ msgstr "Límit seleccionat"
 #: gtk/gtkeditable.c:421
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
-msgstr ""
-"La posició del final oposat de la selecció des del cursor en caràcters"
+msgstr "La posició del final oposat de la selecció des del cursor en caràcters"
 
 #: gtk/gtkeditable.c:434
 msgid "Whether the entry contents can be edited"
@@ -2552,11 +2572,11 @@ msgstr "Amplada màxima en caràcters"
 msgid "The desired maximum width of the entry, in characters"
 msgstr "L'amplada màxima desitjada de l'entrada, en caràcters"
 
-#: gtk/gtkeditable.c:473 gtk/gtklabel.c:2266
+#: gtk/gtkeditable.c:473 gtk/gtklabel.c:2298
 msgid "X align"
 msgstr "Alineació X"
 
-#: gtk/gtkeditable.c:474 gtk/gtklabel.c:2267
+#: gtk/gtkeditable.c:474 gtk/gtklabel.c:2299
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2606,8 +2626,8 @@ msgid ""
 "FALSE displays the “invisible char” instead of the actual text (password "
 "mode)"
 msgstr ""
-"Si és «FALSE» (fals) mostrarà el «caràcter d'invisibilitat» en lloc del text"
-" real (mode de contrasenya)"
+"Si és «FALSE» (fals) mostrarà el «caràcter d'invisibilitat» en lloc del text "
+"real (mode de contrasenya)"
 
 #: gtk/gtkentry.c:526
 msgid "FALSE removes outside bevel from entry"
@@ -2654,7 +2674,7 @@ msgstr "Trunca línies múltiples"
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Si s'han de truncar enganxades de més d'una línia en una de sola."
 
-#: gtk/gtkentry.c:586 gtk/gtktext.c:835 gtk/gtktextview.c:1058
+#: gtk/gtkentry.c:586 gtk/gtktext.c:835 gtk/gtktextview.c:1064
 msgid "Overwrite mode"
 msgstr "Mode de sobreescriptura"
 
@@ -2818,11 +2838,11 @@ msgstr "Marcatge de l'indicador de funció de la icona primària"
 msgid "Secondary icon tooltip markup"
 msgstr "Marcatge de l'indicador de funció de la icona secundària"
 
-#: gtk/gtkentry.c:901 gtk/gtktext.c:878 gtk/gtktextview.c:1089
+#: gtk/gtkentry.c:901 gtk/gtktext.c:878 gtk/gtktextview.c:1095
 msgid "IM module"
 msgstr "Mòdul de mètode d'entrada"
 
-#: gtk/gtkentry.c:902 gtk/gtktext.c:879 gtk/gtktextview.c:1090
+#: gtk/gtkentry.c:902 gtk/gtktext.c:879 gtk/gtktextview.c:1096
 msgid "Which IM module should be used"
 msgstr "Quin mòdul de mètode d'entrada s'hauria d'utilitzar"
 
@@ -2834,23 +2854,23 @@ msgstr "Compleció"
 msgid "The auxiliary completion object"
 msgstr "L'objecte de compleció auxiliar"
 
-#: gtk/gtkentry.c:932 gtk/gtkimcontext.c:336 gtk/gtktext.c:897
-#: gtk/gtktextview.c:1105
+#: gtk/gtkentry.c:932 gtk/gtkimcontext.c:338 gtk/gtktext.c:897
+#: gtk/gtktextview.c:1111
 msgid "Purpose"
 msgstr "Propòsit"
 
-#: gtk/gtkentry.c:933 gtk/gtkimcontext.c:337 gtk/gtktext.c:898
-#: gtk/gtktextview.c:1106
+#: gtk/gtkentry.c:933 gtk/gtkimcontext.c:339 gtk/gtktext.c:898
+#: gtk/gtktextview.c:1112
 msgid "Purpose of the text field"
 msgstr "Propòsit del camp de text"
 
-#: gtk/gtkentry.c:947 gtk/gtkimcontext.c:350 gtk/gtktext.c:911
-#: gtk/gtktextview.c:1121
+#: gtk/gtkentry.c:947 gtk/gtkimcontext.c:352 gtk/gtktext.c:911
+#: gtk/gtktextview.c:1127
 msgid "hints"
 msgstr "indicacions"
 
-#: gtk/gtkentry.c:948 gtk/gtkimcontext.c:351 gtk/gtktext.c:912
-#: gtk/gtktextview.c:1122
+#: gtk/gtkentry.c:948 gtk/gtkimcontext.c:353 gtk/gtktext.c:912
+#: gtk/gtktextview.c:1128
 msgid "Hints for the text field behaviour"
 msgstr "Indicacions pel comportament del camp de text"
 
@@ -2859,7 +2879,7 @@ msgid "A list of style attributes to apply to the text of the entry"
 msgstr "Una llista d'atributs d'estil per a aplicar al text de l'entrada"
 
 #: gtk/gtkentry.c:977 gtk/gtktext.c:941 gtk/gtktexttag.c:735
-#: gtk/gtktextview.c:1019
+#: gtk/gtktextview.c:1025
 msgid "Tabs"
 msgstr "Pestanyes"
 
@@ -2877,8 +2897,8 @@ msgstr "Icona emoji"
 msgid "Whether to show an icon for Emoji"
 msgstr "Si es mostrarà una icona per l'emoji"
 
-#: gtk/gtkentry.c:1002 gtk/gtklabel.c:2455 gtk/gtkpasswordentry.c:504
-#: gtk/gtktext.c:990 gtk/gtktextview.c:1152
+#: gtk/gtkentry.c:1002 gtk/gtklabel.c:2487 gtk/gtkpasswordentry.c:504
+#: gtk/gtktext.c:990 gtk/gtktextview.c:1158
 msgid "Extra menu"
 msgstr "Menú addicional"
 
@@ -3024,11 +3044,11 @@ msgstr "Si l'extensor s'ha obert per a mostrar el giny fill"
 msgid "Text of the expander’s label"
 msgstr "Text de l'etiqueta de l'expansor"
 
-#: gtk/gtkexpander.c:359 gtk/gtklabel.c:2223 gtk/gtkmodelbutton.c:1211
+#: gtk/gtkexpander.c:359 gtk/gtklabel.c:2255 gtk/gtkmodelbutton.c:1211
 msgid "Use markup"
 msgstr "Utilitza marques"
 
-#: gtk/gtkexpander.c:360 gtk/gtklabel.c:2224
+#: gtk/gtkexpander.c:360 gtk/gtklabel.c:2256
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "El text de l'etiqueta inclou les marques XML. Vegeu pango_parse_markup()"
@@ -3050,8 +3070,8 @@ msgid ""
 "Whether the expander will resize the toplevel window upon expanding and "
 "collapsing"
 msgstr ""
-"Si l'expansor redimensionarà la finestra de nivell superior en expandir-se i"
-" col·lapsar-se"
+"Si l'expansor redimensionarà la finestra de nivell superior en expandir-se i "
+"col·lapsar-se"
 
 #: gtk/gtkfilechooser.c:87 gtk/gtkshortcut.c:156
 msgid "Action"
@@ -3138,7 +3158,7 @@ msgstr "El nom llegible per als humans per aquest filtre"
 msgid "The filter set for this model"
 msgstr "El conjunt de filtres per a aquest model"
 
-#: gtk/gtkfilterlistmodel.c:573 gtk/gtksortlistmodel.c:781
+#: gtk/gtkfilterlistmodel.c:573 gtk/gtksortlistmodel.c:788
 msgid "Incremental"
 msgstr "Incremental"
 
@@ -3150,7 +3170,7 @@ msgstr "Filtra els elements incrementalment"
 msgid "The model being filtered"
 msgstr "El model que s'està filtrant"
 
-#: gtk/gtkfilterlistmodel.c:597 gtk/gtksortlistmodel.c:805
+#: gtk/gtkfilterlistmodel.c:597 gtk/gtksortlistmodel.c:812
 msgid "Pending"
 msgstr "Pendent"
 
@@ -3182,12 +3202,12 @@ msgstr "Mode de selecció"
 #: gtk/gtkflowbox.c:3626 gtk/gtkiconview.c:589 gtk/gtklistbox.c:518
 #: gtk/gtktreeview.c:1158
 msgid "Activate on Single Click"
-msgstr "Activa en fer un sol clic"
+msgstr "Activa amb un sol clic"
 
 #: gtk/gtkflowbox.c:3627 gtk/gtkiconview.c:590 gtk/gtklistbox.c:519
 #: gtk/gtktreeview.c:1159
 msgid "Activate row on a single click"
-msgstr "Activa la fila en fer un sol clic"
+msgstr "Activa la fila amb un sol clic"
 
 #: gtk/gtkflowbox.c:3638 gtk/gtklistbox.c:530 gtk/gtklistbox.c:531
 msgid "Accept unpaired release"
@@ -3237,23 +3257,23 @@ msgstr "Espaiat horitzontal"
 msgid "The amount of horizontal space between two children"
 msgstr "La quantitat d'espai horitzontal entre dos fills"
 
-#: gtk/gtkfontbutton.c:494
+#: gtk/gtkfontbutton.c:505
 msgid "The title of the font chooser dialog"
 msgstr "El títol del diàleg de selecció de tipus de lletra"
 
-#: gtk/gtkfontbutton.c:506
+#: gtk/gtkfontbutton.c:517
 msgid "Use font in label"
 msgstr "Utilitza el tipus de lletra de l'etiqueta"
 
-#: gtk/gtkfontbutton.c:507
+#: gtk/gtkfontbutton.c:518
 msgid "Whether the label is drawn in the selected font"
 msgstr "Si l'etiqueta es dibuixa amb el tipus de lletra seleccionat"
 
-#: gtk/gtkfontbutton.c:519
+#: gtk/gtkfontbutton.c:530
 msgid "Use size in label"
 msgstr "Utilitza la mida de l'etiqueta"
 
-#: gtk/gtkfontbutton.c:520
+#: gtk/gtkfontbutton.c:531
 msgid "Whether the label is drawn with the selected font size"
 msgstr "Si l'etiqueta es dibuixa amb la mida del tipus de lletra seleccionada"
 
@@ -3495,67 +3515,67 @@ msgstr "Mínim de columnes"
 msgid "Minimum number of columns per row"
 msgstr "Nombre mínim de columnes per fila"
 
-#: gtk/gtkheaderbar.c:570
+#: gtk/gtkheaderbar.c:569
 msgid "Title Widget"
 msgstr "Giny del títol"
 
-#: gtk/gtkheaderbar.c:571
+#: gtk/gtkheaderbar.c:570
 msgid "Title widget to display"
 msgstr "Giny del títol a mostrar"
 
-#: gtk/gtkheaderbar.c:587
+#: gtk/gtkheaderbar.c:586
 msgid "Show title buttons"
 msgstr "Mostra el títol dels botons"
 
-#: gtk/gtkheaderbar.c:588
+#: gtk/gtkheaderbar.c:587
 msgid "Whether to show title buttons"
 msgstr "Si s'ha de mostrar el títol dels botons"
 
-#: gtk/gtkheaderbar.c:602 gtk/gtksettings.c:997 gtk/gtkwindowcontrols.c:535
+#: gtk/gtkheaderbar.c:601 gtk/gtksettings.c:1018 gtk/gtkwindowcontrols.c:535
 msgid "Decoration Layout"
 msgstr "Disposició de la decoració"
 
-#: gtk/gtkheaderbar.c:603 gtk/gtksettings.c:998 gtk/gtkwindowcontrols.c:536
+#: gtk/gtkheaderbar.c:602 gtk/gtksettings.c:1019 gtk/gtkwindowcontrols.c:536
 msgid "The layout for window decorations"
 msgstr "La disposició per a les decoracions de la finestra"
 
-#: gtk/gtkicontheme.c:1003 gtk/gtkicontheme.c:1004
+#: gtk/gtkicontheme.c:1004 gtk/gtkicontheme.c:1005
 msgid "Supported icon names"
 msgstr "Noms d'icones compatibles"
 
-#: gtk/gtkicontheme.c:1021 gtk/gtkicontheme.c:1022
+#: gtk/gtkicontheme.c:1022 gtk/gtkicontheme.c:1023
 msgid "Search path"
 msgstr "Camí de cerca"
 
-#: gtk/gtkicontheme.c:1040 gtk/gtkicontheme.c:1041
+#: gtk/gtkicontheme.c:1041 gtk/gtkicontheme.c:1042
 msgid "Resource path"
 msgstr "Camí al recurs"
 
-#: gtk/gtkicontheme.c:1056 gtk/gtkicontheme.c:1057
+#: gtk/gtkicontheme.c:1057 gtk/gtkicontheme.c:1058
 msgid "Theme name"
 msgstr "Nom del tema"
 
-#: gtk/gtkicontheme.c:3631
+#: gtk/gtkicontheme.c:3629
 msgid "file"
 msgstr "fitxer"
 
-#: gtk/gtkicontheme.c:3632
+#: gtk/gtkicontheme.c:3630
 msgid "The file representing the icon"
 msgstr "El fitxer que representa la icona"
 
-#: gtk/gtkicontheme.c:3643 gtk/gtkstack.c:452
+#: gtk/gtkicontheme.c:3641 gtk/gtkstack.c:452
 msgid "Icon name"
 msgstr "Nom de la icona"
 
-#: gtk/gtkicontheme.c:3644
+#: gtk/gtkicontheme.c:3642
 msgid "The icon name chosen during lookup"
 msgstr "El nom de la icona triat durant la cerca"
 
-#: gtk/gtkicontheme.c:3655
+#: gtk/gtkicontheme.c:3653
 msgid "Is symbolic"
 msgstr "És simbòlic"
 
-#: gtk/gtkicontheme.c:3656
+#: gtk/gtkicontheme.c:3654
 msgid "If the icon is symbolic"
 msgstr "Si la icona és simbòlica"
 
@@ -3733,19 +3753,19 @@ msgstr "Si s'ha d'incloure un botó de tancament estàndard"
 msgid "Controls whether the info bar shows its contents or not"
 msgstr "Controla si la barra d'informació mostra o no els seus continguts"
 
-#: gtk/gtklabel.c:2198
+#: gtk/gtklabel.c:2230
 msgid "The text of the label"
 msgstr "El text de l'etiqueta"
 
-#: gtk/gtklabel.c:2210
+#: gtk/gtklabel.c:2242
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Una llista d'atributs d'estil per a aplicar al text de l'etiqueta"
 
-#: gtk/gtklabel.c:2250 gtk/gtktexttag.c:475 gtk/gtktextview.c:916
+#: gtk/gtklabel.c:2282 gtk/gtktexttag.c:475 gtk/gtktextview.c:922
 msgid "Justification"
 msgstr "Justificació"
 
-#: gtk/gtklabel.c:2251
+#: gtk/gtklabel.c:2283
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3755,52 +3775,51 @@ msgstr ""
 "Això NO afecta l'alineació de l'etiqueta en la seva assignació. Vegeu "
 "GtkLabel:xalign"
 
-#: gtk/gtklabel.c:2282
+#: gtk/gtklabel.c:2314
 msgid "Y align"
 msgstr "Alineació Y"
 
-#: gtk/gtklabel.c:2283
+#: gtk/gtklabel.c:2315
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr "L'alineació vertical, des de 0 (a dalt) fins a 1 (a baix)"
 
-#: gtk/gtklabel.c:2295
+#: gtk/gtklabel.c:2327
 msgid "Line wrap"
 msgstr "Ajustament de línia"
 
-#: gtk/gtklabel.c:2296
+#: gtk/gtklabel.c:2328
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr ""
-"Si és establert, ajusta les línies si el text arriba a ser massa ample"
+msgstr "Si és establert, ajusta les línies si el text arriba a ser massa ample"
 
-#: gtk/gtklabel.c:2311
+#: gtk/gtklabel.c:2343
 msgid "Line wrap mode"
 msgstr "Mode de l'ajustament de línia"
 
-#: gtk/gtklabel.c:2312
+#: gtk/gtklabel.c:2344
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "Si s'estableix l'ajustament, controla de quina manera es fa"
 
-#: gtk/gtklabel.c:2325
+#: gtk/gtklabel.c:2357
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Si el ratolí pot seleccionar el text de l'etiqueta"
 
-#: gtk/gtklabel.c:2336
+#: gtk/gtklabel.c:2368
 msgid "Mnemonic key"
 msgstr "Clau mnemotècnica"
 
-#: gtk/gtklabel.c:2337
+#: gtk/gtklabel.c:2369
 msgid "The mnemonic accelerator key for this label"
 msgstr "La clau acceleradora mnemotècnica per a aquesta etiqueta"
 
-#: gtk/gtklabel.c:2349
+#: gtk/gtklabel.c:2381
 msgid "Mnemonic widget"
 msgstr "Giny mnemotècnic"
 
-#: gtk/gtklabel.c:2350
+#: gtk/gtklabel.c:2382
 msgid "The widget to be activated when the label’s mnemonic key is pressed"
 msgstr "El giny a activar quan se'n premi la clau mnemotècnica"
 
-#: gtk/gtklabel.c:2371
+#: gtk/gtklabel.c:2403
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3808,65 +3827,65 @@ msgstr ""
 "El lloc preferit on posar punts suspensius a la cadena, si l'etiqueta no té "
 "prou espai per a mostrar tota la cadena"
 
-#: gtk/gtklabel.c:2407
+#: gtk/gtklabel.c:2439
 msgid "Single Line Mode"
 msgstr "Mode de línia simple"
 
-#: gtk/gtklabel.c:2408
+#: gtk/gtklabel.c:2440
 msgid "Whether the label is in single line mode"
 msgstr "Si l'etiqueta està en mode de línia simple"
 
-#: gtk/gtklabel.c:2426
+#: gtk/gtklabel.c:2458
 msgid "The desired maximum width of the label, in characters"
 msgstr "L'amplada màxima desitjada de l'etiqueta, en caràcters"
 
-#: gtk/gtklabel.c:2442
+#: gtk/gtklabel.c:2474
 msgid "Number of lines"
 msgstr "Nombre de línies"
 
-#: gtk/gtklabel.c:2443
+#: gtk/gtklabel.c:2475
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr ""
-"El nombre de línies desitjades quan es posen punts suspensius a una etiqueta"
-" ajustada"
+"El nombre de línies desitjades quan es posen punts suspensius a una etiqueta "
+"ajustada"
 
-#: gtk/gtklabel.c:2456 gtk/gtktext.c:991 gtk/gtktextview.c:1153
+#: gtk/gtklabel.c:2488 gtk/gtktext.c:991 gtk/gtktextview.c:1159
 msgid "Menu model to append to the context menu"
 msgstr "Model de menú a afegir al menú contextual"
 
-#: gtk/gtklevelbar.c:945
+#: gtk/gtklevelbar.c:962
 msgid "Currently filled value level"
 msgstr "Valor del nivell d'emplenament actual"
 
-#: gtk/gtklevelbar.c:946
+#: gtk/gtklevelbar.c:963
 msgid "Currently filled value level of the level bar"
 msgstr "El valor del nivell d'emplenament actual de la barra de nivell"
 
-#: gtk/gtklevelbar.c:957
+#: gtk/gtklevelbar.c:974
 msgid "Minimum value level for the bar"
 msgstr "Valor mínim possible del nivell de la barra"
 
-#: gtk/gtklevelbar.c:958
+#: gtk/gtklevelbar.c:975
 msgid "Minimum value level that can be displayed by the bar"
 msgstr "El valor mínim possible del nivell que pot mostrar-se a la barra"
 
-#: gtk/gtklevelbar.c:969
+#: gtk/gtklevelbar.c:986
 msgid "Maximum value level for the bar"
 msgstr "Valor màxim possible del nivell de la barra"
 
-#: gtk/gtklevelbar.c:970
+#: gtk/gtklevelbar.c:987
 msgid "Maximum value level that can be displayed by the bar"
 msgstr "El valor màxim possible del nivell que pot mostrar-se a la barra"
 
-#: gtk/gtklevelbar.c:990
+#: gtk/gtklevelbar.c:1007
 msgid "The mode of the value indicator"
 msgstr "El mode de l'indicador de valor"
 
-#: gtk/gtklevelbar.c:991
+#: gtk/gtklevelbar.c:1008
 msgid "The mode of the value indicator displayed by the bar"
 msgstr "El mode de l'indicador de valor que es mostra a la barra"
 
-#: gtk/gtklevelbar.c:1007
+#: gtk/gtklevelbar.c:1024
 msgid "Invert the direction in which the level bar grows"
 msgstr "Inverteix la direcció de creixement de la barra de progrés"
 
@@ -3920,7 +3939,7 @@ msgid "Displayed item"
 msgstr "Element mostrat"
 
 #: gtk/gtklistitem.c:205 gtk/gtknotebook.c:651 gtk/gtkpaned.c:426
-#: gtk/gtkpopover.c:1820
+#: gtk/gtkpopover.c:1822
 msgid "Position"
 msgstr "Posició"
 
@@ -3987,8 +4006,8 @@ msgstr "Indicador de funció de no autorització"
 msgid ""
 "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr ""
-"L'indicador de funció a mostrar quan s'indiqui a l'usuari que no pot obtenir"
-" l'autorització"
+"L'indicador de funció a mostrar quan s'indiqui a l'usuari que no pot obtenir "
+"l'autorització"
 
 #: gtk/gtkmagnifier.c:187
 msgid "Inspected"
@@ -4139,49 +4158,50 @@ msgstr "Volum"
 msgid "Volume of the audio stream."
 msgstr "Volum del flux d'àudio."
 
-#: gtk/gtkmenubutton.c:401 gtk/gtkpopovermenubar.c:636
-#: gtk/gtkpopovermenu.c:611
+#: gtk/gtkmenubutton.c:414 gtk/gtkpopovermenubar.c:636 gtk/gtkpopovermenu.c:612
 msgid "Menu model"
 msgstr "Model del menú"
 
-#: gtk/gtkmenubutton.c:402
+#: gtk/gtkmenubutton.c:415
 msgid "The model from which the popup is made."
 msgstr "El model a partir del qual es fa el diàleg emergent."
 
-#: gtk/gtkmenubutton.c:415
+#: gtk/gtkmenubutton.c:428
 msgid "The direction the arrow should point."
 msgstr "La direcció a la qual ha d'apuntar la fletxa."
 
-#: gtk/gtkmenubutton.c:427 gtk/gtkmodelbutton.c:1243
+#: gtk/gtkmenubutton.c:440 gtk/gtkmodelbutton.c:1243
 msgid "Popover"
 msgstr "Diàleg contextual"
 
-#: gtk/gtkmenubutton.c:428
+#: gtk/gtkmenubutton.c:441
 msgid "The popover"
 msgstr "El diàleg contextual"
 
-#: gtk/gtkmenubutton.c:453
+#: gtk/gtkmenubutton.c:466
 msgid "Always Show Arrow"
 msgstr "Mostra sempre la fletxa"
 
-#: gtk/gtkmenubutton.c:454
-msgid "Whether to show a dropdown arrow even when using an icon"
+#: gtk/gtkmenubutton.c:467
+msgid ""
+"Whether to show a dropdown arrow even when using an icon or a custom child"
 msgstr ""
-"Si s'ha de mostrar una fletxa desplegable encara que s'utilitzi una icona"
+"Si mostrar una fletxa desplegable fins i tot quan s'utilitza una icona o un "
+"fill personalitzat"
 
-#: gtk/gtkmenubutton.c:466
+#: gtk/gtkmenubutton.c:479
 msgid "The label for the button"
 msgstr "L'etiqueta per al botó"
 
-#: gtk/gtkmenubutton.c:489
+#: gtk/gtkmenubutton.c:502
 msgid "Has frame"
 msgstr "Té marc"
 
-#: gtk/gtkmenubutton.c:505
+#: gtk/gtkmenubutton.c:518
 msgid "Primary"
 msgstr "Primari"
 
-#: gtk/gtkmenubutton.c:506
+#: gtk/gtkmenubutton.c:519
 msgid "Whether the menubutton acts as a primary menu"
 msgstr "Si el botó de menú actua com a menú primari"
 
@@ -4316,21 +4336,21 @@ msgstr "El títol del diàleg de selecció de fitxers"
 
 #: gtk/gtknativedialog.c:225
 msgid ""
-"If TRUE, the dialog is modal (other windows are not usable while this one is"
-" up)"
+"If TRUE, the dialog is modal (other windows are not usable while this one is "
+"up)"
 msgstr ""
-"Si és «TRUE» (cert), la finestra és modal (les altres finestres no es podran"
-" utilitzar mentre aquesta estigui oberta)"
+"Si és «TRUE» (cert), la finestra és modal (les altres finestres no es podran "
+"utilitzar mentre aquesta estigui oberta)"
 
 #: gtk/gtknativedialog.c:237
 msgid "Whether the dialog is currently visible"
 msgstr "Si el diàleg és visible"
 
-#: gtk/gtknativedialog.c:248 gtk/gtkwindow.c:947
+#: gtk/gtknativedialog.c:248 gtk/gtkwindow.c:943
 msgid "Transient for Window"
 msgstr "Finestra transitòria"
 
-#: gtk/gtknativedialog.c:249 gtk/gtkwindow.c:948
+#: gtk/gtknativedialog.c:249 gtk/gtkwindow.c:944
 msgid "The transient parent of the dialog"
 msgstr "El pare transitori del diàleg"
 
@@ -4462,8 +4482,8 @@ msgstr "Disponible el menú emergent"
 
 #: gtk/gtknotebook.c:1189
 msgid ""
-"If TRUE, pressing the right mouse button on the notebook pops up a menu that"
-" you can use to go to a page"
+"If TRUE, pressing the right mouse button on the notebook pops up a menu that "
+"you can use to go to a page"
 msgstr ""
 "Si és «TRUE» (cert), prement el botó dret del ratolí sobre la llibreta "
 "apareixerà un menú que podreu utilitzar per a anar a una pàgina"
@@ -4572,8 +4592,8 @@ msgstr "Canvia la mida del primer fill"
 msgid ""
 "If TRUE, the first child expands and shrinks along with the paned widget"
 msgstr ""
-"Si és «TRUE» (cert), el primer fill s'expandirà o s'encongirà amb el giny de"
-" la subfinestra"
+"Si és «TRUE» (cert), el primer fill s'expandirà o s'encongirà amb el giny de "
+"la subfinestra"
 
 #: gtk/gtkpaned.c:509
 msgid "Resize second child"
@@ -4802,51 +4822,51 @@ msgstr "El fitxer representat per la fila, si n'hi ha"
 msgid "Whether the row represents a network location"
 msgstr "Si la fila representa una ubicació de xarxa"
 
-#: gtk/gtkpopover.c:1808
+#: gtk/gtkpopover.c:1810
 msgid "Pointing to"
 msgstr "Apunta a"
 
-#: gtk/gtkpopover.c:1809
+#: gtk/gtkpopover.c:1811
 msgid "Rectangle the bubble window points to"
 msgstr "Rectangle al qual apunta la finestra bombolla"
 
-#: gtk/gtkpopover.c:1821
+#: gtk/gtkpopover.c:1823
 msgid "Position to place the bubble window"
 msgstr "Posició on posar la finestra bombolla"
 
-#: gtk/gtkpopover.c:1833
+#: gtk/gtkpopover.c:1835
 msgid "Whether to dismiss the popover on outside clicks"
 msgstr "Si s'ha de descartar el diàleg emergent als clics externs"
 
-#: gtk/gtkpopover.c:1844 gtk/gtkwindow.c:1015
+#: gtk/gtkpopover.c:1846 gtk/gtkwindow.c:1011
 msgid "Default widget"
 msgstr "Giny per defecte"
 
-#: gtk/gtkpopover.c:1845 gtk/gtkwindow.c:1016
+#: gtk/gtkpopover.c:1847 gtk/gtkwindow.c:1012
 msgid "The default widget"
 msgstr "El giny per defecte"
 
-#: gtk/gtkpopover.c:1856
+#: gtk/gtkpopover.c:1858
 msgid "Has Arrow"
 msgstr "Té fletxa"
 
-#: gtk/gtkpopover.c:1857
+#: gtk/gtkpopover.c:1859
 msgid "Whether to draw an arrow"
 msgstr "Si s'ha de dibuixar una fletxa"
 
-#: gtk/gtkpopover.c:1868
+#: gtk/gtkpopover.c:1870
 msgid "Mnemonics visible"
 msgstr "Mnemònics visibles"
 
-#: gtk/gtkpopover.c:1869
+#: gtk/gtkpopover.c:1871
 msgid "Whether mnemonics are currently visible in this popover"
 msgstr "Si els mnemònics són visibles actualment en aquesta finestra emergent"
 
-#: gtk/gtkpopover.c:1894
+#: gtk/gtkpopover.c:1896
 msgid "Cascade popdown"
 msgstr "Obertura cap avall en cascada"
 
-#: gtk/gtkpopover.c:1895
+#: gtk/gtkpopover.c:1897
 msgid "Whether the popover pops down after a child popover"
 msgstr ""
 "Si la finestra emergent es mostra cap avall després d'una finestra emergent "
@@ -4856,15 +4876,15 @@ msgstr ""
 msgid "The model from which the bar is made."
 msgstr "El model a partir del qual es fa la barra."
 
-#: gtk/gtkpopovermenu.c:598
+#: gtk/gtkpopovermenu.c:599
 msgid "Visible submenu"
 msgstr "Submenú visible"
 
-#: gtk/gtkpopovermenu.c:599
+#: gtk/gtkpopovermenu.c:600
 msgid "The name of the visible submenu"
 msgstr "El nom del submenú visible"
 
-#: gtk/gtkpopovermenu.c:612
+#: gtk/gtkpopovermenu.c:613
 msgid "The model from which the menu is made."
 msgstr "El model des del qual es fa el menú."
 
@@ -4994,8 +5014,8 @@ msgstr "Segueix l'estat de la impressió"
 
 #: gtk/gtkprintjob.c:205
 msgid ""
-"TRUE if the print job will continue to emit status-changed signals after the"
-" print data has been sent to the printer or print server."
+"TRUE if the print job will continue to emit status-changed signals after the "
+"print data has been sent to the printer or print server."
 msgstr ""
 "«TRUE» (cert) si el treball d'impressió ha de continuar emetent senyals "
 "«status-changed» un cop ja s'hagin transmès les dades a la impressora, o al "
@@ -5106,7 +5126,7 @@ msgstr "Cadena d'estat"
 
 #: gtk/gtkprintoperation.c:1312
 msgid "A human-readable description of the status"
-msgstr "Descripció de l'estat"
+msgstr "Descripció intel·ligible de l'estat"
 
 #: gtk/gtkprintoperation.c:1329
 msgid "Custom tab label"
@@ -5195,8 +5215,8 @@ msgstr "Pas de la pulsació"
 #: gtk/gtkprogressbar.c:214
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
-"La fracció de progrés total en què es mourà el bloc de rebot en realitzar el"
-" moviment polsant"
+"La fracció de progrés total en què es mourà el bloc de rebot en realitzar el "
+"moviment polsant"
 
 #: gtk/gtkprogressbar.c:227
 msgid "Text to be displayed in the progress bar"
@@ -5249,8 +5269,7 @@ msgstr "El GtkAdjustment que conté el valor actual d'aquest rang d'objectes"
 #: gtk/gtkrange.c:385
 msgid "Invert direction slider moves to increase range value"
 msgstr ""
-"El lliscador de direcció invertida es mou per a incrementar el valor del "
-"rang"
+"El lliscador de direcció invertida es mou per a incrementar el valor del rang"
 
 #: gtk/gtkrange.c:397
 msgid "Show Fill Level"
@@ -5292,19 +5311,19 @@ msgstr "El camí sencer al fitxer a utilitzar per a desar i llegir la llista"
 msgid "The size of the recently used resources list"
 msgstr "La mida de la llista de recursos utilitzada recentment"
 
-#: gtk/gtkrevealer.c:319 gtk/gtkstack.c:870
+#: gtk/gtkrevealer.c:319 gtk/gtkstack.c:871
 msgid "Transition type"
 msgstr "Tipus de transició"
 
-#: gtk/gtkrevealer.c:320 gtk/gtkstack.c:870
+#: gtk/gtkrevealer.c:320 gtk/gtkstack.c:871
 msgid "The type of animation used to transition"
 msgstr "El tipus d'animació emprada a la transició"
 
-#: gtk/gtkrevealer.c:332 gtk/gtkstack.c:860
+#: gtk/gtkrevealer.c:332 gtk/gtkstack.c:861
 msgid "Transition duration"
 msgstr "Duració de la transició"
 
-#: gtk/gtkrevealer.c:333 gtk/gtkstack.c:860
+#: gtk/gtkrevealer.c:333 gtk/gtkstack.c:861
 msgid "The animation duration, in milliseconds"
 msgstr "La durada de l'animació, en mil·lisegons"
 
@@ -5330,11 +5349,9 @@ msgstr "El valor de l'escalat"
 
 #: gtk/gtkscalebutton.c:213
 msgid ""
-"The GtkAdjustment that contains the current value of this scale button "
-"object"
+"The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
-"El GtkAdjustment que conté el valor actual d'aquest objecte de botó "
-"d'escalat"
+"El GtkAdjustment que conté el valor actual d'aquest objecte de botó d'escalat"
 
 #: gtk/gtkscalebutton.c:240
 msgid "Icons"
@@ -5355,8 +5372,8 @@ msgstr "Valor del dibuix"
 #: gtk/gtkscale.c:695
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
-"Si el valor actual es mostra com una cadena de text al costat de la barra de"
-" desplaçament"
+"Si el valor actual es mostra com una cadena de text al costat de la barra de "
+"desplaçament"
 
 #: gtk/gtkscale.c:706
 msgid "Has Origin"
@@ -5466,8 +5483,7 @@ msgid "Minimum Content Width"
 msgstr "Amplada mínima del contingut"
 
 #: gtk/gtkscrolledwindow.c:686
-msgid ""
-"The minimum width that the scrolled window will allocate to its content"
+msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 "L'amplada mínima que la finestra amb desplaçament ubicarà per aquests "
 "continguts"
@@ -5504,8 +5520,7 @@ msgid "Maximum Content Width"
 msgstr "Amplada màxima del contingut"
 
 #: gtk/gtkscrolledwindow.c:743
-msgid ""
-"The maximum width that the scrolled window will allocate to its content"
+msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 "L'amplada màxima que la finestra amb desplaçament ubicarà per aquest "
 "contingut"
@@ -5518,8 +5533,7 @@ msgstr "Alçada màxima del contingut"
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr ""
-"L'alçada màxima que la finestra amb desplaçament ubicarà per aquest "
-"contingut"
+"L'alçada màxima que la finestra amb desplaçament ubicarà per aquest contingut"
 
 #: gtk/gtkscrolledwindow.c:770 gtk/gtkscrolledwindow.c:771
 msgid "Propagate Natural Width"
@@ -5545,11 +5559,11 @@ msgstr "Si es mostra el botó de tancament a la barra d'eines"
 msgid "Key Capture Widget"
 msgstr "Giny de captura de tecla"
 
-#: gtk/gtksettings.c:340
+#: gtk/gtksettings.c:341
 msgid "Double Click Time"
 msgstr "Temps del doble clic"
 
-#: gtk/gtksettings.c:341
+#: gtk/gtksettings.c:342
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -5557,11 +5571,11 @@ msgstr ""
 "Temps màxim permès entre dos clics perquè es considerin un doble clic (en "
 "mil·lisegons)"
 
-#: gtk/gtksettings.c:354
+#: gtk/gtksettings.c:355
 msgid "Double Click Distance"
 msgstr "Distància de doble clic"
 
-#: gtk/gtksettings.c:355
+#: gtk/gtksettings.c:356
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -5569,96 +5583,96 @@ msgstr ""
 "Distància màxima permesa entre dos clics perquè es considerin un doble clic "
 "(en píxels)"
 
-#: gtk/gtksettings.c:370
+#: gtk/gtksettings.c:371
 msgid "Cursor Blink"
 msgstr "Parpelleig del cursor"
 
-#: gtk/gtksettings.c:371
+#: gtk/gtksettings.c:372
 msgid "Whether the cursor should blink"
 msgstr "Si el cursor hauria de parpellejar"
 
-#: gtk/gtksettings.c:383
+#: gtk/gtksettings.c:384
 msgid "Cursor Blink Time"
 msgstr "Temps de parpelleig del cursor"
 
-#: gtk/gtksettings.c:384
+#: gtk/gtksettings.c:385
 msgid "Length of the cursor blink cycle, in milliseconds"
 msgstr "Llargada del cicle de parpelleig del cursor, en mil·lisegons"
 
-#: gtk/gtksettings.c:401
+#: gtk/gtksettings.c:402
 msgid "Cursor Blink Timeout"
 msgstr "Temps de parpelleig del cursor"
 
-#: gtk/gtksettings.c:402
+#: gtk/gtksettings.c:403
 msgid "Time after which the cursor stops blinking, in seconds"
 msgstr "Temps, en segons, al cap del qual el cursor deixarà de parpellejar"
 
-#: gtk/gtksettings.c:415
+#: gtk/gtksettings.c:416
 msgid "Split Cursor"
 msgstr "Cursor partit"
 
-#: gtk/gtksettings.c:416
+#: gtk/gtksettings.c:417
 msgid ""
-"Whether two cursors should be displayed for mixed left-to-right and right-"
-"to-left text"
+"Whether two cursors should be displayed for mixed left-to-right and right-to-"
+"left text"
 msgstr ""
-"Si s'han de mostrar dos cursors en text mixt d'esquerra a dreta i de dreta a"
-" esquerra"
+"Si s'han de mostrar dos cursors en text mixt d'esquerra a dreta i de dreta a "
+"esquerra"
 
-#: gtk/gtksettings.c:428
+#: gtk/gtksettings.c:429
 msgid "Cursor Aspect Ratio"
 msgstr "Relació d'aspecte del cursor"
 
 # FIXME: no sé ben bé a què es refereix (dpm)
-#: gtk/gtksettings.c:429
+#: gtk/gtksettings.c:430
 msgid "The aspect ratio of the text caret"
 msgstr "La relació d'aspecte del cursor de text"
 
-#: gtk/gtksettings.c:444
+#: gtk/gtksettings.c:445
 msgid "Theme Name"
 msgstr "Nom del tema"
 
-#: gtk/gtksettings.c:445
+#: gtk/gtksettings.c:446
 msgid "Name of theme to load"
 msgstr "Nom del tema a carregar"
 
-#: gtk/gtksettings.c:460
+#: gtk/gtksettings.c:461
 msgid "Icon Theme Name"
 msgstr "Nom del tema d'icones"
 
-#: gtk/gtksettings.c:461
+#: gtk/gtksettings.c:462
 msgid "Name of icon theme to use"
 msgstr "Nom del tema d'icones a utilitzar"
 
-#: gtk/gtksettings.c:473
+#: gtk/gtksettings.c:474
 msgid "Drag threshold"
 msgstr "Llindar de l'arrossegament"
 
-#: gtk/gtksettings.c:474
+#: gtk/gtksettings.c:475
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Nombre de píxels que el cursor pot moure's abans d'avançar"
 
-#: gtk/gtksettings.c:488
+#: gtk/gtksettings.c:489
 msgid "Font Name"
 msgstr "Nom del tipus de lletra"
 
-#: gtk/gtksettings.c:489
+#: gtk/gtksettings.c:490
 msgid "The default font family and size to use"
 msgstr "La família i mida del tipus de lletra per defecte a utilitzar"
 
-#: gtk/gtksettings.c:503
+#: gtk/gtksettings.c:504
 msgid "Xft Antialias"
 msgstr "Suavitzat de vores Xft"
 
-#: gtk/gtksettings.c:504
+#: gtk/gtksettings.c:505
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Si s'han de suavitzar les vores dels tipus de lletra Xft: 0=no, 1=sí, -1=per"
-" defecte"
+"Si s'han de suavitzar les vores dels tipus de lletra Xft: 0=no, 1=sí, -1=per "
+"defecte"
 
 # Una mica d'ajuda per a "hint font":
 # http://www.cairographics.org/manual/cairo-Font-Options.html
-# 
+#
 # Specifies the type of hinting to do on font outlines. Hinting is the process
 #  of fitting outlines to the pixel grid in order to improve the appearance of
 #  the result. Since hinting outlines involves distorting them, it also
@@ -5672,78 +5686,88 @@ msgstr ""
 # CAIRO_HINT_STYLE_MEDIUM 	Hint outlines with medium strength giving a
 #  compromise between fidelity to the original shapes and contrast
 # CAIRO_HINT_STYLE_FULL 	Hint outlines to maximize contrast
-#: gtk/gtksettings.c:519
+#: gtk/gtksettings.c:520
 msgid "Xft Hinting"
 msgstr "Transforma el contorn Xft"
 
-#: gtk/gtksettings.c:520
+#: gtk/gtksettings.c:521
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
 "Si s'ha de transformar el contorn dels tipus de lletra Xft: 0=no, 1=sí, "
 "-1=per defecte"
 
-#: gtk/gtksettings.c:536
+#: gtk/gtksettings.c:537
 msgid "Xft Hint Style"
 msgstr "Estil de transformació Xft"
 
-#: gtk/gtksettings.c:537
+#: gtk/gtksettings.c:538
 msgid ""
 "What degree of hinting to use; hintnone, hintslight, hintmedium, or hintfull"
 msgstr ""
-"Quin grau de transformació a emprar: «hintnone» (cap), «hintslight» "
-"(senzill), «hintmedium» (mitjà) o «hintfull» (complet)"
+"Quin grau de transformació a emprar: «hintnone» (cap), "
+"«hintslight» (senzill), «hintmedium» (mitjà) o «hintfull» (complet)"
 
-#: gtk/gtksettings.c:552
+#: gtk/gtksettings.c:553
 msgid "Xft RGBA"
 msgstr "RGBA de Xft"
 
-#: gtk/gtksettings.c:553
+#: gtk/gtksettings.c:554
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
 msgstr ""
 "Tipus de suavitzat de subpíxels: «none» (cap), «rgb» (vermell-verd-blau), "
-"«bgr» (blau-verd-vermell), «vrgb» (vermell-verd-blau vertical) o «vbgr» "
-"(blau-verd-vermell vertical)"
+"«bgr» (blau-verd-vermell), «vrgb» (vermell-verd-blau vertical) o "
+"«vbgr» (blau-verd-vermell vertical)"
 
-#: gtk/gtksettings.c:568
+#: gtk/gtksettings.c:570
 msgid "Xft DPI"
 msgstr "PPP de Xft"
 
-#: gtk/gtksettings.c:569
+#: gtk/gtksettings.c:571
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr ""
 "Resolució per a Xft, en 1024 * punts/polzada. -1 per al valor per defecte"
 
-#: gtk/gtksettings.c:584
+#: gtk/gtksettings.c:589
+msgid "Hint Font Metrics"
+msgstr "Mètriques del tipus de lletra de les indicacions"
+
+#: gtk/gtksettings.c:590
+msgid "Whether hinting should be applied to font metrics"
+msgstr ""
+"Si la transformació del contorn s'ha d'aplicar a les mètriques de tipus de "
+"lletra"
+
+#: gtk/gtksettings.c:605
 msgid "Cursor theme name"
 msgstr "Nom del tema del cursor"
 
-#: gtk/gtksettings.c:585
+#: gtk/gtksettings.c:606
 msgid "Name of the cursor theme to use, or NULL to use the default theme"
 msgstr ""
 "Nom del tema de cursors a utilitzar, o «NULL» (nul) per a utilitzar el per "
 "defecte"
 
-#: gtk/gtksettings.c:599
+#: gtk/gtksettings.c:620
 msgid "Cursor theme size"
 msgstr "Mida del tema del cursor"
 
-#: gtk/gtksettings.c:600
+#: gtk/gtksettings.c:621
 msgid "Size to use for cursors, or 0 to use the default size"
 msgstr "Mida per als cursors, o 0 per a la mida per defecte"
 
-#: gtk/gtksettings.c:613
+#: gtk/gtksettings.c:634
 msgid "Alternative button order"
 msgstr "Ordre alternatiu de botons"
 
-#: gtk/gtksettings.c:614
+#: gtk/gtksettings.c:635
 msgid "Whether buttons in dialogs should use the alternative button order"
 msgstr "Si els botons en els diàlegs haurien d'utilitzar l'ordre alternatiu"
 
-#: gtk/gtksettings.c:630
+#: gtk/gtksettings.c:651
 msgid "Alternative sort indicator direction"
 msgstr "Direcció alternativa dels indicadors d'ordenació"
 
-#: gtk/gtksettings.c:631
+#: gtk/gtksettings.c:652
 msgid ""
 "Whether the direction of the sort indicators in list and tree views is "
 "inverted compared to the default (where down means ascending)"
@@ -5752,156 +5776,155 @@ msgstr ""
 "i en arbre s'ha d'invertir respecte al valor per defecte (on cap avall "
 "significa ascendent)"
 
-#: gtk/gtksettings.c:643
+#: gtk/gtksettings.c:664
 msgid "Enable Animations"
 msgstr "Habilita les animacions"
 
-#: gtk/gtksettings.c:644
+#: gtk/gtksettings.c:665
 msgid "Whether to enable toolkit-wide animations."
 msgstr "Si s'han d'habilitar animacions per als jocs d'eines."
 
-#: gtk/gtksettings.c:662
+#: gtk/gtksettings.c:683
 msgid "Error Bell"
 msgstr "Timbre d'error"
 
-#: gtk/gtksettings.c:663
+#: gtk/gtksettings.c:684
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
 msgstr ""
 "Si és «TRUE» (cert), els errors de la navegació amb el teclat i altres "
 "causaran l'emissió d'un to sonor"
 
-#: gtk/gtksettings.c:680
+#: gtk/gtksettings.c:701
 msgid "Default print backend"
 msgstr "Rerefons per defecte per a la impressió"
 
-#: gtk/gtksettings.c:681
+#: gtk/gtksettings.c:702
 msgid "List of the GtkPrintBackend backends to use by default"
 msgstr "Llista de rerefons GtkPrintBackend a utilitzar per defecte"
 
-#: gtk/gtksettings.c:702
+#: gtk/gtksettings.c:723
 msgid "Default command to run when displaying a print preview"
 msgstr ""
 "Ordre que s'ha d'executar per defecte quan es mostri la previsualització de "
 "la impressió"
 
-#: gtk/gtksettings.c:703
+#: gtk/gtksettings.c:724
 msgid "Command to run when displaying a print preview"
 msgstr "Ordre a executar en mostrar una previsualització d'impressió"
 
-#: gtk/gtksettings.c:716
+#: gtk/gtksettings.c:737
 msgid "Enable Accelerators"
 msgstr "Habilita els acceleradors"
 
-#: gtk/gtksettings.c:717
+#: gtk/gtksettings.c:738
 msgid "Whether menu items should have accelerators"
 msgstr "Si els menús han de tenir acceleradors"
 
-#: gtk/gtksettings.c:736
+#: gtk/gtksettings.c:757
 msgid "Default IM module"
 msgstr "Mòdul de mètodes d'entrada per defecte"
 
-#: gtk/gtksettings.c:737
+#: gtk/gtksettings.c:758
 msgid "Which IM module should be used by default"
 msgstr "Quin mòdul de mètodes d'entrada s'ha d'utilitzar per defecte"
 
-#: gtk/gtksettings.c:754
+#: gtk/gtksettings.c:775
 msgid "Recent Files Max Age"
 msgstr "Antiguitat màxima dels fitxers recents"
 
-#: gtk/gtksettings.c:755
+#: gtk/gtksettings.c:776
 msgid "Maximum age of recently used files, in days"
 msgstr "Antiguitat màxima dels fitxers utilitzats recentment, en dies"
 
-#: gtk/gtksettings.c:768
+#: gtk/gtksettings.c:789
 msgid "Fontconfig configuration timestamp"
 msgstr "Marca horària de la configuració de la fontconfig"
 
-#: gtk/gtksettings.c:769
+#: gtk/gtksettings.c:790
 msgid "Timestamp of current fontconfig configuration"
 msgstr "Marca horària de la configuració actual de la fontconfig"
 
-#: gtk/gtksettings.c:788
+#: gtk/gtksettings.c:809
 msgid "Sound Theme Name"
 msgstr "Nom del tema de so"
 
-#: gtk/gtksettings.c:789
+#: gtk/gtksettings.c:810
 msgid "XDG sound theme name"
 msgstr "Nom del tema de so XDG"
 
-#. Translators: this means sounds that are played as feedback to user input
 # FIXME (dpm)
-#: gtk/gtksettings.c:808
+#. Translators: this means sounds that are played as feedback to user input
+#: gtk/gtksettings.c:829
 msgid "Audible Input Feedback"
 msgstr "Sons en resposta a l'activitat de l'usuari"
 
-#: gtk/gtksettings.c:809
+#: gtk/gtksettings.c:830
 msgid "Whether to play event sounds as feedback to user input"
 msgstr ""
-"Si s'han de reproduir sons per als esdeveniments com a reacció a l'activitat"
-" de l'usuari"
+"Si s'han de reproduir sons per als esdeveniments com a reacció a l'activitat "
+"de l'usuari"
 
-#: gtk/gtksettings.c:827
+#: gtk/gtksettings.c:848
 msgid "Enable Event Sounds"
 msgstr "Habilita els sons dels esdeveniments"
 
-#: gtk/gtksettings.c:828
+#: gtk/gtksettings.c:849
 msgid "Whether to play any event sounds at all"
 msgstr "Si s'han de reproduir sons per als esdeveniments"
 
 # Notes:
 # Afegeix una nota
-# 
+#
 # Camins:
 # ../gtk/gtksettings.c:1174
-#: gtk/gtksettings.c:849
+#: gtk/gtksettings.c:870
 msgid "Primary button warps slider"
 msgstr "El botó primari desplaça el lliscador a la posició del punter"
 
-#: gtk/gtksettings.c:850
+#: gtk/gtksettings.c:871
 msgid ""
 "Whether a primary click on the trough should warp the slider into position"
 msgstr ""
 "Si un clic amb el botó primari a la regata desplaça el lliscador a la "
 "posició del punter"
 
-#: gtk/gtksettings.c:875
+#: gtk/gtksettings.c:896
 msgid "Application prefers a dark theme"
 msgstr "L'aplicació prefereix un tema fosc"
 
-#: gtk/gtksettings.c:876
+#: gtk/gtksettings.c:897
 msgid "Whether the application prefers to have a dark theme."
 msgstr "Si l'aplicació prefereix utilitzar un tema fosc."
 
-#: gtk/gtksettings.c:888 gtk/gtksettings.c:920
+#: gtk/gtksettings.c:909 gtk/gtksettings.c:941
 msgid "Select on focus"
 msgstr "Selecciona en enfocar"
 
-#: gtk/gtksettings.c:889
+#: gtk/gtksettings.c:910
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Si s'ha de seleccionar els continguts d'una entrada quan s'enfoca"
 
-#: gtk/gtksettings.c:905
+#: gtk/gtksettings.c:926
 msgid "Password Hint Timeout"
 msgstr "Temps d'espera de l'ajuda emergent per a contrasenyes"
 
-#: gtk/gtksettings.c:906
+#: gtk/gtksettings.c:927
 msgid "How long to show the last input character in hidden entries"
 msgstr ""
 "Durant quant de temps s'ha de mostrar el darrer caràcter introduït en les "
 "entrades ocultes"
 
-#: gtk/gtksettings.c:921
-msgid ""
-"Whether to select the contents of a selectable label when it is focused"
+#: gtk/gtksettings.c:942
+msgid "Whether to select the contents of a selectable label when it is focused"
 msgstr ""
 "Si s'han de seleccionar els continguts d'una etiqueta seleccionable quan "
 "obtingui el focus"
 
-#: gtk/gtksettings.c:934
+#: gtk/gtksettings.c:955
 msgid "Desktop shell shows app menu"
 msgstr "L'escriptori mostra el menú d'aplicacions"
 
-#: gtk/gtksettings.c:935
+#: gtk/gtksettings.c:956
 msgid ""
 "Set to TRUE if the desktop environment is displaying the app menu, FALSE if "
 "the app should display it itself."
@@ -5910,11 +5933,11 @@ msgstr ""
 "d'aplicació, a «FALSE» (fals) si l'aplicació l'hauria de mostrar per ella "
 "mateixa."
 
-#: gtk/gtksettings.c:949
+#: gtk/gtksettings.c:970
 msgid "Desktop shell shows the menubar"
 msgstr "L'escriptori mostra la barra de menú"
 
-#: gtk/gtksettings.c:950
+#: gtk/gtksettings.c:971
 msgid ""
 "Set to TRUE if the desktop environment is displaying the menubar, FALSE if "
 "the app should display it itself."
@@ -5922,11 +5945,11 @@ msgstr ""
 "S'estableix a «TRUE» (cert) si l'entorn d'escriptori mostra la barra de "
 "menú, a «FALSE» (fals) si l'aplicació l'hauria de mostrar per ella mateixa."
 
-#: gtk/gtksettings.c:964
+#: gtk/gtksettings.c:985
 msgid "Desktop environment shows the desktop folder"
 msgstr "L'entorn d'escriptori mostra la carpeta d'escriptori"
 
-#: gtk/gtksettings.c:965
+#: gtk/gtksettings.c:986
 msgid ""
 "Set to TRUE if the desktop environment is displaying the desktop folder, "
 "FALSE if not."
@@ -5934,35 +5957,35 @@ msgstr ""
 "S'estableix a «TRUE» (cert) si l'entorn d'escriptori mostra la carpeta "
 "d'escriptori, «FALSE» (fals) en cas contrari."
 
-#: gtk/gtksettings.c:1013
+#: gtk/gtksettings.c:1034
 msgid "Titlebar double-click action"
 msgstr "Acció doble clic en la barra de títol"
 
-#: gtk/gtksettings.c:1014
+#: gtk/gtksettings.c:1035
 msgid "The action to take on titlebar double-click"
 msgstr "Acció a realitzar en fer doble clic en la barra de títol"
 
-#: gtk/gtksettings.c:1029
+#: gtk/gtksettings.c:1050
 msgid "Titlebar middle-click action"
 msgstr "Acció en fer clic al botó del mig en la barra de títol"
 
-#: gtk/gtksettings.c:1030
+#: gtk/gtksettings.c:1051
 msgid "The action to take on titlebar middle-click"
 msgstr "Acció a realitzar en fer clic al botó del mig en la barra de títol"
 
-#: gtk/gtksettings.c:1045
+#: gtk/gtksettings.c:1066
 msgid "Titlebar right-click action"
 msgstr "Acció en fer clic al botó de dret en la barra de títol"
 
-#: gtk/gtksettings.c:1046
+#: gtk/gtksettings.c:1067
 msgid "The action to take on titlebar right-click"
 msgstr "Acció a realitzar en fer clic al botó de dret en la barra de títol"
 
-#: gtk/gtksettings.c:1062
+#: gtk/gtksettings.c:1083
 msgid "Dialogs use header bar"
 msgstr "Els diàlegs utilitzen barra de títol"
 
-#: gtk/gtksettings.c:1063
+#: gtk/gtksettings.c:1084
 msgid ""
 "Whether builtin GTK dialogs should use a header bar instead of an action "
 "area."
@@ -5970,11 +5993,11 @@ msgstr ""
 "Si els diàlegs integrats del GTK han d'utilitzar la barra de capçalera en "
 "comptes d'una àrea d'acció."
 
-#: gtk/gtksettings.c:1076
+#: gtk/gtksettings.c:1097
 msgid "Enable primary paste"
 msgstr "Habilita l'enganxat primari"
 
-#: gtk/gtksettings.c:1077
+#: gtk/gtksettings.c:1098
 msgid ""
 "Whether a middle click on a mouse should paste the “PRIMARY” clipboard "
 "content at the cursor location."
@@ -5982,31 +6005,30 @@ msgstr ""
 "Si un clic amb el botó del mig amb el ratolí hauria d'enganxar el contingut "
 "del porta-retalls «primari» a la posició del ratolí."
 
-#: gtk/gtksettings.c:1092
+#: gtk/gtksettings.c:1113
 msgid "Recent Files Enabled"
 msgstr "Fitxers recents habilitats"
 
-#: gtk/gtksettings.c:1093
+#: gtk/gtksettings.c:1114
 msgid "Whether GTK remembers recent files"
 msgstr "Si el GTK ha de recordar els fitxers recents"
 
-#: gtk/gtksettings.c:1107
+#: gtk/gtksettings.c:1128
 msgid "Long press time"
 msgstr "Temps d'una premuda llarga"
 
-#: gtk/gtksettings.c:1108
+#: gtk/gtksettings.c:1129
 msgid ""
-"Time for a button/touch press to be considered a long press (in "
-"milliseconds)"
+"Time for a button/touch press to be considered a long press (in milliseconds)"
 msgstr ""
 "Temps perquè la premuda d'un botó/un gest sigui considerada una premuda "
 "llarga (en mil·lisegons)"
 
-#: gtk/gtksettings.c:1123 gtk/gtksettings.c:1124
+#: gtk/gtksettings.c:1144 gtk/gtksettings.c:1145
 msgid "Whether to show cursor in text"
 msgstr "Si es mostrarà el cursor al text"
 
-#: gtk/gtksettings.c:1139 gtk/gtksettings.c:1140
+#: gtk/gtksettings.c:1160 gtk/gtksettings.c:1161
 msgid "Whether to use overlay scrollbars"
 msgstr "Si s'han de superposar les barres de desplaçament"
 
@@ -6052,8 +6074,7 @@ msgstr "Modificadors mnemònics"
 
 #: gtk/gtkshortcutcontroller.c:573
 msgid "The modifiers to be pressed to allow mnemonics activation"
-msgstr ""
-"Els modificadors a prémer per a permetre l'activació dels mnemotècnics"
+msgstr "Els modificadors a prémer per a permetre l'activació dels mnemotècnics"
 
 #: gtk/gtkshortcutcontroller.c:586
 msgid "A list model to take shortcuts from"
@@ -6221,19 +6242,19 @@ msgstr "Desplaçament de la divisió"
 msgid "Maximum size of slice"
 msgstr "Mida màxima de la divisió"
 
-#: gtk/gtksortlistmodel.c:782
+#: gtk/gtksortlistmodel.c:789
 msgid "Sort items incrementally"
 msgstr "Ordena els elements incrementalment"
 
-#: gtk/gtksortlistmodel.c:794
+#: gtk/gtksortlistmodel.c:801
 msgid "The model being sorted"
 msgstr "El model que s'està ordenant"
 
-#: gtk/gtksortlistmodel.c:806
+#: gtk/gtksortlistmodel.c:813
 msgid "Estimate of unsorted items remaining"
 msgstr "Estima els elements restants sense ordenar"
 
-#: gtk/gtksortlistmodel.c:818
+#: gtk/gtksortlistmodel.c:825
 msgid "The sorter for this model"
 msgstr "L'ordenador d'aquest model"
 
@@ -6279,8 +6300,7 @@ msgstr "Actualitza la política"
 
 #: gtk/gtkspinbutton.c:450
 msgid ""
-"Whether the spin button should update always, or only when the value is "
-"legal"
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Si el botó de rotació s'hauria d'actualitzar sempre, o només quan el valor "
 "és legal"
@@ -6330,54 +6350,54 @@ msgid ""
 "If set, an underline in the title indicates the next character should be "
 "used for the mnemonic accelerator key"
 msgstr ""
-"Si s'estableix un subratllat en el títol indica que el caràcter següent s'ha"
-" d'utilitzar per a la tecla acceleradora mnemotècnica"
+"Si s'estableix un subratllat en el títol indica que el caràcter següent s'ha "
+"d'utilitzar per a la tecla acceleradora mnemotècnica"
 
-#: gtk/gtkstack.c:820
+#: gtk/gtkstack.c:821
 msgid "Horizontally homogeneous"
 msgstr "Homogeni horitzontalment"
 
-#: gtk/gtkstack.c:820
+#: gtk/gtkstack.c:821
 msgid "Horizontally homogeneous sizing"
 msgstr "Dimensionat homogeni horitzontal"
 
-#: gtk/gtkstack.c:830
+#: gtk/gtkstack.c:831
 msgid "Vertically homogeneous"
 msgstr "Homogeni verticalment"
 
-#: gtk/gtkstack.c:830
+#: gtk/gtkstack.c:831
 msgid "Vertically homogeneous sizing"
 msgstr "Dimensionat homogeni vertical"
 
-#: gtk/gtkstack.c:840
+#: gtk/gtkstack.c:841
 msgid "Visible child"
 msgstr "Fill visible"
 
-#: gtk/gtkstack.c:840
+#: gtk/gtkstack.c:841
 msgid "The widget currently visible in the stack"
 msgstr "El giny de la pila visible actualment"
 
-#: gtk/gtkstack.c:850
+#: gtk/gtkstack.c:851
 msgid "Name of visible child"
 msgstr "Nom del fill visible"
 
-#: gtk/gtkstack.c:850
+#: gtk/gtkstack.c:851
 msgid "The name of the widget currently visible in the stack"
 msgstr "El nom del giny de la pila actualment visible"
 
-#: gtk/gtkstack.c:880
+#: gtk/gtkstack.c:881
 msgid "Transition running"
 msgstr "Transició en execució"
 
-#: gtk/gtkstack.c:880
+#: gtk/gtkstack.c:881
 msgid "Whether or not the transition is currently running"
 msgstr "Si s'està executant la transició"
 
-#: gtk/gtkstack.c:890
+#: gtk/gtkstack.c:891
 msgid "Interpolate size"
 msgstr "Mida de la interpolació"
 
-#: gtk/gtkstack.c:890
+#: gtk/gtkstack.c:891
 msgid ""
 "Whether or not the size should smoothly change when changing between "
 "differently sized children"
@@ -6385,12 +6405,12 @@ msgstr ""
 "Si la mida ha de canviar suaument o no en canviar entre fills de diferent "
 "mida"
 
-#: gtk/gtkstack.c:900
+#: gtk/gtkstack.c:901
 msgid "A selection model with the stacks pages"
 msgstr "Un model de selecció amb les pàgines apilades"
 
-#: gtk/gtkstacksidebar.c:369 gtk/gtkstackswitcher.c:551
-#: gtk/gtkstackswitcher.c:552
+#: gtk/gtkstacksidebar.c:369 gtk/gtkstackswitcher.c:553
+#: gtk/gtkstackswitcher.c:554
 msgid "Stack"
 msgstr "Pila"
 
@@ -6423,7 +6443,7 @@ msgstr "Cerca"
 msgid "The search term"
 msgstr "El terme de cerca"
 
-#: gtk/gtkstylecontext.c:140
+#: gtk/gtkstylecontext.c:125
 msgid "The associated GdkDisplay"
 msgstr "El GdkDisplay associat"
 
@@ -6563,11 +6583,11 @@ msgstr "Alçària completa del fons"
 
 #: gtk/gtktexttag.c:264
 msgid ""
-"Whether the background color fills the entire line height or only the height"
-" of the tagged characters"
+"Whether the background color fills the entire line height or only the height "
+"of the tagged characters"
 msgstr ""
-"Si el color de fons omple l'alçada de la línia sencera o només l'alçada dels"
-" caràcters marcats"
+"Si el color de fons omple l'alçada de la línia sencera o només l'alçada dels "
+"caràcters marcats"
 
 #: gtk/gtktexttag.c:289
 msgid "Foreground RGBA"
@@ -6612,15 +6632,15 @@ msgstr "Mida del tipus de lletra en unitats Pango"
 
 #: gtk/gtktexttag.c:446
 msgid ""
-"Font size as a scale factor relative to the default font size. This properly"
-" adapts to theme changes etc. so is recommended. Pango predefines some "
-"scales such as PANGO_SCALE_X_LARGE"
+"Font size as a scale factor relative to the default font size. This properly "
+"adapts to theme changes etc. so is recommended. Pango predefines some scales "
+"such as PANGO_SCALE_X_LARGE"
 msgstr ""
 "Mida del tipus de lletrat com a un factor relatiu a la mida de la font per "
 "defecte. Això s'adapta pròpiament a canvis de tema, etc., per tant es "
 "recomana. El Pango predefineix algunes escales com ara «PANGO_SCALE_X_LARGE»"
 
-#: gtk/gtktexttag.c:476 gtk/gtktextview.c:917
+#: gtk/gtktexttag.c:476 gtk/gtktextview.c:923
 msgid "Left, right, or center justification"
 msgstr "Justificació a l'esquerra, dreta, o centre"
 
@@ -6637,7 +6657,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Marge esquerre"
 
-#: gtk/gtktexttag.c:509 gtk/gtktextview.c:937
+#: gtk/gtktexttag.c:509 gtk/gtktextview.c:943
 msgid "Width of the left margin in pixels"
 msgstr "Amplada del marge esquerre en píxels"
 
@@ -6645,15 +6665,15 @@ msgstr "Amplada del marge esquerre en píxels"
 msgid "Right margin"
 msgstr "Marge dret"
 
-#: gtk/gtktexttag.c:524 gtk/gtktextview.c:956
+#: gtk/gtktexttag.c:524 gtk/gtktextview.c:962
 msgid "Width of the right margin in pixels"
 msgstr "Amplada del marge dret en píxels"
 
-#: gtk/gtktexttag.c:538 gtk/gtktextview.c:1006
+#: gtk/gtktexttag.c:538 gtk/gtktextview.c:1012
 msgid "Indent"
 msgstr "Sagnat"
 
-#: gtk/gtktexttag.c:539 gtk/gtktextview.c:1007
+#: gtk/gtktexttag.c:539 gtk/gtktextview.c:1013
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Quantitat a sagnar el paràgraf, en píxels"
 
@@ -6662,14 +6682,14 @@ msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in Pango units"
 msgstr ""
-"Desplaçament del text per sobre de la línia de base (per sota de la línia de"
-" base si l'elevació és negativa) en unitats del Pango"
+"Desplaçament del text per sobre de la línia de base (per sota de la línia de "
+"base si l'elevació és negativa) en unitats del Pango"
 
 #: gtk/gtktexttag.c:570
 msgid "Pixels above lines"
 msgstr "Píxels per sobre les línies"
 
-#: gtk/gtktexttag.c:571 gtk/gtktextview.c:851
+#: gtk/gtktexttag.c:571 gtk/gtktextview.c:857
 msgid "Pixels of blank space above paragraphs"
 msgstr "Píxels d'espais en blanc per sobre els paràgrafs"
 
@@ -6677,7 +6697,7 @@ msgstr "Píxels d'espais en blanc per sobre els paràgrafs"
 msgid "Pixels below lines"
 msgstr "Píxels per sota les línies"
 
-#: gtk/gtktexttag.c:586 gtk/gtktextview.c:864
+#: gtk/gtktexttag.c:586 gtk/gtktextview.c:870
 msgid "Pixels of blank space below paragraphs"
 msgstr "Píxels d'espais en blanc per sota els paràgrafs"
 
@@ -6685,7 +6705,7 @@ msgstr "Píxels d'espais en blanc per sota els paràgrafs"
 msgid "Pixels inside wrap"
 msgstr "Píxels dins l'ajustament"
 
-#: gtk/gtktexttag.c:601 gtk/gtktextview.c:877
+#: gtk/gtktexttag.c:601 gtk/gtktextview.c:883
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Píxels d'espais en blanc entre línies ajustades a un paràgraf"
 
@@ -6729,14 +6749,14 @@ msgstr "Ratllat RGBA"
 msgid "Color of strikethrough for this text"
 msgstr "Color del ratllat per a aquest text"
 
-#: gtk/gtktexttag.c:722 gtk/gtktextview.c:903
+#: gtk/gtktexttag.c:722 gtk/gtktextview.c:909
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Si no s'ha d'ajustar mai les línies, o fer-ho en els límits de les paraules "
 "o caràcters"
 
-#: gtk/gtktexttag.c:736 gtk/gtktextview.c:1020
+#: gtk/gtktexttag.c:736 gtk/gtktextview.c:1026
 msgid "Custom tabs for this text"
 msgstr "Pestanyes personalitzades per a aquest text"
 
@@ -6830,7 +6850,7 @@ msgstr "Frase"
 
 #: gtk/gtktexttag.c:911
 msgid "Whether this is a sentence."
-msgstr "Si això és una frase"
+msgstr "Si això és una frase."
 
 #: gtk/gtktexttag.c:927
 msgid "Margin Accumulates"
@@ -7044,79 +7064,79 @@ msgstr "Frase definida"
 msgid "Whether this tag represents a single sentence"
 msgstr "Si aquesta etiqueta representa una única frase"
 
-#: gtk/gtktextview.c:850
+#: gtk/gtktextview.c:856
 msgid "Pixels Above Lines"
 msgstr "Píxels per sobre les línies"
 
-#: gtk/gtktextview.c:863
+#: gtk/gtktextview.c:869
 msgid "Pixels Below Lines"
 msgstr "Píxels per sota les línies"
 
-#: gtk/gtktextview.c:876
+#: gtk/gtktextview.c:882
 msgid "Pixels Inside Wrap"
 msgstr "Píxels dins de l'ajust"
 
-#: gtk/gtktextview.c:902
+#: gtk/gtktextview.c:908
 msgid "Wrap Mode"
 msgstr "Mode d'ajust"
 
-#: gtk/gtktextview.c:936
+#: gtk/gtktextview.c:942
 msgid "Left Margin"
 msgstr "Marge esquerre"
 
-#: gtk/gtktextview.c:955
+#: gtk/gtktextview.c:961
 msgid "Right Margin"
 msgstr "Marge dret"
 
-#: gtk/gtktextview.c:974
+#: gtk/gtktextview.c:980
 msgid "Top Margin"
 msgstr "Marge superior"
 
-#: gtk/gtktextview.c:975
+#: gtk/gtktextview.c:981
 msgid "Height of the top margin in pixels"
 msgstr "Alçada del marge superior en píxels"
 
-#: gtk/gtktextview.c:993
+#: gtk/gtktextview.c:999
 msgid "Bottom Margin"
 msgstr "Marge inferior"
 
-#: gtk/gtktextview.c:994
+#: gtk/gtktextview.c:1000
 msgid "Height of the bottom margin in pixels"
 msgstr "Alçada del marge inferior en píxels"
 
-#: gtk/gtktextview.c:1032
+#: gtk/gtktextview.c:1038
 msgid "Cursor Visible"
 msgstr "Cursor visible"
 
-#: gtk/gtktextview.c:1033
+#: gtk/gtktextview.c:1039
 msgid "If the insertion cursor is shown"
 msgstr "Si es mostra el cursor d'inserció"
 
-#: gtk/gtktextview.c:1045
+#: gtk/gtktextview.c:1051
 msgid "Buffer"
 msgstr "Text a memòria intermèdia"
 
-#: gtk/gtktextview.c:1046
+#: gtk/gtktextview.c:1052
 msgid "The buffer which is displayed"
 msgstr "El text a la memòria intermèdia que es mostrarà"
 
-#: gtk/gtktextview.c:1059
+#: gtk/gtktextview.c:1065
 msgid "Whether entered text overwrites existing contents"
 msgstr "Si el text entrat sobreescriu l'existent"
 
-#: gtk/gtktextview.c:1071
+#: gtk/gtktextview.c:1077
 msgid "Accepts tab"
 msgstr "Accepta tabuladors"
 
-#: gtk/gtktextview.c:1072
+#: gtk/gtktextview.c:1078
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Si la tecla de tabulació entra un caràcter de tabulació"
 
-#: gtk/gtktextview.c:1139
+#: gtk/gtktextview.c:1145
 msgid "Monospace"
 msgstr "Monospace"
 
-#: gtk/gtktextview.c:1140
+#: gtk/gtktextview.c:1146
 msgid "Whether to use a monospace font"
 msgstr "Si s'ha d'utilitzar el tipus de lletra monospace"
 
@@ -7156,8 +7176,7 @@ msgstr "Sagna sense l'expansor"
 msgid ""
 "If the TreeExpander should indent the child if no expander-icon is shown"
 msgstr ""
-"Si el TreeExpander ha de sagnat el fill si no es mostra cap icona "
-"d'expansor"
+"Si el TreeExpander ha de sagnat el fill si no es mostra cap icona d'expansor"
 
 #: gtk/gtktreelistmodel.c:690
 msgid "autoexpand"
@@ -7373,8 +7392,8 @@ msgstr ""
 #: gtk/gtktreeview.c:1145
 msgid "The column in the model containing the tooltip texts for the rows"
 msgstr ""
-"La columna del model que conté els texts dels indicadors de funció per a les"
-" files"
+"La columna del model que conté els texts dels indicadors de funció per a les "
+"files"
 
 #: gtk/gtktreeviewcolumn.c:277
 msgid "Whether to display the column"
@@ -7542,8 +7561,8 @@ msgstr "Sol·licitud d'amplada"
 
 #: gtk/gtkwidget.c:1231
 msgid ""
-"Override for width request of the widget, or -1 if natural request should be"
-" used"
+"Override for width request of the widget, or -1 if natural request should be "
+"used"
 msgstr ""
 "Substitueix per sol·licitud d'amplada del giny, o -1 si la sol·licitud "
 "natural hagués de ser utilitzada"
@@ -7766,155 +7785,162 @@ msgstr ""
 msgid "Observed widget"
 msgstr "Giny observat"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:753
 msgid "Window Title"
 msgstr "Títol de finestra"
 
-#: gtk/gtkwindow.c:758
+#: gtk/gtkwindow.c:754
 msgid "The title of the window"
 msgstr "El títol de finestra"
 
-#: gtk/gtkwindow.c:769
+#: gtk/gtkwindow.c:765
 msgid "Startup ID"
 msgstr "Id. d'inici"
 
-#: gtk/gtkwindow.c:770
+#: gtk/gtkwindow.c:766
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "Identificador únic de la finestra utilitzada per a la notificació de l'inici"
 
-#: gtk/gtkwindow.c:782
+#: gtk/gtkwindow.c:778
 msgid "If TRUE, users can resize the window"
 msgstr "Si és «TRUE» (cert), els usuaris podran redimensionar la finestra"
 
-#: gtk/gtkwindow.c:794
+#: gtk/gtkwindow.c:790
 msgid ""
-"If TRUE, the window is modal (other windows are not usable while this one is"
-" up)"
+"If TRUE, the window is modal (other windows are not usable while this one is "
+"up)"
 msgstr ""
 "Si és «TRUE» (cert), la finestra serà modal (les altres finestres no es "
 "podran utilitzar mentre aquesta estigui oberta)"
 
-#: gtk/gtkwindow.c:805
+#: gtk/gtkwindow.c:801
 msgid "Default Width"
 msgstr "Amplada per defecte"
 
-#: gtk/gtkwindow.c:806
+#: gtk/gtkwindow.c:802
 msgid "The default width of the window"
 msgstr "L'amplada per defecte de la finestra"
 
-#: gtk/gtkwindow.c:818
+#: gtk/gtkwindow.c:814
 msgid "Default Height"
 msgstr "Alçària per defecte"
 
-#: gtk/gtkwindow.c:819
+#: gtk/gtkwindow.c:815
 msgid "The default height of the window"
 msgstr "L'alçada per defecte de la finestra"
 
-#: gtk/gtkwindow.c:831
+#: gtk/gtkwindow.c:827
 msgid "Destroy with Parent"
 msgstr "Destrueix amb el pare"
 
-#: gtk/gtkwindow.c:832
+#: gtk/gtkwindow.c:828
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Si s'hauria de destruir aquesta finestra quan es destrueixi el pare"
 
-#: gtk/gtkwindow.c:843
+#: gtk/gtkwindow.c:839
 msgid "Hide on close"
 msgstr "Amaga en tancar"
 
-#: gtk/gtkwindow.c:844
+#: gtk/gtkwindow.c:840
 msgid "If this window should be hidden when the user clicks the close button"
 msgstr ""
-"Si s'hauria d'amagar aquesta finestra quan l'usuari fa clic al botó de "
-"tancar"
+"Si s'hauria d'amagar aquesta finestra quan l'usuari fa clic al botó de tancar"
 
-#: gtk/gtkwindow.c:858
+#: gtk/gtkwindow.c:854
 msgid "Mnemonics Visible"
 msgstr "Mnemònics visibles"
 
-#: gtk/gtkwindow.c:859
+#: gtk/gtkwindow.c:855
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Si els mnemònics són actualment visibles en aquesta finestra"
 
-#: gtk/gtkwindow.c:873
+#: gtk/gtkwindow.c:869
 msgid "Focus Visible"
 msgstr "Focus visible"
 
-#: gtk/gtkwindow.c:874
+#: gtk/gtkwindow.c:870
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Si els rectangles de focus són visibles en aquesta finestra"
 
-#: gtk/gtkwindow.c:888
+#: gtk/gtkwindow.c:884
 msgid "Name of the themed icon for this window"
 msgstr "Nom de la icona del tema per a aquesta finestra"
 
-#: gtk/gtkwindow.c:900
+#: gtk/gtkwindow.c:896
 msgid "The display that will display this window"
 msgstr "La pantalla que mostrarà aquesta finestra"
 
-#: gtk/gtkwindow.c:911
+#: gtk/gtkwindow.c:907
 msgid "Is Active"
 msgstr "Està activa"
 
-#: gtk/gtkwindow.c:912
+#: gtk/gtkwindow.c:908
 msgid "Whether the toplevel is the current active window"
 msgstr "Si el giny de nivell superior és la finestra activa actualment"
 
 # NOTE: the window (josep)
-#: gtk/gtkwindow.c:923
+#: gtk/gtkwindow.c:919
 msgid "Decorated"
 msgstr "Decorada"
 
-#: gtk/gtkwindow.c:924
+#: gtk/gtkwindow.c:920
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Si el gestor de finestres ha de decorar la finestra"
 
-#: gtk/gtkwindow.c:935
+#: gtk/gtkwindow.c:931
 msgid "Deletable"
 msgstr "Suprimible"
 
-#: gtk/gtkwindow.c:936
+#: gtk/gtkwindow.c:932
 msgid "Whether the window frame should have a close button"
 msgstr "Si el marc de la finestra ha de tenir un botó de tancar"
 
-#: gtk/gtkwindow.c:965
+#: gtk/gtkwindow.c:961
 msgid "Is Maximized"
 msgstr "Maximitzada"
 
-#: gtk/gtkwindow.c:966
+#: gtk/gtkwindow.c:962
 msgid "Whether the window is maximized"
 msgstr "Si la finestra està maximitzada"
 
-#: gtk/gtkwindow.c:983
+#: gtk/gtkwindow.c:979
 msgid "Is fullscreen"
 msgstr "Pantalla completa"
 
-#: gtk/gtkwindow.c:984
+#: gtk/gtkwindow.c:980
 msgid "Whether the window is fullscreen"
 msgstr "Si la finestra està en pantalla completa"
 
-#: gtk/gtkwindow.c:1003
+#: gtk/gtkwindow.c:999
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:1004
+#: gtk/gtkwindow.c:1000
 msgid "The GtkApplication for the window"
 msgstr "La GtkApplication per la finestra"
 
-#: gtk/gtkwindow.c:1027
+#: gtk/gtkwindow.c:1023
 msgid "Focus widget"
 msgstr "Giny amb focus"
 
-#: gtk/gtkwindow.c:1028
+#: gtk/gtkwindow.c:1024
 msgid "The focus widget"
 msgstr "El giny amb focus"
 
-#: gtk/gtkwindow.c:1054
+#: gtk/gtkwindow.c:1049
+msgid "Titlebar"
+msgstr "Barra de títol"
+
+#: gtk/gtkwindow.c:1050
+msgid "The titlebar widget"
+msgstr "El giny de la barra de títol"
+
+#: gtk/gtkwindow.c:1064
 msgid "Handle Menubar accels"
 msgstr "Gestiona els acceleradors de la barra de menús"
 
-#: gtk/gtkwindow.c:1055
+#: gtk/gtkwindow.c:1065
 msgid "Whether the window should handle F10"
 msgstr "Si la finestra ha de gestionar F10"
 
@@ -7944,8 +7970,8 @@ msgid "Paintable providing the picture"
 msgstr "Dibuixable proveint el dibuix"
 
 #: modules/media/gtkgstsink.c:699
-msgid "gl-context"
-msgstr "gl-context"
+msgid "GL context"
+msgstr "Context GL"
 
 #: modules/media/gtkgstsink.c:700
 msgid "GL context to use for rendering"
@@ -7959,3 +7985,5 @@ msgstr "Títol del perfil de color"
 msgid "The title of the color profile to use"
 msgstr "El títol del perfil de color a utilitzar"
 
+#~ msgid "gl-context"
+#~ msgstr "gl-context"
