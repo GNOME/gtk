@@ -1152,21 +1152,23 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
   if (display_win32->dummy_context_wgl.hdc == NULL)
     display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
 
-  /* No env vars set, do the regular GL initialization, first WGL and then EGL,
+  /*
+   * No env vars set, do the regular GL initialization, first WGL and then EGL,
    * as WGL is the more tried-and-tested configuration.
    */
 
-/*
- * Disable defaulting to EGL for now, since shaders need to be fixed for
- * usage against libANGLE EGL.  EGL is used more as a compatibility layer
- * on Windows rather than being a native citizen on Windows
- */
-#if 0
-  result = gdk_display_init_egl (display,
-                                 EGL_PLATFORM_ANGLE_ANGLE,
-                                 display_win32->dummy_context_wgl.hdc,
-                                 FALSE,
-                                 error);
+#ifdef HAVE_EGL
+  /*
+   * Disable defaulting to EGL for now, since shaders need to be fixed for
+   * usage against libANGLE EGL.  EGL is used more as a compatibility layer
+   * on Windows rather than being a native citizen on Windows
+   */
+  if (_gdk_debug_flags & GDK_DEBUG_GL_EGL)
+    result = gdk_display_init_egl (display,
+                                   EGL_PLATFORM_ANGLE_ANGLE,
+                                   display_win32->dummy_context_wgl.hdc,
+                                   FALSE,
+                                   error);
 #endif
 
   if (!result)
