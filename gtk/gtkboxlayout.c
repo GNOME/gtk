@@ -322,53 +322,49 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
   sizes = g_newa (GtkRequestedSize, nvis_children);
   extra_space = MAX (0, for_size - (nvis_children - 1) * spacing);
 
-  /* Retrieve desired size for visible children */
-  for (i = 0, child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      int min_opposite, nat_for_min;
-
-      if (!gtk_widget_should_layout (child))
-        continue;
-
-      gtk_widget_measure (child,
-                          self->orientation,
-                          -1,
-                          &sizes[i].minimum_size, &sizes[i].natural_size,
-                          NULL, NULL);
-      /* Don't just use the natural size as the max size,
-       * the natural size is the ideal size, not necessarily
-       * the maximum size.
-       * Also check the nat size for opposite min size.
-       */
-      gtk_widget_measure (child,
-                          OPPOSITE_ORIENTATION (self->orientation),
-                          -1,
-                          &min_opposite, NULL,
-                          NULL, NULL);
-      gtk_widget_measure (child,
-                          self->orientation,
-                          min_opposite,
-                          NULL, &nat_for_min,
-                          NULL, NULL);
-      sizes[i].natural_size = MAX (sizes[i].natural_size, nat_for_min);
-
-      children_minimum_size += sizes[i].minimum_size;
-      i += 1;
-    }
-
   if (self->homogeneous)
     {
-      /* We still need to run the above loop to populate the minimum sizes for
-       * children that aren't going to fill.
-       */
-
       size_given_to_child = extra_space / nvis_children;
       n_extra_widgets = extra_space % nvis_children;
     }
   else
     {
+      /* Retrieve desired size for visible children */
+      for (i = 0, child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
+        {
+          int min_opposite, nat_for_min;
+
+          if (!gtk_widget_should_layout (child))
+            continue;
+
+          gtk_widget_measure (child,
+                              self->orientation,
+                              -1,
+                              &sizes[i].minimum_size, &sizes[i].natural_size,
+                              NULL, NULL);
+          /* Don't just use the natural size as the max size,
+           * the natural size is the ideal size, not necessarily
+           * the maximum size.
+           * Also check the nat size for opposite min size.
+           */
+          gtk_widget_measure (child,
+                              OPPOSITE_ORIENTATION (self->orientation),
+                              -1,
+                              &min_opposite, NULL,
+                              NULL, NULL);
+          gtk_widget_measure (child,
+                              self->orientation,
+                              min_opposite,
+                              NULL, &nat_for_min,
+                              NULL, NULL);
+          sizes[i].natural_size = MAX (sizes[i].natural_size, nat_for_min);
+
+          children_minimum_size += sizes[i].minimum_size;
+          i += 1;
+        }
+
       /* Bring children up to size first */
       extra_space -= children_minimum_size;
       extra_space = MAX (0, extra_space);
