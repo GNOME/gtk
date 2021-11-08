@@ -425,14 +425,9 @@ set_source_actions_helper (GdkDrop       *drop,
   return actions;
 }
 
-/* Utility function to translate win32 screen coordinates to
- * client coordinates (i.e. relative to the surface origin)
- *
- * Note that input is expected to be:
- * a) NOT scaled by dpi_scale
- * b) NOT translated by the GDK screen offset (gdk_offset_x / y)
- *
- * This utility function preserves subpixel precision
+/* Utility function to translate screen coordinates to surface-relative
+ * coordinates. This routine only works with pixel values that aren't
+ * scaled by any GDK DPI scale factor.
  */
 static void
 unscaled_screen_to_client (GdkSurface* surface,
@@ -514,8 +509,8 @@ idroptarget_dragenter (LPDROPTARGET This,
                                               grfKeyState);
 
   set_data_object (&ctx->data_object, pDataObj);
-  pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
-  pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
+  pt_x = pt.x / drop_win32->scale;
+  pt_y = pt.y / drop_win32->scale;
 
   unscaled_screen_to_client (ctx->surface, pt.x, pt.y, &x, &y);
   x /= drop_win32->scale;
@@ -554,8 +549,8 @@ idroptarget_dragover (LPDROPTARGET This,
 {
   drop_target_context *ctx = (drop_target_context *) This;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
-  int pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
-  int pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
+  int pt_x = pt.x / drop_win32->scale;
+  int pt_y = pt.y / drop_win32->scale;
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
 
@@ -624,8 +619,6 @@ idroptarget_drop (LPDROPTARGET This,
 {
   drop_target_context *ctx = (drop_target_context *) This;
   GdkWin32Drop *drop_win32 = GDK_WIN32_DROP (ctx->drop);
-  int pt_x = pt.x / drop_win32->scale + _gdk_offset_x;
-  int pt_y = pt.y / drop_win32->scale + _gdk_offset_y;
   double x = 0.0;
   double y = 0.0;
   GdkDragAction dest_action;
