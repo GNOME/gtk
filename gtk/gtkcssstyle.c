@@ -513,31 +513,6 @@ gtk_css_style_compute_font_features (GtkCssStyle *style)
       break;
     }
 
-  switch (_gtk_css_font_variant_caps_value_get (style->font_variant->font_variant_caps))
-    {
-    case GTK_CSS_FONT_VARIANT_CAPS_SMALL_CAPS:
-      append_separated (&s, "smcp 1");
-      break;
-    case GTK_CSS_FONT_VARIANT_CAPS_ALL_SMALL_CAPS:
-      append_separated (&s, "c2sc 1, smcp 1");
-      break;
-    case GTK_CSS_FONT_VARIANT_CAPS_PETITE_CAPS:
-      append_separated (&s, "pcap 1");
-      break;
-    case GTK_CSS_FONT_VARIANT_CAPS_ALL_PETITE_CAPS:
-      append_separated (&s, "c2pc 1, pcap 1");
-      break;
-    case GTK_CSS_FONT_VARIANT_CAPS_UNICASE:
-      append_separated (&s, "unic 1");
-      break;
-    case GTK_CSS_FONT_VARIANT_CAPS_TITLING_CAPS:
-      append_separated (&s, "titl 1");
-      break;
-    case GTK_CSS_FONT_VARIANT_CAPS_NORMAL:
-    default:
-      break;
-    }
-
   numeric = _gtk_css_font_variant_numeric_value_get (style->font_variant->font_variant_numeric);
   if (numeric == GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL)
     {
@@ -674,6 +649,32 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
           attrs = add_pango_attr (attrs, pango_attr_line_height_new (height));
       }
    }
+
+  /* casing variants */
+  switch (_gtk_css_font_variant_caps_value_get (style->font_variant->font_variant_caps))
+    {
+    case GTK_CSS_FONT_VARIANT_CAPS_SMALL_CAPS:
+      attrs = add_pango_attr (attrs, pango_attr_variant_new (PANGO_VARIANT_SMALL_CAPS));
+      break;
+    case GTK_CSS_FONT_VARIANT_CAPS_ALL_SMALL_CAPS:
+      attrs = add_pango_attr (attrs, pango_attr_variant_new (PANGO_VARIANT_ALL_SMALL_CAPS));
+      break;
+    case GTK_CSS_FONT_VARIANT_CAPS_PETITE_CAPS:
+      attrs = add_pango_attr (attrs, pango_attr_variant_new (PANGO_VARIANT_PETITE_CAPS));
+      break;
+    case GTK_CSS_FONT_VARIANT_CAPS_ALL_PETITE_CAPS:
+      attrs = add_pango_attr (attrs, pango_attr_variant_new (PANGO_VARIANT_ALL_PETITE_CAPS));
+      break;
+    case GTK_CSS_FONT_VARIANT_CAPS_UNICASE:
+      attrs = add_pango_attr (attrs, pango_attr_variant_new (PANGO_VARIANT_UNICASE));
+      break;
+    case GTK_CSS_FONT_VARIANT_CAPS_TITLING_CAPS:
+      attrs = add_pango_attr (attrs, pango_attr_variant_new (PANGO_VARIANT_TITLE_CAPS));
+      break;
+    case GTK_CSS_FONT_VARIANT_CAPS_NORMAL:
+    default:
+      break;
+    }
 
   /* OpenType features */
   {

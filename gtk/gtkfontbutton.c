@@ -1,4 +1,4 @@
-/* 
+/*
  * GTK - The GIMP Toolkit
  * Copyright (C) 1998 David Abilleira Freijeiro <odaf@nexo.es>
  * All rights reserved.
@@ -22,7 +22,7 @@
  * Modified by the GTK+ Team and others 2003.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -121,7 +121,7 @@ enum
   LAST_SIGNAL
 };
 
-enum 
+enum
 {
   PROP_0,
   PROP_TITLE,
@@ -661,7 +661,7 @@ gtk_font_button_set_property (GObject      *object,
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (object);
 
-  switch (param_id) 
+  switch (param_id)
     {
     case GTK_FONT_CHOOSER_PROP_PREVIEW_TEXT:
       gtk_font_button_set_preview_text (font_button, g_value_get_string (value));
@@ -706,8 +706,8 @@ gtk_font_button_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (object);
-  
-  switch (param_id) 
+
+  switch (param_id)
     {
     case GTK_FONT_CHOOSER_PROP_PREVIEW_TEXT:
       g_value_set_string (value, gtk_font_button_get_preview_text (font_button));
@@ -774,7 +774,7 @@ GtkWidget *
 gtk_font_button_new_with_font (const char *fontname)
 {
   return g_object_new (GTK_TYPE_FONT_BUTTON, "font", fontname, NULL);
-} 
+}
 
 /**
  * gtk_font_button_set_title: (attributes org.gtk.Method.set_property=title)
@@ -784,7 +784,7 @@ gtk_font_button_new_with_font (const char *fontname)
  * Sets the title for the font chooser dialog.
  */
 void
-gtk_font_button_set_title (GtkFontButton *font_button, 
+gtk_font_button_set_title (GtkFontButton *font_button,
                            const char    *title)
 {
   char *old_title;
@@ -815,7 +815,7 @@ gtk_font_button_get_title (GtkFontButton *font_button)
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), NULL);
 
   return font_button->title;
-} 
+}
 
 /**
  * gtk_font_button_set_modal: (attributes org.gtk.Method.set_property=modal)
@@ -871,7 +871,7 @@ gtk_font_button_get_use_font (GtkFontButton *font_button)
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), FALSE);
 
   return font_button->use_font;
-} 
+}
 
 /**
  * gtk_font_button_set_use_font: (attributes org.gtk.Method.set_property=use-font)
@@ -889,7 +889,7 @@ gtk_font_button_set_use_font (GtkFontButton *font_button,
 
   use_font = (use_font != FALSE);
 
-  if (font_button->use_font != use_font) 
+  if (font_button->use_font != use_font)
     {
       font_button->use_font = use_font;
 
@@ -914,7 +914,7 @@ gtk_font_button_get_use_size (GtkFontButton *font_button)
   g_return_val_if_fail (GTK_IS_FONT_BUTTON (font_button), FALSE);
 
   return font_button->use_size;
-} 
+}
 
 /**
  * gtk_font_button_set_use_size: (attributes org.gtk.Method.set_property=use-size)
@@ -932,7 +932,7 @@ gtk_font_button_set_use_size (GtkFontButton *font_button,
   g_return_if_fail (GTK_IS_FONT_BUTTON (font_button));
 
   use_size = (use_size != FALSE);
-  if (font_button->use_size != use_size) 
+  if (font_button->use_size != use_size)
     {
       font_button->use_size = use_size;
 
@@ -966,11 +966,11 @@ gtk_font_button_clicked (GtkButton *button,
 {
   GtkFontChooser *font_dialog;
   GtkFontButton  *font_button = user_data;
-  
-  if (!font_button->font_dialog) 
+
+  if (!font_button->font_dialog)
     {
       GtkWidget *parent;
-      
+
       parent = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (font_button)));
 
       font_button->font_dialog = gtk_font_chooser_dialog_new (font_button->title, NULL);
@@ -1191,6 +1191,21 @@ pango_font_description_to_css (PangoFontDescription *desc,
           break;
         case PANGO_VARIANT_SMALL_CAPS:
           g_string_append (s, "font-variant: small-caps; ");
+          break;
+        case PANGO_VARIANT_ALL_SMALL_CAPS:
+          g_string_append (s, "font-variant: all-small-caps; ");
+          break;
+        case PANGO_VARIANT_PETITE_CAPS:
+          g_string_append (s, "font-variant: petite-caps; ");
+          break;
+        case PANGO_VARIANT_ALL_PETITE_CAPS:
+          g_string_append (s, "font-variant: all-petite-caps; ");
+          break;
+        case PANGO_VARIANT_UNICASE:
+          g_string_append (s, "font-variant: unicase; ");
+          break;
+        case PANGO_VARIANT_TITLE_CAPS:
+          g_string_append (s, "font-variant: titling-caps; ");
           break;
         default:
           break;

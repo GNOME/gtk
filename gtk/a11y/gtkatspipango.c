@@ -44,6 +44,16 @@ pango_variant_to_string (PangoVariant variant)
       return "normal";
     case PANGO_VARIANT_SMALL_CAPS:
       return "small_caps";
+    case PANGO_VARIANT_ALL_SMALL_CAPS:
+      return "all_small_caps";
+    case PANGO_VARIANT_PETITE_CAPS:
+      return "petite_caps";
+    case PANGO_VARIANT_ALL_PETITE_CAPS:
+      return "all_petite_caps";
+    case PANGO_VARIANT_UNICASE:
+      return "unicase";
+    case PANGO_VARIANT_TITLE_CAPS:
+      return "title_caps";
     default:
       g_assert_not_reached ();
     }
