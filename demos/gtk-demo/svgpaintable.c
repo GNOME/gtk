@@ -47,22 +47,24 @@ static int
 svg_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
   SvgPaintable *self = SVG_PAINTABLE (paintable);
-  RsvgDimensionData data;
+  double width;
 
-  rsvg_handle_get_dimensions (self->handle, &data);
+  if (!rsvg_handle_get_intrinsic_size_in_pixels (self->handle, &width, NULL))
+    return 0;
 
-  return data.width;
+  return ceil (width);
 }
 
 static int
 svg_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
   SvgPaintable *self = SVG_PAINTABLE (paintable);
-  RsvgDimensionData data;
+  double height;
 
-  rsvg_handle_get_dimensions (self->handle, &data);
+  if (!rsvg_handle_get_intrinsic_size_in_pixels (self->handle, NULL, &height))
+    return 0;
 
-  return data.height;
+  return ceil (height);
 }
 
 static void

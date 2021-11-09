@@ -140,7 +140,7 @@ if os_unix
   demos += files('pagesetup.c')
 endif
 
-librsvg_dep = dependency('librsvg-2.0', version: '>= 2.46.0', required: false)
+librsvg_dep = dependency('librsvg-2.0', version: '>= 2.52.0', required: false)
 
 if librsvg_dep.found()
   demos += files('paintable_svg.c')
