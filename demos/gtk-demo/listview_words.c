@@ -177,6 +177,15 @@ file_open_cb (GtkWidget     *button,
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (dialog));
 }
 
+static void
+listview_activate_cb (GtkListView *listview,
+                      guint        pos,
+                      gpointer     unused)
+{
+  gtk_fixed_item_selection_set_selected_position (GTK_FIXED_ITEM_SELECTION (gtk_list_view_get_model (listview)),
+                                                  pos);
+}
+
 GtkWidget *
 do_listview_words (GtkWidget *do_widget)
 {
@@ -185,6 +194,7 @@ do_listview_words (GtkWidget *do_widget)
       GtkWidget *header, *listview, *sw, *vbox, *search_entry, *open_button, *overlay;
       GtkFilterListModel *filter_model;
       GtkStringList *stringlist;
+      GtkFixedItemSelection *selection;
       GtkFilter *filter;
       GFile *file;
 
@@ -241,11 +251,15 @@ do_listview_words (GtkWidget *do_widget)
       gtk_widget_set_vexpand (sw, TRUE);
       gtk_overlay_set_child (GTK_OVERLAY (overlay), sw);
 
+      selection = gtk_fixed_item_selection_new (G_LIST_MODEL (filter_model));
+
       listview = gtk_list_view_new (
-          GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (filter_model))),
+          GTK_SELECTION_MODEL (selection),
           gtk_builder_list_item_factory_new_from_bytes (NULL,
               g_bytes_new_static (factory_text, strlen (factory_text))));
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
+      gtk_list_view_set_single_click_activate (GTK_LIST_VIEW (listview), TRUE);
+      g_signal_connect (listview, "activate", G_CALLBACK (listview_activate_cb), NULL);
 
       g_signal_connect (filter_model, "items-changed", G_CALLBACK (update_title_cb), progress);
       g_signal_connect (filter_model, "notify::pending", G_CALLBACK (update_title_cb), progress);
