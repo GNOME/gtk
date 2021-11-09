@@ -311,7 +311,7 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
   int child_minimum_baseline, child_natural_baseline;
   int n_extra_widgets = 0;
   int spacing;
-  gboolean have_baseline;
+  gboolean have_baseline = FALSE;
 
   count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
 
@@ -320,12 +320,51 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
 
   spacing = get_spacing (self, gtk_widget_get_css_node (widget));
   sizes = g_newa (GtkRequestedSize, nvis_children);
-  extra_space = MAX (0, for_size - (nvis_children - 1) * spacing);
+  g_assert ((nvis_children - 1) * spacing <= for_size);
+  extra_space = for_size - (nvis_children - 1) * spacing;
 
   if (self->homogeneous)
     {
       size_given_to_child = extra_space / nvis_children;
       n_extra_widgets = extra_space % nvis_children;
+
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
+        {
+          if (!gtk_widget_should_layout (child))
+            continue;
+
+          child_size = size_given_to_child;
+          if (n_extra_widgets)
+            {
+              child_size++;
+              n_extra_widgets--;
+            }
+
+          child_minimum_baseline = child_natural_baseline = -1;
+          /* Assign the child's position. */
+          gtk_widget_measure (child,
+                              OPPOSITE_ORIENTATION (self->orientation),
+                              child_size,
+                              &child_minimum, &child_natural,
+                              &child_minimum_baseline, &child_natural_baseline);
+
+          if (child_minimum_baseline >= 0)
+            {
+              have_baseline = TRUE;
+              computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
+              computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
+              computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
+              computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
+            }
+          else
+            {
+              computed_minimum = MAX (computed_minimum, child_minimum);
+              computed_natural = MAX (computed_natural, child_natural);
+            }
+        }
+
     }
   else
     {
@@ -360,14 +399,15 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                               NULL, &nat_for_min,
                               NULL, NULL);
           sizes[i].natural_size = MAX (sizes[i].natural_size, nat_for_min);
+          sizes[i].data = child;
 
           children_minimum_size += sizes[i].minimum_size;
           i += 1;
         }
 
       /* Bring children up to size first */
+      g_assert (children_minimum_size <= extra_space);
       extra_space -= children_minimum_size;
-      extra_space = MAX (0, extra_space);
       extra_space = gtk_distribute_natural_allocation (extra_space, nvis_children, sizes);
 
       /* Calculate space which hasn't distributed yet,
@@ -382,32 +422,12 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
         {
           size_given_to_child = 0;
         }
-    }
 
-  have_baseline = FALSE;
-  for (i = 0, child = _gtk_widget_get_first_child (widget);
-       child != NULL;
-       child = _gtk_widget_get_next_sibling (child))
-    {
-      if (!gtk_widget_should_layout (child))
-        continue;
-
-      /* Assign the child's size. */
-      if (self->homogeneous)
-        {
-          child_size = size_given_to_child;
-
-          if (n_extra_widgets > 0)
-            {
-              child_size++;
-              n_extra_widgets--;
-            }
-        }
-      else
+      for (i = 0; i < nvis_children; i++)
         {
           child_size = sizes[i].minimum_size;
 
-          if (gtk_widget_compute_expand (child, self->orientation))
+          if (gtk_widget_compute_expand (sizes[i].data, self->orientation))
             {
               child_size += size_given_to_child;
 
@@ -417,30 +437,29 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                   n_extra_widgets--;
                 }
             }
-        }
 
-      child_minimum_baseline = child_natural_baseline = -1;
-      /* Assign the child's position. */
-      gtk_widget_measure (child,
-                          OPPOSITE_ORIENTATION (self->orientation),
-                          child_size,
-                          &child_minimum, &child_natural,
-                          &child_minimum_baseline, &child_natural_baseline);
+          child_minimum_baseline = child_natural_baseline = -1;
+          /* Assign the child's position. */
+          gtk_widget_measure (sizes[i].data,
+                              OPPOSITE_ORIENTATION (self->orientation),
+                              child_size,
+                              &child_minimum, &child_natural,
+                              &child_minimum_baseline, &child_natural_baseline);
 
-      if (child_minimum_baseline >= 0)
-        {
-          have_baseline = TRUE;
-          computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
-          computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
-          computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
-          computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
+          if (child_minimum_baseline >= 0)
+            {
+              have_baseline = TRUE;
+              computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
+              computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
+              computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
+              computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
+            }
+          else
+            {
+              computed_minimum = MAX (computed_minimum, child_minimum);
+              computed_natural = MAX (computed_natural, child_natural);
+            }
         }
-      else
-        {
-          computed_minimum = MAX (computed_minimum, child_minimum);
-          computed_natural = MAX (computed_natural, child_natural);
-        }
-      i += 1;
     }
 
   if (have_baseline)
