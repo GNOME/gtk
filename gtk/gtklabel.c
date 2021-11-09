@@ -1174,6 +1174,7 @@ get_width_for_height (GtkLabel *self,
       /* Minimum width is as many line breaks as possible */
       layout = gtk_label_get_measuring_layout (self, NULL, MAX (minimum_default, 0));
       pango_layout_get_size (layout, minimum_width, NULL);
+      *minimum_width = MAX (*minimum_width, minimum_default);
 
       /* Natural width is natural width - or as wide as possible */
       layout = gtk_label_get_measuring_layout (self, layout, natural_default);
