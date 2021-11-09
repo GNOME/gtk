@@ -117,6 +117,7 @@
 #include <gtk/gtkexpander.h>
 #include <gtk/gtkexpression.h>
 #include <gtk/gtkfixed.h>
+#include <gtk/gtkfixeditemselection.h>
 #include <gtk/gtkfixedlayout.h>
 #include <gtk/gtkfilechooser.h>
 #include <gtk/gtkfilechooserdialog.h>
