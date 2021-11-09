@@ -4127,7 +4127,11 @@ tooltip.csd {
 // catch all extend :)
 
 %selected_items {
-  background-color: $selected_bg_color;
+  background-color: desaturate($selected_bg_color,100%);
+
+  &:focus-within {
+    background-color: $selected_bg_color;
+  }
 
   @at-root %nobg_selected_items, & {
     color: $selected_fg_color;
