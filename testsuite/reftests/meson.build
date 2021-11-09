@@ -506,6 +506,8 @@ testdata = [
   'unresolvable.css',
   'unresolvable.ref.ui',
   'unresolvable.ui',
+  'vbox-with-2-wrapping-labels-where-one-should-wrap.ref.ui',
+  'vbox-with-2-wrapping-labels-where-one-should-wrap.ui',
   'vbox-with-max-width-chars-label.ref.ui',
   'vbox-with-max-width-chars-label.ui',
   'window-border-width.ref.ui',

@@ -288,6 +288,64 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
   *natural = largest_nat;
 }
 
+static int
+distribute_remaining_size (GtkRequestedSize *sizes,
+                           gsize             n_sizes,
+                           GtkOrientation    orientation,
+                           int               available,
+                           int               min,
+                           int               max)
+{
+  int total_size = 0;
+  gsize i;
+
+  if (n_sizes == 0)
+    return available;
+
+  for (i = 0; i < n_sizes; i++)
+    {
+      gtk_widget_measure (sizes[i].data,
+                          orientation,
+                          min,
+                          &sizes[i].minimum_size, &sizes[i].natural_size,
+                          NULL, NULL);
+      total_size += sizes[i].minimum_size;
+    }
+
+  if (total_size <= available)
+    return available - total_size;
+
+  /* total_size > available happens when we last ran for values too big,
+   * rerun for the correct value min == max in that case */
+  while (min < max || total_size > available)
+    {
+      int test;
+
+      if (max == G_MAXINT)
+        test = min * 2;
+      else
+        test = (min + max) / 2;
+
+      total_size = 0;
+      for (i = 0; i < n_sizes; i++)
+        {
+          gtk_widget_measure (sizes[i].data,
+                              orientation,
+                              test,
+                              &sizes[i].minimum_size, &sizes[i].natural_size,
+                              NULL, NULL);
+          total_size += sizes[i].minimum_size;
+        }
+
+      if (total_size > available)
+        min = test + 1;
+      else
+        max = test;
+    }
+    
+  return available - total_size;
+}
+
 static void
 gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                                                GtkWidget    *widget,
@@ -305,8 +363,7 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
   int computed_minimum_below = 0, computed_natural_below = 0;
   int computed_minimum_baseline = -1, computed_natural_baseline = -1;
   GtkRequestedSize *sizes;
-  int extra_space, size_given_to_child, i;
-  int children_minimum_size = 0;
+  int available, size_given_to_child, i;
   int child_size, child_minimum, child_natural;
   int child_minimum_baseline, child_natural_baseline;
   int n_extra_widgets = 0;
@@ -321,12 +378,12 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
   spacing = get_spacing (self, gtk_widget_get_css_node (widget));
   sizes = g_newa (GtkRequestedSize, nvis_children);
   g_assert ((nvis_children - 1) * spacing <= for_size);
-  extra_space = for_size - (nvis_children - 1) * spacing;
+  available = for_size - (nvis_children - 1) * spacing;
 
   if (self->homogeneous)
     {
-      size_given_to_child = extra_space / nvis_children;
-      n_extra_widgets = extra_space % nvis_children;
+      size_given_to_child = available / nvis_children;
+      n_extra_widgets = available % nvis_children;
 
       for (child = _gtk_widget_get_first_child (widget);
            child != NULL;
@@ -364,70 +421,90 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
               computed_natural = MAX (computed_natural, child_natural);
             }
         }
-
     }
   else
     {
+      int min_size = 0, child_min_size;
+      int n_inconstant = 0;
+
       /* Retrieve desired size for visible children */
       for (i = 0, child = _gtk_widget_get_first_child (widget);
            child != NULL;
            child = _gtk_widget_get_next_sibling (child))
         {
-          int min_opposite, nat_for_min;
-
           if (!gtk_widget_should_layout (child))
             continue;
 
-          gtk_widget_measure (child,
-                              self->orientation,
-                              -1,
-                              &sizes[i].minimum_size, &sizes[i].natural_size,
-                              NULL, NULL);
-          /* Don't just use the natural size as the max size,
-           * the natural size is the ideal size, not necessarily
-           * the maximum size.
-           * Also check the nat size for opposite min size.
-           */
-          gtk_widget_measure (child,
-                              OPPOSITE_ORIENTATION (self->orientation),
-                              -1,
-                              &min_opposite, NULL,
-                              NULL, NULL);
-          gtk_widget_measure (child,
-                              self->orientation,
-                              min_opposite,
-                              NULL, &nat_for_min,
-                              NULL, NULL);
-          sizes[i].natural_size = MAX (sizes[i].natural_size, nat_for_min);
-          sizes[i].data = child;
-
-          children_minimum_size += sizes[i].minimum_size;
-          i += 1;
+          if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+            {
+              gtk_widget_measure (child,
+                                  self->orientation,
+                                  -1,
+                                  &sizes[i].minimum_size, &sizes[i].natural_size,
+                                  NULL, NULL);
+              sizes[i].data = child;
+              g_assert (available >= sizes[i].minimum_size);
+              available -= sizes[i].minimum_size;
+              i++;
+            }
+          else
+            {
+              gtk_widget_measure (child,
+                                  OPPOSITE_ORIENTATION (self->orientation),
+                                  -1,
+                                  &child_min_size, NULL,
+                                  NULL, NULL);
+              min_size = MAX (min_size, child_min_size);
+              n_inconstant++;
+              sizes[nvis_children - n_inconstant].data = child;
+            }
         }
 
+      available = distribute_remaining_size (sizes + nvis_children - n_inconstant,
+                                             n_inconstant,
+                                             self->orientation,
+                                             available,
+                                             min_size,
+                                             G_MAXINT);
+
       /* Bring children up to size first */
-      g_assert (children_minimum_size <= extra_space);
-      extra_space -= children_minimum_size;
-      extra_space = gtk_distribute_natural_allocation (extra_space, nvis_children, sizes);
+      available = gtk_distribute_natural_allocation (available, nvis_children, sizes);
 
       /* Calculate space which hasn't distributed yet,
        * and is available for expanding children.
        */
       if (nexpand_children > 0)
         {
-          size_given_to_child = extra_space / nexpand_children;
-          n_extra_widgets = extra_space % nexpand_children;
+          size_given_to_child = available / nexpand_children;
+          n_extra_widgets = available % nexpand_children;
         }
       else
         {
           size_given_to_child = 0;
         }
 
-      for (i = 0; i < nvis_children; i++)
+      i = 0;
+      n_inconstant = 0;
+      for (child = _gtk_widget_get_first_child (widget);
+           child != NULL;
+           child = _gtk_widget_get_next_sibling (child))
         {
-          child_size = sizes[i].minimum_size;
+          if (!gtk_widget_should_layout (child))
+            continue;
 
-          if (gtk_widget_compute_expand (sizes[i].data, self->orientation))
+          if (sizes[i].data == child)
+            {
+              child_size = sizes[i].minimum_size;
+              i++;
+            }
+          else
+            {
+              n_inconstant++;
+              g_assert (sizes[nvis_children - n_inconstant].data == child);
+              child_size = sizes[nvis_children - n_inconstant].minimum_size;
+            }
+
+          if (gtk_widget_compute_expand (child, self->orientation))
             {
               child_size += size_given_to_child;
 
@@ -440,7 +517,7 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
 
           child_minimum_baseline = child_natural_baseline = -1;
           /* Assign the child's position. */
-          gtk_widget_measure (sizes[i].data,
+          gtk_widget_measure (child,
                               OPPOSITE_ORIENTATION (self->orientation),
                               child_size,
                               &child_minimum, &child_natural,
