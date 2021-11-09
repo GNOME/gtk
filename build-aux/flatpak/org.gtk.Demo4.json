@@ -165,6 +165,21 @@
             ]
         },
         {
+            "name" : "pango",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "config-opts" : [
+                "--libdir=/app/lib"
+            ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/pango.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
             "name" : "gtk",
             "buildsystem" : "meson",
             "builddir" : true,
