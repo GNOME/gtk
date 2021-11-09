@@ -139,7 +139,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                        int              *minimum_baseline,
                                        int              *natural_baseline)
 {
-  const gboolean baselines_requested = (minimum_baseline != NULL || natural_baseline != NULL);
   SizeRequestCache *cache;
   int min_size = 0;
   int nat_size = 0;
@@ -361,7 +360,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           nat_size = adjusted_natural;
         }
 
-      if (baselines_requested && (min_baseline != -1 || nat_baseline != -1))
+      if (min_baseline != -1 || nat_baseline != -1)
 	{
 	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {

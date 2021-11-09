@@ -2923,7 +2923,7 @@ microphone-sensitivity-medium-symbolic</property>
     <property name="resizable">0</property>
     <property name="modal">1</property>
     <property name="text" translatable="1">Do something?</property>
-    <property name="secondary-text" translatable="1">If you do something,
+    <property name="secondary-text" translatable="1">If you don't do something,
 bad things might happen.</property>
     <property name="hide-on-close">1</property>
     <child type="action">
