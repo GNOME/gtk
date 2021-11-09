@@ -369,6 +369,8 @@ testdata = [
   'label-text-shadow-changes-modify-clip.ui',
   'label-width-chars-dont-shrink.ref.ui',
   'label-width-chars-dont-shrink.ui',
+  'label-wrap-width-chars.ref.ui',
+  'label-wrap-width-chars.ui',
   'label-wrapped-huge-max-width-chars.ref.ui',
   'label-wrapped-huge-max-width-chars.ui',
   # this seems to make assumptions on text positioning
