@@ -40,8 +40,17 @@ pango_variant_to_string (PangoVariant variant)
 {
   switch (variant)
     {
+#if PANGO_VERSION_CHECK(1,49,3)
+        case PANGO_VARIANT_UNICASE:
+        case PANGO_VARIANT_TITLE_CAPS:
+#endif
     case PANGO_VARIANT_NORMAL:
       return "normal";
+#if PANGO_VERSION_CHECK(1,49,3)
+        case PANGO_VARIANT_ALL_SMALL_CAPS:
+        case PANGO_VARIANT_PETITE_CAPS:
+        case PANGO_VARIANT_ALL_PETITE_CAPS:
+#endif
     case PANGO_VARIANT_SMALL_CAPS:
       return "small_caps";
     default:
