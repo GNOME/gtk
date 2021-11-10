@@ -178,7 +178,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
       else
         pos = MIN (1.0, _gtk_css_number_value_get (stop->offset, hradius) / hradius);
 
-      pos = MAX (pos, 0);
+      pos = MAX (pos, offset);
       step = (pos - offset) / (i - last);
       for (last = last + 1; last <= i; last++)
         {
