@@ -291,6 +291,9 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wundef',
     '-Wuninitialized',
     '-Wunused',
+  ]
+  
+  extra_warnings = [
     '-Werror=address',
     '-Werror=array-bounds',
     '-Werror=empty-body',
@@ -311,6 +314,16 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Werror=vla',
     '-Werror=write-strings',
   ]
+
+  if get_option('buildtype').startswith('debug')
+    foreach warning: extra_warnings
+      test_cflags += '-Werror=@0@'.format(warning)
+    endforeach
+  else
+    foreach warning: extra_warnings
+      test_cflags += '-W@0@'.format(warning)
+    endforeach
+  endif
 
   if cc.get_id() == 'gcc'
     test_cflags += ['-Wcast-align'] # This warns too much on clang
