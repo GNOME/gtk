@@ -2748,7 +2748,7 @@ _gtk_builder_get_template_type (GtkBuilder *builder)
  * Creates a closure to invoke the function called @function_name.
  *
  * This is using the create_closure() implementation of @builder's
- * [class@Gtk.BuilderScope].
+ * [iface@Gtk.BuilderScope].
  *
  * If no closure could be created, %NULL will be returned and @error
  * will be set.

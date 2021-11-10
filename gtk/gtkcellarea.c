@@ -24,10 +24,10 @@
  *
  * An abstract class for laying out GtkCellRenderers
  *
- * The `GtkCellArea` is an abstract class for `GtkCellLayout` widgets
- * (also referred to as "layouting widgets") to interface with an
- * arbitrary number of `GtkCellRenderer`s and interact with the user
- * for a given `GtkTreeModel` row.
+ * The `GtkCellArea` is an abstract class for [iface@Gtk.CellLayout]
+ * widgets (also referred to as "layouting widgets") to interface with
+ * an arbitrary number of [class@Gtk.CellRenderer]s and interact with the user
+ * for a given [iface@Gtk.TreeModel] row.
  *
  * The cell area handles events, focus navigation, drawing and
  * size requests and allocations for a given row of data.
@@ -979,7 +979,7 @@ gtk_cell_area_real_add (GtkCellArea         *area,
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
-static void      
+static void
 gtk_cell_area_real_remove (GtkCellArea         *area,
 			   GtkCellRenderer     *renderer)
 {
@@ -1727,8 +1727,8 @@ gtk_cell_area_foreach_alloc (GtkCellArea          *area,
   g_return_if_fail (cell_area != NULL);
   g_return_if_fail (callback != NULL);
 
-  GTK_CELL_AREA_GET_CLASS (area)->foreach_alloc (area, context, widget, 
-						 cell_area, background_area, 
+  GTK_CELL_AREA_GET_CLASS (area)->foreach_alloc (area, context, widget,
+						 cell_area, background_area,
 						 callback, callback_data);
 }
 
@@ -2018,7 +2018,7 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, context, widget, 
+  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, context, widget,
 						       minimum_width, natural_width);
 }
 
@@ -2090,7 +2090,7 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_height (area, context, widget, 
+  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_height (area, context, widget,
 							minimum_height, natural_height);
 }
 
@@ -3369,7 +3369,7 @@ gtk_cell_area_stop_editing (GtkCellArea *area,
       gtk_cell_renderer_stop_editing (priv->edited_cell, canceled);
 
       /* When editing is explicitly halted either
-       * the "editing-canceled" signal is emitted on the cell 
+       * the "editing-canceled" signal is emitted on the cell
        * renderer or the "editing-done" signal on the GtkCellEditable widget
        */
       if (!canceled)
@@ -3527,7 +3527,7 @@ _gtk_cell_area_set_cell_data_func_with_proxy (GtkCellArea           *area,
 
   /* Note we do not take a reference to the proxy, the proxy is a GtkCellLayout
    * that is forwarding its implementation to a delegate GtkCellArea therefore
-   * its life-cycle is longer than the area's life cycle. 
+   * its life-cycle is longer than the area's life cycle.
    */
   if (info)
     {

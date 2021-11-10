@@ -10375,7 +10375,7 @@ gtk_widget_get_allocated_baseline (GtkWidget *widget)
  * toplevel. The opacity value itself is not inherited by child
  * widgets (since that would make widgets deeper in the hierarchy
  * progressively more translucent). As a consequence, [class@Gtk.Popover]s
- * and other [class@Gtk.Native] widgets with their own surface will use their
+ * and other [iface@Gtk.Native] widgets with their own surface will use their
  * own opacity value, and thus by default appear non-translucent,
  * even if they are attached to a toplevel that is translucent.
  */
