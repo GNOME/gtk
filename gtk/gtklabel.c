@@ -1191,11 +1191,14 @@ get_width_for_height (GtkLabel *self,
       layout = gtk_label_get_measuring_layout (self, NULL, -1);
       pango_layout_get_size (layout, &max, NULL);
 
+      min = PANGO_PIXELS_CEIL (min);
+      max = PANGO_PIXELS_CEIL (max);
       while (min < max)
         {
           mid = (min + max) / 2;
-          layout = gtk_label_get_measuring_layout (self, layout, mid);
+          layout = gtk_label_get_measuring_layout (self, layout, mid * PANGO_SCALE);
           pango_layout_get_size (layout, &text_width, &text_height);
+          text_width = PANGO_PIXELS_CEIL (text_width);
           if (text_width > mid)
             min = mid = text_width;
           if (text_height > height)
@@ -1204,8 +1207,8 @@ get_width_for_height (GtkLabel *self,
             max = mid;
         }
 
-      *minimum_width = min;
-      *natural_width = min;
+      *minimum_width = min * PANGO_SCALE;
+      *natural_width = min * PANGO_SCALE;
     }
 
   g_object_unref (layout);
