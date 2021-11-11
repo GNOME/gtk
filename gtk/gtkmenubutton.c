@@ -57,19 +57,22 @@
  * # CSS nodes
  *
  * ```
- * menubutton
- * ╰── button.toggle
+ * menubutton.popup.toggle
+ * ╰── button.popup.toggle
  *     ╰── <content>
  *          ╰── [arrow]
  * ```
  *
- * `GtkMenuButton` has a single CSS node with name `menubutton`
- * which contains a `button` node with a `.toggle` style class.
+ * `GtkMenuButton` has a single CSS node with name `menubutton` with a `.popup`
+ * and a `.toggle` style classes.
  *
  * If the button contains an icon, it will have the `.image-button` style class,
  * if it contains text, it will have `.text-button` style class. If an arrow is
  * visible in addition to an icon, text or a custom child, it will also have
  * `.arrow-button` style class.
+ *
+ * It has a `button` subnode, which has exactly same style classes as the
+ * `menubutton` node.
  *
  * Inside the toggle button content, there is an `arrow` node for
  * the indicator, which will carry one of the `.none`, `.up`, `.down`,
@@ -77,8 +80,8 @@
  * the menu will appear in. The CSS is expected to provide a suitable
  * image for each of these cases using the `-gtk-icon-source` property.
  *
- * Optionally, the `menubutton` node can carry the `.circular` style class
- * to request a round appearance.
+ * Optionally, the `menubutton` node can carry the same style classes as
+ * `GtkButton`, e.g. `.circular` to request a round appearance.
  *
  * # Accessibility
  *
@@ -608,19 +611,19 @@ update_style_classes (GtkMenuButton *menu_button)
   gboolean has_arrow = gtk_widget_get_visible (menu_button->arrow_widget);
 
   if (has_only_arrow || has_icon)
-    gtk_widget_add_css_class (menu_button->button, "image-button");
+    gtk_widget_add_css_class (GTK_WIDGET (menu_button), "image-button");
   else
-    gtk_widget_remove_css_class (menu_button->button, "image-button");
+    gtk_widget_remove_css_class (GTK_WIDGET (menu_button), "image-button");
 
   if (has_label)
-    gtk_widget_add_css_class (menu_button->button, "text-button");
+    gtk_widget_add_css_class (GTK_WIDGET (menu_button), "text-button");
   else
-    gtk_widget_remove_css_class (menu_button->button, "text-button");
+    gtk_widget_remove_css_class (GTK_WIDGET (menu_button), "text-button");
 
   if (has_arrow && !has_only_arrow)
-    gtk_widget_add_css_class (menu_button->button, "arrow-button");
+    gtk_widget_add_css_class (GTK_WIDGET (menu_button), "arrow-button");
   else
-    gtk_widget_remove_css_class (menu_button->button, "arrow-button");
+    gtk_widget_remove_css_class (GTK_WIDGET (menu_button), "arrow-button");
 }
 
 static void
@@ -669,11 +672,16 @@ gtk_menu_button_init (GtkMenuButton *self)
   gtk_widget_set_sensitive (self->button, FALSE);
 
   gtk_widget_add_css_class (GTK_WIDGET (self), "popup");
+  gtk_widget_add_css_class (GTK_WIDGET (self), "toggle");
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (self->button),
                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY, self, NULL,
                                   GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, self, NULL,
                                   -1);
+
+  g_object_bind_property (self, "css-classes",
+                          self->button, "css-classes",
+                          G_BINDING_SYNC_CREATE);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
