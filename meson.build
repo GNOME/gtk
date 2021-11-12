@@ -16,6 +16,11 @@ toml_conf.set('VERSION', meson.project_version())
 
 gidocgen = find_program('gi-docgen', required: true)
 
+gidocgen_common_args = [
+  '--quiet',
+  '--no-namespace-dir',
+]
+
 subdir('glib/glib')
 subdir('glib/gmodule')
 subdir('glib/gobject')
