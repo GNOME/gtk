@@ -19,6 +19,7 @@ gidocgen = find_program('gi-docgen', required: true)
 gidocgen_common_args = [
   '--quiet',
   '--no-namespace-dir',
+  '--fatal-warnings',
 ]
 
 subdir('glib/glib')
