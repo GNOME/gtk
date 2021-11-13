@@ -774,6 +774,7 @@ send_change_events (GdkDragContext *context,
   GdkWin32DragContext *context_win32 = GDK_WIN32_DRAG_CONTEXT (context);
   POINT pt;
   POINT pt_client;
+  HMONITOR monitor = NULL;
   gboolean changed = FALSE;
   HWND hwnd = GDK_WINDOW_HWND (context->source_window);
   LPARAM lparam;
@@ -783,6 +784,24 @@ send_change_events (GdkDragContext *context,
 
   if (!API_CALL (GetCursorPos, (&pt)))
     return FALSE;
+
+  /* Move the DND IPC window to the monitor the cursor is currently on.
+     This esures that OLE2 DND works correctly even if the DPI awareness
+     isn't per-monitor.
+  */
+  monitor = MonitorFromPoint (pt, MONITOR_DEFAULTTONEAREST);
+  if (monitor != context_win32->last_monitor)
+    {
+      MONITORINFO mi;
+
+      mi.cbSize = sizeof(mi);
+      if (GetMonitorInfoW (monitor, &mi))
+        {
+          MoveWindow (hwnd, mi.rcWork.left, mi.rcWork.top, 1, 1, FALSE);
+        }
+
+      context_win32->last_monitor = monitor;
+    }
 
   pt_client = pt;
 
