@@ -122,6 +122,11 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
  * last item will be returned for the whole width, even if there are empty
  * cells.
  *
+ * It is also possible for the area to be empty (ie have 0 width and height).
+ * This can happen when the widget has queued a resize and no current
+ * allocation information is available for the position or when the position
+ * has been newly added to the model.
+ *
  * Returns: %TRUE on success or %FALSE if no position occupies the given offset.
  **/
 static guint
@@ -1524,8 +1529,8 @@ gtk_list_base_start_rubberband (GtkListBase *self,
 
   priv->rubberband->start_tracker = gtk_list_item_tracker_new (priv->item_manager);
   gtk_list_item_tracker_set_position (priv->item_manager, priv->rubberband->start_tracker, pos, 0, 0);
-  priv->rubberband->start_align_across = (double) (list_x - item_area.x) / item_area.width;
-  priv->rubberband->start_align_along = (double) (list_y - item_area.y) / item_area.height;
+  priv->rubberband->start_align_across = item_area.width ? (double) (list_x - item_area.x) / item_area.width : 0.5;
+  priv->rubberband->start_align_along = item_area.height ? (double) (list_y - item_area.y) / item_area.height : 0.5;
 
   priv->rubberband->pointer_x = x;
   priv->rubberband->pointer_y = y;

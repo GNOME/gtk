@@ -73,6 +73,7 @@ void                    gtk_list_item_manager_augment_node      (GtkRbTree      
                                                                  gpointer                right);
 gpointer                gtk_list_item_manager_get_root          (GtkListItemManager     *self);
 gpointer                gtk_list_item_manager_get_first         (GtkListItemManager     *self);
+gpointer                gtk_list_item_manager_get_last          (GtkListItemManager     *self);
 gpointer                gtk_list_item_manager_get_nth           (GtkListItemManager     *self,
                                                                  guint                   position,
                                                                  guint                  *offset);
@@ -80,6 +81,11 @@ guint                   gtk_list_item_manager_get_item_position (GtkListItemMana
                                                                  gpointer                item);
 gpointer                gtk_list_item_manager_get_item_augment  (GtkListItemManager     *self,
                                                                  gpointer                item);
+
+gpointer                gtk_list_item_manager_split_item        (GtkListItemManager     *self,
+                                                                 gpointer                item,
+                                                                 guint                   size);
+void                    gtk_list_item_manager_gc                (GtkListItemManager     *self);
 
 void                    gtk_list_item_manager_set_factory       (GtkListItemManager     *self,
                                                                  GtkListItemFactory     *factory);
