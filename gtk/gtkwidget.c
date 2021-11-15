@@ -2289,19 +2289,14 @@ _gtk_widget_cancel_sequence (GtkWidget        *widget,
                              GdkEventSequence *sequence)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  gboolean emulates_pointer;
   gboolean handled = FALSE;
-  GdkEventSequence *seq;
   GList *l;
-
-  emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
 
   for (l = priv->event_controllers; l; l = l->next)
     {
       GtkEventController *controller;
       GtkGesture *gesture;
 
-      seq = sequence;
       controller = l->data;
 
       if (!GTK_IS_GESTURE (controller))
@@ -2309,14 +2304,7 @@ _gtk_widget_cancel_sequence (GtkWidget        *widget,
 
       gesture = GTK_GESTURE (controller);
 
-      if (seq && emulates_pointer &&
-          !gtk_gesture_handles_sequence (gesture, seq))
-        seq = NULL;
-
-      if (!gtk_gesture_handles_sequence (gesture, seq))
-        continue;
-
-      handled |= _gtk_gesture_cancel_sequence (gesture, seq);
+      handled |= _gtk_gesture_cancel_sequence (gesture, sequence);
     }
 
   return handled;
