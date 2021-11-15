@@ -3810,7 +3810,7 @@ gtk_label_set_ellipsize (GtkLabel          *self,
  * See [method@Gtk.Label.set_ellipsize].
  *
  * Returns: `PangoEllipsizeMode`
- **/     
+ **/
 PangoEllipsizeMode
 gtk_label_get_ellipsize (GtkLabel *self)
 {
@@ -4962,8 +4962,8 @@ gtk_label_select_region  (GtkLabel *self,
 /**
  * gtk_label_get_selection_bounds:
  * @self: a `GtkLabel`
- * @start: (out): return location for start of selection, as a character offset
- * @end: (out): return location for end of selection, as a character offset
+ * @start: (out) (optional): return location for start of selection, as a character offset
+ * @end: (out) (optional): return location for end of selection, as a character offset
  *
  * Gets the selected range of characters in the label.
  *
