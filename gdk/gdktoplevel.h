@@ -115,6 +115,14 @@ typedef enum
   GDK_TOPLEVEL_STATE_LEFT_RESIZABLE   = 1 << 15
 } GdkToplevelState;
 
+/**
+ * GdkTitlebarGesture:
+ * @GDK_TITLEBAR_GESTURE_DOUBLE_CLICK:
+ * @GDK_TITLEBAR_GESTURE_RIGHT_CLICK:
+ * @GDK_TITLEBAR_GESTURE_MIDDLE_CLICK:
+ *
+ * Since: 4.4
+ */
 typedef enum
 {
   GDK_TITLEBAR_GESTURE_DOUBLE_CLICK   = 1,

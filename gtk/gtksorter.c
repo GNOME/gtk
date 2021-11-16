@@ -378,6 +378,8 @@ gtk_sorter_changed_with_keys (GtkSorter       *self,
  * `GtkOrdering` value.
  *
  * Returns: the corresponding `GtkOrdering`
+ *
+ * Since: 4.2
  **/
 GtkOrdering
 gtk_ordering_from_cmpfunc (int cmpfunc_result)

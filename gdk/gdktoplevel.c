@@ -727,6 +727,13 @@ gdk_toplevel_begin_move (GdkToplevel *toplevel,
                                                  timestamp);
 }
 
+/**
+ * gdk_toplevel_titlebar_gesture:
+ * @toplevel: a `GdkToplevel`
+ * @gesture: a `GdkTitlebarGesture`
+ *
+ * Since: 4.4
+ */
 gboolean
 gdk_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
                                GdkTitlebarGesture  gesture)
