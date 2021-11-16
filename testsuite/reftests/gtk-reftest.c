@@ -497,7 +497,10 @@ log_writer (GLogLevelFlags   log_level,
     }
 #endif
 
-  return g_log_writer_standard_streams (log_level, fields, n_fields, user_data);
+ if (!g_log_writer_default_would_drop (log_level, NULL))
+    return g_log_writer_standard_streams (log_level, fields, n_fields, user_data);
+
+  return G_LOG_WRITER_HANDLED;
 }
 
 int
