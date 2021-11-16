@@ -615,8 +615,7 @@ gtk_video_set_media_stream (GtkVideo       *self,
 
   if (self->media_stream)
     {
-      if (self->autoplay)
-        gtk_media_stream_pause (self->media_stream);
+      gtk_media_stream_pause (self->media_stream);
       g_signal_handlers_disconnect_by_func (self->media_stream,
                                             gtk_video_notify_cb,
                                             self);
