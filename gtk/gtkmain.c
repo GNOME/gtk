@@ -1345,14 +1345,26 @@ handle_pointing_event (GdkEvent *event)
   switch ((guint) type)
     {
     case GDK_LEAVE_NOTIFY:
+      if (gdk_crossing_event_get_mode (event) == GDK_CROSSING_GRAB)
+        {
+          GtkWidget *grab_widget;
+
+          grab_widget =
+            gtk_window_lookup_pointer_focus_implicit_grab (toplevel,
+                                                           device,
+                                                           sequence);
+          if (grab_widget)
+            set_widget_active_state (grab_widget, FALSE);
+        }
+
+      old_target = update_pointer_focus_state (toplevel, event, NULL);
+      gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, old_target, NULL,
+                                      event, gdk_crossing_event_get_mode (event), NULL);
+      break;
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
       old_target = update_pointer_focus_state (toplevel, event, NULL);
-      if (type == GDK_TOUCH_END || type == GDK_TOUCH_CANCEL)
-        set_widget_active_state (old_target, FALSE);
-      else if (type == GDK_LEAVE_NOTIFY)
-        gtk_synthesize_crossing_events (GTK_ROOT (toplevel), GTK_CROSSING_POINTER, old_target, NULL,
-                                        event, gdk_crossing_event_get_mode (event), NULL);
+      set_widget_active_state (old_target, FALSE);
       break;
     case GDK_DRAG_LEAVE:
       {
