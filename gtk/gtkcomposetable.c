@@ -588,8 +588,11 @@ gtk_compose_table_load_cache (const char *compose_file)
   if (!g_file_test (path, G_FILE_TEST_EXISTS))
     goto out_load_cache;
 
-  g_stat (compose_file, &original_buf);
   g_stat (path, &cache_buf);
+  g_lstat (compose_file, &original_buf);
+  if (original_buf.st_mtime > cache_buf.st_mtime)
+    goto out_load_cache;
+  g_stat (compose_file, &original_buf);
   if (original_buf.st_mtime > cache_buf.st_mtime)
     goto out_load_cache;
   if (!g_file_get_contents (path, &contents, &total_length, &error))
