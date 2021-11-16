@@ -37,10 +37,7 @@ typedef struct _GtkCellRendererAccel GtkCellRendererAccel;
  * @GTK_CELL_RENDERER_ACCEL_MODE_GTK: GTK accelerators mode
  * @GTK_CELL_RENDERER_ACCEL_MODE_OTHER: Other accelerator mode
  *
- * Determines if the edited accelerators are GTK accelerators. If
- * they are, consumed modifiers are suppressed, only accelerators
- * accepted by GTK are allowed, and the accelerators are rendered
- * in the same way as they are in menus.
+ * The available modes for [property@Gtk.CellRendererAccel:accel-mode].
  */
 typedef enum
 {
