@@ -228,7 +228,9 @@ endif
 # Use a subset of compiler flags
 demo_cflags = []
 foreach flag: common_cflags
-  if flag not in ['-Werror=missing-prototypes', '-Werror=missing-declarations', '-fvisibility=hidden']
+  if flag not in ['-Werror=missing-prototypes', '-Wmissing-prototypes',
+                  '-Werror=missing-declarations', '-Wmissing-declarations',
+                  '-fvisibility=hidden']
     demo_cflags += flag
   endif
 endforeach
