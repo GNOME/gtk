@@ -685,7 +685,7 @@ typedef enum {
  * @GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH: Prefer height-for-width geometry management
  * @GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT: Prefer width-for-height geometry management
  * @GTK_SIZE_REQUEST_CONSTANT_SIZE: Don’t trade height-for-width or width-for-height
- * 
+ *
  * Specifies a preference for height-for-width or
  * width-for-height geometry management.
  */
@@ -1139,7 +1139,7 @@ typedef enum {
  * @GTK_SYMBOLIC_COLOR_SUCCESS: Indication color for success
  *
  * The indexes of colors passed to symbolic color rendering, such as
- * [vfunc.GtkSymbolicPaintable.snapshot_symbolic].
+ * [vfunc@Gtk.SymbolicPaintable.snapshot_symbolic].
  *
  * More values may be added over time.
  *

@@ -146,6 +146,23 @@ void     gtk_editable_set_enable_undo      (GtkEditable *editable,
 
 /* api for implementations */
 
+/**
+ * GtkEditableProperties:
+ * @GTK_EDITABLE_PROP_TEXT: the property id for [property@Gtk.Editable:text]
+ * @GTK_EDITABLE_PROP_CURSOR_POSITION: the property id for [property@Gtk.Editable:cursor-position]
+ * @GTK_EDITABLE_PROP_SELECTION_BOUND: the property id for [property@Gtk.Editable:selection-bound]
+ * @GTK_EDITABLE_PROP_EDITABLE: the property id for [property@Gtk.Editable:editable]
+ * @GTK_EDITABLE_PROP_WIDTH_CHARS: the property id for [property@Gtk.Editable:width-chars]
+ * @GTK_EDITABLE_PROP_MAX_WIDTH_CHARS: the property id for [property@Gtk.Editable:max-width-chars]
+ * @GTK_EDITABLE_PROP_XALIGN: the property id for [property@Gtk.Editable:xalign]
+ * @GTK_EDITABLE_PROP_ENABLE_UNDO: the property id for [property@Gtk.Editable:enable-undo]
+ * @GTK_EDITABLE_NUM_PROPERTIES: the number of properties
+ *
+ * The identifiers for [iface@Gtk.Editable] properties.
+ *
+ * See [func@Gtk.Editable.install_properties] for details on how to
+ * implement the `GtkEditable` interface.
+ */
 typedef enum {
   GTK_EDITABLE_PROP_TEXT,
   GTK_EDITABLE_PROP_CURSOR_POSITION,
