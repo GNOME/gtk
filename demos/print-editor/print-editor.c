@@ -42,7 +42,7 @@ update_statusbar (void)
   const char *print_str;
 
   gtk_statusbar_pop (GTK_STATUSBAR (statusbar), 0);
-  
+
   gtk_text_buffer_get_iter_at_mark (buffer,
                                     &iter,
                                     gtk_text_buffer_get_insert (buffer));
@@ -56,7 +56,7 @@ update_statusbar (void)
       GtkPrintOperation *op = active_prints->data;
       print_str = gtk_print_operation_get_status_string (op);
     }
-  
+
   msg = g_strdup_printf ("%d, %d%s %s",
                          row, col,
 			 file_changed?" - Modified":"",
@@ -188,10 +188,10 @@ save_file (GFile *save_filename)
 					     "Error saving to file %s:\n%s",
 					     display_name,
 					     error->message);
-      
+
       g_signal_connect (error_dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
       gtk_widget_show (error_dialog);
-      
+
       g_error_free (error);
       g_object_unref (info);
     }
@@ -229,7 +229,7 @@ begin_print (GtkPrintOperation *operation,
   pango_font_description_free (desc);
 
   pango_layout_set_width (print_data->layout, width * PANGO_SCALE);
-  
+
   pango_layout_set_text (print_data->layout, print_data->text, -1);
 
   num_lines = pango_layout_get_line_count (print_data->layout);
@@ -241,7 +241,7 @@ begin_print (GtkPrintOperation *operation,
     {
       PangoRectangle ink_rect, logical_rect;
       double line_height;
-      
+
       layout_line = pango_layout_get_line (print_data->layout, line);
       pango_layout_line_get_extents (layout_line, &ink_rect, &logical_rect);
 
@@ -258,7 +258,7 @@ begin_print (GtkPrintOperation *operation,
 
   page_breaks = g_list_reverse (page_breaks);
   gtk_print_operation_set_n_pages (operation, g_list_length (page_breaks) + 1);
-  
+
   print_data->page_breaks = page_breaks;
 }
 
@@ -287,11 +287,11 @@ draw_page (GtkPrintOperation *operation,
     end = pango_layout_get_line_count (print_data->layout);
   else
     end = GPOINTER_TO_INT (pagebreak->data);
-    
+
   cr = gtk_print_context_get_cairo_context (context);
 
   cairo_set_source_rgb (cr, 0, 0, 0);
-  
+
   i = 0;
   start_pos = 0;
   iter = pango_layout_get_iter (print_data->layout);
@@ -307,12 +307,12 @@ draw_page (GtkPrintOperation *operation,
 
 	  pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
 	  baseline = pango_layout_iter_get_baseline (iter);
-	  
+
 	  if (i == start)
 	    start_pos = logical_rect.y / 1024.0;
-	  
+
 	  cairo_move_to (cr, logical_rect.x / 1024.0, baseline / 1024.0 - start_pos);
-	  
+
 	  pango_cairo_show_layout_line  (cr, line);
 	}
       i++;
@@ -383,9 +383,9 @@ print_done (GtkPrintOperation *op,
     {
 
       GtkWidget *error_dialog;
-      
+
       gtk_print_operation_get_error (op, &error);
-      
+
       error_dialog = gtk_message_dialog_new (GTK_WINDOW (main_window),
 					     GTK_DIALOG_DESTROY_WITH_PARENT,
 					     GTK_MESSAGE_ERROR,
@@ -405,13 +405,13 @@ print_done (GtkPrintOperation *op,
   g_free (print_data->text);
   g_free (print_data->font);
   g_free (print_data);
-  
+
   if (!gtk_print_operation_is_finished (op))
     {
       g_object_ref (op);
       active_prints = g_list_append (active_prints, op);
       update_statusbar ();
-      
+
       /* This ref is unref:ed when we get the final state change */
       g_signal_connect (op, "status_changed",
 			G_CALLBACK (status_changed_cb), NULL);
@@ -628,7 +628,7 @@ activate_about (GSimpleAction *action,
                           glib_micro_version);
   g_string_append_printf (sysinfo, "\tPango\t%s\n",
                           pango_version_string ());
-  g_string_append_printf (sysinfo, "\tGTK\t%d.%d.%d\n",
+  g_string_append_printf (sysinfo, "\tGTK \t%d.%d.%d\n",
                           gtk_get_major_version (),
                           gtk_get_minor_version (),
                           gtk_get_micro_version ());
