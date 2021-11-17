@@ -492,8 +492,17 @@ init_randr15 (GdkX11Screen *x11_screen)
 
       if (output_info->crtc)
         {
-          XRRCrtcInfo *crtc = XRRGetCrtcInfo (x11_screen->xdisplay, resources, output_info->crtc);
+          XRRCrtcInfo *crtc;
           int j;
+
+          gdk_x11_display_error_trap_push (display);
+          crtc = XRRGetCrtcInfo (x11_screen->xdisplay, resources,
+                                 output_info->crtc);
+          if (gdk_x11_display_error_trap_pop (display))
+            {
+              XRRFreeOutputInfo (output_info);
+              continue;
+            }
 
           for (j = 0; j < resources->nmode; j++)
             {
