@@ -133,7 +133,7 @@ gtk_text_buffer_set_text (buffer, "Hello, this is some text", -1);
 provider = gtk_css_provider_new ();
 gtk_css_provider_load_from_data (provider,
                                  "textview {"
-                                 " font: 15 serif;"
+                                 " font: 15px serif;"
                                  "  color: green;"
                                  "}",
                                  -1);
@@ -149,9 +149,9 @@ gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 30);
 tag = gtk_text_buffer_create_tag (buffer, "blue_foreground",
                                   "foreground", "blue",
                                   NULL);
-gtk_text_buffer_get_iter_at_offset (buffer, &amp;start, 7);
-gtk_text_buffer_get_iter_at_offset (buffer, &amp;end, 12);
-gtk_text_buffer_apply_tag (buffer, tag, &amp;start, &amp;end);
+gtk_text_buffer_get_iter_at_offset (buffer, &start, 7);
+gtk_text_buffer_get_iter_at_offset (buffer, &end, 12);
+gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
 ```
 
 The `gtk4-demo` application that comes with
