@@ -1201,7 +1201,7 @@ get_width_for_height (GtkLabel *self,
           text_width = PANGO_PIXELS_CEIL (text_width);
           if (text_width > mid)
             min = mid = text_width;
-          if (text_height > height)
+          else if (text_height > height)
             min = mid + 1;
           else
             max = mid;
