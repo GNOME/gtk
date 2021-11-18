@@ -839,6 +839,9 @@ gtk_picture_set_keep_aspect_ratio (GtkPicture *self,
     return;
 
   self->keep_aspect_ratio = keep_aspect_ratio;
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_KEEP_ASPECT_RATIO]);
 }
 
