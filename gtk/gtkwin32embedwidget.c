@@ -85,6 +85,7 @@ gtk_win32_embed_widget_init (GtkWin32EmbedWidget *embed_widget)
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gtk_container_set_resize_mode (GTK_CONTAINER (embed_widget), GTK_RESIZE_QUEUE);
 G_GNUC_END_IGNORE_DEPRECATIONS;
+  gtk_window_set_decorated (GTK_WINDOW (embed_widget), FALSE);
 }
 
 GtkWidget*
