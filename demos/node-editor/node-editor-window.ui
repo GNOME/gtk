@@ -161,9 +161,10 @@
     </child>
     <child>
       <object class="GtkPaned">
+        <property name="shrink-start-child">false</property>
         <property name="shrink-end-child">false</property>
         <property name="position">400</property>
-        <child>
+        <property name="start-child">
           <object class="GtkScrolledWindow">
             <property name="hscrollbar-policy">never</property>
             <property name="hexpand">1</property>
@@ -184,8 +185,8 @@
               </object>
             </child>
           </object>
-        </child>
-        <child>
+        </property>
+        <property name="end-child">
           <object class="GtkBox">
             <child>
               <object class="GtkScrolledWindow">
@@ -231,7 +232,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
   </template>
