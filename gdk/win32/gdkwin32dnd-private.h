@@ -55,6 +55,15 @@ struct _GdkWin32DragContext
   gint start_x;           /* Coordinates of the drag start, in GDK space */
   gint start_y;
   DWORD last_key_state;     /* Key state from last event */
+  HMONITOR last_monitor;  /* While dragging we keep track of the monitor the cursor
+                             is currently on. As the cursor moves between monitors,
+                             we move the invisible dnd ipc window to the top-left
+                             corner of the current monitor, because OLE2 does not
+                             work correctly if the source window and the dest window
+                             are on monitors with different scales (say one is 125%
+                             and the other 100%) and the drag-initiating application
+                             (effectively driving the DND) is not per-monitor DPI aware
+                           */
 
   /* Just like context->targets, but an array, and with format IDs
    * stored inside.
