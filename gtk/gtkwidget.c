@@ -3832,7 +3832,9 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
   /* Note that adjust_for_align removes any margins from the
    * allocated sizes and possibly limits them to the natural sizes */
 
-  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+  if (priv->halign == GTK_ALIGN_FILL ||
+      (priv->valign != GTK_ALIGN_FILL &&
+       gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH))
     {
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
                           allocation->height + priv->margin.top + priv->margin.bottom,
