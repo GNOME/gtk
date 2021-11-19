@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -362,7 +362,7 @@ enum_locale_proc (LPTSTR locale)
 
   return TRUE;
 }
-  
+
 #endif
 
 void
@@ -379,7 +379,7 @@ setlocale_initialization (void)
 #ifdef G_OS_WIN32
       /* If some of the POSIXish environment variables are set, set
        * the Win32 thread locale correspondingly.
-       */ 
+       */
       char *p = getenv ("LC_ALL");
       if (p == NULL)
         p = getenv ("LANG");
@@ -622,7 +622,7 @@ gtk_init_check (void)
  *
  * Call this function before using any other GTK functions in your GUI
  * applications.  It will initialize everything needed to operate the
- * toolkit and parses some standard command line options.
+ * toolkit.
  *
  * If you are using `GtkApplication`, you don't have to call gtk_init()
  * or gtk_init_check(); the `GApplication::startup` handler
@@ -847,7 +847,7 @@ gtk_main_sync (void)
   ClipboardStore store = { NULL, };
   GSList *displays, *l;
   GCancellable *cancel;
-  
+
   /* Try storing all clipboard data we have */
   displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
   if (displays == NULL)
@@ -875,12 +875,12 @@ gtk_main_sync (void)
 
   if (g_main_loop_is_running (store.store_loop))
     g_main_loop_run (store.store_loop);
-  
+
   g_cancellable_cancel (cancel);
   g_object_unref (cancel);
   g_clear_handle_id (&store.timeout_id, g_source_remove);
   g_clear_pointer (&store.store_loop, g_main_loop_unref);
-  
+
   /* Synchronize the recent manager singleton */
   _gtk_recent_manager_sync ();
 }
