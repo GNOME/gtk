@@ -3846,7 +3846,7 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                         &allocation->x,
                         &allocation->width);
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
-                          allocation->width,
+                          allocation->width + priv->margin.left + priv->margin.right,
                           &min_height, &natural_height, NULL, NULL);
       adjust_for_align (priv->valign,
                         natural_height - priv->margin.top - priv->margin.bottom,
@@ -3867,7 +3867,7 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                         &allocation->y,
                         &allocation->height);
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
-                          allocation->height,
+                          allocation->height + priv->margin.top + priv->margin.bottom,
                           &min_width, &natural_width, NULL, NULL);
       adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
                         natural_width - priv->margin.left - priv->margin.right,
