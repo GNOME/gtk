@@ -444,7 +444,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               }
 	    g_string_append_printf (s, " (hit cache: %s)\n",
 		                    found_in_cache ? "yes" : "no");
-            g_message ("%s", s->str);
+            g_printerr ("%s", s->str);
             g_string_free (s, TRUE);
 	    });
 }
