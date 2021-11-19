@@ -685,22 +685,6 @@ gdk_win32_surface_destroy (GdkSurface *window,
       gdk_win32_surface_set_transient_for (child, NULL);
     }
 
-#ifdef GDK_WIN32_ENABLE_EGL
-  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (window));
-
-  /* Get rid of any EGLSurfaces that we might have created */
-  if (surface->egl_surface != EGL_NO_SURFACE)
-    {
-      eglDestroySurface (display->egl_disp, surface->egl_surface);
-      surface->egl_surface = EGL_NO_SURFACE;
-    }
-  if (surface->egl_dummy_surface != EGL_NO_SURFACE)
-    {
-      eglDestroySurface (display->egl_disp, surface->egl_dummy_surface);
-      surface->egl_dummy_surface = EGL_NO_SURFACE;
-    }
-#endif
-
   /* Remove ourself from our transient owner */
   if (surface->transient_owner != NULL)
     {
@@ -5026,39 +5010,6 @@ gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
   iface->present = gdk_win32_drag_surface_present;
 }
 
-#ifdef GDK_WIN32_ENABLE_EGL
-EGLSurface
-gdk_win32_surface_get_egl_surface (GdkSurface *surface,
-                                   EGLConfig   config,
-                                   gboolean    is_dummy)
-{
-  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
-  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-  if (is_dummy)
-    {
-      if (impl->egl_dummy_surface == EGL_NO_SURFACE)
-        {
-          EGLint attribs[] = {EGL_WIDTH, 1, EGL_WIDTH, 1, EGL_NONE};
-          impl->egl_dummy_surface = eglCreatePbufferSurface (display->egl_disp,
-                                                             config,
-                                                             attribs);
-        }
-      return impl->egl_dummy_surface;
-    }
-  else
-    {
-      if (impl->egl_surface == EGL_NO_SURFACE)
-        impl->egl_surface = eglCreateWindowSurface (display->egl_disp,
-                                                    config,
-                                                    GDK_SURFACE_HWND (surface),
-                                                    NULL);
-
-      return impl->egl_surface;
-    }
-
-}
-#endif
 
 static void
 gdk_win32_surface_get_queued_window_rect (GdkSurface *surface,
@@ -5137,7 +5088,7 @@ _gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
  *  as we need to re-acquire the EGL surfaces that we rendered to upload to Cairo explicitly,
  *  using gdk_window_invalidate_rect (), when we maximize or restore or use aerosnap
  */
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
   if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
     {
       GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);

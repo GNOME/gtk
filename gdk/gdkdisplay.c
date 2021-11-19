@@ -1438,31 +1438,6 @@ describe_egl_config (EGLDisplay egl_display,
 }
 #endif
 
-/*<private>
- * gdk_display_get_egl_display:
- * @self: a display
- *
- * Retrieves the EGL display connection object for the given GDK display.
- *
- * This function returns `NULL` if GL is not supported or GDK is using
- * a different OpenGL framework than EGL.
- *
- * Returns: (nullable): the EGL display object
- */
-gpointer
-gdk_display_get_egl_display (GdkDisplay *self)
-{
-  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
-
-  if (!priv->egl_display &&
-      !gdk_display_prepare_gl (self, NULL))
-    return NULL;
-
-  return priv->egl_display;
-}
-
 gpointer
 gdk_display_get_egl_config (GdkDisplay *self)
 {
@@ -1788,6 +1763,35 @@ gdk_display_init_egl (GdkDisplay  *self,
   return TRUE;
 }
 #endif
+
+/*<private>
+ * gdk_display_get_egl_display:
+ * @self: a display
+ *
+ * Retrieves the EGL display connection object for the given GDK display.
+ *
+ * This function returns `NULL` if GL is not supported or GDK is using
+ * a different OpenGL framework than EGL.
+ *
+ * Returns: (nullable): the EGL display object
+ */
+gpointer
+gdk_display_get_egl_display (GdkDisplay *self)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
+
+#ifdef HAVE_EGL
+  if (!priv->egl_display &&
+      !gdk_display_prepare_gl (self, NULL))
+    return NULL;
+
+  return priv->egl_display;
+#else
+  return NULL;
+#endif
+}
 
 GdkDebugFlags
 gdk_display_get_debug_flags (GdkDisplay *display)

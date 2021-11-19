@@ -38,7 +38,7 @@
 #include <dwmapi.h>
 
 #include "gdkwin32langnotification.h"
-#ifdef GDK_WIN32_ENABLE_EGL
+#ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
 
@@ -645,14 +645,6 @@ gdk_win32_display_dispose (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
-#ifdef GDK_WIN32_ENABLE_EGL
-  if (display_win32->egl_disp != EGL_NO_DISPLAY)
-    {
-      eglTerminate (display_win32->egl_disp);
-      display_win32->egl_disp = EGL_NO_DISPLAY;
-    }
-#endif
-
   if (display_win32->hwnd != NULL)
     {
       if (display_win32->dummy_context_wgl.hglrc != NULL)
@@ -1146,23 +1138,54 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
   return _gdk_win32_get_setting (name, value);
 }
 
+#ifndef EGL_PLATFORM_ANGLE_ANGLE
+#define EGL_PLATFORM_ANGLE_ANGLE          0x3202
+#endif
+
 static gboolean
 gdk_win32_display_init_gl_backend (GdkDisplay  *display,
                                    GError     **error)
 {
   gboolean result = FALSE;
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
 
-  /* No env vars set, do the regular GL initialization, first WGL and then EGL,
+  if (display_win32->dummy_context_wgl.hdc == NULL)
+    display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
+
+  /*
+   * No env vars set, do the regular GL initialization, first WGL and then EGL,
    * as WGL is the more tried-and-tested configuration.
    */
 
-  result = gdk_win32_display_init_wgl (display, error);
+#ifdef HAVE_EGL
+  /*
+   * Disable defaulting to EGL for now, since shaders need to be fixed for
+   * usage against libANGLE EGL.  EGL is used more as a compatibility layer
+   * on Windows rather than being a native citizen on Windows
+   */
+  if (_gdk_debug_flags & GDK_DEBUG_GL_EGL)
+    result = gdk_display_init_egl (display,
+                                   EGL_PLATFORM_ANGLE_ANGLE,
+                                   display_win32->dummy_context_wgl.hdc,
+                                   FALSE,
+                                   error);
+#endif
 
-#ifdef GDK_WIN32_ENABLE_EGL
   if (!result)
     {
       g_clear_error (error);
-      result = gdk_win32_display_init_egl (display, error);
+      result = gdk_win32_display_init_wgl (display, error);
+    }
+
+#ifdef HAVE_EGL
+  if (!result)
+    {
+      g_clear_error (error);
+      result = gdk_display_init_egl (display,
+                                     EGL_PLATFORM_ANGLE_ANGLE,
+                                     display_win32->dummy_context_wgl.hdc,
+                                     TRUE,
+                                     error);
     }
 #endif
 
@@ -1179,13 +1202,12 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
   if (!gdk_win32_display_init_gl_backend (display, error))
     return NULL;
 
-#ifdef GDK_WIN32_ENABLE_EGL
-  if (display_win32->egl_disp)
-    gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL, "display", display, NULL);
-  else
-#endif
   if (display_win32->wgl_pixel_format != 0)
     gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL, "display", display, NULL);
+#ifdef HAVE_EGL
+  else if (gdk_display_get_egl_display (display))
+    gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL, "display", display, NULL);
+#endif
 
   g_return_val_if_fail (gl_context != NULL, NULL);
 
@@ -1203,23 +1225,9 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
 gpointer
 gdk_win32_display_get_egl_display (GdkDisplay *display)
 {
-#ifdef GDK_WIN32_ENABLE_EGL
-  GdkWin32Display *display_win32;
-#endif
-
   g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
 
-#ifdef GDK_WIN32_ENABLE_EGL
-  display_win32 = GDK_WIN32_DISPLAY (display);
-
-  if (display_win32->wgl_pixel_format != 0)
-    return NULL;
-
-  return display_win32->egl_disp;
-#else
-  /* no EGL support */
-  return NULL;
-#endif
+  return gdk_display_get_egl_display (display);
 }
 
 static void

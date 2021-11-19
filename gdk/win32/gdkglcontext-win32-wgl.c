@@ -226,9 +226,6 @@ gdk_init_dummy_wgl_context (GdkWin32Display *display_win32)
   gboolean set_pixel_format_result = FALSE;
   int best_idx = 0;
 
-  if (display_win32->dummy_context_wgl.hdc == NULL)
-    display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
-
   memset (&pfd, 0, sizeof (PIXELFORMATDESCRIPTOR));
 
   best_idx = get_wgl_pfd (display_win32->dummy_context_wgl.hdc, &pfd, NULL);
