@@ -529,6 +529,8 @@ testdata = [
   #'window-show-contents-on-map.ui',
   'wrap-margin-align-critical.ref.ui',
   'wrap-margin-align-critical.ui',
+  'wrapping-in-boxes-in-boxes.ref.ui',
+  'wrapping-in-boxes-in-boxes.ui',
 ]
 
 # These need to be fixed but the issue hasn't been tracked down.

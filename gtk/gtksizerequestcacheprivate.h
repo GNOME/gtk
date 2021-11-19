@@ -36,7 +36,7 @@ G_BEGIN_DECLS
  * only wrap to 3 lines, only 3 caches will
  * ever be allocated for it.
  */
-#define GTK_SIZE_REQUEST_CACHED_SIZES   (5)
+#define GTK_SIZE_REQUEST_CACHED_SIZES   (64)
 
 typedef struct {
   int minimum_size;
@@ -74,8 +74,8 @@ typedef struct {
   GtkSizeRequestMode request_mode   : 3;
   guint       request_mode_valid    : 1;
   struct {
-    guint       n_cached_requests   : 3;
-    guint       last_cached_request : 3;
+    guint       n_cached_requests   : 15;
+    guint       last_cached_request : 15;
     guint       cached_size_valid   : 1;
   }           flags[2];
 } SizeRequestCache;
