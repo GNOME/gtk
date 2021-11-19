@@ -3876,18 +3876,6 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                         &allocation->x,
                         &allocation->width);
     }
-
-#ifdef G_ENABLE_CONSISTENCY_CHECKS
-  if ((min_width > allocation->width + priv->margin.left + priv->margin.right ||
-       min_height > allocation->height + priv->margin.top + priv->margin.bottom) &&
-      !GTK_IS_SCROLLABLE (widget))
-    g_warning ("gtk_widget_size_allocate(): attempt to underallocate %s%s %s %p. "
-               "Allocation is %dx%d, but minimum required size is %dx%d.",
-               priv->parent ? G_OBJECT_TYPE_NAME (priv->parent) : "", priv->parent ? "'s child" : "toplevel",
-               G_OBJECT_TYPE_NAME (widget), widget,
-               allocation->width, allocation->height,
-               min_width, min_height);
-#endif
 }
 
 /**
