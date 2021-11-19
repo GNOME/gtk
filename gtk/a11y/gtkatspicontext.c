@@ -334,6 +334,9 @@ get_index_in_parent (GtkWidget *widget)
   GtkWidget *child;
   int idx;
 
+  if (parent == NULL)
+    return -1;
+
   idx = 0;
   for (child = gtk_widget_get_first_child (parent);
        child;
