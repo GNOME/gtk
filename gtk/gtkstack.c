@@ -2578,7 +2578,16 @@ gtk_stack_measure (GtkWidget      *widget,
 
       if (gtk_widget_get_visible (child))
         {
-          gtk_widget_measure (child, orientation, for_size, &child_min, &child_nat, NULL, NULL);
+          if (!priv->homogeneous[OPPOSITE_ORIENTATION(orientation)] && priv->visible_child != child_info)
+            {
+              int min_for_size;
+
+              gtk_widget_measure (child, OPPOSITE_ORIENTATION (orientation), -1, &min_for_size, NULL, NULL, NULL);
+              
+              gtk_widget_measure (child, orientation, MAX (min_for_size, for_size), &child_min, &child_nat, NULL, NULL);
+            }
+          else
+            gtk_widget_measure (child, orientation, for_size, &child_min, &child_nat, NULL, NULL);
 
           *minimum = MAX (*minimum, child_min);
           *natural = MAX (*natural, child_nat);
