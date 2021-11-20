@@ -444,7 +444,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
               }
 	    g_string_append_printf (s, " (hit cache: %s)\n",
 		                    found_in_cache ? "yes" : "no");
-            g_message ("%s", s->str);
+            g_printerr ("%s", s->str);
             g_string_free (s, TRUE);
 	    });
 }
@@ -487,6 +487,18 @@ gtk_widget_measure (GtkWidget        *widget,
   g_return_if_fail (for_size >= -1);
   g_return_if_fail (orientation == GTK_ORIENTATION_HORIZONTAL ||
                     orientation == GTK_ORIENTATION_VERTICAL);
+
+  if (for_size >= 0)
+    {
+      int min_opposite_size;
+      gtk_widget_measure (widget, OPPOSITE_ORIENTATION (orientation), -1, &min_opposite_size, NULL, NULL, NULL);
+      if (for_size < min_opposite_size)
+        {
+          g_critical ("gtk_widget_measure: assertion 'for_size >= minimum opposite size' failed for %s %p: %u >= %u",
+                      G_OBJECT_TYPE_NAME (widget), widget, for_size, min_opposite_size);
+          for_size = min_opposite_size;
+        }
+    }
 
   /* This is the main function that checks for a cached size and
    * possibly queries the widget class to compute the size if it's
