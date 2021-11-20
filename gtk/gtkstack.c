@@ -2572,9 +2572,8 @@ gtk_stack_measure (GtkWidget      *widget,
       child_info = l->data;
       child = child_info->widget;
 
-      if (((orientation == GTK_ORIENTATION_VERTICAL && !priv->homogeneous[GTK_ORIENTATION_VERTICAL]) ||
-           (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->homogeneous[GTK_ORIENTATION_HORIZONTAL])) &&
-           priv->visible_child != child_info)
+      if (!priv->homogeneous[orientation] &&
+          priv->visible_child != child_info)
         continue;
 
       if (gtk_widget_get_visible (child))
@@ -2586,20 +2585,18 @@ gtk_stack_measure (GtkWidget      *widget,
         }
     }
 
-  if (priv->last_visible_child != NULL)
+  if (priv->last_visible_child != NULL && !priv->homogeneous[orientation])
     {
-      if (orientation == GTK_ORIENTATION_VERTICAL && !priv->homogeneous[GTK_ORIENTATION_VERTICAL])
-        {
-          double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
-          *minimum = LERP (*minimum, priv->last_visible_widget_height, t);
-          *natural = LERP (*natural, priv->last_visible_widget_height, t);
-        }
-      if (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->homogeneous[GTK_ORIENTATION_HORIZONTAL])
-        {
-          double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
-          *minimum = LERP (*minimum, priv->last_visible_widget_width, t);
-          *natural = LERP (*natural, priv->last_visible_widget_width, t);
-        }
+      double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
+      int last_size;
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        last_size = priv->last_visible_widget_width;
+      else
+        last_size = priv->last_visible_widget_height;
+
+      *minimum = LERP (*minimum, last_size, t);
+      *natural = LERP (*natural, last_size, t);
     }
 }
 
