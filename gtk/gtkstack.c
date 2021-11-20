@@ -144,8 +144,7 @@ typedef struct {
 
   GtkStackPage *visible_child;
 
-  gboolean hhomogeneous;
-  gboolean vhomogeneous;
+  gboolean homogeneous[2];
 
   GtkStackTransitionType transition_type;
   guint transition_duration;
@@ -1084,7 +1083,7 @@ gtk_stack_progress_updated (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  if (!priv->vhomogeneous || !priv->hhomogeneous)
+  if (!priv->homogeneous[GTK_ORIENTATION_VERTICAL] || !priv->homogeneous[GTK_ORIENTATION_HORIZONTAL])
     gtk_widget_queue_resize (GTK_WIDGET (stack));
   else if (is_window_moving_transition (priv->active_transition_type))
     gtk_widget_queue_allocate (GTK_WIDGET (stack));
@@ -1362,7 +1361,7 @@ set_visible_child (GtkStack               *stack,
       transition_type = get_simple_transition_type (i_first, transition_type);
     }
 
-  if (priv->hhomogeneous && priv->vhomogeneous)
+  if (priv->homogeneous[GTK_ORIENTATION_HORIZONTAL] && priv->homogeneous[GTK_ORIENTATION_VERTICAL])
     gtk_widget_queue_allocate (widget);
   else
     gtk_widget_queue_resize (widget);
@@ -1559,7 +1558,7 @@ gtk_stack_add_page (GtkStack     *stack,
       gtk_widget_get_visible (child_info->widget))
     set_visible_child (stack, child_info, priv->transition_type, priv->transition_duration);
 
-  if (priv->hhomogeneous || priv->vhomogeneous || priv->visible_child == child_info)
+  if (priv->homogeneous[GTK_ORIENTATION_HORIZONTAL] || priv->homogeneous[GTK_ORIENTATION_VERTICAL] || priv->visible_child == child_info)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
 }
 
@@ -1597,7 +1596,7 @@ stack_remove (GtkStack  *stack,
   g_object_unref (child_info);
 
   if (!in_dispose &&
-      (priv->hhomogeneous || priv->vhomogeneous) &&
+      (priv->homogeneous[GTK_ORIENTATION_HORIZONTAL] || priv->homogeneous[GTK_ORIENTATION_VERTICAL]) &&
       was_visible)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
 }
@@ -1718,10 +1717,10 @@ gtk_stack_set_hhomogeneous (GtkStack *stack,
 
   hhomogeneous = !!hhomogeneous;
 
-  if (priv->hhomogeneous == hhomogeneous)
+  if (priv->homogeneous[GTK_ORIENTATION_HORIZONTAL] == hhomogeneous)
     return;
 
-  priv->hhomogeneous = hhomogeneous;
+  priv->homogeneous[GTK_ORIENTATION_HORIZONTAL] = hhomogeneous;
 
   if (gtk_widget_get_visible (GTK_WIDGET(stack)))
     gtk_widget_queue_resize (GTK_WIDGET (stack));
@@ -1744,7 +1743,7 @@ gtk_stack_get_hhomogeneous (GtkStack *stack)
 
   g_return_val_if_fail (GTK_IS_STACK (stack), FALSE);
 
-  return priv->hhomogeneous;
+  return priv->homogeneous[GTK_ORIENTATION_HORIZONTAL];
 }
 
 /**
@@ -1768,10 +1767,10 @@ gtk_stack_set_vhomogeneous (GtkStack *stack,
 
   vhomogeneous = !!vhomogeneous;
 
-  if (priv->vhomogeneous == vhomogeneous)
+  if (priv->homogeneous[GTK_ORIENTATION_VERTICAL] == vhomogeneous)
     return;
 
-  priv->vhomogeneous = vhomogeneous;
+  priv->homogeneous[GTK_ORIENTATION_VERTICAL] = vhomogeneous;
 
   if (gtk_widget_get_visible (GTK_WIDGET(stack)))
     gtk_widget_queue_resize (GTK_WIDGET (stack));
@@ -1794,7 +1793,7 @@ gtk_stack_get_vhomogeneous (GtkStack *stack)
 
   g_return_val_if_fail (GTK_IS_STACK (stack), FALSE);
 
-  return priv->vhomogeneous;
+  return priv->homogeneous[GTK_ORIENTATION_VERTICAL];
 }
 
 /**
@@ -2573,8 +2572,8 @@ gtk_stack_measure (GtkWidget      *widget,
       child_info = l->data;
       child = child_info->widget;
 
-      if (((orientation == GTK_ORIENTATION_VERTICAL && !priv->vhomogeneous) ||
-           (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->hhomogeneous)) &&
+      if (((orientation == GTK_ORIENTATION_VERTICAL && !priv->homogeneous[GTK_ORIENTATION_VERTICAL]) ||
+           (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->homogeneous[GTK_ORIENTATION_HORIZONTAL])) &&
            priv->visible_child != child_info)
         continue;
 
@@ -2589,13 +2588,13 @@ gtk_stack_measure (GtkWidget      *widget,
 
   if (priv->last_visible_child != NULL)
     {
-      if (orientation == GTK_ORIENTATION_VERTICAL && !priv->vhomogeneous)
+      if (orientation == GTK_ORIENTATION_VERTICAL && !priv->homogeneous[GTK_ORIENTATION_VERTICAL])
         {
           double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
           *minimum = LERP (*minimum, priv->last_visible_widget_height, t);
           *natural = LERP (*natural, priv->last_visible_widget_height, t);
         }
-      if (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->hhomogeneous)
+      if (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->homogeneous[GTK_ORIENTATION_HORIZONTAL])
         {
           double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
           *minimum = LERP (*minimum, priv->last_visible_widget_width, t);
@@ -2609,8 +2608,8 @@ gtk_stack_init (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
-  priv->vhomogeneous = TRUE;
-  priv->hhomogeneous = TRUE;
+  priv->homogeneous[GTK_ORIENTATION_VERTICAL] = TRUE;
+  priv->homogeneous[GTK_ORIENTATION_HORIZONTAL] = TRUE;
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
 }
