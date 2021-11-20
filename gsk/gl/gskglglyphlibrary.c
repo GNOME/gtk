@@ -161,25 +161,27 @@ gsk_gl_glyph_library_create_surface (GskGLGlyphLibrary *self,
 
 static void
 render_glyph (cairo_surface_t           *surface,
-              const cairo_scaled_font_t *scaled_font,
               const GskGLGlyphKey       *key,
               const GskGLGlyphValue     *value)
 {
   cairo_t *cr;
-  cairo_glyph_t glyph;
+  PangoGlyphString glyph_string;
+  PangoGlyphInfo glyph_info;
 
   g_assert (surface != NULL);
-  g_assert (scaled_font != NULL);
 
   cr = cairo_create (surface);
-  cairo_set_scaled_font (cr, scaled_font);
   cairo_set_source_rgba (cr, 1, 1, 1, 1);
 
-  glyph.index = key->glyph;
-  glyph.x = 0.25 * key->xshift - value->ink_rect.x;
-  glyph.y = 0.25 * key->yshift - value->ink_rect.y;
+  glyph_info.glyph = key->glyph;
+  glyph_info.geometry.width = value->ink_rect.width * 1024;
+  glyph_info.geometry.x_offset = 0.25 * key->xshift - value->ink_rect.x * 1024;
+  glyph_info.geometry.y_offset = 0.25 * key->yshift - value->ink_rect.y * 1024;
 
-  cairo_show_glyphs (cr, &glyph, 1);
+  glyph_string.num_glyphs = 1;
+  glyph_string.glyphs = &glyph_info;
+
+  pango_cairo_show_glyph_string (cr, key->font, &glyph_string);
   cairo_destroy (cr);
 
   cairo_surface_flush (surface);
@@ -198,7 +200,6 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
 {
   GskGLTextureLibrary *tl = (GskGLTextureLibrary *)self;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
-  cairo_scaled_font_t *scaled_font;
   cairo_surface_t *surface;
   guchar *pixel_data;
   guchar *free_data = NULL;
@@ -211,11 +212,6 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
   g_assert (key != NULL);
   g_assert (value != NULL);
 
-  scaled_font = pango_cairo_font_get_scaled_font ((PangoCairoFont *)key->font);
-  if G_UNLIKELY (scaled_font == NULL ||
-                 cairo_scaled_font_status (scaled_font) != CAIRO_STATUS_SUCCESS)
-    return;
-
   stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width);
 
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
@@ -223,7 +219,7 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
                                           key->glyph);
 
   surface = gsk_gl_glyph_library_create_surface (self, stride, width, height, uwidth, uheight);
-  render_glyph (surface, scaled_font, key, value);
+  render_glyph (surface, key, value);
 
   texture_id = GSK_GL_TEXTURE_ATLAS_ENTRY_TEXTURE (value);
 
