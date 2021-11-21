@@ -4,7 +4,7 @@
   <object class="GtkWindow" id="window1">
     <property name="child">
       <object class="GtkBox" id="box1">
-        <property name="orientation">1</property>
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkCheckButton" id="checkbutton1">
             <property name="hexpand">1</property>

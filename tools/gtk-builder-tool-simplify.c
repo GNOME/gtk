@@ -621,7 +621,15 @@ canonical_enum_value (MyParserData *data,
   GValue value = G_VALUE_INIT;
 
   if (gtk_builder_value_from_string_type (data->builder, type, string, &value, NULL))
-    return g_strdup_printf ("%d", g_value_get_enum (&value));
+    {
+      GEnumClass *eclass = g_type_class_ref (type);
+      GEnumValue *evalue = g_enum_get_value (eclass, g_value_get_enum (&value));
+
+      if (evalue)
+        return g_strdup (evalue->value_nick);
+      else
+        return g_strdup_printf ("%d", g_value_get_enum (&value));
+    }
 
   return NULL;
 }
