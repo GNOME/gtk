@@ -266,6 +266,8 @@ testdata = [
   'data-url.css',
   'data-url.ref.ui',
   'data-url.ui',
+  'default-size-too-small.ref.ui',
+  'default-size-too-small.ui',
   'default-size-undecorated.ui',
   'default-size-undecorated.ref.ui',
   'default-size-with-titlebar.ui',

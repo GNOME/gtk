@@ -4165,12 +4165,14 @@ update_realized_window_properties (GtkWindow *window)
 
 static void
 gtk_window_compute_default_size (GtkWindow *window,
+                                 int        cur_width,
+                                 int        cur_height,
                                  int        max_width,
                                  int        max_height,
                                  int       *min_width,
                                  int       *min_height,
-                                 int       *nat_width,
-                                 int       *nat_height)
+                                 int       *width,
+                                 int       *height)
 {
   GtkWidget *widget = GTK_WIDGET (window);
 
@@ -4182,14 +4184,20 @@ gtk_window_compute_default_size (GtkWindow *window,
                           &minimum, &natural,
                           NULL, NULL);
       *min_height = minimum;
-      *nat_height = MAX (minimum, MIN (max_height, natural));
+      if (cur_height > 0)
+        *height = MAX (cur_height, minimum);
+      else
+        *height = MAX (minimum, MIN (max_height, natural));
 
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
-                          *nat_height,
+                          *height,
                           &minimum, &natural,
                           NULL, NULL);
       *min_width = minimum;
-      *nat_width = MAX (minimum, MIN (max_width, natural));
+      if (cur_width > 0)
+        *width = MAX (cur_width, minimum);
+      else
+        *width = MAX (minimum, MIN (max_width, natural));
     }
   else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
     {
@@ -4199,14 +4207,20 @@ gtk_window_compute_default_size (GtkWindow *window,
                           &minimum, &natural,
                           NULL, NULL);
       *min_width = minimum;
-      *nat_width = MAX (minimum, MIN (max_width, natural));
+      if (cur_width > 0)
+        *width = MAX (cur_width, minimum);
+      else
+        *width = MAX (minimum, MIN (max_width, natural));
 
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
-                          *nat_width,
+                          *width,
                           &minimum, &natural,
                           NULL, NULL);
       *min_height = minimum;
-      *nat_height = MAX (minimum, MIN (max_height, natural));
+      if (cur_height > 0)
+        *height = MAX (cur_height, minimum);
+      else
+        *height = MAX (minimum, MIN (max_height, natural));
     }
 }
 
@@ -4239,22 +4253,15 @@ toplevel_compute_size (GdkToplevel     *toplevel,
   GtkBorder shadow;
   int bounds_width, bounds_height;
   int min_width, min_height;
-  int nat_width, nat_height;
 
   gdk_toplevel_size_get_bounds (size, &bounds_width, &bounds_height);
 
   gtk_window_compute_default_size (window,
+                                   priv->default_width, priv->default_height,
                                    bounds_width, bounds_height,
                                    &min_width, &min_height,
-                                   &nat_width, &nat_height);
+                                   &width, &height);
 
-  width = priv->default_width;
-  height = priv->default_height;
-
-  if (width <= 0)
-    width = nat_width;
-  if (height <= 0)
-    height = nat_height;
 
   if (width < min_width)
     width = min_width;
