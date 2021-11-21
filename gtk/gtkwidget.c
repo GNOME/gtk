@@ -2429,6 +2429,18 @@ gtk_widget_root_at_context (GtkWidget *self)
   gtk_at_context_set_display (priv->at_context, gtk_root_get_display (priv->root));
 }
 
+static void
+gtk_widget_unroot_at_context (GtkWidget *self)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (self);
+
+  if (priv->at_context != NULL)
+    {
+      gtk_at_context_set_display (priv->at_context, gdk_display_get_default ());
+      gtk_at_context_unrealize (priv->at_context);
+    }
+}
+
 void
 gtk_widget_realize_at_context (GtkWidget *self)
 {
@@ -2520,6 +2532,9 @@ gtk_widget_unroot (GtkWidget *widget)
 
   if (!GTK_IS_ROOT (widget))
     {
+      /* Roots unrealize the ATContext on unmap */
+      gtk_widget_unroot_at_context (widget);
+
       priv->root = NULL;
       g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_ROOT]);
     }
