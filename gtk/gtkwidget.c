@@ -3591,6 +3591,7 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
     return;
 
   priv->resize_needed = TRUE;
+  _gtk_size_request_cache_clear (&priv->requests);
   gtk_widget_set_alloc_needed (widget);
 
   if (priv->resize_func)
@@ -10602,7 +10603,6 @@ gtk_widget_ensure_resize (GtkWidget *widget)
     return;
 
   priv->resize_needed = FALSE;
-  _gtk_size_request_cache_clear (&priv->requests);
 }
 
 void
