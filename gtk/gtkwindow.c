@@ -57,6 +57,7 @@
 #include "gtkshortcutcontrollerprivate.h"
 #include "gtkshortcutmanager.h"
 #include "gtkshortcuttrigger.h"
+#include "gtksizerequest.h"
 #include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
@@ -618,8 +619,10 @@ gtk_window_measure (GtkWidget      *widget,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *child = priv->child;
   gboolean has_size_request = gtk_widget_has_size_request (widget);
+  int title_for_size = for_size;
   int title_min_size = 0;
   int title_nat_size = 0;
+  int child_for_size = for_size;
   int child_min_size = 0;
   int child_nat_size = 0;
 
@@ -629,17 +632,30 @@ gtk_window_measure (GtkWidget      *widget,
           gtk_widget_get_visible (priv->title_box) &&
           gtk_widget_get_child_visible (priv->title_box))
         {
-          int size = for_size;
-          if (orientation == GTK_ORIENTATION_HORIZONTAL && for_size >= 0)
-            gtk_widget_measure (priv->title_box,
-                                GTK_ORIENTATION_VERTICAL,
-                                -1,
-                                NULL, &size,
-                                NULL, NULL);
+          if (orientation == GTK_ORIENTATION_HORIZONTAL && for_size >= 0 &&
+              child != NULL && gtk_widget_get_visible (child))
+            {
+              GtkRequestedSize sizes[2];
+
+              gtk_widget_measure (priv->title_box,
+                                  GTK_ORIENTATION_VERTICAL,
+                                  -1,
+                                  &sizes[0].minimum_size, &sizes[0].natural_size,
+                                  NULL, NULL);
+              gtk_widget_measure (child,
+                                  GTK_ORIENTATION_VERTICAL,
+                                  -1,
+                                  &sizes[1].minimum_size, &sizes[1].natural_size,
+                                  NULL, NULL);
+              for_size -= sizes[0].minimum_size + sizes[1].minimum_size;
+              for_size = gtk_distribute_natural_allocation (for_size, 2, sizes);
+              title_for_size = sizes[0].minimum_size;
+              child_for_size = sizes[1].minimum_size + for_size;
+            }
 
           gtk_widget_measure (priv->title_box,
                               orientation,
-                              MAX (size, -1),
+                              title_for_size,
                               &title_min_size, &title_nat_size,
                               NULL, NULL);
         }
@@ -649,7 +665,7 @@ gtk_window_measure (GtkWidget      *widget,
     {
       gtk_widget_measure (child,
                           orientation,
-                          MAX (for_size, -1),
+                          child_for_size,
                           &child_min_size, &child_nat_size,
                           NULL, NULL);
 
