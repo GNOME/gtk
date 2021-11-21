@@ -11,7 +11,7 @@
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
         <property name="margin_bottom">12</property>
-        <property name="orientation">1</property>
+        <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkNotebook" id="notebook1">
@@ -34,7 +34,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="label5">
-                        <property name="valign">1</property>
+                        <property name="valign">start</property>
                         <property name="hexpand">1</property>
                         <property name="xalign">0</property>
                         <property name="label" translatable="1"> • Click the &quot;Run!&quot; button, and then dash to your desk or meeting.
@@ -129,11 +129,11 @@
                     </child>
                     <child>
                       <object class="GtkBox" id="box2">
-                        <property name="valign">3</property>
-                        <property name="orientation">1</property>
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
                         <child>
                           <object class="GtkLabel" id="result_label">
-                            <property name="valign">1</property>
+                            <property name="valign">start</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="0">Silver Trophy!</property>
                             <property name="use_markup">1</property>
@@ -148,7 +148,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="current_time_label">
-                            <property name="valign">1</property>
+                            <property name="valign">start</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="0">You managed to finish the route with the 2nd best time ever, &lt;b&gt;48.15 seconds!&lt;/b&gt;	</property>
                             <property name="use_markup">1</property>
@@ -157,7 +157,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="better_time_label">
-                            <property name="valign">1</property>
+                            <property name="valign">start</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="0">Only &lt;b&gt;3.75 seconds&lt;/b&gt; separate you from the gold trophy!</property>
                             <property name="use_markup">1</property>

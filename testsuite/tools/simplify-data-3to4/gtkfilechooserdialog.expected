@@ -9,7 +9,7 @@
     <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="visible">0</property>
-        <property name="orientation">1</property>
+        <property name="orientation">vertical</property>
         <property name="border-width">0</property>
         <child>
           <object class="GtkFileChooserWidget" id="widget">
@@ -31,6 +31,6 @@
     </child>
   </template>
   <object class="GtkSizeGroup" id="buttons">
-    <property name="mode">2</property>
+    <property name="mode">vertical</property>
   </object>
 </interface>

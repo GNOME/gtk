@@ -1160,7 +1160,7 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
                                                        int            *natural)
 {
   GtkPaned *paned = GTK_PANED (widget);
-  int for_start_child, for_end_child;
+  int for_start_child, for_end_child, for_handle;
   int child_min, child_nat;
 
   if (size > -1 &&
@@ -1168,22 +1168,21 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
       paned->end_child && gtk_widget_get_visible (paned->end_child))
     {
       int start_child_req, end_child_req;
-      int handle_size;
 
       gtk_widget_measure (paned->handle_widget,
-                          OPPOSITE_ORIENTATION (paned->orientation),
+                          paned->orientation,
                           -1,
-                          NULL, &handle_size,
+                          NULL, &for_handle,
                           NULL, NULL);
 
       gtk_widget_measure (paned->start_child, paned->orientation, -1, &start_child_req, NULL, NULL, NULL);
       gtk_widget_measure (paned->end_child, paned->orientation, -1, &end_child_req, NULL, NULL, NULL);
 
       gtk_paned_compute_position (paned,
-                                  size - handle_size, start_child_req, end_child_req,
+                                  size - for_handle, start_child_req, end_child_req,
                                   NULL, NULL, &for_start_child);
 
-      for_end_child = size - for_start_child - handle_size;
+      for_end_child = size - for_start_child - for_handle;
 
       if (paned->shrink_start_child)
         for_start_child = MAX (start_child_req, for_start_child);
@@ -1194,6 +1193,7 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
     {
       for_start_child = size;
       for_end_child = size;
+      for_handle = -1;
     }
 
   *minimum = *natural = 0;
@@ -1202,7 +1202,7 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
     {
       gtk_widget_measure (paned->start_child,
                           OPPOSITE_ORIENTATION (paned->orientation),
-                          MAX (for_start_child, -1),
+                          for_start_child,
                           &child_min, &child_nat,
                           NULL, NULL);
 
@@ -1214,7 +1214,20 @@ gtk_paned_get_preferred_size_for_opposite_orientation (GtkWidget      *widget,
     {
       gtk_widget_measure (paned->end_child,
                           OPPOSITE_ORIENTATION (paned->orientation),
-                          MAX (for_end_child, -1),
+                          for_end_child,
+                          &child_min, &child_nat,
+                          NULL, NULL);
+
+      *minimum = MAX (*minimum, child_min);
+      *natural = MAX (*natural, child_nat);
+    }
+
+  if (paned->start_child && gtk_widget_get_visible (paned->start_child) &&
+      paned->end_child && gtk_widget_get_visible (paned->end_child))
+    {
+      gtk_widget_measure (paned->handle_widget,
+                          OPPOSITE_ORIENTATION (paned->orientation),
+                          for_handle,
                           &child_min, &child_nat,
                           NULL, NULL);
 
