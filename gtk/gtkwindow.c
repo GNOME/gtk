@@ -4184,20 +4184,18 @@ gtk_window_compute_default_size (GtkWindow *window,
                           &minimum, &natural,
                           NULL, NULL);
       *min_height = minimum;
-      if (cur_height > 0)
-        *height = MAX (cur_height, minimum);
-      else
-        *height = MAX (minimum, MIN (max_height, natural));
+      if (cur_height <= 0)
+        cur_height = natural;
+      *height = MAX (minimum, MIN (max_height, cur_height));
 
       gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
                           *height,
                           &minimum, &natural,
                           NULL, NULL);
       *min_width = minimum;
-      if (cur_width > 0)
-        *width = MAX (cur_width, minimum);
-      else
-        *width = MAX (minimum, MIN (max_width, natural));
+      if (cur_width <= 0)
+        cur_width = natural;
+      *width = MAX (minimum, MIN (max_width, cur_width));
     }
   else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
     {
@@ -4207,20 +4205,19 @@ gtk_window_compute_default_size (GtkWindow *window,
                           &minimum, &natural,
                           NULL, NULL);
       *min_width = minimum;
-      if (cur_width > 0)
-        *width = MAX (cur_width, minimum);
-      else
-        *width = MAX (minimum, MIN (max_width, natural));
+      if (cur_width <= 0)
+        cur_width = natural;
+      *width = MAX (minimum, MIN (max_width, cur_width));
 
       gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
                           *width,
                           &minimum, &natural,
                           NULL, NULL);
       *min_height = minimum;
-      if (cur_height > 0)
-        *height = MAX (cur_height, minimum);
-      else
-        *height = MAX (minimum, MIN (max_height, natural));
+      if (cur_height <= 0)
+        cur_height = natural;
+
+      *height = MAX (minimum, MIN (max_height, cur_height));
     }
 }
 
@@ -4261,7 +4258,6 @@ toplevel_compute_size (GdkToplevel     *toplevel,
                                    bounds_width, bounds_height,
                                    &min_width, &min_height,
                                    &width, &height);
-
 
   if (width < min_width)
     width = min_width;
