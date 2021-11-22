@@ -2081,8 +2081,8 @@ gdk_dnd_handle_motion_event (GdkDrag  *drag,
   API_CALL (PostThreadMessage, (clipdrop->dnd_thread_id,
                                 WM_MOUSEMOVE,
                                 key_state,
-                                MAKELPARAM (x_root * drag_win32->scale - _gdk_offset_x,
-                                            y_root * drag_win32->scale - _gdk_offset_y)));
+                                MAKELPARAM (x_root * drag_win32->scale,
+                                            y_root * drag_win32->scale)));
 
   return TRUE;
 }
