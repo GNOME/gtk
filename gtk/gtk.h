@@ -94,6 +94,7 @@
 #include <gtk/gtkconstraintlayout.h>
 #include <gtk/gtkconstraint.h>
 #include <gtk/gtkcssprovider.h>
+#include <gtk/gtkcustomfilter.h>
 #include <gtk/gtkcustomlayout.h>
 #include <gtk/gtkcustomsorter.h>
 #include <gtk/gtkdebug.h>
@@ -132,8 +133,8 @@
 #include <gtk/gtkfilefilter.h>
 #include <gtk/gtkfilter.h>
 #include <gtk/gtkfilterlistmodel.h>
-#include <gtk/gtkcustomfilter.h>
 #include <gtk/gtkflattenlistmodel.h>
+#include <gtk/gtkflipper.h>
 #include <gtk/gtkflowbox.h>
 #include <gtk/deprecated/gtkfontbutton.h>
 #include <gtk/deprecated/gtkfontchooser.h>
