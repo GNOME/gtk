@@ -136,7 +136,8 @@ gsk_gl_compiler_new (GskGLDriver *driver,
 
       gdk_gl_context_get_version (context, &maj, &min);
 
-      if (maj == 3)
+      /* On Windows, legacy contexts can give us a GL 4.x context */
+      if (maj >= 3)
         self->glsl_version = SHADER_VERSION_GL3_LEGACY;
       else
         self->glsl_version = SHADER_VERSION_GL2_LEGACY;
