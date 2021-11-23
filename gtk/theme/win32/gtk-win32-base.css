@@ -690,7 +690,9 @@ entry:focus {
 
 textview.view:disabled,
 entry:disabled {
-    background-image: -gtk-win32-theme-part(edit, 1, 4);
+    /* This theme part feels wrong here, but it looks as one would expect,
+     whereas (edit, 5, 3) BACKGROUNDWITHBORDER, EBS_DISABLED is just white */
+    background-image: -gtk-win32-theme-part(combobox, 5, 4);
     color: -gtk-win32-color(edit, graytext);
 }
 
@@ -998,38 +1000,58 @@ scale value {
 }
 
 
-/* Progress bars */
+/* Progress bars and level bars */
 
-progressbar {
-    background-color: transparent;
-    padding: 0;
-}
-
-progressbar trough {
-    border-width: 0;
+progressbar.horizontal trough,
+levelbar.horizontal trough {
+    min-height: -gtk-win32-part-height(progress, 1, 1);
     background-image: -gtk-win32-theme-part(progress, 1, 1);
 }
-
-progressbar progress,
-entry progress,
-entry progress:focus {
-    border-width: 0;
-    background-image: -gtk-win32-theme-part(progress, 5, 1);
-}
-
-progressbar progress.pulse,
-entry progress.pulse,
-entry progress.pulse:focus {
-    background-color: transparent;
-    background-image: -gtk-win32-theme-part(progress, 8, 1);
-}
-
-progressbar.vertical trough {
+progressbar.vertical trough,
+levelbar.vertical trough {
+    min-width: -gtk-win32-part-width(progress, 1, 1);
     background-image: -gtk-win32-theme-part(progress, 2, 1);
 }
 
-progressbar.vertical progress {
+progressbar.horizontal progress, levelbar.horizontal block {
+    min-height: -gtk-win32-part-height(progress, 5, 1);
+}
+
+progressbar progress,
+levelbar block.filled,
+entry progress,
+entry progress:focus {
+    background-image: -gtk-win32-theme-part(progress, 5, 1);
+}
+
+/* We use here PBFS_PAUSED (yellow by default) and PBFS_PARTIAL (blue) */
+levelbar block.low {
+    background-image: -gtk-win32-theme-part(progress, 5, 3);
+}
+levelbar block.full {
+    background-image: -gtk-win32-theme-part(progress, 5, 4);
+}
+
+progressbar.horizontal progress.pulse,
+entry progress.pulse,
+entry progress.pulse:focus {
+    background-image: -gtk-win32-theme-part(progress, 8, 1);
+}
+
+progressbar.vertical progress,
+levelbar.vertical block {
+    min-width: -gtk-win32-part-width(progress, 6, 1);
+}
+
+progressbar.vertical progress,
+levelbar.vertical block.filled {
     background-image: -gtk-win32-theme-part(progress, 6, 1);
+}
+levelbar.vertical block.low {
+    background-image: -gtk-win32-theme-part(progress, 6, 3);
+}
+levelbar.vertical block.full {
+    background-image: -gtk-win32-theme-part(progress, 6, 4);
 }
 
 progressbar.vertical progress.pulse {
@@ -1247,6 +1269,21 @@ statusbar > frame {
     border-style: solid;
     border-image:  -gtk-win32-theme-part(status, 0, 0, margins(-1 0 0 0))  2 1 1 1 stretch;
     background-image: none;
+}
+
+/* Expander */
+
+expander title arrow {
+    background-image: -gtk-win32-theme-part(explorerbar, 7, 1);
+}
+expander title arrow:checked {
+    background-image: -gtk-win32-theme-part(explorerbar, 6, 1);
+}
+expander title:hover arrow {
+    background-image: -gtk-win32-theme-part(explorerbar, 7, 2);
+}
+expander title:hover arrow:checked {
+    background-image: -gtk-win32-theme-part(explorerbar, 6, 2);
 }
 
 /* Spinner */

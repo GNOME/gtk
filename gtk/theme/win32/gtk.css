@@ -183,9 +183,18 @@ decoration:disabled {
   margin: -3px;
 }
 
+.titlebar .close image,
+.titlebar .maximize image,
+.titlebar .minimize image {
+    color: transparent;
+}
+
 .titlebar button.close {
     background-image: -gtk-win32-theme-part(window, 18, 1);
-    color: transparent;
+}
+
+.titlebar button.close:backdrop {
+    background-image: -gtk-win32-theme-part(window, 18, 5);
 }
 
 .titlebar button.close:hover {
@@ -202,7 +211,10 @@ decoration:disabled {
 
 .titlebar button.minimize {
     background-image: -gtk-win32-theme-part(window, 15, 1);
-    color: transparent;
+}
+
+.titlebar button.minimize:backdrop {
+    background-image: -gtk-win32-theme-part(window, 15, 5);
 }
 
 .titlebar button.minimize:hover {
@@ -219,7 +231,10 @@ decoration:disabled {
 
 .titlebar button.maximize {
     background-image: -gtk-win32-theme-part(window, 17, 1);
-    color: transparent;
+}
+
+.titlebar button.maximize:backdrop {
+    background-image: -gtk-win32-theme-part(window, 17, 5);
 }
 
 .titlebar button.maximize:hover {
@@ -236,6 +251,10 @@ decoration:disabled {
 
 .maximized .titlebar button.maximize {
     background-image: -gtk-win32-theme-part(window, 21, 1);
+}
+
+.maximized .titlebar button.maximize:backdrop {
+    background-image: -gtk-win32-theme-part(window, 21, 5);
 }
 
 .maximized .titlebar button.maximize:hover {
