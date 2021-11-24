@@ -94,7 +94,7 @@
  * Note: if a sequence is set early to %GTK_EVENT_SEQUENCE_CLAIMED on
  * %GDK_TOUCH_BEGIN/%GDK_BUTTON_PRESS (so those events are captured before
  * reaching the event widget, this implies %GTK_PHASE_CAPTURE), one similar
- * event will emulated if the sequence changes to %GTK_EVENT_SEQUENCE_DENIED.
+ * event will be emulated if the sequence changes to %GTK_EVENT_SEQUENCE_DENIED.
  * This way event coherence is preserved before event propagation is unstopped
  * again.
  *
