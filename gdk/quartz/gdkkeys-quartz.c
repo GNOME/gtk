@@ -812,13 +812,13 @@ input_sources_changed_notification (CFNotificationCenterRef  center,
 static void
 gdk_quartz_keymap_init (GdkQuartzKeymap *keymap)
 {
-  update_keymap ();
   CFNotificationCenterAddObserver (CFNotificationCenterGetDistributedCenter (),
                                    keymap,
                                    input_sources_changed_notification,
                                    CFSTR ("AppleSelectedInputSourcesChangedNotification"),
                                    NULL,
                                    CFNotificationSuspensionBehaviorDeliverImmediately);
+  update_keymap ();
 }
 
 static void
