@@ -1395,17 +1395,35 @@ fi
 ##################################################
 # Check for harfbuzz and pangoft2
 ##################################################
-
 PKG_CHECK_MODULES(GTK_FONT_CHOOSER_WIDGET,
-                  harfbuzz >= 0.9 pangoft2,
+                  harfbuzz >= 2.2.0 pango >= 1.44.0,
                   build_font_demo=yes,
                   build_font_demo=no)
+
+PKG_CHECK_MODULES(GTK_FONT_CHOOSER_WIDGET_FT,
+                  harfbuzz >= 0.9 pangoft2,
+                  build_font_demo_ft=yes,
+                  build_font_demo_ft=no)
+
+if test "x$build_font_demo" = xno; then
+  if test "x$build_font_demo_ft" = xyes; then
+    build_font_demo=yes
+  else
+    build_font_demo=no
+  fi
+fi
+
 AM_CONDITIONAL(BUILD_FONT_DEMO, [ test "x$build_font_demo" = xyes ])
 if test "x$build_font_demo" = xyes; then
   AC_DEFINE([HAVE_HARFBUZZ], 1, [defines whether we have HarfBuzz])
-  AC_DEFINE([HAVE_PANGOFT], 1, [defines whether we have pangoft2])
-  GTK_DEP_CFLAGS="$GTK_DEP_CFLAGS $GTK_FONT_CHOOSER_WIDGET_CFLAGS"
-  GTK_DEP_LIBS="$GTK_DEP_LIBS $GTK_FONT_CHOOSER_WIDGET_LIBS"
+  if test "x$build_font_demo_ft" = xyes; then
+    AC_DEFINE([HAVE_PANGOFT], 1, [defines whether we have pangoft2])
+    GTK_DEP_CFLAGS="$GTK_DEP_CFLAGS $GTK_FONT_CHOOSER_WIDGET_FT_CFLAGS"
+    GTK_DEP_LIBS="$GTK_DEP_LIBS $GTK_FONT_CHOOSER_WIDGET_FT_LIBS"
+  else
+    GTK_DEP_CFLAGS="$GTK_DEP_CFLAGS $GTK_FONT_CHOOSER_WIDGET_CFLAGS"
+    GTK_DEP_LIBS="$GTK_DEP_LIBS $GTK_FONT_CHOOSER_WIDGET_LIBS"
+  fi
 fi
 
 if $PKG_CONFIG --exists x11; then
