@@ -33,6 +33,7 @@ gtk_tools = [
                          'fake-scope.c'], [libgtk_dep] ],
   ['gtk4-update-icon-cache', ['updateiconcache.c'] + extra_update_icon_cache_objs, [ libgtk_static_dep ] ],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c'], [ libgtk_static_dep ] ],
+  ['gtk4-json-format', ['gtk-json-format.c'], [ libgtk_json_dep ], [ libgtk_json ] ],
 ]
 
 if os_unix
@@ -43,12 +44,14 @@ foreach tool: gtk_tools
   tool_name = tool.get(0)
   tool_srcs = tool.get(1)
   tool_deps = tool.get(2)
+  tool_link = tool.get(3, [])
 
   exe = executable(tool_name,
     sources: tool_srcs,
     include_directories: [confinc],
     c_args: common_cflags,
     dependencies: tool_deps,
+    link_with: tool_link,
     install: true,
   )
 
