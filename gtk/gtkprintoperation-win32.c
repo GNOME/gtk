@@ -1484,7 +1484,7 @@ pageDlgProc (HWND wnd, UINT message, WPARAM wparam, LPARAM lparam)
     }
   else 
     {
-      gpointer user_data = GetWindowLongPtrW (wnd, GWLP_USERDATA);
+      gpointer user_data = (void *)GetWindowLongPtrW (wnd, GWLP_USERDATA);
 
       if (!user_data)
         return FALSE;
