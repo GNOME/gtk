@@ -46,6 +46,11 @@ AT_PLAT=aarch64
 AT_PLAT=i686
 !endif
 
+demo_sources = $(demos_base)
+!ifdef FONT_FEATURES_DEMO
+demo_sources = $(demo_sources) $(font_features_demo)
+!endif
+
 # Please do not change anything beneath this line unless maintaining the NMake Makefiles
 GTK_VERSION = @GTK_VERSION@
 

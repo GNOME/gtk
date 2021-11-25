@@ -99,3 +99,17 @@ NULL=
 
 !if [del /f /q resources_sources.mak]
 !endif
+
+!if [call create-lists.bat header demo_sources.mak demo_actual_sources]
+!endif
+
+!if [for %f in ($(demo_sources)) do @call create-lists.bat file demo_sources.mak ..\demos\gtk-demo\%f]
+!endif
+
+!if [call create-lists.bat footer demo_sources.mak]
+!endif
+
+!include demo_sources.mak
+
+!if [del /f /q demo_sources.mak]
+!endif

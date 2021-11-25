@@ -3,6 +3,7 @@
 # Items in here should not need to be edited unless
 # one is maintaining the NMake build files.
 
+!include ../demos/gtk-demo/demos-sources.mak
 !include config-msvc.mak
 !include create-lists-msvc.mak
 
@@ -192,6 +193,12 @@ all:	\
 ..\demos\icon-browser\resources.c: ..\demos\icon-browser\iconbrowser.gresource.xml $(ICON_BROWSER_RESOURCES)
 	@echo Generating $@...
 	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\iconbrowser.gresource.xml
+
+regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
+	@echo Regenerating demos.h.win32...
+	@-del ..\demos\gtk-demo\demos.h.win32
+	@cd ..\demos\gtk-demo
+	@$(PYTHON) geninclude.py demos.h.win32 $(demo_sources)
 
 # Remove the generated files
 clean:
