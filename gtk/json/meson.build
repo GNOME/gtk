@@ -1,5 +1,6 @@
 gtk_json_sources = files([
   'gtkjsonparser.c',
+  'gtkjsonprinter.c',
 ])
 
 gtk_json_deps = [
