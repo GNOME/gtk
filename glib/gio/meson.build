@@ -1,4 +1,5 @@
 expand_content_files = [
+  'migrating-gconf.md',
   'migrating-gnome-vfs.md',
 ]
 
