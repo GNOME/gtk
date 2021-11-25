@@ -1,4 +1,5 @@
 expand_content_files = [
+  'migrating-gnome-vfs.md',
 ]
 
 gio_gir = meson.current_source_dir() / 'Gio-2.0.gir'

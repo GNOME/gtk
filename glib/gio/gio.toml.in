@@ -35,7 +35,9 @@ show_class_hierarchy = true
 [extra]
 urlmap_file = "urlmap.js"
 # The same order will be used when generating the index
-content_files = []
+content_files = [
+  "migrating-gnome-vfs.md",
+]
 content_images = [
   "gvfs-overview.png",
   "menu-example.png",
