@@ -1,7 +1,8 @@
 expand_content_files = [
-  'migrating-gdbus.md',
   'migrating-gconf.md',
+  'migrating-gdbus.md',
   'migrating-gnome-vfs.md',
+  'overview.md',
 ]
 
 gio_gir = meson.current_source_dir() / 'Gio-2.0.gir'
