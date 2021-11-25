@@ -9,10 +9,19 @@
  */
 
 #include <gtk/gtk.h>
+
+#if !(PANGO_VERSION_CHECK(1,44,0) && HB_VERSION_ATLEAST(2,2,0))
+#define FONT_FEATURES_USE_PANGOFT2 1
+#endif
+
+#ifdef FONT_FEATURES_USE_PANGOFT2
 #include <pango/pangofc-font.h>
 #include <hb.h>
 #include <hb-ot.h>
 #include <hb-ft.h>
+#else
+#include <hb-ot.h>
+#endif
 
 static GtkWidget *label;
 static GtkWidget *settings;
@@ -205,19 +214,32 @@ static void
 update_script_combo (void)
 {
   GtkListStore *store;
-  hb_font_t *hb_font;
+  hb_font_t *hb_font = NULL;
   gint i, j, k, l;
-  FT_Face ft_face;
   PangoFont *pango_font;
   GHashTable *tags;
   GHashTableIter iter;
   TagPair *pair;
+  gboolean cleanup_hb_face = FALSE;
+
+#ifdef FONT_FEATURES_USE_PANGOFT2
+  FT_Face ft_face;
+#endif
 
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
 
   pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
-  hb_font = hb_ft_font_create (ft_face, NULL);
+
+#ifdef FONT_FEATURES_USE_PANGOFT2
+  if (PANGO_IS_FC_FONT (pango_font)
+    {
+      ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+      hb_font = hb_ft_font_create (ft_face, NULL);
+      cleanup_hb_face = TRUE;
+    }
+#else
+  hb_font = pango_font_get_hb_font (pango_font);
+#endif
 
   tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
 
@@ -264,10 +286,15 @@ update_script_combo (void)
             }
         }
 
-      hb_face_destroy (hb_face);
+      if (cleanup_hb_face)
+        hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#ifdef FONT_FEATURES_USE_PANGOFT2
+  if (PANGO_IS_FC_FONT (pango_font)
+    pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   g_object_unref (pango_font);
 
   g_hash_table_iter_init (&iter, tags);
@@ -346,8 +373,12 @@ update_features (void)
   GtkTreeIter iter;
   guint script_index, lang_index;
   PangoFont *pango_font;
+  hb_font_t *hb_font = NULL;
+  gboolean cleanup_hb_face = FALSE;
+
+#ifdef FONT_FEATURES_USE_PANGOFT2
   FT_Face ft_face;
-  hb_font_t *hb_font;
+#endif
 
   for (i = 0; i < num_features; i++)
     gtk_widget_set_opacity (icon[i], 0);
@@ -364,8 +395,17 @@ update_features (void)
                       -1);
 
   pango_font = get_pango_font ();
-  ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
-  hb_font = hb_ft_font_create (ft_face, NULL);
+
+#ifdef FONT_FEATURES_USE_PANGOFT2
+  if (PANGO_IS_FC_FONT (pango_font)
+    {
+      ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
+      hb_font = hb_ft_font_create (ft_face, NULL);
+      cleanup_hb_face = TRUE;
+    }
+#else
+  hb_font = pango_font_get_hb_font (pango_font);
+#endif
 
   if (hb_font)
     {
@@ -397,10 +437,15 @@ update_features (void)
             }
         }
 
-      hb_face_destroy (hb_face);
+      if (cleanup_hb_face)
+        hb_face_destroy (hb_face);
     }
 
-  pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#ifdef FONT_FEATURES_USE_PANGOFT2
+  if (PANGO_IS_FC_FONT (pango_font)
+    pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
+#endif
+
   g_object_unref (pango_font);
 }
 
