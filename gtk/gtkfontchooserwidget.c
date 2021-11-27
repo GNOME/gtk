@@ -981,6 +981,7 @@ change_tweak (GSimpleAction *action,
 
 typedef struct {
   guint32 tag;
+  float default_value;
   GtkAdjustment *adjustment;
   GtkWidget *label;
   GtkWidget *scale;
@@ -1509,12 +1510,15 @@ add_font_variations (GtkFontChooserWidget *fontchooser,
       char tag[5];
       double value;
 
+      value = gtk_adjustment_get_value (axis->adjustment);
+      if (value == axis->default_value)
+        continue;
+
       tag[0] = (axis->tag >> 24) & 0xff;
       tag[1] = (axis->tag >> 16) & 0xff;
       tag[2] = (axis->tag >> 8) & 0xff;
       tag[3] = (axis->tag >> 0) & 0xff;
       tag[4] = '\0';
-      value = gtk_adjustment_get_value (axis->adjustment);
       g_string_append_printf (s, "%s%s=%s", sep, tag, g_ascii_dtostr (buf, sizeof(buf), value));
       sep = ",";
     }
@@ -1533,12 +1537,9 @@ adjustment_changed (GtkAdjustment *adjustment,
   s = g_string_new ("");
   add_font_variations (fontchooser, s);
 
-  if (s->len > 0)
-    {
-      font_desc = pango_font_description_new ();
-      pango_font_description_set_variations (font_desc, s->str);
-      gtk_font_chooser_widget_take_font_desc (fontchooser, font_desc);
-    }
+  font_desc = pango_font_description_new ();
+  pango_font_description_set_variations (font_desc, s->str);
+  gtk_font_chooser_widget_take_font_desc (fontchooser, font_desc);
 
   g_string_free (s, TRUE);
 
@@ -1590,6 +1591,7 @@ add_axis (GtkFontChooserWidget  *fontchooser,
 
   axis = g_new (Axis, 1);
   axis->tag = ax->tag;
+  axis->default_value = ax->default_value;
   axis->fontchooser = GTK_WIDGET (fontchooser);
 
   hb_ot_name_get_utf8 (hb_face, ax->name_id, HB_LANGUAGE_INVALID, &buffer_len, buffer);
@@ -2322,13 +2324,13 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
 
   mask = pango_font_description_get_set_fields (font_desc);
 
-  /* sucky test, because we can't restrict the comparison to 
+  /* sucky test, because we can't restrict the comparison to
    * only the parts that actually do get merged */
   if (pango_font_description_equal (font_desc, fontchooser->font_desc))
     return;
 
   pango_font_description_merge (fontchooser->font_desc, font_desc, TRUE);
-  
+
   if (mask & PANGO_FONT_MASK_SIZE)
     {
       double font_size = (double) pango_font_description_get_size (fontchooser->font_desc) / PANGO_SCALE;
@@ -2350,6 +2352,12 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
         has_tweak = TRUE;
 
       g_simple_action_set_enabled (G_SIMPLE_ACTION (fontchooser->tweak_action), has_tweak);
+    }
+
+  if (mask & PANGO_FONT_MASK_VARIATIONS)
+    {
+      if (pango_font_description_get_variations (fontchooser->font_desc)[0] == '\0')
+        pango_font_description_unset_fields (fontchooser->font_desc, PANGO_FONT_MASK_VARIANT);
     }
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
