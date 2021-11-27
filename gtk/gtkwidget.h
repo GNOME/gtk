@@ -851,6 +851,8 @@ void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *
                                                          const char            *name,
                                                          gboolean               internal_child,
                                                          gssize                 struct_offset);
+GDK_AVAILABLE_IN_4_6
+void    gtk_widget_clear_template                       (GtkWidget             *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_insert_action_group  (GtkWidget    *widget,

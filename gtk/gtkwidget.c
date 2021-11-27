@@ -10939,6 +10939,67 @@ get_auto_child_hash (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_clear_template:
+ * @widget: the widget whose template has to be cleared
+ *
+ * Clears and finalizes child widgets defined in templates.
+ *
+ * This function must be called in the `dispose()` implementation
+ * of the widget class which assigned itself a template using
+ * [method@Gtk.WidgetClass.set_template], and called
+ * [method@Gtk.Widget.init_template] in its instance initialization
+ * function.
+ *
+ * Since: 4.6
+ */
+void
+gtk_widget_clear_template (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  GtkWidgetTemplate *template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
+  g_return_if_fail (template != NULL);
+
+  GType class_type = G_OBJECT_TYPE (widget);
+
+  /* Build the automatic child data */
+  for (GSList *l = template->children; l; l = l->next)
+    {
+      AutomaticChildClass *child_class = l->data;
+
+      GHashTable *auto_child_hash = get_auto_child_hash (widget, class_type, FALSE);
+      if (auto_child_hash == NULL)
+        continue;
+
+      GObject *child = g_hash_table_lookup (auto_child_hash, child_class->name);
+      if (G_UNLIKELY (child == NULL))
+        {
+          g_critical ("Unable to retrieve child object '%s' from class "
+                      "template for type '%s' while clearing a '%s'",
+                      child_class->name, g_type_name (class_type), G_OBJECT_TYPE_NAME (widget));
+          break;
+        }
+
+      if (child_class->offset != 0)
+        {
+          gpointer field_p;
+
+          /* Nullify the field in the instance/private data */
+          field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
+          (* (gpointer *) field_p) = NULL;
+        }
+
+      /* Unparent direct children of the widget; objects inside the
+       * auto_child_hash get an additional reference upon insertion
+       */
+      if (GTK_IS_WIDGET (child) && _gtk_widget_get_parent (GTK_WIDGET (child)) == widget)
+        gtk_widget_unparent (GTK_WIDGET (child));
+
+      g_hash_table_remove (auto_child_hash, child_class->name);
+    }
+}
+
+/**
  * gtk_widget_init_template:
  * @widget: a `GtkWidget`
  *
