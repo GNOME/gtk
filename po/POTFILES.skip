@@ -319,6 +319,8 @@ testsuite/reftests/window-height-for-width.ref.ui
 testsuite/reftests/window-height-for-width.ui
 testsuite/reftests/window-show-contents-on-map.ref.ui
 testsuite/reftests/window-show-contents-on-map.ui
+testsuite/reftests/wrapping-in-boxes-in-boxes.ref.ui
+testsuite/reftests/wrapping-in-boxes-in-boxes.ui
 testsuite/tools/simplify-data-3to4/assistant.ui
 testsuite/tools/simplify-data-3to4/box.ui
 testsuite/tools/simplify-data-3to4/grid.ui
