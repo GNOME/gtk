@@ -29,9 +29,6 @@ struct _GtkJsonReader
 {
   const guchar *data;
   const guchar *end;
-
-  gsize lines;
-  const guchar *line_start;
 };
 
 typedef enum {
@@ -131,8 +128,6 @@ gtk_json_reader_init (GtkJsonReader *reader,
 {
   reader->data = data;
   reader->end = data + size;
-  reader->lines = 0;
-  reader->line_start = data;
 }
 
 static gboolean
@@ -158,16 +153,9 @@ gtk_json_reader_skip_whitespace (GtkJsonReader *reader)
         {
         case ' ':
         case '\t':
-          reader->data++;
-          break;
         case '\r':
-          if (gtk_json_reader_remaining (reader) >= 2 && reader->data[1] == '\n')
-            reader->data++;
-          G_GNUC_FALLTHROUGH;
         case '\n':
           reader->data++;
-          reader->lines++;
-          reader->line_start = reader->data;
           break;
         default:
           return;
@@ -257,16 +245,6 @@ gtk_json_reader_parse_string (GtkJsonReader  *reader,
       {
         case '\0':
           goto end;
-
-        case '\r':
-          if (reader->data + 1 < reader->end && reader->data[1] == '\n')
-            reader->data++;
-          G_GNUC_FALLTHROUGH;
-        case '\n':
-          reader->data++;
-          reader->lines++;
-          reader->line_start = reader->data;
-          break;
 
         case '"':
           if (!g_utf8_validate ((const char *) last, reader->data - last, (const char **) &reader->data))
