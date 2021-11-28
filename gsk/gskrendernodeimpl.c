@@ -828,18 +828,14 @@ project (double  angle,
 {
   double x, y;
 
-  x = radius * cos (angle);
-  y = radius * sin (angle);
-  if (copysign (x, 1.0) > copysign (y, 1.0))
-    {
-      *x_out = copysign (radius, x);
-      *y_out = y * radius / copysign (x, 1.0);
-    }
-  else
-    {
-      *x_out = x * radius / copysign (y, 1.0);
-      *y_out = copysign (radius, y);
-    }
+#ifdef HAVE_SINCOS
+  sincos (angle, &y, &x);
+#else
+  x = cos (angle);
+  y = sin (angle);
+#endif
+  *x_out = radius * x;
+  *y_out = radius * y;
 }
 
 static void
