@@ -58,25 +58,127 @@ struct _GtkJsonParser
   GtkJsonBlock blocks_preallocated[128]; /* preallocated */
 };
 
-static void
-gtk_json_set_syntax_error (GError     **error,
-                           const char  *format,
-                           ...) G_GNUC_PRINTF(2, 3);
-static void
-gtk_json_set_syntax_error (GError     **error,
-                           const char  *format,
-                           ...)
+typedef enum {
+  WHITESPACE     = (1 << 0),
+  STRING_ELEMENT = (1 << 1),
+} JsonCharacterType;
+
+static const guchar json_character_table[256] = {
+  ['\t'] = WHITESPACE,
+  ['\r'] = WHITESPACE,
+  ['\n'] = WHITESPACE,
+  [' ']  = WHITESPACE | STRING_ELEMENT,
+  [' ']  = STRING_ELEMENT,
+  ['!']  = STRING_ELEMENT,
+  ['"']  = 0,
+  ['#']  = STRING_ELEMENT,
+  ['$']  = STRING_ELEMENT,
+  ['%']  = STRING_ELEMENT,
+  ['&']  = STRING_ELEMENT,
+  ['\''] = STRING_ELEMENT,
+  ['(']  = STRING_ELEMENT,
+  [')']  = STRING_ELEMENT,
+  ['*']  = STRING_ELEMENT,
+  ['+']  = STRING_ELEMENT,
+  [',']  = STRING_ELEMENT,
+  ['-']  = STRING_ELEMENT,
+  ['.']  = STRING_ELEMENT,
+  ['/']  = STRING_ELEMENT,
+  ['0']  = STRING_ELEMENT,
+  ['1']  = STRING_ELEMENT,
+  ['2']  = STRING_ELEMENT,
+  ['3']  = STRING_ELEMENT,
+  ['4']  = STRING_ELEMENT,
+  ['5']  = STRING_ELEMENT,
+  ['6']  = STRING_ELEMENT,
+  ['7']  = STRING_ELEMENT,
+  ['8']  = STRING_ELEMENT,
+  ['9']  = STRING_ELEMENT,
+  [':']  = STRING_ELEMENT,
+  [';']  = STRING_ELEMENT,
+  ['<']  = STRING_ELEMENT,
+  ['=']  = STRING_ELEMENT,
+  ['>']  = STRING_ELEMENT,
+  ['?']  = STRING_ELEMENT,
+  ['@']  = STRING_ELEMENT,
+  ['A']  = STRING_ELEMENT,
+  ['B']  = STRING_ELEMENT,
+  ['C']  = STRING_ELEMENT,
+  ['D']  = STRING_ELEMENT,
+  ['E']  = STRING_ELEMENT,
+  ['F']  = STRING_ELEMENT,
+  ['G']  = STRING_ELEMENT,
+  ['H']  = STRING_ELEMENT,
+  ['I']  = STRING_ELEMENT,
+  ['J']  = STRING_ELEMENT,
+  ['K']  = STRING_ELEMENT,
+  ['L']  = STRING_ELEMENT,
+  ['M']  = STRING_ELEMENT,
+  ['N']  = STRING_ELEMENT,
+  ['O']  = STRING_ELEMENT,
+  ['P']  = STRING_ELEMENT,
+  ['Q']  = STRING_ELEMENT,
+  ['R']  = STRING_ELEMENT,
+  ['S']  = STRING_ELEMENT,
+  ['T']  = STRING_ELEMENT,
+  ['U']  = STRING_ELEMENT,
+  ['V']  = STRING_ELEMENT,
+  ['W']  = STRING_ELEMENT,
+  ['X']  = STRING_ELEMENT,
+  ['Y']  = STRING_ELEMENT,
+  ['Z']  = STRING_ELEMENT,
+  ['[']  = STRING_ELEMENT,
+  ['\\'] = 0,
+  [']']  = STRING_ELEMENT,
+  ['^']  = STRING_ELEMENT,
+  ['_']  = STRING_ELEMENT,
+  ['`']  = STRING_ELEMENT,
+  ['a']  = STRING_ELEMENT,
+  ['b']  = STRING_ELEMENT,
+  ['c']  = STRING_ELEMENT,
+  ['d']  = STRING_ELEMENT,
+  ['e']  = STRING_ELEMENT,
+  ['f']  = STRING_ELEMENT,
+  ['g']  = STRING_ELEMENT,
+  ['h']  = STRING_ELEMENT,
+  ['i']  = STRING_ELEMENT,
+  ['j']  = STRING_ELEMENT,
+  ['k']  = STRING_ELEMENT,
+  ['l']  = STRING_ELEMENT,
+  ['m']  = STRING_ELEMENT,
+  ['n']  = STRING_ELEMENT,
+  ['o']  = STRING_ELEMENT,
+  ['p']  = STRING_ELEMENT,
+  ['q']  = STRING_ELEMENT,
+  ['r']  = STRING_ELEMENT,
+  ['s']  = STRING_ELEMENT,
+  ['t']  = STRING_ELEMENT,
+  ['u']  = STRING_ELEMENT,
+  ['v']  = STRING_ELEMENT,
+  ['w']  = STRING_ELEMENT,
+  ['x']  = STRING_ELEMENT,
+  ['y']  = STRING_ELEMENT,
+  ['z']  = STRING_ELEMENT,
+  ['{']  = STRING_ELEMENT,
+  ['|']  = STRING_ELEMENT,
+  ['}']  = STRING_ELEMENT,
+  ['~']  = STRING_ELEMENT,
+  [127]  = STRING_ELEMENT,
+};
+
+static const guchar *
+json_skip_characters (const guchar      *start,
+                      const guchar      *end,
+                      JsonCharacterType  type)
 {
-  va_list args;
+  const guchar *s;
 
-  if (error == NULL)
-    return;
-
-  va_start (args, format);
-  *error = g_error_new_valist (G_FILE_ERROR,
-                               G_FILE_ERROR_FAILED,
-                               format, args);
-  va_end (args);
+  for (s = start; s < end; s++)
+    {
+      if ((json_character_table[*s] & type) != type)
+        break;
+    }
+  return s;
 }
 
 static void
@@ -97,6 +199,27 @@ gtk_json_parser_value_error (GtkJsonParser *self,
   self->error = g_error_new_valist (G_FILE_ERROR,
                                     G_FILE_ERROR_FAILED,
                                     format, args);
+  va_end (args);
+}
+
+static void
+gtk_json_set_syntax_error (GError     **error,
+                           const char  *format,
+                           ...) G_GNUC_PRINTF(2, 3);
+static void
+gtk_json_set_syntax_error (GError     **error,
+                           const char  *format,
+                           ...)
+{
+  va_list args;
+
+  if (error == NULL)
+    return;
+
+  va_start (args, format);
+  *error = g_error_new_valist (G_FILE_ERROR,
+                               G_FILE_ERROR_FAILED,
+                               format, args);
   va_end (args);
 }
 
@@ -147,20 +270,7 @@ gtk_json_reader_remaining (GtkJsonReader *reader)
 static void
 gtk_json_reader_skip_whitespace (GtkJsonReader *reader)
 {
-  while (reader->data < reader->end)
-    {
-      switch (*reader->data)
-        {
-        case ' ':
-        case '\t':
-        case '\r':
-        case '\n':
-          reader->data++;
-          break;
-        default:
-          return;
-        }
-    }
+  reader->data = json_skip_characters (reader->data, reader->end, WHITESPACE);
 }
 
 static gboolean
@@ -238,22 +348,31 @@ gtk_json_reader_parse_string (GtkJsonReader  *reader,
     }
 
   last = reader->data;
+  reader->data = json_skip_characters (reader->data, reader->end, STRING_ELEMENT);
 
   while (gtk_json_reader_remaining (reader))
     {
-      switch (*reader->data)
-      {
-        case '\0':
-          goto end;
-
-        case '"':
-          if (!g_utf8_validate ((const char *) last, reader->data - last, (const char **) &reader->data))
+      if (*reader->data < 0x20)
+        {
+          if (string)
+            g_string_free (string, TRUE);
+          gtk_json_set_syntax_error (error, "Disallowed control character in string literal");
+          return FALSE;
+        }
+      else if (*reader->data > 127)
+        {
+          gunichar c = g_utf8_get_char_validated ((const char *) reader->data, reader->end - reader->data);
+          if (c == (gunichar) -2 || c == (gunichar) -1)
             {
               if (string)
                 g_string_free (string, TRUE);
               gtk_json_set_syntax_error (error, "Invalid UTF-8");
               return FALSE;
             }
+          reader->data = (const guchar *) g_utf8_next_char ((const char *) reader->data);
+        }
+      else if (*reader->data == '"')
+        {
           if (out_string)
             {
               if (string)
@@ -266,15 +385,9 @@ gtk_json_reader_parse_string (GtkJsonReader  *reader,
             }
           reader->data++;
           return TRUE;
-
-        case '\\':
-          if (!g_utf8_validate ((const char *) last, reader->data - last, (const char **) &reader->data))
-            {
-              if (string)
-                g_string_free (string, TRUE);
-              gtk_json_set_syntax_error (error, "Invalid UTF-8");
-              return FALSE;
-            }
+        }
+      else if (*reader->data == '\\')
+        {
           if (gtk_json_reader_remaining (reader) < 2)
             goto end;
           if (out_string)
@@ -369,20 +482,10 @@ gtk_json_reader_parse_string (GtkJsonReader  *reader,
               gtk_json_set_syntax_error (error, "Unknown escape sequence");
               return FALSE;
             }
-          last = reader->data + 1;
-          break;
-
-        default:
-          if (*reader->data < 0x20)
-            {
-              if (string)
-                g_string_free (string, TRUE);
-              gtk_json_set_syntax_error (error, "Disallowed control character in string literal");
-              return FALSE;
-            }
-          break;
-      }
-      reader->data++;
+          reader->data++;
+        }
+      last = reader->data;
+      reader->data = json_skip_characters (reader->data, reader->end, STRING_ELEMENT);
     }
 
 end:
