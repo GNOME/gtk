@@ -338,10 +338,37 @@ text_view_query_tooltip_cb (GtkWidget        *widget,
 
 static gboolean
 load_bytes (NodeEditorWindow *self,
+            GBytes           *bytes);
+
+static void
+load_error (NodeEditorWindow *self,
+            const char        *error_message)
+{
+  PangoLayout *layout;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  GBytes *bytes;
+
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), error_message);
+  pango_layout_set_width (layout, 300 * PANGO_SCALE);
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_append_layout (snapshot, layout, &(GdkRGBA) { 0.7, 0.13, 0.13, 1.0 });
+  node = gtk_snapshot_free_to_node (snapshot);
+  bytes = gsk_render_node_serialize (node);
+
+  load_bytes (self, bytes);
+
+  gsk_render_node_unref (node);
+  g_object_unref (layout);
+}
+
+static gboolean
+load_bytes (NodeEditorWindow *self,
             GBytes           *bytes)
 {
   if (!g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
     {
+      load_error (self, "Invalid UTF-8");
       g_bytes_unref (bytes);
       return FALSE;
     }
@@ -359,11 +386,16 @@ static gboolean
 load_file_contents (NodeEditorWindow *self,
                     GFile            *file)
 {
+  GError *error = NULL;
   GBytes *bytes;
 
-  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+  bytes = g_file_load_bytes (file, NULL, NULL, &error);
   if (bytes == NULL)
-    return FALSE;
+    {
+      load_error (self, error->message);
+      g_clear_error (&error);
+      return FALSE;
+    }
 
   return load_bytes (self, bytes);
 }
@@ -473,17 +505,18 @@ node_editor_window_load (NodeEditorWindow *self,
 {
   GError *error = NULL;
 
+  g_clear_object (&self->file_monitor);
+
   if (!load_file_contents (self, file))
     return FALSE;
 
-  g_clear_object (&self->file_monitor);
   self->file_monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
-
 
   if (error)
     {
       g_warning ("couldn't monitor file: %s", error->message);
       g_error_free (error);
+      g_clear_object (&self->file_monitor);
     }
   else
     {
