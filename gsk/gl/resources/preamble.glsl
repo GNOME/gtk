@@ -5,12 +5,10 @@ precision highp float;
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
 #define _OUT_ varying
 #define _IN_ varying
-#define _NOPERSPECTIVE_
 #define _GSK_ROUNDED_RECT_UNIFORM_ vec4[3]
 #else
 #define _OUT_ out
 #define _IN_ in
-#define _NOPERSPECTIVE_ noperspective
 #define _GSK_ROUNDED_RECT_UNIFORM_ GskRoundedRect
 #endif
 

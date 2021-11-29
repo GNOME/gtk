@@ -3,7 +3,7 @@
 
 uniform vec4 u_geometry;
 
-_NOPERSPECTIVE_ _OUT_ vec2 coord;
+_OUT_ vec2 coord;
 
 void main() {
   gl_Position = u_projection * (u_modelview * vec4(aPosition, 0.0, 1.0));
@@ -29,7 +29,7 @@ uniform highp int u_num_color_stops; // Why? Because it works like this.
 uniform vec4 u_geometry;
 uniform float u_color_stops[MAX_COLOR_STOPS * 5];
 
-_NOPERSPECTIVE_ _IN_ vec2 coord;
+_IN_ vec2 coord;
 
 float get_offset(int index) {
   // u_color_stops[5 * index] makes Intel Windows driver crash.
