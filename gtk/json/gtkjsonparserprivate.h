@@ -47,6 +47,8 @@ gboolean                gtk_json_parser_next                    (GtkJsonParser  
 GtkJsonNode             gtk_json_parser_get_node                (GtkJsonParser          *self);
 const GError *          gtk_json_parser_get_error               (GtkJsonParser          *self) G_GNUC_PURE;
 char *                  gtk_json_parser_get_member_name         (GtkJsonParser          *self);
+gssize                  gtk_json_parser_select_member           (GtkJsonParser          *self,
+                                                                 const char * const     *options);
 
 gboolean                gtk_json_parser_get_boolean             (GtkJsonParser          *self);
 double                  gtk_json_parser_get_number              (GtkJsonParser          *self);

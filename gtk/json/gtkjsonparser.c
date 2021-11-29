@@ -873,6 +873,30 @@ gtk_json_parser_get_member_name (GtkJsonParser *self)
   return gtk_json_unescape_string (self->block->member_name);
 }
 
+gssize
+gtk_json_parser_select_member (GtkJsonParser      *self,
+                               const char * const *options)
+{
+  char *member_name;
+  gssize i;
+
+  member_name = gtk_json_parser_get_member_name (self);
+  if (member_name == NULL)
+    return -1;
+
+  for (i = 0; options[i]; i++)
+    {
+      if (strcmp (member_name, options[i]) == 0)
+        break;
+    }
+  if (options[i] == NULL)
+    i = -1;
+
+  g_free (member_name);
+
+  return i;
+}
+
 gboolean
 gtk_json_parser_get_boolean (GtkJsonParser *self)
 {
