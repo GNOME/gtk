@@ -781,6 +781,7 @@ change_tweak (GSimpleAction *action,
 
 typedef struct {
   guint32 tag;
+  float default_value;
   GtkAdjustment *adjustment;
   GtkWidget *label;
   GtkWidget *scale;
@@ -1510,12 +1511,15 @@ add_font_variations (GtkFontChooserWidget *fontchooser,
       char tag[5];
       double value;
 
+      value = gtk_adjustment_get_value (axis->adjustment);
+      if (value == axis->default_value)
+        continue;
+
       tag[0] = (axis->tag >> 24) & 0xff;
       tag[1] = (axis->tag >> 16) & 0xff;
       tag[2] = (axis->tag >> 8) & 0xff;
       tag[3] = (axis->tag >> 0) & 0xff;
       tag[4] = '\0';
-      value = gtk_adjustment_get_value (axis->adjustment);
       g_string_append_printf (s, "%s%s=%s", sep, tag, g_ascii_dtostr (buf, sizeof(buf), value));
       sep = ",";
     }
@@ -1535,12 +1539,9 @@ adjustment_changed (GtkAdjustment *adjustment,
   s = g_string_new ("");
   add_font_variations (fontchooser, s);
 
-  if (s->len > 0)
-    {
-      font_desc = pango_font_description_new ();
-      pango_font_description_set_variations (font_desc, s->str);
-      gtk_font_chooser_widget_take_font_desc (fontchooser, font_desc);
-    }
+  font_desc = pango_font_description_new ();
+  pango_font_description_set_variations (font_desc, s->str);
+  gtk_font_chooser_widget_take_font_desc (fontchooser, font_desc);
 
   g_string_free (s, TRUE);
 
@@ -1717,6 +1718,7 @@ add_axis (GtkFontChooserWidget *fontchooser,
   axis = g_new (Axis, 1);
   axis->tag = ax->tag;
   axis->fontchooser = GTK_WIDGET (fontchooser);
+  axis->default_value = get_axis_float_default (ax);
 
   get_font_name (face, ax, name);
 
@@ -2580,6 +2582,14 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
 
       g_simple_action_set_enabled (G_SIMPLE_ACTION (priv->tweak_action), has_tweak);
     }
+
+#ifdef HAVE_FONT_FEATURES
+  if (mask & PANGO_FONT_MASK_VARIATIONS)
+    {
+      if (pango_font_description_get_variations (priv->font_desc)[0] == '\0')
+        pango_font_description_unset_fields (priv->font_desc, PANGO_FONT_MASK_VARIANT);
+    }
+#endif
 
   gtk_font_chooser_widget_update_preview_attributes (fontchooser);
 
