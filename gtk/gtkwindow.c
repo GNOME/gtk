@@ -4179,6 +4179,61 @@ update_realized_window_properties (GtkWindow *window)
     }
 }
 
+/* NB: When orientation is VERTICAL, width/height are flipped.
+ * The code uses the terms nonetheless to make it more intuitive
+ * to understand.
+ */
+static void
+gtk_window_compute_min_size (GtkWidget      *window,
+                             GtkOrientation  orientation,
+                             double          ideal_ratio,
+                             int            *min_width,
+                             int            *min_height)
+{
+  int start, end, mid, other;
+  double ratio;
+
+  /* start = min width, end = min width for min height (ie max width) */
+  gtk_widget_measure (window, orientation, -1, &start, NULL, NULL, NULL);
+  gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation), start, &other, NULL, NULL, NULL);
+  if ((double) start / other >= ideal_ratio)
+    {
+      *min_width = start;
+      *min_height = other;
+      return;
+    }
+  gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation), -1, &other, NULL, NULL, NULL);
+  gtk_widget_measure (window, orientation, other, &end, NULL, NULL, NULL);
+  if ((double) end / other <= ideal_ratio)
+    {
+      *min_width = end;
+      *min_height = other;
+      return;
+    }
+
+  while (start < end)
+    {
+      mid = (start + end) / 2;
+      
+      gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation), mid, &other, NULL, NULL, NULL);
+      ratio = (double) mid / other;
+      if(ratio == ideal_ratio)
+        {
+          *min_width = mid;
+          *min_height = other;
+          return;
+        }
+      else if (ratio < ideal_ratio)
+        start = mid + 1;
+      else
+        end = mid - 1;
+    }
+
+  gtk_widget_measure (window, orientation, other, &start, NULL, NULL, NULL);
+  *min_width = start;
+  *min_height = other;
+}
+
 static void
 gtk_window_compute_default_size (GtkWindow *window,
                                  int        cur_width,
@@ -4191,8 +4246,9 @@ gtk_window_compute_default_size (GtkWindow *window,
                                  int       *height)
 {
   GtkWidget *widget = GTK_WIDGET (window);
+  GtkSizeRequestMode request_mode = gtk_widget_get_request_mode (widget);
 
-  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+  if (request_mode == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {
       int minimum, natural;
 
@@ -4212,6 +4268,8 @@ gtk_window_compute_default_size (GtkWindow *window,
       if (cur_width <= 0)
         cur_width = natural;
       *width = MAX (minimum, MIN (max_width, cur_width));
+
+      gtk_window_compute_min_size (widget, GTK_ORIENTATION_VERTICAL, (double) *height / *width, min_height, min_width);
     }
   else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
     {
@@ -4234,6 +4292,9 @@ gtk_window_compute_default_size (GtkWindow *window,
         cur_height = natural;
 
       *height = MAX (minimum, MIN (max_height, cur_height));
+
+      if (request_mode != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+        gtk_window_compute_min_size (widget, GTK_ORIENTATION_HORIZONTAL, (double) *width / *height, min_width, min_height);
     }
 }
 
