@@ -27,7 +27,7 @@ aparser.add_argument('--job-id', metavar='ID',
                      default='Unknown')
 aparser.add_argument('--branch', metavar='NAME',
                      help='Branch of the project being tested',
-                     default='master')
+                     default='main')
 aparser.add_argument('--output', metavar='FILE',
                      help='The output file, stdout by default',
                      type=argparse.FileType('w', encoding='UTF-8'),

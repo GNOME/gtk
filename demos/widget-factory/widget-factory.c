@@ -78,6 +78,21 @@ change_theme_state (GSimpleAction *action,
                 NULL);
 }
 
+static void
+change_fullscreen (GSimpleAction *action,
+                   GVariant      *state,
+                   gpointer       user_data)
+{
+  GtkWindow *window = user_data;
+
+  if (g_variant_get_boolean (state))
+    gtk_window_fullscreen (window);
+  else
+    gtk_window_unfullscreen (window);
+
+  g_simple_action_set_state (action, state);
+}
+
 static GtkWidget *page_stack;
 
 static void
@@ -384,7 +399,7 @@ print_operation_done (GtkPrintOperation       *op,
       g_clear_error (&error);
       break;
     case GTK_PRINT_OPERATION_RESULT_APPLY:
-      break; 
+      break;
     case GTK_PRINT_OPERATION_RESULT_CANCEL:
       g_print ("Printing was canceled\n");
       break;
@@ -2012,11 +2027,12 @@ activate (GApplication *app)
   GMenuModel *model;
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_dark_state },
-    { "theme", NULL, "s", "'current'", change_theme_state }, 
+    { "theme", NULL, "s", "'current'", change_theme_state },
     { "transition", NULL, NULL, "true", change_transition_state },
     { "search", activate_search, NULL, NULL, NULL },
     { "delete", activate_delete, NULL, NULL, NULL },
     { "busy", get_busy, NULL, NULL, NULL },
+    { "fullscreen", NULL, NULL, "false", change_fullscreen },
     { "background", activate_background, NULL, NULL, NULL },
     { "open", activate_open, NULL, NULL, NULL },
     { "record", activate_record, NULL, NULL, NULL },
@@ -2182,7 +2198,7 @@ activate (GApplication *app)
   g_object_set_data (G_OBJECT (window), "searchbar", widget);
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "infobar");
-  g_signal_connect (widget, "response", G_CALLBACK (info_bar_response), NULL); 
+  g_signal_connect (widget, "response", G_CALLBACK (info_bar_response), NULL);
   g_object_set_data (G_OBJECT (window), "infobar", widget);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "info_dialog");

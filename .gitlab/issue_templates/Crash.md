@@ -1,7 +1,7 @@
 <!--
   Please, read the CONTRIBUTING.md guide on how to file a new issue.
 
-  https://gitlab.gnome.org/GNOME/gtk/-/blob/master/CONTRIBUTING.md
+  https://gitlab.gnome.org/GNOME/gtk/-/blob/main/CONTRIBUTING.md
 -->
 
 ## Steps to reproduce

@@ -6,6 +6,10 @@
         <attribute name="label" translatable="yes">Get Busy</attribute>
         <attribute name="action">win.busy</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Fullscreen</attribute>
+        <attribute name="action">win.fullscreen</attribute>
+      </item>
       <submenu>
         <attribute name="label" translatable="yes">Style</attribute>
         <section>
