@@ -192,6 +192,9 @@
     <file>listview_minesweeper.ui</file>
     <file>listview_minesweeper_cell.ui</file>
   </gresource>
+  <gresource prefix="/listview_releases">
+    <file>listview_releases.ui</file>
+  </gresource>
   <gresource prefix="/listview_settings">
     <file>listview_settings.ui</file>
   </gresource>
@@ -311,6 +314,7 @@
     <file>listview_filebrowser.c</file>
     <file>listview_minesweeper.c</file>
     <file>listview_selections.c</file>
+    <file>listview_releases.c</file>
     <file>listview_settings.c</file>
     <file>listview_ucd.c</file>
     <file>listview_weather.c</file>

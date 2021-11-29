@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GListStore" id="list">
+    <property name="item-type">GtkRelease</property>
+  </object>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">Releases</property>
+    <property name="default-width">640</property>
+    <property name="default-height">480</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <child type="start">
+          <object class="GtkToggleButton" id="more_button">
+            <property name="label">More…</property>
+            <property name="sensitive" bind-source="more_button" bind-property="active" bind-flags="invert-boolean" />
+            <signal name="clicked" handler="load_some_releases" object="list" swapped="yes"/>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
+        <child>
+          <object class="GtkColumnView" id="columnview">
+            <property name="model">
+              <object class="GtkSingleSelection">
+                <property name="model">list</property>
+              </object>
+            </property>
+            <style>
+              <class name="data-table"/>
+            </style>
+            <child>
+              <object class="GtkColumnViewColumn" id="name_column">
+                <property name="title">Name</property>
+                <property name="resizable">1</property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="name" type="GtkRelease">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                ]]></property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn">
+                <property name="title">Date</property>
+                <property name="resizable">1</property>
+                <property name="expand">1</property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <lookup name="timestamp" type="GtkRelease">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                ]]></property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
