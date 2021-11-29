@@ -34,6 +34,7 @@ gtk_tools = [
   ['gtk4-update-icon-cache', ['updateiconcache.c'] + extra_update_icon_cache_objs, [ libgtk_static_dep ] ],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c'], [ libgtk_static_dep ] ],
   ['gtk4-json-format', ['gtk-json-format.c'], [ libgtk_json_dep ], [ libgtk_json ] ],
+  ['gtk4-json-validate', ['gtk-json-validate.c'], [ libgtk_json_dep ], [ libgtk_json ] ],
 ]
 
 if os_unix
