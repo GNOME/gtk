@@ -61,6 +61,7 @@ struct _GtkJsonParser
 typedef enum {
   WHITESPACE     = (1 << 0),
   STRING_ELEMENT = (1 << 1),
+  STRING_MARKER  = (1 << 2),
 } JsonCharacterType;
 
 static const guchar json_character_table[256] = {
@@ -70,7 +71,7 @@ static const guchar json_character_table[256] = {
   [' ']  = WHITESPACE | STRING_ELEMENT,
   [' ']  = STRING_ELEMENT,
   ['!']  = STRING_ELEMENT,
-  ['"']  = 0,
+  ['"']  = STRING_MARKER,
   ['#']  = STRING_ELEMENT,
   ['$']  = STRING_ELEMENT,
   ['%']  = STRING_ELEMENT,
@@ -128,7 +129,7 @@ static const guchar json_character_table[256] = {
   ['Y']  = STRING_ELEMENT,
   ['Z']  = STRING_ELEMENT,
   ['[']  = STRING_ELEMENT,
-  ['\\'] = 0,
+  ['\\'] = STRING_MARKER,
   [']']  = STRING_ELEMENT,
   ['^']  = STRING_ELEMENT,
   ['_']  = STRING_ELEMENT,
@@ -175,7 +176,21 @@ json_skip_characters (const guchar      *start,
 
   for (s = start; s < end; s++)
     {
-      if ((json_character_table[*s] & type) != type)
+      if (!(json_character_table[*s] & type))
+        break;
+    }
+  return s;
+}
+
+static const guchar *
+json_find_character (const guchar      *start,
+                     JsonCharacterType  type)
+{
+  const guchar *s;
+
+  for (s = start; ; s++)
+    {
+      if ((json_character_table[*s] & type))
         break;
     }
   return s;
@@ -333,29 +348,124 @@ decode_utf16_surrogate_pair (gunichar first,
        | (second & 0x3ff);
 }
 
+static gsize
+gtk_json_unescape_char (const guchar *json_escape,
+                        char          out_data[6],
+                        gsize        *out_len)
+{
+  switch (json_escape[1])
+    {
+    case '"':
+    case '\\':
+    case '/':
+      out_data[0] = json_escape[1];
+      *out_len = 1;
+      return 2;
+    case 'b':
+      out_data[0] = '\b';
+      *out_len = 1;
+      return 2;
+    case 'f':
+      out_data[0] = '\f';
+      *out_len = 1;
+      return 2;
+    case 'n':
+      out_data[0] = '\n';
+      *out_len = 1;
+      return 2;
+    case 'r':
+      out_data[0] = '\r';
+      *out_len = 1;
+      return 2;
+    case 't':
+      out_data[0] = '\t';
+      *out_len = 1;
+      return 2;
+    case 'u':
+      {
+        gunichar unichar = (g_ascii_xdigit_value (json_escape[2]) << 12) |
+                           (g_ascii_xdigit_value (json_escape[3]) <<  8) |
+                           (g_ascii_xdigit_value (json_escape[4]) <<  4) |
+                           (g_ascii_xdigit_value (json_escape[5]));
+        gsize result = 6;
+
+        /* resolve UTF-16 surrogates for Unicode characters not in the BMP,
+         * as per ECMA 404, § 9, "String"
+         */
+        if (g_unichar_type (unichar) == G_UNICODE_SURROGATE)
+          {
+            unichar = decode_utf16_surrogate_pair (unichar,
+                                                   (g_ascii_xdigit_value (json_escape[8])  << 12) |
+                                                   (g_ascii_xdigit_value (json_escape[9])  <<  8) |
+                                                   (g_ascii_xdigit_value (json_escape[10]) <<  4) |
+                                                   (g_ascii_xdigit_value (json_escape[11])));
+            result += 6;
+          }
+        *out_len = g_unichar_to_utf8 (unichar, out_data);
+        return result;
+        }
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
+}
+                   
+/* The escaped string MUST be valid json, so it must begin
+ * with " and end with " and must not contain any invalid
+ * escape codes.
+ * This function is meant to be fast
+ */
+static char *
+gtk_json_unescape_string (const guchar *escaped)
+{
+  char buf[6];
+  gsize buf_size;
+  GString *string;
+  const guchar *last, *s;
+
+  string = NULL;
+
+  g_assert (*escaped == '"');
+  last = escaped + 1;
+  for (s = json_find_character (last, STRING_MARKER);
+       *s != '"';
+       s = json_find_character (last, STRING_MARKER))
+    {
+      g_assert (*s == '\\');
+      if (string == NULL)
+        string = g_string_new (NULL);
+      g_string_append_len (string, (const char *) last, s - last);
+      last = s + gtk_json_unescape_char (s, buf, &buf_size);
+      g_string_append_len (string, buf, buf_size);
+    }
+
+  if (string)
+    {
+      g_string_append_len (string, (const char *) last, s - last);
+      return g_string_free (string, FALSE);
+    }
+  else
+    {
+      return g_strndup ((const char *) last, s - last);
+    }
+}
+
 static gboolean
 gtk_json_reader_parse_string (GtkJsonReader  *reader,
-                              char          **out_string,
                               GError        **error)
 {
-  GString *string = NULL;
-  const guchar *last;
-
   if (!gtk_json_reader_try_char (reader, '"'))
     {
       gtk_json_set_syntax_error (error, "Not a string");
       return FALSE;
     }
 
-  last = reader->data;
   reader->data = json_skip_characters (reader->data, reader->end, STRING_ELEMENT);
 
   while (gtk_json_reader_remaining (reader))
     {
       if (*reader->data < 0x20)
         {
-          if (string)
-            g_string_free (string, TRUE);
           gtk_json_set_syntax_error (error, "Disallowed control character in string literal");
           return FALSE;
         }
@@ -364,8 +474,6 @@ gtk_json_reader_parse_string (GtkJsonReader  *reader,
           gunichar c = g_utf8_get_char_validated ((const char *) reader->data, reader->end - reader->data);
           if (c == (gunichar) -2 || c == (gunichar) -1)
             {
-              if (string)
-                g_string_free (string, TRUE);
               gtk_json_set_syntax_error (error, "Invalid UTF-8");
               return FALSE;
             }
@@ -373,16 +481,6 @@ gtk_json_reader_parse_string (GtkJsonReader  *reader,
         }
       else if (*reader->data == '"')
         {
-          if (out_string)
-            {
-              if (string)
-                {
-                  g_string_append_len (string, (const char *) last, reader->data - last);
-                  *out_string = g_string_free (string, FALSE);
-                }
-              else
-                *out_string = g_strndup ((const char *) last, reader->data - last);
-            }
           reader->data++;
           return TRUE;
         }
@@ -390,50 +488,27 @@ gtk_json_reader_parse_string (GtkJsonReader  *reader,
         {
           if (gtk_json_reader_remaining (reader) < 2)
             goto end;
-          if (out_string)
-            {
-              if (!string)
-                string = g_string_new (NULL);
-              g_string_append_len (string, (const char *) last, reader->data - last);
-            }
           reader->data++;
           switch (*reader->data)
             {
             case '"':
             case '\\':
             case '/':
-              if (string)
-                g_string_append_c (string, *reader->data);
-              break;
             case 'b':
-              if (string)
-                g_string_append_c (string, '\b');
-              break;
             case 'f':
-              if (string)
-                g_string_append_c (string, '\f');
-              break;
             case 'n':
-              if (string)
-                g_string_append_c (string, '\n');
-              break;
             case 'r':
-              if (string)
-                g_string_append_c (string, '\r');
-              break;
             case 't':
-              if (string)
-                g_string_append_c (string, '\t');
               break;
+
             case 'u':
+              /* lots of work necessary to validate the unicode escapes here */
               if (gtk_json_reader_remaining (reader) < 5 ||
                   !g_ascii_isxdigit (reader->data[1]) ||
                   !g_ascii_isxdigit (reader->data[2]) ||
                   !g_ascii_isxdigit (reader->data[3]) ||
                   !g_ascii_isxdigit (reader->data[4]))
                 {
-                  if (string)
-                    g_string_free (string, TRUE);
                   gtk_json_set_syntax_error (error, "Invalid Unicode escape sequence");
                   return FALSE;
                 }
@@ -448,49 +523,47 @@ gtk_json_reader_parse_string (GtkJsonReader  *reader,
                   /* resolve UTF-16 surrogates for Unicode characters not in the BMP,
                    * as per ECMA 404, § 9, "String"
                    */
-                  if (g_unichar_type (unichar) == G_UNICODE_SURROGATE &&
-                      gtk_json_reader_remaining (reader) >= 7 &&
-                      reader->data[1] == '\\' &&
-                      reader->data[2] == 'u' &&
-                      g_ascii_isxdigit (reader->data[3]) &&
-                      g_ascii_isxdigit (reader->data[4]) &&
-                      g_ascii_isxdigit (reader->data[5]) &&
-                      g_ascii_isxdigit (reader->data[6]))
+                  if (g_unichar_type (unichar) == G_UNICODE_SURROGATE)
                     {
-                      unichar = decode_utf16_surrogate_pair (unichar,
-                                                             (g_ascii_xdigit_value (reader->data[3]) << 12) |
-                                                             (g_ascii_xdigit_value (reader->data[4]) <<  8) |
-                                                             (g_ascii_xdigit_value (reader->data[5]) <<  4) |
-                                                             (g_ascii_xdigit_value (reader->data[6])));
-                      reader->data += 6;
+                      if (gtk_json_reader_remaining (reader) >= 7 &&
+                          reader->data[1] == '\\' &&
+                          reader->data[2] == 'u' &&
+                          g_ascii_isxdigit (reader->data[3]) &&
+                          g_ascii_isxdigit (reader->data[4]) &&
+                          g_ascii_isxdigit (reader->data[5]) &&
+                          g_ascii_isxdigit (reader->data[6]))
+                        {
+                          unichar = decode_utf16_surrogate_pair (unichar,
+                                                                 (g_ascii_xdigit_value (reader->data[3]) << 12) |
+                                                                 (g_ascii_xdigit_value (reader->data[4]) <<  8) |
+                                                                 (g_ascii_xdigit_value (reader->data[5]) <<  4) |
+                                                                 (g_ascii_xdigit_value (reader->data[6])));
+                          reader->data += 6;
+                        }
+                      else
+                        {
+                          unichar = 0;
+                        }
 
                       if (unichar == 0)
                         {
-                          if (string)
-                            g_string_free (string, TRUE);
-                          gtk_json_set_syntax_error (error, "Invalid UTF-16 surrogate pair");
+                          gtk_json_parser_syntax_error (self, "Invalid UTF-16 surrogate pair");
                           return FALSE;
                         }
                     }
-                  if (string)
-                    g_string_append_unichar (string, unichar);
                 }
               break;
             default:
-              if (string)
-                g_string_free (string, TRUE);
               gtk_json_set_syntax_error (error, "Unknown escape sequence");
               return FALSE;
             }
           reader->data++;
         }
-      last = reader->data;
+
       reader->data = json_skip_characters (reader->data, reader->end, STRING_ELEMENT);
     }
 
 end:
-  if (string)
-    g_string_free (string, TRUE);
   gtk_json_set_syntax_error (error, "Unterminated string literal");
   return FALSE;
 }
@@ -662,7 +735,7 @@ gtk_json_parser_skip_value (GtkJsonParser *self)
   switch (*self->reader.data)
   {
     case '"':
-      return gtk_json_reader_parse_string (&self->reader, NULL, &self->error);
+      return gtk_json_reader_parse_string (&self->reader, &self->error);
     
     case '-':
     case '0':
@@ -757,7 +830,7 @@ gtk_json_parser_next (GtkJsonParser *self)
       gtk_json_reader_skip_whitespace (&self->reader);
       self->block->member_name = self->reader.data;
 
-      if (!gtk_json_reader_parse_string (&self->reader, NULL, &self->error))
+      if (!gtk_json_reader_parse_string (&self->reader, &self->error))
         return FALSE;
       gtk_json_reader_skip_whitespace (&self->reader);
       if (!gtk_json_reader_try_char (&self->reader, ':'))
@@ -866,9 +939,6 @@ gtk_json_parser_get_error (GtkJsonParser *self)
 char *
 gtk_json_parser_get_member_name (GtkJsonParser *self)
 {
-  GtkJsonReader reader;
-  char *result;
-
   if (self->error)
     return NULL;
 
@@ -878,13 +948,7 @@ gtk_json_parser_get_member_name (GtkJsonParser *self)
   if (self->block->member_name == NULL)
     return NULL;
 
-  gtk_json_reader_init (&reader,
-                        self->block->member_name,
-                        self->reader.end - self->block->member_name);
-  if (!gtk_json_reader_parse_string (&reader, &result, NULL))
-    return NULL;
-
-  return result;
+  return gtk_json_unescape_string (self->block->member_name);
 }
 
 gboolean
@@ -962,28 +1026,22 @@ guint                   gtk_json_parser_get_uint                (GtkJsonParser  
 char *
 gtk_json_parser_get_string (GtkJsonParser *self)
 {
-  char *result;
-
   if (self->error)
     return g_strdup ("");
 
   if (self->block->value == NULL)
     return g_strdup ("");
 
-  if (gtk_json_parser_has_skipped_value (self))
+  if (!gtk_json_parser_skip_value (self))
+    return FALSE;
+
+  if (*self->block->value != '"')
     {
-      GtkJsonReader reader;
-      gtk_json_reader_init (&reader, self->block->value, self->reader.end - self->block->value);
-      if (!gtk_json_reader_parse_string (&reader, &result, NULL))
-        return g_strdup ("");
-    }
-  else
-    {
-      if (!gtk_json_reader_parse_string (&self->reader, &result, &self->error))
-        return g_strdup ("");
+      gtk_json_parser_value_error (self, "Expected a string");
+      return g_strdup ("");
     }
 
-  return result;
+  return gtk_json_unescape_string (self->block->value);
 }
 
 gboolean
@@ -1010,7 +1068,7 @@ gtk_json_parser_start_object (GtkJsonParser *self)
     return TRUE;
   self->block->member_name = self->reader.data;
 
-  if (!gtk_json_reader_parse_string (&self->reader, NULL, &self->error))
+  if (!gtk_json_reader_parse_string (&self->reader, &self->error))
     return FALSE;
   gtk_json_reader_skip_whitespace (&self->reader);
   if (!gtk_json_reader_try_char (&self->reader, ':'))
