@@ -375,6 +375,58 @@ gtk_json_unescape_char (const guchar *json_escape,
     }
 }
                    
+typedef struct _JsonStringIter JsonStringIter;
+struct _JsonStringIter
+{
+  char buf[6];
+  const guchar *s;
+  const guchar *next;
+};
+
+static gsize
+json_string_iter_next (JsonStringIter *iter)
+{
+  gsize len;
+
+  iter->s = iter->next;
+  iter->next = json_find_character (iter->s, STRING_MARKER);
+  if (iter->next != iter->s)
+    return iter->next - iter->s;
+  if (*iter->next == '"')
+    return 0;
+  iter->next += gtk_json_unescape_char (iter->next, iter->buf, &len);
+  iter->s = (const guchar *) iter->buf;
+  return len;
+}
+
+/* The escaped string MUST be valid json, so it must begin
+ * with " and end with " and must not contain any invalid
+ * escape codes.
+ * This function is meant to be fast
+ */
+static gsize
+json_string_iter_init (JsonStringIter *iter,
+                       const guchar   *string)
+{
+  g_assert (*string == '"');
+
+  iter->next = string + 1;
+
+  return json_string_iter_next (iter);
+}
+
+static gboolean
+json_string_iter_has_next (JsonStringIter *iter)
+{
+  return *iter->next != '"';
+}
+
+static const char *
+json_string_iter_get (JsonStringIter *iter)
+{
+  return (const char *) iter->s;
+}
+
 /* The escaped string MUST be valid json, so it must begin
  * with " and end with " and must not contain any invalid
  * escape codes.
@@ -383,36 +435,25 @@ gtk_json_unescape_char (const guchar *json_escape,
 static char *
 gtk_json_unescape_string (const guchar *escaped)
 {
-  char buf[6];
-  gsize buf_size;
+  JsonStringIter iter;
   GString *string;
-  const guchar *last, *s;
+  gsize len;
 
+  len = json_string_iter_init (&iter, escaped);
   string = NULL;
 
-  g_assert (*escaped == '"');
-  last = escaped + 1;
-  for (s = json_find_character (last, STRING_MARKER);
-       *s != '"';
-       s = json_find_character (last, STRING_MARKER))
-    {
-      g_assert (*s == '\\');
-      if (string == NULL)
-        string = g_string_new (NULL);
-      g_string_append_len (string, (const char *) last, s - last);
-      last = s + gtk_json_unescape_char (s, buf, &buf_size);
-      g_string_append_len (string, buf, buf_size);
-    }
+  if (!json_string_iter_has_next (&iter))
+    return g_strndup (json_string_iter_get (&iter), len);
 
-  if (string)
+  string = g_string_new (NULL);
+
+  do
     {
-      g_string_append_len (string, (const char *) last, s - last);
-      return g_string_free (string, FALSE);
+      g_string_append_len (string, json_string_iter_get (&iter), len);
     }
-  else
-    {
-      return g_strndup ((const char *) last, s - last);
-    }
+  while ((len = json_string_iter_next (&iter)));
+  
+  return g_string_free (string, FALSE);
 }
 
 static gboolean
@@ -858,16 +899,25 @@ gtk_json_parser_get_error (GtkJsonParser *self)
   return self->error;
 }
 
+static gboolean
+gtk_json_parser_has_member (GtkJsonParser *self)
+{
+  if (self->error)
+    return FALSE;
+
+  if (self->block->type != GTK_JSON_BLOCK_OBJECT)
+    return FALSE;
+
+  if (self->block->member_name == NULL)
+    return FALSE;
+
+  return TRUE;
+}
+
 char *
 gtk_json_parser_get_member_name (GtkJsonParser *self)
 {
-  if (self->error)
-    return NULL;
-
-  if (self->block->type != GTK_JSON_BLOCK_OBJECT)
-    return NULL;
-
-  if (self->block->member_name == NULL)
+  if (!gtk_json_parser_has_member (self))
     return NULL;
 
   return gtk_json_unescape_string (self->block->member_name);
@@ -877,24 +927,54 @@ gssize
 gtk_json_parser_select_member (GtkJsonParser      *self,
                                const char * const *options)
 {
-  char *member_name;
-  gssize i;
+  JsonStringIter iter;
+  gssize i, j;
+  gsize found, len;
 
-  member_name = gtk_json_parser_get_member_name (self);
-  if (member_name == NULL)
+  if (!gtk_json_parser_has_member (self))
     return -1;
 
-  for (i = 0; options[i]; i++)
+  if (options[0] == NULL)
+    return -1;
+
+  found = 0;
+  i = 0;
+
+  for (len = json_string_iter_init (&iter, self->block->member_name);
+       len > 0;
+       len = json_string_iter_next (&iter))
     {
-      if (strcmp (member_name, options[i]) == 0)
-        break;
+      const char *s = json_string_iter_get (&iter);
+
+      if (strncmp (options[i] + found, s, len) != 0)
+        {
+          for (j = i + 1; options[j]; j++)
+            {
+              if (strncmp (options[j], options[i], found) == 0 &&
+                  strncmp (options[j] + found, s, len) == 0)
+                {
+                  i = j;
+                  break;
+                }
+            }
+          if (j != i)
+            return -1;
+        }
+      found += len;
     }
-  if (options[i] == NULL)
-    i = -1;
 
-  g_free (member_name);
+  if (options[i][found] == 0)
+    return i;
 
-  return i;
+  for (j = i + 1; options[j]; i++)
+    {
+      if (strncmp (options[j], options[i], found) != 0)
+        continue;
+      if (options[j][found] == 0)
+        return j;
+    }
+
+  return -1;
 }
 
 gboolean
