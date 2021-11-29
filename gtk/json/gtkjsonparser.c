@@ -53,19 +53,20 @@ struct _GtkJsonParser
 };
 
 typedef enum {
-  WHITESPACE     = (1 << 0),
-  STRING_ELEMENT = (1 << 1),
-  STRING_MARKER  = (1 << 2),
+  WHITESPACE     = (1 << 4),
+  STRING_ELEMENT = (1 << 5),
+  STRING_MARKER  = (1 << 6),
 } JsonCharacterType;
+
+#define JSON_CHARACTER_NODE_MASK ((1 << 4) - 1)
 
 static const guchar json_character_table[256] = {
   ['\t'] = WHITESPACE,
   ['\r'] = WHITESPACE,
   ['\n'] = WHITESPACE,
   [' ']  = WHITESPACE | STRING_ELEMENT,
-  [' ']  = STRING_ELEMENT,
   ['!']  = STRING_ELEMENT,
-  ['"']  = STRING_MARKER,
+  ['"']  = GTK_JSON_STRING | STRING_MARKER,
   ['#']  = STRING_ELEMENT,
   ['$']  = STRING_ELEMENT,
   ['%']  = STRING_ELEMENT,
@@ -76,19 +77,19 @@ static const guchar json_character_table[256] = {
   ['*']  = STRING_ELEMENT,
   ['+']  = STRING_ELEMENT,
   [',']  = STRING_ELEMENT,
-  ['-']  = STRING_ELEMENT,
+  ['-']  = GTK_JSON_NUMBER | STRING_ELEMENT,
   ['.']  = STRING_ELEMENT,
   ['/']  = STRING_ELEMENT,
-  ['0']  = STRING_ELEMENT,
-  ['1']  = STRING_ELEMENT,
-  ['2']  = STRING_ELEMENT,
-  ['3']  = STRING_ELEMENT,
-  ['4']  = STRING_ELEMENT,
-  ['5']  = STRING_ELEMENT,
-  ['6']  = STRING_ELEMENT,
-  ['7']  = STRING_ELEMENT,
-  ['8']  = STRING_ELEMENT,
-  ['9']  = STRING_ELEMENT,
+  ['0']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['1']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['2']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['3']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['4']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['5']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['6']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['7']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['8']  = GTK_JSON_NUMBER | STRING_ELEMENT,
+  ['9']  = GTK_JSON_NUMBER | STRING_ELEMENT,
   [':']  = STRING_ELEMENT,
   [';']  = STRING_ELEMENT,
   ['<']  = STRING_ELEMENT,
@@ -122,7 +123,7 @@ static const guchar json_character_table[256] = {
   ['X']  = STRING_ELEMENT,
   ['Y']  = STRING_ELEMENT,
   ['Z']  = STRING_ELEMENT,
-  ['[']  = STRING_ELEMENT,
+  ['[']  = GTK_JSON_ARRAY | STRING_ELEMENT,
   ['\\'] = STRING_MARKER,
   [']']  = STRING_ELEMENT,
   ['^']  = STRING_ELEMENT,
@@ -133,7 +134,7 @@ static const guchar json_character_table[256] = {
   ['c']  = STRING_ELEMENT,
   ['d']  = STRING_ELEMENT,
   ['e']  = STRING_ELEMENT,
-  ['f']  = STRING_ELEMENT,
+  ['f']  = GTK_JSON_BOOLEAN | STRING_ELEMENT,
   ['g']  = STRING_ELEMENT,
   ['h']  = STRING_ELEMENT,
   ['i']  = STRING_ELEMENT,
@@ -141,20 +142,20 @@ static const guchar json_character_table[256] = {
   ['k']  = STRING_ELEMENT,
   ['l']  = STRING_ELEMENT,
   ['m']  = STRING_ELEMENT,
-  ['n']  = STRING_ELEMENT,
+  ['n']  = GTK_JSON_NULL | STRING_ELEMENT,
   ['o']  = STRING_ELEMENT,
   ['p']  = STRING_ELEMENT,
   ['q']  = STRING_ELEMENT,
   ['r']  = STRING_ELEMENT,
   ['s']  = STRING_ELEMENT,
-  ['t']  = STRING_ELEMENT,
+  ['t']  = GTK_JSON_BOOLEAN | STRING_ELEMENT,
   ['u']  = STRING_ELEMENT,
   ['v']  = STRING_ELEMENT,
   ['w']  = STRING_ELEMENT,
   ['x']  = STRING_ELEMENT,
   ['y']  = STRING_ELEMENT,
   ['z']  = STRING_ELEMENT,
-  ['{']  = STRING_ELEMENT,
+  ['{']  = GTK_JSON_OBJECT | STRING_ELEMENT,
   ['|']  = STRING_ELEMENT,
   ['}']  = STRING_ELEMENT,
   ['~']  = STRING_ELEMENT,
@@ -581,45 +582,31 @@ gtk_json_parser_parse_value (GtkJsonParser *self)
 {
   if (gtk_json_parser_is_eof (self))
     {
-      gtk_json_parser_syntax_error (self, "Unexpected end of file");
+      gtk_json_parser_syntax_error (self, "Unexpected end of document");
       return FALSE;
     }
 
-  switch (*self->reader)
+  switch (json_character_table[*self->block->value] & JSON_CHARACTER_NODE_MASK)
   {
-    case '"':
+    case GTK_JSON_STRING:
       return gtk_json_parser_parse_string (self);
     
-    case '-':
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
+    case GTK_JSON_NUMBER:
       return gtk_json_parser_parse_number (self);
 
-    case 'f':
-      if (gtk_json_parser_try_identifier (self, "false"))
-        return TRUE;
-      break;
-
-    case 'n':
+    case GTK_JSON_NULL:
       if (gtk_json_parser_try_identifier (self, "null"))
         return TRUE;
       break;
 
-    case 't':
-      if (gtk_json_parser_try_identifier (self, "true"))
+    case GTK_JSON_BOOLEAN:
+      if (gtk_json_parser_try_identifier (self, "true") ||
+          gtk_json_parser_try_identifier (self, "false"))
         return TRUE;
       break;
 
-    case '{':
-    case '[':
+    case GTK_JSON_OBJECT:
+    case GTK_JSON_ARRAY:
       /* don't preparse objects */
       return TRUE;
 
@@ -862,40 +849,7 @@ gtk_json_parser_get_node (GtkJsonParser *self)
   if (self->block->value == NULL)
     return GTK_JSON_NONE;
 
-  switch (*self->block->value)
-    {
-    case '"':
-      return GTK_JSON_STRING;
-    
-    case '{':
-      return GTK_JSON_OBJECT;
-
-    case '[':
-      return GTK_JSON_ARRAY;
-
-    case '-':
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-      return GTK_JSON_NUMBER;
-
-    case 't':
-    case 'f':
-      return GTK_JSON_BOOLEAN;
-
-    case 'n':
-      return GTK_JSON_NULL;
-
-    default:
-      return GTK_JSON_NONE;
-    }
+  return (json_character_table[*self->block->value] & JSON_CHARACTER_NODE_MASK);
 }
 
 const GError *
