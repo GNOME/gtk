@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-11-22 11:53+0000\n"
-"PO-Revision-Date: 2021-11-25 16:48+0100\n"
+"POT-Creation-Date: 2021-11-25 15:51+0000\n"
+"PO-Revision-Date: 2021-11-30 18:02+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -383,8 +383,6 @@ msgid "WWW"
 msgstr "WWW"
 
 #: gdk/keyname-table.h:6902
-#, fuzzy
-#| msgid "Search"
 msgctxt "keyboard label"
 msgid "Search"
 msgstr "Recercar"
@@ -812,9 +810,6 @@ msgid "Toggles the switch"
 msgstr "Invèrsa la comanda"
 
 #: gtk/a11y/gtkatspiaction.c:371
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Select"
 msgctxt "accessibility"
 msgid "Select"
 msgstr "Seleccionar"
@@ -907,7 +902,7 @@ msgstr "Activa l'entrada"
 #: gtk/a11y/gtkatspiaction.c:611
 msgctxt "accessibility"
 msgid "Peek"
-msgstr ""
+msgstr "Ulhada"
 
 #: gtk/a11y/gtkatspiaction.c:612
 #, fuzzy
@@ -1244,7 +1239,7 @@ msgstr "grasilha"
 #: gtk/gtkaccessible.c:577
 msgctxt "accessibility"
 msgid "grid cell"
-msgstr ""
+msgstr "cellula de grasilha"
 
 #: gtk/gtkaccessible.c:578
 msgctxt "accessibility"
@@ -1266,7 +1261,7 @@ msgstr "imatge"
 #: gtk/gtkaccessible.c:581
 msgctxt "accessibility"
 msgid "input"
-msgstr ""
+msgstr "entrada"
 
 #: gtk/gtkaccessible.c:582
 #, fuzzy
@@ -1278,7 +1273,7 @@ msgstr "Etiqueta"
 #: gtk/gtkaccessible.c:583
 msgctxt "accessibility"
 msgid "landmark"
-msgstr ""
+msgstr "punt de referéncia"
 
 #: gtk/gtkaccessible.c:584
 msgctxt "accessibility"
@@ -1298,20 +1293,17 @@ msgstr "lista"
 #: gtk/gtkaccessible.c:587
 msgctxt "accessibility"
 msgid "list box"
-msgstr ""
+msgstr "lista desenrotlanta"
 
 #: gtk/gtkaccessible.c:588
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Clicks the menuitem"
 msgctxt "accessibility"
 msgid "list item"
-msgstr "Clica sus l'element de menú"
+msgstr "element de lista"
 
 #: gtk/gtkaccessible.c:589
 msgctxt "accessibility"
 msgid "log"
-msgstr ""
+msgstr "jornal"
 
 #: gtk/gtkaccessible.c:590
 msgctxt "accessibility"
@@ -1321,17 +1313,17 @@ msgstr "principal"
 #: gtk/gtkaccessible.c:591
 msgctxt "accessibility"
 msgid "marquee"
-msgstr ""
+msgstr "zòna desfilanta"
 
 #: gtk/gtkaccessible.c:592
 msgctxt "accessibility"
 msgid "math"
-msgstr ""
+msgstr "matematicas"
 
 #: gtk/gtkaccessible.c:593
 msgctxt "accessibility"
 msgid "meter"
-msgstr ""
+msgstr "mètre"
 
 #: gtk/gtkaccessible.c:594
 msgctxt "accessibility"
@@ -1351,12 +1343,12 @@ msgstr "element de menú"
 #: gtk/gtkaccessible.c:597
 msgctxt "accessibility"
 msgid "menu item checkbox"
-msgstr ""
+msgstr "casa de marcar de l’element de menú"
 
 #: gtk/gtkaccessible.c:598
 msgctxt "accessibility"
 msgid "menu item radio"
-msgstr ""
+msgstr "boton ràdio de l’element de menú"
 
 #: gtk/gtkaccessible.c:599
 msgctxt "accessibility"
@@ -1374,11 +1366,9 @@ msgid "note"
 msgstr "nòta"
 
 #: gtk/gtkaccessible.c:602
-#, fuzzy
-#| msgid "Location"
 msgctxt "accessibility"
 msgid "option"
-msgstr "Emplaçament"
+msgstr "opcion"
 
 #: gtk/gtkaccessible.c:603
 msgctxt "accessibility"
@@ -1398,7 +1388,7 @@ msgstr "ràdio"
 #: gtk/gtkaccessible.c:606
 msgctxt "accessibility"
 msgid "radio group"
-msgstr ""
+msgstr "grop de botons ràdio"
 
 #: gtk/gtkaccessible.c:607
 #, fuzzy
@@ -1458,12 +1448,9 @@ msgid "section head"
 msgstr ""
 
 #: gtk/gtkaccessible.c:617
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Select"
 msgctxt "accessibility"
 msgid "select"
-msgstr "Seleccionar"
+msgstr "seleccionar"
 
 #: gtk/gtkaccessible.c:618
 msgctxt "accessibility"
@@ -1473,29 +1460,27 @@ msgstr "separador"
 #: gtk/gtkaccessible.c:619
 msgctxt "accessibility"
 msgid "slider"
-msgstr ""
+msgstr "lisièra"
 
 #: gtk/gtkaccessible.c:620
 msgctxt "accessibility"
 msgid "spin button"
-msgstr ""
+msgstr "boton de reglatge"
 
 #: gtk/gtkaccessible.c:621
-#, fuzzy
-#| msgid "Status"
 msgctxt "accessibility"
 msgid "status"
-msgstr "Estat"
+msgstr "estatut"
 
 #: gtk/gtkaccessible.c:622
 msgctxt "accessibility"
 msgid "structure"
-msgstr ""
+msgstr "estructura"
 
 #: gtk/gtkaccessible.c:623
 msgctxt "accessibility"
 msgid "switch"
-msgstr ""
+msgstr "boton de bascula"
 
 #: gtk/gtkaccessible.c:624
 msgctxt "accessibility"
@@ -1510,7 +1495,7 @@ msgstr "tablèu"
 #: gtk/gtkaccessible.c:626
 msgctxt "accessibility"
 msgid "tab list"
-msgstr ""
+msgstr "lista d’onglets"
 
 #: gtk/gtkaccessible.c:627
 msgctxt "accessibility"
@@ -1565,12 +1550,9 @@ msgid "widget"
 msgstr ""
 
 #: gtk/gtkaccessible.c:637
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "R_ewind"
 msgctxt "accessibility"
 msgid "window"
-msgstr "_Rembobinar"
+msgstr "fenèstra"
 
 #: gtk/gtkappchooserbutton.c:316
 msgid "Other application…"
@@ -2291,10 +2273,8 @@ msgid "Show _Size Column"
 msgstr "Afichar la colomna _Talha"
 
 #: gtk/gtkfilechooserwidget.c:1847
-#, fuzzy
-#| msgid "Show _Size Column"
 msgid "Show T_ype Column"
-msgstr "Afichar la colomna _Talha"
+msgstr "Afichar la colomna T_ipe"
 
 #: gtk/gtkfilechooserwidget.c:1851
 msgid "Show _Time"
@@ -2383,11 +2363,8 @@ msgid "Image"
 msgstr "Imatge"
 
 #: gtk/gtkfilechooserwidget.c:4305
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Arch A"
 msgid "Archive"
-msgstr "Arch A"
+msgstr "Archius"
 
 #: gtk/gtkfilechooserwidget.c:4306
 msgid "Markup"
@@ -2414,10 +2391,8 @@ msgid "Document"
 msgstr "Document"
 
 #: gtk/gtkfilechooserwidget.c:4314
-#, fuzzy
-#| msgid "_Orientation:"
 msgid "Presentation"
-msgstr "_Orientacion :"
+msgstr "Presentacion"
 
 #: gtk/gtkfilechooserwidget.c:4315
 msgid "Spreadsheet"
@@ -2482,11 +2457,8 @@ msgid "Weight"
 msgstr "Graissa"
 
 #: gtk/gtkfontchooserwidget.c:1570
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgid "Italic"
-msgstr "_Italica"
+msgstr "Italica"
 
 #: gtk/gtkfontchooserwidget.c:1571
 msgid "Slant"
@@ -2501,11 +2473,8 @@ msgid "Default"
 msgstr "Per defaut"
 
 #: gtk/gtkfontchooserwidget.c:2164
-#, fuzzy
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
-msgstr "Captura"
+msgstr "Ligaduras"
 
 #: gtk/gtkfontchooserwidget.c:2165
 #, fuzzy
@@ -2527,10 +2496,8 @@ msgid "Number Formatting"
 msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2169
-#, fuzzy
-#| msgid "Dark Variant"
 msgid "Character Variants"
-msgstr "Varianta escura"
+msgstr "Variantas de caractèrs"
 
 #: gtk/gtkglarea.c:284
 msgid "OpenGL context creation failed"
@@ -2561,10 +2528,8 @@ msgid "Copy _Link Address"
 msgstr "Copiar l'_adreça del ligam"
 
 #: gtk/gtklinkbutton.c:259
-#, fuzzy
-#| msgid "Copy URL"
 msgid "_Copy URL"
-msgstr "Copiar l'URL"
+msgstr "_Copiar l'URL"
 
 #: gtk/gtklinkbutton.c:544
 msgid "Invalid URI"
@@ -2697,10 +2662,8 @@ msgid "_Domain"
 msgstr "_Domeni"
 
 #: gtk/gtkmountoperation.c:716
-#, fuzzy
-#| msgid "Volume Up"
 msgid "Volume type"
-msgstr "Aumentar lo volum"
+msgstr "Tipe de volum"
 
 #: gtk/gtkmountoperation.c:726
 msgid "_Hidden"
@@ -2796,10 +2759,8 @@ msgid "Previous tab"
 msgstr "Pre_cedent"
 
 #: gtk/gtknotebook.c:3253
-#, fuzzy
-#| msgid "_Next"
 msgid "Next tab"
-msgstr "_Seguent"
+msgstr "Onglet seguent"
 
 #: gtk/gtknotebook.c:4073
 #, fuzzy
@@ -2854,26 +2815,20 @@ msgid "Page Setup"
 msgstr "Parametratge de la pagina"
 
 #: gtk/gtkpasswordentry.c:167
-#, fuzzy
-#| msgid "Hide %s"
 msgid "Hide Text"
-msgstr "Amagar %s"
+msgstr "Amagar lo tèxte"
 
 #: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
-#, fuzzy
-#| msgid "Show _Time"
 msgid "Show Text"
-msgstr "Afichar l'_ora"
+msgstr "Afichar lo tèxte"
 
 #: gtk/gtkpasswordentry.c:199
 msgid "Caps Lock is on"
 msgstr "Verr. maj. es activat"
 
 #: gtk/gtkpasswordentry.c:680
-#, fuzzy
-#| msgid "Show _Time"
 msgid "_Show Text"
-msgstr "Afichar l'_ora"
+msgstr "_Afichar lo tèxte"
 
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:914
@@ -3101,10 +3056,8 @@ msgstr "Cap d'aplicacion pas trobada."
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1210 gtk/gtkplacesview.c:1307
-#, fuzzy
-#| msgid "Unable to access “%s”"
 msgid "Unable to access location"
-msgstr "Impossible d'accedir a « %s »"
+msgstr "Impossible d'accedir a l'emplaçament"
 
 #. Restore from Cancel to Connect
 #: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
@@ -3127,7 +3080,7 @@ msgstr ""
 
 #: gtk/gtkplacesview.c:1611
 msgid "File Transfer Protocol"
-msgstr ""
+msgstr "Protocòl de transferiment de fichièrs (FTP)"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/gtkplacesview.c:1613
@@ -3142,11 +3095,11 @@ msgstr "Sistèma de fichièrs"
 
 #: gtk/gtkplacesview.c:1625
 msgid "Samba"
-msgstr ""
+msgstr "Samba"
 
 #: gtk/gtkplacesview.c:1631
 msgid "SSH File Transfer Protocol"
-msgstr ""
+msgstr "Protocòl de transferiment de fichièrs SSH"
 
 #. Translators: do not translate sftp:// and ssh://
 #: gtk/gtkplacesview.c:1633
@@ -3172,7 +3125,7 @@ msgstr "Se _connectar"
 
 #: gtk/gtkplacesview.c:1871
 msgid "Unable to get remote server location"
-msgstr ""
+msgstr "Impossible d’aténher l’emplaçament del servidor distant"
 
 #: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
 msgid "Networks"
@@ -3481,10 +3434,8 @@ msgstr ""
 "l'element que l'URI n'es « %s »"
 
 #: gtk/gtksearchentry.c:599
-#, fuzzy
-#| msgid "_Clear List"
 msgid "Clear entry"
-msgstr "_Escafar la lista"
+msgstr "Escafar l’entrada"
 
 #. Translators: This string is used to mark left/right variants of modifier
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
@@ -3576,11 +3527,8 @@ msgid "Insert _Emoji"
 msgstr "Inserir un _Emoji"
 
 #: gtk/gtktextview.c:8906
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Undo"
 msgid "_Undo"
-msgstr "A_nullar"
+msgstr "_Anullar"
 
 #: gtk/gtktextview.c:8910
 #, fuzzy
@@ -3634,8 +3582,6 @@ msgstr ""
 "pòt arribar que l'aplicacion foncione mal o plante."
 
 #: gtk/gtkwindow.c:6135
-#, fuzzy
-#| msgid "Don't show this message again"
 msgid "Don’t show this message again"
 msgstr "Afichar pas mai aqueste messatge"
 
@@ -3787,15 +3733,11 @@ msgid "None"
 msgstr "Pas cap"
 
 #: gtk/inspector/general.c:317
-#, fuzzy
-#| msgid "Disabled"
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Desactivat"
 
 #: gtk/inspector/general.c:318
-#, fuzzy
-#| msgid "Disabled"
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Desactivat"
@@ -3828,16 +3770,11 @@ msgid "None"
 msgstr "Pas cap"
 
 #: gtk/inspector/general.c:499 gtk/inspector/general.c:500
-#, fuzzy
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Pas cap"
 
 #: gtk/inspector/general.ui:32
-#, fuzzy
-#| msgid "GTK+ Version"
 msgid "GTK Version"
 msgstr "Version de GTK+"
 
@@ -3870,8 +3807,6 @@ msgid "Display"
 msgstr "Afichatge"
 
 #: gtk/inspector/general.ui:404
-#, fuzzy
-#| msgid "RGBA visual"
 msgid "RGBA Visual"
 msgstr "Visual RGBA"
 
@@ -3937,10 +3872,8 @@ msgid "Reference Count"
 msgstr "Comptatge de referéncias"
 
 #: gtk/inspector/misc-info.ui:151
-#, fuzzy
-#| msgid "Text Direction"
 msgid "Direction"
-msgstr "Direccion del tèxte"
+msgstr "Direccion"
 
 #: gtk/inspector/misc-info.ui:181
 msgid "Buildable ID"
@@ -3966,7 +3899,7 @@ msgstr "Linhas de basa"
 
 #: gtk/inspector/misc-info.ui:327
 msgid "Surface"
-msgstr ""
+msgstr "Susfàcia"
 
 #: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
 #: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1111
@@ -4068,10 +4001,8 @@ msgid "None"
 msgstr "Pas cap"
 
 #: gtk/inspector/prop-editor.c:1360
-#, fuzzy
-#| msgid "Attribute"
 msgid "Attribute:"
-msgstr "Atribut"
+msgstr "Atribut :"
 
 #: gtk/inspector/prop-editor.c:1363
 msgid "Model"
@@ -4095,8 +4026,6 @@ msgid "Reset"
 msgstr "Reïnicializar"
 
 #: gtk/inspector/prop-editor.c:1530
-#, fuzzy
-#| msgid "Default"
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Per defaut"
@@ -4119,8 +4048,6 @@ msgid "Application"
 msgstr "Aplicacion"
 
 #: gtk/inspector/prop-editor.c:1543
-#, fuzzy
-#| msgid "Unknown"
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Desconegut"
@@ -4277,8 +4204,6 @@ msgid "GL rendering is disabled"
 msgstr "Lo rendut GL es desactivat"
 
 #: gtk/inspector/visual.ui:59
-#, fuzzy
-#| msgid "GTK+ Theme"
 msgid "GTK Theme"
 msgstr "Tèma GTK+"
 
@@ -4299,10 +4224,8 @@ msgid "Icon Theme"
 msgstr "Tèma d'icònas"
 
 #: gtk/inspector/visual.ui:212
-#, fuzzy
-#| msgid "Font Selection"
 msgid "Font Scale"
-msgstr "Selector de poliças"
+msgstr "Escala de la poliça de caractèrs"
 
 #: gtk/inspector/visual.ui:249
 msgid "Text Direction"
@@ -4359,10 +4282,8 @@ msgid "CSS Border"
 msgstr "Nosèls CSS"
 
 #: gtk/inspector/visual.ui:564
-#, fuzzy
-#| msgid "Paper Margins"
 msgid "CSS Margin"
-msgstr "Marges del papièr"
+msgstr "Marges CSS"
 
 #: gtk/inspector/visual.ui:574
 #, fuzzy
@@ -4486,10 +4407,8 @@ msgid "Magnifier"
 msgstr "Lópia"
 
 #: gtk/inspector/window.ui:527
-#, fuzzy
-#| msgid "Accessible role"
 msgid "Accessibility"
-msgstr "Ròtle accessible"
+msgstr "Accessibilitat"
 
 #: gtk/inspector/window.ui:551
 msgid "Global"
@@ -4500,10 +4419,8 @@ msgid "Information"
 msgstr "Informacion"
 
 #: gtk/inspector/window.ui:573
-#, fuzzy
-#| msgid "XSettings"
 msgid "Settings"
-msgstr "Paramètres X"
+msgstr "Paramètres"
 
 #: gtk/inspector/window.ui:582
 msgid "Resources"
@@ -4522,11 +4439,8 @@ msgid "CSS"
 msgstr "CSS"
 
 #: gtk/inspector/window.ui:628
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Record"
 msgid "Recorder"
-msgstr "_Enregistrar"
+msgstr "Enregistrador"
 
 #: gtk/open-type-layout.h:13
 #, fuzzy
@@ -4766,12 +4680,9 @@ msgid "Isolated Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:57
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
-msgstr "_Italica"
+msgstr "Italicas"
 
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
@@ -6258,11 +6169,9 @@ msgid "Gothic"
 msgstr ""
 
 #: gtk/script-names.c:28
-#, fuzzy
-#| msgid "_Green:"
 msgctxt "Script"
 msgid "Greek"
-msgstr "_Verd :"
+msgstr "Grèc"
 
 #: gtk/script-names.c:29
 msgctxt "Script"
@@ -6370,11 +6279,9 @@ msgid "Syriac"
 msgstr ""
 
 #: gtk/script-names.c:49
-#, fuzzy
-#| msgid "_Family:"
 msgctxt "Script"
 msgid "Tamil"
-msgstr "_Familha :"
+msgstr "Tamil"
 
 #: gtk/script-names.c:50
 msgctxt "Script"
@@ -6387,12 +6294,9 @@ msgid "Thaana"
 msgstr ""
 
 #: gtk/script-names.c:52
-#, fuzzy
-#| msgctxt "input method menu"
-#| msgid "Thai-Lao"
 msgctxt "Script"
 msgid "Thai"
-msgstr "Taï-Lao"
+msgstr "Tai"
 
 #: gtk/script-names.c:53
 msgctxt "Script"
@@ -6505,8 +6409,6 @@ msgid "Kharoshthi"
 msgstr ""
 
 #: gtk/script-names.c:75
-#, fuzzy
-#| msgid "Unknown"
 msgctxt "Script"
 msgid "Unknown"
 msgstr "Desconegut"
@@ -7080,16 +6982,12 @@ msgid "Hue"
 msgstr "Tinta"
 
 #: gtk/ui/gtkcoloreditor.ui:114
-#, fuzzy
-#| msgid "Alpha"
 msgid "Alpha value"
-msgstr "Alfa"
+msgstr "Valor de l'alfa"
 
 #: gtk/ui/gtkcoloreditor.ui:132
-#, fuzzy
-#| msgid "Saturation"
 msgid "Saturation and value"
-msgstr "Saturacion"
+msgstr "Saturacion e valor"
 
 #: gtk/ui/gtkcoloreditor.ui:156
 msgctxt "Color channel"
@@ -7210,11 +7108,8 @@ msgid "Preview text"
 msgstr "Apercebut del tèxte"
 
 #: gtk/ui/gtkfontchooserwidget.ui:194 gtk/ui/gtkfontchooserwidget.ui:224
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Horizontal"
 msgid "horizontal"
-msgstr "Orizontal"
+msgstr "orizontal"
 
 #: gtk/ui/gtkfontchooserwidget.ui:274
 #, fuzzy
