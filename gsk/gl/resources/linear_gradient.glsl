@@ -2,7 +2,7 @@
 // linear_gradient.glsl
 uniform vec4 u_points;
 
-_NOPERSPECTIVE_ _OUT_ vec4 info;
+_OUT_ vec4 info;
 
 void main() {
   gl_Position = u_projection * (u_modelview * vec4(aPosition, 0.0, 1.0));
@@ -53,7 +53,7 @@ uniform highp int u_num_color_stops; // Why? Because it works like this.
 uniform float u_color_stops[MAX_COLOR_STOPS * 5];
 uniform bool u_repeat;
 
-_NOPERSPECTIVE_ _IN_ vec4 info;
+_IN_ vec4 info;
 
 float get_offset(int index) {
   // u_color_stops[5 * index] makes Intel Windows driver crash.

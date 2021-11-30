@@ -1185,10 +1185,17 @@ get_width_for_height (GtkLabel *self,
     {
       int min, max, mid, text_width, text_height;
 
+      /* Can't use a measuring layout here, because we need to force
+       * ellipsizing mode */
+      gtk_label_ensure_layout (self);
+      layout = pango_layout_copy (self->layout);
+      pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_NONE);
+
       /* binary search for the smallest width where the height doesn't
        * eclipse the given height */
       min = MAX (minimum_default, 0);
-      layout = gtk_label_get_measuring_layout (self, NULL, -1);
+
+      pango_layout_set_width (layout, -1);
       pango_layout_get_size (layout, &max, NULL);
 
       min = PANGO_PIXELS_CEIL (min);
@@ -1196,7 +1203,7 @@ get_width_for_height (GtkLabel *self,
       while (min < max)
         {
           mid = (min + max) / 2;
-          layout = gtk_label_get_measuring_layout (self, layout, mid * PANGO_SCALE);
+          pango_layout_set_width (layout, mid * PANGO_SCALE);
           pango_layout_get_size (layout, &text_width, &text_height);
           text_width = PANGO_PIXELS_CEIL (text_width);
           if (text_width > mid)
@@ -1207,8 +1214,19 @@ get_width_for_height (GtkLabel *self,
             max = mid;
         }
 
-      *minimum_width = min * PANGO_SCALE;
       *natural_width = min * PANGO_SCALE;
+
+      if (self->ellipsize != PANGO_ELLIPSIZE_NONE)
+        {
+          g_object_unref (layout);
+          layout = gtk_label_get_measuring_layout (self, NULL, MAX (minimum_default, 0));
+          pango_layout_get_size (layout, minimum_width, NULL);
+          *minimum_width = MAX (*minimum_width, minimum_default);
+        }
+      else
+        {
+          *minimum_width = *natural_width;
+        }
     }
 
   g_object_unref (layout);

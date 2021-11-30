@@ -9,7 +9,6 @@ ensure_texture_access (GdkTexture *texture)
 {
   /* Make sure to initialize the pixel to anything but red */
   guint32 pixel = 0;
-  float float_pixel[4] = { INFINITY, INFINITY, INFINITY, INFINITY };
 
   g_test_message ("Checking texture access in thread %p...", g_thread_self());
   /* Just to be sure */
@@ -18,14 +17,9 @@ ensure_texture_access (GdkTexture *texture)
 
   /* download the pixel */
   gdk_texture_download (texture, (guchar *) &pixel, 4);
-  gdk_texture_download_float (texture, float_pixel, 4);
 
   /* check the pixel is now red */
   g_assert_cmphex (pixel, ==, 0xFFFF0000);
-  g_assert_cmpfloat (float_pixel[0], ==, 1.0);
-  g_assert_cmpfloat (float_pixel[1], ==, 0.0);
-  g_assert_cmpfloat (float_pixel[2], ==, 0.0);
-  g_assert_cmpfloat (float_pixel[3], ==, 1.0);
 
   g_test_message ("...done in thread %p", g_thread_self());
 }

@@ -31,44 +31,6 @@ struct _TextureBuilder
   gsize offset;
 };
 
-static float
-gdk_memory_format_precsion (GdkMemoryFormat format)
-{
-  switch (format)
-    {
-    case GDK_MEMORY_R8G8B8:
-    case GDK_MEMORY_B8G8R8:
-    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-    case GDK_MEMORY_B8G8R8A8:
-    case GDK_MEMORY_A8R8G8B8:
-    case GDK_MEMORY_R8G8B8A8:
-    case GDK_MEMORY_A8B8G8R8:
-      return 1/256.f;
-
-    case GDK_MEMORY_R16G16B16:
-    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16:
-      return 1/65536.f;
-
-    case GDK_MEMORY_R16G16B16_FLOAT:
-    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-      return 0.0009765625f;
-
-    case GDK_MEMORY_R32G32B32_FLOAT:
-    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R32G32B32A32_FLOAT:
-      return FLT_EPSILON;
-
-    case GDK_MEMORY_N_FORMATS:
-    default:
-      g_assert_not_reached ();
-      return 0;
-    }
-}
-
 static gsize
 gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
 {
@@ -434,50 +396,6 @@ compare_textures (GdkTexture *expected,
   g_free (test_data);
 }
 
-static void
-compare_textures_float (GdkTexture *expected,
-                        GdkTexture *test,
-                        float       eps,
-                        gboolean    has_alpha)
-{
-  static int R = 0;
-  static int G = 1;
-  static int B = 2;
-  static int A = 3;
-  float *expected_data, *test_data;
-  int width, height;
-  int x, y;
-
-  g_assert_cmpint (gdk_texture_get_width (expected), ==, gdk_texture_get_width (test));
-  g_assert_cmpint (gdk_texture_get_height (expected), ==, gdk_texture_get_height (test));
-
-  width = gdk_texture_get_width (expected);
-  height = gdk_texture_get_height (expected);
-
-  expected_data = g_new (float, width * height * 4);
-  gdk_texture_download_float (expected, expected_data, width * 4);
-
-  test_data = g_new (float, width * height * 4);
-  gdk_texture_download_float (test, test_data, width * 4);
-
-  for (y = 0; y < height; y++)
-    {
-      for (x = 0; x < width; x++)
-        {
-          g_assert_cmpfloat_with_epsilon (expected_data[y * width + 4 * x + R], test_data[y * width + 4 * x + R], eps);
-          g_assert_cmpfloat_with_epsilon (expected_data[y * width + 4 * x + G], test_data[y * width + 4 * x + G], eps);
-          g_assert_cmpfloat_with_epsilon (expected_data[y * width + 4 * x + B], test_data[y * width + 4 * x + B], eps);
-          if (has_alpha)
-            g_assert_cmpfloat_with_epsilon (expected_data[y * width + 4 * x + A], test_data[y * width + 4 * x + A], eps);
-          else
-            g_assert_cmpfloat (1.0, ==, test_data[y * width + 4 * x + A]);
-        }
-    }
-
-  g_free (expected_data);
-  g_free (test_data);
-}
-
 static GdkTexture *
 upload_to_gl (GdkTexture *texture)
 {
@@ -683,61 +601,6 @@ test_download_192x192 (gconstpointer data)
 }
 
 static void
-test_download_float_1x1 (gconstpointer data)
-{
-  GdkMemoryFormat format;
-  TextureMethod method;
-  GdkTexture *expected, *test;
-  gsize i;
-
-  decode (data, &format, &method);
-
-  for (i = 0; i < N; i++)
-    {
-      GdkRGBA color;
-
-      create_random_color (&color);
-      expected = create_texture (GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, TEXTURE_METHOD_LOCAL, 1, 1, &color);
-      test = create_texture (format, method, 1, 1, &color);
-      
-      compare_textures_float (expected, test,
-                              gdk_memory_format_precsion (format),
-                              gdk_memory_format_has_alpha (format));
-
-      g_object_unref (expected);
-      g_object_unref (test);
-    }
-}
-
-static void
-test_download_float_4x4 (gconstpointer data)
-{
-  GdkMemoryFormat format;
-  TextureMethod method;
-  GdkTexture *expected, *test;
-  gsize i;
-
-  decode (data, &format, &method);
-
-  for (i = 0; i < N; i++)
-    {
-      GdkRGBA color;
-
-      create_random_color (&color);
-      expected = create_texture (GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, TEXTURE_METHOD_LOCAL, 4, 4, &color);
-      test = create_texture (format, method, 4, 4, &color);
-      
-      compare_textures_float (expected, test,
-                              gdk_memory_format_precsion (format),
-                              gdk_memory_format_has_alpha (format));
-
-      g_object_unref (expected);
-      g_object_unref (test);
-    }
-}
-
-
-static void
 add_test (const char    *name,
           GTestDataFunc  func)
 {
@@ -772,8 +635,6 @@ main (int argc, char *argv[])
   add_test ("/memorytexture/download_1x1", test_download_1x1);
   add_test ("/memorytexture/download_4x4", test_download_4x4);
   add_test ("/memorytexture/download_192x192", test_download_192x192);
-  add_test ("/memorytexture/download_float_1x1", test_download_float_1x1);
-  add_test ("/memorytexture/download_float_4x4", test_download_float_4x4);
 
   gl_renderer = gsk_gl_renderer_new ();
   if (!gsk_renderer_realize (gl_renderer, NULL, NULL))
