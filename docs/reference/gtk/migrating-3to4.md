@@ -410,8 +410,8 @@ have been removed. Update your code accordingly.
 Any APIs that deal with global (or root) coordinates have been
 removed in GTK 4, since not all backends support them. You should
 replace your use of such APIs with surface-relative equivalents.
-Examples of this are `gdk_surface_get_origin()`, `gdk_surface_move()`
-or `gdk_event_get_root_coords()`.
+Examples of such removed APIs are `gdk_window_get_origin()`,
+`gdk_window_move()` or `gdk_event_get_root_coords()`.
 
 ### Adapt to `GdkKeymap` API changes
 

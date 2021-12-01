@@ -221,7 +221,7 @@ static void
 int_modified (GtkAdjustment *adj, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
-  
+
   g_value_init (&val, G_TYPE_INT);
   g_value_set_int (&val, (int) gtk_adjustment_get_value (adj));
   set_property_value (p->obj, p->spec, &val);
@@ -250,7 +250,7 @@ static void
 uint_modified (GtkAdjustment *adj, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
-  
+
   g_value_init (&val, G_TYPE_UINT);
   g_value_set_uint (&val, (guint) gtk_adjustment_get_value (adj));
   set_property_value (p->obj, p->spec, &val);
@@ -280,7 +280,7 @@ static void
 float_modified (GtkAdjustment *adj, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
-  
+
   g_value_init (&val, G_TYPE_FLOAT);
   g_value_set_float (&val, (float) gtk_adjustment_get_value (adj));
   set_property_value (p->obj, p->spec, &val);
@@ -310,7 +310,7 @@ static void
 double_modified (GtkAdjustment *adj, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
-  
+
   g_value_init (&val, G_TYPE_DOUBLE);
   g_value_set_double (&val, gtk_adjustment_get_value (adj));
   set_property_value (p->obj, p->spec, &val);
@@ -340,7 +340,7 @@ static void
 string_modified (GtkEntry *entry, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
-  
+
   g_value_init (&val, G_TYPE_STRING);
   g_value_set_static_string (&val, gtk_editable_get_text (GTK_EDITABLE (entry)));
   set_property_value (p->obj, p->spec, &val);
@@ -1072,7 +1072,12 @@ property_editor (GObject                *object,
           }
 
         if (j >= 10)
-          g_object_set (sw, "vscrollbar-policy", GTK_POLICY_AUTOMATIC, NULL);
+          {
+            g_object_set (sw,
+                          "vscrollbar-policy", GTK_POLICY_AUTOMATIC,
+                          "min-content-height", 250,
+                          NULL);
+          }
 
         g_type_class_unref (fclass);
 
@@ -1208,7 +1213,7 @@ gtk_cell_layout_get_model (GtkCellLayout *layout)
     return gtk_tree_view_get_model (GTK_TREE_VIEW (gtk_tree_view_column_get_tree_view (GTK_TREE_VIEW_COLUMN (layout))));
   else if (GTK_IS_ICON_VIEW (layout))
     return gtk_icon_view_get_model (GTK_ICON_VIEW (layout));
-  else if (GTK_IS_COMBO_BOX (layout)) 
+  else if (GTK_IS_COMBO_BOX (layout))
     return gtk_combo_box_get_model (GTK_COMBO_BOX (layout));
   else
     return NULL;
@@ -1350,7 +1355,7 @@ attribute_editor (GObject                *object,
     {
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (layout));
       col = gtk_cell_area_attribute_get_column (area,
-                                                GTK_CELL_RENDERER (object), 
+                                                GTK_CELL_RENDERER (object),
                                                 self->name);
       model = gtk_cell_layout_get_model (GTK_CELL_LAYOUT (layout));
     }
@@ -1702,7 +1707,7 @@ set_property (GObject      *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID(object, param_id, pspec);
       break;
-    } 
+    }
 }
 
 static void
