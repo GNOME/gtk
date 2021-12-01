@@ -10012,6 +10012,10 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
                                     gtk_text_buffer_get_insert (buffer));
 
   gtk_text_view_get_iter_location (text_view, &iter, (GdkRectangle *) &rect);
+
+  rect.width = MAX (rect.width, 1);
+  rect.height = MAX (rect.height, 1);
+
   gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
                                          rect.x, rect.y, &rect.x, &rect.y);
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
