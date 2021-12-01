@@ -93,6 +93,7 @@ gtk_tests = [
   ['testswitch'],
   ['testtreepos'],
   ['testsensitive'],
+  ['testtextscroll'],
   ['testtextview'],
   ['testtextview2'],
   ['testgmenu'],
