@@ -49,7 +49,7 @@ EXTRA_DIST +=	\
 	replace.py			\
 	pc_base.py			\
 	gtkpc.py			\
-	README_EGL_MSVC.txt		\
+	README_FEATURES_MSVC.txt	\
 	$(GENERATED_ITEMS)
 
 -include $(top_srcdir)/git.mk

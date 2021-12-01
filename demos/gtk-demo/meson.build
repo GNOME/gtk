@@ -76,7 +76,13 @@ demos = files([
 
 gtkdemo_deps = [libgtk_dep]
 
-if harfbuzz_dep.found() and pangoft_dep.found()
+if pango_dep.version().version_compare('>=1.44.0') and harfbuzz_dep.found() and cc.has_header_symbol(
+  'hb-ot.h',
+  'hb_ot_var_get_axis_count',
+  dependencies: harfbuzz_dep
+)
+  demos += files('font_features.c')
+elif harfbuzz_dep.found() and pangoft_dep.found()
   demos += files('font_features.c')
   gtkdemo_deps += [harfbuzz_dep, pangoft_dep]
 endif
