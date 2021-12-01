@@ -327,6 +327,8 @@ gtk_text_buffer_deserialize_text_plain_finish (GObject      *source,
 
   if (data)
     {
+      if (memchr (data, '\0', size))
+        size = -1;
       buffer = g_value_get_object (gdk_content_deserializer_get_value (deserializer));
       gtk_text_buffer_get_end_iter (buffer, &end);
       gtk_text_buffer_insert (buffer, &end, data, size);
