@@ -34,6 +34,11 @@ void            _gtk_window_group_remove_grab (GtkWindowGroup *window_group,
 void            _gtk_window_unset_focus_and_default (GtkWindow *window,
                                                      GtkWidget *widget);
 
+void            _gtk_window_update_focus_visible (GtkWindow       *window,
+                                                  guint            keyval,
+                                                  GdkModifierType  state,
+                                                  gboolean         visible);
+
 void            _gtk_window_set_allocation         (GtkWindow     *window,
                                                     int            width,
                                                     int            height,

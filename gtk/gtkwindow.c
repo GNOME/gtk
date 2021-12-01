@@ -4895,11 +4895,11 @@ update_mnemonics_visible (GtkWindow       *window,
     }
 }
 
-static void
-update_focus_visible (GtkWindow       *window,
-                      guint            keyval,
-                      GdkModifierType  state,
-                      gboolean         visible)
+void
+_gtk_window_update_focus_visible (GtkWindow       *window,
+                                  guint            keyval,
+                                  GdkModifierType  state,
+                                  gboolean         visible)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
@@ -4934,7 +4934,7 @@ gtk_window_key_pressed (GtkWidget       *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  update_focus_visible (window, keyval, state, TRUE);
+  _gtk_window_update_focus_visible (window, keyval, state, TRUE);
   update_mnemonics_visible (window, keyval, state, TRUE);
 
   return FALSE;
@@ -4949,7 +4949,7 @@ gtk_window_key_released (GtkWidget       *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  update_focus_visible (window, keyval, state, FALSE);
+  _gtk_window_update_focus_visible (window, keyval, state, FALSE);
   update_mnemonics_visible (window, keyval, state, FALSE);
 
   return FALSE;
