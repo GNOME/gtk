@@ -61,7 +61,6 @@ struct _GdkX11DeviceXI2Class
 
 G_DEFINE_TYPE (GdkX11DeviceXI2, gdk_x11_device_xi2, GDK_TYPE_DEVICE)
 
-
 static void gdk_x11_device_xi2_finalize     (GObject      *object);
 static void gdk_x11_device_xi2_get_property (GObject      *object,
                                              guint         prop_id,
@@ -762,6 +761,20 @@ _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *device_manager
     }
 #endif /* XINPUT_2_2 */
 
+#ifdef XINPUT_2_4
+  /* XInput 2.4 includes multitouch support */
+  if (minor >= 4 &&
+      event_mask & GDK_TOUCHPAD_GESTURE_MASK)
+    {
+      XISetMask (mask, XI_GesturePinchBegin);
+      XISetMask (mask, XI_GesturePinchUpdate);
+      XISetMask (mask, XI_GesturePinchEnd);
+      XISetMask (mask, XI_GestureSwipeBegin);
+      XISetMask (mask, XI_GestureSwipeUpdate);
+      XISetMask (mask, XI_GestureSwipeEnd);
+    }
+#endif
+
   return mask;
 }
 
@@ -809,6 +822,36 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
 
   return state;
 }
+
+#ifdef XINPUT_2_4
+guint
+_gdk_x11_device_xi2_gesture_type_to_phase (int evtype, int flags)
+{
+  switch (evtype)
+    {
+    case XI_GesturePinchBegin:
+    case XI_GestureSwipeBegin:
+      return GDK_TOUCHPAD_GESTURE_PHASE_BEGIN;
+
+    case XI_GesturePinchUpdate:
+    case XI_GestureSwipeUpdate:
+      return GDK_TOUCHPAD_GESTURE_PHASE_UPDATE;
+
+    case XI_GesturePinchEnd:
+      if (flags & XIGesturePinchEventCancelled)
+        return GDK_TOUCHPAD_GESTURE_PHASE_CANCEL;
+      return GDK_TOUCHPAD_GESTURE_PHASE_END;
+
+    case XI_GestureSwipeEnd:
+      if (flags & XIGestureSwipeEventCancelled)
+        return GDK_TOUCHPAD_GESTURE_PHASE_CANCEL;
+      return GDK_TOUCHPAD_GESTURE_PHASE_END;
+    default:
+      g_assert_not_reached ();
+      return GDK_TOUCHPAD_GESTURE_PHASE_END;
+    }
+}
+#endif /* XINPUT_2_4 */
 
 void
 _gdk_x11_device_xi2_add_scroll_valuator (GdkX11DeviceXI2    *device,

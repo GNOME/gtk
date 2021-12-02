@@ -160,7 +160,7 @@ do_gestures (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), drawing_area);
       gtk_widget_add_events (drawing_area,
                              GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
-                             GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK);
+                             GDK_POINTER_MOTION_MASK | GDK_TOUCH_MASK | GDK_TOUCHPAD_GESTURE_MASK);
 
       g_signal_connect (drawing_area, "draw",
                         G_CALLBACK (drawing_area_draw), NULL);

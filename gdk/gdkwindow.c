@@ -1286,7 +1286,7 @@ get_native_device_event_mask (GdkWindow *private,
       if (gdk_window_is_toplevel (private) ||
           mask & GDK_BUTTON_PRESS_MASK)
         mask |=
-          GDK_TOUCH_MASK |
+          GDK_TOUCH_MASK | GDK_TOUCHPAD_GESTURE_MASK |
           GDK_POINTER_MOTION_MASK |
           GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
           GDK_SCROLL_MASK;

@@ -230,6 +230,11 @@ guchar * _gdk_x11_device_xi2_translate_event_mask (GdkX11DeviceManagerXI2 *devic
 guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
                                                    XIButtonState   *buttons_state,
                                                    XIGroupState    *group_state);
+
+#ifdef XINPUT_2_4
+guint _gdk_x11_device_xi2_gesture_type_to_phase (int evtype, int flags);
+#endif
+
 gint     _gdk_x11_device_xi2_get_id               (GdkX11DeviceXI2 *device);
 void     _gdk_device_xi2_unset_scroll_valuators   (GdkX11DeviceXI2 *device);
 
