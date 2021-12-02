@@ -3606,6 +3606,10 @@ tablet_tool_handle_proximity_out (void                      *data,
   g_object_unref (tablet->pointer_info.focus);
   tablet->pointer_info.focus = NULL;
 
+  tablet->pointer_info.button_modifiers &=
+    ~(GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
+      GDK_BUTTON4_MASK | GDK_BUTTON5_MASK);
+
   gdk_device_update_tool (tablet->stylus_device, NULL);
   g_clear_object (&tablet->pointer_info.cursor);
 }
@@ -3621,7 +3625,6 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
                                   GdkEventType          evtype,
                                   guint                 button)
 {
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
   GdkEvent *event;
 
   event = gdk_button_event_new (evtype,
@@ -3629,7 +3632,7 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
                                 tablet->logical_device,
                                 tablet->current_tool->tool,
                                 tablet->pointer_info.time,
-                                device_get_modifiers (seat->logical_pointer),
+                                device_get_modifiers (tablet->logical_device),
                                 button,
                                 tablet->pointer_info.surface_x,
                                 tablet->pointer_info.surface_y,
