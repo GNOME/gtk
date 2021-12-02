@@ -3606,6 +3606,10 @@ tablet_tool_handle_proximity_out (void                      *data,
   g_object_unref (tablet->pointer_info.focus);
   tablet->pointer_info.focus = NULL;
 
+  tablet->pointer_info.button_modifiers &=
+    ~(GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
+      GDK_BUTTON4_MASK | GDK_BUTTON5_MASK);
+
   gdk_device_update_tool (tablet->stylus_device, NULL);
   g_clear_object (&tablet->pointer_info.cursor);
 }
