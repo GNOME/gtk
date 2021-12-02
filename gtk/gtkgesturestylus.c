@@ -194,16 +194,6 @@ gtk_gesture_stylus_new (void)
                        NULL);
 }
 
-static GdkEvent *
-gesture_get_current_event (GtkGestureStylus *gesture)
-{
-  GdkEventSequence *sequence;
-
-  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-
-  return gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-}
-
 /**
  * gtk_gesture_stylus_get_axis:
  * @gesture: a `GtkGestureStylus`
@@ -230,7 +220,7 @@ gtk_gesture_stylus_get_axis (GtkGestureStylus *gesture,
   g_return_val_if_fail (axis < GDK_AXIS_LAST, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
-  event = gesture_get_current_event (gesture);
+  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
   if (!event)
     return FALSE;
 
@@ -264,7 +254,7 @@ gtk_gesture_stylus_get_axes (GtkGestureStylus  *gesture,
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
   g_return_val_if_fail (values != NULL, FALSE);
 
-  event = gesture_get_current_event (gesture);
+  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
   if (!event)
     return FALSE;
 
@@ -331,7 +321,7 @@ gtk_gesture_stylus_get_backlog (GtkGestureStylus  *gesture,
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
   g_return_val_if_fail (backlog != NULL && n_elems != NULL, FALSE);
 
-  event = gesture_get_current_event (gesture);
+  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
 
   if (event && GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY))
     history = gdk_event_get_history (event, &n_coords);
@@ -391,7 +381,7 @@ gtk_gesture_stylus_get_device_tool (GtkGestureStylus *gesture)
 
   g_return_val_if_fail (GTK_IS_GESTURE_STYLUS (gesture), FALSE);
 
-  event = gesture_get_current_event (gesture);
+  event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
   if (!event)
     return NULL;
 
