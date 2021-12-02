@@ -3621,7 +3621,6 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
                                   GdkEventType          evtype,
                                   guint                 button)
 {
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
   GdkEvent *event;
 
   event = gdk_button_event_new (evtype,
@@ -3629,7 +3628,7 @@ tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
                                 tablet->logical_device,
                                 tablet->current_tool->tool,
                                 tablet->pointer_info.time,
-                                device_get_modifiers (seat->logical_pointer),
+                                device_get_modifiers (tablet->logical_device),
                                 button,
                                 tablet->pointer_info.surface_x,
                                 tablet->pointer_info.surface_y,
