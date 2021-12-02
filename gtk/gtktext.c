@@ -386,9 +386,9 @@ static void        gtk_text_set_editable         (GtkText    *self,
 static void        gtk_text_set_text             (GtkText    *self,
                                                   const char *text);
 static void        gtk_text_set_width_chars      (GtkText    *self,
-                                                  int         n_chars); 
+                                                  int         n_chars);
 static void        gtk_text_set_max_width_chars  (GtkText    *self,
-                                                  int         n_chars); 
+                                                  int         n_chars);
 static void        gtk_text_set_alignment        (GtkText    *self,
                                                   float       xalign);
 
@@ -415,7 +415,7 @@ static void     gtk_text_toggle_overwrite   (GtkText         *self);
 static void     gtk_text_insert_emoji       (GtkText         *self);
 static void     gtk_text_select_all         (GtkText         *self);
 static void     gtk_text_real_activate      (GtkText         *self);
- 
+
 static void     direction_changed           (GdkDevice       *keyboard,
                                              GParamSpec      *pspec,
                                              GtkText         *self);
@@ -438,19 +438,19 @@ static gboolean gtk_text_delete_surrounding_cb   (GtkIMContext *context,
 
 /* Entry buffer signal handlers
  */
-static void buffer_inserted_text     (GtkEntryBuffer *buffer, 
+static void buffer_inserted_text     (GtkEntryBuffer *buffer,
                                       guint           position,
                                       const char     *chars,
                                       guint           n_chars,
                                       GtkText        *self);
-static void buffer_deleted_text      (GtkEntryBuffer *buffer, 
+static void buffer_deleted_text      (GtkEntryBuffer *buffer,
                                       guint           position,
                                       guint           n_chars,
                                       GtkText        *self);
-static void buffer_notify_text       (GtkEntryBuffer *buffer, 
+static void buffer_notify_text       (GtkEntryBuffer *buffer,
                                       GParamSpec     *spec,
                                       GtkText        *self);
-static void buffer_notify_max_length (GtkEntryBuffer *buffer, 
+static void buffer_notify_max_length (GtkEntryBuffer *buffer,
                                       GParamSpec     *spec,
                                       GtkText        *self);
 
@@ -700,7 +700,7 @@ add_move_binding (GtkWidgetClass *widget_class,
                   int             count)
 {
   g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
-  
+
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, modmask,
                                        "move-cursor",
@@ -997,7 +997,7 @@ gtk_text_class_init (GtkTextClass *class)
   gtk_editable_install_properties (gobject_class, NUM_PROPERTIES);
 
  /* Action signals */
-  
+
   /**
    * GtkText::activate:
    * @self: The widget on which the signal is emitted
@@ -1044,7 +1044,7 @@ gtk_text_class_init (GtkTextClass *class)
    * - <kbd>Ctrl</kbd>-<kbd>→</kbd>, etc. move by words/paragraphs
    * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the buffer
    */
-  signals[MOVE_CURSOR] = 
+  signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -1068,7 +1068,7 @@ gtk_text_class_init (GtkTextClass *class)
    *
    * This signal has no default bindings.
    */
-  signals[INSERT_AT_CURSOR] = 
+  signals[INSERT_AT_CURSOR] =
     g_signal_new (I_("insert-at-cursor"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -1096,7 +1096,7 @@ gtk_text_class_init (GtkTextClass *class)
    * for deleting a character and <kbd>Ctrl</kbd>-<kbd>Delete</kbd>
    * for deleting a word.
    */
-  signals[DELETE_FROM_CURSOR] = 
+  signals[DELETE_FROM_CURSOR] =
     g_signal_new (I_("delete-from-cursor"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
@@ -1249,7 +1249,7 @@ gtk_text_class_init (GtkTextClass *class)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
-  
+
   /*
    * Actions
    */
@@ -1281,7 +1281,7 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText|selection.delete:
    *
-   * Deletes the current selection. 
+   * Deletes the current selection.
    */
   gtk_widget_class_install_action (widget_class, "selection.delete", NULL,
                                    gtk_text_activate_selection_delete);
@@ -1306,7 +1306,7 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText|misc.toggle-visibility:
    *
    * Toggles the `GtkText`:visibility property.
-   */ 
+   */
   gtk_widget_class_install_property_action (widget_class,
                                             "misc.toggle-visibility",
                                             "visibility");
@@ -1315,7 +1315,7 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText|text.undo:
    *
    * Undoes the last change to the contents.
-   */ 
+   */
   gtk_widget_class_install_action (widget_class, "text.undo", NULL, gtk_text_real_undo);
 
   /**
@@ -1328,8 +1328,8 @@ gtk_text_class_init (GtkTextClass *class)
   /**
    * GtkText|menu.popup:
    *
-   * Opens the context menu. 
-   */ 
+   * Opens the context menu.
+   */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, gtk_text_popup_menu);
 
   /*
@@ -1348,16 +1348,16 @@ gtk_text_class_init (GtkTextClass *class)
   /* Moving the insertion point */
   add_move_binding (widget_class, GDK_KEY_Right, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  
+
   add_move_binding (widget_class, GDK_KEY_Left, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
   add_move_binding (widget_class, GDK_KEY_KP_Right, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  
+
   add_move_binding (widget_class, GDK_KEY_KP_Left, 0,
                     GTK_MOVEMENT_VISUAL_POSITIONS, -1);
-  
+
   add_move_binding (widget_class, GDK_KEY_Right, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, 1);
 
@@ -1369,7 +1369,7 @@ gtk_text_class_init (GtkTextClass *class)
 
   add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, -1);
-  
+
   add_move_binding (widget_class, GDK_KEY_Home, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
@@ -1381,7 +1381,7 @@ gtk_text_class_init (GtkTextClass *class)
 
   add_move_binding (widget_class, GDK_KEY_KP_End, 0,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
-  
+
   add_move_binding (widget_class, GDK_KEY_Home, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_BUFFER_ENDS, -1);
 
@@ -1405,7 +1405,7 @@ gtk_text_class_init (GtkTextClass *class)
                                 GDK_KEY_slash, GDK_CONTROL_MASK,
                                 (GtkShortcutFunc) gtk_text_select_all,
                                 NULL);
-  /* Unselect all 
+  /* Unselect all
    */
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_backslash, GDK_CONTROL_MASK,
@@ -1427,7 +1427,7 @@ gtk_text_class_init (GtkTextClass *class)
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Enter, 0,
                                        "activate",
                                        NULL);
-  
+
   /* Deleting text */
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Delete, 0,
@@ -1438,7 +1438,7 @@ gtk_text_class_init (GtkTextClass *class)
                                        GDK_KEY_KP_Delete, 0,
                                        "delete-from-cursor",
                                        "(ii)", GTK_DELETE_CHARS, 1);
-  
+
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_BackSpace, 0,
                                        "backspace",
@@ -1464,7 +1464,7 @@ gtk_text_class_init (GtkTextClass *class)
                                        GDK_KEY_KP_Delete, GDK_CONTROL_MASK,
                                        "delete-from-cursor",
                                        "(ii)", GTK_DELETE_WORD_ENDS, 1);
-  
+
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_BackSpace, GDK_CONTROL_MASK,
                                        "delete-from-cursor",
@@ -2233,7 +2233,7 @@ gtk_text_unrealize (GtkWidget *widget)
   GdkClipboard *clipboard;
 
   gtk_text_reset_layout (self);
-  
+
   gtk_im_context_set_client_widget (priv->im_context, NULL);
 
   clipboard = gtk_widget_get_primary_clipboard (widget);
@@ -2619,14 +2619,14 @@ gtk_text_get_pixel_ranges (GtkText  *self,
       if (ranges)
         {
           int *r = *ranges;
-          
+
           for (i = 0; i < real_n_ranges; ++i)
             {
               r[2 * i + 1] = (r[2 * i + 1] - r[2 * i]) / PANGO_SCALE;
               r[2 * i] = r[2 * i] / PANGO_SCALE;
             }
         }
-      
+
       if (n_ranges)
         *n_ranges = real_n_ranges;
     }
@@ -3533,7 +3533,7 @@ gtk_text_update_cached_style_values (GtkText *self)
     }
 }
 
-static void 
+static void
 gtk_text_css_changed (GtkWidget         *widget,
                       GtkCssStyleChange *change)
 {
@@ -3811,7 +3811,7 @@ gtk_text_move_cursor (GtkText         *self,
 
             if (count <= 0)
               new_pos = current_x < bound_x ? priv->current_pos : priv->selection_bound;
-            else 
+            else
               new_pos = current_x > bound_x ? priv->current_pos : priv->selection_bound;
           }
           break;
@@ -3921,7 +3921,7 @@ gtk_text_move_cursor (GtkText         *self,
     gtk_text_set_selection_bounds (self, priv->selection_bound, new_pos);
   else
     gtk_text_set_selection_bounds (self, new_pos, new_pos);
-  
+
   gtk_text_pend_cursor_blink (self);
 }
 
@@ -3963,7 +3963,7 @@ gtk_text_delete_from_cursor (GtkText       *self,
       gtk_text_delete_selection (self);
       return;
     }
-  
+
   switch (type)
     {
     case GTK_DELETE_CHARS:
@@ -4597,7 +4597,7 @@ get_layout_position (GtkText *self,
     y_pos = 0;
   else if (y_pos + logical_rect.height > area_height)
     y_pos = area_height - logical_rect.height;
-  
+
   y_pos = y_pos / PANGO_SCALE;
 
   if (x)
@@ -4855,7 +4855,7 @@ gtk_text_find_position (GtkText *self,
   int trailing;
   const char *text;
   int cursor_index;
-  
+
   layout = gtk_text_ensure_layout (self, TRUE);
   text = pango_layout_get_text (layout);
   cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos) - text;
@@ -4893,7 +4893,7 @@ gtk_text_get_cursor_locations (GtkText   *self,
     {
       if (strong_x)
         *strong_x = 0;
-      
+
       if (weak_x)
         *weak_x = 0;
     }
@@ -4903,14 +4903,14 @@ gtk_text_get_cursor_locations (GtkText   *self,
       const char *text = pango_layout_get_text (layout);
       PangoRectangle strong_pos, weak_pos;
       int index;
-  
+
       index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
 
       pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
-      
+
       if (strong_x)
         *strong_x = strong_pos.x / PANGO_SCALE;
-      
+
       if (weak_x)
         *weak_x = weak_pos.x / PANGO_SCALE;
     }
@@ -5137,7 +5137,7 @@ gtk_text_move_logically (GtkText *self,
           do
             new_pos++;
           while (new_pos < length && !log_attrs[new_pos].is_cursor_position);
-          
+
           count--;
         }
       while (count < 0 && new_pos > 0)
@@ -5145,7 +5145,7 @@ gtk_text_move_logically (GtkText *self,
           do
             new_pos--;
           while (new_pos > 0 && !log_attrs[new_pos].is_cursor_position);
-          
+
           count++;
         }
     }
@@ -5210,7 +5210,7 @@ gtk_text_move_backward_word (GtkText  *self,
       new_pos = start - 1;
 
       /* Find the previous word boundary */
-      while (new_pos > 0 && !(log_attrs[new_pos].is_word_start || 
+      while (new_pos > 0 && !(log_attrs[new_pos].is_word_start ||
                               (log_attrs[new_pos].is_word_end && allow_whitespace)))
         new_pos--;
     }
@@ -5297,7 +5297,7 @@ paste_received (GObject      *clipboard,
         gtk_text_set_selection_bounds (self, pos, pos);
       priv->insert_pos = -1;
     }
-      
+
   if (priv->truncate_multiline)
     length = truncate_multiline (text);
 
@@ -5331,7 +5331,7 @@ gtk_text_update_primary_selection (GtkText *self)
     return;
 
   clipboard = gtk_widget_get_primary_clipboard (GTK_WIDGET (self));
-  
+
   if (priv->selection_bound != priv->current_pos)
     {
       gdk_clipboard_set_content (clipboard, priv->selection_content);
@@ -5449,6 +5449,8 @@ gtk_text_set_buffer (GtkText        *self,
       new_length = gtk_entry_buffer_get_length (priv->buffer);
       buffer_connect_signals (self);
     }
+
+  update_placeholder_visibility (self);
 
   obj = G_OBJECT (self);
   g_object_freeze_notify (obj);
@@ -5886,7 +5888,7 @@ PangoLayout *
 gtk_text_get_layout (GtkText *self)
 {
   PangoLayout *layout;
-  
+
   g_return_val_if_fail (GTK_IS_TEXT (self), NULL);
 
   layout = gtk_text_ensure_layout (self, TRUE);
@@ -6341,7 +6343,7 @@ gtk_text_drag_drop (GtkDropTarget *dest,
       gtk_editable_insert_text (GTK_EDITABLE (self), str, length, &pos);
       end_change (self);
     }
-  
+
   return TRUE;
 }
 
