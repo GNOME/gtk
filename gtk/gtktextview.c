@@ -2641,16 +2641,16 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
       if (cursor.y < screen_inner_top)
         {
           if (cursor.y == 0)
-            border_yoffset = (with_border) ? priv->top_padding : 0;
+            border_yoffset = with_border ? priv->top_padding : 0;
 
           screen_dest.y = cursor.y - MAX (within_margin_yoffset, border_yoffset);
         }
       else if (cursor_bottom > screen_inner_bottom)
         {
           if (cursor_bottom == buffer_bottom - priv->top_margin)
-            border_yoffset = (with_border) ? priv->bottom_padding : 0;
+            border_yoffset = with_border ? priv->bottom_padding : 0;
 
-          screen_dest.y = cursor_bottom - screen_dest.height +
+          screen_dest.y = cursor_bottom - screen_dest.height -
                           MAX (within_margin_yoffset, border_yoffset);
         }
     }
@@ -2679,16 +2679,16 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
       if (cursor.x < screen_inner_left)
         {
           if (cursor.x == priv->left_margin)
-            border_xoffset = (with_border) ? priv->left_padding : 0;
+            border_xoffset = with_border ? priv->left_padding : 0;
 
           screen_dest.x = cursor.x - MAX (within_margin_xoffset, border_xoffset);
         }
       else if (cursor_right >= screen_inner_right - 1)
         {
           if (cursor.x >= buffer_right - priv->right_padding)
-            border_xoffset = (with_border) ? priv->right_padding : 0;
+            border_xoffset = with_border ? priv->right_padding : 0;
 
-          screen_dest.x = cursor_right - screen_dest.width +
+          screen_dest.x = cursor_right - screen_dest.width -
                           MAX (within_margin_xoffset, border_xoffset) + 1;
         }
     }
