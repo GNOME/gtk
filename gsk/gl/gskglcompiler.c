@@ -28,10 +28,11 @@
 #include "gskglcompilerprivate.h"
 #include "gskglprogramprivate.h"
 
-#define SHADER_VERSION_GLES       100
-#define SHADER_VERSION_GL2_LEGACY 110
-#define SHADER_VERSION_GL3_LEGACY 130
-#define SHADER_VERSION_GL3        150
+#define SHADER_VERSION_GLES       "100"
+#define SHADER_VERSION_GLES3      "300 es"
+#define SHADER_VERSION_GL2_LEGACY "110"
+#define SHADER_VERSION_GL3_LEGACY "130"
+#define SHADER_VERSION_GL3        "150"
 
 struct _GskGLCompiler
 {
@@ -49,7 +50,7 @@ struct _GskGLCompiler
 
   GArray *attrib_locations;
 
-  int glsl_version;
+  const char *glsl_version;
 
   guint gl3 : 1;
   guint gles : 1;
@@ -98,7 +99,7 @@ gsk_gl_compiler_class_init (GskGLCompilerClass *klass)
 static void
 gsk_gl_compiler_init (GskGLCompiler *self)
 {
-  self->glsl_version = 150;
+  self->glsl_version = "150";
   self->attrib_locations = g_array_new (FALSE, FALSE, sizeof (GskGLProgramAttrib));
   self->all_preamble = g_bytes_ref (empty_bytes);
   self->vertex_preamble = g_bytes_ref (empty_bytes);
@@ -127,8 +128,18 @@ gsk_gl_compiler_new (GskGLDriver *driver,
 
   if (gdk_gl_context_get_use_es (context))
     {
-      self->glsl_version = SHADER_VERSION_GLES;
-      self->gles = TRUE;
+      int maj, min;
+
+      /* for OpenGL/ES 3.0+, use "300 es" as our shader version */
+      gdk_gl_context_get_version (context, &maj, &min);
+
+      if (maj >= 3)
+        self->glsl_version = SHADER_VERSION_GLES3;
+      else
+        {
+          self->glsl_version = SHADER_VERSION_GLES;
+          self->gles = TRUE;
+        }
     }
   else if (gdk_gl_context_is_legacy (context))
     {
@@ -546,7 +557,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
 
   gsk_gl_command_queue_make_current (self->driver->command_queue);
 
-  g_snprintf (version, sizeof version, "#version %d\n", self->glsl_version);
+  g_snprintf (version, sizeof version, "#version %s\n", self->glsl_version);
 
   if (self->debug_shaders)
     debug = "#define GSK_DEBUG 1\n";

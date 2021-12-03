@@ -638,6 +638,7 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
       return NULL;
     }
 
+  gdk_surface_set_egl_native_window (surface, (void *) impl->handle);
   if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
     gdk_winpointer_initialize_surface (surface);
 
@@ -693,6 +694,7 @@ gdk_win32_surface_destroy (GdkSurface *window,
 
   if (!foreign_destroy)
     {
+      gdk_surface_set_egl_native_window (window, NULL);
       window->destroyed = TRUE;
       DestroyWindow (GDK_SURFACE_HWND (window));
     }
