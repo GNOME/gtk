@@ -101,7 +101,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextWayland, gtk_im_context_wayland, GTK_TYPE_I
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "wayland",
-                                                         0));
+                                                         100));
 
 #define GTK_IM_CONTEXT_WAYLAND(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), gtk_im_context_wayland_get_type (), GtkIMContextWayland))
 
