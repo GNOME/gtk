@@ -892,6 +892,10 @@ gtk_text_iter_get_char (const GtkTextIter *iter)
       return g_utf8_get_char (real->segment->body.chars +
                               real->segment_byte_offset);
     }
+  else if (real->segment->type == &gtk_text_child_type)
+    {
+      return g_utf8_get_char (real->segment->body.child.obj->chars);
+    }
   else
     {
       /* Unicode "unknown character" 0xFFFC */

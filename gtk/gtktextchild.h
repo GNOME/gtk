@@ -60,6 +60,7 @@ struct _GtkTextChildAnchor
 
   /*< private >*/
   gpointer segment;
+  char *chars; /* replacement character */
 };
 
 struct _GtkTextChildAnchorClass
@@ -74,16 +75,19 @@ struct _GtkTextChildAnchorClass
 };
 
 GDK_AVAILABLE_IN_ALL
-GType               gtk_text_child_anchor_get_type    (void) G_GNUC_CONST;
+GType gtk_text_child_anchor_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-GtkTextChildAnchor* gtk_text_child_anchor_new         (void);
+GtkTextChildAnchor *gtk_text_child_anchor_new (void);
+
+GDK_AVAILABLE_IN_4_6
+GtkTextChildAnchor *gtk_text_child_anchor_new_with_replacement (const char *character);
 
 GDK_AVAILABLE_IN_ALL
-GtkWidget **        gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor,
-                                                       guint              *out_len);
+GtkWidget **gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor,
+                                               guint *out_len);
 GDK_AVAILABLE_IN_ALL
-gboolean            gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
+gboolean gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
 
 G_END_DECLS
 
