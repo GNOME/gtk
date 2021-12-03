@@ -92,9 +92,9 @@ test_textview_surrounding (void)
                                                        &selection_bound);
 
   g_assert_true (ret);
-  g_assert_cmpstr (text, ==, "efgh");
-  g_assert_cmpint (cursor_pos, ==, 2);
-  g_assert_cmpint (selection_bound, ==, 2);
+  g_assert_cmpstr (text, ==, "abcd\nefgh\nijkl");
+  g_assert_cmpint (cursor_pos, ==, 7);
+  g_assert_cmpint (selection_bound, ==, 7);
 
   g_free (text);
 
@@ -121,8 +121,8 @@ test_textview_surrounding (void)
   g_assert_cmpint (gtk_text_iter_get_line_offset (&start), ==, 1);
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
-  gtk_text_buffer_set_text (buffer, "abcd\nefgh\nijkl", -1);
-  gtk_text_buffer_get_iter_at_line_offset (buffer, &start, 1, 2);
+  gtk_text_buffer_set_text (buffer, "ab cd\nef gh\nijkl", -1);
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &start, 1, 4);
   gtk_text_buffer_get_iter_at_line_offset (buffer, &end, 2, 2);
   gtk_text_buffer_select_range (buffer, &start, &end);
 
@@ -132,9 +132,9 @@ test_textview_surrounding (void)
                                                        &selection_bound);
 
   g_assert_true (ret);
-  g_assert_cmpstr (text, ==, "efgh\nijkl");
-  g_assert_cmpint (cursor_pos, ==, 7);
-  g_assert_cmpint (selection_bound, ==, 2);
+  g_assert_cmpstr (text, ==, "cd\nef gh\nijkl");
+  g_assert_cmpint (cursor_pos, ==, 11);
+  g_assert_cmpint (selection_bound, ==, 7);
 
   g_free (text);
 

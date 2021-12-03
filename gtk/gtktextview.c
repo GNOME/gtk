@@ -8566,6 +8566,8 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
   GtkTextIter end;
   GtkTextIter start1;
   GtkTextIter end1;
+  GtkTextIter start2;
+  GtkTextIter end2;
   int cursor_pos;
   int anchor_pos;
   char *text;
@@ -8588,6 +8590,16 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
 
   gtk_text_iter_set_line_offset (&start1, 0);
   gtk_text_iter_forward_to_line_end (&end1);
+
+  start2 = start;
+  gtk_text_iter_backward_word_starts (&start2, 3);
+  if (gtk_text_iter_compare (&start2, &start1) < 0)
+    start1 = start2;
+
+  end2 = end;
+  gtk_text_iter_forward_word_ends (&end2, 3);
+  if (gtk_text_iter_compare (&end2, &end1) > 0)
+    end1 = end2;
 
   pre = gtk_text_iter_get_slice (&start1, &start);
   sel = gtk_text_iter_get_slice (&start, &end);
