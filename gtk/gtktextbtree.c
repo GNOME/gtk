@@ -2362,8 +2362,7 @@ copy_segment (GString *string,
 
       /* printf ("  :%s\n", string->str); */
     }
-  else if (seg->type == &gtk_text_paintable_type ||
-           seg->type == &gtk_text_child_type)
+  else if (seg->type == &gtk_text_paintable_type)
     {
       gboolean copy = TRUE;
 
@@ -2382,7 +2381,27 @@ copy_segment (GString *string,
           g_string_append_len (string,
                                _gtk_text_unknown_char_utf8,
                                GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN);
+        }
+    }
+  else if (seg->type == &gtk_text_child_type)
+    {
+      gboolean copy = TRUE;
+      if (!include_nonchars &&
+          g_strcmp0 (_gtk_text_unknown_char_utf8, seg->body.child.obj->chars) == 0)
+        {
+          copy = FALSE;
+        }
+      else if (!include_hidden &&
+               _gtk_text_btree_char_is_invisible (start))
+        {
+          copy = FALSE;
+        }
 
+      if (copy)
+        {
+          g_string_append_len (string,
+                               seg->body.child.obj->chars,
+                               seg->byte_count);
         }
     }
 }
@@ -7121,6 +7140,12 @@ _gtk_text_btree_spew_line_short (GtkTextLine *line, int indent)
           printf ("%s chars '%s'...\n", spaces, str);
           g_free (str);
         }
+      else if (seg->type == &gtk_text_child_type)
+        {
+          char *str = g_strndup (seg->body.child.obj->chars, seg->byte_count);
+          printf ("%s child '%s'...\n", spaces, str);
+          g_free (str);
+        }
       else if (seg->type == &gtk_text_right_mark_type)
         {
           printf ("%s right mark '%s' visible: %d\n",
@@ -7220,6 +7245,12 @@ _gtk_text_btree_spew_segment (GtkTextBTree* tree, GtkTextLineSegment * seg)
   if (seg->type == &gtk_text_char_type)
     {
       char * str = g_strndup (seg->body.chars, seg->byte_count);
+      printf ("       '%s'\n", str);
+      g_free (str);
+    }
+  else if (seg->type == &gtk_text_child_type)
+    {
+      char *str = g_strndup (seg->body.child.obj->chars, seg->byte_count);
       printf ("       '%s'\n", str);
       g_free (str);
     }

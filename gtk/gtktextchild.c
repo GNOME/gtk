@@ -267,9 +267,6 @@ child_segment_check_func (GtkTextLineSegment *seg,
   if (seg->next == NULL)
     g_error ("child segment is the last segment in a line");
 
-  if (seg->byte_count != GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN)
-    g_error ("child segment has byte count of %d", seg->byte_count);
-
   if (seg->char_count != 1)
     g_error ("child segment has char count of %d", seg->char_count);
 }
@@ -301,11 +298,8 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 
   seg->next = NULL;
 
-  /* We convert to the 0xFFFC "unknown character",
-   * a 3-byte sequence in UTF-8.
-   */
-  seg->byte_count = GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN;
-  seg->char_count = 1;
+  seg->byte_count = strlen (anchor->chars);
+  seg->char_count = g_utf8_strlen (anchor->chars, seg->byte_count);
 
   seg->body.child.obj = anchor;
   seg->body.child.obj->segment = seg;
@@ -410,7 +404,28 @@ gtk_text_child_anchor_class_init (GtkTextChildAnchorClass *klass)
 GtkTextChildAnchor*
 gtk_text_child_anchor_new (void)
 {
-  return g_object_new (GTK_TYPE_TEXT_CHILD_ANCHOR, NULL);
+  return gtk_text_child_anchor_new_with_replacement (_gtk_text_unknown_char_utf8);
+}
+
+/**
+ * gtk_text_child_anchor_new_with_replacement:
+ *
+ * Creates a new `GtkTextChildAnchor` with the given replacement character.
+ *
+ * Usually you would then insert it into a `GtkTextBuffer` with
+ * [method@Gtk.TextBuffer.insert_child_anchor].
+ *
+ * Returns: a new `GtkTextChildAnchor`
+ **/
+GtkTextChildAnchor *
+gtk_text_child_anchor_new_with_replacement (const char *replacement_character)
+{
+  /* only a single character can be set as replacement */
+  g_return_val_if_fail (g_utf8_strlen (replacement_character, -1) == 1, NULL);
+
+  GtkTextChildAnchor *anchor = g_object_new (GTK_TYPE_TEXT_CHILD_ANCHOR, NULL);
+  anchor->chars = g_strdup (replacement_character);
+  return anchor;
 }
 
 static void
