@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-11-25 15:51+0000\n"
-"PO-Revision-Date: 2021-11-30 18:02+0100\n"
+"POT-Creation-Date: 2021-11-30 17:05+0000\n"
+"PO-Revision-Date: 2021-12-03 17:12+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -38,10 +38,9 @@ msgstr ""
 
 #: gdk/gdkcontentprovider.c:105 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
-#, fuzzy, c-format
-#| msgid "Could not read the contents of %s"
+#, c-format
 msgid "Cannot provide contents as “%s”"
-msgstr "Impossible de legir lo contengut de %s"
+msgstr "Impossible de fornir lo contengut coma « %s »"
 
 #: gdk/gdkcontentprovider.c:126
 #, fuzzy, c-format
@@ -2752,11 +2751,8 @@ msgid "Tab list"
 msgstr ""
 
 #: gtk/gtknotebook.c:3249
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous tab"
-msgstr "Pre_cedent"
+msgstr "Onglet precedent"
 
 #: gtk/gtknotebook.c:3253
 msgid "Next tab"
@@ -7146,10 +7142,8 @@ msgid "Reverse landscape"
 msgstr "Païsatge inversat"
 
 #: gtk/ui/gtkplacesview.ui:28
-#, fuzzy
-#| msgid "Connect to a network server address"
 msgid "Server Addresses"
-msgstr "Se connècta a una adreça d'un servidor de la ret"
+msgstr "Adreças del servidor"
 
 #: gtk/ui/gtkplacesview.ui:40
 msgid ""
@@ -8000,16 +7994,14 @@ msgid "Invalid size %s\n"
 msgstr "Talha %s invalid\n"
 
 #: tools/encodesymbolic.c:106 tools/encodesymbolic.c:115
-#, fuzzy, c-format
-#| msgid "Can't load file: %s\n"
+#, c-format
 msgid "Can’t load file: %s\n"
 msgstr "Impossible de cargar lo fichièr : %s\n"
 
 #: tools/encodesymbolic.c:143 tools/encodesymbolic.c:149
-#, fuzzy, c-format
-#| msgid "Can't save file %s: %s\n"
+#, c-format
 msgid "Can’t save file %s: %s\n"
-msgstr "Impossible d'enregistrar lo fichièr « %s » : %s\n"
+msgstr "Impossible d'enregistrar « %s » : %s\n"
 
 #: tools/encodesymbolic.c:155
 #, fuzzy, c-format
@@ -8041,10 +8033,10 @@ msgid ""
 msgstr ""
 
 #: tools/gtk-builder-tool-simplify.c:436
-#, fuzzy, c-format
-#| msgid "Could not rename %s to %s: %s\n"
+#, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
-msgstr "Impossible de renomenar « %s » en %s : %s\n"
+msgstr ""
+"%s :%d : impossible d'analisar la valor per la proprietat « %s » : %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:591
 #, fuzzy, c-format
@@ -8053,28 +8045,24 @@ msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "Proprietat de la cellula %s:%s pas trobada\n"
 
 #: tools/gtk-builder-tool-simplify.c:2207
-#, fuzzy, c-format
-#| msgid "Can't load file: %s\n"
+#, c-format
 msgid "Can’t load “%s”: %s\n"
-msgstr "Impossible de cargar lo fichièr : %s\n"
+msgstr "Impossible de cargar « %s » : %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2218
-#, fuzzy, c-format
-#| msgid "Can't save file %s: %s\n"
+#, c-format
 msgid "Can’t parse “%s”: %s\n"
-msgstr "Impossible d'enregistrar lo fichièr « %s » : %s\n"
+msgstr "Impossible d'analisar « %s » : %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2242
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to read “%s”: %s\n"
-msgstr "Impossible de dobrir lo fichièr « %s » : %s\n"
+msgstr "Impossible de legir « %s » : %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2248
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to write %s: “%s”\n"
-msgstr "Impossible de dobrir lo fichièr « %s » : %s\n"
+msgstr "Impossible d’escriure « %s » : %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2288
 #, c-format
