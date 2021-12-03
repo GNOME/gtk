@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-11-30 17:05+0000\n"
-"PO-Revision-Date: 2021-12-03 17:12+0100\n"
+"PO-Revision-Date: 2021-12-03 17:18+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -2257,7 +2257,7 @@ msgstr "A_pondre als signets"
 #: gtk/gtkfilechooserwidget.c:1822 gtk/gtkplacessidebar.c:2309
 #: gtk/gtkplacessidebar.c:3248 gtk/ui/gtkfilechooserwidget.ui:465
 msgid "_Rename"
-msgstr "_Renomenar…"
+msgstr "_Renomenar"
 
 #: gtk/gtkfilechooserwidget.c:1830
 msgid "_Move to Trash"
@@ -2484,15 +2484,15 @@ msgstr "US Letter Plus"
 
 #: gtk/gtkfontchooserwidget.c:2166
 msgid "Number Case"
-msgstr ""
+msgstr "Cassa del nombres"
 
 #: gtk/gtkfontchooserwidget.c:2167
 msgid "Number Spacing"
-msgstr ""
+msgstr "Espaçament dels nombres"
 
 #: gtk/gtkfontchooserwidget.c:2168
 msgid "Number Formatting"
-msgstr ""
+msgstr "Mesa en forma dels nombres"
 
 #: gtk/gtkfontchooserwidget.c:2169
 msgid "Character Variants"
@@ -2585,7 +2585,7 @@ msgstr "default:LTR"
 #, c-format
 msgctxt "long time format"
 msgid "%d:%02d:%02d"
-msgstr ""
+msgstr "%d:%02d:%02d"
 
 #. -hour:minutes:seconds
 #. Translators: This is a time format, like "-9:05:02" for 9
@@ -2597,7 +2597,7 @@ msgstr ""
 #, c-format
 msgctxt "long time format"
 msgid "-%d:%02d:%02d"
-msgstr ""
+msgstr "-%d:%02d:%02d"
 
 #. -minutes:seconds
 #. Translators: This is a time format, like "-5:02" for 5
@@ -2748,7 +2748,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:1527
 msgid "Tab list"
-msgstr ""
+msgstr "Lista d'onglets"
 
 #: gtk/gtknotebook.c:3249
 msgid "Previous tab"
@@ -3081,7 +3081,7 @@ msgstr "Protocòl de transferiment de fichièrs (FTP)"
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/gtkplacesview.c:1613
 msgid "ftp:// or ftps://"
-msgstr ""
+msgstr "ftp:// o ftps://"
 
 #: gtk/gtkplacesview.c:1619
 #, fuzzy
@@ -3100,7 +3100,7 @@ msgstr "Protocòl de transferiment de fichièrs SSH"
 #. Translators: do not translate sftp:// and ssh://
 #: gtk/gtkplacesview.c:1633
 msgid "sftp:// or ssh://"
-msgstr ""
+msgstr "sftp:// o ssh://"
 
 #: gtk/gtkplacesview.c:1639
 msgid "WebDAV"
@@ -3459,27 +3459,27 @@ msgstr "_Afichar tot"
 
 #: gtk/gtkshortcutsshortcut.c:143
 msgid "Two finger pinch"
-msgstr ""
+msgstr "Pinçament amb dos dets"
 
 #: gtk/gtkshortcutsshortcut.c:147
 msgid "Two finger stretch"
-msgstr ""
+msgstr "Escartament de dos dets"
 
 #: gtk/gtkshortcutsshortcut.c:151
 msgid "Rotate clockwise"
-msgstr ""
+msgstr "Pivotar dins lo sens de las agulhas d'un relòtge"
 
 #: gtk/gtkshortcutsshortcut.c:155
 msgid "Rotate counterclockwise"
-msgstr ""
+msgstr "Pivotar dins lo sens invèrse de las agulhas d'un relòtge"
 
 #: gtk/gtkshortcutsshortcut.c:159
 msgid "Two finger swipe left"
-msgstr ""
+msgstr "Lisament de dos dets cap a esquèrra"
 
 #: gtk/gtkshortcutsshortcut.c:163
 msgid "Two finger swipe right"
-msgstr ""
+msgstr "Lisament de dos dets cap a dreita"
 
 #: gtk/gtkshortcutsshortcut.c:167
 msgid "Swipe left"
@@ -6112,57 +6112,57 @@ msgstr "Arabi"
 #: gtk/script-names.c:17
 msgctxt "Script"
 msgid "Armenian"
-msgstr ""
+msgstr "Armenian"
 
 #: gtk/script-names.c:18
 msgctxt "Script"
 msgid "Bengali"
-msgstr ""
+msgstr "Bengalí"
 
 #: gtk/script-names.c:19
 msgctxt "Script"
 msgid "Bopomofo"
-msgstr ""
+msgstr "Bopomofo"
 
 #: gtk/script-names.c:20
 msgctxt "Script"
 msgid "Cherokee"
-msgstr ""
+msgstr "Cheroquí"
 
 #: gtk/script-names.c:21
 msgctxt "Script"
 msgid "Coptic"
-msgstr ""
+msgstr "Còpt"
 
 #: gtk/script-names.c:22
 msgctxt "Script"
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cirillic"
 
 #: gtk/script-names.c:23
 msgctxt "Script"
 msgid "Deseret"
-msgstr ""
+msgstr "Deseret"
 
 #: gtk/script-names.c:24
 msgctxt "Script"
 msgid "Devanagari"
-msgstr ""
+msgstr "Devanagari"
 
 #: gtk/script-names.c:25
 msgctxt "Script"
 msgid "Ethiopic"
-msgstr ""
+msgstr "Etiopian"
 
 #: gtk/script-names.c:26
 msgctxt "Script"
 msgid "Georgian"
-msgstr ""
+msgstr "Georgian"
 
 #: gtk/script-names.c:27
 msgctxt "Script"
 msgid "Gothic"
-msgstr ""
+msgstr "Gotic"
 
 #: gtk/script-names.c:28
 msgctxt "Script"
@@ -6172,47 +6172,47 @@ msgstr "Grèc"
 #: gtk/script-names.c:29
 msgctxt "Script"
 msgid "Gujarati"
-msgstr ""
+msgstr "Gujarati"
 
 #: gtk/script-names.c:30
 msgctxt "Script"
 msgid "Gurmukhi"
-msgstr ""
+msgstr "Gurmukhi"
 
 #: gtk/script-names.c:31
 msgctxt "Script"
 msgid "Han"
-msgstr ""
+msgstr "Han"
 
 #: gtk/script-names.c:32
 msgctxt "Script"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/script-names.c:33
 msgctxt "Script"
 msgid "Hebrew"
-msgstr ""
+msgstr "Ebrèu"
 
 #: gtk/script-names.c:34
 msgctxt "Script"
 msgid "Hiragana"
-msgstr ""
+msgstr "Iragana"
 
 #: gtk/script-names.c:35
 msgctxt "Script"
 msgid "Kannada"
-msgstr ""
+msgstr "Kannadà"
 
 #: gtk/script-names.c:36
 msgctxt "Script"
 msgid "Katakana"
-msgstr ""
+msgstr "Katakana"
 
 #: gtk/script-names.c:37
 msgctxt "Script"
 msgid "Khmer"
-msgstr ""
+msgstr "Cmèr"
 
 #: gtk/script-names.c:38
 #, fuzzy
@@ -6229,22 +6229,22 @@ msgstr "Latin"
 #: gtk/script-names.c:40
 msgctxt "Script"
 msgid "Malayalam"
-msgstr ""
+msgstr "Malaialam"
 
 #: gtk/script-names.c:41
 msgctxt "Script"
 msgid "Mongolian"
-msgstr ""
+msgstr "Mongòl"
 
 #: gtk/script-names.c:42
 msgctxt "Script"
 msgid "Myanmar"
-msgstr ""
+msgstr "Myanmar"
 
 #: gtk/script-names.c:43
 msgctxt "Script"
 msgid "Ogham"
-msgstr ""
+msgstr "Ogam"
 
 #: gtk/script-names.c:44
 #, fuzzy
@@ -6257,7 +6257,7 @@ msgstr "_Italica"
 #: gtk/script-names.c:45
 msgctxt "Script"
 msgid "Oriya"
-msgstr ""
+msgstr "Oriyà"
 
 #: gtk/script-names.c:46
 msgctxt "Script"
@@ -6297,7 +6297,7 @@ msgstr "Tai"
 #: gtk/script-names.c:53
 msgctxt "Script"
 msgid "Tibetan"
-msgstr ""
+msgstr "Tibetan"
 
 #: gtk/script-names.c:54
 msgctxt "Script"
