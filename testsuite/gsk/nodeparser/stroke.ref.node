@@ -1,0 +1,14 @@
+stroke {
+  child: color {
+    bounds: 0 0 50 50;
+    color: rgb(255,0,204);
+  }
+  path: "\
+M 111 222 h 333 v 444 h -333 z";
+  line-width: 2.5;
+  line-cap: round;
+  line-join: miter-clip;
+  miter-limit: 5;
+  dash: 1 2 3 4 5;
+  dash-offset: 1.5;
+}
