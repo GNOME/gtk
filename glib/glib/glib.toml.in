@@ -51,7 +51,12 @@ content_files = [
   "threads.md",
 ]
 content_images = [
+  "file-name-encodings.png",
   "mainloop-states.gif",
+  "Sorted_binary_tree_breadth-first_traversal.svg",
+  "Sorted_binary_tree_inorder.svg",
+  "Sorted_binary_tree_postorder.svg",
+  "Sorted_binary_tree_preorder.svg",
 ]
 
 [[object]]
