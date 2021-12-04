@@ -17,14 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#include <glib.h>
-#include <glib/gstdio.h>
-
-#ifdef G_OS_WIN32
-#include <io.h>
-#else
-#include <unistd.h>
-#endif
+#include <gio/gio.h>
 
 #include "testsuite/testutils.h"
 
@@ -34,46 +27,69 @@ diff_with_file (const char  *file1,
                 gssize       len,
                 GError     **error)
 {
-  const char *command[] = { "diff", "-u", file1, NULL, NULL };
-  char *diff, *tmpfile;
-  int fd;
+  char *diff = NULL;
 
-  diff = NULL;
+  g_return_val_if_fail (file1 != NULL, NULL);
+  g_return_val_if_fail (text != NULL, NULL);
 
   if (g_find_program_in_path ("diff"))
     {
+      GSubprocess *process;
+      GBytes *input, *output, *error_output;
+
       if (len < 0)
         len = strlen (text);
 
-      /* write the text buffer to a temporary file */
-      fd = g_file_open_tmp (NULL, &tmpfile, error);
-      if (fd < 0)
+      process = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE
+                                  | G_SUBPROCESS_FLAGS_STDOUT_PIPE
+                                  | G_SUBPROCESS_FLAGS_STDERR_PIPE,
+                                  error,
+                                  "diff", "-u", file1, "-", NULL);
+      if (process == NULL)
         return NULL;
 
-      if (write (fd, text, len) != (int) len)
+      input = g_bytes_new_static (text, len);
+      if (!g_subprocess_communicate (process,
+                                     input,
+                                     NULL,
+                                     &output,
+                                     &error_output,
+                                     error))
         {
-          close (fd);
-          g_set_error (error,
-                       G_FILE_ERROR, G_FILE_ERROR_FAILED,
-                       "Could not write data to temporary file '%s'", tmpfile);
-          goto done;
+          g_object_unref (process);
+          g_bytes_unref (input);
+          return NULL;
         }
-      close (fd);
-      command[3] = tmpfile;
+      g_bytes_unref (input);
 
-      /* run diff command */
-      g_spawn_sync (NULL,
-                    (char **) command,
-                    NULL,
-                    G_SPAWN_SEARCH_PATH,
-                    NULL, NULL,
-                    &diff,
-                    NULL, NULL,
-                    error);
+      if (error_output)
+        {
+          const char *error_text = g_bytes_get_data (error_output, NULL);
+          if (error_text && error_text[0])
+            {
+              g_test_message ("%s", error_text);
+            }
 
-done:
-      g_unlink (tmpfile);
-      g_free (tmpfile);
+          g_bytes_unref (error_output);
+        }
+
+      if (!g_subprocess_get_successful (process) &&
+          /* this is the condition when the files differ */
+          !(g_subprocess_get_if_exited (process) && g_subprocess_get_exit_status (process) == 1))
+        {
+          g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "The `diff' process exited with error status %d",
+                       g_subprocess_get_exit_status (process));
+        }
+      else
+        {
+          diff = g_strdup (g_bytes_get_data (output, NULL));
+        }
+
+      g_object_unref (process);
+      g_clear_pointer (&output, g_bytes_unref);
+
+      return diff;
     }
   else
     {
