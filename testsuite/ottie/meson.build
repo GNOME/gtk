@@ -5,6 +5,7 @@ snapshot = executable(
   'snapshot',
   ['snapshot.c'],
   dependencies: libgtk_dep,
+  link_with: libottie,
   c_args: common_cflags,
   install: get_option('install-tests'),
   install_dir: testexecdir
