@@ -137,11 +137,13 @@ gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)
   media_info = gst_player_get_media_info (self->player);
   if (media_info)
     {
+      GstClockTime duration = gst_player_media_info_get_duration (media_info);
+
       gtk_media_stream_stream_prepared (GTK_MEDIA_STREAM (self),
                                         gst_player_media_info_get_audio_streams (media_info) != NULL,
                                         gst_player_media_info_get_video_streams (media_info) != NULL,
                                         gst_player_media_info_is_seekable (media_info),
-                                        FROM_GST_TIME (gst_player_media_info_get_duration (media_info)));
+                                        duration == GST_CLOCK_TIME_NONE ? 0 : FROM_GST_TIME (duration));
 
       g_object_unref (media_info);
     }
