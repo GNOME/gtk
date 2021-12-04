@@ -1,0 +1,9 @@
+
+fill {
+  child: color {
+    bounds: 0 0 50 50;
+    color: rgb(255,0,204);
+  }
+  path: "M 150 100 A 50 50 0 0 0 50 100 A 50 50 0 0 0 150 100 z";
+  fill-rule: even-odd;
+}
