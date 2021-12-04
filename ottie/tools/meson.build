@@ -12,6 +12,7 @@ foreach tool: ottie_tools
     include_directories: [confinc],
     c_args: common_cflags,
     dependencies: [libgtk_dep],
+    link_with: libottie,
     install: true,
   )
 
