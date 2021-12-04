@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-10-02 02:23+0000\n"
-"PO-Revision-Date: 2021-10-03 16:14+0200\n"
+"POT-Creation-Date: 2021-12-03 22:52+0000\n"
+"PO-Revision-Date: 2021-12-04 10:31+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -49,13 +49,56 @@ msgstr "Kan inte tillhandahålla innehåll som ”%s”"
 msgid "Cannot provide contents as %s"
 msgstr "Kan inte tillhandahålla innehåll som %s"
 
-#: gdk/gdkdisplay.c:144
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:421
 msgid "The current backend does not support OpenGL"
 msgstr "Den aktuella bakänden stöder inte OpenGL"
 
-#: gdk/gdkdisplay.c:1212
+#: gdk/gdkdisplay.c:1246
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL-stöd inaktiverat via GDK_DEBUG"
+
+#: gdk/gdkdisplay.c:1544
+msgid "No EGL configuration available"
+msgstr "Ingen EGL-konfiguration tillgänglig"
+
+#: gdk/gdkdisplay.c:1552
+msgid "Failed to get EGL configurations"
+msgstr "Misslyckades med att hämta EGL-konfigurationer"
+
+#: gdk/gdkdisplay.c:1582
+msgid "No EGL configuration with required features found"
+msgstr "Ingen EGL-konfiguration med funktionerna som krävdes hittades"
+
+#: gdk/gdkdisplay.c:1589
+msgid "No perfect EGL configuration found"
+msgstr "Ingen perfekt EGL-konfiguration hittades"
+
+#: gdk/gdkdisplay.c:1631
+msgid "EGL implementation is missing extension %2$s"
+msgid_plural "EGL implementation is missing %d extensions: %s"
+msgstr[0] "EGL-implementationen saknar tillägget %2$s"
+msgstr[1] "EGL-implementationen saknar %d tillägg: %s"
+
+#: gdk/gdkdisplay.c:1664
+msgid "libEGL not available in this sandbox"
+msgstr "libEGL är inte tillgängligt i denna sandlåda"
+
+#: gdk/gdkdisplay.c:1665
+msgid "libEGL not available"
+msgstr "libEGL inte tillgängligt"
+
+#: gdk/gdkdisplay.c:1675
+msgid "Failed to create EGL display"
+msgstr "Misslyckades med att skapa EGL-display"
+
+#: gdk/gdkdisplay.c:1685
+msgid "Could not initialize EGL display"
+msgstr "Kunde inte initiera EGL-display"
+
+#: gdk/gdkdisplay.c:1696
+#, c-format
+msgid "EGL version %d.%d is too old. GTK requires %d.%d"
+msgstr "EGL-version %d.%d är för gammal. GTK kräver %d.%d"
 
 #: gdk/gdkdrop.c:130
 msgid "Drag’n’drop from other applications is not supported."
@@ -65,18 +108,36 @@ msgstr "Dra-och-släpp från andra program stöds inte."
 msgid "No compatible formats to transfer contents."
 msgstr "Inga kompatibla format för att överföra innehåll."
 
+#: gdk/gdkglcontext.c:323
+msgid "The EGL implementation does not support any allowed APIs"
+msgstr "EGL-implementationen stöder inte några tillåtna API:er"
+
+#: gdk/gdkglcontext.c:404 gdk/win32/gdkglcontext-win32-wgl.c:624
+#: gdk/x11/gdkglcontext-glx.c:622
+msgid "Unable to create a GL context"
+msgstr "Kan inte skapa en GL-kontext"
+
+#: gdk/gdkglcontext.c:1237
+msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
+msgstr "Allt utom OpenGL ES inaktiverat via GDK_DEBUG"
+
+#: gdk/gdkglcontext.c:1246
+#, c-format
+msgid "Application does not support %s API"
+msgstr "Programmet stöder inte %s-API"
+
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1392
+#: gdk/gdkglcontext.c:1732
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Försöker använda %s, men %s används redan"
 
-#: gdk/gdksurface.c:1161
+#: gdk/gdksurface.c:1235
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan-stöd inaktiverat via GDK_DEBUG"
 
-#: gdk/gdktexture.c:554
+#: gdk/gdktexture.c:529
 msgid "Unknown image format."
 msgstr "Okänt bildformat."
 
@@ -463,38 +524,43 @@ msgstr "Försätt i vänteläge"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Fel vid tolkning av JPEG-bildfil (%s)"
 
-#: gdk/loaders/gdkjpeg.c:220
+#: gdk/loaders/gdkjpeg.c:188
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "JPEG-färgrymden (%d) stöds inte"
 
-#: gdk/loaders/gdkjpeg.c:229 gdk/loaders/gdkpng.c:434 gdk/loaders/gdktiff.c:479
+#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:273 gdk/loaders/gdktiff.c:446
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Inte tillräckligt med minne för bildstorlek %u×%u"
 
-#: gdk/loaders/gdkpng.c:118
+#: gdk/loaders/gdkpng.c:119
 #, c-format
 msgid "Error reading png (%s)"
 msgstr "Fel vid läsning av png (%s)"
 
-#: gdk/loaders/gdkpng.c:381
+#: gdk/loaders/gdkpng.c:216
 #, c-format
-msgid "Failed to parse png image"
-msgstr "Misslyckades med att tolka png-bild"
+msgid "Unsupported depth %u in png image"
+msgstr "Djup %u stöds inte i png-bild"
 
-#: gdk/loaders/gdktiff.c:380
+#: gdk/loaders/gdkpng.c:254
+#, c-format
+msgid "Unsupported color type %u in png image"
+msgstr "Färgtyp %u stöds inte i png-bild"
+
+#: gdk/loaders/gdktiff.c:340
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Misslyckades med att läsa in RGB-data från TIFF-fil"
 
-#: gdk/loaders/gdktiff.c:491
+#: gdk/loaders/gdktiff.c:458
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Läsning av data misslyckades på rad %d"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:967 gdk/win32/gdkdrop-win32.c:1012
+#: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Inget kompatibelt överföringsformat hittades"
@@ -503,60 +569,6 @@ msgstr "Inget kompatibelt överföringsformat hittades"
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Misslyckades med att avkoda innehåll med mime-typen ”%s”"
-
-#: gdk/wayland/gdkglcontext-wayland.c:190
-#: gdk/win32/gdkglcontext-win32-egl.c:401
-#: gdk/win32/gdkglcontext-win32-wgl.c:623 gdk/x11/gdkglcontext-egl.c:599
-#: gdk/x11/gdkglcontext-glx.c:612
-msgid "Unable to create a GL context"
-msgstr "Kan inte skapa en GL-kontext"
-
-#: gdk/wayland/gdkglcontext-wayland.c:547
-msgid "libEGL not available in this sandbox"
-msgstr "libEGL är inte tillgängligt i denna sandlåda"
-
-#: gdk/wayland/gdkglcontext-wayland.c:548
-msgid "libEGL not available"
-msgstr "libEGL inte tillgängligt"
-
-#: gdk/wayland/gdkglcontext-wayland.c:561
-msgid "Sandbox does not provide an OpenGL implementation"
-msgstr "Sandlådan tillhandahåller ingen OpenGL-implementation"
-
-#: gdk/wayland/gdkglcontext-wayland.c:562
-msgid "No OpenGL implementation available"
-msgstr "Ingen OpenGL-implementation tillgänglig"
-
-#: gdk/wayland/gdkglcontext-wayland.c:571 gdk/x11/gdkglcontext-egl.c:761
-msgid "Could not initialize EGL display"
-msgstr "Kunde inte initiera EGL-display"
-
-#: gdk/wayland/gdkglcontext-wayland.c:582 gdk/x11/gdkglcontext-egl.c:771
-#, c-format
-msgid "EGL version %d.%d is too old. GTK requires %d.%d"
-msgstr "EGL-version %d.%d är för gammal. GTK kräver %d.%d"
-
-#: gdk/wayland/gdkglcontext-wayland.c:593
-#: gdk/win32/gdkglcontext-win32-egl.c:275
-#: gdk/win32/gdkglcontext-win32-wgl.c:281
-#: gdk/win32/gdkglcontext-win32-wgl.c:298
-msgid "No GL implementation is available"
-msgstr "Ingen GL-implementation tillgänglig"
-
-#: gdk/wayland/gdkglcontext-wayland.c:603
-msgid "Core GL is not available on EGL implementation"
-msgstr "Kärn-GL är inte tillgängligt på EGL-implementation"
-
-#: gdk/wayland/gdkglcontext-wayland.c:612 gdk/x11/gdkglcontext-egl.c:782
-msgid "Surfaceless contexts are not supported on this EGL implementation"
-msgstr "Ytlösa kontexter stöds inte på denna EGL-implementation"
-
-#: gdk/wayland/gdkglcontext-wayland.c:624
-#: gdk/win32/gdkglcontext-win32-egl.c:215
-#: gdk/win32/gdkglcontext-win32-egl.c:225
-#: gdk/win32/gdkglcontext-win32-wgl.c:589
-msgid "No available configurations for the given pixel format"
-msgstr "Inga tillgängliga inställningar för det givna bildpunktsformatet"
 
 #: gdk/win32/gdkclipdrop-win32.c:721
 #, c-format
@@ -654,46 +666,55 @@ msgstr ""
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "Kan inte erhålla urklippsdata. GetClipboardData() misslyckades: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:898
+#: gdk/win32/gdkdrop-win32.c:937
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Kan inte erhålla dra-och-släpp-data. GlobalLock(0x%p) misslyckades: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:907
+#: gdk/win32/gdkdrop-win32.c:946
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Kan inte erhålla dra-och-släpp-data. GlobalSize(0x%p) misslyckades: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:918
+#: gdk/win32/gdkdrop-win32.c:957
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Kan inte erhålla dra-och-släpp-data. Misslyckades med att allokera %s byte "
 "för att lagra data."
 
-#: gdk/win32/gdkdrop-win32.c:986
+#: gdk/win32/gdkdrop-win32.c:1025
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "GDK-ytan 0x%p är inte registrerad som ett släppmål"
 
-#: gdk/win32/gdkdrop-win32.c:993
+#: gdk/win32/gdkdrop-win32.c:1032
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Målkontextpost 0x%p har inget dataobjekt"
 
-#: gdk/win32/gdkdrop-win32.c:1031
+#: gdk/win32/gdkdrop-win32.c:1070
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) misslyckades, returnerar 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1063
+#: gdk/win32/gdkdrop-win32.c:1102
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 "Misslyckades med att omvandla dra-och-släpp-data i W32-format 0x%x till %p "
 "(%s)"
+
+#: gdk/win32/gdkglcontext-win32-wgl.c:279
+#: gdk/win32/gdkglcontext-win32-wgl.c:296
+msgid "No GL implementation is available"
+msgstr "Ingen GL-implementation tillgänglig"
+
+#: gdk/win32/gdkglcontext-win32-wgl.c:590
+msgid "No available configurations for the given pixel format"
+msgstr "Inga tillgängliga inställningar för det givna bildpunktsformatet"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:63
 msgid "writing a closed stream"
@@ -754,39 +775,15 @@ msgstr "Urklippshanterare kunde inte lagra markering."
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Kan inte lagra urklipp. Ingen urklippshanterare är aktiv."
 
-#: gdk/x11/gdkglcontext-egl.c:179
-msgid "No EGL configuration available"
-msgstr "Ingen EGL-konfiguration tillgänglig"
-
-#: gdk/x11/gdkglcontext-egl.c:187
-msgid "Failed to get EGL configurations"
-msgstr "Misslyckades med att hämta EGL-konfigurationer"
-
-#: gdk/x11/gdkglcontext-egl.c:265
-msgid "No EGL configuration with required features found"
-msgstr "Ingen EGL-konfiguration med funktionerna som krävdes hittades"
-
-#: gdk/x11/gdkglcontext-egl.c:272
-msgid "No perfect EGL configuration found"
-msgstr "Ingen perfekt EGL-konfiguration hittades"
-
-#: gdk/x11/gdkglcontext-egl.c:743
-msgid "EGL is not supported"
-msgstr "EGL stöds inte"
-
-#: gdk/x11/gdkglcontext-egl.c:752
-msgid "Failed to create EGL display"
-msgstr "Misslyckades med att skapa EGL-display"
-
-#: gdk/x11/gdkglcontext-glx.c:771
+#: gdk/x11/gdkglcontext-glx.c:778
 msgid "No GLX configurations available"
 msgstr "Inga GLX-konfigurationer tillgängliga"
 
-#: gdk/x11/gdkglcontext-glx.c:844
+#: gdk/x11/gdkglcontext-glx.c:851
 msgid "No GLX configuration with required features found"
 msgstr "Ingen GLX-konfiguration med funktionerna som krävdes hittades"
 
-#: gdk/x11/gdkglcontext-glx.c:918
+#: gdk/x11/gdkglcontext-glx.c:925
 msgid "GLX is not supported"
 msgstr "GLX stöds inte"
 
@@ -1613,6 +1610,16 @@ msgstr "Elementet <%s> är inte tillåtet i toppnivå"
 msgid "Text may not appear inside <%s>"
 msgstr "Text får inte finnas inuti <%s>"
 
+# I Sverige börjar veckan på måndag
+#
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
+#.
+#: gtk/gtkcalendar.c:668
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:1"
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1623,19 +1630,9 @@ msgstr "Text får inte finnas inuti <%s>"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:768
+#: gtk/gtkcalendar.c:819
 msgid "calendar:MY"
 msgstr "calendar:MY"
-
-# I Sverige börjar veckan på måndag
-#
-#. Translate to calendar:week_start:0 if you want Sunday to be the
-#. * first day of the week to calendar:week_start:1 if you want Monday
-#. * to be the first day of the week, and so on.
-#.
-#: gtk/gtkcalendar.c:806
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1643,7 +1640,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1402
+#: gtk/gtkcalendar.c:1406
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1658,7 +1655,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1439
+#: gtk/gtkcalendar.c:1443
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1672,7 +1669,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1503
+#: gtk/gtkcalendar.c:1507
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2105,7 +2102,7 @@ msgstr "Det finns redan en fil med det namnet"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6138 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6218 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1271
 msgid "_Cancel"
 msgstr "_Avbryt"
@@ -2195,7 +2192,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Om du tar bort ett objekt är det borta för alltid."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6062 gtk/gtktextview.c:8900
+#: gtk/gtklabel.c:5533 gtk/gtktext.c:6064 gtk/gtktextview.c:8920
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -2406,57 +2403,57 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Välj ett typsnitt"
 
-#: gtk/gtkfontbutton.c:1348
+#: gtk/gtkfontbutton.c:1363
 msgctxt "font"
 msgid "None"
 msgstr "Inget"
 
-#: gtk/gtkfontchooserwidget.c:1568
+#: gtk/gtkfontchooserwidget.c:1569
 msgid "Width"
 msgstr "Bredd"
 
-#: gtk/gtkfontchooserwidget.c:1569
+#: gtk/gtkfontchooserwidget.c:1570
 msgid "Weight"
 msgstr "Vikt"
 
-#: gtk/gtkfontchooserwidget.c:1570
+#: gtk/gtkfontchooserwidget.c:1571
 msgid "Italic"
 msgstr "Kursiv"
 
-#: gtk/gtkfontchooserwidget.c:1571
+#: gtk/gtkfontchooserwidget.c:1572
 msgid "Slant"
 msgstr "Lutning"
 
-#: gtk/gtkfontchooserwidget.c:1572
+#: gtk/gtkfontchooserwidget.c:1573
 msgid "Optical Size"
 msgstr "Optisk storlek"
 
-#: gtk/gtkfontchooserwidget.c:2118
+#: gtk/gtkfontchooserwidget.c:2120
 msgid "Default"
 msgstr "Standard"
 
 # https://developer.gnome.org/gtk3/stable/GtkEventController.html#GtkPropagationPhase
-#: gtk/gtkfontchooserwidget.c:2164
+#: gtk/gtkfontchooserwidget.c:2166
 msgid "Ligatures"
 msgstr "Ligaturer"
 
-#: gtk/gtkfontchooserwidget.c:2165
+#: gtk/gtkfontchooserwidget.c:2167
 msgid "Letter Case"
 msgstr "Skiftläge för bokstäver"
 
-#: gtk/gtkfontchooserwidget.c:2166
+#: gtk/gtkfontchooserwidget.c:2168
 msgid "Number Case"
 msgstr "Skiftläge för tal"
 
-#: gtk/gtkfontchooserwidget.c:2167
+#: gtk/gtkfontchooserwidget.c:2169
 msgid "Number Spacing"
 msgstr "Talavstånd"
 
-#: gtk/gtkfontchooserwidget.c:2168
+#: gtk/gtkfontchooserwidget.c:2170
 msgid "Number Formatting"
 msgstr "Talformatering"
 
-#: gtk/gtkfontchooserwidget.c:2169
+#: gtk/gtkfontchooserwidget.c:2171
 msgid "Character Variants"
 msgstr "Teckenvarianter"
 
@@ -2464,27 +2461,27 @@ msgstr "Teckenvarianter"
 msgid "OpenGL context creation failed"
 msgstr "Skapande av OpenGL-kontext misslyckades"
 
-#: gtk/gtklabel.c:5479 gtk/gtktext.c:6050 gtk/gtktextview.c:8888
+#: gtk/gtklabel.c:5530 gtk/gtktext.c:6052 gtk/gtktextview.c:8908
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6054 gtk/gtktextview.c:8892
+#: gtk/gtklabel.c:5531 gtk/gtktext.c:6056 gtk/gtktextview.c:8912
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6058 gtk/gtktextview.c:8896
+#: gtk/gtklabel.c:5532 gtk/gtktext.c:6060 gtk/gtktextview.c:8916
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: gtk/gtklabel.c:5487 gtk/gtktext.c:6071 gtk/gtktextview.c:8921
+#: gtk/gtklabel.c:5538 gtk/gtktext.c:6073 gtk/gtktextview.c:8941
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: gtk/gtklabel.c:5492
+#: gtk/gtklabel.c:5543
 msgid "_Open Link"
 msgstr "_Öppna länk"
 
-#: gtk/gtklabel.c:5496
+#: gtk/gtklabel.c:5547
 msgid "Copy _Link Address"
 msgstr "Kopiera _länkadress"
 
@@ -2586,7 +2583,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6139
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6219
 msgid "_OK"
 msgstr "_OK"
 
@@ -2878,7 +2875,7 @@ msgid "This name is already taken"
 msgstr "Detta namn används redan"
 
 #: gtk/gtkplacessidebar.c:2303 gtk/inspector/actions.ui:19
-#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
+#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:24
 msgid "Name"
 msgstr "Namn"
 
@@ -3422,7 +3419,7 @@ msgid "Swipe right"
 msgstr "Svep åt höger"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:517
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:490
 msgid "Shortcuts"
 msgstr "Genvägar"
 
@@ -3448,15 +3445,15 @@ msgstr "Försök med en annan sökning"
 msgid "Could not show link"
 msgstr "Kunde inte visa länken"
 
-#: gtk/gtktext.c:6076 gtk/gtktextview.c:8926
+#: gtk/gtktext.c:6078 gtk/gtktextview.c:8946
 msgid "Insert _Emoji"
 msgstr "Infoga _emoji"
 
-#: gtk/gtktextview.c:8908
+#: gtk/gtktextview.c:8928
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: gtk/gtktextview.c:8912
+#: gtk/gtktextview.c:8932
 msgid "_Redo"
 msgstr "_Gör om"
 
@@ -3483,12 +3480,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6126
+#: gtk/gtkwindow.c:6206
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Vill du använda GTK Inspector?"
 
-#: gtk/gtkwindow.c:6128
+#: gtk/gtkwindow.c:6208
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3499,7 +3496,7 @@ msgstr ""
 "det inre i vilket GTK-program som helst. Användning av det kan medföra att "
 "programmet avslutar eller kraschar."
 
-#: gtk/gtkwindow.c:6133
+#: gtk/gtkwindow.c:6213
 msgid "Don’t show this message again"
 msgstr "Visa inte detta meddelande igen"
 
@@ -3544,7 +3541,7 @@ msgid "Attribute"
 msgstr "Attribut"
 
 #: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:132
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:124
 msgid "Value"
 msgstr "Värde"
 
@@ -3616,11 +3613,11 @@ msgstr "Ändringar tillämpas omedelbart och globalt för hela programmet."
 msgid "Saving CSS failed"
 msgstr "Sparandet av CSS:en misslyckades"
 
-#: gtk/inspector/css-editor.ui:33
+#: gtk/inspector/css-editor.ui:30
 msgid "Disable this custom CSS"
 msgstr "Inaktivera denna anpassade CSS"
 
-#: gtk/inspector/css-editor.ui:41
+#: gtk/inspector/css-editor.ui:37
 msgid "Save the current CSS"
 msgstr "Spara aktuell CSS"
 
@@ -3676,6 +3673,10 @@ msgctxt "Vulkan version"
 msgid "None"
 msgstr "Ingen"
 
+#: gtk/inspector/general.c:771
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "IM-kontext är hårdkodad med GTK_IM_MODULE"
+
 #: gtk/inspector/general.ui:32
 msgid "GTK Version"
 msgstr "GTK-version"
@@ -3696,39 +3697,43 @@ msgstr "Pango-typsnittskarta"
 msgid "Media Backend"
 msgstr "Mediabakände"
 
-#: gtk/inspector/general.ui:175
+#: gtk/inspector/general.ui:162
+msgid "Input Method"
+msgstr "Inmatningsmetod"
+
+#: gtk/inspector/general.ui:201
 msgid "Prefix"
 msgstr "Prefix"
 
-#: gtk/inspector/general.ui:377
+#: gtk/inspector/general.ui:403
 msgid "Display"
 msgstr "Display"
 
-#: gtk/inspector/general.ui:404
+#: gtk/inspector/general.ui:430
 msgid "RGBA Visual"
 msgstr "RGBA-visuell"
 
-#: gtk/inspector/general.ui:430
+#: gtk/inspector/general.ui:456
 msgid "Composited"
 msgstr "Sammansatt"
 
-#: gtk/inspector/general.ui:482
+#: gtk/inspector/general.ui:508
 msgid "GL Version"
 msgstr "GL-version"
 
-#: gtk/inspector/general.ui:532
+#: gtk/inspector/general.ui:558
 msgid "GL Vendor"
 msgstr "GL-leverantör"
 
-#: gtk/inspector/general.ui:572
+#: gtk/inspector/general.ui:598
 msgid "Vulkan Device"
 msgstr "Vulkan-enhet"
 
-#: gtk/inspector/general.ui:599
+#: gtk/inspector/general.ui:625
 msgid "Vulkan API version"
 msgstr "Vulkan-API-version"
 
-#: gtk/inspector/general.ui:626
+#: gtk/inspector/general.ui:652
 msgid "Vulkan driver version"
 msgstr "Vulkan-drivrutinsversion"
 
@@ -3756,7 +3761,7 @@ msgstr "Ikon"
 msgid "Address"
 msgstr "Adress"
 
-#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:34
+#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
 #: gtk/inspector/statistics.ui:46
 msgid "Type"
 msgstr "Typ"
@@ -3794,8 +3799,8 @@ msgid "Surface"
 msgstr "Yta"
 
 #: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
-#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1111
-#: gtk/inspector/prop-editor.c:1471 gtk/inspector/window.ui:415
+#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1116
+#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:388
 msgid "Properties"
 msgstr "Egenskaper"
 
@@ -3872,70 +3877,70 @@ msgstr "%s för %s %p"
 msgid "%s with value type %s"
 msgstr "%s med värdetyp %s"
 
-#: gtk/inspector/prop-editor.c:1179
+#: gtk/inspector/prop-editor.c:1184
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Ej redigerbar egenskapstyp: %s"
 
-#: gtk/inspector/prop-editor.c:1323
+#: gtk/inspector/prop-editor.c:1328
 msgctxt "column number"
 msgid "None"
 msgstr "Inget"
 
-#: gtk/inspector/prop-editor.c:1360
+#: gtk/inspector/prop-editor.c:1365
 msgid "Attribute:"
 msgstr "Attribut:"
 
-#: gtk/inspector/prop-editor.c:1363
+#: gtk/inspector/prop-editor.c:1368
 msgid "Model"
 msgstr "Modell"
 
-#: gtk/inspector/prop-editor.c:1368
+#: gtk/inspector/prop-editor.c:1373
 msgid "Column:"
 msgstr "Kolumn:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1467
+#: gtk/inspector/prop-editor.c:1472
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Åtgärd från: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1522
+#: gtk/inspector/prop-editor.c:1527
 msgid "Reset"
 msgstr "Återställ"
 
-#: gtk/inspector/prop-editor.c:1530
+#: gtk/inspector/prop-editor.c:1535
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Standard"
 
-#: gtk/inspector/prop-editor.c:1533
+#: gtk/inspector/prop-editor.c:1538
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1536
+#: gtk/inspector/prop-editor.c:1541
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1540
+#: gtk/inspector/prop-editor.c:1545
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Program"
 
-#: gtk/inspector/prop-editor.c:1543
+#: gtk/inspector/prop-editor.c:1548
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: gtk/inspector/prop-editor.c:1546
+#: gtk/inspector/prop-editor.c:1551
 msgid "Source:"
 msgstr "Källa:"
 
-#: gtk/inspector/prop-list.ui:45
+#: gtk/inspector/prop-list.ui:46
 msgid "Defined At"
 msgstr "Definierad vid"
 
@@ -3944,31 +3949,31 @@ msgstr "Definierad vid"
 msgid "Saving RenderNode failed"
 msgstr "Sparande av RenderNode misslyckades"
 
-#: gtk/inspector/recorder.ui:18
+#: gtk/inspector/recorder.ui:15
 msgid "Record frames"
 msgstr "Spela in bildrutor"
 
-#: gtk/inspector/recorder.ui:26
+#: gtk/inspector/recorder.ui:22
 msgid "Clear recorded frames"
 msgstr "Töm inspelade bildrutor"
 
-#: gtk/inspector/recorder.ui:34
+#: gtk/inspector/recorder.ui:29
 msgid "Add debug nodes"
 msgstr "Lägg till felsökningsnoder"
 
-#: gtk/inspector/recorder.ui:44
+#: gtk/inspector/recorder.ui:38
 msgid "Use a dark background"
 msgstr "Använd en mörk bakgrund"
 
-#: gtk/inspector/recorder.ui:53
+#: gtk/inspector/recorder.ui:46
 msgid "Save selected node"
 msgstr "Spara markerad nod"
 
-#: gtk/inspector/recorder.ui:62
+#: gtk/inspector/recorder.ui:54
 msgid "Copy to clipboard"
 msgstr "Kopiera till urklipp"
 
-#: gtk/inspector/recorder.ui:119
+#: gtk/inspector/recorder.ui:111
 msgid "Property"
 msgstr "Egenskap"
 
@@ -4056,7 +4061,7 @@ msgstr "Kumulativ"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Aktivera statistik med GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/tree-data.ui:13
+#: gtk/inspector/tree-data.ui:10
 msgid "Show data"
 msgstr "Visa data"
 
@@ -4200,103 +4205,103 @@ msgstr "Samla statistik"
 msgid "Objects"
 msgstr "Objekt"
 
-#: gtk/inspector/window.ui:220
+#: gtk/inspector/window.ui:223
 msgid "Toggle Sidebar"
 msgstr "Växla sidopanel"
 
-#: gtk/inspector/window.ui:252
+#: gtk/inspector/window.ui:245
 msgid "Refresh action state"
 msgstr "Uppdatera åtgärdstillstånd"
 
-#: gtk/inspector/window.ui:337
+#: gtk/inspector/window.ui:319
 msgid "Previous object"
 msgstr "Föregående objekt"
 
-#: gtk/inspector/window.ui:347
+#: gtk/inspector/window.ui:326
 msgid "Child object"
 msgstr "Barnobjekt"
 
-#: gtk/inspector/window.ui:357
+#: gtk/inspector/window.ui:333
 msgid "Previous sibling"
 msgstr "Föregående syskon"
 
-#: gtk/inspector/window.ui:366
+#: gtk/inspector/window.ui:339
 msgid "List Position"
 msgstr "Listposition"
 
-#: gtk/inspector/window.ui:372
+#: gtk/inspector/window.ui:348
 msgid "Next sibling"
 msgstr "Nästa syskon"
 
-#: gtk/inspector/window.ui:405
+#: gtk/inspector/window.ui:378
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#: gtk/inspector/window.ui:426
+#: gtk/inspector/window.ui:399
 msgid "Layout"
 msgstr "Layout"
 
-#: gtk/inspector/window.ui:437
+#: gtk/inspector/window.ui:410
 msgid "CSS Nodes"
 msgstr "CSS-noder"
 
-#: gtk/inspector/window.ui:448
+#: gtk/inspector/window.ui:421
 msgid "Size Groups"
 msgstr "Storleksgrupper"
 
-#: gtk/inspector/window.ui:457 gtk/inspector/window.ui:466
+#: gtk/inspector/window.ui:430 gtk/inspector/window.ui:439
 msgid "Data"
 msgstr "Data"
 
-#: gtk/inspector/window.ui:476
+#: gtk/inspector/window.ui:449
 msgid "Actions"
 msgstr "Åtgärder"
 
-#: gtk/inspector/window.ui:487
+#: gtk/inspector/window.ui:460
 msgid "Menu"
 msgstr "Meny"
 
-#: gtk/inspector/window.ui:496
+#: gtk/inspector/window.ui:469
 msgid "Controllers"
 msgstr "Kontrollanter"
 
-#: gtk/inspector/window.ui:506
+#: gtk/inspector/window.ui:479
 msgid "Magnifier"
 msgstr "Förstorare"
 
-#: gtk/inspector/window.ui:527
+#: gtk/inspector/window.ui:500
 msgid "Accessibility"
 msgstr "Hjälpmedel"
 
-#: gtk/inspector/window.ui:551
+#: gtk/inspector/window.ui:524
 msgid "Global"
 msgstr "Globalt"
 
-#: gtk/inspector/window.ui:564
+#: gtk/inspector/window.ui:537
 msgid "Information"
 msgstr "Information"
 
-#: gtk/inspector/window.ui:573
+#: gtk/inspector/window.ui:546
 msgid "Settings"
 msgstr "Inställningar"
 
-#: gtk/inspector/window.ui:582
+#: gtk/inspector/window.ui:555
 msgid "Resources"
 msgstr "Resurser"
 
-#: gtk/inspector/window.ui:593
+#: gtk/inspector/window.ui:566
 msgid "Statistics"
 msgstr "Statistik"
 
-#: gtk/inspector/window.ui:604
+#: gtk/inspector/window.ui:577
 msgid "Logging"
 msgstr "Loggning"
 
-#: gtk/inspector/window.ui:619
+#: gtk/inspector/window.ui:592
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:628
+#: gtk/inspector/window.ui:601
 msgid "Recorder"
 msgstr "Inspelare"
 
@@ -7404,37 +7409,37 @@ msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: Kunde inte tolka värde för egenskapen ”%s”: %s\n"
 
 # TODO: ev ta bort ett blanksteg i andra %s som bestäms av kind_str[] = { "", "Packing ", "Cell ", "Layout " };
-#: tools/gtk-builder-tool-simplify.c:638
+#: tools/gtk-builder-tool-simplify.c:646
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %segenskap %s::%s hittades inte\n"
 
-#: tools/gtk-builder-tool-simplify.c:2275
+#: tools/gtk-builder-tool-simplify.c:2283
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Kan inte läsa in ”%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2286
+#: tools/gtk-builder-tool-simplify.c:2294
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Kan inte tolka ”%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2310
+#: tools/gtk-builder-tool-simplify.c:2318
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Misslyckades med att läsa ”%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2316
+#: tools/gtk-builder-tool-simplify.c:2324
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Misslyckades med att skriva %s: ”%s”\n"
 
-#: tools/gtk-builder-tool-simplify.c:2356
+#: tools/gtk-builder-tool-simplify.c:2364
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Ingen .ui-fil angiven\n"
 
-#: tools/gtk-builder-tool-simplify.c:2362
+#: tools/gtk-builder-tool-simplify.c:2370
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Kan endast förenkla en ensam .ui-fil utan --replace\n"
@@ -7601,6 +7606,24 @@ msgid ""
 msgstr ""
 "Ingen temaindexfil i ”%s”.\n"
 "Om du verkligen vill skapa en ikoncache här, använd --ignore-theme-index.\n"
+
+#~ msgid "Failed to parse png image"
+#~ msgstr "Misslyckades med att tolka png-bild"
+
+#~ msgid "Sandbox does not provide an OpenGL implementation"
+#~ msgstr "Sandlådan tillhandahåller ingen OpenGL-implementation"
+
+#~ msgid "No OpenGL implementation available"
+#~ msgstr "Ingen OpenGL-implementation tillgänglig"
+
+#~ msgid "Core GL is not available on EGL implementation"
+#~ msgstr "Kärn-GL är inte tillgängligt på EGL-implementation"
+
+#~ msgid "Surfaceless contexts are not supported on this EGL implementation"
+#~ msgstr "Ytlösa kontexter stöds inte på denna EGL-implementation"
+
+#~ msgid "EGL is not supported"
+#~ msgstr "EGL stöds inte"
 
 #~ msgid "About"
 #~ msgstr "Om"
@@ -9124,10 +9147,6 @@ msgstr ""
 #~ msgctxt "input method menu"
 #~ msgid "Waylandgtk"
 #~ msgstr "Waylandgtk"
-
-#~ msgctxt "input method menu"
-#~ msgid "X Input Method"
-#~ msgstr "X-inmatningsmetod"
 
 #~ msgid "printer offline"
 #~ msgstr "skrivaren är frånkopplad"
