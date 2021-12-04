@@ -221,24 +221,52 @@ format (GtkJsonPrinter *printer,
     }
 
   parser = gtk_json_parser_new_for_bytes (bytes);
-  g_bytes_unref (bytes);
   parse_and_print (parser, printer);
+
   if (gtk_json_parser_get_error (parser))
     {
-      char *uri = g_file_get_uri (file);
-      const GError *parser_error = gtk_json_parser_get_error (parser);
+      char *uri;
+      const GError *parser_error;
+      const char *data, *start, *end;
+      gsize start_line, start_bytes, start_offset, end_line, end_bytes, end_offset;
+      GString *string;
 
+      uri = g_file_get_uri (file);
+      parser_error = gtk_json_parser_get_error (parser);
+      data = g_bytes_get_data (bytes, NULL);
+      gtk_json_parser_get_error_offset (parser, &start_offset, &end_offset);
+      start = data + start_offset;
+      end = data + end_offset;
+      gtk_json_parser_get_error_location (parser,
+                                          &start_line, &start_bytes,
+                                          &end_line, &end_bytes);
+      
+      string = g_string_new (NULL);
+      g_string_append_printf (string, "%zu:%lu", 
+                              start_line + 1,
+                              g_utf8_pointer_to_offset (start - start_bytes, start) + 1);
+      if (start_line != end_line || start_bytes != end_bytes)
+        {
+          g_string_append (string, "-");
+          if (start_line != end_line)
+            g_string_append_printf (string, "%zu:", end_line + 1);
+          g_string_append_printf (string, "%lu", g_utf8_pointer_to_offset (end - end_bytes, end) + 1);
+        }
       /* Translators: the first %s is the program name, the second one
-       * is the URI of the file, the third is the error message.
+       * is the URI of the file, the third is the file location and the
+       * final one the error message.
        */
-      g_printerr (_("%s: %s: error parsing file: %s\n"),
-                  g_get_prgname (), uri, parser_error->message);
+      g_printerr (_("%s: %s: error parsing file: %s: %s\n"),
+                  g_get_prgname (), uri, string->str, parser_error->message);
+      g_string_free (string, TRUE);
       g_free (uri);
       gtk_json_parser_free (parser);
+      g_bytes_unref (bytes);
       return FALSE;
     }
 
   gtk_json_parser_free (parser);
+  g_bytes_unref (bytes);
 
   return TRUE;
 }
