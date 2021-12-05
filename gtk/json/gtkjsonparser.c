@@ -1012,24 +1012,40 @@ gtk_json_parser_free (GtkJsonParser *self)
 static gboolean
 gtk_json_parser_skip_block (GtkJsonParser *self)
 {
+  gsize depth;
+
   if (self->reader != self->block->value)
     return TRUE;
 
-  if (*self->reader == '{')
+  depth = gtk_json_parser_get_depth (self);
+  while (TRUE)
     {
-      return gtk_json_parser_start_object (self) &&
-             gtk_json_parser_end (self);
+      if (*self->reader == '{')
+        {
+          if (!gtk_json_parser_start_object (self))
+            return FALSE;
+        }
+      else if (*self->reader == '[')
+        {
+          if (!gtk_json_parser_start_array (self))
+            return FALSE;
+        }
+    
+      while (self->reader != self->block->value)
+        {
+          /* This should never be reentrant to this function or we might
+           * loop causing stack overflow */
+          if (!gtk_json_parser_next (self))
+            {
+              if (!gtk_json_parser_end (self))
+                return FALSE;
+              if (depth >= gtk_json_parser_get_depth (self))
+                return TRUE;
+            }
+        }
     }
-  else if (*self->reader == '[')
-    {
-      return gtk_json_parser_start_array (self) &&
-             gtk_json_parser_end (self);
-    }
-  else
-    {
-      g_assert_not_reached ();
-      return FALSE;
-    }
+
+  return TRUE;
 }
 
 gboolean
@@ -1145,6 +1161,12 @@ gtk_json_parser_next (GtkJsonParser *self)
     }
 
   return TRUE;
+}
+
+gsize
+gtk_json_parser_get_depth (GtkJsonParser *self)
+{
+  return self->block - self->blocks;
 }
 
 GtkJsonNode

@@ -55,6 +55,7 @@ GtkJsonParser *         gtk_json_parser_new_for_string          (const char     
 void                    gtk_json_parser_free                    (GtkJsonParser          *self);
 
 gboolean                gtk_json_parser_next                    (GtkJsonParser          *self);
+gsize                   gtk_json_parser_get_depth               (GtkJsonParser          *self);
 GtkJsonNode             gtk_json_parser_get_node                (GtkJsonParser          *self);
 char *                  gtk_json_parser_get_member_name         (GtkJsonParser          *self);
 gssize                  gtk_json_parser_select_member           (GtkJsonParser          *self,
