@@ -1,5 +1,6 @@
 expand_content_files = [
   'building.md',
+  'character-set.md',
   'compiling.md',
   'cross-compiling.md',
   'error-reporting.md',
