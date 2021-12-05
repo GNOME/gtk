@@ -393,7 +393,7 @@ gtk_json_parser_schema_error (GtkJsonParser *self,
 static gboolean
 gtk_json_parser_is_eof (GtkJsonParser *self)
 {
-  return self->reader >= self->end || *self->reader == '\0';
+  return self->reader >= self->end;
 }
 
 static gsize
@@ -900,6 +900,8 @@ gtk_json_parser_parse_value (GtkJsonParser *self)
         end++;
       gtk_json_parser_syntax_error_at (self, self->block->value, end, "Numbers may not start with '%c'", *self->block->value);
     }
+  else if (*self->reader == 0)
+    gtk_json_parser_syntax_error (self, "Unexpected nul byte in document");
   else
     gtk_json_parser_syntax_error (self, "Expected a value");
   return FALSE;
@@ -1070,10 +1072,10 @@ gtk_json_parser_next (GtkJsonParser *self)
       if (gtk_json_parser_is_eof (self))
         {
           self->block->value = NULL;
-          if (gtk_json_parser_remaining (self))
-            {
-              gtk_json_parser_syntax_error (self, "Unexpected nul byte in document");
-            }
+        }
+      else if (*self->reader == 0)
+        {
+          gtk_json_parser_syntax_error (self, "Unexpected nul byte in document");
         }
       else
         {
