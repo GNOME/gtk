@@ -980,16 +980,7 @@ gtk_json_parser_new_for_bytes (GBytes *bytes)
 
   gtk_json_parser_skip_bom (self);
   self->start = self->reader;
-  gtk_json_parser_skip_whitespace (self);
-  if (gtk_json_parser_is_eof (self))
-    {
-      gtk_json_parser_syntax_error_at (self, self->start, self->reader, "Empty document");
-    }
-  else
-    {
-      self->block->value = self->reader;
-      gtk_json_parser_parse_value (self);
-    }
+  gtk_json_parser_rewind (self);
 
   return self;
 }
@@ -1165,6 +1156,46 @@ gtk_json_parser_next (GtkJsonParser *self)
   return TRUE;
 }
 
+void
+gtk_json_parser_rewind (GtkJsonParser *self)
+{
+  if (self->error)
+    return;
+
+  switch (self->block->type)
+    {
+    case GTK_JSON_BLOCK_OBJECT:
+      gtk_json_parser_pop_block (self);
+      self->reader = self->block->value;
+      gtk_json_parser_start_object (self);
+      break;
+
+    case GTK_JSON_BLOCK_ARRAY:
+      gtk_json_parser_pop_block (self);
+      self->reader = self->block->value;
+      gtk_json_parser_start_array (self);
+      break;
+
+    case GTK_JSON_BLOCK_TOPLEVEL:
+      self->reader = self->start;
+      gtk_json_parser_skip_whitespace (self);
+      if (gtk_json_parser_is_eof (self))
+        {
+          gtk_json_parser_syntax_error_at (self, self->start, self->reader, "Empty document");
+        }
+      else
+        {
+          self->block->value = self->reader;
+          gtk_json_parser_parse_value (self);
+        }
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+}
+
 gsize
 gtk_json_parser_get_depth (GtkJsonParser *self)
 {
@@ -1273,7 +1304,7 @@ gtk_json_parser_get_error_location (GtkJsonParser *self,
 }
 
 static gboolean
-gtk_json_parser_has_member (GtkJsonParser *self)
+gtk_json_parser_supports_member (GtkJsonParser *self)
 {
   if (self->error)
     return FALSE;
@@ -1290,10 +1321,59 @@ gtk_json_parser_has_member (GtkJsonParser *self)
 char *
 gtk_json_parser_get_member_name (GtkJsonParser *self)
 {
-  if (!gtk_json_parser_has_member (self))
+  if (!gtk_json_parser_supports_member (self))
     return NULL;
 
   return gtk_json_unescape_string (self->block->member_name);
+}
+
+gboolean
+gtk_json_parser_has_member (GtkJsonParser *self,
+                            const char    *name)
+{
+  JsonStringIter iter;
+  gsize found, len;
+
+  if (!gtk_json_parser_supports_member (self))
+    return FALSE;
+
+  found = 0;
+
+  for (len = json_string_iter_init (&iter, self->block->member_name);
+       len > 0;
+       len = json_string_iter_next (&iter))
+    {
+      const char *s = json_string_iter_get (&iter);
+
+      if (strncmp (name + found, s, len) != 0)
+        return FALSE;
+
+      found += len;
+    }
+
+  return TRUE;
+}
+
+gboolean
+gtk_json_parser_find_member (GtkJsonParser *self,
+                             const char    *name)
+{
+  if (!gtk_json_parser_supports_member (self))
+    {
+      while (gtk_json_parser_next (self));
+      return FALSE;
+    }
+
+  gtk_json_parser_rewind (self);
+
+  do
+    {
+      if (gtk_json_parser_has_member (self, name))
+        return TRUE;
+    }
+  while (gtk_json_parser_next (self));
+
+  return FALSE;
 }
 
 gssize
@@ -1304,7 +1384,7 @@ gtk_json_parser_select_member (GtkJsonParser      *self,
   gssize i, j;
   gsize found, len;
 
-  if (!gtk_json_parser_has_member (self))
+  if (!gtk_json_parser_supports_member (self))
     return -1;
 
   if (options[0] == NULL)
