@@ -17,6 +17,7 @@ demos = files([
   'css_pixbufs.c',
   'css_shadows.c',
   'cursors.c',
+  'curve.c',
   'dialog.c',
   'drawingarea.c',
   'dnd.c',
@@ -133,6 +134,7 @@ extra_demo_sources = files([
   'unicode-names.c',
   'suggestionentry.c',
   'language-names.c',
+  'curve-editor.c',
 ])
 
 if os_unix
