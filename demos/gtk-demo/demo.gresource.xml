@@ -249,6 +249,10 @@
   <gresource prefix="/video-player">
     <file>bbb.png</file>
   </gresource>
+  <gresource prefix="/curve">
+    <file>curve-editor.c</file>
+    <file>curve-editor.h</file>
+  </gresource>
   <gresource prefix="/sources">
     <file>application_demo.c</file>
     <file>assistant.c</file>
@@ -266,6 +270,7 @@
     <file>css_pixbufs.c</file>
     <file>css_shadows.c</file>
     <file>cursors.c</file>
+    <file>curve.c</file>
     <file>dialog.c</file>
     <file>drawingarea.c</file>
     <file>dropdown.c</file>

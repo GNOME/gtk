@@ -17,6 +17,7 @@ demos = files([
   'css_pixbufs.c',
   'css_shadows.c',
   'cursors.c',
+  'curve.c',
   'dialog.c',
   'drawingarea.c',
   'dnd.c',
@@ -131,6 +132,7 @@ extra_demo_sources = files([
   'script-names.c',
   'unicode-names.c',
   'suggestionentry.c',
+  'curve-editor.c',
 ])
 
 if harfbuzz_dep.found() and pangoft_dep.found()
