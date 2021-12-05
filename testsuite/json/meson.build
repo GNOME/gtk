@@ -538,19 +538,20 @@ test_data = [
   'JSONTestSuite/y_structure_whitespace_array.json',
 ]
 
+test_files = []
 foreach testname : test_data
   if testname.endswith('.json') and not testname.endswith('.ref.json')
-    test('json ' + testname, test_parser,
-         args: [ '--tap',
-                 '-k',
-                 join_paths(meson.current_source_dir(), testname),
-               ],
-         protocol: 'tap',
-         env: [
-                'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-                'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-              ],
-         suite: 'json')
+    test_files += join_paths(meson.current_source_dir(), testname)
   endif
 endforeach
 
+test('json', test_parser,
+     args: [ '--tap',
+             '-k',
+           ] + test_files,
+     protocol: 'tap',
+     env: [
+            'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+            'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+          ],
+     suite: 'json')
