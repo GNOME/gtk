@@ -9,6 +9,7 @@ expand_content_files = [
   'i18n.md',
   'logging.md',
   'main-loop.md',
+  'memory-slices.md',
   'reference-counting.md',
   'running.md',
   'testing.md',
