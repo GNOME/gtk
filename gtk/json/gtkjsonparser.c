@@ -42,6 +42,7 @@ struct _GtkJsonParser
 {
   GBytes *bytes;
   const guchar *reader; /* current read head, pointing as far as we've read */
+  const guchar *start; /* pointer at start of data, after optional BOM */
   const guchar *end; /* pointer after end of data we're reading */
 
   GError *error; /* if an error has happened, it's stored here. Errors aren't recoverable. */
@@ -222,7 +223,7 @@ gtk_json_parser_take_error (GtkJsonParser *self,
                             GError        *error)
 {
   g_assert (start_location <= end_location);
-  g_assert (g_bytes_get_data (self->bytes, NULL) <= (gconstpointer) start_location);
+  g_assert (self->start <= start_location);
   g_assert (end_location <= self->end);
 
   if (self->error)
@@ -319,7 +320,7 @@ gtk_json_parser_type_error (GtkJsonParser *self,
   else if (self->block != self->blocks)
     start_location = self->block[-1].value;
   else
-    start_location = g_bytes_get_data (self->bytes, NULL);
+    start_location = self->start;
 
   va_start (args, format);
   gtk_json_parser_take_error (self,
@@ -347,7 +348,7 @@ gtk_json_parser_value_error (GtkJsonParser *self,
   else if (self->block != self->blocks)
     start_location = self->block[-1].value;
   else
-    start_location = g_bytes_get_data (self->bytes, NULL);
+    start_location = self->start;
 
   va_start (args, format);
   gtk_json_parser_take_error (self,
@@ -377,7 +378,7 @@ gtk_json_parser_schema_error (GtkJsonParser *self,
   else if (self->block != self->blocks)
     start_location = self->block[-1].value;
   else
-    start_location = g_bytes_get_data (self->bytes, NULL);
+    start_location = self->start;
 
   va_start (args, format);
   gtk_json_parser_take_error (self,
@@ -401,6 +402,18 @@ gtk_json_parser_remaining (GtkJsonParser *self)
   g_return_val_if_fail (self->reader <= self->end, 0);
 
   return self->end - self->reader;
+}
+
+static void
+gtk_json_parser_skip_bom (GtkJsonParser *self)
+{
+  if (gtk_json_parser_remaining (self) < 3)
+    return;
+
+  if (self->reader[0] == 0xEF &&
+      self->reader[1] == 0xBB &&
+      self->reader[2] == 0xBF)
+    self->reader += 3;
 }
 
 static void
@@ -963,10 +976,12 @@ gtk_json_parser_new_for_bytes (GBytes *bytes)
   self->block = self->blocks;
   self->block->type = GTK_JSON_BLOCK_TOPLEVEL;
 
+  gtk_json_parser_skip_bom (self);
+  self->start = self->reader;
   gtk_json_parser_skip_whitespace (self);
   if (gtk_json_parser_is_eof (self))
     {
-      gtk_json_parser_syntax_error_at (self, g_bytes_get_data (self->bytes, NULL), self->reader, "Empty document");
+      gtk_json_parser_syntax_error_at (self, self->start, self->reader, "Empty document");
     }
   else
     {
@@ -1196,7 +1211,7 @@ gtk_json_parser_get_error_location (GtkJsonParser *self,
       return;
     }
 
-  line_start = g_bytes_get_data (self->bytes, NULL);
+  line_start = self->start;
   lines = 0;
 
   for (s = json_skip_characters_until (line_start, self->error_start, NEWLINE);
