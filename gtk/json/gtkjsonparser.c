@@ -1466,17 +1466,7 @@ gtk_json_parser_get_number (GtkJsonParser *self)
     }
 
   errno = 0;
-  if (gtk_json_parser_remaining (self) == 0)
-    {
-      /* need terminated string here */
-      char *s = g_strndup ((const char *) self->block->value, self->reader - self->block->value);
-      result = g_ascii_strtod (s, NULL);
-      g_free (s);
-    }
-  else
-    {
-      result = g_ascii_strtod ((const char *) self->block->value, NULL);
-    }
+  result = g_ascii_strtod ((const char *) self->block->value, NULL);
 
   if (errno)
     {
@@ -1491,10 +1481,93 @@ gtk_json_parser_get_number (GtkJsonParser *self)
   return result;
 }
 
-#if 0
-int                     gtk_json_parser_get_int                 (GtkJsonParser          *self);
-guint                   gtk_json_parser_get_uint                (GtkJsonParser          *self);
-#endif
+int
+gtk_json_parser_get_int (GtkJsonParser *self)
+{
+  long result;
+  char *end;
+
+  if (self->error)
+    return 0;
+
+  if (self->block->value == NULL)
+    return 0;
+
+  if (!strchr ("-0123456789", *self->block->value))
+    {
+      gtk_json_parser_type_error (self, "Expected an intereger");
+      return 0;
+    }
+
+  errno = 0;
+  result = strtol ((const char *) self->block->value, &end, 10);
+  if (*end == '.' || *end == 'e' || *end == 'E')
+    {
+      gtk_json_parser_type_error (self, "Expected an intereger");
+      return 0;
+    }
+
+  if (errno)
+    {
+      if (errno == ERANGE)
+        gtk_json_parser_value_error (self, "Number out of integer range");
+      else
+        gtk_json_parser_value_error (self, "%s", g_strerror (errno));
+
+      return 0;
+    }
+  else if (result > G_MAXINT || result < G_MININT)
+    {
+      gtk_json_parser_value_error (self, "Number out of integer range");
+      return 0;
+    }
+
+  return result;
+}
+
+guint
+gtk_json_parser_get_uint (GtkJsonParser *self)
+{
+  gulong result;
+  char *end;
+
+  if (self->error)
+    return 0;
+
+  if (self->block->value == NULL)
+    return 0;
+
+  if (!strchr ("0123456789", *self->block->value))
+    {
+      gtk_json_parser_type_error (self, "Expected an unsigned intereger");
+      return 0;
+    }
+
+  errno = 0;
+  result = strtoul ((const char *) self->block->value, &end, 10);
+  if (*end == '.' || *end == 'e' || *end == 'E')
+    {
+      gtk_json_parser_type_error (self, "Expected an unsigned intereger");
+      return 0;
+    }
+
+  if (errno)
+    {
+      if (errno == ERANGE)
+        gtk_json_parser_value_error (self, "Number out of unsignedinteger range");
+      else
+        gtk_json_parser_value_error (self, "%s", g_strerror (errno));
+
+      return 0;
+    }
+  else if (result > G_MAXUINT)
+    {
+      gtk_json_parser_value_error (self, "Number out of unsigned integer range");
+      return 0;
+    }
+
+  return result;
+}
 
 char *
 gtk_json_parser_get_string (GtkJsonParser *self)
