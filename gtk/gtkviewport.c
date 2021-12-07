@@ -67,13 +67,8 @@ struct _GtkViewport
 
   GtkWidget *child;
 
-  GtkAdjustment  *hadjustment;
-  GtkAdjustment  *vadjustment;
-
-  /* GtkScrollablePolicy needs to be checked when
-   * driving the scrollable adjustment values */
-  guint hscroll_policy : 1;
-  guint vscroll_policy : 1;
+  GtkAdjustment *adjustment[2];
+  GtkScrollablePolicy scroll_policy[2];
   guint scroll_to_focus : 1;
 
   gulong focus_handler;
@@ -165,21 +160,21 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      adjustment = viewport->hadjustment;
+      adjustment = viewport->adjustment[GTK_ORIENTATION_HORIZONTAL];
       other_orientation = GTK_ORIENTATION_VERTICAL;
       viewport_size = view_width;
       other_viewport_size = view_height;
-      scroll_policy = viewport->hscroll_policy;
-      other_scroll_policy = viewport->vscroll_policy;
+      scroll_policy = viewport->scroll_policy[GTK_ORIENTATION_HORIZONTAL];
+      other_scroll_policy = viewport->scroll_policy[GTK_ORIENTATION_VERTICAL];
     }
   else /* VERTICAL */
     {
-      adjustment = viewport->vadjustment;
+      adjustment = viewport->adjustment[GTK_ORIENTATION_VERTICAL];
       other_orientation = GTK_ORIENTATION_HORIZONTAL;
       viewport_size = view_height;
       other_viewport_size = view_width;
-      scroll_policy = viewport->vscroll_policy;
-      other_scroll_policy = viewport->hscroll_policy;
+      scroll_policy = viewport->scroll_policy[GTK_ORIENTATION_VERTICAL];
+      other_scroll_policy = viewport->scroll_policy[GTK_ORIENTATION_HORIZONTAL];
     }
 
 
@@ -282,7 +277,7 @@ gtk_viewport_get_request_mode (GtkWidget *widget)
 
 #define ADJUSTMENT_POINTER(orientation)            \
   (((orientation) == GTK_ORIENTATION_HORIZONTAL) ? \
-     &viewport->hadjustment : &viewport->vadjustment)
+     &viewport->adjustment[GTK_ORIENTATION_HORIZONTAL] : &viewport->adjustment[GTK_ORIENTATION_VERTICAL])
 
 static void
 viewport_disconnect_adjustment (GtkViewport    *viewport,
@@ -411,17 +406,17 @@ gtk_viewport_set_property (GObject         *object,
       viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, g_value_get_object (value));
       break;
     case PROP_HSCROLL_POLICY:
-      if (viewport->hscroll_policy != g_value_get_enum (value))
+      if (viewport->scroll_policy[GTK_ORIENTATION_HORIZONTAL] != g_value_get_enum (value))
         {
-          viewport->hscroll_policy = g_value_get_enum (value);
+          viewport->scroll_policy[GTK_ORIENTATION_HORIZONTAL] = g_value_get_enum (value);
           gtk_widget_queue_resize (GTK_WIDGET (viewport));
           g_object_notify_by_pspec (object, pspec);
         }
       break;
     case PROP_VSCROLL_POLICY:
-      if (viewport->vscroll_policy != g_value_get_enum (value))
+      if (viewport->scroll_policy[GTK_ORIENTATION_VERTICAL] != g_value_get_enum (value))
         {
-          viewport->vscroll_policy = g_value_get_enum (value);
+          viewport->scroll_policy[GTK_ORIENTATION_VERTICAL] = g_value_get_enum (value);
           gtk_widget_queue_resize (GTK_WIDGET (viewport));
           g_object_notify_by_pspec (object, pspec);
         }
@@ -449,16 +444,16 @@ gtk_viewport_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_HADJUSTMENT:
-      g_value_set_object (value, viewport->hadjustment);
+      g_value_set_object (value, viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]);
       break;
     case PROP_VADJUSTMENT:
-      g_value_set_object (value, viewport->vadjustment);
+      g_value_set_object (value, viewport->adjustment[GTK_ORIENTATION_VERTICAL]);
       break;
     case PROP_HSCROLL_POLICY:
-      g_value_set_enum (value, viewport->hscroll_policy);
+      g_value_set_enum (value, viewport->scroll_policy[GTK_ORIENTATION_HORIZONTAL]);
       break;
     case PROP_VSCROLL_POLICY:
-      g_value_set_enum (value, viewport->vscroll_policy);
+      g_value_set_enum (value, viewport->scroll_policy[GTK_ORIENTATION_VERTICAL]);
       break;
     case PROP_SCROLL_TO_FOCUS:
       g_value_set_boolean (value, viewport->scroll_to_focus);
@@ -481,8 +476,8 @@ gtk_viewport_init (GtkViewport *viewport)
 
   gtk_widget_set_overflow (widget, GTK_OVERFLOW_HIDDEN);
 
-  viewport->hadjustment = NULL;
-  viewport->vadjustment = NULL;
+  viewport->adjustment[GTK_ORIENTATION_HORIZONTAL] = NULL;
+  viewport->adjustment[GTK_ORIENTATION_VERTICAL] = NULL;
 
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
@@ -546,11 +541,9 @@ gtk_viewport_size_allocate (GtkWidget *widget,
                             int        baseline)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
-  GtkAdjustment *hadjustment = viewport->hadjustment;
-  GtkAdjustment *vadjustment = viewport->vadjustment;
 
-  g_object_freeze_notify (G_OBJECT (hadjustment));
-  g_object_freeze_notify (G_OBJECT (vadjustment));
+  g_object_freeze_notify (G_OBJECT (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]));
+  g_object_freeze_notify (G_OBJECT (viewport->adjustment[GTK_ORIENTATION_VERTICAL]));
 
   viewport_set_adjustment_values (viewport, GTK_ORIENTATION_HORIZONTAL);
   viewport_set_adjustment_values (viewport, GTK_ORIENTATION_VERTICAL);
@@ -559,16 +552,16 @@ gtk_viewport_size_allocate (GtkWidget *widget,
     {
       GtkAllocation child_allocation;
 
-      child_allocation.x = - gtk_adjustment_get_value (hadjustment);
-      child_allocation.y = - gtk_adjustment_get_value (vadjustment);
-      child_allocation.width = gtk_adjustment_get_upper (hadjustment);
-      child_allocation.height = gtk_adjustment_get_upper (vadjustment);
+      child_allocation.x = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+      child_allocation.y = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_VERTICAL]);
+      child_allocation.width = gtk_adjustment_get_upper (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+      child_allocation.height = gtk_adjustment_get_upper (viewport->adjustment[GTK_ORIENTATION_VERTICAL]);
 
       gtk_widget_size_allocate (viewport->child, &child_allocation, -1);
     }
 
-  g_object_thaw_notify (G_OBJECT (hadjustment));
-  g_object_thaw_notify (G_OBJECT (vadjustment));
+  g_object_thaw_notify (G_OBJECT (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]));
+  g_object_thaw_notify (G_OBJECT (viewport->adjustment[GTK_ORIENTATION_VERTICAL]));
 }
 
 static void
@@ -670,8 +663,8 @@ focus_change_handler (GtkWidget *widget)
                                     rect.origin.y,
                                      &x, &y);
 
-  scroll_to_view (viewport->hadjustment, x, rect.size.width);
-  scroll_to_view (viewport->vadjustment, y, rect.size.height);
+  scroll_to_view (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL], x, rect.size.width);
+  scroll_to_view (viewport->adjustment[GTK_ORIENTATION_VERTICAL], y, rect.size.height);
 }
 
 static void
@@ -682,7 +675,7 @@ setup_focus_change_handler (GtkViewport *viewport)
   root = gtk_widget_get_root (GTK_WIDGET (viewport));
 
   viewport->focus_handler = g_signal_connect_swapped (root, "notify::focus-widget",
-                                                  G_CALLBACK (focus_change_handler), viewport);
+                                                      G_CALLBACK (focus_change_handler), viewport);
 }
 
 static void
