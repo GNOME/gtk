@@ -71,6 +71,8 @@ double                  gtk_json_parser_get_number              (GtkJsonParser  
 int                     gtk_json_parser_get_int                 (GtkJsonParser          *self);
 guint                   gtk_json_parser_get_uint                (GtkJsonParser          *self);
 char *                  gtk_json_parser_get_string              (GtkJsonParser          *self);
+gssize                  gtk_json_parser_select_string           (GtkJsonParser          *self,
+                                                                 const char * const     *options);
 
 gboolean                gtk_json_parser_start_object            (GtkJsonParser          *self);
 gboolean                gtk_json_parser_start_array             (GtkJsonParser          *self);

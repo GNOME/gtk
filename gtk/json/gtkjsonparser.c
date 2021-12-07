@@ -1376,24 +1376,21 @@ gtk_json_parser_find_member (GtkJsonParser *self,
   return FALSE;
 }
 
-gssize
-gtk_json_parser_select_member (GtkJsonParser      *self,
-                               const char * const *options)
+static gssize
+json_string_iter_run_select (const guchar       *string_data,
+                             const char * const *options)
 {
   JsonStringIter iter;
   gssize i, j;
   gsize found, len;
 
-  if (!gtk_json_parser_supports_member (self))
-    return -1;
-
-  if (options[0] == NULL)
+  if (options == NULL || options[0] == NULL)
     return -1;
 
   found = 0;
   i = 0;
 
-  for (len = json_string_iter_init (&iter, self->block->member_name);
+  for (len = json_string_iter_init (&iter, string_data);
        len > 0;
        len = json_string_iter_next (&iter))
     {
@@ -1428,6 +1425,16 @@ gtk_json_parser_select_member (GtkJsonParser      *self,
     }
 
   return -1;
+}
+                     
+gssize
+gtk_json_parser_select_member (GtkJsonParser      *self,
+                               const char * const *options)
+{
+  if (!gtk_json_parser_supports_member (self))
+    return -1;
+
+  return json_string_iter_run_select (self->block->member_name, options);
 }
 
 gboolean
@@ -1585,6 +1592,25 @@ gtk_json_parser_get_string (GtkJsonParser *self)
     }
 
   return gtk_json_unescape_string (self->block->value);
+}
+
+gssize
+gtk_json_parser_select_string (GtkJsonParser      *self,
+                               const char * const *options)
+{
+  if (self->error)
+    return -1;
+
+  if (self->block->value == NULL)
+    return -1;
+
+  if (*self->block->value != '"')
+    {
+      gtk_json_parser_type_error (self, "Expected a string");
+      return -1;
+    }
+
+  return json_string_iter_run_select (self->block->value, options);
 }
 
 gboolean
