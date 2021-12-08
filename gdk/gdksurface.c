@@ -605,11 +605,14 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   0,
                   NULL,
                   NULL,
-                  NULL,
+                  _gdk_marshal_VOID__INT_INT,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_INT,
                   G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[LAYOUT],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_VOID__INT_INTv);
 
   /**
    * GdkSurface::render:
