@@ -286,7 +286,7 @@ gtk_menu_tracker_item_update_visibility (GtkMenuTrackerItem *self)
   if (visible != self->is_visible)
     {
       self->is_visible = visible;
-      g_object_notify (G_OBJECT (self), "is-visible");
+      g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_IS_VISIBLE]);
     }
 }
 
@@ -300,8 +300,16 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (observer);
   GVariant *action_target;
+  gboolean old_sensitive;
+  gboolean old_toggled;
+  GtkMenuTrackerItemRole old_role;
+  guint n_changed;
 
   GTK_NOTE(ACTIONS, g_message ("menutracker: action %s added", action_name));
+
+  old_sensitive = self->sensitive;
+  old_toggled = self->toggled;
+  old_role = self->role;
 
   action_target = g_menu_item_get_attribute_value (self->item, G_MENU_ATTRIBUTE_TARGET, NULL);
 
@@ -340,18 +348,29 @@ gtk_menu_tracker_item_action_added (GtkActionObserver   *observer,
       self->role = GTK_MENU_TRACKER_ITEM_ROLE_CHECK;
     }
 
-  g_object_freeze_notify (G_OBJECT (self));
+  /* Avoid freeze/thaw_notify as they are quite expensive in runtime/memory
+   * unless we have more than one property to update. Additionally, only
+   * notify on properties that have changed to avoid extraneous signal
+   * emission. This code can get run a lot!
+   */
+  n_changed = (old_role != self->role)
+            + (old_toggled != self->toggled)
+            + (old_sensitive != self->sensitive);
 
-  if (self->sensitive)
+  if (n_changed > 1)
+    g_object_freeze_notify (G_OBJECT (self));
+
+  if (self->sensitive != old_sensitive)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_SENSITIVE]);
 
-  if (self->toggled)
+  if (self->toggled != old_toggled)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_TOGGLED]);
 
-  if (self->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+  if (self->role != old_role)
     g_object_notify_by_pspec (G_OBJECT (self), gtk_menu_tracker_item_pspecs[PROP_ROLE]);
 
-  g_object_thaw_notify (G_OBJECT (self));
+  if (n_changed > 1)
+    g_object_thaw_notify (G_OBJECT (self));
 
   if (action_target)
     g_variant_unref (action_target);
