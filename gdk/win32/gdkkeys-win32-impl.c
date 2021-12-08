@@ -1,3 +1,26 @@
+/*
+ * Copyright (c) 2021 Philip Zander
+ * Copyright (c) 2018 Microsoft
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 /* NOTE: When compiling the 32-bit version of the library, in addition to being
  * compiled as a regular source file, this file is also included by
  * gdkkeys-win32-impl-wow64.c to generate an alternate version of the code
@@ -59,8 +82,11 @@ DEFINE_KBD_LONG_POINTER (USHORT);
 DEFINE_KBD_LONG_POINTER (VOID);
 
 /* Driver definitions
- * Adapted from ReactOS's kbd.h:
- * See https://github.com/reactos/reactos/blob/master/sdk/include/ndk/kbd.h
+ * See
+ *   https://github.com/microsoft/windows-rs/blob/0.28.0/crates/deps/sys/src/Windows/Win32/UI/Input/KeyboardAndMouse/mod.rs
+ *
+ * For more information on how these structures work, see also:
+ *   https://github.com/microsoft/Windows-driver-samples/tree/f0adcda012820b1cd44a8b3a1953baf478029738/input/layout
  */
 
 typedef struct
