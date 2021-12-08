@@ -178,7 +178,8 @@ gtk_picture_measure (GtkWidget      *widget,
   double min_width, min_height, nat_width, nat_height;
   double default_size;
 
-  if (self->paintable == NULL)
+  /* for_size = 0 below is treated as -1, but we want to return zeros. */
+  if (self->paintable == NULL || for_size == 0)
     {
       *minimum = 0;
       *natural = 0;
