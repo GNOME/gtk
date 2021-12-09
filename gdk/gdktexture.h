@@ -89,10 +89,6 @@ GDK_AVAILABLE_IN_ALL
 void                    gdk_texture_download                   (GdkTexture      *texture,
                                                                 guchar          *data,
                                                                 gsize            stride);
-GDK_AVAILABLE_IN_4_6
-void                    gdk_texture_download_float             (GdkTexture      *texture,
-                                                                float           *data,
-                                                                gsize            stride);
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_texture_save_to_png                (GdkTexture      *texture,
                                                                 const char      *filename);
