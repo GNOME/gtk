@@ -314,7 +314,7 @@ static void gdk_wayland_surface_maybe_resize (GdkSurface *surface,
 static void gdk_wayland_surface_configure (GdkSurface *surface);
 
 static void maybe_set_gtk_surface_dbus_properties (GdkWaylandToplevel *wayland_toplevel);
-static void maybe_set_gtk_surface_modal (GdkSurface *surface);
+static void maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel);
 
 static void gdk_wayland_surface_sync_shadow (GdkSurface *surface);
 static void gdk_wayland_surface_sync_input_region (GdkSurface *surface);
@@ -2082,7 +2082,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
   gdk_wayland_toplevel_set_application_id (GDK_TOPLEVEL (wayland_toplevel), app_id);
 
   maybe_set_gtk_surface_dbus_properties (wayland_toplevel);
-  maybe_set_gtk_surface_modal (surface);
+  maybe_set_gtk_surface_modal (wayland_toplevel);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
   wl_surface_commit (wayland_surface->display_server.wl_surface);
@@ -3674,53 +3674,54 @@ static const struct gtk_surface1_listener gtk_surface_listener = {
 };
 
 static void
-gdk_wayland_surface_init_gtk_surface (GdkWaylandSurface *impl)
+gdk_wayland_toplevel_init_gtk_surface (GdkWaylandToplevel *wayland_toplevel)
 {
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
   GdkWaylandDisplay *display =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (impl)));
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (wayland_toplevel)));
 
-  if (impl->display_server.gtk_surface != NULL)
+  if (wayland_surface->display_server.gtk_surface != NULL)
     return;
-  if (!is_realized_toplevel (impl))
+  if (!is_realized_toplevel (wayland_surface))
     return;
   if (display->gtk_shell == NULL)
     return;
 
-  impl->display_server.gtk_surface =
+  wayland_surface->display_server.gtk_surface =
     gtk_shell1_get_gtk_surface (display->gtk_shell,
-                                impl->display_server.wl_surface);
-  wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.gtk_surface,
-                      impl->event_queue);
-  gdk_wayland_surface_set_geometry_hints (impl,
-                                          &impl->geometry_hints,
-                                          impl->geometry_mask);
-  gtk_surface1_add_listener (impl->display_server.gtk_surface,
+                                wayland_surface->display_server.wl_surface);
+  wl_proxy_set_queue ((struct wl_proxy *) wayland_surface->display_server.gtk_surface,
+                      wayland_surface->event_queue);
+  gdk_wayland_surface_set_geometry_hints (wayland_surface,
+                                          &wayland_surface->geometry_hints,
+                                          wayland_surface->geometry_mask);
+  gtk_surface1_add_listener (wayland_surface->display_server.gtk_surface,
                              &gtk_surface_listener,
-                             impl);
+                             wayland_surface);
 }
 
 static void
-maybe_set_gtk_surface_modal (GdkSurface *surface)
+maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
 
-  gdk_wayland_surface_init_gtk_surface (impl);
-  if (impl->display_server.gtk_surface == NULL)
+  gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel);
+  if (wayland_surface->display_server.gtk_surface == NULL)
     return;
 
-  if (surface->modal_hint)
-    gtk_surface1_set_modal (impl->display_server.gtk_surface);
+  if (GDK_SURFACE (wayland_toplevel)->modal_hint)
+    gtk_surface1_set_modal (wayland_surface->display_server.gtk_surface);
   else
-    gtk_surface1_unset_modal (impl->display_server.gtk_surface);
+    gtk_surface1_unset_modal (wayland_surface->display_server.gtk_surface);
 
 }
 
 static void
-gdk_wayland_surface_set_modal_hint (GdkSurface *surface,
-                                    gboolean    modal)
+gdk_wayland_toplevel_set_modal_hint (GdkWaylandToplevel *wayland_toplevel,
+                                     gboolean            modal)
 {
-  surface->modal_hint = modal;
-  maybe_set_gtk_surface_modal (surface);
+  GDK_SURFACE (wayland_toplevel)->modal_hint = modal;
+  maybe_set_gtk_surface_modal (wayland_toplevel);
 }
 
 static void
@@ -4479,11 +4480,9 @@ gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
 }
 
 struct gtk_surface1 *
-gdk_wayland_surface_get_gtk_surface (GdkSurface *surface)
+gdk_wayland_toplevel_get_gtk_surface (GdkWaylandToplevel *wayland_toplevel)
 {
-  g_return_val_if_fail (GDK_IS_WAYLAND_SURFACE (surface), NULL);
-
-  return GDK_WAYLAND_SURFACE (surface)->display_server.gtk_surface;
+  return GDK_WAYLAND_SURFACE (wayland_toplevel)->display_server.gtk_surface;
 }
 
 static void
@@ -4502,7 +4501,7 @@ maybe_set_gtk_surface_dbus_properties (GdkWaylandToplevel *wayland_toplevel)
       wayland_surface->application.unique_bus_name == NULL)
     return;
 
-  gdk_wayland_surface_init_gtk_surface (wayland_surface);
+  gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel);
   if (wayland_surface->display_server.gtk_surface == NULL)
     return;
 
@@ -4988,7 +4987,7 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
-      gdk_wayland_surface_set_modal_hint (surface, g_value_get_boolean (value));
+      gdk_wayland_toplevel_set_modal_hint (toplevel, g_value_get_boolean (value));
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
