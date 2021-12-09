@@ -536,6 +536,10 @@ test_data = [
   'JSONTestSuite/y_structure_trailing_newline.json',
   'JSONTestSuite/y_structure_true_in_array.json',
   'JSONTestSuite/y_structure_whitespace_array.json',
+  'fuzzing/number-starting-with-dot.error',
+  'fuzzing/number-starting-with-dot.json',
+  'fuzzing/number-starting-with-plus.error',
+  'fuzzing/number-starting-with-plus.json',
 ]
 
 test_files = []
