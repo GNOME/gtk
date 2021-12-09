@@ -986,9 +986,11 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
 
   keymap = GDK_WIN32_KEYMAP (gdk_keymap);
   update_keymap (keymap);
-  
+
+  g_return_val_if_fail (group >= 0 && group < keymap->layout_infos->len, FALSE);
+
   layout_info = &g_array_index (keymap->layout_infos, GdkWin32KeymapLayoutInfo,
-                                keymap->active_layout);
+                                group);
 
   vk = hardware_keycode;
   mod_bits = gdk_mod_mask_to_mod_bits (state);
