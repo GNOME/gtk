@@ -102,7 +102,6 @@ struct _GdkWaylandSurface
     struct zxdg_toplevel_v6 *zxdg_toplevel_v6;
     struct zxdg_popup_v6 *zxdg_popup_v6;
 
-    struct gtk_surface1  *gtk_surface;
     struct wl_egl_window *egl_window;
   } display_server;
 
@@ -122,17 +121,6 @@ struct _GdkWaylandSurface
 
   char *title;
 
-  struct {
-    gboolean was_set;
-
-    char *application_id;
-    char *app_menu_path;
-    char *menubar_path;
-    char *window_object_path;
-    char *application_object_path;
-    char *unique_bus_name;
-  } application;
-
   GdkGeometry geometry_hints;
   GdkSurfaceHints geometry_mask;
 
@@ -145,8 +133,6 @@ struct _GdkWaylandSurface
   int shadow_right;
   int shadow_top;
   int shadow_bottom;
-
-  struct wl_output *initial_fullscreen_output;
 
   cairo_region_t *opaque_region;
   gboolean opaque_region_dirty;
@@ -162,14 +148,6 @@ struct _GdkWaylandSurface
 
   int saved_width;
   int saved_height;
-
-  struct {
-    GdkToplevelLayout *layout;
-
-    int bounds_width;
-    int bounds_height;
-    gboolean has_bounds;
-  } toplevel;
 
   struct {
     struct {
@@ -188,11 +166,6 @@ struct _GdkWaylandSurface
     uint32_t serial;
     gboolean is_dirty;
   } pending;
-
-  struct {
-    GdkToplevelState unset_flags;
-    GdkToplevelState set_flags;
-  } initial_state;
 
   struct {
     struct {
@@ -228,6 +201,10 @@ struct _GdkWaylandToplevel
 {
   GdkWaylandSurface parent_instance;
 
+  struct {
+    struct gtk_surface1 *gtk_surface;
+  } display_server;
+
   GdkWaylandToplevel *transient_for;
 
   struct org_kde_kwin_server_decoration *server_decoration;
@@ -239,8 +216,31 @@ struct _GdkWaylandToplevel
     GDestroyNotify destroy_func;
   } exported;
 
+  struct {
+    gboolean was_set;
+
+    char *application_id;
+    char *app_menu_path;
+    char *menubar_path;
+    char *window_object_path;
+    char *application_object_path;
+    char *unique_bus_name;
+  } application;
+
   struct zwp_idle_inhibitor_v1 *idle_inhibitor;
   size_t idle_inhibitor_refcount;
+
+  struct wl_output *initial_fullscreen_output;
+
+  struct {
+    GdkToplevelState unset_flags;
+    GdkToplevelState set_flags;
+  } initial_state;
+
+  GdkToplevelLayout *layout;
+  int bounds_width;
+  int bounds_height;
+  gboolean has_bounds;
 };
 
 typedef struct
@@ -337,13 +337,12 @@ static void update_popup_layout_state (GdkWaylandPopup *wayland_popup,
 
 static gboolean gdk_wayland_toplevel_is_exported (GdkWaylandToplevel *wayland_toplevel);
 
-static void configure_toplevel_geometry (GdkSurface *surface);
+static void configure_toplevel_geometry (GdkWaylandToplevel *wayland_toplevel);
 
 static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
 {
   impl->scale = 1;
-  impl->initial_fullscreen_output = NULL;
   impl->saved_width = -1;
   impl->saved_height = -1;
   impl->shortcuts_inhibitors = g_hash_table_new (NULL, NULL);
@@ -690,9 +689,9 @@ gdk_wayland_surface_compute_size (GdkSurface *surface)
 
   if (impl->next_layout.surface_geometry_dirty)
     {
-      if (GDK_IS_TOPLEVEL (impl))
-        configure_toplevel_geometry (surface);
-      else if (GDK_IS_POPUP (impl))
+      if (GDK_IS_WAYLAND_TOPLEVEL (impl))
+        configure_toplevel_geometry (GDK_WAYLAND_TOPLEVEL (surface));
+      else if (GDK_IS_WAYLAND_POPUP (impl))
         configure_popup_geometry (GDK_WAYLAND_POPUP (surface));
       else if (GDK_IS_DRAG_SURFACE (impl))
         configure_drag_surface_geometry (surface);
@@ -1030,13 +1029,6 @@ gdk_wayland_surface_finalize (GObject *object)
   impl = GDK_WAYLAND_SURFACE (object);
 
   g_free (impl->title);
-
-  g_free (impl->application.application_id);
-  g_free (impl->application.app_menu_path);
-  g_free (impl->application.menubar_path);
-  g_free (impl->application.window_object_path);
-  g_free (impl->application.application_object_path);
-  g_free (impl->application.unique_bus_name);
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
@@ -1398,9 +1390,10 @@ gdk_wayland_surface_create_surface (GdkSurface *surface)
 }
 
 static void
-configure_toplevel_geometry (GdkSurface *surface)
+configure_toplevel_geometry (GdkWaylandToplevel *wayland_toplevel)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkSurface *surface = GDK_SURFACE (wayland_toplevel);
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
   GdkDisplay *display = gdk_surface_get_display (surface);
   int bounds_width, bounds_height;
   GdkToplevelSize size;
@@ -1408,10 +1401,10 @@ configure_toplevel_geometry (GdkSurface *surface)
   GdkGeometry geometry;
   GdkSurfaceHints mask;
 
-  if (impl->toplevel.has_bounds)
+  if (wayland_toplevel->has_bounds)
     {
-      bounds_width = impl->toplevel.bounds_width;
-      bounds_height = impl->toplevel.bounds_height;
+      bounds_width = wayland_toplevel->bounds_width;
+      bounds_height = wayland_toplevel->bounds_height;
     }
   else
     {
@@ -1430,7 +1423,7 @@ configure_toplevel_geometry (GdkSurface *surface)
   g_warn_if_fail (size.width > 0);
   g_warn_if_fail (size.height > 0);
 
-  layout = impl->toplevel.layout;
+  layout = wayland_toplevel->layout;
   if (gdk_toplevel_layout_get_resizable (layout))
     {
       geometry.min_width = size.min_width;
@@ -1443,40 +1436,40 @@ configure_toplevel_geometry (GdkSurface *surface)
       geometry.max_height = geometry.min_height = size.height;
       mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
     }
-  gdk_wayland_surface_set_geometry_hints (impl, &geometry, mask);
+  gdk_wayland_surface_set_geometry_hints (wayland_surface, &geometry, mask);
 
   if (size.shadow.is_valid)
     {
-      impl->shadow_left = size.shadow.left;
-      impl->shadow_right = size.shadow.right;
-      impl->shadow_top = size.shadow.top;
-      impl->shadow_bottom = size.shadow.bottom;
+      wayland_surface->shadow_left = size.shadow.left;
+      wayland_surface->shadow_right = size.shadow.right;
+      wayland_surface->shadow_top = size.shadow.top;
+      wayland_surface->shadow_bottom = size.shadow.bottom;
     }
 
-  if (impl->next_layout.configured_width > 0 &&
-      impl->next_layout.configured_height > 0)
+  if (wayland_surface->next_layout.configured_width > 0 &&
+      wayland_surface->next_layout.configured_height > 0)
     {
       int width, height;
 
-      width = impl->next_layout.configured_width +
-        impl->shadow_left + impl->shadow_right;
-      height = impl->next_layout.configured_height +
-        impl->shadow_top + impl->shadow_bottom;
+      width = wayland_surface->next_layout.configured_width +
+        wayland_surface->shadow_left + wayland_surface->shadow_right;
+      height = wayland_surface->next_layout.configured_height +
+        wayland_surface->shadow_top + wayland_surface->shadow_bottom;
 
-      if (impl->next_layout.toplevel.should_constrain)
+      if (wayland_surface->next_layout.toplevel.should_constrain)
         {
-          gdk_surface_constrain_size (&impl->geometry_hints,
-                                      impl->geometry_mask,
+          gdk_surface_constrain_size (&wayland_surface->geometry_hints,
+                                      wayland_surface->geometry_mask,
                                       width, height,
                                       &width, &height);
         }
-      gdk_wayland_surface_update_size (surface, width, height, impl->scale);
+      gdk_wayland_surface_update_size (surface, width, height, wayland_surface->scale);
 
-      if (!impl->next_layout.toplevel.size_is_fixed)
+      if (!wayland_surface->next_layout.toplevel.size_is_fixed)
         {
-          impl->next_layout.toplevel.should_constrain = FALSE;
-          impl->next_layout.configured_width = 0;
-          impl->next_layout.configured_height = 0;
+          wayland_surface->next_layout.toplevel.should_constrain = FALSE;
+          wayland_surface->next_layout.configured_width = 0;
+          wayland_surface->next_layout.configured_height = 0;
         }
     }
   else
@@ -1488,7 +1481,7 @@ configure_toplevel_geometry (GdkSurface *surface)
       gdk_surface_constrain_size (&geometry, mask,
                                   width, height,
                                   &width, &height);
-      gdk_wayland_surface_update_size (surface, width, height, impl->scale);
+      gdk_wayland_surface_update_size (surface, width, height, wayland_surface->scale);
     }
 }
 
@@ -1497,19 +1490,18 @@ synthesize_initial_surface_state (GdkWaylandToplevel *wayland_toplevel,
                                   GdkToplevelState    unset_flags,
                                   GdkToplevelState    set_flags)
 {
-  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
+  wayland_toplevel->initial_state.unset_flags |= unset_flags;
+  wayland_toplevel->initial_state.set_flags &= ~unset_flags;
 
-  wayland_surface->initial_state.unset_flags |= unset_flags;
-  wayland_surface->initial_state.set_flags &= ~unset_flags;
-
-  wayland_surface->initial_state.set_flags |= set_flags;
-  wayland_surface->initial_state.unset_flags &= ~set_flags;
+  wayland_toplevel->initial_state.set_flags |= set_flags;
+  wayland_toplevel->initial_state.unset_flags &= ~set_flags;
 }
 
 static void
-gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
+gdk_wayland_surface_configure_toplevel (GdkWaylandToplevel *wayland_toplevel)
 {
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkSurface *surface = GDK_SURFACE (wayland_toplevel);
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkToplevelState new_state;
@@ -1519,17 +1511,17 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
   gboolean was_fixed_size;
   gboolean saved_size;
 
-  new_state = impl->pending.toplevel.state;
-  impl->pending.toplevel.state = 0;
+  new_state = wayland_surface->pending.toplevel.state;
+  wayland_surface->pending.toplevel.state = 0;
 
-  is_resizing = impl->pending.toplevel.is_resizing;
-  impl->pending.toplevel.is_resizing = FALSE;
+  is_resizing = wayland_surface->pending.toplevel.is_resizing;
+  wayland_surface->pending.toplevel.is_resizing = FALSE;
 
-  if (impl->pending.toplevel.has_bounds)
+  if (wayland_surface->pending.toplevel.has_bounds)
     {
-      impl->toplevel.bounds_width = impl->pending.toplevel.bounds_width;
-      impl->toplevel.bounds_height = impl->pending.toplevel.bounds_height;
-      impl->toplevel.has_bounds = TRUE;
+      wayland_toplevel->bounds_width = wayland_surface->pending.toplevel.bounds_width;
+      wayland_toplevel->bounds_height = wayland_surface->pending.toplevel.bounds_height;
+      wayland_toplevel->has_bounds = TRUE;
     }
 
   fixed_size =
@@ -1543,8 +1535,8 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
                       GDK_TOPLEVEL_STATE_FULLSCREEN |
                       GDK_TOPLEVEL_STATE_TILED);
 
-  width = impl->pending.toplevel.width;
-  height = impl->pending.toplevel.height;
+  width = wayland_surface->pending.toplevel.width;
+  height = wayland_surface->pending.toplevel.height;
 
   saved_size = (width == 0 && height == 0);
   /* According to xdg_shell, an xdg_surface.configure with size 0x0
@@ -1557,41 +1549,41 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
    */
   if (saved_size && !fixed_size && was_fixed_size)
     {
-      width = impl->saved_width;
-      height = impl->saved_height;
+      width = wayland_surface->saved_width;
+      height = wayland_surface->saved_height;
     }
 
   if (width > 0 && height > 0)
     {
       if (!saved_size)
         {
-          impl->next_layout.toplevel.should_constrain = TRUE;
+          wayland_surface->next_layout.toplevel.should_constrain = TRUE;
 
           /* Save size for next time we get 0x0 */
           _gdk_wayland_surface_save_size (surface);
         }
       else if (is_resizing)
         {
-          impl->next_layout.toplevel.should_constrain = TRUE;
+          wayland_surface->next_layout.toplevel.should_constrain = TRUE;
         }
       else
         {
-          impl->next_layout.toplevel.should_constrain = FALSE;
+          wayland_surface->next_layout.toplevel.should_constrain = FALSE;
         }
 
-      impl->next_layout.toplevel.size_is_fixed = fixed_size;
-      impl->next_layout.configured_width = width;
-      impl->next_layout.configured_height = height;
+      wayland_surface->next_layout.toplevel.size_is_fixed = fixed_size;
+      wayland_surface->next_layout.configured_width = width;
+      wayland_surface->next_layout.configured_height = height;
     }
   else
     {
-      impl->next_layout.toplevel.should_constrain = FALSE;
-      impl->next_layout.toplevel.size_is_fixed = FALSE;
-      impl->next_layout.configured_width = 0;
-      impl->next_layout.configured_height = 0;
+      wayland_surface->next_layout.toplevel.should_constrain = FALSE;
+      wayland_surface->next_layout.toplevel.size_is_fixed = FALSE;
+      wayland_surface->next_layout.configured_width = 0;
+      wayland_surface->next_layout.configured_height = 0;
     }
 
-  impl->next_layout.surface_geometry_dirty = TRUE;
+  wayland_surface->next_layout.surface_geometry_dirty = TRUE;
   gdk_surface_request_layout (surface);
 
   GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
@@ -1607,12 +1599,12 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
   switch (display_wayland->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      xdg_surface_ack_configure (impl->display_server.xdg_surface,
-                                 impl->pending.serial);
+      xdg_surface_ack_configure (wayland_surface->display_server.xdg_surface,
+                                 wayland_surface->pending.serial);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      zxdg_surface_v6_ack_configure (impl->display_server.zxdg_surface_v6,
-                                     impl->pending.serial);
+      zxdg_surface_v6_ack_configure (wayland_surface->display_server.zxdg_surface_v6,
+                                     wayland_surface->pending.serial);
       break;
     default:
       g_assert_not_reached ();
@@ -1713,7 +1705,11 @@ gdk_wayland_surface_configure (GdkSurface *surface)
       gdk_wayland_surface_configure_popup (wayland_popup);
     }
   else if (is_realized_toplevel (impl))
-    gdk_wayland_surface_configure_toplevel (surface);
+    {
+      g_assert (GDK_IS_WAYLAND_TOPLEVEL (surface));
+      GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+      gdk_wayland_surface_configure_toplevel (wayland_toplevel);
+    }
   else
     g_warn_if_reached ();
 
@@ -2049,30 +2045,30 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
   switch (display_wayland->shell_variant)
     {
     case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      if (wayland_surface->initial_state.set_flags & GDK_TOPLEVEL_STATE_MAXIMIZED)
+      if (wayland_toplevel->initial_state.set_flags & GDK_TOPLEVEL_STATE_MAXIMIZED)
         xdg_toplevel_set_maximized (wayland_surface->display_server.xdg_toplevel);
-      if (wayland_surface->initial_state.set_flags & GDK_TOPLEVEL_STATE_MINIMIZED)
+      if (wayland_toplevel->initial_state.set_flags & GDK_TOPLEVEL_STATE_MINIMIZED)
         xdg_toplevel_set_minimized (wayland_surface->display_server.xdg_toplevel);
-      if (wayland_surface->initial_state.set_flags & GDK_TOPLEVEL_STATE_FULLSCREEN)
+      if (wayland_toplevel->initial_state.set_flags & GDK_TOPLEVEL_STATE_FULLSCREEN)
         xdg_toplevel_set_fullscreen (wayland_surface->display_server.xdg_toplevel,
-                                     wayland_surface->initial_fullscreen_output);
+                                     wayland_toplevel->initial_fullscreen_output);
       break;
     case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      if (wayland_surface->initial_state.set_flags & GDK_TOPLEVEL_STATE_MAXIMIZED)
+      if (wayland_toplevel->initial_state.set_flags & GDK_TOPLEVEL_STATE_MAXIMIZED)
         zxdg_toplevel_v6_set_maximized (wayland_surface->display_server.zxdg_toplevel_v6);
-      if (wayland_surface->initial_state.set_flags & GDK_TOPLEVEL_STATE_MINIMIZED)
+      if (wayland_toplevel->initial_state.set_flags & GDK_TOPLEVEL_STATE_MINIMIZED)
         zxdg_toplevel_v6_set_minimized (wayland_surface->display_server.zxdg_toplevel_v6);
-      if (wayland_surface->initial_state.set_flags & GDK_TOPLEVEL_STATE_FULLSCREEN)
+      if (wayland_toplevel->initial_state.set_flags & GDK_TOPLEVEL_STATE_FULLSCREEN)
         zxdg_toplevel_v6_set_fullscreen (wayland_surface->display_server.zxdg_toplevel_v6,
-                                         wayland_surface->initial_fullscreen_output);
+                                         wayland_toplevel->initial_fullscreen_output);
       break;
     default:
       g_assert_not_reached ();
     }
 
-  wayland_surface->initial_fullscreen_output = NULL;
+  wayland_toplevel->initial_fullscreen_output = NULL;
 
-  app_id = wayland_surface->application.application_id;
+  app_id = wayland_toplevel->application.application_id;
   if (app_id == NULL)
     app_id = g_get_prgname ();
 
@@ -3052,15 +3048,22 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
           wayland_popup->state = POPUP_STATE_IDLE;
         }
 
-      if (impl->display_server.gtk_surface)
+      if (GDK_IS_WAYLAND_TOPLEVEL (surface))
         {
-          if (display_wayland->gtk_shell_version >=
-              GTK_SURFACE1_RELEASE_SINCE_VERSION)
-            gtk_surface1_release (impl->display_server.gtk_surface);
-          else
-            gtk_surface1_destroy (impl->display_server.gtk_surface);
-          impl->display_server.gtk_surface = NULL;
-          impl->application.was_set = FALSE;
+          GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+
+          if (wayland_toplevel->display_server.gtk_surface)
+            {
+              if (display_wayland->gtk_shell_version >=
+                  GTK_SURFACE1_RELEASE_SINCE_VERSION)
+                gtk_surface1_release (wayland_toplevel->display_server.gtk_surface);
+              else
+                gtk_surface1_destroy (wayland_toplevel->display_server.gtk_surface);
+              wayland_toplevel->display_server.gtk_surface = NULL;
+              wayland_toplevel->application.was_set = FALSE;
+            }
+
+          g_clear_pointer (&wayland_toplevel->layout, gdk_toplevel_layout_unref);
         }
 
       wl_surface_destroy (impl->display_server.wl_surface);
@@ -3069,7 +3072,6 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
       g_slist_free (impl->display_server.outputs);
       impl->display_server.outputs = NULL;
 
-      g_clear_pointer (&impl->toplevel.layout, gdk_toplevel_layout_unref);
       if (GDK_IS_WAYLAND_POPUP (surface))
         {
           GdkWaylandPopup *wayland_popup = GDK_WAYLAND_POPUP (surface);
@@ -3531,7 +3533,8 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
                             guint32      timestamp)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (toplevel);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   gchar *startup_id = NULL;
@@ -3575,14 +3578,14 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
 
       xdg_activation_v1_activate (display_wayland->xdg_activation,
                                   startup_id,
-                                  impl->display_server.wl_surface);
+                                  wayland_surface->display_server.wl_surface);
     }
-  else if (impl->display_server.gtk_surface)
+  else if (wayland_toplevel->display_server.gtk_surface)
     {
       if (timestamp != GDK_CURRENT_TIME)
-        gtk_surface1_present (impl->display_server.gtk_surface, timestamp);
+        gtk_surface1_present (wayland_toplevel->display_server.gtk_surface, timestamp);
       else if (startup_id && display_wayland->gtk_shell_version >= 3)
-        gtk_surface1_request_focus (impl->display_server.gtk_surface,
+        gtk_surface1_request_focus (wayland_toplevel->display_server.gtk_surface,
                                     startup_id);
     }
 
@@ -3680,22 +3683,22 @@ gdk_wayland_toplevel_init_gtk_surface (GdkWaylandToplevel *wayland_toplevel)
   GdkWaylandDisplay *display =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (wayland_toplevel)));
 
-  if (wayland_surface->display_server.gtk_surface != NULL)
+  if (wayland_toplevel->display_server.gtk_surface != NULL)
     return;
   if (!is_realized_toplevel (wayland_surface))
     return;
   if (display->gtk_shell == NULL)
     return;
 
-  wayland_surface->display_server.gtk_surface =
+  wayland_toplevel->display_server.gtk_surface =
     gtk_shell1_get_gtk_surface (display->gtk_shell,
                                 wayland_surface->display_server.wl_surface);
-  wl_proxy_set_queue ((struct wl_proxy *) wayland_surface->display_server.gtk_surface,
+  wl_proxy_set_queue ((struct wl_proxy *) wayland_toplevel->display_server.gtk_surface,
                       wayland_surface->event_queue);
   gdk_wayland_surface_set_geometry_hints (wayland_surface,
                                           &wayland_surface->geometry_hints,
                                           wayland_surface->geometry_mask);
-  gtk_surface1_add_listener (wayland_surface->display_server.gtk_surface,
+  gtk_surface1_add_listener (wayland_toplevel->display_server.gtk_surface,
                              &gtk_surface_listener,
                              wayland_surface);
 }
@@ -3703,16 +3706,14 @@ gdk_wayland_toplevel_init_gtk_surface (GdkWaylandToplevel *wayland_toplevel)
 static void
 maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel)
 {
-  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
-
   gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel);
-  if (wayland_surface->display_server.gtk_surface == NULL)
+  if (wayland_toplevel->display_server.gtk_surface == NULL)
     return;
 
   if (GDK_SURFACE (wayland_toplevel)->modal_hint)
-    gtk_surface1_set_modal (wayland_surface->display_server.gtk_surface);
+    gtk_surface1_set_modal (wayland_toplevel->display_server.gtk_surface);
   else
-    gtk_surface1_unset_modal (wayland_surface->display_server.gtk_surface);
+    gtk_surface1_unset_modal (wayland_toplevel->display_server.gtk_surface);
 
 }
 
@@ -3924,7 +3925,7 @@ static void
 gdk_wayland_toplevel_maximize (GdkToplevel *toplevel)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (toplevel);
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -4023,7 +4024,7 @@ gdk_wayland_toplevel_fullscreen_on_monitor (GdkWaylandToplevel *wayland_toplevel
   else
     {
       synthesize_initial_surface_state (wayland_toplevel, 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
-      wayland_surface->initial_fullscreen_output = output;
+      wayland_toplevel->initial_fullscreen_output = output;
     }
 }
 
@@ -4036,7 +4037,7 @@ gdk_wayland_toplevel_fullscreen (GdkWaylandToplevel *wayland_toplevel)
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  wayland_surface->initial_fullscreen_output = NULL;
+  wayland_toplevel->initial_fullscreen_output = NULL;
 
   _gdk_wayland_surface_save_size (surface);
 
@@ -4074,7 +4075,7 @@ gdk_wayland_toplevel_unfullscreen (GdkWaylandToplevel *wayland_toplevel)
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  wayland_surface->initial_fullscreen_output = NULL;
+  wayland_toplevel->initial_fullscreen_output = NULL;
 
   if (is_realized_toplevel (wayland_surface))
     {
@@ -4351,8 +4352,8 @@ gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
                                        GdkTitlebarGesture  gesture)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+  struct gtk_surface1 *gtk_surface = wayland_toplevel->display_server.gtk_surface;
   enum gtk_surface1_gesture gtk_gesture;
   GdkSeat *seat;
   struct wl_seat *wl_seat;
@@ -4372,7 +4373,7 @@ gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
 
   serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (seat), NULL);
 
-  gtk_surface1_titlebar_gesture (impl->display_server.gtk_surface,
+  gtk_surface1_titlebar_gesture (wayland_toplevel->display_server.gtk_surface,
                                  serial,
                                  wl_seat,
                                  gtk_gesture);
@@ -4383,9 +4384,8 @@ gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
 static gboolean
 gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 {
-  GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+  struct gtk_surface1 *gtk_surface = wayland_toplevel->display_server.gtk_surface;
 
   if (!gtk_surface)
     return FALSE;
@@ -4482,37 +4482,35 @@ gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
 struct gtk_surface1 *
 gdk_wayland_toplevel_get_gtk_surface (GdkWaylandToplevel *wayland_toplevel)
 {
-  return GDK_WAYLAND_SURFACE (wayland_toplevel)->display_server.gtk_surface;
+  return wayland_toplevel->display_server.gtk_surface;
 }
 
 static void
 maybe_set_gtk_surface_dbus_properties (GdkWaylandToplevel *wayland_toplevel)
 {
-  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
-
-  if (wayland_surface->application.was_set)
+  if (wayland_toplevel->application.was_set)
     return;
 
-  if (wayland_surface->application.application_id == NULL &&
-      wayland_surface->application.app_menu_path == NULL &&
-      wayland_surface->application.menubar_path == NULL &&
-      wayland_surface->application.window_object_path == NULL &&
-      wayland_surface->application.application_object_path == NULL &&
-      wayland_surface->application.unique_bus_name == NULL)
+  if (wayland_toplevel->application.application_id == NULL &&
+      wayland_toplevel->application.app_menu_path == NULL &&
+      wayland_toplevel->application.menubar_path == NULL &&
+      wayland_toplevel->application.window_object_path == NULL &&
+      wayland_toplevel->application.application_object_path == NULL &&
+      wayland_toplevel->application.unique_bus_name == NULL)
     return;
 
   gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel);
-  if (wayland_surface->display_server.gtk_surface == NULL)
+  if (wayland_toplevel->display_server.gtk_surface == NULL)
     return;
 
-  gtk_surface1_set_dbus_properties (wayland_surface->display_server.gtk_surface,
-                                    wayland_surface->application.application_id,
-                                    wayland_surface->application.app_menu_path,
-                                    wayland_surface->application.menubar_path,
-                                    wayland_surface->application.window_object_path,
-                                    wayland_surface->application.application_object_path,
-                                    wayland_surface->application.unique_bus_name);
-  wayland_surface->application.was_set = TRUE;
+  gtk_surface1_set_dbus_properties (wayland_toplevel->display_server.gtk_surface,
+                                    wayland_toplevel->application.application_id,
+                                    wayland_toplevel->application.app_menu_path,
+                                    wayland_toplevel->application.menubar_path,
+                                    wayland_toplevel->application.window_object_path,
+                                    wayland_toplevel->application.application_object_path,
+                                    wayland_toplevel->application.unique_bus_name);
+  wayland_toplevel->application.was_set = TRUE;
 }
 
 void
@@ -4524,21 +4522,21 @@ gdk_wayland_toplevel_set_dbus_properties (GdkToplevel *toplevel,
                                           const char  *application_object_path,
                                           const char *unique_bus_name)
 {
-  GdkWaylandSurface *wayland_surface;
+  GdkWaylandToplevel *wayland_toplevel;
 
   g_return_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel));
 
-  wayland_surface = GDK_WAYLAND_SURFACE (toplevel);
+  wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
 
-  wayland_surface->application.application_id = g_strdup (application_id);
-  wayland_surface->application.app_menu_path = g_strdup (app_menu_path);
-  wayland_surface->application.menubar_path = g_strdup (menubar_path);
-  wayland_surface->application.window_object_path = g_strdup (window_object_path);
-  wayland_surface->application.application_object_path =
+  wayland_toplevel->application.application_id = g_strdup (application_id);
+  wayland_toplevel->application.app_menu_path = g_strdup (app_menu_path);
+  wayland_toplevel->application.menubar_path = g_strdup (menubar_path);
+  wayland_toplevel->application.window_object_path = g_strdup (window_object_path);
+  wayland_toplevel->application.application_object_path =
     g_strdup (application_object_path);
-  wayland_surface->application.unique_bus_name = g_strdup (unique_bus_name);
+  wayland_toplevel->application.unique_bus_name = g_strdup (unique_bus_name);
 
-  maybe_set_gtk_surface_dbus_properties (GDK_WAYLAND_TOPLEVEL (toplevel));
+  maybe_set_gtk_surface_dbus_properties (wayland_toplevel);
 }
 
 void
@@ -4957,6 +4955,7 @@ gdk_wayland_popup_iface_init (GdkPopupInterface *iface)
 static void
 gdk_wayland_toplevel_init (GdkWaylandToplevel *toplevel)
 {
+  toplevel->initial_fullscreen_output = NULL;
 }
 
 static void
@@ -5082,6 +5081,13 @@ gdk_wayland_toplevel_finalize (GObject *object)
   if (gdk_wayland_toplevel_is_exported (wayland_toplevel))
     gdk_wayland_toplevel_unexport_handle (GDK_TOPLEVEL (wayland_toplevel));
 
+  g_free (wayland_toplevel->application.application_id);
+  g_free (wayland_toplevel->application.app_menu_path);
+  g_free (wayland_toplevel->application.menubar_path);
+  g_free (wayland_toplevel->application.window_object_path);
+  g_free (wayland_toplevel->application.application_object_path);
+  g_free (wayland_toplevel->application.unique_bus_name);
+
   G_OBJECT_CLASS (gdk_wayland_toplevel_parent_class)->finalize (object);
 }
 
@@ -5136,8 +5142,8 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
       pending_configure = TRUE;
     }
 
-  g_clear_pointer (&wayland_surface->toplevel.layout, gdk_toplevel_layout_unref);
-  wayland_surface->toplevel.layout = gdk_toplevel_layout_copy (layout);
+  g_clear_pointer (&wayland_toplevel->layout, gdk_toplevel_layout_unref);
+  wayland_toplevel->layout = gdk_toplevel_layout_copy (layout);
 
   gdk_wayland_surface_show (surface);
 
