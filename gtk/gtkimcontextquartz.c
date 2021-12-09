@@ -305,7 +305,7 @@ static void
 quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
-  GtkWidget* surface_widget = GTK_WIDGET (gdk_surface_get_widget (qc->client_surface));
+  GtkWidget* surface_widget;
   int sx, sy;
   double wx, wy;
 
@@ -315,6 +315,11 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
     return;
 
   if (!qc->focused)
+    return;
+
+  surface_widget = GTK_WIDGET (gdk_surface_get_widget (qc->client_surface));
+
+  if (!surface_widget)
     return;
 
   gdk_surface_get_origin (qc->client_surface, &sx, &sy);
