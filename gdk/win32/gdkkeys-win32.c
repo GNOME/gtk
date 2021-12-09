@@ -356,40 +356,39 @@ vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
   gunichar c;
   guint    sym;
 
+  if (consumed_mod_bits)
+    *consumed_mod_bits = 0;
+
+  /* Handle special key: Tab */
+  if (vk == VK_TAB)
+    {
+      if (consumed_mod_bits)
+        *consumed_mod_bits = mod_bits & KBDSHIFT;
+      return (mod_bits & KBDSHIFT) ? GDK_KEY_ISO_Left_Tab : GDK_KEY_Tab;
+    }
+
+  /* Handle other special keys */
+  switch (vk)
+    {
+      #define MAP(a_vk, a_gdk) case a_vk: return a_gdk;
+
+      DEFINE_SPECIAL (MAP)
+
+      /* Non-bijective mappings: */
+      MAP (VK_SHIFT,    GDK_KEY_Shift_L)
+      MAP (VK_CONTROL,  GDK_KEY_Control_L)
+      MAP (VK_MENU,     GDK_KEY_Alt_L)
+      MAP (VK_SNAPSHOT, GDK_KEY_Print)
+
+      #undef MAP
+    }
+
+  /* Handle regular keys (including dead keys) */
   c = vk_to_char_fuzzy (keymap, info, keystate, mod_bits,
                         consumed_mod_bits, &is_dead, vk);
 
-  if (!is_dead)
-    {
-      /* Special cases */
-      if (vk == VK_SHIFT)
-        return GDK_KEY_Shift_L;
-      if (vk == VK_CONTROL)
-        return GDK_KEY_Control_L;
-      if (vk == VK_MENU)
-        return GDK_KEY_Alt_L;
-      if (vk == VK_SNAPSHOT)
-        return GDK_KEY_Print;
-      if (vk == VK_TAB && !(mod_bits & KBDSHIFT))
-        return GDK_KEY_Tab;
-      if (vk == VK_TAB &&  (mod_bits & KBDSHIFT))
-        return GDK_KEY_ISO_Left_Tab;
-
-      /* Generic special keys */
-      switch (vk)
-        {
-          #define MAP(a_vk, a_gdk) case a_vk: return a_gdk;
-          DEFINE_SPECIAL (MAP)
-          #undef MAP
-        }
-    }
-
   if (c == WCH_NONE)
-    {
-      if (consumed_mod_bits)
-        *consumed_mod_bits = 0;
-      return GDK_KEY_VoidSymbol;
-    }
+    return GDK_KEY_VoidSymbol;
 
   sym = gdk_unicode_to_keyval (c);
 

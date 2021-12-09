@@ -256,6 +256,12 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
   int                n_levels;
   int                entry_size;
 
+  /* Initialize with defaults */
+  if (consumed_mod_bits)
+    *consumed_mod_bits = 0;
+  if (is_dead)
+    *is_dead = FALSE;
+
   g_return_val_if_fail (tables != NULL, WCH_NONE);
 
   wch_tables = tables->pVkToWcharTable.ptr;
