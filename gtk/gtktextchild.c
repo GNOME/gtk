@@ -400,6 +400,8 @@ gtk_text_child_anchor_class_init (GtkTextChildAnchorClass *klass)
  * function [method@Gtk.TextBuffer.create_child_anchor].
  * 
  * Returns: a new `GtkTextChildAnchor`
+ *
+ * Since: 4.6
  **/
 GtkTextChildAnchor*
 gtk_text_child_anchor_new (void)
