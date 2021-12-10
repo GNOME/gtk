@@ -7,7 +7,7 @@ project('gtk', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
         ],
-        meson_version : '>= 0.55',
+        meson_version : '>= 0.59',
         license: 'LGPL-2.1-or-later')
 
 glib_req           = '>= 2.66.0'
@@ -861,7 +861,7 @@ common_pc_variables = [
 foreach pkg: pkgs
   pkg_config.generate(
     filebase: pkg,
-    variables: common_pc_variables,
+    unescaped_variables: common_pc_variables,
     name: 'GTK',
     description: 'GTK Graphical UI Library',
     requires: gdk_packages + gsk_packages + gtk_packages,
@@ -877,7 +877,7 @@ endforeach
 if os_unix
   pkg_config.generate(
     filebase: 'gtk4-unix-print',
-    variables: common_pc_variables,
+    unescaped_variables: common_pc_variables,
     name: 'GTK',
     description: 'GTK Unix print support',
     requires: ['gtk4'] + gtk_packages,
