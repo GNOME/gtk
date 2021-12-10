@@ -847,7 +847,7 @@ gtk_deps = [
 ]
 
 if x11_enabled
-  x11_data_prefix = dependency('x11').get_pkgconfig_variable('prefix')
+  x11_data_prefix = dependency('x11').get_variable(pkgconfig: 'prefix')
 
   gtk_cargs += [ '-DX11_DATA_PREFIX="@0@"'.format(x11_data_prefix), ]
   gtk_sources += gtk_use_x11_sources

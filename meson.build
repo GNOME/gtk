@@ -4,7 +4,7 @@ project('gtk+-3.0', 'c',
           'buildtype=debugoptimized',
           'warning_level=1'
         ],
-        meson_version : '>= 0.48.0',
+        meson_version : '>= 0.56.2',
         license: 'LGPLv2.1+')
 
 glib_major_req = 2
@@ -494,7 +494,7 @@ if tracker3_enabled
 endif
 
 if iso_codes_dep.found()
-  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
+  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_variable(pkgconfig: 'prefix'))
 else
   cdata.set_quoted('ISO_CODES_PREFIX', get_option('prefix'))
 endif
