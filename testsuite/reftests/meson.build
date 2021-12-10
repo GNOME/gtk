@@ -430,12 +430,12 @@ test_data = [
 # Depending on the environment these fail, feel free to fix them
 somehow_broken = [
   'button-wrapping.ui',
-  'cellrenderer-pixbuf-stock-rtl.ui',
-  'label-sizing.ui',
-  'label-wrap-justify.ui',
+#  'cellrenderer-pixbuf-stock-rtl.ui',
+#  'label-sizing.ui',
+#  'label-wrap-justify.ui',
   'quit-mnemonic.ui',
   'symbolic-icon-translucent-color.ui',
-  'window-height-for-width.ui',
+#  'window-height-for-width.ui',
 ]
 
 foreach testname : test_data
