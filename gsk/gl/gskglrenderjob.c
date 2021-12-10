@@ -246,6 +246,47 @@ gsk_rounded_rect_shrink_to_minimum (GskRoundedRect *self)
 }
 
 static inline gboolean G_GNUC_PURE
+node_supports_2d_transform (const GskRenderNode *node)
+{
+  switch ((int)gsk_render_node_get_node_type (node))
+    {
+    case GSK_COLOR_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_TEXTURE_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_LINEAR_GRADIENT_NODE:
+    case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+    case GSK_CONIC_GRADIENT_NODE:
+    case GSK_RADIAL_GRADIENT_NODE:
+    case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+    case GSK_DEBUG_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_BLUR_NODE:
+      return TRUE;
+
+    case GSK_SHADOW_NODE:
+      return node_supports_2d_transform (gsk_shadow_node_get_child (node));
+
+    case GSK_TRANSFORM_NODE:
+      return node_supports_2d_transform (gsk_transform_node_get_child (node));
+
+    case GSK_CONTAINER_NODE:
+      for (guint i = 0, p = gsk_container_node_get_n_children (node); i < p; i++)
+        {
+          if (!node_supports_2d_transform (gsk_container_node_get_child (node, i)))
+            return FALSE;
+        }
+      return TRUE;
+
+    default:
+      return FALSE;
+    }
+}
+
+static inline gboolean G_GNUC_PURE
 node_supports_transform (const GskRenderNode *node)
 {
   /* Some nodes can't handle non-trivial transforms without being
@@ -257,24 +298,26 @@ node_supports_transform (const GskRenderNode *node)
 
   switch ((int)gsk_render_node_get_node_type (node))
     {
-      case GSK_COLOR_NODE:
-      case GSK_OPACITY_NODE:
-      case GSK_COLOR_MATRIX_NODE:
-      case GSK_TEXTURE_NODE:
-      case GSK_CROSS_FADE_NODE:
-      case GSK_LINEAR_GRADIENT_NODE:
-      case GSK_DEBUG_NODE:
-      case GSK_TEXT_NODE:
-        return TRUE;
+    case GSK_COLOR_NODE:
+    case GSK_OPACITY_NODE:
+    case GSK_COLOR_MATRIX_NODE:
+    case GSK_TEXTURE_NODE:
+    case GSK_CROSS_FADE_NODE:
+    case GSK_DEBUG_NODE:
+    case GSK_TEXT_NODE:
+    case GSK_CAIRO_NODE:
+    case GSK_BLEND_NODE:
+    case GSK_BLUR_NODE:
+      return TRUE;
 
-      case GSK_SHADOW_NODE:
-        return node_supports_transform (gsk_shadow_node_get_child (node));
+    case GSK_SHADOW_NODE:
+      return node_supports_transform (gsk_shadow_node_get_child (node));
 
-      case GSK_TRANSFORM_NODE:
-        return node_supports_transform (gsk_transform_node_get_child (node));
+    case GSK_TRANSFORM_NODE:
+      return node_supports_transform (gsk_transform_node_get_child (node));
 
-      default:
-        return FALSE;
+    default:
+      return FALSE;
     }
 }
 
@@ -2017,6 +2060,14 @@ gsk_gl_render_job_visit_transform_node (GskGLRenderJob      *job,
     break;
 
     case GSK_TRANSFORM_CATEGORY_2D:
+      if (node_supports_2d_transform (child))
+        {
+          gsk_gl_render_job_push_modelview (job, transform);
+          gsk_gl_render_job_visit_node (job, child);
+          gsk_gl_render_job_pop_modelview (job);
+          return;
+        }
+      G_GNUC_FALLTHROUGH;
     case GSK_TRANSFORM_CATEGORY_3D:
     case GSK_TRANSFORM_CATEGORY_ANY:
     case GSK_TRANSFORM_CATEGORY_UNKNOWN:
