@@ -66,7 +66,13 @@ textview {
   > text {
     @extend %view;
 
-    > selection { &:focus, & { @extend %selected_items; }}
+    > selection {
+      background-color: $backdrop_selected_bg_color;
+
+      &:focus-within {
+         background-color: $selected_bg_color;
+      }
+    }
   }
 
   &:drop(active) {
@@ -152,8 +158,11 @@ label {
   &:selected { @extend %nobg_selected_items; }
 
   > selection {
-    background-color: $selected_bg_color;
+    background-color: $backdrop_selected_bg_color;
     color: $selected_fg_color;
+    &:focus-within {
+       background-color: $selected_bg_color;
+    }
   }
 
   &:disabled {
@@ -318,7 +327,14 @@ entry {
 
     &:disabled { @include entry(insensitive); }
 
-    > text > selection { @extend %selected_items; }
+    > text > selection {
+      background-color: $backdrop_selected_bg_color;
+      color: transparent;
+      &:focus-within {
+        background-color: $selected_bg_color;
+        color: $selected_fg_color;
+      }
+    }
 
     // entry error and warning style
     @each $e_type, $e_color in (error, $error_color),
@@ -1134,7 +1150,14 @@ spinbutton {
       padding: 0;
       border-radius: 0;
 
-      > selection { @extend %selected_items; }
+      > selection {
+        background-color: $backdrop_selected_bg_color;
+        color: transparent;
+        &:focus-within {
+          background-color: $selected_bg_color;
+          color: $selected_fg_color;
+        }
+      }
       > block-cursor { @include entry(block_cursor); }
     }
 
@@ -3357,8 +3380,12 @@ columnview row:not(:selected) cell editablelabel.editing:focus-within {
 }
 
 columnview row:not(:selected) cell editablelabel.editing text selection {
-  color: $selected_fg_color;
-  background-color: $selected_bg_color;
+  background-color: $backdrop_selected_bg_color;
+  color: transparent;
+  &:focus-within {
+    background-color: $selected_bg_color;
+    color: $selected_fg_color;
+  }
 }
 
 /*******************************************************
