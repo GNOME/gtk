@@ -1,36 +1,63 @@
-FROM fedora:31
+FROM fedora:35
 
 RUN dnf -y install \
     adwaita-icon-theme \
     atk-devel \
     at-spi2-atk-devel \
+    autoconf \
+    automake \
     avahi-gobject-devel \
     cairo-devel \
     cairo-gobject-devel \
     ccache \
+    clang \
+    clang-analyzer \
+    clang-tools-extra \
     colord-devel \
     cups-devel \
+    dbus-daemon \
     dbus-x11 \
+    dejavu-sans-mono-fonts \
+    desktop-file-utils \
+    diffutils \
+    elfutils-libelf-devel \
     fribidi-devel \
     gcc \
     gcc-c++ \
     gdk-pixbuf2-devel \
     gdk-pixbuf2-modules \
-    gettext \
     gettext-devel \
     git \
     glib2-devel \
+    glib2-static \
+    glibc-devel \
+    glibc-headers \
+    gnome-desktop-testing \
     gobject-introspection-devel \
     graphene-devel \
+    graphviz \
+    gstreamer1-devel \
+    gstreamer1-plugins-good \
+    gstreamer1-plugins-bad-free-devel \
+    gstreamer1-plugins-base-devel \
     gtk-doc \
     hicolor-icon-theme \
     iso-codes \
     itstool \
     json-glib-devel \
+    lcov \
+    libasan \
+    libattr-devel \
     libcloudproviders-devel \
     libepoxy-devel \
+    libffi-devel \
+    libjpeg-turbo-devel \
     libmount-devel \
+    libpng-devel \
     librsvg2 \
+    libselinux-devel \
+    libtiff-devel \
+    libubsan \
     libXcomposite-devel \
     libXcursor-devel \
     libXcursor-devel \
@@ -42,21 +69,34 @@ RUN dnf -y install \
     libXrandr-devel \
     libXrender-devel \
     libXtst-devel \
+    libxslt \
     make \
+    mesa-dri-drivers \
     mesa-libEGL-devel \
-    mesa-libwayland-egl-devel \
+    mesa-libGLES-devel \
     meson \
     ninja-build \
     pango-devel \
+    pcre-devel \
+    pcre-static \
     python3 \
+    python3-docutils \
+    python3-gobject \
+    python3-jinja2 \
+    python3-markdown \
     python3-pip \
+    python3-pygments \
+    python3-toml \
+    python3-typogrify \
     python3-wheel \
     redhat-rpm-config \
-    rest-devel \
     sassc \
-    vulkan-devel \
+    systemtap-sdt-devel \
     wayland-devel \
     wayland-protocols-devel \
+    weston \
+    weston-libs \
+    which \
     xorg-x11-server-Xvfb \
     && dnf clean all
 
