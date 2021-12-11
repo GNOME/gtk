@@ -9194,19 +9194,66 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
 {
   GtkTextIter start;
   GtkTextIter end;
-  gint pos;
-  gchar *text;
+  GtkTextIter start1;
+  GtkTextIter end1;
+  GtkTextIter start2;
+  GtkTextIter end2;
+  int cursor_pos;
+  int anchor_pos;
+  char *text;
+  char *pre;
+  char *sel;
+  char *post;
+  gboolean flip;
 
   gtk_text_buffer_get_iter_at_mark (text_view->priv->buffer, &start,
-				    gtk_text_buffer_get_insert (text_view->priv->buffer));
-  end = start;
+                                    gtk_text_buffer_get_insert (text_view->priv->buffer));
+  gtk_text_buffer_get_iter_at_mark (text_view->priv->buffer, &end,
+                                    gtk_text_buffer_get_selection_bound (text_view->priv->buffer));
 
-  pos = gtk_text_iter_get_line_index (&start);
-  gtk_text_iter_set_line_offset (&start, 0);
-  gtk_text_iter_forward_to_line_end (&end);
+  flip = gtk_text_iter_compare (&start, &end) < 0;
 
-  text = gtk_text_iter_get_slice (&start, &end);
-  gtk_im_context_set_surrounding (context, text, -1, pos);
+  gtk_text_iter_order (&start, &end);
+
+  start1 = start;
+  end1 = end;
+
+  gtk_text_iter_set_line_offset (&start1, 0);
+  gtk_text_iter_forward_to_line_end (&end1);
+
+  start2 = start;
+  gtk_text_iter_backward_word_starts (&start2, 3);
+  if (gtk_text_iter_compare (&start2, &start1) < 0)
+    start1 = start2;
+
+  end2 = end;
+  gtk_text_iter_forward_word_ends (&end2, 3);
+  if (gtk_text_iter_compare (&end2, &end1) > 0)
+    end1 = end2;
+
+  pre = gtk_text_iter_get_slice (&start1, &start);
+  sel = gtk_text_iter_get_slice (&start, &end);
+  post = gtk_text_iter_get_slice (&end, &end1);
+
+  if (flip)
+    {
+      anchor_pos = strlen (pre);
+      cursor_pos = anchor_pos + strlen (sel);
+    }
+  else
+    {
+      cursor_pos = strlen (pre);
+      anchor_pos = cursor_pos + strlen (sel);
+    }
+
+  text = g_strconcat (pre, sel, post, NULL);
+
+  g_free (pre);
+  g_free (sel);
+  g_free (post);
+
+  gtk_im_context_set_surrounding_with_selection (context, text, -1, cursor_pos, anchor_pos);
+
   g_free (text);
 
   return TRUE;
