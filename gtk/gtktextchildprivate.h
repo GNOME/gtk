@@ -85,6 +85,8 @@ void                _gtk_widget_segment_unref    (GtkTextLineSegment *widget_seg
 
 GtkTextLayout*      _gtk_anchored_child_get_layout (GtkWidget *child);
 
+const char *        gtk_text_child_anchor_get_replacement (GtkTextChildAnchor *anchor);
+
 G_END_DECLS
 
 #endif
