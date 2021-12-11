@@ -53,6 +53,12 @@
 #include "gtktextlayoutprivate.h"
 #include "gtkintl.h"
 
+typedef struct {
+  char *replacement;
+} GtkTextChildAnchorPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkTextChildAnchor, gtk_text_child_anchor, G_TYPE_OBJECT)
+
 #define CHECK_IN_BUFFER(anchor)                                         \
   G_STMT_START {                                                        \
     if ((anchor)->segment == NULL)                                      \
@@ -291,6 +297,7 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
   GtkTextLineSegment *seg;
+  GtkTextChildAnchorPrivate *priv = gtk_text_child_anchor_get_instance_private (anchor);
 
   seg = g_slice_alloc (WIDGET_SEG_SIZE);
 
@@ -298,8 +305,8 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 
   seg->next = NULL;
 
-  seg->byte_count = strlen (anchor->chars);
-  seg->char_count = g_utf8_strlen (anchor->chars, seg->byte_count);
+  seg->byte_count = strlen (priv->replacement);
+  seg->char_count = g_utf8_strlen (priv->replacement, seg->byte_count);
 
   seg->body.child.obj = anchor;
   seg->body.child.obj->segment = seg;
@@ -373,8 +380,6 @@ _gtk_anchored_child_set_layout (GtkWidget     *child,
 
 static void gtk_text_child_anchor_finalize (GObject *obj);
 
-G_DEFINE_TYPE (GtkTextChildAnchor, gtk_text_child_anchor, G_TYPE_OBJECT)
-
 static void
 gtk_text_child_anchor_init (GtkTextChildAnchor *child_anchor)
 {
@@ -422,23 +427,27 @@ gtk_text_child_anchor_new (void)
 GtkTextChildAnchor *
 gtk_text_child_anchor_new_with_replacement (const char *replacement_character)
 {
+  GtkTextChildAnchor *anchor;
+  GtkTextChildAnchorPrivate *priv;
+
   /* only a single character can be set as replacement */
   g_return_val_if_fail (g_utf8_strlen (replacement_character, -1) == 1, NULL);
 
-  GtkTextChildAnchor *anchor = g_object_new (GTK_TYPE_TEXT_CHILD_ANCHOR, NULL);
-  anchor->chars = g_strdup (replacement_character);
+  anchor = g_object_new (GTK_TYPE_TEXT_CHILD_ANCHOR, NULL);
+
+  priv = gtk_text_child_anchor_get_instance_private (anchor);
+
+  priv->replacement = g_strdup (replacement_character);
+
   return anchor;
 }
 
 static void
 gtk_text_child_anchor_finalize (GObject *obj)
 {
-  GtkTextChildAnchor *anchor;
-  GtkTextLineSegment *seg;
-
-  anchor = GTK_TEXT_CHILD_ANCHOR (obj);
-
-  seg = anchor->segment;
+  GtkTextChildAnchor *anchor = GTK_TEXT_CHILD_ANCHOR (obj);
+  GtkTextChildAnchorPrivate *priv = gtk_text_child_anchor_get_instance_private (anchor);
+  GtkTextLineSegment *seg = anchor->segment;
 
   if (seg)
     {
@@ -455,7 +464,7 @@ gtk_text_child_anchor_finalize (GObject *obj)
       g_slice_free1 (WIDGET_SEG_SIZE, seg);
     }
 
-  anchor->segment = NULL;
+  g_free (priv->replacement);
 
   G_OBJECT_CLASS (gtk_text_child_anchor_parent_class)->finalize (obj);
 }
@@ -606,4 +615,12 @@ gtk_text_anchored_child_set_layout (GtkWidget     *child,
   g_return_if_fail (layout == NULL || GTK_IS_TEXT_LAYOUT (layout));
 
   _gtk_anchored_child_set_layout (child, layout);
+}
+
+const char *
+gtk_text_child_anchor_get_replacement (GtkTextChildAnchor *anchor)
+{
+  GtkTextChildAnchorPrivate *priv = gtk_text_child_anchor_get_instance_private (anchor);
+
+  return priv->replacement;
 }

@@ -60,7 +60,6 @@ struct _GtkTextChildAnchor
 
   /*< private >*/
   gpointer segment;
-  char *chars; /* replacement character */
 };
 
 struct _GtkTextChildAnchorClass
