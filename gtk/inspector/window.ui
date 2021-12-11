@@ -132,6 +132,14 @@
                     </child>
                     <child>
                       <object class="GtkStackPage">
+                        <property name="name">clipboard</property>
+                        <property name="child">
+                          <object class="GtkBox"/>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStackPage">
                         <property name="name">statistics</property>
                         <property name="child">
                           <object class="GtkToggleButton" id="record_statistics_button">
@@ -556,6 +564,16 @@
                         <property name="child">
                           <object class="GtkInspectorResourceList">
                             <property name="buttons">resource_buttons</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">clipboard</property>
+                        <property name="title" translatable="yes">Clipboard</property>
+                        <property name="child">
+                          <object class="GtkInspectorClipboard" id="clipboard">
                           </object>
                         </property>
                       </object>
