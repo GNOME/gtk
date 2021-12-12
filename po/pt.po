@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-03 22:52+0000\n"
-"PO-Revision-Date: 2021-12-04 19:45+0000\n"
+"POT-Creation-Date: 2021-12-12 12:57+0000\n"
+"PO-Revision-Date: 2021-12-12 16:25+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -138,7 +138,7 @@ msgstr "Aplicação não suporta API %s"
 msgid "Trying to use %s, but %s is already in use"
 msgstr "A tentar usar %s, mas %s já está em uso"
 
-#: gdk/gdksurface.c:1235
+#: gdk/gdksurface.c:1238
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Suporte a Vulkan desativado via GDK_DEBUG"
 
@@ -3441,7 +3441,7 @@ msgid "Swipe right"
 msgstr "Deslizar para a direita"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:490
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Atalhos"
 
@@ -3587,6 +3587,33 @@ msgstr "Tipo de parâmetro"
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "Estado"
+
+#: gtk/inspector/clipboard.c:149
+msgid "Show"
+msgstr "Mostrar"
+
+#: gtk/inspector/clipboard.c:205
+msgctxt "clipboard"
+msgid "empty"
+msgstr "vazio"
+
+#: gtk/inspector/clipboard.c:210
+msgctxt "clipboard"
+msgid "local"
+msgstr "local"
+
+#: gtk/inspector/clipboard.c:212
+msgctxt "clipboard"
+msgid "remote"
+msgstr "remoto"
+
+#: gtk/inspector/clipboard.ui:31 gtk/inspector/window.ui:574
+msgid "Clipboard"
+msgstr "Área de transferência"
+
+#: gtk/inspector/clipboard.ui:70
+msgid "Primary"
+msgstr "Principal"
 
 #: gtk/inspector/controllers.c:126
 msgctxt "event phase"
@@ -3823,7 +3850,7 @@ msgstr "Surpefície"
 
 #: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
 #: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1116
-#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:388
+#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Propriedades"
 
@@ -4220,111 +4247,111 @@ msgstr "Mostrar todos os objetos"
 msgid "Show all Resources"
 msgstr "Mostrar todos os recursos"
 
-#: gtk/inspector/window.ui:139
+#: gtk/inspector/window.ui:147
 msgid "Collect Statistics"
 msgstr "Colecionar estatísticas"
 
-#: gtk/inspector/window.ui:191
+#: gtk/inspector/window.ui:199
 msgid "Objects"
 msgstr "Objetos"
 
-#: gtk/inspector/window.ui:223
+#: gtk/inspector/window.ui:231
 msgid "Toggle Sidebar"
 msgstr "Ativar/desativar barra lateral"
 
-#: gtk/inspector/window.ui:245
+#: gtk/inspector/window.ui:253
 msgid "Refresh action state"
 msgstr "Atualizar estado de ação"
 
-#: gtk/inspector/window.ui:319
+#: gtk/inspector/window.ui:327
 msgid "Previous object"
 msgstr "Objeto anterior"
 
-#: gtk/inspector/window.ui:326
+#: gtk/inspector/window.ui:334
 msgid "Child object"
 msgstr "Objeto secundário"
 
-#: gtk/inspector/window.ui:333
+#: gtk/inspector/window.ui:341
 msgid "Previous sibling"
 msgstr "Irmão anterior"
 
-#: gtk/inspector/window.ui:339
+#: gtk/inspector/window.ui:347
 msgid "List Position"
 msgstr "Lista posição"
 
-#: gtk/inspector/window.ui:348
+#: gtk/inspector/window.ui:356
 msgid "Next sibling"
 msgstr "Próximo irmão"
 
-#: gtk/inspector/window.ui:378
+#: gtk/inspector/window.ui:386
 msgid "Miscellaneous"
 msgstr "Vários"
 
-#: gtk/inspector/window.ui:399
+#: gtk/inspector/window.ui:407
 msgid "Layout"
 msgstr "Disposição"
 
-#: gtk/inspector/window.ui:410
+#: gtk/inspector/window.ui:418
 msgid "CSS Nodes"
 msgstr "CSS Nodes"
 
-#: gtk/inspector/window.ui:421
+#: gtk/inspector/window.ui:429
 msgid "Size Groups"
 msgstr "Grupos de tamanho"
 
-#: gtk/inspector/window.ui:430 gtk/inspector/window.ui:439
+#: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"
 msgstr "Dados"
 
-#: gtk/inspector/window.ui:449
+#: gtk/inspector/window.ui:457
 msgid "Actions"
 msgstr "Ações"
 
-#: gtk/inspector/window.ui:460
+#: gtk/inspector/window.ui:468
 msgid "Menu"
 msgstr "Menu"
 
-#: gtk/inspector/window.ui:469
+#: gtk/inspector/window.ui:477
 msgid "Controllers"
 msgstr "Controladores"
 
-#: gtk/inspector/window.ui:479
+#: gtk/inspector/window.ui:487
 msgid "Magnifier"
 msgstr "Lupa"
 
-#: gtk/inspector/window.ui:500
+#: gtk/inspector/window.ui:508
 msgid "Accessibility"
 msgstr "Acessibilidade"
 
-#: gtk/inspector/window.ui:524
+#: gtk/inspector/window.ui:532
 msgid "Global"
 msgstr "Global"
 
-#: gtk/inspector/window.ui:537
+#: gtk/inspector/window.ui:545
 msgid "Information"
 msgstr "Informação"
 
-#: gtk/inspector/window.ui:546
+#: gtk/inspector/window.ui:554
 msgid "Settings"
 msgstr "Definições"
 
-#: gtk/inspector/window.ui:555
+#: gtk/inspector/window.ui:563
 msgid "Resources"
 msgstr "Recursos"
 
-#: gtk/inspector/window.ui:566
+#: gtk/inspector/window.ui:584
 msgid "Statistics"
 msgstr "Estatísticas"
 
-#: gtk/inspector/window.ui:577
+#: gtk/inspector/window.ui:595
 msgid "Logging"
 msgstr "A registar"
 
-#: gtk/inspector/window.ui:592
+#: gtk/inspector/window.ui:610
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:601
+#: gtk/inspector/window.ui:619
 msgid "Recorder"
 msgstr "Gravador"
 
@@ -8573,9 +8600,6 @@ msgstr ""
 
 #~ msgid "Unexpected character data on line %d char %d"
 #~ msgstr "Dados de carácter inesperados na linha %d, carácter %d"
-
-#~ msgid "Empty"
-#~ msgstr "Vazio"
 
 #~ msgid "C_redits"
 #~ msgstr "C_réditos"
