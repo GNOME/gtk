@@ -14,7 +14,7 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="label">“Copy” will copy the selected data the clipboard, “Paste” will present the current clipboard contents</property>
+            <property name="label">“Copy” will copy the selected data the clipboard, “Paste” will show the current clipboard contents. You can also drag the data to the bottom.</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">40</property>
           </object>
@@ -84,6 +84,11 @@
                           <object class="GtkToggleButton" id="image_rose">
                             <property name="active">1</property>
                             <child>
+                              <object class="GtkDragSource">
+                                <signal name="prepare" handler="drag_prepare"/>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkImage">
                                 <style>
                                   <class name="large-icons"/>
@@ -97,6 +102,11 @@
                           <object class="GtkToggleButton" id="image_floppy">
                             <property name="group">image_rose</property>
                             <child>
+                              <object class="GtkDragSource">
+                                <signal name="prepare" handler="drag_prepare"/>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkImage">
                                 <style>
                                   <class name="large-icons"/>
@@ -109,6 +119,11 @@
                         <child>
                           <object class="GtkToggleButton" id="image_logo">
                             <property name="group">image_floppy</property>
+                            <child>
+                              <object class="GtkDragSource">
+                                <signal name="prepare" handler="drag_prepare"/>
+                              </object>
+                            </child>
                             <child>
                               <object class="GtkImage">
                                 <style>
@@ -128,6 +143,12 @@
                     <property name="name">File</property>
                     <property name="child">
                       <object class="GtkButton" id="source_file">
+                        <child>
+                          <object class="GtkDragSource">
+                            <property name="propagation-phase">capture</property>
+                            <signal name="prepare" handler="drag_prepare"/>
+                          </object>
+                        </child>
                         <property name="valign">center</property>
                         <property name="child">
                           <object class="GtkLabel">
@@ -160,6 +181,13 @@
         <child>
           <object class="GtkBox">
             <property name="spacing">12</property>
+            <child>
+              <object class="GtkDropTarget">
+                <property name="actions">copy</property>
+                <property name="formats">GdkTexture GdkPaintable GFile GdkRGBA gchararray</property>
+                <signal name="drop" handler="on_drop" object="dest_stack"/>
+              </object>
+            </child>
             <child>
               <object class="GtkButton" id="paste_button">
                 <property name="label" translatable="yes">_Paste</property>
