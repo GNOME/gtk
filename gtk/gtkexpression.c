@@ -124,7 +124,7 @@
  *
  * `GtkBuilder` has support for creating expressions. The syntax here can be used where
  * a `GtkExpression` object is needed like in a `<property>` tag for an expression
- * property, or in a `<binding>` tag to bind a property to an expression.
+ * property, or in a `<binding name="property">` tag to bind a property to an expression.
  *
  * To create an property expression, use the `<lookup>` element. It can have a `type`
  * attribute to specify the object type, and a `name` attribute to specify the property
