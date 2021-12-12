@@ -15,6 +15,7 @@
     <file>demo.ui</file>
   </gresource>
   <gresource prefix="/clipboard">
+    <file>clipboard.ui</file>
     <file>demoimage.c</file>
     <file>demoimage.h</file>
   </gresource>
