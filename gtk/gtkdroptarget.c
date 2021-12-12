@@ -80,6 +80,7 @@
  *     GDK_TYPE_PIXBUF,
  *   }, 2);
  *
+ *   g_signal_connect (target, "drop", G_CALLBACK (on_drop), self);
  *   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (target));
  * }
  * ```
@@ -303,7 +304,7 @@ gtk_drop_target_load (GtkDropTarget *self)
 
   self->cancellable = g_cancellable_new ();
 
-  gdk_drop_read_value_async (self->drop, 
+  gdk_drop_read_value_async (self->drop,
                              type,
                              G_PRIORITY_DEFAULT,
                              self->cancellable,
@@ -355,13 +356,13 @@ make_action_unique (GdkDragAction actions)
 
   if (actions & GDK_ACTION_MOVE)
     return GDK_ACTION_MOVE;
-  
+
   if (actions & GDK_ACTION_LINK)
     return GDK_ACTION_LINK;
 
   return 0;
 }
-  
+
 static GdkDragAction
 gtk_drop_target_enter (GtkDropTarget  *self,
                        double          x,
@@ -370,7 +371,7 @@ gtk_drop_target_enter (GtkDropTarget  *self,
   return make_action_unique (self->actions & gdk_drop_get_actions (self->drop));
 }
 
-static GdkDragAction         
+static GdkDragAction
 gtk_drop_target_motion (GtkDropTarget  *self,
                         double          x,
                         double          y)
@@ -900,7 +901,7 @@ GdkContentFormats *
 gtk_drop_target_get_formats (GtkDropTarget *self)
 {
   g_return_val_if_fail (GTK_IS_DROP_TARGET (self), NULL);
-  
+
   return self->formats;
 }
 
@@ -929,7 +930,7 @@ gtk_drop_target_set_gtypes (GtkDropTarget *self,
   builder = gdk_content_formats_builder_new ();
   for (i = 0; i < n_types; i++)
     gdk_content_formats_builder_add_gtype (builder, types[i]);
-  
+
   self->formats = gdk_content_formats_builder_free_to_formats (builder);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FORMATS]);
@@ -970,7 +971,7 @@ gtk_drop_target_set_actions (GtkDropTarget *self,
                              GdkDragAction  actions)
 {
   g_return_if_fail (GTK_IS_DROP_TARGET (self));
-  
+
   if (self->actions == actions)
     return;
 
@@ -1007,7 +1008,7 @@ gtk_drop_target_set_preload (GtkDropTarget *self,
                              gboolean       preload)
 {
   g_return_if_fail (GTK_IS_DROP_TARGET (self));
-  
+
   if (self->preload == preload)
     return;
 
