@@ -180,6 +180,7 @@
             <child>
               <object class="GtkStack" id="dest_stack">
                 <property name="halign">end</property>
+                <property name="valign">center</property>
                 <child>
                   <object class="GtkStackPage">
                     <property name="name"></property>
@@ -195,6 +196,7 @@
                     <property name="child">
                       <object class="GtkLabel">
                         <property name="halign">end</property>
+                        <property name="valign">center</property>
                         <property name="xalign">0</property>
                         <property name="ellipsize">end</property>
                       </object>
@@ -207,6 +209,7 @@
                     <property name="child">
                       <object class="GtkImage">
                         <property name="halign">end</property>
+                        <property name="valign">center</property>
                         <style>
                           <class name="large-icons"/>
                         </style>
@@ -220,6 +223,7 @@
                     <property name="child">
                       <object class="GtkBox">
                         <property name="halign">end</property>
+                        <property name="valign">center</property>
                         <child>
                           <object class="GtkColorSwatch">
                             <property name="accessible-role">img</property>
@@ -238,6 +242,7 @@
                     <property name="child">
                       <object class="GtkLabel">
                         <property name="halign">end</property>
+                        <property name="valign">center</property>
                         <property name="xalign">0</property>
                         <property name="hexpand">1</property>
                         <property name="ellipsize">start</property>

@@ -35,7 +35,12 @@ copy_button_clicked (GtkStack *source_stack,
           if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (child)))
             {
               GtkWidget *image = gtk_widget_get_first_child (child);
-              gdk_clipboard_set (clipboard, GDK_TYPE_PAINTABLE, gtk_image_get_paintable (GTK_IMAGE (image)));
+              GdkPaintable *paintable = gtk_image_get_paintable (GTK_IMAGE (image));
+
+              if (GDK_IS_TEXTURE (paintable))
+                gdk_clipboard_set (clipboard, GDK_TYPE_TEXTURE, paintable);
+              else
+                gdk_clipboard_set (clipboard, GDK_TYPE_PAINTABLE, paintable);
               break;
             }
         }
@@ -93,7 +98,8 @@ paste_received (GObject      *source_object,
           color = g_value_get_boxed (value);
           g_object_set (child, "rgba", color, NULL);
         }
-      else if (G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE))
+      else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE) ||
+               G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE))
         {
           GdkPaintable *paintable;
 
@@ -128,12 +134,14 @@ paste_button_clicked (GtkStack *dest_stack,
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (dest_stack));
   formats = gdk_clipboard_get_formats (clipboard);
 
-  if (gdk_content_formats_contain_gtype (formats, G_TYPE_FILE))
-    gdk_clipboard_read_value_async (clipboard, G_TYPE_FILE, 0, NULL, paste_received, dest_stack);
-  else if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_RGBA))
-    gdk_clipboard_read_value_async (clipboard, GDK_TYPE_RGBA, 0, NULL, paste_received, dest_stack);
+  if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_TEXTURE))
+    gdk_clipboard_read_value_async (clipboard, GDK_TYPE_TEXTURE, 0, NULL, paste_received, dest_stack);
   else if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_PAINTABLE))
     gdk_clipboard_read_value_async (clipboard, GDK_TYPE_PAINTABLE, 0, NULL, paste_received, dest_stack);
+  else if (gdk_content_formats_contain_gtype (formats, GDK_TYPE_RGBA))
+    gdk_clipboard_read_value_async (clipboard, GDK_TYPE_RGBA, 0, NULL, paste_received, dest_stack);
+  else if (gdk_content_formats_contain_gtype (formats, G_TYPE_FILE))
+    gdk_clipboard_read_value_async (clipboard, G_TYPE_FILE, 0, NULL, paste_received, dest_stack);
   else if (gdk_content_formats_contain_gtype (formats, G_TYPE_STRING))
     gdk_clipboard_read_value_async (clipboard, G_TYPE_STRING, 0, NULL, paste_received, dest_stack);
 }
@@ -240,6 +248,7 @@ update_paste_button_sensitivity (GdkClipboard *clipboard,
 
   if (gdk_content_formats_contain_gtype (formats, G_TYPE_FILE) ||
       gdk_content_formats_contain_gtype (formats, GDK_TYPE_RGBA) ||
+      gdk_content_formats_contain_gtype (formats, GDK_TYPE_TEXTURE) ||
       gdk_content_formats_contain_gtype (formats, GDK_TYPE_PAINTABLE) ||
       gdk_content_formats_contain_gtype (formats, G_TYPE_STRING))
     sensitive = TRUE;
