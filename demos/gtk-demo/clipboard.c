@@ -2,6 +2,9 @@
  *
  * GdkClipboard is used for clipboard handling. This demo shows how to
  * copy and paste text, images, colors or files to and from the clipboard.
+ *
+ * You can also use Drag-And-Drop to copy the data from the source to the
+ * target.
  */
 
 #include <glib/gi18n.h>
@@ -63,6 +66,52 @@ copy_button_clicked (GtkStack *source_stack,
 }
 
 static void
+present_value (GtkStack     *dest_stack,
+               const GValue *value)
+{
+  GtkWidget *child;
+
+  if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+    {
+      GFile *file;
+
+      gtk_stack_set_visible_child_name (dest_stack, "File");
+      child = gtk_stack_get_visible_child (dest_stack);
+
+      file = g_value_get_object (value);
+      g_object_set (child, "label", g_file_peek_path (file), NULL);
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
+    {
+      GdkRGBA *color;
+
+      gtk_stack_set_visible_child_name (dest_stack, "Color");
+      child = gtk_widget_get_first_child (gtk_stack_get_visible_child (dest_stack));
+
+      color = g_value_get_boxed (value);
+      g_object_set (child, "rgba", color, NULL);
+    }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE) ||
+           G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE))
+    {
+      GdkPaintable *paintable;
+
+      gtk_stack_set_visible_child_name (dest_stack, "Image");
+      child = gtk_stack_get_visible_child (dest_stack);
+
+      paintable = g_value_get_object (value);
+      g_object_set (child, "paintable", paintable, NULL);
+    }
+  else if (G_VALUE_HOLDS (value, G_TYPE_STRING))
+    {
+      gtk_stack_set_visible_child_name (dest_stack, "Text");
+      child = gtk_stack_get_visible_child (dest_stack);
+
+      gtk_label_set_label (GTK_LABEL (child), g_value_get_string (value));
+    }
+}
+
+static void
 paste_received (GObject      *source_object,
                 GAsyncResult *result,
                 gpointer      user_data)
@@ -71,51 +120,13 @@ paste_received (GObject      *source_object,
   GdkClipboard *clipboard;
   const GValue *value;
   GError *error = NULL;
-  GtkWidget *child;
 
   clipboard = GDK_CLIPBOARD (source_object);
 
   value = gdk_clipboard_read_value_finish (clipboard, result, &error);
   if (value)
     {
-      if (G_VALUE_HOLDS (value, G_TYPE_FILE))
-        {
-          GFile *file;
-
-          gtk_stack_set_visible_child_name (dest_stack, "File");
-          child = gtk_stack_get_visible_child (dest_stack);
-
-          file = g_value_get_object (value);
-          g_object_set (child, "label", g_file_peek_path (file), NULL);
-        }
-      else if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
-        {
-          GdkRGBA *color;
-
-          gtk_stack_set_visible_child_name (dest_stack, "Color");
-          child = gtk_widget_get_first_child (gtk_stack_get_visible_child (dest_stack));
-
-          color = g_value_get_boxed (value);
-          g_object_set (child, "rgba", color, NULL);
-        }
-      else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE) ||
-               G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE))
-        {
-          GdkPaintable *paintable;
-
-          gtk_stack_set_visible_child_name (dest_stack, "Image");
-          child = gtk_stack_get_visible_child (dest_stack);
-
-          paintable = g_value_get_object (value);
-          g_object_set (child, "paintable", paintable, NULL);
-        }
-      else if (G_VALUE_HOLDS (value, G_TYPE_STRING))
-        {
-          gtk_stack_set_visible_child_name (dest_stack, "Text");
-          child = gtk_stack_get_visible_child (dest_stack);
-
-          gtk_label_set_label (GTK_LABEL (child), g_value_get_string (value));
-        }
+      present_value (dest_stack, value);
     }
   else
     {
@@ -264,6 +275,60 @@ unset_clipboard_handler (gpointer data)
   g_signal_handlers_disconnect_by_func (clipboard, update_paste_button_sensitivity, data);
 }
 
+static gboolean
+on_drop (GtkStack      *dest_stack,
+         const GValue  *value,
+         double         x,
+         double         y,
+         gpointer       data)
+{
+  present_value (dest_stack, value);
+  return TRUE;
+}
+
+static GdkContentProvider *
+drag_prepare (GtkDragSource *drag_source,
+              double         x,
+              double         y,
+              gpointer       data)
+{
+  GtkWidget *button;
+  GValue value = G_VALUE_INIT;
+
+  button = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (drag_source));
+
+  if (GTK_IS_TOGGLE_BUTTON (button))
+    {
+      GtkWidget *image = gtk_widget_get_first_child (button);
+      GdkPaintable *paintable = gtk_image_get_paintable (GTK_IMAGE (image));
+
+      if (GDK_IS_TEXTURE (paintable))
+        {
+          g_value_init (&value, GDK_TYPE_TEXTURE);
+          g_value_set_object (&value, paintable);
+        }
+      else
+        {
+          g_value_init (&value, GDK_TYPE_PAINTABLE);
+          g_value_set_object (&value, paintable);
+        }
+    }
+  else
+    {
+      GFile *file = g_object_get_data (G_OBJECT (button), "file");
+
+      if (file)
+        {
+          g_value_init (&value, G_TYPE_FILE);
+          g_value_set_object (&value, file);
+        }
+      else
+        return NULL;
+    }
+
+  return gdk_content_provider_new_for_value (&value);
+}
+
 GtkWidget *
 do_clipboard (GtkWidget *do_widget)
 {
@@ -273,9 +338,7 @@ do_clipboard (GtkWidget *do_widget)
     {
       GtkBuilderScope *scope;
       GtkBuilder *builder;
-      GObject *copy_button;
-      GObject *source_stack;
-      GtkWidget *paste_button;
+      GtkWidget *button;
 
       scope = gtk_builder_cscope_new ();
       gtk_builder_cscope_add_callback_symbols (GTK_BUILDER_CSCOPE (scope),
@@ -284,6 +347,8 @@ do_clipboard (GtkWidget *do_widget)
                                                "source_changed_cb", G_CALLBACK (source_changed_cb),
                                                "text_changed_cb", G_CALLBACK (text_changed_cb),
                                                "open_file_cb", G_CALLBACK (open_file_cb),
+                                               "on_drop", G_CALLBACK (on_drop),
+                                               "drag_prepare", G_CALLBACK (drag_prepare),
                                                NULL);
 
       builder = gtk_builder_new ();
@@ -294,14 +359,13 @@ do_clipboard (GtkWidget *do_widget)
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
       gtk_window_set_display (GTK_WINDOW (window), gtk_widget_get_display (do_widget));
 
-      copy_button = gtk_builder_get_object (builder, "copy_button");
-      source_stack = gtk_builder_get_object (builder, "source_stack");
-      g_object_set_data (source_stack, "copy-button", copy_button);
+      button = GTK_WIDGET (gtk_builder_get_object (builder, "copy_button"));
+      g_object_set_data (gtk_builder_get_object (builder, "source_stack"), "copy-button", button);
 
-      paste_button = GTK_WIDGET (gtk_builder_get_object (builder, "paste_button"));
-      g_signal_connect (gtk_widget_get_clipboard (paste_button), "changed",
-                        G_CALLBACK (update_paste_button_sensitivity), paste_button);
-      g_object_set_data_full (G_OBJECT (paste_button), "clipboard-handler", paste_button, unset_clipboard_handler);
+      button = GTK_WIDGET (gtk_builder_get_object (builder, "paste_button"));
+      g_signal_connect (gtk_widget_get_clipboard (button), "changed",
+                        G_CALLBACK (update_paste_button_sensitivity), button);
+      g_object_set_data_full (G_OBJECT (button), "clipboard-handler", button, unset_clipboard_handler);
 
       g_object_unref (builder);
       g_object_unref (scope);
