@@ -94,6 +94,7 @@ examples/plugman.c
 gtk/inspector/a11y.ui
 gtk/inspector/actions.ui
 gtk/inspector/actions.ui.h
+gtk/inspector/clipboard.ui
 gtk/inspector/css-editor.ui
 gtk/inspector/css-editor.ui.h
 gtk/inspector/css-node-tree.ui
