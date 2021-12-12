@@ -54,7 +54,7 @@
 
 typedef struct _Serializer Serializer;
 
-struct _Serializer 
+struct _Serializer
 {
   const char *                    mime_type; /* interned */
   GType                           type;
@@ -446,7 +446,7 @@ lookup_serializer (const char *mime_type,
           serializer->type == type)
         return serializer;
     }
-  
+
   return NULL;
 }
 
@@ -630,7 +630,7 @@ pixbuf_serializer (GdkContentSerializer *serializer)
   const GValue *value;
   GdkPixbuf *pixbuf;
   const char *name;
-  
+
   name = gdk_content_serializer_get_user_data (serializer);
   value = gdk_content_serializer_get_value (serializer);
 
@@ -651,7 +651,7 @@ pixbuf_serializer (GdkContentSerializer *serializer)
   gdk_pixbuf_save_to_stream_async (pixbuf,
                                    gdk_content_serializer_get_output_stream (serializer),
                                    name,
-				   gdk_content_serializer_get_cancellable (serializer),
+                                   gdk_content_serializer_get_cancellable (serializer),
                                    pixbuf_serializer_finish,
                                    serializer,
                                    g_str_equal (name, "png") ? "compression" : NULL, "2",
@@ -823,7 +823,7 @@ file_uri_serializer (GdkContentSerializer *serializer)
   else if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
     {
       GSList *l;
-      
+
       for (l = g_value_get_boxed (value); l; l = l->next)
         {
           uri = g_file_get_uri (l->data);
@@ -867,7 +867,7 @@ file_text_serializer (GdkContentSerializer *serializer)
     {
       GString *str;
       GSList *l;
-      
+
       str = g_string_new (NULL);
 
       for (l = g_value_get_boxed (value); l; l = l->next)
@@ -965,25 +965,6 @@ init (void)
                                    NULL, NULL);
 
   formats = gdk_pixbuf_get_formats ();
-
-  /* Make sure png comes first */
-  for (f = formats; f; f = f->next)
-    {
-      GdkPixbufFormat *fmt = f->data;
-      char *name;
-
-      name = gdk_pixbuf_format_get_name (fmt);
-      if (g_str_equal (name, "png"))
-        {
-          formats = g_slist_delete_link (formats, f);
-          formats = g_slist_prepend (formats, fmt);
-
-          g_free (name);
-          break;
-        }
-
-      g_free (name);
-    }
 
   for (f = formats; f; f = f->next)
     {

@@ -24,6 +24,9 @@
 #include "gtkbinlayout.h"
 #include "gtklabel.h"
 #include "gtkpicture.h"
+#include "gtkcolorswatchprivate.h"
+#include "gtkbox.h"
+
 
 struct _GtkDataViewer
 {
@@ -257,6 +260,47 @@ gtk_data_viewer_load_value (GtkDataViewer *self,
       self->contents = gtk_picture_new_for_paintable (g_value_get_object (value));
       gtk_widget_set_size_request (self->contents, 256, 256);
       gtk_widget_set_parent (self->contents, GTK_WIDGET (self));
+    }
+  else if (g_type_is_a (G_VALUE_TYPE (value), GDK_TYPE_PIXBUF))
+    {
+      self->contents = gtk_picture_new_for_pixbuf (g_value_get_object (value));
+      gtk_widget_set_size_request (self->contents, 256, 256);
+      gtk_widget_set_parent (self->contents, GTK_WIDGET (self));
+    }
+  else if (g_type_is_a (G_VALUE_TYPE (value), GDK_TYPE_RGBA))
+    {
+      const GdkRGBA *color = g_value_get_boxed (value);
+
+      self->contents = gtk_color_swatch_new ();
+      gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (self->contents), color);
+      gtk_widget_set_size_request (self->contents, 48, 32);
+      gtk_widget_set_halign (self->contents, GTK_ALIGN_CENTER);
+      gtk_widget_set_parent (self->contents, GTK_WIDGET (self));
+    }
+  else if (g_type_is_a (G_VALUE_TYPE (value), G_TYPE_FILE))
+    {
+      GFile *file = g_value_get_object (value);
+
+      self->contents = gtk_label_new (g_file_peek_path (file));
+      gtk_label_set_ellipsize (GTK_LABEL (self->contents), PANGO_ELLIPSIZE_START);
+      gtk_widget_set_halign (self->contents, GTK_ALIGN_CENTER);
+      gtk_widget_set_parent (self->contents, GTK_WIDGET (self));
+    }
+  else if (g_type_is_a (G_VALUE_TYPE (value), GDK_TYPE_FILE_LIST))
+    {
+      GList *l;
+
+      self->contents = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+      gtk_widget_set_parent (self->contents, GTK_WIDGET (self));
+
+      for (l = g_value_get_boxed (value); l; l = l->next)
+        {
+          GFile *file = l->data;
+          GtkWidget *label = gtk_label_new (g_file_peek_path (file));
+          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_START);
+          gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+          gtk_box_append (GTK_BOX (self->contents), label);
+        }
     }
   else
     {
