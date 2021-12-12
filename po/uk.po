@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-03 22:52+0000\n"
-"PO-Revision-Date: 2021-12-04 18:45+0200\n"
+"POT-Creation-Date: 2021-12-12 12:57+0000\n"
+"PO-Revision-Date: 2021-12-12 19:17+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -138,7 +138,7 @@ msgstr "У програмі не передбачено підтримки пр�
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Намагаємося скористатися %s, але %s вже використано"
 
-#: gdk/gdksurface.c:1235
+#: gdk/gdksurface.c:1238
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Вимкнено підтримування Vulkan через GDK_DEBUG"
 
@@ -3439,7 +3439,7 @@ msgid "Swipe right"
 msgstr "Проведення праворуч"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:490
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Скорочення"
 
@@ -3586,6 +3586,39 @@ msgstr "Тип параметра"
 msgid "State"
 msgstr "Стан"
 
+#: gtk/inspector/clipboard.c:149
+#| msgid "Show All"
+msgid "Show"
+msgstr "Показати"
+
+#: gtk/inspector/clipboard.c:205
+msgctxt "clipboard"
+msgid "empty"
+msgstr ""
+"порожній"
+
+#: gtk/inspector/clipboard.c:210
+msgctxt "clipboard"
+msgid "local"
+msgstr ""
+"локальний"
+
+#: gtk/inspector/clipboard.c:212
+msgctxt "clipboard"
+msgid "remote"
+msgstr ""
+"віддалений"
+
+#: gtk/inspector/clipboard.ui:31 gtk/inspector/window.ui:574
+#| msgid "Copy to clipboard"
+msgid "Clipboard"
+msgstr "Буфер обміну"
+
+#: gtk/inspector/clipboard.ui:70
+msgid "Primary"
+msgstr ""
+"Основний"
+
 #: gtk/inspector/controllers.c:126
 msgctxt "event phase"
 msgid "None"
@@ -3692,7 +3725,6 @@ msgid "None"
 msgstr "Немає"
 
 #: gtk/inspector/general.c:771
-#| msgid "Theme is hardcoded by GTK_THEME"
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст способу введення жорстко встановлено у GTK_IM_MODULE"
 
@@ -3718,8 +3750,7 @@ msgstr "Мультимедійний модуль"
 
 #: gtk/inspector/general.ui:162
 msgid "Input Method"
-msgstr ""
-"Спосіб введення"
+msgstr "Спосіб введення"
 
 #: gtk/inspector/general.ui:201
 msgid "Prefix"
@@ -3820,7 +3851,7 @@ msgstr "Поверхня"
 
 #: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
 #: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1116
-#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:388
+#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Властивості"
 
@@ -4217,111 +4248,111 @@ msgstr "Показати всі об'єкти"
 msgid "Show all Resources"
 msgstr "Показати всі ресурси"
 
-#: gtk/inspector/window.ui:139
+#: gtk/inspector/window.ui:147
 msgid "Collect Statistics"
 msgstr "Збирати статистику"
 
-#: gtk/inspector/window.ui:191
+#: gtk/inspector/window.ui:199
 msgid "Objects"
 msgstr "Об'єкти"
 
-#: gtk/inspector/window.ui:223
+#: gtk/inspector/window.ui:231
 msgid "Toggle Sidebar"
 msgstr "Увімкнути або вимкнути бічну панель"
 
-#: gtk/inspector/window.ui:245
+#: gtk/inspector/window.ui:253
 msgid "Refresh action state"
 msgstr "Оновити стан дії"
 
-#: gtk/inspector/window.ui:319
+#: gtk/inspector/window.ui:327
 msgid "Previous object"
 msgstr "Попередній об'єкт"
 
-#: gtk/inspector/window.ui:326
+#: gtk/inspector/window.ui:334
 msgid "Child object"
 msgstr "Дочірній об'єкт"
 
-#: gtk/inspector/window.ui:333
+#: gtk/inspector/window.ui:341
 msgid "Previous sibling"
 msgstr "Попередній споріднений об'єкт"
 
-#: gtk/inspector/window.ui:339
+#: gtk/inspector/window.ui:347
 msgid "List Position"
 msgstr "Позиція у списку"
 
-#: gtk/inspector/window.ui:348
+#: gtk/inspector/window.ui:356
 msgid "Next sibling"
 msgstr "Наступний споріднений об'єкт"
 
-#: gtk/inspector/window.ui:378
+#: gtk/inspector/window.ui:386
 msgid "Miscellaneous"
 msgstr "Додатково"
 
-#: gtk/inspector/window.ui:399
+#: gtk/inspector/window.ui:407
 msgid "Layout"
 msgstr "Компонування"
 
-#: gtk/inspector/window.ui:410
+#: gtk/inspector/window.ui:418
 msgid "CSS Nodes"
 msgstr "Вузли CSS"
 
-#: gtk/inspector/window.ui:421
+#: gtk/inspector/window.ui:429
 msgid "Size Groups"
 msgstr "Групи розмірів"
 
-#: gtk/inspector/window.ui:430 gtk/inspector/window.ui:439
+#: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"
 msgstr "Дата"
 
-#: gtk/inspector/window.ui:449
+#: gtk/inspector/window.ui:457
 msgid "Actions"
 msgstr "Дії"
 
-#: gtk/inspector/window.ui:460
+#: gtk/inspector/window.ui:468
 msgid "Menu"
 msgstr "Меню"
 
-#: gtk/inspector/window.ui:469
+#: gtk/inspector/window.ui:477
 msgid "Controllers"
 msgstr "Контролери"
 
-#: gtk/inspector/window.ui:479
+#: gtk/inspector/window.ui:487
 msgid "Magnifier"
 msgstr "Лупа"
 
-#: gtk/inspector/window.ui:500
+#: gtk/inspector/window.ui:508
 msgid "Accessibility"
 msgstr "Доступність"
 
-#: gtk/inspector/window.ui:524
+#: gtk/inspector/window.ui:532
 msgid "Global"
 msgstr "Загальна"
 
-#: gtk/inspector/window.ui:537
+#: gtk/inspector/window.ui:545
 msgid "Information"
 msgstr "Інформація"
 
-#: gtk/inspector/window.ui:546
+#: gtk/inspector/window.ui:554
 msgid "Settings"
 msgstr "Параметри"
 
-#: gtk/inspector/window.ui:555
+#: gtk/inspector/window.ui:563
 msgid "Resources"
 msgstr "Ресурси"
 
-#: gtk/inspector/window.ui:566
+#: gtk/inspector/window.ui:584
 msgid "Statistics"
 msgstr "Статистика"
 
-#: gtk/inspector/window.ui:577
+#: gtk/inspector/window.ui:595
 msgid "Logging"
 msgstr "Журналювання"
 
-#: gtk/inspector/window.ui:592
+#: gtk/inspector/window.ui:610
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:601
+#: gtk/inspector/window.ui:619
 msgid "Recorder"
 msgstr "Записувач"
 
