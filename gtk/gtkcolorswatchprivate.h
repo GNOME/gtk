@@ -42,6 +42,8 @@ void        gtk_color_swatch_set_hsva         (GtkColorSwatch *swatch,
                                                double          a);
 void        gtk_color_swatch_set_can_drop     (GtkColorSwatch *swatch,
                                                gboolean        can_drop);
+void        gtk_color_swatch_set_can_drag     (GtkColorSwatch *swatch,
+                                               gboolean        can_drag);
 void        gtk_color_swatch_set_icon         (GtkColorSwatch *swatch,
                                                const char     *icon);
 void        gtk_color_swatch_set_use_alpha    (GtkColorSwatch *swatch,
