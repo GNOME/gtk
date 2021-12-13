@@ -546,6 +546,8 @@ gtk_drag_icon_create_widget_for_value (const GValue *value)
       GtkWidget *swatch;
 
       swatch = gtk_color_swatch_new ();
+      gtk_color_swatch_set_can_drag (GTK_COLOR_SWATCH (swatch), FALSE);
+      gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (swatch), FALSE);
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (swatch), g_value_get_boxed (value));
 
       return swatch;
