@@ -77,10 +77,29 @@ print_atoms (GdkX11Clipboard *cb,
 }
 
 static void
+gdk_x11_clipboard_default_output_closed (GObject      *stream,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  GError *error = NULL;
+
+  if (!g_output_stream_close_finish (G_OUTPUT_STREAM (stream), result, &error))
+    {
+      GDK_NOTE (CLIPBOARD,
+                g_printerr ("-------: failed to close stream: %s\n",
+                            error->message));
+      g_error_free (error);
+    }
+
+  g_object_unref (stream);
+}
+
+static void
 gdk_x11_clipboard_default_output_done (GObject      *clipboard,
                                        GAsyncResult *result,
                                        gpointer      user_data)
 {
+  GOutputStream *stream = user_data;
   GError *error = NULL;
 
   if (!gdk_clipboard_write_finish (GDK_CLIPBOARD (clipboard), result, &error))
@@ -90,6 +109,12 @@ gdk_x11_clipboard_default_output_done (GObject      *clipboard,
                             GDK_X11_CLIPBOARD (clipboard)->selection, error->message));
       g_error_free (error);
     }
+
+  g_output_stream_close_async (stream,
+                               G_PRIORITY_DEFAULT,
+                               NULL, 
+                               gdk_x11_clipboard_default_output_closed,
+                               NULL);
 }
 
 static void
@@ -103,8 +128,7 @@ gdk_x11_clipboard_default_output_handler (GOutputStream   *stream,
                              G_PRIORITY_DEFAULT,
                              NULL,
                              gdk_x11_clipboard_default_output_done,
-                             NULL);
-  g_object_unref (stream);
+                             stream);
 }
 
 static GInputStream * 
