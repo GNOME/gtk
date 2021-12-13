@@ -57,6 +57,7 @@ struct _GdkX11SelectionOutputStreamPrivate {
   GTask *pending_task;
 
   guint incr : 1;
+  guint sent_end_of_stream : 1;
   guint delete_pending : 1; /* owns a reference */
 };
 
@@ -176,11 +177,15 @@ gdk_x11_selection_output_stream_needs_flush_unlocked (GdkX11SelectionOutputStrea
 {
   GdkX11SelectionOutputStreamPrivate *priv = gdk_x11_selection_output_stream_get_instance_private (stream);
 
-  if (priv->data->len == 0 && priv->notify == NULL)
+  if (priv->sent_end_of_stream)
     return FALSE;
 
-  if (g_output_stream_is_closing (G_OUTPUT_STREAM (stream)))
+  if (g_output_stream_is_closing (G_OUTPUT_STREAM (stream)) ||
+      g_output_stream_is_closed (G_OUTPUT_STREAM (stream)))
     return TRUE;
+
+  if (priv->data->len == 0 && priv->notify == NULL)
+    return FALSE;
 
   if (priv->flush_requested)
     return TRUE;
@@ -284,6 +289,8 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
       g_byte_array_remove_range (priv->data, 0, n_elements * element_size);
       if (priv->data->len < element_size)
         priv->flush_requested = FALSE;
+      if (!priv->incr || n_elements == 0)
+        priv->sent_end_of_stream = TRUE;
     }
 
   if (priv->notify)
