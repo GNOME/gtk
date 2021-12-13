@@ -502,60 +502,6 @@ gdk_x11_selection_output_stream_flush_finish (GOutputStream  *stream,
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
-static gboolean
-gdk_x11_selection_output_stream_invoke_close (gpointer stream)
-{
-  GdkX11SelectionOutputStreamPrivate *priv = gdk_x11_selection_output_stream_get_instance_private (stream);
-
-  GDK_X11_DISPLAY (priv->display)->streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->streams, stream);
-  g_signal_handlers_disconnect_by_func (priv->display,
-                                        gdk_x11_selection_output_stream_xevent,
-                                        stream);
-  g_object_unref (stream);
-
-  return G_SOURCE_REMOVE;
-}
-
-static gboolean
-gdk_x11_selection_output_stream_close (GOutputStream  *stream,
-                                       GCancellable   *cancellable,
-                                       GError        **error)
-{
-  g_main_context_invoke (NULL, gdk_x11_selection_output_stream_invoke_close, g_object_ref (stream));
-
-  return TRUE;
-}
-
-static void
-gdk_x11_selection_output_stream_close_async (GOutputStream       *stream,
-                                             int                  io_priority,
-                                             GCancellable        *cancellable,
-                                             GAsyncReadyCallback  callback,
-                                             gpointer             user_data)
-{
-  GTask *task;
-
-  task = g_task_new (stream, cancellable, callback, user_data);
-  g_task_set_source_tag (task, gdk_x11_selection_output_stream_close_async);
-  g_task_set_priority (task, io_priority);
-
-  gdk_x11_selection_output_stream_invoke_close (stream);
-  g_task_return_boolean (task, TRUE);
-
-  g_object_unref (task);
-}
-
-static gboolean
-gdk_x11_selection_output_stream_close_finish (GOutputStream  *stream,
-                                              GAsyncResult   *result,
-                                              GError        **error)
-{
-  g_return_val_if_fail (g_task_is_valid (result, stream), FALSE);
-  g_return_val_if_fail (g_async_result_is_tagged (result, gdk_x11_selection_output_stream_close_async), FALSE);
-
-  return g_task_propagate_boolean (G_TASK (result), error);
-}
-
 static void
 gdk_x11_selection_output_stream_finalize (GObject *object)
 {
@@ -564,6 +510,13 @@ gdk_x11_selection_output_stream_finalize (GObject *object)
 
   /* not sending a notify is terrible */
   g_assert (priv->notify == NULL);
+
+  GDK_DISPLAY_NOTE (priv->display, SELECTION, g_printerr ("%s:%s: finalizing\n",
+                                                          priv->selection, priv->target));
+  GDK_X11_DISPLAY (priv->display)->streams = g_slist_remove (GDK_X11_DISPLAY (priv->display)->streams, stream);
+  g_signal_handlers_disconnect_by_func (priv->display,
+                                        gdk_x11_selection_output_stream_xevent,
+                                        stream);
 
   g_byte_array_unref (priv->data);
   g_cond_clear (&priv->cond);
@@ -587,14 +540,11 @@ gdk_x11_selection_output_stream_class_init (GdkX11SelectionOutputStreamClass *kl
   
   output_stream_class->write_fn = gdk_x11_selection_output_stream_write;
   output_stream_class->flush = gdk_x11_selection_output_stream_flush;
-  output_stream_class->close_fn = gdk_x11_selection_output_stream_close;
 
   output_stream_class->write_async = gdk_x11_selection_output_stream_write_async;
   output_stream_class->write_finish = gdk_x11_selection_output_stream_write_finish;
   output_stream_class->flush_async = gdk_x11_selection_output_stream_flush_async;
   output_stream_class->flush_finish = gdk_x11_selection_output_stream_flush_finish;
-  output_stream_class->close_async = gdk_x11_selection_output_stream_close_async;
-  output_stream_class->close_finish = gdk_x11_selection_output_stream_close_finish;
 }
 
 static void
