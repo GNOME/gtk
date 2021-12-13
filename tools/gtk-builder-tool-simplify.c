@@ -486,7 +486,7 @@ get_attribute_value (Element *element,
         return element->attribute_values[i];
     }
 
-  return NULL;
+  return "";
 }
 
 static void
@@ -549,7 +549,7 @@ get_class_name (Element *element)
         return get_attribute_value (parent, "class");
     }
 
-  return NULL;
+  return "";
 }
 
 static gboolean
@@ -2292,6 +2292,12 @@ simplify_file (const char *filename,
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
     {
       g_printerr (_("Can’t parse “%s”: %s\n"), filename, error->message);
+      return FALSE;
+    }
+
+  if (!g_markup_parse_context_end_parse (context, &error))
+    {
+      g_printerr (_("Can't parse “%s”: %s\n"), filename, error->message);
       return FALSE;
     }
 
