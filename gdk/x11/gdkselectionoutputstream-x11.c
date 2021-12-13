@@ -57,7 +57,7 @@ struct _GdkX11SelectionOutputStreamPrivate {
   GTask *pending_task;
 
   guint incr : 1;
-  guint delete_pending : 1;
+  guint delete_pending : 1; /* owns a reference */
 };
 
 struct _GdkX11PendingSelectionNotify
@@ -292,6 +292,7 @@ gdk_x11_selection_output_stream_perform_flush (GdkX11SelectionOutputStream *stre
       priv->notify = NULL;
     }
 
+  g_object_ref (stream);
   priv->delete_pending = TRUE;
   g_cond_broadcast (&priv->cond);
   g_mutex_unlock (&priv->mutex);
@@ -628,6 +629,7 @@ gdk_x11_selection_output_stream_xevent (GdkDisplay   *display,
       if (gdk_x11_selection_output_stream_needs_flush (stream) &&
           gdk_x11_selection_output_stream_can_flush (stream))
         gdk_x11_selection_output_stream_perform_flush (stream);
+      g_object_unref (stream); /* from unsetting the delete_pending */
       return FALSE;
 
     default:
