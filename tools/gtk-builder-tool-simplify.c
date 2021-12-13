@@ -2295,6 +2295,12 @@ simplify_file (const char *filename,
       return FALSE;
     }
 
+  if (!g_markup_parse_context_end_parse (context, &error))
+    {
+      g_printerr (_("Can't parse “%s”: %s\n"), filename, error->message);
+      return FALSE;
+    }
+
   data.builder = gtk_builder_new ();
 
   if (data.convert3to4)
