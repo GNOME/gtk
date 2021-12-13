@@ -412,6 +412,8 @@ testdata = [
   'label-width-chars-dont-shrink.ui',
   'label-wrap-width-chars.ref.ui',
   'label-wrap-width-chars.ui',
+  'label-wrap-word-char-natural-size.ref.ui',
+  'label-wrap-word-char-natural-size.ui',
   'label-wrapped-huge-max-width-chars.ref.ui',
   'label-wrapped-huge-max-width-chars.ui',
   # this seems to make assumptions on text positioning
