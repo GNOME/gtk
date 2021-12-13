@@ -486,7 +486,7 @@ get_attribute_value (Element *element,
         return element->attribute_values[i];
     }
 
-  return NULL;
+  return "";
 }
 
 static void
@@ -549,7 +549,7 @@ get_class_name (Element *element)
         return get_attribute_value (parent, "class");
     }
 
-  return NULL;
+  return "";
 }
 
 static gboolean
