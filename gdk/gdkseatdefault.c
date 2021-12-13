@@ -43,7 +43,8 @@ struct _GdkSeatDefaultPrivate
                          GDK_ENTER_NOTIFY_MASK |                        \
                          GDK_LEAVE_NOTIFY_MASK |                        \
                          GDK_PROXIMITY_IN_MASK |                        \
-                         GDK_PROXIMITY_OUT_MASK)
+                         GDK_PROXIMITY_OUT_MASK |                       \
+                         GDK_TOUCHPAD_GESTURE_MASK)
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkSeatDefault, gdk_seat_default, GDK_TYPE_SEAT)
 

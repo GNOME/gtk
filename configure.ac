@@ -1167,13 +1167,23 @@ if test "x$enable_x11_backend" = xyes; then
                        AC_DEFINE(XINPUT_2_2, 1, [Define to 1 if XInput 2.2 is available]),
                        have_xinput2_2=no,
                        [[#include <X11/extensions/XInput2.h>]])])
-    LIBS="$gtk_save_LIBS"
 
     if test "x$have_xinput2_2" = "xyes"; then
       X_EXTENSIONS="$X_EXTENSIONS XI2.2"
     else
       X_EXTENSIONS="$X_EXTENSIONS XI2"
     fi
+
+    AC_CHECK_MEMBER([XIGesturePinchEvent.type],
+                    have_xinput2_4=yes
+                    AC_DEFINE(XINPUT_2_4, 1, [Define to 1 if XInput 2.4 is available]),
+                    have_xinput2_4=no,
+                    [[#include <X11/extensions/XInput2.h>]])
+
+    if test "x$have_xinput2_4" = "xyes"; then
+      X_EXTENSIONS="$X_EXTENSIONS XI2.4"
+    fi
+    LIBS="$gtk_save_LIBS"
   fi
 
   AS_IF([test "x$have_xinput2" != "xyes"],

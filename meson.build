@@ -629,6 +629,14 @@ if x11_enabled
     endif
   endif
 
+  has_gesture_pinch_event = cc.has_member('XIGesturePinchEvent', 'type', dependencies: xi_dep,
+                                          prefix: '''#include <X11/Xlib.h>
+                                                     #include <X11/extensions/XInput2.h>''')
+  if has_gesture_pinch_event
+    cdata.set('XINPUT_2_4', 1)
+  endif
+
+
   enable_xinerama = get_option('xinerama')
   if enable_xinerama != 'no'
     want_xinerama = enable_xinerama == 'yes'
