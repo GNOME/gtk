@@ -386,6 +386,7 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
 static void
 gtk_drag_icon_init (GtkDragIcon *self)
 {
+  gtk_widget_set_can_target (GTK_WIDGET (self), FALSE);
 }
 
 /**
@@ -568,7 +569,7 @@ gtk_drag_icon_create_widget_for_value (const GValue *value)
       node = gsk_value_get_render_node (value);
       if (node == NULL)
         return NULL;
-      
+
       gsk_render_node_get_bounds (node, &bounds);
       paintable = gtk_render_node_paintable_new (node, &bounds);
       image = gtk_image_new_from_paintable (paintable);
