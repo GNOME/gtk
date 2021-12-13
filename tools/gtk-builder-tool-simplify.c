@@ -432,6 +432,9 @@ value_is_default (Element      *element,
   if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_BOXED))
     return FALSE;
 
+  if (!value_string)
+    return FALSE;
+
   if (!gtk_builder_value_from_string (data->builder, pspec, value_string, &value, &error))
     {
       g_printerr (_("%s:%d: Couldn’t parse value for property '%s': %s\n"), data->input_filename, element->line_number, pspec->name, error->message);
@@ -2298,6 +2301,12 @@ simplify_file (const char *filename,
   if (!g_markup_parse_context_end_parse (context, &error))
     {
       g_printerr (_("Can't parse “%s”: %s\n"), filename, error->message);
+      return FALSE;
+    }
+
+  if (data.root == NULL)
+    {
+      g_printerr (_("Can't parse “%s”\n"), filename);
       return FALSE;
     }
 
