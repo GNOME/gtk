@@ -2301,6 +2301,12 @@ simplify_file (const char *filename,
       return FALSE;
     }
 
+  if (data.root == NULL)
+    {
+      g_printerr (_("Can't parse “%s”\n"), filename);
+      return FALSE;
+    }
+
   data.builder = gtk_builder_new ();
 
   if (data.convert3to4)
