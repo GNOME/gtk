@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-12 12:57+0000\n"
-"PO-Revision-Date: 2021-12-12 16:25+0000\n"
+"POT-Creation-Date: 2021-12-14 00:32+0000\n"
+"PO-Revision-Date: 2021-12-14 14:02+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -533,7 +533,7 @@ msgstr "Erro na interpretação do ficheiro de imagem JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Espaço de cor JPEG não suportado (%d)"
 
-#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:273 gdk/loaders/gdktiff.c:446
+#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:273 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Memória insuficiente para o tamanho da imagem %ux%u"
@@ -557,7 +557,11 @@ msgstr "Tipo de cor não suportada %u em imagem png"
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Falha no carregamento de dados RGB do ficheiro TIFF"
 
-#: gdk/loaders/gdktiff.c:458
+#: gdk/loaders/gdktiff.c:383
+msgid "Could not load TIFF data"
+msgstr "Não foi possível carregar os dados TIFF"
+
+#: gdk/loaders/gdktiff.c:465
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Dados de leitura falhados na fila %d"
@@ -565,7 +569,7 @@ msgstr "Dados de leitura falhados na fila %d"
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
 #: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:233
+#: gdk/x11/gdkclipboard-x11.c:787 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Nenhum formato de transferência compatível localizado"
 
@@ -785,11 +789,11 @@ msgid_plural "Opening %d Items"
 msgstr[0] "A abrir %d item"
 msgstr[1] "A abrir %d itens"
 
-#: gdk/x11/gdkclipboard-x11.c:433
+#: gdk/x11/gdkclipboard-x11.c:457
 msgid "Clipboard manager could not store selection."
 msgstr "O gestor da área de transferência não pôde armazenar a seleção."
 
-#: gdk/x11/gdkclipboard-x11.c:613
+#: gdk/x11/gdkclipboard-x11.c:637
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 "Não foi possível armazenar a área de transferência. Nenhum gestor está ativo."
@@ -1725,16 +1729,16 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:310
+#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:311
 msgid "Pick a Color"
 msgstr "Escolha uma cor"
 
-#: gtk/gtkcolorbutton.c:499 gtk/gtkcolorchooserwidget.c:308
+#: gtk/gtkcolorbutton.c:500 gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Vermelho %d%%, verde %d%%, azul %d%%, alfa %d%%"
 
-#: gtk/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:314
+#: gtk/gtkcolorbutton.c:506 gtk/gtkcolorchooserwidget.c:314
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Vermelho %d%%, verde %d%%, azul %d%%"
@@ -1979,7 +1983,7 @@ msgstr "Personalizada"
 msgid "Custom color %d: %s"
 msgstr "Cor personalizada %d: %s"
 
-#: gtk/gtkcolorswatch.c:229
+#: gtk/gtkcolorswatch.c:231
 msgid "Customize"
 msgstr "Personalizar"
 
@@ -7400,17 +7404,17 @@ msgstr "Tamanho inválido: %s\n"
 #: tools/encodesymbolic.c:106 tools/encodesymbolic.c:115
 #, c-format
 msgid "Can’t load file: %s\n"
-msgstr "Falha ao carregar o ficheiro: %s\n"
+msgstr "Não é possível carregar o ficheiro: %s\n"
 
 #: tools/encodesymbolic.c:143 tools/encodesymbolic.c:149
 #, c-format
 msgid "Can’t save file %s: %s\n"
-msgstr "Falha ao guardar o ficheiro %s: %s\n"
+msgstr "Não é possível guardar o ficheiro %s: %s\n"
 
 #: tools/encodesymbolic.c:155
 #, c-format
 msgid "Can’t close stream"
-msgstr "Falha ao fechar transmissão"
+msgstr "Não é possível fechar a transmissão"
 
 #: tools/gtk-builder-tool.c:34
 #, c-format
@@ -7453,42 +7457,52 @@ msgstr ""
 "\n"
 "Efetua várias tarefas em ficheiros .ui do GtkBuilder.\n"
 
-#: tools/gtk-builder-tool-simplify.c:437
+#: tools/gtk-builder-tool-simplify.c:440
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: Não foi possível analisar o valor para a propriedade '%s': %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:646
+#: tools/gtk-builder-tool-simplify.c:649
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %spropriedade %s::%s não encontrada\n"
 
-#: tools/gtk-builder-tool-simplify.c:2283
+#: tools/gtk-builder-tool-simplify.c:2286
 #, c-format
 msgid "Can’t load “%s”: %s\n"
-msgstr "Não foi possível carregar “%s”: %s\n"
+msgstr "Não é possível carregar “%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2294
+#: tools/gtk-builder-tool-simplify.c:2297
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
-msgstr "Não foi possível analisar “%s”: %s\n"
+msgstr "Não é possível analisar “%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2318
+#: tools/gtk-builder-tool-simplify.c:2303
+#, c-format
+msgid "Can't parse “%s”: %s\n"
+msgstr "Não é possível analisar “%s”: %s\n"
+
+#: tools/gtk-builder-tool-simplify.c:2309
+#, c-format
+msgid "Can't parse “%s”\n"
+msgstr "Não é possível analisar “%s”\n"
+
+#: tools/gtk-builder-tool-simplify.c:2333
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Falha ao ler “%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2324
+#: tools/gtk-builder-tool-simplify.c:2339
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Falha ao gravar %s: “%s”\n"
 
-#: tools/gtk-builder-tool-simplify.c:2364
+#: tools/gtk-builder-tool-simplify.c:2379
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Nenhum ficheiro .ui especificado\n"
 
-#: tools/gtk-builder-tool-simplify.c:2370
+#: tools/gtk-builder-tool-simplify.c:2385
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Apenas pode simplificar um único ficheiro .ui sem --replace\n"
