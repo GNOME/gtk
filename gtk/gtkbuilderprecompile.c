@@ -321,10 +321,10 @@ _gtk_buildable_parser_precompile (const char  *text,
   data.root = record_data_tree_new (NULL, RECORD_TYPE_ELEMENT, NULL);
   data.current = data.root;
 
-  ctx = g_markup_parse_context_new (&record_parser, G_MARKUP_TREAT_CDATA_AS_TEXT,
-                                    &data, NULL);
+  ctx = g_markup_parse_context_new (&record_parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
 
-  if (!g_markup_parse_context_parse (ctx, text, text_len, error))
+  if (!g_markup_parse_context_parse (ctx, text, text_len, error) ||
+      !g_markup_parse_context_end_parse (ctx, error))
     {
       record_data_tree_free (data.root);
       g_hash_table_destroy (data.strings);
