@@ -314,6 +314,9 @@ record_text (GMarkupParseContext  *context,
   RecordData *data = user_data;
   RecordDataString *string;
 
+  if (text_len == 0)
+    return;
+
   if (!data->current->preserve_whitespace && is_whitespace (text, text_len))
     return;
 
