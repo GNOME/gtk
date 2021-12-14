@@ -1,6 +1,6 @@
 #!/bin/sh
 
-REF="master"
+REF="main"
 
 curl -L --output "$REF-docs.zip" "https://gitlab.gnome.org/GNOME/gtk/-/jobs/artifacts/$REF/download?job=reference"
 unzip -d "$REF-docs" "$REF-docs.zip"
