@@ -546,7 +546,7 @@ gtk_bitset_union (GtkBitset       *self,
 {
   g_return_if_fail (self != NULL);
   g_return_if_fail (other != NULL);
-  
+
   if (self == other)
     return;
 
@@ -571,7 +571,7 @@ gtk_bitset_intersect (GtkBitset       *self,
 {
   g_return_if_fail (self != NULL);
   g_return_if_fail (other != NULL);
-  
+
   if (self == other)
     return;
 
@@ -596,7 +596,7 @@ gtk_bitset_subtract (GtkBitset       *self,
 {
   g_return_if_fail (self != NULL);
   g_return_if_fail (other != NULL);
-  
+
   if (self == other)
     {
       roaring_bitmap_clear (&self->roaring);
@@ -626,7 +626,7 @@ gtk_bitset_difference (GtkBitset       *self,
 {
   g_return_if_fail (self != NULL);
   g_return_if_fail (other != NULL);
-  
+
   if (self == other)
     {
       roaring_bitmap_clear (&self->roaring);
@@ -755,6 +755,24 @@ gtk_bitset_splice (GtkBitset *self,
 }
 
 G_STATIC_ASSERT (sizeof (GtkBitsetIter) >= sizeof (roaring_uint32_iterator_t));
+
+static GtkBitsetIter *
+gtk_bitset_iter_copy (GtkBitsetIter *iter)
+{
+  roaring_uint32_iterator_t *riter = (roaring_uint32_iterator_t *) iter;
+
+  return (GtkBitsetIter *) roaring_copy_uint32_iterator (riter);
+}
+
+static void
+gtk_bitset_iter_free (GtkBitsetIter *iter)
+{
+  roaring_uint32_iterator_t *riter = (roaring_uint32_iterator_t *) iter;
+
+  roaring_free_uint32_iterator (riter);
+}
+
+G_DEFINE_BOXED_TYPE (GtkBitsetIter, gtk_bitset_iter, gtk_bitset_iter_copy, gtk_bitset_iter_free)
 
 /**
  * gtk_bitset_iter_init_first:

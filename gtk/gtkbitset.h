@@ -148,6 +148,9 @@ struct _GtkBitsetIter
   gpointer private_data[10];
 };
 
+GDK_AVAILABLE_IN_4_6
+GType                   gtk_bitset_iter_get_type                (void) G_GNUC_CONST;
+
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_bitset_iter_init_first              (GtkBitsetIter          *iter,
                                                                  const GtkBitset        *set,
@@ -171,8 +174,6 @@ GDK_AVAILABLE_IN_ALL
 guint                   gtk_bitset_iter_get_value               (const GtkBitsetIter    *iter);
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_bitset_iter_is_valid                (const GtkBitsetIter    *iter);
-       
-
 
 G_END_DECLS
 
