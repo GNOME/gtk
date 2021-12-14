@@ -71,8 +71,6 @@
  * The Wayland implementation of `GdkPopup`.
  */
 
-#define SURFACE_IS_TOPLEVEL(surface)  TRUE
-
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
 typedef enum _PopupState
@@ -3734,8 +3732,7 @@ gdk_wayland_surface_set_geometry_hints (GdkWaylandSurface  *impl,
   int min_width, min_height;
   int max_width, max_height;
 
-  if (GDK_SURFACE_DESTROYED (impl) ||
-      !SURFACE_IS_TOPLEVEL (impl))
+  if (GDK_SURFACE_DESTROYED (impl))
     return;
 
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (impl)));
@@ -3894,8 +3891,7 @@ gdk_wayland_toplevel_minimize (GdkToplevel *toplevel)
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return TRUE;
 
   if (!is_realized_toplevel (GDK_WAYLAND_SURFACE (surface)))
@@ -4115,8 +4111,7 @@ gdk_wayland_toplevel_begin_resize (GdkToplevel    *toplevel,
   GdkEventSequence *sequence;
   uint32_t resize_edges, serial;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   switch (edge)
@@ -4201,8 +4196,7 @@ gdk_wayland_toplevel_begin_move (GdkToplevel *toplevel,
   GdkEventSequence *sequence;
   uint32_t serial;
 
-  if (GDK_SURFACE_DESTROYED (surface) ||
-      !SURFACE_IS_TOPLEVEL (surface))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   impl = GDK_WAYLAND_SURFACE (surface);
