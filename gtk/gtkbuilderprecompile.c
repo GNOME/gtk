@@ -58,6 +58,7 @@ struct RecordDataElement {
   RecordDataElement *parent;
   GQueue children;
   int n_attributes;
+  gboolean preserve_whitespace;
   RecordDataString *name;
   RecordDataString *attributes[];
 };
@@ -92,6 +93,25 @@ record_data_node_new (RecordDataElement *parent,
   return node;
 }
 
+static gboolean
+text_is_important (const char *name)
+{
+  const char *elements[] = {
+    "property",
+    "attribute",
+    "col",
+    "action-widget",
+    "item",
+    "mime-type",
+    "pattern",
+    "suffix",
+    "mark",
+    NULL
+  };
+
+  return g_strv_contains (elements, name);
+}
+
 static RecordDataElement *
 record_data_element_new (RecordDataElement *parent,
                          RecordDataString  *name,
@@ -105,6 +125,7 @@ record_data_element_new (RecordDataElement *parent,
                                   sizeof (RecordDataString) * n_attributes);
   element->parent = parent;
   element->name = name;
+  element->preserve_whitespace = name && text_is_important (name->string);
   element->n_attributes = n_attributes;
 
   return element;
@@ -266,6 +287,23 @@ record_end_element (GMarkupParseContext  *context,
   data->current = data->current->parent;
 }
 
+static gboolean
+is_whitespace (const char *text,
+               gsize       text_len)
+{
+  const char *end;
+  const char *p;
+
+  end = text + text_len;
+  for (p = text; p < end; p = g_utf8_next_char (p))
+    {
+      if (!g_unichar_isspace (g_utf8_get_char (p)))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 record_text (GMarkupParseContext  *context,
              const char           *text,
@@ -275,6 +313,9 @@ record_text (GMarkupParseContext  *context,
 {
   RecordData *data = user_data;
   RecordDataString *string;
+
+  if (!data->current->preserve_whitespace && is_whitespace (text, text_len))
+    return;
 
   string = record_data_string_lookup (data, text, text_len);
   record_data_element_append_text (data->current, string);
