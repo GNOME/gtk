@@ -30,6 +30,7 @@
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkadjustmentprivate.h"
 #include "gtkbindings.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkdnd.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
@@ -7973,10 +7974,12 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
                                          GtkTextAttributes  *values)
 {
   GtkStyleContext *context;
+  GtkCssStyle *style;
   GdkRGBA bg_color, fg_color;
   GtkStateFlags state;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
+  style = gtk_css_node_get_style (gtk_text_view_get_text_node (text_view));
   state = gtk_style_context_get_state (context);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -7995,7 +7998,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   if (values->font)
     pango_font_description_free (values->font);
 
-  gtk_style_context_get (context, state, "font", &values->font, NULL);
+  gtk_style_context_get (context, state, GTK_STYLE_PROPERTY_FONT, &values->font, NULL);
+
+  values->letter_spacing = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_LETTER_SPACING), 100) * PANGO_SCALE;
 }
 
 static void
