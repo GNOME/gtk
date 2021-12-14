@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-12 12:57+0000\n"
-"PO-Revision-Date: 2021-12-12 19:17+0200\n"
+"POT-Creation-Date: 2021-12-14 00:32+0000\n"
+"PO-Revision-Date: 2021-12-14 15:20+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -533,7 +533,7 @@ msgstr "Помилка інтерпретації файлу зображенн�
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Непідтримуваний простір кольорів JPEG (%d)"
 
-#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:273 gdk/loaders/gdktiff.c:446
+#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:273 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Недостатньо пам'яті для зображення розміром %ux%u"
@@ -557,7 +557,12 @@ msgstr "Непідтримуваний тип кольору, %u, у зобра�
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Не вдалося завантажити дані RGB з файлу формату TIFF"
 
-#: gdk/loaders/gdktiff.c:458
+#: gdk/loaders/gdktiff.c:383
+msgid "Could not load TIFF data"
+msgstr ""
+"Не вдалося завантажити дані TIFF"
+
+#: gdk/loaders/gdktiff.c:465
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Помилка читання даних у рядку %d"
@@ -565,7 +570,7 @@ msgstr "Помилка читання даних у рядку %d"
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
 #: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:233
+#: gdk/x11/gdkclipboard-x11.c:787 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Не знайдено сумісного формату передавання даних"
 
@@ -786,11 +791,11 @@ msgstr[1] "Відкривається %d пункти"
 msgstr[2] "Відкривається %d пунктів"
 msgstr[3] "Відкривається %d пункт"
 
-#: gdk/x11/gdkclipboard-x11.c:433
+#: gdk/x11/gdkclipboard-x11.c:457
 msgid "Clipboard manager could not store selection."
 msgstr "Засобу керування буфером обміну не вдалося зберегти позначене."
 
-#: gdk/x11/gdkclipboard-x11.c:613
+#: gdk/x11/gdkclipboard-x11.c:637
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 "Не вдалося зберегти буфер обміну. Немає активної програми для керування "
@@ -1726,16 +1731,16 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:310
+#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:311
 msgid "Pick a Color"
 msgstr "Вибір кольору"
 
-#: gtk/gtkcolorbutton.c:499 gtk/gtkcolorchooserwidget.c:308
+#: gtk/gtkcolorbutton.c:500 gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%, Альфа %d%%"
 
-#: gtk/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:314
+#: gtk/gtkcolorbutton.c:506 gtk/gtkcolorchooserwidget.c:314
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Червоний %d%%, Зелений %d%%, Синій %d%%"
@@ -1980,7 +1985,7 @@ msgstr "Власний"
 msgid "Custom color %d: %s"
 msgstr "Власний колір %d: %s"
 
-#: gtk/gtkcolorswatch.c:229
+#: gtk/gtkcolorswatch.c:231
 msgid "Customize"
 msgstr "Налаштувати"
 
@@ -3587,37 +3592,31 @@ msgid "State"
 msgstr "Стан"
 
 #: gtk/inspector/clipboard.c:149
-#| msgid "Show All"
 msgid "Show"
 msgstr "Показати"
 
 #: gtk/inspector/clipboard.c:205
 msgctxt "clipboard"
 msgid "empty"
-msgstr ""
-"порожній"
+msgstr "порожній"
 
 #: gtk/inspector/clipboard.c:210
 msgctxt "clipboard"
 msgid "local"
-msgstr ""
-"локальний"
+msgstr "локальний"
 
 #: gtk/inspector/clipboard.c:212
 msgctxt "clipboard"
 msgid "remote"
-msgstr ""
-"віддалений"
+msgstr "віддалений"
 
 #: gtk/inspector/clipboard.ui:31 gtk/inspector/window.ui:574
-#| msgid "Copy to clipboard"
 msgid "Clipboard"
 msgstr "Буфер обміну"
 
 #: gtk/inspector/clipboard.ui:70
 msgid "Primary"
-msgstr ""
-"Основний"
+msgstr "Основний"
 
 #: gtk/inspector/controllers.c:126
 msgctxt "event phase"
@@ -7453,42 +7452,54 @@ msgstr ""
 "\n"
 "Виконати різні завдання на файлах GtkBuilder .ui.\n"
 
-#: tools/gtk-builder-tool-simplify.c:437
+#: tools/gtk-builder-tool-simplify.c:440
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: не вдалося обробити значення для властивості «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:646
+#: tools/gtk-builder-tool-simplify.c:649
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %sвластивість %s::%s не знайдено\n"
 
-#: tools/gtk-builder-tool-simplify.c:2283
+#: tools/gtk-builder-tool-simplify.c:2286
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Не вдалося завантажити «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2294
+#: tools/gtk-builder-tool-simplify.c:2297
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Не вдалося обробити «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2318
+#: tools/gtk-builder-tool-simplify.c:2303
+#, c-format
+#| msgid "Can’t parse “%s”: %s\n"
+msgid "Can't parse “%s”: %s\n"
+msgstr "Не вдалося обробити «%s»: %s\n"
+
+#: tools/gtk-builder-tool-simplify.c:2309
+#, c-format
+#| msgid "Can’t parse “%s”: %s\n"
+msgid "Can't parse “%s”\n"
+msgstr "Не вдалося обробити «%s»\n"
+
+#: tools/gtk-builder-tool-simplify.c:2333
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Не вдалося прочитати «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2324
+#: tools/gtk-builder-tool-simplify.c:2339
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Не вдалося записати %s: «%s»\n"
 
-#: tools/gtk-builder-tool-simplify.c:2364
+#: tools/gtk-builder-tool-simplify.c:2379
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Не вказано файла .ui\n"
 
-#: tools/gtk-builder-tool-simplify.c:2370
+#: tools/gtk-builder-tool-simplify.c:2385
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Без --replace можна спрощувати лише один файл .ui\n"
