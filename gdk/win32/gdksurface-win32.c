@@ -989,9 +989,6 @@ gdk_win32_surface_hide (GdkSurface *window)
 
   _gdk_surface_clear_update_area (window);
 
-  if (GDK_IS_TOPLEVEL (window))
-    ShowOwnedPopups (GDK_SURFACE_HWND (window), FALSE);
-
   /* Use SetWindowPos to hide transparent windows so automatic redraws
    * in other windows can be suppressed.
    */
