@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master.is\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-12 17:37+0000\n"
-"PO-Revision-Date: 2021-10-12 22:43+0000\n"
+"POT-Creation-Date: 2021-12-09 08:53+0000\n"
+"PO-Revision-Date: 2021-12-15 19:46+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
-"Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
+"Language-Team: Icelandic <translation-team-is@lists.sourceforge.org>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -470,24 +470,23 @@ msgid "Suspend"
 msgstr "Hvíla"
 
 #: gdk/quartz/gdkglcontext-quartz.c:123
-#| msgid "Unable to create a GL context"
 msgid "Unable to create a GL pixel format"
 msgstr "Gat ekki búið til GL-mynddílasnið"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1100 gdk/win32/gdkglcontext-win32.c:1140
+#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1258
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Gat ekki búið til GL-umhverfi"
 
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:938
-#: gdk/win32/gdkglcontext-win32.c:948 gdk/win32/gdkglcontext-win32.c:1065
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:777
+#: gdk/win32/gdkglcontext-win32.c:1136 gdk/win32/gdkglcontext-win32.c:1146
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Engar tiltækar uppsetningar fyrir uppgefið snið mynddíla"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1206
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1491
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Engin GL-uppsetning tiltæk"
@@ -616,7 +615,6 @@ msgid "Activates the expander"
 msgstr "Virkjar útvíkkarann"
 
 #: gtk/a11y/gtkfilechooserwidgetaccessible.c:101
-#| msgid "Show other locations"
 msgctxt "Action name"
 msgid "Show location"
 msgstr "Sýna staðsetningu"
@@ -1491,7 +1489,6 @@ msgid "GNU Affero General Public License, version 3 only"
 msgstr "GNU Affero General Public notkunarleyfi, einungis útgáfa 3"
 
 #: gtk/gtkaboutdialog.c:129
-#| msgid "BSD 2-Clause License"
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-Clause notkunarleyfi"
 
@@ -1500,7 +1497,6 @@ msgid "Apache License, Version 2.0"
 msgstr "Apache-notkunarleyfi, útgáfa 2.0"
 
 #: gtk/gtkaboutdialog.c:131
-#| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla notkunarleyfið (Public License, v 2.0)."
 
@@ -1696,7 +1692,7 @@ msgid "Other Applications"
 msgstr "Önnur forrit"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
-#: gtk/gtkprintoperation-win32.c:1521 gtk/inspector/prop-editor.c:1686
+#: gtk/gtkprintoperation-win32.c:1589 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Forrit"
 
@@ -1909,83 +1905,61 @@ msgid "Color: %s"
 msgstr "Litur: %s"
 
 #: gtk/gtkcolorchooserwidget.c:446
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "Mjög ljósblátt"
 
 #: gtk/gtkcolorchooserwidget.c:447
-#| msgctxt "Color name"
-#| msgid "Light Sky Blue"
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "Ljósblátt"
 
 #: gtk/gtkcolorchooserwidget.c:448
-#| msgid "_Blue:"
 msgctxt "Color name"
 msgid "Blue"
 msgstr "Blátt"
 
 #: gtk/gtkcolorchooserwidget.c:449
-#| msgctxt "Color name"
-#| msgid "Dark Sky Blue"
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "Dökkblátt"
 
 #: gtk/gtkcolorchooserwidget.c:450
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "Mjög dökkblátt"
 
 #: gtk/gtkcolorchooserwidget.c:451
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "Mjög ljósgrænt"
 
 #: gtk/gtkcolorchooserwidget.c:452
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "Ljósgrænt"
 
 #: gtk/gtkcolorchooserwidget.c:453
-#| msgid "_Green:"
 msgctxt "Color name"
 msgid "Green"
 msgstr "Grænt"
 
 #: gtk/gtkcolorchooserwidget.c:454
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "Dökkgrænt"
 
 #: gtk/gtkcolorchooserwidget.c:455
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "Mjög dökkgrænt"
 
 #: gtk/gtkcolorchooserwidget.c:456
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "Mjög ljósgult"
 
 #: gtk/gtkcolorchooserwidget.c:457
-#| msgctxt "Color name"
-#| msgid "Light Chameleon"
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "Ljósgult"
@@ -1996,22 +1970,16 @@ msgid "Yellow"
 msgstr "Gult"
 
 #: gtk/gtkcolorchooserwidget.c:459
-#| msgctxt "Color name"
-#| msgid "Dark Chameleon"
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "Dökkgult"
 
 #: gtk/gtkcolorchooserwidget.c:460
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "Mjög dökkgult"
 
 #: gtk/gtkcolorchooserwidget.c:461
-#| msgctxt "Color name"
-#| msgid "Light Orange"
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "Mjög ljósappelsínugult"
@@ -2032,56 +2000,41 @@ msgid "Dark Orange"
 msgstr "Dökkappelsínugult"
 
 #: gtk/gtkcolorchooserwidget.c:465
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "Mjög dökkappelsínugult"
 
 #: gtk/gtkcolorchooserwidget.c:466
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "Mjög ljósrautt"
 
 #: gtk/gtkcolorchooserwidget.c:467
-#| msgctxt "Color name"
-#| msgid "Light Scarlet Red"
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "Ljósrautt"
 
 #: gtk/gtkcolorchooserwidget.c:468
-#| msgid "_Red:"
 msgctxt "Color name"
 msgid "Red"
 msgstr "Rautt"
 
 #: gtk/gtkcolorchooserwidget.c:469
-#| msgctxt "Color name"
-#| msgid "Dark Scarlet Red"
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "Dökkrautt"
 
 #: gtk/gtkcolorchooserwidget.c:470
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "Mjög dökkrautt"
 
 #: gtk/gtkcolorchooserwidget.c:471
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "Mjög ljóspurpuralitað"
 
 #: gtk/gtkcolorchooserwidget.c:472
-#| msgctxt "Color name"
-#| msgid "Light Plum"
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "Ljóspurpuralitað"
@@ -2092,49 +2045,36 @@ msgid "Purple"
 msgstr "Fjólublátt"
 
 #: gtk/gtkcolorchooserwidget.c:474
-#| msgctxt "Color name"
-#| msgid "Dark Plum"
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "Dökkpurpuralitað"
 
 #: gtk/gtkcolorchooserwidget.c:475
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "Mjög dökkpurpuralitað"
 
 #: gtk/gtkcolorchooserwidget.c:476
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "Mjög ljósbrúnt"
 
 #: gtk/gtkcolorchooserwidget.c:477
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "Ljósbrúnt"
 
 #: gtk/gtkcolorchooserwidget.c:478
-#| msgid "Browse"
 msgctxt "Color name"
 msgid "Brown"
 msgstr "Brúnt"
 
 #: gtk/gtkcolorchooserwidget.c:479
-#| msgctxt "Color name"
-#| msgid "Dark Butter"
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "Dökkbrúnt"
 
 #: gtk/gtkcolorchooserwidget.c:480
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "Mjög dökkbrúnt"
@@ -2145,57 +2085,41 @@ msgid "White"
 msgstr "Hvítt"
 
 #: gtk/gtkcolorchooserwidget.c:482
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "Ljósgrátt 1"
 
 #: gtk/gtkcolorchooserwidget.c:483
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "Ljósgrátt 2"
 
 #: gtk/gtkcolorchooserwidget.c:484
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "Ljósgrátt 3"
 
 #: gtk/gtkcolorchooserwidget.c:485
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "Ljósgrátt 4"
 
 #: gtk/gtkcolorchooserwidget.c:486
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "Dökkgrátt 1"
 
 #: gtk/gtkcolorchooserwidget.c:487
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "Dökkgrátt 2"
 
 #: gtk/gtkcolorchooserwidget.c:488
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "Dökkgrátt 3"
 
 #: gtk/gtkcolorchooserwidget.c:489
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "Dökkgrátt 4"
@@ -2412,27 +2336,21 @@ msgid "The folder could not be created"
 msgstr "Það tókst ekki að búa til möppu"
 
 #: gtk/gtkfilechooserwidget.c:822
-#, fuzzy
 #| msgid ""
 #| "The folder could not be created, as a file with the same name already "
 #| "exists.  Try using a different name for the folder, or rename the file "
 #| "first."
 msgid ""
 "The folder could not be created, as a file with the same name already exists."
-msgstr ""
-"Ekki tókst að búa til möppu, þar sem skrá með sama nafni er þegar til. "
-"Reyndu að nota annað nafn fyrir möppuna eða endurnefndu skrána fyrst."
+msgstr "Ekki tókst að búa til möppu, þar sem skrá með sama nafni er þegar til."
 
 #: gtk/gtkfilechooserwidget.c:824
-#, fuzzy
 #| msgid ""
 #| "The folder could not be created, as a file with the same name already "
 #| "exists.  Try using a different name for the folder, or rename the file "
 #| "first."
 msgid "Try using a different name for the folder, or rename the file first."
-msgstr ""
-"Ekki tókst að búa til möppu, þar sem skrá með sama nafni er þegar til. "
-"Reyndu að nota annað nafn fyrir möppuna eða endurnefndu skrána fyrst."
+msgstr "Reyndu að nota annað nafn fyrir möppuna eða endurnefndu skrána fyrst."
 
 #: gtk/gtkfilechooserwidget.c:837
 msgid "You need to choose a valid filename."
@@ -2788,54 +2706,53 @@ msgctxt "font"
 msgid "None"
 msgstr "Ekkert"
 
-#: gtk/gtkfontchooserwidget.c:1556
+#: gtk/gtkfontchooserwidget.c:1601
 msgid "Width"
 msgstr "Breidd"
 
-#: gtk/gtkfontchooserwidget.c:1557
+#: gtk/gtkfontchooserwidget.c:1602
 msgid "Weight"
 msgstr "Þykkt"
 
-#: gtk/gtkfontchooserwidget.c:1558
+#: gtk/gtkfontchooserwidget.c:1603
 msgid "Italic"
 msgstr "Skáletrað"
 
-#: gtk/gtkfontchooserwidget.c:1559
+#: gtk/gtkfontchooserwidget.c:1604
 msgid "Slant"
 msgstr "Hallandi"
 
-#: gtk/gtkfontchooserwidget.c:1560
+#: gtk/gtkfontchooserwidget.c:1605
 msgid "Optical Size"
-msgstr ""
+msgstr "Sjónræn stærð"
 
-#: gtk/gtkfontchooserwidget.c:2097 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2305 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Sjálfgefið"
 
-#: gtk/gtkfontchooserwidget.c:2144
+#: gtk/gtkfontchooserwidget.c:2352
 msgid "Ligatures"
 msgstr "Staftengi (ligatures)"
 
-#: gtk/gtkfontchooserwidget.c:2145
-#, fuzzy
+#: gtk/gtkfontchooserwidget.c:2353
 #| msgctxt "paper size"
 #| msgid "US Letter Plus"
 msgid "Letter Case"
-msgstr "US bréfsefni Plus"
+msgstr "Hástafir"
 
-#: gtk/gtkfontchooserwidget.c:2146
+#: gtk/gtkfontchooserwidget.c:2354
 msgid "Number Case"
-msgstr ""
+msgstr "Tölustafir"
 
-#: gtk/gtkfontchooserwidget.c:2147
+#: gtk/gtkfontchooserwidget.c:2355
 msgid "Number Spacing"
-msgstr ""
+msgstr "Millibil talna"
 
-#: gtk/gtkfontchooserwidget.c:2148
+#: gtk/gtkfontchooserwidget.c:2356
 msgid "Number Formatting"
-msgstr ""
+msgstr "Snið talna"
 
-#: gtk/gtkfontchooserwidget.c:2149
+#: gtk/gtkfontchooserwidget.c:2357
 msgid "Character Variants"
 msgstr "Stafatilbrigði"
 
@@ -3631,58 +3548,58 @@ msgstr "Sennilega tókst ekki að búa til bráðabirgðaskrá."
 msgid "Print"
 msgstr "Prenta"
 
-#: gtk/gtkprintoperation-win32.c:631
+#: gtk/gtkprintoperation-win32.c:654
 msgid "Printer offline"
 msgstr "Prentari er aftengdur"
 
-#: gtk/gtkprintoperation-win32.c:633
+#: gtk/gtkprintoperation-win32.c:656
 msgid "Out of paper"
 msgstr "Pappír búinn"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:635
+#: gtk/gtkprintoperation-win32.c:658
 #: modules/printbackends/cups/gtkprintbackendcups.c:2680
 msgid "Paused"
 msgstr "Í bið"
 
-#: gtk/gtkprintoperation-win32.c:637
+#: gtk/gtkprintoperation-win32.c:660
 msgid "Need user intervention"
 msgstr "Notandinn þarf að skerast í leikinn"
 
-#: gtk/gtkprintoperation-win32.c:742
+#: gtk/gtkprintoperation-win32.c:765
 msgid "Custom size"
 msgstr "Sérsniðin stærð"
 
-#: gtk/gtkprintoperation-win32.c:1613
+#: gtk/gtkprintoperation-win32.c:1681
 msgid "No printer found"
 msgstr "Fann enga prentara"
 
-#: gtk/gtkprintoperation-win32.c:1640
+#: gtk/gtkprintoperation-win32.c:1708
 msgid "Invalid argument to CreateDC"
 msgstr "Ógild breyta í CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1676 gtk/gtkprintoperation-win32.c:1922
+#: gtk/gtkprintoperation-win32.c:1744 gtk/gtkprintoperation-win32.c:1996
 msgid "Error from StartDoc"
 msgstr "Villa frá StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1777 gtk/gtkprintoperation-win32.c:1800
-#: gtk/gtkprintoperation-win32.c:1848
+#: gtk/gtkprintoperation-win32.c:1851 gtk/gtkprintoperation-win32.c:1874
+#: gtk/gtkprintoperation-win32.c:1922
 msgid "Not enough free memory"
 msgstr "Ekki nógu mikið laust minni"
 
-#: gtk/gtkprintoperation-win32.c:1853
+#: gtk/gtkprintoperation-win32.c:1927
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Ógild breyta í PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1858
+#: gtk/gtkprintoperation-win32.c:1932
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Ógild ábending (pointer) í PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1863
+#: gtk/gtkprintoperation-win32.c:1937
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Ógild hald í PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1868
+#: gtk/gtkprintoperation-win32.c:1942
 msgid "Unspecified error"
 msgstr "Óskilgreind villa"
 
@@ -4848,7 +4765,7 @@ msgstr ""
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "Form ofan grunnlínu"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
@@ -4861,11 +4778,10 @@ msgid "Above-base Substitutions"
 msgstr ""
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
 #| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "Auðkenning"
+msgstr "Önnur tölubrot"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
@@ -4875,7 +4791,7 @@ msgstr ""
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "Form neðan grunnlínu"
 
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
@@ -4895,7 +4811,7 @@ msgstr ""
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "Há-/lágstafsnæm form"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
@@ -4965,7 +4881,7 @@ msgstr ""
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Punktlaus form"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
@@ -4978,25 +4894,22 @@ msgid "Final Glyph on Line Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:40
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "Skjáhermiflettir"
+msgstr "Endaform #2"
 
 #: gtk/open-type-layout.h:41
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "Skjáhermiflettir"
+msgstr "Endaform #3"
 
 #: gtk/open-type-layout.h:42
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "Skjáhermiflettir"
+msgstr "Endaform"
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
@@ -5021,7 +4934,7 @@ msgstr "Hálfbreið form"
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Halant form"
 
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
@@ -5031,7 +4944,7 @@ msgstr ""
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Historical Forms"
-msgstr ""
+msgstr "Söguleg form"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
@@ -5051,7 +4964,7 @@ msgstr "Hangúl"
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "Hojo Kanji form"
 
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
@@ -5059,12 +4972,11 @@ msgid "Half Widths"
 msgstr "Hálfbreiddir"
 
 #: gtk/open-type-layout.h:55
-#, fuzzy
 #| msgctxt "print operation status"
 #| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
-msgstr "Upphafleg staða"
+msgstr "Upphafleg form"
 
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
@@ -5149,12 +5061,12 @@ msgstr ""
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "Miðlæg form #2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr ""
+msgstr "Miðlæg form"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
@@ -5179,12 +5091,12 @@ msgstr ""
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "NLC Kanji form"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Nukta form"
 
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
@@ -5227,11 +5139,10 @@ msgid "Proportional Kana"
 msgstr ""
 
 #: gtk/open-type-layout.h:88
-#, fuzzy
 #| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
-msgstr "Eiginleikar"
+msgstr "Hlutfallslegar fígúrur"
 
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
@@ -5276,7 +5187,7 @@ msgstr ""
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Rakar form"
 
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
@@ -5286,7 +5197,7 @@ msgstr "Nauðsynleg staftengi (ligatures)"
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "Reph form"
 
 #: gtk/open-type-layout.h:100
 msgctxt "OpenType layout"
@@ -5486,12 +5397,12 @@ msgstr ""
 #: gtk/open-type-layout.h:139
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "Hefðbundin form"
 
 #: gtk/open-type-layout.h:140
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "Þriðjungsbreiddir"
 
 #: gtk/open-type-layout.h:141
 msgctxt "OpenType layout"
@@ -7309,10 +7220,9 @@ msgid "Flags"
 msgstr "Fánar"
 
 #: gtk/ui/gtkfilechooserdialog.ui:32
-#, fuzzy
 #| msgid "Focus Widget"
 msgid "File Chooser Widget"
-msgstr "Viðmótshluti (widget) fær virkni"
+msgstr "Viðmótshluti skráavals"
 
 #: gtk/ui/gtkfilechooserwidget.ui:22
 msgid "Places"
@@ -7323,26 +7233,23 @@ msgid "Browse Header Revealer"
 msgstr ""
 
 #: gtk/ui/gtkfilechooserwidget.ui:65
-#, fuzzy
 #| msgid "Browse Network"
 msgid "Browse Header Stack"
-msgstr "Flakka um net"
+msgstr "Skoða höfuðstafla"
 
 #: gtk/ui/gtkfilechooserwidget.ui:75
 msgid "PathBar Layer"
-msgstr ""
+msgstr "Slóðastikulag"
 
 #: gtk/ui/gtkfilechooserwidget.ui:121
-#, fuzzy
 #| msgid "Location"
 msgid "Location Layer"
-msgstr "Staðsetning"
+msgstr "Staðsetningarlag"
 
 #: gtk/ui/gtkfilechooserwidget.ui:137
-#, fuzzy
 #| msgid "Search"
 msgid "Search Layer"
-msgstr "Leita"
+msgstr "Leitarlag"
 
 #: gtk/ui/gtkfilechooserwidget.ui:199
 msgid "Files"
