@@ -1360,12 +1360,51 @@ key_event_string (GdkEvent *event)
   return g_strdup (gdk_keyval_name (keyval));
 }
 
+static const char *
+device_tool_name (GdkDeviceTool *tool)
+{
+  const char *name[] = {
+    "Unknown",
+    "Pen",
+    "Eraser",
+    "Brush",
+    "Pencil",
+    "Airbrush",
+    "Mouse",
+    "Lens"
+  };
+
+  return name[gdk_device_tool_get_tool_type (tool)];
+}
+
+static const char *
+axis_name (GdkAxisUse axis)
+{
+  const char *name[] = {
+    "",
+    "X",
+    "Y",
+    "Delta X",
+    "Delta Y",
+    "Pressure",
+    "X Tilt",
+    "Y Tilt",
+    "Wheel",
+    "Distance",
+    "Rotation",
+    "Slider"
+  };
+
+  return name[axis];
+}
+
 static void
 populate_event_properties (GtkListStore *store,
                            GdkEvent     *event)
 {
   GdkEventType type;
   GdkDevice *device;
+  GdkDeviceTool *tool;
   double x, y;
   char *tmp;
   GdkModifierType state;
@@ -1381,11 +1420,35 @@ populate_event_properties (GtkListStore *store,
   if (device)
     add_text_row (store, "Device", gdk_device_get_name (device));
 
+  tool = gdk_event_get_device_tool (event);
+  if (tool)
+    add_text_row (store, "Device Tool", device_tool_name (tool));
+
   if (gdk_event_get_position (event, &x, &y))
     {
       tmp = g_strdup_printf ("%.2f %.2f", x, y);
       add_text_row (store, "Position", tmp);
       g_free (tmp);
+    }
+
+  if (tool)
+    {
+      GdkAxisFlags axes = gdk_device_tool_get_axes (tool);
+
+      /* We report position and scroll delta separately, so skip them here */
+      axes &= ~(GDK_AXIS_FLAG_X|GDK_AXIS_FLAG_Y|GDK_AXIS_FLAG_DELTA_X|GDK_AXIS_FLAG_DELTA_Y);
+
+      for (int i = 1; i < GDK_AXIS_LAST; i++)
+        {
+          if (axes & (1 << i))
+            {
+              double val;
+              gdk_event_get_axis (event, i, &val);
+              tmp = g_strdup_printf ("%.2f", val);
+              add_text_row (store, axis_name (i), tmp);
+              g_free (tmp);
+            }
+        }
     }
 
   state = gdk_event_get_modifier_state (event);
@@ -1458,18 +1521,26 @@ populate_event_properties (GtkListStore *store,
       history = gdk_event_get_history (event, &n_coords);
       if (history)
         {
-          GString *s;
-
-          s = g_string_new ("");
+          GString *s = g_string_new ("");
 
           for (int i = 0; i < n_coords; i++)
             {
               if (i > 0)
                 g_string_append (s, "\n");
-              if ((history[i].flags & (GDK_AXIS_FLAG_X|GDK_AXIS_FLAG_Y)) == (GDK_AXIS_FLAG_X|GDK_AXIS_FLAG_Y))
-                g_string_append_printf (s, "%d: %.2f %.2f", history[i].time, history[i].axes[GDK_AXIS_X], history[i].axes[GDK_AXIS_Y]);
-              if ((history[i].flags & (GDK_AXIS_FLAG_DELTA_X|GDK_AXIS_FLAG_DELTA_Y)) == (GDK_AXIS_FLAG_DELTA_X|GDK_AXIS_FLAG_DELTA_Y))
-                g_string_append_printf (s, "%d: %.2f %.2f", history[i].time, history[i].axes[GDK_AXIS_DELTA_X], history[i].axes[GDK_AXIS_DELTA_Y]);
+
+              g_string_append_printf (s, "%d", history[i].time);
+
+              if (history[i].flags & (GDK_AXIS_FLAG_X|GDK_AXIS_FLAG_Y))
+                g_string_append_printf (s, " Position %.2f %.2f", history[i].axes[GDK_AXIS_X], history[i].axes[GDK_AXIS_Y]);
+
+              if (history[i].flags & (GDK_AXIS_FLAG_DELTA_X|GDK_AXIS_FLAG_DELTA_Y))
+                g_string_append_printf (s, " Delta %.2f %.2f", history[i].axes[GDK_AXIS_DELTA_X], history[i].axes[GDK_AXIS_DELTA_Y]);
+
+              for (int j = GDK_AXIS_PRESSURE; j < GDK_AXIS_LAST; j++)
+                {
+                  if (history[i].flags & (1 << j))
+                    g_string_append_printf (s, " %s %.2f", axis_name (j), history[i].axes[j]);
+                }
             }
 
           add_text_row (store, "History", s->str);
@@ -2093,4 +2164,4 @@ gtk_inspector_recorder_set_debug_nodes (GtkInspectorRecorder *recorder,
   g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_DEBUG_NODES]);
 }
 
-// vim: set et sw=2 ts=2:
+
