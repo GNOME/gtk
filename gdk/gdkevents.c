@@ -942,6 +942,9 @@ gdk_event_get_pointer_emulated (GdkEvent *event)
  * Extract the axis value for a particular axis use from
  * an event structure.
  *
+ * To find out which axes are used, use [method@Gdk.DeviceTool.get_axes]
+ * on the device tool returned by [method@Gdk.Event.get_device_tool].
+ *
  * Returns: %TRUE if the specified axis was found, otherwise %FALSE
  */
 gboolean
@@ -1167,6 +1170,9 @@ G_DEFINE_BOXED_TYPE (GdkEventSequence, gdk_event_sequence,
  * @n_axes: (out): the length of array
  *
  * Extracts all axis values from an event.
+ *
+ * To find out which axes are used, use [method@Gdk.DeviceTool.get_axes]
+ * on the device tool returned by [method@Gdk.Event.get_device_tool].
  *
  * Returns: %TRUE on success, otherwise %FALSE
  */
