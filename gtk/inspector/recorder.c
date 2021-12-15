@@ -39,6 +39,7 @@
 #include <gtk/gtktreelistmodel.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
+#include <gtk/gtkstack.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>
@@ -70,6 +71,7 @@ struct _GtkInspectorRecorder
   GtkWidget *render_node_save_button;
   GtkWidget *render_node_clip_button;
   GtkWidget *node_property_tree;
+  GtkWidget *recording_data_stack;
   GtkTreeModel *render_node_properties;
 
   GtkInspectorRecording *recording; /* start recording if recording or NULL if not */
@@ -433,7 +435,10 @@ recording_selected (GtkSingleSelection   *selection,
   GtkInspectorRecording *recording;
 
   if (recorder->recordings == NULL)
-    return;
+    {
+      gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "no_data");
+      return;
+    }
 
   recording = gtk_single_selection_get_selected_item (selection);
 
@@ -442,6 +447,8 @@ recording_selected (GtkSingleSelection   *selection,
       graphene_rect_t bounds;
       GskRenderNode *node;
       GdkPaintable *paintable;
+
+      gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "frame_data");
 
       node = gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording));
       gsk_render_node_get_bounds (node, &bounds);
@@ -456,6 +463,7 @@ recording_selected (GtkSingleSelection   *selection,
     }
   else
     {
+      gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "no_data");
       gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), NULL);
       g_list_store_remove_all (recorder->render_node_root_model);
     }
@@ -1511,6 +1519,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_save_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_clip_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, node_property_tree);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, recording_data_stack);
 
   gtk_widget_class_bind_template_callback (widget_class, recordings_clear_all);
   gtk_widget_class_bind_template_callback (widget_class, recording_selected);
