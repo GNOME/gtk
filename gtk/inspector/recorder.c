@@ -73,6 +73,7 @@ struct _GtkInspectorRecorder
   GtkTreeModel *render_node_properties;
 
   GtkInspectorRecording *recording; /* start recording if recording or NULL if not */
+  gint64 start_time;
 
   gboolean debug_nodes;
 };
@@ -1324,27 +1325,16 @@ setup_widget_for_recording (GtkListItemFactory *factory,
                             GtkListItem        *item,
                             gpointer            data)
 {
-  GtkWidget *widget, *hbox, *label, *button;
+  GtkWidget *widget, *label;
 
-  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_box_append (GTK_BOX (widget), hbox);
+  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   label = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_box_append (GTK_BOX (hbox), label);
-
-  button = gtk_toggle_button_new ();
-  gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
-  gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
-  gtk_box_append (GTK_BOX (hbox), button);
-
-  label = gtk_label_new ("");
-  gtk_widget_hide (label);
   gtk_box_append (GTK_BOX (widget), label);
 
-  g_object_bind_property (button, "active", label, "visible", 0);
+  label = gtk_label_new ("");
+  gtk_box_append (GTK_BOX (widget), label);
 
   gtk_widget_set_margin_start (widget, 6);
   gtk_widget_set_margin_end (widget, 6);
@@ -1360,26 +1350,26 @@ bind_widget_for_recording (GtkListItemFactory *factory,
                            gpointer            data)
 {
   GtkInspectorRecording *recording = gtk_list_item_get_item (item);
-  GtkWidget *widget, *hbox, *label, *button, *label2;
+  GtkWidget *widget, *label, *label2;
 
   widget = gtk_list_item_get_child (item);
-  hbox = gtk_widget_get_first_child (widget);
-  label = gtk_widget_get_first_child (hbox);
-  button = gtk_widget_get_next_sibling (label);
-  label2 = gtk_widget_get_next_sibling (hbox);
+  label = gtk_widget_get_first_child (widget);
+  label2 = gtk_widget_get_next_sibling (label);
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
-      gtk_label_set_label (GTK_LABEL (label), "<b>Frame</b>");
-      gtk_widget_show (button);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-      gtk_label_set_label (GTK_LABEL (label2), gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+      char *ts;
+
+      gtk_label_set_label (GTK_LABEL (label), "Frame");
+      gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
+      ts = g_strdup_printf ("%.3f", gtk_inspector_recording_get_timestamp (recording) / 1000.0);
+      gtk_label_set_label (GTK_LABEL (label2), ts);
+      g_free (ts);
     }
   else
     {
       gtk_label_set_label (GTK_LABEL (label), "<b>Start of Recording</b>");
-      gtk_widget_hide (button);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       gtk_label_set_label (GTK_LABEL (label2), "");
     }
 }
@@ -1540,8 +1530,8 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   gtk_widget_init_template (GTK_WIDGET (recorder));
 
   factory = gtk_signal_list_item_factory_new ();
-  g_signal_connect (factory, "setup", G_CALLBACK (setup_widget_for_recording), NULL);
-  g_signal_connect (factory, "bind", G_CALLBACK (bind_widget_for_recording), NULL);
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_widget_for_recording), recorder);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_widget_for_recording), recorder);
   gtk_list_view_set_factory (GTK_LIST_VIEW (recorder->recordings_list), factory);
   g_object_unref (factory);
 
@@ -1572,7 +1562,6 @@ static void
 gtk_inspector_recorder_add_recording (GtkInspectorRecorder  *recorder,
                                       GtkInspectorRecording *recording)
 {
-  g_print ("appending %s\n", G_OBJECT_TYPE_NAME (recording));
   g_list_store_append (G_LIST_STORE (recorder->recordings), recording);
 }
 
@@ -1586,6 +1575,7 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
   if (recording)
     {
       recorder->recording = gtk_inspector_start_recording_new ();
+      recorder->start_time = 0;
       gtk_inspector_recorder_add_recording (recorder, recorder->recording);
     }
   else
@@ -1612,13 +1602,25 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
 {
   GtkInspectorRecording *recording;
   GdkFrameClock *frame_clock;
+  gint64 frame_time;
 
   if (!gtk_inspector_recorder_is_recording (recorder))
     return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
+  frame_time = gdk_frame_clock_get_frame_time (frame_clock);
 
-  recording = gtk_inspector_render_recording_new (gdk_frame_clock_get_frame_time (frame_clock),
+  if (recorder->start_time == 0)
+    {
+      recorder->start_time = frame_time;
+      frame_time = 0;
+    }
+  else
+    {
+      frame_time = frame_time - recorder->start_time;
+    }
+
+  recording = gtk_inspector_render_recording_new (frame_time,
                                                   gsk_renderer_get_profiler (renderer),
                                                   &(GdkRectangle) { 0, 0,
                                                     gdk_surface_get_width (surface),
