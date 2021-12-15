@@ -181,7 +181,7 @@ init_formats (GtkInspectorClipboard *self,
     gtk_list_box_remove (list, GTK_WIDGET (row));
 
   formats = gdk_clipboard_get_formats (clipboard);
-  
+
   gtypes = gdk_content_formats_get_gtypes (formats, &n);
   for (i = 0; i < n; i++)
     add_content_type_row (self, list, g_type_name (gtypes[i]), clipboard, G_CALLBACK (load_gtype), GSIZE_TO_POINTER (gtypes[i]));
@@ -235,7 +235,6 @@ primary_notify (GdkClipboard          *clipboard,
       init_formats (self, GTK_LIST_BOX (self->primary_formats), clipboard);
     }
 
-  g_print ("%s: %s\n", pspec->name, gdk_content_formats_to_string (gdk_clipboard_get_formats (clipboard)));
   init_info (self, GTK_LABEL (self->primary_info), clipboard);
 }
 
