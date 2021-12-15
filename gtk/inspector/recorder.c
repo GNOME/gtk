@@ -1375,6 +1375,7 @@ populate_event_properties (GtkListStore *store,
   type = gdk_event_get_event_type (event);
 
   add_text_row (store, "Type", event_type_name (type));
+  add_int_row (store, "Timestamp", gdk_event_get_time (event));
 
   device = gdk_event_get_device (event);
   if (device)
@@ -1447,6 +1448,35 @@ populate_event_properties (GtkListStore *store,
     default:
       /* FIXME */
       ;
+    }
+
+  if (type == GDK_MOTION_NOTIFY || type == GDK_SCROLL)
+    {
+      GdkTimeCoord *history;
+      guint n_coords;
+
+      history = gdk_event_get_history (event, &n_coords);
+      if (history)
+        {
+          GString *s;
+
+          s = g_string_new ("");
+
+          for (int i = 0; i < n_coords; i++)
+            {
+              if (i > 0)
+                g_string_append (s, "\n");
+              if ((history[i].flags & (GDK_AXIS_FLAG_X|GDK_AXIS_FLAG_Y)) == (GDK_AXIS_FLAG_X|GDK_AXIS_FLAG_Y))
+                g_string_append_printf (s, "%d: %.2f %.2f", history[i].time, history[i].axes[GDK_AXIS_X], history[i].axes[GDK_AXIS_Y]);
+              if ((history[i].flags & (GDK_AXIS_FLAG_DELTA_X|GDK_AXIS_FLAG_DELTA_Y)) == (GDK_AXIS_FLAG_DELTA_X|GDK_AXIS_FLAG_DELTA_Y))
+                g_string_append_printf (s, "%d: %.2f %.2f", history[i].time, history[i].axes[GDK_AXIS_DELTA_X], history[i].axes[GDK_AXIS_DELTA_Y]);
+            }
+
+          add_text_row (store, "History", s->str);
+
+          g_string_free (s, TRUE);
+          g_free (history);
+        }
     }
 }
 
