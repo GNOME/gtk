@@ -9,6 +9,7 @@ inspector_sources = files(
   'controllers.c',
   'css-editor.c',
   'css-node-tree.c',
+  'eventrecording.c',
   'focusoverlay.c',
   'fpsoverlay.c',
   'general.c',

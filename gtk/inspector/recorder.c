@@ -39,6 +39,7 @@
 #include <gtk/gtktreelistmodel.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeview.h>
+#include <gtk/gtkstack.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>
@@ -53,6 +54,7 @@
 #include "recording.h"
 #include "renderrecording.h"
 #include "startrecording.h"
+#include "eventrecording.h"
 
 struct _GtkInspectorRecorder
 {
@@ -70,9 +72,14 @@ struct _GtkInspectorRecorder
   GtkWidget *render_node_save_button;
   GtkWidget *render_node_clip_button;
   GtkWidget *node_property_tree;
+  GtkWidget *recording_data_stack;
   GtkTreeModel *render_node_properties;
+  GtkTreeModel *event_properties;
+  GtkWidget *event_property_tree;
+  GtkWidget *event_view;
 
   GtkInspectorRecording *recording; /* start recording if recording or NULL if not */
+  gint64 start_time;
 
   gboolean debug_nodes;
 };
@@ -425,6 +432,75 @@ bind_widget_for_render_node (GtkSignalListItemFactory *factory,
 }
 
 static void
+show_render_node (GtkInspectorRecorder *recorder,
+                  GskRenderNode        *node)
+{
+  graphene_rect_t bounds;
+  GdkPaintable *paintable;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  paintable = gtk_render_node_paintable_new (node, &bounds);
+
+  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (recorder->recording_data_stack)), "frame_data") == 0)
+    {
+      gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), paintable);
+
+      g_list_store_splice (recorder->render_node_root_model,
+                           0, g_list_model_get_n_items (G_LIST_MODEL (recorder->render_node_root_model)),
+                           (gpointer[1]) { paintable },
+                           1);
+    }
+  else
+    {
+      gtk_picture_set_paintable (GTK_PICTURE (recorder->event_view), paintable);
+    }
+
+  g_object_unref (paintable);
+}
+
+static GskRenderNode *
+make_dot (double x, double y)
+{
+  GskRenderNode *fill, *dot;
+  GdkRGBA red = (GdkRGBA){ 1, 0, 0, 1 };
+  graphene_rect_t rect = GRAPHENE_RECT_INIT (x - 3, y - 3, 6, 6);
+  graphene_size_t corner = GRAPHENE_SIZE_INIT (3, 3);
+  GskRoundedRect clip;
+
+  fill = gsk_color_node_new (&red, &rect);
+  dot = gsk_rounded_clip_node_new (fill, gsk_rounded_rect_init (&clip, &rect,
+                                                               &corner, &corner, &corner, &corner));
+  gsk_render_node_unref (fill);
+
+  return dot;
+}
+
+static void
+show_event (GtkInspectorRecorder *recorder,
+            GskRenderNode        *node,
+            GdkEvent             *event)
+{
+  GskRenderNode *temp;
+  double x, y;
+
+  if (gdk_event_get_position (event, &x, &y))
+    {
+      GskRenderNode *dot = make_dot (x, y);
+      temp = gsk_container_node_new ((GskRenderNode *[]) { node, dot }, 2);
+      gsk_render_node_unref (dot);
+    }
+  else
+    temp = gsk_render_node_ref (node);
+
+  show_render_node (recorder, temp);
+
+  gsk_render_node_unref (temp);
+}
+
+static void populate_event_properties (GtkListStore *store,
+                                       GdkEvent     *event);
+
+static void
 recording_selected (GtkSingleSelection   *selection,
                     GParamSpec           *pspec,
                     GtkInspectorRecorder *recorder)
@@ -432,29 +508,51 @@ recording_selected (GtkSingleSelection   *selection,
   GtkInspectorRecording *recording;
 
   if (recorder->recordings == NULL)
-    return;
+    {
+      gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "no_data");
+      return;
+    }
 
   recording = gtk_single_selection_get_selected_item (selection);
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
-      graphene_rect_t bounds;
       GskRenderNode *node;
-      GdkPaintable *paintable;
+
+      gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "frame_data");
 
       node = gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording));
-      gsk_render_node_get_bounds (node, &bounds);
-      paintable = gtk_render_node_paintable_new (node, &bounds);
-      gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), paintable);
+      show_render_node (recorder, node);
+    }
+  else if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
+    {
+      GdkEvent *event;
 
-      g_list_store_splice (recorder->render_node_root_model,
-                           0, g_list_model_get_n_items (G_LIST_MODEL (recorder->render_node_root_model)),
-                           (gpointer[1]) { paintable },
-                           1);
-      g_object_unref (paintable);
+      gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "event_data");
+
+      event = gtk_inspector_event_recording_get_event (GTK_INSPECTOR_EVENT_RECORDING (recording));
+
+      for (guint pos = gtk_single_selection_get_selected (selection) - 1; pos > 0; pos--)
+        {
+          GtkInspectorRecording *item = g_list_model_get_item (G_LIST_MODEL (selection), pos);
+
+          g_object_unref (item);
+          if (GTK_INSPECTOR_IS_RENDER_RECORDING (item))
+            {
+              GskRenderNode *node;
+
+              node = gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (item));
+              show_event (recorder, node, event);
+              break;
+            }
+        }
+
+      populate_event_properties (GTK_LIST_STORE (recorder->event_properties), event);
     }
   else
     {
+      gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "no_data");
+
       gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), NULL);
       g_list_store_remove_all (recorder->render_node_root_model);
     }
@@ -1161,6 +1259,227 @@ populate_render_node_properties (GtkListStore  *store,
     }
 }
 
+static const char *
+event_type_name (GdkEventType type)
+{
+  const char *event_name[] = {
+    "Delete",
+    "Motion",
+    "Button Press",
+    "Button Release",
+    "Key Press",
+    "Key Release",
+    "Enter",
+    "Leave",
+    "Focus",
+    "Proximity In",
+    "Proximity Out",
+    "Drag Enter",
+    "Drag Leave",
+    "Drag Motion",
+    "Drop Start",
+    "Scroll",
+    "Grab Broken",
+    "Touch Begin",
+    "Touch Update",
+    "Touch End",
+    "Touch Cancel",
+    "Touchpad Swipe",
+    "Touchpad Pinch",
+    "Pad Button Press",
+    "Pad Button Release",
+    "Pad Rind",
+    "Pad Strip",
+    "Pad Group Mode"
+  };
+
+  return event_name[type];
+}
+
+static const char *
+scroll_direction_name (GdkScrollDirection dir)
+{
+  const char *scroll_dir[] = {
+    "Up", "Down", "Left", "Right", "Smooth"
+  };
+  return scroll_dir[dir];
+}
+
+static char *
+modifier_names (GdkModifierType state)
+{
+  struct {
+    const char *name;
+    int mask;
+  } mods[] = {
+    { "Shift", GDK_SHIFT_MASK },
+    { "Lock", GDK_LOCK_MASK },
+    { "Control", GDK_CONTROL_MASK },
+    { "Alt", GDK_ALT_MASK },
+    { "Button1", GDK_BUTTON1_MASK },
+    { "Button2", GDK_BUTTON2_MASK },
+    { "Button3", GDK_BUTTON3_MASK },
+    { "Button4", GDK_BUTTON4_MASK },
+    { "Button5", GDK_BUTTON5_MASK },
+    { "Super", GDK_SUPER_MASK },
+    { "Hyper", GDK_HYPER_MASK },
+    { "Meta", GDK_META_MASK },
+  };
+  GString *s;
+
+  s = g_string_new ("");
+
+  for (int i = 0; i < G_N_ELEMENTS (mods); i++)
+    {
+      if (state & mods[i].mask)
+        {
+          if (s->len > 0)
+            g_string_append (s, " ");
+          g_string_append (s, mods[i].name);
+        }
+    }
+
+  return g_string_free (s, FALSE);
+}
+
+static char *
+key_event_string (GdkEvent *event)
+{
+  guint keyval;
+  gunichar c;
+  char buf[5] = { 0, };
+
+  keyval = gdk_key_event_get_keyval (event);
+  c = gdk_keyval_to_unicode (keyval);
+  if (c)
+    {
+      g_unichar_to_utf8 (c, buf);
+      return g_strdup (buf);
+    }
+
+  return g_strdup (gdk_keyval_name (keyval));
+}
+
+static void
+populate_event_properties (GtkListStore *store,
+                           GdkEvent     *event)
+{
+  GdkEventType type;
+  GdkDevice *device;
+  double x, y;
+  char *tmp;
+  GdkModifierType state;
+
+  gtk_list_store_clear (store);
+
+  type = gdk_event_get_event_type (event);
+
+  add_text_row (store, "Type", event_type_name (type));
+  add_int_row (store, "Timestamp", gdk_event_get_time (event));
+
+  device = gdk_event_get_device (event);
+  if (device)
+    add_text_row (store, "Device", gdk_device_get_name (device));
+
+  if (gdk_event_get_position (event, &x, &y))
+    {
+      tmp = g_strdup_printf ("%.2f %.2f", x, y);
+      add_text_row (store, "Position", tmp);
+      g_free (tmp);
+    }
+
+  state = gdk_event_get_modifier_state (event);
+  if (state != 0)
+    {
+      tmp = modifier_names (state);
+      add_text_row (store, "State", tmp);
+      g_free (tmp);
+    }
+
+  switch ((int)type)
+    {
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      add_int_row (store, "Button", gdk_button_event_get_button (event));
+      break;
+
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      add_int_row (store, "Keycode", gdk_key_event_get_keycode (event));
+      add_int_row (store, "Keyval", gdk_key_event_get_keyval (event));
+      tmp = key_event_string (event);
+      add_text_row (store, "Key", tmp);
+      g_free (tmp);
+      add_int_row (store, "Layout", gdk_key_event_get_layout (event));
+      add_int_row (store, "Level", gdk_key_event_get_level (event));
+      add_boolean_row (store, "Is Modifier", gdk_key_event_is_modifier (event));
+      break;
+
+    case GDK_SCROLL:
+      if (gdk_scroll_event_get_direction (event) == GDK_SCROLL_SMOOTH)
+        {
+          gdk_scroll_event_get_deltas (event, &x, &y);
+          tmp = g_strdup_printf ("%.2f %.2f", x, y);
+          add_text_row (store, "Delta", tmp);
+          g_free (tmp);
+        }
+      else
+        {
+          add_text_row (store, "Direction", scroll_direction_name (gdk_scroll_event_get_direction (event)));
+        }
+      add_boolean_row (store, "Is Stop", gdk_scroll_event_is_stop (event));
+      break;
+
+    case GDK_FOCUS_CHANGE:
+      add_text_row (store, "Direction", gdk_focus_event_get_in (event) ? "In" : "Out");
+      break;
+
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+      add_int_row (store, "Mode", gdk_crossing_event_get_mode (event));
+      add_int_row (store, "Detail", gdk_crossing_event_get_detail (event));
+      add_boolean_row (store, "Is Focus", gdk_crossing_event_get_focus (event));
+      break;
+
+    case GDK_GRAB_BROKEN:
+      add_boolean_row (store, "Implicit", gdk_grab_broken_event_get_implicit (event));
+      break;
+
+    default:
+      /* FIXME */
+      ;
+    }
+
+  if (type == GDK_MOTION_NOTIFY || type == GDK_SCROLL)
+    {
+      GdkTimeCoord *history;
+      guint n_coords;
+
+      history = gdk_event_get_history (event, &n_coords);
+      if (history)
+        {
+          GString *s;
+
+          s = g_string_new ("");
+
+          for (int i = 0; i < n_coords; i++)
+            {
+              if (i > 0)
+                g_string_append (s, "\n");
+              if ((history[i].flags & (GDK_AXIS_FLAG_X|GDK_AXIS_FLAG_Y)) == (GDK_AXIS_FLAG_X|GDK_AXIS_FLAG_Y))
+                g_string_append_printf (s, "%d: %.2f %.2f", history[i].time, history[i].axes[GDK_AXIS_X], history[i].axes[GDK_AXIS_Y]);
+              if ((history[i].flags & (GDK_AXIS_FLAG_DELTA_X|GDK_AXIS_FLAG_DELTA_Y)) == (GDK_AXIS_FLAG_DELTA_X|GDK_AXIS_FLAG_DELTA_Y))
+                g_string_append_printf (s, "%d: %.2f %.2f", history[i].time, history[i].axes[GDK_AXIS_DELTA_X], history[i].axes[GDK_AXIS_DELTA_Y]);
+            }
+
+          add_text_row (store, "History", s->str);
+
+          g_string_free (s, TRUE);
+          g_free (history);
+        }
+    }
+}
+
 static GskRenderNode *
 get_selected_node (GtkInspectorRecorder *recorder)
 {
@@ -1324,27 +1643,16 @@ setup_widget_for_recording (GtkListItemFactory *factory,
                             GtkListItem        *item,
                             gpointer            data)
 {
-  GtkWidget *widget, *hbox, *label, *button;
+  GtkWidget *widget, *label;
 
-  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_box_append (GTK_BOX (widget), hbox);
+  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   label = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-  gtk_box_append (GTK_BOX (hbox), label);
-
-  button = gtk_toggle_button_new ();
-  gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
-  gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
-  gtk_box_append (GTK_BOX (hbox), button);
-
-  label = gtk_label_new ("");
-  gtk_widget_hide (label);
   gtk_box_append (GTK_BOX (widget), label);
 
-  g_object_bind_property (button, "active", label, "visible", 0);
+  label = gtk_label_new ("");
+  gtk_box_append (GTK_BOX (widget), label);
 
   gtk_widget_set_margin_start (widget, 6);
   gtk_widget_set_margin_end (widget, 6);
@@ -1354,32 +1662,116 @@ setup_widget_for_recording (GtkListItemFactory *factory,
   gtk_list_item_set_child (item, widget);
 }
 
+static char *
+get_event_summary (GdkEvent *event)
+{
+  double x, y;
+  int type;
+  const char *name;
+
+  gdk_event_get_position (event, &x, &y);
+  type = gdk_event_get_event_type (event);
+  name = event_type_name (type);
+
+  switch (type)
+    {
+    case GDK_ENTER_NOTIFY:
+    case GDK_LEAVE_NOTIFY:
+    case GDK_MOTION_NOTIFY:
+    case GDK_DRAG_ENTER:
+    case GDK_DRAG_LEAVE:
+    case GDK_DRAG_MOTION:
+    case GDK_DROP_START:
+    case GDK_TOUCH_BEGIN:
+    case GDK_TOUCH_UPDATE:
+    case GDK_TOUCH_END:
+    case GDK_TOUCH_CANCEL:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+    case GDK_BUTTON_PRESS:
+    case GDK_BUTTON_RELEASE:
+      return g_strdup_printf ("%s (%.2f %.2f)", name, x, y);
+
+    case GDK_KEY_PRESS:
+    case GDK_KEY_RELEASE:
+      {
+        char *tmp, *ret;
+        tmp = key_event_string (event);
+        ret = g_strdup_printf ("%s %s\n", name, tmp);
+        g_free (tmp);
+        return ret;
+      }
+
+    case GDK_FOCUS_CHANGE:
+      return g_strdup_printf ("%s %s", name, gdk_focus_event_get_in (event) ? "In" : "Out");
+
+    case GDK_GRAB_BROKEN:
+    case GDK_PROXIMITY_IN:
+    case GDK_PROXIMITY_OUT:
+    case GDK_PAD_BUTTON_PRESS:
+    case GDK_PAD_BUTTON_RELEASE:
+    case GDK_PAD_RING:
+    case GDK_PAD_STRIP:
+    case GDK_PAD_GROUP_MODE:
+      return g_strdup_printf ("%s", name);
+
+    case GDK_SCROLL:
+      if (gdk_scroll_event_get_direction (event) == GDK_SCROLL_SMOOTH)
+        {
+          gdk_scroll_event_get_deltas (event, &x, &y);
+          return g_strdup_printf ("%s %.2f %.2f", name, x, y);
+        }
+      else
+        {
+          return g_strdup_printf ("%s %s", name, scroll_direction_name (gdk_scroll_event_get_direction (event)));
+        }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static void
 bind_widget_for_recording (GtkListItemFactory *factory,
                            GtkListItem        *item,
                            gpointer            data)
 {
   GtkInspectorRecording *recording = gtk_list_item_get_item (item);
-  GtkWidget *widget, *hbox, *label, *button, *label2;
+  GtkWidget *widget, *label, *label2;
+  char *text;
 
   widget = gtk_list_item_get_child (item);
-  hbox = gtk_widget_get_first_child (widget);
-  label = gtk_widget_get_first_child (hbox);
-  button = gtk_widget_get_next_sibling (label);
-  label2 = gtk_widget_get_next_sibling (hbox);
+  label = gtk_widget_get_first_child (widget);
+  label2 = gtk_widget_get_next_sibling (label);
+
+  gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
-      gtk_label_set_label (GTK_LABEL (label), "<b>Frame</b>");
-      gtk_widget_show (button);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
-      gtk_label_set_label (GTK_LABEL (label2), gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+      gtk_label_set_label (GTK_LABEL (label), "Frame");
+      gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
+
+      text = g_strdup_printf ("%.3f", gtk_inspector_recording_get_timestamp (recording) / 1000.0);
+      gtk_label_set_label (GTK_LABEL (label2), text);
+      g_free (text);
+    }
+  else if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
+    {
+      GdkEvent *event = gtk_inspector_event_recording_get_event (GTK_INSPECTOR_EVENT_RECORDING (recording));
+
+      text = get_event_summary (event);
+      gtk_label_set_label (GTK_LABEL (label), text);
+      g_free (text);
+
+      text = g_strdup_printf ("%.3f", gtk_inspector_recording_get_timestamp (recording) / 1000.0);
+      gtk_label_set_label (GTK_LABEL (label2), text);
+      g_free (text);
     }
   else
     {
       gtk_label_set_label (GTK_LABEL (label), "<b>Start of Recording</b>");
-      gtk_widget_hide (button);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       gtk_label_set_label (GTK_LABEL (label2), "");
     }
 }
@@ -1521,6 +1913,9 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_save_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, render_node_clip_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, node_property_tree);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, recording_data_stack);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, event_view);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, event_property_tree);
 
   gtk_widget_class_bind_template_callback (widget_class, recordings_clear_all);
   gtk_widget_class_bind_template_callback (widget_class, recording_selected);
@@ -1540,8 +1935,8 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   gtk_widget_init_template (GTK_WIDGET (recorder));
 
   factory = gtk_signal_list_item_factory_new ();
-  g_signal_connect (factory, "setup", G_CALLBACK (setup_widget_for_recording), NULL);
-  g_signal_connect (factory, "bind", G_CALLBACK (bind_widget_for_recording), NULL);
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_widget_for_recording), recorder);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_widget_for_recording), recorder);
   gtk_list_view_set_factory (GTK_LIST_VIEW (recorder->recordings_list), factory);
   g_object_unref (factory);
 
@@ -1566,13 +1961,16 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   recorder->render_node_properties = GTK_TREE_MODEL (gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, GDK_TYPE_TEXTURE));
   gtk_tree_view_set_model (GTK_TREE_VIEW (recorder->node_property_tree), recorder->render_node_properties);
   g_object_unref (recorder->render_node_properties);
+
+  recorder->event_properties = GTK_TREE_MODEL (gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, GDK_TYPE_TEXTURE));
+  gtk_tree_view_set_model (GTK_TREE_VIEW (recorder->event_property_tree), recorder->event_properties);
+  g_object_unref (recorder->event_properties);
 }
 
 static void
 gtk_inspector_recorder_add_recording (GtkInspectorRecorder  *recorder,
                                       GtkInspectorRecording *recording)
 {
-  g_print ("appending %s\n", G_OBJECT_TYPE_NAME (recording));
   g_list_store_append (G_LIST_STORE (recorder->recordings), recording);
 }
 
@@ -1586,6 +1984,7 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
   if (recording)
     {
       recorder->recording = gtk_inspector_start_recording_new ();
+      recorder->start_time = 0;
       gtk_inspector_recorder_add_recording (recorder, recorder->recording);
     }
   else
@@ -1612,19 +2011,61 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
 {
   GtkInspectorRecording *recording;
   GdkFrameClock *frame_clock;
+  gint64 frame_time;
 
   if (!gtk_inspector_recorder_is_recording (recorder))
     return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
+  frame_time = gdk_frame_clock_get_frame_time (frame_clock);
 
-  recording = gtk_inspector_render_recording_new (gdk_frame_clock_get_frame_time (frame_clock),
+  if (recorder->start_time == 0)
+    {
+      recorder->start_time = frame_time;
+      frame_time = 0;
+    }
+  else
+    {
+      frame_time = frame_time - recorder->start_time;
+    }
+
+  recording = gtk_inspector_render_recording_new (frame_time,
                                                   gsk_renderer_get_profiler (renderer),
                                                   &(GdkRectangle) { 0, 0,
                                                     gdk_surface_get_width (surface),
                                                     gdk_surface_get_height (surface) },
                                                   region,
                                                   node);
+  gtk_inspector_recorder_add_recording (recorder, recording);
+  g_object_unref (recording);
+}
+
+void
+gtk_inspector_recorder_record_event (GtkInspectorRecorder *recorder,
+                                     GtkWidget            *widget,
+                                     GdkEvent             *event)
+{
+  GtkInspectorRecording *recording;
+  GdkFrameClock *frame_clock;
+  gint64 frame_time;
+
+  if (!gtk_inspector_recorder_is_recording (recorder))
+    return;
+
+  frame_clock = gtk_widget_get_frame_clock (widget);
+  frame_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+  if (recorder->start_time == 0)
+    {
+      recorder->start_time = frame_time;
+      frame_time = 0;
+    }
+  else
+    {
+      frame_time = frame_time - recorder->start_time;
+    }
+
+  recording = gtk_inspector_event_recording_new (frame_time, event);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
 }

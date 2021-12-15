@@ -209,7 +209,7 @@ struct _GdkTouchEvent
  * @pointer_emulated: whether the scroll event was the result of
  *   a pointer emulation
  * @tool: a `GdkDeviceTool`
- * @history: (element-type GdkScrollHistory): array of times and deltas
+ * @history: (element-type GdkTimeCoord): array of times and deltas
  *   for other scroll events that were compressed before delivering the
  *   current event
  *
@@ -233,7 +233,7 @@ struct _GdkScrollEvent
   gboolean pointer_emulated;
   gboolean is_stop;
   GdkDeviceTool *tool;
-  GArray *history; /* <GdkScrollHistory> */
+  GArray *history; /* <GdkTimeCoord> */
 };
 
 /*

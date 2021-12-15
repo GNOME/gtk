@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -522,7 +522,8 @@ _gdk_event_queue_find_first (GdkDisplay *display)
           if (pending_motion)
             return pending_motion;
 
-          if (event->event_type == GDK_MOTION_NOTIFY && (event->flags & GDK_EVENT_FLUSHED) == 0)
+          if ((event->event_type == GDK_MOTION_NOTIFY || event->event_type == GDK_SCROLL) &&
+              (event->flags & GDK_EVENT_FLUSHED) == 0)
             pending_motion = tmp_list;
           else
             return tmp_list;
@@ -596,6 +597,9 @@ _gdk_event_unqueue (GdkDisplay *display)
 /*
  * If the last N events in the event queue are smooth scroll events
  * for the same surface and device, combine them into one.
+ *
+ * We give the remaining event a history with N items, and deltas
+ * that are the sum over the history entries.
  */
 void
 gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
@@ -605,7 +609,6 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
   GdkDevice *device = NULL;
   GdkEvent *last_event = NULL;
   GList *scrolls = NULL;
-  double delta_x, delta_y;
   GArray *history = NULL;
   GdkTimeCoord hist;
 
@@ -640,35 +643,42 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
       l = l->prev;
     }
 
-  delta_x = delta_y = 0;
-
   while (scrolls && scrolls->next != NULL)
     {
       GdkEvent *event = scrolls->data;
       GList *next = scrolls->next;
       double dx, dy;
+      gboolean inherited = FALSE;
+
+      if (!history && ((GdkScrollEvent *)event)->history)
+        {
+          history = ((GdkScrollEvent *)event)->history;
+          ((GdkScrollEvent *)event)->history = NULL;
+          inherited = TRUE;
+        }
 
       if (!history)
         history = g_array_new (FALSE, TRUE, sizeof (GdkTimeCoord));
 
-      gdk_scroll_event_get_deltas (event, &dx, &dy);
-      delta_x += dx;
-      delta_y += dy;
+      if (!inherited)
+        {
+          gdk_scroll_event_get_deltas (event, &dx, &dy);
 
-      memset (&hist, 0, sizeof (GdkTimeCoord));
-      hist.time = gdk_event_get_time (event);
-      hist.flags = GDK_AXIS_FLAG_DELTA_X | GDK_AXIS_FLAG_DELTA_Y;
-      hist.axes[GDK_AXIS_DELTA_X] = dx;
-      hist.axes[GDK_AXIS_DELTA_Y] = dy;
+          memset (&hist, 0, sizeof (GdkTimeCoord));
+          hist.time = gdk_event_get_time (event);
+          hist.flags = GDK_AXIS_FLAG_DELTA_X | GDK_AXIS_FLAG_DELTA_Y;
+          hist.axes[GDK_AXIS_DELTA_X] = dx;
+          hist.axes[GDK_AXIS_DELTA_Y] = dy;
 
-      g_array_append_val (history, hist);
+          g_array_append_val (history, hist);
+       }
 
       gdk_event_unref (event);
       g_queue_delete_link (&display->queued_events, scrolls);
       scrolls = next;
     }
 
-  if (scrolls)
+  if (scrolls && history)
     {
       GdkEvent *old_event, *event;
       double dx, dy;
@@ -676,13 +686,29 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
       old_event = scrolls->data;
 
       gdk_scroll_event_get_deltas (old_event, &dx, &dy);
+
+      memset (&hist, 0, sizeof (GdkTimeCoord));
+      hist.time = gdk_event_get_time (old_event);
+      hist.flags = GDK_AXIS_FLAG_DELTA_X | GDK_AXIS_FLAG_DELTA_Y;
+      hist.axes[GDK_AXIS_DELTA_X] = dx;
+      hist.axes[GDK_AXIS_DELTA_Y] = dy;
+      g_array_append_val (history, hist);
+
+      dx = dy = 0;
+      for (int i = 0; i < history->len; i++)
+        {
+          GdkTimeCoord *val = &g_array_index (history, GdkTimeCoord, i);
+          dx += val->axes[GDK_AXIS_DELTA_X];
+          dy += val->axes[GDK_AXIS_DELTA_Y];
+        }
+
       event = gdk_scroll_event_new (surface,
                                     device,
                                     gdk_event_get_device_tool (old_event),
                                     gdk_event_get_time (old_event),
                                     gdk_event_get_modifier_state (old_event),
-                                    delta_x + dx,
-                                    delta_y + dy,
+                                    dx,
+                                    dy,
                                     gdk_scroll_event_is_stop (old_event));
 
       ((GdkScrollEvent *)event)->history = history;
@@ -714,24 +740,41 @@ gdk_motion_event_push_history (GdkEvent *event,
   g_assert (GDK_IS_EVENT_TYPE (event, GDK_MOTION_NOTIFY));
   g_assert (GDK_IS_EVENT_TYPE (history_event, GDK_MOTION_NOTIFY));
 
-  if (!self->tool)
-    return;
+  if (G_UNLIKELY (!self->history))
+    self->history = g_array_new (FALSE, TRUE, sizeof (GdkTimeCoord));
+
+  if (((GdkMotionEvent *)history_event)->history)
+    {
+      GArray *history = ((GdkMotionEvent *)history_event)->history;
+      g_array_append_vals (self->history, history->data, history->len);
+    }
 
   tool = gdk_event_get_device_tool (history_event);
 
   memset (&hist, 0, sizeof (GdkTimeCoord));
   hist.time = gdk_event_get_time (history_event);
-  hist.flags = gdk_device_tool_get_axes (tool);
-
-  for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
-    gdk_event_get_axis (history_event, i, &hist.axes[i]);
-
-  if (G_UNLIKELY (!self->history))
-    self->history = g_array_new (FALSE, TRUE, sizeof (GdkTimeCoord));
+  if (tool)
+    {
+      hist.flags = gdk_device_tool_get_axes (tool);
+      for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
+        gdk_event_get_axis (history_event, i, &hist.axes[i]);
+    }
+  else
+    {
+      hist.flags = GDK_AXIS_FLAG_X | GDK_AXIS_FLAG_Y;
+      gdk_event_get_position (history_event, &hist.axes[GDK_AXIS_X], &hist.axes[GDK_AXIS_Y]);
+    }
 
   g_array_append_val (self->history, hist);
 }
 
+/* If the last N events in the event queue are motion notify
+ * events for the same surface, drop all but the last.
+ *
+ * If a button is held down or the device has a tool, then
+ * we give the remaining events a history containing the N-1
+ * dropped events.
+ */
 void
 _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
 {
@@ -740,9 +783,6 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
   GdkSurface *pending_motion_surface = NULL;
   GdkDevice *pending_motion_device = NULL;
   GdkEvent *last_motion = NULL;
-
-  /* If the last N events in the event queue are motion notify
-   * events for the same surface, drop all but the last */
 
   tmp_list = g_queue_peek_tail_link (&display->queued_events);
 
@@ -780,12 +820,11 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
 
       if (last_motion != NULL)
         {
-          GdkModifierType state = gdk_event_get_modifier_state (last_motion);
-
-          if (state &
-              (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
-               GDK_BUTTON4_MASK | GDK_BUTTON5_MASK))
-           gdk_motion_event_push_history (last_motion, pending_motions->data);
+          if ((gdk_event_get_modifier_state (last_motion) &
+               (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
+                GDK_BUTTON4_MASK | GDK_BUTTON5_MASK)) ||
+               gdk_event_get_device_tool (last_motion) != NULL)
+            gdk_motion_event_push_history (last_motion, pending_motions->data);
         }
 
       gdk_event_unref (pending_motions->data);
@@ -2907,7 +2946,8 @@ gdk_motion_event_new (GdkSurface      *surface,
  * to the application because they occurred in the same frame as @event.
  *
  * Note that only motion and scroll events record history, and motion
- * events do it only if one of the mouse buttons is down.
+ * events do it only if one of the mouse buttons is down, or the device
+ * has a tool.
  *
  * Returns: (transfer container) (array length=out_n_coords) (nullable): an
  *   array of time and coordinates
