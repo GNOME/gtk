@@ -184,7 +184,7 @@ open_object_details (GtkWidget *button, GtkInspectorWindow *iw)
   GObject *selected;
 
   selected = gtk_inspector_object_tree_get_selected (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree));
- 
+
   gtk_inspector_window_set_object (iw, selected, CHILD_KIND_WIDGET, 0);
 
   gtk_stack_set_visible_child_name (GTK_STACK (iw->object_stack), "object-details");
@@ -752,7 +752,7 @@ gtk_inspector_window_get (GdkDisplay *display)
   iw = GTK_WIDGET (g_object_get_data (G_OBJECT (display), "-gtk-inspector"));
 
   if (!iw)
-    iw = GTK_WIDGET (gtk_inspector_window_new (display)); 
+    iw = GTK_WIDGET (gtk_inspector_window_new (display));
 
   return iw;
 }
@@ -872,6 +872,10 @@ gtk_inspector_handle_event (GdkEvent *event)
   iw = gtk_inspector_window_get_for_display (gdk_event_get_display (event));
   if (iw == NULL)
     return FALSE;
+
+  gtk_inspector_recorder_record_event (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
+                                       gtk_get_event_widget (event),
+                                       event);
 
   g_signal_emit (iw, signals[EVENT], 0, event, &handled);
 

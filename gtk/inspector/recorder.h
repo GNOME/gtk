@@ -44,6 +44,10 @@ void            gtk_inspector_recorder_record_render            (GtkInspectorRec
                                                                  const cairo_region_t   *region,
                                                                  GskRenderNode          *node);
 
+void            gtk_inspector_recorder_record_event             (GtkInspectorRecorder   *recorder,
+                                                                 GtkWidget              *widget,
+                                                                 GdkEvent               *event);
+
 G_END_DECLS
 
 #endif // _GTK_INSPECTOR_RECORDER_H_
