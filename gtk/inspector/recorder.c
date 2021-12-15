@@ -168,7 +168,7 @@ create_list_model_for_render_node (GskRenderNode *node)
       return create_render_node_list_model ((GskRenderNode *[1]) { gsk_shadow_node_get_child (node) }, 1);
 
     case GSK_BLEND_NODE:
-      return create_render_node_list_model ((GskRenderNode *[2]) { gsk_blend_node_get_bottom_child (node), 
+      return create_render_node_list_model ((GskRenderNode *[2]) { gsk_blend_node_get_bottom_child (node),
                                                                    gsk_blend_node_get_top_child (node) }, 2);
 
     case GSK_CROSS_FADE_NODE:
@@ -425,19 +425,16 @@ bind_widget_for_render_node (GtkSignalListItemFactory *factory,
 }
 
 static void
-recordings_list_row_selected (GtkListBox           *box,
-                              GtkListBoxRow        *row,
-                              GtkInspectorRecorder *recorder)
+recording_selected (GtkSingleSelection   *selection,
+                    GParamSpec           *pspec,
+                    GtkInspectorRecorder *recorder)
 {
   GtkInspectorRecording *recording;
 
   if (recorder->recordings == NULL)
     return;
 
-  if (row)
-    recording = g_list_model_get_item (recorder->recordings, gtk_list_box_row_get_index (row));
-  else
-    recording = NULL;
+  recording = gtk_single_selection_get_selected_item (selection);
 
   if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
     {
@@ -461,9 +458,6 @@ recordings_list_row_selected (GtkListBox           *box,
       gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), NULL);
       g_list_store_remove_all (recorder->render_node_root_model);
     }
-
-  if (recording)
-    g_object_unref (recording);
 }
 
 static GdkTexture *
@@ -1325,58 +1319,69 @@ toggle_dark_mode (GtkToggleButton *button,
     }
 }
 
-static GtkWidget *
-gtk_inspector_recorder_recordings_list_create_widget (gpointer item,
-                                                      gpointer user_data)
+static void
+setup_widget_for_recording (GtkListItemFactory *factory,
+                            GtkListItem        *item,
+                            gpointer            data)
 {
-  GtkInspectorRecording *recording = GTK_INSPECTOR_RECORDING (item);
-  GtkWidget *widget;
+  GtkWidget *widget, *hbox, *label, *button;
 
-  if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
-    {
-      cairo_region_t *region;
-      GtkWidget *hbox, *label, *button;
+  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_box_append (GTK_BOX (widget), hbox);
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_box_append (GTK_BOX (hbox), label);
 
-      widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  button = gtk_toggle_button_new ();
+  gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
+  gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
+  gtk_box_append (GTK_BOX (hbox), button);
 
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-      gtk_box_append (GTK_BOX (widget), hbox);
+  label = gtk_label_new ("");
+  gtk_widget_hide (label);
+  gtk_box_append (GTK_BOX (widget), label);
 
-      region = cairo_region_create_rectangle (
-                   gtk_inspector_render_recording_get_area (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      cairo_region_subtract (region,
-                             gtk_inspector_render_recording_get_clip_region (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      cairo_region_destroy (region);
-
-      label = gtk_label_new ("<b>Frame</b>");
-      gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
-      gtk_widget_set_hexpand (label, TRUE);
-      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-      gtk_box_append (GTK_BOX (hbox), label);
-
-      button = gtk_toggle_button_new ();
-      gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
-      gtk_button_set_icon_name (GTK_BUTTON (button), "view-more-symbolic");
-
-      gtk_box_append (GTK_BOX (hbox), button);
-
-      label = gtk_label_new (gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
-      gtk_widget_hide (label);
-      gtk_box_append (GTK_BOX (widget), label);
-      g_object_bind_property (button, "active", label, "visible", 0);
-    }
-  else
-    {
-      widget = gtk_label_new ("<b>Start of Recording</b>");
-      gtk_label_set_use_markup (GTK_LABEL (widget), TRUE);
-    }
+  g_object_bind_property (button, "active", label, "visible", 0);
 
   gtk_widget_set_margin_start (widget, 6);
   gtk_widget_set_margin_end (widget, 6);
   gtk_widget_set_margin_top (widget, 6);
   gtk_widget_set_margin_bottom (widget, 6);
 
-  return widget;
+  gtk_list_item_set_child (item, widget);
+}
+
+static void
+bind_widget_for_recording (GtkListItemFactory *factory,
+                           GtkListItem        *item,
+                           gpointer            data)
+{
+  GtkInspectorRecording *recording = gtk_list_item_get_item (item);
+  GtkWidget *widget, *hbox, *label, *button, *label2;
+
+  widget = gtk_list_item_get_child (item);
+  hbox = gtk_widget_get_first_child (widget);
+  label = gtk_widget_get_first_child (hbox);
+  button = gtk_widget_get_next_sibling (label);
+  label2 = gtk_widget_get_next_sibling (hbox);
+
+  if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
+    {
+      gtk_label_set_label (GTK_LABEL (label), "<b>Frame</b>");
+      gtk_widget_show (button);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+      gtk_label_set_label (GTK_LABEL (label2), gtk_inspector_render_recording_get_profiler_info (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+    }
+  else
+    {
+      gtk_label_set_label (GTK_LABEL (label), "<b>Start of Recording</b>");
+      gtk_widget_hide (button);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+      gtk_label_set_label (GTK_LABEL (label2), "");
+    }
 }
 
 static void
@@ -1518,7 +1523,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorRecorder, node_property_tree);
 
   gtk_widget_class_bind_template_callback (widget_class, recordings_clear_all);
-  gtk_widget_class_bind_template_callback (widget_class, recordings_list_row_selected);
+  gtk_widget_class_bind_template_callback (widget_class, recording_selected);
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
   gtk_widget_class_bind_template_callback (widget_class, render_node_clip);
   gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
@@ -1534,11 +1539,11 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
 
   gtk_widget_init_template (GTK_WIDGET (recorder));
 
-  gtk_list_box_bind_model (GTK_LIST_BOX (recorder->recordings_list),
-                           recorder->recordings,
-                           gtk_inspector_recorder_recordings_list_create_widget,
-                           recorder,
-                           NULL);
+  factory = gtk_signal_list_item_factory_new ();
+  g_signal_connect (factory, "setup", G_CALLBACK (setup_widget_for_recording), NULL);
+  g_signal_connect (factory, "bind", G_CALLBACK (bind_widget_for_recording), NULL);
+  gtk_list_view_set_factory (GTK_LIST_VIEW (recorder->recordings_list), factory);
+  g_object_unref (factory);
 
   recorder->render_node_root_model = g_list_store_new (GDK_TYPE_PAINTABLE);
   recorder->render_node_model = gtk_tree_list_model_new (g_object_ref (G_LIST_MODEL (recorder->render_node_root_model)),
@@ -1567,6 +1572,7 @@ static void
 gtk_inspector_recorder_add_recording (GtkInspectorRecorder  *recorder,
                                       GtkInspectorRecording *recording)
 {
+  g_print ("appending %s\n", G_OBJECT_TYPE_NAME (recording));
   g_list_store_append (G_LIST_STORE (recorder->recordings), recording);
 }
 
