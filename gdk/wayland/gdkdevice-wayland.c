@@ -137,6 +137,7 @@ struct _GdkWaylandPointerData {
   guint cursor_timeout_id;
   guint cursor_image_index;
   guint cursor_image_delay;
+  guint touchpad_event_sequence;
 
   guint current_output_scale;
   GSList *pointer_surface_outputs;
@@ -2667,8 +2668,11 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
 
   seat->pointer_info.time = _time;
 
+  if (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
+    seat->pointer_info.touchpad_event_sequence++;
+
   event = gdk_touchpad_event_new_swipe (seat->pointer_info.focus,
-                                        NULL,
+                                        GDK_SLOT_TO_EVENT_SEQUENCE (seat->pointer_info.touchpad_event_sequence),
                                         seat->logical_pointer,
                                         _time,
                                         device_get_modifiers (seat->logical_pointer),
@@ -2764,8 +2768,11 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
 
   seat->pointer_info.time = _time;
 
+  if (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
+    seat->pointer_info.touchpad_event_sequence++;
+
   event = gdk_touchpad_event_new_pinch (seat->pointer_info.focus,
-                                        NULL,
+                                        GDK_SLOT_TO_EVENT_SEQUENCE (seat->pointer_info.touchpad_event_sequence),
                                         seat->logical_pointer,
                                         _time,
                                         device_get_modifiers (seat->logical_pointer),
