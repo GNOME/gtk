@@ -1398,6 +1398,19 @@ axis_name (GdkAxisUse axis)
   return name[axis];
 }
 
+static const char *
+gesture_phase_name (GdkTouchpadGesturePhase phase)
+{
+  const char *name[] = {
+    "Begin",
+    "Update",
+    "End",
+    "Cancel"
+  };
+
+  return name[phase];
+}
+
 static void
 populate_event_properties (GtkListStore *store,
                            GdkEvent     *event)
@@ -1406,6 +1419,7 @@ populate_event_properties (GtkListStore *store,
   GdkDevice *device;
   GdkDeviceTool *tool;
   double x, y;
+  double dx, dy;
   char *tmp;
   GdkModifierType state;
 
@@ -1506,6 +1520,25 @@ populate_event_properties (GtkListStore *store,
 
     case GDK_GRAB_BROKEN:
       add_boolean_row (store, "Implicit", gdk_grab_broken_event_get_implicit (event));
+      break;
+
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
+      add_text_row (store, "Phase", gesture_phase_name (gdk_touchpad_event_get_gesture_phase (event)));
+      add_int_row (store, "Fingers", gdk_touchpad_event_get_n_fingers (event));
+      gdk_touchpad_event_get_deltas (event, &dx, &dy);
+      tmp = g_strdup_printf ("%.2f %.f2", dx, dy);
+      add_text_row (store, "Delta", tmp);
+      g_free (tmp);
+      if (type == GDK_TOUCHPAD_PINCH)
+        {
+          tmp = g_strdup_printf ("%.2f", gdk_touchpad_event_get_pinch_angle_delta (event));
+          add_text_row (store, "Angle Delta", tmp);
+          g_free (tmp);
+          tmp = g_strdup_printf ("%.2f", gdk_touchpad_event_get_pinch_scale (event));
+          add_text_row (store, "Scale", tmp);
+          g_free (tmp);
+        }
       break;
 
     default:
