@@ -879,6 +879,7 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 				  NULL));
 
   impl->view = NULL;
+  impl->toplevel = NULL;
 
   if (attributes_mask & GDK_WA_TYPE_HINT)
     {

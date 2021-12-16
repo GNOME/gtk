@@ -33,6 +33,7 @@
 #include "gdkmonitor-quartz.h"
 #include "gdkglcontext-quartz.h"
 #include "gdkinternal-quartz.h"
+#include "gdkwindow.h"
 
 /* Note about coordinates: There are three coordinate systems at play:
  *
@@ -453,10 +454,29 @@ static GdkMonitor *
 gdk_quartz_display_get_monitor_at_window (GdkDisplay *display,
                                           GdkWindow *window)
 {
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-  NSWindow *nswindow = impl->toplevel;
-  NSScreen *screen = [nswindow screen];
+  GdkWindowImplQuartz *impl = NULL;
+  NSWindow *nswindow = NULL;
+  NSScreen *screen = NULL;
   GdkMonitor *monitor = NULL;
+  GdkWindow *onscreen_window = window;
+
+  /*
+   * This stops crashes when there is no NSWindow available on
+   * an offscreen window which occurs for children of children
+   * of an onscreen window (children of an onscreen window do
+   * have NSWindow set)
+   * https://gitlab.gnome.org/GNOME/gimp/-/issues/7608
+   */
+  while (onscreen_window && onscreen_window->window_type == GDK_WINDOW_OFFSCREEN)
+    onscreen_window = onscreen_window->parent;
+
+  if (!onscreen_window)
+    return NULL;
+
+  impl = GDK_WINDOW_IMPL_QUARTZ (onscreen_window->impl);
+  nswindow = impl->toplevel;
+  screen = [nswindow screen];
+
   if (screen)
   {
     GdkQuartzDisplay *quartz_display = GDK_QUARTZ_DISPLAY (display);
