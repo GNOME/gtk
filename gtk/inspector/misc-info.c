@@ -19,6 +19,8 @@
 #include <glib/gi18n-lib.h>
 
 #include "misc-info.h"
+
+#include "measuregraph.h"
 #include "window.h"
 #include "type-info.h"
 
@@ -55,6 +57,10 @@ struct _GtkInspectorMiscInfo
   GtkWidget *mnemonic_label;
   GtkWidget *request_mode_row;
   GtkWidget *request_mode;
+  GtkWidget *measure_row;
+  GtkWidget *measure_expand_toggle;
+  GtkWidget *measure_picture;
+  GdkPaintable *measure_graph;
   GtkWidget *allocated_size_row;
   GtkWidget *allocated_size;
   GtkWidget *baseline_row;
@@ -158,6 +164,8 @@ update_allocation (GtkWidget            *w,
   value = g_enum_get_value (class, gtk_widget_get_request_mode (w));
   gtk_label_set_label (GTK_LABEL (sl->request_mode), value->value_nick);
   g_type_class_unref (class);
+
+  gtk_inspector_measure_graph_measure (GTK_INSPECTOR_MEASURE_GRAPH (sl->measure_graph), w);
 }
 
 static void
@@ -424,6 +432,50 @@ update_info (gpointer data)
   return G_SOURCE_CONTINUE;
 }
 
+static GdkContentProvider *
+measure_picture_drag_prepare (GtkDragSource *source,
+                              double         x,
+                              double         y,
+                              gpointer       unused)
+{
+  GtkWidget *picture;
+  GdkPaintable *measure_graph;
+  GdkTexture *texture;
+
+  picture = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+  measure_graph = gtk_picture_get_paintable (GTK_PICTURE (picture));
+  if (!GTK_IS_INSPECTOR_MEASURE_GRAPH (measure_graph))
+    return NULL;
+
+  texture = gtk_inspector_measure_graph_get_texture (GTK_INSPECTOR_MEASURE_GRAPH (measure_graph));
+  if (texture == NULL)
+    return NULL;
+
+  return gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, texture);
+}
+
+static void
+update_measure_picture (GtkPicture      *picture,
+                        GtkToggleButton *toggle)
+{
+  GdkPaintable *paintable = gtk_picture_get_paintable (picture);
+
+  if (gtk_toggle_button_get_active (toggle) ||
+      (gdk_paintable_get_intrinsic_width (paintable) <= 200 &&
+       gdk_paintable_get_intrinsic_height (paintable) <= 100))
+    {
+      gtk_picture_set_can_shrink (picture, FALSE);
+      gtk_widget_set_size_request (GTK_WIDGET (picture), -1, -1);
+    }
+  else
+    {
+      gtk_picture_set_can_shrink (picture, TRUE);
+      gtk_widget_set_size_request (GTK_WIDGET (picture),
+                                   -1,
+                                   MIN (100, 200 / gdk_paintable_get_intrinsic_aspect_ratio (paintable)));
+    }
+}
+
 void
 gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
                                     GObject              *object)
@@ -448,6 +500,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_show (sl->state_row);
       gtk_widget_show (sl->direction_row);
       gtk_widget_show (sl->request_mode_row);
+      gtk_widget_show (sl->measure_row);
       gtk_widget_show (sl->allocated_size_row);
       gtk_widget_show (sl->baseline_row);
       gtk_widget_show (sl->mnemonic_label_row);
@@ -462,12 +515,15 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       state_flags_changed (GTK_WIDGET (sl->object), 0, sl);
 
       update_allocation (GTK_WIDGET (sl->object), sl);
+      update_measure_picture (GTK_PICTURE (sl->measure_picture), GTK_TOGGLE_BUTTON (sl->measure_expand_toggle));
     }
   else
     {
       gtk_widget_hide (sl->state_row);
       gtk_widget_hide (sl->direction_row);
       gtk_widget_hide (sl->request_mode_row);
+      gtk_widget_hide (sl->measure_row);
+      gtk_inspector_measure_graph_clear (GTK_INSPECTOR_MEASURE_GRAPH (sl->measure_graph));
       gtk_widget_hide (sl->mnemonic_label_row);
       gtk_widget_hide (sl->allocated_size_row);
       gtk_widget_hide (sl->baseline_row);
@@ -572,6 +628,10 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, mnemonic_label);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, request_mode_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, request_mode);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, measure_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, measure_expand_toggle);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, measure_picture);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, measure_graph);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, allocated_size_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, allocated_size);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, baseline_row);
@@ -600,6 +660,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, child_visible_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, child_visible);
 
+  gtk_widget_class_bind_template_callback (widget_class, update_measure_picture);
+  gtk_widget_class_bind_template_callback (widget_class, measure_picture_drag_prepare);
   gtk_widget_class_bind_template_callback (widget_class, show_surface);
   gtk_widget_class_bind_template_callback (widget_class, show_renderer);
   gtk_widget_class_bind_template_callback (widget_class, show_frame_clock);

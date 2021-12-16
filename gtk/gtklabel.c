@@ -4003,12 +4003,12 @@ gtk_label_set_wrap_mode (GtkLabel *self,
  *
  * See [method@Gtk.Label.set_wrap_mode].
  *
- * Returns: %TRUE if the lines of the label are automatically wrapped.
+ * Returns: the line wrap mode
  */
 PangoWrapMode
 gtk_label_get_wrap_mode (GtkLabel *self)
 {
-  g_return_val_if_fail (GTK_IS_LABEL (self), FALSE);
+  g_return_val_if_fail (GTK_IS_LABEL (self), PANGO_WRAP_WORD);
 
   return self->wrap_mode;
 }

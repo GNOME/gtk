@@ -24,6 +24,7 @@ inspector_sources = files(
   'layoutoverlay.c',
   'logs.c',
   'magnifier.c',
+  'measuregraph.c',
   'menu.c',
   'misc-info.c',
   'object-tree.c',
