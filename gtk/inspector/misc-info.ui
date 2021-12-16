@@ -255,6 +255,65 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkListBoxRow" id="measure_info_row">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Measure map</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkToggleButton" id="measure_expand_toggle">
+                                <property name="label" translatable="yes">Expand</property>
+                                <property name="halign">end</property>
+                                <property name="valign">baseline</property>
+                                <signal name="clicked" handler="update_measure_picture" swapped="yes" after="1" object="measure_picture"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow" id="measure_row">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin-start">10</property>
+                            <property name="margin-end">10</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkPicture" id="measure_picture">
+                                <property name="paintable">
+                                  <object class="GtkInspectorMeasureGraph" id="measure_graph" />
+                                </property>
+                                <property name="can-shrink">0</property>
+                                <property name="hexpand">1</property>
+                                <child>
+                                  <object class="GtkDragSource">
+                                    <signal name="prepare" handler="measure_picture_drag_prepare" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkListBoxRow" id="allocated_size_row">
                         <property name="activatable">0</property>
                         <child>
