@@ -402,6 +402,7 @@ struct _GdkTouchpadEvent
 {
   GdkEvent parent_instance;
 
+  GdkEventSequence *sequence;
   GdkModifierType state;
   gint8 phase;
   gint8 n_fingers;
@@ -506,18 +507,20 @@ GdkEvent * gdk_touch_event_new          (GdkEventType      type,
                                          double           *axes,
                                          gboolean          emulating);
 
-GdkEvent * gdk_touchpad_event_new_swipe (GdkSurface      *surface,
-                                         GdkDevice       *device,
-                                         guint32          time,
-                                         GdkModifierType  state,
+GdkEvent * gdk_touchpad_event_new_swipe (GdkSurface              *surface,
+                                         GdkEventSequence        *sequence,
+                                         GdkDevice               *device,
+                                         guint32                  time,
+                                         GdkModifierType          state,
                                          GdkTouchpadGesturePhase  phase,
-                                         double           x,
-                                         double           y,
-                                         int              n_fingers,
-                                         double           dx,
-                                         double           dy);
+                                         double                   x,
+                                         double                   y,
+                                         int                      n_fingers,
+                                         double                   dx,
+                                         double                   dy);
 
 GdkEvent * gdk_touchpad_event_new_pinch (GdkSurface              *surface,
+                                         GdkEventSequence        *sequence,
                                          GdkDevice               *device,
                                          guint32                  time,
                                          GdkModifierType          state,
