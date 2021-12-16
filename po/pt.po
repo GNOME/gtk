@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-14 00:32+0000\n"
-"PO-Revision-Date: 2021-12-14 14:02+0000\n"
+"POT-Creation-Date: 2021-12-16 14:58+0000\n"
+"PO-Revision-Date: 2021-12-16 15:47+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -2126,7 +2126,7 @@ msgstr "Já existe um ficheiro com esse nome"
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
 #: gtk/gtkwindow.c:6218 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1271
+#: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2137,7 +2137,7 @@ msgid "_Open"
 msgstr "_Abrir"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1272
+#: gtk/inspector/recorder.c:1707
 msgid "_Save"
 msgstr "_Gravar"
 
@@ -3567,7 +3567,8 @@ msgid "Attribute"
 msgstr "Atributo"
 
 #: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:124
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:155
+#: gtk/inspector/recorder.ui:221
 msgid "Value"
 msgstr "Valor"
 
@@ -3998,42 +3999,46 @@ msgstr "Origem:"
 msgid "Defined At"
 msgstr "Definido em"
 
-#: gtk/inspector/recorder.c:1242
+#: gtk/inspector/recorder.c:1677
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Falha ao gravar RenderNode"
 
-#: gtk/inspector/recorder.ui:15
+#: gtk/inspector/recorder.ui:20
 msgid "Record frames"
-msgstr "Quadros registados"
+msgstr "Imagens registadas"
 
-#: gtk/inspector/recorder.ui:22
+#: gtk/inspector/recorder.ui:27
 msgid "Clear recorded frames"
 msgstr "Limpar imagens gravadas"
 
-#: gtk/inspector/recorder.ui:29
+#: gtk/inspector/recorder.ui:34
 msgid "Add debug nodes"
 msgstr "Adicionar nodes de depuração"
 
-#: gtk/inspector/recorder.ui:38
+#: gtk/inspector/recorder.ui:42
+msgid "Highlight event sequences"
+msgstr "Destacar sequências de eventos"
+
+#: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
 msgstr "Usar um fundo escuro"
 
-#: gtk/inspector/recorder.ui:46
+#: gtk/inspector/recorder.ui:59
 msgid "Save selected node"
 msgstr "Gravar node selecionado"
 
-#: gtk/inspector/recorder.ui:54
+#: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
 msgstr "Copiar para a área de transferência"
 
-#: gtk/inspector/recorder.ui:111
+#: gtk/inspector/recorder.ui:142 gtk/inspector/recorder.ui:208
 msgid "Property"
 msgstr "Propriedade"
 
 #: gtk/inspector/resource-list.ui:59
 msgid "Path"
-msgstr "Caminho"
+msgstr "Localização"
 
 #: gtk/inspector/resource-list.ui:71
 msgid "Count"
@@ -4057,7 +4062,7 @@ msgstr "Tamanho:"
 
 #: gtk/inspector/shortcuts.ui:17
 msgid "Trigger"
-msgstr "Gatilho"
+msgstr "Acionador"
 
 #: gtk/inspector/size-groups.c:225
 msgctxt "sizegroup mode"
