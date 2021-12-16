@@ -235,7 +235,6 @@ primary_notify (GdkClipboard          *clipboard,
       init_formats (self, GTK_LIST_BOX (self->primary_formats), clipboard);
     }
 
-  g_print ("%s: %s\n", pspec->name, gdk_content_formats_to_string (gdk_clipboard_get_formats (clipboard)));
   init_info (self, GTK_LABEL (self->primary_info), clipboard);
 }
 
