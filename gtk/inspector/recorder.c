@@ -55,6 +55,7 @@
 #include "renderrecording.h"
 #include "startrecording.h"
 #include "eventrecording.h"
+#include "recorderrow.h"
 
 struct _GtkInspectorRecorder
 {
@@ -82,6 +83,9 @@ struct _GtkInspectorRecorder
   gint64 start_time;
 
   gboolean debug_nodes;
+  gboolean highlight_sequences;
+
+  GdkEventSequence *selected_sequence;
 };
 
 typedef struct _GtkInspectorRecorderClass
@@ -95,6 +99,8 @@ enum
   PROP_0,
   PROP_RECORDING,
   PROP_DEBUG_NODES,
+  PROP_HIGHLIGHT_SEQUENCES,
+  PROP_SELECTED_SEQUENCE,
   LAST_PROP
 };
 
@@ -506,6 +512,7 @@ recording_selected (GtkSingleSelection   *selection,
                     GtkInspectorRecorder *recorder)
 {
   GtkInspectorRecording *recording;
+  GdkEventSequence *selected_sequence = NULL;
 
   if (recorder->recordings == NULL)
     {
@@ -548,6 +555,9 @@ recording_selected (GtkSingleSelection   *selection,
         }
 
       populate_event_properties (GTK_LIST_STORE (recorder->event_properties), event);
+
+      if (recorder->highlight_sequences)
+        selected_sequence = gdk_event_get_event_sequence (event);
     }
   else
     {
@@ -556,6 +566,8 @@ recording_selected (GtkSingleSelection   *selection,
       gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), NULL);
       g_list_store_remove_all (recorder->render_node_root_model);
     }
+
+  gtk_inspector_recorder_set_selected_sequence (recorder, selected_sequence);
 }
 
 static GdkTexture *
@@ -1428,6 +1440,12 @@ populate_event_properties (GtkListStore *store,
   type = gdk_event_get_event_type (event);
 
   add_text_row (store, "Type", event_type_name (type));
+  if (gdk_event_get_event_sequence (event) != NULL)
+    {
+      tmp = g_strdup_printf ("%p", gdk_event_get_event_sequence (event));
+      add_text_row (store, "Sequence", tmp);
+      g_free (tmp);
+    }
   add_int_row (store, "Timestamp", gdk_event_get_time (event));
 
   device = gdk_event_get_device (event);
@@ -1747,23 +1765,27 @@ setup_widget_for_recording (GtkListItemFactory *factory,
                             GtkListItem        *item,
                             gpointer            data)
 {
-  GtkWidget *widget, *label;
+  GtkWidget *row, *box, *label;
 
-  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  row = g_object_new (GTK_TYPE_INSPECTOR_RECORDER_ROW, NULL);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   label = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (label), 0.0f);
   gtk_widget_set_hexpand (label, TRUE);
-  gtk_box_append (GTK_BOX (widget), label);
+  gtk_box_append (GTK_BOX (box), label);
 
   label = gtk_label_new ("");
-  gtk_box_append (GTK_BOX (widget), label);
+  gtk_box_append (GTK_BOX (box), label);
 
-  gtk_widget_set_margin_start (widget, 6);
-  gtk_widget_set_margin_end (widget, 6);
-  gtk_widget_set_margin_top (widget, 6);
-  gtk_widget_set_margin_bottom (widget, 6);
+  gtk_widget_set_margin_start (box, 6);
+  gtk_widget_set_margin_end (box, 6);
+  gtk_widget_set_margin_top (box, 6);
+  gtk_widget_set_margin_bottom (box, 6);
 
-  gtk_list_item_set_child (item, widget);
+  gtk_widget_set_parent (box, row);
+
+  gtk_list_item_set_child (item, row);
 }
 
 static char *
@@ -1841,13 +1863,18 @@ bind_widget_for_recording (GtkListItemFactory *factory,
                            GtkListItem        *item,
                            gpointer            data)
 {
+  GtkInspectorRecorder *recorder = GTK_INSPECTOR_RECORDER (data);
   GtkInspectorRecording *recording = gtk_list_item_get_item (item);
-  GtkWidget *widget, *label, *label2;
+  GtkWidget *row, *box, *label, *label2;
   char *text;
 
-  widget = gtk_list_item_get_child (item);
-  label = gtk_widget_get_first_child (widget);
+  row = gtk_list_item_get_child (item);
+  box = gtk_widget_get_first_child (row);
+  label = gtk_widget_get_first_child (box);
   label2 = gtk_widget_get_next_sibling (label);
+
+  g_object_set (row, "sequence", NULL, NULL);
+  g_object_bind_property (recorder, "selected-sequence", row, "match-sequence", G_BINDING_SYNC_CREATE);
 
   gtk_label_set_use_markup (GTK_LABEL (label), FALSE);
 
@@ -1863,6 +1890,8 @@ bind_widget_for_recording (GtkListItemFactory *factory,
   else if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
     {
       GdkEvent *event = gtk_inspector_event_recording_get_event (GTK_INSPECTOR_EVENT_RECORDING (recording));
+
+      g_object_set (row, "sequence", gdk_event_get_event_sequence (event), NULL);
 
       text = get_event_summary (event);
       gtk_label_set_label (GTK_LABEL (label), text);
@@ -1939,6 +1968,14 @@ gtk_inspector_recorder_get_property (GObject    *object,
       g_value_set_boolean (value, recorder->debug_nodes);
       break;
 
+    case PROP_HIGHLIGHT_SEQUENCES:
+      g_value_set_boolean (value, recorder->highlight_sequences);
+      break;
+
+    case PROP_SELECTED_SEQUENCE:
+      g_value_set_pointer (value, recorder->selected_sequence);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -1961,6 +1998,14 @@ gtk_inspector_recorder_set_property (GObject      *object,
 
     case PROP_DEBUG_NODES:
       gtk_inspector_recorder_set_debug_nodes (recorder, g_value_get_boolean (value));
+      break;
+
+    case PROP_HIGHLIGHT_SEQUENCES:
+      gtk_inspector_recorder_set_highlight_sequences (recorder, g_value_get_boolean (value));
+      break;
+
+    case PROP_SELECTED_SEQUENCE:
+      recorder->selected_sequence = g_value_get_pointer (value);
       break;
 
     default:
@@ -2004,6 +2049,9 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
                           "Whether to insert extra debug nodes in the tree",
                           FALSE,
                           G_PARAM_READWRITE);
+
+  props[PROP_HIGHLIGHT_SEQUENCES] = g_param_spec_boolean ("highlight-sequences", "", "", FALSE, G_PARAM_READWRITE);
+  props[PROP_SELECTED_SEQUENCE] = g_param_spec_pointer ("selected-sequence", "", "", G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
@@ -2195,6 +2243,50 @@ gtk_inspector_recorder_set_debug_nodes (GtkInspectorRecorder *recorder,
   gtk_set_debug_flags (flags);
 
   g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_DEBUG_NODES]);
+}
+
+void
+gtk_inspector_recorder_set_highlight_sequences (GtkInspectorRecorder *recorder,
+                                                gboolean              highlight_sequences)
+{
+  GdkEventSequence *sequence = NULL;
+
+  if (recorder->highlight_sequences == highlight_sequences)
+    return;
+
+  recorder->highlight_sequences = highlight_sequences;
+
+  if (highlight_sequences)
+    {
+      GtkSingleSelection *selection;
+      GtkInspectorRecording *recording;
+      GdkEvent *event;
+
+      selection = GTK_SINGLE_SELECTION (gtk_list_view_get_model (GTK_LIST_VIEW (recorder->recordings_list)));
+      recording = gtk_single_selection_get_selected_item (selection);
+
+      if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
+        {
+          event = gtk_inspector_event_recording_get_event (GTK_INSPECTOR_EVENT_RECORDING (recording));
+          sequence = gdk_event_get_event_sequence (event);
+        }
+    }
+
+  gtk_inspector_recorder_set_selected_sequence (recorder, sequence);
+
+  g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_HIGHLIGHT_SEQUENCES]);
+}
+
+void
+gtk_inspector_recorder_set_selected_sequence (GtkInspectorRecorder *recorder,
+                                              GdkEventSequence     *sequence)
+{
+  if (recorder->selected_sequence == sequence)
+    return;
+
+  recorder->selected_sequence = sequence;
+
+  g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_SELECTED_SEQUENCE]);
 }
 
 

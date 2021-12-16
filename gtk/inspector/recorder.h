@@ -37,6 +37,12 @@ gboolean        gtk_inspector_recorder_is_recording             (GtkInspectorRec
 void            gtk_inspector_recorder_set_debug_nodes          (GtkInspectorRecorder   *recorder,
                                                                  gboolean                debug_nodes);
 
+void            gtk_inspector_recorder_set_highlight_sequences  (GtkInspectorRecorder   *recorder,
+                                                                 gboolean                highlight_sequences);
+
+void            gtk_inspector_recorder_set_selected_sequence    (GtkInspectorRecorder   *recorder,
+                                                                 GdkEventSequence       *sequence);
+
 void            gtk_inspector_recorder_record_render            (GtkInspectorRecorder   *recorder,
                                                                  GtkWidget              *widget,
                                                                  GskRenderer            *renderer,
