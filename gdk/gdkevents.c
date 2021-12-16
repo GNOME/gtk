@@ -942,6 +942,9 @@ gdk_event_get_pointer_emulated (GdkEvent *event)
  * Extract the axis value for a particular axis use from
  * an event structure.
  *
+ * To find out which axes are used, use [method@Gdk.DeviceTool.get_axes]
+ * on the device tool returned by [method@Gdk.Event.get_device_tool].
+ *
  * Returns: %TRUE if the specified axis was found, otherwise %FALSE
  */
 gboolean
@@ -1167,6 +1170,9 @@ G_DEFINE_BOXED_TYPE (GdkEventSequence, gdk_event_sequence,
  * @n_axes: (out): the length of array
  *
  * Extracts all axis values from an event.
+ *
+ * To find out which axes are used, use [method@Gdk.DeviceTool.get_axes]
+ * on the device tool returned by [method@Gdk.Event.get_device_tool].
  *
  * Returns: %TRUE on success, otherwise %FALSE
  */
@@ -2470,6 +2476,14 @@ gdk_touchpad_event_get_state (GdkEvent *event)
   return self->state;
 }
 
+static GdkEventSequence *
+gdk_touchpad_event_get_sequence (GdkEvent *event)
+{
+  GdkTouchpadEvent *self = (GdkTouchpadEvent *) event;
+
+  return self->sequence;
+}
+
 static gboolean
 gdk_touchpad_event_get_position (GdkEvent *event,
                                  double   *x,
@@ -2489,7 +2503,7 @@ static const GdkEventTypeInfo gdk_touchpad_event_info = {
   NULL,
   gdk_touchpad_event_get_state,
   gdk_touchpad_event_get_position,
-  NULL,
+  gdk_touchpad_event_get_sequence,
   NULL,
   NULL,
 };
@@ -2500,19 +2514,28 @@ GDK_DEFINE_EVENT_TYPE (GdkTouchpadEvent, gdk_touchpad_event,
                        GDK_EVENT_TYPE_SLOT (GDK_TOUCHPAD_PINCH))
 
 GdkEvent *
-gdk_touchpad_event_new_swipe (GdkSurface *surface,
-                              GdkDevice  *device,
-                              guint32     time,
-                              GdkModifierType state,
-                              GdkTouchpadGesturePhase phase,
-                              double      x,
-                              double      y,
-                              int         n_fingers,
-                              double      dx,
-                              double      dy)
+gdk_touchpad_event_new_swipe (GdkSurface              *surface,
+                              GdkEventSequence        *sequence,
+                              GdkDevice               *device,
+                              guint32                  time,
+                              GdkModifierType          state,
+                              GdkTouchpadGesturePhase  phase,
+                              double                   x,
+                              double                   y,
+                              int                      n_fingers,
+                              double                   dx,
+                              double                   dy)
 {
-  GdkTouchpadEvent *self = gdk_event_alloc (GDK_TOUCHPAD_SWIPE, surface, device, time);
+  GdkTouchpadEvent *self;
 
+  g_return_val_if_fail (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
+                        phase == GDK_TOUCHPAD_GESTURE_PHASE_END ||
+                        phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE ||
+                        phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL, NULL);
+
+  self = gdk_event_alloc (GDK_TOUCHPAD_SWIPE, surface, device, time);
+
+  self->sequence = sequence;
   self->state = state;
   self->phase = phase;
   self->x = x;
@@ -2525,21 +2548,30 @@ gdk_touchpad_event_new_swipe (GdkSurface *surface,
 }
 
 GdkEvent *
-gdk_touchpad_event_new_pinch (GdkSurface *surface,
-                              GdkDevice  *device,
-                              guint32     time,
-                              GdkModifierType state,
-                              GdkTouchpadGesturePhase phase,
-                              double      x,
-                              double      y,
-                              int         n_fingers,
-                              double      dx,
-                              double      dy,
-                              double      scale,
-                              double      angle_delta)
+gdk_touchpad_event_new_pinch (GdkSurface              *surface,
+                              GdkEventSequence        *sequence,
+                              GdkDevice               *device,
+                              guint32                  time,
+                              GdkModifierType          state,
+                              GdkTouchpadGesturePhase  phase,
+                              double                   x,
+                              double                   y,
+                              int                      n_fingers,
+                              double                   dx,
+                              double                   dy,
+                              double                   scale,
+                              double                   angle_delta)
 {
-  GdkTouchpadEvent *self = gdk_event_alloc (GDK_TOUCHPAD_PINCH, surface, device, time);
+  GdkTouchpadEvent *self;
 
+  g_return_val_if_fail (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
+                        phase == GDK_TOUCHPAD_GESTURE_PHASE_END ||
+                        phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE ||
+                        phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL, NULL);
+
+  self = gdk_event_alloc (GDK_TOUCHPAD_PINCH, surface, device, time);
+
+  self->sequence = sequence;
   self->state = state;
   self->phase = phase;
   self->x = x;

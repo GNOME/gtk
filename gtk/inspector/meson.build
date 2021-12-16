@@ -31,6 +31,7 @@ inspector_sources = files(
   'prop-holder.c',
   'prop-list.c',
   'recorder.c',
+  'recorderrow.c',
   'recording.c',
   'renderrecording.c',
   'resource-holder.c',

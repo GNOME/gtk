@@ -34,6 +34,14 @@
                 <property name="tooltip-text" translatable="yes">Add debug nodes</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="debug-nodes" bind-flags="bidirectional|sync-create"/>
                 <property name="halign">start</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="icon-name">function-linear-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Highlight event sequences</property>
+                <property name="active" bind-source="GtkInspectorRecorder" bind-property="highlight-sequences" bind-flags="bidirectional|sync-create"/>
+                <property name="halign">start</property>
                 <property name="hexpand">1</property>
               </object>
             </child>

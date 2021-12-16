@@ -951,6 +951,7 @@ rewrite_event_for_surface (GdkEvent  *event,
     case GDK_TOUCHPAD_SWIPE:
       gdk_touchpad_event_get_deltas (event, &dx, &dy);
       return gdk_touchpad_event_new_swipe (new_surface,
+                                           gdk_event_get_event_sequence (event),
                                            gdk_event_get_device (event),
                                            gdk_event_get_time (event),
                                            gdk_event_get_modifier_state (event),
@@ -961,6 +962,7 @@ rewrite_event_for_surface (GdkEvent  *event,
     case GDK_TOUCHPAD_PINCH:
       gdk_touchpad_event_get_deltas (event, &dx, &dy);
       return gdk_touchpad_event_new_pinch (new_surface,
+                                           gdk_event_get_event_sequence (event),
                                            gdk_event_get_device (event),
                                            gdk_event_get_time (event),
                                            gdk_event_get_modifier_state (event),

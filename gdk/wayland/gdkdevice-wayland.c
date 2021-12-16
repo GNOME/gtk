@@ -137,6 +137,7 @@ struct _GdkWaylandPointerData {
   guint cursor_timeout_id;
   guint cursor_image_index;
   guint cursor_image_delay;
+  guint touchpad_event_sequence;
 
   guint current_output_scale;
   GSList *pointer_surface_outputs;
@@ -1127,7 +1128,7 @@ data_offer_source_actions (void                 *data,
       seat->pending_source_actions = gdk_wayland_actions_to_gdk_actions (source_actions);
       return;
     }
-  
+
   if (seat->drop == NULL)
     return;
 
@@ -1152,7 +1153,7 @@ data_offer_action (void                 *data,
       seat->pending_action = gdk_wayland_actions_to_gdk_actions (action);
       return;
     }
-  
+
   if (seat->drop == NULL)
     return;
 
@@ -2164,7 +2165,7 @@ deliver_key_event (GdkWaylandSeat *seat,
                              key,
                              device_get_modifiers (seat->logical_pointer),
                              _gdk_wayland_keymap_key_is_modifier (keymap, key),
-                             &translated, 
+                             &translated,
                              &no_lock);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
@@ -2667,7 +2668,11 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
 
   seat->pointer_info.time = _time;
 
+  if (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
+    seat->pointer_info.touchpad_event_sequence++;
+
   event = gdk_touchpad_event_new_swipe (seat->pointer_info.focus,
+                                        GDK_SLOT_TO_EVENT_SEQUENCE (seat->pointer_info.touchpad_event_sequence),
                                         seat->logical_pointer,
                                         _time,
                                         device_get_modifiers (seat->logical_pointer),
@@ -2763,7 +2768,11 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
 
   seat->pointer_info.time = _time;
 
+  if (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
+    seat->pointer_info.touchpad_event_sequence++;
+
   event = gdk_touchpad_event_new_pinch (seat->pointer_info.focus,
+                                        GDK_SLOT_TO_EVENT_SEQUENCE (seat->pointer_info.touchpad_event_sequence),
                                         seat->logical_pointer,
                                         _time,
                                         device_get_modifiers (seat->logical_pointer),
@@ -4088,7 +4097,7 @@ tablet_pad_strip_handle_frame (void                           *data,
   event = gdk_pad_event_new_strip (seat->keyboard_focus,
                                    pad->device,
                                    time,
-                                   g_list_index (pad->mode_groups, group),        
+                                   g_list_index (pad->mode_groups, group),
                                    g_list_index (pad->strips, wp_tablet_pad_strip),
                                    group->current_mode,
                                    group->axis_tmp_info.value);

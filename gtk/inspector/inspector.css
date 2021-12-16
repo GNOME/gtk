@@ -55,3 +55,7 @@ picture.light {
   min-width: 10px;
   min-height: 10px;
 }
+
+row:not(:selected) > .highlight {
+  background-color: rgba(135, 206, 250, 0.4);
+}
