@@ -1276,6 +1276,15 @@ is provided in the form of a `GtkIconPaintable` (this can be checked with
 [method@Gtk.IconPaintable.is_symbolic]), you have to call
 [method@Gtk.IconPaintable.get_icon_name] and set the icon name on a `GtkImage`.
 
+### Adapt to GtkImage changes
+`GtkPicture`'s behaviour was "split out" of `GtkImage` as the latter was covering
+too many use cases; if you're loading an icon, [class@Gtk.Image] in GTK3 and GTK4 are
+perfectly equivalent. If you are loading a more complex image asset, like a picture
+or a thumbnail, then [class@Gtk.Picture] is the appropriate widget.
+
+One noteworthy distinction is that while `GtkImage` has its size computed by
+GTK, `GtkPicture` lets you decide about the size.
+
 ### Update to GtkFileChooser API changes
 
 `GtkFileChooser` moved to a GFile-based API. If you need to convert a path
