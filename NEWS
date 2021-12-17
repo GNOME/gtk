@@ -1,5 +1,5 @@
-Overview of Changes
-===================
+Overview of Changes in 4.5.1, 16-12-2021
+========================================
 
 * GtkWidget sizing has been rewritten to implement
   width-for-height more properly. This had some fallout,
