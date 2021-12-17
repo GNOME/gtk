@@ -1927,6 +1927,12 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="tooltip-text" translatable="1">Insert something</property>
                                           </object>
                                         </child>
+                                        <child>
+                                          <object class="GtkColorButton">
+                                            <property name="rgba">#9141AC</property>
+                                            <property name="tooltip-text" translatable="1">Select a color</property>
+                                          </object>
+                                        </child>
                                       </object>
                                     </child>
                                     <child>
