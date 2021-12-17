@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-16 14:58+0000\n"
-"PO-Revision-Date: 2021-12-16 15:47+0000\n"
+"POT-Creation-Date: 2021-12-17 00:32+0000\n"
+"PO-Revision-Date: 2021-12-17 12:40+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
 msgid "Broadway display type not supported: %s"
-msgstr "Tipo de ecrã broadway não suportado: %s"
+msgstr "Tipo de gráfica broadway não suportada: %s"
 
 #: gdk/gdkclipboard.c:231
 msgid "This clipboard cannot store data."
@@ -3483,7 +3483,7 @@ msgstr "_Desfazer"
 msgid "_Redo"
 msgstr "_Refazer"
 
-#: gtk/gtktreeexpander.c:205
+#: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:278
 msgid "Expand"
 msgstr "Expandir"
 
@@ -3842,56 +3842,60 @@ msgid "Request Mode"
 msgstr "Modo de solicitação"
 
 #: gtk/inspector/misc-info.ui:269
-msgid "Allocation"
-msgstr "Alocação"
+msgid "Measure map"
+msgstr "Mapa de medida"
 
-#: gtk/inspector/misc-info.ui:298
+#: gtk/inspector/misc-info.ui:328
+msgid "Allocation"
+msgstr "Atribuição"
+
+#: gtk/inspector/misc-info.ui:357
 msgid "Baseline"
 msgstr "Linha base"
 
-#: gtk/inspector/misc-info.ui:327
+#: gtk/inspector/misc-info.ui:386
 msgid "Surface"
 msgstr "Surpefície"
 
-#: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
-#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1116
+#: gtk/inspector/misc-info.ui:405 gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:483 gtk/inspector/prop-editor.c:1116
 #: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Propriedades"
 
-#: gtk/inspector/misc-info.ui:366
+#: gtk/inspector/misc-info.ui:425
 msgid "Renderer"
 msgstr "Renderizador"
 
-#: gtk/inspector/misc-info.ui:405
+#: gtk/inspector/misc-info.ui:464
 msgid "Frame Clock"
 msgstr "Moldura do relógio"
 
-#: gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:503
 msgid "Tick Callback"
 msgstr "Retorno do tique"
 
-#: gtk/inspector/misc-info.ui:474
+#: gtk/inspector/misc-info.ui:533
 msgid "Frame Count"
 msgstr "Contagem de imagem"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:562
 msgid "Frame Rate"
 msgstr "Taxa de atualização"
 
-#: gtk/inspector/misc-info.ui:532
+#: gtk/inspector/misc-info.ui:591
 msgid "Mapped"
 msgstr "Mapeado"
 
-#: gtk/inspector/misc-info.ui:562
+#: gtk/inspector/misc-info.ui:621
 msgid "Realized"
 msgstr "Realizado"
 
-#: gtk/inspector/misc-info.ui:592
+#: gtk/inspector/misc-info.ui:651
 msgid "Is Toplevel"
 msgstr "É nível de topo"
 
-#: gtk/inspector/misc-info.ui:622
+#: gtk/inspector/misc-info.ui:681
 msgid "Child Visible"
 msgstr "Filho visível"
 
