@@ -1073,14 +1073,6 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                         <property name="spacing">10</property>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="label">Large Title</property>
-                                            <style>
-                                              <class name="large-title"/>
-                                            </style>
-                                          </object>
-                                        </child>
-                                        <child>
-                                          <object class="GtkLabel">
                                             <property name="label">Title 1</property>
                                             <style>
                                               <class name="title-1"/>
