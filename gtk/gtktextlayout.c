@@ -1157,7 +1157,6 @@ totally_invisible_line (GtkTextLayout *layout,
                         GtkTextIter   *iter)
 {
   GtkTextLineSegment *seg;
-  int bytes = 0;
 
   /* Check if the first char is visible, if so we are partially visible.
    * Note that we have to check this since we don't know the current
@@ -1168,22 +1167,12 @@ totally_invisible_line (GtkTextLayout *layout,
   if (!_gtk_text_btree_char_is_invisible (iter))
     return FALSE;
 
-  bytes = 0;
   seg = line->segments;
 
   while (seg != NULL)
     {
-      if (seg->byte_count > 0)
-        bytes += seg->byte_count;
-
-      /* Note that these two tests can cause us to bail out
-       * when we shouldn't, because a higher-priority tag
-       * may override these settings. However the important
-       * thing is to only invisible really-invisible lines, rather
-       * than to invisible all really-invisible lines.
-       */
-
-      else if (seg->type == &gtk_text_toggle_on_type)
+      if (seg->byte_count <= 0 &&
+          seg->type == &gtk_text_toggle_on_type)
         {
           invalidate_cached_style (layout);
 
@@ -2297,7 +2286,7 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
   char *text;
   int text_pixel_width;
   PangoAttrList *attrs;
-  int text_allocated, layout_byte_offset, buffer_byte_offset;
+  int text_allocated, layout_byte_offset;
   PangoRectangle extents;
   gboolean para_values_set = FALSE;
   GSList *cursor_byte_offsets = NULL;
@@ -2356,7 +2345,6 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
 
   /* Iterate over segments, creating display chunks for them, and updating the tags array. */
   layout_byte_offset = 0; /* current length of layout text (includes preedit, does not include invisible text) */
-  buffer_byte_offset = 0; /* position in the buffer line */
   seg = _gtk_text_iter_get_any_segment (&iter);
   tags = _gtk_text_btree_get_tags (&iter);
   initial_toggle_segments = TRUE;
@@ -2406,7 +2394,6 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
                         {
                           memcpy (text + layout_byte_offset, seg->body.chars, seg->byte_count);
                           layout_byte_offset += seg->byte_count;
-                          buffer_byte_offset += seg->byte_count;
                           bytes += seg->byte_count;
                         }
                       else if (seg->type == &gtk_text_right_mark_type ||
@@ -2458,7 +2445,6 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
                   memcpy (text + layout_byte_offset, _gtk_text_unknown_char_utf8,
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;
-                  buffer_byte_offset += seg->byte_count;
                 }
               else if (seg->type == &gtk_text_child_type)
                 {
@@ -2473,7 +2459,6 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
                   memcpy (text + layout_byte_offset, gtk_text_child_anchor_get_replacement (seg->body.child.obj),
                           seg->byte_count);
                   layout_byte_offset += seg->byte_count;
-                  buffer_byte_offset += seg->byte_count;
                 }
               else
                 {
@@ -2482,11 +2467,6 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
                 }
 
             } /* if (segment was visible) */
-          else
-            {
-              /* Invisible segment */
-              buffer_byte_offset += seg->byte_count;
-            }
 
           release_style (layout, style);
         }

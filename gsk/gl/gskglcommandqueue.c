@@ -952,9 +952,9 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
   guint program = 0;
   guint width = 0;
   guint height = 0;
-  guint n_binds = 0;
+  G_GNUC_UNUSED guint n_binds = 0;
   guint n_fbos = 0;
-  guint n_uniforms = 0;
+  G_GNUC_UNUSED guint n_uniforms = 0;
   guint n_programs = 0;
   guint vao_id;
   guint vbo_id;
