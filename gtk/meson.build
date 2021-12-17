@@ -1205,28 +1205,11 @@ libgtk_static = static_library('gtk',
   link_with: [libgtk_css, libgdk, libgsk ],
 )
 
-# `link_whole:` is actually only supported on Visual Studio 2015 Update 2
-# or later via the linker flag `/WHOLEARCHIVE:<static_lib>`, so we need
-# to work around it for Visual Studio 2013.  Note that all needed static
-# libs are required so that we grab the object files from each of them to
-# link the final GTK DLL.
-whole_archives = []
-gtk4_objs = []
-
-if cc.get_id() == 'msvc' and cc.version().split('.').get(0) < '19'
-  foreach target : [ libgtk_static, libgtk_css, libgdk, libgdk_win32, libgsk, libgsk_f16c ]
-    gtk4_objs += target.extract_all_objects(recursive: false)
-  endforeach
-else
-  whole_archives = [libgtk_static, libgtk_css, libgdk, libgsk ]
-endif
-
 libgtk = shared_library('gtk-4',
   c_args: gtk_cargs + common_cflags,
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
   dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
-  link_whole: whole_archives,
-  objects: gtk4_objs,
+  link_whole: [libgtk_static, libgtk_css, libgdk, libgsk ],
   link_args: common_ldflags,
   soversion: gtk_soversion,
   version: gtk_library_version,
