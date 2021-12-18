@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-14 00:32+0000\n"
-"PO-Revision-Date: 2021-12-14 15:20+0200\n"
+"POT-Creation-Date: 2021-12-17 00:32+0000\n"
+"PO-Revision-Date: 2021-12-18 08:28+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -559,8 +559,7 @@ msgstr "Не вдалося завантажити дані RGB з файлу ф
 
 #: gdk/loaders/gdktiff.c:383
 msgid "Could not load TIFF data"
-msgstr ""
-"Не вдалося завантажити дані TIFF"
+msgstr "Не вдалося завантажити дані TIFF"
 
 #: gdk/loaders/gdktiff.c:465
 #, c-format
@@ -2128,7 +2127,7 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
 #: gtk/gtkwindow.c:6218 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1271
+#: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "_Скасувати"
 
@@ -2139,7 +2138,7 @@ msgid "_Open"
 msgstr "_Відкрити"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1272
+#: gtk/inspector/recorder.c:1707
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -3482,7 +3481,7 @@ msgstr "_Скасувати"
 msgid "_Redo"
 msgstr "Пов_торити"
 
-#: gtk/gtktreeexpander.c:205
+#: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:278
 msgid "Expand"
 msgstr "Розгорнути"
 
@@ -3566,7 +3565,8 @@ msgid "Attribute"
 msgstr "Атрибут"
 
 #: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:124
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:155
+#: gtk/inspector/recorder.ui:221
 msgid "Value"
 msgstr "Значення"
 
@@ -3837,56 +3837,61 @@ msgid "Request Mode"
 msgstr "Режим запиту"
 
 #: gtk/inspector/misc-info.ui:269
+msgid "Measure map"
+msgstr ""
+"Мапа вимірювання"
+
+#: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
 msgstr "Розміщення"
 
-#: gtk/inspector/misc-info.ui:298
+#: gtk/inspector/misc-info.ui:357
 msgid "Baseline"
 msgstr "Базова лінія"
 
-#: gtk/inspector/misc-info.ui:327
+#: gtk/inspector/misc-info.ui:386
 msgid "Surface"
 msgstr "Поверхня"
 
-#: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
-#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1116
+#: gtk/inspector/misc-info.ui:405 gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:483 gtk/inspector/prop-editor.c:1116
 #: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Властивості"
 
-#: gtk/inspector/misc-info.ui:366
+#: gtk/inspector/misc-info.ui:425
 msgid "Renderer"
 msgstr "Відтворювач"
 
-#: gtk/inspector/misc-info.ui:405
+#: gtk/inspector/misc-info.ui:464
 msgid "Frame Clock"
 msgstr "Годинник кадрів"
 
-#: gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:503
 msgid "Tick Callback"
 msgstr "Позначити зворотний виклик"
 
-#: gtk/inspector/misc-info.ui:474
+#: gtk/inspector/misc-info.ui:533
 msgid "Frame Count"
 msgstr "Підрахунок кадрів"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:562
 msgid "Frame Rate"
 msgstr "Частота кадрів"
 
-#: gtk/inspector/misc-info.ui:532
+#: gtk/inspector/misc-info.ui:591
 msgid "Mapped"
 msgstr "Відображення"
 
-#: gtk/inspector/misc-info.ui:562
+#: gtk/inspector/misc-info.ui:621
 msgid "Realized"
 msgstr "Спостереження"
 
-#: gtk/inspector/misc-info.ui:592
+#: gtk/inspector/misc-info.ui:651
 msgid "Is Toplevel"
 msgstr "На верхньому рівні"
 
-#: gtk/inspector/misc-info.ui:622
+#: gtk/inspector/misc-info.ui:681
 msgid "Child Visible"
 msgstr "Видимі діти"
 
@@ -3994,36 +3999,41 @@ msgstr "Джерело:"
 msgid "Defined At"
 msgstr "Визначено в"
 
-#: gtk/inspector/recorder.c:1242
+#: gtk/inspector/recorder.c:1677
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Не вдалося зберегти RenderNode"
 
-#: gtk/inspector/recorder.ui:15
+#: gtk/inspector/recorder.ui:20
 msgid "Record frames"
 msgstr "Запис кадрів"
 
-#: gtk/inspector/recorder.ui:22
+#: gtk/inspector/recorder.ui:27
 msgid "Clear recorded frames"
 msgstr "Вилучити записані кадри"
 
-#: gtk/inspector/recorder.ui:29
+#: gtk/inspector/recorder.ui:34
 msgid "Add debug nodes"
 msgstr "Додати діагностичні вузли"
 
-#: gtk/inspector/recorder.ui:38
+#: gtk/inspector/recorder.ui:42
+msgid "Highlight event sequences"
+msgstr ""
+"Підсвітити послідовності подій"
+
+#: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
 msgstr "Використовувати темне тло"
 
-#: gtk/inspector/recorder.ui:46
+#: gtk/inspector/recorder.ui:59
 msgid "Save selected node"
 msgstr "Зберегти позначений вузол"
 
-#: gtk/inspector/recorder.ui:54
+#: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
 msgstr "Скопіювати до буфера"
 
-#: gtk/inspector/recorder.ui:111
+#: gtk/inspector/recorder.ui:142 gtk/inspector/recorder.ui:208
 msgid "Property"
 msgstr "Властивість"
 
@@ -7474,13 +7484,11 @@ msgstr "Не вдалося обробити «%s»: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2303
 #, c-format
-#| msgid "Can’t parse “%s”: %s\n"
 msgid "Can't parse “%s”: %s\n"
 msgstr "Не вдалося обробити «%s»: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2309
 #, c-format
-#| msgid "Can’t parse “%s”: %s\n"
 msgid "Can't parse “%s”\n"
 msgstr "Не вдалося обробити «%s»\n"
 
