@@ -162,8 +162,16 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
    */
   if (window_impl->in_paint_rect_count == 0)
     {
-      if (![window_impl->view lockFocusIfCanDraw])
-        return NULL;
+      /* The NSView focus-locking API set was deprecated in MacOS 10.14 and
+       * has a significant cost in MacOS 11 - every lock/unlock seems to 
+       * trigger a drawRect: call for the entire window.  To return the
+       * lost performance, do not use the locking API in MacOS 11+
+       */
+      if(gdk_quartz_osx_version() < GDK_OSX_BIGSUR)
+        {
+          if (![window_impl->view lockFocusIfCanDraw])
+            return NULL;
+        }
     }
 #if MAC_OS_X_VERSION_MAX_ALLOWED < 101000
     cg_context = [[NSGraphicsContext currentContext] graphicsPort];
@@ -201,7 +209,15 @@ gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
   if (window_impl->in_paint_rect_count == 0)
     {
       _gdk_quartz_window_flush (window_impl);
-      [window_impl->view unlockFocus];
+
+      /* As per gdk_window_impl_quartz_get_context(), the NSView
+        * focus-locking API set was deprecated in MacOS 10.14 and has
+        * a significant cost in MacOS 11 - every lock/unlock seems to 
+        * trigger a drawRect: call for the entire window.  To return the
+        * lost performance, do not use the locking API in MacOS 11+
+        */
+      if(gdk_quartz_osx_version() < GDK_OSX_BIGSUR)
+        [window_impl->view unlockFocus];
     }
 }
 

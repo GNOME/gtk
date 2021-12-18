@@ -289,6 +289,22 @@
     gdk_screen_get_rgba_visual (_gdk_screen);
 }
 
+- (void) viewWillDraw
+{
+  /* MacOS 11 (Big Sur) has added a new, dynamic "accent" as default.
+   * This uses a 10-bit colorspace so every GIMP drawing operation
+   * has the additional cost of an 8-bit (ARGB) to 10-bit conversion.
+   * Let's disable this mode to regain the lost performance.
+   */
+  if(gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
+  {
+    CALayer* layer = self.layer;
+    layer.contentsFormat = kCAContentsFormatRGBA8Uint;
+  }
+
+  [super viewWillDraw];
+}
+
 -(void)drawRect: (NSRect)rect
 {
   GdkRectangle gdk_rect;
@@ -416,7 +432,7 @@
 {
   if (GDK_WINDOW_DESTROYED (gdk_window))
     return;
-  
+
   [super setFrame: frame];
 
   if ([self window])
