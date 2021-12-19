@@ -1,3 +1,4 @@
+py = import('python').find_installation('python3', modules: ['gi'])
 
 test('api',
      find_program('api.py', dirs: meson.current_source_dir()),
