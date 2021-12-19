@@ -31,7 +31,8 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-pango \
     mingw-w64-$MSYS2_ARCH-fribidi \
     mingw-w64-$MSYS2_ARCH-gst-plugins-bad \
-    mingw-w64-$MSYS2_ARCH-shared-mime-info
+    mingw-w64-$MSYS2_ARCH-shared-mime-info \
+    mingw-w64-$MSYS2_ARCH-python-gobject
 
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"
