@@ -272,6 +272,7 @@ struct _GtkLabel
   guint    ellipsize          : 3;
   guint    use_markup         : 1;
   guint    wrap_mode          : 3;
+  guint    natural_wrap_mode  : 3;
   guint    single_line_mode   : 1;
   guint    in_click           : 1;
   guint    track_links        : 1;
@@ -380,6 +381,7 @@ enum {
   PROP_JUSTIFY,
   PROP_WRAP,
   PROP_WRAP_MODE,
+  PROP_NATURAL_WRAP_MODE,
   PROP_SELECTABLE,
   PROP_MNEMONIC_KEYVAL,
   PROP_MNEMONIC_WIDGET,
@@ -484,6 +486,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_WRAP_MODE:
       gtk_label_set_wrap_mode (self, g_value_get_enum (value));
       break;
+    case PROP_NATURAL_WRAP_MODE:
+      gtk_label_set_natural_wrap_mode (self, g_value_get_enum (value));
+      break;
     case PROP_SELECTABLE:
       gtk_label_set_selectable (self, g_value_get_boolean (value));
       break;
@@ -551,6 +556,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_WRAP_MODE:
       g_value_set_enum (value, self->wrap_mode);
       break;
+    case PROP_NATURAL_WRAP_MODE:
+      g_value_set_enum (value, self->natural_wrap_mode);
+      break;
     case PROP_SELECTABLE:
       g_value_set_boolean (value, gtk_label_get_selectable (self));
       break;
@@ -604,6 +612,7 @@ gtk_label_init (GtkLabel *self)
   self->jtype = GTK_JUSTIFY_LEFT;
   self->wrap = FALSE;
   self->wrap_mode = PANGO_WRAP_WORD;
+  self->natural_wrap_mode = GTK_NATURAL_WRAP_INHERIT;
   self->ellipsize = PANGO_ELLIPSIZE_NONE;
 
   self->use_underline = FALSE;
@@ -1218,8 +1227,6 @@ get_width_for_height (GtkLabel *self,
       gtk_label_ensure_layout (self);
       layout = pango_layout_copy (self->layout);
       pango_layout_set_ellipsize (layout, PANGO_ELLIPSIZE_NONE);
-      if (self->wrap_mode == PANGO_WRAP_WORD_CHAR)
-        pango_layout_set_wrap (layout, PANGO_WRAP_WORD);
 
       /* binary search for the smallest width where the height doesn't
        * eclipse the given height */
@@ -1228,8 +1235,19 @@ get_width_for_height (GtkLabel *self,
       pango_layout_set_width (layout, -1);
       pango_layout_get_size (layout, &max, NULL);
 
-      *natural_width = my_pango_layout_get_width_for_height (layout, height, min, max);
+      /* first, do natural width */
+      if (self->natural_wrap_mode == GTK_NATURAL_WRAP_NONE)
+        {
+          *natural_width = max;
+        }
+      else
+        {
+          if (self->natural_wrap_mode == GTK_NATURAL_WRAP_WORD)
+            pango_layout_set_wrap (layout, PANGO_WRAP_WORD);
+          *natural_width = my_pango_layout_get_width_for_height (layout, height, min, max);
+        }
 
+      /* then, do minimum width */
       if (self->ellipsize != PANGO_ELLIPSIZE_NONE)
         {
           g_object_unref (layout);
@@ -1237,14 +1255,14 @@ get_width_for_height (GtkLabel *self,
           pango_layout_get_size (layout, minimum_width, NULL);
           *minimum_width = MAX (*minimum_width, minimum_default);
         }
-      else if (self->wrap_mode == PANGO_WRAP_WORD_CHAR)
+      else if (self->natural_wrap_mode == GTK_NATURAL_WRAP_INHERIT)
         {
-          pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
-          *minimum_width = my_pango_layout_get_width_for_height (layout, height, min, *natural_width);
+          *minimum_width = *natural_width;
         }
       else
         {
-          *minimum_width = *natural_width;
+          pango_layout_set_wrap (layout, self->wrap_mode);
+          *minimum_width = my_pango_layout_get_width_for_height (layout, height, min, *natural_width);
         }
     }
 
@@ -2375,6 +2393,9 @@ gtk_label_class_init (GtkLabelClass *class)
    * This only affects the formatting if line wrapping is on (see the
    * [property@Gtk.Label:wrap] property). The default is %PANGO_WRAP_WORD,
    * which means wrap on word boundaries.
+   *
+   * For sizing behavior, also consider the [property@Gtk.Label:natural-wrap-mode]
+   * property.
    */
   label_props[PROP_WRAP_MODE] =
       g_param_spec_enum ("wrap-mode",
@@ -2382,6 +2403,27 @@ gtk_label_class_init (GtkLabelClass *class)
                          P_("If wrap is set, controls how linewrapping is done"),
                          PANGO_TYPE_WRAP_MODE,
                          PANGO_WRAP_WORD,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkLabel:natural-wrap-mode: (attributes org.gtk.Property.get=gtk_label_get_natural_wrap_mode org.gtk.Property.set=gtk_label_set_natural_wrap_mode)
+   *
+   * Select the line wrapping for the natural size request.
+   *
+   * This only affects the natural size requested. For the actual wrapping used,
+   * see the [property@Gtk.Label:wrap-mode] property.
+   *
+   * The default is %GTK_NATURAL_WRAP_INHERIT, which inherits the behavior of the
+   * [property@Gtk.Label:wrap-mode] property.
+   *
+   * Since: 4.6
+   */
+  label_props[PROP_NATURAL_WRAP_MODE] =
+      g_param_spec_enum ("natural-wrap-mode",
+                         P_("Natrural wrap mode"),
+                         P_("If wrap is set, controls linewrapping for natural size requests"),
+                         GTK_TYPE_NATURAL_WRAP_MODE,
+                         GTK_NATURAL_WRAP_INHERIT,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -3998,6 +4040,9 @@ gtk_label_get_wrap (GtkLabel *self)
  * This only affects the label if line wrapping is on. (See
  * [method@Gtk.Label.set_wrap]) The default is %PANGO_WRAP_WORD
  * which means wrap on word boundaries.
+ *
+ * For sizing behavior, also consider the [property@Gtk.Label:natural-wrap-mode]
+ * property.
  */
 void
 gtk_label_set_wrap_mode (GtkLabel *self,
@@ -4030,6 +4075,53 @@ gtk_label_get_wrap_mode (GtkLabel *self)
   g_return_val_if_fail (GTK_IS_LABEL (self), PANGO_WRAP_WORD);
 
   return self->wrap_mode;
+}
+
+/**
+ * gtk_label_set_natural_wrap_mode: (attributes org.gtk.Method.set_property=natural-wrap-mode)
+ * @self: a `GtkLabel`
+ * @wrap_mode: the line wrapping mode
+ *
+ * Select the line wrapping for the natural size request.
+ *
+ * This only affects the natural size requested, for the actual wrapping used,
+ * see the [property@Gtk.Label:wrap-mode] property.
+ *
+ * Since: 4.6
+ */
+void
+gtk_label_set_natural_wrap_mode (GtkLabel           *self,
+                                 GtkNaturalWrapMode  wrap_mode)
+{
+  g_return_if_fail (GTK_IS_LABEL (self));
+
+  if (self->natural_wrap_mode != wrap_mode)
+    {
+      self->natural_wrap_mode = wrap_mode;
+      g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_NATURAL_WRAP_MODE]);
+
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+    }
+}
+
+/**
+ * gtk_label_get_natural_wrap_mode: (attributes org.gtk.Method.get_property=natural-wrap-mode)
+ * @self: a `GtkLabel`
+ *
+ * Returns line wrap mode used by the label.
+ *
+ * See [method@Gtk.Label.set_natural_wrap_mode].
+ *
+ * Returns: the natural line wrap mode
+ *
+ * Since: 4.6
+ */
+GtkNaturalWrapMode
+gtk_label_get_natural_wrap_mode (GtkLabel *self)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (self), PANGO_WRAP_CHAR);
+
+  return self->natural_wrap_mode;
 }
 
 static void
