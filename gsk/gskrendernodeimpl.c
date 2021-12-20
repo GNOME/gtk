@@ -33,6 +33,12 @@
 
 #include <hb-ot.h>
 
+/* maximal number of rectangles we keep in a diff region before we throw
+ * the towel and just use the bounding box of the parent node.
+ * Meant to avoid performance corner cases.
+ */
+#define MAX_RECTS_IN_DIFF 30
+
 static inline void
 gsk_cairo_rectangle (cairo_t               *cr,
                      const graphene_rect_t *rect)
@@ -2611,6 +2617,8 @@ static GskDiffResult
 gsk_container_node_keep_func (gconstpointer elem1, gconstpointer elem2, gpointer data)
 {
   gsk_render_node_diff ((GskRenderNode *) elem1, (GskRenderNode *) elem2, data);
+  if (cairo_region_num_rectangles (data) > MAX_RECTS_IN_DIFF)
+    return GSK_DIFF_ABORTED;
 
   return GSK_DIFF_OK;
 }
@@ -2624,6 +2632,8 @@ gsk_container_node_change_func (gconstpointer elem, gsize idx, gpointer data)
 
   rectangle_init_from_graphene (&rect, &node->bounds);
   cairo_region_union_rectangle (region, &rect);
+  if (cairo_region_num_rectangles (region) > MAX_RECTS_IN_DIFF)
+    return GSK_DIFF_ABORTED;
 
   return GSK_DIFF_OK;
 }
