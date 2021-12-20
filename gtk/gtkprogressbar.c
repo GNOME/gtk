@@ -1025,6 +1025,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
 
   pbar->inverted = inverted;
 
+  gtk_widget_queue_allocate (pbar->trough_widget);
   update_node_classes (pbar);
 
   g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_INVERTED]);
