@@ -1,3 +1,76 @@
+Overview of Changes in GTK+ 3.24.31, 20-12-2021
+===============================================
+
+* input:
+ - Fix a crash with touch on GtkScale
+
+* clipboard:
+ - Avoid a double-free
+
+* css:
+ - Avoid a crash with radial gradients
+
+* GtkFileChooser:
+ - Don't leak search results
+
+* GtkTextView:
+ - Support css letterspacing
+
+* Wayland:
+ - Reset position when hiding popups
+ - Ignore globals we did not bind ourselves
+ - Avoid infinite loops when hiding surfaces
+ - Avoid clipboard-related lockups
+
+* X11:
+ - Trap errors while doing XRANDR calls
+ - Support touchpad gestures with XI 2.4
+
+* win32:
+ - Some OpenGL setup fixes
+ - Fall back to GLES for OpenGL
+ - Fix MinGW autotools build
+ - Fix building on Windows 11
+ - Support building with Visual Studio 2022
+ - Improve DND across monitors
+ - Rewrite keymap handling code
+
+* macOS:
+ - Accept NSPasteboardTypeFileURL drops
+ - Build on macOS 12
+ - Fix display on macOS 12
+ - Fix keyboard layout notifications
+ - Fix a crash
+ - Improve performance on Big Sur
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Chinese (China)
+ Chinese (Taiwan)
+ Croatian
+ Czech
+ Danish
+ Dutch
+ Finnish
+ French
+ Friulian
+ Galician
+ German
+ Hungarian
+ Icelandic
+ Italian
+ Kazakh
+ Korean
+ Latvian
+ Occitan
+ Persian
+ Russian
+ Serbian
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.24.30
 ===================================
 
