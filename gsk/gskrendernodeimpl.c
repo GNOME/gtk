@@ -2601,32 +2601,31 @@ gsk_container_node_draw (GskRenderNode *node,
     }
 }
 
-static void
-gsk_render_node_add_to_region (GskRenderNode  *node,
-                               cairo_region_t *region)
-{
-  cairo_rectangle_int_t rect;
-
-  rectangle_init_from_graphene (&rect, &node->bounds);
-  cairo_region_union_rectangle (region, &rect);
-}
-
 static int
 gsk_container_node_compare_func (gconstpointer elem1, gconstpointer elem2, gpointer data)
 {
   return gsk_render_node_can_diff ((const GskRenderNode *) elem1, (const GskRenderNode *) elem2) ? 0 : 1;
 }
 
-static void
+static GskDiffResult
 gsk_container_node_keep_func (gconstpointer elem1, gconstpointer elem2, gpointer data)
 {
   gsk_render_node_diff ((GskRenderNode *) elem1, (GskRenderNode *) elem2, data);
+
+  return GSK_DIFF_OK;
 }
 
-static void
+static GskDiffResult
 gsk_container_node_change_func (gconstpointer elem, gsize idx, gpointer data)
 {
-  gsk_render_node_add_to_region ((GskRenderNode *) elem, data);
+  const GskRenderNode *node = elem;
+  cairo_region_t *region = data;
+  cairo_rectangle_int_t rect;
+
+  rectangle_init_from_graphene (&rect, &node->bounds);
+  cairo_region_union_rectangle (region, &rect);
+
+  return GSK_DIFF_OK;
 }
 
 static GskDiffSettings *

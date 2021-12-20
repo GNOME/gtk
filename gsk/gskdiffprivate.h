@@ -29,9 +29,9 @@ typedef enum {
   GSK_DIFF_ABORTED,
 } GskDiffResult;
 
-typedef void (* GskKeepFunc)   (gconstpointer elem1, gconstpointer elem2, gpointer data);
-typedef void (* GskDeleteFunc) (gconstpointer elem, gsize idx, gpointer data);
-typedef void (* GskInsertFunc) (gconstpointer elem, gsize idx, gpointer data);
+typedef GskDiffResult (* GskKeepFunc)   (gconstpointer elem1, gconstpointer elem2, gpointer data);
+typedef GskDiffResult (* GskDeleteFunc) (gconstpointer elem, gsize idx, gpointer data);
+typedef GskDiffResult (* GskInsertFunc) (gconstpointer elem, gsize idx, gpointer data);
 
 typedef struct _GskDiffSettings GskDiffSettings;
 
