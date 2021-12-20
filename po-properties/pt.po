@@ -7,12 +7,13 @@
 # Sérgio Cardeira <cardeira dot sergio at gmail dot com>, 2016.
 # Tiago Santos <tiagofsantos81@sapo.pt>, 2014 - 2016.
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2021.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 3.12\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-13 19:56+0000\n"
-"PO-Revision-Date: 2021-12-14 14:19+0000\n"
+"POT-Creation-Date: 2021-12-20 15:49+0000\n"
+"PO-Revision-Date: 2021-12-20 16:06+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Hugo Carvalho\n"
 "Language: pt\n"
@@ -797,7 +798,7 @@ msgid "Bookmark file to load"
 msgstr "Ficheiro favorito para carregar"
 
 #: gtk/gtkbookmarklist.c:228 gtk/gtkcellrenderertext.c:267 gtk/gtkentry.c:965
-#: gtk/gtklabel.c:2260 gtk/gtktext.c:929
+#: gtk/gtklabel.c:2297 gtk/gtktext.c:929
 msgid "Attributes"
 msgstr "Atributos"
 
@@ -920,7 +921,7 @@ msgid "scope to use when instantiating listitems"
 msgstr "escopo para usar ao instanciar “listitems”"
 
 #: gtk/gtkbutton.c:222 gtk/gtkcheckbutton.c:562 gtk/gtkexpander.c:333
-#: gtk/gtkframe.c:170 gtk/gtklabel.c:2248 gtk/gtkmenubutton.c:478
+#: gtk/gtkframe.c:170 gtk/gtklabel.c:2285 gtk/gtkmenubutton.c:478
 msgid "Label"
 msgstr "Rótulo"
 
@@ -933,12 +934,12 @@ msgstr ""
 "componente"
 
 #: gtk/gtkbutton.c:235 gtk/gtkcheckbutton.c:590 gtk/gtkexpander.c:346
-#: gtk/gtklabel.c:2286 gtk/gtkmenubutton.c:490 gtk/gtkstack.c:491
+#: gtk/gtklabel.c:2323 gtk/gtkmenubutton.c:490 gtk/gtkstack.c:491
 msgid "Use underline"
 msgstr "Utilizar sublinhado"
 
 #: gtk/gtkbutton.c:236 gtk/gtkcheckbutton.c:591 gtk/gtkexpander.c:347
-#: gtk/gtklabel.c:2287 gtk/gtkmenubutton.c:491
+#: gtk/gtklabel.c:2324 gtk/gtkmenubutton.c:491
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1612,7 +1613,7 @@ msgstr ""
 "dica quando for renderizar o texto. Se não entende este parâmetro, "
 "provavelmente não precisa dele"
 
-#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:2421 gtk/gtkprogressbar.c:267
+#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:2482 gtk/gtkprogressbar.c:267
 msgid "Ellipsize"
 msgstr "Reticências"
 
@@ -1624,15 +1625,15 @@ msgstr ""
 "O local preferido onde colocar reticências na cadeia, se o desenhador de "
 "célula não possuir espaço suficiente para mostrar a cadeia completa"
 
-#: gtk/gtkcellrenderertext.c:461 gtk/gtklabel.c:2440
+#: gtk/gtkcellrenderertext.c:461 gtk/gtklabel.c:2501
 msgid "Width In Characters"
 msgstr "Largura em caracteres"
 
-#: gtk/gtkcellrenderertext.c:462 gtk/gtklabel.c:2441
+#: gtk/gtkcellrenderertext.c:462 gtk/gtklabel.c:2502
 msgid "The desired width of the label, in characters"
 msgstr "A largura desejada da etiqueta, em caracteres"
 
-#: gtk/gtkcellrenderertext.c:481 gtk/gtklabel.c:2476
+#: gtk/gtkcellrenderertext.c:481 gtk/gtklabel.c:2537
 msgid "Maximum Width In Characters"
 msgstr "Largura máxima em caracteres"
 
@@ -1955,7 +1956,7 @@ msgstr "Cor RGBA"
 msgid "Color as RGBA"
 msgstr "Cor como RGBA"
 
-#: gtk/gtkcolorswatch.c:515 gtk/gtklabel.c:2375 gtk/gtklistbox.c:3570
+#: gtk/gtkcolorswatch.c:515 gtk/gtklabel.c:2436 gtk/gtklistbox.c:3570
 #: gtk/gtklistitem.c:217
 msgid "Selectable"
 msgstr "Selecionável"
@@ -2547,11 +2548,11 @@ msgstr "Largura máxima em caracteres"
 msgid "The desired maximum width of the entry, in characters"
 msgstr "A largura máxima desejada da entrada, em caracteres"
 
-#: gtk/gtkeditable.c:473 gtk/gtklabel.c:2317
+#: gtk/gtkeditable.c:473 gtk/gtklabel.c:2354
 msgid "X align"
 msgstr "Alinh x"
 
-#: gtk/gtkeditable.c:474 gtk/gtklabel.c:2318
+#: gtk/gtkeditable.c:474 gtk/gtklabel.c:2355
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2868,7 +2869,7 @@ msgstr "Ícone de Emoji"
 msgid "Whether to show an icon for Emoji"
 msgstr "Se mostra ou não um ícone para o Emoji"
 
-#: gtk/gtkentry.c:1002 gtk/gtklabel.c:2506 gtk/gtkpasswordentry.c:504
+#: gtk/gtkentry.c:1002 gtk/gtklabel.c:2567 gtk/gtkpasswordentry.c:504
 #: gtk/gtktext.c:990 gtk/gtktextview.c:1158
 msgid "Extra menu"
 msgstr "Menu extra"
@@ -3011,11 +3012,11 @@ msgstr "Se o expansor foi aberto ou não para revelar o widget do sub-processo"
 msgid "Text of the expander’s label"
 msgstr "Texto do rótulo do expansor"
 
-#: gtk/gtkexpander.c:359 gtk/gtklabel.c:2274 gtk/gtkmodelbutton.c:1211
+#: gtk/gtkexpander.c:359 gtk/gtklabel.c:2311 gtk/gtkmodelbutton.c:1211
 msgid "Use markup"
 msgstr "Usar markup"
 
-#: gtk/gtkexpander.c:360 gtk/gtklabel.c:2275
+#: gtk/gtkexpander.c:360 gtk/gtklabel.c:2312
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "O texto da etiqueta inclui código XML. Consulte pango_parse_markup()"
 
@@ -3714,19 +3715,19 @@ msgstr "Se incluir ou não um botão de fechar padrão"
 msgid "Controls whether the info bar shows its contents or not"
 msgstr "Controla se a barra de informações mostra seu conteúdo"
 
-#: gtk/gtklabel.c:2249
+#: gtk/gtklabel.c:2286
 msgid "The text of the label"
 msgstr "O texto da etiqueta"
 
-#: gtk/gtklabel.c:2261
+#: gtk/gtklabel.c:2298
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Uma lista de atributos de estilo a aplicar ao texto da etiqueta"
 
-#: gtk/gtklabel.c:2301 gtk/gtktexttag.c:475 gtk/gtktextview.c:922
+#: gtk/gtklabel.c:2338 gtk/gtktexttag.c:475 gtk/gtktextview.c:922
 msgid "Justification"
 msgstr "Alinhamento"
 
-#: gtk/gtklabel.c:2302
+#: gtk/gtklabel.c:2339
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3736,51 +3737,62 @@ msgstr ""
 "alinhamento da etiqueta dentro da sua alocação. Consulte GtkMisc::xalign "
 "para tal"
 
-#: gtk/gtklabel.c:2333
+#: gtk/gtklabel.c:2370
 msgid "Y align"
 msgstr "Alinh y"
 
-#: gtk/gtklabel.c:2334
+#: gtk/gtklabel.c:2371
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr "O alinhamento vertical, de 0 (topo) até 1 (fundo)"
 
-#: gtk/gtklabel.c:2346
+#: gtk/gtklabel.c:2383
 msgid "Line wrap"
 msgstr "Quebra de linha"
 
-#: gtk/gtklabel.c:2347
+#: gtk/gtklabel.c:2384
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Se definido, quebrar linhas se o texto se tornar demasiado longo"
 
-#: gtk/gtklabel.c:2362
+#: gtk/gtklabel.c:2402
 msgid "Line wrap mode"
 msgstr "Modo de quebra de linha"
 
-#: gtk/gtklabel.c:2363
+#: gtk/gtklabel.c:2403
 msgid "If wrap is set, controls how linewrapping is done"
-msgstr "Se quebra de linha estiver ativa, controla como é efetuada a quebra"
+msgstr ""
+"Se a quebra de linha estiver definida, controla como é efetuada a quebra"
 
-#: gtk/gtklabel.c:2376
+#: gtk/gtklabel.c:2423
+msgid "Natrural wrap mode"
+msgstr "Modo de quebra de linha natural"
+
+#: gtk/gtklabel.c:2424
+msgid "If wrap is set, controls linewrapping for natural size requests"
+msgstr ""
+"Se a quebra de linha estiver definida, controla a quebra de linha para "
+"pedidos de tamanho natural"
+
+#: gtk/gtklabel.c:2437
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Se o texto da etiqueta pode ou não ser selecionado com o rato"
 
-#: gtk/gtklabel.c:2387
+#: gtk/gtklabel.c:2448
 msgid "Mnemonic key"
 msgstr "Chave mnemónica"
 
-#: gtk/gtklabel.c:2388
+#: gtk/gtklabel.c:2449
 msgid "The mnemonic accelerator key for this label"
 msgstr "A tecla de atalho mnemónica para esta etiqueta"
 
-#: gtk/gtklabel.c:2400
+#: gtk/gtklabel.c:2461
 msgid "Mnemonic widget"
 msgstr "Widget da mnemónica"
 
-#: gtk/gtklabel.c:2401
+#: gtk/gtklabel.c:2462
 msgid "The widget to be activated when the label’s mnemonic key is pressed"
 msgstr "O componente ativado quando a tecla mnemônica do rótulo é pressionada"
 
-#: gtk/gtklabel.c:2422
+#: gtk/gtklabel.c:2483
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3788,30 +3800,30 @@ msgstr ""
 "O local preferido para colocar reticências na cadeia, se a etiqueta não "
 "possuir espaço suficiente para mostrar a cadeia completa"
 
-#: gtk/gtklabel.c:2458
+#: gtk/gtklabel.c:2519
 msgid "Single Line Mode"
 msgstr "Modo de linha única"
 
-#: gtk/gtklabel.c:2459
+#: gtk/gtklabel.c:2520
 msgid "Whether the label is in single line mode"
 msgstr "Se a etiqueta está ou não em modo de linha única"
 
-#: gtk/gtklabel.c:2477
+#: gtk/gtklabel.c:2538
 msgid "The desired maximum width of the label, in characters"
 msgstr "A largura máxima desejada da etiqueta, em caracteres"
 
-#: gtk/gtklabel.c:2493
+#: gtk/gtklabel.c:2554
 msgid "Number of lines"
 msgstr "Número de linhas"
 
 # Quando um rótulo é redu... -- Rafael
-#: gtk/gtklabel.c:2494
+#: gtk/gtklabel.c:2555
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr ""
 "O número de linhas desejado, ao pôr reticências numa etiqueta que contém "
 "quebras de linha"
 
-#: gtk/gtklabel.c:2507 gtk/gtktext.c:991 gtk/gtktextview.c:1159
+#: gtk/gtklabel.c:2568 gtk/gtktext.c:991 gtk/gtktextview.c:1159
 msgid "Menu model to append to the context menu"
 msgstr "O modelo de menu para acrescentar ao menu de contexto"
 
