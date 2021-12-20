@@ -286,6 +286,31 @@ typedef enum
 } GtkMovementStep;
 
 /**
+ * GtkNaturalWrapMode:
+ * @GTK_NATURAL_WRAP_INHERIT: Inherit the minimum size request.
+ *   In particular, this should be used with %PANGO_WRAP_CHAR.
+ * @GTK_NATURAL_WRAP_NONE: Try not to wrap the text. This mode is the
+ *   closest to GTK3's behavior but can lead to a wide label leaving
+ *   lots of empty space below the text.
+ * @GTK_NATURAL_WRAP_WORD: Attempt to wrap at word boundaries. This
+ *   is useful in particular when using %PANGO_WRAP_WORD_CHAR as the
+ *   wrap mode.
+ *
+ * Options for selecting a different wrap mode for natural size
+ * requests.
+ *
+ * See for example the [property@Gtk.Label:natural-wrap-mode] property.
+ *
+ * Since: 4.6
+ */
+typedef enum
+{
+  GTK_NATURAL_WRAP_INHERIT,
+  GTK_NATURAL_WRAP_NONE,
+  GTK_NATURAL_WRAP_WORD
+} GtkNaturalWrapMode;
+
+/**
  * GtkScrollStep:
  * @GTK_SCROLL_STEPS: Scroll in steps.
  * @GTK_SCROLL_PAGES: Scroll by pages.
