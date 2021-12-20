@@ -56,19 +56,19 @@ window1
       <AtkComponent>
       layer: widget
       alpha: 1
-      lt-accessibility-dump
+      accessibility-dump
         "label"
         parent: unnamed-GtkContainerAccessible-4
         index: 0
-        name: lt-accessibility-dump
+        name: accessibility-dump
         state: enabled multi-line sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
         alpha: 1
         <AtkText>
-        text: lt-accessibility-dump
-        character count: 21
+        text: accessibility-dump
+        character count: 18
         caret offset: 0
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
