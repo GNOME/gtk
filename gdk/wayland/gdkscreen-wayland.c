@@ -555,6 +555,7 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.wm.preferences", "action-middle-click-titlebar", "gtk-titlebar-middle-click", G_TYPE_STRING, { .s = "none" } },
   { FALSE, "org.gnome.desktop.wm.preferences", "action-right-click-titlebar", "gtk-titlebar-right-click", G_TYPE_STRING, { .s = "menu" } },
   { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } },
+  { FALSE, "org.gnome.desktop.a11y.interface", "high-contrast", "high-contrast", G_TYPE_NONE, { .b = FALSE } },
   { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_INT, { .i = 0 } }
 };
 
@@ -603,6 +604,13 @@ find_translation_entry_by_setting (const gchar *setting)
 }
 
 static void
+high_contrast_changed (GdkScreen *screen)
+{
+  notify_setting (screen, "gtk-theme-name");
+  notify_setting (screen, "gtk-icon-theme-name");
+}
+
+static void
 settings_changed (GSettings   *settings,
                   const gchar *key,
                   GdkScreen   *screen)
@@ -615,6 +623,8 @@ settings_changed (GSettings   *settings,
     {
       if (entry->type != G_TYPE_NONE)
         notify_setting (screen, entry->setting);
+      else if (strcmp (key, "high-contrast") == 0)
+        high_contrast_changed (screen);
       else
         update_xft_settings (screen);
     }
@@ -997,6 +1007,32 @@ set_decoration_layout_from_entry (GdkScreen        *screen,
     }
 }
 
+static void
+set_theme_from_entry (GdkScreen        *screen,
+                      TranslationEntry *entry,
+                      GValue           *value)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  GSettings *settings = NULL;
+  GSettingsSchema *schema = NULL;
+  gboolean hc = FALSE;
+
+  settings = (GSettings *)g_hash_table_lookup (screen_wayland->settings, "org.gnome.desktop.a11y.interface");
+
+  if (settings)
+    g_object_get (settings, "settings-schema", &schema, NULL);
+
+  if (schema && g_settings_schema_has_key (schema, "high-contrast"))
+    hc = g_settings_get_boolean (settings, "high-contrast");
+
+  g_clear_pointer (&schema, g_settings_schema_unref);
+
+  if (hc)
+    g_value_set_static_string (value, "HighContrast");
+  else
+    set_value_from_entry (screen, entry, value);
+}
+
 static gboolean
 set_capability_setting (GdkScreen                 *screen,
                         GValue                    *value,
@@ -1028,6 +1064,9 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
     {
       if (strcmp (name, "gtk-decoration-layout") == 0)
         set_decoration_layout_from_entry (screen, entry, value);
+      else if (strcmp (name, "gtk-theme-name") == 0 ||
+               strcmp (name, "gtk-icon-theme-name") == 0)
+        set_theme_from_entry (screen, entry, value);
       else
         set_value_from_entry (screen, entry, value);
       return TRUE;
