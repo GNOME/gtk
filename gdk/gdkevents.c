@@ -522,7 +522,8 @@ _gdk_event_queue_find_first (GdkDisplay *display)
           if (pending_motion)
             return pending_motion;
 
-          if ((event->event_type == GDK_MOTION_NOTIFY || event->event_type == GDK_SCROLL) &&
+          if ((event->event_type == GDK_MOTION_NOTIFY ||
+               (event->event_type == GDK_SCROLL && gdk_scroll_event_get_direction (event) == GDK_SCROLL_SMOOTH)) &&
               (event->flags & GDK_EVENT_FLUSHED) == 0)
             pending_motion = tmp_list;
           else
