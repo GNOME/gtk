@@ -45,5 +45,5 @@ option('installed_tests', type: 'boolean', value: 'false',
   description : 'enable installed tests')
 
 # input modules
-option('builtin_immodules', type: 'combo', choices : ['yes', 'no', 'auto'],
-       value: 'auto', description: 'Build immodules into GTK so/DLL')
+option('builtin_immodules', type: 'string',
+       value: '', description: 'Build specified immodules into GTK so/DLL (comma-separated list), "all", "none" or "backend"')

@@ -7,7 +7,7 @@ foreach l: immodules
   cond = l.get(2, true)
   cflags = l.get(3, [])
 
-  if cond and not builtin_immodules
+  if cond and not (builtin_immodules.contains(name) or builtin_all_immodules)
     shared_module('im-@0@'.format(name),
                   immod_sources,
                   c_args: common_cflags + cflags,

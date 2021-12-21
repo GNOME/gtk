@@ -5,7 +5,7 @@ app5_resources = gnome.compile_resources(
   source_dir: '.'
 )
 
-app5_schemas = gnome.compile_schemas()
+app5_schemas = gnome.compile_schemas(depend_files: files(['org.gtk.exampleapp.gschema.xml']))
 
 
 app5 = executable(
@@ -19,3 +19,5 @@ app5 = executable(
   app5_schemas,
   dependencies: libgtk_dep
 )
+
+install_data('org.gtk.exampleapp.gschema.xml', install_dir: gtk_schemasdir)
