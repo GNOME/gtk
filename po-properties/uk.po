@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-13 03:40+0000\n"
-"PO-Revision-Date: 2021-12-13 15:16+0200\n"
+"POT-Creation-Date: 2021-12-21 18:24+0000\n"
+"PO-Revision-Date: 2021-12-21 23:28+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -789,7 +789,7 @@ msgid "Bookmark file to load"
 msgstr "Файл закладок, який слід завантажити"
 
 #: gtk/gtkbookmarklist.c:228 gtk/gtkcellrenderertext.c:267 gtk/gtkentry.c:965
-#: gtk/gtklabel.c:2260 gtk/gtktext.c:929
+#: gtk/gtklabel.c:2297 gtk/gtktext.c:929
 msgid "Attributes"
 msgstr "Атрибути"
 
@@ -911,7 +911,7 @@ msgid "scope to use when instantiating listitems"
 msgstr "область, яку слід використати для створення екземплярів пунктів списку"
 
 #: gtk/gtkbutton.c:222 gtk/gtkcheckbutton.c:562 gtk/gtkexpander.c:333
-#: gtk/gtkframe.c:170 gtk/gtklabel.c:2248 gtk/gtkmenubutton.c:478
+#: gtk/gtkframe.c:170 gtk/gtklabel.c:2285 gtk/gtkmenubutton.c:478
 msgid "Label"
 msgstr "Позначка"
 
@@ -922,12 +922,12 @@ msgid ""
 msgstr "Текст віджета позначки в кнопці, якщо кнопка містить віджет позначки"
 
 #: gtk/gtkbutton.c:235 gtk/gtkcheckbutton.c:590 gtk/gtkexpander.c:346
-#: gtk/gtklabel.c:2286 gtk/gtkmenubutton.c:490 gtk/gtkstack.c:491
+#: gtk/gtklabel.c:2323 gtk/gtkmenubutton.c:490 gtk/gtkstack.c:491
 msgid "Use underline"
 msgstr "Використовувати підкреслення"
 
 #: gtk/gtkbutton.c:236 gtk/gtkcheckbutton.c:591 gtk/gtkexpander.c:347
-#: gtk/gtklabel.c:2287 gtk/gtkmenubutton.c:491
+#: gtk/gtklabel.c:2324 gtk/gtkmenubutton.c:491
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1598,7 +1598,7 @@ msgstr ""
 "під час відтворення тексту. Якщо ви не розумієте цей параметр, то, напевно, "
 "він вам не потрібний."
 
-#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:2421 gtk/gtkprogressbar.c:267
+#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:2482 gtk/gtkprogressbar.c:267
 msgid "Ellipsize"
 msgstr "Багатокрапка"
 
@@ -1610,15 +1610,15 @@ msgstr ""
 "Бажане місце обривання рядка багатокрапкою, якщо механізму відтворення рядка "
 "не вистачає місця для показу всього рядка"
 
-#: gtk/gtkcellrenderertext.c:461 gtk/gtklabel.c:2440
+#: gtk/gtkcellrenderertext.c:461 gtk/gtklabel.c:2501
 msgid "Width In Characters"
 msgstr "Ширина у символах"
 
-#: gtk/gtkcellrenderertext.c:462 gtk/gtklabel.c:2441
+#: gtk/gtkcellrenderertext.c:462 gtk/gtklabel.c:2502
 msgid "The desired width of the label, in characters"
 msgstr "Бажана ширина, у символах"
 
-#: gtk/gtkcellrenderertext.c:481 gtk/gtklabel.c:2476
+#: gtk/gtkcellrenderertext.c:481 gtk/gtklabel.c:2537
 msgid "Maximum Width In Characters"
 msgstr "Максимальна ширина в символах"
 
@@ -1944,7 +1944,7 @@ msgstr "Колір RGBA"
 msgid "Color as RGBA"
 msgstr "Колір як RGBA"
 
-#: gtk/gtkcolorswatch.c:515 gtk/gtklabel.c:2375 gtk/gtklistbox.c:3570
+#: gtk/gtkcolorswatch.c:515 gtk/gtklabel.c:2436 gtk/gtklistbox.c:3570
 #: gtk/gtklistitem.c:217
 msgid "Selectable"
 msgstr "Вибирається"
@@ -1970,12 +1970,10 @@ msgid "Whether the swatch should accept drops"
 msgstr "Чи прийматиме пробник події скидання"
 
 #: gtk/gtkcolorswatch.c:524
-#| msgid "Can Drop"
 msgid "Can Drag"
 msgstr "Можна перетягувати"
 
 #: gtk/gtkcolorswatch.c:524
-#| msgid "Whether the swatch should accept drops"
 msgid "Whether the swatch should allow drags"
 msgstr "Чи дозволятиме пробник перетягування"
 
@@ -2541,11 +2539,11 @@ msgstr "Максимальна ширина у символах"
 msgid "The desired maximum width of the entry, in characters"
 msgstr "Бажана максимальна ширина поля введення, у символах"
 
-#: gtk/gtkeditable.c:473 gtk/gtklabel.c:2317
+#: gtk/gtkeditable.c:473 gtk/gtklabel.c:2354
 msgid "X align"
 msgstr "Вирівнювання за X"
 
-#: gtk/gtkeditable.c:474 gtk/gtklabel.c:2318
+#: gtk/gtkeditable.c:474 gtk/gtklabel.c:2355
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2865,7 +2863,7 @@ msgstr "Піктограма емодзі"
 msgid "Whether to show an icon for Emoji"
 msgstr "Чи слід показувати піктограму емодзі"
 
-#: gtk/gtkentry.c:1002 gtk/gtklabel.c:2506 gtk/gtkpasswordentry.c:504
+#: gtk/gtkentry.c:1002 gtk/gtklabel.c:2567 gtk/gtkpasswordentry.c:504
 #: gtk/gtktext.c:990 gtk/gtktextview.c:1158
 msgid "Extra menu"
 msgstr "Додаткове меню"
@@ -3008,11 +3006,11 @@ msgstr "Чи розширювач був відкритий для показу 
 msgid "Text of the expander’s label"
 msgstr "Текст мітки розгортання"
 
-#: gtk/gtkexpander.c:359 gtk/gtklabel.c:2274 gtk/gtkmodelbutton.c:1211
+#: gtk/gtkexpander.c:359 gtk/gtklabel.c:2311 gtk/gtkmodelbutton.c:1211
 msgid "Use markup"
 msgstr "Використовувати розмітку"
 
-#: gtk/gtkexpander.c:360 gtk/gtklabel.c:2275
+#: gtk/gtkexpander.c:360 gtk/gtklabel.c:2312
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Текст позначки включає розмітку XML. Див. pango_parse_markup()"
 
@@ -3715,19 +3713,19 @@ msgstr "Чи потрібно додавати стандартну кнопку
 msgid "Controls whether the info bar shows its contents or not"
 msgstr "Керує тим, чи буде показано вміст інформаційної панелі"
 
-#: gtk/gtklabel.c:2249
+#: gtk/gtklabel.c:2286
 msgid "The text of the label"
 msgstr "Текст позначки"
 
-#: gtk/gtklabel.c:2261
+#: gtk/gtklabel.c:2298
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Список стильових ознак для застосування до тексту позначки"
 
-#: gtk/gtklabel.c:2301 gtk/gtktexttag.c:475 gtk/gtktextview.c:922
+#: gtk/gtklabel.c:2338 gtk/gtktexttag.c:475 gtk/gtktextview.c:922
 msgid "Justification"
 msgstr "Вирівнювання"
 
-#: gtk/gtklabel.c:2302
+#: gtk/gtklabel.c:2339
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3737,53 +3735,64 @@ msgstr ""
 "вирівнювання мітки всередині вказаного для неї місця. З цього питання див. "
 "GtkLabel::xalign"
 
-#: gtk/gtklabel.c:2333
+#: gtk/gtklabel.c:2370
 msgid "Y align"
 msgstr "Вирівнювання за Y"
 
-#: gtk/gtklabel.c:2334
+#: gtk/gtklabel.c:2371
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr "Вертикальне вирівнювання, від 0 (вгору) до 1 (вниз)"
 
-#: gtk/gtklabel.c:2346
+#: gtk/gtklabel.c:2383
 msgid "Line wrap"
 msgstr "Перенос рядків"
 
-#: gtk/gtklabel.c:2347
+#: gtk/gtklabel.c:2384
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Якщо встановлено, занадто довгі рядки переносяться"
 
-#: gtk/gtklabel.c:2362
+#: gtk/gtklabel.c:2402
 msgid "Line wrap mode"
 msgstr "Режим переносу рядків"
 
-#: gtk/gtklabel.c:2363
+#: gtk/gtklabel.c:2403
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr ""
 "Якщо встановлено перенос рядків, контролює як виконувати перенос рядків"
 
-#: gtk/gtklabel.c:2376
+#: gtk/gtklabel.c:2423
+#| msgid "Line wrap mode"
+msgid "Natrural wrap mode"
+msgstr "Природний режим перенесення"
+
+#: gtk/gtklabel.c:2424
+#| msgid "If wrap is set, controls how linewrapping is done"
+msgid "If wrap is set, controls linewrapping for natural size requests"
+msgstr ""
+"Якщо встановлено перенос рядків, контролює перенос рядків для запитів щодо природного розміру"
+
+#: gtk/gtklabel.c:2437
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Чи може текст позначки бути виділений використовуючи мишу"
 
-#: gtk/gtklabel.c:2387
+#: gtk/gtklabel.c:2448
 msgid "Mnemonic key"
 msgstr "Мнемонічна клавіша"
 
-#: gtk/gtklabel.c:2388
+#: gtk/gtklabel.c:2449
 msgid "The mnemonic accelerator key for this label"
 msgstr "Мнемонічна клавіша-прискорювач для цієї позначки"
 
-#: gtk/gtklabel.c:2400
+#: gtk/gtklabel.c:2461
 msgid "Mnemonic widget"
 msgstr "Мнемонічний віджет"
 
-#: gtk/gtklabel.c:2401
+#: gtk/gtklabel.c:2462
 msgid "The widget to be activated when the label’s mnemonic key is pressed"
 msgstr ""
 "Віджет, який буде активовано під час натиснення мнемонічної клавіші позначки"
 
-#: gtk/gtklabel.c:2422
+#: gtk/gtklabel.c:2483
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3791,27 +3800,27 @@ msgstr ""
 "Бажане місце для багатокрапки у рядку, якщо для показу усього рядка не "
 "вистачає місця."
 
-#: gtk/gtklabel.c:2458
+#: gtk/gtklabel.c:2519
 msgid "Single Line Mode"
 msgstr "Режим одного рядка"
 
-#: gtk/gtklabel.c:2459
+#: gtk/gtklabel.c:2520
 msgid "Whether the label is in single line mode"
 msgstr "Чи знаходиться рядок у режимі одного рядка"
 
-#: gtk/gtklabel.c:2477
+#: gtk/gtklabel.c:2538
 msgid "The desired maximum width of the label, in characters"
 msgstr "Бажана максимальна ширина ярлика, у символах"
 
-#: gtk/gtklabel.c:2493
+#: gtk/gtklabel.c:2554
 msgid "Number of lines"
 msgstr "Кількість ліній"
 
-#: gtk/gtklabel.c:2494
+#: gtk/gtklabel.c:2555
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr "Число рядків при скороченні мітки з використанням трьох крапок"
 
-#: gtk/gtklabel.c:2507 gtk/gtktext.c:991 gtk/gtktextview.c:1159
+#: gtk/gtklabel.c:2568 gtk/gtktext.c:991 gtk/gtktextview.c:1159
 msgid "Menu model to append to the context menu"
 msgstr "Модель меню для долучення до контекстного меню"
 
