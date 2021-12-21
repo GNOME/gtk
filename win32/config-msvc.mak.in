@@ -63,8 +63,10 @@ GDK_PREPROCESSOR_FLAGS =	\
 
 GTK_PREPROCESSOR_FLAGS =	\
 	 /I..\gtk	\
+	 /I.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk	\
 	 /I..\gdk	\
 	 /I..\gdk\win32	\
+	 /I.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3	\
 	 /I..	\
 	 /I$(PREFIX)\include\gdk-pixbuf-2.0	\
 	 /I$(PREFIX)\include\pango-1.0	\

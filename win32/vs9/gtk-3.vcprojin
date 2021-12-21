@@ -21,7 +21,7 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			ConfigurationType="2"
 			CharacterSet="2"
 			>
@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gtk;..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -53,7 +53,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gtk;..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="$(GtkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -85,7 +85,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			ConfigurationType="2"
 			CharacterSet="2"
 			>
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gtk;..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefinesX64)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -117,7 +117,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gtk;..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="$(GtkDefinesX64)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

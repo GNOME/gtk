@@ -31,6 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(BaseIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -60,6 +61,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
+				AdditionalIncludeDirectories="$(BaseIncludesRelease)"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions=""
 				RuntimeLibrary="2"
@@ -91,6 +93,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="$(BaseIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -121,6 +124,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
+				AdditionalIncludeDirectories="$(BaseIncludesRelease)"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions=""
 				RuntimeLibrary="2"

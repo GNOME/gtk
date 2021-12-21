@@ -25,22 +25,22 @@ GDK_CONFIG_TEMPLATE = ..\gdk\gdkconfig.h.win32
 !endif
 
 GDK_MARSHALERS_FLAGS = --prefix=_gdk_marshal --valist-marshallers
-GDK_RESOURCES_ARGS = ..\gdk\gdk.gresource.xml --target=$@ --sourcedir=..\gdk --c-name _gdk --manual-register
+GDK_RESOURCES_ARGS = --target=$@ --sourcedir=..\gdk --c-name _gdk --manual-register
 GTK_MARSHALERS_FLAGS = --prefix=_gtk_marshal --valist-marshallers
 GTK_RESOURCES_ARGS = ..\gtk\gtk.gresource.xml --target=$@ --sourcedir=..\gtk --c-name _gtk --manual-register
 
 GDK_GENERATED_SOURCES =	\
-	..\gdk\gdkconfig.h	\
-	..\gdk\gdkversionmacros.h	\
-	..\gdk\gdkmarshalers.h	\
-	..\gdk\gdkmarshalers.c	\
-	..\gdk\gdkresources.h	\
-	..\gdk\gdkresources.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkconfig.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c	\
-	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkmarshalers.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkmarshalers.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h	\
 
 generate-base-sources:	\
-	..\config.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
 	$(GDK_GENERATED_SOURCES)	\
 	..\gtk\gtk-win32.rc	\
 	..\gtk\libgtk3.manifest	\
@@ -57,7 +57,7 @@ generate-base-sources:	\
 	..\demos\icon-browser\resources.c
 
 # Copy the pre-defined config.h.win32 and demos.h.win32
-..\config.h: ..\config.h.win32
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h: ..\config.h.win32
 ..\demos\gtk-demo\demos.h: ..\demos\gtk-demo\demos.h.win32
 ..\gtk\gtk-win32.rc: ..\gtk\gtk-win32.rc.body
 
@@ -67,13 +67,14 @@ generate-base-sources:	\
 	@if exist ..\gdk-$(CFG)-$(GDK_DEL_CONFIG)-build del ..\gdk-$(CFG)-$(GDK_DEL_CONFIG)-build
 	@copy $** $@
 	
-..\gdk\gdkconfig.h: ..\gdk-$(CFG)-$(GDK_CONFIG)-build
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkconfig.h: ..\gdk-$(CFG)-$(GDK_CONFIG)-build
 
-..\config.h	\
-..\gdk\gdkconfig.h	\
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkconfig.h	\
 ..\gtk\gtk-win32.rc	\
 ..\demos\gtk-demo\demos.h:
 	@echo Copying $@...
+	@if not exist $(@D)\ md $(@D)
 	@copy $** $@
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c: ..\gdk\gdkenumtypes.c.template $(GDK_PUBLIC_HEADERS)
@@ -87,22 +88,26 @@ generate-base-sources:	\
 	@$(PYTHON) $(GLIB_MKENUMS) --template $(@F).template $(gdk_public_h_sources) $(deprecated_h_sources) > ..\win32\$@
 	@cd ..\win32
 
-..\gdk\gdkversionmacros.h: ..\gdk\gdkversionmacros.h.in
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h: ..\gdk\gdkversionmacros.h.in
 	@echo Generating $@...
-	@$(PYTHON) gen-gdkversionmacros-h.py --version=$(GTK_VERSION)
+	@if not exist $(@D)\ md $(@D)
+	@$(PYTHON) gen-gdkversionmacros-h.py --version=$(GTK_VERSION) --outdir=.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk
 
-..\gdk\gdkmarshalers.h: ..\gdk\gdkmarshalers.list
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkmarshalers.h: ..\gdk\gdkmarshalers.list
 	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GDK_MARSHALERS_FLAGS) --header $** > $@.tmp
 	@move $@.tmp $@
 
-..\gdk\gdkmarshalers.c: ..\gdk\gdkmarshalers.list
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkmarshalers.c: ..\gdk\gdkmarshalers.list
 	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GDK_MARSHALERS_FLAGS) --body $** > $@.tmp
 	@move $@.tmp $@
 
-..\gdk\gdk.gresource.xml: $(GDK_RESOURCES)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdk.gresource.xml: $(GDK_RESOURCES)
 	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
 	@echo ^<?xml version='1.0' encoding='UTF-8'?^> >$@
 	@echo ^<gresources^> >> $@
 	@echo  ^<gresource prefix='/org/gtk/libgdk'^> >> $@
@@ -110,19 +115,19 @@ generate-base-sources:	\
 	@echo   ^</gresource^> >> $@
 	@echo ^</gresources^> >> $@
 
-..\gdk\gdkresources.h: ..\gdk\gdk.gresource.xml
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.h: .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdk.gresource.xml
 	@echo Generating $@...
 	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
 	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
 	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
-	@start /min $(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-header
+	@start /min $(GLIB_COMPILE_RESOURCES) $** $(GDK_RESOURCES_ARGS) --generate-header
 
-..\gdk\gdkresources.c: ..\gdk\gdk.gresource.xml $(GDK_RESOURCES)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.c: .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdk.gresource.xml
 	@echo Generating $@...
 	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
 	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
 	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
-	@start /min $(GLIB_COMPILE_RESOURCES) $(GDK_RESOURCES_ARGS) --generate-source
+	@start /min $(GLIB_COMPILE_RESOURCES) $** $(GDK_RESOURCES_ARGS) --generate-source
 
 ..\gtk\libgtk3.manifest: ..\gtk\libgtk3.manifest.in
 	@echo Generating $@...
@@ -216,6 +221,18 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 	@cd ..\demos\gtk-demo
 	@$(PYTHON) geninclude.py demos.h.win32 $(demo_sources)
 
+Gdk_3_0_gir_list_final: Gdk_3_0_gir_list $(GDK_GENERATED_SOURCES)
+	@echo Generating $@...
+	@type Gdk_3_0_gir_list>$@
+	@for %%s in ($(GDK_GENERATED_SOURCES)) do echo %%s>>$@
+
+GdkWin32_3_0_gir_list_final: GdkWin32_3_0_gir_list
+Gtk_3_0_gir_list_final: Gtk_3_0_gir_list
+
+GdkWin32_3_0_gir_list_final Gtk_3_0_gir_list_final:
+	@echo Copying $@...
+	@copy $** $@
+
 # Remove the generated files
 clean:
 	@-del /f /q ..\demos\icon-browser\resources.c
@@ -233,16 +250,16 @@ clean:
 	@-del /f /q ..\gtk\gtk-win32.rc
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h
-	@-del /f /q ..\gdk\gdkresources.c
-	@-del /f /q ..\gdk\gdkresources.h
-	@-del /f /q ..\gdk\gdk.gresource.xml
-	@-del /f /q ..\gdk\gdkmarshalers.c
-	@-del /f /q ..\gdk\gdkmarshalers.h
-	@-del /f /q ..\gdk\gdkversionmacros.h
-	@-del /f /q ..\gdk\gdkconfig.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdk.gresource.xml
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkmarshalers.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkmarshalers.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkconfig.h
 	@if exist ..\gdk-$(CFG)-$(GDK_CONFIG)-build del ..\gdk-$(CFG)-$(GDK_CONFIG)-build
 	@if exist ..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build del ..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build
 	@if exist ..\gdk-$(GDK_OLD_CFG)-$(GDK_CONFIG)-build del ..\gdk-$(GDK_OLD_CFG)-$(GDK_CONFIG)-build
 	@if exist ..\gdk-$(CFG)-$(GDK_DEL_CONFIG)-build del ..\gdk-$(CFG)-$(GDK_DEL_CONFIG)-build
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h
 	@-rd .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk
-	@-del /f /q ..\config.h

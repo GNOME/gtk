@@ -93,7 +93,7 @@ $(top_builddir)/win32/$(1).msvc.introspect: Makefile
 	-$(RM) $(top_builddir)/win32/$(1).msvc.introspect
 
 # Assemble the Command to Run g-ir-scanner
-	echo 'vs$$$$(VSVER)\$$$$(CFG)\$$$$(PLAT)\bin\'$(1)': '$(_gir_name)'_list '$($(_gir_name)_MSVC_GIR_DEPS)>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo 'vs$$$$(VSVER)\$$$$(CFG)\$$$$(PLAT)\bin\'$(1)': '$(_gir_name)'_list_final '$($(_gir_name)_MSVC_GIR_DEPS)>>$(top_builddir)/win32/$(1).msvc.introspect
 	echo '	@-echo Generating $$$$@...'>>$(top_builddir)/win32/$(1).msvc.introspect
 	echo '	$$$$(PYTHON) $$$$(G_IR_SCANNER)	\'>>$(top_builddir)/win32/$(1).msvc.introspect
 	echo '	--verbose -no-libtool	\'>>$(top_builddir)/win32/$(1).msvc.introspect
@@ -110,7 +110,7 @@ $(top_builddir)/win32/$(1).msvc.introspect: Makefile
 	echo '	'$($(_gir_name)_MSVC_CFLAGS)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
 	echo '	--cflags-end	\'>>$(top_builddir)/win32/$(1).msvc.introspect
 	echo '	'$($(_gir_name)_MSVC_SCANNERFLAGS)'	\'>>$(top_builddir)/win32/$(1).msvc.introspect
-	echo '	--filelist='$(_gir_name)'_list	\'>>$(top_builddir)/win32/$(1).msvc.introspect
+	echo '	--filelist='$(_gir_name)'_list_final	\'>>$(top_builddir)/win32/$(1).msvc.introspect
 	echo '	-L.\vs$$$$(VSVER)\$$$$(CFG)\$$$$(PLAT)\bin	\'>>$(top_builddir)/win32/$(1).msvc.introspect
 	echo '	-o $$$$@'>>$(top_builddir)/win32/$(1).msvc.introspect
 	echo '' >>$(top_builddir)/win32/$(1).msvc.introspect

@@ -49,5 +49,8 @@ introspect:
 !endif
 
 introspect-clean:
+	@-del /f/q Gtk_3_0_gir_list_final
+	@-del /f/q GdkWin32_3_0_gir_list_final
+	@-del /f/q Gdk_3_0_gir_list_final
 	@-del /f/q vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.typelib
 	@-del /f/q vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.gir

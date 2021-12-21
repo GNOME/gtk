@@ -1554,7 +1554,9 @@ GTK_MSVC_GIR_CFLAGS =						\
 	-DINCLUDE_IM_ti_et			\
 	-DINCLUDE_IM_viqr			\
 	-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API	\
-	-I.. -I../gtk -I../gdk
+	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gdk-3' -I..	\
+	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gtk-3/gtk' -I../gtk	\
+	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gdk-3/gdk' -I../gdk
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
 	$(top_builddir)/win32/Gtk-3.0.gir.msvc.introspect		\

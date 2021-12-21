@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32;..\..\gdk\broadway"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesDebug);..\..\gdk\win32;..\..\gdk\broadway"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -95,7 +95,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="$(GdkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32;..\..\gdk\broadway"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesRelease);..\..\gdk\win32;..\..\gdk\broadway"
 				PreprocessorDefinitions="$(GdkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -159,7 +159,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -191,7 +191,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32;..\..\gdk\broadway"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesDebug);..\..\gdk\win32;..\..\gdk\broadway"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -223,7 +223,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="$(GdkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -255,7 +255,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32;..\..\gdk\broadway"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesRelease);..\..\gdk\win32;..\..\gdk\broadway"
 				PreprocessorDefinitions="$(GdkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -299,6 +299,42 @@
 			>
 #include "gdk-3.sourcefiles"
 			<File RelativePath="..\..\gdk\gdkkeynames.c" />
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gdk-3\gdk\gdkenumtypes.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gdk-3\gdk\gdkmarshalers.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gdk-3\gdk\gdkresources.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gdk-3\gdk\gdkenumtypes.c" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gdk-3\gdk\gdkmarshalers.c" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gdk-3\gdk\gdkresources.c" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 </VisualStudioProject>

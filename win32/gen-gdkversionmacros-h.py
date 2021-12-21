@@ -17,6 +17,8 @@ def main(argv):
     parser = argparse.ArgumentParser(description='Generate gdkversionmacros.h')
     parser.add_argument('--version', help='Version of the package',
                         required=True)
+    parser.add_argument('--outdir', help='Output location of generated file',
+                        required=True)
     args = parser.parse_args()
     gdk_sourcedir = os.path.join(top_srcdir, 'gdk')
     version_parts = args.version.split('.')
@@ -26,7 +28,7 @@ def main(argv):
                                      '@GTK_MICRO_VERSION@': version_parts[2]}
 
     replace_multi(os.path.join(gdk_sourcedir, 'gdkversionmacros.h.in'),
-                  os.path.join(gdk_sourcedir, 'gdkversionmacros.h'),
+                  os.path.join(args.outdir, 'gdkversionmacros.h'),
                   gdkversionmacro_replace_items)
 
 if __name__ == '__main__':
