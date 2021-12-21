@@ -33,6 +33,23 @@
 
 NULL=
 
+# For GDK enumeration sources
+!include ..\gdk\gdk-pub-headers.mak
+
+!if [call create-lists.bat header gdk_headers.mak GDK_PUBLIC_HEADERS]
+!endif
+
+!if [for %f in ($(gdk_public_h_sources) $(deprecated_h_sources)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!endif
+
+!if [call create-lists.bat footer gdk_headers.mak]
+!endif
+
+!include gdk_headers.mak
+
+!if [del /f /q gdk_headers.mak]
+!endif
+
 # For GDK resources
 
 !if [call create-lists.bat header resources_sources.mak GDK_RESOURCES]

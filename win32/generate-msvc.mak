@@ -36,6 +36,8 @@ GDK_GENERATED_SOURCES =	\
 	..\gdk\gdkmarshalers.c	\
 	..\gdk\gdkresources.h	\
 	..\gdk\gdkresources.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h
 
 generate-base-sources:	\
 	..\config.h	\
@@ -73,6 +75,17 @@ generate-base-sources:	\
 ..\demos\gtk-demo\demos.h:
 	@echo Copying $@...
 	@copy $** $@
+
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c: ..\gdk\gdkenumtypes.c.template $(GDK_PUBLIC_HEADERS)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h: ..\gdk\gdkenumtypes.h.template $(GDK_PUBLIC_HEADERS)
+
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c	\
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h:
+	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
+	@cd ..\gdk
+	@$(PYTHON) $(GLIB_MKENUMS) --template $(@F).template $(gdk_public_h_sources) $(deprecated_h_sources) > ..\win32\$@
+	@cd ..\win32
 
 ..\gdk\gdkversionmacros.h: ..\gdk\gdkversionmacros.h.in
 	@echo Generating $@...
@@ -218,6 +231,8 @@ clean:
 	@-del /f /q ..\gtk\gtkdbusgenerated.h
 	@-del /f /q ..\gtk\libgtk3.manifest
 	@-del /f /q ..\gtk\gtk-win32.rc
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h
 	@-del /f /q ..\gdk\gdkresources.c
 	@-del /f /q ..\gdk\gdkresources.h
 	@-del /f /q ..\gdk\gdk.gresource.xml
@@ -229,4 +244,5 @@ clean:
 	@if exist ..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build del ..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build
 	@if exist ..\gdk-$(GDK_OLD_CFG)-$(GDK_CONFIG)-build del ..\gdk-$(GDK_OLD_CFG)-$(GDK_CONFIG)-build
 	@if exist ..\gdk-$(CFG)-$(GDK_DEL_CONFIG)-build del ..\gdk-$(CFG)-$(GDK_DEL_CONFIG)-build
+	@-rd .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk
 	@-del /f /q ..\config.h
