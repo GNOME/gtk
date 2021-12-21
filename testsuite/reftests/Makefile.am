@@ -336,9 +336,6 @@ testdata = \
 	label-text-shadow-clipping.css \
 	label-text-shadow-clipping.ref.ui \
 	label-text-shadow-clipping.ui \
-	label-text-shadow-changes-modify-clip.css \
-	label-text-shadow-changes-modify-clip.ref.ui \
-	label-text-shadow-changes-modify-clip.ui \
 	label-width-chars-dont-shrink.ref.ui \
 	label-width-chars-dont-shrink.ui \
 	label-wrap-justify.ref.ui \
@@ -450,10 +447,6 @@ testdata = \
 	textview-margins.ui \
 	textview-tags.ref.ui \
 	textview-tags.ui \
-	toplevel-vs-popup.ref.ui \
-	toplevel-vs-popup.ui \
-	treeview-crash-too-wide.ref.ui \
-	treeview-crash-too-wide.ui \
 	treeview-fixed-height.css \
 	treeview-fixed-height.ref.ui \
 	treeview-fixed-height.ui \
