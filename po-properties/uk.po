@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-21 18:24+0000\n"
-"PO-Revision-Date: 2021-12-21 23:28+0200\n"
+"POT-Creation-Date: 2021-12-22 08:10+0000\n"
+"PO-Revision-Date: 2021-12-22 14:52+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -3761,15 +3761,15 @@ msgstr ""
 "Якщо встановлено перенос рядків, контролює як виконувати перенос рядків"
 
 #: gtk/gtklabel.c:2423
-#| msgid "Line wrap mode"
-msgid "Natrural wrap mode"
+#| msgid "Natrural wrap mode"
+msgid "Natural wrap mode"
 msgstr "Природний режим перенесення"
 
 #: gtk/gtklabel.c:2424
-#| msgid "If wrap is set, controls how linewrapping is done"
 msgid "If wrap is set, controls linewrapping for natural size requests"
 msgstr ""
-"Якщо встановлено перенос рядків, контролює перенос рядків для запитів щодо природного розміру"
+"Якщо встановлено перенос рядків, контролює перенос рядків для запитів щодо "
+"природного розміру"
 
 #: gtk/gtklabel.c:2437
 msgid "Whether the label text can be selected with the mouse"
