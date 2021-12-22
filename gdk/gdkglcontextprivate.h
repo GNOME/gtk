@@ -99,6 +99,8 @@ gboolean                gdk_gl_backend_can_be_used              (GdkGLBackend   
                                                                  GError         **error);
 void                    gdk_gl_backend_use                      (GdkGLBackend     backend_type);
 
+void                    gdk_gl_context_clear_current_if_surface (GdkSurface      *surface);
+
 GdkGLContext *          gdk_gl_context_new                      (GdkDisplay      *display,
                                                                  GdkSurface      *surface);
 
