@@ -94,14 +94,17 @@ if cc.get_id() == 'msvc'
     # Visual Studio 2015 and later (19.xx.xxxxx or later): look at the minor version.
     # If minor version < 10: Visual Studio 2015,
     #    10 < minor version < 20: Visual Studio 2017,
-    #    20 < minor version: Visual Studio 2019
+    #    20 < minor version < 30: Visual Studio 2019,
+    #    30 < minor version: Visual Studio 2022
     mscsubver = cc.version().split('.')[1].to_int()
     if mscsubver < 10
       vsver = 14
     elif mscsubver < 20
       vsver = 15
-    else
+    elif mscsubver < 30
       vsver = 16
+    else
+      vsver = 17
     endif
   endif
 
