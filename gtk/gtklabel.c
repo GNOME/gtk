@@ -2420,7 +2420,7 @@ gtk_label_class_init (GtkLabelClass *class)
    */
   label_props[PROP_NATURAL_WRAP_MODE] =
       g_param_spec_enum ("natural-wrap-mode",
-                         P_("Natrural wrap mode"),
+                         P_("Natural wrap mode"),
                          P_("If wrap is set, controls linewrapping for natural size requests"),
                          GTK_TYPE_NATURAL_WRAP_MODE,
                          GTK_NATURAL_WRAP_INHERIT,
