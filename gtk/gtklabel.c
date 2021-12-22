@@ -4119,7 +4119,7 @@ gtk_label_set_natural_wrap_mode (GtkLabel           *self,
 GtkNaturalWrapMode
 gtk_label_get_natural_wrap_mode (GtkLabel *self)
 {
-  g_return_val_if_fail (GTK_IS_LABEL (self), PANGO_WRAP_CHAR);
+  g_return_val_if_fail (GTK_IS_LABEL (self), GTK_NATURAL_WRAP_INHERIT);
 
   return self->natural_wrap_mode;
 }
