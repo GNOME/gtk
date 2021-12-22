@@ -29,14 +29,17 @@ GDK_RESOURCES_ARGS = ..\gdk\gdk.gresource.xml --target=$@ --sourcedir=..\gdk --c
 GTK_MARSHALERS_FLAGS = --prefix=_gtk_marshal --valist-marshallers
 GTK_RESOURCES_ARGS = ..\gtk\gtk.gresource.xml --target=$@ --sourcedir=..\gtk --c-name _gtk --manual-register
 
-all:	\
-	..\config.h	\
+GDK_GENERATED_SOURCES =	\
 	..\gdk\gdkconfig.h	\
 	..\gdk\gdkversionmacros.h	\
 	..\gdk\gdkmarshalers.h	\
 	..\gdk\gdkmarshalers.c	\
 	..\gdk\gdkresources.h	\
 	..\gdk\gdkresources.c	\
+
+generate-base-sources:	\
+	..\config.h	\
+	$(GDK_GENERATED_SOURCES)	\
 	..\gtk\gtk-win32.rc	\
 	..\gtk\libgtk3.manifest	\
 	..\gtk\gtkdbusgenerated.h	\

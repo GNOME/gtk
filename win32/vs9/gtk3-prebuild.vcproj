@@ -28,8 +28,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName)  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
 				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
@@ -43,8 +43,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName)  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
 				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
@@ -58,8 +58,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean"
 				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
@@ -73,8 +73,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean"
 				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
@@ -89,8 +89,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName)  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
 				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
@@ -105,8 +105,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName)  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
 				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
@@ -121,8 +121,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean"
 				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
@@ -137,8 +137,8 @@
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean"
 				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
