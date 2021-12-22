@@ -151,6 +151,12 @@ unmask_context (MaskedContext *mask)
   return GDK_GL_CONTEXT (GSIZE_TO_POINTER (GPOINTER_TO_SIZE (mask) & ~(gsize) 1));
 }
 
+static inline gboolean
+mask_is_surfaceless (MaskedContext *mask)
+{
+  return GPOINTER_TO_SIZE (mask) & (gsize) 1;
+}
+
 static void
 unref_unmasked (gpointer data)
 {
@@ -1649,6 +1655,31 @@ gdk_gl_context_clear_current (void)
   if (current != NULL)
     {
       GdkGLContext *context = unmask_context (current);
+
+      if (GDK_GL_CONTEXT_GET_CLASS (context)->clear_current (context))
+        g_private_replace (&thread_current_context, NULL);
+    }
+}
+
+/*<private>
+ * gdk_gl_context_clear_current_if_surface:
+ * @surface: surface to clear for
+ *
+ * Does a gdk_gl_context_clear_current() if the current context is attached
+ * to @surface, leaves the current context alone otherwise.
+ **/
+void
+gdk_gl_context_clear_current_if_surface (GdkSurface *surface)
+{
+  MaskedContext *current;
+
+  current = g_private_get (&thread_current_context);
+  if (current != NULL && !mask_is_surfaceless (current))
+    {
+      GdkGLContext *context = unmask_context (current);
+
+      if (gdk_gl_context_get_surface (context) != surface)
+        return;
 
       if (GDK_GL_CONTEXT_GET_CLASS (context)->clear_current (context))
         g_private_replace (&thread_current_context, NULL);
