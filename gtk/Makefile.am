@@ -1287,9 +1287,7 @@ MSVCPROJS = gtk-3
 gtk_3_FILES = \
 	$(gtk_base_c_sources)		\
 	$(gtk_os_win32_c_sources)	\
-	$(gtk_use_win32_c_sources)	\
-	$(gtk_dbus_built_sources)	\
-	$(gtk_built_sources)
+	$(gtk_use_win32_c_sources)
 
 gtk_3_EXCLUDES = dummy
 gtk_3_HEADERS_DIR = $(gtkincludedir)
@@ -1299,7 +1297,7 @@ gtk_3_HEADERS_INST = \
 	$(a11y_h_sources)	\
 	$(gtk_deprecated_h_sources)
 
-gtk_3_HEADERS_EXCLUDES = dummy
+gtk_3_HEADERS_EXCLUDES = gtktypebuiltins.h
 
 include $(top_srcdir)/win32/Makefile.msvcproj
 
@@ -1327,6 +1325,7 @@ GTK_MSVC_GIR_CFLAGS =						\
 	-DINCLUDE_IM_ti_et			\
 	-DINCLUDE_IM_viqr			\
 	-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API	\
+	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gtk-3'	\
 	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gdk-3' -I..	\
 	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gtk-3/gtk' -I../gtk	\
 	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gdk-3/gdk' -I../gdk
@@ -1336,11 +1335,9 @@ INTROSPECTION_INTERMEDIATE_ITEMS = \
 	$(top_builddir)/win32/Gtk_3_0_gir_list
 
 Gtk_3_0_gir_MSVC_FILES =		\
-	$(introspected_pub_headers)	\
+	$(filter-out gtktypebuiltins.h, $(introspected_pub_headers)) \
 	$(gtk_base_c_sources)		\
-	$(gtk_os_win32_c_sources)	\
-	gtktypebuiltins.h		\
-	gtktypebuiltins.c
+	$(gtk_os_win32_c_sources)
 
 Gtk_3_0_gir_MSVC_EXPORT_PACKAGES = $(Gtk_3_0_gir_EXPORT_PACKAGES)
 Gtk_3_0_gir_MSVC_INCLUDE_GIRS = Atk-1.0

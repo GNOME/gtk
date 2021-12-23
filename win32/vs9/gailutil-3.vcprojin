@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesDebug);..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;GTK_DISABLE_DEPRECATED;GDK_DISABLE_DEPRECATED"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesDebug);..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;GTK_DISABLE_DEPRECATED;GDK_DISABLE_DEPRECATED"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -99,7 +99,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesRelease);..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="GTK_DISABLE_DEPRECATED;GDK_DISABLE_DEPRECATED"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -133,7 +133,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesRelease);..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="GTK_DISABLE_DEPRECATED;GDK_DISABLE_DEPRECATED"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

@@ -27,7 +27,7 @@ GDK_CONFIG_TEMPLATE = ..\gdk\gdkconfig.h.win32
 GDK_MARSHALERS_FLAGS = --prefix=_gdk_marshal --valist-marshallers
 GDK_RESOURCES_ARGS = --target=$@ --sourcedir=..\gdk --c-name _gdk --manual-register
 GTK_MARSHALERS_FLAGS = --prefix=_gtk_marshal --valist-marshallers
-GTK_RESOURCES_ARGS = ..\gtk\gtk.gresource.xml --target=$@ --sourcedir=..\gtk --c-name _gtk --manual-register
+GTK_RESOURCES_ARGS = --target=$@ --sourcedir=..\gtk --c-name _gtk --manual-register
 
 GDK_GENERATED_SOURCES =	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkconfig.h	\
@@ -39,19 +39,29 @@ GDK_GENERATED_SOURCES =	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.c	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h
 
+GTK_TYPEBUILTIN_SOURCES =	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.c
+
+GTK_GENERATED_SOURCES =	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypefuncs.inc	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.c	\
+	$(GTK_TYPEBUILTIN_SOURCES)	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkmarshalers.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkmarshalers.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.c
+
 generate-base-sources:	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
 	$(GDK_GENERATED_SOURCES)	\
-	..\gtk\gtk-win32.rc	\
-	..\gtk\libgtk3.manifest	\
-	..\gtk\gtkdbusgenerated.h	\
-	..\gtk\gtkdbusgenerated.c	\
-	..\gtk\gtktypefuncs.inc	\
-	..\gtk\gtk.gresource.xml	\
-	..\gtk\gtkmarshalers.h	\
-	..\gtk\gtkmarshalers.c	\
-	..\gtk\gtkresources.h	\
-	..\gtk\gtkresources.c	\
+	$(GTK_GENERATED_SOURCES)	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk-win32.rc	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\libgtk3.manifest	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml	\
 	..\demos\gtk-demo\demos.h	\
 	..\demos\gtk-demo\demo_resources.c	\
 	..\demos\icon-browser\resources.c
@@ -59,7 +69,7 @@ generate-base-sources:	\
 # Copy the pre-defined config.h.win32 and demos.h.win32
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h: ..\config.h.win32
 ..\demos\gtk-demo\demos.h: ..\demos\gtk-demo\demos.h.win32
-..\gtk\gtk-win32.rc: ..\gtk\gtk-win32.rc.body
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk-win32.rc: ..\gtk\gtk-win32.rc.body
 
 ..\gdk-$(CFG)-$(GDK_CONFIG)-build: $(GDK_CONFIG_TEMPLATE)
 	@if exist ..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build del ..\gdk-$(GDK_OLD_CFG)-$(GDK_DEL_CONFIG)-build
@@ -71,7 +81,7 @@ generate-base-sources:	\
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkconfig.h	\
-..\gtk\gtk-win32.rc	\
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk-win32.rc	\
 ..\demos\gtk-demo\demos.h:
 	@echo Copying $@...
 	@if not exist $(@D)\ md $(@D)
@@ -79,6 +89,10 @@ generate-base-sources:	\
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c: ..\gdk\gdkenumtypes.c.template $(GDK_PUBLIC_HEADERS)
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h: ..\gdk\gdkenumtypes.h.template $(GDK_PUBLIC_HEADERS)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.c: ..\gtk\gtktypebuiltins.c.template $(GTK_PUBLIC_ENUM_HEADERS)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.h: ..\gtk\gtktypebuiltins.h.template $(GTK_PUBLIC_ENUM_HEADERS)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.c: ..\gtk\gtkprivatetypebuiltins.c.template $(GTK_PRIVATE_ENUM_HEADERS)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.h: ..\gtk\gtkprivatetypebuiltins.h.template $(GTK_PRIVATE_ENUM_HEADERS)
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c	\
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h:
@@ -86,6 +100,22 @@ generate-base-sources:	\
 	@if not exist $(@D)\ md $(@D)
 	@cd ..\gdk
 	@$(PYTHON) $(GLIB_MKENUMS) --template $(@F).template $(gdk_public_h_sources) $(gdk_deprecated_h_sources) > ..\win32\$@
+	@cd ..\win32
+
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.h	\
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.c:
+	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
+	@cd ..\gtk
+	@$(PYTHON) $(GLIB_MKENUMS) --template $(@F).template $(GTK_PUB_HDRS) $(a11y_h_sources) $(gtk_deprecated_h_sources) > ..\win32\$@
+	@cd ..\win32
+
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.c	\
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.h:
+	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
+	@cd ..\gtk
+	@$(PYTHON) $(GLIB_MKENUMS) --template $(@F).template $(GTK_PRIVATE_TYPE_HDRS) > ..\win32\$@
 	@cd ..\win32
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h: ..\gdk\gdkversionmacros.h.in
@@ -129,30 +159,37 @@ generate-base-sources:	\
 	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
 	@start /min $(GLIB_COMPILE_RESOURCES) $** $(GDK_RESOURCES_ARGS) --generate-source
 
-..\gtk\libgtk3.manifest: ..\gtk\libgtk3.manifest.in
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\libgtk3.manifest: ..\gtk\libgtk3.manifest.in
 	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
 	@$(PYTHON) replace.py	\
 	--action=replace-var	\
 	--input=$**	--output=$@	\
 	--var=EXE_MANIFEST_ARCHITECTURE	\
 	--outstring=*
 
-..\gtk\gtkdbusgenerated.h ..\gtk\gtkdbusgenerated.c: ..\gtk\gtkdbusinterfaces.xml
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.h: ..\gtk\gtkdbusinterfaces.xml
 	@echo Generating GTK DBus sources...
+	@if not exist $(@D)\ md $(@D)
 	@$(PYTHON) $(GDBUS_CODEGEN)	\
 	--interface-prefix org.Gtk. --c-namespace _Gtk	\
 	--generate-c-code gtkdbusgenerated $**	\
 	--output-directory $(@D)
 
-..\gtk\gtktypefuncs.inc: ..\gtk\gentypefuncs.py
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.c: .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.h
+
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypefuncs.inc: ..\gtk\gentypefuncs.py
 	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
+	@if not exist $(@D)\gtktypebuiltins.h $(MAKE) /f generate-msvc.mak CFG=$(CFG) $(@D)\gtktypebuiltins.h
+	@if not exist $(@D)\gtkversion.h $(MAKE) /f generate-msvc.mak CFG=$(CFG) $(@D)\gtkversion.h
 	@echo #undef GTK_COMPILATION > $(@R).preproc.c
 	@echo #include "gtkx.h" >> $(@R).preproc.c
 	@cl /EP $(GTK_PREPROCESSOR_FLAGS) $(@R).preproc.c > $(@R).combined.c
 	@$(PYTHON) $** $@ $(@R).combined.c
 	@del $(@R).preproc.c $(@R).combined.c
 
-..\gtk\gtk.gresource.xml: $(GTK_RESOURCES)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml: $(GTK_RESOURCES)
 	@echo Generating $@...
 	@echo ^<?xml version='1.0' encoding='UTF-8'?^>> $@
 	@echo ^<gresources^>>> $@
@@ -182,26 +219,26 @@ generate-base-sources:	\
 	@echo   ^</gresource^>>> $@
 	@echo ^</gresources^>>> $@
 
-..\gtk\gtkresources.h: ..\gtk\gtk.gresource.xml
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.h: .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml
 	@echo Generating $@...
 	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
 	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
 	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
-	@start /min $(GLIB_COMPILE_RESOURCES) $(GTK_RESOURCES_ARGS) --generate-header
+	@start /min $(GLIB_COMPILE_RESOURCES) $(GTK_RESOURCES_ARGS) $** --generate-header
 
-..\gtk\gtkresources.c: ..\gtk\gtk.gresource.xml $(GTK_RESOURCES)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.c: .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml
 	@echo Generating $@...
 	@if not "$(XMLLINT)" == "" set XMLLINT=$(XMLLINT)
 	@if not "$(JSON_GLIB_FORMAT)" == "" set JSON_GLIB_FORMAT=$(JSON_GLIB_FORMAT)
 	@if not "$(GDK_PIXBUF_PIXDATA)" == "" set GDK_PIXBUF_PIXDATA=$(GDK_PIXBUF_PIXDATA)
-	@start /min $(GLIB_COMPILE_RESOURCES) $(GTK_RESOURCES_ARGS) --generate-source
+	@start /min $(GLIB_COMPILE_RESOURCES) $(GTK_RESOURCES_ARGS) $** --generate-source
 
-..\gtk\gtkmarshalers.h: ..\gtk\gtkmarshalers.list
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkmarshalers.h: ..\gtk\gtkmarshalers.list
 	@echo Generating $@...
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --header $** > $@.tmp
 	@move $@.tmp $@
 
-..\gtk\gtkmarshalers.c: ..\gtk\gtkmarshalers.list
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkmarshalers.c: ..\gtk\gtkmarshalers.list
 	@echo Generating $@...
 	@echo #undef G_ENABLE_DEBUG> $@.tmp
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --body $** >> $@.tmp
@@ -226,10 +263,12 @@ Gdk_3_0_gir_list_final: Gdk_3_0_gir_list $(GDK_GENERATED_SOURCES)
 	@type Gdk_3_0_gir_list>$@
 	@for %%s in ($(GDK_GENERATED_SOURCES)) do echo %%s>>$@
 
-GdkWin32_3_0_gir_list_final: GdkWin32_3_0_gir_list
-Gtk_3_0_gir_list_final: Gtk_3_0_gir_list
+Gtk_3_0_gir_list_final: Gtk_3_0_gir_list $(GTK_TYPEBUILTIN_SOURCES)
+	@echo Generating $@...
+	@type Gtk_3_0_gir_list>$@
+	@for %%s in ($(GTK_TYPEBUILTIN_SOURCES)) do echo %%s>>$@
 
-GdkWin32_3_0_gir_list_final Gtk_3_0_gir_list_final:
+GdkWin32_3_0_gir_list_final: GdkWin32_3_0_gir_list
 	@echo Copying $@...
 	@copy $** $@
 
@@ -238,16 +277,21 @@ clean:
 	@-del /f /q ..\demos\icon-browser\resources.c
 	@-del /f /q ..\demos\gtk-demo\demo_resources.c
 	@-del /f /q ..\demos\gtk-demo\demos.h
-	@-del /f /q ..\gtk\gtkresources.c
-	@-del /f /q ..\gtk\gtkresources.h
-	@-del /f /q ..\gtk\gtkmarshalers.c
-	@-del /f /q ..\gtk\gtkmarshalers.h
-	@-del /f /q ..\gtk\gtk.gresource.xml
-	@-del /f /q ..\gtk\gtktypefuncs.inc
-	@-del /f /q ..\gtk\gtkdbusgenerated.c
-	@-del /f /q ..\gtk\gtkdbusgenerated.h
-	@-del /f /q ..\gtk\libgtk3.manifest
-	@-del /f /q ..\gtk\gtk-win32.rc
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkmarshalers.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkmarshalers.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypefuncs.inc
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\libgtk3.manifest
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk-win32.rc
+	@-rd .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.c
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkenumtypes.h
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.c

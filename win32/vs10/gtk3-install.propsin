@@ -121,6 +121,8 @@ copy ..\gail-3.0.pc $(CopyDir)\lib\pkgconfig
 echo off
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\win32
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\deprecated
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
+mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 copy ..\..\gdk\win32\gdkwin32.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 
 if "$(Configuration)" == "Release" goto COPY_RELEASE_BUILT_HEADERS
@@ -132,20 +134,20 @@ if "$(Configuration)" == "Debug_Broadway" goto COPY_DEBUG_BUILT_HEADERS
 copy .\Debug\$(Platform)\obj\gdk-3\gdk\gdkconfig.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy .\Debug\$(Platform)\obj\gdk-3\gdk\gdkenumtypes.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy .\Debug\$(Platform)\obj\gdk-3\gdk\gdkversionmacros.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
+copy .\Debug\$(Platform)\obj\gtk-3\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 goto CONTINUE_HEADERS
 
 :COPY_RELEASE_BUILT_HEADERS
 copy .\Release\$(Platform)\obj\gdk-3\gdk\gdkconfig.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy .\Release\$(Platform)\obj\gdk-3\gdk\gdkenumtypes.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy .\Release\$(Platform)\obj\gdk-3\gdk\gdkversionmacros.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
+copy .\Release\$(Platform)\obj\gtk-3\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 goto CONTINUE_HEADERS
 
 :CONTINUE_HEADERS
 #include "gdk-3.vs10.headers"
 #include "gdk3-win32.vs10.headers"
 
-mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
-mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 #include "gtk-3.vs10.headers"
 
 mkdir $(CopyDir)\include\gail-$(ApiVersion)\libgail-util

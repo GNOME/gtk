@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesDebug)"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesDebug)"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -95,7 +95,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesRelease)"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesRelease)"
 				PreprocessorDefinitions="$(GtkPrefixDefine)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesRelease)"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesRelease)"
 				PreprocessorDefinitions="$(GtkPrefixDefine)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

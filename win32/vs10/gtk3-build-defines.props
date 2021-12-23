@@ -11,8 +11,10 @@
     <GdkGenSrcDir>.\$(Configuration)\$(Platform)\obj\gdk-3</GdkGenSrcDir>
     <GdkGenSrcDir Condition="'$(Configuration)' == 'Release_Broadway'">.\Release\$(Platform)\obj\gdk-3</GdkGenSrcDir>
     <GdkGenSrcDir Condition="'$(Configuration)' == 'Debug_Broadway'">.\Debug\$(Platform)\obj\gdk-3</GdkGenSrcDir>
-    <BaseConfigIncludes>$(GdkGenSrcDir);..\..</BaseConfigIncludes>
+    <GtkGenSrcDir>.\$(Configuration)\$(Platform)\obj\gtk-3</GtkGenSrcDir>
+    <BaseConfigIncludes>$(GtkGenSrcDir);$(GdkGenSrcDir);..\..</BaseConfigIncludes>
     <GdkBaseIncludes>$(GdkGenSrcDir)\gdk;..\..\gdk;$(BaseConfigIncludes)</GdkBaseIncludes>
+    <GtkBaseIncludes>$(GtkGenSrcDir)\gtk;..\..\gtk;$(GdkBaseIncludes)</GtkBaseIncludes>
     <GtkIncludedImmodulesDefines>INCLUDE_IM_am_et;INCLUDE_IM_cedilla;INCLUDE_IM_cyrillic_translit;INCLUDE_IM_ime;INCLUDE_IM_inuktitut;INCLUDE_IM_ipa;INCLUDE_IM_multipress;INCLUDE_IM_thai;INCLUDE_IM_ti_er;INCLUDE_IM_ti_et;INCLUDE_IM_viqr</GtkIncludedImmodulesDefines>
     <GtkHostMachine Condition="'$(Platform)' == 'Win32'">i686</GtkHostMachine>
     <GtkHostMachine Condition="'$(Platform)' == 'x64'">x86_64</GtkHostMachine>
@@ -73,11 +75,17 @@ nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)</GenerateRequiredSources
     <BuildMacro Include="GdkGenSrcDir">
       <Value>$(GdkGdkGenSrcDir)</Value>
     </BuildMacro>
+    <BuildMacro Include="GtkGenSrcDir">
+      <Value>$(GtkGdkGenSrcDir)</Value>
+    </BuildMacro>
     <BuildMacro Include="BaseConfigIncludes">
       <Value>$(BaseConfigIncludes)</Value>
     </BuildMacro>
     <BuildMacro Include="GdkBaseIncludes">
       <Value>$(GdkBaseIncludes)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkBaseIncludes">
+      <Value>$(GtkBaseIncludes)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkIncludedImmodulesDefines">
       <Value>$(GtkIncludedImmodulesDefines)</Value>

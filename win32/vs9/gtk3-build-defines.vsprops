@@ -33,11 +33,11 @@
 	/>
 	<UserMacro
 		Name="BaseIncludesDebug"
-		Value=".\Debug\$(PlatformName)\obj\gdk-3;..\.."
+		Value=".\Debug\$(PlatformName)\obj\gtk-3;.\Debug\$(PlatformName)\obj\gdk-3;..\.."
 	/>
 	<UserMacro
 		Name="BaseIncludesRelease"
-		Value=".\Release\$(PlatformName)\obj\gdk-3;..\.."
+		Value=".\Release\$(PlatformName)\obj\gtk-3;.\Release\$(PlatformName)\obj\gdk-3;..\.."
 	/>
 	<UserMacro
 		Name="GdkBaseIncludesDebug"
@@ -46,6 +46,14 @@
 	<UserMacro
 		Name="GdkBaseIncludesRelease"
 		Value=".\Release\$(PlatformName)\obj\gdk-3\gdk;..\..\gdk;$(BaseIncludesRelease)"
+	/>
+	<UserMacro
+		Name="GtkBaseIncludesDebug"
+		Value=".\Debug\$(PlatformName)\obj\gtk-3\gtk;..\..\gtk;$(GdkBaseIncludesDebug)"
+	/>
+	<UserMacro
+		Name="GtkBaseIncludesRelease"
+		Value=".\Release\$(PlatformName)\obj\gtk-3\gtk;..\..\gtk;$(GdkBaseIncludesRelease)"
 	/>
 	<UserMacro
 		Name="GdkDefines"

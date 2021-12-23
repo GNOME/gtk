@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesDebug);..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesRelease);..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="$(GtkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesDebug);..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GtkDefinesX64)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gtk;$(GdkBaseIncludesRelease);..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GtkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="$(GtkDefinesX64)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -162,8 +162,22 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File RelativePath="..\..\gtk\gtk-win32.rc" />
-			<File RelativePath="..\..\gtk\libgtk3.manifest" />
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk-3\gtk\gtk-win32.rc" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk-3\gtk\libgtk3.manifest" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCManifestTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCManifestTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk-3\gtk\gtk-win32.rc" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk-3\gtk\libgtk3.manifest" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCManifestTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCManifestTool" /></FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
@@ -186,6 +200,46 @@
 			<File RelativePath="..\..\modules\input\imti-et.c" />
 			<File RelativePath="..\..\modules\input\imviqr.c" />
 			<File RelativePath="..\..\modules\input\thai-charprop.c" />
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk-3\gtk\gtkdbusgenerated.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk-3\gtk\gtkmarshalers.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk-3\gtk\gtkresources.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk-3\gtk\gtkprivatetypebuiltins.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk-3\gtk\gtktypebuiltins.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk-3\gtk\gtkdbusgenerated.c" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk-3\gtk\gtkmarshalers.c" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk-3\gtk\gtkresources.c" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk-3\gtk\gtkprivatetypebuiltins.c" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk-3\gtk\gtktypebuiltins.c" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 </VisualStudioProject>
