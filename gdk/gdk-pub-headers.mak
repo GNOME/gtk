@@ -40,5 +40,5 @@ gdk_public_h_sources = 				\
 	gdkvisual.h				\
 	gdkwindow.h
 
-deprecated_h_sources =				\
+gdk_deprecated_h_sources =				\
 	deprecated/gdkcolor.h

@@ -37,7 +37,7 @@ GDK_GENERATED_SOURCES =	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkmarshalers.c	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.h	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkresources.c	\
-	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h
 
 generate-base-sources:	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
@@ -85,7 +85,7 @@ generate-base-sources:	\
 	@echo Generating $@...
 	@if not exist $(@D)\ md $(@D)
 	@cd ..\gdk
-	@$(PYTHON) $(GLIB_MKENUMS) --template $(@F).template $(gdk_public_h_sources) $(deprecated_h_sources) > ..\win32\$@
+	@$(PYTHON) $(GLIB_MKENUMS) --template $(@F).template $(gdk_public_h_sources) $(gdk_deprecated_h_sources) > ..\win32\$@
 	@cd ..\win32
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h: ..\gdk\gdkversionmacros.h.in

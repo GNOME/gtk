@@ -39,7 +39,7 @@ NULL=
 !if [call create-lists.bat header gdk_headers.mak GDK_PUBLIC_HEADERS]
 !endif
 
-!if [for %f in ($(gdk_public_h_sources) $(deprecated_h_sources)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!if [for %f in ($(gdk_public_h_sources) $(gdk_deprecated_h_sources)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
 !endif
 
 !if [call create-lists.bat footer gdk_headers.mak]

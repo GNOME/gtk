@@ -68,7 +68,7 @@ LDADD = 					\
 
 gdk_h_sources =					\
 	$(gdk_public_h_sources)			\
-	$(deprecated_h_sources)
+	$(gdk_deprecated_h_sources)
 
 gdk_private_headers = 				\
 	gdk-private.h				\
@@ -159,7 +159,7 @@ gdkinclude_HEADERS = $(gdk_public_h_sources)
 nodist_gdkinclude_HEADERS = gdkconfig.h gdkenumtypes.h gdkversionmacros.h
 
 deprecatedincludedir = $(includedir)/gtk-3.0/gdk/deprecated
-deprecatedinclude_HEADERS = $(deprecated_h_sources)
+deprecatedinclude_HEADERS = $(gdk_deprecated_h_sources)
 
 common_sources = 		\
 	$(gdk_private_headers)	\
