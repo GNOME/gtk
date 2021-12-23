@@ -493,11 +493,7 @@ gtk_widget_measure (GtkWidget        *widget,
       int min_opposite_size;
       gtk_widget_measure (widget, OPPOSITE_ORIENTATION (orientation), -1, &min_opposite_size, NULL, NULL, NULL);
       if (for_size < min_opposite_size)
-        {
-          g_critical ("gtk_widget_measure: assertion 'for_size >= minimum opposite size' failed: %u >= %u",
-                      for_size, min_opposite_size);
-          for_size = min_opposite_size;
-        }
+        for_size = min_opposite_size;
     }
 
   /* This is the main function that checks for a cached size and
