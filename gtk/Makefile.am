@@ -114,236 +114,12 @@ endif
 include $(srcdir)/a11y/Makefile.inc
 include $(srcdir)/deprecated/Makefile.inc
 include $(srcdir)/inspector/Makefile.inc
+include $(srcdir)/gtk-mkenums-headers.mak
 
 # GTK+ header files for public installation (non-generated, or generated
 # by configure)
 
-gtk_public_h_sources = 		\
-	gtk.h			\
-	gtk-autocleanups.h	\
-	gtkx.h			\
-	gtkx-autocleanups.h	\
-	gtk-a11y.h		\
-	gtkaboutdialog.h	\
-	gtkaccelgroup.h		\
-	gtkaccellabel.h		\
-	gtkaccelmap.h		\
-	gtkaccessible.h		\
-	gtkactionable.h		\
-	gtkactionbar.h		\
-	gtkadjustment.h		\
-	gtkappchooser.h		\
-	gtkappchooserbutton.h	\
-	gtkappchooserdialog.h	\
-	gtkappchooserwidget.h	\
-	gtkapplication.h	\
-	gtkapplicationwindow.h	\
-	gtkaspectframe.h	\
-	gtkassistant.h		\
-	gtkbbox.h		\
-	gtkbin.h		\
-	gtkbindings.h		\
-	gtkborder.h		\
-	gtkbox.h		\
-	gtkbuilder.h		\
-	gtkbuildable.h		\
-	gtkbutton.h		\
-	gtkcalendar.h		\
-	gtkcellarea.h		\
-	gtkcellareacontext.h	\
-	gtkcellareabox.h	\
-	gtkcelleditable.h	\
-	gtkcelllayout.h		\
-	gtkcellrenderer.h	\
-	gtkcellrendereraccel.h	\
-	gtkcellrenderercombo.h	\
-	gtkcellrendererpixbuf.h	\
-	gtkcellrendererprogress.h \
-	gtkcellrendererspin.h	\
-	gtkcellrendererspinner.h\
-	gtkcellrenderertext.h	\
-	gtkcellrenderertoggle.h	\
-	gtkcellview.h		\
-	gtkcheckbutton.h	\
-	gtkcheckmenuitem.h	\
-	gtkclipboard.h		\
-	gtkcolorbutton.h	\
-	gtkcolorchooser.h	\
-	gtkcolorchooserwidget.h	\
-	gtkcolorchooserdialog.h	\
-	gtkcolorutils.h		\
-	gtkcombobox.h		\
-	gtkcomboboxtext.h	\
-	gtkcontainer.h		\
-	gtkcssprovider.h	\
-	gtkcsssection.h 	\
-	gtkdebug.h		\
-	gtkdialog.h		\
-	gtkdnd.h		\
-	gtkdragdest.h		\
-	gtkdragsource.h		\
-	gtkdrawingarea.h	\
-	gtkeditable.h		\
-	gtkentry.h		\
-	gtkentrybuffer.h	\
-	gtkentrycompletion.h	\
-	gtkenums.h		\
-	gtkeventbox.h		\
-	gtkeventcontroller.h	\
-	gtkeventcontrollerkey.h	\
-	gtkeventcontrollermotion.h	\
-	gtkeventcontrollerscroll.h	\
-	gtkexpander.h		\
-	gtkfilechooser.h	\
-	gtkfilechooserbutton.h	\
-	gtkfilechooserdialog.h	\
-	gtkfilechoosernative.h	\
-	gtkfilechooserwidget.h	\
-	gtkfilefilter.h		\
-	gtkfixed.h		\
-	gtkflowbox.h		\
-	gtkfontbutton.h		\
-	gtkfontchooser.h	\
-	gtkfontchooserdialog.h  \
-	gtkfontchooserwidget.h	\
-	gtkframe.h		\
-	gtkgesture.h		\
-	gtkgesturedrag.h	\
-	gtkgesturelongpress.h	\
-	gtkgesturemultipress.h	\
-	gtkgesturepan.h		\
-	gtkgesturerotate.h	\
-	gtkgesturesingle.h	\
-	gtkgesturestylus.h	\
-	gtkgestureswipe.h	\
-	gtkgesturezoom.h	\
-	gtkglarea.h		\
-	gtkgrid.h		\
-	gtkheaderbar.h		\
-	gtkicontheme.h		\
-	gtkiconview.h		\
-	gtkimage.h		\
-	gtkimcontext.h		\
-	gtkimcontextinfo.h	\
-	gtkimcontextsimple.h	\
-	gtkimmodule.h		\
-	gtkimmulticontext.h	\
-	gtkinfobar.h		\
-	gtkinvisible.h		\
-	gtklabel.h		\
-	gtklayout.h		\
-	gtklevelbar.h		\
-	gtklinkbutton.h		\
-	gtklistbox.h		\
-	gtkliststore.h		\
-	gtklockbutton.h		\
-	gtkmain.h		\
-	gtkmenu.h		\
-	gtkmenubar.h		\
-	gtkmenubutton.h		\
-	gtkmenuitem.h		\
-	gtkmenushell.h		\
-	gtkmenutoolbutton.h	\
-	gtkmessagedialog.h	\
-	gtkmodelbutton.h	\
-	gtkmodules.h		\
-	gtkmountoperation.h	\
-	gtknativedialog.h	\
-	gtknotebook.h		\
-	gtkoffscreenwindow.h	\
-	gtkorientable.h		\
-	gtkoverlay.h		\
-	gtkpadcontroller.h	\
-	gtkpagesetup.h		\
-	gtkpaned.h		\
-	gtkpapersize.h		\
-	gtkplacessidebar.h	\
-	gtkplug.h		\
-	gtkpopover.h		\
-	gtkpopovermenu.h	\
-	gtkprintcontext.h	\
-	gtkprintoperation.h	\
-	gtkprintoperationpreview.h \
-	gtkprintsettings.h	\
-	gtkprogressbar.h	\
-	gtkradiobutton.h	\
-	gtkradiomenuitem.h	\
-	gtkradiotoolbutton.h	\
-	gtkrange.h		\
-	gtkrecentchooser.h	\
-	gtkrecentchooserdialog.h \
-	gtkrecentchoosermenu.h	\
-	gtkrecentchooserwidget.h \
-	gtkrecentfilter.h	\
-	gtkrecentmanager.h	\
-	gtkrender.h		\
-	gtkrevealer.h		\
-	gtkscale.h		\
-	gtkscalebutton.h	\
-	gtkscrollable.h		\
-	gtkscrollbar.h		\
-	gtkscrolledwindow.h	\
-	gtksearchbar.h		\
-	gtksearchentry.h	\
-	gtkselection.h		\
-	gtkseparator.h		\
-	gtkseparatormenuitem.h	\
-	gtkseparatortoolitem.h	\
-	gtksettings.h		\
-	gtkshortcutlabel.h	\
-	gtkshortcutsgroup.h	\
-	gtkshortcutssection.h	\
-	gtkshortcutsshortcut.h	\
-	gtkshortcutswindow.h	\
-	gtkshow.h		\
-	gtkstacksidebar.h	\
-	gtksizegroup.h		\
-	gtksizerequest.h	\
-	gtksocket.h		\
-	gtkspinbutton.h		\
-	gtkspinner.h		\
-	gtkstack.h		\
-	gtkstackswitcher.h	\
-	gtkstatusbar.h		\
-	gtkstylecontext.h	\
-	gtkstyleprovider.h	\
-	gtkswitch.h		\
-	gtktestutils.h		\
-	gtktextattributes.h	\
-	gtktextbuffer.h		\
-	gtktextbufferrichtext.h	\
-	gtktextchild.h		\
-	gtktextdisplay.h	\
-	gtktextiter.h		\
-	gtktextmark.h		\
-	gtktexttag.h		\
-	gtktexttagtable.h	\
-	gtktextview.h		\
-	gtktogglebutton.h	\
-	gtktoggletoolbutton.h	\
-	gtktoolbar.h		\
-	gtktoolbutton.h		\
-	gtktoolitem.h		\
-	gtktoolitemgroup.h	\
-	gtktoolpalette.h	\
-	gtktoolshell.h		\
-	gtktooltip.h		\
-	gtktreednd.h		\
-	gtktreemodel.h		\
-	gtktreemodelfilter.h	\
-	gtktreemodelsort.h	\
-	gtktreeselection.h	\
-	gtktreesortable.h	\
-	gtktreestore.h		\
-	gtktreeview.h		\
-	gtktreeviewcolumn.h	\
-	gtktypes.h		\
-	gtkviewport.h		\
-	gtkvolumebutton.h	\
-	gtkwidget.h		\
-	gtkwidgetpath.h		\
-	gtkwindow.h		\
-	gtkwindowgroup.h
+gtk_public_h_sources = $(GTK_PUB_HDRS)
 
 if OS_UNIX
 gtk_unix_print_public_h_sources = 	\
@@ -360,10 +136,7 @@ endif
 gtk_semi_private_h_sources = \
 	gtktextlayout.h
 
-gtk_private_type_h_sources =	\
-	gtkcsstypesprivate.h	\
-	gtktexthandleprivate.h
-
+gtk_private_type_h_sources = $(GTK_PRIVATE_TYPE_HDRS)
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
@@ -1277,15 +1050,15 @@ gtkmarshalers.c: gtkmarshalers.list
 
 gtktypebuiltins.h: stamp-gtktypebuiltins.h
 	@true
-stamp-gtktypebuiltins.h: $(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sources) gtktypebuiltins.h.template
+stamp-gtktypebuiltins.h: $(gtk_public_h_sources) $(a11y_h_sources) $(gtk_deprecated_h_sources) gtktypebuiltins.h.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtktypebuiltins.h.template \
-		$(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sources) ) > xgen-gtbh \
+		$(gtk_public_h_sources) $(a11y_h_sources) $(gtk_deprecated_h_sources) ) > xgen-gtbh \
 	&& (cmp -s xgen-gtbh gtktypebuiltins.h || cp xgen-gtbh gtktypebuiltins.h ) \
 	&& rm -f xgen-gtbh \
 	&& echo timestamp > $(@F)
-gtktypebuiltins.c: $(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sources) gtktypebuiltins.c.template
+gtktypebuiltins.c: $(gtk_public_h_sources) $(a11y_h_sources) $(gtk_deprecated_h_sources) gtktypebuiltins.c.template
 	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gtktypebuiltins.c.template \
-		$(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sources) ) > xgen-gtbc \
+		$(gtk_public_h_sources) $(a11y_h_sources) $(gtk_deprecated_h_sources) ) > xgen-gtbc \
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
@@ -1470,7 +1243,7 @@ a11yincludedir = $(includedir)/gtk-3.0/gtk/a11y
 a11yinclude_HEADERS= $(a11y_h_sources)
 
 deprecatedincludedir = $(includedir)/gtk-3.0/gtk/deprecated
-deprecatedinclude_HEADERS= $(deprecated_h_sources)
+deprecatedinclude_HEADERS= $(gtk_deprecated_h_sources)
 
 gtkunixprintincludedir = $(includedir)/gtk-3.0/unix-print/gtk
 gtkunixprintinclude_HEADERS = $(gtk_unix_print_public_h_sources)
@@ -1524,7 +1297,7 @@ gtk_3_HEADERS_DIR = $(gtkincludedir)
 gtk_3_HEADERS_INST = \
 	$(gtkinclude_HEADERS)	\
 	$(a11y_h_sources)	\
-	$(deprecated_h_sources)
+	$(gtk_deprecated_h_sources)
 
 gtk_3_HEADERS_EXCLUDES = dummy
 

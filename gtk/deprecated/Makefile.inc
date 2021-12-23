@@ -1,4 +1,4 @@
-deprecated_h_sources = 			\
+gtk_deprecated_h_sources = 		\
 	deprecated/gtkactivatable.h	\
 	deprecated/gtkaction.h		\
 	deprecated/gtkactiongroup.h	\
