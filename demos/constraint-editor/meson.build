@@ -17,7 +17,7 @@ executable('gtk4-constraint-editor',
   c_args: common_cflags,
   dependencies: libgtk_dep,
   include_directories: confinc,
-  gui_app: true,
+  win_subsystem: 'windows',
   link_args: extra_demo_ldflags,
   install: false,
 )
