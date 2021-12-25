@@ -342,7 +342,7 @@ gdk_content_provider_write_mime_type_finish (GdkContentProvider  *provider,
 /**
  * gdk_content_provider_get_value:
  * @provider: a `GdkContentProvider`
- * @value: (out): the `GValue` to fill
+ * @value: (out caller-allocates): the `GValue` to fill
  * @error: a `GError` location to store the error occurring
  *
  * Gets the contents of @provider stored in @value.
