@@ -456,7 +456,7 @@ colord_dep = dependency('colord', version: '>= 0.1.9', required: get_option('col
 cdata.set('HAVE_COLORD', colord_dep.found())
 
 if iso_codes_dep.found()
-  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
+  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_variable(pkgconfig: 'prefix'))
 else
   cdata.set_quoted('ISO_CODES_PREFIX', '/usr')
 endif
@@ -515,7 +515,7 @@ if wayland_enabled
   if not wlprotocolsdep.found()
     wlproto_dir = subproject('wayland-protocols').get_variable('wayland_protocols_srcdir')
   else
-    wlproto_dir = wlprotocolsdep.get_pkgconfig_variable('pkgdatadir')
+    wlproto_dir = wlprotocolsdep.get_variable(pkgconfig: 'pkgdatadir')
   endif
 
   wayland_pkgs = [
@@ -709,8 +709,8 @@ endif
 
 graphene_dep_type = graphene_dep.type_name()
 if graphene_dep_type == 'pkgconfig'
-  graphene_has_sse2 = graphene_dep.get_pkgconfig_variable('graphene_has_sse2') == '1'
-  graphene_has_gcc = graphene_dep.get_pkgconfig_variable('graphene_has_gcc') == '1'
+  graphene_has_sse2 = graphene_dep.get_variable(pkgconfig: 'graphene_has_sse2') == '1'
+  graphene_has_gcc = graphene_dep.get_variable(pkgconfig: 'graphene_has_gcc') == '1'
 else
   graphene_simd = subproject('graphene').get_variable('graphene_simd')
   graphene_has_sse2 = graphene_simd.contains('sse2')

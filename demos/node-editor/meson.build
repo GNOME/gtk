@@ -17,7 +17,7 @@ executable('gtk4-node-editor',
   c_args: [
     '-DNODE_EDITOR_SOURCE_DIR="@0@/../../testsuite/gsk/compare/"'.format(meson.current_source_dir())
   ] + common_cflags,
-  gui_app: true,
+  win_subsystem: 'windows',
   link_args: extra_demo_ldflags,
   install: false,
 )
