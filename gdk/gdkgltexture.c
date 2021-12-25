@@ -21,6 +21,7 @@
 #include "gdkgltextureprivate.h"
 
 #include "gdkdisplayprivate.h"
+#include "gdkglcontextprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdktextureprivate.h"
@@ -305,9 +306,11 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
   GLint active_texture;
   GLint internal_format;
 
-  if (self->context != gdk_gl_context_get_current ())
+  /* Abort if somebody else is GL-ing here... */
+  if (self->context != gdk_gl_context_get_current () ||
+      /* ... or glGetTexLevelParameter() isn't supported */
+      !gdk_gl_context_check_version (self->context, 0, 0, 3, 1))
     {
-      /* Somebody else is GL-ing here, abort! */
       texture->format = GDK_MEMORY_DEFAULT;
       return;
     }
