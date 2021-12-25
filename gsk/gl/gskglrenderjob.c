@@ -4117,14 +4117,19 @@ gsk_gl_render_job_set_debug_fallback (GskGLRenderJob *job,
 }
 
 static int
-get_framebuffer_format (guint framebuffer)
+get_framebuffer_format (GdkGLContext *context,
+                        guint         framebuffer)
 {
   int size;
+
+  if (!gdk_gl_context_check_version (context, 0, 0, 3, 0))
+    return GL_RGBA8;
 
   glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);
   glGetFramebufferAttachmentParameteriv (GL_FRAMEBUFFER,
                                          framebuffer ? GL_COLOR_ATTACHMENT0
-                                                     : GL_BACK_LEFT,
+                                                     : gdk_gl_context_get_use_es (context) ? GL_BACK
+                                                                                           : GL_BACK_LEFT,
                                          GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &size);
 
   if (size > 16)
@@ -4161,7 +4166,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   job->scale_x = scale_factor;
   job->scale_y = scale_factor;
   job->viewport = *viewport;
-  job->target_format = get_framebuffer_format (framebuffer);
+  job->target_format = get_framebuffer_format (job->command_queue->context, framebuffer);
 
   gsk_gl_render_job_set_alpha (job, 1.0f);
   gsk_gl_render_job_set_projection_from_rect (job, viewport, NULL);
