@@ -1329,6 +1329,7 @@ gl_debug_message_callback (GLenum        source,
   const char *message_source;
   const char *message_type;
   const char *message_severity;
+  GLogLevelFlags log_level;
 
   if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
     return;
@@ -1390,22 +1391,31 @@ gl_debug_message_callback (GLenum        source,
     {
     case GL_DEBUG_SEVERITY_HIGH:
       message_severity = "High";
+      log_level = G_LOG_LEVEL_CRITICAL;
       break;
     case GL_DEBUG_SEVERITY_MEDIUM:
       message_severity = "Medium";
+      log_level = G_LOG_LEVEL_WARNING;
       break;
     case GL_DEBUG_SEVERITY_LOW:
       message_severity = "Low";
+      log_level = G_LOG_LEVEL_MESSAGE;
       break;
     case GL_DEBUG_SEVERITY_NOTIFICATION:
       message_severity = "Notification";
+      log_level = G_LOG_LEVEL_INFO;
       break;
     default:
       message_severity = "Unknown";
+      log_level = G_LOG_LEVEL_MESSAGE;
     }
 
-  g_warning ("OPENGL:\n    Source: %s\n    Type: %s\n    Severity: %s\n    Message: %s",
-             message_source, message_type, message_severity, message);
+  /* There's no higher level function taking a log level argument... */
+  g_log_structured_standard (G_LOG_DOMAIN, log_level,
+                             __FILE__, G_STRINGIFY (__LINE__),
+                             G_STRFUNC,
+                             "OPENGL:\n    Source: %s\n    Type: %s\n    Severity: %s\n    Message: %s",
+                             message_source, message_type, message_severity, message);
 }
 
 /**
