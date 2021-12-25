@@ -1003,16 +1003,33 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
 }
 
 gboolean
-gdk_gl_context_check_version (GdkGLContext *context,
-                              int           required_major,
-                              int           required_minor)
+gdk_gl_context_check_version (GdkGLContext *self,
+                              int           required_gl_major,
+                              int           required_gl_minor,
+                              int           required_gles_major,
+                              int           required_gles_minor)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
-  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
-  g_return_val_if_fail (required_minor < 10, FALSE);
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), FALSE);
+  g_return_val_if_fail (required_gl_minor < 10, FALSE);
+  g_return_val_if_fail (required_gles_minor < 10, FALSE);
 
-  return priv->gl_version >= required_major * 10 + required_minor;
+  if (!gdk_gl_context_is_realized (self))
+    return FALSE;
+
+  switch (priv->api)
+    {
+    case GDK_GL_API_GL:
+      return priv->gl_version >= required_gl_major * 10 + required_gl_minor;
+
+    case GDK_GL_API_GLES:
+      return priv->gl_version >= required_gles_major * 10 + required_gles_minor;
+
+    default:
+      g_return_val_if_reached (FALSE);
+
+    }
 }
 
 /**
