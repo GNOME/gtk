@@ -76,7 +76,7 @@
       </description>
     </key>
     <key type="b" name="sort-directories-first">
-      <default>false</default>
+      <default>true</default>
       <summary>Show folders first</summary>
       <description>
         If set to true, then folders are shown before files in the list.
