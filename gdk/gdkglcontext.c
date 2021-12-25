@@ -580,8 +580,8 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   glViewport (0, 0, ww, wh);
 
 #ifdef HAVE_EGL
-  if (priv->egl_context)
-    glDrawBuffers (1, (GLenum[1]) { GL_BACK_LEFT });
+  if (priv->egl_context && gdk_gl_context_check_version (context, 0, 0, 3, 0))
+    glDrawBuffers (1, (GLenum[1]) { gdk_gl_context_get_use_es (context) ? GL_BACK : GL_BACK_LEFT });
 #endif
 }
 
