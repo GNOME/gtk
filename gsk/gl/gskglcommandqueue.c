@@ -1396,7 +1396,7 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
       glTexImage2D (GL_TEXTURE_2D, 0, gl_internalformat, width, height, 0, gl_format, gl_type, data);
     }
   else if (stride % bpp == 0 &&
-           (!use_es || gdk_gl_context_check_version (context, 3, 0) || gdk_gl_context_has_unpack_subimage (context)))
+           (gdk_gl_context_check_version (context, 0, 0, 3, 0) || gdk_gl_context_has_unpack_subimage (context)))
     {
       glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
 
