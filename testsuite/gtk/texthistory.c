@@ -251,8 +251,6 @@ run_test (const Command *commands,
             set_selection (text, cmd->location, cmd->end_location);
           else if (strlen (cmd->text) == 1)
             set_selection (text, cmd->location, -1);
-          else
-            set_selection (text, -1, -1);
           command_delete_key (cmd, text);
           break;
 
@@ -261,8 +259,6 @@ run_test (const Command *commands,
             set_selection (text, cmd->location, cmd->end_location);
           else if (strlen (cmd->text) == 1)
             set_selection (text, cmd->end_location, -1);
-          else
-            set_selection (text, -1, -1);
           command_delete_key (cmd, text);
           break;
 
