@@ -942,7 +942,7 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
 
   while (TRUE)
     {
-      GtkCssTransform transform;
+      GtkCssTransform transform = { 0, };
 
       if (gtk_css_parser_has_function (parser, "matrix"))
         {
