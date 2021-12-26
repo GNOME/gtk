@@ -663,7 +663,7 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
  *
  * Gets the widget that @bar is capturing key events from.
  *
- * Returns: (transfer none): The key capture widget.
+ * Returns: (nullable) (transfer none): The key capture widget.
  **/
 GtkWidget *
 gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar)
