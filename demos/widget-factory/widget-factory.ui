@@ -6,6 +6,10 @@
         <attribute name="label" translatable="yes">Get Busy</attribute>
         <attribute name="action">win.busy</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Fullscreen</attribute>
+        <attribute name="action">win.fullscreen</attribute>
+      </item>
       <submenu>
         <attribute name="label" translatable="yes">Style</attribute>
         <section>
@@ -1921,6 +1925,12 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="label" translatable="1">Insert</property>
                                             <property name="icon-name">insert-image</property>
                                             <property name="tooltip-text" translatable="1">Insert something</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkColorButton">
+                                            <property name="rgba">#9141AC</property>
+                                            <property name="tooltip-text" translatable="1">Select a color</property>
                                           </object>
                                         </child>
                                       </object>

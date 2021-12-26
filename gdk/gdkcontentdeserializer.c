@@ -49,7 +49,7 @@
 
 typedef struct _Deserializer Deserializer;
 
-struct _Deserializer 
+struct _Deserializer
 {
   const char *                    mime_type; /* interned */
   GType                           type;
@@ -933,25 +933,6 @@ init (void)
 
 
   formats = gdk_pixbuf_get_formats ();
-
-  /* Make sure png comes first */
-  for (f = formats; f; f = f->next)
-    {
-      GdkPixbufFormat *fmt = f->data;
-      char *name;
-
-      name = gdk_pixbuf_format_get_name (fmt);
-      if (g_str_equal (name, "png"))
-        {
-          formats = g_slist_delete_link (formats, f);
-          formats = g_slist_prepend (formats, fmt);
-
-          g_free (name);
-          break;
-        }
-
-      g_free (name);
-    }
 
   for (f = formats; f; f = f->next)
     {

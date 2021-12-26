@@ -1,5 +1,10 @@
 <interface domain="gtk40">
-  <object class="GListStore" id="recordings"/>
+  <object class="GtkSingleSelection" id="selection">
+    <signal name="notify::selected" handler="recording_selected"/>
+    <property name="model">
+      <object class="GListStore" id="recordings"/>
+    </property>
+  </object>
   <template class="GtkInspectorRecorder" parent="GtkWidget">
     <child>
       <object class="GtkBox" id="box">
@@ -28,6 +33,14 @@
                 <property name="icon-name">insert-object-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Add debug nodes</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="debug-nodes" bind-flags="bidirectional|sync-create"/>
+                <property name="halign">start</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton">
+                <property name="icon-name">function-linear-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Highlight event sequences</property>
+                <property name="active" bind-source="GtkInspectorRecorder" bind-property="highlight-sequences" bind-flags="bidirectional|sync-create"/>
                 <property name="halign">start</property>
                 <property name="hexpand">1</property>
               </object>
@@ -70,9 +83,9 @@
                 <property name="hscrollbar-policy">never</property>
                 <property name="propagate-natural-width">1</property>
                 <child>
-                  <object class="GtkListBox" id="recordings_list">
+                  <object class="GtkListView" id="recordings_list">
                     <property name="vexpand">1</property>
-                    <signal name="row-selected" handler="recordings_list_row_selected"/>
+                    <property name="model">selection</property>
                   </object>
                 </child>
               </object>
@@ -81,76 +94,155 @@
               <object class="GtkSeparator"/>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="hscrollbar-policy">never</property>
-                <property name="propagate-natural-width">1</property>
+              <object class="GtkStack" id="recording_data_stack">
                 <child>
-                  <object class="GtkListView" id="render_node_list">
-                    <property name="vexpand">1</property>
-                    <property name="hexpand">1</property>
+                  <object class="GtkStackPage">
+                    <property name="name">no_data</property>
+                    <property name="child">
+                      <object class="GtkLabel">
+                        <property name="label">No data.</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator"/>
-            </child>
-            <child>
-              <object class="GtkPaned" id="render_paned">
-                <property name="orientation">vertical</property>
-                <property name="position">300</property>
-                <property name="wide-handle">1</property>
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <child>
-                      <object class="GtkTreeView" id="node_property_tree">
-                        <property name="activate-on-single-click">1</property>
-                        <signal name="row-activated" handler="node_property_activated"/>
+                  <object class="GtkStackPage">
+                    <property name="name">frame_data</property>
+                    <property name="child">
+                      <object class="GtkPaned">
+                        <property name="position">400</property>
+                        <property name="wide-handle">1</property>
                         <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Property</property>
+                          <object class="GtkScrolledWindow">
+                            <property name="propagate-natural-width">1</property>
                             <child>
-                              <object class="GtkCellRendererText">
-                                <property name="yalign">0</property>
+                              <object class="GtkListView" id="render_node_list">
+                                <property name="vexpand">1</property>
+                                <property name="hexpand">1</property>
                               </object>
-                              <attributes>
-                                <attribute name="text">0</attribute>
-                              </attributes>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Value</property>
+                          <object class="GtkPaned" id="render_paned">
+                            <property name="orientation">vertical</property>
+                            <property name="position">200</property>
+                            <property name="wide-handle">1</property>
                             <child>
-                              <object class="GtkCellRendererText">
-                                <property name="yalign">0</property>
-                                <property name="wrap-mode">word</property>
-                                <property name="max-width-chars">50</property>
+                              <object class="GtkScrolledWindow">
+                                <property name="propagate-natural-width">1</property>
+                                <child>
+                                  <object class="GtkTreeView" id="node_property_tree">
+                                    <property name="activate-on-single-click">1</property>
+                                    <signal name="row-activated" handler="node_property_activated"/>
+                                    <child>
+                                      <object class="GtkTreeViewColumn">
+                                        <property name="title" translatable="yes">Property</property>
+                                        <child>
+                                          <object class="GtkCellRendererText">
+                                            <property name="yalign">0</property>
+                                          </object>
+                                          <attributes>
+                                            <attribute name="text">0</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkTreeViewColumn">
+                                        <property name="title" translatable="yes">Value</property>
+                                        <child>
+                                          <object class="GtkCellRendererText">
+                                            <property name="yalign">0</property>
+                                            <property name="wrap-mode">word</property>
+                                            <property name="max-width-chars">50</property>
+                                          </object>
+                                          <attributes>
+                                            <attribute name="text">1</attribute>
+                                          </attributes>
+                                        </child>
+                                        <child>
+                                          <object class="GtkCellRendererPixbuf">
+                                            <property name="xalign">0</property>
+                                          </object>
+                                          <attributes>
+                                            <attribute name="visible">2</attribute>
+                                            <attribute name="texture">3</attribute>
+                                          </attributes>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
                               </object>
-                              <attributes>
-                                <attribute name="text">1</attribute>
-                              </attributes>
                             </child>
                             <child>
-                              <object class="GtkCellRendererPixbuf">
-                                <property name="xalign">0</property>
+                              <object class="GtkPicture" id="render_node_view">
+                                <property name="hexpand">1</property>
+                                <property name="vexpand">1</property>
                               </object>
-                              <attributes>
-                                <attribute name="visible">2</attribute>
-                                <attribute name="texture">3</attribute>
-                              </attributes>
                             </child>
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkPicture" id="render_node_view">
-                    <property name="hexpand">1</property>
-                    <property name="vexpand">1</property>
+                  <object class="GtkStackPage">
+                    <property name="name">event_data</property>
+                    <property name="child">
+                      <object class="GtkPaned">
+                        <property name="position">400</property>
+                        <property name="wide-handle">1</property>
+                        <child>
+                          <object class="GtkScrolledWindow">
+                            <property name="propagate-natural-width">1</property>
+                            <child>
+                              <object class="GtkTreeView" id="event_property_tree">
+                                <property name="activate-on-single-click">1</property>
+                                <child>
+                                  <object class="GtkTreeViewColumn">
+                                    <property name="title" translatable="yes">Property</property>
+                                    <child>
+                                      <object class="GtkCellRendererText">
+                                        <property name="yalign">0</property>
+                                      </object>
+                                      <attributes>
+                                        <attribute name="text">0</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkTreeViewColumn">
+                                    <property name="title" translatable="yes">Value</property>
+                                    <child>
+                                      <object class="GtkCellRendererText">
+                                        <property name="yalign">0</property>
+                                        <property name="wrap-mode">word</property>
+                                        <property name="max-width-chars">50</property>
+                                      </object>
+                                      <attributes>
+                                        <attribute name="text">1</attribute>
+                                      </attributes>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkPicture" id="event_view">
+                            <property name="hexpand">1</property>
+                            <property name="vexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>
@@ -161,3 +253,4 @@
     </child>
   </template>
 </interface>
+

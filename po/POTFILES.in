@@ -337,6 +337,8 @@ gtk/gtkwindowhandle.c
 gtk/inspector/a11y.ui
 gtk/inspector/action-editor.c
 gtk/inspector/actions.ui
+gtk/inspector/clipboard.c
+gtk/inspector/clipboard.ui
 gtk/inspector/controllers.c
 gtk/inspector/css-editor.c
 gtk/inspector/css-editor.ui

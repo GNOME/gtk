@@ -356,6 +356,8 @@ compare (gconstpointer             *elem1,
          const GskDiffSettings     *settings,
          gpointer                   data)
 {
+  GskDiffResult res;
+
   /*
    * Shrink the box by walking through each diagonal snake (SW and NE).
    */
@@ -364,7 +366,9 @@ compare (gconstpointer             *elem1,
       if (settings->compare_func (elem1[off1], elem2[off2], data) != 0)
         break;
 
-      settings->keep_func (elem1[off1], elem2[off2], data);
+      res = settings->keep_func (elem1[off1], elem2[off2], data);
+      if (res != GSK_DIFF_OK)
+        return res;
     }
 
   for (; off1 < lim1 && off2 < lim2; lim1--, lim2--)
@@ -372,7 +376,9 @@ compare (gconstpointer             *elem1,
       if (settings->compare_func (elem1[lim1 - 1], elem2[lim2 - 1], data) != 0)
         break;
 
-      settings->keep_func (elem1[lim1 - 1], elem2[lim2 - 1], data);
+      res = settings->keep_func (elem1[lim1 - 1], elem2[lim2 - 1], data);
+      if (res != GSK_DIFF_OK)
+        return res;
     }
 
   /*
@@ -383,20 +389,23 @@ compare (gconstpointer             *elem1,
     {
       for (; off2 < lim2; off2++)
         {
-          settings->insert_func (elem2[off2], off2, data);
+          res = settings->insert_func (elem2[off2], off2, data);
+          if (res != GSK_DIFF_OK)
+            return res;
         }
     }
   else if (off2 == lim2)
     {
       for (; off1 < lim1; off1++)
         {
-          settings->delete_func (elem1[off1], off1, data);
+          res = settings->delete_func (elem1[off1], off1, data);
+          if (res != GSK_DIFF_OK)
+            return res;
         }
     }
   else
     {
       SplitResult spl = { 0, };
-      GskDiffResult res;
 
       /*
        * Divide ...

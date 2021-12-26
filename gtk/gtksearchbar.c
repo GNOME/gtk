@@ -69,7 +69,7 @@
  * The following example shows you how to create a more complex search
  * entry.
  *
- * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/search-bar.c)
+ * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/main/examples/search-bar.c)
  *
  * # CSS nodes
  *

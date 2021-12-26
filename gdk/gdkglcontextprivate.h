@@ -99,6 +99,8 @@ gboolean                gdk_gl_backend_can_be_used              (GdkGLBackend   
                                                                  GError         **error);
 void                    gdk_gl_backend_use                      (GdkGLBackend     backend_type);
 
+void                    gdk_gl_context_clear_current_if_surface (GdkSurface      *surface);
+
 GdkGLContext *          gdk_gl_context_new                      (GdkDisplay      *display,
                                                                  GdkSurface      *surface);
 
@@ -109,8 +111,10 @@ void                    gdk_gl_context_set_is_legacy            (GdkGLContext   
                                                                  gboolean         is_legacy);
 
 gboolean                gdk_gl_context_check_version            (GdkGLContext    *context,
-                                                                 int              required_major,
-                                                                 int              required_minor);
+                                                                 int              required_gl_major,
+                                                                 int              required_gl_minor,
+                                                                 int              required_gles_major,
+                                                                 int              required_gles_minor);
 
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,

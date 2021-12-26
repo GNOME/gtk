@@ -296,6 +296,7 @@ gtk_color_button_init (GtkColorButton *button)
                                  "accessible-role", GTK_ACCESSIBLE_ROLE_IMG,
                                  "selectable", FALSE,
                                  "has-menu", FALSE,
+                                 "can-drag", FALSE,
                                  NULL);
   gtk_widget_set_can_focus (button->swatch, FALSE);
   gtk_widget_remove_css_class (button->swatch, "activatable");

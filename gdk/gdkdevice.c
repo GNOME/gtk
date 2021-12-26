@@ -132,6 +132,8 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * GdkDevice:source: (attributes org.gtk.Property.get=gdk_device_get_source)
    *
    * Source type for the device.
+   *
+   * Deprecated: 4.6: Use GdkDeviceTool:tool-type instead
    */
   device_props[PROP_SOURCE] =
       g_param_spec_enum ("source",
@@ -596,6 +598,8 @@ gdk_device_get_has_cursor (GdkDevice *device)
  * Determines the type of the device.
  *
  * Returns: a `GdkInputSource`
+ *
+ * Deprecated: 4.6: Use gdk_device_tool_get_tool_type() instead
  */
 GdkInputSource
 gdk_device_get_source (GdkDevice *device)

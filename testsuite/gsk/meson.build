@@ -93,10 +93,10 @@ informative_render_tests = [
 ]
 
 renderers = [
-  # name      exclude term
-  [ 'gl', ''    ],
-  [ 'broadway',  '-3d' ],
-  [ 'cairo',  '-3d' ],
+  # name          exclude term
+  [ 'gl', ''           ],
+  [ 'broadway',   '-3d' ],
+  [ 'cairo',      '-3d' ],
 ]
 
 foreach renderer : renderers

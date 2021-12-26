@@ -1581,6 +1581,75 @@ test_get_iter (void)
   g_object_unref (buffer);
 }
 
+static void
+test_iter_with_anchor (void)
+{
+  GtkTextView *text_view;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GtkTextChildAnchor *anchor;
+  GtkWidget *child;
+
+  text_view = GTK_TEXT_VIEW (gtk_text_view_new ());
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_buffer_set_text (buffer, "ab\ncd\r\nef", -1);
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 1));
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  child = gtk_label_new ("text");
+  gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+  g_object_unref (child);
+
+  gtk_text_buffer_get_iter_at_child_anchor (buffer, &iter, anchor);
+  g_assert_cmpint (gtk_text_iter_get_char (&iter), ==, GTK_TEXT_UNKNOWN_CHAR);
+
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 1));
+  /* ß takes 2 bytes in UTF-8 */
+  anchor = gtk_text_child_anchor_new_with_replacement ("ß");
+  gtk_text_buffer_insert_child_anchor (buffer, &iter, anchor);
+  child = gtk_label_new ("text");
+  gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+
+  gtk_text_buffer_get_iter_at_child_anchor (buffer, &iter, anchor);
+  g_assert_cmpint (gtk_text_iter_get_char (&iter), ==, 223);
+
+  g_object_unref (child);
+  g_object_ref_sink (text_view);
+}
+
+static void
+test_get_text_with_anchor (void)
+{
+  GtkTextView *text_view;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter, start, end;
+  GtkTextChildAnchor *anchor;
+  GtkWidget *child;
+
+  text_view = GTK_TEXT_VIEW (gtk_text_view_new ());
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_buffer_set_text (buffer, "ab\ncd\r\nef", -1);
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 1));
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  child = gtk_label_new ("text");
+  gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+  g_object_unref (child);
+
+  g_assert_true (gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 1));
+  /* ß takes 2 bytes in UTF-8 */
+  anchor = gtk_text_child_anchor_new_with_replacement ("ß");
+  gtk_text_buffer_insert_child_anchor (buffer, &iter, anchor);
+  child = gtk_label_new ("text");
+  gtk_text_view_add_child_at_anchor (text_view, child, anchor);
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  g_assert_cmpstr (gtk_text_buffer_get_text (buffer, &start, &end, FALSE), ==, "ab\ncßd\r\nef");
+
+  g_object_unref (child);
+  g_object_ref_sink (text_view);
+}
+
 /* Check that basic undo works */
 static void
 test_undo0 (void)
@@ -1768,6 +1837,8 @@ main (int argc, char** argv)
   g_test_add_func ("/TextBuffer/Tag", test_tag);
   g_test_add_func ("/TextBuffer/Clipboard", test_clipboard);
   g_test_add_func ("/TextBuffer/Get iter", test_get_iter);
+  g_test_add_func ("/TextBuffer/Iter with anchor", test_iter_with_anchor);
+  g_test_add_func ("/TextBuffer/Get text with anchor", test_get_text_with_anchor);
   g_test_add_func ("/TextBuffer/Undo 0", test_undo0);
   g_test_add_func ("/TextBuffer/Undo 1", test_undo1);
   g_test_add_func ("/TextBuffer/Undo 2", test_undo2);

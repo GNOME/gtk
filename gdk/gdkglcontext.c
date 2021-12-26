@@ -151,6 +151,12 @@ unmask_context (MaskedContext *mask)
   return GDK_GL_CONTEXT (GSIZE_TO_POINTER (GPOINTER_TO_SIZE (mask) & ~(gsize) 1));
 }
 
+static inline gboolean
+mask_is_surfaceless (MaskedContext *mask)
+{
+  return GPOINTER_TO_SIZE (mask) & (gsize) 1;
+}
+
 static void
 unref_unmasked (gpointer data)
 {
@@ -574,8 +580,8 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
   glViewport (0, 0, ww, wh);
 
 #ifdef HAVE_EGL
-  if (priv->egl_context)
-    glDrawBuffers (1, (GLenum[1]) { GL_BACK_LEFT });
+  if (priv->egl_context && gdk_gl_context_check_version (context, 0, 0, 3, 0))
+    glDrawBuffers (1, (GLenum[1]) { gdk_gl_context_get_use_es (context) ? GL_BACK : GL_BACK_LEFT });
 #endif
 }
 
@@ -997,16 +1003,33 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
 }
 
 gboolean
-gdk_gl_context_check_version (GdkGLContext *context,
-                              int           required_major,
-                              int           required_minor)
+gdk_gl_context_check_version (GdkGLContext *self,
+                              int           required_gl_major,
+                              int           required_gl_minor,
+                              int           required_gles_major,
+                              int           required_gles_minor)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
-  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
-  g_return_val_if_fail (required_minor < 10, FALSE);
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), FALSE);
+  g_return_val_if_fail (required_gl_minor < 10, FALSE);
+  g_return_val_if_fail (required_gles_minor < 10, FALSE);
 
-  return priv->gl_version >= required_major * 10 + required_minor;
+  if (!gdk_gl_context_is_realized (self))
+    return FALSE;
+
+  switch (priv->api)
+    {
+    case GDK_GL_API_GL:
+      return priv->gl_version >= required_gl_major * 10 + required_gl_minor;
+
+    case GDK_GL_API_GLES:
+      return priv->gl_version >= required_gles_major * 10 + required_gles_minor;
+
+    default:
+      g_return_val_if_reached (FALSE);
+
+    }
 }
 
 /**
@@ -1323,6 +1346,7 @@ gl_debug_message_callback (GLenum        source,
   const char *message_source;
   const char *message_type;
   const char *message_severity;
+  GLogLevelFlags log_level;
 
   if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
     return;
@@ -1384,22 +1408,31 @@ gl_debug_message_callback (GLenum        source,
     {
     case GL_DEBUG_SEVERITY_HIGH:
       message_severity = "High";
+      log_level = G_LOG_LEVEL_CRITICAL;
       break;
     case GL_DEBUG_SEVERITY_MEDIUM:
       message_severity = "Medium";
+      log_level = G_LOG_LEVEL_WARNING;
       break;
     case GL_DEBUG_SEVERITY_LOW:
       message_severity = "Low";
+      log_level = G_LOG_LEVEL_MESSAGE;
       break;
     case GL_DEBUG_SEVERITY_NOTIFICATION:
       message_severity = "Notification";
+      log_level = G_LOG_LEVEL_INFO;
       break;
     default:
       message_severity = "Unknown";
+      log_level = G_LOG_LEVEL_MESSAGE;
     }
 
-  g_warning ("OPENGL:\n    Source: %s\n    Type: %s\n    Severity: %s\n    Message: %s",
-             message_source, message_type, message_severity, message);
+  /* There's no higher level function taking a log level argument... */
+  g_log_structured_standard (G_LOG_DOMAIN, log_level,
+                             __FILE__, G_STRINGIFY (__LINE__),
+                             G_STRFUNC,
+                             "OPENGL:\n    Source: %s\n    Type: %s\n    Severity: %s\n    Message: %s",
+                             message_source, message_type, message_severity, message);
 }
 
 /**
@@ -1649,6 +1682,31 @@ gdk_gl_context_clear_current (void)
   if (current != NULL)
     {
       GdkGLContext *context = unmask_context (current);
+
+      if (GDK_GL_CONTEXT_GET_CLASS (context)->clear_current (context))
+        g_private_replace (&thread_current_context, NULL);
+    }
+}
+
+/*<private>
+ * gdk_gl_context_clear_current_if_surface:
+ * @surface: surface to clear for
+ *
+ * Does a gdk_gl_context_clear_current() if the current context is attached
+ * to @surface, leaves the current context alone otherwise.
+ **/
+void
+gdk_gl_context_clear_current_if_surface (GdkSurface *surface)
+{
+  MaskedContext *current;
+
+  current = g_private_get (&thread_current_context);
+  if (current != NULL && !mask_is_surfaceless (current))
+    {
+      GdkGLContext *context = unmask_context (current);
+
+      if (gdk_gl_context_get_surface (context) != surface)
+        return;
 
       if (GDK_GL_CONTEXT_GET_CLASS (context)->clear_current (context))
         g_private_replace (&thread_current_context, NULL);

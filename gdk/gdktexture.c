@@ -28,8 +28,7 @@
  * `GdkPixbuf`, or a Cairo surface, or other pixel data.
  *
  * The ownership of the pixel data is transferred to the `GdkTexture`
- * instance; you can only make a copy of it, via [method@Gdk.Texture.download]
- * or [method@Gdk.Texture.download_float].
+ * instance; you can only make a copy of it, via [method@Gdk.Texture.download].
  *
  * `GdkTexture` is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
@@ -740,48 +739,6 @@ gdk_texture_download (GdkTexture *texture,
   gdk_texture_do_download (texture,
                            GDK_MEMORY_DEFAULT,
                            data,
-                           stride);
-}
-
-/**
- * gdk_texture_download_float:
- * @texture: a `GdkTexture`
- * @data: (array): pointer to enough memory to be filled with the
- *   downloaded data of @texture
- * @stride: rowstride in elements, will usually be equal to
- *   gdk_texture_get_width() * 4
- *
- * Downloads the @texture into local memory in a high dynamic range format.
- *
- * This may be an expensive operation, as the actual texture data
- * may reside on a GPU or on a remote display server and because the data
- * may need to be upsampled if it was not already available in this
- * format.
- *
- * You may want to use [method@Gdk.Texture.download] instead if you don't
- * need high dynamic range support.
- *
- * The data format of the downloaded data is equivalent to
- * GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, so every downloaded
- * pixel requires 16 bytes of memory.
- *
- * Note that the caller is responsible to provide sufficiently
- * aligned memory to access the resulting data directly as floats.
- *
- * Since: 4.6
- */
-void
-gdk_texture_download_float (GdkTexture *texture,
-                            float      *data,
-                            gsize       stride)
-{
-  g_return_if_fail (GDK_IS_TEXTURE (texture));
-  g_return_if_fail (data != NULL);
-  g_return_if_fail (stride >= gdk_texture_get_width (texture) * 4);
-
-  gdk_texture_do_download (texture,
-                           GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
-                           (guchar *) data,
                            stride);
 }
 

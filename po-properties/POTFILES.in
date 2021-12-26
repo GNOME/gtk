@@ -332,6 +332,7 @@ gtk/gtkwindow.c
 gtk/gtkwindowcontrols.c
 gtk/gtkwindowhandle.c
 gtk/inspector/action-editor.c
+gtk/inspector/clipboard.c
 gtk/inspector/controllers.c
 gtk/inspector/css-editor.c
 gtk/inspector/css-node-tree.c

@@ -43,6 +43,6 @@ flatpak build-bundle \
         ${appid}
 
 # to be consumed by the nightly publish jobs
-if [[ $CI_COMMIT_BRANCH == master ]]; then
+if [[ $CI_COMMIT_BRANCH == main ]]; then
         tar cf repo.tar ${repodir}
 fi

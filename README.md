@@ -1,7 +1,7 @@
 GTK — The GTK toolkit
 =====================
 
-[![Build status](https://gitlab.gnome.org/GNOME/gtk/badges/master/pipeline.svg)](https://gitlab.gnome.org/GNOME/gtk/-/commits/master)
+[![Build status](https://gitlab.gnome.org/GNOME/gtk/badges/main/pipeline.svg)](https://gitlab.gnome.org/GNOME/gtk/-/commits/main)
 
 General information
 -------------------
@@ -40,7 +40,7 @@ Nightly documentation can be found at
 
 Nightly flatpaks of our demos can be installed from the
 [GNOME Nightly](https://wiki.gnome.org/Apps/Nightly) repository:
-  - `flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo` 
+  - `flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo`
   - `flatpak install gnome-nightly org.gtk.Demo4`
   - `flatpak install gnome-nightly org.gtk.WidgetFactory4`
   - `flatpak install gnome-nightly org.gtk.IconBrowser4`
@@ -115,6 +115,20 @@ docs/reference/gtk/html/gtk-building.html
 ```
 
 Or [online](https://docs.gtk.org/gtk4/building.html)
+
+Default branch renamed to `main`
+--------------------------------
+
+The default development branch of GTK has been renamed to `main`.
+To update your local checkout, use:
+```sh
+git checkout master
+git branch -m master main
+git fetch
+git branch --unset-upstream
+git branch -u origin/main
+git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+```
 
 How to report bugs
 ------------------

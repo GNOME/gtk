@@ -93,7 +93,7 @@
  *
  * ## A simple application
  *
- * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/master/examples/bp/bloatpad.c)
+ * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/main/examples/bp/bloatpad.c)
  * is available in the GTK source code repository
  *
  * `GtkApplication` optionally registers with a session manager of the
@@ -671,7 +671,7 @@ gtk_application_class_init (GtkApplicationClass *class)
  * If `application_id` is not %NULL, then it must be valid. See
  * `g_application_id_is_valid()`.
  *
- * If no application ID is given then some features (most notably application 
+ * If no application ID is given then some features (most notably application
  * uniqueness) will be disabled.
  *
  * Returns: a new `GtkApplication` instance
@@ -806,7 +806,7 @@ gtk_application_get_window_by_id (GtkApplication *application,
 
   g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
 
-  for (l = priv->windows; l != NULL; l = l->next) 
+  for (l = priv->windows; l != NULL; l = l->next)
     {
       if (GTK_IS_APPLICATION_WINDOW (l->data) &&
           gtk_application_window_get_id (GTK_APPLICATION_WINDOW (l->data)) == id)

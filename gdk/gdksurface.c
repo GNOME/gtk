@@ -605,11 +605,14 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   0,
                   NULL,
                   NULL,
-                  NULL,
+                  _gdk_marshal_VOID__INT_INT,
                   G_TYPE_NONE,
                   2,
                   G_TYPE_INT,
                   G_TYPE_INT);
+  g_signal_set_va_marshaller (signals[LAYOUT],
+                              G_OBJECT_CLASS_TYPE (object_class),
+                              _gdk_marshal_VOID__INT_INTv);
 
   /**
    * GdkSurface::render:
@@ -1092,6 +1095,7 @@ gdk_surface_set_egl_native_window (GdkSurface *self,
 
   if (priv->egl_surface != NULL)
     {
+      gdk_gl_context_clear_current_if_surface (self);
       eglDestroySurface (gdk_surface_get_display (self), priv->egl_surface);
       priv->egl_surface = NULL;
     }
@@ -1120,6 +1124,7 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
       priv->egl_surface != NULL &&
       gdk_display_get_egl_config_high_depth (display) != gdk_display_get_egl_config (display))
     {
+      gdk_gl_context_clear_current_if_surface (self);
       eglDestroySurface (gdk_surface_get_display (self), priv->egl_surface);
       priv->egl_surface = NULL;
     }

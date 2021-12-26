@@ -386,6 +386,7 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
 static void
 gtk_drag_icon_init (GtkDragIcon *self)
 {
+  gtk_widget_set_can_target (GTK_WIDGET (self), FALSE);
 }
 
 /**
@@ -531,14 +532,37 @@ gtk_drag_icon_create_widget_for_value (const GValue *value)
     {
       return gtk_label_new (g_value_get_string (value));
     }
+  else if (G_VALUE_HOLDS (value, GDK_TYPE_PAINTABLE))
+    {
+      GtkWidget *image;
+
+      image = gtk_image_new_from_paintable (g_value_get_object (value));
+      gtk_widget_add_css_class (image, "large-icons");
+
+      return image;
+    }
   else if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
     {
       GtkWidget *swatch;
 
       swatch = gtk_color_swatch_new ();
+      gtk_color_swatch_set_can_drag (GTK_COLOR_SWATCH (swatch), FALSE);
+      gtk_color_swatch_set_can_drop (GTK_COLOR_SWATCH (swatch), FALSE);
       gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (swatch), g_value_get_boxed (value));
 
       return swatch;
+    }
+  else if (G_VALUE_HOLDS (value, G_TYPE_FILE))
+    {
+      GFileInfo *info;
+      GtkWidget *image;
+
+      info = g_file_query_info (G_FILE (g_value_get_object (value)), "standard::icon", 0, NULL, NULL);
+      image = gtk_image_new_from_gicon (g_file_info_get_icon (info));
+      gtk_widget_add_css_class (image, "large-icons");
+      g_object_unref (info);
+
+      return image;
     }
   else if (G_VALUE_HOLDS (value, GTK_TYPE_TEXT_BUFFER))
     {
@@ -568,7 +592,7 @@ gtk_drag_icon_create_widget_for_value (const GValue *value)
       node = gsk_value_get_render_node (value);
       if (node == NULL)
         return NULL;
-      
+
       gsk_render_node_get_bounds (node, &bounds);
       paintable = gtk_render_node_paintable_new (node, &bounds);
       image = gtk_image_new_from_paintable (paintable);

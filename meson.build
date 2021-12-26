@@ -1,5 +1,5 @@
 project('gtk', 'c',
-        version: '4.5.0',
+        version: '4.5.1',
         default_options: [
           'buildtype=debugoptimized',
           'warning_level=1',
@@ -7,11 +7,11 @@ project('gtk', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
         ],
-        meson_version : '>= 0.55',
+        meson_version : '>= 0.59',
         license: 'LGPL-2.1-or-later')
 
 glib_req           = '>= 2.66.0'
-pango_req          = '>= 1.49.3' # keep this in sync with .gitlab-ci/test-msys.sh
+pango_req          = '>= 1.50.0' # keep this in sync with .gitlab-ci/test-msys.sh
 fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
@@ -292,7 +292,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     '-Wuninitialized',
     '-Wunused',
   ]
-  
+
   extra_warnings = [
     'address',
     'array-bounds',
@@ -456,7 +456,7 @@ colord_dep = dependency('colord', version: '>= 0.1.9', required: get_option('col
 cdata.set('HAVE_COLORD', colord_dep.found())
 
 if iso_codes_dep.found()
-  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
+  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_variable(pkgconfig: 'prefix'))
 else
   cdata.set_quoted('ISO_CODES_PREFIX', '/usr')
 endif
@@ -515,7 +515,7 @@ if wayland_enabled
   if not wlprotocolsdep.found()
     wlproto_dir = subproject('wayland-protocols').get_variable('wayland_protocols_srcdir')
   else
-    wlproto_dir = wlprotocolsdep.get_pkgconfig_variable('pkgdatadir')
+    wlproto_dir = wlprotocolsdep.get_variable(pkgconfig: 'pkgdatadir')
   endif
 
   wayland_pkgs = [
@@ -709,8 +709,8 @@ endif
 
 graphene_dep_type = graphene_dep.type_name()
 if graphene_dep_type == 'pkgconfig'
-  graphene_has_sse2 = graphene_dep.get_pkgconfig_variable('graphene_has_sse2') == '1'
-  graphene_has_gcc = graphene_dep.get_pkgconfig_variable('graphene_has_gcc') == '1'
+  graphene_has_sse2 = graphene_dep.get_variable(pkgconfig: 'graphene_has_sse2') == '1'
+  graphene_has_gcc = graphene_dep.get_variable(pkgconfig: 'graphene_has_gcc') == '1'
 else
   graphene_simd = subproject('graphene').get_variable('graphene_simd')
   graphene_has_sse2 = graphene_simd.contains('sse2')
@@ -861,7 +861,7 @@ common_pc_variables = [
 foreach pkg: pkgs
   pkg_config.generate(
     filebase: pkg,
-    variables: common_pc_variables,
+    unescaped_variables: common_pc_variables,
     name: 'GTK',
     description: 'GTK Graphical UI Library',
     requires: gdk_packages + gsk_packages + gtk_packages,
@@ -877,7 +877,7 @@ endforeach
 if os_unix
   pkg_config.generate(
     filebase: 'gtk4-unix-print',
-    variables: common_pc_variables,
+    unescaped_variables: common_pc_variables,
     name: 'GTK',
     description: 'GTK Unix print support',
     requires: ['gtk4'] + gtk_packages,

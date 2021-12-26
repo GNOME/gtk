@@ -66,7 +66,13 @@ textview {
   > text {
     @extend %view;
 
-    > selection { &:focus, & { @extend %selected_items; }}
+    > selection {
+      background-color: $backdrop_selected_bg_color;
+
+      &:focus-within {
+         background-color: $selected_bg_color;
+      }
+    }
   }
 
   &:drop(active) {
@@ -152,8 +158,11 @@ label {
   &:selected { @extend %nobg_selected_items; }
 
   > selection {
-    background-color: $selected_bg_color;
+    background-color: $backdrop_selected_bg_color;
     color: $selected_fg_color;
+    &:focus-within {
+       background-color: $selected_bg_color;
+    }
   }
 
   &:disabled {
@@ -318,7 +327,14 @@ entry {
 
     &:disabled { @include entry(insensitive); }
 
-    > text > selection { @extend %selected_items; }
+    > text > selection {
+      background-color: $backdrop_selected_bg_color;
+      color: transparent;
+      &:focus-within {
+        background-color: $selected_bg_color;
+        color: $selected_fg_color;
+      }
+    }
 
     // entry error and warning style
     @each $e_type, $e_color in (error, $error_color),
@@ -606,7 +622,7 @@ button {
     min-width: 26px;
     min-height: 32px;
 
-    &.image-button { 
+    &.image-button {
       min-width: 30px;
       &:only-child {
         margin: 4px;
@@ -895,7 +911,15 @@ modelbutton.flat arrow {
 
 /* oldstyle toolbar buttons */
 
-.toolbar button {
+.toolbar > button,
+.toolbar > :not(.linked) > button,
+.toolbar :not(.linked) > menubutton > button,
+.toolbar :not(.linked) > scalebutton > button,
+.toolbar :not(.linked) > dropdown > button,
+.toolbar :not(.linked) > colorbutton > button,
+.toolbar :not(.linked) > fontbutton > button,
+.toolbar :not(.linked) > appchooserbutton > button,
+.toolbar :not(.linked) > combobox > box > button {
   margin: 1px;
 
    @extend %button_basic_flat;
@@ -1134,7 +1158,14 @@ spinbutton {
       padding: 0;
       border-radius: 0;
 
-      > selection { @extend %selected_items; }
+      > selection {
+        background-color: $backdrop_selected_bg_color;
+        color: transparent;
+        &:focus-within {
+          background-color: $selected_bg_color;
+          color: $selected_fg_color;
+        }
+      }
       > block-cursor { @include entry(block_cursor); }
     }
 
@@ -1296,8 +1327,7 @@ combobox {
   background-color: $bg_color;
 }
 
-.toolbar,
-toolbar {
+.toolbar {
   @extend %toolbar;
 
   // on OSD
@@ -1846,7 +1876,7 @@ popover.background {
 
     > list,
     > .view,
-    > toolbar {
+    > .toolbar {
       border-style: none;
       background-color: transparent;
     }
@@ -2401,7 +2431,7 @@ switch {
     border-radius: 50%;
     transition: $button_transition;
   }
-  
+
   > image { color: transparent; } /* only show i / o for the accessible theme */
 
   &:hover > slider {
@@ -2510,7 +2540,7 @@ radio {
       }
     }
   }
-  
+
   @if $variant == 'light' {
     // the borders of the light variant versions of checks and radios are too similar in luminosity to the selected background
     // color, hence we need special casing.
@@ -3357,8 +3387,12 @@ columnview row:not(:selected) cell editablelabel.editing:focus-within {
 }
 
 columnview row:not(:selected) cell editablelabel.editing text selection {
-  color: $selected_fg_color;
-  background-color: $selected_bg_color;
+  background-color: $backdrop_selected_bg_color;
+  color: transparent;
+  &:focus-within {
+    background-color: $selected_bg_color;
+    color: $selected_fg_color;
+  }
 }
 
 /*******************************************************
@@ -4127,11 +4161,7 @@ tooltip.csd {
 // catch all extend :)
 
 %selected_items {
-  background-color: desaturate($selected_bg_color,100%);
-
-  &:focus-within {
-    background-color: $selected_bg_color;
-  }
+  background-color: $selected_bg_color;
 
   @at-root %nobg_selected_items, & {
     color: $selected_fg_color;

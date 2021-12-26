@@ -945,6 +945,7 @@ gtk_action_muxer_register_observer (GtkActionObservable *observable,
   gboolean enabled;
   const GVariantType *parameter_type;
   GVariant *state;
+  gboolean is_duplicate;
 
   if (!muxer->observed_actions)
     muxer->observed_actions = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_action);
@@ -961,22 +962,26 @@ gtk_action_muxer_register_observer (GtkActionObservable *observable,
       g_hash_table_insert (muxer->observed_actions, action->fullname, action);
     }
 
+  is_duplicate = g_slist_find (action->watchers, observer) != NULL;
   action->watchers = g_slist_prepend (action->watchers, observer);
   g_object_weak_ref (G_OBJECT (observer), gtk_action_muxer_weak_notify, action);
 
-  if (action_muxer_query_action (muxer, name,
-                                 &enabled, &parameter_type,
-                                 NULL, NULL, &state, TRUE))
+  if (!is_duplicate)
     {
-      gtk_action_muxer_action_added (muxer, name, parameter_type, enabled, state);
-      g_clear_pointer (&state, g_variant_unref);
-    }
+      if (action_muxer_query_action (muxer, name,
+                                     &enabled, &parameter_type,
+                                     NULL, NULL, &state, TRUE))
+        {
+          gtk_action_muxer_action_added (muxer, name, parameter_type, enabled, state);
+          g_clear_pointer (&state, g_variant_unref);
+        }
 
-  if (muxer->parent)
-    {
-      gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
-                                               name,
-                                               GTK_ACTION_OBSERVER (muxer));
+      if (muxer->parent)
+        {
+          gtk_action_observable_register_observer (GTK_ACTION_OBSERVABLE (muxer->parent),
+                                                   name,
+                                                   GTK_ACTION_OBSERVER (muxer));
+        }
     }
 }
 

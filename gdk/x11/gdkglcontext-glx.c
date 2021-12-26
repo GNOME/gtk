@@ -71,6 +71,8 @@ gdk_x11_surface_destroy_glx_drawable (GdkX11Surface *self)
   if (self->glx_drawable == None)
     return;
 
+  gdk_gl_context_clear_current_if_surface (GDK_SURFACE (self));
+
   glXDestroyWindow (gdk_x11_display_get_xdisplay (gdk_surface_get_display (GDK_SURFACE (self))),
                     self->glx_drawable);
 

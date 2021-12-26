@@ -209,7 +209,7 @@ struct _GdkTouchEvent
  * @pointer_emulated: whether the scroll event was the result of
  *   a pointer emulation
  * @tool: a `GdkDeviceTool`
- * @history: (element-type GdkScrollHistory): array of times and deltas
+ * @history: (element-type GdkTimeCoord): array of times and deltas
  *   for other scroll events that were compressed before delivering the
  *   current event
  *
@@ -233,7 +233,7 @@ struct _GdkScrollEvent
   gboolean pointer_emulated;
   gboolean is_stop;
   GdkDeviceTool *tool;
-  GArray *history; /* <GdkScrollHistory> */
+  GArray *history; /* <GdkTimeCoord> */
 };
 
 /*
@@ -402,6 +402,7 @@ struct _GdkTouchpadEvent
 {
   GdkEvent parent_instance;
 
+  GdkEventSequence *sequence;
   GdkModifierType state;
   gint8 phase;
   gint8 n_fingers;
@@ -506,18 +507,20 @@ GdkEvent * gdk_touch_event_new          (GdkEventType      type,
                                          double           *axes,
                                          gboolean          emulating);
 
-GdkEvent * gdk_touchpad_event_new_swipe (GdkSurface      *surface,
-                                         GdkDevice       *device,
-                                         guint32          time,
-                                         GdkModifierType  state,
+GdkEvent * gdk_touchpad_event_new_swipe (GdkSurface              *surface,
+                                         GdkEventSequence        *sequence,
+                                         GdkDevice               *device,
+                                         guint32                  time,
+                                         GdkModifierType          state,
                                          GdkTouchpadGesturePhase  phase,
-                                         double           x,
-                                         double           y,
-                                         int              n_fingers,
-                                         double           dx,
-                                         double           dy);
+                                         double                   x,
+                                         double                   y,
+                                         int                      n_fingers,
+                                         double                   dx,
+                                         double                   dy);
 
 GdkEvent * gdk_touchpad_event_new_pinch (GdkSurface              *surface,
+                                         GdkEventSequence        *sequence,
                                          GdkDevice               *device,
                                          guint32                  time,
                                          GdkModifierType          state,

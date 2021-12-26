@@ -7,6 +7,7 @@ demos/gtk-demo/appwindow.c
 demos/gtk-demo/blendmodes.ui
 demos/gtk-demo/changedisplay.c
 demos/gtk-demo/clipboard.c
+demos/gtk-demo/clipboard.ui
 demos/gtk-demo/combobox.c
 demos/gtk-demo/constraints_builder.ui
 demos/gtk-demo/constraints.ui
@@ -94,6 +95,7 @@ examples/plugman.c
 gtk/inspector/a11y.ui
 gtk/inspector/actions.ui
 gtk/inspector/actions.ui.h
+gtk/inspector/clipboard.ui
 gtk/inspector/css-editor.ui
 gtk/inspector/css-editor.ui.h
 gtk/inspector/css-node-tree.ui

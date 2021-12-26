@@ -27,99 +27,227 @@
 
 typedef enum
 {
- RECORD_TYPE_ELEMENT,
- RECORD_TYPE_END_ELEMENT,
- RECORD_TYPE_TEXT,
-} RecordTreeType;
+  RECORD_TYPE_ELEMENT,
+  RECORD_TYPE_END_ELEMENT,
+  RECORD_TYPE_TEXT,
+} RecordDataType;
 
-typedef struct RecordDataTree RecordDataTree;
+/* All strings are owned by the string chunk */
+typedef struct {
+  /* Must be first for g_slice_free_chain() */
+  GList link;
 
-/* All strings are owned by the string table */
-struct RecordDataTree {
-  RecordDataTree *parent;
-  RecordTreeType type;
+  const char *string;
+  int len;
+  int count;
+  int offset;
+  int text_offset;
+  gboolean include_len;
+} RecordDataString;
+
+typedef struct {
+  RecordDataType type;
+  GList link;
+} RecordDataNode;
+
+typedef struct RecordDataElement RecordDataElement;
+
+struct RecordDataElement {
+  RecordDataNode base;
+
+  RecordDataElement *parent;
+  GQueue children;
   int n_attributes;
-  const char *data;
-  const char **attributes;
-  const char **values;
-  GList *children;
+  gboolean preserve_whitespace;
+  RecordDataString *name;
+  RecordDataString *attributes[];
 };
 
 typedef struct {
-  char *string;
-  int count;
-  int offset;
-} RecordDataString;
+  RecordDataNode base;
 
-static RecordDataTree *
-record_data_tree_new (RecordDataTree *parent,
-                      RecordTreeType  type,
-                      const char     *data)
-{
-  RecordDataTree *tree = g_slice_new0 (RecordDataTree);
-
-  tree->parent = parent;
-  tree->type = type;
-  tree->data = data;
-
-  if (parent)
-    parent->children = g_list_prepend  (parent->children, tree);
-
-  return tree;
-}
-
-static void
-record_data_tree_free (RecordDataTree *tree)
-{
-  g_list_free_full (tree->children, (GDestroyNotify)record_data_tree_free);
-  g_free (tree->attributes);
-  g_free (tree->values);
-  g_slice_free (RecordDataTree, tree);
-}
-
-static void
-record_data_string_free (RecordDataString *s)
-{
-  g_free (s->string);
-  g_slice_free (RecordDataString, s);
-}
-
-static const char *
-record_data_string_lookup (GHashTable *strings,
-                           const char *str,
-                           gssize      len)
-{
-  char *copy = NULL;
-  RecordDataString *s;
-
-  if (len >= 0)
-    {
-      /* Ensure str is zero terminated */
-      copy = g_strndup (str, len);
-      str = copy;
-    }
-
-  s = g_hash_table_lookup (strings, str);
-  if (s)
-    {
-      g_free (copy);
-      s->count++;
-      return s->string;
-    }
-
-  s = g_slice_new (RecordDataString);
-  s->string = copy ? copy : g_strdup (str);
-  s->count = 1;
-
-  g_hash_table_insert (strings, s->string, s);
-  return s->string;
-}
+  RecordDataString *string;
+} RecordDataText;
 
 typedef struct {
   GHashTable *strings;
-  RecordDataTree *root;
-  RecordDataTree *current;
+  GStringChunk *chunks;
+  GQueue string_list;
+  RecordDataElement *root;
+  RecordDataElement *current;
 } RecordData;
+
+static gpointer
+record_data_node_new (RecordDataElement *parent,
+                      RecordDataType     type,
+                      gsize              size)
+{
+  RecordDataNode *node = g_slice_alloc0 (size);
+
+  node->type = type;
+  node->link.data = node;
+
+  if (parent)
+    g_queue_push_tail_link (&parent->children, &node->link);
+
+  return node;
+}
+
+static gboolean
+text_is_important (const char *name)
+{
+  const char *elements[] = {
+    "property",
+    "attribute",
+    "col",
+    "action-widget",
+    "item",
+    "mime-type",
+    "pattern",
+    "suffix",
+    "mark",
+    NULL
+  };
+
+  return g_strv_contains (elements, name);
+}
+
+static RecordDataElement *
+record_data_element_new (RecordDataElement *parent,
+                         RecordDataString  *name,
+                         gsize              n_attributes)
+{
+  RecordDataElement *element;
+
+  element = record_data_node_new (parent,
+                                  RECORD_TYPE_ELEMENT,
+                                  sizeof (RecordDataElement) +
+                                  sizeof (RecordDataString) * n_attributes);
+  element->parent = parent;
+  element->name = name;
+  element->preserve_whitespace = name && text_is_important (name->string);
+  element->n_attributes = n_attributes;
+
+  return element;
+}
+
+static void
+record_data_element_append_text (RecordDataElement *parent,
+                                 RecordDataString  *string)
+{
+  RecordDataText *text;
+
+  text = record_data_node_new (parent,
+                               RECORD_TYPE_TEXT,
+                               sizeof (RecordDataText));
+  text->string = string;
+}
+
+static void
+record_data_node_free (RecordDataNode *node)
+{
+  GList *l, *next;
+  RecordDataText *text;
+  RecordDataElement *element;
+
+  switch (node->type)
+    {
+    case RECORD_TYPE_ELEMENT:
+      element = (RecordDataElement *)node;
+
+      l = element->children.head;
+      while (l)
+        {
+          next = l->next;
+          record_data_node_free (l->data);
+          l = next;
+        }
+
+      g_slice_free1 (sizeof (RecordDataElement) +
+                     sizeof (RecordDataString) * element->n_attributes, element);
+      break;
+    case RECORD_TYPE_TEXT:
+      text = (RecordDataText *)node;
+      g_slice_free (RecordDataText, text);
+      break;
+    case RECORD_TYPE_END_ELEMENT:
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static gboolean
+record_data_string_equal (gconstpointer _a,
+                          gconstpointer _b)
+{
+  const RecordDataString *a = _a;
+  const RecordDataString *b = _b;
+
+  return a->len == b->len &&
+         memcmp (a->string, b->string, a->len) == 0;
+}
+
+/* Copied from g_bytes_hash() */
+static guint
+record_data_string_hash (gconstpointer _a)
+{
+  const RecordDataString *a = _a;
+  const signed char *p, *e;
+  guint32 h = 5381;
+
+  for (p = (signed char *)a->string, e = (signed char *)a->string + a->len; p != e; p++)
+    h = (h << 5) + h + *p;
+
+  return h;
+}
+
+static int
+record_data_string_compare (gconstpointer _a,
+                            gconstpointer _b,
+                            gpointer      user_data)
+{
+  const RecordDataString *a = _a;
+  const RecordDataString *b = _b;
+
+  return b->count - a->count;
+}
+
+static RecordDataString *
+record_data_string_lookup (RecordData *data,
+                           const char *str,
+                           gssize      len)
+{
+  RecordDataString *s, tmp;
+  gboolean include_len = len >= 0;
+
+  if (len < 0)
+    len = strlen (str);
+
+  tmp.string = str;
+  tmp.len = len;
+
+  s = g_hash_table_lookup (data->strings, &tmp);
+  if (s)
+    {
+      s->count++;
+      s->include_len |= include_len;
+      return s;
+    }
+
+  s = g_slice_new (RecordDataString);
+  /* The string is zero terminated */
+  s->string = g_string_chunk_insert_len (data->chunks, str, len);
+  s->len = len;
+  s->count = 1;
+  s->include_len = include_len;
+  s->link.data = s;
+  s->link.next = NULL;
+  s->link.prev = NULL;
+
+  g_hash_table_add (data->strings, s);
+  g_queue_push_tail_link (&data->string_list, &s->link);
+  return s;
+}
 
 static void
 record_start_element (GMarkupParseContext  *context,
@@ -131,21 +259,20 @@ record_start_element (GMarkupParseContext  *context,
 {
   gsize n_attrs = g_strv_length ((char **)names);
   RecordData *data = user_data;
-  RecordDataTree *child;
+  RecordDataElement *child;
+  RecordDataString *name, **attr_names, **attr_values;
   int i;
 
-  child = record_data_tree_new (data->current, RECORD_TYPE_ELEMENT,
-                                record_data_string_lookup (data->strings, element_name, -1));
+  name = record_data_string_lookup (data, element_name, -1);
+  child = record_data_element_new (data->current, name, n_attrs);
   data->current = child;
 
-  child->n_attributes = n_attrs;
-  child->attributes = g_new (const char *, n_attrs);
-  child->values = g_new (const char *, n_attrs);
-
+  attr_names = &child->attributes[0];
+  attr_values = &child->attributes[n_attrs];
   for (i = 0; i < n_attrs; i++)
     {
-      child->attributes[i] = record_data_string_lookup (data->strings, names[i], -1);
-      child->values[i] = record_data_string_lookup (data->strings, values[i], -1);
+      attr_names[i] = record_data_string_lookup (data, names[i], -1);
+      attr_values[i] = record_data_string_lookup (data, values[i], -1);
     }
 }
 
@@ -160,6 +287,23 @@ record_end_element (GMarkupParseContext  *context,
   data->current = data->current->parent;
 }
 
+static gboolean
+is_whitespace (const char *text,
+               gsize       text_len)
+{
+  const char *end;
+  const char *p;
+
+  end = text + text_len;
+  for (p = text; p < end; p = g_utf8_next_char (p))
+    {
+      if (!g_unichar_isspace (g_utf8_get_char (p)))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 record_text (GMarkupParseContext  *context,
              const char           *text,
@@ -168,9 +312,16 @@ record_text (GMarkupParseContext  *context,
              GError              **error)
 {
   RecordData *data = user_data;
+  RecordDataString *string;
 
-  record_data_tree_new (data->current, RECORD_TYPE_TEXT,
-                        record_data_string_lookup (data->strings, text, text_len));
+  if (text_len == 0)
+    return;
+
+  if (!data->current->preserve_whitespace && is_whitespace (text, text_len))
+    return;
+
+  string = record_data_string_lookup (data, text, text_len);
+  record_data_element_append_text (data->current, string);
 }
 
 static const GMarkupParser record_parser =
@@ -181,16 +332,6 @@ static const GMarkupParser record_parser =
   NULL, // passthrough, not stored
   NULL, // error, fails immediately
 };
-
-static int
-compare_string (gconstpointer _a,
-                gconstpointer _b)
-{
-  const RecordDataString *a = _a;
-  const RecordDataString *b = _b;
-
-  return b->count - a->count;
-}
 
 static void
 marshal_uint32 (GString *str,
@@ -240,59 +381,76 @@ marshal_uint32 (GString *str,
     }
 }
 
-static void
-marshal_string (GString    *marshaled,
-                GHashTable *strings,
-                const char *string)
+static int
+marshal_uint32_len (guint32 v)
 {
-  RecordDataString *s;
+  if (v < 128)
+    return 1;
 
-  s = g_hash_table_lookup (strings, string);
-  g_assert (s != NULL);
+  if (v < (1<<14))
+    return 2;
 
-  marshal_uint32 (marshaled, s->offset);
+  if (v < (1<<21))
+    return 3;
+
+  if (v < (1<<28))
+    return 4;
+
+  return 5;
 }
 
 static void
 marshal_tree (GString        *marshaled,
-              GHashTable     *strings,
-              RecordDataTree *tree)
+              RecordDataNode *node)
 {
   GList *l;
   int i;
+  RecordDataText *text;
+  RecordDataElement *element;
+  RecordDataString **attr_names, **attr_values;
 
-  /* Special case the root */
-  if (tree->parent == NULL)
-    {
-      for (l = g_list_last (tree->children); l != NULL; l = l->prev)
-        marshal_tree (marshaled, strings, l->data);
-      return;
-    }
-
-  switch (tree->type)
+  switch (node->type)
     {
     case RECORD_TYPE_ELEMENT:
+      element = (RecordDataElement *)node;
+
       marshal_uint32 (marshaled, RECORD_TYPE_ELEMENT);
-      marshal_string (marshaled, strings, tree->data);
-      marshal_uint32 (marshaled, tree->n_attributes);
-      for (i = 0; i < tree->n_attributes; i++)
+      marshal_uint32 (marshaled, element->name->offset);
+      marshal_uint32 (marshaled, element->n_attributes);
+
+      attr_names = &element->attributes[0];
+      attr_values = &element->attributes[element->n_attributes];
+      for (i = 0; i < element->n_attributes; i++)
         {
-          marshal_string (marshaled, strings, tree->attributes[i]);
-          marshal_string (marshaled, strings, tree->values[i]);
+          marshal_uint32 (marshaled, attr_names[i]->offset);
+          marshal_uint32 (marshaled, attr_values[i]->offset);
         }
-      for (l = g_list_last (tree->children); l != NULL; l = l->prev)
-        marshal_tree (marshaled, strings, l->data);
+
+      for (l = element->children.head; l != NULL; l = l->next)
+        marshal_tree (marshaled, l->data);
 
       marshal_uint32 (marshaled, RECORD_TYPE_END_ELEMENT);
       break;
     case RECORD_TYPE_TEXT:
+      text = (RecordDataText *)node;
       marshal_uint32 (marshaled, RECORD_TYPE_TEXT);
-      marshal_string (marshaled, strings, tree->data);
+      marshal_uint32 (marshaled, text->string->text_offset);
       break;
     case RECORD_TYPE_END_ELEMENT:
     default:
       g_assert_not_reached ();
     }
+}
+
+static void
+marshal_root (GString        *marshaled,
+              RecordDataNode *node)
+{
+  GList *l;
+  RecordDataElement *element = (RecordDataElement *)node;
+
+  for (l = element->children.head; l != NULL; l = l->next)
+    marshal_tree (marshaled, l->data);
 }
 
 /**
@@ -313,20 +471,22 @@ _gtk_buildable_parser_precompile (const char  *text,
 {
   GMarkupParseContext *ctx;
   RecordData data = { 0 };
-  GList *string_table, *l;
+  GList *l;
   GString *marshaled;
   int offset;
 
-  data.strings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify)record_data_string_free);
-  data.root = record_data_tree_new (NULL, RECORD_TYPE_ELEMENT, NULL);
+  data.strings = g_hash_table_new (record_data_string_hash, record_data_string_equal);
+  data.chunks = g_string_chunk_new (512);
+  data.root = record_data_element_new (NULL, NULL, 0);
   data.current = data.root;
 
-  ctx = g_markup_parse_context_new (&record_parser, G_MARKUP_TREAT_CDATA_AS_TEXT,
-                                    &data, NULL);
+  ctx = g_markup_parse_context_new (&record_parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
 
-  if (!g_markup_parse_context_parse (ctx, text, text_len, error))
+  if (!g_markup_parse_context_parse (ctx, text, text_len, error) ||
+      !g_markup_parse_context_end_parse (ctx, error))
     {
-      record_data_tree_free (data.root);
+      record_data_node_free (&data.root->base);
+      g_string_chunk_free (data.chunks);
       g_hash_table_destroy (data.strings);
       g_markup_parse_context_free (ctx);
       return NULL;
@@ -334,34 +494,45 @@ _gtk_buildable_parser_precompile (const char  *text,
 
   g_markup_parse_context_free (ctx);
 
-  string_table = g_hash_table_get_values (data.strings);
-
-  string_table = g_list_sort (string_table, compare_string);
+  g_queue_sort (&data.string_list, record_data_string_compare, NULL);
 
   offset = 0;
-  for (l = string_table; l != NULL; l = l->next)
+  for (l = data.string_list.head; l != NULL; l = l->next)
     {
       RecordDataString *s = l->data;
+
+      if (s->include_len)
+        {
+          s->text_offset = offset;
+          offset += marshal_uint32_len (s->len);
+        }
+
       s->offset = offset;
-      offset += strlen (s->string) + 1;
+      offset += s->len + 1;
     }
 
-  marshaled = g_string_new ("");
+  marshaled = g_string_sized_new (4 + offset + 32);
   /* Magic marker */
   g_string_append_len (marshaled, "GBU\0", 4);
   marshal_uint32 (marshaled, offset);
 
-  for (l = string_table; l != NULL; l = l->next)
+  for (l = data.string_list.head; l != NULL; l = l->next)
     {
       RecordDataString *s = l->data;
-      g_string_append_len (marshaled, s->string, strlen (s->string) + 1);
+
+      if (s->include_len)
+        marshal_uint32 (marshaled, s->len);
+
+      g_string_append_len (marshaled, s->string, s->len + 1);
     }
 
-  g_list_free (string_table);
+  marshal_root (marshaled, &data.root->base);
 
-  marshal_tree (marshaled, data.strings, data.root);
-
-  record_data_tree_free (data.root);
+  g_slice_free_chain (RecordDataString,
+                      (RecordDataString *)data.string_list.head,
+                      link.next);
+  record_data_node_free (&data.root->base);
+  g_string_chunk_free (data.chunks);
   g_hash_table_destroy (data.strings);
 
   return g_string_free_to_bytes (marshaled);
@@ -410,6 +581,18 @@ demarshal_string (const char **tree,
   guint32 offset = demarshal_uint32 (tree);
 
   return strings + offset;
+}
+
+static const char *
+demarshal_text (const char **tree,
+                const char  *strings,
+                guint32     *len)
+{
+  guint32 offset = demarshal_uint32 (tree);
+  const char *str = strings + offset;
+
+  *len = demarshal_uint32 (&str);
+  return str;
 }
 
 static void
@@ -489,14 +672,15 @@ replay_text (GtkBuildableParseContext  *context,
              const char                *strings,
              GError                   **error)
 {
+  guint32 len;
   const char *text;
   GError *tmp_error = NULL;
 
-  text = demarshal_string (tree, strings);
+  text = demarshal_text (tree, strings, &len);
 
   (*context->internal_callbacks->text) (NULL,
                                         text,
-                                        strlen (text),
+                                        len,
                                         context,
                                         &tmp_error);
 

@@ -53,6 +53,12 @@
 #include "gtktextlayoutprivate.h"
 #include "gtkintl.h"
 
+typedef struct {
+  char *replacement;
+} GtkTextChildAnchorPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkTextChildAnchor, gtk_text_child_anchor, G_TYPE_OBJECT)
+
 #define CHECK_IN_BUFFER(anchor)                                         \
   G_STMT_START {                                                        \
     if ((anchor)->segment == NULL)                                      \
@@ -232,7 +238,7 @@ child_segment_delete_func (GtkTextLineSegment *seg,
   GSList *copy;
 
   _gtk_text_btree_unregister_child_anchor (seg->body.child.obj);
-  
+
   seg->body.child.tree = NULL;
   seg->body.child.line = NULL;
 
@@ -254,9 +260,9 @@ child_segment_delete_func (GtkTextLineSegment *seg,
   g_assert (seg->body.child.widgets == NULL);
 
   g_slist_free (copy);
-  
-  _gtk_widget_segment_unref (seg);  
-  
+
+  _gtk_widget_segment_unref (seg);
+
   return 0;
 }
 
@@ -266,9 +272,6 @@ child_segment_check_func (GtkTextLineSegment *seg,
 {
   if (seg->next == NULL)
     g_error ("child segment is the last segment in a line");
-
-  if (seg->byte_count != GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN)
-    g_error ("child segment has byte count of %d", seg->byte_count);
 
   if (seg->char_count != 1)
     g_error ("child segment has char count of %d", seg->char_count);
@@ -294,6 +297,7 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
   GtkTextLineSegment *seg;
+  GtkTextChildAnchorPrivate *priv = gtk_text_child_anchor_get_instance_private (anchor);
 
   seg = g_slice_alloc (WIDGET_SEG_SIZE);
 
@@ -301,11 +305,8 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
 
   seg->next = NULL;
 
-  /* We convert to the 0xFFFC "unknown character",
-   * a 3-byte sequence in UTF-8.
-   */
-  seg->byte_count = GTK_TEXT_UNKNOWN_CHAR_UTF8_LEN;
-  seg->char_count = 1;
+  seg->byte_count = strlen (priv->replacement);
+  seg->char_count = g_utf8_strlen (priv->replacement, seg->byte_count);
 
   seg->body.child.obj = anchor;
   seg->body.child.obj->segment = seg;
@@ -314,7 +315,7 @@ _gtk_widget_segment_new (GtkTextChildAnchor *anchor)
   seg->body.child.line = NULL;
 
   g_object_ref (anchor);
-  
+
   return seg;
 #pragma GCC diagnostic pop
 }
@@ -327,7 +328,7 @@ _gtk_widget_segment_add    (GtkTextLineSegment *widget_segment,
   g_return_if_fail (widget_segment->body.child.tree != NULL);
 
   g_object_ref (child);
-  
+
   widget_segment->body.child.widgets =
     g_slist_prepend (widget_segment->body.child.widgets,
                      child);
@@ -338,7 +339,7 @@ _gtk_widget_segment_remove (GtkTextLineSegment *widget_segment,
                             GtkWidget          *child)
 {
   g_return_if_fail (widget_segment->type == &gtk_text_child_type);
-  
+
   widget_segment->body.child.widgets =
     g_slist_remove (widget_segment->body.child.widgets,
                     child);
@@ -365,7 +366,7 @@ _gtk_widget_segment_unref (GtkTextLineSegment *widget_segment)
 GtkTextLayout*
 _gtk_anchored_child_get_layout (GtkWidget *child)
 {
-  return g_object_get_data (G_OBJECT (child), "gtk-text-child-anchor-layout");  
+  return g_object_get_data (G_OBJECT (child), "gtk-text-child-anchor-layout");
 }
 
 static void
@@ -374,12 +375,10 @@ _gtk_anchored_child_set_layout (GtkWidget     *child,
 {
   g_object_set_data (G_OBJECT (child),
                      I_("gtk-text-child-anchor-layout"),
-                     layout);  
+                     layout);
 }
-     
-static void gtk_text_child_anchor_finalize (GObject *obj);
 
-G_DEFINE_TYPE (GtkTextChildAnchor, gtk_text_child_anchor, G_TYPE_OBJECT)
+static void gtk_text_child_anchor_finalize (GObject *obj);
 
 static void
 gtk_text_child_anchor_init (GtkTextChildAnchor *child_anchor)
@@ -397,32 +396,59 @@ gtk_text_child_anchor_class_init (GtkTextChildAnchorClass *klass)
 
 /**
  * gtk_text_child_anchor_new:
- * 
+ *
  * Creates a new `GtkTextChildAnchor`.
  *
  * Usually you would then insert it into a `GtkTextBuffer` with
  * [method@Gtk.TextBuffer.insert_child_anchor]. To perform the
  * creation and insertion in one step, use the convenience
  * function [method@Gtk.TextBuffer.create_child_anchor].
- * 
+ *
  * Returns: a new `GtkTextChildAnchor`
  **/
 GtkTextChildAnchor*
 gtk_text_child_anchor_new (void)
 {
-  return g_object_new (GTK_TYPE_TEXT_CHILD_ANCHOR, NULL);
+  return gtk_text_child_anchor_new_with_replacement (_gtk_text_unknown_char_utf8);
+}
+
+/**
+ * gtk_text_child_anchor_new_with_replacement:
+ *
+ * Creates a new `GtkTextChildAnchor` with the given replacement character.
+ *
+ * Usually you would then insert it into a `GtkTextBuffer` with
+ * [method@Gtk.TextBuffer.insert_child_anchor].
+ *
+ * Returns: a new `GtkTextChildAnchor`
+ *
+ * Since: 4.6
+ **/
+GtkTextChildAnchor *
+gtk_text_child_anchor_new_with_replacement (const char *replacement_character)
+{
+  GtkTextChildAnchor *anchor;
+  GtkTextChildAnchorPrivate *priv;
+
+  /* only a single character can be set as replacement */
+  g_return_val_if_fail (g_utf8_strlen (replacement_character, -1) == 1, NULL);
+
+  anchor = g_object_new (GTK_TYPE_TEXT_CHILD_ANCHOR, NULL);
+
+  priv = gtk_text_child_anchor_get_instance_private (anchor);
+
+  priv->replacement = g_strdup (replacement_character);
+
+  return anchor;
 }
 
 static void
 gtk_text_child_anchor_finalize (GObject *obj)
 {
-  GtkTextChildAnchor *anchor;
-  GtkTextLineSegment *seg;
-  
-  anchor = GTK_TEXT_CHILD_ANCHOR (obj);
+  GtkTextChildAnchor *anchor = GTK_TEXT_CHILD_ANCHOR (obj);
+  GtkTextChildAnchorPrivate *priv = gtk_text_child_anchor_get_instance_private (anchor);
+  GtkTextLineSegment *seg = anchor->segment;
 
-  seg = anchor->segment;
-  
   if (seg)
     {
       if (seg->body.child.tree != NULL)
@@ -438,7 +464,7 @@ gtk_text_child_anchor_finalize (GObject *obj)
       g_slice_free1 (WIDGET_SEG_SIZE, seg);
     }
 
-  anchor->segment = NULL;
+  g_free (priv->replacement);
 
   G_OBJECT_CLASS (gtk_text_child_anchor_parent_class)->finalize (obj);
 }
@@ -447,7 +473,7 @@ gtk_text_child_anchor_finalize (GObject *obj)
  * gtk_text_child_anchor_get_widgets:
  * @anchor: a `GtkTextChildAnchor`
  * @out_len: (out): return location for the length of the array
- * 
+ *
  * Gets a list of all widgets anchored at this child anchor.
  *
  * The order in which the widgets are returned is not defined.
@@ -512,7 +538,7 @@ gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor)
   GtkTextLineSegment *seg = anchor->segment;
 
   CHECK_IN_BUFFER_RETURN (anchor, TRUE);
-  
+
   g_return_val_if_fail (seg->type == &gtk_text_child_type, TRUE);
 
   return seg->body.child.tree == NULL;
@@ -527,9 +553,9 @@ gtk_text_child_anchor_register_child (GtkTextChildAnchor *anchor,
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   CHECK_IN_BUFFER (anchor);
-  
+
   _gtk_anchored_child_set_layout (child, layout);
-  
+
   _gtk_widget_segment_add (anchor->segment, child);
 
   gtk_text_child_anchor_queue_resize (anchor, layout);
@@ -543,15 +569,15 @@ gtk_text_child_anchor_unregister_child (GtkTextChildAnchor *anchor,
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   CHECK_IN_BUFFER (anchor);
-  
+
   if (_gtk_anchored_child_get_layout (child))
     {
       gtk_text_child_anchor_queue_resize (anchor,
                                           _gtk_anchored_child_get_layout (child));
     }
-  
+
   _gtk_anchored_child_set_layout (child, NULL);
-  
+
   _gtk_widget_segment_remove (anchor->segment, child);
 }
 
@@ -562,22 +588,22 @@ gtk_text_child_anchor_queue_resize (GtkTextChildAnchor *anchor,
   GtkTextIter start;
   GtkTextIter end;
   GtkTextLineSegment *seg;
-  
+
   g_return_if_fail (GTK_IS_TEXT_CHILD_ANCHOR (anchor));
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
 
   CHECK_IN_BUFFER (anchor);
-  
+
   seg = anchor->segment;
 
   if (seg->body.child.tree == NULL)
     return;
-  
+
   gtk_text_buffer_get_iter_at_child_anchor (layout->buffer,
                                             &start, anchor);
   end = start;
   gtk_text_iter_forward_char (&end);
-  
+
   gtk_text_layout_invalidate (layout, &start, &end);
 }
 
@@ -587,6 +613,14 @@ gtk_text_anchored_child_set_layout (GtkWidget     *child,
 {
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (layout == NULL || GTK_IS_TEXT_LAYOUT (layout));
-  
+
   _gtk_anchored_child_set_layout (child, layout);
+}
+
+const char *
+gtk_text_child_anchor_get_replacement (GtkTextChildAnchor *anchor)
+{
+  GtkTextChildAnchorPrivate *priv = gtk_text_child_anchor_get_instance_private (anchor);
+
+  return priv->replacement;
 }

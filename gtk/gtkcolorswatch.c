@@ -65,6 +65,7 @@ struct _GtkColorSwatch
 
   GtkWidget *popover;
   GtkDropTarget *dest;
+  GtkDragSource *source;
 };
 
 struct _GtkColorSwatchClass
@@ -81,7 +82,8 @@ enum
   PROP_RGBA,
   PROP_SELECTABLE,
   PROP_HAS_MENU,
-  PROP_CAN_DROP
+  PROP_CAN_DROP,
+  PROP_CAN_DRAG
 };
 
 G_DEFINE_TYPE (GtkColorSwatch, gtk_color_swatch, GTK_TYPE_WIDGET)
@@ -429,6 +431,9 @@ swatch_get_property (GObject    *object,
     case PROP_CAN_DROP:
       g_value_set_boolean (value, swatch->dest != NULL);
       break;
+    case PROP_CAN_DRAG:
+      g_value_set_boolean (value, swatch->source != NULL);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -457,6 +462,9 @@ swatch_set_property (GObject      *object,
     case PROP_CAN_DROP:
       gtk_color_swatch_set_can_drop (swatch, g_value_get_boolean (value));
       break;
+    case PROP_CAN_DRAG:
+      gtk_color_swatch_set_can_drag (swatch, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -470,7 +478,7 @@ swatch_finalize (GObject *object)
 
   g_free (swatch->icon);
   gtk_widget_unparent (swatch->overlay_widget);
- 
+
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->finalize (object);
 }
 
@@ -512,11 +520,14 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   g_object_class_install_property (object_class, PROP_CAN_DROP,
       g_param_spec_boolean ("can-drop", P_("Can Drop"), P_("Whether the swatch should accept drops"),
                             FALSE, GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class, PROP_CAN_DRAG,
+      g_param_spec_boolean ("can-drag", P_("Can Drag"), P_("Whether the swatch should allow drags"),
+                            TRUE, GTK_PARAM_READWRITE));
 
   /**
    * GtkColorSwatch|menu.popup:
    *
-   * Opens the context menu. 
+   * Opens the context menu.
    */
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, swatch_popup_menu);
 
@@ -568,6 +579,8 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
                     G_CALLBACK (key_controller_key_pressed), swatch);
   gtk_widget_add_controller (GTK_WIDGET (swatch), controller);
 
+  gtk_color_swatch_set_can_drag (swatch, TRUE);
+
   gtk_widget_add_css_class (GTK_WIDGET (swatch), "activatable");
 
   swatch->overlay_widget = g_object_new (GTK_TYPE_IMAGE,
@@ -598,18 +611,10 @@ void
 gtk_color_swatch_set_rgba (GtkColorSwatch *swatch,
                            const GdkRGBA  *color)
 {
-  if (!swatch->has_color)
-    {
-      GtkDragSource *source;
-
-      source = gtk_drag_source_new ();
-      g_signal_connect (source, "prepare", G_CALLBACK (gtk_color_swatch_drag_prepare), swatch);
-
-      gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (source));
-    }
-
   swatch->has_color = TRUE;
   swatch->color = *color;
+  if (swatch->source)
+    gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (swatch->source), GTK_PHASE_CAPTURE);
 
   if (INTENSITY (swatch->color.red, swatch->color.green, swatch->color.blue) > 0.5)
     {
@@ -679,6 +684,30 @@ gtk_color_swatch_set_can_drop (GtkColorSwatch *swatch,
     }
 
   g_object_notify (G_OBJECT (swatch), "can-drop");
+}
+
+void
+gtk_color_swatch_set_can_drag (GtkColorSwatch *swatch,
+                               gboolean        can_drag)
+{
+  if (can_drag == (swatch->source != NULL))
+    return;
+
+  if (can_drag && !swatch->source)
+    {
+      swatch->source = gtk_drag_source_new ();
+      g_signal_connect (swatch->source, "prepare", G_CALLBACK (gtk_color_swatch_drag_prepare), swatch);
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (swatch->source),
+                                                  swatch->has_color ? GTK_PHASE_CAPTURE : GTK_PHASE_NONE);
+      gtk_widget_add_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (swatch->source));
+    }
+  if (!can_drag && swatch->source)
+    {
+      gtk_widget_remove_controller (GTK_WIDGET (swatch), GTK_EVENT_CONTROLLER (swatch->source));
+      swatch->source = NULL;
+    }
+
+  g_object_notify (G_OBJECT (swatch), "can-drag");
 }
 
 void

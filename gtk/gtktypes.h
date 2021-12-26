@@ -69,7 +69,7 @@ typedef struct _GtkWindow              GtkWindow;
  * Refer to each function's documentation for if this value is
  * allowed and what it does.
  */
-#define GTK_INVALID_LIST_POSITION (0xffffffffU)
+#define GTK_INVALID_LIST_POSITION ((guint) 0xffffffff)
 
 G_END_DECLS
 

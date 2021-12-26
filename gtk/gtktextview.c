@@ -1863,13 +1863,13 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        NULL);
 
   /* Emoji */
-  gtk_widget_class_add_binding_signal (widget_class,
+  gtk_widget_class_add_binding_action (widget_class,
                                        GDK_KEY_period, GDK_CONTROL_MASK,
-                                       "insert-emoji",
+                                       "misc.insert-emoji",
                                        NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
+  gtk_widget_class_add_binding_action (widget_class,
                                        GDK_KEY_semicolon, GDK_CONTROL_MASK,
-                                       "insert-emoji",
+                                       "misc.insert-emoji",
                                        NULL);
 
   /* Caret mode */
@@ -2641,16 +2641,16 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
       if (cursor.y < screen_inner_top)
         {
           if (cursor.y == 0)
-            border_yoffset = (with_border) ? priv->top_padding : 0;
+            border_yoffset = with_border ? priv->top_padding : 0;
 
           screen_dest.y = cursor.y - MAX (within_margin_yoffset, border_yoffset);
         }
       else if (cursor_bottom > screen_inner_bottom)
         {
           if (cursor_bottom == buffer_bottom - priv->top_margin)
-            border_yoffset = (with_border) ? priv->bottom_padding : 0;
+            border_yoffset = with_border ? priv->bottom_padding : 0;
 
-          screen_dest.y = cursor_bottom - screen_dest.height +
+          screen_dest.y = cursor_bottom - screen_dest.height -
                           MAX (within_margin_yoffset, border_yoffset);
         }
     }
@@ -2679,16 +2679,16 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
       if (cursor.x < screen_inner_left)
         {
           if (cursor.x == priv->left_margin)
-            border_xoffset = (with_border) ? priv->left_padding : 0;
+            border_xoffset = with_border ? priv->left_padding : 0;
 
           screen_dest.x = cursor.x - MAX (within_margin_xoffset, border_xoffset);
         }
       else if (cursor_right >= screen_inner_right - 1)
         {
           if (cursor.x >= buffer_right - priv->right_padding)
-            border_xoffset = (with_border) ? priv->right_padding : 0;
+            border_xoffset = with_border ? priv->right_padding : 0;
 
-          screen_dest.x = cursor_right - screen_dest.width +
+          screen_dest.x = cursor_right - screen_dest.width -
                           MAX (within_margin_xoffset, border_xoffset) + 1;
         }
     }
@@ -8566,6 +8566,8 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
   GtkTextIter end;
   GtkTextIter start1;
   GtkTextIter end1;
+  GtkTextIter start2;
+  GtkTextIter end2;
   int cursor_pos;
   int anchor_pos;
   char *text;
@@ -8588,6 +8590,16 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
 
   gtk_text_iter_set_line_offset (&start1, 0);
   gtk_text_iter_forward_to_line_end (&end1);
+
+  start2 = start;
+  gtk_text_iter_backward_word_starts (&start2, 3);
+  if (gtk_text_iter_compare (&start2, &start1) < 0)
+    start1 = start2;
+
+  end2 = end;
+  gtk_text_iter_forward_word_ends (&end2, 3);
+  if (gtk_text_iter_compare (&end2, &end1) > 0)
+    end1 = end2;
 
   pre = gtk_text_iter_get_slice (&start1, &start);
   sel = gtk_text_iter_get_slice (&start, &end);
@@ -10012,6 +10024,10 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
                                     gtk_text_buffer_get_insert (buffer));
 
   gtk_text_view_get_iter_location (text_view, &iter, (GdkRectangle *) &rect);
+
+  rect.width = MAX (rect.width, 1);
+  rect.height = MAX (rect.height, 1);
+
   gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
                                          rect.x, rect.y, &rect.x, &rect.y);
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);

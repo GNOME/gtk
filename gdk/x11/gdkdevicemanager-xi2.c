@@ -1665,7 +1665,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                    _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
                                                    direction,
                                                    FALSE);
-                                                   
+
           }
         else
           {
@@ -1799,7 +1799,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                       _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group),
                                       x, y,
                                       axes);
-                                       
+
       }
       break;
 
@@ -1838,7 +1838,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         x = (double) xev->event_x / scale;
         y = (double) xev->event_y / scale;
- 
+
         event = gdk_touch_event_new (ev->evtype == XI_TouchBegin
                                        ? GDK_TOUCH_BEGIN
                                        : GDK_TOUCH_END,
@@ -1946,6 +1946,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         y = (double) xev->event_y / scale;
 
         event = gdk_touchpad_event_new_pinch (surface,
+                                              NULL, /* FIXME make up sequences */
                                               device,
                                               xev->time,
                                               state,
@@ -2006,6 +2007,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         y = (double) xev->event_y / scale;
 
         event = gdk_touchpad_event_new_swipe (surface,
+                                              NULL, /* FIXME make up sequences */
                                               device,
                                               xev->time,
                                               state,

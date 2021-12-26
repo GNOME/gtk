@@ -776,6 +776,7 @@ gtk_popover_key_pressed (GtkWidget       *widget,
                          GdkModifierType  state)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
+  GtkWindow *root;
 
   if (keyval == GDK_KEY_Escape)
     {
@@ -783,6 +784,8 @@ gtk_popover_key_pressed (GtkWidget       *widget,
       return TRUE;
     }
 
+  root = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (popover)));
+  _gtk_window_update_focus_visible (root, keyval, state, TRUE);
   update_mnemonics_visible (popover, keyval, state, TRUE);
 
   return FALSE;
@@ -795,7 +798,10 @@ gtk_popover_key_released (GtkWidget       *widget,
                           GdkModifierType  state)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
+  GtkWindow *root;
 
+  root = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (popover)));
+  _gtk_window_update_focus_visible (root, keyval, state, FALSE);
   update_mnemonics_visible (popover, keyval, state, FALSE);
 
   return FALSE;

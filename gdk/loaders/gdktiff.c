@@ -240,7 +240,7 @@ static const FormatData format_data[] = {
   [GDK_MEMORY_A8R8G8B8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA },
   [GDK_MEMORY_R8G8B8A8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA },
   [GDK_MEMORY_A8B8G8R8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA },
-  [GDK_MEMORY_R8G8B8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0                      }, 
+  [GDK_MEMORY_R8G8B8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0                      },
   [GDK_MEMORY_B8G8R8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0                      },
   [GDK_MEMORY_R16G16B16]                        = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   0                      },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED]       = { GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,       16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA },
@@ -376,6 +376,13 @@ gdk_load_tiff (GBytes  *input_bytes,
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
   tif = tiff_open_read (input_bytes);
+  if (!tif)
+    {
+      g_set_error_literal (error,
+                           GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
+                           _("Could not load TIFF data"));
+      return NULL;
+    }
 
   TIFFSetDirectory (tif, 0);
 

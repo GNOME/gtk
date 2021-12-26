@@ -33,6 +33,12 @@
 
 #include <hb-ot.h>
 
+/* maximal number of rectangles we keep in a diff region before we throw
+ * the towel and just use the bounding box of the parent node.
+ * Meant to avoid performance corner cases.
+ */
+#define MAX_RECTS_IN_DIFF 30
+
 static inline void
 gsk_cairo_rectangle (cairo_t               *cr,
                      const graphene_rect_t *rect)
@@ -828,18 +834,14 @@ project (double  angle,
 {
   double x, y;
 
-  x = radius * cos (angle);
-  y = radius * sin (angle);
-  if (copysign (x, 1.0) > copysign (y, 1.0))
-    {
-      *x_out = copysign (radius, x);
-      *y_out = y * radius / copysign (x, 1.0);
-    }
-  else
-    {
-      *x_out = x * radius / copysign (y, 1.0);
-      *y_out = copysign (radius, y);
-    }
+#ifdef HAVE_SINCOS
+  sincos (angle, &y, &x);
+#else
+  x = cos (angle);
+  y = sin (angle);
+#endif
+  *x_out = radius * x;
+  *y_out = radius * y;
 }
 
 static void
@@ -2605,32 +2607,35 @@ gsk_container_node_draw (GskRenderNode *node,
     }
 }
 
-static void
-gsk_render_node_add_to_region (GskRenderNode  *node,
-                               cairo_region_t *region)
-{
-  cairo_rectangle_int_t rect;
-
-  rectangle_init_from_graphene (&rect, &node->bounds);
-  cairo_region_union_rectangle (region, &rect);
-}
-
 static int
 gsk_container_node_compare_func (gconstpointer elem1, gconstpointer elem2, gpointer data)
 {
   return gsk_render_node_can_diff ((const GskRenderNode *) elem1, (const GskRenderNode *) elem2) ? 0 : 1;
 }
 
-static void
+static GskDiffResult
 gsk_container_node_keep_func (gconstpointer elem1, gconstpointer elem2, gpointer data)
 {
   gsk_render_node_diff ((GskRenderNode *) elem1, (GskRenderNode *) elem2, data);
+  if (cairo_region_num_rectangles (data) > MAX_RECTS_IN_DIFF)
+    return GSK_DIFF_ABORTED;
+
+  return GSK_DIFF_OK;
 }
 
-static void
+static GskDiffResult
 gsk_container_node_change_func (gconstpointer elem, gsize idx, gpointer data)
 {
-  gsk_render_node_add_to_region ((GskRenderNode *) elem, data);
+  const GskRenderNode *node = elem;
+  cairo_region_t *region = data;
+  cairo_rectangle_int_t rect;
+
+  rectangle_init_from_graphene (&rect, &node->bounds);
+  cairo_region_union_rectangle (region, &rect);
+  if (cairo_region_num_rectangles (region) > MAX_RECTS_IN_DIFF)
+    return GSK_DIFF_ABORTED;
+
+  return GSK_DIFF_OK;
 }
 
 static GskDiffSettings *

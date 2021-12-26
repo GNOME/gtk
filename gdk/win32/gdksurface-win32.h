@@ -337,6 +337,7 @@ struct _GdkWin32Surface
     int configured_height;
     RECT configured_rect;
   } next_layout;
+  gboolean force_recompute_size;
 
 #ifdef HAVE_EGL
   guint egl_force_redraw_all : 1;

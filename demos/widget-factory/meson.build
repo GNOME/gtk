@@ -74,7 +74,7 @@ executable('gtk4-widget-factory',
   c_args: common_cflags,
   dependencies: [ libgtk_dep, demo_conf_h ],
   include_directories: confinc,
-  gui_app: true,
+  win_subsystem: 'windows',
   link_args: extra_demo_ldflags,
   install: true,
 )

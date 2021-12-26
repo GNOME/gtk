@@ -1,7 +1,90 @@
-Overview of Changes
-===================
+Overview of Changes in 4.5.1, 16-12-2021
+========================================
+
+* GtkWidget sizing has been rewritten to implement
+  width-for-height more properly. This had some fallout,
+  and some widgets may still not react kindly to the
+  new way of doing things.
+
+  See https://blog.gtk.org/2021/12/03/sizable-news/
+  for details, and please file issues if you notice fallout.
 
 * Rename git `master` branch to `main`
+
+* Css:
+ - Fully support font-variant-caps
+ - Fix a crash with gradients
+
+* Make various widgets activatable:
+ - GtkComboBox
+ - GtkDropDown
+
+* GtkPopover:
+ - Make focus indicators not disappear
+
+* GtkTextView:
+ - Don't leave embedded children stranded when scrolling
+ - Don't insert Emoji into non-editable textviews
+ - Fix Emoji chooser positioning
+ - Fix problems with pasting text
+ - Improve scroll-to-mark behavior
+ - Support right-aligned, centered and decimal tabs
+ - Make child anchor replacement character settable
+ - Provide more context to input methods
+
+* GtkDragIcon:
+ - Provide default icons for paintables and files
+
+* GtkBuilder:
+ - Speed up template precompilation
+
+* Actions:
+ - Reduce allocations during signal emissions
+ - Avoid duplication and unnecessary recursion
+
+* Inspector:
+ - Show the selected im-module in the General tab
+ - Add a clipboard viewer
+ - Make the recorder record events too
+ - Add a graph visualizing gtk_widget_measure()
+
+* Gsk:
+ - Fix hexbox rendering
+ - Fix transformed linear gradient rendering
+
+* Printing:
+ - Fix dialog-less printing
+
+* Windows:
+ - Use the common EGL setup code
+ - Respect GDK_DEBUG=gl-egl
+ - Fix AeroSnap indicator and positioning
+
+* X11:
+ - Improve behavior of windows drags on headerbar controls
+ - Trap errors for RANDR changes
+ - Fix problems with drag icons
+
+* Wayland:
+ - Ensure we prefer the Wayland im-module over others
+
+* Translation updates
+ Basque
+ Catalan
+ Croatian
+ Friulian
+ Galician
+ Hebrew
+ Icelandic
+ Italian
+ Latvian
+ Lithuanian
+ Occitan
+ Persian
+ Portuguese
+ Spanish
+ Swedish
+ Ukrainian
 
 Overview of Changes in 4.5.0
 ============================

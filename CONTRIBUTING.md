@@ -256,7 +256,7 @@ people committing to GTK to follow a few rules:
 0. Always write a meaningful commit message. Changes without a sufficient
    commit message will be reverted.
 
-0. Never push to the `master` branch, or any stable branches, directly; you
+0. Never push to the `main` branch, or any stable branches, directly; you
    should always go through a merge request, to ensure that the code is
    tested on the CI infrastructure at the very least. A merge request is
    also the proper place to get a comprehensive code review from the core

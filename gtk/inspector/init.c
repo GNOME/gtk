@@ -27,6 +27,7 @@
 #include "a11y.h"
 #include "actions.h"
 #include "cellrenderergraph.h"
+#include "clipboard.h"
 #include "controllers.h"
 #include "css-editor.h"
 #include "css-node-tree.h"
@@ -35,6 +36,7 @@
 #include "list-data.h"
 #include "logs.h"
 #include "magnifier.h"
+#include "measuregraph.h"
 #include "menu.h"
 #include "misc-info.h"
 #include "object-tree.h"
@@ -64,6 +66,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_GRAPH_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_A11Y);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
+  g_type_ensure (GTK_TYPE_INSPECTOR_CLIPBOARD);
   g_type_ensure (GTK_TYPE_INSPECTOR_CONTROLLERS);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_EDITOR);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_NODE_TREE);
@@ -72,6 +75,7 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_LOGS);
   g_type_ensure (GTK_TYPE_MAGNIFIER);
   g_type_ensure (GTK_TYPE_INSPECTOR_MAGNIFIER);
+  g_type_ensure (GTK_TYPE_INSPECTOR_MEASURE_GRAPH);
   g_type_ensure (GTK_TYPE_INSPECTOR_MENU);
   g_type_ensure (GTK_TYPE_INSPECTOR_MISC_INFO);
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_TREE);
