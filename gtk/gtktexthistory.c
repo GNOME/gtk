@@ -981,11 +981,8 @@ gtk_text_history_selection_changed (GtkTextHistory *self,
   return_if_applying (self);
   return_if_irreversible (self);
 
-  if (self->in_user == 0 && self->irreversible == 0)
-    {
-      self->selection.insert = CLAMP (selection_insert, -1, G_MAXINT);
-      self->selection.bound = CLAMP (selection_bound, -1, G_MAXINT);
-    }
+  self->selection.insert = CLAMP (selection_insert, -1, G_MAXINT);
+  self->selection.bound = CLAMP (selection_bound, -1, G_MAXINT);
 }
 
 void
