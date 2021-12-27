@@ -812,11 +812,6 @@ gtk_switch_dispose (GObject *object)
       priv->action = NULL;
     }
 
-  g_clear_object (&priv->gadget);
-  g_clear_object (&priv->slider_gadget);
-  g_clear_object (&priv->on_gadget);
-  g_clear_object (&priv->off_gadget);
-
   g_clear_object (&priv->pan_gesture);
   g_clear_object (&priv->multipress_gesture);
 
@@ -826,7 +821,13 @@ gtk_switch_dispose (GObject *object)
 static void
 gtk_switch_finalize (GObject *object)
 {
+  GtkSwitchPrivate *priv = GTK_SWITCH (object)->priv;
   gtk_switch_end_toggle_animation (GTK_SWITCH (object));
+
+  g_clear_object (&priv->gadget);
+  g_clear_object (&priv->slider_gadget);
+  g_clear_object (&priv->on_gadget);
+  g_clear_object (&priv->off_gadget);
 
   G_OBJECT_CLASS (gtk_switch_parent_class)->finalize (object);
 }
