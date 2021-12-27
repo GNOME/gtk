@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-17 00:32+0000\n"
-"PO-Revision-Date: 2021-12-18 08:28+0200\n"
+"POT-Creation-Date: 2021-12-27 13:54+0000\n"
+"PO-Revision-Date: 2021-12-27 16:07+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -49,7 +49,7 @@ msgstr "Не вдалося надати дані як «%s»"
 msgid "Cannot provide contents as %s"
 msgstr "Не вдалося надати дані як %s"
 
-#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:421
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:427
 msgid "The current backend does not support OpenGL"
 msgstr "Цей модуль не підтримує OpenGL"
 
@@ -111,34 +111,34 @@ msgstr ""
 msgid "No compatible formats to transfer contents."
 msgstr "Немає сумісних форматів для передавання даних."
 
-#: gdk/gdkglcontext.c:323
+#: gdk/gdkglcontext.c:329
 msgid "The EGL implementation does not support any allowed APIs"
 msgstr ""
 "У реалізації EGL не передбачено підтримки жодного з дозволених програмних "
 "інтерфейсів"
 
-#: gdk/gdkglcontext.c:404 gdk/win32/gdkglcontext-win32-wgl.c:624
-#: gdk/x11/gdkglcontext-glx.c:622
+#: gdk/gdkglcontext.c:410 gdk/win32/gdkglcontext-win32-wgl.c:624
+#: gdk/x11/gdkglcontext-glx.c:624
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
-#: gdk/gdkglcontext.c:1237
+#: gdk/gdkglcontext.c:1260
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "За допомогою GDK_DEBUG вимкнено усе, окрім OpenGL ES"
 
-#: gdk/gdkglcontext.c:1246
+#: gdk/gdkglcontext.c:1269
 #, c-format
 msgid "Application does not support %s API"
 msgstr "У програмі не передбачено підтримки програмного інтерфейсу %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1732
+#: gdk/gdkglcontext.c:1790
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Намагаємося скористатися %s, але %s вже використано"
 
-#: gdk/gdksurface.c:1238
+#: gdk/gdksurface.c:1240
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Вимкнено підтримування Vulkan через GDK_DEBUG"
 
@@ -800,15 +800,15 @@ msgstr ""
 "Не вдалося зберегти буфер обміну. Немає активної програми для керування "
 "буфером обміну."
 
-#: gdk/x11/gdkglcontext-glx.c:778
+#: gdk/x11/gdkglcontext-glx.c:780
 msgid "No GLX configurations available"
 msgstr "Немає доступних налаштувань GLX"
 
-#: gdk/x11/gdkglcontext-glx.c:851
+#: gdk/x11/gdkglcontext-glx.c:853
 msgid "No GLX configuration with required features found"
 msgstr "Не знайдено налаштувань GLX із потрібними можливостями"
 
-#: gdk/x11/gdkglcontext-glx.c:925
+#: gdk/x11/gdkglcontext-glx.c:927
 msgid "GLX is not supported"
 msgstr "Підтримки GLX не передбачено"
 
@@ -2215,7 +2215,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5533 gtk/gtktext.c:6064 gtk/gtktextview.c:8920
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6064 gtk/gtktextview.c:8920
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2481,27 +2481,27 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/gtklabel.c:5530 gtk/gtktext.c:6052 gtk/gtktextview.c:8908
+#: gtk/gtklabel.c:5641 gtk/gtktext.c:6052 gtk/gtktextview.c:8908
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5531 gtk/gtktext.c:6056 gtk/gtktextview.c:8912
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6056 gtk/gtktextview.c:8912
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5532 gtk/gtktext.c:6060 gtk/gtktextview.c:8916
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6060 gtk/gtktextview.c:8916
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5538 gtk/gtktext.c:6073 gtk/gtktextview.c:8941
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6073 gtk/gtktextview.c:8941
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5543
+#: gtk/gtklabel.c:5654
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5547
+#: gtk/gtklabel.c:5658
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
@@ -3591,30 +3591,40 @@ msgstr "Тип параметра"
 msgid "State"
 msgstr "Стан"
 
-#: gtk/inspector/clipboard.c:149
+#: gtk/inspector/clipboard.c:211
 msgid "Show"
 msgstr "Показати"
 
-#: gtk/inspector/clipboard.c:205
+#: gtk/inspector/clipboard.c:228
+#| msgid "Copy to clipboard"
+msgid "Hover to load"
+msgstr "Наведення для завантаження"
+
+#: gtk/inspector/clipboard.c:278
 msgctxt "clipboard"
 msgid "empty"
 msgstr "порожній"
 
-#: gtk/inspector/clipboard.c:210
+#: gtk/inspector/clipboard.c:283 gtk/inspector/clipboard.c:325
 msgctxt "clipboard"
 msgid "local"
 msgstr "локальний"
 
-#: gtk/inspector/clipboard.c:212
+#: gtk/inspector/clipboard.c:285 gtk/inspector/clipboard.c:327
 msgctxt "clipboard"
 msgid "remote"
 msgstr "віддалений"
 
-#: gtk/inspector/clipboard.ui:31 gtk/inspector/window.ui:574
+#: gtk/inspector/clipboard.ui:31
+msgid "Drag and hold here"
+msgstr ""
+"Перетягніть і затримайте тут"
+
+#: gtk/inspector/clipboard.ui:75 gtk/inspector/window.ui:574
 msgid "Clipboard"
 msgstr "Буфер обміну"
 
-#: gtk/inspector/clipboard.ui:70
+#: gtk/inspector/clipboard.ui:114
 msgid "Primary"
 msgstr "Основний"
 
@@ -3838,8 +3848,7 @@ msgstr "Режим запиту"
 
 #: gtk/inspector/misc-info.ui:269
 msgid "Measure map"
-msgstr ""
-"Мапа вимірювання"
+msgstr "Мапа вимірювання"
 
 #: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
@@ -4018,8 +4027,7 @@ msgstr "Додати діагностичні вузли"
 
 #: gtk/inspector/recorder.ui:42
 msgid "Highlight event sequences"
-msgstr ""
-"Підсвітити послідовності подій"
+msgstr "Підсвітити послідовності подій"
 
 #: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
