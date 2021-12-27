@@ -21,7 +21,7 @@
         <item>
           <attribute name="label" translatable="yes">Save _As...</attribute>
           <attribute name="action">app.save-as</attribute>
-          <attribute name="accel">&lt;Control&gt;s</attribute>
+          <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;s</attribute>
         </item>
       </section>
       <section>
