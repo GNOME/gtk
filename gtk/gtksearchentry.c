@@ -763,7 +763,7 @@ gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
  *
  * Gets the widget that @entry is capturing key events from.
  *
- * Returns: (transfer none): The key capture widget.
+ * Returns: (nullable) (transfer none): The key capture widget.
  */
 GtkWidget *
 gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry)
