@@ -2103,7 +2103,7 @@ gtk_popover_buildable_init (GtkBuildableIface *iface)
 /**
  * gtk_popover_set_pointing_to: (attributes org.gtk.Method.set_property=pointing-to)
  * @popover: a `GtkPopover`
- * @rect: rectangle to point to
+ * @rect: (nullable): rectangle to point to
  *
  * Sets the rectangle that @popover points to.
  *
