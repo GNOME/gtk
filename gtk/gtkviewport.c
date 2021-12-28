@@ -150,11 +150,17 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
                                 int             child_size)
 {
   GtkAdjustment *adjustment;
-  double upper, value;
+  double upper, value, old_range;
 
   adjustment = viewport->adjustment[orientation];
   upper = child_size;
   value = gtk_adjustment_get_value (adjustment);
+  old_range = gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_page_size (adjustment);
+  if (old_range > 0)
+    {
+      double percentage = value / old_range;
+      value = percentage * (child_size - viewport_size);
+    }
 
   /* We clamp to the left in RTL mode */
   if (orientation == GTK_ORIENTATION_HORIZONTAL &&
