@@ -20,7 +20,8 @@
 
 G_BEGIN_DECLS
 
-void gtk_inspector_init (void);
+void gtk_inspector_init               (void);
+void gtk_inspector_register_extension (void);
 
 G_END_DECLS
 
