@@ -106,6 +106,8 @@ main (int argc, char *argv[])
 
 ### Integrating GTest in your project
 
+#### Using Meson
+
 If you are using the Meson build system, you will typically use the provided
 `test()` primitive to call the test binaries, e.g.:
 
@@ -117,6 +119,7 @@ test(
     'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
     'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
   ],
+  protocol: 'tap',
 )
 
 test(
@@ -126,15 +129,18 @@ test(
     'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
     'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
   ],
+  protocol: 'tap',
 )
 ```
+
+#### Using Autotools
 
 If you are using Autotools, you're strongly encouraged to use the Automake
 TAP harness; GLib provides template files for easily integrating with it:
 
-- `glib-tap.mk`
-- `tap-test`
-- `tap-driver.sh`
+- [`glib-tap.mk`](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/glib-tap.mk)
+- [`tap-test`](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/tap-test)
+- [`tap-driver.sh`](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/tap-driver.sh)
 
 You can copy these files in your own project's root directory, and then set
 up your `Makefile.am` file to reference them, for instance:
@@ -170,7 +176,8 @@ EXTRA_DIST += \
 `Makefile.am`. All three files should be added to version control.
 
 If you don't have access to the Autotools TAP harness, you can use the
-gtester and gtester-report tools, and use the `glib.mk` Automake template
-provided by GLib. Note, however, that since GLib 2.62, gtester and
-gtester-report have been deprecated in favour of using TAP. The `--tap`
-argument to tests is enabled by default as of GLib 2.62.
+gtester and gtester-report tools, and use the
+[`glib.mk`](https://gitlab.gnome.org/GNOME/glib/blob/glib-2-58/glib.mk)
+Automake template provided by GLib. Note, however, that since GLib 2.62,
+gtester and gtester-report have been deprecated in favour of using TAP. The
+`--tap` argument to tests is enabled by default as of GLib 2.62.
