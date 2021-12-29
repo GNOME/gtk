@@ -148,6 +148,14 @@
  * # Accessibility
  *
  * `GtkWindow` uses the %GTK_ACCESSIBLE_ROLE_WINDOW role.
+ * 
+ * # Actions
+ * 
+ * `GtkWindow` defines a set of built-in actions:
+ * - `default.activate`: Activate the default widget.
+ * - `window.minimize`: Minimize the window.
+ * - `window.toggle-maximized`: Maximize or restore the window.
+ * - `window.close`: Close the window.
  */
 
 #define MENU_BAR_ACCEL GDK_KEY_F10
@@ -1200,7 +1208,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   /**
    * GtkWindow|window.minimize:
    *
-   * Close the window.
+   * Minimize the window.
    */
   gtk_widget_class_install_action (widget_class, "window.minimize", NULL,
                                    gtk_window_activate_minimize);
