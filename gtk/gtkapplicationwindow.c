@@ -435,9 +435,11 @@ gtk_application_window_measure (GtkWidget      *widget,
           gtk_widget_measure (priv->menubar, GTK_ORIENTATION_VERTICAL,
                               for_size, &menubar_height, NULL, NULL, NULL);
 
+
           GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
                                                                            orientation,
-                                                                           for_size - menubar_height,
+                                                                           for_size > -1 ?
+                                                                             for_size - menubar_height : -1,
                                                                            minimum, natural,
                                                                            minimum_baseline, natural_baseline);
 
