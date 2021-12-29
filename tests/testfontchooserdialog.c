@@ -15,9 +15,14 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "config.h"
+
 #include <string.h>
+#ifdef HAVE_PANGOFT
 #include <pango/pangofc-fontmap.h>
+#endif
 #include <gtk/gtk.h>
+
 
 static gboolean
 monospace_filter (const PangoFontFamily *family,
@@ -86,6 +91,7 @@ main (int argc, char *argv[])
 
   font_button = gtk_font_button_new ();
 
+#ifdef HAVE_PANGOFT
   if (argc > 0)
     {
       FcConfig *config;
@@ -103,6 +109,7 @@ main (int argc, char *argv[])
       pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (fontmap), config);
       gtk_font_chooser_set_font_map (GTK_FONT_CHOOSER (font_button), fontmap);
     }
+#endif
 
   gtk_font_button_set_use_font (GTK_FONT_BUTTON (font_button), TRUE);
 
