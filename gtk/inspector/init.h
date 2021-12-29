@@ -18,12 +18,10 @@
 #ifndef _GTK_INSPECTOR_INIT_H_
 #define _GTK_INSPECTOR_INIT_H_
 
-#include <gdk/gdkversionmacros.h>
-
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
-void gtk_inspector_init (void);
+void gtk_inspector_init               (void);
+void gtk_inspector_register_extension (void);
 
 G_END_DECLS
 

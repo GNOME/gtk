@@ -68,6 +68,7 @@
 #include "gtknative.h"
 #include "gtkpopcountprivate.h"
 
+#include "inspector/init.h"
 #include "inspector/window.h"
 
 #include "gdk/gdkeventsprivate.h"
@@ -566,6 +567,8 @@ do_post_parse_initialization (void)
   g_signal_connect (display_manager, "notify::default-display",
                     G_CALLBACK (default_display_notify_cb),
                     NULL);
+
+  gtk_inspector_register_extension ();
 }
 
 #ifdef G_PLATFORM_WIN32
