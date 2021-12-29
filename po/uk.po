@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-12-27 13:54+0000\n"
-"PO-Revision-Date: 2021-12-27 16:07+0200\n"
+"PO-Revision-Date: 2021-12-30 00:16+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2942,7 +2942,7 @@ msgstr "_Додати до закладок"
 
 #: gtk/gtkplacessidebar.c:3244
 msgid "_Remove"
-msgstr "В_лучити"
+msgstr "Ви_лучити"
 
 #: gtk/gtkplacessidebar.c:3260 gtk/gtkplacesview.c:1692
 msgid "_Mount"
