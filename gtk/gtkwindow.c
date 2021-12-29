@@ -156,7 +156,7 @@
  * - `window.minimize`: Minimize the window.
  * - `window.toggle-maximized`: Maximize or restore the window.
  * - `window.close`: Close the window.
- /
+ */
 
 #define MENU_BAR_ACCEL GDK_KEY_F10
 #define RESIZE_HANDLE_SIZE 12 /* Width of resize borders */
