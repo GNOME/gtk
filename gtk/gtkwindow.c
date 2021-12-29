@@ -1208,7 +1208,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   /**
    * GtkWindow|window.minimize:
    *
-   * Close the window.
+   * Minimize the window.
    */
   gtk_widget_class_install_action (widget_class, "window.minimize", NULL,
                                    gtk_window_activate_minimize);
