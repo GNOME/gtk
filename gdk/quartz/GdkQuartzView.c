@@ -298,8 +298,10 @@
    */
   if(gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
   {
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 101200
     CALayer* layer = self.layer;
     layer.contentsFormat = kCAContentsFormatRGBA8Uint;
+#endif
   }
 
   [super viewWillDraw];
