@@ -80,13 +80,19 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 
 -(NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender
 {
-  /* We have no way to give our message other than to pop up a dialog
-   * ourselves, which we should not do since the OS will already show
-   * one when we return NSTerminateNow.
-   *
-   * Just let the OS show the generic message...
-   */
-  return quartz->quit_inhibit == 0 ? NSTerminateNow : NSTerminateCancel;
+  const gchar *quit_action_name = "quit";
+  GActionGroup *action_group = G_ACTION_GROUP (quartz->impl.application);
+
+  if (quartz->quit_inhibit != 0)
+    return NSTerminateCancel;
+
+  if (g_action_group_has_action (action_group, quit_action_name))
+    {
+      g_action_group_activate_action (action_group, quit_action_name, NULL);
+      return NSTerminateCancel;
+    }
+
+  return NSTerminateNow;
 }
 
 -(void)application:(NSApplication *)theApplication openFiles:(NSArray *)filenames
