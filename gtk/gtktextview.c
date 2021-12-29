@@ -10101,7 +10101,11 @@ gtk_text_view_real_undo (GtkWidget   *widget,
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
   if (gtk_text_view_get_editable (text_view))
-    gtk_text_buffer_undo (text_view->priv->buffer);
+    {
+      gtk_text_buffer_undo (text_view->priv->buffer);
+      gtk_text_view_scroll_mark_onscreen (text_view,
+                                          gtk_text_buffer_get_insert (text_view->priv->buffer));
+    }
 }
 
 static void
@@ -10112,7 +10116,11 @@ gtk_text_view_real_redo (GtkWidget   *widget,
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
 
   if (gtk_text_view_get_editable (text_view))
-    gtk_text_buffer_redo (text_view->priv->buffer);
+    {
+      gtk_text_buffer_redo (text_view->priv->buffer);
+      gtk_text_view_scroll_mark_onscreen (text_view,
+                                          gtk_text_buffer_get_insert (text_view->priv->buffer));
+    }
 }
 
 static void
