@@ -22,9 +22,7 @@ libreftest = shared_library('reftest',
 
 gtk_reftest = executable('gtk-reftest', 'gtk-reftest.c',
   link_with : [libgtkreftestprivate, libreftest],
-  dependencies : libgtk_dep,
-  install: get_option('installed_tests'),
-  install_dir: installed_test_bindir)
+  dependencies : libgtk_dep)
 
 test_data = [
   '721800-0px-dotted-border.css',
@@ -457,24 +455,3 @@ foreach testname : test_data
          is_parallel: false)
   endif
 endforeach
-
-reftests_installed_tests = [
-  'reftests-dark.test',
-  'reftests-hc.test',
-  'reftests-hci.test',
-  'reftests.test',
-]
-
-if get_option('installed_tests')
-  test_cdata = configuration_data()
-  test_cdata.set('libexecdir', gtk_libexecdir)
-
-  foreach t: reftests_installed_tests
-    configure_file(input: '@0@.in'.format(t),
-                   output: t,
-                   configuration: test_cdata,
-                   install_dir: installed_test_datadir)
-  endforeach
-
-  install_data(test_data, install_dir: testexecdir)
-endif
