@@ -1,3 +1,39 @@
+Overview of Changes
+===================
+
+* GtkProgressBar:
+ - Fix handling of "inverted"
+
+* GtkLabel:
+ - Add a "natural wrap mode" property to influence how
+   natural width is determined
+
+* GtkTextView
+ - Scroll insertion on-screen after undo / redo
+
+* gsk:
+ - Abort region diffing when changes are too complex
+
+* gdk:
+ - Avoid compressing discrete scroll events
+ - Fix problems with hiding windows
+ - Improve GL and GLES version checks
+
+* Wayland:
+ - Support new high-contrast setting
+
+* Inspector:
+ - Add DND inspection support
+
+* build:
+ - Avoid deprecated meson apis
+
+* Translation updates
+ Galician
+ Portuguese
+ Ukrainian
+
+
 Overview of Changes in 4.5.1, 16-12-2021
 ========================================
 
