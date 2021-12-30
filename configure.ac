@@ -410,6 +410,8 @@ if test "x$enable_quartz_backend" = xyes; then
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_QUARTZ"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -Wl,-framework,Cocoa"
+  # See discussion of MR !535.
+  GDK_EXTRA_CFLAGS="$GDK_EXTRA_CFLAGS -I${includedir}/gtk-$GTK_API_VERSION/gdk/"
   DISABLE_ON_QUARTZ='%'
   AM_CONDITIONAL(USE_QUARTZ, true)
   if test "x$quartz_relocation" = xyes; then

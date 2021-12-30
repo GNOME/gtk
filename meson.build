@@ -499,9 +499,10 @@ else
   cdata.set_quoted('ISO_CODES_PREFIX', get_option('prefix'))
 endif
 
-backend_immodules = []
+backend_immodules   = []
 
-pc_gdk_extra_libs = []
+pc_gdk_extra_libs   = []
+pc_gdk_extra_cflags = []
 
 cairo_found_type = cairo_dep.type_name()
 if cairo_found_type == 'internal'
@@ -665,8 +666,10 @@ if broadway_enabled
 endif
 
 if quartz_enabled
-  pc_gdk_extra_libs += ['-Wl,-framework,Cocoa', '-Wl,-framework,Carbon', '-Wl,-framework,CoreGraphics']
-  backend_immodules += ['quartz']
+  pc_gdk_extra_libs   += ['-Wl,-framework,Cocoa', '-Wl,-framework,Carbon', '-Wl,-framework,CoreGraphics']
+  # See discussion of MR !535.
+  pc_gdk_extra_cflags += ['-I${includedir}/gtk-@0@/gdk/'.format(gtk_api_version)]
+  backend_immodules   += ['quartz']
 endif
 
 extra_demo_ldflags = []
@@ -950,7 +953,7 @@ pkgconf.set('GDK_EXTRA_LIBS', ' '.join(pc_gdk_extra_libs))
 pkgconf.set('GSK_EXTRA_LIBS', '')
 pkgconf.set('GTK_EXTRA_LIBS', '')
 
-pkgconf.set('GDK_EXTRA_CFLAGS', '')
+pkgconf.set('GDK_EXTRA_CFLAGS', ' '.join(pc_gdk_extra_cflags))
 pkgconf.set('GSK_EXTRA_CFLAGS', '')
 pkgconf.set('GTK_EXTRA_CFLAGS', '')
 
