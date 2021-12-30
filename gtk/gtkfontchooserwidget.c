@@ -2334,10 +2334,12 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
   if (mask & PANGO_FONT_MASK_SIZE)
     {
       double font_size = (double) pango_font_description_get_size (fontchooser->font_desc) / PANGO_SCALE;
-      /* XXX: This clamps, which can cause it to reloop into here, do we need
-       * to block its signal handler? */
+      g_signal_handlers_block_by_func (gtk_range_get_adjustment (GTK_RANGE (fontchooser->size_slider)), size_change_cb, fontchooser);
+      g_signal_handlers_block_by_func (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(fontchooser->size_spin)), size_change_cb, fontchooser);
       gtk_range_set_value (GTK_RANGE (fontchooser->size_slider), font_size);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (fontchooser->size_spin), font_size);
+      g_signal_handlers_unblock_by_func (gtk_range_get_adjustment (GTK_RANGE (fontchooser->size_slider)), size_change_cb, fontchooser);
+      g_signal_handlers_unblock_by_func (gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON(fontchooser->size_spin)), size_change_cb, fontchooser);
     }
   if (mask & (PANGO_FONT_MASK_FAMILY | PANGO_FONT_MASK_STYLE | PANGO_FONT_MASK_VARIANT |
               PANGO_FONT_MASK_WEIGHT | PANGO_FONT_MASK_STRETCH))
