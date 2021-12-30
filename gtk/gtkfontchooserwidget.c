@@ -53,12 +53,13 @@
 #include "gtkcombobox.h"
 #include "gtkgesturemultipress.h"
 
-#if (PANGO_VERSION_CHECK(1,44,0) && HB_VERSION_ATLEAST(2,2,0)) || \
-    (defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT))
-#define HAVE_FONT_FEATURES 1
-#if !(PANGO_VERSION_CHECK(1,44,0) && HB_VERSION_ATLEAST(2,2,0))
-#define FONT_FEATURES_USE_PANGOFT2 1
-#endif
+#if !PANGO_VERSION_CHECK(1,44,0)
+# if (defined(HAVE_HARFBUZZ) && defined(HAVE_PANGOFT))
+#  define HAVE_FONT_FEATURES 1
+#  define FONT_FEATURES_USE_PANGOFT2 1
+# endif
+#elif HB_VERSION_ATLEAST(2,2,0)
+# define HAVE_FONT_FEATURES 1
 #endif
 
 #ifdef FONT_FEATURES_USE_PANGOFT2
@@ -2392,7 +2393,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
   pango_font = pango_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
                                         priv->font_desc);
 
-#ifdef FONT_FEATURE_USE_PANGOFT2
+#ifdef FONT_FEATURES_USE_PANGOFT2
   if (PANGO_IS_FC_FONT (pango_font))
     {
       ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
@@ -2470,7 +2471,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
         hb_face_destroy (hb_face);
     }
 
-#if FONT_FEATURE_USE_PANGOFT2
+#if FONT_FEATURES_USE_PANGOFT2
   if (PANGO_IS_FC_FONT (pango_font))
     pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
 #endif
