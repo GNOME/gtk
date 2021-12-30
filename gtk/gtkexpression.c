@@ -1,4 +1,3 @@
-
 /*
  * Copyright © 2019 Benjamin Otte
  *
@@ -1372,7 +1371,7 @@ gtk_property_expression_new_for_pspec (GtkExpression *expression,
  * Gets the expression specifying the object of
  * a property expression.
  *
- * Returns: (transfer none): the object expression
+ * Returns: (transfer none) (nullable): the object expression
  */
 GtkExpression *
 gtk_property_expression_get_expression (GtkExpression *expression)
