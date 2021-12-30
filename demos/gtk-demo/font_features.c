@@ -10,8 +10,12 @@
 
 #include <gtk/gtk.h>
 
-#if !(PANGO_VERSION_CHECK(1,44,0) && HB_VERSION_ATLEAST(2,2,0))
-#define FONT_FEATURES_USE_PANGOFT2 1
+#if PANGO_VERSION_CHECK(1,44,0)
+# if !HB_VERSION_ATLEAST(2,2,0)
+#  define FONT_FEATURES_USE_PANGOFT2 1
+# endif
+#else
+# define FONT_FEATURES_USE_PANGOFT2 1
 #endif
 
 #ifdef FONT_FEATURES_USE_PANGOFT2
@@ -231,7 +235,7 @@ update_script_combo (void)
   pango_font = get_pango_font ();
 
 #ifdef FONT_FEATURES_USE_PANGOFT2
-  if (PANGO_IS_FC_FONT (pango_font)
+  if (PANGO_IS_FC_FONT (pango_font))
     {
       ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
       hb_font = hb_ft_font_create (ft_face, NULL);
@@ -291,7 +295,7 @@ update_script_combo (void)
     }
 
 #ifdef FONT_FEATURES_USE_PANGOFT2
-  if (PANGO_IS_FC_FONT (pango_font)
+  if (PANGO_IS_FC_FONT (pango_font))
     pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
 #endif
 
@@ -397,7 +401,7 @@ update_features (void)
   pango_font = get_pango_font ();
 
 #ifdef FONT_FEATURES_USE_PANGOFT2
-  if (PANGO_IS_FC_FONT (pango_font)
+  if (PANGO_IS_FC_FONT (pango_font))
     {
       ft_face = pango_fc_font_lock_face (PANGO_FC_FONT (pango_font)),
       hb_font = hb_ft_font_create (ft_face, NULL);
@@ -442,7 +446,7 @@ update_features (void)
     }
 
 #ifdef FONT_FEATURES_USE_PANGOFT2
-  if (PANGO_IS_FC_FONT (pango_font)
+  if (PANGO_IS_FC_FONT (pango_font))
     pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
 #endif
 
