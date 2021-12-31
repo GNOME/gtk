@@ -1131,6 +1131,66 @@ add_to_fontlist (GtkWidget     *widget,
     return G_SOURCE_CONTINUE;
 }
 
+/* Only show one face with a given face name.
+ * Prefer a variable face over a non-variable one.
+ */
+static gboolean
+filter_face_func (gpointer item,
+                  gpointer user_data)
+{
+  PangoFontFace *face = item;
+  PangoFontFamily *family;
+  int val;
+
+  val = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (face), "gtk-font-chooser-show"));
+  if (val)
+    return val > 0;
+
+  family = pango_font_face_get_family (face);
+  for (int i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (family)); i++)
+    {
+      PangoFontFace *face2 = g_list_model_get_item (G_LIST_MODEL (family), i);
+
+      g_object_unref (face2);
+
+      if (face2 == face ||
+          strcmp (pango_font_face_get_face_name (face),
+                  pango_font_face_get_face_name (face2)) != 0)
+        continue;
+
+      val = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (face2), "gtk-font-chooser-show"));
+      if (val < 0)
+        continue;
+
+      if (val > 0)
+        {
+          g_object_set_data (G_OBJECT (face), "gtk-font-chooser-show", GINT_TO_POINTER (-1));
+          return FALSE;
+        }
+
+#if PANGO_VERSION_CHECK (1,52,0)
+      if (pango_font_face_is_variable (face2))
+        {
+          g_object_set_data (G_OBJECT (face2), "gtk-font-chooser-show", GINT_TO_POINTER (1));
+          g_object_set_data (G_OBJECT (face), "gtk-font-chooser-show", GINT_TO_POINTER (-1));
+          return FALSE;
+        }
+      else
+#endif
+        g_object_set_data (G_OBJECT (face2), "gtk-font-chooser-show", GINT_TO_POINTER (-1));
+    }
+
+  g_object_set_data (G_OBJECT (face), "gtk-font-chooser-show", GINT_TO_POINTER (1));
+  return TRUE;
+}
+
+static gpointer
+map_family_list (gpointer item,
+                 gpointer user_data)
+{
+  return G_LIST_MODEL (gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (item)), GTK_FILTER (gtk_custom_filter_new (filter_face_func, NULL, NULL))));
+}
+
 static void
 update_fontlist (GtkFontChooserWidget *self)
 {
@@ -1142,9 +1202,9 @@ update_fontlist (GtkFontChooserWidget *self)
     fontmap = pango_cairo_font_map_get_default ();
 
   if ((self->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0)
-    model = g_object_ref (G_LIST_MODEL (fontmap));
+    model = G_LIST_MODEL (fontmap);
   else
-    model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (g_object_ref (fontmap))));
+    model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (fontmap)), map_family_list, NULL, NULL))));
 
   model = G_LIST_MODEL (gtk_slice_list_model_new (model, 0, 20));
   gtk_widget_add_tick_callback (GTK_WIDGET (self), add_to_fontlist, g_object_ref (model), g_object_unref);
