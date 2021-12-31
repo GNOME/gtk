@@ -64,9 +64,6 @@
 #include "gtkstringsorter.h"
 
 #include <hb-ot.h>
-#if defined(HAVE_PANGOFT) && defined(HAVE_HARFBUZZ)
-#include <pango/pangofc-font.h>
-#endif
 
 #include "language-names.h"
 #include "script-names.h"
@@ -362,7 +359,6 @@ user_filter_cb (gpointer item,
       !pango_font_family_is_monospace (family))
     return FALSE;
 
-#ifdef HAVE_PANGOFT
   if (self->filter_by_language &&
       self->filter_language)
     {
@@ -370,6 +366,7 @@ user_filter_cb (gpointer item,
       PangoContext *context;
       PangoFont *font;
       gboolean ret;
+      PangoLanguage **langs;
 
       desc = pango_font_face_describe (face);
       pango_font_description_set_size (desc, 20);
@@ -377,27 +374,19 @@ user_filter_cb (gpointer item,
       context = gtk_widget_get_pango_context (GTK_WIDGET (self));
       font = pango_context_load_font (context, desc);
 
-      ret = TRUE;
+      ret = FALSE;
 
-      if (PANGO_IS_FC_FONT (font))
+      langs = pango_font_get_languages (font);
+      if (langs)
         {
-          PangoLanguage **langs;
-          int i;
-
-          ret = FALSE;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          langs = pango_fc_font_get_languages (PANGO_FC_FONT (font));
-G_GNUC_END_IGNORE_DEPRECATIONS
-          if (langs)
-            for (i = 0; langs[i]; i++)
-              {
-                if (langs[i] == self->filter_language)
-                  {
-                    ret = TRUE;
-                    break;
-                  }
-              }
+          for (int i = 0; langs[i]; i++)
+            {
+              if (langs[i] == self->filter_language)
+                {
+                  ret = TRUE;
+                  break;
+                }
+            }
         }
 
       g_object_unref (font);
@@ -405,7 +394,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       return ret;
     }
-#endif
 
   return TRUE;
 }
@@ -549,10 +537,16 @@ maybe_update_preview_text (GtkFontChooserWidget *self,
                            PangoFontFace        *face,
                            PangoFontDescription *desc)
 {
-#if defined(HAVE_PANGOFT) && defined(HAVE_HARFBUZZ)
   PangoContext *context;
   PangoFont *font;
   const char *sample;
+  PangoLanguage **languages;
+  GHashTable *langs = NULL;
+  PangoLanguage *default_lang;
+  PangoLanguage *alt_default = NULL;
+  PangoLanguage *lang = NULL;
+  int i;
+  const char *p;
 
   /* If the user has typed text into the entry, we don't touch it */
   if (self->preview_text_set)
@@ -576,88 +570,76 @@ maybe_update_preview_text (GtkFontChooserWidget *self,
   context = gtk_widget_get_pango_context (GTK_WIDGET (self));
   font = pango_context_load_font (context, desc);
 
-  if (PANGO_IS_FC_FONT (font))
+  default_lang = pango_language_get_default ();
+  p = pango_language_to_string (default_lang);
+
+  /* The default language tends to be of the form en-us.
+   * Since fontconfig languages just have the language part,
+   * and we want to use direct pointer comparisons, we need
+   * an PangoLanguage for the shortened default language.
+   */
+  if (strchr (p, '-'))
     {
-      PangoLanguage **languages;
-      GHashTable *langs = NULL;
-      PangoLanguage *default_lang;
-      PangoLanguage *alt_default = NULL;
-      PangoLanguage *lang = NULL;
-      int i;
-      const char *p;
+      char q[10];
+      for (i = 0; p[i] != '-' && i < 9; i++)
+        q[i] = p[i];
+      q[i] = '\0';
+      alt_default = pango_language_from_string (q);
+    }
 
-      default_lang = pango_language_get_default ();
-      p = pango_language_to_string (default_lang);
+  languages = pango_font_get_languages (font);
 
-      /* The default language tends to be of the form en-us.
-       * Since fontconfig languages just have the language part,
-       * and we want to use direct pointer comparisons, we need
-       * an PangoLanguage for the shortened default language.
-       */
-      if (strchr (p, '-'))
-        {
-          char q[10];
-          for (i = 0; p[i] != '-' && i < 9; i++)
-            q[i] = p[i];
-          q[i] = '\0';
-          alt_default = pango_language_from_string (q);
-        }
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      languages = pango_fc_font_get_languages (PANGO_FC_FONT (font));
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-      /* If the font supports the default language, just use it. */
-      if (languages)
-        for (i = 0; languages[i]; i++)
+  /* If the font supports the default language, just use it. */
+  if (languages)
+    for (i = 0; languages[i]; i++)
+      {
+        if (languages[i] == default_lang || languages[i] == alt_default)
           {
-            if (languages[i] == default_lang || languages[i] == alt_default)
-              {
-                lang = default_lang;
-                goto found;
-              }
+            lang = default_lang;
+            goto found;
           }
+      }
 
-      /* Otherwise, we make a list of representative languages */
-      langs = g_hash_table_new (NULL, NULL);
+  /* Otherwise, we make a list of representative languages */
+  langs = g_hash_table_new (NULL, NULL);
 
-      for (i = 0; languages[i]; i++)
+  for (i = 0; languages[i]; i++)
+    {
+      const PangoScript *scripts;
+      int num, j;
+
+      scripts = pango_language_get_scripts (languages[i], &num);
+      for (j = 0; j < num; j++)
         {
-          const PangoScript *scripts;
-          int num, j;
-
-          scripts = pango_language_get_scripts (languages[i], &num);
-          for (j = 0; j < num; j++)
-            {
-              lang = pango_script_get_sample_language (scripts[j]);
-              if (lang)
-                g_hash_table_add (langs, lang);
-            }
+          lang = pango_script_get_sample_language (scripts[j]);
+          if (lang)
+            g_hash_table_add (langs, lang);
         }
+    }
 
-      /* ... and compare it to the users default and preferred languages */
-      if (g_hash_table_contains (langs, default_lang) ||
-          g_hash_table_contains (langs, alt_default))
-        {
-          lang = default_lang;
-        }
-      else
-        {
-          PangoLanguage **preferred;
+  /* ... and compare it to the users default and preferred languages */
+  if (g_hash_table_contains (langs, default_lang) ||
+      g_hash_table_contains (langs, alt_default))
+    {
+      lang = default_lang;
+    }
+  else
+    {
+      PangoLanguage **preferred;
 
-          preferred = pango_language_get_preferred ();
-          if (preferred)
+      preferred = pango_language_get_preferred ();
+      if (preferred)
+        {
+          for (i = 0; preferred[i]; i++)
             {
-              for (i = 0; preferred[i]; i++)
+              if (g_hash_table_contains (langs, preferred[i]))
                 {
-                  if (g_hash_table_contains (langs, preferred[i]))
-                    {
-                      lang = preferred[i];
-                      break;
-                    }
+                  lang = preferred[i];
+                  break;
                 }
             }
         }
+
       g_hash_table_unref (langs);
 
 found:
@@ -667,7 +649,6 @@ found:
     }
 
   g_object_unref (font);
-#endif
 }
 
 
@@ -1027,7 +1008,6 @@ axis_free (gpointer v)
   g_free (a);
 }
 
-#ifdef HAVE_PANGOFT
 static void
 select_added (GListModel *model,
               guint       position,
@@ -1051,6 +1031,10 @@ add_languages_from_font (GtkFontChooserWidget *self,
   PangoFontDescription *desc;
   PangoFont *font;
   PangoContext *context;
+  GtkSelectionModel *model = gtk_list_view_get_model (GTK_LIST_VIEW (self->language_list));
+  PangoLanguage *default_lang = pango_language_get_default ();
+  PangoLanguage **langs;
+  int i;
 
   if (PANGO_IS_FONT_FAMILY (item))
     face = pango_font_family_get_face (PANGO_FONT_FAMILY (item), NULL);
@@ -1066,44 +1050,35 @@ add_languages_from_font (GtkFontChooserWidget *self,
   context = gtk_widget_get_pango_context (GTK_WIDGET (self));
   font = pango_context_load_font (context, desc);
 
-  if (PANGO_IS_FC_FONT (font))
+  langs = pango_font_get_languages (font);
+  if (langs)
     {
-      GtkSelectionModel *model = gtk_list_view_get_model (GTK_LIST_VIEW (self->language_list));
-      PangoLanguage *default_lang = pango_language_get_default ();
-      PangoLanguage **langs;
-      int i;
+      for (i = 0; langs[i]; i++)
+        {
+          if (!g_hash_table_contains (self->language_table, langs[i]))
+            {
+              g_hash_table_add (self->language_table, langs[i]);
+              if (get_language_name (langs[i]))
+                {
+                  const char *l = pango_language_to_string (langs[i]);
+                  gulong id = 0;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      langs = pango_fc_font_get_languages (PANGO_FC_FONT (font));
-G_GNUC_END_IGNORE_DEPRECATIONS
-      if (langs)
-        for (i = 0; langs[i]; i++)
-          {
-            if (!g_hash_table_contains (self->language_table, langs[i]))
-              {
-                g_hash_table_add (self->language_table, langs[i]);
-                if (get_language_name (langs[i]))
-                  {
-                    const char *l = pango_language_to_string (langs[i]);
-                    gulong id = 0;
+                  /* Pre-select the default language */
+                  if (pango_language_matches (default_lang, l))
+                    id = g_signal_connect (model, "items-changed", G_CALLBACK (select_added), NULL);
 
-                    /* Pre-select the default language */
-                    if (pango_language_matches (default_lang, l))
-                      id = g_signal_connect (model, "items-changed", G_CALLBACK (select_added), NULL);
+                  gtk_string_list_append (self->languages, l);
 
-                    gtk_string_list_append (self->languages, l);
-
-                    if (id)
-                      g_signal_handler_disconnect (model, id);
-                  }
-              }
-          }
+                  if (id)
+                    g_signal_handler_disconnect (model, id);
+                }
+            }
+        }
     }
 
   g_object_unref (font);
   pango_font_description_free (desc);
 }
-#endif
 
 static gboolean
 gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self);
@@ -1130,7 +1105,6 @@ add_to_fontlist (GtkWidget     *widget,
 
   n = gtk_slice_list_model_get_size (model);
 
-#ifdef HAVE_PANGOFT
   for (i = n; i < n + 10; i++)
     {
       gpointer item = g_list_model_get_item (child_model, i);
@@ -1139,7 +1113,6 @@ add_to_fontlist (GtkWidget     *widget,
       add_languages_from_font (self, item);
       g_object_unref (item);
     }
-#endif
 
   n += 10;
 
@@ -1179,7 +1152,6 @@ update_fontlist (GtkFontChooserWidget *self)
   g_object_unref (model);
 }
 
-#ifdef HAVE_PANGOFT
 static void
 setup_lang_item (GtkSignalListItemFactory *factory,
                  gpointer                  item,
@@ -1269,7 +1241,6 @@ setup_language_list (GtkFontChooserWidget *self)
 
   return TRUE;
 }
-#endif
 
 static void
 gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
@@ -1310,12 +1281,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
 
   gtk_custom_filter_set_filter_func (self->user_filter, user_filter_cb, self, NULL);
 
-#ifdef HAVE_PANGOFT
   setup_language_list (self);
-#else
-  gtk_widget_hide (GTK_WIDGET (self->language_button));
-  gtk_widget_hide (GTK_WIDGET (self->language_frame));
-#endif
 }
 
 /**
