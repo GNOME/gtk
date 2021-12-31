@@ -405,7 +405,9 @@ memories.)
 - non-virtual public methods,
 - virtual public methods and
 - virtual private methods
-- non-virtual public methods
+- non-virtual private methods
+
+#### Non-Virtual Methods
 
 These are the simplest, providing a simple method which acts on the object.
 Provide a function prototype in the header and an implementation of that
