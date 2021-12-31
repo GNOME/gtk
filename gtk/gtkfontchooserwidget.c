@@ -603,19 +603,20 @@ maybe_update_preview_text (GtkFontChooserWidget *self,
   /* Otherwise, we make a list of representative languages */
   langs = g_hash_table_new (NULL, NULL);
 
-  for (i = 0; languages[i]; i++)
-    {
-      const PangoScript *scripts;
-      int num, j;
+  if (languages)
+    for (i = 0; languages[i]; i++)
+      {
+        const PangoScript *scripts;
+        int num, j;
 
-      scripts = pango_language_get_scripts (languages[i], &num);
-      for (j = 0; j < num; j++)
-        {
-          lang = pango_script_get_sample_language (scripts[j]);
-          if (lang)
-            g_hash_table_add (langs, lang);
-        }
-    }
+        scripts = pango_language_get_scripts (languages[i], &num);
+        for (j = 0; j < num; j++)
+          {
+            lang = pango_script_get_sample_language (scripts[j]);
+            if (lang)
+              g_hash_table_add (langs, lang);
+          }
+      }
 
   /* ... and compare it to the users default and preferred languages */
   if (g_hash_table_contains (langs, default_lang) ||
