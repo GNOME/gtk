@@ -108,10 +108,11 @@ gtk_inspector_init (void)
 void
 gtk_inspector_register_extension (void)
 {
-  if (extension_point == NULL) {
-    extension_point = g_io_extension_point_register ("gtk-inspector-page");
-    g_io_extension_point_set_required_type (extension_point, GTK_TYPE_WIDGET);
-  }
+  if (extension_point == NULL)
+    {
+      extension_point = g_io_extension_point_register ("gtk-inspector-page");
+      g_io_extension_point_set_required_type (extension_point, GTK_TYPE_WIDGET);
+    }
 }
 
 // vim: set et sw=2 ts=2:

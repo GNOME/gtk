@@ -461,9 +461,9 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
  * @minimum: (out) (optional): location to store the minimum size
  * @natural: (out) (optional): location to store the natural size
  * @minimum_baseline: (out) (optional): location to store the baseline
- *   position for the minimum size
+ *   position for the minimum size, or -1 to report no baseline
  * @natural_baseline: (out) (optional): location to store the baseline
- *   position for the natural size
+ *   position for the natural size, or -1 to report no baseline
  *
  * Measures @widget in the orientation @orientation and for the given @for_size.
  *
