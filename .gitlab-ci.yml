@@ -25,3 +25,5 @@ pages:
   artifacts:
     paths:
       - public
+  only:
+    - docs-gtk-org@GNOME/gtk
