@@ -45,8 +45,7 @@
  *
  * widgets = gtk_widget_observe_children (widget);
  *
- * controllers = gtk_map_list_model_new (G_TYPE_LIST_MODEL,
- *                                       widgets,
+ * controllers = gtk_map_list_model_new (widgets,
  *                                       map_to_controllers,
  *                                       NULL, NULL);
  *
