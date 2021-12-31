@@ -152,6 +152,8 @@ struct _GtkFontChooserWidget
   GList *feature_items;
 
   GAction *tweak_action;
+
+  hb_map_t *glyphmap;
 };
 
 struct _GtkFontChooserWidgetClass
@@ -1794,11 +1796,12 @@ feat_pressed (GtkGestureClick *gesture,
 }
 
 static char *
-find_affected_text (hb_tag_t   feature_tag,
-                    hb_font_t *hb_font,
-                    hb_tag_t   script_tag,
-                    hb_tag_t   lang_tag,
-                    int        max_chars)
+find_affected_text (GtkFontChooserWidget *fontchooser,
+                    hb_tag_t    feature_tag,
+                    hb_font_t  *hb_font,
+                    hb_tag_t    script_tag,
+                    hb_tag_t    lang_tag,
+                    int         max_chars)
 {
   hb_face_t *hb_face;
   unsigned int script_index = 0;
@@ -1848,24 +1851,35 @@ find_affected_text (hb_tag_t   feature_tag,
                                               glyphs_after,
                                               glyphs_output);
 
-          gid = -1;
-          while (hb_set_next (glyphs_input, &gid)) {
-            hb_codepoint_t ch;
-            if (n_chars == max_chars)
-              {
-                g_string_append (chars, "…");
-                break;
-              }
-            for (ch = 0; ch < 0xffff; ch++) {
-              hb_codepoint_t glyph = 0;
-              hb_font_get_nominal_glyph (hb_font, ch, &glyph);
-              if (glyph == gid) {
-                g_string_append_unichar (chars, (gunichar)ch);
-                n_chars++;
-                break;
-              }
+          if (!fontchooser->glyphmap)
+            {
+              fontchooser->glyphmap = hb_map_create ();
+              for (hb_codepoint_t ch = 0; ch < 0xffff; ch++)
+                {
+                  hb_codepoint_t glyph = 0;
+                  if (hb_font_get_nominal_glyph (hb_font, ch, &glyph) &&
+                     !hb_map_has (fontchooser->glyphmap, glyph))
+                    hb_map_set (fontchooser->glyphmap, glyph, ch);
+                }
             }
-          }
+
+          while (hb_set_next (glyphs_input, &gid))
+            {
+              hb_codepoint_t ch;
+
+              if (n_chars == max_chars)
+                {
+                  g_string_append (chars, "…");
+                  break;
+                }
+              ch = hb_map_get (fontchooser->glyphmap, gid);
+              if (ch != HB_MAP_VALUE_INVALID)
+                {
+                  g_string_append_unichar (chars, (gunichar)ch);
+                  n_chars++;
+                }
+            }
+
           hb_set_destroy (glyphs_input);
         }
     }
@@ -1874,7 +1888,8 @@ find_affected_text (hb_tag_t   feature_tag,
 }
 
 static void
-update_feature_example (FeatureItem          *item,
+update_feature_example (GtkFontChooserWidget *fontchooser,
+                        FeatureItem          *item,
                         hb_font_t            *hb_font,
                         hb_tag_t              script_tag,
                         hb_tag_t              lang_tag,
@@ -1929,9 +1944,9 @@ update_feature_example (FeatureItem          *item,
       else if (strcmp (item->name, "frac") == 0)
         input = g_strdup ("1/2 2/3 7/8");
       else if (strcmp (item->name, "nalt") == 0)
-        input = find_affected_text (item->tag, hb_font, script_tag, lang_tag, 3);
+        input = find_affected_text (fontchooser, item->tag, hb_font, script_tag, lang_tag, 3);
       else
-        input = find_affected_text (item->tag, hb_font, script_tag, lang_tag, 10);
+        input = find_affected_text (fontchooser, item->tag, hb_font, script_tag, lang_tag, 10);
 
       if (input[0] != '\0')
         {
@@ -2211,7 +2226,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
               gtk_widget_show (item->top);
               gtk_widget_show (gtk_widget_get_parent (item->top));
 
-              update_feature_example (item, hb_font, script_tag, lang_tag, fontchooser->font_desc);
+              update_feature_example (fontchooser, item, hb_font, script_tag, lang_tag, fontchooser->font_desc);
 
               if (GTK_IS_CHECK_BUTTON (item->feat))
                 {
@@ -2226,6 +2241,12 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
                     set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
                 }
             }
+        }
+
+      if (fontchooser->glyphmap)
+        {
+          hb_map_destroy (fontchooser->glyphmap);
+          fontchooser->glyphmap = NULL;
         }
     }
 
