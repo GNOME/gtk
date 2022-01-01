@@ -1078,7 +1078,7 @@ gtk_list_box_set_adjustment (GtkListBox    *box,
  * Gets the adjustment (if any) that the widget uses to
  * for vertical scrolling.
  *
- * Returns: (transfer none): the adjustment
+ * Returns: (transfer none) (nullable): the adjustment
  */
 GtkAdjustment *
 gtk_list_box_get_adjustment (GtkListBox *box)
