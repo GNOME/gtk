@@ -1317,7 +1317,7 @@ gtk_gl_area_set_auto_render (GtkGLArea *area,
  *
  * Retrieves the `GdkGLContext` used by @area.
  *
- * Returns: (transfer none): the `GdkGLContext`
+ * Returns: (transfer none) (nullable): the `GdkGLContext`
  */
 GdkGLContext *
 gtk_gl_area_get_context (GtkGLArea *area)
