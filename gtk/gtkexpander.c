@@ -847,7 +847,7 @@ gtk_expander_new (const char *label)
 
 /**
  * gtk_expander_new_with_mnemonic:
- * @label: (nullable): the text of the label with an underscore
+ * @label: the text of the label with an underscore
  *   in front of the mnemonic character
  *
  * Creates a new expander using @label as the text of the label.

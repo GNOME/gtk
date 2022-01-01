@@ -2780,7 +2780,7 @@ gtk_label_new (const char *str)
 
 /**
  * gtk_label_new_with_mnemonic:
- * @str: (nullable): The text of the label, with an underscore in front of the
+ * @str: The text of the label, with an underscore in front of the
  *   mnemonic character
  *
  * Creates a new `GtkLabel`, containing the text in @str.
