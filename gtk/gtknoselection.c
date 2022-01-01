@@ -242,7 +242,7 @@ gtk_no_selection_new (GListModel *model)
  *
  * Gets the model that @self is wrapping.
  *
- * Returns: (transfer none): The model being wrapped
+ * Returns: (transfer none) (nullable): The model being wrapped
  */
 GListModel *
 gtk_no_selection_get_model (GtkNoSelection *self)

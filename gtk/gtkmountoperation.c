@@ -1873,7 +1873,7 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
  *
  * Gets the transient parent used by the `GtkMountOperation`.
  *
- * Returns: (transfer none): the transient parent for windows shown by @op
+ * Returns: (transfer none) (nullable): the transient parent for windows shown by @op
  */
 GtkWindow *
 gtk_mount_operation_get_parent (GtkMountOperation *op)

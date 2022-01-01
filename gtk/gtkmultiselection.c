@@ -396,7 +396,7 @@ gtk_multi_selection_new (GListModel *model)
  *
  * Returns the underlying model of @self.
  *
- * Returns: (transfer none): the underlying model
+ * Returns: (transfer none) (nullable): the underlying model
  */
 GListModel *
 gtk_multi_selection_get_model (GtkMultiSelection *self)

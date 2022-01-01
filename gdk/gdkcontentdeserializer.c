@@ -264,7 +264,7 @@ gdk_content_deserializer_get_priority (GdkContentDeserializer *deserializer)
  *
  * This is the `GCancellable` that was passed to [func@Gdk.content_deserialize_async].
  *
- * Returns: (transfer none): the cancellable for the current operation
+ * Returns: (transfer none) (nullable): the cancellable for the current operation
  */
 GCancellable *
 gdk_content_deserializer_get_cancellable (GdkContentDeserializer *deserializer)

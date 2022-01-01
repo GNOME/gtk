@@ -746,7 +746,7 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
  *
  * Returns the model from which the contents of @bar are taken.
  *
- * Returns: (transfer none): a `GMenuModel`
+ * Returns: (transfer none) (nullable): a `GMenuModel`
  */
 GMenuModel *
 gtk_popover_menu_bar_get_menu_model (GtkPopoverMenuBar *bar)

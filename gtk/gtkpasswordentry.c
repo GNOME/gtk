@@ -729,7 +729,7 @@ gtk_password_entry_set_extra_menu (GtkPasswordEntry *entry,
  *
  * Gets the menu model set with gtk_password_entry_set_extra_menu().
  *
- * Returns: (transfer none): (nullable): the menu model
+ * Returns: (transfer none) (nullable): the menu model
  */
 GMenuModel *
 gtk_password_entry_get_extra_menu (GtkPasswordEntry *entry)

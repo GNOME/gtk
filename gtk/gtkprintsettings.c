@@ -154,7 +154,7 @@ gtk_print_settings_copy (GtkPrintSettings *other)
  *
  * Looks up the string value associated with @key.
  *
- * Returns: the string value for @key
+ * Returns: (nullable): the string value for @key
  */
 const char *
 gtk_print_settings_get (GtkPrintSettings *settings,
@@ -480,7 +480,7 @@ gtk_print_settings_foreach (GtkPrintSettings    *settings,
  * Convenience function to obtain the value of
  * %GTK_PRINT_SETTINGS_PRINTER.
  *
- * Returns: the printer name
+ * Returns: (nullable): the printer name
  */
 const char *
 gtk_print_settings_get_printer (GtkPrintSettings *settings)
@@ -574,7 +574,7 @@ gtk_print_settings_set_orientation (GtkPrintSettings   *settings,
  * Gets the value of %GTK_PRINT_SETTINGS_PAPER_FORMAT,
  * converted to a `GtkPaperSize`.
  *
- * Returns: the paper size
+ * Returns: (nullable): the paper size
  */
 GtkPaperSize *     
 gtk_print_settings_get_paper_size (GtkPrintSettings *settings)
@@ -779,7 +779,7 @@ gtk_print_settings_set_collate (GtkPrintSettings *settings,
  *
  * Gets the value of %GTK_PRINT_SETTINGS_REVERSE.
  *
- * Returns: whether to reverse the order of the printed pages
+ * Returns:  whether to reverse the order of the printed pages
  */
 gboolean
 gtk_print_settings_get_reverse (GtkPrintSettings *settings)
@@ -1415,7 +1415,7 @@ gtk_print_settings_set_page_ranges  (GtkPrintSettings *settings,
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_DEFAULT_SOURCE.
  * 
- * Returns: the default source
+ * Returns: (nullable): the default source
  */
 const char *
 gtk_print_settings_get_default_source (GtkPrintSettings *settings)
@@ -1445,7 +1445,7 @@ gtk_print_settings_set_default_source (GtkPrintSettings *settings,
  *
  * The set of media types is defined in PWG 5101.1-2002 PWG.
  * 
- * Returns: the media type
+ * Returns: (nullable): the media type
  */
 const char *
 gtk_print_settings_get_media_type (GtkPrintSettings *settings)
@@ -1475,7 +1475,7 @@ gtk_print_settings_set_media_type (GtkPrintSettings *settings,
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_DITHER.
  * 
- * Returns: the dithering that is used
+ * Returns: (nullable): the dithering that is used
  */
 const char *
 gtk_print_settings_get_dither (GtkPrintSettings *settings)
@@ -1503,7 +1503,7 @@ gtk_print_settings_set_dither (GtkPrintSettings *settings,
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_FINISHINGS.
  * 
- * Returns: the finishings
+ * Returns: (nullable): the finishings
  */
 const char *
 gtk_print_settings_get_finishings (GtkPrintSettings *settings)
@@ -1531,7 +1531,7 @@ gtk_print_settings_set_finishings (GtkPrintSettings *settings,
  * 
  * Gets the value of %GTK_PRINT_SETTINGS_OUTPUT_BIN.
  * 
- * Returns: the output bin
+ * Returns: (nullable): the output bin
  */
 const char *
 gtk_print_settings_get_output_bin (GtkPrintSettings *settings)

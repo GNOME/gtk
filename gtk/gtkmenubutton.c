@@ -1059,7 +1059,7 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
  *
  * Gets the name of the icon shown in the button.
  *
- * Returns: the name of the icon shown in the button
+ * Returns: (nullable): the name of the icon shown in the button
  */
 const char *
 gtk_menu_button_get_icon_name (GtkMenuButton *menu_button)
@@ -1182,7 +1182,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
  *
  * Gets the label shown in the button
  *
- * Returns: the label shown in the button
+ * Returns: (nullable): the label shown in the button
  */
 const char *
 gtk_menu_button_get_label (GtkMenuButton *menu_button)

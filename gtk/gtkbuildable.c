@@ -83,7 +83,7 @@ gtk_buildable_set_buildable_id (GtkBuildable *buildable,
  * `GtkBuilder` sets the name based on the ID attribute
  * of the <object> tag used to construct the @buildable.
  *
- * Returns: the ID of the buildable object
+ * Returns: (nullable): the ID of the buildable object
  **/
 const char *
 gtk_buildable_get_buildable_id (GtkBuildable *buildable)

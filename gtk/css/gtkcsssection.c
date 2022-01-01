@@ -140,7 +140,7 @@ gtk_css_section_get_parent (const GtkCssSection *section)
  * If no such file exists, for example because the CSS was loaded via
  * [method@Gtk.CssProvider.load_from_data], then `NULL` is returned.
  *
- * Returns: (transfer none): the `GFile` from which the `section`
+ * Returns: (transfer none) (nullable): the `GFile` from which the `section`
  *   was parsed
  **/
 GFile *
