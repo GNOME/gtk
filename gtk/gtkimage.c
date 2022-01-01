@@ -477,7 +477,7 @@ gtk_image_new_from_resource (const char *resource_path)
 
 /**
  * gtk_image_new_from_pixbuf:
- * @pixbuf: (nullable): a `GdkPixbuf`
+ * @pixbuf: a `GdkPixbuf`
  *
  * Creates a new `GtkImage` displaying @pixbuf.
  *
@@ -508,7 +508,7 @@ gtk_image_new_from_pixbuf (GdkPixbuf *pixbuf)
 
 /**
  * gtk_image_new_from_paintable:
- * @paintable: (nullable): a `GdkPaintable`
+ * @paintable: a `GdkPaintable`
  *
  * Creates a new `GtkImage` displaying @paintable.
  *
@@ -535,7 +535,7 @@ gtk_image_new_from_paintable (GdkPaintable *paintable)
 
 /**
  * gtk_image_new_from_icon_name:
- * @icon_name: (nullable): an icon name
+ * @icon_name: an icon name
  *
  * Creates a `GtkImage` displaying an icon from the current icon theme.
  *
