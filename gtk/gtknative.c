@@ -267,7 +267,7 @@ gtk_native_get_surface_transform (GtkNative *self,
  *
  * Finds the `GtkNative` associated with the surface.
  *
- * Returns: (transfer none): the `GtkNative` that is associated with @surface
+ * Returns: (transfer none) (nullable): the `GtkNative` that is associated with @surface
  */
 GtkNative *
 gtk_native_get_for_surface (GdkSurface *surface)
