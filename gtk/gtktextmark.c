@@ -346,7 +346,7 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
  *
  * Returns %NULL if the mark is deleted.
  *
- * Returns: (transfer none): the mark’s `GtkTextBuffer`
+ * Returns: (transfer none) (nullable): the mark’s `GtkTextBuffer`
  */
 GtkTextBuffer*
 gtk_text_mark_get_buffer (GtkTextMark *mark)
