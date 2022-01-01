@@ -558,7 +558,7 @@ gtk_link_button_new (const char *uri)
 /**
  * gtk_link_button_new_with_label:
  * @uri: a valid URI
- * @label: (nullable): the text of the button
+ * @label: the text of the button
  *
  * Creates a new `GtkLinkButton` containing a label.
  *
