@@ -510,7 +510,7 @@ gtk_flatten_list_model_get_model (GtkFlattenListModel *self)
  *
  * Returns the model containing the item at the given position.
  *
- * Returns: (transfer none): the model containing the item at @position
+ * Returns: (transfer none) (nullable): the model containing the item at @position
  */
 GListModel *
 gtk_flatten_list_model_get_model_for_item (GtkFlattenListModel *self,
