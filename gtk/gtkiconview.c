@@ -6519,7 +6519,7 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
  * Creates a `GdkPaintable` representation of the item at @path.
  * This image is used for a drag icon.
  *
- * Returns: (transfer full): a newly-allocated `GdkPaintable` of the drag icon.
+ * Returns: (transfer full) (nullable): a newly-allocated `GdkPaintable` of the drag icon.
  **/
 GdkPaintable *
 gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
