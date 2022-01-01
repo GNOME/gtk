@@ -819,7 +819,7 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
  *
  * Returns the menu model used to populate the popover.
  *
- * Returns: (transfer none): the menu model of @popover
+ * Returns: (transfer none) (nullable): the menu model of @popover
  */
 GMenuModel *
 gtk_popover_menu_get_menu_model (GtkPopoverMenu *popover)
