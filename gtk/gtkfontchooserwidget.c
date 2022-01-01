@@ -1522,6 +1522,13 @@ should_show_axis (hb_ot_var_axis_info_t *ax)
   return TRUE;
 }
 
+static gboolean
+is_named_instance (hb_font_t *font)
+{
+  /* FIXME */
+  return FALSE;
+}
+
 static struct {
   guint32 tag;
   const char *name;
@@ -1591,7 +1598,7 @@ add_axis (GtkFontChooserWidget  *fontchooser,
 
   adjustment_changed (axis->adjustment, axis);
   g_signal_connect (axis->adjustment, "value-changed", G_CALLBACK (adjustment_changed), axis);
-  if (!should_show_axis (ax))
+  if (is_named_instance (hb_font) || !should_show_axis (ax))
     {
       gtk_widget_hide (axis->label);
       gtk_widget_hide (axis->scale);
