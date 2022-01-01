@@ -130,7 +130,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
  *
  * Retrieves the `GtkAdjustment` used for horizontal scrolling.
  *
- * Returns: (transfer none): horizontal `GtkAdjustment`.
+ * Returns: (transfer none) (nullable): horizontal `GtkAdjustment`.
  */
 GtkAdjustment *
 gtk_scrollable_get_hadjustment (GtkScrollable *scrollable)
@@ -174,7 +174,7 @@ gtk_scrollable_set_hadjustment (GtkScrollable *scrollable,
  *
  * Retrieves the `GtkAdjustment` used for vertical scrolling.
  *
- * Returns: (transfer none): vertical `GtkAdjustment`.
+ * Returns: (transfer none) (nullable): vertical `GtkAdjustment`.
  */
 GtkAdjustment *
 gtk_scrollable_get_vadjustment (GtkScrollable *scrollable)
