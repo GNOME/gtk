@@ -187,7 +187,7 @@ gdk_popup_get_rect_anchor (GdkPopup *popup)
  *
  * Returns the parent surface of a popup.
  *
- * Returns: (transfer none): the parent surface
+ * Returns: (transfer none) (nullable): the parent surface
  */
 GdkSurface *
 gdk_popup_get_parent (GdkPopup *popup)

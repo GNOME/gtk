@@ -270,7 +270,7 @@ gdk_content_serializer_get_priority (GdkContentSerializer *serializer)
  *
  * This is the `GCancellable` that was passed to [func@content_serialize_async].
  *
- * Returns: (transfer none): the cancellable for the current operation
+ * Returns: (transfer none) (nullable): the cancellable for the current operation
  */
 GCancellable *
 gdk_content_serializer_get_cancellable (GdkContentSerializer *serializer)

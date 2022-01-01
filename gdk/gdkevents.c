@@ -1225,7 +1225,7 @@ gdk_event_get_event_type (GdkEvent *event)
  *
  * Extracts the surface associated with an event.
  *
- * Returns: (transfer none): The `GdkSurface` associated with the event
+ * Returns: (transfer none) (nullable): The `GdkSurface` associated with the event
  */
 GdkSurface *
 gdk_event_get_surface (GdkEvent *event)
