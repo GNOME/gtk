@@ -523,7 +523,7 @@ gtk_file_chooser_set_file (GtkFileChooser  *chooser,
  * If the file chooser is in folder mode, this function returns
  * the selected folder.
  *
- * Returns: (transfer full): a selected `GFile`. You own the
+ * Returns: (transfer full) (nullable): a selected `GFile`. You own the
  *   returned file; use g_object_unref() to release it.
  */
 GFile *
@@ -794,7 +794,7 @@ gtk_file_chooser_set_choice (GtkFileChooser  *chooser,
  *
  * Gets the currently selected option in the 'choice' with the given ID.
  *
- * Returns: the ID of the currently selected option
+ * Returns: (nullable): the ID of the currently selected option
  */
 const char *
 gtk_file_chooser_get_choice (GtkFileChooser  *chooser,
