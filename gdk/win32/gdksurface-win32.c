@@ -1333,33 +1333,22 @@ gdk_win32_surface_set_urgency_hint (GdkSurface *window,
                                     gboolean    urgent)
 {
   FLASHWINFO flashwinfo;
-  typedef BOOL (WINAPI *PFN_FlashWindowEx) (FLASHWINFO*);
-  PFN_FlashWindowEx flashWindowEx = NULL;
 
   g_return_if_fail (GDK_IS_SURFACE (window));
 
   if (GDK_SURFACE_DESTROYED (window))
     return;
 
-  flashWindowEx = (PFN_FlashWindowEx) GetProcAddress (GetModuleHandle ("user32.dll"), "FlashWindowEx");
-
-  if (flashWindowEx)
-    {
-      flashwinfo.cbSize = sizeof (flashwinfo);
-      flashwinfo.hwnd = GDK_SURFACE_HWND (window);
-      if (urgent)
-	flashwinfo.dwFlags = FLASHW_ALL | FLASHW_TIMER;
-      else
-	flashwinfo.dwFlags = FLASHW_STOP;
-      flashwinfo.uCount = 0;
-      flashwinfo.dwTimeout = 0;
-
-      flashWindowEx (&flashwinfo);
-    }
+  flashwinfo.cbSize = sizeof (flashwinfo);
+  flashwinfo.hwnd = GDK_SURFACE_HWND (window);
+  if (urgent)
+    flashwinfo.dwFlags = FLASHW_ALL | FLASHW_TIMER;
   else
-    {
-      FlashWindow (GDK_SURFACE_HWND (window), urgent);
-    }
+    flashwinfo.dwFlags = FLASHW_STOP;
+  flashwinfo.uCount = 0;
+  flashwinfo.dwTimeout = 0;
+
+  FlashWindowEx (&flashwinfo);
 }
 
 static gboolean
