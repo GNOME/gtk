@@ -22,7 +22,7 @@
  */
 
 #include <glib.h>
-#include <Windows.h>
+#include <windows.h>
 
 /* For lookup table VK -> chars */
 typedef struct 
