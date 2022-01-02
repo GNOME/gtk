@@ -787,26 +787,6 @@ show_window_internal (GdkSurface *window,
   if (!unminimize && !already_mapped && IsWindowVisible (GDK_SURFACE_HWND (window)))
     return;
 
-  /* Other cases */
-
-  exstyle = GetWindowLong (GDK_SURFACE_HWND (window), GWL_EXSTYLE);
-
-  /* Use SetWindowPos to show transparent windows so automatic redraws
-   * in other windows can be suppressed.
-   */
-  if (exstyle & WS_EX_TRANSPARENT)
-    {
-      UINT flags = SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER;
-
-      if (GDK_IS_DRAG_SURFACE (window))
-	flags |= SWP_NOACTIVATE;
-
-      SetWindowPos (GDK_SURFACE_HWND (window),
-		    SWP_NOZORDER_SPECIFIED, 0, 0, 0, 0, flags);
-
-      return;
-    }
-
   /* For initial map of "normal" windows we want to emulate WM window
    * positioning behaviour, which means:
    * + default to the initial CW_USEDEFAULT placement,
@@ -953,6 +933,8 @@ show_window_internal (GdkSurface *window,
       GtkShowWindow (window, SW_SHOW);
     }
 
+  exstyle = GetWindowLong (GDK_SURFACE_HWND (window), GWL_EXSTYLE);
+
   /* Sync STATE_ABOVE to TOPMOST */
   if (!GDK_IS_DRAG_SURFACE (window) &&
       (((window->state & GDK_TOPLEVEL_STATE_ABOVE) &&
@@ -989,19 +971,7 @@ gdk_win32_surface_hide (GdkSurface *window)
 
   _gdk_surface_clear_update_area (window);
 
-  /* Use SetWindowPos to hide transparent windows so automatic redraws
-   * in other windows can be suppressed.
-   */
-  if (GetWindowLong (GDK_SURFACE_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
-    {
-      SetWindowPos (GDK_SURFACE_HWND (window), SWP_NOZORDER_SPECIFIED,
-		    0, 0, 0, 0,
-		    SWP_HIDEWINDOW | SWP_NOREDRAW | SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE);
-    }
-  else
-    {
-      GtkShowWindow (window, SW_HIDE);
-    }
+  GtkShowWindow (window, SW_HIDE);
 }
 
 static void
