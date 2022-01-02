@@ -50,6 +50,7 @@ GDK_AVAILABLE_IN_ALL
 GtkExpression *         gtk_expression_ref                      (GtkExpression                  *self);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_expression_unref                    (GtkExpression                  *self);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkExpression, gtk_expression_unref)
 
 GDK_AVAILABLE_IN_ALL
 GType                   gtk_expression_get_value_type           (GtkExpression                  *self);
