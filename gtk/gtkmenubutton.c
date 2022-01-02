@@ -1028,6 +1028,7 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
    */
   gtk_accessible_update_relation (GTK_ACCESSIBLE (menu_button->button),
                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY, menu_button, NULL,
+                                  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, menu_button, NULL,
                                   -1);
 
   image_widget = g_object_new (GTK_TYPE_IMAGE,
@@ -1164,6 +1165,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
 
   gtk_accessible_update_relation (GTK_ACCESSIBLE (menu_button->button),
                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY, menu_button->label_widget, NULL,
+                                  GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, menu_button->label_widget, NULL,
                                   -1);
 
   menu_button->image_widget = NULL;
