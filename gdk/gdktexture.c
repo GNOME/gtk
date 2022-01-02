@@ -454,7 +454,7 @@ gdk_texture_new_from_resource (const char *resource_path)
     texture = NULL;
 
   if (texture == NULL)
-    g_error ("Resource path %s s not a valid image: %s", resource_path, error->message);
+    g_error ("Resource path %s is not a valid image: %s", resource_path, error->message);
 
   return texture;
 }
