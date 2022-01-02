@@ -1612,6 +1612,33 @@ add_axis (GtkFontChooserWidget  *fontchooser,
   return TRUE;
 }
 
+#if HB_VERSION_ATLEAST (3, 3, 0)
+static void
+get_axes_and_values (hb_font_t             *font,
+                     unsigned int           n_axes,
+                     hb_ot_var_axis_info_t *axes,
+                     float                 *coords)
+{
+  const float *dcoords;
+  unsigned int length = n_axes;
+
+  hb_ot_var_get_axis_infos (hb_font_get_face (font), 0, &length, axes);
+
+  dcoords = hb_font_get_var_coords_design (font, &length);
+  if (dcoords)
+    memcpy (coords, dcoords, sizeof (float) * length);
+  else
+    {
+      for (int i = 0; i < n_axes; i++)
+        {
+          hb_ot_var_axis_info_t *axis = &axes[i];
+          coords[axis->axis_index] = axis->default_value;
+        }
+    }
+}
+
+#else
+
 /* FIXME: This doesn't work if the font has an avar table */
 static float
 denorm_coord (hb_ot_var_axis_info_t *axis, int coord)
@@ -1624,16 +1651,40 @@ denorm_coord (hb_ot_var_axis_info_t *axis, int coord)
     return axis->default_value + r * (axis->max_value - axis->default_value);
 }
 
+static void
+get_axes_and_values (hb_font_t             *font,
+                     unsigned int           n_axes,
+                     hb_ot_var_axis_info_t *axes,
+                     float                 *coords)
+{
+  const int *ncoords;
+  unsigned int length = n_axes;
+
+  hb_ot_var_get_axis_infos (hb_font_get_face (font), 0, &length, axes);
+
+  ncoords = hb_font_get_var_coords_normalized (font, &length);
+
+  for (int i = 0; i < n_axes; i++)
+    {
+      hb_ot_var_axis_info_t *axis = &axes[i];
+      int idx = axis->axis_index;
+      if (ncoords)
+        coords[idx] = denorm_coord (axis, ncoords[idx]);
+      else
+        coords[idx] = axis->default_value;
+    }
+}
+#endif
+
 static gboolean
 gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchooser)
 {
   PangoFont *pango_font;
   hb_font_t *hb_font;
   hb_face_t *hb_face;
-  const int *coords;
-  unsigned int n_coords;
   unsigned int n_axes;
   hb_ot_var_axis_info_t *axes;
+  float *coords;
   gboolean has_axis = FALSE;
   int i;
 
@@ -1654,24 +1705,17 @@ gtk_font_chooser_widget_update_font_variations (GtkFontChooserWidget *fontchoose
   if (!hb_ot_var_has_data (hb_face))
     return FALSE;
 
-  coords = hb_font_get_var_coords_normalized (hb_font, &n_coords);
-
   n_axes = hb_ot_var_get_axis_count (hb_face);
-  axes = g_new0 (hb_ot_var_axis_info_t, n_axes);
-  hb_ot_var_get_axis_infos (hb_face, 0, &n_axes, axes);
+  axes = g_alloca (sizeof (hb_ot_var_axis_info_t) * n_axes);
+  coords = g_alloca (sizeof (float) * n_axes);
+  get_axes_and_values (hb_font, n_axes, axes, coords);
 
   for (i = 0; i < n_axes; i++)
     {
-      float value;
-      if (coords && i < n_coords)
-        value = denorm_coord (&axes[i], coords[i]);
-      else
-        value = axes[i].default_value;
-      if (add_axis (fontchooser, hb_font, &axes[i], value, i + 4))
+      if (add_axis (fontchooser, hb_font, &axes[i], coords[axes[i].axis_index], i + 4))
         has_axis = TRUE;
     }
 
-  g_free (axes);
   g_object_unref (pango_font);
 
   return has_axis;
