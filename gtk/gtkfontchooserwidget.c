@@ -1961,6 +1961,9 @@ update_feature_example (GtkFontChooserWidget *fontchooser,
 
           desc = pango_font_description_copy (font_desc);
           pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
+          str = g_strconcat (pango_font_description_get_family (desc), ",", "sans-serif", NULL);
+          pango_font_description_set_family (desc, str);
+          g_free (str);
           pango_attr_list_insert (attrs, pango_attr_font_desc_new (desc));
           pango_font_description_free (desc);
           str = g_strconcat (item->name, " 0", NULL);
