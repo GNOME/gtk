@@ -152,6 +152,8 @@ struct _GtkFontChooserWidget
   GList *feature_items;
 
   GAction *tweak_action;
+
+  hb_map_t *glyphmap;
 };
 
 struct _GtkFontChooserWidgetClass
@@ -1131,66 +1133,6 @@ add_to_fontlist (GtkWidget     *widget,
     return G_SOURCE_CONTINUE;
 }
 
-/* Only show one face with a given face name.
- * Prefer a variable face over a non-variable one.
- */
-static gboolean
-filter_face_func (gpointer item,
-                  gpointer user_data)
-{
-  PangoFontFace *face = item;
-  PangoFontFamily *family;
-  int val;
-
-  val = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (face), "gtk-font-chooser-show"));
-  if (val)
-    return val > 0;
-
-  family = pango_font_face_get_family (face);
-  for (int i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (family)); i++)
-    {
-      PangoFontFace *face2 = g_list_model_get_item (G_LIST_MODEL (family), i);
-
-      g_object_unref (face2);
-
-      if (face2 == face ||
-          strcmp (pango_font_face_get_face_name (face),
-                  pango_font_face_get_face_name (face2)) != 0)
-        continue;
-
-      val = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (face2), "gtk-font-chooser-show"));
-      if (val < 0)
-        continue;
-
-      if (val > 0)
-        {
-          g_object_set_data (G_OBJECT (face), "gtk-font-chooser-show", GINT_TO_POINTER (-1));
-          return FALSE;
-        }
-
-#if PANGO_VERSION_CHECK (1,52,0)
-      if (pango_font_face_is_variable (face2))
-        {
-          g_object_set_data (G_OBJECT (face2), "gtk-font-chooser-show", GINT_TO_POINTER (1));
-          g_object_set_data (G_OBJECT (face), "gtk-font-chooser-show", GINT_TO_POINTER (-1));
-          return FALSE;
-        }
-      else
-#endif
-        g_object_set_data (G_OBJECT (face2), "gtk-font-chooser-show", GINT_TO_POINTER (-1));
-    }
-
-  g_object_set_data (G_OBJECT (face), "gtk-font-chooser-show", GINT_TO_POINTER (1));
-  return TRUE;
-}
-
-static gpointer
-map_family_list (gpointer item,
-                 gpointer user_data)
-{
-  return G_LIST_MODEL (gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (item)), GTK_FILTER (gtk_custom_filter_new (filter_face_func, NULL, NULL))));
-}
-
 static void
 update_fontlist (GtkFontChooserWidget *self)
 {
@@ -1202,9 +1144,9 @@ update_fontlist (GtkFontChooserWidget *self)
     fontmap = pango_cairo_font_map_get_default ();
 
   if ((self->level & GTK_FONT_CHOOSER_LEVEL_STYLE) == 0)
-    model = G_LIST_MODEL (fontmap);
+    model = g_object_ref (G_LIST_MODEL (fontmap));
   else
-    model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (fontmap)), map_family_list, NULL, NULL))));
+    model = G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (g_object_ref (fontmap))));
 
   model = G_LIST_MODEL (gtk_slice_list_model_new (model, 0, 20));
   gtk_widget_add_tick_callback (GTK_WIDGET (self), add_to_fontlist, g_object_ref (model), g_object_unref);
@@ -1582,6 +1524,13 @@ should_show_axis (hb_ot_var_axis_info_t *ax)
   return TRUE;
 }
 
+static gboolean
+is_named_instance (hb_font_t *font)
+{
+  /* FIXME */
+  return FALSE;
+}
+
 static struct {
   guint32 tag;
   const char *name;
@@ -1651,7 +1600,7 @@ add_axis (GtkFontChooserWidget  *fontchooser,
 
   adjustment_changed (axis->adjustment, axis);
   g_signal_connect (axis->adjustment, "value-changed", G_CALLBACK (adjustment_changed), axis);
-  if (!should_show_axis (ax))
+  if (is_named_instance (hb_font) || !should_show_axis (ax))
     {
       gtk_widget_hide (axis->label);
       gtk_widget_hide (axis->scale);
@@ -1847,11 +1796,12 @@ feat_pressed (GtkGestureClick *gesture,
 }
 
 static char *
-find_affected_text (hb_tag_t   feature_tag,
-                    hb_font_t *hb_font,
-                    hb_tag_t   script_tag,
-                    hb_tag_t   lang_tag,
-                    int        max_chars)
+find_affected_text (GtkFontChooserWidget *fontchooser,
+                    hb_tag_t    feature_tag,
+                    hb_font_t  *hb_font,
+                    hb_tag_t    script_tag,
+                    hb_tag_t    lang_tag,
+                    int         max_chars)
 {
   hb_face_t *hb_face;
   unsigned int script_index = 0;
@@ -1901,24 +1851,35 @@ find_affected_text (hb_tag_t   feature_tag,
                                               glyphs_after,
                                               glyphs_output);
 
-          gid = -1;
-          while (hb_set_next (glyphs_input, &gid)) {
-            hb_codepoint_t ch;
-            if (n_chars == max_chars)
-              {
-                g_string_append (chars, "…");
-                break;
-              }
-            for (ch = 0; ch < 0xffff; ch++) {
-              hb_codepoint_t glyph = 0;
-              hb_font_get_nominal_glyph (hb_font, ch, &glyph);
-              if (glyph == gid) {
-                g_string_append_unichar (chars, (gunichar)ch);
-                n_chars++;
-                break;
-              }
+          if (!fontchooser->glyphmap)
+            {
+              fontchooser->glyphmap = hb_map_create ();
+              for (hb_codepoint_t ch = 0; ch < 0xffff; ch++)
+                {
+                  hb_codepoint_t glyph = 0;
+                  if (hb_font_get_nominal_glyph (hb_font, ch, &glyph) &&
+                     !hb_map_has (fontchooser->glyphmap, glyph))
+                    hb_map_set (fontchooser->glyphmap, glyph, ch);
+                }
             }
-          }
+
+          while (hb_set_next (glyphs_input, &gid))
+            {
+              hb_codepoint_t ch;
+
+              if (n_chars == max_chars)
+                {
+                  g_string_append (chars, "…");
+                  break;
+                }
+              ch = hb_map_get (fontchooser->glyphmap, gid);
+              if (ch != HB_MAP_VALUE_INVALID)
+                {
+                  g_string_append_unichar (chars, (gunichar)ch);
+                  n_chars++;
+                }
+            }
+
           hb_set_destroy (glyphs_input);
         }
     }
@@ -1927,7 +1888,8 @@ find_affected_text (hb_tag_t   feature_tag,
 }
 
 static void
-update_feature_example (FeatureItem          *item,
+update_feature_example (GtkFontChooserWidget *fontchooser,
+                        FeatureItem          *item,
                         hb_font_t            *hb_font,
                         hb_tag_t              script_tag,
                         hb_tag_t              lang_tag,
@@ -1982,9 +1944,9 @@ update_feature_example (FeatureItem          *item,
       else if (strcmp (item->name, "frac") == 0)
         input = g_strdup ("1/2 2/3 7/8");
       else if (strcmp (item->name, "nalt") == 0)
-        input = find_affected_text (item->tag, hb_font, script_tag, lang_tag, 3);
+        input = find_affected_text (fontchooser, item->tag, hb_font, script_tag, lang_tag, 3);
       else
-        input = find_affected_text (item->tag, hb_font, script_tag, lang_tag, 10);
+        input = find_affected_text (fontchooser, item->tag, hb_font, script_tag, lang_tag, 10);
 
       if (input[0] != '\0')
         {
@@ -2264,7 +2226,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
               gtk_widget_show (item->top);
               gtk_widget_show (gtk_widget_get_parent (item->top));
 
-              update_feature_example (item, hb_font, script_tag, lang_tag, fontchooser->font_desc);
+              update_feature_example (fontchooser, item, hb_font, script_tag, lang_tag, fontchooser->font_desc);
 
               if (GTK_IS_CHECK_BUTTON (item->feat))
                 {
@@ -2279,6 +2241,12 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
                     set_inconsistent (GTK_CHECK_BUTTON (item->feat), TRUE);
                 }
             }
+        }
+
+      if (fontchooser->glyphmap)
+        {
+          hb_map_destroy (fontchooser->glyphmap);
+          fontchooser->glyphmap = NULL;
         }
     }
 
