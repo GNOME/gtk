@@ -47,8 +47,7 @@
  * Cursors by themselves are not very interesting: they must be bound to a
  * window for users to see them. This is done with [method@Gdk.Surface.set_cursor]
  * or [method@Gdk.Surface.set_device_cursor]. Applications will typically
- * use higher-level GTK functions such as [method@Gtk.Widget.set_cursor]`
- * instead.
+ * use higher-level GTK functions such as [method@Gtk.Widget.set_cursor] instead.
  *
  * Cursors are not bound to a given [class@Gdk.Display], so they can be shared.
  * However, the appearance of cursors may vary when used on different
