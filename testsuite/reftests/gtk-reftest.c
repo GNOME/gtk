@@ -552,7 +552,7 @@ main (int argc, char **argv)
    * is the same as the reftest data, because we're using the
    * "file" property of GtkImage as a relative path in builder files.
    */
-  chdir (basedir);
+  g_assert (chdir (basedir) == 0);
 
   g_log_set_writer_func (log_writer, NULL, NULL);
 
