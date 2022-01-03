@@ -1470,26 +1470,23 @@ add_font_variations (GtkFontChooserWidget *fontchooser,
 {
   GHashTableIter iter;
   Axis *axis;
-  const char *sep = "";
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
   g_hash_table_iter_init (&iter, fontchooser->axes);
   while (g_hash_table_iter_next (&iter, (gpointer *)NULL, (gpointer *)&axis))
     {
-      char tag[5];
       double value;
+      char buf[128];
 
       value = gtk_adjustment_get_value (axis->adjustment);
+
       if (value == axis->default_value)
         continue;
 
-      tag[0] = (axis->tag >> 24) & 0xff;
-      tag[1] = (axis->tag >> 16) & 0xff;
-      tag[2] = (axis->tag >> 8) & 0xff;
-      tag[3] = (axis->tag >> 0) & 0xff;
-      tag[4] = '\0';
-      g_string_append_printf (s, "%s%s=%s", sep, tag, g_ascii_dtostr (buf, sizeof(buf), value));
-      sep = ",";
+      hb_variation_to_string (&(hb_variation_t) { axis->tag, value }, buf, sizeof (buf));
+
+      if (s->len > 0)
+        g_string_append_c (s, ',');
+      g_string_append (s, buf);
     }
 }
 
@@ -1518,10 +1515,7 @@ adjustment_changed (GtkAdjustment *adjustment,
 static gboolean
 should_show_axis (hb_ot_var_axis_info_t *ax)
 {
-  if (ax->flags & HB_OT_VAR_AXIS_FLAG_HIDDEN)
-    return FALSE;
-
-  return TRUE;
+  return (ax->flags & HB_OT_VAR_AXIS_FLAG_HIDDEN) == 0;
 }
 
 static gboolean
@@ -1535,11 +1529,11 @@ static struct {
   guint32 tag;
   const char *name;
 } axis_names[] = {
-  { HB_OT_TAG_VAR_AXIS_WIDTH,        N_("Width") },
-  { HB_OT_TAG_VAR_AXIS_WEIGHT,       N_("Weight") },
-  { HB_OT_TAG_VAR_AXIS_ITALIC,       N_("Italic") },
-  { HB_OT_TAG_VAR_AXIS_SLANT,        N_("Slant") },
-  { HB_OT_TAG_VAR_AXIS_OPTICAL_SIZE, N_("Optical Size") },
+  { HB_OT_TAG_VAR_AXIS_WIDTH,        NC_("Font variation axis", "Width") },
+  { HB_OT_TAG_VAR_AXIS_WEIGHT,       NC_("Font variation axis", "Weight") },
+  { HB_OT_TAG_VAR_AXIS_ITALIC,       NC_("Font variation axis", "Italic") },
+  { HB_OT_TAG_VAR_AXIS_SLANT,        NC_("Font variation axis", "Slant") },
+  { HB_OT_TAG_VAR_AXIS_OPTICAL_SIZE, NC_("Font variation axis", "Optical Size") },
 };
 
 static gboolean
@@ -1570,7 +1564,7 @@ add_axis (GtkFontChooserWidget  *fontchooser,
     {
       if (axis_names[i].tag == ax->tag)
         {
-          name = _(axis_names[i].name);
+          name = g_dpgettext2 (NULL, "Font variation axis", axis_names[i].name);
           break;
         }
     }
@@ -2304,6 +2298,7 @@ update_font_features (GtkFontChooserWidget *fontchooser)
 {
   GString *s;
   GList *l;
+  char buf[128];
 
   s = g_string_new ("");
 
@@ -2319,17 +2314,24 @@ update_font_features (GtkFontChooserWidget *fontchooser)
           if (gtk_check_button_get_active (GTK_CHECK_BUTTON (item->feat)) &&
               strcmp (item->name, "xxxx") != 0)
             {
-              g_string_append_printf (s, "%s\"%s\" %d", s->len > 0 ? ", " : "", item->name, 1);
+              hb_feature_to_string (&(hb_feature_t) { item->tag, 1, 0, -1 }, buf, sizeof (buf));
+              if (s->len > 0)
+                g_string_append_c (s, ',');
+              g_string_append (s, buf);
             }
         }
       else if (GTK_IS_CHECK_BUTTON (item->feat))
         {
+          guint32 value;
+
           if (gtk_check_button_get_inconsistent (GTK_CHECK_BUTTON (item->feat)))
             continue;
 
-          g_string_append_printf (s, "%s\"%s\" %d",
-                                  s->len > 0 ? ", " : "", item->name,
-                                  gtk_check_button_get_active (GTK_CHECK_BUTTON (item->feat)));
+          value = gtk_check_button_get_active (GTK_CHECK_BUTTON (item->feat));
+          hb_feature_to_string (&(hb_feature_t) { item->tag, value, 0, -1 }, buf, sizeof (buf));
+          if (s->len > 0)
+            g_string_append_c (s, ',');
+          g_string_append (s, buf);
         }
     }
 
@@ -2367,7 +2369,8 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
     {
       double font_size = (double) pango_font_description_get_size (fontchooser->font_desc) / PANGO_SCALE;
       /* XXX: This clamps, which can cause it to reloop into here, do we need
-       * to block its signal handler? */
+       * to block its signal handler?
+       */
       gtk_range_set_value (GTK_RANGE (fontchooser->size_slider), font_size);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (fontchooser->size_spin), font_size);
     }
