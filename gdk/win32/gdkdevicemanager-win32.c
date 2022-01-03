@@ -1762,10 +1762,12 @@ winpointer_make_event (GdkDisplay *display,
   x /= impl->window_scale;
   y /= impl->window_scale;
 
+  /* info->dwKeyStates is not reliable. We shall use
+   * GetKeyState here even for Ctrl and Shift. */
   state = 0;
-  if (info->dwKeyStates & POINTER_MOD_CTRL)
+  if (GetKeyState (VK_CONTROL) < 0)
     state |= GDK_CONTROL_MASK;
-  if (info->dwKeyStates & POINTER_MOD_SHIFT)
+  if (GetKeyState (VK_SHIFT) < 0)
     state |= GDK_SHIFT_MASK;
   if (GetKeyState (VK_MENU) < 0)
     state |= GDK_MOD1_MASK;
