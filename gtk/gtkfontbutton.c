@@ -433,6 +433,8 @@ gtk_font_button_font_chooser_set_font_map (GtkFontChooser *chooser,
 
       context = gtk_widget_get_pango_context (font_button->font_label);
       pango_context_set_font_map (context, font_map);
+      if (font_button->font_dialog)
+        gtk_font_chooser_set_font_map (GTK_FONT_CHOOSER (font_button->font_dialog), font_map);
     }
 }
 
