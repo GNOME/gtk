@@ -52,6 +52,7 @@ demo_sources = $(demo_sources) $(font_features_demo)
 !endif
 
 # Please do not change anything beneath this line unless maintaining the NMake Makefiles
+GTK_INTERFACE_AGE = @GTK_INTERFACE_AGE@
 GTK_VERSION = @GTK_VERSION@
 
 GDK_PREPROCESSOR_FLAGS =	\
