@@ -1293,7 +1293,7 @@ gtk_3_EXCLUDES = dummy
 gtk_3_HEADERS_DIR = $(gtkincludedir)
 
 gtk_3_HEADERS_INST = \
-	$(gtkinclude_HEADERS)	\
+	$(filter-out gtkversion.h, $(gtkinclude_HEADERS))	\
 	$(a11y_h_sources)	\
 	$(gtk_deprecated_h_sources)
 
@@ -1335,7 +1335,7 @@ INTROSPECTION_INTERMEDIATE_ITEMS = \
 	$(top_builddir)/win32/Gtk_3_0_gir_list
 
 Gtk_3_0_gir_MSVC_FILES =		\
-	$(filter-out gtktypebuiltins.h, $(introspected_pub_headers)) \
+	$(filter-out gtktypebuiltins.h gtkversion.h, $(introspected_pub_headers)) \
 	$(gtk_base_c_sources)		\
 	$(gtk_os_win32_c_sources)
 

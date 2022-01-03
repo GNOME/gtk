@@ -135,6 +135,7 @@ copy .\Debug\$(Platform)\obj\gdk-3\gdk\gdkconfig.h $(CopyDir)\include\gtk-$(ApiV
 copy .\Debug\$(Platform)\obj\gdk-3\gdk\gdkenumtypes.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy .\Debug\$(Platform)\obj\gdk-3\gdk\gdkversionmacros.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy .\Debug\$(Platform)\obj\gtk-3\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+copy .\Debug\$(Platform)\obj\gtk-3\gtk\gtkversion.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 goto CONTINUE_HEADERS
 
 :COPY_RELEASE_BUILT_HEADERS
@@ -142,6 +143,7 @@ copy .\Release\$(Platform)\obj\gdk-3\gdk\gdkconfig.h $(CopyDir)\include\gtk-$(Ap
 copy .\Release\$(Platform)\obj\gdk-3\gdk\gdkenumtypes.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy .\Release\$(Platform)\obj\gdk-3\gdk\gdkversionmacros.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy .\Release\$(Platform)\obj\gtk-3\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
+copy .\Release\$(Platform)\obj\gtk-3\gtk\gtkversion.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 goto CONTINUE_HEADERS
 
 :CONTINUE_HEADERS

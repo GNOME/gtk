@@ -41,6 +41,10 @@
 				DebugInformationFormat="4"
 			/>
 			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="..\..\gdk\win32\rc"
+			/>
+			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(GdkAdditionalLibs)"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
@@ -73,6 +77,10 @@
 				DebugInformationFormat="4"
 			/>
 			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="..\..\gdk\win32\rc"
+			/>
+			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(GdkAdditionalLibs) $(GdkBroadwayAdditionalLibs)"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
@@ -101,6 +109,10 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="..\..\gdk\win32\rc"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -133,6 +145,10 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="..\..\gdk\win32\rc"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -169,6 +185,10 @@
 				DebugInformationFormat="3"
 			/>
 			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="..\..\gdk\win32\rc"
+			/>
+			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(GdkAdditionalLibs)"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
@@ -201,6 +221,10 @@
 				DebugInformationFormat="3"
 			/>
 			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="..\..\gdk\win32\rc"
+			/>
+			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(GdkAdditionalLibs) $(GdkBroadwayAdditionalLibs)"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
@@ -229,6 +253,10 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="..\..\gdk\win32\rc"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -263,6 +291,10 @@
 				DebugInformationFormat="3"
 			/>
 			<Tool
+				Name="VCResourceCompilerTool"
+				AdditionalIncludeDirectories="..\..\gdk\win32\rc"
+			/>
+			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(GdkAdditionalLibs) $(GdkBroadwayAdditionalLibs)"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
@@ -290,7 +322,18 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File RelativePath="..\..\gdk\win32\rc\gdk.rc" />
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gdk-3\gdk\gdk.rc" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|Win32" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|x64" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Release\$(PlatformName)\obj\gdk-3\gdk\gdk.rc" >
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|Win32" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|x64" ExcludedFromBuild="true" ><Tool Name="VCResourceCompilerTool" /></FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"
