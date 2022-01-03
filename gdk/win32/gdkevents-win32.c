@@ -157,7 +157,6 @@ static HKL latin_locale = NULL;
 
 static gboolean in_ime_composition = FALSE;
 static UINT     modal_timer;
-static UINT     sync_timer = 0;
 
 static int debug_indent = 0;
 
@@ -1451,23 +1450,6 @@ _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind)
       API_CALL (KillTimer, (NULL, modal_timer));
       modal_timer = 0;
     }
-}
-
-static VOID CALLBACK
-sync_timer_proc (HWND     hwnd,
-		 UINT     msg,
-		 UINT_PTR id,
-		 DWORD    time)
-{
-  MSG message;
-  if (PeekMessageW (&message, hwnd, WM_PAINT, WM_PAINT, PM_REMOVE))
-    {
-      return;
-    }
-
-  RedrawWindow (hwnd, NULL, NULL, RDW_INVALIDATE|RDW_UPDATENOW|RDW_ALLCHILDREN);
-
-  KillTimer (hwnd, sync_timer);
 }
 
 static gboolean
@@ -2852,12 +2834,6 @@ gdk_event_translate (MSG *msg,
 
       return_val = TRUE;
       *ret_valp = 1;
-      break;
-
-    case WM_SYNCPAINT:
-      sync_timer = SetTimer (GDK_SURFACE_HWND (window),
-			     1,
-			     200, sync_timer_proc);
       break;
 
     case WM_PAINT:
