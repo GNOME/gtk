@@ -42,7 +42,7 @@ EXTRA_DIST +=	\
 	create-lists.bat	\
 	create-lists-msvc.mak		\
 	detectenv-msvc.mak		\
-	gen-gdkversionmacros-h.py	\
+	gen-version-items.py	\
 	generate-msvc.mak	\
 	gtk-introspection-msvc.mak	\
 	introspection-msvc.mak		\

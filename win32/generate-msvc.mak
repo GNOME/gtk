@@ -121,7 +121,7 @@ generate-base-sources:	\
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h: ..\gdk\gdkversionmacros.h.in
 	@echo Generating $@...
 	@if not exist $(@D)\ md $(@D)
-	@$(PYTHON) gen-gdkversionmacros-h.py --version=$(GTK_VERSION) --outdir=.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk
+	@$(PYTHON) gen-version-items.py --version=$(GTK_VERSION) --interface-age=$(GTK_INTERFACE_AGE) --source=$** --output=$@
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkmarshalers.h: ..\gdk\gdkmarshalers.list
 	@echo Generating $@...
