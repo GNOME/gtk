@@ -1017,7 +1017,11 @@ set_theme_from_entry (GdkScreen        *screen,
   GSettingsSchema *schema = NULL;
   gboolean hc = FALSE;
 
-  settings = (GSettings *)g_hash_table_lookup (screen_wayland->settings, "org.gnome.desktop.a11y.interface");
+  if (screen_wayland->settings_portal == NULL)
+    {
+      settings = (GSettings *)g_hash_table_lookup (screen_wayland->settings,
+                                                   "org.gnome.desktop.a11y.interface");
+    }
 
   if (settings)
     g_object_get (settings, "settings-schema", &schema, NULL);
