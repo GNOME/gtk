@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-27 13:54+0000\n"
-"PO-Revision-Date: 2021-12-27 22:51+0000\n"
+"POT-Creation-Date: 2022-01-04 11:18+0000\n"
+"PO-Revision-Date: 2022-01-04 14:12+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -2125,7 +2125,7 @@ msgstr "Já existe um ficheiro com esse nome"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6218 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6226 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "_Cancelar"
@@ -2215,7 +2215,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Se eliminar um item, estará permanentemente perdido."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5644 gtk/gtktext.c:6064 gtk/gtktextview.c:8920
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6064 gtk/gtktextview.c:8920
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2336,7 +2336,7 @@ msgstr "Programa"
 msgid "Audio"
 msgstr "Áudio"
 
-#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
+#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:604
 #: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "Letra"
@@ -2421,60 +2421,65 @@ msgstr "Acedido"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:626
+#: gtk/gtkfontbutton.c:508 gtk/gtkfontbutton.c:628
 msgid "Pick a Font"
 msgstr "Escolha uma letra"
 
-#: gtk/gtkfontbutton.c:1363
+#: gtk/gtkfontbutton.c:1365
 msgctxt "font"
 msgid "None"
 msgstr "Nenhuma"
 
-#: gtk/gtkfontchooserwidget.c:1569
+#: gtk/gtkfontchooserwidget.c:1532
+msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Largura"
 
-#: gtk/gtkfontchooserwidget.c:1570
+#: gtk/gtkfontchooserwidget.c:1533
+msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Peso"
 
-#: gtk/gtkfontchooserwidget.c:1571
+#: gtk/gtkfontchooserwidget.c:1534
+msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Itálico"
 
-#: gtk/gtkfontchooserwidget.c:1572
+#: gtk/gtkfontchooserwidget.c:1535
+msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Inclinado"
 
-#: gtk/gtkfontchooserwidget.c:1573
+#: gtk/gtkfontchooserwidget.c:1536
+msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Tamanho ótico"
 
-#: gtk/gtkfontchooserwidget.c:2120
+#: gtk/gtkfontchooserwidget.c:2140
 msgid "Default"
 msgstr "Predefinição"
 
-#: gtk/gtkfontchooserwidget.c:2166
+#: gtk/gtkfontchooserwidget.c:2186
 msgid "Ligatures"
 msgstr "Ligaduras"
 
-#: gtk/gtkfontchooserwidget.c:2167
+#: gtk/gtkfontchooserwidget.c:2187
 msgid "Letter Case"
 msgstr "Caixa de letra"
 
-#: gtk/gtkfontchooserwidget.c:2168
+#: gtk/gtkfontchooserwidget.c:2188
 msgid "Number Case"
 msgstr "Caixa de número"
 
-#: gtk/gtkfontchooserwidget.c:2169
+#: gtk/gtkfontchooserwidget.c:2189
 msgid "Number Spacing"
 msgstr "Espaçamento de número"
 
-#: gtk/gtkfontchooserwidget.c:2170
+#: gtk/gtkfontchooserwidget.c:2190
 msgid "Number Formatting"
 msgstr "Formatação de número"
 
-#: gtk/gtkfontchooserwidget.c:2171
+#: gtk/gtkfontchooserwidget.c:2191
 msgid "Character Variants"
 msgstr "Variantes de carácter"
 
@@ -2482,27 +2487,27 @@ msgstr "Variantes de carácter"
 msgid "OpenGL context creation failed"
 msgstr "Falha ao criar o contexto OpenGL"
 
-#: gtk/gtklabel.c:5641 gtk/gtktext.c:6052 gtk/gtktextview.c:8908
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6052 gtk/gtktextview.c:8908
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtklabel.c:5642 gtk/gtktext.c:6056 gtk/gtktextview.c:8912
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6056 gtk/gtktextview.c:8912
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5643 gtk/gtktext.c:6060 gtk/gtktextview.c:8916
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6060 gtk/gtktextview.c:8916
 msgid "_Paste"
 msgstr "Co_lar"
 
-#: gtk/gtklabel.c:5649 gtk/gtktext.c:6073 gtk/gtktextview.c:8941
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6073 gtk/gtktextview.c:8941
 msgid "Select _All"
 msgstr "Selecionar _tudo"
 
-#: gtk/gtklabel.c:5654
+#: gtk/gtklabel.c:5655
 msgid "_Open Link"
 msgstr "_Abrir Ligação"
 
-#: gtk/gtklabel.c:5658
+#: gtk/gtklabel.c:5659
 msgid "Copy _Link Address"
 msgstr "Copiar endereço da _ligação"
 
@@ -2551,7 +2556,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:768
+#: gtk/gtkmain.c:771
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2604,7 +2609,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6219
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6227
 msgid "_OK"
 msgstr "_Aceitar"
 
@@ -3506,12 +3511,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6206
+#: gtk/gtkwindow.c:6214
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Deseja usar o Inspetor GTK?"
 
-#: gtk/gtkwindow.c:6208
+#: gtk/gtkwindow.c:6216
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3522,7 +3527,7 @@ msgstr ""
 "estado interno de qualquer aplicação GTK. Usá-lo pode fazer que a aplicação "
 "se encerre ou falhe."
 
-#: gtk/gtkwindow.c:6213
+#: gtk/gtkwindow.c:6221
 msgid "Don’t show this message again"
 msgstr "Não mostrar esta mensagem novamente"
 
