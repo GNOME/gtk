@@ -41,6 +41,7 @@
 #include "gtktogglebutton.h"
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
+#include "gtkmain.h"
 #include "gtkfilefilterprivate.h"
 #include "gtknative.h"
 
@@ -50,6 +51,9 @@
 
 typedef struct {
   GtkFileChooserNative *self;
+
+  GtkWidget *grab_widget;
+
   IFileDialogEvents *events;
 
   HWND parent;
@@ -317,6 +321,12 @@ filechooser_win32_thread_data_free (FilechooserWin32ThreadData *data)
 
   if (data->events)
     IFileDialogEvents_Release (data->events);
+
+  if (data->grab_widget)
+    {
+      gtk_grab_remove (data->grab_widget);
+      g_object_unref (data->grab_widget);
+    }
 
   g_clear_object (&data->current_folder);
   g_clear_object (&data->current_file);
@@ -967,6 +977,12 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
     {
       filechooser_win32_thread_data_free (data);
       return FALSE;
+    }
+
+  if (data->modal)
+    {
+      data->grab_widget = g_object_ref_sink (gtk_label_new (""));
+      gtk_grab_add (GTK_WIDGET (data->grab_widget));
     }
 
   return TRUE;
