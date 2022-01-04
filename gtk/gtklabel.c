@@ -2493,7 +2493,7 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * If this property is set to -1, the width will be calculated automatically.
    *
-   * See the section on [text layout](#text-layout) for details of how
+   * See the section on [text layout](class.Label.html#text-layout) for details of how
    * [property@Gtk.Label:width-chars] and [property@Gtk.Label:max-width-chars]
    * determine the width of ellipsized and wrapped labels.
    */
@@ -2529,7 +2529,7 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * If this property is set to -1, the width will be calculated automatically.
    *
-   * See the section on [text layout](#text-layout) for details of how
+   * See the section on [text layout](class.Label.html#text-layout) for details of how
    * [property@Gtk.Label:width-chars] and [property@Gtk.Label:max-width-chars]
    * determine the width of ellipsized and wrapped labels.
    */
