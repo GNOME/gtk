@@ -927,6 +927,7 @@ if not meson.is_cross_build() and build_machine.system() == 'linux' and objcopy.
       input : gtk_gresource,
       output : 'gtkresources_blob.o',
       command : [ld,
+                 '-z', 'noexecstack',
                  '-r',
                  '-b','binary',
                  '@INPUT@',
@@ -937,6 +938,7 @@ if not meson.is_cross_build() and build_machine.system() == 'linux' and objcopy.
     input : gtk_resources_binary,
     output : 'gtkresources_blob2.o',
     command : [objcopy,
+                 '--strip-all',
                  '--add-symbol','_gtk_resource_data=.data:0',
                  '@INPUT@',
                  '@OUTPUT@'])
