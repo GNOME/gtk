@@ -64,9 +64,10 @@ $(srcroot)\win32, and run
 "nmake /f generate-msvc.mak regenerate-demos-h-win32 FONT_FEATURES_DEMO=1".
 To undo that, run that command without "FONT_FEATURES_DEMO=1".  Python must
 be present in your PATH or passed in via PYTHON=<path_to_python_interpreter>.
-
-You will then need to add $(srcroot)\demos\gtk-demo\font_features.c into 
-the source list of the "gtk3-demo" project, and add the .lib file for 
-HarfBuzz, and if using pre-Pango 1.44.0 and/or pre-HarfBuzz 2.2.0, the 
-.lib files for PangoFT2 and FreeType into the "Additional Libraries" 
-entry under the linker settings.
+If you are building the font features demo with the older PangoFT2-style
+(i.e. pre-Pango-1.44.x and pre-HarfBuzz-2.2.0) support, pass in 
+"FONT_FEATURES_USE_PANGOFT2=1" in addition to "FONT_FEATURES_DEMO=1" in the 
+NMake command line.  The gtk3-demo project files will also be updated with the 
+appropriate dependent libraries linked in-please check that the project settings 
+contain the correct .lib file names for your system, as they assume the most 
+common names are used there.
