@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\gtk\gtk-win32.rc"><Filter>Resource Files</Filter></ResourceCompile>
+    <ResourceCompile Include="$(GtkGenSrcDir)\gtk\gtk-win32.rc"><Filter>Resource Files</Filter></ResourceCompile>
   </ItemGroup>
   <ItemGroup>
 #include "gtk-3.vs10.sourcefiles.filters"
@@ -36,6 +36,6 @@
     <ClCompile Include="..\..\modules\input\thai-charprop.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Manifest Include="..\..\gtk\libgtk3.manifest"><Filter>Resource Files</Filter></Manifest>
+    <Manifest Include="$(GtkGenSrcDir)\gtk\libgtk3.manifest"><Filter>Resource Files</Filter></Manifest>
   </ItemGroup>
 </Project>

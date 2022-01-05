@@ -52,6 +52,7 @@ demo_sources = $(demo_sources) $(font_features_demo)
 !endif
 
 # Please do not change anything beneath this line unless maintaining the NMake Makefiles
+GTK_INTERFACE_AGE = @GTK_INTERFACE_AGE@
 GTK_VERSION = @GTK_VERSION@
 
 GDK_PREPROCESSOR_FLAGS =	\
@@ -62,9 +63,13 @@ GDK_PREPROCESSOR_FLAGS =	\
 	/I..\gdk\win32
 
 GTK_PREPROCESSOR_FLAGS =	\
+	 /I.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk	\
 	 /I..\gtk	\
+	 /I.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk	\
 	 /I..\gdk	\
 	 /I..\gdk\win32	\
+	 /I.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3	\
+	 /I.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3	\
 	 /I..	\
 	 /I$(PREFIX)\include\gdk-pixbuf-2.0	\
 	 /I$(PREFIX)\include\pango-1.0	\

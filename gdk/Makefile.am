@@ -1,5 +1,7 @@
 ## Makefile.am for gtk+/gdk
 include $(top_srcdir)/Makefile.decl
+include gdk-pub-headers.mak
+
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
 INTROSPECTION_SCANNER_ENV = \
@@ -63,54 +65,10 @@ LDADD = 					\
 #
 # setup source file variables
 #
-#
-# GDK header files for public installation (non-generated)
-#
-#
-gdk_public_h_sources = 				\
-	gdk.h					\
-	gdk-autocleanup.h			\
-	gdkapplaunchcontext.h			\
-	gdkcairo.h				\
-	gdkcursor.h				\
-	gdkdevice.h				\
-	gdkdevicepad.h				\
-	gdkdevicetool.h				\
-	gdkdevicemanager.h			\
-	gdkdisplay.h				\
-	gdkdisplaymanager.h			\
-	gdkdnd.h				\
-	gdkdrawingcontext.h			\
-	gdkevents.h				\
-	gdkframetimings.h			\
-	gdkglcontext.h				\
-	gdkkeys.h				\
-	gdkkeysyms.h				\
-	gdkkeysyms-compat.h			\
-	gdkmain.h				\
-	gdkmonitor.h				\
-	gdkpango.h				\
-	gdkframeclock.h				\
-	gdkpixbuf.h				\
-	gdkprivate.h				\
-	gdkproperty.h				\
-	gdkrectangle.h				\
-	gdkrgba.h				\
-	gdkscreen.h				\
-	gdkseat.h				\
-	gdkselection.h				\
-	gdktestutils.h				\
-	gdkthreads.h				\
-	gdktypes.h				\
-	gdkvisual.h				\
-	gdkwindow.h
-
-deprecated_h_sources =				\
-	deprecated/gdkcolor.h
 
 gdk_h_sources =					\
 	$(gdk_public_h_sources)			\
-	$(deprecated_h_sources)
+	$(gdk_deprecated_h_sources)
 
 gdk_private_headers = 				\
 	gdk-private.h				\
@@ -201,7 +159,7 @@ gdkinclude_HEADERS = $(gdk_public_h_sources)
 nodist_gdkinclude_HEADERS = gdkconfig.h gdkenumtypes.h gdkversionmacros.h
 
 deprecatedincludedir = $(includedir)/gtk-3.0/gdk/deprecated
-deprecatedinclude_HEADERS = $(deprecated_h_sources)
+deprecatedinclude_HEADERS = $(gdk_deprecated_h_sources)
 
 common_sources = 		\
 	$(gdk_private_headers)	\
@@ -499,14 +457,13 @@ gdkresources.c: gdk.gresource.xml $(resource_files)
 # ------------------- MSVC Build Items ----------------
 MSVCPROJS = gdk-3
 
-gdk_3_FILES = $(libgdk_3_la_SOURCES)
+gdk_3_FILES = $(gdk_c_sources)
 gdk_3_EXCLUDES = dummy
 gdk_3_HEADERS_DIR = $(gdkincludedir)
 
 gdk_3_HEADERS_INST = \
 	$(gdkinclude_HEADERS)		\
-	$(deprecatedinclude_HEADERS)	\
-	$(nodist_gdkinclude_HEADERS)
+	$(deprecatedinclude_HEADERS)
 
 gdk_3_HEADERS_EXCLUDES = dummy
 
@@ -518,7 +475,9 @@ MSVC_INTROSPECT_GIRS = Gdk-3.0.gir GdkWin32-3.0.gir
 
 BASE_MSVC_GIR_CFLAGS =			\
 	$(GDK_CFLAGS_DEFINES)		\
-	-I.. -I../gdk -I../gdk/win32
+	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gdk-3' -I..	\
+	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gdk-3/gdk' -I../gdk	\
+	-I../gdk/win32
 
 INTROSPECTION_INTERMEDIATE_ITEMS = \
 	$(top_builddir)/win32/Gdk-3.0.gir.msvc.introspect	\
@@ -526,7 +485,8 @@ INTROSPECTION_INTERMEDIATE_ITEMS = \
 	$(top_builddir)/win32/GdkWin32-3.0.gir.msvc.introspect	\
 	$(top_builddir)/win32/GdkWin32_3_0_gir_list
 
-Gdk_3_0_gir_MSVC_FILES = $(introspection_files)
+Gdk_3_0_gir_MSVC_FILES = $(filter-out gdkkeysyms-compat.h, $(gdk_h_sources))	\
+	$(gdk_c_sources)	\
 Gdk_3_0_gir_MSVC_EXPORT_PACKAGES = $(Gdk_3_0_gir_EXPORT_PACKAGES)
 Gdk_3_0_gir_MSVC_INCLUDE_GIRS = $(Gdk_3_0_gir_INCLUDES)
 Gdk_3_0_gir_MSVC_LIBS = gdk-3.0

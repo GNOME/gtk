@@ -89,46 +89,46 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-gen-srcs.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-gen-srcs.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-gen-srcs.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-gen-srcs.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-gen-srcs.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-gen-srcs.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-gen-srcs.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-gen-srcs.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <NMakeBuildCommandLine Condition="'$(Configuration)' == 'Debug_Broadway'">$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)</NMakeBuildCommandLine>
-    <NMakeBuildCommandLine Condition="'$(Configuration)' == 'Release_Broadway'">$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)</NMakeBuildCommandLine>
-    <NMakeBuildCommandLine Condition="'$(Configuration)' == 'Debug'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam)</NMakeBuildCommandLine>
-    <NMakeBuildCommandLine Condition="'$(Configuration)' == 'Release'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam)</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)' == 'Debug_Broadway'">$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all</NMakeReBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)' == 'Release_Broadway'">$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all</NMakeReBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)' == 'Debug'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) clean all</NMakeReBuildCommandLine>
-    <NMakeReBuildCommandLine Condition="'$(Configuration)' == 'Release'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) clean all</NMakeReBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)' == 'Debug_Broadway'">$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) generate-base-sources</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)' == 'Release_Broadway'">$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) generate-base-sources</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)' == 'Debug'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) generate-base-sources</NMakeBuildCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)' == 'Release'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) generate-base-sources</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)' == 'Debug_Broadway'">$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources</NMakeReBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)' == 'Release_Broadway'">$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources</NMakeReBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)' == 'Debug'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) clean generate-base-sources</NMakeReBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)' == 'Release'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) clean generate-base-sources</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)' == 'Debug_Broadway'">$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)' == 'Release_Broadway'">$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean</NMakeCleanCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)' == 'Debug'">$(GenerateRequiredSourcesBase) CFG=$(Configuration) $(IntrospectPythonParam) clean</NMakeCleanCommandLine>

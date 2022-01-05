@@ -8,6 +8,13 @@
     <GtkDummyPrefix>/dummy</GtkDummyPrefix>
     <GtkPrefixDefine>GTK_PREFIX=\"$(GtkDummyPrefix)\"</GtkPrefixDefine>
     <GdkDefines>GDK_COMPILATION;G_LOG_DOMAIN="Gdk"</GdkDefines>
+    <GdkGenSrcDir>.\$(Configuration)\$(Platform)\obj\gdk-3</GdkGenSrcDir>
+    <GdkGenSrcDir Condition="'$(Configuration)' == 'Release_Broadway'">.\Release\$(Platform)\obj\gdk-3</GdkGenSrcDir>
+    <GdkGenSrcDir Condition="'$(Configuration)' == 'Debug_Broadway'">.\Debug\$(Platform)\obj\gdk-3</GdkGenSrcDir>
+    <GtkGenSrcDir>.\$(Configuration)\$(Platform)\obj\gtk-3</GtkGenSrcDir>
+    <BaseConfigIncludes>$(GtkGenSrcDir);$(GdkGenSrcDir);..\..</BaseConfigIncludes>
+    <GdkBaseIncludes>$(GdkGenSrcDir)\gdk;..\..\gdk;$(BaseConfigIncludes)</GdkBaseIncludes>
+    <GtkBaseIncludes>$(GtkGenSrcDir)\gtk;..\..\gtk;$(GdkBaseIncludes)</GtkBaseIncludes>
     <GtkIncludedImmodulesDefines>INCLUDE_IM_am_et;INCLUDE_IM_cedilla;INCLUDE_IM_cyrillic_translit;INCLUDE_IM_ime;INCLUDE_IM_inuktitut;INCLUDE_IM_ipa;INCLUDE_IM_multipress;INCLUDE_IM_thai;INCLUDE_IM_ti_er;INCLUDE_IM_ti_et;INCLUDE_IM_viqr</GtkIncludedImmodulesDefines>
     <GtkHostMachine Condition="'$(Platform)' == 'Win32'">i686</GtkHostMachine>
     <GtkHostMachine Condition="'$(Platform)' == 'x64'">x86_64</GtkHostMachine>
@@ -22,6 +29,9 @@
 set VCInstallDir=$(VCInstallDir)
 nmake -f gtk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstallRoot)</GtkIntrospectNMakeCmd>
     <GtkIntrospectBuiltFiles>$(BinDir)\Gtk-3.0.gir;$(BinDir)\Gtk-3.0.typelib</GtkIntrospectBuiltFiles>
+    <GenerateRequiredSourcesBase>cd ..
+set VCInstallDir=$(VCInstallDir)
+nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)</GenerateRequiredSourcesBase>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk3builddefinesprops</_PropertySheetDisplayName>
@@ -30,7 +40,7 @@ nmake -f gtk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstall
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..;$(GlibEtcInstallRoot)\include\gdk-pixbuf-2.0;$(GlibEtcInstallRoot)\include\pango-1.0;$(GlibEtcInstallRoot)\include\harfbuzz;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\gio-win32-2.0;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\fribidi;$(GlibEtcInstallRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(GlibEtcInstallRoot)\include\gdk-pixbuf-2.0;$(GlibEtcInstallRoot)\include\pango-1.0;$(GlibEtcInstallRoot)\include\harfbuzz;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\gio-win32-2.0;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\fribidi;$(GlibEtcInstallRoot)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>HAVE_CONFIG_H;G_ENABLE_DEBUG;G_DISABLE_SINGLE_INCLUDES;ATK_DISABLE_SINGLE_INCLUDES;GDK_PIXBUF_DISABLE_SINGLE_INCLUDES;GTK_DISABLE_SINGLE_INCLUDES;_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -62,6 +72,21 @@ nmake -f gtk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstall
     <BuildMacro Include="GdkDefines">
       <Value>$(GdkDefines)</Value>
     </BuildMacro>
+    <BuildMacro Include="GdkGenSrcDir">
+      <Value>$(GdkGdkGenSrcDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkGenSrcDir">
+      <Value>$(GtkGdkGenSrcDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BaseConfigIncludes">
+      <Value>$(BaseConfigIncludes)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GdkBaseIncludes">
+      <Value>$(GdkBaseIncludes)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GtkBaseIncludes">
+      <Value>$(GtkBaseIncludes)</Value>
+    </BuildMacro>
     <BuildMacro Include="GtkIncludedImmodulesDefines">
       <Value>$(GtkIncludedImmodulesDefines)</Value>
     </BuildMacro>
@@ -88,6 +113,9 @@ nmake -f gtk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstall
     </BuildMacro>
     <BuildMacro Include="GtkIntrospectBuiltFiles">
       <Value>$(GtkIntrospectBuiltFiles)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateRequiredSourcesBase">
+      <Value>$(GenerateRequiredSourcesBase)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

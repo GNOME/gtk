@@ -33,6 +33,23 @@
 
 NULL=
 
+# For GDK enumeration sources
+!include ..\gdk\gdk-pub-headers.mak
+
+!if [call create-lists.bat header gdk_headers.mak GDK_PUBLIC_HEADERS]
+!endif
+
+!if [for %f in ($(gdk_public_h_sources) $(gdk_deprecated_h_sources)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!endif
+
+!if [call create-lists.bat footer gdk_headers.mak]
+!endif
+
+!include gdk_headers.mak
+
+!if [del /f /q gdk_headers.mak]
+!endif
+
 # For GDK resources
 
 !if [call create-lists.bat header resources_sources.mak GDK_RESOURCES]
@@ -46,6 +63,39 @@ NULL=
 
 !if [call create-lists.bat header resources_sources.mak GTK_RESOURCES]
 !endif
+
+# For GTK enumeration sources
+!include ..\gtk\gtk-mkenums-headers.mak
+!include ..\gtk\a11y\Makefile.inc
+!include ..\gtk\deprecated\Makefile.inc
+
+!if [call create-lists.bat header gtk_headers.mak GTK_PUBLIC_ENUM_HEADERS]
+!endif
+
+!if [for %f in ($(GTK_PUB_HDRS:.h=)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f.h]
+!endif
+
+!if [for %f in ($(a11y_h_sources) $(gtk_deprecated_h_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!endif
+
+!if [call create-lists.bat footer gtk_headers.mak]
+!endif
+
+!if [call create-lists.bat header gtk_headers.mak GTK_PRIVATE_ENUM_HEADERS]
+!endif
+
+!if [for %f in ($(GTK_PRIVATE_TYPE_HDRS)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!endif
+
+!if [call create-lists.bat footer gtk_headers.mak]
+!endif
+
+!include gtk_headers.mak
+
+!if [del /f /q gtk_headers.mak]
+!endif
+
+# For GTK resources
 
 !if [for %f in (..\gtk\theme\Adwaita\gtk.css ..\gtk\theme\Adwaita\gtk-dark.css ..\gtk\theme\Adwaita\gtk-contained.css ..\gtk\theme\Adwaita\gtk-contained-dark.css) do @call create-lists.bat file resources_sources.mak %f]
 !endif
@@ -76,6 +126,8 @@ NULL=
 
 !if [call create-lists.bat footer resources_sources.mak]
 !endif
+
+# For gtk demo program resources
 
 !if [call create-lists.bat header resources_sources.mak GTK_DEMO_RESOURCES]
 !endif

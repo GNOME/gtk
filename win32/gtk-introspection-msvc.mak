@@ -1,6 +1,7 @@
 # NMake Makefile to build Introspection Files for GTK+
 
 !include detectenv-msvc.mak
+!include generate-msvc.mak
 
 APIVERSION = 3.0
 
@@ -28,7 +29,7 @@ AT_PLAT=aarch64
 AT_PLAT=i686
 !endif
 
-all: setgirbuildenv $(built_install_girs) $(built_install_typelibs)
+introspect: setgirbuildenv $(built_install_girs) $(built_install_typelibs)
 
 setgirbuildenv:
 	@set PYTHONPATH=$(PREFIX)\lib\gobject-introspection
@@ -38,15 +39,18 @@ setgirbuildenv:
 
 !include introspection.body.mak
 
-install-introspection: all
+install-introspection: introspect
 	@-copy vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.gir "$(G_IR_INCLUDEDIR)"
 	@-copy /b vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.typelib "$(G_IR_TYPELIBDIR)"
 
 !else
-all:
+introspect:
 	@-echo $(ERROR_MSG)
 !endif
 
-clean:
+introspect-clean:
+	@-del /f/q Gtk_3_0_gir_list_final
+	@-del /f/q GdkWin32_3_0_gir_list_final
+	@-del /f/q Gdk_3_0_gir_list_final
 	@-del /f/q vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.typelib
 	@-del /f/q vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.gir

@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\demos\icon-browser"
+				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\demos\icon-browser"
+				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesRelease)"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions=""
 				RuntimeLibrary="2"
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\demos\icon-browser"
+				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -127,7 +127,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\demos\icon-browser"
+				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesRelease)"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions=""
 				RuntimeLibrary="2"

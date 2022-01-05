@@ -41,7 +41,6 @@ EXTRA_DIST += \
 	gdk3-broadway.vcprojin		\
 	gtk3-build-defines.vsprops	\
 	gtk3-copy-gdk-broadway.vsprops	\
-	gtk3-gen-srcs.vsprops		\
 	gtk3-ignore-broadway.vsprops	\
 	gtk3-install.vspropsin		\
 	gtk3-version-paths.vsprops.in	\

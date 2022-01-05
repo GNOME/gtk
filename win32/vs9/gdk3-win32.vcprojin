@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines);INSIDE_GDK_WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -53,7 +53,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="$(GdkDefines);INSIDE_GDK_WIN32"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -73,7 +73,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesDebug);..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;$(GdkDefines);INSIDE_GDK_WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -95,7 +95,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\gdk;..\..\gdk\win32"
+				AdditionalIncludeDirectories="$(GdkBaseIncludesRelease);..\..\gdk\win32"
 				PreprocessorDefinitions="$(GdkDefines);INSIDE_GDK_WIN32"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"

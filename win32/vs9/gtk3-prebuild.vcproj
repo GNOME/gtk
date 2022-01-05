@@ -22,125 +22,117 @@
 		<Configuration
 			Name="Debug|Win32"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName)  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName)  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug_Broadway|Win32"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug_Broadway|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Debug BROADWAY=1 $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName)  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName)  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release_Broadway|Win32"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release_Broadway|x64"
 			ConfigurationType="0"
-			InheritedPropertySheets=".\gtk3-gen-srcs.vsprops"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			WholeProgramOptimization="1"
 			>
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam)"
-				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean all"
+				BuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1  $(IntrospectPythonParam) generate-base-sources"
+				ReBuildCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean generate-base-sources"
 				CleanCommandLine="$(GenerateRequiredSourcesBase) CFG=Release BROADWAY=1 $(IntrospectPythonParam) clean"
-				Output="$(GeneratedGdkSources);$(GeneratedDemoSources);$(GeneratedGtkSources)"
 			/>
 		</Configuration>
 	</Configurations>

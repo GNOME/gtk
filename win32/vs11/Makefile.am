@@ -35,7 +35,6 @@ EXTRA_DIST +=	\
 	gdk3-broadway.vcxproj.filters	\
 	gtk3-build-defines.props	\
 	gtk3-copy-gdk-broadway.props	\
-	gtk3-gen-srcs.props	\
 	gtk3-ignore-broadway.props	\
 	gtk3-install.props	\
 	gtk3-version-paths.props
