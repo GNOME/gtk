@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 /**
  * GTK_MAJOR_VERSION:
  *
- * Like gtk_get_major_version(), but from the headers used at
+ * Like [func@get_major_version], but from the headers used at
  * application compile time, rather than from the library linked
  * against at application run time.
  */
@@ -45,7 +45,7 @@ G_BEGIN_DECLS
 /**
  * GTK_MINOR_VERSION:
  *
- * Like gtk_get_minor_version(), but from the headers used at
+ * Like [func@get_minor_version], but from the headers used at
  * application compile time, rather than from the library linked
  * against at application run time.
  */
@@ -54,7 +54,7 @@ G_BEGIN_DECLS
 /**
  * GTK_MICRO_VERSION:
  *
- * Like gtk_get_micro_version(), but from the headers used at
+ * Like [func@get_micro_version], but from the headers used at
  * application compile time, rather than from the library linked
  * against at application run time.
  */
@@ -63,7 +63,7 @@ G_BEGIN_DECLS
 /**
  * GTK_BINARY_AGE:
  *
- * Like gtk_get_binary_age(), but from the headers used at
+ * Like [func@get_binary_age], but from the headers used at
  * application compile time, rather than from the library linked
  * against at application run time.
  */
@@ -72,7 +72,7 @@ G_BEGIN_DECLS
 /**
  * GTK_INTERFACE_AGE:
  *
- * Like gtk_get_interface_age(), but from the headers used at
+ * Like [func@get_interface_age], but from the headers used at
  * application compile time, rather than from the library linked
  * against at application run time.
  */
