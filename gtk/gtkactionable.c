@@ -44,10 +44,10 @@
 
 /**
  * GtkActionableInterface:
- * @get_action_name: virtual function for gtk_actionable_get_action_name()
- * @set_action_name: virtual function for gtk_actionable_set_action_name()
- * @get_action_target_value: virtual function for gtk_actionable_get_action_target_value()
- * @set_action_target_value: virtual function for gtk_actionable_set_action_target_value()
+ * @get_action_name: virtual function for [method@Actionable.get_action_name]
+ * @set_action_name: virtual function for [method@Actionable.set_action_name]
+ * @get_action_target_value: virtual function for [method@Actionable.get_action_target_value]
+ * @set_action_target_value: virtual function for [method@Actionable.set_action_target_value]
  *
  * The interface vtable for `GtkActionable`.
  **/
@@ -100,8 +100,8 @@ gtk_actionable_get_action_name (GtkActionable *actionable)
  * located) within the hierarchy of a `GtkApplicationWindow`.
  *
  * Names are of the form “win.save” or “app.quit” for actions on the
- * containing `GtkApplicationWindow` or its associated `GtkApplication`,
- * respectively. This is the same form used for actions in the `GMenu`
+ * containing [class@ApplicationWindow] or its associated [class@Application],
+ * respectively. This is the same form used for actions in the [class@Gio.Menu]
  * associated with the window.
  */
 void
@@ -134,7 +134,7 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
 /**
  * gtk_actionable_set_action_target_value: (attributes org.gtk.Method.set_property=action-target)
  * @actionable: a `GtkActionable` widget
- * @target_value: (nullable): a `GVariant` to set as the target value
+ * @target_value: (nullable): a [struct@GLib.Variant] to set as the target value
  *
  * Sets the target value of an actionable widget.
  *
@@ -145,7 +145,7 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
  * Second, it is used to determine if the widget should be rendered as
  * “active” — the widget is active if the state is equal to the given target.
  *
- * Consider the example of associating a set of buttons with a `GAction`
+ * Consider the example of associating a set of buttons with a [iface@Gio.Action]
  * with string state in a typical “radio button” situation. Each button
  * will be associated with the same action, but with a different target
  * value for that action. Clicking on a particular button will activate
@@ -168,12 +168,12 @@ gtk_actionable_set_action_target_value (GtkActionable *actionable,
 /**
  * gtk_actionable_set_action_target:
  * @actionable: a `GtkActionable` widget
- * @format_string: a GVariant format string
+ * @format_string: a [struct@GLib.Variant] format string
  * @...: arguments appropriate for @format_string
  *
  * Sets the target of an actionable widget.
  *
- * This is a convenience function that calls g_variant_new() for
+ * This is a convenience function that calls [ctor@GLib.Variant.new] for
  * @format_string and uses the result to call
  * [method@Gtk.Actionable.set_action_target_value].
  *
@@ -202,7 +202,7 @@ gtk_actionable_set_action_target (GtkActionable *actionable,
  * actionable widget.
  *
  * @detailed_action_name is a string in the format accepted by
- * g_action_parse_detailed_name().
+ * [func@Gio.Action.parse_detailed_name].
  */
 void
 gtk_actionable_set_detailed_action_name (GtkActionable *actionable,
