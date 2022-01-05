@@ -356,7 +356,7 @@ guint8     _gdk_win32_keymap_get_active_group    (GdkWin32Keymap *keymap);
 guint8     _gdk_win32_keymap_get_rshift_scancode (GdkWin32Keymap *keymap);
 void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
                                                   HKL             hkl);
-
+GdkModifierType _gdk_win32_keymap_get_mod_mask   (GdkWin32Keymap *keymap);
 
 GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 
@@ -424,5 +424,13 @@ BOOL WINAPI GtkShowWindow (GdkSurface *window,
 void _gdk_win32_surfaceing_init (void);
 void _gdk_drag_init    (void);
 void _gdk_events_init (GdkDisplay *display);
+
+typedef enum _GdkWin32ProcessorCheckType
+{
+  GDK_WIN32_ARM64,
+  GDK_WIN32_WOW64,
+} GdkWin32ProcessorCheckType;
+
+gboolean _gdk_win32_check_processor (GdkWin32ProcessorCheckType check_type);
 
 #endif /* __GDK_PRIVATE_WIN32_H__ */
