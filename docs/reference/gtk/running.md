@@ -286,7 +286,7 @@ requires that GTK is compiled with support for that backend.
 The following backends can be selected, provided they are
 included in the GDK libraries you are using:
 
-`quartz`
+`macos`
 : Selects the native Quartz backend
 
 `win32`
@@ -335,9 +335,6 @@ using and the GDK backend supports them:
 
 `gl`
 : Selects the "gl" OpenGL renderer
-
-`ngl`
-: Selects the "ngl" OpenGL renderer
 
 `vulkan`
 : Selects the Vulkan renderer
