@@ -136,7 +136,7 @@ gdk_memory_sanitize (GBytes          *bytes,
  * The `GBytes` must contain @stride x @height pixels
  * in the given format.
  *
- * Returns: A newly-created `GdkTexture`
+ * Returns: (type GdkMemoryTexture): A newly-created `GdkTexture`
  */
 GdkTexture *
 gdk_memory_texture_new (int              width,
