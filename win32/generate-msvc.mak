@@ -266,6 +266,36 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 	@-del ..\demos\gtk-demo\demos.h.win32
 	@cd ..\demos\gtk-demo
 	@$(PYTHON) geninclude.py demos.h.win32 $(demo_sources)
+	@cd ..\..\win32
+	@echo Regenerating gtk3-demo VS project files...
+	@-del vs9\$(DEMO_VS9_PROJ) vs10\$(DEMO_VS10_PROJ) vs10\$(DEMO_VS10_PROJ_FILTERS)
+	@for %%s in ($(demo_sources) gtkfishbowl.c demo_resources.c main.c) do	\
+	@echo.   ^<File RelativePath^="..\..\demos\gtk-demo\%%s" /^>>>gtk3-demo.sourcefiles & \
+	@echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s" /^>>>gtk3-demo.vs10.sourcefiles & \
+	@echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>gtk3-demo.vs10.sourcefiles.filters
+	@$(CPP) /nologo /EP /I. vs9\$(DEMO_VS9_PROJ)in>$(DEMO_VS9_PROJ).tmp
+	@for /f "usebackq tokens=* delims=" %%l in ($(DEMO_VS9_PROJ).tmp) do @echo %%l>>$(DEMO_VS9_PROJ).tmp1
+	@$(CPP) /nologo /EP /I. vs10\$(DEMO_VS10_PROJ)in>$(DEMO_VS10_PROJ).tmp
+	@for /f "usebackq tokens=* delims=" %%l in ($(DEMO_VS10_PROJ).tmp) do @echo %%l>>$(DEMO_VS10_PROJ).tmp1
+	@$(CPP) /nologo /EP /I. vs10\$(DEMO_VS10_PROJ_FILTERS)in> $(DEMO_VS10_PROJ_FILTERS).tmp
+	@for /f "usebackq tokens=* delims=" %%l in ($(DEMO_VS10_PROJ_FILTERS).tmp) do @ echo %%l>>vs10\$(DEMO_VS10_PROJ_FILTERS)
+	@if not "$(FONT_FEATURES_DEMO)" == ""	\
+	 if not "$(FONT_FEATURES_USE_PANGOFT2)" == ""	\
+	 ($(PYTHON) replace.py -a=replace-str -i=$(DEMO_VS9_PROJ).tmp1 -o=vs9\$(DEMO_VS9_PROJ) --instring="AdditionalDependencies=\"\"" --outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_PANGOFT2_VS9)\"") & \
+	 ($(PYTHON) replace.py -a=replace-str -i=$(DEMO_VS10_PROJ).tmp1 -o=vs10\$(DEMO_VS10_PROJ) --instring=">%(AdditionalDependencies)<" --outstring=">$(DEMO_DEP_LIBS_PANGOFT2_VS1X);%(AdditionalDependencies)<")
+	@if not "$(FONT_FEATURES_DEMO)" == ""	\
+	 if "$(FONT_FEATURES_USE_PANGOFT2)" == ""	\
+	 ($(PYTHON) replace.py -a=replace-str -i=$(DEMO_VS9_PROJ).tmp1 -o=vs9\$(DEMO_VS9_PROJ) --instring="AdditionalDependencies=\"\"" --outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_NEW_PANGO)\"") & \
+	 ($(PYTHON) replace.py -a=replace-str -i=$(DEMO_VS10_PROJ).tmp1 -o=vs10\$(DEMO_VS10_PROJ) --instring=">%(AdditionalDependencies)<" --outstring=">$(DEMO_DEP_LIBS_NEW_PANGO);%(AdditionalDependencies)<")
+	@if "$(FONT_FEATURES_DEMO)" == "" copy $(DEMO_VS9_PROJ).tmp1 vs9\$(DEMO_VS9_PROJ) & copy $(DEMO_VS10_PROJ).tmp1 vs10\$(DEMO_VS10_PROJ)
+	@del *vc*proj*.tmp* gtk3-demo.*sourcefiles*
+	@for %%v in (11 12 14 15 16 17) do @(copy /y vs10\$(DEMO_VS10_PROJ_FILTERS) vs%v\ & del vs%v\gtk3-demo.vcxproj)
+	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs11\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v110<"
+	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs12\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v120<"
+	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs14\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v140<"
+	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs15\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v141<"
+	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs16\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v142<"
+	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs17\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v143<"
 
 Gdk_3_0_gir_list_final: Gdk_3_0_gir_list $(GDK_GENERATED_SOURCES)
 	@echo Generating $@...
