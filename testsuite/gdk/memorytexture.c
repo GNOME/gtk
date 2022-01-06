@@ -649,6 +649,7 @@ main (int argc, char *argv[])
       gsk_renderer_unrealize (gl_renderer);
       g_clear_object (&gl_renderer);
     }
+  gdk_gl_context_clear_current ();
 
   return result;
 }
