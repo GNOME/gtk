@@ -28,7 +28,7 @@
  *
  * These buttons and sensors have no implicit meaning, and by default they
  * perform no action. `GtkPadController` is provided to map those to
- * `GAction` objects, thus letting the application give them a more
+ * [iface@Gio.Action] objects, thus letting the application give them a more
  * semantic meaning.
  *
  * Buttons and sensors are not constrained to triggering a single action,
@@ -41,10 +41,10 @@
  * different modes. See [method@Gdk.DevicePad.get_n_groups] and
  * [method@Gdk.DevicePad.get_group_n_modes].
  *
- * Each of the actions that a given button/strip/ring performs for a given
- * mode is defined by a [struct@Gtk.PadActionEntry]. It contains an action
- * name that will be looked up in the given `GActionGroup` and activated
- * whenever the specified input element and mode are triggered.
+ * Each of the actions that a given button/strip/ring performs for a given mode
+ * is defined by a [struct@Gtk.PadActionEntry]. It contains an action name that
+ * will be looked up in the given [iface@Gio.ActionGroup] and activated whenever
+ * the specified input element and mode are triggered.
  *
  * A simple example of `GtkPadController` usage: Assigning button 1 in all
  * modes and pad devices to an "invert-selection" action:

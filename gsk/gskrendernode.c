@@ -20,7 +20,7 @@
  * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref) (set-value-func gsk_value_set_render_node) (get-value-func gsk_value_get_render_node)
  *
  * `GskRenderNode` is the basic block in a scene graph to be
- * rendered using `GskRenderer`.
+ * rendered using [class@Gsk.Renderer].
  *
  * Each node has a parent, except the top-level node; each node may have
  * children nodes.
@@ -424,7 +424,7 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
  *
  * Typically, you'll use this function to implement fallback rendering
  * of `GskRenderNode`s on an intermediate Cairo context, instead of using
- * the drawing context associated to a `GdkSurface`'s rendering buffer.
+ * the drawing context associated to a [class@Gdk.Surface]'s rendering buffer.
  *
  * For advanced nodes that cannot be supported using Cairo, in particular
  * for nodes doing 3D operations, this function may fail.
@@ -565,8 +565,8 @@ gsk_render_node_diff (GskRenderNode  *node1,
  * @filename: (type filename): the file to save it to.
  * @error: Return location for a potential error
  *
- * This function is equivalent to calling gsk_render_node_serialize()
- * followed by g_file_set_contents().
+ * This function is equivalent to calling [method@Gsk.RenderNode.serialize]
+ * followed by [func@GLib.file_set_contents].
  *
  * See those two functions for details on the arguments.
  *
@@ -603,7 +603,7 @@ gsk_render_node_write_to_file (GskRenderNode *node,
  * @error_func: (nullable) (scope call): Callback on parsing errors
  * @user_data: (closure error_func): user_data for @error_func
  *
- * Loads data previously created via gsk_render_node_serialize().
+ * Loads data previously created via [method@Gsk.RenderNode.serialize].
  *
  * For a discussion of the supported format, see that function.
  *
@@ -623,12 +623,12 @@ gsk_render_node_deserialize (GBytes            *bytes,
 
 /**
  * gsk_value_set_render_node:
- * @value: a `GValue` initialized with type `GSK_TYPE_RENDER_NODE`
+ * @value: a [struct@GObject.Value] initialized with type `GSK_TYPE_RENDER_NODE`
  * @node: a `GskRenderNode`
  *
  * Stores the given `GskRenderNode` inside `value`.
  *
- * The `GValue` will acquire a reference to the `node`.
+ * The [struct@GObject.Value] will acquire a reference to the `node`.
  *
  * Since: 4.6
  */
@@ -659,7 +659,7 @@ gsk_value_set_render_node (GValue        *value,
 
 /**
  * gsk_value_take_render_node:
- * @value: a `GValue` initialized with type `GSK_TYPE_RENDER_NODE`
+ * @value: a [struct@GObject.Value] initialized with type `GSK_TYPE_RENDER_NODE`
  * @node: (transfer full) (nullable): a `GskRenderNode`
  *
  * Stores the given `GskRenderNode` inside `value`.
@@ -713,7 +713,7 @@ gsk_value_get_render_node (const GValue *value)
 
 /**
  * gsk_value_dup_render_node:
- * @value: a `GValue` initialized with type `GSK_TYPE_RENDER_NODE`
+ * @value: a [struct@GObject.Value] initialized with type `GSK_TYPE_RENDER_NODE`
  *
  * Retrieves the `GskRenderNode` stored inside the given `value`, and acquires
  * a reference to it.
