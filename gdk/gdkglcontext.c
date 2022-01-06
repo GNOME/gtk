@@ -185,8 +185,7 @@ gdk_gl_context_dispose (GObject *gobject)
 
   if (priv->egl_context != NULL)
     {
-      GdkSurface *surface = gdk_gl_context_get_surface (context);
-      GdkDisplay *display = gdk_surface_get_display (surface);
+      GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
       EGLDisplay *egl_display = gdk_display_get_egl_display (display);
 
       if (eglGetCurrentContext () == priv->egl_context)
