@@ -25,14 +25,14 @@
  * multiple frames, and will be used for a long time.
  *
  * There are various ways to create `GdkTexture` objects from a
- * `GdkPixbuf`, or a Cairo surface, or other pixel data.
+ * [class@GdkPixbuf.Pixbuf], or a Cairo surface, or other pixel data.
  *
  * The ownership of the pixel data is transferred to the `GdkTexture`
  * instance; you can only make a copy of it, via [method@Gdk.Texture.download].
  *
  * `GdkTexture` is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
- * g_object_ref().
+ * [method@GObject.Object.ref].
  */
 
 #include "config.h"
@@ -346,7 +346,7 @@ gdk_texture_init (GdkTexture *self)
  *
  * Creates a new texture object representing the surface.
  *
- * @surface must be an image surface with format CAIRO_FORMAT_ARGB32.
+ * @surface must be an image surface with format `CAIRO_FORMAT_ARGB32`.
  *
  * Returns: a new `GdkTexture`
  */
@@ -384,7 +384,7 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
  * Creates a new texture object representing the `GdkPixbuf`.
  *
  * This function is threadsafe, so that you can e.g. use GTask
- * and g_task_run_in_thread() to avoid blocking the main thread
+ * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
  * Returns: a new `GdkTexture`
@@ -430,7 +430,7 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * [ctor@Gdk.Texture.new_from_file] to load it.
  *
  * This function is threadsafe, so that you can e.g. use GTask
- * and g_task_run_in_thread() to avoid blocking the main thread
+ * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
  * Return value: A newly-created `GdkTexture`
@@ -472,7 +472,7 @@ gdk_texture_new_from_resource (const char *resource_path)
  * If %NULL is returned, then @error will be set.
  *
  * This function is threadsafe, so that you can e.g. use GTask
- * and g_task_run_in_thread() to avoid blocking the main thread
+ * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
  * Return value: A newly-created `GdkTexture`
@@ -565,7 +565,7 @@ gdk_texture_new_from_bytes_pixbuf (GBytes  *bytes,
  * If %NULL is returned, then @error will be set.
  *
  * This function is threadsafe, so that you can e.g. use GTask
- * and g_task_run_in_thread() to avoid blocking the main thread
+ * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
  * Return value: A newly-created `GdkTexture`
@@ -611,7 +611,7 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
  * If %NULL is returned, then @error will be set.
  *
  * This function is threadsafe, so that you can e.g. use GTask
- * and g_task_run_in_thread() to avoid blocking the main thread
+ * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
  * Return value: A newly-created `GdkTexture`
@@ -796,7 +796,7 @@ gdk_texture_get_render_data (GdkTexture  *self,
  *
  * This is a utility function intended for debugging and testing.
  * If you want more control over formats, proper error handling or
- * want to store to a `GFile` or other location, you might want to
+ * want to store to a [iface@Gio.File] or other location, you might want to
  * use [method@Gdk.Texture.save_to_png_bytes] or look into the
  * gdk-pixbuf library.
  *
