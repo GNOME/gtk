@@ -32,7 +32,7 @@
  *
  * `GdkTexture` is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
- * [method@GObject.Object.ref].
+ * [method@GObject.Object.ref], and consequently, it is a thread-safe object.
  */
 
 #include "config.h"
