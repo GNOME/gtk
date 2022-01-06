@@ -330,14 +330,8 @@ using and the GDK backend supports them:
 `cairo`
 : Selects the fallback Cairo renderer
 
-`opengl`
-: Selects the default OpenGL renderer
-
 `gl`
-: Selects the "gl" OpenGL renderer
-
-`ngl`
-: Selects the "ngl" OpenGL renderer
+: Selects the OpenGL renderer
 
 `vulkan`
 : Selects the Vulkan renderer
