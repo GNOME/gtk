@@ -108,6 +108,7 @@ texture_threads (void)
   g_clear_pointer (&loop, g_main_loop_unref);
   g_clear_object (&gl_renderer);
   g_main_context_release (NULL);
+  gdk_gl_context_clear_current ();
 }
 
 int
