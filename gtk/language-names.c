@@ -18,6 +18,7 @@
 #include <hb-ot.h>
 
 #include "language-names.h"
+#include "gtkprivate.h"
 
 #ifndef ISO_CODES_PREFIX
 #define ISO_CODES_PREFIX "/usr"
@@ -200,11 +201,22 @@ languages_variant_init (const char *variant)
   char *filename;
   GError *error;
 
-  bindtextdomain (variant, ISO_CODES_LOCALESDIR);
+  char *iso_codes_datadir;
+  char *iso_codes_localedir;
+
+#ifdef G_OS_WIN32
+  iso_codes_datadir = g_build_filename (_gtk_get_datadir (), "xml", "iso-codes", NULL);
+  iso_codes_localedir = _gtk_get_localedir ();
+#else
+  iso_codes_datadir = g_strdup (ISO_CODES_DATADIR);
+  iso_codes_localedir = g_strdup (ISO_CODES_LOCALESDIR);
+#endif
+
+  bindtextdomain (variant, iso_codes_localedir);
   bind_textdomain_codeset (variant, "UTF-8");
 
   error = NULL;
-  filename = g_strconcat (ISO_CODES_DATADIR, "/", variant, ".xml", NULL);
+  filename = g_strconcat (iso_codes_datadir, "/", variant, ".xml", NULL);
   res = g_file_get_contents (filename, &buf, &buf_len, &error);
   if (res)
     {
@@ -230,6 +242,8 @@ languages_variant_init (const char *variant)
 
   g_free (filename);
   g_free (buf);
+  g_free (iso_codes_datadir);
+  g_free (iso_codes_localedir);
 }
 
 static void
