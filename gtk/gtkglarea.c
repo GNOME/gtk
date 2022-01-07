@@ -833,6 +833,10 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * If set to %TRUE the widget will allocate and enable a depth buffer for the
    * target framebuffer.
+   *
+   * Setting this property will enable GL's depth testing as a side effect. If
+   * you don't need depth testing, you should call `glDisable(GL_DEPTH_TEST)`
+   * in your `GtkGLArea::render` handler.
    */
   obj_props[PROP_HAS_DEPTH_BUFFER] =
     g_param_spec_boolean ("has-depth-buffer",
