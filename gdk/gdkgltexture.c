@@ -383,7 +383,8 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
  * which will happen when the GdkTexture object is finalized, or due to
  * an explicit call of [method@Gdk.GLTexture.release].
  *
- * Return value: (transfer full): A newly-created `GdkTexture`
+ * Return value: (transfer full) (type GdkGLTexture): A newly-created
+ *   `GdkTexture`
  */
 GdkTexture *
 gdk_gl_texture_new (GdkGLContext   *context,
