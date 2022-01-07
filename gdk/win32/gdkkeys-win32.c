@@ -870,6 +870,8 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
   g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), FALSE);
   g_return_val_if_fail (n_entries != NULL, FALSE);
 
+  *n_entries = 0;
+
   if (keys != NULL)
     key_array = g_array_new (FALSE, FALSE, sizeof (GdkKeymapKey));
   else
