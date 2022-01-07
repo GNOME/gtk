@@ -1186,7 +1186,7 @@ my_pango_layout_get_width_for_height (PangoLayout *layout,
       pango_layout_get_size (layout, &text_width, &text_height);
       text_width = PANGO_PIXELS_CEIL (text_width);
       if (text_width > mid)
-        min = mid = text_width;
+        min = text_width;
       else if (text_height > for_height)
         min = mid + 1;
       else

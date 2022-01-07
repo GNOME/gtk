@@ -753,9 +753,15 @@ gtk_is_initialized (void)
  * you can use it to update the default text direction as follows:
  *
  * |[<!-- language="C" -->
- * setlocale (LC_ALL, new_locale);
- * direction = gtk_get_locale_direction ();
- * gtk_widget_set_default_direction (direction);
+ * #include <locale.h>
+ *
+ * static void
+ * update_locale (const char *new_locale)
+ * {
+ *   setlocale (LC_ALL, new_locale);
+ *   GtkTextDirection direction = gtk_get_locale_direction ();
+ *   gtk_widget_set_default_direction (direction);
+ * }
  * ]|
  *
  * Returns: the `GtkTextDirection` of the current locale
