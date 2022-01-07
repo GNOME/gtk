@@ -780,11 +780,22 @@ gdk_wayland_surface_update_scale (GdkSurface *surface)
       return;
     }
 
-  scale = 1;
-  for (l = impl->display_server.outputs; l != NULL; l = l->next)
+  if (!impl->display_server.outputs)
     {
-      guint32 output_scale = gdk_wayland_display_get_output_scale (display_wayland, l->data);
-      scale = MAX (scale, output_scale);
+      scale = impl->scale;
+    }
+  else
+    {
+      scale = 1;
+      for (l = impl->display_server.outputs; l != NULL; l = l->next)
+        {
+          struct wl_output *output = l->data;
+          uint32_t output_scale;
+
+          output_scale = gdk_wayland_display_get_output_scale (display_wayland,
+                                                               output);
+          scale = MAX (scale, output_scale);
+        }
     }
 
   /* Notify app that scale changed */
