@@ -231,7 +231,12 @@ struct _GtkTextViewPrivate
   guint first_validate_idle;        /* Idle to revalidate onscreen portion, runs before resize */
   guint incremental_validate_idle;  /* Idle to revalidate offscreen portions, runs after redraw */
 
+  /* Mark for drop target */
   GtkTextMark *dnd_mark;
+
+  /* Mark for selection of drag source */
+  GtkTextMark *dnd_drag_begin_mark;
+  GtkTextMark *dnd_drag_end_mark;
 
   GtkIMContext *im_context;
   GtkWidget *popup_menu;
@@ -8056,8 +8061,26 @@ static void
 dnd_finished_cb (GdkDrag     *drag,
                  GtkTextView *self)
 {
-  if (gdk_drag_get_selected_action (drag) == GDK_ACTION_MOVE)
-    gtk_text_buffer_delete_selection (self->priv->buffer, TRUE, self->priv->editable);
+  GtkTextBuffer *buffer = self->priv->buffer;
+
+  if (self->priv->dnd_drag_begin_mark)
+    {
+      if (gdk_drag_get_selected_action (drag) == GDK_ACTION_MOVE)
+        {
+            {
+              GtkTextIter begin, end;
+
+              gtk_text_buffer_get_iter_at_mark (buffer, &begin, self->priv->dnd_drag_begin_mark);
+              gtk_text_buffer_get_iter_at_mark (buffer, &end, self->priv->dnd_drag_end_mark);
+              gtk_text_buffer_delete (buffer, &begin, &end);
+            }
+        }
+
+      gtk_text_buffer_delete_mark (buffer, self->priv->dnd_drag_begin_mark);
+      gtk_text_buffer_delete_mark (buffer, self->priv->dnd_drag_end_mark);
+      self->priv->dnd_drag_begin_mark = NULL;
+      self->priv->dnd_drag_end_mark = NULL;
+    }
 
   self->priv->drag = NULL;
 }
@@ -8067,6 +8090,16 @@ dnd_cancel_cb (GdkDrag *drag,
                GdkDragCancelReason reason,
                GtkTextView *self)
 {
+  GtkTextBuffer *buffer = self->priv->buffer;
+
+  if (self->priv->dnd_drag_begin_mark)
+    {
+      gtk_text_buffer_delete_mark (buffer, self->priv->dnd_drag_begin_mark);
+      gtk_text_buffer_delete_mark (buffer, self->priv->dnd_drag_end_mark);
+      self->priv->dnd_drag_begin_mark = NULL;
+      self->priv->dnd_drag_end_mark = NULL;
+    }
+
   self->priv->drag = NULL;
 }
 
@@ -8108,6 +8141,9 @@ gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
       paintable = gtk_text_util_create_rich_drag_icon (widget, buffer, &start, &end);
       gtk_drag_icon_set_from_paintable (drag, paintable, 0, 0);
       g_object_unref (paintable);
+
+      text_view->priv->dnd_drag_begin_mark = gtk_text_buffer_create_mark (buffer, NULL, &start, TRUE);
+      text_view->priv->dnd_drag_end_mark = gtk_text_buffer_create_mark (buffer, NULL, &end, TRUE);
     }
 
   text_view->priv->drag = drag;
