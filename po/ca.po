@@ -4076,7 +4076,7 @@ msgstr "Afegeix nodes de depuració"
 
 #: gtk/inspector/recorder.ui:42
 msgid "Highlight event sequences"
-msgstr "Ressalta les seqüencies d'esdeveniments"
+msgstr "Ressalta les seqüències d'esdeveniments"
 
 #: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
