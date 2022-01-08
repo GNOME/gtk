@@ -222,11 +222,7 @@ gdk_load_png (GBytes  *bytes,
     case PNG_COLOR_TYPE_RGB_ALPHA:
       if (depth == 8)
         {
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
           format = GDK_MEMORY_R8G8B8A8;
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-          format = GDK_MEMORY_A8B8G8R8;
-#endif
         }
       else
         {
@@ -236,11 +232,7 @@ gdk_load_png (GBytes  *bytes,
     case PNG_COLOR_TYPE_RGB:
       if (depth == 8)
         {
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
           format = GDK_MEMORY_R8G8B8;
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-          format = GDK_MEMORY_B8G8R8;
-#endif
         }
       else if (depth == 16)
         {
@@ -325,22 +317,14 @@ gdk_save_png (GdkTexture *texture)
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
       format = GDK_MEMORY_R8G8B8A8;
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-      format = GDK_MEMORY_A8B8G8R8;
-#endif
       png_format = PNG_COLOR_TYPE_RGB_ALPHA;
       depth = 8;
       break;
 
     case GDK_MEMORY_R8G8B8:
     case GDK_MEMORY_B8G8R8:
-#if G_BYTE_ORDER == G_LITTLE_ENDIAN
       format = GDK_MEMORY_R8G8B8;
-#elif G_BYTE_ORDER == G_BIG_ENDIAN
-      format = GDK_MEMORY_B8G8R8;
-#endif
       png_format = PNG_COLOR_TYPE_RGB;
       depth = 8;
       break;
