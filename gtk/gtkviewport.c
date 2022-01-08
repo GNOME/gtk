@@ -312,13 +312,17 @@ gtk_viewport_class_init (GtkViewportClass *class)
    * GtkViewport:scroll-to-focus: (attributes org.gtk.Property.get=gtk_viewport_get_scroll_to_focus org.gtk.Property.set=gtk_viewport_set_scroll_to_focus)
    *
    * Whether to scroll when the focus changes.
+   *
+   * Before 4.6.2, this property was mistakenly defaulting to FALSE, so if your
+   * code needs to work with older versions, consider setting it explicitly to
+   * TRUE.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SCROLL_TO_FOCUS,
                                    g_param_spec_boolean ("scroll-to-focus",
                                                          P_("Scroll to focus"),
                                                          P_("Whether to scroll when the focus changes"),
-                                                         FALSE,
+                                                         TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
@@ -430,6 +434,8 @@ gtk_viewport_init (GtkViewport *viewport)
 
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
+
+  viewport->scroll_to_focus = TRUE;
 }
 
 /**
