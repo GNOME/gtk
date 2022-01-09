@@ -4993,7 +4993,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  * want to convert the returned list into a list of `GtkTreeRowReferences`.
  * To do this, you can use gtk_tree_row_reference_new().
  *
- * To free the return value, use `g_lsit_free_full`:
+ * To free the return value, use `g_list_free_full`:
  * |[<!-- language="C" -->
  * GtkWidget *icon_view = gtk_icon_view_new ();
  * // Use icon_view
