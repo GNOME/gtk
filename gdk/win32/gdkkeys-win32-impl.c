@@ -180,7 +180,8 @@ keystate_to_modbits (GdkWin32KeymapLayoutInfo *info,
   BYTE       result = 0;
   int        i;
 
-  g_return_val_if_fail (tables != NULL, 0);
+  if (tables == NULL)
+    return 0;
 
   vk_to_bit = tables->pCharModifiers.ptr->pVkToBit.ptr;
 
@@ -198,7 +199,8 @@ modbits_to_level (GdkWin32KeymapLayoutInfo *info,
   PKBDTABLES tables = (PKBDTABLES) info->tables;
   PMODIFIERS modifiers;
 
-  g_return_val_if_fail (tables != NULL, 0);
+  if (tables == NULL)
+    return 0;
 
   modifiers = tables->pCharModifiers.ptr;
   if (modbits > modifiers->wMaxModBits)
@@ -268,7 +270,8 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
   if (is_dead)
     *is_dead = FALSE;
 
-  g_return_val_if_fail (tables != NULL, WCH_NONE);
+  if (tables == NULL)
+    return WCH_NONE;
 
   wch_tables = tables->pVkToWcharTable.ptr;
 

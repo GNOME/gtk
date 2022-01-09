@@ -179,6 +179,7 @@ get_keyboard_layout_file (const char *layout_name)
   DWORD  file_name_len = 0;
   int    dir_len       = 0;
   int    buf_len       = 0;
+  LSTATUS status;
 
   static const char prefix[] = "SYSTEM\\CurrentControlSet\\Control\\"
                                "Keyboard Layouts\\";
@@ -187,18 +188,32 @@ get_keyboard_layout_file (const char *layout_name)
   g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s", prefix,
               layout_name);
 
-  if (RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
-                     KEY_QUERY_VALUE, &hkey) != ERROR_SUCCESS)
-    goto fail1;
+
+  status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
+                          KEY_QUERY_VALUE, &hkey);
+  if (status != ERROR_SUCCESS)
+    {
+      g_warning("Could not open registry key '%s'. Error code: %d",
+                kbdKeyPath, (int)status);
+      goto fail1;
+    }
 
   /* Get sizes */
-  if (RegQueryValueExA (hkey, "Layout File", 0, &var_type, 0,
-			&file_name_len) != ERROR_SUCCESS)
-    goto fail2;
+  status = RegQueryValueExA (hkey, "Layout File", 0, &var_type, 0,
+                             &file_name_len);
+  if (status != ERROR_SUCCESS)
+    {
+      g_warning("Could not query registry key '%s\\Layout File'. Error code: %d",
+                kbdKeyPath, (int)status);
+      goto fail2;
+    }
 
   dir_len = GetSystemDirectoryA (0, 0); /* includes \0 */
   if (dir_len == 0)
-    goto fail2;
+    {
+      g_warning("GetSystemDirectoryA failed. Error: %d", (int)GetLastError());
+      goto fail2;
+    }
 
   /* Allocate buffer */
   buf_len = dir_len + (int) strlen ("\\") + file_name_len;
@@ -212,10 +227,12 @@ get_keyboard_layout_file (const char *layout_name)
   result[dir_len - 1] = '\\';
 
   /* Append file name */
-  if (RegQueryValueExA (hkey, "Layout File", 0, &var_type,
-			(LPBYTE) &result[dir_len], &file_name_len)
-      != ERROR_SUCCESS)
-    goto fail3;
+  status = RegQueryValueExA (hkey, "Layout File", 0, &var_type,
+                             (LPBYTE) &result[dir_len], &file_name_len);
+  if (status != ERROR_SUCCESS)
+    {
+      goto fail3;
+    }
 
   result[dir_len + file_name_len] = '\0';
 
@@ -413,6 +430,9 @@ gdk_keysym_to_key_entry_index (GdkWin32KeymapLayoutInfo *info,
   gunichar c;
   gintptr  index;
 
+  if (info->reverse_lookup_table == NULL)
+    return -1;
+
   /* Special cases */
   if (sym == GDK_KEY_Tab)
     return VK_TAB;
@@ -436,8 +456,6 @@ gdk_keysym_to_key_entry_index (GdkWin32KeymapLayoutInfo *info,
 
   /* Try converting to Unicode and back */
   c = gdk_keyval_to_unicode (sym);
-
-  g_return_val_if_fail (info->reverse_lookup_table != NULL, -1);
 
   index = -1;
   if (g_hash_table_lookup_extended (info->reverse_lookup_table,
@@ -555,7 +573,7 @@ update_keymap (GdkWin32Keymap *keymap)
 
           info->file = get_keyboard_layout_file (info->name);
 
-          if (load_layout_dll (keymap, info->file, info))
+          if (info->file != NULL && load_layout_dll (keymap, info->file, info))
             {
               info->key_entries = g_array_new (FALSE, FALSE,
                                                sizeof (GdkWin32KeymapKeyEntry));
@@ -563,6 +581,11 @@ update_keymap (GdkWin32Keymap *keymap)
               info->reverse_lookup_table = g_hash_table_new (g_direct_hash,
                                                              g_direct_equal);
               init_vk_lookup_table (keymap, info);
+            }
+          else
+            {
+              g_warning("Failed to load keyboard layout DLL for layout %s: %s",
+                        info->name, info->file);
             }
         }
 
@@ -1014,6 +1037,13 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
     *level = tmp_level;
   if (consumed_modifiers)
     *consumed_modifiers = mod_bits_to_gdk_mod_mask (consumed_mod_bits);
+
+  /* Just a diagnostic message to inform the user why their keypresses aren't working.
+   * Shouldn't happen under normal circumstances. */
+  if (tmp_keyval == GDK_KEY_VoidSymbol && layout_info->tables == NULL)
+    g_warning("Failed to translate keypress (keycode: %u) for group %d (%s) because "
+              "we could not load the layout.",
+              hardware_keycode, group, layout_info->name);
 
   return tmp_keyval != GDK_KEY_VoidSymbol;
 }
