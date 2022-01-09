@@ -156,13 +156,13 @@ modbits_to_level (GdkWin32Keymap           *keymap,
 static WCHAR
 vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
                   GdkWin32KeymapLayoutInfo *info,
-                  const BYTE                keystate[256],
-                  BYTE                      extra_mod_bits,
+                  BYTE                      mod_bits,
+                  BYTE                      lock_bits,
                   BYTE                     *consumed_mod_bits,
                   gboolean                 *is_dead,
                   BYTE                      vk)
 {
-  return keymap->gdkwin32_keymap_impl->vk_to_char_fuzzy (info, keystate, extra_mod_bits,
+  return keymap->gdkwin32_keymap_impl->vk_to_char_fuzzy (info, mod_bits, lock_bits,
                                                          consumed_mod_bits, is_dead, vk);
 }
 
@@ -347,8 +347,8 @@ static guint
 vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
                                GdkWin32KeymapLayoutInfo *info,
                                guint               vk,
-                               const BYTE          keystate[256],
                                BYTE                mod_bits,
+                               BYTE                lock_bits,
                                BYTE               *consumed_mod_bits)
 
 {
@@ -384,7 +384,7 @@ vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
     }
 
   /* Handle regular keys (including dead keys) */
-  c = vk_to_char_fuzzy (keymap, info, keystate, mod_bits,
+  c = vk_to_char_fuzzy (keymap, info, mod_bits, lock_bits,
                         consumed_mod_bits, &is_dead, vk);
 
   if (c == WCH_NONE)
@@ -495,26 +495,6 @@ gdk_mod_mask_to_mod_bits (GdkModifierType mod_mask)
   if (mod_mask & GDK_MODIFIER_RESERVED_14_MASK)
     result |= KBDGRPSELTAP;
   return result;
-}
-
-static void
-get_lock_state (BYTE lock_state[256])
-{
-  static const guint mode_keys[] =
-    {
-      VK_CAPITAL,
-      VK_KANA, VK_HANGUL, VK_JUNJA, VK_FINAL, VK_HANJA, VK_KANJI, /* Is this correct? */
-      VK_NUMLOCK, VK_SCROLL
-    };
-
-  BYTE keystate[256] = {0};
-  guint i;
-
-  GetKeyboardState (keystate);
-
-  /* Copy over some keystates like numlock and capslock */
-  for (i = 0; i < G_N_ELEMENTS(mode_keys); ++i)
-    lock_state[mode_keys[i]] = keystate[mode_keys[i]] & 0x1;
 }
 
 
@@ -766,7 +746,6 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
 {
   GdkWin32Keymap *keymap;
   GArray         *retval;
-  BYTE            keystate[256] = {0};
   gint            group;
 
   g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), FALSE);
@@ -822,8 +801,7 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
               /* Check if the additional modifiers change the semantics.
                * If they do not, add them. */
               sym = vk_and_mod_bits_to_gdk_keysym (keymap, info, entry->vk,
-                                                   keystate, modbits,
-                                                   NULL);
+                                                   modbits, 0, NULL);
               if (sym == keyval || sym == GDK_KEY_VoidSymbol)
                 {
                   gdk_key.keycode = entry->vk;
@@ -864,7 +842,6 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
   GArray         *key_array;
   GArray         *keyval_array;
   gint            group;
-  BYTE            keystate[256] = {0};
   BYTE            vk;
 
   g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), FALSE);
@@ -901,7 +878,7 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
           GdkKeymapKey key              = {0};
           guint        keyval;
 
-          keyval = vk_and_mod_bits_to_gdk_keysym (keymap, info, vk, keystate, modbits, &consumed_modbits);
+          keyval = vk_and_mod_bits_to_gdk_keysym (keymap, info, vk, modbits, 0, &consumed_modbits);
 
           if (keyval == GDK_KEY_VoidSymbol || consumed_modbits != modbits)
             continue;
@@ -936,7 +913,6 @@ gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
   GdkWin32Keymap           *keymap;
   GdkWin32KeymapLayoutInfo *info;
 
-  BYTE                      keystate[256] = {0};
   BYTE                      modbits;
   guint                     sym;
 
@@ -954,7 +930,7 @@ gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
     return 0;
   
   modbits = info->level_to_modbits[key->level];
-  sym = vk_and_mod_bits_to_gdk_keysym (keymap, info, key->keycode, keystate, modbits, NULL);
+  sym = vk_and_mod_bits_to_gdk_keysym (keymap, info, key->keycode, modbits, 0, NULL);
 
   if (sym == GDK_KEY_VoidSymbol)
     return 0;
@@ -981,7 +957,7 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   GdkWin32KeymapLayoutInfo *layout_info;
   guint                     vk;
   BYTE                      mod_bits;
-  BYTE                      keystate[256] = {0};
+  BYTE                      lock_bits = 0;
 
   g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), FALSE);
 
@@ -1005,11 +981,25 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   if (vk == VK_RMENU)
     mod_bits &= ~KBDALTGR;
 
-  /* We need to query the existing keyboard state for NumLock, CapsLock etc. */
-  get_lock_state (keystate);
+  /* Translate lock state
+   *
+   * Right now the only locking modifier is CAPSLOCK. We don't handle KANALOK
+   * because GDK doesn't have an equivalent modifier mask to my knowledge (On
+   * X11, I believe the same effect is achieved by shifting to a different
+   * group. It's just a different concept, that doesn't translate to Windows).
+   * But since KANALOK is only used on far-eastern keyboards, which require IME
+   * anyway, this is probably fine. The IME input module has actually been the
+   * default for all languages (not just far-eastern) for a while now, which
+   * means that the keymap is now only used for things like accelerators and
+   * keybindings, where you probably don't even want KANALOK to affect the
+   * translation.
+   */
 
-  tmp_keyval = vk_and_mod_bits_to_gdk_keysym (keymap, layout_info, vk, keystate,
-                                              mod_bits, &consumed_mod_bits);
+  if (state & GDK_LOCK_MASK)
+    lock_bits |= CAPLOK;
+
+  tmp_keyval = vk_and_mod_bits_to_gdk_keysym (keymap, layout_info, vk, mod_bits,
+                                              lock_bits, &consumed_mod_bits);
   tmp_effective_group = group;
   tmp_level = modbits_to_level (keymap, layout_info, consumed_mod_bits);
 
