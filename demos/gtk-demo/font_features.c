@@ -12,7 +12,6 @@
  */
 
 #include <gtk/gtk.h>
-#include <pango/pangofc-font.h>
 #include <hb.h>
 #include <hb-ot.h>
 #include <glib/gi18n.h>

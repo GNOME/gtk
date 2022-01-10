@@ -98,6 +98,7 @@ demos = files([
   'transparent.c',
   'tree_store.c',
   'video_player.c',
+  'font_features.c',
 ])
 
 gtkdemo_deps = [ libgtk_dep, ]
@@ -128,13 +129,8 @@ extra_demo_sources = files([
   'script-names.c',
   'unicode-names.c',
   'suggestionentry.c',
+  'language-names.c',
 ])
-
-if harfbuzz_dep.found() and pangoft_dep.found()
-  demos += files(['font_features.c'])
-  extra_demo_sources += files(['language-names.c'])
-  gtkdemo_deps += [ harfbuzz_dep, epoxy_dep ]
-endif
 
 if os_unix
   demos += files('pagesetup.c')
