@@ -1101,7 +1101,6 @@ if harfbuzz_dep.found() and pangoft_dep.found()
   gtk_deps += [ harfbuzz_dep, pangoft_dep ]
   gtk_sources += files([
   'language-names.c',
-  'script-names.c',
   ])
 endif
 

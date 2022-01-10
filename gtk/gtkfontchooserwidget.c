@@ -66,7 +66,6 @@
 #include <hb-ot.h>
 
 #include "language-names.h"
-#include "script-names.h"
 #include "open-type-layout.h"
 
 /**
