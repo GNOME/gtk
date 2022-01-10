@@ -166,6 +166,67 @@ vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
                                                          consumed_mod_bits, is_dead, vk);
 }
 
+/*
+ * Return the keyboard layout according to the user's keyboard layout
+ * substitution preferences.
+ *
+ * The result is heap-allocated and should be freed with g_free().
+ */
+static char*
+get_keyboard_layout_substituted_name (const char *layout_name)
+{
+  HKEY     hkey     = 0;
+  DWORD    var_type = REG_SZ;
+  char    *result   = NULL;
+  DWORD    buf_len  = 0;
+  LSTATUS  status;
+
+  static const char *substitute_path = "Keyboard Layout\\Substitutes";
+
+  status = RegOpenKeyExA (HKEY_CURRENT_USER, substitute_path, 0,
+                          KEY_QUERY_VALUE, &hkey);
+  if (status != ERROR_SUCCESS)
+    {
+      /* No substitute set for this value, not sure if this is a normal case */
+      g_warning("Could not open registry key '%s'. Error code: %d",
+                substitute_path, (int)status);
+
+      goto fail1;
+    }
+
+  status = RegQueryValueExA (hkey, layout_name, 0, &var_type, 0, &buf_len);
+  if (status != ERROR_SUCCESS)
+    {
+      g_debug("Could not query registry key '%s\\%s'. Error code: %d",
+              substitute_path, layout_name, (int)status);
+      goto fail2;
+    }
+
+  /* Allocate buffer */
+  result = (char*) g_malloc (buf_len);
+
+  /* Retrieve substitute name */
+  status = RegQueryValueExA (hkey, layout_name, 0, &var_type,
+                             (LPBYTE) result, &buf_len);
+  if (status != ERROR_SUCCESS)
+    {
+      g_warning("Could not obtain registry value at key '%s\\%s'. "
+                "Error code: %d",
+                substitute_path, layout_name, (int)status);
+      goto fail3;
+    }
+
+  RegCloseKey (hkey);
+  return result;
+
+fail3:
+  g_free (result);
+fail2:
+  RegCloseKey (hkey);
+fail1:
+  return NULL;
+}
+
 /* 
  * Get the file path of the keyboard layout dll.
  * The result is heap-allocated and should be freed with g_free().
@@ -173,21 +234,37 @@ vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
 static char*
 get_keyboard_layout_file (const char *layout_name)
 {
-  HKEY   hkey          = 0;
-  DWORD  var_type      = REG_SZ;
-  char  *result        = NULL;
-  DWORD  file_name_len = 0;
-  int    dir_len       = 0;
-  int    buf_len       = 0;
-  LSTATUS status;
+  char    *final_layout_name = NULL;
+  HKEY     hkey              = 0;
+  DWORD    var_type          = REG_SZ;
+  char    *result            = NULL;
+  DWORD    file_name_len     = 0;
+  int      dir_len           = 0;
+  int      buf_len           = 0;
+  LSTATUS  status;
 
   static const char prefix[] = "SYSTEM\\CurrentControlSet\\Control\\"
                                "Keyboard Layouts\\";
   char kbdKeyPath[sizeof (prefix) + KL_NAMELENGTH];
 
-  g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s", prefix,
-              layout_name);
-
+  /* The user may have a keyboard substitute configured */
+  final_layout_name = get_keyboard_layout_substituted_name (layout_name);
+  if (final_layout_name != NULL)
+    {
+      g_debug ("Substituting keyboard layout name from '%s' to '%s'",
+               layout_name, final_layout_name);
+      g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
+                  prefix, final_layout_name);
+      g_free (final_layout_name);
+      final_layout_name = NULL;
+    }
+  else
+    {
+      g_debug ("Could not get substitute keyboard layout name for '%s', "
+               "will use '%s' directly", layout_name, layout_name);
+      g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
+                  prefix, layout_name);
+    }
 
   status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
                           KEY_QUERY_VALUE, &hkey);
