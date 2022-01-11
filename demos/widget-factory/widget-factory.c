@@ -2360,7 +2360,7 @@ activate (GApplication *app)
   model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");
   set_up_context_popover (widget, model);
 
-  gtk_widget_show (GTK_WIDGET (window));
+  gtk_window_present (window);
 
   g_object_unref (builder);
 }
