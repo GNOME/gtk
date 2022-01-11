@@ -1040,7 +1040,7 @@ out:
       g_signal_connect_swapped (G_OBJECT (demo), "destroy", G_CALLBACK (g_application_quit), app);
     }
   else
-    gtk_widget_show (GTK_WIDGET (window));
+    gtk_window_present (GTK_WINDOW (window));
 
   if (autoquit)
     g_timeout_add_seconds (1, auto_quit, app);
