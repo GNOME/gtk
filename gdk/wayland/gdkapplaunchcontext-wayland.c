@@ -75,8 +75,9 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
       xdg_activation_token_v1_set_serial (token,
                                           _gdk_wayland_seat_get_last_implicit_grab_serial (seat, NULL),
                                           gdk_wayland_seat_get_wl_seat (seat));
-      xdg_activation_token_v1_set_surface (token,
-                                           gdk_wayland_window_get_wl_surface (focus_window));
+      if (focus_window)
+        xdg_activation_token_v1_set_surface (token,
+                                             gdk_wayland_window_get_wl_surface (focus_window));
       xdg_activation_token_v1_commit (token);
 
       while (app_launch_data.token == NULL)
