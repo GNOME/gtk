@@ -156,14 +156,75 @@ modbits_to_level (GdkWin32Keymap           *keymap,
 static WCHAR
 vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
                   GdkWin32KeymapLayoutInfo *info,
-                  const BYTE                keystate[256],
-                  BYTE                      extra_mod_bits,
+                  BYTE                      mod_bits,
+                  BYTE                      lock_bits,
                   BYTE                     *consumed_mod_bits,
                   gboolean                 *is_dead,
                   BYTE                      vk)
 {
-  return keymap->gdkwin32_keymap_impl->vk_to_char_fuzzy (info, keystate, extra_mod_bits,
+  return keymap->gdkwin32_keymap_impl->vk_to_char_fuzzy (info, mod_bits, lock_bits,
                                                          consumed_mod_bits, is_dead, vk);
+}
+
+/*
+ * Return the keyboard layout according to the user's keyboard layout
+ * substitution preferences.
+ *
+ * The result is heap-allocated and should be freed with g_free().
+ */
+static char*
+get_keyboard_layout_substituted_name (const char *layout_name)
+{
+  HKEY     hkey     = 0;
+  DWORD    var_type = REG_SZ;
+  char    *result   = NULL;
+  DWORD    buf_len  = 0;
+  LSTATUS  status;
+
+  static const char *substitute_path = "Keyboard Layout\\Substitutes";
+
+  status = RegOpenKeyExA (HKEY_CURRENT_USER, substitute_path, 0,
+                          KEY_QUERY_VALUE, &hkey);
+  if (status != ERROR_SUCCESS)
+    {
+      /* No substitute set for this value, not sure if this is a normal case */
+      g_warning("Could not open registry key '%s'. Error code: %d",
+                substitute_path, (int)status);
+
+      goto fail1;
+    }
+
+  status = RegQueryValueExA (hkey, layout_name, 0, &var_type, 0, &buf_len);
+  if (status != ERROR_SUCCESS)
+    {
+      g_debug("Could not query registry key '%s\\%s'. Error code: %d",
+              substitute_path, layout_name, (int)status);
+      goto fail2;
+    }
+
+  /* Allocate buffer */
+  result = (char*) g_malloc (buf_len);
+
+  /* Retrieve substitute name */
+  status = RegQueryValueExA (hkey, layout_name, 0, &var_type,
+                             (LPBYTE) result, &buf_len);
+  if (status != ERROR_SUCCESS)
+    {
+      g_warning("Could not obtain registry value at key '%s\\%s'. "
+                "Error code: %d",
+                substitute_path, layout_name, (int)status);
+      goto fail3;
+    }
+
+  RegCloseKey (hkey);
+  return result;
+
+fail3:
+  g_free (result);
+fail2:
+  RegCloseKey (hkey);
+fail1:
+  return NULL;
 }
 
 /* 
@@ -173,32 +234,63 @@ vk_to_char_fuzzy (GdkWin32Keymap           *keymap,
 static char*
 get_keyboard_layout_file (const char *layout_name)
 {
-  HKEY   hkey          = 0;
-  DWORD  var_type      = REG_SZ;
-  char  *result        = NULL;
-  DWORD  file_name_len = 0;
-  int    dir_len       = 0;
-  int    buf_len       = 0;
+  char    *final_layout_name = NULL;
+  HKEY     hkey              = 0;
+  DWORD    var_type          = REG_SZ;
+  char    *result            = NULL;
+  DWORD    file_name_len     = 0;
+  int      dir_len           = 0;
+  int      buf_len           = 0;
+  LSTATUS  status;
 
   static const char prefix[] = "SYSTEM\\CurrentControlSet\\Control\\"
                                "Keyboard Layouts\\";
   char kbdKeyPath[sizeof (prefix) + KL_NAMELENGTH];
 
-  g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s", prefix,
-              layout_name);
+  /* The user may have a keyboard substitute configured */
+  final_layout_name = get_keyboard_layout_substituted_name (layout_name);
+  if (final_layout_name != NULL)
+    {
+      g_debug ("Substituting keyboard layout name from '%s' to '%s'",
+               layout_name, final_layout_name);
+      g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
+                  prefix, final_layout_name);
+      g_free (final_layout_name);
+      final_layout_name = NULL;
+    }
+  else
+    {
+      g_debug ("Could not get substitute keyboard layout name for '%s', "
+               "will use '%s' directly", layout_name, layout_name);
+      g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
+                  prefix, layout_name);
+    }
 
-  if (RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
-                     KEY_QUERY_VALUE, &hkey) != ERROR_SUCCESS)
-    goto fail1;
+  status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
+                          KEY_QUERY_VALUE, &hkey);
+  if (status != ERROR_SUCCESS)
+    {
+      g_warning("Could not open registry key '%s'. Error code: %d",
+                kbdKeyPath, (int)status);
+      goto fail1;
+    }
 
   /* Get sizes */
-  if (RegQueryValueExA (hkey, "Layout File", 0, &var_type, 0,
-			&file_name_len) != ERROR_SUCCESS)
-    goto fail2;
+  status = RegQueryValueExA (hkey, "Layout File", 0, &var_type, 0,
+                             &file_name_len);
+  if (status != ERROR_SUCCESS)
+    {
+      g_warning("Could not query registry key '%s\\Layout File'. Error code: %d",
+                kbdKeyPath, (int)status);
+      goto fail2;
+    }
 
   dir_len = GetSystemDirectoryA (0, 0); /* includes \0 */
   if (dir_len == 0)
-    goto fail2;
+    {
+      g_warning("GetSystemDirectoryA failed. Error: %d", (int)GetLastError());
+      goto fail2;
+    }
 
   /* Allocate buffer */
   buf_len = dir_len + (int) strlen ("\\") + file_name_len;
@@ -212,10 +304,12 @@ get_keyboard_layout_file (const char *layout_name)
   result[dir_len - 1] = '\\';
 
   /* Append file name */
-  if (RegQueryValueExA (hkey, "Layout File", 0, &var_type,
-			(LPBYTE) &result[dir_len], &file_name_len)
-      != ERROR_SUCCESS)
-    goto fail3;
+  status = RegQueryValueExA (hkey, "Layout File", 0, &var_type,
+                             (LPBYTE) &result[dir_len], &file_name_len);
+  if (status != ERROR_SUCCESS)
+    {
+      goto fail3;
+    }
 
   result[dir_len + file_name_len] = '\0';
 
@@ -320,7 +414,8 @@ clear_keyboard_layout_info (gpointer data)
   map (VK_SCROLL,     GDK_KEY_Scroll_Lock)  \
   map (VK_RSHIFT,     GDK_KEY_Shift_R)      \
   map (VK_RCONTROL,   GDK_KEY_Control_R)    \
-  map (VK_RMENU,      GDK_KEY_Alt_R)  
+  map (VK_RMENU,      GDK_KEY_Alt_R)        \
+  map (VK_CAPITAL,    GDK_KEY_Caps_Lock)
 
 
 #define DEFINE_DEAD(map)                                                      \
@@ -347,8 +442,8 @@ static guint
 vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
                                GdkWin32KeymapLayoutInfo *info,
                                guint               vk,
-                               const BYTE          keystate[256],
                                BYTE                mod_bits,
+                               BYTE                lock_bits,
                                BYTE               *consumed_mod_bits)
 
 {
@@ -384,7 +479,7 @@ vk_and_mod_bits_to_gdk_keysym (GdkWin32Keymap     *keymap,
     }
 
   /* Handle regular keys (including dead keys) */
-  c = vk_to_char_fuzzy (keymap, info, keystate, mod_bits,
+  c = vk_to_char_fuzzy (keymap, info, mod_bits, lock_bits,
                         consumed_mod_bits, &is_dead, vk);
 
   if (c == WCH_NONE)
@@ -412,6 +507,9 @@ gdk_keysym_to_key_entry_index (GdkWin32KeymapLayoutInfo *info,
   gunichar c;
   gintptr  index;
 
+  if (info->reverse_lookup_table == NULL)
+    return -1;
+
   /* Special cases */
   if (sym == GDK_KEY_Tab)
     return VK_TAB;
@@ -435,8 +533,6 @@ gdk_keysym_to_key_entry_index (GdkWin32KeymapLayoutInfo *info,
 
   /* Try converting to Unicode and back */
   c = gdk_keyval_to_unicode (sym);
-
-  g_return_val_if_fail (info->reverse_lookup_table != NULL, -1);
 
   index = -1;
   if (g_hash_table_lookup_extended (info->reverse_lookup_table,
@@ -497,26 +593,6 @@ gdk_mod_mask_to_mod_bits (GdkModifierType mod_mask)
   return result;
 }
 
-static void
-get_lock_state (BYTE lock_state[256])
-{
-  static const guint mode_keys[] =
-    {
-      VK_CAPITAL,
-      VK_KANA, VK_HANGUL, VK_JUNJA, VK_FINAL, VK_HANJA, VK_KANJI, /* Is this correct? */
-      VK_NUMLOCK, VK_SCROLL
-    };
-
-  BYTE keystate[256] = {0};
-  guint i;
-
-  GetKeyboardState (keystate);
-
-  /* Copy over some keystates like numlock and capslock */
-  for (i = 0; i < G_N_ELEMENTS(mode_keys); ++i)
-    lock_state[mode_keys[i]] = keystate[mode_keys[i]] & 0x1;
-}
-
 
 /* keypad decimal mark depends on active keyboard layout
  * return current decimal mark as unicode character
@@ -574,7 +650,7 @@ update_keymap (GdkWin32Keymap *keymap)
 
           info->file = get_keyboard_layout_file (info->name);
 
-          if (load_layout_dll (keymap, info->file, info))
+          if (info->file != NULL && load_layout_dll (keymap, info->file, info))
             {
               info->key_entries = g_array_new (FALSE, FALSE,
                                                sizeof (GdkWin32KeymapKeyEntry));
@@ -582,6 +658,11 @@ update_keymap (GdkWin32Keymap *keymap)
               info->reverse_lookup_table = g_hash_table_new (g_direct_hash,
                                                              g_direct_equal);
               init_vk_lookup_table (keymap, info);
+            }
+          else
+            {
+              g_warning("Failed to load keyboard layout DLL for layout %s: %s",
+                        info->name, info->file);
             }
         }
 
@@ -614,17 +695,6 @@ _gdk_win32_keymap_set_active_layout (GdkWin32Keymap *keymap,
         if (g_array_index (keymap->layout_handles, HKL, group) == hkl)
           keymap->active_layout = group;
     }
-}
-
-gboolean
-_gdk_win32_keymap_has_altgr (GdkWin32Keymap *keymap)
-{
-  /* We just return FALSE, since it doesn't really matter because AltGr
-   * is the same as Ctrl + Alt. Hence, we will never get a GDK_MOD2_MASK, 
-   * rather we will just get GDK_CONTROL_MASK | GDK_MOD1_MASK. I don't 
-   * think there is any clean way to distinguish <Ctrl + Alt> from 
-   * <AltGr> on Windows. */
-  return FALSE;
 }
 
 guint8
@@ -766,7 +836,6 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
 {
   GdkWin32Keymap *keymap;
   GArray         *retval;
-  BYTE            keystate[256] = {0};
   gint            group;
 
   g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), FALSE);
@@ -822,8 +891,7 @@ gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *gdk_keymap,
               /* Check if the additional modifiers change the semantics.
                * If they do not, add them. */
               sym = vk_and_mod_bits_to_gdk_keysym (keymap, info, entry->vk,
-                                                   keystate, modbits,
-                                                   NULL);
+                                                   modbits, 0, NULL);
               if (sym == keyval || sym == GDK_KEY_VoidSymbol)
                 {
                   gdk_key.keycode = entry->vk;
@@ -864,7 +932,6 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
   GArray         *key_array;
   GArray         *keyval_array;
   gint            group;
-  BYTE            keystate[256] = {0};
   BYTE            vk;
 
   g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), FALSE);
@@ -901,7 +968,7 @@ gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *gdk_keymap,
           GdkKeymapKey key              = {0};
           guint        keyval;
 
-          keyval = vk_and_mod_bits_to_gdk_keysym (keymap, info, vk, keystate, modbits, &consumed_modbits);
+          keyval = vk_and_mod_bits_to_gdk_keysym (keymap, info, vk, modbits, 0, &consumed_modbits);
 
           if (keyval == GDK_KEY_VoidSymbol || consumed_modbits != modbits)
             continue;
@@ -936,7 +1003,6 @@ gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
   GdkWin32Keymap           *keymap;
   GdkWin32KeymapLayoutInfo *info;
 
-  BYTE                      keystate[256] = {0};
   BYTE                      modbits;
   guint                     sym;
 
@@ -954,7 +1020,7 @@ gdk_win32_keymap_lookup_key (GdkKeymap          *gdk_keymap,
     return 0;
   
   modbits = info->level_to_modbits[key->level];
-  sym = vk_and_mod_bits_to_gdk_keysym (keymap, info, key->keycode, keystate, modbits, NULL);
+  sym = vk_and_mod_bits_to_gdk_keysym (keymap, info, key->keycode, modbits, 0, NULL);
 
   if (sym == GDK_KEY_VoidSymbol)
     return 0;
@@ -981,7 +1047,7 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   GdkWin32KeymapLayoutInfo *layout_info;
   guint                     vk;
   BYTE                      mod_bits;
-  BYTE                      keystate[256] = {0};
+  BYTE                      lock_bits = 0;
 
   g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), FALSE);
 
@@ -1005,11 +1071,25 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
   if (vk == VK_RMENU)
     mod_bits &= ~KBDALTGR;
 
-  /* We need to query the existing keyboard state for NumLock, CapsLock etc. */
-  get_lock_state (keystate);
+  /* Translate lock state
+   *
+   * Right now the only locking modifier is CAPSLOCK. We don't handle KANALOK
+   * because GDK doesn't have an equivalent modifier mask to my knowledge (On
+   * X11, I believe the same effect is achieved by shifting to a different
+   * group. It's just a different concept, that doesn't translate to Windows).
+   * But since KANALOK is only used on far-eastern keyboards, which require IME
+   * anyway, this is probably fine. The IME input module has actually been the
+   * default for all languages (not just far-eastern) for a while now, which
+   * means that the keymap is now only used for things like accelerators and
+   * keybindings, where you probably don't even want KANALOK to affect the
+   * translation.
+   */
 
-  tmp_keyval = vk_and_mod_bits_to_gdk_keysym (keymap, layout_info, vk, keystate,
-                                              mod_bits, &consumed_mod_bits);
+  if (state & GDK_LOCK_MASK)
+    lock_bits |= CAPLOK;
+
+  tmp_keyval = vk_and_mod_bits_to_gdk_keysym (keymap, layout_info, vk, mod_bits,
+                                              lock_bits, &consumed_mod_bits);
   tmp_effective_group = group;
   tmp_level = modbits_to_level (keymap, layout_info, consumed_mod_bits);
 
@@ -1023,6 +1103,13 @@ gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *gdk_keymap,
     *level = tmp_level;
   if (consumed_modifiers)
     *consumed_modifiers = mod_bits_to_gdk_mod_mask (consumed_mod_bits);
+
+  /* Just a diagnostic message to inform the user why their keypresses aren't working.
+   * Shouldn't happen under normal circumstances. */
+  if (tmp_keyval == GDK_KEY_VoidSymbol && layout_info->tables == NULL)
+    g_warning("Failed to translate keypress (keycode: %u) for group %d (%s) because "
+              "we could not load the layout.",
+              hardware_keycode, group, layout_info->name);
 
   return tmp_keyval != GDK_KEY_VoidSymbol;
 }
