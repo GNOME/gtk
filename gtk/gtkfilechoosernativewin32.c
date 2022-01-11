@@ -982,8 +982,11 @@ gtk_file_chooser_native_win32_show (GtkFileChooserNative *self)
       return FALSE;
     }
 
-  data->grab_widget = gtk_invisible_new ();
-  gtk_grab_add (GTK_WIDGET (data->grab_widget));
+  if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
+    {
+      data->grab_widget = gtk_invisible_new ();
+      gtk_grab_add (GTK_WIDGET (data->grab_widget));
+    }
 
   return TRUE;
 }
