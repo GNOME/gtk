@@ -42,7 +42,7 @@ univocally identifies events that are related to the same
 interaction.
 
 When GTK creates a `GdkSurface`, it connects to the ::event
-signal on it, which receives all of these input events. Surfaces have
+signal on it, which receives all of these input events. Surfaces
 have signals and properties, e.g. to deal with window management
 related events.
 
