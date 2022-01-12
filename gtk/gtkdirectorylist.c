@@ -65,6 +65,25 @@ enum {
   NUM_PROPERTIES
 };
 
+typedef struct _QueuedEvent QueuedEvent;
+struct _QueuedEvent
+{
+  GtkDirectoryList *list;
+  GFile *file;
+  GFileInfo *info;
+  GFileMonitorEvent event;
+};
+
+static void
+free_queued_event (gpointer data)
+{
+  QueuedEvent *event = data;
+
+  g_clear_object (&event->file);
+  g_clear_object (&event->info);
+  g_free (event);
+}
+
 struct _GtkDirectoryList
 {
   GObject parent_instance;
@@ -78,6 +97,7 @@ struct _GtkDirectoryList
   GCancellable *cancellable;
   GError *error; /* Error while loading */
   GSequence *items; /* Use GPtrArray or GListStore here? */
+  GQueue events;
 };
 
 struct _GtkDirectoryListClass
@@ -140,7 +160,6 @@ gtk_directory_list_set_property (GObject      *object,
     case PROP_ATTRIBUTES:
       gtk_directory_list_set_attributes (self, g_value_get_string (value));
       break;
-
     case PROP_FILE:
       gtk_directory_list_set_file (self, g_value_get_object (value));
       break;
@@ -238,6 +257,9 @@ gtk_directory_list_dispose (GObject *object)
   g_clear_error (&self->error);
   g_clear_pointer (&self->items, g_sequence_free);
 
+  g_queue_foreach (&self->events, (GFunc) free_queued_event, NULL);
+  g_queue_clear (&self->events);
+
   G_OBJECT_CLASS (gtk_directory_list_parent_class)->dispose (object);
 }
 
@@ -331,6 +353,7 @@ gtk_directory_list_init (GtkDirectoryList *self)
   self->items = g_sequence_new (g_object_unref);
   self->io_priority = G_PRIORITY_DEFAULT;
   self->monitored = TRUE;
+  g_queue_init (&self->events);
 }
 
 /**
@@ -519,24 +542,123 @@ gtk_directory_list_start_loading (GtkDirectoryList *self)
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LOADING]);
 }
 
+static GSequenceIter *
+find_file (GSequence *sequence,
+           GFile     *file)
+{
+  GSequenceIter *iter;
+
+  for (iter = g_sequence_get_begin_iter (sequence);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      GFileInfo *item = G_FILE_INFO (g_sequence_get (iter));
+      GFile *f = G_FILE (g_file_info_get_attribute_object (item, "standard::file"));
+
+      if (g_file_equal (f, file))
+        return iter;
+    }
+
+  return NULL;
+}
+
+static gboolean
+handle_event (QueuedEvent *event)
+{
+  GtkDirectoryList *self = event->list;
+  GFile *file = event->file;
+  GFileInfo *info = event->info;
+  GSequenceIter *iter;
+  unsigned int position;
+
+  switch ((int)event->event)
+    {
+    case G_FILE_MONITOR_EVENT_MOVED_IN:
+    case G_FILE_MONITOR_EVENT_CREATED:
+      if (!info)
+        return FALSE;
+
+      g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+
+      iter = find_file (self->items, file);
+      if (iter)
+        {
+          position = g_sequence_iter_get_position (iter);
+          g_sequence_set (iter, g_object_ref (info));
+          g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 1);
+        }
+      else
+        {
+          position = g_sequence_get_length (self->items);
+          g_sequence_append (self->items, g_object_ref (info));
+          g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+        }
+      break;
+
+    case G_FILE_MONITOR_EVENT_MOVED_OUT:
+    case G_FILE_MONITOR_EVENT_DELETED:
+      iter = find_file (self->items, file);
+      if (iter)
+        {
+          position = g_sequence_iter_get_position (iter);
+          g_sequence_remove (iter);
+          g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+        }
+      break;
+
+    case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
+      if (!info)
+        return FALSE;
+
+      g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+
+      iter = find_file (self->items, file);
+      if (iter)
+        {
+          position = g_sequence_iter_get_position (iter);
+          g_sequence_set (iter, g_object_ref (info));
+          g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 1);
+        }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static void
+handle_events (GtkDirectoryList *self)
+{
+  QueuedEvent *event;
+
+  do
+    {
+      event = g_queue_peek_tail (&self->events);
+      if (!event)
+        return;
+
+      if (!handle_event (event))
+        return;
+
+      event = g_queue_pop_tail (&self->events);
+      free_queued_event (event);
+    }
+  while (TRUE);
+}
+
 static void
 got_new_file_info_cb (GObject      *source,
                       GAsyncResult *res,
                       gpointer      data)
 {
-  GFile *file = G_FILE (source);
-  GtkDirectoryList *self = GTK_DIRECTORY_LIST (data);
-  GFileInfo *info;
-  guint position;
+  QueuedEvent *event = data;
+  GtkDirectoryList *self = event->list;
+  GFile *file = event->file;
 
-  info = g_file_query_info_finish (file, res, NULL);
-  if (!info)
-    return;
-
-  g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
-  position = g_sequence_get_length (self->items);
-  g_sequence_append (self->items, info);
-  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+  event->info = g_file_query_info_finish (file, res, NULL);
+  handle_events (self);
 }
 
 static void
@@ -544,53 +666,12 @@ got_existing_file_info_cb (GObject      *source,
                            GAsyncResult *res,
                            gpointer      data)
 {
-  GFile *file = G_FILE (source);
-  GtkDirectoryList *self = GTK_DIRECTORY_LIST (data);
-  GFileInfo *info;
-  GSequenceIter *iter;
+  QueuedEvent *event = data;
+  GtkDirectoryList *self = event->list;
+  GFile *file = event->file;
 
-  info = g_file_query_info_finish (file, res, NULL);
-  if (!info)
-    return;
-
-  g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
-
-  for (iter = g_sequence_get_begin_iter (self->items);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      GFileInfo *item = g_sequence_get (iter);
-      GFile *f = G_FILE (g_file_info_get_attribute_object (item, "standard::file"));
-      if (g_file_equal (f, file))
-        {
-          guint position = g_sequence_iter_get_position (iter);
-          g_sequence_set (iter, g_object_ref (info));
-          g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 1);
-          break;
-        }
-    }
-}
-
-static void
-gtk_directory_list_remove_file (GtkDirectoryList *self,
-                                GFile            *file)
-{
-  GSequenceIter *iter;
-
-  for (iter = g_sequence_get_begin_iter (self->items);
-       !g_sequence_iter_is_end (iter);
-       iter = g_sequence_iter_next (iter))
-    {
-      GFileInfo *item = g_sequence_get (iter);
-      GFile *f = G_FILE (g_file_info_get_attribute_object (item, "standard::file"));
-      if (g_file_equal (f, file))
-        {
-          guint position = g_sequence_iter_get_position (iter);
-          g_sequence_remove (iter);
-          g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
-          break;
-        }
-    }
+  event->info = g_file_query_info_finish (file, res, NULL);
+  handle_events (self);
 }
 
 static void
@@ -601,30 +682,74 @@ directory_changed (GFileMonitor       *monitor,
                    gpointer            data)
 {
   GtkDirectoryList *self = GTK_DIRECTORY_LIST (data);
+  QueuedEvent *ev;
+
   switch (event)
     {
+    case G_FILE_MONITOR_EVENT_MOVED_IN:
     case G_FILE_MONITOR_EVENT_CREATED:
+      ev = g_new0 (QueuedEvent, 1);
+      ev->list = self;
+      ev->event = event;
+      ev->file = g_object_ref (file);
+      g_queue_push_head (&self->events, ev);
+
       g_file_query_info_async (file,
                                self->attributes,
                                G_FILE_QUERY_INFO_NONE,
                                self->io_priority,
                                self->cancellable,
                                got_new_file_info_cb,
-                               self);
+                               ev);
       break;
 
+    case G_FILE_MONITOR_EVENT_MOVED_OUT:
     case G_FILE_MONITOR_EVENT_DELETED:
-      gtk_directory_list_remove_file (self, file);
+      ev = g_new0 (QueuedEvent, 1);
+      ev->list = self;
+      ev->event = event;
+      ev->file = g_object_ref (file);
+      g_queue_push_head (&self->events, ev);
+
+      handle_events (self);
       break;
 
     case G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED:
+      ev = g_new0 (QueuedEvent, 1);
+      ev->list = self;
+      ev->event = event;
+      ev->file = g_object_ref (file);
+      g_queue_push_head (&self->events, ev);
+
       g_file_query_info_async (file,
                                self->attributes,
                                G_FILE_QUERY_INFO_NONE,
                                self->io_priority,
                                self->cancellable,
                                got_existing_file_info_cb,
-                               self);
+                               ev);
+      break;
+
+    case G_FILE_MONITOR_EVENT_RENAMED:
+      ev = g_new0 (QueuedEvent, 1);
+      ev->list = self;
+      ev->event = G_FILE_MONITOR_EVENT_DELETED;
+      ev->file = g_object_ref (file);
+      g_queue_push_head (&self->events, ev);
+
+      ev = g_new0 (QueuedEvent, 1);
+      ev->list = self;
+      ev->event = G_FILE_MONITOR_EVENT_CREATED;
+      ev->file = g_object_ref (other_file);
+      g_queue_push_head (&self->events, ev);
+
+      g_file_query_info_async (other_file,
+                               self->attributes,
+                               G_FILE_QUERY_INFO_NONE,
+                               self->io_priority,
+                               self->cancellable,
+                               got_existing_file_info_cb,
+                               ev);
       break;
 
     case G_FILE_MONITOR_EVENT_CHANGED:
@@ -632,9 +757,6 @@ directory_changed (GFileMonitor       *monitor,
     case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
     case G_FILE_MONITOR_EVENT_UNMOUNTED:
     case G_FILE_MONITOR_EVENT_MOVED:
-    case G_FILE_MONITOR_EVENT_RENAMED:
-    case G_FILE_MONITOR_EVENT_MOVED_IN:
-    case G_FILE_MONITOR_EVENT_MOVED_OUT:
     default:
       break;
     }
@@ -644,7 +766,7 @@ static void
 gtk_directory_list_start_monitoring (GtkDirectoryList *self)
 {
   g_assert (self->monitor == NULL);
-  self->monitor = g_file_monitor_directory (self->file, G_FILE_MONITOR_NONE, NULL, NULL);
+  self->monitor = g_file_monitor_directory (self->file, G_FILE_MONITOR_WATCH_MOVES, NULL, NULL);
   g_signal_connect (self->monitor, "changed", G_CALLBACK (directory_changed), self);
 }
 
