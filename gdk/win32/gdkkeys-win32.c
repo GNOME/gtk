@@ -322,7 +322,8 @@ clear_keyboard_layout_info (gpointer data)
   map (VK_SCROLL,     GDK_KEY_Scroll_Lock)  \
   map (VK_RSHIFT,     GDK_KEY_Shift_R)      \
   map (VK_RCONTROL,   GDK_KEY_Control_R)    \
-  map (VK_RMENU,      GDK_KEY_Alt_R)  
+  map (VK_RMENU,      GDK_KEY_Alt_R)        \
+  map (VK_CAPITAL,    GDK_KEY_Caps_Lock)
 
 
 #define DEFINE_DEAD(map)                                                      \
