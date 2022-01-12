@@ -602,17 +602,6 @@ _gdk_win32_keymap_set_active_layout (GdkWin32Keymap *keymap,
     }
 }
 
-gboolean
-_gdk_win32_keymap_has_altgr (GdkWin32Keymap *keymap)
-{
-  /* We just return FALSE, since it doesn't really matter because AltGr
-   * is the same as Ctrl + Alt. Hence, we will never get a GDK_MOD2_MASK,
-   * rather we will just get GDK_CONTROL_MASK | GDK_ALT_MASK. I don't
-   * think there is any clean way to distinguish <Ctrl + Alt> from
-   * <AltGr> on Windows. */
-  return FALSE;
-}
-
 guint8
 _gdk_win32_keymap_get_active_group (GdkWin32Keymap *keymap)
 {

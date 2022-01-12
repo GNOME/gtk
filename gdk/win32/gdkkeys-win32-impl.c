@@ -291,6 +291,7 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
 
   if (entry->VirtualKey == vk)
     {
+      gboolean have_sgcaps    = FALSE;
       WCHAR    best_char      = WCH_NONE;
       BYTE     best_modifiers = 0;
       int      best_score     = -1;
@@ -316,10 +317,11 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
         mod_bits ^= KBDSHIFT;
 
       /* In the Swiss German layout, CapsLock + key is different from Shift + key
-       * for some keys. For such keys, Capslock toggles the KBDCTRL bit. */
+       * for some keys. For such keys, the characters for active capslock are
+       * in the next entry. */
       if ((entry->Attributes & SGCAPS) &&
           (lock_bits & CAPLOK))
-        mod_bits ^= KBDCTRL;
+        have_sgcaps = TRUE;
 
       /* I'm not totally sure how kanalok behaves, for now I assume that there
        * aren't any special cases. */
@@ -336,12 +338,12 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           int      score;
 
           if (candidate_modbits & ~mod_bits)
-              continue;
+            continue;
 
           c = entry->wch[level];
-          if (c == WCH_DEAD)
+          if (c == WCH_DEAD || have_sgcaps)
             {
-              /* Next entry contains the undead keys */
+              /* Next entry contains the undead/capslocked keys */
               PVK_TO_WCHARS next_entry;
               next_entry = (PVK_TO_WCHARS) ((PBYTE) wch_table->pVkToWchars.ptr
                                             + entry_size * (entry_index + 1));
@@ -458,8 +460,13 @@ init_vk_lookup_table (GdkWin32KeymapLayoutInfo *info)
 
           /* Lookup table to find entry for a VK in O(1). */
 
-          info->vk_lookup_table[entry->VirtualKey].table = table_idx;
-          info->vk_lookup_table[entry->VirtualKey].index = entry_idx;
+          /* Only add the first entry, as some layouts (Swiss German) contain
+           * multiple successive entries for the same VK (SGCAPS). */
+          if (info->vk_lookup_table[entry->VirtualKey].table < 0)
+            {
+              info->vk_lookup_table[entry->VirtualKey].table = table_idx;
+              info->vk_lookup_table[entry->VirtualKey].index = entry_idx;
+            }
 
           /* Create reverse lookup entries to find a VK+modifier combinations
            * that results in a given character. */
@@ -497,7 +504,7 @@ init_vk_lookup_table (GdkWin32KeymapLayoutInfo *info)
               g_hash_table_insert (info->reverse_lookup_table,
                                    GINT_TO_POINTER (c),
                                    GINT_TO_POINTER (inserted_idx));
-          }
+            }
         }
     }
 }
