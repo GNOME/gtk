@@ -1622,12 +1622,13 @@ static struct {
  * We actually don't bother about the FT_Face here, but we use this so that we can have a single
  * version of add_axis() taylored to PangoFT2 or Pango with HarfBuzz integrated
  */
-static void *
+static void
 get_font_name (FT_Face      face,
                FT_Var_Axis *ax,
-               const char  *result)
+               char        *buffer,
+               guint        buffer_len)
 {
-  result = ax->name;
+  g_strlcpy (buffer, ax->name, buffer_len);
 }
 
 static const float
@@ -1662,13 +1663,10 @@ get_axis_float_default (FT_Var_Axis *ax)
 static void
 get_font_name (hb_face_t             *face,
                hb_ot_var_axis_info_t *ax,
-               const char            *name)
+               char                  *buffer,
+               unsigned int           buffer_len)
 {
-  char buffer[20];
-  unsigned int buffer_len = 20;
-
   hb_ot_name_get_utf8 (face, ax->name_id, HB_LANGUAGE_INVALID, &buffer_len, buffer);
-  name = buffer;
 }
 
 #define get_float_value(x) x
@@ -1713,7 +1711,8 @@ add_axis (GtkFontChooserWidget *fontchooser,
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   Axis *axis;
-  const char *name;
+  char buffer[20];
+  char *name;
   int i;
 
   axis = g_new (Axis, 1);
@@ -1721,7 +1720,8 @@ add_axis (GtkFontChooserWidget *fontchooser,
   axis->fontchooser = GTK_WIDGET (fontchooser);
   axis->default_value = get_axis_float_default (ax);
 
-  get_font_name (face, ax, name);
+  get_font_name (face, ax, buffer, 20);
+  name = buffer;
 
   for (i = 0; i < G_N_ELEMENTS (axis_names); i++)
     {
