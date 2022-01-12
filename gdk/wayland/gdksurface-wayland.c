@@ -118,7 +118,6 @@ struct _GdkWaylandSurface
   unsigned int mapped : 1;
   unsigned int awaiting_frame : 1;
   unsigned int awaiting_frame_frozen : 1;
-  unsigned int is_drag_surface : 1;
 
   int pending_buffer_offset_x;
   int pending_buffer_offset_y;
@@ -2836,27 +2835,12 @@ find_grab_input_seat (GdkSurface *surface,
   return NULL;
 }
 
-static gboolean
-should_be_mapped (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-
-  /* Don't map crazy temp that GTK uses for internal X11 shenanigans. */
-  if (GDK_IS_DRAG_SURFACE (surface) && surface->x < 0 && surface->y < 0)
-    return FALSE;
-
-  if (impl->is_drag_surface)
-    return FALSE;
-
-  return TRUE;
-}
-
 static void
 gdk_wayland_surface_map_toplevel (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (!should_be_mapped (surface))
+  if (!GDK_IS_WAYLAND_TOPLEVEL (surface))
     return;
 
   if (impl->mapped)
@@ -4714,7 +4698,6 @@ create_dnd_surface (GdkDisplay *display)
                                                  GDK_SURFACE_TEMP,
                                                  NULL,
                                                  0, 0, 100, 100);
-  GDK_WAYLAND_SURFACE (surface)->is_drag_surface = TRUE;
 
   return surface;
 }
