@@ -455,10 +455,12 @@ cdata.set('HAVE_TRACKER3', tracker3_dep.found())
 colord_dep = dependency('colord', version: '>= 0.1.9', required: get_option('colord'))
 cdata.set('HAVE_COLORD', colord_dep.found())
 
-if iso_codes_dep.found()
-  cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_variable(pkgconfig: 'prefix'))
-else
-  cdata.set_quoted('ISO_CODES_PREFIX', '/usr')
+if not os_win32
+  if iso_codes_dep.found()
+    cdata.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_variable(pkgconfig: 'prefix'))
+  else
+    cdata.set_quoted('ISO_CODES_PREFIX', '/usr')
+  endif
 endif
 
 

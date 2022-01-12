@@ -18,14 +18,80 @@
 
 #include "language-names.h"
 
+#ifdef G_OS_WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#else
+
 #ifndef ISO_CODES_PREFIX
 #define ISO_CODES_PREFIX "/usr"
 #endif
 
 #define ISO_CODES_DATADIR ISO_CODES_PREFIX "/share/xml/iso-codes"
 #define ISO_CODES_LOCALESDIR ISO_CODES_PREFIX "/share/locale"
+#endif
 
 static GHashTable *language_map;
+
+#ifdef G_OS_WIN32
+/* if we are using native Windows use native Windows API for language names */
+static BOOL CALLBACK
+get_win32_all_locales_scripts (LPWSTR locale_w, DWORD flags, LPARAM param)
+{
+  wchar_t *langname_w = NULL;
+  wchar_t locale_abbrev_w[9];
+  gchar *langname, *locale_abbrev, *locale, *p;
+  gint i;
+  const LCTYPE iso639_lctypes[] = { LOCALE_SISO639LANGNAME, LOCALE_SISO639LANGNAME2 };
+  GHashTable *ht_scripts_langs = (GHashTable *) param;
+  PangoLanguage *lang;
+
+  gint langname_size, locale_abbrev_size;
+  langname_size = GetLocaleInfoEx (locale_w, LOCALE_SLOCALIZEDDISPLAYNAME, langname_w, 0);
+  if (langname_size == 0)
+    return FALSE;
+
+  langname_w = g_new0 (wchar_t, langname_size);
+
+  if (langname_size == 0)
+    return FALSE;
+
+  GetLocaleInfoEx (locale_w, LOCALE_SLOCALIZEDDISPLAYNAME, langname_w, langname_size);
+  langname = g_utf16_to_utf8 (langname_w, -1, NULL, NULL, NULL);
+  locale = g_utf16_to_utf8 (locale_w, -1, NULL, NULL, NULL);
+  p = strchr (locale, '-');
+  lang = pango_language_from_string (locale);
+  if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
+    g_hash_table_insert (ht_scripts_langs, lang, langname);
+
+  /*
+   * Track 3+-letter ISO639-2/3 language codes as well (these have a max length of 9 including terminating NUL)
+   * ISO639-2: iso639_lctypes[0] = LOCALE_SISO639LANGNAME
+   * ISO639-3: iso639_lctypes[1] = LOCALE_SISO639LANGNAME2
+   */
+  for (i = 0; i < 2; i++)
+    {
+      locale_abbrev_size = GetLocaleInfoEx (locale_w, iso639_lctypes[i], locale_abbrev_w, 0);
+      if (locale_abbrev_size > 0)
+        {
+          GetLocaleInfoEx (locale_w, iso639_lctypes[i], locale_abbrev_w, locale_abbrev_size);
+
+          locale_abbrev = g_utf16_to_utf8 (locale_abbrev_w, -1, NULL, NULL, NULL);
+          lang = pango_language_from_string (locale_abbrev);
+          if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
+            g_hash_table_insert (ht_scripts_langs, lang, langname);
+
+          g_free (locale_abbrev);
+        }
+    }
+
+  g_free (locale);
+  g_free (langname_w);
+
+  return TRUE;
+}
+
+#else /* non-Windows */
 
 static char *
 get_first_item_in_semicolon_list (const char *list)
@@ -210,6 +276,7 @@ languages_variant_init (const char *variant)
   g_free (filename);
   g_free (buf);
 }
+#endif
 
 static void
 languages_init (void)
@@ -218,8 +285,13 @@ languages_init (void)
     return;
 
   language_map = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+
+#ifdef G_OS_WIN32
+  g_return_if_fail (EnumSystemLocalesEx (&get_win32_all_locales_scripts, LOCALE_ALL, (LPARAM) language_map, NULL));
+#else
   languages_variant_init ("iso_639");
   languages_variant_init ("iso_639_3");
+#endif
 }
 
 const char *
