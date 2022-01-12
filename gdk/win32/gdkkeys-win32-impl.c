@@ -180,7 +180,8 @@ keystate_to_modbits (GdkWin32KeymapLayoutInfo *info,
   BYTE       result = 0;
   int        i;
 
-  g_return_val_if_fail (tables != NULL, 0);
+  if (tables == NULL)
+    return 0;
 
   vk_to_bit = tables->pCharModifiers.ptr->pVkToBit.ptr;
 
@@ -198,7 +199,8 @@ modbits_to_level (GdkWin32KeymapLayoutInfo *info,
   PKBDTABLES tables = (PKBDTABLES) info->tables;
   PMODIFIERS modifiers;
 
-  g_return_val_if_fail (tables != NULL, 0);
+  if (tables == NULL)
+    return 0;
 
   modifiers = tables->pCharModifiers.ptr;
   if (modbits > modifiers->wMaxModBits)
@@ -213,7 +215,7 @@ modbits_to_level (GdkWin32KeymapLayoutInfo *info,
 /*
  * vk_to_char_fuzzy:
  *
- * For a given key and keystate, return the best-fit character and the
+ * For a given key and modifier state, return the best-fit character and the
  * modifiers used to produce it. Note that not all modifiers need to be used,
  * because some modifier combination aren't actually mapped in the keyboard
  * layout (for example the Ctrl key typically has no effect, unless used in
@@ -221,26 +223,32 @@ modbits_to_level (GdkWin32KeymapLayoutInfo *info,
  *
  * 'Best-fit' means 'consume as many modifiers as possibe'.
  *
- * For example (assuming a neutral keystate):
+ * For example (assuming a neutral lock state):
  *
+ * - a                -> 'a', consumed_mod_bits: []
  * - Shift + a        -> 'A', consumed_mod_bits: [Shift]
  * - Ctrl + a         -> 'a', consumed_mod_bits: []
  * - Ctrl + Shift + a -> 'A', consumed_mod_bits: [Shift]
  *
  * If capslock is active, the result could be:
  *
- * - Shift + a        -> 'a', consumed_mod_bits: [Shift]
+ * - a                -> 'A', consumed_mod_bits: [Shift]
+ * - Shift + a        -> 'a', consumed_mod_bits: []
+ * - Ctrl + a         -> 'a', consumed_mod_bits: []
+ * - Ctrl + Shift + a -> 'A', consumed_mod_bits: [Shift]
  *
- * The caller can supply additional modifiers to be added to the
- * keystate in `extra_mod_bits`.
+ * The held down modifiers are supplied in `mod_bits` as a bitmask of KBDSHIFT,
+ * KBDCTRL, KBDALT etc.
+ *
+ * The toggled modifiers are supplied in `lock_state` as a bitmask of CAPLOK and KANALOK.
  *
  * If the key combination results in a dead key, `is_dead` will be set to TRUE,
  * otherwise it will be set to FALSE.
  */
 static WCHAR
 vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
-                  const BYTE                keystate[256],
-                  BYTE                      extra_mod_bits,
+                  BYTE                      mod_bits,
+                  BYTE                      lock_bits,
                   BYTE                     *consumed_mod_bits,
                   gboolean                 *is_dead,
                   BYTE                      vk)
@@ -262,7 +270,8 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
   if (is_dead)
     *is_dead = FALSE;
 
-  g_return_val_if_fail (tables != NULL, WCH_NONE);
+  if (tables == NULL)
+    return WCH_NONE;
 
   wch_tables = tables->pVkToWcharTable.ptr;
 
@@ -282,17 +291,12 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
 
   if (entry->VirtualKey == vk)
     {
-      BYTE     modbits;
+      gboolean have_sgcaps    = FALSE;
       WCHAR    best_char      = WCH_NONE;
       BYTE     best_modifiers = 0;
       int      best_score     = -1;
       gboolean best_is_dead   = FALSE;
       int      level;
-
-      /* Add modbits of currently pressed keys. */
-      modbits  = keystate_to_modbits (info, keystate);
-      /* Add modbits supplied by caller. */
-      modbits |= extra_mod_bits;
 
       /* Take toggled keys into account. For example, capslock normally inverts the
        * state of KBDSHIFT (with some exceptions). */
@@ -302,27 +306,28 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           /* Ignore capslock if any modifiers other than shift are pressed.
            * E.g. on the German layout, CapsLock + AltGr + q is the same as
            * AltGr + q ('@'), but NOT the same as Shift + AltGr + q (not mapped). */
-          !(modbits & ~KBDSHIFT) &&
-	  (keystate[VK_CAPITAL] & 0x01))
-        modbits ^= KBDSHIFT;
+          !(mod_bits & ~KBDSHIFT) &&
+          (lock_bits & CAPLOK))
+        mod_bits ^= KBDSHIFT;
 
       /* Key supporting combination of capslock + altgr */
       if ((entry->Attributes & CAPLOKALTGR) &&
-          (modbits & KBDALTGR) &&
-          (keystate[VK_CAPITAL] & 0x01))
-        modbits ^= KBDSHIFT;
+          (mod_bits & KBDALTGR) &&
+          (lock_bits & CAPLOK))
+        mod_bits ^= KBDSHIFT;
 
       /* In the Swiss German layout, CapsLock + key is different from Shift + key
-       * for some keys. For such keys, Capslock toggles the KBDCTRL bit. */
+       * for some keys. For such keys, the characters for active capslock are
+       * in the next entry. */
       if ((entry->Attributes & SGCAPS) &&
-          (keystate[VK_CAPITAL] & 0x01))
-        modbits ^= KBDCTRL;
+          (lock_bits & CAPLOK))
+        have_sgcaps = TRUE;
 
       /* I'm not totally sure how kanalok behaves, for now I assume that there
        * aren't any special cases. */
       if ((entry->Attributes & KANALOK) &&
-          (keystate[VK_KANA] & 0x01))
-        modbits ^= KBDKANA;
+          (lock_bits & KANALOK))
+        mod_bits ^= KBDKANA;
 
       /* We try to find the entry with the most matching modifiers */
       for (level = 0; level < n_levels; ++level)
@@ -332,13 +337,13 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           WCHAR    c;
           int      score;
 
-          if (candidate_modbits & ~modbits)
-              continue;
+          if (candidate_modbits & ~mod_bits)
+            continue;
 
           c = entry->wch[level];
-          if (c == WCH_DEAD)
+          if (c == WCH_DEAD || have_sgcaps)
             {
-              /* Next entry contains the undead keys */
+              /* Next entry contains the undead/capslocked keys */
               PVK_TO_WCHARS next_entry;
               next_entry = (PVK_TO_WCHARS) ((PBYTE) wch_table->pVkToWchars.ptr
                                             + entry_size * (entry_index + 1));
@@ -349,7 +354,7 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           if (c == WCH_DEAD || c == WCH_LGTR || c == WCH_NONE)
             continue;
 
-          score = POPCOUNT (candidate_modbits & modbits);
+          score = POPCOUNT (candidate_modbits & mod_bits);
           if (score > best_score)
             {
               best_score = score;
@@ -455,8 +460,13 @@ init_vk_lookup_table (GdkWin32KeymapLayoutInfo *info)
 
           /* Lookup table to find entry for a VK in O(1). */
 
-          info->vk_lookup_table[entry->VirtualKey].table = table_idx;
-          info->vk_lookup_table[entry->VirtualKey].index = entry_idx;
+          /* Only add the first entry, as some layouts (Swiss German) contain
+           * multiple successive entries for the same VK (SGCAPS). */
+          if (info->vk_lookup_table[entry->VirtualKey].table < 0)
+            {
+              info->vk_lookup_table[entry->VirtualKey].table = table_idx;
+              info->vk_lookup_table[entry->VirtualKey].index = entry_idx;
+            }
 
           /* Create reverse lookup entries to find a VK+modifier combinations
            * that results in a given character. */
@@ -494,7 +504,7 @@ init_vk_lookup_table (GdkWin32KeymapLayoutInfo *info)
               g_hash_table_insert (info->reverse_lookup_table,
                                    GINT_TO_POINTER (c),
                                    GINT_TO_POINTER (inserted_idx));
-          }
+            }
         }
     }
 }

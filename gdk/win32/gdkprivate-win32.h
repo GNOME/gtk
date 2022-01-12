@@ -351,7 +351,6 @@ GList *_gdk_win32_display_list_devices (GdkDisplay *dpy);
 gboolean _gdk_win32_display_has_pending (GdkDisplay *display);
 void _gdk_win32_display_queue_events (GdkDisplay *display);
 
-gboolean   _gdk_win32_keymap_has_altgr           (GdkWin32Keymap *keymap);
 guint8     _gdk_win32_keymap_get_active_group    (GdkWin32Keymap *keymap);
 guint8     _gdk_win32_keymap_get_rshift_scancode (GdkWin32Keymap *keymap);
 void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
