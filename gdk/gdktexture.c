@@ -348,7 +348,7 @@ gdk_texture_init (GdkTexture *self)
  *
  * @surface must be an image surface with format `CAIRO_FORMAT_ARGB32`.
  *
- * Returns: (type GdkMemoryTexture): a new `GdkTexture`
+ * Returns: a new `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_for_surface (cairo_surface_t *surface)
@@ -387,7 +387,7 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
  * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
- * Returns: (type GdkMemoryTexture): a new `GdkTexture`
+ * Returns: a new `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
@@ -433,7 +433,7 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
- * Return value: (type GdkMemoryTexture): A newly-created `GdkTexture`
+ * Return value: A newly-created `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_from_resource (const char *resource_path)
@@ -475,7 +475,7 @@ gdk_texture_new_from_resource (const char *resource_path)
  * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
- * Return value: (type GdkMemoryTexture): A newly-created `GdkTexture`
+ * Return value: A newly-created `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_from_file (GFile   *file,
@@ -568,7 +568,7 @@ gdk_texture_new_from_bytes_pixbuf (GBytes  *bytes,
  * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
- * Return value: (type GdkMemoryTexture): A newly-created `GdkTexture`
+ * Return value: A newly-created `GdkTexture`
  *
  * Since: 4.6
  */
@@ -614,7 +614,7 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
  * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
  *
- * Return value: (type GdkMemoryTexture): A newly-created `GdkTexture`
+ * Return value: A newly-created `GdkTexture`
  *
  * Since: 4.6
  */
