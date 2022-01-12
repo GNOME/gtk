@@ -289,10 +289,15 @@ gsk_renderer_is_realized (GskRenderer *renderer)
  *
  * Since GTK 4.6, the surface may be `NULL`, which allows using
  * renderers without having to create a surface.
+ *
+ * Note that it is mandatory to call [method@Gsk.Renderer.unrealize] before
+ * destroying the renderer.
+ *
+ * Returns: Whether the renderer was successfully realized
  */
 gboolean
 gsk_renderer_realize (GskRenderer  *renderer,
-                      GdkSurface    *surface,
+                      GdkSurface   *surface,
                       GError      **error)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
