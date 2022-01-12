@@ -897,7 +897,7 @@ if not meson.is_cross_build()
     gnome.post_install(
       glib_compile_schemas: true,
       gio_querymodules: gio_module_dirs,
-      gtk_update_icon_cache: true,
+      gtk_update_icon_cache: get_option('demos'),
     )
   else
     meson.add_install_script('build-aux/meson/post-install.py',
