@@ -344,7 +344,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   GtkIMContextIME *context_ime;
   gboolean retval = FALSE;
   guint32 c;
-  GdkModifierType state;
+  GdkModifierType state, consumed_modifiers, no_text_input_mask;
   guint keyval;
 
   g_return_val_if_fail (GTK_IS_IM_CONTEXT_IME (context), FALSE);
@@ -353,9 +353,12 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
   if (gdk_event_get_event_type ((GdkEvent *) event) == GDK_KEY_RELEASE)
     return FALSE;
 
-  state = gdk_event_get_modifier_state ((GdkEvent *) event);
+  no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK;
 
-  if (state & GDK_CONTROL_MASK)
+  state = gdk_event_get_modifier_state ((GdkEvent *) event);
+  consumed_modifiers = gdk_key_event_get_consumed_modifiers (event);
+
+  if (state & no_text_input_mask & ~consumed_modifiers)
     return FALSE;
 
   context_ime = GTK_IM_CONTEXT_IME (context);
