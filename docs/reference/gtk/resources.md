@@ -26,7 +26,7 @@ GTK with your code applied, and run the test suite, on multiple platforms
 and architectures, and verify that nothing breaks. They also allow us to
 do proper code reviews, so we can iterate over the changes.
 
-You should follow the [contribution guide](https://gitlab.gnome.org/GNOME/gtk/blob/master/CONTRIBUTING.md)
+You should follow the [contribution guide](https://gitlab.gnome.org/GNOME/gtk/blob/main/CONTRIBUTING.md)
 for GTK, available on GitLab.
 
 If you want to discuss your approach before or after working on it,

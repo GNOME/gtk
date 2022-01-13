@@ -38,7 +38,7 @@ show_index_summary = true
 show_class_hierarchy = true
 
 [source-location]
-base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/master/"
+base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/"
 
 [extra]
 content_images = [

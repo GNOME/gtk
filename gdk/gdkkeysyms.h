@@ -18,7 +18,7 @@
 
 
 /*
- * File auto-generated from script https://gitlab.gnome.org/GNOME/gtk/tree/master/gdk/gdkkeysyms-update.pl
+ * File auto-generated from script https://gitlab.gnome.org/GNOME/gtk/tree/main/gdk/gdkkeysyms-update.pl
  * using the input file
  * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
  * and
