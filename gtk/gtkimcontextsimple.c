@@ -901,8 +901,23 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
        !is_hex_start && !is_hex_end && !is_escape && !is_backspace))
     {
       GdkModifierType no_text_input_mask;
+      GdkModifierType consumed_modifiers = 0;
 
       no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK;
+
+#ifdef G_OS_WIN32
+     /* On Win32, even Ctrl + Alt could be text input because AltGr = Ctrl
+      * + Alt. For example, Ctrl + Alt + e = € on a German keyboard. The
+      * GdkEvent's state, however, reports *all* modifiers that were
+      * active at the time the key was pressed, including the ones that
+      * were consumed to generate the keyval. So we cannot just assume
+      * that any key event containing Ctrl or Alt is a keybinding. We have
+      * to first check if those modifiers were actually used to generate
+      * the keyval. If so, then the keypress is regular input and we
+      * should not exit here.
+      */
+      consumed_modifiers = gdk_key_event_get_consumed_modifiers (event);
+#endif
 
       if (priv->in_hex_sequence && priv->modifiers_dropped &&
 	  (keyval == GDK_KEY_Return ||
@@ -912,7 +927,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  return FALSE;
 	}
 
-      if (state & no_text_input_mask)
+      if (state & no_text_input_mask & ~consumed_modifiers)
         {
           if (priv->in_hex_sequence || priv->in_compose_sequence)
             return TRUE; /* Don't leak random key events during preedit */
