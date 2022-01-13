@@ -170,7 +170,7 @@ activate (GtkApplication *app,
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_halign (box, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (box, GTK_ALIGN_CENTER);
-  
+
   gtk_window_set_child (GTK_WINDOW (window), box);
 
   button = gtk_button_new_with_label ("Hello World");
@@ -752,7 +752,7 @@ templates, resources, application menus, settings, [class@Gtk.HeaderBar], [class
 
 The full, buildable sources for these examples can be found in the
 `examples` directory of the GTK source distribution, or
-[online](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples) in the GTK
+[online](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples) in the GTK
 source code repository. You can build each example separately by using make
 with the `Makefile.example` file. For more information, see the `README`
 included in the examples directory.
@@ -972,7 +972,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
  ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application2/exampleappwin.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application2/exampleappwin.c))
 
 You may have noticed that we used the `_from_resource()` variant of the function
 that sets a template. Now we need to use
@@ -1043,7 +1043,7 @@ example_app_window_class_init (ExampleAppWindowClass *class)
 ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application3/exampleappwin.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application3/exampleappwin.c))
 
 Now we revisit the `example_app_window_open()` function that is called for each
 commandline argument, and construct a GtkTextView that we then add as a page
@@ -1087,7 +1087,7 @@ example_app_window_open (ExampleAppWindow *win,
 ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application3/exampleappwin.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application3/exampleappwin.c))
 
 Lastly, we add a [class@Gtk.StackSwitcher] to the titlebar area in the UI file, and we
 tell it to display information about our stack.
@@ -1188,7 +1188,7 @@ example_app_class_init (ExampleAppClass *class)
 ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application4/exampleapp.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application4/exampleapp.c))
 
 Our preferences menu item does not do anything yet, but the Quit menu item
 is fully functional. Note that it can also be activated by the usual Ctrl-Q
@@ -1258,7 +1258,7 @@ example_app_window_init (ExampleAppWindow *win)
 ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application5/exampleappwin.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application5/exampleappwin.c))
 
 The code to connect the font setting is a little more involved, since there
 is no simple object property that it corresponds to, so we are not going to
@@ -1429,7 +1429,7 @@ preferences_activated (GSimpleAction *action,
 ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application6/exampleapp.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application6/exampleapp.c))
 
 After all this work, our application can now show a preference dialog
 like this:
@@ -1549,7 +1549,7 @@ example_app_window_init (ExampleAppWindow *win)
 ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application7/exampleappwin.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application7/exampleappwin.c))
 
 With the search bar, our application now looks like this:
 
@@ -1682,7 +1682,7 @@ example_app_window_init (ExampleAppWindow *win)
 ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application8/exampleappwin.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application8/exampleappwin.c))
 
 What our application looks like now:
 
@@ -1760,10 +1760,10 @@ example_app_window_init (ExampleAppWindow *win)
 ...
 ```
 
-([full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application9/exampleappwin.c))
+([full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application9/exampleappwin.c))
 
 We also need a function that counts the lines of the currently active tab,
-and updates the `lines` label. See the [full source](https://gitlab.gnome.org/GNOME/gtk/blob/master/examples/application9/exampleappwin.c)
+and updates the `lines` label. See the [full source](https://gitlab.gnome.org/GNOME/gtk/blob/main/examples/application9/exampleappwin.c)
 if you are interested in the details.
 
 This brings our example application to this appearance:
