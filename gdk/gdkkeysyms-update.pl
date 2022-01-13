@@ -1,16 +1,16 @@
 #!/usr/bin/env perl
 
-# Updates https://gitlab.gnome.org/GNOME/gtk/tree/master/gdk/gdkkeysyms.h from upstream (X.org 7.x),
+# Updates https://gitlab.gnome.org/GNOME/gtk/tree/main/gdk/gdkkeysyms.h from upstream (X.org 7.x),
 # from https://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
-# 
+#
 # Author  : Simos Xenitellis <simos at gnome dot org>.
 # Author  : Bastien Nocera <hadess@hadess.net>
 # Version : 1.2
 #
 # Input   : https://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
 # Input   : https://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
-# Output  : https://gitlab.gnome.org/GNOME/gtk/tree/master/gdk/gdkkeysyms.h
-# 
+# Output  : https://gitlab.gnome.org/GNOME/gtk/tree/main/gdk/gdkkeysyms.h
+#
 # Notes   : It downloads keysymdef.h from the Internet, if not found locally,
 # Notes   : and creates an updated gdkkeysyms.h
 # Notes   : This version updates the source of gdkkeysyms.h from CVS to the GIT server.
@@ -24,7 +24,7 @@ if ( ! -f "keysymdef.h" )
 {
 	print "Trying to download keysymdef.h from\n";
 	print "http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h\n";
-	die "Unable to download keysymdef.h from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h\n" 
+	die "Unable to download keysymdef.h from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h\n"
 		unless system("wget -c -O keysymdef.h \"http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h\"") == 0;
 	print " done.\n\n";
 }
@@ -39,7 +39,7 @@ if ( ! -f "XF86keysym.h" )
 {
 	print "Trying to download XF86keysym.h from\n";
 	print "http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\n";
-	die "Unable to download keysymdef.h from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\n" 
+	die "Unable to download keysymdef.h from http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\n"
 		unless system("wget -c -O XF86keysym.h \"http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h\"") == 0;
 	print " done.\n\n";
 }
@@ -82,7 +82,7 @@ print OUT_GDKKEYSYMS $LICENSE_HEADER;
 print OUT_GDKKEYSYMS<<EOF;
 
 /*
- * File auto-generated from script https://gitlab.gnome.org/GNOME/gtk/tree/master/gdk/gdkkeysyms-update.pl
+ * File auto-generated from script https://gitlab.gnome.org/GNOME/gtk/tree/main/gdk/gdkkeysyms-update.pl
  * using the input file
  * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
  * and
@@ -111,7 +111,7 @@ while (<IN_KEYSYMDEF>)
 
 	$_ = $keysymelements[1];
 	die "Internal error, was expecting \"XC_*\", found: $_\n" if ( ! /^XK_/ );
-	
+
 	$_ = $keysymelements[2];
 	die "Internal error, was expecting \"0x*\", found: $_\n" if ( ! /^0x/ );
 
