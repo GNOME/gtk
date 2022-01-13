@@ -348,7 +348,6 @@ gtk/inspector/window.c
 gtk/open-type-layout.h
 gtk/paper_names.c
 gtk/paper_names_offsets.c
-gtk/script-names.c
 modules/media/gtkffmediafile.c
 modules/media/gtkgstsink.c
 modules/printbackends/gtkprintbackendcups.c

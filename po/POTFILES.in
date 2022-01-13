@@ -370,7 +370,6 @@ gtk/inspector/window.c
 gtk/inspector/window.ui
 gtk/open-type-layout.h
 gtk/paper_names_offsets.c
-gtk/script-names.c
 gtk/ui/gtkaboutdialog.ui
 gtk/ui/gtkappchooserdialog.ui
 gtk/ui/gtkappchooserwidget.ui
