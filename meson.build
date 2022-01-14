@@ -1008,13 +1008,25 @@ subdir('docs/reference')
 
 install_data('m4macros/gtk-3.0.m4', install_dir: join_paths(get_option('datadir'), 'aclocal'))
 
-# Keep this in sync with post-install.py expected arguments
-meson.add_install_script('build-aux/meson/post-install.py',
-                         gtk_api_version,
-                         gtk_binary_version,
-                         join_paths(gtk_prefix, get_option('bindir')),
-                         gtk_libdir,
-                         gtk_datadir)
+if not meson.is_cross_build()
+  if meson.version().version_compare('>=0.57.0')
+    gnome.post_install(
+      glib_compile_schemas: true,
+      gio_querymodules: gio_module_dirs,
+      gtk_update_icon_cache: get_option('demos'),
+    )
+  else
+    # Keep this in sync with post-install.py expected arguments
+    meson.add_install_script('build-aux/meson/post-install.py',
+                             gtk_api_version,
+                             gtk_binary_version,
+                             join_paths(gtk_prefix, get_option('bindir')),
+                             gtk_libdir,
+                             gtk_datadir)
+  endif
+else
+  message('Not executing post-install steps automatically when cross compiling')
+endif
 
 if host_machine.system() != 'windows'
   # Install Valgrind suppression files (except on Windows,

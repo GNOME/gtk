@@ -95,6 +95,8 @@ printbackends_args = [
 printbackends_subdir = 'gtk-3.0/@0@/printbackends'.format(gtk_binary_version)
 printbackends_install_dir = join_paths(get_option('libdir'), printbackends_subdir)
 
+gio_module_dirs += printbackends_install_dir
+
 if print_backends.contains('file')
   shared_module('printbackend-file',
                 'file/gtkprintbackendfile.c',
