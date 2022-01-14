@@ -623,7 +623,7 @@ static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
  *
  * Translates @next in 2-dimensional space by @point.
  *
- * Returns: The new transform
+ * Returns: (nullable): The new transform
  **/
 GskTransform *
 gsk_transform_translate (GskTransform           *next,
@@ -643,7 +643,7 @@ gsk_transform_translate (GskTransform           *next,
  *
  * Translates @next by @point.
  *
- * Returns: The new transform
+ * Returns: (nullable): The new transform
  **/
 GskTransform *
 gsk_transform_translate_3d (GskTransform             *next,
@@ -859,7 +859,7 @@ normalize_angle (float angle)
  *
  * Rotates @next @angle degrees in 2D - or in 3D-speak, around the z axis.
  *
- * Returns: The new transform
+ * Returns: (nullable): The new transform
  */
 GskTransform *
 gsk_transform_rotate (GskTransform *next,
@@ -987,7 +987,7 @@ static const GskTransformClass GSK_ROTATE3D_TRANSFORM_CLASS =
  *
  * For a rotation in 2D space, use [method@Gsk.Transform.rotate]
  *
- * Returns: The new transform
+ * Returns: (nullable): The new transform
  */
 GskTransform *
 gsk_transform_rotate_3d (GskTransform          *next,
@@ -1163,7 +1163,7 @@ static const GskTransformClass GSK_SKEW_TRANSFORM_CLASS =
  *
  * Applies a skew transform.
  *
- * Returns: The new transform
+ * Returns: (nullable): The new transform
  *
  * Since: 4.6
  */
@@ -1335,7 +1335,7 @@ static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
  *
  * Use [method@Gsk.Transform.scale_3d] to scale in all 3 dimensions.
  *
- * Returns: The new transform
+ * Returns: (nullable): The new transform
  **/
 GskTransform *
 gsk_transform_scale (GskTransform *next,
@@ -1354,7 +1354,7 @@ gsk_transform_scale (GskTransform *next,
  *
  * Scales @next by the given factors.
  *
- * Returns: The new transform
+ * Returns: (nullable): The new transform
  **/
 GskTransform *
 gsk_transform_scale_3d (GskTransform *next,
@@ -1523,7 +1523,7 @@ gsk_transform_perspective (GskTransform *next,
  *
  * Acquires a reference on the given `GskTransform`.
  *
- * Returns: (transfer none): the `GskTransform` with an additional reference
+ * Returns: (nullable) (transfer none): the `GskTransform` with an additional reference
  */
 GskTransform *
 gsk_transform_ref (GskTransform *self)
@@ -1898,7 +1898,7 @@ gsk_transform_to_translate (GskTransform *self,
  *
  * Applies all the operations from @other to @next.
  *
- * Returns: The new transform
+ * Returns: (nullable): The new transform
  */
 GskTransform *
 gsk_transform_transform (GskTransform *next,
