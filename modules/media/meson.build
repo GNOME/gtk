@@ -69,3 +69,7 @@ if gstplayer_dep.found() and gstgl_dep.found()
     install: true,
   )
 endif
+
+if media_backends.length() > 0
+  gio_module_dirs += media_install_dir
+endif

@@ -13,7 +13,7 @@ if 'DESTDIR' not in os.environ:
 
     gtk_moduledir = os.path.join(gtk_libdir, 'gtk-' + gtk_api_version, gtk_abi_version)
     gtk_printmodule_dir = os.path.join(gtk_moduledir, 'printbackends')
-    gtk_immodule_dir = os.path.join(gtk_moduledir, 'immodules')
+    gtk_mediamodule_dir = os.path.join(gtk_moduledir, 'media')
 
     print('Compiling GSettings schemas...')
     glib_compile_schemas = subprocess.check_output(['pkg-config',
@@ -40,6 +40,6 @@ if 'DESTDIR' not in os.environ:
         gio_querymodules = 'gio-querymodules'
     subprocess.call([gio_querymodules, gtk_printmodule_dir])
 
-    print('Updating module cache for input methods...')
-    os.makedirs(gtk_immodule_dir, exist_ok=True)
-    subprocess.call([gio_querymodules, gtk_immodule_dir])
+    print('Updating module cache for media backends...')
+    os.makedirs(gtk_mediamodule_dir, exist_ok=True)
+    subprocess.call([gio_querymodules, gtk_mediamodule_dir])
