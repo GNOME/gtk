@@ -1899,13 +1899,12 @@ gdk_event_translate (MSG *msg,
       {
         GdkWin32Keymap *win32_keymap;
         GdkModifierType state;
-        GdkModifierType consumed_modifiers;
         guint keyval;
         guint16 keycode;
         guint8 group;
-        int level;
         gboolean is_modifier;
         GdkTranslatedKey translated;
+        GdkTranslatedKey no_lock;
         BYTE key_state[256];
         wchar_t wbuf[100];
         int ccount = 0;
@@ -2008,18 +2007,33 @@ gdk_event_translate (MSG *msg,
                 keyval = gdk_unicode_to_keyval (wbuf[0]);
               }
 
-            /* TODO: What values to use for level and consumed_modifiers? */
-            level = 0;
-            consumed_modifiers = 0;
+            translated.keyval = keyval;
+            translated.consumed = 0;
+            translated.layout = 0;
+            translated.level = 0;
+
+            no_lock = translated;
           }
         else
           {
-            gdk_keymap_translate_keyboard_state ((GdkKeymap*)win32_keymap,
-                                                 keycode,
-                                                 state,
-                                                 group,
-                                                 &keyval,
-                                                 NULL, &level, &consumed_modifiers);
+            int level = 0;
+            int effective_group = 0;
+            GdkModifierType consumed = 0;
+
+            gdk_keymap_translate_keyboard_state ((GdkKeymap*) win32_keymap, keycode, state, group,
+                                                 &keyval, &effective_group, &level, &consumed);
+            translated.keyval = keyval;
+            translated.consumed = consumed;
+            translated.layout = effective_group;
+            translated.level = level;
+
+            gdk_keymap_translate_keyboard_state ((GdkKeymap*) win32_keymap, keycode,
+                                                 state & ~GDK_LOCK_MASK, group, &keyval,
+                                                 &effective_group, &level, &consumed);
+            no_lock.keyval = keyval;
+            no_lock.consumed = consumed;
+            no_lock.layout = effective_group;
+            no_lock.level = level;
           }
 
         if (msg->message == WM_KEYDOWN)
@@ -2063,11 +2077,6 @@ gdk_event_translate (MSG *msg,
         if (msg->wParam == VK_MENU)
           state &= ~GDK_ALT_MASK;
 
-        translated.keyval = keyval;
-        translated.consumed = consumed_modifiers;
-        translated.layout = group;
-        translated.level = level;
-
         event = gdk_key_event_new ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN)
                                      ? GDK_KEY_PRESS
                                      : GDK_KEY_RELEASE,
@@ -2078,7 +2087,7 @@ gdk_event_translate (MSG *msg,
                                    state,
                                    is_modifier,
                                    &translated,
-                                   &translated);
+                                   &no_lock);
 
         _gdk_win32_append_event (event);
 
