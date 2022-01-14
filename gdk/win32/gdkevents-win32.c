@@ -1740,15 +1740,11 @@ gdk_event_translate (MSG *msg,
   POINT point;
   MINMAXINFO *mmi;
   HWND hwnd;
-  BYTE key_state[256];
   HIMC himc;
   WINDOWPOS *windowpos;
   gboolean ignore_leave;
 
   GdkEvent *event;
-
-  wchar_t wbuf[100];
-  int ccount;
 
   GdkDisplay *display;
   GdkSurface *window = NULL;
@@ -1767,21 +1763,12 @@ gdk_event_translate (MSG *msg,
 
   int button;
 
-  char buf[256];
   gboolean return_val = FALSE;
 
   int i;
 
-  GdkModifierType state, consumed_modifiers;
-  guint keyval;
-  guint16 keycode;
-  guint8 group;
-  int level;
-  gboolean is_modifier;
-
   double delta_x, delta_y;
   GdkScrollDirection direction;
-  GdkTranslatedKey translated;
 
   display = gdk_display_get_default ();
   win32_display = GDK_WIN32_DISPLAY (display);
@@ -1840,35 +1827,43 @@ gdk_event_translate (MSG *msg,
   switch (msg->message)
     {
     case WM_INPUTLANGCHANGE:
-      _gdk_input_locale = (HKL) msg->lParam;
-      _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
-      GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
-		     LOCALE_IDEFAULTANSICODEPAGE,
-		     buf, sizeof (buf));
-      _gdk_input_codepage = atoi (buf);
-      _gdk_keymap_serial++;
-      GDK_NOTE (EVENTS,
-		g_print (" cs:%lu hkl:%p%s cp:%d",
-			 (gulong) msg->wParam,
-			 (gpointer) msg->lParam, _gdk_input_locale_is_ime ? " (IME)" : "",
-			 _gdk_input_codepage));
-      gdk_display_setting_changed (display, "gtk-im-module");
+      {
+        GdkWin32Keymap *win32_keymap;
+        GdkTranslatedKey translated;
+        char buf[256];
 
-      /* Generate a dummy key event to "nudge" IMContext */
-      translated.keyval = GDK_KEY_VoidSymbol;
-      translated.consumed = 0;
-      translated.layout = 0;
-      translated.level = 0;
-      event = gdk_key_event_new (GDK_KEY_PRESS,
-                                 window,
-                                 device_manager_win32->core_keyboard,
-                                 _gdk_win32_get_next_tick (msg->time),
-                                 0,
-                                 0,
-                                 FALSE,
-                                 &translated,
-                                 &translated);
-      _gdk_win32_append_event (event);
+        win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
+
+        _gdk_input_locale = (HKL) msg->lParam;
+        _gdk_win32_keymap_set_active_layout (win32_keymap, _gdk_input_locale);
+        GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
+                       LOCALE_IDEFAULTANSICODEPAGE, buf, sizeof (buf));
+        _gdk_input_codepage = atoi (buf);
+        _gdk_keymap_serial++;
+        GDK_NOTE (EVENTS,
+                  g_print (" cs:%lu hkl:%p%s cp:%d",
+                           (gulong) msg->wParam,
+                           (gpointer) msg->lParam,
+                           _gdk_input_locale_is_ime ? " (IME)" : "",
+                           _gdk_input_codepage));
+        gdk_display_setting_changed (display, "gtk-im-module");
+
+        /* Generate a dummy key event to "nudge" IMContext */
+        translated.keyval = GDK_KEY_VoidSymbol;
+        translated.consumed = 0;
+        translated.layout = 0;
+        translated.level = 0;
+        event = gdk_key_event_new (GDK_KEY_PRESS,
+                                   window,
+                                   device_manager_win32->core_keyboard,
+                                   _gdk_win32_get_next_tick (msg->time),
+                                   0,
+                                   0,
+                                   FALSE,
+                                   &translated,
+                                   &translated);
+        _gdk_win32_append_event (event);
+      }
       break;
 
     case WM_SYSKEYUP:
@@ -1905,181 +1900,194 @@ gdk_event_translate (MSG *msg,
 			 decode_key_lparam (msg->lParam)));
 
     keyup_or_down:
+      {
+        GdkWin32Keymap *win32_keymap;
+        GdkModifierType state;
+        GdkModifierType consumed_modifiers;
+        guint keyval;
+        guint16 keycode;
+        guint8 group;
+        int level;
+        gboolean is_modifier;
+        GdkTranslatedKey translated;
+        BYTE key_state[256];
+        wchar_t wbuf[100];
+        int ccount = 0;
 
-      /* Ignore key messages intended for the IME */
-      if (msg->wParam == VK_PROCESSKEY ||
-	  in_ime_composition)
-	break;
+        /* Ignore key messages intended for the IME */
+        if (msg->wParam == VK_PROCESSKEY || in_ime_composition)
+          break;
 
-      /* Ignore autorepeats on modifiers */
-      if (msg->message == WM_KEYDOWN &&
-          (msg->wParam == VK_MENU ||
-           msg->wParam == VK_CONTROL ||
-           msg->wParam == VK_SHIFT) &&
-           ((HIWORD(msg->lParam) & KF_REPEAT) >= 1))
-        break;
+        /* Ignore autorepeats on modifiers */
+        if (msg->message == WM_KEYDOWN &&
+            (msg->wParam == VK_MENU ||
+             msg->wParam == VK_CONTROL ||
+             msg->wParam == VK_SHIFT) &&
+             ((HIWORD(msg->lParam) & KF_REPEAT) >= 1))
+          break;
 
-      if (GDK_SURFACE_DESTROYED (window))
-	break;
+        if (GDK_SURFACE_DESTROYED (window))
+          break;
 
-      impl = GDK_WIN32_SURFACE (window);
+        win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
+        impl = GDK_WIN32_SURFACE (window);
 
-      API_CALL (GetKeyboardState, (key_state));
+        API_CALL (GetKeyboardState, (key_state));
 
-      ccount = 0;
+        ccount = 0;
 
-      if (msg->wParam == VK_PACKET)
-	{
-	  ccount = ToUnicode (VK_PACKET, HIWORD (msg->lParam), key_state, wbuf, 1, 0);
-	  if (ccount == 1)
-	    {
-	      if (wbuf[0] >= 0xD800 && wbuf[0] < 0xDC00)
-	        {
-		  if (msg->message == WM_KEYDOWN)
-		    impl->leading_surrogate_keydown = wbuf[0];
-		  else
-		    impl->leading_surrogate_keyup = wbuf[0];
+        if (msg->wParam == VK_PACKET)
+          {
+            ccount = ToUnicode (VK_PACKET, HIWORD (msg->lParam), key_state, wbuf, 1, 0);
+            if (ccount == 1)
+              {
+                if (wbuf[0] >= 0xD800 && wbuf[0] < 0xDC00)
+                  {
+                    if (msg->message == WM_KEYDOWN)
+                      impl->leading_surrogate_keydown = wbuf[0];
+                    else
+                      impl->leading_surrogate_keyup = wbuf[0];
 
-		  /* don't emit an event */
-		  return_val = TRUE;
-		  break;
-	        }
-	      else
-		{
-		  /* wait until an event is created */;
-		}
-	    }
-	}
+                    /* don't emit an event */
+                    return_val = TRUE;
+                    break;
+                  }
+                else
+                  {
+                    /* wait until an event is created */;
+                  }
+              }
+          }
 
-      keyval = GDK_KEY_VoidSymbol;
-      keycode = msg->wParam;
+        keyval = GDK_KEY_VoidSymbol;
+        keycode = msg->wParam;
 
-      if (HIWORD (msg->lParam) & KF_EXTENDED)
-	{
-	  switch (msg->wParam)
-	    {
-	    case VK_CONTROL:
-	      keycode = VK_RCONTROL;
-	      break;
-	    case VK_SHIFT:	/* Actually, KF_EXTENDED is not set
-				 * for the right shift key.
-				 */
-	      keycode = VK_RSHIFT;
-	      break;
-	    case VK_MENU:
-	      keycode = VK_RMENU;
-	      break;
-	    }
-	}
-      else if (msg->wParam == VK_SHIFT &&
-	       LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display))))
-	keycode = VK_RSHIFT;
+        if (HIWORD (msg->lParam) & KF_EXTENDED)
+          {
+            switch (msg->wParam)
+              {
+              case VK_CONTROL:
+                keycode = VK_RCONTROL;
+                break;
+              case VK_SHIFT:      /* Actually, KF_EXTENDED is not set
+                                   * for the right shift key.
+                                   */
+                keycode = VK_RSHIFT;
+                break;
+              case VK_MENU:
+                keycode = VK_RMENU;
+                break;
+              }
+          }
+        else if (msg->wParam == VK_SHIFT &&
+                 LOBYTE (HIWORD (msg->lParam)) == _gdk_win32_keymap_get_rshift_scancode (win32_keymap))
+          keycode = VK_RSHIFT;
 
-      is_modifier = (msg->wParam == VK_CONTROL ||
-                     msg->wParam == VK_SHIFT ||
-                     msg->wParam == VK_MENU);
-      /* g_print ("ctrl:%02x lctrl:%02x rctrl:%02x alt:%02x lalt:%02x ralt:%02x\n", key_state[VK_CONTROL], key_state[VK_LCONTROL], key_state[VK_RCONTROL], key_state[VK_MENU], key_state[VK_LMENU], key_state[VK_RMENU]); */
+        is_modifier = (msg->wParam == VK_CONTROL ||
+                       msg->wParam == VK_SHIFT ||
+                       msg->wParam == VK_MENU);
 
-      state = build_key_event_state (key_state);
-      group = get_active_group ();
+        state = build_key_event_state (key_state);
+        group = get_active_group ();
 
-      if (msg->wParam == VK_PACKET && ccount == 1)
-	{
-	  if (wbuf[0] >= 0xD800 && wbuf[0] < 0xDC00)
-	    {
-	      g_assert_not_reached ();
-	    }
-	  else if (wbuf[0] >= 0xDC00 && wbuf[0] < 0xE000)
-	    {
-	      wchar_t leading;
+        if (msg->wParam == VK_PACKET && ccount == 1)
+          {
+            if (wbuf[0] >= 0xD800 && wbuf[0] < 0xDC00)
+              {
+                g_assert_not_reached ();
+              }
+            else if (wbuf[0] >= 0xDC00 && wbuf[0] < 0xE000)
+              {
+                wchar_t leading;
 
-              if (msg->message == WM_KEYDOWN)
-		leading = impl->leading_surrogate_keydown;
-	      else
-		leading = impl->leading_surrogate_keyup;
+                if (msg->message == WM_KEYDOWN)
+                  leading = impl->leading_surrogate_keydown;
+                else
+                  leading = impl->leading_surrogate_keyup;
 
-	      keyval = gdk_unicode_to_keyval ((leading - 0xD800) * 0x400 + wbuf[0] - 0xDC00 + 0x10000);
-	    }
-	  else
-	    {
-	      keyval = gdk_unicode_to_keyval (wbuf[0]);
-	    }
+                keyval = gdk_unicode_to_keyval ((leading - 0xD800) * 0x400 + wbuf[0] - 0xDC00 + 0x10000);
+              }
+            else
+              {
+                keyval = gdk_unicode_to_keyval (wbuf[0]);
+              }
 
-          /* TODO: What values to use for level and consumed_modifiers? */
-          level = 0;
-          consumed_modifiers = 0;
-	}
-      else
-	{
-	  gdk_keymap_translate_keyboard_state (_gdk_win32_display_get_keymap (display),
-					       keycode,
-					       state,
-					       group,
-					       &keyval,
-					       NULL, &level, &consumed_modifiers);
-	}
+            /* TODO: What values to use for level and consumed_modifiers? */
+            level = 0;
+            consumed_modifiers = 0;
+          }
+        else
+          {
+            gdk_keymap_translate_keyboard_state ((GdkKeymap*)win32_keymap,
+                                                 keycode,
+                                                 state,
+                                                 group,
+                                                 &keyval,
+                                                 NULL, &level, &consumed_modifiers);
+          }
 
-      if (msg->message == WM_KEYDOWN)
-	impl->leading_surrogate_keydown = 0;
-      else
-	impl->leading_surrogate_keyup = 0;
+        if (msg->message == WM_KEYDOWN)
+          impl->leading_surrogate_keydown = 0;
+        else
+          impl->leading_surrogate_keyup = 0;
 
-  /* Only one release key event is fired when both shift keys are pressed together
-     and then released. In order to send the missing event, press events for shift
-     keys are recorded and sent together when the release event occurs.
-     Other modifiers (e.g. ctrl, alt) don't have this problem. */
-  if (msg->message == WM_KEYDOWN && msg->wParam == VK_SHIFT)
-    {
-      int pressed_shift = msg->lParam & 0xffffff; /* mask shift modifier */
-      if (both_shift_pressed[0] == 0)
-        both_shift_pressed[0] = pressed_shift;
-      else if (both_shift_pressed[0] != pressed_shift)
-        both_shift_pressed[1] = pressed_shift;
-    }
+        /* Only one release key event is fired when both shift keys are pressed together
+           and then released. In order to send the missing event, press events for shift
+           keys are recorded and sent together when the release event occurs.
+           Other modifiers (e.g. ctrl, alt) don't have this problem. */
+        if (msg->message == WM_KEYDOWN && msg->wParam == VK_SHIFT)
+          {
+            int pressed_shift = msg->lParam & 0xffffff; /* mask shift modifier */
+            if (both_shift_pressed[0] == 0)
+              both_shift_pressed[0] = pressed_shift;
+            else if (both_shift_pressed[0] != pressed_shift)
+              both_shift_pressed[1] = pressed_shift;
+          }
 
-  if (msg->message == WM_KEYUP && msg->wParam == VK_SHIFT)
-    {
-      if (both_shift_pressed[0] != 0 && both_shift_pressed[1] != 0)
-        {
-          int tmp_retval;
-          MSG fake_release = *msg;
-          int pressed_shift = msg->lParam & 0xffffff;
+        if (msg->message == WM_KEYUP && msg->wParam == VK_SHIFT)
+          {
+            if (both_shift_pressed[0] != 0 && both_shift_pressed[1] != 0)
+              {
+                int tmp_retval;
+                MSG fake_release = *msg;
+                int pressed_shift = msg->lParam & 0xffffff;
 
-          if (both_shift_pressed[0] == pressed_shift)
-            fake_release.lParam = both_shift_pressed[1];
-          else
-            fake_release.lParam = both_shift_pressed[0];
+                if (both_shift_pressed[0] == pressed_shift)
+                  fake_release.lParam = both_shift_pressed[1];
+                else
+                  fake_release.lParam = both_shift_pressed[0];
 
-          both_shift_pressed[0] = both_shift_pressed[1] = 0;
-          gdk_event_translate (&fake_release, &tmp_retval);
-        }
-      both_shift_pressed[0] = both_shift_pressed[1] = 0;
-    }
+                both_shift_pressed[0] = both_shift_pressed[1] = 0;
+                gdk_event_translate (&fake_release, &tmp_retval);
+              }
+            both_shift_pressed[0] = both_shift_pressed[1] = 0;
+          }
 
-      /* Reset ALT_MASK if it is the Alt key itself */
-      if (msg->wParam == VK_MENU)
-	state &= ~GDK_ALT_MASK;
+        /* Reset ALT_MASK if it is the Alt key itself */
+        if (msg->wParam == VK_MENU)
+          state &= ~GDK_ALT_MASK;
 
-      translated.keyval = keyval;
-      translated.consumed = consumed_modifiers;
-      translated.layout = group;
-      translated.level = level;
+        translated.keyval = keyval;
+        translated.consumed = consumed_modifiers;
+        translated.layout = group;
+        translated.level = level;
 
-      event = gdk_key_event_new ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN)
-                                   ? GDK_KEY_PRESS
-                                   : GDK_KEY_RELEASE,
-                                 window,
-                                 device_manager_win32->core_keyboard,
-                                 _gdk_win32_get_next_tick (msg->time),
-                                 keycode,
-                                 state,
-                                 is_modifier,
-                                 &translated,
-                                 &translated);
+        event = gdk_key_event_new ((msg->message == WM_KEYDOWN || msg->message == WM_SYSKEYDOWN)
+                                     ? GDK_KEY_PRESS
+                                     : GDK_KEY_RELEASE,
+                                   window,
+                                   device_manager_win32->core_keyboard,
+                                   _gdk_win32_get_next_tick (msg->time),
+                                   keycode,
+                                   state,
+                                   is_modifier,
+                                   &translated,
+                                   &translated);
 
-      _gdk_win32_append_event (event);
+        _gdk_win32_append_event (event);
 
-      return_val = TRUE;
+        return_val = TRUE;
+      }
       break;
 
     case WM_SYSCHAR:
@@ -2100,73 +2108,82 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_IME_COMPOSITION:
-      /* On Win2k WM_IME_CHAR doesn't work correctly for non-Unicode
-       * applications. Thus, handle WM_IME_COMPOSITION with
-       * GCS_RESULTSTR instead, fetch the Unicode chars from the IME
-       * with ImmGetCompositionStringW().
-       *
-       * See for instance
-       * http://groups.google.com/groups?selm=natX5.57%24g77.19788%40nntp2.onemain.com
-       * and
-       * http://groups.google.com/groups?selm=u2XfrXw5BHA.1628%40tkmsftngp02
-       * for comments by other people that seems to have the same
-       * experience. WM_IME_CHAR just gives question marks, apparently
-       * because of going through some conversion to the current code
-       * page.
-       *
-       * WM_IME_CHAR might work on NT4 or Win9x with ActiveIMM, but
-       * use WM_IME_COMPOSITION there, too, to simplify the code.
-       */
-      GDK_NOTE (EVENTS, g_print (" %#lx", (long) msg->lParam));
+      {
+        BYTE key_state[256];
+        wchar_t wbuf[100];
+        int ccount = 0;
 
-      if (!(msg->lParam & GCS_RESULTSTR))
-	break;
+        /* On Win2k WM_IME_CHAR doesn't work correctly for non-Unicode
+         * applications. Thus, handle WM_IME_COMPOSITION with
+         * GCS_RESULTSTR instead, fetch the Unicode chars from the IME
+         * with ImmGetCompositionStringW().
+         *
+         * See for instance
+         * http://groups.google.com/groups?selm=natX5.57%24g77.19788%40nntp2.onemain.com
+         * and
+         * http://groups.google.com/groups?selm=u2XfrXw5BHA.1628%40tkmsftngp02
+         * for comments by other people that seems to have the same
+         * experience. WM_IME_CHAR just gives question marks, apparently
+         * because of going through some conversion to the current code
+         * page.
+         *
+         * WM_IME_CHAR might work on NT4 or Win9x with ActiveIMM, but
+         * use WM_IME_COMPOSITION there, too, to simplify the code.
+         */
+        GDK_NOTE (EVENTS, g_print (" %#lx", (long) msg->lParam));
 
-      if (GDK_SURFACE_DESTROYED (window))
-	break;
+        if (!(msg->lParam & GCS_RESULTSTR))
+          break;
 
-      himc = ImmGetContext (msg->hwnd);
-      ccount = ImmGetCompositionStringW (himc, GCS_RESULTSTR,
-					 wbuf, sizeof (wbuf));
-      ImmReleaseContext (msg->hwnd, himc);
+        if (GDK_SURFACE_DESTROYED (window))
+          break;
 
-      ccount /= 2;
+        himc = ImmGetContext (msg->hwnd);
+        ccount = ImmGetCompositionStringW (himc, GCS_RESULTSTR,
+                                           wbuf, sizeof (wbuf));
+        ImmReleaseContext (msg->hwnd, himc);
 
-      API_CALL (GetKeyboardState, (key_state));
+        ccount /= 2;
 
-      for (i = 0; i < ccount; i++)
-	{
-          /* Build a key press event */
-          translated.keyval = gdk_unicode_to_keyval (wbuf[i]);
-          translated.consumed = 0;
-          translated.layout = get_active_group ();
-          translated.level = 0;
-          event = gdk_key_event_new (GDK_KEY_PRESS,
-                                     window,
-                                     device_manager_win32->core_keyboard,
-                                     _gdk_win32_get_next_tick (msg->time),
-                                     0,
-                                     build_key_event_state (key_state),
-                                     FALSE,
-                                     &translated,
-                                     &translated);
+        API_CALL (GetKeyboardState, (key_state));
 
-          _gdk_win32_append_event (event);
+        for (i = 0; i < ccount; i++)
+          {
+            GdkTranslatedKey translated;
 
-          /* Build a key release event.  */
-          event = gdk_key_event_new (GDK_KEY_RELEASE,
-                                     window,
-                                     device_manager_win32->core_keyboard,
-                                     _gdk_win32_get_next_tick (msg->time),
-                                     0,
-                                     build_key_event_state (key_state),
-                                     FALSE,
-                                     &translated,
-                                     &translated);
+            /* Build a key press event */
+            translated.keyval = gdk_unicode_to_keyval (wbuf[i]);
+            translated.consumed = 0;
+            translated.layout = get_active_group ();
+            translated.level = 0;
+            event = gdk_key_event_new (GDK_KEY_PRESS,
+                                       window,
+                                       device_manager_win32->core_keyboard,
+                                       _gdk_win32_get_next_tick (msg->time),
+                                       0,
+                                       build_key_event_state (key_state),
+                                       FALSE,
+                                       &translated,
+                                       &translated);
 
-          _gdk_win32_append_event (event);
-	}
-      return_val = TRUE;
+            _gdk_win32_append_event (event);
+
+            /* Build a key release event.  */
+            event = gdk_key_event_new (GDK_KEY_RELEASE,
+                                       window,
+                                       device_manager_win32->core_keyboard,
+                                       _gdk_win32_get_next_tick (msg->time),
+                                       0,
+                                       build_key_event_state (key_state),
+                                       FALSE,
+                                       &translated,
+                                       &translated);
+
+            _gdk_win32_append_event (event);
+          }
+
+        return_val = TRUE;
+      }
       break;
 
     case WM_LBUTTONDOWN:
@@ -2963,17 +2980,22 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_WINDOWPOSCHANGING:
-      GDK_NOTE (EVENTS, (windowpos = (WINDOWPOS *) msg->lParam,
-			 g_print (" %s %s %dx%d@%+d%+d now below %p",
-				  _gdk_win32_surface_pos_bits_to_string (windowpos->flags),
-				  (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
-				   (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
-				    (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
-				     (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
-				      (sprintf (buf, "%p", windowpos->hwndInsertAfter),
-				       buf))))),
-				  windowpos->cx, windowpos->cy, windowpos->x, windowpos->y,
-				  GetNextWindow (msg->hwnd, GW_HWNDPREV))));
+#ifdef G_ENABLE_DEBUG
+      {
+        char buf[256];
+        GDK_NOTE (EVENTS, (windowpos = (WINDOWPOS *) msg->lParam,
+                           g_print (" %s %s %dx%d@%+d%+d now below %p",
+                                    _gdk_win32_surface_pos_bits_to_string (windowpos->flags),
+                                    (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
+                                     (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
+                                      (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
+                                       (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
+                                        (sprintf (buf, "%p", windowpos->hwndInsertAfter),
+                                         buf))))),
+                                    windowpos->cx, windowpos->cy, windowpos->x, windowpos->y,
+                                    GetNextWindow (msg->hwnd, GW_HWNDPREV))));
+      }
+#endif
 
       if (GDK_SURFACE_IS_MAPPED (window))
         {
@@ -2999,15 +3021,21 @@ gdk_event_translate (MSG *msg,
 
     case WM_WINDOWPOSCHANGED:
       windowpos = (WINDOWPOS *) msg->lParam;
-      GDK_NOTE (EVENTS, g_print (" %s %s %dx%d@%+d%+d",
-				 _gdk_win32_surface_pos_bits_to_string (windowpos->flags),
-				 (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
-				  (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
-				   (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
-				    (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
-				     (sprintf (buf, "%p", windowpos->hwndInsertAfter),
-				      buf))))),
-				 windowpos->cx, windowpos->cy, windowpos->x, windowpos->y));
+
+#ifdef G_ENABLE_DEBUG
+      {
+        char buf[256];
+        GDK_NOTE (EVENTS, g_print (" %s %s %dx%d@%+d%+d",
+                                   _gdk_win32_surface_pos_bits_to_string (windowpos->flags),
+                                   (windowpos->hwndInsertAfter == HWND_BOTTOM ? "BOTTOM" :
+                                    (windowpos->hwndInsertAfter == HWND_NOTOPMOST ? "NOTOPMOST" :
+                                     (windowpos->hwndInsertAfter == HWND_TOP ? "TOP" :
+                                      (windowpos->hwndInsertAfter == HWND_TOPMOST ? "TOPMOST" :
+                                       (sprintf (buf, "%p", windowpos->hwndInsertAfter),
+                                        buf))))),
+                                   windowpos->cx, windowpos->cy, windowpos->x, windowpos->y));
+      }
+#endif
 
       /* Break grabs on unmap or minimize */
       if (windowpos->flags & SWP_HIDEWINDOW ||
