@@ -269,7 +269,6 @@ extern int               _gdk_input_ignore_core;
  */
 extern HKL               _gdk_input_locale;
 extern gboolean          _gdk_input_locale_is_ime;
-extern UINT              _gdk_input_codepage;
 
 extern guint             _gdk_keymap_serial;
 

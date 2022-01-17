@@ -52,7 +52,9 @@ static gboolean gdk_synchronize = FALSE;
 void
 _gdk_win32_surfaceing_init (void)
 {
-  char buf[10];
+  GdkWin32Keymap *win32_keymap;
+
+  win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
 
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
@@ -60,13 +62,9 @@ _gdk_win32_surfaceing_init (void)
   _gdk_app_hmodule = GetModuleHandle (NULL);
   _gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   _gdk_input_locale = GetKeyboardLayout (0);
-  _gdk_win32_keymap_set_active_layout (GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display)), _gdk_input_locale);
-  GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
-		 LOCALE_IDEFAULTANSICODEPAGE,
-		 buf, sizeof (buf));
-  _gdk_input_codepage = atoi (buf);
-  GDK_NOTE (EVENTS, g_print ("input_locale:%p, codepage:%d\n",
-			     _gdk_input_locale, _gdk_input_codepage));
+  _gdk_win32_keymap_set_active_layout (win32_keymap, _gdk_input_locale);
+
+  GDK_NOTE (EVENTS, g_print ("input_locale: %p\n", _gdk_input_locale));
 
   _gdk_win32_clipdrop_init ();
 }
