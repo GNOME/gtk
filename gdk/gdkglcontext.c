@@ -278,7 +278,15 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
       int i = 0;
       G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
-      gdk_gl_context_get_required_version (context, &major, &minor);
+      if (share != NULL)
+        {
+          gdk_gl_context_get_required_version (share, &major, &minor);
+          gdk_gl_context_set_allowed_apis (context,
+                                           gdk_gl_context_get_allowed_apis (share));
+        }
+      else
+        gdk_gl_context_get_required_version (context, &major, &minor);
+
       debug_bit = gdk_gl_context_get_debug_enabled (context);
       forward_bit = gdk_gl_context_get_forward_compatible (context);
       legacy_bit = GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY) ||
