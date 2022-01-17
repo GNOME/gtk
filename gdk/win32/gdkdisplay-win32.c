@@ -1181,6 +1181,7 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
 {
   gboolean result = FALSE;
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkWin32GLType gl_type = GDK_WIN32_GL_TYPE_NONE;
 
   if (display_win32->dummy_context_wgl.hdc == NULL)
     display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
@@ -1196,19 +1197,28 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
    * usage against libANGLE EGL.  EGL is used more as a compatibility layer
    * on Windows rather than being a native citizen on Windows
    */
-  if (_gdk_debug_flags & GDK_DEBUG_GL_EGL)
-    result = gdk_display_init_egl (display,
-                                   EGL_PLATFORM_ANGLE_ANGLE,
-                                   display_win32->dummy_context_wgl.hdc,
-                                   FALSE,
-                                   error);
+  if (GDK_DEBUG_CHECK (GL_EGL) || GDK_DEBUG_CHECK (GL_GLES))
+    {
+      result = gdk_display_init_egl (display,
+                                     EGL_PLATFORM_ANGLE_ANGLE,
+                                     display_win32->dummy_context_wgl.hdc,
+                                     FALSE,
+                                     error);
+
+      if (result)
+        gl_type = GDK_WIN32_GL_TYPE_EGL;
+    }
 #endif
 
   if (!result)
     {
       g_clear_error (error);
       result = gdk_win32_display_init_wgl (display, error);
+
+      if (result)
+        gl_type = GDK_WIN32_GL_TYPE_WGL;
     }
+
 
 #ifdef HAVE_EGL
   if (!result)
@@ -1219,9 +1229,13 @@ gdk_win32_display_init_gl_backend (GdkDisplay  *display,
                                      display_win32->dummy_context_wgl.hdc,
                                      TRUE,
                                      error);
+
+      if (result)
+        gl_type = GDK_WIN32_GL_TYPE_EGL;
     }
 #endif
 
+  display_win32->gl_type = gl_type;
   return result;
 }
 
@@ -1235,11 +1249,17 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
   if (!gdk_win32_display_init_gl_backend (display, error))
     return NULL;
 
-  if (display_win32->wgl_pixel_format != 0)
+  if (display_win32->gl_type == GDK_WIN32_GL_TYPE_WGL)
     gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL, "display", display, NULL);
 #ifdef HAVE_EGL
-  else if (gdk_display_get_egl_display (display))
-    gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL, "display", display, NULL);
+  else if (display_win32->gl_type == GDK_WIN32_GL_TYPE_EGL)
+    {
+      gl_context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_EGL, "display", display, NULL);
+
+      /* We want to use a GLES 3.0+ context */
+      gdk_gl_context_set_allowed_apis (gl_context, GDK_GL_API_GLES);
+      gdk_gl_context_set_required_version (gl_context, 3, 0);
+    }
 #endif
 
   g_return_val_if_fail (gl_context != NULL, NULL);

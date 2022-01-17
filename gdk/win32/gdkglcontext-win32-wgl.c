@@ -258,7 +258,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
     return FALSE;
 
-  if (display_win32->wgl_pixel_format != 0)
+  if (display_win32->gl_type == GDK_WIN32_GL_TYPE_WGL)
     return TRUE;
 
   /* acquire and cache dummy Window (HWND & HDC) and
@@ -298,8 +298,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
           return FALSE;
         }
     }
-
-  display_win32->wgl_pixel_format = best_idx;
 
   display_win32->hasWglARBCreateContext =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
@@ -728,9 +726,10 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
   if (!GDK_IS_WIN32_DISPLAY (display))
     return FALSE;
 
-  display_win32 = GDK_WIN32_DISPLAY (display);
-  if (display_win32->wgl_pixel_format == 0)
+  if (!gdk_win32_display_init_wgl (display, NULL))
     return FALSE;
+
+  display_win32 = GDK_WIN32_DISPLAY (display);
 
   if (major != NULL)
     *major = display_win32->gl_version / 10;
