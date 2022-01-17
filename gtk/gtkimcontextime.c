@@ -382,7 +382,7 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
 
   c = gdk_keyval_to_unicode (keyval);
 
-  if (c)
+  if (c && !g_unichar_iscntrl(c))
     {
       _gtk_im_context_ime_commit_unichar (context_ime, c);
       retval = TRUE;
