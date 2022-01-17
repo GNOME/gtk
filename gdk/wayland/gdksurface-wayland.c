@@ -2293,8 +2293,7 @@ gdk_wayland_toplevel_inhibit_idle (GdkToplevel *toplevel)
 
   if (!wayland_toplevel->idle_inhibitor)
     {
-      g_assert (wayland_toplevel->idle_inhibitor &&
-                wayland_toplevel->idle_inhibitor_refcount > 0);
+      g_assert (wayland_toplevel->idle_inhibitor_refcount == 0);
 
       wayland_toplevel->idle_inhibitor =
           zwp_idle_inhibit_manager_v1_create_inhibitor (display_wayland->idle_inhibit_manager,
