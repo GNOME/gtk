@@ -1477,6 +1477,7 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
   int width, height;
   gboolean is_resizing;
   gboolean fixed_size;
+  gboolean was_fixed_size;
   gboolean saved_size;
 
   new_state = impl->pending.toplevel.state;
@@ -1491,6 +1492,11 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
                  GDK_TOPLEVEL_STATE_TILED) ||
     is_resizing;
 
+  was_fixed_size =
+    surface->state & (GDK_TOPLEVEL_STATE_MAXIMIZED |
+                      GDK_TOPLEVEL_STATE_FULLSCREEN |
+                      GDK_TOPLEVEL_STATE_TILED);
+
   width = impl->pending.toplevel.width;
   height = impl->pending.toplevel.height;
 
@@ -1503,7 +1509,7 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
    * the client should configure its size back to what it was before
    * being maximize or fullscreen.
    */
-  if (saved_size && !fixed_size)
+  if (saved_size && !fixed_size && was_fixed_size)
     {
       width = impl->saved_width;
       height = impl->saved_height;
