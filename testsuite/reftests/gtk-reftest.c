@@ -551,8 +551,15 @@ main (int argc, char **argv)
   /* We need to ensure the process' current working directory
    * is the same as the reftest data, because we're using the
    * "file" property of GtkImage as a relative path in builder files.
+   *
+   * The g_assert() is needed to ensure GNU libc does not complain
+   * about the unused return value, and the G_GNUC_UNUSED is needed
+   * to avoid compiler warnings when g_assert() is compiled out
+   * during the release build.
    */
-  g_assert (chdir (basedir) == 0);
+  int res G_GNUC_UNUSED;
+  res = chdir (basedir);
+  g_assert (res == 0);
 
   g_log_set_writer_func (log_writer, NULL, NULL);
 
