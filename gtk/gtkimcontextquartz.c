@@ -65,7 +65,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextQuartz, gtk_im_context_quartz, GTK_TYPE_IM_
 static void
 quartz_get_preedit_string (GtkIMContext *context,
                            char **str,
-                           PangoAttrList **attrs,
+                           Pango2AttrList **attrs,
                            int *cursor_pos)
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
@@ -77,12 +77,12 @@ quartz_get_preedit_string (GtkIMContext *context,
 
   if (attrs)
     {
-      *attrs = pango_attr_list_new ();
+      *attrs = pango2_attr_list_new ();
       int len = g_utf8_strlen (*str, -1);
       char *ch = *str;
       if (len > 0)
         {
-          PangoAttribute *attr;
+          Pango2Attribute *attr;
           int i = 0;
           for (;;)
             {
@@ -91,17 +91,15 @@ quartz_get_preedit_string (GtkIMContext *context,
 
               if (i >= qc->cursor_index &&
 		  i < qc->cursor_index + qc->selected_len)
-                attr = pango_attr_underline_new (PANGO_UNDERLINE_DOUBLE);
+                attr = pango2_attr_underline_new (PANGO2_LINE_STYLE_DOUBLE);
               else
-                attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-
-              attr->start_index = s - *str;
+                attr = pango2_attr_underline_new (PANGO2_LINE_STYLE_SOLID);
               if (!*ch)
-                attr->end_index = attr->start_index + strlen (s);
+                pango2_attribute_set_range (s - *str, s - *str + strlen (s));
               else
-                attr->end_index = ch - *str;
+                pango2_attribute_set_range (s - *str, ch - *str);
 
-              pango_attr_list_change (*attrs, attr);
+              pango2_attr_list_change (*attrs, attr);
 
               if (!*ch)
                 break;

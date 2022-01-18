@@ -109,7 +109,7 @@ label_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextBeforeOffset") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      Pango2Layout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -124,7 +124,7 @@ label_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      Pango2Layout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -139,7 +139,7 @@ label_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextAfterOffset") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      Pango2Layout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -169,7 +169,7 @@ label_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetStringAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      Pango2Layout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       int offset;
       AtspiTextGranularity granularity;
       char *string;
@@ -184,7 +184,7 @@ label_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributes") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      Pango2Layout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       int start, end;
@@ -197,7 +197,7 @@ label_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      Pango2Layout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
@@ -218,7 +218,7 @@ label_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      Pango2Layout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       gboolean include_defaults;
@@ -236,7 +236,7 @@ label_handle_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetDefaultAttributes") == 0 ||
            g_strcmp0 (method_name, "GetDefaultAttributeSet") == 0)
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
+      Pango2Layout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
 
       gtk_pango_get_default_attributes (layout, &builder);
@@ -462,7 +462,7 @@ inscription_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextBeforeOffset") == 0)
     {
-      PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
+      Pango2Layout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -477,7 +477,7 @@ inscription_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
+      Pango2Layout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -492,7 +492,7 @@ inscription_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextAfterOffset") == 0)
     {
-      PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
+      Pango2Layout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -522,7 +522,7 @@ inscription_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetStringAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
+      Pango2Layout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       int offset;
       AtspiTextGranularity granularity;
       char *string;
@@ -537,7 +537,7 @@ inscription_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributes") == 0)
     {
-      PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
+      Pango2Layout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       int start, end;
@@ -550,7 +550,7 @@ inscription_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
-      PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
+      Pango2Layout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
@@ -571,7 +571,7 @@ inscription_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
-      PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
+      Pango2Layout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       gboolean include_defaults;
@@ -589,7 +589,7 @@ inscription_handle_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetDefaultAttributes") == 0 ||
            g_strcmp0 (method_name, "GetDefaultAttributeSet") == 0)
     {
-      PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
+      Pango2Layout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
 
       gtk_pango_get_default_attributes (layout, &builder);
@@ -759,7 +759,7 @@ editable_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextBeforeOffset") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (text_widget);
+      Pango2Layout *layout = gtk_text_get_layout (text_widget);
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -774,7 +774,7 @@ editable_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (text_widget);
+      Pango2Layout *layout = gtk_text_get_layout (text_widget);
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -789,7 +789,7 @@ editable_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetTextAfterOffset") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (text_widget);
+      Pango2Layout *layout = gtk_text_get_layout (text_widget);
       int offset;
       AtspiTextBoundaryType boundary_type;
       char *string;
@@ -818,7 +818,7 @@ editable_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetStringAtOffset") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (text_widget);
+      Pango2Layout *layout = gtk_text_get_layout (text_widget);
       int offset;
       AtspiTextGranularity granularity;
       char *string;
@@ -833,7 +833,7 @@ editable_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributes") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (text_widget);
+      Pango2Layout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       int start, end;
@@ -846,7 +846,7 @@ editable_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (text_widget);
+      Pango2Layout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
@@ -866,7 +866,7 @@ editable_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (text_widget);
+      Pango2Layout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       gboolean include_defaults;
@@ -884,7 +884,7 @@ editable_handle_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetDefaultAttributes") == 0 ||
            g_strcmp0 (method_name, "GetDefaultAttributeSet") == 0)
     {
-      PangoLayout *layout = gtk_text_get_layout (text_widget);
+      Pango2Layout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
 
       gtk_pango_get_default_attributes (layout, &builder);

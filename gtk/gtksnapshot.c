@@ -2081,7 +2081,7 @@ gtk_snapshot_render_focus (GtkSnapshot     *snapshot,
  * @context: the style context that defines the text
  * @x: X origin of the rectangle
  * @y: Y origin of the rectangle
- * @layout: the `PangoLayout` to render
+ * @layout: the `Pango2Layout` to render
  *
  * Creates a render node for rendering @layout according to the style
  * information in @context, and appends it to the current node of @snapshot,
@@ -2092,7 +2092,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
                             GtkStyleContext *context,
                             double           x,
                             double           y,
-                            PangoLayout     *layout)
+                            Pango2Layout     *layout)
 {
   const bool needs_translate = (x != 0 || y != 0);
   const GdkRGBA *fg_color;
@@ -2101,7 +2101,7 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+  g_return_if_fail (PANGO2_IS_LAYOUT (layout));
 
   if (needs_translate)
     {
@@ -2125,8 +2125,9 @@ gtk_snapshot_render_layout (GtkSnapshot     *snapshot,
 
 void
 gtk_snapshot_append_text (GtkSnapshot           *snapshot,
-                          PangoFont             *font,
-                          PangoGlyphString      *glyphs,
+                          Pango2Font            *font,
+                          GQuark                 palette,
+                          Pango2GlyphString     *glyphs,
                           const GdkRGBA         *color,
                           float                  x,
                           float                  y)
@@ -2138,6 +2139,7 @@ gtk_snapshot_append_text (GtkSnapshot           *snapshot,
 
   node = gsk_text_node_new (font,
                             glyphs,
+                            palette,
                             color,
                             &GRAPHENE_POINT_INIT (x + dx, y + dy));
   if (node == NULL)

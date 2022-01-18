@@ -488,19 +488,22 @@ float                   gsk_cross_fade_node_get_progress        (const GskRender
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_text_node_get_type                  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_text_node_new                       (PangoFont                *font,
-                                                                 PangoGlyphString         *glyphs,
-                                                                 const GdkRGBA            *color,
-                                                                 const graphene_point_t   *offset);
+GskRenderNode *         gsk_text_node_new                       (Pango2Font                *font,
+                                                                 Pango2GlyphString         *glyphs,
+                                                                 GQuark                     palette,
+                                                                 const GdkRGBA             *color,
+                                                                 const graphene_point_t    *offset);
 GDK_AVAILABLE_IN_ALL
-PangoFont *             gsk_text_node_get_font                  (const GskRenderNode      *node) G_GNUC_PURE;
+Pango2Font *             gsk_text_node_get_font                  (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_2
 gboolean                gsk_text_node_has_color_glyphs          (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 guint                   gsk_text_node_get_num_glyphs            (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-const PangoGlyphInfo   *gsk_text_node_get_glyphs                (const GskRenderNode      *node,
+const Pango2GlyphInfo   *gsk_text_node_get_glyphs               (const GskRenderNode      *node,
                                                                  guint                    *n_glyphs) G_GNUC_PURE;
+GDK_AVAILABLE_IN_ALL
+GQuark                   gsk_text_node_get_palette              (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_text_node_get_color                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL

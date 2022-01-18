@@ -107,7 +107,7 @@ static gboolean gtk_im_context_ime_filter_keypress (GtkIMContext   *context,
 static void gtk_im_context_ime_reset               (GtkIMContext   *context);
 static void gtk_im_context_ime_get_preedit_string  (GtkIMContext   *context,
                                                     char          **str,
-                                                    PangoAttrList **attrs,
+                                                    Pango2AttrList **attrs,
                                                     int            *cursor_pos);
 static void gtk_im_context_ime_focus_in            (GtkIMContext   *context);
 static void gtk_im_context_ime_focus_out           (GtkIMContext   *context);
@@ -502,10 +502,10 @@ get_utf8_preedit_string (GtkIMContextIME *context_ime,
 }
 
 
-static PangoAttrList *
+static Pango2AttrList *
 get_pango_attr_list (GtkIMContextIME *context_ime, const char *utf8str)
 {
-  PangoAttrList *attrs = pango_attr_list_new ();
+  Pango2AttrList *attrs = pango2_attr_list_new ();
   HWND hwnd;
   HIMC himc;
   guint8 *buf = NULL;
@@ -522,7 +522,7 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const char *utf8str)
       const char *schr = utf8str, *echr;
       guint16 f_red, f_green, f_blue, b_red, b_green, b_blue;
       glong len, spos = 0, epos, sidx = 0, eidx;
-      PangoAttribute *attr;
+      Pango2Attribute *attr;
 
       /*
        *  get attributes list of IME.
@@ -557,10 +557,9 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const char *utf8str)
               switch (buf[spos])
                 {
                 case ATTR_TARGET_CONVERTED:
-                  attr = pango_attr_underline_new (PANGO_UNDERLINE_DOUBLE);
-                  attr->start_index = sidx;
-                  attr->end_index = eidx;
-                  pango_attr_list_change (attrs, attr);
+                  attr = pango2_attr_underline_new (PANGO_UNDERLINE_DOUBLE);
+                  pango2_attribute_set_range (attr, sidx, eidx);
+                  pango2_attr_list_change (attrs, attr);
                   f_red = f_green = f_blue = 0;
                   b_red = b_green = b_blue = 0xffff;
                   break;
@@ -573,21 +572,18 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const char *utf8str)
                   b_red = b_green = b_blue = 0x7fff;
                   break;
                 default:        /* ATTR_INPUT,ATTR_CONVERTED,ATTR_FIXEDCONVERTED */
-                  attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-                  attr->start_index = sidx;
-                  attr->end_index = eidx;
-                  pango_attr_list_change (attrs, attr);
+                  attr = pango2_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+                  pango2_attribute_set_range (attr, sidx, eidx);
+                  pango2_attr_list_change (attrs, attr);
                   f_red = f_green = f_blue = 0;
                   b_red = b_green = b_blue = 0xffff;
                 }
-              attr = pango_attr_foreground_new (f_red, f_green, f_blue);
-              attr->start_index = sidx;
-              attr->end_index = eidx;
-              pango_attr_list_change (attrs, attr);
-              attr = pango_attr_background_new (b_red, b_green, b_blue);
-              attr->start_index = sidx;
-              attr->end_index = eidx;
-              pango_attr_list_change (attrs, attr);
+              attr = pango2_attr_foreground_new (&(PangoColor){f_red, f_green, f_blue});
+              pango2_attribute_set_range (attr, sidx, eidx);
+              pango2_attr_list_change (attrs, attr);
+              attr = pango2_attr_background_new (&(PangoColor){b_red, b_green, b_blue};
+              pango2_attribute_set_range (attr, sidx, eidx);
+              pango2_attr_list_change (attrs, attr);
 
               schr = echr;
               spos = epos;
@@ -606,7 +602,7 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const char *utf8str)
 static void
 gtk_im_context_ime_get_preedit_string (GtkIMContext   *context,
                                        char          **str,
-                                       PangoAttrList **attrs,
+                                       Pango2AttrList **attrs,
                                        int            *cursor_pos)
 {
   char *utf8str = NULL;

@@ -28,7 +28,7 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-graphene \
     mingw-w64-$MSYS2_ARCH-json-glib \
     mingw-w64-$MSYS2_ARCH-libepoxy \
-    mingw-w64-$MSYS2_ARCH-pango \
+    mingw-w64-$MSYS2_ARCH-pango2 \
     mingw-w64-$MSYS2_ARCH-fribidi \
     mingw-w64-$MSYS2_ARCH-gst-plugins-bad-libs \
     mingw-w64-$MSYS2_ARCH-shared-mime-info \

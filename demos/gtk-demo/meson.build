@@ -75,7 +75,7 @@ demos = files([
   'printing.c',
   'read_more.c',
   'revealer.c',
-  'rotated_text.c',
+  #'rotated_text.c', FIXME
   'scale.c',
   'search_entry.c',
   'search_entry2.c',

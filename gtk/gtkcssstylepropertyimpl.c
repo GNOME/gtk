@@ -890,19 +890,19 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_style_parse,
-                                          _gtk_css_font_style_value_new (PANGO_STYLE_NORMAL));
+                                          _gtk_css_font_style_value_new (PANGO2_STYLE_NORMAL));
   gtk_css_style_property_register        ("font-weight",
                                           GTK_CSS_PROPERTY_FONT_WEIGHT,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_weight_parse,
-                                          _gtk_css_number_value_new (PANGO_WEIGHT_NORMAL, GTK_CSS_NUMBER));
+                                          _gtk_css_number_value_new (PANGO2_WEIGHT_NORMAL, GTK_CSS_NUMBER));
   gtk_css_style_property_register        ("font-stretch",
                                           GTK_CSS_PROPERTY_FONT_STRETCH,
                                           GTK_STYLE_PROPERTY_INHERIT,
                                           GTK_CSS_AFFECTS_TEXT_SIZE,
                                           font_stretch_parse,
-                                          _gtk_css_font_stretch_value_new (PANGO_STRETCH_NORMAL));
+                                          _gtk_css_font_stretch_value_new (PANGO2_STRETCH_NORMAL));
 
   gtk_css_style_property_register        ("letter-spacing",
                                           GTK_CSS_PROPERTY_LETTER_SPACING,

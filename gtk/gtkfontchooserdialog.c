@@ -204,14 +204,14 @@ gtk_font_chooser_dialog_map (GtkWidget *widget)
 static void
 update_button (GtkFontChooserDialog *dialog)
 {
-  PangoFontDescription *desc;
+  Pango2FontDescription *desc;
 
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (dialog->fontchooser));
 
   gtk_widget_set_sensitive (dialog->select_button, desc != NULL);
 
   if (desc)
-    pango_font_description_free (desc);
+    pango2_font_description_free (desc);
 }
 
 static void

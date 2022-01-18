@@ -234,7 +234,7 @@ set_dialog_properties (GtkAppChooserDialog *self)
       label = gtk_label_new (title);
       gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
       gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
       gtk_label_set_width_chars (GTK_LABEL (label), 5);
       gtk_widget_add_css_class (label, "title");
       gtk_widget_set_parent (label, box);
@@ -244,7 +244,7 @@ set_dialog_properties (GtkAppChooserDialog *self)
           label = gtk_label_new (subtitle);
           gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
           gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
           gtk_widget_add_css_class (label, "subtitle");
           gtk_widget_set_parent (label, box);
         }

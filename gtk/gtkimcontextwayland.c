@@ -603,7 +603,7 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
 static void
 gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
                                            char          **str,
-                                           PangoAttrList **attrs,
+                                           Pango2AttrList **attrs,
                                            int            *cursor_pos)
 {
   GtkIMContextWayland *context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
@@ -636,31 +636,30 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
     *str = g_strdup (preedit_str);
   if (attrs)
     {
-      PangoAttribute *attr;
+      Pango2Attribute *attr;
       guint len = strlen (preedit_str);
 
       if (!*attrs)
-        *attrs = pango_attr_list_new ();
+        *attrs = pango2_attr_list_new ();
 
-      attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-      attr->start_index = 0;
-      attr->end_index = len;
-      pango_attr_list_insert (*attrs, attr);
+      attr = pango2_attr_underline_new (PANGO2_LINE_STYLE_SOLID);
+      pango2_attribute_set_range (attr, 0, len);
+      pango2_attr_list_insert (*attrs, attr);
 
       /* enable fallback, since IBus will send us things like ⎄ */
-      attr = pango_attr_fallback_new (TRUE);
-      attr->start_index = 0;
-      attr->end_index = len;
-      pango_attr_list_insert (*attrs, attr);
+      attr = pango2_attr_fallback_new (TRUE);
+      pango2_attribute_set_range (attr, 0, len);
+      pango2_attr_list_insert (*attrs, attr);
 
       if (context_wayland->current_preedit.cursor_begin
           != context_wayland->current_preedit.cursor_end)
         {
           /* FIXME: Oh noes, how to highlight while taking into account user preferences? */
-          PangoAttribute *cursor = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-          cursor->start_index = context_wayland->current_preedit.cursor_begin;
-          cursor->end_index = context_wayland->current_preedit.cursor_end;
-          pango_attr_list_insert (*attrs, cursor);
+          Pango2Attribute *cursor = pango2_attr_weight_new (PANGO2_WEIGHT_BOLD);
+          pango2_attribute_set_range (cursor,
+                                     context_wayland->current_preedit.cursor_begin,
+                                     context_wayland->current_preedit.cursor_end);
+          pango2_attr_list_insert (*attrs, cursor);
         }
     }
 }

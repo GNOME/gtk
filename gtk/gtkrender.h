@@ -23,7 +23,7 @@
 #endif
 
 #include <cairo.h>
-#include <pango/pango.h>
+#include <pango2/pango.h>
 #include <gdk/gdk.h>
 
 #include <gtk/gtkenums.h>
@@ -86,7 +86,7 @@ void        gtk_render_layout      (GtkStyleContext     *context,
                                     cairo_t             *cr,
                                     double               x,
                                     double               y,
-                                    PangoLayout         *layout);
+                                    Pango2Layout         *layout);
 GDK_AVAILABLE_IN_ALL
 void        gtk_render_line        (GtkStyleContext     *context,
                                     cairo_t             *cr,

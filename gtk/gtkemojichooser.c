@@ -543,13 +543,13 @@ add_emoji (GtkWidget    *box,
 {
   GtkWidget *child;
   GtkWidget *label;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
   GVariant *codes;
   char text[64];
   char *p = text;
   int i;
-  PangoLayout *layout;
-  PangoRectangle rect;
+  Pango2Layout *layout;
+  Pango2Rectangle rect;
 
   codes = g_variant_get_child_value (item, 0);
   for (i = 0; i < g_variant_n_children (codes); i++)
@@ -567,16 +567,16 @@ add_emoji (GtkWidget    *box,
   p[0] = 0;
 
   label = gtk_label_new (text);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
+  attrs = pango2_attr_list_new ();
+  pango2_attr_list_insert (attrs, pango2_attr_scale_new (PANGO2_SCALE_X_LARGE));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
+  pango2_attr_list_unref (attrs);
 
   layout = gtk_label_get_layout (GTK_LABEL (label));
-  pango_layout_get_extents (layout, &rect, NULL);
+  pango2_lines_get_extents (pango2_layout_get_lines (layout), &rect, NULL);
 
   /* Check for fallback rendering that generates too wide items */
-  if (pango_layout_get_unknown_glyphs_count (layout) > 0 ||
+  if (pango2_lines_get_unknown_glyphs_count (pango2_layout_get_lines (layout)) > 0 ||
       rect.width >= 1.5 * chooser->emoji_max_width)
     {
       g_object_ref_sink (label);
@@ -665,7 +665,7 @@ get_emoji_data (void)
   GBytes *bytes;
   const char *lang;
 
-  lang = pango_language_to_string (gtk_get_default_language ());
+  lang = pango2_language_to_string (gtk_get_default_language ());
   bytes = get_emoji_data_by_language (lang);
   if (bytes)
     return bytes;
@@ -866,7 +866,7 @@ filter_func (GtkFlowBoxChild *child,
     goto out;
 
   term_tokens = g_str_tokenize_and_fold (text, "en", NULL);
-  
+
   g_variant_get_child (emoji_data, 1, "&s", &name);
   name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
   g_variant_get_child (emoji_data, 2, "^a&s", &keywords);
@@ -984,16 +984,16 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
    * as multiply glyphs.
    */
   {
-    PangoLayout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (chooser), "🙂");
-    PangoAttrList *attrs;
-    PangoRectangle rect;
+    Pango2Layout *layout = gtk_widget_create_pango_layout (GTK_WIDGET (chooser), "🙂");
+    Pango2AttrList *attrs;
+    Pango2Rectangle rect;
 
-    attrs = pango_attr_list_new ();
-    pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
-    pango_layout_set_attributes (layout, attrs);
-    pango_attr_list_unref (attrs);
+    attrs = pango2_attr_list_new ();
+    pango2_attr_list_insert (attrs, pango2_attr_scale_new (PANGO2_SCALE_X_LARGE));
+    pango2_layout_set_attributes (layout, attrs);
+    pango2_attr_list_unref (attrs);
 
-    pango_layout_get_extents (layout, &rect, NULL);
+    pango2_lines_get_extents (pango2_layout_get_lines (layout), &rect, NULL);
     chooser->emoji_max_width = rect.width;
 
     g_object_unref (layout);
@@ -1278,7 +1278,7 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
    * @direction: 1 to scroll forward, -1 to scroll back
    *
    * Scrolls to the next or previous section.
-   */ 
+   */
   gtk_widget_class_install_action (widget_class, "scroll.section", "i",
                                    gtk_emoji_chooser_scroll_section);
 

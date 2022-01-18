@@ -17,17 +17,17 @@ gsk_ensure_resources (void)
 }
 
 int
-pango_glyph_string_num_glyphs (PangoGlyphString *glyphs)
+pango_glyph_string_num_glyphs (Pango2GlyphString *glyphs)
 {
   int i, count;
 
   count = 0;
   for (i = 0; i < glyphs->num_glyphs; i++)
     {
-      PangoGlyphInfo *gi = &glyphs->glyphs[i];
-      if (gi->glyph != PANGO_GLYPH_EMPTY)
+      Pango2GlyphInfo *gi = &glyphs->glyphs[i];
+      if (gi->glyph != PANGO2_GLYPH_EMPTY)
         {
-          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
+          if (!(gi->glyph & PANGO2_GLYPH_UNKNOWN_FLAG))
             count++;
         }
     }

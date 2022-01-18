@@ -111,7 +111,7 @@ GDK_AVAILABLE_IN_ALL
 GtkPositionType   gtk_scale_get_value_pos      (GtkScale        *scale);
 
 GDK_AVAILABLE_IN_ALL
-PangoLayout     * gtk_scale_get_layout         (GtkScale        *scale);
+Pango2Layout     * gtk_scale_get_layout         (GtkScale        *scale);
 GDK_AVAILABLE_IN_ALL
 void              gtk_scale_get_layout_offsets (GtkScale        *scale,
                                                 int             *x,

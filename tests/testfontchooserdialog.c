@@ -25,18 +25,18 @@
 
 
 static gboolean
-monospace_filter (const PangoFontFamily *family,
-                  const PangoFontFace   *face,
+monospace_filter (const Pango2FontFamily *family,
+                  const Pango2FontFace   *face,
                   gpointer               data)
 {
-  return pango_font_family_is_monospace ((PangoFontFamily *) family);
+  return pango2_font_face_is_monospace ((Pango2FontFace *) face);
 }
 
 static void
 notify_font_cb (GtkFontChooser *fontchooser, GParamSpec *pspec, gpointer data)
 {
-  PangoFontFamily *family;
-  PangoFontFace *face;
+  Pango2FontFamily *family;
+  Pango2FontFace *face;
 
   g_debug ("Changed font name %s", gtk_font_chooser_get_font (fontchooser));
 
@@ -45,14 +45,14 @@ notify_font_cb (GtkFontChooser *fontchooser, GParamSpec *pspec, gpointer data)
   if (family)
     {
        g_debug ("  Family: %s is-monospace:%s",
-                pango_font_family_get_name (family),
-                pango_font_family_is_monospace (family) ? "true" : "false");
+                pango2_font_family_get_name (family),
+                pango2_font_face_is_monospace (face) ? "true" : "false");
     }
   else
     g_debug ("  No font family!");
 
   if (face)
-    g_debug ("  Face description: %s", pango_font_face_get_face_name (face));
+    g_debug ("  Face description: %s", pango2_font_face_get_name (face));
   else
     g_debug ("  No font face!");
 }
@@ -108,6 +108,9 @@ main (int argc, char *argv[])
   GtkWidget *box;
   GtkWidget *toggle;
   gboolean done = FALSE;
+  Pango2FontMap *map;
+  Pango2FontFamily *family = NULL;
+  Pango2FontFace *face = NULL;
 
   gtk_init ();
 
@@ -117,7 +120,7 @@ main (int argc, char *argv[])
   if (argc > 0)
     {
       FcConfig *config;
-      PangoFontMap *fontmap;
+      Pango2FontMap *fontmap;
       int i;
 
       /* Create a custom font configuration by adding font files specified
@@ -127,11 +130,21 @@ main (int argc, char *argv[])
       for (i = 0; i < argc; i++)
         FcConfigAppFontAddFile (config, (const FcChar8 *)argv[i]);
 
-      fontmap = pango_cairo_font_map_new_for_font_type (CAIRO_FONT_TYPE_FT);
-      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (fontmap), config);
+      fontmap = PANGO_FONT_MAP (pango2_fc_font_map_new ());
+      pango2_fc_font_map_set_config (PANGO_FC_FONT_MAP (fontmap), config);
       gtk_font_chooser_set_font_map (GTK_FONT_CHOOSER (font_button), fontmap);
     }
 #endif
+
+  map = pango2_font_map_get_default ();
+  family = pango2_font_map_get_family (map, "Bungee Color");
+  if (family)
+    face = pango2_font_family_get_face (family, "Bold");
+  if (face)
+    {
+      pango2_hb_face_set_palette_name (PANGO2_HB_FACE (face), "day", 0);
+      pango2_hb_face_set_palette_name (PANGO2_HB_FACE (face), "night", 1);
+    }
 
   gtk_font_button_set_use_font (GTK_FONT_BUTTON (font_button), TRUE);
 

@@ -24,56 +24,56 @@
 
 #include "config.h"
 #include "gtkpango.h"
-#include <pango/pangocairo.h>
+#include <pango2/pangocairo.h>
 #include "gtkintl.h"
 #include "gtkbuilderprivate.h"
 
 static gboolean
-attr_list_merge_filter (PangoAttribute *attribute,
+attr_list_merge_filter (Pango2Attribute *attribute,
                         gpointer        list)
 {
-  pango_attr_list_change (list, pango_attribute_copy (attribute));
+  pango2_attr_list_change (list, pango2_attribute_copy (attribute));
   return FALSE;
 }
 
 /*
- * _gtk_pango_attr_list_merge:
- * @into: (nullable): a `PangoAttrList` where attributes are merged
- * @from: (nullable): a `PangoAttrList` with the attributes to merge
+ * _gtk_pango2_attr_list_merge:
+ * @into: (nullable): a `Pango2AttrList` where attributes are merged
+ * @from: (nullable): a `Pango2AttrList` with the attributes to merge
  *
  * Merges attributes from @from into @into.
  *
  * Returns: the merged list.
  */
-PangoAttrList *
-_gtk_pango_attr_list_merge (PangoAttrList *into,
-                            PangoAttrList *from)
+Pango2AttrList *
+_gtk_pango_attr_list_merge (Pango2AttrList *into,
+                            Pango2AttrList *from)
 {
   if (from)
     {
       if (into)
-        pango_attr_list_filter (from, attr_list_merge_filter, into);
+        pango2_attr_list_filter (from, attr_list_merge_filter, into);
       else
-       return pango_attr_list_ref (from);
+       return pango2_attr_list_ref (from);
     }
 
   return into;
 }
 
-static PangoAttribute *
+static Pango2Attribute *
 attribute_from_text (GtkBuilder  *builder,
                      const char  *name,
                      const char  *value,
                      GError     **error)
 {
-  PangoAttribute *attribute = NULL;
-  PangoAttrType type;
-  PangoLanguage *language;
-  PangoFontDescription *font_desc;
+  Pango2Attribute *attribute = NULL;
+  Pango2AttrType type;
+  Pango2Language *language;
+  Pango2FontDescription *font_desc;
   GdkRGBA *color;
   GValue val = G_VALUE_INIT;
 
-  if (!gtk_builder_value_from_string_type (builder, PANGO_TYPE_ATTR_TYPE, name, &val, error))
+  if (!gtk_builder_value_from_string_type (builder, PANGO2_TYPE_ATTR_TYPE, name, &val, error))
     return NULL;
 
   type = g_value_get_enum (&val);
@@ -81,208 +81,202 @@ attribute_from_text (GtkBuilder  *builder,
 
   switch (type)
     {
-      /* PangoAttrLanguage */
-    case PANGO_ATTR_LANGUAGE:
-      if ((language = pango_language_from_string (value)))
+    case PANGO2_ATTR_LANGUAGE:
+      if ((language = pango2_language_from_string (value)))
         {
-          attribute = pango_attr_language_new (language);
+          attribute = pango2_attr_language_new (language);
           g_value_init (&val, G_TYPE_INT);
         }
       break;
-      /* PangoAttrInt */
-    case PANGO_ATTR_STYLE:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_STYLE, value, &val, error))
-        attribute = pango_attr_style_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_STYLE:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_STYLE, value, &val, error))
+        attribute = pango2_attr_style_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_WEIGHT:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_WEIGHT, value, &val, error))
-        attribute = pango_attr_weight_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_WEIGHT:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_WEIGHT, value, &val, error))
+        attribute = pango2_attr_weight_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_VARIANT:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_VARIANT, value, &val, error))
-        attribute = pango_attr_variant_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_VARIANT:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_VARIANT, value, &val, error))
+        attribute = pango2_attr_variant_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_STRETCH:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_STRETCH, value, &val, error))
-        attribute = pango_attr_stretch_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_STRETCH:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_STRETCH, value, &val, error))
+        attribute = pango2_attr_stretch_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_UNDERLINE:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_UNDERLINE, value, &val, NULL))
-        attribute = pango_attr_underline_new (g_value_get_enum (&val));
-      else
-        {
-          /* XXX: allow boolean for backwards compat, so ignore error */
-          /* Deprecate this somehow */
-          g_value_unset (&val);
-          if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
-            attribute = pango_attr_underline_new (g_value_get_boolean (&val));
-        }
+    case PANGO2_ATTR_UNDERLINE:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_LINE_STYLE, value, &val, NULL))
+        attribute = pango2_attr_underline_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_STRIKETHROUGH:
-      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
-        attribute = pango_attr_strikethrough_new (g_value_get_boolean (&val));
+    case PANGO2_ATTR_UNDERLINE_POSITION:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_UNDERLINE_POSITION, value, &val, NULL))
+        attribute = pango2_attr_underline_position_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_GRAVITY:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_GRAVITY, value, &val, error))
-        attribute = pango_attr_gravity_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_STRIKETHROUGH:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_LINE_STYLE, value, &val, NULL))
+        attribute = pango2_attr_strikethrough_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_GRAVITY_HINT:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_GRAVITY_HINT, value, &val, error))
-        attribute = pango_attr_gravity_hint_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_GRAVITY:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_GRAVITY, value, &val, error))
+        attribute = pango2_attr_gravity_new (g_value_get_enum (&val));
       break;
-      /* PangoAttrString */
-    case PANGO_ATTR_FAMILY:
-      attribute = pango_attr_family_new (value);
+    case PANGO2_ATTR_GRAVITY_HINT:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_GRAVITY_HINT, value, &val, error))
+        attribute = pango2_attr_gravity_hint_new (g_value_get_enum (&val));
+      break;
+    case PANGO2_ATTR_FAMILY:
+      attribute = pango2_attr_family_new (value);
       g_value_init (&val, G_TYPE_INT);
       break;
 
-      /* PangoAttrSize */
-    case PANGO_ATTR_SIZE:
+    case PANGO2_ATTR_SIZE:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
-        attribute = pango_attr_size_new (g_value_get_int (&val));
+        attribute = pango2_attr_size_new (g_value_get_int (&val));
       break;
-    case PANGO_ATTR_ABSOLUTE_SIZE:
+    case PANGO2_ATTR_ABSOLUTE_SIZE:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
-        attribute = pango_attr_size_new_absolute (g_value_get_int (&val));
+        attribute = pango2_attr_size_new_absolute (g_value_get_int (&val));
       break;
 
-      /* PangoAttrFontDesc */
-    case PANGO_ATTR_FONT_DESC:
-      if ((font_desc = pango_font_description_from_string (value)))
+    case PANGO2_ATTR_FONT_DESC:
+      if ((font_desc = pango2_font_description_from_string (value)))
         {
-          attribute = pango_attr_font_desc_new (font_desc);
-          pango_font_description_free (font_desc);
+          attribute = pango2_attr_font_desc_new (font_desc);
+          pango2_font_description_free (font_desc);
           g_value_init (&val, G_TYPE_INT);
         }
       break;
-      /* PangoAttrColor */
-    case PANGO_ATTR_FOREGROUND:
+    case PANGO2_ATTR_FOREGROUND:
       if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
         {
           color = g_value_get_boxed (&val);
-          attribute = pango_attr_foreground_new (color->red * 65535,
-                                                 color->green * 65535,
-                                                 color->blue * 65535);
+          attribute = pango2_attr_foreground_new (&(Pango2Color){color->red * 65535,
+                                                               color->green * 65535,
+                                                               color->blue * 65535,
+                                                               color->alpha * 65535});
         }
       break;
-    case PANGO_ATTR_BACKGROUND:
+    case PANGO2_ATTR_BACKGROUND:
       if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
         {
           color = g_value_get_boxed (&val);
-          attribute = pango_attr_background_new (color->red * 65535,
-                                                 color->green * 65535,
-                                                 color->blue * 65535);
+          attribute = pango2_attr_background_new (&(Pango2Color){color->red * 65535,
+                                                               color->green * 65535,
+                                                               color->blue * 65535,
+                                                               color->alpha * 65535});
         }
       break;
-    case PANGO_ATTR_UNDERLINE_COLOR:
+    case PANGO2_ATTR_UNDERLINE_COLOR:
       if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
         {
           color = g_value_get_boxed (&val);
-          attribute = pango_attr_underline_color_new (color->red * 65535,
-                                                      color->green * 65535,
-                                                      color->blue * 65535);
+          attribute = pango2_attr_underline_color_new (&(Pango2Color){color->red * 65535,
+                                                                    color->green * 65535,
+                                                                    color->blue * 65535,
+                                                                    color->alpha * 65535});
         }
       break;
-    case PANGO_ATTR_STRIKETHROUGH_COLOR:
+    case PANGO2_ATTR_STRIKETHROUGH_COLOR:
       if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
         {
           color = g_value_get_boxed (&val);
-          attribute = pango_attr_strikethrough_color_new (color->red * 65535,
-                                                          color->green * 65535,
-                                                          color->blue * 65535);
+          attribute = pango2_attr_strikethrough_color_new (&(Pango2Color){color->red * 65535,
+                                                                        color->green * 65535,
+                                                                        color->blue * 65535,
+                                                                        color->alpha * 65535});
         }
       break;
-      /* PangoAttrShape */
-    case PANGO_ATTR_SHAPE:
-      /* Unsupported for now */
-      break;
-      /* PangoAttrFloat */
-    case PANGO_ATTR_SCALE:
+      /* Pango2AttrFloat */
+    case PANGO2_ATTR_SCALE:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_DOUBLE, value, &val, error))
-        attribute = pango_attr_scale_new (g_value_get_double (&val));
+        attribute = pango2_attr_scale_new (g_value_get_double (&val));
       break;
-    case PANGO_ATTR_LETTER_SPACING:
+    case PANGO2_ATTR_LETTER_SPACING:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
-        attribute = pango_attr_letter_spacing_new (g_value_get_int (&val));
+        attribute = pango2_attr_letter_spacing_new (g_value_get_int (&val));
       break;
-    case PANGO_ATTR_RISE:
+    case PANGO2_ATTR_RISE:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
-        attribute = pango_attr_rise_new (g_value_get_int (&val));
+        attribute = pango2_attr_rise_new (g_value_get_int (&val));
       break;
-    case PANGO_ATTR_FALLBACK:
+    case PANGO2_ATTR_FALLBACK:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
-        attribute = pango_attr_fallback_new (g_value_get_boolean (&val));
+        attribute = pango2_attr_fallback_new (g_value_get_boolean (&val));
       break;
-    case PANGO_ATTR_FONT_FEATURES:
-      attribute = pango_attr_font_features_new (value);
+    case PANGO2_ATTR_FONT_FEATURES:
+      attribute = pango2_attr_font_features_new (value);
       break;
-    case PANGO_ATTR_FOREGROUND_ALPHA:
-      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
-        attribute = pango_attr_foreground_alpha_new ((guint16)g_value_get_int (&val));
+    case PANGO2_ATTR_PALETTE:
+      attribute = pango2_attr_palette_new (value);
       break;
-    case PANGO_ATTR_BACKGROUND_ALPHA:
-      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
-        attribute = pango_attr_background_alpha_new ((guint16)g_value_get_int (&val));
-      break;
-    case PANGO_ATTR_ALLOW_BREAKS:
+    case PANGO2_ATTR_ALLOW_BREAKS:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
-        attribute = pango_attr_allow_breaks_new (g_value_get_boolean (&val));
+        attribute = pango2_attr_allow_breaks_new (g_value_get_boolean (&val));
       break;
-    case PANGO_ATTR_SHOW:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_SHOW_FLAGS, value, &val, error))
-        attribute = pango_attr_show_new (g_value_get_flags (&val));
+    case PANGO2_ATTR_SHOW:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_SHOW_FLAGS, value, &val, error))
+        attribute = pango2_attr_show_new (g_value_get_flags (&val));
       break;
-    case PANGO_ATTR_INSERT_HYPHENS:
+    case PANGO2_ATTR_INSERT_HYPHENS:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
-        attribute = pango_attr_insert_hyphens_new (g_value_get_boolean (&val));
+        attribute = pango2_attr_insert_hyphens_new (g_value_get_boolean (&val));
       break;
-    case PANGO_ATTR_OVERLINE:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_OVERLINE, value, &val, NULL))
-        attribute = pango_attr_overline_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_OVERLINE:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_LINE_STYLE, value, &val, NULL))
+        attribute = pango2_attr_overline_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_OVERLINE_COLOR:
+    case PANGO2_ATTR_OVERLINE_COLOR:
       if (gtk_builder_value_from_string_type (builder, GDK_TYPE_RGBA, value, &val, error))
         {
           color = g_value_get_boxed (&val);
-          attribute = pango_attr_overline_color_new (color->red * 65535,
-                                                     color->green * 65535,
-                                                     color->blue * 65535);
+          attribute = pango2_attr_overline_color_new (&(Pango2Color){color->red * 65535,
+                                                                   color->green * 65535,
+                                                                   color->blue * 65535,
+                                                                   color->alpha * 65535});
         }
       break;
-    case PANGO_ATTR_LINE_HEIGHT:
+    case PANGO2_ATTR_LINE_HEIGHT:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_DOUBLE, value, &val, error))
-        attribute = pango_attr_line_height_new (g_value_get_double (&val));
+        attribute = pango2_attr_line_height_new (g_value_get_double (&val));
       break;
-    case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
+    case PANGO2_ATTR_ABSOLUTE_LINE_HEIGHT:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
-        attribute = pango_attr_line_height_new_absolute (g_value_get_int (&val) * PANGO_SCALE);
+        attribute = pango2_attr_line_height_new_absolute (g_value_get_int (&val) * PANGO2_SCALE);
       break;
-    case PANGO_ATTR_TEXT_TRANSFORM:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_TEXT_TRANSFORM, value, &val, error))
-        attribute = pango_attr_text_transform_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_LINE_SPACING:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango2_attr_line_spacing_new (g_value_get_int (&val) * PANGO2_SCALE);
       break;
-    case PANGO_ATTR_WORD:
-      attribute = pango_attr_word_new ();
+    case PANGO2_ATTR_TEXT_TRANSFORM:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_TEXT_TRANSFORM, value, &val, error))
+        attribute = pango2_attr_text_transform_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_SENTENCE:
-      attribute = pango_attr_sentence_new ();
+    case PANGO2_ATTR_WORD:
+      attribute = pango2_attr_word_new ();
       break;
-    case PANGO_ATTR_BASELINE_SHIFT:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_BASELINE_SHIFT, value, &val, NULL))
-        attribute = pango_attr_baseline_shift_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_SENTENCE:
+      attribute = pango2_attr_sentence_new ();
+      break;
+    case PANGO2_ATTR_PARAGRAPH:
+      attribute = pango2_attr_paragraph_new ();
+      break;
+    case PANGO2_ATTR_BASELINE_SHIFT:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_BASELINE_SHIFT, value, &val, NULL))
+        attribute = pango2_attr_baseline_shift_new (g_value_get_enum (&val));
       else if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, NULL))
-        attribute = pango_attr_baseline_shift_new (g_value_get_enum (&val));
+        attribute = pango2_attr_baseline_shift_new (g_value_get_enum (&val));
       else
         g_set_error (error,
                      GTK_BUILDER_ERROR,
                      GTK_BUILDER_ERROR_INVALID_VALUE,
                      "Could not parse '%s' as baseline shift value", value);
       break;
-    case PANGO_ATTR_FONT_SCALE:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_FONT_SCALE, value, &val, error))
-        attribute = pango_attr_font_scale_new (g_value_get_enum (&val));
+    case PANGO2_ATTR_FONT_SCALE:
+      if (gtk_builder_value_from_string_type (builder, PANGO2_TYPE_FONT_SCALE, value, &val, error))
+        attribute = pango2_attr_font_scale_new (g_value_get_enum (&val));
       break;
-    case PANGO_ATTR_INVALID:
+    case PANGO2_ATTR_INVALID:
+    case PANGO2_ATTR_SHAPE:
     default:
       break;
     }
@@ -304,7 +298,7 @@ gtk_pango_attribute_start_element (GtkBuildableParseContext  *context,
 
   if (strcmp (element_name, "attribute") == 0)
     {
-      PangoAttribute *attr = NULL;
+      Pango2Attribute *attr = NULL;
       const char *name = NULL;
       const char *value = NULL;
       const char *start = NULL;
@@ -356,13 +350,12 @@ gtk_pango_attribute_start_element (GtkBuildableParseContext  *context,
           return;
         }
 
-      attr->start_index = start_val;
-      attr->end_index = end_val;
+      pango2_attribute_set_range (attr, start_val, end_val);
 
       if (!data->attrs)
-        data->attrs = pango_attr_list_new ();
+        data->attrs = pango2_attr_list_new ();
 
-      pango_attr_list_insert (data->attrs, attr);
+      pango2_attr_list_insert (data->attrs, attr);
     }
   else if (strcmp (element_name, "attributes") == 0)
     {

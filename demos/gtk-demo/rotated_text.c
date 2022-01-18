@@ -1,9 +1,9 @@
-/* Pango/Rotated Text
+/* Pango2/Rotated Text
  *
- * This demo shows how to use PangoCairo to draw rotated and transformed
+ * This demo shows how to use Pango2Cairo to draw rotated and transformed
  * text. The right pane shows a rotated GtkLabel widget.
  *
- * In both cases, a custom PangoCairo shape renderer is installed to draw
+ * In both cases, a custom Pango2Cairo shape renderer is installed to draw
  * a red heart using cairo drawing operations instead of the Unicode heart
  * character.
  */
@@ -14,75 +14,118 @@
 #define HEART "♥"
 const char text[] = "I ♥ GTK";
 
-static void
-fancy_shape_renderer (cairo_t        *cr,
-                      PangoAttrShape *attr,
-                      gboolean        do_path,
-                      gpointer        data)
+static gboolean
+glyph_cb (Pango2UserFace  *face,
+          hb_codepoint_t  unicode,
+          hb_codepoint_t *glyph,
+          gpointer        data)
 {
-  double x, y;
-  cairo_get_current_point (cr, &x, &y);
-  cairo_translate (cr, x, y);
-
-  cairo_scale (cr,
-               (double) attr->ink_rect.width  / PANGO_SCALE,
-               (double) attr->ink_rect.height / PANGO_SCALE);
-
-  if (GPOINTER_TO_UINT (attr->data) == 0x2665) /* U+2665 BLACK HEART SUIT */
+  if (unicode == 0x2665)
     {
+      *glyph = 0x2665;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+glyph_info_cb (Pango2UserFace      *face,
+               int                 size,
+               hb_codepoint_t      glyph,
+               hb_glyph_extents_t *extents,
+               hb_position_t      *h_advance,
+               hb_position_t      *v_advance,
+               gboolean           *is_color,
+               gpointer            user_data)
+{
+  if (glyph == 0x2665)
+    {
+      extents->x_bearing = 0;
+      extents->y_bearing = size;
+      extents->width = size;
+      extents->height = - size;
+
+      *h_advance = size;
+      *v_advance = size;
+      *is_color = TRUE;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+font_info_cb (Pango2UserFace     *face,
+              int                size,
+              hb_font_extents_t *extents,
+              gpointer           user_data)
+{
+  extents->ascender = size;
+  extents->descender = 0;
+  extents->line_gap = 0;
+
+  return TRUE;
+}
+
+static gboolean
+render_cb (Pango2UserFace  *face,
+           int             size,
+           hb_codepoint_t  glyph,
+           gpointer        user_data,
+           const char     *backend_id,
+           gpointer        backend_data)
+{
+  cairo_t *cr;
+
+  if (strcmp (backend_id, "cairo") != 0)
+    {
+      g_warning ("Unsupported Pango2Renderer backend %s", backend_id);
+      return FALSE;
+    }
+
+  cr = backend_data;
+
+  if (glyph == 0x2665)
+    {
+      cairo_set_source_rgb (cr, 1., 0., 0.);
+
       cairo_move_to (cr, .5, .0);
       cairo_line_to (cr, .9, -.4);
       cairo_curve_to (cr, 1.1, -.8, .5, -.9, .5, -.5);
       cairo_curve_to (cr, .5, -.9, -.1, -.8, .1, -.4);
       cairo_close_path (cr);
+      cairo_fill (cr);
+
+      return TRUE;
     }
 
-  if (!do_path)
-    {
-      cairo_set_source_rgb (cr, 1., 0., 0.);
-      cairo_fill (cr);
-    }
+  return FALSE;
 }
 
-static PangoAttrList *
-create_fancy_attr_list_for_layout (PangoLayout *layout)
+static void
+setup_fontmap (void)
 {
-  PangoAttrList *attrs;
-  PangoFontMetrics *metrics;
-  int ascent;
-  PangoRectangle ink_rect, logical_rect;
-  const char *p;
+  Pango2FontMap *fontmap = pango2_font_map_get_default ();
+  Pango2FontDescription *desc;
+  Pango2UserFace *face;
 
-  /* Get font metrics and prepare fancy shape size */
-  metrics = pango_context_get_metrics (pango_layout_get_context (layout),
-                                       pango_layout_get_font_description (layout),
-                                       NULL);
-  ascent = pango_font_metrics_get_ascent (metrics);
-  logical_rect.x = 0;
-  logical_rect.width = ascent;
-  logical_rect.y = -ascent;
-  logical_rect.height = ascent;
-  ink_rect = logical_rect;
-  pango_font_metrics_unref (metrics);
+  desc = pango2_font_description_new ();
+  pango2_font_description_set_family (desc, "Bullets");
 
-  /* Set fancy shape attributes for all hearts */
-  attrs = pango_attr_list_new ();
-  for (p = text; (p = strstr (p, HEART)); p += strlen (HEART))
-    {
-      PangoAttribute *attr;
+  /* Create our fancy user font, "Bullets Black" */
+  face = pango2_user_face_new (font_info_cb,
+                              glyph_cb,
+                              glyph_info_cb,
+                              NULL,
+                              render_cb,
+                              NULL, NULL, "Black", desc);
 
-      attr = pango_attr_shape_new_with_data (&ink_rect,
-                                             &logical_rect,
-                                             GUINT_TO_POINTER (g_utf8_get_char (p)),
-                                             NULL, NULL);
+  /* And add it to the default fontmap */
+  pango2_font_map_add_face (fontmap, PANGO2_FONT_FACE (face));
 
-      attr->start_index = p - text;
-      attr->end_index = attr->start_index + strlen (HEART);
-
-      pango_attr_list_insert (attrs, attr);
-    }
-
-  return attrs;
+  pango2_font_description_free (desc);
 }
 
 static void
@@ -94,16 +137,12 @@ rotated_text_draw (GtkDrawingArea *da,
 {
 #define RADIUS 150
 #define N_WORDS 5
-#define FONT "Serif 18"
+#define FONT "Bullets 18"
 
-  PangoContext *context;
-  PangoLayout *layout;
-  PangoFontDescription *desc;
-
+  Pango2Context *context;
+  Pango2Layout *layout;
+  Pango2FontDescription *desc;
   cairo_pattern_t *pattern;
-
-  PangoAttrList *attrs;
-
   double device_radius;
   int i;
 
@@ -123,40 +162,34 @@ rotated_text_draw (GtkDrawingArea *da,
   cairo_pattern_add_color_stop_rgb (pattern, 1., .0, .0, .5);
   cairo_set_source (cr, pattern);
 
-  /* Create a PangoContext and set up our shape renderer */
+  /* Create a Pango2Context and set up our shape renderer */
   context = gtk_widget_create_pango_context (GTK_WIDGET (da));
-  pango_cairo_context_set_shape_renderer (context,
-                                          fancy_shape_renderer,
-                                          NULL, NULL);
 
-  /* Create a PangoLayout, set the text, font, and attributes */
-  layout = pango_layout_new (context);
-  pango_layout_set_text (layout, text, -1);
-  desc = pango_font_description_from_string (FONT);
-  pango_layout_set_font_description (layout, desc);
-
-  attrs = create_fancy_attr_list_for_layout (layout);
-  pango_layout_set_attributes (layout, attrs);
-  pango_attr_list_unref (attrs);
+  /* Create a Pango2Layout, set the text, font, and attributes */
+  layout = pango2_layout_new (context);
+  pango2_layout_set_text (layout, text, -1);
+  desc = pango2_font_description_from_string (FONT);
+  pango2_layout_set_font_description (layout, desc);
 
   /* Draw the layout N_WORDS times in a circle */
   for (i = 0; i < N_WORDS; i++)
     {
-      int layout_width, layout_height;
+      Pango2Rectangle ext;
 
-      /* Inform Pango to re-layout the text with the new transformation matrix */
-      pango_cairo_update_layout (cr, layout);
+      /* Inform Pango2 to re-layout the text with the new transformation matrix */
+      pango2_cairo_update_layout (cr, layout);
 
-      pango_layout_get_pixel_size (layout, &layout_width, &layout_height);
-      cairo_move_to (cr, - layout_width / 2, - RADIUS * .9);
-      pango_cairo_show_layout (cr, layout);
+      pango2_lines_get_extents (pango2_layout_get_lines (layout), NULL, &ext);
+      pango2_extents_to_pixels (&ext, NULL);
+      cairo_move_to (cr, - ext.width / 2, - RADIUS * .9);
+      pango2_cairo_show_layout (cr, layout);
 
       /* Rotate for the next turn */
       cairo_rotate (cr, G_PI*2 / N_WORDS);
     }
 
   /* free the objects we created */
-  pango_font_description_free (desc);
+  pango2_font_description_free (desc);
   g_object_unref (layout);
   g_object_unref (context);
   cairo_pattern_destroy (pattern);
@@ -172,8 +205,10 @@ do_rotated_text (GtkWidget *do_widget)
       GtkWidget *box;
       GtkWidget *drawing_area;
       GtkWidget *label;
-      PangoLayout *layout;
-      PangoAttrList *attrs;
+      Pango2Attribute *attr;
+      Pango2AttrList *attrs;
+
+      setup_fontmap ();
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
@@ -197,16 +232,12 @@ do_rotated_text (GtkWidget *do_widget)
 
       /* And a label */
       label = gtk_label_new (text);
-      gtk_box_append (GTK_BOX (box), label);
-
-      /* Set up fancy stuff on the label */
-      layout = gtk_label_get_layout (GTK_LABEL (label));
-      pango_cairo_context_set_shape_renderer (pango_layout_get_context (layout),
-                                              fancy_shape_renderer,
-                                              NULL, NULL);
-      attrs = create_fancy_attr_list_for_layout (layout);
+      attrs = pango2_attr_list_new ();
+      attr = pango2_attr_font_desc_new (pango2_font_description_from_string (FONT));
+      pango2_attr_list_insert (attrs, attr);
       gtk_label_set_attributes (GTK_LABEL (label), attrs);
-      pango_attr_list_unref (attrs);
+      pango2_attr_list_unref (attrs);
+      gtk_box_append (GTK_BOX (box), label);
     }
 
   if (!gtk_widget_get_visible (window))

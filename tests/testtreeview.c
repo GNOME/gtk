@@ -584,7 +584,7 @@ create_tree_model (void)
   g_type_class_unref (g_type_class_ref (gtk_scrolled_window_get_type ()));
   g_type_class_unref (g_type_class_ref (gtk_label_get_type ()));
   g_type_class_unref (g_type_class_ref (gtk_scrollbar_get_type ()));
-  g_type_class_unref (g_type_class_ref (pango_layout_get_type ()));
+  g_type_class_unref (g_type_class_ref (pango2_layout_get_type ()));
 
   t = get_model_types ();
   

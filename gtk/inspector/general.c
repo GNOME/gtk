@@ -527,13 +527,13 @@ init_vulkan (GtkInspectorGeneral *gen)
 static void
 set_monospace_font (GtkWidget *w)
 {
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
 
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_fallback_new (FALSE));
-  pango_attr_list_insert (attrs, pango_attr_family_new ("Monospace"));
+  attrs = pango2_attr_list_new ();
+  pango2_attr_list_insert (attrs, pango2_attr_fallback_new (FALSE));
+  pango2_attr_list_insert (attrs, pango2_attr_family_new ("Monospace"));
   gtk_label_set_attributes (GTK_LABEL (w), attrs);
-  pango_attr_list_unref (attrs);
+  pango2_attr_list_unref (attrs);
 }
 
 static void
@@ -737,17 +737,17 @@ init_display (GtkInspectorGeneral *gen)
 static void
 init_pango (GtkInspectorGeneral *gen)
 {
-  PangoFontMap *fontmap;
+  Pango2FontMap *fontmap;
   const char *type;
   const char *name;
 
-  fontmap = pango_cairo_font_map_get_default ();
+  fontmap = pango2_font_map_get_default ();
   type = G_OBJECT_TYPE_NAME (fontmap);
-  if (strcmp (type, "PangoCairoFcFontMap") == 0)
+  if (strcmp (type, "Pango2FcFontMap") == 0)
     name = "fontconfig";
-  else if (strcmp (type, "PangoCairoCoreTextFontMap") == 0)
+  else if (strcmp (type, "Pango2CoreTextFontMap") == 0)
     name = "coretext";
-  else if (strcmp (type, "PangoCairoWin32FontMap") == 0)
+  else if (strcmp (type, "Pango2DirectWriteFontMap") == 0)
     name = "win32";
   else
     name = type;

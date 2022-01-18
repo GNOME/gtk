@@ -140,21 +140,21 @@
  * The `GtkEntry` implementation of the `GtkBuildable` interface supports a
  * custom <attributes> element, which supports any number of <attribute>
  * elements. The <attribute> element has attributes named “name“, “value“,
- * “start“ and “end“ and allows you to specify `PangoAttribute` values for
+ * “start“ and “end“ and allows you to specify `Pango2Attribute` values for
  * this label.
  *
- * An example of a UI definition fragment specifying Pango attributes:
+ * An example of a UI definition fragment specifying Pango2 attributes:
  * ```xml
  * <object class="GtkEntry">
  *   <attributes>
- *     <attribute name="weight" value="PANGO_WEIGHT_BOLD"/>
+ *     <attribute name="weight" value="PANGO2_WEIGHT_BOLD"/>
  *     <attribute name="background" value="red" start="5" end="10"/>
  *   </attributes>
  * </object>
  * ```
  *
  * The start and end attributes specify the range of characters to which the
- * Pango attribute applies. If start and end are not specified, the attribute
+ * Pango2 attribute applies. If start and end are not specified, the attribute
  * is applied to the whole text. Note that specifying ranges does not make much
  * sense with translatable attributes. Use markup embedded in the translatable
  * content instead.
@@ -414,7 +414,7 @@ gtk_entry_buildable_custom_finished (GtkBuildable *buildable,
       if (data->attrs)
         {
           gtk_entry_set_attributes (GTK_ENTRY (buildable), data->attrs);
-          pango_attr_list_unref (data->attrs);
+          pango2_attr_list_unref (data->attrs);
         }
 
       g_object_unref (data->object);
@@ -885,16 +885,16 @@ gtk_entry_class_init (GtkEntryClass *class)
   /**
    * GtkEntry:attributes: (attributes org.gtk.Property.get=gtk_entry_get_attributes org.gtk.Property.set=gtk_entry_set_attributes)
    *
-   * A list of Pango attributes to apply to the text of the entry.
+   * A list of Pango2 attributes to apply to the text of the entry.
    *
    * This is mainly useful to change the size or weight of the text.
    *
-   * The `PangoAttribute`'s @start_index and @end_index must refer to the
+   * The `Pango2Attribute`'s @start_index and @end_index must refer to the
    * [class@Gtk.EntryBuffer] text, i.e. without the preedit string.
    */
   entry_props[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes", NULL, NULL,
-                          PANGO_TYPE_ATTR_LIST,
+                          PANGO2_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -904,7 +904,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    */
   entry_props[PROP_TABS] =
       g_param_spec_boxed ("tabs", NULL, NULL,
-                          PANGO_TYPE_TAB_ARRAY,
+                          PANGO2_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -3017,7 +3017,7 @@ gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
     return NULL;
  
   if (icon_info->tooltip && 
-      !pango_parse_markup (icon_info->tooltip, -1, 0, NULL, &text, NULL, NULL))
+      !pango2_parse_markup (icon_info->tooltip, -1, 0, NULL, &text, NULL, NULL))
     g_assert (NULL == text); /* text should still be NULL in case of markup errors */
 
   return text;
@@ -3116,7 +3116,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
  * Sets @tooltip as the contents of the tooltip for the icon at
  * the specified position.
  *
- * @tooltip is assumed to be marked up with Pango Markup.
+ * @tooltip is assumed to be marked up with Pango2 Markup.
  *
  * Use %NULL for @tooltip to remove an existing tooltip.
  *
@@ -3537,9 +3537,9 @@ gtk_entry_get_input_hints (GtkEntry *entry)
 /**
  * gtk_entry_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @entry: a `GtkEntry`
- * @attrs: a `PangoAttrList`
+ * @attrs: a `Pango2AttrList`
  *
- * Sets a `PangoAttrList`.
+ * Sets a `Pango2AttrList`.
  *
  * The attributes in the list are applied to the entry text.
  *
@@ -3549,7 +3549,7 @@ gtk_entry_get_input_hints (GtkEntry *entry)
  */
 void
 gtk_entry_set_attributes (GtkEntry      *entry,
-                          PangoAttrList *attrs)
+                          Pango2AttrList *attrs)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
@@ -3568,7 +3568,7 @@ gtk_entry_set_attributes (GtkEntry      *entry,
  *
  * Returns: (transfer none) (nullable): the attribute list
  */
-PangoAttrList *
+Pango2AttrList *
 gtk_entry_get_attributes (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
@@ -3581,16 +3581,16 @@ gtk_entry_get_attributes (GtkEntry *entry)
 /**
  * gtk_entry_set_tabs: (attributes org.gtk.Method.set_property=tabs)
  * @entry: a `GtkEntry`
- * @tabs: (nullable): a `PangoTabArray`
+ * @tabs: (nullable): a `Pango2TabArray`
  *
- * Sets a `PangoTabArray`.
+ * Sets a `Pango2TabArray`.
  *
  * The tabstops in the array are applied to the entry text.
  */
 
 void
 gtk_entry_set_tabs (GtkEntry      *entry,
-                    PangoTabArray *tabs)
+                    Pango2TabArray *tabs)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
@@ -3610,7 +3610,7 @@ gtk_entry_set_tabs (GtkEntry      *entry,
  * Returns: (nullable) (transfer none): the tabstops
  */
 
-PangoTabArray *
+Pango2TabArray *
 gtk_entry_get_tabs (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);

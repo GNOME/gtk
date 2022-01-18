@@ -90,10 +90,10 @@ _gdk_broadway_display_get_keymap (GdkDisplay *display)
   return broadway_display->keymap;
 }
 
-static PangoDirection
+static Pango2Direction
 gdk_broadway_keymap_get_direction (GdkKeymap *keymap)
 {
-  return PANGO_DIRECTION_NEUTRAL;
+  return PANGO2_DIRECTION_NEUTRAL;
 }
 
 static gboolean

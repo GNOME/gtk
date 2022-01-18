@@ -55,6 +55,7 @@ gsk_gl_glyph_key_hash (gconstpointer data)
    */
 
   return GPOINTER_TO_UINT (key->font) ^
+         key->palette ^
          key->glyph ^
          (key->xshift << 24) ^
          (key->yshift << 26) ^
@@ -215,8 +216,8 @@ render_glyph (cairo_surface_t           *surface,
               const GskGLGlyphValue     *value)
 {
   cairo_t *cr;
-  PangoGlyphString glyph_string;
-  PangoGlyphInfo glyph_info;
+  Pango2GlyphString glyph_string;
+  Pango2GlyphInfo glyph_info;
 
   g_assert (surface != NULL);
 
@@ -231,7 +232,7 @@ render_glyph (cairo_surface_t           *surface,
   glyph_string.num_glyphs = 1;
   glyph_string.glyphs = &glyph_info;
 
-  pango_cairo_show_glyph_string (cr, key->font, &glyph_string);
+  pango2_cairo_show_color_glyph_string (cr, key->font, key->palette, &glyph_string);
   cairo_destroy (cr);
 
   cairo_surface_flush (surface);
@@ -323,7 +324,7 @@ gsk_gl_glyph_library_add (GskGLGlyphLibrary      *self,
                           const GskGLGlyphValue **out_value)
 {
   GskGLTextureLibrary *tl = (GskGLTextureLibrary *)self;
-  PangoRectangle ink_rect;
+  Pango2Rectangle ink_rect;
   GskGLGlyphValue *value;
   int width;
   int height;
@@ -334,8 +335,8 @@ gsk_gl_glyph_library_add (GskGLGlyphLibrary      *self,
   g_assert (key != NULL);
   g_assert (out_value != NULL);
 
-  pango_font_get_glyph_extents (key->font, key->glyph, &ink_rect, NULL);
-  pango_extents_to_pixels (&ink_rect, NULL);
+  pango2_font_get_glyph_extents (key->font, key->glyph, &ink_rect, NULL);
+  pango2_extents_to_pixels (&ink_rect, NULL);
 
   ink_rect.x -= 1;
   ink_rect.width += 2;

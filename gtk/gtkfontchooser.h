@@ -31,8 +31,8 @@ G_BEGIN_DECLS
 
 /**
  * GtkFontFilterFunc:
- * @family: a `PangoFontFamily`
- * @face: a `PangoFontFace` belonging to @family
+ * @family: a `Pango2FontFamily`
+ * @face: a `Pango2FontFace` belonging to @family
  * @data: (closure): user data passed to gtk_font_chooser_set_filter_func()
  *
  * The type of function that is used for deciding what fonts get
@@ -42,8 +42,8 @@ G_BEGIN_DECLS
  *
  * Returns: %TRUE if the font should be displayed
  */
-typedef gboolean (*GtkFontFilterFunc) (const PangoFontFamily *family,
-                                       const PangoFontFace   *face,
+typedef gboolean (*GtkFontFilterFunc) (const Pango2FontFamily *family,
+                                       const Pango2FontFace   *face,
                                        gpointer               data);
 
 /**
@@ -81,8 +81,8 @@ struct _GtkFontChooserIface
   GTypeInterface base_iface;
 
   /* Methods */
-  PangoFontFamily * (* get_font_family)         (GtkFontChooser  *fontchooser);
-  PangoFontFace *   (* get_font_face)           (GtkFontChooser  *fontchooser);
+  Pango2FontFamily * (* get_font_family)         (GtkFontChooser  *fontchooser);
+  Pango2FontFace *   (* get_font_face)           (GtkFontChooser  *fontchooser);
   int               (* get_font_size)           (GtkFontChooser  *fontchooser);
 
   void              (* set_filter_func)         (GtkFontChooser   *fontchooser,
@@ -96,8 +96,8 @@ struct _GtkFontChooserIface
 
   /* More methods */
   void              (* set_font_map)            (GtkFontChooser   *fontchooser,
-                                                 PangoFontMap     *fontmap);
-  PangoFontMap *    (* get_font_map)            (GtkFontChooser   *fontchooser);
+                                                 Pango2FontMap     *fontmap);
+  Pango2FontMap *    (* get_font_map)            (GtkFontChooser   *fontchooser);
 
   /*< private >*/
   /* Padding; remove in GTK-next */
@@ -108,18 +108,18 @@ GDK_AVAILABLE_IN_ALL
 GType            gtk_font_chooser_get_type                 (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
-PangoFontFamily *gtk_font_chooser_get_font_family          (GtkFontChooser   *fontchooser);
+Pango2FontFamily *gtk_font_chooser_get_font_family          (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
-PangoFontFace   *gtk_font_chooser_get_font_face            (GtkFontChooser   *fontchooser);
+Pango2FontFace   *gtk_font_chooser_get_font_face            (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
 int              gtk_font_chooser_get_font_size            (GtkFontChooser   *fontchooser);
 
 GDK_AVAILABLE_IN_ALL
-PangoFontDescription *
+Pango2FontDescription *
                  gtk_font_chooser_get_font_desc            (GtkFontChooser             *fontchooser);
 GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_font_desc            (GtkFontChooser             *fontchooser,
-                                                            const PangoFontDescription *font_desc);
+                                                            const Pango2FontDescription *font_desc);
 
 GDK_AVAILABLE_IN_ALL
 char *           gtk_font_chooser_get_font                 (GtkFontChooser   *fontchooser);
@@ -144,9 +144,9 @@ void             gtk_font_chooser_set_filter_func          (GtkFontChooser   *fo
                                                             GDestroyNotify    destroy);
 GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_font_map             (GtkFontChooser   *fontchooser,
-                                                            PangoFontMap     *fontmap);
+                                                            Pango2FontMap     *fontmap);
 GDK_AVAILABLE_IN_ALL
-PangoFontMap *   gtk_font_chooser_get_font_map             (GtkFontChooser   *fontchooser);
+Pango2FontMap *   gtk_font_chooser_get_font_map             (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_level                (GtkFontChooser   *fontchooser,
                                                             GtkFontChooserLevel level);

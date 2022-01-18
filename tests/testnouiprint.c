@@ -27,8 +27,8 @@ draw_page (GtkPrintOperation *operation,
 	   int page_nr)
 {
   cairo_t *cr;
-  PangoLayout *layout;
-  PangoFontDescription *desc;
+  Pango2Layout *layout;
+  Pango2FontDescription *desc;
   
   cr = gtk_print_context_get_cairo_context (context);
 
@@ -54,13 +54,13 @@ draw_page (GtkPrintOperation *operation,
   /* Draw some text */
   
   layout = gtk_print_context_create_pango_layout (context);
-  pango_layout_set_text (layout, "Hello World! Printing is easy", -1);
-  desc = pango_font_description_from_string ("sans 28");
-  pango_layout_set_font_description (layout, desc);
-  pango_font_description_free (desc);
+  pango2_layout_set_text (layout, "Hello World! Printing is easy", -1);
+  desc = pango2_font_description_from_string ("sans 28");
+  pango2_layout_set_font_description (layout, desc);
+  pango2_font_description_free (desc);
 
   cairo_move_to (cr, 30, 20);
-  pango_cairo_layout_path (cr, layout);
+  pango2_cairo_layout_path (cr, layout);
 
   /* Font Outline */
   cairo_set_source_rgb (cr, 0.93, 1.0, 0.47);

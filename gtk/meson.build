@@ -1172,10 +1172,6 @@ if x11_enabled or wayland_enabled
   gtk_sources += gtk_use_wayland_or_x11_c_sources
 endif
 
-if pangoft_dep.found()
-  gtk_deps += pangoft_dep
-endif
-
 if macos_enabled
   gtk_macos_frameworks = [
     'AppKit',
@@ -1255,7 +1251,7 @@ if build_gir
     '--quiet',
   ]
 
-  gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'PangoCairo-1.0' ]
+  gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango2-1.0' ]
 
   gdk_gir = gnome.generate_gir(libgtk,
     sources: gdk_public_headers + gdk_public_sources + [ gdkenum_h ],

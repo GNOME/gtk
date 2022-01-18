@@ -21,7 +21,7 @@
 #define __GTK_SHADOW_H__
 
 #include <cairo.h>
-#include <pango/pango.h>
+#include <pango2/pango.h>
 
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"

@@ -74,6 +74,7 @@ struct _GtkTextTagPrivate
   guint line_height_set : 1;
   guint tabs_set : 1;
   guint underline_set : 1;
+  guint underline_position_set : 1;
   guint overline_set : 1;
   guint wrap_mode_set : 1;
   guint bg_full_height_set : 1;

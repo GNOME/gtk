@@ -25,13 +25,13 @@
 #ifndef __GTK_PANGO_H__
 #define __GTK_PANGO_H__
 
-#include <pango/pangocairo.h>
+#include <pango2/pangocairo.h>
 #include  "gtkbuildable.h"
 
 G_BEGIN_DECLS
 
-PangoAttrList *_gtk_pango_attr_list_merge (PangoAttrList *into,
-                                           PangoAttrList *from) G_GNUC_WARN_UNUSED_RESULT;
+Pango2AttrList *_gtk_pango_attr_list_merge (Pango2AttrList *into,
+                                           Pango2AttrList *from) G_GNUC_WARN_UNUSED_RESULT;
 
 gboolean gtk_buildable_attribute_tag_start (GtkBuildable       *buildable,
                                             GtkBuilder         *builder,
@@ -43,7 +43,7 @@ gboolean gtk_buildable_attribute_tag_start (GtkBuildable       *buildable,
 typedef struct {
   GtkBuilder    *builder;
   GObject       *object;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
 } GtkPangoAttributeParserData;
 
 void

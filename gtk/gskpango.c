@@ -30,10 +30,10 @@
 
 #include <math.h>
 
-#include <pango/pango.h>
+#include <pango2/pango.h>
 #include <cairo.h>
 
-G_DEFINE_TYPE (GskPangoRenderer, gsk_pango_renderer, PANGO_TYPE_RENDERER)
+G_DEFINE_TYPE (GskPangoRenderer, gsk_pango_renderer, PANGO2_TYPE_RENDERER)
 
 void
 gsk_pango_renderer_set_state (GskPangoRenderer      *crenderer,
@@ -44,93 +44,84 @@ gsk_pango_renderer_set_state (GskPangoRenderer      *crenderer,
   crenderer->state = state;
 }
 
-void
-gsk_pango_renderer_set_shape_handler (GskPangoRenderer    *crenderer,
-                                      GskPangoShapeHandler handler)
-{
-  g_return_if_fail (GSK_IS_PANGO_RENDERER (crenderer));
-
-  crenderer->shape_handler = handler;
-}
-
 static void
 get_color (GskPangoRenderer *crenderer,
-           PangoRenderPart   part,
+           Pango2RenderPart   part,
            GdkRGBA          *rgba)
 {
-  const PangoColor *color = pango_renderer_get_color ((PangoRenderer *) (crenderer), part);
-  const guint16 a = pango_renderer_get_alpha ((PangoRenderer *) (crenderer), part);
+  const Pango2Color *color = pango2_renderer_get_color ((Pango2Renderer *) (crenderer), part);
 
   if (color)
     {
       rgba->red = color->red / 65535.;
       rgba->green = color->green / 65535.;
       rgba->blue = color->blue / 65535.;
-      rgba->alpha = a ? a  / 65535. : crenderer->fg_color->alpha;
+      rgba->alpha = color->alpha / 65535.;
     }
   else
     {
       *rgba = *crenderer->fg_color;
-      if (a)
-        rgba->alpha = a / 65535.;
     }
 }
 
 static void
 set_color (GskPangoRenderer *crenderer,
-           PangoRenderPart   part,
+           Pango2RenderPart   part,
            cairo_t          *cr)
 {
-  GdkRGBA rgba = { 0, 0, 0, 1 };
+  GdkRGBA rgba = { 1, 192./255., 203./255., 1 };
 
   get_color (crenderer, part, &rgba);
   gdk_cairo_set_source_rgba (cr, &rgba);
 }
 
 static void
-gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
-                                    const char     *text,
-                                    PangoGlyphItem *glyph_item,
-                                    int             x,
-                                    int             y)
+gsk_pango_renderer_draw_run (Pango2Renderer *renderer,
+                             const char    *text,
+                             Pango2Run      *run,
+                             int            x,
+                             int            y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  GdkRGBA color;
+  GdkRGBA color = { 0, 0, 0, 1 };
+  Pango2Item *item = pango2_run_get_item (run);
+  Pango2GlyphString *glyphs = pango2_run_get_glyphs (run);
 
-  get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
+  get_color (crenderer, PANGO2_RENDER_PART_FOREGROUND, &color);
 
   gtk_snapshot_append_text (crenderer->snapshot,
-                            glyph_item->item->analysis.font,
-                            glyph_item->glyphs,
+                            pango2_analysis_get_font (pango2_item_get_analysis (item)),
+                            crenderer->palette,
+                            glyphs,
                             &color,
-                            (float) x / PANGO_SCALE,
-                            (float) y / PANGO_SCALE);
+                            (float) x / PANGO2_SCALE,
+                            (float) y / PANGO2_SCALE);
 }
 
 static void
-gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
-                                   PangoRenderPart    part,
+gsk_pango_renderer_draw_rectangle (Pango2Renderer     *renderer,
+                                   Pango2RenderPart    part,
                                    int                x,
                                    int                y,
                                    int                width,
                                    int                height)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  GdkRGBA rgba;
+  GdkRGBA color = { 0, 0, 0, 1 };
 
-  get_color (crenderer, part, &rgba);
+  get_color (crenderer, part, &color);
 
   gtk_snapshot_append_color (crenderer->snapshot,
-                             &rgba,
-                             &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
-                                                  (double)y / PANGO_SCALE,
-                                                  (double)width / PANGO_SCALE,
-                                                  (double)height / PANGO_SCALE));
+                             &color,
+                             &GRAPHENE_RECT_INIT ((double)x / PANGO2_SCALE,
+                                                  (double)y / PANGO2_SCALE,
+                                                  (double)width / PANGO2_SCALE,
+                                                  (double)height / PANGO2_SCALE));
 }
 
 static void
-gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
-                                   PangoRenderPart  part,
+gsk_pango_renderer_draw_trapezoid (Pango2Renderer   *renderer,
+                                   Pango2RenderPart  part,
                                    double           y1_,
                                    double           x11,
                                    double           x21,
@@ -139,16 +130,17 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
                                    double           x22)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  PangoLayout *layout;
-  PangoRectangle ink_rect;
+  Pango2Lines *lines;
+  Pango2Rectangle ink_rect;
   cairo_t *cr;
   double x, y;
 
-  layout = pango_renderer_get_layout (renderer);
-  if (!layout)
+  lines = pango2_renderer_get_lines (renderer);
+  if (!lines)
     return;
 
-  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+  pango2_lines_get_extents (lines, &ink_rect, NULL);
+  pango2_extents_to_pixels (&ink_rect, NULL);
   cr = gtk_snapshot_append_cairo (crenderer->snapshot,
                                   &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
                                                        ink_rect.width, ink_rect.height));
@@ -170,8 +162,9 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
   cairo_destroy (cr);
 }
 
+#if 0
 static void
-gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
+gsk_pango_renderer_draw_error_underline (Pango2Renderer *renderer,
                                          int            x,
                                          int            y,
                                          int            width,
@@ -182,12 +175,12 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
   GdkRGBA rgba;
   GskRoundedRect dot;
 
-  xx = (double)x / PANGO_SCALE;
-  yy = (double)y / PANGO_SCALE;
-  ww = (double)width / PANGO_SCALE;
-  hh = (double)height / PANGO_SCALE;
+  xx = (double)x / PANGO2_SCALE;
+  yy = (double)y / PANGO2_SCALE;
+  ww = (double)width / PANGO2_SCALE;
+  hh = (double)height / PANGO2_SCALE;
 
-  get_color (crenderer, PANGO_RENDER_PART_UNDERLINE, &rgba);
+  get_color (crenderer, PANGO2_RENDER_PART_UNDERLINE, &rgba);
 
   gtk_snapshot_push_repeat (crenderer->snapshot,
                             &GRAPHENE_RECT_INIT (xx, yy, ww, hh),
@@ -206,25 +199,22 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
 
   gtk_snapshot_pop (crenderer->snapshot);
 }
+#endif
 
 static void
-gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
-                               PangoAttrShape *attr,
+gsk_pango_renderer_draw_shape (Pango2Renderer  *renderer,
+                               Pango2Rectangle *ink_rect,
+                               Pango2Rectangle *logical_rect,
+                               gpointer        data,
                                int             x,
                                int             y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  PangoLayout *layout;
-  PangoCairoShapeRendererFunc shape_renderer;
-  gpointer shape_renderer_data;
-  double base_x = (double)x / PANGO_SCALE;
-  double base_y = (double)y / PANGO_SCALE;
-  gboolean handled = FALSE;
 
   if (crenderer->shape_handler)
     {
-      double shape_x = base_x;
-      double shape_y = (double) (y + attr->logical_rect.y) / PANGO_SCALE;
+      double shape_x = (double)x / PANGO2_SCALE;
+      double shape_y = (double) (y + logical_rect->y) / PANGO2_SCALE;
 
       if (shape_x != 0 || shape_y != 0)
         {
@@ -232,82 +222,50 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
           gtk_snapshot_translate (crenderer->snapshot, &GRAPHENE_POINT_INIT (shape_x, shape_y));
         }
 
-      handled = crenderer->shape_handler (attr,
-                                          crenderer->snapshot,
-                                          (double)attr->logical_rect.width / PANGO_SCALE,
-                                          (double)attr->logical_rect.height / PANGO_SCALE);
+      crenderer->shape_handler (data,
+                                crenderer->snapshot,
+                                (double)logical_rect->width / PANGO2_SCALE,
+                                (double)logical_rect->height / PANGO2_SCALE);
       if (shape_x != 0 || shape_y != 0)
         gtk_snapshot_restore (crenderer->snapshot);
-    }
-
-  if (!handled)
-    {
-      cairo_t *cr;
-      PangoRectangle ink_rect;
-
-      layout = pango_renderer_get_layout (renderer);
-      if (!layout)
-        return;
-
-      pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
-      cr = gtk_snapshot_append_cairo (crenderer->snapshot,
-                                      &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
-                                                           ink_rect.width, ink_rect.height));
-      shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
-                                                               &shape_renderer_data);
-
-      if (!shape_renderer)
-        {
-          cairo_destroy (cr);
-          return;
-        }
-
-      set_color (crenderer, PANGO_RENDER_PART_FOREGROUND, cr);
-
-      cairo_move_to (cr, base_x, base_y);
-
-      shape_renderer (cr, attr, FALSE, shape_renderer_data);
-
-      cairo_destroy (cr);
     }
 }
 
 static void
 text_renderer_set_rgba (GskPangoRenderer *crenderer,
-                        PangoRenderPart   part,
+                        Pango2RenderPart   part,
                         const GdkRGBA    *rgba)
 {
-  PangoRenderer *renderer = PANGO_RENDERER (crenderer);
-  PangoColor color = { 0, };
-  guint16 alpha;
+  Pango2Renderer *renderer = PANGO2_RENDERER (crenderer);
+  Pango2Color color = { 0, };
 
   if (rgba)
     {
       color.red = (guint16)(rgba->red * 65535);
       color.green = (guint16)(rgba->green * 65535);
       color.blue = (guint16)(rgba->blue * 65535);
-      alpha = (guint16)(rgba->alpha * 65535);
-      pango_renderer_set_color (renderer, part, &color);
-      pango_renderer_set_alpha (renderer, part, alpha);
+      color.alpha = (guint16)(rgba->alpha * 65535);
+      pango2_renderer_set_color (renderer, part, &color);
     }
   else
     {
-      pango_renderer_set_color (renderer, part, NULL);
-      pango_renderer_set_alpha (renderer, part, 0);
+      pango2_renderer_set_color (renderer, part, NULL);
     }
 }
 
 static GtkTextAppearance *
-get_item_appearance (PangoItem *item)
+get_item_appearance (Pango2Item *item)
 {
-  GSList *tmp_list = item->analysis.extra_attrs;
+  GSList *tmp_list;
+
+  tmp_list = pango2_analysis_get_extra_attributes (pango2_item_get_analysis (item));
 
   while (tmp_list)
     {
-      PangoAttribute *attr = tmp_list->data;
+      Pango2Attribute *attr = tmp_list->data;
 
-      if (attr->klass->type == gtk_text_attr_appearance_type)
-        return &((GtkTextAttrAppearance *)attr)->appearance;
+      if (pango2_attribute_type (attr) == gtk_text_attr_appearance_type)
+        return (GtkTextAppearance *)pango2_attribute_get_pointer (attr);
 
       tmp_list = tmp_list->next;
     }
@@ -315,18 +273,37 @@ get_item_appearance (PangoItem *item)
   return NULL;
 }
 
+static GQuark
+find_palette (Pango2Context *context,
+              Pango2Item    *item)
+{
+  GSList *l;
+
+  for (l = pango2_analysis_get_extra_attributes (pango2_item_get_analysis (item)); l; l = l->next)
+    {
+      Pango2Attribute *attr = l->data;
+
+      if (pango2_attribute_type (attr) == PANGO2_ATTR_PALETTE)
+        return g_quark_from_string (pango2_attribute_get_string (attr));
+    }
+
+  return g_quark_from_string (pango2_context_get_palette (context));
+}
+
 static void
-gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
-                                PangoLayoutRun *run)
+gsk_pango_renderer_prepare_run (Pango2Renderer *renderer,
+                                Pango2Run      *run)
 {
   GskPangoRenderer *crenderer = GSK_PANGO_RENDERER (renderer);
   const GdkRGBA *bg_rgba = NULL;
   const GdkRGBA *fg_rgba = NULL;
   GtkTextAppearance *appearance;
 
-  PANGO_RENDERER_CLASS (gsk_pango_renderer_parent_class)->prepare_run (renderer, run);
+  PANGO2_RENDERER_CLASS (gsk_pango_renderer_parent_class)->prepare_run (renderer, run);
 
-  appearance = get_item_appearance (run->item);
+  crenderer->palette = find_palette (pango2_renderer_get_context (renderer), pango2_run_get_item (run));
+
+  appearance = get_item_appearance (pango2_run_get_item (run));
 
   if (appearance == NULL)
     return;
@@ -336,7 +313,7 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
   else
     bg_rgba = NULL;
 
-  text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_BACKGROUND, bg_rgba);
+  text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_BACKGROUND, bg_rgba);
 
   if (crenderer->state == GSK_PANGO_RENDERER_SELECTED &&
       GTK_IS_TEXT_VIEW (crenderer->widget))
@@ -360,16 +337,16 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
   else
     fg_rgba = appearance->fg_rgba;
 
-  text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_FOREGROUND, fg_rgba);
+  text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_FOREGROUND, fg_rgba);
 
   if (appearance->strikethrough_rgba)
-    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_STRIKETHROUGH, appearance->strikethrough_rgba);
+    text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_STRIKETHROUGH, appearance->strikethrough_rgba);
   else
-    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_rgba);
+    text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_STRIKETHROUGH, fg_rgba);
 
   if (appearance->underline_rgba)
-    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_UNDERLINE, appearance->underline_rgba);
-  else if (appearance->underline == PANGO_UNDERLINE_ERROR)
+    text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_UNDERLINE, appearance->underline_rgba);
+  else if (appearance->underline == PANGO2_LINE_STYLE_DOTTED)
     {
       if (!crenderer->error_color)
         {
@@ -377,10 +354,16 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
           crenderer->error_color = gdk_rgba_copy (&red);
         }
 
-      text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_UNDERLINE, crenderer->error_color);
+      text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_UNDERLINE, crenderer->error_color);
     }
   else
-    text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_UNDERLINE, fg_rgba);
+    text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_UNDERLINE, fg_rgba);
+
+  if (appearance->overline_rgba)
+    text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_OVERLINE, appearance->overline_rgba);
+  else
+    text_renderer_set_rgba (crenderer, PANGO2_RENDER_PART_OVERLINE, fg_rgba);
+
 }
 
 static void
@@ -391,12 +374,12 @@ gsk_pango_renderer_init (GskPangoRenderer *renderer G_GNUC_UNUSED)
 static void
 gsk_pango_renderer_class_init (GskPangoRendererClass *klass)
 {
-  PangoRendererClass *renderer_class = PANGO_RENDERER_CLASS (klass);
+  Pango2RendererClass *renderer_class = PANGO2_RENDERER_CLASS (klass);
 
-  renderer_class->draw_glyph_item = gsk_pango_renderer_draw_glyph_item;
+  renderer_class->draw_run = gsk_pango_renderer_draw_run;
   renderer_class->draw_rectangle = gsk_pango_renderer_draw_rectangle;
   renderer_class->draw_trapezoid = gsk_pango_renderer_draw_trapezoid;
-  renderer_class->draw_error_underline = gsk_pango_renderer_draw_error_underline;
+  //renderer_class->draw_error_underline = gsk_pango_renderer_draw_error_underline;
   renderer_class->draw_shape = gsk_pango_renderer_draw_shape;
   renderer_class->prepare_run = gsk_pango_renderer_prepare_run;
 }
@@ -421,7 +404,6 @@ gsk_pango_renderer_acquire (void)
 
       /* Reset to standard state */
       renderer->state = GSK_PANGO_RENDERER_NORMAL;
-      renderer->shape_handler = NULL;
     }
   else
     {
@@ -454,7 +436,7 @@ gsk_pango_renderer_release (GskPangoRenderer *renderer)
 /**
  * gtk_snapshot_append_layout:
  * @snapshot: a `GtkSnapshot`
- * @layout: the `PangoLayout` to render
+ * @layout: the `Pango2Layout` to render
  * @color: the foreground color to render the layout in
  *
  * Creates render nodes for rendering @layout in the given foregound @color
@@ -463,20 +445,40 @@ gsk_pango_renderer_release (GskPangoRenderer *renderer)
  **/
 void
 gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
-                            PangoLayout   *layout,
+                            Pango2Layout   *layout,
                             const GdkRGBA *color)
 {
   GskPangoRenderer *crenderer;
 
   g_return_if_fail (snapshot != NULL);
-  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+  g_return_if_fail (PANGO2_IS_LAYOUT (layout));
 
   crenderer = gsk_pango_renderer_acquire ();
 
   crenderer->snapshot = snapshot;
   crenderer->fg_color = color;
 
-  pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
+  pango2_renderer_draw_lines (PANGO2_RENDERER (crenderer), pango2_layout_get_lines (layout), 0, 0);
+
+  gsk_pango_renderer_release (crenderer);
+}
+
+void
+gtk_snapshot_append_lines (GtkSnapshot   *snapshot,
+                            Pango2Lines   *lines,
+                            const GdkRGBA *color)
+{
+  GskPangoRenderer *crenderer;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (PANGO2_IS_LINES (lines));
+
+  crenderer = gsk_pango_renderer_acquire ();
+
+  crenderer->snapshot = snapshot;
+  crenderer->fg_color = color;
+
+  pango2_renderer_draw_lines (PANGO2_RENDERER (crenderer), lines, 0, 0);
 
   gsk_pango_renderer_release (crenderer);
 }

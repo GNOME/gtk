@@ -263,7 +263,7 @@ drop_down_new_from_strings (const char *const *titles,
 static char *
 get_family_name (gpointer item)
 {
-  return g_strdup (pango_font_family_get_name (PANGO_FONT_FAMILY (item)));
+  return g_strdup (pango2_font_family_get_name (PANGO2_FONT_FAMILY (item)));
 }
 
 static char *
@@ -326,8 +326,8 @@ bind_highlight_item (GtkSignalListItemFactory *factory,
 {
   MatchObject *obj;
   GtkWidget *label;
-  PangoAttrList *attrs;
-  PangoAttribute *attr;
+  Pango2AttrList *attrs;
+  Pango2Attribute *attr;
   const char *str;
 
   obj = MATCH_OBJECT (gtk_list_item_get_item (item));
@@ -336,13 +336,14 @@ bind_highlight_item (GtkSignalListItemFactory *factory,
   str = match_object_get_string (obj);
 
   gtk_label_set_label (GTK_LABEL (label), str);
-  attrs = pango_attr_list_new ();
-  attr = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-  attr->start_index = match_object_get_match_start (obj);
-  attr->end_index = match_object_get_match_end (obj);
-  pango_attr_list_insert (attrs, attr);
+  attrs = pango2_attr_list_new ();
+  attr = pango2_attr_weight_new (PANGO2_WEIGHT_BOLD);
+  pango2_attribute_set_range (attr,
+                             match_object_get_match_start (obj),
+                             match_object_get_match_end (obj));
+  pango2_attr_list_insert (attrs, attr);
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
+  pango2_attr_list_unref (attrs);
 }
 
 static void
@@ -434,7 +435,7 @@ do_dropdown (GtkWidget *do_widget)
 
       button = gtk_drop_down_new (NULL, NULL);
 
-      model = G_LIST_MODEL (pango_cairo_font_map_get_default ());
+      model = G_LIST_MODEL (pango2_font_map_get_default ());
       gtk_drop_down_set_model (GTK_DROP_DOWN (button), model);
       gtk_drop_down_set_selected (GTK_DROP_DOWN (button), 0);
 

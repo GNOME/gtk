@@ -36,12 +36,12 @@
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
-#include <pango/pangofc-fontmap.h>
+#include <pango2/pangofc-fontmap.h>
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
-#include <pango/pangofc-fontmap.h>
+#include <pango2/pangofc-fontmap.h>
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
@@ -1286,30 +1286,30 @@ settings_invalidate_style (GtkSettings *settings)
 static void
 settings_update_font_values (GtkSettings *settings)
 {
-  PangoFontDescription *desc;
+  Pango2FontDescription *desc;
   const char *font_name;
 
   font_name = g_value_get_string (&settings->property_values[PROP_FONT_NAME - 1].value);
-  desc = pango_font_description_from_string (font_name);
+  desc = pango2_font_description_from_string (font_name);
 
   if (desc != NULL &&
-      (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_SIZE) != 0)
+      (pango2_font_description_get_set_fields (desc) & PANGO2_FONT_MASK_SIZE) != 0)
     {
-      settings->font_size = pango_font_description_get_size (desc);
-      settings->font_size_absolute = pango_font_description_get_size_is_absolute (desc);
+      settings->font_size = pango2_font_description_get_size (desc);
+      settings->font_size_absolute = pango2_font_description_get_size_is_absolute (desc);
     }
   else
     {
-      settings->font_size = 10 * PANGO_SCALE;
+      settings->font_size = 10 * PANGO2_SCALE;
       settings->font_size_absolute = FALSE;
     }
 
   g_free (settings->font_family);
 
   if (desc != NULL &&
-      (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_FAMILY) != 0)
+      (pango2_font_description_get_set_fields (desc) & PANGO2_FONT_MASK_FAMILY) != 0)
     {
-      settings->font_family = g_strdup (pango_font_description_get_family (desc));
+      settings->font_family = g_strdup (pango2_font_description_get_family (desc));
     }
   else
     {
@@ -1317,7 +1317,7 @@ settings_update_font_values (GtkSettings *settings)
     }
 
   if (desc)
-    pango_font_description_free (desc);
+    pango2_font_description_free (desc);
 }
 
 static void
@@ -1688,15 +1688,16 @@ settings_update_fontconfig (GtkSettings *settings)
 
   if (timestamp != last_update_timestamp)
     {
-      PangoFontMap *fontmap = pango_cairo_font_map_get_default ();
+      Pango2FontMap *fontmap = pango2_font_map_get_default ();
       gboolean update_needed = FALSE;
 
       /* bug 547680 */
-      if (PANGO_IS_FC_FONT_MAP (fontmap) && !FcConfigUptoDate (NULL))
+      if (PANGO2_IS_FC_FONT_MAP (fontmap))
         {
-          pango_fc_font_map_config_changed (PANGO_FC_FONT_MAP (fontmap));
-          if (FcInitReinitialize ())
-            update_needed = TRUE;
+          FcConfig *config;
+
+          config = pango2_fc_font_map_get_config (PANGO2_FC_FONT_MAP (fontmap));
+          pango2_fc_font_map_set_config (PANGO2_FC_FONT_MAP (fontmap), config);
         }
 
       last_update_timestamp = timestamp;

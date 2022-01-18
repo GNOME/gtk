@@ -118,6 +118,7 @@ enum {
   PROP_STRIKETHROUGH_RGBA,
   PROP_RIGHT_MARGIN,
   PROP_UNDERLINE,
+  PROP_UNDERLINE_POSITION,
   PROP_UNDERLINE_RGBA,
   PROP_OVERLINE,
   PROP_OVERLINE_RGBA,
@@ -164,6 +165,7 @@ enum {
   PROP_STRIKETHROUGH_RGBA_SET,
   PROP_RIGHT_MARGIN_SET,
   PROP_UNDERLINE_SET,
+  PROP_UNDERLINE_POSITION_SET,
   PROP_UNDERLINE_RGBA_SET,
   PROP_OVERLINE_SET,
   PROP_OVERLINE_RGBA_SET,
@@ -308,7 +310,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * Font description as string, e.g. \"Sans Italic 12\".
    *
    * Note that the initial value of this property depends on
-   * the internals of `PangoFontDescription`.
+   * the internals of `Pango2FontDescription`.
    */
   g_object_class_install_property (object_class,
                                    PROP_FONT,
@@ -319,12 +321,12 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:font-desc:
    *
-   * Font description as a `PangoFontDescription`.
+   * Font description as a `Pango2FontDescription`.
    */
   g_object_class_install_property (object_class,
                                    PROP_FONT_DESC,
                                    g_param_spec_boxed ("font-desc", NULL, NULL,
-                                                       PANGO_TYPE_FONT_DESCRIPTION,
+                                                       PANGO2_TYPE_FONT_DESCRIPTION,
                                                        GTK_PARAM_READWRITE));
 
   /**
@@ -341,25 +343,25 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:style:
    *
-   * Font style as a `PangoStyle`, e.g. %PANGO_STYLE_ITALIC.
+   * Font style as a `Pango2Style`, e.g. %PANGO2_STYLE_ITALIC.
    */
   g_object_class_install_property (object_class,
                                    PROP_STYLE,
                                    g_param_spec_enum ("style", NULL, NULL,
-                                                      PANGO_TYPE_STYLE,
-                                                      PANGO_STYLE_NORMAL,
+                                                      PANGO2_TYPE_STYLE,
+                                                      PANGO2_STYLE_NORMAL,
                                                       GTK_PARAM_READWRITE));
 
   /**
    * GtkTextTag:variant:
    *
-   * Font variant as a `PangoVariant`, e.g. %PANGO_VARIANT_SMALL_CAPS.
+   * Font variant as a `Pango2Variant`, e.g. %PANGO2_VARIANT_SMALL_CAPS.
    */
   g_object_class_install_property (object_class,
                                    PROP_VARIANT,
                                    g_param_spec_enum ("variant", NULL, NULL,
-                                                      PANGO_TYPE_VARIANT,
-                                                      PANGO_VARIANT_NORMAL,
+                                                      PANGO2_TYPE_VARIANT,
+                                                      PANGO2_VARIANT_NORMAL,
                                                       GTK_PARAM_READWRITE));
   /**
    * GtkTextTag:weight:
@@ -371,25 +373,25 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_int ("weight", NULL, NULL,
                                                      0,
                                                      G_MAXINT,
-                                                     PANGO_WEIGHT_NORMAL,
+                                                     PANGO2_WEIGHT_NORMAL,
                                                      GTK_PARAM_READWRITE));
 
   /**
    * GtkTextTag:stretch:
    *
-   * Font stretch as a `PangoStretch`, e.g. %PANGO_STRETCH_CONDENSED.
+   * Font stretch as a `Pango2Stretch`, e.g. %PANGO2_STRETCH_CONDENSED.
    */
   g_object_class_install_property (object_class,
                                    PROP_STRETCH,
                                    g_param_spec_enum ("stretch", NULL, NULL,
-                                                      PANGO_TYPE_STRETCH,
-                                                      PANGO_STRETCH_NORMAL,
+                                                      PANGO2_TYPE_STRETCH,
+                                                      PANGO2_STRETCH_NORMAL,
                                                       GTK_PARAM_READWRITE));
 
   /**
    * GtkTextTag:size:
    *
-   * Font size in Pango units.
+   * Font size in Pango2 units.
    */
   g_object_class_install_property (object_class,
                                    PROP_SIZE,
@@ -405,7 +407,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * Font size as a scale factor relative to the default font size.
    *
    * This properly adapts to theme changes, etc. so is recommended.
-   * Pango predefines some scales such as %PANGO_SCALE_X_LARGE.
+   * Pango2 predefines some scales such as %PANGO2_SCALE_X_LARGE.
    */
   g_object_class_install_property (object_class,
                                    PROP_SCALE,
@@ -445,7 +447,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * The language this text is in, as an ISO code.
    *
-   * Pango can use this as a hint when rendering the text.
+   * Pango2 can use this as a hint when rendering the text.
    * If not set, an appropriate default will be used.
    *
    * Note that the initial value of this property depends
@@ -499,7 +501,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:rise:
    *
-   * Offset of text above the baseline, in Pango units.
+   * Offset of text above the baseline, in Pango2 units.
    *
    * Negative values go below the baseline.
    */
@@ -582,8 +584,15 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_UNDERLINE,
                                    g_param_spec_enum ("underline", NULL, NULL,
-                                                      PANGO_TYPE_UNDERLINE,
-                                                      PANGO_UNDERLINE_NONE,
+                                                      PANGO2_TYPE_LINE_STYLE,
+                                                      PANGO2_LINE_STYLE_NONE,
+                                                      GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_UNDERLINE_POSITION,
+                                   g_param_spec_enum ("underline-position", NULL, NULL,
+                                                      PANGO2_TYPE_UNDERLINE_POSITION,
+                                                      PANGO2_UNDERLINE_POSITION_NORMAL,
                                                       GTK_PARAM_READWRITE));
 
   /**
@@ -593,7 +602,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * If not set, underlines will use the foreground color.
    *
-   * If [property@Gtk.TextTag:underline] is set to %PANGO_UNDERLINE_ERROR,
+   * If [property@Gtk.TextTag:underline] is set to %PANGO2_UNDERLINE_ERROR,
    * an alternate color may be applied instead of the foreground. Setting
    * this property will always override those defaults.
    */
@@ -611,8 +620,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_OVERLINE,
                                    g_param_spec_enum ("overline", NULL, NULL,
-                                                      PANGO_TYPE_OVERLINE,
-                                                      PANGO_OVERLINE_NONE,
+                                                      PANGO2_TYPE_LINE_STYLE,
+                                                      PANGO2_LINE_STYLE_NONE,
                                                       GTK_PARAM_READWRITE));
 
   /**
@@ -662,7 +671,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_TABS,
                                    g_param_spec_boxed ("tabs", NULL, NULL,
-                                                       PANGO_TYPE_TAB_ARRAY,
+                                                       PANGO2_TYPE_TAB_ARRAY,
                                                        GTK_PARAM_READWRITE));
   
   /**
@@ -719,7 +728,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   /**
    * GtkTextTag:letter-spacing:
    *
-   * Extra spacing between graphemes, in Pango units.
+   * Extra spacing between graphemes, in Pango2 units.
    */
   g_object_class_install_property (object_class,
                                    PROP_LETTER_SPACING,
@@ -757,8 +766,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_SHOW_SPACES,
                                    g_param_spec_flags ("show-spaces", NULL, NULL,
-                                                         PANGO_TYPE_SHOW_FLAGS,
-                                                         PANGO_SHOW_NONE,
+                                                         PANGO2_TYPE_SHOW_FLAGS,
+                                                         PANGO2_SHOW_NONE,
                                                          GTK_PARAM_READWRITE));
 
   /**
@@ -782,8 +791,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_TEXT_TRANSFORM,
                                    g_param_spec_enum ("text-transform", NULL, NULL,
-                                                         PANGO_TYPE_TEXT_TRANSFORM,
-                                                         PANGO_TEXT_TRANSFORM_NONE,
+                                                         PANGO2_TYPE_TEXT_TRANSFORM,
+                                                         PANGO2_TEXT_TRANSFORM_NONE,
                                                          GTK_PARAM_READWRITE));
 
   /**
@@ -880,6 +889,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("right-margin-set", PROP_RIGHT_MARGIN_SET, NULL, NULL);
 
   ADD_SET_PROP ("underline-set", PROP_UNDERLINE_SET, NULL, NULL);
+
+  ADD_SET_PROP ("underline-position-set", PROP_UNDERLINE_SET, NULL, NULL);
 
   /**
    * GtkTextTag:underline-rgba-set:
@@ -1148,63 +1159,63 @@ set_pg_bg_rgba (GtkTextTag *tag, GdkRGBA *rgba)
     }
 }
 
-static PangoFontMask
+static Pango2FontMask
 get_property_font_set_mask (guint prop_id)
 {
   switch (prop_id)
     {
     case PROP_FAMILY_SET:
-      return PANGO_FONT_MASK_FAMILY;
+      return PANGO2_FONT_MASK_FAMILY;
     case PROP_STYLE_SET:
-      return PANGO_FONT_MASK_STYLE;
+      return PANGO2_FONT_MASK_STYLE;
     case PROP_VARIANT_SET:
-      return PANGO_FONT_MASK_VARIANT;
+      return PANGO2_FONT_MASK_VARIANT;
     case PROP_WEIGHT_SET:
-      return PANGO_FONT_MASK_WEIGHT;
+      return PANGO2_FONT_MASK_WEIGHT;
     case PROP_STRETCH_SET:
-      return PANGO_FONT_MASK_STRETCH;
+      return PANGO2_FONT_MASK_STRETCH;
     case PROP_SIZE_SET:
-      return PANGO_FONT_MASK_SIZE;
+      return PANGO2_FONT_MASK_SIZE;
     default:
       return 0;
     }
 }
 
-static PangoFontMask
-set_font_desc_fields (PangoFontDescription *desc,
-		      PangoFontMask         to_set)
+static Pango2FontMask
+set_font_desc_fields (Pango2FontDescription *desc,
+		      Pango2FontMask         to_set)
 {
-  PangoFontMask changed_mask = 0;
+  Pango2FontMask changed_mask = 0;
   
-  if (to_set & PANGO_FONT_MASK_FAMILY)
+  if (to_set & PANGO2_FONT_MASK_FAMILY)
     {
-      const char *family = pango_font_description_get_family (desc);
+      const char *family = pango2_font_description_get_family (desc);
       if (!family)
 	{
 	  family = "sans";
-	  changed_mask |= PANGO_FONT_MASK_FAMILY;
+	  changed_mask |= PANGO2_FONT_MASK_FAMILY;
 	}
 
-      pango_font_description_set_family (desc, family);
+      pango2_font_description_set_family (desc, family);
     }
-  if (to_set & PANGO_FONT_MASK_STYLE)
-    pango_font_description_set_style (desc, pango_font_description_get_style (desc));
-  if (to_set & PANGO_FONT_MASK_VARIANT)
-    pango_font_description_set_variant (desc, pango_font_description_get_variant (desc));
-  if (to_set & PANGO_FONT_MASK_WEIGHT)
-    pango_font_description_set_weight (desc, pango_font_description_get_weight (desc));
-  if (to_set & PANGO_FONT_MASK_STRETCH)
-    pango_font_description_set_stretch (desc, pango_font_description_get_stretch (desc));
-  if (to_set & PANGO_FONT_MASK_SIZE)
+  if (to_set & PANGO2_FONT_MASK_STYLE)
+    pango2_font_description_set_style (desc, pango2_font_description_get_style (desc));
+  if (to_set & PANGO2_FONT_MASK_VARIANT)
+    pango2_font_description_set_variant (desc, pango2_font_description_get_variant (desc));
+  if (to_set & PANGO2_FONT_MASK_WEIGHT)
+    pango2_font_description_set_weight (desc, pango2_font_description_get_weight (desc));
+  if (to_set & PANGO2_FONT_MASK_STRETCH)
+    pango2_font_description_set_stretch (desc, pango2_font_description_get_stretch (desc));
+  if (to_set & PANGO2_FONT_MASK_SIZE)
     {
-      int size = pango_font_description_get_size (desc);
+      int size = pango2_font_description_get_size (desc);
       if (size <= 0)
 	{
-	  size = 10 * PANGO_SCALE;
-	  changed_mask |= PANGO_FONT_MASK_SIZE;
+	  size = 10 * PANGO2_SCALE;
+	  changed_mask |= PANGO2_FONT_MASK_SIZE;
 	}
       
-      pango_font_description_set_size (desc, size);
+      pango2_font_description_set_size (desc, size);
     }
 
   return changed_mask;
@@ -1212,66 +1223,66 @@ set_font_desc_fields (PangoFontDescription *desc,
 
 static void
 notify_set_changed (GObject       *object,
-		    PangoFontMask  changed_mask)
+		    Pango2FontMask  changed_mask)
 {
-  if (changed_mask & PANGO_FONT_MASK_FAMILY)
+  if (changed_mask & PANGO2_FONT_MASK_FAMILY)
     g_object_notify (object, "family-set");
-  if (changed_mask & PANGO_FONT_MASK_STYLE)
+  if (changed_mask & PANGO2_FONT_MASK_STYLE)
     g_object_notify (object, "style-set");
-  if (changed_mask & PANGO_FONT_MASK_VARIANT)
+  if (changed_mask & PANGO2_FONT_MASK_VARIANT)
     g_object_notify (object, "variant-set");
-  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
+  if (changed_mask & PANGO2_FONT_MASK_WEIGHT)
     g_object_notify (object, "weight-set");
-  if (changed_mask & PANGO_FONT_MASK_STRETCH)
+  if (changed_mask & PANGO2_FONT_MASK_STRETCH)
     g_object_notify (object, "stretch-set");
-  if (changed_mask & PANGO_FONT_MASK_SIZE)
+  if (changed_mask & PANGO2_FONT_MASK_SIZE)
     g_object_notify (object, "size-set");
 }
 
 static void
 notify_fields_changed (GObject       *object,
-		       PangoFontMask  changed_mask)
+		       Pango2FontMask  changed_mask)
 {
-  if (changed_mask & PANGO_FONT_MASK_FAMILY)
+  if (changed_mask & PANGO2_FONT_MASK_FAMILY)
     g_object_notify (object, "family");
-  if (changed_mask & PANGO_FONT_MASK_STYLE)
+  if (changed_mask & PANGO2_FONT_MASK_STYLE)
     g_object_notify (object, "style");
-  if (changed_mask & PANGO_FONT_MASK_VARIANT)
+  if (changed_mask & PANGO2_FONT_MASK_VARIANT)
     g_object_notify (object, "variant");
-  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
+  if (changed_mask & PANGO2_FONT_MASK_WEIGHT)
     g_object_notify (object, "weight");
-  if (changed_mask & PANGO_FONT_MASK_STRETCH)
+  if (changed_mask & PANGO2_FONT_MASK_STRETCH)
     g_object_notify (object, "stretch");
-  if (changed_mask & PANGO_FONT_MASK_SIZE)
+  if (changed_mask & PANGO2_FONT_MASK_SIZE)
     g_object_notify (object, "size");
 }
 
 static void
 set_font_description (GtkTextTag           *text_tag,
-                      PangoFontDescription *font_desc)
+                      Pango2FontDescription *font_desc)
 {
   GtkTextTagPrivate *priv = text_tag->priv;
   GObject *object = G_OBJECT (text_tag);
-  PangoFontDescription *new_font_desc;
-  PangoFontMask old_mask, new_mask, changed_mask, set_changed_mask;
+  Pango2FontDescription *new_font_desc;
+  Pango2FontMask old_mask, new_mask, changed_mask, set_changed_mask;
   
   if (font_desc)
-    new_font_desc = pango_font_description_copy (font_desc);
+    new_font_desc = pango2_font_description_copy (font_desc);
   else
-    new_font_desc = pango_font_description_new ();
+    new_font_desc = pango2_font_description_new ();
 
   if (priv->values->font)
-    old_mask = pango_font_description_get_set_fields (priv->values->font);
+    old_mask = pango2_font_description_get_set_fields (priv->values->font);
   else
     old_mask = 0;
   
-  new_mask = pango_font_description_get_set_fields (new_font_desc);
+  new_mask = pango2_font_description_get_set_fields (new_font_desc);
 
   changed_mask = old_mask | new_mask;
   set_changed_mask = old_mask ^ new_mask;
 
   if (priv->values->font)
-    pango_font_description_free (priv->values->font);
+    pango2_font_description_free (priv->values->font);
   priv->values->font = new_font_desc;
 
   g_object_freeze_notify (object);
@@ -1279,17 +1290,17 @@ set_font_description (GtkTextTag           *text_tag,
   g_object_notify (object, "font-desc");
   g_object_notify (object, "font");
   
-  if (changed_mask & PANGO_FONT_MASK_FAMILY)
+  if (changed_mask & PANGO2_FONT_MASK_FAMILY)
     g_object_notify (object, "family");
-  if (changed_mask & PANGO_FONT_MASK_STYLE)
+  if (changed_mask & PANGO2_FONT_MASK_STYLE)
     g_object_notify (object, "style");
-  if (changed_mask & PANGO_FONT_MASK_VARIANT)
+  if (changed_mask & PANGO2_FONT_MASK_VARIANT)
     g_object_notify (object, "variant");
-  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
+  if (changed_mask & PANGO2_FONT_MASK_WEIGHT)
     g_object_notify (object, "weight");
-  if (changed_mask & PANGO_FONT_MASK_STRETCH)
+  if (changed_mask & PANGO2_FONT_MASK_STRETCH)
     g_object_notify (object, "stretch");
-  if (changed_mask & PANGO_FONT_MASK_SIZE)
+  if (changed_mask & PANGO2_FONT_MASK_SIZE)
     {
       g_object_notify (object, "size");
       g_object_notify (object, "size-points");
@@ -1306,7 +1317,7 @@ gtk_text_tag_ensure_font (GtkTextTag *text_tag)
   GtkTextTagPrivate *priv = text_tag->priv;
 
   if (!priv->values->font)
-    priv->values->font = pango_font_description_new ();
+    priv->values->font = pango2_font_description_new ();
 }
 
 static void
@@ -1370,17 +1381,17 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_FONT:
       {
-        PangoFontDescription *font_desc = NULL;
+        Pango2FontDescription *font_desc = NULL;
         const char *name;
 
         name = g_value_get_string (value);
 
         if (name)
-          font_desc = pango_font_description_from_string (name);
+          font_desc = pango2_font_description_from_string (name);
 
         set_font_description (text_tag, font_desc);
 	if (font_desc)
-	  pango_font_description_free (font_desc);
+	  pango2_font_description_free (font_desc);
         
         size_changed = TRUE;
       }
@@ -1388,7 +1399,7 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_FONT_DESC:
       {
-        PangoFontDescription *font_desc;
+        Pango2FontDescription *font_desc;
 
         font_desc = g_value_get_boxed (value);
 
@@ -1406,41 +1417,41 @@ gtk_text_tag_set_property (GObject      *object,
     case PROP_SIZE:
     case PROP_SIZE_POINTS:
       {
-	PangoFontMask old_set_mask;
+	Pango2FontMask old_set_mask;
 
 	gtk_text_tag_ensure_font (text_tag);
-	old_set_mask = pango_font_description_get_set_fields (priv->values->font);
+	old_set_mask = pango2_font_description_get_set_fields (priv->values->font);
  
 	switch (prop_id)
 	  {
 	  case PROP_FAMILY:
-	    pango_font_description_set_family (priv->values->font,
+	    pango2_font_description_set_family (priv->values->font,
 					       g_value_get_string (value));
 	    break;
 	  case PROP_STYLE:
-	    pango_font_description_set_style (priv->values->font,
+	    pango2_font_description_set_style (priv->values->font,
 					      g_value_get_enum (value));
 	    break;
 	  case PROP_VARIANT:
-	    pango_font_description_set_variant (priv->values->font,
+	    pango2_font_description_set_variant (priv->values->font,
 						g_value_get_enum (value));
 	    break;
 	  case PROP_WEIGHT:
-	    pango_font_description_set_weight (priv->values->font,
+	    pango2_font_description_set_weight (priv->values->font,
 					       g_value_get_int (value));
 	    break;
 	  case PROP_STRETCH:
-	    pango_font_description_set_stretch (priv->values->font,
+	    pango2_font_description_set_stretch (priv->values->font,
 						g_value_get_enum (value));
 	    break;
 	  case PROP_SIZE:
-	    pango_font_description_set_size (priv->values->font,
+	    pango2_font_description_set_size (priv->values->font,
 					     g_value_get_int (value));
 	    g_object_notify (object, "size-points");
 	    break;
 	  case PROP_SIZE_POINTS:
-	    pango_font_description_set_size (priv->values->font,
-					     g_value_get_double (value) * PANGO_SCALE);
+	    pango2_font_description_set_size (priv->values->font,
+					     g_value_get_double (value) * PANGO2_SCALE);
 	    g_object_notify (object, "size");
 	    break;
 
@@ -1449,7 +1460,7 @@ gtk_text_tag_set_property (GObject      *object,
 	  }
 
 	size_changed = TRUE;
-	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (priv->values->font));
+	notify_set_changed (object, old_set_mask & pango2_font_description_get_set_fields (priv->values->font));
 	g_object_notify (object, "font-desc");
 	g_object_notify (object, "font");
 
@@ -1555,6 +1566,12 @@ gtk_text_tag_set_property (GObject      *object,
       g_object_notify (object, "underline-set");
       break;
 
+    case PROP_UNDERLINE_POSITION:
+      priv->underline_position_set = TRUE;
+      priv->values->appearance.underline_position = g_value_get_enum (value);
+      g_object_notify (object, "underline-position-set");
+      break;
+
     case PROP_UNDERLINE_RGBA:
       {
         GdkRGBA *color = g_value_get_boxed (value);
@@ -1590,7 +1607,7 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_LANGUAGE:
       priv->language_set = TRUE;
-      priv->values->language = pango_language_from_string (g_value_get_string (value));
+      priv->values->language = pango2_language_from_string (g_value_get_string (value));
       g_object_notify (object, "language-set");
       break;
 
@@ -1598,11 +1615,11 @@ gtk_text_tag_set_property (GObject      *object,
       priv->tabs_set = TRUE;
 
       if (priv->values->tabs)
-        pango_tab_array_free (priv->values->tabs);
+        pango2_tab_array_free (priv->values->tabs);
 
       /* FIXME I'm not sure if this is a memleak or not */
       priv->values->tabs =
-        pango_tab_array_copy (g_value_get_boxed (value));
+        pango2_tab_array_copy (g_value_get_boxed (value));
 
       g_object_notify (object, "tabs-set");
       
@@ -1716,12 +1733,12 @@ gtk_text_tag_set_property (GObject      *object,
       if (!g_value_get_boolean (value))
 	{
 	  if (priv->values->font)
-	    pango_font_description_unset_fields (priv->values->font,
+	    pango2_font_description_unset_fields (priv->values->font,
 						 get_property_font_set_mask (prop_id));
 	}
       else
 	{
-	  PangoFontMask changed_mask;
+	  Pango2FontMask changed_mask;
 	  
 	  gtk_text_tag_ensure_font (text_tag);
 	  changed_mask = set_font_desc_fields (priv->values->font,
@@ -1789,6 +1806,10 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_UNDERLINE_SET:
       priv->underline_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_UNDERLINE_POSITION_SET:
+      priv->underline_position_set = g_value_get_boolean (value);
       break;
 
     case PROP_UNDERLINE_RGBA_SET:
@@ -1909,7 +1930,7 @@ gtk_text_tag_get_property (GObject      *object,
 
 	  gtk_text_tag_ensure_font (tag);
 
-	  str = pango_font_description_to_string (priv->values->font);
+	  str = pango2_font_description_to_string (priv->values->font);
           g_value_take_string (value, str);
         }
       break;
@@ -1921,37 +1942,37 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_FAMILY:
       gtk_text_tag_ensure_font (tag);
-      g_value_set_string (value, pango_font_description_get_family (priv->values->font));
+      g_value_set_string (value, pango2_font_description_get_family (priv->values->font));
       break;
       
     case PROP_STYLE:
       gtk_text_tag_ensure_font (tag);
-      g_value_set_enum (value, pango_font_description_get_style (priv->values->font));
+      g_value_set_enum (value, pango2_font_description_get_style (priv->values->font));
       break;
       
     case PROP_VARIANT:
       gtk_text_tag_ensure_font (tag);
-      g_value_set_enum (value, pango_font_description_get_variant (priv->values->font));
+      g_value_set_enum (value, pango2_font_description_get_variant (priv->values->font));
       break;
       
     case PROP_WEIGHT:
       gtk_text_tag_ensure_font (tag);
-      g_value_set_int (value, pango_font_description_get_weight (priv->values->font));
+      g_value_set_int (value, pango2_font_description_get_weight (priv->values->font));
       break;
       
     case PROP_STRETCH:
       gtk_text_tag_ensure_font (tag);
-      g_value_set_enum (value, pango_font_description_get_stretch (priv->values->font));
+      g_value_set_enum (value, pango2_font_description_get_stretch (priv->values->font));
       break;
       
     case PROP_SIZE:
       gtk_text_tag_ensure_font (tag);
-      g_value_set_int (value, pango_font_description_get_size (priv->values->font));
+      g_value_set_int (value, pango2_font_description_get_size (priv->values->font));
       break;
       
     case PROP_SIZE_POINTS:
       gtk_text_tag_ensure_font (tag);
-      g_value_set_double (value, ((double)pango_font_description_get_size (priv->values->font)) / (double)PANGO_SCALE);
+      g_value_set_double (value, ((double)pango2_font_description_get_size (priv->values->font)) / (double)PANGO2_SCALE);
       break;
   
     case PROP_SCALE:
@@ -2015,6 +2036,10 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_enum (value, priv->values->appearance.underline);
       break;
 
+    case PROP_UNDERLINE_POSITION:
+      g_value_set_enum (value, priv->values->appearance.underline_position);
+      break;
+
     case PROP_UNDERLINE_RGBA:
       if (priv->underline_rgba_set)
         g_value_set_boxed (value, priv->values->appearance.underline_rgba);
@@ -2038,7 +2063,7 @@ gtk_text_tag_get_property (GObject      *object,
       break;
 
     case PROP_LANGUAGE:
-      g_value_set_string (value, pango_language_to_string (priv->values->language));
+      g_value_set_string (value, pango2_language_to_string (priv->values->language));
       break;
 
     case PROP_TABS:
@@ -2110,8 +2135,8 @@ gtk_text_tag_get_property (GObject      *object,
     case PROP_STRETCH_SET:
     case PROP_SIZE_SET:
       {
-	PangoFontMask set_mask = priv->values->font ? pango_font_description_get_set_fields (priv->values->font) : 0;
-	PangoFontMask test_mask = get_property_font_set_mask (prop_id);
+	Pango2FontMask set_mask = priv->values->font ? pango2_font_description_get_set_fields (priv->values->font) : 0;
+	Pango2FontMask test_mask = get_property_font_set_mask (prop_id);
 	g_value_set_boolean (value, (set_mask & test_mask) != 0);
 
 	break;
@@ -2171,6 +2196,10 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_UNDERLINE_SET:
       g_value_set_boolean (value, priv->underline_set);
+      break;
+
+    case PROP_UNDERLINE_POSITION_SET:
+      g_value_set_boolean (value, priv->underline_position_set);
       break;
 
     case PROP_UNDERLINE_RGBA_SET:

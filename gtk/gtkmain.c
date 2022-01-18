@@ -496,9 +496,6 @@ do_pre_parse_initialization (void)
       slowdown = g_ascii_strtod (env_string, NULL);
       _gtk_set_slowdown (slowdown);
     }
-
-  /* Trigger fontconfig initialization early */
-  pango_cairo_font_map_get_default ();
 }
 
 static void
@@ -797,7 +794,7 @@ gtk_get_locale_direction (void)
 /**
  * gtk_get_default_language:
  *
- * Returns the `PangoLanguage` for the default language
+ * Returns the `Pango2Language` for the default language
  * currently in effect.
  *
  * Note that this can change over the life of an
@@ -808,16 +805,16 @@ gtk_get_locale_direction (void)
  * the right-to-left or left-to-right text direction.
  *
  * This function is equivalent to
- * [func@Pango.Language.get_default].
+ * [func@Pango2.Language.get_default].
  * See that function for details.
  *
  * Returns: (transfer none): the default language as a
- *   `PangoLanguage`
+ *   `Pango2Language`
  */
-PangoLanguage *
+Pango2Language *
 gtk_get_default_language (void)
 {
-  return pango_language_get_default ();
+  return pango2_language_get_default ();
 }
 
 typedef struct {

@@ -221,7 +221,12 @@ void            gtk_snapshot_append_outset_shadow       (GtkSnapshot            
 /* next function implemented in gskpango.c */
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_layout              (GtkSnapshot            *snapshot,
-                                                         PangoLayout            *layout,
+                                                         Pango2Layout            *layout,
+                                                         const GdkRGBA          *color);
+
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_lines               (GtkSnapshot            *snapshot,
+                                                         Pango2Lines             *lines,
                                                          const GdkRGBA          *color);
 
 
@@ -251,15 +256,15 @@ void            gtk_snapshot_render_layout              (GtkSnapshot            
                                                          GtkStyleContext        *context,
                                                          double                  x,
                                                          double                  y,
-                                                         PangoLayout            *layout);
+                                                         Pango2Layout            *layout);
 GDK_AVAILABLE_IN_ALL /* in gtkstylecontext.c */
 void            gtk_snapshot_render_insertion_cursor    (GtkSnapshot            *snapshot,
                                                          GtkStyleContext        *context,
                                                          double                  x,
                                                          double                  y,
-                                                         PangoLayout            *layout,
+                                                         Pango2Layout            *layout,
                                                          int                     index,
-                                                         PangoDirection          direction);
+                                                         Pango2Direction          direction);
 
 
 G_END_DECLS

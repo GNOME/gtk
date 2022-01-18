@@ -2935,8 +2935,9 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
                                    const GdkRGBA       *color,
                                    gboolean             force_color)
 {
-  const PangoFont *font = gsk_text_node_get_font (node);
-  const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
+  const Pango2Font *font = gsk_text_node_get_font (node);
+  GQuark palette = gsk_text_node_get_palette (node);
+  const Pango2GlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
   const graphene_point_t *offset = gsk_text_node_get_offset (node);
   float text_scale = MAX (job->scale_x, job->scale_y); /* TODO: Fix for uneven scales? */
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
@@ -2952,7 +2953,7 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
   guint16 nc[4] = { FP16_MINUS_ONE, FP16_MINUS_ONE, FP16_MINUS_ONE, FP16_MINUS_ONE };
   guint16 cc[4];
   const guint16 *c;
-  const PangoGlyphInfo *gi;
+  const Pango2GlyphInfo *gi;
   guint i;
   int yshift;
   float ypos;
@@ -2966,7 +2967,8 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
 
   rgba_to_half (color, cc);
 
-  lookup.font = (PangoFont *)font;
+  lookup.font = (Pango2Font *)font;
+  lookup.palette = palette;
   lookup.scale = (guint) (text_scale * 1024);
 
   yshift = compute_phase_and_pos (y, &ypos);
@@ -2996,12 +2998,12 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
       else
         c = cc;
 
-      cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+      cx = (float)(x_position + gi->geometry.x_offset) / PANGO2_SCALE;
       lookup.xshift = compute_phase_and_pos (x + cx, &cx);
 
       if G_UNLIKELY (gi->geometry.y_offset != 0)
         {
-          cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
+          cy = (float)(gi->geometry.y_offset) / PANGO2_SCALE;
           lookup.yshift = compute_phase_and_pos (y + cy, &cy);
         }
       else

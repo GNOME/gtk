@@ -9,7 +9,7 @@ struct _DemoWidget
   GtkWidget parent_instance;
 
   GtkIMContext *im_context;
-  PangoLayout *layout;
+  Pango2Layout *layout;
 };
 
 struct _DemoWidgetClass
@@ -24,8 +24,8 @@ commit_cb (GtkIMContext *context,
            const char   *str,
            DemoWidget   *demo)
 {
-  pango_layout_set_text (demo->layout, str, -1);
-  pango_layout_set_attributes (demo->layout, NULL);
+  pango2_layout_set_text (demo->layout, str, -1);
+  pango2_layout_set_attributes (demo->layout, NULL);
   gtk_widget_queue_draw (GTK_WIDGET (demo));
 }
 
@@ -34,14 +34,14 @@ preedit_changed_cb (GtkIMContext *context,
                     DemoWidget   *demo)
 {
   char *str;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
   int cursor_pos;
 
   gtk_im_context_get_preedit_string (context, &str, &attrs, &cursor_pos);
-  pango_layout_set_text (demo->layout, str, -1);
-  pango_layout_set_attributes (demo->layout, attrs);
+  pango2_layout_set_text (demo->layout, str, -1);
+  pango2_layout_set_attributes (demo->layout, attrs);
   g_free (str);
-  pango_attr_list_unref (attrs);
+  pango2_attr_list_unref (attrs);
 
   gtk_widget_queue_draw (GTK_WIDGET (demo));
 }
@@ -55,8 +55,8 @@ key_pressed_cb (GtkEventControllerKey *controller,
 {
   if (keyval == GDK_KEY_BackSpace)
     {
-      pango_layout_set_text (demo->layout, "", -1);
-      pango_layout_set_attributes (demo->layout, NULL);
+      pango2_layout_set_text (demo->layout, "", -1);
+      pango2_layout_set_attributes (demo->layout, NULL);
       gtk_widget_queue_draw (GTK_WIDGET (demo));
 
       return TRUE;

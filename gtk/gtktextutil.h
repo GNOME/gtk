@@ -41,9 +41,9 @@ GdkPaintable *    gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
                                                    GtkTextIter   *start,
                                                    GtkTextIter   *end);
 
-gboolean _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
+gboolean _gtk_text_util_get_block_cursor_location (Pango2Layout    *layout,
 						   int             index_,
-						   PangoRectangle *rectangle,
+						   Pango2Rectangle *rectangle,
 						   gboolean       *at_line_end);
 
 G_END_DECLS

@@ -292,7 +292,7 @@ test_forward_to_tag_toggle (void)
   buffer = gtk_text_buffer_new (NULL);
 
   bold_tag = gtk_text_buffer_create_tag (buffer, "bold",
-                                         "weight", PANGO_WEIGHT_BOLD,
+                                         "weight", PANGO2_WEIGHT_BOLD,
                                          NULL);
 
   editable_tag = gtk_text_buffer_create_tag (buffer, "not-editable",

@@ -71,10 +71,10 @@ struct _GtkInscription
   guint nat_lines;
   float xalign;
   float yalign;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
   GtkInscriptionOverflow overflow;
 
-  PangoLayout *layout;
+  Pango2Layout *layout;
 };
 
 enum
@@ -158,7 +158,7 @@ gtk_inscription_get_property (GObject    *object,
       break;
 
     case PROP_WRAP_MODE:
-      g_value_set_enum (value, pango_layout_get_wrap (self->layout));
+      g_value_set_enum (value, pango2_layout_get_wrap (self->layout));
       break;
 
     case PROP_XALIGN:
@@ -236,28 +236,28 @@ gtk_inscription_set_property (GObject      *object,
 }
 
 static void
-update_pango_alignment (GtkInscription *self)
+update_pango2_alignment (GtkInscription *self)
 {
-  PangoAlignment align;
+  Pango2Alignment align;
   gboolean ltr;
 
   ltr = _gtk_widget_get_direction (GTK_WIDGET (self)) != GTK_TEXT_DIR_RTL;
 
   if (self->xalign < 0.33)
-      align = ltr ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
+      align = ltr ? PANGO2_ALIGN_LEFT : PANGO2_ALIGN_RIGHT;
   else if (self->xalign < 0.67)
-      align = PANGO_ALIGN_CENTER;
+      align = PANGO2_ALIGN_CENTER;
   else
-      align = ltr ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
+      align = ltr ? PANGO2_ALIGN_RIGHT : PANGO2_ALIGN_LEFT;
 
-  pango_layout_set_alignment (self->layout, align);
+  pango2_layout_set_alignment (self->layout, align);
 }
 
 static void
 gtk_inscription_update_layout_attributes (GtkInscription *self,
-                                          PangoAttrList  *css_attrs)
+                                          Pango2AttrList  *css_attrs)
 {
-  PangoAttrList *new_attrs;
+  Pango2AttrList *new_attrs;
 
   if (css_attrs == NULL)
     css_attrs = gtk_css_style_get_pango_attributes (gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (self))));
@@ -266,8 +266,8 @@ gtk_inscription_update_layout_attributes (GtkInscription *self,
 
   new_attrs = _gtk_pango_attr_list_merge (new_attrs, self->attrs);
 
-  pango_layout_set_attributes (self->layout, new_attrs);
-  pango_attr_list_unref (new_attrs);
+  pango2_layout_set_attributes (self->layout, new_attrs);
+  pango2_attr_list_unref (new_attrs);
 }
 
 static void
@@ -295,29 +295,29 @@ gtk_inscription_direction_changed (GtkWidget        *widget,
 
   GTK_WIDGET_CLASS (gtk_inscription_parent_class)->direction_changed (widget, previous_direction);
 
-  update_pango_alignment (self);
+  update_pango2_alignment (self);
 }
 
-static PangoFontMetrics *
+static Pango2FontMetrics *
 gtk_inscription_get_font_metrics (GtkInscription *self)
 {
-  PangoContext *context;
+  Pango2Context *context;
 
   context = gtk_widget_get_pango_context (GTK_WIDGET (self));
 
-  return pango_context_get_metrics (context, NULL, NULL);
+  return pango2_context_get_metrics (context, NULL, NULL);
 }
 
 static int
 get_char_pixels (GtkInscription *self)
 {
   int char_width, digit_width;
-  PangoFontMetrics *metrics;
+  Pango2FontMetrics *metrics;
 
   metrics = gtk_inscription_get_font_metrics (self);
-  char_width = pango_font_metrics_get_approximate_char_width (metrics);
-  digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
-  pango_font_metrics_unref (metrics);
+  char_width = pango2_font_metrics_get_approximate_char_width (metrics);
+  digit_width = pango2_font_metrics_get_approximate_digit_width (metrics);
+  pango2_font_metrics_free (metrics);
 
   return MAX (char_width, digit_width);
 }
@@ -340,13 +340,13 @@ static int
 get_line_pixels (GtkInscription *self,
                  int            *baseline)
 {
-  PangoFontMetrics *metrics;
+  Pango2FontMetrics *metrics;
   int ascent, descent;
 
   metrics = gtk_inscription_get_font_metrics (self);
 
-  ascent = pango_font_metrics_get_ascent (metrics);
-  descent = pango_font_metrics_get_descent (metrics);
+  ascent = pango2_font_metrics_get_ascent (metrics);
+  descent = pango2_font_metrics_get_descent (metrics);
 
   if (baseline)
     *baseline = ascent;
@@ -397,12 +397,12 @@ gtk_inscription_measure (GtkWidget      *widget,
   else
     gtk_inscription_measure_height (self, minimum, natural, minimum_baseline, natural_baseline);
 
-  *minimum = PANGO_PIXELS_CEIL (*minimum);
-  *natural = PANGO_PIXELS_CEIL (*natural);
+  *minimum = PANGO2_PIXELS_CEIL (*minimum);
+  *natural = PANGO2_PIXELS_CEIL (*natural);
   if (*minimum_baseline > 0)
-    *minimum_baseline = PANGO_PIXELS_CEIL (*minimum_baseline);
+    *minimum_baseline = PANGO2_PIXELS_CEIL (*minimum_baseline);
   if (*natural_baseline > 0)
-    *natural_baseline = PANGO_PIXELS_CEIL (*natural_baseline);
+    *natural_baseline = PANGO2_PIXELS_CEIL (*natural_baseline);
 }
 
 static void
@@ -413,20 +413,25 @@ gtk_inscription_get_layout_location (GtkInscription *self,
   GtkWidget *widget = GTK_WIDGET (self);
   const int widget_width = gtk_widget_get_width (widget);
   const int widget_height = gtk_widget_get_height (widget);
-  PangoRectangle logical;
+  Pango2Rectangle logical;
   float xalign;
   int baseline;
   float x, y;
+  Pango2Lines *lines;
 
   g_assert (x_out);
   g_assert (y_out);
+
+  lines = pango2_layout_get_lines (self->layout);
 
   xalign = self->xalign;
   if (_gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
-  pango_layout_get_pixel_extents (self->layout, NULL, &logical);
-  if (pango_layout_get_width (self->layout) > 0)
+  pango2_lines_get_extents (lines, NULL, &logical);
+  pango2_extents_to_pixels (&logical, NULL);
+
+  if (pango2_layout_get_width (self->layout) > 0)
     x = 0.f;
   else
     x = floor ((xalign * (widget_width - logical.width)) - logical.x);
@@ -434,11 +439,11 @@ gtk_inscription_get_layout_location (GtkInscription *self,
   baseline = gtk_widget_get_allocated_baseline (widget);
   if (baseline != -1)
     {
-      int layout_baseline = pango_layout_get_baseline (self->layout) / PANGO_SCALE;
+      int layout_baseline = pango2_lines_get_baseline (lines) / PANGO2_SCALE;
       /* yalign is 0 because we can't support yalign while baseline aligning */
       y = baseline - layout_baseline;
     }
-  else if (pango_layout_is_ellipsized (self->layout))
+  else if (pango2_lines_is_ellipsized (lines))
     {
       y = 0.f;
     }
@@ -461,32 +466,32 @@ gtk_inscription_allocate (GtkWidget *widget,
 {
   GtkInscription *self = GTK_INSCRIPTION (widget);
 
-  pango_layout_set_width (self->layout, width * PANGO_SCALE);
+  pango2_layout_set_width (self->layout, width * PANGO2_SCALE);
 
   switch (self->overflow)
     {
     case GTK_INSCRIPTION_OVERFLOW_CLIP:
-      pango_layout_set_height (self->layout, -1);
+      pango2_layout_set_height (self->layout, -1);
       /* figure out if we're single line (clip horizontally)
        * or multiline (clip vertically):
        * If we can't fit 2 rows, we're single line.
        */
       {
-        PangoLayoutIter *iter = pango_layout_get_iter (self->layout);
-        if (pango_layout_iter_next_line (iter))
+        Pango2LineIter *iter = pango2_layout_get_iter (self->layout);
+        if (pango2_line_iter_next_line (iter))
           {
-            PangoRectangle rect;
-            pango_layout_iter_get_line_extents (iter, NULL, &rect);
-            if (rect.y + rect.height > height * PANGO_SCALE)
+            Pango2Rectangle rect;
+            pango2_line_iter_get_line_extents (iter, NULL, &rect);
+            if (rect.y + rect.height > height * PANGO2_SCALE)
               {
-                while (!pango_layout_line_is_paragraph_start (pango_layout_iter_get_line_readonly (iter)))
+                while (!pango2_line_is_paragraph_start (pango2_line_iter_get_line (iter)))
                   {
-                    if (!pango_layout_iter_next_line (iter))
+                    if (!pango2_line_iter_next_line (iter))
                       break;
                   }
-                if (!pango_layout_line_is_paragraph_start (pango_layout_iter_get_line_readonly (iter)))
+                if (!pango2_line_is_paragraph_start (pango2_line_iter_get_line (iter)))
                   {
-                    pango_layout_set_width (self->layout, -1);
+                    pango2_layout_set_width (self->layout, -1);
                   }
               }
           }
@@ -496,7 +501,7 @@ gtk_inscription_allocate (GtkWidget *widget,
     case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_START:
     case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_MIDDLE:
     case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_END:
-      pango_layout_set_height (self->layout, height * PANGO_SCALE);
+      pango2_layout_set_height (self->layout, height * PANGO2_SCALE);
       break;
     default:
       g_assert_not_reached();
@@ -549,7 +554,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
    */
   properties[PROP_ATTRIBUTES] =
       g_param_spec_boxed ("attributes", NULL, NULL,
-                          PANGO_TYPE_ATTR_LIST,
+                          PANGO2_TYPE_ATTR_LIST,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -559,9 +564,9 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
    * [property@Gtk.Inscription:attributes] properties, mainly intended for use in
    * GtkBuilder ui files to ease translation support and bindings.
    *
-   * This function uses [func@Pango.parse_markup] to parse the markup into text and
+   * This function uses [func@Pango2.parse_markup] to parse the markup into text and
    * attributes. The markup must be valid. If you cannot ensure that, consider using
-   * [func@Pango.parse_markup] and setting the two properties yourself.
+   * [func@Pango2.parse_markup] and setting the two properties yourself.
    *
    * Since: 4.8
    */
@@ -685,14 +690,14 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
    *
    * Controls how the line wrapping is done.
    *
-   * Note that unlike `GtkLabel`, the default here is %PANGO_WRAP_WORD_CHAR.
+   * Note that unlike `GtkLabel`, the default here is %PANGO2_WRAP_WORD_CHAR.
    *
    * Since: 4.8
    */
   properties[PROP_WRAP_MODE] =
       g_param_spec_enum ("wrap-mode", NULL, NULL,
-                         PANGO_TYPE_WRAP_MODE,
-                         PANGO_WRAP_WORD_CHAR,
+                         PANGO2_TYPE_WRAP_MODE,
+                         PANGO2_WRAP_WORD_CHAR,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -744,12 +749,12 @@ gtk_inscription_init (GtkInscription *self)
   self->yalign = DEFAULT_YALIGN;
 
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), NULL);
-  pango_layout_set_wrap (self->layout, PANGO_WRAP_WORD_CHAR);
-  update_pango_alignment (self);
+  pango2_layout_set_wrap (self->layout, PANGO2_WRAP_WORD_CHAR);
+  update_pango2_alignment (self);
 }
 
 /* for a11y */
-PangoLayout *
+Pango2Layout *
 gtk_inscription_get_layout (GtkInscription *self)
 {
   return self->layout;
@@ -794,7 +799,7 @@ gtk_inscription_set_text (GtkInscription *self,
   g_free (self->text);
   self->text = g_strdup (text);
 
-  pango_layout_set_text (self->layout,
+  pango2_layout_set_text (self->layout,
                          self->text ? self->text : "",
                          -1);
 
@@ -1034,7 +1039,7 @@ gtk_inscription_set_xalign (GtkInscription *self,
 
   self->xalign = xalign;
 
-  update_pango_alignment (self);
+  update_pango2_alignment (self);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
@@ -1113,7 +1118,7 @@ gtk_inscription_get_yalign (GtkInscription *self)
 /**
  * gtk_inscription_set_attributes: (attributes org.gtk.Method.set_property=attributes)
  * @self: a `GtkInscription`
- * @attrs: (nullable): a [struct@Pango.AttrList]
+ * @attrs: (nullable): a [struct@Pango2.AttrList]
  *
  * Apply attributes to the inscription text.
  *
@@ -1123,7 +1128,7 @@ gtk_inscription_get_yalign (GtkInscription *self)
  */
 void
 gtk_inscription_set_attributes (GtkInscription *self,
-                                PangoAttrList  *attrs)
+                                Pango2AttrList  *attrs)
 {
   g_return_if_fail (GTK_IS_INSCRIPTION (self));
 
@@ -1131,10 +1136,10 @@ gtk_inscription_set_attributes (GtkInscription *self,
     return;
 
   if (attrs)
-    pango_attr_list_ref (attrs);
+    pango2_attr_list_ref (attrs);
 
   if (self->attrs)
-    pango_attr_list_unref (self->attrs);
+    pango2_attr_list_unref (self->attrs);
   self->attrs = attrs;
 
   gtk_inscription_update_layout_attributes (self, NULL);
@@ -1154,7 +1159,7 @@ gtk_inscription_set_attributes (GtkInscription *self,
  *
  * Since: 4.8
  */
-PangoAttrList *
+Pango2AttrList *
 gtk_inscription_get_attributes (GtkInscription *self)
 {
   g_return_val_if_fail (GTK_IS_INSCRIPTION (self), NULL);
@@ -1185,16 +1190,16 @@ gtk_inscription_set_text_overflow (GtkInscription         *self,
   switch (self->overflow)
     {
     case GTK_INSCRIPTION_OVERFLOW_CLIP:
-      pango_layout_set_ellipsize (self->layout, PANGO_ELLIPSIZE_NONE);
+      pango2_layout_set_ellipsize (self->layout, PANGO2_ELLIPSIZE_NONE);
       break;
     case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_START:
-      pango_layout_set_ellipsize (self->layout, PANGO_ELLIPSIZE_START);
+      pango2_layout_set_ellipsize (self->layout, PANGO2_ELLIPSIZE_START);
       break;
     case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_MIDDLE:
-      pango_layout_set_ellipsize (self->layout, PANGO_ELLIPSIZE_MIDDLE);
+      pango2_layout_set_ellipsize (self->layout, PANGO2_ELLIPSIZE_MIDDLE);
       break;
     case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_END:
-      pango_layout_set_ellipsize (self->layout, PANGO_ELLIPSIZE_END);
+      pango2_layout_set_ellipsize (self->layout, PANGO2_ELLIPSIZE_END);
       break;
     default:
       g_assert_not_reached();
@@ -1235,14 +1240,14 @@ gtk_inscription_get_text_overflow (GtkInscription *self)
  */
 void
 gtk_inscription_set_wrap_mode (GtkInscription *self,
-                               PangoWrapMode   wrap_mode)
+                               Pango2WrapMode   wrap_mode)
 {
   g_return_if_fail (GTK_IS_INSCRIPTION (self));
 
-  if (pango_layout_get_wrap (self->layout) == wrap_mode)
+  if (pango2_layout_get_wrap (self->layout) == wrap_mode)
     return;
 
-  pango_layout_set_wrap (self->layout, wrap_mode);
+  pango2_layout_set_wrap (self->layout, wrap_mode);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
@@ -1261,12 +1266,12 @@ gtk_inscription_set_wrap_mode (GtkInscription *self,
  *
  * Since:4.8
  */
-PangoWrapMode
+Pango2WrapMode
 gtk_inscription_get_wrap_mode (GtkInscription *self)
 {
-  g_return_val_if_fail (GTK_IS_INSCRIPTION (self), PANGO_WRAP_WORD_CHAR);
+  g_return_val_if_fail (GTK_IS_INSCRIPTION (self), PANGO2_WRAP_WORD_CHAR);
 
-  return pango_layout_get_wrap (self->layout);
+  return pango2_layout_get_wrap (self->layout);
 }
 
 /**
@@ -1284,7 +1289,7 @@ void
 gtk_inscription_set_markup (GtkInscription *self,
                             const char     *markup)
 {
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
   char *text;
   GError *error = NULL;
 
@@ -1295,7 +1300,7 @@ gtk_inscription_set_markup (GtkInscription *self,
       text = NULL;
       attrs = NULL;
     }
-  else if (!pango_parse_markup (markup, -1,
+  else if (!pango2_parse_markup (markup, -1,
                            0,
                            &attrs, &text,
                            NULL,
@@ -1310,5 +1315,5 @@ gtk_inscription_set_markup (GtkInscription *self,
   gtk_inscription_set_attributes (self, attrs);
 
   g_clear_pointer (&text, g_free);
-  g_clear_pointer (&attrs, pango_attr_list_unref);
+  g_clear_pointer (&attrs, pango2_attr_list_unref);
 }

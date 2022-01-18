@@ -40,13 +40,13 @@ create_tags (GtkTextBuffer *buffer)
 {
 
   gtk_text_buffer_create_tag (buffer, "italic",
-                              "style", PANGO_STYLE_ITALIC, NULL);
+                              "style", PANGO2_STYLE_ITALIC, NULL);
 
   gtk_text_buffer_create_tag (buffer, "bold",
-                              "weight", PANGO_WEIGHT_BOLD, NULL);
+                              "weight", PANGO2_WEIGHT_BOLD, NULL);
 
   gtk_text_buffer_create_tag (buffer, "x-large",
-                              "scale", PANGO_SCALE_X_LARGE, NULL);
+                              "scale", PANGO2_SCALE_X_LARGE, NULL);
 
   gtk_text_buffer_create_tag (buffer, "semi_blue_foreground",
                               "foreground", "rgba(0,0,255,0.7)", NULL);

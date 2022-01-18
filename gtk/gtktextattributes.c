@@ -119,10 +119,10 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
 
   /* Remove refs */
   if (dest->tabs)
-    pango_tab_array_free (dest->tabs);
+    pango2_tab_array_free (dest->tabs);
 
   if (dest->font)
-    pango_font_description_free (dest->font);
+    pango2_font_description_free (dest->font);
 
   if (dest->pg_bg_rgba)
     gdk_rgba_free (dest->pg_bg_rgba);
@@ -151,12 +151,12 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   *dest = *src;
 
   if (src->tabs)
-    dest->tabs = pango_tab_array_copy (src->tabs);
+    dest->tabs = pango2_tab_array_copy (src->tabs);
 
   dest->language = src->language;
 
   if (src->font)
-    dest->font = pango_font_description_copy (src->font);
+    dest->font = pango2_font_description_copy (src->font);
 
   if (src->pg_bg_rgba)
     dest->pg_bg_rgba = gdk_rgba_copy (src->pg_bg_rgba);
@@ -218,10 +218,10 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
   if (values->refcount == 0)
     {
       if (values->tabs)
-        pango_tab_array_free (values->tabs);
+        pango2_tab_array_free (values->tabs);
 
       if (values->font)
-	pango_font_description_free (values->font);
+	pango2_font_description_free (values->font);
 
       if (values->pg_bg_rgba)
 	gdk_rgba_free (values->pg_bg_rgba);
@@ -341,9 +341,9 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (vals->font)
 	{
 	  if (dest->font)
-	    pango_font_description_merge (dest->font, vals->font, TRUE);
+	    pango2_font_description_merge (dest->font, vals->font, TRUE);
 	  else
-	    dest->font = pango_font_description_copy (vals->font);
+	    dest->font = pango2_font_description_copy (vals->font);
 	}
 
       /* multiply all the scales together to get a composite */
@@ -393,8 +393,8 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
       if (tag->priv->tabs_set)
         {
           if (dest->tabs)
-            pango_tab_array_free (dest->tabs);
-          dest->tabs = pango_tab_array_copy (vals->tabs);
+            pango2_tab_array_free (dest->tabs);
+          dest->tabs = pango2_tab_array_copy (vals->tabs);
         }
 
       if (tag->priv->wrap_mode_set)
@@ -402,6 +402,9 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
 
       if (tag->priv->underline_set)
         dest->appearance.underline = vals->appearance.underline;
+
+      if (tag->priv->underline_position_set)
+        dest->appearance.underline_position = vals->appearance.underline_position;
 
       if (tag->priv->overline_set)
         dest->appearance.overline = vals->appearance.overline;
@@ -459,7 +462,7 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
   GtkTextTagPrivate *priv = tag->priv;
 
   return
-    (priv->values->font && pango_font_description_get_set_fields (priv->values->font) != 0) ||
+    (priv->values->font && pango2_font_description_get_set_fields (priv->values->font) != 0) ||
     priv->scale_set ||
     priv->justification_set ||
     priv->left_margin_set ||
@@ -472,6 +475,7 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
     priv->line_height_set ||
     priv->tabs_set ||
     priv->underline_set ||
+    priv->underline_position_set ||
     priv->overline_set ||
     priv->wrap_mode_set ||
     priv->invisible_set ||

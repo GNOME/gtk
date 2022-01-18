@@ -37,26 +37,26 @@ struct cell_params {
   int height;				/* 8 */
   int width_chars;			/* 9 */
   int wrap_width;			/* 10 */
-  PangoWrapMode wrap_mode;		/* 11 */
+  Pango2WrapMode wrap_mode;		/* 11 */
   gboolean single_paragraph_mode;	/* 12 */
-  PangoEllipsizeMode ellipsize;		/* 13 */
-  PangoAlignment alignment;			/* 14 */
+  Pango2EllipsizeMode ellipsize;		/* 13 */
+  Pango2Alignment alignment;			/* 14 */
   /* COL_BACKGROUND	 */		/* 15 */
   /* COL_LINE_NUM */			/* 16 */
 };
 
-#define WO PANGO_WRAP_WORD
-#define CH PANGO_WRAP_CHAR
-#define WC PANGO_WRAP_WORD_CHAR
+#define WO PANGO2_WRAP_WORD
+#define CH PANGO2_WRAP_CHAR
+#define WC PANGO2_WRAP_WORD_CHAR
 
-#define NO PANGO_ELLIPSIZE_NONE
-#define ST PANGO_ELLIPSIZE_START
-#define MI PANGO_ELLIPSIZE_MIDDLE
-#define EN PANGO_ELLIPSIZE_END
+#define NO PANGO2_ELLIPSIZE_NONE
+#define ST PANGO2_ELLIPSIZE_START
+#define MI PANGO2_ELLIPSIZE_MIDDLE
+#define EN PANGO2_ELLIPSIZE_END
 
-#define AL PANGO_ALIGN_LEFT
-#define AC PANGO_ALIGN_CENTER
-#define AR PANGO_ALIGN_RIGHT
+#define AL PANGO2_ALIGN_LEFT
+#define AC PANGO2_ALIGN_CENTER
+#define AR PANGO2_ALIGN_RIGHT
 
 #define TESTL "LEFT JUSTIFIED This is really truly verily some very long text\n\330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205 \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205 \330\247\331\204\330\263\331\204\330\247\331\205 \330\271\331\204\331\212\331\203\331\205"
 
@@ -97,7 +97,7 @@ static const struct cell_params cell_params[] = {
   { "10 10 .5 1  T  -1 -1 -1 -1 CH F  NO", TESTC, 10, 10, 0.5, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 17 */
   { "10 10 1  1  T  -1 -1 -1 -1 CH F  NO", TESTR, 10, 10, 1.0, 1.0, TRUE,  -1, -1, -1, -1, CH, FALSE, NO , AL }, /* 18 */
 
-  /* Test Pango alignment (not xalign) */
+  /* Test Pango2 alignment (not xalign) */
   { "0  0  0  0  T  -1 -1 -1 -1 CH F  NO AL", TESTL,  0,  0, 0.0, 0.0, TRUE,  -1, -1, -1, 20, WO, FALSE, NO , AL }, /* 19 */
   { "0  0  0  0  T  -1 -1 -1 -1 CH F  NO AC", TESTC,  0,  0, 0.0, 0.0, TRUE,  -1, -1, -1, 20, WO, FALSE, NO , AC }, /* 20 */
   { "0  0  0  0  T  -1 -1 -1 -1 CH F  NO AR", TESTR,  0,  0, 0.0, 0.0, TRUE,  -1, -1, -1, 20, WO, FALSE, NO , AR }, /* 21 */
@@ -121,10 +121,10 @@ create_list_store (void)
 				   G_TYPE_INT,			/* 8 */ 
 				   G_TYPE_INT,			/* 9 */ 
 				   G_TYPE_INT,			/* 10 */
-				   PANGO_TYPE_WRAP_MODE,	/* 11 */
+				   PANGO2_TYPE_WRAP_MODE,	/* 11 */
 				   G_TYPE_BOOLEAN,		/* 12 */
-				   PANGO_TYPE_ELLIPSIZE_MODE,	/* 13 */
-				   PANGO_TYPE_ALIGNMENT,	/* 14 */
+				   PANGO2_TYPE_ELLIPSIZE_MODE,	/* 13 */
+				   PANGO2_TYPE_ALIGNMENT,	/* 14 */
 				   G_TYPE_STRING,		/* 15 */
 				   G_TYPE_STRING);		/* 16 */
 

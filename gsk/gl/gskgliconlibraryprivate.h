@@ -21,7 +21,7 @@
 #ifndef __GSK_GL_ICON_LIBRARY_PRIVATE_H__
 #define __GSK_GL_ICON_LIBRARY_PRIVATE_H__
 
-#include <pango/pango.h>
+#include <pango2/pango.h>
 
 #include "gskgltexturelibraryprivate.h"
 

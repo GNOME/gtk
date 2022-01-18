@@ -214,7 +214,7 @@ drop_down_new_from_strings (const char *const *titles,
 static char *
 get_family_name (gpointer item)
 {
-  return g_strdup (pango_font_family_get_name (PANGO_FONT_FAMILY (item)));
+  return g_strdup (pango2_font_family_get_name (PANGO2_FONT_FAMILY (item)));
 }
 
 static char *
@@ -471,7 +471,7 @@ main (int argc, char *argv[])
 
   button = gtk_drop_down_new (NULL, NULL);
 
-  model = G_LIST_MODEL (pango_cairo_font_map_get_default ());
+  model = G_LIST_MODEL (pango2_font_map_get_default ());
   gtk_drop_down_set_model (GTK_DROP_DOWN (button), model);
   gtk_drop_down_set_selected (GTK_DROP_DOWN (button), 0);
 

@@ -1892,7 +1892,7 @@ text_buffer_new (GtkAboutDialog  *about,
 
               tag = gtk_text_buffer_create_tag (buffer, NULL,
                                                 "foreground-rgba", &color,
-                                                "underline", PANGO_UNDERLINE_SINGLE,
+                                                "underline", PANGO2_LINE_STYLE_SOLID,
                                                 NULL);
               if (strcmp (link_type, "email") == 0)
                 {
@@ -1923,7 +1923,7 @@ text_buffer_new (GtkAboutDialog  *about,
     }
 
   tag = gtk_text_buffer_create_tag (buffer, NULL,
-                                    "scale", PANGO_SCALE_SMALL,
+                                    "scale", PANGO2_SCALE_SMALL,
                                     NULL);
 
   gtk_text_buffer_get_start_iter (buffer, &start_iter);

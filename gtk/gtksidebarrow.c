@@ -280,9 +280,9 @@ gtk_sidebar_row_set_property (GObject      *object,
       self->section_type = g_value_get_enum (value);
       if (self->section_type == GTK_PLACES_SECTION_COMPUTER ||
           self->section_type == GTK_PLACES_SECTION_OTHER_LOCATIONS)
-        gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_NONE);
+        gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO2_ELLIPSIZE_NONE);
       else
-        gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_END);
+        gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO2_ELLIPSIZE_END);
       break;
 
     case PROP_PLACE_TYPE:

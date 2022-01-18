@@ -1563,16 +1563,16 @@ gtk_scale_finalize (GObject *object)
  * gtk_scale_get_layout:
  * @scale: A `GtkScale`
  *
- * Gets the `PangoLayout` used to display the scale.
+ * Gets the `Pango2Layout` used to display the scale.
  *
  * The returned object is owned by the scale so does not need
  * to be freed by the caller.
  *
- * Returns: (transfer none) (nullable): the [class@Pango.Layout]
+ * Returns: (transfer none) (nullable): the [class@Pango2.Layout]
  *   for this scale, or %NULL if the [property@GtkScale:draw-value]
  *   property is %FALSE.
  */
-PangoLayout *
+Pango2Layout *
 gtk_scale_get_layout (GtkScale *scale)
 {
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
@@ -1592,9 +1592,9 @@ gtk_scale_get_layout (GtkScale *scale)
  * @y: (out) (optional): location to store Y offset of layout
  *
  * Obtains the coordinates where the scale will draw the
- * `PangoLayout` representing the text in the scale.
+ * `Pango2Layout` representing the text in the scale.
  *
- * Remember when using the `PangoLayout` function you need to
+ * Remember when using the `Pango2Layout` function you need to
  * convert to and from pixels using `PANGO_PIXELS()` or `PANGO_SCALE`.
  *
  * If the [property@GtkScale:draw-value] property is %FALSE, the return

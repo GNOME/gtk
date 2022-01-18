@@ -963,18 +963,18 @@ gtk_image_unrealize (GtkWidget *widget)
 static float
 gtk_image_get_baseline_align (GtkImage *image)
 {
-  PangoContext *pango_context;
-  PangoFontMetrics *metrics;
+  Pango2Context *pango2_context;
+  Pango2FontMetrics *metrics;
 
   if (image->baseline_align == 0.0)
     {
-      pango_context = gtk_widget_get_pango_context (GTK_WIDGET (image));
-      metrics = pango_context_get_metrics (pango_context, NULL, NULL);
+      pango2_context = gtk_widget_get_pango_context (GTK_WIDGET (image));
+      metrics = pango2_context_get_metrics (pango2_context, NULL, NULL);
       image->baseline_align =
-                (float)pango_font_metrics_get_ascent (metrics) /
-                (pango_font_metrics_get_ascent (metrics) + pango_font_metrics_get_descent (metrics));
+                (float)pango2_font_metrics_get_ascent (metrics) /
+                (pango2_font_metrics_get_ascent (metrics) + pango2_font_metrics_get_descent (metrics));
 
-      pango_font_metrics_unref (metrics);
+      pango2_font_metrics_free (metrics);
     }
 
   return image->baseline_align;

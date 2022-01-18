@@ -641,20 +641,17 @@ parse_blend_mode (GtkCssParser *parser,
   return FALSE;
 }
 
-static PangoFont *
+static Pango2Font *
 font_from_string (const char *string)
 {
-  PangoFontDescription *desc;
-  PangoFontMap *font_map;
-  PangoContext *context;
-  PangoFont *font;
+  Pango2FontDescription *desc;
+  Pango2Context *context;
+  Pango2Font *font;
 
-  desc = pango_font_description_from_string (string);
-  font_map = pango_cairo_font_map_get_default ();
-  context = pango_font_map_create_context (font_map);
-  font = pango_font_map_load_font (font_map, context, desc);
-
-  pango_font_description_free (desc);
+  desc = pango2_font_description_from_string (string);
+  context = pango2_context_new ();
+  font = pango2_context_load_font (context, desc);
+  pango2_font_description_free (desc);
   g_object_unref (context);
 
   return font;
@@ -664,62 +661,61 @@ font_from_string (const char *string)
 #define MAX_ASCII_GLYPH 127 /* exclusive */
 #define N_ASCII_GLYPHS (MAX_ASCII_GLYPH - MIN_ASCII_GLYPH)
 
-static PangoGlyphString *
-create_ascii_glyphs (PangoFont *font)
+static Pango2GlyphString *
+create_ascii_glyphs (Pango2Font *font)
 {
-  PangoLanguage *language = pango_language_from_string ("en_US"); /* just pick one */
-  PangoCoverage *coverage;
-  PangoAnalysis not_a_hack = {
-    .shape_engine = NULL, /* unused */
-    .lang_engine = NULL, /* unused by pango_shape() */
-    .font = font,
-    .level = 0,
-    .gravity = PANGO_GRAVITY_SOUTH,
-    .flags = 0,
-    .script = PANGO_SCRIPT_COMMON,
-    .language = language,
-    .extra_attrs = NULL
-  };
-  PangoGlyphString *result, *glyph_string;
+  Pango2Context *context;
+  Pango2FontDescription *desc;
+  Pango2GlyphString *result, *glyph_string;
   guint i;
 
-  coverage = pango_font_get_coverage (font, language);
   for (i = MIN_ASCII_GLYPH; i < MAX_ASCII_GLYPH; i++)
     {
-      if (!pango_coverage_get (coverage, i))
+      if (!pango2_font_face_has_char (pango2_font_get_face (font), i))
         break;
     }
-  pango_coverage_unref (coverage);
   if (i < MAX_ASCII_GLYPH)
     return NULL;
 
-  result = pango_glyph_string_new ();
-  pango_glyph_string_set_size (result, N_ASCII_GLYPHS);
-  glyph_string = pango_glyph_string_new ();
+  desc = pango2_font_describe (font);
+  context = pango2_context_new ();
+  pango2_context_set_font_description (context, desc);
+  pango2_font_description_free (desc);
+
+  result = pango2_glyph_string_new ();
+  pango2_glyph_string_set_size (result, N_ASCII_GLYPHS);
+  glyph_string = pango2_glyph_string_new ();
   for (i = MIN_ASCII_GLYPH; i < MAX_ASCII_GLYPH; i++)
     {
       const char text[2] = { i, 0 };
-      PangoShapeFlags flags = 0;
+      GList *items;
+      Pango2Item *item;
+      Pango2ShapeFlags flags;
+
+      items = pango2_itemize (context, PANGO2_DIRECTION_LTR, text, 0, 1, NULL);
+      item = items->data;
 
       if (cairo_version () < CAIRO_VERSION_ENCODE (1, 17, 4))
-        flags = PANGO_SHAPE_ROUND_POSITIONS;
+        flags = PANGO2_SHAPE_ROUND_POSITIONS;
 
-      pango_shape_with_flags (text, 1,
-                              text, 1,
-                              &not_a_hack,
-                              glyph_string,
-                              flags);
+      pango2_shape_item (item, text, 1, NULL, glyph_string, flags);
+
+      g_list_free_full (items, (GDestroyNotify) pango2_item_free);
 
       if (glyph_string->num_glyphs != 1)
         {
-          pango_glyph_string_free (glyph_string);
-          pango_glyph_string_free (result);
+          pango2_glyph_string_free (glyph_string);
+          pango2_glyph_string_free (result);
+          g_object_unref (context);
           return NULL;
         }
+
       result->glyphs[i - MIN_ASCII_GLYPH] = glyph_string->glyphs[0];
     }
 
-  pango_glyph_string_free (glyph_string);
+  pango2_glyph_string_free (glyph_string);
+
+  g_object_unref (context);
 
   return result;
 }
@@ -728,7 +724,7 @@ static gboolean
 parse_font (GtkCssParser *parser,
             gpointer      out_font)
 {
-  PangoFont *font;
+  Pango2Font *font;
   char *s;
 
   s = gtk_css_parser_consume_string (parser);
@@ -742,7 +738,7 @@ parse_font (GtkCssParser *parser,
       return FALSE;
     }
 
-  *((PangoFont**)out_font) = font;
+  *((Pango2Font**)out_font) = font;
 
   g_free (s);
 
@@ -752,20 +748,20 @@ parse_font (GtkCssParser *parser,
 static void
 clear_font (gpointer inout_font)
 {
-  g_clear_object ((PangoFont **) inout_font);
+  g_clear_object ((Pango2Font **) inout_font);
 }
 
 static gboolean
 parse_glyphs (GtkCssParser *parser,
               gpointer      out_glyphs)
 {
-  PangoGlyphString *glyph_string;
+  Pango2GlyphString *glyph_string;
 
-  glyph_string = pango_glyph_string_new ();
+  glyph_string = pango2_glyph_string_new ();
 
   do
     {
-      PangoGlyphInfo gi = { 0, { 0, 0, 0}, { 1 } };
+      Pango2GlyphInfo gi = { 0, { 0, 0, 0}, { 1 } };
       double d, d2;
       int i;
 
@@ -779,8 +775,8 @@ parse_glyphs (GtkCssParser *parser,
                 {
                   gtk_css_parser_error_value (parser, "Unsupported character %d in string", i);
                 }
-              gi.glyph = PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + s[i];
-              pango_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
+              gi.glyph = PANGO2_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + s[i];
+              pango2_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
               glyph_string->glyphs[glyph_string->num_glyphs - 1] = gi;
             }
 
@@ -791,22 +787,22 @@ parse_glyphs (GtkCssParser *parser,
           if (!gtk_css_parser_consume_integer (parser, &i) ||
               !gtk_css_parser_consume_number (parser, &d))
             {
-              pango_glyph_string_free (glyph_string);
+              pango2_glyph_string_free (glyph_string);
               return FALSE;
             }
           gi.glyph = i;
-          gi.geometry.width = (int) (d * PANGO_SCALE);
+          gi.geometry.width = (int) (d * PANGO2_SCALE);
 
           if (gtk_css_parser_has_number (parser))
             {
               if (!gtk_css_parser_consume_number (parser, &d) ||
                   !gtk_css_parser_consume_number (parser, &d2))
                 {
-                  pango_glyph_string_free (glyph_string);
+                  pango2_glyph_string_free (glyph_string);
                   return FALSE;
                 }
-              gi.geometry.x_offset = (int) (d * PANGO_SCALE);
-              gi.geometry.y_offset = (int) (d2 * PANGO_SCALE);
+              gi.geometry.x_offset = (int) (d * PANGO2_SCALE);
+              gi.geometry.y_offset = (int) (d2 * PANGO2_SCALE);
 
               if (gtk_css_parser_try_ident (parser, "same-cluster"))
                 gi.attr.is_cluster_start = 0;
@@ -819,13 +815,13 @@ parse_glyphs (GtkCssParser *parser,
                 gi.attr.is_color = 0;
             }
 
-          pango_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
+          pango2_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
           glyph_string->glyphs[glyph_string->num_glyphs - 1] = gi;
         }
     }
   while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
-  *((PangoGlyphString **)out_glyphs) = glyph_string;
+  *((Pango2GlyphString **)out_glyphs) = glyph_string;
 
   return TRUE;
 }
@@ -833,7 +829,7 @@ parse_glyphs (GtkCssParser *parser,
 static void
 clear_glyphs (gpointer inout_glyphs)
 {
-  g_clear_pointer ((PangoGlyphString **) inout_glyphs, pango_glyph_string_free);
+  g_clear_pointer ((Pango2GlyphString **) inout_glyphs, pango2_glyph_string_free);
 }
 
 static gboolean
@@ -1616,21 +1612,21 @@ parse_repeat_node (GtkCssParser *parser)
 }
 
 static gboolean
-unpack_glyphs (PangoFont        *font,
-               PangoGlyphString *glyphs)
+unpack_glyphs (Pango2Font        *font,
+               Pango2GlyphString *glyphs)
 {
-  PangoGlyphString *ascii = NULL;
+  Pango2GlyphString *ascii = NULL;
   guint i;
 
   for (i = 0; i < glyphs->num_glyphs; i++)
     {
-      PangoGlyph glyph = glyphs->glyphs[i].glyph;
+      Pango2Glyph glyph = glyphs->glyphs[i].glyph;
 
-      if (glyph < PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH ||
-          glyph >= PANGO_GLYPH_INVALID_INPUT)
+      if (glyph < PANGO2_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH ||
+          glyph >= PANGO2_GLYPH_INVALID_INPUT)
         continue;
 
-      glyph = glyph - (PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH) - MIN_ASCII_GLYPH;
+      glyph = glyph - (PANGO2_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH) - MIN_ASCII_GLYPH;
 
       if (ascii == NULL)
         {
@@ -1643,7 +1639,7 @@ unpack_glyphs (PangoFont        *font,
       glyphs->glyphs[i].geometry.width = ascii->glyphs[glyph].geometry.width;
     }
 
-  g_clear_pointer (&ascii, pango_glyph_string_free);
+  g_clear_pointer (&ascii, pango2_glyph_string_free);
 
   return TRUE;
 }
@@ -1651,15 +1647,17 @@ unpack_glyphs (PangoFont        *font,
 static GskRenderNode *
 parse_text_node (GtkCssParser *parser)
 {
-  PangoFont *font = NULL;
+  Pango2Font *font = NULL;
   graphene_point_t offset = GRAPHENE_POINT_INIT (0, 0);
   GdkRGBA color = GDK_RGBA("000000");
-  PangoGlyphString *glyphs = NULL;
+  Pango2GlyphString *glyphs = NULL;
+  char *palette = NULL;
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
     { "offset", parse_point, NULL, &offset },
     { "color", parse_color, NULL, &color },
-    { "glyphs", parse_glyphs, clear_glyphs, &glyphs }
+    { "glyphs", parse_glyphs, clear_glyphs, &glyphs },
+    { "palette", parse_string, clear_string, &palette },
   };
   GskRenderNode *result;
 
@@ -1671,17 +1669,20 @@ parse_text_node (GtkCssParser *parser)
       g_assert (font);
     }
 
+  if (palette == NULL)
+    palette = g_strdup ("default");
+
   if (!glyphs)
     {
       const char *text = "Hello";
-      PangoGlyphInfo gi = { 0, { 0, 0, 0}, { 1 } };
+      Pango2GlyphInfo gi = { 0, { 0, 0, 0}, { 1 } };
       guint i;
 
-      glyphs = pango_glyph_string_new ();
-      pango_glyph_string_set_size (glyphs, strlen (text));
+      glyphs = pango2_glyph_string_new ();
+      pango2_glyph_string_set_size (glyphs, strlen (text));
       for (i = 0; i < strlen (text); i++)
         {
-          gi.glyph = PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + text[i];
+          gi.glyph = PANGO2_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + text[i];
           glyphs->glyphs[i] = gi;
         }
     }
@@ -1693,7 +1694,7 @@ parse_text_node (GtkCssParser *parser)
     }
   else
     {
-      result = gsk_text_node_new (font, glyphs, &color, &offset);
+      result = gsk_text_node_new (font, glyphs, g_quark_from_string (palette), &color, &offset);
       if (result == NULL)
         {
           gtk_css_parser_error_value (parser, "Glyphs result in empty text");
@@ -1701,7 +1702,7 @@ parse_text_node (GtkCssParser *parser)
     }
 
   g_object_unref (font);
-  pango_glyph_string_free (glyphs);
+  pango2_glyph_string_free (glyphs);
 
   /* return anything, whatever, just not NULL */
   if (result == NULL)
@@ -2329,11 +2330,11 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
                                 GString       *p)
 {
   const guint n_glyphs = gsk_text_node_get_num_glyphs (node);
-  const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
-  PangoFont *font = gsk_text_node_get_font (node);
+  const Pango2GlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
+  Pango2Font *font = gsk_text_node_get_font (node);
   GString *str;
   guint i, j;
-  PangoGlyphString *ascii;
+  Pango2GlyphString *ascii;
 
   ascii = create_ascii_glyphs (font);
   str = g_string_new ("");
@@ -2377,16 +2378,16 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
         }
 
       g_string_append_printf (p, "%u ", glyphs[i].glyph);
-      string_append_double (p, (double) glyphs[i].geometry.width / PANGO_SCALE);
+      string_append_double (p, (double) glyphs[i].geometry.width / PANGO2_SCALE);
       if (!glyphs[i].attr.is_cluster_start ||
           glyphs[i].attr.is_color ||
           glyphs[i].geometry.x_offset != 0 ||
           glyphs[i].geometry.y_offset != 0)
         {
           g_string_append (p, " ");
-          string_append_double (p, (double) glyphs[i].geometry.x_offset / PANGO_SCALE);
+          string_append_double (p, (double) glyphs[i].geometry.x_offset / PANGO2_SCALE);
           g_string_append (p, " ");
-          string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
+          string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO2_SCALE);
           if (!glyphs[i].attr.is_cluster_start)
             g_string_append (p, " same-cluster");
           if (!glyphs[i].attr.is_color)
@@ -2402,7 +2403,7 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
 
   g_string_free (str, TRUE);
   if (ascii)
-    pango_glyph_string_free (ascii);
+    pango2_glyph_string_free (ascii);
 }
 
 static void
@@ -2761,9 +2762,10 @@ render_node_print (Printer       *p,
       {
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         const GdkRGBA *color = gsk_text_node_get_color (node);
-        PangoFont *font = gsk_text_node_get_font (node);
-        PangoFontDescription *desc;
+        Pango2Font *font = gsk_text_node_get_font (node);
+        Pango2FontDescription *desc;
         char *font_name;
+        const char *palette = g_quark_to_string (gsk_text_node_get_palette (node));
 
         start_node (p, "text");
 
@@ -2771,11 +2773,11 @@ render_node_print (Printer       *p,
           append_rgba_param (p, "color", color);
 
         _indent (p);
-        desc = pango_font_describe (font);
-        font_name = pango_font_description_to_string (desc);
+        desc = pango2_font_describe (font);
+        font_name = pango2_font_description_to_string (desc);
         g_string_append_printf (p->str, "font: \"%s\";\n", font_name);
         g_free (font_name);
-        pango_font_description_free (desc);
+        pango2_font_description_free (desc);
 
         _indent (p);
         g_string_append (p->str, "glyphs: ");
@@ -2787,6 +2789,9 @@ render_node_print (Printer       *p,
 
         if (!graphene_point_equal (offset, graphene_point_zero ()))
           append_point_param (p, "offset", offset);
+
+        if (strcmp (palette, "default") != 0)
+          append_string_param (p, "palette", palette);
 
         end_node (p);
       }

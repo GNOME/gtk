@@ -296,8 +296,8 @@ activate_about (GSimpleAction *action,
                           glib_major_version,
                           glib_minor_version,
                           glib_micro_version);
-  g_string_append_printf (s, "\tPango\t%s\n",
-                          pango_version_string ());
+  g_string_append_printf (s, "\tPango2\t%s\n",
+                          pango2_version_string ());
   g_string_append_printf (s, "\tGTK \t%d.%d.%d\n",
                           gtk_get_major_version (),
                           gtk_get_minor_version (),

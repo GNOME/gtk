@@ -1,82 +1,88 @@
 #include <gtk/gtk.h>
 
 void
-print_attribute (PangoAttribute *attr, GString *string)
+print_attribute (Pango2Attribute *attr, GString *string)
 {
   GEnumClass *class;
   GEnumValue *value;
-  PangoAttrString *str;
-  PangoAttrLanguage *lang;
-  PangoAttrInt *integer;
-  PangoAttrFloat *flt;
-  PangoAttrFontDesc *font;
-  PangoAttrColor *color;
-  PangoAttrShape *shape;
+  guint start, end;
 
-  g_string_append_printf (string, "[%d,%d]", attr->start_index, attr->end_index);
+  pango2_attribute_get_range (attr, &start, &end);
+  g_string_append_printf (string, "[%u,%u]", start, end);
 
-  class = g_type_class_ref (pango_attr_type_get_type ());
-  value = g_enum_get_value (class, attr->klass->type);
+  class = g_type_class_ref (pango2_attr_type_get_type ());
+  value = g_enum_get_value (class, pango2_attribute_type (attr));
   g_string_append_printf (string, "%s=", value->value_nick);
   g_type_class_unref (class);
 
-  if ((str = pango_attribute_as_string (attr)) != NULL)
-    g_string_append (string, str->value);
-  else if ((lang = pango_attribute_as_language (attr)) != NULL)
-    g_string_append (string, pango_language_to_string (lang->value));
-  else if ((integer = pango_attribute_as_int (attr)) != NULL)
-    g_string_append_printf (string, "%d", integer->value);
-  else if ((flt = pango_attribute_as_float (attr)) != NULL)
+  switch (PANGO2_ATTR_VALUE_TYPE (attr))
     {
+    case PANGO2_ATTR_VALUE_STRING:
+      g_string_append (string, pango2_attribute_get_string (attr));
+      break;
+    case PANGO2_ATTR_VALUE_BOOLEAN:
+      g_string_append_printf (string, "%s", pango2_attribute_get_boolean (attr) ? "true" : "false");
+      break;
+    case PANGO2_ATTR_VALUE_LANGUAGE:
+      g_string_append (string, pango2_language_to_string (pango2_attribute_get_language (attr)));
+      break;
+    case PANGO2_ATTR_VALUE_INT:
+      g_string_append_printf (string, "%d", pango2_attribute_get_int (attr));
+      break;
+    case PANGO2_ATTR_VALUE_FLOAT:
+      {
         char val[20];
 
-        g_ascii_formatd (val, 20, "%f", flt->value);
+        g_ascii_formatd (val, 20, "%f", pango2_attribute_get_float (attr));
         g_string_append (string, val);
-     }
-  else if ((font = pango_attribute_as_font_desc (attr)) != NULL)
-    {
-      char *text = pango_font_description_to_string (font->desc);
-      g_string_append (string, text);
-      g_free (text);
+      }
+      break;
+    case PANGO2_ATTR_VALUE_FONT_DESC:
+      {
+        char *text = pango2_font_description_to_string (pango2_attribute_get_font_desc (attr));
+        g_string_append (string, text);
+        g_free (text);
+      }
+      break;
+    case PANGO2_ATTR_VALUE_COLOR:
+      {
+        char *text = pango2_color_to_string (pango2_attribute_get_color (attr));
+        g_string_append (string, text);
+        g_free (text);
+      }
+      break;
+    case PANGO2_ATTR_VALUE_POINTER:
+    default:
+      g_assert_not_reached ();
     }
-  else if ((color = pango_attribute_as_color (attr)) != NULL)
-    {
-      char *text = pango_color_to_string (&color->color);
-      g_string_append (string, text);
-      g_free (text);
-    }
-  else if ((shape = pango_attribute_as_shape (attr)) != NULL)
-    g_string_append_printf (string, "shape");
-  else
-    g_assert_not_reached ();
 }
 
 void
-print_attr_list (PangoAttrList *attrs, GString *string)
+print_attr_list (Pango2AttrList *attrs, GString *string)
 {
-  PangoAttrIterator *iter;
+  Pango2AttrIterator *iter;
 
   if (!attrs)
     return;
 
-  iter = pango_attr_list_get_iterator (attrs);
+  iter = pango2_attr_list_get_iterator (attrs);
   do {
     int start, end;
     GSList *list, *l;
 
-    pango_attr_iterator_range (iter, &start, &end);
+    pango2_attr_iterator_range (iter, &start, &end);
     g_string_append_printf (string, "range %d %d\n", start, end);
-    list = pango_attr_iterator_get_attrs (iter);
+    list = pango2_attr_iterator_get_attrs (iter);
     for (l = list; l; l = l->next)
       {
-        PangoAttribute *attr = l->data;
+        Pango2Attribute *attr = l->data;
         print_attribute (attr, string);
         g_string_append (string, "\n");
       }
-    g_slist_free_full (list, (GDestroyNotify)pango_attribute_destroy);
-  } while (pango_attr_iterator_next (iter));
+    g_slist_free_full (list, (GDestroyNotify)pango2_attribute_destroy);
+  } while (pango2_attr_iterator_next (iter));
 
-  pango_attr_iterator_destroy (iter);
+  pango2_attr_iterator_destroy (iter);
 }
 
 static void
@@ -84,7 +90,7 @@ test_label_markup (void)
 {
   GtkWidget *window;
   GtkWidget *label;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
   GString *str;
   const char *text;
 
@@ -100,10 +106,10 @@ test_label_markup (void)
 
   g_assert_cmpuint (gtk_label_get_mnemonic_keyval (GTK_LABEL (label)), ==, 'd');
 
-  text = pango_layout_get_text (gtk_label_get_layout (GTK_LABEL (label)));
+  text = pango2_layout_get_text (gtk_label_get_layout (GTK_LABEL (label)));
   g_assert_cmpstr (text, ==, "abc def");
 
-  attrs = pango_layout_get_attributes (gtk_label_get_layout (GTK_LABEL (label)));
+  attrs = pango2_layout_get_attributes (gtk_label_get_layout (GTK_LABEL (label)));
   str = g_string_new ("");
   print_attr_list (attrs, str);
 
@@ -126,10 +132,10 @@ test_label_markup (void)
 
   gtk_window_set_mnemonics_visible (GTK_WINDOW (window), FALSE);
 
-  text = pango_layout_get_text (gtk_label_get_layout (GTK_LABEL (label)));
+  text = pango2_layout_get_text (gtk_label_get_layout (GTK_LABEL (label)));
   g_assert_cmpstr (text, ==, "abc def");
 
-  attrs = pango_layout_get_attributes (gtk_label_get_layout (GTK_LABEL (label)));
+  attrs = pango2_layout_get_attributes (gtk_label_get_layout (GTK_LABEL (label)));
   g_string_set_size (str, 0);
   print_attr_list (attrs, str);
 
@@ -146,10 +152,10 @@ test_label_markup (void)
   gtk_window_set_mnemonics_visible (GTK_WINDOW (window), TRUE);
   gtk_label_set_use_underline (GTK_LABEL (label), FALSE);
 
-  text = pango_layout_get_text (gtk_label_get_layout (GTK_LABEL (label)));
+  text = pango2_layout_get_text (gtk_label_get_layout (GTK_LABEL (label)));
   g_assert_cmpstr (text, ==, "abc _def");
 
-  attrs = pango_layout_get_attributes (gtk_label_get_layout (GTK_LABEL (label)));
+  attrs = pango2_layout_get_attributes (gtk_label_get_layout (GTK_LABEL (label)));
   g_string_set_size (str, 0);
   print_attr_list (attrs, str);
 

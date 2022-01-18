@@ -365,13 +365,13 @@ static void
 load_error (NodeEditorWindow *self,
             const char        *error_message)
 {
-  PangoLayout *layout;
+  Pango2Layout *layout;
   GtkSnapshot *snapshot;
   GskRenderNode *node;
   GBytes *bytes;
 
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), error_message);
-  pango_layout_set_width (layout, 300 * PANGO_SCALE);
+  pango2_layout_set_width (layout, 300 * PANGO2_SCALE);
   snapshot = gtk_snapshot_new ();
   gtk_snapshot_append_layout (snapshot, layout, &(GdkRGBA) { 0.7, 0.13, 0.13, 1.0 });
   node = gtk_snapshot_free_to_node (snapshot);
@@ -1060,7 +1060,7 @@ node_editor_window_init (NodeEditorWindow *self)
   gtk_text_tag_table_add (self->tag_table,
                           g_object_new (GTK_TYPE_TEXT_TAG,
                                         "name", "error",
-                                        "underline", PANGO_UNDERLINE_ERROR,
+                                        "underline", PANGO2_LINE_STYLE_DOTTED,
                                         NULL));
   gtk_text_tag_table_add (self->tag_table,
                           g_object_new (GTK_TYPE_TEXT_TAG,

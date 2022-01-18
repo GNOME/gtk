@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-PangoLayout *           gtk_inscription_get_layout              (GtkInscription *self);
+Pango2Layout *           gtk_inscription_get_layout              (GtkInscription *self);
 
 G_END_DECLS
 

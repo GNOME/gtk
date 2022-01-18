@@ -909,17 +909,17 @@ populate_render_node_properties (GtkListStore  *store,
 
     case GSK_TEXT_NODE:
       {
-        const PangoFont *font = gsk_text_node_get_font (node);
+        const Pango2Font *font = gsk_text_node_get_font (node);
         const GdkRGBA *color = gsk_text_node_get_color (node);
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
-        PangoFontDescription *desc;
+        Pango2FontDescription *desc;
         GString *s;
 
-        desc = pango_font_describe ((PangoFont *)font);
-        tmp = pango_font_description_to_string (desc);
+        desc = pango2_font_describe ((Pango2Font *)font);
+        tmp = pango2_font_description_to_string (desc);
         add_text_row (store, "Font", tmp);
         g_free (tmp);
-        pango_font_description_free (desc);
+        pango2_font_description_free (desc);
 
         s = g_string_sized_new (0);
         gsk_text_node_serialize_glyphs (node, s);

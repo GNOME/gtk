@@ -24,7 +24,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <pango/pango.h>
+#include <pango2/pango.h>
 #include <gtk/gtkpagesetup.h>
 
 
@@ -63,11 +63,11 @@ gboolean      gtk_print_context_get_hard_margins     (GtkPrintContext *context,
 
 /* Fonts */
 GDK_AVAILABLE_IN_ALL
-PangoFontMap *gtk_print_context_get_pango_fontmap    (GtkPrintContext *context);
+Pango2FontMap *gtk_print_context_get_pango_fontmap    (GtkPrintContext *context);
 GDK_AVAILABLE_IN_ALL
-PangoContext *gtk_print_context_create_pango_context (GtkPrintContext *context);
+Pango2Context *gtk_print_context_create_pango_context (GtkPrintContext *context);
 GDK_AVAILABLE_IN_ALL
-PangoLayout  *gtk_print_context_create_pango_layout  (GtkPrintContext *context);
+Pango2Layout  *gtk_print_context_create_pango_layout  (GtkPrintContext *context);
 
 /* Needed for preview implementations */
 GDK_AVAILABLE_IN_ALL

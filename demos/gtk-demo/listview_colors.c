@@ -758,15 +758,15 @@ setup_number_item (GtkSignalListItemFactory *factory,
                    GtkListItem              *item)
 {
   GtkWidget *label;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
 
   label = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (label), 1);
 
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum"));
+  attrs = pango2_attr_list_new ();
+  pango2_attr_list_insert (attrs, pango2_attr_font_features_new ("tnum"));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
+  pango2_attr_list_unref (attrs);
 
   gtk_list_item_set_child (item, label);
 }
@@ -862,7 +862,7 @@ do_listview_colors (GtkWidget *do_widget)
       GtkExpression *expression;
       GtkWidget *button;
       GtkWidget *label;
-      PangoAttrList *attrs;
+      Pango2AttrList *attrs;
       char *string;
       guint len;
       GtkWidget *selection_view;
@@ -990,10 +990,10 @@ do_listview_colors (GtkWidget *do_widget)
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
       label = gtk_label_new ("0 /");
-      attrs = pango_attr_list_new ();
-      pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum"));
+      attrs = pango2_attr_list_new ();
+      pango2_attr_list_insert (attrs, pango2_attr_font_features_new ("tnum"));
       gtk_label_set_attributes (GTK_LABEL (label), attrs);
-      pango_attr_list_unref (attrs);
+      pango2_attr_list_unref (attrs);
       string = g_strdup_printf ("%'u", 4096);
       len = g_utf8_strlen (string, -1);
       g_free (string);

@@ -125,7 +125,7 @@ text_grid (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("2", "blue"), 0, 1, 1, 1);
 
   label = gtk_label_new ("Some text that may wrap if it has to");
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
   gtk_grid_attach (GTK_GRID (grid), label, 1, 1, 1, 1);
 
@@ -155,7 +155,7 @@ box_comparison (void)
   gtk_box_append (GTK_BOX (box), test_widget ("1", "white"));
 
   label = gtk_label_new ("Some ellipsizing text");
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
   gtk_box_append (GTK_BOX (box), label);
 
@@ -176,7 +176,7 @@ box_comparison (void)
   gtk_grid_attach (GTK_GRID (grid), test_widget ("1", "white"), 0, 0, 1, 1);
 
   label = gtk_label_new ("Some ellipsizing text");
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
   gtk_label_set_width_chars (GTK_LABEL (label), 10);
   gtk_grid_attach (GTK_GRID (grid), label, 1, 0, 1, 1);
   gtk_widget_set_hexpand (label, TRUE);

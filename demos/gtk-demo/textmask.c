@@ -1,6 +1,6 @@
 /* Pango/Text Mask
  *
- * This demo shows how to use PangoCairo to draw text with more than
+ * This demo shows how to use Pango to draw text with more than
  * just a single color.
  */
 
@@ -15,18 +15,18 @@ draw_text (GtkDrawingArea *da,
            gpointer        data)
 {
   cairo_pattern_t *pattern;
-  PangoLayout *layout;
-  PangoFontDescription *desc;
+  Pango2Layout *layout;
+  Pango2FontDescription *desc;
 
   cairo_save (cr);
 
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (da), "Pango power!\nPango power!\nPango power!");
-  desc = pango_font_description_from_string ("sans bold 34");
-  pango_layout_set_font_description (layout, desc);
-  pango_font_description_free (desc);
+  desc = pango2_font_description_from_string ("sans bold 34");
+  pango2_layout_set_font_description (layout, desc);
+  pango2_font_description_free (desc);
 
   cairo_move_to (cr, 30, 20);
-  pango_cairo_layout_path (cr, layout);
+  pango2_cairo_layout_path (cr, layout);
   g_object_unref (layout);
 
   pattern = cairo_pattern_create_linear (0.0, 0.0, width, height);

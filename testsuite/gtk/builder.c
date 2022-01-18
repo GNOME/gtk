@@ -1901,25 +1901,29 @@ typedef struct {
 } FoundAttrs;
 
 static gboolean
-filter_pango_attrs (PangoAttribute *attr,
+filter_pango_attrs (Pango2Attribute *attr,
 		    gpointer        data)
 {
   FoundAttrs *found = (FoundAttrs *)data;
+  guint type = pango2_attribute_type (attr);
+  guint start, end;
 
-  if (attr->klass->type == PANGO_ATTR_WEIGHT)
+  pango2_attribute_get_range (attr, &start, &end);
+
+  if (type == PANGO2_ATTR_WEIGHT)
     found->weight = TRUE;
-  else if (attr->klass->type == PANGO_ATTR_FOREGROUND)
+  else if (type == PANGO2_ATTR_FOREGROUND)
     found->foreground = TRUE;
-  else if (attr->klass->type == PANGO_ATTR_UNDERLINE)
+  else if (type == PANGO2_ATTR_UNDERLINE)
     found->underline = TRUE;
   /* Make sure optional start/end properties are working */
-  else if (attr->klass->type == PANGO_ATTR_SIZE &&
-	   attr->start_index == 5 &&
-	   attr->end_index   == 10)
+  else if (type == PANGO2_ATTR_SIZE &&
+	   start == 5 &&
+	   end == 10)
     found->size = TRUE;
-  else if (attr->klass->type == PANGO_ATTR_FONT_DESC)
+  else if (type == PANGO2_ATTR_FONT_DESC)
     found->font_desc = TRUE;
-  else if (attr->klass->type == PANGO_ATTR_LANGUAGE)
+  else if (type == PANGO2_ATTR_LANGUAGE)
     found->language = TRUE;
 
   return TRUE;
@@ -1934,7 +1938,7 @@ test_pango_attributes (void)
     "<interface>"
     "  <object class=\"GtkLabel\" id=\"label1\">"
     "    <attributes>"
-    "      <attribute name=\"weight\" value=\"PANGO_WEIGHT_BOLD\"/>"
+    "      <attribute name=\"weight\" value=\"PANGO2_WEIGHT_BOLD\"/>"
     "      <attribute name=\"foreground\" value=\"DarkSlateGray\"/>"
     "      <attribute name=\"underline\" value=\"True\"/>"
     "      <attribute name=\"size\" value=\"4\" start=\"5\" end=\"10\"/>"
@@ -1955,14 +1959,14 @@ test_pango_attributes (void)
     "<interface>"
     "  <object class=\"GtkLabel\" id=\"label1\">"
     "    <attributes>"
-    "      <attribute name=\"weight\" value=\"PANGO_WEIGHT_BOLD\" unrecognized=\"True\"/>"
+    "      <attribute name=\"weight\" value=\"PANGO2_WEIGHT_BOLD\" unrecognized=\"True\"/>"
     "    </attributes>"
     "  </object>"
     "</interface>";
 
   GObject *label;
   GError  *error = NULL;
-  PangoAttrList *attrs, *filtered;
+  Pango2AttrList *attrs, *filtered;
 
   /* Test attributes are set */
   builder = builder_new_from_string (buffer, -1, NULL);
@@ -1972,9 +1976,9 @@ test_pango_attributes (void)
   attrs = gtk_label_get_attributes (GTK_LABEL (label));
   g_assert_nonnull (attrs);
 
-  filtered = pango_attr_list_filter (attrs, filter_pango_attrs, &found);
+  filtered = pango2_attr_list_filter (attrs, filter_pango_attrs, &found);
   g_assert_true (filtered);
-  pango_attr_list_unref (filtered);
+  pango2_attr_list_unref (filtered);
 
   g_assert_true (found.weight);
   g_assert_true (found.foreground);
@@ -2718,7 +2722,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Value From String", test_value_from_string);
   g_test_add_func ("/Builder/Reference Counting", test_reference_counting);
   g_test_add_func ("/Builder/Window", test_window);
-  g_test_add_func ("/Builder/PangoAttributes", test_pango_attributes);
+  g_test_add_func ("/Builder/Pango2Attributes", test_pango_attributes);
   g_test_add_func ("/Builder/Requires", test_requires);
   g_test_add_func ("/Builder/AddObjects", test_add_objects);
   g_test_add_func ("/Builder/MessageArea", test_message_area);

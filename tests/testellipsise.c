@@ -32,7 +32,7 @@ combo_changed_cb (GtkWidget *combo,
   int active;
 
   active = gtk_combo_box_get_active (GTK_COMBO_BOX (combo));
-  gtk_label_set_ellipsize (GTK_LABEL (label), (PangoEllipsizeMode)active);
+  gtk_label_set_ellipsize (GTK_LABEL (label), (Pango2EllipsizeMode)active);
 }
 
 static void
@@ -43,7 +43,7 @@ overlay_draw (GtkDrawingArea *da,
               gpointer        data)
 {
   GtkWidget *widget = GTK_WIDGET (da);
-  PangoLayout *layout;
+  Pango2Layout *layout;
   const double dashes[] = { 6, 18 };
   GtkAllocation label_allocation;
   GtkRequisition minimum_size, natural_size;
@@ -62,12 +62,12 @@ overlay_draw (GtkDrawingArea *da,
 
   gtk_widget_get_preferred_size (label, &minimum_size, &natural_size); 
 
-  pango_layout_set_markup (layout,
+  pango2_layout_set_markup (layout,
     "<span color='#c33'>\342\227\217 requisition</span>\n"
     "<span color='#3c3'>\342\227\217 natural size</span>\n"
     "<span color='#33c'>\342\227\217 allocation</span>", -1);
 
-  pango_cairo_show_layout (cr, layout);
+  pango2_cairo_show_layout (cr, layout);
   g_object_unref (layout);
 
   gtk_widget_get_allocation (label, &label_allocation);

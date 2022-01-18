@@ -71,9 +71,10 @@ struct _GtkTextAppearance
   /* super/subscript rise, can be negative */
   int rise;
 
-  guint underline : 4;          /* PangoUnderline */
-  guint overline  : 2;          /* PangoOverline */
-  guint strikethrough : 1;
+  guint underline          : 4; /* Pango2LineStyle */
+  guint overline           : 4; /* Pango2LineStyle */
+  guint strikethrough      : 4; /* Pango2LineStyle */
+  guint underline_position : 4; /* Pango2UnderlinePosition */
 
   /* Whether to use background-related values; this is irrelevant for
    * the values struct when in a tag, but is used for the composite
@@ -95,7 +96,7 @@ struct _GtkTextAppearance
  * @appearance: GtkTextAppearance for text.
  * @justification: GtkJustification for text.
  * @direction: GtkTextDirection for text.
- * @font: `PangoFontDescription` for text.
+ * @font: `Pango2FontDescription` for text.
  * @font_scale: Font scale factor.
  * @left_margin: Width of the left margin in pixels.
  * @right_margin: Width of the right margin in pixels.
@@ -104,15 +105,15 @@ struct _GtkTextAppearance
  * @pixels_below_lines: Pixels of blank space below paragraphs.
  * @pixels_inside_wrap: Pixels of blank space between wrapped lines in
  *   a paragraph.
- * @tabs: Custom `PangoTabArray` for this text.
+ * @tabs: Custom `Pango2TabArray` for this text.
  * @wrap_mode: `GtkWrapMode` for text.
- * @language: `PangoLanguage` for text.
+ * @language: `Pango2Language` for text.
  * @invisible: Hide the text.
  * @bg_full_height: Background is fit to full line height rather than
  *    baseline +/- ascent/descent (font height).
  * @editable: Can edit this text.
  * @no_fallback: Whether to disable font fallback.
- * @letter_spacing: Extra space to insert between graphemes, in Pango units
+ * @letter_spacing: Extra space to insert between graphemes, in Pango2 units
  *
  * Using GtkTextAttributes directly should rarely be necessary.
  * It’s primarily useful with gtk_text_iter_get_attributes().
@@ -129,13 +130,13 @@ struct _GtkTextAttributes
 
   GtkTextAppearance appearance;
 
-  PangoFontDescription *font;
+  Pango2FontDescription *font;
   char *font_features;
 
   GdkRGBA *pg_bg_rgba;
 
-  PangoTabArray *tabs;
-  PangoLanguage *language;
+  Pango2TabArray *tabs;
+  Pango2Language *language;
 
   double font_scale;
 
@@ -156,10 +157,10 @@ struct _GtkTextAttributes
   guint editable : 1;
   guint no_fallback: 1;
   guint no_breaks : 1;
-  guint show_spaces : 3; /* PangoShowFlags */
+  guint show_spaces : 3; /* Pango2ShowFlags */
   guint no_hyphens : 1;
   guint line_height_is_absolute : 1;
-  guint text_transform : 3; /* PangoTextTransform */
+  guint text_transform : 3; /* Pango2TextTransform */
   guint word : 1;
   guint sentence : 1;
 };

@@ -51,7 +51,7 @@ struct _GdkWaylandKeymap
   struct xkb_keymap *xkb_keymap;
   struct xkb_state *xkb_state;
 
-  PangoDirection *direction;
+  Pango2Direction *direction;
   gboolean bidi;
 };
 
@@ -80,7 +80,7 @@ gdk_wayland_keymap_finalize (GObject *object)
   G_OBJECT_CLASS (_gdk_wayland_keymap_parent_class)->finalize (object);
 }
 
-static PangoDirection
+static Pango2Direction
 gdk_wayland_keymap_get_direction (GdkKeymap *keymap)
 {
   GdkWaylandKeymap *keymap_wayland = GDK_WAYLAND_KEYMAP (keymap);
@@ -92,7 +92,7 @@ gdk_wayland_keymap_get_direction (GdkKeymap *keymap)
         return keymap_wayland->direction[i];
     }
 
-  return PANGO_DIRECTION_NEUTRAL;
+  return PANGO2_DIRECTION_NEUTRAL;
 }
 
 static gboolean
@@ -399,7 +399,7 @@ update_direction (GdkWaylandKeymap *keymap)
 
   num_layouts = xkb_keymap_num_layouts (keymap->xkb_keymap);
 
-  keymap->direction = g_renew (PangoDirection, keymap->direction, num_layouts);
+  keymap->direction = g_renew (Pango2Direction, keymap->direction, num_layouts);
   rtl = g_newa (int, num_layouts);
   for (i = 0; i < num_layouts; i++)
     rtl[i] = 0;
@@ -421,22 +421,20 @@ update_direction (GdkWaylandKeymap *keymap)
            num_syms = xkb_keymap_key_get_syms_by_level (keymap->xkb_keymap, key, layout, 0, &syms);
            for (sym = 0; sym < num_syms; sym++)
              {
-               PangoDirection dir;
+               Pango2Direction dir;
 
                dir = gdk_unichar_direction (xkb_keysym_to_utf32 (syms[sym]));
                switch (dir)
                  {
-                 case PANGO_DIRECTION_RTL:
+                 case PANGO2_DIRECTION_RTL:
                    rtl[layout]++;
                    break;
-                 case PANGO_DIRECTION_LTR:
+                 case PANGO2_DIRECTION_LTR:
                    rtl[layout]--;
                    break;
-                 case PANGO_DIRECTION_TTB_LTR:
-                 case PANGO_DIRECTION_TTB_RTL:
-                 case PANGO_DIRECTION_WEAK_LTR:
-                 case PANGO_DIRECTION_WEAK_RTL:
-                 case PANGO_DIRECTION_NEUTRAL:
+                 case PANGO2_DIRECTION_WEAK_LTR:
+                 case PANGO2_DIRECTION_WEAK_RTL:
+                 case PANGO2_DIRECTION_NEUTRAL:
                  default:
                    break;
                  }
@@ -449,12 +447,12 @@ update_direction (GdkWaylandKeymap *keymap)
     {
       if (rtl[i] > 0)
         {
-          keymap->direction[i] = PANGO_DIRECTION_RTL;
+          keymap->direction[i] = PANGO2_DIRECTION_RTL;
           have_rtl = TRUE;
         }
       else
         {
-          keymap->direction[i] = PANGO_DIRECTION_LTR;
+          keymap->direction[i] = PANGO2_DIRECTION_LTR;
           have_ltr = TRUE;
         }
     }

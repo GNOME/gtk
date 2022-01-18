@@ -151,7 +151,7 @@ static gboolean gtk_im_context_simple_filter_keypress    (GtkIMContext          
 static void     gtk_im_context_simple_reset              (GtkIMContext             *context);
 static void     gtk_im_context_simple_get_preedit_string (GtkIMContext             *context,
 							  char                    **str,
-							  PangoAttrList           **attrs,
+							  Pango2AttrList           **attrs,
 							  int                      *cursor_pos);
 
 static void init_compose_table_async (GCancellable         *cancellable,
@@ -1206,7 +1206,7 @@ gtk_im_context_simple_reset (GtkIMContext *context)
 static void
 gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
                                           char          **str,
-                                          PangoAttrList **attrs,
+                                          Pango2AttrList **attrs,
                                           int            *cursor_pos)
 {
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
@@ -1270,21 +1270,19 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 
   if (attrs)
     {
-      *attrs = pango_attr_list_new ();
+      *attrs = pango2_attr_list_new ();
 
       if (s->len)
         {
-          PangoAttribute *attr;
+          Pango2Attribute *attr;
 
-          attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-          attr->start_index = 0;
-          attr->end_index = s->len;
-          pango_attr_list_insert (*attrs, attr);
+          attr = pango2_attr_underline_new (PANGO2_LINE_STYLE_SOLID);
+          pango2_attribute_set_range (attr, 0, s->len);
+          pango2_attr_list_insert (*attrs, attr);
 
-          attr = pango_attr_fallback_new (TRUE);
-          attr->start_index = 0;
-          attr->end_index = s->len;
-          pango_attr_list_insert (*attrs, attr);
+          attr = pango2_attr_fallback_new (TRUE);
+          pango2_attribute_set_range (attr, 0, s->len);
+          pango2_attr_list_insert (*attrs, attr);
         }
     }
 

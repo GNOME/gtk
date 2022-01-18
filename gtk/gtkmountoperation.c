@@ -1582,7 +1582,7 @@ create_show_processes_dialog (GtkMountOperation *op,
                                        NULL);
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer,
-                "ellipsize", PANGO_ELLIPSIZE_MIDDLE,
+                "ellipsize", PANGO2_ELLIPSIZE_MIDDLE,
                 "ellipsize-set", TRUE,
                 NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);

@@ -21,7 +21,7 @@
 #ifndef __GSK_GL_GLYPH_LIBRARY_PRIVATE_H__
 #define __GSK_GL_GLYPH_LIBRARY_PRIVATE_H__
 
-#include <pango/pango.h>
+#include <pango2/pango.h>
 
 #include "gskgltexturelibraryprivate.h"
 
@@ -31,8 +31,9 @@ G_BEGIN_DECLS
 
 typedef struct _GskGLGlyphKey
 {
-  PangoFont *font;
-  PangoGlyph glyph;
+  Pango2Font *font;
+  GQuark palette;
+  Pango2Glyph glyph;
   guint xshift : 2;
   guint yshift : 2;
   guint scale  : 28; /* times 1024 */
@@ -41,13 +42,13 @@ typedef struct _GskGLGlyphKey
 typedef struct _GskGLGlyphValue
 {
   GskGLTextureAtlasEntry entry;
-  PangoRectangle ink_rect;
+  Pango2Rectangle ink_rect;
 } GskGLGlyphValue;
 
 #if GLIB_SIZEOF_VOID_P == 8
-G_STATIC_ASSERT (sizeof (GskGLGlyphKey) == 16);
+G_STATIC_ASSERT (sizeof (GskGLGlyphKey) == 24);
 #elif GLIB_SIZEOF_VOID_P == 4
-G_STATIC_ASSERT (sizeof (GskGLGlyphKey) == 12);
+G_STATIC_ASSERT (sizeof (GskGLGlyphKey) == 16);
 #endif
 
 G_DECLARE_FINAL_TYPE (GskGLGlyphLibrary, gsk_gl_glyph_library, GSK, GL_GLYPH_LIBRARY, GskGLTextureLibrary)

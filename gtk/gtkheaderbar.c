@@ -272,7 +272,7 @@ construct_title_label (GtkHeaderBar *bar)
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_label_set_wrap (GTK_LABEL (label), FALSE);
   gtk_label_set_single_line_mode (GTK_LABEL (label), TRUE);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
   gtk_label_set_width_chars (GTK_LABEL (label), MIN_TITLE_CHARS);
   gtk_center_box_set_center_widget (GTK_CENTER_BOX (bar->center_box), label);
 

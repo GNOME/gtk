@@ -38,7 +38,7 @@ struct _GdkKeymapClass
 {
   GObjectClass parent_class;
 
-  PangoDirection (* get_direction)      (GdkKeymap *keymap);
+  Pango2Direction (* get_direction)      (GdkKeymap *keymap);
   gboolean (* have_bidi_layouts)        (GdkKeymap *keymap);
   gboolean (* get_caps_lock_state)      (GdkKeymap *keymap);
   gboolean (* get_num_lock_state)       (GdkKeymap *keymap);
@@ -111,7 +111,7 @@ gboolean       gdk_keymap_get_entries_for_keycode  (GdkKeymap           *keymap,
                                                     guint              **keyvals,
                                                     int                 *n_entries);
 
-PangoDirection gdk_keymap_get_direction            (GdkKeymap           *keymap);
+Pango2Direction gdk_keymap_get_direction            (GdkKeymap           *keymap);
 gboolean       gdk_keymap_have_bidi_layouts        (GdkKeymap           *keymap);
 gboolean       gdk_keymap_get_caps_lock_state      (GdkKeymap           *keymap);
 gboolean       gdk_keymap_get_num_lock_state       (GdkKeymap           *keymap);

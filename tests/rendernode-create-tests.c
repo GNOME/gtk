@@ -360,9 +360,9 @@ text (guint n)
 {
   GPtrArray *nodes;
   GskRenderNode *container;
-  PangoFontDescription *desc;
-  PangoContext *context;
-  PangoLayout *layout;
+  Pango2FontDescription *desc;
+  Pango2Context *context;
+  Pango2Layout *layout;
   GtkSettings *settings;
   char *usr_dict_words;
   char **words;
@@ -381,63 +381,68 @@ text (guint n)
     }
   n_words = g_strv_length (words);
 
-  context = pango_font_map_create_context (pango_cairo_font_map_get_default ());
+  context = pango2_context_new ();
   nodes = g_ptr_array_new_with_free_func ((GDestroyNotify) gsk_render_node_unref);
 
   settings = gtk_settings_get_default ();
   g_object_get (settings, "gtk-xft-dpi", &dpi_int, NULL);
   if (dpi_int > 0)
-    pango_cairo_context_set_resolution (context, dpi_int / 1024.);
+    pango2_font_map_set_resolution (pango2_font_map_get_default (), dpi_int / 1024.);
 
-  desc = pango_font_description_new ();
-  pango_font_description_set_family (desc, "Cantarell");
-  layout = pango_layout_new (context);
+  desc = pango2_font_description_new ();
+  pango2_font_description_set_family (desc, "Cantarell");
+  layout = pango2_layout_new (context);
 
   for (i = 0; i < n; i++)
     {
-      PangoFont *font;
-      PangoLayoutIter *iter;
-      PangoLayoutRun *run;
+      Pango2Font *font;
+      Pango2LineIter *iter;
+      Pango2Run *run;
       GdkRGBA color;
-      int x, y, width, height;
+      Pango2Rectangle ext;
+      int x, y;
 
-      pango_layout_set_text (layout, words[g_random_int_range (0, n_words)], -1);
+      pango2_layout_set_text (layout, words[g_random_int_range (0, n_words)], -1);
       if (g_random_boolean ())
-        pango_font_description_set_style (desc, PANGO_STYLE_ITALIC);
+        pango2_font_description_set_style (desc, PANGO2_STYLE_ITALIC);
       else
-        pango_font_description_set_style (desc, PANGO_STYLE_NORMAL);
+        pango2_font_description_set_style (desc, PANGO2_STYLE_NORMAL);
 
-      pango_font_description_set_weight (desc, 100 * g_random_int_range (1, 10));
-      pango_font_description_set_size (desc, PANGO_SCALE * g_random_int_range (8,32));
+      pango2_font_description_set_weight (desc, 100 * g_random_int_range (1, 10));
+      pango2_font_description_set_size (desc, PANGO2_SCALE * g_random_int_range (8,32));
 
-      font = pango_context_load_font (context, desc);
-      pango_layout_set_font_description (layout, desc);
+      font = pango2_context_load_font (context, desc);
+      pango2_layout_set_font_description (layout, desc);
 
-      pango_layout_get_pixel_size (layout, &width, &height);
-      x = width >= 1000 ? 0 : g_random_int_range (0, 1000 - width);
-      y = height >= 1000 ? 0 : g_random_int_range (0, 1000 - height);
+      pango2_lines_get_extents (pango2_layout_get_lines (layout), NULL, &ext);
+      pango2_extents_to_pixels (&ext, NULL);
+
+      x = ext.width >= 1000 ? 0 : g_random_int_range (0, 1000 - ext.width);
+      y = ext.height >= 1000 ? 0 : g_random_int_range (0, 1000 - ext.height);
       hsv_to_rgb (&color, g_random_double (), g_random_double_range (0.5, 1.0), g_random_double_range (0.15, 0.75));
 
-      iter = pango_layout_get_iter (layout);
+      iter = pango2_layout_get_iter (layout);
       do
         {
-          run = pango_layout_iter_get_run (iter);
+          run = pango2_line_iter_get_run (iter);
           if (run != NULL)
             {
+              Pango2GlyphString *glyphs;
               GskRenderNode *node;
-              
-              node = gsk_text_node_new (font, run->glyphs, &color, &GRAPHENE_POINT_INIT (x, y));
+
+              glyphs = pango2_run_get_glyphs (run);
+              node = gsk_text_node_new (font, glyphs, 0, &color, &GRAPHENE_POINT_INIT (x, y));
               if (node)
                 g_ptr_array_add (nodes, node);
             }
         }
-      while (pango_layout_iter_next_run (iter));
-      pango_layout_iter_free (iter);
+      while (pango2_line_iter_next_run (iter));
+      pango2_line_iter_free (iter);
 
       g_object_unref (font);
     }
 
-  pango_font_description_free (desc);
+  pango2_font_description_free (desc);
   g_object_unref (layout);
 
   container = gsk_container_node_new ((GskRenderNode **) nodes->pdata, nodes->len);

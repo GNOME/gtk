@@ -123,11 +123,11 @@ populate_emoji_text (void)
   for (int i = 0; i < 500; i++)
     {
       if (i % 2)
-        g_string_append (s, "<span underline=\"single\" underline_color=\"red\">x</span>");
+        g_string_append (s, "<span underline=\"solid\" underline_color=\"red\">x</span>");
       for (int j = 0; j < 30; j++)
         {
           g_string_append (s, "💓");
-          g_string_append (s, "<span underline=\"single\" underline_color=\"red\">x</span>");
+          g_string_append (s, "<span underline=\"solid\" underline_color=\"red\">x</span>");
         }
       g_string_append (s, "\n");
     }

@@ -387,7 +387,7 @@ main (int argc, char *argv[])
   gtk_text_buffer_insert (buffer, &iter, "Hello, the text ", -1);
 
   tag = gtk_text_buffer_create_tag (buffer, "bold", NULL);
-  g_object_set (tag, "weight", PANGO_WEIGHT_BOLD, NULL);
+  g_object_set (tag, "weight", PANGO2_WEIGHT_BOLD, NULL);
 
   gtk_text_buffer_get_end_iter (buffer, &iter);
   gtk_text_buffer_insert_with_tags (buffer, &iter, "in bold", -1, tag, NULL);

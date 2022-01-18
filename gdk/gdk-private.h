@@ -28,8 +28,8 @@ gboolean gdk_should_use_portal (void);
 
 const char *   gdk_get_startup_notification_id (void);
 
-PangoDirection gdk_unichar_direction (gunichar    ch) G_GNUC_CONST;
-PangoDirection gdk_find_base_dir     (const char *text,
+Pango2Direction gdk_unichar_direction (gunichar    ch) G_GNUC_CONST;
+Pango2Direction gdk_find_base_dir     (const char *text,
                                       int         len);
 
 typedef struct

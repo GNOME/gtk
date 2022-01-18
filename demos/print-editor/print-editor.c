@@ -1,6 +1,6 @@
 #include <config.h>
 #include <math.h>
-#include <pango/pangocairo.h>
+#include <pango2/pangocairo.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
@@ -200,7 +200,7 @@ save_file (GFile *save_filename)
 
 typedef struct {
   char *text;
-  PangoLayout *layout;
+  Pango2Layout *layout;
   GList *page_breaks;
   GtkWidget *font_button;
   char *font;
@@ -211,39 +211,41 @@ begin_print (GtkPrintOperation *operation,
 	     GtkPrintContext *context,
 	     PrintData *print_data)
 {
-  PangoFontDescription *desc;
-  PangoLayoutLine *layout_line;
+  Pango2FontDescription *desc;
+  Pango2Lines *lines;
+  Pango2Line *line;
   double width, height;
   double page_height;
   GList *page_breaks;
   int num_lines;
-  int line;
+  int i;
 
   width = gtk_print_context_get_width (context);
   height = gtk_print_context_get_height (context);
 
   print_data->layout = gtk_print_context_create_pango_layout (context);
 
-  desc = pango_font_description_from_string (print_data->font);
-  pango_layout_set_font_description (print_data->layout, desc);
-  pango_font_description_free (desc);
+  desc = pango2_font_description_from_string (print_data->font);
+  pango2_layout_set_font_description (print_data->layout, desc);
+  pango2_font_description_free (desc);
 
-  pango_layout_set_width (print_data->layout, width * PANGO_SCALE);
+  pango2_layout_set_width (print_data->layout, width * PANGO2_SCALE);
 
-  pango_layout_set_text (print_data->layout, print_data->text, -1);
+  pango2_layout_set_text (print_data->layout, print_data->text, -1);
 
-  num_lines = pango_layout_get_line_count (print_data->layout);
+  lines = pango2_layout_get_lines (print_data->layout);
+  num_lines = pango2_lines_get_line_count (lines);
 
   page_breaks = NULL;
   page_height = 0;
 
-  for (line = 0; line < num_lines; line++)
+  for (i = 0; i < num_lines; i++)
     {
-      PangoRectangle ink_rect, logical_rect;
+      Pango2Rectangle logical_rect;
       double line_height;
 
-      layout_line = pango_layout_get_line (print_data->layout, line);
-      pango_layout_line_get_extents (layout_line, &ink_rect, &logical_rect);
+      line = pango2_lines_get_lines (lines)[i];
+      pango2_line_get_extents (line, NULL, &logical_rect);
 
       line_height = logical_rect.height / 1024.0;
 
@@ -271,7 +273,7 @@ draw_page (GtkPrintOperation *operation,
   cairo_t *cr;
   GList *pagebreak;
   int start, end, i;
-  PangoLayoutIter *iter;
+  Pango2LineIter *iter;
   double start_pos;
 
   if (page_nr == 0)
@@ -284,7 +286,7 @@ draw_page (GtkPrintOperation *operation,
 
   pagebreak = g_list_nth (print_data->page_breaks, page_nr);
   if (pagebreak == NULL)
-    end = pango_layout_get_line_count (print_data->layout);
+    end = pango2_lines_get_line_count (pango2_layout_get_lines (print_data->layout));
   else
     end = GPOINTER_TO_INT (pagebreak->data);
 
@@ -294,33 +296,33 @@ draw_page (GtkPrintOperation *operation,
 
   i = 0;
   start_pos = 0;
-  iter = pango_layout_get_iter (print_data->layout);
+  iter = pango2_layout_get_iter (print_data->layout);
   do
     {
-      PangoRectangle   logical_rect;
-      PangoLayoutLine *line;
-      int              baseline;
+      Pango2Rectangle logical_rect;
+      Pango2Line *line;
+      int baseline;
 
       if (i >= start)
 	{
-	  line = pango_layout_iter_get_line (iter);
+	  line = pango2_line_iter_get_line (iter);
 
-	  pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
-	  baseline = pango_layout_iter_get_baseline (iter);
+	  pango2_line_iter_get_line_extents (iter, NULL, &logical_rect);
+	  baseline = pango2_line_iter_get_line_baseline (iter);
 
 	  if (i == start)
 	    start_pos = logical_rect.y / 1024.0;
 
 	  cairo_move_to (cr, logical_rect.x / 1024.0, baseline / 1024.0 - start_pos);
 
-	  pango_cairo_show_layout_line  (cr, line);
+	  pango2_cairo_show_line  (cr, line);
 	}
       i++;
     }
   while (i < end &&
-	 pango_layout_iter_next_line (iter));
+	 pango2_line_iter_next_line (iter));
 
-  pango_layout_iter_free (iter);
+  pango2_line_iter_free (iter);
 }
 
 static void
@@ -626,8 +628,8 @@ activate_about (GSimpleAction *action,
                           glib_major_version,
                           glib_minor_version,
                           glib_micro_version);
-  g_string_append_printf (sysinfo, "\tPango\t%s\n",
-                          pango_version_string ());
+  g_string_append_printf (sysinfo, "\tPango2\t%s\n",
+                          pango2_version_string ());
   g_string_append_printf (sysinfo, "\tGTK \t%d.%d.%d\n",
                           gtk_get_major_version (),
                           gtk_get_minor_version (),

@@ -159,7 +159,7 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
 
   if (self->mouse_x != G_MININT && self->mouse_y != G_MININT)
     {
-      PangoLayout *layout;
+      Pango2Layout *layout;
       char *text;
       GtkAllocation alloc;
       graphene_rect_t bounds;
@@ -187,7 +187,7 @@ gtk_focus_widget_snapshot (GtkWidget *widget, GtkSnapshot *snapshot)
 
       layout = gtk_widget_create_pango_layout (widget, NULL);
       text = g_strdup_printf ("%.2f×%.2f", self->mouse_x, self->mouse_y);
-      pango_layout_set_text (layout, text, -1);
+      pango2_layout_set_text (layout, text, -1);
 
       gtk_snapshot_render_layout (snapshot,
                                   gtk_widget_get_style_context (widget),

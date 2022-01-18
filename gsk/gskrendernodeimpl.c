@@ -4406,14 +4406,15 @@ struct _GskTextNode
 {
   GskRenderNode render_node;
 
-  PangoFont *font;
+  Pango2Font *font;
   gboolean has_color_glyphs;
+  GQuark palette;
 
   GdkRGBA color;
   graphene_point_t offset;
 
+  Pango2GlyphInfo *glyphs;
   guint num_glyphs;
-  PangoGlyphInfo *glyphs;
 };
 
 static void
@@ -4433,7 +4434,7 @@ gsk_text_node_draw (GskRenderNode *node,
                     cairo_t       *cr)
 {
   GskTextNode *self = (GskTextNode *) node;
-  PangoGlyphString glyphs;
+  Pango2GlyphString glyphs;
 
   glyphs.num_glyphs = self->num_glyphs;
   glyphs.glyphs = self->glyphs;
@@ -4443,7 +4444,7 @@ gsk_text_node_draw (GskRenderNode *node,
 
   gdk_cairo_set_source_rgba (cr, &self->color);
   cairo_translate (cr, self->offset.x, self->offset.y);
-  pango_cairo_show_glyph_string (cr, self->font, &glyphs);
+  pango2_cairo_show_color_glyph_string (cr, self->font, self->palette, &glyphs);
 
   cairo_restore (cr);
 }
@@ -4457,6 +4458,7 @@ gsk_text_node_diff (GskRenderNode  *node1,
   GskTextNode *self2 = (GskTextNode *) node2;
 
   if (self1->font == self2->font &&
+      self1->palette == self2->palette &&
       gdk_rgba_equal (&self1->color, &self2->color) &&
       graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->num_glyphs == self2->num_glyphs)
@@ -4465,8 +4467,8 @@ gsk_text_node_diff (GskRenderNode  *node1,
 
       for (i = 0; i < self1->num_glyphs; i++)
         {
-          PangoGlyphInfo *info1 = &self1->glyphs[i];
-          PangoGlyphInfo *info2 = &self2->glyphs[i];
+          Pango2GlyphInfo *info1 = &self1->glyphs[i];
+          Pango2GlyphInfo *info2 = &self2->glyphs[i];
 
           if (info1->glyph == info2->glyph &&
               info1->geometry.width == info2->geometry.width &&
@@ -4488,8 +4490,9 @@ gsk_text_node_diff (GskRenderNode  *node1,
 
 /**
  * gsk_text_node_new:
- * @font: the `PangoFont` containing the glyphs
- * @glyphs: the `PangoGlyphString` to render
+ * @font: the `Pango2Font` containing the glyphs
+ * @glyphs: the `Pango2GlyphString` to render
+ * @palette: the palette to use, as quark
  * @color: the foreground color to render with
  * @offset: offset of the baseline
  *
@@ -4501,19 +4504,20 @@ gsk_text_node_diff (GskRenderNode  *node1,
  * Returns: (nullable) (transfer full) (type GskTextNode): a new `GskRenderNode`
  */
 GskRenderNode *
-gsk_text_node_new (PangoFont              *font,
-                   PangoGlyphString       *glyphs,
+gsk_text_node_new (Pango2Font             *font,
+                   Pango2GlyphString      *glyphs,
+                   GQuark                  palette,
                    const GdkRGBA          *color,
                    const graphene_point_t *offset)
 {
   GskTextNode *self;
   GskRenderNode *node;
-  PangoRectangle ink_rect;
-  PangoGlyphInfo *glyph_infos;
+  Pango2Rectangle ink_rect;
+  Pango2GlyphInfo *glyph_infos;
   int n;
 
-  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
-  pango_extents_to_pixels (&ink_rect, NULL);
+  pango2_glyph_string_extents (glyphs, font, &ink_rect, NULL);
+  pango2_extents_to_pixels (&ink_rect, NULL);
 
   /* Don't create nodes with empty bounds */
   if (ink_rect.width == 0 || ink_rect.height == 0)
@@ -4527,14 +4531,15 @@ gsk_text_node_new (PangoFont              *font,
   self->color = *color;
   self->offset = *offset;
   self->has_color_glyphs = FALSE;
+  self->palette = palette;
 
-  glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
+  glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (Pango2GlyphInfo));
 
   n = 0;
   for (int i = 0; i < glyphs->num_glyphs; i++)
     {
       /* skip empty glyphs */
-      if (glyphs->glyphs[i].glyph == PANGO_GLYPH_EMPTY)
+      if (glyphs->glyphs[i].glyph == PANGO2_GLYPH_EMPTY)
         continue;
 
       glyph_infos[n] = glyphs->glyphs[i];
@@ -4581,7 +4586,7 @@ gsk_text_node_get_color (const GskRenderNode *node)
  *
  * Returns: (transfer none): the font
  */
-PangoFont *
+Pango2Font *
 gsk_text_node_get_font (const GskRenderNode *node)
 {
   const GskTextNode *self = (const GskTextNode *) node;
@@ -4605,6 +4610,14 @@ gsk_text_node_has_color_glyphs (const GskRenderNode *node)
   const GskTextNode *self = (const GskTextNode *) node;
 
   return self->has_color_glyphs;
+}
+
+GQuark
+gsk_text_node_get_palette (const GskRenderNode *node)
+{
+  const GskTextNode *self = (const GskTextNode *) node;
+
+  return self->palette;
 }
 
 /**
@@ -4632,7 +4645,7 @@ gsk_text_node_get_num_glyphs (const GskRenderNode *node)
  *
  * Returns: (transfer none) (array length=n_glyphs): the glyph information
  */
-const PangoGlyphInfo *
+const Pango2GlyphInfo *
 gsk_text_node_get_glyphs (const GskRenderNode *node,
                           guint               *n_glyphs)
 {

@@ -1925,7 +1925,7 @@ keyboard_handle_keymap (void               *data,
                         uint32_t            size)
 {
   GdkWaylandSeat *seat = data;
-  PangoDirection direction;
+  Pango2Direction direction;
   gboolean bidi;
   gboolean caps_lock;
   gboolean num_lock;
@@ -2297,7 +2297,7 @@ keyboard_handle_modifiers (void               *data,
   GdkWaylandSeat *seat = data;
   GdkKeymap *keymap;
   struct xkb_state *xkb_state;
-  PangoDirection direction;
+  Pango2Direction direction;
   gboolean bidi;
   gboolean caps_lock;
   gboolean num_lock;

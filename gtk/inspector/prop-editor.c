@@ -363,13 +363,13 @@ static void
 attr_list_modified (GtkEntry *entry, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
 
-  attrs = pango_attr_list_from_string (gtk_editable_get_text (GTK_EDITABLE (entry)));
+  attrs = pango2_attr_list_from_string (gtk_editable_get_text (GTK_EDITABLE (entry)));
   if (!attrs)
     return;
 
-  g_value_init (&val, PANGO_TYPE_ATTR_LIST);
+  g_value_init (&val, PANGO2_TYPE_ATTR_LIST);
   g_value_take_boxed (&val, attrs);
   set_property_value (p->obj, p->spec, &val);
   g_value_unset (&val);
@@ -407,14 +407,14 @@ attr_list_changed (GObject *object, GParamSpec *pspec, gpointer data)
   GValue val = G_VALUE_INIT;
   char *str = NULL;
   const char *text;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
 
-  g_value_init (&val, PANGO_TYPE_ATTR_LIST);
+  g_value_init (&val, PANGO2_TYPE_ATTR_LIST);
   get_property_value (object, pspec, &val);
 
   attrs = g_value_get_boxed (&val);
   if (attrs)
-    str = pango_attr_list_to_string (attrs);
+    str = pango2_attr_list_to_string (attrs);
   if (str == NULL)
     str = g_strdup ("");
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
@@ -781,7 +781,7 @@ font_modified (GtkFontChooser *fb, GParamSpec *pspec, ObjectProperty *p)
 {
   GValue val = G_VALUE_INIT;
 
-  g_value_init (&val, PANGO_TYPE_FONT_DESCRIPTION);
+  g_value_init (&val, PANGO2_TYPE_FONT_DESCRIPTION);
   g_object_get_property (G_OBJECT (fb), "font-desc", &val);
   set_property_value (p->obj, p->spec, &val);
   g_value_unset (&val);
@@ -792,10 +792,10 @@ font_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkFontChooser *fb = GTK_FONT_CHOOSER (data);
   GValue val = G_VALUE_INIT;
-  const PangoFontDescription *font_desc;
-  PangoFontDescription *fb_font_desc;
+  const Pango2FontDescription *font_desc;
+  Pango2FontDescription *fb_font_desc;
 
-  g_value_init (&val, PANGO_TYPE_FONT_DESCRIPTION);
+  g_value_init (&val, PANGO2_TYPE_FONT_DESCRIPTION);
   get_property_value (object, pspec, &val);
 
   font_desc = g_value_get_boxed (&val);
@@ -803,7 +803,7 @@ font_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   if (font_desc == NULL ||
       (fb_font_desc != NULL &&
-       !pango_font_description_equal (fb_font_desc, font_desc)))
+       !pango2_font_description_equal (fb_font_desc, font_desc)))
     {
       block_controller (G_OBJECT (fb));
       gtk_font_chooser_set_font_desc (fb, font_desc);
@@ -811,7 +811,7 @@ font_changed (GObject *object, GParamSpec *pspec, gpointer data)
     }
 
   g_value_unset (&val);
-  pango_font_description_free (fb_font_desc);
+  pango2_font_description_free (fb_font_desc);
 }
 
 static char *
@@ -1186,7 +1186,7 @@ property_editor (GObject                *object,
                           object, spec, G_CALLBACK (rgba_modified));
     }
   else if (type == G_TYPE_PARAM_BOXED &&
-           G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO_TYPE_FONT_DESCRIPTION)
+           G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO2_TYPE_FONT_DESCRIPTION)
     {
       prop_edit = gtk_font_button_new ();
 
@@ -1215,7 +1215,7 @@ property_editor (GObject                *object,
       gtk_widget_set_valign (prop_edit, GTK_ALIGN_CENTER);
     }
   else if (type == G_TYPE_PARAM_BOXED &&
-           G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO_TYPE_ATTR_LIST)
+           G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO2_TYPE_ATTR_LIST)
     {
       prop_edit = gtk_entry_new ();
 
@@ -1668,7 +1668,7 @@ constructed (GObject *object)
   if (!can_modify)
     {
       label = gtk_label_new ("");
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
       gtk_label_set_max_width_chars (GTK_LABEL (label), 20);
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
       gtk_widget_set_hexpand (label, TRUE);

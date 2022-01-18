@@ -55,7 +55,7 @@ typedef struct _DirectionCacheEntry DirectionCacheEntry;
 struct _DirectionCacheEntry
 {
   guint serial;
-  PangoDirection direction;
+  Pango2Direction direction;
   Atom group_atom;
 };
 
@@ -73,7 +73,7 @@ struct _GdkX11Keymap
   GdkModifierType num_lock_mask;
   GdkModifierType scroll_lock_mask;
   GdkModifierType modmap[8];
-  PangoDirection current_direction;
+  Pango2Direction current_direction;
   guint have_direction    : 1;
   guint have_lock_state   : 1;
   guint caps_lock_state   : 1;
@@ -470,7 +470,7 @@ get_keymap (GdkX11Keymap *keymap_x11)
 }
 
 #ifdef HAVE_XKB
-static PangoDirection
+static Pango2Direction
 get_direction (XkbDescRec *xkb,
                int         group)
 {
@@ -482,33 +482,31 @@ get_direction (XkbDescRec *xkb,
     {
       int level = 0;
       KeySym sym = XkbKeySymEntry (xkb, code, level, group);
-      PangoDirection dir = gdk_unichar_direction (gdk_keyval_to_unicode (sym));
+      Pango2Direction dir = gdk_unichar_direction (gdk_keyval_to_unicode (sym));
 
       switch (dir)
         {
-        case PANGO_DIRECTION_RTL:
+        case PANGO2_DIRECTION_RTL:
           rtl_minus_ltr++;
           break;
-        case PANGO_DIRECTION_LTR:
+        case PANGO2_DIRECTION_LTR:
           rtl_minus_ltr--;
           break;
-        case PANGO_DIRECTION_TTB_LTR:
-        case PANGO_DIRECTION_TTB_RTL:
-        case PANGO_DIRECTION_WEAK_LTR:
-        case PANGO_DIRECTION_WEAK_RTL:
-        case PANGO_DIRECTION_NEUTRAL:
+        case PANGO2_DIRECTION_WEAK_LTR:
+        case PANGO2_DIRECTION_WEAK_RTL:
+        case PANGO2_DIRECTION_NEUTRAL:
         default:
           break;
         }
     }
 
   if (rtl_minus_ltr > 0)
-    return PANGO_DIRECTION_RTL;
+    return PANGO2_DIRECTION_RTL;
   else
-    return PANGO_DIRECTION_LTR;
+    return PANGO2_DIRECTION_LTR;
 }
 
-static PangoDirection
+static Pango2Direction
 get_direction_from_cache (GdkX11Keymap *keymap_x11,
                           XkbDescPtr    xkb,
                           int           group)
@@ -518,7 +516,7 @@ get_direction_from_cache (GdkX11Keymap *keymap_x11,
   gboolean cache_hit = FALSE;
   DirectionCacheEntry *cache = keymap_x11->group_direction_cache;
 
-  PangoDirection direction = PANGO_DIRECTION_NEUTRAL;
+  Pango2Direction direction = PANGO2_DIRECTION_NEUTRAL;
   int i;
 
   if (keymap_x11->have_direction)
@@ -588,7 +586,7 @@ update_direction (GdkX11Keymap *keymap_x11,
   XkbDescPtr xkb = get_xkb (keymap_x11);
   Atom group_atom;
   gboolean had_direction;
-  PangoDirection old_direction;
+  Pango2Direction old_direction;
 
   had_direction = keymap_x11->have_direction;
   old_direction = keymap_x11->current_direction;
@@ -721,7 +719,7 @@ _gdk_x11_keymap_keys_changed (GdkDisplay *display)
     g_signal_emit_by_name (display_x11->keymap, "keys_changed", 0);
 }
 
-static PangoDirection
+static Pango2Direction
 gdk_x11_keymap_get_direction (GdkKeymap *keymap)
 {
 #ifdef HAVE_XKB
@@ -746,7 +744,7 @@ gdk_x11_keymap_get_direction (GdkKeymap *keymap)
     }
   else
 #endif /* HAVE_XKB */
-    return PANGO_DIRECTION_NEUTRAL;
+    return PANGO2_DIRECTION_NEUTRAL;
 }
 
 static gboolean
@@ -765,7 +763,7 @@ gdk_x11_keymap_have_bidi_layouts (GdkKeymap *keymap)
 
       for (i = 0; i < num_groups; i++)
       {
-        if (get_direction_from_cache (keymap_x11, xkb, i) == PANGO_DIRECTION_RTL)
+        if (get_direction_from_cache (keymap_x11, xkb, i) == PANGO2_DIRECTION_RTL)
           have_rtl_keyboard = TRUE;
         else
           have_ltr_keyboard = TRUE;

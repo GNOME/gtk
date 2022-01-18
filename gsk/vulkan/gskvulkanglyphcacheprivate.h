@@ -1,7 +1,7 @@
 #ifndef __GSK_VULKAN_GLYPH_CACHE_PRIVATE_H__
 #define __GSK_VULKAN_GLYPH_CACHE_PRIVATE_H__
 
-#include <pango/pango.h>
+#include <pango2/pango.h>
 #include "gskvulkanrendererprivate.h"
 #include "gskvulkanimageprivate.h"
 

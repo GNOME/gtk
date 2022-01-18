@@ -188,7 +188,7 @@ init_xft_settings (GdkX11Screen *x11_screen)
   if (!get_double_default (x11_screen, "dpi", &dpi_double))
     dpi_double = 96.0;
 
-  x11_screen->xft_dpi = (int)(0.5 + PANGO_SCALE * dpi_double);
+  x11_screen->xft_dpi = (int)(0.5 + PANGO2_SCALE * dpi_double);
 }
 
 gboolean

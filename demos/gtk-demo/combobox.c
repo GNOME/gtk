@@ -260,12 +260,13 @@ mask_entry_set_background (MaskEntry *entry)
     {
       if (!g_regex_match_simple (entry->mask, gtk_editable_get_text (GTK_EDITABLE (entry)), 0, 0))
         {
-          PangoAttrList *attrs;
+          Pango2AttrList *attrs;
+          Pango2Color color = { 65535, 32767, 32767, 65535 };
 
-          attrs = pango_attr_list_new ();
-          pango_attr_list_insert (attrs, pango_attr_foreground_new (65535, 32767, 32767));
+          attrs = pango2_attr_list_new ();
+          pango2_attr_list_insert (attrs, pango2_attr_foreground_new (&color));
           gtk_entry_set_attributes (GTK_ENTRY (entry), attrs);
-          pango_attr_list_unref (attrs);
+          pango2_attr_list_unref (attrs);
           return;
         }
     }

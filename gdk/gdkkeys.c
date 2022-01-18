@@ -309,14 +309,14 @@ gdk_keyval_is_lower (guint keyval)
  * The direction of a layout is the direction of the majority of its
  * symbols. See pango_unichar_direction().
  *
- * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL
- *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL
+ * Returns: %PANGO2_DIRECTION_LTR or %PANGO2_DIRECTION_RTL
+ *   if it can determine the direction. %PANGO2_DIRECTION_NEUTRAL
  *   otherwise.
  */
-PangoDirection
+Pango2Direction
 gdk_keymap_get_direction (GdkKeymap *keymap)
 {
-  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), PANGO_DIRECTION_LTR);
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), PANGO2_DIRECTION_LTR);
 
   return GDK_KEYMAP_GET_CLASS (keymap)->get_direction (keymap);
 }

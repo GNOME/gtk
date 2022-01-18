@@ -72,7 +72,7 @@ do_links (GtkWidget *do_widget)
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       gtk_label_set_max_width_chars (GTK_LABEL (label), 40);
       gtk_label_set_wrap (GTK_LABEL (label), TRUE);
-      gtk_label_set_wrap_mode (GTK_LABEL (label), PANGO_WRAP_WORD);
+      gtk_label_set_wrap_mode (GTK_LABEL (label), PANGO2_WRAP_WORD);
       g_signal_connect (label, "activate-link", G_CALLBACK (activate_link), NULL);
       gtk_widget_set_margin_start (label, 20);
       gtk_widget_set_margin_end (label, 20);

@@ -720,7 +720,7 @@ _gdk_win32_keymap_get_mod_mask (GdkWin32Keymap *keymap)
   return mod_bits_to_gdk_mod_mask (mod_bits);
 }
 
-static PangoDirection
+static Pango2Direction
 get_hkl_direction (HKL hkl)
 {
   switch (PRIMARYLANGID (LOWORD ((DWORD) (gintptr) hkl)))
@@ -739,7 +739,7 @@ get_hkl_direction (HKL hkl)
     }
 }
 
-static PangoDirection
+static Pango2Direction
 gdk_win32_keymap_get_direction (GdkKeymap *gdk_keymap)
 {
   GdkWin32Keymap *keymap;

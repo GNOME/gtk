@@ -378,7 +378,7 @@ enum {
         G_TYPE_STRING,            /* MODEL_COL_DATE_TEXT */     \
         G_TYPE_STRING,            /* MODEL_COL_TIME_TEXT */     \
         G_TYPE_STRING,            /* MODEL_COL_LOCATION_TEXT */ \
-        PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
+        PANGO2_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
 
 #define DEFAULT_RECENT_FILES_LIMIT 50
 
@@ -4564,7 +4564,7 @@ file_system_model_set (GtkFileSystemModel *model,
         break;
       }
     case MODEL_COL_ELLIPSIZE:
-      g_value_set_enum (value, info ? PANGO_ELLIPSIZE_END : PANGO_ELLIPSIZE_NONE);
+      g_value_set_enum (value, info ? PANGO2_ELLIPSIZE_END : PANGO2_ELLIPSIZE_NONE);
       break;
     case MODEL_COL_LOCATION_TEXT:
       {

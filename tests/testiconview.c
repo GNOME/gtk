@@ -474,7 +474,7 @@ main (int argc, char **argv)
   g_object_set (cell, 
 		"editable", TRUE, 
 		"xalign", 0.5,
-		"wrap-mode", PANGO_WRAP_WORD_CHAR,
+		"wrap-mode", PANGO2_WRAP_WORD_CHAR,
 		"wrap-width", 100,
 		NULL);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_list),

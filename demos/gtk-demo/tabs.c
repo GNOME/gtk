@@ -21,7 +21,7 @@ do_tabs (GtkWidget *do_widget)
       GtkWidget *view;
       GtkWidget *sw;
       GtkTextBuffer *buffer;
-      PangoTabArray *tabs;
+      Pango2TabArray *tabs;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Tabs");
@@ -38,13 +38,13 @@ do_tabs (GtkWidget *do_widget)
       gtk_text_view_set_left_margin (GTK_TEXT_VIEW (view), 20);
       gtk_text_view_set_right_margin (GTK_TEXT_VIEW (view), 20);
 
-      tabs = pango_tab_array_new (3, TRUE);
-      pango_tab_array_set_tab (tabs, 0, PANGO_TAB_LEFT, 0);
-      pango_tab_array_set_tab (tabs, 1, PANGO_TAB_DECIMAL, 150);
-      pango_tab_array_set_decimal_point (tabs, 1, '.');
-      pango_tab_array_set_tab (tabs, 2, PANGO_TAB_RIGHT, 290);
+      tabs = pango2_tab_array_new (3, TRUE);
+      pango2_tab_array_set_tab (tabs, 0, PANGO2_TAB_LEFT, 0);
+      pango2_tab_array_set_tab (tabs, 1, PANGO2_TAB_DECIMAL, 150);
+      pango2_tab_array_set_decimal_point (tabs, 1, '.');
+      pango2_tab_array_set_tab (tabs, 2, PANGO2_TAB_RIGHT, 290);
       gtk_text_view_set_tabs (GTK_TEXT_VIEW (view), tabs);
-      pango_tab_array_free (tabs);
+      pango2_tab_array_free (tabs);
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
       gtk_text_buffer_set_text (buffer, "one\t2.0\tthree\nfour\t5.555\tsix\nseven\t88.88\tnine", -1);

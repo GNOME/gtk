@@ -29,7 +29,7 @@ insert_link (GtkTextBuffer *buffer,
 
   tag = gtk_text_buffer_create_tag (buffer, NULL,
                                     "foreground", "blue",
-                                    "underline", PANGO_UNDERLINE_SINGLE,
+                                    "underline", PANGO2_LINE_STYLE_SOLID,
                                     NULL);
   g_object_set_data (G_OBJECT (tag), "page", GINT_TO_POINTER (page));
   gtk_text_buffer_insert_with_tags (buffer, iter, text, -1, tag, NULL);
@@ -72,8 +72,8 @@ show_page (GtkTextView *text_view,
   buffer = gtk_text_view_get_buffer (text_view);
 
   bold = gtk_text_buffer_create_tag (buffer, NULL,
-                                     "weight", PANGO_WEIGHT_BOLD,
-                                     "scale", PANGO_SCALE_X_LARGE,
+                                     "weight", PANGO2_WEIGHT_BOLD,
+                                     "scale", PANGO2_SCALE_X_LARGE,
                                      NULL);
   mono = gtk_text_buffer_create_tag (buffer, NULL,
                                      "family", "monospace",

@@ -29,15 +29,15 @@ main (int argc, char *argv[])
   gtk_window_set_child (GTK_WINDOW (window), box);
 
   child = gtk_label_new ("Start Start Start Start Start");
-  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO2_ELLIPSIZE_END);
   gtk_center_box_set_start_widget (GTK_CENTER_BOX (box), child);
 
   child = gtk_label_new ("Center");
-  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO2_ELLIPSIZE_END);
   gtk_center_box_set_center_widget (GTK_CENTER_BOX (box), child);
 
   child = gtk_label_new ("End");
-  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (child), PANGO2_ELLIPSIZE_END);
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (box), child);
 
   g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);

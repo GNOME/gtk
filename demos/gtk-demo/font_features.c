@@ -35,9 +35,10 @@ typedef struct {
 typedef struct {
   unsigned int start;
   unsigned int end;
-  PangoFontDescription *desc;
+  Pango2FontDescription *desc;
   char *features;
-  PangoLanguage *language;
+  char *palette;
+  Pango2Language *language;
 } Range;
 
 typedef struct {
@@ -202,12 +203,12 @@ font_features_reset_basic (void)
 static void
 update_basic (void)
 {
-  PangoFontDescription *desc;
+  Pango2FontDescription *desc;
 
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
 
   gtk_adjustment_set_value (demo->size_adjustment,
-                            pango_font_description_get_size (desc) / (double) PANGO_SCALE);
+                            pango2_font_description_get_size (desc) / (double) PANGO2_SCALE);
 }
 
 static void add_font_variations (GString *s);
@@ -218,8 +219,9 @@ free_range (gpointer data)
   Range *range = data;
 
   if (range->desc)
-    pango_font_description_free (range->desc);
+    pango2_font_description_free (range->desc);
   g_free (range->features);
+  g_free (range->palette);
   g_free (range);
 }
 
@@ -244,9 +246,10 @@ compare_range (gconstpointer a, gconstpointer b)
 static void
 ensure_range (unsigned int          start,
               unsigned int          end,
-              PangoFontDescription *desc,
+              Pango2FontDescription *desc,
               const char           *features,
-              PangoLanguage        *language)
+              const char           *palette,
+              Pango2Language        *language)
 {
   GList *l;
   Range *range;
@@ -270,11 +273,12 @@ ensure_range (unsigned int          start,
 
 set:
   if (range->desc)
-    pango_font_description_free (range->desc);
+    pango2_font_description_free (range->desc);
   if (desc)
-    range->desc = pango_font_description_copy (desc);
+    range->desc = pango2_font_description_copy (desc);
   g_free (range->features);
   range->features = g_strdup (features);
+  range->palette = g_strdup (palette);
   range->language = language;
 }
 
@@ -473,13 +477,13 @@ update_display (void)
   gboolean has_feature;
   GtkTreeIter iter;
   GtkTreeModel *model;
-  PangoFontDescription *desc;
+  Pango2FontDescription *desc;
   GList *l;
-  PangoAttrList *attrs;
-  PangoAttribute *attr;
+  Pango2AttrList *attrs;
+  Pango2Attribute *attr;
   int ins, bound;
   guint start, end;
-  PangoLanguage *lang;
+  Pango2Language *lang;
   char *font_desc;
   char *features;
   double value;
@@ -503,8 +507,8 @@ update_display (void)
 
   if (do_waterfall)
     {
-      start = PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING;
-      end = PANGO_ATTR_INDEX_TO_TEXT_END;
+      start = PANGO2_ATTR_INDEX_FROM_TEXT_BEGINNING;
+      end = PANGO2_ATTR_INDEX_TO_TEXT_END;
     }
   else if (gtk_label_get_selection_bounds (GTK_LABEL (demo->the_label), &ins, &bound))
     {
@@ -513,24 +517,24 @@ update_display (void)
     }
   else
     {
-      start = PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING;
-      end = PANGO_ATTR_INDEX_TO_TEXT_END;
+      start = PANGO2_ATTR_INDEX_FROM_TEXT_BEGINNING;
+      end = PANGO2_ATTR_INDEX_TO_TEXT_END;
     }
 
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
 
   value = gtk_adjustment_get_value (demo->size_adjustment);
-  pango_font_description_set_size (desc, value * PANGO_SCALE);
+  pango2_font_description_set_size (desc, value * PANGO2_SCALE);
 
   s = g_string_new ("");
   add_font_variations (s);
   if (s->len > 0)
     {
-      pango_font_description_set_variations (desc, s->str);
+      pango2_font_description_set_variations (desc, s->str);
       g_string_free (s, TRUE);
     }
 
-  font_desc = pango_font_description_to_string (desc);
+  font_desc = pango2_font_description_to_string (desc);
 
   s = g_string_new ("");
 
@@ -575,6 +579,8 @@ update_display (void)
 
   features = g_string_free (s, FALSE);
 
+  palette = g_strdup_printf ("palette%d", demo->palette);
+
   if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (demo->script_lang), &iter))
     {
       hb_tag_t lang_tag;
@@ -582,27 +588,25 @@ update_display (void)
       model = gtk_combo_box_get_model (GTK_COMBO_BOX (demo->script_lang));
       gtk_tree_model_get (model, &iter, 3, &lang_tag, -1);
 
-      lang = pango_language_from_string (hb_language_to_string (hb_ot_tag_to_language (lang_tag)));
+      lang = pango2_language_from_string (hb_language_to_string (hb_ot_tag_to_language (lang_tag)));
     }
   else
     lang = NULL;
 
-  attrs = pango_attr_list_new ();
+  attrs = pango2_attr_list_new ();
 
   if (gtk_adjustment_get_value (demo->letterspacing_adjustment) != 0.)
     {
-      attr = pango_attr_letter_spacing_new (gtk_adjustment_get_value (demo->letterspacing_adjustment));
-      attr->start_index = start;
-      attr->end_index = end;
-      pango_attr_list_insert (attrs, attr);
+      attr = pango2_attr_letter_spacing_new (gtk_adjustment_get_value (demo->letterspacing_adjustment));
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
     }
 
   if (gtk_adjustment_get_value (demo->line_height_adjustment) != 1.)
     {
-      attr = pango_attr_line_height_new (gtk_adjustment_get_value (demo->line_height_adjustment));
-      attr->start_index = start;
-      attr->end_index = end;
-      pango_attr_list_insert (attrs, attr);
+      attr = pango2_attr_line_height_new (gtk_adjustment_get_value (demo->line_height_adjustment));
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
     }
 
     {
@@ -610,16 +614,12 @@ update_display (void)
       char *fg, *bg, *css;
 
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->foreground), &rgba);
-      attr = pango_attr_foreground_new (65535 * rgba.red,
-                                        65535 * rgba.green,
-                                        65535 * rgba.blue);
-      attr->start_index = start;
-      attr->end_index = end;
-      pango_attr_list_insert (attrs, attr);
-      attr = pango_attr_foreground_alpha_new (65535 * rgba.alpha);
-      attr->start_index = start;
-      attr->end_index = end;
-      pango_attr_list_insert (attrs, attr);
+      attr = pango2_attr_foreground_new (&(Pango2Color){ 65535 * rgba.red,
+                                                         65535 * rgba.green,
+                                                         65535 * rgba.blue,
+                                                         65535 * rgba.alpha });
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
 
       fg = gdk_rgba_to_string (&rgba);
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->background), &rgba);
@@ -633,37 +633,40 @@ update_display (void)
 
   if (do_waterfall)
     {
-      attr = pango_attr_font_desc_new (desc);
-      pango_attr_list_insert (attrs, attr);
-      attr = pango_attr_font_features_new (features);
-      pango_attr_list_insert (attrs, attr);
-      attr = pango_attr_language_new (lang);
-      pango_attr_list_insert (attrs, attr);
+      attr = pango2_attr_font_desc_new (desc);
+      pango2_attr_list_insert (attrs, attr);
+      attr = pango2_attr_font_features_new (features);
+      pango2_attr_list_insert (attrs, attr);
+      attr = pango2_attr_palette_new (palette);
+      pango2_attr_list_insert (attrs, attr);
+      attr = pango2_attr_language_new (lang);
+      pango2_attr_list_insert (attrs, attr);
     }
   else
     {
-      ensure_range (start, end, desc, features, lang);
+      ensure_range (start, end, desc, features, palette, lang);
 
       for (l = demo->ranges; l; l = l->next)
         {
           Range *range = l->data;
 
-          attr = pango_attr_font_desc_new (range->desc);
-          attr->start_index = range->start;
-          attr->end_index = range->end;
-          pango_attr_list_insert (attrs, attr);
+          attr = pango2_attr_font_desc_new (range->desc);
+          pango2_attribute_set_range (attr, range->start, range->end);
+          pango2_attr_list_insert (attrs, attr);
 
-          attr = pango_attr_font_features_new (range->features);
-          attr->start_index = range->start;
-          attr->end_index = range->end;
-          pango_attr_list_insert (attrs, attr);
+          attr = pango2_attr_font_features_new (range->features);
+          pango2_attribute_set_range (attr, range->start, range->end);
+          pango2_attr_list_insert (attrs, attr);
+
+          attr = pango2_attr_palette_new (range->palette);
+          pango2_attribute_set_range (attr, range->start, range->end);
+          pango2_attr_list_insert (attrs, attr);
 
           if (range->language)
             {
-              attr = pango_attr_language_new (range->language);
-              attr->start_index = range->start;
-              attr->end_index = range->end;
-              pango_attr_list_insert (attrs, attr);
+              attr = pango2_attr_language_new (range->language);
+              pango2_attribute_set_range (attr, range->start, range->end);
+              pango2_attr_list_insert (attrs, attr);
             }
         }
     }
@@ -681,10 +684,9 @@ update_display (void)
           g_string_append (waterfall, text);
           g_string_append_c (waterfall, '\n');
 
-          attr = pango_attr_size_new (sizes[i] * PANGO_SCALE);
-          attr->start_index = start;
-          attr->end_index = start + text_len;
-          pango_attr_list_insert (attrs, attr);
+          attr = pango2_attr_size_new (sizes[i] * PANGO2_SCALE);
+          pango2_attribute_set_range (attr, start, start + text_len);
+          pango2_attr_list_insert (attrs, attr);
 
           start += text_len + 1;
         }
@@ -697,22 +699,23 @@ update_display (void)
   gtk_label_set_attributes (GTK_LABEL (demo->the_label), attrs);
 
   g_free (font_desc);
-  pango_font_description_free (desc);
+  pango2_font_description_free (desc);
   g_free (features);
-  pango_attr_list_unref (attrs);
+  g_free (palette);
+  pango2_attr_list_unref (attrs);
   g_free (text);
 }
 
-static PangoFont *
+static Pango2Font *
 get_pango_font (void)
 {
-  PangoFontDescription *desc;
-  PangoContext *context;
+  Pango2FontDescription *desc;
+  Pango2Context *context;
 
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
   context = gtk_widget_get_pango_context (demo->font);
 
-  return pango_context_load_font (context, desc);
+  return pango2_context_load_font (context, desc);
 }
 
 typedef struct {
@@ -765,7 +768,7 @@ update_script_combo (void)
   GtkListStore *store;
   hb_font_t *hb_font;
   int i, j, k;
-  PangoFont *pango_font;
+  Pango2Font *pango_font;
   GHashTable *tags;
   GHashTableIter iter;
   TagPair *pair;
@@ -785,7 +788,7 @@ update_script_combo (void)
   store = gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT);
 
   pango_font = get_pango_font ();
-  hb_font = pango_font_get_hb_font (pango_font);
+  hb_font = pango2_font_get_hb_font (pango_font);
 
   tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
 
@@ -908,7 +911,7 @@ update_features (void)
   GtkTreeIter iter;
   guint script_index, lang_index;
   hb_tag_t lang_tag;
-  PangoFont *pango_font;
+  Pango2Font *pango_font;
   hb_font_t *hb_font;
   GList *l;
 
@@ -947,8 +950,19 @@ update_features (void)
         gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), TRUE);
     }
 
+  /* set feature presence checks from the font features */
+
+  if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (demo->script_lang), &iter))
+    return;
+
+  model = gtk_combo_box_get_model (GTK_COMBO_BOX (demo->script_lang));
+  gtk_tree_model_get (model, &iter,
+                      1, &script_index,
+                      2, &lang_index,
+                      -1);
+
   pango_font = get_pango_font ();
-  hb_font = pango_font_get_hb_font (pango_font);
+  hb_font = pango2_font_get_hb_font (pango_font);
 
   if (hb_font)
     {
@@ -1361,7 +1375,7 @@ instance_changed (GtkComboBox *combo)
   float *coords = NULL;
   hb_ot_var_axis_info_t *ai = NULL;
   unsigned int n_axes;
-  PangoFont *pango_font = NULL;
+  Pango2Font *pango_font = NULL;
   hb_font_t *hb_font;
   hb_face_t *hb_face;
 
@@ -1378,7 +1392,7 @@ instance_changed (GtkComboBox *combo)
     }
 
   pango_font = get_pango_font ();
-  hb_font = pango_font_get_hb_font (pango_font);
+  hb_font = pango2_font_get_hb_font (pango_font);
   hb_face = hb_font_get_face (hb_font);
 
   n_axes = hb_ot_var_get_axis_infos (hb_face, 0, NULL, NULL);
@@ -1482,7 +1496,7 @@ static void
 update_font_variations (void)
 {
   GtkWidget *child;
-  PangoFont *pango_font = NULL;
+  Pango2Font *pango_font = NULL;
   hb_font_t *hb_font;
   hb_face_t *hb_face;
   unsigned int n_axes;
@@ -1501,7 +1515,7 @@ update_font_variations (void)
   g_hash_table_remove_all (demo->instances);
 
   pango_font = get_pango_font ();
-  hb_font = pango_font_get_hb_font (pango_font);
+  hb_font = pango2_font_get_hb_font (pango_font);
   hb_face = hb_font_get_face (hb_font);
 
   n_axes = hb_ot_var_get_axis_infos (hb_face, 0, NULL, NULL);

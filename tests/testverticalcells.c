@@ -340,7 +340,7 @@ main (int argc, char **argv)
 				       "icon-name", ICON_COLUMN, NULL);
 
   renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "scale", 1.2F, "weight", PANGO_WEIGHT_BOLD, NULL);
+  g_object_set (renderer, "scale", 1.2F, "weight", PANGO2_WEIGHT_BOLD, NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "text", INFO_COLUMN,
@@ -353,7 +353,7 @@ main (int argc, char **argv)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_VERTICAL);
 
   renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, "editable", TRUE, NULL);
+  g_object_set (renderer, "ellipsize", PANGO2_ELLIPSIZE_END, "editable", TRUE, NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "text", DESCRIPTION_COLUMN,
@@ -366,7 +366,7 @@ main (int argc, char **argv)
 				       NULL);
 
   renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "scale", 0.6F, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  g_object_set (renderer, "scale", 0.6F, "ellipsize", PANGO2_ELLIPSIZE_END, NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "text", FINE_PRINT_COLUMN,

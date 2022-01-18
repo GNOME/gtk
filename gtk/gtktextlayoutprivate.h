@@ -5,7 +5,7 @@
  * Copyright (c) 1994-1997 Sun Microsystems, Inc.
  * Copyright (c) 2000 Red Hat, Inc.
  * Tk->Gtk port by Havoc Pennington
- * Pango support by Owen Taylor
+ * Pango2 support by Owen Taylor
  *
  * This file can be used under your choice of two licenses, the LGPL
  * and the original Tk license.
@@ -121,9 +121,9 @@ struct _GtkTextLayout
   /* Default style used if no tags override it */
   GtkTextAttributes *default_style;
 
-  /* Pango contexts used for creating layouts */
-  PangoContext *ltr_context;
-  PangoContext *rtl_context;
+  /* Pango2 contexts used for creating layouts */
+  Pango2Context *ltr_context;
+  Pango2Context *rtl_context;
 
   /* A cache of one style; this is used to ensure
    * we don't constantly regenerate the style
@@ -151,7 +151,7 @@ struct _GtkTextLayout
   /* The preedit string and attributes, if any */
 
   char *preedit_string;
-  PangoAttrList *preedit_attrs;
+  Pango2AttrList *preedit_attrs;
   int preedit_len;
   int preedit_cursor;
 };
@@ -159,12 +159,6 @@ struct _GtkTextLayout
 struct _GtkTextLayoutClass
 {
   GObjectClass parent_class;
-};
-
-struct _GtkTextAttrAppearance
-{
-  PangoAttribute attr;
-  GtkTextAppearance appearance;
 };
 
 typedef struct _CursorPosition CursorPosition;
@@ -176,11 +170,11 @@ struct _CursorPosition {
 
 struct _GtkTextLineDisplay
 {
-  PangoLayout *layout;
+  Pango2Layout *layout;
 
   GskRenderNode *node;
 
-  GArray *cursors;      /* indexes of cursors in the PangoLayout, and mark names */
+  GArray *cursors;      /* indexes of cursors in the Pango2Layout, and mark names */
 
   /* GSequenceIter backpointer for use within cache */
   GSequenceIter *cache_iter;
@@ -218,7 +212,7 @@ struct _GtkTextLineDisplay
 };
 
 #ifdef GTK_COMPILATION
-extern G_GNUC_INTERNAL PangoAttrType gtk_text_attr_appearance_type;
+extern G_GNUC_INTERNAL Pango2AttrType gtk_text_attr_appearance_type;
 #endif
 
 GType         gtk_text_layout_get_type    (void) G_GNUC_CONST;
@@ -230,8 +224,8 @@ GtkTextBuffer     *gtk_text_layout_get_buffer            (GtkTextLayout     *lay
 void               gtk_text_layout_set_default_style     (GtkTextLayout     *layout,
 							  GtkTextAttributes *values);
 void               gtk_text_layout_set_contexts          (GtkTextLayout     *layout,
-							  PangoContext      *ltr_context,
-							  PangoContext      *rtl_context);
+							  Pango2Context      *ltr_context,
+							  Pango2Context      *rtl_context);
 void               gtk_text_layout_set_cursor_direction  (GtkTextLayout     *layout,
                                                           GtkTextDirection   direction);
 void		   gtk_text_layout_set_overwrite_mode	 (GtkTextLayout     *layout,
@@ -244,7 +238,7 @@ void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,
                                              int                width);
 void gtk_text_layout_set_preedit_string     (GtkTextLayout     *layout,
  					     const char        *preedit_string,
- 					     PangoAttrList     *preedit_attrs,
+ 					     Pango2AttrList     *preedit_attrs,
  					     int                cursor_pos);
 
 void     gtk_text_layout_set_cursor_visible (GtkTextLayout     *layout,

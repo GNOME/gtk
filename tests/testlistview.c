@@ -507,7 +507,7 @@ setup_widget (GtkSignalListItemFactory *factory,
 
   data->name = gtk_label_new (NULL);
   gtk_label_set_max_width_chars (GTK_LABEL (data->name), 25);
-  gtk_label_set_ellipsize (GTK_LABEL (data->name), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (data->name), PANGO2_ELLIPSIZE_END);
   gtk_box_append (GTK_BOX (box), data->name);
 
   g_signal_connect (list_item, "notify::item", G_CALLBACK (row_data_notify_item), data);

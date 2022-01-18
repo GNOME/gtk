@@ -123,7 +123,7 @@ setup_ellipsizing_label (GtkSignalListItemFactory *factory,
   GtkWidget *label;
   label = gtk_label_new ("");
   gtk_label_set_xalign (GTK_LABEL (label), 0);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
   gtk_label_set_width_chars (GTK_LABEL (label), 20);
   gtk_list_item_set_child (GTK_LIST_ITEM (listitem), label);
 }

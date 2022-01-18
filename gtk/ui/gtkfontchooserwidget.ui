@@ -163,7 +163,7 @@
           </closure>
         </binding>
         <binding name="attributes">
-          <closure type="PangoAttrList" function="get_font_attributes">
+          <closure type="Pango2AttrList" function="get_font_attributes">
             <lookup name="item">GtkListItem</lookup>
           </closure>
         </binding>
@@ -313,7 +313,7 @@
                       </closure>
                     </binding>
                     <binding name="attributes" object="GtkFontChooserWidget">
-                      <closure type="PangoAttrList" function="get_font_attributes">
+                      <closure type="Pango2AttrList" function="get_font_attributes">
                         <lookup name="selected-item">selection</lookup>
                       </closure>
                     </binding>

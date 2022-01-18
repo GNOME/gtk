@@ -264,10 +264,10 @@ gboolean                gtk_css_style_print                     (GtkCssStyle    
                                                                  guint                   indent,
                                                                  gboolean                skip_initial);
 
-PangoTextTransform      gtk_css_style_get_pango_text_transform  (GtkCssStyle            *style);
+Pango2TextTransform      gtk_css_style_get_pango_text_transform  (GtkCssStyle            *style);
 char *                  gtk_css_style_compute_font_features     (GtkCssStyle            *style);
-PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
-PangoFontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
+Pango2AttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
+Pango2FontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
 
 GtkCssValues *gtk_css_values_new   (GtkCssValuesType  type);
 GtkCssValues *gtk_css_values_ref   (GtkCssValues     *values);

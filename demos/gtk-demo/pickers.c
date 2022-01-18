@@ -11,8 +11,8 @@
 #include <gtk/gtk.h>
 
 static gboolean
-filter_font_cb (const PangoFontFamily *family,
-                const PangoFontFace   *face,
+filter_font_cb (const Pango2FontFamily *family,
+                const Pango2FontFace   *face,
                 gpointer               data)
 {
   const char *alias_families[] = {
@@ -26,7 +26,7 @@ filter_font_cb (const PangoFontFamily *family,
   };
   const char *family_name;
 
-  family_name = pango_font_family_get_name (PANGO_FONT_FAMILY (family));
+  family_name = pango2_font_family_get_name ((Pango2FontFamily *)family);
 
   for (int i = 0; alias_families[i]; i++)
     {

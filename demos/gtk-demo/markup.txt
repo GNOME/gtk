@@ -7,9 +7,9 @@ Text weights: <span weight="thin">thin</span> <span weight="light">light</span> 
 
 Text <span color="gray">c<span color="green">o</span>l<span color="tomato">o</span>rs</span> and <span background="pink">backgrounds</span>
 
-Colorful <span underline="low" underline-color="blue"><span underline="double" underline-color="red">under</span>lines</span> and <span background="pink"><span underline="error">mo</span><span underline="error" underline-color="green">re</span></span>
+Colorful <span underline_position="under" underline-color="blue"><span underline="double" underline-color="red">under</span>lines</span> and <span background="pink"><span underline="wavy">mo</span><span underline="wavy" underline-color="green">re</span></span>
 
-Colorful <span strikethrough="true" strikethrough-color="magenta">strikethroughs</span> and <span overline="single" overline_color="green">overlines</span>
+Colorful <span strikethrough="solid" strikethrough-color="magenta">strikethroughs</span> and <span overline="solid" overline_color="green">overlines</span>
 
 Superscripts and subscripts: 𝜀<span rise="-6000" size="x-small" font_desc="italic">0</span> = 𝜔<span rise="8000" size="smaller">𝜔<span rise="14000" size="smaller">𝜔<span rise="20000">.<span rise="23000">.<span rise="26000">.</span></span></span></span></span>
 
@@ -19,7 +19,7 @@ OpenType font features: <span font_desc="sans regular" font_features="dlig=0">fe
 
 Shortcuts: <tt>Monospace</tt> – <b>Bold</b> – <i>Italic</i> – <big>Big</big> – <small>Small</small> – <u>Underlined</u> – <s>Strikethrough</s> – Super<sup>script</sup> – Sub<sub>script</sub>
 
-hy­phen­ation al­go­rithm is a <span allow_breaks="false" style="italic">set of rules</span>, espe­ci­ally one co­di­fied for im­ple­men­tation in a com­pu­ter pro­gram, that de­ci­des at which points a word can be bro­ken over two lines with a hy­phen. For ex­am­ple, a hy­phen­ation al­go­rithm might de­cide that im­peach­ment can be broken as impeach‧ment or im‧peachment but not impe‧achment.
+A hy­phen­ation al­go­rithm is a <span allow_breaks="false" style="italic">set of rules</span>, espe­ci­ally one co­di­fied for im­ple­men­tation in a com­pu­ter pro­gram, that de­ci­des at which points a word can be bro­ken over two lines with a hy­phen. For ex­am­ple, a hy­phen­ation al­go­rithm might de­cide that im­peach­ment can be broken as impeach‧ment or im‧peachment but not impe‧achment.
 
 <span insert_hyphens="false">one/two three/four five/six seven/eight nine/ten</span>
 

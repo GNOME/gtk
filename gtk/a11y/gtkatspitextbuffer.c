@@ -58,7 +58,7 @@ gtk_text_direction_to_string (GtkTextDirection direction)
 static const char *
 gtk_wrap_mode_to_string (GtkWrapMode wrap_mode)
 {
-  /* Keep these in sync with pango_wrap_mode_to_string(); note that
+  /* Keep these in sync with pango2_wrap_mode_to_string(); note that
    * here we have an extra case for NONE.
    */
   switch (wrap_mode)
@@ -81,7 +81,7 @@ gtk_text_view_add_default_attributes (GtkTextView     *view,
                                       GVariantBuilder *builder)
 {
   GtkTextAttributes *text_attrs;
-  PangoFontDescription *font;
+  Pango2FontDescription *font;
   char *value;
 
   text_attrs = gtk_text_view_get_default_attributes (view);
@@ -106,7 +106,7 @@ gtk_text_view_add_default_attributes (GtkTextView     *view,
   g_variant_builder_add (builder, "{ss}", "strikethrough",
                          text_attrs->appearance.strikethrough ? "true" : "false");
   g_variant_builder_add (builder, "{ss}", "underline",
-                         pango_underline_to_string (text_attrs->appearance.underline));
+                         pango_line_style_to_string (text_attrs->appearance.underline));
 
   value = g_strdup_printf ("%u,%u,%u",
                            (guint)(text_attrs->appearance.bg_rgba->red * 65535),
@@ -190,7 +190,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
   while (temp_tags && !val_set)
     {
       GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
-      PangoStyle style;
+      Pango2Style style;
 
       g_object_get (tag,
                     "style-set", &val_set,
@@ -206,7 +206,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
   while (temp_tags && !val_set)
     {
       GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
-      PangoVariant variant;
+      Pango2Variant variant;
 
       g_object_get (tag,
                     "variant-set", &val_set,
@@ -222,7 +222,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
   while (temp_tags && !val_set)
     {
       GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
-      PangoStretch stretch;
+      Pango2Stretch stretch;
 
       g_object_get (tag,
                     "stretch-set", &val_set,
@@ -455,7 +455,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
   while (temp_tags && !val_set)
     {
       GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
-      PangoUnderline underline;
+      Pango2LineStyle underline;
 
       g_object_get (tag,
                     "underline-set", &val_set,
@@ -463,7 +463,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         g_variant_builder_add (builder, "{ss}", "underline",
-                               pango_underline_to_string (underline));
+                               pango_line_style_to_string (underline));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;

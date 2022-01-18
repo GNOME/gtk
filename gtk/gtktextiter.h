@@ -219,7 +219,7 @@ GDK_AVAILABLE_IN_ALL
 int      gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter);
 
 GDK_AVAILABLE_IN_ALL
-PangoLanguage* gtk_text_iter_get_language   (const GtkTextIter *iter);
+Pango2Language* gtk_text_iter_get_language   (const GtkTextIter *iter);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_text_iter_is_end         (const GtkTextIter *iter);
 GDK_AVAILABLE_IN_ALL

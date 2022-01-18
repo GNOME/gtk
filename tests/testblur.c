@@ -105,12 +105,12 @@ main (int argc, char **argv)
   value_label = gtk_label_new ("FF");
   gtk_widget_set_margin_top (value_label, 32);
   {
-    PangoAttrList *attrs;
+    Pango2AttrList *attrs;
 
-    attrs = pango_attr_list_new ();
-    pango_attr_list_insert (attrs, pango_attr_scale_new (6.0));
+    attrs = pango2_attr_list_new ();
+    pango2_attr_list_insert (attrs, pango2_attr_scale_new (6.0));
     gtk_label_set_attributes (GTK_LABEL (value_label), attrs);
-    pango_attr_list_unref (attrs);
+    pango2_attr_list_unref (attrs);
   }
   gtk_box_append (GTK_BOX (blur_box), value_label);
 

@@ -111,11 +111,11 @@ do_css_shadows (GtkWidget *do_widget)
       text = gtk_text_buffer_new (NULL);
       gtk_text_buffer_create_tag (text,
                                   "warning",
-                                  "underline", PANGO_UNDERLINE_SINGLE,
+                                  "underline", PANGO2_LINE_STYLE_SOLID,
                                   NULL);
       gtk_text_buffer_create_tag (text,
                                   "error",
-                                  "underline", PANGO_UNDERLINE_ERROR,
+                                  "underline", PANGO2_LINE_STYLE_DOTTED,
                                   NULL);
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());

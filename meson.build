@@ -12,8 +12,8 @@ project('gtk', 'c',
         license: 'LGPL-2.1-or-later')
 
 glib_req           = '>= 2.66.0'
-pango_req          = '>= 1.50.0' # keep this in sync with .gitlab-ci/test-msys.sh
-harfbuzz_req	   = '>= 2.6.0'
+pango_req          = '>= 0.90.0' # keep this in sync with .gitlab-ci/test-msys.sh
+harfbuzz_req       = '>= 2.6.0'
 fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
@@ -391,7 +391,7 @@ cairo_dep      = dependency('cairo', version: cairo_req,
                             default_options: ['zlib=enabled', 'tests=disabled'])
 cairogobj_dep  = dependency('cairo-gobject', version: cairo_req,
                             fallback : ['cairo', 'libcairogobject_dep'])
-pango_dep      = dependency('pango', version: pango_req,
+pango_dep      = dependency('pango2', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
                             fallback : ['fribidi', 'libfribidi_dep'])
@@ -399,35 +399,19 @@ harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             fallback: ['harfbuzz', 'libharfbuzz_dep'],
                             default_options: ['coretext=enabled'])
 
-# Require PangoFT2 if on X11 or wayland
-require_pangoft2 = wayland_enabled or x11_enabled
+pangocairo_dep = pango_dep
 
-if require_pangoft2
-  pangoft_dep    = dependency('pangoft2', version: pango_req,
-                              fallback : ['pango', 'libpangoft2_dep'])
-else
-  pangoft_dep    = dependency('pangoft2', required: false)
-endif
-
-if win32_enabled
-  # for GTK_IM_CONTEXT_IME
-  pangowin32_dep = dependency('pangowin32')
-endif
-
-is_msvc_like = cc.get_argument_syntax() == 'msvc'
-
-pangocairo_dep = dependency('pangocairo', version: pango_req,
-                            fallback : ['pango', 'libpangocairo_dep'])
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'],
                             default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
-png_dep        = dependency(is_msvc_like ? 'png' : 'libpng',
+
+png_dep        = dependency('libpng',
                             fallback: ['libpng', 'libpng_dep'],
                             required: true)
-tiff_dep       = dependency(is_msvc_like ? 'tiff' : 'libtiff-4',
+tiff_dep       = dependency('libtiff-4',
                             fallback: ['libtiff', 'libtiff4_dep'],
                             required: true)
-jpeg_dep       = dependency(is_msvc_like ? 'jpeg' : 'libjpeg',
+jpeg_dep       = dependency('libjpeg',
                             fallback: ['libjpeg-turbo', 'jpeg_dep'],
                             required: true)
 
@@ -512,7 +496,6 @@ if have_egl
   cdata.set('HAVE_EGL', 1)
 endif
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
-cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
 wayland_pkgs = []
 if wayland_enabled

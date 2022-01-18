@@ -25,7 +25,7 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkpixbuf.h>
-#include <pango/pangocairo.h>
+#include <pango2/pangocairo.h>
 
 G_BEGIN_DECLS
 

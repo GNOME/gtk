@@ -37,7 +37,7 @@ static char *
 _get_system_font_name (HDC hdc)
 {
   NONCLIENTMETRICSW ncm;
-  PangoFontDescription *font_desc;
+  Pango2FontDescription *font_desc;
   char *result, *font_desc_string;
   int logpixelsy;
   int font_size;

@@ -633,16 +633,16 @@ void         gtk_widget_remove_controller     (GtkWidget          *widget,
                                                GtkEventController *controller);
 
 GDK_AVAILABLE_IN_ALL
-PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
+Pango2Context *gtk_widget_create_pango_context (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
-PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
+Pango2Context *gtk_widget_get_pango_context    (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
 void gtk_widget_set_font_options (GtkWidget                  *widget,
                                   const cairo_font_options_t *options);
 GDK_AVAILABLE_IN_ALL
 const cairo_font_options_t *gtk_widget_get_font_options (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
-PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
+Pango2Layout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
                                                const char *text);
 
 /* Functions for setting directionality for widgets */
@@ -872,9 +872,9 @@ void                    gtk_widget_activate_default     (GtkWidget *widget);
 
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_font_map         (GtkWidget             *widget,
-                                                         PangoFontMap          *font_map);
+                                                         Pango2FontMap          *font_map);
 GDK_AVAILABLE_IN_ALL
-PangoFontMap *          gtk_widget_get_font_map         (GtkWidget             *widget);
+Pango2FontMap *          gtk_widget_get_font_map         (GtkWidget             *widget);
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_widget_get_first_child      (GtkWidget *widget);

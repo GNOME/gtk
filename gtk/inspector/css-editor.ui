@@ -3,14 +3,15 @@
     <child type="tag">
       <object class="GtkTextTag">
         <property name="name">warning</property>
-        <property name="underline">single</property>
+        <property name="underline">solid</property>
         <property name="underline-rgba">darkorange</property>
       </object>
     </child>
     <child type="tag">
       <object class="GtkTextTag">
         <property name="name">error</property>
-        <property name="underline">error</property>
+        <property name="underline">wavy</property>
+        <property name="underline-rgba">red</property>
       </object>
     </child>
   </object>

@@ -25,7 +25,7 @@ static GtkWidget *show_extents = NULL;
 static GtkWidget *show_pixels = NULL;
 static GtkWidget *show_outlines = NULL;
 
-static PangoContext *context;
+static Pango2Context *context;
 
 static int scale = 7;
 static double pixel_alpha = 1.0;
@@ -35,9 +35,9 @@ static void
 update_image (void)
 {
   const char *text;
-  PangoFontDescription *desc;
-  PangoLayout *layout;
-  PangoRectangle ink, logical;
+  Pango2FontDescription *desc;
+  Pango2Layout *layout;
+  Pango2Rectangle ink, logical;
   int baseline;
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -56,7 +56,7 @@ update_image (void)
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font_button));
 
-  fopt = cairo_font_options_copy (pango_cairo_context_get_font_options (context));
+  fopt = cairo_font_options_copy (pango2_cairo_context_get_font_options (context));
 
   hint = gtk_combo_box_get_active_id (GTK_COMBO_BOX (hinting));
   hintstyle = CAIRO_HINT_STYLE_DEFAULT;
@@ -85,20 +85,20 @@ update_image (void)
     antialias = CAIRO_ANTIALIAS_NONE;
   cairo_font_options_set_antialias (fopt, antialias);
 
-  pango_context_set_round_glyph_positions (context, hintmetrics == CAIRO_HINT_METRICS_ON);
-  pango_cairo_context_set_font_options (context, fopt);
+  pango2_context_set_round_glyph_positions (context, hintmetrics == CAIRO_HINT_METRICS_ON);
+  pango2_cairo_context_set_font_options (context, fopt);
   cairo_font_options_destroy (fopt);
-  pango_context_changed (context);
+  pango2_context_changed (context);
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (text_radio)))
     {
-      layout = pango_layout_new (context);
-      pango_layout_set_font_description (layout, desc);
-      pango_layout_set_text (layout, text, -1);
-      pango_layout_get_extents (layout, &ink, &logical);
-      baseline = pango_layout_get_baseline (layout);
+      layout = pango2_layout_new (context);
+      pango2_layout_set_font_description (layout, desc);
+      pango2_layout_set_text (layout, text, -1);
+      pango2_lines_get_extents (pango2_layout_get_lines (layout), &ink, &logical);
+      baseline = pango2_lines_get_baseline (pango2_layout_get_lines (layout));
 
-      pango_extents_to_pixels (&ink, NULL);
+      pango2_extents_to_pixels (&ink, NULL);
 
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, ink.width + 20, ink.height + 20);
       cr = cairo_create (surface);
@@ -108,9 +108,9 @@ update_image (void)
       cairo_set_source_rgba (cr, 0, 0, 0, pixel_alpha);
 
       cairo_move_to (cr, 10, 10);
-      pango_cairo_show_layout (cr, layout);
+      pango2_cairo_show_layout (cr, layout);
 
-      pango_cairo_layout_path (cr, layout);
+      pango2_cairo_layout_path (cr, layout);
       path = cairo_copy_path (cr);
 
       cairo_destroy (cr);
@@ -154,15 +154,15 @@ update_image (void)
           cairo_set_source_rgb (cr, 0, 0, 1);
 
           cairo_rectangle (cr,
-                           scale * (10 + pango_units_to_double (logical.x)) - 0.5,
-                           scale * (10 + pango_units_to_double (logical.y)) - 0.5,
-                           scale * pango_units_to_double (logical.width) + 1,
-                           scale * pango_units_to_double (logical.height) + 1);
+                           scale * (10 + pango2_units_to_double (logical.x)) - 0.5,
+                           scale * (10 + pango2_units_to_double (logical.y)) - 0.5,
+                           scale * pango2_units_to_double (logical.width) + 1,
+                           scale * pango2_units_to_double (logical.height) + 1);
           cairo_stroke (cr);
-          cairo_move_to (cr, scale * (10 + pango_units_to_double (logical.x)) - 0.5,
-                             scale * (10 + pango_units_to_double (baseline)) - 0.5);
-          cairo_line_to (cr, scale * (10 + pango_units_to_double (logical.x + logical.width)) + 1,
-                             scale * (10 + pango_units_to_double (baseline)) - 0.5);
+          cairo_move_to (cr, scale * (10 + pango2_units_to_double (logical.x)) - 0.5,
+                             scale * (10 + pango2_units_to_double (baseline)) - 0.5);
+          cairo_line_to (cr, scale * (10 + pango2_units_to_double (logical.x + logical.width)) + 1,
+                             scale * (10 + pango2_units_to_double (baseline)) - 0.5);
           cairo_stroke (cr);
           cairo_set_source_rgb (cr, 1, 0, 0);
           cairo_rectangle (cr,
@@ -206,9 +206,10 @@ update_image (void)
     }
   else
     {
-      PangoLayoutIter *iter;
-      PangoLayoutRun *run;
-      PangoGlyphInfo *g;
+      Pango2LineIter *iter;
+      Pango2Run *run;
+      Pango2GlyphString *glyphs;
+      Pango2GlyphInfo *g;
       int i, j;
       GString *str;
       gunichar ch;
@@ -226,43 +227,44 @@ update_image (void)
           g_string_append_unichar (str, 0x200c);
         }
 
-      layout = pango_layout_new (context);
-      pango_layout_set_font_description (layout, desc);
-      pango_layout_set_text (layout, str->str, -1);
+      layout = pango2_layout_new (context);
+      pango2_layout_set_font_description (layout, desc);
+      pango2_layout_set_text (layout, str->str, -1);
       g_string_free (str, TRUE);
-      pango_layout_get_extents (layout, &ink, &logical);
-      pango_extents_to_pixels (&logical, NULL);
+      pango2_lines_get_extents (pango2_layout_get_lines (layout), &ink, &logical);
+      pango2_extents_to_pixels (&logical, NULL);
 
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, logical.width * 3 / 2, 4*logical.height);
       cr = cairo_create (surface);
       cairo_set_source_rgb (cr, 1, 1, 1);
       cairo_paint (cr);
 
-      iter = pango_layout_get_iter (layout);
-      run = pango_layout_iter_get_run (iter);
+      iter = pango2_layout_get_iter (layout);
+      run = pango2_line_iter_get_run (iter);
+      glyphs = pango2_run_get_glyphs (run);
 
       cairo_set_source_rgb (cr, 0, 0, 0);
       for (i = 0; i < 4; i++)
         {
-          g = &(run->glyphs->glyphs[2*i]);
-          g->geometry.width = PANGO_UNITS_ROUND (g->geometry.width * 3 / 2);
+          g = &(glyphs->glyphs[2*i]);
+          g->geometry.width = PANGO2_UNITS_ROUND (g->geometry.width * 3 / 2);
         }
 
       for (j = 0; j < 4; j++)
         {
           for (i = 0; i < 4; i++)
             {
-              g = &(run->glyphs->glyphs[2*i]);
-              g->geometry.x_offset = i * (PANGO_SCALE / 4);
-              g->geometry.y_offset = j * (PANGO_SCALE / 4);
+              g = &(glyphs->glyphs[2*i]);
+              g->geometry.x_offset = i * (PANGO2_SCALE / 4);
+              g->geometry.y_offset = j * (PANGO2_SCALE / 4);
             }
 
           cairo_move_to (cr, 0, j * logical.height);
-          pango_cairo_show_layout (cr, layout);
+          pango2_cairo_show_layout (cr, layout);
         }
 
       cairo_destroy (cr);
-      pango_layout_iter_free (iter);
+      pango2_line_iter_free (iter);
       g_object_unref (layout);
 
       pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, cairo_image_surface_get_width (surface), cairo_image_surface_get_height (surface));
@@ -275,7 +277,7 @@ update_image (void)
 
   g_object_unref (pixbuf2);
 
-  pango_font_description_free (desc);
+  pango2_font_description_free (desc);
 }
 
 static gboolean fading = FALSE;

@@ -44,7 +44,7 @@ get_win32_all_locales_scripts (LPWSTR locale_w, DWORD flags, LPARAM param)
   gint i;
   const LCTYPE iso639_lctypes[] = { LOCALE_SISO639LANGNAME, LOCALE_SISO639LANGNAME2 };
   GHashTable *ht_scripts_langs = (GHashTable *) param;
-  PangoLanguage *lang;
+  Pango2Language *lang;
 
   gint langname_size, locale_abbrev_size;
   langname_size = GetLocaleInfoEx (locale_w, LOCALE_SLOCALIZEDDISPLAYNAME, langname_w, 0);
@@ -60,7 +60,7 @@ get_win32_all_locales_scripts (LPWSTR locale_w, DWORD flags, LPARAM param)
   langname = g_utf16_to_utf8 (langname_w, -1, NULL, NULL, NULL);
   locale = g_utf16_to_utf8 (locale_w, -1, NULL, NULL, NULL);
   p = strchr (locale, '-');
-  lang = pango_language_from_string (locale);
+  lang = pango2_language_from_string (locale);
   if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
     g_hash_table_insert (ht_scripts_langs, lang, langname);
 
@@ -77,7 +77,7 @@ get_win32_all_locales_scripts (LPWSTR locale_w, DWORD flags, LPARAM param)
           GetLocaleInfoEx (locale_w, iso639_lctypes[i], locale_abbrev_w, locale_abbrev_size);
 
           locale_abbrev = g_utf16_to_utf8 (locale_abbrev_w, -1, NULL, NULL, NULL);
-          lang = pango_language_from_string (locale_abbrev);
+          lang = pango2_language_from_string (locale_abbrev);
           if (g_hash_table_lookup (ht_scripts_langs, lang) == NULL)
             g_hash_table_insert (ht_scripts_langs, lang, langname);
 
@@ -218,22 +218,22 @@ languages_parse_start_tag (GMarkupParseContext  *ctx,
 
   if (ccode != NULL)
     g_hash_table_insert (language_map,
-                         pango_language_from_string (ccode),
+                         pango2_language_from_string (ccode),
                          g_strdup (display_name));
 
   if (ccode_longB != NULL)
     g_hash_table_insert (language_map,
-                         pango_language_from_string (ccode_longB),
+                         pango2_language_from_string (ccode_longB),
                          g_strdup (display_name));
 
   if (ccode_longT != NULL)
     g_hash_table_insert (language_map,
-                         pango_language_from_string (ccode_longT),
+                         pango2_language_from_string (ccode_longT),
                          g_strdup (display_name));
 
   if (ccode_id != NULL)
     g_hash_table_insert (language_map,
-                         pango_language_from_string (ccode_id),
+                         pango2_language_from_string (ccode_id),
                          g_strdup (display_name));
 
   g_free (display_name);
@@ -295,7 +295,7 @@ languages_init (void)
 }
 
 const char *
-get_language_name (PangoLanguage *language)
+get_language_name (Pango2Language *language)
 {
   languages_init ();
 
@@ -311,5 +311,5 @@ get_language_name_for_tag (guint32 tag)
   lang = hb_ot_tag_to_language (tag);
   s = hb_language_to_string (lang);
 
-  return get_language_name (pango_language_from_string (s));
+  return get_language_name (pango2_language_from_string (s));
 }

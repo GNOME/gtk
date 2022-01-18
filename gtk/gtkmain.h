@@ -84,7 +84,7 @@ gboolean gtk_init_check_abi_check (int     num_checks,
 GDK_AVAILABLE_IN_ALL
 void              gtk_disable_setlocale    (void);
 GDK_AVAILABLE_IN_ALL
-PangoLanguage *   gtk_get_default_language (void) G_GNUC_CONST;
+Pango2Language *   gtk_get_default_language (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkTextDirection  gtk_get_locale_direction (void);
 

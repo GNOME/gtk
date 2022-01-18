@@ -17,43 +17,43 @@
 
 #pragma once
 
-#include <pango/pangocairo.h>
+#include <pango2/pangocairo.h>
 #include "gtkatspiprivate.h"
 
 G_BEGIN_DECLS
 
-const char *pango_wrap_mode_to_string (PangoWrapMode mode);
-const char *pango_underline_to_string (PangoUnderline underline);
-const char *pango_stretch_to_string (PangoStretch stretch);
-const char *pango_style_to_string (PangoStyle style);
-const char *pango_variant_to_string (PangoVariant variant);
+const char *pango_wrap_mode_to_string (Pango2WrapMode mode);
+const char *pango_line_style_to_string (Pango2LineStyle underline);
+const char *pango_stretch_to_string (Pango2Stretch stretch);
+const char *pango_style_to_string (Pango2Style style);
+const char *pango_variant_to_string (Pango2Variant variant);
 
-void gtk_pango_get_font_attributes (PangoFontDescription *font,
+void gtk_pango_get_font_attributes (Pango2FontDescription *font,
                                     GVariantBuilder      *builder);
-void gtk_pango_get_default_attributes (PangoLayout     *layout,
+void gtk_pango_get_default_attributes (Pango2Layout     *layout,
                                        GVariantBuilder *builder);
-void gtk_pango_get_run_attributes     (PangoLayout     *layout,
+void gtk_pango_get_run_attributes     (Pango2Layout     *layout,
                                        GVariantBuilder *builder,
                                        int              offset,
                                        int             *start_offset,
                                        int             *end_offset);
 
-char *gtk_pango_get_text_before (PangoLayout           *layout,
+char *gtk_pango_get_text_before (Pango2Layout           *layout,
                                  int                    offset,
                                  AtspiTextBoundaryType  boundary_type,
                                  int                   *start_offset,
                                  int                   *end_offset);
-char *gtk_pango_get_text_at     (PangoLayout           *layout,
+char *gtk_pango_get_text_at     (Pango2Layout           *layout,
                                  int                    offset,
                                  AtspiTextBoundaryType  boundary_type,
                                  int                   *start_offset,
                                  int                   *end_offset);
-char *gtk_pango_get_text_after  (PangoLayout           *layout,
+char *gtk_pango_get_text_after  (Pango2Layout           *layout,
                                  int                    offset,
                                  AtspiTextBoundaryType  boundary_type,
                                  int                   *start_offset,
                                  int                   *end_offset);
-char *gtk_pango_get_string_at   (PangoLayout           *layout,
+char *gtk_pango_get_string_at   (Pango2Layout           *layout,
                                  int                    offset,
                                  AtspiTextGranularity   granularity,
                                  int                   *start_offset,

@@ -280,7 +280,7 @@ gtk_data_viewer_load_value (GtkDataViewer *self,
       GFile *file = g_value_get_object (value);
 
       self->contents = gtk_label_new (g_file_peek_path (file));
-      gtk_label_set_ellipsize (GTK_LABEL (self->contents), PANGO_ELLIPSIZE_START);
+      gtk_label_set_ellipsize (GTK_LABEL (self->contents), PANGO2_ELLIPSIZE_START);
       gtk_widget_set_halign (self->contents, GTK_ALIGN_CENTER);
       gtk_widget_set_parent (self->contents, GTK_WIDGET (self));
     }
@@ -295,7 +295,7 @@ gtk_data_viewer_load_value (GtkDataViewer *self,
         {
           GFile *file = l->data;
           GtkWidget *label = gtk_label_new (g_file_peek_path (file));
-          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_START);
+          gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_START);
           gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
           gtk_box_append (GTK_BOX (self->contents), label);
         }

@@ -105,7 +105,7 @@ simple_iconview (void)
 
   cell_3 = renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), 
-		"wrap-mode", PANGO_WRAP_WORD,
+		"wrap-mode", PANGO2_WRAP_WORD,
 		"wrap-width", 215,
 		NULL);
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE, FALSE);
@@ -375,7 +375,7 @@ focus_iconview (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **si
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), 
-		"wrap-mode", PANGO_WRAP_WORD,
+		"wrap-mode", PANGO2_WRAP_WORD,
 		"wrap-width", 150,
 		NULL);
 

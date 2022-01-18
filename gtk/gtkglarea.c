@@ -651,18 +651,19 @@ gtk_gl_area_draw_error_screen (GtkGLArea   *area,
                                int          height)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-  PangoLayout *layout;
-  int layout_height;
+  Pango2Layout *layout;
+  Pango2Rectangle ext;
 
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (area),
                                            priv->error->message);
-  pango_layout_set_width (layout, width * PANGO_SCALE);
-  pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
-  pango_layout_get_pixel_size (layout, NULL, &layout_height);
+  pango2_layout_set_width (layout, width * PANGO2_SCALE);
+  pango2_layout_set_alignment (layout, PANGO2_ALIGN_CENTER);
+  pango2_lines_get_extents (pango2_layout_get_lines (layout), NULL, &ext);
+  pango2_extents_to_pixels (&ext, NULL);
 
   gtk_snapshot_render_layout (snapshot,
                               gtk_widget_get_style_context (GTK_WIDGET (area)),
-                              0, (height - layout_height) / 2,
+                              0, (height - ext.height) / 2,
                               layout);
 
   g_object_unref (layout);

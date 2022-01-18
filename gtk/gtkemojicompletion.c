@@ -456,16 +456,16 @@ add_emoji_variation (GtkWidget *box,
 {
   GtkWidget *child;
   GtkWidget *label;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
   char text[64];
 
   get_text (emoji_data, modifier, text, 64);
 
   label = gtk_label_new (text);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
+  attrs = pango2_attr_list_new ();
+  pango2_attr_list_insert (attrs, pango2_attr_scale_new (PANGO2_SCALE_X_LARGE));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
+  pango2_attr_list_unref (attrs);
 
   child = g_object_new (GTK_TYPE_FLOW_BOX_CHILD, "css-name", "emoji", NULL);
   g_object_set_data_full (G_OBJECT (child), "text", g_strdup (text), g_free);
@@ -487,7 +487,7 @@ add_emoji (GtkWidget          *list,
   GtkWidget *child;
   GtkWidget *label;
   GtkWidget *box;
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
   char text[64];
   const char *name;
   GtkWidget *stack;
@@ -496,10 +496,10 @@ add_emoji (GtkWidget          *list,
   get_text (emoji_data, 0, text, 64);
 
   label = gtk_label_new (text);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_scale_new (PANGO_SCALE_X_LARGE));
+  attrs = pango2_attr_list_new ();
+  pango2_attr_list_insert (attrs, pango2_attr_scale_new (PANGO2_SCALE_X_LARGE));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
+  pango2_attr_list_unref (attrs);
   gtk_widget_add_css_class (label, "emoji");
 
   child = g_object_new (GTK_TYPE_LIST_BOX_ROW, "css-name", "emoji-completion-row", NULL);

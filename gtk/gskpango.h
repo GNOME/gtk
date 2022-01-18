@@ -19,7 +19,7 @@
 #ifndef __GSK_PANGO_H__
 #define __GSK_PANGO_H__
 
-#include <pango/pango.h>
+#include <pango2/pango.h>
 #include "gtk/gtksnapshot.h"
 
 G_BEGIN_DECLS
@@ -41,7 +41,7 @@ typedef enum
   GSK_PANGO_RENDERER_CURSOR
 } GskPangoRendererState;
 
-typedef gboolean (*GskPangoShapeHandler) (PangoAttrShape         *attr,
+typedef gboolean (*GskPangoShapeHandler) (gpointer                data,
                                           GdkSnapshot            *snapshot,
                                           double                  width,
                                           double                  height);
@@ -54,32 +54,34 @@ typedef gboolean (*GskPangoShapeHandler) (PangoAttrShape         *attr,
 
 struct _GskPangoRenderer
 {
-  PangoRenderer          parent_instance;
+  Pango2Renderer          parent_instance;
 
   GtkWidget             *widget;
   GtkSnapshot           *snapshot;
   const GdkRGBA         *fg_color;
+  GQuark                 palette;
 
   /* Error underline color for this widget */
   GdkRGBA               *error_color;
 
   GskPangoRendererState  state;
 
-  guint                  is_cached_renderer : 1;
-
   GskPangoShapeHandler   shape_handler;
+
+  guint                  is_cached_renderer : 1;
 };
 
 struct _GskPangoRendererClass
 {
-  PangoRendererClass parent_class;
+  Pango2RendererClass parent_class;
 };
 
 GType             gsk_pango_renderer_get_type  (void) G_GNUC_CONST;
 void              gsk_pango_renderer_set_state (GskPangoRenderer      *crenderer,
                                                 GskPangoRendererState  state);
-void              gsk_pango_renderer_set_shape_handler (GskPangoRenderer      *crenderer,
-                                                        GskPangoShapeHandler handler);
+void              gsk_pango_renderer_set_shape_handler
+                                               (GskPangoRenderer      *crenderer,
+                                                GskPangoShapeHandler handler);
 GskPangoRenderer *gsk_pango_renderer_acquire   (void);
 void              gsk_pango_renderer_release   (GskPangoRenderer      *crenderer);
 

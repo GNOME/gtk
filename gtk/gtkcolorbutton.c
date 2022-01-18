@@ -279,8 +279,8 @@ gtk_color_button_drag_prepare (GtkDragSource  *source,
 static void
 gtk_color_button_init (GtkColorButton *button)
 {
-  PangoLayout *layout;
-  PangoRectangle rect;
+  Pango2Layout *layout;
+  Pango2Rectangle rect;
   GtkDragSource *source;
   GtkDropTarget *dest;
 
@@ -297,7 +297,8 @@ gtk_color_button_init (GtkColorButton *button)
   gtk_widget_set_can_focus (button->swatch, FALSE);
   gtk_widget_remove_css_class (button->swatch, "activatable");
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (button), "Black");
-  pango_layout_get_pixel_extents (layout, NULL, &rect);
+  pango2_lines_get_extents (pango2_layout_get_lines (layout), NULL, &rect);
+  pango2_extents_to_pixels (&rect, NULL);
   g_object_unref (layout);
 
   gtk_widget_set_size_request (button->swatch, rect.width, rect.height);

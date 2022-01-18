@@ -337,7 +337,7 @@ gtk_render_focus (GtkStyleContext *context,
  * @cr: a `cairo_t`
  * @x: X origin
  * @y: Y origin
- * @layout: the `PangoLayout` to render
+ * @layout: the `Pango2Layout` to render
  *
  * Renders @layout on the coordinates @x, @y
  **/
@@ -346,13 +346,13 @@ gtk_render_layout (GtkStyleContext *context,
                    cairo_t         *cr,
                    double           x,
                    double           y,
-                   PangoLayout     *layout)
+                   Pango2Layout     *layout)
 {
   GtkSnapshot *snapshot;
   GskRenderNode *node;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (PANGO_IS_LAYOUT (layout));
+  g_return_if_fail (PANGO2_IS_LAYOUT (layout));
   g_return_if_fail (cr != NULL);
 
   snapshot = gtk_snapshot_new ();

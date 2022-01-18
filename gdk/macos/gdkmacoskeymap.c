@@ -380,7 +380,7 @@ gdk_macos_keymap_update (GdkMacosKeymap *self)
   g_signal_emit_by_name (self, "keys-changed");
 }
 
-static PangoDirection
+static Pango2Direction
 gdk_macos_keymap_get_direction (GdkKeymap *keymap)
 {
   return PANGO_DIRECTION_NEUTRAL;

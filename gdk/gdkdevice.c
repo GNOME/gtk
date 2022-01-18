@@ -229,7 +229,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    */
   device_props[PROP_DIRECTION] =
       g_param_spec_enum ("direction", NULL, NULL,
-                         PANGO_TYPE_DIRECTION, PANGO_DIRECTION_NEUTRAL,
+                         PANGO2_TYPE_DIRECTION, PANGO2_DIRECTION_NEUTRAL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -1309,13 +1309,13 @@ gdk_device_get_modifier_state (GdkDevice *device)
  * This is only relevant for keyboard devices.
  *
  * The direction of a layout is the direction of the majority
- * of its symbols. See [func@Pango.unichar_direction].
+ * of its symbols. See [func@Pango2.unichar_direction].
  *
  * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL
  *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL
  *   otherwise
  */
-PangoDirection
+Pango2Direction
 gdk_device_get_direction (GdkDevice *device)
 {
   GdkKeymap *keymap = gdk_display_get_keymap (device->display);
@@ -1323,7 +1323,7 @@ gdk_device_get_direction (GdkDevice *device)
   if (device->source == GDK_SOURCE_KEYBOARD)
     return gdk_keymap_get_direction (keymap);
 
-  return PANGO_DIRECTION_NEUTRAL;
+  return PANGO2_DIRECTION_NEUTRAL;
 }
 
 /**

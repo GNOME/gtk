@@ -73,9 +73,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean           gtk_progress_bar_get_inverted    (GtkProgressBar *pbar);
 GDK_AVAILABLE_IN_ALL
 void               gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
-                                                   PangoEllipsizeMode  mode);
+                                                   Pango2EllipsizeMode  mode);
 GDK_AVAILABLE_IN_ALL
-PangoEllipsizeMode gtk_progress_bar_get_ellipsize (GtkProgressBar     *pbar);
+Pango2EllipsizeMode gtk_progress_bar_get_ellipsize (GtkProgressBar     *pbar);
 
 GDK_AVAILABLE_IN_ALL
 void               gtk_progress_bar_set_show_text (GtkProgressBar     *pbar,

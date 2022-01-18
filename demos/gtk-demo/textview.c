@@ -36,25 +36,25 @@ create_tags (GtkTextBuffer *buffer)
    */
 
   gtk_text_buffer_create_tag (buffer, "heading",
-                              "weight", PANGO_WEIGHT_BOLD,
-                              "size", 15 * PANGO_SCALE,
+                              "weight", PANGO2_WEIGHT_BOLD,
+                              "size", 15 * PANGO2_SCALE,
                               NULL);
 
   gtk_text_buffer_create_tag (buffer, "italic",
-                              "style", PANGO_STYLE_ITALIC, NULL);
+                              "style", PANGO2_STYLE_ITALIC, NULL);
 
   gtk_text_buffer_create_tag (buffer, "bold",
-                              "weight", PANGO_WEIGHT_BOLD, NULL);
+                              "weight", PANGO2_WEIGHT_BOLD, NULL);
 
   gtk_text_buffer_create_tag (buffer, "big",
-                              /* points times the PANGO_SCALE factor */
-                              "size", 20 * PANGO_SCALE, NULL);
+                              /* points times the PANGO2_SCALE factor */
+                              "size", 20 * PANGO2_SCALE, NULL);
 
   gtk_text_buffer_create_tag (buffer, "xx-small",
-                              "scale", PANGO_SCALE_XX_SMALL, NULL);
+                              "scale", PANGO2_SCALE_XX_SMALL, NULL);
 
   gtk_text_buffer_create_tag (buffer, "x-large",
-                              "scale", PANGO_SCALE_X_LARGE, NULL);
+                              "scale", PANGO2_SCALE_X_LARGE, NULL);
 
   gtk_text_buffer_create_tag (buffer, "monospace",
                               "family", "monospace", NULL);
@@ -100,19 +100,19 @@ create_tags (GtkTextBuffer *buffer)
                               "strikethrough", TRUE, NULL);
 
   gtk_text_buffer_create_tag (buffer, "underline",
-                              "underline", PANGO_UNDERLINE_SINGLE, NULL);
+                              "underline", PANGO2_LINE_STYLE_SOLID, NULL);
 
   gtk_text_buffer_create_tag (buffer, "double_underline",
-                              "underline", PANGO_UNDERLINE_DOUBLE, NULL);
+                              "underline", PANGO2_LINE_STYLE_DOUBLE, NULL);
 
   gtk_text_buffer_create_tag (buffer, "superscript",
-                              "rise", 10 * PANGO_SCALE,   /* 10 pixels */
-                              "size", 8 * PANGO_SCALE,    /* 8 points */
+                              "rise", 10 * PANGO2_SCALE,   /* 10 pixels */
+                              "size", 8 * PANGO2_SCALE,    /* 8 points */
                               NULL);
 
   gtk_text_buffer_create_tag (buffer, "subscript",
-                              "rise", -10 * PANGO_SCALE,   /* 10 pixels */
-                              "size", 8 * PANGO_SCALE,     /* 8 points */
+                              "rise", -10 * PANGO2_SCALE,   /* 10 pixels */
+                              "size", 8 * PANGO2_SCALE,     /* 8 points */
                               NULL);
 
   gtk_text_buffer_create_tag (buffer, "rtl_quote",

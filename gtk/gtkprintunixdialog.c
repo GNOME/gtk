@@ -2376,8 +2376,8 @@ draw_page (GtkDrawingArea *da,
   double page_width, page_height;
   GtkPageOrientation orientation;
   gboolean landscape;
-  PangoLayout *layout;
-  PangoFontDescription *font;
+  Pango2Layout *layout;
+  Pango2FontDescription *font;
   char *text;
   GdkRGBA color;
   GtkNumberUpLayout number_up_layout;
@@ -2493,21 +2493,21 @@ draw_page (GtkDrawingArea *da,
   page_width = (double)w / pages_x;
   page_height = (double)h / pages_y;
 
-  layout  = pango_cairo_create_layout (cr);
+  layout  = pango2_cairo_create_layout (cr);
 
-  font = pango_font_description_new ();
-  pango_font_description_set_family (font, "sans");
+  font = pango2_font_description_new ();
+  pango2_font_description_set_family (font, "sans");
 
   if (page_height > 0)
-    pango_font_description_set_absolute_size (font, page_height * 0.4 * PANGO_SCALE);
+    pango2_font_description_set_absolute_size (font, page_height * 0.4 * PANGO2_SCALE);
   else
-    pango_font_description_set_absolute_size (font, 1);
+    pango2_font_description_set_absolute_size (font, 1);
 
-  pango_layout_set_font_description (layout, font);
-  pango_font_description_free (font);
+  pango2_layout_set_font_description (layout, font);
+  pango2_font_description_free (font);
 
-  pango_layout_set_width (layout, page_width * PANGO_SCALE);
-  pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
+  pango2_layout_set_width (layout, page_width * PANGO2_SCALE);
+  pango2_layout_set_alignment (layout, PANGO2_ALIGN_CENTER);
 
   switch (number_up_layout)
     {
@@ -2593,15 +2593,15 @@ draw_page (GtkDrawingArea *da,
         for (x = start_x; x != end_x + dx; x += dx)
           {
             text = g_strdup_printf ("%d", i++);
-            pango_layout_set_text (layout, text, -1);
+            pango2_layout_set_text (layout, text, -1);
             g_free (text);
-            pango_layout_get_size (layout, &layout_w, &layout_h);
+            pango2_lines_get_size (pango2_layout_get_lines (layout), &layout_w, &layout_h);
             cairo_save (cr);
             cairo_translate (cr,
                              x * page_width,
                              y * page_height + (page_height - layout_h / 1024.0) / 2);
 
-            pango_cairo_show_layout (cr, layout);
+            pango2_cairo_show_layout (cr, layout);
             cairo_restore (cr);
           }
       }
@@ -2611,15 +2611,15 @@ draw_page (GtkDrawingArea *da,
         for (y = start_y; y != end_y + dy; y += dy)
           {
             text = g_strdup_printf ("%d", i++);
-            pango_layout_set_text (layout, text, -1);
+            pango2_layout_set_text (layout, text, -1);
             g_free (text);
-            pango_layout_get_size (layout, &layout_w, &layout_h);
+            pango2_lines_get_size (pango2_layout_get_lines (layout), &layout_w, &layout_h);
             cairo_save (cr);
             cairo_translate (cr,
                              x * page_width,
                              y * page_height + (page_height - layout_h / 1024.0) / 2);
 
-            pango_cairo_show_layout (cr, layout);
+            pango2_cairo_show_layout (cr, layout);
             cairo_restore (cr);
           }
       }
@@ -2632,9 +2632,9 @@ draw_page (GtkDrawingArea *da,
 
   if (page_setup != NULL)
     {
-      PangoContext *pango_c = NULL;
-      PangoFontDescription *pango_f = NULL;
-      int font_size = 12 * PANGO_SCALE;
+      Pango2Context *pango_c = NULL;
+      Pango2FontDescription *pango_f = NULL;
+      int font_size = 12 * PANGO2_SCALE;
 
       pos_x += 1;
       pos_y += 1;
@@ -2653,46 +2653,46 @@ draw_page (GtkDrawingArea *da,
       cairo_restore (cr);
       cairo_save (cr);
 
-      layout = pango_cairo_create_layout (cr);
+      layout = pango2_cairo_create_layout (cr);
 
-      font = pango_font_description_new ();
-      pango_font_description_set_family (font, "sans");
+      font = pango2_font_description_new ();
+      pango2_font_description_set_family (font, "sans");
 
       pango_c = gtk_widget_get_pango_context (widget);
       if (pango_c != NULL)
         {
-          pango_f = pango_context_get_font_description (pango_c);
+          pango_f = pango2_context_get_font_description (pango_c);
           if (pango_f != NULL)
-            font_size = pango_font_description_get_size (pango_f);
+            font_size = pango2_font_description_get_size (pango_f);
         }
 
-      pango_font_description_set_size (font, font_size);
-      pango_layout_set_font_description (layout, font);
-      pango_font_description_free (font);
+      pango2_font_description_set_size (font, font_size);
+      pango2_layout_set_font_description (layout, font);
+      pango2_font_description_free (font);
 
-      pango_layout_set_width (layout, -1);
-      pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
+      pango2_layout_set_width (layout, -1);
+      pango2_layout_set_alignment (layout, PANGO2_ALIGN_CENTER);
 
       if (_gtk_print_get_default_user_units () == GTK_UNIT_MM)
         text = g_strdup_printf ("%.1f mm", paper_height);
       else
         text = g_strdup_printf ("%.2f inch", paper_height);
 
-      pango_layout_set_text (layout, text, -1);
+      pango2_layout_set_text (layout, text, -1);
       g_free (text);
-      pango_layout_get_size (layout, &layout_w, &layout_h);
+      pango2_lines_get_size (pango2_layout_get_lines (layout), &layout_w, &layout_h);
 
       ltr = gtk_widget_get_direction (GTK_WIDGET (dialog)) == GTK_TEXT_DIR_LTR;
 
       if (ltr)
-        cairo_translate (cr, pos_x - layout_w / PANGO_SCALE - 2 * RULER_DISTANCE,
-                             (height - layout_h / PANGO_SCALE) / 2);
+        cairo_translate (cr, pos_x - layout_w / PANGO2_SCALE - 2 * RULER_DISTANCE,
+                             (height - layout_h / PANGO2_SCALE) / 2);
       else
         cairo_translate (cr, pos_x + w + 2 * RULER_DISTANCE,
-                             (height - layout_h / PANGO_SCALE) / 2);
+                             (height - layout_h / PANGO2_SCALE) / 2);
 
       gdk_cairo_set_source_rgba (cr, &color);
-      pango_cairo_show_layout (cr, layout);
+      pango2_cairo_show_layout (cr, layout);
 
       cairo_restore (cr);
       cairo_save (cr);
@@ -2702,15 +2702,15 @@ draw_page (GtkDrawingArea *da,
       else
         text = g_strdup_printf ("%.2f inch", paper_width);
 
-      pango_layout_set_text (layout, text, -1);
+      pango2_layout_set_text (layout, text, -1);
       g_free (text);
-      pango_layout_get_size (layout, &layout_w, &layout_h);
+      pango2_lines_get_size (pango2_layout_get_lines (layout), &layout_w, &layout_h);
 
-      cairo_translate (cr, (width - layout_w / PANGO_SCALE) / 2,
+      cairo_translate (cr, (width - layout_w / PANGO2_SCALE) / 2,
                            pos_y + h + 2 * RULER_DISTANCE);
 
       gdk_cairo_set_source_rgba (cr, &color);
-      pango_cairo_show_layout (cr, layout);
+      pango2_cairo_show_layout (cr, layout);
 
       g_object_unref (layout);
 

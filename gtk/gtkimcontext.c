@@ -86,7 +86,7 @@ struct _GtkIMContextPrivate {
 
 static void     gtk_im_context_real_get_preedit_string (GtkIMContext   *context,
 							char          **str,
-							PangoAttrList **attrs,
+							Pango2AttrList **attrs,
 							int            *cursor_pos);
 static gboolean gtk_im_context_real_filter_keypress    (GtkIMContext   *context,
 							GdkEvent       *event);
@@ -362,13 +362,13 @@ gtk_im_context_init (GtkIMContext *im_context)
 static void
 gtk_im_context_real_get_preedit_string (GtkIMContext       *context,
 					char              **str,
-					PangoAttrList     **attrs,
+					Pango2AttrList     **attrs,
 					int                *cursor_pos)
 {
   if (str)
     *str = g_strdup ("");
   if (attrs)
-    *attrs = pango_attr_list_new ();
+    *attrs = pango2_attr_list_new ();
   if (cursor_pos)
     *cursor_pos = 0;
 }
@@ -483,7 +483,7 @@ gtk_im_context_set_client_widget (GtkIMContext *context,
  *   string. The string retrieved must be freed with g_free().
  * @attrs: (out) (transfer full): location to store the retrieved
  *   attribute list. When you are done with this list, you
- *   must unreference it with [method@Pango.AttrList.unref].
+ *   must unreference it with [method@Pango2.AttrList.unref].
  * @cursor_pos: (out): location to store position of cursor
  *   (in characters) within the preedit string.
  *
@@ -495,7 +495,7 @@ gtk_im_context_set_client_widget (GtkIMContext *context,
 void
 gtk_im_context_get_preedit_string (GtkIMContext   *context,
 				   char          **str,
-				   PangoAttrList **attrs,
+				   Pango2AttrList **attrs,
 				   int            *cursor_pos)
 {
   GtkIMContextClass *klass;

@@ -284,12 +284,13 @@ compute_dimensions (GtkCellRenderer *cell,
 		    int             *width,
 		    int             *height)
 {
-  PangoRectangle logical_rect;
-  PangoLayout *layout;
+  Pango2Rectangle logical_rect;
+  Pango2Layout *layout;
   int xpad, ypad;
 
   layout = gtk_widget_create_pango_layout (widget, text);
-  pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+  pango2_lines_get_extents (pango2_layout_get_lines (layout), NULL, &logical_rect);
+  pango2_extents_to_pixels (&logical_rect, NULL);
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
@@ -418,8 +419,8 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
   GtkCellRendererProgressPrivate *priv = gtk_cell_renderer_progress_get_instance_private (cellprogress);
   GtkStyleContext *context;
   GtkBorder padding;
-  PangoLayout *layout;
-  PangoRectangle logical_rect;
+  Pango2Layout *layout;
+  Pango2Rectangle logical_rect;
   int x, y, w, h, x_pos, y_pos, bar_position, bar_size, start, full_size;
   int xpad, ypad;
   GdkRectangle clip;
@@ -506,7 +507,8 @@ gtk_cell_renderer_progress_snapshot (GtkCellRenderer      *cell,
       float text_xalign;
 
       layout = gtk_widget_create_pango_layout (widget, priv->label);
-      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+      pango2_lines_get_extents (pango2_layout_get_lines (layout), NULL, &logical_rect);
+      pango2_extents_to_pixels (&logical_rect, NULL);
 
       if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
 	text_xalign = 1.0 - priv->text_xalign;

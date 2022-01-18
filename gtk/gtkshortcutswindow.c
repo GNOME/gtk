@@ -826,7 +826,7 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   GtkWidget *scroller;
   GtkWidget *label;
   GtkWidget *empty;
-  PangoAttrList *attributes;
+  Pango2AttrList *attributes;
 
   gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
 
@@ -961,14 +961,14 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
                                  "pixel-size", 72,
                                  NULL),
                    0, 0, 1, 1);
-  attributes = pango_attr_list_new ();
-  pango_attr_list_insert (attributes, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  pango_attr_list_insert (attributes, pango_attr_scale_new (1.44));
+  attributes = pango2_attr_list_new ();
+  pango2_attr_list_insert (attributes, pango2_attr_weight_new (PANGO2_WEIGHT_BOLD));
+  pango2_attr_list_insert (attributes, pango2_attr_scale_new (1.44));
   label = g_object_new (GTK_TYPE_LABEL,
                         "label", _("No Results Found"),
                         "attributes", attributes,
                         NULL);
-  pango_attr_list_unref (attributes);
+  pango2_attr_list_unref (attributes);
   gtk_grid_attach (GTK_GRID (empty), label, 0, 1, 1, 1);
   label = g_object_new (GTK_TYPE_LABEL,
                         "label", _("Try a different search"),

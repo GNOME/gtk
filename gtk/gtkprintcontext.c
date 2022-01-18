@@ -27,8 +27,8 @@
  * drawing pages for printing.
  *
  * This includes the cairo context and important parameters like page size
- * and resolution. It also lets you easily create [class@Pango.Layout] and
- * [class@Pango.Context] objects that match the font metrics of the cairo surface.
+ * and resolution. It also lets you easily create [class@Pango2.Layout] and
+ * [class@Pango2.Context] objects that match the font metrics of the cairo surface.
  *
  * `GtkPrintContext` objects get passed to the
  * [signal@Gtk.PrintOperation::begin-print],
@@ -46,8 +46,8 @@
  *            int                page_nr)
  * {
  *   cairo_t *cr;
- *   PangoLayout *layout;
- *   PangoFontDescription *desc;
+ *   Pango2Layout *layout;
+ *   Pango2FontDescription *desc;
  *
  *   cr = gtk_print_context_get_cairo_context (context);
  *
@@ -78,7 +78,7 @@
  *   pango_font_description_free (desc);
  *
  *   cairo_move_to (cr, 30, 20);
- *   pango_cairo_layout_path (cr, layout);
+ *   pango2_cairo_layout_path (cr, layout);
  *
  *   // Font Outline
  *   cairo_set_source_rgb (cr, 0.93, 1.0, 0.47);
@@ -175,10 +175,10 @@ _gtk_print_context_new (GtkPrintOperation *op)
   return context;
 }
 
-static PangoFontMap *
+static Pango2FontMap *
 _gtk_print_context_get_fontmap (GtkPrintContext *context)
 {
-  return pango_cairo_font_map_get_default ();
+  return pango2_font_map_get_default ();
 }
 
 /**
@@ -544,12 +544,12 @@ _gtk_print_context_set_hard_margins (GtkPrintContext *context,
  * gtk_print_context_get_pango_fontmap:
  * @context: a `GtkPrintContext`
  *
- * Returns a `PangoFontMap` that is suitable for use
+ * Returns a `Pango2FontMap` that is suitable for use
  * with the `GtkPrintContext`.
  *
  * Returns: (transfer none): the font map of @context
  */
-PangoFontMap *
+Pango2FontMap *
 gtk_print_context_get_pango_fontmap (GtkPrintContext *context)
 {
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
@@ -561,31 +561,31 @@ gtk_print_context_get_pango_fontmap (GtkPrintContext *context)
  * gtk_print_context_create_pango_context:
  * @context: a `GtkPrintContext`
  *
- * Creates a new `PangoContext` that can be used with the
+ * Creates a new `Pango2Context` that can be used with the
  * `GtkPrintContext`.
  *
- * Returns: (transfer full): a new Pango context for @context
+ * Returns: (transfer full): a new Pango2 context for @context
  */
-PangoContext *
+Pango2Context *
 gtk_print_context_create_pango_context (GtkPrintContext *context)
 {
-  PangoContext *pango_context;
+  Pango2Context *pango_context;
   cairo_font_options_t *options;
 
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
-  
-  pango_context = pango_font_map_create_context (_gtk_print_context_get_fontmap (context));
+
+  pango_context = pango2_context_new_with_font_map (_gtk_print_context_get_fontmap (context));
 
   options = cairo_font_options_create ();
   cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
-  pango_cairo_context_set_font_options (pango_context, options);
+  pango2_cairo_context_set_font_options (pango_context, options);
   cairo_font_options_destroy (options);
   
   /* We use the unit-scaled resolution, as we still want 
    * fonts given in points to work 
    */
-  pango_cairo_context_set_resolution (pango_context,
-				      context->surface_dpi_y / context->pixels_per_unit_y);
+  pango2_font_map_set_resolution (pango2_context_get_font_map (pango_context),
+                                 context->surface_dpi_y / context->pixels_per_unit_y);
   return pango_context;
 }
 
@@ -593,23 +593,23 @@ gtk_print_context_create_pango_context (GtkPrintContext *context)
  * gtk_print_context_create_pango_layout:
  * @context: a `GtkPrintContext`
  *
- * Creates a new `PangoLayout` that is suitable for use
+ * Creates a new `Pango2Layout` that is suitable for use
  * with the `GtkPrintContext`.
  *
- * Returns: (transfer full): a new Pango layout for @context
+ * Returns: (transfer full): a new Pango2 layout for @context
  */
-PangoLayout *
+Pango2Layout *
 gtk_print_context_create_pango_layout (GtkPrintContext *context)
 {
-  PangoContext *pango_context;
-  PangoLayout *layout;
+  Pango2Context *pango_context;
+  Pango2Layout *layout;
 
   g_return_val_if_fail (GTK_IS_PRINT_CONTEXT (context), NULL);
 
   pango_context = gtk_print_context_create_pango_context (context);
-  layout = pango_layout_new (pango_context);
+  layout = pango2_layout_new (pango_context);
 
-  pango_cairo_update_context (context->cr, pango_context);
+  pango2_cairo_update_context (context->cr, pango_context);
   g_object_unref (pango_context);
 
   return layout;

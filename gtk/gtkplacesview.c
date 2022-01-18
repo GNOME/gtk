@@ -587,14 +587,14 @@ populate_servers (GtkPlacesView *view)
       label = gtk_label_new (name);
       gtk_widget_set_hexpand (label, TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
       gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 1, 1);
 
       /* the uri itself */
       label = gtk_label_new (uris[i]);
       gtk_widget_set_hexpand (label, TRUE);
       gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+      gtk_label_set_ellipsize (GTK_LABEL (label), PANGO2_ELLIPSIZE_END);
       gtk_widget_add_css_class (label, "dim-label");
       gtk_grid_attach (GTK_GRID (grid), label, 0, 1, 1, 1);
 

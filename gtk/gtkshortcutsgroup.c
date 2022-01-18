@@ -339,19 +339,19 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
 static void
 gtk_shortcuts_group_init (GtkShortcutsGroup *self)
 {
-  PangoAttrList *attrs;
+  Pango2AttrList *attrs;
 
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
   gtk_box_set_spacing (GTK_BOX (self), 10);
 
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+  attrs = pango2_attr_list_new ();
+  pango2_attr_list_insert (attrs, pango2_attr_weight_new (PANGO2_WEIGHT_BOLD));
   self->title = g_object_new (GTK_TYPE_LABEL,
                               "attributes", attrs,
                               "visible", TRUE,
                               "xalign", 0.0f,
                               NULL);
-  pango_attr_list_unref (attrs);
+  pango2_attr_list_unref (attrs);
 
   gtk_box_append (GTK_BOX (self), GTK_WIDGET (self->title));
 }
