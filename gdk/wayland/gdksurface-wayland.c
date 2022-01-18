@@ -935,12 +935,33 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
     }
 }
 
+static void
+gdk_wayland_surface_sync_offset (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (wl_surface_get_version (impl->display_server.wl_surface) <
+      WL_SURFACE_OFFSET_SINCE_VERSION)
+    return;
+
+  if (impl->pending_buffer_offset_x == 0 &&
+      impl->pending_buffer_offset_y == 0)
+    return;
+
+  wl_surface_offset (impl->display_server.wl_surface,
+                     impl->pending_buffer_offset_x,
+                     impl->pending_buffer_offset_y);
+  impl->pending_buffer_offset_x = 0;
+  impl->pending_buffer_offset_y = 0;
+}
+
 void
 gdk_wayland_surface_sync (GdkSurface *surface)
 {
   gdk_wayland_surface_sync_shadow (surface);
   gdk_wayland_surface_sync_opaque_region (surface);
   gdk_wayland_surface_sync_input_region (surface);
+  gdk_wayland_surface_sync_offset (surface);
 }
 
 static gboolean

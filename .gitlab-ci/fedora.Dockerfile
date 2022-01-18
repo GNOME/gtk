@@ -95,6 +95,8 @@ RUN dnf -y install \
     weston-libs \
     which \
     xorg-x11-server-Xvfb \
+ && dnf install -y 'dnf-command(builddep)' \
+ && dnf builddep -y wayland \
  && dnf clean all
 
 # Enable sudo for wheel users

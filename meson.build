@@ -17,7 +17,7 @@ cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 introspection_req  = '>= 1.39.0'
 wayland_proto_req  = '>= 1.21'
-wayland_req        = '>= 1.16.91'
+wayland_req        = '>= 1.20.0'
 graphene_req       = '>= 1.9.1'
 epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
@@ -510,9 +510,12 @@ cdata.set('HAVE_PANGOFT', pangoft_dep.found())
 
 wayland_pkgs = []
 if wayland_enabled
-  wlclientdep    = dependency('wayland-client', version:  wayland_req)
+  wlclientdep    = dependency('wayland-client', version:  wayland_req,
+                              fallback: 'wayland',
+                              default_options: ['documentation=false'])
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req, required: false)
-  wlegldep       = dependency('wayland-egl')
+  wlegldep       = dependency('wayland-egl',
+                              fallback: 'wayland')
 
   if not wlprotocolsdep.found()
     wlproto_dir = subproject('wayland-protocols').get_variable('wayland_protocols_srcdir')
