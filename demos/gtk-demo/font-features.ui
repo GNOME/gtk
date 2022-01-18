@@ -45,9 +45,7 @@
                           <object class="GtkLabel">
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Font Features</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"></attribute>
-                            </attributes>
+                            <property name="attributes" translatable="yes">0 -1 weight bold</property>
                           </object>
                         </child>
                         <child>
@@ -75,9 +73,7 @@
                           <object class="GtkLabel" id="variations_heading">
                             <property name="label" translatable="yes">Font Variations</property>
                             <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"></attribute>
-                            </attributes>
+                            <property name="attributes" translatable="yes">0 -1 weight bold</property>
                           </object>
                         </child>
                         <child>
