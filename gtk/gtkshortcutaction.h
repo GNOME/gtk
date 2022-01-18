@@ -37,6 +37,8 @@ G_BEGIN_DECLS
  * @user_data: (nullable): The user data provided when activating the action
  *
  * Prototype for shortcuts based on user callbacks.
+ *
+ * Returns: %TRUE if the action was successful.
  */
 typedef gboolean (* GtkShortcutFunc) (GtkWidget *widget,
                                       GVariant  *args,
