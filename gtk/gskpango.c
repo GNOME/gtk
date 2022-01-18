@@ -480,3 +480,23 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
 
   gsk_pango_renderer_release (crenderer);
 }
+
+void
+gtk_snapshot_append_lines (GtkSnapshot   *snapshot,
+                            PangoLines   *lines,
+                            const GdkRGBA *color)
+{
+  GskPangoRenderer *crenderer;
+
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (PANGO_IS_LINES (lines));
+
+  crenderer = gsk_pango_renderer_acquire ();
+
+  crenderer->snapshot = snapshot;
+  crenderer->fg_color = color;
+
+  pango_renderer_draw_lines (PANGO_RENDERER (crenderer), lines, 0, 0);
+
+  gsk_pango_renderer_release (crenderer);
+}

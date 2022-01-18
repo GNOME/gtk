@@ -224,6 +224,11 @@ void            gtk_snapshot_append_layout              (GtkSnapshot            
                                                          PangoLayout            *layout,
                                                          const GdkRGBA          *color);
 
+GDK_AVAILABLE_IN_ALL
+void            gtk_snapshot_append_lines               (GtkSnapshot            *snapshot,
+                                                         PangoLines             *lines,
+                                                         const GdkRGBA          *color);
+
 
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_render_background          (GtkSnapshot            *snapshot,
