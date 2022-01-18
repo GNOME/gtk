@@ -258,9 +258,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
     return FALSE;
 
-  if (display_win32->gl_type == GDK_WIN32_GL_TYPE_WGL)
-    return TRUE;
-
   /* acquire and cache dummy Window (HWND & HDC) and
    * dummy GL Context, it is used to query functions
    * and used for other stuff as well
@@ -724,7 +721,7 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
   if (!GDK_IS_WIN32_DISPLAY (display))
     return FALSE;
 
-  if (!gdk_win32_display_init_wgl (display, NULL))
+  if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, NULL))
     return FALSE;
 
   display_win32 = GDK_WIN32_DISPLAY (display);

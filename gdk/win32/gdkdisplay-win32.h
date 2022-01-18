@@ -105,13 +105,6 @@ typedef enum {
   GDK_WIN32_TABLET_INPUT_API_WINPOINTER
 } GdkWin32TabletInputAPI;
 
-typedef enum
-{
-  GDK_WIN32_GL_TYPE_NONE,
-  GDK_WIN32_GL_TYPE_WGL,
-  GDK_WIN32_GL_TYPE_EGL,
-} GdkWin32GLType;
-
 typedef struct
 {
   HDC hdc;
@@ -132,7 +125,6 @@ struct _GdkWin32Display
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
-  GdkWin32GLType gl_type;
   guint gl_version;
 
   GListModel *monitors;
