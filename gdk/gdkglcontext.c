@@ -1056,18 +1056,21 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   gboolean force_gles = FALSE;
-#ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
-#endif
   int default_major, default_minor;
   int maj, min;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-#ifdef G_ENABLE_DEBUG
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+
+#ifdef G_ENABLE_DEBUG
   force_gles = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES);
 #endif
+
+  /* libANGLE on Windows at least requires GLES 3.0+ */
+  if (display->have_egl_win32_libangle)
+    force_gles = TRUE;
 
   /* Default fallback values for uninitialised contexts; we
    * enforce a context version number of 3.2 for desktop GL,
@@ -1075,7 +1078,7 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
    */
   if (gdk_gl_context_get_use_es (context) || force_gles)
     {
-      default_major = 2;
+      default_major = display->have_egl_win32_libangle ? 3 : 2;
       default_minor = 0;
     }
   else

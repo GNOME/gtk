@@ -1727,6 +1727,8 @@ gdk_display_init_egl (GdkDisplay  *self,
     epoxy_has_egl_extension (priv->egl_display, "EGL_KHR_no_config_context");
   self->have_egl_pixel_format_float =
     epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_pixel_format_float");
+  self->have_egl_win32_libangle =
+    epoxy_has_egl_extension (priv->egl_display, "EGL_ANGLE_d3d_share_handle_client_buffer");
 
   if (self->have_egl_no_config_context)
     priv->egl_config_high_depth = gdk_display_create_egl_config (self,
