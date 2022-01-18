@@ -794,12 +794,13 @@ gtk_im_context_wayland_focus_in (GtkIMContext *context)
   global = gtk_im_context_wayland_global_get (gtk_widget_get_display (self->widget));
   if (global->current == context)
     return;
+
+  global->current = context;
   if (!global->text_input)
     return;
 
   if (self->gesture)
     gtk_event_controller_reset (GTK_EVENT_CONTROLLER (self->gesture));
-  global->current = context;
 
   if (global->focused)
     enable (self, global);
