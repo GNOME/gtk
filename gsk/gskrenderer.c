@@ -597,14 +597,7 @@ get_renderer_for_backend (GdkSurface *surface)
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (GDK_IS_WIN32_SURFACE (surface))
-    /* remove check for OpenGL/ES when OpenGL/ES 2.0 shader is ready */
-    {
-      GdkDisplay *display = gdk_surface_get_display (surface);
-
-      if (!(GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES) ||
-            GDK_WIN32_DISPLAY (display)->running_on_arm64))
-        return GSK_TYPE_GL_RENDERER;
-    }
+    return GSK_TYPE_GL_RENDERER;
 #endif
 
   return G_TYPE_INVALID;

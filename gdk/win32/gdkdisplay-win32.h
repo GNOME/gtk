@@ -125,7 +125,6 @@ struct _GdkWin32Display
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
-  int wgl_pixel_format;
   guint gl_version;
 
   GListModel *monitors;

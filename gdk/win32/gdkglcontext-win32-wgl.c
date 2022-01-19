@@ -258,9 +258,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
     return FALSE;
 
-  if (display_win32->wgl_pixel_format != 0)
-    return TRUE;
-
   /* acquire and cache dummy Window (HWND & HDC) and
    * dummy GL Context, it is used to query functions
    * and used for other stuff as well
@@ -298,8 +295,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
           return FALSE;
         }
     }
-
-  display_win32->wgl_pixel_format = best_idx;
 
   display_win32->hasWglARBCreateContext =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
@@ -432,33 +427,13 @@ create_wgl_context (HDC           hdc,
           goto gl_fail;
         }
 
-      /*
-       * We need a Core GL 4.1 context in order to use the GL support in
-       * the GStreamer media widget backend, but wglCreateContextAttribsARB()
-       * may only give us the GL context version that we ask for here, and
-       * nothing more.  So, if we are asking for a pre-GL 4.1 context,
-       * try to ask for a 4.1 context explicitly first.  If that is not supported,
-       * then we fall back to whatever version that we were asking for (or, even a
-       * legacy context if that fails), at a price of not able to have GL support
-       * for the media GStreamer backend.
-       */
-      if (major < 4 || (major == 4 && minor < 1))
-        hglrc = create_wgl_context_with_attribs (hdc,
-                                                 hglrc_base,
-                                                 share,
-                                                 flags,
-                                                 4,
-                                                 1,
-                                                 is_legacy);
-
-      if (hglrc == NULL)
-        hglrc = create_wgl_context_with_attribs (hdc,
-                                                 hglrc_base,
-                                                 share,
-                                                 flags,
-                                                 major,
-                                                 minor,
-                                                 is_legacy);
+      hglrc = create_wgl_context_with_attribs (hdc,
+                                               hglrc_base,
+                                               share,
+                                               flags,
+                                               major,
+                                               minor,
+                                               is_legacy);
 
       /* return the legacy context we have if it could be setup properly, in case the 3.0+ context creation failed */
       if (hglrc == NULL)
@@ -564,9 +539,26 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   if (!gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, error))
     return 0;
 
-  gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   compat_bit = gdk_gl_context_get_forward_compatible (context);
+
+  /*
+   * We may need a Core GL 4.1+ context in order to use the GL support in
+   * the GStreamer media widget backend (such as on Intel drivers), but
+   * wglCreateContextAttribsARB() may only give us the GL context version
+   * that we ask for here, and nothing more.  So, improve things here by
+   * asking for the GL version that is reported to us via epoxy_gl_version(),
+   * rather than the default GL core 3.2 context.  Save this up in our
+   * GdkGLContext so that subsequent contexts that are shared with this
+   * context are created likewise too.
+   */
+  if (share != NULL)
+    gdk_gl_context_get_required_version (share, &major, &minor);
+  else
+    {
+      major = display_win32->gl_version / 10;
+      minor = display_win32->gl_version % 10;
+    }
 
   if (surface != NULL)
     hdc = GDK_WIN32_SURFACE (surface)->hdc;
@@ -634,6 +626,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
   /* Ensure that any other context is created with a legacy bit set */
   gdk_gl_context_set_is_legacy (context, legacy_bit);
+  gdk_gl_context_set_required_version (context, major, minor);
 
   return GDK_GL_API_GL;
 }
@@ -728,9 +721,10 @@ gdk_win32_display_get_wgl_version (GdkDisplay *display,
   if (!GDK_IS_WIN32_DISPLAY (display))
     return FALSE;
 
-  display_win32 = GDK_WIN32_DISPLAY (display);
-  if (display_win32->wgl_pixel_format == 0)
+  if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, NULL))
     return FALSE;
+
+  display_win32 = GDK_WIN32_DISPLAY (display);
 
   if (major != NULL)
     *major = display_win32->gl_version / 10;
