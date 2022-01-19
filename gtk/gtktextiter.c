@@ -1025,7 +1025,7 @@ gtk_text_iter_get_visible_text (const GtkTextIter  *start,
  *
  * Otherwise, %NULL is returned.
  *
- * Returns: (transfer none): the paintable at @iter
+ * Returns: (transfer none) (nullable): the paintable at @iter
  **/
 GdkPaintable *
 gtk_text_iter_get_paintable (const GtkTextIter *iter)
@@ -1056,7 +1056,7 @@ gtk_text_iter_get_paintable (const GtkTextIter *iter)
  *
  * Otherwise, %NULL is returned.
  *
- * Returns: (transfer none): the anchor at @iter
+ * Returns: (transfer none) (nullable): the anchor at @iter
  **/
 GtkTextChildAnchor*
 gtk_text_iter_get_child_anchor (const GtkTextIter *iter)
