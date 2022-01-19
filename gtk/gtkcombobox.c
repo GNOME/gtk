@@ -2707,8 +2707,12 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
   GtkTreeIter iter;
   GtkTreeIter new_iter;
 
+  /* Scrolling the parent window/container takes precedence - Issue #3092 */
+  if (gtk_widget_inside_scrollable_container (widget))
+    return GDK_EVENT_PROPAGATE;
+
   if (!gtk_combo_box_get_active_iter (combo_box, &iter))
-    return TRUE;
+    return GDK_EVENT_STOP;
 
   if (event->direction == GDK_SCROLL_UP)
     found = tree_prev (combo_box, priv->model,
@@ -2720,7 +2724,7 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
   if (found)
     gtk_combo_box_set_active_iter (combo_box, &new_iter);
 
-  return TRUE;
+  return GDK_EVENT_STOP;
 }
 
 /*

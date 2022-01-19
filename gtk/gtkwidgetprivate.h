@@ -282,6 +282,7 @@ GList *           _gtk_widget_list_controllers             (GtkWidget           
                                                             GtkPropagationPhase  phase);
 gboolean          _gtk_widget_consumes_motion              (GtkWidget           *widget,
                                                             GdkEventSequence    *sequence);
+gboolean          gtk_widget_inside_scrollable_container   (GtkWidget *widget);
 
 gboolean          gtk_widget_has_tick_callback             (GtkWidget *widget);
 
