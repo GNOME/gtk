@@ -158,7 +158,7 @@ msys2-mingw64:
     CHERE_INVOKING: "yes"
   artifacts:
     when: always
-    expose_as: 'Windows DLL (MSYS2 64 bit toolchain)'
+    expose_as: 'Windows_DLL_MSYS2_64_bit_toolchain'
     paths:
       - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
 
