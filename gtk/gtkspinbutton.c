@@ -1335,6 +1335,10 @@ gtk_spin_button_scroll (GtkWidget      *widget,
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin->priv;
 
+  /* Scrolling the parent window/container takes precedence - Issue #3092 */
+  if (gtk_widget_inside_scrollable_container (widget))
+    return GDK_EVENT_PROPAGATE;
+
   if (event->direction == GDK_SCROLL_UP)
     {
       if (!gtk_widget_has_focus (widget))
@@ -1348,9 +1352,9 @@ gtk_spin_button_scroll (GtkWidget      *widget,
       gtk_spin_button_real_spin (spin, -gtk_adjustment_get_step_increment (priv->adjustment));
     }
   else
-    return FALSE;
+    return GDK_EVENT_PROPAGATE;
 
-  return TRUE;
+  return GDK_EVENT_STOP;
 }
 
 static gboolean

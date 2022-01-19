@@ -11662,6 +11662,36 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 }
 
 /**
+ * gtk_widget_inside_scrollable_container:
+ * @widget: a #GtkWidget
+ *
+ * Private function used by GtkComboBox, GtkRange, GtkSpinButton - See issue #3092
+ *
+ * Returns: whether @widget is inside a scrollable container (like eg.
+ * GtkScrolledWindow, GtkViewPort) and the view can currently be scrolled
+ * i.e. the scrollbars can move because the content excedes the page_size
+ **/
+gboolean
+gtk_widget_inside_scrollable_container (GtkWidget *widget)
+{
+  GtkWidget *ancestor;
+  GtkAdjustment *vadj;
+  gdouble upper, page_size;
+
+  ancestor = gtk_widget_get_ancestor (gtk_widget_get_parent (widget), GTK_TYPE_SCROLLABLE);
+  if (ancestor && GTK_IS_SCROLLABLE (ancestor))
+    {
+      vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (ancestor));
+      g_object_get (vadj, "upper", &upper, "page_size", &page_size, NULL);
+
+      if (!G_APPROX_VALUE ((upper - page_size), 0.0, DBL_EPSILON))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+/**
  * gtk_widget_set_visual:
  * @widget: a #GtkWidget
  * @visual: (allow-none): visual to be used or %NULL to unset a previous one

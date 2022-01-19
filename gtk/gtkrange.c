@@ -3118,6 +3118,11 @@ gtk_range_scroll_event (GtkWidget      *widget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
   double delta = _gtk_range_get_wheel_delta (range, event);
+
+  /* Scrolling the parent window/container takes precedence - Issue #3092 */
+  if (gtk_widget_inside_scrollable_container (widget))
+    return GDK_EVENT_PROPAGATE;
+
   gboolean handled;
 
   g_signal_emit (range, signals[CHANGE_VALUE], 0,
