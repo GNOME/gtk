@@ -1382,5 +1382,5 @@ a new family of widgets for this purpose that uses list models instead
 of tree models, and widgets instead of cell renderers.
 
 To learn more about the new list widgets, you can read the [List Widget
-Overview](#ListWidget).
+Overview](https://docs.gtk.org/gtk4/section-list-widget.html).
 
