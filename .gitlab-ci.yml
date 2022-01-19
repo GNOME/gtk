@@ -160,7 +160,7 @@ msys2-mingw64:
     when: always
     expose_as: 'Windows DLL (MSYS2 64 bit toolchain)'
     paths:
-      - "${CI_PROJECT_DIR}/_build/gtk/libgtk*.dll"
+      - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
 
 macos:
   extends: .only-default
