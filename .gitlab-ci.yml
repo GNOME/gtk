@@ -156,6 +156,11 @@ msys2-mingw64:
   variables:
     MSYSTEM: "MINGW64"
     CHERE_INVOKING: "yes"
+  artifacts:
+    when: always
+    expose_as: 'Windows DLL (MSYS2 64 bit toolchain)'
+    paths:
+      - "${CI_PROJECT_DIR}/_build/gtk/libgtk*.dll"
 
 macos:
   extends: .only-default
