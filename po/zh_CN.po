@@ -29,16 +29,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-05 17:26+0000\n"
-"PO-Revision-Date: 2021-09-05 16:30-0400\n"
-"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
+"POT-Creation-Date: 2021-09-16 11:35+0000\n"
+"PO-Revision-Date: 2021-09-17 17:02+0800\n"
+"Last-Translator: Dingzhong Chen <wsxy162@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 40.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -716,11 +716,11 @@ msgstr "获取 EGL 配置失败"
 
 #: gdk/x11/gdkglcontext-egl.c:266
 msgid "No EGL configuration with required features found"
-msgstr "未找到带有必需特性的 EGL 配置"
+msgstr "未找到带有所需功能的 EGL 配置"
 
 #: gdk/x11/gdkglcontext-egl.c:273
 msgid "No perfect EGL configuration found"
-msgstr "未找到完美的 EGL 配置"
+msgstr "未找到完全符合的 EGL 配置"
 
 #: gdk/x11/gdkglcontext-egl.c:679
 msgid "EGL is not supported"
@@ -736,7 +736,7 @@ msgstr "没有可用的 GLX 配置"
 
 #: gdk/x11/gdkglcontext-glx.c:843
 msgid "No GLX configuration with required features found"
-msgstr "未找到带有必需特性的 GLX 配置"
+msgstr "未找到带有所需功能的 GLX 配置"
 
 #: gdk/x11/gdkglcontext-glx.c:914
 msgid "GLX is not supported"
@@ -824,7 +824,7 @@ msgstr "自定义颜色"
 #: gtk/a11y/gtkatspiaction.c:440
 msgctxt "accessibility"
 msgid "Activates the expander"
-msgstr "激活展开器"
+msgstr "激活扩展器"
 
 #: gtk/a11y/gtkatspiaction.c:496 gtk/a11y/gtkatspiaction.c:604
 #: gtk/a11y/gtkatspiaction.c:691
@@ -870,7 +870,7 @@ msgstr "清除"
 #: gtk/a11y/gtkatspiaction.c:699
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
-msgstr "清除条目的内容"
+msgstr "清除输入框的内容"
 
 #: gtk/a11y/gtkatspiroot.c:255
 msgctxt "accessibility"
@@ -1124,7 +1124,7 @@ msgstr "复选框"
 #: gtk/gtkaccessible.c:567
 msgctxt "accessibility"
 msgid "column header"
-msgstr "列标题"
+msgstr "列首"
 
 #: gtk/gtkaccessible.c:568
 msgctxt "accessibility"
@@ -1139,7 +1139,7 @@ msgstr "命令"
 #: gtk/gtkaccessible.c:570
 msgctxt "accessibility"
 msgid "composite"
-msgstr "复合"
+msgstr "合成"
 
 #: gtk/gtkaccessible.c:571
 msgctxt "accessibility"
@@ -1344,7 +1344,7 @@ msgstr "行组"
 #: gtk/gtkaccessible.c:611
 msgctxt "accessibility"
 msgid "row header"
-msgstr "行标题"
+msgstr "行首"
 
 #: gtk/gtkaccessible.c:612
 msgctxt "accessibility"
@@ -1389,7 +1389,7 @@ msgstr "滑块"
 #: gtk/gtkaccessible.c:620
 msgctxt "accessibility"
 msgid "spin button"
-msgstr "旋转图标"
+msgstr "微调按钮"
 
 #: gtk/gtkaccessible.c:621
 msgctxt "accessibility"
