@@ -26,16 +26,32 @@
 #include "gdkinternal-quartz.h"
 #include <cairo/cairo-quartz.h>
 #import <AppKit/AppKit.h>
+#import <IOSurface/IOSurface.h>
 
 @implementation GdkQuartzView
+
+
 
 -(id)initWithFrame: (NSRect)frameRect
 {
   if ((self = [super initWithFrame: frameRect]))
     {
+      CVReturn rv;
+      pb_props = @{
+        (id)kCVPixelBufferIOSurfaceCoreAnimationCompatibilityKey: @1,
+        (id)kCVPixelBufferBytesPerRowAlignmentKey: @64,
+      };
+      [pb_props retain];
+      cfpb_props  = (__bridge CFDictionaryRef)pb_props;
+
       markedRange = NSMakeRange (NSNotFound, 0);
       selectedRange = NSMakeRange (0, 0);
+      rv = CVPixelBufferCreate (NULL, frameRect.size.width,
+                                frameRect.size.height,
+                                kCVPixelFormatType_32ARGB,
+                                cfpb_props, &pixels);
     }
+
   [self setValue: @(YES) forKey: @"postsFrameChangedNotifications"];
 
   return self;
@@ -258,6 +274,12 @@
       trackingRect = 0;
     }
 
+  if (pixels)
+    {
+      CVPixelBufferRelease (pixels);
+    }
+
+  [pb_props release];
   [super dealloc];
 }
 
@@ -278,7 +300,7 @@
 
 -(BOOL)isFlipped
 {
-  return YES;
+  return NO;
 }
 
 -(BOOL)isOpaque
@@ -300,7 +322,7 @@
    */
   if(gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
   {
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 101200
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 101100
     CALayer* layer = self.layer;
     layer.contentsFormat = kCAContentsFormatRGBA8Uint;
 #endif
@@ -315,36 +337,107 @@
 }
 
 static void
-provider_release_cb (void* info, const void* data, size_t size)
+nsrect_from_cairo_rect (NSRect *nsrect, cairo_rectangle_int_t *rect)
 {
-  g_free (info);
+  nsrect->origin.x = (CGFloat)rect->x;
+  nsrect->origin.y = (CGFloat)rect->y;
+  nsrect->size.width = (CGFloat)rect->width;
+  nsrect->size.height = (CGFloat)rect->height;
+}
+
+static void
+cairo_rect_from_nsrect (cairo_rectangle_int_t *rect, NSRect *nsrect)
+{
+  rect->x = (int)nsrect->origin.x;
+  rect->y = (int)nsrect->origin.y;
+  rect->width = (int)nsrect->size.width;
+  rect->height = (int)nsrect->size.height;
+}
+
+static cairo_status_t
+copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
+                       cairo_rectangle_int_t *rect)
+{
+  cairo_surface_t *source_img, *dest_img;
+  cairo_status_t status;
+  cairo_format_t format;
+  int height, width, stride;
+
+  source_img = cairo_surface_map_to_image (source, rect);
+  status = cairo_surface_status (source_img);
+
+  if (status)
+    {
+      g_warning ("Failed to map source image surface, %d %d %d %d on %d %d: %s\n",
+                 rect->x, rect->y, rect->width, rect->height,
+                 cairo_image_surface_get_width (source),
+                 cairo_image_surface_get_height (source),
+                 cairo_status_to_string (status));
+       return status;
+    }
+
+  format = cairo_image_surface_get_format (source_img);
+  dest_img = cairo_surface_map_to_image (dest, rect);
+  status = cairo_surface_status (dest_img);
+
+  if (status)
+    {
+      g_warning ("Failed to map destination image surface, %d %d %d %d on %d %d: %s\n",
+                 rect->x, rect->y, rect->width, rect->height,
+                 cairo_image_surface_get_width (source),
+                 cairo_image_surface_get_height (source),
+                 cairo_status_to_string (status));
+       goto CLEANUP;
+    }
+
+  width = cairo_image_surface_get_width (source_img);
+  stride = cairo_format_stride_for_width (format, width);
+  height = cairo_image_surface_get_height (source_img);
+  memcpy (cairo_image_surface_get_data (dest_img),
+          cairo_image_surface_get_data (source_img),
+          stride * height);
+  cairo_surface_unmap_image (dest, dest_img);
+
+ CLEANUP:
+  cairo_surface_unmap_image (source, source_img);
+  return status;
 }
 
 -(void)updateLayer
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (gdk_window->impl);
-  CALayer *ca_layer = [self layer];
-  CGRect layer_bounds = [ca_layer bounds];
+  CGRect layer_bounds = [self.layer bounds];
   CGRect backing_bounds = [self convertRectToBacking: layer_bounds];
-  cairo_rectangle_int_t surface_extents = { layer_bounds.origin.x,
-                                            layer_bounds.origin.y,
-                                            backing_bounds.size.width,
-                                            backing_bounds.size.height };
-  cairo_surface_t *image_surface = NULL;
+  cairo_rectangle_int_t extents;
+  cairo_surface_t *cvpb_surface;
 
   if (GDK_WINDOW_DESTROYED (gdk_window))
     return;
 
+  ++impl->in_paint_rect_count;
+  CVPixelBufferLockBaseAddress (pixels, 0);
+  cvpb_surface =
+    cairo_image_surface_create_for_data (CVPixelBufferGetBaseAddress (pixels),
+                                         CAIRO_FORMAT_ARGB32,
+                                         (int)CVPixelBufferGetWidth (pixels),
+                                         (int)CVPixelBufferGetHeight (pixels),
+                                         (int)CVPixelBufferGetBytesPerRow (pixels));
+
+  cairo_rect_from_nsrect (&extents, &backing_bounds);
   if (impl->needs_display_region)
     {
-      _gdk_window_process_updates_recurse (gdk_window, impl->needs_display_region);
-      cairo_region_destroy (impl->needs_display_region);
+      cairo_region_t *region = impl->needs_display_region;
+      _gdk_window_process_updates_recurse (gdk_window, region);
+      cairo_region_destroy (region);
       impl->needs_display_region = NULL;
     }
   else
     {
-      cairo_region_t *region = cairo_region_create_rectangle (&surface_extents);
-      ++impl->in_paint_rect_count;
+      cairo_rectangle_int_t bounds;
+      cairo_region_t *region;
+
+      cairo_rect_from_nsrect (&bounds, &layer_bounds);
+      region = cairo_region_create_rectangle (&bounds);
       _gdk_window_process_updates_recurse (gdk_window, region);
       cairo_region_destroy (region);
     }
@@ -352,57 +445,13 @@ provider_release_cb (void* info, const void* data, size_t size)
   if (!impl || !impl->cairo_surface)
     return;
 
-  image_surface = cairo_surface_map_to_image (impl->cairo_surface,
-                                              &surface_extents);
-  if (!cairo_surface_status (image_surface))
-    {
-      cairo_format_t image_format = cairo_image_surface_get_format (image_surface);
-      if (image_format == CAIRO_FORMAT_ARGB32)
-        {
-          int image_width = cairo_image_surface_get_width (image_surface);
-          int image_height = cairo_image_surface_get_height (image_surface);
-          int image_stride = cairo_image_surface_get_stride (image_surface);
-          void* image_data = g_malloc (image_height * image_stride);
-          int color_bits = 8;
-          int pixel_bits = 32;
-          CGColorSpaceRef color_space = CGColorSpaceCreateDeviceRGB ();
-	  CGBitmapInfo bitinfo =
-            kCGBitmapByteOrder32Host | kCGImageAlphaPremultipliedFirst;
-          CGDataProviderRef provider =
-            CGDataProviderCreateWithData (image_data, image_data,
-                                          image_height * image_stride,
-                                          provider_release_cb);
-          const CGFloat *decode = NULL;
-          bool interpolate = YES;
-          CGSize image_size = {image_height, image_width};
-          NSImage* ns_image = NULL;
+  copy_rectangle_argb32 (cvpb_surface, impl->cairo_surface, &extents);
 
-          if (ca_layer.contents)
-            [(NSImage*)ca_layer.contents release];
-
-          memcpy (image_data, cairo_image_surface_get_data (image_surface),
-                  image_height * image_stride);
-
-          ns_image = [[NSImage alloc]
-                      initWithCGImage:CGImageCreate (image_width,
-                                                                   image_height,
-                                                                   color_bits,
-                                                                   pixel_bits,
-                                                                   image_stride,
-                                                                   color_space,
-                                                                   bitinfo,
-                                                                   provider,
-                                                                   decode,
-                                                                   interpolate,
-                                                                   kCGRenderingIntentDefault)
-                      size:image_size];
-          ca_layer.contents = ns_image;
-        }
-    }
-  cairo_surface_unmap_image (impl->cairo_surface, image_surface);
-  cairo_surface_destroy (impl->cairo_surface);
+  cairo_surface_destroy (cvpb_surface);
+  CVPixelBufferUnlockBaseAddress (pixels, 0);
   --impl->in_paint_rect_count;
-
+  self.layer.contents = NULL;
+  self.layer.contents = (id)CVPixelBufferGetIOSurface (pixels);
 }
 
 -(void)setNeedsInvalidateShadow: (BOOL)invalidate
@@ -460,8 +509,18 @@ provider_release_cb (void* info, const void* data, size_t size)
 
 -(void)setFrame: (NSRect)frame
 {
+  CVReturn rv;
+  NSRect rect = self.layer ? self.layer.bounds : frame;
+  NSRect backing_rect = [self convertRectToBacking: rect];
+
   if (GDK_WINDOW_DESTROYED (gdk_window))
     return;
+
+  CVPixelBufferRelease (pixels);
+  rv = CVPixelBufferCreate (NULL, backing_rect.size.width,
+                            backing_rect.size.height,
+                            kCVPixelFormatType_32BGRA,
+                            cfpb_props, &pixels);
 
   [super setFrame: frame];
 

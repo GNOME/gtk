@@ -148,7 +148,6 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
 				    gboolean             antialias)
 {
   CGContextRef cg_context = NULL;
-  //  CGSize scale;
 
   if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
     return NULL;
@@ -184,10 +183,6 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
   CGContextSaveGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
-  /* Undo the default scaling transform, since we apply our own
-   * in gdk_quartz_ref_cairo_surface () */
-  //  scale = CGContextConvertSizeToDeviceSpace (cg_context, CGSizeMake (1.0, 1.0));
-  //  CGContextScaleCTM (cg_context, 1.0 / fabs(scale.width), 1.0 / fabs(scale.height));
   return cg_context;
 }
 
@@ -275,18 +270,25 @@ static cairo_surface_t *
 gdk_quartz_ref_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-  gint scale = gdk_window_get_scale_factor (impl->wrapper);
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
   if (!impl->cairo_surface)
     {
-      impl->cairo_surface =
-        gdk_quartz_create_cairo_surface (impl,
-                                         gdk_window_get_width (impl->wrapper) * scale,
-                                         gdk_window_get_height (impl->wrapper) * scale);
+      gint width = gdk_window_get_width (impl->wrapper);
+      gint height = gdk_window_get_height (impl->wrapper);
+      gint scale = gdk_window_get_scale_factor (impl->wrapper);
+      gint scaled_width = width * scale;
+
+      if (scaled_width % 16)
+          scaled_width += 16 - scaled_width % 16; // Surface widths must be 4-pixel aligned
+
+      impl->cairo_surface = gdk_quartz_create_cairo_surface (impl,
+                                                             scaled_width,
+                                                             height * scale);
       cairo_surface_set_device_scale (impl->cairo_surface, scale, scale);
+      cairo_surface_reference (impl->cairo_surface); // The caller will destroy the returned one.
     }
   else
     cairo_surface_reference (impl->cairo_surface);
@@ -1234,6 +1236,7 @@ move_resize_window_internal (GdkWindow *window,
   cairo_region_t *old_region;
   cairo_region_t *expose_region;
   NSSize delta;
+  gboolean resized = FALSE;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -1281,10 +1284,18 @@ move_resize_window_internal (GdkWindow *window,
     }
 
   if (width != -1)
-    window->width = width;
+    {
+      if (window->width != width)
+        resized = TRUE;
+      window->width = width;
+    }
 
   if (height != -1)
-    window->height = height;
+    {
+      if (window->height != height)
+        resized = TRUE;
+      window->height = height;
+    }
 
   GDK_QUARTZ_ALLOC_POOL;
 

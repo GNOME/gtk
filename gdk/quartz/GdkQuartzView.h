@@ -17,6 +17,7 @@
  */
 
 #import <AppKit/AppKit.h>
+#import <CoreVideo/CoreVideo.h>
 #include "gdk/gdk.h"
 
 /* Text Input Client */
@@ -40,6 +41,9 @@
   BOOL needsInvalidateShadow;
   NSRange markedRange;
   NSRange selectedRange;
+  CVPixelBufferRef pixels;
+  NSDictionary *pb_props;
+  CFDictionaryRef cfpb_props;
 }
 
 - (void)setGdkWindow: (GdkWindow *)window;
