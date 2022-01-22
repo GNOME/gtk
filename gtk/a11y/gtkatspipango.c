@@ -126,6 +126,22 @@ pango_wrap_mode_to_string (PangoWrapMode mode)
     }
 }
 
+static const char *
+pango_align_to_string (PangoAlignment align)
+{
+  switch (align)
+    {
+    case PANGO_ALIGN_LEFT:
+      return "left";
+    case PANGO_ALIGN_CENTER:
+      return "center";
+    case PANGO_ALIGN_RIGHT:
+      return "right";
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 void
 gtk_pango_get_font_attributes (PangoFontDescription *font,
                                GVariantBuilder      *builder)
@@ -167,9 +183,6 @@ gtk_pango_get_default_attributes (PangoLayout     *layout,
                                   GVariantBuilder *builder)
 {
   PangoContext *context;
-  const char *val;
-  PangoAlignment align;
-  PangoWrapMode mode;
 
   context = pango_layout_get_context (layout);
   if (context)
@@ -186,26 +199,12 @@ gtk_pango_get_default_attributes (PangoLayout     *layout,
       if (font)
         gtk_pango_get_font_attributes (font, builder);
     }
-  if (pango_layout_get_justify (layout))
-    {
-      val = "fill";
-    }
-  else
-    {
-      align = pango_layout_get_alignment (layout);
-      if (align == PANGO_ALIGN_LEFT)
-        val = "left";
-      else if (align == PANGO_ALIGN_CENTER)
-        val = "center";
-      else
-        val = "right";
-    }
-  g_variant_builder_add (builder, "{ss}", "justification", val);
 
-  mode = pango_layout_get_wrap (layout);
+  g_variant_builder_add (builder, "{ss}", "justification",
+                         pango_align_to_string (pango_layout_get_alignment (layout)));
+
   g_variant_builder_add (builder, "{ss}", "wrap-mode",
-                         pango_wrap_mode_to_string (mode));
-
+                         pango_wrap_mode_to_string (pango_layout_get_wrap (layout)));
   g_variant_builder_add (builder, "{ss}", "strikethrough", "false");
   g_variant_builder_add (builder, "{ss}", "underline", "false");
   g_variant_builder_add (builder, "{ss}", "rise", "0");
@@ -678,7 +677,9 @@ pango_layout_get_line_before (PangoLayout           *layout,
 {
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL, *prev_prev_line = NULL;
-  int index, start_index, end_index;
+  int index, start_index, length, end_index;
+  int prev_start_index, prev_length;
+  int prev_prev_start_index, prev_prev_length;
   const char *text;
   gboolean found = FALSE;
 
@@ -688,8 +689,9 @@ pango_layout_get_line_before (PangoLayout           *layout,
   do
     {
       line = pango_layout_iter_get_line (iter);
-      start_index = line->start_index;
-      end_index = start_index + line->length;
+      start_index = pango_layout_line_get_start_index (line);
+      length = pango_layout_line_get_length (line);
+      end_index = start_index + length;
 
       if (index >= start_index && index <= end_index)
         {
@@ -700,14 +702,14 @@ pango_layout_get_line_before (PangoLayout           *layout,
                 {
                 case ATSPI_TEXT_BOUNDARY_LINE_START:
                   end_index = start_index;
-                  start_index = prev_line->start_index;
+                  start_index = prev_start_index;
                   break;
                 case ATSPI_TEXT_BOUNDARY_LINE_END:
                   if (prev_prev_line)
-                    start_index = prev_prev_line->start_index + prev_prev_line->length;
+                    start_index = prev_prev_start_index + prev_prev_length;
                   else
                     start_index = 0;
-                  end_index = prev_line->start_index + prev_line->length;
+                  end_index = prev_start_index + prev_length;
                   break;
                 case ATSPI_TEXT_BOUNDARY_CHAR:
                 case ATSPI_TEXT_BOUNDARY_WORD_START:
@@ -726,13 +728,17 @@ pango_layout_get_line_before (PangoLayout           *layout,
         }
 
       prev_prev_line = prev_line;
+      prev_prev_start_index = prev_start_index;
+      prev_prev_length = prev_length;
       prev_line = line;
+      prev_start_index = start_index;
+      prev_length = length;
     }
   while (pango_layout_iter_next_line (iter));
 
   if (!found)
     {
-      start_index = prev_line->start_index + prev_line->length;
+      start_index = prev_start_index + prev_length;
       end_index = start_index;
     }
   pango_layout_iter_free (iter);
@@ -750,7 +756,7 @@ pango_layout_get_line_at (PangoLayout           *layout,
 {
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL;
-  int index, start_index, end_index;
+  int index, start_index, length, end_index;
   const char *text;
   gboolean found = FALSE;
 
@@ -760,8 +766,9 @@ pango_layout_get_line_at (PangoLayout           *layout,
   do
     {
       line = pango_layout_iter_get_line (iter);
-      start_index = line->start_index;
-      end_index = start_index + line->length;
+      start_index = pango_layout_line_get_start_index (line);
+      length = pango_layout_line_get_length (line);
+      end_index = start_index + length;
 
       if (index >= start_index && index <= end_index)
         {
@@ -770,11 +777,11 @@ pango_layout_get_line_at (PangoLayout           *layout,
             {
             case ATSPI_TEXT_BOUNDARY_LINE_START:
               if (pango_layout_iter_next_line (iter))
-                end_index = pango_layout_iter_get_line (iter)->start_index;
+                end_index = pango_layout_line_get_start_index (pango_layout_iter_get_line (iter));
               break;
             case ATSPI_TEXT_BOUNDARY_LINE_END:
               if (prev_line)
-                start_index = prev_line->start_index + prev_line->length;
+                start_index = pango_layout_line_get_start_index (prev_line) + pango_layout_line_get_length (prev_line);
               break;
             case ATSPI_TEXT_BOUNDARY_CHAR:
             case ATSPI_TEXT_BOUNDARY_WORD_START:
@@ -795,7 +802,7 @@ pango_layout_get_line_at (PangoLayout           *layout,
 
   if (!found)
     {
-      start_index = prev_line->start_index + prev_line->length;
+      start_index = pango_layout_line_get_start_index (prev_line) + pango_layout_line_get_length (prev_line);
       end_index = start_index;
     }
   pango_layout_iter_free (iter);
@@ -813,7 +820,7 @@ pango_layout_get_line_after (PangoLayout           *layout,
 {
   PangoLayoutIter *iter;
   PangoLayoutLine *line, *prev_line = NULL;
-  int index, start_index, end_index;
+  int index, start_index, length, end_index;
   const char *text;
   gboolean found = FALSE;
 
@@ -823,8 +830,9 @@ pango_layout_get_line_after (PangoLayout           *layout,
   do
     {
       line = pango_layout_iter_get_line (iter);
-      start_index = line->start_index;
-      end_index = start_index + line->length;
+      start_index = pango_layout_line_get_start_index (line);
+      length = pango_layout_line_get_length (line);
+      end_index = start_index + length;
 
       if (index >= start_index && index <= end_index)
         {
@@ -835,15 +843,15 @@ pango_layout_get_line_after (PangoLayout           *layout,
               switch (boundary_type)
                 {
                 case ATSPI_TEXT_BOUNDARY_LINE_START:
-                  start_index = line->start_index;
+                  start_index = pango_layout_line_get_start_index (line);
                   if (pango_layout_iter_next_line (iter))
-                    end_index = pango_layout_iter_get_line (iter)->start_index;
+                    end_index = pango_layout_line_get_start_index (pango_layout_iter_get_line (iter));
                   else
-                    end_index = start_index + line->length;
+                    end_index = start_index + pango_layout_line_get_length (line);
                   break;
                 case ATSPI_TEXT_BOUNDARY_LINE_END:
                   start_index = end_index;
-                  end_index = line->start_index + line->length;
+                  end_index = pango_layout_line_get_start_index (line) + pango_layout_line_get_length (line);
                   break;
                 case ATSPI_TEXT_BOUNDARY_CHAR:
                 case ATSPI_TEXT_BOUNDARY_WORD_START:
@@ -867,7 +875,7 @@ pango_layout_get_line_after (PangoLayout           *layout,
 
   if (!found)
     {
-      start_index = prev_line->start_index + prev_line->length;
+      start_index = pango_layout_line_get_start_index (prev_line) + pango_layout_line_get_length (prev_line);
       end_index = start_index;
     }
   pango_layout_iter_free (iter);

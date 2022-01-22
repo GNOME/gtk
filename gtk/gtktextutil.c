@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -64,7 +64,7 @@ limit_layout_lines (PangoLayout *layout)
   int          n_lines;
 
   n_lines = pango_layout_get_line_count (layout);
-  
+
   if (n_lines >= DRAG_ICON_MAX_LINES)
     {
       text  = pango_layout_get_text (layout);
@@ -355,13 +355,13 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
 
   text = pango_layout_get_text (layout);
 
-  if (index < layout_line->start_index + layout_line->length)
+  if (index < pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line))
     {
       /* this may be a zero-width character in the middle of the line,
        * or it could be a character where line is wrapped, we do want
        * block cursor in latter case */
       if (g_utf8_next_char (text + index) - text !=
-	  layout_line->start_index + layout_line->length)
+	  pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line))
 	{
 	  /* zero-width character in the middle of the line, do not
 	   * bother with block cursor */
@@ -384,9 +384,9 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
 
   /* In case when index points to the end of line, pos->x is always most right
    * pixel of the layout line, so we need to correct it for RTL text. */
-  if (layout_line->length)
+  if (pango_layout_line_get_length (layout_line))
     {
-      if (layout_line->resolved_dir == PANGO_DIRECTION_RTL)
+      if (pango_layout_line_get_resolved_direction (layout_line) == PANGO_DIRECTION_RTL)
 	{
 	  PangoLayoutIter *iter;
 	  PangoRectangle line_rect;
