@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 2000 Red Hat, Inc. 
+ * Copyright (C) 2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,24 +27,12 @@
 
 G_BEGIN_DECLS
 
-/* Get a clip region to draw only part of a layout or
- * line. index_ranges contains alternating range starts/stops. The
- * region is the region which contains the given ranges, i.e. if you
- * draw with the region as clip, only the given ranges are drawn.
- */
-
-GDK_AVAILABLE_IN_ALL
-cairo_region_t    *gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
-                                                     int              x_origin,
-                                                     int              y_origin,
-                                                     const int       *index_ranges,
-                                                     int              n_ranges);
 GDK_AVAILABLE_IN_ALL
 cairo_region_t    *gdk_pango_layout_get_clip_region      (PangoLayout     *layout,
-                                                     int              x_origin,
-                                                     int              y_origin,
-                                                     const int       *index_ranges,
-                                                     int              n_ranges);
+                                                          int              x_origin,
+                                                          int              y_origin,
+                                                          const int       *index_ranges,
+                                                          int              n_ranges);
 
 G_END_DECLS
 
