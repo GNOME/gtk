@@ -137,6 +137,9 @@ pango_align_to_string (PangoAlignment align)
       return "center";
     case PANGO_ALIGN_RIGHT:
       return "right";
+    case PANGO_ALIGN_JUSTIFY:
+    case PANGO_ALIGN_JUSTIFY_ALL:
+      return "fill";
     default:
       g_assert_not_reached ();
     }
@@ -424,7 +427,7 @@ gtk_pango_move_chars (PangoLayout *layout,
   const PangoLogAttr *attrs;
   int n_attrs;
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   while (count > 0 && offset < n_attrs - 1)
     {
@@ -470,7 +473,7 @@ gtk_pango_move_words (PangoLayout  *layout,
   const PangoLogAttr *attrs;
   int n_attrs;
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   while (count > 0 && offset < n_attrs - 1)
     {
@@ -516,7 +519,7 @@ gtk_pango_move_sentences (PangoLayout  *layout,
   const PangoLogAttr *attrs;
   int n_attrs;
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   while (count > 0 && offset < n_attrs - 1)
     {
@@ -627,7 +630,7 @@ gtk_pango_is_inside_word (PangoLayout  *layout,
   const PangoLogAttr *attrs;
   int n_attrs;
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   while (offset >= 0 &&
          !(attrs[offset].is_word_start || attrs[offset].is_word_end))
@@ -656,7 +659,7 @@ gtk_pango_is_inside_sentence (PangoLayout  *layout,
   const PangoLogAttr *attrs;
   int n_attrs;
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   while (offset >= 0 &&
          !(attrs[offset].is_sentence_start || attrs[offset].is_sentence_end))
@@ -922,7 +925,7 @@ gtk_pango_get_text_before (PangoLayout           *layout,
       return g_strdup ("");
     }
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   start = offset;
   end = start;
@@ -1027,7 +1030,7 @@ gtk_pango_get_text_after (PangoLayout           *layout,
       return g_strdup ("");
     }
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   start = offset;
   end = start;
@@ -1138,7 +1141,7 @@ gtk_pango_get_text_at (PangoLayout           *layout,
       return g_strdup ("");
     }
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   start = offset;
   end = start;
@@ -1223,7 +1226,7 @@ char *gtk_pango_get_string_at (PangoLayout           *layout,
       return g_strdup ("");
     }
 
-  attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   start = offset;
   end = start;
