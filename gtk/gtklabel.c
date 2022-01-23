@@ -899,8 +899,8 @@ get_cursor_direction (GtkLabel *self)
        * definitely in this paragraph, which is good enough
        * to figure out the resolved direction.
        */
-       if (line->start_index + line->length >= self->select_info->selection_end)
-        return line->resolved_dir;
+       if (pango_layout_line_get_start_index (line) + pango_layout_line_get_length (line) >= self->select_info->selection_end)
+        return pango_layout_line_get_resolved_direction (line);
     }
 
   return PANGO_DIRECTION_LTR;
