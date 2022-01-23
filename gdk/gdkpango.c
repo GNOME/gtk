@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * Copyright (C) 2000 Red Hat, Inc. 
+ * Copyright (C) 2000 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,25 +52,25 @@ layout_iter_get_line_clip_region (PangoLayoutIter *iter,
 
   i = 0;
   while (i < n_ranges)
-    {  
+    {
       int *pixel_ranges = NULL;
       int n_pixel_ranges = 0;
       int j;
 
       /* Note that get_x_ranges returns layout coordinates
        */
-      if (index_ranges[i*2+1] >= line->start_index &&
-	  index_ranges[i*2] < line->start_index + line->length)
+      if (index_ranges[i*2+1] >= pango_layout_line_get_start_index (line) &&
+	  index_ranges[i*2] < pango_layout_line_get_start_index (line) + pango_layout_line_get_length (line))
 	pango_layout_line_get_x_ranges (line,
 					index_ranges[i*2],
 					index_ranges[i*2+1],
 					&pixel_ranges, &n_pixel_ranges);
-  
+
       for (j = 0; j < n_pixel_ranges; j++)
         {
           GdkRectangle rect;
 	  int x_off, y_off;
-          
+
           x_off = PANGO_PIXELS (pixel_ranges[2*j] - logical_rect.x);
 	  y_off = PANGO_PIXELS (baseline - logical_rect.y);
 
@@ -124,14 +124,14 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
 {
   cairo_region_t *clip_region;
   PangoLayoutIter *iter;
-  
+
   g_return_val_if_fail (line != NULL, NULL);
   g_return_val_if_fail (index_ranges != NULL, NULL);
-  
+
   iter = pango_layout_get_iter (line->layout);
   while (pango_layout_iter_get_line_readonly (iter) != line)
     pango_layout_iter_next_line (iter);
-  
+
   clip_region = layout_iter_get_line_clip_region(iter, x_origin, y_origin, index_ranges, n_ranges);
 
   pango_layout_iter_free (iter);
@@ -167,26 +167,26 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
                                   const int   *index_ranges,
                                   int          n_ranges)
 {
-  PangoLayoutIter *iter;  
+  PangoLayoutIter *iter;
   cairo_region_t *clip_region;
-  
+
   g_return_val_if_fail (PANGO_IS_LAYOUT (layout), NULL);
   g_return_val_if_fail (index_ranges != NULL, NULL);
-  
+
   clip_region = cairo_region_create ();
-  
+
   iter = pango_layout_get_iter (layout);
-  
+
   do
     {
       PangoRectangle logical_rect;
       cairo_region_t *line_region;
       int baseline;
-      
-      pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
-      baseline = pango_layout_iter_get_baseline (iter);      
 
-      line_region = layout_iter_get_line_clip_region(iter, 
+      pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
+      baseline = pango_layout_iter_get_baseline (iter);
+
+      line_region = layout_iter_get_line_clip_region(iter,
 						     x_origin + PANGO_PIXELS (logical_rect.x),
 						     y_origin + PANGO_PIXELS (baseline),
 						     index_ranges,

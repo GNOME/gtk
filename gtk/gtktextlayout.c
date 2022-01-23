@@ -3085,7 +3085,7 @@ find_display_line_below (GtkTextLayout *layout,
           int first_y, last_y;
           PangoLayoutLine *layout_line = pango_layout_iter_get_line_readonly (layout_iter);
 
-          found_byte = layout_line->start_index;
+          found_byte = pango_layout_line_get_start_index (layout_line);
 
           if (line_top >= y)
             {
@@ -3157,7 +3157,7 @@ find_display_line_above (GtkTextLayout *layout,
           int first_y, last_y;
           PangoLayoutLine *layout_line = pango_layout_iter_get_line_readonly (layout_iter);
 
-          found_byte = layout_line->start_index;
+          found_byte = pango_layout_line_get_start_index (layout_line);
 
           pango_layout_iter_get_line_yrange (layout_iter, &first_y, &last_y);
 
@@ -3290,10 +3290,10 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
 
   if (update_byte)
     {
-      line_byte = layout_line->start_index + layout_line->length;
+      line_byte = pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line);
     }
 
-  if (line_byte < layout_line->length || !tmp_list->next) /* first line of paragraph */
+  if (line_byte < pango_layout_line_get_length (layout_line) || !tmp_list->next) /* first line of paragraph */
     {
       GtkTextLine *prev_line;
 
@@ -3315,7 +3315,7 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
               layout_line = tmp_list->data;
 
               line_display_index_to_iter (layout, display, iter,
-                                          layout_line->start_index + layout_line->length, 0);
+                                          pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line), 0);
               break;
             }
 
@@ -3324,21 +3324,21 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
     }
   else
     {
-      int prev_offset = layout_line->start_index;
+      int prev_offset = pango_layout_line_get_start_index (layout_line);
 
       tmp_list = tmp_list->next;
       while (tmp_list)
         {
           layout_line = tmp_list->data;
 
-          if (line_byte < layout_line->start_index + layout_line->length ||
+          if (line_byte < pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line) ||
               !tmp_list->next)
             {
  	      line_display_index_to_iter (layout, display, iter, prev_offset, 0);
               break;
             }
 
-          prev_offset = layout_line->start_index;
+          prev_offset = pango_layout_line_get_start_index (layout_line);
           tmp_list = tmp_list->next;
         }
     }
@@ -3405,10 +3405,10 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
           if (found)
             {
 	      line_display_index_to_iter (layout, display, iter,
-                                          layout_line->start_index, 0);
+                                          pango_layout_line_get_start_index (layout_line), 0);
               found_after = TRUE;
             }
-          else if (line_byte < layout_line->start_index + layout_line->length || !tmp_list->next)
+          else if (line_byte < pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line) || !tmp_list->next)
             found = TRUE;
 
           tmp_list = tmp_list->next;
@@ -3462,17 +3462,17 @@ gtk_text_layout_move_iter_to_line_end (GtkTextLayout *layout,
     {
       PangoLayoutLine *layout_line = tmp_list->data;
 
-      if (line_byte < layout_line->start_index + layout_line->length || !tmp_list->next)
+      if (line_byte < pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line) || !tmp_list->next)
         {
  	  line_display_index_to_iter (layout, display, iter,
- 				      direction < 0 ? layout_line->start_index : layout_line->start_index + layout_line->length,
+ 				      direction < 0 ? pango_layout_line_get_start_index (layout_line) : pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line),
  				      0);
 
           /* FIXME: As a bad hack, we move back one position when we
 	   * are inside a paragraph to avoid going to next line on a
 	   * forced break not at whitespace. Real fix is to keep track
 	   * of whether marks are at leading or trailing edge?  */
-          if (direction > 0 && layout_line->length > 0 &&
+          if (direction > 0 && pango_layout_line_get_length (layout_line) > 0 &&
 	      !gtk_text_iter_ends_line (iter) &&
 	      !_gtk_text_btree_char_is_invisible (iter))
             gtk_text_iter_backward_char (iter);
@@ -3518,7 +3518,7 @@ gtk_text_layout_iter_starts_line (GtkTextLayout       *layout,
     {
       PangoLayoutLine *layout_line = tmp_list->data;
 
-      if (line_byte < layout_line->start_index + layout_line->length ||
+      if (line_byte < pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line) ||
           !tmp_list->next)
         {
           /* We're located on this line or the para delimiters before
@@ -3526,7 +3526,7 @@ gtk_text_layout_iter_starts_line (GtkTextLayout       *layout,
            */
           gtk_text_line_display_unref (display);
 
-          if (line_byte == layout_line->start_index)
+          if (line_byte == pango_layout_line_get_start_index (layout_line))
             return TRUE;
           else
             return FALSE;
@@ -3583,7 +3583,7 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
     {
       PangoLayoutLine *layout_line = pango_layout_iter_get_line_readonly (layout_iter);
 
-      if (line_byte < layout_line->start_index + layout_line->length ||
+      if (line_byte < pango_layout_line_get_start_index (layout_line) + pango_layout_line_get_length (layout_line) ||
           pango_layout_iter_at_last_line (layout_iter))
         {
           PangoRectangle logical_rect;
@@ -3908,7 +3908,7 @@ render_para (GskPangoRenderer   *crenderer,
        * only do it if the selection is opaque.
        */
       if (selection_start_index < byte_offset &&
-          selection_end_index > line->length + byte_offset &&
+          selection_end_index > pango_layout_line_get_length (line) + byte_offset &&
           selection->alpha >= 1)
         {
           gtk_snapshot_append_color (crenderer->snapshot,
@@ -3944,11 +3944,11 @@ render_para (GskPangoRenderer   *crenderer,
                                            baseline);
 
           /* Check if some part of the line is selected; the newline
-           * that is after line->length for the last line of the
+           * that is after pango_layout_line_get_length (line) for the last line of the
            * paragraph counts as part of the line for this
            */
-          if ((selection_start_index < byte_offset + line->length ||
-               (selection_start_index == byte_offset + line->length && pango_layout_iter_at_last_line (iter))) &&
+          if ((selection_start_index < byte_offset + pango_layout_line_get_length (line) ||
+               (selection_start_index == byte_offset + pango_layout_line_get_length (line) && pango_layout_iter_at_last_line (iter))) &&
               selection_end_index > byte_offset)
             {
               int *ranges = NULL;
@@ -3996,7 +3996,7 @@ render_para (GskPangoRenderer   *crenderer,
               /* Paint in the ends of the line */
               if (line_rect.x > line_display->left_margin * PANGO_SCALE &&
                   ((line_display->direction == GTK_TEXT_DIR_LTR && selection_start_index < byte_offset) ||
-                   (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + line->length)))
+                   (line_display->direction == GTK_TEXT_DIR_RTL && selection_end_index > byte_offset + pango_layout_line_get_length (line))))
                 gtk_snapshot_append_color (crenderer->snapshot,
                                            selection,
                                            &GRAPHENE_RECT_INIT (line_display->left_margin,
@@ -4006,7 +4006,7 @@ render_para (GskPangoRenderer   *crenderer,
 
               if (line_rect.x + line_rect.width <
                   (screen_width + line_display->left_margin) * PANGO_SCALE &&
-                  ((line_display->direction == GTK_TEXT_DIR_LTR && selection_end_index > byte_offset + line->length) ||
+                  ((line_display->direction == GTK_TEXT_DIR_LTR && selection_end_index > byte_offset + pango_layout_line_get_length (line)) ||
                    (line_display->direction == GTK_TEXT_DIR_RTL && selection_start_index < byte_offset)))
                 {
                   int nonlayout_width = line_display->left_margin
@@ -4025,8 +4025,8 @@ render_para (GskPangoRenderer   *crenderer,
                    gtk_widget_has_focus (crenderer->widget) &&
                    cursor_alpha > 0 &&
                    byte_offset <= line_display->insert_index &&
-                   (line_display->insert_index < byte_offset + line->length ||
-                    (at_last_line && line_display->insert_index == byte_offset + line->length)))
+                   (line_display->insert_index < byte_offset + pango_layout_line_get_length (line) ||
+                    (at_last_line && line_display->insert_index == byte_offset + pango_layout_line_get_length (line))))
             {
               GtkStyleContext *context;
               GdkRGBA cursor_color;
@@ -4061,7 +4061,7 @@ render_para (GskPangoRenderer   *crenderer,
             }
         }
 
-      byte_offset += line->length;
+      byte_offset += pango_layout_line_get_length (line);
     }
   while (pango_layout_iter_next_line (iter));
 
