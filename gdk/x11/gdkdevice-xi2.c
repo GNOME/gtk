@@ -657,10 +657,10 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
     }
 
   if (win_x)
-    *win_x = (window) ? (xwin_x / impl->window_scale) : -1;
+    *win_x = (window && impl) ? (xwin_x / impl->window_scale) : -1;
 
   if (win_y)
-    *win_y = (window) ? (xwin_y / impl->window_scale) : -1;
+    *win_y = (window && impl) ? (xwin_y / impl->window_scale) : -1;
 
 
   return window;
