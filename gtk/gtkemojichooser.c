@@ -573,10 +573,10 @@ add_emoji (GtkWidget    *box,
   pango_attr_list_unref (attrs);
 
   layout = gtk_label_get_layout (GTK_LABEL (label));
-  pango_layout_get_extents (layout, &rect, NULL);
+  pango_lines_get_extents (pango_layout_get_lines (layout), &rect, NULL);
 
   /* Check for fallback rendering that generates too wide items */
-  if (pango_layout_get_unknown_glyphs_count (layout) > 0 ||
+  if (pango_lines_get_unknown_glyphs_count (pango_layout_get_lines (layout)) > 0 ||
       rect.width >= 1.5 * chooser->emoji_max_width)
     {
       g_object_ref_sink (label);
@@ -866,7 +866,7 @@ filter_func (GtkFlowBoxChild *child,
     goto out;
 
   term_tokens = g_str_tokenize_and_fold (text, "en", NULL);
-  
+
   g_variant_get_child (emoji_data, 1, "&s", &name);
   name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
   g_variant_get_child (emoji_data, 2, "^a&s", &keywords);
@@ -993,7 +993,7 @@ gtk_emoji_chooser_init (GtkEmojiChooser *chooser)
     pango_layout_set_attributes (layout, attrs);
     pango_attr_list_unref (attrs);
 
-    pango_layout_get_extents (layout, &rect, NULL);
+    pango_lines_get_extents (pango_layout_get_lines (layout), &rect, NULL);
     chooser->emoji_max_width = rect.width;
 
     g_object_unref (layout);
@@ -1278,7 +1278,7 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
    * @direction: 1 to scroll forward, -1 to scroll back
    *
    * Scrolls to the next or previous section.
-   */ 
+   */
   gtk_widget_class_install_action (widget_class, "scroll.section", "i",
                                    gtk_emoji_chooser_scroll_section);
 

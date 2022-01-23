@@ -139,16 +139,17 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
                                    double           x22)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  PangoLayout *layout;
+  PangoLines *lines;
   PangoRectangle ink_rect;
   cairo_t *cr;
   double x, y;
 
-  layout = pango_renderer_get_layout (renderer);
-  if (!layout)
+  lines = pango_renderer_get_lines (renderer);
+  if (!lines)
     return;
 
-  pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+  pango_lines_get_extents (lines, &ink_rect, NULL);
+  pango_extents_to_pixels (&ink_rect, NULL);
   cr = gtk_snapshot_append_cairo (crenderer->snapshot,
                                   &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
                                                        ink_rect.width, ink_rect.height));
@@ -214,7 +215,7 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
                                int             y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  PangoLayout *layout;
+  PangoLines *lines;
   PangoCairoShapeRendererFunc shape_renderer;
   gpointer shape_renderer_data;
   double base_x = (double)x / PANGO_SCALE;
@@ -245,15 +246,16 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
       cairo_t *cr;
       PangoRectangle ink_rect;
 
-      layout = pango_renderer_get_layout (renderer);
-      if (!layout)
+      lines = pango_renderer_get_lines (renderer);
+      if (!lines)
         return;
 
-      pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+      pango_lines_get_extents (lines, &ink_rect, NULL);
+      pango_extents_to_pixels (&ink_rect, NULL);
       cr = gtk_snapshot_append_cairo (crenderer->snapshot,
                                       &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
                                                            ink_rect.width, ink_rect.height));
-      shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
+      shape_renderer = pango_cairo_context_get_shape_renderer (pango_renderer_get_context (renderer),
                                                                &shape_renderer_data);
 
       if (!shape_renderer)
@@ -326,7 +328,7 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
 
   PANGO_RENDERER_CLASS (gsk_pango_renderer_parent_class)->prepare_run (renderer, run);
 
-  appearance = get_item_appearance (run->item);
+  appearance = get_item_appearance (pango_layout_run_get_item (run));
 
   if (appearance == NULL)
     return;
@@ -476,7 +478,7 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
   crenderer->snapshot = snapshot;
   crenderer->fg_color = color;
 
-  pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
+  pango_renderer_draw_lines (PANGO_RENDERER (crenderer), pango_layout_get_lines (layout), 0, 0);
 
   gsk_pango_renderer_release (crenderer);
 }

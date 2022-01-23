@@ -4566,6 +4566,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  PangoRectangle ext;
   int width, height;
   GdkRectangle text_rect;
   GdkRectangle left_rect;
@@ -4661,10 +4662,11 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   /* Optimize display cache size */
   layout = gtk_widget_create_pango_layout (widget, "X");
-  pango_layout_get_pixel_size (layout, &width, &height);
-  if (height > 0)
+  pango_lines_get_extents (pango_layout_get_lines (layout), NULL, &ext);
+  pango_extents_to_pixels (&ext, NULL);
+  if (ext.height > 0)
     {
-      mru_size = SCREEN_HEIGHT (widget) / height * 3;
+      mru_size = SCREEN_HEIGHT (widget) / ext.height * 3;
       gtk_text_layout_set_mru_size (priv->layout, mru_size);
     }
   g_object_unref (layout);

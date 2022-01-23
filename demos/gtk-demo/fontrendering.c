@@ -95,8 +95,8 @@ update_image (void)
       layout = pango_layout_new (context);
       pango_layout_set_font_description (layout, desc);
       pango_layout_set_text (layout, text, -1);
-      pango_layout_get_extents (layout, &ink, &logical);
-      baseline = pango_layout_get_baseline (layout);
+      pango_lines_get_extents (pango_layout_get_lines (layout), &ink, &logical);
+      baseline = pango_lines_get_baseline (pango_layout_get_lines (layout));
 
       pango_extents_to_pixels (&ink, NULL);
 
@@ -208,6 +208,7 @@ update_image (void)
     {
       PangoLayoutIter *iter;
       PangoLayoutRun *run;
+      PangoGlyphString *glyphs;
       PangoGlyphInfo *g;
       int i, j;
       GString *str;
@@ -230,7 +231,7 @@ update_image (void)
       pango_layout_set_font_description (layout, desc);
       pango_layout_set_text (layout, str->str, -1);
       g_string_free (str, TRUE);
-      pango_layout_get_extents (layout, &ink, &logical);
+      pango_lines_get_extents (pango_layout_get_lines (layout), &ink, &logical);
       pango_extents_to_pixels (&logical, NULL);
 
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, logical.width * 3 / 2, 4*logical.height);
@@ -240,11 +241,12 @@ update_image (void)
 
       iter = pango_layout_get_iter (layout);
       run = pango_layout_iter_get_run (iter);
+      glyphs = pango_layout_run_get_glyphs (run);
 
       cairo_set_source_rgb (cr, 0, 0, 0);
       for (i = 0; i < 4; i++)
         {
-          g = &(run->glyphs->glyphs[2*i]);
+          g = &(glyphs->glyphs[2*i]);
           g->geometry.width = PANGO_UNITS_ROUND (g->geometry.width * 3 / 2);
         }
 
@@ -252,7 +254,7 @@ update_image (void)
         {
           for (i = 0; i < 4; i++)
             {
-              g = &(run->glyphs->glyphs[2*i]);
+              g = &(glyphs->glyphs[2*i]);
               g->geometry.x_offset = i * (PANGO_SCALE / 4);
               g->geometry.y_offset = j * (PANGO_SCALE / 4);
             }

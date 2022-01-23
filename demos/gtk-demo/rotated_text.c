@@ -142,13 +142,14 @@ rotated_text_draw (GtkDrawingArea *da,
   /* Draw the layout N_WORDS times in a circle */
   for (i = 0; i < N_WORDS; i++)
     {
-      int layout_width, layout_height;
+      PangoRectangle ext;
 
       /* Inform Pango to re-layout the text with the new transformation matrix */
       pango_cairo_update_layout (cr, layout);
 
-      pango_layout_get_pixel_size (layout, &layout_width, &layout_height);
-      cairo_move_to (cr, - layout_width / 2, - RADIUS * .9);
+      pango_lines_get_extents (pango_layout_get_lines (layout), NULL, &ext);
+      pango_extents_to_pixels (&ext, NULL);
+      cairo_move_to (cr, - ext.width / 2, - RADIUS * .9);
       pango_cairo_show_layout (cr, layout);
 
       /* Rotate for the next turn */

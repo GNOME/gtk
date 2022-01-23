@@ -42,18 +42,21 @@
 #define ELLIPSIS_CHARACTER "\xe2\x80\xa6"
 
 static void
-append_n_lines (GString *str, const char *text, GSList *lines, int n_lines)
+append_n_lines (GString    *str,
+                const char *text,
+                PangoLines *lines,
+                int         first,
+                int         n_lines)
 {
   PangoLayoutLine *line;
   int i;
 
-  for (i = 0; i < n_lines; i++)
+  for (i = first; i < first + n_lines; i++)
     {
-      line = lines->data;
+      line = pango_lines_get_line (lines, i, NULL, NULL);
       g_string_append_len (str,
                            &text[pango_layout_line_get_start_index (line)],
                            pango_layout_line_get_length (line));
-      lines = lines->next;
     }
 }
 
@@ -61,29 +64,25 @@ static void
 limit_layout_lines (PangoLayout *layout)
 {
   const char *text;
-  GString     *str;
-  GSList      *lines, *elem;
-  int          n_lines;
+  GString *str;
+  PangoLines *lines;
+  int n_lines;
 
-  n_lines = pango_layout_get_line_count (layout);
+  lines = pango_layout_get_lines (layout);
+  n_lines = pango_lines_get_line_count (pango_layout_get_lines (layout));
 
   if (n_lines >= DRAG_ICON_MAX_LINES)
     {
-      text  = pango_layout_get_text (layout);
-      str   = g_string_new (NULL);
-      lines = pango_layout_get_lines_readonly (layout);
+      text = pango_layout_get_text (layout);
+      str = g_string_new (NULL);
 
       /* get first lines */
-      elem = lines;
-      append_n_lines (str, text, elem,
-                      DRAG_ICON_MAX_LINES / 2);
+      append_n_lines (str, text, lines, 0, DRAG_ICON_MAX_LINES / 2);
 
       g_string_append (str, "\n" ELLIPSIS_CHARACTER "\n");
 
       /* get last lines */
-      elem = g_slist_nth (lines, n_lines - DRAG_ICON_MAX_LINES / 2);
-      append_n_lines (str, text, elem,
-                      DRAG_ICON_MAX_LINES / 2);
+      append_n_lines (str, text, lines , n_lines - DRAG_ICON_MAX_LINES / 2, DRAG_ICON_MAX_LINES / 2);
 
       pango_layout_set_text (layout, str->str, -1);
       g_string_free (str, TRUE);
@@ -123,7 +122,7 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
 
   pango_layout_set_text (layout, text, len);
   pango_layout_set_wrap (layout, PANGO_WRAP_WORD_CHAR);
-  pango_layout_get_size (layout, &layout_width, NULL);
+  pango_lines_get_size (pango_layout_get_lines (layout), &layout_width, NULL);
 
   layout_width = MIN (layout_width, DRAG_ICON_MAX_WIDTH * PANGO_SCALE);
   pango_layout_set_width (layout, layout_width);
@@ -146,7 +145,7 @@ gtk_text_util_create_drag_icon (GtkWidget *widget,
         bg_widget = gtk_widget_get_parent (widget);
       else
         bg_widget = widget;
-      pango_layout_get_size (layout, &layout_width, &layout_height);
+      pango_lines_get_size (pango_layout_get_lines (layout), &layout_width, &layout_height);
       gtk_snapshot_render_background (snapshot,
                                       gtk_widget_get_style_context (bg_widget),
                                       0, 0, layout_width / PANGO_SCALE,
@@ -336,7 +335,7 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
   g_return_val_if_fail (index >= 0, FALSE);
   g_return_val_if_fail (pos != NULL, FALSE);
 
-  pango_layout_index_to_pos (layout, index, pos);
+  pango_lines_index_to_pos (pango_layout_get_lines (layout), NULL, index, pos);
 
   if (pos->width != 0)
     {
@@ -351,8 +350,8 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
       return TRUE;
     }
 
-  pango_layout_index_to_line_x (layout, index, FALSE, &line_no, NULL);
-  layout_line = pango_layout_get_line_readonly (layout, line_no);
+  layout_line = NULL;
+  pango_lines_index_to_line (pango_layout_get_lines (layout), index, &layout_line, &line_no, NULL, NULL);
   g_return_val_if_fail (layout_line != NULL, FALSE);
 
   text = pango_layout_get_text (layout);
@@ -375,7 +374,7 @@ _gtk_text_util_get_block_cursor_location (PangoLayout    *layout,
    * be on the left or on the right depending on text direction, or it
    * even could be in the middle of visual layout in bidi text. */
 
-  pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
+  pango_lines_get_cursor_pos (pango_layout_get_lines (layout), NULL, index, &strong_pos, &weak_pos);
 
   if (strong_pos.x != weak_pos.x)
     {

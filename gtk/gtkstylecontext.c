@@ -1167,7 +1167,7 @@ gtk_snapshot_render_insertion_cursor (GtkSnapshot     *snapshot,
         keyboard_direction = gdk_device_get_direction (keyboard);
     }
 
-  pango_layout_get_caret_pos (layout, index, &strong_pos, &weak_pos);
+  pango_lines_get_caret_pos (pango_layout_get_lines (layout), NULL, index, &strong_pos, &weak_pos);
 
   direction2 = PANGO_DIRECTION_NEUTRAL;
 

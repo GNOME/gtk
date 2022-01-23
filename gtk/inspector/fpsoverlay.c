@@ -97,8 +97,8 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   char *fps_string;
   graphene_rect_t bounds;
   gboolean has_bounds;
-  int width, height;
   double overlay_opacity;
+  PangoRectangle ext;
 
   now = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
   info = g_hash_table_lookup (self->infos, widget);
@@ -157,16 +157,17 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum=1"));
   pango_layout_set_attributes (layout, attrs);
   pango_attr_list_unref (attrs);
-  pango_layout_get_pixel_size (layout, &width, &height);
+  pango_lines_get_extents (pango_layout_get_lines (layout), NULL, &ext);
+  pango_extents_to_pixels (&ext, NULL);
 
   gtk_snapshot_save (snapshot);
   if (has_bounds)
-    gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (bounds.origin.x + bounds.size.width - width, bounds.origin.y));
+    gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (bounds.origin.x + bounds.size.width - ext.width, bounds.origin.y));
   if (overlay_opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, overlay_opacity);
   gtk_snapshot_append_color (snapshot,
                              &(GdkRGBA) { 0, 0, 0, 0.5 },
-                             &GRAPHENE_RECT_INIT (-1, -1, width + 2, height + 2));
+                             &GRAPHENE_RECT_INIT (-1, -1, ext.width + 2, ext.height + 2));
   gtk_snapshot_append_layout (snapshot,
                               layout,
                               &(GdkRGBA) { 1, 1, 1, 1 });

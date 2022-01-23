@@ -257,6 +257,10 @@ attribute_from_text (GtkBuilder  *builder,
       if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
         attribute = pango_attr_line_height_new_absolute (g_value_get_int (&val) * PANGO_SCALE);
       break;
+    case PANGO_ATTR_LINE_SPACING:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_line_spacing_new (g_value_get_int (&val) * PANGO_SCALE);
+      break;
     case PANGO_ATTR_TEXT_TRANSFORM:
       if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_TEXT_TRANSFORM, value, &val, error))
         attribute = pango_attr_text_transform_new (g_value_get_enum (&val));
@@ -266,6 +270,9 @@ attribute_from_text (GtkBuilder  *builder,
       break;
     case PANGO_ATTR_SENTENCE:
       attribute = pango_attr_sentence_new ();
+      break;
+    case PANGO_ATTR_PARAGRAPH:
+      attribute = pango_attr_paragraph_new ();
       break;
     case PANGO_ATTR_BASELINE_SHIFT:
       if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_BASELINE_SHIFT, value, &val, NULL))

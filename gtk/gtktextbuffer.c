@@ -4710,6 +4710,10 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
           FLOAT_ATTR (line_height);
           break;
 
+        case PANGO_ATTR_LINE_SPACING:
+          INT_ATTR (pixels_inside_wrap);
+          break;
+
         case PANGO_ATTR_ABSOLUTE_LINE_HEIGHT:
           break;
 
@@ -4739,6 +4743,10 @@ insert_tags_for_attributes (GtkTextBuffer     *buffer,
 
         case PANGO_ATTR_SENTENCE:
           VOID_ATTR (sentence);
+          break;
+
+        case PANGO_ATTR_PARAGRAPH:
+          VOID_ATTR (paragraph);
           break;
 
         case PANGO_ATTR_BASELINE_SHIFT:

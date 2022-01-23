@@ -2611,7 +2611,7 @@ draw_page (GtkDrawingArea *da,
             text = g_strdup_printf ("%d", i++);
             pango_layout_set_text (layout, text, -1);
             g_free (text);
-            pango_layout_get_size (layout, &layout_w, &layout_h);
+            pango_lines_get_size (pango_layout_get_lines (layout), &layout_w, &layout_h);
             cairo_save (cr);
             cairo_translate (cr,
                              x * page_width,
@@ -2629,7 +2629,7 @@ draw_page (GtkDrawingArea *da,
             text = g_strdup_printf ("%d", i++);
             pango_layout_set_text (layout, text, -1);
             g_free (text);
-            pango_layout_get_size (layout, &layout_w, &layout_h);
+            pango_lines_get_size (pango_layout_get_lines (layout), &layout_w, &layout_h);
             cairo_save (cr);
             cairo_translate (cr,
                              x * page_width,
@@ -2696,7 +2696,7 @@ draw_page (GtkDrawingArea *da,
 
       pango_layout_set_text (layout, text, -1);
       g_free (text);
-      pango_layout_get_size (layout, &layout_w, &layout_h);
+      pango_lines_get_size (pango_layout_get_lines (layout), &layout_w, &layout_h);
 
       ltr = gtk_widget_get_direction (GTK_WIDGET (dialog)) == GTK_TEXT_DIR_LTR;
 
@@ -2720,7 +2720,7 @@ draw_page (GtkDrawingArea *da,
 
       pango_layout_set_text (layout, text, -1);
       g_free (text);
-      pango_layout_get_size (layout, &layout_w, &layout_h);
+      pango_lines_get_size (pango_layout_get_lines (layout), &layout_w, &layout_h);
 
       cairo_translate (cr, (width - layout_w / PANGO_SCALE) / 2,
                            pos_y + h + 2 * RULER_DISTANCE);

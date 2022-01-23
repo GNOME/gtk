@@ -2313,7 +2313,7 @@ gtk_text_get_selection_bound_location (GtkText *self)
   layout = gtk_text_ensure_layout (self, FALSE);
   text = pango_layout_get_text (layout);
   index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
-  pango_layout_index_to_pos (layout, index, &pos);
+  pango_lines_index_to_pos (pango_layout_get_lines (layout), NULL, index, &pos);
 
   if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
     x = (pos.x + pos.width) / PANGO_SCALE;
@@ -2426,12 +2426,13 @@ gtk_text_measure (GtkWidget      *widget,
       if (priv->propagate_text_width)
         {
           PangoLayout *layout;
-          int act;
+          PangoRectangle ext;
 
           layout = gtk_text_ensure_layout (self, TRUE);
-          pango_layout_get_pixel_size (layout, &act, NULL);
+          pango_lines_get_extents (pango_layout_get_lines (layout), NULL, &ext);
+          pango_extents_to_pixels (&ext, NULL);
 
-          nat = MIN (act, nat);
+          nat = MIN (ext.width, nat);
         }
 
       nat = MAX (min, nat);
@@ -2453,17 +2454,19 @@ gtk_text_measure (GtkWidget      *widget,
     {
       int height, baseline;
       PangoLayout *layout;
+      PangoRectangle ext;
 
       layout = gtk_text_ensure_layout (self, TRUE);
 
       priv->ascent = pango_font_metrics_get_ascent (metrics);
       priv->descent = pango_font_metrics_get_descent (metrics);
 
-      pango_layout_get_pixel_size (layout, NULL, &height);
+      pango_lines_get_extents (pango_layout_get_lines (layout), NULL, &ext);
+      pango_extents_to_pixels (&ext, NULL);
 
-      height = MAX (height, PANGO_PIXELS (priv->ascent + priv->descent));
+      height = MAX (ext.height, PANGO_PIXELS (priv->ascent + priv->descent));
 
-      baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
+      baseline = pango_lines_get_baseline (pango_layout_get_lines (layout)) / PANGO_SCALE;
 
       *minimum = *natural = height;
 
@@ -2604,17 +2607,18 @@ gtk_text_get_pixel_ranges (GtkText  *self,
   if (priv->selection_bound != priv->current_pos)
     {
       PangoLayout *layout = gtk_text_ensure_layout (self, TRUE);
-      PangoLayoutLine *line = pango_layout_get_lines_readonly (layout)->data;
+      PangoLines *lines = pango_layout_get_lines (layout);
+      PangoLayoutLine *line = pango_lines_get_line (lines, 0, NULL, NULL);
       const char *text = pango_layout_get_text (layout);
       int start_index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
       int end_index = g_utf8_offset_to_pointer (text, priv->current_pos) - text;
       int real_n_ranges, i;
 
-      pango_layout_line_get_x_ranges (line,
-                                      MIN (start_index, end_index),
-                                      MAX (start_index, end_index),
-                                      ranges,
-                                      &real_n_ranges);
+      pango_lines_get_x_ranges (lines, line,
+                                NULL, MIN (start_index, end_index),
+                                NULL, MAX (start_index, end_index),
+                                ranges,
+                                &real_n_ranges);
 
       if (ranges)
         {
@@ -3502,7 +3506,7 @@ find_invisible_char (GtkWidget *widget)
       len = g_unichar_to_utf8 (invisible_chars[i], text);
       pango_layout_set_text (layout, text, len);
 
-      count = pango_layout_get_unknown_glyphs_count (layout);
+      count = pango_lines_get_unknown_glyphs_count (pango_layout_get_lines (layout));
 
       if (count == 0)
         {
@@ -3778,7 +3782,7 @@ get_better_cursor_x (GtkText *self,
                 "gtk-split-cursor", &split_cursor,
                 NULL);
 
-  pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
+  pango_lines_get_cursor_pos (pango_layout_get_lines (layout), NULL, index, &strong_pos, &weak_pos);
 
   if (split_cursor)
     return strong_pos.x / PANGO_SCALE;
@@ -4057,7 +4061,7 @@ gtk_text_backspace (GtkText *self)
       const PangoLogAttr *log_attrs;
       int n_attrs;
 
-      log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
       /* Deleting parts of characters */
       if (log_attrs[priv->current_pos].backspace_deletes_character)
@@ -4456,7 +4460,7 @@ gtk_text_create_layout (GtkText  *self,
   guint n_bytes;
 
   layout = gtk_widget_create_pango_layout (widget, NULL);
-  pango_layout_set_single_paragraph_mode (layout, TRUE);
+  pango_layout_set_single_paragraph (layout, TRUE);
 
   tmp_attrs = gtk_css_style_get_pango_attributes (gtk_css_node_get_style (gtk_widget_get_css_node (widget)));
   if (!tmp_attrs)
@@ -4572,15 +4576,17 @@ get_layout_position (GtkText *self,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   const int text_height = gtk_widget_get_height (GTK_WIDGET (self));
   PangoLayout *layout;
+  PangoLines *lines;
   PangoRectangle logical_rect;
   int y_pos, area_height;
   PangoLayoutLine *line;
 
   layout = gtk_text_ensure_layout (self, TRUE);
+  lines = pango_layout_get_lines (layout);
 
   area_height = PANGO_SCALE * text_height;
 
-  line = pango_layout_get_lines_readonly (layout)->data;
+  line = pango_lines_get_line (lines, 0, NULL, NULL);
   pango_layout_line_get_extents (line, NULL, &logical_rect);
 
   /* Align primarily for locale's ascent/descent */
@@ -4588,7 +4594,7 @@ get_layout_position (GtkText *self,
     y_pos = ((area_height - priv->ascent - priv->descent) / 2 +
              priv->ascent + logical_rect.y);
   else
-    y_pos = PANGO_SCALE * priv->text_baseline - pango_layout_get_baseline (layout);
+    y_pos = PANGO_SCALE * priv->text_baseline - pango_lines_get_baseline (lines);
 
   /* Now see if we need to adjust to fit in actual drawn string */
   if (logical_rect.height > area_height)
@@ -4860,7 +4866,7 @@ gtk_text_find_position (GtkText *self,
   text = pango_layout_get_text (layout);
   cursor_index = g_utf8_offset_to_pointer (text, priv->current_pos) - text;
 
-  line = pango_layout_get_lines_readonly (layout)->data;
+  line = pango_lines_get_line (pango_layout_get_lines (layout), 0, NULL, NULL);
   pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
 
   if (index >= cursor_index && priv->preedit_length)
@@ -4906,7 +4912,7 @@ gtk_text_get_cursor_locations (GtkText   *self,
 
       index = g_utf8_offset_to_pointer (text, priv->current_pos + priv->preedit_cursor) - text;
 
-      pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
+      pango_lines_get_cursor_pos (pango_layout_get_lines (layout), NULL, index, &strong_pos, &weak_pos);
 
       if (strong_x)
         *strong_x = strong_pos.x / PANGO_SCALE;
@@ -4943,7 +4949,7 @@ gtk_text_get_scroll_limits (GtkText *self,
   int text_width, width;
 
   layout = gtk_text_ensure_layout (self, TRUE);
-  line = pango_layout_get_lines_readonly (layout)->data;
+  line = pango_lines_get_line (pango_layout_get_lines (layout), 0, NULL, NULL);
 
   pango_layout_line_get_extents (line, NULL, &logical_rect);
 
@@ -5088,12 +5094,16 @@ gtk_text_move_visually (GtkText *self,
 
       if (count > 0)
         {
-          pango_layout_move_cursor_visually (layout, strong, index, 0, 1, &new_index, &new_trailing);
+          pango_lines_move_cursor (pango_layout_get_lines (layout), strong,
+                                   NULL, index, 0, 1,
+                                   NULL, &new_index, &new_trailing);
           count--;
         }
       else
         {
-          pango_layout_move_cursor_visually (layout, strong, index, 0, -1, &new_index, &new_trailing);
+          pango_lines_move_cursor (pango_layout_get_lines (layout), strong,
+                                   NULL, index, 0, -1,
+                                   NULL, &new_index, &new_trailing);
           count++;
         }
 
@@ -5130,7 +5140,7 @@ gtk_text_move_logically (GtkText *self,
       const PangoLogAttr *log_attrs;
       int n_attrs;
 
-      log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
       while (count > 0 && new_pos < length)
         {
@@ -5174,7 +5184,7 @@ gtk_text_move_forward_word (GtkText  *self,
       const PangoLogAttr *log_attrs;
       int n_attrs;
 
-      log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
       /* Find the next word boundary */
       new_pos++;
@@ -5205,7 +5215,7 @@ gtk_text_move_backward_word (GtkText  *self,
       const PangoLogAttr *log_attrs;
       int n_attrs;
 
-      log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
       new_pos = start - 1;
 
@@ -5227,7 +5237,7 @@ gtk_text_delete_whitespace (GtkText *self)
   int n_attrs;
   int start, end;
 
-  log_attrs = pango_layout_get_log_attrs_readonly (layout, &n_attrs);
+  log_attrs = pango_layout_get_log_attrs (layout, &n_attrs);
 
   start = end = priv->current_pos;
 
@@ -7167,9 +7177,10 @@ gtk_text_compute_cursor_extents (GtkText         *self,
   position = CLAMP (position, 0, g_utf8_strlen (text, -1));
   index = g_utf8_offset_to_pointer (text, position) - text;
 
-  pango_layout_get_cursor_pos (layout, index,
-                               strong ? &pango_strong_pos : NULL,
-                               weak ? &pango_weak_pos : NULL);
+  pango_lines_get_cursor_pos (pango_layout_get_lines (layout),
+                              NULL, index,
+                              strong ? &pango_strong_pos : NULL,
+                              weak ? &pango_weak_pos : NULL);
   gtk_text_get_layout_offsets (self, &offset_x, &offset_y);
 
   if (strong)

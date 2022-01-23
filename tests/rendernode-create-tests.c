@@ -399,7 +399,8 @@ text (guint n)
       PangoLayoutIter *iter;
       PangoLayoutRun *run;
       GdkRGBA color;
-      int x, y, width, height;
+      PangoRectangle ext;
+      int x, y;
 
       pango_layout_set_text (layout, words[g_random_int_range (0, n_words)], -1);
       if (g_random_boolean ())
@@ -413,9 +414,11 @@ text (guint n)
       font = pango_context_load_font (context, desc);
       pango_layout_set_font_description (layout, desc);
 
-      pango_layout_get_pixel_size (layout, &width, &height);
-      x = width >= 1000 ? 0 : g_random_int_range (0, 1000 - width);
-      y = height >= 1000 ? 0 : g_random_int_range (0, 1000 - height);
+      pango_lines_get_extents (pango_layout_get_lines (layout), NULL, &ext);
+      pango_extents_to_pixels (&ext, NULL);
+
+      x = ext.width >= 1000 ? 0 : g_random_int_range (0, 1000 - ext.width);
+      y = ext.height >= 1000 ? 0 : g_random_int_range (0, 1000 - ext.height);
       hsv_to_rgb (&color, g_random_double (), g_random_double_range (0.5, 1.0), g_random_double_range (0.15, 0.75));
 
       iter = pango_layout_get_iter (layout);
@@ -424,9 +427,11 @@ text (guint n)
           run = pango_layout_iter_get_run (iter);
           if (run != NULL)
             {
+              PangoGlyphString *glyphs;
               GskRenderNode *node;
-              
-              node = gsk_text_node_new (font, run->glyphs, &color, &GRAPHENE_POINT_INIT (x, y));
+
+              glyphs = pango_layout_run_get_glyphs (run);
+              node = gsk_text_node_new (font, glyphs, &color, &GRAPHENE_POINT_INIT (x, y));
               if (node)
                 g_ptr_array_add (nodes, node);
             }

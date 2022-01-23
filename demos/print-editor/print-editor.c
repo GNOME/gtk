@@ -212,6 +212,7 @@ begin_print (GtkPrintOperation *operation,
 	     PrintData *print_data)
 {
   PangoFontDescription *desc;
+  PangoLines *lines;
   PangoLayoutLine *layout_line;
   double width, height;
   double page_height;
@@ -232,18 +233,19 @@ begin_print (GtkPrintOperation *operation,
 
   pango_layout_set_text (print_data->layout, print_data->text, -1);
 
-  num_lines = pango_layout_get_line_count (print_data->layout);
+  lines = pango_layout_get_lines (print_data->layout);
+  num_lines = pango_lines_get_line_count (lines);
 
   page_breaks = NULL;
   page_height = 0;
 
   for (line = 0; line < num_lines; line++)
     {
-      PangoRectangle ink_rect, logical_rect;
+      PangoRectangle logical_rect;
       double line_height;
 
-      layout_line = pango_layout_get_line (print_data->layout, line);
-      pango_layout_line_get_extents (layout_line, &ink_rect, &logical_rect);
+      layout_line = pango_lines_get_line (lines, line, NULL, NULL);
+      pango_layout_line_get_extents (layout_line, NULL, &logical_rect);
 
       line_height = logical_rect.height / 1024.0;
 
@@ -284,7 +286,7 @@ draw_page (GtkPrintOperation *operation,
 
   pagebreak = g_list_nth (print_data->page_breaks, page_nr);
   if (pagebreak == NULL)
-    end = pango_layout_get_line_count (print_data->layout);
+    end = pango_lines_get_line_count (pango_layout_get_lines (print_data->layout));
   else
     end = GPOINTER_TO_INT (pagebreak->data);
 
@@ -306,7 +308,7 @@ draw_page (GtkPrintOperation *operation,
 	  line = pango_layout_iter_get_line (iter);
 
 	  pango_layout_iter_get_line_extents (iter, NULL, &logical_rect);
-	  baseline = pango_layout_iter_get_baseline (iter);
+	  baseline = pango_layout_iter_get_line_baseline (iter);
 
 	  if (i == start)
 	    start_pos = logical_rect.y / 1024.0;

@@ -882,15 +882,16 @@ gtk_label_css_changed (GtkWidget         *widget,
 static PangoDirection
 get_cursor_direction (GtkLabel *self)
 {
-  GSList *l;
+  PangoLines *lines;
 
   g_assert (self->select_info);
 
   gtk_label_ensure_layout (self);
 
-  for (l = pango_layout_get_lines_readonly (self->layout); l; l = l->next)
+  lines = pango_layout_get_lines (self->layout);
+  for (int i = 0; i < pango_lines_get_line_count (lines); i++)
     {
-      PangoLayoutLine *line = l->data;
+      PangoLayoutLine *line = pango_lines_get_line (lines, i, NULL, NULL);
 
       /* If self->select_info->selection_end is at the very end of
        * the line, we don't know if the cursor is on this line or
@@ -972,6 +973,7 @@ gtk_label_get_measuring_layout (GtkLabel    *self,
                                 PangoLayout *existing_layout,
                                 int          width)
 {
+  PangoLines *lines;
   PangoLayout *copy;
 
   if (existing_layout != NULL)
@@ -1009,15 +1011,15 @@ gtk_label_get_measuring_layout (GtkLabel    *self,
    * can just return the current layout, because for measuring purposes, it will be
    * identical.
    */
-  if (!pango_layout_is_wrapped (self->layout) &&
-      !pango_layout_is_ellipsized (self->layout))
+  lines = pango_layout_get_lines (self->layout);
+  if (!pango_lines_wrapped (lines) && !pango_lines_ellipsized (lines))
     {
       PangoRectangle rect;
 
       if (width == -1)
         return g_object_ref (self->layout);
 
-      pango_layout_get_extents (self->layout, NULL, &rect);
+      pango_lines_get_extents (lines, NULL, &rect);
       if (rect.width <= width)
         return g_object_ref (self->layout);
     }
@@ -1096,11 +1098,11 @@ get_static_size (GtkLabel       *self,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      pango_layout_get_size (layout, natural, NULL);
+      pango_lines_get_size (pango_layout_get_lines (layout), natural, NULL);
       if (self->ellipsize)
         {
           layout = gtk_label_get_measuring_layout (self, layout, 0);
-          pango_layout_get_size (layout, minimum, NULL);
+          pango_lines_get_size (pango_layout_get_lines (layout), minimum, NULL);
           /* yes, Pango ellipsizes even when that needs more space */
           *minimum = MIN (*minimum, *natural);
         }
@@ -1113,8 +1115,8 @@ get_static_size (GtkLabel       *self,
     }
   else
     {
-      pango_layout_get_size (layout, NULL, minimum);
-      *minimum_baseline = pango_layout_get_baseline (layout);
+      pango_lines_get_size (pango_layout_get_lines (layout), NULL, minimum);
+      *minimum_baseline = pango_lines_get_baseline (pango_layout_get_lines (layout));
 
       *natural = *minimum;
       *natural_baseline = *minimum_baseline;
@@ -1138,16 +1140,16 @@ get_height_for_width (GtkLabel *self,
     {
       /* Minimum height is assuming infinite width */
       layout = gtk_label_get_measuring_layout (self, NULL, -1);
-      pango_layout_get_size (layout, NULL, minimum_height);
-      baseline = pango_layout_get_baseline (layout);
+      pango_lines_get_size (pango_layout_get_lines (layout), NULL, minimum_height);
+      baseline = pango_lines_get_baseline (pango_layout_get_lines (layout));
       *minimum_baseline = baseline;
 
       /* Natural height is assuming natural width */
       get_default_widths (self, NULL, &natural_width);
 
       layout = gtk_label_get_measuring_layout (self, layout, natural_width);
-      pango_layout_get_size (layout, NULL, natural_height);
-      baseline = pango_layout_get_baseline (layout);
+      pango_lines_get_size (pango_layout_get_lines (layout), NULL, natural_height);
+      baseline = pango_lines_get_baseline (pango_layout_get_lines (layout));
       *natural_baseline = baseline;
     }
   else
@@ -1155,12 +1157,12 @@ get_height_for_width (GtkLabel *self,
       /* minimum = natural for any given width */
       layout = gtk_label_get_measuring_layout (self, NULL, width);
 
-      pango_layout_get_size (layout, NULL, &text_height);
+      pango_lines_get_size (pango_layout_get_lines (layout), NULL, &text_height);
 
       *minimum_height = text_height;
       *natural_height = text_height;
 
-      baseline = pango_layout_get_baseline (layout);
+      baseline = pango_lines_get_baseline (pango_layout_get_lines (layout));
       *minimum_baseline = baseline;
       *natural_baseline = baseline;
     }
@@ -1183,7 +1185,7 @@ my_pango_layout_get_width_for_height (PangoLayout *layout,
     {
       mid = (min + max) / 2;
       pango_layout_set_width (layout, mid * PANGO_SCALE);
-      pango_layout_get_size (layout, &text_width, &text_height);
+      pango_lines_get_size (pango_layout_get_lines (layout), &text_width, &text_height);
       text_width = PANGO_PIXELS_CEIL (text_width);
       if (text_width > mid)
         min = text_width;
@@ -1211,12 +1213,12 @@ get_width_for_height (GtkLabel *self,
     {
       /* Minimum width is as many line breaks as possible */
       layout = gtk_label_get_measuring_layout (self, NULL, MAX (minimum_default, 0));
-      pango_layout_get_size (layout, minimum_width, NULL);
+      pango_lines_get_size (pango_layout_get_lines (layout), minimum_width, NULL);
       *minimum_width = MAX (*minimum_width, minimum_default);
 
       /* Natural width is natural width - or as wide as possible */
       layout = gtk_label_get_measuring_layout (self, layout, natural_default);
-      pango_layout_get_size (layout, natural_width, NULL);
+      pango_lines_get_size (pango_layout_get_lines (layout), natural_width, NULL);
       *natural_width = MAX (*natural_width, *minimum_width);
     }
   else
@@ -1234,7 +1236,7 @@ get_width_for_height (GtkLabel *self,
       min = MAX (minimum_default, 0);
 
       pango_layout_set_width (layout, -1);
-      pango_layout_get_size (layout, &max, NULL);
+      pango_lines_get_size (pango_layout_get_lines (layout), &max, NULL);
 
       /* first, do natural width */
       if (self->natural_wrap_mode == GTK_NATURAL_WRAP_NONE)
@@ -1253,7 +1255,7 @@ get_width_for_height (GtkLabel *self,
         {
           g_object_unref (layout);
           layout = gtk_label_get_measuring_layout (self, NULL, MAX (minimum_default, 0));
-          pango_layout_get_size (layout, minimum_width, NULL);
+          pango_lines_get_size (pango_layout_get_lines (layout), minimum_width, NULL);
           *minimum_width = MAX (*minimum_width, minimum_default);
         }
       else if (self->natural_wrap_mode == GTK_NATURAL_WRAP_INHERIT)
@@ -1320,13 +1322,15 @@ get_layout_location (GtkLabel  *self,
   if (_gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
     xalign = 1.0 - xalign;
 
-  pango_layout_get_pixel_extents (self->layout, NULL, &logical);
+  pango_lines_get_extents (pango_layout_get_lines (self->layout), NULL, &logical);
+  pango_extents_to_pixels (&logical, NULL);
+
   x = floor ((xalign * (widget_width - logical.width)) - logical.x);
 
   baseline = gtk_widget_get_allocated_baseline (widget);
   if (baseline != -1)
     {
-      int layout_baseline = pango_layout_get_baseline (self->layout) / PANGO_SCALE;
+      int layout_baseline = pango_lines_get_baseline (pango_layout_get_lines (self->layout)) / PANGO_SCALE;
       /* yalign is 0 because we can't support yalign while baseline aligning */
       y = baseline - layout_baseline;
     }
@@ -1584,7 +1588,7 @@ range_is_in_ellipsis_full (GtkLabel *self,
 
   gtk_label_ensure_layout (self);
 
-  if (!pango_layout_is_ellipsized (self->layout))
+  if (!pango_lines_ellipsized (pango_layout_get_lines (self->layout)))
     return FALSE;
 
   iter = pango_layout_get_iter (self->layout);
@@ -1594,7 +1598,7 @@ range_is_in_ellipsis_full (GtkLabel *self,
   do {
     PangoLayoutRun *run;
 
-    run = pango_layout_iter_get_run_readonly (iter);
+    run = pango_layout_iter_get_run (iter);
     if (run)
       {
         PangoItem *item;
@@ -1690,7 +1694,7 @@ get_layout_index (GtkLabel *self,
   int trailing = 0;
   const char *cluster;
   const char *cluster_end;
-  gboolean inside;
+  PangoLayoutLine *line;
   int lx, ly;
 
   *index = 0;
@@ -1705,9 +1709,9 @@ get_layout_index (GtkLabel *self,
   x *= PANGO_SCALE;
   y *= PANGO_SCALE;
 
-  inside = pango_layout_xy_to_index (self->layout,
-                                     x, y,
-                                     index, &trailing);
+  line = pango_lines_pos_to_index (pango_layout_get_lines (self->layout),
+                                   x, y,
+                                   index, &trailing);
 
   cluster = self->text + *index;
   cluster_end = cluster;
@@ -1719,7 +1723,7 @@ get_layout_index (GtkLabel *self,
 
   *index += (cluster_end - cluster);
 
-  return inside;
+  return line != NULL;
 }
 
 static gboolean
@@ -4157,8 +4161,7 @@ gtk_label_ensure_layout (GtkLabel *self)
       align = PANGO_ALIGN_CENTER;
       break;
     case GTK_JUSTIFY_FILL:
-      align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
-      pango_layout_set_justify (self->layout, TRUE);
+      align = PANGO_ALIGN_JUSTIFY;
       break;
     default:
       g_assert_not_reached();
@@ -4167,7 +4170,7 @@ gtk_label_ensure_layout (GtkLabel *self)
   pango_layout_set_alignment (self->layout, align);
   pango_layout_set_ellipsize (self->layout, self->ellipsize);
   pango_layout_set_wrap (self->layout, self->wrap_mode);
-  pango_layout_set_single_paragraph_mode (self->layout, self->single_line_mode);
+  pango_layout_set_single_paragraph (self->layout, self->single_line_mode);
   if (self->lines > 0)
     pango_layout_set_height (self->layout, - self->lines);
 
@@ -4223,7 +4226,7 @@ gtk_label_move_forward_word (GtkLabel *self,
 
       gtk_label_ensure_layout (self);
 
-      log_attrs = pango_layout_get_log_attrs_readonly (self->layout, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs (self->layout, &n_attrs);
 
       /* Find the next word end */
       new_pos++;
@@ -4247,7 +4250,7 @@ gtk_label_move_backward_word (GtkLabel *self,
 
       gtk_label_ensure_layout (self);
 
-      log_attrs = pango_layout_get_log_attrs_readonly (self->layout, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs (self->layout, &n_attrs);
 
       new_pos -= 1;
 
@@ -5371,7 +5374,7 @@ get_better_cursor (GtkLabel *self,
 
   gtk_label_ensure_layout (self);
 
-  pango_layout_get_cursor_pos (self->layout, index,
+  pango_lines_get_cursor_pos (pango_layout_get_lines (self->layout), NULL, index,
                                &strong_pos, &weak_pos);
 
   if (split_cursor)
@@ -5412,7 +5415,7 @@ gtk_label_move_logically (GtkLabel *self,
 
       length = g_utf8_strlen (self->text, -1);
 
-      log_attrs = pango_layout_get_log_attrs_readonly (self->layout, &n_attrs);
+      log_attrs = pango_layout_get_log_attrs (self->layout, &n_attrs);
 
       while (count > 0 && offset < length)
         {
@@ -5479,12 +5482,14 @@ gtk_label_move_visually (GtkLabel *self,
 
       if (count > 0)
         {
-          pango_layout_move_cursor_visually (self->layout, strong, index, 0, 1, &new_index, &new_trailing);
+          pango_lines_move_cursor (pango_layout_get_lines (self->layout), strong,
+                                   NULL, index, 0, 1, NULL, &new_index, &new_trailing);
           count--;
         }
       else
         {
-          pango_layout_move_cursor_visually (self->layout, strong, index, 0, -1, &new_index, &new_trailing);
+          pango_lines_move_cursor (pango_layout_get_lines (self->layout), strong,
+                                   NULL, index, 0, -1, NULL, &new_index, &new_trailing);
           count++;
         }
 

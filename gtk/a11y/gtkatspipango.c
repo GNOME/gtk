@@ -137,8 +137,9 @@ pango_align_to_string (PangoAlignment align)
       return "center";
     case PANGO_ALIGN_RIGHT:
       return "right";
+    case PANGO_ALIGN_NATURAL:
+      return "natural";
     case PANGO_ALIGN_JUSTIFY:
-    case PANGO_ALIGN_JUSTIFY_ALL:
       return "fill";
     default:
       g_assert_not_reached ();
