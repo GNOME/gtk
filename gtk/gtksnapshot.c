@@ -302,7 +302,7 @@ gtk_snapshot_new (void)
  * Returns the node that was constructed by @snapshot
  * and frees @snapshot.
  *
- * Returns: (transfer full): a newly-created [class@Gsk.RenderNode]
+ * Returns: (transfer full) (nullable): a newly-created [class@Gsk.RenderNode]
  */
 GskRenderNode *
 gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
@@ -324,7 +324,7 @@ gtk_snapshot_free_to_node (GtkSnapshot *snapshot)
  * Returns a paintable for the node that was
  * constructed by @snapshot and frees @snapshot.
  *
- * Returns: (transfer full): a newly-created [iface@Gdk.Paintable]
+ * Returns: (transfer full) (nullable): a newly-created [iface@Gdk.Paintable]
  */
 GdkPaintable *
 gtk_snapshot_free_to_paintable (GtkSnapshot           *snapshot,
@@ -1497,7 +1497,7 @@ gtk_snapshot_pop_collect (GtkSnapshot *snapshot)
  * add more nodes to @snapshot. The only function that should
  * be called after this is [method@GObject.Object.unref].
  *
- * Returns: (transfer full): the constructed `GskRenderNode`
+ * Returns: (transfer full) (nullable): the constructed `GskRenderNode`
  */
 GskRenderNode *
 gtk_snapshot_to_node (GtkSnapshot *snapshot)
@@ -1532,7 +1532,7 @@ gtk_snapshot_to_node (GtkSnapshot *snapshot)
  * add more nodes to @snapshot. The only function that should
  * be called after this is [method@GObject.Object.unref].
  *
- * Returns: (transfer full): a new `GdkPaintable`
+ * Returns: (transfer full) (nullable): a new `GdkPaintable`
  */
 GdkPaintable *
 gtk_snapshot_to_paintable (GtkSnapshot           *snapshot,
