@@ -50,7 +50,9 @@ append_n_lines (GString *str, const char *text, GSList *lines, int n_lines)
   for (i = 0; i < n_lines; i++)
     {
       line = lines->data;
-      g_string_append_len (str, &text[line->start_index], line->length);
+      g_string_append_len (str,
+                           &text[pango_layout_line_get_start_index (line)],
+                           pango_layout_line_get_length (line));
       lines = lines->next;
     }
 }
