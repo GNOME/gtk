@@ -2300,13 +2300,13 @@ simplify_file (const char *filename,
 
   if (!g_markup_parse_context_end_parse (context, &error))
     {
-      g_printerr (_("Can't parse “%s”: %s\n"), filename, error->message);
+      g_printerr (_("Can’t parse “%s”: %s\n"), filename, error->message);
       return FALSE;
     }
 
   if (data.root == NULL)
     {
-      g_printerr (_("Can't parse “%s”\n"), filename);
+      g_printerr (_("Can’t parse “%s”\n"), filename);
       return FALSE;
     }
 
