@@ -762,8 +762,11 @@ gtk_menu_section_box_remove_custom (GtkPopoverMenu *popover,
   const char *id;
   GtkWidget *slot;
 
-  stack = gtk_popover_get_child (GTK_POPOVER (popover));
+  stack = gtk_popover_menu_get_stack (popover);
   box = GTK_MENU_SECTION_BOX (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"));
+  if (box == NULL)
+    return FALSE;
+
   parent = gtk_widget_get_parent (child);
 
   id = (const char *) g_object_get_data (G_OBJECT (parent), "slot-id");
