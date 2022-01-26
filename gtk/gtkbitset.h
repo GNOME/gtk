@@ -38,6 +38,7 @@ GDK_AVAILABLE_IN_ALL
 GtkBitset *             gtk_bitset_ref                          (GtkBitset              *self);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_bitset_unref                        (GtkBitset              *self);
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkBitset, gtk_bitset_unref)
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_bitset_contains                     (const GtkBitset        *self,
