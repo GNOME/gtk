@@ -533,6 +533,15 @@ GdkEvent * gdk_touchpad_event_new_pinch (GdkSurface              *surface,
                                          double                   scale,
                                          double                   angle_delta);
 
+GdkEvent * gdk_touchpad_event_new_hold  (GdkSurface              *surface,
+                                         GdkDevice               *device,
+                                         guint32                  time,
+                                         GdkModifierType          state,
+                                         GdkTouchpadGesturePhase  phase,
+                                         double                   x,
+                                         double                   y,
+                                         int                      n_fingers);
+
 GdkEvent * gdk_pad_event_new_ring       (GdkSurface      *surface,
                                          GdkDevice       *device,
                                          guint32          time,

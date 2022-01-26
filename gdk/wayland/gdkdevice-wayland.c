@@ -227,6 +227,7 @@ struct _GdkWaylandSeat
   struct wl_touch *wl_touch;
   struct zwp_pointer_gesture_swipe_v1 *wp_pointer_gesture_swipe;
   struct zwp_pointer_gesture_pinch_v1 *wp_pointer_gesture_pinch;
+  struct zwp_pointer_gesture_hold_v1 *wp_pointer_gesture_hold;
   struct zwp_tablet_seat_v2 *wp_tablet_seat;
 
   GdkDisplay *display;
@@ -2857,6 +2858,81 @@ gesture_pinch_end (void                                *data,
 }
 
 static void
+emit_gesture_hold_event (GdkWaylandSeat          *seat,
+                         GdkTouchpadGesturePhase  phase,
+                         guint32                  _time,
+                         guint32                  n_fingers)
+{
+  GdkEvent *event;
+
+  if (!seat->pointer_info.focus)
+    return;
+
+  seat->pointer_info.time = _time;
+
+  event = gdk_touchpad_event_new_hold (seat->pointer_info.focus,
+                                       seat->logical_pointer,
+                                       _time,
+                                       device_get_modifiers (seat->logical_pointer),
+                                       phase,
+                                       seat->pointer_info.surface_x,
+                                       seat->pointer_info.surface_y,
+                                       n_fingers);
+
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_seat_get_display (GDK_SEAT (seat)), EVENTS))
+    {
+      double x, y;
+      gdk_event_get_position (event, &x, &y);
+      g_message ("hold event %d, coords: %f %f, seat %p state %d",
+                 gdk_event_get_event_type (event),
+                 x, y, seat,
+                 gdk_event_get_modifier_state (event));
+    }
+
+  _gdk_wayland_display_deliver_event (seat->display, event);
+}
+
+static void
+gesture_hold_begin (void                               *data,
+                    struct zwp_pointer_gesture_hold_v1 *hold,
+                    uint32_t                            serial,
+                    uint32_t                            time,
+                    struct wl_surface                  *surface,
+                    uint32_t                            fingers)
+{
+  GdkWaylandSeat *seat = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
+
+  _gdk_wayland_display_update_serial (display, serial);
+
+  emit_gesture_hold_event (seat,
+                           GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
+                           time, fingers);
+  seat->gesture_n_fingers = fingers;
+}
+
+static void
+gesture_hold_end (void                               *data,
+                  struct zwp_pointer_gesture_hold_v1 *hold,
+                  uint32_t                            serial,
+                  uint32_t                            time,
+                  int32_t                             cancelled)
+{
+  GdkWaylandSeat *seat = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkTouchpadGesturePhase phase;
+
+  _gdk_wayland_display_update_serial (display, serial);
+
+  phase = (cancelled) ?
+    GDK_TOUCHPAD_GESTURE_PHASE_CANCEL :
+    GDK_TOUCHPAD_GESTURE_PHASE_END;
+
+  emit_gesture_hold_event (seat, phase, time,
+                           seat->gesture_n_fingers);
+}
+
+static void
 _gdk_wayland_seat_remove_tool (GdkWaylandSeat           *seat,
                                GdkWaylandTabletToolData *tool)
 {
@@ -3065,6 +3141,11 @@ static const struct zwp_pointer_gesture_pinch_v1_listener gesture_pinch_listener
   gesture_pinch_end
 };
 
+static const struct zwp_pointer_gesture_hold_v1_listener gesture_hold_listener = {
+  gesture_hold_begin,
+  gesture_hold_end
+};
+
 static const struct zwp_tablet_v2_listener tablet_listener = {
   tablet_handle_name,
   tablet_handle_id,
@@ -3120,6 +3201,17 @@ seat_handle_capabilities (void                    *data,
                                                       seat);
           zwp_pointer_gesture_pinch_v1_add_listener (seat->wp_pointer_gesture_pinch,
                                                      &gesture_pinch_listener, seat);
+
+          if (display_wayland->pointer_gestures_version >= ZWP_POINTER_GESTURES_V1_GET_HOLD_GESTURE_SINCE_VERSION)
+            {
+              seat->wp_pointer_gesture_hold =
+                  zwp_pointer_gestures_v1_get_hold_gesture (display_wayland->pointer_gestures,
+                                                            seat->wl_pointer);
+              zwp_pointer_gesture_hold_v1_set_user_data (seat->wp_pointer_gesture_hold,
+                                                         seat);
+              zwp_pointer_gesture_hold_v1_add_listener (seat->wp_pointer_gesture_hold,
+                                                        &gesture_hold_listener, seat);
+            }
         }
     }
   else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && seat->wl_pointer)

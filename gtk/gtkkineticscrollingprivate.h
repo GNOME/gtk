@@ -50,6 +50,8 @@ gboolean                 gtk_kinetic_scrolling_tick (GtkKineticScrolling  *data,
                                                      double               *position,
                                                      double               *velocity);
 
+void                     gtk_kinetic_scrolling_stop (GtkKineticScrolling  *data);
+
 G_END_DECLS
 
 #endif /* __GTK_KINETIC_SCROLLING_H__ */

@@ -202,9 +202,7 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
         else if (fabs(data->velocity) < 1 ||
                  (last_time != 0.0 && fabs(data->position - last_position) < 1))
           {
-            data->phase = GTK_KINETIC_SCROLLING_PHASE_FINISHED;
-            data->position = round(data->position);
-            data->velocity = 0;
+            gtk_kinetic_scrolling_stop (data);
           }
         break;
       }
@@ -249,3 +247,13 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
   return data->phase != GTK_KINETIC_SCROLLING_PHASE_FINISHED;
 }
 
+void
+gtk_kinetic_scrolling_stop (GtkKineticScrolling *data)
+{
+  if (data->phase == GTK_KINETIC_SCROLLING_PHASE_DECELERATING)
+    {
+      data->phase = GTK_KINETIC_SCROLLING_PHASE_FINISHED;
+      data->position = round (data->position);
+      data->velocity = 0;
+    }
+}

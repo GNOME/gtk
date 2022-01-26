@@ -172,8 +172,9 @@ static gboolean
 gtk_gesture_rotate_filter_event (GtkEventController *controller,
                                  GdkEvent           *event)
 {
-  /* Let 2-finger touchpad pinch events go through */
-  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH)
+  /* Let 2-finger touchpad pinch and hold events go through */
+  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH ||
+      gdk_event_get_event_type (event) == GDK_TOUCHPAD_HOLD)
     {
       guint n_fingers;
 
