@@ -1352,6 +1352,14 @@ handle_pointing_event (GdkEvent *event)
        */
       device = gdk_seat_get_pointer (gdk_event_get_seat (event));
     }
+  else if (type == GDK_TOUCHPAD_PINCH ||
+           type == GDK_TOUCHPAD_SWIPE)
+    {
+      /* Another bit of a kludge, touchpad gesture sequences do not
+       * reflect on the pointer focus lookup.
+       */
+      sequence = NULL;
+    }
 
   switch ((guint) type)
     {

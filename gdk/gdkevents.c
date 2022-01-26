@@ -719,14 +719,6 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
 
       gdk_event_unref (old_event);
     }
-
-  if (g_queue_get_length (&display->queued_events) == 1 &&
-      g_queue_peek_head_link (&display->queued_events) == scrolls)
-    {
-      GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
-      if (clock) /* might be NULL if surface was destroyed */
-        gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
-    }
 }
 
 static void
@@ -831,14 +823,6 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       gdk_event_unref (pending_motions->data);
       g_queue_delete_link (&display->queued_events, pending_motions);
       pending_motions = next;
-    }
-
-  if (g_queue_get_length (&display->queued_events) == 1 &&
-      g_queue_peek_head_link (&display->queued_events) == pending_motions)
-    {
-      GdkFrameClock *clock = gdk_surface_get_frame_clock (pending_motion_surface);
-      if (clock) /* might be NULL if surface was destroyed */
-        gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
     }
 }
 
