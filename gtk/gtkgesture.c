@@ -242,7 +242,7 @@ _gtk_gesture_get_n_touchpad_points (GtkGesture *gesture,
   if (!priv->touchpad)
     return 0;
 
-  data = g_hash_table_lookup (priv->points, NULL);
+  data = g_hash_table_lookup (priv->points, priv->last_sequence);
 
   if (!data)
     return 0;
