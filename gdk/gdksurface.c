@@ -2244,7 +2244,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
                           GdkEvent   *event,
                           gulong      serial)
 {
-  GdkSurface *event_surface;
+  GdkSurface *event_surface = NULL;
   gboolean unlink_event = FALSE;
   GdkDeviceGrabInfo *button_release_grab;
   GdkPointerSurfaceInfo *pointer_info = NULL;
@@ -2336,6 +2336,14 @@ _gdk_windowing_got_event (GdkDisplay *display,
    */
   _gdk_event_queue_handle_motion_compression (display);
   gdk_event_queue_handle_scroll_compression (display);
+
+  if (event_surface)
+    {
+      GdkFrameClock *clock = gdk_surface_get_frame_clock (event_surface);
+
+      if (clock) /* might be NULL if surface was destroyed */
+        gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_FLUSH_EVENTS);
+    }
 }
 
 /**
