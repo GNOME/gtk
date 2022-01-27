@@ -23,14 +23,15 @@
 # Rafael Fontenelle <rafaelff@gnome.org>, 2013-2021.
 # Enrico Nicoletto <liverig@gmail.com>, 2013, 2021.
 # Leônidas Araújo <leorusvellt@hotmail.com>, 2022.
+# Matheus Barbosa <mdpb.matheus@gmail.com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-01-19 13:51+0000\n"
-"PO-Revision-Date: 2022-01-09 15:50-0500\n"
-"Last-Translator: Leônidas Araújo <leorusvellt@hotmail.com>\n"
+"POT-Creation-Date: 2022-01-27 14:15+0000\n"
+"PO-Revision-Date: 2022-01-26 17:08-0300\n"
+"Last-Translator: Matheus Barbosa <mdpb.matheus@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
@@ -2240,7 +2241,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Se você excluir um item, ele será permanentemente perdido."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5645 gtk/gtktext.c:6064 gtk/gtktextview.c:8956
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6073 gtk/gtktextview.c:8956
 msgid "_Delete"
 msgstr "E_xcluir"
 
@@ -2514,19 +2515,19 @@ msgstr "Variantes de caractere"
 msgid "OpenGL context creation failed"
 msgstr "Criação de contexto OpenGL falhou"
 
-#: gtk/gtklabel.c:5642 gtk/gtktext.c:6052 gtk/gtktextview.c:8944
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6061 gtk/gtktextview.c:8944
 msgid "Cu_t"
 msgstr "Recor_tar"
 
-#: gtk/gtklabel.c:5643 gtk/gtktext.c:6056 gtk/gtktextview.c:8948
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6065 gtk/gtktextview.c:8948
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5644 gtk/gtktext.c:6060 gtk/gtktextview.c:8952
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6069 gtk/gtktextview.c:8952
 msgid "_Paste"
 msgstr "C_olar"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6073 gtk/gtktextview.c:8977
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6082 gtk/gtktextview.c:8977
 msgid "Select _All"
 msgstr "_Selecionar tudo"
 
@@ -3528,7 +3529,7 @@ msgstr "Tente uma pesquisa diferente"
 msgid "Could not show link"
 msgstr "Não foi possível mostrar o link"
 
-#: gtk/gtktext.c:6078 gtk/gtktextview.c:8982
+#: gtk/gtktext.c:6087 gtk/gtktextview.c:8982
 msgid "Insert _Emoji"
 msgstr "Inserir _emoji"
 
@@ -6806,18 +6807,14 @@ msgid "Can’t load “%s”: %s\n"
 msgstr "Não foi possível carregar “%s”: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2297
+#: tools/gtk-builder-tool-simplify.c:2303
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Não foi possível analisar “%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2303
-#, c-format
-msgid "Can't parse “%s”: %s\n"
-msgstr "Não foi possível analisar “%s”: %s\n"
-
 #: tools/gtk-builder-tool-simplify.c:2309
 #, c-format
-msgid "Can't parse “%s”\n"
+msgid "Can’t parse “%s”\n"
 msgstr "Não foi possível analisar “%s”\n"
 
 #: tools/gtk-builder-tool-simplify.c:2333
@@ -7006,6 +7003,12 @@ msgstr ""
 "Sem arquivo de índice de tema em “%s”.\n"
 "Se você realmente quiser criar um cache de ícones aqui, use --ignore-theme-"
 "index.\n"
+
+#~ msgid "Can't parse “%s”: %s\n"
+#~ msgstr "Não foi possível analisar “%s”: %s\n"
+
+#~ msgid "Can't parse “%s”\n"
+#~ msgstr "Não foi possível analisar “%s”\n"
 
 #~ msgctxt "Script"
 #~ msgid "Arabic"
