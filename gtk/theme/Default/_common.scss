@@ -4138,12 +4138,13 @@ window {
   &.tiled-left,
   &.tiled-right,
   &.tiled-bottom {
-   border-radius: 0;
-   box-shadow: 0 0 0 1px $_wm_border_backdrop,
-               0 0 0 20px transparent; //transparent control workaround -- #3670
-   }
-   &:backdrop { box-shadow: 0 0 0 1px $_wm_border_backdrop,
-                            0 0 0 20px transparent; // #3670
+    border-radius: 0;
+    box-shadow: 0 0 0 1px $_wm_border_backdrop,
+                0 0 0 20px transparent; //transparent control workaround -- #3670
+
+    &:backdrop { box-shadow: 0 0 0 1px $_wm_border_backdrop,
+                             0 0 0 20px transparent; // #3670
+    }
   }
 
   &.popup { box-shadow: none; }
