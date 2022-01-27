@@ -2212,6 +2212,18 @@ gtk_text_unmap (GtkWidget *widget)
 }
 
 static void
+gtk_text_im_set_focus_in (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (!priv->editable)
+    return;
+
+  gtk_text_schedule_im_reset (self);
+  gtk_im_context_focus_in (priv->im_context);
+}
+
+static void
 gtk_text_realize (GtkWidget *widget)
 {
   GtkText *self = GTK_TEXT (widget);
@@ -2220,6 +2232,8 @@ gtk_text_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_text_parent_class)->realize (widget);
 
   gtk_im_context_set_client_widget (priv->im_context, widget);
+  if (gtk_widget_is_focus (GTK_WIDGET (self)))
+    gtk_text_im_set_focus_in (self);
 
   gtk_text_adjust_scroll (self);
   gtk_text_update_primary_selection (self);
@@ -3245,12 +3259,7 @@ gtk_text_focus_changed (GtkEventControllerFocus *controller,
         g_signal_connect (keyboard, "notify::direction",
                           G_CALLBACK (direction_changed), self);
 
-      if (priv->editable)
-        {
-          gtk_text_schedule_im_reset (self);
-          gtk_im_context_focus_in (priv->im_context);
-        }
-
+      gtk_text_im_set_focus_in (self);
       gtk_text_reset_blink_time (self);
     }
   else /* Focus out */
