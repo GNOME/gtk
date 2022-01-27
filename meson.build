@@ -298,7 +298,8 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     'array-bounds',
     'empty-body',
     'implicit',
-    'implicit-fallthrough',
+    'implicit-fallthrough',   # For non-gcc
+    'implicit-fallthrough=5', # For GCC, only recognize the attribute and no comments
     'init-self',
     'int-to-pointer-cast',
     'main',
