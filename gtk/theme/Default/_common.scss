@@ -4139,7 +4139,7 @@ window {
   &.tiled-right,
   &.tiled-bottom {
     border-radius: 0;
-    box-shadow: 0 0 0 1px $_wm_border_backdrop,
+    box-shadow: 0 0 0 1px $_wm_border,
                 0 0 0 20px transparent; //transparent control workaround -- #3670
 
     &:backdrop { box-shadow: 0 0 0 1px $_wm_border_backdrop,
