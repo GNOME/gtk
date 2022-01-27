@@ -261,14 +261,21 @@ _gdk_quartz_display_get_cursor_for_surface (GdkDisplay      *display,
   NSCursor *nscursor;
   GdkCursor *cursor;
   GdkPixbuf *pixbuf;
+  double x_scale;
+  double y_scale;
 
   GDK_QUARTZ_ALLOC_POOL;
 
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0,
 					cairo_image_surface_get_width (surface),
 					cairo_image_surface_get_height (surface));
+  cairo_surface_get_device_scale (surface,
+                                  &x_scale,
+                                  &y_scale);
   image = gdk_quartz_pixbuf_to_ns_image_libgtk_only (pixbuf);
-  nscursor = [[NSCursor alloc] initWithImage:image hotSpot:NSMakePoint(x, y)];
+  NSImageRep *rep = [[image representations] objectAtIndex:0];
+  [image setSize:NSMakeSize(rep.pixelsWide / x_scale, rep.pixelsHigh / y_scale)];
+  nscursor = [[NSCursor alloc] initWithImage:image hotSpot:NSMakePoint(x / x_scale, y / y_scale)];
 
   cursor = gdk_quartz_cursor_new_from_nscursor (nscursor, GDK_CURSOR_IS_PIXMAP);
 
