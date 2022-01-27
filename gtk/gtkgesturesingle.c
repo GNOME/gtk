@@ -200,7 +200,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
     case GDK_TOUCHPAD_HOLD:
       if (gdk_touchpad_event_get_n_fingers (event) == 1)
         return FALSE;
-      /* fallthrough */
+      G_GNUC_FALLTHROUGH;
     case GDK_TOUCH_CANCEL:
     case GDK_GRAB_BROKEN:
     case GDK_TOUCHPAD_SWIPE:
