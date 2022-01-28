@@ -43,7 +43,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.freedesktop.org/wayland/wayland.git"
+                    "url" : "https://gitlab.freedesktop.org/wayland/wayland.git",
+                    "branch" : "main"
                 }
             ]
         },
