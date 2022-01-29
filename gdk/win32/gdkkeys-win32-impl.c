@@ -340,6 +340,13 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           if (candidate_modbits & ~mod_bits)
             continue;
 
+          /* Some keys have bogus mappings for the control key, e.g.
+           * Ctrl + Backspace = Delete, or Ctrl + [ = 0x1B. These are
+           * never used on Windows, so we ignore them.
+           */
+          if (candidate_modbits == KBDCTRL)
+            continue;
+
           c = entry->wch[level];
           if (c == WCH_DEAD || have_sgcaps)
             {
