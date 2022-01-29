@@ -369,7 +369,7 @@ static const struct {
   { 0x07a2, 0x0388 }, /*         Greek_EPSILONaccent Έ GREEK CAPITAL LETTER EPSILON WITH TONOS */
   { 0x07a3, 0x0389 }, /*             Greek_ETAaccent Ή GREEK CAPITAL LETTER ETA WITH TONOS */
   { 0x07a4, 0x038a }, /*            Greek_IOTAaccent Ί GREEK CAPITAL LETTER IOTA WITH TONOS */
-  { 0x07a5, 0x03aa }, /*          Greek_IOTAdieresis Ϊ GREEK CAPITAL LETTER IOTA WITH DIALYTIKA */
+  { 0x07a5, 0x03aa }, /*         Greek_IOTAdiaeresis Ϊ GREEK CAPITAL LETTER IOTA WITH DIALYTIKA */
   { 0x07a7, 0x038c }, /*         Greek_OMICRONaccent Ό GREEK CAPITAL LETTER OMICRON WITH TONOS */
   { 0x07a8, 0x038e }, /*         Greek_UPSILONaccent Ύ GREEK CAPITAL LETTER UPSILON WITH TONOS */
   { 0x07a9, 0x03ab }, /*       Greek_UPSILONdieresis Ϋ GREEK CAPITAL LETTER UPSILON WITH DIALYTIKA */
@@ -436,22 +436,22 @@ static const struct {
   { 0x07f7, 0x03c7 }, /*                   Greek_chi χ GREEK SMALL LETTER CHI */
   { 0x07f8, 0x03c8 }, /*                   Greek_psi ψ GREEK SMALL LETTER PSI */
   { 0x07f9, 0x03c9 }, /*                 Greek_omega ω GREEK SMALL LETTER OMEGA */
-/*  0x08a1                               leftradical ? ??? */
-/*  0x08a2                            topleftradical ? ??? */
-/*  0x08a3                            horizconnector ? ??? */
+  { 0x08a1, 0x23b7 }, /*                 leftradical ⎷ ??? */
+  { 0x08a2, 0x250c }, /*              topleftradical ┌ BOX DRAWINGS LIGHT DOWN AND RIGHT */
+  { 0x08a3, 0x2500 }, /*              horizconnector ─ BOX DRAWINGS LIGHT HORIZONTAL */
   { 0x08a4, 0x2320 }, /*                 topintegral ⌠ TOP HALF INTEGRAL */
   { 0x08a5, 0x2321 }, /*                 botintegral ⌡ BOTTOM HALF INTEGRAL */
   { 0x08a6, 0x2502 }, /*               vertconnector │ BOX DRAWINGS LIGHT VERTICAL */
-/*  0x08a7                          topleftsqbracket ? ??? */
-/*  0x08a8                          botleftsqbracket ? ??? */
-/*  0x08a9                         toprightsqbracket ? ??? */
-/*  0x08aa                         botrightsqbracket ? ??? */
-/*  0x08ab                             topleftparens ? ??? */
-/*  0x08ac                             botleftparens ? ??? */
-/*  0x08ad                            toprightparens ? ??? */
-/*  0x08ae                            botrightparens ? ??? */
-/*  0x08af                      leftmiddlecurlybrace ? ??? */
-/*  0x08b0                     rightmiddlecurlybrace ? ??? */
+  { 0x08a7, 0x23a1 }, /*            topleftsqbracket ⎡ ??? */
+  { 0x08a8, 0x23a3 }, /*            botleftsqbracket ⎣ ??? */
+  { 0x08a9, 0x23a4 }, /*           toprightsqbracket ⎤ ??? */
+  { 0x08aa, 0x23a6 }, /*           botrightsqbracket ⎦ ??? */
+  { 0x08ab, 0x239b }, /*               topleftparens ⎛ ??? */
+  { 0x08ac, 0x239d }, /*               botleftparens ⎝ ??? */
+  { 0x08ad, 0x239e }, /*              toprightparens ⎞ ??? */
+  { 0x08ae, 0x23a0 }, /*              botrightparens ⎠ ??? */
+  { 0x08af, 0x23a8 }, /*        leftmiddlecurlybrace ⎨ ??? */
+  { 0x08b0, 0x23ac }, /*       rightmiddlecurlybrace ⎬ ??? */
 /*  0x08b1                          topleftsummation ? ??? */
 /*  0x08b2                          botleftsummation ? ??? */
 /*  0x08b3                 topvertsummationconnector ? ??? */
@@ -467,8 +467,8 @@ static const struct {
   { 0x08c1, 0x221d }, /*                   variation ∝ PROPORTIONAL TO */
   { 0x08c2, 0x221e }, /*                    infinity ∞ INFINITY */
   { 0x08c5, 0x2207 }, /*                       nabla ∇ NABLA */
-  { 0x08c8, 0x2245 }, /*                 approximate ≅ APPROXIMATELY EQUAL TO */
-/*  0x08c9                              similarequal ? ??? */
+  { 0x08c8, 0x223c }, /*                 approximate ∼ TILDE OPERATOR */
+  { 0x08c9, 0x2243 }, /*                similarequal ≃ ASYMPTOTICALLY EQUAL TO */
   { 0x08cd, 0x21d4 }, /*                    ifonlyif ⇔ LEFT RIGHT DOUBLE ARROW */
   { 0x08ce, 0x21d2 }, /*                     implies ⇒ RIGHTWARDS DOUBLE ARROW */
   { 0x08cf, 0x2261 }, /*                   identical ≡ IDENTICAL TO */
@@ -485,7 +485,7 @@ static const struct {
   { 0x08fc, 0x2191 }, /*                     uparrow ↑ UPWARDS ARROW */
   { 0x08fd, 0x2192 }, /*                  rightarrow → RIGHTWARDS ARROW */
   { 0x08fe, 0x2193 }, /*                   downarrow ↓ DOWNWARDS ARROW */
-  { 0x09df, 0x2422 }, /*                       blank ␢ BLANK SYMBOL */
+/*  0x09df                                     blank ? ??? */
   { 0x09e0, 0x25c6 }, /*                soliddiamond ◆ BLACK DIAMOND */
   { 0x09e1, 0x2592 }, /*                checkerboard ▒ MEDIUM SHADE */
   { 0x09e2, 0x2409 }, /*                          ht ␉ SYMBOL FOR HORIZONTAL TABULATION */
@@ -499,11 +499,11 @@ static const struct {
   { 0x09ec, 0x250c }, /*                upleftcorner ┌ BOX DRAWINGS LIGHT DOWN AND RIGHT */
   { 0x09ed, 0x2514 }, /*               lowleftcorner └ BOX DRAWINGS LIGHT UP AND RIGHT */
   { 0x09ee, 0x253c }, /*               crossinglines ┼ BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL */
-/*  0x09ef                            horizlinescan1 ? ??? */
-/*  0x09f0                            horizlinescan3 ? ??? */
+  { 0x09ef, 0x23ba }, /*              horizlinescan1 ⎺ HORIZONTAL SCAN LINE-1 (Unicode 3.2 draft) */
+  { 0x09f0, 0x23bb }, /*              horizlinescan3 ⎻ HORIZONTAL SCAN LINE-3 (Unicode 3.2 draft) */
   { 0x09f1, 0x2500 }, /*              horizlinescan5 ─ BOX DRAWINGS LIGHT HORIZONTAL */
-/*  0x09f2                            horizlinescan7 ? ??? */
-/*  0x09f3                            horizlinescan9 ? ??? */
+  { 0x09f2, 0x23bc }, /*              horizlinescan7 ⎼ HORIZONTAL SCAN LINE-7 (Unicode 3.2 draft) */
+  { 0x09f3, 0x23bd }, /*              horizlinescan9 ⎽ HORIZONTAL SCAN LINE-9 (Unicode 3.2 draft) */
   { 0x09f4, 0x251c }, /*                       leftt ├ BOX DRAWINGS LIGHT VERTICAL AND RIGHT */
   { 0x09f5, 0x2524 }, /*                      rightt ┤ BOX DRAWINGS LIGHT VERTICAL AND LEFT */
   { 0x09f6, 0x2534 }, /*                        bott ┴ BOX DRAWINGS LIGHT UP AND HORIZONTAL */
@@ -519,9 +519,9 @@ static const struct {
   { 0x0aa8, 0x200a }, /*                   hairspace   HAIR SPACE */
   { 0x0aa9, 0x2014 }, /*                      emdash — EM DASH */
   { 0x0aaa, 0x2013 }, /*                      endash – EN DASH */
-/*  0x0aac                               signifblank ? ??? */
+  { 0x0aac, 0x2423 }, /*                 signifblank ␣ OPEN BOX */
   { 0x0aae, 0x2026 }, /*                    ellipsis … HORIZONTAL ELLIPSIS */
-/*  0x0aaf                           doubbaselinedot ? ??? */
+  { 0x0aaf, 0x2025 }, /*             doubbaselinedot ‥ TWO DOT LEADER */
   { 0x0ab0, 0x2153 }, /*                    onethird ⅓ VULGAR FRACTION ONE THIRD */
   { 0x0ab1, 0x2154 }, /*                   twothirds ⅔ VULGAR FRACTION TWO THIRDS */
   { 0x0ab2, 0x2155 }, /*                    onefifth ⅕ VULGAR FRACTION ONE FIFTH */
@@ -532,9 +532,9 @@ static const struct {
   { 0x0ab7, 0x215a }, /*                  fivesixths ⅚ VULGAR FRACTION FIVE SIXTHS */
   { 0x0ab8, 0x2105 }, /*                      careof ℅ CARE OF */
   { 0x0abb, 0x2012 }, /*                     figdash ‒ FIGURE DASH */
-  { 0x0abc, 0x2329 }, /*            leftanglebracket 〈 LEFT-POINTING ANGLE BRACKET */
+  { 0x0abc, 0x27e8 }, /*            leftanglebracket ⟨ MATHEMATICAL LEFT ANGLE BRACKET */
   { 0x0abd, 0x002e }, /*                decimalpoint . FULL STOP */
-  { 0x0abe, 0x232a }, /*           rightanglebracket 〉 RIGHT-POINTING ANGLE BRACKET */
+  { 0x0abe, 0x27e9 }, /*           rightanglebracket ⟩ MATHEMATICAL RIGHT ANGLE BRACKET */
 /*  0x0abf                                    marker ? ??? */
   { 0x0ac3, 0x215b }, /*                   oneeighth ⅛ VULGAR FRACTION ONE EIGHTH */
   { 0x0ac4, 0x215c }, /*                threeeighths ⅜ VULGAR FRACTION THREE EIGHTHS */
@@ -546,12 +546,13 @@ static const struct {
   { 0x0acc, 0x25c1 }, /*            leftopentriangle ◁ WHITE LEFT-POINTING TRIANGLE */
   { 0x0acd, 0x25b7 }, /*           rightopentriangle ▷ WHITE RIGHT-POINTING TRIANGLE */
   { 0x0ace, 0x25cb }, /*                emopencircle ○ WHITE CIRCLE */
-  { 0x0acf, 0x25a1 }, /*             emopenrectangle □ WHITE SQUARE */
+  { 0x0acf, 0x25af }, /*             emopenrectangle ▯ WHITE VERTICAL RECTANGLE */
   { 0x0ad0, 0x2018 }, /*         leftsinglequotemark ‘ LEFT SINGLE QUOTATION MARK */
   { 0x0ad1, 0x2019 }, /*        rightsinglequotemark ’ RIGHT SINGLE QUOTATION MARK */
   { 0x0ad2, 0x201c }, /*         leftdoublequotemark “ LEFT DOUBLE QUOTATION MARK */
   { 0x0ad3, 0x201d }, /*        rightdoublequotemark ” RIGHT DOUBLE QUOTATION MARK */
   { 0x0ad4, 0x211e }, /*                prescription ℞ PRESCRIPTION TAKE */
+  { 0x0ad5, 0x2030 }, /*                    permille ‰ PER MILLE SIGN */
   { 0x0ad6, 0x2032 }, /*                     minutes ′ PRIME */
   { 0x0ad7, 0x2033 }, /*                     seconds ″ DOUBLE PRIME */
   { 0x0ad9, 0x271d }, /*                  latincross ✝ LATIN CROSS */
@@ -560,7 +561,7 @@ static const struct {
   { 0x0adc, 0x25c0 }, /*         filledlefttribullet ◀ BLACK LEFT-POINTING TRIANGLE */
   { 0x0add, 0x25b6 }, /*        filledrighttribullet ▶ BLACK RIGHT-POINTING TRIANGLE */
   { 0x0ade, 0x25cf }, /*              emfilledcircle ● BLACK CIRCLE */
-  { 0x0adf, 0x25a0 }, /*                emfilledrect ■ BLACK SQUARE */
+  { 0x0adf, 0x25ae }, /*                emfilledrect ▮ BLACK VERTICAL RECTANGLE */
   { 0x0ae0, 0x25e6 }, /*            enopencircbullet ◦ WHITE BULLET */
   { 0x0ae1, 0x25ab }, /*          enopensquarebullet ▫ WHITE SMALL SQUARE */
   { 0x0ae2, 0x25ad }, /*              openrectbullet ▭ WHITE RECTANGLE */
@@ -805,15 +806,16 @@ static const struct {
   { 0x0ef0, 0x3171 }, /*    Hangul_SunkyeongeumMieum ㅱ HANGUL LETTER KAPYEOUNMIEUM */
   { 0x0ef1, 0x3178 }, /*    Hangul_SunkyeongeumPieub ㅸ HANGUL LETTER KAPYEOUNPIEUP */
   { 0x0ef2, 0x317f }, /*              Hangul_PanSios ㅿ HANGUL LETTER PANSIOS */
-/*  0x0ef3                  Hangul_KkogjiDalrinIeung ? ??? */
+  { 0x0ef3, 0x3181 }, /*    Hangul_KkogjiDalrinIeung ㆁ HANGUL LETTER YESIEUNG */
   { 0x0ef4, 0x3184 }, /*   Hangul_SunkyeongeumPhieuf ㆄ HANGUL LETTER KAPYEOUNPHIEUPH */
   { 0x0ef5, 0x3186 }, /*          Hangul_YeorinHieuh ㆆ HANGUL LETTER YEORINHIEUH */
   { 0x0ef6, 0x318d }, /*                Hangul_AraeA ㆍ HANGUL LETTER ARAEA */
   { 0x0ef7, 0x318e }, /*               Hangul_AraeAE ㆎ HANGUL LETTER ARAEAE */
   { 0x0ef8, 0x11eb }, /*            Hangul_J_PanSios ᇫ HANGUL JONGSEONG PANSIOS */
-/*  0x0ef9                Hangul_J_KkogjiDalrinIeung ? ??? */
+  { 0x0ef9, 0x11f0 }, /*  Hangul_J_KkogjiDalrinIeung ᇰ HANGUL JONGSEONG YESIEUNG */
   { 0x0efa, 0x11f9 }, /*        Hangul_J_YeorinHieuh ᇹ HANGUL JONGSEONG YEORINHIEUH */
   { 0x0eff, 0x20a9 }, /*                  Korean_Won ₩ WON SIGN */
+  { 0x13a4, 0x20ac }, /*                        Euro € EURO SIGN */
   { 0x13bc, 0x0152 }, /*                          OE Œ LATIN CAPITAL LIGATURE OE */
   { 0x13bd, 0x0153 }, /*                          oe œ LATIN SMALL LIGATURE OE */
   { 0x13be, 0x0178 }, /*                  Ydiaeresis Ÿ LATIN CAPITAL LETTER Y WITH DIAERESIS */
@@ -1077,7 +1079,7 @@ static const struct {
   { 0x07d7, 0x03a7 }, /*                   Greek_CHI Χ GREEK CAPITAL LETTER CHI */
   { 0x07d8, 0x03a8 }, /*                   Greek_PSI Ψ GREEK CAPITAL LETTER PSI */
   { 0x07d9, 0x03a9 }, /*                 Greek_OMEGA Ω GREEK CAPITAL LETTER OMEGA */
-  { 0x07a5, 0x03aa }, /*          Greek_IOTAdieresis Ϊ GREEK CAPITAL LETTER IOTA WITH DIALYTIKA */
+  { 0x07a5, 0x03aa }, /*         Greek_IOTAdiaeresis Ϊ GREEK CAPITAL LETTER IOTA WITH DIALYTIKA */
   { 0x07a9, 0x03ab }, /*       Greek_UPSILONdieresis Ϋ GREEK CAPITAL LETTER UPSILON WITH DIALYTIKA */
   { 0x07b1, 0x03ac }, /*           Greek_alphaaccent ά GREEK SMALL LETTER ALPHA WITH TONOS */
   { 0x07b2, 0x03ad }, /*         Greek_epsilonaccent έ GREEK SMALL LETTER EPSILON WITH TONOS */
@@ -1392,6 +1394,7 @@ static const struct {
   { 0x0eed, 0x11c1 }, /*             Hangul_J_Phieuf ᇁ HANGUL JONGSEONG PHIEUPH */
   { 0x0eee, 0x11c2 }, /*              Hangul_J_Hieuh ᇂ HANGUL JONGSEONG HIEUH */
   { 0x0ef8, 0x11eb }, /*            Hangul_J_PanSios ᇫ HANGUL JONGSEONG PANSIOS */
+  { 0x0ef9, 0x11f0 }, /*  Hangul_J_KkogjiDalrinIeung ᇰ HANGUL JONGSEONG YESIEUNG */
   { 0x0efa, 0x11f9 }, /*        Hangul_J_YeorinHieuh ᇹ HANGUL JONGSEONG YEORINHIEUH */
   { 0x0aa2, 0x2002 }, /*                     enspace   EN SPACE */
   { 0x0aa1, 0x2003 }, /*                     emspace   EM SPACE */
@@ -1415,7 +1418,9 @@ static const struct {
   { 0x0af1, 0x2020 }, /*                      dagger † DAGGER */
   { 0x0af2, 0x2021 }, /*                doubledagger ‡ DOUBLE DAGGER */
   { 0x0ae6, 0x2022 }, /*          enfilledcircbullet • BULLET */
+  { 0x0aaf, 0x2025 }, /*             doubbaselinedot ‥ TWO DOT LEADER */
   { 0x0aae, 0x2026 }, /*                    ellipsis … HORIZONTAL ELLIPSIS */
+  { 0x0ad5, 0x2030 }, /*                    permille ‰ PER MILLE SIGN */
   { 0x0ad6, 0x2032 }, /*                     minutes ′ PRIME */
   { 0x0ad7, 0x2033 }, /*                     seconds ″ DOUBLE PRIME */
   { 0x0afc, 0x2038 }, /*                       caret ‸ CARET */
@@ -1473,7 +1478,8 @@ static const struct {
   { 0x0bd6, 0x222a }, /*                    downshoe ∪ UNION */
   { 0x08bf, 0x222b }, /*                    integral ∫ INTEGRAL */
   { 0x08c0, 0x2234 }, /*                   therefore ∴ THEREFORE */
-  { 0x08c8, 0x2245 }, /*                 approximate ≅ APPROXIMATELY EQUAL TO */
+  { 0x08c8, 0x223c }, /*                 approximate ∼ TILDE OPERATOR */
+  { 0x08c9, 0x2243 }, /*                similarequal ≃ ASYMPTOTICALLY EQUAL TO */
   { 0x08bd, 0x2260 }, /*                    notequal ≠ NOT EQUAL TO */
   { 0x08cf, 0x2261 }, /*                   identical ≡ IDENTICAL TO */
   { 0x08bc, 0x2264 }, /*               lessthanequal ≤ LESS-THAN OR EQUAL TO */
@@ -1491,15 +1497,28 @@ static const struct {
   { 0x0afa, 0x2315 }, /*           telephonerecorder ⌕ TELEPHONE RECORDER */
   { 0x08a4, 0x2320 }, /*                 topintegral ⌠ TOP HALF INTEGRAL */
   { 0x08a5, 0x2321 }, /*                 botintegral ⌡ BOTTOM HALF INTEGRAL */
-  { 0x0abc, 0x2329 }, /*            leftanglebracket 〈 LEFT-POINTING ANGLE BRACKET */
-  { 0x0abe, 0x232a }, /*           rightanglebracket 〉 RIGHT-POINTING ANGLE BRACKET */
   { 0x0bcc, 0x2395 }, /*                        quad ⎕ APL FUNCTIONAL SYMBOL QUAD (Unicode 3.0) */
+  { 0x08a7, 0x23a1 }, /*            topleftsqbracket ⎡ ??? */
+  { 0x08a8, 0x23a3 }, /*            botleftsqbracket ⎣ ??? */
+  { 0x08a9, 0x23a4 }, /*           toprightsqbracket ⎤ ??? */
+  { 0x08aa, 0x23a6 }, /*           botrightsqbracket ⎦ ??? */
+  { 0x08ab, 0x239b }, /*               topleftparens ⎛ ??? */
+  { 0x08ac, 0x239d }, /*               botleftparens ⎝ ??? */
+  { 0x08ad, 0x239e }, /*              toprightparens ⎞ ??? */
+  { 0x08ae, 0x23a0 }, /*              botrightparens ⎠ ??? */
+  { 0x08af, 0x23a8 }, /*        leftmiddlecurlybrace ⎨ ??? */
+  { 0x08b0, 0x23ac }, /*       rightmiddlecurlybrace ⎬ ??? */
+  { 0x08a1, 0x23b7 }, /*                 leftradical ⎷ ??? */
+  { 0x09ef, 0x23ba }, /*              horizlinescan1 ⎺ HORIZONTAL SCAN LINE-1 (Unicode 3.2 draft) */
+  { 0x09f0, 0x23bb }, /*              horizlinescan3 ⎻ HORIZONTAL SCAN LINE-3 (Unicode 3.2 draft) */
+  { 0x09f2, 0x23bc }, /*              horizlinescan7 ⎼ HORIZONTAL SCAN LINE-7 (Unicode 3.2 draft) */
+  { 0x09f3, 0x23bd }, /*              horizlinescan9 ⎽ HORIZONTAL SCAN LINE-9 (Unicode 3.2 draft) */
   { 0x09e2, 0x2409 }, /*                          ht ␉ SYMBOL FOR HORIZONTAL TABULATION */
   { 0x09e5, 0x240a }, /*                          lf ␊ SYMBOL FOR LINE FEED */
   { 0x09e9, 0x240b }, /*                          vt ␋ SYMBOL FOR VERTICAL TABULATION */
   { 0x09e3, 0x240c }, /*                          ff ␌ SYMBOL FOR FORM FEED */
   { 0x09e4, 0x240d }, /*                          cr ␍ SYMBOL FOR CARRIAGE RETURN */
-  { 0x09df, 0x2422 }, /*                       blank ␢ BLANK SYMBOL */
+  { 0x0aac, 0x2423 }, /*                 signifblank ␣ OPEN BOX */
   { 0x09e8, 0x2424 }, /*                          nl ␤ SYMBOL FOR NEWLINE */
   { 0x09f1, 0x2500 }, /*              horizlinescan5 ─ BOX DRAWINGS LIGHT HORIZONTAL */
   { 0x08a6, 0x2502 }, /*               vertconnector │ BOX DRAWINGS LIGHT VERTICAL */
@@ -1515,11 +1534,11 @@ static const struct {
   { 0x09ee, 0x253c }, /*               crossinglines ┼ BOX DRAWINGS LIGHT VERTICAL AND HORIZONTAL */
   { 0x09e1, 0x2592 }, /*                checkerboard ▒ MEDIUM SHADE */
   { 0x0adf, 0x25a0 }, /*                emfilledrect ■ BLACK SQUARE */
-  { 0x0acf, 0x25a1 }, /*             emopenrectangle □ WHITE SQUARE */
   { 0x0ae7, 0x25aa }, /*            enfilledsqbullet ▪ BLACK SMALL SQUARE */
   { 0x0ae1, 0x25ab }, /*          enopensquarebullet ▫ WHITE SMALL SQUARE */
   { 0x0adb, 0x25ac }, /*            filledrectbullet ▬ BLACK RECTANGLE */
   { 0x0ae2, 0x25ad }, /*              openrectbullet ▭ WHITE RECTANGLE */
+  { 0x0acf, 0x25af }, /*             emopenrectangle ▯ WHITE VERTICAL RECTANGLE */
   { 0x0ae8, 0x25b2 }, /*           filledtribulletup ▲ BLACK UP-POINTING TRIANGLE */
   { 0x0ae3, 0x25b3 }, /*             opentribulletup △ WHITE UP-POINTING TRIANGLE */
   { 0x0add, 0x25b6 }, /*        filledrighttribullet ▶ BLACK RIGHT-POINTING TRIANGLE */
@@ -1549,6 +1568,8 @@ static const struct {
   { 0x0af4, 0x2717 }, /*                 ballotcross ✗ BALLOT X */
   { 0x0ad9, 0x271d }, /*                  latincross ✝ LATIN CROSS */
   { 0x0af0, 0x2720 }, /*                maltesecross ✠ MALTESE CROSS */
+  { 0x0abc, 0x27e8 }, /*            leftanglebracket ⟨ MATHEMATICAL LEFT ANGLE BRACKET */
+  { 0x0abe, 0x27e9 }, /*           rightanglebracket ⟩ MATHEMATICAL RIGHT ANGLE BRACKET */
   { 0x04a4, 0x3001 }, /*                  kana_comma 、 IDEOGRAPHIC COMMA */
   { 0x04a1, 0x3002 }, /*               kana_fullstop 。 IDEOGRAPHIC FULL STOP */
   { 0x04a2, 0x300c }, /*         kana_openingbracket 「 LEFT CORNER BRACKET */
@@ -1667,6 +1688,7 @@ static const struct {
   { 0x0ef0, 0x3171 }, /*    Hangul_SunkyeongeumMieum ㅱ HANGUL LETTER KAPYEOUNMIEUM */
   { 0x0ef1, 0x3178 }, /*    Hangul_SunkyeongeumPieub ㅸ HANGUL LETTER KAPYEOUNPIEUP */
   { 0x0ef2, 0x317f }, /*              Hangul_PanSios ㅿ HANGUL LETTER PANSIOS */
+  { 0x0ef3, 0x3181 }, /*    Hangul_KkogjiDalrinIeung ㆁ HANGUL LETTER YESIEUNG */
   { 0x0ef4, 0x3184 }, /*   Hangul_SunkyeongeumPhieuf ㆄ HANGUL LETTER KAPYEOUNPHIEUPH */
   { 0x0ef5, 0x3186 }, /*          Hangul_YeorinHieuh ㆆ HANGUL LETTER YEORINHIEUH */
   { 0x0ef6, 0x318d }, /*                Hangul_AraeA ㆍ HANGUL LETTER ARAEA */
