@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+.master.is\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-12-31 10:15+0000\n"
-"PO-Revision-Date: 2022-01-29 13:47+0000\n"
+"PO-Revision-Date: 2022-01-30 21:13+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.org>\n"
 "Language: is\n"
@@ -35,7 +35,7 @@ msgstr "Get ekki lesið af auðu klippispjaldi"
 
 #: gdk/gdkclipboard.c:317 gdk/gdkclipboard.c:1142 gdk/gdkdrag.c:632
 msgid "No compatible formats to transfer clipboard contents."
-msgstr ""
+msgstr "Engin samhæfð snið fundust til að flytja innihald klippispjalds."
 
 #: gdk/gdkcontentprovider.c:105 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
@@ -62,14 +62,14 @@ msgstr "'Draga-sleppa' úr öðrum forritum er ekki stutt."
 
 #: gdk/gdkdrop.c:163
 msgid "No compatible formats to transfer contents."
-msgstr ""
+msgstr "Engin samhæfð snið fundust til að flytja efni."
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #: gdk/gdkglcontext.c:1374
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
-msgstr ""
+msgstr "Reyni að nota %s, en %s er þegar í notkun"
 
 #: gdk/gdksurface.c:1164
 msgid "Vulkan support disabled via GDK_DEBUG"
@@ -457,7 +457,7 @@ msgstr "Hvíla"
 #: gdk/win32/gdkdrop-win32.c:1138 gdk/win32/gdkdrop-win32.c:1183
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:234
 msgid "No compatible transfer format found"
-msgstr ""
+msgstr "Engin samhæfð flutningssnið fundust"
 
 #: gdk/macos/gdkmacosclipboard.c:643
 #, c-format
@@ -473,7 +473,7 @@ msgstr "Gat ekki búið til GL-umhverfi"
 
 #: gdk/wayland/gdkglcontext-wayland.c:489
 msgid "libEGL not available in this sandbox"
-msgstr ""
+msgstr "libEGL ekki tiltækt í þessum sandkassa"
 
 #: gdk/wayland/gdkglcontext-wayland.c:490
 msgid "libEGL not available"
@@ -481,7 +481,7 @@ msgstr "libEGL ekki tiltækt"
 
 #: gdk/wayland/gdkglcontext-wayland.c:503
 msgid "Sandbox does not provide an OpenGL implementation"
-msgstr ""
+msgstr "Sandkassi gefur ekki kost á neinni OpenGL-uppsetningu"
 
 #: gdk/wayland/gdkglcontext-wayland.c:504
 msgid "No OpenGL implementation available"
@@ -692,7 +692,7 @@ msgstr "Klippispjalsstýring gat ekki geymt valið."
 
 #: gdk/x11/gdkclipboard-x11.c:613
 msgid "Cannot store clipboard. No clipboard manager is active."
-msgstr ""
+msgstr "Get ekki geymt klippispjald. Enginn klippispjaldsstýring er virk."
 
 #: gdk/x11/gdkglcontext-egl.c:180
 msgid "No EGL configuration available"
@@ -1171,7 +1171,7 @@ msgstr "hnitanet"
 #: gtk/gtkaccessible.c:577
 msgctxt "accessibility"
 msgid "grid cell"
-msgstr ""
+msgstr "hnitareitur"
 
 #: gtk/gtkaccessible.c:578
 msgctxt "accessibility"
@@ -1276,7 +1276,7 @@ msgstr "gátreitur valmyndaratriðis"
 #: gtk/gtkaccessible.c:598
 msgctxt "accessibility"
 msgid "menu item radio"
-msgstr ""
+msgstr "einvalsreitur valmyndarfærslu"
 
 #: gtk/gtkaccessible.c:599
 msgctxt "accessibility"
@@ -1311,12 +1311,12 @@ msgstr "framvindustika"
 #: gtk/gtkaccessible.c:605
 msgctxt "accessibility"
 msgid "radio"
-msgstr ""
+msgstr "einvalsreitur"
 
 #: gtk/gtkaccessible.c:606
 msgctxt "accessibility"
 msgid "radio group"
-msgstr ""
+msgstr "hópur einvalsreita"
 
 #: gtk/gtkaccessible.c:607
 msgctxt "accessibility"
@@ -1336,7 +1336,7 @@ msgstr "röð"
 #: gtk/gtkaccessible.c:610
 msgctxt "accessibility"
 msgid "row group"
-msgstr ""
+msgstr "hópur raða"
 
 #: gtk/gtkaccessible.c:611
 msgctxt "accessibility"
@@ -1386,7 +1386,7 @@ msgstr "rennanlegur hnappur"
 #: gtk/gtkaccessible.c:620
 msgctxt "accessibility"
 msgid "spin button"
-msgstr ""
+msgstr "snúningshnappur"
 
 #: gtk/gtkaccessible.c:621
 msgctxt "accessibility"
@@ -2681,7 +2681,7 @@ msgstr "Get ekki slökkt á ferli með PID %d: %s"
 
 #: gtk/gtknomediafile.c:48
 msgid "GTK could not find a media module. Check your installation."
-msgstr ""
+msgstr "GTK fann ekki margmiðlunareiningu. Athugaðu uppsetninguna þína."
 
 #: gtk/gtknotebook.c:1527
 msgid "Tab list"
@@ -4018,7 +4018,7 @@ msgstr "Hamur"
 
 #: gtk/inspector/statistics.c:400
 msgid "GLib must be configured with -Dbuildtype=debug"
-msgstr ""
+msgstr "GLib verður að vera stillt með -Dbuildtype=debug"
 
 #: gtk/inspector/statistics.ui:60
 msgid "Self 1"
@@ -4122,7 +4122,7 @@ msgstr "Hæging"
 
 #: gtk/inspector/visual.ui:384
 msgid "Show fps overlay"
-msgstr ""
+msgstr "Birta fps-yfirlag"
 
 #: gtk/inspector/visual.ui:409
 msgid "Show Graphic Updates"
@@ -4130,7 +4130,7 @@ msgstr "Birta uppfærslur myndefnis"
 
 #: gtk/inspector/visual.ui:434
 msgid "Show Fallback Rendering"
-msgstr ""
+msgstr "Birta varamyndgerð"
 
 #: gtk/inspector/visual.ui:459
 msgid "Show Baselines"
@@ -4158,7 +4158,7 @@ msgstr "Spássía viðmótshluta (widget)"
 
 #: gtk/inspector/visual.ui:609
 msgid "Show Focus"
-msgstr ""
+msgstr "Sýna virkni"
 
 #: gtk/inspector/visual.ui:648
 msgid "Simulate Touchscreen"
@@ -4198,7 +4198,7 @@ msgstr "Víxla hliðarspjaldi af/á"
 
 #: gtk/inspector/window.ui:252
 msgid "Refresh action state"
-msgstr ""
+msgstr "Endurnýja stöðu aðgerðar"
 
 #: gtk/inspector/window.ui:337
 msgid "Previous object"
@@ -4484,7 +4484,7 @@ msgstr "Söguleg form"
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "Lárétt Kana-tilbrigði"
 
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
@@ -4646,7 +4646,7 @@ msgstr ""
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "Sjónræn mörk"
 
 #: gtk/open-type-layout.h:83
 msgctxt "OpenType layout"
@@ -4762,7 +4762,7 @@ msgstr ""
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Stílgerð tilbrigði"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
@@ -7745,7 +7745,7 @@ msgstr "Setja úttak í þessa möppu í stað cwd"
 
 #: tools/encodesymbolic.c:42
 msgid "Generate debug output"
-msgstr ""
+msgstr "Útbúa villuleitarúttak"
 
 #: tools/encodesymbolic.c:94
 #, c-format
