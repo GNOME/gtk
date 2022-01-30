@@ -726,7 +726,8 @@ _gdk_macos_surface_thaw (GdkMacosSurface *self,
 
   gdk_surface_thaw_updates (GDK_SURFACE (self));
 
-  frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self));
+  if (!(frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
+    return;
 
   if (self->pending_frame_counter)
     {
