@@ -41,6 +41,11 @@ typedef struct _GtkPlugAccessible        GtkPlugAccessible;
 typedef struct _GtkPlugAccessibleClass   GtkPlugAccessibleClass;
 typedef struct _GtkPlugAccessiblePrivate GtkPlugAccessiblePrivate;
 
+/**
+ * GtkPlugAccessible:
+ *
+ * Since: 3.24.30
+ */
 struct _GtkPlugAccessible
 {
   GtkWindowAccessible parent;
