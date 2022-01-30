@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk 2.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2021-12-31 10:15+0000\n"
-"PO-Revision-Date: 2022-01-29 12:33+0000\n"
+"PO-Revision-Date: 2022-01-30 19:47+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.org>\n"
 "Language: is\n"
@@ -1997,10 +1997,9 @@ msgid "Model for the items displayed"
 msgstr ""
 
 #: gtk/gtkcolumnview.c:706
-#, fuzzy
 #| msgid "Has separator"
 msgid "Show row separators"
-msgstr "Er með aðskiljara"
+msgstr "Sýna aðgreina milli raða"
 
 #: gtk/gtkcolumnview.c:707 gtk/gtklistbox.c:544 gtk/gtklistview.c:844
 msgid "Show separators between rows"
@@ -2011,9 +2010,8 @@ msgid "Show column separators"
 msgstr ""
 
 #: gtk/gtkcolumnview.c:719
-#, fuzzy
 msgid "Show separators between columns"
-msgstr "Bil milli raða"
+msgstr "Sýna aðgreina milli dálka"
 
 #: gtk/gtkcolumnview.c:730 gtk/gtkcolumnviewcolumn.c:277
 #: gtk/gtksortlistmodel.c:817 gtk/gtktreelistrowsorter.c:544
@@ -2052,10 +2050,9 @@ msgid "Allow selecting items by dragging with the mouse"
 msgstr ""
 
 #: gtk/gtkcolumnviewcolumn.c:241
-#, fuzzy
 #| msgid "Columns"
 msgid "Column view"
-msgstr "Dálkar"
+msgstr "Dálkasýn"
 
 #: gtk/gtkcolumnviewcolumn.c:242
 msgid "Column view this column is a part of"
@@ -2116,15 +2113,13 @@ msgid "column gets share of extra width"
 msgstr ""
 
 #: gtk/gtkcolumnviewcolumn.c:338
-#, fuzzy
 #| msgid "Fixed Width"
 msgid "Fixed width"
 msgstr "Jafnbreitt"
 
 #: gtk/gtkcolumnviewcolumn.c:339
-#, fuzzy
 msgid "Fixed width of this column"
-msgstr "Skráin sem nú er valin"
+msgstr "Föst breidd þessa dálks"
 
 #: gtk/gtkcombobox.c:636
 msgid "ComboBox model"
@@ -2230,17 +2225,15 @@ msgid "The attribute of the target set by the constraint"
 msgstr ""
 
 #: gtk/gtkconstraint.c:222
-#, fuzzy
 #| msgid "Ratio"
 msgid "Relation"
-msgstr "Hlutfall"
+msgstr "Vensl"
 
 #: gtk/gtkconstraint.c:223
 msgid "The relation between the source and target attributes"
 msgstr ""
 
 #: gtk/gtkconstraint.c:241
-#, fuzzy
 #| msgid "Resource"
 msgid "Source"
 msgstr "Uppruni"
@@ -2358,15 +2351,13 @@ msgid "The initial specified value used for this property"
 msgstr ""
 
 #: gtk/gtkdirectorylist.c:260
-#, fuzzy
 #| msgid "Attributes"
 msgid "attributes"
-msgstr "Eigindi"
+msgstr "eigindi"
 
 #: gtk/gtkdirectorylist.c:272
-#, fuzzy
 msgid "error"
-msgstr "Villa"
+msgstr "villa"
 
 #: gtk/gtkdirectorylist.c:273
 msgid "Error encountered while loading files"
@@ -2383,10 +2374,9 @@ msgid "The file to query"
 msgstr ""
 
 #: gtk/gtkdirectorylist.c:320
-#, fuzzy
 #| msgid "Monitor"
 msgid "monitored"
-msgstr "Skjár"
+msgstr "vaktað"
 
 #: gtk/gtkdirectorylist.c:321
 #, fuzzy
@@ -2413,36 +2403,32 @@ msgid "Actions"
 msgstr "Aðgerðir"
 
 #: gtk/gtkdragsource.c:343
-#, fuzzy
 #| msgid "Unsupported icon type"
 msgid "Supported actions"
-msgstr "Óþekkt gerð táknmyndar"
+msgstr "Studdar aðgerðir"
 
 #: gtk/gtkdrawingarea.c:290
-#, fuzzy
 #| msgid "Content type"
 msgid "Content Width"
-msgstr "Tegund efnis"
+msgstr "Breidd efnis"
 
 #: gtk/gtkdrawingarea.c:291
 msgid "Desired width for displayed content"
 msgstr ""
 
 #: gtk/gtkdrawingarea.c:302
-#, fuzzy
 #| msgid "Font weight"
 msgid "Content Height"
-msgstr "Þyngd leturs"
+msgstr "Hæð efnis"
 
 #: gtk/gtkdrawingarea.c:303
 msgid "Desired height for displayed content"
 msgstr ""
 
 #: gtk/gtkdropcontrollermotion.c:224 gtk/gtkeventcontrollermotion.c:229
-#, fuzzy
 #| msgid "Paused Printer"
 msgid "Contains Pointer"
-msgstr "Prentari í bið"
+msgstr "Inniheldur bendil"
 
 #: gtk/gtkdropcontrollermotion.c:225 gtk/gtkeventcontrollermotion.c:230
 msgid "Whether the pointer is in the controllers widget or a descendant"
@@ -2457,10 +2443,9 @@ msgid "The ongoing drop operation"
 msgstr ""
 
 #: gtk/gtkdropcontrollermotion.c:265 gtk/gtkeventcontrollermotion.c:211
-#, fuzzy
 #| msgid "Printer"
 msgid "Is Pointer"
-msgstr "Prentari"
+msgstr "Er bendill"
 
 #: gtk/gtkdropcontrollermotion.c:266 gtk/gtkeventcontrollermotion.c:212
 #, fuzzy
@@ -2525,10 +2510,9 @@ msgid "Current drop"
 msgstr "Núverandi litur"
 
 #: gtk/gtkdroptarget.c:668
-#, fuzzy
 #| msgid "The Sun raster image format"
 msgid "The supported formats"
-msgstr "Sun raster myndsniðið"
+msgstr "Studdu sniðin"
 
 #: gtk/gtkdroptarget.c:696
 msgid "Preload"
@@ -2557,10 +2541,9 @@ msgid "The current position of the insertion cursor in chars"
 msgstr "Núverandi staðsetning á innsetningarbendli í fjölda rittákna"
 
 #: gtk/gtkeditable.c:408
-#, fuzzy
 #| msgid "Enable Animations"
 msgid "Enable Undo"
-msgstr "Virkja hreyfingar"
+msgstr "Virkja afturköllun"
 
 #: gtk/gtkeditable.c:409
 msgid "If undo/redo should be enabled for the editable"
@@ -3018,9 +3001,8 @@ msgid "Propagation limit for events handled by this controller"
 msgstr ""
 
 #: gtk/gtkeventcontroller.c:243
-#, fuzzy
 msgid "Name for this controller"
-msgstr "Skráin sem nú er valin"
+msgstr "Heiti á þessari stýringu"
 
 #: gtk/gtkeventcontrollerfocus.c:203
 msgid "Is Focus"
@@ -3197,9 +3179,8 @@ msgid "Number of items not yet filtered"
 msgstr ""
 
 #: gtk/gtkfixedlayout.c:163
-#, fuzzy
 msgid "transform"
-msgstr "Ummynda"
+msgstr "ummyndun"
 
 #: gtk/gtkfixedlayout.c:164
 msgid "The transform of a child of a fixed layout"
@@ -3313,10 +3294,9 @@ msgid "Whether the preview text entry is shown or not"
 msgstr ""
 
 #: gtk/gtkfontchooser.c:114
-#, fuzzy
 #| msgid "Selection mode"
 msgid "Selection level"
-msgstr "Valhamur"
+msgstr "Valstig"
 
 #: gtk/gtkfontchooser.c:115
 msgid "Whether to select family, face or font"
@@ -3328,10 +3308,9 @@ msgid "Font features"
 msgstr "Eiginleikar leturs"
 
 #: gtk/gtkfontchooser.c:134
-#, fuzzy
 #| msgid "Font features set"
 msgid "Font features as a string"
-msgstr "Letureiginleikasett"
+msgstr "Letureiginleikar sem strengur"
 
 #: gtk/gtkfontchooser.c:147
 msgid "Language for which features have been selected"
@@ -3493,10 +3472,9 @@ msgid "The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"
 msgstr ""
 
 #: gtk/gtkgridlayout.c:168
-#, fuzzy
 #| msgid "Columns"
 msgid "Column"
-msgstr "Dálkur:"
+msgstr "Dálkur"
 
 #: gtk/gtkgridlayout.c:169
 #, fuzzy
@@ -3560,10 +3538,9 @@ msgid "Minimum number of columns per row"
 msgstr "Fjöldi dálka"
 
 #: gtk/gtkheaderbar.c:570
-#, fuzzy
 #| msgid "Widget"
 msgid "Title Widget"
-msgstr "Viðmótshluti (widget)"
+msgstr "Viðmótshluti titils"
 
 #: gtk/gtkheaderbar.c:571
 msgid "Title widget to display"
@@ -3590,16 +3567,14 @@ msgid "The layout for window decorations"
 msgstr ""
 
 #: gtk/gtkicontheme.c:1003 gtk/gtkicontheme.c:1004
-#, fuzzy
 #| msgid "Unsupported icon type"
 msgid "Supported icon names"
-msgstr "Óþekkt gerð táknmyndar"
+msgstr "Studd heiti táknmynda"
 
 #: gtk/gtkicontheme.c:1021 gtk/gtkicontheme.c:1022
-#, fuzzy
 #| msgid "Search mode"
 msgid "Search path"
-msgstr "Leitarhamur"
+msgstr "Leitarslóð"
 
 #: gtk/gtkicontheme.c:1040 gtk/gtkicontheme.c:1041
 #, fuzzy
@@ -3738,10 +3713,9 @@ msgid "Padding around icon view items"
 msgstr ""
 
 #: gtk/gtkimage.c:178 gtk/gtkpicture.c:331
-#, fuzzy
 #| msgid "Editable"
 msgid "Paintable"
-msgstr "Breytanlegt"
+msgstr "Teiknanlegt"
 
 #: gtk/gtkimage.c:179
 msgid "A GdkPaintable to display"
@@ -3957,10 +3931,9 @@ msgid "The orientation of the orientable"
 msgstr ""
 
 #: gtk/gtklistbox.c:543 gtk/gtklistview.c:843
-#, fuzzy
 #| msgid "Has separator"
 msgid "Show separators"
-msgstr "Er með aðskiljara"
+msgstr "Sýna aðgreina"
 
 #: gtk/gtklistbox.c:3559
 msgid "Whether this row can be activated"
@@ -3983,10 +3956,9 @@ msgid "Item"
 msgstr "Atriði"
 
 #: gtk/gtklistitem.c:194
-#, fuzzy
 #| msgid "Display"
 msgid "Displayed item"
-msgstr "Skjár"
+msgstr "Birt atriði"
 
 #: gtk/gtklistitem.c:205 gtk/gtknotebook.c:651 gtk/gtkpaned.c:426
 #: gtk/gtkpopover.c:1820
@@ -3994,10 +3966,9 @@ msgid "Position"
 msgstr "Staðsetning"
 
 #: gtk/gtklistitem.c:206
-#, fuzzy
 #| msgid "The orientation of the tray"
 msgid "Position of the item"
-msgstr "Snúningur bakkans"
+msgstr "Staðsetning atriðisins"
 
 #: gtk/gtklistitem.c:218
 msgid "If the item can be selected by the user"
@@ -4090,7 +4061,7 @@ msgstr "Valhamurinn"
 
 #: gtk/gtkmediacontrols.c:276 gtk/gtkvideo.c:354
 msgid "Media Stream"
-msgstr ""
+msgstr "Margmiðlunarstreymi"
 
 #: gtk/gtkmediacontrols.c:277
 msgid "The media stream managed"
@@ -4101,24 +4072,22 @@ msgid "File being played back"
 msgstr ""
 
 #: gtk/gtkmediafile.c:173
-#, fuzzy
 #| msgid "Input source"
 msgid "Input stream"
-msgstr "Inntaksgjafi"
+msgstr "Inntaksstreymi"
 
 #: gtk/gtkmediafile.c:174
 msgid "Input stream being played back"
-msgstr ""
+msgstr "Inntaksstreymi spilað aftur"
 
 #: gtk/gtkmediastream.c:301
 msgid "Prepared"
 msgstr "Undirbúið"
 
 #: gtk/gtkmediastream.c:302
-#, fuzzy
 #| msgid "Whether this tag affects underlining"
 msgid "Whether the stream has finished initializing"
-msgstr "Hvort þetta merki hafi áhrif á undirstrikun"
+msgstr "Hvort lokið sé að frumstilla streymið"
 
 #: gtk/gtkmediastream.c:314
 #| msgid "Error color"
@@ -4141,23 +4110,20 @@ msgstr "Hvort streymið innihaldi hljóð"
 
 #: gtk/gtkmediastream.c:338
 msgid "Has video"
-msgstr ""
+msgstr "Er með myndmerki"
 
 #: gtk/gtkmediastream.c:339
-#, fuzzy
 #| msgid "Whether the widget is visible"
 msgid "Whether the stream contains video"
-msgstr "Hvort þessi viðmótshluti er sýnilegur"
+msgstr "Hvort streymið innihaldi myndmerki"
 
 #: gtk/gtkmediastream.c:350
-#, fuzzy
 msgid "Playing"
 msgstr "Afspilun"
 
 #: gtk/gtkmediastream.c:351
-#, fuzzy
 msgid "Whether the stream is playing"
-msgstr "Stillir hvort velja má margar skrár"
+msgstr "Hvort streymið sé í spilun"
 
 #: gtk/gtkmediastream.c:362
 #, fuzzy
@@ -4216,20 +4182,18 @@ msgid "Muted"
 msgstr "Þaggað"
 
 #: gtk/gtkmediastream.c:435
-#, fuzzy
 #| msgid "Whether to strike through the text"
 msgid "Whether the audio stream should be muted."
-msgstr "Hvort það eigi að yfirstrika textan"
+msgstr "Hvort þagga eigi niður í hljóðstreymi."
 
 #: gtk/gtkmediastream.c:446
-#, fuzzy
 #| msgid "Columns"
 msgid "Volume"
 msgstr "Hljóðstyrkur"
 
 #: gtk/gtkmediastream.c:447
 msgid "Volume of the audio stream."
-msgstr ""
+msgstr "Styrkur hljóðstreymisins."
 
 #: gtk/gtkmenubutton.c:401 gtk/gtkpopovermenubar.c:636 gtk/gtkpopovermenu.c:611
 msgid "Menu model"
@@ -4452,10 +4416,9 @@ msgid "The child for this page"
 msgstr "Atriðisvísir núverandi síðu"
 
 #: gtk/gtknotebook.c:599
-#, fuzzy
 #| msgid "Tabs"
 msgid "Tab"
-msgstr "Tab"
+msgstr "Flipi"
 
 #: gtk/gtknotebook.c:600
 #, fuzzy
@@ -4482,9 +4445,8 @@ msgid "The text of the tab widget"
 msgstr "Texti á skýringu"
 
 #: gtk/gtknotebook.c:638
-#, fuzzy
 msgid "Menu label"
-msgstr "Skýring valmyndar:"
+msgstr "Skýring valmyndar"
 
 #: gtk/gtknotebook.c:639
 #, fuzzy
@@ -4715,20 +4677,18 @@ msgid "If TRUE, the second child can be made smaller than its requisition"
 msgstr ""
 
 #: gtk/gtkpaned.c:547
-#, fuzzy
 #| msgid "Visible child"
 msgid "First child"
-msgstr "Sýnileg afleiða"
+msgstr "Fyrsta afleiða"
 
 #: gtk/gtkpaned.c:548
 msgid "The first child"
 msgstr ""
 
 #: gtk/gtkpaned.c:559
-#, fuzzy
 #| msgid "Obey child"
 msgid "Second child"
-msgstr "Hlýða afleiðu"
+msgstr "Önnur afleiða"
 
 #: gtk/gtkpaned.c:560
 #, fuzzy
@@ -7481,7 +7441,7 @@ msgstr ""
 
 #: gtk/gtkvideo.c:331
 msgid "The video file played back"
-msgstr ""
+msgstr "Myndskeiðsskrá spiluð aftur"
 
 #: gtk/gtkvideo.c:343
 msgid "If new media streams should be set to loop"
@@ -7489,7 +7449,7 @@ msgstr ""
 
 #: gtk/gtkvideo.c:355
 msgid "The media stream played"
-msgstr ""
+msgstr "Margmiðlunarstreymi spilað"
 
 #: gtk/gtkviewport.c:375
 msgid "Scroll to focus"
@@ -7511,15 +7471,15 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1190
 msgid "Widget name"
-msgstr ""
+msgstr "Heiti viðmótshluta"
 
 #: gtk/gtkwidget.c:1191
 msgid "The name of the widget"
-msgstr ""
+msgstr "Heiti viðmótshluta"
 
 #: gtk/gtkwidget.c:1202
 msgid "Parent widget"
-msgstr ""
+msgstr "Yfirviðmótshluti"
 
 #: gtk/gtkwidget.c:1203
 msgid "The parent widget of this widget."
