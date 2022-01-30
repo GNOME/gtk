@@ -987,7 +987,11 @@ _gdk_macos_display_add_frame_callback (GdkMacosDisplay *self,
 
   if (!queue_contains (&self->awaiting_frames, &surface->frame))
     {
-      g_queue_push_tail_link (&self->awaiting_frames, &surface->frame);
+      /* Processing frames is always head to tail, so push to the
+       * head so that we don't possibly re-enter this right after
+       * adding to the queue.
+       */
+      g_queue_push_head_link (&self->awaiting_frames, &surface->frame);
 
       if (self->awaiting_frames.length == 1)
         gdk_display_link_source_unpause ((GdkDisplayLinkSource *)self->frame_source);
