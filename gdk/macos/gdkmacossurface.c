@@ -197,8 +197,6 @@ gdk_macos_surface_end_frame (GdkMacosSurface *self)
     self->pending_frame_counter = timings->frame_counter;
 
   _gdk_macos_display_add_frame_callback (GDK_MACOS_DISPLAY (display), self);
-
-  gdk_surface_freeze_updates (GDK_SURFACE (self));
 }
 
 static void

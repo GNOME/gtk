@@ -993,6 +993,8 @@ _gdk_macos_display_add_frame_callback (GdkMacosDisplay *self,
        */
       g_queue_push_head_link (&self->awaiting_frames, &surface->frame);
 
+      gdk_surface_freeze_updates (GDK_SURFACE (surface));
+
       if (self->awaiting_frames.length == 1)
         gdk_display_link_source_unpause ((GdkDisplayLinkSource *)self->frame_source);
     }
