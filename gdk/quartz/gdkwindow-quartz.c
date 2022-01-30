@@ -301,8 +301,9 @@ gdk_quartz_cairo_surface_destroy (void *data)
 
   surface_data->window_impl->cairo_surface = NULL;
 
-  gdk_quartz_window_release_context (surface_data->window_impl,
-                                     surface_data->cg_context);
+  if (surface_data->cg_context)
+       gdk_quartz_window_release_context (surface_data->window_impl,
+                                          surface_data->cg_context);
 
   g_free (surface_data);
 }
@@ -3211,6 +3212,7 @@ gdk_quartz_window_release_context (GdkWindowImplQuartz  *window,
       return;
     }
 
+  g_return_if_fail (cg_context);
   GDK_WINDOW_IMPL_QUARTZ_GET_CLASS (window)->release_context (window, cg_context);
 }
 
