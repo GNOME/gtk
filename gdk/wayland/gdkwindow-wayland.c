@@ -2006,6 +2006,13 @@ create_zxdg_toplevel_v6_resources (GdkWindow *window)
                                  window);
 }
 
+/**
+ * gdk_wayland_window_set_application_id:
+ * @window:
+ * @application_id:
+ *
+ * Since: 3.24.22
+ */
 void
 gdk_wayland_window_set_application_id (GdkWindow *window, const char* application_id)
 {
