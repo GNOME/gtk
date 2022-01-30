@@ -1,5 +1,5 @@
 # gtk+ ja.po.
-# Copyright (C) 1998, 2000-2016, 2018-2020 Free Software Foundation, Inc.
+# Copyright (C) 1998, 2000-2016, 2018-2020, 2022 Free Software Foundation, Inc.
 # Yasuhiro SHIRASAKI <yasuhiro@awa.tohoku.ac.jp>, 1998.
 # Yukihiro Nakai <nakai@gnome.gr.jp>, 2000-2001.
 # Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>, 2002, 2009-2010.
@@ -13,14 +13,14 @@
 # Jiro Matsuzawa <jmatsuzawa@gnome.org>, 2011-2016.
 # Shushi KUROSE <md81bird@hitaki.net>, 2013.
 # Hajime Taira <htaira@redhat.com>, 2015.
-# sicklylife <translation@sicklylife.jp>, 2019-2020.
+# sicklylife <translation@sicklylife.jp>, 2019-2020, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-01-29 12:37+0000\n"
-"PO-Revision-Date: 2020-12-20 16:48+0900\n"
+"PO-Revision-Date: 2022-01-30 21:00+0900\n"
 "Last-Translator: sicklylife <translation@sicklylife.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "Language: ja\n"
@@ -483,23 +483,19 @@ msgstr "GL コンテキストを生成できません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:489
 msgid "libEGL not available in this sandbox"
-msgstr ""
+msgstr "このサンドボックス内では libEGL は利用できません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:490
-#, fuzzy
-#| msgid "Not available"
 msgid "libEGL not available"
-msgstr "利用できません"
+msgstr "libEGL は利用できません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:503
 msgid "Sandbox does not provide an OpenGL implementation"
-msgstr ""
+msgstr "サンドボックスは OpenGL 実装を提供していません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:504
-#, fuzzy
-#| msgid "No GL implementation is available"
 msgid "No OpenGL implementation available"
-msgstr "利用可能な GL 実装がありません"
+msgstr "利用可能な OpenGL 実装がありません"
 
 #: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
 msgid "Could not initialize EGL display"
@@ -742,10 +738,8 @@ msgstr ""
 "ん。"
 
 #: gdk/x11/gdkglcontext-egl.c:180
-#, fuzzy
-#| msgid "No GL implementation is available"
 msgid "No EGL configuration available"
-msgstr "利用可能な GL 実装がありません"
+msgstr ""
 
 #: gdk/x11/gdkglcontext-egl.c:188
 msgid "Failed to get EGL configurations"
@@ -756,38 +750,28 @@ msgid "No EGL configuration with required features found"
 msgstr ""
 
 #: gdk/x11/gdkglcontext-egl.c:273
-#, fuzzy
-#| msgid "No network locations found"
 msgid "No perfect EGL configuration found"
-msgstr "ネットワークの場所が見つかりませんでした"
+msgstr ""
 
 #: gdk/x11/gdkglcontext-egl.c:684
-#, fuzzy
-#| msgid "Format %s not supported"
 msgid "EGL is not supported"
-msgstr "フォーマット %s はサポートしていません"
+msgstr "EGL はサポートしていません"
 
 #: gdk/x11/gdkglcontext-egl.c:693
-#, fuzzy
-#| msgid "Unable to create a GL pixel format"
 msgid "Failed to create EGL display"
-msgstr "GL ピクセルフォーマットを生成できません"
+msgstr ""
 
 #: gdk/x11/gdkglcontext-glx.c:772
-#, fuzzy
-#| msgid "No GL implementation is available"
 msgid "No GLX configurations available"
-msgstr "利用可能な GL 実装がありません"
+msgstr ""
 
 #: gdk/x11/gdkglcontext-glx.c:845
 msgid "No GLX configuration with required features found"
 msgstr ""
 
 #: gdk/x11/gdkglcontext-glx.c:919
-#, fuzzy
-#| msgid "Format %s not supported"
 msgid "GLX is not supported"
-msgstr "フォーマット %s はサポートしていません"
+msgstr "GLX はサポートしていません"
 
 #: gdk/x11/gdkselectioninputstream-x11.c:462
 #, c-format
@@ -2768,16 +2752,12 @@ msgid "Page Setup"
 msgstr "ページの設定"
 
 #: gtk/gtkpasswordentry.c:167
-#, fuzzy
-#| msgid "Hide text"
 msgid "Hide Text"
 msgstr "テキストを隠す"
 
 #: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
-#, fuzzy
-#| msgid "_Show Text"
 msgid "Show Text"
-msgstr "テキストを表示(_S)"
+msgstr "テキストを表示"
 
 #: gtk/gtkpasswordentry.c:199
 msgid "Caps Lock is on"
