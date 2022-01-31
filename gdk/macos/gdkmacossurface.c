@@ -190,6 +190,9 @@ gdk_macos_surface_end_frame (GdkMacosSurface *self)
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
+  if (GDK_SURFACE_DESTROYED (self))
+    return;
+
   display = gdk_surface_get_display (GDK_SURFACE (self));
   frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self));
 
@@ -208,10 +211,11 @@ gdk_macos_surface_before_paint (GdkMacosSurface *self,
   g_assert (GDK_IS_MACOS_SURFACE (self));
   g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
 
-  if (surface->update_freeze_count > 0)
+  if (GDK_SURFACE_DESTROYED (self))
     return;
 
-  gdk_macos_surface_begin_frame (self);
+  if (surface->update_freeze_count == 0)
+    gdk_macos_surface_begin_frame (self);
 }
 
 static void
@@ -223,10 +227,11 @@ gdk_macos_surface_after_paint (GdkMacosSurface *self,
   g_assert (GDK_IS_MACOS_SURFACE (self));
   g_assert (GDK_IS_FRAME_CLOCK (frame_clock));
 
-  if (surface->update_freeze_count > 0)
+  if (GDK_SURFACE_DESTROYED (self))
     return;
 
-  gdk_macos_surface_end_frame (self);
+  if (surface->update_freeze_count == 0)
+    gdk_macos_surface_end_frame (self);
 }
 
 static void
