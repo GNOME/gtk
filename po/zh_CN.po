@@ -29,8 +29,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-01-23 04:31+0000\n"
-"PO-Revision-Date: 2022-01-24 14:45-0500\n"
+"POT-Creation-Date: 2022-01-30 15:27+0000\n"
+"PO-Revision-Date: 2022-01-30 22:45-0500\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -38,7 +38,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -2188,7 +2188,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "如果您删除一个项目，它将永久丢失。"
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5645 gtk/gtktext.c:6064 gtk/gtktextview.c:8956
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6073 gtk/gtktextview.c:8956
 msgid "_Delete"
 msgstr "删除(_D)"
 
@@ -2459,19 +2459,19 @@ msgstr "字符变体"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL 上下文创建失败"
 
-#: gtk/gtklabel.c:5642 gtk/gtktext.c:6052 gtk/gtktextview.c:8944
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6061 gtk/gtktextview.c:8944
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: gtk/gtklabel.c:5643 gtk/gtktext.c:6056 gtk/gtktextview.c:8948
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6065 gtk/gtktextview.c:8948
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: gtk/gtklabel.c:5644 gtk/gtktext.c:6060 gtk/gtktextview.c:8952
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6069 gtk/gtktextview.c:8952
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6073 gtk/gtktextview.c:8977
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6082 gtk/gtktextview.c:8977
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -3441,7 +3441,7 @@ msgstr "尝试不同的搜索"
 msgid "Could not show link"
 msgstr "无法显示链接"
 
-#: gtk/gtktext.c:6078 gtk/gtktextview.c:8982
+#: gtk/gtktext.c:6087 gtk/gtktextview.c:8982
 msgid "Insert _Emoji"
 msgstr "插入表情符号(_E)"
 
@@ -3588,7 +3588,7 @@ msgstr "远端"
 
 #: gtk/inspector/clipboard.ui:31
 msgid "Drag and hold here"
-msgstr ""
+msgstr "拖动并在这里保持"
 
 #: gtk/inspector/clipboard.ui:75 gtk/inspector/window.ui:574
 msgid "Clipboard"
@@ -3818,7 +3818,7 @@ msgstr "请求模式"
 
 #: gtk/inspector/misc-info.ui:269
 msgid "Measure map"
-msgstr ""
+msgstr "测量地图"
 
 #: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
@@ -3997,7 +3997,7 @@ msgstr "添加调试节点"
 
 #: gtk/inspector/recorder.ui:42
 msgid "Highlight event sequences"
-msgstr ""
+msgstr "高亮事件序列"
 
 #: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
@@ -6679,18 +6679,14 @@ msgid "Can’t load “%s”: %s\n"
 msgstr "无法加载“%s”：%s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2297
+#: tools/gtk-builder-tool-simplify.c:2303
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "无法解析“%s”：%s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2303
-#, c-format
-msgid "Can't parse “%s”: %s\n"
-msgstr "无法解析“%s”：%s\n"
-
 #: tools/gtk-builder-tool-simplify.c:2309
 #, c-format
-msgid "Can't parse “%s”\n"
+msgid "Can’t parse “%s”\n"
 msgstr "无法解析“%s”\n"
 
 #: tools/gtk-builder-tool-simplify.c:2333
@@ -6875,6 +6871,12 @@ msgid ""
 msgstr ""
 "“%s”中没有主题索引文件。\n"
 "如果您确实想要在此创建图标缓存，请使用 --ignore-theme-index 参数。\n"
+
+#~ msgid "Can't parse “%s”: %s\n"
+#~ msgstr "无法解析“%s”：%s\n"
+
+#~ msgid "Can't parse “%s”\n"
+#~ msgstr "无法解析“%s”\n"
 
 #~ msgid "Sandbox does not provide an OpenGL implementation"
 #~ msgstr "沙盒未提供 OpenGL 实现"
