@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk-properties master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-01-13 12:45+0000\n"
-"PO-Revision-Date: 2022-01-13 15:19-0500\n"
+"POT-Creation-Date: 2022-01-30 15:28+0000\n"
+"PO-Revision-Date: 2022-01-30 22:50-0500\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -30,7 +30,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: gdk/gdkapplaunchcontext.c:130 gdk/gdkdrawcontext.c:172 gdk/gdkseat.c:188
 #: gdk/gdkseat.c:189 gdk/gdksurface.c:522 gdk/gdksurface.c:523
@@ -219,27 +219,27 @@ msgstr "表面"
 msgid "The GDK surface bound to the context"
 msgstr "绑定到上下文的 GDK 表面"
 
-#: gdk/gdkglcontext.c:676
+#: gdk/gdkglcontext.c:684
 msgid "Shared context"
 msgstr "共享上下文"
 
-#: gdk/gdkglcontext.c:677
+#: gdk/gdkglcontext.c:685
 msgid "The GL context this context shares data with"
 msgstr "与这个上下文分享数据的 GL 上下文"
 
-#: gdk/gdkglcontext.c:693
+#: gdk/gdkglcontext.c:701
 msgid "Allowed APIs"
 msgstr "允许的 API"
 
-#: gdk/gdkglcontext.c:694
+#: gdk/gdkglcontext.c:702
 msgid "The list of allowed APIs for this context"
 msgstr "该上下文所允许的 API 列表"
 
-#: gdk/gdkglcontext.c:710
+#: gdk/gdkglcontext.c:718
 msgid "API"
 msgstr "API"
 
-#: gdk/gdkglcontext.c:711
+#: gdk/gdkglcontext.c:719
 msgid "The API currently in use"
 msgstr "当前正在使用的 API"
 
@@ -2959,7 +2959,7 @@ msgstr "包含焦点"
 msgid "Whether the focus is in a descendant of the controllers widget"
 msgstr "焦点是否在控制器部件的后代中"
 
-#: gtk/gtkeventcontrollerscroll.c:372 gtk/gtkeventcontrollerscroll.c:373
+#: gtk/gtkeventcontrollerscroll.c:469 gtk/gtkeventcontrollerscroll.c:470
 msgid "Flags"
 msgstr "标志"
 
@@ -3263,11 +3263,11 @@ msgstr "标签的水平对齐方式"
 msgid "A widget to display in place of the usual frame label"
 msgstr "代替常规框架标签来显示的部件"
 
-#: gtk/gtkgesture.c:768
+#: gtk/gtkgesture.c:812
 msgid "Number of points"
 msgstr "点数"
 
-#: gtk/gtkgesture.c:769
+#: gtk/gtkgesture.c:813
 msgid "Number of points needed to trigger the gesture"
 msgstr "触发该手势所需的触摸点数量"
 
@@ -3287,23 +3287,23 @@ msgstr "方向"
 msgid "Allowed orientations"
 msgstr "允许的方向"
 
-#: gtk/gtkgesturesingle.c:265
+#: gtk/gtkgesturesingle.c:269
 msgid "Handle only touch events"
 msgstr "只处理触摸事件"
 
-#: gtk/gtkgesturesingle.c:266
+#: gtk/gtkgesturesingle.c:270
 msgid "Whether the gesture handles only touch events"
 msgstr "手势是否只处理触摸事件"
 
-#: gtk/gtkgesturesingle.c:279 gtk/gtkgesturesingle.c:280
+#: gtk/gtkgesturesingle.c:283 gtk/gtkgesturesingle.c:284
 msgid "Whether the gesture is exclusive"
 msgstr "手势是否是独占的"
 
-#: gtk/gtkgesturesingle.c:291
+#: gtk/gtkgesturesingle.c:295
 msgid "Button number"
 msgstr "按键编号"
 
-#: gtk/gtkgesturesingle.c:292
+#: gtk/gtkgesturesingle.c:296
 msgid "Button number to listen to"
 msgstr "用以监听的按键编号"
 
@@ -3719,7 +3719,6 @@ msgid "Natural wrap mode"
 msgstr "自然换行模式"
 
 #: gtk/gtklabel.c:2425
-#, fuzzy
 msgid "If wrap is set, controls linewrapping for natural size requests"
 msgstr "如果设定了换行，则此处设定自然大小请求的换行"
 
