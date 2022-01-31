@@ -128,6 +128,7 @@ struct BroadwaySurface {
   gboolean visible;
   gint32 transient_for;
   guint32 texture;
+  gboolean modal_hint;
   BroadwayNode *nodes;
   GHashTable *node_lookup;
 };
@@ -425,6 +426,14 @@ update_event_state (BroadwayServer *server,
       {
         surface->x = message->configure_notify.x;
         surface->y = message->configure_notify.y;
+
+	if (server->focused_surface_id != message->configure_notify.id &&
+	    server->pointer_grab_surface_id == -1 && surface->modal_hint)
+	{
+	  broadway_server_surface_raise (server, message->configure_notify.id);
+	  broadway_server_focus_surface (server, message->configure_notify.id);
+	  broadway_server_flush (server);
+	}
       }
     break;
   case BROADWAY_EVENT_ROUNDTRIP_NOTIFY:
@@ -1572,6 +1581,7 @@ broadway_server_destroy_surface (BroadwayServer *server,
                                  int id)
 {
   BroadwaySurface *surface;
+  gint32 transient_for = -1;
 
   if (server->mouse_in_surface_id == id)
     {
@@ -1589,10 +1599,23 @@ broadway_server_destroy_surface (BroadwayServer *server,
   surface = broadway_server_lookup_surface (server, id);
   if (surface != NULL)
     {
+      if (server->focused_surface_id == id)
+	transient_for = surface->transient_for;
+
       server->surfaces = g_list_remove (server->surfaces, surface);
       g_hash_table_remove (server->surface_id_hash,
                            GINT_TO_POINTER (id));
       broadway_surface_free (server, surface);
+    }
+
+  if (transient_for != -1)
+    {
+      surface = broadway_server_lookup_surface (server, transient_for);
+      if (surface != NULL)
+        {
+	  broadway_server_focus_surface (server, transient_for);
+	  broadway_server_flush (server);
+	}
     }
 }
 
@@ -1712,6 +1735,19 @@ broadway_server_surface_set_transient_for (BroadwayServer *server,
       broadway_output_set_transient_for (server->output, surface->id, surface->transient_for);
       broadway_server_flush (server);
     }
+}
+
+void
+broadway_server_surface_set_modal_hint (BroadwayServer *server,
+                                        int id, gboolean modal_hint)
+{
+  BroadwaySurface *surface;
+
+  surface = broadway_server_lookup_surface (server, id);
+  if (surface == NULL)
+    return;
+
+  surface->modal_hint = modal_hint;
 }
 
 gboolean

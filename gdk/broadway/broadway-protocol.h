@@ -213,6 +213,7 @@ typedef enum {
   BROADWAY_REQUEST_RELEASE_TEXTURE,
   BROADWAY_REQUEST_SET_NODES,
   BROADWAY_REQUEST_ROUNDTRIP,
+  BROADWAY_REQUEST_SET_MODAL_HINT,
 } BroadwayRequestType;
 
 typedef struct {
@@ -293,6 +294,12 @@ typedef struct {
   guint32 show_keyboard;
 } BroadwayRequestSetShowKeyboard;
 
+typedef struct {
+  BroadwayRequestBase base;
+  guint32 id;
+  gboolean modal_hint;
+} BroadwayRequestSetModalHint;
+
 typedef union {
   BroadwayRequestBase base;
   BroadwayRequestNewSurface new_surface;
@@ -312,6 +319,7 @@ typedef union {
   BroadwayRequestUploadTexture upload_texture;
   BroadwayRequestReleaseTexture release_texture;
   BroadwayRequestSetNodes set_nodes;
+  BroadwayRequestSetModalHint set_modal_hint;
 } BroadwayRequest;
 
 typedef enum {

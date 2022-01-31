@@ -710,6 +710,21 @@ gdk_broadway_surface_set_transient_for (GdkSurface *surface,
 }
 
 static void
+gdk_broadway_surface_set_modal_hint (GdkSurface *surface,
+                                     gboolean   modal)
+ {
+  GdkBroadwayDisplay *display;
+  GdkBroadwaySurface *impl;
+
+  impl = GDK_BROADWAY_SURFACE (surface);
+
+  impl->modal_hint = modal;
+
+  display = GDK_BROADWAY_DISPLAY (gdk_surface_get_display (surface));
+  _gdk_broadway_server_surface_set_modal_hint (display->server, impl->id, impl->modal_hint);
+ }
+
+static void
 gdk_broadway_surface_get_geometry (GdkSurface *surface,
                                    int        *x,
                                    int        *y,
@@ -1433,6 +1448,8 @@ gdk_broadway_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
+      gdk_broadway_surface_set_modal_hint (surface, g_value_get_boolean (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
@@ -1477,6 +1494,10 @@ gdk_broadway_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_TRANSIENT_FOR:
       g_value_set_object (value, surface->transient_for);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_MODAL:
+      g_value_set_boolean (value, surface->modal_hint);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:

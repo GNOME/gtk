@@ -384,6 +384,11 @@ client_handle_request (BroadwayClient *client,
     case BROADWAY_REQUEST_SET_SHOW_KEYBOARD:
       broadway_server_set_show_keyboard (server, request->set_show_keyboard.show_keyboard);
       break;
+    case BROADWAY_REQUEST_SET_MODAL_HINT:
+      broadway_server_surface_set_modal_hint (server,
+                                              request->set_modal_hint.id,
+                                              request->set_modal_hint.modal_hint);
+      break;
     default:
       g_warning ("Unknown request of type %d", request->base.type);
     }

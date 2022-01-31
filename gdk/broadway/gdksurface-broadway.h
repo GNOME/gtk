@@ -54,6 +54,7 @@ struct _GdkBroadwaySurface
 
   gboolean dirty;
   gboolean last_synced;
+  gboolean modal_hint;
 
   GdkGeometry geometry_hints;
   GdkSurfaceHints geometry_hints_mask;

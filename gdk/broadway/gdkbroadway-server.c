@@ -561,6 +561,18 @@ _gdk_broadway_server_surface_set_transient_for (GdkBroadwayServer *server,
                                     BROADWAY_REQUEST_SET_TRANSIENT_FOR);
 }
 
+void
+_gdk_broadway_server_surface_set_modal_hint (GdkBroadwayServer *server,
+                                             int id, gboolean modal_hint)
+{
+  BroadwayRequestSetModalHint msg;
+
+  msg.id = id;
+  msg.modal_hint = modal_hint;
+  gdk_broadway_server_send_message (server, msg,
+				    BROADWAY_REQUEST_SET_MODAL_HINT);
+}
+
 static int
 open_shared_memory (void)
 {

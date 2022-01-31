@@ -82,6 +82,26 @@ gdk_event_source_check (GSource *source)
   return retval;
 }
 
+static void
+handle_focus_change (GdkEvent *event)
+{
+  GdkSurface *surface = gdk_event_get_surface(event);
+  GdkEvent *focus_event;
+  gboolean focus_in = (gdk_event_get_event_type (event) == GDK_ENTER_NOTIFY);
+
+  if (gdk_crossing_event_get_detail (event) == GDK_NOTIFY_INFERIOR)
+    return;
+
+  if (!gdk_crossing_event_get_focus (event) )
+    return;
+
+  focus_event = gdk_focus_event_new (gdk_event_get_surface (event),
+				     gdk_event_get_device (event),
+				     focus_in);
+  gdk_display_put_event (gdk_event_get_display (event), focus_event);
+  gdk_event_unref (focus_event);
+}
+
 void
 _gdk_broadway_events_got_input (GdkDisplay *display,
                                 BroadwayInputMsg *message)
@@ -110,6 +130,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
 
         node = _gdk_event_queue_append (display, event);
         _gdk_windowing_got_event (display, node, event, message->base.serial);
+
+	handle_focus_change (event);
       }
     break;
   case BROADWAY_EVENT_LEAVE:
@@ -125,6 +147,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                         message->pointer.win_y,
                                         message->crossing.mode,
                                         GDK_NOTIFY_ANCESTOR);
+
+	handle_focus_change (event);
 
         node = _gdk_event_queue_append (display, event);
         _gdk_windowing_got_event (display, node, event, message->base.serial);
