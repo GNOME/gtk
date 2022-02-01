@@ -175,8 +175,8 @@ render_glyph (cairo_surface_t           *surface,
 
   glyph_info.glyph = key->glyph;
   glyph_info.geometry.width = value->ink_rect.width * 1024;
-  glyph_info.geometry.x_offset = 0.25 * key->xshift - value->ink_rect.x * 1024;
-  glyph_info.geometry.y_offset = 0.25 * key->yshift - value->ink_rect.y * 1024;
+  glyph_info.geometry.x_offset = (0.25 * key->xshift - value->ink_rect.x) * 1024;
+  glyph_info.geometry.y_offset = (0.25 * key->yshift - value->ink_rect.y) * 1024;
 
   glyph_string.num_glyphs = 1;
   glyph_string.glyphs = &glyph_info;
