@@ -433,8 +433,10 @@ gtk_list_box_dispose (GObject *object)
 {
   GtkWidget *child;
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (object))))
+  while ((child = GTK_WIDGET (gtk_list_box_get_row_at_index (GTK_LIST_BOX (object), 0))))
     gtk_list_box_remove (GTK_LIST_BOX (object), child);
+
+  gtk_list_box_set_placeholder (GTK_LIST_BOX (object), NULL);
 
   G_OBJECT_CLASS (gtk_list_box_parent_class)->dispose (object);
 }
