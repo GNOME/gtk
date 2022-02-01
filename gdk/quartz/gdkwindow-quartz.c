@@ -160,27 +160,27 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
    * and for widgets that send fake expose events like the arrow
    * buttons in spinbuttons or the position marker in rulers.
    */
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
   if (window_impl->in_paint_rect_count == 0)
     {
       /* The NSView focus-locking API set was deprecated in MacOS 10.14 and
-       * has a significant cost in MacOS 11 - every lock/unlock seems to 
+       * has a significant cost in MacOS 11 - every lock/unlock seems to
        * trigger a drawRect: call for the entire window.  To return the
        * lost performance, do not use the locking API in MacOS 11+
        */
-      if(gdk_quartz_osx_version() < GDK_OSX_BIGSUR)
+      if(gdk_quartz_osx_version() < GDK_OSX_MOJAVE)
         {
           if (![window_impl->view lockFocusIfCanDraw])
             return NULL;
         }
     }
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 101000
-    cg_context = [[NSGraphicsContext currentContext] graphicsPort];
-#else
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
   if (gdk_quartz_osx_version () < GDK_OSX_YOSEMITE)
     cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
-    cg_context = [[NSGraphicsContext currentContext] CGContext];
 #endif
+    cg_context = [[NSGraphicsContext currentContext] CGContext];
 
   if (!cg_context)
     return NULL;
