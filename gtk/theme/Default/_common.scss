@@ -70,7 +70,7 @@ textview {
       background-color: $backdrop_selected_bg_color;
 
       &:focus-within {
-         background-color: $selected_bg_color;
+         background-color: $selected_text_bg_color;
       }
     }
   }
@@ -161,7 +161,7 @@ label {
     background-color: $backdrop_selected_bg_color;
     color: $selected_fg_color;
     &:focus-within {
-       background-color: $selected_bg_color;
+       background-color: $selected_text_bg_color;
     }
   }
 
@@ -331,8 +331,8 @@ entry {
       background-color: $backdrop_selected_bg_color;
       color: transparent;
       &:focus-within {
-        background-color: $selected_bg_color;
-        color: $selected_fg_color;
+        background-color: $selected_text_bg_color;
+        color: $fg_color;
       }
     }
 
@@ -1162,7 +1162,7 @@ spinbutton {
         background-color: $backdrop_selected_bg_color;
         color: transparent;
         &:focus-within {
-          background-color: $selected_bg_color;
+          background-color: $selected_text_bg_color;
           color: $selected_fg_color;
         }
       }
@@ -3390,8 +3390,8 @@ columnview row:not(:selected) cell editablelabel.editing text selection {
   background-color: $backdrop_selected_bg_color;
   color: transparent;
   &:focus-within {
-    background-color: $selected_bg_color;
-    color: $selected_fg_color;
+    background-color: $selected_text_bg_color;
+    color: $fg_color;
   }
 }
 
