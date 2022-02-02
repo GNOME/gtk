@@ -854,10 +854,10 @@ parse_declaration (GtkCssScanner *scanner,
             {
               GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
               GtkCssValue *sub = _gtk_css_array_value_get_nth (value, i);
-              
+
               gtk_css_ruleset_add (ruleset, child, _gtk_css_value_ref (sub), section);
             }
-          
+
             _gtk_css_value_unref (value);
         }
       else if (GTK_IS_CSS_STYLE_PROPERTY (property))
@@ -1045,7 +1045,7 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
             }
           else
             {
-              gtk_css_parser_error (parent->parser, 
+              gtk_css_parser_error (parent->parser,
                                     GTK_CSS_PARSER_ERROR_IMPORT,
                                     gtk_css_parser_get_block_location (parent->parser),
                                     gtk_css_parser_get_end_location (parent->parser),
@@ -1146,7 +1146,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
 /**
  * gtk_css_provider_load_from_path:
  * @css_provider: a `GtkCssProvider`
- * @path: the path of a filename to load, in the GLib filename encoding
+ * @path: (type filename): the path of a filename to load, in the GLib filename encoding
  *
  * Loads the data contained in @path into @css_provider.
  *
@@ -1162,7 +1162,7 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
   g_return_if_fail (path != NULL);
 
   file = g_file_new_for_path (path);
-  
+
   gtk_css_provider_load_from_file (css_provider, file);
 
   g_object_unref (file);
