@@ -22,6 +22,7 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkdeviceprivate.h>
 #include <gdk/gdkdisplayprivate.h>
+#include <gdk/gdkframeclockprivate.h>
 
 #include "gdkwindowimpl.h"
 #include "gdkwindow-quartz.h"
@@ -801,6 +802,29 @@ get_nsscreen_for_point (gint x, gint y)
   return screen;
 }
 
+static void
+on_frame_clock_before_paint (GdkFrameClock *frame_clock,
+                             GdkWindow     *window)
+{
+}
+
+static void
+on_frame_clock_after_paint (GdkFrameClock *frame_clock,
+                            GdkWindow     *window)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkFrameTimings *timings;
+
+  timings = gdk_frame_clock_get_current_timings (frame_clock);
+  if (timings != NULL)
+    impl->pending_frame_counter = timings->frame_counter;
+
+  _gdk_quartz_display_add_frame_callback (display, window);
+
+  _gdk_frame_clock_freeze (frame_clock);
+}
+
 void
 _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                                         GdkWindow     *window,
@@ -813,6 +837,7 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
   GdkWindowImplQuartz *impl;
   GdkWindowImplQuartz *parent_impl;
   GdkWindowTypeHint    type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+  GdkFrameClock *frame_clock;
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -957,6 +982,16 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
     }
 
   GDK_QUARTZ_RELEASE_POOL;
+
+  if (attributes_mask & GDK_WA_TYPE_HINT)
+    gdk_window_set_type_hint (window, attributes->type_hint);
+
+  frame_clock = gdk_window_get_frame_clock (window);
+
+  g_signal_connect (frame_clock, "before-paint",
+                    G_CALLBACK (on_frame_clock_before_paint), window);
+  g_signal_connect (frame_clock, "after-paint",
+                    G_CALLBACK (on_frame_clock_after_paint), window);
 }
 
 void
@@ -1012,8 +1047,13 @@ gdk_quartz_window_destroy (GdkWindow *window,
 {
   GdkWindowImplQuartz *impl;
   GdkWindow *parent;
+  GdkDisplay *display;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  display = gdk_window_get_display (window);
+
+  _gdk_quartz_display_remove_frame_callback (display, window);
 
   main_window_stack = g_slist_remove (main_window_stack, window);
 

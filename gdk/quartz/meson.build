@@ -8,6 +8,7 @@ gdk_quartz_sources = files(
   'gdkdevice-core-quartz.c',
   'gdkdevicemanager-core-quartz.c',
   'gdkdisplay-quartz.c',
+  'gdkdisplaylinksource.c',
   'gdkdisplaymanager-quartz.c',
   'gdkdnd-quartz.c',
   'gdkevents-quartz.c',
