@@ -142,10 +142,23 @@ _gdk_macos_cairo_context_surface_resized (GdkDrawContext *draw_context)
 }
 
 static void
+_gdk_macos_cairo_context_dispose (GObject *object)
+{
+  GdkMacosCairoContext *self = (GdkMacosCairoContext *)object;
+
+  g_clear_pointer (&self->window_surface, cairo_surface_destroy);
+
+  G_OBJECT_CLASS (_gdk_macos_cairo_context_parent_class)->dispose (object);
+}
+
+static void
 _gdk_macos_cairo_context_class_init (GdkMacosCairoContextClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
+
+  object_class->dispose = _gdk_macos_cairo_context_dispose;
 
   draw_context_class->begin_frame = _gdk_macos_cairo_context_begin_frame;
   draw_context_class->end_frame = _gdk_macos_cairo_context_end_frame;
