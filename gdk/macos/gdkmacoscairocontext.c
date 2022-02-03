@@ -34,6 +34,7 @@ struct _GdkMacosCairoContext
   GdkCairoContext  parent_instance;
 
   cairo_surface_t *window_surface;
+  cairo_t         *cr;
 };
 
 struct _GdkMacosCairoContextClass
@@ -77,6 +78,9 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
+  if (self->cr != NULL)
+    return cairo_reference (self->cr);
+
   return cairo_create (self->window_surface);
 }
 
@@ -95,20 +99,18 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
   nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
 
   if (self->window_surface == NULL)
+    self->window_surface = create_cairo_surface_for_surface (surface);
+
+  self->cr = cairo_create (self->window_surface);
+
+  if (![nswindow isOpaque])
     {
-      self->window_surface = create_cairo_surface_for_surface (surface);
-    }
-  else
-    {
-      if (![nswindow isOpaque])
-        {
-          cairo_t *cr = cairo_create (self->window_surface);
-          gdk_cairo_region (cr, region);
-          cairo_set_source_rgba (cr, 0, 0, 0, 0);
-          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-          cairo_fill (cr);
-          cairo_destroy (cr);
-        }
+      cairo_save (self->cr);
+      gdk_cairo_region (self->cr, region);
+      cairo_set_source_rgba (self->cr, 0, 0, 0, 0);
+      cairo_set_operator (self->cr, CAIRO_OPERATOR_SOURCE);
+      cairo_fill (self->cr);
+      cairo_restore (self->cr);
     }
 }
 
@@ -125,6 +127,8 @@ _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
 
   surface = gdk_draw_context_get_surface (draw_context);
   nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
+
+  g_clear_pointer (&self->cr, cairo_destroy);
 
   if (GDK_IS_MACOS_CAIRO_VIEW (nsview))
     [(GdkMacosCairoView *)nsview setCairoSurface:self->window_surface
