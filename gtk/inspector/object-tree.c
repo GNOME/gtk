@@ -826,6 +826,9 @@ static gboolean
 match_object (GObject    *object,
               const char *text)
 {
+  char *address;
+  gboolean ret = FALSE;
+
   if (match_string (G_OBJECT_TYPE_NAME (object), text) ||
       match_string (gtk_inspector_get_object_name (object), text))
     return TRUE;
@@ -838,8 +841,12 @@ match_object (GObject    *object,
     return match_string (gtk_window_get_title (GTK_WINDOW (object)), text);
   else if (GTK_IS_TREE_VIEW_COLUMN (object))
     return match_string (gtk_tree_view_column_get_title (GTK_TREE_VIEW_COLUMN (object)), text);
-  else
-    return FALSE;
+
+  address = g_strdup_printf ("%p", object);
+  ret = match_string (address, text);
+  g_free (address);
+
+  return ret;
 }
 
 static GObject *
