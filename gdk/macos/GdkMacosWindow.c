@@ -214,7 +214,14 @@ typedef NSString *CALayerContentsGravity;
    * as we are leaving maximized state.
    */
   if ((style_mask & NSWindowStyleMaskTitled) == 0 && [self isOpaque])
-    [self setOpaque:NO];
+    {
+      GdkSurface *surface = GDK_SURFACE ([self gdkSurface]);
+
+      [self setOpaque:NO];
+
+      /* Force updating of various styling, regions, etc */
+      _gdk_surface_update_size (surface);
+    }
 }
 
 -(void)windowDidMove:(NSNotification *)aNotification
