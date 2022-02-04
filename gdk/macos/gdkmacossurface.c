@@ -994,6 +994,9 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
       g_object_unref (monitor);
     }
+
+  _gdk_surface_update_size (GDK_SURFACE (self));
+  gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
 }
 
 GdkMonitor *
