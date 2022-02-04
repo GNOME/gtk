@@ -86,9 +86,25 @@ create_cairo_surface_for_surface (GdkSurface *surface)
   cairo_surface_set_user_data (cairo_surface, &buffer_key, data, g_free);
   cairo_surface_set_device_scale (cairo_surface, scale, scale);
 
-
-
   return cairo_surface;
+}
+
+static cairo_t *
+do_cairo_create (GdkMacosCairoContext *self)
+{
+  GdkSurface *surface;
+  cairo_t *cr;
+
+  g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
+
+  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
+  cr = cairo_create (self->window_surface);
+
+  /* Draw upside down as quartz prefers */
+  cairo_translate (cr, 0, surface->height);
+  cairo_scale (cr, 1.0, -1.0);
+
+  return cr;
 }
 
 static cairo_t *
@@ -101,7 +117,7 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
   if (self->cr != NULL)
     return cairo_reference (self->cr);
 
-  return cairo_create (self->window_surface);
+  return do_cairo_create (self);
 }
 
 static void
@@ -121,7 +137,7 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
   if (self->window_surface == NULL)
     self->window_surface = create_cairo_surface_for_surface (surface);
 
-  self->cr = cairo_create (self->window_surface);
+  self->cr = do_cairo_create (self);
 
   if (![nswindow isOpaque])
     {

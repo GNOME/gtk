@@ -25,13 +25,12 @@
 @interface GdkMacosCairoSubview : NSView
 {
   BOOL             _isOpaque;
-  cairo_surface_t *cairoSurface;
   cairo_region_t  *clip;
+  CGImageRef       image;
 }
 
 -(void)setOpaque:(BOOL)opaque;
--(void)setCairoSurface:(cairo_surface_t *)cairoSurface
-            withDamage:(cairo_region_t *)region;
+-(void)setImage:(CGImageRef)theImage withDamage:(cairo_region_t *)region;
 -(void)setClip:(cairo_region_t*)region;
 
 @end
