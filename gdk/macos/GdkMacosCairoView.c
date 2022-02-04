@@ -28,6 +28,7 @@
 #import "GdkMacosCairoView.h"
 #import "GdkMacosCairoSubview.h"
 
+#include "gdkmacosmonitor-private.h"
 #include "gdkmacossurface-private.h"
 
 @implementation GdkMacosCairoView
@@ -78,6 +79,7 @@ release_surface_provider (void       *info,
       CGColorSpaceRef rgb;
       cairo_format_t format;
       CGBitmapInfo bitmap = kCGBitmapByteOrder32Host;
+      GdkMonitor *monitor;
       guint8 *framebuffer;
       size_t width;
       size_t height;
@@ -92,7 +94,8 @@ release_surface_provider (void       *info,
       rowstride = cairo_image_surface_get_stride (cairoSurface);
       width = cairo_image_surface_get_width (cairoSurface);
       height = cairo_image_surface_get_height (cairoSurface);
-      rgb = CGColorSpaceCreateDeviceRGB ();
+      monitor = _gdk_macos_surface_get_best_monitor ([self gdkSurface]);
+      rgb = _gdk_macos_monitor_copy_colorspace (GDK_MACOS_MONITOR (monitor));
 
       /* Assert that our image surface was created correctly with
        * 16-byte aligned pointers and strides. This is needed to
