@@ -47,26 +47,46 @@ G_DEFINE_TYPE (GdkMacosCairoContext, _gdk_macos_cairo_context, GDK_TYPE_CAIRO_CO
 static cairo_surface_t *
 create_cairo_surface_for_surface (GdkSurface *surface)
 {
+  static const cairo_user_data_key_t buffer_key;
   cairo_surface_t *cairo_surface;
+  guint8 *data;
+  cairo_format_t format;
+  size_t size;
+  size_t rowstride;
+  size_t width;
+  size_t height;
   int scale;
-  int width;
-  int height;
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+  /* We use a cairo image surface here instead of a quartz surface because
+   * we get strange artifacts with the quartz surface such as empty
+   * cross-fades when hovering buttons. For performance, we want to be using
+   * GL rendering so there isn't much point here as correctness is better.
+   *
+   * Additionally, so we can take avantage of faster paths in Core
+   * Graphics, we want our data pointer to be 16-byte aligned and our rows
+   * to be 16-byte aligned or we risk errors below us. Normally, cairo
+   * image surface does not guarantee the later, which means we could end
+   * up doing some costly copies along the way to compositing.
+   */
+
+  if ([GDK_MACOS_SURFACE (surface)->window isOpaque])
+    format = CAIRO_FORMAT_RGB24;
+  else
+    format = CAIRO_FORMAT_ARGB32;
 
   scale = gdk_surface_get_scale_factor (surface);
   width = scale * gdk_surface_get_width (surface);
   height = scale * gdk_surface_get_height (surface);
+  rowstride = (cairo_format_stride_for_width (format, width) + 0xF) & ~0xF;
+  size = rowstride * height;
+  data = g_malloc0 (size);
+  cairo_surface = cairo_image_surface_create_for_data (data, format, width, height, rowstride);
+  cairo_surface_set_user_data (cairo_surface, &buffer_key, data, g_free);
+  cairo_surface_set_device_scale (cairo_surface, scale, scale);
 
-  /* We use a cairo image surface here instead of a quartz surface because we
-   * get strange artifacts with the quartz surface such as empty cross-fades
-   * when hovering buttons. For performance, we want to be using GL rendering
-   * so there isn't much point here as correctness is better.
-   */
-  cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
 
-  if (cairo_surface != NULL)
-    cairo_surface_set_device_scale (cairo_surface, scale, scale);
 
   return cairo_surface;
 }
