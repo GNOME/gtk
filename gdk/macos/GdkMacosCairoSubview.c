@@ -32,7 +32,8 @@
 
 -(void)dealloc
 {
-  g_clear_pointer (&self->clip, cairo_region_destroy);
+  g_clear_pointer (&self->clip, g_array_unref);
+  g_clear_pointer (&self->damage, g_array_unref);
   g_clear_pointer (&self->image, CGImageRelease);
   [super dealloc];
 }
@@ -75,21 +76,18 @@
    * to the self->clip region. This is usually just on the views
    * for the shadow areas.
    */
+  CGContextAddRect (cgContext, [self bounds]);
   if (self->clip != NULL)
     {
-      guint n_rects = cairo_region_num_rectangles (self->clip);
-
-      for (guint i = 0; i < n_rects; i++)
-        {
-          cairo_rectangle_int_t area;
-
-          cairo_region_get_rectangle (self->clip, i, &area);
-          CGContextAddRect (cgContext,
-                            CGRectMake (area.x, area.y, area.width, area.height));
-        }
-
-      CGContextClip (cgContext);
+      for (guint i = 0; i < self->clip->len; i++)
+        CGContextAddRect (cgContext, g_array_index (self->clip, CGRect, i));
     }
+  if (self->damage != NULL)
+    {
+      for (guint i = 0; i < self->damage->len; i++)
+        CGContextAddRect (cgContext, g_array_index (self->damage, CGRect, i));
+    }
+  CGContextClip (cgContext);
 
   /* Scale/Translate so that the CGImageRef draws in proper format/placement */
   scale = CGSizeMake (1.0, 1.0);
@@ -115,28 +113,7 @@
         image = CGImageRetain (theImage);
     }
 
-  if (region != NULL)
-    {
-      NSView *root_view = [[self window] contentView];
-      NSRect abs_bounds = [self convertRect:[self bounds] toView:root_view];
-      guint n_rects = cairo_region_num_rectangles (region);
-
-      for (guint i = 0; i < n_rects; i++)
-        {
-          cairo_rectangle_int_t rect;
-          NSRect nsrect;
-
-          cairo_region_get_rectangle (region, i, &rect);
-          nsrect = NSMakeRect (rect.x, rect.y, rect.width, rect.height);
-
-          if (NSIntersectsRect (abs_bounds, nsrect))
-            {
-              nsrect.origin.x -= abs_bounds.origin.x;
-              nsrect.origin.y -= abs_bounds.origin.y;
-              [self setNeedsDisplayInRect:nsrect];
-            }
-        }
-    }
+  [self convertRegion:region toArray:&self->damage andDisplay:YES];
 
   for (id view in [self subviews])
     [(GdkMacosCairoSubview *)view setImage:theImage withDamage:region];
@@ -147,14 +124,44 @@
   self->_isOpaque = opaque;
 }
 
+-(void)convertRegion:(const cairo_region_t *)region
+             toArray:(GArray **)array
+          andDisplay:(BOOL)display
+{
+  NSView *root_view;
+  CGRect abs_bounds;
+  guint n_rects;
+
+  if (*array == NULL)
+    *array = g_array_new (FALSE, FALSE, sizeof (CGRect));
+  else
+    g_array_set_size (*array, 0);
+
+  root_view = [[self window] contentView];
+  abs_bounds = [self convertRect:[self bounds] toView:root_view];
+  n_rects = cairo_region_num_rectangles (region);
+
+  for (guint i = 0; i < n_rects; i++)
+    {
+      cairo_rectangle_int_t rect;
+      CGRect nsrect;
+
+      cairo_region_get_rectangle (region, i, &rect);
+      nsrect = CGRectIntersection (abs_bounds, CGRectMake (rect.x, rect.y, rect.width, rect.height));
+
+      if (!CGRectIsNull (nsrect))
+        g_array_append_val (*array, nsrect);
+
+      if (display)
+        [self setNeedsDisplayInRect:CGRectMake (rect.x - abs_bounds.origin.x,
+                                                rect.y - abs_bounds.origin.y,
+                                                rect.width, rect.height)];
+    }
+}
+
 -(void)setClip:(cairo_region_t*)region
 {
-  if (region != self->clip)
-    {
-      g_clear_pointer (&self->clip, cairo_region_destroy);
-      if (region != NULL)
-        self->clip = cairo_region_reference (region);
-    }
+  [self convertRegion:region toArray:&self->clip andDisplay:NO];
 }
 
 @end
