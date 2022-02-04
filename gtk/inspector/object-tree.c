@@ -850,21 +850,26 @@ match_row (GtkTreeModel *model,
            gpointer      data)
 {
   GtkInspectorObjectTree *wt = data;
-  gchar *type, *name, *label;
+  gpointer object;
+  gchar *type, *name, *label, *address;
   const gchar *text;
   gboolean match;
 
   text = gtk_entry_get_text (GTK_ENTRY (wt->priv->search_entry));
   gtk_tree_model_get (model, iter,
+                      OBJECT, &object,
                       OBJECT_TYPE, &type,
                       OBJECT_NAME, &name,
                       OBJECT_LABEL, &label,
                       -1);
+  address = g_strdup_printf ("%p", object);
 
-  match = (match_string (type, text) ||
+  match = (match_string (address, text) ||
+           match_string (type, text) ||
            match_string (name, text) ||
            match_string (label, text));
 
+  g_free (address);
   g_free (type);
   g_free (name);
   g_free (label);
