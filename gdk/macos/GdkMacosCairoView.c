@@ -97,6 +97,15 @@ release_surface_provider (void       *info,
       monitor = _gdk_macos_surface_get_best_monitor ([self gdkSurface]);
       rgb = _gdk_macos_monitor_copy_colorspace (GDK_MACOS_MONITOR (monitor));
 
+      /* If we have an WCG colorspace, just take the slow path or we risk
+       * really screwing things up.
+       */
+      if (CGColorSpaceIsWideGamutRGB (rgb))
+        {
+          CGColorSpaceRelease (rgb);
+          rgb = CGColorSpaceCreateDeviceRGB ();
+        }
+
       /* Assert that our image surface was created correctly with
        * 16-byte aligned pointers and strides. This is needed to
        * ensure that we're working with fast paths in CoreGraphics.
