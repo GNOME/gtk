@@ -4,13 +4,13 @@
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2004 - 2015, 2016, 2017.
-# Asier Sarasua Garmendia  <asiersarasua@ni.eus>, 2019, 2020, 2021.
+# Asier Sarasua Garmendia  <asiersarasua@ni.eus>, 2019, 2020, 2021, 2022.
 #
 msgid ""
 msgstr "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-11-16 03:16+0000\n"
-"PO-Revision-Date: 2021-11-16 10:00+0100\n"
+"POT-Creation-Date: 2022-02-04 18:08+0000\n"
+"PO-Revision-Date: 2022-02-05 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -47,7 +47,7 @@ msgstr "Ezin dira edukiak “%s” gisa hornitu"
 msgid "Cannot provide contents as %s"
 msgstr "Ezin dira edukiak %s gisa hornitu"
 
-#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:421
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:434
 msgid "The current backend does not support OpenGL"
 msgstr "Uneko motorrak ez du OpenGL onartzen"
 
@@ -55,45 +55,45 @@ msgstr "Uneko motorrak ez du OpenGL onartzen"
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL euskarria desgaituta GDK_DEBUG bidez"
 
-#: gdk/gdkdisplay.c:1569
+#: gdk/gdkdisplay.c:1544
 msgid "No EGL configuration available"
 msgstr "Ez dago EGL konfiguraziorik erabilgarri"
 
-#: gdk/gdkdisplay.c:1577
+#: gdk/gdkdisplay.c:1552
 msgid "Failed to get EGL configurations"
 msgstr "Huts egin du EGL konfigurazioa eskuratzeak"
 
-#: gdk/gdkdisplay.c:1607
+#: gdk/gdkdisplay.c:1582
 msgid "No EGL configuration with required features found"
 msgstr "Ez da beharrezkoak diren eginbideak dituen EGL konfiguraziorik aurkitu"
 
-#: gdk/gdkdisplay.c:1614
+#: gdk/gdkdisplay.c:1589
 msgid "No perfect EGL configuration found"
 msgstr "Ez da EGL konfigurazio perfektua aurkitu"
 
-#: gdk/gdkdisplay.c:1656
+#: gdk/gdkdisplay.c:1631
 msgid "EGL implementation is missing extension %2$s"
 msgid_plural "EGL implementation is missing %d extensions: %s"
 msgstr[0] "EGL inplementazioari %2$s hedapena falta zaio"
 msgstr[1] "EGL inplementazioari %d hedapen falta zaizkio: %s"
 
-#: gdk/gdkdisplay.c:1689
+#: gdk/gdkdisplay.c:1664
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL ez dago erabilgarri isolatu honetan"
 
-#: gdk/gdkdisplay.c:1690
+#: gdk/gdkdisplay.c:1665
 msgid "libEGL not available"
 msgstr "libEGL ez dago erabilgarri"
 
-#: gdk/gdkdisplay.c:1700
+#: gdk/gdkdisplay.c:1675
 msgid "Failed to create EGL display"
 msgstr "Huts egin du EGL ikuspegia sortzeak"
 
-#: gdk/gdkdisplay.c:1710
+#: gdk/gdkdisplay.c:1685
 msgid "Could not initialize EGL display"
 msgstr "Ezin da EGL ikuspegia hasieratu"
 
-#: gdk/gdkdisplay.c:1721
+#: gdk/gdkdisplay.c:1696
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL %d.%d bertsioa zaharregia da. GTK aplikazioak %d.%d behar du"
@@ -106,36 +106,36 @@ msgstr "Ez da onartzen beste aplikazio batzuetatik arrastatu eta jaregitea."
 msgid "No compatible formats to transfer contents."
 msgstr "Ez dago formatu bateragarririk edukiak transferitzeko."
 
-#: gdk/gdkglcontext.c:323
+#: gdk/gdkglcontext.c:336
 msgid "The EGL implementation does not support any allowed APIs"
 msgstr "EGL inplementazioak ez du onartzen edozein API"
 
-#: gdk/gdkglcontext.c:404 gdk/win32/gdkglcontext-win32-egl.c:401
-#: gdk/win32/gdkglcontext-win32-wgl.c:627 gdk/x11/gdkglcontext-glx.c:622
+#: gdk/gdkglcontext.c:417 gdk/win32/gdkglcontext-win32-wgl.c:616
+#: gdk/x11/gdkglcontext-glx.c:624
 msgid "Unable to create a GL context"
 msgstr "Ezin da GL testuingurua sortu"
 
-#: gdk/gdkglcontext.c:1237
+#: gdk/gdkglcontext.c:1270
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES salbu, beste guztia desgaituta GDK_DEBUG bidez"
 
-#: gdk/gdkglcontext.c:1246
+#: gdk/gdkglcontext.c:1279
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Aplikazioak ez du %s APIa onartzen"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1732
+#: gdk/gdkglcontext.c:1800
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s erabiltzen saiatzen, baina %s jadanik erabiltzen ari da"
 
-#: gdk/gdksurface.c:1235
+#: gdk/gdksurface.c:1240
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan euskarria desgaituta GDK_DEBUG bidez"
 
-#: gdk/gdktexture.c:530
+#: gdk/gdktexture.c:529
 msgid "Unknown image format."
 msgstr "Irudi-formatu ezezaguna."
 
@@ -526,7 +526,7 @@ msgstr "Errorea JPEG irudi-fitxategia (%s) interpretatzen"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Onartzen ez den JPEG kolore-espazioa (%d)"
 
-#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:273 gdk/loaders/gdktiff.c:446
+#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Ez dago %ux%u tamainako irudia marrazteko adina memoriarik"
@@ -541,16 +541,20 @@ msgstr "Errorea PNGa irakurtzean (%s)"
 msgid "Unsupported depth %u in png image"
 msgstr "Onartzen ez den %u sakonera PNG irudian"
 
-#: gdk/loaders/gdkpng.c:254
+#: gdk/loaders/gdkpng.c:246
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Onartzen ez den %u kolore mota PNG irudian"
 
 #: gdk/loaders/gdktiff.c:340
 msgid "Failed to load RGB data from TIFF file"
-msgstr "Ezin izan dira RGB datuak kargatu TIFF fitxategitik"
+msgstr "Ezin dira RGB datuak kargatu TIFF fitxategitik"
 
-#: gdk/loaders/gdktiff.c:458
+#: gdk/loaders/gdktiff.c:383
+msgid "Could not load TIFF data"
+msgstr "Ezin dira TIFF datuak kargatu"
+
+#: gdk/loaders/gdktiff.c:465
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Datuen irakurketak huts egin du %d errenkadan"
@@ -558,7 +562,7 @@ msgstr "Datuen irakurketak huts egin du %d errenkadan"
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
 #: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:233
+#: gdk/x11/gdkclipboard-x11.c:787 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Ez da transferentziarako formatu bateragarririk aurkitu"
 
@@ -684,17 +688,14 @@ msgstr "IDataObject_GetData (0x%x) prozesuak huts egin du, 0x%lx itzultzen"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Huts egin du DnD datuen 0x%x W32 formatua  %p formatura bihurtzeak (%s)"
 
-#: gdk/win32/gdkglcontext-win32-egl.c:215
-#: gdk/win32/gdkglcontext-win32-egl.c:225
-#: gdk/win32/gdkglcontext-win32-wgl.c:593
-msgid "No available configurations for the given pixel format"
-msgstr "Ez dago emandako pixel formatuaren konfiguraziorik erabilgarri"
-
-#: gdk/win32/gdkglcontext-win32-egl.c:275
-#: gdk/win32/gdkglcontext-win32-wgl.c:282
-#: gdk/win32/gdkglcontext-win32-wgl.c:299
+#: gdk/win32/gdkglcontext-win32-wgl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:293
 msgid "No GL implementation is available"
 msgstr "Ez dago GL inplementaziorik erabilgarri"
+
+#: gdk/win32/gdkglcontext-win32-wgl.c:582
+msgid "No available configurations for the given pixel format"
+msgstr "Ez dago emandako pixel formatuaren konfiguraziorik erabilgarri"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:63
 msgid "writing a closed stream"
@@ -747,23 +748,23 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Elementu %d irekitzen"
 msgstr[1] "%d elementu irekitzen"
 
-#: gdk/x11/gdkclipboard-x11.c:433
+#: gdk/x11/gdkclipboard-x11.c:457
 msgid "Clipboard manager could not store selection."
 msgstr "Arbel-kudeatzaileak ezin izan da hautapena biltegiratu."
 
-#: gdk/x11/gdkclipboard-x11.c:613
+#: gdk/x11/gdkclipboard-x11.c:637
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Ezin da arbela biltegiratu. Ez dago arbel-kudeatzaile aktiborik."
 
-#: gdk/x11/gdkglcontext-glx.c:778
+#: gdk/x11/gdkglcontext-glx.c:780
 msgid "No GLX configurations available"
 msgstr "Ez dago GLX konfiguraziorik erabilgarri"
 
-#: gdk/x11/gdkglcontext-glx.c:851
+#: gdk/x11/gdkglcontext-glx.c:853
 msgid "No GLX configuration with required features found"
 msgstr "Ez da beharrezkoak diren eginbideak dituen GLX konfiguraziorik aurkitu"
 
-#: gdk/x11/gdkglcontext-glx.c:925
+#: gdk/x11/gdkglcontext-glx.c:927
 msgid "GLX is not supported"
 msgstr "GLX ez dago onartuta"
 
@@ -1682,16 +1683,16 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%%%d"
 
-#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:310
+#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:311
 msgid "Pick a Color"
 msgstr "Hautatu kolorea"
 
-#: gtk/gtkcolorbutton.c:499 gtk/gtkcolorchooserwidget.c:308
+#: gtk/gtkcolorbutton.c:500 gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Gorria %d%%, berdea %d%%, urdina %d%%, alfa %d%%"
 
-#: gtk/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:314
+#: gtk/gtkcolorbutton.c:506 gtk/gtkcolorchooserwidget.c:314
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Gorria %%%d, berdea %%%d, urdina %%%d"
@@ -1936,7 +1937,7 @@ msgstr "Pertsonalizatua"
 msgid "Custom color %d: %s"
 msgstr "%d. kolore pertsonalizatua: %s"
 
-#: gtk/gtkcolorswatch.c:229
+#: gtk/gtkcolorswatch.c:231
 msgid "Customize"
 msgstr "Pertsonalizatu"
 
@@ -2078,8 +2079,8 @@ msgstr "Izen hori duen fitxategia badago lehendik ere"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6138 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1271
+#: gtk/gtkwindow.c:6226 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "_Utzi"
 
@@ -2090,7 +2091,7 @@ msgid "_Open"
 msgstr "_Ireki"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1272
+#: gtk/inspector/recorder.c:1707
 msgid "_Save"
 msgstr "_Gorde"
 
@@ -2167,7 +2168,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Elementu bat ezabatzen baduzu, betirako galduko duzu."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5515 gtk/gtktext.c:6062 gtk/gtktextview.c:8908
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6073 gtk/gtktextview.c:8956
 msgid "_Delete"
 msgstr "Ez_abatu"
 
@@ -2288,7 +2289,7 @@ msgstr "Programa"
 msgid "Audio"
 msgstr "Audioa"
 
-#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
+#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:604
 #: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "Letra-tipoa"
@@ -2372,60 +2373,65 @@ msgstr "Atzituta"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:626
+#: gtk/gtkfontbutton.c:508 gtk/gtkfontbutton.c:628
 msgid "Pick a Font"
 msgstr "Hautatu letra-tipoa"
 
-#: gtk/gtkfontbutton.c:1363
+#: gtk/gtkfontbutton.c:1365
 msgctxt "font"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/gtkfontchooserwidget.c:1568
+#: gtk/gtkfontchooserwidget.c:1531
+msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Zabalera"
 
-#: gtk/gtkfontchooserwidget.c:1569
+#: gtk/gtkfontchooserwidget.c:1532
+msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Pisua"
 
-#: gtk/gtkfontchooserwidget.c:1570
+#: gtk/gtkfontchooserwidget.c:1533
+msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Etzana"
 
-#: gtk/gtkfontchooserwidget.c:1571
+#: gtk/gtkfontchooserwidget.c:1534
+msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Makurdura"
 
-#: gtk/gtkfontchooserwidget.c:1572
+#: gtk/gtkfontchooserwidget.c:1535
+msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Tamaina optikoa"
 
-#: gtk/gtkfontchooserwidget.c:2118
+#: gtk/gtkfontchooserwidget.c:2139
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: gtk/gtkfontchooserwidget.c:2164
+#: gtk/gtkfontchooserwidget.c:2185
 msgid "Ligatures"
 msgstr "Hizki-loturak"
 
-#: gtk/gtkfontchooserwidget.c:2165
+#: gtk/gtkfontchooserwidget.c:2186
 msgid "Letter Case"
 msgstr "Maiuskula/minuskula"
 
-#: gtk/gtkfontchooserwidget.c:2166
+#: gtk/gtkfontchooserwidget.c:2187
 msgid "Number Case"
 msgstr "Zenbakien tamaina"
 
-#: gtk/gtkfontchooserwidget.c:2167
+#: gtk/gtkfontchooserwidget.c:2188
 msgid "Number Spacing"
 msgstr "Zenbakien tartea"
 
-#: gtk/gtkfontchooserwidget.c:2168
+#: gtk/gtkfontchooserwidget.c:2189
 msgid "Number Formatting"
 msgstr "Zenbakien formatua"
 
-#: gtk/gtkfontchooserwidget.c:2169
+#: gtk/gtkfontchooserwidget.c:2190
 msgid "Character Variants"
 msgstr "Karaktere-aldaerak"
 
@@ -2433,27 +2439,27 @@ msgstr "Karaktere-aldaerak"
 msgid "OpenGL context creation failed"
 msgstr "Huts egin du OpenGL-ren testuingurua sortzean"
 
-#: gtk/gtklabel.c:5512 gtk/gtktext.c:6050 gtk/gtktextview.c:8896
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6061 gtk/gtktextview.c:8944
 msgid "Cu_t"
 msgstr "_Ebaki"
 
-#: gtk/gtklabel.c:5513 gtk/gtktext.c:6054 gtk/gtktextview.c:8900
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6065 gtk/gtktextview.c:8948
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: gtk/gtklabel.c:5514 gtk/gtktext.c:6058 gtk/gtktextview.c:8904
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6069 gtk/gtktextview.c:8952
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: gtk/gtklabel.c:5520 gtk/gtktext.c:6071 gtk/gtktextview.c:8929
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6082 gtk/gtktextview.c:8977
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: gtk/gtklabel.c:5525
+#: gtk/gtklabel.c:5655
 msgid "_Open Link"
 msgstr "_Ireki esteka"
 
-#: gtk/gtklabel.c:5529
+#: gtk/gtklabel.c:5659
 msgid "Copy _Link Address"
 msgstr "Kopiatu _estekaren helbidea"
 
@@ -2499,7 +2505,7 @@ msgstr "Sistemaren arauek aldaketak saihesten dituzte.\n"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:768
+#: gtk/gtkmain.c:777
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2552,7 +2558,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6139
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6227
 msgid "_OK"
 msgstr "_Ados"
 
@@ -3386,7 +3392,7 @@ msgid "Swipe right"
 msgstr "Eskuinera igarotzea"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:490
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Lasterbideak"
 
@@ -3412,19 +3418,19 @@ msgstr "Saiatu bestelako bilaketa"
 msgid "Could not show link"
 msgstr "Ezin izan da esteka erakutsi"
 
-#: gtk/gtktext.c:6076 gtk/gtktextview.c:8934
+#: gtk/gtktext.c:6087 gtk/gtktextview.c:8982
 msgid "Insert _Emoji"
 msgstr "Txertatu _emojia"
 
-#: gtk/gtktextview.c:8916
+#: gtk/gtktextview.c:8964
 msgid "_Undo"
 msgstr "_Desegin"
 
-#: gtk/gtktextview.c:8920
+#: gtk/gtktextview.c:8968
 msgid "_Redo"
 msgstr "_Berregin"
 
-#: gtk/gtktreeexpander.c:205
+#: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:278
 msgid "Expand"
 msgstr "Zabaldu"
 
@@ -3447,12 +3453,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%%%d"
 
-#: gtk/gtkwindow.c:6126
+#: gtk/gtkwindow.c:6214
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Nahi duzu GTK ikuskatzailea erabili?"
 
-#: gtk/gtkwindow.c:6128
+#: gtk/gtkwindow.c:6216
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3460,7 +3466,7 @@ msgid ""
 "break or crash."
 msgstr "GTK ikuskatzailea arazketa elkarreragile bat da, edozer GTk aplikazioren barnekoak arakatzea eta aldatzea baimentzen dizu. Hori erabiltzean aplikazioa hondatu edo kraskatu dezakezu."
 
-#: gtk/gtkwindow.c:6133
+#: gtk/gtkwindow.c:6221
 msgid "Don’t show this message again"
 msgstr "Ez erakutsi mezu hau berriro"
 
@@ -3505,7 +3511,8 @@ msgid "Attribute"
 msgstr "Atributua"
 
 #: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:124
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:155
+#: gtk/inspector/recorder.ui:221
 msgid "Value"
 msgstr "Balioa"
 
@@ -3529,6 +3536,41 @@ msgstr "Parametro mota"
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "Egoera"
+
+#: gtk/inspector/clipboard.c:211
+msgid "Show"
+msgstr "Erakutsi"
+
+#: gtk/inspector/clipboard.c:228
+msgid "Hover to load"
+msgstr "Igaro gainetik kargatzeko"
+
+#: gtk/inspector/clipboard.c:278
+msgctxt "clipboard"
+msgid "empty"
+msgstr "hutsik"
+
+#: gtk/inspector/clipboard.c:283 gtk/inspector/clipboard.c:325
+msgctxt "clipboard"
+msgid "local"
+msgstr "lokala"
+
+#: gtk/inspector/clipboard.c:285 gtk/inspector/clipboard.c:327
+msgctxt "clipboard"
+msgid "remote"
+msgstr "urrunekoa"
+
+#: gtk/inspector/clipboard.ui:31
+msgid "Drag and hold here"
+msgstr "Arrastatu eta eutsi hemen"
+
+#: gtk/inspector/clipboard.ui:75 gtk/inspector/window.ui:574
+msgid "Clipboard"
+msgstr "Arbela"
+
+#: gtk/inspector/clipboard.ui:114
+msgid "Primary"
+msgstr "Nagusia"
 
 #: gtk/inspector/controllers.c:126
 msgctxt "event phase"
@@ -3594,45 +3636,49 @@ msgstr "Estiloaren klaseak"
 msgid "CSS Property"
 msgstr "CSSren propietatea"
 
-#: gtk/inspector/general.c:307 gtk/inspector/general.c:387
+#: gtk/inspector/general.c:309 gtk/inspector/general.c:389
 msgctxt "GL version"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/general.c:316
+#: gtk/inspector/general.c:318
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Desgaituta"
 
-#: gtk/inspector/general.c:317
+#: gtk/inspector/general.c:319
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Desgaituta"
 
-#: gtk/inspector/general.c:388
+#: gtk/inspector/general.c:390
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/general.c:439
+#: gtk/inspector/general.c:441
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Desgaituta"
 
-#: gtk/inspector/general.c:440 gtk/inspector/general.c:441
+#: gtk/inspector/general.c:442 gtk/inspector/general.c:443
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Desgaituta"
 
-#: gtk/inspector/general.c:497
+#: gtk/inspector/general.c:499
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/general.c:498 gtk/inspector/general.c:499
+#: gtk/inspector/general.c:500 gtk/inspector/general.c:501
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Bat ere ez"
+
+#: gtk/inspector/general.c:771
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "IM testuingurua GTK_IM_MODULE kodean txertatuta dago"
 
 #: gtk/inspector/general.ui:32
 msgid "GTK Version"
@@ -3654,39 +3700,43 @@ msgstr "Pango Fontmap"
 msgid "Media Backend"
 msgstr "Multimedia-motorra"
 
-#: gtk/inspector/general.ui:175
+#: gtk/inspector/general.ui:162
+msgid "Input Method"
+msgstr "Sarrerako metodoa"
+
+#: gtk/inspector/general.ui:201
 msgid "Prefix"
 msgstr "Aurrizkia"
 
-#: gtk/inspector/general.ui:377
+#: gtk/inspector/general.ui:403
 msgid "Display"
 msgstr "Pantaila"
 
-#: gtk/inspector/general.ui:404
+#: gtk/inspector/general.ui:430
 msgid "RGBA Visual"
 msgstr "RGBA bisuala"
 
-#: gtk/inspector/general.ui:430
+#: gtk/inspector/general.ui:456
 msgid "Composited"
 msgstr "Konposatua"
 
-#: gtk/inspector/general.ui:482
+#: gtk/inspector/general.ui:508
 msgid "GL Version"
 msgstr "GL bertsioa"
 
-#: gtk/inspector/general.ui:532
+#: gtk/inspector/general.ui:558
 msgid "GL Vendor"
 msgstr "GL hornitzailea"
 
-#: gtk/inspector/general.ui:572
+#: gtk/inspector/general.ui:598
 msgid "Vulkan Device"
 msgstr "Vulkan gailua"
 
-#: gtk/inspector/general.ui:599
+#: gtk/inspector/general.ui:625
 msgid "Vulkan API version"
 msgstr "Vulkan API bertsioa"
 
-#: gtk/inspector/general.ui:626
+#: gtk/inspector/general.ui:652
 msgid "Vulkan driver version"
 msgstr "Vulkan kontrolagailuaren bertsioa"
 
@@ -3740,56 +3790,60 @@ msgid "Request Mode"
 msgstr "Eskaera modua"
 
 #: gtk/inspector/misc-info.ui:269
+msgid "Measure map"
+msgstr "Neurketa-mapa"
+
+#: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
 msgstr "Esleipena"
 
-#: gtk/inspector/misc-info.ui:298
+#: gtk/inspector/misc-info.ui:357
 msgid "Baseline"
 msgstr "Oinarri-lerroa"
 
-#: gtk/inspector/misc-info.ui:327
+#: gtk/inspector/misc-info.ui:386
 msgid "Surface"
 msgstr "Gainazala"
 
-#: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
-#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1111
-#: gtk/inspector/prop-editor.c:1471 gtk/inspector/window.ui:388
+#: gtk/inspector/misc-info.ui:405 gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:483 gtk/inspector/prop-editor.c:1116
+#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Propietateak"
 
-#: gtk/inspector/misc-info.ui:366
+#: gtk/inspector/misc-info.ui:425
 msgid "Renderer"
 msgstr "Errendatzailea"
 
-#: gtk/inspector/misc-info.ui:405
+#: gtk/inspector/misc-info.ui:464
 msgid "Frame Clock"
 msgstr "Fotogramen erlojua"
 
-#: gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:503
 msgid "Tick Callback"
 msgstr "Tick-en atzeradeia"
 
-#: gtk/inspector/misc-info.ui:474
+#: gtk/inspector/misc-info.ui:533
 msgid "Frame Count"
 msgstr "Fotograma kopurua"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:562
 msgid "Frame Rate"
 msgstr "Fotograma-emaria"
 
-#: gtk/inspector/misc-info.ui:532
+#: gtk/inspector/misc-info.ui:591
 msgid "Mapped"
 msgstr "Mapatuta"
 
-#: gtk/inspector/misc-info.ui:562
+#: gtk/inspector/misc-info.ui:621
 msgid "Realized"
 msgstr "Osatuta"
 
-#: gtk/inspector/misc-info.ui:592
+#: gtk/inspector/misc-info.ui:651
 msgid "Is Toplevel"
 msgstr "Goi-mailakoa da"
 
-#: gtk/inspector/misc-info.ui:622
+#: gtk/inspector/misc-info.ui:681
 msgid "Child Visible"
 msgstr "Umea ikusgai"
 
@@ -3830,66 +3884,66 @@ msgstr "%s honetarako: %s %p"
 msgid "%s with value type %s"
 msgstr "%s honako balio motarekin: %s"
 
-#: gtk/inspector/prop-editor.c:1179
+#: gtk/inspector/prop-editor.c:1184
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Propietate mota ez-editagarria: %s"
 
-#: gtk/inspector/prop-editor.c:1323
+#: gtk/inspector/prop-editor.c:1328
 msgctxt "column number"
 msgid "None"
 msgstr "Bat ere ez"
 
-#: gtk/inspector/prop-editor.c:1360
+#: gtk/inspector/prop-editor.c:1365
 msgid "Attribute:"
 msgstr "Atributua:"
 
-#: gtk/inspector/prop-editor.c:1363
+#: gtk/inspector/prop-editor.c:1368
 msgid "Model"
 msgstr "Modeloa"
 
-#: gtk/inspector/prop-editor.c:1368
+#: gtk/inspector/prop-editor.c:1373
 msgid "Column:"
 msgstr "Zutabea:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1467
+#: gtk/inspector/prop-editor.c:1472
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Ekintza hemendik: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1522
+#: gtk/inspector/prop-editor.c:1527
 msgid "Reset"
 msgstr "Berrezarri"
 
-#: gtk/inspector/prop-editor.c:1530
+#: gtk/inspector/prop-editor.c:1535
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Lehenetsia"
 
-#: gtk/inspector/prop-editor.c:1533
+#: gtk/inspector/prop-editor.c:1538
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Gaia"
 
-#: gtk/inspector/prop-editor.c:1536
+#: gtk/inspector/prop-editor.c:1541
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1540
+#: gtk/inspector/prop-editor.c:1545
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Aplikazioa"
 
-#: gtk/inspector/prop-editor.c:1543
+#: gtk/inspector/prop-editor.c:1548
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: gtk/inspector/prop-editor.c:1546
+#: gtk/inspector/prop-editor.c:1551
 msgid "Source:"
 msgstr "Iturburua:"
 
@@ -3897,36 +3951,40 @@ msgstr "Iturburua:"
 msgid "Defined At"
 msgstr "Hemen definituta"
 
-#: gtk/inspector/recorder.c:1242
+#: gtk/inspector/recorder.c:1677
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Huts gin du RenderNode gordetzean"
 
-#: gtk/inspector/recorder.ui:15
+#: gtk/inspector/recorder.ui:20
 msgid "Record frames"
 msgstr "Grabatu fotogramak"
 
-#: gtk/inspector/recorder.ui:22
+#: gtk/inspector/recorder.ui:27
 msgid "Clear recorded frames"
 msgstr "Garbitu grabatutako fotogramak"
 
-#: gtk/inspector/recorder.ui:29
+#: gtk/inspector/recorder.ui:34
 msgid "Add debug nodes"
 msgstr "Gehitu arazketa-nodoak"
 
-#: gtk/inspector/recorder.ui:38
+#: gtk/inspector/recorder.ui:42
+msgid "Highlight event sequences"
+msgstr "Nabarmendu gertaeren sekuentziak"
+
+#: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
 msgstr "Erabili atzeko plano iluna"
 
-#: gtk/inspector/recorder.ui:46
+#: gtk/inspector/recorder.ui:59
 msgid "Save selected node"
 msgstr "Gorde hautatutako nodoa"
 
-#: gtk/inspector/recorder.ui:54
+#: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
 msgstr "Kopiatu arbelean"
 
-#: gtk/inspector/recorder.ui:111
+#: gtk/inspector/recorder.ui:142 gtk/inspector/recorder.ui:208
 msgid "Property"
 msgstr "Propietatea"
 
@@ -4150,111 +4208,111 @@ msgstr "Erakutsi objektu guztiak"
 msgid "Show all Resources"
 msgstr "Erakutsi baliabide guztiak"
 
-#: gtk/inspector/window.ui:139
+#: gtk/inspector/window.ui:147
 msgid "Collect Statistics"
 msgstr "Bildu estatistikak"
 
-#: gtk/inspector/window.ui:191
+#: gtk/inspector/window.ui:199
 msgid "Objects"
 msgstr "Objektuak"
 
-#: gtk/inspector/window.ui:223
+#: gtk/inspector/window.ui:231
 msgid "Toggle Sidebar"
 msgstr "Txandakatu alboko barra"
 
-#: gtk/inspector/window.ui:245
+#: gtk/inspector/window.ui:253
 msgid "Refresh action state"
 msgstr "Freskatu ekintza-egoera"
 
-#: gtk/inspector/window.ui:319
+#: gtk/inspector/window.ui:327
 msgid "Previous object"
 msgstr "Aurreko objektua"
 
-#: gtk/inspector/window.ui:326
+#: gtk/inspector/window.ui:334
 msgid "Child object"
 msgstr "Objektu haurra"
 
-#: gtk/inspector/window.ui:333
+#: gtk/inspector/window.ui:341
 msgid "Previous sibling"
 msgstr "Aurreko anaia"
 
-#: gtk/inspector/window.ui:339
+#: gtk/inspector/window.ui:347
 msgid "List Position"
 msgstr "Zerrendako posizioa"
 
-#: gtk/inspector/window.ui:348
+#: gtk/inspector/window.ui:356
 msgid "Next sibling"
 msgstr "Hurrengo anaia"
 
-#: gtk/inspector/window.ui:378
+#: gtk/inspector/window.ui:386
 msgid "Miscellaneous"
 msgstr "Bestelakoak"
 
-#: gtk/inspector/window.ui:399
+#: gtk/inspector/window.ui:407
 msgid "Layout"
 msgstr "Diseinua"
 
-#: gtk/inspector/window.ui:410
+#: gtk/inspector/window.ui:418
 msgid "CSS Nodes"
 msgstr "CSS nodoak"
 
-#: gtk/inspector/window.ui:421
+#: gtk/inspector/window.ui:429
 msgid "Size Groups"
 msgstr "Taldeen tamaina"
 
-#: gtk/inspector/window.ui:430 gtk/inspector/window.ui:439
+#: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"
 msgstr "Datuak"
 
-#: gtk/inspector/window.ui:449
+#: gtk/inspector/window.ui:457
 msgid "Actions"
 msgstr "Ekintzak"
 
-#: gtk/inspector/window.ui:460
+#: gtk/inspector/window.ui:468
 msgid "Menu"
 msgstr "Menua"
 
-#: gtk/inspector/window.ui:469
+#: gtk/inspector/window.ui:477
 msgid "Controllers"
 msgstr "Kontrolatzaileak"
 
-#: gtk/inspector/window.ui:479
+#: gtk/inspector/window.ui:487
 msgid "Magnifier"
 msgstr "Lupa"
 
-#: gtk/inspector/window.ui:500
+#: gtk/inspector/window.ui:508
 msgid "Accessibility"
 msgstr "Erabilerraztasuna"
 
-#: gtk/inspector/window.ui:524
+#: gtk/inspector/window.ui:532
 msgid "Global"
 msgstr "Globala"
 
-#: gtk/inspector/window.ui:537
+#: gtk/inspector/window.ui:545
 msgid "Information"
 msgstr "Informazioa"
 
-#: gtk/inspector/window.ui:546
+#: gtk/inspector/window.ui:554
 msgid "Settings"
 msgstr "Ezarpenak"
 
-#: gtk/inspector/window.ui:555
+#: gtk/inspector/window.ui:563
 msgid "Resources"
 msgstr "Baliabideak"
 
-#: gtk/inspector/window.ui:566
+#: gtk/inspector/window.ui:584
 msgid "Statistics"
 msgstr "Estatistikak"
 
-#: gtk/inspector/window.ui:577
+#: gtk/inspector/window.ui:595
 msgid "Logging"
 msgstr "Egunkaria"
 
-#: gtk/inspector/window.ui:592
+#: gtk/inspector/window.ui:610
 msgid "CSS"
 msgstr "CSSa"
 
-#: gtk/inspector/window.ui:601
+#: gtk/inspector/window.ui:619
 msgid "Recorder"
 msgstr "Grabagailua"
 
@@ -5868,781 +5926,6 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/script-names.c:16
-msgctxt "Script"
-msgid "Arabic"
-msgstr "Arabiera"
-
-#: gtk/script-names.c:17
-msgctxt "Script"
-msgid "Armenian"
-msgstr "Armeniera"
-
-#: gtk/script-names.c:18
-msgctxt "Script"
-msgid "Bengali"
-msgstr "Bengalera"
-
-#: gtk/script-names.c:19
-msgctxt "Script"
-msgid "Bopomofo"
-msgstr "Bopomofoa"
-
-#: gtk/script-names.c:20
-msgctxt "Script"
-msgid "Cherokee"
-msgstr "Txerokia"
-
-#: gtk/script-names.c:21
-msgctxt "Script"
-msgid "Coptic"
-msgstr "Koptoera"
-
-#: gtk/script-names.c:22
-msgctxt "Script"
-msgid "Cyrillic"
-msgstr "Zirilikoa"
-
-#: gtk/script-names.c:23
-msgctxt "Script"
-msgid "Deseret"
-msgstr "Deseret"
-
-#: gtk/script-names.c:24
-msgctxt "Script"
-msgid "Devanagari"
-msgstr "Devanagaria"
-
-#: gtk/script-names.c:25
-msgctxt "Script"
-msgid "Ethiopic"
-msgstr "Etiopiera"
-
-#: gtk/script-names.c:26
-msgctxt "Script"
-msgid "Georgian"
-msgstr "Georgiera"
-
-#: gtk/script-names.c:27
-msgctxt "Script"
-msgid "Gothic"
-msgstr "Gotikoa"
-
-#: gtk/script-names.c:28
-msgctxt "Script"
-msgid "Greek"
-msgstr "Greziera"
-
-#: gtk/script-names.c:29
-msgctxt "Script"
-msgid "Gujarati"
-msgstr "Gujaratiera"
-
-#: gtk/script-names.c:30
-msgctxt "Script"
-msgid "Gurmukhi"
-msgstr "Gurmukhia"
-
-#: gtk/script-names.c:31
-msgctxt "Script"
-msgid "Han"
-msgstr "Han"
-
-#: gtk/script-names.c:32
-msgctxt "Script"
-msgid "Hangul"
-msgstr "Hangul"
-
-#: gtk/script-names.c:33
-msgctxt "Script"
-msgid "Hebrew"
-msgstr "Hebreera"
-
-#: gtk/script-names.c:34
-msgctxt "Script"
-msgid "Hiragana"
-msgstr "Hiragana"
-
-#: gtk/script-names.c:35
-msgctxt "Script"
-msgid "Kannada"
-msgstr "Kannadera"
-
-#: gtk/script-names.c:36
-msgctxt "Script"
-msgid "Katakana"
-msgstr "Katakana"
-
-#: gtk/script-names.c:37
-msgctxt "Script"
-msgid "Khmer"
-msgstr "Khemerera"
-
-#: gtk/script-names.c:38
-msgctxt "Script"
-msgid "Lao"
-msgstr "Laosera"
-
-#: gtk/script-names.c:39
-msgctxt "Script"
-msgid "Latin"
-msgstr "Latina"
-
-#: gtk/script-names.c:40
-msgctxt "Script"
-msgid "Malayalam"
-msgstr "Malayalama"
-
-#: gtk/script-names.c:41
-msgctxt "Script"
-msgid "Mongolian"
-msgstr "Mongoliera"
-
-#: gtk/script-names.c:42
-msgctxt "Script"
-msgid "Myanmar"
-msgstr "Birmaniera"
-
-#: gtk/script-names.c:43
-msgctxt "Script"
-msgid "Ogham"
-msgstr "Oghama"
-
-#: gtk/script-names.c:44
-msgctxt "Script"
-msgid "Old Italic"
-msgstr "Etzan zaharra"
-
-#: gtk/script-names.c:45
-msgctxt "Script"
-msgid "Oriya"
-msgstr "Oriya"
-
-#: gtk/script-names.c:46
-msgctxt "Script"
-msgid "Runic"
-msgstr "Errunikoa"
-
-#: gtk/script-names.c:47
-msgctxt "Script"
-msgid "Sinhala"
-msgstr "Sinhala"
-
-#: gtk/script-names.c:48
-msgctxt "Script"
-msgid "Syriac"
-msgstr "Siriera"
-
-#: gtk/script-names.c:49
-msgctxt "Script"
-msgid "Tamil"
-msgstr "Tamilera"
-
-#: gtk/script-names.c:50
-msgctxt "Script"
-msgid "Telugu"
-msgstr "Teluguera"
-
-#: gtk/script-names.c:51
-msgctxt "Script"
-msgid "Thaana"
-msgstr "Thaana"
-
-#: gtk/script-names.c:52
-msgctxt "Script"
-msgid "Thai"
-msgstr "Thailandiera"
-
-#: gtk/script-names.c:53
-msgctxt "Script"
-msgid "Tibetan"
-msgstr "Tibetera"
-
-#: gtk/script-names.c:54
-msgctxt "Script"
-msgid "Canadian Aboriginal"
-msgstr "Kanadako aborigena"
-
-#: gtk/script-names.c:55
-msgctxt "Script"
-msgid "Yi"
-msgstr "Yi"
-
-#: gtk/script-names.c:56
-msgctxt "Script"
-msgid "Tagalog"
-msgstr "Tagaloa"
-
-#: gtk/script-names.c:57
-msgctxt "Script"
-msgid "Hanunoo"
-msgstr "Hanunooa"
-
-#: gtk/script-names.c:58
-msgctxt "Script"
-msgid "Buhid"
-msgstr "Buhida"
-
-#: gtk/script-names.c:59
-msgctxt "Script"
-msgid "Tagbanwa"
-msgstr "Tagbanwa"
-
-#: gtk/script-names.c:60
-msgctxt "Script"
-msgid "Braille"
-msgstr "Braillea"
-
-#: gtk/script-names.c:61
-msgctxt "Script"
-msgid "Cypriot"
-msgstr "Ziprera"
-
-#: gtk/script-names.c:62
-msgctxt "Script"
-msgid "Limbu"
-msgstr "Limbua"
-
-#: gtk/script-names.c:63
-msgctxt "Script"
-msgid "Osmanya"
-msgstr "Osmanya"
-
-#: gtk/script-names.c:64
-msgctxt "Script"
-msgid "Shavian"
-msgstr "Shaviana"
-
-#: gtk/script-names.c:65
-msgctxt "Script"
-msgid "Linear B"
-msgstr "B lineala"
-
-#: gtk/script-names.c:66
-msgctxt "Script"
-msgid "Tai Le"
-msgstr "Tai Lea"
-
-#: gtk/script-names.c:67
-msgctxt "Script"
-msgid "Ugaritic"
-msgstr "Ugaritikoa"
-
-#: gtk/script-names.c:68
-msgctxt "Script"
-msgid "New Tai Lue"
-msgstr "Tai Lea berria"
-
-#: gtk/script-names.c:69
-msgctxt "Script"
-msgid "Buginese"
-msgstr "Bugisera"
-
-#: gtk/script-names.c:70
-msgctxt "Script"
-msgid "Glagolitic"
-msgstr "Glagolitikoa"
-
-#: gtk/script-names.c:71
-msgctxt "Script"
-msgid "Tifinagh"
-msgstr "Tifinagh"
-
-#: gtk/script-names.c:72
-msgctxt "Script"
-msgid "Syloti Nagri"
-msgstr "Syloti Nagri"
-
-#: gtk/script-names.c:73
-msgctxt "Script"
-msgid "Old Persian"
-msgstr "Persiera zaharra"
-
-#: gtk/script-names.c:74
-msgctxt "Script"
-msgid "Kharoshthi"
-msgstr "Kharoshthi"
-
-#: gtk/script-names.c:75
-msgctxt "Script"
-msgid "Unknown"
-msgstr "Ezezaguna"
-
-#: gtk/script-names.c:76
-msgctxt "Script"
-msgid "Balinese"
-msgstr "Baliera"
-
-#: gtk/script-names.c:77
-msgctxt "Script"
-msgid "Cuneiform"
-msgstr "Kuneiformea"
-
-#: gtk/script-names.c:78
-msgctxt "Script"
-msgid "Phoenician"
-msgstr "Feniziera"
-
-#: gtk/script-names.c:79
-msgctxt "Script"
-msgid "Phags-pa"
-msgstr "Phags-pa"
-
-#: gtk/script-names.c:80
-msgctxt "Script"
-msgid "N'Ko"
-msgstr "N'Ko"
-
-#: gtk/script-names.c:81
-msgctxt "Script"
-msgid "Kayah Li"
-msgstr "Kayah Li"
-
-#: gtk/script-names.c:82
-msgctxt "Script"
-msgid "Lepcha"
-msgstr "Lepcha"
-
-#: gtk/script-names.c:83
-msgctxt "Script"
-msgid "Rejang"
-msgstr "Rejang"
-
-#: gtk/script-names.c:84
-msgctxt "Script"
-msgid "Sundanese"
-msgstr "Sundanera"
-
-#: gtk/script-names.c:85
-msgctxt "Script"
-msgid "Saurashtra"
-msgstr "Saurashtra"
-
-#: gtk/script-names.c:86
-msgctxt "Script"
-msgid "Cham"
-msgstr "Cham"
-
-#: gtk/script-names.c:87
-msgctxt "Script"
-msgid "Ol Chiki"
-msgstr "Ol Chiki"
-
-#: gtk/script-names.c:88
-msgctxt "Script"
-msgid "Vai"
-msgstr "Vaiera"
-
-#: gtk/script-names.c:89
-msgctxt "Script"
-msgid "Carian"
-msgstr "Carian"
-
-#: gtk/script-names.c:90
-msgctxt "Script"
-msgid "Lycian"
-msgstr "Lycian"
-
-#: gtk/script-names.c:91
-msgctxt "Script"
-msgid "Lydian"
-msgstr "Lydian"
-
-#: gtk/script-names.c:92
-msgctxt "Script"
-msgid "Avestan"
-msgstr "Avestan"
-
-#: gtk/script-names.c:93
-msgctxt "Script"
-msgid "Bamum"
-msgstr "Bamum"
-
-#: gtk/script-names.c:94
-msgctxt "Script"
-msgid "Egyptian Hieroglyphs"
-msgstr "Hieroglifiko egiptoarra"
-
-#: gtk/script-names.c:95
-msgctxt "Script"
-msgid "Imperial Aramaic"
-msgstr "Aramaiera inperiala"
-
-#: gtk/script-names.c:96
-msgctxt "Script"
-msgid "Inscriptional Pahlavi"
-msgstr "Pahlaviko inskripzioak"
-
-#: gtk/script-names.c:97
-msgctxt "Script"
-msgid "Inscriptional Parthian"
-msgstr "Parthiako inskripzioak"
-
-#: gtk/script-names.c:98
-msgctxt "Script"
-msgid "Javanese"
-msgstr "Javera"
-
-#: gtk/script-names.c:99
-msgctxt "Script"
-msgid "Kaithi"
-msgstr "Kaithi"
-
-#: gtk/script-names.c:100
-msgctxt "Script"
-msgid "Lisu"
-msgstr "Lisu"
-
-#: gtk/script-names.c:101
-msgctxt "Script"
-msgid "Meetei Mayek"
-msgstr "Meetei Mayek"
-
-#: gtk/script-names.c:102
-msgctxt "Script"
-msgid "Old South Arabian"
-msgstr "Hego arabiar zaharra"
-
-#: gtk/script-names.c:103
-msgctxt "Script"
-msgid "Old Turkic"
-msgstr "Turkiko zaharra"
-
-#: gtk/script-names.c:104
-msgctxt "Script"
-msgid "Samaritan"
-msgstr "Samariera"
-
-#: gtk/script-names.c:105
-msgctxt "Script"
-msgid "Tai Tham"
-msgstr "Tai Tham"
-
-#: gtk/script-names.c:106
-msgctxt "Script"
-msgid "Tai Viet"
-msgstr "Tai Viet"
-
-#: gtk/script-names.c:107
-msgctxt "Script"
-msgid "Batak"
-msgstr "Batak"
-
-#: gtk/script-names.c:108
-msgctxt "Script"
-msgid "Brahmi"
-msgstr "Brahmi"
-
-#: gtk/script-names.c:109
-msgctxt "Script"
-msgid "Mandaic"
-msgstr "Mandearra"
-
-#: gtk/script-names.c:110
-msgctxt "Script"
-msgid "Chakma"
-msgstr "Chakma"
-
-#: gtk/script-names.c:111
-msgctxt "Script"
-msgid "Meroitic Cursive"
-msgstr "Meroitiko etzana"
-
-#: gtk/script-names.c:112
-msgctxt "Script"
-msgid "Meroitic Hieroglyphs"
-msgstr "Hieroglifo meroitikoak"
-
-#: gtk/script-names.c:113
-msgctxt "Script"
-msgid "Miao"
-msgstr "Miao"
-
-#: gtk/script-names.c:114
-msgctxt "Script"
-msgid "Sharada"
-msgstr "Sharada"
-
-#: gtk/script-names.c:115
-msgctxt "Script"
-msgid "Sora Sompeng"
-msgstr "Sora Sompeng"
-
-#: gtk/script-names.c:116
-msgctxt "Script"
-msgid "Takri"
-msgstr "Takri"
-
-#: gtk/script-names.c:117
-msgctxt "Script"
-msgid "Bassa"
-msgstr "Bassa"
-
-#: gtk/script-names.c:118
-msgctxt "Script"
-msgid "Caucasian Albanian"
-msgstr "Kaukasoko albaniera"
-
-#: gtk/script-names.c:119
-msgctxt "Script"
-msgid "Duployan"
-msgstr "Duployan"
-
-#: gtk/script-names.c:120
-msgctxt "Script"
-msgid "Elbasan"
-msgstr "Elbasan"
-
-#: gtk/script-names.c:121
-msgctxt "Script"
-msgid "Grantha"
-msgstr "Grantha"
-
-#: gtk/script-names.c:122
-msgctxt "Script"
-msgid "Khojki"
-msgstr "Khojki"
-
-#: gtk/script-names.c:123
-msgctxt "Script"
-msgid "Khudawadi, Sindhi"
-msgstr "Khudawadi, Sindhi"
-
-#: gtk/script-names.c:124
-msgctxt "Script"
-msgid "Linear A"
-msgstr "A lineala"
-
-#: gtk/script-names.c:125
-msgctxt "Script"
-msgid "Mahajani"
-msgstr "Mahajani"
-
-#: gtk/script-names.c:126
-msgctxt "Script"
-msgid "Manichaean"
-msgstr "Manikeoa"
-
-#: gtk/script-names.c:127
-msgctxt "Script"
-msgid "Mende Kikakui"
-msgstr "Mende Kikakui"
-
-#: gtk/script-names.c:128
-msgctxt "Script"
-msgid "Modi"
-msgstr "Modi"
-
-#: gtk/script-names.c:129
-msgctxt "Script"
-msgid "Mro"
-msgstr "Mro"
-
-#: gtk/script-names.c:130
-msgctxt "Script"
-msgid "Nabataean"
-msgstr "Nabateoa"
-
-#: gtk/script-names.c:131
-msgctxt "Script"
-msgid "Old North Arabian"
-msgstr "Ipar arabiar zaharra"
-
-#: gtk/script-names.c:132
-msgctxt "Script"
-msgid "Old Permic"
-msgstr "Permiko zaharra"
-
-#: gtk/script-names.c:133
-msgctxt "Script"
-msgid "Pahawh Hmong"
-msgstr "Pahawh Hmong"
-
-#: gtk/script-names.c:134
-msgctxt "Script"
-msgid "Palmyrene"
-msgstr "Palmirakoa"
-
-#: gtk/script-names.c:135
-msgctxt "Script"
-msgid "Pau Cin Hau"
-msgstr "Pau Cin Hau"
-
-#: gtk/script-names.c:136
-msgctxt "Script"
-msgid "Psalter Pahlavi"
-msgstr "Psalter Pahlavi"
-
-#: gtk/script-names.c:137
-msgctxt "Script"
-msgid "Siddham"
-msgstr "Siddhamaç"
-
-#: gtk/script-names.c:138
-msgctxt "Script"
-msgid "Tirhuta"
-msgstr "Tirhuta"
-
-#: gtk/script-names.c:139
-msgctxt "Script"
-msgid "Warang Citi"
-msgstr "Warang Citia"
-
-#: gtk/script-names.c:140
-msgctxt "Script"
-msgid "Ahom"
-msgstr "Ahoma"
-
-#: gtk/script-names.c:141
-msgctxt "Script"
-msgid "Anatolian Hieroglyphs"
-msgstr "Hieroglifo anatoliarrak"
-
-#: gtk/script-names.c:142
-msgctxt "Script"
-msgid "Hatran"
-msgstr "Hatrana"
-
-#: gtk/script-names.c:143
-msgctxt "Script"
-msgid "Multani"
-msgstr "Multania"
-
-#: gtk/script-names.c:144
-msgctxt "Script"
-msgid "Old Hungarian"
-msgstr "Hungariera zaharra"
-
-#: gtk/script-names.c:145
-msgctxt "Script"
-msgid "Signwriting"
-msgstr "Zeinu-idazkera"
-
-#: gtk/script-names.c:146
-msgctxt "Script"
-msgid "Adlam"
-msgstr "Adlama"
-
-#: gtk/script-names.c:147
-msgctxt "Script"
-msgid "Bhaiksuki"
-msgstr "Bhaiksukia"
-
-#: gtk/script-names.c:148
-msgctxt "Script"
-msgid "Marchen"
-msgstr "Marchena"
-
-#: gtk/script-names.c:149
-msgctxt "Script"
-msgid "Newa"
-msgstr "Newa"
-
-#: gtk/script-names.c:150
-msgctxt "Script"
-msgid "Osage"
-msgstr "Osagea"
-
-#: gtk/script-names.c:151
-msgctxt "Script"
-msgid "Tangut"
-msgstr "Tanguta"
-
-#: gtk/script-names.c:152
-msgctxt "Script"
-msgid "Masaram Gondi"
-msgstr "Masaram Gondia"
-
-#: gtk/script-names.c:153
-msgctxt "Script"
-msgid "Nushu"
-msgstr "Nushua"
-
-#: gtk/script-names.c:154
-msgctxt "Script"
-msgid "Soyombo"
-msgstr "Soyomboa"
-
-#: gtk/script-names.c:155
-msgctxt "Script"
-msgid "Zanabazar Square"
-msgstr "Zanabazar Squarea"
-
-#: gtk/script-names.c:156
-msgctxt "Script"
-msgid "Dogra"
-msgstr "Dogra"
-
-#: gtk/script-names.c:157
-msgctxt "Script"
-msgid "Gunjala Gondi"
-msgstr "Gunjala Gondia"
-
-#: gtk/script-names.c:158
-msgctxt "Script"
-msgid "Hanifi Rohingya"
-msgstr "Hanifi Rohingya"
-
-#: gtk/script-names.c:159
-msgctxt "Script"
-msgid "Makasar"
-msgstr "Makasara"
-
-#: gtk/script-names.c:160
-msgctxt "Script"
-msgid "Medefaidrin"
-msgstr "Medefaidrina"
-
-#: gtk/script-names.c:161
-msgctxt "Script"
-msgid "Old Sogdian"
-msgstr "Sogdiar zaharra"
-
-#: gtk/script-names.c:162
-msgctxt "Script"
-msgid "Sogdian"
-msgstr "Sogdiarra"
-
-#: gtk/script-names.c:165 gtk/script-names.c:170
-msgctxt "Script"
-msgid "Elym"
-msgstr "Elimaikoa"
-
-#: gtk/script-names.c:166 gtk/script-names.c:171
-msgctxt "Script"
-msgid "Nand"
-msgstr "Nanda"
-
-#: gtk/script-names.c:167 gtk/script-names.c:172
-msgctxt "Script"
-msgid "Rohg"
-msgstr "Rohga"
-
-#: gtk/script-names.c:168 gtk/script-names.c:173
-msgctxt "Script"
-msgid "Wcho"
-msgstr "Wchoa"
-
-#: gtk/script-names.c:176 gtk/script-names.c:181
-msgctxt "Script"
-msgid "Chorasmian"
-msgstr "Korasmiarra"
-
-#: gtk/script-names.c:177 gtk/script-names.c:182
-msgctxt "Script"
-msgid "Dives Akuru"
-msgstr "Dives Akurua"
-
-#: gtk/script-names.c:178 gtk/script-names.c:183
-msgctxt "Script"
-msgid "Khitan small script"
-msgstr "Khitan txikia"
-
-#: gtk/script-names.c:179 gtk/script-names.c:184
-msgctxt "Script"
-msgid "Yezidi"
-msgstr "Yezidia"
-
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "Hobespenak"
@@ -7352,42 +6635,48 @@ msgstr "Erabilera:\n"
 "\n"
 "Landu hainbat ataza GtkBuilder .ui fitxategietan.\n"
 
-#: tools/gtk-builder-tool-simplify.c:437
+#: tools/gtk-builder-tool-simplify.c:440
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: Ezin izan da '%s' propietatearen balioa analizatu: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:638
+#: tools/gtk-builder-tool-simplify.c:649
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %spropietatea %s::%s ez da aurkitu\n"
 
-#: tools/gtk-builder-tool-simplify.c:2275
+#: tools/gtk-builder-tool-simplify.c:2286
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Ezin da “%s” kargatu: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2286
+#: tools/gtk-builder-tool-simplify.c:2297
+#: tools/gtk-builder-tool-simplify.c:2303
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Ezin da “%s” analizatu: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2310
+#: tools/gtk-builder-tool-simplify.c:2309
+#, c-format
+msgid "Can’t parse “%s”\n"
+msgstr "Ezin da “%s” analizatu\n"
+
+#: tools/gtk-builder-tool-simplify.c:2333
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Huts egin du “%s” irakurtzeak: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2316
+#: tools/gtk-builder-tool-simplify.c:2339
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Huts egin du %s idazteak: “%s”\n"
 
-#: tools/gtk-builder-tool-simplify.c:2356
+#: tools/gtk-builder-tool-simplify.c:2379
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Ez da .ui fitxategirik zehaztu\n"
 
-#: tools/gtk-builder-tool-simplify.c:2362
+#: tools/gtk-builder-tool-simplify.c:2385
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr ".ui fitxategi bakarra sinplifikatu daiteke --replace erabili gabe\n"
@@ -7553,6 +6842,626 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr "Ez dago gaiaren indize fitxategirik “%s”(e)n.\n"
 "Ikono-cache bat sortzea nahi baduzu erabili --ignore-theme-index.\n"
+
+#~ msgctxt "Script"
+#~ msgid "Arabic"
+#~ msgstr "Arabiera"
+
+#~ msgctxt "Script"
+#~ msgid "Armenian"
+#~ msgstr "Armeniera"
+
+#~ msgctxt "Script"
+#~ msgid "Bengali"
+#~ msgstr "Bengalera"
+
+#~ msgctxt "Script"
+#~ msgid "Bopomofo"
+#~ msgstr "Bopomofoa"
+
+#~ msgctxt "Script"
+#~ msgid "Cherokee"
+#~ msgstr "Txerokia"
+
+#~ msgctxt "Script"
+#~ msgid "Coptic"
+#~ msgstr "Koptoera"
+
+#~ msgctxt "Script"
+#~ msgid "Cyrillic"
+#~ msgstr "Zirilikoa"
+
+#~ msgctxt "Script"
+#~ msgid "Deseret"
+#~ msgstr "Deseret"
+
+#~ msgctxt "Script"
+#~ msgid "Devanagari"
+#~ msgstr "Devanagaria"
+
+#~ msgctxt "Script"
+#~ msgid "Ethiopic"
+#~ msgstr "Etiopiera"
+
+#~ msgctxt "Script"
+#~ msgid "Georgian"
+#~ msgstr "Georgiera"
+
+#~ msgctxt "Script"
+#~ msgid "Gothic"
+#~ msgstr "Gotikoa"
+
+#~ msgctxt "Script"
+#~ msgid "Greek"
+#~ msgstr "Greziera"
+
+#~ msgctxt "Script"
+#~ msgid "Gujarati"
+#~ msgstr "Gujaratiera"
+
+#~ msgctxt "Script"
+#~ msgid "Gurmukhi"
+#~ msgstr "Gurmukhia"
+
+#~ msgctxt "Script"
+#~ msgid "Han"
+#~ msgstr "Han"
+
+#~ msgctxt "Script"
+#~ msgid "Hangul"
+#~ msgstr "Hangul"
+
+#~ msgctxt "Script"
+#~ msgid "Hebrew"
+#~ msgstr "Hebreera"
+
+#~ msgctxt "Script"
+#~ msgid "Hiragana"
+#~ msgstr "Hiragana"
+
+#~ msgctxt "Script"
+#~ msgid "Kannada"
+#~ msgstr "Kannadera"
+
+#~ msgctxt "Script"
+#~ msgid "Katakana"
+#~ msgstr "Katakana"
+
+#~ msgctxt "Script"
+#~ msgid "Khmer"
+#~ msgstr "Khemerera"
+
+#~ msgctxt "Script"
+#~ msgid "Lao"
+#~ msgstr "Laosera"
+
+#~ msgctxt "Script"
+#~ msgid "Latin"
+#~ msgstr "Latina"
+
+#~ msgctxt "Script"
+#~ msgid "Malayalam"
+#~ msgstr "Malayalama"
+
+#~ msgctxt "Script"
+#~ msgid "Mongolian"
+#~ msgstr "Mongoliera"
+
+#~ msgctxt "Script"
+#~ msgid "Myanmar"
+#~ msgstr "Birmaniera"
+
+#~ msgctxt "Script"
+#~ msgid "Ogham"
+#~ msgstr "Oghama"
+
+#~ msgctxt "Script"
+#~ msgid "Old Italic"
+#~ msgstr "Etzan zaharra"
+
+#~ msgctxt "Script"
+#~ msgid "Oriya"
+#~ msgstr "Oriya"
+
+#~ msgctxt "Script"
+#~ msgid "Runic"
+#~ msgstr "Errunikoa"
+
+#~ msgctxt "Script"
+#~ msgid "Sinhala"
+#~ msgstr "Sinhala"
+
+#~ msgctxt "Script"
+#~ msgid "Syriac"
+#~ msgstr "Siriera"
+
+#~ msgctxt "Script"
+#~ msgid "Tamil"
+#~ msgstr "Tamilera"
+
+#~ msgctxt "Script"
+#~ msgid "Telugu"
+#~ msgstr "Teluguera"
+
+#~ msgctxt "Script"
+#~ msgid "Thaana"
+#~ msgstr "Thaana"
+
+#~ msgctxt "Script"
+#~ msgid "Thai"
+#~ msgstr "Thailandiera"
+
+#~ msgctxt "Script"
+#~ msgid "Tibetan"
+#~ msgstr "Tibetera"
+
+#~ msgctxt "Script"
+#~ msgid "Canadian Aboriginal"
+#~ msgstr "Kanadako aborigena"
+
+#~ msgctxt "Script"
+#~ msgid "Yi"
+#~ msgstr "Yi"
+
+#~ msgctxt "Script"
+#~ msgid "Tagalog"
+#~ msgstr "Tagaloa"
+
+#~ msgctxt "Script"
+#~ msgid "Hanunoo"
+#~ msgstr "Hanunooa"
+
+#~ msgctxt "Script"
+#~ msgid "Buhid"
+#~ msgstr "Buhida"
+
+#~ msgctxt "Script"
+#~ msgid "Tagbanwa"
+#~ msgstr "Tagbanwa"
+
+#~ msgctxt "Script"
+#~ msgid "Braille"
+#~ msgstr "Braillea"
+
+#~ msgctxt "Script"
+#~ msgid "Cypriot"
+#~ msgstr "Ziprera"
+
+#~ msgctxt "Script"
+#~ msgid "Limbu"
+#~ msgstr "Limbua"
+
+#~ msgctxt "Script"
+#~ msgid "Osmanya"
+#~ msgstr "Osmanya"
+
+#~ msgctxt "Script"
+#~ msgid "Shavian"
+#~ msgstr "Shaviana"
+
+#~ msgctxt "Script"
+#~ msgid "Linear B"
+#~ msgstr "B lineala"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Le"
+#~ msgstr "Tai Lea"
+
+#~ msgctxt "Script"
+#~ msgid "Ugaritic"
+#~ msgstr "Ugaritikoa"
+
+#~ msgctxt "Script"
+#~ msgid "New Tai Lue"
+#~ msgstr "Tai Lea berria"
+
+#~ msgctxt "Script"
+#~ msgid "Buginese"
+#~ msgstr "Bugisera"
+
+#~ msgctxt "Script"
+#~ msgid "Glagolitic"
+#~ msgstr "Glagolitikoa"
+
+#~ msgctxt "Script"
+#~ msgid "Tifinagh"
+#~ msgstr "Tifinagh"
+
+#~ msgctxt "Script"
+#~ msgid "Syloti Nagri"
+#~ msgstr "Syloti Nagri"
+
+#~ msgctxt "Script"
+#~ msgid "Old Persian"
+#~ msgstr "Persiera zaharra"
+
+#~ msgctxt "Script"
+#~ msgid "Kharoshthi"
+#~ msgstr "Kharoshthi"
+
+#~ msgctxt "Script"
+#~ msgid "Unknown"
+#~ msgstr "Ezezaguna"
+
+#~ msgctxt "Script"
+#~ msgid "Balinese"
+#~ msgstr "Baliera"
+
+#~ msgctxt "Script"
+#~ msgid "Cuneiform"
+#~ msgstr "Kuneiformea"
+
+#~ msgctxt "Script"
+#~ msgid "Phoenician"
+#~ msgstr "Feniziera"
+
+#~ msgctxt "Script"
+#~ msgid "Phags-pa"
+#~ msgstr "Phags-pa"
+
+#~ msgctxt "Script"
+#~ msgid "N'Ko"
+#~ msgstr "N'Ko"
+
+#~ msgctxt "Script"
+#~ msgid "Kayah Li"
+#~ msgstr "Kayah Li"
+
+#~ msgctxt "Script"
+#~ msgid "Lepcha"
+#~ msgstr "Lepcha"
+
+#~ msgctxt "Script"
+#~ msgid "Rejang"
+#~ msgstr "Rejang"
+
+#~ msgctxt "Script"
+#~ msgid "Sundanese"
+#~ msgstr "Sundanera"
+
+#~ msgctxt "Script"
+#~ msgid "Saurashtra"
+#~ msgstr "Saurashtra"
+
+#~ msgctxt "Script"
+#~ msgid "Cham"
+#~ msgstr "Cham"
+
+#~ msgctxt "Script"
+#~ msgid "Ol Chiki"
+#~ msgstr "Ol Chiki"
+
+#~ msgctxt "Script"
+#~ msgid "Vai"
+#~ msgstr "Vaiera"
+
+#~ msgctxt "Script"
+#~ msgid "Carian"
+#~ msgstr "Carian"
+
+#~ msgctxt "Script"
+#~ msgid "Lycian"
+#~ msgstr "Lycian"
+
+#~ msgctxt "Script"
+#~ msgid "Lydian"
+#~ msgstr "Lydian"
+
+#~ msgctxt "Script"
+#~ msgid "Avestan"
+#~ msgstr "Avestan"
+
+#~ msgctxt "Script"
+#~ msgid "Bamum"
+#~ msgstr "Bamum"
+
+#~ msgctxt "Script"
+#~ msgid "Egyptian Hieroglyphs"
+#~ msgstr "Hieroglifiko egiptoarra"
+
+#~ msgctxt "Script"
+#~ msgid "Imperial Aramaic"
+#~ msgstr "Aramaiera inperiala"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Pahlavi"
+#~ msgstr "Pahlaviko inskripzioak"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Parthian"
+#~ msgstr "Parthiako inskripzioak"
+
+#~ msgctxt "Script"
+#~ msgid "Javanese"
+#~ msgstr "Javera"
+
+#~ msgctxt "Script"
+#~ msgid "Kaithi"
+#~ msgstr "Kaithi"
+
+#~ msgctxt "Script"
+#~ msgid "Lisu"
+#~ msgstr "Lisu"
+
+#~ msgctxt "Script"
+#~ msgid "Meetei Mayek"
+#~ msgstr "Meetei Mayek"
+
+#~ msgctxt "Script"
+#~ msgid "Old South Arabian"
+#~ msgstr "Hego arabiar zaharra"
+
+#~ msgctxt "Script"
+#~ msgid "Old Turkic"
+#~ msgstr "Turkiko zaharra"
+
+#~ msgctxt "Script"
+#~ msgid "Samaritan"
+#~ msgstr "Samariera"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Tham"
+#~ msgstr "Tai Tham"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Viet"
+#~ msgstr "Tai Viet"
+
+#~ msgctxt "Script"
+#~ msgid "Batak"
+#~ msgstr "Batak"
+
+#~ msgctxt "Script"
+#~ msgid "Brahmi"
+#~ msgstr "Brahmi"
+
+#~ msgctxt "Script"
+#~ msgid "Mandaic"
+#~ msgstr "Mandearra"
+
+#~ msgctxt "Script"
+#~ msgid "Chakma"
+#~ msgstr "Chakma"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Cursive"
+#~ msgstr "Meroitiko etzana"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Hieroglyphs"
+#~ msgstr "Hieroglifo meroitikoak"
+
+#~ msgctxt "Script"
+#~ msgid "Miao"
+#~ msgstr "Miao"
+
+#~ msgctxt "Script"
+#~ msgid "Sharada"
+#~ msgstr "Sharada"
+
+#~ msgctxt "Script"
+#~ msgid "Sora Sompeng"
+#~ msgstr "Sora Sompeng"
+
+#~ msgctxt "Script"
+#~ msgid "Takri"
+#~ msgstr "Takri"
+
+#~ msgctxt "Script"
+#~ msgid "Bassa"
+#~ msgstr "Bassa"
+
+#~ msgctxt "Script"
+#~ msgid "Caucasian Albanian"
+#~ msgstr "Kaukasoko albaniera"
+
+#~ msgctxt "Script"
+#~ msgid "Duployan"
+#~ msgstr "Duployan"
+
+#~ msgctxt "Script"
+#~ msgid "Elbasan"
+#~ msgstr "Elbasan"
+
+#~ msgctxt "Script"
+#~ msgid "Grantha"
+#~ msgstr "Grantha"
+
+#~ msgctxt "Script"
+#~ msgid "Khojki"
+#~ msgstr "Khojki"
+
+#~ msgctxt "Script"
+#~ msgid "Khudawadi, Sindhi"
+#~ msgstr "Khudawadi, Sindhi"
+
+#~ msgctxt "Script"
+#~ msgid "Linear A"
+#~ msgstr "A lineala"
+
+#~ msgctxt "Script"
+#~ msgid "Mahajani"
+#~ msgstr "Mahajani"
+
+#~ msgctxt "Script"
+#~ msgid "Manichaean"
+#~ msgstr "Manikeoa"
+
+#~ msgctxt "Script"
+#~ msgid "Mende Kikakui"
+#~ msgstr "Mende Kikakui"
+
+#~ msgctxt "Script"
+#~ msgid "Modi"
+#~ msgstr "Modi"
+
+#~ msgctxt "Script"
+#~ msgid "Mro"
+#~ msgstr "Mro"
+
+#~ msgctxt "Script"
+#~ msgid "Nabataean"
+#~ msgstr "Nabateoa"
+
+#~ msgctxt "Script"
+#~ msgid "Old North Arabian"
+#~ msgstr "Ipar arabiar zaharra"
+
+#~ msgctxt "Script"
+#~ msgid "Old Permic"
+#~ msgstr "Permiko zaharra"
+
+#~ msgctxt "Script"
+#~ msgid "Pahawh Hmong"
+#~ msgstr "Pahawh Hmong"
+
+#~ msgctxt "Script"
+#~ msgid "Palmyrene"
+#~ msgstr "Palmirakoa"
+
+#~ msgctxt "Script"
+#~ msgid "Pau Cin Hau"
+#~ msgstr "Pau Cin Hau"
+
+#~ msgctxt "Script"
+#~ msgid "Psalter Pahlavi"
+#~ msgstr "Psalter Pahlavi"
+
+#~ msgctxt "Script"
+#~ msgid "Siddham"
+#~ msgstr "Siddhamaç"
+
+#~ msgctxt "Script"
+#~ msgid "Tirhuta"
+#~ msgstr "Tirhuta"
+
+#~ msgctxt "Script"
+#~ msgid "Warang Citi"
+#~ msgstr "Warang Citia"
+
+#~ msgctxt "Script"
+#~ msgid "Ahom"
+#~ msgstr "Ahoma"
+
+#~ msgctxt "Script"
+#~ msgid "Anatolian Hieroglyphs"
+#~ msgstr "Hieroglifo anatoliarrak"
+
+#~ msgctxt "Script"
+#~ msgid "Hatran"
+#~ msgstr "Hatrana"
+
+#~ msgctxt "Script"
+#~ msgid "Multani"
+#~ msgstr "Multania"
+
+#~ msgctxt "Script"
+#~ msgid "Old Hungarian"
+#~ msgstr "Hungariera zaharra"
+
+#~ msgctxt "Script"
+#~ msgid "Signwriting"
+#~ msgstr "Zeinu-idazkera"
+
+#~ msgctxt "Script"
+#~ msgid "Adlam"
+#~ msgstr "Adlama"
+
+#~ msgctxt "Script"
+#~ msgid "Bhaiksuki"
+#~ msgstr "Bhaiksukia"
+
+#~ msgctxt "Script"
+#~ msgid "Marchen"
+#~ msgstr "Marchena"
+
+#~ msgctxt "Script"
+#~ msgid "Newa"
+#~ msgstr "Newa"
+
+#~ msgctxt "Script"
+#~ msgid "Osage"
+#~ msgstr "Osagea"
+
+#~ msgctxt "Script"
+#~ msgid "Tangut"
+#~ msgstr "Tanguta"
+
+#~ msgctxt "Script"
+#~ msgid "Masaram Gondi"
+#~ msgstr "Masaram Gondia"
+
+#~ msgctxt "Script"
+#~ msgid "Nushu"
+#~ msgstr "Nushua"
+
+#~ msgctxt "Script"
+#~ msgid "Soyombo"
+#~ msgstr "Soyomboa"
+
+#~ msgctxt "Script"
+#~ msgid "Zanabazar Square"
+#~ msgstr "Zanabazar Squarea"
+
+#~ msgctxt "Script"
+#~ msgid "Dogra"
+#~ msgstr "Dogra"
+
+#~ msgctxt "Script"
+#~ msgid "Gunjala Gondi"
+#~ msgstr "Gunjala Gondia"
+
+#~ msgctxt "Script"
+#~ msgid "Hanifi Rohingya"
+#~ msgstr "Hanifi Rohingya"
+
+#~ msgctxt "Script"
+#~ msgid "Makasar"
+#~ msgstr "Makasara"
+
+#~ msgctxt "Script"
+#~ msgid "Medefaidrin"
+#~ msgstr "Medefaidrina"
+
+#~ msgctxt "Script"
+#~ msgid "Old Sogdian"
+#~ msgstr "Sogdiar zaharra"
+
+#~ msgctxt "Script"
+#~ msgid "Sogdian"
+#~ msgstr "Sogdiarra"
+
+#~ msgctxt "Script"
+#~ msgid "Elym"
+#~ msgstr "Elimaikoa"
+
+#~ msgctxt "Script"
+#~ msgid "Nand"
+#~ msgstr "Nanda"
+
+#~ msgctxt "Script"
+#~ msgid "Rohg"
+#~ msgstr "Rohga"
+
+#~ msgctxt "Script"
+#~ msgid "Wcho"
+#~ msgstr "Wchoa"
+
+#~ msgctxt "Script"
+#~ msgid "Chorasmian"
+#~ msgstr "Korasmiarra"
+
+#~ msgctxt "Script"
+#~ msgid "Dives Akuru"
+#~ msgstr "Dives Akurua"
+
+#~ msgctxt "Script"
+#~ msgid "Khitan small script"
+#~ msgstr "Khitan txikia"
+
+#~ msgctxt "Script"
+#~ msgid "Yezidi"
+#~ msgstr "Yezidia"
 
 #~ msgid "Core GL is not available on EGL implementation"
 #~ msgstr "GL nukleoa ez dago erabilgarri EGL inplementazioan"
