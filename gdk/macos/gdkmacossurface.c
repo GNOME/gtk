@@ -94,6 +94,17 @@ static void
 gdk_macos_surface_set_input_region (GdkSurface     *surface,
                                     cairo_region_t *region)
 {
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+  cairo_rectangle_int_t rect;
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  if (self->window == NULL)
+    return;
+
+  cairo_region_get_extents (region, &rect);
+
+  [(GdkMacosBaseView *)[self->window contentView] setInputArea:&rect];
 }
 
 static void
