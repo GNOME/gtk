@@ -427,6 +427,16 @@ gtk_cell_renderer_progress_set_pulse (GtkCellRendererProgress *cellprogress,
 }
 
 static void
+set_layout_tnum (PangoLayout *layout)
+{
+  PangoAttrList* attrs = pango_attr_list_new ();
+  PangoAttribute* attribute_font_features = pango_attr_font_features_new ("tnum 1");
+  pango_attr_list_insert (attrs, attribute_font_features);
+  pango_layout_set_attributes (layout, attrs);
+  pango_attr_list_unref (attrs);
+}
+
+static void
 compute_dimensions (GtkCellRenderer *cell,
 		    GtkWidget       *widget, 
 		    const gchar     *text, 
@@ -438,6 +448,7 @@ compute_dimensions (GtkCellRenderer *cell,
   gint xpad, ypad;
   
   layout = gtk_widget_create_pango_layout (widget, text);
+  set_layout_tnum (layout);
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
@@ -643,6 +654,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       gfloat text_xalign;
 
       layout = gtk_widget_create_pango_layout (widget, priv->label);
+      set_layout_tnum (layout);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
       if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
