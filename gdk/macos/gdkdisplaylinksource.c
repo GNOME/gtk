@@ -27,6 +27,7 @@
 #include "gdkdisplaylinksource.h"
 
 #include "gdkmacoseventsource-private.h"
+#include "gdk-private.h"
 
 static gint64 host_to_frame_clock_time (gint64 val);
 
