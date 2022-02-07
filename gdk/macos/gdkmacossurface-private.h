@@ -104,7 +104,7 @@ void               _gdk_macos_surface_resize                  (GdkMacosSurface  
 void               _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface    *self);
 void               _gdk_macos_surface_update_position         (GdkMacosSurface    *self);
 void               _gdk_macos_surface_show                    (GdkMacosSurface    *self);
-void               _gdk_macos_surface_thaw                    (GdkMacosSurface    *self,
+void               _gdk_macos_surface_publish_timings         (GdkMacosSurface    *self,
                                                                gint64              predicted_presentation_time,
                                                                gint64              refresh_interval);
 CGContextRef       _gdk_macos_surface_acquire_context         (GdkMacosSurface    *self,

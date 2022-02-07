@@ -28,6 +28,7 @@
 #import "GdkMacosCairoView.h"
 #import "GdkMacosCairoSubview.h"
 
+#include "gdkmacosmonitor-private.h"
 #include "gdkmacossurface-private.h"
 
 @implementation GdkMacosCairoView
@@ -58,12 +59,92 @@
     [child setNeedsDisplay:needsDisplay];
 }
 
+static void
+release_surface_provider (void       *info,
+                          const void *data,
+                          size_t      size)
+{
+  cairo_surface_destroy (info);
+}
+
 -(void)setCairoSurface:(cairo_surface_t *)cairoSurface
             withDamage:(cairo_region_t *)cairoRegion
 {
+  CGImageRef image = NULL;
+
+  if (cairoSurface != NULL)
+    {
+      const CGColorRenderingIntent intent = kCGRenderingIntentDefault;
+      CGDataProviderRef provider;
+      CGColorSpaceRef rgb;
+      cairo_format_t format;
+      CGBitmapInfo bitmap = kCGBitmapByteOrder32Host;
+      GdkMonitor *monitor;
+      guint8 *framebuffer;
+      size_t width;
+      size_t height;
+      int rowstride;
+      int bpp;
+      int bpc;
+
+      cairo_surface_flush (cairoSurface);
+
+      format = cairo_image_surface_get_format (cairoSurface);
+      framebuffer = cairo_image_surface_get_data (cairoSurface);
+      rowstride = cairo_image_surface_get_stride (cairoSurface);
+      width = cairo_image_surface_get_width (cairoSurface);
+      height = cairo_image_surface_get_height (cairoSurface);
+      monitor = _gdk_macos_surface_get_best_monitor ([self gdkSurface]);
+      rgb = _gdk_macos_monitor_copy_colorspace (GDK_MACOS_MONITOR (monitor));
+
+      /* If we have an WCG colorspace, just take the slow path or we risk
+       * really screwing things up.
+       */
+      if (CGColorSpaceIsWideGamutRGB (rgb))
+        {
+          CGColorSpaceRelease (rgb);
+          rgb = CGColorSpaceCreateDeviceRGB ();
+        }
+
+      /* Assert that our image surface was created correctly with
+       * 16-byte aligned pointers and strides. This is needed to
+       * ensure that we're working with fast paths in CoreGraphics.
+       */
+      g_assert (format == CAIRO_FORMAT_ARGB32 || format == CAIRO_FORMAT_RGB24);
+      g_assert (framebuffer != NULL);
+      g_assert (((intptr_t)framebuffer & (intptr_t)~0xF) == (intptr_t)framebuffer);
+      g_assert ((rowstride & ~0xF) == rowstride);
+
+      if (format == CAIRO_FORMAT_ARGB32)
+        {
+          bitmap |= kCGImageAlphaPremultipliedFirst;
+          bpp = 32;
+          bpc = 8;
+        }
+      else
+        {
+          bitmap |= kCGImageAlphaNoneSkipFirst;
+          bpp = 32;
+          bpc = 8;
+        }
+
+      provider = CGDataProviderCreateWithData (cairo_surface_reference (cairoSurface),
+                                               framebuffer,
+                                               rowstride * height,
+                                               release_surface_provider);
+
+      image = CGImageCreate (width, height, bpc, bpp, rowstride, rgb, bitmap, provider, NULL, FALSE, intent);
+
+      CGDataProviderRelease (provider);
+      CGColorSpaceRelease (rgb);
+    }
+
   for (id view in [self subviews])
-    [(GdkMacosCairoSubview *)view setCairoSurface:cairoSurface
-                                       withDamage:cairoRegion];
+    [(GdkMacosCairoSubview *)view setImage:image
+                                withDamage:cairoRegion];
+
+  if (image != NULL)
+    CGImageRelease (image);
 }
 
 -(void)removeOpaqueChildren
@@ -162,7 +243,6 @@
        */
       self->transparent = [[GdkMacosCairoSubview alloc] initWithFrame:frame];
       [self addSubview:self->transparent];
-
     }
 
   return self;

@@ -19,19 +19,21 @@
  */
 
 #include <AppKit/AppKit.h>
+#include <cairo.h>
+#include <glib.h>
 
 #define GDK_IS_MACOS_CAIRO_SUBVIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosCairoSubview class]])
 
 @interface GdkMacosCairoSubview : NSView
 {
-  BOOL             _isOpaque;
-  cairo_surface_t *cairoSurface;
-  cairo_region_t  *clip;
+  BOOL        _isOpaque;
+  GArray     *clip;
+  GArray     *damage;
+  CGImageRef  image;
 }
 
 -(void)setOpaque:(BOOL)opaque;
--(void)setCairoSurface:(cairo_surface_t *)cairoSurface
-            withDamage:(cairo_region_t *)region;
+-(void)setImage:(CGImageRef)theImage withDamage:(cairo_region_t *)region;
 -(void)setClip:(cairo_region_t*)region;
 
 @end

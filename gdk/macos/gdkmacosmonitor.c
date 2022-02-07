@@ -298,3 +298,11 @@ _gdk_macos_monitor_get_screen_id (GdkMacosMonitor *self)
 
   return self->screen_id;
 }
+
+CGColorSpaceRef
+_gdk_macos_monitor_copy_colorspace (GdkMacosMonitor *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_MONITOR (self), NULL);
+
+  return CGDisplayCopyColorSpace (self->screen_id);
+}

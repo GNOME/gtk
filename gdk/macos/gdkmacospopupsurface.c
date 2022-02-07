@@ -204,6 +204,10 @@ static void
 _gdk_macos_popup_surface_finalize (GObject *object)
 {
   GdkMacosPopupSurface *self = (GdkMacosPopupSurface *)object;
+  GdkSurface *parent = GDK_SURFACE (self)->parent;
+
+  if (parent != NULL)
+    parent->children = g_list_remove (parent->children, self);
 
   g_clear_object (&GDK_SURFACE (self)->parent);
   g_clear_pointer (&self->layout, gdk_popup_layout_unref);

@@ -301,10 +301,14 @@ gdk_macos_display_frame_cb (gpointer data)
 
       iter = iter->next;
 
+      _gdk_macos_surface_publish_timings (surface,
+                                          source->presentation_time,
+                                          source->refresh_interval);
+
       _gdk_macos_display_remove_frame_callback (self, surface);
-      _gdk_macos_surface_thaw (surface,
-                               source->presentation_time,
-                               source->refresh_interval);
+
+      if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (surface)))
+        gdk_surface_thaw_updates (GDK_SURFACE (surface));
     }
 
   return G_SOURCE_CONTINUE;
@@ -987,7 +991,11 @@ _gdk_macos_display_add_frame_callback (GdkMacosDisplay *self,
 
   if (!queue_contains (&self->awaiting_frames, &surface->frame))
     {
-      g_queue_push_tail_link (&self->awaiting_frames, &surface->frame);
+      /* Processing frames is always head to tail, so push to the
+       * head so that we don't possibly re-enter this right after
+       * adding to the queue.
+       */
+      g_queue_push_head_link (&self->awaiting_frames, &surface->frame);
 
       if (self->awaiting_frames.length == 1)
         gdk_display_link_source_unpause ((GdkDisplayLinkSource *)self->frame_source);
