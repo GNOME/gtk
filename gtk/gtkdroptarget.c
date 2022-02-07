@@ -895,7 +895,7 @@ gtk_drop_target_new (GType         type,
  *
  * If the result is %NULL, all formats are expected to be supported.
  *
- * Returns: (nullable): the supported data formats
+ * Returns: (nullable) (transfer none): the supported data formats
  */
 GdkContentFormats *
 gtk_drop_target_get_formats (GtkDropTarget *self)
