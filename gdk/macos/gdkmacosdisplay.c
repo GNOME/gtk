@@ -730,7 +730,8 @@ _gdk_macos_display_open (const char *display_name)
   if (self != NULL)
     return NULL;
 
-  GDK_NOTE (MISC, g_message ("opening display %s", display_name ? display_name : ""));
+  display_name = display_name ? display_name : "";
+  GDK_NOTE (MISC, g_message ("opening display %s", display_name));
 
   /* Make the current process a foreground application, i.e. an app
    * with a user interface, in case we're not running from a .app bundle
