@@ -1211,6 +1211,8 @@ gtk_entry_completion_match_selected (GtkEntryCompletion *completion,
                                      GtkTreeModel       *model,
                                      GtkTreeIter        *iter)
 {
+  g_assert (completion->entry != NULL);
+
   char *str = NULL;
 
   gtk_tree_model_get (model, iter, completion->text_column, &str, -1);
@@ -1229,6 +1231,8 @@ gtk_entry_completion_cursor_on_match (GtkEntryCompletion *completion,
                                       GtkTreeModel       *model,
                                       GtkTreeIter        *iter)
 {
+  g_assert (completion->entry != NULL);
+
   gtk_entry_completion_insert_completion (completion, model, iter);
 
   return TRUE;
@@ -1317,6 +1321,8 @@ static gboolean
 gtk_entry_completion_real_insert_prefix (GtkEntryCompletion *completion,
                                          const char         *prefix)
 {
+  g_assert (completion->entry != NULL);
+
   if (prefix)
     {
       int key_len;
@@ -1417,6 +1423,8 @@ gtk_entry_completion_insert_completion (GtkEntryCompletion *completion,
 void
 gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
 {
+  g_return_if_fail (completion->entry != NULL);
+
   gboolean done;
   char *prefix;
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (completion->entry));
