@@ -730,9 +730,26 @@ _gtk_builder_construct (GtkBuilder  *builder,
   else
     {
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      obj = g_object_newv (info->type,
-                           construct_parameters->len,
-                           (GParameter *)construct_parameters->data);
+      if (G_TYPE_IS_INITABLE(info->type))
+        {
+          obj = g_initable_newv (info->type,
+                                 construct_parameters->len,
+                                 (GParameter *)construct_parameters->data,
+                                 NULL,
+                                 error);
+          if (!obj)
+            {
+              g_array_free (parameters, TRUE);
+              g_array_free (construct_parameters, TRUE);
+              return NULL;
+            }
+        }
+      else
+        {
+          obj = g_object_newv (info->type,
+                               construct_parameters->len,
+                               (GParameter *)construct_parameters->data);
+        }
 G_GNUC_END_IGNORE_DEPRECATIONS
 
       /* No matter what, make sure we have a reference.
