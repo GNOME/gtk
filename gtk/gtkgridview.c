@@ -139,32 +139,74 @@ G_DEFINE_TYPE (GtkGridView, gtk_grid_view, GTK_TYPE_LIST_BASE)
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 
+
+#include "gdk/gdkrgbaprivate.h"
+#include "gtkadjustment.h"
+#include "gtkscrollable.h"
+#include "gtksnapshot.h"
+
 static void G_GNUC_UNUSED
-dump (GtkGridView *self)
+dump (GtkGridView   *self,
+      const GdkRGBA *bg)
 {
   Cell *cell;
-  guint n_widgets, n_list_rows, n_items;
+  gsize n;
+  char *filename;
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  GdkRGBA black = GDK_RGBA("000000");
+  float scale = 8.0;
+  GtkAdjustment *hadj, *vadj;
 
-  n_widgets = 0;
-  n_list_rows = 0;
-  n_items = 0;
-  //g_print ("ANCHOR: %u - %u\n", self->anchor_start, self->anchor_end);
+  hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (self));
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (self));
+  if (gtk_adjustment_get_upper (hadj) <= 0 ||
+      gtk_adjustment_get_upper (vadj) <= 0)
+    return;
+
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_scale (snapshot, 1 / scale, 1 / scale);
+
+  gtk_snapshot_append_color (snapshot,
+                             bg,
+                             &GRAPHENE_RECT_INIT (gtk_adjustment_get_lower (hadj),
+                                                  gtk_adjustment_get_lower (vadj),
+                                                  gtk_adjustment_get_upper (hadj),
+                                                  gtk_adjustment_get_upper (vadj)));
+
   for (cell = gtk_list_item_manager_get_first (self->item_manager);
        cell;
        cell = gtk_rb_tree_node_get_next (cell))
     {
+      GskRoundedRect r = GSK_ROUNDED_RECT_INIT (cell->area.x, cell->area.y, cell->area.width, cell->area.height);
+
       if (cell->parent.widget)
-        n_widgets++;
-      n_list_rows++;
-      g_print ("%6u%6u %5ux%3u %s (%d, %d, %d, %d)\n",
-               cell->parent.n_items, n_items,
-               n_items / (self->n_columns ? self->n_columns : self->min_columns),
-               n_items % (self->n_columns ? self->n_columns : self->min_columns),
-               cell->parent.widget ? " (widget)" : "", cell->area.x, cell->area.y, cell->area.width, cell->area.height);
-      n_items += cell->parent.n_items;
+        gtk_snapshot_append_color (snapshot, &GDK_RGBA("FFFFFF"), &r.bounds);
+
+      gtk_snapshot_append_border (snapshot,
+                                  &r,
+                                  (float[4]) { scale, scale, scale, scale },
+                                  (GdkRGBA[4]) { black, black, black, black });
     }
 
-  g_print ("  => %u widgets in %u list rows\n", n_widgets, n_list_rows);
+  gtk_snapshot_append_color (snapshot,
+                             &GDK_RGBA("3584E450"),
+                             &GRAPHENE_RECT_INIT (gtk_adjustment_get_value (hadj),
+                                                  gtk_adjustment_get_value (vadj),
+                                                  gtk_adjustment_get_page_size (hadj),
+                                                  gtk_adjustment_get_page_size (vadj)));
+
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  n = GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (self), "-gtk-dump-counter"));
+  n++;
+  g_object_set_data (G_OBJECT (self), "-gtk-dump-counter", GSIZE_TO_POINTER (n));
+  filename = g_strdup_printf ("gridview-%p-%zu.node", self, n);
+
+  gsk_render_node_write_to_file (node, filename, NULL);
+
+  g_free (filename);
+  gsk_render_node_unref (node);
 }
 
 static void
@@ -680,6 +722,8 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   int x, y;
   guint i;
 
+  dump (self, &GDK_RGBA("D0B0B0"));
+
   orientation = gtk_list_base_get_orientation (GTK_LIST_BASE (self));
   scroll_policy = gtk_list_base_get_scroll_policy (GTK_LIST_BASE (self), orientation);
   opposite_orientation = OPPOSITE_ORIENTATION (orientation);
@@ -816,6 +860,8 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
     }
 
   gtk_list_base_allocate_rubberband (GTK_LIST_BASE (widget));
+
+  dump (self, &GDK_RGBA("B0D0B0"));
 }
 
 static void
