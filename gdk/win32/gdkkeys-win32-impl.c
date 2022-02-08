@@ -340,11 +340,12 @@ vk_to_char_fuzzy (GdkWin32KeymapLayoutInfo *info,
           if (candidate_modbits & ~mod_bits)
             continue;
 
-          /* Some keys have bogus mappings for the control key, e.g.
-           * Ctrl + Backspace = Delete, or Ctrl + [ = 0x1B. These are
-           * never used on Windows, so we ignore them.
+          /* Some keys have bogus mappings for the control key, e.g.  Ctrl +
+           * Backspace = Delete, Ctrl + [ = 0x1B or even  Ctrl + Shift + 6 =
+           * 0x1E on a US keyboard. So we have to ignore all cases of
+           * Ctrl that aren't part of AltGr.
            */
-          if (candidate_modbits == KBDCTRL)
+          if ((candidate_modbits & KBDCTRL) && !(candidate_modbits & KBDALT))
             continue;
 
           c = entry->wch[level];
