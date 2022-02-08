@@ -379,7 +379,7 @@ gtk_column_view_column_new (const char         *title,
 {
   GtkColumnViewColumn *result;
 
-  g_return_val_if_fail (GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
+  g_return_val_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory), NULL);
 
   result = g_object_new (GTK_TYPE_COLUMN_VIEW_COLUMN,
                          "factory", factory,
