@@ -37,6 +37,11 @@ typedef struct _GtkHeaderBarAccessible        GtkHeaderBarAccessible;
 typedef struct _GtkHeaderBarAccessibleClass   GtkHeaderBarAccessibleClass;
 typedef struct _GtkHeaderBarAccessiblePrivate GtkHeaderBarAccessiblePrivate;
 
+/**
+ * GtkHeaderBarAccessible:
+ *
+ * Since: 3.24.11
+ */
 struct _GtkHeaderBarAccessible
 {
   GtkContainerAccessible parent;

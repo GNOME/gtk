@@ -37,6 +37,11 @@ typedef struct _GtkSocketAccessible        GtkSocketAccessible;
 typedef struct _GtkSocketAccessibleClass   GtkSocketAccessibleClass;
 typedef struct _GtkSocketAccessiblePrivate GtkSocketAccessiblePrivate;
 
+/**
+ * GtkSocketAccessible:
+ *
+ * Since: 3.24.30
+ */
 struct _GtkSocketAccessible
 {
   GtkContainerAccessible parent;

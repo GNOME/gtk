@@ -37,6 +37,11 @@ typedef struct _GtkFileChooserWidgetAccessible        GtkFileChooserWidgetAccess
 typedef struct _GtkFileChooserWidgetAccessibleClass   GtkFileChooserWidgetAccessibleClass;
 typedef struct _GtkFileChooserWidgetAccessiblePrivate GtkFileChooserWidgetAccessiblePrivate;
 
+/**
+ * GtkFileChooserWidgetAccessible:
+ *
+ * Since: 3.24.30
+ */
 struct _GtkFileChooserWidgetAccessible
 {
   GtkContainerAccessible parent;
