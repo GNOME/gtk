@@ -175,10 +175,19 @@ gdk_gl_texture_do_download (gpointer texture_,
       glGenFramebuffers (1, &fbo);
       glBindFramebuffer (GL_FRAMEBUFFER, fbo);
       glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->id, 0);
-      glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &gl_read_format);
-      glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &gl_read_type);
-      if (!gdk_gl_texture_find_format (gdk_gl_context_get_use_es (self->context), gl_read_format, gl_read_type, &actual_format))
-        actual_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED; /* pray */
+      if (gdk_gl_context_check_version (self->context, 4, 3, 3, 1))
+        {
+          glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &gl_read_format);
+          glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &gl_read_type);
+          if (!gdk_gl_texture_find_format (gdk_gl_context_get_use_es (self->context), gl_read_format, gl_read_type, &actual_format))
+            actual_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED; /* pray */
+        }
+      else
+        {
+          gl_read_format = GL_RGBA;
+          gl_read_type = GL_UNSIGNED_BYTE;
+          actual_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+        }
 
       if (download->format == actual_format &&
           (download->stride == expected_stride))
