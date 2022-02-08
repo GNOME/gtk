@@ -92,10 +92,9 @@ GDK_AVAILABLE_IN_ALL
 GdkDisplay *        gdk_device_get_display              (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 GdkSeat *           gdk_device_get_seat                 (GdkDevice *device);
-GDK_DEPRECATED_IN_4_6_FOR(gdk_device_tool_get_tool_type)
-GdkDeviceTool *     gdk_device_get_device_tool          (GdkDevice *device);
-
 GDK_AVAILABLE_IN_ALL
+GdkDeviceTool *     gdk_device_get_device_tool          (GdkDevice *device);
+GDK_DEPRECATED_IN_4_6_FOR(gdk_device_tool_get_tool_type)
 GdkInputSource      gdk_device_get_source               (GdkDevice *device);
 GDK_AVAILABLE_IN_ALL
 gboolean            gdk_device_get_has_cursor           (GdkDevice *device);
