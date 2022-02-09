@@ -1478,6 +1478,7 @@ gtk_assistant_set_current_page (GtkAssistant *assistant,
   GtkAssistantPage *page;
 
   g_return_if_fail (GTK_IS_ASSISTANT (assistant));
+  g_return_if_fail (assistant->pages != NULL);
 
   if (page_num >= 0)
     page = (GtkAssistantPage *) g_list_nth_data (assistant->pages, page_num);
