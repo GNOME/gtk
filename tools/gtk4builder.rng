@@ -52,6 +52,7 @@
           <ref name="property"/>
           <ref name="signal"/>
           <ref name="child"/>
+          <ref name="constraints"/>
           <ref name="ANY"/>
         </choice>
       </zeroOrMore>
@@ -115,9 +116,13 @@
           </optional>
         </group>
       </optional>
-      <optional>
+      <choice>
         <text/>
-      </optional>
+        <ref name="object"/>
+        <ref name="constant"/>
+        <ref name="lookup"/>
+        <ref name="closure"/>
+      </choice>
     </element>
   </define>
   <define name="signal">
@@ -303,6 +308,11 @@
           <name>link</name>
           <name>submenu</name>
           <name>section</name>
+          <name>lookup</name>
+          <name>closure</name>
+          <name>constant</name>
+          <name>constraint</name>
+          <name>guide</name>
         </except>
       </anyName>
       <zeroOrMore>
@@ -338,6 +348,144 @@
           <text/>
         </optional>
       </interleave>
+    </element>
+  </define>
+  <define name="constant">
+    <element name="constant">
+      <attribute name="type">
+        <text/>
+      </attribute>
+      <optional>
+        <text/>
+      </optional>
+    </element>
+  </define>
+  <define name="lookup">
+    <element name="lookup">
+      <optional>
+        <attribute name="name">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="type">
+          <text/>
+        </attribute>
+      </optional>
+      <choice>
+        <text/>
+        <ref name="constant"/>
+      </choice>
+    </element>
+  </define>
+  <define name="closure">
+    <element name="closure">
+      <attribute name="type">
+        <text/>
+      </attribute>
+      <attribute name="function">
+        <text/>
+      </attribute>
+      <zeroOrMore>
+        <choice>
+          <ref name="constant"/>
+          <ref name="lookup"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+  <define name="guide">
+    <element name="guide">
+      <optional>
+        <attribute name="name">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="min-width">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="min-height">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="nat-width">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="nat-height">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="max-width">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="max-height">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="strength">
+          <text/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="constraint">
+    <element name="constraint">
+      <attribute name="target">
+        <text/>
+      </attribute>
+      <attribute name="target-attribute">
+        <text/>
+      </attribute>
+      <optional>
+        <group>
+          <attribute name="source">
+            <text/>
+          </attribute>
+          <attribute name="source-attribute">
+            <text/>
+          </attribute>
+        </group>
+      </optional>
+      <optional>
+        <attribute name="relation">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="constant">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="multiplier">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="strength">
+          <text/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+  <define name="constraints">
+    <element name="constraints">
+      <zeroOrMore>
+        <choice>
+          <ref name="guide"/>
+          <ref name="constraint"/>
+        </choice>
+      </zeroOrMore>
     </element>
   </define>
 </grammar>
