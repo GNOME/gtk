@@ -1238,7 +1238,7 @@ gdk_device_get_num_touches (GdkDevice *device)
  *
  * Retrieves the current tool for @device.
  *
- * Returns: (transfer none): the `GdkDeviceTool`
+ * Returns: (transfer none) (nullable): the `GdkDeviceTool`
  */
 GdkDeviceTool *
 gdk_device_get_device_tool (GdkDevice *device)
