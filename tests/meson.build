@@ -26,6 +26,7 @@ gtk_tests = [
   ['testbbox'],
   ['testbox'],
   ['testboxcss'],
+  ['testbuilder'],
   ['testbuttons'],
   ['testcairo'],
   ['testcalendar'],
