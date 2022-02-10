@@ -6432,7 +6432,7 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
 /**
  * gtk_icon_view_get_drag_dest_item:
  * @icon_view: a `GtkIconView`
- * @path: (out) (optional): Return location for the path of
+ * @path: (out) (nullable) (optional): Return location for the path of
  *   the highlighted item
  * @pos: (out) (optional): Return location for the drop position
  *
