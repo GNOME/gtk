@@ -1,6 +1,73 @@
 Overview of Changes
 ===================
 
+* GtkFontChooser:
+ - Stop using PangoFc api
+ - Fix a crash
+ - Use new HarfBuzz api
+
+* GtkMenuButton:
+ - Update accessible description
+
+* GtkTextView:
+ - Fix intra-widget dnd
+
+* Printing:
+ - Fix an fd leak
+
+* Input:
+ - Make sure input methods get focus-in events
+ - Always flush events to avoid scroll event pileup
+ - Support hold events
+ - Update keysyms from libxkbcommon
+
+* Theme:
+ - Improve text selection legibility
+
+* Introspection:
+ - Add missing nullable annotations everywhere
+
+* Build:
+ - Make stack noexec again
+ - Avoid symbol leaks
+ - Drop unneeded script data
+
+* Windows:
+ - Stop using WM_SYNCPAINT
+ - Relax check for GL 3.x legacy contexts
+ - Use native apis for language names
+ - Rewrite the keymap code
+ - Use the GL renderer by default
+
+* Wayland:
+ - Fix support for the new high-contrast setting
+ - Avoid redundant scale changes
+ - Fix DND hotspot handling
+ - Don't always restore the saved size when floating
+
+* MacOS:
+ - Various performance improvements
+
+* Translation updates:
+ Brazilian Portuguese
+ Catalan
+ Chinese (China)
+ Galician
+ Hebrew
+ Japanese
+ Lithuanian
+ Persian
+ Polish
+ Portuguese
+ Russian
+ Slovenian
+ Spanish
+ Ukrainian
+
+
+Overview of Changes in 4.6.0, 30-12-2021
+========================================
+
 * GtkProgressBar:
  - Fix handling of "inverted"
 
