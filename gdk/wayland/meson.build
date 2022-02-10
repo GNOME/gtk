@@ -71,7 +71,7 @@ foreach p: proto_sources
   elif proto_stability == 'staging'
     proto_version = p.get(2)
     output_base = '@0@-@1@'.format(proto_name, proto_version)
-    input = join_paths(wlproto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base))
+    input = files(join_paths(wlproto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base)))
   elif proto_stability == 'private'
     output_base = proto_name
     input = files('protocol/@0@.xml'.format(proto_name))
