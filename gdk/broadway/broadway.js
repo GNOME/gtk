@@ -91,6 +91,31 @@ const GDK_META_MASK     = 1 << 28;
 
 var useDataUrls = window.location.search.includes("datauri");
 
+/* check if we are on Android and using Chrome */
+var isAndroidChrome = false;
+{
+    var ua = navigator.userAgent.toLowerCase();
+    if (ua.indexOf("android") > -1 && ua.indexOf("chrom") > -1) {
+	isAndroidChrome = true;
+    }
+}
+/* check for the passive option for Event listener */
+let passiveSupported = false;
+try {
+    const options = {
+	get passive() { // This function will be called when the browser
+            //   attempts to access the passive property.
+	    passiveSupported = true;
+	    return false;
+	}
+    };
+
+    window.addEventListener("test", null, options);
+    window.removeEventListener("test", null, options);
+} catch(err) {
+    passiveSupported = false;
+}
+
 /* This base64code is based on https://github.com/beatgammit/base64-js/blob/master/index.js which is MIT licensed */
 
 var b64_lookup = [];
@@ -215,11 +240,32 @@ function logStackTrace(len) {
         log(callstack[i]);
 }
 
+/* Helper functions for touch identifier to make it unique on Android */
+var globalTouchIdentifier = Math.round(Date.now() / 1000);
+function touchIdentifierStart(tId)
+{
+    if (isAndroidChrome) {
+	if (tId == 0) {
+	    return ++globalTouchIdentifier;
+	}
+	return globalTouchIdentifier + tId;
+    }
+    return tId;
+}
+function touchIdentifier(tId)
+{
+    if (isAndroidChrome) {
+	return globalTouchIdentifier + tId;
+    }
+    return tId;
+}
+
 var grab = new Object();
 grab.surface = null;
 grab.ownerEvents = false;
 grab.implicit = false;
 var keyDownList = [];
+var inputList = [];
 var lastSerial = 0;
 var lastX = 0;
 var lastY = 0;
@@ -987,7 +1033,14 @@ function handleDisplayCommands(display_commands)
             break;
         case DISPLAY_OP_DELETE_SURFACE:
             var id = cmd[1];
-            delete surfaces[id];
+	    if (id == surfaceWithMouse) {
+		surfaceWithMouse = 0;
+	    }
+	    if (id == realSurfaceWithMouse) {
+		realSurfaceWithMouse = 0;
+		firstTouchDownId = null;
+	    }
+           delete surfaces[id];
             break;
         case DISPLAY_OP_CHANGE_TEXTURE:
             var image = cmd[1];
@@ -1371,8 +1424,14 @@ function getEffectiveEventTarget (id) {
 function updateKeyboardStatus() {
     if (fakeInput != null && showKeyboardChanged) {
         showKeyboardChanged = false;
-        if (showKeyboard)
+        if (showKeyboard) {
+	    if (isAndroidChrome) {
+		fakeInput.blur();
+		fakeInput.value = ' '.repeat(80); // TODO: Should be exchange with broadway server
+		                                  // to bring real value here.
+	    }
             fakeInput.focus();
+	}
         else
             fakeInput.blur();
     }
@@ -2924,6 +2983,19 @@ function pushKeyEvent(fev) {
     keyDownList.push(fev);
 }
 
+function copyInputEvent(ev) {
+    var members = ['inputType', 'data'], i, obj = {};
+    for (i = 0; i < members.length; i++) {
+	if (typeof ev[members[i]] !== "undefined")
+	    obj[members[i]] = ev[members[i]];
+    }
+    return obj;
+}
+
+function pushInputEvent(fev) {
+    inputList.push(fev);
+}
+
 function getKeyEvent(keyCode, pop) {
     var i, fev = null;
     for (i = keyDownList.length-1; i >= 0; i--) {
@@ -3022,11 +3094,44 @@ function handleKeyUp(e) {
         keysym = fev.keysym;
     else {
         //log("Key event (keyCode = " + ev.keyCode + ") not found on keyDownList");
+	if (isAndroidChrome && (ev.keyCode == 229)) {
+	    var i, fev = null, len = inputList.length, str;
+	    for (i = 0; i < len; i++) {
+		fev = inputList[i];
+		switch(fev.inputType) {
+		case "deleteContentBackward":
+		    sendInput(BROADWAY_EVENT_KEY_PRESS, [65288, lastState]);
+		    sendInput(BROADWAY_EVENT_KEY_RELEASE, [65288, lastState]);
+		    break;
+		case "insertText":
+		    if (fev.data !== undefined) {
+			for (let sym of fev.data) {
+			    sendInput(BROADWAY_EVENT_KEY_PRESS, [sym.codePointAt(0), lastState]);
+			    sendInput(BROADWAY_EVENT_KEY_RELEASE, [sym.codePointAt(0), lastState]);
+			}
+		    }
+		    break;
+		default:
+		    break;
+		}
+	    }
+	    inputList.splice(0, len);
+	}
         keysym = 0;
     }
 
     if (keysym > 0)
         sendInput (BROADWAY_EVENT_KEY_RELEASE, [keysym, lastState]);
+    return cancelEvent(ev);
+}
+
+function handleInput (e)  {
+    var fev = null, ev = (e ? e : window.event), keysym = null, suppress = false;
+
+    fev = copyInputEvent(ev);
+    pushInputEvent(fev);
+
+    // Stop keypress events just in case
     return cancelEvent(ev);
 }
 
@@ -3043,6 +3148,11 @@ function onKeyPress(ev) {
 function onKeyUp (ev) {
     updateForEvent(ev);
     return handleKeyUp(ev);
+}
+
+function onInput (ev) {
+    updateForEvent(ev);
+    return handleInput(ev);
 }
 
 function cancelEvent(ev)
@@ -3076,13 +3186,14 @@ function onMouseWheel(ev)
 }
 
 function onTouchStart(ev) {
-    event.preventDefault();
+    ev.preventDefault();
 
     updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
+	var touchId = touchIdentifierStart(touch.identifier);
 
         var origId = getSurfaceId(touch);
         var id = getEffectiveEventTarget (origId);
@@ -3090,7 +3201,7 @@ function onTouchStart(ev) {
         var isEmulated = 0;
 
         if (firstTouchDownId == null) {
-            firstTouchDownId = touch.identifier;
+            firstTouchDownId = touchId;
             isEmulated = 1;
 
             if (realSurfaceWithMouse != origId || id != surfaceWithMouse) {
@@ -3105,52 +3216,54 @@ function onTouchStart(ev) {
             }
         }
 
-        sendInput (BROADWAY_EVENT_TOUCH, [0, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [0, id, touchId, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
 function onTouchMove(ev) {
-    event.preventDefault();
+    ev.preventDefault();
 
     updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
+	var touchId = touchIdentifier(touch.identifier);
 
         var origId = getSurfaceId(touch);
         var id = getEffectiveEventTarget (origId);
         var pos = getPositionsFromEvent(touch, id);
 
         var isEmulated = 0;
-        if (firstTouchDownId == touch.identifier) {
+        if (firstTouchDownId == touchId) {
             isEmulated = 1;
         }
 
-        sendInput (BROADWAY_EVENT_TOUCH, [1, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [1, id, touchId, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
 function onTouchEnd(ev) {
-    event.preventDefault();
+    ev.preventDefault();
 
     updateKeyboardStatus();
     updateForEvent(ev);
 
     for (var i = 0; i < ev.changedTouches.length; i++) {
         var touch = ev.changedTouches.item(i);
+	var touchId = touchIdentifier(touch.identifier);
 
         var origId = getSurfaceId(touch);
         var id = getEffectiveEventTarget (origId);
         var pos = getPositionsFromEvent(touch, id);
 
         var isEmulated = 0;
-        if (firstTouchDownId == touch.identifier) {
+        if (firstTouchDownId == touchId) {
             isEmulated = 1;
             firstTouchDownId = null;
         }
 
-        sendInput (BROADWAY_EVENT_TOUCH, [2, id, touch.identifier, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
+        sendInput (BROADWAY_EVENT_TOUCH, [2, id, touchId, isEmulated, pos.rootX, pos.rootY, pos.winX, pos.winY, lastState]);
     }
 }
 
@@ -3167,11 +3280,11 @@ function setupDocument(document)
     document.onkeyup = onKeyUp;
 
     if (document.addEventListener) {
-      document.addEventListener('DOMMouseScroll', onMouseWheel, false);
-      document.addEventListener('mousewheel', onMouseWheel, false);
-      document.addEventListener('touchstart', onTouchStart, false);
-      document.addEventListener('touchmove', onTouchMove, false);
-      document.addEventListener('touchend', onTouchEnd, false);
+	document.addEventListener('DOMMouseScroll', onMouseWheel, passiveSupported ? { passive: false, capture: false } : false);
+	document.addEventListener('mousewheel', onMouseWheel, passiveSupported ? { passive: false, capture: false } : false);
+	document.addEventListener('touchstart', onTouchStart, passiveSupported ? { passive: false, capture: false } : false);
+	document.addEventListener('touchmove', onTouchMove, passiveSupported ? { passive: false, capture: false } : false);
+	document.addEventListener('touchend', onTouchEnd, passiveSupported ? { passive: false, capture: false } : false);
     } else if (document.attachEvent) {
       element.attachEvent("onmousewheel", onMouseWheel);
     }
@@ -3237,12 +3350,14 @@ function connect()
     };
 
     var iOS = /(iPad|iPhone|iPod)/g.test( navigator.userAgent );
-    if (iOS) {
+    if (iOS || isAndroidChrome) {
         fakeInput = document.createElement("input");
         fakeInput.type = "text";
         fakeInput.style.position = "absolute";
         fakeInput.style.left = "-1000px";
         fakeInput.style.top = "-1000px";
         document.body.appendChild(fakeInput);
+	if (isAndroidChrome)
+	    fakeInput.addEventListener('input', onInput, passiveSupported ? { passive: false, capture: false } : false);
     }
 }
