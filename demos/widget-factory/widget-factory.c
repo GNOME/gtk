@@ -2053,6 +2053,7 @@ activate (GApplication *app)
     { "win.open", { "<Control>o", NULL } },
     { "win.record", { "<Control>r", NULL } },
     { "win.lock", { "<Control>l", NULL } },
+    { "win.fullscreen", { "F11", NULL } },
   };
   struct {
     const char *action_and_target;
