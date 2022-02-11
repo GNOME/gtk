@@ -898,7 +898,7 @@ set_active_printer (GtkPageSetupUnixDialog *dialog,
 /**
  * gtk_page_setup_unix_dialog_set_print_settings:
  * @dialog: a `GtkPageSetupUnixDialog`
- * @print_settings: a `GtkPrintSettings`
+ * @print_settings: (nullable): a `GtkPrintSettings`
  *
  * Sets the `GtkPrintSettings` from which the page setup dialog
  * takes its values.
@@ -935,7 +935,7 @@ gtk_page_setup_unix_dialog_set_print_settings (GtkPageSetupUnixDialog *dialog,
  *
  * Gets the current print settings from the dialog.
  *
- * Returns: (transfer none): the current print settings
+ * Returns: (transfer none) (nullable): the current print settings
  **/
 GtkPrintSettings *
 gtk_page_setup_unix_dialog_get_print_settings (GtkPageSetupUnixDialog *dialog)

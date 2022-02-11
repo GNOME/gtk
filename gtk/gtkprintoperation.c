@@ -1515,7 +1515,7 @@ gtk_print_operation_set_print_settings (GtkPrintOperation *op,
  * [method@Gtk.PrintOperation.set_print_settings] or
  * [method@Gtk.PrintOperation.run] have been called.
  *
- * Returns: (transfer none): the current print settings of @op.
+ * Returns: (transfer none) (nullable): the current print settings of @op.
  **/
 GtkPrintSettings *
 gtk_print_operation_get_print_settings (GtkPrintOperation *op)
