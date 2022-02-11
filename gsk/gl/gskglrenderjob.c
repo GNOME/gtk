@@ -123,6 +123,7 @@ struct _GskGLRenderJob
    * GL context.
    */
   guint framebuffer;
+  guint default_framebuffer;
 
   /* The viewport we are using. This state is updated as we process render
    * nodes in the specific visitor callbacks.
@@ -4058,7 +4059,7 @@ gsk_gl_render_job_render_flipped (GskGLRenderJob *job,
   gsk_gl_render_job_end_draw (job);
 
   gdk_gl_context_push_debug_group (job->command_queue->context, "Executing command queue");
-  gsk_gl_command_queue_execute (job->command_queue, surface_height, 1, NULL);
+  gsk_gl_command_queue_execute (job->command_queue, surface_height, 1, NULL, job->default_framebuffer);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
 
   glDeleteFramebuffers (1, &framebuffer_id);
@@ -4108,7 +4109,7 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
   start_time = GDK_PROFILER_CURRENT_TIME;
   gsk_gl_command_queue_make_current (job->command_queue);
   gdk_gl_context_push_debug_group (job->command_queue->context, "Executing command queue");
-  gsk_gl_command_queue_execute (job->command_queue, surface_height, scale_factor, job->region);
+  gsk_gl_command_queue_execute (job->command_queue, surface_height, scale_factor, job->region, job->default_framebuffer);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
   gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Execute GL command queue", "");
 }
@@ -4157,10 +4158,22 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   const graphene_rect_t *clip_rect = viewport;
   graphene_rect_t transformed_extents;
   GskGLRenderJob *job;
+  GdkGLContext *context;
+  GLint default_framebuffer = 0;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (driver), NULL);
   g_return_val_if_fail (viewport != NULL, NULL);
   g_return_val_if_fail (scale_factor > 0, NULL);
+
+  /* Check for non-standard framebuffer binding as we might not be using
+   * the default framebuffer on systems like macOS where we've bound an
+   * IOSurface to a GL_TEXTURE_RECTANGLE. Otherwise, no scissor clip will
+   * be applied in the command queue causing overdrawing.
+   */
+  context = driver->command_queue->context;
+  default_framebuffer = GDK_GL_CONTEXT_GET_CLASS (context)->get_default_framebuffer (context);
+  if (framebuffer == 0 && default_framebuffer != 0)
+    framebuffer = default_framebuffer;
 
   job = g_slice_new0 (GskGLRenderJob);
   job->driver = g_object_ref (driver);
@@ -4169,6 +4182,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   job->modelview = g_array_sized_new (FALSE, FALSE, sizeof (GskGLRenderModelview), 16);
   job->framebuffer = framebuffer;
   job->clear_framebuffer = !!clear_framebuffer;
+  job->default_framebuffer = default_framebuffer;
   job->offset_x = 0;
   job->offset_y = 0;
   job->scale_x = scale_factor;

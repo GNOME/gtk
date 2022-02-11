@@ -278,7 +278,8 @@ void                gsk_gl_command_queue_end_frame            (GskGLCommandQueue
 void                gsk_gl_command_queue_execute              (GskGLCommandQueue    *self,
                                                                guint                 surface_height,
                                                                guint                 scale_factor,
-                                                               const cairo_region_t *scissor);
+                                                               const cairo_region_t *scissor,
+                                                               guint                 default_framebuffer);
 int                 gsk_gl_command_queue_upload_texture       (GskGLCommandQueue    *self,
                                                                GdkTexture           *texture,
                                                                int                   min_filter,
