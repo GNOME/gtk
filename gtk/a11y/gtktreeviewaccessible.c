@@ -413,6 +413,7 @@ create_cell_accessible (GtkTreeView           *treeview,
         {
           cell = create_cell_accessible_for_renderer (l->data, GTK_WIDGET (treeview), ATK_OBJECT (container));
           gtk_container_cell_accessible_add_child (container, cell);
+          g_object_unref (cell);
         }
 
       cell = GTK_CELL_ACCESSIBLE (container);
