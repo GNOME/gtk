@@ -293,7 +293,7 @@ gtk_event_controller_key_new (void)
 /**
  * gtk_event_controller_key_set_im_context:
  * @controller: a `GtkEventControllerKey`
- * @im_context: a `GtkIMContext`
+ * @im_context: (nullable): a `GtkIMContext`
  *
  * Sets the input method context of the key @controller.
  */
@@ -316,7 +316,7 @@ gtk_event_controller_key_set_im_context (GtkEventControllerKey *controller,
  *
  * Gets the input method context of the key @controller.
  *
- * Returns: (transfer none): the `GtkIMContext`
+ * Returns: (transfer none) (nullable): the `GtkIMContext`
  **/
 GtkIMContext *
 gtk_event_controller_key_get_im_context (GtkEventControllerKey *controller)
