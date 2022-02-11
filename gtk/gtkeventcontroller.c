@@ -551,6 +551,8 @@ gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
  * @controller: a `GtkEventController`
  *
  * Gets the name of @controller.
+ * 
+ * Returns: (nullable): The controller name
  */
 const char *
 gtk_event_controller_get_name (GtkEventController *controller)
@@ -565,7 +567,7 @@ gtk_event_controller_get_name (GtkEventController *controller)
 /**
  * gtk_event_controller_set_name: (attributes org.gtk.Method.set_property=name)
  * @controller: a `GtkEventController`
- * @name: a name for @controller
+ * @name: (nullable): a name for @controller
  *
  * Sets a name on the controller that can be used for debugging.
  */
