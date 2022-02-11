@@ -19,10 +19,17 @@
 
 #include "config.h"
 
+#include <math.h>
+
+#include "gtkintl.h"
+
+#include "gtkcssboxesimplprivate.h"
+#include "gtkcsscolorvalueprivate.h"
+#include "gtkcsscornervalueprivate.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtknativeprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkintl.h"
-#include "gtkcssnodeprivate.h"
 
 #include "gdk/gdksurfaceprivate.h"
 
@@ -296,4 +303,182 @@ gtk_native_queue_relayout (GtkNative *self)
 
   gdk_frame_clock_request_phase (clock, GDK_FRAME_CLOCK_PHASE_UPDATE);
   gdk_surface_request_layout (surface);
+}
+
+static void
+corner_rect (const GtkCssValue     *value,
+             cairo_rectangle_int_t *rect)
+{
+  rect->width = _gtk_css_corner_value_get_x (value, 100);
+  rect->height = _gtk_css_corner_value_get_y (value, 100);
+}
+
+static void
+subtract_decoration_corners_from_region (cairo_region_t        *region,
+                                         cairo_rectangle_int_t *extents,
+                                         const GtkCssStyle     *style)
+{
+  cairo_rectangle_int_t rect;
+
+  corner_rect (style->border->border_top_left_radius, &rect);
+  rect.x = extents->x;
+  rect.y = extents->y;
+  cairo_region_subtract_rectangle (region, &rect);
+
+  corner_rect (style->border->border_top_right_radius, &rect);
+  rect.x = extents->x + extents->width - rect.width;
+  rect.y = extents->y;
+  cairo_region_subtract_rectangle (region, &rect);
+
+  corner_rect (style->border->border_bottom_left_radius, &rect);
+  rect.x = extents->x;
+  rect.y = extents->y + extents->height - rect.height;
+  cairo_region_subtract_rectangle (region, &rect);
+
+  corner_rect (style->border->border_bottom_right_radius, &rect);
+  rect.x = extents->x + extents->width - rect.width;
+  rect.y = extents->y + extents->height - rect.height;
+  cairo_region_subtract_rectangle (region, &rect);
+}
+
+static int
+get_translucent_border_edge (const GtkCssValue *color,
+                             const GtkCssValue *border_color,
+                             const GtkCssValue *border_width)
+{
+  if (border_color == NULL)
+    border_color = color;
+
+  if (!gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (border_color)))
+    return round (_gtk_css_number_value_get (border_width, 100));
+
+  return 0;
+}
+
+static void
+get_translucent_border_width (GtkWidget *widget,
+                              GtkBorder *border)
+{
+  GtkCssNode *css_node = gtk_widget_get_css_node (widget);
+  GtkCssStyle *style = gtk_css_node_get_style (css_node);
+
+  border->top = get_translucent_border_edge (style->core->color,
+                                             style->border->border_top_color,
+                                             style->border->border_top_width);
+  border->bottom = get_translucent_border_edge (style->core->color,
+                                                style->border->border_bottom_color,
+                                                style->border->border_bottom_width);
+  border->left = get_translucent_border_edge (style->core->color,
+                                              style->border->border_left_color,
+                                              style->border->border_left_width);
+  border->right = get_translucent_border_edge (style->core->color,
+                                               style->border->border_right_color,
+                                               style->border->border_right_width);
+}
+
+static gboolean
+get_opaque_rect (GtkWidget             *widget,
+                 const GtkCssStyle     *style,
+                 cairo_rectangle_int_t *rect)
+{
+  gboolean is_opaque = gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (style->background->background_color));
+
+  if (is_opaque && gtk_widget_get_opacity (widget) < 1.0)
+    is_opaque = FALSE;
+
+  if (is_opaque)
+    {
+      const graphene_rect_t *border_rect;
+      GtkCssBoxes css_boxes;
+      GtkBorder border;
+
+      gtk_css_boxes_init (&css_boxes, widget);
+      border_rect = gtk_css_boxes_get_border_rect (&css_boxes);
+      get_translucent_border_width (widget, &border);
+
+      rect->x = border_rect->origin.x + border.left;
+      rect->y = border_rect->origin.y + border.top;
+      rect->width = border_rect->size.width - border.left - border.right;
+      rect->height = border_rect->size.height - border.top - border.bottom;
+    }
+
+  return is_opaque;
+}
+
+static void
+get_shadow_width (GtkWidget *widget,
+                  GtkBorder *shadow_width,
+                  int        resize_handle_size)
+{
+  GtkCssNode *css_node = gtk_widget_get_css_node (widget);
+  const GtkCssStyle *style = gtk_css_node_get_style (css_node);
+
+  gtk_css_shadow_value_get_extents (style->background->box_shadow, shadow_width);
+
+  shadow_width->left = MAX (shadow_width->left, resize_handle_size);
+  shadow_width->top = MAX (shadow_width->top, resize_handle_size);
+  shadow_width->bottom = MAX (shadow_width->bottom, resize_handle_size);
+  shadow_width->right = MAX (shadow_width->right, resize_handle_size);
+}
+
+void
+gtk_native_update_opaque_region (GtkNative  *native,
+                                 GtkWidget  *contents,
+                                 gboolean    subtract_decoration_corners,
+                                 gboolean    subtract_shadow,
+                                 int         resize_handle_size)
+{
+  cairo_rectangle_int_t rect;
+  cairo_region_t *opaque_region = NULL;
+  const GtkCssStyle *style;
+  GtkCssNode *css_node;
+  GdkSurface *surface;
+  GtkBorder shadow;
+
+  g_return_if_fail (GTK_IS_NATIVE (native));
+  g_return_if_fail (!contents || GTK_IS_WIDGET (contents));
+
+  if (contents == NULL)
+    contents = GTK_WIDGET (native);
+
+  if (!_gtk_widget_get_realized (GTK_WIDGET (native)) ||
+      !_gtk_widget_get_realized (contents))
+    return;
+
+  css_node = gtk_widget_get_css_node (contents);
+
+  if (subtract_shadow)
+    get_shadow_width (contents, &shadow, resize_handle_size);
+  else
+    shadow = (GtkBorder) {0, 0, 0, 0};
+
+  surface = gtk_native_get_surface (native);
+  style = gtk_css_node_get_style (css_node);
+
+  if (get_opaque_rect (contents, style, &rect))
+    {
+      double native_x, native_y;
+
+      gtk_native_get_surface_transform (native, &native_x, &native_y);
+      rect.x += native_x;
+      rect.y += native_y;
+
+      if (contents != GTK_WIDGET (native))
+        {
+          double contents_x, contents_y;
+
+          gtk_widget_translate_coordinates (contents, GTK_WIDGET (native), 0, 0, &contents_x, &contents_y);
+          rect.x += contents_x;
+          rect.y += contents_y;
+        }
+
+      opaque_region = cairo_region_create_rectangle (&rect);
+
+      if (subtract_decoration_corners)
+        subtract_decoration_corners_from_region (opaque_region, &rect, style);
+    }
+
+  gdk_surface_set_opaque_region (surface, opaque_region);
+
+  cairo_region_destroy (opaque_region);
 }

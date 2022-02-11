@@ -4055,112 +4055,39 @@ out:
 }
 
 static void
-corner_rect (cairo_rectangle_int_t *rect,
-             const GtkCssValue     *value)
-{
-  rect->width = _gtk_css_corner_value_get_x (value, 100);
-  rect->height = _gtk_css_corner_value_get_y (value, 100);
-}
-
-static void
-subtract_decoration_corners_from_region (cairo_region_t        *region,
-                                         cairo_rectangle_int_t *extents,
-                                         GtkCssStyle           *style,
-                                         GtkWindow             *window)
+update_opaque_region (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  cairo_rectangle_int_t rect;
+  gboolean subtract_decoration_corners;
+  gboolean subtract_shadow;
 
-  if (!priv->client_decorated ||
-      !priv->decorated ||
-      priv->fullscreen ||
-      priv->maximized)
-    return;
+  subtract_decoration_corners = (priv->client_decorated &&
+                                 priv->decorated &&
+                                 !priv->fullscreen &&
+                                 !priv->maximized);
+  subtract_shadow = (priv->client_decorated &&
+                     priv->decorated &&
+                     priv->use_client_shadow &&
+                     !priv->maximized &&
+                     !priv->fullscreen);
 
-  corner_rect (&rect, style->border->border_top_left_radius);
-  rect.x = extents->x;
-  rect.y = extents->y;
-  cairo_region_subtract_rectangle (region, &rect);
-
-  corner_rect (&rect, style->border->border_top_right_radius);
-  rect.x = extents->x + extents->width - rect.width;
-  rect.y = extents->y;
-  cairo_region_subtract_rectangle (region, &rect);
-
-  corner_rect (&rect, style->border->border_bottom_left_radius);
-  rect.x = extents->x;
-  rect.y = extents->y + extents->height - rect.height;
-  cairo_region_subtract_rectangle (region, &rect);
-
-  corner_rect (&rect, style->border->border_bottom_right_radius);
-  rect.x = extents->x + extents->width - rect.width;
-  rect.y = extents->y + extents->height - rect.height;
-  cairo_region_subtract_rectangle (region, &rect);
-}
-
-static void
-update_opaque_region (GtkWindow       *window,
-                      const GtkBorder *shadow)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *widget = GTK_WIDGET (window);
-  cairo_region_t *opaque_region;
-  gboolean is_opaque = FALSE;
-  GtkCssStyle *style;
-
-  if (!_gtk_widget_get_realized (widget))
-    return;
-
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (window)));
-
-  is_opaque = gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (style->background->background_color));
-
-  if (is_opaque && gtk_widget_get_opacity (widget) < 1.0)
-    is_opaque = FALSE;
-
-  if (is_opaque)
-    {
-      cairo_rectangle_int_t rect;
-      GtkCssBoxes css_boxes;
-      const graphene_rect_t *border_rect;
-      double native_x, native_y;
-
-      gtk_native_get_surface_transform (GTK_NATIVE (window), &native_x, &native_y);
-
-      gtk_css_boxes_init (&css_boxes, widget);
-      border_rect = gtk_css_boxes_get_border_rect (&css_boxes);
-
-      rect.x = native_x + border_rect->origin.x;
-      rect.y = native_y + border_rect->origin.y;
-      rect.width = border_rect->size.width;
-      rect.height = border_rect->size.height;
-
-      opaque_region = cairo_region_create_rectangle (&rect);
-
-      subtract_decoration_corners_from_region (opaque_region, &rect, style, window);
-    }
-  else
-    {
-      opaque_region = NULL;
-    }
-
-  gdk_surface_set_opaque_region (priv->surface, opaque_region);
-
-  cairo_region_destroy (opaque_region);
+  gtk_native_update_opaque_region (GTK_NATIVE (window),
+                                   NULL,
+                                   subtract_decoration_corners,
+                                   subtract_shadow,
+                                   RESIZE_HANDLE_SIZE);
 }
 
 static void
 update_realized_window_properties (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkBorder shadow;
   GdkRectangle rect;
   GtkCssBoxes css_boxes;
   const graphene_rect_t *border_rect;
   double native_x, native_y;
 
-  get_shadow_width (window, &shadow);
-  update_opaque_region (window, &shadow);
+  update_opaque_region (window);
 
   if (!priv->client_decorated || !priv->use_client_shadow)
     return;
@@ -5227,13 +5154,7 @@ gtk_window_css_changed (GtkWidget         *widget,
 
   if (!_gtk_widget_get_alloc_needed (widget) &&
       (change == NULL || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_BACKGROUND_COLOR)))
-    {
-      GtkBorder shadow;
-
-      get_shadow_width (window, &shadow);
-
-      update_opaque_region (window, &shadow);
-    }
+    update_opaque_region (window);
 }
 
 /*
