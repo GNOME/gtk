@@ -101,6 +101,7 @@ gdk_wayland_primary_claim_remote (GdkWaylandPrimary                     *cb,
     {
       GDK_DISPLAY_NOTE (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD, g_message ("%p: Ignoring clipboard offer for self", cb));
       gdk_content_formats_unref (formats);
+      g_clear_pointer (&offer, zwp_primary_selection_offer_v1_destroy);
       return;
     }
 
