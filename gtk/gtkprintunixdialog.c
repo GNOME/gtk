@@ -3078,7 +3078,7 @@ gtk_print_unix_dialog_new (const char *title,
  *
  * Gets the currently selected printer.
  *
- * Returns: (transfer none): the currently selected printer
+ * Returns: (transfer none) (nullable): the currently selected printer
  */
 GtkPrinter *
 gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
