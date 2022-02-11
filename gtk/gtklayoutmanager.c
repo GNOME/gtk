@@ -424,6 +424,7 @@ gtk_layout_manager_get_request_mode (GtkLayoutManager *manager)
   GtkLayoutManagerClass *klass;
 
   g_return_val_if_fail (GTK_IS_LAYOUT_MANAGER (manager), GTK_SIZE_REQUEST_CONSTANT_SIZE);
+  g_return_val_if_fail (priv->widget != NULL, GTK_SIZE_REQUEST_CONSTANT_SIZE);
 
   klass = GTK_LAYOUT_MANAGER_GET_CLASS (manager);
 
