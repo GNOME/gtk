@@ -8,21 +8,23 @@ docs_url = "https://docs.gtk.org/gobject/"
 authors = "GTK Development Team"
 license = "LGPL-2.1-or-later"
 description = "The base type system and object class"
-dependencies = [ "GLib-2.0", "GModule-2.0", "Gio-2.0" ]
 devhelp = true
 search_index = true
+dependencies = ["GLib-2.0"]
 
   [dependencies."GLib-2.0"]
   name = "GLib"
   description = "The base utility library"
   docs_url = "https://docs.gtk.org/glib/"
 
-  [dependencies."GModule-2.0"]
+related = ["GModule-2.0", "Gio-2.0"]
+
+  [related."GModule-2.0"]
   name = "GModule"
   description = "Portable API for dynamically loading modules"
   docs_url = "https://docs.gtk.org/gmodule/"
 
-  [dependencies."Gio-2.0"]
+  [related."Gio-2.0"]
   name = "GIO"
   description = "GObject Interfaces and Objects, Networking, IPC, and I/O"
   docs_url = "https://docs.gtk.org/gio/"

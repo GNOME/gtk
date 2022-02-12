@@ -7,14 +7,22 @@ docs_url = "https://docs.gtk.org/atk/"
 authors = "GTK Development Team"
 license = "LGPL-2.1-or-later"
 description = "The Accessibility toolkit"
-dependencies = [ "GObject-2.0", ]
 devhelp = true
 search_index = true
+
+dependencies = [ "GObject-2.0", ]
 
   [dependencies."GObject-2.0"]
   name = "GObject"
   description = "The base type system library"
   docs_url = "https://docs.gtk.org/gobject/"
+
+related = ["Atspi-2.0"]
+
+  [related."Atspi-2.0"]
+  name = "AT-SPI"
+  description = "The Assistive Technology Service Provider Interface"
+  docs_url = "https://docs.gtk.org/atspi2/"
 
 [theme]
 name = "basic"
