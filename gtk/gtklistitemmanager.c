@@ -77,6 +77,41 @@ static void             gtk_list_item_manager_release_list_item (GtkListItemMana
                                                                  GtkWidget              *widget);
 G_DEFINE_TYPE (GtkListItemManager, gtk_list_item_manager, G_TYPE_OBJECT)
 
+static void
+dump_items (GtkListItemManager *self)
+{
+  GtkListItemManagerItem *item;
+  guint position;
+  gboolean tracked;
+
+  item = gtk_rb_tree_get_first (self->items);
+  if (item == NULL)
+    {
+      g_print ("0\n");
+      return;
+    }
+
+  g_print ("0 %s ", item->widget ? "X" : "-");
+  tracked = !!item->widget;
+  position = item->n_items;
+
+  for (item = gtk_rb_tree_node_get_next (item);
+       item != NULL;
+       item = gtk_rb_tree_node_get_next (item))
+    {
+      if (item->n_items == 0)
+        continue;
+
+      if (!!item->widget != tracked)
+        {
+          tracked = !tracked;
+          g_print ("%u %s ", position, tracked ? "X" : "-");
+        }
+      position += item->n_items;
+    }
+  g_print ("%u\n", position);
+}
+
 void
 gtk_list_item_manager_augment_node (GtkRbTree *tree,
                                     gpointer   node_augment,
@@ -523,6 +558,7 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
   while (position < n_items)
     {
       gtk_list_item_query_tracked_range (self, n_items, position, &query_n_items, &tracked);
+      g_print ("tracked: %u => %u %s\n", position, position + query_n_items, tracked ? "X" : "-");
       if (tracked)
         {
           position += query_n_items;
@@ -544,6 +580,8 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
         }
       position += query_n_items;
     }
+
+  dump_items (self);
 }
 
 static void
@@ -646,6 +684,8 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
 
   while ((widget = g_queue_pop_head (&released)))
     gtk_list_item_manager_release_list_item (self, NULL, widget);
+
+  dump_items (self);
 }
 
 static void
