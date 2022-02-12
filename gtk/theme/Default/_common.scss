@@ -66,6 +66,8 @@ textview {
   > text {
     @extend %view;
 
+    background-color: transparent;
+
     > selection {
       background-color: $backdrop_selected_bg_color;
 
