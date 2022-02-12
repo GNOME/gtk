@@ -8,9 +8,10 @@ authors = "GTK Development Team"
 logo_url = "gtk-logo.svg"
 license = "LGPL-2.1-or-later"
 description = "The GTK toolkit"
-dependencies = [ "GObject-2.0", "cairo-1.0", "Pango-1.0", "GdkX11-3.0" ]
 devhelp = true
 search_index = true
+
+dependencies = [ "GObject-2.0", "cairo-1.0", "Pango-1.0", "GdkX11-3.0" ]
 
   [dependencies."GObject-2.0"]
   name = "GObject"
@@ -31,6 +32,14 @@ search_index = true
   name = "GdkX11"
   description = "GDK X11 Backend"
   docs_url = "https://docs.gtk.org/gdk3-x11/"
+
+related = ["Gtk-3.0"]
+
+  [related."Gtk-3.0"]
+  name = "Gtk"
+  description = "The GTK toolkit"
+  docs_url = "https://docs.gtk.org/gtk3/"
+
 
 [theme]
 name = "basic"
