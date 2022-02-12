@@ -7,13 +7,14 @@ authors = "GTK Development Team"
 logo_url = "gtk-logo.svg"
 license = "GPL-2.1-or-later"
 description = "The GTK toolkit"
-dependencies = [ "GObject-2.0" ]
 devhelp = true
 
-  [dependencies."GObject-2.0"]
-  name = "GObject"
-  description = "The base type system library"
-  docs_url = "https://docs.gtk.org/gobject/"
+dependencies = ["Gdk-4.0"]
+
+  [dependencies."Gdk-4.0"]
+  name = "GDK"
+  description = "The GTK drawing kit"
+  docs_url = "https://docs.gtk.org/gdk/"
 
 [theme]
 name = "basic"
