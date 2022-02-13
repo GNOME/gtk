@@ -268,11 +268,29 @@ bind_widget (GtkSignalListItemFactory *factory,
     break;
   }
 
-
   child = gtk_widget_get_next_sibling (child);
   s = g_strdup_printf ("%d°", info->temperature);
   gtk_label_set_text (GTK_LABEL (child), s);
   g_free (s);
+}
+
+static gboolean
+transform_weather_to_date_string (GBinding     *binding,
+                                  const GValue *from_value,
+                                  GValue       *to_value,
+                                  gpointer      unused)
+{
+  GtkWeatherInfo *info;
+  GDateTime *timestamp;
+
+  info = g_value_get_object (from_value);
+  if (info == NULL)
+    return TRUE;
+
+  timestamp = g_date_time_new_from_unix_utc (info->timestamp);
+  g_value_take_string (to_value, g_date_time_format (timestamp, "%x"));
+  g_date_time_unref (timestamp);
+  return TRUE;
 }
 
 static GtkWidget *window = NULL;
@@ -300,7 +318,7 @@ do_listview_weather (GtkWidget *do_widget)
 {
   if (window == NULL)
     {
-      GtkWidget *listview, *sw;
+      GtkWidget *listview, *sw, *box, *label;
 
       window = gtk_window_new ();
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
@@ -310,10 +328,26 @@ do_listview_weather (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Weather");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *) &window);
 
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+      gtk_window_set_child (GTK_WINDOW (window), box);
+
+      label = gtk_label_new ("");
+      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_box_append (GTK_BOX (box), label);
+
       sw = gtk_scrolled_window_new ();
-      gtk_window_set_child (GTK_WINDOW (window), sw);
+      gtk_widget_set_vexpand (sw, TRUE);
+      gtk_box_append (GTK_BOX (box), sw);
       listview = create_weather_view ();
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), listview);
+
+      g_object_bind_property_full (listview, "focus-item",
+                                   label, "label",
+                                   G_BINDING_SYNC_CREATE,
+                                   transform_weather_to_date_string,
+                                   NULL,
+                                   NULL,
+                                   NULL);
     }
 
   if (!gtk_widget_get_visible (window))
