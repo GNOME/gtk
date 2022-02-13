@@ -83,6 +83,8 @@
  *
  * A macro that evaluates to the 4.2 version of GDK, in a format
  * that can be used by the C pre-processor.
+ *
+ * Since: 4.2
  */
 #define GDK_VERSION_4_2        (G_ENCODE_VERSION (4, 2))
 
@@ -91,6 +93,8 @@
  *
  * A macro that evaluates to the 4.4 version of GDK, in a format
  * that can be used by the C pre-processor.
+ *
+ * Since: 4.4
  */
 #define GDK_VERSION_4_4        (G_ENCODE_VERSION (4, 4))
 
@@ -99,6 +103,8 @@
  *
  * A macro that evaluates to the 4.6 version of GDK, in a format
  * that can be used by the C pre-processor.
+ *
+ * Since: 4.6
  */
 #define GDK_VERSION_4_6        (G_ENCODE_VERSION (4, 6))
 
