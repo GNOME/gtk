@@ -219,18 +219,18 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
   else if (cell_area.x >= area.x && cell_area.x + cell_area.width > area.x + area.width)
     side_across = GTK_PACK_START;
   else if (cell_area.x + cell_area.width / 2 > across)
-    side_across = GTK_PACK_END;
-  else
     side_across = GTK_PACK_START;
+  else
+    side_across = GTK_PACK_END;
 
   if (cell_area.y < area.y && cell_area.y + cell_area.height <= area.y + area.height)
     side_along = GTK_PACK_END;
   else if (cell_area.y >= area.y && cell_area.y + cell_area.height > area.y + area.height)
     side_along = GTK_PACK_START;
   else if (cell_area.y + cell_area.height / 2 > along)
-    side_along = GTK_PACK_END;
-  else
     side_along = GTK_PACK_START;
+  else
+    side_along = GTK_PACK_END;
 
   /* Compute the align based on side to keep the values identical */
   if (side_across == GTK_PACK_START)
