@@ -1269,3 +1269,13 @@ gtk_list_item_tracker_get_position (GtkListItemManager *self,
 {
   return tracker->position;
 }
+
+gpointer
+gtk_list_item_tracker_get_item (GtkListItemManager *self,
+                                GtkListItemTracker *tracker)
+{
+  if (tracker->widget == NULL)
+    return NULL;
+
+  return gtk_list_item_widget_get_item (tracker->widget);
+}

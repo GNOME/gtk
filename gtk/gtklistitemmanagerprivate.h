@@ -113,6 +113,8 @@ void                    gtk_list_item_tracker_set_position      (GtkListItemMana
                                                                  guint                   n_after);
 guint                   gtk_list_item_tracker_get_position      (GtkListItemManager     *self,
                                                                  GtkListItemTracker     *tracker);
+gpointer                gtk_list_item_tracker_get_item          (GtkListItemManager     *self,
+                                                                 GtkListItemTracker     *tracker);
 
 
 G_END_DECLS

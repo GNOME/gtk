@@ -161,6 +161,8 @@ enum
 {
   PROP_0,
   PROP_FACTORY,
+  PROP_FOCUS_ITEM,
+  PROP_FOCUS_POSITION,
   PROP_MODEL,
   PROP_SHOW_SEPARATORS,
   PROP_SINGLE_CLICK_ACTIVATE,
@@ -708,6 +710,14 @@ gtk_list_view_get_property (GObject    *object,
       g_value_set_object (value, gtk_list_item_manager_get_factory (self->item_manager));
       break;
 
+    case PROP_FOCUS_ITEM:
+      g_value_set_object (value, gtk_list_base_get_focus_item (GTK_LIST_BASE (self)));
+      break;
+
+    case PROP_FOCUS_POSITION:
+      g_value_set_uint (value, gtk_list_base_get_focus_position (GTK_LIST_BASE (self)));
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, gtk_list_base_get_model (GTK_LIST_BASE (self)));
       break;
@@ -742,6 +752,10 @@ gtk_list_view_set_property (GObject      *object,
     {
     case PROP_FACTORY:
       gtk_list_view_set_factory (self, g_value_get_object (value));
+      break;
+
+    case PROP_FOCUS_POSITION:
+      gtk_list_view_set_focus_position (self, g_value_get_uint (value));
       break;
 
     case PROP_MODEL:
@@ -821,6 +835,35 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          P_("Factory for populating list items"),
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkListView:focus-position: (attributes org.gtk.Property.get=gtk_list_view_get_focus_position org.gtk.Property.set=gtk_list_view_set_focus_position)
+   *
+   * The position of the focused item.
+   *
+   * If no item is in focus, the property has the value
+   * %GTK_INVALID_LIST_POSITION.
+   */
+  properties[PROP_FOCUS_POSITION] =
+    g_param_spec_uint ("focus-position",
+                         P_("Focus position"),
+                         P_("Position of the focused item"),
+                         0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkListView:focus-item: (attributes org.gtk.Property.get=gtk_list_view_get_focus_item)
+   *
+   * The focused item.
+   *
+   * If the list is empty, %NULL is returned.
+   */
+  properties[PROP_FOCUS_ITEM] =
+    g_param_spec_object ("focus-item",
+                       P_("Focused Item"),
+                       P_("The focused item"),
+                       G_TYPE_OBJECT,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkListView:model: (attributes org.gtk.Property.get=gtk_list_view_get_model org.gtk.Property.set=gtk_list_view_set_model)
@@ -1044,6 +1087,78 @@ gtk_list_view_set_factory (GtkListView        *self,
 }
 
 /**
+ * gtk_list_view_set_focus_position: (attributes org.gtk.Method.set_property=focus-position)
+ * @self: a `GtkListView`
+ * @position: position of item to focus
+ *
+ * Sets focus to be given to the item at the given position.
+ * If position is larger than the number of items, this call is ignored.
+ * 
+ * Moving keyboard focus will select the new item and scroll it into view.
+ *
+ * The operation will be performed even if the listview is hidden.
+ * 
+ * If keyboard focus is not currently inside the listview, the application's
+ * keyboard focus will not change. Call gtk_widget_grab_focus() on the listview
+ * afterwards to move application keyboard focus.
+ *
+ * Since: 4.8
+ */
+void
+gtk_list_view_set_focus_position (GtkListView *self,
+                                  guint        position)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+
+  gtk_list_base_grab_focus_on_item (GTK_LIST_BASE (self), position, TRUE, FALSE, FALSE);
+}
+
+/**
+ * gtk_list_view_get_focus_position: (attributes org.gtk.Method.get_property=focus-position)
+ * @self: a `GtkListView`
+ *
+ * Gets the position of the item that currently has keyboard focus - or that
+ * would have keyboard focus if the listview was focused.
+ *
+ * Note that the focused item might not be in the visible region, for example when
+ * the visible region was scrolled with the mouse.
+ *
+ * Returns: the position of the focused item, or %GTK_INVALID_LIST_POSITION
+ *   if the listview is empty
+ *
+ * Since: 4.8
+ */
+guint
+gtk_list_view_get_focus_position (GtkListView *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), GTK_INVALID_LIST_POSITION);
+
+  return gtk_list_base_get_focus_position (GTK_LIST_BASE (self));
+}
+
+/**
+ * gtk_list_view_get_focus_item: (attributes org.gtk.Method.get_property=focus-item)
+ * @self: a `GtkListView`
+ *
+ * Gets the item that currently has keyboard focus - or that would have keyboard
+ * focus if the listview was focused.
+ *
+ * Note that the focused item might not be in the visible region, for example when
+ * the visible region was scrolled with the mouse.
+ *
+ * Returns: (transfer none) (type GObject) (nullable): The fcoused item
+ *
+ * Since: 4.8
+ **/
+gpointer
+gtk_list_view_get_focus_item (GtkListView *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
+
+  return gtk_list_base_get_focus_item (GTK_LIST_BASE (self));
+}
+
+/**
  * gtk_list_view_set_show_separators: (attributes org.gtk.Method.set_property=show-separators)
  * @self: a `GtkListView`
  * @show_separators: %TRUE to show separators
@@ -1162,3 +1277,4 @@ gtk_list_view_get_enable_rubberband (GtkListView *self)
 
   return gtk_list_base_get_enable_rubberband (GTK_LIST_BASE (self));
 }
+

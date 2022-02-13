@@ -58,6 +58,14 @@ GDK_AVAILABLE_IN_ALL
 GtkListItemFactory *
                 gtk_list_view_get_factory                       (GtkListView            *self);
 
+GDK_AVAILABLE_IN_4_8
+void            gtk_list_view_set_focus_position                (GtkListView            *self,
+                                                                 guint                   position);
+GDK_AVAILABLE_IN_4_8
+guint           gtk_list_view_get_focus_position                (GtkListView            *self);
+GDK_AVAILABLE_IN_4_8
+gpointer        gtk_list_view_get_focus_item                    (GtkListView            *self);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_list_view_set_show_separators               (GtkListView            *self,
                                                                  gboolean                show_separators);

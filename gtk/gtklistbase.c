@@ -483,6 +483,14 @@ gtk_list_base_get_focus_position (GtkListBase *self)
   return gtk_list_item_tracker_get_position (priv->item_manager, priv->focus);
 }
 
+gpointer
+gtk_list_base_get_focus_item (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  return gtk_list_item_tracker_get_item (priv->item_manager, priv->focus);
+}
+
 static gboolean
 gtk_list_base_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
@@ -1805,7 +1813,9 @@ gtk_list_base_init_real (GtkListBase      *self,
   priv->anchor_side_along = GTK_PACK_START;
   priv->anchor_side_across = GTK_PACK_START;
   priv->selected = gtk_list_item_tracker_new (priv->item_manager, NULL, NULL);
-  priv->focus = gtk_list_item_tracker_new (priv->item_manager, NULL, NULL);
+  priv->focus = gtk_list_item_tracker_new (priv->item_manager,
+                                           g_object_class_find_property (G_OBJECT_CLASS (g_class), "focus-position"),
+                                           g_object_class_find_property (G_OBJECT_CLASS (g_class), "focus-item"));
 
   priv->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   g_object_ref_sink (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
