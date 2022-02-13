@@ -108,6 +108,16 @@
  */
 #define GDK_VERSION_4_6        (G_ENCODE_VERSION (4, 6))
 
+/**
+ * GDK_VERSION_4_8:
+ *
+ * A macro that evaluates to the 4.8 version of GDK, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 4.8
+ */
+#define GDK_VERSION_4_8        (G_ENCODE_VERSION (4, 8))
+
 
 /* evaluates to the current stable version; for development cycles,
  * this means the next stable target, with a hard backstop to the
@@ -247,6 +257,20 @@
 #else
 # define GDK_DEPRECATED_IN_4_6                  _GDK_EXTERN
 # define GDK_DEPRECATED_IN_4_6_FOR(f)           _GDK_EXTERN
+#endif
+
+#if GDK_VERSION_MAX_ALLOWED < GDK_VERSION_4_8
+# define GDK_AVAILABLE_IN_4_8                   GDK_UNAVAILABLE(4, 8)
+#else
+# define GDK_AVAILABLE_IN_4_8                   _GDK_EXTERN
+#endif
+
+#if GDK_VERSION_MIN_REQUIRED >= GDK_VERSION_4_8
+# define GDK_DEPRECATED_IN_4_8                  GDK_DEPRECATED
+# define GDK_DEPRECATED_IN_4_8_FOR(f)           GDK_DEPRECATED_FOR(f)
+#else
+# define GDK_DEPRECATED_IN_4_8                  _GDK_EXTERN
+# define GDK_DEPRECATED_IN_4_8_FOR(f)           _GDK_EXTERN
 #endif
 
 #endif  /* __GDK_VERSION_MACROS_H__ */
