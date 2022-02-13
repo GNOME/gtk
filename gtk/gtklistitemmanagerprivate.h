@@ -101,7 +101,9 @@ void                    gtk_list_item_manager_set_single_click_activate
 gboolean                gtk_list_item_manager_get_single_click_activate
                                                                 (GtkListItemManager     *self);
 
-GtkListItemTracker *    gtk_list_item_tracker_new               (GtkListItemManager     *self);
+GtkListItemTracker *    gtk_list_item_tracker_new               (GtkListItemManager     *self,
+                                                                 GParamSpec             *position_property,
+                                                                 GParamSpec             *item_property);
 void                    gtk_list_item_tracker_free              (GtkListItemManager     *self,
                                                                  GtkListItemTracker     *tracker);
 void                    gtk_list_item_tracker_set_position      (GtkListItemManager     *self,

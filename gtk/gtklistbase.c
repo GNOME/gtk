@@ -1527,7 +1527,7 @@ gtk_list_base_start_rubberband (GtkListBase *self,
 
   priv->rubberband = g_new0 (RubberbandData, 1);
 
-  priv->rubberband->start_tracker = gtk_list_item_tracker_new (priv->item_manager);
+  priv->rubberband->start_tracker = gtk_list_item_tracker_new (priv->item_manager, NULL, NULL);
   gtk_list_item_tracker_set_position (priv->item_manager, priv->rubberband->start_tracker, pos, 0, 0);
   priv->rubberband->start_align_across = item_area.width ? (double) (list_x - item_area.x) / item_area.width : 0.5;
   priv->rubberband->start_align_along = item_area.height ? (double) (list_y - item_area.y) / item_area.height : 0.5;
@@ -1801,11 +1801,11 @@ gtk_list_base_init_real (GtkListBase      *self,
                                                            g_class->list_item_size,
                                                            g_class->list_item_augment_size,
                                                            g_class->list_item_augment_func);
-  priv->anchor = gtk_list_item_tracker_new (priv->item_manager);
+  priv->anchor = gtk_list_item_tracker_new (priv->item_manager, NULL, NULL);
   priv->anchor_side_along = GTK_PACK_START;
   priv->anchor_side_across = GTK_PACK_START;
-  priv->selected = gtk_list_item_tracker_new (priv->item_manager);
-  priv->focus = gtk_list_item_tracker_new (priv->item_manager);
+  priv->selected = gtk_list_item_tracker_new (priv->item_manager, NULL, NULL);
+  priv->focus = gtk_list_item_tracker_new (priv->item_manager, NULL, NULL);
 
   priv->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   g_object_ref_sink (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
@@ -2077,7 +2077,7 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
 
   if (!item->widget)
     {
-      GtkListItemTracker *tracker = gtk_list_item_tracker_new (priv->item_manager);
+      GtkListItemTracker *tracker = gtk_list_item_tracker_new (priv->item_manager, NULL, NULL);
 
       /* We need a tracker here to create the widget.
        * That needs to have happened or we can't grab it.

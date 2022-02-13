@@ -48,6 +48,9 @@ struct _GtkListItemManagerClass
 
 struct _GtkListItemTracker
 {
+  GParamSpec *position_property;
+  GParamSpec *item_property;
+
   guint position;
   GtkListItemWidget *widget;
   guint n_before;
@@ -264,6 +267,9 @@ gtk_list_item_tracker_update_widget (GtkListItemManager *self,
     return;
 
   tracker->widget = widget;
+
+  if (tracker->item_property)
+    g_object_notify_by_pspec (G_OBJECT (self->widget), tracker->item_property);
 }
 
 static void
@@ -275,6 +281,9 @@ gtk_list_item_tracker_update_position (GtkListItemManager *self,
     return;
 
   tracker->position = position;
+
+  if (tracker->position_property)
+    g_object_notify_by_pspec (G_OBJECT (self->widget), tracker->position_property);
 }
 
 static void
@@ -286,6 +295,11 @@ gtk_list_item_tracker_unset_position (GtkListItemManager *self,
 
   tracker->widget = NULL;
   tracker->position = GTK_INVALID_LIST_POSITION;
+
+  if (tracker->position_property)
+    g_object_notify_by_pspec (G_OBJECT (self->widget), tracker->position_property);
+  if (tracker->item_property)
+    g_object_notify_by_pspec (G_OBJECT (self->widget), tracker->item_property);
 }
 
 static gboolean
@@ -1172,7 +1186,9 @@ gtk_list_item_manager_get_single_click_activate (GtkListItemManager   *self)
 }
 
 GtkListItemTracker *
-gtk_list_item_tracker_new (GtkListItemManager *self)
+gtk_list_item_tracker_new (GtkListItemManager *self,
+                           GParamSpec         *position_property,
+                           GParamSpec         *item_property)
 {
   GtkListItemTracker *tracker;
 
@@ -1181,6 +1197,8 @@ gtk_list_item_tracker_new (GtkListItemManager *self)
   tracker = g_slice_new0 (GtkListItemTracker);
 
   tracker->position = GTK_INVALID_LIST_POSITION;
+  tracker->position_property = position_property;
+  tracker->item_property = item_property;
 
   self->trackers = g_slist_prepend (self->trackers, tracker);
 
