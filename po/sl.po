@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-02-07 15:18+0000\n"
-"PO-Revision-Date: 2022-02-07 20:23+0100\n"
+"PO-Revision-Date: 2022-02-13 19:43+0100\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -79,14 +79,14 @@ msgstr "Nastavitve EGL ni mogoče najti"
 #: gdk/gdkdisplay.c:1631
 msgid "EGL implementation is missing extension %2$s"
 msgid_plural "EGL implementation is missing %d extensions: %s"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Vstavku EGL manjka %d razširitev: %s"
+msgstr[1] "Vstavku EGL manjka %d razširitev: %s"
+msgstr[2] "Vstavku EGL manjkata %d razširitvi: %s"
+msgstr[3] "Vstavku EGL manjkajo %d razširitve: %s"
 
 #: gdk/gdkdisplay.c:1664
 msgid "libEGL not available in this sandbox"
-msgstr ""
+msgstr "Sandbox ne podpira knjižnice libEGL"
 
 #: gdk/gdkdisplay.c:1665
 msgid "libEGL not available"
@@ -115,7 +115,7 @@ msgstr "Ni skladnih zapisov za prenos vsebine."
 
 #: gdk/gdkglcontext.c:336
 msgid "The EGL implementation does not support any allowed APIs"
-msgstr ""
+msgstr "Možnost EGL ne podpira vmesnikov API"
 
 #: gdk/gdkglcontext.c:417 gdk/win32/gdkglcontext-win32-wgl.c:616
 #: gdk/x11/gdkglcontext-glx.c:624
@@ -123,10 +123,8 @@ msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
 #: gdk/gdkglcontext.c:1270
-#, fuzzy
-#| msgid "GL support disabled via GDK_DEBUG"
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
-msgstr "Podpora GL je onemogočena prek GDK_DEBUG"
+msgstr "Podpora OpenGL ES je onemogočena z GDK_DEBUG"
 
 #: gdk/gdkglcontext.c:1279
 #, c-format
@@ -138,7 +136,7 @@ msgstr "Program ne podpira vmesnika API %s"
 #: gdk/gdkglcontext.c:1800
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
-msgstr ""
+msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
 
 #: gdk/gdksurface.c:1240
 msgid "Vulkan support disabled via GDK_DEBUG"
@@ -528,12 +526,12 @@ msgstr "V pripravljenost"
 #: gdk/loaders/gdkjpeg.c:61
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "Napaka med tolmačenjem slikovne datoteke JPEG (%s)"
 
 #: gdk/loaders/gdkjpeg.c:188
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
-msgstr ""
+msgstr "Nepodprt barvni prostor JPEG (%d) "
 
 #: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
 #, c-format
@@ -548,16 +546,16 @@ msgstr "Napaka branja zapisa png (%s)"
 #: gdk/loaders/gdkpng.c:216
 #, c-format
 msgid "Unsupported depth %u in png image"
-msgstr ""
+msgstr "Slika PNG ima nepodprto barvno globino %u"
 
 #: gdk/loaders/gdkpng.c:246
 #, c-format
 msgid "Unsupported color type %u in png image"
-msgstr ""
+msgstr "Nepodprta barvna globina %u v sliki PNG"
 
 #: gdk/loaders/gdktiff.c:340
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "Podatkov RGB iz datoteke TIFF ni mogoče naložiti"
 
 #: gdk/loaders/gdktiff.c:383
 msgid "Could not load TIFF data"
@@ -3602,10 +3600,8 @@ msgid "Show"
 msgstr "Pokaži"
 
 #: gtk/inspector/clipboard.c:228
-#, fuzzy
-#| msgid "Copy to clipboard"
 msgid "Hover to load"
-msgstr "Kopiraj v odložišče"
+msgstr "Naloži ob prehodu"
 
 #: gtk/inspector/clipboard.c:278
 msgctxt "clipboard"
@@ -3624,7 +3620,7 @@ msgstr "oddaljeno"
 
 #: gtk/inspector/clipboard.ui:31
 msgid "Drag and hold here"
-msgstr ""
+msgstr "Povleci in zadrži na tem mestu"
 
 #: gtk/inspector/clipboard.ui:75 gtk/inspector/window.ui:574
 msgid "Clipboard"
@@ -3740,10 +3736,8 @@ msgid "None"
 msgstr "Neopredeljeno"
 
 #: gtk/inspector/general.c:771
-#, fuzzy
-#| msgid "Theme is hardcoded by GTK_THEME"
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
-msgstr "Tema je vključena v privzeto temo GTK_THEME"
+msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
 #: gtk/inspector/general.ui:32
 msgid "GTK Version"
@@ -3856,7 +3850,7 @@ msgstr "Način zahteve"
 
 #: gtk/inspector/misc-info.ui:269
 msgid "Measure map"
-msgstr ""
+msgstr "Shema merila"
 
 #: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
@@ -4035,7 +4029,7 @@ msgstr "Dodaj razhroščevalna vozlišča"
 
 #: gtk/inspector/recorder.ui:42
 msgid "Highlight event sequences"
-msgstr ""
+msgstr "Poudari zaporedja dogodkov"
 
 #: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
