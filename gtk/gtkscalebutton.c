@@ -884,7 +884,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
   const char *name;
   guint num_icons;
 
-  if (!priv->icon_list || priv->icon_list[0][0] == '\0')
+  if (!priv->icon_list || !priv->icon_list[0] || priv->icon_list[0][0] == '\0')
     {
       gtk_button_set_icon_name (GTK_BUTTON (priv->button), "image-missing");
       return;
