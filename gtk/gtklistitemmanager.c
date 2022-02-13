@@ -256,9 +256,34 @@ gtk_list_item_manager_get_item_augment (GtkListItemManager *self,
 }
 
 static void
+gtk_list_item_tracker_update_widget (GtkListItemManager *self,
+                                     GtkListItemTracker *tracker,
+                                     GtkListItemWidget  *widget)
+{
+  if (tracker->widget == widget)
+    return;
+
+  tracker->widget = widget;
+}
+
+static void
+gtk_list_item_tracker_update_position (GtkListItemManager *self,
+                                       GtkListItemTracker *tracker,
+                                       guint               position)
+{
+  if (tracker->position == position)
+    return;
+
+  tracker->position = position;
+}
+
+static void
 gtk_list_item_tracker_unset_position (GtkListItemManager *self,
                                       GtkListItemTracker *tracker)
 {
+  if (tracker->position == GTK_INVALID_LIST_POSITION)
+    return;
+
   tracker->widget = NULL;
   tracker->position = GTK_INVALID_LIST_POSITION;
 }
@@ -709,33 +734,35 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
         {
           /* if the list is no longer empty, set the tracker to a valid position. */
           if (n_items > 0 && n_items == added && removed == 0)
-            tracker->position = 0;
+            gtk_list_item_tracker_update_position (self, tracker, 0);
         }
       else if (tracker->position >= position + removed)
         {
-          tracker->position += added - removed;
+          gtk_list_item_tracker_update_position (self, tracker, tracker->position + added - removed);
         }
       else if (tracker->position >= position)
         {
           if (g_hash_table_lookup (change, gtk_list_item_widget_get_item (tracker->widget)))
             {
               /* The item is gone. Guess a good new position */
-              tracker->position = position + (tracker->position - position) * added / removed;
-              if (tracker->position >= n_items)
+              guint new_position = position + (tracker->position - position) * added / removed;
+              if (new_position >= n_items)
                 {
                   if (n_items == 0)
-                    tracker->position = GTK_INVALID_LIST_POSITION;
+                    gtk_list_item_tracker_unset_position (self, tracker);
                   else
-                    tracker->position--;
+                    gtk_list_item_tracker_update_position (self, tracker, new_position - 1);
                 }
-              tracker->widget = NULL;
+              else
+                gtk_list_item_tracker_update_position (self, tracker, new_position);
+              tracker->widget = NULL; /* will be filled in below */
             }
           else
             {
               /* item was put in its right place in the expensive loop above,
                * and we updated its position while at it. So grab it from there.
                */
-              tracker->position = gtk_list_item_widget_get_position (tracker->widget);
+              gtk_list_item_tracker_update_position (self, tracker, gtk_list_item_widget_get_position (tracker->widget));
             }
         }
       else
@@ -762,7 +789,7 @@ gtk_list_item_manager_model_items_changed_cb (GListModel         *model,
       item = gtk_list_item_manager_get_nth (self, tracker->position, NULL);
       g_assert (item != NULL);
       g_assert (item->widget);
-      tracker->widget = GTK_LIST_ITEM_WIDGET (item->widget);
+      gtk_list_item_tracker_update_widget (self, tracker, GTK_LIST_ITEM_WIDGET (item->widget));
     }
 
   g_hash_table_unref (change);
@@ -1185,26 +1212,37 @@ gtk_list_item_tracker_set_position (GtkListItemManager *self,
   GtkListItemManagerItem *item;
   guint n_items;
 
-  gtk_list_item_tracker_unset_position (self, tracker);
-
-  if (self->model == NULL)
-    return;
-
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
-  if (position >= n_items)
-    position = n_items - 1; /* for n_items == 0 this underflows to GTK_INVALID_LIST_POSITION */
-
-  tracker->position = position;
   tracker->n_before = n_before;
   tracker->n_after = n_after;
+
+  if (self->model == NULL)
+    {
+      g_assert (tracker->position == GTK_INVALID_LIST_POSITION);
+      return;
+    }
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
+  if (n_items == 0)
+    {
+      g_assert (tracker->position == GTK_INVALID_LIST_POSITION);
+      return;
+    }
+
+  if (position >= n_items)
+    position = n_items - 1;
+
+  g_object_freeze_notify (G_OBJECT (self->widget));
+
+  gtk_list_item_tracker_update_position (self, tracker, position);
 
   gtk_list_item_manager_ensure_items (self, NULL, G_MAXUINT);
 
   item = gtk_list_item_manager_get_nth (self, position, NULL);
-  if (item)
-    tracker->widget = GTK_LIST_ITEM_WIDGET (item->widget);
+  g_assert (item);
+  gtk_list_item_tracker_update_widget (self, tracker, GTK_LIST_ITEM_WIDGET (item->widget));
 
   gtk_widget_queue_resize (self->widget);
+  g_object_thaw_notify (G_OBJECT (self->widget));
 }
 
 guint
