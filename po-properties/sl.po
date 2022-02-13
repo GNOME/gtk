@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-02-07 15:18+0000\n"
-"PO-Revision-Date: 2022-02-07 20:32+0100\n"
+"PO-Revision-Date: 2022-02-13 19:49+0100\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: sl\n"
@@ -1974,16 +1974,12 @@ msgid "Whether the swatch should accept drops"
 msgstr "Ali naj lahko vzorci prejmejo predmete s potegni in spusti"
 
 #: gtk/gtkcolorswatch.c:524
-#, fuzzy
-#| msgid "Can Drop"
 msgid "Can Drag"
 msgstr "Podpora potegni in pusti"
 
 #: gtk/gtkcolorswatch.c:524
-#, fuzzy
-#| msgid "Whether the swatch should accept drops"
 msgid "Whether the swatch should allow drags"
-msgstr "Ali naj lahko vzorci prejmejo predmete s potegni in spusti"
+msgstr "Ali naj bo vzorce mogoče potegniti in spustiti"
 
 #: gtk/gtkcolumnview.c:682
 msgid "Columns"
@@ -3753,16 +3749,12 @@ msgid "If wrap is set, controls how linewrapping is done"
 msgstr "Možnost določa način preloma, kadar je izbrana ta možnost"
 
 #: gtk/gtklabel.c:2424
-#, fuzzy
-#| msgid "Line wrap mode"
 msgid "Natural wrap mode"
 msgstr "Način preloma vrstic"
 
 #: gtk/gtklabel.c:2425
-#, fuzzy
-#| msgid "If wrap is set, controls how linewrapping is done"
 msgid "If wrap is set, controls linewrapping for natural size requests"
-msgstr "Možnost določa način preloma, kadar je izbrana ta možnost"
+msgstr "Možnost določa način preloma, ki upošteva običajne zahteve velikosti"
 
 #: gtk/gtklabel.c:2438
 msgid "Whether the label text can be selected with the mouse"
@@ -4141,12 +4133,11 @@ msgid "Always Show Arrow"
 msgstr "Vedno pokaži puščico"
 
 #: gtk/gtkmenubutton.c:467
-#, fuzzy
-#| msgid "Whether to show a dropdown arrow even when using an icon"
 msgid ""
 "Whether to show a dropdown arrow even when using an icon or a custom child"
 msgstr ""
-"Ali naj se pokaže puščica spustnega polja tudi, če je uporabljen z ikono"
+"Ali naj se pokaže puščica spustnega polja tudi, če je uporabljena ikona "
+"oziroma podrejen predmet"
 
 #: gtk/gtkmenubutton.c:479
 msgid "The label for the button"
@@ -5641,16 +5632,12 @@ msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
 msgstr "Ločljivost Xtf, v 1024 * točk/palec. -1 za uporabo privzete vrednosti."
 
 #: gtk/gtksettings.c:589
-#, fuzzy
-#| msgid "Font Features"
 msgid "Hint Font Metrics"
-msgstr "Možnosti pisave"
+msgstr "Metrika glajenja pisave"
 
 #: gtk/gtksettings.c:590
-#, fuzzy
-#| msgid "Whether the items should be displayed with a number"
 msgid "Whether hinting should be applied to font metrics"
-msgstr "Ali naj bodo predmeti prikazani s številkami"
+msgstr "Ali naj bo za pisave uporabljeno glajenje"
 
 #: gtk/gtksettings.c:605
 msgid "Cursor theme name"
@@ -6596,16 +6583,12 @@ msgstr ""
 "Število slikovnih točk praznega prostora med prelomi vrstic znotraj odstavkov"
 
 #: gtk/gtktexttag.c:617
-#, fuzzy
-#| msgid "List Factory"
 msgid "Line height factor"
-msgstr "Vsebuje vir seznama"
+msgstr "Faktor višine vrstice"
 
 #: gtk/gtktexttag.c:618
-#, fuzzy
-#| msgid "The action to take on titlebar right-click"
 msgid "The factor to apply to line height"
-msgstr "Dejanje, ki se izvede ob desnem kliku na nazivni vrstici"
+msgstr "Faktor, ki določa višino vrstice"
 
 #: gtk/gtktexttag.c:663
 msgid "Underline RGBA"
@@ -7064,6 +7047,8 @@ msgstr "Zamakni brez razširilnika"
 msgid ""
 "If the TreeExpander should indent the child if no expander-icon is shown"
 msgstr ""
+"Ali naj razširjevalnik drevesa zamakne podrejene predmete, če ni ikone "
+"razširljevalnika"
 
 #: gtk/gtktreelistmodel.c:690
 msgid "autoexpand"
