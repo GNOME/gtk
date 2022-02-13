@@ -187,7 +187,7 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
   gtk_list_base_get_adjustment_values (self, OPPOSITE_ORIENTATION (priv->orientation), &area.x, &total_size, &area.width);
   if (total_size == area.width)
     align_across = 0.5;
-  else if (adjustment != priv->adjustment[priv->orientation])
+  else if (adjustment != priv->adjustment[OPPOSITE_ORIENTATION(priv->orientation)])
     align_across = CLAMP (priv->anchor_align_across, 0, 1);
   else
     align_across = (double) area.x / (total_size - area.width);
@@ -197,7 +197,7 @@ gtk_list_base_adjustment_value_changed_cb (GtkAdjustment *adjustment,
   gtk_list_base_get_adjustment_values (self, priv->orientation, &area.y, &total_size, &area.height);
   if (total_size == area.height)
     align_along = 0.5;
-  else if (adjustment != priv->adjustment[OPPOSITE_ORIENTATION(priv->orientation)])
+  else if (adjustment != priv->adjustment[priv->orientation])
     align_along = CLAMP (priv->anchor_align_along, 0, 1);
   else
     align_along = (double) area.y / (total_size - area.height);
