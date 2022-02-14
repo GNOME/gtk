@@ -24,8 +24,7 @@
 #include <gdk/gdk.h>
 
 #import "GdkMacosBaseView.h"
-#import "GdkMacosCairoView.h"
-#import "GdkMacosGLView.h"
+#import "GdkMacosView.h"
 #import "GdkMacosWindow.h"
 
 #include "gdkmacosclipboard-private.h"
@@ -150,8 +149,7 @@ typedef NSString *CALayerContentsGravity;
       _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), time);
 
       /* Reset gravity */
-      if (GDK_IS_MACOS_GL_VIEW ([self contentView]))
-        [[[self contentView] layer] setContentsGravity:kCAGravityBottomLeft];
+      [[[self contentView] layer] setContentsGravity:kCAGravityBottomLeft];
 
       break;
     }
@@ -225,7 +223,7 @@ typedef NSString *CALayerContentsGravity;
                    defer:(BOOL)flag
                   screen:(NSScreen *)screen
 {
-  GdkMacosCairoView *view;
+  GdkMacosView *view;
 
   self = [super initWithContentRect:contentRect
 	                        styleMask:styleMask
@@ -236,8 +234,9 @@ typedef NSString *CALayerContentsGravity;
   [self setAcceptsMouseMovedEvents:YES];
   [self setDelegate:(id<NSWindowDelegate>)self];
   [self setReleasedWhenClosed:YES];
+  [self setPreservesContentDuringLiveResize:NO];
 
-  view = [[GdkMacosCairoView alloc] initWithFrame:contentRect];
+  view = [[GdkMacosView alloc] initWithFrame:contentRect];
   [self setContentView:view];
   [view release];
 
@@ -754,7 +753,7 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowWillExitFullScreen:(NSNotification *)aNotification
 {
-  [self setFrame:lastUnfullscreenFrame display:YES];
+  [self setFrame:lastUnfullscreenFrame display:NO];
 }
 
 -(void)windowDidExitFullScreen:(NSNotification *)aNotification
@@ -808,6 +807,11 @@ typedef NSString *CALayerContentsGravity;
 -(BOOL)movableByWindowBackground
 {
   return NO;
+}
+
+-(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage
+{
+  [(GdkMacosView *)[self contentView] swapBuffer:buffer withDamage:damage];
 }
 
 @end

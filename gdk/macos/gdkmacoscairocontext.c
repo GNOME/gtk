@@ -22,19 +22,17 @@
 
 #include "gdkconfig.h"
 
+#include <cairo.h>
+#include <QuartzCore/QuartzCore.h>
 #include <CoreGraphics/CoreGraphics.h>
 
-#import "GdkMacosCairoView.h"
-
+#include "gdkmacosbuffer-private.h"
 #include "gdkmacoscairocontext-private.h"
 #include "gdkmacossurface-private.h"
 
 struct _GdkMacosCairoContext
 {
-  GdkCairoContext  parent_instance;
-
-  cairo_surface_t *window_surface;
-  cairo_t         *cr;
+  GdkCairoContext parent_instance;
 };
 
 struct _GdkMacosCairoContextClass
@@ -44,80 +42,120 @@ struct _GdkMacosCairoContextClass
 
 G_DEFINE_TYPE (GdkMacosCairoContext, _gdk_macos_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
-static cairo_surface_t *
-create_cairo_surface_for_surface (GdkSurface *surface)
+static const cairo_user_data_key_t buffer_key;
+
+static void
+unlock_buffer (gpointer data)
 {
-  static const cairo_user_data_key_t buffer_key;
-  cairo_surface_t *cairo_surface;
-  guint8 *data;
-  cairo_format_t format;
-  size_t size;
-  size_t rowstride;
-  size_t width;
-  size_t height;
-  int scale;
+  GdkMacosBuffer *buffer = data;
 
-  g_assert (GDK_IS_MACOS_SURFACE (surface));
+  g_assert (GDK_IS_MACOS_BUFFER (buffer));
 
-  /* We use a cairo image surface here instead of a quartz surface because
-   * we get strange artifacts with the quartz surface such as empty
-   * cross-fades when hovering buttons. For performance, we want to be using
-   * GL rendering so there isn't much point here as correctness is better.
-   *
-   * Additionally, so we can take avantage of faster paths in Core
-   * Graphics, we want our data pointer to be 16-byte aligned and our rows
-   * to be 16-byte aligned or we risk errors below us. Normally, cairo
-   * image surface does not guarantee the later, which means we could end
-   * up doing some costly copies along the way to compositing.
-   */
-
-  if ([GDK_MACOS_SURFACE (surface)->window isOpaque])
-    format = CAIRO_FORMAT_RGB24;
-  else
-    format = CAIRO_FORMAT_ARGB32;
-
-  scale = gdk_surface_get_scale_factor (surface);
-  width = scale * gdk_surface_get_width (surface);
-  height = scale * gdk_surface_get_height (surface);
-  rowstride = (cairo_format_stride_for_width (format, width) + 0xF) & ~0xF;
-  size = rowstride * height;
-  data = g_malloc0 (size);
-  cairo_surface = cairo_image_surface_create_for_data (data, format, width, height, rowstride);
-  cairo_surface_set_user_data (cairo_surface, &buffer_key, data, g_free);
-  cairo_surface_set_device_scale (cairo_surface, scale, scale);
-
-  return cairo_surface;
-}
-
-static cairo_t *
-do_cairo_create (GdkMacosCairoContext *self)
-{
-  GdkSurface *surface;
-  cairo_t *cr;
-
-  g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
-
-  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
-  cr = cairo_create (self->window_surface);
-
-  /* Draw upside down as quartz prefers */
-  cairo_translate (cr, 0, surface->height);
-  cairo_scale (cr, 1.0, -1.0);
-
-  return cr;
+  _gdk_macos_buffer_unlock (buffer);
+  g_clear_object (&buffer);
 }
 
 static cairo_t *
 _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)cairo_context;
+  const cairo_region_t *damage;
+  cairo_surface_t *image_surface;
+  GdkMacosBuffer *buffer;
+  GdkSurface *surface;
+  NSWindow *nswindow;
+  cairo_t *cr;
+  gpointer data;
+  double scale;
+  guint width;
+  guint height;
+  guint stride;
+  gboolean opaque;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
-  if (self->cr != NULL)
-    return cairo_reference (self->cr);
+  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
+  nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
+  opaque = [nswindow isOpaque];
 
-  return do_cairo_create (self);
+  buffer = _gdk_macos_surface_get_buffer (GDK_MACOS_SURFACE (surface));
+  damage = _gdk_macos_buffer_get_damage (buffer);
+  width = _gdk_macos_buffer_get_width (buffer);
+  height = _gdk_macos_buffer_get_height (buffer);
+  scale = _gdk_macos_buffer_get_device_scale (buffer);
+  stride = _gdk_macos_buffer_get_stride (buffer);
+  data = _gdk_macos_buffer_get_data (buffer);
+
+  /* Instead of forcing cairo to do everything through a CGContext,
+   * we just use an image surface backed by an IOSurfaceRef mapped
+   * into user-space. We can then use pixman which is quite fast as
+   * far as software rendering goes.
+   *
+   * Additionally, cairo_quartz_surface_t can't handle a number of
+   * tricks that the GSK cairo renderer does with border nodes and
+   * shadows, so an image surface is necessary for that.
+   *
+   * Since our IOSurfaceRef is width*scale-by-height*scale, we undo
+   * the scaling using cairo_surface_set_device_scale() so the renderer
+   * just thinks it's on a 2x scale surface for HiDPI.
+   */
+  image_surface = cairo_image_surface_create_for_data (data,
+                                                       CAIRO_FORMAT_ARGB32,
+                                                       width,
+                                                       height,
+                                                       stride);
+  cairo_surface_set_device_scale (image_surface, scale, scale);
+
+  /* Lock the buffer so we can modify it safely */
+  _gdk_macos_buffer_lock (buffer);
+  cairo_surface_set_user_data (image_surface,
+                               &buffer_key,
+                               g_object_ref (buffer),
+                               unlock_buffer);
+
+  if (!(cr = cairo_create (image_surface)))
+    goto failure;
+
+  /* Clip to the current damage region */
+  if (damage != NULL)
+    {
+      gdk_cairo_region (cr, damage);
+      cairo_clip (cr);
+    }
+
+  /* If we have some exposed transparent area in the damage region,
+   * we need to clear the existing content first to leave an transparent
+   * area for cairo. We use (surface_bounds or damage)-(opaque) to get
+   * the smallest set of rectangles we need to clear as it's expensive.
+   */
+  if (!opaque)
+    {
+      cairo_region_t *transparent;
+      cairo_rectangle_int_t r = { 0, 0, width/scale, height/scale };
+
+      cairo_save (cr);
+
+      if (damage != NULL)
+        cairo_region_get_extents (damage, &r);
+      transparent = cairo_region_create_rectangle (&r);
+      if (surface->opaque_region)
+        cairo_region_subtract (transparent, surface->opaque_region);
+
+      if (!cairo_region_is_empty (transparent))
+        {
+          gdk_cairo_region (cr, transparent);
+          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+          cairo_fill (cr);
+        }
+
+      cairo_region_destroy (transparent);
+      cairo_restore (cr);
+    }
+
+failure:
+  cairo_surface_destroy (image_surface);
+
+  return cr;
 }
 
 static void
@@ -126,79 +164,52 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
                                       cairo_region_t *region)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
+  GdkMacosBuffer *buffer;
   GdkSurface *surface;
-  NSWindow *nswindow;
 
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
 
+  [CATransaction begin];
+  [CATransaction setDisableActions:YES];
+
   surface = gdk_draw_context_get_surface (draw_context);
-  nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface));
+  buffer = _gdk_macos_surface_get_buffer (GDK_MACOS_SURFACE (surface));
 
-  if (self->window_surface == NULL)
-    self->window_surface = create_cairo_surface_for_surface (surface);
-
-  self->cr = do_cairo_create (self);
-
-  if (![nswindow isOpaque])
-    {
-      cairo_save (self->cr);
-      gdk_cairo_region (self->cr, region);
-      cairo_set_source_rgba (self->cr, 0, 0, 0, 0);
-      cairo_set_operator (self->cr, CAIRO_OPERATOR_SOURCE);
-      cairo_fill (self->cr);
-      cairo_restore (self->cr);
-    }
+  _gdk_macos_buffer_set_damage (buffer, region);
+  _gdk_macos_buffer_set_flipped (buffer, FALSE);
 }
 
 static void
 _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
                                     cairo_region_t *painted)
 {
-  GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
+  GdkMacosBuffer *buffer;
   GdkSurface *surface;
-  NSView *nsview;
 
-  g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
-  g_assert (self->window_surface != NULL);
+  g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (draw_context));
 
   surface = gdk_draw_context_get_surface (draw_context);
-  nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
+  buffer = _gdk_macos_surface_get_buffer (GDK_MACOS_SURFACE (surface));
 
-  g_clear_pointer (&self->cr, cairo_destroy);
+  _gdk_macos_surface_swap_buffers (GDK_MACOS_SURFACE (surface), painted);
+  _gdk_macos_buffer_set_damage (buffer, NULL);
 
-  if (GDK_IS_MACOS_CAIRO_VIEW (nsview))
-    [(GdkMacosCairoView *)nsview setCairoSurface:self->window_surface
-                                      withDamage:painted];
+  [CATransaction commit];
 }
 
 static void
 _gdk_macos_cairo_context_surface_resized (GdkDrawContext *draw_context)
 {
-  GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
+  g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (draw_context));
 
-  g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
-
-  g_clear_pointer (&self->window_surface, cairo_surface_destroy);
-}
-
-static void
-_gdk_macos_cairo_context_dispose (GObject *object)
-{
-  GdkMacosCairoContext *self = (GdkMacosCairoContext *)object;
-
-  g_clear_pointer (&self->window_surface, cairo_surface_destroy);
-
-  G_OBJECT_CLASS (_gdk_macos_cairo_context_parent_class)->dispose (object);
+  /* Do nothing, next begin_frame will get new buffer */
 }
 
 static void
 _gdk_macos_cairo_context_class_init (GdkMacosCairoContextClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-
-  object_class->dispose = _gdk_macos_cairo_context_dispose;
 
   draw_context_class->begin_frame = _gdk_macos_cairo_context_begin_frame;
   draw_context_class->end_frame = _gdk_macos_cairo_context_end_frame;

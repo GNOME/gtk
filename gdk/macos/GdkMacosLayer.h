@@ -1,7 +1,6 @@
-/* GdkMacosGLView.h
+/* GdkMacosLayer.h
  *
- * Copyright © 2020 Red Hat, Inc.
- * Copyright © 2005-2007 Imendio AB
+ * Copyright © 2022 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,23 +18,27 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
+#include <QuartzCore/QuartzCore.h>
+#include <IOSurface/IOSurface.h>
+
 #include <cairo.h>
+#include <glib.h>
 
-#import "GdkMacosBaseView.h"
+#include "gdkmacosbuffer-private.h"
 
-#define GDK_IS_MACOS_GL_VIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosGLView class]])
+#define GDK_IS_MACOS_LAYER(obj) ((obj) && [obj isKindOfClass:[GdkMacosLayer class]])
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
-@interface GdkMacosGLView : GdkMacosBaseView
+@interface GdkMacosLayer : CALayer
 {
-  NSOpenGLContext *_openGLContext;
-}
+  cairo_region_t *_opaqueRegion;
+  GArray         *_tiles;
+  guint           _opaque : 1;
+  guint           _layoutInvalid : 1;
+  guint           _inSwapBuffer : 1;
+  guint           _isFlipped : 1;
+};
 
--(void)setOpenGLContext:(NSOpenGLContext*)context;
--(NSOpenGLContext *)openGLContext;
--(void)invalidateRegion:(const cairo_region_t *)region;
-
-G_GNUC_END_IGNORE_DEPRECATIONS
+-(void)setOpaqueRegion:(const cairo_region_t *)opaqueRegion;
+-(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;
 
 @end

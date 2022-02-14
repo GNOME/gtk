@@ -1,7 +1,6 @@
-/* GdkMacosCairoView.h
+/* GdkMacosTile.c
  *
- * Copyright © 2020 Red Hat, Inc.
- * Copyright © 2005-2007 Imendio AB
+ * Copyright © 2022 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,19 +18,34 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include <cairo.h>
+#include "config.h"
 
-#import "GdkMacosBaseView.h"
+#include <AppKit/AppKit.h>
 
-#define GDK_IS_MACOS_CAIRO_VIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosCairoView class]])
+#import "GdkMacosTile.h"
 
-@interface GdkMacosCairoView : GdkMacosBaseView
+@implementation GdkMacosTile
+
+-(id)init
 {
-  NSView *transparent;
-  GPtrArray *opaque;
+  self = [super init];
+
+  [self setContentsScale:1.0];
+  [self setEdgeAntialiasingMask:0];
+  [self setDrawsAsynchronously:YES];
+
+  return self;
 }
 
--(void)setCairoSurface:(cairo_surface_t *)cairoSurface
-            withDamage:(cairo_region_t *)region;
+-(void)swapBuffer:(IOSurfaceRef)buffer withRect:(CGRect)rect
+{
+  if G_LIKELY ([self contents] == (id)buffer)
+    [(id<CanSetContentsChanged>)self setContentsChanged];
+  else
+    [self setContents:(id)buffer];
+
+  if G_UNLIKELY (!CGRectEqualToRect ([self contentsRect], rect))
+    self.contentsRect = rect;
+}
 
 @end
