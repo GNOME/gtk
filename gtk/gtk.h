@@ -213,6 +213,7 @@
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtksearchbar.h>
 #include <gtk/gtksearchentry.h>
+#include <gtk/gtksectionmodel.h>
 #include <gtk/gtkselectionfiltermodel.h>
 #include <gtk/gtkselectionmodel.h>
 #include <gtk/gtkseparator.h>
