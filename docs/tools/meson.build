@@ -1,4 +1,4 @@
-if get_option('gtk_doc')
+if get_option('gtk_doc') and x11_enabled
   doc_shooter_resources = gnome.compile_resources('shooter_resources',
                                                   'shooter.gresource.xml',
                                                   source_dir: '.')
