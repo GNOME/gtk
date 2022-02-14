@@ -603,6 +603,27 @@ _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
     *right = self->shadow_right;
 }
 
+gboolean
+_gdk_macos_surface_is_opaque (GdkMacosSurface *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), FALSE);
+
+  if (self->opaque_region != NULL &&
+      cairo_region_num_rectangles (self->opaque_region) == 1)
+    {
+      cairo_rectangle_int_t extents;
+
+      cairo_region_get_extents (self->opaque_region, &extents);
+
+      return (extents.x == 0 &&
+              extents.y == 0 &&
+              extents.width == GDK_SURFACE (self)->width &&
+              extents.height == GDK_SURFACE (self)->height);
+    }
+
+  return FALSE;
+}
+
 const char *
 _gdk_macos_surface_get_title (GdkMacosSurface *self)
 {
