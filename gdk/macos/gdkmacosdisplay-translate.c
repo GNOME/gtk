@@ -688,8 +688,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                       NULL,
                                       get_time_from_ns_event (nsevent),
                                       state,
-                                      dx,
-                                      dy,
+                                      -dx * 32,
+                                      -dy * 32,
                                       FALSE);
         }
     }
