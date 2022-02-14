@@ -2431,8 +2431,8 @@ gdk_win32_window_get_frame_extents (GdkWindow    *window,
    */
   rect->width = (rect->width + rect->x % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
   rect->height = (rect->height + rect->y % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
-  rect->x = r.left / impl->window_scale;
-  rect->y = r.top / impl->window_scale;
+  rect->x /= impl->window_scale;
+  rect->y /= impl->window_scale;
 
   GDK_NOTE (MISC, g_print ("gdk_window_get_frame_extents: %p: %ldx%ld@%+ld%+ld\n",
                            GDK_WINDOW_HWND (window),
