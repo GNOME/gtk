@@ -211,6 +211,7 @@ fill_button_event (GdkMacosDisplay *display,
   GdkDevice *pointer = NULL;
   GdkDeviceTool *tool = NULL;
   double *axes = NULL;
+  cairo_region_t *input_region;
 
   g_assert (GDK_IS_MACOS_DISPLAY (display));
   g_assert (GDK_IS_MACOS_SURFACE (surface));
@@ -218,6 +219,7 @@ fill_button_event (GdkMacosDisplay *display,
   seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
   state = get_keyboard_modifiers_from_ns_event (nsevent) |
          _gdk_macos_display_get_current_mouse_modifiers (display);
+  input_region = GDK_SURFACE (surface)->input_region;
 
   switch ((int)[nsevent type])
     {
@@ -244,7 +246,8 @@ fill_button_event (GdkMacosDisplay *display,
    */
   if (type == GDK_BUTTON_PRESS &&
       (x < 0 || x > GDK_SURFACE (surface)->width ||
-       y < 0 || y > GDK_SURFACE (surface)->height))
+       y < 0 || y > GDK_SURFACE (surface)->height ||
+       (input_region && !cairo_region_contains_point (input_region, x, y))))
     return NULL;
 
   if (([nsevent subtype] == NSEventSubtypeTabletPoint) &&
@@ -906,7 +909,13 @@ find_surface_for_mouse_event (GdkMacosDisplay *self,
   GdkDeviceGrabInfo *grab;
   GdkSeat *seat;
 
-  surface = get_surface_from_ns_event (self, nsevent, &point, x, y);
+  /* Even if we had a surface window, it might be for something outside
+   * the input region (shadow) which we might want to ignore. This is
+   * handled for us deeper in the event unwrapping.
+   */
+  if (!(surface = get_surface_from_ns_event (self, nsevent, &point, x, y)))
+    return NULL;
+
   display = gdk_surface_get_display (surface);
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
   pointer = gdk_seat_get_pointer (seat);
@@ -1008,11 +1017,6 @@ find_surface_for_ns_event (GdkMacosDisplay *self,
   g_assert (x != NULL);
   g_assert (y != NULL);
 
-  if (!(surface = get_surface_from_ns_event (self, nsevent, &point, x, y)))
-    return NULL;
-
-  view = (GdkMacosBaseView *)[GDK_MACOS_SURFACE (surface)->window contentView];
-
   _gdk_macos_display_from_display_coords (self, point.x, point.y, &x_tmp, &y_tmp);
 
   switch ((int)[nsevent type])
@@ -1037,7 +1041,9 @@ find_surface_for_ns_event (GdkMacosDisplay *self,
       /* Only handle our own entered/exited events, not the ones for the
        * titlebar buttons.
        */
-      if ([nsevent trackingArea] == [view trackingArea])
+      if ((surface = get_surface_from_ns_event (self, nsevent, &point, x, y)) &&
+          (view = (GdkMacosBaseView *)[GDK_MACOS_SURFACE (surface)->window contentView]) &&
+          ([nsevent trackingArea] == [view trackingArea]))
         return GDK_MACOS_SURFACE (surface);
       else
         return NULL;

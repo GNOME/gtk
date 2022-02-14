@@ -968,6 +968,14 @@ _gdk_macos_display_get_surface_at_coords (GdkMacosDisplay *self,
           *surface_x = x - GDK_MACOS_SURFACE (surface)->root_x;
           *surface_y = y - GDK_MACOS_SURFACE (surface)->root_y;
 
+          /* One last check to make sure that the x,y is within the input
+           * region of the window. Otherwise we might send the event to the
+           * wrong window because of window shadow.
+           */
+          if (surface->input_region != NULL &&
+              !cairo_region_contains_point (surface->input_region, *surface_x, *surface_y))
+            continue;
+
           return GDK_MACOS_SURFACE (surface);
         }
     }
