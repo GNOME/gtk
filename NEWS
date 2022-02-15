@@ -1,3 +1,19 @@
+Overview of Changes in 4.4.2, 15-02-2022
+========================================
+
+* GtkEntry:
+ - Update placeholder visibility when needed
+
+* Work with newer pango
+
+* Translation updates:
+ German
+ Icelandic
+ Italian
+ Japanese
+ Occitan
+
+
 Overview of Changes in 4.4.1
 ============================
 
