@@ -815,6 +815,7 @@ _gdk_macos_display_get_monitor_at_coords (GdkMacosDisplay *self,
                                           int              x,
                                           int              y)
 {
+  GdkMacosMonitor *best_match = NULL;
   guint n_monitors;
 
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (self), NULL);
@@ -824,12 +825,25 @@ _gdk_macos_display_get_monitor_at_coords (GdkMacosDisplay *self,
   for (guint i = 0; i < n_monitors; i++)
     {
       GdkMacosMonitor *monitor = get_monitor (self, i);
+      const GdkRectangle *geom = &GDK_MONITOR (monitor)->geometry;
 
-      if (gdk_rectangle_contains_point (&GDK_MONITOR (monitor)->geometry, x, y))
-        return GDK_MONITOR (monitor);
+      if (x >= geom->x &&
+          y >= geom->y &&
+          x <= (geom->x + geom->width) &&
+          y <= (geom->y + geom->height))
+        {
+          if (x <= geom->x + geom->width && y < geom->y + geom->height)
+            return GDK_MONITOR (monitor);
+
+          /* Not an exact match as we're on a boundary, but there is
+           * a good chance another monitor doesn't exist there so we
+           * would want to still treat this as the best monitor.
+           */
+          best_match = monitor;
+        }
     }
 
-  return NULL;
+  return GDK_MONITOR (best_match);
 }
 
 GdkMonitor *
