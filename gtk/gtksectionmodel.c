@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtksectionmodel.h"
+#include "gtksectionmodelprivate.h"
 
 #include "gtkmarshalers.h"
 
@@ -144,6 +144,49 @@ gtk_section_model_get_section (GtkSectionModel *self,
   iface->get_section (self, position, out_start, out_end);
 
   g_warn_if_fail (*out_start < *out_end);
+}
+
+/* A version of gtk_section_model_get_section() that handles NULL
+ * (treats it as the empty list) and any GListModel (treats it as
+ * a single section).
+ **/
+void
+gtk_list_model_get_section (GListModel *self,
+                            guint       position,
+                            guint      *out_start,
+                            guint      *out_end)
+{
+  g_return_if_fail (out_start != NULL);
+  g_return_if_fail (out_end != NULL);
+
+  if (self == NULL)
+    {
+      *out_start = 0;
+      *out_end = G_MAXUINT;
+      return;
+    }
+
+  g_return_if_fail (G_IS_LIST_MODEL (self));
+
+  if (!GTK_IS_SECTION_MODEL (self))
+    {
+      guint n_items = g_list_model_get_n_items (self);
+
+      if (position < n_items)
+        {
+          *out_start = 0;
+          *out_end = G_MAXUINT;
+        }
+      else
+        {
+          *out_start = n_items;
+          *out_end = G_MAXUINT;
+        }
+
+      return;
+    }
+
+  gtk_section_model_get_section (GTK_SECTION_MODEL (self), position, out_start, out_end);
 }
 
 /**
