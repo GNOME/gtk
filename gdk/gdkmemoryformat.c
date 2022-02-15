@@ -25,6 +25,10 @@
 
 #include <epoxy/gl.h>
 
+#ifdef __ARM_NEON
+#include <arm_neon.h>
+#endif
+
 typedef struct _GdkMemoryFormatDescription GdkMemoryFormatDescription;
 
 #define TYPED_FUNCS(name, T, R, G, B, A, bpp, scale) \
@@ -174,6 +178,52 @@ r8g8b8a8_to_b8g8r8a8_premultiplied (guchar *dest,
                                     const guchar *src,
                                     gsize n)
 {
+#ifdef __ARM_NEON
+  uint16x8_t one = vdupq_n_u16 (1);
+  uint16x8_t half = vdupq_n_u16 (127);
+
+  for (gsize i = n / 8; i > 0; i--)
+    {
+      // Work on “just” 8 pixels at once, since we need the full 16-bytes of
+      // the q registers for the multiplication.
+      uint8x8x4_t rgba = vld4_u8 (src);
+      uint8x8_t r8 = rgba.val[0];
+      uint8x8_t g8 = rgba.val[1];
+      uint8x8_t b8 = rgba.val[2];
+      uint8x8_t a8 = rgba.val[3];
+
+      // This is the same algorithm as premultiply(), but on packed 16-bit
+      // instead of float.
+      uint16x8_t r16 = vmull_u8 (r8, a8);
+      uint16x8_t g16 = vmull_u8 (g8, a8);
+      uint16x8_t b16 = vmull_u8 (b8, a8);
+
+      r16 = vaddq_u16 (r16, half);
+      g16 = vaddq_u16 (g16, half);
+      b16 = vaddq_u16 (b16, half);
+
+      r16 = vsraq_n_u16 (r16, r16, 8);
+      g16 = vsraq_n_u16 (g16, g16, 8);
+      b16 = vsraq_n_u16 (b16, b16, 8);
+
+      r16 = vaddq_u16 (r16, one);
+      g16 = vaddq_u16 (g16, one);
+      b16 = vaddq_u16 (b16, one);
+
+      // Just like the other one, here we use BGRA instead of RGBA!
+      rgba.val[0] = vshrn_n_u16 (b16, 8);
+      rgba.val[1] = vshrn_n_u16 (g16, 8);
+      rgba.val[2] = vshrn_n_u16 (r16, 8);
+
+      vst4_u8 (dest, rgba);
+      src += 32;
+      dest += 32;
+    }
+
+  // We want the fallthrough here for the last (up to) seven bytes of the row.
+  n = n % 8;
+#endif // __ARM_NEON
+
   for (; n > 0; n--)
     {
       guchar a = src[3];
