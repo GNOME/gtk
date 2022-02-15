@@ -23,6 +23,7 @@
 
 #include "gtkbitset.h"
 #include "gtkintl.h"
+#include "gtksectionmodelprivate.h"
 #include "gtkselectionmodel.h"
 
 /**
@@ -91,6 +92,23 @@ gtk_multi_selection_list_model_init (GListModelInterface *iface)
   iface->get_item_type = gtk_multi_selection_get_item_type;
   iface->get_n_items = gtk_multi_selection_get_n_items;
   iface->get_item = gtk_multi_selection_get_item;
+}
+
+static void
+gtk_multi_selection_get_section (GtkSectionModel *model,
+                                 guint            position,
+                                 guint           *out_start,
+                                 guint           *out_end)
+{
+  GtkMultiSelection *self = GTK_MULTI_SELECTION (model);
+
+  gtk_list_model_get_section (self->model, position, out_start, out_end);
+}
+
+static void
+gtk_multi_selection_section_model_init (GtkSectionModelInterface *iface)
+{
+  iface->get_section = gtk_multi_selection_get_section;
 }
 
 static gboolean
@@ -204,6 +222,8 @@ gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
 G_DEFINE_TYPE_EXTENDED (GtkMultiSelection, gtk_multi_selection, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
                                                gtk_multi_selection_list_model_init)
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_SECTION_MODEL,
+                                               gtk_multi_selection_section_model_init)
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
                                                gtk_multi_selection_selection_model_init))
 
