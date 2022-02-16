@@ -45,7 +45,6 @@
 
       options = (NSTrackingMouseEnteredAndExited |
                  NSTrackingMouseMoved |
-                 NSTrackingInVisibleRect |
                  NSTrackingActiveAlways);
       trackingArea = [[NSTrackingArea alloc] initWithRect:rect
                                                   options:options
@@ -57,9 +56,26 @@
   return self;
 }
 
+-(void)setInputArea:(const cairo_rectangle_int_t *)area
+{
+  NSRect rect = NSMakeRect (area->x, area->y, area->width, area->height);
+  NSTrackingAreaOptions options;
+
+  [self removeTrackingArea:trackingArea];
+
+  options = (NSTrackingMouseEnteredAndExited |
+             NSTrackingMouseMoved |
+             NSTrackingActiveAlways);
+  trackingArea = [[NSTrackingArea alloc] initWithRect:rect
+                                              options:options
+                                                owner:(id)self
+                                             userInfo:nil];
+  [self addTrackingArea:trackingArea];
+}
+
 -(void)setOpaqueRegion:(cairo_region_t *)region
 {
-  /* Do nothing */
+  /* Handled in Subclass */
 }
 
 -(BOOL)acceptsFirstMouse

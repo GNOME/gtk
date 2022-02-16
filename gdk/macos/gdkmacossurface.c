@@ -94,6 +94,17 @@ static void
 gdk_macos_surface_set_input_region (GdkSurface     *surface,
                                     cairo_region_t *region)
 {
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+  cairo_rectangle_int_t rect;
+
+  g_assert (GDK_IS_MACOS_SURFACE (self));
+
+  if (self->window == NULL)
+    return;
+
+  cairo_region_get_extents (region, &rect);
+
+  [(GdkMacosBaseView *)[self->window contentView] setInputArea:&rect];
 }
 
 static void
@@ -385,7 +396,7 @@ gdk_macos_surface_destroy (GdkSurface *surface,
                                             G_CALLBACK (gdk_macos_surface_before_paint),
                                             self);
       g_signal_handlers_disconnect_by_func (frame_clock,
-                                            G_CALLBACK (gdk_macos_surface_before_paint),
+                                            G_CALLBACK (gdk_macos_surface_after_paint),
                                             self);
     }
 
@@ -590,6 +601,27 @@ _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
 
   if (right)
     *right = self->shadow_right;
+}
+
+gboolean
+_gdk_macos_surface_is_opaque (GdkMacosSurface *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), FALSE);
+
+  if (self->opaque_region != NULL &&
+      cairo_region_num_rectangles (self->opaque_region) == 1)
+    {
+      cairo_rectangle_int_t extents;
+
+      cairo_region_get_extents (self->opaque_region, &extents);
+
+      return (extents.x == 0 &&
+              extents.y == 0 &&
+              extents.width == GDK_SURFACE (self)->width &&
+              extents.height == GDK_SURFACE (self)->height);
+    }
+
+  return FALSE;
 }
 
 const char *

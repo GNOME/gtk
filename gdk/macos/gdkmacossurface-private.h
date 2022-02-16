@@ -131,6 +131,7 @@ void               _gdk_macos_surface_set_opacity             (GdkMacosSurface  
 void               _gdk_macos_surface_get_root_coords         (GdkMacosSurface    *self,
                                                                int                *x,
                                                                int                *y);
+gboolean           _gdk_macos_surface_is_opaque               (GdkMacosSurface      *self);
 
 G_END_DECLS
 

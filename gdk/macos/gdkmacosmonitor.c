@@ -56,13 +56,11 @@ void
 gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
                                 GdkRectangle *geometry)
 {
-  GDK_BEGIN_MACOS_ALLOC_POOL;
-
   GdkMacosMonitor *self = (GdkMacosMonitor *)monitor;
   int x,  y;
 
-  g_assert (GDK_IS_MACOS_MONITOR (self));
-  g_assert (geometry != NULL);
+  g_return_if_fail (GDK_IS_MACOS_MONITOR (self));
+  g_return_if_fail (geometry != NULL);
 
   x = self->workarea.origin.x;
   y = self->workarea.origin.y + self->workarea.size.height;
@@ -75,8 +73,6 @@ gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
   geometry->y = y;
   geometry->width = self->workarea.size.width;
   geometry->height = self->workarea.size.height;
-
-  GDK_END_MACOS_ALLOC_POOL;
 }
 
 static void
