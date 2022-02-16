@@ -279,11 +279,7 @@ gdk_gl_context_real_realize (GdkGLContext  *context,
       G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
       if (share != NULL)
-        {
-          gdk_gl_context_get_required_version (share, &major, &minor);
-          gdk_gl_context_set_allowed_apis (context,
-                                           gdk_gl_context_get_allowed_apis (share));
-        }
+        gdk_gl_context_get_required_version (share, &major, &minor);
       else
         gdk_gl_context_get_required_version (context, &major, &minor);
 
