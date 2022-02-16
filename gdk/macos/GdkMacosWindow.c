@@ -203,76 +203,20 @@ typedef NSString *CALayerContentsGravity;
     }
 }
 
--(void)windowDidUnmaximize
+-(void)setFrame:(NSRect)frame display:(BOOL)display
 {
-  NSWindowStyleMask style_mask = [self styleMask];
-
-  gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
-
-  /* If we are using CSD, then we transitioned to an opaque
-   * window while we were maximized. Now we need to drop that
-   * as we are leaving maximized state.
-   */
-  if ((style_mask & NSWindowStyleMaskTitled) == 0 && [self isOpaque])
-    {
-      GdkSurface *surface = GDK_SURFACE ([self gdkSurface]);
-
-      [self setOpaque:NO];
-
-      /* Force updating of various styling, regions, etc */
-      _gdk_surface_update_size (surface);
-    }
-}
-
--(void)windowDidMove:(NSNotification *)aNotification
-{
+  NSRect contentRect = [self contentRectForFrameRect:frame];
   GdkSurface *surface = GDK_SURFACE (gdk_surface);
   gboolean maximized = (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED) != 0;
 
-  /* In case the window is changed when maximized remove the maximized state */
-  if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
-    [self windowDidUnmaximize];
+  if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, frame))
+    {
+      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
+      _gdk_surface_update_size (surface);
+    }
 
-  _gdk_macos_surface_update_position (gdk_surface);
-  _gdk_macos_surface_reposition_children (gdk_surface);
-
-  [self checkSendEnterNotify];
-}
-
--(void)windowDidResize:(NSNotification *)aNotification
-{
-  NSRect content_rect;
-  GdkSurface *surface;
-  GdkDisplay *display;
-  gboolean maximized;
-
-  surface = GDK_SURFACE (gdk_surface);
-  display = gdk_surface_get_display (surface);
-
-  content_rect = [self contentRectForFrameRect:[self frame]];
-  maximized = (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED) != 0;
-
-  /* see same in windowDidMove */
-  if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
-    [self windowDidUnmaximize];
-
-  surface->width = content_rect.size.width;
-  surface->height = content_rect.size.height;
-
-  /* Certain resize operations (e.g. going fullscreen), also move the
-   * origin of the window.
-   */
-  _gdk_macos_surface_update_position (GDK_MACOS_SURFACE (surface));
-
-  [[self contentView] setFrame:NSMakeRect (0, 0, surface->width, surface->height)];
-
-  _gdk_surface_update_size (surface);
-
-  gdk_surface_request_layout (surface);
-
-  _gdk_macos_surface_reposition_children (gdk_surface);
-
-  [self checkSendEnterNotify];
+  [super setFrame:frame display:display];
+  [[self contentView] setFrame:NSMakeRect (0, 0, contentRect.size.width, contentRect.size.height)];
 }
 
 -(id)initWithContentRect:(NSRect)contentRect
@@ -418,10 +362,21 @@ typedef NSString *CALayerContentsGravity;
   windowFrame.origin.x = new_origin.x;
   windowFrame.origin.y = new_origin.y;
 
-  /* And now apply the frame to the window */
-  [self setFrameOrigin:NSMakePoint(new_origin.x, new_origin.y)];
+  [self setFrame:NSMakeRect (new_origin.x, new_origin.y,
+                             window_gdk.width, window_gdk.height)
+         display:YES];
 
   return YES;
+}
+
+-(void)windowDidMove:(NSNotification *)notification
+{
+  _gdk_macos_surface_configure ([self gdkSurface]);
+}
+
+- (void)windowDidResize:(NSNotification *)notification
+{
+  _gdk_macos_surface_configure ([self gdkSurface]);
 }
 
 /* Used by gdkmacosdisplay-translate.c to decide if our sendEvent() handler
@@ -435,6 +390,7 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)beginManualMove
 {
+  gboolean maximized = GDK_SURFACE (gdk_surface)->state & GDK_TOPLEVEL_STATE_MAXIMIZED;
   NSPoint initialMoveLocation;
   GdkPoint point;
   GdkMonitor *monitor;
@@ -452,6 +408,13 @@ typedef NSString *CALayerContentsGravity;
   gdk_macos_monitor_get_workarea (monitor, &workarea);
 
   initialMoveLocation = [NSEvent mouseLocation];
+
+  if (maximized)
+    [self setFrame:NSMakeRect (initialMoveLocation.x - (int)lastUnmaximizedFrame.size.width/2,
+                               initialMoveLocation.y,
+                               lastUnmaximizedFrame.size.width,
+                               lastUnmaximizedFrame.size.height)
+           display:YES];
 
   _gdk_macos_display_from_display_coords ([self gdkDisplay],
                                           initialMoveLocation.x,
@@ -544,15 +507,7 @@ typedef NSString *CALayerContentsGravity;
       new_frame.size.height = min_size.height;
     }
 
-  /* We could also apply aspect ratio:
-     new_frame.size.height = new_frame.size.width / [self aspectRatio].width * [self aspectRatio].height;
-  */
-
-  [self setFrame:new_frame display:YES];
-
-  /* Let the resizing be handled by GTK. */
-  if (g_main_context_pending (NULL))
-    g_main_context_iteration (NULL, FALSE);
+  _gdk_macos_surface_user_resize ([self gdkSurface], new_frame);
 
   inTrackManualResize = NO;
 
@@ -561,48 +516,45 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)beginManualResize:(GdkSurfaceEdge)edge
 {
+  CALayerContentsGravity gravity = kCAGravityBottomLeft;
+
   if (inMove || inManualMove || inManualResize)
     return;
 
   inManualResize = YES;
   resizeEdge = edge;
 
-  if (GDK_IS_MACOS_GL_VIEW ([self contentView]))
+  switch (edge)
     {
-      CALayerContentsGravity gravity = kCAGravityBottomLeft;
+    default:
+    case GDK_SURFACE_EDGE_NORTH:
+      gravity = kCAGravityTopLeft;
+      break;
 
-      switch (edge)
-        {
-        default:
-        case GDK_SURFACE_EDGE_NORTH:
-          gravity = kCAGravityTopLeft;
-          break;
+    case GDK_SURFACE_EDGE_NORTH_WEST:
+      gravity = kCAGravityTopRight;
+      break;
 
-        case GDK_SURFACE_EDGE_NORTH_WEST:
-          gravity = kCAGravityTopRight;
-          break;
+    case GDK_SURFACE_EDGE_SOUTH_WEST:
+    case GDK_SURFACE_EDGE_WEST:
+      gravity = kCAGravityBottomRight;
+      break;
 
-        case GDK_SURFACE_EDGE_SOUTH_WEST:
-        case GDK_SURFACE_EDGE_WEST:
-          gravity = kCAGravityBottomRight;
-          break;
+    case GDK_SURFACE_EDGE_SOUTH:
+    case GDK_SURFACE_EDGE_SOUTH_EAST:
+      gravity = kCAGravityBottomLeft;
+      break;
 
-        case GDK_SURFACE_EDGE_SOUTH:
-        case GDK_SURFACE_EDGE_SOUTH_EAST:
-          gravity = kCAGravityBottomLeft;
-          break;
+    case GDK_SURFACE_EDGE_EAST:
+      gravity = kCAGravityBottomLeft;
+      break;
 
-        case GDK_SURFACE_EDGE_EAST:
-          gravity = kCAGravityBottomLeft;
-          break;
-
-        case GDK_SURFACE_EDGE_NORTH_EAST:
-          gravity = kCAGravityTopLeft;
-          break;
-        }
-
-      [[[self contentView] layer] setContentsGravity:gravity];
+    case GDK_SURFACE_EDGE_NORTH_EAST:
+      gravity = kCAGravityTopLeft;
+      break;
     }
+
+  [[[self contentView] layer] setContentsGravity:gravity];
 
   initialResizeFrame = [self frame];
   initialResizeLocation = convert_nspoint_to_screen (self, [self mouseLocationOutsideOfEventStream]);
@@ -767,7 +719,6 @@ typedef NSString *CALayerContentsGravity;
   if (state & GDK_TOPLEVEL_STATE_MAXIMIZED)
     {
       lastMaximizedFrame = newFrame;
-      [self windowDidUnmaximize];
     }
   else
     {
@@ -782,16 +733,7 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowDidEndLiveResize:(NSNotification *)aNotification
 {
-  gboolean maximized = GDK_SURFACE (gdk_surface)->state & GDK_TOPLEVEL_STATE_MAXIMIZED;
-
   inMaximizeTransition = NO;
-
-  /* Even if this is CSD, we want to be opaque while maximized
-   * to speed up compositing by allowing the display server to
-   * avoid costly blends.
-   */
-  if (maximized)
-    [self setOpaque:YES];
 }
 
 -(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize

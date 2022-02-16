@@ -35,6 +35,8 @@ struct _GdkMacosToplevelSurface
 {
   GdkMacosSurface    parent_instance;
   GdkToplevelLayout *layout;
+  int                last_computed_width;
+  int                last_computed_height;
   guint              decorated : 1;
 };
 
