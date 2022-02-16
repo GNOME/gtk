@@ -115,7 +115,7 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
                                                     GstPlayer              *player)
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
-  GstElement *sink, *glsinkbin;
+  GstElement *sink;
   GdkGLContext *ctx;
 
   sink = g_object_new (GTK_TYPE_GST_SINK,
@@ -128,7 +128,10 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
 
   if (self->context != NULL && ctx != NULL)
     {
-      glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
+      GstElement *glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
+
+      if (!glsinkbin)
+        return NULL;
 
       g_object_set (glsinkbin, "sink", sink, NULL);
       g_object_unref (ctx);
