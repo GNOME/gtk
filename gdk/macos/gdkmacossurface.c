@@ -385,7 +385,7 @@ gdk_macos_surface_destroy (GdkSurface *surface,
                                             G_CALLBACK (gdk_macos_surface_before_paint),
                                             self);
       g_signal_handlers_disconnect_by_func (frame_clock,
-                                            G_CALLBACK (gdk_macos_surface_before_paint),
+                                            G_CALLBACK (gdk_macos_surface_after_paint),
                                             self);
     }
 
