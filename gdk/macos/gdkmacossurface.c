@@ -1017,6 +1017,9 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
       g_object_unref (monitor);
     }
 
+  /* We need to create a new IOSurface for this monitor */
+  g_clear_object (&self->buffer);
+
   _gdk_macos_surface_configure (self);
 
   gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
