@@ -133,6 +133,7 @@ gdk_macos_surface_hide (GdkSurface *surface)
   GdkMacosSurface *self = (GdkMacosSurface *)surface;
   GdkSeat *seat;
   gboolean was_mapped;
+  gboolean was_key;
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
@@ -141,6 +142,7 @@ gdk_macos_surface_hide (GdkSurface *surface)
   _gdk_macos_display_remove_frame_callback (GDK_MACOS_DISPLAY (surface->display), self);
 
   was_mapped = GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
+  was_key = [self->window isKeyWindow];
 
   seat = gdk_display_get_default_seat (surface->display);
   gdk_seat_ungrab (seat);
@@ -150,6 +152,17 @@ gdk_macos_surface_hide (GdkSurface *surface)
   _gdk_surface_clear_update_area (surface);
 
   g_clear_object (&self->buffer);
+
+  if (was_key)
+    {
+      /* Return key input to the parent window if necessary */
+      if (surface->parent != NULL && GDK_SURFACE_IS_MAPPED (surface->parent))
+        {
+          GdkMacosWindow *parentWindow = GDK_MACOS_SURFACE (surface->parent)->window;
+
+          [parentWindow showAndMakeKey:YES];
+        }
+    }
 
   if (was_mapped)
     gdk_surface_freeze_updates (GDK_SURFACE (self));
