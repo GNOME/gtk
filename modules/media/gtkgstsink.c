@@ -48,6 +48,10 @@
 #include <gst/gl/egl/gstgldisplay_egl.h>
 #endif
 
+#ifdef GDK_WINDOWING_MACOS
+#include <gdk/macos/gdkmacos.h>
+#endif
+
 #include <gst/gl/gstglfuncs.h>
 
 enum {
@@ -492,6 +496,29 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
       else
         {
           GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext, not using Wayland EGL");
+          return FALSE;
+        }
+    }
+  else
+#endif
+#if defined(GST_GL_HAVE_PLATFORM_CGL) && defined(GDK_WINDOWING_MACOS)
+  if (GDK_IS_MACOS_DISPLAY (display))
+    {
+      platform = GST_GL_PLATFORM_CGL;
+
+      GST_DEBUG_OBJECT (self, "got CGL on macOS!");
+
+      gl_api = gst_gl_context_get_current_gl_api (platform, NULL, NULL);
+      gl_handle = gst_gl_context_get_current_gl_context (platform);
+
+      if (gl_handle)
+        {
+          self->gst_display = gst_gl_display_new ();
+          self->gst_app_context = gst_gl_context_new_wrapped (self->gst_display, gl_handle, platform, gl_api);
+        }
+      else
+        {
+          GST_ERROR_OBJECT (self, "Failed to get handle from GdkGLContext, not using macOS CGL");
           return FALSE;
         }
     }
