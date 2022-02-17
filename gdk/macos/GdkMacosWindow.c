@@ -310,7 +310,7 @@ typedef NSString *CALayerContentsGravity;
 
 -(BOOL)canBecomeKeyWindow
 {
-  return GDK_IS_TOPLEVEL (gdk_surface);
+  return GDK_IS_TOPLEVEL (gdk_surface) || GDK_IS_POPUP (gdk_surface);
 }
 
 -(void)showAndMakeKey:(BOOL)makeKey
