@@ -62,6 +62,9 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *device_box;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
+  GtkWidget *app_id_frame;
+  GtkWidget *app_id;
+  GtkWidget *resource_path;
   GtkWidget *gl_version;
   GtkWidget *gl_vendor;
   GtkWidget *prefix;
@@ -117,6 +120,24 @@ init_version (GtkInspectorGeneral *gen)
 
   gtk_label_set_text (GTK_LABEL (gen->priv->gtk_version), GTK_VERSION);
   gtk_label_set_text (GTK_LABEL (gen->priv->gdk_backend), backend);
+}
+
+static void
+init_app_id (GtkInspectorGeneral *gen)
+{
+  GApplication *app;
+
+  app = g_application_get_default ();
+  if (!app)
+    {
+      gtk_widget_hide (gen->priv->app_id_frame);
+      return;
+    }
+
+  gtk_label_set_text (GTK_LABEL (gen->priv->app_id),
+                      g_application_get_application_id (app));
+  gtk_label_set_text (GTK_LABEL (gen->priv->resource_path),
+                      g_application_get_resource_base_path (app));
 }
 
 static G_GNUC_UNUSED void
@@ -646,6 +667,7 @@ gtk_inspector_general_init (GtkInspectorGeneral *gen)
   gen->priv = gtk_inspector_general_get_instance_private (gen);
   gtk_widget_init_template (GTK_WIDGET (gen));
   init_version (gen);
+  init_app_id (gen);
   init_env (gen);
   init_display (gen);
   init_gl (gen);
@@ -735,6 +757,9 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gdk_backend);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, app_id_frame);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, app_id);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, resource_path);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_vendor);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, prefix);
