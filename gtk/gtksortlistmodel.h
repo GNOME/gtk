@@ -46,6 +46,12 @@ void                    gtk_sort_list_model_set_sorter          (GtkSortListMode
 GDK_AVAILABLE_IN_ALL
 GtkSorter *             gtk_sort_list_model_get_sorter          (GtkSortListModel       *self);
 
+GDK_AVAILABLE_IN_4_8
+void                    gtk_sort_list_model_set_section_sorter  (GtkSortListModel       *self,
+                                                                 GtkSorter              *sorter);
+GDK_AVAILABLE_IN_4_8
+GtkSorter *             gtk_sort_list_model_get_section_sorter  (GtkSortListModel       *self);
+
 GDK_AVAILABLE_IN_ALL
 void                    gtk_sort_list_model_set_model           (GtkSortListModel       *self,
                                                                  GListModel             *model);
