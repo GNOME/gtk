@@ -36,12 +36,27 @@
       if (o1 != o2) \
         { \
           char *_s = g_strdup_printf ("Objects differ at index %u out of %u", _i, _n); \
+          g_print ("%s\n", model_to_string (model1)); \
+          g_print ("%s\n", model_to_string (model2)); \
          g_assertion_message (G_LOG_DOMAIN, __FILE__, __LINE__, G_STRFUNC, _s); \
           g_free (_s); \
         } \
 \
       g_object_unref (o1); \
       g_object_unref (o2); \
+    } \
+}G_STMT_END
+
+#define assert_model_sections(model) G_STMT_START{ \
+  guint _i, _start, _end; \
+  _start = 0; \
+  _end = 0; \
+  for (_i = 0; _i < G_MAXUINT; _i = _end) \
+    { \
+      gtk_section_model_get_section (GTK_SECTION_MODEL (model), _i, &_start, &_end); \
+\
+      g_assert_cmpint (_start, ==, _i); \
+      g_assert_cmpint (_end, >, _i); \
     } \
 }G_STMT_END
 
@@ -259,7 +274,7 @@ create_sorter (gsize id)
       /* match all As, Bs and nothing */
       sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
       if (id == 1)
-        gtk_string_sorter_set_ignore_case (GTK_STRING_SORTER (sorter), TRUE);
+        gtk_string_sorter_set_ignore_case (GTK_STRING_SORTER (sorter), FALSE);
       return sorter;
 
     default:
@@ -435,6 +450,258 @@ test_stability (gconstpointer model_id)
   g_object_unref (flatten);
 }
 
+static gboolean
+string_is_lowercase (GtkStringObject *o)
+{
+  return g_ascii_islower (*gtk_string_object_get_string (o));
+}
+
+/* Run:
+ *   source => section-sorter
+ *   source => sorter
+ * and set a section sorter on the section sorter that is a subsort of
+ * the real sorter.
+ *
+ * And then randomly add/remove sources and change the sorters and
+ * see if the two sorters stay identical
+ */
+static void
+test_section_sorters (gconstpointer model_id)
+{
+  GListStore *store;
+  GtkFlattenListModel *flatten;
+  GtkSortListModel *sort1, *sort2;
+  GtkSorter *sorter;
+  gsize i;
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  flatten = gtk_flatten_list_model_new (G_LIST_MODEL (store));
+  sort1 = create_sort_list_model (model_id, FALSE, G_LIST_MODEL (flatten), NULL);
+  sort2 = create_sort_list_model (model_id, FALSE, G_LIST_MODEL (flatten), NULL);
+
+  for (i = 0; i < 500; i++)
+    {
+      gboolean add = FALSE, remove = FALSE;
+      guint position;
+
+      switch (g_test_rand_int_range (0, 4))
+      {
+        case 0:
+          /* set the same sorter, once as section sorter, once as sorter */
+          sorter = create_random_sorter (TRUE);
+          gtk_sort_list_model_set_section_sorter (sort1, sorter);
+          gtk_sort_list_model_set_sorter (sort1, NULL);
+          gtk_sort_list_model_set_sorter (sort2, sorter);
+          g_clear_object (&sorter);
+          break;
+
+        case 1:
+          /* use a section sorter that is a more generic version of the sorter */
+          sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
+          gtk_string_sorter_set_ignore_case (GTK_STRING_SORTER (sorter), FALSE);
+          gtk_sort_list_model_set_sorter (sort1, sorter);
+          gtk_sort_list_model_set_sorter (sort2, sorter);
+          g_clear_object (&sorter);
+          sorter = GTK_SORTER (gtk_numeric_sorter_new (gtk_cclosure_expression_new (G_TYPE_BOOLEAN, NULL, 0, NULL, G_CALLBACK (string_is_lowercase), NULL, NULL)));
+          gtk_sort_list_model_set_section_sorter (sort1, sorter);
+          g_clear_object (&sorter);
+          break;
+
+        case 2:
+          /* remove a model */
+          remove = TRUE;
+          break;
+
+        case 3:
+          /* add a model */
+          add = TRUE;
+          break;
+
+        case 4:
+          /* replace a model */
+          remove = TRUE;
+          add = TRUE;
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+      }
+
+      position = g_test_rand_int_range (0, g_list_model_get_n_items (G_LIST_MODEL (store)) + 1);
+      if (g_list_model_get_n_items (G_LIST_MODEL (store)) == position)
+        remove = FALSE;
+
+      if (add)
+        {
+          /* We want at least one element, otherwise the sorters will see no changes */
+          GListModel *source = create_source_model (1, 50);
+          g_list_store_splice (store,
+                               position,
+                               remove ? 1 : 0,
+                               (gpointer *) &source, 1);
+          g_object_unref (source);
+        }
+      else if (remove)
+        {
+          g_list_store_remove (store, position);
+        }
+
+      if (g_test_rand_bit ())
+        {
+          ensure_updated ();
+          assert_model_equal (G_LIST_MODEL (sort1), G_LIST_MODEL (sort2));
+        }
+
+      if (g_test_rand_bit ())
+        assert_model_sections (G_LIST_MODEL (sort1));
+    }
+
+  g_object_unref (sort2);
+  g_object_unref (sort1);
+  g_object_unref (flatten);
+}
+
+/* Run:
+ *   source => sorter
+ * And then randomly add/remove sources and change the sorters and
+ * see if the invariants for sections keep correct.
+ */
+static void
+test_sections (gconstpointer model_id)
+{
+  GListStore *store;
+  GtkFlattenListModel *flatten;
+  GtkSortListModel *sort;
+  GtkSorter *sorter;
+  gsize i;
+
+  store = g_list_store_new (G_TYPE_OBJECT);
+  flatten = gtk_flatten_list_model_new (G_LIST_MODEL (store));
+  sort = create_sort_list_model (model_id, FALSE, G_LIST_MODEL (flatten), NULL);
+
+  for (i = 0; i < 500; i++)
+    {
+      gboolean add = FALSE, remove = FALSE;
+      guint position;
+
+      switch (g_test_rand_int_range (0, 4))
+      {
+        case 0:
+          /* set the same sorter, once as section sorter, once as sorter */
+          sorter = create_random_sorter (TRUE);
+          gtk_sort_list_model_set_sorter (sort, sorter);
+          g_clear_object (&sorter);
+          break;
+
+        case 1:
+          /* set the same sorter, once as section sorter, once as sorter */
+          sorter = create_random_sorter (TRUE);
+          gtk_sort_list_model_set_section_sorter (sort, sorter);
+          g_clear_object (&sorter);
+          break;
+
+        case 2:
+          /* remove a model */
+          remove = TRUE;
+          break;
+
+        case 3:
+          /* add a model */
+          add = TRUE;
+          break;
+
+        case 4:
+          /* replace a model */
+          remove = TRUE;
+          add = TRUE;
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+      }
+
+      position = g_test_rand_int_range (0, g_list_model_get_n_items (G_LIST_MODEL (store)) + 1);
+      if (g_list_model_get_n_items (G_LIST_MODEL (store)) == position)
+        remove = FALSE;
+
+      if (add)
+        {
+          /* We want at least one element, otherwise the sorters will see no changes */
+          GListModel *source = create_source_model (1, 50);
+          g_list_store_splice (store,
+                               position,
+                               remove ? 1 : 0,
+                               (gpointer *) &source, 1);
+          g_object_unref (source);
+        }
+      else if (remove)
+        {
+          g_list_store_remove (store, position);
+        }
+
+      if (g_test_rand_bit ())
+        ensure_updated ();
+
+      if (g_test_rand_bit ())
+        {
+          guint start, end, pos, n, sec_start, sec_end;
+          gpointer prev_item, item;
+
+          n = g_list_model_get_n_items (G_LIST_MODEL (sort));
+          sorter = gtk_sort_list_model_get_section_sorter (sort);
+          start = end = 0;
+          prev_item = item = NULL;
+
+          for (pos = 0; pos < n; pos++)
+            {
+              gtk_section_model_get_section (GTK_SECTION_MODEL (sort), pos, &sec_start, &sec_end);
+              prev_item = item;
+              item = g_list_model_get_item (G_LIST_MODEL (sort), pos);
+              if (end <= pos)
+                {
+                  g_assert_cmpint (pos, ==, end);
+                  /* there should be a new section */
+                  g_assert_cmpint (sec_start, ==, end);
+                  g_assert_cmpint (sec_end, >, sec_start);
+                  g_assert_cmpint (sec_end, <=, n);
+                  start = sec_start;
+                  end = sec_end;
+                  if (prev_item)
+                    {
+                      g_assert_nonnull (sorter);
+                      g_assert_cmpint (gtk_sorter_compare (sorter, prev_item, item), !=, GTK_ORDERING_EQUAL);
+                    }
+                }
+              else
+                {
+                  /* the old section keeps on going */
+                  g_assert_cmpint (sec_start, ==, start);
+                  g_assert_cmpint (sec_end, ==, end);
+                  if (prev_item && sorter)
+                    g_assert_cmpint (gtk_sorter_compare (sorter, prev_item, item), ==, GTK_ORDERING_EQUAL);
+                }
+              g_clear_object (&prev_item);
+            }
+
+          g_clear_object (&item);
+
+          /* for good measure, check the error condition */
+          if (n < G_MAXINT32)
+            {
+              gtk_section_model_get_section (GTK_SECTION_MODEL (sort), g_test_rand_int_range (n, G_MAXINT32), &sec_start, &sec_end);
+              g_assert_cmpint (sec_start, ==, n);
+              g_assert_cmpint (sec_end, ==, G_MAXUINT);
+            }
+          sorter = NULL;
+        }
+    }
+
+  g_object_unref (sort);
+  g_object_unref (flatten);
+}
+
 static void
 add_test_for_all_models (const char    *name,
                          GTestDataFunc  test_func)
@@ -460,6 +727,8 @@ main (int argc, char *argv[])
 
   add_test_for_all_models ("two-sorters", test_two_sorters);
   add_test_for_all_models ("stability", test_stability);
+  add_test_for_all_models ("section-sorters", test_section_sorters);
+  add_test_for_all_models ("sections", test_sections);
 
   return g_test_run ();
 }
