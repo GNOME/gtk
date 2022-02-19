@@ -203,27 +203,12 @@ gtk_sort_list_model_ensure_key (GtkSortListModel *self,
 }
 
 static void
-gtk_sort_list_model_get_section (GtkSectionModel *model,
-                                 guint            position,
-                                 guint           *out_start,
-                                 guint           *out_end)
+gtk_sort_list_model_get_section_unsorted (GtkSortListModel *self,
+                                          guint             position,
+                                          guint            *out_start,
+                                          guint            *out_end)
 {
-  GtkSortListModel *self = GTK_SORT_LIST_MODEL (model);
   gpointer *pos, *start, *end;
-
-  if (position >= self->n_items)
-    {
-      *out_start = self->n_items;
-      *out_end = G_MAXUINT;
-      return;
-    }
-
-  if (self->section_sort_keys == NULL)
-    {
-      *out_start = 0;
-      *out_end = self->n_items;
-      return;
-    }
 
   pos = &self->positions[position];
   gtk_sort_list_model_ensure_key (self, pos_from_key (self, *pos));
@@ -248,6 +233,101 @@ gtk_sort_list_model_get_section (GtkSectionModel *model,
 
   *out_start = start - self->positions;
   *out_end = end - self->positions;
+}
+
+static void
+gtk_sort_list_model_get_section_sorted (GtkSortListModel *self,
+                                        guint             position,
+                                        guint            *out_start,
+                                        guint            *out_end)
+{
+  gpointer *pos;
+  guint step, min, max, mid;
+
+  pos = &self->positions[position];
+  
+  max = position;
+  step = 1;
+  while (max > 0)
+    {
+      min = max - MIN (max, step);
+      step *= 2;
+      if (gtk_sort_keys_compare (self->section_sort_keys, self->positions[min], *pos) == GTK_ORDERING_EQUAL)
+        {
+          max = min;
+          continue;
+        }
+      /* now min is different, max is equal, bsearch where that changes */
+      while (max - min > 1)
+        {
+          mid = (max + min) / 2;
+          if (gtk_sort_keys_compare (self->section_sort_keys, self->positions[mid], *pos) == GTK_ORDERING_EQUAL)
+            max = mid;
+          else
+            min = mid;
+        }
+      break;
+    }
+  *out_start = max;
+
+  min = position;
+  step = 1;
+  while (min < self->n_items - 1)
+    {
+      max = min + MIN (self->n_items - 1 - min, step);
+      step *= 2;
+      if (gtk_sort_keys_compare (self->section_sort_keys, self->positions[max], *pos) == GTK_ORDERING_EQUAL)
+        {
+          min = max;
+          continue;
+        }
+      /* now min is equal, max is different, bsearch where that changes */
+      while (max - min > 1)
+        {
+          mid = (max + min) / 2;
+          if (gtk_sort_keys_compare (self->section_sort_keys, self->positions[mid], *pos) == GTK_ORDERING_EQUAL)
+            min = mid;
+          else
+            max = mid;
+        }
+      break;
+    }
+  *out_end = min + 1;
+}
+
+static void
+gtk_sort_list_model_get_section (GtkSectionModel *model,
+                                 guint            position,
+                                 guint           *out_start,
+                                 guint           *out_end)
+{
+  GtkSortListModel *self = GTK_SORT_LIST_MODEL (model);
+
+  if (position >= self->n_items)
+    {
+      *out_start = self->n_items;
+      *out_end = G_MAXUINT;
+      return;
+    }
+
+  if (self->section_sort_keys == NULL)
+    {
+      *out_start = 0;
+      *out_end = self->n_items;
+      return;
+    }
+
+  /* When the list is not sorted:
+   * - keys may not exist yet
+   * - equal items may not be adjacent
+   * So add a slow path that can deal with that, but is O(N).
+   * The fast path is O(log N) and will be used for I guess
+   * 99% of cases.
+   */
+  if (self->sort_cb)
+    gtk_sort_list_model_get_section_unsorted (self, position, out_start, out_end);
+  else
+    gtk_sort_list_model_get_section_sorted (self, position, out_start, out_end);
 }
 
 static void
