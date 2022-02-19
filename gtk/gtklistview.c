@@ -148,6 +148,7 @@ typedef struct _ListRowAugment ListRowAugment;
 struct _ListRow
 {
   GtkListItemManagerItem parent;
+  guint section_height;
   guint height; /* per row */
 };
 
@@ -164,6 +165,7 @@ enum
   PROP_FOCUS_ITEM,
   PROP_FOCUS_POSITION,
   PROP_MODEL,
+  PROP_SECTION_FACTORY,
   PROP_SHOW_SEPARATORS,
   PROP_SINGLE_CLICK_ACTIVATE,
   PROP_ENABLE_RUBBERBAND,
@@ -215,7 +217,7 @@ list_row_augment (GtkRbTree *tree,
 
   gtk_list_item_manager_augment_node (tree, node_augment, node, left, right);
 
-  aug->height = row->height;
+  aug->height = row->height + row->section_height;
 
   if (left)
     {
@@ -255,9 +257,9 @@ gtk_list_view_get_row_at_y (GtkListView *self,
           y -= aug->height;
         }
 
-      if (y < row->height)
+      if (y < row->height + row->section_height)
         break;
-      y -= row->height;
+      y -= row->height + row->section_height;
 
       row = gtk_rb_tree_node_get_right (row);
     }
@@ -297,7 +299,7 @@ list_row_get_y (GtkListView *self,
               ListRowAugment *aug = gtk_list_item_manager_get_item_augment (self->item_manager, left);
               y += aug->height;
             }
-          y += parent->height;
+          y += parent->height + parent->section_height;
         }
 
       row = parent;
@@ -329,12 +331,13 @@ gtk_list_view_get_allocation_along (GtkListBase *base,
 
   y = list_row_get_y (self, row);
   g_assert (row->parent.n_items > 0);
-  y += skip * row->height / row->parent.n_items;
+  if (skip)
+    y += row->section_height + skip * row->height / row->parent.n_items;
 
   if (offset)
     *offset = y;
   if (size)
-    *size = row->height / row->parent.n_items;
+    *size = row->height / row->parent.n_items + (skip ? 0 : row->section_height);
 
   return TRUE;
 }
@@ -363,6 +366,7 @@ gtk_list_view_get_items_in_rect (GtkListBase                 *base,
   guint first, last, n_items;
   GtkBitset *result;
   ListRow *row;
+  int remaining;
 
   result = gtk_bitset_new_empty ();
 
@@ -375,9 +379,13 @@ gtk_list_view_get_items_in_rect (GtkListBase                 *base,
     first = gtk_list_item_manager_get_item_position (self->item_manager, row);
   else
     first = rect->y < 0 ? 0 : n_items - 1;
-  row = gtk_list_view_get_row_at_y (self, rect->y + rect->height, NULL);
+  row = gtk_list_view_get_row_at_y (self, rect->y + rect->height, &remaining);
   if (row)
-    last = gtk_list_item_manager_get_item_position (self->item_manager, row);
+    {
+      last = gtk_list_item_manager_get_item_position (self->item_manager, row);
+      if (remaining < row->section_height && last > 0)
+        last--;
+    }
   else
     last = rect->y < 0 ? 0 : n_items - 1;
 
@@ -428,7 +436,7 @@ gtk_list_view_get_position_from_allocation (GtkListBase           *base,
   else
     one_item_height = row->height / row->parent.n_items;
 
-  g_assert (remaining < row->height);
+  g_assert (remaining < row->height + row->section_height);
   *pos += remaining / one_item_height;
 
   if (area)
@@ -499,6 +507,14 @@ gtk_list_view_measure_across (GtkWidget      *widget,
                           &child_min, &child_nat, NULL, NULL);
       min = MAX (min, child_min);
       nat = MAX (nat, child_nat);
+      if (row->parent.section_header)
+        {
+          gtk_widget_measure (row->parent.section_header,
+                              orientation, for_size,
+                              &child_min, &child_nat, NULL, NULL);
+          min = MAX (min, child_min);
+          nat = MAX (nat, child_nat);
+        }
     }
 
   *minimum = min;
@@ -535,6 +551,15 @@ gtk_list_view_measure_list (GtkWidget      *widget,
                               &child_min, &child_nat, NULL, NULL);
           g_array_append_val (min_heights, child_min);
           g_array_append_val (nat_heights, child_nat);
+          if (row->parent.section_header)
+            {
+              int section_min, section_nat;
+              gtk_widget_measure (row->parent.section_header,
+                                  orientation, for_size,
+                                  &section_min, &section_nat, NULL, NULL);
+              child_min += section_min;
+              child_nat += section_nat;
+            }
           min += child_min;
           nat += child_nat;
         }
@@ -617,23 +642,42 @@ gtk_list_view_size_allocate (GtkWidget *widget,
        row != NULL;
        row = gtk_rb_tree_node_get_next (row))
     {
-      if (row->parent.widget == NULL)
-        continue;
-
-      gtk_widget_measure (row->parent.widget, orientation,
-                          self->list_width,
-                          &min, &nat, NULL, NULL);
-      if (scroll_policy == GTK_SCROLL_MINIMUM)
-        row_height = min;
-      else
-        row_height = nat;
-      if (row->height != row_height)
+      if (row->parent.widget)
         {
-          row->height = row_height;
+          gtk_widget_measure (row->parent.widget, orientation,
+                              self->list_width,
+                              &min, &nat, NULL, NULL);
+          if (scroll_policy == GTK_SCROLL_MINIMUM)
+            row_height = min;
+          else
+            row_height = nat;
+          g_array_append_val (heights, row_height);
+          if (row->height != row_height)
+            {
+              row->height = row_height;
+              gtk_rb_tree_node_mark_dirty (row);
+            }
+          total_height += row->height;
+        }
+      if (row->parent.section_header)
+        {
+          gtk_widget_measure (row->parent.section_header, orientation,
+                              self->list_width,
+                              &min, &nat, NULL, NULL);
+          if (scroll_policy == GTK_SCROLL_MINIMUM)
+            row_height = min;
+          else
+            row_height = nat;
+        }
+      else
+        row_height = 0;
+
+      if (row->section_height != row_height)
+        {
+          row->section_height = row_height;
           gtk_rb_tree_node_mark_dirty (row);
         }
-      total_height += row->height;
-      g_array_append_val (heights, row_height);
+      total_height += row_height;
     }
 
   /* step 5: determine height of unknown items */
@@ -670,6 +714,16 @@ gtk_list_view_size_allocate (GtkWidget *widget,
        row != NULL;
        row = gtk_rb_tree_node_get_next (row))
     {
+      if (row->parent.section_header)
+        {
+          gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
+                                             row->parent.section_header,
+                                             x,
+                                             y,
+                                             self->list_width,
+                                             row->section_height);
+          y += row->section_height;
+        }
       if (row->parent.widget)
         {
           gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
@@ -679,7 +733,6 @@ gtk_list_view_size_allocate (GtkWidget *widget,
                                              self->list_width,
                                              row->height);
         }
-
       y += row->height;
     }
 
@@ -722,6 +775,10 @@ gtk_list_view_get_property (GObject    *object,
       g_value_set_object (value, gtk_list_base_get_model (GTK_LIST_BASE (self)));
       break;
 
+    case PROP_SECTION_FACTORY:
+      g_value_set_object (value, gtk_list_item_manager_get_section_factory (self->item_manager));
+      break;
+
     case PROP_SHOW_SEPARATORS:
       g_value_set_boolean (value, self->show_separators);
       break;
@@ -760,6 +817,10 @@ gtk_list_view_set_property (GObject      *object,
 
     case PROP_MODEL:
       gtk_list_view_set_model (self, g_value_get_object (value));
+      break;
+
+    case PROP_SECTION_FACTORY:
+      gtk_list_view_set_section_factory (self, g_value_get_object (value));
       break;
 
     case PROP_SHOW_SEPARATORS:
@@ -875,6 +936,20 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          P_("Model"),
                          P_("Model for the items displayed"),
                          GTK_TYPE_SELECTION_MODEL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkListView:section-factory: (attributes org.gtk.Property.get=gtk_list_view_get_section_factory org.gtk.Property.set=gtk_list_view_set_section_factory)
+   *
+   * Factory for populating section headers.
+   *
+   * Since: 4.8
+   */
+  properties[PROP_SECTION_FACTORY] =
+    g_param_spec_object ("section-factory",
+                         P_("Section factory"),
+                         P_("Factory for populating secion headers"),
+                         GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -1084,6 +1159,50 @@ gtk_list_view_set_factory (GtkListView        *self,
   gtk_list_item_manager_set_factory (self->item_manager, factory);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FACTORY]);
+}
+
+/**
+ * gtk_list_view_get_section_factory: (attributes org.gtk.Method.get_property=section-factory)
+ * @self: a `GtkListView`
+ *
+ * Gets the factory that's currently used to populate section headers.
+ *
+ * Returns: (nullable) (transfer none): The factory in use
+ *
+ * Since: 4.8
+ */
+GtkListItemFactory *
+gtk_list_view_get_section_factory (GtkListView *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (self), NULL);
+
+  return gtk_list_item_manager_get_section_factory (self->item_manager);
+}
+
+/**
+ * gtk_list_view_set_section_factory: (attributes org.gtk.Method.set_property=section-factory)
+ * @self: a `GtkListView`
+ * @factory: (nullable) (transfer none): the factory to use
+ *
+ * Sets the `GtkListItemFactory` to use for populating section headers.
+ *
+ * If this factory is set to %NULL, the list will not use section.
+ *
+ * Since: 4.8
+ */
+void
+gtk_list_view_set_section_factory (GtkListView        *self,
+                                   GtkListItemFactory *factory)
+{
+  g_return_if_fail (GTK_IS_LIST_VIEW (self));
+  g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
+
+  if (factory == gtk_list_item_manager_get_section_factory (self->item_manager))
+    return;
+
+  gtk_list_item_manager_set_section_factory (self->item_manager, factory);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SECTION_FACTORY]);
 }
 
 /**

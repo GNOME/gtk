@@ -22,6 +22,7 @@
 #include "gtklistitemmanagerprivate.h"
 
 #include "gtklistitemwidgetprivate.h"
+#include "gtksectionmodelprivate.h"
 #include "gtkwidgetprivate.h"
 
 #define GTK_LIST_VIEW_MAX_LIST_ITEMS 200
@@ -33,6 +34,7 @@ struct _GtkListItemManager
   GtkWidget *widget;
   GtkSelectionModel *model;
   GtkListItemFactory *factory;
+  GtkListItemFactory *section_factory;
   gboolean single_click_activate;
   const char *item_css_name;
   GtkAccessibleRole item_role;
@@ -59,6 +61,7 @@ struct _GtkListItemTracker
 
 static GtkWidget *      gtk_list_item_manager_acquire_list_item (GtkListItemManager     *self,
                                                                  guint                   position,
+                                                                 gboolean                is_header,
                                                                  GtkWidget              *prev_sibling);
 static GtkWidget *      gtk_list_item_manager_try_reacquire_list_item
                                                                 (GtkListItemManager     *self,
@@ -145,6 +148,7 @@ gtk_list_item_manager_clear_node (gpointer _item)
   GtkListItemManagerItem *item G_GNUC_UNUSED = _item;
 
   g_assert (item->widget == NULL);
+  g_assert (item->section_header == NULL);
 }
 
 GtkListItemManager *
@@ -427,6 +431,141 @@ restart:
     }
 }
 
+static gboolean
+gtk_list_item_manager_has_sections (GtkListItemManager *self)
+{
+  return self->section_factory != NULL;
+}
+
+static void
+gtk_list_item_manager_clear_sections (GtkListItemManager *self)
+{
+  GtkListItemManagerItem *item;
+
+  for (item = gtk_rb_tree_get_first (self->items);
+       item != NULL;
+       item = gtk_rb_tree_node_get_next (item))
+    {
+      if (item->section_header)
+        {
+          gtk_list_item_manager_release_list_item (self, NULL, item->section_header);
+          item->section_header = NULL;
+        }
+    }
+}
+
+typedef struct _SectionIter SectionIter;
+struct _SectionIter
+{
+  GtkListItemManagerItem *item;
+  guint                   item_pos;
+  GtkWidget              *insert_after;
+};
+
+static void
+section_iter_init (SectionIter        *siter,
+                   GtkListItemManager *self)
+{
+  siter->item = gtk_rb_tree_get_first (self->items);
+  siter->item_pos = 0;
+  siter->insert_after = NULL;
+}
+
+static void
+section_iter_next (SectionIter *siter)
+{
+  siter->item_pos += siter->item->n_items;
+  if (siter->item->widget)
+    siter->insert_after = siter->item->widget;
+  siter->item = gtk_rb_tree_node_get_next (siter->item);
+}
+
+static void
+section_iter_put_at (SectionIter        *siter,
+                     GtkListItemManager *self,
+                     guint               pos)
+{
+  /* We already put an item there */
+  if (siter->item_pos == pos + 1)
+    return;
+
+  g_assert (pos >= siter->item_pos);
+
+  while (siter->item_pos < pos)
+    {
+      if (siter->item->section_header)
+        {
+          gtk_list_item_manager_release_list_item (self, NULL, siter->item->section_header);
+          siter->item->section_header = NULL;
+        }
+
+      if (siter->item->n_items + siter->item_pos > pos)
+        gtk_list_item_manager_split_item (self, siter->item, pos - siter->item_pos);
+
+      section_iter_next (siter);
+    }
+
+  g_assert (siter->item_pos == pos);
+
+  while (siter->item->n_items == 0)
+    section_iter_next (siter);
+
+  if (siter->item->n_items > 1)
+    gtk_list_item_manager_split_item (self, siter->item, 1);
+
+  if (siter->item->section_header == NULL)
+    {
+      siter->item->section_header = gtk_list_item_manager_acquire_list_item (self,
+                                                                             pos,
+                                                                             TRUE,
+                                                                             siter->insert_after);
+    }
+
+  section_iter_next (siter);
+}
+
+static void
+section_iter_finish (SectionIter        *siter,
+                     GtkListItemManager *self)
+{
+  while (siter->item)
+    section_iter_next (siter);
+}
+                     
+static void
+gtk_list_item_manager_ensure_sections (GtkListItemManager *self)
+{
+  SectionIter siter;
+  guint pos, n_items, query_n_items, section_start, section_end;
+  gboolean tracked;
+
+  if (!gtk_list_item_manager_has_sections (self) || self->model == NULL)
+    return;
+
+  pos = 0;
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->model));
+  section_iter_init (&siter, self);
+
+  while (pos < n_items)
+    {
+      gtk_list_item_query_tracked_range (self, n_items, pos, &query_n_items, &tracked);
+      if (tracked)
+        {
+          gtk_list_model_get_section (G_LIST_MODEL (self->model), pos, &section_start, &section_end);
+          section_iter_put_at (&siter, self, section_start);
+
+          while (section_end < pos + query_n_items)
+            {
+              gtk_list_model_get_section (G_LIST_MODEL (self->model), section_end, &section_start, &section_end);
+              section_iter_put_at (&siter, self, section_start);
+            }
+        }
+      pos += query_n_items;
+    }
+
+  section_iter_finish (&siter, self);
+}
+
 static void
 gtk_list_item_manager_remove_items (GtkListItemManager *self,
                                     GHashTable         *change,
@@ -452,8 +591,15 @@ gtk_list_item_manager_remove_items (GtkListItemManager *self,
         {
           GtkListItemManagerItem *next = gtk_rb_tree_node_get_next (item);
           if (item->widget)
-            gtk_list_item_manager_release_list_item (self, change, item->widget);
-          item->widget = NULL;
+            {
+              gtk_list_item_manager_release_list_item (self, change, item->widget);
+              item->widget = NULL;
+            }
+          if (item->section_header)
+            {
+              gtk_list_item_manager_release_list_item (self, NULL, item->section_header);
+              item->section_header = NULL;
+            }
           n_items -= item->n_items;
           item->n_items = 0;
           gtk_rb_tree_node_mark_dirty (item);
@@ -509,7 +655,8 @@ gtk_list_item_manager_merge_list_items (GtkListItemManager     *self,
                                         GtkListItemManagerItem *first,
                                         GtkListItemManagerItem *second)
 {
-  if (first->widget || second->widget)
+  if (first->widget || first->section_header ||
+      second->widget || second->section_header)
     return FALSE;
 
   first->n_items += second->n_items;
@@ -574,6 +721,11 @@ gtk_list_item_manager_release_items (GtkListItemManager *self,
             {
               g_queue_push_tail (released, item->widget);
               item->widget = NULL;
+            }
+          if (item->section_header)
+            {
+              gtk_list_item_manager_release_list_item (self, NULL, item->section_header);
+              item->section_header = NULL;
             }
           i += item->n_items;
           item = gtk_rb_tree_node_get_next (item);
@@ -668,6 +820,7 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
                     {
                       new_item->widget = gtk_list_item_manager_acquire_list_item (self,
                                                                                   position + i,
+                                                                                  FALSE,
                                                                                   insert_after);
                     }
                 }
@@ -675,7 +828,11 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
           else
             {
               if (update_start <= position + i)
-                gtk_list_item_manager_update_list_item (self, new_item->widget, position + i);
+                {
+                  gtk_list_item_manager_update_list_item (self, new_item->widget, position + i);
+                  if (new_item->section_header)
+                    gtk_list_item_manager_update_list_item (self, new_item->section_header, position + i);
+                }
             }
           insert_after = new_item->widget;
         }
@@ -684,6 +841,8 @@ gtk_list_item_manager_ensure_items (GtkListItemManager *self,
 
   while ((widget = g_queue_pop_head (&released)))
     gtk_list_item_manager_release_list_item (self, NULL, widget);
+
+  gtk_list_item_manager_ensure_sections (self);
 
   dump_items (self);
 }
@@ -977,6 +1136,31 @@ gtk_list_item_manager_get_factory (GtkListItemManager *self)
 }
 
 void
+gtk_list_item_manager_set_section_factory (GtkListItemManager *self,
+                                           GtkListItemFactory *factory)
+{
+  g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
+  g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
+
+  if (self->section_factory == factory)
+    return;
+
+  gtk_list_item_manager_clear_sections (self);
+
+  g_set_object (&self->section_factory, factory);
+
+  gtk_list_item_manager_ensure_sections (self);
+}
+
+GtkListItemFactory *
+gtk_list_item_manager_get_section_factory (GtkListItemManager *self)
+{
+  g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
+
+  return self->factory;
+}
+
+void
 gtk_list_item_manager_set_model (GtkListItemManager *self,
                                  GtkSelectionModel  *model)
 {
@@ -1017,6 +1201,8 @@ gtk_list_item_manager_get_model (GtkListItemManager *self)
  * gtk_list_item_manager_acquire_list_item:
  * @self: a `GtkListItemManager`
  * @position: the row in the model to create a list item for
+ * @is_header: %TRUE if this is for acquiring a header, %FALSE for regular
+ *   list items
  * @prev_sibling: the widget this widget should be inserted before or %NULL
  *   if it should be the first widget
  *
@@ -1034,6 +1220,7 @@ gtk_list_item_manager_get_model (GtkListItemManager *self)
 static GtkWidget *
 gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
                                          guint               position,
+                                         gboolean            is_header,
                                          GtkWidget          *prev_sibling)
 {
   GtkWidget *result;
@@ -1043,14 +1230,24 @@ gtk_list_item_manager_acquire_list_item (GtkListItemManager *self,
   g_return_val_if_fail (GTK_IS_LIST_ITEM_MANAGER (self), NULL);
   g_return_val_if_fail (prev_sibling == NULL || GTK_IS_WIDGET (prev_sibling), NULL);
 
-  result = gtk_list_item_widget_new (self->factory,
-                                     self->item_css_name,
-                                     self->item_role);
-
-  gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
+  if (is_header)
+    {
+      result = gtk_list_item_widget_new (self->section_factory,
+                                         "section",
+                                         GTK_ACCESSIBLE_ROLE_ROW_HEADER);
+      gtk_list_item_widget_set_activatable (GTK_LIST_ITEM_WIDGET (result), FALSE);
+      selected = FALSE;
+    }
+  else
+    {
+      result = gtk_list_item_widget_new (self->factory,
+                                         self->item_css_name,
+                                         self->item_role);
+      selected = gtk_selection_model_is_selected (self->model, position);
+      gtk_list_item_widget_set_single_click_activate (GTK_LIST_ITEM_WIDGET (result), self->single_click_activate);
+    }
 
   item = g_list_model_get_item (G_LIST_MODEL (self->model), position);
-  selected = gtk_selection_model_is_selected (self->model, position);
   gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (result), position, item, selected);
   g_object_unref (item);
   gtk_widget_insert_after (result, self->widget, prev_sibling);

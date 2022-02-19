@@ -46,6 +46,7 @@ typedef struct _GtkListItemTracker GtkListItemTracker;
 struct _GtkListItemManagerItem
 {
   GtkWidget *widget;
+  GtkWidget *section_header;
   guint n_items;
 };
 
@@ -90,6 +91,9 @@ void                    gtk_list_item_manager_gc                (GtkListItemMana
 void                    gtk_list_item_manager_set_factory       (GtkListItemManager     *self,
                                                                  GtkListItemFactory     *factory);
 GtkListItemFactory *    gtk_list_item_manager_get_factory       (GtkListItemManager     *self);
+void                    gtk_list_item_manager_set_section_factory (GtkListItemManager     *self,
+                                                                 GtkListItemFactory     *factory);
+GtkListItemFactory *    gtk_list_item_manager_get_section_factory (GtkListItemManager     *self);
 void                    gtk_list_item_manager_set_model         (GtkListItemManager     *self,
                                                                  GtkSelectionModel      *model);
 GtkSelectionModel *     gtk_list_item_manager_get_model         (GtkListItemManager     *self);

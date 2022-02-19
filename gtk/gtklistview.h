@@ -59,6 +59,13 @@ GtkListItemFactory *
                 gtk_list_view_get_factory                       (GtkListView            *self);
 
 GDK_AVAILABLE_IN_4_8
+void            gtk_list_view_set_section_factory               (GtkListView            *self,
+                                                                 GtkListItemFactory     *factory);
+GDK_AVAILABLE_IN_4_8
+GtkListItemFactory *
+                gtk_list_view_get_section_factory               (GtkListView            *self);
+
+GDK_AVAILABLE_IN_4_8
 void            gtk_list_view_set_focus_position                (GtkListView            *self,
                                                                  guint                   position);
 GDK_AVAILABLE_IN_4_8
