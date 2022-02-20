@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-01-09 11:19+0000\n"
-"PO-Revision-Date: 2022-01-10 15:08+0330\n"
+"POT-Creation-Date: 2022-02-18 19:38+0000\n"
+"PO-Revision-Date: 2022-02-20 14:42+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Bookmarks: 133,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -53,7 +53,7 @@ msgstr "نمی‌توان محتوا را به شکل «%s» فراهم کرد"
 msgid "Cannot provide contents as %s"
 msgstr "نمی‌توان محتوا را به شکل %s فراهم کرد"
 
-#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:426
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:430
 msgid "The current backend does not support OpenGL"
 msgstr "پسانه در حال حاضر از OpenGL پشتیبانی نمی‌کند"
 
@@ -111,27 +111,27 @@ msgstr "کشیدن و رها کردن از دیگر برنامه‌ها پشتی
 msgid "No compatible formats to transfer contents."
 msgstr "هیچ قالب سازگاری برای انتقال محتویات وجود ندارد."
 
-#: gdk/gdkglcontext.c:328
+#: gdk/gdkglcontext.c:332
 msgid "The EGL implementation does not support any allowed APIs"
 msgstr "پشتیبانی EGL از هیچ API مجازی پیشتیبانی نمی‌کند"
 
-#: gdk/gdkglcontext.c:409 gdk/win32/gdkglcontext-win32-wgl.c:624
+#: gdk/gdkglcontext.c:413 gdk/win32/gdkglcontext-win32-wgl.c:616
 #: gdk/x11/gdkglcontext-glx.c:624
 msgid "Unable to create a GL context"
 msgstr "امکان ساخت زمینه مناسب برای GL نبود"
 
-#: gdk/gdkglcontext.c:1259
+#: gdk/gdkglcontext.c:1266
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "هر چیزی جز OpenGL Es به دست GDK_DEBUG از کار افتاده"
 
-#: gdk/gdkglcontext.c:1268
+#: gdk/gdkglcontext.c:1275
 #, c-format
 msgid "Application does not support %s API"
 msgstr "برنامه از API مربوط به %s پشتبانی نمی‌کند"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1789
+#: gdk/gdkglcontext.c:1796
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "تلاش شد از %s استفاده شود، ولی %s از پیش در حال استفاده است"
@@ -521,17 +521,17 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "تعلیق"
 
-#: gdk/loaders/gdkjpeg.c:61
+#: gdk/loaders/gdkjpeg.c:63
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "خطا در تفسیر پروندهٔ JPEG ‏(%s)"
 
-#: gdk/loaders/gdkjpeg.c:188
+#: gdk/loaders/gdkjpeg.c:190
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "فضای رنگ JPEG پشتیبانی نشده (%Id)"
 
-#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
+#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "حافظهٔ ناکافی برای اندازهٔ تصویر %Iu×%Iu"
@@ -565,7 +565,7 @@ msgid "Reading data failed at row %d"
 msgstr "خواندن داده‌ها در ردیف %Id شکست خورد"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
-#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
+#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:313
 #: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
 #: gdk/x11/gdkclipboard-x11.c:787 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
@@ -693,11 +693,11 @@ msgstr "IDataObject_GetData (0x%x) شکست خورد. 0x%lx را برگردان�
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "شکست در تغییر شکل قالب W32 دادهٔ ک‌ور 0x%x به %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:279 gdk/win32/gdkglcontext-win32-wgl.c:296
+#: gdk/win32/gdkglcontext-win32-wgl.c:276 gdk/win32/gdkglcontext-win32-wgl.c:293
 msgid "No GL implementation is available"
 msgstr "هیچ پیاده‌سازی GLای پیدا نشد"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:590
+#: gdk/win32/gdkglcontext-win32-wgl.c:582
 msgid "No available configurations for the given pixel format"
 msgstr "هیچ پیکربندی برای قالب نقطه‌ای ارائه شده موجود نیست"
 
@@ -2075,7 +2075,7 @@ msgstr "یک پرونده با همان نام در حال حاضر وجود د�
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175 gtk/gtkmountoperation.c:610
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:642
 #: gtk/gtkprinteroptionwidget.c:713 gtk/gtkprintunixdialog.c:667
-#: gtk/gtkprintunixdialog.c:823 gtk/gtkwindow.c:6226 gtk/inspector/css-editor.c:248
+#: gtk/gtkprintunixdialog.c:823 gtk/gtkwindow.c:6147 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "_انصراف"
@@ -2163,7 +2163,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5645 gtk/gtktext.c:6064 gtk/gtktextview.c:8956
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6073 gtk/gtktextview.c:8956
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2378,56 +2378,56 @@ msgctxt "font"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/gtkfontchooserwidget.c:1532
+#: gtk/gtkfontchooserwidget.c:1531
 msgctxt "Font variation axis"
 msgid "Width"
 msgstr "پهنا"
 
-#: gtk/gtkfontchooserwidget.c:1533
+#: gtk/gtkfontchooserwidget.c:1532
 msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "وزن"
 
-#: gtk/gtkfontchooserwidget.c:1534
+#: gtk/gtkfontchooserwidget.c:1533
 msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "کج"
 
-#: gtk/gtkfontchooserwidget.c:1535
+#: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "شکافتن"
 
-#: gtk/gtkfontchooserwidget.c:1536
+#: gtk/gtkfontchooserwidget.c:1535
 msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "اندازهٔ نوری"
 
-#: gtk/gtkfontchooserwidget.c:2140
+#: gtk/gtkfontchooserwidget.c:2139
 msgid "Default"
 msgstr "پیش‌گزیده"
 
-#: gtk/gtkfontchooserwidget.c:2186
+#: gtk/gtkfontchooserwidget.c:2185
 msgid "Ligatures"
 msgstr "جایگزین‌ها"
 
-#: gtk/gtkfontchooserwidget.c:2187
+#: gtk/gtkfontchooserwidget.c:2186
 msgid "Letter Case"
 msgstr "حالت حرف"
 
-#: gtk/gtkfontchooserwidget.c:2188
+#: gtk/gtkfontchooserwidget.c:2187
 msgid "Number Case"
 msgstr "حالت عدد"
 
-#: gtk/gtkfontchooserwidget.c:2189
+#: gtk/gtkfontchooserwidget.c:2188
 msgid "Number Spacing"
 msgstr "فاصله‌گذاری عدد"
 
-#: gtk/gtkfontchooserwidget.c:2190
+#: gtk/gtkfontchooserwidget.c:2189
 msgid "Number Formatting"
 msgstr "قالب‌بندی عدد"
 
-#: gtk/gtkfontchooserwidget.c:2191
+#: gtk/gtkfontchooserwidget.c:2190
 msgid "Character Variants"
 msgstr "دگرگونه‌های نویسه"
 
@@ -2435,19 +2435,19 @@ msgstr "دگرگونه‌های نویسه"
 msgid "OpenGL context creation failed"
 msgstr "ساخت زمینه OpenGL شکست خورد"
 
-#: gtk/gtklabel.c:5642 gtk/gtktext.c:6052 gtk/gtktextview.c:8944
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6061 gtk/gtktextview.c:8944
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5643 gtk/gtktext.c:6056 gtk/gtktextview.c:8948
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6065 gtk/gtktextview.c:8948
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: gtk/gtklabel.c:5644 gtk/gtktext.c:6060 gtk/gtktextview.c:8952
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6069 gtk/gtktextview.c:8952
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6073 gtk/gtktextview.c:8977
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6082 gtk/gtktextview.c:8977
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
@@ -2557,7 +2557,7 @@ msgid "%d:%02d"
 msgstr "%Id:%I02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176 gtk/gtkprintbackend.c:643
-#: gtk/gtkwindow.c:6227
+#: gtk/gtkwindow.c:6148
 msgid "_OK"
 msgstr "_تأیید"
 
@@ -3407,7 +3407,7 @@ msgstr "جست‌وجو دیگری را امتحان کنید"
 msgid "Could not show link"
 msgstr "نتوانست پیوند را نشان دهد"
 
-#: gtk/gtktext.c:6078 gtk/gtktextview.c:8982
+#: gtk/gtktext.c:6087 gtk/gtktextview.c:8982
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
@@ -3442,12 +3442,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkwindow.c:6214
+#: gtk/gtkwindow.c:6135
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "می‌خواهید از بازرس +GTK استفاده کنید؟"
 
-#: gtk/gtkwindow.c:6216
+#: gtk/gtkwindow.c:6137
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify the "
@@ -3457,7 +3457,7 @@ msgstr ""
 "بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK "
 "را می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
 
-#: gtk/gtkwindow.c:6221
+#: gtk/gtkwindow.c:6142
 msgid "Don’t show this message again"
 msgstr "این پیام را دوباره نشان نده"
 
@@ -5925,781 +5925,6 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/script-names.c:16
-msgctxt "Script"
-msgid "Arabic"
-msgstr "عربی"
-
-#: gtk/script-names.c:17
-msgctxt "Script"
-msgid "Armenian"
-msgstr "ارمنی"
-
-#: gtk/script-names.c:18
-msgctxt "Script"
-msgid "Bengali"
-msgstr "بنگالی"
-
-#: gtk/script-names.c:19
-msgctxt "Script"
-msgid "Bopomofo"
-msgstr "بوپوموفو"
-
-#: gtk/script-names.c:20
-msgctxt "Script"
-msgid "Cherokee"
-msgstr "چروکی"
-
-#: gtk/script-names.c:21
-msgctxt "Script"
-msgid "Coptic"
-msgstr "قبطی"
-
-#: gtk/script-names.c:22
-msgctxt "Script"
-msgid "Cyrillic"
-msgstr "سریلیک"
-
-#: gtk/script-names.c:23
-msgctxt "Script"
-msgid "Deseret"
-msgstr "ده‌سه‌رت"
-
-#: gtk/script-names.c:24
-msgctxt "Script"
-msgid "Devanagari"
-msgstr "دوانگاری"
-
-#: gtk/script-names.c:25
-msgctxt "Script"
-msgid "Ethiopic"
-msgstr "اتیوپیایی"
-
-#: gtk/script-names.c:26
-msgctxt "Script"
-msgid "Georgian"
-msgstr "گرجی"
-
-#: gtk/script-names.c:27
-msgctxt "Script"
-msgid "Gothic"
-msgstr "گوتی"
-
-#: gtk/script-names.c:28
-msgctxt "Script"
-msgid "Greek"
-msgstr "یونانی"
-
-#: gtk/script-names.c:29
-msgctxt "Script"
-msgid "Gujarati"
-msgstr "گجراتی"
-
-#: gtk/script-names.c:30
-msgctxt "Script"
-msgid "Gurmukhi"
-msgstr "گورموکی"
-
-#: gtk/script-names.c:31
-msgctxt "Script"
-msgid "Han"
-msgstr "هان"
-
-#: gtk/script-names.c:32
-msgctxt "Script"
-msgid "Hangul"
-msgstr "هانگول"
-
-#: gtk/script-names.c:33
-msgctxt "Script"
-msgid "Hebrew"
-msgstr "عبری"
-
-#: gtk/script-names.c:34
-msgctxt "Script"
-msgid "Hiragana"
-msgstr "هیراگانا"
-
-#: gtk/script-names.c:35
-msgctxt "Script"
-msgid "Kannada"
-msgstr "کانادا"
-
-#: gtk/script-names.c:36
-msgctxt "Script"
-msgid "Katakana"
-msgstr "کاتاگانا"
-
-#: gtk/script-names.c:37
-msgctxt "Script"
-msgid "Khmer"
-msgstr "خمر"
-
-#: gtk/script-names.c:38
-msgctxt "Script"
-msgid "Lao"
-msgstr "لاوو"
-
-#: gtk/script-names.c:39
-msgctxt "Script"
-msgid "Latin"
-msgstr "لاتین"
-
-#: gtk/script-names.c:40
-msgctxt "Script"
-msgid "Malayalam"
-msgstr "مالایام"
-
-#: gtk/script-names.c:41
-msgctxt "Script"
-msgid "Mongolian"
-msgstr "مغولی"
-
-#: gtk/script-names.c:42
-msgctxt "Script"
-msgid "Myanmar"
-msgstr "میانمار"
-
-#: gtk/script-names.c:43
-msgctxt "Script"
-msgid "Ogham"
-msgstr "اوغام"
-
-#: gtk/script-names.c:44
-msgctxt "Script"
-msgid "Old Italic"
-msgstr "ایتالیایی باستان"
-
-#: gtk/script-names.c:45
-msgctxt "Script"
-msgid "Oriya"
-msgstr "اوریا"
-
-#: gtk/script-names.c:46
-msgctxt "Script"
-msgid "Runic"
-msgstr "رونی"
-
-#: gtk/script-names.c:47
-msgctxt "Script"
-msgid "Sinhala"
-msgstr "سری‌لانکایی"
-
-#: gtk/script-names.c:48
-msgctxt "Script"
-msgid "Syriac"
-msgstr "سریانی"
-
-#: gtk/script-names.c:49
-msgctxt "Script"
-msgid "Tamil"
-msgstr "تامیل"
-
-#: gtk/script-names.c:50
-msgctxt "Script"
-msgid "Telugu"
-msgstr "تلوگو"
-
-#: gtk/script-names.c:51
-msgctxt "Script"
-msgid "Thaana"
-msgstr "تانا"
-
-#: gtk/script-names.c:52
-msgctxt "Script"
-msgid "Thai"
-msgstr "تایلندی"
-
-#: gtk/script-names.c:53
-msgctxt "Script"
-msgid "Tibetan"
-msgstr "تبّتی"
-
-#: gtk/script-names.c:54
-msgctxt "Script"
-msgid "Canadian Aboriginal"
-msgstr "بومی کانادایی"
-
-#: gtk/script-names.c:55
-msgctxt "Script"
-msgid "Yi"
-msgstr "یی"
-
-#: gtk/script-names.c:56
-msgctxt "Script"
-msgid "Tagalog"
-msgstr "تاگالویی"
-
-#: gtk/script-names.c:57
-msgctxt "Script"
-msgid "Hanunoo"
-msgstr "هانونو"
-
-#: gtk/script-names.c:58
-msgctxt "Script"
-msgid "Buhid"
-msgstr "فیلیپینی"
-
-#: gtk/script-names.c:59
-msgctxt "Script"
-msgid "Tagbanwa"
-msgstr "تاگ‌بان‌وا"
-
-#: gtk/script-names.c:60
-msgctxt "Script"
-msgid "Braille"
-msgstr "بریل"
-
-#: gtk/script-names.c:61
-msgctxt "Script"
-msgid "Cypriot"
-msgstr "قبرسی"
-
-#: gtk/script-names.c:62
-msgctxt "Script"
-msgid "Limbu"
-msgstr "لیم‌بو"
-
-#: gtk/script-names.c:63
-msgctxt "Script"
-msgid "Osmanya"
-msgstr "عثمانی"
-
-#: gtk/script-names.c:64
-msgctxt "Script"
-msgid "Shavian"
-msgstr "شاوی"
-
-#: gtk/script-names.c:65
-msgctxt "Script"
-msgid "Linear B"
-msgstr "خطّی B"
-
-#: gtk/script-names.c:66
-msgctxt "Script"
-msgid "Tai Le"
-msgstr "تای‌لی"
-
-#: gtk/script-names.c:67
-msgctxt "Script"
-msgid "Ugaritic"
-msgstr "اوگاریتی"
-
-#: gtk/script-names.c:68
-msgctxt "Script"
-msgid "New Tai Lue"
-msgstr "تای لوی جدید"
-
-#: gtk/script-names.c:69
-msgctxt "Script"
-msgid "Buginese"
-msgstr "بوگینی"
-
-#: gtk/script-names.c:70
-msgctxt "Script"
-msgid "Glagolitic"
-msgstr "گالگولیتی"
-
-#: gtk/script-names.c:71
-msgctxt "Script"
-msgid "Tifinagh"
-msgstr "تی‌فی‌نا"
-
-#: gtk/script-names.c:72
-msgctxt "Script"
-msgid "Syloti Nagri"
-msgstr "ناگری سیلوتی"
-
-#: gtk/script-names.c:73
-msgctxt "Script"
-msgid "Old Persian"
-msgstr "پارسی باستان"
-
-#: gtk/script-names.c:74
-msgctxt "Script"
-msgid "Kharoshthi"
-msgstr "خروشتی"
-
-#: gtk/script-names.c:75
-msgctxt "Script"
-msgid "Unknown"
-msgstr "ناشناخته"
-
-#: gtk/script-names.c:76
-msgctxt "Script"
-msgid "Balinese"
-msgstr "بالیایی"
-
-#: gtk/script-names.c:77
-msgctxt "Script"
-msgid "Cuneiform"
-msgstr "میخی"
-
-#: gtk/script-names.c:78
-msgctxt "Script"
-msgid "Phoenician"
-msgstr "فنیقی"
-
-#: gtk/script-names.c:79
-msgctxt "Script"
-msgid "Phags-pa"
-msgstr "فاگزپا"
-
-#: gtk/script-names.c:80
-msgctxt "Script"
-msgid "N'Ko"
-msgstr "ان‌کو"
-
-#: gtk/script-names.c:81
-msgctxt "Script"
-msgid "Kayah Li"
-msgstr "کایالی"
-
-#: gtk/script-names.c:82
-msgctxt "Script"
-msgid "Lepcha"
-msgstr "لپکی"
-
-#: gtk/script-names.c:83
-msgctxt "Script"
-msgid "Rejang"
-msgstr "ری‌جانگ"
-
-#: gtk/script-names.c:84
-msgctxt "Script"
-msgid "Sundanese"
-msgstr "ساندانسی"
-
-#: gtk/script-names.c:85
-msgctxt "Script"
-msgid "Saurashtra"
-msgstr "ساراشترا"
-
-#: gtk/script-names.c:86
-msgctxt "Script"
-msgid "Cham"
-msgstr "چام"
-
-#: gtk/script-names.c:87
-msgctxt "Script"
-msgid "Ol Chiki"
-msgstr "اول‌چیکی"
-
-#: gtk/script-names.c:88
-msgctxt "Script"
-msgid "Vai"
-msgstr "وای"
-
-#: gtk/script-names.c:89
-msgctxt "Script"
-msgid "Carian"
-msgstr "کاریایی"
-
-#: gtk/script-names.c:90
-msgctxt "Script"
-msgid "Lycian"
-msgstr "لایکیایی"
-
-#: gtk/script-names.c:91
-msgctxt "Script"
-msgid "Lydian"
-msgstr "لیده‌ای"
-
-#: gtk/script-names.c:92
-msgctxt "Script"
-msgid "Avestan"
-msgstr "اوستایی"
-
-#: gtk/script-names.c:93
-msgctxt "Script"
-msgid "Bamum"
-msgstr "باموم"
-
-#: gtk/script-names.c:94
-msgctxt "Script"
-msgid "Egyptian Hieroglyphs"
-msgstr "هیروگلیف‌های مصری"
-
-#: gtk/script-names.c:95
-msgctxt "Script"
-msgid "Imperial Aramaic"
-msgstr "آرامی امپراتوری"
-
-#: gtk/script-names.c:96
-msgctxt "Script"
-msgid "Inscriptional Pahlavi"
-msgstr "پهلوی کتیبه‌ای"
-
-#: gtk/script-names.c:97
-msgctxt "Script"
-msgid "Inscriptional Parthian"
-msgstr "پارتی کتیبه‌ای"
-
-#: gtk/script-names.c:98
-msgctxt "Script"
-msgid "Javanese"
-msgstr "جاوه‌ای"
-
-#: gtk/script-names.c:99
-msgctxt "Script"
-msgid "Kaithi"
-msgstr "کای‌تی"
-
-#: gtk/script-names.c:100
-msgctxt "Script"
-msgid "Lisu"
-msgstr "لی‌سو"
-
-#: gtk/script-names.c:101
-msgctxt "Script"
-msgid "Meetei Mayek"
-msgstr "می‌تی مایک"
-
-#: gtk/script-names.c:102
-msgctxt "Script"
-msgid "Old South Arabian"
-msgstr "عربی جنوبی قدیمی"
-
-#: gtk/script-names.c:103
-msgctxt "Script"
-msgid "Old Turkic"
-msgstr "ترکی باستان"
-
-#: gtk/script-names.c:104
-msgctxt "Script"
-msgid "Samaritan"
-msgstr "سامری"
-
-#: gtk/script-names.c:105
-msgctxt "Script"
-msgid "Tai Tham"
-msgstr "تای‌تام"
-
-#: gtk/script-names.c:106
-msgctxt "Script"
-msgid "Tai Viet"
-msgstr "تام‌ویت"
-
-#: gtk/script-names.c:107
-msgctxt "Script"
-msgid "Batak"
-msgstr "باتاک"
-
-#: gtk/script-names.c:108
-msgctxt "Script"
-msgid "Brahmi"
-msgstr "برهمایی"
-
-#: gtk/script-names.c:109
-msgctxt "Script"
-msgid "Mandaic"
-msgstr "مندایی"
-
-#: gtk/script-names.c:110
-msgctxt "Script"
-msgid "Chakma"
-msgstr "چک‌ما"
-
-#: gtk/script-names.c:111
-msgctxt "Script"
-msgid "Meroitic Cursive"
-msgstr "شکستهٔ مروی"
-
-#: gtk/script-names.c:112
-msgctxt "Script"
-msgid "Meroitic Hieroglyphs"
-msgstr "هیروگلیف‌های مروی"
-
-#: gtk/script-names.c:113
-msgctxt "Script"
-msgid "Miao"
-msgstr "میایویی"
-
-#: gtk/script-names.c:114
-msgctxt "Script"
-msgid "Sharada"
-msgstr "شارادا"
-
-#: gtk/script-names.c:115
-msgctxt "Script"
-msgid "Sora Sompeng"
-msgstr "سورا سوم‌پنگ"
-
-#: gtk/script-names.c:116
-msgctxt "Script"
-msgid "Takri"
-msgstr "تکری"
-
-#: gtk/script-names.c:117
-msgctxt "Script"
-msgid "Bassa"
-msgstr "باسا"
-
-#: gtk/script-names.c:118
-msgctxt "Script"
-msgid "Caucasian Albanian"
-msgstr "آلبانیایی قفقازی"
-
-#: gtk/script-names.c:119
-msgctxt "Script"
-msgid "Duployan"
-msgstr "دوپلویی"
-
-#: gtk/script-names.c:120
-msgctxt "Script"
-msgid "Elbasan"
-msgstr "الباسی"
-
-#: gtk/script-names.c:121
-msgctxt "Script"
-msgid "Grantha"
-msgstr "گران‌تا"
-
-#: gtk/script-names.c:122
-msgctxt "Script"
-msgid "Khojki"
-msgstr "خجکی"
-
-#: gtk/script-names.c:123
-msgctxt "Script"
-msgid "Khudawadi, Sindhi"
-msgstr "سندی"
-
-#: gtk/script-names.c:124
-msgctxt "Script"
-msgid "Linear A"
-msgstr "خطّی A"
-
-#: gtk/script-names.c:125
-msgctxt "Script"
-msgid "Mahajani"
-msgstr "ماهاجانی"
-
-#: gtk/script-names.c:126
-msgctxt "Script"
-msgid "Manichaean"
-msgstr "مانوی"
-
-#: gtk/script-names.c:127
-msgctxt "Script"
-msgid "Mende Kikakui"
-msgstr "من‌ده کای‌کاکویی"
-
-#: gtk/script-names.c:128
-msgctxt "Script"
-msgid "Modi"
-msgstr "مودی"
-
-#: gtk/script-names.c:129
-msgctxt "Script"
-msgid "Mro"
-msgstr "مرو"
-
-#: gtk/script-names.c:130
-msgctxt "Script"
-msgid "Nabataean"
-msgstr "نبتی"
-
-#: gtk/script-names.c:131
-msgctxt "Script"
-msgid "Old North Arabian"
-msgstr "عربی شمالی قدیمی"
-
-#: gtk/script-names.c:132
-msgctxt "Script"
-msgid "Old Permic"
-msgstr "پرمی باستان"
-
-#: gtk/script-names.c:133
-msgctxt "Script"
-msgid "Pahawh Hmong"
-msgstr "هومونگ پاهاوا"
-
-#: gtk/script-names.c:134
-msgctxt "Script"
-msgid "Palmyrene"
-msgstr "پالمیری"
-
-#: gtk/script-names.c:135
-msgctxt "Script"
-msgid "Pau Cin Hau"
-msgstr "پاو چین ها"
-
-#: gtk/script-names.c:136
-msgctxt "Script"
-msgid "Psalter Pahlavi"
-msgstr "پهلوی کتیبه‌ای"
-
-#: gtk/script-names.c:137
-msgctxt "Script"
-msgid "Siddham"
-msgstr "سیدهام"
-
-#: gtk/script-names.c:138
-msgctxt "Script"
-msgid "Tirhuta"
-msgstr "تیرهوتا"
-
-#: gtk/script-names.c:139
-msgctxt "Script"
-msgid "Warang Citi"
-msgstr "سیتی وارانگ"
-
-#: gtk/script-names.c:140
-msgctxt "Script"
-msgid "Ahom"
-msgstr "أهوم"
-
-#: gtk/script-names.c:141
-msgctxt "Script"
-msgid "Anatolian Hieroglyphs"
-msgstr "هیروگلیف‌های آناتولیایی"
-
-#: gtk/script-names.c:142
-msgctxt "Script"
-msgid "Hatran"
-msgstr "هت‌ران"
-
-#: gtk/script-names.c:143
-msgctxt "Script"
-msgid "Multani"
-msgstr "مولتانی"
-
-#: gtk/script-names.c:144
-msgctxt "Script"
-msgid "Old Hungarian"
-msgstr "مجاری باستان"
-
-#: gtk/script-names.c:145
-msgctxt "Script"
-msgid "Signwriting"
-msgstr "علامت‌نگاری"
-
-#: gtk/script-names.c:146
-msgctxt "Script"
-msgid "Adlam"
-msgstr "ادلم"
-
-#: gtk/script-names.c:147
-msgctxt "Script"
-msgid "Bhaiksuki"
-msgstr "بهایک‌سوکی"
-
-#: gtk/script-names.c:148
-msgctxt "Script"
-msgid "Marchen"
-msgstr "مرچن"
-
-#: gtk/script-names.c:149
-msgctxt "Script"
-msgid "Newa"
-msgstr "نه‌وا"
-
-#: gtk/script-names.c:150
-msgctxt "Script"
-msgid "Osage"
-msgstr "اوساگه‌ای"
-
-#: gtk/script-names.c:151
-msgctxt "Script"
-msgid "Tangut"
-msgstr "تن‌گوت"
-
-#: gtk/script-names.c:152
-msgctxt "Script"
-msgid "Masaram Gondi"
-msgstr "گندی ماسارام"
-
-#: gtk/script-names.c:153
-msgctxt "Script"
-msgid "Nushu"
-msgstr "نوشو"
-
-#: gtk/script-names.c:154
-msgctxt "Script"
-msgid "Soyombo"
-msgstr "سویوم‌بو"
-
-#: gtk/script-names.c:155
-msgctxt "Script"
-msgid "Zanabazar Square"
-msgstr "اسکوار زنزیبار"
-
-#: gtk/script-names.c:156
-msgctxt "Script"
-msgid "Dogra"
-msgstr "دگرا"
-
-#: gtk/script-names.c:157
-msgctxt "Script"
-msgid "Gunjala Gondi"
-msgstr "گندی گنجاله"
-
-#: gtk/script-names.c:158
-msgctxt "Script"
-msgid "Hanifi Rohingya"
-msgstr "حنیفی روهینگا"
-
-#: gtk/script-names.c:159
-msgctxt "Script"
-msgid "Makasar"
-msgstr "ماکاسار"
-
-#: gtk/script-names.c:160
-msgctxt "Script"
-msgid "Medefaidrin"
-msgstr "مه‌ده‌فایدرین"
-
-#: gtk/script-names.c:161
-msgctxt "Script"
-msgid "Old Sogdian"
-msgstr "سغدی باستان"
-
-#: gtk/script-names.c:162
-msgctxt "Script"
-msgid "Sogdian"
-msgstr "سغدی"
-
-#: gtk/script-names.c:165 gtk/script-names.c:170
-msgctxt "Script"
-msgid "Elym"
-msgstr "الیم"
-
-#: gtk/script-names.c:166 gtk/script-names.c:171
-msgctxt "Script"
-msgid "Nand"
-msgstr "ناند"
-
-#: gtk/script-names.c:167 gtk/script-names.c:172
-msgctxt "Script"
-msgid "Rohg"
-msgstr "رو"
-
-#: gtk/script-names.c:168 gtk/script-names.c:173
-msgctxt "Script"
-msgid "Wcho"
-msgstr "وکو"
-
-#: gtk/script-names.c:176 gtk/script-names.c:181
-msgctxt "Script"
-msgid "Chorasmian"
-msgstr "کوراسمی"
-
-#: gtk/script-names.c:177 gtk/script-names.c:182
-msgctxt "Script"
-msgid "Dives Akuru"
-msgstr "دایوز آکورور"
-
-#: gtk/script-names.c:178 gtk/script-names.c:183
-msgctxt "Script"
-msgid "Khitan small script"
-msgstr "دبیرهٔ کوچک خیتان"
-
-#: gtk/script-names.c:179 gtk/script-names.c:184
-msgctxt "Script"
-msgid "Yezidi"
-msgstr "یزیدی"
-
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "ترجیحات"
@@ -7428,20 +6653,15 @@ msgstr "%s:%d: %sویژگی %s::%s پیدا نشد\n"
 msgid "Can’t load “%s”: %s\n"
 msgstr "نمی‌توان «%s» را بار کرد: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2297
+#: tools/gtk-builder-tool-simplify.c:2297 tools/gtk-builder-tool-simplify.c:2303
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "نمی‌توان «%s» را تجزیه کرد: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2303
-#, c-format
-msgid "Can't parse “%s”: %s\n"
-msgstr "نمی‌توان «%s» را تجزیه کرد: %s\n"
-
 #: tools/gtk-builder-tool-simplify.c:2309
 #, c-format
-msgid "Can't parse “%s”\n"
-msgstr "نمی‌توان «%s» را تجزیه کرد\n"
+msgid "Can’t parse “%s”\n"
+msgstr "نتوانست «%s» را تجزیه کند:\n"
 
 #: tools/gtk-builder-tool-simplify.c:2333
 #, c-format
@@ -7626,6 +6846,632 @@ msgstr ""
 "پروندهٔ نمایهٔ زمینه در «%s» نیست.\n"
 "اگر به‌راستی می‌خواهید این‌جا انبارهٔ نقشکی ایجاد کنید، از ‪--ignore-theme-index‬ "
 "استفاده کنید.\n"
+
+#~ msgctxt "Script"
+#~ msgid "Arabic"
+#~ msgstr "عربی"
+
+#~ msgctxt "Script"
+#~ msgid "Armenian"
+#~ msgstr "ارمنی"
+
+#~ msgctxt "Script"
+#~ msgid "Bengali"
+#~ msgstr "بنگالی"
+
+#~ msgctxt "Script"
+#~ msgid "Bopomofo"
+#~ msgstr "بوپوموفو"
+
+#~ msgctxt "Script"
+#~ msgid "Cherokee"
+#~ msgstr "چروکی"
+
+#~ msgctxt "Script"
+#~ msgid "Coptic"
+#~ msgstr "قبطی"
+
+#~ msgctxt "Script"
+#~ msgid "Cyrillic"
+#~ msgstr "سریلیک"
+
+#~ msgctxt "Script"
+#~ msgid "Deseret"
+#~ msgstr "ده‌سه‌رت"
+
+#~ msgctxt "Script"
+#~ msgid "Devanagari"
+#~ msgstr "دوانگاری"
+
+#~ msgctxt "Script"
+#~ msgid "Ethiopic"
+#~ msgstr "اتیوپیایی"
+
+#~ msgctxt "Script"
+#~ msgid "Georgian"
+#~ msgstr "گرجی"
+
+#~ msgctxt "Script"
+#~ msgid "Gothic"
+#~ msgstr "گوتی"
+
+#~ msgctxt "Script"
+#~ msgid "Greek"
+#~ msgstr "یونانی"
+
+#~ msgctxt "Script"
+#~ msgid "Gujarati"
+#~ msgstr "گجراتی"
+
+#~ msgctxt "Script"
+#~ msgid "Gurmukhi"
+#~ msgstr "گورموکی"
+
+#~ msgctxt "Script"
+#~ msgid "Han"
+#~ msgstr "هان"
+
+#~ msgctxt "Script"
+#~ msgid "Hangul"
+#~ msgstr "هانگول"
+
+#~ msgctxt "Script"
+#~ msgid "Hebrew"
+#~ msgstr "عبری"
+
+#~ msgctxt "Script"
+#~ msgid "Hiragana"
+#~ msgstr "هیراگانا"
+
+#~ msgctxt "Script"
+#~ msgid "Kannada"
+#~ msgstr "کانادا"
+
+#~ msgctxt "Script"
+#~ msgid "Katakana"
+#~ msgstr "کاتاگانا"
+
+#~ msgctxt "Script"
+#~ msgid "Khmer"
+#~ msgstr "خمر"
+
+#~ msgctxt "Script"
+#~ msgid "Lao"
+#~ msgstr "لاوو"
+
+#~ msgctxt "Script"
+#~ msgid "Latin"
+#~ msgstr "لاتین"
+
+#~ msgctxt "Script"
+#~ msgid "Malayalam"
+#~ msgstr "مالایام"
+
+#~ msgctxt "Script"
+#~ msgid "Mongolian"
+#~ msgstr "مغولی"
+
+#~ msgctxt "Script"
+#~ msgid "Myanmar"
+#~ msgstr "میانمار"
+
+#~ msgctxt "Script"
+#~ msgid "Ogham"
+#~ msgstr "اوغام"
+
+#~ msgctxt "Script"
+#~ msgid "Old Italic"
+#~ msgstr "ایتالیایی باستان"
+
+#~ msgctxt "Script"
+#~ msgid "Oriya"
+#~ msgstr "اوریا"
+
+#~ msgctxt "Script"
+#~ msgid "Runic"
+#~ msgstr "رونی"
+
+#~ msgctxt "Script"
+#~ msgid "Sinhala"
+#~ msgstr "سری‌لانکایی"
+
+#~ msgctxt "Script"
+#~ msgid "Syriac"
+#~ msgstr "سریانی"
+
+#~ msgctxt "Script"
+#~ msgid "Tamil"
+#~ msgstr "تامیل"
+
+#~ msgctxt "Script"
+#~ msgid "Telugu"
+#~ msgstr "تلوگو"
+
+#~ msgctxt "Script"
+#~ msgid "Thaana"
+#~ msgstr "تانا"
+
+#~ msgctxt "Script"
+#~ msgid "Thai"
+#~ msgstr "تایلندی"
+
+#~ msgctxt "Script"
+#~ msgid "Tibetan"
+#~ msgstr "تبّتی"
+
+#~ msgctxt "Script"
+#~ msgid "Canadian Aboriginal"
+#~ msgstr "بومی کانادایی"
+
+#~ msgctxt "Script"
+#~ msgid "Yi"
+#~ msgstr "یی"
+
+#~ msgctxt "Script"
+#~ msgid "Tagalog"
+#~ msgstr "تاگالویی"
+
+#~ msgctxt "Script"
+#~ msgid "Hanunoo"
+#~ msgstr "هانونو"
+
+#~ msgctxt "Script"
+#~ msgid "Buhid"
+#~ msgstr "فیلیپینی"
+
+#~ msgctxt "Script"
+#~ msgid "Tagbanwa"
+#~ msgstr "تاگ‌بان‌وا"
+
+#~ msgctxt "Script"
+#~ msgid "Braille"
+#~ msgstr "بریل"
+
+#~ msgctxt "Script"
+#~ msgid "Cypriot"
+#~ msgstr "قبرسی"
+
+#~ msgctxt "Script"
+#~ msgid "Limbu"
+#~ msgstr "لیم‌بو"
+
+#~ msgctxt "Script"
+#~ msgid "Osmanya"
+#~ msgstr "عثمانی"
+
+#~ msgctxt "Script"
+#~ msgid "Shavian"
+#~ msgstr "شاوی"
+
+#~ msgctxt "Script"
+#~ msgid "Linear B"
+#~ msgstr "خطّی B"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Le"
+#~ msgstr "تای‌لی"
+
+#~ msgctxt "Script"
+#~ msgid "Ugaritic"
+#~ msgstr "اوگاریتی"
+
+#~ msgctxt "Script"
+#~ msgid "New Tai Lue"
+#~ msgstr "تای لوی جدید"
+
+#~ msgctxt "Script"
+#~ msgid "Buginese"
+#~ msgstr "بوگینی"
+
+#~ msgctxt "Script"
+#~ msgid "Glagolitic"
+#~ msgstr "گالگولیتی"
+
+#~ msgctxt "Script"
+#~ msgid "Tifinagh"
+#~ msgstr "تی‌فی‌نا"
+
+#~ msgctxt "Script"
+#~ msgid "Syloti Nagri"
+#~ msgstr "ناگری سیلوتی"
+
+#~ msgctxt "Script"
+#~ msgid "Old Persian"
+#~ msgstr "پارسی باستان"
+
+#~ msgctxt "Script"
+#~ msgid "Kharoshthi"
+#~ msgstr "خروشتی"
+
+#~ msgctxt "Script"
+#~ msgid "Unknown"
+#~ msgstr "ناشناخته"
+
+#~ msgctxt "Script"
+#~ msgid "Balinese"
+#~ msgstr "بالیایی"
+
+#~ msgctxt "Script"
+#~ msgid "Cuneiform"
+#~ msgstr "میخی"
+
+#~ msgctxt "Script"
+#~ msgid "Phoenician"
+#~ msgstr "فنیقی"
+
+#~ msgctxt "Script"
+#~ msgid "Phags-pa"
+#~ msgstr "فاگزپا"
+
+#~ msgctxt "Script"
+#~ msgid "N'Ko"
+#~ msgstr "ان‌کو"
+
+#~ msgctxt "Script"
+#~ msgid "Kayah Li"
+#~ msgstr "کایالی"
+
+#~ msgctxt "Script"
+#~ msgid "Lepcha"
+#~ msgstr "لپکی"
+
+#~ msgctxt "Script"
+#~ msgid "Rejang"
+#~ msgstr "ری‌جانگ"
+
+#~ msgctxt "Script"
+#~ msgid "Sundanese"
+#~ msgstr "ساندانسی"
+
+#~ msgctxt "Script"
+#~ msgid "Saurashtra"
+#~ msgstr "ساراشترا"
+
+#~ msgctxt "Script"
+#~ msgid "Cham"
+#~ msgstr "چام"
+
+#~ msgctxt "Script"
+#~ msgid "Ol Chiki"
+#~ msgstr "اول‌چیکی"
+
+#~ msgctxt "Script"
+#~ msgid "Vai"
+#~ msgstr "وای"
+
+#~ msgctxt "Script"
+#~ msgid "Carian"
+#~ msgstr "کاریایی"
+
+#~ msgctxt "Script"
+#~ msgid "Lycian"
+#~ msgstr "لایکیایی"
+
+#~ msgctxt "Script"
+#~ msgid "Lydian"
+#~ msgstr "لیده‌ای"
+
+#~ msgctxt "Script"
+#~ msgid "Avestan"
+#~ msgstr "اوستایی"
+
+#~ msgctxt "Script"
+#~ msgid "Bamum"
+#~ msgstr "باموم"
+
+#~ msgctxt "Script"
+#~ msgid "Egyptian Hieroglyphs"
+#~ msgstr "هیروگلیف‌های مصری"
+
+#~ msgctxt "Script"
+#~ msgid "Imperial Aramaic"
+#~ msgstr "آرامی امپراتوری"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Pahlavi"
+#~ msgstr "پهلوی کتیبه‌ای"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Parthian"
+#~ msgstr "پارتی کتیبه‌ای"
+
+#~ msgctxt "Script"
+#~ msgid "Javanese"
+#~ msgstr "جاوه‌ای"
+
+#~ msgctxt "Script"
+#~ msgid "Kaithi"
+#~ msgstr "کای‌تی"
+
+#~ msgctxt "Script"
+#~ msgid "Lisu"
+#~ msgstr "لی‌سو"
+
+#~ msgctxt "Script"
+#~ msgid "Meetei Mayek"
+#~ msgstr "می‌تی مایک"
+
+#~ msgctxt "Script"
+#~ msgid "Old South Arabian"
+#~ msgstr "عربی جنوبی قدیمی"
+
+#~ msgctxt "Script"
+#~ msgid "Old Turkic"
+#~ msgstr "ترکی باستان"
+
+#~ msgctxt "Script"
+#~ msgid "Samaritan"
+#~ msgstr "سامری"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Tham"
+#~ msgstr "تای‌تام"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Viet"
+#~ msgstr "تام‌ویت"
+
+#~ msgctxt "Script"
+#~ msgid "Batak"
+#~ msgstr "باتاک"
+
+#~ msgctxt "Script"
+#~ msgid "Brahmi"
+#~ msgstr "برهمایی"
+
+#~ msgctxt "Script"
+#~ msgid "Mandaic"
+#~ msgstr "مندایی"
+
+#~ msgctxt "Script"
+#~ msgid "Chakma"
+#~ msgstr "چک‌ما"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Cursive"
+#~ msgstr "شکستهٔ مروی"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Hieroglyphs"
+#~ msgstr "هیروگلیف‌های مروی"
+
+#~ msgctxt "Script"
+#~ msgid "Miao"
+#~ msgstr "میایویی"
+
+#~ msgctxt "Script"
+#~ msgid "Sharada"
+#~ msgstr "شارادا"
+
+#~ msgctxt "Script"
+#~ msgid "Sora Sompeng"
+#~ msgstr "سورا سوم‌پنگ"
+
+#~ msgctxt "Script"
+#~ msgid "Takri"
+#~ msgstr "تکری"
+
+#~ msgctxt "Script"
+#~ msgid "Bassa"
+#~ msgstr "باسا"
+
+#~ msgctxt "Script"
+#~ msgid "Caucasian Albanian"
+#~ msgstr "آلبانیایی قفقازی"
+
+#~ msgctxt "Script"
+#~ msgid "Duployan"
+#~ msgstr "دوپلویی"
+
+#~ msgctxt "Script"
+#~ msgid "Elbasan"
+#~ msgstr "الباسی"
+
+#~ msgctxt "Script"
+#~ msgid "Grantha"
+#~ msgstr "گران‌تا"
+
+#~ msgctxt "Script"
+#~ msgid "Khojki"
+#~ msgstr "خجکی"
+
+#~ msgctxt "Script"
+#~ msgid "Khudawadi, Sindhi"
+#~ msgstr "سندی"
+
+#~ msgctxt "Script"
+#~ msgid "Linear A"
+#~ msgstr "خطّی A"
+
+#~ msgctxt "Script"
+#~ msgid "Mahajani"
+#~ msgstr "ماهاجانی"
+
+#~ msgctxt "Script"
+#~ msgid "Manichaean"
+#~ msgstr "مانوی"
+
+#~ msgctxt "Script"
+#~ msgid "Mende Kikakui"
+#~ msgstr "من‌ده کای‌کاکویی"
+
+#~ msgctxt "Script"
+#~ msgid "Modi"
+#~ msgstr "مودی"
+
+#~ msgctxt "Script"
+#~ msgid "Mro"
+#~ msgstr "مرو"
+
+#~ msgctxt "Script"
+#~ msgid "Nabataean"
+#~ msgstr "نبتی"
+
+#~ msgctxt "Script"
+#~ msgid "Old North Arabian"
+#~ msgstr "عربی شمالی قدیمی"
+
+#~ msgctxt "Script"
+#~ msgid "Old Permic"
+#~ msgstr "پرمی باستان"
+
+#~ msgctxt "Script"
+#~ msgid "Pahawh Hmong"
+#~ msgstr "هومونگ پاهاوا"
+
+#~ msgctxt "Script"
+#~ msgid "Palmyrene"
+#~ msgstr "پالمیری"
+
+#~ msgctxt "Script"
+#~ msgid "Pau Cin Hau"
+#~ msgstr "پاو چین ها"
+
+#~ msgctxt "Script"
+#~ msgid "Psalter Pahlavi"
+#~ msgstr "پهلوی کتیبه‌ای"
+
+#~ msgctxt "Script"
+#~ msgid "Siddham"
+#~ msgstr "سیدهام"
+
+#~ msgctxt "Script"
+#~ msgid "Tirhuta"
+#~ msgstr "تیرهوتا"
+
+#~ msgctxt "Script"
+#~ msgid "Warang Citi"
+#~ msgstr "سیتی وارانگ"
+
+#~ msgctxt "Script"
+#~ msgid "Ahom"
+#~ msgstr "أهوم"
+
+#~ msgctxt "Script"
+#~ msgid "Anatolian Hieroglyphs"
+#~ msgstr "هیروگلیف‌های آناتولیایی"
+
+#~ msgctxt "Script"
+#~ msgid "Hatran"
+#~ msgstr "هت‌ران"
+
+#~ msgctxt "Script"
+#~ msgid "Multani"
+#~ msgstr "مولتانی"
+
+#~ msgctxt "Script"
+#~ msgid "Old Hungarian"
+#~ msgstr "مجاری باستان"
+
+#~ msgctxt "Script"
+#~ msgid "Signwriting"
+#~ msgstr "علامت‌نگاری"
+
+#~ msgctxt "Script"
+#~ msgid "Adlam"
+#~ msgstr "ادلم"
+
+#~ msgctxt "Script"
+#~ msgid "Bhaiksuki"
+#~ msgstr "بهایک‌سوکی"
+
+#~ msgctxt "Script"
+#~ msgid "Marchen"
+#~ msgstr "مرچن"
+
+#~ msgctxt "Script"
+#~ msgid "Newa"
+#~ msgstr "نه‌وا"
+
+#~ msgctxt "Script"
+#~ msgid "Osage"
+#~ msgstr "اوساگه‌ای"
+
+#~ msgctxt "Script"
+#~ msgid "Tangut"
+#~ msgstr "تن‌گوت"
+
+#~ msgctxt "Script"
+#~ msgid "Masaram Gondi"
+#~ msgstr "گندی ماسارام"
+
+#~ msgctxt "Script"
+#~ msgid "Nushu"
+#~ msgstr "نوشو"
+
+#~ msgctxt "Script"
+#~ msgid "Soyombo"
+#~ msgstr "سویوم‌بو"
+
+#~ msgctxt "Script"
+#~ msgid "Zanabazar Square"
+#~ msgstr "اسکوار زنزیبار"
+
+#~ msgctxt "Script"
+#~ msgid "Dogra"
+#~ msgstr "دگرا"
+
+#~ msgctxt "Script"
+#~ msgid "Gunjala Gondi"
+#~ msgstr "گندی گنجاله"
+
+#~ msgctxt "Script"
+#~ msgid "Hanifi Rohingya"
+#~ msgstr "حنیفی روهینگا"
+
+#~ msgctxt "Script"
+#~ msgid "Makasar"
+#~ msgstr "ماکاسار"
+
+#~ msgctxt "Script"
+#~ msgid "Medefaidrin"
+#~ msgstr "مه‌ده‌فایدرین"
+
+#~ msgctxt "Script"
+#~ msgid "Old Sogdian"
+#~ msgstr "سغدی باستان"
+
+#~ msgctxt "Script"
+#~ msgid "Sogdian"
+#~ msgstr "سغدی"
+
+#~ msgctxt "Script"
+#~ msgid "Elym"
+#~ msgstr "الیم"
+
+#~ msgctxt "Script"
+#~ msgid "Nand"
+#~ msgstr "ناند"
+
+#~ msgctxt "Script"
+#~ msgid "Rohg"
+#~ msgstr "رو"
+
+#~ msgctxt "Script"
+#~ msgid "Wcho"
+#~ msgstr "وکو"
+
+#~ msgctxt "Script"
+#~ msgid "Chorasmian"
+#~ msgstr "کوراسمی"
+
+#~ msgctxt "Script"
+#~ msgid "Dives Akuru"
+#~ msgstr "دایوز آکورور"
+
+#~ msgctxt "Script"
+#~ msgid "Khitan small script"
+#~ msgstr "دبیرهٔ کوچک خیتان"
+
+#~ msgctxt "Script"
+#~ msgid "Yezidi"
+#~ msgstr "یزیدی"
+
+#~ msgid "Can't parse “%s”: %s\n"
+#~ msgstr "نمی‌توان «%s» را تجزیه کرد: %s\n"
+
+#~ msgid "Can't parse “%s”\n"
+#~ msgstr "نمی‌توان «%s» را تجزیه کرد\n"
 
 #~ msgid "Failed to parse png image"
 #~ msgstr "شکست در تجزیهٔ تصویر png"
