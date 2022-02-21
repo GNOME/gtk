@@ -85,6 +85,8 @@ struct _GtkEventControllerScroll
   double cur_dx;
   double cur_dy;
 
+  GdkScrollUnit cur_unit;
+
   guint hold_timeout_id;
   guint active : 1;
 };
@@ -365,6 +367,8 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
   g_clear_handle_id (&scroll->hold_timeout_id, g_source_remove);
 
+  scroll->cur_unit = gdk_scroll_event_get_unit (event);
+
   /* FIXME: Handle device changes */
   direction = gdk_scroll_event_get_direction (event);
   if (direction == GDK_SCROLL_SMOOTH)
@@ -497,6 +501,9 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
    * Signals that the widget should scroll by the
    * amount specified by @dx and @dy.
    *
+   * For the representation unit of the deltas, see
+   * [method@Gtk.EventControllerScroll.get_unit].
+   *
    * Returns: %TRUE if the scroll event was handled,
    *   %FALSE otherwise.
    */
@@ -613,4 +620,24 @@ gtk_event_controller_scroll_get_flags (GtkEventControllerScroll *scroll)
                         GTK_EVENT_CONTROLLER_SCROLL_NONE);
 
   return scroll->flags;
+}
+
+/**
+ * gtk_event_controller_scroll_get_unit:
+ * @scroll: a `GtkEventControllerScroll`.
+ *
+ * Gets the scroll unit of the last
+ * [signal@Gtk.EventControllerScroll::scroll] signal received.
+ *
+ * Returns: the scroll unit.
+ *
+ * Since: 4.8
+ */
+GdkScrollUnit
+gtk_event_controller_scroll_get_unit (GtkEventControllerScroll *scroll)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_SCROLL (scroll),
+                        GDK_SCROLL_UNIT_WHEEL);
+
+  return scroll->cur_unit;
 }
