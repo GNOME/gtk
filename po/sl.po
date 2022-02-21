@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-25 18:22+0000\n"
-"PO-Revision-Date: 2021-05-25 21:42+0200\n"
-"Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
+"POT-Creation-Date: 2022-02-19 13:40+0000\n"
+"PO-Revision-Date: 2022-02-20 10:55+0100\n"
+"Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -477,19 +477,19 @@ msgid "Unable to create a GL pixel format"
 msgstr "Ni mogoče ustvariti zapis sličice GL"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
-#: gdk/win32/gdkglcontext-win32.c:1100 gdk/win32/gdkglcontext-win32.c:1140
+#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1258
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:418
-#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:938
-#: gdk/win32/gdkglcontext-win32.c:948 gdk/win32/gdkglcontext-win32.c:1065
+#: gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:777
+#: gdk/win32/gdkglcontext-win32.c:1136 gdk/win32/gdkglcontext-win32.c:1146
 #: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "Ni navedenih nastavitev za podan točkovni zapis"
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1207
+#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1491
 #: gdk/x11/gdkglcontext-x11.c:1281
 msgid "No GL implementation is available"
 msgstr "Okolje GL ni na voljo"
@@ -497,36 +497,6 @@ msgstr "Okolje GL ni na voljo"
 #: gdk/wayland/gdkglcontext-wayland.c:476
 msgid "Core GL is not available on EGL implementation"
 msgstr "Jedrni GL ni na voljo v okolju EGL"
-
-#. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:56
-msgid "Don't batch GDI requests"
-msgstr "Ne združuj zahtev GDI"
-
-#. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
-msgid "Don't use the Wintab API for tablet support"
-msgstr "Ne uporabi vmesnika Wintab API kot podporo za tablične računalnike"
-
-#. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
-msgid "Same as --no-wintab"
-msgstr "Enako kot --no-wintab"
-
-#. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:62
-msgid "Do use the Wintab API [default]"
-msgstr "Uporabi Wintab API [privzeto]"
-
-#. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:64
-msgid "Size of the palette in 8 bit mode"
-msgstr "Velikost barvne palete v 8-bitnem načinu"
-
-#. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:65
-msgid "COLORS"
-msgstr "BARVE"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:298
 #, c-format
@@ -691,15 +661,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zapri"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9319
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9320
 msgid "Minimize"
 msgstr "Skrči"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9328
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9329
 msgid "Maximize"
 msgstr "Razpni"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9285
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9286
 msgid "Restore"
 msgstr "Obnovi"
 
@@ -1246,7 +1216,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12789 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12790 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1295,7 +1265,7 @@ msgid "_Apply"
 msgstr "_Uveljavi"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12790
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12791
 msgid "_OK"
 msgstr "_V redu"
 
@@ -1723,7 +1693,7 @@ msgid "Other Applications"
 msgstr "Drugi programi"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
-#: gtk/gtkprintoperation-win32.c:1521 gtk/inspector/prop-editor.c:1686
+#: gtk/gtkprintoperation-win32.c:1589 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "Program"
 
@@ -1919,7 +1889,7 @@ msgstr "Neveljavno"
 msgid "New accelerator…"
 msgstr "Nov pospeševalnik …"
 
-#: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:470
+#: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:481
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
@@ -2269,44 +2239,44 @@ msgstr "_Desno:"
 msgid "Paper Margins"
 msgstr "Robovi papirja"
 
-#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6686 gtk/gtktextview.c:9520
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6687 gtk/gtktextview.c:9525
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6687 gtk/gtktextview.c:9524
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6688 gtk/gtktextview.c:9529
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6688 gtk/gtktextview.c:9526
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6689 gtk/gtktextview.c:9531
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
 #: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1500
-#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6690 gtk/gtktextview.c:9529
+#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9534
 msgid "_Delete"
 msgstr "_Izbriši"
 
-#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6699 gtk/gtktextview.c:9543
+#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6700 gtk/gtktextview.c:9548
 msgid "Select _All"
 msgstr "Izberi _vse"
 
-#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9553
+#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9558
 msgid "Insert _Emoji"
 msgstr "Vstavi izrazno _ikono"
 
-#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9777
+#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9782
 msgid "Select all"
 msgstr "Izberi vse"
 
-#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9780
+#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9785
 msgid "Cut"
 msgstr "Izreži"
 
-#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9783
+#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9788
 msgid "Copy"
 msgstr "Kopiraj"
 
-#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9786
+#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9791
 msgid "Paste"
 msgstr "Prilepi"
 
@@ -2322,7 +2292,7 @@ msgstr "Vstavi izrazno ikono"
 msgid "Select a File"
 msgstr "Izberite datoteko"
 
-#: gtk/gtkfilechooserbutton.c:113 gtk/gtkplacessidebar.c:1109
+#: gtk/gtkfilechooserbutton.c:113 gtk/gtkplacessidebar.c:1112
 msgid "Desktop"
 msgstr "Namizje"
 
@@ -2340,7 +2310,7 @@ msgstr "_Ime"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:546 gtk/gtkfilechoosernative.c:631
-#: gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693
+#: gtk/gtkplacessidebar.c:3628 gtk/gtkplacessidebar.c:3696
 #: gtk/gtkplacesview.c:1705
 msgid "_Open"
 msgstr "_Odpri"
@@ -2510,7 +2480,7 @@ msgstr "Kopiraj _mesto"
 msgid "_Add to Bookmarks"
 msgstr "_Dodaj med zaznamke"
 
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2741
+#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2744
 #: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
 msgstr "P_reimenuj"
@@ -2654,15 +2624,12 @@ msgstr "Predstavitev"
 msgid "Spreadsheet"
 msgstr "Preglednica"
 
-#. Translators: We don't know whether this printer is
-#. * available to print to.
 #: gtk/gtkfilechooserwidget.c:5055 gtk/gtkfilechooserwidget.c:5244
 #: gtk/inspector/prop-editor.c:1689
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1097
 msgid "Home"
 msgstr "Osebna mapa"
 
@@ -2723,51 +2690,51 @@ msgctxt "font"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/gtkfontchooserwidget.c:1556
+#: gtk/gtkfontchooserwidget.c:1602
 msgid "Width"
 msgstr "Širina"
 
-#: gtk/gtkfontchooserwidget.c:1557
+#: gtk/gtkfontchooserwidget.c:1603
 msgid "Weight"
 msgstr "Teža"
 
-#: gtk/gtkfontchooserwidget.c:1558
+#: gtk/gtkfontchooserwidget.c:1604
 msgid "Italic"
 msgstr "Ležeče"
 
-#: gtk/gtkfontchooserwidget.c:1559
+#: gtk/gtkfontchooserwidget.c:1605
 msgid "Slant"
 msgstr "Nagib"
 
-#: gtk/gtkfontchooserwidget.c:1560
+#: gtk/gtkfontchooserwidget.c:1606
 msgid "Optical Size"
 msgstr "Optična velikost"
 
-#: gtk/gtkfontchooserwidget.c:2097 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2306 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Privzeto"
 
-#: gtk/gtkfontchooserwidget.c:2144
+#: gtk/gtkfontchooserwidget.c:2353
 msgid "Ligatures"
 msgstr "Ligature"
 
-#: gtk/gtkfontchooserwidget.c:2145
+#: gtk/gtkfontchooserwidget.c:2354
 msgid "Letter Case"
 msgstr "Črke"
 
-#: gtk/gtkfontchooserwidget.c:2146
+#: gtk/gtkfontchooserwidget.c:2355
 msgid "Number Case"
 msgstr "Številke"
 
-#: gtk/gtkfontchooserwidget.c:2147
+#: gtk/gtkfontchooserwidget.c:2356
 msgid "Number Spacing"
 msgstr "Številski razmiki"
 
-#: gtk/gtkfontchooserwidget.c:2148
+#: gtk/gtkfontchooserwidget.c:2357
 msgid "Number Formatting"
 msgstr "Oblikovanje števil"
 
-#: gtk/gtkfontchooserwidget.c:2149
+#: gtk/gtkfontchooserwidget.c:2358
 msgid "Character Variants"
 msgstr "Različica znakov"
 
@@ -2779,7 +2746,7 @@ msgstr "Ustvarjanje vsebine OpenGL je spodletelo"
 msgid "Application menu"
 msgstr "Programski meni"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9355
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9356
 msgid "Close"
 msgstr "Zapri"
 
@@ -2830,12 +2797,12 @@ msgid "Error"
 msgstr "Napaka"
 
 #. Open Link
-#: gtk/gtklabel.c:6667
+#: gtk/gtklabel.c:6668
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6676
+#: gtk/gtklabel.c:6677
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
@@ -3091,7 +3058,7 @@ msgstr "Lupina Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Opravila s PID %d ni mogoče končati: %s"
 
-#: gtk/gtknotebook.c:5150 gtk/gtknotebook.c:7428
+#: gtk/gtknotebook.c:5151 gtk/gtknotebook.c:7429
 #, c-format
 msgid "Page %u"
 msgstr "Stran %u"
@@ -3137,218 +3104,218 @@ msgid "File System Root"
 msgstr "Koren datotečnega sistema"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:981
+#: gtk/gtkplacessidebar.c:984
 #, c-format
 msgid "Open %s"
 msgstr "Odpri %s"
 
-#: gtk/gtkplacessidebar.c:1070 gtk/ui/gtkemojichooser.ui:197
+#: gtk/gtkplacessidebar.c:1073 gtk/ui/gtkemojichooser.ui:197
 msgid "Recent"
 msgstr "Nedavno"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1075
 msgid "Recent files"
 msgstr "Nedavno uporabljeno"
 
-#: gtk/gtkplacessidebar.c:1082
+#: gtk/gtkplacessidebar.c:1085
 msgid "Starred"
 msgstr "Z zvezdico"
 
 #. TODO: Rename to 'Starred files'
-#: gtk/gtkplacessidebar.c:1085
+#: gtk/gtkplacessidebar.c:1088
 msgid "Favorite files"
 msgstr "Priljubljene datoteke"
 
-#: gtk/gtkplacessidebar.c:1096
+#: gtk/gtkplacessidebar.c:1099
 msgid "Open your personal folder"
 msgstr "Odpri osebno mapo"
 
-#: gtk/gtkplacessidebar.c:1111
+#: gtk/gtkplacessidebar.c:1114
 msgid "Open the contents of your desktop in a folder"
 msgstr "Odpri vsebino namizja v mapi"
 
-#: gtk/gtkplacessidebar.c:1125
+#: gtk/gtkplacessidebar.c:1128
 msgid "Enter Location"
 msgstr "Vpis mesta"
 
-#: gtk/gtkplacessidebar.c:1127
+#: gtk/gtkplacessidebar.c:1130
 msgid "Manually enter a location"
 msgstr "Ročni vnos mesta"
 
-#: gtk/gtkplacessidebar.c:1137
+#: gtk/gtkplacessidebar.c:1140
 msgid "Trash"
 msgstr "Smeti"
 
-#: gtk/gtkplacessidebar.c:1139
+#: gtk/gtkplacessidebar.c:1142
 msgid "Open the trash"
 msgstr "Odpri smeti"
 
-#: gtk/gtkplacessidebar.c:1248 gtk/gtkplacessidebar.c:1276
-#: gtk/gtkplacessidebar.c:1491
+#: gtk/gtkplacessidebar.c:1251 gtk/gtkplacessidebar.c:1279
+#: gtk/gtkplacessidebar.c:1494
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Priklopi in odpri »%s«"
 
-#: gtk/gtkplacessidebar.c:1371
+#: gtk/gtkplacessidebar.c:1374
 msgid "Open the contents of the file system"
 msgstr "Odpri vsebino datotečnega sistema"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1458
 msgid "New bookmark"
 msgstr "Nov zaznamek"
 
-#: gtk/gtkplacessidebar.c:1457
+#: gtk/gtkplacessidebar.c:1460
 msgid "Add a new bookmark"
 msgstr "Dodaj nov zaznamek"
 
-#: gtk/gtkplacessidebar.c:1470
+#: gtk/gtkplacessidebar.c:1473
 msgid "Connect to Server"
 msgstr "Poveži s strežnikom"
 
-#: gtk/gtkplacessidebar.c:1472
+#: gtk/gtkplacessidebar.c:1475
 msgid "Connect to a network server address"
 msgstr "Poveži z naslovom omrežnega strežnika"
 
-#: gtk/gtkplacessidebar.c:1534
+#: gtk/gtkplacessidebar.c:1537
 msgid "Other Locations"
 msgstr "Druga mesta"
 
-#: gtk/gtkplacessidebar.c:1535
+#: gtk/gtkplacessidebar.c:1538
 msgid "Show other locations"
 msgstr "Pokaži druga mesta"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2334 gtk/gtkplacessidebar.c:3713
+#: gtk/gtkplacessidebar.c:2337 gtk/gtkplacessidebar.c:3716
 msgid "_Start"
 msgstr "_Začni"
 
-#: gtk/gtkplacessidebar.c:2335 gtk/gtkplacessidebar.c:3714
+#: gtk/gtkplacessidebar.c:2338 gtk/gtkplacessidebar.c:3717
 msgid "_Stop"
 msgstr "_Zaustavi"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2342
+#: gtk/gtkplacessidebar.c:2345
 msgid "_Power On"
 msgstr "_Vklopi"
 
-#: gtk/gtkplacessidebar.c:2343
+#: gtk/gtkplacessidebar.c:2346
 msgid "_Safely Remove Drive"
 msgstr "_Varno odstrani pogon"
 
-#: gtk/gtkplacessidebar.c:2347
+#: gtk/gtkplacessidebar.c:2350
 msgid "_Connect Drive"
 msgstr "_Poveži pogon"
 
-#: gtk/gtkplacessidebar.c:2348
+#: gtk/gtkplacessidebar.c:2351
 msgid "_Disconnect Drive"
 msgstr "_Prekini povezavo s pogonom"
 
-#: gtk/gtkplacessidebar.c:2352
+#: gtk/gtkplacessidebar.c:2355
 msgid "_Start Multi-disk Device"
 msgstr "_Zaženi več-diskovno napravo"
 
-#: gtk/gtkplacessidebar.c:2353
+#: gtk/gtkplacessidebar.c:2356
 msgid "_Stop Multi-disk Device"
 msgstr "_Zaustavi več-diskovno napravo"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2358
+#: gtk/gtkplacessidebar.c:2361
 msgid "_Unlock Device"
 msgstr "_Odkleni napravo"
 
-#: gtk/gtkplacessidebar.c:2359
+#: gtk/gtkplacessidebar.c:2362
 msgid "_Lock Device"
 msgstr "_Zakleni napravo"
 
-#: gtk/gtkplacessidebar.c:2397 gtk/gtkplacessidebar.c:3394
+#: gtk/gtkplacessidebar.c:2400 gtk/gtkplacessidebar.c:3397
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Ni mogoče začeti »%s«"
 
-#: gtk/gtkplacessidebar.c:2430
+#: gtk/gtkplacessidebar.c:2433
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Napaka odpiranja »%s«."
 
-#: gtk/gtkplacessidebar.c:2432
+#: gtk/gtkplacessidebar.c:2435
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Ni mogoč dostop do »%s«"
 
-#: gtk/gtkplacessidebar.c:2666
+#: gtk/gtkplacessidebar.c:2669
 msgid "This name is already taken"
 msgstr "To ime je že uporabljeno"
 
-#: gtk/gtkplacessidebar.c:2735 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2738 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:220 gtk/ui/gtkfilechooserwidget.ui:543
 msgid "Name"
 msgstr "Ime"
 
-#: gtk/gtkplacessidebar.c:2935
+#: gtk/gtkplacessidebar.c:2938
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Ni mogoče odstraniti »%s«"
 
-#: gtk/gtkplacessidebar.c:3111
+#: gtk/gtkplacessidebar.c:3114
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Ni mogoče zaustaviti »%s«"
 
-#: gtk/gtkplacessidebar.c:3140
+#: gtk/gtkplacessidebar.c:3143
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Ni mogoče izvreči »%s«"
 
-#: gtk/gtkplacessidebar.c:3169 gtk/gtkplacessidebar.c:3198
+#: gtk/gtkplacessidebar.c:3172 gtk/gtkplacessidebar.c:3201
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Ni mogoče izvreči %s"
 
-#: gtk/gtkplacessidebar.c:3346
+#: gtk/gtkplacessidebar.c:3349
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Ni mogoče preveriti »%s« za spremembe nosilca"
 
-#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696
+#: gtk/gtkplacessidebar.c:3633 gtk/gtkplacessidebar.c:3699
 #: gtk/gtkplacesview.c:1715
 msgid "Open in New _Tab"
 msgstr "Odpri v novem _zavihku"
 
-#: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699
+#: gtk/gtkplacessidebar.c:3639 gtk/gtkplacessidebar.c:3702
 #: gtk/gtkplacesview.c:1726
 msgid "Open in New _Window"
 msgstr "Odpri v novem _oknu"
 
-#: gtk/gtkplacessidebar.c:3703
+#: gtk/gtkplacessidebar.c:3706
 msgid "_Add Bookmark"
 msgstr "_Dodaj zaznamek"
 
-#: gtk/gtkplacessidebar.c:3704
+#: gtk/gtkplacessidebar.c:3707
 msgid "_Remove"
 msgstr "_Odstrani"
 
-#: gtk/gtkplacessidebar.c:3705
+#: gtk/gtkplacessidebar.c:3708
 msgid "Rename…"
 msgstr "Preimenuj …"
 
-#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1760
+#: gtk/gtkplacessidebar.c:3712 gtk/gtkplacesview.c:1760
 msgid "_Mount"
 msgstr "_Priklopi"
 
-#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1750
+#: gtk/gtkplacessidebar.c:3713 gtk/gtkplacesview.c:1750
 msgid "_Unmount"
 msgstr "_Odklopi"
 
-#: gtk/gtkplacessidebar.c:3711
+#: gtk/gtkplacessidebar.c:3714
 msgid "_Eject"
 msgstr "_Izvrzi"
 
-#: gtk/gtkplacessidebar.c:3712
+#: gtk/gtkplacessidebar.c:3715
 msgid "_Detect Media"
 msgstr "_Zaznaj medij"
 
-#: gtk/gtkplacessidebar.c:4158 gtk/gtkplacesview.c:1122
+#: gtk/gtkplacessidebar.c:4161 gtk/gtkplacesview.c:1122
 msgid "Computer"
 msgstr "Računalnik"
 
@@ -3562,58 +3529,58 @@ msgstr "Najverjetnejši razlog je, da začasne datoteke ni mogoče ustvariti"
 msgid "Print"
 msgstr "Natisni"
 
-#: gtk/gtkprintoperation-win32.c:631
+#: gtk/gtkprintoperation-win32.c:654
 msgid "Printer offline"
 msgstr "Tiskalnik je izključen"
 
-#: gtk/gtkprintoperation-win32.c:633
+#: gtk/gtkprintoperation-win32.c:656
 msgid "Out of paper"
 msgstr "Brez papirja"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:635
+#: gtk/gtkprintoperation-win32.c:658
 #: modules/printbackends/cups/gtkprintbackendcups.c:2680
 msgid "Paused"
 msgstr "Premor"
 
-#: gtk/gtkprintoperation-win32.c:637
+#: gtk/gtkprintoperation-win32.c:660
 msgid "Need user intervention"
 msgstr "Zahtevano je posredovanje uporabnika"
 
-#: gtk/gtkprintoperation-win32.c:742
+#: gtk/gtkprintoperation-win32.c:765
 msgid "Custom size"
 msgstr "Velikost po meri"
 
-#: gtk/gtkprintoperation-win32.c:1613
+#: gtk/gtkprintoperation-win32.c:1681
 msgid "No printer found"
 msgstr "Ni najdenega tiskalnika"
 
-#: gtk/gtkprintoperation-win32.c:1640
+#: gtk/gtkprintoperation-win32.c:1708
 msgid "Invalid argument to CreateDC"
 msgstr "Neveljaven argument za CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1676 gtk/gtkprintoperation-win32.c:1922
+#: gtk/gtkprintoperation-win32.c:1744 gtk/gtkprintoperation-win32.c:1996
 msgid "Error from StartDoc"
 msgstr "Napaka iz StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1777 gtk/gtkprintoperation-win32.c:1800
-#: gtk/gtkprintoperation-win32.c:1848
+#: gtk/gtkprintoperation-win32.c:1851 gtk/gtkprintoperation-win32.c:1874
+#: gtk/gtkprintoperation-win32.c:1922
 msgid "Not enough free memory"
 msgstr "Ni dovolj prostega pomnilnika"
 
-#: gtk/gtkprintoperation-win32.c:1853
+#: gtk/gtkprintoperation-win32.c:1927
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Neveljaven argument za PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1858
+#: gtk/gtkprintoperation-win32.c:1932
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Neveljaven kazalec na PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1863
+#: gtk/gtkprintoperation-win32.c:1937
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Neveljavna ročica za PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1868
+#: gtk/gtkprintoperation-win32.c:1942
 msgid "Unspecified error"
 msgstr "Nedoločena napaka"
 
@@ -4060,24 +4027,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9303
+#: gtk/gtkwindow.c:9304
 msgid "Move"
 msgstr "Premakni"
 
-#: gtk/gtkwindow.c:9311
+#: gtk/gtkwindow.c:9312
 msgid "Resize"
 msgstr "Spremeni velikost"
 
-#: gtk/gtkwindow.c:9342
+#: gtk/gtkwindow.c:9343
 msgid "Always on Top"
 msgstr "Vedno na vrhu"
 
-#: gtk/gtkwindow.c:12777
+#: gtk/gtkwindow.c:12778
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Ali želite uporabljati nadzorni program GTK+?"
 
-#: gtk/gtkwindow.c:12779
+#: gtk/gtkwindow.c:12780
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -4087,7 +4054,7 @@ msgstr ""
 "Nadzornik GTK+ je razhroščevalnik, ki omogoča raziskovanje in spreminjanje "
 "nastavitev GTK+. Neustrezna raba lahko povzroči nedelovanje okolja."
 
-#: gtk/gtkwindow.c:12784
+#: gtk/gtkwindow.c:12785
 msgid "Don't show this message again"
 msgstr "Sporočila ne pokaži več"
 
@@ -4100,7 +4067,7 @@ msgstr "Omogoči"
 msgid "State"
 msgstr "Stanje"
 
-#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:196
 #: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "Predpona"
@@ -4162,12 +4129,12 @@ msgstr "Vrednost"
 msgid "Show data"
 msgstr "Pokaži podatke"
 
-#: gtk/inspector/general.c:309
+#: gtk/inspector/general.c:330
 msgctxt "GL version"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/inspector/general.c:310
+#: gtk/inspector/general.c:331
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Brez"
@@ -4180,23 +4147,31 @@ msgstr "Različica GTK+"
 msgid "GDK Backend"
 msgstr "Ozadnji program GDK"
 
-#: gtk/inspector/general.ui:373
+#: gtk/inspector/general.ui:115
+msgid "Application ID"
+msgstr "ID programa"
+
+#: gtk/inspector/general.ui:149
+msgid "Resource Path"
+msgstr "Pot vira"
+
+#: gtk/inspector/general.ui:454
 msgid "Display"
 msgstr "Prikaz"
 
-#: gtk/inspector/general.ui:408
+#: gtk/inspector/general.ui:489
 msgid "RGBA visual"
 msgstr "Vidni RGBA"
 
-#: gtk/inspector/general.ui:442
+#: gtk/inspector/general.ui:523
 msgid "Composited"
 msgstr "Sestavljeno"
 
-#: gtk/inspector/general.ui:489
+#: gtk/inspector/general.ui:570
 msgid "GL Version"
 msgstr "Različica GL"
 
-#: gtk/inspector/general.ui:524
+#: gtk/inspector/general.ui:605
 msgid "GL Vendor"
 msgstr "Ponudnik GL"
 
@@ -7794,31 +7769,6 @@ msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "Vnosni način X"
 
-#. Translators: The printer status is online, i.e. it is
-#. * ready to print.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
-msgid "Online"
-msgstr "Povezano"
-
-#. Translators: The printer is offline.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:751
-msgid "Offline"
-msgstr "Ni povezave"
-
-#. We shouldn't get here because the query omits dormant
-#. * printers by default.
-#. Translators: Printer has been offline for a long time.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:757
-msgid "Dormant"
-msgstr "Nedejavno stanje"
-
-#. How many document pages to go onto one side of paper.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:939
-#: modules/printbackends/file/gtkprintbackendfile.c:676
-#: modules/printbackends/test/gtkprintbackendtest.c:501
-msgid "Pages per _sheet:"
-msgstr "Strani na _list:"
-
 #: modules/printbackends/cups/gtkprintbackendcups.c:1159
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "Username:"
@@ -8361,6 +8311,11 @@ msgstr "PostScript"
 msgid "SVG"
 msgstr "SVG"
 
+#: modules/printbackends/file/gtkprintbackendfile.c:676
+#: modules/printbackends/test/gtkprintbackendtest.c:501
+msgid "Pages per _sheet:"
+msgstr "Strani na _list:"
+
 #: modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "File"
 msgstr "Datoteka"
@@ -8415,362 +8370,3 @@ msgstr "preizkusni-izhod.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Natisni na preizkusnem tiskalniku"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark"
-#~ msgstr "Temna"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Scarlet Red"
-#~ msgstr "svetlo škrlatno rdeča"
-
-#~ msgctxt "Color name"
-#~ msgid "Scarlet Red"
-#~ msgstr "škrlatno rdeča"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Butter"
-#~ msgstr "svetlo maslena"
-
-#~ msgctxt "Color name"
-#~ msgid "Butter"
-#~ msgstr "maslena"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chameleon"
-#~ msgstr "svetla kameleonska"
-
-#~ msgctxt "Color name"
-#~ msgid "Chameleon"
-#~ msgstr "kameleonska"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chameleon"
-#~ msgstr "temna kameleonska"
-
-#~ msgctxt "Color name"
-#~ msgid "Sky Blue"
-#~ msgstr "nebesno modra"
-
-#~ msgctxt "Color name"
-#~ msgid "Plum"
-#~ msgstr "slivno vijolična"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chocolate"
-#~ msgstr "svetla čokoladno rjava"
-
-#~ msgctxt "Color name"
-#~ msgid "Chocolate"
-#~ msgstr "čokoladno rjava"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chocolate"
-#~ msgstr "temno čokoladno rjava"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 1"
-#~ msgstr "svetlobna leta"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 1"
-#~ msgstr "kovinska 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 1"
-#~ msgstr "temna kovinska 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 2"
-#~ msgstr "svetla kovinska 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 2"
-#~ msgstr "kovinska 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 2"
-#~ msgstr "svetla kovinska 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Darker Gray"
-#~ msgstr "temnejša siva"
-
-#~ msgctxt "Color name"
-#~ msgid "Medium Gray"
-#~ msgstr "srednje siva"
-
-#~ msgctxt "Color name"
-#~ msgid "Lighter Gray"
-#~ msgstr "svetlejša siva"
-
-#~ msgid "3.2 core GL profile is not available on EGL implementation"
-#~ msgstr "Profil jedra GL 3.2 ni na voljo v okolju EGL"
-
-#~ msgid "Not implemented on OS X"
-#~ msgstr "Ni vprogramirano v OS X"
-
-#~ msgctxt "switch"
-#~ msgid "ON"
-#~ msgstr "❙"
-
-#~ msgctxt "switch"
-#~ msgid "OFF"
-#~ msgstr "○"
-
-#~ msgid "smb://"
-#~ msgstr "smb://"
-
-#~ msgid "This clipboard cannot store data."
-#~ msgstr "V tem odložišču ni mogoče shranjevati podatkov."
-
-#~ msgid "Cannot read from empty clipboard."
-#~ msgstr "Ni mogoče brati iz praznega odložišča."
-
-#~ msgid "No compatible formats to transfer clipboard contents."
-#~ msgstr "Ni skladnih zapisov za prenos vsebine odložišča."
-
-#~ msgid "Cannot provide contents as “%s”"
-#~ msgstr "Ni mogoče določiti vsebine kot »%s«."
-
-#, fuzzy
-#~| msgid "Could not read the contents of %s"
-#~ msgid "Cannot provide contents as %s"
-#~ msgstr "Vsebine %s ni mogoče prebrati"
-
-#~ msgid "No compatible formats to transfer contents."
-#~ msgstr "Ni skladnih zapisov za prenos vsebine."
-
-#~ msgid "Vulkan support disabled via GDK_DEBUG"
-#~ msgstr "Podpora Vulkan je onemogočena prek GDK_DEBUG"
-
-#~ msgid "Format %s not supported"
-#~ msgstr "Zapis %s ni podprt."
-
-#, fuzzy
-#~ msgid "Not enough space in destination"
-#~ msgstr "Ni dovolj prostora za cilju"
-
-#, fuzzy
-#~ msgid "Invalid byte sequence in conversion input"
-#~ msgstr "Neveljavno zaporedje bajtov na vhodu pretvorbe"
-
-#, fuzzy
-#~| msgid "Opening “%s”."
-#~ msgid "Unsupported encoding “%s”"
-#~ msgstr "Odpiranje datoteke »%s«."
-
-#~ msgid "Design by"
-#~ msgstr "Oblikovanje:"
-
-#~ msgctxt "long time format"
-#~ msgid "%d:%02d:%02d"
-#~ msgstr "%d.%02d.%02d"
-
-#~ msgctxt "long time format"
-#~ msgid "-%d:%02d:%02d"
-#~ msgstr "–%d.%02d.%02d"
-
-#~ msgctxt "short time format"
-#~ msgid "-%d:%02d"
-#~ msgstr "–%d.%02d"
-
-#~ msgctxt "short time format"
-#~ msgid "%d:%02d"
-#~ msgstr "%d.%02d"
-
-#~ msgid "Starred files"
-#~ msgstr "Z zvezdico"
-
-#~ msgid "Swipe left"
-#~ msgstr "Poteg v levo"
-
-#~ msgid "Swipe right"
-#~ msgstr "Poteg v desno"
-
-#, fuzzy
-#~| msgctxt "font"
-#~| msgid "None"
-#~ msgctxt "Vulkan device"
-#~ msgid "None"
-#~ msgstr "Brez"
-
-#, fuzzy
-#~| msgctxt "font"
-#~| msgid "None"
-#~ msgctxt "Vulkan version"
-#~ msgid "None"
-#~ msgstr "Brez"
-
-#~ msgid "GSK Renderer"
-#~ msgstr "Izrisovalnik GSK"
-
-#, fuzzy
-#~| msgid "_Unlock Device"
-#~ msgid "Vulkan Device"
-#~ msgstr "_Odkleni napravo"
-
-#~ msgid "Saving RenderNode failed"
-#~ msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
-
-#, fuzzy
-#~| msgid "Recorder"
-#~ msgid "Record frames"
-#~ msgstr "Snemalnik"
-
-#~ msgid "Logging"
-#~ msgstr "Beleženje"
-
-#~ msgid "Global"
-#~ msgstr "Splošno"
-
-#~ msgid "Recorder"
-#~ msgstr "Snemalnik"
-
-#~ msgctxt "emoji category"
-#~ msgid "Recent"
-#~ msgstr "Nedavno"
-
-#~ msgid "horizontal"
-#~ msgstr "vodoravno"
-
-#, fuzzy
-#~| msgid "Unspecified error"
-#~ msgid "Unspecified error decoding video"
-#~ msgstr "Nedoločena napaka"
-
-#~ msgid "Not enough memory"
-#~ msgstr "Ni dovolj pomnilnika"
-
-#, fuzzy
-#~| msgid "Not a valid page setup file"
-#~ msgid "Not a video file"
-#~ msgstr "Ni veljavna datoteka nastavitev strani"
-
-#~ msgid "Open “%s”"
-#~ msgstr "Odpri »%s«"
-
-#~ msgid "Snapshot Debug Nodes"
-#~ msgstr "Vozlišča razhroščevanja Snapshot"
-
-#~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
-#~ msgstr ""
-#~ "Za ustvarjanje profilov jedra potrebna razširitev WGL_ARB_create_context "
-#~ "ni na voljo"
-
-#~ msgid "Could not start the search process"
-#~ msgstr "Postopka iskanja ni mogoče začeti"
-
-#~ msgid ""
-#~ "The program was not able to create a connection to the indexer daemon. "
-#~ "Please make sure it is running."
-#~ msgstr ""
-#~ "Povezave z ozadnjim programom za ustvarjanje kazala ni mogoče ustvariti. "
-#~ "Preverite, ali je ta zagnan."
-
-#~ msgid ""
-#~ "The GLX_ARB_create_context_profile extension needed to create core "
-#~ "profiles is not available"
-#~ msgstr ""
-#~ "Za ustvarjanje profilov jedra potrebna razširitev "
-#~ "GLX_ARB_create_context_profile ni na voljo"
-
-#~ msgid "Error launching preview"
-#~ msgstr "Napaka med zaganjanjem predogleda"
-
-#~ msgid "New class"
-#~ msgstr "Nov razred"
-
-#~ msgid "Cancel"
-#~ msgstr "Prekliči"
-
-#~ msgid "Class name"
-#~ msgstr "Ime razreda"
-
-#~ msgid "Add a class"
-#~ msgstr "Dodaj razred"
-
-#~ msgid "Restore defaults for this widget"
-#~ msgstr "Obnovi privzete nastavitve gradnika"
-
-#~ msgid "Changes are applied instantly, only for this selected widget."
-#~ msgstr "Spremembe so uveljavljene takoj le za izbran gradnik."
-
-#~ msgid "Classes"
-#~ msgstr "Razredi"
-
-#~ msgid "Allocated size"
-#~ msgstr "Dodeljena velikost"
-
-#~ msgid "Object Hierarchy"
-#~ msgstr "Hierarhija predmeta"
-
-#~ msgid "Style Properties"
-#~ msgstr "Lastnosti slova"
-
-#~ msgid "Invalid object type '%s' on line %d"
-#~ msgstr "Neveljavna vrsta predmeta '%s' v vrstici %d"
-
-#~ msgid "Invalid type function on line %d: '%s'"
-#~ msgstr "Neveljavna vrsta funkcije v vrstici %d: '%s'"
-
-#~ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-#~ msgstr "Podvojeni ID predmeta '%s' v vrstici %d (prvič vnesen v vrstici %d)"
-
-#~ msgid "Invalid property: %s.%s on line %d"
-#~ msgstr "Neveljavna lastnost: %s.%s v vrstici %d"
-
-#~ msgid "Invalid signal '%s' for type '%s' on line %d"
-#~ msgstr "Neveljaven signal '%s' za vrsto '%s' v vrstici %d"
-
-#~ msgid "Invalid root element: <%s>"
-#~ msgstr "Neveljaven korenski predmet: <%s>"
-
-#~ msgid "Unhandled tag: <%s>"
-#~ msgstr "Neobravnavana oznaka: <%s>"
-
-#~ msgid "_Customize"
-#~ msgstr "_Prilagodi"
-
-#~ msgid "%-I:%M %P"
-#~ msgstr "%-H.%M"
-
-#~ msgid "Yesterday at %H:%M"
-#~ msgstr "Včeraj ob %H:%M"
-
-#~ msgid "Yesterday at %-I:%M %P"
-#~ msgstr "Včeraj ob %-H:%M"
-
-#~ msgid "Devices"
-#~ msgstr "Naprave"
-
-#~ msgid "Bookmarks"
-#~ msgstr "Zaznamki"
-
-#~ msgid "Network"
-#~ msgstr "Omrežje"
-
-#~ msgid "Browse the contents of the network"
-#~ msgstr "Prebrskaj vsebino omrežja"
-
-#~ msgid "_Unlock Drive"
-#~ msgstr "_Odkleni pogon"
-
-#~ msgid "_Lock Drive"
-#~ msgstr "_Zakleni pogon"
-
-#~ msgid "Remove"
-#~ msgstr "Odstrani"
-
-#~ msgid "X display"
-#~ msgstr "Zaslon X"
-
-#~ msgid "All Files"
-#~ msgstr "Vse datoteke"
-
-#~ msgid ""
-#~ "No fonts matched your search. You can revise your search and try again."
-#~ msgstr ""
-#~ "Nobena pisava ne ustreza iskanemu nizu. Preverite niz in poskusite znova."
