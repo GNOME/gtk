@@ -1226,15 +1226,14 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
 }
 
 static double
-get_scroll_unit (GtkScrolledWindow        *sw,
-                 GtkOrientation            orientation,
-                 GtkEventControllerScroll *scroll)
+get_wheel_detent_scroll_step (GtkScrolledWindow *sw,
+                              GtkOrientation     orientation)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   GtkScrollbar *scrollbar;
   GtkAdjustment *adj;
   double page_size;
-  double scroll_unit;
+  double scroll_step;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     scrollbar = GTK_SCROLLBAR (priv->hscrollbar);
@@ -1246,20 +1245,9 @@ get_scroll_unit (GtkScrolledWindow        *sw,
 
   adj = gtk_scrollbar_get_adjustment (scrollbar);
   page_size = gtk_adjustment_get_page_size (adj);
-  scroll_unit = pow (page_size, 2.0 / 3.0);
+  scroll_step = pow (page_size, 2.0 / 3.0);
 
-#ifdef GDK_WINDOWING_MACOS
-  {
-    GdkEvent *event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (scroll));
-
-    if (event != NULL &&
-        gdk_event_get_event_type (event) == GDK_SCROLL &&
-        gdk_scroll_event_get_direction (event) == GDK_SCROLL_SMOOTH)
-      scroll_unit = 1;
-  }
-#endif
-
-  return scroll_unit;
+  return scroll_step;
 }
 
 static gboolean
@@ -1401,12 +1389,18 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
     {
       GtkAdjustment *adj;
       double new_value;
-      double scroll_unit;
+      GdkScrollUnit scroll_unit;
 
       adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
-      scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL, scroll);
+      scroll_unit = gtk_event_controller_scroll_get_unit (scroll);
 
-      new_value = priv->unclamped_hadj_value + delta_x * scroll_unit;
+      if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
+        {
+          delta_x *= get_wheel_detent_scroll_step (scrolled_window,
+                                                   GTK_ORIENTATION_HORIZONTAL);
+        }
+
+      new_value = priv->unclamped_hadj_value + delta_x;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
                                                  new_value);
     }
@@ -1416,12 +1410,18 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
     {
       GtkAdjustment *adj;
       double new_value;
-      double scroll_unit;
+      GdkScrollUnit scroll_unit;
 
       adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
-      scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL, scroll);
+      scroll_unit = gtk_event_controller_scroll_get_unit (scroll);
 
-      new_value = priv->unclamped_vadj_value + delta_y * scroll_unit;
+      if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
+        {
+          delta_y *= get_wheel_detent_scroll_step (scrolled_window,
+                                                   GTK_ORIENTATION_VERTICAL);
+        }
+
+      new_value = priv->unclamped_vadj_value + delta_y;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
                                                  new_value);
     }
@@ -1468,30 +1468,36 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
                               double                    initial_vel_y,
                               GtkScrolledWindow        *scrolled_window)
 {
-  double unit_x, unit_y;
+  GdkScrollUnit scroll_unit;
   gboolean shifted;
   GdkModifierType state;
 
-
+  scroll_unit = gtk_event_controller_scroll_get_unit (scroll);
   state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
 
   shifted = (state & GDK_SHIFT_MASK) != 0;
 
-  unit_x = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL, scroll);
-  unit_y = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL, scroll);
-
   if (shifted)
     {
-      gtk_scrolled_window_decelerate (scrolled_window,
-                                      initial_vel_y * unit_x,
-                                      initial_vel_x * unit_y);
+      double tmp;
+
+      tmp = initial_vel_x;
+      initial_vel_x = initial_vel_y;
+      initial_vel_y = tmp;
     }
-  else
+
+  if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
     {
-      gtk_scrolled_window_decelerate (scrolled_window,
-                                      initial_vel_x * unit_x,
-                                      initial_vel_y * unit_y);
+      initial_vel_x *= get_wheel_detent_scroll_step (scrolled_window,
+                                                     GTK_ORIENTATION_HORIZONTAL);
+
+      initial_vel_y *= get_wheel_detent_scroll_step (scrolled_window,
+                                                     GTK_ORIENTATION_VERTICAL);
     }
+
+  gtk_scrolled_window_decelerate (scrolled_window,
+                                  initial_vel_x,
+                                  initial_vel_y);
 }
 
 static void
