@@ -433,7 +433,8 @@ harfbuzz_dep   = dependency('harfbuzz', version: '>= 2.1.0', required: false,
                             default_options: ['coretext=enabled'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                            fallback: ['graphene', 'graphene_dep'])
+                            fallback: ['graphene', 'graphene_dep'],
+                            default_options: ['tests=false'])
 iso_codes_dep  = dependency('iso-codes', required: false)
 
 gidocgen_dep    = dependency('gi-docgen', version: '>= 2021.1',
