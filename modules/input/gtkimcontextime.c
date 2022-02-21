@@ -942,25 +942,18 @@ gtk_im_context_ime_message_filter (GdkXEvent *xevent,
       {
         gint wx = 0, wy = 0;
         CANDIDATEFORM cf;
-        guint scale = gdk_window_get_scale_factor (context_ime->client_window);
+        gint scale = gdk_window_get_scale_factor (context_ime->client_window);
 
         get_window_position (context_ime->client_window, &wx, &wy);
-        /* FIXME! */
-        {
-          POINT pt;
-          RECT rc;
-          GetWindowRect (hwnd, &rc);
-          pt.x = wx * scale;
-          pt.y = wy * scale;
-          ClientToScreen (hwnd, &pt);
-          wx = (pt.x - rc.left) / scale;
-          wy = (pt.y - rc.top) / scale;
-        }
+
         cf.dwIndex = 0;
-        cf.dwStyle = CFS_CANDIDATEPOS;
+        cf.dwStyle = CFS_EXCLUDE;
         cf.ptCurrentPos.x = (wx + context_ime->cursor_location.x) * scale;
-        cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y
-          + context_ime->cursor_location.height) * scale;
+        cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y) * scale;
+        cf.rcArea.left = (wx + context_ime->cursor_location.x) * scale;
+        cf.rcArea.right = (wx + context_ime->cursor_location.x + context_ime->cursor_location.width) * scale;
+        cf.rcArea.top = (wy + context_ime->cursor_location.y) * scale;
+        cf.rcArea.bottom = (wy + context_ime->cursor_location.y + context_ime->cursor_location.height) * scale;
         ImmSetCandidateWindow (himc, &cf);
 
         if ((msg->lParam & GCS_COMPSTR))
