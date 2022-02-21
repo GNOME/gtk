@@ -419,7 +419,7 @@ pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 png_dep        = dependency(is_msvc_like ? 'png' : 'libpng',
                             fallback: ['libpng', 'libpng_dep'],
                             required: true)
-tiff_dep       = dependency('libtiff-4',
+tiff_dep       = dependency(is_msvc_like ? 'tiff' : 'libtiff-4',
                             fallback: ['libtiff', 'libtiff4_dep'],
                             required: true)
 jpeg_dep       = dependency('libjpeg',
