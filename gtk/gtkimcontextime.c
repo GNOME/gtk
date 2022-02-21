@@ -156,6 +156,7 @@ gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
 static void
 gtk_im_context_ime_init (GtkIMContextIME *context_ime)
 {
+  context_ime->client_widget          = NULL;
   context_ime->client_surface         = NULL;
   context_ime->use_preedit            = TRUE;
   context_ime->preediting             = FALSE;
@@ -272,6 +273,7 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
       gtk_im_context_ime_focus_out (context);
     }
 
+  context_ime->client_widget = widget;
   context_ime->client_surface = client_surface;
 }
 
@@ -825,7 +827,6 @@ static void
 gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime;
-  GtkWidget *widget = NULL;
   HWND hwnd;
   HIMC himc;
   HKL ime = GetKeyboardLayout (0);
@@ -839,11 +840,8 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
 
   context_ime = GTK_IM_CONTEXT_IME (context);
-  if (!context_ime->client_surface)
-    return;
 
-  widget = GTK_WIDGET (gtk_native_get_for_surface (context_ime->client_surface));
-  if (!widget)
+  if (!(context_ime->client_widget && context_ime->client_surface))
     return;
 
   hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
@@ -852,7 +850,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
     return;
 
   /* set font */
-  pango_context = gtk_widget_get_pango_context (widget);
+  pango_context = gtk_widget_get_pango_context (context_ime->client_widget);
   if (!pango_context)
     goto ERROR_OUT;
 
@@ -887,7 +885,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
       lang = ""; break;
     }
 
-  font_desc = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (gtk_widget_get_style_context (widget)));
+  font_desc = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (gtk_widget_get_style_context (context_ime->client_widget)));
 
   if (lang[0])
     {

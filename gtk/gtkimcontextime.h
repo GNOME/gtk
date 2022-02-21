@@ -36,6 +36,7 @@ struct _GtkIMContextIME
 {
   GtkIMContext object;
 
+  GtkWidget *client_widget;
   GdkSurface *client_surface;
   guint use_preedit : 1;
   guint preediting : 1;
