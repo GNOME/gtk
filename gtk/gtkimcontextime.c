@@ -124,9 +124,6 @@ gtk_im_context_ime_message_filter               (GdkWin32Display *display,
                                                  MSG             *msg,
                                                  int             *ret_valp,
                                                  gpointer         data);
-static void get_window_position                 (GdkSurface       *win,
-                                                 int             *x,
-                                                 int             *y);
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT,
 			 gtk_im_module_ensure_extension_point ();
@@ -766,7 +763,6 @@ static void
 gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
                                         GdkRectangle *area)
 {
-  int wx = 0, wy = 0;
   GtkIMContextIME *context_ime;
   COMPOSITIONFORM cf;
   HWND hwnd;
@@ -788,10 +784,10 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
     return;
 
   scale = gdk_surface_get_scale_factor (context_ime->client_surface);
-  get_window_position (context_ime->client_surface, &wx, &wy);
+
   cf.dwStyle = CFS_POINT;
-  cf.ptCurrentPos.x = (wx + context_ime->cursor_location.x) * scale;
-  cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y) * scale;
+  cf.ptCurrentPos.x = context_ime->cursor_location.x * scale;
+  cf.ptCurrentPos.y = context_ime->cursor_location.y * scale;
   ImmSetCompositionWindow (himc, &cf);
 
   ImmReleaseContext (hwnd, himc);
@@ -979,7 +975,6 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
         CANDIDATEFORM cf;
         int scale = gdk_surface_get_scale_factor (context_ime->client_surface);
 
-        get_window_position (context_ime->client_surface, &wx, &wy);
         /* FIXME! */
         {
           HWND impl_hwnd;
@@ -997,9 +992,8 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
         }
         cf.dwIndex = 0;
         cf.dwStyle = CFS_CANDIDATEPOS;
-        cf.ptCurrentPos.x = (wx + context_ime->cursor_location.x) * scale;
-        cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y
-          + context_ime->cursor_location.height) * scale;
+        cf.ptCurrentPos.x = context_ime->cursor_location.x * scale;
+        cf.ptCurrentPos.y = (context_ime->cursor_location.y + context_ime->cursor_location.height) * scale;
         ImmSetCandidateWindow (himc, &cf);
 
         if ((msg->lParam & GCS_COMPSTR))
@@ -1068,31 +1062,4 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
 
   ImmReleaseContext (hwnd, himc);
   return retval;
-}
-
-
-/*
- * x and y must be initialized to 0.
- */
-static void
-get_window_position (GdkSurface *surface, int *x, int *y)
-{
-  GdkSurface *parent, *toplevel;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (x && y);
-
-  if (GDK_IS_POPUP (surface))
-    {
-      parent = gdk_popup_get_parent (GDK_POPUP (surface));
-      toplevel = surface;
-    }
-  else
-    {
-      parent = NULL;
-      toplevel = surface;
-    }
-
-  if (parent && parent != toplevel)
-    get_window_position (parent, x, y);
 }
