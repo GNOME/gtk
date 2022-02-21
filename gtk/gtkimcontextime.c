@@ -969,29 +969,45 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
     {
     case WM_IME_COMPOSITION:
       {
-        int wx = 0, wy = 0;
         CANDIDATEFORM cf;
-        int scale = gdk_surface_get_scale_factor (context_ime->client_surface);
+        int wx = 0;
+        int wy = 0;
+        int scale = 1;
 
-        /* FIXME! */
-        {
-          HWND impl_hwnd;
-          POINT pt;
-          RECT rc;
+        if (context_ime->client_surface && context_ime->client_widget)
+          {
+            GtkNative *native = gtk_native_get_for_surface (context_ime->client_surface);
+            if G_LIKELY (native)
+              {
+                double x = 0.0;
+                double y = 0.0;
+                double decor_x = 0.0;
+                double decor_y = 0.0;
 
-          impl_hwnd =
-            gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
-          GetWindowRect (impl_hwnd, &rc);
-          pt.x = wx * scale;
-          pt.y = wy * scale;
-          ClientToScreen (impl_hwnd, &pt);
-          wx = (pt.x - rc.left) / scale;
-          wy = (pt.y - rc.top) / scale;
-        }
+                gtk_widget_translate_coordinates (context_ime->client_widget,
+                                                  GTK_WIDGET (native),
+                                                  0.0, 0.0, &x, &y);
+
+                gtk_native_get_surface_transform (native, &decor_x, &decor_y);
+                x += decor_x;
+                y += decor_y;
+
+                wx = (int) x;
+                wy = (int) y;
+              }
+
+            scale = gtk_widget_get_scale_factor (context_ime->client_widget);
+          }
+
         cf.dwIndex = 0;
-        cf.dwStyle = CFS_CANDIDATEPOS;
-        cf.ptCurrentPos.x = context_ime->cursor_location.x * scale;
-        cf.ptCurrentPos.y = (context_ime->cursor_location.y + context_ime->cursor_location.height) * scale;
+        cf.dwStyle = CFS_EXCLUDE;
+        cf.ptCurrentPos.x = (wx + context_ime->cursor_location.x) * scale;
+        cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y) * scale;
+        cf.rcArea.left = cf.ptCurrentPos.x;
+        cf.rcArea.right = cf.rcArea.left + context_ime->cursor_location.width * scale;
+        cf.rcArea.top = cf.ptCurrentPos.y;
+        cf.rcArea.bottom = cf.rcArea.top + context_ime->cursor_location.height * scale;
+
         ImmSetCandidateWindow (himc, &cf);
 
         if ((msg->lParam & GCS_COMPSTR))
