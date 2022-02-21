@@ -246,17 +246,17 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
                                       GtkWidget    *widget)
 {
   GtkIMContextIME *context_ime;
-  GdkSurface *client_surface = NULL;
+  GdkSurface *surface = NULL;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
 
   if (widget)
-    client_surface = gtk_native_get_surface (gtk_widget_get_native (widget));
+    surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
-  if (client_surface != NULL)
+  if (surface != NULL)
     {
-      HWND hwnd = gdk_win32_surface_get_impl_hwnd (client_surface);
+      HWND hwnd = gdk_win32_surface_get_impl_hwnd (surface);
       HIMC himc = ImmGetContext (hwnd);
       if (himc)
         {
@@ -274,7 +274,7 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
     }
 
   context_ime->client_widget = widget;
-  context_ime->client_surface = client_surface;
+  context_ime->client_surface = surface;
 }
 
 static gunichar
