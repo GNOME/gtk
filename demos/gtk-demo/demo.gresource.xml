@@ -305,6 +305,7 @@
     <file>listview_clocks.c</file>
     <file>listview_filebrowser.c</file>
     <file>listview_minesweeper.c</file>
+    <file>listview_objects.c</file>
     <file>listview_settings.c</file>
     <file>listview_ucd.c</file>
     <file>listview_weather.c</file>
