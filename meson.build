@@ -422,7 +422,7 @@ png_dep        = dependency(is_msvc_like ? 'png' : 'libpng',
 tiff_dep       = dependency(is_msvc_like ? 'tiff' : 'libtiff-4',
                             fallback: ['libtiff', 'libtiff4_dep'],
                             required: true)
-jpeg_dep       = dependency('libjpeg',
+jpeg_dep       = dependency(is_msvc_like ? 'jpeg' : 'libjpeg',
                             fallback: ['libjpeg-turbo', 'jpeg_dep'],
                             required: true)
 
