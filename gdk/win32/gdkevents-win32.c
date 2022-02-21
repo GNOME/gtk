@@ -2742,7 +2742,8 @@ gdk_event_translate (MSG *msg,
                                     build_pointer_event_state (msg),
                                     delta_x,
                                     delta_y,
-                                    FALSE);
+                                    FALSE,
+                                    GDK_SCROLL_UNIT_WHEEL);
 
       /* Append the discrete version too */
       direction = 0;

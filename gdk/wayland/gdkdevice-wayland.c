@@ -1416,7 +1416,8 @@ flush_smooth_scroll_event (GdkWaylandSeat *seat,
                                 seat->pointer_info.time,
                                 device_get_modifiers (seat->logical_pointer),
                                 delta_x, delta_y,
-                                is_stop);
+                                is_stop,
+                                GDK_SCROLL_UNIT_SURFACE);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -1755,10 +1756,10 @@ pointer_handle_axis (void              *data,
   switch (axis)
     {
     case WL_POINTER_AXIS_VERTICAL_SCROLL:
-      pointer_frame->delta_y = wl_fixed_to_double (value) / 10.0;
+      pointer_frame->delta_y = wl_fixed_to_double (value);
       break;
     case WL_POINTER_AXIS_HORIZONTAL_SCROLL:
-      pointer_frame->delta_x = wl_fixed_to_double (value) / 10.0;
+      pointer_frame->delta_x = wl_fixed_to_double (value);
       break;
     default:
       g_return_if_reached ();
@@ -1768,7 +1769,7 @@ pointer_handle_axis (void              *data,
 
   GDK_SEAT_NOTE (seat, EVENTS,
             g_message ("scroll, axis %s, value %f, seat %p",
-                       get_axis_name (axis), wl_fixed_to_double (value) / 10.0,
+                       get_axis_name (axis), wl_fixed_to_double (value),
                        seat));
 
   if (display->seat_version < WL_POINTER_HAS_FRAME)
@@ -3994,7 +3995,8 @@ tablet_tool_handle_wheel (void                      *data,
                                 tablet->pointer_info.time,
                                 device_get_modifiers (tablet->logical_device),
                                 0, clicks,
-                                FALSE);
+                                FALSE,
+                                GDK_SCROLL_UNIT_WHEEL);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 
