@@ -134,15 +134,6 @@ static GSourceFuncs event_funcs = {
   NULL
 };
 
-/* Whenever we do an implicit grab (call SetCapture() after
- * a mouse button is held down), we ref the capturing surface
- * and keep that ref here. When mouse buttons are released,
- * we remove the implicit grab and synthesize a crossing
- * event from the grab surface to whatever surface is now
- * under cursor.
- */
-static GdkSurface *implicit_grab_surface = NULL;
-
 static GdkSurface *mouse_window = NULL;
 static GdkSurface *mouse_window_ignored_leave = NULL;
 static int current_x, current_y;
@@ -2224,10 +2215,7 @@ gdk_event_translate (MSG *msg,
       if (pointer_grab == NULL)
 	{
 	  SetCapture (GDK_SURFACE_HWND (window));
-	  g_set_object (&implicit_grab_surface, g_object_ref (window));
 	}
-      else
-	g_set_object (&implicit_grab_surface, NULL);
 
       generate_button_event (GDK_BUTTON_PRESS, button,
 			     window, msg);
@@ -2262,7 +2250,7 @@ gdk_event_translate (MSG *msg,
 
       g_set_object (&window, find_window_for_mouse_event (window, msg));
 
-      if (pointer_grab == NULL && implicit_grab_surface != NULL)
+      if (pointer_grab != NULL && pointer_grab->implicit)
 	{
 	  int state = build_pointer_event_state (msg);
 
@@ -2285,19 +2273,16 @@ gdk_event_translate (MSG *msg,
 
 	      synthesize_crossing_events (display,
                                           _gdk_device_manager->system_pointer,
-					  implicit_grab_surface, new_window,
+                                          pointer_grab->surface, new_window,
 					  GDK_CROSSING_UNGRAB,
 					  &msg->pt,
 					  0, /* TODO: Set right mask */
 					  _gdk_win32_get_next_tick (msg->time),
 					  FALSE);
-	      g_set_object (&implicit_grab_surface, NULL);
 	      g_set_object (&mouse_window, new_window);
 	      mouse_window_ignored_leave = NULL;
 	    }
 	}
-      else
-	g_set_object (&implicit_grab_surface, NULL);
 
       generate_button_event (GDK_BUTTON_RELEASE, button,
 			     window, msg);
