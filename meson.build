@@ -409,18 +409,20 @@ if win32_enabled
   pangowin32_dep = dependency('pangowin32')
 endif
 
+is_msvc_like = cc.get_argument_syntax() == 'msvc'
+
 pangocairo_dep = dependency('pangocairo', version: pango_req,
                             fallback : ['pango', 'libpangocairo_dep'])
 pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                             fallback : ['gdk-pixbuf', 'gdkpixbuf_dep'],
                             default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
-png_dep        = dependency(cc.get_argument_syntax() == 'msvc' ? 'png' : 'libpng',
+png_dep        = dependency(is_msvc_like ? 'png' : 'libpng',
                             fallback: ['libpng', 'libpng_dep'],
                             required: true)
-tiff_dep       = dependency('libtiff-4',
+tiff_dep       = dependency(is_msvc_like ? 'tiff' : 'libtiff-4',
                             fallback: ['libtiff', 'libtiff4_dep'],
                             required: true)
-jpeg_dep       = dependency('libjpeg',
+jpeg_dep       = dependency(is_msvc_like ? 'jpeg' : 'libjpeg',
                             fallback: ['libjpeg-turbo', 'jpeg_dep'],
                             required: true)
 
