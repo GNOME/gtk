@@ -6,22 +6,22 @@
 # Gil Osher <dolfin@rpg.org.il>, 2004.
 # Yair Hershkovitz <yairhr@gmail.com>, 2006.
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2011, 2012.
-# Yosef Or Boczko <yoseforb@gmail.com>, 2013-2020.
+# Yosef Or Boczko <yoseforb@gmail.com>, 2013-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-09-17 13:25+0000\n"
-"PO-Revision-Date: 2020-09-28 21:57+0300\n"
+"PO-Revision-Date: 2022-02-22 22:48+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
-"Language-Team: Hebrew <yoseforb@gmail.com>\n"
+"Language-Team: Hebrew <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2\n"
-"X-Generator: Gtranslator 3.36.0\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n>2||n==0) ? 1 : 2;\n"
+"X-Generator: Gtranslator 40.0\n"
 "X-Project-Style: default\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -4679,7 +4679,7 @@ msgstr "גישה לכל החלופות"
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr ""
+msgstr "צורות מעל הבסיס"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
@@ -4692,11 +4692,10 @@ msgid "Above-base Substitutions"
 msgstr ""
 
 #: gtk/open-type-layout.h:17
-#, fuzzy
 #| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "אימות"
+msgstr "שברים חלופיים"
 
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
@@ -4706,7 +4705,7 @@ msgstr ""
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr ""
+msgstr "צורות מתחת לבסיס"
 
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
@@ -4721,17 +4720,17 @@ msgstr ""
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
 msgid "Contextual Alternates"
-msgstr ""
+msgstr "חלופות לפי הקשר"
 
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
-msgstr ""
+msgstr "צורות תלויות רישיות"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr ""
+msgstr "הרכבת / פירוק גליפים"
 
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
@@ -4746,12 +4745,12 @@ msgstr ""
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "ליגטורות תלויות הקשר"
 
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "ניקוד בסינית, יפנית וקוריאנית ממורכז"
 
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
@@ -4766,7 +4765,7 @@ msgstr ""
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "מקום בכתב מחובר"
 
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
@@ -4781,7 +4780,7 @@ msgstr ""
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Distances"
-msgstr ""
+msgstr "מרחקים"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
@@ -4796,12 +4795,12 @@ msgstr ""
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "צורות ללא נקודות"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr ""
+msgstr "צורות למומחים"
 
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
@@ -4809,25 +4808,22 @@ msgid "Final Glyph on Line Alternates"
 msgstr ""
 
 #: gtk/open-type-layout.h:40
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "מציג טקסט במסוף"
+msgstr "צורות סופיות מס׳ 2"
 
 #: gtk/open-type-layout.h:41
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "מציג טקסט במסוף"
+msgstr "צורות סופיות מס׳ 3"
 
 #: gtk/open-type-layout.h:42
-#, fuzzy
 #| msgid "Terminal Pager"
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "מציג טקסט במסוף"
+msgstr "צורות סופיות"
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
@@ -4835,53 +4831,51 @@ msgid "Flattened accent forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:44
-#, fuzzy
 #| msgid "Actions"
 msgctxt "OpenType layout"
 msgid "Fractions"
-msgstr "פעולות"
+msgstr "שברים"
 
 #: gtk/open-type-layout.h:45
-#, fuzzy
 #| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
-msgstr "יישומון ממוקד"
+msgstr "מלאי רוחב"
 
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Half Forms"
-msgstr ""
+msgstr "צורות חצויות"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
 msgid "Halant Forms"
-msgstr ""
+msgstr "צורות הלנט"
 
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "צורות חצויות חלופיות"
 
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Historical Forms"
-msgstr ""
+msgstr "צורות היסטוריות"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "חלופות קאנה נטויות"
 
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
 msgid "Historical Ligatures"
-msgstr ""
+msgstr "ליגטורות היסטוריות"
 
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr ""
+msgstr "האנגול"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
@@ -4891,81 +4885,76 @@ msgstr ""
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr ""
+msgstr "חצאי רוחב"
 
 #: gtk/open-type-layout.h:55
-#, fuzzy
 #| msgctxt "print operation status"
 #| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
-msgstr "מצב התחלתי"
+msgstr "צורות תחיליות"
 
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
 msgid "Isolated Forms"
-msgstr ""
+msgstr "צורות מבודדות"
 
 #: gtk/open-type-layout.h:57
-#, fuzzy
 #| msgctxt "Stock label"
 #| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
-msgstr "_נטוי"
+msgstr "נטויים"
 
 #: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "חלופות יישור"
 
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "צורות JIS78"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "צורות  JIS83"
 
 #: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "צורות JIS90"
 
 #: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "צורות JIS2004"
 
 #: gtk/open-type-layout.h:63
-#, fuzzy
 #| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr "אזהרה"
+msgstr "ריווח"
 
 #: gtk/open-type-layout.h:64
-#, fuzzy
 #| msgctxt "output-bin"
 #| msgid "Left Bin"
 msgctxt "OpenType layout"
 msgid "Left Bounds"
-msgstr "מגש שמאלי"
+msgstr "גבולות שמאליים"
 
 #: gtk/open-type-layout.h:65
-#, fuzzy
 #| msgctxt "cover page"
 #| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
-msgstr "רגיל"
+msgstr "ליגטורות רגילות"
 
 #: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "צורות ג׳אמו מובילות"
 
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
@@ -4978,18 +4967,16 @@ msgid "Localized Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:69
-#, fuzzy
 #| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
-msgstr "LRM סימון _שמאל לימין"
+msgstr "חלופות שמאל לימין"
 
 #: gtk/open-type-layout.h:70
-#, fuzzy
 #| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "LRM סימון _שמאל לימין"
+msgstr "צורות הפוכות משמאל לימין"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
@@ -4999,17 +4986,17 @@ msgstr ""
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr ""
+msgstr "צורות אמצעיות מס׳ 2"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr ""
+msgstr "צורות אמצעיות"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "יוונית מתמטית"
 
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
@@ -5034,7 +5021,7 @@ msgstr ""
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "צורות נוקטה"
 
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
@@ -5044,24 +5031,23 @@ msgstr ""
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "צורות בסגנון ישן"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "גבולות אופטיים"
 
 #: gtk/open-type-layout.h:83
-#, fuzzy
 #| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "אותות"
+msgstr "סודרים"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr ""
+msgstr "קישוטים"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
@@ -5113,7 +5099,7 @@ msgstr ""
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "רבעי רוחב"
 
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
@@ -5133,39 +5119,36 @@ msgstr ""
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "ליגטורות נחוצות"
 
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "צורות רף"
 
 #: gtk/open-type-layout.h:100
-#, fuzzy
 #| msgctxt "output-bin"
 #| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
-msgstr "מגש ימני"
+msgstr "גבולות ימניים"
 
 #: gtk/open-type-layout.h:101
-#, fuzzy
 #| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr "RLM סימון _ימין לשמאל"
+msgstr "חלופות ימין לשמאל"
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
 #| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "RLM סימון _ימין לשמאל"
+msgstr "צורות הפוכות מימין לשמאל"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "צורות סימון רובי"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
@@ -5175,7 +5158,7 @@ msgstr ""
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "חלופות מסוגננות"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
@@ -5185,124 +5168,123 @@ msgstr ""
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
 msgid "Optical size"
-msgstr ""
+msgstr "גודל אופטי"
 
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
 msgid "Small Capitals"
-msgstr ""
+msgstr "אותיות גדולות בקטן"
 
 #: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
 msgid "Simplified Forms"
-msgstr ""
+msgstr "צורות מופשטות"
 
 #: gtk/open-type-layout.h:110
 msgctxt "OpenType layout"
 msgid "Stylistic Set 1"
-msgstr ""
+msgstr "ערכה מסוגננת 1"
 
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
 msgid "Stylistic Set 2"
-msgstr ""
+msgstr "ערכה מסוגננת 2"
 
 #: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stylistic Set 3"
-msgstr ""
+msgstr "ערכה מסוגננת 3"
 
 #: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
 msgid "Stylistic Set 4"
-msgstr ""
+msgstr "ערכה מסוגננת 3"
 
 #: gtk/open-type-layout.h:114
 msgctxt "OpenType layout"
 msgid "Stylistic Set 5"
-msgstr ""
+msgstr "ערכה מסוגננת 5"
 
 #: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Stylistic Set 6"
-msgstr ""
+msgstr "ערכה מסוגננת 6"
 
 #: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Stylistic Set 7"
-msgstr ""
+msgstr "ערכה מסוגננת 7"
 
 #: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Stylistic Set 8"
-msgstr ""
+msgstr "ערכה מסוגננת 8"
 
 #: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Stylistic Set 9"
-msgstr ""
+msgstr "ערכה מסוגננת 9"
 
 #: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Stylistic Set 10"
-msgstr ""
+msgstr "ערכה מסוגננת 10"
 
 #: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Stylistic Set 11"
-msgstr ""
+msgstr "ערכה מסוגננת 11"
 
 #: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Stylistic Set 12"
-msgstr ""
+msgstr "ערכה מסוגננת 12"
 
 #: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Stylistic Set 13"
-msgstr ""
+msgstr "ערכה מסוגננת 13"
 
 #: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Stylistic Set 14"
-msgstr ""
+msgstr "ערכה מסוגננת 14"
 
 #: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
 msgid "Stylistic Set 15"
-msgstr ""
+msgstr "ערכה מסוגננת 15"
 
 #: gtk/open-type-layout.h:125
 msgctxt "OpenType layout"
 msgid "Stylistic Set 16"
-msgstr ""
+msgstr "ערכה מסוגננת 16"
 
 #: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Stylistic Set 17"
-msgstr ""
+msgstr "ערכה מסוגננת 17"
 
 #: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
 msgid "Stylistic Set 18"
-msgstr ""
+msgstr "ערכה מסוגננת 18"
 
 #: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Stylistic Set 19"
-msgstr ""
+msgstr "ערכה מסוגננת 19"
 
 #: gtk/open-type-layout.h:129
-#, fuzzy
 #| msgid "Artistic License 2.0"
 msgctxt "OpenType layout"
 msgid "Stylistic Set 20"
-msgstr "רישיון אמנותי 2.0"
+msgstr "ערכה מסוגננת 20"
 
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "חלופות סגנון כתב מתמטי"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
@@ -5310,19 +5292,17 @@ msgid "Stretching Glyph Decomposition"
 msgstr ""
 
 #: gtk/open-type-layout.h:132
-#, fuzzy
 #| msgid "Postscript"
 msgctxt "OpenType layout"
 msgid "Subscript"
-msgstr "Postscript"
+msgstr "כתב תחתי"
 
 #: gtk/open-type-layout.h:133
-#, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Super"
 msgctxt "OpenType layout"
 msgid "Superscript"
-msgstr "Super"
+msgstr "כתב עילי"
 
 #: gtk/open-type-layout.h:134
 msgctxt "OpenType layout"
@@ -5337,7 +5317,7 @@ msgstr ""
 #: gtk/open-type-layout.h:136
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "צורות גא׳מו סופיות"
 
 #: gtk/open-type-layout.h:137
 msgctxt "OpenType layout"
@@ -5347,17 +5327,17 @@ msgstr ""
 #: gtk/open-type-layout.h:138
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "צורות טבלאיות"
 
 #: gtk/open-type-layout.h:139
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "צורות מסורתיות"
 
 #: gtk/open-type-layout.h:140
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "שלישי גובה"
 
 #: gtk/open-type-layout.h:141
 msgctxt "OpenType layout"
@@ -5377,12 +5357,11 @@ msgid "Vattu Variants"
 msgstr "הֶגְוֵן כהה"
 
 #: gtk/open-type-layout.h:144
-#, fuzzy
 #| msgctxt "sizegroup mode"
 #| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
-msgstr "אנכי"
+msgstr "כתיבה אנכית"
 
 #: gtk/open-type-layout.h:145
 msgctxt "OpenType layout"
@@ -5392,20 +5371,19 @@ msgstr ""
 #: gtk/open-type-layout.h:146
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "צורות תנועות בג׳אמו"
 
 #: gtk/open-type-layout.h:147
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "חלופות קאנה אנכיות"
 
 #: gtk/open-type-layout.h:148
-#, fuzzy
 #| msgctxt "sizegroup mode"
 #| msgid "Vertical"
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
-msgstr "אנכי"
+msgstr "ריווח אנכי"
 
 #: gtk/open-type-layout.h:149
 msgctxt "OpenType layout"
@@ -5415,17 +5393,17 @@ msgstr ""
 #: gtk/open-type-layout.h:150
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "חלופות אנכיות וסיבוב"
 
 #: gtk/open-type-layout.h:151
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "חלופות אנכיות לסיבוב"
 
 #: gtk/open-type-layout.h:152
 msgctxt "OpenType layout"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "אפס עם לוכסן"
 
 #: gtk/paper_names_offsets.c:4
 msgctxt "paper size"
