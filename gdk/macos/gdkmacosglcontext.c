@@ -532,6 +532,9 @@ gdk_macos_gl_context_surface_resized (GdkDrawContext *draw_context)
   g_assert (GDK_IS_MACOS_GL_CONTEXT (self));
 
   g_clear_pointer (&self->damage, cairo_region_destroy);
+
+  if (self->cgl_context != NULL)
+    CGLUpdateContext (self->cgl_context);
 }
 
 static gboolean
