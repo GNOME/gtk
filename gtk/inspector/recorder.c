@@ -1423,6 +1423,17 @@ gesture_phase_name (GdkTouchpadGesturePhase phase)
   return name[phase];
 }
 
+static const char *
+scroll_unit_name (GdkScrollUnit unit)
+{
+  if (unit == GDK_SCROLL_UNIT_WHEEL)
+    return "Wheel";
+  else if (unit == GDK_SCROLL_UNIT_SURFACE)
+    return "Surface";
+  else
+    return "Incorrect value";
+}
+
 static void
 populate_event_properties (GtkListStore *store,
                            GdkEvent     *event)
@@ -1434,6 +1445,7 @@ populate_event_properties (GtkListStore *store,
   double dx, dy;
   char *tmp;
   GdkModifierType state;
+  GdkScrollUnit scroll_unit;
 
   gtk_list_store_clear (store);
 
@@ -1517,6 +1529,9 @@ populate_event_properties (GtkListStore *store,
           tmp = g_strdup_printf ("%.2f %.2f", x, y);
           add_text_row (store, "Delta", tmp);
           g_free (tmp);
+
+          scroll_unit = gdk_scroll_event_get_unit (event);
+          add_text_row (store, "Unit", scroll_unit_name (scroll_unit));
         }
       else
         {
