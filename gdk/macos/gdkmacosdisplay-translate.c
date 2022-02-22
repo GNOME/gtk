@@ -857,9 +857,9 @@ get_surface_from_ns_event (GdkMacosDisplay *self,
 
 find_under_pointer:
 
-  if (!surface)
+  if (surface == NULL && nswindow == NULL)
     {
-      /* Fallback used when no NSSurface set.  This happens e.g. when
+      /* Fallback used when no NSWindow set. This happens e.g. when
        * we allow motion events without a window set in gdk_event_translate()
        * that occur immediately after the main menu bar was clicked/used.
        * This fallback will not return coordinates contained in a window's
