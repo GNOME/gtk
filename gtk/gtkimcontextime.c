@@ -124,9 +124,6 @@ gtk_im_context_ime_message_filter               (GdkWin32Display *display,
                                                  MSG             *msg,
                                                  int             *ret_valp,
                                                  gpointer         data);
-static void get_window_position                 (GdkSurface       *win,
-                                                 int             *x,
-                                                 int             *y);
 
 G_DEFINE_TYPE_WITH_CODE (GtkIMContextIME, gtk_im_context_ime, GTK_TYPE_IM_CONTEXT,
 			 gtk_im_module_ensure_extension_point ();
@@ -159,6 +156,7 @@ gtk_im_context_ime_class_init (GtkIMContextIMEClass *class)
 static void
 gtk_im_context_ime_init (GtkIMContextIME *context_ime)
 {
+  context_ime->client_widget          = NULL;
   context_ime->client_surface         = NULL;
   context_ime->use_preedit            = TRUE;
   context_ime->preediting             = FALSE;
@@ -248,17 +246,17 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
                                       GtkWidget    *widget)
 {
   GtkIMContextIME *context_ime;
-  GdkSurface *client_surface = NULL;
+  GdkSurface *surface = NULL;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
   context_ime = GTK_IM_CONTEXT_IME (context);
 
   if (widget)
-    client_surface = gtk_native_get_surface (gtk_widget_get_native (widget));
+    surface = gtk_native_get_surface (gtk_widget_get_native (widget));
 
-  if (client_surface != NULL)
+  if (surface != NULL)
     {
-      HWND hwnd = gdk_win32_surface_get_impl_hwnd (client_surface);
+      HWND hwnd = gdk_win32_surface_get_impl_hwnd (surface);
       HIMC himc = ImmGetContext (hwnd);
       if (himc)
         {
@@ -275,7 +273,8 @@ gtk_im_context_ime_set_client_widget (GtkIMContext *context,
       gtk_im_context_ime_focus_out (context);
     }
 
-  context_ime->client_surface = client_surface;
+  context_ime->client_widget = widget;
+  context_ime->client_surface = surface;
 }
 
 static gunichar
@@ -766,7 +765,6 @@ static void
 gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
                                         GdkRectangle *area)
 {
-  int wx = 0, wy = 0;
   GtkIMContextIME *context_ime;
   COMPOSITIONFORM cf;
   HWND hwnd;
@@ -788,10 +786,10 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
     return;
 
   scale = gdk_surface_get_scale_factor (context_ime->client_surface);
-  get_window_position (context_ime->client_surface, &wx, &wy);
+
   cf.dwStyle = CFS_POINT;
-  cf.ptCurrentPos.x = (wx + context_ime->cursor_location.x) * scale;
-  cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y) * scale;
+  cf.ptCurrentPos.x = context_ime->cursor_location.x * scale;
+  cf.ptCurrentPos.y = context_ime->cursor_location.y * scale;
   ImmSetCompositionWindow (himc, &cf);
 
   ImmReleaseContext (hwnd, himc);
@@ -829,7 +827,6 @@ static void
 gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
 {
   GtkIMContextIME *context_ime;
-  GtkWidget *widget = NULL;
   HWND hwnd;
   HIMC himc;
   HKL ime = GetKeyboardLayout (0);
@@ -843,11 +840,8 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
 
   context_ime = GTK_IM_CONTEXT_IME (context);
-  if (!context_ime->client_surface)
-    return;
 
-  widget = GTK_WIDGET (gtk_native_get_for_surface (context_ime->client_surface));
-  if (!widget)
+  if (!(context_ime->client_widget && context_ime->client_surface))
     return;
 
   hwnd = gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
@@ -856,7 +850,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
     return;
 
   /* set font */
-  pango_context = gtk_widget_get_pango_context (widget);
+  pango_context = gtk_widget_get_pango_context (context_ime->client_widget);
   if (!pango_context)
     goto ERROR_OUT;
 
@@ -891,7 +885,7 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
       lang = ""; break;
     }
 
-  font_desc = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (gtk_widget_get_style_context (widget)));
+  font_desc = gtk_css_style_get_pango_font (gtk_style_context_lookup_style (gtk_widget_get_style_context (context_ime->client_widget)));
 
   if (lang[0])
     {
@@ -975,31 +969,45 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
     {
     case WM_IME_COMPOSITION:
       {
-        int wx = 0, wy = 0;
         CANDIDATEFORM cf;
-        int scale = gdk_surface_get_scale_factor (context_ime->client_surface);
+        int wx = 0;
+        int wy = 0;
+        int scale = 1;
 
-        get_window_position (context_ime->client_surface, &wx, &wy);
-        /* FIXME! */
-        {
-          HWND impl_hwnd;
-          POINT pt;
-          RECT rc;
+        if (context_ime->client_surface && context_ime->client_widget)
+          {
+            GtkNative *native = gtk_native_get_for_surface (context_ime->client_surface);
+            if G_LIKELY (native)
+              {
+                double x = 0.0;
+                double y = 0.0;
+                double decor_x = 0.0;
+                double decor_y = 0.0;
 
-          impl_hwnd =
-            gdk_win32_surface_get_impl_hwnd (context_ime->client_surface);
-          GetWindowRect (impl_hwnd, &rc);
-          pt.x = wx * scale;
-          pt.y = wy * scale;
-          ClientToScreen (impl_hwnd, &pt);
-          wx = (pt.x - rc.left) / scale;
-          wy = (pt.y - rc.top) / scale;
-        }
+                gtk_widget_translate_coordinates (context_ime->client_widget,
+                                                  GTK_WIDGET (native),
+                                                  0.0, 0.0, &x, &y);
+
+                gtk_native_get_surface_transform (native, &decor_x, &decor_y);
+                x += decor_x;
+                y += decor_y;
+
+                wx = (int) x;
+                wy = (int) y;
+              }
+
+            scale = gtk_widget_get_scale_factor (context_ime->client_widget);
+          }
+
         cf.dwIndex = 0;
-        cf.dwStyle = CFS_CANDIDATEPOS;
+        cf.dwStyle = CFS_EXCLUDE;
         cf.ptCurrentPos.x = (wx + context_ime->cursor_location.x) * scale;
-        cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y
-          + context_ime->cursor_location.height) * scale;
+        cf.ptCurrentPos.y = (wy + context_ime->cursor_location.y) * scale;
+        cf.rcArea.left = cf.ptCurrentPos.x;
+        cf.rcArea.right = cf.rcArea.left + context_ime->cursor_location.width * scale;
+        cf.rcArea.top = cf.ptCurrentPos.y;
+        cf.rcArea.bottom = cf.rcArea.top + context_ime->cursor_location.height * scale;
+
         ImmSetCandidateWindow (himc, &cf);
 
         if ((msg->lParam & GCS_COMPSTR))
@@ -1068,31 +1076,4 @@ gtk_im_context_ime_message_filter (GdkWin32Display *display,
 
   ImmReleaseContext (hwnd, himc);
   return retval;
-}
-
-
-/*
- * x and y must be initialized to 0.
- */
-static void
-get_window_position (GdkSurface *surface, int *x, int *y)
-{
-  GdkSurface *parent, *toplevel;
-
-  g_return_if_fail (GDK_IS_SURFACE (surface));
-  g_return_if_fail (x && y);
-
-  if (GDK_IS_POPUP (surface))
-    {
-      parent = gdk_popup_get_parent (GDK_POPUP (surface));
-      toplevel = surface;
-    }
-  else
-    {
-      parent = NULL;
-      toplevel = surface;
-    }
-
-  if (parent && parent != toplevel)
-    get_window_position (parent, x, y);
 }
