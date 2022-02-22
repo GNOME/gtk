@@ -1031,7 +1031,24 @@ libgtk_dep = declare_dependency(sources: gtk_dep_sources,
                                 link_with: libgtk,
                                 link_args: common_ldflags)
 
-foreach lang : [ 'de', 'fr', 'es', 'zh' ]
+foreach lang : [
+    'de',
+    'da',
+    'fr',
+    'es',
+    'hu',
+    'it',
+    'ko',
+    'lt',
+    'ms',
+    'nl',
+    'pl',
+    'pt',
+    'ru',
+    'sv',
+    'uk',
+    'zh'
+  ]
   conf = configuration_data()
   conf.set('lang', lang)
   resxml = configure_file(input: 'emoji/gresource.xml.in',
