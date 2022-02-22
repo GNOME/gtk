@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-02-18 19:38+0000\n"
-"PO-Revision-Date: 2022-02-20 14:42+0330\n"
+"POT-Creation-Date: 2022-02-22 19:37+0000\n"
+"PO-Revision-Date: 2022-02-22 23:36+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -3630,50 +3630,50 @@ msgid "CSS Property"
 msgstr "مشخصه CSS"
 
 # farmaan
-#: gtk/inspector/general.c:309 gtk/inspector/general.c:389
+#: gtk/inspector/general.c:330 gtk/inspector/general.c:410
 msgctxt "GL version"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/inspector/general.c:318
+#: gtk/inspector/general.c:339
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "از کار افتاده"
 
-#: gtk/inspector/general.c:319
+#: gtk/inspector/general.c:340
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "از کار افتاده"
 
 # farmaan
-#: gtk/inspector/general.c:390
+#: gtk/inspector/general.c:411
 msgctxt "GL vendor"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/inspector/general.c:441
+#: gtk/inspector/general.c:462
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "از کار افتاده"
 
-#: gtk/inspector/general.c:442 gtk/inspector/general.c:443
+#: gtk/inspector/general.c:463 gtk/inspector/general.c:464
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "از کار افتاده"
 
 # farmaan
-#: gtk/inspector/general.c:499
+#: gtk/inspector/general.c:520
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "هیچ‌کدام"
 
 # farmaan
-#: gtk/inspector/general.c:500 gtk/inspector/general.c:501
+#: gtk/inspector/general.c:521 gtk/inspector/general.c:522
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/inspector/general.c:771
+#: gtk/inspector/general.c:792
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "بافتار IM به دست GTK_IM_MODULE به صورت سخت رمز شده است"
 
@@ -3701,39 +3701,47 @@ msgstr "پسانهٔ رسانه"
 msgid "Input Method"
 msgstr "روش ورودی"
 
-#: gtk/inspector/general.ui:201
+#: gtk/inspector/general.ui:202
+msgid "Application ID"
+msgstr "شناسهٔ برنامه"
+
+#: gtk/inspector/general.ui:228
+msgid "Resource Path"
+msgstr "مسیر منبع"
+
+#: gtk/inspector/general.ui:268
 msgid "Prefix"
 msgstr "پیشوند"
 
-#: gtk/inspector/general.ui:403
+#: gtk/inspector/general.ui:470
 msgid "Display"
 msgstr "نمایشگر"
 
-#: gtk/inspector/general.ui:430
+#: gtk/inspector/general.ui:497
 msgid "RGBA Visual"
 msgstr "RGBA بصری"
 
-#: gtk/inspector/general.ui:456
+#: gtk/inspector/general.ui:523
 msgid "Composited"
 msgstr "مرکب"
 
-#: gtk/inspector/general.ui:508
+#: gtk/inspector/general.ui:575
 msgid "GL Version"
 msgstr "نسخهٔ GL"
 
-#: gtk/inspector/general.ui:558
+#: gtk/inspector/general.ui:625
 msgid "GL Vendor"
 msgstr "تولیدکننده GL"
 
-#: gtk/inspector/general.ui:598
+#: gtk/inspector/general.ui:665
 msgid "Vulkan Device"
 msgstr "افزارهٔ ولکان"
 
-#: gtk/inspector/general.ui:625
+#: gtk/inspector/general.ui:692
 msgid "Vulkan API version"
 msgstr "نگارش API ولکان"
 
-#: gtk/inspector/general.ui:652
+#: gtk/inspector/general.ui:719
 msgid "Vulkan driver version"
 msgstr "نگارش راه‌انداز ولکان"
 
