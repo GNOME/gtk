@@ -1067,6 +1067,8 @@ install_data('gtkbuilder.loc', 'gtkbuilder.its',
              install_dir: join_paths(gtk_datadir, 'gettext/its'))
 
 ####### Utils ######
+gtk_tools = []
+
 gtk_query_settings = executable(
   'gtk-query-settings',
   'gtk-query-settings.c',
@@ -1074,6 +1076,7 @@ gtk_query_settings = executable(
   dependencies: libgtk_dep,
   install: true
 )
+gtk_tools += gtk_query_settings
 
 gtk_builder_tool = executable(
   'gtk-builder-tool',
@@ -1082,6 +1085,7 @@ gtk_builder_tool = executable(
   dependencies: libgtk_dep,
   install: true
 )
+gtk_tools += gtk_builder_tool
 
 extra_update_icon_cache_objs = []
 if win32_enabled
@@ -1113,8 +1117,9 @@ gtk_update_icon_cache = executable(
   dependencies: libgtk_dep,
   install: true
 )
+gtk_tools += gtk_update_icon_cache
 
- gtk_query_immodules = executable(
+gtk_query_immodules = executable(
   'gtk-query-immodules-3.0',
   'queryimmodules.c',
   'gtkutils.c',
@@ -1122,6 +1127,7 @@ gtk_update_icon_cache = executable(
   dependencies: libgtk_dep,
   install: true
 )
+gtk_tools += gtk_query_immodules
 
 gtk_encode_symbolic_svg = executable(
   'gtk-encode-symbolic-svg',
@@ -1130,6 +1136,7 @@ gtk_encode_symbolic_svg = executable(
   dependencies: libgtk_dep,
   install: true
 )
+gtk_tools += gtk_encode_symbolic_svg
 
 gtk_launch = executable(
   'gtk-launch',
@@ -1138,3 +1145,10 @@ gtk_launch = executable(
   dependencies: libgtk_dep,
   install: true
 )
+gtk_tools += gtk_launch
+
+if meson.version().version_compare('>=0.54.0')
+  foreach tool: gtk_tools
+    meson.override_find_program(tool.name(), tool)
+  endforeach
+endif
