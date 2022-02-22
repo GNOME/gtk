@@ -330,6 +330,8 @@ create_pixel_format (int      major,
   CGLPixelFormatAttribute attrs[] = {
     kCGLPFAOpenGLProfile, (CGLPixelFormatAttribute)kCGLOGLPVersion_Legacy,
     kCGLPFAAllowOfflineRenderers, /* allow sharing across GPUs */
+    kCGLPFADepthSize, 0,
+    kCGLPFAStencilSize, 0,
     kCGLPFAColorSize, 24,
     kCGLPFAAlphaSize, 8,
     0
