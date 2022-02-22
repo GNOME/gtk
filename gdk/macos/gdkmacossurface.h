@@ -36,7 +36,9 @@ typedef struct _GdkMacosSurfaceClass GdkMacosSurfaceClass;
 #define GDK_IS_MACOS_SURFACE(object) (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MACOS_SURFACE))
 
 GDK_AVAILABLE_IN_ALL
-GType gdk_macos_surface_get_type (void);
+GType    gdk_macos_surface_get_type          (void);
+GDK_AVAILABLE_IN_4_8
+gpointer gdk_macos_surface_get_native_window (GdkMacosSurface *self);
 
 G_END_DECLS
 
