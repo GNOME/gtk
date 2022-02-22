@@ -480,6 +480,21 @@ _gdk_macos_display_surface_became_key (GdkMacosDisplay *self,
   event = gdk_focus_event_new (GDK_SURFACE (surface), keyboard, TRUE);
   _gdk_event_queue_append (GDK_DISPLAY (self), event);
 
+  /* For each parent surface, we want them to look like they
+   * are also still focused, so ensure they have that same
+   * state associated with them.
+   */
+  if (GDK_IS_POPUP (surface))
+    {
+      for (GdkSurface *parent = GDK_SURFACE (surface)->parent;
+           parent != NULL;
+           parent = parent->parent)
+        {
+          if (GDK_IS_TOPLEVEL (parent))
+            gdk_synthesize_surface_state (parent, 0, GDK_TOPLEVEL_STATE_FOCUSED);
+        }
+    }
+
   /* We just became the active window.  Unlike X11, Mac OS X does
    * not send us motion events while the window does not have focus
    * ("is not key").  We send a dummy motion notify event now, so that
@@ -514,6 +529,21 @@ _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
       node = _gdk_event_queue_append (GDK_DISPLAY (self), event);
       _gdk_windowing_got_event (GDK_DISPLAY (self), node, event,
                                 _gdk_display_get_next_serial (GDK_DISPLAY (self)));
+    }
+
+  /* For each parent surface, we want them to look like they
+   * are also still focused, so ensure they have that same
+   * state associated with them.
+   */
+  if (GDK_IS_POPUP (surface))
+    {
+      for (GdkSurface *parent = GDK_SURFACE (surface)->parent;
+           parent != NULL;
+           parent = parent->parent)
+        {
+          if (GDK_IS_TOPLEVEL (parent))
+            gdk_synthesize_surface_state (parent, GDK_TOPLEVEL_STATE_FOCUSED, 0);
+        }
     }
 
   _gdk_macos_display_clear_sorting (self);
