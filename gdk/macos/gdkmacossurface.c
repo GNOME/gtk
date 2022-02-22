@@ -152,6 +152,7 @@ gdk_macos_surface_hide (GdkSurface *surface)
   _gdk_surface_clear_update_area (surface);
 
   g_clear_object (&self->buffer);
+  g_clear_object (&self->front);
 
   if (was_key)
     {
@@ -426,6 +427,9 @@ gdk_macos_surface_destroy (GdkSurface *surface,
   _gdk_macos_display_surface_removed (GDK_MACOS_DISPLAY (surface->display), self);
 
   g_clear_pointer (&self->monitors, g_ptr_array_unref);
+
+  g_clear_object (&self->buffer);
+  g_clear_object (&self->front);
 
   g_assert (self->sorted.prev == NULL);
   g_assert (self->sorted.next == NULL);
@@ -781,6 +785,7 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
       surface->height = content_rect.size.height;
 
       g_clear_object (&self->buffer);
+      g_clear_object (&self->front);
 
       _gdk_surface_update_size (surface);
       gdk_surface_request_layout (surface);
@@ -1032,6 +1037,7 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
   /* We need to create a new IOSurface for this monitor */
   g_clear_object (&self->buffer);
+  g_clear_object (&self->front);
 
   _gdk_macos_surface_configure (self);
 
@@ -1156,14 +1162,20 @@ void
 _gdk_macos_surface_swap_buffers (GdkMacosSurface      *self,
                                  const cairo_region_t *damage)
 {
+  GdkMacosBuffer *swap;
+
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
   g_return_if_fail (damage != NULL);
+
+  swap = self->buffer;
+  self->buffer = self->front;
+  self->front = swap;
 
   /* This code looks like it swaps buffers, but since the IOSurfaceRef
    * appears to be retained on the other side, we really just ask all
    * of the GdkMacosTile CALayer's to update their contents.
    */
-  [self->window swapBuffer:self->buffer withDamage:damage];
+  [self->window swapBuffer:swap withDamage:damage];
 
   /* We might have delayed actually showing the window until the buffer
    * contents are ready to be displayed. Doing so ensures that we don't
