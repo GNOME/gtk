@@ -163,6 +163,11 @@ struct _GskGLRenderJob
   /* If we should be rendering red zones over fallback nodes */
   guint debug_fallback : 1;
 
+  /* In some cases we might want to avoid clearing the framebuffer
+   * because we're going to render over the existing contents.
+   */
+  guint clear_framebuffer : 1;
+
   /* Format we want to use for intermediate textures, determined by
    * looking at the format of the framebuffer we are rendering on.
    */
@@ -4083,7 +4088,8 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
   start_time = GDK_PROFILER_CURRENT_TIME;
   gdk_gl_context_push_debug_group (job->command_queue->context, "Building command queue");
   gsk_gl_command_queue_bind_framebuffer (job->command_queue, job->framebuffer);
-  gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
+  if (job->clear_framebuffer)
+    gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
   gsk_gl_render_job_visit_node (job, root);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
   gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Build GL command queue", "");
@@ -4145,7 +4151,8 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
                        const graphene_rect_t *viewport,
                        float                  scale_factor,
                        const cairo_region_t  *region,
-                       guint                  framebuffer)
+                       guint                  framebuffer,
+                       gboolean               clear_framebuffer)
 {
   const graphene_rect_t *clip_rect = viewport;
   graphene_rect_t transformed_extents;
@@ -4161,6 +4168,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   job->clip = g_array_sized_new (FALSE, FALSE, sizeof (GskGLRenderClip), 16);
   job->modelview = g_array_sized_new (FALSE, FALSE, sizeof (GskGLRenderModelview), 16);
   job->framebuffer = framebuffer;
+  job->clear_framebuffer = !!clear_framebuffer;
   job->offset_x = 0;
   job->offset_y = 0;
   job->scale_x = scale_factor;
