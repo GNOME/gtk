@@ -181,6 +181,73 @@
                 </child>
               </object>
             </child>
+
+            <child>
+              <object class="GtkFrame" id="app_id_frame">
+                <property name="halign">center</property>
+                <child>
+                  <object class="GtkListBox" id="app_id_box">
+                    <property name="selection-mode">none</property>
+                    <style>
+                      <class name="rich-list"/>
+                    </style>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="app_id_label">
+                                <property name="label" translatable="yes">Application ID</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="app_id">
+                                <property name="selectable">1</property>
+                                <property name="halign">end</property>
+                                <property name="valign">baseline</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="resource_path_label">
+                                <property name="label" translatable="yes">Resource Path</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="resource_path">
+                                <property name="selectable">1</property>
+                                <property name="halign">end</property>
+                                <property name="valign">baseline</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+
             <child>
               <object class="GtkFrame" id="env_frame">
                 <property name="halign">center</property>
@@ -702,6 +769,8 @@
       <widget name="vk_device_label"/>
       <widget name="vk_api_version_label"/>
       <widget name="vk_driver_version_label"/>
+      <widget name="app_id_label"/>
+      <widget name="resource_path_label"/>
       <widget name="prefix_label"/>
       <widget name="xdg_data_home_label"/>
       <widget name="xdg_data_dirs_label"/>
@@ -717,6 +786,7 @@
   <object class="GtkSizeGroup">
     <widgets>
       <widget name="version_frame"/>
+      <widget name="app_id_frame"/>
       <widget name="gl_frame"/>
       <widget name="monitor_frame"/>
       <widget name="vulkan_frame"/>

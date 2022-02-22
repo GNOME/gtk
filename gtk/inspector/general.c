@@ -97,6 +97,9 @@ struct _GtkInspectorGeneral
   GtkWidget *vk_device;
   GtkWidget *vk_api_version;
   GtkWidget *vk_driver_version;
+  GtkWidget *app_id_frame;
+  GtkWidget *app_id;
+  GtkWidget *resource_path;
   GtkWidget *prefix;
   GtkWidget *xdg_data_home;
   GtkWidget *xdg_data_dirs;
@@ -172,6 +175,24 @@ init_version (GtkInspectorGeneral *gen)
   gtk_label_set_text (GTK_LABEL (gen->gtk_version), GTK_VERSION);
   gtk_label_set_text (GTK_LABEL (gen->gdk_backend), backend);
   gtk_label_set_text (GTK_LABEL (gen->gsk_renderer), renderer);
+}
+
+static void
+init_app_id (GtkInspectorGeneral *gen)
+{
+  GApplication *app;
+
+  app = g_application_get_default ();
+  if (!app)
+    {
+      gtk_widget_hide (gen->app_id_frame);
+      return;
+    }
+
+  gtk_label_set_text (GTK_LABEL (gen->app_id),
+                      g_application_get_application_id (app));
+  gtk_label_set_text (GTK_LABEL (gen->resource_path),
+                      g_application_get_resource_base_path (app));
 }
 
 static G_GNUC_UNUSED void
@@ -1112,6 +1133,9 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_device);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_api_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_driver_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id_frame);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, resource_path);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, prefix);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, xdg_data_home);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, xdg_data_dirs);
@@ -1136,6 +1160,7 @@ gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
 
   init_version (gen);
   init_env (gen);
+  init_app_id (gen);
   init_display (gen);
   init_pango (gen);
   init_media (gen);
