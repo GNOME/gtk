@@ -185,7 +185,7 @@ gdk_macos_display_monitors_changed_cb (CFNotificationCenterRef  center,
       g_assert (GDK_IS_MACOS_SURFACE (surface));
 
       if (GDK_IS_TOPLEVEL (surface))
-        _gdk_macos_surface_update_position (surface);
+        _gdk_macos_surface_configure (surface);
     }
 }
 

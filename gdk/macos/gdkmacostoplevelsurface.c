@@ -381,11 +381,11 @@ static gboolean
 _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
 {
   GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)surface;
+  GdkMacosSurface *macos_surface = (GdkMacosSurface *)surface;
   GdkToplevelSize size;
   GdkDisplay *display;
   GdkMonitor *monitor;
   int bounds_width, bounds_height;
-  int width, height;
   GdkGeometry geometry;
   GdkSurfaceHints mask;
 
@@ -419,9 +419,6 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
   g_warn_if_fail (size.width > 0);
   g_warn_if_fail (size.height > 0);
 
-  width = surface->width;
-  height = surface->height;
-
   if (self->layout != NULL &&
       gdk_toplevel_layout_get_resizable (self->layout))
     {
@@ -437,16 +434,63 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
     }
 
   if (size.shadow.is_valid)
-    _gdk_macos_surface_set_shadow (GDK_MACOS_SURFACE (surface),
+    _gdk_macos_surface_set_shadow (macos_surface,
                                    size.shadow.top,
                                    size.shadow.right,
                                    size.shadow.bottom,
                                    size.shadow.left);
 
-  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+  _gdk_macos_surface_set_geometry_hints (macos_surface, &geometry, mask);
 
-  _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
-  _gdk_macos_surface_resize (GDK_MACOS_SURFACE (self), width, height);
+  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
+                        GDK_TOPLEVEL_STATE_MAXIMIZED |
+                        GDK_TOPLEVEL_STATE_TILED |
+                        GDK_TOPLEVEL_STATE_TOP_TILED |
+                        GDK_TOPLEVEL_STATE_RIGHT_TILED |
+                        GDK_TOPLEVEL_STATE_BOTTOM_TILED |
+                        GDK_TOPLEVEL_STATE_LEFT_TILED |
+                        GDK_TOPLEVEL_STATE_MINIMIZED))
+    return FALSE;
+
+  /* If we delayed a user resize until the beginning of the frame,
+   * apply it now so we can start processing updates for it.
+   */
+  if (macos_surface->next_layout.width > 0 &&
+      macos_surface->next_layout.height > 0)
+    {
+      int root_x = macos_surface->next_layout.root_x;
+      int root_y = macos_surface->next_layout.root_y;
+      int width = macos_surface->next_layout.width;
+      int height = macos_surface->next_layout.height;
+
+      gdk_surface_constrain_size (&geometry, mask,
+                                  width, height,
+                                  &width, &height);
+
+      macos_surface->next_layout.width = 0;
+      macos_surface->next_layout.height = 0;
+
+      _gdk_macos_surface_move_resize (macos_surface,
+                                      root_x, root_y,
+                                      width, height);
+
+      return FALSE;
+    }
+
+  gdk_surface_constrain_size (&geometry, mask,
+                              size.width, size.height,
+                              &size.width, &size.height);
+
+  if ((size.width != self->last_computed_width ||
+       size.height != self->last_computed_height) &&
+      (size.width != surface->width ||
+       size.height != surface->height))
+    {
+      self->last_computed_width = size.width;
+      self->last_computed_height = size.height;
+
+      _gdk_macos_surface_resize (macos_surface, size.width, size.height);
+    }
 
   return FALSE;
 }

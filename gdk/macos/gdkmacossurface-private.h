@@ -53,6 +53,13 @@ struct _GdkMacosSurface
   int root_x;
   int root_y;
 
+  struct {
+    int root_x;
+    int root_y;
+    int width;
+    int height;
+  } next_layout;
+
   int shadow_top;
   int shadow_right;
   int shadow_bottom;
@@ -102,7 +109,6 @@ void               _gdk_macos_surface_resize                  (GdkMacosSurface  
                                                                int                 width,
                                                                int                 height);
 void               _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface    *self);
-void               _gdk_macos_surface_update_position         (GdkMacosSurface    *self);
 void               _gdk_macos_surface_show                    (GdkMacosSurface    *self);
 void               _gdk_macos_surface_publish_timings         (GdkMacosSurface    *self,
                                                                gint64              predicted_presentation_time,
@@ -121,6 +127,9 @@ void               _gdk_macos_surface_move_resize             (GdkMacosSurface  
                                                                int                 y,
                                                                int                 width,
                                                                int                 height);
+void               _gdk_macos_surface_configure               (GdkMacosSurface    *self);
+void               _gdk_macos_surface_user_resize             (GdkMacosSurface    *self,
+                                                               CGRect              new_frame);
 gboolean           _gdk_macos_surface_is_tracking             (GdkMacosSurface    *self,
                                                                NSTrackingArea     *area);
 void               _gdk_macos_surface_monitor_changed         (GdkMacosSurface    *self);

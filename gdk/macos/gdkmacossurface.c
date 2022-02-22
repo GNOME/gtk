@@ -430,15 +430,6 @@ gdk_macos_surface_constructed (GObject *object)
 
   G_OBJECT_CLASS (gdk_macos_surface_parent_class)->constructed (object);
 
-  if (self->window != NULL)
-    {
-      NSRect bounds = [[self->window contentView] bounds];
-
-      GDK_SURFACE (self)->width = bounds.size.width;
-      GDK_SURFACE (self)->height = bounds.size.height;
-      _gdk_macos_surface_update_position (self);
-    }
-
   if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
     {
       g_signal_connect_object (frame_clock,
@@ -452,6 +443,9 @@ gdk_macos_surface_constructed (GObject *object)
                                self,
                                G_CONNECT_SWAPPED);
     }
+
+  if (self->window != NULL)
+    _gdk_macos_surface_configure (self);
 }
 
 static void
@@ -731,12 +725,21 @@ _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
 }
 
 void
-_gdk_macos_surface_update_position (GdkMacosSurface *self)
+_gdk_macos_surface_configure (GdkMacosSurface *self)
 {
-  GdkSurface *surface = GDK_SURFACE (self);
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  NSRect frame_rect = [self->window frame];
-  NSRect content_rect = [self->window contentRectForFrameRect:frame_rect];
+  GdkMacosDisplay *display;
+  GdkSurface *surface = (GdkSurface *)self;
+  NSRect frame_rect;
+  NSRect content_rect;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+
+  if (GDK_SURFACE_DESTROYED (self))
+    return;
+
+  display = GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display);
+  frame_rect = [self->window frame];
+  content_rect = [self->window contentRectForFrameRect:frame_rect];
 
   _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (display),
                                           content_rect.origin.x,
@@ -753,6 +756,19 @@ _gdk_macos_surface_update_position (GdkMacosSurface *self)
       surface->x = self->root_x;
       surface->y = self->root_y;
     }
+
+  if (surface->width != content_rect.size.width ||
+      surface->height != content_rect.size.height)
+    {
+      surface->width = content_rect.size.width;
+      surface->height = content_rect.size.height;
+
+      _gdk_surface_update_size (surface);
+      gdk_surface_request_layout (surface);
+      gdk_surface_invalidate_rect (surface, NULL);
+    }
+
+  _gdk_macos_surface_reposition_children (self);
 }
 
 void
@@ -813,8 +829,7 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
     {
       if (gdk_surface_get_mapped (GDK_SURFACE (self)))
         {
-          _gdk_macos_surface_update_position (self);
-          gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
+          _gdk_macos_surface_configure (self);
           gdk_surface_thaw_updates (GDK_SURFACE (self));
         }
     }
@@ -914,7 +929,6 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   GdkDisplay *display;
   NSRect content_rect;
   NSRect frame_rect;
-  gboolean size_changed;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
@@ -938,28 +952,43 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   if (y == -1)
     y = self->root_y;
 
-  size_changed = height != surface->height || width != surface->width;
-
-  if (GDK_IS_MACOS_SURFACE (surface->parent))
-    {
-      surface->x = x - GDK_MACOS_SURFACE (surface->parent)->root_x;
-      surface->y = y - GDK_MACOS_SURFACE (surface->parent)->root_y;
-    }
-  else
-    {
-      surface->x = x;
-      surface->y = y;
-    }
-
   _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
-                                        x, y + height, &x, &y);
+                                        x, y + height,
+                                        &x, &y);
 
   content_rect = NSMakeRect (x, y, width, height);
   frame_rect = [self->window frameRectForContentRect:content_rect];
   [self->window setFrame:frame_rect display:YES];
+}
 
-  if (size_changed)
-    gdk_surface_invalidate_rect (surface, NULL);
+void
+_gdk_macos_surface_user_resize (GdkMacosSurface *self,
+                                CGRect           new_frame)
+{
+  GdkMacosDisplay *display;
+  CGRect content_rect;
+  int root_x, root_y;
+
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+  g_return_if_fail (GDK_IS_TOPLEVEL (self));
+
+  if (GDK_SURFACE_DESTROYED (self))
+    return;
+
+  display = GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display);
+  content_rect = [self->window contentRectForFrameRect:new_frame];
+
+  _gdk_macos_display_from_display_coords (display,
+                                          new_frame.origin.x,
+                                          new_frame.origin.y + new_frame.size.height,
+                                          &root_x, &root_y);
+
+  self->next_layout.root_x = root_x;
+  self->next_layout.root_y = root_y;
+  self->next_layout.width = content_rect.size.width;
+  self->next_layout.height = content_rect.size.height;
+
+  gdk_surface_request_layout (GDK_SURFACE (self));
 }
 
 gboolean
@@ -1027,7 +1056,8 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
       g_object_unref (monitor);
     }
 
-  _gdk_surface_update_size (GDK_SURFACE (self));
+  _gdk_macos_surface_configure (self);
+
   gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
 }
 
