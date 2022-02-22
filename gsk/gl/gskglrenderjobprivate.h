@@ -27,7 +27,8 @@ GskGLRenderJob *gsk_gl_render_job_new                (GskGLDriver           *dri
                                                       const graphene_rect_t *viewport,
                                                       float                  scale_factor,
                                                       const cairo_region_t  *region,
-                                                      guint                  framebuffer);
+                                                      guint                  framebuffer,
+                                                      gboolean               clear_framebuffer);
 void            gsk_gl_render_job_free               (GskGLRenderJob        *job);
 void            gsk_gl_render_job_render             (GskGLRenderJob        *job,
                                                       GskRenderNode         *root);
