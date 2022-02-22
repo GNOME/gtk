@@ -317,13 +317,14 @@ fromCGRect (const CGRect rect)
 
 -(void)setFrame:(NSRect)frame
 {
-  if (CGRectEqualToRect (frame, self.frame))
-    return;
-
-  self->_layoutInvalid = TRUE;
+  if (frame.size.width != self.bounds.size.width ||
+      frame.size.height != self.bounds.size.height)
+    {
+      self->_layoutInvalid = TRUE;
+      [self setNeedsLayout];
+    }
 
   [super setFrame:frame];
-  [self setNeedsLayout];
 }
 
 -(void)setOpaqueRegion:(const cairo_region_t *)opaqueRegion
