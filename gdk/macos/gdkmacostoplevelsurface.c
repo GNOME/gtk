@@ -690,6 +690,9 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
                                                  defer:NO
                                                 screen:screen];
 
+  /* Allow NSWindow to go fullscreen */
+  [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+
   self = g_object_new (GDK_TYPE_MACOS_TOPLEVEL_SURFACE,
                        "display", display,
                        "frame-clock", frame_clock,

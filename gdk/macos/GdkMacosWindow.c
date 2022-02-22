@@ -746,12 +746,28 @@ typedef NSString *CALayerContentsGravity;
   lastUnfullscreenFrame = [self frame];
 }
 
+-(void)windowDidEnterFullScreen:(NSNotification *)aNotification
+{
+  initialPositionKnown = NO;
+  [self checkSendEnterNotify];
+}
+
 -(void)windowWillExitFullScreen:(NSNotification *)aNotification
 {
   [self setFrame:lastUnfullscreenFrame display:YES];
 }
 
 -(void)windowDidExitFullScreen:(NSNotification *)aNotification
+{
+  initialPositionKnown = NO;
+  [self checkSendEnterNotify];
+}
+
+-(void)windowDidFailToEnterFullScreen:(NSNotification *)aNotification
+{
+}
+
+-(void)windowDidFailToExitFullScreen:(NSNotification *)aNotification
 {
 }
 
