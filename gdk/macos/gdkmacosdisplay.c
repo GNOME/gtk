@@ -173,8 +173,7 @@ gdk_macos_display_monitors_changed_cb (CFNotificationCenterRef  center,
   _gdk_macos_display_reload_monitors (self);
 
   /* Now we need to update all our surface positions since they
-   * probably just changed origins. We ignore the popup surfaces
-   * since we can rely on the toplevel surfaces to handle that.
+   * probably just changed origins.
    */
   for (const GList *iter = _gdk_macos_display_get_surfaces (self);
        iter != NULL;
@@ -184,8 +183,7 @@ gdk_macos_display_monitors_changed_cb (CFNotificationCenterRef  center,
 
       g_assert (GDK_IS_MACOS_SURFACE (surface));
 
-      if (GDK_IS_TOPLEVEL (surface))
-        _gdk_macos_surface_configure (surface);
+      _gdk_macos_surface_monitor_changed (surface);
     }
 }
 
