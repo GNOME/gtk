@@ -194,43 +194,15 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
         _gdk_macos_toplevel_surface_unfullscreen (self);
     }
 
-  if (GDK_SURFACE (self)->transient_for != NULL)
+  if (!GDK_MACOS_SURFACE (self)->did_initial_present)
     {
-    }
-  else
-    {
-      [nswindow setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
+      int x = 0, y = 0;
 
-      if (!self->decorated &&
-          !GDK_MACOS_SURFACE (self)->did_initial_present &&
-          GDK_SURFACE (self)->x == 0 &&
-          GDK_SURFACE (self)->y == 0 &&
-          (GDK_MACOS_SURFACE (self)->shadow_left ||
-           GDK_MACOS_SURFACE (self)->shadow_top))
-        {
-          int x = GDK_SURFACE (self)->x;
-          int y = GDK_SURFACE (self)->y;
+      _gdk_macos_display_position_surface (GDK_MACOS_DISPLAY (display),
+                                           GDK_MACOS_SURFACE (self),
+                                           &x, &y);
 
-          monitor = _gdk_macos_surface_get_best_monitor (GDK_MACOS_SURFACE (self));
-
-          if (monitor != NULL)
-            {
-              GdkRectangle visible;
-
-              gdk_macos_monitor_get_workarea (monitor, &visible);
-
-              if (x < visible.x)
-                x = visible.x;
-
-              if (y < visible.y)
-                y = visible.y;
-            }
-
-          x -= GDK_MACOS_SURFACE (self)->shadow_left;
-          y -= GDK_MACOS_SURFACE (self)->shadow_top;
-
-          _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
-        }
+      _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
     }
 
   _gdk_macos_surface_show (GDK_MACOS_SURFACE (self));
