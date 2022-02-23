@@ -57,6 +57,13 @@ void            gtk_grid_view_set_factory                       (GtkGridView    
 GDK_AVAILABLE_IN_ALL
 GtkListItemFactory *
                 gtk_grid_view_get_factory                       (GtkGridView            *self);
+GDK_AVAILABLE_IN_4_8
+void            gtk_grid_view_set_section_factory               (GtkGridView            *self,
+                                                                 GtkListItemFactory     *factory);
+GDK_AVAILABLE_IN_4_8
+GtkListItemFactory *
+                gtk_grid_view_get_section_factory               (GtkGridView            *self);
+
 GDK_AVAILABLE_IN_ALL
 guint           gtk_grid_view_get_min_columns                   (GtkGridView            *self);
 GDK_AVAILABLE_IN_ALL

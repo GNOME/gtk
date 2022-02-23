@@ -639,10 +639,17 @@ gtk_list_item_manager_split_item (GtkListItemManager *self,
   GtkListItemManagerItem *item = itemp;
   GtkListItemManagerItem *new_item;
 
-  g_assert (size > 0 && size < item->n_items);
+  g_assert (size <= item->n_items);
 
   new_item = gtk_rb_tree_insert_after (self->items, item);
   new_item->n_items = item->n_items - size;
+  if (size == 0)
+    {
+      new_item->widget = item->widget;
+      item->widget = NULL;
+      new_item->section_header = item->section_header;
+      item->section_header = NULL;
+    }
   gtk_rb_tree_node_mark_dirty (new_item);
   item->n_items = size;
   gtk_rb_tree_node_mark_dirty (item);
