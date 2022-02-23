@@ -8,7 +8,7 @@ authors = "GTK Development Team"
 logo_url = "gtk-logo.svg"
 license = "LGPL-2.1-or-later"
 description = "The GTK toolkit"
-dependencies = [ "GObject-2.0", "cairo-1.0", "Pango-1.0", "GdkWayland-4.0",  "GdkX11-4.0" ]
+dependencies = ["GObject-2.0", "Gio-2.0", "cairo-1.0", "Pango-1.0", "GdkPixbuf-2.0"]
 devhelp = true
 search_index = true
 
@@ -16,6 +16,11 @@ search_index = true
   name = "GObject"
   description = "The base type system library"
   docs_url = "https://docs.gtk.org/gobject/"
+
+  [dependencies."Gio-2.0"]
+  name = "GIO"
+  description = "GObject Interfaces and Objects, Networking, IPC, and I/O"
+  docs_url = "https://docs.gtk.org/gio/"
 
   [dependencies."cairo-1.0"]
   name = "Cairo"
@@ -27,12 +32,19 @@ search_index = true
   description = "Text shaping and rendering"
   docs_url = "https://docs.gtk.org/Pango/"
 
-  [dependencies."GdkWayland-4.0"]
+  [dependencies."GdkPixbuf-2.0"]
+  name = "GdkPixbuf"
+  description = "Image data loading"
+  docs_url = "https://docs.gtk.org/gdk-pixbuf/"
+
+related = ["GdkWayland-4.0", "GdkX11-4.0"]
+
+  [related."GdkWayland-4.0"]
   name = "GdkWayland"
   description = "GDK Wayland Backend"
   docs_url = "https://docs.gtk.org/gdk4-wayland/"
 
-  [dependencies."GdkX11-4.0"]
+  [related."GdkX11-4.0"]
   name = "GdkX11"
   description = "GDK X11 Backend"
   docs_url = "https://docs.gtk.org/gdk4-x11/"

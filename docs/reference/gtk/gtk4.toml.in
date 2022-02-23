@@ -8,24 +8,10 @@ authors = "GTK Development Team"
 logo_url = "gtk-logo.svg"
 license = "LGPL-2.1-or-later"
 description = "The GTK toolkit"
-dependencies = [ "GObject-2.0", "Graphene-1.0", "Pango-1.0", "Gdk-4.0", "Gsk-4.0" ]
 devhelp = true
 search_index = true
 
-  [dependencies."GObject-2.0"]
-  name = "GObject"
-  description = "The base type system library"
-  docs_url = "https://docs.gtk.org/gobject/"
-
-  [dependencies."Graphene-1.0"]
-  name = "Graphene"
-  description = "A thin layer of mathematical types for 3D libraries"
-  docs_url = "https://ebassi.github.io/graphene/docs"
-
-  [dependencies."Pango-1.0"]
-  name = "Pango"
-  description = "Text shaping and rendering"
-  docs_url = "https://docs.gtk.org/Pango/"
+dependencies = ["Gdk-4.0", "Gsk-4.0"]
 
   [dependencies."Gdk-4.0"]
   name = "GDK"
@@ -36,6 +22,28 @@ search_index = true
   name = "GSK"
   description = "The GTK rendering abstraction"
   docs_url = "https://docs.gtk.org/gsk4/"
+
+related = ["Pango-1.0", "Graphene-1.0", "GObject-2.0", "Gio-2.0"]
+
+  [related."GObject-2.0"]
+  name = "GObject"
+  description = "The base type system library"
+  docs_url = "https://docs.gtk.org/gobject/"
+
+  [related."Gio-2.0"]
+  name = "GIO"
+  description = "GObject Interfaces and Objects, Networking, IPC, and I/O"
+  docs_url = "https://docs.gtk.org/gio/"
+
+  [related."Graphene-1.0"]
+  name = "Graphene"
+  description = "A thin layer of mathematical types for 3D libraries"
+  docs_url = "https://ebassi.github.io/graphene/docs"
+
+  [related."Pango-1.0"]
+  name = "Pango"
+  description = "Text shaping and rendering"
+  docs_url = "https://docs.gtk.org/Pango/"
 
 [theme]
 name = "basic"
