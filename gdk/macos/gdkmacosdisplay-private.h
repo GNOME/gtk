@@ -174,6 +174,10 @@ void             _gdk_macos_display_set_drag                       (GdkMacosDisp
 void             _gdk_macos_display_set_drop                       (GdkMacosDisplay *self,
                                                                     NSInteger        sequence_number,
                                                                     GdkDrop         *drop);
+void             _gdk_macos_display_position_surface               (GdkMacosDisplay *self,
+                                                                    GdkMacosSurface *surface,
+                                                                    int             *x,
+                                                                    int             *y);
 
 G_END_DECLS
 

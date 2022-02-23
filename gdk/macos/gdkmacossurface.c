@@ -767,15 +767,18 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
                                           content_rect.origin.y + content_rect.size.height,
                                           &self->root_x, &self->root_y);
 
-  if (surface->parent != NULL)
+  if (self->did_initial_present)
     {
-      surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
-      surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
-    }
-  else
-    {
-      surface->x = self->root_x;
-      surface->y = self->root_y;
+      if (surface->parent != NULL)
+        {
+          surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
+          surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
+        }
+      else
+        {
+          surface->x = self->root_x;
+          surface->y = self->root_y;
+        }
     }
 
   if (surface->width != content_rect.size.width ||
