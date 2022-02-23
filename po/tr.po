@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-02-20 14:48+0000\n"
-"PO-Revision-Date: 2022-02-20 18:00+0300\n"
+"POT-Creation-Date: 2022-02-23 03:11+0000\n"
+"PO-Revision-Date: 2022-02-23 12:41+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -126,19 +126,19 @@ msgstr "EGL uygulaması herhangi bir izin verilen APIyi desteklemiyor"
 msgid "Unable to create a GL context"
 msgstr "GL bağlamı oluşturulamadı"
 
-#: gdk/gdkglcontext.c:1266
+#: gdk/gdkglcontext.c:1273
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr ""
 "Herhangi biri ancak GDK_DEBUG aracılığıyla OpenGL ES devre dışı bırakılmış"
 
-#: gdk/gdkglcontext.c:1275
+#: gdk/gdkglcontext.c:1282
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Uygulama %s APIsini desteklemiyor"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1796
+#: gdk/gdkglcontext.c:1803
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
@@ -3662,47 +3662,47 @@ msgstr "Biçem Sınıfları"
 msgid "CSS Property"
 msgstr "CSS Özelliği"
 
-#: gtk/inspector/general.c:309 gtk/inspector/general.c:389
+#: gtk/inspector/general.c:330 gtk/inspector/general.c:410
 msgctxt "GL version"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:318
+#: gtk/inspector/general.c:339
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Devre Dışı"
 
-#: gtk/inspector/general.c:319
+#: gtk/inspector/general.c:340
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Devre Dışı"
 
-#: gtk/inspector/general.c:390
+#: gtk/inspector/general.c:411
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:441
+#: gtk/inspector/general.c:462
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Devre Dışı"
 
-#: gtk/inspector/general.c:442 gtk/inspector/general.c:443
+#: gtk/inspector/general.c:463 gtk/inspector/general.c:464
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Devre Dışı"
 
-#: gtk/inspector/general.c:499
+#: gtk/inspector/general.c:520
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:500 gtk/inspector/general.c:501
+#: gtk/inspector/general.c:521 gtk/inspector/general.c:522
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:771
+#: gtk/inspector/general.c:792
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM Bağlamı GTK_IM_MODULE tarafından kodlanmış"
 
@@ -3730,39 +3730,47 @@ msgstr "Ortam Arka Ucu"
 msgid "Input Method"
 msgstr "Giriş Yöntemi"
 
-#: gtk/inspector/general.ui:201
-msgid "Prefix"
-msgstr "Önek"
+#: gtk/inspector/general.ui:202
+msgid "Application ID"
+msgstr "Uygulama Kimliği"
 
-#: gtk/inspector/general.ui:403
+#: gtk/inspector/general.ui:228
+msgid "Resource Path"
+msgstr "Kaynak Yolu"
+
+#: gtk/inspector/general.ui:268
+msgid "Prefix"
+msgstr "Ön Ek"
+
+#: gtk/inspector/general.ui:470
 msgid "Display"
 msgstr "Göster"
 
-#: gtk/inspector/general.ui:430
+#: gtk/inspector/general.ui:497
 msgid "RGBA Visual"
 msgstr "RGBA Görsel"
 
-#: gtk/inspector/general.ui:456
+#: gtk/inspector/general.ui:523
 msgid "Composited"
 msgstr "Birleştirilmiş"
 
-#: gtk/inspector/general.ui:508
+#: gtk/inspector/general.ui:575
 msgid "GL Version"
 msgstr "GL Sürümü"
 
-#: gtk/inspector/general.ui:558
+#: gtk/inspector/general.ui:625
 msgid "GL Vendor"
 msgstr "GL Üreticisi"
 
-#: gtk/inspector/general.ui:598
+#: gtk/inspector/general.ui:665
 msgid "Vulkan Device"
 msgstr "Vulkan Aygıtı"
 
-#: gtk/inspector/general.ui:625
+#: gtk/inspector/general.ui:692
 msgid "Vulkan API version"
 msgstr "Vulkan API sürümü"
 
-#: gtk/inspector/general.ui:652
+#: gtk/inspector/general.ui:719
 msgid "Vulkan driver version"
 msgstr "Vulkan sürücü sürümü"
 
