@@ -648,6 +648,12 @@ gdk_gl_context_surface_resized (GdkDrawContext *draw_context)
   gdk_gl_context_clear_old_updated_area (context);
 }
 
+static guint
+gdk_gl_context_real_get_default_framebuffer (GdkGLContext *self)
+{
+  return 0;
+}
+
 static void
 gdk_gl_context_class_init (GdkGLContextClass *klass)
 {
@@ -659,6 +665,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   klass->is_shared = gdk_gl_context_real_is_shared;
   klass->make_current = gdk_gl_context_real_make_current;
   klass->clear_current = gdk_gl_context_real_clear_current;
+  klass->get_default_framebuffer = gdk_gl_context_real_get_default_framebuffer;
 
   draw_context_class->begin_frame = gdk_gl_context_real_begin_frame;
   draw_context_class->end_frame = gdk_gl_context_real_end_frame;

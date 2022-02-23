@@ -300,7 +300,7 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
   if (data->filters)
     {
       // when filters have been provided, a combobox needs to be added
-      data->filter_combo_box = [[NSComboBox alloc] initWithFrame:NSMakeRect(0.0, 0.0, 200, 20)];
+      data->filter_combo_box = [[NSComboBox alloc] initWithFrame:NSMakeRect(0, 0, 200, 24)];
       [data->filter_combo_box addItemsWithObjectValues:data->filter_names];
       [data->filter_combo_box setEditable:NO];
       [data->filter_combo_box setDelegate:[[FilterComboBox alloc] initWithData:data]];

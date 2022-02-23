@@ -1,6 +1,6 @@
-/* GdkMacosCairoSubview.h
+/* GdkMacosTile.h
  *
- * Copyright © 2020 Red Hat, Inc.
+ * Copyright © 2022 Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,22 +18,20 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include <AppKit/AppKit.h>
-#include <cairo.h>
-#include <glib.h>
+#include <QuartzCore/QuartzCore.h>
 
-#define GDK_IS_MACOS_CAIRO_SUBVIEW(obj) ((obj) && [obj isKindOfClass:[GdkMacosCairoSubview class]])
+#include "gdkmacosbuffer-private.h"
 
-@interface GdkMacosCairoSubview : NSView
+#define GDK_IS_MACOS_TILE(obj) ((obj) && [obj isKindOfClass:[GdkMacosTile class]])
+
+@protocol CanSetContentsChanged
+-(void)setContentsChanged;
+@end
+
+@interface GdkMacosTile : CALayer
 {
-  BOOL        _isOpaque;
-  GArray     *clip;
-  GArray     *damage;
-  CGImageRef  image;
-}
+};
 
--(void)setOpaque:(BOOL)opaque;
--(void)setImage:(CGImageRef)theImage withDamage:(cairo_region_t *)region;
--(void)setClip:(cairo_region_t*)region;
+-(void)swapBuffer:(IOSurfaceRef)buffer withRect:(CGRect)rect;
 
 @end

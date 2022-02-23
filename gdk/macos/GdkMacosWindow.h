@@ -21,9 +21,11 @@
 
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
+#import <IOSurface/IOSurface.h>
 
 #include <gdk/gdk.h>
 
+#include "gdkmacosbuffer-private.h"
 #include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
 #include "edgesnapping.h"
@@ -66,5 +68,6 @@
 -(BOOL)trackManualMove;
 -(BOOL)trackManualResize;
 -(void)setDecorated:(BOOL)decorated;
+-(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;
 
 @end

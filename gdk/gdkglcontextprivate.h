@@ -71,6 +71,8 @@ struct _GdkGLContextClass
 
   gboolean              (* is_shared)                           (GdkGLContext          *self,
                                                                  GdkGLContext          *other);
+
+  guint                 (* get_default_framebuffer)             (GdkGLContext          *self);
 };
 
 typedef struct {

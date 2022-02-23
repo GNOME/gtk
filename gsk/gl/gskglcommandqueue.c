@@ -675,9 +675,9 @@ gsk_gl_command_queue_split_draw (GskGLCommandQueue *self)
 }
 
 void
-gsk_gl_command_queue_clear (GskGLCommandQueue    *self,
-                             guint                  clear_bits,
-                             const graphene_rect_t *viewport)
+gsk_gl_command_queue_clear (GskGLCommandQueue     *self,
+                            guint                  clear_bits,
+                            const graphene_rect_t *viewport)
 {
   GskGLCommandBatch *batch;
 
@@ -750,11 +750,12 @@ static inline void
 apply_scissor (gboolean              *state,
                guint                  framebuffer,
                const graphene_rect_t *scissor,
-               gboolean               has_scissor)
+               gboolean               has_scissor,
+               guint                  default_framebuffer)
 {
   g_assert (framebuffer != (guint)-1);
 
-  if (framebuffer != 0 || !has_scissor)
+  if (framebuffer != default_framebuffer || !has_scissor)
     {
       if (*state != FALSE)
         {
@@ -935,15 +936,24 @@ gsk_gl_command_queue_sort_batches (GskGLCommandQueue *self)
  * @self: a `GskGLCommandQueue`
  * @surface_height: the height of the backing surface
  * @scale_factor: the scale factor of the backing surface
- * #scissor: (nullable): the scissor clip if any
+ * @scissor: (nullable): the scissor clip if any
+ * @default_framebuffer: the default framebuffer id if not zero
  *
  * Executes all of the batches in the command queue.
+ *
+ * Typically, the scissor rect is only applied when rendering to the default
+ * framebuffer (zero in most cases). However, if @default_framebuffer is not
+ * zero, it will be checked to see if the rendering target matches so that
+ * the scissor rect is applied. This should be used in cases where rendering
+ * to the backbuffer for display is not the default GL framebuffer of zero.
+ * Currently, this happens when rendering on macOS using IOSurface.
  */
 void
 gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
                               guint                 surface_height,
                               guint                 scale_factor,
-                              const cairo_region_t *scissor)
+                              const cairo_region_t *scissor,
+                              guint                 default_framebuffer)
 {
   G_GNUC_UNUSED guint count = 0;
   graphene_rect_t scissor_test;
@@ -1049,7 +1059,7 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
         case GSK_GL_COMMAND_KIND_CLEAR:
           if (apply_framebuffer (&framebuffer, batch->clear.framebuffer))
             {
-              apply_scissor (&scissor_state, framebuffer, &scissor_test, has_scissor);
+              apply_scissor (&scissor_state, framebuffer, &scissor_test, has_scissor, default_framebuffer);
               n_fbos++;
             }
 
@@ -1073,7 +1083,7 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
 
           if (apply_framebuffer (&framebuffer, batch->draw.framebuffer))
             {
-              apply_scissor (&scissor_state, framebuffer, &scissor_test, has_scissor);
+              apply_scissor (&scissor_state, framebuffer, &scissor_test, has_scissor, default_framebuffer);
               n_fbos++;
             }
 
