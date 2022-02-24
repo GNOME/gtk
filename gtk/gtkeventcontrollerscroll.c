@@ -67,6 +67,7 @@
 
 #define SCROLL_CAPTURE_THRESHOLD_MS 150
 #define HOLD_TIMEOUT_MS 50
+#define SURFACE_UNIT_DISCRETE_MAPPING 10
 
 typedef struct
 {
@@ -352,6 +353,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
   double dx = 0, dy = 0;
   gboolean handled = GDK_EVENT_PROPAGATE;
   GdkEventType event_type;
+  GdkScrollUnit scroll_unit;
 
   event_type = gdk_event_get_event_type (event);
 
@@ -367,7 +369,7 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
 
   g_clear_handle_id (&scroll->hold_timeout_id, g_source_remove);
 
-  scroll->cur_unit = gdk_scroll_event_get_unit (event);
+  scroll_unit = gdk_scroll_event_get_unit (event);
 
   /* FIXME: Handle device changes */
   direction = gdk_scroll_event_get_direction (event);
@@ -389,18 +391,31 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
           scroll->cur_dy += dy;
           dx = dy = 0;
 
-          if (ABS (scroll->cur_dx) >= 1)
+          if (scroll_unit == GDK_SCROLL_UNIT_SURFACE)
             {
-              steps = trunc (scroll->cur_dx);
-              scroll->cur_dx -= steps;
-              dx = steps;
-            }
+              dx = (int) scroll->cur_dx / SURFACE_UNIT_DISCRETE_MAPPING;
+              scroll->cur_dx -= dx * SURFACE_UNIT_DISCRETE_MAPPING;
 
-          if (ABS (scroll->cur_dy) >= 1)
+              dy = (int) scroll->cur_dy / SURFACE_UNIT_DISCRETE_MAPPING;
+              scroll->cur_dy -= dy * SURFACE_UNIT_DISCRETE_MAPPING;
+
+              scroll_unit = GDK_SCROLL_UNIT_WHEEL;
+            }
+          else
             {
-              steps = trunc (scroll->cur_dy);
-              scroll->cur_dy -= steps;
-              dy = steps;
+              if (ABS (scroll->cur_dx) >= 1)
+                {
+                  steps = trunc (scroll->cur_dx);
+                  scroll->cur_dx -= steps;
+                  dx = steps;
+                }
+
+              if (ABS (scroll->cur_dy) >= 1)
+                {
+                  steps = trunc (scroll->cur_dy);
+                  scroll->cur_dy -= steps;
+                  dy = steps;
+                }
             }
         }
     }
@@ -431,6 +446,8 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
       if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL) == 0)
         dx = 0;
     }
+
+  scroll->cur_unit = scroll_unit;
 
   if (dx != 0 || dy != 0)
     g_signal_emit (controller, signals[SCROLL], 0, dx, dy, &handled);
@@ -628,6 +645,9 @@ gtk_event_controller_scroll_get_flags (GtkEventControllerScroll *scroll)
  *
  * Gets the scroll unit of the last
  * [signal@Gtk.EventControllerScroll::scroll] signal received.
+ *
+ * Always returns %GDK_SCROLL_UNIT_WHEEL if the
+ * %GTK_EVENT_CONTROLLER_SCROLL_DISCRETE flag is set.
  *
  * Returns: the scroll unit.
  *
