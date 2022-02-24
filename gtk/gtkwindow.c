@@ -6324,6 +6324,10 @@ gtk_window_unexport_handle (GtkWindow *window)
       return;
     }
 #endif
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return;
+#endif
 
   g_warning ("Couldn't unexport handle for %s surface, unsupported windowing system",
              G_OBJECT_TYPE_NAME (priv->surface));
