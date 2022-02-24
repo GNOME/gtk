@@ -173,6 +173,23 @@ gtk_gst_media_file_position_updated_cb (GstPlayer       *player,
 }
 
 static void
+gtk_gst_media_file_media_info_updated_cb (GstPlayer          *player,
+                                          GstPlayerMediaInfo *media_info,
+                                          GtkGstMediaFile    *self)
+{
+  /* clock_time == 0: https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/issues/1588
+   * GstPlayer's first media-info-updated comes with 0 duration
+   *
+   * click_time == -1: Seen on loading an audio-only ogg
+   */
+  GstClockTime clock_time = gst_player_media_info_get_duration (media_info);
+  if (clock_time == 0 || clock_time == -1)
+    return;
+
+  gtk_gst_media_file_ensure_prepared (self);
+}
+
+static void
 gtk_gst_media_file_seek_done_cb (GstPlayer       *player,
                                  GstClockTime     time,
                                  GtkGstMediaFile *self)
@@ -219,6 +236,7 @@ gtk_gst_media_file_destroy_player (GtkGstMediaFile *self)
   if (self->player == NULL)
     return;
 
+  g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_media_info_updated_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_position_updated_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_end_of_stream_cb, self);
   g_signal_handlers_disconnect_by_func (self->player, gtk_gst_media_file_seek_done_cb, self);
@@ -237,6 +255,7 @@ gtk_gst_media_file_create_player (GtkGstMediaFile *file)
 
   self->player = gst_player_new (GST_PLAYER_VIDEO_RENDERER (g_object_ref (self->paintable)),
                                  gst_player_g_main_context_signal_dispatcher_new (NULL));
+  g_signal_connect (self->player, "media-info-updated", G_CALLBACK (gtk_gst_media_file_media_info_updated_cb), self);
   g_signal_connect (self->player, "position-updated", G_CALLBACK (gtk_gst_media_file_position_updated_cb), self);
   g_signal_connect (self->player, "end-of-stream", G_CALLBACK (gtk_gst_media_file_end_of_stream_cb), self);
   g_signal_connect (self->player, "seek-done", G_CALLBACK (gtk_gst_media_file_seek_done_cb), self);
