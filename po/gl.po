@@ -12,24 +12,24 @@
 # Mancomún - Centro de Referencia e Servizos de Software Libre <g11n@mancomun.org>, 2009.
 # Antón Méixome <meixome@mancomun.org>, 2009.
 # Antón Méixome <meixome@certima.net>, 2009, 2010.
-# Fran Diéguez <frandieguez@gnome.org>, 2009, 2010, 2011, 2012.
 # Leandro Regueiro <leandro.regueiro@gmail.com>, 2012.
 # Fran Dieguez <fran.dieguez@gnome.org>, 2012-2022.
+# Fran Diéguez <frandieguez@gnome.org>, 2009-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-01-26 19:35+0000\n"
-"PO-Revision-Date: 2022-01-27 00:35+0100\n"
-"Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
+"POT-Creation-Date: 2022-02-24 11:57+0000\n"
+"PO-Revision-Date: 2022-02-24 13:44+0100\n"
+"Last-Translator: Fran Diéguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 40.0\n"
+"X-Generator: Gtranslator 41.0\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: gl\n"
 "X-DL-Module: gtk\n"
@@ -65,7 +65,7 @@ msgstr "Non foi posíbel fornecer contidos como «%s»"
 msgid "Cannot provide contents as %s"
 msgstr "Non foi posíbel fornecer contidos como %s"
 
-#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:434
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:430
 msgid "The current backend does not support OpenGL"
 msgstr "O backend actual non admite o OpenGL"
 
@@ -124,27 +124,27 @@ msgstr "Arrastrar e soltar desde outras aplicacións non está admitido."
 msgid "No compatible formats to transfer contents."
 msgstr "Formatos non compatíbeis para transferir contidos."
 
-#: gdk/gdkglcontext.c:336
+#: gdk/gdkglcontext.c:332
 msgid "The EGL implementation does not support any allowed APIs"
 msgstr "A implementación de EGL non admite algúnha das APIs permitidas"
 
-#: gdk/gdkglcontext.c:417 gdk/win32/gdkglcontext-win32-wgl.c:616
+#: gdk/gdkglcontext.c:413 gdk/win32/gdkglcontext-win32-wgl.c:616
 #: gdk/x11/gdkglcontext-glx.c:624
 msgid "Unable to create a GL context"
 msgstr "Non é posíbel crear un contexto GL"
 
-#: gdk/gdkglcontext.c:1270
+#: gdk/gdkglcontext.c:1273
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Todo está desactivado salvo OpenGL ES mediante GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1279
+#: gdk/gdkglcontext.c:1282
 #, c-format
 msgid "Application does not support %s API"
 msgstr "A aplicación non admite a API de %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1800
+#: gdk/gdkglcontext.c:1803
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Tentando usar %s, pero %s xa está en uso"
@@ -534,17 +534,17 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspender"
 
-#: gdk/loaders/gdkjpeg.c:61
+#: gdk/loaders/gdkjpeg.c:63
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Produciuse un erro ao interpretar o ficheiro de imaxe do JPEG (%s)"
 
-#: gdk/loaders/gdkjpeg.c:188
+#: gdk/loaders/gdkjpeg.c:190
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Espazo de cor JPEG non admitido (%d)"
 
-#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
+#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Non hai memoria dabondo para o tamaño de imaxe %ux%u"
@@ -578,7 +578,7 @@ msgid "Reading data failed at row %d"
 msgstr "Fallou a lectura o dato na fila %d"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
-#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
+#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:313
 #: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
 #: gdk/x11/gdkclipboard-x11.c:787 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
@@ -2130,7 +2130,7 @@ msgstr "Xa existe un ficheiro con ese nome"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6226 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6147 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "_Cancelar"
@@ -2222,7 +2222,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Se elimina un elemento perderase para sempre."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5645 gtk/gtktext.c:6064 gtk/gtktextview.c:8956
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6073 gtk/gtktextview.c:8956
 msgid "_Delete"
 msgstr "E_liminar"
 
@@ -2494,19 +2494,19 @@ msgstr "Variantes de carácter"
 msgid "OpenGL context creation failed"
 msgstr "Produciuse un fallo ao crear o contexto de OpenGL"
 
-#: gtk/gtklabel.c:5642 gtk/gtktext.c:6052 gtk/gtktextview.c:8944
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6061 gtk/gtktextview.c:8944
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtklabel.c:5643 gtk/gtktext.c:6056 gtk/gtktextview.c:8948
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6065 gtk/gtktextview.c:8948
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5644 gtk/gtktext.c:6060 gtk/gtktextview.c:8952
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6069 gtk/gtktextview.c:8952
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6073 gtk/gtktextview.c:8977
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6082 gtk/gtktextview.c:8977
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2616,7 +2616,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6227
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6148
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -3481,7 +3481,7 @@ msgstr "Tente unha busca diferente"
 msgid "Could not show link"
 msgstr "Non foi posíbel mostrar a ligazón"
 
-#: gtk/gtktext.c:6078 gtk/gtktextview.c:8982
+#: gtk/gtktext.c:6087 gtk/gtktextview.c:8982
 msgid "Insert _Emoji"
 msgstr "Inserir _emoticono"
 
@@ -3516,12 +3516,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6214
+#: gtk/gtkwindow.c:6135
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Desexa usar o Inspector de GTK?"
 
-#: gtk/gtkwindow.c:6216
+#: gtk/gtkwindow.c:6137
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3532,7 +3532,7 @@ msgstr ""
 "modificar propiedades internas de calquera aplicación GTK+. Ao usalo pode "
 "causar que a aplicación se rompa ou se interrompa."
 
-#: gtk/gtkwindow.c:6221
+#: gtk/gtkwindow.c:6142
 msgid "Don’t show this message again"
 msgstr "Non mostrar este mensaxe de novo"
 
@@ -3705,47 +3705,47 @@ msgstr "Clases de estilo"
 msgid "CSS Property"
 msgstr "Propiedade CSS"
 
-#: gtk/inspector/general.c:309 gtk/inspector/general.c:389
+#: gtk/inspector/general.c:330 gtk/inspector/general.c:410
 msgctxt "GL version"
 msgid "None"
 msgstr "Ningún"
 
-#: gtk/inspector/general.c:318
+#: gtk/inspector/general.c:339
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Desactivada"
 
-#: gtk/inspector/general.c:319
+#: gtk/inspector/general.c:340
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: gtk/inspector/general.c:390
+#: gtk/inspector/general.c:411
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Ningún"
 
-#: gtk/inspector/general.c:441
+#: gtk/inspector/general.c:462
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: gtk/inspector/general.c:442 gtk/inspector/general.c:443
+#: gtk/inspector/general.c:463 gtk/inspector/general.c:464
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Desactivada"
 
-#: gtk/inspector/general.c:499
+#: gtk/inspector/general.c:520
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Ningún"
 
-#: gtk/inspector/general.c:500 gtk/inspector/general.c:501
+#: gtk/inspector/general.c:521 gtk/inspector/general.c:522
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Ningunha"
 
-#: gtk/inspector/general.c:771
+#: gtk/inspector/general.c:792
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "O contexto de IM está incrustado á man por GTK_IM_MODULE"
 
@@ -3773,39 +3773,49 @@ msgstr "Backend multimedia"
 msgid "Input Method"
 msgstr "Método da entrada"
 
-#: gtk/inspector/general.ui:201
+#: gtk/inspector/general.ui:202
+#| msgid "Application"
+msgid "Application ID"
+msgstr "ID de aplicación"
+
+#: gtk/inspector/general.ui:228
+#| msgid "Resources"
+msgid "Resource Path"
+msgstr "Ruta ao recurso"
+
+#: gtk/inspector/general.ui:268
 msgid "Prefix"
 msgstr "Prefixo"
 
-#: gtk/inspector/general.ui:403
+#: gtk/inspector/general.ui:470
 msgid "Display"
 msgstr "Pantalla"
 
-#: gtk/inspector/general.ui:430
+#: gtk/inspector/general.ui:497
 msgid "RGBA Visual"
 msgstr "RGBA visual"
 
-#: gtk/inspector/general.ui:456
+#: gtk/inspector/general.ui:523
 msgid "Composited"
 msgstr "Composto"
 
-#: gtk/inspector/general.ui:508
+#: gtk/inspector/general.ui:575
 msgid "GL Version"
 msgstr "Versión de GL"
 
-#: gtk/inspector/general.ui:558
+#: gtk/inspector/general.ui:625
 msgid "GL Vendor"
 msgstr "Fabricante do GL"
 
-#: gtk/inspector/general.ui:598
+#: gtk/inspector/general.ui:665
 msgid "Vulkan Device"
 msgstr "Dispositivo Vulkan"
 
-#: gtk/inspector/general.ui:625
+#: gtk/inspector/general.ui:692
 msgid "Vulkan API version"
 msgstr "Versión da API Vulkan"
 
-#: gtk/inspector/general.ui:652
+#: gtk/inspector/general.ui:719
 msgid "Vulkan driver version"
 msgstr "Versión do driver de Vulkan"
 
@@ -6729,7 +6739,6 @@ msgstr "Non é posíbel analizar o ficheiro «%s»: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2309
 #, c-format
-#| msgid "Can’t parse “%s”: %s\n"
 msgid "Can’t parse “%s”\n"
 msgstr "Non é posíbel analizar «%s»\n"
 
