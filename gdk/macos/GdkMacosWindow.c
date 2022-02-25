@@ -668,7 +668,12 @@ typedef NSString *CALayerContentsGravity;
   is_opaque = (([self styleMask] & NSWindowStyleMaskTitled) != 0);
 
   if (was_fullscreen != is_fullscreen)
-    _gdk_macos_surface_update_fullscreen_state (gdk_surface);
+    {
+      if (was_fullscreen)
+        [self setFrame:lastUnfullscreenFrame display:NO];
+
+      _gdk_macos_surface_update_fullscreen_state (gdk_surface);
+    }
 
   if (was_opaque != is_opaque)
     {
@@ -753,7 +758,6 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowWillExitFullScreen:(NSNotification *)aNotification
 {
-  [self setFrame:lastUnfullscreenFrame display:NO];
 }
 
 -(void)windowDidExitFullScreen:(NSNotification *)aNotification
