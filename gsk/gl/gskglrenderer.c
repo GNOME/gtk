@@ -306,10 +306,9 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   GskGLRenderer *self = (GskGLRenderer *)renderer;
   GskGLRenderTarget *render_target;
   GskGLRenderJob *job;
-  GdkTexture *texture = NULL;
+  GdkTexture *texture;
   guint texture_id;
-  int width;
-  int height;
+  int width, height, max_size;
   int format;
 
   g_assert (GSK_IS_GL_RENDERER (renderer));
@@ -317,6 +316,37 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   width = ceilf (viewport->size.width);
   height = ceilf (viewport->size.height);
+  max_size = self->command_queue->max_texture_size;
+  if (width > max_size || height > max_size)
+    {
+      gsize x, y, size, stride;
+      GBytes *bytes;
+      guchar *data;
+
+      stride = width * 4;
+      size = stride * height;
+      data = g_malloc_n (stride, height);
+
+      for (y = 0; y < height; y += max_size)
+        {
+          for (x = 0; x < width; x += max_size)
+            {
+              texture = gsk_gl_renderer_render_texture (renderer, root, 
+                                                        &GRAPHENE_RECT_INIT (x, y,
+                                                                             MIN (max_size, viewport->size.width - x),
+                                                                             MIN (max_size, viewport->size.height - y)));
+              gdk_texture_download (texture,
+                                    data + stride * y + x * 4,
+                                    stride);
+              g_object_unref (texture);
+            }
+        }
+
+      bytes = g_bytes_new_take (data, size);
+      texture = gdk_memory_texture_new (width, height, GDK_MEMORY_DEFAULT, bytes, stride);
+      g_bytes_unref (bytes);
+      return texture;
+    }
 
   format = gsk_render_node_prefers_high_depth (root) ? GL_RGBA32F : GL_RGBA8;
 
@@ -341,6 +371,10 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
       gsk_gl_render_job_free (job);
 
       gsk_gl_driver_after_frame (self->driver);
+    }
+  else
+    {
+      g_assert_not_reached ();
     }
 
   return g_steal_pointer (&texture);
