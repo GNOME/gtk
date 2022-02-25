@@ -115,12 +115,6 @@ gdk_macos_surface_set_opaque_region (GdkSurface     *surface,
 
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
-  if (region != self->opaque_region)
-    {
-      g_clear_pointer (&self->opaque_region, cairo_region_destroy);
-      self->opaque_region = cairo_region_copy (region);
-    }
-
   if ((nsview = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface))))
     [(GdkMacosView *)nsview setOpaqueRegion:region];
 }
@@ -417,7 +411,6 @@ gdk_macos_surface_destroy (GdkSurface *surface,
     }
 
   g_clear_pointer (&self->title, g_free);
-  g_clear_pointer (&self->opaque_region, cairo_region_destroy);
 
   if (window != NULL)
     [window close];
@@ -619,14 +612,16 @@ _gdk_macos_surface_get_shadow (GdkMacosSurface *self,
 gboolean
 _gdk_macos_surface_is_opaque (GdkMacosSurface *self)
 {
+  GdkSurface *surface = (GdkSurface *)self;
+
   g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), FALSE);
 
-  if (self->opaque_region != NULL &&
-      cairo_region_num_rectangles (self->opaque_region) == 1)
+  if (surface->opaque_region != NULL &&
+      cairo_region_num_rectangles (surface->opaque_region) == 1)
     {
       cairo_rectangle_int_t extents;
 
-      cairo_region_get_extents (self->opaque_region, &extents);
+      cairo_region_get_extents (surface->opaque_region, &extents);
 
       return (extents.x == 0 &&
               extents.y == 0 &&
