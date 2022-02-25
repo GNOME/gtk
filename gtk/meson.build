@@ -14,6 +14,7 @@ gtk_cargs = [
 # List of sources that do not contain public API, and should not be
 # introspected
 gtk_private_sources = files([
+  'gtkemojilist.c',
   'fnmatch.c',
   'gdkpixbufutils.c',
   'gsettings-mapping.c',
@@ -520,6 +521,7 @@ gtk_public_headers = files([
   'gtkeditable.h',
   'gtkeditablelabel.h',
   'gtkemojichooser.h',
+  'gtkemojilist.h',
   'gtkentry.h',
   'gtkentrybuffer.h',
   'gtkentrycompletion.h',

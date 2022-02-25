@@ -104,6 +104,7 @@
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkeditablelabel.h>
 #include <gtk/gtkemojichooser.h>
+#include <gtk/gtkemojilist.h>
 #include <gtk/gtkentry.h>
 #include <gtk/gtkentrybuffer.h>
 #include <gtk/gtkentrycompletion.h>
