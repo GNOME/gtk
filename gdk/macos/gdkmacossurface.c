@@ -69,10 +69,8 @@ _gdk_macos_surface_reposition_children (GdkMacosSurface *self)
 {
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
-  if (GDK_SURFACE_DESTROYED (self))
-    return;
 
-  if (!gdk_surface_get_mapped (GDK_SURFACE (self)))
+  if (GDK_SURFACE_DESTROYED (self))
     return;
 
   for (const GList *iter = GDK_SURFACE (self)->children;
@@ -767,18 +765,15 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
                                           content_rect.origin.y + content_rect.size.height,
                                           &self->root_x, &self->root_y);
 
-  if (self->did_initial_present)
+  if (surface->parent != NULL)
     {
-      if (surface->parent != NULL)
-        {
-          surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
-          surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
-        }
-      else
-        {
-          surface->x = self->root_x;
-          surface->y = self->root_y;
-        }
+      surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
+      surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
+    }
+  else
+    {
+      surface->x = self->root_x;
+      surface->y = self->root_y;
     }
 
   if (surface->width != content_rect.size.width ||
