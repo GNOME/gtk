@@ -1219,11 +1219,10 @@ inner_clipboard_window_procedure (HWND   hwnd,
             return DefWindowProcW (hwnd, message, wparam, lparam);
           }
 
+        SetLastError (0);
         hwnd_owner = GetClipboardOwner ();
-
-        if ((hwnd_owner == NULL) &&
-            (GetLastError () != ERROR_SUCCESS))
-            WIN32_API_FAILED ("GetClipboardOwner");
+        if (hwnd_owner == NULL && GetLastError () != 0)
+          WIN32_API_FAILED ("GetClipboardOwner");
 
         hwnd_opener = GetOpenClipboardWindow ();
 
