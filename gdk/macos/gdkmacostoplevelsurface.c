@@ -421,7 +421,8 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
                         GDK_TOPLEVEL_STATE_RIGHT_TILED |
                         GDK_TOPLEVEL_STATE_BOTTOM_TILED |
                         GDK_TOPLEVEL_STATE_LEFT_TILED |
-                        GDK_TOPLEVEL_STATE_MINIMIZED))
+                        GDK_TOPLEVEL_STATE_MINIMIZED) ||
+      [macos_surface->window inLiveResize])
     return FALSE;
 
   /* If we delayed a user resize until the beginning of the frame,
