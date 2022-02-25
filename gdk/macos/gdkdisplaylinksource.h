@@ -30,17 +30,18 @@ G_BEGIN_DECLS
 
 typedef struct
 {
-  GSource          source;
+  GSource           source;
 
-  CVDisplayLinkRef display_link;
-  gint64           refresh_interval;
-  guint            refresh_rate;
+  CGDirectDisplayID display_id;
+  CVDisplayLinkRef  display_link;
+  gint64            refresh_interval;
+  guint             refresh_rate;
 
-  volatile gint64  presentation_time;
-  volatile guint   needs_dispatch;
+  volatile gint64   presentation_time;
+  volatile guint    needs_dispatch;
 } GdkDisplayLinkSource;
 
-GSource *gdk_display_link_source_new     (void);
+GSource *gdk_display_link_source_new     (CGDirectDisplayID     display_id);
 void     gdk_display_link_source_pause   (GdkDisplayLinkSource *source);
 void     gdk_display_link_source_unpause (GdkDisplayLinkSource *source);
 

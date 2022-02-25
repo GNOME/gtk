@@ -273,7 +273,7 @@ gdk_macos_display_frame_cb (gpointer data)
 static void
 gdk_macos_display_load_display_link (GdkMacosDisplay *self)
 {
-  self->frame_source = gdk_display_link_source_new ();
+  self->frame_source = gdk_display_link_source_new (CGMainDisplayID ());
   g_source_set_callback (self->frame_source,
                          gdk_macos_display_frame_cb,
                          self,

@@ -147,6 +147,7 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
 
 /**
  * gdk_display_link_source_new:
+ * @display_id: the identifier of the monitor
  *
  * Creates a new `GSource` that will activate the dispatch function upon
  * notification from a CVDisplayLink that a new frame should be drawn.
@@ -159,7 +160,7 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
  * Returns: (transfer full): A newly created `GSource`
  */
 GSource *
-gdk_display_link_source_new (void)
+gdk_display_link_source_new (CGDirectDisplayID display_id)
 {
   GdkDisplayLinkSource *impl;
   GSource *source;
@@ -168,15 +169,13 @@ gdk_display_link_source_new (void)
 
   source = g_source_new (&gdk_display_link_source_funcs, sizeof *impl);
   impl = (GdkDisplayLinkSource *)source;
+  impl->display_id = display_id;
 
-  /*
-   * Create our link based on currently connected displays.
-   * If there are multiple displays, this will be something that tries
-   * to work for all of them. In the future, we may want to explore multiple
-   * links based on the connected displays.
+  /* Create DisplayLink for timing information for the display in
+   * question so that we can produce graphics for that display at whatever
+   * rate it can provide.
    */
-  ret = CVDisplayLinkCreateWithActiveCGDisplays (&impl->display_link);
-  if (ret != kCVReturnSuccess)
+  if (CVDisplayLinkCreateWithCGDisplay (display_id, &impl->display_link) != kCVReturnSuccess)
     {
       g_warning ("Failed to initialize CVDisplayLink!");
       return source;
