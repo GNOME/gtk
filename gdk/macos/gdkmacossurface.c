@@ -400,6 +400,8 @@ gdk_macos_surface_destroy (GdkSurface *surface,
   GdkMacosWindow *window = g_steal_pointer (&self->window);
   GdkFrameClock *frame_clock;
 
+  g_clear_object (&self->best_monitor);
+
   if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
     {
       g_signal_handlers_disconnect_by_func (frame_clock,
@@ -1011,11 +1013,13 @@ void
 _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 {
   GListModel *monitors;
+  GdkMonitor *best = NULL;
   GdkRectangle rect;
   GdkRectangle intersect;
   GdkDisplay *display;
   GdkMonitor *monitor;
   guint n_monitors;
+  int best_area = 0;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
@@ -1058,6 +1062,28 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
   g_clear_object (&self->buffer);
   g_clear_object (&self->front);
 
+  /* Determine the best-fit monitor */
+  for (guint i = 0; i < self->monitors->len; i++)
+    {
+      monitor = g_ptr_array_index (self->monitors, i);
+
+      if (gdk_rectangle_intersect (&monitor->geometry, &rect, &intersect))
+        {
+          int area = intersect.width * intersect.height;
+
+          if (area > best_area)
+            {
+              best_area = area;
+              best = monitor;
+            }
+        }
+    }
+
+  if (g_set_object (&self->best_monitor, best))
+    {
+      /* TODO: change frame clock to new monitor */
+    }
+
   _gdk_macos_surface_configure (self);
 
   gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
@@ -1066,35 +1092,9 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 GdkMonitor *
 _gdk_macos_surface_get_best_monitor (GdkMacosSurface *self)
 {
-  GdkMonitor *best = NULL;
-  GdkRectangle rect;
-  int best_area = 0;
-
   g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
 
-  rect.x = self->root_x;
-  rect.y = self->root_y;
-  rect.width = GDK_SURFACE (self)->width;
-  rect.height = GDK_SURFACE (self)->height;
-
-  for (guint i = 0; i < self->monitors->len; i++)
-    {
-      GdkMonitor *monitor = g_ptr_array_index (self->monitors, i);
-      GdkRectangle intersect;
-
-      if (gdk_rectangle_intersect (&monitor->geometry, &rect, &intersect))
-        {
-          int area = intersect.width * intersect.height;
-
-          if (area > best_area)
-            {
-              best = monitor;
-              best_area = area;
-            }
-        }
-    }
-
-  return best;
+  return self->best_monitor;
 }
 
 NSView *
