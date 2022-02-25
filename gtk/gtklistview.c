@@ -599,6 +599,20 @@ gtk_list_view_measure (GtkWidget      *widget,
 }
 
 static void
+row_set_height (ListRow *row,
+                int      section_height,
+                int      row_height)
+{
+  if (row->section_height == section_height &&
+      row->height == row_height)
+    return;
+
+  row->section_height = section_height;
+  row->height = row_height;
+  gtk_rb_tree_node_mark_dirty (row);
+}
+
+static void
 gtk_list_view_size_allocate (GtkWidget *widget,
                              int        width,
                              int        height,
@@ -607,7 +621,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
   GtkListView *self = GTK_LIST_VIEW (widget);
   ListRow *row;
   GArray *heights;
-  int min, nat, row_height, total_height;
+  int min, nat, row_height, section_height, total_height;
   int x, y;
   GtkOrientation orientation, opposite_orientation;
   GtkScrollablePolicy scroll_policy, opposite_scroll_policy;
@@ -652,31 +666,23 @@ gtk_list_view_size_allocate (GtkWidget *widget,
           else
             row_height = nat;
           g_array_append_val (heights, row_height);
-          if (row->height != row_height)
-            {
-              row->height = row_height;
-              gtk_rb_tree_node_mark_dirty (row);
-            }
-          total_height += row->height;
         }
+      else
+        row_height = 0;
       if (row->parent.section_header)
         {
           gtk_widget_measure (row->parent.section_header, orientation,
                               self->list_width,
                               &min, &nat, NULL, NULL);
           if (scroll_policy == GTK_SCROLL_MINIMUM)
-            row_height = min;
+            section_height = min;
           else
-            row_height = nat;
+            section_height = nat;
         }
       else
-        row_height = 0;
+        section_height = 0;
 
-      if (row->section_height != row_height)
-        {
-          row->section_height = row_height;
-          gtk_rb_tree_node_mark_dirty (row);
-        }
+      row_set_height (row, section_height, row_height);
       total_height += row_height;
     }
 
@@ -691,11 +697,7 @@ gtk_list_view_size_allocate (GtkWidget *widget,
       if (row->parent.widget)
         continue;
 
-      if (row->height != row->parent.n_items * row_height)
-        {
-          row->height = row->parent.n_items * row_height;
-          gtk_rb_tree_node_mark_dirty (row);
-        }
+      row_set_height (row, 0, row->parent.n_items * row_height);
       total_height += row->height;
     }
 
