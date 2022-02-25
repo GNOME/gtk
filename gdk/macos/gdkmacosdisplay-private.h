@@ -124,6 +124,8 @@ GdkMonitor      *_gdk_macos_display_get_monitor_at_display_coords  (GdkMacosDisp
                                                                     int              y);
 GdkEvent        *_gdk_macos_display_translate                      (GdkMacosDisplay *self,
                                                                     NSEvent         *event);
+void             _gdk_macos_display_feedback_init                  (GdkMacosDisplay *self);
+void             _gdk_macos_display_feedback_destroy               (GdkMacosDisplay *self);
 void             _gdk_macos_display_break_all_grabs                (GdkMacosDisplay *self,
                                                                     guint32          time);
 GdkModifierType  _gdk_macos_display_get_current_keyboard_modifiers (GdkMacosDisplay *self);
