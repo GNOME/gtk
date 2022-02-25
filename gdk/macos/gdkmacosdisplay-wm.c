@@ -24,6 +24,9 @@
 #include "gdkmacossurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 
+#define WARP_OFFSET_X 15
+#define WARP_OFFSET_Y 15
+
 static void
 _gdk_macos_display_position_toplevel_with_parent (GdkMacosDisplay *self,
                                                   GdkMacosSurface *surface,
@@ -79,6 +82,22 @@ _gdk_macos_display_position_toplevel_with_parent (GdkMacosDisplay *self,
   *y = surface_rect.y - surface->shadow_top;
 }
 
+static inline gboolean
+has_surface_at_origin (const GList *surfaces,
+                       int          x,
+                       int          y)
+{
+  for (const GList *iter = surfaces; iter; iter = iter->next)
+    {
+      GdkMacosSurface *surface = iter->data;
+
+      if (surface->root_x == x && surface->root_y == y)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 _gdk_macos_display_position_toplevel (GdkMacosDisplay *self,
                                       GdkMacosSurface *surface,
@@ -87,6 +106,7 @@ _gdk_macos_display_position_toplevel (GdkMacosDisplay *self,
 {
   cairo_rectangle_int_t surface_rect;
   GdkRectangle workarea;
+  const GList *surfaces;
   GdkMonitor *monitor;
   CGPoint mouse;
 
@@ -109,10 +129,27 @@ _gdk_macos_display_position_toplevel (GdkMacosDisplay *self,
   if (surface_rect.y < workarea.y)
     surface_rect.y = workarea.y;
 
-  /* TODO: If there is another window at this same position, perhaps we should move it */
-
   *x = surface_rect.x - surface->shadow_left;
   *y = surface_rect.y - surface->shadow_top;
+
+  /* Try to see if there are any other surfaces at this origin and if so,
+   * adjust until we get something better.
+   */
+  surfaces = _gdk_macos_display_get_surfaces (self);
+  while (has_surface_at_origin (surfaces, *x, *y))
+    {
+      *x += WARP_OFFSET_X;
+      *y += WARP_OFFSET_Y;
+
+      /* If we reached the bottom right, just bail and try the workspace origin */
+      if (*x + surface->shadow_left + WARP_OFFSET_X > workarea.x + workarea.width ||
+          *y + surface->shadow_top + WARP_OFFSET_Y > workarea.y + workarea.height)
+        {
+          *x = workarea.x - surface->shadow_left;
+          *y = workarea.y - surface->shadow_top;
+          return;
+        }
+    }
 }
 
 /*<private>
