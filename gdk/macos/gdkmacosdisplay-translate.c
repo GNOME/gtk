@@ -612,12 +612,23 @@ fill_scroll_event (GdkMacosDisplay *self,
   GdkModifierType state;
   GdkDevice *pointer;
   GdkEvent *ret = NULL;
+  NSEventPhase phase;
+  NSEventPhase momentumPhase;
   GdkSeat *seat;
   double dx;
   double dy;
 
   g_assert (GDK_IS_MACOS_SURFACE (surface));
   g_assert (nsevent != NULL);
+
+  phase = [nsevent phase];
+  momentumPhase = [nsevent momentumPhase];
+
+  /* Ignore kinetic scroll events from the display server as we already
+   * handle those internally.
+   */
+  if (phase == 0 && momentumPhase != 0)
+    return NULL;
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
   pointer = gdk_seat_get_pointer (seat);
@@ -684,17 +695,29 @@ fill_scroll_event (GdkMacosDisplay *self,
         }
       else
         {
-          g_assert (ret == NULL);
-
-          ret = gdk_scroll_event_new (GDK_SURFACE (surface),
-                                      pointer,
-                                      NULL,
-                                      get_time_from_ns_event (nsevent),
-                                      state,
-                                      -dx * 32,
-                                      -dy * 32,
-                                      FALSE);
+          ret = gdk_scroll_event_new_discrete (GDK_SURFACE (surface),
+                                               pointer,
+                                               NULL,
+                                               get_time_from_ns_event (nsevent),
+                                               state,
+                                               direction,
+                                               FALSE);
         }
+    }
+
+  if (phase == NSEventPhaseEnded || phase == NSEventPhaseCancelled)
+    {
+      /* The user must have released their fingers in a touchpad
+       * scroll, so try to send a scroll is_stop event.
+       */
+      if (ret != NULL)
+        _gdk_event_queue_append (GDK_DISPLAY (self), g_steal_pointer (&ret));
+      ret = gdk_scroll_event_new (GDK_SURFACE (surface),
+                                  pointer,
+                                  NULL,
+                                  get_time_from_ns_event (nsevent),
+                                  state,
+                                  0.0, 0.0, TRUE);
     }
 
   return g_steal_pointer (&ret);
