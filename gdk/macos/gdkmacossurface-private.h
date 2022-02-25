@@ -49,6 +49,7 @@ struct _GdkMacosSurface
   GdkMacosBuffer *buffer;
   GdkMacosBuffer *front;
   GPtrArray *monitors;
+  GdkMonitor *best_monitor;
   char *title;
 
   int root_x;
