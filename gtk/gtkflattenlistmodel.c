@@ -21,9 +21,10 @@
 
 #include "gtkflattenlistmodel.h"
 
-#include "gtkrbtreeprivate.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtksectionmodel.h"
+#include "gtkrbtreeprivate.h"
 
 /**
  * GtkFlattenListModel:
@@ -198,8 +199,39 @@ gtk_flatten_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_flatten_list_model_get_item;
 }
 
+static void
+gtk_flatten_list_model_get_section (GtkSectionModel *model,
+                                    guint            position,
+                                    guint           *out_start,
+                                    guint           *out_end)
+{
+  GtkFlattenListModel *self = GTK_FLATTEN_LIST_MODEL (model);
+  FlattenNode *node;
+  guint model_pos;
+
+  node = gtk_flatten_list_model_get_nth (self->items, position, &model_pos);
+  if (node == NULL)
+    {
+      *out_start = gtk_flatten_list_model_get_n_items (G_LIST_MODEL (self));
+      *out_end = G_MAXUINT;
+      return;
+    }
+
+  *out_start = position - model_pos;
+  *out_start = position - model_pos + g_list_model_get_n_items (node->model);
+}
+
+static void
+gtk_flatten_list_model_section_model_init (GtkSectionModelInterface *iface)
+{
+  iface->get_section = gtk_flatten_list_model_get_section;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GtkFlattenListModel, gtk_flatten_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_flatten_list_model_model_init))
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                gtk_flatten_list_model_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SECTION_MODEL,
+                                                gtk_flatten_list_model_section_model_init))
 
 static void
 gtk_flatten_list_model_items_changed_cb (GListModel *model,
