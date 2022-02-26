@@ -249,7 +249,7 @@ test_create (void)
 {
   GtkSortListModel *sort;
   GListStore *store;
-  
+
   store = new_store ((guint[]) { 4, 8, 2, 6, 10, 0 });
   sort = new_model (store);
   assert_model (sort, "2 4 6 8 10");
@@ -267,7 +267,7 @@ test_set_model (void)
 {
   GtkSortListModel *sort;
   GListStore *store;
-  
+
   sort = new_model (NULL);
   assert_model (sort, "");
   assert_changes (sort, "");
@@ -306,7 +306,7 @@ test_set_sorter (void)
   GtkSortListModel *sort;
   GtkSorter *sorter;
   GListStore *store;
-  
+
   store = new_store ((guint[]) { 4, 8, 2, 6, 10, 0 });
   sort = new_model (store);
   assert_model (sort, "2 4 6 8 10");
@@ -337,7 +337,7 @@ test_add_items (void)
 {
   GtkSortListModel *sort;
   GListStore *store;
-  
+
   /* add beginning */
   store = new_store ((guint[]) { 51, 99, 100, 49, 50, 0 });
   sort = new_model (store);
@@ -377,7 +377,7 @@ test_remove_items (void)
 {
   GtkSortListModel *sort;
   GListStore *store;
-  
+
   /* remove beginning */
   store = new_store ((guint[]) { 51, 99, 100, 49, 1, 2, 50, 0 });
   sort = new_model (store);
@@ -534,6 +534,58 @@ test_out_of_bounds_access (void)
   g_object_unref (sort);
 }
 
+static int
+sort_func (gconstpointer p1,
+           gconstpointer p2,
+           gpointer      data)
+{
+  const char *s1 = gtk_string_object_get_string ((GtkStringObject *)p1);
+  const char *s2 = gtk_string_object_get_string ((GtkStringObject *)p2);
+
+  /* compare just the first byte */
+  return (int)(s1[0]) - (int)(s2[0]);
+}
+
+static void
+test_sections (void)
+{
+  GtkStringList *list;
+  const char *strings[] = {
+    "aaa",
+    "aab",
+    "abc",
+    "bbb",
+    "bq1",
+    "bq2",
+    "cc",
+    "cx",
+    NULL
+  };
+  GtkSorter *sorter;
+  GtkSortListModel *sorted;
+  GtkSorter *section_sorter;
+  guint s, e;
+
+  list = gtk_string_list_new (strings);
+  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (GTK_TYPE_STRING_OBJECT, NULL, "string")));
+  sorted = gtk_sort_list_model_new (G_LIST_MODEL (list), sorter);
+  section_sorter = GTK_SORTER (gtk_custom_sorter_new (sort_func, NULL, NULL));
+  gtk_sort_list_model_set_section_sorter (GTK_SORT_LIST_MODEL (sorted), section_sorter);
+  g_object_unref (section_sorter);
+
+  gtk_section_model_get_section (GTK_SECTION_MODEL (sorted), 0, &s, &e);
+  g_assert_cmpint (s, ==, 0);
+  g_assert_cmpint (e, ==, 3);
+  gtk_section_model_get_section (GTK_SECTION_MODEL (sorted), 3, &s, &e);
+  g_assert_cmpint (s, ==, 3);
+  g_assert_cmpint (e, ==, 6);
+  gtk_section_model_get_section (GTK_SECTION_MODEL (sorted), 6, &s, &e);
+  g_assert_cmpint (s, ==, 6);
+  g_assert_cmpint (e, ==, 8);
+
+  g_object_unref (sorted);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -554,6 +606,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/sortlistmodel/stability", test_stability);
   g_test_add_func ("/sortlistmodel/incremental/remove", test_incremental_remove);
   g_test_add_func ("/sortlistmodel/oob-access", test_out_of_bounds_access);
+  g_test_add_func ("/sortlistmodel/sections", test_sections);
 
   return g_test_run ();
 }
