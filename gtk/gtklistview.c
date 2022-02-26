@@ -1032,7 +1032,7 @@ gtk_list_view_set_factory (GtkListView        *self,
                            GtkListItemFactory *factory)
 {
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
-  g_return_if_fail (factory == NULL || GTK_LIST_ITEM_FACTORY (factory));
+  g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
 
   if (factory == gtk_list_item_manager_get_factory (self->item_manager))
     return;

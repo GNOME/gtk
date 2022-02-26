@@ -58,6 +58,8 @@ compare_render_tests = [
   'empty-shadow',
   'empty-texture',
   'empty-transform',
+  'huge-height',
+  'huge-width',
   'inset-shadow-multiple',
   'invalid-transform',
   'issue-3615',

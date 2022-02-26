@@ -825,7 +825,7 @@ gtk_list_item_manager_set_factory (GtkListItemManager *self,
   GSList *l;
 
   g_return_if_fail (GTK_IS_LIST_ITEM_MANAGER (self));
-  g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (factory));
+  g_return_if_fail (factory == NULL || GTK_IS_LIST_ITEM_FACTORY (factory));
 
   if (self->factory == factory)
     return;

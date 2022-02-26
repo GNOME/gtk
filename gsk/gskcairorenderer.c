@@ -107,8 +107,44 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
   GdkTexture *texture;
   cairo_surface_t *surface;
   cairo_t *cr;
+  int width, height;
+  /* limit from cairo's source code */
+#define MAX_IMAGE_SIZE 32767
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, ceil (viewport->size.width), ceil (viewport->size.height));
+  width = ceil (viewport->size.width);
+  height = ceil (viewport->size.height);
+  if (width > MAX_IMAGE_SIZE || height > MAX_IMAGE_SIZE)
+    {
+      gsize x, y, size, stride;
+      GBytes *bytes;
+      guchar *data;
+
+      stride = width * 4;
+      size = stride * height;
+      data = g_malloc_n (stride, height);
+
+      for (y = 0; y < height; y += MAX_IMAGE_SIZE)
+        {
+          for (x = 0; x < width; x += MAX_IMAGE_SIZE)
+            {
+              texture = gsk_cairo_renderer_render_texture (renderer, root, 
+                                                           &GRAPHENE_RECT_INIT (x, y,
+                                                                                MIN (MAX_IMAGE_SIZE, viewport->size.width - x),
+                                                                                MIN (MAX_IMAGE_SIZE, viewport->size.height - y)));
+              gdk_texture_download (texture,
+                                    data + stride * y + x * 4,
+                                    stride);
+              g_object_unref (texture);
+            }
+        }
+
+      bytes = g_bytes_new_take (data, size);
+      texture = gdk_memory_texture_new (width, height, GDK_MEMORY_DEFAULT, bytes, stride);
+      g_bytes_unref (bytes);
+      return texture;
+    }
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
   cr = cairo_create (surface);
 
   cairo_translate (cr, - viewport->origin.x, - viewport->origin.y);
