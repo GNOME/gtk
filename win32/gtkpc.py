@@ -30,7 +30,7 @@ def main(argv):
     atk_min_ver = '2.15.1'
     cairo_min_ver = '1.14.0'
     gdk_pixbuf_min_ver = '2.30.0'
-    gdk_win32_sys_libs = '-lgdi32 -limm32 -lshell32 -lole32 -lwinmm -ldwmapi'
+    gdk_win32_sys_libs = '-lgdi32 -limm32 -lshell32 -lole32 -lwinmm -ldwmapi -lwinspool -lcomctl32 -lcomdlg32'
     cairo_libs = '-lcairo-gobject -lcairo '
     glib_min_ver = '2.45.8'
 
