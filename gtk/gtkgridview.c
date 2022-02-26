@@ -109,11 +109,6 @@ struct _Cell
   enum {
     /* A newly created cell that hasn't yet been allocated */
     UNKNOWN,
-    /* A section header.
-     * A 0-size cell, the section header widget is in the next
-     * cell (sorry, the list item manager needs that).
-     */
-    SECTION,
     /* One or more cells in the same row.
      * May contain a widget, but don't have to.
      */
@@ -130,6 +125,7 @@ struct _Cell
     FILLER
   } cell_type;
   int height;
+  int section_height;
   int col_start;
   int col_end;
 };
@@ -249,7 +245,7 @@ static inline int
 cell_height (GtkGridView *self,
              Cell        *cell)
 {
-  return cell->height;
+  return cell->section_height + cell->height;
 }
 
 static void G_GNUC_UNUSED
@@ -297,6 +293,13 @@ dump (GtkGridView   *self,
         case CELL:
           if (cell->parent.widget)
             gtk_snapshot_append_color (snapshot, &GDK_RGBA("FFFFFF"), &r.bounds);
+          if (cell->section_height)
+            gtk_snapshot_append_color (snapshot,
+                                       &GDK_RGBA("7F7F00"),
+                                       &GRAPHENE_RECT_INIT (r.bounds.origin.x,
+                                                            r.bounds.origin.y,
+                                                            r.bounds.size.width,
+                                                            cell->section_height));
 
           gtk_snapshot_append_border (snapshot,
                                       &r,
@@ -304,15 +307,6 @@ dump (GtkGridView   *self,
                                       (GdkRGBA[4]) { black, black, black, black });
           if (cell->col_end == self->n_columns)
             y += cell_height (self, cell);
-          break;
-
-        case SECTION:
-          gtk_snapshot_append_color (snapshot, &GDK_RGBA("FFFFFF"), &r.bounds);
-          gtk_snapshot_append_border (snapshot,
-                                      &r,
-                                      (float[4]) { scale, scale, scale, scale },
-                                      (GdkRGBA[4]) { black, black, black, black });
-          y += cell_height (self, cell);
           break;
 
         case FILLER:
@@ -327,6 +321,13 @@ dump (GtkGridView   *self,
           break;
 
         case BLOCK:
+          if (cell->section_height)
+            gtk_snapshot_append_color (snapshot,
+                                       &GDK_RGBA("7F7F00"),
+                                       &GRAPHENE_RECT_INIT (r.bounds.origin.x,
+                                                            r.bounds.origin.y,
+                                                            r.bounds.size.width,
+                                                            cell->section_height));
           gtk_snapshot_append_border (snapshot,
                                       &r,
                                       (float[4]) { scale, scale, scale, scale },
@@ -379,11 +380,11 @@ cell_augment (GtkRbTree *tree,
       aug->height = left_aug->height;
       aug->col_start = left_aug->col_start;
       if (cell->col_start == 0)
-        aug->height += cell->height;
+        aug->height += cell->section_height + cell->height;
     }
   else
     {
-      aug->height = cell->height;
+      aug->height = cell->section_height + cell->height;
       aug->col_start = cell->col_start;
     }
 
@@ -395,7 +396,7 @@ cell_augment (GtkRbTree *tree,
       aug->col_end = right_aug->col_end;
 
       if (right_aug->col_start != 0)
-        aug->height -= cell->height;
+        aug->height -= cell->section_height + cell->height;
     }
   else
     {
@@ -424,7 +425,7 @@ get_cell_at (GtkGridView *self,
       if (tmp)
         {
           CellAugment *aug = gtk_list_item_manager_get_item_augment (self->item_manager, tmp);
-          if (y < aug->height - cell->height ||
+          if (y < aug->height - cell_height (self, cell) ||
               (y < aug->height && col < aug->col_end))
             {
               cell = tmp;
@@ -433,14 +434,14 @@ get_cell_at (GtkGridView *self,
           if (cell->col_start == 0)
             y -= aug->height;
           else
-            y -= aug->height - cell->height;
+            y -= aug->height - cell_height (self, cell);
           pos += aug->parent.n_items;
         }
 
-      if (y < cell->height && col >= cell->col_start && col < cell->col_end)
+      if (y < cell_height (self, cell) && col >= cell->col_start && col < cell->col_end)
         break;
       if (cell->col_end == self->n_columns)
-        y -= cell->height;
+        y -= cell_height (self, cell);
       pos += cell->parent.n_items;
 
       cell = gtk_rb_tree_node_get_right (cell);
@@ -480,14 +481,14 @@ gtk_grid_view_get_allocation_along (GtkListBase *base,
   /* only multi-row cell, remaining items are irrelevant for other cells */
   if (cell->cell_type == BLOCK)
     {
-      int row_height = cell_height (self, cell) / self->n_columns;
+      int row_height = cell->height / self->n_columns;
 
       remaining /= self->n_columns;
 
       if (offset)
-        *offset = cell_y (self, cell) + remaining * row_height;
+        *offset = cell_y (self, cell) + remaining * row_height + (remaining ? cell->section_height : 0);
       if (size)
-        *size = row_height;
+        *size = row_height + (remaining ? 0 : cell->section_height);
     }
   else
     {
@@ -569,26 +570,25 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
             col = cell->col_start - 1;
             break;
 
-          case SECTION:
-            cell = gtk_rb_tree_node_get_next (cell);
-            while (cell->col_end < col)
-              {
-                cell = gtk_rb_tree_node_get_next (cell);
-                pos += cell->parent.n_items;
-              }
-            break;
-
           case BLOCK:
             {
-              int row_height = cell->height / (cell->parent.n_items / self->n_columns);
-              int row = (y - y_offset) / row_height;
+              int row_height = (cell->height) / (cell->parent.n_items / self->n_columns);
+              int row = (y - y_offset < cell->section_height) ? 0 : (y - y_offset - cell->section_height) / row_height;
               *position = pos + row * self->n_columns + col;
               if (area)
                 {
                   area->x = column_x (self, col);
                   area->width = column_x (self, col + 1) - area->x;
-                  area->y = y_offset + row * row_height;
-                  area->height = row_height;
+                  if (row == 0)
+                    {
+                      area->y = y_offset;
+                      area->height = row_height + cell->section_height;
+                    }
+                  else
+                    {
+                      area->y = y_offset + cell->section_height + row * row_height;
+                      area->height = row_height;
+                    }
                 }
               return TRUE;
             }
@@ -640,20 +640,69 @@ gtk_grid_view_move_focus_along (GtkListBase *base,
                                 int          steps)
 {
   GtkGridView *self = GTK_GRID_VIEW (base);
+  Cell *cell;
+  guint col, remaining;
 
-  steps *= self->n_columns;
+  cell = gtk_list_item_manager_get_nth (self->item_manager, pos, &remaining);
+  if (cell == NULL)
+    g_return_val_if_reached (pos);
 
-  if (steps < 0)
+  col = (cell->col_start + remaining) % self->n_columns;
+  /* go to first row in case of blocks */
+  steps += remaining / self->n_columns;
+  /* go to start of cell */
+  pos -= remaining;
+
+  /* now advance to correct row by counting rows, then find
+   * correct column */
+
+  while (steps < 0)
     {
-      if (pos >= self->n_columns)
-        pos -= MIN (pos, -steps);
+      if (cell->col_start == 0)
+        steps++;
+      cell = gtk_rb_tree_node_get_previous (cell);
+      if (cell == NULL)
+        {
+          g_assert (pos == 0);
+          cell = gtk_list_item_manager_get_first (self->item_manager);
+          steps = 0;
+          break;
+        }
+      pos -= cell->parent.n_items;
+      steps -= MAX (1, cell->parent.n_items / self->n_columns) - 1;
     }
+  while (steps > 0)
+    {
+      int rows = cell->parent.n_items / self->n_columns;
+      if (rows > steps)
+        return pos + steps * self->n_columns + col;
+      else if (rows > 0)
+        steps -= rows;
+      else if (cell->col_end >= self->n_columns)
+        steps--;
+      pos += cell->parent.n_items;
+      cell = gtk_rb_tree_node_get_next (cell);
+      if (cell == NULL)
+        {
+          cell = gtk_list_item_manager_get_last (self->item_manager);
+          pos -= cell->parent.n_items;
+          steps = MAX (1, cell->parent.n_items / self->n_columns) - 1;
+        }
+    }
+  while (cell->col_start > col)
+    {
+      cell = gtk_rb_tree_node_get_previous (cell);
+      pos -= cell->parent.n_items;
+    }
+  while (cell->col_end <= col)
+    {
+      pos += cell->parent.n_items;
+      cell = gtk_rb_tree_node_get_next (cell);
+    }
+  if (cell->parent.n_items == 0)
+    pos--;
   else
-    {
-      guint n_items = gtk_list_base_get_n_items (base);
-      if (n_items / self->n_columns > pos / self->n_columns)
-        pos += MIN (n_items - pos - 1, steps);
-    }
+    pos += MIN (cell->parent.n_items, col - cell->col_start);
 
   return pos;
 }
@@ -877,15 +926,19 @@ gtk_grid_view_measure (GtkWidget      *widget,
 
 static void
 cell_set_size (Cell *cell,
+               int   section_height,
                int   height,
                int   col_start,
                int   col_end)
 {
-  if (cell->height == height &&
+  if (cell->section_height == section_height &&
+      cell->height == height &&
       cell->col_start == col_start &&
       cell->col_end == col_end)
     return;
 
+  g_assert ((cell->parent.section_header == NULL) || (section_height != 0));
+  cell->section_height = section_height;
   cell->height = height;
   cell->col_start = col_start;
   cell->col_end = col_end;
@@ -901,7 +954,7 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
   GtkGridView *self = GTK_GRID_VIEW (widget);
   Cell *cell, *tmp;
   GArray *heights;
-  int min_row_height, row_height, total_height, total_width, col_min, col_nat, sec_min, sec_nat;
+  int min_row_height, row_height, section_height, total_height, total_width, col_min, col_nat, sec_min, sec_nat;
   GtkOrientation orientation, opposite_orientation;
   GtkScrollablePolicy scroll_policy;
   int x, y;
@@ -940,17 +993,13 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
        cell != NULL;
        cell = gtk_rb_tree_node_get_next (cell))
     {
-      if (cell->parent.section_header)
+      if (cell->parent.section_header && i > 0)
         {
-          if (i > 0)
-            {
-              cell->cell_type = FILLER;
-              cell = gtk_list_item_manager_split_item (self->item_manager, cell, 0);
-              i = 0;
-            }
-          cell->cell_type = SECTION;
+          cell->cell_type = FILLER;
           cell = gtk_list_item_manager_split_item (self->item_manager, cell, 0);
+          i = 0;
         }
+
       if (cell->parent.n_items + i > self->n_columns)
         {
           if (i > 0)
@@ -1028,15 +1077,31 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
             }
           if (row_height > 0)
             {
+              int min, nat;
               total_height += row_height;
+              if (tmp->parent.section_header)
+                {
+                  gtk_widget_measure (tmp->parent.section_header,
+                                      gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
+                                      total_width,
+                                      &min, &nat, NULL, NULL);
+                  if (scroll_policy == GTK_SCROLL_MINIMUM)
+                    section_height = min;
+                  else
+                    section_height = nat;
+                  total_height += section_height;
+                }
+              else
+                section_height = 0;
+
               for (i = 0;
                    tmp != cell;
                    tmp = gtk_rb_tree_node_get_next (tmp))
                 {
                   if (tmp->cell_type == FILLER)
-                    cell_set_size (tmp, row_height, i, self->n_columns);
+                    cell_set_size (tmp, section_height, row_height, i, self->n_columns);
                   else
-                    cell_set_size (tmp, row_height, i, i + tmp->parent.n_items);
+                    cell_set_size (tmp, section_height, row_height, i, i + tmp->parent.n_items);
                   i += tmp->parent.n_items;
                 }
             }
@@ -1044,24 +1109,6 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
 
         case BLOCK:
           cell = gtk_rb_tree_node_get_next (cell);
-          break;
-
-        case SECTION:
-          {
-            int min, nat;
-            tmp = gtk_rb_tree_node_get_next (cell);
-            gtk_widget_measure (tmp->parent.section_header,
-                                gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
-                                total_width,
-                                &min, &nat, NULL, NULL);
-            if (scroll_policy == GTK_SCROLL_MINIMUM)
-              row_height = min;
-            else
-              row_height = nat;
-            total_height += row_height;
-            cell_set_size (cell, row_height, 0, self->n_columns);
-            cell = tmp;
-          }
           break;
 
         case FILLER:
@@ -1082,35 +1129,67 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
       switch (cell->cell_type)
         {
         case CELL:
-          tmp = gtk_rb_tree_node_get_next (cell);
-          if (cell->parent.widget == NULL &&
-              tmp->cell_type == FILLER)
+          tmp = cell;
+          /* check if we should skip the row */
+          for (i = 0;
+               i < self->n_columns;
+               cell = gtk_rb_tree_node_get_next (cell))
             {
-              /* Special case where we don't have assigned a height,
-               * becuase it's the last row in a block with filler */
-              cell_set_size (cell, row_height, 0, cell->parent.n_items);
-              cell_set_size (tmp, row_height, cell->parent.n_items, self->n_columns);
-              total_height += row_height;
-              cell = gtk_rb_tree_node_get_next (tmp);
+              if (cell->parent.widget != NULL)
+                tmp = cell;
+              i += cell->parent.n_items;
+              if (cell->cell_type == FILLER)
+                i = self->n_columns;
             }
-          else
+          /* no cell with a parent found, need to allocate it */
+          if (tmp->parent.widget == NULL)
             {
-              /* skip the row */
-              for (cell = gtk_rb_tree_node_get_next (cell);
-                   cell && cell->col_start != 0;
-                   cell = gtk_rb_tree_node_get_next (cell))
-                {}
+              if (tmp->parent.section_header)
+                {
+                  int min, nat;
+                  gtk_widget_measure (tmp->parent.section_header,
+                                      gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
+                                      total_width,
+                                      &min, &nat, NULL, NULL);
+                  if (scroll_policy == GTK_SCROLL_MINIMUM)
+                    section_height = min;
+                  else
+                    section_height = nat;
+                }
+              else
+                section_height = 0;
+              total_height += section_height + row_height;
+              for (i = 0;
+                   tmp != cell;
+                   tmp = gtk_rb_tree_node_get_next (tmp))
+                {
+                  if (tmp->cell_type == FILLER)
+                    cell_set_size (tmp, section_height, row_height, i, self->n_columns);
+                  else
+                    cell_set_size (tmp, section_height, row_height, i, i + tmp->parent.n_items);
+                  i += tmp->parent.n_items;
+                }
             }
           break;
         
         case BLOCK:
+          if (cell->parent.section_header)
+            {
+              int min, nat;
+              gtk_widget_measure (cell->parent.section_header,
+                                  gtk_list_base_get_orientation (GTK_LIST_BASE (self)),
+                                  total_width,
+                                  &min, &nat, NULL, NULL);
+              if (scroll_policy == GTK_SCROLL_MINIMUM)
+                section_height = min;
+              else
+                section_height = nat;
+            }
+          else
+            section_height = 0;
           i = cell->parent.n_items / self->n_columns;
-          cell_set_size (cell, i * row_height, 0, self->n_columns);
-          total_height += row_height * i;
-          cell = gtk_rb_tree_node_get_next (cell);
-          break;
-
-        case SECTION:
+          cell_set_size (cell, section_height, i * row_height, 0, self->n_columns);
+          total_height += section_height + row_height * i;
           cell = gtk_rb_tree_node_get_next (cell);
           break;
 
@@ -1136,6 +1215,15 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
        cell != NULL;
        cell = gtk_rb_tree_node_get_next (cell))
     {
+      if (cell->parent.section_header)
+        {
+          gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
+                                             cell->parent.section_header,
+                                             - x,
+                                             y,
+                                             total_width,
+                                             cell->section_height);
+        }
       switch (cell->cell_type)
         {
         case CELL:
@@ -1144,28 +1232,17 @@ gtk_grid_view_size_allocate (GtkWidget *widget,
               gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
                                                  cell->parent.widget,
                                                  cell_x (self, cell) - x,
-                                                 y,
+                                                 y + cell->section_height,
                                                  cell_width (self, cell),
-                                                 cell_height (self, cell));
+                                                 cell->height);
             }
           if (cell->col_end == self->n_columns)
-            y += cell->height;
-          break;
-
-        case SECTION:
-          tmp = gtk_rb_tree_node_get_next (cell);
-          gtk_list_base_size_allocate_child (GTK_LIST_BASE (self),
-                                             tmp->parent.section_header,
-                                             cell_x (self, cell) - x,
-                                             y,
-                                             cell_width (self, cell),
-                                             cell_height (self, cell));
-          y += cell->height;
+            y += cell_height (self, cell);
           break;
 
         case BLOCK:
         case FILLER:
-          y += cell->height;
+          y += cell_height (self, cell);
           break;
 
         case UNKNOWN:
