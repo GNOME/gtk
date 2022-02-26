@@ -142,6 +142,11 @@ gridview {
       margin: 12px;
     }
   }
+
+  > section {
+    background: hotpink;
+    padding: 6px;
+  }
 }
 
 coverflow cover {
@@ -3315,6 +3320,11 @@ list {
   &:not(.horizontal) row.separator,
   &.separators:not(.horizontal) > row:not(.separator) {
     border-bottom: 1px solid $_treeview_borders_color;
+  }
+
+  > section {
+    background: hotpink;
+    padding: 6px;
   }
 }
 
