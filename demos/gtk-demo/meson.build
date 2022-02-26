@@ -52,6 +52,7 @@ demos = files([
   'listview_applauncher.c',
   'listview_clocks.c',
   'listview_colors.c',
+  'listview_emoji.c',
   'listview_filebrowser.c',
   'listview_minesweeper.c',
   'listview_objects.c',

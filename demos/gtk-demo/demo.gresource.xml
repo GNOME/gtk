@@ -303,6 +303,7 @@
     <file>listview_applauncher.c</file>
     <file>listview_colors.c</file>
     <file>listview_clocks.c</file>
+    <file>listview_emoji.c</file>
     <file>listview_filebrowser.c</file>
     <file>listview_minesweeper.c</file>
     <file>listview_objects.c</file>
