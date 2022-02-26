@@ -24,6 +24,7 @@
 #include "gtkbitset.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtksectionmodelprivate.h"
 
 /**
  * GtkFilterListModel:
@@ -134,8 +135,67 @@ gtk_filter_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_filter_list_model_get_item;
 }
 
+static void
+gtk_filter_list_model_get_section (GtkSectionModel *model,
+                                   guint            position,
+                                   guint           *out_start,
+                                   guint           *out_end)
+{
+  GtkFilterListModel *self = GTK_FILTER_LIST_MODEL (model);
+  guint n_items;
+  guint pos, start, end;
+
+  switch (self->strictness)
+    {
+    case GTK_FILTER_MATCH_NONE:
+      *out_start = 0;
+      *out_end = G_MAXUINT;
+      return;
+
+    case GTK_FILTER_MATCH_ALL:
+      gtk_list_model_get_section (self->model, position, out_start, out_end);
+      return;
+
+    case GTK_FILTER_MATCH_SOME:
+      n_items = gtk_bitset_get_size (self->matches);
+      if (position >= n_items)
+        {
+          *out_start = n_items;
+          *out_end = G_MAXUINT;
+          return;
+        }
+      if (!GTK_IS_SECTION_MODEL (self->model))
+        {
+          *out_start = 0;
+          *out_end = n_items;
+          return;
+        }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  /* if we get here, we have a section model, and are MATCH_SOME */
+
+  pos = gtk_bitset_get_nth (self->matches, position);
+  gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), pos, &start, &end);
+  if (start == 0)
+    *out_start = 0;
+  else
+    *out_start = gtk_bitset_get_size_in_range (self->matches, 0, start - 1);
+  *out_end = *out_start + gtk_bitset_get_size_in_range (self->matches, start, end - 1);
+}
+
+static void
+gtk_filter_list_model_section_model_init (GtkSectionModelInterface *iface)
+{
+  iface->get_section = gtk_filter_list_model_get_section;
+}
+
 G_DEFINE_TYPE_WITH_CODE (GtkFilterListModel, gtk_filter_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_filter_list_model_model_init))
+                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_filter_list_model_model_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_SECTION_MODEL, gtk_filter_list_model_section_model_init))
 
 static gboolean
 gtk_filter_list_model_run_filter_on_item (GtkFilterListModel *self,
@@ -163,7 +223,7 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
   gboolean more;
 
   g_return_if_fail (GTK_IS_FILTER_LIST_MODEL (self));
-  
+
   if (self->pending == NULL)
     return;
 
@@ -346,7 +406,7 @@ gtk_filter_list_model_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_filter_list_model_get_property (GObject     *object,
                                     guint        prop_id,
                                     GValue      *value,
@@ -473,7 +533,7 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self,
     case GTK_FILTER_MATCH_SOME:
       {
         GtkBitset *old, *pending;
-      
+
         if (self->matches == NULL)
           {
             if (self->strictness == GTK_FILTER_MATCH_ALL)
