@@ -72,8 +72,8 @@ static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
 static FlattenNode *
 gtk_flatten_list_model_get_nth (GtkRbTree *tree,
-                                guint         position,
-                                guint        *model_position)
+                                guint      position,
+                                guint     *model_position)
 {
   FlattenNode *node, *tmp;
   guint model_n_items;
@@ -110,8 +110,8 @@ gtk_flatten_list_model_get_nth (GtkRbTree *tree,
 
 static FlattenNode *
 gtk_flatten_list_model_get_nth_model (GtkRbTree *tree,
-                                      guint         position,
-                                      guint        *items_before)
+                                      guint      position,
+                                      guint     *items_before)
 {
   FlattenNode *node, *tmp;
   guint before;
@@ -202,11 +202,11 @@ G_DEFINE_TYPE_WITH_CODE (GtkFlattenListModel, gtk_flatten_list_model, G_TYPE_OBJ
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_flatten_list_model_model_init))
 
 static void
-gtk_flatten_list_model_items_changed_cb (GListModel          *model,
-                                         guint                position,
-                                         guint                removed,
-                                         guint                added,
-                                         gpointer             _node)
+gtk_flatten_list_model_items_changed_cb (GListModel *model,
+                                         guint       position,
+                                         guint       removed,
+                                         guint       added,
+                                         gpointer    _node)
 {
   FlattenNode *node = _node, *parent, *left;
   GtkFlattenListModel *self = node->list;
@@ -323,10 +323,10 @@ gtk_flatten_list_model_set_property (GObject      *object,
 }
 
 static void 
-gtk_flatten_list_model_get_property (GObject     *object,
-                                     guint        prop_id,
-                                     GValue      *value,
-                                     GParamSpec  *pspec)
+gtk_flatten_list_model_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
   GtkFlattenListModel *self = GTK_FLATTEN_LIST_MODEL (object);
 
