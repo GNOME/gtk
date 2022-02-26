@@ -18,6 +18,8 @@ struct _FileBrowserView
   GObject parent_instance;
 
   GtkListItemFactory *factory;
+  GtkListItemFactory *section_factory;
+  GtkSorter *section_sorter;
   char *icon_name;
   char *title;
   GtkOrientation orientation;
@@ -27,8 +29,10 @@ enum {
   PROP_0,
   PROP_FACTORY,
   PROP_ICON_NAME,
-  PROP_TITLE,
   PROP_ORIENTATION,
+  PROP_SECTION_FACTORY,
+  PROP_SECTION_SORTER,
+  PROP_TITLE,
 
   N_PROPS
 };
@@ -58,12 +62,20 @@ file_browser_view_get_property (GObject    *object,
       g_value_set_string (value, self->icon_name);
       break;
 
-    case PROP_TITLE:
-      g_value_set_string (value, self->title);
-      break;
-
     case PROP_ORIENTATION:
       g_value_set_enum (value, self->orientation);
+      break;
+
+    case PROP_SECTION_FACTORY:
+      g_value_set_object (value, self->section_factory);
+      break;
+
+    case PROP_SECTION_SORTER:
+      g_value_set_object (value, self->section_sorter);
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, self->title);
       break;
 
     default:
@@ -91,13 +103,21 @@ file_browser_view_set_property (GObject      *object,
       self->icon_name = g_value_dup_string (value);
       break;
 
+    case PROP_ORIENTATION:
+      self->orientation = g_value_get_enum (value);
+      break;
+
+    case PROP_SECTION_FACTORY:
+      g_set_object (&self->section_factory, g_value_get_object (value));
+      break;
+
+    case PROP_SECTION_SORTER:
+      g_set_object (&self->section_sorter, g_value_get_object (value));
+      break;
+
     case PROP_TITLE:
       g_free (self->title);
       self->title = g_value_dup_string (value);
-      break;
-
-    case PROP_ORIENTATION:
-      self->orientation = g_value_get_enum (value);
       break;
 
     default:
@@ -139,12 +159,6 @@ file_browser_view_class_init (FileBrowserViewClass *klass)
                          "icon to display for selecting this view",
                          NULL,
                          G_PARAM_READWRITE);
-  properties[PROP_TITLE] =
-    g_param_spec_string ("title",
-                         "title",
-                         "title to display for selecting this view",
-                         NULL,
-                         G_PARAM_READWRITE);
   properties[PROP_ORIENTATION] =
     g_param_spec_enum ("orientation",
                        "orientation",
@@ -152,6 +166,24 @@ file_browser_view_class_init (FileBrowserViewClass *klass)
                        GTK_TYPE_ORIENTATION,
                        GTK_ORIENTATION_VERTICAL,
                        G_PARAM_READWRITE);
+  properties[PROP_SECTION_FACTORY] =
+    g_param_spec_object ("section-factory",
+                         "section factory",
+                         "factory to use for sections or NULL",
+                         GTK_TYPE_LIST_ITEM_FACTORY,
+                         G_PARAM_READWRITE);
+  properties[PROP_SECTION_SORTER] =
+    g_param_spec_object ("section-sorter",
+                         "section sorter",
+                         "sorter to split files into sections or NULL",
+                         GTK_TYPE_SORTER,
+                         G_PARAM_READWRITE);
+  properties[PROP_TITLE] =
+    g_param_spec_string ("title",
+                         "title",
+                         "title to display for selecting this view",
+                         NULL,
+                         G_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }

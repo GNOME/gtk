@@ -93,6 +93,78 @@
     </child>
     <child>
       <object class="FileBrowserView">
+        <property name="factory">
+          <object class="GtkBuilderListItemFactory">
+            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <child>
+          <object class="GtkImage">
+            <binding name="gicon">
+              <closure type="GIcon" function="filebrowser_get_icon">
+                <lookup name="item">GtkListItem</lookup>
+              </closure>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="hexpand">true</property>
+            <property name="width-chars">30</property>
+            <property name="ellipsize">middle</property>
+            <binding name="label">
+              <closure type="gchararray" function="filebrowser_get_display_name">
+                <lookup name="item">GtkListItem</lookup>
+              </closure>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+            ]]></property>
+          </object>
+        </property>
+        <property name="section-factory">
+          <object class="GtkBuilderListItemFactory">
+            <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="xalign">0</property>
+        <binding name="label">
+          <closure type="gchararray" function="filebrowser_get_content_type">
+            <lookup name="item">GtkListItem</lookup>
+          </closure>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+            ]]></property>
+          </object>
+        </property>
+        <property name="section-sorter">
+          <object class="GtkStringSorter">
+            <property name="expression">
+              <closure type="gchararray" function="filebrowser_get_content_type" swapped="true" />
+            </property>
+          </object>
+        </property>
+        <property name="icon-name">view-continuous-symbolic</property>
+        <property name="title" translatable="yes">Sections</property>
+        <property name="orientation">vertical</property>
+      </object>
+    </child>
+    <child>
+      <object class="FileBrowserView">
         <property name="icon-name">view-paged-symbolic</property>
         <property name="title" translatable="yes">Paged</property>
         <property name="factory">
@@ -167,8 +239,17 @@
   </object>
   <object class="GtkSingleSelection" id="selection_model">
     <property name="model">
-      <object class="GtkDirectoryList" id="dirlist">
-        <property name="attributes">standard::name,standard::display-name,standard::icon,standard::size,standard::content-type</property>
+      <object class="GtkSortListModel">
+        <binding name="section-sorter">
+          <lookup name="section-sorter" type="FileBrowserView">
+            <lookup name="selected-item">selected-view</lookup>
+          </lookup>
+        </binding>
+        <property name="model">
+          <object class="GtkDirectoryList" id="dirlist">
+            <property name="attributes">standard::name,standard::display-name,standard::icon,standard::size,standard::content-type</property>
+          </object>
+        </property>
       </object>
     </property>
   </object>
@@ -235,6 +316,11 @@
             <property name="max-columns">15</property>
             <binding name="factory">
               <lookup name="factory" type="FileBrowserView">
+                <lookup name="selected-item">selected-view</lookup>
+              </lookup>
+            </binding>
+            <binding name="section-factory">
+              <lookup name="section-factory" type="FileBrowserView">
                 <lookup name="selected-item">selected-view</lookup>
               </lookup>
             </binding>
