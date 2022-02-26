@@ -43,6 +43,23 @@
     } \
 }G_STMT_END
 
+#define assert_sections_equal(model1, model2) G_STMT_START{ \
+  guint _i, _n, _start1, _end1, _start2, _end2; \
+  g_assert_cmpint (g_list_model_get_n_items (G_LIST_MODEL (model1)), ==, g_list_model_get_n_items (G_LIST_MODEL (model2))); \
+  _n = g_list_model_get_n_items (G_LIST_MODEL (model1)); \
+  for (_i = 0; _i < _n; _i = _end1) \
+    { \
+      gtk_section_model_get_section (model1, i, &_start1, &_end1); \
+      gtk_section_model_get_section (model2, i, &_start2, &_end2); \
+      g_assert_cmpint (_start1, <, _end1); \
+      g_assert_cmpint (_start2, <, _end2); \
+      g_assert_cmpint (_start1, ==, _start2); \
+      g_assert_cmpint (_end1, ==, _end2); \
+      g_assert_cmpint (_i, ==, _start1); \
+      g_assert_cmpint (_end1, <=, _n); \
+    } \
+}G_STMT_END
+
 G_GNUC_UNUSED static char *
 model_to_string (GListModel *model)
 {
@@ -441,6 +458,7 @@ test_model_changes (gconstpointer model_id)
         {
           ensure_updated ();
           assert_model_equal (G_LIST_MODEL (flatten1), G_LIST_MODEL (model2));
+          assert_sections_equal (GTK_SECTION_MODEL (flatten1), GTK_SECTION_MODEL (model2));
         }
     }
 
