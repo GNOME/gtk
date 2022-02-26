@@ -526,6 +526,11 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
   surface_class->set_opaque_region = gdk_macos_surface_set_opaque_region;
 
+  /**
+   * GdkMacosSurface:native: (attributes org.gtk.Property.get=gdk_macos_surface_get_native_window)
+   *
+   * The "native" property contains the underlying NSWindow.
+   */
   properties [PROP_NATIVE] =
     g_param_spec_pointer ("native",
                           "Native",
@@ -684,6 +689,27 @@ _gdk_macos_surface_get_native (GdkMacosSurface *self)
   g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
 
   return (NSWindow *)self->window;
+}
+
+/**
+ * gdk_macos_surface_get_native_window: (attributes org.gtk.Method.get_property=native)
+ * @self: a #GdkMacosSurface
+ *
+ * Gets the underlying NSWindow used by the surface.
+ *
+ * The NSWindow's contentView is an implementation detail and may change
+ * between releases of GTK.
+ *
+ * Returns: (nullable): a #NSWindow or %NULL
+ *
+ * Since: 4.8
+ */
+gpointer
+gdk_macos_surface_get_native_window (GdkMacosSurface *self)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), NULL);
+
+  return _gdk_macos_surface_get_native (self);
 }
 
 void
