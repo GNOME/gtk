@@ -635,6 +635,20 @@ fill_scroll_event (GdkMacosDisplay *self,
   state = _gdk_macos_display_get_current_mouse_modifiers (self) |
           _gdk_macos_display_get_current_keyboard_modifiers (self);
 
+  /* If we are starting a new phase, send a stop so any previous
+   * scrolling immediately stops.
+   */
+  if (phase == NSEventPhaseMayBegin)
+    {
+      ret = gdk_scroll_event_new (GDK_SURFACE (surface),
+                                  pointer,
+                                  NULL,
+                                  get_time_from_ns_event (nsevent),
+                                  state,
+                                  0.0, 0.0, TRUE);
+      _gdk_event_queue_append (GDK_DISPLAY (self), g_steal_pointer (&ret));
+    }
+
   dx = [nsevent deltaX];
   dy = [nsevent deltaY];
 
