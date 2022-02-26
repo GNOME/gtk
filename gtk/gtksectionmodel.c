@@ -93,7 +93,7 @@ gtk_section_model_default_init (GtkSectionModelInterface *iface)
    * model, though it would be rather useless to emit such a signal.
    *
    * The [signal@Gio.ListModel::items-changed] implies the effect of the
-   * [signal@Gtk.SectionModel::section-changed] signal for all the items
+   * [signal@Gtk.SectionModel::sections-changed] signal for all the items
    * it covers.
    *
    * Since: 4.12
