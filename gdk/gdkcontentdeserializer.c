@@ -576,7 +576,7 @@ gdk_content_deserialize_async (GInputStream        *stream,
 /**
  * gdk_content_deserialize_finish:
  * @result: the `GAsyncResult`
- * @value: return location for the result of the operation
+ * @value: (out): return location for the result of the operation
  * @error: return location for an error
  *
  * Finishes a content deserialization operation.
