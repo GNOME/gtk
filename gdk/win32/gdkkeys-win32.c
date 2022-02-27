@@ -227,14 +227,9 @@ fail1:
   return NULL;
 }
 
-/* 
- * Get the file path of the keyboard layout dll.
- * The result is heap-allocated and should be freed with g_free().
- */
 static char*
-get_keyboard_layout_file (const char *layout_name)
+_get_keyboard_layout_file (const char *layout_name)
 {
-  char    *final_layout_name = NULL;
   HKEY     hkey              = 0;
   DWORD    var_type          = REG_SZ;
   char    *result            = NULL;
@@ -247,24 +242,8 @@ get_keyboard_layout_file (const char *layout_name)
                                "Keyboard Layouts\\";
   char kbdKeyPath[sizeof (prefix) + KL_NAMELENGTH];
 
-  /* The user may have a keyboard substitute configured */
-  final_layout_name = get_keyboard_layout_substituted_name (layout_name);
-  if (final_layout_name != NULL)
-    {
-      g_debug ("Substituting keyboard layout name from '%s' to '%s'",
-               layout_name, final_layout_name);
-      g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
-                  prefix, final_layout_name);
-      g_free (final_layout_name);
-      final_layout_name = NULL;
-    }
-  else
-    {
-      g_debug ("Could not get substitute keyboard layout name for '%s', "
-               "will use '%s' directly", layout_name, layout_name);
-      g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
-                  prefix, layout_name);
-    }
+  g_snprintf (kbdKeyPath, sizeof (prefix) + KL_NAMELENGTH, "%s%s",
+              prefix, layout_name);
 
   status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
                           KEY_QUERY_VALUE, &hkey);
@@ -322,6 +301,28 @@ fail2:
   RegCloseKey (hkey);
 fail1:
   return NULL;
+}
+
+/*
+ * Get the file path of the keyboard layout dll.
+ * The result is heap-allocated and should be freed with g_free().
+ */
+static char*
+get_keyboard_layout_file (const char *layout_name)
+{
+  char *result = _get_keyboard_layout_file (layout_name);
+
+  /* If we could not retrieve a path, it may be that we need to perform layout
+   * substitution
+   */
+  if (result == NULL)
+    {
+      char *substituted = get_keyboard_layout_substituted_name (layout_name);
+      result = _get_keyboard_layout_file (substituted);
+      g_free (substituted);
+    }
+
+  return result;
 }
 
 static void
