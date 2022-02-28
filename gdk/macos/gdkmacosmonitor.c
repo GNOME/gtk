@@ -160,8 +160,8 @@ GetSubpixelLayout (CGDirectDisplayID screen_id)
   return GDK_SUBPIXEL_LAYOUT_UNKNOWN;
 }
 
-static char *
-GetLocalizedName (NSScreen *screen)
+char *
+_gdk_macos_monitor_get_localized_name (NSScreen *screen)
 {
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_15_AND_LATER
   GDK_BEGIN_MACOS_ALLOC_POOL;
@@ -182,8 +182,8 @@ GetLocalizedName (NSScreen *screen)
 #endif
 }
 
-static char *
-GetConnectorName (CGDirectDisplayID screen_id)
+char *
+_gdk_macos_monitor_get_connector_name (CGDirectDisplayID screen_id)
 {
   guint unit = CGDisplayUnitNumber (screen_id);
   return g_strdup_printf ("unit-%u", unit);
@@ -306,8 +306,8 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   pixel_width = CGDisplayModeGetPixelWidth (mode);
   has_opengl = CGDisplayUsesOpenGLAcceleration (self->screen_id);
   subpixel_layout = GetSubpixelLayout (self->screen_id);
-  name = GetLocalizedName (screen);
-  connector = GetConnectorName (self->screen_id);
+  name = _gdk_macos_monitor_get_localized_name (screen);
+  connector = _gdk_macos_monitor_get_connector_name (self->screen_id);
 
   if (width != 0 && pixel_width != 0)
     scale_factor = MAX (1, pixel_width / width);

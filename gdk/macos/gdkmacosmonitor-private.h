@@ -29,6 +29,8 @@
 
 G_BEGIN_DECLS
 
+char              *_gdk_macos_monitor_get_localized_name    (NSScreen          *screen);
+char              *_gdk_macos_monitor_get_connector_name    (CGDirectDisplayID  screen_id);
 GdkMacosMonitor   *_gdk_macos_monitor_new                   (GdkMacosDisplay   *display,
                                                              CGDirectDisplayID  screen_id);
 CGDirectDisplayID  _gdk_macos_monitor_get_screen_id         (GdkMacosMonitor   *self);
