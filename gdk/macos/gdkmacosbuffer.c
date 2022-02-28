@@ -281,7 +281,7 @@ _gdk_macos_buffer_set_damage (GdkMacosBuffer *self,
     return;
 
   g_clear_pointer (&self->damage, cairo_region_destroy);
-  self->damage = cairo_region_reference (damage);
+  self->damage = cairo_region_copy (damage);
 }
 
 gpointer
