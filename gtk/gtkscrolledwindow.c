@@ -1052,7 +1052,8 @@ gtk_scrolled_window_decelerate (GtkScrolledWindow *scrolled_window,
 
   if (priv->x_velocity != 0 || priv->y_velocity != 0 || overshoot)
     {
-      gtk_scrolled_window_start_deceleration (scrolled_window);
+      if (priv->deceleration_id == 0)
+        gtk_scrolled_window_start_deceleration (scrolled_window);
       priv->x_velocity = priv->y_velocity = 0;
     }
 }
