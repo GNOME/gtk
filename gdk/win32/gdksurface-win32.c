@@ -4152,6 +4152,9 @@ gdk_win32_surface_fullscreen (GdkSurface *window)
       g_object_set_data (G_OBJECT (window), "fullscreen-info", fi);
       fi->style = GetWindowLong (GDK_SURFACE_HWND (window), GWL_STYLE);
 
+      impl->inhibit_configure = TRUE;
+      impl->force_recompute_size = FALSE;
+
       /* Send state change before configure event */
       gdk_synthesize_surface_state (window, 0, GDK_TOPLEVEL_STATE_FULLSCREEN);
 
@@ -4160,7 +4163,7 @@ gdk_win32_surface_fullscreen (GdkSurface *window)
 
       API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), HWND_TOP,
                 x, y, width, height,
-                SWP_NOCOPYBITS | SWP_SHOWWINDOW));
+                SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_FRAMECHANGED));
     }
 }
 
@@ -4184,11 +4187,17 @@ gdk_win32_surface_unfullscreen (GdkSurface *window)
       API_CALL (SetWindowPos, (GDK_SURFACE_HWND (window), HWND_NOTOPMOST,
 			       fi->r.left, fi->r.top,
 			       fi->r.right - fi->r.left, fi->r.bottom - fi->r.top,
-			       SWP_NOCOPYBITS | SWP_SHOWWINDOW));
+			       SWP_NOCOPYBITS | SWP_SHOWWINDOW | SWP_FRAMECHANGED));
 
       g_object_set_data (G_OBJECT (window), "fullscreen-info", NULL);
       g_free (fi);
       _gdk_win32_surface_update_style_bits (window);
+
+      if (impl->inhibit_configure)
+        {
+          impl->inhibit_configure = FALSE;
+          impl->force_recompute_size = TRUE;
+        }
     }
 }
 
