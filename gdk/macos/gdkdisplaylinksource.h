@@ -36,12 +36,14 @@ typedef struct
   CVDisplayLinkRef  display_link;
   gint64            refresh_interval;
   guint             refresh_rate;
+  guint             paused : 1;
 
   volatile gint64   presentation_time;
   volatile guint    needs_dispatch;
 } GdkDisplayLinkSource;
 
-GSource *gdk_display_link_source_new     (CGDirectDisplayID     display_id);
+GSource *gdk_display_link_source_new     (CGDirectDisplayID     display_id,
+                                          CGDisplayModeRef      mode);
 void     gdk_display_link_source_pause   (GdkDisplayLinkSource *source);
 void     gdk_display_link_source_unpause (GdkDisplayLinkSource *source);
 
