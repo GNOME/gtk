@@ -192,6 +192,45 @@ _gdk_macos_buffer_unlock (GdkMacosBuffer *self)
   IOSurfaceUnlock (self->surface, 0, NULL);
 }
 
+/**
+ * _gdk_macos_buffer_lock_readonly:
+ *
+ * Like _gdk_macos_buffer_lock() but uses the read-only flag to
+ * indicate we are not interested in retrieving the updates from
+ * the GPU before modifying the CPU-side cache.
+ *
+ * Must be used with _gdk_macos_buffer_unlock_readonly().
+ */
+void
+_gdk_macos_buffer_read_lock (GdkMacosBuffer *self)
+{
+  kern_return_t ret;
+
+  g_return_if_fail (GDK_IS_MACOS_BUFFER (self));
+  g_return_if_fail (self->lock_count == 0);
+
+  self->lock_count++;
+
+  ret = IOSurfaceLock (self->surface, kIOSurfaceLockReadOnly, NULL);
+
+  g_return_if_fail (ret == KERN_SUCCESS);
+}
+
+void
+_gdk_macos_buffer_read_unlock (GdkMacosBuffer *self)
+{
+  kern_return_t ret;
+
+  g_return_if_fail (GDK_IS_MACOS_BUFFER (self));
+  g_return_if_fail (self->lock_count == 1);
+
+  self->lock_count--;
+
+  ret = IOSurfaceUnlock (self->surface, kIOSurfaceLockReadOnly, NULL);
+
+  g_return_if_fail (ret == KERN_SUCCESS);
+}
+
 guint
 _gdk_macos_buffer_get_width (GdkMacosBuffer *self)
 {
