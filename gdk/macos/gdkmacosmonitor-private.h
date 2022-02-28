@@ -24,6 +24,7 @@
 
 #include "gdkmacosdisplay.h"
 #include "gdkmacosmonitor.h"
+#include "gdkmacossurface.h"
 
 #include "gdkmonitorprivate.h"
 
