@@ -330,6 +330,27 @@ gtk_emoji_list_init (GtkEmojiList *self)
   objects_init (&self->items);
 }
 
+static gboolean
+has_emoji_coverage (GtkEmojiObject *emoji)
+{
+  PangoContext *context;
+  PangoLayout *layout;
+  char buffer[64];
+  gboolean ret;
+
+  context = pango_font_map_create_context (pango_cairo_font_map_get_default ());
+  layout = pango_layout_new (context);
+
+  gtk_emoji_object_get_text (emoji, buffer, sizeof (buffer), 0);
+  pango_layout_set_text (layout, buffer, -1);
+  ret = pango_layout_get_unknown_glyphs_count (layout) == 0;
+
+  g_object_unref (layout);
+  g_object_unref (context);
+
+  return ret;
+}
+
 static void
 gtk_emoji_list_populate_recent (GtkEmojiList *self)
 {
@@ -350,19 +371,25 @@ gtk_emoji_list_populate_recent (GtkEmojiList *self)
       GVariant *emoji_data;
       gunichar modifier;
       GtkEmojiObject *emoji;
-      GtkEmojiGroup group;
-
-      pos++;
 
       emoji_data = g_variant_get_child_value (item, 0);
       g_variant_get_child (item, 1, "u", &modifier);
 
       emoji = gtk_emoji_object_new (emoji_data, TRUE, modifier);
 
-      group = gtk_emoji_object_get_group (emoji);
-      self->section[group] = MAX (self->section[group], pos);
+      if (has_emoji_coverage (emoji))
+        {
+          GtkEmojiGroup group;
 
-      objects_append (&self->items, emoji);
+          pos++;
+
+          group = gtk_emoji_object_get_group (emoji);
+          self->section[group] = MAX (self->section[group], pos);
+
+          objects_append (&self->items, emoji);
+        }
+      else
+        g_object_unref (emoji);
 
       g_variant_unref (emoji_data);
       g_variant_unref (item);
@@ -390,14 +417,20 @@ gtk_emoji_list_populate_data (GtkEmojiList *self)
   while ((item = g_variant_iter_next_value (iter)))
     {
       GtkEmojiObject *emoji = gtk_emoji_object_new (item, FALSE, 0);
-      GtkEmojiGroup group;
 
-      pos++;
+      if (has_emoji_coverage (emoji))
+        {
+          GtkEmojiGroup group;
 
-      group = gtk_emoji_object_get_group (emoji);
-      self->section[group] = MAX (self->section[group], pos);
+          pos++;
 
-      objects_append (&self->items, emoji);
+          group = gtk_emoji_object_get_group (emoji);
+          self->section[group] = MAX (self->section[group], pos);
+
+          objects_append (&self->items, emoji);
+        }
+      else
+        g_object_unref (emoji);
 
       g_variant_unref (item);
     }
