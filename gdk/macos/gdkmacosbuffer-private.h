@@ -41,6 +41,8 @@ GdkMacosBuffer       *_gdk_macos_buffer_new              (int              width
 IOSurfaceRef          _gdk_macos_buffer_get_native       (GdkMacosBuffer  *self);
 void                  _gdk_macos_buffer_lock             (GdkMacosBuffer  *self);
 void                  _gdk_macos_buffer_unlock           (GdkMacosBuffer  *self);
+void                  _gdk_macos_buffer_read_lock        (GdkMacosBuffer  *self);
+void                  _gdk_macos_buffer_read_unlock      (GdkMacosBuffer  *self);
 guint                 _gdk_macos_buffer_get_width        (GdkMacosBuffer  *self);
 guint                 _gdk_macos_buffer_get_height       (GdkMacosBuffer  *self);
 guint                 _gdk_macos_buffer_get_stride       (GdkMacosBuffer  *self);

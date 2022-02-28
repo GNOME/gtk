@@ -635,6 +635,17 @@ fill_scroll_event (GdkMacosDisplay *self,
   state = _gdk_macos_display_get_current_mouse_modifiers (self) |
           _gdk_macos_display_get_current_keyboard_modifiers (self);
 
+  /* If we are starting a new phase, send a stop so any previous
+   * scrolling immediately stops.
+   */
+  if (phase == NSEventPhaseMayBegin)
+    return gdk_scroll_event_new (GDK_SURFACE (surface),
+                                 pointer,
+                                 NULL,
+                                 get_time_from_ns_event (nsevent),
+                                 state,
+                                 0.0, 0.0, TRUE);
+
   dx = [nsevent deltaX];
   dy = [nsevent deltaY];
 
@@ -678,31 +689,17 @@ fill_scroll_event (GdkMacosDisplay *self,
       dy = 0.0;
     }
 
-  if (dx != 0.0 || dy != 0.0)
+  if ((dx != 0.0 || dy != 0.0) && ![nsevent hasPreciseScrollingDeltas])
     {
-      if ([nsevent hasPreciseScrollingDeltas])
-        {
-          GdkEvent *emulated;
+      g_assert (ret == NULL);
 
-          emulated = gdk_scroll_event_new_discrete (GDK_SURFACE (surface),
-                                                    pointer,
-                                                    NULL,
-                                                    get_time_from_ns_event (nsevent),
-                                                    state,
-                                                    direction,
-                                                    TRUE);
-          _gdk_event_queue_append (GDK_DISPLAY (self), emulated);
-        }
-      else
-        {
-          ret = gdk_scroll_event_new_discrete (GDK_SURFACE (surface),
-                                               pointer,
-                                               NULL,
-                                               get_time_from_ns_event (nsevent),
-                                               state,
-                                               direction,
-                                               FALSE);
-        }
+      ret = gdk_scroll_event_new_discrete (GDK_SURFACE (surface),
+                                           pointer,
+                                           NULL,
+                                           get_time_from_ns_event (nsevent),
+                                           state,
+                                           direction,
+                                           FALSE);
     }
 
   if (phase == NSEventPhaseEnded || phase == NSEventPhaseCancelled)

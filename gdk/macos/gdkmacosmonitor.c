@@ -22,16 +22,21 @@
 #include <gdk/gdk.h>
 #include <math.h>
 
+#include "gdkdisplaylinksource.h"
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosmonitor-private.h"
+#include "gdkmacossurface-private.h"
 #include "gdkmacosutils-private.h"
 
 struct _GdkMacosMonitor
 {
-  GdkMonitor        parent_instance;
-  CGDirectDisplayID screen_id;
-  NSRect            workarea;
-  guint             has_opengl : 1;
+  GdkMonitor            parent_instance;
+  CGDirectDisplayID     screen_id;
+  GdkDisplayLinkSource *display_link;
+  NSRect                workarea;
+  GQueue                awaiting_frames;
+  guint                 has_opengl : 1;
+  guint                 in_frame : 1;
 };
 
 struct _GdkMacosMonitorClass
@@ -76,8 +81,25 @@ gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
 }
 
 static void
+gdk_macos_monitor_dispose (GObject *object)
+{
+  GdkMacosMonitor *self = (GdkMacosMonitor *)object;
+
+  if (self->display_link)
+    {
+      g_source_destroy ((GSource *)self->display_link);
+      g_clear_pointer ((GSource **)&self->display_link, g_source_unref);
+    }
+
+  G_OBJECT_CLASS (gdk_macos_monitor_parent_class)->dispose (object);
+}
+
+static void
 gdk_macos_monitor_class_init (GdkMacosMonitorClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = gdk_macos_monitor_dispose;
 }
 
 static void
@@ -138,8 +160,8 @@ GetSubpixelLayout (CGDirectDisplayID screen_id)
   return GDK_SUBPIXEL_LAYOUT_UNKNOWN;
 }
 
-static char *
-GetLocalizedName (NSScreen *screen)
+char *
+_gdk_macos_monitor_get_localized_name (NSScreen *screen)
 {
 #ifdef AVAILABLE_MAC_OS_X_VERSION_10_15_AND_LATER
   GDK_BEGIN_MACOS_ALLOC_POOL;
@@ -160,8 +182,8 @@ GetLocalizedName (NSScreen *screen)
 #endif
 }
 
-static char *
-GetConnectorName (CGDirectDisplayID screen_id)
+char *
+_gdk_macos_monitor_get_connector_name (CGDirectDisplayID screen_id)
 {
   guint unit = CGDisplayUnitNumber (screen_id);
   return g_strdup_printf ("unit-%u", unit);
@@ -186,6 +208,68 @@ find_screen (CGDirectDisplayID screen_id)
   GDK_END_MACOS_ALLOC_POOL;
 
   return screen;
+}
+
+static gboolean
+gdk_macos_monitor_display_link_cb (GdkMacosMonitor *self)
+{
+  gint64 presentation_time;
+  gint64 refresh_interval;
+  gint64 now;
+  GList *iter;
+
+  g_assert (GDK_IS_MACOS_MONITOR (self));
+  g_assert (!self->display_link->paused);
+
+  self->in_frame = TRUE;
+
+  presentation_time = self->display_link->presentation_time;
+  refresh_interval = self->display_link->refresh_interval;
+  now = g_source_get_time ((GSource *)self->display_link);
+
+  iter = self->awaiting_frames.head;
+
+  while (iter != NULL)
+    {
+      GdkMacosSurface *surface = iter->data;
+
+      g_assert (GDK_IS_MACOS_SURFACE (surface));
+
+      iter = iter->next;
+
+      g_queue_unlink (&self->awaiting_frames, &surface->frame);
+      _gdk_macos_surface_frame_presented (surface, presentation_time, refresh_interval);
+    }
+
+  if (self->awaiting_frames.length == 0 && !self->display_link->paused)
+    gdk_display_link_source_pause (self->display_link);
+
+  self->in_frame = FALSE;
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+_gdk_macos_monitor_reset_display_link (GdkMacosMonitor  *self,
+                                       CGDisplayModeRef  mode)
+{
+  GSource *source;
+
+  g_assert (GDK_IS_MACOS_MONITOR (self));
+
+  if (self->display_link)
+    {
+      g_source_destroy ((GSource *)self->display_link);
+      g_clear_pointer ((GSource **)&self->display_link, g_source_unref);
+    }
+
+  source = gdk_display_link_source_new (self->screen_id, mode);
+  self->display_link = (GdkDisplayLinkSource *)source;
+  g_source_set_callback (source,
+                         (GSourceFunc) gdk_macos_monitor_display_link_cb,
+                         self,
+                         NULL);
+  g_source_attach (source, NULL);
 }
 
 gboolean
@@ -222,8 +306,8 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
   pixel_width = CGDisplayModeGetPixelWidth (mode);
   has_opengl = CGDisplayUsesOpenGLAcceleration (self->screen_id);
   subpixel_layout = GetSubpixelLayout (self->screen_id);
-  name = GetLocalizedName (screen);
-  connector = GetConnectorName (self->screen_id);
+  name = _gdk_macos_monitor_get_localized_name (screen);
+  connector = _gdk_macos_monitor_get_connector_name (self->screen_id);
 
   if (width != 0 && pixel_width != 0)
     scale_factor = MAX (1, pixel_width / width);
@@ -241,7 +325,7 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
    * setting (which is also used by the frame clock).
    */
   if (!(refresh_rate = CGDisplayModeGetRefreshRate (mode)))
-    refresh_rate = _gdk_macos_display_get_nominal_refresh_rate (display);
+    refresh_rate = 60 * 1000;
 
   gdk_monitor_set_connector (GDK_MONITOR (self), connector);
   gdk_monitor_set_model (GDK_MONITOR (self), name);
@@ -260,6 +344,9 @@ _gdk_macos_monitor_reconfigure (GdkMacosMonitor *self)
    * an emulator such as QEMU.
    */
   self->has_opengl = !!has_opengl;
+
+  /* Create a new display link to receive feedback about when to render */
+  _gdk_macos_monitor_reset_display_link (self, mode);
 
   CGDisplayModeRelease (mode);
   g_free (name);
@@ -301,4 +388,46 @@ _gdk_macos_monitor_copy_colorspace (GdkMacosMonitor *self)
   g_return_val_if_fail (GDK_IS_MACOS_MONITOR (self), NULL);
 
   return CGDisplayCopyColorSpace (self->screen_id);
+}
+
+void
+_gdk_macos_monitor_add_frame_callback (GdkMacosMonitor *self,
+                                       GdkMacosSurface *surface)
+{
+  g_return_if_fail (GDK_IS_MACOS_MONITOR (self));
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
+  g_return_if_fail (surface->frame.data == (gpointer)surface);
+  g_return_if_fail (surface->frame.prev == NULL);
+  g_return_if_fail (surface->frame.next == NULL);
+  g_return_if_fail (self->awaiting_frames.head != &surface->frame);
+  g_return_if_fail (self->awaiting_frames.tail != &surface->frame);
+
+  /* Processing frames is always head to tail, so push to the
+   * head so that we don't possibly re-enter this right after
+   * adding to the queue.
+   */
+  if (!queue_contains (&self->awaiting_frames, &surface->frame))
+    {
+      g_queue_push_head_link (&self->awaiting_frames, &surface->frame);
+
+      if (!self->in_frame && self->awaiting_frames.length == 1)
+        gdk_display_link_source_unpause (self->display_link);
+    }
+}
+
+void
+_gdk_macos_monitor_remove_frame_callback (GdkMacosMonitor *self,
+                                          GdkMacosSurface *surface)
+{
+  g_return_if_fail (GDK_IS_MACOS_MONITOR (self));
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
+  g_return_if_fail (surface->frame.data == (gpointer)surface);
+
+  if (queue_contains (&self->awaiting_frames, &surface->frame))
+    {
+      g_queue_unlink (&self->awaiting_frames, &surface->frame);
+
+      if (!self->in_frame && self->awaiting_frames.length == 0)
+        gdk_display_link_source_pause (self->display_link);
+    }
 }

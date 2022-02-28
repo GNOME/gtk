@@ -8,6 +8,7 @@ gdk_macos_sources = files([
   'gdkmacoscursor.c',
   'gdkmacosdevice.c',
   'gdkmacosdisplay.c',
+  'gdkmacosdisplay-feedback.c',
   'gdkmacosdisplay-settings.c',
   'gdkmacosdisplay-translate.c',
   'gdkmacosdisplay-wm.c',
