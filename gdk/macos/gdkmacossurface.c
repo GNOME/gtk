@@ -27,6 +27,7 @@
 
 #include "gdkmacossurface-private.h"
 
+#include "gdkdebug.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"
@@ -1090,7 +1091,10 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
   if (g_set_object (&self->best_monitor, best))
     {
-      /* TODO: change frame clock to new monitor */
+      GDK_NOTE (MISC,
+                g_message ("Surface \"%s\" moved to monitor \"%s\"",
+                           self->title ? self->title : "unknown",
+                           gdk_monitor_get_connector (best)));
     }
 
   _gdk_macos_surface_configure (self);
