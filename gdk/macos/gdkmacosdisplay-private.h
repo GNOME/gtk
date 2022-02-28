@@ -68,16 +68,6 @@ struct _GdkMacosDisplay
    */
   GQueue sorted_surfaces;
 
-  /* Our CVDisplayLink based GSource which we use to freeze/thaw the
-   * GdkFrameClock for the surface.
-   */
-  GSource *frame_source;
-
-  /* A queue of surfaces which we know are awaiting frames to be drawn. This
-   * uses the GdkMacosSurface.frame link.
-   */
-  GQueue awaiting_frames;
-
   /* The surface that is receiving keyboard events */
   GdkMacosSurface *keyboard_surface;
 
@@ -138,10 +128,6 @@ GdkMacosSurface *_gdk_macos_display_get_surface_at_display_coords  (GdkMacosDisp
 void             _gdk_macos_display_reload_monitors                (GdkMacosDisplay *self);
 void             _gdk_macos_display_surface_removed                (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
-void             _gdk_macos_display_add_frame_callback             (GdkMacosDisplay *self,
-                                                                    GdkMacosSurface *surface);
-void             _gdk_macos_display_remove_frame_callback          (GdkMacosDisplay *self,
-                                                                    GdkMacosSurface *surface);
 NSWindow        *_gdk_macos_display_find_native_under_pointer      (GdkMacosDisplay *self,
                                                                     int             *x,
                                                                     int             *y);
@@ -157,7 +143,6 @@ void             _gdk_macos_display_surface_resigned_key           (GdkMacosDisp
                                                                     GdkMacosSurface *surface);
 void             _gdk_macos_display_surface_became_key             (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
-int              _gdk_macos_display_get_nominal_refresh_rate       (GdkMacosDisplay *self);
 void             _gdk_macos_display_clear_sorting                  (GdkMacosDisplay *self);
 const GList     *_gdk_macos_display_get_surfaces                   (GdkMacosDisplay *self);
 void             _gdk_macos_display_send_button_event              (GdkMacosDisplay *self,
