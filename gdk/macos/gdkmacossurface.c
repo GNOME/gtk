@@ -963,13 +963,17 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   GdkDisplay *display;
   NSRect content_rect;
   NSRect frame_rect;
+  gboolean ignore_move;
+  gboolean ignore_size;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
-  if ((x == -1 || (x == self->root_x)) &&
-      (y == -1 || (y == self->root_y)) &&
-      (width == -1 || (width == surface->width)) &&
-      (height == -1 || (height == surface->height)))
+  ignore_move = (x == -1 || (x == self->root_x)) &&
+                (y == -1 || (y == self->root_y));
+  ignore_size = (width == -1 || (width == surface->width)) &&
+                (height == -1 || (height == surface->height));
+
+  if (ignore_move && ignore_size)
     return;
 
   display = gdk_surface_get_display (surface);
@@ -990,7 +994,14 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
                                         x, y + height,
                                         &x, &y);
 
-  content_rect = NSMakeRect (x, y, width, height);
+  content_rect = [self->window contentRectForFrameRect:[self->window frame]];
+
+  if (!ignore_move)
+    content_rect.origin = NSMakePoint (x, y);
+
+  if (!ignore_size)
+    content_rect.size = NSMakeSize (width, height);
+
   frame_rect = [self->window frameRectForContentRect:content_rect];
   [self->window setFrame:frame_rect display:YES];
 }
