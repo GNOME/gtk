@@ -684,6 +684,8 @@ _gdk_macos_display_open (const char *display_name)
 
   gdk_display_emit_opened (GDK_DISPLAY (self));
 
+  [NSApp activateIgnoringOtherApps:YES];
+
   return GDK_DISPLAY (self);
 }
 
