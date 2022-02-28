@@ -2202,25 +2202,27 @@ gtk_range_scroll_controller_scroll (GtkEventControllerScroll *scroll,
                                     GtkRange                 *range)
 {
   GtkRangePrivate *priv = gtk_range_get_instance_private (range);
-  double scroll_unit, delta;
+  double delta;
   gboolean handled;
   GtkOrientation move_orientation;
-
-#ifdef GDK_WINDOWING_MACOS
-  scroll_unit = 1;
-#else
-  scroll_unit = gtk_adjustment_get_page_increment (priv->adjustment);
-#endif
+  GdkScrollUnit scroll_unit;
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL && dx != 0)
     {
       move_orientation = GTK_ORIENTATION_HORIZONTAL;
-      delta = dx * scroll_unit;
+      delta = dx;
     }
   else
     {
       move_orientation = GTK_ORIENTATION_VERTICAL;
-      delta = dy * scroll_unit;
+      delta = dy;
+    }
+
+  scroll_unit = gtk_event_controller_scroll_get_unit (scroll);
+
+  if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
+    {
+      delta *= gtk_adjustment_get_page_increment (priv->adjustment);
     }
 
   if (delta != 0 && should_invert_move (range, move_orientation))
