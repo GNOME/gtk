@@ -29,11 +29,15 @@
 
 G_BEGIN_DECLS
 
-GdkMacosMonitor   *_gdk_macos_monitor_new             (GdkMacosDisplay   *display,
-                                                       CGDirectDisplayID  screen_id);
-CGDirectDisplayID  _gdk_macos_monitor_get_screen_id   (GdkMacosMonitor   *self);
-gboolean           _gdk_macos_monitor_reconfigure     (GdkMacosMonitor   *self);
-CGColorSpaceRef    _gdk_macos_monitor_copy_colorspace (GdkMacosMonitor   *self);
+GdkMacosMonitor   *_gdk_macos_monitor_new                   (GdkMacosDisplay   *display,
+                                                             CGDirectDisplayID  screen_id);
+CGDirectDisplayID  _gdk_macos_monitor_get_screen_id         (GdkMacosMonitor   *self);
+gboolean           _gdk_macos_monitor_reconfigure           (GdkMacosMonitor   *self);
+CGColorSpaceRef    _gdk_macos_monitor_copy_colorspace       (GdkMacosMonitor   *self);
+void               _gdk_macos_monitor_add_frame_callback    (GdkMacosMonitor   *self,
+                                                             GdkMacosSurface   *surface);
+void               _gdk_macos_monitor_remove_frame_callback (GdkMacosMonitor   *self,
+                                                             GdkMacosSurface   *surface);
 
 G_END_DECLS
 
