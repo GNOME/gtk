@@ -5271,14 +5271,15 @@ gtk_window_present_with_time (GtkWindow *window,
 #endif
 	    timestamp = gtk_get_current_event_time ();
         }
-
-      gdk_toplevel_focus (GDK_TOPLEVEL (surface), timestamp);
     }
   else
     {
       priv->initial_timestamp = timestamp;
       gtk_widget_show (widget);
     }
+
+  g_assert (priv->surface != NULL);
+  gdk_toplevel_focus (GDK_TOPLEVEL (priv->surface), timestamp);
 }
 
 /**

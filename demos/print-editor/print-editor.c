@@ -871,7 +871,7 @@ activate (GApplication *app)
 
   update_ui ();
 
-  gtk_widget_show (main_window);
+  gtk_window_present (GTK_WINDOW (main_window));
 }
 
 static void
