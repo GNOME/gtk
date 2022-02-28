@@ -33,7 +33,7 @@ gdk_quartz_monitor_get_workarea (GdkMonitor   *monitor,
   GDK_QUARTZ_ALLOC_POOL;
 
   NSArray *array = [NSScreen screens];
-  NSScreen* screen;
+  NSScreen* screen = NULL;
   for (id obj in array)
     {
       CGDirectDisplayID screen_id =
