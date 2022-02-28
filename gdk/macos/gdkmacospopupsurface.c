@@ -87,6 +87,9 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
 
   gdk_surface_get_origin (GDK_SURFACE (self)->parent, &x, &y);
 
+  GDK_SURFACE (self)->x = final_rect.x;
+  GDK_SURFACE (self)->y = final_rect.y;
+
   x += final_rect.x;
   y += final_rect.y;
 
@@ -391,9 +394,7 @@ _gdk_macos_popup_surface_reposition (GdkMacosPopupSurface *self)
 {
   g_return_if_fail (GDK_IS_MACOS_POPUP_SURFACE (self));
 
-  if (self->layout == NULL ||
-      !gdk_surface_get_mapped (GDK_SURFACE (self)) ||
-      GDK_SURFACE (self)->parent == NULL)
+  if (self->layout == NULL || GDK_SURFACE (self)->parent == NULL)
     return;
 
   gdk_macos_popup_surface_layout (self,
