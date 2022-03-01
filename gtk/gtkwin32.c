@@ -41,6 +41,7 @@
 
 static HMODULE gtk_dll;
 
+#ifdef DLL_EXPORT
 BOOL WINAPI
 DllMain (HINSTANCE hinstDLL,
          DWORD     fdwReason,
@@ -55,6 +56,7 @@ DllMain (HINSTANCE hinstDLL,
 
   return TRUE;
 }
+#endif
 
 static BOOL CALLBACK
 find_first_manifest (HMODULE  module_handle,
