@@ -49,6 +49,7 @@
 
 static gboolean gdk_synchronize = FALSE;
 
+#ifdef DLL_EXPORT
 BOOL WINAPI
 DllMain (HINSTANCE hinstDLL,
 	 DWORD     dwReason,
@@ -58,6 +59,7 @@ DllMain (HINSTANCE hinstDLL,
 
   return TRUE;
 }
+#endif
 
 void
 _gdk_win32_windowing_init (void)
