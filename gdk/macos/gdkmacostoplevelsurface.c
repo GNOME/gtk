@@ -648,10 +648,10 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
 
   GdkMacosWindow *window;
   GdkMacosSurface *self;
-  NSScreen *screen;
   NSUInteger style_mask;
   NSRect content_rect;
-  NSRect screen_rect;
+  NSRect visible_frame;
+  NSScreen *screen;
   int nx;
   int ny;
 
@@ -664,14 +664,17 @@ _gdk_macos_toplevel_surface_new (GdkMacosDisplay *display,
                 NSWindowStyleMaskMiniaturizable |
                 NSWindowStyleMaskResizable);
 
-  _gdk_macos_display_to_display_coords (display, x, y, &nx, &ny);
+  if (parent != NULL)
+    {
+      x += GDK_MACOS_SURFACE (parent)->root_x;
+      y += GDK_MACOS_SURFACE (parent)->root_y;
+    }
+
+  _gdk_macos_display_to_display_coords (display, x, y + height, &nx, &ny);
 
   screen = _gdk_macos_display_get_screen_at_display_coords (display, nx, ny);
-  screen_rect = [screen visibleFrame];
-  nx -= screen_rect.origin.x;
-  ny -= screen_rect.origin.y;
-  content_rect = NSMakeRect (nx, ny - height, width, height);
-
+  visible_frame = [screen visibleFrame];
+  content_rect = NSMakeRect (nx - visible_frame.origin.x, ny - visible_frame.origin.y, width, height);
   window = [[GdkMacosWindow alloc] initWithContentRect:content_rect
                                              styleMask:style_mask
                                                backing:NSBackingStoreBuffered
@@ -707,13 +710,21 @@ _gdk_macos_toplevel_surface_attach_to_parent (GdkMacosToplevelSurface *self)
     {
       NSWindow *parent = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (surface->transient_for));
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+      int x, y;
 
       [parent addChildWindow:window ordered:NSWindowAbove];
 
       if (GDK_SURFACE (self)->modal_hint)
         [window setLevel:NSModalPanelWindowLevel];
 
+      surface->x = 0;
+      surface->y = 0;
+
       _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
+      _gdk_macos_display_position_surface (GDK_MACOS_DISPLAY (surface->display),
+                                           GDK_MACOS_SURFACE (surface),
+                                           &x, &y);
+      _gdk_macos_surface_move (GDK_MACOS_SURFACE (surface), x, y);
     }
 }
 
