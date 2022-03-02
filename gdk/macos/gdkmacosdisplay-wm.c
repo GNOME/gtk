@@ -20,7 +20,7 @@
 #include "config.h"
 
 #include "gdkmacosdisplay-private.h"
-#include "gdkmacosmonitor.h"
+#include "gdkmacosmonitor-private.h"
 #include "gdkmacossurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 
@@ -36,47 +36,28 @@ _gdk_macos_display_position_toplevel_with_parent (GdkMacosDisplay *self,
 {
   GdkRectangle surface_rect;
   GdkRectangle parent_rect;
-  GdkRectangle workarea;
   GdkMonitor *monitor;
 
   g_assert (GDK_IS_MACOS_DISPLAY (self));
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (surface));
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (parent));
 
-  /* If x/y is set, we should place relative to parent */
-  if (GDK_SURFACE (surface)->x != 0 || GDK_SURFACE (surface)->y != 0)
-    {
-      *x = parent->root_x + GDK_SURFACE (surface)->x;
-      *y = parent->root_y + GDK_SURFACE (surface)->y;
-      return;
-    }
+  monitor = _gdk_macos_surface_get_best_monitor (parent);
 
   /* Try to center on top of the parent but also try to make the whole thing
    * visible in case that lands us under the topbar/panel/etc.
    */
-  surface_rect.x = surface->root_x + surface->shadow_left;
-  surface_rect.y = surface->root_y + surface->shadow_top;
+  parent_rect.x = parent->root_x + parent->shadow_left;
+  parent_rect.y = parent->root_y + parent->shadow_top;
+  parent_rect.width = GDK_SURFACE (parent)->width - parent->shadow_left - parent->shadow_right;
+  parent_rect.height = GDK_SURFACE (parent)->height - parent->shadow_top - parent->shadow_bottom;
+
   surface_rect.width = GDK_SURFACE (surface)->width - surface->shadow_left - surface->shadow_right;
   surface_rect.height = GDK_SURFACE (surface)->height - surface->shadow_top - surface->shadow_bottom;
-
-  parent_rect.x = parent->root_x + surface->shadow_left;
-  parent_rect.y = parent->root_y + surface->shadow_top;
-  parent_rect.width = GDK_SURFACE (parent)->width - surface->shadow_left - surface->shadow_right;
-  parent_rect.height = GDK_SURFACE (parent)->height - surface->shadow_top - surface->shadow_bottom;
-
-  /* Try to place centered atop parent */
   surface_rect.x = parent_rect.x + ((parent_rect.width - surface_rect.width) / 2);
   surface_rect.y = parent_rect.y + ((parent_rect.height - surface_rect.height) / 2);
 
-  /* Now make sure that we don't overlap the top-bar */
-  monitor = _gdk_macos_surface_get_best_monitor (parent);
-  gdk_macos_monitor_get_workarea (monitor, &workarea);
-
-  if (surface_rect.x < workarea.x)
-    surface_rect.x = workarea.x;
-
-  if (surface_rect.y < workarea.y)
-    surface_rect.y = workarea.y;
+  _gdk_macos_monitor_clamp (GDK_MACOS_MONITOR (monitor), &surface_rect);
 
   *x = surface_rect.x - surface->shadow_left;
   *y = surface_rect.y - surface->shadow_top;
@@ -123,11 +104,7 @@ _gdk_macos_display_position_toplevel (GdkMacosDisplay *self,
   surface_rect.x = workarea.x + ((workarea.width - surface_rect.width) / 2);
   surface_rect.y = workarea.y + ((workarea.height - surface_rect.height) / 2);
 
-  if (surface_rect.x < workarea.x)
-    surface_rect.x = workarea.x;
-
-  if (surface_rect.y < workarea.y)
-    surface_rect.y = workarea.y;
+  _gdk_macos_monitor_clamp (GDK_MACOS_MONITOR (surface->best_monitor), &surface_rect);
 
   *x = surface_rect.x - surface->shadow_left;
   *y = surface_rect.y - surface->shadow_top;
