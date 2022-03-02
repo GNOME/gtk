@@ -158,9 +158,6 @@ _gdk_macos_surface_reposition_children (GdkMacosSurface *self)
       if (GDK_IS_MACOS_POPUP_SURFACE (child))
         _gdk_macos_popup_surface_reposition (GDK_MACOS_POPUP_SURFACE (child));
     }
-
-  if (GDK_IS_POPUP (self) && self->did_initial_present)
-    gdk_surface_request_layout (GDK_SURFACE (self));
 }
 
 static void
@@ -877,7 +874,6 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
       g_clear_object (&self->front);
 
       _gdk_surface_update_size (surface);
-      gdk_surface_request_layout (surface);
       gdk_surface_invalidate_rect (surface, NULL);
     }
 
@@ -1136,7 +1132,6 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
   gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
 
   self->in_change_monitor = FALSE;
-  _gdk_macos_surface_request_frame (self);
 }
 
 GdkMonitor *
