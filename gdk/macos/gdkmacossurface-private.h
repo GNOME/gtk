@@ -75,6 +75,7 @@ struct _GdkMacosSurface
   guint geometry_dirty : 1;
   guint next_frame_set : 1;
   guint show_on_next_swap : 1;
+  guint in_change_monitor : 1;
   guint in_frame : 1;
   guint awaiting_frame : 1;
 };
