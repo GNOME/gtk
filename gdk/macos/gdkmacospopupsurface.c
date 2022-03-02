@@ -275,7 +275,7 @@ _gdk_macos_popup_surface_class_init (GdkMacosPopupSurfaceClass *klass)
   object_class->get_property = _gdk_macos_popup_surface_get_property;
   object_class->set_property = _gdk_macos_popup_surface_set_property;
 
-  gdk_popup_install_properties (object_class, 1);
+  gdk_popup_install_properties (object_class, LAST_PROP);
 }
 
 static void

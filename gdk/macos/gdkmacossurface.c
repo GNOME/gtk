@@ -72,9 +72,12 @@ _gdk_macos_surface_request_frame (GdkMacosSurface *self)
   if (self->awaiting_frame)
     return;
 
-  self->awaiting_frame = TRUE;
-  _gdk_macos_monitor_add_frame_callback (GDK_MACOS_MONITOR (self->best_monitor), self);
-  gdk_surface_freeze_updates (GDK_SURFACE (self));
+  if (self->best_monitor != NULL)
+    {
+      self->awaiting_frame = TRUE;
+      _gdk_macos_monitor_add_frame_callback (GDK_MACOS_MONITOR (self->best_monitor), self);
+      gdk_surface_freeze_updates (GDK_SURFACE (self));
+    }
 }
 
 static void
@@ -85,9 +88,12 @@ _gdk_macos_surface_cancel_frame (GdkMacosSurface *self)
   if (!self->awaiting_frame)
     return;
 
-  self->awaiting_frame = FALSE;
-  _gdk_macos_monitor_remove_frame_callback (GDK_MACOS_MONITOR (self->best_monitor), self);
-  gdk_surface_thaw_updates (GDK_SURFACE (self));
+  if (self->best_monitor != NULL)
+    {
+      self->awaiting_frame = FALSE;
+      _gdk_macos_monitor_remove_frame_callback (GDK_MACOS_MONITOR (self->best_monitor), self);
+      gdk_surface_thaw_updates (GDK_SURFACE (self));
+    }
 }
 
 void
@@ -152,9 +158,6 @@ _gdk_macos_surface_reposition_children (GdkMacosSurface *self)
       if (GDK_IS_MACOS_POPUP_SURFACE (child))
         _gdk_macos_popup_surface_reposition (GDK_MACOS_POPUP_SURFACE (child));
     }
-
-  if (GDK_IS_POPUP (self) && self->did_initial_present)
-    gdk_surface_request_layout (GDK_SURFACE (self));
 }
 
 static void
@@ -199,7 +202,9 @@ gdk_macos_surface_hide (GdkSurface *surface)
 
   self->show_on_next_swap = FALSE;
 
-  was_mapped = GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self));
+  _gdk_macos_surface_cancel_frame (self);
+
+  was_mapped = GDK_SURFACE_IS_MAPPED (surface);
   was_key = [self->window isKeyWindow];
 
   seat = gdk_display_get_default_seat (surface->display);
@@ -221,13 +226,6 @@ gdk_macos_surface_hide (GdkSurface *surface)
 
           [parentWindow showAndMakeKey:YES];
         }
-    }
-
-  if (self->awaiting_frame)
-    {
-      self->awaiting_frame = FALSE;
-      _gdk_macos_monitor_remove_frame_callback (GDK_MACOS_MONITOR (self->best_monitor), self);
-      gdk_surface_freeze_updates (surface);
     }
 }
 
@@ -469,16 +467,8 @@ gdk_macos_surface_destroy (GdkSurface *surface,
   GdkMacosWindow *window = g_steal_pointer (&self->window);
   GdkFrameClock *frame_clock;
 
-  if (self->best_monitor)
-    {
-      if (self->awaiting_frame)
-        {
-          _gdk_macos_monitor_remove_frame_callback (GDK_MACOS_MONITOR (self->best_monitor), self);
-          self->awaiting_frame = FALSE;
-        }
-
-      g_clear_object (&self->best_monitor);
-    }
+  _gdk_macos_surface_cancel_frame (self);
+  g_clear_object (&self->best_monitor);
 
   if ((frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self))))
     {
@@ -636,7 +626,10 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
 
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
 
-  frame_clock = _gdk_frame_clock_idle_new ();
+  if (parent != NULL)
+    frame_clock = g_object_ref (parent->frame_clock);
+  else
+    frame_clock = _gdk_frame_clock_idle_new ();
 
   switch (surface_type)
     {
@@ -844,8 +837,9 @@ _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
 void
 _gdk_macos_surface_configure (GdkMacosSurface *self)
 {
-  GdkMacosDisplay *display;
   GdkSurface *surface = (GdkSurface *)self;
+  GdkMacosDisplay *display;
+  GdkMacosSurface *parent;
   NSRect frame_rect;
   NSRect content_rect;
 
@@ -853,6 +847,13 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
 
   if (GDK_SURFACE_DESTROYED (self))
     return;
+
+  if (surface->parent != NULL)
+    parent = GDK_MACOS_SURFACE (surface->parent);
+  else if (surface->transient_for != NULL)
+    parent = GDK_MACOS_SURFACE (surface->transient_for);
+  else
+    parent = NULL;
 
   display = GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display);
   frame_rect = [self->window frame];
@@ -863,10 +864,10 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
                                           content_rect.origin.y + content_rect.size.height,
                                           &self->root_x, &self->root_y);
 
-  if (surface->parent != NULL)
+  if (parent != NULL)
     {
-      surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
-      surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
+      surface->x = self->root_x - parent->root_x;
+      surface->y = self->root_y - parent->root_y;
     }
   else
     {
@@ -884,7 +885,6 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
       g_clear_object (&self->front);
 
       _gdk_surface_update_size (surface);
-      gdk_surface_request_layout (surface);
       gdk_surface_invalidate_rect (surface, NULL);
     }
 
@@ -910,6 +910,7 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
     {
       gdk_surface_set_is_mapped (GDK_SURFACE (self), TRUE);
       gdk_surface_request_layout (GDK_SURFACE (self));
+      gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
       gdk_surface_thaw_updates (GDK_SURFACE (self));
     }
 }
@@ -965,13 +966,27 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   NSRect frame_rect;
   gboolean ignore_move;
   gboolean ignore_size;
+  GdkRectangle current;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
-  ignore_move = (x == -1 || (x == self->root_x)) &&
-                (y == -1 || (y == self->root_y));
-  ignore_size = (width == -1 || (width == surface->width)) &&
-                (height == -1 || (height == surface->height));
+  /* Query for up-to-date values in case we're racing against
+   * an incoming frame notify which could be queued behind whatever
+   * we're processing right now.
+   */
+  frame_rect = [self->window frame];
+  content_rect = [self->window contentRectForFrameRect:frame_rect];
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display),
+                                          content_rect.origin.x, content_rect.origin.y,
+                                          &current.x, &current.y);
+  current.width = content_rect.size.width;
+  current.height = content_rect.size.height;
+
+  /* Check if we can ignore the operation all together */
+  ignore_move = (x == -1 || (x == current.x)) &&
+                (y == -1 || (y == current.y));
+  ignore_size = (width == -1 || (width == current.width)) &&
+                (height == -1 || (height == current.height));
 
   if (ignore_move && ignore_size)
     return;
@@ -979,22 +994,20 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   display = gdk_surface_get_display (surface);
 
   if (width == -1)
-    width = surface->width;
+    width = current.width;
 
   if (height == -1)
-    height = surface->height;
+    height = current.height;
 
   if (x == -1)
-    x = self->root_x;
+    x = current.x;
 
   if (y == -1)
-    y = self->root_y;
+    y = current.y;
 
   _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
                                         x, y + height,
                                         &x, &y);
-
-  content_rect = [self->window contentRectForFrameRect:[self->window frame]];
 
   if (!ignore_move)
     content_rect.origin = NSMakePoint (x, y);
@@ -1003,7 +1016,7 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
     content_rect.size = NSMakeSize (width, height);
 
   frame_rect = [self->window frameRectForContentRect:content_rect];
-  [self->window setFrame:frame_rect display:YES];
+  [self->window setFrame:frame_rect display:NO];
 }
 
 void
@@ -1068,7 +1081,13 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
+  if (self->in_change_monitor)
+    return;
+
+  self->in_change_monitor = TRUE;
+
   _gdk_macos_surface_cancel_frame (self);
+  _gdk_macos_surface_configure (self);
 
   rect.x = self->root_x;
   rect.y = self->root_y;
@@ -1132,11 +1151,42 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
                 g_message ("Surface \"%s\" moved to monitor \"%s\"",
                            self->title ? self->title : "unknown",
                            gdk_monitor_get_connector (best)));
+
+      _gdk_macos_surface_configure (self);
+
+      if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self)))
+        {
+          _gdk_macos_surface_request_frame (self);
+          gdk_surface_request_layout (GDK_SURFACE (self));
+        }
+
+      for (const GList *iter = GDK_SURFACE (self)->children;
+           iter != NULL;
+           iter = iter->next)
+        {
+          GdkMacosSurface *child = iter->data;
+          GdkRectangle area;
+
+          g_set_object (&child->best_monitor, best);
+
+          area.x = self->root_x + GDK_SURFACE (child)->x + child->shadow_left;
+          area.y = self->root_y + GDK_SURFACE (child)->y + child->shadow_top;
+          area.width = GDK_SURFACE (child)->width - child->shadow_left - child->shadow_right;
+          area.height = GDK_SURFACE (child)->height - child->shadow_top - child->shadow_bottom;
+
+          _gdk_macos_monitor_clamp (GDK_MACOS_MONITOR (best), &area);
+
+          area.x -= child->shadow_left;
+          area.y -= child->shadow_top;
+
+          _gdk_macos_surface_move (child, area.x, area.y);
+          gdk_surface_invalidate_rect (GDK_SURFACE (child), NULL);
+        }
     }
 
-  _gdk_macos_surface_configure (self);
   gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
-  _gdk_macos_surface_request_frame (self);
+
+  self->in_change_monitor = FALSE;
 }
 
 GdkMonitor *
@@ -1220,11 +1270,15 @@ _gdk_macos_surface_get_buffer (GdkMacosSurface *self)
 static void
 _gdk_macos_surface_do_delayed_show (GdkMacosSurface *self)
 {
+  GdkSurface *surface = (GdkSurface *)self;
+
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
   self->show_on_next_swap = FALSE;
   [self->window showAndMakeKey:YES];
-  gdk_surface_request_motion (GDK_SURFACE (self));
+
+  _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
+  gdk_surface_request_motion (surface);
 }
 
 void
