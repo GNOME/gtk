@@ -621,7 +621,10 @@ _gdk_macos_surface_new (GdkMacosDisplay   *display,
 
   g_return_val_if_fail (GDK_IS_MACOS_DISPLAY (display), NULL);
 
-  frame_clock = _gdk_frame_clock_idle_new ();
+  if (parent != NULL)
+    frame_clock = g_object_ref (parent->frame_clock);
+  else
+    frame_clock = _gdk_frame_clock_idle_new ();
 
   switch (surface_type)
     {
