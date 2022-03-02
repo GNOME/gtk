@@ -965,13 +965,27 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   NSRect frame_rect;
   gboolean ignore_move;
   gboolean ignore_size;
+  GdkRectangle current;
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
-  ignore_move = (x == -1 || (x == self->root_x)) &&
-                (y == -1 || (y == self->root_y));
-  ignore_size = (width == -1 || (width == surface->width)) &&
-                (height == -1 || (height == surface->height));
+  /* Query for up-to-date values in case we're racing against
+   * an incoming frame notify which could be queued behind whatever
+   * we're processing right now.
+   */
+  frame_rect = [self->window frame];
+  content_rect = [self->window contentRectForFrameRect:frame_rect];
+  _gdk_macos_display_from_display_coords (GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display),
+                                          content_rect.origin.x, content_rect.origin.y,
+                                          &current.x, &current.y);
+  current.width = content_rect.size.width;
+  current.height = content_rect.size.height;
+
+  /* Check if we can ignore the operation all together */
+  ignore_move = (x == -1 || (x == current.x)) &&
+                (y == -1 || (y == current.y));
+  ignore_size = (width == -1 || (width == current.width)) &&
+                (height == -1 || (height == current.height));
 
   if (ignore_move && ignore_size)
     return;
@@ -979,22 +993,20 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
   display = gdk_surface_get_display (surface);
 
   if (width == -1)
-    width = surface->width;
+    width = current.width;
 
   if (height == -1)
-    height = surface->height;
+    height = current.height;
 
   if (x == -1)
-    x = self->root_x;
+    x = current.x;
 
   if (y == -1)
-    y = self->root_y;
+    y = current.y;
 
   _gdk_macos_display_to_display_coords (GDK_MACOS_DISPLAY (display),
                                         x, y + height,
                                         &x, &y);
-
-  content_rect = [self->window contentRectForFrameRect:[self->window frame]];
 
   if (!ignore_move)
     content_rect.origin = NSMakePoint (x, y);
@@ -1003,7 +1015,7 @@ _gdk_macos_surface_move_resize (GdkMacosSurface *self,
     content_rect.size = NSMakeSize (width, height);
 
   frame_rect = [self->window frameRectForContentRect:content_rect];
-  [self->window setFrame:frame_rect display:YES];
+  [self->window setFrame:frame_rect display:NO];
 }
 
 void
