@@ -884,6 +884,7 @@ _gdk_macos_surface_show (GdkMacosSurface *self)
     {
       gdk_surface_set_is_mapped (GDK_SURFACE (self), TRUE);
       gdk_surface_request_layout (GDK_SURFACE (self));
+      gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
       gdk_surface_thaw_updates (GDK_SURFACE (self));
     }
 }
