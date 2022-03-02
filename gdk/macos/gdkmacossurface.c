@@ -1061,6 +1061,11 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
+  if (self->in_change_monitor)
+    return;
+
+  self->in_change_monitor = TRUE;
+
   _gdk_macos_surface_cancel_frame (self);
 
   rect.x = self->root_x;
@@ -1129,6 +1134,8 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
   _gdk_macos_surface_configure (self);
   gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
+
+  self->in_change_monitor = FALSE;
   _gdk_macos_surface_request_frame (self);
 }
 
