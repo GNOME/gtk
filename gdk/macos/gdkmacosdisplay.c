@@ -156,6 +156,10 @@ gdk_macos_display_update_bounds (GdkMacosDisplay *self)
   self->width = self->max_x - self->min_x;
   self->height = self->max_y - self->min_y;
 
+  GDK_NOTE (MISC,
+            g_message ("Displays reconfigured to bounds %d,%d %dx%d",
+                       self->min_x, self->min_y, self->width, self->height));
+
   GDK_END_MACOS_ALLOC_POOL;
 }
 
