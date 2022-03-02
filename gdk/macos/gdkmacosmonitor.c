@@ -431,3 +431,29 @@ _gdk_macos_monitor_remove_frame_callback (GdkMacosMonitor *self,
         gdk_display_link_source_pause (self->display_link);
     }
 }
+
+void
+_gdk_macos_monitor_clamp (GdkMacosMonitor *self,
+                          GdkRectangle    *area)
+{
+  GdkRectangle workarea;
+  GdkRectangle geom;
+
+  g_return_if_fail (GDK_IS_MACOS_MONITOR (self));
+  g_return_if_fail (area != NULL);
+
+  gdk_macos_monitor_get_workarea (GDK_MONITOR (self), &workarea);
+  gdk_monitor_get_geometry (GDK_MONITOR (self), &geom);
+
+  if (area->x + area->width > workarea.x + workarea.width)
+    area->x = workarea.x + workarea.width - area->width;
+
+  if (area->x < workarea.x)
+    area->x = workarea.x;
+
+  if (area->y + area->height > workarea.y + workarea.height)
+    area->y = workarea.y + workarea.height - area->height;
+
+  if (area->y < workarea.y)
+    area->y = workarea.y;
+}
