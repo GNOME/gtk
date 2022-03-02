@@ -38,8 +38,6 @@ struct _GdkMacosGLContext
 {
   GdkGLContext parent_instance;
 
-  cairo_region_t *damage;
-
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   CGLContextObj cgl_context;
   G_GNUC_END_IGNORE_DEPRECATIONS
