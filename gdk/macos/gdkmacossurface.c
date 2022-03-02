@@ -1270,11 +1270,15 @@ _gdk_macos_surface_get_buffer (GdkMacosSurface *self)
 static void
 _gdk_macos_surface_do_delayed_show (GdkMacosSurface *self)
 {
+  GdkSurface *surface = (GdkSurface *)self;
+
   g_assert (GDK_IS_MACOS_SURFACE (self));
 
   self->show_on_next_swap = FALSE;
   [self->window showAndMakeKey:YES];
-  gdk_surface_request_motion (GDK_SURFACE (self));
+
+  _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
+  gdk_surface_request_motion (surface);
 }
 
 void
