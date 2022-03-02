@@ -1060,6 +1060,7 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
   self->in_change_monitor = TRUE;
 
   _gdk_macos_surface_cancel_frame (self);
+  _gdk_macos_surface_configure (self);
 
   rect.x = self->root_x;
   rect.y = self->root_y;
@@ -1123,9 +1124,39 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
                 g_message ("Surface \"%s\" moved to monitor \"%s\"",
                            self->title ? self->title : "unknown",
                            gdk_monitor_get_connector (best)));
+
+      _gdk_macos_surface_configure (self);
+
+      if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self)))
+        {
+          _gdk_macos_surface_request_frame (self);
+          gdk_surface_request_layout (GDK_SURFACE (self));
+        }
+
+      for (const GList *iter = GDK_SURFACE (self)->children;
+           iter != NULL;
+           iter = iter->next)
+        {
+          GdkMacosSurface *child = iter->data;
+          GdkRectangle area;
+
+          g_set_object (&child->best_monitor, best);
+
+          area.x = self->root_x + GDK_SURFACE (child)->x + child->shadow_left;
+          area.y = self->root_y + GDK_SURFACE (child)->y + child->shadow_top;
+          area.width = GDK_SURFACE (child)->width - child->shadow_left - child->shadow_right;
+          area.height = GDK_SURFACE (child)->height - child->shadow_top - child->shadow_bottom;
+
+          _gdk_macos_monitor_clamp (GDK_MACOS_MONITOR (best), &area);
+
+          area.x -= child->shadow_left;
+          area.y -= child->shadow_top;
+
+          _gdk_macos_surface_move (child, area.x, area.y);
+          gdk_surface_invalidate_rect (GDK_SURFACE (child), NULL);
+        }
     }
 
-  _gdk_macos_surface_configure (self);
   gdk_surface_invalidate_rect (GDK_SURFACE (self), NULL);
 
   self->in_change_monitor = FALSE;
