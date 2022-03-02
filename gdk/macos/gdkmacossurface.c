@@ -837,8 +837,9 @@ _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
 void
 _gdk_macos_surface_configure (GdkMacosSurface *self)
 {
-  GdkMacosDisplay *display;
   GdkSurface *surface = (GdkSurface *)self;
+  GdkMacosDisplay *display;
+  GdkMacosSurface *parent;
   NSRect frame_rect;
   NSRect content_rect;
 
@@ -846,6 +847,13 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
 
   if (GDK_SURFACE_DESTROYED (self))
     return;
+
+  if (surface->parent != NULL)
+    parent = GDK_MACOS_SURFACE (surface->parent);
+  else if (surface->transient_for != NULL)
+    parent = GDK_MACOS_SURFACE (surface->transient_for);
+  else
+    parent = NULL;
 
   display = GDK_MACOS_DISPLAY (GDK_SURFACE (self)->display);
   frame_rect = [self->window frame];
@@ -856,10 +864,10 @@ _gdk_macos_surface_configure (GdkMacosSurface *self)
                                           content_rect.origin.y + content_rect.size.height,
                                           &self->root_x, &self->root_y);
 
-  if (surface->parent != NULL)
+  if (parent != NULL)
     {
-      surface->x = self->root_x - GDK_MACOS_SURFACE (surface->parent)->root_x;
-      surface->y = self->root_y - GDK_MACOS_SURFACE (surface->parent)->root_y;
+      surface->x = self->root_x - parent->root_x;
+      surface->y = self->root_y - parent->root_y;
     }
   else
     {
