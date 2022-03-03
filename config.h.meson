@@ -230,6 +230,9 @@
 /* Define to the version of this package. */
 #mesondefine PACKAGE_VERSION
 
+/* Define when building a shared library for Windows */
+#mesondefine DLL_EXPORT
+
 /* Use NSBundle functions to determine load paths for libraries, translations,
    etc. */
 #mesondefine QUARTZ_RELOCATION
