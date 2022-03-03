@@ -192,6 +192,28 @@ PREMULTIPLY_FUNC(r8g8b8a8_to_b8g8r8a8_premultiplied, 0, 1, 2, 3, 2, 1, 0, 3)
 PREMULTIPLY_FUNC(r8g8b8a8_to_a8r8g8b8_premultiplied, 0, 1, 2, 3, 1, 2, 3, 0)
 PREMULTIPLY_FUNC(r8g8b8a8_to_a8b8g8r8_premultiplied, 0, 1, 2, 3, 3, 2, 1, 0)
 
+#define ADD_ALPHA_FUNC(name, R1, G1, B1, R2, G2, B2, A2) \
+static void \
+name (guchar *dest, \
+      const guchar *src, \
+      gsize n) \
+{ \
+  for (; n > 0; n--) \
+    { \
+      dest[R2] = src[R1]; \
+      dest[G2] = src[G1]; \
+      dest[B2] = src[B1]; \
+      dest[A2] = 255; \
+      dest += 4; \
+      src += 3; \
+    } \
+}
+
+ADD_ALPHA_FUNC(r8g8b8_to_r8g8b8a8, 0, 1, 2, 0, 1, 2, 3)
+ADD_ALPHA_FUNC(r8g8b8_to_b8g8r8a8, 0, 1, 2, 2, 1, 0, 3)
+ADD_ALPHA_FUNC(r8g8b8_to_a8r8g8b8, 0, 1, 2, 1, 2, 3, 0)
+ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
+
 struct _GdkMemoryFormatDescription
 {
   GdkMemoryAlpha alpha;
@@ -518,6 +540,30 @@ gdk_memory_convert (guchar              *dest_data,
     func = r8g8b8a8_to_a8r8g8b8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
     func = r8g8b8a8_to_a8b8g8r8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    func = r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    func = r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    func = r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    func = r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    func = r8g8b8_to_a8r8g8b8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    func = r8g8b8_to_a8b8g8r8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8)
+    func = r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8)
+    func = r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8)
+    func = r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8)
+    func = r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8)
+    func = r8g8b8_to_a8r8g8b8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8)
+    func = r8g8b8_to_a8b8g8r8;
 
   if (func != NULL)
     {
