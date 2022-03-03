@@ -166,28 +166,31 @@ r32g32b32a32_float_from_float (guchar      *dest,
   memcpy (dest, src, sizeof (float) * n * 4);
 }
 
-// This one conversion is quite important, it converts from RGBA with straight
-// alpha (as found in PNG for instance) to BGRA with premultiplied alpha (the
-// sole cairo format available).
-static void
-r8g8b8a8_to_b8g8r8a8_premultiplied (guchar *dest,
-                                    const guchar *src,
-                                    gsize n)
-{
-  for (; n > 0; n--)
-    {
-      guchar a = src[3];
-      guint16 r = (guint16)src[0] * a + 127;
-      guint16 g = (guint16)src[1] * a + 127;
-      guint16 b = (guint16)src[2] * a + 127;
-      dest[0] = (b + (b >> 8) + 1) >> 8;
-      dest[1] = (g + (g >> 8) + 1) >> 8;
-      dest[2] = (r + (r >> 8) + 1) >> 8;
-      dest[3] = a;
-      dest += 4;
-      src += 4;
-    }
+#define PREMULTIPLY_FUNC(name, R1, G1, B1, A1, R2, G2, B2, A2) \
+static void \
+name (guchar *dest, \
+      const guchar *src, \
+      gsize n) \
+{ \
+  for (; n > 0; n--) \
+    { \
+      guchar a = src[A1]; \
+      guint16 r = (guint16)src[R1] * a + 127; \
+      guint16 g = (guint16)src[G1] * a + 127; \
+      guint16 b = (guint16)src[B1] * a + 127; \
+      dest[R2] = (r + (r >> 8) + 1) >> 8; \
+      dest[G2] = (g + (g >> 8) + 1) >> 8; \
+      dest[B2] = (b + (b >> 8) + 1) >> 8; \
+      dest[A2] = a; \
+      dest += 4; \
+      src += 4; \
+    } \
 }
+
+PREMULTIPLY_FUNC(r8g8b8a8_to_r8g8b8a8_premultiplied, 0, 1, 2, 3, 0, 1, 2, 3)
+PREMULTIPLY_FUNC(r8g8b8a8_to_b8g8r8a8_premultiplied, 0, 1, 2, 3, 2, 1, 0, 3)
+PREMULTIPLY_FUNC(r8g8b8a8_to_a8r8g8b8_premultiplied, 0, 1, 2, 3, 1, 2, 3, 0)
+PREMULTIPLY_FUNC(r8g8b8a8_to_a8b8g8r8_premultiplied, 0, 1, 2, 3, 3, 2, 1, 0)
 
 struct _GdkMemoryFormatDescription
 {
@@ -498,15 +501,29 @@ gdk_memory_convert (guchar              *dest_data,
   const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
   float *tmp;
   gsize y;
+  void (*func) (guchar *, const guchar *, gsize) = NULL;
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
 
-  if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+  if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    func = r8g8b8a8_to_r8g8b8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    func = r8g8b8a8_to_b8g8r8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    func = r8g8b8a8_to_b8g8r8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    func = r8g8b8a8_to_r8g8b8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    func = r8g8b8a8_to_a8r8g8b8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    func = r8g8b8a8_to_a8b8g8r8_premultiplied;
+
+  if (func != NULL)
     {
       for (y = 0; y < height; y++)
         {
-          r8g8b8a8_to_b8g8r8a8_premultiplied (dest_data, src_data, width);
+          func (dest_data, src_data, width);
           src_data += src_stride;
           dest_data += dest_stride;
         }
