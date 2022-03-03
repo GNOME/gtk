@@ -54,7 +54,7 @@
  * maximize and close buttons, or the window icon.
  *
  * For these reasons, `GtkHeaderBar` is the natural choice for use as the
- * custom titlebar widget of a `GtkWindow (see [method@Gtk.Window.set_titlebar]),
+ * custom titlebar widget of a `GtkWindow` (see [method@Gtk.Window.set_titlebar]),
  * as it gives features typical of titlebars while allowing the addition of
  * child widgets.
  *
