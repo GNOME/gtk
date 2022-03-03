@@ -1132,7 +1132,8 @@ gdk_unichar_direction (gunichar ch)
     return PANGO_DIRECTION_LTR;
 }
 
-#ifdef G_HAS_CONSTRUCTORS
+#if defined (G_HAS_CONSTRUCTORS) && !defined (G_OS_WIN32)
+#define GDK_USE_CONSTRUCTORS
 #ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
 #pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(stash_startup_id)
 #pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(stash_autostart_id)
@@ -1175,7 +1176,7 @@ gdk_get_desktop_startup_id (void)
 
   if (g_once_init_enter (&init))
     {
-#ifndef G_HAS_CONSTRUCTORS
+#ifndef GDK_USE_CONSTRUCTORS
       stash_startup_id ();
 #endif
       /* Clear the environment variable so it won't be inherited by
@@ -1196,7 +1197,7 @@ gdk_get_desktop_autostart_id (void)
 
   if (g_once_init_enter (&init))
     {
-#ifndef G_HAS_CONSTRUCTORS
+#ifndef GDK_USE_CONSTRUCTORS
       stash_autostart_id ();
 #endif
       /* Clear the environment variable so it won't be inherited by
