@@ -5130,10 +5130,10 @@ gsk_gl_shader_node_diff (GskRenderNode  *node1,
  * @shader: the `GskGLShader`
  * @bounds: the rectangle to render the shader into
  * @args: Arguments for the uniforms
- * @children: (array length=n_children): array of child nodes, these will
- *     be rendered to textures and used as input.
+ * @children: (nullable) (array length=n_children): array of child nodes,
+ *   these will be rendered to textures and used as input.
  * @n_children: Length of @children (currenly the GL backend supports
- *     up to 4 children)
+ *   up to 4 children)
  *
  * Creates a `GskRenderNode` that will render the given @shader into the
  * area given by @bounds.
@@ -5167,10 +5167,10 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
 
   g_return_val_if_fail (GSK_IS_GL_SHADER (shader), NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
-  g_return_val_if_fail ((args == NULL && gsk_gl_shader_get_n_uniforms (shader) == 0) ||
-                        (args != NULL && g_bytes_get_size (args) == gsk_gl_shader_get_args_size (shader)), NULL);
+  g_return_val_if_fail (args != NULL, NULL);
+  g_return_val_if_fail (g_bytes_get_size (args) == gsk_gl_shader_get_args_size (shader), NULL);
   g_return_val_if_fail ((children == NULL && n_children == 0) ||
-                        (children != NULL && n_children == gsk_gl_shader_get_n_textures (shader)), NULL);
+                        (n_children == gsk_gl_shader_get_n_textures (shader)), NULL);
 
   self = gsk_render_node_alloc (GSK_GL_SHADER_NODE);
   node = (GskRenderNode *) self;
