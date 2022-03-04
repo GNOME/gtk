@@ -1,3 +1,59 @@
+Overview of Changes in GTK+ 3.24.32, 03-03-2022
+===============================================
+
+* GtkCellRendererProgress:
+ - Use tabular figures
+
+* GtkFontChooser:
+ - Fix the build with older Pango
+ - Fix axis name handling
+
+* Theme:
+ - Fix border color for tiled windows
+
+* Accessibility:
+ - Fix cell accessible leak
+
+* Wayland:
+ - Support new high-contrast setting
+ - Only update scale when on any outputs
+
+* Windows:
+ - Various build fixes
+ - Fix keyboard state handling
+ - Fix capslock handling
+ - Fix AltGr not working
+
+* MacOS:
+ - Fix the build on 10.11
+ - Make Dock "Quit" invoke the app.quit action
+ - Correctly handle HiDPI cursors
+
+* Translation updates
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Chinese (China)
+ Croatian
+ Czech
+ French
+ Galician
+ Hebrew
+ Indonesian
+ Korean
+ Persian
+ Polish
+ Portuguese
+ Romanian
+ Russian
+ Serbian
+ Slovenian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.24.31, 20-12-2021
 ===============================================
 
