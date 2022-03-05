@@ -372,7 +372,7 @@ library you are using:
 The `test` accessibility backend is recommended for test suites and remote
 continuous integration pipelines.
 
-### `XDG_DTA_HOME`, `XDG_DATA_DIRS`
+### `XDG_DATA_HOME`, `XDG_DATA_DIRS`
 
 GTK uses these environment variables to locate icon themes
 and MIME information. For more information, see the
