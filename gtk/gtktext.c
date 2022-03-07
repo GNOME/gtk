@@ -181,6 +181,7 @@ struct _GtkTextPrivate
 
   GtkGesture    *drag_gesture;
   GtkEventController *key_controller;
+  GtkEventController *focus_controller;
 
   GtkCssNode    *selection_node;
   GtkCssNode    *block_cursor_node;
@@ -529,6 +530,7 @@ static void         gtk_text_schedule_im_reset        (GtkText        *self);
 static gboolean     gtk_text_mnemonic_activate        (GtkWidget      *widget,
                                                        gboolean        group_cycling);
 static void         gtk_text_check_cursor_blink       (GtkText        *self);
+static void         remove_blink_timeout              (GtkText        *self);
 static void         gtk_text_pend_cursor_blink        (GtkText        *self);
 static void         gtk_text_reset_blink_time         (GtkText        *self);
 static void         gtk_text_update_cached_style_values(GtkText       *self);
@@ -1949,11 +1951,11 @@ gtk_text_init (GtkText *self)
                                            priv->im_context);
   gtk_widget_add_controller (GTK_WIDGET (self), priv->key_controller);
 
-  controller = gtk_event_controller_focus_new ();
-  gtk_event_controller_set_name (controller, "gtk-text-focus-controller");
-  g_signal_connect (controller, "notify::is-focus",
+  priv->focus_controller = gtk_event_controller_focus_new ();
+  gtk_event_controller_set_name (priv->focus_controller, "gtk-text-focus-controller");
+  g_signal_connect (priv->focus_controller, "notify::is-focus",
                     G_CALLBACK (gtk_text_focus_changed), self);
-  gtk_widget_add_controller (GTK_WIDGET (self), controller);
+  gtk_widget_add_controller (GTK_WIDGET (self), priv->focus_controller);
 
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
   for (i = 0; i < 2; i++)
@@ -3261,6 +3263,7 @@ gtk_text_focus_changed (GtkEventControllerFocus *controller,
 
       gtk_text_im_set_focus_in (self);
       gtk_text_reset_blink_time (self);
+      gtk_text_check_cursor_blink (self);
     }
   else /* Focus out */
     {
@@ -3277,9 +3280,10 @@ gtk_text_focus_changed (GtkEventControllerFocus *controller,
           gtk_text_schedule_im_reset (self);
           gtk_im_context_focus_out (priv->im_context);
         }
-    }
 
-  gtk_text_check_cursor_blink (self);
+      if (priv->blink_tick)
+        remove_blink_timeout (self);
+    }
 }
 
 static gboolean
@@ -6426,7 +6430,7 @@ cursor_blinks (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
-  if (gtk_widget_has_focus (GTK_WIDGET (self)) &&
+  if (gtk_event_controller_focus_is_focus (GTK_EVENT_CONTROLLER_FOCUS (priv->focus_controller)) &&
       priv->editable &&
       priv->selection_bound == priv->current_pos)
     {
