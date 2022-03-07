@@ -1050,7 +1050,7 @@ gtk_icon_theme_class_init (GtkIconThemeClass *klass)
    *
    * Unless set to a different value, this will be the value of
    * the `GtkSettings:gtk-icon-theme-name` property of the `GtkSettings`
-   * object associated to the display of the icontheme object. 
+   * object associated to the display of the icontheme object.
    */
   props[PROP_THEME_NAME] =
       g_param_spec_string ("theme-name",
@@ -1521,7 +1521,7 @@ gtk_icon_theme_add_search_path (GtkIconTheme *self,
 
   g_return_if_fail (GTK_IS_ICON_THEME (self));
   g_return_if_fail (path != NULL);
- 
+
   len = g_strv_length (self->search_path);
   paths = g_new (char *, len + 2);
   memcpy (paths, self->search_path, sizeof (char *) * len);
@@ -1536,7 +1536,7 @@ gtk_icon_theme_add_search_path (GtkIconTheme *self,
 /**
  * gtk_icon_theme_set_resource_path:
  * @self: a `GtkIconTheme`
- * @path: (array zero-terminated=1) (element-type utf8) (nullable): 
+ * @path: (array zero-terminated=1) (element-type utf8) (nullable):
  *   NULL-terminated array of resource paths
  *   that are searched for icons
  *
@@ -1622,7 +1622,7 @@ gtk_icon_theme_add_resource_path (GtkIconTheme *self,
 
   g_return_if_fail (GTK_IS_ICON_THEME (self));
   g_return_if_fail (path != NULL);
- 
+
   len = g_strv_length (self->resource_path);
   paths = g_new (char *, len + 2);
   memcpy (paths, self->resource_path, sizeof (char *) * len);
@@ -1686,7 +1686,7 @@ gtk_icon_theme_set_theme_name (GtkIconTheme *self,
  *
  * Gets the current icon theme name.
  *
- * Returns (transfer full): the current icon theme name,
+ * Returns (transfer full) (nullable): the current icon theme name,
  */
 char *
 gtk_icon_theme_get_theme_name (GtkIconTheme *self)
