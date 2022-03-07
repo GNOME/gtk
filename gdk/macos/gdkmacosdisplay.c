@@ -491,47 +491,11 @@ void
 _gdk_macos_display_surface_resigned_main (GdkMacosDisplay *self,
                                           GdkMacosSurface *surface)
 {
-  GdkMacosSurface *new_surface = NULL;
-
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
   g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
 
   if (queue_contains (&self->main_surfaces, &surface->main))
     g_queue_unlink (&self->main_surfaces, &surface->main);
-
-  _gdk_macos_display_clear_sorting (self);
-
-  if (GDK_SURFACE (surface)->transient_for &&
-      gdk_surface_get_mapped (GDK_SURFACE (surface)->transient_for))
-    {
-      new_surface = GDK_MACOS_SURFACE (GDK_SURFACE (surface)->transient_for);
-    }
-  else
-    {
-      const GList *surfaces = _gdk_macos_display_get_surfaces (self);
-
-      for (const GList *iter = surfaces; iter; iter = iter->next)
-        {
-          GdkMacosSurface *item = iter->data;
-
-          g_assert (GDK_IS_MACOS_SURFACE (item));
-
-          if (item == surface)
-            continue;
-
-          if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (item)))
-            {
-              new_surface = item;
-              break;
-            }
-        }
-    }
-
-  if (new_surface != NULL)
-    {
-      NSWindow *nswindow = _gdk_macos_surface_get_native (new_surface);
-      [nswindow makeKeyAndOrderFront:nswindow];
-    }
 
   _gdk_macos_display_clear_sorting (self);
 }
