@@ -85,7 +85,7 @@ if get_option('install-tests')
     test_cdata.set('testexecdir', testexecdir)
     test_cdata.set('test', test_name)
     configure_file(input: 'gdk.test.in',
-      output: '@0@.test'.format(t),
+      output: '@0@.test'.format(test_name),
       configuration: test_cdata,
       install: true,
       install_dir: testdatadir,
