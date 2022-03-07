@@ -1,17 +1,18 @@
 # Swedish messages for GTK.
-# Copyright © 1999-2021 Free Software Foundation, Inc.
+# Copyright © 1999-2022 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
 # Christian Rose <menthos@menthos.com>, 2000, 2001, 2002, 2003, 2004, 2005.
 # Daniel Nylander <po@danielnylander.se>, 2006, 2007, 2008, 2009, 2010, 2011, 2012.
 # Josef Andersson <josef.andersson@fripost.org>, 2014.
 # Anders Jonsson <anders.jonsson@norsjovallen.se>, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
+# Luna Jernberg <droidbittin@gmail.com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-12-03 22:52+0000\n"
-"PO-Revision-Date: 2021-12-04 10:31+0100\n"
+"POT-Creation-Date: 2022-02-28 14:47+0000\n"
+"PO-Revision-Date: 2022-03-07 01:30+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -49,7 +50,7 @@ msgstr "Kan inte tillhandahålla innehåll som ”%s”"
 msgid "Cannot provide contents as %s"
 msgstr "Kan inte tillhandahålla innehåll som %s"
 
-#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:421
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:430
 msgid "The current backend does not support OpenGL"
 msgstr "Den aktuella bakänden stöder inte OpenGL"
 
@@ -108,32 +109,32 @@ msgstr "Dra-och-släpp från andra program stöds inte."
 msgid "No compatible formats to transfer contents."
 msgstr "Inga kompatibla format för att överföra innehåll."
 
-#: gdk/gdkglcontext.c:323
+#: gdk/gdkglcontext.c:332
 msgid "The EGL implementation does not support any allowed APIs"
 msgstr "EGL-implementationen stöder inte några tillåtna API:er"
 
-#: gdk/gdkglcontext.c:404 gdk/win32/gdkglcontext-win32-wgl.c:624
-#: gdk/x11/gdkglcontext-glx.c:622
+#: gdk/gdkglcontext.c:413 gdk/win32/gdkglcontext-win32-wgl.c:616
+#: gdk/x11/gdkglcontext-glx.c:624
 msgid "Unable to create a GL context"
 msgstr "Kan inte skapa en GL-kontext"
 
-#: gdk/gdkglcontext.c:1237
+#: gdk/gdkglcontext.c:1273
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Allt utom OpenGL ES inaktiverat via GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1246
+#: gdk/gdkglcontext.c:1282
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Programmet stöder inte %s-API"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1732
+#: gdk/gdkglcontext.c:1803
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Försöker använda %s, men %s används redan"
 
-#: gdk/gdksurface.c:1235
+#: gdk/gdksurface.c:1240
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan-stöd inaktiverat via GDK_DEBUG"
 
@@ -519,17 +520,17 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Försätt i vänteläge"
 
-#: gdk/loaders/gdkjpeg.c:61
+#: gdk/loaders/gdkjpeg.c:63
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Fel vid tolkning av JPEG-bildfil (%s)"
 
-#: gdk/loaders/gdkjpeg.c:188
+#: gdk/loaders/gdkjpeg.c:190
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "JPEG-färgrymden (%d) stöds inte"
 
-#: gdk/loaders/gdkjpeg.c:197 gdk/loaders/gdkpng.c:273 gdk/loaders/gdktiff.c:446
+#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Inte tillräckligt med minne för bildstorlek %u×%u"
@@ -544,7 +545,7 @@ msgstr "Fel vid läsning av png (%s)"
 msgid "Unsupported depth %u in png image"
 msgstr "Djup %u stöds inte i png-bild"
 
-#: gdk/loaders/gdkpng.c:254
+#: gdk/loaders/gdkpng.c:246
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Färgtyp %u stöds inte i png-bild"
@@ -553,15 +554,19 @@ msgstr "Färgtyp %u stöds inte i png-bild"
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Misslyckades med att läsa in RGB-data från TIFF-fil"
 
-#: gdk/loaders/gdktiff.c:458
+#: gdk/loaders/gdktiff.c:383
+msgid "Could not load TIFF data"
+msgstr "Kunde inte läsa in TIFF-data"
+
+#: gdk/loaders/gdktiff.c:465
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Läsning av data misslyckades på rad %d"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
-#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:312
+#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:313
 #: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:233
+#: gdk/x11/gdkclipboard-x11.c:787 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Inget kompatibelt överföringsformat hittades"
 
@@ -707,12 +712,12 @@ msgstr ""
 "Misslyckades med att omvandla dra-och-släpp-data i W32-format 0x%x till %p "
 "(%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:279
-#: gdk/win32/gdkglcontext-win32-wgl.c:296
+#: gdk/win32/gdkglcontext-win32-wgl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:293
 msgid "No GL implementation is available"
 msgstr "Ingen GL-implementation tillgänglig"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:590
+#: gdk/win32/gdkglcontext-win32-wgl.c:582
 msgid "No available configurations for the given pixel format"
 msgstr "Inga tillgängliga inställningar för det givna bildpunktsformatet"
 
@@ -767,23 +772,23 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Öppnar %d objekt"
 msgstr[1] "Öppnar %d objekt"
 
-#: gdk/x11/gdkclipboard-x11.c:433
+#: gdk/x11/gdkclipboard-x11.c:457
 msgid "Clipboard manager could not store selection."
 msgstr "Urklippshanterare kunde inte lagra markering."
 
-#: gdk/x11/gdkclipboard-x11.c:613
+#: gdk/x11/gdkclipboard-x11.c:637
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Kan inte lagra urklipp. Ingen urklippshanterare är aktiv."
 
-#: gdk/x11/gdkglcontext-glx.c:778
+#: gdk/x11/gdkglcontext-glx.c:780
 msgid "No GLX configurations available"
 msgstr "Inga GLX-konfigurationer tillgängliga"
 
-#: gdk/x11/gdkglcontext-glx.c:851
+#: gdk/x11/gdkglcontext-glx.c:853
 msgid "No GLX configuration with required features found"
 msgstr "Ingen GLX-konfiguration med funktionerna som krävdes hittades"
 
-#: gdk/x11/gdkglcontext-glx.c:925
+#: gdk/x11/gdkglcontext-glx.c:927
 msgid "GLX is not supported"
 msgstr "GLX stöds inte"
 
@@ -1706,16 +1711,16 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:310
+#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:311
 msgid "Pick a Color"
 msgstr "Välj en färg"
 
-#: gtk/gtkcolorbutton.c:499 gtk/gtkcolorchooserwidget.c:308
+#: gtk/gtkcolorbutton.c:500 gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Röd %d%%, Grön %d%%, Blå %d%%, Alfa %d%%"
 
-#: gtk/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:314
+#: gtk/gtkcolorbutton.c:506 gtk/gtkcolorchooserwidget.c:314
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Röd %d%%, Grön %d%%, Blå %d%%"
@@ -1960,7 +1965,7 @@ msgstr "Anpassad"
 msgid "Custom color %d: %s"
 msgstr "Anpassad färg %d: %s"
 
-#: gtk/gtkcolorswatch.c:229
+#: gtk/gtkcolorswatch.c:231
 msgid "Customize"
 msgstr "Anpassa"
 
@@ -2102,8 +2107,8 @@ msgstr "Det finns redan en fil med det namnet"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6218 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1271
+#: gtk/gtkwindow.c:6147 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "_Avbryt"
 
@@ -2114,7 +2119,7 @@ msgid "_Open"
 msgstr "_Öppna"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1272
+#: gtk/inspector/recorder.c:1707
 msgid "_Save"
 msgstr "_Spara"
 
@@ -2192,7 +2197,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Om du tar bort ett objekt är det borta för alltid."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5533 gtk/gtktext.c:6064 gtk/gtktextview.c:8920
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6073 gtk/gtktextview.c:8956
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -2313,7 +2318,7 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Ljud"
 
-#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
+#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:604
 #: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "Typsnitt"
@@ -2399,61 +2404,66 @@ msgstr "Åtkommen"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:626
+#: gtk/gtkfontbutton.c:508 gtk/gtkfontbutton.c:628
 msgid "Pick a Font"
 msgstr "Välj ett typsnitt"
 
-#: gtk/gtkfontbutton.c:1363
+#: gtk/gtkfontbutton.c:1365
 msgctxt "font"
 msgid "None"
 msgstr "Inget"
 
-#: gtk/gtkfontchooserwidget.c:1569
+#: gtk/gtkfontchooserwidget.c:1531
+msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Bredd"
 
-#: gtk/gtkfontchooserwidget.c:1570
+#: gtk/gtkfontchooserwidget.c:1532
+msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Vikt"
 
-#: gtk/gtkfontchooserwidget.c:1571
+#: gtk/gtkfontchooserwidget.c:1533
+msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Kursiv"
 
-#: gtk/gtkfontchooserwidget.c:1572
+#: gtk/gtkfontchooserwidget.c:1534
+msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Lutning"
 
-#: gtk/gtkfontchooserwidget.c:1573
+#: gtk/gtkfontchooserwidget.c:1535
+msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Optisk storlek"
 
-#: gtk/gtkfontchooserwidget.c:2120
+#: gtk/gtkfontchooserwidget.c:2139
 msgid "Default"
 msgstr "Standard"
 
 # https://developer.gnome.org/gtk3/stable/GtkEventController.html#GtkPropagationPhase
-#: gtk/gtkfontchooserwidget.c:2166
+#: gtk/gtkfontchooserwidget.c:2185
 msgid "Ligatures"
 msgstr "Ligaturer"
 
-#: gtk/gtkfontchooserwidget.c:2167
+#: gtk/gtkfontchooserwidget.c:2186
 msgid "Letter Case"
 msgstr "Skiftläge för bokstäver"
 
-#: gtk/gtkfontchooserwidget.c:2168
+#: gtk/gtkfontchooserwidget.c:2187
 msgid "Number Case"
 msgstr "Skiftläge för tal"
 
-#: gtk/gtkfontchooserwidget.c:2169
+#: gtk/gtkfontchooserwidget.c:2188
 msgid "Number Spacing"
 msgstr "Talavstånd"
 
-#: gtk/gtkfontchooserwidget.c:2170
+#: gtk/gtkfontchooserwidget.c:2189
 msgid "Number Formatting"
 msgstr "Talformatering"
 
-#: gtk/gtkfontchooserwidget.c:2171
+#: gtk/gtkfontchooserwidget.c:2190
 msgid "Character Variants"
 msgstr "Teckenvarianter"
 
@@ -2461,27 +2471,27 @@ msgstr "Teckenvarianter"
 msgid "OpenGL context creation failed"
 msgstr "Skapande av OpenGL-kontext misslyckades"
 
-#: gtk/gtklabel.c:5530 gtk/gtktext.c:6052 gtk/gtktextview.c:8908
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6061 gtk/gtktextview.c:8944
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: gtk/gtklabel.c:5531 gtk/gtktext.c:6056 gtk/gtktextview.c:8912
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6065 gtk/gtktextview.c:8948
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: gtk/gtklabel.c:5532 gtk/gtktext.c:6060 gtk/gtktextview.c:8916
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6069 gtk/gtktextview.c:8952
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: gtk/gtklabel.c:5538 gtk/gtktext.c:6073 gtk/gtktextview.c:8941
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6082 gtk/gtktextview.c:8977
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: gtk/gtklabel.c:5543
+#: gtk/gtklabel.c:5655
 msgid "_Open Link"
 msgstr "_Öppna länk"
 
-#: gtk/gtklabel.c:5547
+#: gtk/gtklabel.c:5659
 msgid "Copy _Link Address"
 msgstr "Kopiera _länkadress"
 
@@ -2530,7 +2540,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:768
+#: gtk/gtkmain.c:777
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2583,7 +2593,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6219
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6148
 msgid "_OK"
 msgstr "_OK"
 
@@ -3419,7 +3429,7 @@ msgid "Swipe right"
 msgstr "Svep åt höger"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:490
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Genvägar"
 
@@ -3445,19 +3455,19 @@ msgstr "Försök med en annan sökning"
 msgid "Could not show link"
 msgstr "Kunde inte visa länken"
 
-#: gtk/gtktext.c:6078 gtk/gtktextview.c:8946
+#: gtk/gtktext.c:6087 gtk/gtktextview.c:8982
 msgid "Insert _Emoji"
 msgstr "Infoga _emoji"
 
-#: gtk/gtktextview.c:8928
+#: gtk/gtktextview.c:8964
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: gtk/gtktextview.c:8932
+#: gtk/gtktextview.c:8968
 msgid "_Redo"
 msgstr "_Gör om"
 
-#: gtk/gtktreeexpander.c:205
+#: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:278
 msgid "Expand"
 msgstr "Expandera"
 
@@ -3480,12 +3490,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6206
+#: gtk/gtkwindow.c:6135
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Vill du använda GTK Inspector?"
 
-#: gtk/gtkwindow.c:6208
+#: gtk/gtkwindow.c:6137
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3496,7 +3506,7 @@ msgstr ""
 "det inre i vilket GTK-program som helst. Användning av det kan medföra att "
 "programmet avslutar eller kraschar."
 
-#: gtk/gtkwindow.c:6213
+#: gtk/gtkwindow.c:6142
 msgid "Don’t show this message again"
 msgstr "Visa inte detta meddelande igen"
 
@@ -3541,7 +3551,8 @@ msgid "Attribute"
 msgstr "Attribut"
 
 #: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:124
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:155
+#: gtk/inspector/recorder.ui:221
 msgid "Value"
 msgstr "Värde"
 
@@ -3565,6 +3576,41 @@ msgstr "Parametertyp"
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "Tillstånd"
+
+#: gtk/inspector/clipboard.c:211
+msgid "Show"
+msgstr "Visa"
+
+#: gtk/inspector/clipboard.c:228
+msgid "Hover to load"
+msgstr "Hovra för att läsa in"
+
+#: gtk/inspector/clipboard.c:278
+msgctxt "clipboard"
+msgid "empty"
+msgstr "tomt"
+
+#: gtk/inspector/clipboard.c:283 gtk/inspector/clipboard.c:325
+msgctxt "clipboard"
+msgid "local"
+msgstr "lokalt"
+
+#: gtk/inspector/clipboard.c:285 gtk/inspector/clipboard.c:327
+msgctxt "clipboard"
+msgid "remote"
+msgstr "fjärran"
+
+#: gtk/inspector/clipboard.ui:31
+msgid "Drag and hold here"
+msgstr "Dra och håll här"
+
+#: gtk/inspector/clipboard.ui:75 gtk/inspector/window.ui:574
+msgid "Clipboard"
+msgstr "Urklipp"
+
+#: gtk/inspector/clipboard.ui:114
+msgid "Primary"
+msgstr "Primärt"
 
 #: gtk/inspector/controllers.c:126
 msgctxt "event phase"
@@ -3633,47 +3679,47 @@ msgstr "Stilklasser"
 msgid "CSS Property"
 msgstr "CSS-egenskap"
 
-#: gtk/inspector/general.c:309 gtk/inspector/general.c:389
+#: gtk/inspector/general.c:330 gtk/inspector/general.c:410
 msgctxt "GL version"
 msgid "None"
 msgstr "Ingen"
 
-#: gtk/inspector/general.c:318
+#: gtk/inspector/general.c:339
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Inaktiverad"
 
-#: gtk/inspector/general.c:319
+#: gtk/inspector/general.c:340
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Inaktiverad"
 
-#: gtk/inspector/general.c:390
+#: gtk/inspector/general.c:411
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Ingen"
 
-#: gtk/inspector/general.c:441
+#: gtk/inspector/general.c:462
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Inaktiverad"
 
-#: gtk/inspector/general.c:442 gtk/inspector/general.c:443
+#: gtk/inspector/general.c:463 gtk/inspector/general.c:464
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Inaktiverad"
 
-#: gtk/inspector/general.c:499
+#: gtk/inspector/general.c:520
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Ingen"
 
-#: gtk/inspector/general.c:500 gtk/inspector/general.c:501
+#: gtk/inspector/general.c:521 gtk/inspector/general.c:522
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Ingen"
 
-#: gtk/inspector/general.c:771
+#: gtk/inspector/general.c:792
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM-kontext är hårdkodad med GTK_IM_MODULE"
 
@@ -3701,39 +3747,47 @@ msgstr "Mediabakände"
 msgid "Input Method"
 msgstr "Inmatningsmetod"
 
-#: gtk/inspector/general.ui:201
+#: gtk/inspector/general.ui:202
+msgid "Application ID"
+msgstr "Program-ID"
+
+#: gtk/inspector/general.ui:228
+msgid "Resource Path"
+msgstr "Resurssökväg"
+
+#: gtk/inspector/general.ui:268
 msgid "Prefix"
 msgstr "Prefix"
 
-#: gtk/inspector/general.ui:403
+#: gtk/inspector/general.ui:470
 msgid "Display"
 msgstr "Display"
 
-#: gtk/inspector/general.ui:430
+#: gtk/inspector/general.ui:497
 msgid "RGBA Visual"
 msgstr "RGBA-visuell"
 
-#: gtk/inspector/general.ui:456
+#: gtk/inspector/general.ui:523
 msgid "Composited"
 msgstr "Sammansatt"
 
-#: gtk/inspector/general.ui:508
+#: gtk/inspector/general.ui:575
 msgid "GL Version"
 msgstr "GL-version"
 
-#: gtk/inspector/general.ui:558
+#: gtk/inspector/general.ui:625
 msgid "GL Vendor"
 msgstr "GL-leverantör"
 
-#: gtk/inspector/general.ui:598
+#: gtk/inspector/general.ui:665
 msgid "Vulkan Device"
 msgstr "Vulkan-enhet"
 
-#: gtk/inspector/general.ui:625
+#: gtk/inspector/general.ui:692
 msgid "Vulkan API version"
 msgstr "Vulkan-API-version"
 
-#: gtk/inspector/general.ui:652
+#: gtk/inspector/general.ui:719
 msgid "Vulkan driver version"
 msgstr "Vulkan-drivrutinsversion"
 
@@ -3787,56 +3841,60 @@ msgid "Request Mode"
 msgstr "Förfrågningsläge"
 
 #: gtk/inspector/misc-info.ui:269
+msgid "Measure map"
+msgstr "Mätkarta"
+
+#: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
 msgstr "Allokering"
 
-#: gtk/inspector/misc-info.ui:298
+#: gtk/inspector/misc-info.ui:357
 msgid "Baseline"
 msgstr "Baslinje"
 
-#: gtk/inspector/misc-info.ui:327
+#: gtk/inspector/misc-info.ui:386
 msgid "Surface"
 msgstr "Yta"
 
-#: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
-#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1116
-#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:388
+#: gtk/inspector/misc-info.ui:405 gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:483 gtk/inspector/prop-editor.c:1116
+#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Egenskaper"
 
-#: gtk/inspector/misc-info.ui:366
+#: gtk/inspector/misc-info.ui:425
 msgid "Renderer"
 msgstr "Renderare"
 
-#: gtk/inspector/misc-info.ui:405
+#: gtk/inspector/misc-info.ui:464
 msgid "Frame Clock"
 msgstr "Bildruteklocka"
 
-#: gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:503
 msgid "Tick Callback"
 msgstr "Tickåteranrop"
 
-#: gtk/inspector/misc-info.ui:474
+#: gtk/inspector/misc-info.ui:533
 msgid "Frame Count"
 msgstr "Antal bildrutor"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:562
 msgid "Frame Rate"
 msgstr "Bildfrekvens"
 
-#: gtk/inspector/misc-info.ui:532
+#: gtk/inspector/misc-info.ui:591
 msgid "Mapped"
 msgstr "Mappad"
 
-#: gtk/inspector/misc-info.ui:562
+#: gtk/inspector/misc-info.ui:621
 msgid "Realized"
 msgstr "Realiserad"
 
-#: gtk/inspector/misc-info.ui:592
+#: gtk/inspector/misc-info.ui:651
 msgid "Is Toplevel"
 msgstr "Är toppnivå"
 
-#: gtk/inspector/misc-info.ui:622
+#: gtk/inspector/misc-info.ui:681
 msgid "Child Visible"
 msgstr "Barn synligt"
 
@@ -3944,36 +4002,40 @@ msgstr "Källa:"
 msgid "Defined At"
 msgstr "Definierad vid"
 
-#: gtk/inspector/recorder.c:1242
+#: gtk/inspector/recorder.c:1677
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Sparande av RenderNode misslyckades"
 
-#: gtk/inspector/recorder.ui:15
+#: gtk/inspector/recorder.ui:20
 msgid "Record frames"
 msgstr "Spela in bildrutor"
 
-#: gtk/inspector/recorder.ui:22
+#: gtk/inspector/recorder.ui:27
 msgid "Clear recorded frames"
 msgstr "Töm inspelade bildrutor"
 
-#: gtk/inspector/recorder.ui:29
+#: gtk/inspector/recorder.ui:34
 msgid "Add debug nodes"
 msgstr "Lägg till felsökningsnoder"
 
-#: gtk/inspector/recorder.ui:38
+#: gtk/inspector/recorder.ui:42
+msgid "Highlight event sequences"
+msgstr "Färgmarkera händelsesekvenser"
+
+#: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
 msgstr "Använd en mörk bakgrund"
 
-#: gtk/inspector/recorder.ui:46
+#: gtk/inspector/recorder.ui:59
 msgid "Save selected node"
 msgstr "Spara markerad nod"
 
-#: gtk/inspector/recorder.ui:54
+#: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
 msgstr "Kopiera till urklipp"
 
-#: gtk/inspector/recorder.ui:111
+#: gtk/inspector/recorder.ui:142 gtk/inspector/recorder.ui:208
 msgid "Property"
 msgstr "Egenskap"
 
@@ -4197,111 +4259,111 @@ msgstr "Visa alla objekt"
 msgid "Show all Resources"
 msgstr "Visa alla resurser"
 
-#: gtk/inspector/window.ui:139
+#: gtk/inspector/window.ui:147
 msgid "Collect Statistics"
 msgstr "Samla statistik"
 
-#: gtk/inspector/window.ui:191
+#: gtk/inspector/window.ui:199
 msgid "Objects"
 msgstr "Objekt"
 
-#: gtk/inspector/window.ui:223
+#: gtk/inspector/window.ui:231
 msgid "Toggle Sidebar"
 msgstr "Växla sidopanel"
 
-#: gtk/inspector/window.ui:245
+#: gtk/inspector/window.ui:253
 msgid "Refresh action state"
 msgstr "Uppdatera åtgärdstillstånd"
 
-#: gtk/inspector/window.ui:319
+#: gtk/inspector/window.ui:327
 msgid "Previous object"
 msgstr "Föregående objekt"
 
-#: gtk/inspector/window.ui:326
+#: gtk/inspector/window.ui:334
 msgid "Child object"
 msgstr "Barnobjekt"
 
-#: gtk/inspector/window.ui:333
+#: gtk/inspector/window.ui:341
 msgid "Previous sibling"
 msgstr "Föregående syskon"
 
-#: gtk/inspector/window.ui:339
+#: gtk/inspector/window.ui:347
 msgid "List Position"
 msgstr "Listposition"
 
-#: gtk/inspector/window.ui:348
+#: gtk/inspector/window.ui:356
 msgid "Next sibling"
 msgstr "Nästa syskon"
 
-#: gtk/inspector/window.ui:378
+#: gtk/inspector/window.ui:386
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#: gtk/inspector/window.ui:399
+#: gtk/inspector/window.ui:407
 msgid "Layout"
 msgstr "Layout"
 
-#: gtk/inspector/window.ui:410
+#: gtk/inspector/window.ui:418
 msgid "CSS Nodes"
 msgstr "CSS-noder"
 
-#: gtk/inspector/window.ui:421
+#: gtk/inspector/window.ui:429
 msgid "Size Groups"
 msgstr "Storleksgrupper"
 
-#: gtk/inspector/window.ui:430 gtk/inspector/window.ui:439
+#: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"
 msgstr "Data"
 
-#: gtk/inspector/window.ui:449
+#: gtk/inspector/window.ui:457
 msgid "Actions"
 msgstr "Åtgärder"
 
-#: gtk/inspector/window.ui:460
+#: gtk/inspector/window.ui:468
 msgid "Menu"
 msgstr "Meny"
 
-#: gtk/inspector/window.ui:469
+#: gtk/inspector/window.ui:477
 msgid "Controllers"
 msgstr "Kontrollanter"
 
-#: gtk/inspector/window.ui:479
+#: gtk/inspector/window.ui:487
 msgid "Magnifier"
 msgstr "Förstorare"
 
-#: gtk/inspector/window.ui:500
+#: gtk/inspector/window.ui:508
 msgid "Accessibility"
 msgstr "Hjälpmedel"
 
-#: gtk/inspector/window.ui:524
+#: gtk/inspector/window.ui:532
 msgid "Global"
 msgstr "Globalt"
 
-#: gtk/inspector/window.ui:537
+#: gtk/inspector/window.ui:545
 msgid "Information"
 msgstr "Information"
 
-#: gtk/inspector/window.ui:546
+#: gtk/inspector/window.ui:554
 msgid "Settings"
 msgstr "Inställningar"
 
-#: gtk/inspector/window.ui:555
+#: gtk/inspector/window.ui:563
 msgid "Resources"
 msgstr "Resurser"
 
-#: gtk/inspector/window.ui:566
+#: gtk/inspector/window.ui:584
 msgid "Statistics"
 msgstr "Statistik"
 
-#: gtk/inspector/window.ui:577
+#: gtk/inspector/window.ui:595
 msgid "Logging"
 msgstr "Loggning"
 
-#: gtk/inspector/window.ui:592
+#: gtk/inspector/window.ui:610
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:601
+#: gtk/inspector/window.ui:619
 msgid "Recorder"
 msgstr "Inspelare"
 
@@ -5917,781 +5979,6 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/script-names.c:16
-msgctxt "Script"
-msgid "Arabic"
-msgstr "Arabisk"
-
-#: gtk/script-names.c:17
-msgctxt "Script"
-msgid "Armenian"
-msgstr "Armenisk"
-
-#: gtk/script-names.c:18
-msgctxt "Script"
-msgid "Bengali"
-msgstr "Bengali"
-
-#: gtk/script-names.c:19
-msgctxt "Script"
-msgid "Bopomofo"
-msgstr "Bopomofo"
-
-#: gtk/script-names.c:20
-msgctxt "Script"
-msgid "Cherokee"
-msgstr "Cherokesisk"
-
-#: gtk/script-names.c:21
-msgctxt "Script"
-msgid "Coptic"
-msgstr "Koptisk"
-
-#: gtk/script-names.c:22
-msgctxt "Script"
-msgid "Cyrillic"
-msgstr "Kyrillisk"
-
-#: gtk/script-names.c:23
-msgctxt "Script"
-msgid "Deseret"
-msgstr "Deseret"
-
-#: gtk/script-names.c:24
-msgctxt "Script"
-msgid "Devanagari"
-msgstr "Devanagari"
-
-#: gtk/script-names.c:25
-msgctxt "Script"
-msgid "Ethiopic"
-msgstr "Etiopisk"
-
-#: gtk/script-names.c:26
-msgctxt "Script"
-msgid "Georgian"
-msgstr "Georgisk"
-
-#: gtk/script-names.c:27
-msgctxt "Script"
-msgid "Gothic"
-msgstr "Gotisk"
-
-#: gtk/script-names.c:28
-msgctxt "Script"
-msgid "Greek"
-msgstr "Grekisk"
-
-#: gtk/script-names.c:29
-msgctxt "Script"
-msgid "Gujarati"
-msgstr "Gujarati"
-
-#: gtk/script-names.c:30
-msgctxt "Script"
-msgid "Gurmukhi"
-msgstr "Gurmukhi"
-
-#: gtk/script-names.c:31
-msgctxt "Script"
-msgid "Han"
-msgstr "Han"
-
-#: gtk/script-names.c:32
-msgctxt "Script"
-msgid "Hangul"
-msgstr "Hangul"
-
-#: gtk/script-names.c:33
-msgctxt "Script"
-msgid "Hebrew"
-msgstr "Hebreisk"
-
-#: gtk/script-names.c:34
-msgctxt "Script"
-msgid "Hiragana"
-msgstr "Hiragana"
-
-#: gtk/script-names.c:35
-msgctxt "Script"
-msgid "Kannada"
-msgstr "Kannada"
-
-#: gtk/script-names.c:36
-msgctxt "Script"
-msgid "Katakana"
-msgstr "Katakana"
-
-#: gtk/script-names.c:37
-msgctxt "Script"
-msgid "Khmer"
-msgstr "Khmer"
-
-#: gtk/script-names.c:38
-msgctxt "Script"
-msgid "Lao"
-msgstr "Lao"
-
-#: gtk/script-names.c:39
-msgctxt "Script"
-msgid "Latin"
-msgstr "Latinsk"
-
-#: gtk/script-names.c:40
-msgctxt "Script"
-msgid "Malayalam"
-msgstr "Malayalam"
-
-#: gtk/script-names.c:41
-msgctxt "Script"
-msgid "Mongolian"
-msgstr "Mongolisk"
-
-#: gtk/script-names.c:42
-msgctxt "Script"
-msgid "Myanmar"
-msgstr "Myanmar"
-
-#: gtk/script-names.c:43
-msgctxt "Script"
-msgid "Ogham"
-msgstr "Ogham"
-
-#: gtk/script-names.c:44
-msgctxt "Script"
-msgid "Old Italic"
-msgstr "Fornitalisk"
-
-#: gtk/script-names.c:45
-msgctxt "Script"
-msgid "Oriya"
-msgstr "Oriya"
-
-#: gtk/script-names.c:46
-msgctxt "Script"
-msgid "Runic"
-msgstr "Runskrift"
-
-#: gtk/script-names.c:47
-msgctxt "Script"
-msgid "Sinhala"
-msgstr "Sinhala"
-
-#: gtk/script-names.c:48
-msgctxt "Script"
-msgid "Syriac"
-msgstr "Syrisk"
-
-#: gtk/script-names.c:49
-msgctxt "Script"
-msgid "Tamil"
-msgstr "Tamilsk"
-
-#: gtk/script-names.c:50
-msgctxt "Script"
-msgid "Telugu"
-msgstr "Telugu"
-
-#: gtk/script-names.c:51
-msgctxt "Script"
-msgid "Thaana"
-msgstr "Thaana"
-
-#: gtk/script-names.c:52
-msgctxt "Script"
-msgid "Thai"
-msgstr "Thailändsk"
-
-#: gtk/script-names.c:53
-msgctxt "Script"
-msgid "Tibetan"
-msgstr "Tibetansk"
-
-#: gtk/script-names.c:54
-msgctxt "Script"
-msgid "Canadian Aboriginal"
-msgstr "Kanadensisk-aboriginsk"
-
-#: gtk/script-names.c:55
-msgctxt "Script"
-msgid "Yi"
-msgstr "Yi"
-
-#: gtk/script-names.c:56
-msgctxt "Script"
-msgid "Tagalog"
-msgstr "Tagalog"
-
-#: gtk/script-names.c:57
-msgctxt "Script"
-msgid "Hanunoo"
-msgstr "Hanunoo"
-
-#: gtk/script-names.c:58
-msgctxt "Script"
-msgid "Buhid"
-msgstr "Buhid"
-
-#: gtk/script-names.c:59
-msgctxt "Script"
-msgid "Tagbanwa"
-msgstr "Tagbanwa"
-
-#: gtk/script-names.c:60
-msgctxt "Script"
-msgid "Braille"
-msgstr "Punktskrift"
-
-#: gtk/script-names.c:61
-msgctxt "Script"
-msgid "Cypriot"
-msgstr "Cypriotisk"
-
-#: gtk/script-names.c:62
-msgctxt "Script"
-msgid "Limbu"
-msgstr "Limbu"
-
-#: gtk/script-names.c:63
-msgctxt "Script"
-msgid "Osmanya"
-msgstr "Osmanya"
-
-#: gtk/script-names.c:64
-msgctxt "Script"
-msgid "Shavian"
-msgstr "Shavisk"
-
-#: gtk/script-names.c:65
-msgctxt "Script"
-msgid "Linear B"
-msgstr "Linjär B"
-
-#: gtk/script-names.c:66
-msgctxt "Script"
-msgid "Tai Le"
-msgstr "Tai le"
-
-#: gtk/script-names.c:67
-msgctxt "Script"
-msgid "Ugaritic"
-msgstr "Ugaritisk"
-
-#: gtk/script-names.c:68
-msgctxt "Script"
-msgid "New Tai Lue"
-msgstr "Ny tai lue"
-
-#: gtk/script-names.c:69
-msgctxt "Script"
-msgid "Buginese"
-msgstr "Buginesisk"
-
-#: gtk/script-names.c:70
-msgctxt "Script"
-msgid "Glagolitic"
-msgstr "Glagolitisk"
-
-#: gtk/script-names.c:71
-msgctxt "Script"
-msgid "Tifinagh"
-msgstr "Tifinagh"
-
-#: gtk/script-names.c:72
-msgctxt "Script"
-msgid "Syloti Nagri"
-msgstr "Syloti nagri"
-
-#: gtk/script-names.c:73
-msgctxt "Script"
-msgid "Old Persian"
-msgstr "Gammalpersisk"
-
-#: gtk/script-names.c:74
-msgctxt "Script"
-msgid "Kharoshthi"
-msgstr "Kharoshthi"
-
-#: gtk/script-names.c:75
-msgctxt "Script"
-msgid "Unknown"
-msgstr "Okänd"
-
-#: gtk/script-names.c:76
-msgctxt "Script"
-msgid "Balinese"
-msgstr "Balinesisk"
-
-#: gtk/script-names.c:77
-msgctxt "Script"
-msgid "Cuneiform"
-msgstr "Kilskrift"
-
-#: gtk/script-names.c:78
-msgctxt "Script"
-msgid "Phoenician"
-msgstr "Phoenicisk"
-
-#: gtk/script-names.c:79
-msgctxt "Script"
-msgid "Phags-pa"
-msgstr "Phags-pa"
-
-#: gtk/script-names.c:80
-msgctxt "Script"
-msgid "N'Ko"
-msgstr "N'Ko"
-
-#: gtk/script-names.c:81
-msgctxt "Script"
-msgid "Kayah Li"
-msgstr "Kayah li"
-
-#: gtk/script-names.c:82
-msgctxt "Script"
-msgid "Lepcha"
-msgstr "Lepcha"
-
-#: gtk/script-names.c:83
-msgctxt "Script"
-msgid "Rejang"
-msgstr "Rejang"
-
-#: gtk/script-names.c:84
-msgctxt "Script"
-msgid "Sundanese"
-msgstr "Sundanesisk"
-
-#: gtk/script-names.c:85
-msgctxt "Script"
-msgid "Saurashtra"
-msgstr "Saurashtra"
-
-#: gtk/script-names.c:86
-msgctxt "Script"
-msgid "Cham"
-msgstr "Cham"
-
-#: gtk/script-names.c:87
-msgctxt "Script"
-msgid "Ol Chiki"
-msgstr "Ol chiki"
-
-#: gtk/script-names.c:88
-msgctxt "Script"
-msgid "Vai"
-msgstr "Vai"
-
-#: gtk/script-names.c:89
-msgctxt "Script"
-msgid "Carian"
-msgstr "Karisk"
-
-#: gtk/script-names.c:90
-msgctxt "Script"
-msgid "Lycian"
-msgstr "Lykisk"
-
-#: gtk/script-names.c:91
-msgctxt "Script"
-msgid "Lydian"
-msgstr "Lydisk"
-
-#: gtk/script-names.c:92
-msgctxt "Script"
-msgid "Avestan"
-msgstr "Avestisk"
-
-#: gtk/script-names.c:93
-msgctxt "Script"
-msgid "Bamum"
-msgstr "Bamum"
-
-#: gtk/script-names.c:94
-msgctxt "Script"
-msgid "Egyptian Hieroglyphs"
-msgstr "Egyptiska hieroglyfer"
-
-#: gtk/script-names.c:95
-msgctxt "Script"
-msgid "Imperial Aramaic"
-msgstr "Senarameisk"
-
-#: gtk/script-names.c:96
-msgctxt "Script"
-msgid "Inscriptional Pahlavi"
-msgstr "Inskriptionell pahlavi"
-
-#: gtk/script-names.c:97
-msgctxt "Script"
-msgid "Inscriptional Parthian"
-msgstr "Inskriptionell parthisk"
-
-#: gtk/script-names.c:98
-msgctxt "Script"
-msgid "Javanese"
-msgstr "Javanesisk"
-
-#: gtk/script-names.c:99
-msgctxt "Script"
-msgid "Kaithi"
-msgstr "Kaithi"
-
-#: gtk/script-names.c:100
-msgctxt "Script"
-msgid "Lisu"
-msgstr "Lisu"
-
-#: gtk/script-names.c:101
-msgctxt "Script"
-msgid "Meetei Mayek"
-msgstr "Meetei mayek"
-
-#: gtk/script-names.c:102
-msgctxt "Script"
-msgid "Old South Arabian"
-msgstr "Fornsydarabisk"
-
-#: gtk/script-names.c:103
-msgctxt "Script"
-msgid "Old Turkic"
-msgstr "Fornturkisk"
-
-#: gtk/script-names.c:104
-msgctxt "Script"
-msgid "Samaritan"
-msgstr "Samaritansk"
-
-#: gtk/script-names.c:105
-msgctxt "Script"
-msgid "Tai Tham"
-msgstr "Tai Tham"
-
-#: gtk/script-names.c:106
-msgctxt "Script"
-msgid "Tai Viet"
-msgstr "Tai viet"
-
-#: gtk/script-names.c:107
-msgctxt "Script"
-msgid "Batak"
-msgstr "Batak"
-
-#: gtk/script-names.c:108
-msgctxt "Script"
-msgid "Brahmi"
-msgstr "Brahmi"
-
-#: gtk/script-names.c:109
-msgctxt "Script"
-msgid "Mandaic"
-msgstr "Mandeisk"
-
-#: gtk/script-names.c:110
-msgctxt "Script"
-msgid "Chakma"
-msgstr "Chakma"
-
-#: gtk/script-names.c:111
-msgctxt "Script"
-msgid "Meroitic Cursive"
-msgstr "Meroitisk kursiv"
-
-#: gtk/script-names.c:112
-msgctxt "Script"
-msgid "Meroitic Hieroglyphs"
-msgstr "Meroitiska hieroglyfer"
-
-#: gtk/script-names.c:113
-msgctxt "Script"
-msgid "Miao"
-msgstr "Miao"
-
-#: gtk/script-names.c:114
-msgctxt "Script"
-msgid "Sharada"
-msgstr "Sharada"
-
-#: gtk/script-names.c:115
-msgctxt "Script"
-msgid "Sora Sompeng"
-msgstr "Sora sompeng"
-
-#: gtk/script-names.c:116
-msgctxt "Script"
-msgid "Takri"
-msgstr "Takri"
-
-#: gtk/script-names.c:117
-msgctxt "Script"
-msgid "Bassa"
-msgstr "Bassa"
-
-#: gtk/script-names.c:118
-msgctxt "Script"
-msgid "Caucasian Albanian"
-msgstr "Kaukasisk albansk"
-
-#: gtk/script-names.c:119
-msgctxt "Script"
-msgid "Duployan"
-msgstr "Duployé"
-
-#: gtk/script-names.c:120
-msgctxt "Script"
-msgid "Elbasan"
-msgstr "Elbasan"
-
-#: gtk/script-names.c:121
-msgctxt "Script"
-msgid "Grantha"
-msgstr "Grantha"
-
-#: gtk/script-names.c:122
-msgctxt "Script"
-msgid "Khojki"
-msgstr "Khojkisk"
-
-#: gtk/script-names.c:123
-msgctxt "Script"
-msgid "Khudawadi, Sindhi"
-msgstr "Khudawadi, Sindhi"
-
-#: gtk/script-names.c:124
-msgctxt "Script"
-msgid "Linear A"
-msgstr "Linjär A"
-
-#: gtk/script-names.c:125
-msgctxt "Script"
-msgid "Mahajani"
-msgstr "Mahajani"
-
-#: gtk/script-names.c:126
-msgctxt "Script"
-msgid "Manichaean"
-msgstr "Manikeisk"
-
-#: gtk/script-names.c:127
-msgctxt "Script"
-msgid "Mende Kikakui"
-msgstr "Mende kikakui"
-
-#: gtk/script-names.c:128
-msgctxt "Script"
-msgid "Modi"
-msgstr "Modi"
-
-#: gtk/script-names.c:129
-msgctxt "Script"
-msgid "Mro"
-msgstr "Mru"
-
-#: gtk/script-names.c:130
-msgctxt "Script"
-msgid "Nabataean"
-msgstr "Nabatéisk"
-
-#: gtk/script-names.c:131
-msgctxt "Script"
-msgid "Old North Arabian"
-msgstr "Fornnordarabisk"
-
-#: gtk/script-names.c:132
-msgctxt "Script"
-msgid "Old Permic"
-msgstr "Fornpermisk"
-
-#: gtk/script-names.c:133
-msgctxt "Script"
-msgid "Pahawh Hmong"
-msgstr "Pahaw mong"
-
-#: gtk/script-names.c:134
-msgctxt "Script"
-msgid "Palmyrene"
-msgstr "Palmyrensk"
-
-#: gtk/script-names.c:135
-msgctxt "Script"
-msgid "Pau Cin Hau"
-msgstr "Pau Cin Hau"
-
-#: gtk/script-names.c:136
-msgctxt "Script"
-msgid "Psalter Pahlavi"
-msgstr "Psaltaren-pahlavi"
-
-#: gtk/script-names.c:137
-msgctxt "Script"
-msgid "Siddham"
-msgstr "Siddham"
-
-#: gtk/script-names.c:138
-msgctxt "Script"
-msgid "Tirhuta"
-msgstr "Tirhuta"
-
-#: gtk/script-names.c:139
-msgctxt "Script"
-msgid "Warang Citi"
-msgstr "Warang Citi"
-
-#: gtk/script-names.c:140
-msgctxt "Script"
-msgid "Ahom"
-msgstr "Ahom"
-
-#: gtk/script-names.c:141
-msgctxt "Script"
-msgid "Anatolian Hieroglyphs"
-msgstr "Anatoliska hieroglyfer"
-
-#: gtk/script-names.c:142
-msgctxt "Script"
-msgid "Hatran"
-msgstr "Hatransk"
-
-#: gtk/script-names.c:143
-msgctxt "Script"
-msgid "Multani"
-msgstr "Multani"
-
-#: gtk/script-names.c:144
-msgctxt "Script"
-msgid "Old Hungarian"
-msgstr "Fornungersk"
-
-#: gtk/script-names.c:145
-msgctxt "Script"
-msgid "Signwriting"
-msgstr "Teckningsskrift"
-
-#: gtk/script-names.c:146
-msgctxt "Script"
-msgid "Adlam"
-msgstr "Adlam"
-
-#: gtk/script-names.c:147
-msgctxt "Script"
-msgid "Bhaiksuki"
-msgstr "Bhaiksuki"
-
-#: gtk/script-names.c:148
-msgctxt "Script"
-msgid "Marchen"
-msgstr "Marchen"
-
-#: gtk/script-names.c:149
-msgctxt "Script"
-msgid "Newa"
-msgstr "Newa"
-
-#: gtk/script-names.c:150
-msgctxt "Script"
-msgid "Osage"
-msgstr "Osage"
-
-#: gtk/script-names.c:151
-msgctxt "Script"
-msgid "Tangut"
-msgstr "Tangut"
-
-#: gtk/script-names.c:152
-msgctxt "Script"
-msgid "Masaram Gondi"
-msgstr "Masaram Gondi"
-
-#: gtk/script-names.c:153
-msgctxt "Script"
-msgid "Nushu"
-msgstr "Nushu"
-
-#: gtk/script-names.c:154
-msgctxt "Script"
-msgid "Soyombo"
-msgstr "Soyombo"
-
-#: gtk/script-names.c:155
-msgctxt "Script"
-msgid "Zanabazar Square"
-msgstr "Zanabazar-kvadratskrift"
-
-#: gtk/script-names.c:156
-msgctxt "Script"
-msgid "Dogra"
-msgstr "Dogra"
-
-#: gtk/script-names.c:157
-msgctxt "Script"
-msgid "Gunjala Gondi"
-msgstr "Gunjala Gondi"
-
-#: gtk/script-names.c:158
-msgctxt "Script"
-msgid "Hanifi Rohingya"
-msgstr "Hanifi Rohingya"
-
-#: gtk/script-names.c:159
-msgctxt "Script"
-msgid "Makasar"
-msgstr "Makasar"
-
-#: gtk/script-names.c:160
-msgctxt "Script"
-msgid "Medefaidrin"
-msgstr "Medefaidrin"
-
-#: gtk/script-names.c:161
-msgctxt "Script"
-msgid "Old Sogdian"
-msgstr "Fornsogdisk"
-
-#: gtk/script-names.c:162
-msgctxt "Script"
-msgid "Sogdian"
-msgstr "Sogdisk"
-
-#: gtk/script-names.c:165 gtk/script-names.c:170
-msgctxt "Script"
-msgid "Elym"
-msgstr "Elym"
-
-#: gtk/script-names.c:166 gtk/script-names.c:171
-msgctxt "Script"
-msgid "Nand"
-msgstr "Nand"
-
-#: gtk/script-names.c:167 gtk/script-names.c:172
-msgctxt "Script"
-msgid "Rohg"
-msgstr "Rohg"
-
-#: gtk/script-names.c:168 gtk/script-names.c:173
-msgctxt "Script"
-msgid "Wcho"
-msgstr "Wcho"
-
-#: gtk/script-names.c:176 gtk/script-names.c:181
-msgctxt "Script"
-msgid "Chorasmian"
-msgstr "Khwarezmisk"
-
-#: gtk/script-names.c:177 gtk/script-names.c:182
-msgctxt "Script"
-msgid "Dives Akuru"
-msgstr "Dives Akuru"
-
-#: gtk/script-names.c:178 gtk/script-names.c:183
-msgctxt "Script"
-msgid "Khitan small script"
-msgstr "Khitansk liten skrift"
-
-#: gtk/script-names.c:179 gtk/script-names.c:184
-msgctxt "Script"
-msgid "Yezidi"
-msgstr "Yezidi"
-
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "Inställningar"
@@ -7403,43 +6690,49 @@ msgstr ""
 "\n"
 "Utför diverse uppgifter på GtkBuilders .ui-filer.\n"
 
-#: tools/gtk-builder-tool-simplify.c:437
+#: tools/gtk-builder-tool-simplify.c:440
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: Kunde inte tolka värde för egenskapen ”%s”: %s\n"
 
 # TODO: ev ta bort ett blanksteg i andra %s som bestäms av kind_str[] = { "", "Packing ", "Cell ", "Layout " };
-#: tools/gtk-builder-tool-simplify.c:646
+#: tools/gtk-builder-tool-simplify.c:649
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %segenskap %s::%s hittades inte\n"
 
-#: tools/gtk-builder-tool-simplify.c:2283
+#: tools/gtk-builder-tool-simplify.c:2286
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Kan inte läsa in ”%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2294
+#: tools/gtk-builder-tool-simplify.c:2297
+#: tools/gtk-builder-tool-simplify.c:2303
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Kan inte tolka ”%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2318
+#: tools/gtk-builder-tool-simplify.c:2309
+#, c-format
+msgid "Can’t parse “%s”\n"
+msgstr "Kan inte tolka ”%s”\n"
+
+#: tools/gtk-builder-tool-simplify.c:2333
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Misslyckades med att läsa ”%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2324
+#: tools/gtk-builder-tool-simplify.c:2339
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Misslyckades med att skriva %s: ”%s”\n"
 
-#: tools/gtk-builder-tool-simplify.c:2364
+#: tools/gtk-builder-tool-simplify.c:2379
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Ingen .ui-fil angiven\n"
 
-#: tools/gtk-builder-tool-simplify.c:2370
+#: tools/gtk-builder-tool-simplify.c:2385
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Kan endast förenkla en ensam .ui-fil utan --replace\n"
@@ -7606,6 +6899,626 @@ msgid ""
 msgstr ""
 "Ingen temaindexfil i ”%s”.\n"
 "Om du verkligen vill skapa en ikoncache här, använd --ignore-theme-index.\n"
+
+#~ msgctxt "Script"
+#~ msgid "Arabic"
+#~ msgstr "Arabisk"
+
+#~ msgctxt "Script"
+#~ msgid "Armenian"
+#~ msgstr "Armenisk"
+
+#~ msgctxt "Script"
+#~ msgid "Bengali"
+#~ msgstr "Bengali"
+
+#~ msgctxt "Script"
+#~ msgid "Bopomofo"
+#~ msgstr "Bopomofo"
+
+#~ msgctxt "Script"
+#~ msgid "Cherokee"
+#~ msgstr "Cherokesisk"
+
+#~ msgctxt "Script"
+#~ msgid "Coptic"
+#~ msgstr "Koptisk"
+
+#~ msgctxt "Script"
+#~ msgid "Cyrillic"
+#~ msgstr "Kyrillisk"
+
+#~ msgctxt "Script"
+#~ msgid "Deseret"
+#~ msgstr "Deseret"
+
+#~ msgctxt "Script"
+#~ msgid "Devanagari"
+#~ msgstr "Devanagari"
+
+#~ msgctxt "Script"
+#~ msgid "Ethiopic"
+#~ msgstr "Etiopisk"
+
+#~ msgctxt "Script"
+#~ msgid "Georgian"
+#~ msgstr "Georgisk"
+
+#~ msgctxt "Script"
+#~ msgid "Gothic"
+#~ msgstr "Gotisk"
+
+#~ msgctxt "Script"
+#~ msgid "Greek"
+#~ msgstr "Grekisk"
+
+#~ msgctxt "Script"
+#~ msgid "Gujarati"
+#~ msgstr "Gujarati"
+
+#~ msgctxt "Script"
+#~ msgid "Gurmukhi"
+#~ msgstr "Gurmukhi"
+
+#~ msgctxt "Script"
+#~ msgid "Han"
+#~ msgstr "Han"
+
+#~ msgctxt "Script"
+#~ msgid "Hangul"
+#~ msgstr "Hangul"
+
+#~ msgctxt "Script"
+#~ msgid "Hebrew"
+#~ msgstr "Hebreisk"
+
+#~ msgctxt "Script"
+#~ msgid "Hiragana"
+#~ msgstr "Hiragana"
+
+#~ msgctxt "Script"
+#~ msgid "Kannada"
+#~ msgstr "Kannada"
+
+#~ msgctxt "Script"
+#~ msgid "Katakana"
+#~ msgstr "Katakana"
+
+#~ msgctxt "Script"
+#~ msgid "Khmer"
+#~ msgstr "Khmer"
+
+#~ msgctxt "Script"
+#~ msgid "Lao"
+#~ msgstr "Lao"
+
+#~ msgctxt "Script"
+#~ msgid "Latin"
+#~ msgstr "Latinsk"
+
+#~ msgctxt "Script"
+#~ msgid "Malayalam"
+#~ msgstr "Malayalam"
+
+#~ msgctxt "Script"
+#~ msgid "Mongolian"
+#~ msgstr "Mongolisk"
+
+#~ msgctxt "Script"
+#~ msgid "Myanmar"
+#~ msgstr "Myanmar"
+
+#~ msgctxt "Script"
+#~ msgid "Ogham"
+#~ msgstr "Ogham"
+
+#~ msgctxt "Script"
+#~ msgid "Old Italic"
+#~ msgstr "Fornitalisk"
+
+#~ msgctxt "Script"
+#~ msgid "Oriya"
+#~ msgstr "Oriya"
+
+#~ msgctxt "Script"
+#~ msgid "Runic"
+#~ msgstr "Runskrift"
+
+#~ msgctxt "Script"
+#~ msgid "Sinhala"
+#~ msgstr "Sinhala"
+
+#~ msgctxt "Script"
+#~ msgid "Syriac"
+#~ msgstr "Syrisk"
+
+#~ msgctxt "Script"
+#~ msgid "Tamil"
+#~ msgstr "Tamilsk"
+
+#~ msgctxt "Script"
+#~ msgid "Telugu"
+#~ msgstr "Telugu"
+
+#~ msgctxt "Script"
+#~ msgid "Thaana"
+#~ msgstr "Thaana"
+
+#~ msgctxt "Script"
+#~ msgid "Thai"
+#~ msgstr "Thailändsk"
+
+#~ msgctxt "Script"
+#~ msgid "Tibetan"
+#~ msgstr "Tibetansk"
+
+#~ msgctxt "Script"
+#~ msgid "Canadian Aboriginal"
+#~ msgstr "Kanadensisk-aboriginsk"
+
+#~ msgctxt "Script"
+#~ msgid "Yi"
+#~ msgstr "Yi"
+
+#~ msgctxt "Script"
+#~ msgid "Tagalog"
+#~ msgstr "Tagalog"
+
+#~ msgctxt "Script"
+#~ msgid "Hanunoo"
+#~ msgstr "Hanunoo"
+
+#~ msgctxt "Script"
+#~ msgid "Buhid"
+#~ msgstr "Buhid"
+
+#~ msgctxt "Script"
+#~ msgid "Tagbanwa"
+#~ msgstr "Tagbanwa"
+
+#~ msgctxt "Script"
+#~ msgid "Braille"
+#~ msgstr "Punktskrift"
+
+#~ msgctxt "Script"
+#~ msgid "Cypriot"
+#~ msgstr "Cypriotisk"
+
+#~ msgctxt "Script"
+#~ msgid "Limbu"
+#~ msgstr "Limbu"
+
+#~ msgctxt "Script"
+#~ msgid "Osmanya"
+#~ msgstr "Osmanya"
+
+#~ msgctxt "Script"
+#~ msgid "Shavian"
+#~ msgstr "Shavisk"
+
+#~ msgctxt "Script"
+#~ msgid "Linear B"
+#~ msgstr "Linjär B"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Le"
+#~ msgstr "Tai le"
+
+#~ msgctxt "Script"
+#~ msgid "Ugaritic"
+#~ msgstr "Ugaritisk"
+
+#~ msgctxt "Script"
+#~ msgid "New Tai Lue"
+#~ msgstr "Ny tai lue"
+
+#~ msgctxt "Script"
+#~ msgid "Buginese"
+#~ msgstr "Buginesisk"
+
+#~ msgctxt "Script"
+#~ msgid "Glagolitic"
+#~ msgstr "Glagolitisk"
+
+#~ msgctxt "Script"
+#~ msgid "Tifinagh"
+#~ msgstr "Tifinagh"
+
+#~ msgctxt "Script"
+#~ msgid "Syloti Nagri"
+#~ msgstr "Syloti nagri"
+
+#~ msgctxt "Script"
+#~ msgid "Old Persian"
+#~ msgstr "Gammalpersisk"
+
+#~ msgctxt "Script"
+#~ msgid "Kharoshthi"
+#~ msgstr "Kharoshthi"
+
+#~ msgctxt "Script"
+#~ msgid "Unknown"
+#~ msgstr "Okänd"
+
+#~ msgctxt "Script"
+#~ msgid "Balinese"
+#~ msgstr "Balinesisk"
+
+#~ msgctxt "Script"
+#~ msgid "Cuneiform"
+#~ msgstr "Kilskrift"
+
+#~ msgctxt "Script"
+#~ msgid "Phoenician"
+#~ msgstr "Phoenicisk"
+
+#~ msgctxt "Script"
+#~ msgid "Phags-pa"
+#~ msgstr "Phags-pa"
+
+#~ msgctxt "Script"
+#~ msgid "N'Ko"
+#~ msgstr "N'Ko"
+
+#~ msgctxt "Script"
+#~ msgid "Kayah Li"
+#~ msgstr "Kayah li"
+
+#~ msgctxt "Script"
+#~ msgid "Lepcha"
+#~ msgstr "Lepcha"
+
+#~ msgctxt "Script"
+#~ msgid "Rejang"
+#~ msgstr "Rejang"
+
+#~ msgctxt "Script"
+#~ msgid "Sundanese"
+#~ msgstr "Sundanesisk"
+
+#~ msgctxt "Script"
+#~ msgid "Saurashtra"
+#~ msgstr "Saurashtra"
+
+#~ msgctxt "Script"
+#~ msgid "Cham"
+#~ msgstr "Cham"
+
+#~ msgctxt "Script"
+#~ msgid "Ol Chiki"
+#~ msgstr "Ol chiki"
+
+#~ msgctxt "Script"
+#~ msgid "Vai"
+#~ msgstr "Vai"
+
+#~ msgctxt "Script"
+#~ msgid "Carian"
+#~ msgstr "Karisk"
+
+#~ msgctxt "Script"
+#~ msgid "Lycian"
+#~ msgstr "Lykisk"
+
+#~ msgctxt "Script"
+#~ msgid "Lydian"
+#~ msgstr "Lydisk"
+
+#~ msgctxt "Script"
+#~ msgid "Avestan"
+#~ msgstr "Avestisk"
+
+#~ msgctxt "Script"
+#~ msgid "Bamum"
+#~ msgstr "Bamum"
+
+#~ msgctxt "Script"
+#~ msgid "Egyptian Hieroglyphs"
+#~ msgstr "Egyptiska hieroglyfer"
+
+#~ msgctxt "Script"
+#~ msgid "Imperial Aramaic"
+#~ msgstr "Senarameisk"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Pahlavi"
+#~ msgstr "Inskriptionell pahlavi"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Parthian"
+#~ msgstr "Inskriptionell parthisk"
+
+#~ msgctxt "Script"
+#~ msgid "Javanese"
+#~ msgstr "Javanesisk"
+
+#~ msgctxt "Script"
+#~ msgid "Kaithi"
+#~ msgstr "Kaithi"
+
+#~ msgctxt "Script"
+#~ msgid "Lisu"
+#~ msgstr "Lisu"
+
+#~ msgctxt "Script"
+#~ msgid "Meetei Mayek"
+#~ msgstr "Meetei mayek"
+
+#~ msgctxt "Script"
+#~ msgid "Old South Arabian"
+#~ msgstr "Fornsydarabisk"
+
+#~ msgctxt "Script"
+#~ msgid "Old Turkic"
+#~ msgstr "Fornturkisk"
+
+#~ msgctxt "Script"
+#~ msgid "Samaritan"
+#~ msgstr "Samaritansk"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Tham"
+#~ msgstr "Tai Tham"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Viet"
+#~ msgstr "Tai viet"
+
+#~ msgctxt "Script"
+#~ msgid "Batak"
+#~ msgstr "Batak"
+
+#~ msgctxt "Script"
+#~ msgid "Brahmi"
+#~ msgstr "Brahmi"
+
+#~ msgctxt "Script"
+#~ msgid "Mandaic"
+#~ msgstr "Mandeisk"
+
+#~ msgctxt "Script"
+#~ msgid "Chakma"
+#~ msgstr "Chakma"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Cursive"
+#~ msgstr "Meroitisk kursiv"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Hieroglyphs"
+#~ msgstr "Meroitiska hieroglyfer"
+
+#~ msgctxt "Script"
+#~ msgid "Miao"
+#~ msgstr "Miao"
+
+#~ msgctxt "Script"
+#~ msgid "Sharada"
+#~ msgstr "Sharada"
+
+#~ msgctxt "Script"
+#~ msgid "Sora Sompeng"
+#~ msgstr "Sora sompeng"
+
+#~ msgctxt "Script"
+#~ msgid "Takri"
+#~ msgstr "Takri"
+
+#~ msgctxt "Script"
+#~ msgid "Bassa"
+#~ msgstr "Bassa"
+
+#~ msgctxt "Script"
+#~ msgid "Caucasian Albanian"
+#~ msgstr "Kaukasisk albansk"
+
+#~ msgctxt "Script"
+#~ msgid "Duployan"
+#~ msgstr "Duployé"
+
+#~ msgctxt "Script"
+#~ msgid "Elbasan"
+#~ msgstr "Elbasan"
+
+#~ msgctxt "Script"
+#~ msgid "Grantha"
+#~ msgstr "Grantha"
+
+#~ msgctxt "Script"
+#~ msgid "Khojki"
+#~ msgstr "Khojkisk"
+
+#~ msgctxt "Script"
+#~ msgid "Khudawadi, Sindhi"
+#~ msgstr "Khudawadi, Sindhi"
+
+#~ msgctxt "Script"
+#~ msgid "Linear A"
+#~ msgstr "Linjär A"
+
+#~ msgctxt "Script"
+#~ msgid "Mahajani"
+#~ msgstr "Mahajani"
+
+#~ msgctxt "Script"
+#~ msgid "Manichaean"
+#~ msgstr "Manikeisk"
+
+#~ msgctxt "Script"
+#~ msgid "Mende Kikakui"
+#~ msgstr "Mende kikakui"
+
+#~ msgctxt "Script"
+#~ msgid "Modi"
+#~ msgstr "Modi"
+
+#~ msgctxt "Script"
+#~ msgid "Mro"
+#~ msgstr "Mru"
+
+#~ msgctxt "Script"
+#~ msgid "Nabataean"
+#~ msgstr "Nabatéisk"
+
+#~ msgctxt "Script"
+#~ msgid "Old North Arabian"
+#~ msgstr "Fornnordarabisk"
+
+#~ msgctxt "Script"
+#~ msgid "Old Permic"
+#~ msgstr "Fornpermisk"
+
+#~ msgctxt "Script"
+#~ msgid "Pahawh Hmong"
+#~ msgstr "Pahaw mong"
+
+#~ msgctxt "Script"
+#~ msgid "Palmyrene"
+#~ msgstr "Palmyrensk"
+
+#~ msgctxt "Script"
+#~ msgid "Pau Cin Hau"
+#~ msgstr "Pau Cin Hau"
+
+#~ msgctxt "Script"
+#~ msgid "Psalter Pahlavi"
+#~ msgstr "Psaltaren-pahlavi"
+
+#~ msgctxt "Script"
+#~ msgid "Siddham"
+#~ msgstr "Siddham"
+
+#~ msgctxt "Script"
+#~ msgid "Tirhuta"
+#~ msgstr "Tirhuta"
+
+#~ msgctxt "Script"
+#~ msgid "Warang Citi"
+#~ msgstr "Warang Citi"
+
+#~ msgctxt "Script"
+#~ msgid "Ahom"
+#~ msgstr "Ahom"
+
+#~ msgctxt "Script"
+#~ msgid "Anatolian Hieroglyphs"
+#~ msgstr "Anatoliska hieroglyfer"
+
+#~ msgctxt "Script"
+#~ msgid "Hatran"
+#~ msgstr "Hatransk"
+
+#~ msgctxt "Script"
+#~ msgid "Multani"
+#~ msgstr "Multani"
+
+#~ msgctxt "Script"
+#~ msgid "Old Hungarian"
+#~ msgstr "Fornungersk"
+
+#~ msgctxt "Script"
+#~ msgid "Signwriting"
+#~ msgstr "Teckningsskrift"
+
+#~ msgctxt "Script"
+#~ msgid "Adlam"
+#~ msgstr "Adlam"
+
+#~ msgctxt "Script"
+#~ msgid "Bhaiksuki"
+#~ msgstr "Bhaiksuki"
+
+#~ msgctxt "Script"
+#~ msgid "Marchen"
+#~ msgstr "Marchen"
+
+#~ msgctxt "Script"
+#~ msgid "Newa"
+#~ msgstr "Newa"
+
+#~ msgctxt "Script"
+#~ msgid "Osage"
+#~ msgstr "Osage"
+
+#~ msgctxt "Script"
+#~ msgid "Tangut"
+#~ msgstr "Tangut"
+
+#~ msgctxt "Script"
+#~ msgid "Masaram Gondi"
+#~ msgstr "Masaram Gondi"
+
+#~ msgctxt "Script"
+#~ msgid "Nushu"
+#~ msgstr "Nushu"
+
+#~ msgctxt "Script"
+#~ msgid "Soyombo"
+#~ msgstr "Soyombo"
+
+#~ msgctxt "Script"
+#~ msgid "Zanabazar Square"
+#~ msgstr "Zanabazar-kvadratskrift"
+
+#~ msgctxt "Script"
+#~ msgid "Dogra"
+#~ msgstr "Dogra"
+
+#~ msgctxt "Script"
+#~ msgid "Gunjala Gondi"
+#~ msgstr "Gunjala Gondi"
+
+#~ msgctxt "Script"
+#~ msgid "Hanifi Rohingya"
+#~ msgstr "Hanifi Rohingya"
+
+#~ msgctxt "Script"
+#~ msgid "Makasar"
+#~ msgstr "Makasar"
+
+#~ msgctxt "Script"
+#~ msgid "Medefaidrin"
+#~ msgstr "Medefaidrin"
+
+#~ msgctxt "Script"
+#~ msgid "Old Sogdian"
+#~ msgstr "Fornsogdisk"
+
+#~ msgctxt "Script"
+#~ msgid "Sogdian"
+#~ msgstr "Sogdisk"
+
+#~ msgctxt "Script"
+#~ msgid "Elym"
+#~ msgstr "Elym"
+
+#~ msgctxt "Script"
+#~ msgid "Nand"
+#~ msgstr "Nand"
+
+#~ msgctxt "Script"
+#~ msgid "Rohg"
+#~ msgstr "Rohg"
+
+#~ msgctxt "Script"
+#~ msgid "Wcho"
+#~ msgstr "Wcho"
+
+#~ msgctxt "Script"
+#~ msgid "Chorasmian"
+#~ msgstr "Khwarezmisk"
+
+#~ msgctxt "Script"
+#~ msgid "Dives Akuru"
+#~ msgstr "Dives Akuru"
+
+#~ msgctxt "Script"
+#~ msgid "Khitan small script"
+#~ msgstr "Khitansk liten skrift"
+
+#~ msgctxt "Script"
+#~ msgid "Yezidi"
+#~ msgstr "Yezidi"
 
 #~ msgid "Failed to parse png image"
 #~ msgstr "Misslyckades med att tolka png-bild"
@@ -8820,9 +8733,6 @@ msgstr ""
 #~ msgid "Unexpected character data on line %d char %d"
 #~ msgstr "Oväntade teckendata på rad %d tecken %d"
 
-#~ msgid "Empty"
-#~ msgstr "Tom"
-
 #~ msgid "Artwork by"
 #~ msgstr "Grafik av"
 
@@ -8967,8 +8877,8 @@ msgstr ""
 #~ msgstr "”%s” är inte ett giltigt attributnamn"
 
 #~ msgid ""
-#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s"
-#~ "\""
+#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute "
+#~ "\"%s\""
 #~ msgstr ""
 #~ "”%s” kunde inte konverteras till ett värde av typen ”%s” för attributet "
 #~ "”%s”"
