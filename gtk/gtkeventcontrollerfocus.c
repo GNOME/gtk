@@ -149,7 +149,8 @@ gtk_event_controller_focus_handle_crossing (GtkEventController    *controller,
                                             double                 x,
                                             double                 y)
 {
-  if (crossing->type == GTK_CROSSING_FOCUS)
+  if (crossing->type == GTK_CROSSING_FOCUS ||
+      crossing->type == GTK_CROSSING_ACTIVE)
     update_focus (controller, crossing);
 }
 

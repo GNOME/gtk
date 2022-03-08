@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -148,9 +148,9 @@
  * # Accessibility
  *
  * `GtkWindow` uses the %GTK_ACCESSIBLE_ROLE_WINDOW role.
- * 
+ *
  * # Actions
- * 
+ *
  * `GtkWindow` defines a set of built-in actions:
  * - `default.activate`: Activate the default widget.
  * - `window.minimize`: Minimize the window.
@@ -565,7 +565,7 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 		    GtkDirectionType  direction)
 {
   guint keypad_keysym = keysym - GDK_KEY_Left + GDK_KEY_KP_Left;
-  
+
   gtk_widget_class_add_binding_signal (widget_class, keysym, 0,
                                        "move-focus",
                                        "(i)",
@@ -593,8 +593,8 @@ extract_time_from_startup_id (const char * startup_id)
   if (timestr)
     {
       char *end;
-      guint32 timestamp; 
-    
+      guint32 timestamp;
+
       /* Skip past the "_TIME" part */
       timestr += 5;
 
@@ -845,7 +845,7 @@ gtk_window_class_init (GtkWindowClass *klass)
    * GtkWindow:destroy-with-parent: (attributes org.gtk.Property.get=gtk_window_get_destroy_with_parent org.gtk.Property.set=gtk_window_set_destroy_with_parent)
    *
    * If this window should be destroyed when the parent is destroyed.
-   */ 
+   */
   window_props[PROP_DESTROY_WITH_PARENT] =
       g_param_spec_boolean ("destroy-with-parent",
                             P_("Destroy with Parent"),
@@ -1233,7 +1233,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                        "activate-focus", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, 0,
                                        "activate-focus", NULL);
-  
+
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Return, 0,
                                        "activate-default", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_ISO_Enter, 0,
@@ -2401,7 +2401,7 @@ handle_keys_changed (gpointer data)
   if (priv->application_shortcut_controller)
     gtk_shortcut_controller_update_accels (GTK_SHORTCUT_CONTROLLER (priv->application_shortcut_controller));
   g_signal_emit (window, window_signals[KEYS_CHANGED], 0);
-  
+
   return FALSE;
 }
 
@@ -3231,7 +3231,7 @@ get_icon_info (GtkWindow *window)
 {
   return g_object_get_qdata (G_OBJECT (window), quark_gtk_window_icon_info);
 }
-     
+
 static void
 free_icon_info (GtkWindowIconInfo *info)
 {
@@ -3246,7 +3246,7 @@ ensure_icon_info (GtkWindow *window)
   GtkWindowIconInfo *info;
 
   info = get_icon_info (window);
-  
+
   if (info == NULL)
     {
       info = g_slice_new0 (GtkWindowIconInfo);
@@ -3422,7 +3422,7 @@ gtk_window_unrealize_icon (GtkWindow *window)
 
   if (info == NULL)
     return;
-  
+
   /* We don't clear the properties on the window, just figure the
    * window is going away.
    */
@@ -3431,15 +3431,15 @@ gtk_window_unrealize_icon (GtkWindow *window)
 
 }
 
-static void 
+static void
 update_themed_icon (GtkWindow *window)
 {
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON_NAME]);
-  
+
   gtk_window_unrealize_icon (window);
-  
+
   if (_gtk_widget_get_realized (GTK_WIDGET (window)))
-    gtk_window_realize_icon (window);  
+    gtk_window_realize_icon (window);
 }
 
 /**
@@ -3524,7 +3524,7 @@ gtk_window_set_default_icon_name (const char *name)
     {
       GtkWindowIconInfo *info;
       GtkWindow *w = tmp_list->data;
-      
+
       info = get_icon_info (w);
       if (info && info->using_default_icon && info->using_themed_icon)
         {
@@ -3617,7 +3617,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
           g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DEFAULT_HEIGHT]);
         }
     }
-  
+
   g_object_thaw_notify (G_OBJECT (window));
 }
 
@@ -3867,7 +3867,7 @@ gtk_window_show (GtkWidget *widget)
 
   if (!priv->focus_widget)
     gtk_window_move_focus (widget, GTK_DIR_TAB_FORWARD);
-  
+
   if (priv->modal)
     gtk_grab_add (widget);
 }
@@ -3917,7 +3917,7 @@ gtk_window_update_toplevel (GtkWindow         *window,
                             GdkToplevelLayout *layout)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  
+
   if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), layout);
   gdk_toplevel_layout_unref (layout);
@@ -4149,7 +4149,7 @@ gtk_window_compute_min_size (GtkWidget      *window,
   while (start < end)
     {
       mid = (start + end) / 2;
-      
+
       gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation), mid, &other, NULL, NULL, NULL);
       ratio = (double) mid / other;
       if(ratio == ideal_ratio)
@@ -5864,9 +5864,15 @@ _gtk_window_set_is_active (GtkWindow *window,
       focus = g_object_ref (priv->focus_widget);
 
       if (is_active)
-        synthesize_focus_change_events (window, NULL, focus, GTK_CROSSING_ACTIVE);
+        {
+          synthesize_focus_change_events (window, NULL, focus, GTK_CROSSING_ACTIVE);
+          gtk_widget_set_has_focus (focus, TRUE);
+        }
       else
-        synthesize_focus_change_events (window, focus, NULL, GTK_CROSSING_ACTIVE);
+        {
+          synthesize_focus_change_events (window, focus, NULL, GTK_CROSSING_ACTIVE);
+          gtk_widget_set_has_focus (focus, FALSE);
+        }
 
       g_object_unref (focus);
     }
