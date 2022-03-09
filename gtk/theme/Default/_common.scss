@@ -1238,7 +1238,7 @@ dropdown > button > box {
 dropdown,
 combobox {
   arrow {
-    -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    -gtk-icon-source: -gtk-icontheme('go-down-symbolic');
     min-height: 16px;
     min-width: 16px;
   }
@@ -4375,16 +4375,16 @@ menubutton {
       -gtk-icon-source: -gtk-icontheme('open-menu-symbolic');
     }
     &.down {
-      -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+      -gtk-icon-source: -gtk-icontheme('go-down-symbolic');
     }
     &.up {
-      -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
+      -gtk-icon-source: -gtk-icontheme('go-up-symbolic');
     }
     &.left {
-      -gtk-icon-source: -gtk-icontheme('pan-start-symbolic');
+      -gtk-icon-source: -gtk-icontheme('go-start-symbolic');
     }
     &.right {
-      -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+      -gtk-icon-source: -gtk-icontheme('go-end-symbolic');
     }
   }
 }
