@@ -1200,7 +1200,11 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
         GdkDevice *pointer = gdk_seat_get_pointer (seat);
         GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (GDK_DISPLAY (self), pointer);
 
-        if (grab == NULL)
+        if ([(GdkMacosWindow *)window isInManualResizeOrMove])
+          {
+            ret = GDK_MACOS_EVENT_DROP;
+          }
+        else if (grab == NULL)
           {
             if (event_type == NSEventTypeMouseExited)
               [[NSCursor arrowCursor] set];
