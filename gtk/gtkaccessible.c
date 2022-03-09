@@ -425,7 +425,7 @@ gtk_accessible_reset_property (GtkAccessible         *self,
  * gtk_accessible_update_relation (accessible,
  *                                 GTK_ACCESSIBLE_RELATION_CONTROLS,
  *                                   ref1, NULL,
- *                                 GTK_ACCESSIBLE_LABELLED_BY,
+ *                                 GTK_ACCESSIBLE_RELATION_LABELLED_BY,
  *                                   ref1, ref2, ref3, NULL,
  *                                 -1);
  * ```
