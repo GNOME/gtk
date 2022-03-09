@@ -314,7 +314,11 @@ gdk_macos_display_queue_events (GdkDisplay *display)
     {
       GdkEvent *event = _gdk_macos_display_translate (self, nsevent);
 
-      if (event != NULL)
+      if (event == GDK_MACOS_EVENT_DROP)
+        {
+          [nsevent release];
+        }
+      else if (event != NULL)
         {
           push_nsevent (event, nsevent);
           _gdk_windowing_got_event (GDK_DISPLAY (self),

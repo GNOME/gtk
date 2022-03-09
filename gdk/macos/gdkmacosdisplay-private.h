@@ -43,6 +43,8 @@ G_BEGIN_DECLS
 #define GIC_FILTER_PASSTHRU  0
 #define GIC_FILTER_FILTERED  1
 
+#define GDK_MACOS_EVENT_DROP (GdkEvent *)GSIZE_TO_POINTER(1)
+
 struct _GdkMacosDisplay
 {
   GdkDisplay parent_instance;
