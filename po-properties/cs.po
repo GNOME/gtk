@@ -5268,7 +5268,7 @@ msgstr "Ukázat potomka"
 
 #: gtk/gtkrevealer.c:345
 msgid "Whether the container should reveal the child"
-msgstr "estli má kontejner ukázat potomka"
+msgstr "Jestli má kontejner ukázat potomka"
 
 #: gtk/gtkrevealer.c:356
 msgid "Child Revealed"
