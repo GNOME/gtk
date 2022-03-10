@@ -310,7 +310,7 @@ gdk_macos_display_queue_events (GdkDisplay *display)
 
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
 
-  if ((nsevent = _gdk_macos_event_source_get_pending ()))
+  while ((nsevent = _gdk_macos_event_source_get_pending ()))
     {
       GdkEvent *event = _gdk_macos_display_translate (self, nsevent);
 
