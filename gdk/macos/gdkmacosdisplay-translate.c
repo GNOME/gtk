@@ -628,7 +628,7 @@ fill_scroll_event (GdkMacosDisplay *self,
    * handle those internally.
    */
   if (phase == 0 && momentumPhase != 0)
-    return NULL;
+    return GDK_MACOS_EVENT_DROP;
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
   pointer = gdk_seat_get_pointer (seat);
