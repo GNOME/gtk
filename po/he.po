@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-02-22 20:08+0000\n"
+"POT-Creation-Date: 2022-03-09 10:50+0000\n"
 "PO-Revision-Date: 2022-02-22 22:21+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <GNOME Hebrew Translation Project>\n"
@@ -123,20 +123,20 @@ msgstr ""
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
 
-#: gdk/gdkglcontext.c:1266
+#: gdk/gdkglcontext.c:1273
 #, fuzzy
 #| msgid "GL support disabled via GDK_DEBUG"
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "GL support disabled via GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1275
+#: gdk/gdkglcontext.c:1282
 #, c-format
 msgid "Application does not support %s API"
 msgstr "היישום אינו תומך ב־API ‏%s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1796
+#: gdk/gdkglcontext.c:1803
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "מתבצע ניסיון להשתמש ב־%s אך %s כבר בשימוש"
@@ -555,7 +555,6 @@ msgstr "העומק %u אינו נתמך בתמונות png"
 
 #: gdk/loaders/gdkpng.c:246
 #, c-format
-#| msgid "Unsupported JPEG color space (%s)"
 msgid "Unsupported color type %u in png image"
 msgstr "סוג הצבע %u אינו נתמך בתמונות png"
 
@@ -1098,6 +1097,18 @@ msgid ""
 msgstr ""
 "תכנית זו מופצת ללא שום אחריות.\n"
 "ניתן לבקר בכתובת <a href=\"%s\">%s</a> לפרטים."
+
+#: gtk/ui/gtkaboutdialog.ui:62
+msgid "About"
+msgstr "על אודות"
+
+#: gtk/ui/gtkaboutdialog.ui:123
+msgid "Credits"
+msgstr "תודות"
+
+#: gtk/ui/gtkaboutdialog.ui:206
+msgid "System"
+msgstr "מערכת"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -3792,7 +3803,6 @@ msgid "Input Method"
 msgstr "שיטת קלט"
 
 #: gtk/inspector/general.ui:202
-#| msgid "Application"
 msgid "Application ID"
 msgstr "מזהה יישום"
 
@@ -4013,7 +4023,6 @@ msgstr "עמודה:"
 #.
 #: gtk/inspector/prop-editor.c:1472
 #, c-format
-#| msgid "Object: %p (%s)"
 msgid "Action from: %p (%s)"
 msgstr "פעולה מתוך: %p ‏(%s)"
 
@@ -4144,7 +4153,6 @@ msgid "Mode"
 msgstr "מצב"
 
 #: gtk/inspector/statistics.c:400
-#| msgid "GLib must be configured with --enable-debug"
 msgid "GLib must be configured with -Dbuildtype=debug"
 msgstr "‏GLib חייב להיות בנוי עם תצורת ‎-Dbuildtype=debug"
 
@@ -4321,8 +4329,6 @@ msgid "Objects"
 msgstr "עצמים"
 
 #: gtk/inspector/window.ui:231
-#| msgctxt "printing option"
-#| msgid "Two Sided"
 msgid "Toggle Sidebar"
 msgstr "הצגת סרגל צד"
 
@@ -6715,24 +6721,6 @@ msgstr "אי אפשר לסגור תזרים"
 
 #: tools/gtk-builder-tool.c:34
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate           Validate the file\n"
-#| "  simplify [OPTIONS] Simplify the file\n"
-#| "  enumerate          List all named objects\n"
-#| "  preview [OPTIONS]  Preview the file\n"
-#| "\n"
-#| "Simplify Options:\n"
-#| "  --replace          Replace the file\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID            Preview only the named object\n"
-#| "  --css=FILE         Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -6838,7 +6826,6 @@ msgstr "Show program version"
 #. Translators: this message will appear immediately after the
 #. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
 #: tools/gtk-launch.c:74
-#| msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgid "APPLICATION [URI…] — launch an APPLICATION"
 msgstr "APPLICATION [URI…] — launch an APPLICATION"
 
@@ -7416,17 +7403,6 @@ msgstr ""
 #~ msgctxt "Script"
 #~ msgid "Old Sogdian"
 #~ msgstr "פרסית עתיקה"
-
-#~ msgid "About"
-#~ msgstr "על אודות"
-
-#~ msgid "Credits"
-#~ msgstr "תודות"
-
-# hebrew note: "תיקייה" is "folder", but there is no better word for
-# "directory"
-#~ msgid "System"
-#~ msgstr "מערכת"
 
 #~ msgid "_View All Applications"
 #~ msgstr "ה_צגת כל היישומים"
