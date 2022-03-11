@@ -379,8 +379,15 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowDidResize:(NSNotification *)notification
 {
-  _gdk_macos_surface_configure ([self gdkSurface]);
-  gdk_surface_request_layout (GDK_SURFACE (gdk_surface));
+  _gdk_macos_surface_configure (gdk_surface);
+
+  /* If we're using server-side decorations, this notification is coming
+   * in from a display-side change. We need to request a layout in
+   * addition to the configure event.
+   */
+  if (GDK_IS_MACOS_TOPLEVEL_SURFACE (gdk_surface) &&
+      GDK_MACOS_TOPLEVEL_SURFACE (gdk_surface)->decorated)
+    gdk_surface_request_layout (GDK_SURFACE (gdk_surface));
 }
 
 /* Used by gdkmacosdisplay-translate.c to decide if our sendEvent() handler
