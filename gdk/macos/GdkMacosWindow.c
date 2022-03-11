@@ -266,6 +266,9 @@ typedef NSString *CALayerContentsGravity;
   else
     [self orderFront:nil];
 
+  if (makeKey && [self canBecomeMainWindow])
+    [self makeMainWindow];
+
   inShowOrHide = NO;
 
   [self checkSendEnterNotify];
