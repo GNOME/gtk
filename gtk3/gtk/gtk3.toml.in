@@ -50,6 +50,7 @@ content_files = [
   "building.md",
   "compiling.md",
   "running.md",
+  "getting_started.md",
   "drawing-model.md",
   "input-handling.md",
   "key-bindings.md",
@@ -75,6 +76,22 @@ content_files = [
 ]
 content_images = [
   "gtk-logo.svg",
+
+  "builder.png",
+  "drawing.png",
+  "exampleapp.png",
+  "getting-started-app1.png",
+  "getting-started-app2.png",
+  "getting-started-app3.png",
+  "getting-started-app4.png",
+  "getting-started-app6.png",
+  "getting-started-app7.png",
+  "getting-started-app8.png",
+  "getting-started-app9.png",
+  "getting-started-app10.png",
+  "grid-packing.png",
+  "hellow-world.png",
+  "window-default.png",
 
   "images/cell-renderer-properties.png",
   "images/renderer.png",
