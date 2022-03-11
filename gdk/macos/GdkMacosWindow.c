@@ -262,9 +262,9 @@ typedef NSString *CALayerContentsGravity;
   inShowOrHide = YES;
 
   if (makeKey && [self canBecomeKeyWindow])
-    [self makeKeyAndOrderFront:nil];
+    [self makeKeyAndOrderFront:self];
   else
-    [self orderFront:nil];
+    [self orderFront:self];
 
   if (makeKey && [self canBecomeMainWindow])
     [self makeMainWindow];
@@ -828,6 +828,12 @@ typedef NSString *CALayerContentsGravity;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage
 {
   [(GdkMacosView *)[self contentView] swapBuffer:buffer withDamage:damage];
+}
+
+-(BOOL)needsMouseDownQuirk
+{
+  return GDK_IS_MACOS_TOPLEVEL_SURFACE (gdk_surface) &&
+    !GDK_MACOS_TOPLEVEL_SURFACE (gdk_surface)->decorated;
 }
 
 @end

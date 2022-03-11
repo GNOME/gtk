@@ -1159,15 +1159,31 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   if (test_resize (nsevent, surface, x, y))
     return NULL;
 
-  if ((event_type == NSEventTypeRightMouseDown ||
-       event_type == NSEventTypeOtherMouseDown ||
-       event_type == NSEventTypeLeftMouseDown))
+  if (event_type == NSEventTypeRightMouseDown ||
+      event_type == NSEventTypeOtherMouseDown ||
+      event_type == NSEventTypeLeftMouseDown)
     {
       if (![NSApp isActive])
         [NSApp activateIgnoringOtherApps:YES];
 
       if (![window isKeyWindow])
-        [window makeKeyWindow];
+        {
+          NSWindow *orig_window = [nsevent window];
+
+          /* To get NSApp to supress activating the window we might
+           * have clicked through the shadow of, we need to dispatch
+           * the event and handle it in GdkMacosView:mouseDown to call
+           * [NSApp preventWindowOrdering]. Calling it here will not
+           * do anything as the event is not registered.
+           */
+          if (orig_window &&
+              GDK_IS_MACOS_WINDOW (orig_window) &&
+              [(GdkMacosWindow *)orig_window needsMouseDownQuirk])
+            [NSApp sendEvent:nsevent];
+
+          [window showAndMakeKey:YES];
+          _gdk_macos_display_clear_sorting (self);
+        }
     }
 
   switch ((int)event_type)
