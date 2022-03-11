@@ -24,6 +24,7 @@
 
 #import "GdkMacosLayer.h"
 #import "GdkMacosView.h"
+#import "GdkMacosWindow.h"
 
 @implementation GdkMacosView
 
@@ -54,6 +55,19 @@
 -(BOOL)mouseDownCanMoveWindow
 {
   return NO;
+}
+
+-(void)mouseDown:(NSEvent *)nsevent
+{
+  if ([(GdkMacosWindow *)[self window] needsMouseDownQuirk])
+    /* We should only hit this when we are trying to click through
+     * the shadow of a window into another window. Just request
+     * that the application not activate this window on mouseUp.
+     * See gdkmacosdisplay-translate.c for the other half of this.
+     */
+    [NSApp preventWindowOrdering];
+  else
+    [super mouseDown:nsevent];
 }
 
 -(void)setFrame:(NSRect)rect
