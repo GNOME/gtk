@@ -377,9 +377,10 @@ typedef NSString *CALayerContentsGravity;
   _gdk_macos_surface_configure ([self gdkSurface]);
 }
 
-- (void)windowDidResize:(NSNotification *)notification
+-(void)windowDidResize:(NSNotification *)notification
 {
   _gdk_macos_surface_configure ([self gdkSurface]);
+  gdk_surface_request_layout (GDK_SURFACE (gdk_surface));
 }
 
 /* Used by gdkmacosdisplay-translate.c to decide if our sendEvent() handler
