@@ -54,6 +54,11 @@ void            gtk_search_entry_set_key_capture_widget (GtkSearchEntry *entry,
 GDK_AVAILABLE_IN_ALL
 GtkWidget*      gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry);
 
+GDK_AVAILABLE_IN_4_8
+void gtk_search_entry_set_search_delay (GtkSearchEntry *entry,
+                                        guint delay);
+GDK_AVAILABLE_IN_4_8
+guint gtk_search_entry_get_search_delay (GtkSearchEntry *entry);
 
 G_END_DECLS
 
