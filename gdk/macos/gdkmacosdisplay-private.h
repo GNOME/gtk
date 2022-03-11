@@ -84,6 +84,9 @@ struct _GdkMacosDisplay
   int min_y;
   int max_x;
   int max_y;
+
+  /* A GSource to select a new main/key window */
+  guint select_key_in_idle;
 };
 
 struct _GdkMacosDisplayClass
