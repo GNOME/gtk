@@ -413,6 +413,34 @@ _gdk_macos_display_surface_became_key (GdkMacosDisplay *self,
   gdk_surface_request_motion (GDK_SURFACE (surface));
 }
 
+static gboolean
+select_key_in_idle_cb (gpointer data)
+{
+  GdkMacosDisplay *self = data;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  self->select_key_in_idle = 0;
+
+  if (self->keyboard_surface == NULL)
+    {
+      const GList *surfaces = _gdk_macos_display_get_surfaces (self);
+
+      for (const GList *iter = surfaces; iter; iter = iter->next)
+        {
+          GdkMacosSurface *surface = iter->data;
+
+          if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (surface)))
+            {
+              [surface->window showAndMakeKey:YES];
+              break;
+            }
+        }
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 void
 _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
                                          GdkMacosSurface *surface)
@@ -457,6 +485,9 @@ _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
     }
 
   _gdk_macos_display_clear_sorting (self);
+
+  if (self->select_key_in_idle == 0)
+    self->select_key_in_idle = g_idle_add (select_key_in_idle_cb, self);
 }
 
 /* Raises a transient window.
@@ -564,6 +595,7 @@ gdk_macos_display_finalize (GObject *object)
 
   _gdk_macos_display_feedback_destroy (self);
 
+  g_clear_handle_id (&self->select_key_in_idle, g_source_remove);
   g_clear_pointer (&self->active_drags, g_hash_table_unref);
   g_clear_pointer (&self->active_drops, g_hash_table_unref);
   g_clear_object (&GDK_DISPLAY (self)->clipboard);
