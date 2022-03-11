@@ -1,19 +1,19 @@
 # Hungarian translation for gtk.
-# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 #
 # Szabolcs Ban <shooby at gnome dot hu>, 1999, 2000, 2001, 2002.
 # Andras Timar <timar at gnome dot hu>, 2002.
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
-# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
 # Balázs Meskó <mesko.balazs at fsf dot hu>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-10 06:30+0000\n"
-"PO-Revision-Date: 2021-09-12 01:37+0200\n"
+"POT-Creation-Date: 2022-01-30 21:15+0000\n"
+"PO-Revision-Date: 2022-03-11 02:11+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -66,6 +66,13 @@ msgstr "Egyéb alkalmazásokból a fogd és vidd módszer nem támogatott."
 #: gdk/gdkdrop.c:163
 msgid "No compatible formats to transfer contents."
 msgstr "Nincsenek megfelelő formátumok a tartalmak átviteléhez."
+
+#. translators: This is about OpenGL backend names, like
+#. * "Trying to use X11 GLX, but EGL is already in use"
+#: gdk/gdkglcontext.c:1374
+#, c-format
+msgid "Trying to use %s, but %s is already in use"
+msgstr "A(z) %s használatának kísérlete, de a(z) %s már használatban van"
 
 #: gdk/gdksurface.c:1164
 msgid "Vulkan support disabled via GDK_DEBUG"
@@ -450,7 +457,7 @@ msgstr "Felfüggesztés"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:1099 gdk/win32/gdkdrop-win32.c:1144
+#: gdk/win32/gdkdrop-win32.c:1138 gdk/win32/gdkdrop-win32.c:1183
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:234
 msgid "No compatible transfer format found"
 msgstr "Nem található megfelelő átviteli formátum"
@@ -460,47 +467,61 @@ msgstr "Nem található megfelelő átviteli formátum"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "A tartalom dekódolása a(z) „%s” MIME-típussal sikertelen"
 
-#: gdk/wayland/gdkglcontext-wayland.c:190
-#: gdk/win32/gdkglcontext-win32-egl.c:399
-#: gdk/win32/gdkglcontext-win32-wgl.c:628 gdk/x11/gdkglcontext-egl.c:600
+#: gdk/wayland/gdkglcontext-wayland.c:191
+#: gdk/win32/gdkglcontext-win32-egl.c:402
+#: gdk/win32/gdkglcontext-win32-wgl.c:632 gdk/x11/gdkglcontext-egl.c:600
 #: gdk/x11/gdkglcontext-glx.c:613
 msgid "Unable to create a GL context"
 msgstr "Nem lehet létrehozni GL környezetet"
 
-#: gdk/wayland/gdkglcontext-wayland.c:484 gdk/x11/gdkglcontext-egl.c:688
-#| msgid "Unable to create a GL pixel format"
-msgid "Failed to create EGL display"
-msgstr "Az EGL megjelenítő létrehozása sikertelen"
+#: gdk/wayland/gdkglcontext-wayland.c:489
+msgid "libEGL not available in this sandbox"
+msgstr "A libEGL nem érhető el ebben a biztonságos környezetben"
 
-#: gdk/wayland/gdkglcontext-wayland.c:493 gdk/x11/gdkglcontext-egl.c:697
+#: gdk/wayland/gdkglcontext-wayland.c:490
+#| msgid "Not available"
+msgid "libEGL not available"
+msgstr "A libEGL nem érhető el"
+
+#: gdk/wayland/gdkglcontext-wayland.c:503
+#| msgid "Core GL is not available on EGL implementation"
+msgid "Sandbox does not provide an OpenGL implementation"
+msgstr "A biztonságos környezet nem biztosít OpenGL megvalósítást"
+
+#: gdk/wayland/gdkglcontext-wayland.c:504
+#| msgid "No GL implementation is available"
+msgid "No OpenGL implementation available"
+msgstr "Nem érhető el OpenGL megvalósítás"
+
+#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
 msgid "Could not initialize EGL display"
 msgstr "Nem sikerült előkészíteni az EGL megjelenítőt"
 
-#: gdk/wayland/gdkglcontext-wayland.c:504 gdk/x11/gdkglcontext-egl.c:707
+#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Az EGL verzió túl régi: %d.%d. A GTK-hoz a következő szükséges: %d.%d."
 
-#: gdk/wayland/gdkglcontext-wayland.c:515
-#: gdk/win32/gdkglcontext-win32-egl.c:273
-#: gdk/win32/gdkglcontext-win32-wgl.c:286
-#: gdk/win32/gdkglcontext-win32-wgl.c:304
+#: gdk/wayland/gdkglcontext-wayland.c:535
+#: gdk/win32/gdkglcontext-win32-egl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:289
+#: gdk/win32/gdkglcontext-win32-wgl.c:306
 msgid "No GL implementation is available"
 msgstr "Nem érhető el GL megvalósítás"
 
-#: gdk/wayland/gdkglcontext-wayland.c:525
+#: gdk/wayland/gdkglcontext-wayland.c:545
 msgid "Core GL is not available on EGL implementation"
 msgstr "Az alap GL nem érhető el az EGL megvalósításban"
 
-#: gdk/wayland/gdkglcontext-wayland.c:534 gdk/x11/gdkglcontext-egl.c:718
+#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
 msgid "Surfaceless contexts are not supported on this EGL implementation"
 msgstr ""
 "A felület nélküli környezetek nem támogatottak ebben az EGL megvalósításban"
 
-#: gdk/wayland/gdkglcontext-wayland.c:546
+#: gdk/wayland/gdkglcontext-wayland.c:566
 #: gdk/win32/gdkglcontext-win32-egl.c:216
 #: gdk/win32/gdkglcontext-win32-egl.c:226
-#: gdk/win32/gdkglcontext-win32-wgl.c:594
+#: gdk/win32/gdkglcontext-win32-wgl.c:598
 msgid "No available configurations for the given pixel format"
 msgstr "Nincs elérhető beállítás a megadott képpontformátumhoz"
 
@@ -612,39 +633,39 @@ msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Nem lehet lekérni a vágólap adatait. A GetClipboardData() sikertelen: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1030
+#: gdk/win32/gdkdrop-win32.c:1069
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Nem lehet lekérni a DnD adatait. A GlobalLock(0x%p) sikertelen: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1039
+#: gdk/win32/gdkdrop-win32.c:1078
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Nem lehet lekérni a DnD adatait. A GlobalSize(0x%p) sikertelen: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1050
+#: gdk/win32/gdkdrop-win32.c:1089
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Nem lehet lekérni a DnD adatait. Nem sikerült %s bájtot lefoglalni az adatok "
 "tárolásához."
 
-#: gdk/win32/gdkdrop-win32.c:1118
+#: gdk/win32/gdkdrop-win32.c:1157
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "A 0x%p GDK felület nincs regisztrálva ejtési célként"
 
-#: gdk/win32/gdkdrop-win32.c:1125
+#: gdk/win32/gdkdrop-win32.c:1164
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "A 0x%p célkörnyezetrekordnak nincs adatobjektuma"
 
-#: gdk/win32/gdkdrop-win32.c:1163
+#: gdk/win32/gdkdrop-win32.c:1202
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "A IDataObject_GetData (0x%x) sikertelen, visszatérési érték: 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1195
+#: gdk/win32/gdkdrop-win32.c:1234
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
@@ -710,7 +731,6 @@ msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "A vágólap nem tárolható. Nincs aktív vágólapkezelő."
 
 #: gdk/x11/gdkglcontext-egl.c:180
-#| msgid "No GL implementation is available"
 msgid "No EGL configuration available"
 msgstr "Nem érhető el EGL konfiguráció"
 
@@ -723,26 +743,26 @@ msgid "No EGL configuration with required features found"
 msgstr "Nem található EGL konfiguráció a kért funkciókkal"
 
 #: gdk/x11/gdkglcontext-egl.c:273
-#| msgid "No network locations found"
 msgid "No perfect EGL configuration found"
 msgstr "Nem található tökéletes EGL konfiguráció"
 
-#: gdk/x11/gdkglcontext-egl.c:679
-#| msgid "Format %s not supported"
+#: gdk/x11/gdkglcontext-egl.c:684
 msgid "EGL is not supported"
 msgstr "Az EGL nem támogatott"
 
-#: gdk/x11/gdkglcontext-glx.c:770
-#| msgid "No GL implementation is available"
+#: gdk/x11/gdkglcontext-egl.c:693
+msgid "Failed to create EGL display"
+msgstr "Az EGL megjelenítő létrehozása sikertelen"
+
+#: gdk/x11/gdkglcontext-glx.c:772
 msgid "No GLX configurations available"
 msgstr "Nem érhető el GLX konfiguráció"
 
-#: gdk/x11/gdkglcontext-glx.c:843
+#: gdk/x11/gdkglcontext-glx.c:845
 msgid "No GLX configuration with required features found"
 msgstr "Nem található GLX konfiguráció a kért funkciókkal"
 
-#: gdk/x11/gdkglcontext-glx.c:914
-#| msgid "Format %s not supported"
+#: gdk/x11/gdkglcontext-glx.c:919
 msgid "GLX is not supported"
 msgstr "A GLX nem támogatott"
 
@@ -1010,7 +1030,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:826 gtk/gtkshortcutlabel.c:100
+#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:100
 #: gtk/gtkshortcutlabel.c:136
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1021,7 +1041,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:845 gtk/gtkshortcutlabel.c:103
+#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:103
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1032,7 +1052,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:864 gtk/gtkshortcutlabel.c:106
+#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:106
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1043,7 +1063,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:882 gtk/gtkshortcutlabel.c:112
+#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:112
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Super"
@@ -1054,7 +1074,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:896 gtk/gtkshortcutlabel.c:115
+#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:115
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1065,7 +1085,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:911 gtk/gtkshortcutlabel.c:109
+#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:109
 #: gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1075,17 +1095,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:931
+#: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "KP"
 
-#: gtk/gtkaccelgroup.c:938
+#: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Szóköz"
 
-#: gtk/gtkaccelgroup.c:941 gtk/gtkshortcutlabel.c:171
+#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:171
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Fordított törtvonal"
@@ -1569,6 +1589,14 @@ msgstr "<%s> elem nem engedélyezett a felső szinten"
 msgid "Text may not appear inside <%s>"
 msgstr "Nem jelenhet meg szöveg ezen belül: <%s>"
 
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
+#.
+#: gtk/gtkcalendar.c:668
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:1"
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1579,17 +1607,9 @@ msgstr "Nem jelenhet meg szöveg ezen belül: <%s>"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:768
+#: gtk/gtkcalendar.c:819
 msgid "calendar:MY"
 msgstr "calendar:YM"
-
-#. Translate to calendar:week_start:0 if you want Sunday to be the
-#. * first day of the week to calendar:week_start:1 if you want Monday
-#. * to be the first day of the week, and so on.
-#.
-#: gtk/gtkcalendar.c:806
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
 
 # msgid "2000".
 #. Translators: This dictates how the year is displayed in
@@ -1598,7 +1618,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1402
+#: gtk/gtkcalendar.c:1406
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1613,7 +1633,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1439
+#: gtk/gtkcalendar.c:1443
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1627,7 +1647,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1503
+#: gtk/gtkcalendar.c:1507
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2152,7 +2172,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ha töröl egy elemet, akkor az véglegesen elvész."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8847
+#: gtk/gtklabel.c:5483 gtk/gtktext.c:6062 gtk/gtktextview.c:8898
 msgid "_Delete"
 msgstr "_Törlés"
 
@@ -2366,7 +2386,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Válasszon betűkészletet"
 
-#: gtk/gtkfontbutton.c:1348
+#: gtk/gtkfontbutton.c:1357
 msgctxt "font"
 msgid "None"
 msgstr "Nincs"
@@ -2423,19 +2443,19 @@ msgstr "Karakterváltozatok"
 msgid "OpenGL context creation failed"
 msgstr "Az OpenGL környezet létrehozása sikertelen"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8835
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6050 gtk/gtktextview.c:8886
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8839
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6054 gtk/gtktextview.c:8890
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8843
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6058 gtk/gtktextview.c:8894
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8868
+#: gtk/gtklabel.c:5488 gtk/gtktext.c:6071 gtk/gtktextview.c:8919
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
@@ -2725,12 +2745,10 @@ msgid "Page Setup"
 msgstr "Oldalbeállítás"
 
 #: gtk/gtkpasswordentry.c:167
-#| msgid "Hide text"
 msgid "Hide Text"
 msgstr "Szöveg elrejtése"
 
 #: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
-#| msgid "_Show Text"
 msgid "Show Text"
 msgstr "Szöveg megjelenítése"
 
@@ -3418,15 +3436,15 @@ msgstr "Próbáljon mást keresni"
 msgid "Could not show link"
 msgstr "Nem jeleníthető meg a hivatkozás"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8873
+#: gtk/gtktext.c:6076 gtk/gtktextview.c:8924
 msgid "Insert _Emoji"
 msgstr "_Emodzsi beszúrása"
 
-#: gtk/gtktextview.c:8855
+#: gtk/gtktextview.c:8906
 msgid "_Undo"
 msgstr "_Visszavonás"
 
-#: gtk/gtktextview.c:8859
+#: gtk/gtktextview.c:8910
 msgid "_Redo"
 msgstr "Mé_gis"
 
@@ -3612,15 +3630,11 @@ msgid "None"
 msgstr "Nincs"
 
 #: gtk/inspector/general.c:317
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Letiltva"
 
 #: gtk/inspector/general.c:318
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Letiltva"
@@ -3631,15 +3645,11 @@ msgid "None"
 msgstr "Nincs"
 
 #: gtk/inspector/general.c:440
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Letiltva"
 
 #: gtk/inspector/general.c:441 gtk/inspector/general.c:442
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Letiltva"
@@ -3744,7 +3754,6 @@ msgid "Reference Count"
 msgstr "Hivatkozásszám"
 
 #: gtk/inspector/misc-info.ui:151
-#| msgid "Text Direction"
 msgid "Direction"
 msgstr "Irány"
 
@@ -4050,7 +4059,7 @@ msgstr "Megvalósítja"
 
 #: gtk/inspector/visual.c:603 gtk/inspector/visual.c:622
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr "A téma bedrótozva a GTK_THEME-ben"
+msgstr "A téma a GTK_THEME által beégetett érték"
 
 #: gtk/inspector/visual.c:853
 msgid "Backend does not support window scaling"
