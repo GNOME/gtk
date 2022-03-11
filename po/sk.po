@@ -13,16 +13,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-30 12:41+0000\n"
-"PO-Revision-Date: 2021-10-04 15:19+0200\n"
+"POT-Creation-Date: 2022-03-10 18:43+0000\n"
+"PO-Revision-Date: 2022-03-11 08:42+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #  HTML backend
 #: gdk/broadway/gdkbroadway-server.c:135
@@ -53,13 +53,57 @@ msgstr "Nedá sa poskytnúť obsah ako „%s“"
 msgid "Cannot provide contents as %s"
 msgstr "Nedá sa poskytnúť obsah ako %s"
 
-#: gdk/gdkdisplay.c:144
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:430
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuálny obslužný program nepodporuje OpenGL"
 
-#: gdk/gdkdisplay.c:1212
+#: gdk/gdkdisplay.c:1246
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázaná prostredníctvom GDK_DEBUG"
+
+#: gdk/gdkdisplay.c:1544
+msgid "No EGL configuration available"
+msgstr "Nie je dostupná žiadna konfigurácia EGL"
+
+#: gdk/gdkdisplay.c:1552
+msgid "Failed to get EGL configurations"
+msgstr "Zlyhalo získanie konfigurácie EGL"
+
+#: gdk/gdkdisplay.c:1582
+msgid "No EGL configuration with required features found"
+msgstr ""
+
+#: gdk/gdkdisplay.c:1589
+msgid "No perfect EGL configuration found"
+msgstr "Nenašla sa žiadna perfektná konfigurácia EGL"
+
+#: gdk/gdkdisplay.c:1631
+msgid "EGL implementation is missing extension %2$s"
+msgid_plural "EGL implementation is missing %d extensions: %s"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: gdk/gdkdisplay.c:1664
+msgid "libEGL not available in this sandbox"
+msgstr ""
+
+#: gdk/gdkdisplay.c:1665
+msgid "libEGL not available"
+msgstr "Knižnica libEGL nie je dostupná"
+
+#: gdk/gdkdisplay.c:1675
+msgid "Failed to create EGL display"
+msgstr "Zlyhalo vytvorenie displeja EGL"
+
+#: gdk/gdkdisplay.c:1685
+msgid "Could not initialize EGL display"
+msgstr "Nepodarilo sa inicializovať displej EGL"
+
+#: gdk/gdkdisplay.c:1696
+#, c-format
+msgid "EGL version %d.%d is too old. GTK requires %d.%d"
+msgstr ""
 
 #: gdk/gdkdrop.c:130
 msgid "Drag’n’drop from other applications is not supported."
@@ -69,16 +113,40 @@ msgstr "Funkcia Ťahaj a pusť nie je z iných aplikácií podporovaná."
 msgid "No compatible formats to transfer contents."
 msgstr "Žiadne kompatibilné formáty na prenos obsahu."
 
+#: gdk/gdkglcontext.c:332
+msgid "The EGL implementation does not support any allowed APIs"
+msgstr ""
+
+#: gdk/gdkglcontext.c:413 gdk/win32/gdkglcontext-win32-wgl.c:616
+#: gdk/x11/gdkglcontext-glx.c:624
+msgid "Unable to create a GL context"
+msgstr "Nie je možné vytvoriť kontext GL"
+
+#: gdk/gdkglcontext.c:1273
+#, fuzzy
+#| msgid "GL support disabled via GDK_DEBUG"
+msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
+msgstr "Podpora GL je zakázaná prostredníctvom GDK_DEBUG"
+
+#: gdk/gdkglcontext.c:1282
+#, c-format
+msgid "Application does not support %s API"
+msgstr "Aplikácia nepodporuje API %s"
+
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1374
+#: gdk/gdkglcontext.c:1803
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Pokúša sa použiť %s, alebo %s sa už používa"
 
-#: gdk/gdksurface.c:1164
+#: gdk/gdksurface.c:1240
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Podpora pre Vulkan je zakázaná prostredníctvom GDK_DEBUG"
+
+#: gdk/gdktexture.c:529
+msgid "Unknown image format."
+msgstr "Neznámy formát obrázku."
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -458,10 +526,53 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Uspať"
 
+#: gdk/loaders/gdkjpeg.c:63
+#, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr "Chyba pri interpretácii obrázku JPEG (%s)"
+
+#: gdk/loaders/gdkjpeg.c:190
+#, c-format
+msgid "Unsupported JPEG colorspace (%d)"
+msgstr "Nepodporovaný priestor farieb formátu JPEG (%d)"
+
+#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
+#, c-format
+msgid "Not enough memory for image size %ux%u"
+msgstr "Nedostatok pamäte pre veľkosť obrázka %ux%u"
+
+#: gdk/loaders/gdkpng.c:119
+#, c-format
+msgid "Error reading png (%s)"
+msgstr "Chyba pri čítaní obrázku png (%s)"
+
+#: gdk/loaders/gdkpng.c:216
+#, c-format
+msgid "Unsupported depth %u in png image"
+msgstr "Nepodporovaná hĺbka %u v obrázku png"
+
+#: gdk/loaders/gdkpng.c:246
+#, c-format
+msgid "Unsupported color type %u in png image"
+msgstr "Nepodporovaný typ farby %u v obrázku png"
+
+#: gdk/loaders/gdktiff.c:340
+msgid "Failed to load RGB data from TIFF file"
+msgstr "Zlyhalo načítanie údajov RGB zo súboru TIFF"
+
+#: gdk/loaders/gdktiff.c:383
+msgid "Could not load TIFF data"
+msgstr "Nepodarilo sa načítať údaje formátu TIFF"
+
+#: gdk/loaders/gdktiff.c:465
+#, c-format
+msgid "Reading data failed at row %d"
+msgstr "Čítanie údajov zlyhalo na riadku č. %d"
+
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
-#: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:1099 gdk/win32/gdkdrop-win32.c:1144
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:234
+#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:313
+#: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
+#: gdk/x11/gdkclipboard-x11.c:787 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Nenašiel sa žiadny kompatibilný formát prenosu"
 
@@ -470,214 +581,163 @@ msgstr "Nenašiel sa žiadny kompatibilný formát prenosu"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr ""
 
-#: gdk/wayland/gdkglcontext-wayland.c:191
-#: gdk/win32/gdkglcontext-win32-egl.c:402
-#: gdk/win32/gdkglcontext-win32-wgl.c:632 gdk/x11/gdkglcontext-egl.c:600
-#: gdk/x11/gdkglcontext-glx.c:613
-msgid "Unable to create a GL context"
-msgstr "Nie je možné vytvoriť kontext GL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:489
-msgid "libEGL not available in this sandbox"
-msgstr ""
-
-#: gdk/wayland/gdkglcontext-wayland.c:490
-#, fuzzy
-#| msgid "Not available"
-msgid "libEGL not available"
-msgstr "Nie je k dispozícii"
-
-#: gdk/wayland/gdkglcontext-wayland.c:503
-#, fuzzy
-#| msgid "Core GL is not available on EGL implementation"
-msgid "Sandbox does not provide an OpenGL implementation"
-msgstr "Jadro GL nie je dostupné v implementácii EGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:504
-#, fuzzy
-#| msgid "No GL implementation is available"
-msgid "No OpenGL implementation available"
-msgstr "Nie je k dispozícii žiadna implementácia GL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
-msgid "Could not initialize EGL display"
-msgstr "Nepodarilo sa inicializovať displej EGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
-#, c-format
-msgid "EGL version %d.%d is too old. GTK requires %d.%d"
-msgstr ""
-
-#: gdk/wayland/gdkglcontext-wayland.c:535
-#: gdk/win32/gdkglcontext-win32-egl.c:276
-#: gdk/win32/gdkglcontext-win32-wgl.c:289
-#: gdk/win32/gdkglcontext-win32-wgl.c:306
-msgid "No GL implementation is available"
-msgstr "Nie je k dispozícii žiadna implementácia GL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:545
-msgid "Core GL is not available on EGL implementation"
-msgstr "Jadro GL nie je dostupné v implementácii EGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
-msgid "Surfaceless contexts are not supported on this EGL implementation"
-msgstr ""
-
-#: gdk/wayland/gdkglcontext-wayland.c:566
-#: gdk/win32/gdkglcontext-win32-egl.c:216
-#: gdk/win32/gdkglcontext-win32-egl.c:226
-#: gdk/win32/gdkglcontext-win32-wgl.c:598
-msgid "No available configurations for the given pixel format"
-msgstr "Žiadne dostupné konfigurácie pre zadaný formát pixelov"
-
-#: gdk/win32/gdkclipdrop-win32.c:718
+#: gdk/win32/gdkclipdrop-win32.c:721
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:728
+#: gdk/win32/gdkclipdrop-win32.c:731
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:742
+#: gdk/win32/gdkclipdrop-win32.c:745
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:754
+#: gdk/win32/gdkclipdrop-win32.c:757
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:797
+#: gdk/win32/gdkclipdrop-win32.c:800
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:807 gdk/win32/gdkclipdrop-win32.c:838
+#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:821
+#: gdk/win32/gdkclipdrop-win32.c:824
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:873
+#: gdk/win32/gdkclipdrop-win32.c:876
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:884
+#: gdk/win32/gdkclipdrop-win32.c:887
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:897
+#: gdk/win32/gdkclipdrop-win32.c:900
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:929
+#: gdk/win32/gdkclipdrop-win32.c:932
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:939
+#: gdk/win32/gdkclipdrop-win32.c:942
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:949
+#: gdk/win32/gdkclipdrop-win32.c:952
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:966
+#: gdk/win32/gdkclipdrop-win32.c:969
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:991
+#: gdk/win32/gdkclipdrop-win32.c:994
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 
-#: gdk/win32/gdkclipdrop-win32.c:1001
+#: gdk/win32/gdkclipdrop-win32.c:1004
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1030
+#: gdk/win32/gdkdrop-win32.c:937
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1039
+#: gdk/win32/gdkdrop-win32.c:946
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1050
+#: gdk/win32/gdkdrop-win32.c:957
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1118
+#: gdk/win32/gdkdrop-win32.c:1025
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1125
+#: gdk/win32/gdkdrop-win32.c:1032
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1163
+#: gdk/win32/gdkdrop-win32.c:1070
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1195
+#: gdk/win32/gdkdrop-win32.c:1102
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:64
+#: gdk/win32/gdkglcontext-win32-wgl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:293
+msgid "No GL implementation is available"
+msgstr "Nie je k dispozícii žiadna implementácia GL"
+
+#: gdk/win32/gdkglcontext-win32-wgl.c:582
+msgid "No available configurations for the given pixel format"
+msgstr "Žiadne dostupné konfigurácie pre zadaný formát pixelov"
+
+#: gdk/win32/gdkhdataoutputstream-win32.c:63
 msgid "writing a closed stream"
 msgstr "zapisuje sa uzavretý prúd"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:86
+#: gdk/win32/gdkhdataoutputstream-win32.c:85
 msgid "g_try_realloc () failed"
 msgstr ""
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:94
-#: gdk/win32/gdkhdataoutputstream-win32.c:232
+#: gdk/win32/gdkhdataoutputstream-win32.c:93
+#: gdk/win32/gdkhdataoutputstream-win32.c:231
 msgid "GlobalReAlloc() failed: "
 msgstr ""
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:106
+#: gdk/win32/gdkhdataoutputstream-win32.c:105
 msgid "Ran out of buffer space (buffer size is fixed)"
 msgstr ""
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:204
+#: gdk/win32/gdkhdataoutputstream-win32.c:203
 msgid "Can’t transmute a single handle"
 msgstr ""
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:216
+#: gdk/win32/gdkhdataoutputstream-win32.c:215
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
 msgstr ""
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:251
+#: gdk/win32/gdkhdataoutputstream-win32.c:250
 msgid "GlobalLock() failed: "
 msgstr ""
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:365
+#: gdk/win32/gdkhdataoutputstream-win32.c:364
 msgid "GlobalAlloc() failed: "
 msgstr ""
 
@@ -699,59 +759,25 @@ msgstr[0] "Otvára sa %d položiek"
 msgstr[1] "Otvára sa %d položka"
 msgstr[2] "Otvárajú sa %d položky"
 
-#: gdk/x11/gdkclipboard-x11.c:433
+#: gdk/x11/gdkclipboard-x11.c:457
 msgid "Clipboard manager could not store selection."
 msgstr "Správcovi schránky sa nepodarilo uložiť výber."
 
-#: gdk/x11/gdkclipboard-x11.c:613
+#: gdk/x11/gdkclipboard-x11.c:637
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 
-#: gdk/x11/gdkglcontext-egl.c:180
-#, fuzzy
-#| msgid "No GL implementation is available"
-msgid "No EGL configuration available"
-msgstr "Nie je k dispozícii žiadna implementácia GL"
-
-#: gdk/x11/gdkglcontext-egl.c:188
-#, fuzzy
-#| msgid "Failed to open file %s : %s\n"
-msgid "Failed to get EGL configurations"
-msgstr "Zlyhalo otvorenie súboru %s : %s\n"
-
-#: gdk/x11/gdkglcontext-egl.c:266
-msgid "No EGL configuration with required features found"
-msgstr ""
-
-#: gdk/x11/gdkglcontext-egl.c:273
-#, fuzzy
-#| msgid "No network locations found"
-msgid "No perfect EGL configuration found"
-msgstr "Nenašli sa žiadne sieťové umiestnenia"
-
-#: gdk/x11/gdkglcontext-egl.c:684
-#, fuzzy
-#| msgid "Format %s not supported"
-msgid "EGL is not supported"
-msgstr "Formát %s nie je podporovaný"
-
-#: gdk/x11/gdkglcontext-egl.c:693
-#| msgid "Unable to create a GL context"
-msgid "Failed to create EGL display"
-msgstr "Zlyhalo vytvorenie displeja EGL"
-
-#: gdk/x11/gdkglcontext-glx.c:772
+#: gdk/x11/gdkglcontext-glx.c:780
 #, fuzzy
 #| msgid "No GL implementation is available"
 msgid "No GLX configurations available"
 msgstr "Nie je k dispozícii žiadna implementácia GL"
 
-#: gdk/x11/gdkglcontext-glx.c:845
+#: gdk/x11/gdkglcontext-glx.c:853
 msgid "No GLX configuration with required features found"
 msgstr ""
 
-#: gdk/x11/gdkglcontext-glx.c:919
-#| msgid "Format %s not supported"
+#: gdk/x11/gdkglcontext-glx.c:927
 msgid "GLX is not supported"
 msgstr "GLX nie je podporované"
 
@@ -783,43 +809,31 @@ msgid "Unsupported encoding “%s”"
 msgstr "Nepodporované kódovanie „%s“"
 
 #: gtk/a11y/gtkatspiaction.c:239
-#| msgctxt "Action name"
-#| msgid "Click"
 msgctxt "accessibility"
 msgid "Click"
 msgstr "Kliknutie"
 
 #: gtk/a11y/gtkatspiaction.c:240
-#| msgctxt "Action description"
-#| msgid "Clicks the button"
 msgctxt "accessibility"
 msgid "Clicks the button"
 msgstr "Uskutoční kliknutie tlačidla"
 
 #: gtk/a11y/gtkatspiaction.c:290
-#| msgctxt "Action name"
-#| msgid "Toggle"
 msgctxt "accessibility"
 msgid "Toggle"
 msgstr "Prepnutie"
 
 #: gtk/a11y/gtkatspiaction.c:291
-#| msgctxt "Action description"
-#| msgid "Toggles the switch"
 msgctxt "accessibility"
 msgid "Toggles the switch"
 msgstr "Uskutoční prepnutie prepínača"
 
 #: gtk/a11y/gtkatspiaction.c:371
-#| msgctxt "Action name"
-#| msgid "Select"
 msgctxt "accessibility"
 msgid "Select"
 msgstr "Výber"
 
 #: gtk/a11y/gtkatspiaction.c:372
-#| msgctxt "Action description"
-#| msgid "Selects the color"
 msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "Uskutoční výber farby"
@@ -827,42 +841,32 @@ msgstr "Uskutoční výber farby"
 #: gtk/a11y/gtkatspiaction.c:379 gtk/a11y/gtkatspiaction.c:439
 #: gtk/a11y/gtkatspiaction.c:495 gtk/a11y/gtkatspiaction.c:603
 #: gtk/a11y/gtkatspiaction.c:690
-#| msgid "Activate"
 msgctxt "accessibility"
 msgid "Activate"
 msgstr "Aktivovať"
 
 #: gtk/a11y/gtkatspiaction.c:380
-#| msgctxt "Action description"
-#| msgid "Activates the color"
 msgctxt "accessibility"
 msgid "Activates the color"
 msgstr "Aktivuje farbu"
 
 #: gtk/a11y/gtkatspiaction.c:387
-#| msgid "Customize"
 msgctxt "accessibility"
 msgid "Customize"
 msgstr "Prispôsobiť"
 
 #: gtk/a11y/gtkatspiaction.c:388
-#| msgctxt "Action description"
-#| msgid "Customizes the color"
 msgctxt "accessibility"
 msgid "Customizes the color"
 msgstr "Prispôsobí farbu"
 
 #: gtk/a11y/gtkatspiaction.c:440
-#| msgctxt "Action description"
-#| msgid "Activates the expander"
 msgctxt "accessibility"
 msgid "Activates the expander"
 msgstr "Aktivuje rozbaľovač"
 
 #: gtk/a11y/gtkatspiaction.c:496 gtk/a11y/gtkatspiaction.c:604
 #: gtk/a11y/gtkatspiaction.c:691
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the entry"
 msgstr "Aktivuje záznam"
@@ -873,22 +877,16 @@ msgid "Activate primary icon"
 msgstr "Aktivovať hlavnú ikonu"
 
 #: gtk/a11y/gtkatspiaction.c:504
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the primary icon of the entry"
 msgstr "Aktivuje hlavnú ikonu záznamu"
 
 #: gtk/a11y/gtkatspiaction.c:511
-#| msgctxt "Action description"
-#| msgid "Activates the color"
 msgctxt "accessibility"
 msgid "Activate secondary icon"
 msgstr "Aktivovať vedľajšiu ikonu"
 
 #: gtk/a11y/gtkatspiaction.c:512
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the secondary icon of the entry"
 msgstr "Aktivuje vedľajšiu ikonu záznamu"
@@ -900,27 +898,22 @@ msgstr "Nazrieť"
 
 # tooltip
 #: gtk/a11y/gtkatspiaction.c:612
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
 msgstr "Zobrazí obsah záznamu s heslom"
 
 #: gtk/a11y/gtkatspiaction.c:698
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgctxt "accessibility"
 msgid "Clear"
 msgstr "Vymazať"
 
 # tooltip
 #: gtk/a11y/gtkatspiaction.c:699
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "Vymaže obsah záznamu"
 
 #: gtk/a11y/gtkatspiroot.c:255
-#| msgid "Application"
 msgctxt "accessibility"
 msgid "application"
 msgstr "aplikácia"
@@ -941,7 +934,7 @@ msgstr "Zdeformované údaje: URL"
 msgid "Could not unescape string"
 msgstr "Nepodarilo sa vymazať zoznam"
 
-#: gtk/gtkaboutdialog.c:124 gtk/ui/gtkaboutdialog.ui:163
+#: gtk/gtkaboutdialog.c:124
 msgid "License"
 msgstr "Licencia"
 
@@ -1022,7 +1015,6 @@ msgstr ""
 "Affero), len verzia 3"
 
 #: gtk/gtkaboutdialog.c:139
-#| msgid "BSD 2-Clause License"
 msgid "BSD 3-Clause License"
 msgstr "BSD 3-Clause License"
 
@@ -1031,7 +1023,6 @@ msgid "Apache License, Version 2.0"
 msgstr "Licencia Apache, verzia 2.0"
 
 #: gtk/gtkaboutdialog.c:141
-#| msgid "Artistic License 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
@@ -1077,7 +1068,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:826 gtk/gtkshortcutlabel.c:100
+#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:100
 #: gtk/gtkshortcutlabel.c:136
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1088,7 +1079,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:845 gtk/gtkshortcutlabel.c:103
+#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:103
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1099,7 +1090,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:864 gtk/gtkshortcutlabel.c:106
+#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:106
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1110,7 +1101,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:882 gtk/gtkshortcutlabel.c:112
+#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:112
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Super"
@@ -1121,7 +1112,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:896 gtk/gtkshortcutlabel.c:115
+#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:115
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1132,7 +1123,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:911 gtk/gtkshortcutlabel.c:109
+#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:109
 #: gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1142,17 +1133,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:931
+#: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
 msgstr ""
 
-#: gtk/gtkaccelgroup.c:938
+#: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Medzerník"
 
-#: gtk/gtkaccelgroup.c:941 gtk/gtkshortcutlabel.c:171
+#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:171
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Spätná lomka"
@@ -1181,11 +1172,9 @@ msgid "button"
 msgstr "tlačidlo"
 
 #: gtk/gtkaccessible.c:564
-#, fuzzy
-#| msgid "Location"
 msgctxt "accessibility"
 msgid "caption"
-msgstr "Umiestnenie"
+msgstr "titulok"
 
 #: gtk/gtkaccessible.c:565
 msgctxt "accessibility"
@@ -1208,11 +1197,9 @@ msgid "combo box"
 msgstr ""
 
 #: gtk/gtkaccessible.c:569
-#, fuzzy
-#| msgid "Top Command"
 msgctxt "accessibility"
 msgid "command"
-msgstr "Príkaz top"
+msgstr "príkaz"
 
 #: gtk/gtkaccessible.c:570
 #, fuzzy
@@ -1222,18 +1209,14 @@ msgid "composite"
 msgstr "Kompozitné"
 
 #: gtk/gtkaccessible.c:571
-#| msgctxt "Script"
-#| msgid "Tagalog"
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "dialógové okno"
 
 #: gtk/gtkaccessible.c:572
-#, fuzzy
-#| msgid "Document"
 msgctxt "accessibility"
 msgid "document"
-msgstr "Dokument"
+msgstr "dokument"
 
 #: gtk/gtkaccessible.c:573
 msgctxt "accessibility"
@@ -1276,7 +1259,6 @@ msgid "heading"
 msgstr "Zaznamenávanie"
 
 #: gtk/gtkaccessible.c:580
-#| msgid "Image"
 msgctxt "accessibility"
 msgid "image"
 msgstr "obrázok"
@@ -1319,8 +1301,6 @@ msgid "list box"
 msgstr "pole zoznamu"
 
 #: gtk/gtkaccessible.c:588
-#| msgctxt "Action description"
-#| msgid "Clicks the menuitem"
 msgctxt "accessibility"
 msgid "list item"
 msgstr "položka zoznamu"
@@ -1378,11 +1358,9 @@ msgid "menu item radio"
 msgstr ""
 
 #: gtk/gtkaccessible.c:599
-#, fuzzy
-#| msgid "Animations"
 msgctxt "accessibility"
 msgid "navigation"
-msgstr "Animácie"
+msgstr "navigácia"
 
 #: gtk/gtkaccessible.c:600
 msgctxt "accessibility"
@@ -1395,18 +1373,14 @@ msgid "note"
 msgstr ""
 
 #: gtk/gtkaccessible.c:602
-#, fuzzy
-#| msgid "Location"
 msgctxt "accessibility"
 msgid "option"
-msgstr "Umiestnenie"
+msgstr "voľba"
 
 #: gtk/gtkaccessible.c:603
-#, fuzzy
-#| msgid "Presentation"
 msgctxt "accessibility"
 msgid "presentation"
-msgstr "Prezentácia"
+msgstr "prezentácia"
 
 #: gtk/gtkaccessible.c:604
 msgctxt "accessibility"
@@ -1424,12 +1398,9 @@ msgid "radio group"
 msgstr ""
 
 #: gtk/gtkaccessible.c:607
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Orange"
 msgctxt "accessibility"
 msgid "range"
-msgstr "Oranžová"
+msgstr "rozsah"
 
 #: gtk/gtkaccessible.c:608
 msgctxt "accessibility"
@@ -1437,11 +1408,9 @@ msgid "region"
 msgstr ""
 
 #: gtk/gtkaccessible.c:609
-#, fuzzy
-#| msgid "Low"
 msgctxt "accessibility"
 msgid "row"
-msgstr "Nízka"
+msgstr "riadok"
 
 #: gtk/gtkaccessible.c:610
 msgctxt "accessibility"
@@ -1475,11 +1444,9 @@ msgid "search box"
 msgstr "Hľadať"
 
 #: gtk/gtkaccessible.c:615
-#, fuzzy
-#| msgid "Action"
 msgctxt "accessibility"
 msgid "section"
-msgstr "Akcia"
+msgstr "sekcia"
 
 #: gtk/gtkaccessible.c:616
 msgctxt "accessibility"
@@ -1510,11 +1477,9 @@ msgid "spin button"
 msgstr ""
 
 #: gtk/gtkaccessible.c:621
-#, fuzzy
-#| msgid "Status"
 msgctxt "accessibility"
 msgid "status"
-msgstr "Stav"
+msgstr "stav"
 
 #: gtk/gtkaccessible.c:622
 msgctxt "accessibility"
@@ -1522,27 +1487,19 @@ msgid "structure"
 msgstr ""
 
 #: gtk/gtkaccessible.c:623
-#, fuzzy
-#| msgctxt "light switch widget"
-#| msgid "Switch"
 msgctxt "accessibility"
 msgid "switch"
-msgstr "Prepínač"
+msgstr "prepínač"
 
 #: gtk/gtkaccessible.c:624
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Tab"
 msgctxt "accessibility"
 msgid "tab"
-msgstr "Tab"
+msgstr "tabulátor"
 
 #: gtk/gtkaccessible.c:625
-#, fuzzy
-#| msgid "Enabled"
 msgctxt "accessibility"
 msgid "table"
-msgstr "Povolené"
+msgstr "tabuľka"
 
 #: gtk/gtkaccessible.c:626
 msgctxt "accessibility"
@@ -1590,11 +1547,9 @@ msgid "tree grid"
 msgstr ""
 
 #: gtk/gtkaccessible.c:635
-#, fuzzy
-#| msgid "Could not remove item"
 msgctxt "accessibility"
 msgid "tree item"
-msgstr "Nepodarilo sa odobrať položku"
+msgstr "položka stromu"
 
 #: gtk/gtkaccessible.c:636
 msgctxt "accessibility"
@@ -1602,19 +1557,15 @@ msgid "widget"
 msgstr ""
 
 #: gtk/gtkaccessible.c:637
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "R_ewind"
 msgctxt "accessibility"
 msgid "window"
-msgstr "Pr_evinúť"
+msgstr "okno"
 
 #: gtk/gtkappchooserbutton.c:316
 msgid "Other application…"
 msgstr "Iná aplikácia…"
 
 #: gtk/gtkappchooserdialog.c:205 gtk/gtkappchooserdialog.c:256
-#: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select Application"
 msgstr "Výber aplikácie"
 
@@ -1698,6 +1649,14 @@ msgstr "Prvok <%s> nie je povolený na najvyššej úrovni"
 msgid "Text may not appear inside <%s>"
 msgstr "Text sa nesmie objaviť vo vnútri <%s>"
 
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
+#.
+#: gtk/gtkcalendar.c:668
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:1"
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1708,17 +1667,9 @@ msgstr "Text sa nesmie objaviť vo vnútri <%s>"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:768
+#: gtk/gtkcalendar.c:819
 msgid "calendar:MY"
 msgstr "calendar:MY"
-
-#. Translate to calendar:week_start:0 if you want Sunday to be the
-#. * first day of the week to calendar:week_start:1 if you want Monday
-#. * to be the first day of the week, and so on.
-#.
-#: gtk/gtkcalendar.c:806
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1726,7 +1677,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1402
+#: gtk/gtkcalendar.c:1406
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1741,7 +1692,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1439
+#: gtk/gtkcalendar.c:1443
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1755,7 +1706,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1503
+#: gtk/gtkcalendar.c:1507
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1796,16 +1747,16 @@ msgstr "%d %%"
 # PM: treba to riesit v master vetve
 # DK: nahlas bug na rozdelenie
 # PK: podla kodu su obe titulok
-#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:310
+#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:311
 msgid "Pick a Color"
 msgstr "Výber farby"
 
-#: gtk/gtkcolorbutton.c:499 gtk/gtkcolorchooserwidget.c:308
+#: gtk/gtkcolorbutton.c:500 gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Červená %d %%, Zelená %d %%, Modrá %d %%, Alfa %d %%"
 
-#: gtk/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:314
+#: gtk/gtkcolorbutton.c:506 gtk/gtkcolorchooserwidget.c:314
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Červená %d %%, Zelená %d %%, Modrá %d %%"
@@ -1816,99 +1767,65 @@ msgid "Color: %s"
 msgstr "Farba: %s"
 
 #: gtk/gtkcolorchooserwidget.c:436
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Blue"
-msgstr "Veľmi svetlá sivá"
+msgstr "Veľmi svetlá modrá"
 
 #: gtk/gtkcolorchooserwidget.c:437
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Sky Blue"
 msgctxt "Color name"
 msgid "Light Blue"
-msgstr "Svetlá blankytná"
+msgstr "Svetlá modrá"
 
 #: gtk/gtkcolorchooserwidget.c:438
-#, fuzzy
-#| msgid "_Blue:"
 msgctxt "Color name"
 msgid "Blue"
-msgstr "_Modrá:"
+msgstr "Modrá"
 
 #: gtk/gtkcolorchooserwidget.c:439
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Sky Blue"
 msgctxt "Color name"
 msgid "Dark Blue"
-msgstr "Tmavá blankytná"
+msgstr "Tmavá modrá"
 
 #: gtk/gtkcolorchooserwidget.c:440
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Blue"
-msgstr "Veľmi tmavá sivá"
+msgstr "Veľmi tmavá modrá"
 
 #: gtk/gtkcolorchooserwidget.c:441
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Green"
-msgstr "Veľmi svetlá sivá"
+msgstr "Veľmi svetlá zelená"
 
 #: gtk/gtkcolorchooserwidget.c:442
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Green"
-msgstr "Svetlosivá"
+msgstr "Svetlá zelená"
 
 #: gtk/gtkcolorchooserwidget.c:443
-#, fuzzy
-#| msgid "_Green:"
 msgctxt "Color name"
 msgid "Green"
-msgstr "_Zelená:"
+msgstr "Zelená"
 
 #: gtk/gtkcolorchooserwidget.c:444
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Green"
-msgstr "Tmavosivá"
+msgstr "Tmavá zelená"
 
 #: gtk/gtkcolorchooserwidget.c:445
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Green"
-msgstr "Veľmi tmavá sivá"
+msgstr "Veľmi tmavá zelená"
 
 #: gtk/gtkcolorchooserwidget.c:446
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Yellow"
-msgstr "Veľmi svetlá sivá"
+msgstr "Veľmi svetlá žltá"
 
 # PM: myslím že chameleonia farba je dosť divné označenie lebo ako je známe chameleón farby mení.
 #: gtk/gtkcolorchooserwidget.c:447
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Chameleon"
 msgctxt "Color name"
 msgid "Light Yellow"
-msgstr "Svetlý chameleón"
+msgstr "Svetlá žltá"
 
 #: gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
@@ -1916,28 +1833,19 @@ msgid "Yellow"
 msgstr ""
 
 #: gtk/gtkcolorchooserwidget.c:449
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Chameleon"
 msgctxt "Color name"
 msgid "Dark Yellow"
-msgstr "Tmavý chameleón"
+msgstr "Tmavá žltá"
 
 #: gtk/gtkcolorchooserwidget.c:450
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Yellow"
-msgstr "Veľmi tmavá sivá"
+msgstr "Veľmi tmavá žltá"
 
 #: gtk/gtkcolorchooserwidget.c:451
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Orange"
 msgctxt "Color name"
 msgid "Very Light Orange"
-msgstr "Svetlá oranžová"
+msgstr "Veľmi svetlá oranžová"
 
 #: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
@@ -1955,99 +1863,66 @@ msgid "Dark Orange"
 msgstr "Tmavá oranžová"
 
 #: gtk/gtkcolorchooserwidget.c:455
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgctxt "Color name"
 msgid "Very Dark Orange"
-msgstr "Tmavá oranžová"
+msgstr "Veľmi tmavá oranžová"
 
 #: gtk/gtkcolorchooserwidget.c:456
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Red"
-msgstr "Veľmi svetlá sivá"
+msgstr "Veľmi svetlá červená"
 
 #: gtk/gtkcolorchooserwidget.c:457
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Scarlet Red"
 msgctxt "Color name"
 msgid "Light Red"
-msgstr "Svetlá šarlátovočervená"
+msgstr "Svetlá červená"
 
 #: gtk/gtkcolorchooserwidget.c:458
-#, fuzzy
-#| msgid "_Redo"
 msgctxt "Color name"
 msgid "Red"
-msgstr "_Opakovať vrátené"
+msgstr "Červená"
 
 #: gtk/gtkcolorchooserwidget.c:459
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Scarlet Red"
 msgctxt "Color name"
 msgid "Dark Red"
-msgstr "Tmavá šarlátovočervená"
+msgstr "Tmavá červená"
 
 #: gtk/gtkcolorchooserwidget.c:460
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Red"
-msgstr "Veľmi tmavá sivá"
+msgstr "Veľmi tmavá červená"
 
 #: gtk/gtkcolorchooserwidget.c:461
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Purple"
-msgstr "Veľmi svetlá sivá"
+msgstr "Veľmi svetlá purpurová"
 
 #: gtk/gtkcolorchooserwidget.c:462
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Light Plum"
 msgctxt "Color name"
 msgid "Light Purple"
-msgstr "Svetlá slivková"
+msgstr "Svetlá purpurová"
 
 #: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Purple"
-msgstr ""
+msgstr "Purpurová"
 
 #: gtk/gtkcolorchooserwidget.c:464
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Dark Plum"
 msgctxt "Color name"
 msgid "Dark Purple"
-msgstr "Tmavá slivková"
+msgstr "Tmavá purpurová"
 
 #: gtk/gtkcolorchooserwidget.c:465
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Purple"
-msgstr "Veľmi tmavá sivá"
+msgstr "Veľmi tmavá purpurová"
 
 #: gtk/gtkcolorchooserwidget.c:466
-#| msgctxt "Color name"
-#| msgid "Very Light Gray"
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "Veľmi svetlá hnedá"
 
 #: gtk/gtkcolorchooserwidget.c:467
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "Svetlá hnedá"
@@ -2058,15 +1933,11 @@ msgid "Brown"
 msgstr "Hnedá"
 
 #: gtk/gtkcolorchooserwidget.c:469
-#| msgctxt "Color name"
-#| msgid "Dark Butter"
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "Tmavá hnedá"
 
 #: gtk/gtkcolorchooserwidget.c:470
-#| msgctxt "Color name"
-#| msgid "Very Dark Gray"
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "Veľmi tmavá hnedá"
@@ -2077,57 +1948,41 @@ msgid "White"
 msgstr "Biela"
 
 #: gtk/gtkcolorchooserwidget.c:472
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "Svetlosivá 1"
 
 #: gtk/gtkcolorchooserwidget.c:473
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "Svetlosivá 2"
 
 #: gtk/gtkcolorchooserwidget.c:474
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "Svetlosivá 3"
 
 #: gtk/gtkcolorchooserwidget.c:475
-#| msgctxt "Color name"
-#| msgid "Light Gray"
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "Svetlosivá 4"
 
 #: gtk/gtkcolorchooserwidget.c:476
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "Tmavosivá 1"
 
 #: gtk/gtkcolorchooserwidget.c:477
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "Tmavosivá 2"
 
 #: gtk/gtkcolorchooserwidget.c:478
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "Tmavosivá 3"
 
 #: gtk/gtkcolorchooserwidget.c:479
-#| msgctxt "Color name"
-#| msgid "Dark Gray"
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "Tmavosivá 4"
@@ -2147,7 +2002,7 @@ msgstr "Vlastná"
 msgid "Custom color %d: %s"
 msgstr "Vlastná farba č. %d: %s"
 
-#: gtk/gtkcolorswatch.c:229
+#: gtk/gtkcolorswatch.c:231
 msgid "Customize"
 msgstr "Prispôsobiť"
 
@@ -2166,7 +2021,6 @@ msgid "Margins from Printer…"
 msgstr "Okraje z tlačiarne…"
 
 #: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:162
-#: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "Za_vrieť"
 
@@ -2221,7 +2075,7 @@ msgid "Paper Margins"
 msgstr "Okraje papiera"
 
 # tooltip
-#: gtk/gtkentry.c:3726
+#: gtk/gtkentry.c:3743
 msgid "Insert Emoji"
 msgstr "Vloží emotikonu"
 
@@ -2291,10 +2145,8 @@ msgstr "Súbor s takým názvom už existuje"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6140 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1245 gtk/ui/gtkappchooserdialog.ui:45
-#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
-#: gtk/ui/gtkfontchooserdialog.ui:24
+#: gtk/gtkwindow.c:6147 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "_Zrušiť"
 
@@ -2305,12 +2157,12 @@ msgid "_Open"
 msgstr "_Otvoriť"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1246
+#: gtk/inspector/recorder.c:1707
 msgid "_Save"
 msgstr "_Uložiť"
 
 # tooltip
-#: gtk/gtkfilechoosernativequartz.c:338 gtk/ui/gtkfilechooserwidget.ui:346
+#: gtk/gtkfilechoosernativequartz.c:338
 msgid "Select which types of files are shown"
 msgstr "Vyberá, ktoré typy súborov sú zobrazené"
 
@@ -2383,7 +2235,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ak položku odstránite, bude natrvalo stratená."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8862
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6073 gtk/gtktextview.c:8956
 msgid "_Delete"
 msgstr "O_dstrániť"
 
@@ -2412,7 +2264,7 @@ msgid "_Add to Bookmarks"
 msgstr "_Pridať do záložiek"
 
 #: gtk/gtkfilechooserwidget.c:1822 gtk/gtkplacessidebar.c:2309
-#: gtk/gtkplacessidebar.c:3248 gtk/ui/gtkfilechooserwidget.ui:465
+#: gtk/gtkplacessidebar.c:3248
 msgid "_Rename"
 msgstr "_Premenovať"
 
@@ -2437,13 +2289,10 @@ msgid "Show _Time"
 msgstr "Zobraziť ča_s"
 
 #: gtk/gtkfilechooserwidget.c:1855
-#| msgid "Sort _Folders before Files"
 msgid "Sort _Folders Before Files"
 msgstr "Usporiadať _priečinky pred súbormi"
 
-#. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2253 gtk/inspector/css-node-tree.ui:135
-#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkprintunixdialog.ui:116
 msgid "Location"
 msgstr "Umiestnenie"
 
@@ -2466,7 +2315,6 @@ msgid "Enter location or URL"
 msgstr "Zadať umiestnenie alebo URL"
 
 #: gtk/gtkfilechooserwidget.c:3791 gtk/gtkfilechooserwidget.c:6604
-#: gtk/ui/gtkfilechooserwidget.ui:226
 msgid "Modified"
 msgstr "Zmenený"
 
@@ -2508,8 +2356,8 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Zvuk"
 
-#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
-#: gtk/inspector/visual.ui:187
+#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:604
+#: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "Písmo"
 
@@ -2600,61 +2448,66 @@ msgstr "Sans 12"
 # DK: nahlásil by som bug na rozdelenie pre obidva výskyty - jedno bude dialog title a druhé asi button label
 # PK: je to titulok podla zdrojaku
 # window title
-#: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:626
+#: gtk/gtkfontbutton.c:508 gtk/gtkfontbutton.c:628
 msgid "Pick a Font"
 msgstr "Výber písma"
 
 # jedná sa o titulnú stránku takže (žiadna)
-#: gtk/gtkfontbutton.c:1348
+#: gtk/gtkfontbutton.c:1365
 msgctxt "font"
 msgid "None"
 msgstr "Žiadne"
 
-#: gtk/gtkfontchooserwidget.c:1568
+#: gtk/gtkfontchooserwidget.c:1531
+msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Šírka"
 
-#: gtk/gtkfontchooserwidget.c:1569
+#: gtk/gtkfontchooserwidget.c:1532
+msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Hrúbka"
 
-#: gtk/gtkfontchooserwidget.c:1570
+#: gtk/gtkfontchooserwidget.c:1533
+msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Kurzíva"
 
-#: gtk/gtkfontchooserwidget.c:1571
+#: gtk/gtkfontchooserwidget.c:1534
+msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Sklon"
 
-#: gtk/gtkfontchooserwidget.c:1572
+#: gtk/gtkfontchooserwidget.c:1535
+msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Optická veľkosť"
 
-#: gtk/gtkfontchooserwidget.c:2118
+#: gtk/gtkfontchooserwidget.c:2139
 msgid "Default"
 msgstr "Predvolený"
 
-#: gtk/gtkfontchooserwidget.c:2164
+#: gtk/gtkfontchooserwidget.c:2185
 msgid "Ligatures"
 msgstr "Ligatúry"
 
-#: gtk/gtkfontchooserwidget.c:2165
+#: gtk/gtkfontchooserwidget.c:2186
 msgid "Letter Case"
 msgstr "Veľkosť písma"
 
-#: gtk/gtkfontchooserwidget.c:2166
+#: gtk/gtkfontchooserwidget.c:2187
 msgid "Number Case"
 msgstr "Veľkosť čísel"
 
-#: gtk/gtkfontchooserwidget.c:2167
+#: gtk/gtkfontchooserwidget.c:2188
 msgid "Number Spacing"
 msgstr "Medzery medzi číslami"
 
-#: gtk/gtkfontchooserwidget.c:2168
+#: gtk/gtkfontchooserwidget.c:2189
 msgid "Number Formatting"
 msgstr "Formátovanie čísiel"
 
-#: gtk/gtkfontchooserwidget.c:2169
+#: gtk/gtkfontchooserwidget.c:2190
 msgid "Character Variants"
 msgstr "Varianty znakov"
 
@@ -2662,27 +2515,27 @@ msgstr "Varianty znakov"
 msgid "OpenGL context creation failed"
 msgstr "Vytvárania kontextu OpenGL zlyhalo"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8850
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6061 gtk/gtktextview.c:8944
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8854
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6065 gtk/gtktextview.c:8948
 msgid "_Copy"
 msgstr "_Kopírovať"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8858
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6069 gtk/gtktextview.c:8952
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8883
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6082 gtk/gtktextview.c:8977
 msgid "Select _All"
 msgstr "Vybr_ať všetko"
 
-#: gtk/gtklabel.c:5493
+#: gtk/gtklabel.c:5655
 msgid "_Open Link"
 msgstr "_Otvoriť odkaz"
 
-#: gtk/gtklabel.c:5497
+#: gtk/gtklabel.c:5659
 msgid "Copy _Link Address"
 msgstr "Kopírovať _adresu odkazu"
 
@@ -2695,12 +2548,12 @@ msgid "Invalid URI"
 msgstr "Neplatné URI"
 
 # button
-#: gtk/gtklockbutton.c:289 gtk/ui/gtklockbutton.ui:20
+#: gtk/gtklockbutton.c:289
 msgid "Lock"
 msgstr "Uzamknúť"
 
 # button
-#: gtk/gtklockbutton.c:303 gtk/ui/gtklockbutton.ui:26
+#: gtk/gtklockbutton.c:303
 msgid "Unlock"
 msgstr "Odomknúť"
 
@@ -2735,7 +2588,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:765
+#: gtk/gtkmain.c:777
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2788,7 +2641,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6141
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6148
 msgid "_OK"
 msgstr "_OK"
 
@@ -2912,18 +2765,14 @@ msgid "Tab list"
 msgstr "Zoznam kariet"
 
 #: gtk/gtknotebook.c:3249
-#| msgid "Previous object"
 msgid "Previous tab"
 msgstr "Predchádzajúca karta"
 
 #: gtk/gtknotebook.c:3253
-#| msgid "_Next"
 msgid "Next tab"
 msgstr "Nasledujúca karta"
 
 #: gtk/gtknotebook.c:4073
-#| msgctxt "keyboard label"
-#| msgid "Tab"
 msgid "Tab"
 msgstr "Karta"
 
@@ -2940,7 +2789,7 @@ msgstr "Neplatný súbor nastavenia stránky"
 msgid "Manage Custom Sizes…"
 msgstr "Správa vlastných veľkostí…"
 
-#: gtk/gtkpagesetupunixdialog.c:284 gtk/ui/gtkassistant.ui:98
+#: gtk/gtkpagesetupunixdialog.c:284
 msgid "_Apply"
 msgstr "Po_užiť"
 
@@ -2967,26 +2816,23 @@ msgstr ""
 " Horný: %s %s\n"
 " Spodný: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
-#: gtk/ui/gtkprintunixdialog.ui:711
+#: gtk/gtkpagesetupunixdialog.c:784
 msgid "Page Setup"
 msgstr "Nastavenie strany"
 
-#: gtk/gtkpasswordentry.c:167
-#| msgid "Hide text"
+#: gtk/gtkpasswordentry.c:173
 msgid "Hide Text"
 msgstr "Skryť text"
 
-#: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
-#| msgid "_Show Text"
+#: gtk/gtkpasswordentry.c:178 gtk/gtkpasswordentry.c:629
 msgid "Show Text"
 msgstr "Zobraziť text"
 
-#: gtk/gtkpasswordentry.c:199
+#: gtk/gtkpasswordentry.c:216
 msgid "Caps Lock is on"
 msgstr "Caps Lock je zapnutý"
 
-#: gtk/gtkpasswordentry.c:680
+#: gtk/gtkpasswordentry.c:705
 msgid "_Show Text"
 msgstr "_Zobraziť text"
 
@@ -3095,9 +2941,7 @@ msgid "This name is already taken"
 msgstr "Tento názov je už zadaný"
 
 #: gtk/gtkplacessidebar.c:2303 gtk/inspector/actions.ui:19
-#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
-#: gtk/ui/gtkfilechooserwidget.ui:168 gtk/ui/gtkfilechooserwidget.ui:440
-#: gtk/ui/gtkprintunixdialog.ui:85
+#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:24
 msgid "Name"
 msgstr "Názov"
 
@@ -3221,7 +3065,7 @@ msgid "Unable to access location"
 msgstr "Nepodarilo sa pristúpiť k umiestneniu"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
+#: gtk/gtkplacesview.c:1228
 msgid "Con_nect"
 msgstr "Prip_ojiť"
 
@@ -3312,8 +3156,7 @@ msgid "Disconnect"
 msgstr "Odpojí"
 
 # tooltip
-#: gtk/gtkplacesviewrow.c:485 gtk/ui/gtkplacesviewrow.ui:53
-#: gtk/ui/gtksidebarrow.ui:50
+#: gtk/gtkplacesviewrow.c:485
 msgid "Unmount"
 msgstr "Odpojí"
 
@@ -3330,8 +3173,7 @@ msgstr "_Zapamätať heslo"
 msgid "Select a filename"
 msgstr "Výber názvu súboru"
 
-#: gtk/gtkprinteroptionwidget.c:714 gtk/ui/gtkappchooserdialog.ui:50
-#: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
+#: gtk/gtkprinteroptionwidget.c:714
 msgid "_Select"
 msgstr "_Vybrať"
 
@@ -3594,7 +3436,7 @@ msgstr ""
 "Pre položku s URI „%2$s“ nebola nájdená žiadna registrovaná aplikácia s "
 "názvom „%1$s“"
 
-#: gtk/gtksearchentry.c:599
+#: gtk/gtksearchentry.c:619
 msgid "Clear entry"
 msgstr "Vymazať záznam"
 
@@ -3655,7 +3497,7 @@ msgid "Swipe right"
 msgstr "Potiahnutie doprava"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:517
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Klávesové skratky"
 
@@ -3669,13 +3511,11 @@ msgstr "Výsledky vyhľadávania"
 msgid "Search Shortcuts"
 msgstr "Vyhľadajte klávesové skratky"
 
-#: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
-#: gtk/ui/gtkfilechooserwidget.ui:297
+#: gtk/gtkshortcutswindow.c:968
 msgid "No Results Found"
 msgstr "Nenašli sa žiadne výsledky"
 
-#: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:362
-#: gtk/ui/gtkfilechooserwidget.ui:310 gtk/ui/gtkplacesview.ui:230
+#: gtk/gtkshortcutswindow.c:974
 msgid "Try a different search"
 msgstr "Skúste vyhľadať niečo iné"
 
@@ -3683,21 +3523,21 @@ msgstr "Skúste vyhľadať niečo iné"
 msgid "Could not show link"
 msgstr "Nepodarilo sa zobraziť odkaz"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8888
+#: gtk/gtktext.c:6087 gtk/gtktextview.c:8982
 msgid "Insert _Emoji"
 msgstr "Vložiť _emotikonu"
 
-#: gtk/gtktextview.c:8870
+#: gtk/gtktextview.c:8964
 msgid "_Undo"
 msgstr "Vrátiť _späť"
 
-#: gtk/gtktextview.c:8874
+#: gtk/gtktextview.c:8968
 msgid "_Redo"
 msgstr "_Opakovať vrátené"
 
-#: gtk/gtktreeexpander.c:196
+#: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:278
 msgid "Expand"
-msgstr ""
+msgstr "Rozbaliť"
 
 #: gtk/gtkvolumebutton.c:230
 msgid "Muted"
@@ -3718,12 +3558,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6128
+#: gtk/gtkwindow.c:6135
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK?"
 
-#: gtk/gtkwindow.c:6130
+#: gtk/gtkwindow.c:6137
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3734,7 +3574,7 @@ msgstr ""
 "preskúmať a meniť interné vlastnosti ľubovolnej aplikácie GTK. Jeho "
 "používaním môžete spôsobiť neočakávané chovanie alebo pád."
 
-#: gtk/gtkwindow.c:6135
+#: gtk/gtkwindow.c:6142
 msgid "Don’t show this message again"
 msgstr "Nezobrazovať túto správu znovu"
 
@@ -3771,7 +3611,6 @@ msgid "Role"
 msgstr "Úloha"
 
 #: gtk/inspector/a11y.ui:40
-#| msgid "Object"
 msgid "Object path"
 msgstr "Cesta objektu"
 
@@ -3780,7 +3619,8 @@ msgid "Attribute"
 msgstr "Atribút"
 
 #: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:132
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:155
+#: gtk/inspector/recorder.ui:221
 msgid "Value"
 msgstr "Hodnota"
 
@@ -3804,6 +3644,41 @@ msgstr "Typ parametra"
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "Stav"
+
+#: gtk/inspector/clipboard.c:211
+msgid "Show"
+msgstr "Zobraziť"
+
+#: gtk/inspector/clipboard.c:228
+msgid "Hover to load"
+msgstr "Zotrvaním načítate"
+
+#: gtk/inspector/clipboard.c:278
+msgctxt "clipboard"
+msgid "empty"
+msgstr "prázdna"
+
+#: gtk/inspector/clipboard.c:283 gtk/inspector/clipboard.c:325
+msgctxt "clipboard"
+msgid "local"
+msgstr ""
+
+#: gtk/inspector/clipboard.c:285 gtk/inspector/clipboard.c:327
+msgctxt "clipboard"
+msgid "remote"
+msgstr ""
+
+#: gtk/inspector/clipboard.ui:31
+msgid "Drag and hold here"
+msgstr "Pretiahnite a podržte tu"
+
+#: gtk/inspector/clipboard.ui:75 gtk/inspector/window.ui:574
+msgid "Clipboard"
+msgstr "Schránka"
+
+#: gtk/inspector/clipboard.ui:114
+msgid "Primary"
+msgstr ""
 
 # jedná sa o titulnú stránku takže (žiadna)
 #: gtk/inspector/controllers.c:126
@@ -3854,11 +3729,11 @@ msgstr "Zmeny sa prejavia okamžite a globálne pre celú aplikáciu."
 msgid "Saving CSS failed"
 msgstr "Ukladanie pravidla CSS zlyhalo"
 
-#: gtk/inspector/css-editor.ui:33
+#: gtk/inspector/css-editor.ui:30
 msgid "Disable this custom CSS"
 msgstr "Zakázať toto vlastné pravidlo CSS"
 
-#: gtk/inspector/css-editor.ui:41
+#: gtk/inspector/css-editor.ui:37
 msgid "Save the current CSS"
 msgstr "Uložiť aktuálne pravidlo CSS"
 
@@ -3875,56 +3750,54 @@ msgid "CSS Property"
 msgstr "Vlastnosť CSS"
 
 # jedná sa o titulnú stránku takže (žiadna)
-#: gtk/inspector/general.c:308 gtk/inspector/general.c:388
+#: gtk/inspector/general.c:330 gtk/inspector/general.c:410
 msgctxt "GL version"
 msgid "None"
 msgstr "Žiadna"
 
-#: gtk/inspector/general.c:317
-#, fuzzy
-#| msgid "Disabled"
+#: gtk/inspector/general.c:339
 msgctxt "GL version"
 msgid "Disabled"
-msgstr "Zakázané"
+msgstr "Zakázaná"
 
-#: gtk/inspector/general.c:318
-#, fuzzy
-#| msgid "Disabled"
+#: gtk/inspector/general.c:340
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Zakázané"
 
 # jedná sa o titulnú stránku takže (žiadna)
-#: gtk/inspector/general.c:389
+#: gtk/inspector/general.c:411
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Žiadny"
 
-#: gtk/inspector/general.c:440
-#, fuzzy
-#| msgid "Disabled"
+#: gtk/inspector/general.c:462
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Zakázané"
 
-#: gtk/inspector/general.c:441 gtk/inspector/general.c:442
-#, fuzzy
-#| msgid "Disabled"
+#: gtk/inspector/general.c:463 gtk/inspector/general.c:464
 msgctxt "Vulkan version"
 msgid "Disabled"
-msgstr "Zakázané"
+msgstr "Zakázaná"
 
 # jedná sa o titulnú stránku takže (žiadna)
-#: gtk/inspector/general.c:498
+#: gtk/inspector/general.c:520
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Žiadne"
 
 # jedná sa o titulnú stránku takže (žiadna)
-#: gtk/inspector/general.c:499 gtk/inspector/general.c:500
+#: gtk/inspector/general.c:521 gtk/inspector/general.c:522
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Žiadna"
+
+#: gtk/inspector/general.c:792
+#, fuzzy
+#| msgid "Theme is hardcoded by GTK_THEME"
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "Motív je vynútený podľa premennej prostredia GTK_THEME"
 
 #: gtk/inspector/general.ui:32
 msgid "GTK Version"
@@ -3948,40 +3821,52 @@ msgstr ""
 msgid "Media Backend"
 msgstr "Obslužný program GDK"
 
-#: gtk/inspector/general.ui:175 gtk/ui/gtkplacesview.ui:79
+#: gtk/inspector/general.ui:162
+msgid "Input Method"
+msgstr "Metóda vstupu"
+
+#: gtk/inspector/general.ui:202
+msgid "Application ID"
+msgstr "Identifikátor aplikácie"
+
+#: gtk/inspector/general.ui:228
+msgid "Resource Path"
+msgstr "Cesta k prostriedku"
+
+#: gtk/inspector/general.ui:268
 msgid "Prefix"
 msgstr "Predpona"
 
-#: gtk/inspector/general.ui:377
+#: gtk/inspector/general.ui:470
 msgid "Display"
 msgstr "Displej"
 
-#: gtk/inspector/general.ui:404
+#: gtk/inspector/general.ui:497
 msgid "RGBA Visual"
 msgstr "Vizuál RGBA"
 
-#: gtk/inspector/general.ui:430
+#: gtk/inspector/general.ui:523
 msgid "Composited"
 msgstr "Kompozitné"
 
-#: gtk/inspector/general.ui:482
+#: gtk/inspector/general.ui:575
 msgid "GL Version"
 msgstr "Verzia GL"
 
-#: gtk/inspector/general.ui:532
+#: gtk/inspector/general.ui:625
 msgid "GL Vendor"
 msgstr "Výrobca GL"
 
 # button
-#: gtk/inspector/general.ui:572
+#: gtk/inspector/general.ui:665
 msgid "Vulkan Device"
 msgstr "Zariadenie Vulkan"
 
-#: gtk/inspector/general.ui:599
+#: gtk/inspector/general.ui:692
 msgid "Vulkan API version"
 msgstr ""
 
-#: gtk/inspector/general.ui:626
+#: gtk/inspector/general.ui:719
 msgid "Vulkan driver version"
 msgstr ""
 
@@ -4009,8 +3894,8 @@ msgstr "Ikona"
 msgid "Address"
 msgstr "Adresa"
 
-#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:34
-#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:214
+#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
+#: gtk/inspector/statistics.ui:46
 msgid "Type"
 msgstr "Typ"
 
@@ -4019,7 +3904,6 @@ msgid "Reference Count"
 msgstr "Počet odkazov"
 
 #: gtk/inspector/misc-info.ui:151
-#| msgid "Text Direction"
 msgid "Direction"
 msgstr "Smer"
 
@@ -4036,56 +3920,60 @@ msgid "Request Mode"
 msgstr "Režim požiadaviek"
 
 #: gtk/inspector/misc-info.ui:269
+msgid "Measure map"
+msgstr ""
+
+#: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
 msgstr "Pridelenie"
 
-#: gtk/inspector/misc-info.ui:298
+#: gtk/inspector/misc-info.ui:357
 msgid "Baseline"
 msgstr "Základná čiara"
 
-#: gtk/inspector/misc-info.ui:327
+#: gtk/inspector/misc-info.ui:386
 msgid "Surface"
 msgstr "Povrch"
 
-#: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
-#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1111
-#: gtk/inspector/prop-editor.c:1471 gtk/inspector/window.ui:415
+#: gtk/inspector/misc-info.ui:405 gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:483 gtk/inspector/prop-editor.c:1116
+#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Vlastnosti"
 
-#: gtk/inspector/misc-info.ui:366
+#: gtk/inspector/misc-info.ui:425
 msgid "Renderer"
 msgstr "Vykresľovač"
 
-#: gtk/inspector/misc-info.ui:405
+#: gtk/inspector/misc-info.ui:464
 msgid "Frame Clock"
 msgstr "Snímka hodín"
 
-#: gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:503
 msgid "Tick Callback"
 msgstr "Spätné volanie pri zaškrtnutí"
 
-#: gtk/inspector/misc-info.ui:474
+#: gtk/inspector/misc-info.ui:533
 msgid "Frame Count"
 msgstr "Počet snímkov"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:562
 msgid "Frame Rate"
 msgstr "Frekvencia snímok"
 
-#: gtk/inspector/misc-info.ui:532
+#: gtk/inspector/misc-info.ui:591
 msgid "Mapped"
 msgstr "Zmapované"
 
-#: gtk/inspector/misc-info.ui:562
+#: gtk/inspector/misc-info.ui:621
 msgid "Realized"
 msgstr "Zrealizované"
 
-#: gtk/inspector/misc-info.ui:592
+#: gtk/inspector/misc-info.ui:651
 msgid "Is Toplevel"
 msgstr "Je najvyššej úrovne"
 
-#: gtk/inspector/misc-info.ui:622
+#: gtk/inspector/misc-info.ui:681
 msgid "Child Visible"
 msgstr "Viditeľný potomok"
 
@@ -4126,64 +4014,58 @@ msgstr "%s pre %s %p"
 msgid "%s with value type %s"
 msgstr "%s s typom hodnoty %s"
 
-#: gtk/inspector/prop-editor.c:1179
+#: gtk/inspector/prop-editor.c:1184
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Neupravovateľný typ vlastnosti: %s"
 
 # jedná sa o titulnú stránku takže (žiadna)
-#: gtk/inspector/prop-editor.c:1323
-#| msgctxt "font"
-#| msgid "None"
+#: gtk/inspector/prop-editor.c:1328
 msgctxt "column number"
 msgid "None"
 msgstr "Žiadne"
 
-#: gtk/inspector/prop-editor.c:1360
+#: gtk/inspector/prop-editor.c:1365
 msgid "Attribute:"
 msgstr "Atribút:"
 
-#: gtk/inspector/prop-editor.c:1363
+#: gtk/inspector/prop-editor.c:1368
 msgid "Model"
 msgstr "Model"
 
 #  atk name
-#: gtk/inspector/prop-editor.c:1368
+#: gtk/inspector/prop-editor.c:1373
 msgid "Column:"
 msgstr "Stĺpec:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1467
+#: gtk/inspector/prop-editor.c:1472
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Akcia od: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1522
+#: gtk/inspector/prop-editor.c:1527
 msgid "Reset"
 msgstr "Obnoviť"
 
-#: gtk/inspector/prop-editor.c:1530
-#| msgid "Default"
+#: gtk/inspector/prop-editor.c:1535
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Predvolený"
 
-#: gtk/inspector/prop-editor.c:1533
-#| msgid "Theme"
+#: gtk/inspector/prop-editor.c:1538
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Motív"
 
-#: gtk/inspector/prop-editor.c:1536
-#| msgid "XSettings"
+#: gtk/inspector/prop-editor.c:1541
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "Nastavenia X"
 
-#: gtk/inspector/prop-editor.c:1540
-#| msgid "Application"
+#: gtk/inspector/prop-editor.c:1545
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Aplikácia"
@@ -4192,32 +4074,31 @@ msgstr "Aplikácia"
 # PK: prever
 # PM: v master vetve
 # datum
-#: gtk/inspector/prop-editor.c:1543
-#| msgid "Unknown"
+#: gtk/inspector/prop-editor.c:1548
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Neznámy"
 
-#: gtk/inspector/prop-editor.c:1546
+#: gtk/inspector/prop-editor.c:1551
 msgid "Source:"
 msgstr "Zdroj:"
 
-#: gtk/inspector/prop-list.ui:45
+#: gtk/inspector/prop-list.ui:46
 msgid "Defined At"
 msgstr "Definované na"
 
-#: gtk/inspector/recorder.c:1216
+#: gtk/inspector/recorder.c:1677
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Ukladanie RenderNode zlyhalo"
 
 # tooltip
-#: gtk/inspector/recorder.ui:18
+#: gtk/inspector/recorder.ui:20
 msgid "Record frames"
 msgstr "Zaznamená snímky"
 
 # tooltip
-#: gtk/inspector/recorder.ui:26
+#: gtk/inspector/recorder.ui:27
 msgid "Clear recorded frames"
 msgstr "Vymaže zaznamenané snímky"
 
@@ -4226,20 +4107,24 @@ msgstr "Vymaže zaznamenané snímky"
 msgid "Add debug nodes"
 msgstr "Pridá ladiace uzly"
 
-#: gtk/inspector/recorder.ui:44
+#: gtk/inspector/recorder.ui:42
+msgid "Highlight event sequences"
+msgstr ""
+
+#: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
 msgstr "Použiť tmavé pozadie"
 
 # tooltip
-#: gtk/inspector/recorder.ui:53
+#: gtk/inspector/recorder.ui:59
 msgid "Save selected node"
 msgstr "Uloží vybraný uzol"
 
-#: gtk/inspector/recorder.ui:62
+#: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Skopírovať do schránky"
 
-#: gtk/inspector/recorder.ui:119
+#: gtk/inspector/recorder.ui:142 gtk/inspector/recorder.ui:208
 msgid "Property"
 msgstr "Vlastnosť"
 
@@ -4251,8 +4136,7 @@ msgstr "Cesta"
 msgid "Count"
 msgstr "Počet"
 
-#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:202
-#: gtk/ui/gtkfontchooserwidget.ui:207 gtk/ui/gtkfontchooserwidget.ui:355
+#: gtk/inspector/resource-list.ui:82
 msgid "Size"
 msgstr "Veľkosť"
 
@@ -4331,7 +4215,7 @@ msgstr "Kumulatívne"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Povoliť štatistiky s GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/tree-data.ui:13
+#: gtk/inspector/tree-data.ui:10
 msgid "Show data"
 msgstr "Zobraziť údaje"
 
@@ -4355,105 +4239,101 @@ msgstr "Obslužný program nepodporuje škálovanie okna"
 msgid "GL rendering is disabled"
 msgstr "Vykresľovanie GL je zakázané"
 
-#: gtk/inspector/visual.ui:59
+#: gtk/inspector/visual.ui:35
 msgid "GTK Theme"
 msgstr "Motív GTK"
 
-#: gtk/inspector/visual.ui:83
+#: gtk/inspector/visual.ui:59
 msgid "Dark Variant"
 msgstr "Tmavý variant"
 
-#: gtk/inspector/visual.ui:108
+#: gtk/inspector/visual.ui:84
 msgid "Cursor Theme"
 msgstr "Motív kurzora"
 
-#: gtk/inspector/visual.ui:133
+#: gtk/inspector/visual.ui:109
 msgid "Cursor Size"
 msgstr "Veľkosť kurzora"
 
-#: gtk/inspector/visual.ui:162
+#: gtk/inspector/visual.ui:145
 msgid "Icon Theme"
 msgstr "Motív ikon"
 
-#: gtk/inspector/visual.ui:212
+#: gtk/inspector/visual.ui:195
 msgid "Font Scale"
 msgstr "Mierka písma"
 
-#: gtk/inspector/visual.ui:249
+#: gtk/inspector/visual.ui:240
 msgid "Text Direction"
 msgstr "Smer textu"
 
-#: gtk/inspector/visual.ui:264
+#: gtk/inspector/visual.ui:255
 msgid "Left-to-Right"
 msgstr "Zľava-doprava"
 
-#: gtk/inspector/visual.ui:265
+#: gtk/inspector/visual.ui:256
 msgid "Right-to-Left"
 msgstr "Sprava-doľava"
 
-#: gtk/inspector/visual.ui:283
+#: gtk/inspector/visual.ui:274
 msgid "Window Scaling"
 msgstr "Škálovanie okna"
 
-#: gtk/inspector/visual.ui:309
+#: gtk/inspector/visual.ui:307
 msgid "Animations"
 msgstr "Animácie"
 
-#: gtk/inspector/visual.ui:334
+#: gtk/inspector/visual.ui:332
 msgid "Slowdown"
 msgstr "Spomaliť"
 
-#: gtk/inspector/visual.ui:384
+#: gtk/inspector/visual.ui:390
 msgid "Show fps overlay"
 msgstr ""
 
-#: gtk/inspector/visual.ui:409
+#: gtk/inspector/visual.ui:415
 msgid "Show Graphic Updates"
 msgstr "Zobraziť grafické aktualizácie"
 
-#: gtk/inspector/visual.ui:434
+#: gtk/inspector/visual.ui:440
 msgid "Show Fallback Rendering"
 msgstr ""
 
-#: gtk/inspector/visual.ui:459
+#: gtk/inspector/visual.ui:465
 msgid "Show Baselines"
 msgstr "Zobraziť základné čiary"
 
-#: gtk/inspector/visual.ui:487
+#: gtk/inspector/visual.ui:493
 msgid "Show Layout Borders"
 msgstr "Zobraziť okraje rozloženia"
 
-#: gtk/inspector/visual.ui:544
+#: gtk/inspector/visual.ui:550
 msgid "CSS Padding"
-msgstr ""
+msgstr "Odsadenie CSS"
 
-#: gtk/inspector/visual.ui:554
-#, fuzzy
-#| msgid "CSS Nodes"
+#: gtk/inspector/visual.ui:560
 msgid "CSS Border"
-msgstr "Uzly CSS"
+msgstr "Hranica CSS"
 
-#: gtk/inspector/visual.ui:564
-#, fuzzy
-#| msgid "Paper Margins"
+#: gtk/inspector/visual.ui:570
 msgid "CSS Margin"
-msgstr "Okraje papiera"
+msgstr "Okraj CSS"
 
-#: gtk/inspector/visual.ui:574
+#: gtk/inspector/visual.ui:580
 #, fuzzy
 #| msgid "Paper Margins"
 msgid "Widget Margin"
 msgstr "Okraje papiera"
 
-#: gtk/inspector/visual.ui:609
+#: gtk/inspector/visual.ui:615
 msgid "Show Focus"
 msgstr ""
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:654
 msgid "Simulate Touchscreen"
 msgstr "Simulovať dotykovú obrazovku"
 
-#: gtk/inspector/visual.ui:672
+#: gtk/inspector/visual.ui:678
 msgid "Software GL"
 msgstr "Softvérové GL"
 
@@ -4474,120 +4354,120 @@ msgstr "Zobrazí všetky objekty"
 # tooltip
 #: gtk/inspector/window.ui:121
 msgid "Show all Resources"
-msgstr "Zobrazí všetky zdroje"
+msgstr "Zobrazí všetky prostriedky"
 
 # tooltip
-#: gtk/inspector/window.ui:139
+#: gtk/inspector/window.ui:147
 msgid "Collect Statistics"
 msgstr "Zozbiera štatistiku"
 
-#: gtk/inspector/window.ui:191
+#: gtk/inspector/window.ui:199
 msgid "Objects"
 msgstr "Objekty"
 
 # tooltip
-#: gtk/inspector/window.ui:220
+#: gtk/inspector/window.ui:231
 msgid "Toggle Sidebar"
 msgstr "Prepne bočný panel"
 
-#: gtk/inspector/window.ui:252
+#: gtk/inspector/window.ui:253
 msgid "Refresh action state"
 msgstr ""
 
-#: gtk/inspector/window.ui:337
+#: gtk/inspector/window.ui:327
 msgid "Previous object"
 msgstr "Predchádzajúci objekt"
 
-#: gtk/inspector/window.ui:347
+#: gtk/inspector/window.ui:334
 #, fuzzy
 #| msgid "Child Properties"
 msgid "Child object"
 msgstr "Vlastnosti potomka"
 
-#: gtk/inspector/window.ui:357
+#: gtk/inspector/window.ui:341
 #, fuzzy
 #| msgctxt "Stock label, media"
 #| msgid "Pre_vious"
 msgid "Previous sibling"
 msgstr "Pre_dchádzajúca"
 
-#: gtk/inspector/window.ui:366
+#: gtk/inspector/window.ui:347
 msgid "List Position"
 msgstr ""
 
-#: gtk/inspector/window.ui:372
+#: gtk/inspector/window.ui:356
 msgid "Next sibling"
 msgstr ""
 
-#: gtk/inspector/window.ui:405
+#: gtk/inspector/window.ui:386
 msgid "Miscellaneous"
 msgstr "Rôzne"
 
-#: gtk/inspector/window.ui:426 gtk/ui/gtkprintunixdialog.ui:395
+#: gtk/inspector/window.ui:407
 msgid "Layout"
 msgstr "Rozloženie"
 
-#: gtk/inspector/window.ui:437
+#: gtk/inspector/window.ui:418
 msgid "CSS Nodes"
 msgstr "Uzly CSS"
 
-#: gtk/inspector/window.ui:448
+#: gtk/inspector/window.ui:429
 msgid "Size Groups"
 msgstr "Skupiny veľkostí"
 
-#: gtk/inspector/window.ui:457 gtk/inspector/window.ui:466
+#: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"
 msgstr "Údaje"
 
-#: gtk/inspector/window.ui:476
+#: gtk/inspector/window.ui:457
 msgid "Actions"
 msgstr "Akcie"
 
-#: gtk/inspector/window.ui:487
+#: gtk/inspector/window.ui:468
 msgid "Menu"
 msgstr "Ponuka"
 
-#: gtk/inspector/window.ui:496
+#: gtk/inspector/window.ui:477
 msgid "Controllers"
 msgstr "Ovládače"
 
-#: gtk/inspector/window.ui:506
+#: gtk/inspector/window.ui:487
 msgid "Magnifier"
 msgstr "Lupa"
 
-#: gtk/inspector/window.ui:527
+#: gtk/inspector/window.ui:508
 msgid "Accessibility"
 msgstr "Zjednodušenie ovládania"
 
-#: gtk/inspector/window.ui:551
+#: gtk/inspector/window.ui:532
 msgid "Global"
 msgstr ""
 
-#: gtk/inspector/window.ui:564
+#: gtk/inspector/window.ui:545
 msgid "Information"
 msgstr "Informácie"
 
-#: gtk/inspector/window.ui:573
+#: gtk/inspector/window.ui:554
 msgid "Settings"
 msgstr "Nastavenia"
 
-#: gtk/inspector/window.ui:582
+#: gtk/inspector/window.ui:563
 msgid "Resources"
-msgstr "Zdroje"
+msgstr "Prostriedky"
 
-#: gtk/inspector/window.ui:593
+#: gtk/inspector/window.ui:584
 msgid "Statistics"
 msgstr "Štatistika"
 
-#: gtk/inspector/window.ui:604
+#: gtk/inspector/window.ui:595
 msgid "Logging"
 msgstr "Zaznamenávanie"
 
-#: gtk/inspector/window.ui:619
+#: gtk/inspector/window.ui:610
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:628
+#: gtk/inspector/window.ui:619
 msgid "Recorder"
 msgstr "Záznamník"
 
@@ -4701,7 +4581,7 @@ msgstr ""
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Distances"
-msgstr ""
+msgstr "Vzdialenosti"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
@@ -4716,12 +4596,12 @@ msgstr ""
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
-msgstr ""
+msgstr "Formy bez bodky"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr ""
+msgstr "Expertné formy"
 
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
@@ -4761,7 +4641,7 @@ msgstr "Plné šírky"
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Half Forms"
-msgstr ""
+msgstr "Polovičné formy"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
@@ -4776,7 +4656,7 @@ msgstr ""
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Historical Forms"
-msgstr ""
+msgstr "Historické formy"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
@@ -4791,7 +4671,7 @@ msgstr ""
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
@@ -4801,7 +4681,7 @@ msgstr ""
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr ""
+msgstr "Polovičné šírky"
 
 #: gtk/open-type-layout.h:55
 msgctxt "OpenType layout"
@@ -4811,7 +4691,7 @@ msgstr "Počiatočné formy"
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
 msgid "Isolated Forms"
-msgstr ""
+msgstr "Izolované formy"
 
 #: gtk/open-type-layout.h:57
 msgctxt "OpenType layout"
@@ -4826,22 +4706,22 @@ msgstr ""
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "Formy JIS78"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "Formy JIS83"
 
 #: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "Formy JIS90"
 
 #: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "Formy JIS2004"
 
 #: gtk/open-type-layout.h:63
 msgctxt "OpenType layout"
@@ -4948,7 +4828,7 @@ msgstr ""
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "Optické ohraničenia"
 
 #: gtk/open-type-layout.h:83
 #, fuzzy
@@ -4960,7 +4840,7 @@ msgstr "Signály"
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr ""
+msgstr "Ornamenty"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
@@ -5262,11 +5142,9 @@ msgid "Alternate Vertical Metrics"
 msgstr ""
 
 #: gtk/open-type-layout.h:143
-#, fuzzy
-#| msgid "Dark Variant"
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
-msgstr "Tmavý variant"
+msgstr "Varianty Vattu"
 
 #: gtk/open-type-layout.h:144
 msgctxt "OpenType layout"
@@ -6223,824 +6101,6 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/script-names.c:16
-msgctxt "Script"
-msgid "Arabic"
-msgstr "Arabské"
-
-#: gtk/script-names.c:17
-msgctxt "Script"
-msgid "Armenian"
-msgstr "Arménske"
-
-#: gtk/script-names.c:18
-msgctxt "Script"
-msgid "Bengali"
-msgstr "Bengálske"
-
-#: gtk/script-names.c:19
-msgctxt "Script"
-msgid "Bopomofo"
-msgstr "Bopomofo"
-
-#: gtk/script-names.c:20
-msgctxt "Script"
-msgid "Cherokee"
-msgstr "Cherokee"
-
-#: gtk/script-names.c:21
-msgctxt "Script"
-msgid "Coptic"
-msgstr "Koptické"
-
-#: gtk/script-names.c:22
-msgctxt "Script"
-msgid "Cyrillic"
-msgstr "Cyrilika"
-
-#: gtk/script-names.c:23
-msgctxt "Script"
-msgid "Deseret"
-msgstr "Deseret"
-
-#: gtk/script-names.c:24
-msgctxt "Script"
-msgid "Devanagari"
-msgstr "Devanagari"
-
-#: gtk/script-names.c:25
-msgctxt "Script"
-msgid "Ethiopic"
-msgstr "Etiópske"
-
-#: gtk/script-names.c:26
-msgctxt "Script"
-msgid "Georgian"
-msgstr "Gruzínske"
-
-#: gtk/script-names.c:27
-msgctxt "Script"
-msgid "Gothic"
-msgstr "Gotické"
-
-#: gtk/script-names.c:28
-#, fuzzy
-#| msgid "_Green:"
-msgctxt "Script"
-msgid "Greek"
-msgstr "_Zelená:"
-
-#: gtk/script-names.c:29
-msgctxt "Script"
-msgid "Gujarati"
-msgstr "Gudžarátske"
-
-#: gtk/script-names.c:30
-msgctxt "Script"
-msgid "Gurmukhi"
-msgstr "Gurmukhi"
-
-#: gtk/script-names.c:31
-msgctxt "Script"
-msgid "Han"
-msgstr "Han"
-
-#: gtk/script-names.c:32
-msgctxt "Script"
-msgid "Hangul"
-msgstr "Hangul"
-
-#: gtk/script-names.c:33
-msgctxt "Script"
-msgid "Hebrew"
-msgstr "Hebrejské"
-
-#: gtk/script-names.c:34
-msgctxt "Script"
-msgid "Hiragana"
-msgstr "Hiragana"
-
-#: gtk/script-names.c:35
-msgctxt "Script"
-msgid "Kannada"
-msgstr "Kannadské"
-
-#: gtk/script-names.c:36
-msgctxt "Script"
-msgid "Katakana"
-msgstr "Katakana"
-
-#: gtk/script-names.c:37
-msgctxt "Script"
-msgid "Khmer"
-msgstr "Kmérske"
-
-#: gtk/script-names.c:38
-msgctxt "Script"
-msgid "Lao"
-msgstr "Lao"
-
-#: gtk/script-names.c:39
-msgctxt "Script"
-msgid "Latin"
-msgstr "Latinka"
-
-#: gtk/script-names.c:40
-msgctxt "Script"
-msgid "Malayalam"
-msgstr "Malajalámske"
-
-#: gtk/script-names.c:41
-msgctxt "Script"
-msgid "Mongolian"
-msgstr "Mongolské"
-
-#: gtk/script-names.c:42
-msgctxt "Script"
-msgid "Myanmar"
-msgstr "Mjanmarsko"
-
-#: gtk/script-names.c:43
-msgctxt "Script"
-msgid "Ogham"
-msgstr "Oghamské"
-
-#: gtk/script-names.c:44
-msgctxt "Script"
-msgid "Old Italic"
-msgstr "Stará italika"
-
-#: gtk/script-names.c:45
-msgctxt "Script"
-msgid "Oriya"
-msgstr "uríjčina"
-
-#: gtk/script-names.c:46
-msgctxt "Script"
-msgid "Runic"
-msgstr "Runové"
-
-#: gtk/script-names.c:47
-msgctxt "Script"
-msgid "Sinhala"
-msgstr "Sinhala"
-
-#: gtk/script-names.c:48
-msgctxt "Script"
-msgid "Syriac"
-msgstr "Syrské"
-
-#: gtk/script-names.c:49
-#, fuzzy
-#| msgid "_Family:"
-msgctxt "Script"
-msgid "Tamil"
-msgstr "_Rodina:"
-
-#: gtk/script-names.c:50
-msgctxt "Script"
-msgid "Telugu"
-msgstr "Telugské"
-
-#: gtk/script-names.c:51
-msgctxt "Script"
-msgid "Thaana"
-msgstr "Thaana"
-
-#: gtk/script-names.c:52
-msgctxt "Script"
-msgid "Thai"
-msgstr "Thajské"
-
-#: gtk/script-names.c:53
-msgctxt "Script"
-msgid "Tibetan"
-msgstr "Tibetské"
-
-#: gtk/script-names.c:54
-msgctxt "Script"
-msgid "Canadian Aboriginal"
-msgstr "Kanadské domorodé"
-
-#: gtk/script-names.c:55
-msgctxt "Script"
-msgid "Yi"
-msgstr "Yi"
-
-#: gtk/script-names.c:56
-msgctxt "Script"
-msgid "Tagalog"
-msgstr "Tagalog"
-
-#: gtk/script-names.c:57
-msgctxt "Script"
-msgid "Hanunoo"
-msgstr "Hanunoo"
-
-#: gtk/script-names.c:58
-msgctxt "Script"
-msgid "Buhid"
-msgstr "Buhid"
-
-#: gtk/script-names.c:59
-msgctxt "Script"
-msgid "Tagbanwa"
-msgstr "Tagbanwa"
-
-#: gtk/script-names.c:60
-msgctxt "Script"
-msgid "Braille"
-msgstr "Brailleovo"
-
-#: gtk/script-names.c:61
-msgctxt "Script"
-msgid "Cypriot"
-msgstr "Cyperské"
-
-#: gtk/script-names.c:62
-msgctxt "Script"
-msgid "Limbu"
-msgstr "Limbu"
-
-#: gtk/script-names.c:63
-msgctxt "Script"
-msgid "Osmanya"
-msgstr "Osmanské"
-
-#: gtk/script-names.c:64
-msgctxt "Script"
-msgid "Shavian"
-msgstr "Shavian"
-
-#: gtk/script-names.c:65
-msgctxt "Script"
-msgid "Linear B"
-msgstr "Lineárne B"
-
-#: gtk/script-names.c:66
-msgctxt "Script"
-msgid "Tai Le"
-msgstr "Tai Le"
-
-#: gtk/script-names.c:67
-msgctxt "Script"
-msgid "Ugaritic"
-msgstr "Ugaritické"
-
-#: gtk/script-names.c:68
-msgctxt "Script"
-msgid "New Tai Lue"
-msgstr "Nové Tai Lue"
-
-#: gtk/script-names.c:69
-msgctxt "Script"
-msgid "Buginese"
-msgstr "Buginese"
-
-#: gtk/script-names.c:70
-msgctxt "Script"
-msgid "Glagolitic"
-msgstr "Hlaholika"
-
-#: gtk/script-names.c:71
-msgctxt "Script"
-msgid "Tifinagh"
-msgstr "Tifinagh"
-
-#: gtk/script-names.c:72
-msgctxt "Script"
-msgid "Syloti Nagri"
-msgstr "Syloti Nagri"
-
-#: gtk/script-names.c:73
-msgctxt "Script"
-msgid "Old Persian"
-msgstr "Staré perzské"
-
-#: gtk/script-names.c:74
-msgctxt "Script"
-msgid "Kharoshthi"
-msgstr "Kharoshthi"
-
-# prečo stredný rod?
-# PK: prever
-# PM: v master vetve
-# datum
-#: gtk/script-names.c:75
-msgctxt "Script"
-msgid "Unknown"
-msgstr "Neznámy"
-
-#: gtk/script-names.c:76
-msgctxt "Script"
-msgid "Balinese"
-msgstr "Balijske"
-
-#: gtk/script-names.c:77
-msgctxt "Script"
-msgid "Cuneiform"
-msgstr "Klinové písmo"
-
-#: gtk/script-names.c:78
-msgctxt "Script"
-msgid "Phoenician"
-msgstr "Fenické"
-
-#: gtk/script-names.c:79
-msgctxt "Script"
-msgid "Phags-pa"
-msgstr "Phags-pa"
-
-#: gtk/script-names.c:80
-msgctxt "Script"
-msgid "N'Ko"
-msgstr "N'Ko"
-
-#: gtk/script-names.c:81
-msgctxt "Script"
-msgid "Kayah Li"
-msgstr "Kayah Li"
-
-#: gtk/script-names.c:82
-msgctxt "Script"
-msgid "Lepcha"
-msgstr "Lepcha"
-
-#: gtk/script-names.c:83
-msgctxt "Script"
-msgid "Rejang"
-msgstr "Rejang"
-
-#: gtk/script-names.c:84
-msgctxt "Script"
-msgid "Sundanese"
-msgstr "Sudánske"
-
-#: gtk/script-names.c:85
-msgctxt "Script"
-msgid "Saurashtra"
-msgstr "Saurashtra"
-
-#: gtk/script-names.c:86
-msgctxt "Script"
-msgid "Cham"
-msgstr "Cham"
-
-#: gtk/script-names.c:87
-msgctxt "Script"
-msgid "Ol Chiki"
-msgstr "Ol Chiki"
-
-#: gtk/script-names.c:88
-msgctxt "Script"
-msgid "Vai"
-msgstr "Vai"
-
-#: gtk/script-names.c:89
-msgctxt "Script"
-msgid "Carian"
-msgstr "Carian"
-
-#: gtk/script-names.c:90
-msgctxt "Script"
-msgid "Lycian"
-msgstr "Lycian"
-
-#: gtk/script-names.c:91
-msgctxt "Script"
-msgid "Lydian"
-msgstr "Lydian"
-
-#: gtk/script-names.c:92
-msgctxt "Script"
-msgid "Avestan"
-msgstr "Avestanské"
-
-#: gtk/script-names.c:93
-msgctxt "Script"
-msgid "Bamum"
-msgstr "Bamum"
-
-#: gtk/script-names.c:94
-msgctxt "Script"
-msgid "Egyptian Hieroglyphs"
-msgstr "Egyptské hieroglyfy"
-
-#: gtk/script-names.c:95
-msgctxt "Script"
-msgid "Imperial Aramaic"
-msgstr "Aramejské kráľovské"
-
-#: gtk/script-names.c:96
-msgctxt "Script"
-msgid "Inscriptional Pahlavi"
-msgstr "Pahlavi nápisové"
-
-#: gtk/script-names.c:97
-msgctxt "Script"
-msgid "Inscriptional Parthian"
-msgstr "Parthian nápisové"
-
-#: gtk/script-names.c:98
-msgctxt "Script"
-msgid "Javanese"
-msgstr "Jávske"
-
-#: gtk/script-names.c:99
-msgctxt "Script"
-msgid "Kaithi"
-msgstr "Kaithi"
-
-#: gtk/script-names.c:100
-msgctxt "Script"
-msgid "Lisu"
-msgstr "Lisu"
-
-#: gtk/script-names.c:101
-msgctxt "Script"
-msgid "Meetei Mayek"
-msgstr "Meetei Mayek"
-
-#: gtk/script-names.c:102
-msgctxt "Script"
-msgid "Old South Arabian"
-msgstr "Staré juho-arabské"
-
-#: gtk/script-names.c:103
-msgctxt "Script"
-msgid "Old Turkic"
-msgstr "Turecké staré"
-
-#: gtk/script-names.c:104
-msgctxt "Script"
-msgid "Samaritan"
-msgstr "Samaritánske"
-
-#: gtk/script-names.c:105
-msgctxt "Script"
-msgid "Tai Tham"
-msgstr "Tai Tham"
-
-#: gtk/script-names.c:106
-msgctxt "Script"
-msgid "Tai Viet"
-msgstr "Tai Viet"
-
-#: gtk/script-names.c:107
-msgctxt "Script"
-msgid "Batak"
-msgstr "Batak"
-
-#: gtk/script-names.c:108
-msgctxt "Script"
-msgid "Brahmi"
-msgstr "Brahmi"
-
-#: gtk/script-names.c:109
-msgctxt "Script"
-msgid "Mandaic"
-msgstr "Mandaic"
-
-#: gtk/script-names.c:110
-msgctxt "Script"
-msgid "Chakma"
-msgstr "Chakma"
-
-#: gtk/script-names.c:111
-msgctxt "Script"
-msgid "Meroitic Cursive"
-msgstr "Meroitické kurzíva"
-
-#: gtk/script-names.c:112
-msgctxt "Script"
-msgid "Meroitic Hieroglyphs"
-msgstr "Meroitické hieroglyfy"
-
-#: gtk/script-names.c:113
-msgctxt "Script"
-msgid "Miao"
-msgstr "Miao"
-
-#: gtk/script-names.c:114
-msgctxt "Script"
-msgid "Sharada"
-msgstr "Sharada"
-
-#: gtk/script-names.c:115
-msgctxt "Script"
-msgid "Sora Sompeng"
-msgstr "Sora Sompeng"
-
-#: gtk/script-names.c:116
-msgctxt "Script"
-msgid "Takri"
-msgstr "Takri"
-
-#: gtk/script-names.c:117
-msgctxt "Script"
-msgid "Bassa"
-msgstr "Bassa Vah"
-
-#: gtk/script-names.c:118
-msgctxt "Script"
-msgid "Caucasian Albanian"
-msgstr "Kaukazská albánčina"
-
-#: gtk/script-names.c:119
-msgctxt "Script"
-msgid "Duployan"
-msgstr "Duployan"
-
-#: gtk/script-names.c:120
-msgctxt "Script"
-msgid "Elbasan"
-msgstr "Elbasan"
-
-#: gtk/script-names.c:121
-msgctxt "Script"
-msgid "Grantha"
-msgstr "Grantha"
-
-#: gtk/script-names.c:122
-msgctxt "Script"
-msgid "Khojki"
-msgstr "Khojki"
-
-#: gtk/script-names.c:123
-msgctxt "Script"
-msgid "Khudawadi, Sindhi"
-msgstr ""
-
-#: gtk/script-names.c:124
-msgctxt "Script"
-msgid "Linear A"
-msgstr "Lineárne A"
-
-#: gtk/script-names.c:125
-msgctxt "Script"
-msgid "Mahajani"
-msgstr "Mahajani"
-
-#: gtk/script-names.c:126
-msgctxt "Script"
-msgid "Manichaean"
-msgstr "Manichijské"
-
-#: gtk/script-names.c:127
-msgctxt "Script"
-msgid "Mende Kikakui"
-msgstr "Mende Kikakui"
-
-#: gtk/script-names.c:128
-msgctxt "Script"
-msgid "Modi"
-msgstr "Modi"
-
-#: gtk/script-names.c:129
-msgctxt "Script"
-msgid "Mro"
-msgstr "Mro"
-
-#: gtk/script-names.c:130
-msgctxt "Script"
-msgid "Nabataean"
-msgstr "Nabataean"
-
-#: gtk/script-names.c:131
-msgctxt "Script"
-msgid "Old North Arabian"
-msgstr "Staré severo-arabské"
-
-#: gtk/script-names.c:132
-msgctxt "Script"
-msgid "Old Permic"
-msgstr "Staré permické"
-
-#: gtk/script-names.c:133
-msgctxt "Script"
-msgid "Pahawh Hmong"
-msgstr "Pahawh Hmong"
-
-#: gtk/script-names.c:134
-msgctxt "Script"
-msgid "Palmyrene"
-msgstr "Palmyrene"
-
-#: gtk/script-names.c:135
-msgctxt "Script"
-msgid "Pau Cin Hau"
-msgstr "Pau Cin Hau"
-
-#: gtk/script-names.c:136
-msgctxt "Script"
-msgid "Psalter Pahlavi"
-msgstr ""
-
-#: gtk/script-names.c:137
-msgctxt "Script"
-msgid "Siddham"
-msgstr "Siddham"
-
-#: gtk/script-names.c:138
-msgctxt "Script"
-msgid "Tirhuta"
-msgstr "Tirhuta"
-
-#: gtk/script-names.c:139
-msgctxt "Script"
-msgid "Warang Citi"
-msgstr "Warang Citi"
-
-#: gtk/script-names.c:140
-msgctxt "Script"
-msgid "Ahom"
-msgstr "Ahom"
-
-#: gtk/script-names.c:141
-msgctxt "Script"
-msgid "Anatolian Hieroglyphs"
-msgstr "Anatolské hieroglyfy"
-
-#: gtk/script-names.c:142
-msgctxt "Script"
-msgid "Hatran"
-msgstr "Hatranské"
-
-#: gtk/script-names.c:143
-msgctxt "Script"
-msgid "Multani"
-msgstr "Multanské"
-
-#: gtk/script-names.c:144
-msgctxt "Script"
-msgid "Old Hungarian"
-msgstr "Staro-Maďarské"
-
-#: gtk/script-names.c:145
-msgctxt "Script"
-msgid "Signwriting"
-msgstr "Signwriting"
-
-#: gtk/script-names.c:146
-msgctxt "Script"
-msgid "Adlam"
-msgstr "Adlam"
-
-#: gtk/script-names.c:147
-msgctxt "Script"
-msgid "Bhaiksuki"
-msgstr "Bhaiksuki"
-
-#: gtk/script-names.c:148
-msgctxt "Script"
-msgid "Marchen"
-msgstr "Marchen"
-
-#: gtk/script-names.c:149
-msgctxt "Script"
-msgid "Newa"
-msgstr "Newa"
-
-#: gtk/script-names.c:150
-msgctxt "Script"
-msgid "Osage"
-msgstr "Osage"
-
-#: gtk/script-names.c:151
-msgctxt "Script"
-msgid "Tangut"
-msgstr "Tangut"
-
-#: gtk/script-names.c:152
-msgctxt "Script"
-msgid "Masaram Gondi"
-msgstr "Masaram Gondi"
-
-#: gtk/script-names.c:153
-msgctxt "Script"
-msgid "Nushu"
-msgstr "Nushu"
-
-#: gtk/script-names.c:154
-msgctxt "Script"
-msgid "Soyombo"
-msgstr "Soyombo"
-
-#: gtk/script-names.c:155
-msgctxt "Script"
-msgid "Zanabazar Square"
-msgstr ""
-
-#: gtk/script-names.c:156
-#, fuzzy
-#| msgid "Program"
-msgctxt "Script"
-msgid "Dogra"
-msgstr "Program"
-
-#: gtk/script-names.c:157
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Masaram Gondi"
-msgctxt "Script"
-msgid "Gunjala Gondi"
-msgstr "Masaram Gondi"
-
-#: gtk/script-names.c:158
-msgctxt "Script"
-msgid "Hanifi Rohingya"
-msgstr ""
-
-#: gtk/script-names.c:159
-msgctxt "Script"
-msgid "Makasar"
-msgstr ""
-
-#: gtk/script-names.c:160
-msgctxt "Script"
-msgid "Medefaidrin"
-msgstr ""
-
-#: gtk/script-names.c:161
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Old Hungarian"
-msgctxt "Script"
-msgid "Old Sogdian"
-msgstr "Staro-Maďarské"
-
-#: gtk/script-names.c:162
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Lydian"
-msgctxt "Script"
-msgid "Sogdian"
-msgstr "Lydian"
-
-#: gtk/script-names.c:165 gtk/script-names.c:170
-msgctxt "Script"
-msgid "Elym"
-msgstr ""
-
-#: gtk/script-names.c:166 gtk/script-names.c:171
-msgctxt "Script"
-msgid "Nand"
-msgstr ""
-
-#: gtk/script-names.c:167 gtk/script-names.c:172
-msgctxt "Script"
-msgid "Rohg"
-msgstr ""
-
-#: gtk/script-names.c:168 gtk/script-names.c:173
-msgctxt "Script"
-msgid "Wcho"
-msgstr ""
-
-#: gtk/script-names.c:176 gtk/script-names.c:181
-msgctxt "Script"
-msgid "Chorasmian"
-msgstr ""
-
-#: gtk/script-names.c:177 gtk/script-names.c:182
-msgctxt "Script"
-msgid "Dives Akuru"
-msgstr ""
-
-#: gtk/script-names.c:178 gtk/script-names.c:183
-msgctxt "Script"
-msgid "Khitan small script"
-msgstr ""
-
-#: gtk/script-names.c:179 gtk/script-names.c:184
-msgctxt "Script"
-msgid "Yezidi"
-msgstr ""
-
-#: gtk/ui/gtkaboutdialog.ui:62
-msgid "About"
-msgstr "O programe"
-
-#: gtk/ui/gtkaboutdialog.ui:123
-msgid "Credits"
-msgstr "Poďakovanie"
-
-#: gtk/ui/gtkaboutdialog.ui:206
-msgid "System"
-msgstr "Systém"
-
-#: gtk/ui/gtkappchooserdialog.ui:60
-msgid "_View All Applications"
-msgstr "Zobraziť _všetky aplikácie"
-
-#: gtk/ui/gtkappchooserdialog.ui:66
-msgid "_Find New Applications"
-msgstr "_Nájsť nové aplikácie"
-
-#: gtk/ui/gtkappchooserwidget.ui:100
-msgid "No applications found."
-msgstr "Neboli nájdené žiadne aplikácie."
-
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "Nastavenia"
@@ -7067,433 +6127,34 @@ msgstr "Zobraziť všetky"
 msgid "Quit %s"
 msgstr "Ukončiť %s"
 
-#: gtk/ui/gtkassistant.ui:64
-msgid "_Finish"
-msgstr "_Dokončiť"
-
-#: gtk/ui/gtkassistant.ui:75
-msgid "_Back"
-msgstr "_Späť"
-
-#: gtk/ui/gtkassistant.ui:86
-msgid "_Next"
-msgstr "_Nasledujúca"
-
-#: gtk/ui/gtkcolorchooserdialog.ui:4
-msgid "Select a Color"
-msgstr "Výber farby"
-
-# tooltip
-#: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
-msgid "Pick a color from the screen"
-msgstr "Vyberie farbu z obrazovky"
-
-#: gtk/ui/gtkcoloreditor.ui:80
-msgid "Hexadecimal color or color name"
-msgstr ""
-
-#: gtk/ui/gtkcoloreditor.ui:95
-msgid "Hue"
-msgstr "Odtieň"
-
-#: gtk/ui/gtkcoloreditor.ui:114
-#| msgid "Alpha"
-msgid "Alpha value"
-msgstr "Hodnoty alfy"
-
-#: gtk/ui/gtkcoloreditor.ui:132
-#| msgid "Saturation"
-msgid "Saturation and value"
-msgstr "Sýtosť a hodnota"
-
-#: gtk/ui/gtkcoloreditor.ui:156
-msgctxt "Color channel"
-msgid "A"
-msgstr "A"
-
-#: gtk/ui/gtkcoloreditor.ui:192
-msgctxt "Color channel"
-msgid "H"
-msgstr "H"
-
-#: gtk/ui/gtkcoloreditor.ui:229
-msgctxt "Color Channel"
-msgid "S"
-msgstr "S"
-
-#: gtk/ui/gtkcoloreditor.ui:238
-msgctxt "Color Channel"
-msgid "V"
-msgstr "V"
-
-#: gtk/ui/gtkdropdown.ui:20
-msgid "(None)"
-msgstr "(žiaden)"
-
-#: gtk/ui/gtkdropdown.ui:70
-msgid "Search…"
-msgstr "Hľadať…"
-
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
-msgctxt "emoji category"
-msgid "Smileys & People"
-msgstr "Emotikony a ľudia"
-
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
-msgctxt "emoji category"
-msgid "Body & Clothing"
-msgstr "Telo a oblečenie"
-
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
-msgctxt "emoji category"
-msgid "Animals & Nature"
-msgstr "Zvieratá a príroda"
-
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
-msgctxt "emoji category"
-msgid "Food & Drink"
-msgstr "Jedlo a nápoje"
-
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
-msgctxt "emoji category"
-msgid "Travel & Places"
-msgstr "Cestovanie a miesta"
-
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
-msgctxt "emoji category"
-msgid "Activities"
-msgstr "Činnosti"
-
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
-msgctxt "emoji category"
-msgid "Objects"
-msgstr "Objekty"
-
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
-msgctxt "emoji category"
-msgid "Symbols"
-msgstr "Symboly"
-
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
-msgctxt "emoji category"
-msgid "Flags"
-msgstr "Vlajky"
-
-#: gtk/ui/gtkemojichooser.ui:230
-msgctxt "emoji category"
-msgid "Recent"
-msgstr "Nedávne"
-
-# tooltip
-#: gtk/ui/gtkfilechooserwidget.ui:64
-msgid "Create Folder"
-msgstr "Vytvorí priečinok"
-
-#: gtk/ui/gtkfilechooserwidget.ui:249
-msgid "Remote location — only searching the current folder"
-msgstr "Vzdialené umiestnenie - vyhľadávanie iba v aktuálnom priečinku"
-
-#: gtk/ui/gtkfilechooserwidget.ui:378
-msgid "Folder Name"
-msgstr "Názov priečinka"
-
-#: gtk/ui/gtkfilechooserwidget.ui:404
-msgid "_Create"
-msgstr "_Vytvoriť"
-
-#: gtk/ui/gtkfontchooserdialog.ui:4
-msgid "Select Font"
-msgstr "Výber písma"
-
-#: gtk/ui/gtkfontchooserwidget.ui:64
-msgid "Search font name"
-msgstr "Vyhľadajte názov písma"
-
-#: gtk/ui/gtkfontchooserwidget.ui:79
-msgid "Filter by"
-msgstr "Filtrovať podľa"
-
-#: gtk/ui/gtkfontchooserwidget.ui:89
-msgid "Monospace"
-msgstr "Písmo s pevnou šírkou"
-
-#: gtk/ui/gtkfontchooserwidget.ui:95
-msgid "Language"
-msgstr "Jazyk"
-
-#: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:328
-msgid "Preview text"
-msgstr "Text náhľadu"
-
-#: gtk/ui/gtkfontchooserwidget.ui:194 gtk/ui/gtkfontchooserwidget.ui:224
-#| msgctxt "sizegroup mode"
-#| msgid "Horizontal"
-msgid "horizontal"
-msgstr "vodorovný"
-
-#: gtk/ui/gtkfontchooserwidget.ui:274
-msgid "No Fonts Found"
-msgstr "Nenašli sa žiadne písma"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:27
-msgid "_Format for:"
-msgstr "_Formát pre:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:637
-msgid "_Paper size:"
-msgstr "_Veľkosť papiera:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:86
-msgid "_Orientation:"
-msgstr "_Orientácia:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:98 gtk/ui/gtkprintunixdialog.ui:677
-msgid "Portrait"
-msgstr "Na výšku"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:109 gtk/ui/gtkprintunixdialog.ui:679
-msgid "Reverse portrait"
-msgstr "Obrátene na výšku"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:121 gtk/ui/gtkprintunixdialog.ui:678
-msgid "Landscape"
-msgstr "Na šírku"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:132 gtk/ui/gtkprintunixdialog.ui:680
-msgid "Reverse landscape"
-msgstr "Obrátene na šírku"
-
-#  tooltip
-#: gtk/ui/gtkplacesview.ui:28
-msgid "Server Addresses"
-msgstr "Adresy serverov"
-
-#: gtk/ui/gtkplacesview.ui:40
-msgid ""
-"Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr "Adresy serverov sú tvorené z predpony protokolu a adresy. Príklady:"
-
-#: gtk/ui/gtkplacesview.ui:66
-msgid "Available Protocols"
-msgstr "Dostupné protokoly"
-
-#. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:118
-msgid "No recent servers found"
-msgstr "Nenašli sa žiadne nedávne servery"
-
-#: gtk/ui/gtkplacesview.ui:141
-msgid "Recent Servers"
-msgstr "Nedávne servery"
-
-#: gtk/ui/gtkplacesview.ui:221
-msgid "No results found"
-msgstr "Nenašli sa žiadne výsledky"
-
-#: gtk/ui/gtkplacesview.ui:252
-msgid "Connect to _Server"
-msgstr "Pripojiť k _serveru"
-
-#  tooltip
-#: gtk/ui/gtkplacesview.ui:277
-msgid "Enter server address…"
-msgstr "Zadajte adresu servera…"
-
-#. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:147
-msgid "Status"
-msgstr "Stav"
-
-#: gtk/ui/gtkprintunixdialog.ui:201
-msgid "Range"
-msgstr "Rozsah"
-
 # stránka je v zdrojovom dokumente, strana je papiera - toto sa týka dokumentu
-#: gtk/ui/gtkprintunixdialog.ui:214
-msgid "_All Pages"
-msgstr "Vš_etky stránky"
-
-#: gtk/ui/gtkprintunixdialog.ui:226
-msgid "C_urrent Page"
-msgstr "_Aktuálnu stránku"
-
-#: gtk/ui/gtkprintunixdialog.ui:239
-msgid "Se_lection"
-msgstr "Vý_ber"
-
-#: gtk/ui/gtkprintunixdialog.ui:252
-msgid "Pag_es:"
-msgstr "_Stránky:"
-
-#: gtk/ui/gtkprintunixdialog.ui:253 gtk/ui/gtkprintunixdialog.ui:266
-msgid ""
-"Specify one or more page ranges,\n"
-" e.g. 1–3, 7, 11"
-msgstr ""
-"Uveďte jeden alebo viac rozsahov stránok,\n"
-" napr. 1–3, 7, 11"
-
-#: gtk/ui/gtkprintunixdialog.ui:289
-msgid "Copies"
-msgstr "Kópií"
-
-#: gtk/ui/gtkprintunixdialog.ui:304
-msgid "Copie_s:"
-msgstr "_Kópie:"
-
-#: gtk/ui/gtkprintunixdialog.ui:327
-msgid "C_ollate"
-msgstr "Zh_romažďovať"
-
-#: gtk/ui/gtkprintunixdialog.ui:338
-msgid "_Reverse"
-msgstr "_Opačne"
-
-#: gtk/ui/gtkprintunixdialog.ui:368
-msgid "General"
-msgstr "Všeobecné"
-
-#: gtk/ui/gtkprintunixdialog.ui:410
-msgid "T_wo-sided:"
-msgstr "O_bojstrannosť:"
-
-#: gtk/ui/gtkprintunixdialog.ui:432
-msgid "Pages per _side:"
-msgstr "_Stránok na stranu:"
-
-#: gtk/ui/gtkprintunixdialog.ui:456
-msgid "Page or_dering:"
-msgstr "Pora_die stránok:"
-
-#: gtk/ui/gtkprintunixdialog.ui:479
-msgid "_Only print:"
-msgstr "Tlačiť _len:"
-
-# stránka je v zdrojovom dokumente, strana je papiera - toto sa týka dokumentu
-#: gtk/ui/gtkprintunixdialog.ui:495
+#: gtk/ui/gtkprintunixdialog.ui:493
 msgid "All sheets"
 msgstr "Všetky listy"
 
-#: gtk/ui/gtkprintunixdialog.ui:496
+#: gtk/ui/gtkprintunixdialog.ui:494
 msgid "Even sheets"
 msgstr "Párne listy"
 
-#: gtk/ui/gtkprintunixdialog.ui:497
+#: gtk/ui/gtkprintunixdialog.ui:495
 msgid "Odd sheets"
 msgstr "Nepárne listy"
 
-#: gtk/ui/gtkprintunixdialog.ui:511
-msgid "Sc_ale:"
-msgstr "_Mierka:"
+#: gtk/ui/gtkprintunixdialog.ui:675
+msgid "Portrait"
+msgstr "Na výšku"
 
-#: gtk/ui/gtkprintunixdialog.ui:556
-msgid "Paper"
-msgstr "Papier"
+#: gtk/ui/gtkprintunixdialog.ui:676
+msgid "Landscape"
+msgstr "Na šírku"
 
-#: gtk/ui/gtkprintunixdialog.ui:571
-msgid "Paper _type:"
-msgstr "Typ p_apiera:"
+#: gtk/ui/gtkprintunixdialog.ui:677
+msgid "Reverse portrait"
+msgstr "Obrátene na výšku"
 
-#: gtk/ui/gtkprintunixdialog.ui:593
-msgid "Paper _source:"
-msgstr "Zd_roj papiera:"
-
-#: gtk/ui/gtkprintunixdialog.ui:615
-msgid "Output t_ray:"
-msgstr "Výstup_ný zberač:"
-
-#: gtk/ui/gtkprintunixdialog.ui:660
-msgid "Or_ientation:"
-msgstr "_Orientácia:"
-
-#: gtk/ui/gtkprintunixdialog.ui:734
-msgid "Job Details"
-msgstr "Podrobnosti úlohy"
-
-#: gtk/ui/gtkprintunixdialog.ui:749
-msgid "Pri_ority:"
-msgstr "Pri_orita:"
-
-# napr. pri firemných tlačiarňach, kde si musíš potom stránky nad limit zaplatiť...
-#: gtk/ui/gtkprintunixdialog.ui:770
-msgid "_Billing info:"
-msgstr "Zúčtovacie _informácie:"
-
-# label
-#: gtk/ui/gtkprintunixdialog.ui:803
-msgid "Print Document"
-msgstr "Tlač dokumentu"
-
-#. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:816
-msgid "_Now"
-msgstr "_Ihneď"
-
-#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:830
-msgid "A_t:"
-msgstr "_V čase:"
-
-#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:832 gtk/ui/gtkprintunixdialog.ui:834
-#: gtk/ui/gtkprintunixdialog.ui:850 gtk/ui/gtkprintunixdialog.ui:852
-msgid ""
-"Specify the time of print,\n"
-" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-msgstr ""
-"Uveďte čas tlače,\n"
-" napríklad 15:30, 14:15:30"
-
-#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:864
-msgid "On _hold"
-msgstr "Poz_držané"
-
-#: gtk/ui/gtkprintunixdialog.ui:866 gtk/ui/gtkprintunixdialog.ui:867
-msgid "Hold the job until it is explicitly released"
-msgstr "Pozdrží úlohu až do explicitného uvoľnenia"
-
-#  label
-#: gtk/ui/gtkprintunixdialog.ui:894
-msgid "Add Cover Page"
-msgstr "Pridanie titulnej stránky"
-
-#. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:909
-msgid "Be_fore:"
-msgstr "P_red:"
-
-#. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:930
-msgid "_After:"
-msgstr "Z_a:"
-
-#: gtk/ui/gtkprintunixdialog.ui:959
-msgid "Job"
-msgstr "Úloha"
-
-#. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:989
-msgid "Image Quality"
-msgstr "Kvalita obrazu"
-
-#. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1018
-msgid "Color"
-msgstr "Farba"
-
-#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1047
-msgid "Finishing"
-msgstr "Konečná úprava"
-
-#: gtk/ui/gtkprintunixdialog.ui:1076
-msgid "Advanced"
-msgstr "Pokročilé"
-
-#: gtk/ui/gtkprintunixdialog.ui:1092
-msgid "Some of the settings in the dialog conflict"
-msgstr "Niektoré nastavenia v dialógovom okne si odporujú"
+#: gtk/ui/gtkprintunixdialog.ui:678
+msgid "Reverse landscape"
+msgstr "Obrátene na šírku"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
@@ -8157,42 +6818,48 @@ msgstr ""
 "\n"
 "Vykonanie rozličných úloh na súboroch .ui nástroja GtkBuilder.\n"
 
-#: tools/gtk-builder-tool-simplify.c:436
+#: tools/gtk-builder-tool-simplify.c:440
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: Nepodarilo sa analzyovať hodnotu pre vlastnosť „%s“: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:591
+#: tools/gtk-builder-tool-simplify.c:649
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %svlastnosť %s::%s sa nenašla\n"
 
-#: tools/gtk-builder-tool-simplify.c:2207
+#: tools/gtk-builder-tool-simplify.c:2286
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Nedá sa načítať súbor „%s“: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2218
+#: tools/gtk-builder-tool-simplify.c:2297
+#: tools/gtk-builder-tool-simplify.c:2303
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Nedá sa analyzovať súbor „%s“: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2242
+#: tools/gtk-builder-tool-simplify.c:2309
+#, c-format
+msgid "Can’t parse “%s”\n"
+msgstr "Nedá sa analyzovať „%s“\n"
+
+#: tools/gtk-builder-tool-simplify.c:2333
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Zlyhalo čítanie súboru „%s“: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2248
+#: tools/gtk-builder-tool-simplify.c:2339
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Zlyhalo zapísanie súboru %s: „%s“\n"
 
-#: tools/gtk-builder-tool-simplify.c:2288
+#: tools/gtk-builder-tool-simplify.c:2379
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Nie je určený žiadny súbor typu .ui\n"
 
-#: tools/gtk-builder-tool-simplify.c:2294
+#: tools/gtk-builder-tool-simplify.c:2385
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr ""
@@ -8370,6 +7037,922 @@ msgstr ""
 "Žiaden indexový súbor témy v „%s“.\n"
 "Ak tu naozaj chcete vytvoriť vyrovnávaciu pamäť ikon, použite voľbu --ignore-"
 "theme-index.\n"
+
+#, fuzzy
+#~| msgid "Core GL is not available on EGL implementation"
+#~ msgid "Sandbox does not provide an OpenGL implementation"
+#~ msgstr "Jadro GL nie je dostupné v implementácii EGL"
+
+#, fuzzy
+#~| msgid "No GL implementation is available"
+#~ msgid "No OpenGL implementation available"
+#~ msgstr "Nie je k dispozícii žiadna implementácia GL"
+
+#~ msgid "Core GL is not available on EGL implementation"
+#~ msgstr "Jadro GL nie je dostupné v implementácii EGL"
+
+#, fuzzy
+#~| msgid "Format %s not supported"
+#~ msgid "EGL is not supported"
+#~ msgstr "Formát %s nie je podporovaný"
+
+#~ msgctxt "Script"
+#~ msgid "Arabic"
+#~ msgstr "Arabské"
+
+#~ msgctxt "Script"
+#~ msgid "Armenian"
+#~ msgstr "Arménske"
+
+#~ msgctxt "Script"
+#~ msgid "Bengali"
+#~ msgstr "Bengálske"
+
+#~ msgctxt "Script"
+#~ msgid "Bopomofo"
+#~ msgstr "Bopomofo"
+
+#~ msgctxt "Script"
+#~ msgid "Cherokee"
+#~ msgstr "Cherokee"
+
+#~ msgctxt "Script"
+#~ msgid "Coptic"
+#~ msgstr "Koptické"
+
+#~ msgctxt "Script"
+#~ msgid "Cyrillic"
+#~ msgstr "Cyrilika"
+
+#~ msgctxt "Script"
+#~ msgid "Deseret"
+#~ msgstr "Deseret"
+
+#~ msgctxt "Script"
+#~ msgid "Devanagari"
+#~ msgstr "Devanagari"
+
+#~ msgctxt "Script"
+#~ msgid "Ethiopic"
+#~ msgstr "Etiópske"
+
+#~ msgctxt "Script"
+#~ msgid "Georgian"
+#~ msgstr "Gruzínske"
+
+#~ msgctxt "Script"
+#~ msgid "Gothic"
+#~ msgstr "Gotické"
+
+#, fuzzy
+#~| msgid "_Green:"
+#~ msgctxt "Script"
+#~ msgid "Greek"
+#~ msgstr "_Zelená:"
+
+#~ msgctxt "Script"
+#~ msgid "Gujarati"
+#~ msgstr "Gudžarátske"
+
+#~ msgctxt "Script"
+#~ msgid "Gurmukhi"
+#~ msgstr "Gurmukhi"
+
+#~ msgctxt "Script"
+#~ msgid "Han"
+#~ msgstr "Han"
+
+#~ msgctxt "Script"
+#~ msgid "Hangul"
+#~ msgstr "Hangul"
+
+#~ msgctxt "Script"
+#~ msgid "Hebrew"
+#~ msgstr "Hebrejské"
+
+#~ msgctxt "Script"
+#~ msgid "Hiragana"
+#~ msgstr "Hiragana"
+
+#~ msgctxt "Script"
+#~ msgid "Kannada"
+#~ msgstr "Kannadské"
+
+#~ msgctxt "Script"
+#~ msgid "Katakana"
+#~ msgstr "Katakana"
+
+#~ msgctxt "Script"
+#~ msgid "Khmer"
+#~ msgstr "Kmérske"
+
+#~ msgctxt "Script"
+#~ msgid "Lao"
+#~ msgstr "Lao"
+
+#~ msgctxt "Script"
+#~ msgid "Latin"
+#~ msgstr "Latinka"
+
+#~ msgctxt "Script"
+#~ msgid "Malayalam"
+#~ msgstr "Malajalámske"
+
+#~ msgctxt "Script"
+#~ msgid "Mongolian"
+#~ msgstr "Mongolské"
+
+#~ msgctxt "Script"
+#~ msgid "Myanmar"
+#~ msgstr "Mjanmarsko"
+
+#~ msgctxt "Script"
+#~ msgid "Ogham"
+#~ msgstr "Oghamské"
+
+#~ msgctxt "Script"
+#~ msgid "Old Italic"
+#~ msgstr "Stará italika"
+
+#~ msgctxt "Script"
+#~ msgid "Oriya"
+#~ msgstr "uríjčina"
+
+#~ msgctxt "Script"
+#~ msgid "Runic"
+#~ msgstr "Runové"
+
+#~ msgctxt "Script"
+#~ msgid "Sinhala"
+#~ msgstr "Sinhala"
+
+#~ msgctxt "Script"
+#~ msgid "Syriac"
+#~ msgstr "Syrské"
+
+#, fuzzy
+#~| msgid "_Family:"
+#~ msgctxt "Script"
+#~ msgid "Tamil"
+#~ msgstr "_Rodina:"
+
+#~ msgctxt "Script"
+#~ msgid "Telugu"
+#~ msgstr "Telugské"
+
+#~ msgctxt "Script"
+#~ msgid "Thaana"
+#~ msgstr "Thaana"
+
+#~ msgctxt "Script"
+#~ msgid "Thai"
+#~ msgstr "Thajské"
+
+#~ msgctxt "Script"
+#~ msgid "Tibetan"
+#~ msgstr "Tibetské"
+
+#~ msgctxt "Script"
+#~ msgid "Canadian Aboriginal"
+#~ msgstr "Kanadské domorodé"
+
+#~ msgctxt "Script"
+#~ msgid "Yi"
+#~ msgstr "Yi"
+
+#~ msgctxt "Script"
+#~ msgid "Tagalog"
+#~ msgstr "Tagalog"
+
+#~ msgctxt "Script"
+#~ msgid "Hanunoo"
+#~ msgstr "Hanunoo"
+
+#~ msgctxt "Script"
+#~ msgid "Buhid"
+#~ msgstr "Buhid"
+
+#~ msgctxt "Script"
+#~ msgid "Tagbanwa"
+#~ msgstr "Tagbanwa"
+
+#~ msgctxt "Script"
+#~ msgid "Braille"
+#~ msgstr "Brailleovo"
+
+#~ msgctxt "Script"
+#~ msgid "Cypriot"
+#~ msgstr "Cyperské"
+
+#~ msgctxt "Script"
+#~ msgid "Limbu"
+#~ msgstr "Limbu"
+
+#~ msgctxt "Script"
+#~ msgid "Osmanya"
+#~ msgstr "Osmanské"
+
+#~ msgctxt "Script"
+#~ msgid "Shavian"
+#~ msgstr "Shavian"
+
+#~ msgctxt "Script"
+#~ msgid "Linear B"
+#~ msgstr "Lineárne B"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Le"
+#~ msgstr "Tai Le"
+
+#~ msgctxt "Script"
+#~ msgid "Ugaritic"
+#~ msgstr "Ugaritické"
+
+#~ msgctxt "Script"
+#~ msgid "New Tai Lue"
+#~ msgstr "Nové Tai Lue"
+
+#~ msgctxt "Script"
+#~ msgid "Buginese"
+#~ msgstr "Buginese"
+
+#~ msgctxt "Script"
+#~ msgid "Glagolitic"
+#~ msgstr "Hlaholika"
+
+#~ msgctxt "Script"
+#~ msgid "Tifinagh"
+#~ msgstr "Tifinagh"
+
+#~ msgctxt "Script"
+#~ msgid "Syloti Nagri"
+#~ msgstr "Syloti Nagri"
+
+#~ msgctxt "Script"
+#~ msgid "Old Persian"
+#~ msgstr "Staré perzské"
+
+#~ msgctxt "Script"
+#~ msgid "Kharoshthi"
+#~ msgstr "Kharoshthi"
+
+# prečo stredný rod?
+# PK: prever
+# PM: v master vetve
+# datum
+#~ msgctxt "Script"
+#~ msgid "Unknown"
+#~ msgstr "Neznámy"
+
+#~ msgctxt "Script"
+#~ msgid "Balinese"
+#~ msgstr "Balijske"
+
+#~ msgctxt "Script"
+#~ msgid "Cuneiform"
+#~ msgstr "Klinové písmo"
+
+#~ msgctxt "Script"
+#~ msgid "Phoenician"
+#~ msgstr "Fenické"
+
+#~ msgctxt "Script"
+#~ msgid "Phags-pa"
+#~ msgstr "Phags-pa"
+
+#~ msgctxt "Script"
+#~ msgid "N'Ko"
+#~ msgstr "N'Ko"
+
+#~ msgctxt "Script"
+#~ msgid "Kayah Li"
+#~ msgstr "Kayah Li"
+
+#~ msgctxt "Script"
+#~ msgid "Lepcha"
+#~ msgstr "Lepcha"
+
+#~ msgctxt "Script"
+#~ msgid "Rejang"
+#~ msgstr "Rejang"
+
+#~ msgctxt "Script"
+#~ msgid "Sundanese"
+#~ msgstr "Sudánske"
+
+#~ msgctxt "Script"
+#~ msgid "Saurashtra"
+#~ msgstr "Saurashtra"
+
+#~ msgctxt "Script"
+#~ msgid "Cham"
+#~ msgstr "Cham"
+
+#~ msgctxt "Script"
+#~ msgid "Ol Chiki"
+#~ msgstr "Ol Chiki"
+
+#~ msgctxt "Script"
+#~ msgid "Vai"
+#~ msgstr "Vai"
+
+#~ msgctxt "Script"
+#~ msgid "Carian"
+#~ msgstr "Carian"
+
+#~ msgctxt "Script"
+#~ msgid "Lycian"
+#~ msgstr "Lycian"
+
+#~ msgctxt "Script"
+#~ msgid "Lydian"
+#~ msgstr "Lydian"
+
+#~ msgctxt "Script"
+#~ msgid "Avestan"
+#~ msgstr "Avestanské"
+
+#~ msgctxt "Script"
+#~ msgid "Bamum"
+#~ msgstr "Bamum"
+
+#~ msgctxt "Script"
+#~ msgid "Egyptian Hieroglyphs"
+#~ msgstr "Egyptské hieroglyfy"
+
+#~ msgctxt "Script"
+#~ msgid "Imperial Aramaic"
+#~ msgstr "Aramejské kráľovské"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Pahlavi"
+#~ msgstr "Pahlavi nápisové"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Parthian"
+#~ msgstr "Parthian nápisové"
+
+#~ msgctxt "Script"
+#~ msgid "Javanese"
+#~ msgstr "Jávske"
+
+#~ msgctxt "Script"
+#~ msgid "Kaithi"
+#~ msgstr "Kaithi"
+
+#~ msgctxt "Script"
+#~ msgid "Lisu"
+#~ msgstr "Lisu"
+
+#~ msgctxt "Script"
+#~ msgid "Meetei Mayek"
+#~ msgstr "Meetei Mayek"
+
+#~ msgctxt "Script"
+#~ msgid "Old South Arabian"
+#~ msgstr "Staré juho-arabské"
+
+#~ msgctxt "Script"
+#~ msgid "Old Turkic"
+#~ msgstr "Turecké staré"
+
+#~ msgctxt "Script"
+#~ msgid "Samaritan"
+#~ msgstr "Samaritánske"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Tham"
+#~ msgstr "Tai Tham"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Viet"
+#~ msgstr "Tai Viet"
+
+#~ msgctxt "Script"
+#~ msgid "Batak"
+#~ msgstr "Batak"
+
+#~ msgctxt "Script"
+#~ msgid "Brahmi"
+#~ msgstr "Brahmi"
+
+#~ msgctxt "Script"
+#~ msgid "Mandaic"
+#~ msgstr "Mandaic"
+
+#~ msgctxt "Script"
+#~ msgid "Chakma"
+#~ msgstr "Chakma"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Cursive"
+#~ msgstr "Meroitické kurzíva"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Hieroglyphs"
+#~ msgstr "Meroitické hieroglyfy"
+
+#~ msgctxt "Script"
+#~ msgid "Miao"
+#~ msgstr "Miao"
+
+#~ msgctxt "Script"
+#~ msgid "Sharada"
+#~ msgstr "Sharada"
+
+#~ msgctxt "Script"
+#~ msgid "Sora Sompeng"
+#~ msgstr "Sora Sompeng"
+
+#~ msgctxt "Script"
+#~ msgid "Takri"
+#~ msgstr "Takri"
+
+#~ msgctxt "Script"
+#~ msgid "Bassa"
+#~ msgstr "Bassa Vah"
+
+#~ msgctxt "Script"
+#~ msgid "Caucasian Albanian"
+#~ msgstr "Kaukazská albánčina"
+
+#~ msgctxt "Script"
+#~ msgid "Duployan"
+#~ msgstr "Duployan"
+
+#~ msgctxt "Script"
+#~ msgid "Elbasan"
+#~ msgstr "Elbasan"
+
+#~ msgctxt "Script"
+#~ msgid "Grantha"
+#~ msgstr "Grantha"
+
+#~ msgctxt "Script"
+#~ msgid "Khojki"
+#~ msgstr "Khojki"
+
+#~ msgctxt "Script"
+#~ msgid "Linear A"
+#~ msgstr "Lineárne A"
+
+#~ msgctxt "Script"
+#~ msgid "Mahajani"
+#~ msgstr "Mahajani"
+
+#~ msgctxt "Script"
+#~ msgid "Manichaean"
+#~ msgstr "Manichijské"
+
+#~ msgctxt "Script"
+#~ msgid "Mende Kikakui"
+#~ msgstr "Mende Kikakui"
+
+#~ msgctxt "Script"
+#~ msgid "Modi"
+#~ msgstr "Modi"
+
+#~ msgctxt "Script"
+#~ msgid "Mro"
+#~ msgstr "Mro"
+
+#~ msgctxt "Script"
+#~ msgid "Nabataean"
+#~ msgstr "Nabataean"
+
+#~ msgctxt "Script"
+#~ msgid "Old North Arabian"
+#~ msgstr "Staré severo-arabské"
+
+#~ msgctxt "Script"
+#~ msgid "Old Permic"
+#~ msgstr "Staré permické"
+
+#~ msgctxt "Script"
+#~ msgid "Pahawh Hmong"
+#~ msgstr "Pahawh Hmong"
+
+#~ msgctxt "Script"
+#~ msgid "Palmyrene"
+#~ msgstr "Palmyrene"
+
+#~ msgctxt "Script"
+#~ msgid "Pau Cin Hau"
+#~ msgstr "Pau Cin Hau"
+
+#~ msgctxt "Script"
+#~ msgid "Siddham"
+#~ msgstr "Siddham"
+
+#~ msgctxt "Script"
+#~ msgid "Tirhuta"
+#~ msgstr "Tirhuta"
+
+#~ msgctxt "Script"
+#~ msgid "Warang Citi"
+#~ msgstr "Warang Citi"
+
+#~ msgctxt "Script"
+#~ msgid "Ahom"
+#~ msgstr "Ahom"
+
+#~ msgctxt "Script"
+#~ msgid "Anatolian Hieroglyphs"
+#~ msgstr "Anatolské hieroglyfy"
+
+#~ msgctxt "Script"
+#~ msgid "Hatran"
+#~ msgstr "Hatranské"
+
+#~ msgctxt "Script"
+#~ msgid "Multani"
+#~ msgstr "Multanské"
+
+#~ msgctxt "Script"
+#~ msgid "Old Hungarian"
+#~ msgstr "Staro-Maďarské"
+
+#~ msgctxt "Script"
+#~ msgid "Signwriting"
+#~ msgstr "Signwriting"
+
+#~ msgctxt "Script"
+#~ msgid "Adlam"
+#~ msgstr "Adlam"
+
+#~ msgctxt "Script"
+#~ msgid "Bhaiksuki"
+#~ msgstr "Bhaiksuki"
+
+#~ msgctxt "Script"
+#~ msgid "Marchen"
+#~ msgstr "Marchen"
+
+#~ msgctxt "Script"
+#~ msgid "Newa"
+#~ msgstr "Newa"
+
+#~ msgctxt "Script"
+#~ msgid "Osage"
+#~ msgstr "Osage"
+
+#~ msgctxt "Script"
+#~ msgid "Tangut"
+#~ msgstr "Tangut"
+
+#~ msgctxt "Script"
+#~ msgid "Masaram Gondi"
+#~ msgstr "Masaram Gondi"
+
+#~ msgctxt "Script"
+#~ msgid "Nushu"
+#~ msgstr "Nushu"
+
+#~ msgctxt "Script"
+#~ msgid "Soyombo"
+#~ msgstr "Soyombo"
+
+#, fuzzy
+#~| msgid "Program"
+#~ msgctxt "Script"
+#~ msgid "Dogra"
+#~ msgstr "Program"
+
+#, fuzzy
+#~| msgctxt "Script"
+#~| msgid "Masaram Gondi"
+#~ msgctxt "Script"
+#~ msgid "Gunjala Gondi"
+#~ msgstr "Masaram Gondi"
+
+#, fuzzy
+#~| msgctxt "Script"
+#~| msgid "Old Hungarian"
+#~ msgctxt "Script"
+#~ msgid "Old Sogdian"
+#~ msgstr "Staro-Maďarské"
+
+#, fuzzy
+#~| msgctxt "Script"
+#~| msgid "Lydian"
+#~ msgctxt "Script"
+#~ msgid "Sogdian"
+#~ msgstr "Lydian"
+
+#~ msgid "About"
+#~ msgstr "O programe"
+
+#~ msgid "Credits"
+#~ msgstr "Poďakovanie"
+
+#~ msgid "System"
+#~ msgstr "Systém"
+
+#~ msgid "_View All Applications"
+#~ msgstr "Zobraziť _všetky aplikácie"
+
+#~ msgid "_Find New Applications"
+#~ msgstr "_Nájsť nové aplikácie"
+
+#~ msgid "No applications found."
+#~ msgstr "Neboli nájdené žiadne aplikácie."
+
+#~ msgid "_Finish"
+#~ msgstr "_Dokončiť"
+
+#~ msgid "_Back"
+#~ msgstr "_Späť"
+
+#~ msgid "_Next"
+#~ msgstr "_Nasledujúca"
+
+#~ msgid "Select a Color"
+#~ msgstr "Výber farby"
+
+# tooltip
+#~ msgid "Pick a color from the screen"
+#~ msgstr "Vyberie farbu z obrazovky"
+
+#~ msgid "Hue"
+#~ msgstr "Odtieň"
+
+#~| msgid "Alpha"
+#~ msgid "Alpha value"
+#~ msgstr "Hodnoty alfy"
+
+#~| msgid "Saturation"
+#~ msgid "Saturation and value"
+#~ msgstr "Sýtosť a hodnota"
+
+#~ msgctxt "Color channel"
+#~ msgid "A"
+#~ msgstr "A"
+
+#~ msgctxt "Color channel"
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgctxt "Color Channel"
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgctxt "Color Channel"
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "(None)"
+#~ msgstr "(žiaden)"
+
+#~ msgid "Search…"
+#~ msgstr "Hľadať…"
+
+#~ msgctxt "emoji category"
+#~ msgid "Smileys & People"
+#~ msgstr "Emotikony a ľudia"
+
+#~ msgctxt "emoji category"
+#~ msgid "Body & Clothing"
+#~ msgstr "Telo a oblečenie"
+
+#~ msgctxt "emoji category"
+#~ msgid "Animals & Nature"
+#~ msgstr "Zvieratá a príroda"
+
+#~ msgctxt "emoji category"
+#~ msgid "Food & Drink"
+#~ msgstr "Jedlo a nápoje"
+
+#~ msgctxt "emoji category"
+#~ msgid "Travel & Places"
+#~ msgstr "Cestovanie a miesta"
+
+#~ msgctxt "emoji category"
+#~ msgid "Activities"
+#~ msgstr "Činnosti"
+
+#~ msgctxt "emoji category"
+#~ msgid "Objects"
+#~ msgstr "Objekty"
+
+#~ msgctxt "emoji category"
+#~ msgid "Symbols"
+#~ msgstr "Symboly"
+
+#~ msgctxt "emoji category"
+#~ msgid "Flags"
+#~ msgstr "Vlajky"
+
+#~ msgctxt "emoji category"
+#~ msgid "Recent"
+#~ msgstr "Nedávne"
+
+# tooltip
+#~ msgid "Create Folder"
+#~ msgstr "Vytvorí priečinok"
+
+#~ msgid "Remote location — only searching the current folder"
+#~ msgstr "Vzdialené umiestnenie - vyhľadávanie iba v aktuálnom priečinku"
+
+#~ msgid "Folder Name"
+#~ msgstr "Názov priečinka"
+
+#~ msgid "_Create"
+#~ msgstr "_Vytvoriť"
+
+#~ msgid "Select Font"
+#~ msgstr "Výber písma"
+
+#~ msgid "Search font name"
+#~ msgstr "Vyhľadajte názov písma"
+
+#~ msgid "Filter by"
+#~ msgstr "Filtrovať podľa"
+
+#~ msgid "Monospace"
+#~ msgstr "Písmo s pevnou šírkou"
+
+#~ msgid "Language"
+#~ msgstr "Jazyk"
+
+#~ msgid "Preview text"
+#~ msgstr "Text náhľadu"
+
+#~| msgctxt "sizegroup mode"
+#~| msgid "Horizontal"
+#~ msgid "horizontal"
+#~ msgstr "vodorovný"
+
+#~ msgid "No Fonts Found"
+#~ msgstr "Nenašli sa žiadne písma"
+
+#~ msgid "_Format for:"
+#~ msgstr "_Formát pre:"
+
+#~ msgid "_Paper size:"
+#~ msgstr "_Veľkosť papiera:"
+
+#~ msgid "_Orientation:"
+#~ msgstr "_Orientácia:"
+
+#  tooltip
+#~ msgid "Server Addresses"
+#~ msgstr "Adresy serverov"
+
+#~ msgid ""
+#~ "Server addresses are made up of a protocol prefix and an address. "
+#~ "Examples:"
+#~ msgstr "Adresy serverov sú tvorené z predpony protokolu a adresy. Príklady:"
+
+#~ msgid "Available Protocols"
+#~ msgstr "Dostupné protokoly"
+
+#~ msgid "No recent servers found"
+#~ msgstr "Nenašli sa žiadne nedávne servery"
+
+#~ msgid "Recent Servers"
+#~ msgstr "Nedávne servery"
+
+#~ msgid "No results found"
+#~ msgstr "Nenašli sa žiadne výsledky"
+
+#~ msgid "Connect to _Server"
+#~ msgstr "Pripojiť k _serveru"
+
+#  tooltip
+#~ msgid "Enter server address…"
+#~ msgstr "Zadajte adresu servera…"
+
+#~ msgid "Status"
+#~ msgstr "Stav"
+
+#~ msgid "Range"
+#~ msgstr "Rozsah"
+
+# stránka je v zdrojovom dokumente, strana je papiera - toto sa týka dokumentu
+#~ msgid "_All Pages"
+#~ msgstr "Vš_etky stránky"
+
+#~ msgid "C_urrent Page"
+#~ msgstr "_Aktuálnu stránku"
+
+#~ msgid "Se_lection"
+#~ msgstr "Vý_ber"
+
+#~ msgid "Pag_es:"
+#~ msgstr "_Stránky:"
+
+#~ msgid ""
+#~ "Specify one or more page ranges,\n"
+#~ " e.g. 1–3, 7, 11"
+#~ msgstr ""
+#~ "Uveďte jeden alebo viac rozsahov stránok,\n"
+#~ " napr. 1–3, 7, 11"
+
+#~ msgid "Copies"
+#~ msgstr "Kópií"
+
+#~ msgid "Copie_s:"
+#~ msgstr "_Kópie:"
+
+#~ msgid "C_ollate"
+#~ msgstr "Zh_romažďovať"
+
+#~ msgid "_Reverse"
+#~ msgstr "_Opačne"
+
+#~ msgid "General"
+#~ msgstr "Všeobecné"
+
+#~ msgid "T_wo-sided:"
+#~ msgstr "O_bojstrannosť:"
+
+#~ msgid "Pages per _side:"
+#~ msgstr "_Stránok na stranu:"
+
+#~ msgid "Page or_dering:"
+#~ msgstr "Pora_die stránok:"
+
+#~ msgid "_Only print:"
+#~ msgstr "Tlačiť _len:"
+
+#~ msgid "Sc_ale:"
+#~ msgstr "_Mierka:"
+
+#~ msgid "Paper"
+#~ msgstr "Papier"
+
+#~ msgid "Paper _type:"
+#~ msgstr "Typ p_apiera:"
+
+#~ msgid "Paper _source:"
+#~ msgstr "Zd_roj papiera:"
+
+#~ msgid "Output t_ray:"
+#~ msgstr "Výstup_ný zberač:"
+
+#~ msgid "Or_ientation:"
+#~ msgstr "_Orientácia:"
+
+#~ msgid "Job Details"
+#~ msgstr "Podrobnosti úlohy"
+
+#~ msgid "Pri_ority:"
+#~ msgstr "Pri_orita:"
+
+# napr. pri firemných tlačiarňach, kde si musíš potom stránky nad limit zaplatiť...
+#~ msgid "_Billing info:"
+#~ msgstr "Zúčtovacie _informácie:"
+
+# label
+#~ msgid "Print Document"
+#~ msgstr "Tlač dokumentu"
+
+#~ msgid "_Now"
+#~ msgstr "_Ihneď"
+
+#~ msgid "A_t:"
+#~ msgstr "_V čase:"
+
+#~ msgid ""
+#~ "Specify the time of print,\n"
+#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+#~ msgstr ""
+#~ "Uveďte čas tlače,\n"
+#~ " napríklad 15:30, 14:15:30"
+
+#~ msgid "On _hold"
+#~ msgstr "Poz_držané"
+
+#~ msgid "Hold the job until it is explicitly released"
+#~ msgstr "Pozdrží úlohu až do explicitného uvoľnenia"
+
+#  label
+#~ msgid "Add Cover Page"
+#~ msgstr "Pridanie titulnej stránky"
+
+#~ msgid "Be_fore:"
+#~ msgstr "P_red:"
+
+#~ msgid "_After:"
+#~ msgstr "Z_a:"
+
+#~ msgid "Job"
+#~ msgstr "Úloha"
+
+#~ msgid "Image Quality"
+#~ msgstr "Kvalita obrazu"
+
+#~ msgid "Color"
+#~ msgstr "Farba"
+
+#~ msgid "Finishing"
+#~ msgstr "Konečná úprava"
+
+#~ msgid "Advanced"
+#~ msgstr "Pokročilé"
+
+#~ msgid "Some of the settings in the dialog conflict"
+#~ msgstr "Niektoré nastavenia v dialógovom okne si odporujú"
 
 #~ msgid "No available configurations for the given RGBA pixel format"
 #~ msgstr "Žiadne dostupné konfigurácie pre zadaný formát pixelov RGBA"
@@ -9050,9 +8633,6 @@ msgstr ""
 #~ msgid "Open “%s”"
 #~ msgstr "Otvoriť „%s“"
 
-#~ msgid "Unknown item"
-#~ msgstr "Neznáma položka"
-
 #~ msgctxt "recent menu label"
 #~ msgid "_%d. %s"
 #~ msgstr "_%d. %s"
@@ -9309,10 +8889,6 @@ msgstr ""
 #~ msgctxt "input method menu"
 #~ msgid "Vietnamese (VIQR)"
 #~ msgstr "Vietnamský (VIQR)"
-
-#~ msgctxt "input method menu"
-#~ msgid "X Input Method"
-#~ msgstr "Metóda vstupu X"
 
 #~ msgid "printer offline"
 #~ msgstr "tlačiareň odpojená"
@@ -9633,9 +9209,6 @@ msgstr ""
 
 #~ msgid "Unexpected character data on line %d char %d"
 #~ msgstr "Neočakávané znakové dáta na riadku č. %d znaku č. %d"
-
-#~ msgid "Empty"
-#~ msgstr "Prázdne"
 
 # metóda vstupu
 #~ msgctxt "input method menu"
