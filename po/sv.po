@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-02-28 14:47+0000\n"
-"PO-Revision-Date: 2022-03-07 01:30+0100\n"
+"POT-Creation-Date: 2022-03-11 07:44+0000\n"
+"PO-Revision-Date: 2022-03-11 23:42+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -2733,7 +2733,7 @@ msgstr "Sida %u"
 
 #: gtk/gtkpagesetup.c:609 gtk/gtkpapersize.c:942 gtk/gtkpapersize.c:982
 msgid "Not a valid page setup file"
-msgstr "Inte en giltig sidkonfigurationsfil"
+msgstr "Inte en giltig sidinställningsfil"
 
 #: gtk/gtkpagesetupunixdialog.c:201 gtk/gtkprintunixdialog.c:752
 msgid "Manage Custom Sizes…"
