@@ -422,6 +422,10 @@ select_key_in_idle_cb (gpointer data)
 
   self->select_key_in_idle = 0;
 
+  /* Don't steal focus from NSPanel, etc */
+  if (self->key_window_is_foregin)
+    return G_SOURCE_REMOVE;
+
   if (self->keyboard_surface == NULL)
     {
       const GList *surfaces = _gdk_macos_display_get_surfaces (self);
@@ -960,10 +964,15 @@ _gdk_macos_display_get_surfaces (GdkMacosDisplay *self)
       NSArray *array = [NSApp orderedWindows];
       GQueue sorted = G_QUEUE_INIT;
 
+      self->key_window_is_foregin = FALSE;
+
       for (id obj in array)
         {
           NSWindow *nswindow = (NSWindow *)obj;
           GdkMacosSurface *surface;
+
+          if ([nswindow isKeyWindow])
+            self->key_window_is_foregin = !GDK_IS_MACOS_WINDOW (nswindow);
 
           if (!GDK_IS_MACOS_WINDOW (nswindow))
             continue;
