@@ -347,13 +347,7 @@ _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
   [window setBackgroundColor:[NSColor clearColor]];
   [window setDecorated:NO];
 
-#if 0
-  /* NOTE: We could set these to be popup level, but then
-   * [NSApp orderedWindows] would not give us the windows
-   * back with the stacking order applied.
-   */
   [window setLevel:NSPopUpMenuWindowLevel];
-#endif
 
   self = g_object_new (GDK_TYPE_MACOS_POPUP_SURFACE,
                        "display", display,
