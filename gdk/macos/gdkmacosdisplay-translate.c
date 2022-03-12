@@ -1086,6 +1086,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   GdkMacosSurface *surface;
   GdkMacosWindow *window;
   NSEventType event_type;
+  NSWindow *event_window;
   GdkEvent *ret = NULL;
   int x;
   int y;
@@ -1128,6 +1129,15 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       return NULL;
     }
 
+  /* If the event was delivered to NSWindow that is foreign (or rather,
+   * Cocoa native), then we should pass the event along to that window.
+   */
+  if ((event_window = [nsevent window]) && !GDK_IS_MACOS_WINDOW (event_window))
+    return NULL;
+
+  /* If we can't find a GdkSurface to deliver the event to, then we
+   * should pass it along to the NSApp.
+   */
   if (!(surface = find_surface_for_ns_event (self, nsevent, &x, &y)))
     return NULL;
 
