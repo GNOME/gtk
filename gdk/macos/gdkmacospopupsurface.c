@@ -34,6 +34,7 @@ struct _GdkMacosPopupSurface
 {
   GdkMacosSurface parent_instance;
   GdkPopupLayout *layout;
+  guint attached : 1;
 };
 
 struct _GdkMacosPopupSurfaceClass
@@ -138,6 +139,9 @@ gdk_macos_popup_surface_present (GdkPopup       *popup,
   if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (self)))
     return TRUE;
 
+  if (!self->attached && GDK_SURFACE (self)->parent != NULL)
+    _gdk_macos_popup_surface_attach_to_parent (self);
+
   if (GDK_SURFACE (self)->autohide)
     {
       GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (popup));
@@ -202,6 +206,19 @@ enum {
   PROP_0,
   LAST_PROP,
 };
+
+static void
+_gdk_macos_popup_surface_hide (GdkSurface *surface)
+{
+  GdkMacosPopupSurface *self = (GdkMacosPopupSurface *)surface;
+
+  g_assert (GDK_IS_MACOS_POPUP_SURFACE (self));
+
+  if (self->attached)
+    _gdk_macos_popup_surface_detach_from_parent (self);
+
+  GDK_SURFACE_CLASS (_gdk_macos_popup_surface_parent_class)->hide (surface);
+}
 
 static void
 _gdk_macos_popup_surface_finalize (GObject *object)
@@ -270,10 +287,13 @@ static void
 _gdk_macos_popup_surface_class_init (GdkMacosPopupSurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (klass);
 
   object_class->finalize = _gdk_macos_popup_surface_finalize;
   object_class->get_property = _gdk_macos_popup_surface_get_property;
   object_class->set_property = _gdk_macos_popup_surface_set_property;
+
+  surface_class->hide = _gdk_macos_popup_surface_hide;
 
   gdk_popup_install_properties (object_class, LAST_PROP);
 }
@@ -326,14 +346,8 @@ _gdk_macos_popup_surface_new (GdkMacosDisplay *display,
   [window setOpaque:NO];
   [window setBackgroundColor:[NSColor clearColor]];
   [window setDecorated:NO];
-
-#if 0
-  /* NOTE: We could set these to be popup level, but then
-   * [NSApp orderedWindows] would not give us the windows
-   * back with the stacking order applied.
-   */
+  [window setExcludedFromWindowsMenu:YES];
   [window setLevel:NSPopUpMenuWindowLevel];
-#endif
 
   self = g_object_new (GDK_TYPE_MACOS_POPUP_SURFACE,
                        "display", display,
@@ -364,6 +378,8 @@ _gdk_macos_popup_surface_attach_to_parent (GdkMacosPopupSurface *self)
 
       [parent addChildWindow:window ordered:NSWindowAbove];
 
+      self->attached = TRUE;
+
       _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
     }
 }
@@ -384,6 +400,8 @@ _gdk_macos_popup_surface_detach_from_parent (GdkMacosPopupSurface *self)
       NSWindow *window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
       [parent removeChildWindow:window];
+
+      self->attached = FALSE;
 
       _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
     }

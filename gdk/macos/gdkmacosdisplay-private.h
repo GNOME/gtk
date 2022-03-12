@@ -43,6 +43,8 @@ G_BEGIN_DECLS
 #define GIC_FILTER_PASSTHRU  0
 #define GIC_FILTER_FILTERED  1
 
+#define GDK_MACOS_EVENT_DROP (GdkEvent *)GSIZE_TO_POINTER(1)
+
 struct _GdkMacosDisplay
 {
   GdkDisplay parent_instance;
@@ -82,6 +84,14 @@ struct _GdkMacosDisplay
   int min_y;
   int max_x;
   int max_y;
+
+  /* A GSource to select a new main/key window */
+  guint select_key_in_idle;
+
+  /* Note if we have a key window that is not a GdkMacosWindow
+   * such as a NSPanel used for native dialogs.
+   */
+  guint key_window_is_foregin : 1;
 };
 
 struct _GdkMacosDisplayClass

@@ -628,7 +628,7 @@ fill_scroll_event (GdkMacosDisplay *self,
    * handle those internally.
    */
   if (phase == 0 && momentumPhase != 0)
-    return NULL;
+    return GDK_MACOS_EVENT_DROP;
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (self));
   pointer = gdk_seat_get_pointer (seat);
@@ -1086,6 +1086,7 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   GdkMacosSurface *surface;
   GdkMacosWindow *window;
   NSEventType event_type;
+  NSWindow *event_window;
   GdkEvent *ret = NULL;
   int x;
   int y;
@@ -1128,6 +1129,15 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
       return NULL;
     }
 
+  /* If the event was delivered to NSWindow that is foreign (or rather,
+   * Cocoa native), then we should pass the event along to that window.
+   */
+  if ((event_window = [nsevent window]) && !GDK_IS_MACOS_WINDOW (event_window))
+    return NULL;
+
+  /* If we can't find a GdkSurface to deliver the event to, then we
+   * should pass it along to the NSApp.
+   */
   if (!(surface = find_surface_for_ns_event (self, nsevent, &x, &y)))
     return NULL;
 
@@ -1159,15 +1169,31 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
   if (test_resize (nsevent, surface, x, y))
     return NULL;
 
-  if ((event_type == NSEventTypeRightMouseDown ||
-       event_type == NSEventTypeOtherMouseDown ||
-       event_type == NSEventTypeLeftMouseDown))
+  if (event_type == NSEventTypeRightMouseDown ||
+      event_type == NSEventTypeOtherMouseDown ||
+      event_type == NSEventTypeLeftMouseDown)
     {
       if (![NSApp isActive])
         [NSApp activateIgnoringOtherApps:YES];
 
       if (![window isKeyWindow])
-        [window makeKeyWindow];
+        {
+          NSWindow *orig_window = [nsevent window];
+
+          /* To get NSApp to supress activating the window we might
+           * have clicked through the shadow of, we need to dispatch
+           * the event and handle it in GdkMacosView:mouseDown to call
+           * [NSApp preventWindowOrdering]. Calling it here will not
+           * do anything as the event is not registered.
+           */
+          if (orig_window &&
+              GDK_IS_MACOS_WINDOW (orig_window) &&
+              [(GdkMacosWindow *)orig_window needsMouseDownQuirk])
+            [NSApp sendEvent:nsevent];
+
+          [window showAndMakeKey:YES];
+          _gdk_macos_display_clear_sorting (self);
+        }
     }
 
   switch ((int)event_type)
@@ -1200,7 +1226,11 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
         GdkDevice *pointer = gdk_seat_get_pointer (seat);
         GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (GDK_DISPLAY (self), pointer);
 
-        if (grab == NULL)
+        if ([(GdkMacosWindow *)window isInManualResizeOrMove])
+          {
+            ret = GDK_MACOS_EVENT_DROP;
+          }
+        else if (grab == NULL)
           {
             if (event_type == NSEventTypeMouseExited)
               [[NSCursor arrowCursor] set];

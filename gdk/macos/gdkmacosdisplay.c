@@ -310,11 +310,15 @@ gdk_macos_display_queue_events (GdkDisplay *display)
 
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
 
-  if ((nsevent = _gdk_macos_event_source_get_pending ()))
+  while ((nsevent = _gdk_macos_event_source_get_pending ()))
     {
       GdkEvent *event = _gdk_macos_display_translate (self, nsevent);
 
-      if (event != NULL)
+      if (event == GDK_MACOS_EVENT_DROP)
+        {
+          [nsevent release];
+        }
+      else if (event != NULL)
         {
           push_nsevent (event, nsevent);
           _gdk_windowing_got_event (GDK_DISPLAY (self),
@@ -409,6 +413,38 @@ _gdk_macos_display_surface_became_key (GdkMacosDisplay *self,
   gdk_surface_request_motion (GDK_SURFACE (surface));
 }
 
+static gboolean
+select_key_in_idle_cb (gpointer data)
+{
+  GdkMacosDisplay *self = data;
+
+  g_assert (GDK_IS_MACOS_DISPLAY (self));
+
+  self->select_key_in_idle = 0;
+
+  /* Don't steal focus from NSPanel, etc */
+  if (self->key_window_is_foregin)
+    return G_SOURCE_REMOVE;
+
+  if (self->keyboard_surface == NULL)
+    {
+      const GList *surfaces = _gdk_macos_display_get_surfaces (self);
+
+      for (const GList *iter = surfaces; iter; iter = iter->next)
+        {
+          GdkMacosSurface *surface = iter->data;
+
+          if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (surface)))
+            {
+              [surface->window showAndMakeKey:YES];
+              break;
+            }
+        }
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 void
 _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
                                          GdkMacosSurface *surface)
@@ -453,6 +489,9 @@ _gdk_macos_display_surface_resigned_key (GdkMacosDisplay *self,
     }
 
   _gdk_macos_display_clear_sorting (self);
+
+  if (self->select_key_in_idle == 0)
+    self->select_key_in_idle = g_idle_add (select_key_in_idle_cb, self);
 }
 
 /* Raises a transient window.
@@ -491,47 +530,11 @@ void
 _gdk_macos_display_surface_resigned_main (GdkMacosDisplay *self,
                                           GdkMacosSurface *surface)
 {
-  GdkMacosSurface *new_surface = NULL;
-
   g_return_if_fail (GDK_IS_MACOS_DISPLAY (self));
   g_return_if_fail (GDK_IS_MACOS_SURFACE (surface));
 
   if (queue_contains (&self->main_surfaces, &surface->main))
     g_queue_unlink (&self->main_surfaces, &surface->main);
-
-  _gdk_macos_display_clear_sorting (self);
-
-  if (GDK_SURFACE (surface)->transient_for &&
-      gdk_surface_get_mapped (GDK_SURFACE (surface)->transient_for))
-    {
-      new_surface = GDK_MACOS_SURFACE (GDK_SURFACE (surface)->transient_for);
-    }
-  else
-    {
-      const GList *surfaces = _gdk_macos_display_get_surfaces (self);
-
-      for (const GList *iter = surfaces; iter; iter = iter->next)
-        {
-          GdkMacosSurface *item = iter->data;
-
-          g_assert (GDK_IS_MACOS_SURFACE (item));
-
-          if (item == surface)
-            continue;
-
-          if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (item)))
-            {
-              new_surface = item;
-              break;
-            }
-        }
-    }
-
-  if (new_surface != NULL)
-    {
-      NSWindow *nswindow = _gdk_macos_surface_get_native (new_surface);
-      [nswindow makeKeyAndOrderFront:nswindow];
-    }
 
   _gdk_macos_display_clear_sorting (self);
 }
@@ -596,6 +599,7 @@ gdk_macos_display_finalize (GObject *object)
 
   _gdk_macos_display_feedback_destroy (self);
 
+  g_clear_handle_id (&self->select_key_in_idle, g_source_remove);
   g_clear_pointer (&self->active_drags, g_hash_table_unref);
   g_clear_pointer (&self->active_drops, g_hash_table_unref);
   g_clear_object (&GDK_DISPLAY (self)->clipboard);
@@ -960,10 +964,15 @@ _gdk_macos_display_get_surfaces (GdkMacosDisplay *self)
       NSArray *array = [NSApp orderedWindows];
       GQueue sorted = G_QUEUE_INIT;
 
+      self->key_window_is_foregin = FALSE;
+
       for (id obj in array)
         {
           NSWindow *nswindow = (NSWindow *)obj;
           GdkMacosSurface *surface;
+
+          if ([nswindow isKeyWindow])
+            self->key_window_is_foregin = !GDK_IS_MACOS_WINDOW (nswindow);
 
           if (!GDK_IS_MACOS_WINDOW (nswindow))
             continue;

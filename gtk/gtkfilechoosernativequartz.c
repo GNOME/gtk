@@ -39,6 +39,7 @@
 #include "gtkfilefilterprivate.h"
 
 #include "macos/gdkmacos.h"
+#include "macos/gdkmacosdisplay-private.h"
 #include "macos/gdkmacossurface-private.h"
 
 typedef struct {
@@ -367,6 +368,9 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
       {
         [data->key_window makeKeyAndOrderFront:nil];
       }
+
+    /* Need to clear our cached copy of ordered windows */
+    _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (gdk_display_get_default ()));
 
     if (!data->skip_response)
       {

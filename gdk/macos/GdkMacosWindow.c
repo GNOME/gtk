@@ -262,9 +262,12 @@ typedef NSString *CALayerContentsGravity;
   inShowOrHide = YES;
 
   if (makeKey && [self canBecomeKeyWindow])
-    [self makeKeyAndOrderFront:nil];
+    [self makeKeyAndOrderFront:self];
   else
-    [self orderFront:nil];
+    [self orderFront:self];
+
+  if (makeKey && [self canBecomeMainWindow])
+    [self makeMainWindow];
 
   inShowOrHide = NO;
 
@@ -374,9 +377,17 @@ typedef NSString *CALayerContentsGravity;
   _gdk_macos_surface_configure ([self gdkSurface]);
 }
 
-- (void)windowDidResize:(NSNotification *)notification
+-(void)windowDidResize:(NSNotification *)notification
 {
-  _gdk_macos_surface_configure ([self gdkSurface]);
+  _gdk_macos_surface_configure (gdk_surface);
+
+  /* If we're using server-side decorations, this notification is coming
+   * in from a display-side change. We need to request a layout in
+   * addition to the configure event.
+   */
+  if (GDK_IS_MACOS_TOPLEVEL_SURFACE (gdk_surface) &&
+      GDK_MACOS_TOPLEVEL_SURFACE (gdk_surface)->decorated)
+    gdk_surface_request_layout (GDK_SURFACE (gdk_surface));
 }
 
 /* Used by gdkmacosdisplay-translate.c to decide if our sendEvent() handler
@@ -817,6 +828,12 @@ typedef NSString *CALayerContentsGravity;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage
 {
   [(GdkMacosView *)[self contentView] swapBuffer:buffer withDamage:damage];
+}
+
+-(BOOL)needsMouseDownQuirk
+{
+  return GDK_IS_MACOS_TOPLEVEL_SURFACE (gdk_surface) &&
+    !GDK_MACOS_TOPLEVEL_SURFACE (gdk_surface)->decorated;
 }
 
 @end
