@@ -160,7 +160,7 @@ endif
 
 ld = find_program('ld', required : false)
 
-if not meson.is_cross_build() and build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
+if not meson.is_cross_build() and build_machine.cpu_family() != 'arm' and build_machine.system() == 'linux' and objcopy.found() and objcopy_supports_add_symbol and ld.found()
   glib_compile_resources = find_program('glib-compile-resources')
 
   # Create the resource blob
