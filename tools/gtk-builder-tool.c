@@ -109,11 +109,13 @@ log_writer_func (GLogLevelFlags   level,
 int
 main (int argc, const char *argv[])
 {
+  gboolean has_display;
+
   g_set_prgname ("gtk-builder-tool");
 
   g_log_set_writer_func (log_writer_func, NULL, NULL);
 
-  gtk_init ();
+  has_display = gtk_init_check ();
 
   gtk_test_register_all_types ();
 
@@ -133,7 +135,15 @@ main (int argc, const char *argv[])
   else if (strcmp (argv[0], "enumerate") == 0)
     do_enumerate (&argc, &argv);
   else if (strcmp (argv[0], "preview") == 0)
-    do_preview (&argc, &argv);
+    {
+      if (!has_display)
+        {
+          g_printerr ("Could not initialize windowing system\n");
+          return 1;
+        }
+
+      do_preview (&argc, &argv);
+    }
   else
     usage ();
 
