@@ -37,6 +37,7 @@
 #include "gskglcommandqueueprivate.h"
 #include "gskgldriverprivate.h"
 #include "gskglglyphlibraryprivate.h"
+#include "gskglglyphylibraryprivate.h"
 #include "gskgliconlibraryprivate.h"
 #include "gskglprogramprivate.h"
 #include "gskglrenderjobprivate.h"
@@ -2929,10 +2930,10 @@ compute_phase_and_pos (float value, float *pos)
 }
 
 static inline void
-gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
-                                   const GskRenderNode *node,
-                                   const GdkRGBA       *color,
-                                   gboolean             force_color)
+gsk_gl_render_job_visit_text_node_legacy (GskGLRenderJob      *job,
+                                          const GskRenderNode *node,
+                                          const GdkRGBA       *color,
+                                          gboolean             force_color)
 {
   const PangoFont *font = gsk_text_node_get_font (node);
   const PangoGlyphInfo *glyphs = gsk_text_node_get_glyphs (node, NULL);
@@ -3065,6 +3066,26 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
     gsk_gl_command_queue_retract_n_vertices (job->command_queue, num_glyphs - used);
 
   gsk_gl_render_job_end_draw (job);
+}
+
+static inline void
+gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
+                                          const GskRenderNode *node,
+                                          const GdkRGBA       *color,
+                                          gboolean             force_color)
+{
+}
+
+static inline void
+gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
+                                   const GskRenderNode *node,
+                                   const GdkRGBA       *color,
+                                   gboolean             force_color)
+{
+  if (!gsk_text_node_has_color_glyphs (node))
+    gsk_gl_render_job_visit_text_node_glyphy (job, node, color, force_color);
+  else
+    gsk_gl_render_job_visit_text_node_legacy (job, node, color, force_color);
 }
 
 static inline void
