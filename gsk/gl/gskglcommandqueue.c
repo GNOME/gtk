@@ -282,7 +282,7 @@ snapshot_uniforms (GskGLUniformState    *state,
     {
       const GskGLUniformMapping *mapping = &program->mappings[i];
 
-      if (!mapping->info.initial && mapping->location > -1)
+      if (!mapping->info.initial && mapping->info.format && mapping->location > -1)
         {
           uniform[count].location = mapping->location;
           uniform[count].info = mapping->info;
