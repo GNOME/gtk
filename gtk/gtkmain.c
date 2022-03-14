@@ -899,30 +899,10 @@ rewrite_event_for_surface (GdkEvent  *event,
 			   GdkSurface *new_surface)
 {
   GdkEventType type;
-  double x, y;
+  double x = -G_MAXDOUBLE, y = -G_MAXDOUBLE;
   double dx, dy;
 
   type = gdk_event_get_event_type (event);
-
-  switch ((guint) type)
-    {
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-    case GDK_MOTION_NOTIFY:
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-    case GDK_TOUCHPAD_SWIPE:
-    case GDK_TOUCHPAD_PINCH:
-    case GDK_TOUCHPAD_HOLD:
-      gdk_event_get_position (event, &x, &y);
-      gdk_surface_translate_coordinates (gdk_event_get_surface (event), new_surface, &x, &y);
-      break;
-    default:
-      x = y = 0;
-      break;
-    }
 
   switch ((guint) type)
     {
