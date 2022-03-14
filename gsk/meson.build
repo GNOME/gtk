@@ -196,6 +196,7 @@ gsk_deps = [
   cairo_csi_dep,
   pixbuf_dep,
   libgdk_dep,
+  libglyphy_dep,
 ]
 
 libgsk_f16c = static_library('gsk_f16c',

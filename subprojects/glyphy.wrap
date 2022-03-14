@@ -1,0 +1,5 @@
+[wrap-git]
+directory=glyphy
+url=https://github.com/behdad/glyphy.git
+revision=master
+depth=1
