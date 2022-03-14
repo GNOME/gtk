@@ -23,6 +23,7 @@ epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
+libglyphy_req      = '>= 0.2.0'
 
 fs = import('fs')
 gnome = import('gnome')
@@ -393,6 +394,8 @@ pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
                             fallback : ['fribidi', 'libfribidi_dep'])
+libglyphy_dep  = dependency('glyphy', version: libglyphy_req,
+                             fallback : ['glyphy', 'libglyphy_dep'])
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
