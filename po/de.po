@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-07 16:05+0000\n"
-"PO-Revision-Date: 2022-03-07 22:50+0100\n"
+"POT-Creation-Date: 2022-03-12 23:00+0000\n"
+"PO-Revision-Date: 2022-03-13 23:05+0100\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -7286,17 +7286,18 @@ msgstr "Dateiauswähler-Widget"
 msgid "Places"
 msgstr "Orte"
 
-# Ist ein Symbol in der Kopfzeile gemeint?
+# From Gtk inbuilt docs:
+# A `GtkRevealer` animates the transition of its child from invisible to 
+# visible.
 #: gtk/ui/gtkfilechooserwidget.ui:47
-#, fuzzy
 msgid "Browse Header Revealer"
-msgstr "Header Revealer durchsuchen"
+msgstr "Kopfzeilen-Enthüller durchsuchen"
 
-# ist hier nicht das Burger-menü in der Kopfzeile gemeint?
+# From Gtk inbuilt docs:
+# `GtkStack` is a container which only shows one of its children at a time.
 #: gtk/ui/gtkfilechooserwidget.ui:65
-#, fuzzy
 msgid "Browse Header Stack"
-msgstr "Header Stack durchsuchen"
+msgstr "Kopfzeilen-Stapelcontainer durchsuchen"
 
 #: gtk/ui/gtkfilechooserwidget.ui:75
 msgid "PathBar Layer"
