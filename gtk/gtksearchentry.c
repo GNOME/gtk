@@ -106,6 +106,7 @@ enum {
   PROP_0,
   PROP_PLACEHOLDER_TEXT,
   PROP_ACTIVATES_DEFAULT,
+  PROP_SEARCH_DELAY,
   NUM_PROPERTIES,
 };
 
@@ -121,6 +122,8 @@ struct _GtkSearchEntry
 
   GtkWidget *capture_widget;
   GtkEventController *capture_widget_controller;
+
+  guint search_delay;
 
   GtkWidget *entry;
   GtkWidget *icon;
@@ -149,9 +152,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_WIDGET,
                                                 gtk_search_entry_accessible_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_search_entry_editable_init))
-
-/* 150 mseconds of delay */
-#define DELAYED_TIMEOUT_ID 150
 
 static void
 text_changed (GtkSearchEntry *entry)
@@ -224,6 +224,10 @@ gtk_search_entry_set_property (GObject      *object,
         }
       break;
 
+    case PROP_SEARCH_DELAY:
+      gtk_search_entry_set_search_delay (entry, g_value_get_uint (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -248,6 +252,10 @@ gtk_search_entry_get_property (GObject    *object,
 
     case PROP_ACTIVATES_DEFAULT:
       g_value_set_boolean (value, gtk_text_get_activates_default (GTK_TEXT (entry->entry)));
+      break;
+
+    case PROP_SEARCH_DELAY:
+      g_value_set_uint (value, entry->search_delay);
       break;
 
     default:
@@ -315,6 +323,19 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkSearchEntry:search-delay:
+   *
+   * The delay in milliseconds from last keypress to the search
+   * changed signal.
+   */
+  props[PROP_SEARCH_DELAY] =
+      g_param_spec_uint ("search-delay",
+                         P_("Search delay"),
+                         P_("The delay from last keypress to the search-changed signal. If this is not set, it defaults to 150ms"),
+                         0, G_MAXUINT, 150,
+                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, NUM_PROPERTIES, props);
   gtk_editable_install_properties (object_class, NUM_PROPERTIES);
 
@@ -339,8 +360,9 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * GtkSearchEntry::search-changed:
    * @entry: the entry on which the signal was emitted
    *
-   * Emitted with a short delay of 150 milliseconds after the
-   * last change to the entry text.
+   * Emitted with a delay. The length of the delay can be
+   * changed with the [property@Gtk.SearchEntry:search-delay]
+   * property.
    */
   signals[SEARCH_CHANGED] =
     g_signal_new (I_("search-changed"),
@@ -526,7 +548,7 @@ reset_timeout (GtkSearchEntry *entry)
 {
   if (entry->delayed_changed_id > 0)
     g_source_remove (entry->delayed_changed_id);
-  entry->delayed_changed_id = g_timeout_add (DELAYED_TIMEOUT_ID,
+  entry->delayed_changed_id = g_timeout_add (entry->search_delay,
                                             gtk_search_entry_changed_timeout_cb,
                                             entry);
   gdk_source_set_static_name_by_id (entry->delayed_changed_id, "[gtk] gtk_search_entry_changed_timeout_cb");
@@ -594,6 +616,8 @@ gtk_search_entry_init (GtkSearchEntry *entry)
 {
   GtkWidget *icon;
   GtkGesture *press, *catchall;
+
+  entry->search_delay = 150;
 
   /* The search icon is purely presentational */
   icon = g_object_new (GTK_TYPE_IMAGE,
@@ -771,6 +795,52 @@ gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry)
   g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), NULL);
 
   return entry->capture_widget;
+}
+
+/**
+ * gtk_search_entry_set_searcH-delay:
+ * @entry: a `GtkSearchEntry`
+ * @delay: a delay in milliseconds
+ *
+ * Set the delay to be used between the last keypress and the
+ * [signal@Gtk.SearchEntry::search-changed] signal being emitted.
+ *
+ * Since: 4.8
+ */
+void
+gtk_search_entry_set_search_delay (GtkSearchEntry *entry,
+                                   guint delay)
+{
+  g_return_if_fail (GTK_IS_SEARCH_ENTRY (entry));
+
+  if (entry->search_delay == delay)
+    return;
+
+  entry->search_delay = delay;
+
+  /* Apply the updated timeout */
+  reset_timeout (entry);
+
+  g_object_notify_by_pspec (G_OBJECT (entry), props[PROP_SEARCH_DELAY]);
+}
+
+/**
+ * gtk_search_entry_get_search_delay
+ * @entry: a `GtkSearchEntry`
+ *
+ * Get the delay to be used between the last keypress and the
+ * [signal@Gtk.SearchEntry::search-changed] signal being emitted.
+ *
+ * Returns: a delay in milliseconds.
+ *
+ * Since: 4.8
+ */
+guint
+gtk_search_entry_get_search_delay (GtkSearchEntry *entry)
+{
+  g_return_val_if_fail (GTK_IS_SEARCH_ENTRY (entry), 0);
+
+  return entry->search_delay;
 }
 
 GtkEventController *
