@@ -921,7 +921,8 @@ create_cloud_provider_account_row (GtkPlacesSidebar      *sidebar,
 
       g_free (tooltip);
       g_free (mount_uri);
-      g_object_unref (end_icon);
+      g_clear_object (&end_icon);
+      
       return TRUE;
     }
   else
