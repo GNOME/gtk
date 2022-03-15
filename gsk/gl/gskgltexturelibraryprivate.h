@@ -89,10 +89,11 @@ typedef struct _GskGLTextureAtlasEntry
 
 typedef struct _GskGLTextureLibrary
 {
-  GObject        parent_instance;
+  GObject      parent_instance;
   GskGLDriver *driver;
-  GHashTable    *hash_table;
-  guint          max_entry_size;
+  GHashTable  *hash_table;
+  guint        max_entry_size;
+  guint        max_frame_age;
 } GskGLTextureLibrary;
 
 typedef struct _GskGLTextureLibraryClass

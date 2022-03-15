@@ -27,7 +27,7 @@
 #include "gskgldriverprivate.h"
 #include "gskgltexturelibraryprivate.h"
 
-#define MAX_FRAME_AGE 60
+#define DEFAULT_MAX_FRAME_AGE 60
 
 G_DEFINE_ABSTRACT_TYPE (GskGLTextureLibrary, gsk_gl_texture_library, G_TYPE_OBJECT)
 
@@ -118,6 +118,7 @@ gsk_gl_texture_library_class_init (GskGLTextureLibraryClass *klass)
 static void
 gsk_gl_texture_library_init (GskGLTextureLibrary *self)
 {
+  self->max_frame_age = DEFAULT_MAX_FRAME_AGE;
 }
 
 void
@@ -176,7 +177,7 @@ gsk_gl_texture_library_begin_frame (GskGLTextureLibrary *self,
                              G_OBJECT_TYPE_NAME (self), dropped));
     }
 
-  if (frame_id % MAX_FRAME_AGE == 0)
+  if (frame_id % self->max_frame_age == 0)
     {
       GskGLTextureAtlasEntry *entry;
       int atlased = 0;
