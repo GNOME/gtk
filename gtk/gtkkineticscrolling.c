@@ -254,6 +254,5 @@ gtk_kinetic_scrolling_stop (GtkKineticScrolling *data)
     {
       data->phase = GTK_KINETIC_SCROLLING_PHASE_FINISHED;
       data->position = round (data->position);
-      data->velocity = 0;
     }
 }
