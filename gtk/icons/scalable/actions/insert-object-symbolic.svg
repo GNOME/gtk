@@ -1,1 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g fill="#474747"><path d="M8 0L3 3.143v4.714L8 11l5-3.143V3.143zm0 6L4.355 3.824 8 1.532l3.646 2.292z"/><path d="M11 12h-1c-.257 0-.528.118-.719.284l-1.28 1.163-1.282-1.163A1.145 1.145 0 006 12H5v.908c0 .28.09.501.281.68L8.001 16l2.718-2.411a.88.88 0 00.281-.681V12z" style="line-height:normal;-inkscape-font-specification:'Bitstream Vera Sans';text-indent:0;text-align:start;text-decoration-line:none;text-transform:none;marker:none" color="#bebebe" font-weight="400" font-family="Bitstream Vera Sans" overflow="visible"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg">
+    <g fill="#2e3436">
+        <path d="m 5 12 v 1 h 0.007812 c -0.003906 0.265625 0.101563 0.519531 0.285157 0.707031 l 2 2 c 0.390625 0.390625 1.023437 0.390625 1.414062 0 l 2 -2 c 0.183594 -0.1875 0.289063 -0.441406 0.289063 -0.707031 h 0.003906 v -1 z m 0 0"/>
+        <path d="m 8 -0.0078125 l -5 3.1406245 v 4.714844 l 5 3.144532 l 5 -3.144532 v -4.714844 z m 0 6.0000005 l -3.644531 -2.175782 l 3.644531 -2.292968 l 3.644531 2.292968 z m 0 0"/>
+    </g>
+</svg>
