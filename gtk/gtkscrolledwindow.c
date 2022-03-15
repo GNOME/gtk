@@ -3371,18 +3371,21 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
       gtk_scrolled_window_accumulate_velocity (&priv->hscrolling, elapsed, &priv->x_velocity);
       g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
 
-      hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
-      lower = gtk_adjustment_get_lower (hadjustment);
-      upper = gtk_adjustment_get_upper (hadjustment);
-      upper -= gtk_adjustment_get_page_size (hadjustment);
-      priv->hscrolling =
-        gtk_kinetic_scrolling_new (lower,
-                                   upper,
-                                   MAX_OVERSHOOT_DISTANCE,
-                                   DECELERATION_FRICTION,
-                                   OVERSHOOT_FRICTION,
-                                   priv->unclamped_hadj_value,
-                                   priv->x_velocity);
+      if (priv->x_velocity != 0)
+        {
+          hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
+          lower = gtk_adjustment_get_lower (hadjustment);
+          upper = gtk_adjustment_get_upper (hadjustment);
+          upper -= gtk_adjustment_get_page_size (hadjustment);
+          priv->hscrolling =
+            gtk_kinetic_scrolling_new (lower,
+                                       upper,
+                                       MAX_OVERSHOOT_DISTANCE,
+                                       DECELERATION_FRICTION,
+                                       OVERSHOOT_FRICTION,
+                                       priv->unclamped_hadj_value,
+                                       priv->x_velocity);
+        }
     }
   else
     g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
@@ -3395,18 +3398,21 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
       gtk_scrolled_window_accumulate_velocity (&priv->vscrolling, elapsed, &priv->y_velocity);
       g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
 
-      vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
-      lower = gtk_adjustment_get_lower(vadjustment);
-      upper = gtk_adjustment_get_upper(vadjustment);
-      upper -= gtk_adjustment_get_page_size(vadjustment);
-      priv->vscrolling =
-        gtk_kinetic_scrolling_new (lower,
-                                   upper,
-                                   MAX_OVERSHOOT_DISTANCE,
-                                   DECELERATION_FRICTION,
-                                   OVERSHOOT_FRICTION,
-                                   priv->unclamped_vadj_value,
-                                   priv->y_velocity);
+      if (priv->y_velocity != 0)
+        {
+          vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
+          lower = gtk_adjustment_get_lower(vadjustment);
+          upper = gtk_adjustment_get_upper(vadjustment);
+          upper -= gtk_adjustment_get_page_size(vadjustment);
+          priv->vscrolling =
+            gtk_kinetic_scrolling_new (lower,
+                                       upper,
+                                       MAX_OVERSHOOT_DISTANCE,
+                                       DECELERATION_FRICTION,
+                                       OVERSHOOT_FRICTION,
+                                       priv->unclamped_vadj_value,
+                                       priv->y_velocity);
+        }
     }
   else
     g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
