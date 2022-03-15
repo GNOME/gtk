@@ -3268,6 +3268,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
   GtkAdjustment *hadjustment, *vadjustment;
   gint64 current_time;
   double position, elapsed;
+  gboolean retval = G_SOURCE_REMOVE;
 
   current_time = gdk_frame_clock_get_frame_time (frame_clock);
   elapsed = (current_time - priv->last_deceleration_time) / (double)G_TIME_SPAN_SECOND;
@@ -3283,6 +3284,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
     {
       priv->unclamped_hadj_value = position;
       gtk_adjustment_set_value (hadjustment, position);
+      retval = G_SOURCE_CONTINUE;
     }
   else if (priv->hscrolling)
     g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
@@ -3292,19 +3294,17 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
     {
       priv->unclamped_vadj_value = position;
       gtk_adjustment_set_value (vadjustment, position);
+      retval = G_SOURCE_CONTINUE;
     }
   else if (priv->vscrolling)
     g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
 
-  if (!priv->hscrolling && !priv->vscrolling)
-    {
-      gtk_scrolled_window_cancel_deceleration (scrolled_window);
-      return G_SOURCE_REMOVE;
-    }
+  if (retval == G_SOURCE_REMOVE)
+    gtk_scrolled_window_cancel_deceleration (scrolled_window);
+  else
+    gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
-  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
-
-  return G_SOURCE_CONTINUE;
+  return retval;
 }
 
 static void
