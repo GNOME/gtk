@@ -84,11 +84,11 @@ gsk_gl_glyph_value_free (gpointer data)
 }
 
 static void
-gsk_gl_glyph_library_begin_frame (GskGLTextureLibrary *library,
-                                  gint64               frame_id,
-                                  GPtrArray           *removed_atlases)
+gsk_gl_glyph_library_clear_cache (GskGLTextureLibrary *library)
 {
   GskGLGlyphLibrary *self = (GskGLGlyphLibrary *)library;
+
+  g_assert (GSK_IS_GL_GLYPH_LIBRARY (self));
 
   memset (self->front, 0, sizeof self->front);
 }
@@ -111,7 +111,7 @@ gsk_gl_glyph_library_class_init (GskGLGlyphLibraryClass *klass)
 
   object_class->finalize = gsk_gl_glyph_library_finalize;
 
-  library_class->begin_frame = gsk_gl_glyph_library_begin_frame;
+  library_class->clear_cache = gsk_gl_glyph_library_clear_cache;
 }
 
 static void

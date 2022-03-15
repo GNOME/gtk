@@ -141,6 +141,7 @@ gsk_gl_texture_library_begin_frame (GskGLTextureLibrary *self,
                                     GPtrArray            *removed_atlases)
 {
   GHashTableIter iter;
+  gboolean drop_caches = FALSE;
 
   g_return_if_fail (GSK_IS_GL_TEXTURE_LIBRARY (self));
 
@@ -175,6 +176,8 @@ gsk_gl_texture_library_begin_frame (GskGLTextureLibrary *self,
                 if (dropped > 0)
                   g_message ("%s: Dropped %d items",
                              G_OBJECT_TYPE_NAME (self), dropped));
+
+      drop_caches |= dropped > 0;
     }
 
   if (frame_id % self->max_frame_age == 0)
@@ -208,7 +211,12 @@ gsk_gl_texture_library_begin_frame (GskGLTextureLibrary *self,
                                         g_hash_table_size (self->hash_table),
                                         atlased,
                                         g_hash_table_size (self->hash_table) - atlased));
+
+      drop_caches |= dropped > 0;
     }
+
+  if (drop_caches && GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->clear_cache)
+    GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->clear_cache (self);
 }
 
 static GskGLTexture *
