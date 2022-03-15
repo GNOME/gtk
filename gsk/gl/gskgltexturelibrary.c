@@ -381,7 +381,9 @@ gsk_gl_texture_library_pack (GskGLTextureLibrary *self,
       *out_packed_x = 0;
       *out_packed_y = 0;
     }
-  else if (width <= self->max_entry_size && height <= self->max_entry_size)
+  else if (self->max_entry_size == 0 ||
+           (width <= self->max_entry_size &&
+            height <= self->max_entry_size))
     {
       int packed_x;
       int packed_y;
