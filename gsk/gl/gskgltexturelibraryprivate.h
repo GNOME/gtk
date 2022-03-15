@@ -103,6 +103,7 @@ typedef struct _GskGLTextureLibraryClass
   void (*begin_frame) (GskGLTextureLibrary *library,
                        gint64               frame_id,
                        GPtrArray           *removed_atlases);
+  void (*clear_cache) (GskGLTextureLibrary *library);
 } GskGLTextureLibraryClass;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GskGLTextureLibrary, g_object_unref)
