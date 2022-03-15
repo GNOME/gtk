@@ -1056,6 +1056,11 @@ gtk_scrolled_window_decelerate (GtkScrolledWindow *scrolled_window,
         gtk_scrolled_window_start_deceleration (scrolled_window);
       priv->x_velocity = priv->y_velocity = 0;
     }
+  else
+    {
+      g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
+      g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
+    }
 }
 
 static void
@@ -3286,8 +3291,6 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
       gtk_adjustment_set_value (hadjustment, position);
       retval = G_SOURCE_CONTINUE;
     }
-  else if (priv->hscrolling)
-    g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
 
   if (priv->vscrolling &&
       gtk_kinetic_scrolling_tick (priv->vscrolling, elapsed, &position, NULL))
@@ -3296,8 +3299,6 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
       gtk_adjustment_set_value (vadjustment, position);
       retval = G_SOURCE_CONTINUE;
     }
-  else if (priv->vscrolling)
-    g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
 
   if (retval == G_SOURCE_REMOVE)
     gtk_scrolled_window_cancel_deceleration (scrolled_window);
@@ -3368,6 +3369,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
       GtkAdjustment *hadjustment;
 
       gtk_scrolled_window_accumulate_velocity (&priv->hscrolling, elapsed, &priv->x_velocity);
+      g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
 
       hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
       lower = gtk_adjustment_get_lower (hadjustment);
@@ -3391,6 +3393,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
       GtkAdjustment *vadjustment;
 
       gtk_scrolled_window_accumulate_velocity (&priv->vscrolling, elapsed, &priv->y_velocity);
+      g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
 
       vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
       lower = gtk_adjustment_get_lower(vadjustment);
