@@ -29,15 +29,10 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_PASSWORD_ENTRY                 (gtk_password_entry_get_type ())
-#define GTK_PASSWORD_ENTRY(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PASSWORD_ENTRY, GtkPasswordEntry))
-#define GTK_IS_PASSWORD_ENTRY(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PASSWORD_ENTRY))
-
-typedef struct _GtkPasswordEntry       GtkPasswordEntry;
-typedef struct _GtkPasswordEntryClass  GtkPasswordEntryClass;
+#define GTK_TYPE_PASSWORD_ENTRY (gtk_password_entry_get_type ())
 
 GDK_AVAILABLE_IN_ALL
-GType           gtk_password_entry_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GtkPasswordEntry, gtk_password_entry, GTK, PASSWORD_ENTRY, GtkWidget)
 
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_password_entry_new      (void);

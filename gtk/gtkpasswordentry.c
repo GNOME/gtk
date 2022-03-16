@@ -104,7 +104,7 @@ enum {
   PROP_ACTIVATES_DEFAULT,
   PROP_SHOW_PEEK_ICON,
   PROP_EXTRA_MENU,
-  NUM_PROPERTIES 
+  NUM_PROPERTIES
 };
 
 static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
@@ -112,9 +112,9 @@ static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
 static void gtk_password_entry_editable_init (GtkEditableInterface *iface);
 static void gtk_password_entry_accessible_init (GtkAccessibleInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkPasswordEntry, gtk_password_entry, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE, gtk_password_entry_accessible_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, gtk_password_entry_editable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkPasswordEntry, gtk_password_entry, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE, gtk_password_entry_accessible_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, gtk_password_entry_editable_init))
 
 static void
 caps_lock_state_changed (GdkDevice  *device,
