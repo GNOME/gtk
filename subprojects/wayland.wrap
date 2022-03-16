@@ -1,7 +1,7 @@
 [wrap-git]
 directory=wayland
 url=https://gitlab.freedesktop.org/wayland/wayland.git
-revision=main
+revision=1.20.0
 depth=1
 
 [provide]
