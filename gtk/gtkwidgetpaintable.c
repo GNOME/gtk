@@ -143,9 +143,9 @@ gtk_widget_paintable_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_height = gtk_widget_paintable_paintable_get_intrinsic_height;
 }
 
-G_DEFINE_TYPE_EXTENDED (GtkWidgetPaintable, gtk_widget_paintable, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                               gtk_widget_paintable_paintable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkWidgetPaintable, gtk_widget_paintable, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
+                                                      gtk_widget_paintable_paintable_init))
 
 static void
 gtk_widget_paintable_set_property (GObject      *object,
@@ -289,7 +289,7 @@ gtk_widget_paintable_snapshot_widget (GtkWidgetPaintable *self)
 
   if (self->widget->priv->render_node == NULL)
     return gdk_paintable_new_empty (bounds.size.width, bounds.size.height);
-  
+
   return gtk_render_node_paintable_new (self->widget->priv->render_node, &bounds);
 }
 

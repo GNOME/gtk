@@ -59,7 +59,7 @@ typedef enum {
 } GuideValue;
 
 struct _GtkConstraintGuide
-{ 
+{
   GObject parent_instance;
 
   char *name;
@@ -104,9 +104,9 @@ gtk_constraint_guide_constraint_target_iface_init (GtkConstraintTargetInterface 
 {
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkConstraintGuide, gtk_constraint_guide, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_CONSTRAINT_TARGET,
-                                                gtk_constraint_guide_constraint_target_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkConstraintGuide, gtk_constraint_guide, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_CONSTRAINT_TARGET,
+                                                      gtk_constraint_guide_constraint_target_iface_init))
 
 static void
 gtk_constraint_guide_init (GtkConstraintGuide *guide)

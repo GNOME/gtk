@@ -173,8 +173,8 @@ gtk_sort_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_sort_list_model_get_item;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkSortListModel, gtk_sort_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_sort_list_model_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkSortListModel, gtk_sort_list_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_sort_list_model_model_init))
 
 static gboolean
 gtk_sort_list_model_is_sorting (GtkSortListModel *self)
@@ -253,7 +253,7 @@ gtk_sort_list_model_sort_step (GtkSortListModel *self,
           start_change = MIN (start_change, (gpointer *) change.base);
           end_change = MAX (end_change, ((gpointer *) change.base) + change.len);
         }
-     
+
       if (g_get_monotonic_time () >= end_time && !finish)
         break;
     }
@@ -419,7 +419,7 @@ gtk_sort_list_model_clear_items (GtkSortListModel *self,
   g_clear_pointer (&self->positions, g_free);
 
   gtk_sort_list_model_clear_keys (self);
-} 
+}
 
 static gboolean
 gtk_sort_list_model_should_sort (GtkSortListModel *self)
@@ -478,7 +478,7 @@ gtk_sort_list_model_update_items (GtkSortListModel *self,
   n_items = self->n_items;
   start = n_items;
   end = n_items;
-  
+
   /* first, move the keys over */
   old_keys = self->keys;
   gtk_sort_list_model_clear_sort_keys (self, position, removed);
@@ -523,7 +523,7 @@ gtk_sort_list_model_update_items (GtkSortListModel *self,
           if (pos >= position + removed)
             pos = pos - removed + added;
           else if (pos >= position)
-            { 
+            {
               start = MIN (start, valid);
               end = n_items - i - 1;
               continue;
@@ -650,7 +650,7 @@ gtk_sort_list_model_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_sort_list_model_get_property (GObject     *object,
                                   guint        prop_id,
                                   GValue      *value,
@@ -903,7 +903,7 @@ gtk_sort_list_model_set_model (GtkSortListModel *self,
             gtk_sort_list_model_finish_sorting (self, &ignore1, &ignore2);
         }
     }
-  
+
   if (removed > 0 || self->n_items > 0)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, self->n_items);
 

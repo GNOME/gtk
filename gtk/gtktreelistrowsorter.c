@@ -60,7 +60,7 @@ enum {
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (GtkTreeListRowSorter, gtk_tree_list_row_sorter, GTK_TYPE_SORTER)
+G_DEFINE_FINAL_TYPE (GtkTreeListRowSorter, gtk_tree_list_row_sorter, GTK_TYPE_SORTER)
 
 #define MAX_KEY_DEPTH (8)
 
@@ -155,7 +155,7 @@ gtk_tree_list_row_sort_keys_compare (gconstpointer a,
   resa = unpack (keysa, &keysa, &sizea);
   resb = unpack (keysb, &keysb, &sizeb);
   if (!resa)
-    return resb ? GTK_ORDERING_LARGER : (keysa[2] < keysb[2] ? GTK_ORDERING_SMALLER : 
+    return resb ? GTK_ORDERING_LARGER : (keysa[2] < keysb[2] ? GTK_ORDERING_SMALLER :
                                         (keysb[2] > keysa[2] ? GTK_ORDERING_LARGER : GTK_ORDERING_EQUAL));
   else if (!resb)
     return GTK_ORDERING_SMALLER;
@@ -329,7 +329,7 @@ gtk_tree_list_row_sort_keys_clear_key (GtkSortKeys *keys,
 
   for (i = 0; i < max && key[i] != NULL; i++)
     gtk_tree_list_row_sort_keys_unref_key (self, key[i]);
-  
+
   if (key[0] == NULL)
     g_free (key[1]);
 }

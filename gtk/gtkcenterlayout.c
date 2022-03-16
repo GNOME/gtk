@@ -54,7 +54,7 @@ struct _GtkCenterLayout
   };
 };
 
-G_DEFINE_TYPE (GtkCenterLayout, gtk_center_layout, GTK_TYPE_LAYOUT_MANAGER)
+G_DEFINE_FINAL_TYPE (GtkCenterLayout, gtk_center_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static int
 get_spacing (GtkCenterLayout *self,

@@ -81,7 +81,7 @@ enum
   N_PROPS
 };
 
-G_DEFINE_TYPE (GtkVideo, gtk_video, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (GtkVideo, gtk_video, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 

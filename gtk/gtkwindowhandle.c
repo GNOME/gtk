@@ -74,8 +74,8 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
 
 static void gtk_window_handle_buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkWindowHandle, gtk_window_handle, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_window_handle_buildable_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkWindowHandle, gtk_window_handle, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_window_handle_buildable_iface_init))
 
 static void
 lower_window (GtkWindowHandle *self)

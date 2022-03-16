@@ -113,11 +113,11 @@ gtk_no_selection_selection_model_init (GtkSelectionModelInterface *iface)
   iface->get_selection_in_range = gtk_no_selection_get_selection_in_range;
 }
 
-G_DEFINE_TYPE_EXTENDED (GtkNoSelection, gtk_no_selection, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
-                                               gtk_no_selection_list_model_init)
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
-                                               gtk_no_selection_selection_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkNoSelection, gtk_no_selection, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                      gtk_no_selection_list_model_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
+                                                      gtk_no_selection_selection_model_init))
 
 static void
 gtk_no_selection_clear_model (GtkNoSelection *self)
@@ -125,7 +125,7 @@ gtk_no_selection_clear_model (GtkNoSelection *self)
   if (self->model == NULL)
     return;
 
-  g_signal_handlers_disconnect_by_func (self->model, 
+  g_signal_handlers_disconnect_by_func (self->model,
                                         g_list_model_items_changed,
                                         self);
   g_clear_object (&self->model);

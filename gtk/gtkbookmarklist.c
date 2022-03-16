@@ -117,8 +117,8 @@ static void     bookmark_file_changed (GFileMonitor       *monitor,
 static void gtk_bookmark_list_set_filename (GtkBookmarkList *self,
                                                 const char         *filename);
 
-G_DEFINE_TYPE_WITH_CODE (GtkBookmarkList, gtk_bookmark_list, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_bookmark_list_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkBookmarkList, gtk_bookmark_list, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_bookmark_list_model_init))
 
 static void
 gtk_bookmark_list_set_property (GObject      *object,

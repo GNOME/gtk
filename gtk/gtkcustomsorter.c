@@ -39,7 +39,7 @@ struct _GtkCustomSorter
   GDestroyNotify user_destroy;
 };
 
-G_DEFINE_TYPE (GtkCustomSorter, gtk_custom_sorter, GTK_TYPE_SORTER)
+G_DEFINE_FINAL_TYPE (GtkCustomSorter, gtk_custom_sorter, GTK_TYPE_SORTER)
 
 static GtkOrdering
 gtk_custom_sorter_compare (GtkSorter *sorter,

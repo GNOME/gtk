@@ -65,7 +65,7 @@ enum
   N_PROPS
 };
 
-G_DEFINE_TYPE (GtkShortcut, gtk_shortcut, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GtkShortcut, gtk_shortcut, G_TYPE_OBJECT)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
@@ -387,7 +387,7 @@ gtk_shortcut_set_arguments (GtkShortcut *self,
 
   if (self->args == args)
     return;
-  
+
   g_clear_pointer (&self->args, g_variant_unref);
   if (args)
     self->args = g_variant_ref_sink (args);

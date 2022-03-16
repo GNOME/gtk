@@ -240,9 +240,9 @@ gtk_multi_sorter_buildable_init (GtkBuildableIface *iface)
   iface->add_child = gtk_multi_sorter_buildable_add_child;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkMultiSorter, gtk_multi_sorter, GTK_TYPE_SORTER,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_multi_sorter_list_model_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_multi_sorter_buildable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkMultiSorter, gtk_multi_sorter, GTK_TYPE_SORTER,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_multi_sorter_list_model_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_multi_sorter_buildable_init))
 
 static GtkOrdering
 gtk_multi_sorter_compare (GtkSorter *sorter,

@@ -46,7 +46,7 @@ enum {
   NUM_PROPERTIES
 };
 
-G_DEFINE_TYPE (GtkBoolFilter, gtk_bool_filter, GTK_TYPE_FILTER)
+G_DEFINE_FINAL_TYPE (GtkBoolFilter, gtk_bool_filter, GTK_TYPE_FILTER)
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
@@ -106,7 +106,7 @@ gtk_bool_filter_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_bool_filter_get_property (GObject     *object,
                               guint        prop_id,
                               GValue      *value,

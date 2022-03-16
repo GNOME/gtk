@@ -165,7 +165,7 @@ tree_node_get_local_position (GtkRbTree *tree,
   TreeNode *left, *parent;
   TreeAugment *left_aug;
   guint n;
-  
+
   left = gtk_rb_tree_node_get_left (node);
   if (left)
     {
@@ -209,7 +209,7 @@ tree_node_get_position (TreeNode *node)
   TreeNode *left, *parent;
   TreeAugment *left_aug;
   guint n;
-  
+
   for (n = 0;
        !node->is_root;
        node = node->parent, n++)
@@ -520,7 +520,7 @@ gtk_tree_list_model_expand_node (GtkTreeListModel *self,
 
   if (node->empty)
     return 0;
-  
+
   if (node->model != NULL)
     return 0;
 
@@ -528,18 +528,18 @@ gtk_tree_list_model_expand_node (GtkTreeListModel *self,
 
   if (model == NULL)
     return 0;
-  
+
   gtk_tree_list_model_init_node (self, node, model);
 
   tree_node_mark_dirty (node);
-  
+
   return tree_node_get_n_children (node);
 }
 
 static guint
 gtk_tree_list_model_collapse_node (GtkTreeListModel *self,
                                    TreeNode         *node)
-{      
+{
   guint n_items;
 
   if (node->model == NULL)
@@ -604,8 +604,8 @@ gtk_tree_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_tree_list_model_get_item;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkTreeListModel, gtk_tree_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_tree_list_model_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkTreeListModel, gtk_tree_list_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_tree_list_model_model_init))
 
 static void
 gtk_tree_list_model_set_property (GObject      *object,
@@ -631,7 +631,7 @@ gtk_tree_list_model_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_tree_list_model_get_property (GObject     *object,
                                   guint        prop_id,
                                   GValue      *value,
@@ -956,7 +956,7 @@ enum {
 
 static GParamSpec *row_properties[NUM_ROW_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (GtkTreeListRow, gtk_tree_list_row, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GtkTreeListRow, gtk_tree_list_row, G_TYPE_OBJECT)
 
 static void
 gtk_tree_list_row_destroy (GtkTreeListRow *self)
@@ -993,7 +993,7 @@ gtk_tree_list_row_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_tree_list_row_get_property (GObject     *object,
                                 guint        prop_id,
                                 GValue      *value,

@@ -38,7 +38,7 @@ struct _GtkCustomFilter
   GDestroyNotify user_destroy;
 };
 
-G_DEFINE_TYPE (GtkCustomFilter, gtk_custom_filter, GTK_TYPE_FILTER)
+G_DEFINE_FINAL_TYPE (GtkCustomFilter, gtk_custom_filter, GTK_TYPE_FILTER)
 
 static gboolean
 gtk_custom_filter_match (GtkFilter *filter,

@@ -198,8 +198,8 @@ gtk_flatten_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_flatten_list_model_get_item;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkFlattenListModel, gtk_flatten_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_flatten_list_model_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkFlattenListModel, gtk_flatten_list_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_flatten_list_model_model_init))
 
 static void
 gtk_flatten_list_model_items_changed_cb (GListModel *model,
@@ -322,7 +322,7 @@ gtk_flatten_list_model_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_flatten_list_model_get_property (GObject    *object,
                                      guint       prop_id,
                                      GValue     *value,
@@ -463,7 +463,7 @@ gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
   if (self->model == model)
     return;
 
-  removed = g_list_model_get_n_items (G_LIST_MODEL (self)); 
+  removed = g_list_model_get_n_items (G_LIST_MODEL (self));
   gtk_flatten_list_clear_model (self);
 
   self->model = model;

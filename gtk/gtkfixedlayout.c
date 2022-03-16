@@ -92,7 +92,7 @@ enum
 
 static GParamSpec *child_props[N_CHILD_PROPERTIES];
 
-G_DEFINE_TYPE (GtkFixedLayoutChild, gtk_fixed_layout_child, GTK_TYPE_LAYOUT_CHILD)
+G_DEFINE_FINAL_TYPE (GtkFixedLayoutChild, gtk_fixed_layout_child, GTK_TYPE_LAYOUT_CHILD)
 
 static void
 gtk_fixed_layout_child_set_property (GObject      *gobject,
@@ -215,7 +215,7 @@ gtk_fixed_layout_child_get_transform (GtkFixedLayoutChild *child)
   return child->transform;
 }
 
-G_DEFINE_TYPE (GtkFixedLayout, gtk_fixed_layout, GTK_TYPE_LAYOUT_MANAGER)
+G_DEFINE_FINAL_TYPE (GtkFixedLayout, gtk_fixed_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static GtkSizeRequestMode
 gtk_fixed_layout_get_request_mode (GtkLayoutManager *layout_manager,

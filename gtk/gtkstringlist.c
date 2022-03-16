@@ -83,7 +83,7 @@ enum {
   PROP_NUM_PROPERTIES
 };
 
-G_DEFINE_TYPE (GtkStringObject, gtk_string_object, G_TYPE_OBJECT);
+G_DEFINE_FINAL_TYPE (GtkStringObject, gtk_string_object, G_TYPE_OBJECT)
 
 static void
 gtk_string_object_init (GtkStringObject *object)
@@ -395,11 +395,11 @@ gtk_string_list_buildable_init (GtkBuildableIface *iface)
   iface->custom_finished = gtk_string_list_buildable_custom_finished;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkStringList, gtk_string_list, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                gtk_string_list_buildable_init)
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
-                                                gtk_string_list_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkStringList, gtk_string_list, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                      gtk_string_list_buildable_init)
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                      gtk_string_list_model_init))
 
 static void
 gtk_string_list_dispose (GObject *object)

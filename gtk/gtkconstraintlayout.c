@@ -266,7 +266,7 @@ struct _GtkConstraintLayout
   GListStore *guides_observer;
 };
 
-G_DEFINE_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK_TYPE_LAYOUT_CHILD)
+G_DEFINE_FINAL_TYPE (GtkConstraintLayoutChild, gtk_constraint_layout_child, GTK_TYPE_LAYOUT_CHILD)
 
 GtkConstraintSolver *
 gtk_constraint_layout_get_solver (GtkConstraintLayout *self)
@@ -537,8 +537,8 @@ gtk_constraint_layout_child_init (GtkConstraintLayoutChild *self)
 
 static void gtk_buildable_interface_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkConstraintLayout, gtk_constraint_layout, GTK_TYPE_LAYOUT_MANAGER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_buildable_interface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkConstraintLayout, gtk_constraint_layout, GTK_TYPE_LAYOUT_MANAGER,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, gtk_buildable_interface_init))
 
 static void
 gtk_constraint_layout_finalize (GObject *gobject)

@@ -108,7 +108,7 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
 
 #define WINDOW_ICON_SIZE 16
 
-G_DEFINE_TYPE (GtkWindowControls, gtk_window_controls, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (GtkWindowControls, gtk_window_controls, GTK_TYPE_WIDGET)
 
 static char *
 get_layout (GtkWindowControls *self)

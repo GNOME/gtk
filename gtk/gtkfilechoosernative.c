@@ -206,9 +206,9 @@ static GParamSpec *native_props[LAST_ARG] = { NULL, };
 
 static void    _gtk_file_chooser_native_iface_init   (GtkFileChooserIface  *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkFileChooserNative, gtk_file_chooser_native, GTK_TYPE_NATIVE_DIALOG,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
-                                                _gtk_file_chooser_native_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkFileChooserNative, gtk_file_chooser_native, GTK_TYPE_NATIVE_DIALOG,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER,
+                                                      _gtk_file_chooser_native_iface_init))
 
 
 /**

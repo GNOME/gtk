@@ -64,7 +64,7 @@ enum {
   NUM_PROPERTIES
 };
 
-G_DEFINE_TYPE (GtkStringFilter, gtk_string_filter, GTK_TYPE_FILTER)
+G_DEFINE_FINAL_TYPE (GtkStringFilter, gtk_string_filter, GTK_TYPE_FILTER)
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
@@ -190,7 +190,7 @@ gtk_string_filter_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_string_filter_get_property (GObject     *object,
                                 guint        prop_id,
                                 GValue      *value,

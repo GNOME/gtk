@@ -84,7 +84,7 @@ enum {
 
 static GParamSpec *child_props[N_CHILD_PROPERTIES];
 
-G_DEFINE_TYPE (GtkGridLayoutChild, gtk_grid_layout_child, GTK_TYPE_LAYOUT_CHILD)
+G_DEFINE_FINAL_TYPE (GtkGridLayoutChild, gtk_grid_layout_child, GTK_TYPE_LAYOUT_CHILD)
 
 static void
 gtk_grid_layout_child_set_property (GObject      *gobject,
@@ -454,7 +454,7 @@ enum {
 
 static GParamSpec *layout_props[N_PROPERTIES];
 
-G_DEFINE_TYPE (GtkGridLayout, gtk_grid_layout, GTK_TYPE_LAYOUT_MANAGER)
+G_DEFINE_FINAL_TYPE (GtkGridLayout, gtk_grid_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static inline GtkGridLayoutChild *
 get_grid_child (GtkGridLayout *self,

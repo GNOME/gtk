@@ -52,7 +52,7 @@ enum {
   NUM_PROPERTIES
 };
 
-G_DEFINE_TYPE (GtkNumericSorter, gtk_numeric_sorter, GTK_TYPE_SORTER)
+G_DEFINE_FINAL_TYPE (GtkNumericSorter, gtk_numeric_sorter, GTK_TYPE_SORTER)
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
@@ -491,7 +491,7 @@ gtk_numeric_sorter_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_numeric_sorter_get_property (GObject     *object,
                                 guint        prop_id,
                                 GValue      *value,

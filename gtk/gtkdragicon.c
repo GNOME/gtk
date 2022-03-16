@@ -79,11 +79,11 @@ static GParamSpec *properties[LAST_ARG] = { NULL, };
 static void gtk_drag_icon_root_init   (GtkRootInterface *iface);
 static void gtk_drag_icon_native_init (GtkNativeInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkDragIcon, gtk_drag_icon, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
-                                                gtk_drag_icon_native_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
-                                                gtk_drag_icon_root_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkDragIcon, gtk_drag_icon, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_NATIVE,
+                                                      gtk_drag_icon_native_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ROOT,
+                                                      gtk_drag_icon_root_init))
 
 static GdkDisplay *
 gtk_drag_icon_root_get_display (GtkRoot *self)

@@ -132,7 +132,7 @@ enum
   LAST_SIGNAL
 };
 
-G_DEFINE_TYPE (GtkDropDown, gtk_drop_down, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (GtkDropDown, gtk_drop_down, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };

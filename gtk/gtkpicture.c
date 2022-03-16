@@ -111,7 +111,7 @@ struct _GtkPictureClass
 
 static GParamSpec *properties[NUM_PROPERTIES] = { NULL, };
 
-G_DEFINE_TYPE (GtkPicture, gtk_picture, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (GtkPicture, gtk_picture, GTK_TYPE_WIDGET)
 
 static void
 gtk_picture_snapshot (GtkWidget   *widget,

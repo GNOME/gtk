@@ -38,7 +38,7 @@ struct _GtkBinLayout
   GtkLayoutManager parent_instance;
 };
 
-G_DEFINE_TYPE (GtkBinLayout, gtk_bin_layout, GTK_TYPE_LAYOUT_MANAGER)
+G_DEFINE_FINAL_TYPE (GtkBinLayout, gtk_bin_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static void
 gtk_bin_layout_measure (GtkLayoutManager *layout_manager,

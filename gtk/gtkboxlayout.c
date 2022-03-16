@@ -58,8 +58,8 @@ struct _GtkBoxLayout
   GtkBaselinePosition baseline_position;
 };
 
-G_DEFINE_TYPE_WITH_CODE (GtkBoxLayout, gtk_box_layout, GTK_TYPE_LAYOUT_MANAGER,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkBoxLayout, gtk_box_layout, GTK_TYPE_LAYOUT_MANAGER,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
 enum {
   PROP_HOMOGENEOUS = 1,
@@ -342,7 +342,7 @@ distribute_remaining_size (GtkRequestedSize *sizes,
       else
         max = test;
     }
-    
+
   return available - total_size;
 }
 

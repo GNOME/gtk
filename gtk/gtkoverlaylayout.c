@@ -72,7 +72,7 @@ enum
 
 static GParamSpec *child_props[N_CHILD_PROPERTIES];
 
-G_DEFINE_TYPE (GtkOverlayLayoutChild, gtk_overlay_layout_child, GTK_TYPE_LAYOUT_CHILD)
+G_DEFINE_FINAL_TYPE (GtkOverlayLayoutChild, gtk_overlay_layout_child, GTK_TYPE_LAYOUT_CHILD)
 
 static void
 gtk_overlay_layout_child_set_property (GObject      *gobject,
@@ -247,7 +247,7 @@ gtk_overlay_layout_child_get_clip_overlay (GtkOverlayLayoutChild *child)
   return child->clip_overlay;
 }
 
-G_DEFINE_TYPE (GtkOverlayLayout, gtk_overlay_layout, GTK_TYPE_LAYOUT_MANAGER)
+G_DEFINE_FINAL_TYPE (GtkOverlayLayout, gtk_overlay_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static void
 gtk_overlay_layout_measure (GtkLayoutManager *layout_manager,

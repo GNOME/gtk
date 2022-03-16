@@ -134,8 +134,8 @@ gtk_filter_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_filter_list_model_get_item;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkFilterListModel, gtk_filter_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_filter_list_model_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkFilterListModel, gtk_filter_list_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_filter_list_model_model_init))
 
 static gboolean
 gtk_filter_list_model_run_filter_on_item (GtkFilterListModel *self,
@@ -163,7 +163,7 @@ gtk_filter_list_model_run_filter (GtkFilterListModel *self,
   gboolean more;
 
   g_return_if_fail (GTK_IS_FILTER_LIST_MODEL (self));
-  
+
   if (self->pending == NULL)
     return;
 
@@ -346,7 +346,7 @@ gtk_filter_list_model_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_filter_list_model_get_property (GObject     *object,
                                     guint        prop_id,
                                     GValue      *value,
@@ -473,7 +473,7 @@ gtk_filter_list_model_refilter (GtkFilterListModel *self,
     case GTK_FILTER_MATCH_SOME:
       {
         GtkBitset *old, *pending;
-      
+
         if (self->matches == NULL)
           {
             if (self->strictness == GTK_FILTER_MATCH_ALL)

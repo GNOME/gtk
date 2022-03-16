@@ -157,17 +157,17 @@ gtk_single_selection_unselect_item (GtkSelectionModel *model,
 static void
 gtk_single_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
-  iface->is_selected = gtk_single_selection_is_selected; 
-  iface->get_selection_in_range = gtk_single_selection_get_selection_in_range; 
-  iface->select_item = gtk_single_selection_select_item; 
-  iface->unselect_item = gtk_single_selection_unselect_item; 
+  iface->is_selected = gtk_single_selection_is_selected;
+  iface->get_selection_in_range = gtk_single_selection_get_selection_in_range;
+  iface->select_item = gtk_single_selection_select_item;
+  iface->unselect_item = gtk_single_selection_unselect_item;
 }
 
-G_DEFINE_TYPE_EXTENDED (GtkSingleSelection, gtk_single_selection, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
-                                               gtk_single_selection_list_model_init)
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
-                                               gtk_single_selection_selection_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkSingleSelection, gtk_single_selection, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                      gtk_single_selection_list_model_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
+                                                      gtk_single_selection_selection_model_init))
 
 static void
 gtk_single_selection_items_changed_cb (GListModel         *model,
@@ -281,7 +281,7 @@ gtk_single_selection_clear_model (GtkSingleSelection *self)
   if (self->model == NULL)
     return;
 
-  g_signal_handlers_disconnect_by_func (self->model, 
+  g_signal_handlers_disconnect_by_func (self->model,
                                         gtk_single_selection_items_changed_cb,
                                         self);
   g_clear_object (&self->model);
@@ -510,7 +510,7 @@ gtk_single_selection_set_model (GtkSingleSelection *self,
     return;
 
   g_object_freeze_notify (G_OBJECT (self));
-  
+
   n_items_before = self->model ? g_list_model_get_n_items (self->model) : 0;
   gtk_single_selection_clear_model (self);
 
@@ -674,7 +674,7 @@ gtk_single_selection_set_autoselect (GtkSingleSelection *self,
   self->autoselect = autoselect;
 
   g_object_freeze_notify (G_OBJECT (self));
-  
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_AUTOSELECT]);
 
   if (self->autoselect && !self->selected_item)

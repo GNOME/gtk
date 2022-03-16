@@ -1,4 +1,4 @@
-/* gtkpasswordentrybuffer.c: Entry buffer with secure allocation 
+/* gtkpasswordentrybuffer.c: Entry buffer with secure allocation
  *
    Copyright 2009  Stefan Walter
  * Copyright 2020  GNOME Foundation
@@ -50,7 +50,7 @@ struct _GtkPasswordEntryBuffer
   guint text_chars;
 };
 
-G_DEFINE_TYPE (GtkPasswordEntryBuffer, gtk_password_entry_buffer, GTK_TYPE_ENTRY_BUFFER)
+G_DEFINE_FINAL_TYPE (GtkPasswordEntryBuffer, gtk_password_entry_buffer, GTK_TYPE_ENTRY_BUFFER)
 
 static const char *
 gtk_password_entry_buffer_real_get_text (GtkEntryBuffer *buffer,

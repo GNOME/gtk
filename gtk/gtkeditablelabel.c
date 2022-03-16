@@ -103,9 +103,9 @@ gtk_editable_label_editable_init (GtkEditableInterface *iface)
 }
 
 
-G_DEFINE_TYPE_WITH_CODE (GtkEditableLabel, gtk_editable_label, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
-                                                gtk_editable_label_editable_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkEditableLabel, gtk_editable_label, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
+                                                      gtk_editable_label_editable_init))
 
 static void
 start_editing (GtkWidget  *widget,

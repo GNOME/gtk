@@ -60,7 +60,7 @@ enum {
 
 static GParamSpec *obj_props[N_PROPERTIES];
 
-G_DEFINE_TYPE (GtkConstraint, gtk_constraint, G_TYPE_OBJECT)
+G_DEFINE_FINAL_TYPE (GtkConstraint, gtk_constraint, G_TYPE_OBJECT)
 
 static void
 gtk_constraint_set_property (GObject      *gobject,

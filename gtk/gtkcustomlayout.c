@@ -22,7 +22,7 @@ struct _GtkCustomLayout
   GtkCustomAllocateFunc allocate_func;
 };
 
-G_DEFINE_TYPE (GtkCustomLayout, gtk_custom_layout, GTK_TYPE_LAYOUT_MANAGER)
+G_DEFINE_FINAL_TYPE (GtkCustomLayout, gtk_custom_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static GtkSizeRequestMode
 gtk_custom_layout_get_request_mode (GtkLayoutManager *manager,

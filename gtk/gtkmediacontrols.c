@@ -62,7 +62,7 @@ enum
   N_PROPS
 };
 
-G_DEFINE_TYPE (GtkMediaControls, gtk_media_controls, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (GtkMediaControls, gtk_media_controls, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
@@ -138,7 +138,7 @@ time_adjustment_changed (GtkAdjustment    *adjustment,
   if (gtk_adjustment_get_value (adjustment) == (double) gtk_media_stream_get_timestamp (controls->stream) / G_USEC_PER_SEC)
     return;
 
-  gtk_media_stream_seek (controls->stream, 
+  gtk_media_stream_seek (controls->stream,
                          gtk_adjustment_get_value (adjustment) * G_USEC_PER_SEC + 0.5);
 }
 

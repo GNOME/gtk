@@ -73,7 +73,7 @@ gtk_slice_list_model_get_n_items (GListModel *list)
 {
   GtkSliceListModel *self = GTK_SLICE_LIST_MODEL (list);
   guint n_items;
-  
+
   if (self->model == NULL)
     return 0;
 
@@ -110,8 +110,8 @@ gtk_slice_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_slice_list_model_get_item;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkSliceListModel, gtk_slice_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_slice_list_model_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkSliceListModel, gtk_slice_list_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_slice_list_model_model_init))
 
 static void
 gtk_slice_list_model_items_changed_cb (GListModel        *model,
@@ -193,7 +193,7 @@ gtk_slice_list_model_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_slice_list_model_get_property (GObject     *object,
                                    guint        prop_id,
                                    GValue      *value,

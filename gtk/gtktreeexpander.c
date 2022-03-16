@@ -101,7 +101,7 @@ enum
   N_PROPS
 };
 
-G_DEFINE_TYPE (GtkTreeExpander, gtk_tree_expander, GTK_TYPE_WIDGET)
+G_DEFINE_FINAL_TYPE (GtkTreeExpander, gtk_tree_expander, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 

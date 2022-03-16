@@ -201,11 +201,11 @@ gtk_multi_selection_selection_model_init (GtkSelectionModelInterface *iface)
   iface->set_selection = gtk_multi_selection_set_selection;
 }
 
-G_DEFINE_TYPE_EXTENDED (GtkMultiSelection, gtk_multi_selection, G_TYPE_OBJECT, 0,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
-                                               gtk_multi_selection_list_model_init)
-                        G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
-                                               gtk_multi_selection_selection_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkMultiSelection, gtk_multi_selection, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL,
+                                                      gtk_multi_selection_list_model_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL,
+                                                      gtk_multi_selection_selection_model_init))
 
 static void
 gtk_multi_selection_items_changed_cb (GListModel        *model,

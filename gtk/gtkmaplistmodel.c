@@ -147,7 +147,7 @@ static guint
 gtk_map_list_model_get_n_items (GListModel *list)
 {
   GtkMapListModel *self = GTK_MAP_LIST_MODEL (list);
-  
+
   if (self->model == NULL)
     return 0;
 
@@ -205,8 +205,8 @@ gtk_map_list_model_model_init (GListModelInterface *iface)
   iface->get_item = gtk_map_list_model_get_item;
 }
 
-G_DEFINE_TYPE_WITH_CODE (GtkMapListModel, gtk_map_list_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_map_list_model_model_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GtkMapListModel, gtk_map_list_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_map_list_model_model_init))
 
 static void
 gtk_map_list_model_items_changed_cb (GListModel      *model,
@@ -291,7 +291,7 @@ gtk_map_list_model_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_map_list_model_get_property (GObject     *object,
                                  guint        prop_id,
                                  GValue      *value,
@@ -527,7 +527,7 @@ gtk_map_list_model_set_map_func (GtkMapListModel        *self,
   self->map_func = map_func;
   self->user_data = user_data;
   self->user_destroy = user_destroy;
-  
+
   gtk_map_list_model_init_items (self);
 
   if (self->model)
@@ -579,7 +579,7 @@ gtk_map_list_model_set_model (GtkMapListModel *self,
     }
 
   gtk_map_list_model_init_items (self);
-  
+
   if (removed > 0 || added > 0)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
 
