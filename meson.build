@@ -10,7 +10,7 @@ project('gtk', 'c',
         meson_version : '>= 0.59',
         license: 'LGPL-2.1-or-later')
 
-glib_req           = '>= 2.66.0'
+glib_req           = '>= 2.70.0'
 pango_req          = '>= 1.50.0' # keep this in sync with .gitlab-ci/test-msys.sh
 fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
