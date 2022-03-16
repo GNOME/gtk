@@ -34,7 +34,7 @@ typedef struct
   const char *font_name;
   int         xft_dpi;
   int         double_click_time;
-  int         cursor_blink_timeout;
+  int         cursor_blink_time;
   guint       enable_animations : 1;
   guint       shell_shows_desktop : 1;
   guint       shell_shows_menubar : 1;
@@ -65,9 +65,9 @@ _gdk_macos_settings_load (GdkMacosSettings *settings)
 
   ival = [defaults integerForKey:@"NSTextInsertionPointBlinkPeriod"];
   if (ival > 0)
-    settings->cursor_blink_timeout = ival;
+    settings->cursor_blink_time = ival;
   else
-    settings->cursor_blink_timeout = 1000;
+    settings->cursor_blink_time = 1000;
 
   settings->primary_button_warps_slider =
       [[NSUserDefaults standardUserDefaults] boolForKey:@"AppleScrollerPagingBehavior"] == YES;
@@ -124,9 +124,9 @@ _gdk_macos_display_get_setting (GdkMacosDisplay *self,
       g_value_set_int (value, current_settings.xft_dpi);
       ret = TRUE;
     }
-  else if (strcmp (setting, "gtk-cursor-blink-timeout") == 0)
+  else if (strcmp (setting, "gtk-cursor-blink-time") == 0)
     {
-      g_value_set_int (value, current_settings.cursor_blink_timeout);
+      g_value_set_int (value, current_settings.cursor_blink_time);
       ret = TRUE;
     }
   else if (strcmp (setting, "gtk-double-click-time") == 0)

@@ -43,6 +43,8 @@ G_BEGIN_DECLS
 #define GIC_FILTER_PASSTHRU  0
 #define GIC_FILTER_FILTERED  1
 
+#define GDK_MACOS_EVENT_DROP (GdkEvent *)GSIZE_TO_POINTER(1)
+
 struct _GdkMacosDisplay
 {
   GdkDisplay parent_instance;
@@ -68,16 +70,6 @@ struct _GdkMacosDisplay
    */
   GQueue sorted_surfaces;
 
-  /* Our CVDisplayLink based GSource which we use to freeze/thaw the
-   * GdkFrameClock for the surface.
-   */
-  GSource *frame_source;
-
-  /* A queue of surfaces which we know are awaiting frames to be drawn. This
-   * uses the GdkMacosSurface.frame link.
-   */
-  GQueue awaiting_frames;
-
   /* The surface that is receiving keyboard events */
   GdkMacosSurface *keyboard_surface;
 
@@ -92,6 +84,14 @@ struct _GdkMacosDisplay
   int min_y;
   int max_x;
   int max_y;
+
+  /* A GSource to select a new main/key window */
+  guint select_key_in_idle;
+
+  /* Note if we have a key window that is not a GdkMacosWindow
+   * such as a NSPanel used for native dialogs.
+   */
+  guint key_window_is_foregin : 1;
 };
 
 struct _GdkMacosDisplayClass
@@ -124,6 +124,8 @@ GdkMonitor      *_gdk_macos_display_get_monitor_at_display_coords  (GdkMacosDisp
                                                                     int              y);
 GdkEvent        *_gdk_macos_display_translate                      (GdkMacosDisplay *self,
                                                                     NSEvent         *event);
+void             _gdk_macos_display_feedback_init                  (GdkMacosDisplay *self);
+void             _gdk_macos_display_feedback_destroy               (GdkMacosDisplay *self);
 void             _gdk_macos_display_break_all_grabs                (GdkMacosDisplay *self,
                                                                     guint32          time);
 GdkModifierType  _gdk_macos_display_get_current_keyboard_modifiers (GdkMacosDisplay *self);
@@ -135,10 +137,6 @@ GdkMacosSurface *_gdk_macos_display_get_surface_at_display_coords  (GdkMacosDisp
                                                                     int             *surface_y);
 void             _gdk_macos_display_reload_monitors                (GdkMacosDisplay *self);
 void             _gdk_macos_display_surface_removed                (GdkMacosDisplay *self,
-                                                                    GdkMacosSurface *surface);
-void             _gdk_macos_display_add_frame_callback             (GdkMacosDisplay *self,
-                                                                    GdkMacosSurface *surface);
-void             _gdk_macos_display_remove_frame_callback          (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
 NSWindow        *_gdk_macos_display_find_native_under_pointer      (GdkMacosDisplay *self,
                                                                     int             *x,
@@ -155,7 +153,6 @@ void             _gdk_macos_display_surface_resigned_key           (GdkMacosDisp
                                                                     GdkMacosSurface *surface);
 void             _gdk_macos_display_surface_became_key             (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface);
-int              _gdk_macos_display_get_nominal_refresh_rate       (GdkMacosDisplay *self);
 void             _gdk_macos_display_clear_sorting                  (GdkMacosDisplay *self);
 const GList     *_gdk_macos_display_get_surfaces                   (GdkMacosDisplay *self);
 void             _gdk_macos_display_send_button_event              (GdkMacosDisplay *self,

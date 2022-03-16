@@ -69,5 +69,6 @@
 -(BOOL)trackManualResize;
 -(void)setDecorated:(BOOL)decorated;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;
+-(BOOL)needsMouseDownQuirk;
 
 @end

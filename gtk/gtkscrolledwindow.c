@@ -1226,16 +1226,15 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
 }
 
 static double
-get_scroll_unit (GtkScrolledWindow *sw,
-                 GtkOrientation     orientation)
+get_scroll_unit (GtkScrolledWindow        *sw,
+                 GtkOrientation            orientation,
+                 GtkEventControllerScroll *scroll)
 {
-  double scroll_unit;
-
-#ifndef GDK_WINDOWING_MACOS
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
   GtkScrollbar *scrollbar;
   GtkAdjustment *adj;
   double page_size;
+  double scroll_unit;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     scrollbar = GTK_SCROLLBAR (priv->hscrollbar);
@@ -1248,8 +1247,16 @@ get_scroll_unit (GtkScrolledWindow *sw,
   adj = gtk_scrollbar_get_adjustment (scrollbar);
   page_size = gtk_adjustment_get_page_size (adj);
   scroll_unit = pow (page_size, 2.0 / 3.0);
-#else
-  scroll_unit = 1;
+
+#ifdef GDK_WINDOWING_MACOS
+  {
+    GdkEvent *event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (scroll));
+
+    if (event != NULL &&
+        gdk_event_get_event_type (event) == GDK_SCROLL &&
+        gdk_scroll_event_get_direction (event) == GDK_SCROLL_SMOOTH)
+      scroll_unit = 1;
+  }
 #endif
 
   return scroll_unit;
@@ -1397,7 +1404,7 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
       double scroll_unit;
 
       adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
-      scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL);
+      scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL, scroll);
 
       new_value = priv->unclamped_hadj_value + delta_x * scroll_unit;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
@@ -1412,7 +1419,7 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
       double scroll_unit;
 
       adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
-      scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL);
+      scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL, scroll);
 
       new_value = priv->unclamped_vadj_value + delta_y * scroll_unit;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
@@ -1470,8 +1477,8 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
 
   shifted = (state & GDK_SHIFT_MASK) != 0;
 
-  unit_x = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL);
-  unit_y = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL);
+  unit_x = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL, scroll);
+  unit_y = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL, scroll);
 
   if (shifted)
     {

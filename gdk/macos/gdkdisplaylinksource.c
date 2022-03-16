@@ -26,7 +26,9 @@
 
 #include "gdkdisplaylinksource.h"
 
+#include "gdkdebug.h"
 #include "gdkmacoseventsource-private.h"
+#include "gdkmacosmonitor-private.h"
 #include "gdk-private.h"
 
 static gint64 host_to_frame_clock_time (gint64 val);
@@ -65,7 +67,7 @@ gdk_display_link_source_dispatch (GSource     *source,
 
   impl->needs_dispatch = FALSE;
 
-  if (callback != NULL)
+  if (!impl->paused && callback != NULL)
     ret = callback (user_data);
 
   return ret;
@@ -76,7 +78,9 @@ gdk_display_link_source_finalize (GSource *source)
 {
   GdkDisplayLinkSource *impl = (GdkDisplayLinkSource *)source;
 
-  CVDisplayLinkStop (impl->display_link);
+  if (!impl->paused)
+    CVDisplayLinkStop (impl->display_link);
+
   CVDisplayLinkRelease (impl->display_link);
 }
 
@@ -90,12 +94,18 @@ static GSourceFuncs gdk_display_link_source_funcs = {
 void
 gdk_display_link_source_pause (GdkDisplayLinkSource *source)
 {
+  g_return_if_fail (source->paused == FALSE);
+
+  source->paused = TRUE;
   CVDisplayLinkStop (source->display_link);
 }
 
 void
 gdk_display_link_source_unpause (GdkDisplayLinkSource *source)
 {
+  g_return_if_fail (source->paused == TRUE);
+
+  source->paused = FALSE;
   CVDisplayLinkStart (source->display_link);
 }
 
@@ -147,6 +157,7 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
 
 /**
  * gdk_display_link_source_new:
+ * @display_id: the identifier of the monitor
  *
  * Creates a new `GSource` that will activate the dispatch function upon
  * notification from a CVDisplayLink that a new frame should be drawn.
@@ -159,41 +170,61 @@ gdk_display_link_source_frame_cb (CVDisplayLinkRef   display_link,
  * Returns: (transfer full): A newly created `GSource`
  */
 GSource *
-gdk_display_link_source_new (void)
+gdk_display_link_source_new (CGDirectDisplayID display_id,
+                             CGDisplayModeRef  mode)
 {
   GdkDisplayLinkSource *impl;
   GSource *source;
-  CVReturn ret;
-  double period;
+  char *name;
 
   source = g_source_new (&gdk_display_link_source_funcs, sizeof *impl);
   impl = (GdkDisplayLinkSource *)source;
+  impl->display_id = display_id;
+  impl->paused = TRUE;
 
-  /*
-   * Create our link based on currently connected displays.
-   * If there are multiple displays, this will be something that tries
-   * to work for all of them. In the future, we may want to explore multiple
-   * links based on the connected displays.
+  /* Create DisplayLink for timing information for the display in
+   * question so that we can produce graphics for that display at whatever
+   * rate it can provide.
    */
-  ret = CVDisplayLinkCreateWithActiveCGDisplays (&impl->display_link);
-  if (ret != kCVReturnSuccess)
+  if (CVDisplayLinkCreateWithCGDisplay (display_id, &impl->display_link) != kCVReturnSuccess)
     {
       g_warning ("Failed to initialize CVDisplayLink!");
-      return source;
+      goto failure;
     }
 
-  /*
-   * Determine our nominal period between frames.
-   */
-  period = CVDisplayLinkGetActualOutputVideoRefreshPeriod (impl->display_link);
-  if (period == 0.0)
-    period = 1.0 / 60.0;
-  impl->refresh_interval = period * 1000000L;
-  impl->refresh_rate = 1.0 / period * 1000L;
+  impl->refresh_rate = CGDisplayModeGetRefreshRate (mode) * 1000.0;
 
-  /*
-   * Wire up our callback to be executed within the high-priority thread.
-   */
+  if (impl->refresh_rate == 0)
+    {
+      const CVTime time = CVDisplayLinkGetNominalOutputVideoRefreshPeriod (impl->display_link);
+      if (!(time.flags & kCVTimeIsIndefinite))
+        impl->refresh_rate = (double)time.timeScale / (double)time.timeValue * 1000.0;
+    }
+
+  if (impl->refresh_rate != 0)
+    {
+      impl->refresh_interval = 1000000.0 / (double)impl->refresh_rate * 1000.0;
+    }
+  else
+    {
+      double period = CVDisplayLinkGetActualOutputVideoRefreshPeriod (impl->display_link);
+
+      if (period == 0.0)
+        period = 1.0 / 60.0;
+
+      impl->refresh_rate = 1.0 / period * 1000L;
+      impl->refresh_interval = period * 1000000L;
+    }
+
+  name = _gdk_macos_monitor_get_connector_name (display_id);
+  GDK_NOTE (MISC,
+            g_message ("Monitor \"%s\" discovered with Refresh Rate %d and Interval %"G_GINT64_FORMAT,
+                       name ? name : "unknown",
+                       impl->refresh_rate,
+                       impl->refresh_interval));
+  g_free (name);
+
+  /* Wire up our callback to be executed within the high-priority thread. */
   CVDisplayLinkSetOutputCallback (impl->display_link,
                                   gdk_display_link_source_frame_cb,
                                   source);
@@ -201,6 +232,10 @@ gdk_display_link_source_new (void)
   g_source_set_static_name (source, "[gdk] quartz frame clock");
 
   return source;
+
+failure:
+  g_source_unref (source);
+  return NULL;
 }
 
 static gint64
