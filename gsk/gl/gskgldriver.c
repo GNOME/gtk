@@ -229,6 +229,29 @@ gsk_gl_driver_shader_weak_cb (gpointer  data,
     g_hash_table_remove (self->shader_cache, where_object_was);
 }
 
+G_GNUC_NULL_TERMINATED static inline GBytes *
+join_sources (GBytes *first_bytes,
+              ...)
+{
+  GByteArray *byte_array = g_byte_array_new ();
+  GBytes *bytes = first_bytes;
+  va_list args;
+
+  va_start (args, first_bytes);
+  while (bytes != NULL)
+    {
+      gsize len;
+      const guint8 *data = g_bytes_get_data (bytes, &len);
+      if (len > 0)
+        g_byte_array_append (byte_array, data, len);
+      g_bytes_unref (bytes);
+      bytes = va_arg (args, GBytes *);
+    }
+  va_end (args);
+
+  return g_byte_array_free_to_bytes (byte_array);
+}
+
 static void
 gsk_gl_driver_dispose (GObject *object)
 {
@@ -238,6 +261,10 @@ gsk_gl_driver_dispose (GObject *object)
   g_assert (self->in_frame == FALSE);
 
 #define GSK_GL_NO_UNIFORMS
+#define GSK_GL_SHADER_RESOURCE(name)
+#define GSK_GL_SHADER_STRING(str)
+#define GSK_GL_SHADER_SINGLE(name)
+#define GSK_GL_SHADER_JOINED(kind, ...)
 #define GSK_GL_ADD_UNIFORM(pos, KEY, name)
 #define GSK_GL_DEFINE_PROGRAM(name, resource, uniforms) \
   GSK_GL_DELETE_PROGRAM(name);                          \
@@ -251,6 +278,10 @@ gsk_gl_driver_dispose (GObject *object)
   } G_STMT_END;
 # include "gskglprograms.defs"
 #undef GSK_GL_NO_UNIFORMS
+#undef GSK_GL_SHADER_RESOURCE
+#undef GSK_GL_SHADER_STRING
+#undef GSK_GL_SHADER_SINGLE
+#undef GSK_GL_SHADER_JOINED
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_DEFINE_PROGRAM
 
@@ -351,14 +382,14 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
 
   /* Setup preambles that are shared by all shaders */
   gsk_gl_compiler_set_preamble_from_resource (compiler,
-                                               GSK_GL_COMPILER_ALL,
-                                               "/org/gtk/libgsk/gl/preamble.glsl");
+                                              GSK_GL_COMPILER_ALL,
+                                              "/org/gtk/libgsk/gl/preamble.glsl");
   gsk_gl_compiler_set_preamble_from_resource (compiler,
-                                               GSK_GL_COMPILER_VERTEX,
-                                               "/org/gtk/libgsk/gl/preamble.vs.glsl");
+                                              GSK_GL_COMPILER_VERTEX,
+                                              "/org/gtk/libgsk/gl/preamble.vs.glsl");
   gsk_gl_compiler_set_preamble_from_resource (compiler,
-                                               GSK_GL_COMPILER_FRAGMENT,
-                                               "/org/gtk/libgsk/gl/preamble.fs.glsl");
+                                              GSK_GL_COMPILER_FRAGMENT,
+                                              "/org/gtk/libgsk/gl/preamble.fs.glsl");
 
   /* Setup attributes that are provided via VBO */
   gsk_gl_compiler_bind_attribute (compiler, "aPosition", 0);
@@ -368,10 +399,28 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
 
   /* Use XMacros to register all of our programs and their uniforms */
 #define GSK_GL_NO_UNIFORMS
+#define GSK_GL_SHADER_RESOURCE(name)                                                            \
+  g_bytes_ref(g_resources_lookup_data("/org/gtk/libgsk/gl/" name, 0, NULL))
+#define GSK_GL_SHADER_STRING(str)                                                               \
+  g_bytes_new_static(str, strlen(str))
+#define GSK_GL_SHADER_SINGLE(bytes)                                                             \
+  G_STMT_START {                                                                                \
+    GBytes *b = bytes;                                                                          \
+    gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_ALL, b);                              \
+    g_bytes_unref (b);                                                                          \
+  } G_STMT_END;
+#define GSK_GL_SHADER_JOINED(kind, ...)                                                         \
+  G_STMT_START {                                                                                \
+    GBytes *bytes = join_sources(__VA_ARGS__);                                                  \
+    gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_##kind, bytes);                       \
+    g_bytes_unref (bytes);                                                                      \
+  } G_STMT_END;
 #define GSK_GL_ADD_UNIFORM(pos, KEY, name)                                                      \
   gsk_gl_program_add_uniform (program, #name, UNIFORM_##KEY);
-#define GSK_GL_DEFINE_PROGRAM(name, resource, uniforms)                                         \
-  gsk_gl_compiler_set_source_from_resource (compiler, GSK_GL_COMPILER_ALL, resource);           \
+#define GSK_GL_DEFINE_PROGRAM(name, sources, uniforms)                                          \
+  gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_VERTEX, NULL);                          \
+  gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_FRAGMENT, NULL);                        \
+  sources                                                                                       \
   GSK_GL_COMPILE_PROGRAM(name ## _no_clip, uniforms, "#define NO_CLIP 1\n");                    \
   GSK_GL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");                \
   GSK_GL_COMPILE_PROGRAM(name, uniforms, "");
@@ -404,6 +453,11 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
 #undef GSK_GL_DEFINE_PROGRAM_CLIP
 #undef GSK_GL_DEFINE_PROGRAM
 #undef GSK_GL_ADD_UNIFORM
+#undef GSK_GL_SHADER_SINGLE
+#undef GSK_GL_SHADER_JOINED
+#undef GSK_GL_SHADER_RESOURCE
+#undef GSK_GL_SHADER_STRING
+#undef GSK_GL_NO_UNIFORMS
 
   ret = TRUE;
 
