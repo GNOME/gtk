@@ -44,7 +44,6 @@
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
 
-#define ATLAS_SIZE 512
 #define MAX_OLD_RATIO 0.5
 
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
@@ -170,15 +169,19 @@ gsk_gl_texture_atlas_free (GskGLTextureAtlas *atlas)
 }
 
 GskGLTextureAtlas *
-gsk_gl_driver_create_atlas (GskGLDriver *self)
+gsk_gl_driver_create_atlas (GskGLDriver *self,
+                            guint        width,
+                            guint        height)
 {
   GskGLTextureAtlas *atlas;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (self), NULL);
+  g_return_val_if_fail (width > 0, NULL);
+  g_return_val_if_fail (height > 0, NULL);
 
   atlas = g_slice_new0 (GskGLTextureAtlas);
-  atlas->width = ATLAS_SIZE;
-  atlas->height = ATLAS_SIZE;
+  atlas->width = width;
+  atlas->height = height;
   /* TODO: We might want to change the strategy about the amount of
    *       nodes here? stb_rect_pack.h says width is optimal. */
   atlas->nodes = g_malloc0_n (atlas->width, sizeof (struct stbrp_node));

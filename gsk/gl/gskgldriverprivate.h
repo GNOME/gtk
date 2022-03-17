@@ -184,7 +184,9 @@ void                gsk_gl_driver_add_texture_slices     (GskGLDriver         *s
 GskGLProgram      * gsk_gl_driver_lookup_shader          (GskGLDriver         *self,
                                                           GskGLShader         *shader,
                                                           GError             **error);
-GskGLTextureAtlas * gsk_gl_driver_create_atlas           (GskGLDriver         *self);
+GskGLTextureAtlas * gsk_gl_driver_create_atlas           (GskGLDriver         *self,
+                                                          guint                width,
+                                                          guint                height);
 
 #ifdef G_ENABLE_DEBUG
 void                gsk_gl_driver_save_atlases_to_png    (GskGLDriver         *self,
