@@ -3068,12 +3068,192 @@ gsk_gl_render_job_visit_text_node_legacy (GskGLRenderJob      *job,
   gsk_gl_render_job_end_draw (job);
 }
 
+typedef struct
+{
+  float x;
+  float y;
+  float g16hi;
+  float g16lo;
+} EncodedGlyph;
+
+static unsigned int
+glyph_encode (guint atlas_x ,  /* 7 bits */
+              guint atlas_y,   /* 7 bits */
+              guint corner_x,  /* 1 bit */
+              guint corner_y,  /* 1 bit */
+              guint nominal_w, /* 6 bits */
+              guint nominal_h) /* 6 bits */
+{
+  guint x, y;
+
+  g_assert (0 == (atlas_x & ~0x7F));
+  g_assert (0 == (atlas_y & ~0x7F));
+  g_assert (0 == (corner_x & ~1));
+  g_assert (0 == (corner_y & ~1));
+  g_assert (0 == (nominal_w & ~0x3F));
+  g_assert (0 == (nominal_h & ~0x3F));
+
+  x = (((atlas_x << 6) | nominal_w) << 1) | corner_x;
+  y = (((atlas_y << 6) | nominal_h) << 1) | corner_y;
+
+  return (x << 16) | y;
+}
+
+static void
+encoded_glyph_init (EncodedGlyph           *eg,
+                    float                   x,
+                    float                   y,
+                    guint                   corner_x,
+                    guint                   corner_y,
+                    const GskGLGlyphyValue *gi)
+{
+  guint encoded = glyph_encode (gi->atlas_x, gi->atlas_y, corner_x, corner_y, gi->nominal_w, gi->nominal_h);
+
+  eg->x = x;
+  eg->y = y;
+  eg->g16hi = encoded >> 16;
+  eg->g16lo = encoded & 0xFFFF;
+}
+
+static inline void
+add_encoded_glyph (GskGLDrawVertex    *vertices,
+                   const EncodedGlyph *eg,
+                   const guint16       c[4])
+{
+  *vertices = (GskGLDrawVertex) { .position = { eg->x, eg->y}, .uv = { eg->g16hi, eg->g16lo}, .color = { c[0], c[1], c[2], c[3] } };
+}
+
 static inline void
 gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
                                           const GskRenderNode *node,
-                                          const GdkRGBA       *color,
-                                          gboolean             force_color)
+                                          const GdkRGBA       *color)
 {
+  const graphene_point_t *offset;
+  const PangoGlyphInfo *glyphs;
+  const PangoGlyphInfo *gi;
+  GskGLGlyphyLibrary *library;
+  GskGLCommandBatch *batch;
+  const PangoFont *font;
+  GskGLDrawVertex *vertices;
+  const guint16 *c;
+  GskGLGlyphyKey lookup;
+  guint16 cc[4];
+  float x;
+  float y;
+  guint last_texture = 0;
+  guint num_glyphs;
+  guint used = 0;
+  guint i;
+  int x_position = 0;
+
+  g_assert (!gsk_text_node_has_color_glyphs (node));
+
+  if (!(num_glyphs = gsk_text_node_get_num_glyphs (node)))
+    return;
+
+  if (RGBA_IS_CLEAR (color))
+    return;
+
+  font = gsk_text_node_get_font (node);
+  glyphs = gsk_text_node_get_glyphs (node, NULL);
+  library = job->driver->glyphy_library;
+  offset = gsk_text_node_get_offset (node);
+  x = offset->x + job->offset_x;
+  y = offset->y + job->offset_y;
+
+  rgba_to_half (color, cc);
+  c = cc;
+
+  gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, glyphy));
+
+  batch = gsk_gl_command_queue_get_batch (job->command_queue);
+  vertices = gsk_gl_command_queue_add_n_vertices (job->command_queue, num_glyphs);
+
+  lookup.font = (PangoFont *)font;
+
+  for (i = 0, gi = glyphs; i < num_glyphs; i++, gi++)
+    {
+      const GskGLGlyphyValue *glyph;
+      float cx = 0, cy = 0;
+      guint texture_id;
+
+      lookup.glyph = gi->glyph;
+      texture_id = gsk_gl_glyphy_library_lookup_or_add (library, &lookup, &glyph);
+      if G_UNLIKELY (texture_id == 0)
+        continue;
+
+      if G_UNLIKELY (last_texture != texture_id || batch->draw.vbo_count + GSK_GL_N_VERTICES > 0xffff)
+        {
+          if G_LIKELY (last_texture != 0)
+            {
+              guint vbo_offset = batch->draw.vbo_offset + batch->draw.vbo_count;
+
+              /* Since we have batched added our VBO vertices to avoid repeated
+               * calls to the buffer, we need to manually tweak the vbo offset
+               * of the new batch as otherwise it will point at the end of our
+               * vbo array.
+               */
+              gsk_gl_render_job_split_draw (job);
+              batch = gsk_gl_command_queue_get_batch (job->command_queue);
+              batch->draw.vbo_offset = vbo_offset;
+            }
+
+          gsk_gl_program_set_uniform4i (job->current_program,
+                                        UNIFORM_GLYPHY_ATLAS_INFO, 0,
+                                        GSK_GL_TEXTURE_LIBRARY (library)->atlas_width,
+                                        GSK_GL_TEXTURE_LIBRARY (library)->atlas_height,
+                                        library->item_w,
+                                        library->item_h_q);
+          gsk_gl_program_set_uniform_texture (job->current_program,
+                                              UNIFORM_SHARED_SOURCE, 0,
+                                              GL_TEXTURE_2D,
+                                              GL_TEXTURE0,
+                                              texture_id);
+          gsk_gl_program_set_uniform1f (job->current_program,
+                                        UNIFORM_GLYPHY_GAMMA_ADJUST, 0,
+                                        1.0);
+          gsk_gl_program_set_uniform1f (job->current_program,
+                                        UNIFORM_GLYPHY_CONTRAST, 0,
+                                        1.0);
+
+          last_texture = texture_id;
+        }
+
+      cx = (float)(x_position + gi->geometry.x_offset) / PANGO_SCALE;
+      if G_UNLIKELY (gi->geometry.y_offset != 0)
+        cy = (float)(gi->geometry.y_offset) / PANGO_SCALE;
+
+      x_position += gi->geometry.width;
+
+      EncodedGlyph encoded[4];
+#define ENCODE_CORNER(_cx, _cy) \
+  G_STMT_START { \
+    float _vx = x + cx + ((1-_cx) * glyph->extents.min_x + _cx * glyph->extents.max_x); \
+    float _vy = y + cy - ((1-_cy) * glyph->extents.min_y + _cy * glyph->extents.max_y); \
+    encoded_glyph_init (&encoded[_cx * 2 + _cy], _vx, _vy, _cx, _cy, glyph); \
+  } G_STMT_END
+      ENCODE_CORNER (0, 0);
+      ENCODE_CORNER (0, 1);
+      ENCODE_CORNER (1, 0);
+      ENCODE_CORNER (1, 1);
+#undef ENCODE_CORNER
+
+      add_encoded_glyph (vertices++, &encoded[0], c);
+      add_encoded_glyph (vertices++, &encoded[1], c);
+      add_encoded_glyph (vertices++, &encoded[2], c);
+
+      add_encoded_glyph (vertices++, &encoded[1], c);
+      add_encoded_glyph (vertices++, &encoded[2], c);
+      add_encoded_glyph (vertices++, &encoded[3], c);
+
+      batch->draw.vbo_count += GSK_GL_N_VERTICES;
+      used++;
+    }
+
+  if (used != num_glyphs)
+    gsk_gl_command_queue_retract_n_vertices (job->command_queue, num_glyphs - used);
+
+  gsk_gl_render_job_end_draw (job);
 }
 
 static inline void
@@ -3083,7 +3263,7 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
                                    gboolean             force_color)
 {
   if (!gsk_text_node_has_color_glyphs (node))
-    gsk_gl_render_job_visit_text_node_glyphy (job, node, color, force_color);
+    gsk_gl_render_job_visit_text_node_glyphy (job, node, color);
   else
     gsk_gl_render_job_visit_text_node_legacy (job, node, color, force_color);
 }

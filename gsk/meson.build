@@ -19,6 +19,9 @@ gsk_private_gl_shaders = [
   'gl/resources/repeat.glsl',
   'gl/resources/custom.glsl',
   'gl/resources/filled_border.glsl',
+  'gl/resources/glyphy.atlas.glsl',
+  'gl/resources/glyphy.fs.glsl',
+  'gl/resources/glyphy.vs.glsl',
 ]
 
 gsk_public_sources = files([
