@@ -37,6 +37,7 @@ typedef struct _GskGLCompiler GskGLCompiler;
 typedef struct _GskGLDrawVertex GskGLDrawVertex;
 typedef struct _GskGLRenderTarget GskGLRenderTarget;
 typedef struct _GskGLGlyphLibrary GskGLGlyphLibrary;
+typedef struct _GskGLGlyphyLibrary GskGLGlyphyLibrary;
 typedef struct _GskGLIconLibrary GskGLIconLibrary;
 typedef struct _GskGLProgram GskGLProgram;
 typedef struct _GskGLRenderJob GskGLRenderJob;

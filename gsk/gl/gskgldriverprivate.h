@@ -101,6 +101,7 @@ struct _GskGLDriver
   GskGLCommandQueue *command_queue;
 
   GskGLGlyphLibrary *glyphs_library;
+  GskGLGlyphyLibrary *glyphy_library;
   GskGLIconLibrary *icons_library;
   GskGLShadowLibrary *shadows_library;
 
