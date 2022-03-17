@@ -9,5 +9,9 @@
       <pattern>*.txt</pattern>
       <pattern>*.png</pattern>
     </patterns>
+    <suffixes>
+      <suffix>txt</suffix>
+      <suffix>png</suffix>
+    </suffixes>
   </object>
 </interface>
