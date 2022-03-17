@@ -1,71 +1,71 @@
 GSK_GL_DEFINE_PROGRAM (blend,
-                       "/org/gtk/libgsk/gl/blend.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("blend.glsl")),
                        GSK_GL_ADD_UNIFORM (1, BLEND_SOURCE2, u_source2)
                        GSK_GL_ADD_UNIFORM (2, BLEND_MODE, u_mode))
 
 GSK_GL_DEFINE_PROGRAM (blit,
-                       "/org/gtk/libgsk/gl/blit.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("blit.glsl")),
                        GSK_GL_NO_UNIFORMS)
 
 GSK_GL_DEFINE_PROGRAM (blur,
-                       "/org/gtk/libgsk/gl/blur.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("blur.glsl")),
                        GSK_GL_ADD_UNIFORM (1, BLUR_RADIUS, u_blur_radius)
                        GSK_GL_ADD_UNIFORM (2, BLUR_SIZE, u_blur_size)
                        GSK_GL_ADD_UNIFORM (3, BLUR_DIR, u_blur_dir))
 
 GSK_GL_DEFINE_PROGRAM (border,
-                       "/org/gtk/libgsk/gl/border.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("border.glsl")),
                        GSK_GL_ADD_UNIFORM (1, BORDER_WIDTHS, u_widths)
                        GSK_GL_ADD_UNIFORM (2, BORDER_OUTLINE_RECT, u_outline_rect))
 
 GSK_GL_DEFINE_PROGRAM (color,
-                       "/org/gtk/libgsk/gl/color.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("color.glsl")),
                        GSK_GL_NO_UNIFORMS)
 
 GSK_GL_DEFINE_PROGRAM (coloring,
-                       "/org/gtk/libgsk/gl/coloring.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("coloring.glsl")),
                        GSK_GL_NO_UNIFORMS)
 
 GSK_GL_DEFINE_PROGRAM (color_matrix,
-                       "/org/gtk/libgsk/gl/color_matrix.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("color_matrix.glsl")),
                        GSK_GL_ADD_UNIFORM (1, COLOR_MATRIX_COLOR_MATRIX, u_color_matrix)
                        GSK_GL_ADD_UNIFORM (2, COLOR_MATRIX_COLOR_OFFSET, u_color_offset))
 
 GSK_GL_DEFINE_PROGRAM (conic_gradient,
-                       "/org/gtk/libgsk/gl/conic_gradient.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("conic_gradient.glsl")),
                        GSK_GL_ADD_UNIFORM (1, CONIC_GRADIENT_COLOR_STOPS, u_color_stops)
                        GSK_GL_ADD_UNIFORM (2, CONIC_GRADIENT_NUM_COLOR_STOPS, u_num_color_stops)
                        GSK_GL_ADD_UNIFORM (3, CONIC_GRADIENT_GEOMETRY, u_geometry))
 
 GSK_GL_DEFINE_PROGRAM (cross_fade,
-                       "/org/gtk/libgsk/gl/cross_fade.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("cross_fade.glsl")),
                        GSK_GL_ADD_UNIFORM (1, CROSS_FADE_PROGRESS, u_progress)
                        GSK_GL_ADD_UNIFORM (2, CROSS_FADE_SOURCE2, u_source2))
 
 GSK_GL_DEFINE_PROGRAM (filled_border,
-                       "/org/gtk/libgsk/gl/filled_border.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("filled_border.glsl")),
                        GSK_GL_ADD_UNIFORM (1, FILLED_BORDER_WIDTHS, u_widths)
                        GSK_GL_ADD_UNIFORM (2, FILLED_BORDER_OUTLINE_RECT, u_outline_rect))
 
 GSK_GL_DEFINE_PROGRAM (inset_shadow,
-                       "/org/gtk/libgsk/gl/inset_shadow.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("inset_shadow.glsl")),
                        GSK_GL_ADD_UNIFORM (1, INSET_SHADOW_SPREAD, u_spread)
                        GSK_GL_ADD_UNIFORM (2, INSET_SHADOW_OFFSET, u_offset)
                        GSK_GL_ADD_UNIFORM (3, INSET_SHADOW_OUTLINE_RECT, u_outline_rect))
 
 GSK_GL_DEFINE_PROGRAM (linear_gradient,
-                       "/org/gtk/libgsk/gl/linear_gradient.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("linear_gradient.glsl")),
                        GSK_GL_ADD_UNIFORM (1, LINEAR_GRADIENT_COLOR_STOPS, u_color_stops)
                        GSK_GL_ADD_UNIFORM (2, LINEAR_GRADIENT_NUM_COLOR_STOPS, u_num_color_stops)
                        GSK_GL_ADD_UNIFORM (3, LINEAR_GRADIENT_POINTS, u_points)
                        GSK_GL_ADD_UNIFORM (4, LINEAR_GRADIENT_REPEAT, u_repeat))
 
 GSK_GL_DEFINE_PROGRAM (outset_shadow,
-                       "/org/gtk/libgsk/gl/outset_shadow.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("outset_shadow.glsl")),
                        GSK_GL_ADD_UNIFORM (1, OUTSET_SHADOW_OUTLINE_RECT, u_outline_rect))
 
 GSK_GL_DEFINE_PROGRAM (radial_gradient,
-                       "/org/gtk/libgsk/gl/radial_gradient.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("radial_gradient.glsl")),
                        GSK_GL_ADD_UNIFORM (1, RADIAL_GRADIENT_COLOR_STOPS, u_color_stops)
                        GSK_GL_ADD_UNIFORM (2, RADIAL_GRADIENT_NUM_COLOR_STOPS, u_num_color_stops)
                        GSK_GL_ADD_UNIFORM (3, RADIAL_GRADIENT_REPEAT, u_repeat)
@@ -73,12 +73,12 @@ GSK_GL_DEFINE_PROGRAM (radial_gradient,
                        GSK_GL_ADD_UNIFORM (5, RADIAL_GRADIENT_GEOMETRY, u_geometry))
 
 GSK_GL_DEFINE_PROGRAM (repeat,
-                       "/org/gtk/libgsk/gl/repeat.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("repeat.glsl")),
                        GSK_GL_ADD_UNIFORM (1, REPEAT_CHILD_BOUNDS, u_child_bounds)
                        GSK_GL_ADD_UNIFORM (2, REPEAT_TEXTURE_RECT, u_texture_rect))
 
 GSK_GL_DEFINE_PROGRAM (unblurred_outset_shadow,
-                       "/org/gtk/libgsk/gl/unblurred_outset_shadow.glsl",
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("unblurred_outset_shadow.glsl")),
                        GSK_GL_ADD_UNIFORM (1, UNBLURRED_OUTSET_SHADOW_SPREAD, u_spread)
                        GSK_GL_ADD_UNIFORM (2, UNBLURRED_OUTSET_SHADOW_OFFSET, u_offset)
                        GSK_GL_ADD_UNIFORM (3, UNBLURRED_OUTSET_SHADOW_OUTLINE_RECT, u_outline_rect))
