@@ -3454,38 +3454,79 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
 }
 
 static void
+token_done (gpointer                        data,
+            struct xdg_activation_token_v1 *provider,
+            const char                     *token)
+{
+  char **token_out = data;
+
+  *token_out = g_strdup (token);
+}
+
+static const struct xdg_activation_token_v1_listener token_listener = {
+  token_done,
+};
+
+static void
 gdk_wayland_surface_focus (GdkSurface *surface,
                            guint32     timestamp)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  gchar *startup_id = NULL;
 
-  if (!impl->display_server.gtk_surface)
-    return;
+  startup_id = g_steal_pointer (&display_wayland->startup_notification_id);
 
-  if (timestamp == GDK_CURRENT_TIME)
+  if (display_wayland->xdg_activation)
     {
-      GdkWaylandDisplay *display_wayland =
-        GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+      GdkWaylandSeat *seat =
+        GDK_WAYLAND_SEAT (gdk_display_get_default_seat (display));
 
-      if (display_wayland->startup_notification_id)
+      /* If the focus request does not have a startup ID associated, get a
+       * new token to activate the window.
+       */
+      if (!startup_id)
         {
-          if (display_wayland->xdg_activation)
-            {
-              xdg_activation_v1_activate (display_wayland->xdg_activation,
-                                          display_wayland->startup_notification_id,
-                                          impl->display_server.wl_surface);
-            }
-          else if (display_wayland->gtk_shell_version >= 3)
-            {
-              gtk_surface1_request_focus (impl->display_server.gtk_surface,
-                                          display_wayland->startup_notification_id);
-            }
+          struct xdg_activation_token_v1 *token;
+          struct wl_event_queue *event_queue;
 
-          g_clear_pointer (&display_wayland->startup_notification_id, g_free);
+          event_queue = wl_display_create_queue (display_wayland->wl_display);
+
+          token = xdg_activation_v1_get_activation_token (display_wayland->xdg_activation);
+          wl_proxy_set_queue ((struct wl_proxy *) token, event_queue);
+
+          xdg_activation_token_v1_add_listener (token,
+                                                &token_listener,
+                                                &startup_id);
+          xdg_activation_token_v1_set_serial (token,
+                                              _gdk_wayland_seat_get_last_implicit_grab_serial (seat, NULL),
+                                              gdk_wayland_seat_get_wl_seat (GDK_SEAT (seat)));
+          xdg_activation_token_v1_set_surface (token,
+                                               gdk_wayland_surface_get_wl_surface (surface));
+          xdg_activation_token_v1_commit (token);
+
+          while (startup_id == NULL)
+            wl_display_dispatch_queue (display_wayland->wl_display, event_queue);
+
+          xdg_activation_token_v1_destroy (token);
+          wl_event_queue_destroy (event_queue);
         }
+
+      xdg_activation_v1_activate (display_wayland->xdg_activation,
+                                  startup_id,
+                                  impl->display_server.wl_surface);
     }
-  else
-    gtk_surface1_present (impl->display_server.gtk_surface, timestamp);
+  else if (impl->display_server.gtk_surface)
+    {
+      if (timestamp != GDK_CURRENT_TIME)
+        gtk_surface1_present (impl->display_server.gtk_surface, timestamp);
+      else if (startup_id && display_wayland->gtk_shell_version >= 3)
+        gtk_surface1_request_focus (impl->display_server.gtk_surface,
+                                    startup_id);
+    }
+
+  g_free (startup_id);
 }
 
 static void
