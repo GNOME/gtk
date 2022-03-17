@@ -2996,7 +2996,7 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   float x = offset->x + job->offset_x;
   float y = offset->y + job->offset_y;
-  GskGLGlyphLibrary *library = job->driver->glyphs;
+  GskGLGlyphLibrary *library = job->driver->glyphs_library;
   GskGLCommandBatch *batch;
   int x_position = 0;
   GskGLGlyphKey lookup;
