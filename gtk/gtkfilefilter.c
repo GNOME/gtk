@@ -283,7 +283,8 @@ parser_start_element (GtkBuildableParseContext  *context,
     }
 
   if (strcmp (element_name, "mime-types") == 0 ||
-      strcmp (element_name, "patterns") == 0)
+      strcmp (element_name, "patterns") == 0 ||
+      strcmp (element_name, "suffixes") == 0)
     {
       if (!_gtk_builder_check_parent (data->builder, context, "object", error))
         return;
@@ -422,7 +423,8 @@ gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
                                           gpointer      user_data)
 {
   if (strcmp (tagname, "mime-types") == 0 ||
-      strcmp (tagname, "patterns") == 0)
+      strcmp (tagname, "patterns") == 0 ||
+      strcmp (tagname, "suffixes") == 0)
     {
       SubParserData *data = (SubParserData*)user_data;
 
