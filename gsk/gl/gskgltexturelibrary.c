@@ -28,6 +28,8 @@
 #include "gskgltexturelibraryprivate.h"
 
 #define DEFAULT_MAX_FRAME_AGE 60
+#define DEFAULT_ATLAS_WIDTH 512
+#define DEFAULT_ATLAS_HEIGHT 512
 
 G_DEFINE_ABSTRACT_TYPE (GskGLTextureLibrary, gsk_gl_texture_library, G_TYPE_OBJECT)
 
@@ -119,6 +121,8 @@ static void
 gsk_gl_texture_library_init (GskGLTextureLibrary *self)
 {
   self->max_frame_age = DEFAULT_MAX_FRAME_AGE;
+  self->atlas_width = DEFAULT_ATLAS_WIDTH;
+  self->atlas_height = DEFAULT_ATLAS_HEIGHT;
 }
 
 void
@@ -312,13 +316,14 @@ gsk_gl_texture_atlas_initialize (GskGLDriver       *driver,
 }
 
 static void
-gsk_gl_texture_atlases_pack (GskGLDriver        *driver,
-                             int                 width,
-                             int                 height,
-                             GskGLTextureAtlas **out_atlas,
-                             int                *out_x,
-                             int                *out_y)
+gsk_gl_texture_atlases_pack (GskGLTextureLibrary *self,
+                             int                  width,
+                             int                  height,
+                             GskGLTextureAtlas  **out_atlas,
+                             int                 *out_x,
+                             int                 *out_y)
 {
+  GskGLDriver *driver = self->driver;
   GskGLTextureAtlas *atlas = NULL;
   int x, y;
 
@@ -335,7 +340,7 @@ gsk_gl_texture_atlases_pack (GskGLDriver        *driver,
   if (atlas == NULL)
     {
       /* No atlas has enough space, so create a new one... */
-      atlas = gsk_gl_driver_create_atlas (driver);
+      atlas = gsk_gl_driver_create_atlas (driver, self->atlas_width, self->atlas_height);
 
       gsk_gl_texture_atlas_initialize (driver, atlas);
 
@@ -396,7 +401,7 @@ gsk_gl_texture_library_pack (GskGLTextureLibrary *self,
       int packed_x;
       int packed_y;
 
-      gsk_gl_texture_atlases_pack (self->driver,
+      gsk_gl_texture_atlases_pack (self,
                                    padding + width + padding,
                                    padding + height + padding,
                                    &atlas,

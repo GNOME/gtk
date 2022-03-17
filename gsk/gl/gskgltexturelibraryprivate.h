@@ -50,7 +50,6 @@ typedef struct _GskGLTextureAtlas
    */
   int unused_pixels;
 
-  void *user_data;
 } GskGLTextureAtlas;
 
 typedef struct _GskGLTextureAtlasEntry
@@ -94,6 +93,8 @@ typedef struct _GskGLTextureLibrary
   GHashTable  *hash_table;
   guint        max_entry_size;
   guint        max_frame_age;
+  guint        atlas_width;
+  guint        atlas_height;
 } GskGLTextureLibrary;
 
 typedef struct _GskGLTextureLibraryClass
