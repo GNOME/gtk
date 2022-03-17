@@ -36,8 +36,13 @@ G_BEGIN_DECLS
 
 typedef struct _GskGLTextureAtlas
 {
+  /* Used by Glyph/Icons */
   struct stbrp_context context;
   struct stbrp_node *nodes;
+
+  /* Used by Glyphy */
+  int cursor_x;
+  int cursor_y;
 
   int width;
   int height;
@@ -48,7 +53,6 @@ typedef struct _GskGLTextureAtlas
    * But are now unused.
    */
   int unused_pixels;
-
 } GskGLTextureAtlas;
 
 typedef struct _GskGLTextureAtlasEntry
