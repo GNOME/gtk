@@ -58,6 +58,7 @@ gsk_private_sources = files([
   'gl/gskglcompiler.c',
   'gl/gskgldriver.c',
   'gl/gskglglyphlibrary.c',
+  'gl/gskglglyphylibrary.c',
   'gl/gskgliconlibrary.c',
   'gl/gskglprogram.c',
   'gl/gskglrenderjob.c',
