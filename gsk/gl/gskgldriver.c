@@ -44,9 +44,6 @@
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
 
-#define ATLAS_SIZE 512
-#define MAX_OLD_RATIO 0.5
-
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
 
 static guint
@@ -157,50 +154,6 @@ gsk_gl_driver_collect_unused_textures (GskGLDriver *self,
 }
 
 static void
-gsk_gl_texture_atlas_free (GskGLTextureAtlas *atlas)
-{
-  if (atlas->texture_id != 0)
-    {
-      glDeleteTextures (1, &atlas->texture_id);
-      atlas->texture_id = 0;
-    }
-
-  g_clear_pointer (&atlas->nodes, g_free);
-  g_slice_free (GskGLTextureAtlas, atlas);
-}
-
-GskGLTextureAtlas *
-gsk_gl_driver_create_atlas (GskGLDriver *self)
-{
-  GskGLTextureAtlas *atlas;
-
-  g_return_val_if_fail (GSK_IS_GL_DRIVER (self), NULL);
-
-  atlas = g_slice_new0 (GskGLTextureAtlas);
-  atlas->width = ATLAS_SIZE;
-  atlas->height = ATLAS_SIZE;
-  /* TODO: We might want to change the strategy about the amount of
-   *       nodes here? stb_rect_pack.h says width is optimal. */
-  atlas->nodes = g_malloc0_n (atlas->width, sizeof (struct stbrp_node));
-  stbrp_init_target (&atlas->context, atlas->width, atlas->height, atlas->nodes, atlas->width);
-  atlas->texture_id = gsk_gl_command_queue_create_texture (self->command_queue,
-                                                           atlas->width,
-                                                           atlas->height,
-                                                           GL_RGBA8,
-                                                           GL_LINEAR,
-                                                           GL_LINEAR);
-
-  gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
-                                      GL_TEXTURE, atlas->texture_id,
-                                      "Texture atlas %d",
-                                      atlas->texture_id);
-
-  g_ptr_array_add (self->atlases, atlas);
-
-  return atlas;
-}
-
-static void
 remove_program (gpointer data)
 {
   GskGLProgram *program = data;
@@ -226,6 +179,29 @@ gsk_gl_driver_shader_weak_cb (gpointer  data,
     g_hash_table_remove (self->shader_cache, where_object_was);
 }
 
+G_GNUC_NULL_TERMINATED static inline GBytes *
+join_sources (GBytes *first_bytes,
+              ...)
+{
+  GByteArray *byte_array = g_byte_array_new ();
+  GBytes *bytes = first_bytes;
+  va_list args;
+
+  va_start (args, first_bytes);
+  while (bytes != NULL)
+    {
+      gsize len;
+      const guint8 *data = g_bytes_get_data (bytes, &len);
+      if (len > 0)
+        g_byte_array_append (byte_array, data, len);
+      g_bytes_unref (bytes);
+      bytes = va_arg (args, GBytes *);
+    }
+  va_end (args);
+
+  return g_byte_array_free_to_bytes (byte_array);
+}
+
 static void
 gsk_gl_driver_dispose (GObject *object)
 {
@@ -235,6 +211,10 @@ gsk_gl_driver_dispose (GObject *object)
   g_assert (self->in_frame == FALSE);
 
 #define GSK_GL_NO_UNIFORMS
+#define GSK_GL_SHADER_RESOURCE(name)
+#define GSK_GL_SHADER_STRING(str)
+#define GSK_GL_SHADER_SINGLE(name)
+#define GSK_GL_SHADER_JOINED(kind, ...)
 #define GSK_GL_ADD_UNIFORM(pos, KEY, name)
 #define GSK_GL_DEFINE_PROGRAM(name, resource, uniforms) \
   GSK_GL_DELETE_PROGRAM(name);                          \
@@ -248,6 +228,10 @@ gsk_gl_driver_dispose (GObject *object)
   } G_STMT_END;
 # include "gskglprograms.defs"
 #undef GSK_GL_NO_UNIFORMS
+#undef GSK_GL_SHADER_RESOURCE
+#undef GSK_GL_SHADER_STRING
+#undef GSK_GL_SHADER_SINGLE
+#undef GSK_GL_SHADER_JOINED
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_DEFINE_PROGRAM
 
@@ -289,11 +273,10 @@ gsk_gl_driver_dispose (GObject *object)
   g_assert (!self->texture_id_to_key || g_hash_table_size (self->texture_id_to_key) == 0);
   g_assert (!self->key_to_texture_id|| g_hash_table_size (self->key_to_texture_id) == 0);
 
-  g_clear_object (&self->glyphs);
-  g_clear_object (&self->icons);
-  g_clear_object (&self->shadows);
+  g_clear_object (&self->glyphs_library);
+  g_clear_object (&self->icons_library);
+  g_clear_object (&self->shadows_library);
 
-  g_clear_pointer (&self->atlases, g_ptr_array_unref);
   g_clear_pointer (&self->autorelease_framebuffers, g_array_unref);
   g_clear_pointer (&self->key_to_texture_id, g_hash_table_unref);
   g_clear_pointer (&self->textures, g_hash_table_unref);
@@ -330,7 +313,6 @@ gsk_gl_driver_init (GskGLDriver *self)
   self->shader_cache = g_hash_table_new_full (NULL, NULL, NULL, remove_program);
   self->texture_pool = g_array_new (FALSE, FALSE, sizeof (guint));
   self->render_targets = g_ptr_array_new ();
-  self->atlases = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_gl_texture_atlas_free);
 }
 
 static gboolean
@@ -348,14 +330,14 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
 
   /* Setup preambles that are shared by all shaders */
   gsk_gl_compiler_set_preamble_from_resource (compiler,
-                                               GSK_GL_COMPILER_ALL,
-                                               "/org/gtk/libgsk/gl/preamble.glsl");
+                                              GSK_GL_COMPILER_ALL,
+                                              "/org/gtk/libgsk/gl/preamble.glsl");
   gsk_gl_compiler_set_preamble_from_resource (compiler,
-                                               GSK_GL_COMPILER_VERTEX,
-                                               "/org/gtk/libgsk/gl/preamble.vs.glsl");
+                                              GSK_GL_COMPILER_VERTEX,
+                                              "/org/gtk/libgsk/gl/preamble.vs.glsl");
   gsk_gl_compiler_set_preamble_from_resource (compiler,
-                                               GSK_GL_COMPILER_FRAGMENT,
-                                               "/org/gtk/libgsk/gl/preamble.fs.glsl");
+                                              GSK_GL_COMPILER_FRAGMENT,
+                                              "/org/gtk/libgsk/gl/preamble.fs.glsl");
 
   /* Setup attributes that are provided via VBO */
   gsk_gl_compiler_bind_attribute (compiler, "aPosition", 0);
@@ -365,10 +347,28 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
 
   /* Use XMacros to register all of our programs and their uniforms */
 #define GSK_GL_NO_UNIFORMS
+#define GSK_GL_SHADER_RESOURCE(name)                                                            \
+  g_bytes_ref(g_resources_lookup_data("/org/gtk/libgsk/gl/" name, 0, NULL))
+#define GSK_GL_SHADER_STRING(str)                                                               \
+  g_bytes_new_static(str, strlen(str))
+#define GSK_GL_SHADER_SINGLE(bytes)                                                             \
+  G_STMT_START {                                                                                \
+    GBytes *b = bytes;                                                                          \
+    gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_ALL, b);                              \
+    g_bytes_unref (b);                                                                          \
+  } G_STMT_END;
+#define GSK_GL_SHADER_JOINED(kind, ...)                                                         \
+  G_STMT_START {                                                                                \
+    GBytes *bytes = join_sources(__VA_ARGS__);                                                  \
+    gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_##kind, bytes);                       \
+    g_bytes_unref (bytes);                                                                      \
+  } G_STMT_END;
 #define GSK_GL_ADD_UNIFORM(pos, KEY, name)                                                      \
   gsk_gl_program_add_uniform (program, #name, UNIFORM_##KEY);
-#define GSK_GL_DEFINE_PROGRAM(name, resource, uniforms)                                         \
-  gsk_gl_compiler_set_source_from_resource (compiler, GSK_GL_COMPILER_ALL, resource);           \
+#define GSK_GL_DEFINE_PROGRAM(name, sources, uniforms)                                          \
+  gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_VERTEX, NULL);                          \
+  gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_FRAGMENT, NULL);                        \
+  sources                                                                                       \
   GSK_GL_COMPILE_PROGRAM(name ## _no_clip, uniforms, "#define NO_CLIP 1\n");                    \
   GSK_GL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");                \
   GSK_GL_COMPILE_PROGRAM(name, uniforms, "");
@@ -401,6 +401,11 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
 #undef GSK_GL_DEFINE_PROGRAM_CLIP
 #undef GSK_GL_DEFINE_PROGRAM
 #undef GSK_GL_ADD_UNIFORM
+#undef GSK_GL_SHADER_SINGLE
+#undef GSK_GL_SHADER_JOINED
+#undef GSK_GL_SHADER_RESOURCE
+#undef GSK_GL_SHADER_STRING
+#undef GSK_GL_NO_UNIFORMS
 
   ret = TRUE;
 
@@ -456,9 +461,9 @@ gsk_gl_driver_new (GskGLCommandQueue  *command_queue,
       return NULL;
     }
 
-  self->glyphs = gsk_gl_glyph_library_new (self);
-  self->icons = gsk_gl_icon_library_new (self);
-  self->shadows = gsk_gl_shadow_library_new (self);
+  self->glyphs_library = gsk_gl_glyph_library_new (self);
+  self->icons_library = gsk_gl_icon_library_new (self);
+  self->shadows_library = gsk_gl_shadow_library_new (self);
 
   gdk_profiler_end_mark (before, "create GskGLDriver", NULL);
 
@@ -518,37 +523,6 @@ failure:
   return g_steal_pointer (&driver);
 }
 
-static GPtrArray *
-gsk_gl_driver_compact_atlases (GskGLDriver *self)
-{
-  GPtrArray *removed = NULL;
-
-  g_assert (GSK_IS_GL_DRIVER (self));
-
-  for (guint i = self->atlases->len; i > 0; i--)
-    {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i - 1);
-
-      if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
-        {
-          GSK_NOTE (GLYPH_CACHE,
-                    g_message ("Dropping atlas %d (%g.2%% old)", i,
-                               100.0 * gsk_gl_texture_atlas_get_unused_ratio (atlas)));
-          if (removed == NULL)
-            removed = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_gl_texture_atlas_free);
-          g_ptr_array_add (removed, g_ptr_array_steal_index (self->atlases, i - 1));
-        }
-    }
-
-  GSK_NOTE (GLYPH_CACHE, {
-    static guint timestamp;
-    if (timestamp++ % 60 == 0)
-      g_message ("%d atlases", self->atlases->len);
-  });
-
-  return removed;
-}
-
 /**
  * gsk_gl_driver_begin_frame:
  * @self: a `GskGLDriver`
@@ -565,7 +539,6 @@ gsk_gl_driver_begin_frame (GskGLDriver       *self,
                            GskGLCommandQueue *command_queue)
 {
   gint64 last_frame_id;
-  GPtrArray *removed;
 
   g_return_if_fail (GSK_IS_GL_DRIVER (self));
   g_return_if_fail (GSK_IS_GL_COMMAND_QUEUE (command_queue));
@@ -580,19 +553,14 @@ gsk_gl_driver_begin_frame (GskGLDriver       *self,
 
   gsk_gl_command_queue_begin_frame (self->command_queue);
 
-  /* Compact atlases with too many freed pixels */
-  removed = gsk_gl_driver_compact_atlases (self);
-
   /* Mark unused pixel regions of the atlases */
-  gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->icons),
-                                       self->current_frame_id,
-                                       removed);
-  gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->glyphs),
-                                       self->current_frame_id,
-                                       removed);
+  gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->icons_library),
+                                      self->current_frame_id);
+  gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->glyphs_library),
+                                      self->current_frame_id);
 
   /* Cleanup old shadows */
-  gsk_gl_shadow_library_begin_frame (self->shadows);
+  gsk_gl_shadow_library_begin_frame (self->shadows_library);
 
   /* Remove all textures that are from a previous frame or are no
    * longer used by linked GdkTexture. We do this at the beginning
@@ -600,9 +568,6 @@ gsk_gl_driver_begin_frame (GskGLDriver       *self,
    * we block on any resources while delivering our frames.
    */
   gsk_gl_driver_collect_unused_textures (self, last_frame_id - 1);
-
-  /* Now free atlas textures */
-  g_clear_pointer (&removed, g_ptr_array_unref);
 }
 
 /**
@@ -1182,14 +1147,23 @@ void
 gsk_gl_driver_save_atlases_to_png (GskGLDriver *self,
                                    const char  *directory)
 {
+  GPtrArray *atlases;
+
   g_return_if_fail (GSK_IS_GL_DRIVER (self));
 
   if (directory == NULL)
     directory = ".";
 
-  for (guint i = 0; i < self->atlases->len; i++)
+#define copy_atlases(dst, library) \
+  g_ptr_array_extend(dst, GSK_GL_TEXTURE_LIBRARY(library)->atlases, NULL, NULL)
+  atlases = g_ptr_array_new ();
+  copy_atlases (atlases, self->glyphs_library);
+  copy_atlases (atlases, self->icons_library);
+#undef copy_atlases
+
+  for (guint i = 0; i < atlases->len; i++)
     {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
+      GskGLTextureAtlas *atlas = g_ptr_array_index (atlases, i);
       char *filename = g_strdup_printf ("%s%sframe-%d-atlas-%d.png",
                                         directory,
                                         G_DIR_SEPARATOR_S,
@@ -1198,6 +1172,8 @@ gsk_gl_driver_save_atlases_to_png (GskGLDriver *self,
       write_atlas_to_png (self, atlas, filename);
       g_free (filename);
     }
+
+  g_ptr_array_unref (atlases);
 }
 #endif
 

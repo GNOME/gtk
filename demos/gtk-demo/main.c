@@ -512,7 +512,7 @@ load_file (const char *demoname,
 
   info_buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_create_tag (info_buffer, "title",
-                              "font", "Sans 18",
+                              "size", 18 * 1024,
                               "pixels-below-lines", 10,
                               NULL);
 

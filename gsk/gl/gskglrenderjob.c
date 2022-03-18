@@ -2512,7 +2512,9 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
       scaled_outline.corner[i].height *= scale_y;
     }
 
-  cached_tid = gsk_gl_shadow_library_lookup (job->driver->shadows, &scaled_outline, blur_radius);
+  cached_tid = gsk_gl_shadow_library_lookup (job->driver->shadows_library,
+                                             &scaled_outline,
+                                             blur_radius);
 
   if (cached_tid == 0)
     {
@@ -2574,7 +2576,7 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
                                            blur_radius * scale_x,
                                            blur_radius * scale_y);
 
-      gsk_gl_shadow_library_insert (job->driver->shadows,
+      gsk_gl_shadow_library_insert (job->driver->shadows_library,
                                     &scaled_outline,
                                     blur_radius,
                                     blurred_texture_id);
@@ -2996,7 +2998,7 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
   guint num_glyphs = gsk_text_node_get_num_glyphs (node);
   float x = offset->x + job->offset_x;
   float y = offset->y + job->offset_y;
-  GskGLGlyphLibrary *library = job->driver->glyphs;
+  GskGLGlyphLibrary *library = job->driver->glyphs_library;
   GskGLCommandBatch *batch;
   int x_position = 0;
   GskGLGlyphKey lookup;
@@ -3499,14 +3501,14 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
                                   GdkTexture           *texture,
                                   GskGLRenderOffscreen *offscreen)
 {
-  if (gsk_gl_texture_library_can_cache ((GskGLTextureLibrary *)job->driver->icons,
+  if (gsk_gl_texture_library_can_cache ((GskGLTextureLibrary *)job->driver->icons_library,
                                         texture->width,
                                         texture->height) &&
       !GDK_IS_GL_TEXTURE (texture))
     {
       const GskGLIconData *icon_data;
 
-      gsk_gl_icon_library_lookup_or_add (job->driver->icons, texture, &icon_data);
+      gsk_gl_icon_library_lookup_or_add (job->driver->icons_library, texture, &icon_data);
       offscreen->texture_id = GSK_GL_TEXTURE_ATLAS_ENTRY_TEXTURE (icon_data);
       memcpy (&offscreen->area, &icon_data->entry.area, sizeof offscreen->area);
     }

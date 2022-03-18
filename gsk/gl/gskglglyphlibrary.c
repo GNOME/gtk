@@ -84,14 +84,63 @@ gsk_gl_glyph_value_free (gpointer data)
 }
 
 static void
-gsk_gl_glyph_library_begin_frame (GskGLTextureLibrary *library,
-                                  gint64               frame_id,
-                                  GPtrArray           *removed_atlases)
+gsk_gl_glyph_library_clear_cache (GskGLTextureLibrary *library)
 {
   GskGLGlyphLibrary *self = (GskGLGlyphLibrary *)library;
 
+  g_assert (GSK_IS_GL_GLYPH_LIBRARY (self));
+
   memset (self->front, 0, sizeof self->front);
 }
+
+static void
+gsk_gl_glyph_library_init_atlas (GskGLTextureLibrary *self,
+                                 GskGLTextureAtlas   *atlas)
+{
+  gboolean packed G_GNUC_UNUSED;
+  int x, y;
+  guint gl_format;
+  guint gl_type;
+  guint8 pixel_data[4 * 3 * 3];
+
+  g_assert (GSK_IS_GL_GLYPH_LIBRARY (self));
+  g_assert (atlas != NULL);
+
+  /* Insert a single pixel at 0,0 for use in coloring */
+
+  gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
+                                          "Initializing Atlas");
+
+  packed = gsk_gl_texture_library_allocate (self, atlas, 3, 3, &x, &y);
+  g_assert (packed);
+  g_assert (x == 0 && y == 0);
+
+  memset (pixel_data, 255, sizeof pixel_data);
+
+  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
+    {
+      gl_format = GL_RGBA;
+      gl_type = GL_UNSIGNED_BYTE;
+    }
+  else
+    {
+      gl_format = GL_BGRA;
+      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+    }
+
+  glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
+
+  glTexSubImage2D (GL_TEXTURE_2D, 0,
+                   0, 0,
+                   3, 3,
+                   gl_format, gl_type,
+                   pixel_data);
+
+  gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
+
+  self->driver->command_queue->n_uploads++;
+}
+
 
 static void
 gsk_gl_glyph_library_finalize (GObject *object)
@@ -111,7 +160,8 @@ gsk_gl_glyph_library_class_init (GskGLGlyphLibraryClass *klass)
 
   object_class->finalize = gsk_gl_glyph_library_finalize;
 
-  library_class->begin_frame = gsk_gl_glyph_library_begin_frame;
+  library_class->clear_cache = gsk_gl_glyph_library_clear_cache;
+  library_class->init_atlas = gsk_gl_glyph_library_init_atlas;
 }
 
 static void

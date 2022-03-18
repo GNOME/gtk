@@ -100,16 +100,14 @@ struct _GskGLDriver
   GskGLCommandQueue *shared_command_queue;
   GskGLCommandQueue *command_queue;
 
-  GskGLGlyphLibrary *glyphs;
-  GskGLIconLibrary *icons;
-  GskGLShadowLibrary *shadows;
+  GskGLGlyphLibrary *glyphs_library;
+  GskGLIconLibrary *icons_library;
+  GskGLShadowLibrary *shadows_library;
 
   GArray *texture_pool;
   GHashTable *textures;
   GHashTable *key_to_texture_id;
   GHashTable *texture_id_to_key;
-
-  GPtrArray *atlases;
 
   GHashTable *shader_cache;
 
@@ -184,7 +182,6 @@ void                gsk_gl_driver_add_texture_slices     (GskGLDriver         *s
 GskGLProgram      * gsk_gl_driver_lookup_shader          (GskGLDriver         *self,
                                                           GskGLShader         *shader,
                                                           GError             **error);
-GskGLTextureAtlas * gsk_gl_driver_create_atlas           (GskGLDriver         *self);
 
 #ifdef G_ENABLE_DEBUG
 void                gsk_gl_driver_save_atlases_to_png    (GskGLDriver         *self,
