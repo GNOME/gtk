@@ -29,9 +29,9 @@
 
 struct _GskGLShadowLibrary
 {
-  GObject        parent_instance;
+  GObject      parent_instance;
   GskGLDriver *driver;
-  GArray        *shadows;
+  GArray      *shadows;
 };
 
 typedef struct _Shadow
