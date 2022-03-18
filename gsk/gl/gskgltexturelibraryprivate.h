@@ -90,6 +90,7 @@ typedef struct _GskGLTextureLibrary
 {
   GObject      parent_instance;
   GskGLDriver *driver;
+  GPtrArray   *atlases;
   GHashTable  *hash_table;
   guint        max_entry_size;
   guint        max_frame_age;
