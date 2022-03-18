@@ -44,8 +44,6 @@
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
 
-#define MAX_OLD_RATIO 0.5
-
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
 
 static guint
@@ -153,54 +151,6 @@ gsk_gl_driver_collect_unused_textures (GskGLDriver *self,
   collected = old_size - g_hash_table_size (self->textures);
 
   return collected;
-}
-
-static void
-gsk_gl_texture_atlas_free (GskGLTextureAtlas *atlas)
-{
-  if (atlas->texture_id != 0)
-    {
-      glDeleteTextures (1, &atlas->texture_id);
-      atlas->texture_id = 0;
-    }
-
-  g_clear_pointer (&atlas->nodes, g_free);
-  g_slice_free (GskGLTextureAtlas, atlas);
-}
-
-GskGLTextureAtlas *
-gsk_gl_driver_create_atlas (GskGLDriver *self,
-                            guint        width,
-                            guint        height)
-{
-  GskGLTextureAtlas *atlas;
-
-  g_return_val_if_fail (GSK_IS_GL_DRIVER (self), NULL);
-  g_return_val_if_fail (width > 0, NULL);
-  g_return_val_if_fail (height > 0, NULL);
-
-  atlas = g_slice_new0 (GskGLTextureAtlas);
-  atlas->width = width;
-  atlas->height = height;
-  /* TODO: We might want to change the strategy about the amount of
-   *       nodes here? stb_rect_pack.h says width is optimal. */
-  atlas->nodes = g_malloc0_n (atlas->width, sizeof (struct stbrp_node));
-  stbrp_init_target (&atlas->context, atlas->width, atlas->height, atlas->nodes, atlas->width);
-  atlas->texture_id = gsk_gl_command_queue_create_texture (self->command_queue,
-                                                           atlas->width,
-                                                           atlas->height,
-                                                           GL_RGBA8,
-                                                           GL_LINEAR,
-                                                           GL_LINEAR);
-
-  gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
-                                      GL_TEXTURE, atlas->texture_id,
-                                      "Texture atlas %d",
-                                      atlas->texture_id);
-
-  g_ptr_array_add (self->atlases, atlas);
-
-  return atlas;
 }
 
 static void
@@ -327,7 +277,6 @@ gsk_gl_driver_dispose (GObject *object)
   g_clear_object (&self->icons);
   g_clear_object (&self->shadows);
 
-  g_clear_pointer (&self->atlases, g_ptr_array_unref);
   g_clear_pointer (&self->autorelease_framebuffers, g_array_unref);
   g_clear_pointer (&self->key_to_texture_id, g_hash_table_unref);
   g_clear_pointer (&self->textures, g_hash_table_unref);
@@ -364,7 +313,6 @@ gsk_gl_driver_init (GskGLDriver *self)
   self->shader_cache = g_hash_table_new_full (NULL, NULL, NULL, remove_program);
   self->texture_pool = g_array_new (FALSE, FALSE, sizeof (guint));
   self->render_targets = g_ptr_array_new ();
-  self->atlases = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_gl_texture_atlas_free);
 }
 
 static gboolean
@@ -575,37 +523,6 @@ failure:
   return g_steal_pointer (&driver);
 }
 
-static GPtrArray *
-gsk_gl_driver_compact_atlases (GskGLDriver *self)
-{
-  GPtrArray *removed = NULL;
-
-  g_assert (GSK_IS_GL_DRIVER (self));
-
-  for (guint i = self->atlases->len; i > 0; i--)
-    {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i - 1);
-
-      if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
-        {
-          GSK_NOTE (GLYPH_CACHE,
-                    g_message ("Dropping atlas %d (%g.2%% old)", i,
-                               100.0 * gsk_gl_texture_atlas_get_unused_ratio (atlas)));
-          if (removed == NULL)
-            removed = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_gl_texture_atlas_free);
-          g_ptr_array_add (removed, g_ptr_array_steal_index (self->atlases, i - 1));
-        }
-    }
-
-  GSK_NOTE (GLYPH_CACHE, {
-    static guint timestamp;
-    if (timestamp++ % 60 == 0)
-      g_message ("%d atlases", self->atlases->len);
-  });
-
-  return removed;
-}
-
 /**
  * gsk_gl_driver_begin_frame:
  * @self: a `GskGLDriver`
@@ -622,7 +539,6 @@ gsk_gl_driver_begin_frame (GskGLDriver       *self,
                            GskGLCommandQueue *command_queue)
 {
   gint64 last_frame_id;
-  GPtrArray *removed;
 
   g_return_if_fail (GSK_IS_GL_DRIVER (self));
   g_return_if_fail (GSK_IS_GL_COMMAND_QUEUE (command_queue));
@@ -637,16 +553,11 @@ gsk_gl_driver_begin_frame (GskGLDriver       *self,
 
   gsk_gl_command_queue_begin_frame (self->command_queue);
 
-  /* Compact atlases with too many freed pixels */
-  removed = gsk_gl_driver_compact_atlases (self);
-
   /* Mark unused pixel regions of the atlases */
   gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->icons),
-                                      self->current_frame_id,
-                                      removed);
+                                      self->current_frame_id);
   gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->glyphs_library),
-                                      self->current_frame_id,
-                                      removed);
+                                      self->current_frame_id);
 
   /* Cleanup old shadows */
   gsk_gl_shadow_library_begin_frame (self->shadows);
@@ -657,9 +568,6 @@ gsk_gl_driver_begin_frame (GskGLDriver       *self,
    * we block on any resources while delivering our frames.
    */
   gsk_gl_driver_collect_unused_textures (self, last_frame_id - 1);
-
-  /* Now free atlas textures */
-  g_clear_pointer (&removed, g_ptr_array_unref);
 }
 
 /**
@@ -1239,14 +1147,23 @@ void
 gsk_gl_driver_save_atlases_to_png (GskGLDriver *self,
                                    const char  *directory)
 {
+  GPtrArray *atlases;
+
   g_return_if_fail (GSK_IS_GL_DRIVER (self));
 
   if (directory == NULL)
     directory = ".";
 
-  for (guint i = 0; i < self->atlases->len; i++)
+#define copy_atlases(dst, library) \
+  g_ptr_array_extend(dst, GSK_GL_TEXTURE_LIBRARY(library)->atlases, NULL, NULL)
+  atlases = g_ptr_array_new ();
+  copy_atlases (atlases, self->glyphs_library);
+  copy_atlases (atlases, self->icons);
+#undef copy_atlases
+
+  for (guint i = 0; i < atlases->len; i++)
     {
-      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i);
+      GskGLTextureAtlas *atlas = g_ptr_array_index (atlases, i);
       char *filename = g_strdup_printf ("%s%sframe-%d-atlas-%d.png",
                                         directory,
                                         G_DIR_SEPARATOR_S,
@@ -1255,6 +1172,8 @@ gsk_gl_driver_save_atlases_to_png (GskGLDriver *self,
       write_atlas_to_png (self, atlas, filename);
       g_free (filename);
     }
+
+  g_ptr_array_unref (atlases);
 }
 #endif
 

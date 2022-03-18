@@ -102,31 +102,53 @@ typedef struct _GskGLTextureLibraryClass
 {
   GObjectClass parent_class;
 
-  void (*begin_frame) (GskGLTextureLibrary *library,
-                       gint64               frame_id,
-                       GPtrArray           *removed_atlases);
-  void (*clear_cache) (GskGLTextureLibrary *library);
+  void     (*begin_frame) (GskGLTextureLibrary *library,
+                           gint64               frame_id);
+  gboolean (*compact)     (GskGLTextureLibrary *library,
+                           gint64               frame_id);
+  void     (*clear_cache) (GskGLTextureLibrary *library);
+  void     (*init_atlas)  (GskGLTextureLibrary *library,
+                           GskGLTextureAtlas   *atlas);
+  gboolean (*allocate)    (GskGLTextureLibrary *library,
+                           GskGLTextureAtlas   *atlas,
+                           int                  width,
+                           int                  height,
+                           int                 *out_x,
+                           int                 *out_y);
 } GskGLTextureLibraryClass;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GskGLTextureLibrary, g_object_unref)
 
-GType    gsk_gl_texture_library_get_type    (void) G_GNUC_CONST;
-void     gsk_gl_texture_library_set_funcs   (GskGLTextureLibrary *self,
-                                             GHashFunc            hash_func,
-                                             GEqualFunc           equal_func,
-                                             GDestroyNotify       key_destroy,
-                                             GDestroyNotify       value_destroy);
-void     gsk_gl_texture_library_begin_frame (GskGLTextureLibrary *self,
-                                             gint64               frame_id,
-                                             GPtrArray           *removed_atlases);
-gpointer gsk_gl_texture_library_pack        (GskGLTextureLibrary *self,
-                                             gpointer             key,
-                                             gsize                valuelen,
-                                             guint                width,
-                                             guint                height,
-                                             int                  padding,
-                                             guint               *out_packed_x,
-                                             guint               *out_packed_y);
+GType              gsk_gl_texture_library_get_type       (void) G_GNUC_CONST;
+gboolean           gsk_gl_texture_library_compact        (GskGLTextureLibrary *self,
+                                                          gint64               frame_id);
+void               gsk_gl_texture_library_clear_cache    (GskGLTextureLibrary *self);
+void               gsk_gl_texture_library_reset          (GskGLTextureLibrary *self);
+void               gsk_gl_texture_library_set_atlas_size (GskGLTextureLibrary *self,
+                                                          int                  width,
+                                                          int                  height);
+GskGLTextureAtlas *gsk_gl_texture_library_acquire_atlas  (GskGLTextureLibrary *self);
+void               gsk_gl_texture_library_set_funcs      (GskGLTextureLibrary *self,
+                                                          GHashFunc            hash_func,
+                                                          GEqualFunc           equal_func,
+                                                          GDestroyNotify       key_destroy,
+                                                          GDestroyNotify       value_destroy);
+void               gsk_gl_texture_library_begin_frame    (GskGLTextureLibrary *self,
+                                                          gint64               frame_id);
+gboolean           gsk_gl_texture_library_allocate       (GskGLTextureLibrary *self,
+                                                          GskGLTextureAtlas   *atlas,
+                                                          int                  width,
+                                                          int                  height,
+                                                          int                 *out_x,
+                                                          int                 *out_y);
+gpointer           gsk_gl_texture_library_pack           (GskGLTextureLibrary *self,
+                                                          gpointer             key,
+                                                          gsize                valuelen,
+                                                          guint                width,
+                                                          guint                height,
+                                                          int                  padding,
+                                                          guint               *out_packed_x,
+                                                          guint               *out_packed_y);
 
 static inline void
 gsk_gl_texture_atlas_mark_unused (GskGLTextureAtlas *self,
