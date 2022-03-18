@@ -54,6 +54,7 @@ gsk_gl_texture_library_dispose (GObject *object)
 {
   GskGLTextureLibrary *self = (GskGLTextureLibrary *)object;
 
+  g_clear_pointer (&self->atlases, g_ptr_array_unref);
   g_clear_object (&self->driver);
 
   G_OBJECT_CLASS (gsk_gl_texture_library_parent_class)->dispose (object);
@@ -123,6 +124,7 @@ gsk_gl_texture_library_init (GskGLTextureLibrary *self)
   self->max_frame_age = DEFAULT_MAX_FRAME_AGE;
   self->atlas_width = DEFAULT_ATLAS_WIDTH;
   self->atlas_height = DEFAULT_ATLAS_HEIGHT;
+  self->atlases = g_ptr_array_new ();
 }
 
 void
@@ -156,6 +158,10 @@ gsk_gl_texture_library_begin_frame (GskGLTextureLibrary *self,
     {
       GskGLTextureAtlasEntry *entry;
       guint dropped = 0;
+
+      /* Remove cached copy of purged atlases */
+      for (guint i = 0; i < removed_atlases->len; i++)
+        g_ptr_array_remove (self->atlases, g_ptr_array_index (removed_atlases, i));
 
       g_hash_table_iter_init (&iter, self->hash_table);
       while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&entry))
@@ -271,8 +277,8 @@ gsk_gl_texture_atlas_pack (GskGLTextureAtlas *self,
 }
 
 static void
-gsk_gl_texture_atlas_initialize (GskGLDriver       *driver,
-                                 GskGLTextureAtlas *atlas)
+gsk_gl_texture_library_init_atlas (GskGLTextureLibrary *self,
+                                   GskGLTextureAtlas   *atlas)
 {
   /* Insert a single pixel at 0,0 for use in coloring */
 
@@ -281,6 +287,8 @@ gsk_gl_texture_atlas_initialize (GskGLDriver       *driver,
   guint gl_format;
   guint gl_type;
   guint8 pixel_data[4 * 3 * 3];
+
+  g_ptr_array_add (self->atlases, atlas);
 
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Initializing Atlas");
@@ -312,7 +320,7 @@ gsk_gl_texture_atlas_initialize (GskGLDriver       *driver,
 
   gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
 
-  driver->command_queue->n_uploads++;
+  self->driver->command_queue->n_uploads++;
 }
 
 static void
@@ -323,13 +331,12 @@ gsk_gl_texture_atlases_pack (GskGLTextureLibrary *self,
                              int                 *out_x,
                              int                 *out_y)
 {
-  GskGLDriver *driver = self->driver;
   GskGLTextureAtlas *atlas = NULL;
   int x, y;
 
-  for (guint i = 0; i < driver->atlases->len; i++)
+  for (guint i = 0; i < self->atlases->len; i++)
     {
-      atlas = g_ptr_array_index (driver->atlases, i);
+      atlas = g_ptr_array_index (self->atlases, i);
 
       if (gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y))
         break;
@@ -340,9 +347,8 @@ gsk_gl_texture_atlases_pack (GskGLTextureLibrary *self,
   if (atlas == NULL)
     {
       /* No atlas has enough space, so create a new one... */
-      atlas = gsk_gl_driver_create_atlas (driver, self->atlas_width, self->atlas_height);
-
-      gsk_gl_texture_atlas_initialize (driver, atlas);
+      atlas = gsk_gl_driver_create_atlas (self->driver, self->atlas_width, self->atlas_height);
+      gsk_gl_texture_library_init_atlas (self, atlas);
 
       /* Pack it onto that one, which surely has enough space... */
       if (!gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y))
