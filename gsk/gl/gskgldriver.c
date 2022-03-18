@@ -274,8 +274,8 @@ gsk_gl_driver_dispose (GObject *object)
   g_assert (!self->key_to_texture_id|| g_hash_table_size (self->key_to_texture_id) == 0);
 
   g_clear_object (&self->glyphs_library);
-  g_clear_object (&self->icons);
-  g_clear_object (&self->shadows);
+  g_clear_object (&self->icons_library);
+  g_clear_object (&self->shadows_library);
 
   g_clear_pointer (&self->autorelease_framebuffers, g_array_unref);
   g_clear_pointer (&self->key_to_texture_id, g_hash_table_unref);
@@ -462,8 +462,8 @@ gsk_gl_driver_new (GskGLCommandQueue  *command_queue,
     }
 
   self->glyphs_library = gsk_gl_glyph_library_new (self);
-  self->icons = gsk_gl_icon_library_new (self);
-  self->shadows = gsk_gl_shadow_library_new (self);
+  self->icons_library = gsk_gl_icon_library_new (self);
+  self->shadows_library = gsk_gl_shadow_library_new (self);
 
   gdk_profiler_end_mark (before, "create GskGLDriver", NULL);
 
@@ -554,13 +554,13 @@ gsk_gl_driver_begin_frame (GskGLDriver       *self,
   gsk_gl_command_queue_begin_frame (self->command_queue);
 
   /* Mark unused pixel regions of the atlases */
-  gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->icons),
+  gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->icons_library),
                                       self->current_frame_id);
   gsk_gl_texture_library_begin_frame (GSK_GL_TEXTURE_LIBRARY (self->glyphs_library),
                                       self->current_frame_id);
 
   /* Cleanup old shadows */
-  gsk_gl_shadow_library_begin_frame (self->shadows);
+  gsk_gl_shadow_library_begin_frame (self->shadows_library);
 
   /* Remove all textures that are from a previous frame or are no
    * longer used by linked GdkTexture. We do this at the beginning
@@ -1158,7 +1158,7 @@ gsk_gl_driver_save_atlases_to_png (GskGLDriver *self,
   g_ptr_array_extend(dst, GSK_GL_TEXTURE_LIBRARY(library)->atlases, NULL, NULL)
   atlases = g_ptr_array_new ();
   copy_atlases (atlases, self->glyphs_library);
-  copy_atlases (atlases, self->icons);
+  copy_atlases (atlases, self->icons_library);
 #undef copy_atlases
 
   for (guint i = 0; i < atlases->len; i++)
