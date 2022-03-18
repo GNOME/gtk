@@ -670,6 +670,7 @@ endif
 if quartz_enabled
   pc_gdk_extra_libs += ['-Wl,-framework,Cocoa', '-Wl,-framework,Carbon', '-Wl,-framework,CoreGraphics']
   backend_immodules += ['quartz']
+  cdata.set('QUARTZ_RELOCATION', 1)
 endif
 
 extra_demo_ldflags = []
