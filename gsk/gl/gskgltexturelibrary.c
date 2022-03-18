@@ -30,6 +30,7 @@
 #define DEFAULT_MAX_FRAME_AGE 60
 #define DEFAULT_ATLAS_WIDTH 512
 #define DEFAULT_ATLAS_HEIGHT 512
+#define MAX_OLD_RATIO 0.5
 
 G_DEFINE_ABSTRACT_TYPE (GskGLTextureLibrary, gsk_gl_texture_library, G_TYPE_OBJECT)
 
@@ -40,6 +41,143 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+gsk_gl_texture_atlas_free (GskGLTextureAtlas *atlas)
+{
+  if (atlas->texture_id != 0)
+    {
+      glDeleteTextures (1, &atlas->texture_id);
+      atlas->texture_id = 0;
+    }
+
+  g_clear_pointer (&atlas->nodes, g_free);
+  g_slice_free (GskGLTextureAtlas, atlas);
+}
+
+static gboolean
+gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
+                                     gint64               frame_id)
+{
+  GPtrArray *removed = NULL;
+  gboolean ret = FALSE;
+  gboolean periodic_scan;
+
+  g_assert (GSK_IS_GL_TEXTURE_LIBRARY (self));
+
+  periodic_scan = (self->max_frame_age > 0 &&
+                   (frame_id % self->max_frame_age) == 0);
+
+  for (guint i = self->atlases->len; i > 0; i--)
+    {
+      GskGLTextureAtlas *atlas = g_ptr_array_index (self->atlases, i - 1);
+
+      if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
+        {
+          GSK_NOTE (GLYPH_CACHE,
+                    g_message ("Dropping atlas %d (%g.2%% old)", i,
+                               100.0 * gsk_gl_texture_atlas_get_unused_ratio (atlas)));
+          if (removed == NULL)
+            removed = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_gl_texture_atlas_free);
+          g_ptr_array_add (removed, g_ptr_array_steal_index (self->atlases, i - 1));
+        }
+    }
+
+  if (periodic_scan || removed != NULL)
+    {
+      GskGLTextureAtlasEntry *entry;
+      GHashTableIter iter;
+      guint dropped = 0;
+      guint atlased = 0;
+
+      g_hash_table_iter_init (&iter, self->hash_table);
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&entry))
+        {
+          if (entry->is_atlased)
+            {
+              if (removed && g_ptr_array_find (removed, entry->atlas, NULL))
+                {
+                  g_hash_table_iter_remove (&iter);
+                  dropped++;
+                }
+              else if (periodic_scan)
+                {
+                  gsk_gl_texture_atlas_entry_mark_unused (entry);
+                  entry->accessed = FALSE;
+                  if (entry->is_atlased)
+                    atlased++;
+                }
+            }
+          else if (!entry->accessed)
+            {
+              gsk_gl_driver_release_texture (self->driver, entry->texture);
+              g_hash_table_iter_remove (&iter);
+              dropped++;
+            }
+        }
+
+      GSK_NOTE (GLYPH_CACHE, g_message ("%s: Dropped %d individual items",
+                                        G_OBJECT_TYPE_NAME (self),
+                                        dropped);
+                             g_message ("%s: %d items cached (%d atlased, %d individually)",
+                                        G_OBJECT_TYPE_NAME (self),
+                                        g_hash_table_size (self->hash_table),
+                                        atlased,
+                                        g_hash_table_size (self->hash_table) - atlased));
+
+      if (dropped > 0)
+        gsk_gl_texture_library_clear_cache (self);
+
+      ret = TRUE;
+
+      g_clear_pointer (&removed, g_ptr_array_unref);
+    }
+
+  GSK_NOTE (GLYPH_CACHE, {
+    static gint64 last_message;
+    gint64 now = g_get_monotonic_time ();
+    if (now - last_message > G_USEC_PER_SEC)
+      {
+        last_message = now;
+        g_message ("%s contains %d atlases",
+                   G_OBJECT_TYPE_NAME (self),
+                   self->atlases->len);
+      }
+  });
+
+  return ret;
+}
+
+static gboolean
+gsk_gl_texture_library_real_allocate (GskGLTextureLibrary *self,
+                                      GskGLTextureAtlas   *atlas,
+                                      int                  width,
+                                      int                  height,
+                                      int                 *out_x,
+                                      int                 *out_y)
+{
+  stbrp_rect rect;
+
+  g_assert (GSK_IS_GL_TEXTURE_LIBRARY (self));
+  g_assert (atlas != NULL);
+  g_assert (width > 0);
+  g_assert (height > 0);
+  g_assert (out_x != NULL);
+  g_assert (out_y != NULL);
+
+  rect.w = width;
+  rect.h = height;
+
+  stbrp_pack_rects (&atlas->context, &rect, 1);
+
+  if (rect.was_packed)
+    {
+      *out_x = rect.x;
+      *out_y = rect.y;
+    }
+
+  return rect.was_packed;
+}
 
 static void
 gsk_gl_texture_library_constructed (GObject *object)
@@ -108,6 +246,9 @@ gsk_gl_texture_library_class_init (GskGLTextureLibraryClass *klass)
   object_class->get_property = gsk_gl_texture_library_get_property;
   object_class->set_property = gsk_gl_texture_library_set_property;
 
+  klass->compact = gsk_gl_texture_library_real_compact;
+  klass->allocate = gsk_gl_texture_library_real_allocate;
+
   properties [PROP_DRIVER] =
     g_param_spec_object ("driver",
                          "Driver",
@@ -124,7 +265,7 @@ gsk_gl_texture_library_init (GskGLTextureLibrary *self)
   self->max_frame_age = DEFAULT_MAX_FRAME_AGE;
   self->atlas_width = DEFAULT_ATLAS_WIDTH;
   self->atlas_height = DEFAULT_ATLAS_HEIGHT;
-  self->atlases = g_ptr_array_new ();
+  self->atlases = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_gl_texture_atlas_free);
 }
 
 void
@@ -143,90 +284,14 @@ gsk_gl_texture_library_set_funcs (GskGLTextureLibrary *self,
 
 void
 gsk_gl_texture_library_begin_frame (GskGLTextureLibrary *self,
-                                    gint64               frame_id,
-                                    GPtrArray            *removed_atlases)
+                                    gint64               frame_id)
 {
-  GHashTableIter iter;
-  gboolean drop_caches = FALSE;
-
   g_return_if_fail (GSK_IS_GL_TEXTURE_LIBRARY (self));
 
+  gsk_gl_texture_library_compact (self, frame_id);
+
   if (GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->begin_frame)
-    GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->begin_frame (self, frame_id, removed_atlases);
-
-  if (removed_atlases != NULL)
-    {
-      GskGLTextureAtlasEntry *entry;
-      guint dropped = 0;
-
-      /* Remove cached copy of purged atlases */
-      for (guint i = 0; i < removed_atlases->len; i++)
-        g_ptr_array_remove (self->atlases, g_ptr_array_index (removed_atlases, i));
-
-      g_hash_table_iter_init (&iter, self->hash_table);
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&entry))
-        {
-          if (entry->is_atlased)
-            {
-              for (guint i = 0; i < removed_atlases->len; i++)
-                {
-                  GskGLTextureAtlas *atlas = g_ptr_array_index (removed_atlases, i);
-
-                  if (atlas == entry->atlas)
-                    {
-                      g_hash_table_iter_remove (&iter);
-                      dropped++;
-                      break;
-                    }
-                }
-            }
-        }
-
-      GSK_NOTE (GLYPH_CACHE,
-                if (dropped > 0)
-                  g_message ("%s: Dropped %d items",
-                             G_OBJECT_TYPE_NAME (self), dropped));
-
-      drop_caches |= dropped > 0;
-    }
-
-  if (frame_id % self->max_frame_age == 0)
-    {
-      GskGLTextureAtlasEntry *entry;
-      int atlased = 0;
-      int dropped = 0;
-
-      g_hash_table_iter_init (&iter, self->hash_table);
-      while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&entry))
-        {
-          if (!entry->is_atlased && !entry->accessed)
-            {
-              gsk_gl_driver_release_texture (self->driver, entry->texture);
-              g_hash_table_iter_remove (&iter);
-              dropped++;
-              continue;
-            }
-
-          gsk_gl_texture_atlas_entry_mark_unused (entry);
-          entry->accessed = FALSE;
-          if (entry->is_atlased)
-            atlased++;
-        }
-
-      GSK_NOTE (GLYPH_CACHE, g_message ("%s: Dropped %d individual items",
-                                        G_OBJECT_TYPE_NAME (self),
-                                        dropped);
-                             g_message ("%s: %d items cached (%d atlased, %d individually)",
-                                        G_OBJECT_TYPE_NAME (self),
-                                        g_hash_table_size (self->hash_table),
-                                        atlased,
-                                        g_hash_table_size (self->hash_table) - atlased));
-
-      drop_caches |= dropped > 0;
-    }
-
-  if (drop_caches && GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->clear_cache)
-    GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->clear_cache (self);
+    GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->begin_frame (self, frame_id);
 }
 
 static GskGLTexture *
@@ -253,92 +318,29 @@ gsk_gl_texture_library_pack_one (GskGLTextureLibrary *self,
   return texture;
 }
 
-static inline gboolean
-gsk_gl_texture_atlas_pack (GskGLTextureAtlas *self,
-                           int                width,
-                           int                height,
-                           int               *out_x,
-                           int               *out_y)
-{
-  stbrp_rect rect;
-
-  rect.w = width;
-  rect.h = height;
-
-  stbrp_pack_rects (&self->context, &rect, 1);
-
-  if (rect.was_packed)
-    {
-      *out_x = rect.x;
-      *out_y = rect.y;
-    }
-
-  return rect.was_packed;
-}
-
 static void
-gsk_gl_texture_library_init_atlas (GskGLTextureLibrary *self,
-                                   GskGLTextureAtlas   *atlas)
-{
-  /* Insert a single pixel at 0,0 for use in coloring */
-
-  gboolean packed G_GNUC_UNUSED;
-  int x, y;
-  guint gl_format;
-  guint gl_type;
-  guint8 pixel_data[4 * 3 * 3];
-
-  g_ptr_array_add (self->atlases, atlas);
-
-  gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
-                                          "Initializing Atlas");
-
-  packed = gsk_gl_texture_atlas_pack (atlas, 3, 3, &x, &y);
-  g_assert (packed);
-  g_assert (x == 0 && y == 0);
-
-  memset (pixel_data, 255, sizeof pixel_data);
-
-  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
-    {
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_BYTE;
-    }
-  else
-    {
-      gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-    }
-
-  glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
-
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   0, 0,
-                   3, 3,
-                   gl_format, gl_type,
-                   pixel_data);
-
-  gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
-
-  self->driver->command_queue->n_uploads++;
-}
-
-static void
-gsk_gl_texture_atlases_pack (GskGLTextureLibrary *self,
-                             int                  width,
-                             int                  height,
-                             GskGLTextureAtlas  **out_atlas,
-                             int                 *out_x,
-                             int                 *out_y)
+gsk_gl_texture_library_pack_any_atlas (GskGLTextureLibrary  *self,
+                                       int                   width,
+                                       int                   height,
+                                       GskGLTextureAtlas   **out_atlas,
+                                       int                  *out_x,
+                                       int                  *out_y)
 {
   GskGLTextureAtlas *atlas = NULL;
   int x, y;
+
+  g_assert (GSK_IS_GL_TEXTURE_LIBRARY (self));
+  g_assert (width > 0);
+  g_assert (height > 0);
+  g_assert (out_atlas != NULL);
+  g_assert (out_x != NULL);
+  g_assert (out_y != NULL);
 
   for (guint i = 0; i < self->atlases->len; i++)
     {
       atlas = g_ptr_array_index (self->atlases, i);
 
-      if (gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y))
+      if (gsk_gl_texture_library_allocate (self, atlas, width, height, &x, &y))
         break;
 
       atlas = NULL;
@@ -347,11 +349,10 @@ gsk_gl_texture_atlases_pack (GskGLTextureLibrary *self,
   if (atlas == NULL)
     {
       /* No atlas has enough space, so create a new one... */
-      atlas = gsk_gl_driver_create_atlas (self->driver, self->atlas_width, self->atlas_height);
-      gsk_gl_texture_library_init_atlas (self, atlas);
+      atlas = gsk_gl_texture_library_acquire_atlas (self);
 
       /* Pack it onto that one, which surely has enough space... */
-      if (!gsk_gl_texture_atlas_pack (atlas, width, height, &x, &y))
+      if (!gsk_gl_texture_library_allocate (self, atlas, width, height, &x, &y))
         g_assert_not_reached ();
     }
 
@@ -407,12 +408,12 @@ gsk_gl_texture_library_pack (GskGLTextureLibrary *self,
       int packed_x;
       int packed_y;
 
-      gsk_gl_texture_atlases_pack (self,
-                                   padding + width + padding,
-                                   padding + height + padding,
-                                   &atlas,
-                                   &packed_x,
-                                   &packed_y);
+      gsk_gl_texture_library_pack_any_atlas (self,
+                                             padding + width + padding,
+                                             padding + height + padding,
+                                             &atlas,
+                                             &packed_x,
+                                             &packed_y);
 
       entry->atlas = atlas;
       entry->is_atlased = TRUE;
@@ -445,4 +446,135 @@ gsk_gl_texture_library_pack (GskGLTextureLibrary *self,
   g_hash_table_insert (self->hash_table, key, entry);
 
   return entry;
+}
+
+/*
+ * gsk_gl_texture_library_clear_cache:
+ *
+ * Clear the front cache if the texture library is using one. For
+ * example the glyph cache would drop it's front cache to force
+ * next lookups to fall through to the GHashTable key lookup.
+ */
+void
+gsk_gl_texture_library_clear_cache (GskGLTextureLibrary *self)
+{
+  g_return_if_fail (GSK_IS_GL_TEXTURE_LIBRARY (self));
+
+  if (GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->clear_cache)
+    GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->clear_cache (self);
+}
+
+/*
+ * gsk_gl_texture_library_compact:
+ *
+ * Requests that the texture library compact it's altases. That
+ * generally means to traverse them to look for unused pixels over
+ * a certain threshold and release them if necessary.
+ *
+ * Returns: %TRUE if any compaction occurred.
+ */
+gboolean
+gsk_gl_texture_library_compact (GskGLTextureLibrary *self,
+                                gint64               frame_id)
+{
+  g_return_val_if_fail (GSK_IS_GL_TEXTURE_LIBRARY (self), FALSE);
+
+  if (GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->compact)
+    return GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->compact (self, frame_id);
+
+  return FALSE;
+}
+
+void
+gsk_gl_texture_library_reset (GskGLTextureLibrary *self)
+{
+  g_return_if_fail (GSK_IS_GL_TEXTURE_LIBRARY (self));
+
+  gsk_gl_texture_library_clear_cache (self);
+
+  g_hash_table_remove_all (self->hash_table);
+
+  if (self->atlases->len)
+    g_ptr_array_remove_range (self->atlases, 0, self->atlases->len);
+}
+
+void
+gsk_gl_texture_library_set_atlas_size (GskGLTextureLibrary *self,
+                                       int                  width,
+                                       int                  height)
+{
+  g_return_if_fail (GSK_IS_GL_TEXTURE_LIBRARY (self));
+
+  if (width <= 0)
+    width = DEFAULT_ATLAS_WIDTH;
+
+  if (height <= 0)
+    height = DEFAULT_ATLAS_HEIGHT;
+
+  self->atlas_height = height;
+  self->atlas_width = width;
+
+  gsk_gl_texture_library_reset (self);
+}
+
+/*
+ * gsk_gl_texture_library_acquire_atlas:
+ *
+ * Allocates a new texture atlas based on the current size
+ * and format requirements.
+ */
+GskGLTextureAtlas *
+gsk_gl_texture_library_acquire_atlas (GskGLTextureLibrary *self)
+{
+  GskGLTextureAtlas *atlas;
+
+  g_return_val_if_fail (GSK_IS_GL_TEXTURE_LIBRARY (self), NULL);
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (self->driver), NULL);
+  g_return_val_if_fail (GSK_IS_GL_COMMAND_QUEUE (self->driver->command_queue), NULL);
+  g_return_val_if_fail (self->atlas_width > 0, NULL);
+  g_return_val_if_fail (self->atlas_height > 0, NULL);
+
+  atlas = g_slice_new0 (GskGLTextureAtlas);
+  atlas->width = self->atlas_width;
+  atlas->height = self->atlas_height;
+  /* TODO: We might want to change the strategy about the amount of
+   *       nodes here? stb_rect_pack.h says width is optimal. */
+  atlas->nodes = g_malloc0_n (atlas->width, sizeof (struct stbrp_node));
+  stbrp_init_target (&atlas->context, atlas->width, atlas->height, atlas->nodes, atlas->width);
+  atlas->texture_id = gsk_gl_command_queue_create_texture (self->driver->command_queue,
+                                                           atlas->width,
+                                                           atlas->height,
+                                                           GL_RGBA8,
+                                                           GL_LINEAR,
+                                                           GL_LINEAR);
+
+  gdk_gl_context_label_object_printf (gdk_gl_context_get_current (),
+                                      GL_TEXTURE, atlas->texture_id,
+                                      "Texture atlas %d",
+                                      atlas->texture_id);
+
+  g_ptr_array_add (self->atlases, atlas);
+
+  if (GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->init_atlas)
+    GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->init_atlas (self, atlas);
+
+  return atlas;
+}
+
+gboolean
+gsk_gl_texture_library_allocate (GskGLTextureLibrary *self,
+                                 GskGLTextureAtlas   *atlas,
+                                 int                  width,
+                                 int                  height,
+                                 int                 *out_x,
+                                 int                 *out_y)
+{
+  g_assert (GSK_IS_GL_TEXTURE_LIBRARY (self));
+  g_assert (atlas != NULL);
+  g_assert (width > 0);
+  g_assert (height > 0);
+  g_assert (out_x != NULL);
+  g_assert (out_y != NULL);
+
+  return GSK_GL_TEXTURE_LIBRARY_GET_CLASS (self)->allocate (self, atlas, width, height, out_x, out_y);
 }
