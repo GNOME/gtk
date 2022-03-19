@@ -798,7 +798,7 @@ gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry)
 }
 
 /**
- * gtk_search_entry_set_searcH-delay:
+ * gtk_search_entry_set_search_delay:
  * @entry: a `GtkSearchEntry`
  * @delay: a delay in milliseconds
  *
