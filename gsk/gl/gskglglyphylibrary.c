@@ -239,9 +239,7 @@ encode_glyph (GskGLGlyphyLibrary *self,
               guint              *output_len,
               guint              *nominal_width,
               guint              *nominal_height,
-              glyphy_extents_t   *extents,
-              double             *advance,
-              gboolean           *is_empty)
+              glyphy_extents_t   *extents)
 {
   hb_face_t *face = hb_font_get_face (font);
   guint upem = hb_face_get_upem (face);
@@ -283,9 +281,6 @@ encode_glyph (GskGLGlyphyLibrary *self,
 
   glyphy_extents_scale (extents, 1./upem, 1./upem);
 
-  *advance = hb_font_get_glyph_h_advance (font, glyph_index) / (double)upem;
-  *is_empty = glyphy_extents_is_empty (extents);
-
   return TRUE;
 }
 
@@ -299,8 +294,6 @@ gsk_gl_glyphy_library_add (GskGLGlyphyLibrary      *self,
   GskGLGlyphyValue *value;
   glyphy_extents_t extents;
   hb_font_t *font;
-  gboolean is_empty;
-  double advance;
   guint packed_x;
   guint packed_y;
   guint nominal_w, nominal_h;
@@ -318,7 +311,7 @@ gsk_gl_glyphy_library_add (GskGLGlyphyLibrary      *self,
   if (!encode_glyph (self, font, key->glyph, TOLERANCE,
                      buffer, sizeof buffer, &output_len,
                      &nominal_w, &nominal_h,
-                     &extents, &advance, &is_empty))
+                     &extents))
     return FALSE;
 
   /* Allocate space for list within atlas */
@@ -336,7 +329,7 @@ gsk_gl_glyphy_library_add (GskGLGlyphyLibrary      *self,
   if (texture_id == 0)
     return FALSE;
 
-  if (!is_empty)
+  if (!glyphy_extents_is_empty (&extents))
     {
       /* Connect the texture for data upload */
       glActiveTexture (GL_TEXTURE0);
@@ -370,8 +363,10 @@ gsk_gl_glyphy_library_add (GskGLGlyphyLibrary      *self,
         }
     }
 
-  value->advance = advance;
-  value->extents = extents;
+  value->extents.min_x = extents.min_x;
+  value->extents.min_y = extents.min_y;
+  value->extents.max_x = extents.max_x;
+  value->extents.max_y = extents.max_y;
   value->nominal_w = nominal_w;
   value->nominal_h = nominal_h;
   value->atlas_x = packed_x / self->item_w;
