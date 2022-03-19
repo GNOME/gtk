@@ -328,6 +328,8 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    *
    * The delay in milliseconds from last keypress to the search
    * changed signal.
+   *
+   * Since: 4.8
    */
   props[PROP_SEARCH_DELAY] =
       g_param_spec_uint ("search-delay",
