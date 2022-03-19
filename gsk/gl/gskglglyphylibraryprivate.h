@@ -30,9 +30,44 @@ G_BEGIN_DECLS
 
 #define GSK_TYPE_GL_GLYPHY_LIBRARY (gsk_gl_glyphy_library_get_type())
 
+typedef guint FontKey;
+
+extern GQuark quark_glyphy_font_key;
+
+static inline FontKey
+gsk_gl_glyphy_library_get_font_key (PangoFont *font)
+{
+  FontKey key;
+
+  key = (FontKey) GPOINTER_TO_UINT (g_object_get_qdata ((GObject *)font, quark_glyphy_font_key));
+  if (key == 0)
+    {
+      PangoFontDescription *desc = pango_font_describe (font);
+      pango_font_description_set_size (desc, 10 * PANGO_SCALE);
+      key = (FontKey) pango_font_description_hash (desc);
+      pango_font_description_free (desc);
+      g_object_set_qdata ((GObject *)font, quark_glyphy_font_key, GUINT_TO_POINTER (key));
+    }
+
+  return key;
+}
+
+static inline float
+gsk_gl_glyphy_library_get_font_scale (PangoFont *font)
+{
+  hb_font_t *hbfont;
+  int x_scale, y_scale;
+
+  hbfont = pango_font_get_hb_font (font);
+  hb_font_get_scale (hbfont, &x_scale, &y_scale);
+
+  return MAX (x_scale, y_scale) / 1000.0;
+}
+
+
 typedef struct _GskGLGlyphyKey
 {
-  PangoFont *font;
+  FontKey font;
   PangoGlyph glyph;
 } GskGLGlyphyKey;
 
@@ -69,11 +104,13 @@ struct _GskGLGlyphyLibrary
 GskGLGlyphyLibrary *gsk_gl_glyphy_library_new (GskGLDriver             *driver);
 gboolean            gsk_gl_glyphy_library_add (GskGLGlyphyLibrary      *self,
                                                GskGLGlyphyKey          *key,
+                                               PangoFont               *font,
                                                const GskGLGlyphyValue **out_value);
 
 static inline guint
 gsk_gl_glyphy_library_lookup_or_add (GskGLGlyphyLibrary      *self,
                                      const GskGLGlyphyKey    *key,
+                                     PangoFont               *font,
                                      const GskGLGlyphyValue **out_value)
 {
   GskGLTextureAtlasEntry *entry;
@@ -92,8 +129,7 @@ gsk_gl_glyphy_library_lookup_or_add (GskGLGlyphyLibrary      *self,
   else
     {
       GskGLGlyphyKey *k = g_slice_copy (sizeof *key, key);
-      g_object_ref (k->font);
-      gsk_gl_glyphy_library_add (self, k, out_value);
+      gsk_gl_glyphy_library_add (self, k, font, out_value);
       self->front[front_index].key = *key;
       self->front[front_index].value = *out_value;
     }

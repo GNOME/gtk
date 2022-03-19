@@ -3076,7 +3076,7 @@ typedef struct
   float g16lo;
 } EncodedGlyph;
 
-static unsigned int
+static inline unsigned int
 glyph_encode (guint atlas_x ,  /* 7 bits */
               guint atlas_y,   /* 7 bits */
               guint corner_x,  /* 1 bit */
@@ -3099,7 +3099,7 @@ glyph_encode (guint atlas_x ,  /* 7 bits */
   return (x << 16) | y;
 }
 
-static void
+static inline void
 encoded_glyph_init (EncodedGlyph           *eg,
                     float                   x,
                     float                   y,
@@ -3133,7 +3133,7 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   const PangoGlyphInfo *gi;
   GskGLGlyphyLibrary *library;
   GskGLCommandBatch *batch;
-  const PangoFont *font;
+  PangoFont *font;
   GskGLDrawVertex *vertices;
   const guint16 *c;
   GskGLGlyphyKey lookup;
@@ -3145,6 +3145,7 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   guint used = 0;
   guint i;
   int x_position = 0;
+  float font_scale;
 
   g_assert (!gsk_text_node_has_color_glyphs (node));
 
@@ -3154,7 +3155,7 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   if (RGBA_IS_CLEAR (color))
     return;
 
-  font = gsk_text_node_get_font (node);
+  font = (PangoFont *)gsk_text_node_get_font (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   library = job->driver->glyphy_library;
   offset = gsk_text_node_get_offset (node);
@@ -3169,7 +3170,8 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   batch = gsk_gl_command_queue_get_batch (job->command_queue);
   vertices = gsk_gl_command_queue_add_n_vertices (job->command_queue, num_glyphs);
 
-  lookup.font = (PangoFont *)font;
+  lookup.font = gsk_gl_glyphy_library_get_font_key (font);
+  font_scale = gsk_gl_glyphy_library_get_font_scale (font);
 
   for (i = 0, gi = glyphs; i < num_glyphs; i++, gi++)
     {
@@ -3178,7 +3180,8 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
       guint texture_id;
 
       lookup.glyph = gi->glyph;
-      texture_id = gsk_gl_glyphy_library_lookup_or_add (library, &lookup, &glyph);
+      texture_id = gsk_gl_glyphy_library_lookup_or_add (library, &lookup, font, &glyph);
+
       if G_UNLIKELY (texture_id == 0)
         continue;
 
@@ -3228,8 +3231,8 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
       EncodedGlyph encoded[4];
 #define ENCODE_CORNER(_cx, _cy) \
   G_STMT_START { \
-    float _vx = x + cx + ((1-_cx) * glyph->extents.min_x + _cx * glyph->extents.max_x); \
-    float _vy = y + cy - ((1-_cy) * glyph->extents.min_y + _cy * glyph->extents.max_y); \
+    float _vx = x + cx + font_scale * ((1-_cx) * glyph->extents.min_x + _cx * glyph->extents.max_x); \
+    float _vy = y + cy - font_scale * ((1-_cy) * glyph->extents.min_y + _cy * glyph->extents.max_y); \
     encoded_glyph_init (&encoded[_cx * 2 + _cy], _vx, _vy, _cx, _cy, glyph); \
   } G_STMT_END
       ENCODE_CORNER (0, 0);
