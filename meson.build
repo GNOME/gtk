@@ -517,15 +517,11 @@ if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req,
                               fallback: 'wayland',
                               default_options: ['documentation=false'])
-  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req, required: false)
+  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
   wlegldep       = dependency('wayland-egl',
                               fallback: 'wayland')
 
-  if not wlprotocolsdep.found()
-    wlproto_dir = subproject('wayland-protocols').get_variable('wayland_protocols_srcdir')
-  else
-    wlproto_dir = wlprotocolsdep.get_variable(pkgconfig: 'pkgdatadir')
-  endif
+  wlproto_dir = wlprotocolsdep.get_variable('pkgdatadir')
 
   wayland_pkgs = [
     'wayland-client @0@'.format(wayland_req),
