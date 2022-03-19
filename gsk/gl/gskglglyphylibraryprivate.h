@@ -39,13 +39,16 @@ typedef struct _GskGLGlyphyKey
 typedef struct _GskGLGlyphyValue
 {
   GskGLTextureAtlasEntry entry;
-  glyphy_extents_t extents;
-  double advance;
+  struct {
+    float min_x;
+    float min_y;
+    float max_x;
+    float max_y;
+  } extents;
   guint nominal_w;
   guint nominal_h;
   guint atlas_x;
   guint atlas_y;
-  guint is_empty : 1;
 } GskGLGlyphyValue;
 
 G_DECLARE_FINAL_TYPE (GskGLGlyphyLibrary, gsk_gl_glyphy_library, GSK, GL_GLYPHY_LIBRARY, GskGLTextureLibrary)
