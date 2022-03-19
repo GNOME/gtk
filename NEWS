@@ -1,3 +1,91 @@
+Overview of Changes in 4.6.2, 18-03-2022
+========================================
+
+* GtkScrolledWindow:
+ - Set scroll-to-focus on viewports
+ - Avoid doubly triggering deceleration
+
+* GtkEntry:
+ - Stop cursor blinking on focus-out
+
+* Emoji:
+ - Update Emoji data to CLDR 40 and Unicode 14
+ - Add more locales for Emoji data (da, de, en, es,
+   fr hu, it, ko, lt, ms, nl, pl, pt, ru, s, uk zh)
+
+* GDK
+ - Optimize texture conversions on x86 and ARM
+ - Use EGK_KHR_swap_buffers_with_damage if available
+
+* GSK
+ - Avoid clearing opaque regions
+ - Support using a non-default framebuffer
+ - Handle large viewports by tiling
+
+* Wayland:
+ - Prefer xdg-activation over gtk-shell
+ - text protocol: Fix text caret location
+ - text protocol: Use serials to control outbound messages
+
+* Inspector:
+ - Show app ID and resource path
+
+* Demos:
+ - widget-factory: Handle F11 to toggle fullscreen
+
+* Tools:
+ - gtk-builder-tool: Allow use without display
+
+* Windows:
+ - Fix preedit window placement on HiDPI
+ - Build improvements
+ - Fix fullscreen handling
+
+* MacOS:
+ - Fix scrolling with an external mouse
+ - Fix kinetic scrolling with overshoot
+ - Improve monitor detection
+ - Many input handling fixes
+ - Support OpenGL accelerated video playback
+ - Support fullscreen
+ - Improve interactive window resizing and moving
+ - Fix backdrop state handling
+ - Fix GtkFileChooserNative filtering
+ - Use CALayer and IOSurface for rendering
+ - Use per monitor CVDisplayLink to support mixed-rate monitors
+ - Start applications in foreground
+ - Fix cursor blink time
+
+* Translation updates
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Chinese (China)
+ Croatian
+ Czech
+ Danish
+ Finnish
+ Galician
+ German
+ Hebrew
+ Hungarian
+ Italian
+ Kazakh
+ Korean
+ Lithuanian
+ Norwegian Bokmål
+ Persian
+ Poliah
+ Portuguese
+ Russian
+ Slovak
+ Slovenian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.6.1, 11-02-2022
 ========================================
 
