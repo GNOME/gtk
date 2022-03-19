@@ -379,8 +379,8 @@ update_node_ordering (GtkModelButton *button)
         gtk_widget_insert_before (button->end_indicator, GTK_WIDGET (button), child);
 
       child = gtk_widget_get_last_child (GTK_WIDGET (button));
-      if (child != button->start_box)
-        gtk_widget_insert_after (button->start_box, GTK_WIDGET (button), child);
+      if (button->end_indicator && child != button->end_indicator)
+        gtk_widget_insert_after (button->end_indicator, GTK_WIDGET (button), child);
     }
 }
 
