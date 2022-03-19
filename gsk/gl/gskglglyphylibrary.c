@@ -79,11 +79,7 @@ gsk_gl_glyphy_key_hash (gconstpointer data)
    * for us.
    */
 
-#if GLIB_SIZEOF_VOID_P == 4
-  return (guint)(GPOINTER_TO_SIZE (key->font) << 6) ^ key->glyph;
-#else
-  return (guint)(GPOINTER_TO_SIZE (key->font) << 5) ^ key->glyph;
-#endif
+  return (key->font << 8) ^ key->glyph;
 }
 
 static gboolean
@@ -98,7 +94,6 @@ gsk_gl_glyphy_key_free (gpointer data)
 {
   GskGLGlyphyKey *key = data;
 
-  g_clear_object (&key->font);
   g_slice_free (GskGLGlyphyKey, key);
 }
 
@@ -284,16 +279,39 @@ encode_glyph (GskGLGlyphyLibrary *self,
   return TRUE;
 }
 
+static inline hb_font_t *
+get_nominal_size_hb_font (PangoFont *font)
+{
+  hb_font_t *hbfont;
+  const float *coords;
+  unsigned int length;
+
+  hbfont = (hb_font_t *) g_object_get_data ((GObject *)font, "glyph-nominal-size-font");
+  if (hbfont == NULL)
+    {
+      hbfont = hb_font_create (hb_font_get_face (pango_font_get_hb_font (font)));
+      coords = hb_font_get_var_coords_design (pango_font_get_hb_font (font), &length);
+      if (length > 0)
+        hb_font_set_var_coords_design (hbfont, coords, length);
+
+      g_object_set_data_full ((GObject *)font, "glyphy-nominal-size-font",
+                              hbfont, (GDestroyNotify)hb_font_destroy);
+    }
+
+  return hbfont;
+}
+
 gboolean
 gsk_gl_glyphy_library_add (GskGLGlyphyLibrary      *self,
                            GskGLGlyphyKey          *key,
+                           PangoFont               *font,
                            const GskGLGlyphyValue **out_value)
 {
   static glyphy_rgba_t buffer[4096 * 16];
   GskGLTextureLibrary *tl = (GskGLTextureLibrary *)self;
   GskGLGlyphyValue *value;
   glyphy_extents_t extents;
-  hb_font_t *font;
+  hb_font_t *hbfont;
   guint packed_x;
   guint packed_y;
   guint nominal_w, nominal_h;
@@ -303,15 +321,15 @@ gsk_gl_glyphy_library_add (GskGLGlyphyLibrary      *self,
 
   g_assert (GSK_IS_GL_GLYPHY_LIBRARY (self));
   g_assert (key != NULL);
-  g_assert (key->font != NULL);
+  g_assert (font != NULL);
   g_assert (out_value != NULL);
 
+  hbfont = get_nominal_size_hb_font (font);
+
   /* Convert the glyph to a list of arcs */
-  font = pango_font_get_hb_font (key->font);
-  if (!encode_glyph (self, font, key->glyph, TOLERANCE,
+  if (!encode_glyph (self, hbfont, key->glyph, TOLERANCE,
                      buffer, sizeof buffer, &output_len,
-                     &nominal_w, &nominal_h,
-                     &extents))
+                     &nominal_w, &nominal_h, &extents))
     return FALSE;
 
   /* Allocate space for list within atlas */
