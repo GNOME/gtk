@@ -1,5 +1,5 @@
 [wrap-git]
 directory=libepoxy
 url=https://github.com/anholt/libepoxy.git
-revision=master
+revision=1.5.10
 depth=1

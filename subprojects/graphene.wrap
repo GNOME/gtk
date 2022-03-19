@@ -1,5 +1,5 @@
 [wrap-git]
 directory=graphene
 url=https://github.com/ebassi/graphene.git
-revision=master
+revision=graphene-1-10
 depth=1
