@@ -71,6 +71,9 @@ GDK_AVAILABLE_IN_ALL
 GtkEventControllerScrollFlags
                     gtk_event_controller_scroll_get_flags (GtkEventControllerScroll      *scroll);
 
+GDK_AVAILABLE_IN_4_8
+GdkScrollUnit       gtk_event_controller_scroll_get_unit (GtkEventControllerScroll       *scroll);
+
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_SCROLL_H__ */

@@ -665,7 +665,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                     state,
                                     -sx,
                                     -sy,
-                                    FALSE);
+                                    FALSE,
+                                    GDK_SCROLL_UNIT_SURFACE);
 
       /* Fall through for scroll emulation */
     }
@@ -714,7 +715,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                   NULL,
                                   get_time_from_ns_event (nsevent),
                                   state,
-                                  0.0, 0.0, TRUE);
+                                  0.0, 0.0, TRUE,
+                                  GDK_SCROLL_UNIT_SURFACE);
     }
 
   return g_steal_pointer (&ret);

@@ -212,6 +212,7 @@ struct _GdkTouchEvent
  * @history: (element-type GdkTimeCoord): array of times and deltas
  *   for other scroll events that were compressed before delivering the
  *   current event
+ * @unit: The scroll unit in which delta_x and delta_y are represented.
  *
  * Generated from button presses for the buttons 4 to 7. Wheel mice are
  * usually configured to generate button press events for buttons 4 and 5
@@ -234,6 +235,7 @@ struct _GdkScrollEvent
   gboolean is_stop;
   GdkDeviceTool *tool;
   GArray *history; /* <GdkTimeCoord> */
+  GdkScrollUnit unit;
 };
 
 /*
@@ -486,7 +488,8 @@ GdkEvent * gdk_scroll_event_new         (GdkSurface      *surface,
                                          GdkModifierType  state,
                                          double           delta_x,
                                          double           delta_y,
-                                         gboolean         is_stop);
+                                         gboolean         is_stop,
+                                         GdkScrollUnit    unit);
 
 GdkEvent * gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                           GdkDevice          *device,

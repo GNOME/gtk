@@ -597,7 +597,8 @@ _gdk_event_unqueue (GdkDisplay *display)
 
 /*
  * If the last N events in the event queue are smooth scroll events
- * for the same surface and device, combine them into one.
+ * for the same surface, the same device and the same scroll unit,
+ * combine them into one.
  *
  * We give the remaining event a history with N items, and deltas
  * that are the sum over the history entries.
@@ -611,6 +612,8 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
   GdkEvent *last_event = NULL;
   GList *scrolls = NULL;
   GArray *history = NULL;
+  GdkScrollUnit scroll_unit = GDK_SCROLL_UNIT_WHEEL;
+  gboolean scroll_unit_defined = FALSE;
   GdkTimeCoord hist;
 
   l = g_queue_peek_tail_link (&display->queued_events);
@@ -618,6 +621,7 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
   while (l)
     {
       GdkEvent *event = l->data;
+      GdkScrollEvent *scroll_event = (GdkScrollEvent *) event;
 
       if (event->flags & GDK_EVENT_PENDING)
         break;
@@ -634,11 +638,17 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
           device != event->device)
         break;
 
+      if (scroll_unit_defined &&
+          scroll_unit != scroll_event->unit)
+        break;
+
       if (!last_event)
         last_event = event;
 
       surface = event->surface;
       device = event->device;
+      scroll_unit = scroll_event->unit;
+      scroll_unit_defined = TRUE;
       scrolls = l;
 
       l = l->prev;
@@ -710,7 +720,8 @@ gdk_event_queue_handle_scroll_compression (GdkDisplay *display)
                                     gdk_event_get_modifier_state (old_event),
                                     dx,
                                     dy,
-                                    gdk_scroll_event_is_stop (old_event));
+                                    gdk_scroll_event_is_stop (old_event),
+                                    scroll_unit);
 
       ((GdkScrollEvent *)event)->history = history;
 
@@ -2334,7 +2345,8 @@ gdk_scroll_event_new (GdkSurface      *surface,
                       GdkModifierType  state,
                       double           delta_x,
                       double           delta_y,
-                      gboolean         is_stop)
+                      gboolean         is_stop,
+                      GdkScrollUnit    unit)
 {
   GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, time);
 
@@ -2344,6 +2356,7 @@ gdk_scroll_event_new (GdkSurface      *surface,
   self->delta_x = delta_x;
   self->delta_y = delta_y;
   self->is_stop = is_stop;
+  self->unit = unit;
 
   return (GdkEvent *) self;
 }
@@ -2363,6 +2376,7 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
   self->state = state;
   self->direction = direction;
   self->pointer_emulated = emulated;
+  self->unit = GDK_SCROLL_UNIT_WHEEL;
 
   return (GdkEvent *) self;
 }
@@ -2396,6 +2410,9 @@ gdk_scroll_event_get_direction (GdkEvent *event)
  *
  * The deltas will be zero unless the scroll direction
  * is %GDK_SCROLL_SMOOTH.
+ *
+ * For the representation unit of these deltas, see
+ * [method@Gdk.ScrollEvent.get_unit].
  */
 void
 gdk_scroll_event_get_deltas (GdkEvent *event,
@@ -2436,6 +2453,31 @@ gdk_scroll_event_is_stop (GdkEvent *event)
   g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_SCROLL), FALSE);
 
   return self->is_stop;
+}
+
+/**
+ * gdk_scroll_event_get_unit:
+ * @event: (type GdkScrollEvent): a scroll event.
+ *
+ * Extracts the scroll delta unit of a scroll event.
+ *
+ * The unit will always be %GDK_SCROLL_UNIT_WHEEL if the scroll direction is not
+ * %GDK_SCROLL_SMOOTH.
+ *
+ * Returns: the scroll unit.
+ *
+ * Since: 4.8
+ */
+GdkScrollUnit
+gdk_scroll_event_get_unit (GdkEvent *event)
+{
+  GdkScrollEvent *self = (GdkScrollEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), GDK_SCROLL_UNIT_WHEEL);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_SCROLL),
+                        GDK_SCROLL_UNIT_WHEEL);
+
+  return self->unit;
 }
 
 /* }}} */

@@ -1778,7 +1778,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                               state,
                                               delta_x,
                                               delta_y,
-                                              delta_x == 0.0 && delta_y == 0.0);
+                                              delta_x == 0.0 && delta_y == 0.0,
+                                              GDK_SCROLL_UNIT_WHEEL);
               }
             break;
           }
