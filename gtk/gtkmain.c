@@ -899,30 +899,10 @@ rewrite_event_for_surface (GdkEvent  *event,
 			   GdkSurface *new_surface)
 {
   GdkEventType type;
-  double x, y;
+  double x = -G_MAXDOUBLE, y = -G_MAXDOUBLE;
   double dx, dy;
 
   type = gdk_event_get_event_type (event);
-
-  switch ((guint) type)
-    {
-    case GDK_BUTTON_PRESS:
-    case GDK_BUTTON_RELEASE:
-    case GDK_MOTION_NOTIFY:
-    case GDK_TOUCH_BEGIN:
-    case GDK_TOUCH_UPDATE:
-    case GDK_TOUCH_END:
-    case GDK_TOUCH_CANCEL:
-    case GDK_TOUCHPAD_SWIPE:
-    case GDK_TOUCHPAD_PINCH:
-    case GDK_TOUCHPAD_HOLD:
-      gdk_event_get_position (event, &x, &y);
-      gdk_surface_translate_coordinates (gdk_event_get_surface (event), new_surface, &x, &y);
-      break;
-    default:
-      x = y = 0;
-      break;
-    }
 
   switch ((guint) type)
     {
@@ -1033,8 +1013,7 @@ rewrite_event_for_grabs (GdkEvent *event)
       display = gdk_event_get_display (event);
       device = gdk_event_get_device (event);
 
-      if (!gdk_device_grab_info (display, device, &grab_surface, &owner_events) ||
-          !owner_events)
+      if (!gdk_device_grab_info (display, device, &grab_surface, &owner_events))
         return NULL;
       break;
     default:
@@ -1044,11 +1023,24 @@ rewrite_event_for_grabs (GdkEvent *event)
   event_widget = gtk_get_event_widget (event);
   grab_widget = GTK_WIDGET (gtk_native_get_for_surface (grab_surface));
 
-  if (grab_widget &&
-      gtk_main_get_window_group (grab_widget) != gtk_main_get_window_group (event_widget))
-    return rewrite_event_for_surface (event, grab_surface);
-  else
+  if (!grab_widget)
     return NULL;
+
+  /* If owner_events was set, events in client surfaces get forwarded
+   * as normal, but we consider other window groups foreign surfaces.
+   */
+  if (owner_events &&
+      gtk_main_get_window_group (grab_widget) == gtk_main_get_window_group (event_widget))
+    return NULL;
+
+  /* If owner_events was not set, events only get sent to the grabbing
+   * surface.
+   */
+  if (!owner_events &&
+      grab_surface == gtk_native_get_surface (gtk_widget_get_native (event_widget)))
+    return NULL;
+
+  return rewrite_event_for_surface (event, grab_surface);
 }
 
 static GdkEvent *
