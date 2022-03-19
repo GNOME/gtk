@@ -644,7 +644,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                  NULL,
                                  get_time_from_ns_event (nsevent),
                                  state,
-                                 0.0, 0.0, TRUE);
+                                 0.0, 0.0, TRUE,
+                                 GDK_SCROLL_UNIT_SURFACE);
 
   dx = [nsevent deltaX];
   dy = [nsevent deltaY];
