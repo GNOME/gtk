@@ -1056,6 +1056,11 @@ gtk_scrolled_window_decelerate (GtkScrolledWindow *scrolled_window,
         gtk_scrolled_window_start_deceleration (scrolled_window);
       priv->x_velocity = priv->y_velocity = 0;
     }
+  else
+    {
+      g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
+      g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
+    }
 }
 
 static void
@@ -3268,6 +3273,7 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
   GtkAdjustment *hadjustment, *vadjustment;
   gint64 current_time;
   double position, elapsed;
+  gboolean retval = G_SOURCE_REMOVE;
 
   current_time = gdk_frame_clock_get_frame_time (frame_clock);
   elapsed = (current_time - priv->last_deceleration_time) / (double)G_TIME_SPAN_SECOND;
@@ -3283,28 +3289,23 @@ scrolled_window_deceleration_cb (GtkWidget         *widget,
     {
       priv->unclamped_hadj_value = position;
       gtk_adjustment_set_value (hadjustment, position);
+      retval = G_SOURCE_CONTINUE;
     }
-  else if (priv->hscrolling)
-    g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
 
   if (priv->vscrolling &&
       gtk_kinetic_scrolling_tick (priv->vscrolling, elapsed, &position, NULL))
     {
       priv->unclamped_vadj_value = position;
       gtk_adjustment_set_value (vadjustment, position);
-    }
-  else if (priv->vscrolling)
-    g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
-
-  if (!priv->hscrolling && !priv->vscrolling)
-    {
-      gtk_scrolled_window_cancel_deceleration (scrolled_window);
-      return G_SOURCE_REMOVE;
+      retval = G_SOURCE_CONTINUE;
     }
 
-  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
+  if (retval == G_SOURCE_REMOVE)
+    gtk_scrolled_window_cancel_deceleration (scrolled_window);
+  else
+    gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
-  return G_SOURCE_CONTINUE;
+  return retval;
 }
 
 static void
@@ -3368,19 +3369,23 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
       GtkAdjustment *hadjustment;
 
       gtk_scrolled_window_accumulate_velocity (&priv->hscrolling, elapsed, &priv->x_velocity);
+      g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
 
-      hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
-      lower = gtk_adjustment_get_lower (hadjustment);
-      upper = gtk_adjustment_get_upper (hadjustment);
-      upper -= gtk_adjustment_get_page_size (hadjustment);
-      priv->hscrolling =
-        gtk_kinetic_scrolling_new (lower,
-                                   upper,
-                                   MAX_OVERSHOOT_DISTANCE,
-                                   DECELERATION_FRICTION,
-                                   OVERSHOOT_FRICTION,
-                                   priv->unclamped_hadj_value,
-                                   priv->x_velocity);
+      if (priv->x_velocity != 0)
+        {
+          hadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
+          lower = gtk_adjustment_get_lower (hadjustment);
+          upper = gtk_adjustment_get_upper (hadjustment);
+          upper -= gtk_adjustment_get_page_size (hadjustment);
+          priv->hscrolling =
+            gtk_kinetic_scrolling_new (lower,
+                                       upper,
+                                       MAX_OVERSHOOT_DISTANCE,
+                                       DECELERATION_FRICTION,
+                                       OVERSHOOT_FRICTION,
+                                       priv->unclamped_hadj_value,
+                                       priv->x_velocity);
+        }
     }
   else
     g_clear_pointer (&priv->hscrolling, gtk_kinetic_scrolling_free);
@@ -3391,19 +3396,23 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
       GtkAdjustment *vadjustment;
 
       gtk_scrolled_window_accumulate_velocity (&priv->vscrolling, elapsed, &priv->y_velocity);
+      g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
 
-      vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
-      lower = gtk_adjustment_get_lower(vadjustment);
-      upper = gtk_adjustment_get_upper(vadjustment);
-      upper -= gtk_adjustment_get_page_size(vadjustment);
-      priv->vscrolling =
-        gtk_kinetic_scrolling_new (lower,
-                                   upper,
-                                   MAX_OVERSHOOT_DISTANCE,
-                                   DECELERATION_FRICTION,
-                                   OVERSHOOT_FRICTION,
-                                   priv->unclamped_vadj_value,
-                                   priv->y_velocity);
+      if (priv->y_velocity != 0)
+        {
+          vadjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
+          lower = gtk_adjustment_get_lower(vadjustment);
+          upper = gtk_adjustment_get_upper(vadjustment);
+          upper -= gtk_adjustment_get_page_size(vadjustment);
+          priv->vscrolling =
+            gtk_kinetic_scrolling_new (lower,
+                                       upper,
+                                       MAX_OVERSHOOT_DISTANCE,
+                                       DECELERATION_FRICTION,
+                                       OVERSHOOT_FRICTION,
+                                       priv->unclamped_vadj_value,
+                                       priv->y_velocity);
+        }
     }
   else
     g_clear_pointer (&priv->vscrolling, gtk_kinetic_scrolling_free);
