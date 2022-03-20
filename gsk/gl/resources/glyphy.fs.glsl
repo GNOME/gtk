@@ -46,8 +46,6 @@ main()
   vec2 dpdy = dFdy (p);
   float m = length (vec2 (length (dpdx), length (dpdy))) * SQRT2_2;
 
-  vec4 color = final_color;
-
   float gsdist = glyphy_sdf (p, gi.nominal_size GLYPHY_DEMO_EXTRA_ARGS);
   float sdist = gsdist / m * u_contrast;
 
@@ -60,9 +58,10 @@ main()
     float alpha = antialias (-sdist);
     if (u_gamma_adjust != 1.)
       alpha = pow (alpha, 1./u_gamma_adjust);
-    color = vec4 (color.rgb,color.a * alpha);
+
+    gskSetOutputColor(final_color * alpha);
   } else {
-    color = vec4 (0,0,0,0);
+    vec4 color = vec4 (0,0,0,0);
 
     // Color the inside of the glyph a light red
     color += vec4 (.5,0,0,.5) * smoothstep (1., -1., sdist);
@@ -82,7 +81,7 @@ main()
     glyphy_arc_list_t arc_list = glyphy_arc_list (p, gi.nominal_size GLYPHY_DEMO_EXTRA_ARGS);
     // Color the number of endpoints per cell blue
     color += vec4 (0,0,1,.1) * float(arc_list.num_endpoints) * 32./255.;
-  }
 
-  gskSetOutputColor(color);
+    gskSetOutputColor(color);
+  }
 }
