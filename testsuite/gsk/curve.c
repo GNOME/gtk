@@ -361,6 +361,33 @@ test_curve_curve_intersection (void)
   graphene_rect_contains_point (&b, &p[0]);
 }
 
+static void
+test_curve_curve_max_intersection (void)
+{
+  GskCurve c1, c2;
+  graphene_point_t p1[4], p2[4];
+  float t1[9], t2[9];
+  graphene_point_t p[9];
+  int n;
+
+  graphene_point_init (&p1[0], 106, 100);
+  graphene_point_init (&p1[1], 118, 264);
+  graphene_point_init (&p1[2], 129,   4);
+  graphene_point_init (&p1[3], 128, 182);
+
+  graphene_point_init (&p2[0],  54, 135);
+  graphene_point_init (&p2[1], 263, 136);
+  graphene_point_init (&p2[2],   2, 143);
+  graphene_point_init (&p2[3], 141, 150);
+
+  gsk_curve_init (&c1, gsk_pathop_encode (GSK_PATH_CURVE, p1));
+  gsk_curve_init (&c2, gsk_pathop_encode (GSK_PATH_CURVE, p2));
+
+  n = gsk_curve_intersect (&c1, &c2, t1, t2, p, 9);
+
+  g_assert_cmpint (n, ==, 9);
+}
+
 /* This showed up as artifacts in the stroker when our
  * intersection code failed to find intersections with
  * horizontal lines
@@ -631,6 +658,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/intersection/line-line", test_line_line_intersection);
   g_test_add_func ("/curve/intersection/line-curve", test_line_curve_intersection);
   g_test_add_func ("/curve/intersection/curve-curve", test_curve_curve_intersection);
+  g_test_add_func ("/curve/intersection/curve-curve-max", test_curve_curve_max_intersection);
   g_test_add_func ("/curve/intersection/horizontal-line", test_curve_intersection_horizontal_line);
   g_test_add_func ("/curve/split", test_curve_split);
   g_test_add_func ("/curve/reverse", test_curve_reverse);
