@@ -58,5 +58,20 @@ void                    gsk_path_builder_svg_arc_to             (GskPathBuilder 
                                                                  float                   y);
 
 
+typedef enum
+{
+  GSK_PATH_OP_SIMPLIFY,
+  GSK_PATH_OP_UNION,
+  GSK_PATH_OP_INTERSECTION,
+  GSK_PATH_OP_DIFFERENCE,
+  GSK_PATH_OP_XOR
+} GskPathOp;
+
+GskPath *               gsk_path_op                             (GskPathOp               operation,
+                                                                 GskFillRule             fill_rule,
+                                                                 GskPath                *first,
+                                                                 GskPath                *second);
+
+
 G_END_DECLS
 
