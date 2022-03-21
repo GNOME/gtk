@@ -4326,7 +4326,7 @@ msgstr "Uzly CSS"
 
 #: gtk/inspector/window.ui:429
 msgid "Size Groups"
-msgstr "Skupiny velikostí"
+msgstr "Sjednocené velikosti"
 
 #: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"

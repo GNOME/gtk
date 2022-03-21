@@ -4247,11 +4247,11 @@ msgstr "Jestli je upřednostňována ikona před textem."
 
 #: gtk/gtkmodelbutton.c:1271
 msgid "Size group"
-msgstr "Velikost seskupených"
+msgstr "Sjednocená velikost"
 
 #: gtk/gtkmodelbutton.c:1272
 msgid "Size group for checks and radios"
-msgstr "Velikost pro seskupená zaškrtávací políčka a skupinové přepínače"
+msgstr "Sjednocená velikost pro zaškrtávací políčka a skupinové přepínače"
 
 #: gtk/gtkmodelbutton.c:1277
 msgid "Accel"
