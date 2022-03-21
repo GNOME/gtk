@@ -485,11 +485,13 @@ test_curve_split (void)
           float dist;
 
           gsk_curve_get_point (&c1, k/19.0, &q);
-          dist = gsk_path_measure_get_closest_point (measure, &q, NULL);
+          gsk_path_measure_get_closest_point_full (measure, &q, INFINITY,
+                                                   &dist, NULL, NULL, NULL);
           g_assert_cmpfloat (dist, <=, 0.2);
 
           gsk_curve_get_point (&c2, k/19.0, &q);
-          dist = gsk_path_measure_get_closest_point (measure, &q, NULL);
+          gsk_path_measure_get_closest_point_full (measure, &q, INFINITY,
+                                                   &dist, NULL, NULL, NULL);
           g_assert_cmpfloat (dist, <=, 0.2);
         }
     }
