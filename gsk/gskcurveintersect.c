@@ -517,6 +517,76 @@ general_intersect (const GskCurve   *curve1,
   return pos;
 }
 
+static int
+curve_self_intersect (const GskCurve   *curve,
+                      float            *t1,
+                      float            *t2,
+                      graphene_point_t *p,
+                      int               n)
+{
+  float tt[3], ss[3], s;
+  graphene_point_t pp[3];
+  int m;
+  GskCurve cs, ce;
+
+  if (curve->op != GSK_PATH_CURVE)
+    return 0;
+
+  s = 0.5;
+  m = gsk_curve_get_curvature_points (curve, tt);
+  for (int i = 0; i < m; i++)
+    {
+      if (gsk_curve_get_curvature (curve, tt[i], NULL) == 0)
+        {
+          s = tt[i];
+          break;
+        }
+    }
+
+  gsk_curve_split (curve, s, &cs, &ce);
+
+  m = gsk_curve_intersect (&cs, &ce, tt, ss, pp, 3);
+
+  if (m > 1)
+    {
+      if (tt[0] != 1)
+        {
+          t1[0] = t2[0] = tt[0] * s;
+          p[0] = pp[0];
+        }
+      else if (tt[1] != 1)
+        {
+          t1[0] = t2[0] = tt[1] * s;
+          p[0] = pp[1];
+        }
+      if (ss[0] != 0)
+        {
+          t1[1] = t2[1] = s + ss[0] * (1 - s);
+          p[1] = pp[0];
+        }
+      else if (ss[1] != 0)
+        {
+          t1[1] = t2[1] = s + ss[1] * (1 - s);
+          p[1] = pp[1];
+        }
+
+      return 2;
+    }
+  else if (m == 1)
+    {
+      if (tt[0] != 1 && ss[0] != 0)
+        {
+          t1[0] = t2[0] = tt[0] * s;
+          t1[1] = t2[1] = s + ss[0] * (1 - s);
+          p[0] = p[1] = pp[0];
+
+          return 2;
+        }
+    }
+
+  return 0;
+}
+
 /* Place intersections between the curves in p, and their Bezier positions
  * in t1 and t2, up to n. Return the number of intersections found.
  *
@@ -538,6 +608,9 @@ gsk_curve_intersect (const GskCurve   *curve1,
 
   if (op2 == GSK_PATH_CLOSE)
     op2 = GSK_PATH_LINE;
+
+  if (memcmp (curve1, curve2, sizeof (GskCurve)) == 0)
+    return curve_self_intersect (curve1, t1, t2, p, n);
 
   /* We special-case line-line and line-curve intersections,
    * since we can solve them directly.
