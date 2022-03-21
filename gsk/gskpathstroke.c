@@ -573,147 +573,6 @@ conic_is_degenerate (const GskCurve *curve)
   return FALSE;
 }
 
-static void
-align_points (const graphene_point_t *p,
-              const graphene_point_t *a,
-              const graphene_point_t *b,
-              graphene_point_t       *q,
-              int                     n)
-{
-  graphene_vec2_t n1;
-  float angle;
-  float s, c;
-
-  get_tangent (a, b, &n1);
-  angle = - atan2 (graphene_vec2_get_y (&n1), graphene_vec2_get_x (&n1));
-  sincosf (angle, &s, &c);
-
-  for (int i = 0; i < n; i++)
-    {
-      q[i].x = (p[i].x - a->x) * c - (p[i].y - a->y) * s;
-      q[i].y = (p[i].x - a->x) * s + (p[i].y - a->y) * c;
-    }
-}
-
-/* find solutions for at^2 + bt + c = 0 */
-static int
-solve_quadratic (float a, float b, float c, float t[2])
-{
-  float d;
-  int n = 0;
-
-  if (fabs (a) > 0.0001)
-    {
-      if (b*b > 4*a*c)
-        {
-          d = sqrt (b*b - 4*a*c);
-          t[n++] = (-b + d)/(2*a);
-          t[n++] = (-b - d)/(2*a);
-        }
-      else
-        {
-          t[n++] = -b / (2*a);
-        }
-    }
-  else if (fabs (b) > 0.0001)
-    {
-      t[n++] = -c / b;
-    }
-
-  return n;
-}
-
-static int
-filter_allowable (float t[3],
-                  int   n)
-{
-  float g[3];
-  int j = 0;
-
-  for (int i = 0; i < n; i++)
-    if (0 < t[i] && t[i] < 1)
-      g[j++] = t[i];
-  for (int i = 0; i < j; i++)
-    t[i] = g[i];
-  return j;
-}
-
-/* Get the points where the curvature of curve is
- * zero, or a maximum or minimum, inside the open
- * interval from 0 to 1.
- */
-static int
-cubic_curvature_points (const GskCurve *curve,
-                        float           t[3])
-{
-  const graphene_point_t *pts = curve->curve.points;
-  graphene_point_t p[4];
-  float a, b, c, d;
-  float x, y, z;
-  int n;
-
-  align_points (pts, &pts[0], &pts[3], p, 4);
-
-  a = p[2].x * p[1].y;
-  b = p[3].x * p[1].y;
-  c = p[1].x * p[2].y;
-  d = p[3].x * p[2].y;
-
-  x = - 3*a + 2*b + 3*c - d;
-  y = 3*a - b - 3*c;
-  z = c - a;
-
-  n = solve_quadratic (x, y, z, t);
-  return filter_allowable (t, n);
-}
-
-/* Find cusps inside the open interval from 0 to 1. According
- * to Stone & deRose, A Geometric Characterization of Parametric
- * Cubic curves, a necessary and sufficient condition is that
- * the first derivative vanishes.
- */
-static int
-find_cusps (const GskCurve *curve,
-            float           t[2])
-{
-  const graphene_point_t *pts = curve->curve.points;
-  graphene_point_t p[3];
-  float ax, bx, cx;
-  float ay, by, cy;
-  float tx[3];
-  int nx;
-  int n = 0;
-
-  p[0].x = 3 * (pts[1].x - pts[0].x);
-  p[0].y = 3 * (pts[1].y - pts[0].y);
-  p[1].x = 3 * (pts[2].x - pts[1].x);
-  p[1].y = 3 * (pts[2].y - pts[1].y);
-  p[2].x = 3 * (pts[3].x - pts[2].x);
-  p[2].y = 3 * (pts[3].y - pts[2].y);
-
-  ax = p[0].x - 2 * p[1].x + p[2].x;
-  bx = - 2 * p[0].x + 2 * p[1].x;
-  cx = p[0].x;
-
-  nx = solve_quadratic (ax, bx, cx, tx);
-  nx = filter_allowable (tx, nx);
-
-  ay = p[0].y - 2 * p[1].y + p[2].y;
-  by = - 2 * p[0].y + 2 * p[1].y;
-  cy = p[0].y;
-
-  for (int i = 0; i < nx; i++)
-    {
-      float ti = tx[i];
-
-      if (0 < ti && ti < 1 &&
-          fabs (ay * ti * ti + by * ti + cy) < 0.001)
-        t[n++] = ti;
-    }
-
-  return n;
-}
-
 /* }}} */
 /* {{{ Stroke helpers */
 
@@ -1761,7 +1620,7 @@ subdivide_and_add_curve (const GskCurve *curve,
     add_curve_cb (curve, force_round_join, data);
   else if (level < MAX_SUBDIVISION && cubic_is_simple (curve))
     add_curve_cb (curve, force_round_join, data);
-  else if (level == MAX_SUBDIVISION && (n = find_cusps (curve, t)) > 0)
+  else if (level == MAX_SUBDIVISION && (n = gsk_curve_get_cusps (curve, t)) > 0)
     {
       t[n++] = 0;
       t[n++] = 1;
@@ -1783,7 +1642,7 @@ subdivide_and_add_curve (const GskCurve *curve,
 
       if (level == MAX_SUBDIVISION)
         {
-          n += cubic_curvature_points (curve, &t[n]);
+          n += gsk_curve_get_curvature_points (curve, &t[n]);
           qsort (t, n, sizeof (float), cmpfloat);
         }
 
