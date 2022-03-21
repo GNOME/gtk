@@ -1432,4 +1432,95 @@ gsk_path_offset (GskPath     *self,
   return gsk_path_builder_free_to_path (builder);
 }
 
+/**
+ * gsk_path_simplify:
+ * @self: a `GskPath`
+ * @fill_rule: a `GskFillRule`
+ *
+ * Create a new path that describes the same area as @self,
+ * without overlapping contours.
+ *
+ * Returns: a new `GskPath`
+ */
+GskPath *
+gsk_path_simplify (GskPath     *self,
+                   GskFillRule  fill_rule)
+{
+  return gsk_path_op (GSK_PATH_OP_SIMPLIFY, fill_rule, self, NULL);
+}
 
+/**
+ * gsk_path_union:
+ * @first: a `GskPath`
+ * @second: a `GskPath`
+ * @fill_rule: a `GskFillRule`
+ *
+ * Create a new path that describes the union of the areas
+ * of the given paths.
+ *
+ * Returns: a new `GskPath`
+ */
+GskPath *
+gsk_path_union (GskPath     *first,
+                GskPath     *second,
+                GskFillRule  fill_rule)
+{
+  return gsk_path_op (GSK_PATH_OP_UNION, fill_rule, first, second);
+}
+
+/**
+ * gsk_path_intersection:
+ * @first: a `GskPath`
+ * @second: a `GskPath`
+ * @fill_rule: a `GskFillRule`
+ *
+ * Create a new path that describes the intersection of the areas
+ * of the given paths.
+ *
+ * Returns: a new `GskPath`
+ */
+GskPath *
+gsk_path_intersection (GskPath     *first,
+                       GskPath     *second,
+                       GskFillRule  fill_rule)
+{
+  return gsk_path_op (GSK_PATH_OP_INTERSECTION, fill_rule, first, second);
+}
+
+/**
+ * gsk_path_difference:
+ * @first: a `GskPath`
+ * @second: a `GskPath`
+ * @fill_rule: a `GskFillRule`
+ *
+ * Create a new path that describes the difference of the areas
+ * of the given paths.
+ *
+ * Returns: a new `GskPath`
+ */
+GskPath *
+gsk_path_difference (GskPath     *first,
+                     GskPath     *second,
+                     GskFillRule  fill_rule)
+{
+  return gsk_path_op (GSK_PATH_OP_DIFFERENCE, fill_rule, first, second);
+}
+
+/**
+ * gsk_path_symmetric_difference:
+ * @first: a `GskPath`
+ * @second: a `GskPath`
+ * @fill_rule: a `GskFillRule`
+ *
+ * Create a new path that describes the symmetric difference
+ * of the areas of the given paths.
+ *
+ * Returns: a new `GskPath`
+ */
+GskPath *
+gsk_path_symmetric_difference (GskPath     *first,
+                               GskPath     *second,
+                               GskFillRule  fill_rule)
+{
+  return gsk_path_op (GSK_PATH_OP_XOR, fill_rule, first, second);
+}
