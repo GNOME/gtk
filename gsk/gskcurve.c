@@ -74,6 +74,8 @@ struct _GskCurveClass
                                                          GskCurve               *reverse);
   float                         (* get_curvature)       (const GskCurve         *curve,
                                                          float                   t);
+
+  void                          (* print)               (const GskCurve         *curve);
 };
 
 static void
@@ -334,6 +336,14 @@ gsk_line_curve_get_curvature (const GskCurve *curve,
   return 0;
 }
 
+static void
+gsk_line_curve_print (const GskCurve *curve)
+{
+  g_print ("M %g %g L %g %g",
+           curve->line.points[0].x, curve->line.points[0].y,
+           curve->line.points[1].x, curve->line.points[1].y);
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -352,7 +362,8 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_bounds,
   gsk_line_curve_offset,
   gsk_line_curve_reverse,
-  gsk_line_curve_get_curvature
+  gsk_line_curve_get_curvature,
+  gsk_line_curve_print,
 };
 
 /** CURVE **/
@@ -870,6 +881,16 @@ gsk_curve_curve_get_curvature (const GskCurve *curve,
   return num / denom;
 }
 
+static void
+gsk_curve_curve_print (const GskCurve *curve)
+{
+  g_print ("M %g %g C %g %g %g %g %g %g",
+           curve->curve.points[0].x, curve->curve.points[0].y,
+           curve->curve.points[1].x, curve->curve.points[1].y,
+           curve->curve.points[2].x, curve->curve.points[2].y,
+           curve->curve.points[3].x, curve->curve.points[3].y);
+}
+
 static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_init,
   gsk_curve_curve_init_foreach,
@@ -889,6 +910,7 @@ static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_offset,
   gsk_curve_curve_reverse,
   gsk_curve_curve_get_curvature,
+  gsk_curve_curve_print,
 };
 
 /** CONIC **/
@@ -1591,6 +1613,17 @@ gsk_conic_curve_get_curvature (const GskCurve *curve,
   return num / denom;
 }
 
+static void
+gsk_conic_curve_print (const GskCurve *curve)
+{
+  g_print ("M %g %g C %g %g %g %g %g",
+           curve->conic.points[0].x, curve->conic.points[0].y,
+           curve->conic.points[1].x, curve->conic.points[1].y,
+           curve->conic.points[2].x,
+           curve->conic.points[3].x, curve->conic.points[3].y);
+
+}
+
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
   gsk_conic_curve_init_foreach,
@@ -1609,7 +1642,8 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_tight_bounds,
   gsk_conic_curve_offset,
   gsk_conic_curve_reverse,
-  gsk_conic_curve_get_curvature
+  gsk_conic_curve_get_curvature,
+  gsk_conic_curve_print,
 };
 
 /** API **/
@@ -1882,6 +1916,9 @@ gsk_curve_get_curvature_points (const GskCurve *curve,
   float x, y, z;
   int n;
 
+  if (curve->op != GSK_PATH_CURVE)
+    return 0;
+
   align_points (pts, &pts[0], &pts[3], p, 4);
 
   a = p[2].x * p[1].y;
@@ -1945,4 +1982,10 @@ gsk_curve_get_cusps (const GskCurve *curve,
     }
 
   return n;
+}
+
+void
+gsk_curve_print (const GskCurve *curve)
+{
+  get_class (curve->op)->print (curve);
 }
