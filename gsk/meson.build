@@ -40,6 +40,7 @@ gsk_public_sources = files([
 ])
 
 gsk_private_sources = files([
+  'gskboundingbox.c',
   'gskcairoblur.c',
   'gskcontour.c',
   'gskcurve.c',
