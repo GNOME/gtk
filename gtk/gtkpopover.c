@@ -2097,6 +2097,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
 {
   GtkPopoverPrivate *priv = popover->priv;
   GtkStateFlags old_state = 0;
+  gboolean had_grab_notify_blocked = FALSE;
 
   if (priv->widget == relative_to)
     return;
@@ -2123,7 +2124,15 @@ gtk_popover_update_relative_to (GtkPopover *popover,
       if (g_signal_handler_is_connected (priv->widget, priv->state_changed_id))
         g_signal_handler_disconnect (priv->widget, priv->state_changed_id);
       if (g_signal_handler_is_connected (priv->widget, priv->grab_notify_id))
-        g_signal_handler_disconnect (priv->widget, priv->grab_notify_id);
+        {
+          if (priv->grab_notify_blocked)
+            {
+              g_signal_handler_unblock (priv->widget, priv->grab_notify_id);
+              priv->grab_notify_blocked = FALSE;
+              had_grab_notify_blocked = TRUE;
+            }
+          g_signal_handler_disconnect (priv->widget, priv->grab_notify_id);
+        }
 
       widget_unmanage_popover (priv->widget, popover);
     }
@@ -2159,6 +2168,11 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         g_signal_connect (priv->widget, "grab-notify",
                           G_CALLBACK (_gtk_popover_parent_grab_notify),
                           popover);
+      if (had_grab_notify_blocked)
+        {
+          g_signal_handler_block (priv->widget, priv->grab_notify_id);
+          priv->grab_notify_blocked = TRUE;
+        }
 
       /* Give ownership of the popover to widget */
       widget_manage_popover (priv->widget, popover);
