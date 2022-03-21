@@ -58,6 +58,20 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
 void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
                                                                  GskContour             *contour);
 
+typedef enum
+{
+  GSK_PATH_OP_SIMPLIFY,
+  GSK_PATH_OP_UNION,
+  GSK_PATH_OP_INTERSECTION,
+  GSK_PATH_OP_DIFFERENCE,
+  GSK_PATH_OP_XOR
+} GskPathOp;
+
+GskPath *               gsk_path_op                             (GskPathOp               operation,
+                                                                 GskFillRule             fill_rule,
+                                                                 GskPath                *first,
+                                                                 GskPath                *second);
+
 static inline void
 gsk_cairo_set_fill_rule (cairo_t     *cr,
                          GskFillRule  fill_rule)
