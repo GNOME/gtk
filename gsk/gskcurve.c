@@ -863,8 +863,10 @@ gsk_curve_curve_get_curvature (const GskCurve *curve,
   get_derivatives (curve, t, &d, &dd);
 
   num = cross (&d, &dd);
-  denom = pow3 (graphene_vec2_length (&d));
+  if (num == 0)
+    return 0;
 
+  denom = pow3 (graphene_vec2_length (&d));
   if (denom == 0)
     return 0;
 
@@ -1584,8 +1586,10 @@ gsk_conic_curve_get_curvature (const GskCurve *curve,
   get_conic_derivatives (curve, t, &d, &dd);
 
   num = cross (&d, &dd);
-  denom = pow3 (graphene_vec2_length (&d));
+  if (num == 0)
+    return 0;
 
+  denom = pow3 (graphene_vec2_length (&d));
   if (denom == 0)
     return 0;
 
