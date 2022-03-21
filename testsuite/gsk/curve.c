@@ -215,6 +215,9 @@ add_curve_to_array (const graphene_point_t points[4],
 static void
 test_curve_decompose_curve (void)
 {
+  g_test_skip ("No good error bounds for decomposing conics");
+  return;
+
   for (int i = 0; i < 100; i++)
     {
       GArray *array;
