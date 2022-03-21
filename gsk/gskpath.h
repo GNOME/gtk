@@ -129,6 +129,25 @@ GskPath *               gsk_path_offset                         (GskPath        
                                                                  GskLineJoin             line_join,
                                                                  float                   miter_limit);
 
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_union                          (GskPath                *first,
+                                                                 GskPath                *second);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_intersection                   (GskPath                *first,
+                                                                 GskPath                *second);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_difference                     (GskPath                *first,
+                                                                 GskPath                *second);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_symmetric_difference           (GskPath                *first,
+                                                                 GskPath                *second);
+
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_simplify                       (GskPath                *self);
+
 
 G_END_DECLS
 
