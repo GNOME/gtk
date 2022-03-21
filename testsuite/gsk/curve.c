@@ -328,6 +328,31 @@ test_line_curve_intersection (void)
 }
 
 static void
+test_line_curve_none_intersection (void)
+{
+  GskCurve c1, c2;
+  graphene_point_t p1[4], p2[2];
+  float t1[9], t2[9];
+  graphene_point_t p[9];
+  int n;
+
+  graphene_point_init (&p1[0], 333, 78);
+  graphene_point_init (&p1[1], 415, 78);
+  graphene_point_init (&p1[2], 463, 131);
+  graphene_point_init (&p1[3], 463, 223);
+
+  graphene_point_init (&p2[0], 520, 476);
+  graphene_point_init (&p2[1], 502, 418);
+
+  gsk_curve_init (&c1, gsk_pathop_encode (GSK_PATH_CURVE, p1));
+  gsk_curve_init (&c2, gsk_pathop_encode (GSK_PATH_LINE, p2));
+
+  n = gsk_curve_intersect (&c1, &c2, t1, t2, p, 1);
+
+  g_assert_cmpint (n, ==, 0);
+}
+
+static void
 test_curve_curve_intersection (void)
 {
   GskCurve c1, c2;
@@ -662,6 +687,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/decompose-curve", test_curve_decompose_curve);
   g_test_add_func ("/curve/intersection/line-line", test_line_line_intersection);
   g_test_add_func ("/curve/intersection/line-curve", test_line_curve_intersection);
+  g_test_add_func ("/curve/intersection/line-curve-none", test_line_curve_none_intersection);
   g_test_add_func ("/curve/intersection/curve-curve", test_curve_curve_intersection);
   g_test_add_func ("/curve/intersection/curve-curve-max", test_curve_curve_max_intersection);
   g_test_add_func ("/curve/intersection/horizontal-line", test_curve_intersection_horizontal_line);

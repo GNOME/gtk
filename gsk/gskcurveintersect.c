@@ -24,7 +24,7 @@
 static inline gboolean
 acceptable (float t)
 {
-  return 0 <= t && t <= 1;
+  return 0 - FLT_EPSILON <= t && t <= 1 + FLT_EPSILON;
 }
 
 
@@ -82,15 +82,18 @@ align_points (const graphene_point_t *p,
   graphene_vec2_t n1;
   float angle;
   float s, c;
+  float dist;
 
   get_tangent (a, b, &n1);
   angle = - atan2 (graphene_vec2_get_y (&n1), graphene_vec2_get_x (&n1));
   sincosf (angle, &s, &c);
 
+  dist = sqrtf ((a->x - b->x)*(a->x - b->x) + (a->y - b->y)*(a->y - b->y));
+
   for (int i = 0; i < n; i++)
     {
-      q[i].x = (p[i].x - a->x) * c - (p[i].y - a->y) * s;
-      q[i].y = (p[i].x - a->x) * s + (p[i].y - a->y) * c;
+      q[i].x = ((p[i].x - a->x) * c - (p[i].y - a->y) * s) / dist;
+      q[i].y = ((p[i].x - a->x) * s + (p[i].y - a->y) * c) / dist;
     }
 }
 
@@ -100,12 +103,10 @@ find_point_on_line (const graphene_point_t *p1,
                     const graphene_point_t *q,
                     float                  *t)
 {
-  float tx = p2->x - p1->x;
-  float ty = p2->y - p1->y;
-  float sx = q->x - p1->x;
-  float sy = q->y - p1->y;
-
-  *t = (tx*sx + ty*sy) / (tx*tx + ty*ty);
+  if (p2->x != p1->x)
+    *t = (q->x - p1->x) / (p2->x - p1->x);
+  else
+    *t = (q->y - p1->y) / (p2->y - p1->y);
 }
 
 static float
@@ -231,7 +232,7 @@ line_curve_intersect (const GskCurve   *curve1,
   const graphene_point_t *b = &curve1->line.points[1];
   graphene_point_t pts[4];
   float t[3];
-  int m, i;
+  int m, i, j;
 
   /* Rotate things to place curve1 on the x axis,
    * then solve curve2 for y == 0.
@@ -240,15 +241,19 @@ line_curve_intersect (const GskCurve   *curve1,
 
   m = get_cubic_roots (pts[0].y, pts[1].y, pts[2].y, pts[3].y, t);
 
-  m = MIN (m, n);
+  j = 0;
   for (i = 0; i < m; i++)
     {
-      t2[i] = t[i];
-      gsk_curve_get_point (curve2, t[i], &p[i]);
-      find_point_on_line (a, b, &p[i], &t1[i]);
+      t2[j] = t[i];
+      gsk_curve_get_point (curve2, t2[j], &p[j]);
+      find_point_on_line (a, b, &p[j], &t1[j]);
+      if (acceptable (t1[j]))
+        j++;
+      if (j == n)
+        break;
     }
 
-  return m;
+  return j;
 }
 
 static void

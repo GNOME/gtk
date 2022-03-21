@@ -149,6 +149,80 @@ test_curve_degenerate_tangents (void)
   g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
 }
 
+static void
+test_errant_intersection (void)
+{
+  GskCurve c;
+  GskCurve l;
+  graphene_point_t p[4];
+  graphene_point_t q[2];
+  float t1[3], t2[3];
+  graphene_point_t s[3];
+  int n;
+
+  graphene_point_init (&p[0], 888, 482);
+  graphene_point_init (&p[1], 999.333313, 508.666687);
+  graphene_point_init (&p[2], 1080.83325, 544.333313);
+  graphene_point_init (&p[3], 1132.5, 589);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+
+  graphene_point_init (&q[0], 886, 680);
+  graphene_point_init (&q[1], 642, 618);
+  gsk_curve_init (&l, gsk_pathop_encode (GSK_PATH_LINE, q));
+
+  n = gsk_curve_intersect (&l, &c, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 0);
+}
+
+static void
+test_errant_intersection2 (void)
+{
+  GskCurve c;
+  GskCurve l;
+  graphene_point_t p[4];
+  graphene_point_t q[2];
+  float t1[3], t2[3];
+  graphene_point_t s[3];
+  int n;
+
+  graphene_point_init (&p[0], 1119.5, 772);
+  graphene_point_init (&p[1], 1039.16675, 850.666687);
+  graphene_point_init (&p[2], 925.333313, 890);
+  graphene_point_init (&p[3], 778, 890);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+
+  graphene_point_init (&q[0], 1052, 1430);
+  graphene_point_init (&q[1], 734, 762);
+  gsk_curve_init (&l, gsk_pathop_encode (GSK_PATH_LINE, q));
+
+  n = gsk_curve_intersect (&l, &c, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 1);
+
+  graphene_point_init (&q[0], 954, 762);
+  graphene_point_init (&q[1], 1292, 1430);
+  gsk_curve_init (&l, gsk_pathop_encode (GSK_PATH_LINE, q));
+
+  n = gsk_curve_intersect (&l, &c, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 1);
+
+  graphene_point_init (&p[0], 248, 142);
+  graphene_point_init (&p[1], 283, 103);
+  graphene_point_init (&p[2], 333, 80);
+  graphene_point_init (&p[3], 384, 80);
+  gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CURVE, p));
+
+  graphene_point_init (&q[0], 256, 719);
+  graphene_point_init (&q[1], 256, 76);
+  gsk_curve_init (&l, gsk_pathop_encode (GSK_PATH_LINE, q));
+
+  n = gsk_curve_intersect (&l, &c, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 1);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -158,6 +232,8 @@ main (int   argc,
   g_test_add_func ("/curve/special/conic-segment", test_conic_segment);
   g_test_add_func ("/curve/special/tangents", test_curve_tangents);
   g_test_add_func ("/curve/special/degenerate-tangents", test_curve_degenerate_tangents);
+  g_test_add_func ("/curve/errant-intersection", test_errant_intersection);
+  g_test_add_func ("/curve/errant-intersection2", test_errant_intersection2);
 
   return g_test_run ();
 }
