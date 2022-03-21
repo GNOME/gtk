@@ -363,7 +363,7 @@ curve_intersect_recurse (const GskCurve   *curve1,
                          int              *pos)
 {
   GskCurve p11, p12, p21, p22;
-  graphene_rect_t b1, b2;
+  GskBoundingBox b1, b2;
   float d1, d2;
 
   if (*pos == n)
@@ -372,14 +372,14 @@ curve_intersect_recurse (const GskCurve   *curve1,
   gsk_curve_get_tight_bounds (curve1, &b1);
   gsk_curve_get_tight_bounds (curve2, &b2);
 
-  if (!graphene_rect_intersection (&b1, &b2, NULL))
+  if (!gsk_bounding_box_intersection (&b1, &b2, NULL))
     return;
 
   d1 = (t1r - t1l) / 2;
   d2 = (t2r - t2l) / 2;
 
-  if (b1.size.width < 0.1 && b1.size.height < 0.1 &&
-      b2.size.width < 0.1 && b2.size.height < 0.1)
+  if (b1.max.x - b1.min.x < 0.1 && b1.max.y - b1.min.y < 0.1 &&
+      b2.max.x - b2.min.x < 0.1 && b2.max.y - b2.min.y < 0.1)
     {
       graphene_point_t c;
       t1[*pos] = t1l + d1;
@@ -426,18 +426,12 @@ static void
 get_bounds (const GskCurve  *curve,
             float            tl,
             float            tr,
-            graphene_rect_t *bounds)
+            GskBoundingBox  *bounds)
 {
   GskCurve c;
 
   gsk_curve_segment (curve, tl, tr, &c);
   gsk_curve_get_tight_bounds (&c, bounds);
-
- /* FIXME this is working around inadequacies of
-  * graphene_rect_t as bounding box
-  */
- bounds->size.width += 0.0001;
- bounds->size.height += 0.0001;
 }
 
 static void
@@ -453,7 +447,7 @@ general_intersect_recurse (const GskCurve   *curve1,
                            int               n,
                            int              *pos)
 {
-  graphene_rect_t b1, b2;
+  GskBoundingBox b1, b2;
   float d1, d2;
 
   if (*pos == n)
@@ -462,14 +456,14 @@ general_intersect_recurse (const GskCurve   *curve1,
   get_bounds (curve1, t1l, t1r, &b1);
   get_bounds (curve2, t2l, t2r, &b2);
 
-  if (!graphene_rect_intersection (&b1, &b2, NULL))
+  if (!gsk_bounding_box_intersection (&b1, &b2, NULL))
     return;
 
   d1 = (t1r - t1l) / 2;
   d2 = (t2r - t2l) / 2;
 
-  if (b1.size.width < 0.1 && b1.size.height < 0.1 &&
-      b2.size.width < 0.1 && b2.size.height < 0.1)
+  if (b1.max.x - b1.min.x < 0.1 && b1.max.y - b1.min.y < 0.1 &&
+      b2.max.x - b2.min.x < 0.1 && b2.max.y - b2.min.y < 0.1)
     {
       graphene_point_t c;
       t1[*pos] = t1l + d1;
@@ -547,24 +541,27 @@ curve_self_intersect (const GskCurve   *curve,
 
   m = gsk_curve_intersect (&cs, &ce, tt, ss, pp, 3);
 
+  g_print ("found %d intersections:", m);
+  for (int i = 0; i < m; i++) g_print (" %f", tt[i]);
+  g_print ("\n");
   if (m > 1)
     {
-      if (tt[0] != 1)
+      if (fabs (tt[0] - 1) > 1e-4)
         {
           t1[0] = t2[0] = tt[0] * s;
           p[0] = pp[0];
         }
-      else if (tt[1] != 1)
+      else if (fabs (tt[1] - 1) > 1e-4)
         {
           t1[0] = t2[0] = tt[1] * s;
           p[0] = pp[1];
         }
-      if (ss[0] != 0)
+      if (fabs (ss[0]) > 1e-4)
         {
           t1[1] = t2[1] = s + ss[0] * (1 - s);
           p[1] = pp[0];
         }
-      else if (ss[1] != 0)
+      else if (fabs (ss[1]) > 1e-4)
         {
           t1[1] = t2[1] = s + ss[1] * (1 - s);
           p[1] = pp[1];
