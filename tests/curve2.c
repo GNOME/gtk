@@ -18,6 +18,7 @@ struct _DemoWidget
 
   gboolean track;
   gboolean show_bounding_box;
+  gboolean show_points;
   GtkWidget *label;
 
   gboolean do_stroke;
@@ -103,6 +104,56 @@ demo_widget_init (DemoWidget *self)
   controller = gtk_event_controller_motion_new ();
   g_signal_connect (controller, "motion", G_CALLBACK (motion), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
+}
+
+static void
+draw_point (GtkSnapshot            *snapshot,
+            const graphene_point_t *pt)
+{
+  graphene_rect_t bounds;
+  GdkRGBA color = { 1, 0, 0, 1 };
+
+  bounds.origin.x = pt->x - 2;
+  bounds.origin.y = pt->y - 2;
+  bounds.size.width = 4;
+  bounds.size.height = 4;
+
+  gtk_snapshot_append_color (snapshot, &color, &bounds);
+}
+
+static gboolean
+point_cb (GskPathOperation        op,
+          const graphene_point_t *pts,
+          gsize                   n_ts,
+          float                   weight,
+          gpointer                user_data)
+{
+  GtkSnapshot *snapshot = user_data;
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      draw_point (snapshot, &pts[0]);
+      break;
+
+    case GSK_PATH_CLOSE:
+      draw_point (snapshot, &pts[0]);
+      break;
+
+    case GSK_PATH_LINE:
+      draw_point (snapshot, &pts[1]);
+      break;
+
+    case GSK_PATH_CURVE:
+      draw_point (snapshot, &pts[3]);
+      break;
+
+    case GSK_PATH_CONIC:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
 }
 
 static void
@@ -198,6 +249,11 @@ demo_widget_snapshot (GtkWidget   *widget,
                                  &GRAPHENE_RECT_INIT (0, 0, width, height ));
 
       gtk_snapshot_pop (snapshot);
+    }
+
+  if (self->show_points)
+    {
+      gsk_path_foreach (self->path, GSK_PATH_FOREACH_ALLOW_CURVE, point_cb, snapshot);
     }
 
   if (self->show_bounding_box)
@@ -500,6 +556,14 @@ zoom_changed (GtkRange   *range,
 }
 
 static void
+points_toggled (GtkCheckButton *button,
+                DemoWidget      *self)
+{
+  self->show_points = gtk_check_button_get_active (button);
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
 track_toggled (GtkCheckButton *button,
                DemoWidget      *self)
 {
@@ -774,6 +838,10 @@ main (int argc, char *argv[])
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin), 0);
   g_signal_connect (spin, "value-changed", G_CALLBACK (dash_offset_changed), demo);
   gtk_grid_attach (GTK_GRID (grid), spin, 1, row++, 1, 1);
+
+  toggle = gtk_check_button_new_with_label ("Show points");
+  g_signal_connect (toggle, "toggled", G_CALLBACK (points_toggled), demo);
+  gtk_grid_attach (GTK_GRID (grid), toggle, 1, row++, 1, 1);
 
   toggle = gtk_check_button_new_with_label ("Show closest point");
   g_signal_connect (toggle, "toggled", G_CALLBACK (track_toggled), demo);
