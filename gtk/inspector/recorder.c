@@ -232,6 +232,9 @@ create_list_model_for_render_node (GskRenderNode *node)
 
     case GSK_DEBUG_NODE:
       return create_render_node_list_model ((GskRenderNode *[1]) { gsk_debug_node_get_child (node) }, 1);
+
+    case GSK_HINT_NODE:
+      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_hint_node_get_child (node) }, 1);
     }
 }
 
@@ -310,6 +313,8 @@ node_type_name (GskRenderNodeType type)
       return "Blur";
     case GSK_GL_SHADER_NODE:
       return "GL Shader";
+    case GSK_HINT_NODE:
+      return "Hint";
     }
 }
 
@@ -343,6 +348,7 @@ node_name (GskRenderNode *node)
     case GSK_TEXT_NODE:
     case GSK_BLUR_NODE:
     case GSK_GL_SHADER_NODE:
+    case GSK_HINT_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
     case GSK_DEBUG_NODE:
@@ -1215,6 +1221,19 @@ populate_render_node_properties (GtkListStore  *store,
     case GSK_DEBUG_NODE:
       add_text_row (store, "Message", gsk_debug_node_get_message (node));
       break;
+
+    case GSK_HINT_NODE:
+      {
+        GskRenderHints hints = gsk_hint_node_get_hints (node);
+
+        if (hints & GSK_RENDER_HINTS_NEVER_CACHE)
+          add_text_row (store, "Never Cache", "True");
+
+        if (hints & GSK_RENDER_HINTS_FORCE_CACHE)
+          add_text_row (store, "Force Cache", "True");
+
+        break;
+      }
 
     case GSK_SHADOW_NODE:
       {

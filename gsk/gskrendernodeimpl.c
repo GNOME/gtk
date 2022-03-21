@@ -5056,6 +5056,127 @@ gsk_debug_node_get_message (const GskRenderNode *node)
   return self->message;
 }
 
+/*** GSK_HINT_NODE ***/
+
+/**
+ * GskHintNode:
+ *
+ * A render node that provides hints to the renderer about how a child node
+ * should be processed.
+ */
+struct _GskHintNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  GskRenderHints hints;
+};
+
+static void
+gsk_hint_node_finalize (GskRenderNode *node)
+{
+  GskHintNode *self = (GskHintNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_HINT_NODE));
+
+  gsk_render_node_unref (self->child);
+
+  parent_class->finalize (node);
+}
+
+static void
+gsk_hint_node_draw (GskRenderNode *node,
+                    cairo_t       *cr)
+{
+  GskHintNode *self = (GskHintNode *) node;
+
+  gsk_render_node_draw (self->child, cr);
+}
+
+static gboolean
+gsk_hint_node_can_diff (const GskRenderNode *node1,
+                        const GskRenderNode *node2)
+{
+  GskHintNode *self1 = (GskHintNode *) node1;
+  GskHintNode *self2 = (GskHintNode *) node2;
+
+  return gsk_render_node_can_diff (self1->child, self2->child);
+}
+
+static void
+gsk_hint_node_diff (GskRenderNode  *node1,
+                    GskRenderNode  *node2,
+                    cairo_region_t *region)
+{
+  GskHintNode *self1 = (GskHintNode *) node1;
+  GskHintNode *self2 = (GskHintNode *) node2;
+
+  gsk_render_node_diff (self1->child, self2->child, region);
+}
+
+/**
+ * gsk_hint_node_new:
+ * @child: The child to add hint info for
+ * @hints: The hints for the child
+ *
+ * Creates a `GskRenderNode` that will add hints about how the child
+ * should be processed by the renderer.
+ *
+ * Returns: (transfer full) (type GskHintNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_hint_node_new (GskRenderNode  *child,
+                   GskRenderHints  hints)
+{
+  GskHintNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = gsk_render_node_alloc (GSK_HINT_NODE);
+  node = (GskRenderNode *) self;
+
+  self->child = gsk_render_node_ref (child);
+  self->hints = hints;
+
+  graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+
+  node->prefers_high_depth = gsk_render_node_prefers_high_depth (child);
+
+  return node;
+}
+
+/**
+ * gsk_hint_node_get_child:
+ * @node: (type GskHintNode): a hint `GskRenderNode`
+ *
+ * Gets the child node that is getting drawn by the given @node.
+ *
+ * Returns: (transfer none): the child `GskRenderNode`
+ **/
+GskRenderNode *
+gsk_hint_node_get_child (const GskRenderNode *node)
+{
+  const GskHintNode *self = (const GskHintNode *) node;
+
+  return self->child;
+}
+
+/**
+ * gsk_hint_node_get_hints:
+ * @node: (type GskHintNode): a hint `GskRenderNode`
+ *
+ * Gets the hints applied to this node
+ *
+ * Returns: The hints for the node
+ **/
+GskRenderHints
+gsk_hint_node_get_hints (const GskRenderNode *node)
+{
+  const GskHintNode *self = (const GskHintNode *) node;
+
+  return self->hints;
+}
+
 /*** GSK_GL_SHADER_NODE ***/
 
 /**
@@ -5298,6 +5419,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_cross_fade_node, GSK_CROSS_FADE_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_text_node, GSK_TEXT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_blur_node, GSK_BLUR_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_gl_shader_node, GSK_GL_SHADER_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_hint_node, GSK_HINT_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
 
 static void
@@ -5685,6 +5807,22 @@ gsk_render_node_init_types_once (void)
 
     GType node_type = gsk_render_node_type_register_static (I_("GskGLShaderNode"), &node_info);
     gsk_render_node_types[GSK_GL_SHADER_NODE] = node_type;
+  }
+
+  {
+    const GskRenderNodeTypeInfo node_info =
+    {
+      GSK_HINT_NODE,
+      sizeof (GskHintNode),
+      NULL,
+      gsk_hint_node_finalize,
+      gsk_hint_node_draw,
+      gsk_hint_node_can_diff,
+      gsk_hint_node_diff,
+    };
+
+    GType node_type = gsk_render_node_type_register_static (I_("GskHintNode"), &node_info);
+    gsk_render_node_types[GSK_HINT_NODE] = node_type;
   }
 
   {

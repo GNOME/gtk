@@ -50,7 +50,8 @@
  * @GSK_BLUR_NODE: A node that applies a blur
  * @GSK_DEBUG_NODE: Debug information that does not affect the rendering
  * @GSK_GL_SHADER_NODE: A node that uses OpenGL fragment shaders to render
- 
+ * @GSK_HINT_NODE: A node that provides hints to the renderer
+
  * The type of a node determines what the node is rendering.
  */
 typedef enum {
@@ -79,7 +80,8 @@ typedef enum {
   GSK_TEXT_NODE,
   GSK_BLUR_NODE,
   GSK_DEBUG_NODE,
-  GSK_GL_SHADER_NODE
+  GSK_GL_SHADER_NODE,
+  GSK_HINT_NODE
 } GskRenderNodeType;
 
 /**
@@ -250,6 +252,25 @@ typedef enum
   GSK_GL_UNIFORM_TYPE_VEC3,
   GSK_GL_UNIFORM_TYPE_VEC4,
 } GskGLUniformType;
+
+/**
+ * GskRenderHints:
+ * @GSK_RENDER_HINTS_NEVER_CACHE: Hints to the renderer that it should never
+ *   cache the contents of this or any descendant node.
+ * @GSK_RENDER_HINTS_FORCE_CACHE: Hints to the renderer that it should try
+ *   to cache the conents of the node as it is likely to be reused in future
+ *   render requests.
+ *
+ * This defines the hints that may be provided to renderers to instruct
+ * preferred behavior.
+ *
+ * Since: 4.8
+ */
+typedef enum
+{
+  GSK_RENDER_HINTS_NEVER_CACHE = 1 << 0,
+  GSK_RENDER_HINTS_FORCE_CACHE = 1 << 1,
+} GskRenderHints;
 
 
 #endif /* __GSK_TYPES_H__ */

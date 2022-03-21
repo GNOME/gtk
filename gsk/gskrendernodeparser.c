@@ -417,6 +417,29 @@ clear_string (gpointer inout_string)
 }
 
 static gboolean
+parse_bool (GtkCssParser *parser,
+            gpointer      out_bool)
+{
+  if (gtk_css_parser_try_ident (parser, "true") ||
+      gtk_css_parser_try_ident (parser, "True") ||
+      gtk_css_parser_try_ident (parser, "TRUE"))
+    {
+      *(gboolean *) out_bool = TRUE;
+      return TRUE;
+    }
+
+  if (gtk_css_parser_try_ident (parser, "false") ||
+      gtk_css_parser_try_ident (parser, "False") ||
+      gtk_css_parser_try_ident (parser, "FALSE"))
+    {
+      *(gboolean *) out_bool = FALSE;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 parse_stops (GtkCssParser *parser,
              gpointer      out_stops)
 {
@@ -1102,7 +1125,7 @@ parse_conic_gradient_node (GtkCssParser *parser)
       g_array_append_val (stops, to);
     }
 
-  result = gsk_conic_gradient_node_new (&bounds, &center, rotation, 
+  result = gsk_conic_gradient_node_new (&bounds, &center, rotation,
                                         (GskColorStop *) stops->data, stops->len);
 
   g_array_free (stops, TRUE);
@@ -1388,7 +1411,7 @@ parse_cairo_node (GtkCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
   node = gsk_cairo_node_new (&bounds);
-  
+
   if (surface != NULL)
     {
       cairo_t *cr = gsk_cairo_node_get_draw_context (node);
@@ -1816,6 +1839,37 @@ parse_debug_node (GtkCssParser *parser)
   return result;
 }
 
+static GskRenderNode *
+parse_hint_node (GtkCssParser *parser)
+{
+  gboolean force_cache = FALSE;
+  gboolean never_cache = FALSE;
+  GskRenderHints hints = 0;
+  GskRenderNode *child = NULL;
+  const Declaration declarations[] = {
+    { "never-cache", parse_bool, NULL, &never_cache },
+    { "force-cache", parse_bool, NULL, &force_cache },
+    { "child", parse_node, clear_node, &child },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+
+  if (never_cache)
+    hints |= GSK_RENDER_HINTS_NEVER_CACHE;
+
+  if (force_cache)
+    hints |= GSK_RENDER_HINTS_FORCE_CACHE;
+
+  result = gsk_hint_node_new (child, hints);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static gboolean
 parse_node (GtkCssParser *parser,
             gpointer      out_node)
@@ -1849,6 +1903,7 @@ parse_node (GtkCssParser *parser,
     { "texture", parse_texture_node },
     { "transform", parse_transform_node },
     { "glshader", parse_glshader_node },
+    { "hint", parse_hint_node },
   };
   GskRenderNode **node_p = out_node;
   guint i;
@@ -2154,6 +2209,17 @@ append_point_param (Printer                *p,
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
   append_point (p->str, value);
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
+append_bool_param (Printer    *p,
+                   const char *param_name,
+                   gboolean    value)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: %s", param_name, value ? "true" : "false");
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
@@ -2760,6 +2826,24 @@ render_node_print (Printer       *p,
             g_string_append_printf (p->str, "message: \"%s\";\n", message);
           }
         append_node_param (p, "child", gsk_debug_node_get_child (node));
+
+        end_node (p);
+      }
+      break;
+
+    case GSK_HINT_NODE:
+      {
+        GskRenderHints hints = gsk_hint_node_get_hints (node);
+
+        start_node (p, "hint");
+
+        if (hints & GSK_RENDER_HINTS_NEVER_CACHE)
+          append_bool_param (p, "never-cache", TRUE);
+
+        if (hints & GSK_RENDER_HINTS_FORCE_CACHE)
+          append_bool_param (p, "force-cache", TRUE);
+
+        append_node_param (p, "child", gsk_hint_node_get_child (node));
 
         end_node (p);
       }

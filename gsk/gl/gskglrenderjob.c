@@ -173,6 +173,11 @@ struct _GskGLRenderJob
    * looking at the format of the framebuffer we are rendering on.
    */
   int target_format;
+
+  /* If caching render nodes is inhibited from a hint node through
+   * all of the descendants.
+   */
+  int inhibit_cache_count;
 };
 
 typedef struct _GskGLRenderOffscreen
@@ -2903,6 +2908,9 @@ is_non_branching (const GskRenderNode *node)
     case GSK_DEBUG_NODE:
       return is_non_branching (gsk_debug_node_get_child (node));
 
+    case GSK_HINT_NODE:
+      return is_non_branching (gsk_hint_node_get_child (node));
+
     case GSK_CONTAINER_NODE:
       return gsk_container_node_get_n_children (node) == 1 &&
              is_non_branching (gsk_container_node_get_child (node, 0));
@@ -3647,6 +3655,51 @@ gsk_gl_render_job_visit_repeat_node (GskGLRenderJob      *job,
 }
 
 static void
+gsk_gl_render_job_visit_hint_node (GskGLRenderJob      *job,
+                                   const GskRenderNode *node)
+{
+  const GskRenderNode *child = gsk_hint_node_get_child (node);
+  GskRenderHints hints = gsk_hint_node_get_hints (node);
+  gboolean never_cache = !!(hints & GSK_RENDER_HINTS_NEVER_CACHE);
+  gboolean force_cache = !!(hints & GSK_RENDER_HINTS_FORCE_CACHE);
+
+  job->inhibit_cache_count += never_cache;
+
+  if (force_cache && job->inhibit_cache_count == 0)
+    {
+      GskGLRenderOffscreen offscreen = {0};
+
+      offscreen.bounds = &child->bounds;
+      offscreen.reset_clip = TRUE;
+      offscreen.force_offscreen = TRUE;
+
+      /* gsk_gl_render_job_visit_node_with_offscreen() will cache the texture
+       * for @child and if already cached, re-use it without further rendering.
+       */
+      if (!gsk_gl_render_job_visit_node_with_offscreen (job, child, &offscreen))
+        g_assert_not_reached ();
+
+      g_assert (offscreen.texture_id);
+      g_assert (offscreen.was_offscreen == TRUE);
+
+      gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
+      gsk_gl_program_set_uniform_texture (job->current_program,
+                                          UNIFORM_SHARED_SOURCE, 0,
+                                          GL_TEXTURE_2D,
+                                          GL_TEXTURE0,
+                                          offscreen.texture_id);
+      gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
+      gsk_gl_render_job_end_draw (job);
+    }
+  else
+    {
+      gsk_gl_render_job_visit_node (job, child);
+    }
+
+  job->inhibit_cache_count -= never_cache;
+}
+
+static void
 gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
                               const GskRenderNode *node)
 {
@@ -3755,6 +3808,10 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
     case GSK_DEBUG_NODE:
       /* Debug nodes are ignored because draws get reordered anyway */
       gsk_gl_render_job_visit_node (job, gsk_debug_node_get_child (node));
+    break;
+
+    case GSK_HINT_NODE:
+      gsk_gl_render_job_visit_hint_node (job, node);
     break;
 
     case GSK_GL_SHADER_NODE:
@@ -4000,7 +4057,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
 
   init_full_texture_region (offscreen);
 
-  if (!offscreen->do_not_cache)
+  if (!offscreen->do_not_cache && job->inhibit_cache_count == 0)
     gsk_gl_driver_cache_texture (job->driver, &key, offscreen->texture_id);
 
   return TRUE;
