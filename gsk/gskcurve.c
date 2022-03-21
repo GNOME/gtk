@@ -65,6 +65,9 @@ struct _GskCurveClass
                                                          GskBoundingBox         *bounds);
   float                         (* get_curvature)       (const GskCurve         *curve,
                                                          float                   t);
+
+  void                          (* print)               (const GskCurve         *curve,
+                                                         GString                *string);
 };
 
 static void
@@ -226,6 +229,16 @@ gsk_line_curve_get_curvature (const GskCurve *curve,
   return 0;
 }
 
+static void
+gsk_line_curve_print (const GskCurve *curve,
+                      GString        *string)
+{
+  g_string_append_printf (string,
+                          "M %g %g L %g %g",
+                          curve->line.points[0].x, curve->line.points[0].y,
+                          curve->line.points[1].x, curve->line.points[1].y);
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -242,6 +255,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_bounds,
   gsk_line_curve_get_bounds,
   gsk_line_curve_get_curvature,
+  gsk_line_curve_print,
 };
 
 /** QUADRATIC **/
@@ -510,6 +524,17 @@ gsk_quad_curve_get_curvature (const GskCurve *curve,
   return gsk_cubic_curve_get_curvature (curve, t);
 }
 
+static void
+gsk_quad_curve_print (const GskCurve *curve,
+                      GString        *string)
+{
+  g_string_append_printf (string,
+                          "M %g %g Q %g %g %g %g",
+                          curve->quad.points[0].x, curve->quad.points[0].y,
+                          curve->quad.points[1].x, curve->cubic.points[1].y,
+                          curve->quad.points[2].x, curve->cubic.points[2].y);
+}
+
 static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_init,
   gsk_quad_curve_init_foreach,
@@ -526,6 +551,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_get_bounds,
   gsk_quad_curve_get_tight_bounds,
   gsk_quad_curve_get_curvature,
+  gsk_quad_curve_print,
 };
 
 /** CUBIC **/
@@ -927,6 +953,18 @@ gsk_cubic_curve_get_curvature (const GskCurve *curve,
   return num / denom;
 }
 
+static void
+gsk_cubic_curve_print (const GskCurve *curve,
+                       GString        *string)
+{
+  g_string_append_printf (string,
+                          "M %g %g C %g %g %g %g %g %g",
+                          curve->cubic.points[0].x, curve->cubic.points[0].y,
+                          curve->cubic.points[1].x, curve->cubic.points[1].y,
+                          curve->cubic.points[2].x, curve->cubic.points[2].y,
+                          curve->cubic.points[3].x, curve->cubic.points[3].y);
+}
+
 static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_init,
   gsk_cubic_curve_init_foreach,
@@ -943,6 +981,7 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_get_bounds,
   gsk_cubic_curve_get_tight_bounds,
   gsk_cubic_curve_get_curvature,
+  gsk_cubic_curve_print,
 };
 
 /** CONIC **/
@@ -1452,6 +1491,18 @@ gsk_conic_curve_get_curvature (const GskCurve *curve,
   return 0.5 * ((w*pow3 (w2))/(pow3 (w1[0])*pow3 (w1[1]))) * (cross (&t1, &t2) / pow3 (graphene_vec2_length (&t3)));
 }
 
+static void
+gsk_conic_curve_print (const GskCurve *curve,
+                       GString        *string)
+{
+  g_string_append_printf (string,
+                          "M %g %g O %g %g %g %g %g",
+                          curve->conic.points[0].x, curve->conic.points[0].y,
+                          curve->conic.points[1].x, curve->conic.points[1].y,
+                          curve->conic.points[3].x, curve->conic.points[3].y,
+                          curve->conic.points[2].x);
+}
+
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
   gsk_conic_curve_init_foreach,
@@ -1468,6 +1519,7 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_bounds,
   gsk_conic_curve_get_tight_bounds,
   gsk_conic_curve_get_curvature,
+  gsk_conic_curve_print,
 };
 
 /** API **/
@@ -1638,6 +1690,21 @@ gsk_curve_get_curvature (const GskCurve   *curve,
     }
 
   return k;
+}
+
+void
+gsk_curve_print (const GskCurve *curve,
+                 GString        *string)
+{
+  get_class (curve->op)->print (curve, string);
+}
+
+char *
+gsk_curve_to_string (const GskCurve *curve)
+{
+  GString *s = g_string_new ("");
+  gsk_curve_print (curve, s);
+  return g_string_free (s, FALSE);
 }
 
 static inline void
