@@ -1125,7 +1125,7 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
       gdk_display_get_egl_config_high_depth (display) != gdk_display_get_egl_config (display))
     {
       gdk_gl_context_clear_current_if_surface (self);
-      eglDestroySurface (gdk_surface_get_display (self), priv->egl_surface);
+      eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
       priv->egl_surface = NULL;
     }
 
