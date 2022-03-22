@@ -45,7 +45,7 @@ create_random_degenerate_path (guint max_contours)
 
     case 1:
       /* a single point */
-      gsk_path_builder_move_to (builder, 
+      gsk_path_builder_move_to (builder,
                                 g_test_rand_double_range (-1000, 1000),
                                 g_test_rand_double_range (-1000, 1000));
       break;
@@ -54,7 +54,7 @@ create_random_degenerate_path (guint max_contours)
       /* N points */
       for (i = 0; i < MIN (10, max_contours); i++)
         {
-          gsk_path_builder_move_to (builder, 
+          gsk_path_builder_move_to (builder,
                                     g_test_rand_double_range (-1000, 1000),
                                     g_test_rand_double_range (-1000, 1000));
         }
@@ -62,7 +62,7 @@ create_random_degenerate_path (guint max_contours)
 
     case 3:
       /* 1 closed point */
-      gsk_path_builder_move_to (builder, 
+      gsk_path_builder_move_to (builder,
                                 g_test_rand_double_range (-1000, 1000),
                                 g_test_rand_double_range (-1000, 1000));
       gsk_path_builder_close (builder);
@@ -70,7 +70,7 @@ create_random_degenerate_path (guint max_contours)
 
     case 4:
       /* the same point closed N times */
-      gsk_path_builder_move_to (builder, 
+      gsk_path_builder_move_to (builder,
                                 g_test_rand_double_range (-1000, 1000),
                                 g_test_rand_double_range (-1000, 1000));
       for (i = 0; i < MIN (10, max_contours); i++)
@@ -440,7 +440,7 @@ path_operation_equal (const PathOperation *p1,
     }
 }
 
-static gboolean 
+static gboolean
 collect_path_operation_cb (GskPathOperation        op,
                            const graphene_point_t *pts,
                            gsize                   n_pts,
@@ -1115,7 +1115,7 @@ test_in_fill_rotated (void)
           GskFillRule fill_rule = g_random_int_range (0, N_FILL_RULES);
           float x = g_test_rand_double_range (-1000, 1000);
           float y = g_test_rand_double_range (-1000, 1000);
-  
+
           g_assert_cmpint (gsk_path_measure_in_fill (measures[0], &GRAPHENE_POINT_INIT (x, y), fill_rule),
                            ==,
                            gsk_path_measure_in_fill (measures[1], &GRAPHENE_POINT_INIT (y, -x), fill_rule));
@@ -1229,6 +1229,74 @@ test_path_stroke_distance (void)
   gsk_stroke_free (stroke);
 }
 
+static void
+test_path_convexity (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (100, 100), 100);
+  path = gsk_path_builder_free_to_path (builder);
+
+  g_assert_true (gsk_path_is_convex (path));
+
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (100, 100), 100);
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (100, 100), 10);
+  path = gsk_path_builder_free_to_path (builder);
+
+  g_assert_false (gsk_path_is_convex (path));
+
+  gsk_path_unref (path);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (9, 0, 100, 100));
+  path = gsk_path_builder_free_to_path (builder);
+
+  g_assert_true (gsk_path_is_convex (path));
+
+  gsk_path_unref (path);
+
+  path = gsk_path_parse ("M 100 100 C 150 50 200 50 250 100 C 200 150 150 150 100 100 Z");
+
+  g_assert_true (gsk_path_is_convex (path));
+
+  gsk_path_unref (path);
+
+  path = gsk_path_parse ("M 100 100 L 150 50 L 200 100 L 250 50 L 300 100 L 200 200 Z");
+
+  g_assert_false (gsk_path_is_convex (path));
+
+  gsk_path_unref (path);
+
+  /* Cantarell M, only turns in one direction, but winds around several times */
+  path = gsk_path_parse ("M 185.70745849609375 704 "
+                         "L 282.899658203125 704 "
+                         "L 282.899658203125 150.52880859375 "
+                         "L 265.08203125 156.04779052734375 "
+                         "L 491.34271240234375 596.20440673828125 "
+                         "L 569.83355712890625 596.20440673828125 "
+                         "L 792.276611328125 156.04779052734375 "
+                         "L 780.48101806640625 151.55084228515625 "
+                         "L 780.48101806640625 704 "
+                         "L 877.6732177734375 704 "
+                         "L 877.6732177734375 10 "
+                         "L 778.70745849609375 10 "
+                         "L 507.47491455078125 540.8739013671875 "
+                         "L 561.7674560546875 540.8739013671875 "
+                         "L 287.46881103515625 10 "
+                         "L 185.70745849609375 10 "
+                         "L 185.70745849609375 704 "
+                         "Z");
+
+  g_assert_false (gsk_path_is_convex (path));
+
+  gsk_path_unref (path);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -1247,6 +1315,7 @@ main (int   argc,
   g_test_add_func ("/path/in-fill-union", test_in_fill_union);
   g_test_add_func ("/path/in-fill-rotated", test_in_fill_rotated);
   g_test_add_func ("/path/stroke/distance", test_path_stroke_distance);
+  g_test_add_func ("/path/convexity", test_path_convexity);
 
   return g_test_run ();
 }
