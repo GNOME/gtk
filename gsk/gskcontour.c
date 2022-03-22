@@ -26,6 +26,7 @@
 #include "gskpathprivate.h"
 #include "gsksplineprivate.h"
 #include "gskstrokeprivate.h"
+#include "gskconvexityprivate.h"
 
 typedef struct _GskContourClass GskContourClass;
 
@@ -99,6 +100,7 @@ struct _GskContourClass
                                                  GskLineJoin             line_join,
                                                  float                   miter_limit);
   GskContour *          (* reverse)             (const GskContour       *contour);
+  gboolean              (* is_convex)           (const GskContour       *contour);
 };
 
 static gsize
@@ -576,6 +578,12 @@ gsk_rect_contour_reverse (const GskContour *contour)
                                                     self->height));
 }
 
+static gboolean
+gsk_rect_contour_is_convex (const GskContour *contour)
+{
+  return TRUE;
+}
+
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
 {
   sizeof (GskRectContour),
@@ -598,6 +606,7 @@ static const GskContourClass GSK_RECT_CONTOUR_CLASS =
   gsk_rect_contour_add_stroke,
   gsk_rect_contour_offset,
   gsk_rect_contour_reverse,
+  gsk_rect_contour_is_convex,
 };
 
 GskContour *
@@ -990,6 +999,12 @@ gsk_circle_contour_reverse (const GskContour *contour)
                                  self->start_angle);
 }
 
+static gboolean
+gsk_circle_contour_is_convex (const GskContour *contour)
+{
+  return TRUE;
+}
+
 static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
 {
   sizeof (GskCircleContour),
@@ -1012,6 +1027,7 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_add_stroke,
   gsk_circle_contour_offset,
   gsk_circle_contour_reverse,
+  gsk_circle_contour_is_convex,
 };
 
 GskContour *
@@ -1046,6 +1062,7 @@ struct _GskStandardContour
   GskContour contour;
 
   GskPathFlags flags;
+  GskConvexity convexity;
 
   gsize n_ops;
   gsize n_points;
@@ -1820,6 +1837,17 @@ gsk_standard_contour_reverse (const GskContour *contour)
   return res;
 }
 
+static gboolean
+gsk_standard_contour_is_convex (const GskContour *contour)
+{
+  GskStandardContour *self = (GskStandardContour *) contour;
+
+  if (self->convexity == GSK_CONVEXITY_UNKNOWN)
+    self->convexity = gsk_contour_compute_convexity (contour);
+
+  return self->convexity == GSK_CONVEXITY_CONVEX;
+}
+
 static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 {
   sizeof (GskStandardContour),
@@ -1842,6 +1870,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_add_stroke,
   gsk_standard_contour_offset,
   gsk_standard_contour_reverse,
+  gsk_standard_contour_is_convex,
 };
 
 /* You must ensure the contour has enough size allocated,
@@ -1863,6 +1892,7 @@ gsk_standard_contour_init (GskContour             *contour,
   self->contour.klass = &GSK_STANDARD_CONTOUR_CLASS;
 
   self->flags = flags;
+  self->convexity = GSK_CONVEXITY_UNKNOWN;
   self->n_ops = n_ops;
   self->n_points = n_points;
   self->points = (graphene_point_t *) &self->ops[n_ops];
@@ -2063,6 +2093,12 @@ GskContour *
 gsk_contour_reverse (const GskContour *src)
 {
   return src->klass->reverse (src);
+}
+
+gboolean
+gsk_contour_is_convex (const GskContour *contour)
+{
+  return contour->klass->is_convex (contour);
 }
 
 /* }}} */

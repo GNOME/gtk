@@ -44,6 +44,7 @@ gsk_private_sources = files([
   'gskboundingbox.c',
   'gskcairoblur.c',
   'gskcontour.c',
+  'gskconvexity.c',
   'gskcurve.c',
   'gskcurveintersect.c',
   'gskdebug.c',
