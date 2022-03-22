@@ -44,6 +44,7 @@ gsk_public_sources = files([
 gsk_private_sources = files([
   'gskcairoblur.c',
   'gskcontour.c',
+  'gskconvexity.c',
   'gskcurve.c',
   'gskcurveintersect.c',
   'gskdebug.c',
