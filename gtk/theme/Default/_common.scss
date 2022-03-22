@@ -2352,15 +2352,14 @@ scrollbar {
   &.overlay-indicator {
     &:not(.dragging):not(.hovering) {
       border-color: transparent;
-      opacity: 0.4;
       background-color: transparent;
 
       > range > trough > slider {
         margin: 0;
         min-width: 3px;
         min-height: 3px;
-        background-color: $fg_color;
-        border: 1px solid if($variant == 'light', white, black);
+        background-color: gtkalpha($fg_color, 0.4);
+        border: 1px solid gtkalpha(if($variant == 'light', white, black), 0.4);
       }
 
       &.horizontal {
@@ -2379,7 +2378,10 @@ scrollbar {
     }
 
     &.dragging,
-    &.hovering { opacity: 0.8; }
+    &.hovering {
+      background-color: gtkalpha($scrollbar_bg_color, 0.8);
+      border: 1px solid gtkalpha(if($variant == 'light', white, black), 0.8);
+    }
   }
 
   &.horizontal > range > trough > slider { min-width: $_slider_min_length; }
