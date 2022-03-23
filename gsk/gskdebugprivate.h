@@ -14,6 +14,7 @@ typedef enum {
   GSK_DEBUG_VULKAN                = 1 <<  5,
   GSK_DEBUG_FALLBACK              = 1 <<  6,
   GSK_DEBUG_GLYPH_CACHE           = 1 <<  7,
+  GSK_DEBUG_PATHS                 = 1 <<  8,
   /* flags below may affect behavior */
   GSK_DEBUG_GEOMETRY              = 1 <<  9,
   GSK_DEBUG_FULL_REDRAW           = 1 << 10,
