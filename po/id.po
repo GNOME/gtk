@@ -8,22 +8,22 @@
 # Andika Triwidada <andika@gmail.com>, 2010-2014, 2021.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2010.
 # Dirgita Devina <dirgitadevina@yahoo.co.id>, 2010, 2012.
-# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2021.
+# Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-4-4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-26 19:59+0000\n"
-"PO-Revision-Date: 2021-09-27 08:39+0700\n"
+"POT-Creation-Date: 2022-02-28 17:29+0000\n"
+"PO-Revision-Date: 2022-03-02 10:11+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural= n!=1\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -53,13 +53,55 @@ msgstr "Tidak dapat memberikan konten sebagai %s"
 msgid "Cannot provide contents as %s"
 msgstr "Tidak dapat memberikan konten sebagai \"%s\""
 
-#: gdk/gdkdisplay.c:144
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:430
 msgid "The current backend does not support OpenGL"
 msgstr "Backend saat ini tak mendukung OpenGL"
 
-#: gdk/gdkdisplay.c:1212
+#: gdk/gdkdisplay.c:1246
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Dukungan GL dinonaktifkan melalui GDK_DEBUG"
+
+#: gdk/gdkdisplay.c:1544
+msgid "No EGL configuration available"
+msgstr "Tak ada konfigurasi EGL yang tersedia"
+
+#: gdk/gdkdisplay.c:1552
+msgid "Failed to get EGL configurations"
+msgstr "Gagal mendapatkan konfigurasi EGL"
+
+#: gdk/gdkdisplay.c:1582
+msgid "No EGL configuration with required features found"
+msgstr "Tidak ditemukan konfigurasi EGL dengan fitur yang diperlukan"
+
+#: gdk/gdkdisplay.c:1589
+msgid "No perfect EGL configuration found"
+msgstr "Tak ditemukan konfigurasi EGL yang sempurna"
+
+#: gdk/gdkdisplay.c:1631
+msgid "EGL implementation is missing extension %2$s"
+msgid_plural "EGL implementation is missing %d extensions: %s"
+msgstr[0] "Implementasi EGL tidak memiliki %d ekstensi: %s"
+
+#: gdk/gdkdisplay.c:1664
+msgid "libEGL not available in this sandbox"
+msgstr "libEGL tidak tersedia di sandbox ini"
+
+#: gdk/gdkdisplay.c:1665
+msgid "libEGL not available"
+msgstr "libEGL tidak tersedia"
+
+#: gdk/gdkdisplay.c:1675
+msgid "Failed to create EGL display"
+msgstr "Gagal membuat tampilan EGL"
+
+#: gdk/gdkdisplay.c:1685
+msgid "Could not initialize EGL display"
+msgstr "Tidak bisa menginisialisasi tampilan EGL"
+
+#: gdk/gdkdisplay.c:1696
+#, c-format
+msgid "EGL version %d.%d is too old. GTK requires %d.%d"
+msgstr "EGL versi %d.%d terlalu tua. GTK memerlukan %d.%d"
 
 #: gdk/gdkdrop.c:130
 msgid "Drag’n’drop from other applications is not supported."
@@ -69,16 +111,38 @@ msgstr "Seret dan jatuhkan dari aplikasi lain tidak didukung."
 msgid "No compatible formats to transfer contents."
 msgstr "Tidak ada format yang kompatibel untuk mentransfer konten."
 
+#: gdk/gdkglcontext.c:332
+msgid "The EGL implementation does not support any allowed APIs"
+msgstr "Implementasi EGL tidak mendukung API yang diizinkan"
+
+#: gdk/gdkglcontext.c:413 gdk/win32/gdkglcontext-win32-wgl.c:616
+#: gdk/x11/gdkglcontext-glx.c:624
+msgid "Unable to create a GL context"
+msgstr "Tak dapat membuat sebuah konteks GL"
+
+#: gdk/gdkglcontext.c:1273
+msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
+msgstr "Apa pun kecuali OpenGL ES dinonaktifkan melalui GDK_DEBUG"
+
+#: gdk/gdkglcontext.c:1282
+#, c-format
+msgid "Application does not support %s API"
+msgstr "Aplikasi tidak mendukung API %s"
+
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1374
+#: gdk/gdkglcontext.c:1803
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Mencoba menggunakan %s, tetapi %s sudah digunakan"
 
-#: gdk/gdksurface.c:1164
+#: gdk/gdksurface.c:1240
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Dukungan Vulkan dinonaktifkan melalui GDK_DEBUG"
+
+#: gdk/gdktexture.c:529
+msgid "Unknown image format."
+msgstr "Format gambar tidak dikenal."
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -457,10 +521,53 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
+#: gdk/loaders/gdkjpeg.c:63
+#, c-format
+msgid "Error interpreting JPEG image file (%s)"
+msgstr "Galat menginterpretasi berkas citra JPEG (%s)"
+
+#: gdk/loaders/gdkjpeg.c:190
+#, c-format
+msgid "Unsupported JPEG colorspace (%d)"
+msgstr "Ruang warna JPEG yang tidak didukung (%d)"
+
+#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
+#, c-format
+msgid "Not enough memory for image size %ux%u"
+msgstr "Tidak cukup memori untuk ukuran gambar %ux%u"
+
+#: gdk/loaders/gdkpng.c:119
+#, c-format
+msgid "Error reading png (%s)"
+msgstr "Galat membaca png (%s)"
+
+#: gdk/loaders/gdkpng.c:216
+#, c-format
+msgid "Unsupported depth %u in png image"
+msgstr "Kedalaman %u yang tidak didukung dalam gambar png"
+
+#: gdk/loaders/gdkpng.c:246
+#, c-format
+msgid "Unsupported color type %u in png image"
+msgstr "Jenis warna %u yang tidak didukung dalam gambar png"
+
+#: gdk/loaders/gdktiff.c:340
+msgid "Failed to load RGB data from TIFF file"
+msgstr "Gagal memuat data RGB dari berkas TIFF"
+
+#: gdk/loaders/gdktiff.c:383
+msgid "Could not load TIFF data"
+msgstr "Tidak dapat memuat data TIFF"
+
+#: gdk/loaders/gdktiff.c:465
+#, c-format
+msgid "Reading data failed at row %d"
+msgstr "Gagal membaca data pada baris %d"
+
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
-#: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:1099 gdk/win32/gdkdrop-win32.c:1144
-#: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:234
+#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:313
+#: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
+#: gdk/x11/gdkclipboard-x11.c:787 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Tidak ditemukan format transfer yang kompatibel"
 
@@ -469,116 +576,62 @@ msgstr "Tidak ditemukan format transfer yang kompatibel"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Gagal mendekode isi dengan tipe mime '%s'"
 
-#: gdk/wayland/gdkglcontext-wayland.c:191
-#: gdk/win32/gdkglcontext-win32-egl.c:402
-#: gdk/win32/gdkglcontext-win32-wgl.c:632 gdk/x11/gdkglcontext-egl.c:600
-#: gdk/x11/gdkglcontext-glx.c:613
-msgid "Unable to create a GL context"
-msgstr "Tak dapat membuat sebuah konteks GL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:489
-msgid "libEGL not available in this sandbox"
-msgstr "libEGL tidak tersedia di sandbox ini"
-
-#: gdk/wayland/gdkglcontext-wayland.c:490
-msgid "libEGL not available"
-msgstr "libEGL tidak tersedia"
-
-#: gdk/wayland/gdkglcontext-wayland.c:503
-msgid "Sandbox does not provide an OpenGL implementation"
-msgstr "Sandbox tidak menyediakan implementasi OpenGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:504
-msgid "No OpenGL implementation available"
-msgstr "Tak ada implementasi OpenGL yang tersedia"
-
-#: gdk/wayland/gdkglcontext-wayland.c:513 gdk/x11/gdkglcontext-egl.c:702
-msgid "Could not initialize EGL display"
-msgstr "Tidak bisa menginisialisasi tampilan EGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:524 gdk/x11/gdkglcontext-egl.c:712
-#, c-format
-msgid "EGL version %d.%d is too old. GTK requires %d.%d"
-msgstr "EGL versi %d.%d terlalu tua. GTK memerlukan %d.%d"
-
-#: gdk/wayland/gdkglcontext-wayland.c:535
-#: gdk/win32/gdkglcontext-win32-egl.c:276
-#: gdk/win32/gdkglcontext-win32-wgl.c:289
-#: gdk/win32/gdkglcontext-win32-wgl.c:306
-msgid "No GL implementation is available"
-msgstr "Tak ada implementasi GL yang tersedia"
-
-#: gdk/wayland/gdkglcontext-wayland.c:545
-msgid "Core GL is not available on EGL implementation"
-msgstr "GL inti tak tersedia pada implementasi EGL"
-
-#: gdk/wayland/gdkglcontext-wayland.c:554 gdk/x11/gdkglcontext-egl.c:723
-msgid "Surfaceless contexts are not supported on this EGL implementation"
-msgstr "Konteks tanpa permukaan tidak didukung pada implementasi EGL ini"
-
-#: gdk/wayland/gdkglcontext-wayland.c:566
-#: gdk/win32/gdkglcontext-win32-egl.c:216
-#: gdk/win32/gdkglcontext-win32-egl.c:226
-#: gdk/win32/gdkglcontext-win32-wgl.c:598
-msgid "No available configurations for the given pixel format"
-msgstr "Tak ada konfigurasi yang tersedia bagi format piksel yang diberikan"
-
-#: gdk/win32/gdkclipdrop-win32.c:718
+#: gdk/win32/gdkclipdrop-win32.c:721
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Tidak dapat mengklaim kepemilikan papan klip. OpenClipboard() kehabisan "
 "waktu."
 
-#: gdk/win32/gdkclipdrop-win32.c:728
+#: gdk/win32/gdkclipdrop-win32.c:731
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Tidak dapat mengklaim kepemilikan papan klip. Proses lain mengklaimnya "
 "sebelum kita."
 
-#: gdk/win32/gdkclipdrop-win32.c:742
+#: gdk/win32/gdkclipdrop-win32.c:745
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Tidak dapat mengklaim kepemilikan papan klip. OpenClipboard() gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:754
+#: gdk/win32/gdkclipdrop-win32.c:757
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Tidak dapat mengklaim kepemilikan papan klip. EmptyClipboard() gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:797
+#: gdk/win32/gdkclipdrop-win32.c:800
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "Tidak dapat mengatur data papan klip. OpenClipboard() kehabisan waktu."
 
-#: gdk/win32/gdkclipdrop-win32.c:807 gdk/win32/gdkclipdrop-win32.c:838
+#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Tidak dapat mengatur data papan klip. Proses lain mengklaim kepemilikan "
 "papan klip."
 
-#: gdk/win32/gdkclipdrop-win32.c:821
+#: gdk/win32/gdkclipdrop-win32.c:824
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Tidak dapat mengatur data papan klip. OpenClipboard() gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:873
+#: gdk/win32/gdkclipdrop-win32.c:876
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. GlobalLock(0x%p) gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:884
+#: gdk/win32/gdkclipdrop-win32.c:887
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. GlobalSize(0x%p) gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:897
+#: gdk/win32/gdkclipdrop-win32.c:900
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -586,19 +639,19 @@ msgstr ""
 "Tidak bisa memperoleh data papan klip. Gagal mengalokasikan %s byte untuk "
 "menyimpan data."
 
-#: gdk/win32/gdkclipdrop-win32.c:929
+#: gdk/win32/gdkclipdrop-win32.c:932
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. OpenClipboard() kehabisan waktu."
 
-#: gdk/win32/gdkclipdrop-win32.c:939
+#: gdk/win32/gdkclipdrop-win32.c:942
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. Kepemilikan papan klip berubah."
 
-#: gdk/win32/gdkclipdrop-win32.c:949
+#: gdk/win32/gdkclipdrop-win32.c:952
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -606,92 +659,101 @@ msgstr ""
 "Tidak dapat mendapatkan data papan klip. Data papan klip berubah sebelum "
 "kami bisa mendapatkannya."
 
-#: gdk/win32/gdkclipdrop-win32.c:966
+#: gdk/win32/gdkclipdrop-win32.c:969
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Tidak dapat mendapatkan data papan klip. OpenClipboard() gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:991
+#: gdk/win32/gdkclipdrop-win32.c:994
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. Tidak ditemukan format transfer "
 "yang kompatibel."
 
-#: gdk/win32/gdkclipdrop-win32.c:1001
+#: gdk/win32/gdkclipdrop-win32.c:1004
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. GetClipboardData() gagal: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1030
+#: gdk/win32/gdkdrop-win32.c:937
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Tidak dapat mendapatkan data DnD. GlobalLock(0x%p) gagal: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1039
+#: gdk/win32/gdkdrop-win32.c:946
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Tidak dapat mendapatkan data DnD. GlobalSize(0x%p) gagal: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1050
+#: gdk/win32/gdkdrop-win32.c:957
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Tidak bisa memperoleh data DnD. Gagal mengalokasikan %s byte untuk menyimpan "
 "data."
 
-#: gdk/win32/gdkdrop-win32.c:1118
+#: gdk/win32/gdkdrop-win32.c:1025
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Permukaan GDK 0x%p tidak terdaftar sebagai target penurunan"
 
-#: gdk/win32/gdkdrop-win32.c:1125
+#: gdk/win32/gdkdrop-win32.c:1032
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Catatan konteks target 0x%p tidak memiliki objek data"
 
-#: gdk/win32/gdkdrop-win32.c:1163
+#: gdk/win32/gdkdrop-win32.c:1070
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) gagal, menghasilkan 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1195
+#: gdk/win32/gdkdrop-win32.c:1102
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Gagal mentransmisikan data DnD format W32 0x%x to %p (%s)"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:64
+#: gdk/win32/gdkglcontext-win32-wgl.c:276
+#: gdk/win32/gdkglcontext-win32-wgl.c:293
+msgid "No GL implementation is available"
+msgstr "Tak ada implementasi GL yang tersedia"
+
+#: gdk/win32/gdkglcontext-win32-wgl.c:582
+msgid "No available configurations for the given pixel format"
+msgstr "Tak ada konfigurasi yang tersedia bagi format piksel yang diberikan"
+
+#: gdk/win32/gdkhdataoutputstream-win32.c:63
 msgid "writing a closed stream"
 msgstr "menulis stream tertutup"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:86
+#: gdk/win32/gdkhdataoutputstream-win32.c:85
 msgid "g_try_realloc () failed"
 msgstr "g_try_realloc () gagal"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:94
-#: gdk/win32/gdkhdataoutputstream-win32.c:232
+#: gdk/win32/gdkhdataoutputstream-win32.c:93
+#: gdk/win32/gdkhdataoutputstream-win32.c:231
 msgid "GlobalReAlloc() failed: "
 msgstr "GlobalReAlloc() gagal: "
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:106
+#: gdk/win32/gdkhdataoutputstream-win32.c:105
 msgid "Ran out of buffer space (buffer size is fixed)"
 msgstr "Kehabisan ruang buffer (ukuran buffer diperbaiki)"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:204
+#: gdk/win32/gdkhdataoutputstream-win32.c:203
 msgid "Can’t transmute a single handle"
 msgstr "Tidak dapat mentransmutasikan satu penanganan"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:216
+#: gdk/win32/gdkhdataoutputstream-win32.c:215
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
 msgstr "Gagal mentransmutasikan %zu byte data dari %s ke %u"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:251
+#: gdk/win32/gdkhdataoutputstream-win32.c:250
 msgid "GlobalLock() failed: "
 msgstr "GlobalLock() gagal: "
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:365
+#: gdk/win32/gdkhdataoutputstream-win32.c:364
 msgid "GlobalAlloc() failed: "
 msgstr "GlobalAlloc() gagal: "
 
@@ -710,50 +772,25 @@ msgstr "Membuka \"%s\""
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Membuka %d Butir"
-msgstr[1] "Membuka %d Butir"
 
-#: gdk/x11/gdkclipboard-x11.c:433
+#: gdk/x11/gdkclipboard-x11.c:457
 msgid "Clipboard manager could not store selection."
 msgstr "Manajer papan klip tidak dapat menyimpan pilihan."
 
-#: gdk/x11/gdkclipboard-x11.c:613
+#: gdk/x11/gdkclipboard-x11.c:637
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 "Tidak dapat menyimpan papan klip. Tidak ada manajer papan klip yang aktif."
 
-#: gdk/x11/gdkglcontext-egl.c:180
-msgid "No EGL configuration available"
-msgstr "Tak ada konfigurasi EGL yang tersedia"
-
-#: gdk/x11/gdkglcontext-egl.c:188
-msgid "Failed to get EGL configurations"
-msgstr "Gagal mendapatkan konfigurasi EGL"
-
-#: gdk/x11/gdkglcontext-egl.c:266
-msgid "No EGL configuration with required features found"
-msgstr "Tidak ditemukan konfigurasi EGL dengan fitur yang diperlukan"
-
-#: gdk/x11/gdkglcontext-egl.c:273
-msgid "No perfect EGL configuration found"
-msgstr "Tak ditemukan konfigurasi EGL yang sempurna"
-
-#: gdk/x11/gdkglcontext-egl.c:684
-msgid "EGL is not supported"
-msgstr "EGL tidak didukung"
-
-#: gdk/x11/gdkglcontext-egl.c:693
-msgid "Failed to create EGL display"
-msgstr "Gagal membuat tampilan EGL"
-
-#: gdk/x11/gdkglcontext-glx.c:772
+#: gdk/x11/gdkglcontext-glx.c:780
 msgid "No GLX configurations available"
 msgstr "Tak ada konfigurasi GLX yang tersedia"
 
-#: gdk/x11/gdkglcontext-glx.c:845
+#: gdk/x11/gdkglcontext-glx.c:853
 msgid "No GLX configuration with required features found"
 msgstr "Tidak ditemukan konfigurasi GLX dengan fitur yang diperlukan"
 
-#: gdk/x11/gdkglcontext-glx.c:919
+#: gdk/x11/gdkglcontext-glx.c:927
 msgid "GLX is not supported"
 msgstr "GLX tidak didukung"
 
@@ -907,7 +944,7 @@ msgstr "Data rusak: URL"
 msgid "Could not unescape string"
 msgstr "Tidak dapat menghapus string"
 
-#: gtk/gtkaboutdialog.c:124 gtk/ui/gtkaboutdialog.ui:163
+#: gtk/gtkaboutdialog.c:124
 msgid "License"
 msgstr "Lisensi"
 
@@ -1021,7 +1058,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:826 gtk/gtkshortcutlabel.c:100
+#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:100
 #: gtk/gtkshortcutlabel.c:136
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1032,7 +1069,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:845 gtk/gtkshortcutlabel.c:103
+#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:103
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1043,7 +1080,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:864 gtk/gtkshortcutlabel.c:106
+#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:106
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1054,7 +1091,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:882 gtk/gtkshortcutlabel.c:112
+#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:112
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Super"
@@ -1065,7 +1102,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:896 gtk/gtkshortcutlabel.c:115
+#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:115
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1076,7 +1113,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:911 gtk/gtkshortcutlabel.c:109
+#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:109
 #: gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1086,17 +1123,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:931
+#: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "KP"
 
-#: gtk/gtkaccelgroup.c:938
+#: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Spasi"
 
-#: gtk/gtkaccelgroup.c:941 gtk/gtkshortcutlabel.c:171
+#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:171
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1497,7 +1534,6 @@ msgid "Other application…"
 msgstr "Aplikasi lain…"
 
 #: gtk/gtkappchooserdialog.c:205 gtk/gtkappchooserdialog.c:256
-#: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select Application"
 msgstr "Pilih Aplikasi"
 
@@ -1581,6 +1617,15 @@ msgstr "Elemen <%s> tak diperbolehkan di aras puncak"
 msgid "Text may not appear inside <%s>"
 msgstr "Teks tak boleh muncul di dalam <%s>"
 
+# Karena awal minggu dimulai dari Minggu (kalender sekarang banyak menggunakan hari Minggu sebagai awal minggu), maka menggunakan nilai "0".
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
+#.
+#: gtk/gtkcalendar.c:668
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:0"
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1591,18 +1636,9 @@ msgstr "Teks tak boleh muncul di dalam <%s>"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:768
+#: gtk/gtkcalendar.c:819
 msgid "calendar:MY"
 msgstr "calendar:MY"
-
-# Karena awal minggu dimulai dari Minggu (kalender sekarang banyak menggunakan hari Minggu sebagai awal minggu), maka menggunakan nilai "0".
-#. Translate to calendar:week_start:0 if you want Sunday to be the
-#. * first day of the week to calendar:week_start:1 if you want Monday
-#. * to be the first day of the week, and so on.
-#.
-#: gtk/gtkcalendar.c:806
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:0"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1610,7 +1646,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1402
+#: gtk/gtkcalendar.c:1406
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1625,7 +1661,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1439
+#: gtk/gtkcalendar.c:1443
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1639,7 +1675,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1503
+#: gtk/gtkcalendar.c:1507
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1676,16 +1712,16 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:310
+#: gtk/gtkcolorbutton.c:181 gtk/gtkcolorbutton.c:311
 msgid "Pick a Color"
 msgstr "Pilih Warna"
 
-#: gtk/gtkcolorbutton.c:499 gtk/gtkcolorchooserwidget.c:308
+#: gtk/gtkcolorbutton.c:500 gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Merah %d%%, Hijau %d%%, Biru %d%%, Alfa %d%%"
 
-#: gtk/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:314
+#: gtk/gtkcolorbutton.c:506 gtk/gtkcolorchooserwidget.c:314
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Merah %d%%, Hijau %d%%, Biru %d%%"
@@ -1930,7 +1966,7 @@ msgstr "Sesuaian"
 msgid "Custom color %d: %s"
 msgstr "Warna gubahan %d: %s"
 
-#: gtk/gtkcolorswatch.c:229
+#: gtk/gtkcolorswatch.c:231
 msgid "Customize"
 msgstr "Gubah"
 
@@ -1949,7 +1985,6 @@ msgid "Margins from Printer…"
 msgstr "Batas dari Pencetak…"
 
 #: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:162
-#: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_Tutup"
 
@@ -2003,7 +2038,7 @@ msgstr "_Kanan:"
 msgid "Paper Margins"
 msgstr "Margin Kertas"
 
-#: gtk/gtkentry.c:3726
+#: gtk/gtkentry.c:3743
 msgid "Insert Emoji"
 msgstr "Sisipkan Emoji"
 
@@ -2073,10 +2108,8 @@ msgstr "Berkas dengan nama itu sudah ada"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:713
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6140 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1245 gtk/ui/gtkappchooserdialog.ui:45
-#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
-#: gtk/ui/gtkfontchooserdialog.ui:24
+#: gtk/gtkwindow.c:6148 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1706
 msgid "_Cancel"
 msgstr "Ba_tal"
 
@@ -2087,11 +2120,11 @@ msgid "_Open"
 msgstr "Buk_a"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1246
+#: gtk/inspector/recorder.c:1707
 msgid "_Save"
 msgstr "_Simpan"
 
-#: gtk/gtkfilechoosernativequartz.c:338 gtk/ui/gtkfilechooserwidget.ui:346
+#: gtk/gtkfilechoosernativequartz.c:338
 msgid "Select which types of files are shown"
 msgstr "Pilih jenis berkas yang ingin ditampilkan"
 
@@ -2164,7 +2197,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jika Anda menghapus suatu butir, itu akan hilang selamanya."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8862
+#: gtk/gtklabel.c:5645 gtk/gtktext.c:6073 gtk/gtktextview.c:8956
 msgid "_Delete"
 msgstr "_Hapus"
 
@@ -2193,7 +2226,7 @@ msgid "_Add to Bookmarks"
 msgstr "T_ambah dalam Markah"
 
 #: gtk/gtkfilechooserwidget.c:1822 gtk/gtkplacessidebar.c:2309
-#: gtk/gtkplacessidebar.c:3248 gtk/ui/gtkfilechooserwidget.ui:465
+#: gtk/gtkplacessidebar.c:3248
 msgid "_Rename"
 msgstr "_Ganti Nama"
 
@@ -2221,9 +2254,7 @@ msgstr "_Tampilkan Waktu"
 msgid "Sort _Folders Before Files"
 msgstr "Urutkan _Folder Sebelum Berkas"
 
-#. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2253 gtk/inspector/css-node-tree.ui:135
-#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkprintunixdialog.ui:116
 msgid "Location"
 msgstr "Lokasi"
 
@@ -2246,7 +2277,6 @@ msgid "Enter location or URL"
 msgstr "Masukkan lokasi atau URL"
 
 #: gtk/gtkfilechooserwidget.c:3791 gtk/gtkfilechooserwidget.c:6604
-#: gtk/ui/gtkfilechooserwidget.ui:226
 msgid "Modified"
 msgstr "Diubah"
 
@@ -2288,8 +2318,8 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Audio"
 
-#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:602
-#: gtk/inspector/visual.ui:187
+#: gtk/gtkfilechooserwidget.c:4303 gtk/gtkfontbutton.c:604
+#: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "Fonta"
 
@@ -2374,60 +2404,65 @@ msgstr "Diakses"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:626
+#: gtk/gtkfontbutton.c:508 gtk/gtkfontbutton.c:628
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
-#: gtk/gtkfontbutton.c:1348
+#: gtk/gtkfontbutton.c:1365
 msgctxt "font"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/gtkfontchooserwidget.c:1568
+#: gtk/gtkfontchooserwidget.c:1531
+msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Lebar"
 
-#: gtk/gtkfontchooserwidget.c:1569
+#: gtk/gtkfontchooserwidget.c:1532
+msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Bobot"
 
-#: gtk/gtkfontchooserwidget.c:1570
+#: gtk/gtkfontchooserwidget.c:1533
+msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Miring"
 
-#: gtk/gtkfontchooserwidget.c:1571
+#: gtk/gtkfontchooserwidget.c:1534
+msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Miring"
 
-#: gtk/gtkfontchooserwidget.c:1572
+#: gtk/gtkfontchooserwidget.c:1535
+msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Ukuran Optik"
 
-#: gtk/gtkfontchooserwidget.c:2118
+#: gtk/gtkfontchooserwidget.c:2139
 msgid "Default"
 msgstr "Baku"
 
-#: gtk/gtkfontchooserwidget.c:2164
+#: gtk/gtkfontchooserwidget.c:2185
 msgid "Ligatures"
 msgstr "Ligatura"
 
-#: gtk/gtkfontchooserwidget.c:2165
+#: gtk/gtkfontchooserwidget.c:2186
 msgid "Letter Case"
 msgstr "Huruf besar kecil"
 
-#: gtk/gtkfontchooserwidget.c:2166
+#: gtk/gtkfontchooserwidget.c:2187
 msgid "Number Case"
 msgstr "Notasi Angka"
 
-#: gtk/gtkfontchooserwidget.c:2167
+#: gtk/gtkfontchooserwidget.c:2188
 msgid "Number Spacing"
 msgstr "Spasi Angka"
 
-#: gtk/gtkfontchooserwidget.c:2168
+#: gtk/gtkfontchooserwidget.c:2189
 msgid "Number Formatting"
 msgstr "Format Angka"
 
-#: gtk/gtkfontchooserwidget.c:2169
+#: gtk/gtkfontchooserwidget.c:2190
 msgid "Character Variants"
 msgstr "Varian Karakter"
 
@@ -2435,27 +2470,27 @@ msgstr "Varian Karakter"
 msgid "OpenGL context creation failed"
 msgstr "Pembuatan konteks OpenGL gagal"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8850
+#: gtk/gtklabel.c:5642 gtk/gtktext.c:6061 gtk/gtktextview.c:8944
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8854
+#: gtk/gtklabel.c:5643 gtk/gtktext.c:6065 gtk/gtktextview.c:8948
 msgid "_Copy"
 msgstr "_Salin"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8858
+#: gtk/gtklabel.c:5644 gtk/gtktext.c:6069 gtk/gtktextview.c:8952
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8883
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6082 gtk/gtktextview.c:8977
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: gtk/gtklabel.c:5493
+#: gtk/gtklabel.c:5655
 msgid "_Open Link"
 msgstr "_Buka Taut"
 
-#: gtk/gtklabel.c:5497
+#: gtk/gtklabel.c:5659
 msgid "Copy _Link Address"
 msgstr "Sa_lin Alamat Taut"
 
@@ -2467,11 +2502,11 @@ msgstr "_Salin URL"
 msgid "Invalid URI"
 msgstr "URI Salah"
 
-#: gtk/gtklockbutton.c:289 gtk/ui/gtklockbutton.ui:20
+#: gtk/gtklockbutton.c:289
 msgid "Lock"
 msgstr "Kunci"
 
-#: gtk/gtklockbutton.c:303 gtk/ui/gtklockbutton.ui:26
+#: gtk/gtklockbutton.c:303
 msgid "Unlock"
 msgstr "Buka kunci"
 
@@ -2504,7 +2539,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:765
+#: gtk/gtkmain.c:777
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2557,7 +2592,7 @@ msgid "%d:%02d"
 msgstr "%d: %02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6141
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6149
 msgid "_OK"
 msgstr "_Ok"
 
@@ -2704,7 +2739,7 @@ msgstr "Bukan berkas tata halaman yang sah"
 msgid "Manage Custom Sizes…"
 msgstr "Kelola Ukuran Gubahan…"
 
-#: gtk/gtkpagesetupunixdialog.c:284 gtk/ui/gtkassistant.ui:98
+#: gtk/gtkpagesetupunixdialog.c:284
 msgid "_Apply"
 msgstr "Ter_apkan"
 
@@ -2731,24 +2766,23 @@ msgstr ""
 " Atas: %s %s\n"
 " Bawah: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
-#: gtk/ui/gtkprintunixdialog.ui:711
+#: gtk/gtkpagesetupunixdialog.c:784
 msgid "Page Setup"
 msgstr "Atur Halaman"
 
-#: gtk/gtkpasswordentry.c:167
+#: gtk/gtkpasswordentry.c:173
 msgid "Hide Text"
 msgstr "Sembunyikan Teks"
 
-#: gtk/gtkpasswordentry.c:172 gtk/gtkpasswordentry.c:606
+#: gtk/gtkpasswordentry.c:178 gtk/gtkpasswordentry.c:629
 msgid "Show Text"
 msgstr "Tampilkan Teks"
 
-#: gtk/gtkpasswordentry.c:199
+#: gtk/gtkpasswordentry.c:216
 msgid "Caps Lock is on"
 msgstr "Caps Lock menyala"
 
-#: gtk/gtkpasswordentry.c:680
+#: gtk/gtkpasswordentry.c:705
 msgid "_Show Text"
 msgstr "Tampilkan Tek_s"
 
@@ -2851,9 +2885,7 @@ msgid "This name is already taken"
 msgstr "Nama sudah dipakai"
 
 #: gtk/gtkplacessidebar.c:2303 gtk/inspector/actions.ui:19
-#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:23
-#: gtk/ui/gtkfilechooserwidget.ui:168 gtk/ui/gtkfilechooserwidget.ui:440
-#: gtk/ui/gtkprintunixdialog.ui:85
+#: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:24
 msgid "Name"
 msgstr "Nama"
 
@@ -2974,7 +3006,7 @@ msgid "Unable to access location"
 msgstr "Tak bisa mengakses lokasi"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
+#: gtk/gtkplacesview.c:1228
 msgid "Con_nect"
 msgstr "CON-PATH"
 
@@ -3056,14 +3088,12 @@ msgstr "Pada Komputer Ini"
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
 msgstr[0] "%s / %s tersedia"
-msgstr[1] "%s / %s tersedia"
 
 #: gtk/gtkplacesviewrow.c:485
 msgid "Disconnect"
 msgstr "Putuskan"
 
-#: gtk/gtkplacesviewrow.c:485 gtk/ui/gtkplacesviewrow.ui:53
-#: gtk/ui/gtksidebarrow.ui:50
+#: gtk/gtkplacesviewrow.c:485
 msgid "Unmount"
 msgstr "Lepaskan Kaitan"
 
@@ -3079,8 +3109,7 @@ msgstr "Ingat _sandi"
 msgid "Select a filename"
 msgstr "Pilih nama berkas"
 
-#: gtk/gtkprinteroptionwidget.c:714 gtk/ui/gtkappchooserdialog.ui:50
-#: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
+#: gtk/gtkprinteroptionwidget.c:714
 msgid "_Select"
 msgstr "_Pilih"
 
@@ -3339,7 +3368,7 @@ msgstr ""
 "Tak ditemukan aplikasi terdaftar dengan nama \"%s\" bagi butir dengan URI "
 "\"%s\""
 
-#: gtk/gtksearchentry.c:599
+#: gtk/gtksearchentry.c:619
 msgid "Clear entry"
 msgstr "Bersihkan entri"
 
@@ -3400,7 +3429,7 @@ msgid "Swipe right"
 msgstr "Gesek ke kanan"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:517
+#: gtk/gtkshortcutswindow.c:874 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Pintasan"
 
@@ -3414,13 +3443,11 @@ msgstr "Hasil Cari"
 msgid "Search Shortcuts"
 msgstr "Pintasan Cari"
 
-#: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
-#: gtk/ui/gtkfilechooserwidget.ui:297
+#: gtk/gtkshortcutswindow.c:968
 msgid "No Results Found"
 msgstr "Tak Ada Hasil yang Ditemukan"
 
-#: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:362
-#: gtk/ui/gtkfilechooserwidget.ui:310 gtk/ui/gtkplacesview.ui:230
+#: gtk/gtkshortcutswindow.c:974
 msgid "Try a different search"
 msgstr "Cobalah pencarian lain"
 
@@ -3428,19 +3455,19 @@ msgstr "Cobalah pencarian lain"
 msgid "Could not show link"
 msgstr "Tidak dapat menampilkan tautan"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8888
+#: gtk/gtktext.c:6087 gtk/gtktextview.c:8982
 msgid "Insert _Emoji"
 msgstr "Sisipkan _Emoji"
 
-#: gtk/gtktextview.c:8870
+#: gtk/gtktextview.c:8964
 msgid "_Undo"
 msgstr "_Tidak Jadi"
 
-#: gtk/gtktextview.c:8874
+#: gtk/gtktextview.c:8968
 msgid "_Redo"
 msgstr "_Jadi Lagi"
 
-#: gtk/gtktreeexpander.c:196
+#: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:278
 msgid "Expand"
 msgstr "Ekspansi"
 
@@ -3463,12 +3490,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6128
+#: gtk/gtkwindow.c:6136
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Apakah Anda ingin memakai GTK Inspector?"
 
-#: gtk/gtkwindow.c:6130
+#: gtk/gtkwindow.c:6138
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3479,7 +3506,7 @@ msgstr ""
 "mengeksplorasi dan mengubah internal dari sebarang aplikasi GTK. Memakainya "
 "dapat menyebabkan aplikasi rusak atau remuk."
 
-#: gtk/gtkwindow.c:6135
+#: gtk/gtkwindow.c:6143
 msgid "Don’t show this message again"
 msgstr "Jangan tampilkan pesan ini lagi"
 
@@ -3524,7 +3551,8 @@ msgid "Attribute"
 msgstr "Atribut"
 
 #: gtk/inspector/a11y.ui:78 gtk/inspector/css-node-tree.ui:119
-#: gtk/inspector/prop-list.ui:56 gtk/inspector/recorder.ui:132
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:155
+#: gtk/inspector/recorder.ui:221
 msgid "Value"
 msgstr "Nilai"
 
@@ -3548,6 +3576,41 @@ msgstr "Tipe parameter"
 #: gtk/inspector/misc-info.ui:121
 msgid "State"
 msgstr "Keadaan"
+
+#: gtk/inspector/clipboard.c:211
+msgid "Show"
+msgstr "Tampilkan"
+
+#: gtk/inspector/clipboard.c:228
+msgid "Hover to load"
+msgstr "Arahkan kursor untuk memuat"
+
+#: gtk/inspector/clipboard.c:278
+msgctxt "clipboard"
+msgid "empty"
+msgstr "kosong"
+
+#: gtk/inspector/clipboard.c:283 gtk/inspector/clipboard.c:325
+msgctxt "clipboard"
+msgid "local"
+msgstr "lokal"
+
+#: gtk/inspector/clipboard.c:285 gtk/inspector/clipboard.c:327
+msgctxt "clipboard"
+msgid "remote"
+msgstr "remote"
+
+#: gtk/inspector/clipboard.ui:31
+msgid "Drag and hold here"
+msgstr "Seret dan tahan di sini"
+
+#: gtk/inspector/clipboard.ui:75 gtk/inspector/window.ui:574
+msgid "Clipboard"
+msgstr "Papan klip"
+
+#: gtk/inspector/clipboard.ui:114
+msgid "Primary"
+msgstr "Primer"
 
 #: gtk/inspector/controllers.c:126
 msgctxt "event phase"
@@ -3597,11 +3660,11 @@ msgstr ""
 msgid "Saving CSS failed"
 msgstr "Penyimpanan CSS gagal"
 
-#: gtk/inspector/css-editor.ui:33
+#: gtk/inspector/css-editor.ui:30
 msgid "Disable this custom CSS"
 msgstr "Matikan CSS gubahan ini"
 
-#: gtk/inspector/css-editor.ui:41
+#: gtk/inspector/css-editor.ui:37
 msgid "Save the current CSS"
 msgstr "Simpan CSS kini"
 
@@ -3617,45 +3680,49 @@ msgstr "Kelas Gaya"
 msgid "CSS Property"
 msgstr "Properti CSS"
 
-#: gtk/inspector/general.c:308 gtk/inspector/general.c:388
+#: gtk/inspector/general.c:330 gtk/inspector/general.c:410
 msgctxt "GL version"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/general.c:317
+#: gtk/inspector/general.c:339
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
-#: gtk/inspector/general.c:318
+#: gtk/inspector/general.c:340
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
-#: gtk/inspector/general.c:389
+#: gtk/inspector/general.c:411
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/general.c:440
+#: gtk/inspector/general.c:462
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
-#: gtk/inspector/general.c:441 gtk/inspector/general.c:442
+#: gtk/inspector/general.c:463 gtk/inspector/general.c:464
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
-#: gtk/inspector/general.c:498
+#: gtk/inspector/general.c:520
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/general.c:499 gtk/inspector/general.c:500
+#: gtk/inspector/general.c:521 gtk/inspector/general.c:522
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Nihil"
+
+#: gtk/inspector/general.c:792
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "Konteks IM adalah di-hardcode oleh GTK_IM_MODULE"
 
 #: gtk/inspector/general.ui:32
 msgid "GTK Version"
@@ -3677,39 +3744,51 @@ msgstr "Peta Fonta Pango"
 msgid "Media Backend"
 msgstr "Backend Media"
 
-#: gtk/inspector/general.ui:175 gtk/ui/gtkplacesview.ui:79
+#: gtk/inspector/general.ui:162
+msgid "Input Method"
+msgstr "Metode Masukan"
+
+#: gtk/inspector/general.ui:202
+msgid "Application ID"
+msgstr "ID Aplikasi"
+
+#: gtk/inspector/general.ui:228
+msgid "Resource Path"
+msgstr "Path Sumber Daya"
+
+#: gtk/inspector/general.ui:268
 msgid "Prefix"
 msgstr "Prefiks"
 
-#: gtk/inspector/general.ui:377
+#: gtk/inspector/general.ui:470
 msgid "Display"
 msgstr "Tampilan"
 
-#: gtk/inspector/general.ui:404
+#: gtk/inspector/general.ui:497
 msgid "RGBA Visual"
 msgstr "Visual RGBA"
 
-#: gtk/inspector/general.ui:430
+#: gtk/inspector/general.ui:523
 msgid "Composited"
 msgstr "Terkomposisi"
 
-#: gtk/inspector/general.ui:482
+#: gtk/inspector/general.ui:575
 msgid "GL Version"
 msgstr "Versi GL"
 
-#: gtk/inspector/general.ui:532
+#: gtk/inspector/general.ui:625
 msgid "GL Vendor"
 msgstr "Vendor GL"
 
-#: gtk/inspector/general.ui:572
+#: gtk/inspector/general.ui:665
 msgid "Vulkan Device"
 msgstr "Perangkat Vulkan"
 
-#: gtk/inspector/general.ui:599
+#: gtk/inspector/general.ui:692
 msgid "Vulkan API version"
 msgstr "Versi API Vulkan"
 
-#: gtk/inspector/general.ui:626
+#: gtk/inspector/general.ui:719
 msgid "Vulkan driver version"
 msgstr "Versi penggerak Vulkan"
 
@@ -3737,8 +3816,8 @@ msgstr "Ikon"
 msgid "Address"
 msgstr "Alamat"
 
-#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:34
-#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:214
+#: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
+#: gtk/inspector/statistics.ui:46
 msgid "Type"
 msgstr "Tipe"
 
@@ -3763,56 +3842,60 @@ msgid "Request Mode"
 msgstr "Moda Permintaan"
 
 #: gtk/inspector/misc-info.ui:269
+msgid "Measure map"
+msgstr "Peta ukuran"
+
+#: gtk/inspector/misc-info.ui:328
 msgid "Allocation"
 msgstr "Alokasi"
 
-#: gtk/inspector/misc-info.ui:298
+#: gtk/inspector/misc-info.ui:357
 msgid "Baseline"
 msgstr "Baseline"
 
-#: gtk/inspector/misc-info.ui:327
+#: gtk/inspector/misc-info.ui:386
 msgid "Surface"
 msgstr "Permukaan"
 
-#: gtk/inspector/misc-info.ui:346 gtk/inspector/misc-info.ui:385
-#: gtk/inspector/misc-info.ui:424 gtk/inspector/prop-editor.c:1111
-#: gtk/inspector/prop-editor.c:1471 gtk/inspector/window.ui:415
+#: gtk/inspector/misc-info.ui:405 gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:483 gtk/inspector/prop-editor.c:1116
+#: gtk/inspector/prop-editor.c:1476 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Properti"
 
-#: gtk/inspector/misc-info.ui:366
+#: gtk/inspector/misc-info.ui:425
 msgid "Renderer"
 msgstr "Perender"
 
-#: gtk/inspector/misc-info.ui:405
+#: gtk/inspector/misc-info.ui:464
 msgid "Frame Clock"
 msgstr "Jam Bingkai"
 
-#: gtk/inspector/misc-info.ui:444
+#: gtk/inspector/misc-info.ui:503
 msgid "Tick Callback"
 msgstr "Callback Tik"
 
-#: gtk/inspector/misc-info.ui:474
+#: gtk/inspector/misc-info.ui:533
 msgid "Frame Count"
 msgstr "Cacah Bingkai"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:562
 msgid "Frame Rate"
 msgstr "Laju Bingkai"
 
-#: gtk/inspector/misc-info.ui:532
+#: gtk/inspector/misc-info.ui:591
 msgid "Mapped"
 msgstr "Dipetakan"
 
-#: gtk/inspector/misc-info.ui:562
+#: gtk/inspector/misc-info.ui:621
 msgid "Realized"
 msgstr "Direalisasikan"
 
-#: gtk/inspector/misc-info.ui:592
+#: gtk/inspector/misc-info.ui:651
 msgid "Is Toplevel"
 msgstr "Aras Puncak"
 
-#: gtk/inspector/misc-info.ui:622
+#: gtk/inspector/misc-info.ui:681
 msgid "Child Visible"
 msgstr "Anak Tampak"
 
@@ -3853,83 +3936,83 @@ msgstr "%s untuk %s %p"
 msgid "%s with value type %s"
 msgstr "%s dengan tipe nilai %s"
 
-#: gtk/inspector/prop-editor.c:1179
+#: gtk/inspector/prop-editor.c:1184
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Tipe properti yang tak dapat disunting: %s"
 
-#: gtk/inspector/prop-editor.c:1323
+#: gtk/inspector/prop-editor.c:1328
 msgctxt "column number"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/prop-editor.c:1360
+#: gtk/inspector/prop-editor.c:1365
 msgid "Attribute:"
 msgstr "Atribut:"
 
-#: gtk/inspector/prop-editor.c:1363
+#: gtk/inspector/prop-editor.c:1368
 msgid "Model"
 msgstr "Model"
 
-#: gtk/inspector/prop-editor.c:1368
+#: gtk/inspector/prop-editor.c:1373
 msgid "Column:"
 msgstr "Kolom:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1467
+#: gtk/inspector/prop-editor.c:1472
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Aksi dari: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1522
+#: gtk/inspector/prop-editor.c:1527
 msgid "Reset"
 msgstr "Reset"
 
-#: gtk/inspector/prop-editor.c:1530
+#: gtk/inspector/prop-editor.c:1535
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Baku"
 
-#: gtk/inspector/prop-editor.c:1533
+#: gtk/inspector/prop-editor.c:1538
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1536
+#: gtk/inspector/prop-editor.c:1541
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1540
+#: gtk/inspector/prop-editor.c:1545
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Aplikasi"
 
-#: gtk/inspector/prop-editor.c:1543
+#: gtk/inspector/prop-editor.c:1548
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: gtk/inspector/prop-editor.c:1546
+#: gtk/inspector/prop-editor.c:1551
 msgid "Source:"
 msgstr "Sumber:"
 
-#: gtk/inspector/prop-list.ui:45
+#: gtk/inspector/prop-list.ui:46
 msgid "Defined At"
 msgstr "Didefinisikan Pada"
 
-#: gtk/inspector/recorder.c:1216
+#: gtk/inspector/recorder.c:1677
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Penyimpanan RenderNode gagal"
 
-#: gtk/inspector/recorder.ui:18
+#: gtk/inspector/recorder.ui:20
 msgid "Record frames"
 msgstr "Rekam bingkai"
 
-#: gtk/inspector/recorder.ui:26
+#: gtk/inspector/recorder.ui:27
 msgid "Clear recorded frames"
 msgstr "Bersihkan bingkai yang direkam"
 
@@ -3937,19 +4020,23 @@ msgstr "Bersihkan bingkai yang direkam"
 msgid "Add debug nodes"
 msgstr "Tambahkan simpul awakutu"
 
-#: gtk/inspector/recorder.ui:44
+#: gtk/inspector/recorder.ui:42
+msgid "Highlight event sequences"
+msgstr "Menyoroti urutan peristiwa"
+
+#: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
 msgstr "Gunakan latar belakang gelap"
 
-#: gtk/inspector/recorder.ui:53
+#: gtk/inspector/recorder.ui:59
 msgid "Save selected node"
 msgstr "Simpan simpul yang dipilih"
 
-#: gtk/inspector/recorder.ui:62
+#: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
 msgstr "Salin ke papan klip"
 
-#: gtk/inspector/recorder.ui:119
+#: gtk/inspector/recorder.ui:142 gtk/inspector/recorder.ui:208
 msgid "Property"
 msgstr "Properti"
 
@@ -3961,8 +4048,7 @@ msgstr "Path"
 msgid "Count"
 msgstr "Cacah"
 
-#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:202
-#: gtk/ui/gtkfontchooserwidget.ui:207 gtk/ui/gtkfontchooserwidget.ui:355
+#: gtk/inspector/resource-list.ui:82
 msgid "Size"
 msgstr "Ukuran"
 
@@ -4038,7 +4124,7 @@ msgstr "Kumulatif"
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Fungsikan statistik dengan GOBJECT_DEBUG=instance-count"
 
-#: gtk/inspector/tree-data.ui:13
+#: gtk/inspector/tree-data.ui:10
 msgid "Show data"
 msgstr "Tampilkan data"
 
@@ -4062,99 +4148,99 @@ msgstr "Backend tak mendukung penskalaan jendela"
 msgid "GL rendering is disabled"
 msgstr "Perenderan GL dinonaktifkan"
 
-#: gtk/inspector/visual.ui:59
+#: gtk/inspector/visual.ui:35
 msgid "GTK Theme"
 msgstr "Tema GTK"
 
-#: gtk/inspector/visual.ui:83
+#: gtk/inspector/visual.ui:59
 msgid "Dark Variant"
 msgstr "Varian Gelap"
 
-#: gtk/inspector/visual.ui:108
+#: gtk/inspector/visual.ui:84
 msgid "Cursor Theme"
 msgstr "Tema Kursor"
 
-#: gtk/inspector/visual.ui:133
+#: gtk/inspector/visual.ui:109
 msgid "Cursor Size"
 msgstr "Ukuran Kursor"
 
-#: gtk/inspector/visual.ui:162
+#: gtk/inspector/visual.ui:145
 msgid "Icon Theme"
 msgstr "Tema Ikon"
 
-#: gtk/inspector/visual.ui:212
+#: gtk/inspector/visual.ui:195
 msgid "Font Scale"
 msgstr "Skala Fonta"
 
-#: gtk/inspector/visual.ui:249
+#: gtk/inspector/visual.ui:240
 msgid "Text Direction"
 msgstr "Arah Teks"
 
-#: gtk/inspector/visual.ui:264
+#: gtk/inspector/visual.ui:255
 msgid "Left-to-Right"
 msgstr "Kiri ke Kanan"
 
-#: gtk/inspector/visual.ui:265
+#: gtk/inspector/visual.ui:256
 msgid "Right-to-Left"
 msgstr "Kanan ke Kiri"
 
-#: gtk/inspector/visual.ui:283
+#: gtk/inspector/visual.ui:274
 msgid "Window Scaling"
 msgstr "Penskalaan Jendela"
 
-#: gtk/inspector/visual.ui:309
+#: gtk/inspector/visual.ui:307
 msgid "Animations"
 msgstr "Animasi"
 
-#: gtk/inspector/visual.ui:334
+#: gtk/inspector/visual.ui:332
 msgid "Slowdown"
 msgstr "Melambat"
 
-#: gtk/inspector/visual.ui:384
+#: gtk/inspector/visual.ui:390
 msgid "Show fps overlay"
 msgstr "Tampilkan overlay fps"
 
-#: gtk/inspector/visual.ui:409
+#: gtk/inspector/visual.ui:415
 msgid "Show Graphic Updates"
 msgstr "Tampilkan Pembaruan Grafik"
 
-#: gtk/inspector/visual.ui:434
+#: gtk/inspector/visual.ui:440
 msgid "Show Fallback Rendering"
 msgstr "Tampilkan Rendering Cadangan"
 
-#: gtk/inspector/visual.ui:459
+#: gtk/inspector/visual.ui:465
 msgid "Show Baselines"
 msgstr "Tampilkan Baseline"
 
-#: gtk/inspector/visual.ui:487
+#: gtk/inspector/visual.ui:493
 msgid "Show Layout Borders"
 msgstr "Tampilkan Batas Tata Letak"
 
-#: gtk/inspector/visual.ui:544
+#: gtk/inspector/visual.ui:550
 msgid "CSS Padding"
 msgstr "Pengisi CSS"
 
-#: gtk/inspector/visual.ui:554
+#: gtk/inspector/visual.ui:560
 msgid "CSS Border"
 msgstr "Batas CSS"
 
-#: gtk/inspector/visual.ui:564
+#: gtk/inspector/visual.ui:570
 msgid "CSS Margin"
 msgstr "Margin CSS"
 
-#: gtk/inspector/visual.ui:574
+#: gtk/inspector/visual.ui:580
 msgid "Widget Margin"
 msgstr "Margin Widget"
 
-#: gtk/inspector/visual.ui:609
+#: gtk/inspector/visual.ui:615
 msgid "Show Focus"
 msgstr "Tampilkan Fokus"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:654
 msgid "Simulate Touchscreen"
 msgstr "Simulasikan Layar Sentuh"
 
-#: gtk/inspector/visual.ui:672
+#: gtk/inspector/visual.ui:678
 msgid "Software GL"
 msgstr "GL Perangkat Lunak"
 
@@ -4174,111 +4260,111 @@ msgstr "Tampilkan semua Objek"
 msgid "Show all Resources"
 msgstr "Tampilkan semua Sumber Daya"
 
-#: gtk/inspector/window.ui:139
+#: gtk/inspector/window.ui:147
 msgid "Collect Statistics"
 msgstr "Mengumpulkan Statistik"
 
-#: gtk/inspector/window.ui:191
+#: gtk/inspector/window.ui:199
 msgid "Objects"
 msgstr "Objek"
 
-#: gtk/inspector/window.ui:220
+#: gtk/inspector/window.ui:231
 msgid "Toggle Sidebar"
 msgstr "Jungkitkan Bilah Sisi"
 
-#: gtk/inspector/window.ui:252
+#: gtk/inspector/window.ui:253
 msgid "Refresh action state"
 msgstr "Segarkan keadaan tindakan"
 
-#: gtk/inspector/window.ui:337
+#: gtk/inspector/window.ui:327
 msgid "Previous object"
 msgstr "Objek sebelumnya"
 
-#: gtk/inspector/window.ui:347
+#: gtk/inspector/window.ui:334
 msgid "Child object"
 msgstr "Objek anak"
 
-#: gtk/inspector/window.ui:357
+#: gtk/inspector/window.ui:341
 msgid "Previous sibling"
 msgstr "Sibling sebelumnya"
 
-#: gtk/inspector/window.ui:366
+#: gtk/inspector/window.ui:347
 msgid "List Position"
 msgstr "Posisi Daftar"
 
-#: gtk/inspector/window.ui:372
+#: gtk/inspector/window.ui:356
 msgid "Next sibling"
 msgstr "Sibling selanjutnya"
 
-#: gtk/inspector/window.ui:405
+#: gtk/inspector/window.ui:386
 msgid "Miscellaneous"
 msgstr "Lain-lain"
 
-#: gtk/inspector/window.ui:426 gtk/ui/gtkprintunixdialog.ui:395
+#: gtk/inspector/window.ui:407
 msgid "Layout"
 msgstr "Tata letak"
 
-#: gtk/inspector/window.ui:437
+#: gtk/inspector/window.ui:418
 msgid "CSS Nodes"
 msgstr "Simpul CSS"
 
-#: gtk/inspector/window.ui:448
+#: gtk/inspector/window.ui:429
 msgid "Size Groups"
 msgstr "Grup Ukuran"
 
-#: gtk/inspector/window.ui:457 gtk/inspector/window.ui:466
+#: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"
 msgstr "Data"
 
-#: gtk/inspector/window.ui:476
+#: gtk/inspector/window.ui:457
 msgid "Actions"
 msgstr "Aksi"
 
-#: gtk/inspector/window.ui:487
+#: gtk/inspector/window.ui:468
 msgid "Menu"
 msgstr "Menu"
 
-#: gtk/inspector/window.ui:496
+#: gtk/inspector/window.ui:477
 msgid "Controllers"
 msgstr "Pengendali"
 
-#: gtk/inspector/window.ui:506
+#: gtk/inspector/window.ui:487
 msgid "Magnifier"
 msgstr "Pembesar"
 
-#: gtk/inspector/window.ui:527
+#: gtk/inspector/window.ui:508
 msgid "Accessibility"
 msgstr "Aksesibilitas"
 
-#: gtk/inspector/window.ui:551
+#: gtk/inspector/window.ui:532
 msgid "Global"
 msgstr "Global"
 
-#: gtk/inspector/window.ui:564
+#: gtk/inspector/window.ui:545
 msgid "Information"
 msgstr "Informasi"
 
-#: gtk/inspector/window.ui:573
+#: gtk/inspector/window.ui:554
 msgid "Settings"
 msgstr "Pengaturan"
 
-#: gtk/inspector/window.ui:582
+#: gtk/inspector/window.ui:563
 msgid "Resources"
 msgstr "Sumber Daya"
 
-#: gtk/inspector/window.ui:593
+#: gtk/inspector/window.ui:584
 msgid "Statistics"
 msgstr "Statistik"
 
-#: gtk/inspector/window.ui:604
+#: gtk/inspector/window.ui:595
 msgid "Logging"
 msgstr "Logging"
 
-#: gtk/inspector/window.ui:619
+#: gtk/inspector/window.ui:610
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:628
+#: gtk/inspector/window.ui:619
 msgid "Recorder"
 msgstr "Perekam"
 
@@ -5892,805 +5978,6 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/script-names.c:16
-msgctxt "Script"
-msgid "Arabic"
-msgstr "Arab"
-
-#: gtk/script-names.c:17
-msgctxt "Script"
-msgid "Armenian"
-msgstr "Armenia"
-
-#: gtk/script-names.c:18
-msgctxt "Script"
-msgid "Bengali"
-msgstr "Bengali"
-
-#: gtk/script-names.c:19
-msgctxt "Script"
-msgid "Bopomofo"
-msgstr "Bopomofo"
-
-#: gtk/script-names.c:20
-msgctxt "Script"
-msgid "Cherokee"
-msgstr "Cherokee"
-
-#: gtk/script-names.c:21
-msgctxt "Script"
-msgid "Coptic"
-msgstr "Koptik"
-
-#: gtk/script-names.c:22
-msgctxt "Script"
-msgid "Cyrillic"
-msgstr "Sirilik"
-
-#: gtk/script-names.c:23
-msgctxt "Script"
-msgid "Deseret"
-msgstr "Deseret"
-
-#: gtk/script-names.c:24
-msgctxt "Script"
-msgid "Devanagari"
-msgstr "Devanagari"
-
-#: gtk/script-names.c:25
-msgctxt "Script"
-msgid "Ethiopic"
-msgstr "Etiopia"
-
-#: gtk/script-names.c:26
-msgctxt "Script"
-msgid "Georgian"
-msgstr "Georgia"
-
-#: gtk/script-names.c:27
-msgctxt "Script"
-msgid "Gothic"
-msgstr "Gothic"
-
-#: gtk/script-names.c:28
-msgctxt "Script"
-msgid "Greek"
-msgstr "Yunani"
-
-#: gtk/script-names.c:29
-msgctxt "Script"
-msgid "Gujarati"
-msgstr "Gujarat"
-
-#: gtk/script-names.c:30
-msgctxt "Script"
-msgid "Gurmukhi"
-msgstr "Gurmukh"
-
-#: gtk/script-names.c:31
-msgctxt "Script"
-msgid "Han"
-msgstr "Han"
-
-#: gtk/script-names.c:32
-msgctxt "Script"
-msgid "Hangul"
-msgstr "Hangul"
-
-#: gtk/script-names.c:33
-msgctxt "Script"
-msgid "Hebrew"
-msgstr "Ibrani"
-
-#: gtk/script-names.c:34
-msgctxt "Script"
-msgid "Hiragana"
-msgstr "Hiragana"
-
-#: gtk/script-names.c:35
-msgctxt "Script"
-msgid "Kannada"
-msgstr "Kanada"
-
-#: gtk/script-names.c:36
-msgctxt "Script"
-msgid "Katakana"
-msgstr "Katakana"
-
-#: gtk/script-names.c:37
-msgctxt "Script"
-msgid "Khmer"
-msgstr "Khmer"
-
-#: gtk/script-names.c:38
-msgctxt "Script"
-msgid "Lao"
-msgstr "Laos"
-
-#: gtk/script-names.c:39
-msgctxt "Script"
-msgid "Latin"
-msgstr "Latin"
-
-#: gtk/script-names.c:40
-msgctxt "Script"
-msgid "Malayalam"
-msgstr "Malayalam"
-
-#: gtk/script-names.c:41
-msgctxt "Script"
-msgid "Mongolian"
-msgstr "Mongolian"
-
-#: gtk/script-names.c:42
-msgctxt "Script"
-msgid "Myanmar"
-msgstr "Myanmar"
-
-#: gtk/script-names.c:43
-msgctxt "Script"
-msgid "Ogham"
-msgstr "Ogham"
-
-#: gtk/script-names.c:44
-msgctxt "Script"
-msgid "Old Italic"
-msgstr "Itali Lama"
-
-#: gtk/script-names.c:45
-msgctxt "Script"
-msgid "Oriya"
-msgstr "Oriya"
-
-#: gtk/script-names.c:46
-msgctxt "Script"
-msgid "Runic"
-msgstr "Runic"
-
-#: gtk/script-names.c:47
-msgctxt "Script"
-msgid "Sinhala"
-msgstr "Sinhala"
-
-#: gtk/script-names.c:48
-msgctxt "Script"
-msgid "Syriac"
-msgstr "Syriac"
-
-#: gtk/script-names.c:49
-msgctxt "Script"
-msgid "Tamil"
-msgstr "Tamil"
-
-#: gtk/script-names.c:50
-msgctxt "Script"
-msgid "Telugu"
-msgstr "Telugu"
-
-#: gtk/script-names.c:51
-msgctxt "Script"
-msgid "Thaana"
-msgstr "Thaana"
-
-#: gtk/script-names.c:52
-msgctxt "Script"
-msgid "Thai"
-msgstr "Thailand"
-
-#: gtk/script-names.c:53
-msgctxt "Script"
-msgid "Tibetan"
-msgstr "Tibetan"
-
-#: gtk/script-names.c:54
-msgctxt "Script"
-msgid "Canadian Aboriginal"
-msgstr "Aborigin Kanada"
-
-#: gtk/script-names.c:55
-msgctxt "Script"
-msgid "Yi"
-msgstr "Yi"
-
-#: gtk/script-names.c:56
-msgctxt "Script"
-msgid "Tagalog"
-msgstr "Tagalog"
-
-#: gtk/script-names.c:57
-msgctxt "Script"
-msgid "Hanunoo"
-msgstr "Hanunoo"
-
-#: gtk/script-names.c:58
-msgctxt "Script"
-msgid "Buhid"
-msgstr "Buhid"
-
-#: gtk/script-names.c:59
-msgctxt "Script"
-msgid "Tagbanwa"
-msgstr "Tagbanwa"
-
-#: gtk/script-names.c:60
-msgctxt "Script"
-msgid "Braille"
-msgstr "Braille"
-
-#: gtk/script-names.c:61
-msgctxt "Script"
-msgid "Cypriot"
-msgstr "Cypriot"
-
-#: gtk/script-names.c:62
-msgctxt "Script"
-msgid "Limbu"
-msgstr "Limbu"
-
-#: gtk/script-names.c:63
-msgctxt "Script"
-msgid "Osmanya"
-msgstr "Osmanya"
-
-#: gtk/script-names.c:64
-msgctxt "Script"
-msgid "Shavian"
-msgstr "Shavia"
-
-#: gtk/script-names.c:65
-msgctxt "Script"
-msgid "Linear B"
-msgstr "Linear B"
-
-#: gtk/script-names.c:66
-msgctxt "Script"
-msgid "Tai Le"
-msgstr "Tai Le"
-
-#: gtk/script-names.c:67
-msgctxt "Script"
-msgid "Ugaritic"
-msgstr "Ugaritic"
-
-#: gtk/script-names.c:68
-msgctxt "Script"
-msgid "New Tai Lue"
-msgstr "Tai Lue Baru"
-
-#: gtk/script-names.c:69
-msgctxt "Script"
-msgid "Buginese"
-msgstr "Bugis"
-
-#: gtk/script-names.c:70
-msgctxt "Script"
-msgid "Glagolitic"
-msgstr "Glagolit"
-
-#: gtk/script-names.c:71
-msgctxt "Script"
-msgid "Tifinagh"
-msgstr "Tifinagh"
-
-#: gtk/script-names.c:72
-msgctxt "Script"
-msgid "Syloti Nagri"
-msgstr "Syloti Nagri"
-
-#: gtk/script-names.c:73
-msgctxt "Script"
-msgid "Old Persian"
-msgstr "Persia Lama"
-
-#: gtk/script-names.c:74
-msgctxt "Script"
-msgid "Kharoshthi"
-msgstr "Kharoshthi"
-
-#: gtk/script-names.c:75
-msgctxt "Script"
-msgid "Unknown"
-msgstr "Tidak Dikenal"
-
-#: gtk/script-names.c:76
-msgctxt "Script"
-msgid "Balinese"
-msgstr "Bahasa Bali"
-
-#: gtk/script-names.c:77
-msgctxt "Script"
-msgid "Cuneiform"
-msgstr "Cuneiform"
-
-#: gtk/script-names.c:78
-msgctxt "Script"
-msgid "Phoenician"
-msgstr "Phoenician"
-
-#: gtk/script-names.c:79
-msgctxt "Script"
-msgid "Phags-pa"
-msgstr "Phags-pa"
-
-#: gtk/script-names.c:80
-msgctxt "Script"
-msgid "N'Ko"
-msgstr "N'Ko"
-
-#: gtk/script-names.c:81
-msgctxt "Script"
-msgid "Kayah Li"
-msgstr "Kayah Li"
-
-#: gtk/script-names.c:82
-msgctxt "Script"
-msgid "Lepcha"
-msgstr "Lepcha"
-
-#: gtk/script-names.c:83
-msgctxt "Script"
-msgid "Rejang"
-msgstr "Rejang"
-
-#: gtk/script-names.c:84
-msgctxt "Script"
-msgid "Sundanese"
-msgstr "Bahasa Sunda"
-
-#: gtk/script-names.c:85
-msgctxt "Script"
-msgid "Saurashtra"
-msgstr "Saurashtra"
-
-#: gtk/script-names.c:86
-msgctxt "Script"
-msgid "Cham"
-msgstr "Cham"
-
-#: gtk/script-names.c:87
-msgctxt "Script"
-msgid "Ol Chiki"
-msgstr "Ol Chiki"
-
-#: gtk/script-names.c:88
-msgctxt "Script"
-msgid "Vai"
-msgstr "Vai"
-
-#: gtk/script-names.c:89
-msgctxt "Script"
-msgid "Carian"
-msgstr "Caria"
-
-#: gtk/script-names.c:90
-msgctxt "Script"
-msgid "Lycian"
-msgstr "Lycia"
-
-#: gtk/script-names.c:91
-msgctxt "Script"
-msgid "Lydian"
-msgstr "Lydia"
-
-#: gtk/script-names.c:92
-msgctxt "Script"
-msgid "Avestan"
-msgstr "Avestan"
-
-#: gtk/script-names.c:93
-msgctxt "Script"
-msgid "Bamum"
-msgstr "Bamum"
-
-#: gtk/script-names.c:94
-msgctxt "Script"
-msgid "Egyptian Hieroglyphs"
-msgstr "Hieroglif Mesir"
-
-#: gtk/script-names.c:95
-msgctxt "Script"
-msgid "Imperial Aramaic"
-msgstr "Imperial Arama"
-
-#: gtk/script-names.c:96
-msgctxt "Script"
-msgid "Inscriptional Pahlavi"
-msgstr "Inscriptional Pahlavi"
-
-#: gtk/script-names.c:97
-msgctxt "Script"
-msgid "Inscriptional Parthian"
-msgstr "Inscriptional Parthia"
-
-#: gtk/script-names.c:98
-msgctxt "Script"
-msgid "Javanese"
-msgstr "Bahasa Jawa"
-
-#: gtk/script-names.c:99
-msgctxt "Script"
-msgid "Kaithi"
-msgstr "Kaithi"
-
-#: gtk/script-names.c:100
-msgctxt "Script"
-msgid "Lisu"
-msgstr "Lisu"
-
-#: gtk/script-names.c:101
-msgctxt "Script"
-msgid "Meetei Mayek"
-msgstr "Meetei Mayek"
-
-#: gtk/script-names.c:102
-msgctxt "Script"
-msgid "Old South Arabian"
-msgstr "Arab Selatan Tua"
-
-#: gtk/script-names.c:103
-msgctxt "Script"
-msgid "Old Turkic"
-msgstr "Turkic Lama"
-
-#: gtk/script-names.c:104
-msgctxt "Script"
-msgid "Samaritan"
-msgstr "Samarita"
-
-#: gtk/script-names.c:105
-msgctxt "Script"
-msgid "Tai Tham"
-msgstr "Tai Tham"
-
-#: gtk/script-names.c:106
-msgctxt "Script"
-msgid "Tai Viet"
-msgstr "Tai Viet"
-
-#: gtk/script-names.c:107
-msgctxt "Script"
-msgid "Batak"
-msgstr "Batak"
-
-#: gtk/script-names.c:108
-msgctxt "Script"
-msgid "Brahmi"
-msgstr "Brahmi"
-
-#: gtk/script-names.c:109
-msgctxt "Script"
-msgid "Mandaic"
-msgstr "Manda"
-
-#: gtk/script-names.c:110
-msgctxt "Script"
-msgid "Chakma"
-msgstr "Chakma"
-
-#: gtk/script-names.c:111
-msgctxt "Script"
-msgid "Meroitic Cursive"
-msgstr "Kursif Meroe"
-
-#: gtk/script-names.c:112
-msgctxt "Script"
-msgid "Meroitic Hieroglyphs"
-msgstr "Hieroglif Meroe"
-
-#: gtk/script-names.c:113
-msgctxt "Script"
-msgid "Miao"
-msgstr "Miao"
-
-#: gtk/script-names.c:114
-msgctxt "Script"
-msgid "Sharada"
-msgstr "Sharada"
-
-#: gtk/script-names.c:115
-msgctxt "Script"
-msgid "Sora Sompeng"
-msgstr "Sora Sompeng"
-
-#: gtk/script-names.c:116
-msgctxt "Script"
-msgid "Takri"
-msgstr "Takri"
-
-#: gtk/script-names.c:117
-msgctxt "Script"
-msgid "Bassa"
-msgstr "Bassa Vah"
-
-#: gtk/script-names.c:118
-msgctxt "Script"
-msgid "Caucasian Albanian"
-msgstr "Albania Kaukasia"
-
-#: gtk/script-names.c:119
-msgctxt "Script"
-msgid "Duployan"
-msgstr "Duployan"
-
-#: gtk/script-names.c:120
-msgctxt "Script"
-msgid "Elbasan"
-msgstr "Elbasan"
-
-#: gtk/script-names.c:121
-msgctxt "Script"
-msgid "Grantha"
-msgstr "Grantha"
-
-#: gtk/script-names.c:122
-msgctxt "Script"
-msgid "Khojki"
-msgstr "Khojki"
-
-#: gtk/script-names.c:123
-msgctxt "Script"
-msgid "Khudawadi, Sindhi"
-msgstr "Khudawadi, Sindhi"
-
-#: gtk/script-names.c:124
-msgctxt "Script"
-msgid "Linear A"
-msgstr "Linear A"
-
-#: gtk/script-names.c:125
-msgctxt "Script"
-msgid "Mahajani"
-msgstr "Mahajani"
-
-#: gtk/script-names.c:126
-msgctxt "Script"
-msgid "Manichaean"
-msgstr "Manichaean"
-
-#: gtk/script-names.c:127
-msgctxt "Script"
-msgid "Mende Kikakui"
-msgstr "Mende Kikakui"
-
-#: gtk/script-names.c:128
-msgctxt "Script"
-msgid "Modi"
-msgstr "Modi"
-
-#: gtk/script-names.c:129
-msgctxt "Script"
-msgid "Mro"
-msgstr "Mro"
-
-#: gtk/script-names.c:130
-msgctxt "Script"
-msgid "Nabataean"
-msgstr "Nabataean"
-
-#: gtk/script-names.c:131
-msgctxt "Script"
-msgid "Old North Arabian"
-msgstr "Arab Utara Tua"
-
-#: gtk/script-names.c:132
-msgctxt "Script"
-msgid "Old Permic"
-msgstr "Pemic Kuno"
-
-#: gtk/script-names.c:133
-msgctxt "Script"
-msgid "Pahawh Hmong"
-msgstr "Pahawh Hmong"
-
-#: gtk/script-names.c:134
-msgctxt "Script"
-msgid "Palmyrene"
-msgstr "Palmyrene"
-
-#: gtk/script-names.c:135
-msgctxt "Script"
-msgid "Pau Cin Hau"
-msgstr "Pau Cin Hau"
-
-#: gtk/script-names.c:136
-msgctxt "Script"
-msgid "Psalter Pahlavi"
-msgstr "Psalter Pahlavi"
-
-#: gtk/script-names.c:137
-msgctxt "Script"
-msgid "Siddham"
-msgstr "Siddham"
-
-#: gtk/script-names.c:138
-msgctxt "Script"
-msgid "Tirhuta"
-msgstr "Tirhuta"
-
-#: gtk/script-names.c:139
-msgctxt "Script"
-msgid "Warang Citi"
-msgstr "Warang Citi"
-
-#: gtk/script-names.c:140
-msgctxt "Script"
-msgid "Ahom"
-msgstr "Ahom"
-
-#: gtk/script-names.c:141
-msgctxt "Script"
-msgid "Anatolian Hieroglyphs"
-msgstr "Hieroglif Anatolia"
-
-#: gtk/script-names.c:142
-msgctxt "Script"
-msgid "Hatran"
-msgstr "Hatran"
-
-#: gtk/script-names.c:143
-msgctxt "Script"
-msgid "Multani"
-msgstr "Multani"
-
-#: gtk/script-names.c:144
-msgctxt "Script"
-msgid "Old Hungarian"
-msgstr "Hungaria Lama"
-
-#: gtk/script-names.c:145
-msgctxt "Script"
-msgid "Signwriting"
-msgstr "Signwriting"
-
-#: gtk/script-names.c:146
-msgctxt "Script"
-msgid "Adlam"
-msgstr "Adlam"
-
-#: gtk/script-names.c:147
-msgctxt "Script"
-msgid "Bhaiksuki"
-msgstr "Bhaiksuki"
-
-#: gtk/script-names.c:148
-msgctxt "Script"
-msgid "Marchen"
-msgstr "Marchen"
-
-#: gtk/script-names.c:149
-msgctxt "Script"
-msgid "Newa"
-msgstr "Newa"
-
-#: gtk/script-names.c:150
-msgctxt "Script"
-msgid "Osage"
-msgstr "Osage"
-
-#: gtk/script-names.c:151
-msgctxt "Script"
-msgid "Tangut"
-msgstr "Tangut"
-
-#: gtk/script-names.c:152
-msgctxt "Script"
-msgid "Masaram Gondi"
-msgstr "Masaram Gondi"
-
-#: gtk/script-names.c:153
-msgctxt "Script"
-msgid "Nushu"
-msgstr "Nushu"
-
-#: gtk/script-names.c:154
-msgctxt "Script"
-msgid "Soyombo"
-msgstr "Soyombo"
-
-#: gtk/script-names.c:155
-msgctxt "Script"
-msgid "Zanabazar Square"
-msgstr "Bujur Sangkar Zanabazar"
-
-#: gtk/script-names.c:156
-msgctxt "Script"
-msgid "Dogra"
-msgstr "Dogra"
-
-#: gtk/script-names.c:157
-msgctxt "Script"
-msgid "Gunjala Gondi"
-msgstr "Gunjala Gondi"
-
-#: gtk/script-names.c:158
-msgctxt "Script"
-msgid "Hanifi Rohingya"
-msgstr "Hanifi Rohingya"
-
-#: gtk/script-names.c:159
-msgctxt "Script"
-msgid "Makasar"
-msgstr "Makasar"
-
-#: gtk/script-names.c:160
-msgctxt "Script"
-msgid "Medefaidrin"
-msgstr "Medefaidrin"
-
-#: gtk/script-names.c:161
-msgctxt "Script"
-msgid "Old Sogdian"
-msgstr "Sogdian Lama"
-
-#: gtk/script-names.c:162
-msgctxt "Script"
-msgid "Sogdian"
-msgstr "Sogdian"
-
-#: gtk/script-names.c:165 gtk/script-names.c:170
-msgctxt "Script"
-msgid "Elym"
-msgstr "Elym"
-
-#: gtk/script-names.c:166 gtk/script-names.c:171
-msgctxt "Script"
-msgid "Nand"
-msgstr "Nand"
-
-#: gtk/script-names.c:167 gtk/script-names.c:172
-msgctxt "Script"
-msgid "Rohg"
-msgstr "Rohg"
-
-#: gtk/script-names.c:168 gtk/script-names.c:173
-msgctxt "Script"
-msgid "Wcho"
-msgstr "Wcho"
-
-#: gtk/script-names.c:176 gtk/script-names.c:181
-msgctxt "Script"
-msgid "Chorasmian"
-msgstr "Chorasmian"
-
-#: gtk/script-names.c:177 gtk/script-names.c:182
-msgctxt "Script"
-msgid "Dives Akuru"
-msgstr "Dives Akuru"
-
-#: gtk/script-names.c:178 gtk/script-names.c:183
-msgctxt "Script"
-msgid "Khitan small script"
-msgstr "Khitan Skrip Kecil"
-
-#: gtk/script-names.c:179 gtk/script-names.c:184
-msgctxt "Script"
-msgid "Yezidi"
-msgstr "Yezidi"
-
-#: gtk/ui/gtkaboutdialog.ui:62
-msgid "About"
-msgstr "Tentang"
-
-#: gtk/ui/gtkaboutdialog.ui:123
-msgid "Credits"
-msgstr "Kredit"
-
-#: gtk/ui/gtkaboutdialog.ui:206
-msgid "System"
-msgstr "Sistem"
-
-#: gtk/ui/gtkappchooserdialog.ui:60
-msgid "_View All Applications"
-msgstr "_Tilik Semua Aplikasi"
-
-#: gtk/ui/gtkappchooserdialog.ui:66
-msgid "_Find New Applications"
-msgstr "_Cari Aplikasi Lain"
-
-#: gtk/ui/gtkappchooserwidget.ui:100
-msgid "No applications found."
-msgstr "Tidak menemukan aplikasi."
-
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "Preferensi"
@@ -6717,420 +6004,33 @@ msgstr "Tampilkan Semua"
 msgid "Quit %s"
 msgstr "Keluar %s"
 
-#: gtk/ui/gtkassistant.ui:64
-msgid "_Finish"
-msgstr "_Selesai"
-
-#: gtk/ui/gtkassistant.ui:75
-msgid "_Back"
-msgstr "_Kembali"
-
-#: gtk/ui/gtkassistant.ui:86
-msgid "_Next"
-msgstr "_Lanjut"
-
-#: gtk/ui/gtkcolorchooserdialog.ui:4
-msgid "Select a Color"
-msgstr "Pilih Warna"
-
-#: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
-msgid "Pick a color from the screen"
-msgstr "Pilih warna dari layar"
-
-#: gtk/ui/gtkcoloreditor.ui:80
-msgid "Hexadecimal color or color name"
-msgstr "Warna heksadesimal atau nama warna"
-
-#: gtk/ui/gtkcoloreditor.ui:95
-msgid "Hue"
-msgstr "Hue"
-
-#: gtk/ui/gtkcoloreditor.ui:114
-msgid "Alpha value"
-msgstr "Nilai alfa"
-
-#: gtk/ui/gtkcoloreditor.ui:132
-msgid "Saturation and value"
-msgstr "Saturasi dan nilai"
-
-#: gtk/ui/gtkcoloreditor.ui:156
-msgctxt "Color channel"
-msgid "A"
-msgstr "A"
-
-#: gtk/ui/gtkcoloreditor.ui:192
-msgctxt "Color channel"
-msgid "H"
-msgstr "H"
-
-#: gtk/ui/gtkcoloreditor.ui:229
-msgctxt "Color Channel"
-msgid "S"
-msgstr "S"
-
-#: gtk/ui/gtkcoloreditor.ui:238
-msgctxt "Color Channel"
-msgid "V"
-msgstr "V"
-
-#: gtk/ui/gtkdropdown.ui:20
-msgid "(None)"
-msgstr "(Nihil)"
-
-#: gtk/ui/gtkdropdown.ui:70
-msgid "Search…"
-msgstr "Cari…"
-
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
-msgctxt "emoji category"
-msgid "Smileys & People"
-msgstr "Senyum & Orang"
-
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
-msgctxt "emoji category"
-msgid "Body & Clothing"
-msgstr "Tubuh & Pakaian"
-
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
-msgctxt "emoji category"
-msgid "Animals & Nature"
-msgstr "Hewan & Alam"
-
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
-msgctxt "emoji category"
-msgid "Food & Drink"
-msgstr "Makanan & Minuman"
-
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
-msgctxt "emoji category"
-msgid "Travel & Places"
-msgstr "Perjalanan & Tempat"
-
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
-msgctxt "emoji category"
-msgid "Activities"
-msgstr "Aktivitas"
-
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
-msgctxt "emoji category"
-msgid "Objects"
-msgstr "Objek"
-
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
-msgctxt "emoji category"
-msgid "Symbols"
-msgstr "Simbol"
-
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
-msgctxt "emoji category"
-msgid "Flags"
-msgstr "Bendera"
-
-#: gtk/ui/gtkemojichooser.ui:230
-msgctxt "emoji category"
-msgid "Recent"
-msgstr "Terkini"
-
-#: gtk/ui/gtkfilechooserwidget.ui:64
-msgid "Create Folder"
-msgstr "Buat Folder"
-
-#: gtk/ui/gtkfilechooserwidget.ui:249
-msgid "Remote location — only searching the current folder"
-msgstr "Lokasi jauh — hanya mencari folder saat ini"
-
-#: gtk/ui/gtkfilechooserwidget.ui:378
-msgid "Folder Name"
-msgstr "Nama Folder"
-
-#: gtk/ui/gtkfilechooserwidget.ui:404
-msgid "_Create"
-msgstr "_Buat"
-
-#: gtk/ui/gtkfontchooserdialog.ui:4
-msgid "Select Font"
-msgstr "Pilih Fonta"
-
-#: gtk/ui/gtkfontchooserwidget.ui:64
-msgid "Search font name"
-msgstr "Cari nama fonta"
-
-#: gtk/ui/gtkfontchooserwidget.ui:79
-msgid "Filter by"
-msgstr "Filter berdasarkan"
-
-#: gtk/ui/gtkfontchooserwidget.ui:89
-msgid "Monospace"
-msgstr "Monospace"
-
-#: gtk/ui/gtkfontchooserwidget.ui:95
-msgid "Language"
-msgstr "Bahasa"
-
-#: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:328
-msgid "Preview text"
-msgstr "Pratampil teks"
-
-#: gtk/ui/gtkfontchooserwidget.ui:194 gtk/ui/gtkfontchooserwidget.ui:224
-msgid "horizontal"
-msgstr "horisontal"
-
-#: gtk/ui/gtkfontchooserwidget.ui:274
-msgid "No Fonts Found"
-msgstr "Tak Ada Fonta yang Ditemukan"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:27
-msgid "_Format for:"
-msgstr "_Bentuk untuk:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:637
-msgid "_Paper size:"
-msgstr "_Ukuran kertas:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:86
-msgid "_Orientation:"
-msgstr "_Orientasi:"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:98 gtk/ui/gtkprintunixdialog.ui:677
-msgid "Portrait"
-msgstr "Tegak"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:109 gtk/ui/gtkprintunixdialog.ui:679
-msgid "Reverse portrait"
-msgstr "Tegak terjungkir"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:121 gtk/ui/gtkprintunixdialog.ui:678
-msgid "Landscape"
-msgstr "Tumbang"
-
-#: gtk/ui/gtkpagesetupunixdialog.ui:132 gtk/ui/gtkprintunixdialog.ui:680
-msgid "Reverse landscape"
-msgstr "Tumbang terbalik"
-
-#: gtk/ui/gtkplacesview.ui:28
-msgid "Server Addresses"
-msgstr "Alamat Server"
-
-#: gtk/ui/gtkplacesview.ui:40
-msgid ""
-"Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr "Alamat server disusuh antas prefiks protokol dan suatu alamat. Contoh:"
-
-#: gtk/ui/gtkplacesview.ui:66
-msgid "Available Protocols"
-msgstr "Protokol Yang Tersedia"
-
-#. Translators: Server as any successfully connected network address
-#: gtk/ui/gtkplacesview.ui:118
-msgid "No recent servers found"
-msgstr "Tak ada server baru-baru ini yang ditemukan"
-
-#: gtk/ui/gtkplacesview.ui:141
-msgid "Recent Servers"
-msgstr "Server Baru-baru Ini"
-
-#: gtk/ui/gtkplacesview.ui:221
-msgid "No results found"
-msgstr "Tak ditemukan hasil"
-
-#: gtk/ui/gtkplacesview.ui:252
-msgid "Connect to _Server"
-msgstr "Menyambung ke _Server"
-
-#: gtk/ui/gtkplacesview.ui:277
-msgid "Enter server address…"
-msgstr "Masukkan alamat server…"
-
-#. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:147
-msgid "Status"
-msgstr "Status"
-
-#: gtk/ui/gtkprintunixdialog.ui:201
-msgid "Range"
-msgstr "Jangkauan"
-
-#: gtk/ui/gtkprintunixdialog.ui:214
-msgid "_All Pages"
-msgstr "Semu_a Halaman"
-
-#: gtk/ui/gtkprintunixdialog.ui:226
-msgid "C_urrent Page"
-msgstr "Halaman Sekarang"
-
-#: gtk/ui/gtkprintunixdialog.ui:239
-msgid "Se_lection"
-msgstr "Se_leksi"
-
-#: gtk/ui/gtkprintunixdialog.ui:252
-msgid "Pag_es:"
-msgstr "_Halaman:"
-
-#: gtk/ui/gtkprintunixdialog.ui:253 gtk/ui/gtkprintunixdialog.ui:266
-msgid ""
-"Specify one or more page ranges,\n"
-" e.g. 1–3, 7, 11"
-msgstr ""
-"Nyatakan satu atau lebih rentang halaman,\n"
-"mis. 1-3, 7, 11"
-
-#: gtk/ui/gtkprintunixdialog.ui:289
-msgid "Copies"
-msgstr "Rangkap"
-
-#: gtk/ui/gtkprintunixdialog.ui:304
-msgid "Copie_s:"
-msgstr "_Rangkap:"
-
-#: gtk/ui/gtkprintunixdialog.ui:327
-msgid "C_ollate"
-msgstr "K_olasi"
-
-#: gtk/ui/gtkprintunixdialog.ui:338
-msgid "_Reverse"
-msgstr "Te_rbalik"
-
-#: gtk/ui/gtkprintunixdialog.ui:368
-msgid "General"
-msgstr "Umum"
-
-#: gtk/ui/gtkprintunixdialog.ui:410
-msgid "T_wo-sided:"
-msgstr "D_ua sisi:"
-
-#: gtk/ui/gtkprintunixdialog.ui:432
-msgid "Pages per _side:"
-msgstr "Halaman per _sisi:"
-
-#: gtk/ui/gtkprintunixdialog.ui:456
-msgid "Page or_dering:"
-msgstr "U_rutan halaman:"
-
-#: gtk/ui/gtkprintunixdialog.ui:479
-msgid "_Only print:"
-msgstr "_Hanya cetak:"
-
-#: gtk/ui/gtkprintunixdialog.ui:495
+#: gtk/ui/gtkprintunixdialog.ui:493
 msgid "All sheets"
 msgstr "Semua lembar"
 
-#: gtk/ui/gtkprintunixdialog.ui:496
+#: gtk/ui/gtkprintunixdialog.ui:494
 msgid "Even sheets"
 msgstr "Lembar genap"
 
-#: gtk/ui/gtkprintunixdialog.ui:497
+#: gtk/ui/gtkprintunixdialog.ui:495
 msgid "Odd sheets"
 msgstr "Lembar ganjil"
 
-#: gtk/ui/gtkprintunixdialog.ui:511
-msgid "Sc_ale:"
-msgstr "Sk_ala:"
+#: gtk/ui/gtkprintunixdialog.ui:675
+msgid "Portrait"
+msgstr "Tegak"
 
-#: gtk/ui/gtkprintunixdialog.ui:556
-msgid "Paper"
-msgstr "Kertas"
+#: gtk/ui/gtkprintunixdialog.ui:676
+msgid "Landscape"
+msgstr "Tumbang"
 
-#: gtk/ui/gtkprintunixdialog.ui:571
-msgid "Paper _type:"
-msgstr "Jenis ker_tas:"
+#: gtk/ui/gtkprintunixdialog.ui:677
+msgid "Reverse portrait"
+msgstr "Tegak terjungkir"
 
-#: gtk/ui/gtkprintunixdialog.ui:593
-msgid "Paper _source:"
-msgstr "_Sumber kertas:"
-
-#: gtk/ui/gtkprintunixdialog.ui:615
-msgid "Output t_ray:"
-msgstr "Baki kelua_ran:"
-
-#: gtk/ui/gtkprintunixdialog.ui:660
-msgid "Or_ientation:"
-msgstr "Or_ientasi:"
-
-#: gtk/ui/gtkprintunixdialog.ui:734
-msgid "Job Details"
-msgstr "Rincian Tugas"
-
-#: gtk/ui/gtkprintunixdialog.ui:749
-msgid "Pri_ority:"
-msgstr "Pri_oritas:"
-
-#: gtk/ui/gtkprintunixdialog.ui:770
-msgid "_Billing info:"
-msgstr "Info _Billing:"
-
-#: gtk/ui/gtkprintunixdialog.ui:803
-msgid "Print Document"
-msgstr "Cetak Dokumen"
-
-#. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:816
-msgid "_Now"
-msgstr "Sekara_ng"
-
-#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:830
-msgid "A_t:"
-msgstr "_Pada:"
-
-#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:832 gtk/ui/gtkprintunixdialog.ui:834
-#: gtk/ui/gtkprintunixdialog.ui:850 gtk/ui/gtkprintunixdialog.ui:852
-msgid ""
-"Specify the time of print,\n"
-" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-msgstr ""
-"Nyatakan waktu pencetakan,\n"
-" mis. 15:30, 14:15:20, 4"
-
-#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:864
-msgid "On _hold"
-msgstr "_Tahan"
-
-#: gtk/ui/gtkprintunixdialog.ui:866 gtk/ui/gtkprintunixdialog.ui:867
-msgid "Hold the job until it is explicitly released"
-msgstr "Tahan tugas sampai dilepas secara eksplisit"
-
-#: gtk/ui/gtkprintunixdialog.ui:894
-msgid "Add Cover Page"
-msgstr "Tambahkan Sampulan Halaman"
-
-#. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:909
-msgid "Be_fore:"
-msgstr "_Sebelum:"
-
-#. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:930
-msgid "_After:"
-msgstr "Sesud_ah:"
-
-#: gtk/ui/gtkprintunixdialog.ui:959
-msgid "Job"
-msgstr "Tugas"
-
-#. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:989
-msgid "Image Quality"
-msgstr "Kualitas Gambar"
-
-#. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1018
-msgid "Color"
-msgstr "Warna"
-
-#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1047
-msgid "Finishing"
-msgstr "Penyelesaian"
-
-#: gtk/ui/gtkprintunixdialog.ui:1076
-msgid "Advanced"
-msgstr "Diperluas"
-
-#: gtk/ui/gtkprintunixdialog.ui:1092
-msgid "Some of the settings in the dialog conflict"
-msgstr "Beberapa ketentuan pada dialog konflik"
+#: gtk/ui/gtkprintunixdialog.ui:678
+msgid "Reverse landscape"
+msgstr "Tumbang terbalik"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
@@ -7791,44 +6691,50 @@ msgstr ""
 "\n"
 "Melakukan berbagai tugas pada berkas .ui GtkBuilder.\n"
 
-#: tools/gtk-builder-tool-simplify.c:436
+#: tools/gtk-builder-tool-simplify.c:440
 #, c-format
 msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr ""
 "%s:%d: Tak bisa uraikan nilai untuk properti '%s': %s\n"
 "\n"
 
-#: tools/gtk-builder-tool-simplify.c:591
+#: tools/gtk-builder-tool-simplify.c:649
 #, c-format
 msgid "%s:%d: %sproperty %s::%s not found\n"
 msgstr "%s:%d: %sproperti %s::%s tak ditemukan\n"
 
-#: tools/gtk-builder-tool-simplify.c:2207
+#: tools/gtk-builder-tool-simplify.c:2286
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Tak bisa memuat berkas “%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2218
+#: tools/gtk-builder-tool-simplify.c:2297
+#: tools/gtk-builder-tool-simplify.c:2303
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "Tak bisa mengurai berkas “%s”: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2242
+#: tools/gtk-builder-tool-simplify.c:2309
+#, c-format
+msgid "Can’t parse “%s”\n"
+msgstr "Tidak dapat mengurai \"%s\"\n"
+
+#: tools/gtk-builder-tool-simplify.c:2333
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Gagal membaca \"%s\": %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2248
+#: tools/gtk-builder-tool-simplify.c:2339
 #, c-format
 msgid "Failed to write %s: “%s”\n"
 msgstr "Gagal menulis %s:\"%s\"\n"
 
-#: tools/gtk-builder-tool-simplify.c:2288
+#: tools/gtk-builder-tool-simplify.c:2379
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Tidak ada berkas .ui yang ditentukan\n"
 
-#: tools/gtk-builder-tool-simplify.c:2294
+#: tools/gtk-builder-tool-simplify.c:2385
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Hanya dapat menyederhanakan satu berkas .ui tanpa --replace\n"
@@ -7996,3 +6902,945 @@ msgstr ""
 "Tidak ada berkas indeks tema dalam \"%s\".\n"
 "JIka Anda memang ingin membuat singgahan ikon di sini, gunakan --ignore-"
 "theme-index.\n"
+
+#~ msgid "Sandbox does not provide an OpenGL implementation"
+#~ msgstr "Sandbox tidak menyediakan implementasi OpenGL"
+
+#~ msgid "No OpenGL implementation available"
+#~ msgstr "Tak ada implementasi OpenGL yang tersedia"
+
+#~ msgid "Core GL is not available on EGL implementation"
+#~ msgstr "GL inti tak tersedia pada implementasi EGL"
+
+#~ msgid "Surfaceless contexts are not supported on this EGL implementation"
+#~ msgstr "Konteks tanpa permukaan tidak didukung pada implementasi EGL ini"
+
+#~ msgid "EGL is not supported"
+#~ msgstr "EGL tidak didukung"
+
+#~ msgctxt "Script"
+#~ msgid "Arabic"
+#~ msgstr "Arab"
+
+#~ msgctxt "Script"
+#~ msgid "Armenian"
+#~ msgstr "Armenia"
+
+#~ msgctxt "Script"
+#~ msgid "Bengali"
+#~ msgstr "Bengali"
+
+#~ msgctxt "Script"
+#~ msgid "Bopomofo"
+#~ msgstr "Bopomofo"
+
+#~ msgctxt "Script"
+#~ msgid "Cherokee"
+#~ msgstr "Cherokee"
+
+#~ msgctxt "Script"
+#~ msgid "Coptic"
+#~ msgstr "Koptik"
+
+#~ msgctxt "Script"
+#~ msgid "Cyrillic"
+#~ msgstr "Sirilik"
+
+#~ msgctxt "Script"
+#~ msgid "Deseret"
+#~ msgstr "Deseret"
+
+#~ msgctxt "Script"
+#~ msgid "Devanagari"
+#~ msgstr "Devanagari"
+
+#~ msgctxt "Script"
+#~ msgid "Ethiopic"
+#~ msgstr "Etiopia"
+
+#~ msgctxt "Script"
+#~ msgid "Georgian"
+#~ msgstr "Georgia"
+
+#~ msgctxt "Script"
+#~ msgid "Gothic"
+#~ msgstr "Gothic"
+
+#~ msgctxt "Script"
+#~ msgid "Greek"
+#~ msgstr "Yunani"
+
+#~ msgctxt "Script"
+#~ msgid "Gujarati"
+#~ msgstr "Gujarat"
+
+#~ msgctxt "Script"
+#~ msgid "Gurmukhi"
+#~ msgstr "Gurmukh"
+
+#~ msgctxt "Script"
+#~ msgid "Han"
+#~ msgstr "Han"
+
+#~ msgctxt "Script"
+#~ msgid "Hangul"
+#~ msgstr "Hangul"
+
+#~ msgctxt "Script"
+#~ msgid "Hebrew"
+#~ msgstr "Ibrani"
+
+#~ msgctxt "Script"
+#~ msgid "Hiragana"
+#~ msgstr "Hiragana"
+
+#~ msgctxt "Script"
+#~ msgid "Kannada"
+#~ msgstr "Kanada"
+
+#~ msgctxt "Script"
+#~ msgid "Katakana"
+#~ msgstr "Katakana"
+
+#~ msgctxt "Script"
+#~ msgid "Khmer"
+#~ msgstr "Khmer"
+
+#~ msgctxt "Script"
+#~ msgid "Lao"
+#~ msgstr "Laos"
+
+#~ msgctxt "Script"
+#~ msgid "Latin"
+#~ msgstr "Latin"
+
+#~ msgctxt "Script"
+#~ msgid "Malayalam"
+#~ msgstr "Malayalam"
+
+#~ msgctxt "Script"
+#~ msgid "Mongolian"
+#~ msgstr "Mongolian"
+
+#~ msgctxt "Script"
+#~ msgid "Myanmar"
+#~ msgstr "Myanmar"
+
+#~ msgctxt "Script"
+#~ msgid "Ogham"
+#~ msgstr "Ogham"
+
+#~ msgctxt "Script"
+#~ msgid "Old Italic"
+#~ msgstr "Itali Lama"
+
+#~ msgctxt "Script"
+#~ msgid "Oriya"
+#~ msgstr "Oriya"
+
+#~ msgctxt "Script"
+#~ msgid "Runic"
+#~ msgstr "Runic"
+
+#~ msgctxt "Script"
+#~ msgid "Sinhala"
+#~ msgstr "Sinhala"
+
+#~ msgctxt "Script"
+#~ msgid "Syriac"
+#~ msgstr "Syriac"
+
+#~ msgctxt "Script"
+#~ msgid "Tamil"
+#~ msgstr "Tamil"
+
+#~ msgctxt "Script"
+#~ msgid "Telugu"
+#~ msgstr "Telugu"
+
+#~ msgctxt "Script"
+#~ msgid "Thaana"
+#~ msgstr "Thaana"
+
+#~ msgctxt "Script"
+#~ msgid "Thai"
+#~ msgstr "Thailand"
+
+#~ msgctxt "Script"
+#~ msgid "Tibetan"
+#~ msgstr "Tibetan"
+
+#~ msgctxt "Script"
+#~ msgid "Canadian Aboriginal"
+#~ msgstr "Aborigin Kanada"
+
+#~ msgctxt "Script"
+#~ msgid "Yi"
+#~ msgstr "Yi"
+
+#~ msgctxt "Script"
+#~ msgid "Tagalog"
+#~ msgstr "Tagalog"
+
+#~ msgctxt "Script"
+#~ msgid "Hanunoo"
+#~ msgstr "Hanunoo"
+
+#~ msgctxt "Script"
+#~ msgid "Buhid"
+#~ msgstr "Buhid"
+
+#~ msgctxt "Script"
+#~ msgid "Tagbanwa"
+#~ msgstr "Tagbanwa"
+
+#~ msgctxt "Script"
+#~ msgid "Braille"
+#~ msgstr "Braille"
+
+#~ msgctxt "Script"
+#~ msgid "Cypriot"
+#~ msgstr "Cypriot"
+
+#~ msgctxt "Script"
+#~ msgid "Limbu"
+#~ msgstr "Limbu"
+
+#~ msgctxt "Script"
+#~ msgid "Osmanya"
+#~ msgstr "Osmanya"
+
+#~ msgctxt "Script"
+#~ msgid "Shavian"
+#~ msgstr "Shavia"
+
+#~ msgctxt "Script"
+#~ msgid "Linear B"
+#~ msgstr "Linear B"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Le"
+#~ msgstr "Tai Le"
+
+#~ msgctxt "Script"
+#~ msgid "Ugaritic"
+#~ msgstr "Ugaritic"
+
+#~ msgctxt "Script"
+#~ msgid "New Tai Lue"
+#~ msgstr "Tai Lue Baru"
+
+#~ msgctxt "Script"
+#~ msgid "Buginese"
+#~ msgstr "Bugis"
+
+#~ msgctxt "Script"
+#~ msgid "Glagolitic"
+#~ msgstr "Glagolit"
+
+#~ msgctxt "Script"
+#~ msgid "Tifinagh"
+#~ msgstr "Tifinagh"
+
+#~ msgctxt "Script"
+#~ msgid "Syloti Nagri"
+#~ msgstr "Syloti Nagri"
+
+#~ msgctxt "Script"
+#~ msgid "Old Persian"
+#~ msgstr "Persia Lama"
+
+#~ msgctxt "Script"
+#~ msgid "Kharoshthi"
+#~ msgstr "Kharoshthi"
+
+#~ msgctxt "Script"
+#~ msgid "Unknown"
+#~ msgstr "Tidak Dikenal"
+
+#~ msgctxt "Script"
+#~ msgid "Balinese"
+#~ msgstr "Bahasa Bali"
+
+#~ msgctxt "Script"
+#~ msgid "Cuneiform"
+#~ msgstr "Cuneiform"
+
+#~ msgctxt "Script"
+#~ msgid "Phoenician"
+#~ msgstr "Phoenician"
+
+#~ msgctxt "Script"
+#~ msgid "Phags-pa"
+#~ msgstr "Phags-pa"
+
+#~ msgctxt "Script"
+#~ msgid "N'Ko"
+#~ msgstr "N'Ko"
+
+#~ msgctxt "Script"
+#~ msgid "Kayah Li"
+#~ msgstr "Kayah Li"
+
+#~ msgctxt "Script"
+#~ msgid "Lepcha"
+#~ msgstr "Lepcha"
+
+#~ msgctxt "Script"
+#~ msgid "Rejang"
+#~ msgstr "Rejang"
+
+#~ msgctxt "Script"
+#~ msgid "Sundanese"
+#~ msgstr "Bahasa Sunda"
+
+#~ msgctxt "Script"
+#~ msgid "Saurashtra"
+#~ msgstr "Saurashtra"
+
+#~ msgctxt "Script"
+#~ msgid "Cham"
+#~ msgstr "Cham"
+
+#~ msgctxt "Script"
+#~ msgid "Ol Chiki"
+#~ msgstr "Ol Chiki"
+
+#~ msgctxt "Script"
+#~ msgid "Vai"
+#~ msgstr "Vai"
+
+#~ msgctxt "Script"
+#~ msgid "Carian"
+#~ msgstr "Caria"
+
+#~ msgctxt "Script"
+#~ msgid "Lycian"
+#~ msgstr "Lycia"
+
+#~ msgctxt "Script"
+#~ msgid "Lydian"
+#~ msgstr "Lydia"
+
+#~ msgctxt "Script"
+#~ msgid "Avestan"
+#~ msgstr "Avestan"
+
+#~ msgctxt "Script"
+#~ msgid "Bamum"
+#~ msgstr "Bamum"
+
+#~ msgctxt "Script"
+#~ msgid "Egyptian Hieroglyphs"
+#~ msgstr "Hieroglif Mesir"
+
+#~ msgctxt "Script"
+#~ msgid "Imperial Aramaic"
+#~ msgstr "Imperial Arama"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Pahlavi"
+#~ msgstr "Inscriptional Pahlavi"
+
+#~ msgctxt "Script"
+#~ msgid "Inscriptional Parthian"
+#~ msgstr "Inscriptional Parthia"
+
+#~ msgctxt "Script"
+#~ msgid "Javanese"
+#~ msgstr "Bahasa Jawa"
+
+#~ msgctxt "Script"
+#~ msgid "Kaithi"
+#~ msgstr "Kaithi"
+
+#~ msgctxt "Script"
+#~ msgid "Lisu"
+#~ msgstr "Lisu"
+
+#~ msgctxt "Script"
+#~ msgid "Meetei Mayek"
+#~ msgstr "Meetei Mayek"
+
+#~ msgctxt "Script"
+#~ msgid "Old South Arabian"
+#~ msgstr "Arab Selatan Tua"
+
+#~ msgctxt "Script"
+#~ msgid "Old Turkic"
+#~ msgstr "Turkic Lama"
+
+#~ msgctxt "Script"
+#~ msgid "Samaritan"
+#~ msgstr "Samarita"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Tham"
+#~ msgstr "Tai Tham"
+
+#~ msgctxt "Script"
+#~ msgid "Tai Viet"
+#~ msgstr "Tai Viet"
+
+#~ msgctxt "Script"
+#~ msgid "Batak"
+#~ msgstr "Batak"
+
+#~ msgctxt "Script"
+#~ msgid "Brahmi"
+#~ msgstr "Brahmi"
+
+#~ msgctxt "Script"
+#~ msgid "Mandaic"
+#~ msgstr "Manda"
+
+#~ msgctxt "Script"
+#~ msgid "Chakma"
+#~ msgstr "Chakma"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Cursive"
+#~ msgstr "Kursif Meroe"
+
+#~ msgctxt "Script"
+#~ msgid "Meroitic Hieroglyphs"
+#~ msgstr "Hieroglif Meroe"
+
+#~ msgctxt "Script"
+#~ msgid "Miao"
+#~ msgstr "Miao"
+
+#~ msgctxt "Script"
+#~ msgid "Sharada"
+#~ msgstr "Sharada"
+
+#~ msgctxt "Script"
+#~ msgid "Sora Sompeng"
+#~ msgstr "Sora Sompeng"
+
+#~ msgctxt "Script"
+#~ msgid "Takri"
+#~ msgstr "Takri"
+
+#~ msgctxt "Script"
+#~ msgid "Bassa"
+#~ msgstr "Bassa Vah"
+
+#~ msgctxt "Script"
+#~ msgid "Caucasian Albanian"
+#~ msgstr "Albania Kaukasia"
+
+#~ msgctxt "Script"
+#~ msgid "Duployan"
+#~ msgstr "Duployan"
+
+#~ msgctxt "Script"
+#~ msgid "Elbasan"
+#~ msgstr "Elbasan"
+
+#~ msgctxt "Script"
+#~ msgid "Grantha"
+#~ msgstr "Grantha"
+
+#~ msgctxt "Script"
+#~ msgid "Khojki"
+#~ msgstr "Khojki"
+
+#~ msgctxt "Script"
+#~ msgid "Khudawadi, Sindhi"
+#~ msgstr "Khudawadi, Sindhi"
+
+#~ msgctxt "Script"
+#~ msgid "Linear A"
+#~ msgstr "Linear A"
+
+#~ msgctxt "Script"
+#~ msgid "Mahajani"
+#~ msgstr "Mahajani"
+
+#~ msgctxt "Script"
+#~ msgid "Manichaean"
+#~ msgstr "Manichaean"
+
+#~ msgctxt "Script"
+#~ msgid "Mende Kikakui"
+#~ msgstr "Mende Kikakui"
+
+#~ msgctxt "Script"
+#~ msgid "Modi"
+#~ msgstr "Modi"
+
+#~ msgctxt "Script"
+#~ msgid "Mro"
+#~ msgstr "Mro"
+
+#~ msgctxt "Script"
+#~ msgid "Nabataean"
+#~ msgstr "Nabataean"
+
+#~ msgctxt "Script"
+#~ msgid "Old North Arabian"
+#~ msgstr "Arab Utara Tua"
+
+#~ msgctxt "Script"
+#~ msgid "Old Permic"
+#~ msgstr "Pemic Kuno"
+
+#~ msgctxt "Script"
+#~ msgid "Pahawh Hmong"
+#~ msgstr "Pahawh Hmong"
+
+#~ msgctxt "Script"
+#~ msgid "Palmyrene"
+#~ msgstr "Palmyrene"
+
+#~ msgctxt "Script"
+#~ msgid "Pau Cin Hau"
+#~ msgstr "Pau Cin Hau"
+
+#~ msgctxt "Script"
+#~ msgid "Psalter Pahlavi"
+#~ msgstr "Psalter Pahlavi"
+
+#~ msgctxt "Script"
+#~ msgid "Siddham"
+#~ msgstr "Siddham"
+
+#~ msgctxt "Script"
+#~ msgid "Tirhuta"
+#~ msgstr "Tirhuta"
+
+#~ msgctxt "Script"
+#~ msgid "Warang Citi"
+#~ msgstr "Warang Citi"
+
+#~ msgctxt "Script"
+#~ msgid "Ahom"
+#~ msgstr "Ahom"
+
+#~ msgctxt "Script"
+#~ msgid "Anatolian Hieroglyphs"
+#~ msgstr "Hieroglif Anatolia"
+
+#~ msgctxt "Script"
+#~ msgid "Hatran"
+#~ msgstr "Hatran"
+
+#~ msgctxt "Script"
+#~ msgid "Multani"
+#~ msgstr "Multani"
+
+#~ msgctxt "Script"
+#~ msgid "Old Hungarian"
+#~ msgstr "Hungaria Lama"
+
+#~ msgctxt "Script"
+#~ msgid "Signwriting"
+#~ msgstr "Signwriting"
+
+#~ msgctxt "Script"
+#~ msgid "Adlam"
+#~ msgstr "Adlam"
+
+#~ msgctxt "Script"
+#~ msgid "Bhaiksuki"
+#~ msgstr "Bhaiksuki"
+
+#~ msgctxt "Script"
+#~ msgid "Marchen"
+#~ msgstr "Marchen"
+
+#~ msgctxt "Script"
+#~ msgid "Newa"
+#~ msgstr "Newa"
+
+#~ msgctxt "Script"
+#~ msgid "Osage"
+#~ msgstr "Osage"
+
+#~ msgctxt "Script"
+#~ msgid "Tangut"
+#~ msgstr "Tangut"
+
+#~ msgctxt "Script"
+#~ msgid "Masaram Gondi"
+#~ msgstr "Masaram Gondi"
+
+#~ msgctxt "Script"
+#~ msgid "Nushu"
+#~ msgstr "Nushu"
+
+#~ msgctxt "Script"
+#~ msgid "Soyombo"
+#~ msgstr "Soyombo"
+
+#~ msgctxt "Script"
+#~ msgid "Zanabazar Square"
+#~ msgstr "Bujur Sangkar Zanabazar"
+
+#~ msgctxt "Script"
+#~ msgid "Dogra"
+#~ msgstr "Dogra"
+
+#~ msgctxt "Script"
+#~ msgid "Gunjala Gondi"
+#~ msgstr "Gunjala Gondi"
+
+#~ msgctxt "Script"
+#~ msgid "Hanifi Rohingya"
+#~ msgstr "Hanifi Rohingya"
+
+#~ msgctxt "Script"
+#~ msgid "Makasar"
+#~ msgstr "Makasar"
+
+#~ msgctxt "Script"
+#~ msgid "Medefaidrin"
+#~ msgstr "Medefaidrin"
+
+#~ msgctxt "Script"
+#~ msgid "Old Sogdian"
+#~ msgstr "Sogdian Lama"
+
+#~ msgctxt "Script"
+#~ msgid "Sogdian"
+#~ msgstr "Sogdian"
+
+#~ msgctxt "Script"
+#~ msgid "Elym"
+#~ msgstr "Elym"
+
+#~ msgctxt "Script"
+#~ msgid "Nand"
+#~ msgstr "Nand"
+
+#~ msgctxt "Script"
+#~ msgid "Rohg"
+#~ msgstr "Rohg"
+
+#~ msgctxt "Script"
+#~ msgid "Wcho"
+#~ msgstr "Wcho"
+
+#~ msgctxt "Script"
+#~ msgid "Chorasmian"
+#~ msgstr "Chorasmian"
+
+#~ msgctxt "Script"
+#~ msgid "Dives Akuru"
+#~ msgstr "Dives Akuru"
+
+#~ msgctxt "Script"
+#~ msgid "Khitan small script"
+#~ msgstr "Khitan Skrip Kecil"
+
+#~ msgctxt "Script"
+#~ msgid "Yezidi"
+#~ msgstr "Yezidi"
+
+#~ msgid "About"
+#~ msgstr "Tentang"
+
+#~ msgid "Credits"
+#~ msgstr "Kredit"
+
+#~ msgid "System"
+#~ msgstr "Sistem"
+
+#~ msgid "_View All Applications"
+#~ msgstr "_Tilik Semua Aplikasi"
+
+#~ msgid "_Find New Applications"
+#~ msgstr "_Cari Aplikasi Lain"
+
+#~ msgid "No applications found."
+#~ msgstr "Tidak menemukan aplikasi."
+
+#~ msgid "_Finish"
+#~ msgstr "_Selesai"
+
+#~ msgid "_Back"
+#~ msgstr "_Kembali"
+
+#~ msgid "_Next"
+#~ msgstr "_Lanjut"
+
+#~ msgid "Select a Color"
+#~ msgstr "Pilih Warna"
+
+#~ msgid "Pick a color from the screen"
+#~ msgstr "Pilih warna dari layar"
+
+#~ msgid "Hexadecimal color or color name"
+#~ msgstr "Warna heksadesimal atau nama warna"
+
+#~ msgid "Hue"
+#~ msgstr "Hue"
+
+#~ msgid "Alpha value"
+#~ msgstr "Nilai alfa"
+
+#~ msgid "Saturation and value"
+#~ msgstr "Saturasi dan nilai"
+
+#~ msgctxt "Color channel"
+#~ msgid "A"
+#~ msgstr "A"
+
+#~ msgctxt "Color channel"
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgctxt "Color Channel"
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgctxt "Color Channel"
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "(None)"
+#~ msgstr "(Nihil)"
+
+#~ msgid "Search…"
+#~ msgstr "Cari…"
+
+#~ msgctxt "emoji category"
+#~ msgid "Smileys & People"
+#~ msgstr "Senyum & Orang"
+
+#~ msgctxt "emoji category"
+#~ msgid "Body & Clothing"
+#~ msgstr "Tubuh & Pakaian"
+
+#~ msgctxt "emoji category"
+#~ msgid "Animals & Nature"
+#~ msgstr "Hewan & Alam"
+
+#~ msgctxt "emoji category"
+#~ msgid "Food & Drink"
+#~ msgstr "Makanan & Minuman"
+
+#~ msgctxt "emoji category"
+#~ msgid "Travel & Places"
+#~ msgstr "Perjalanan & Tempat"
+
+#~ msgctxt "emoji category"
+#~ msgid "Activities"
+#~ msgstr "Aktivitas"
+
+#~ msgctxt "emoji category"
+#~ msgid "Objects"
+#~ msgstr "Objek"
+
+#~ msgctxt "emoji category"
+#~ msgid "Symbols"
+#~ msgstr "Simbol"
+
+#~ msgctxt "emoji category"
+#~ msgid "Flags"
+#~ msgstr "Bendera"
+
+#~ msgctxt "emoji category"
+#~ msgid "Recent"
+#~ msgstr "Terkini"
+
+#~ msgid "Create Folder"
+#~ msgstr "Buat Folder"
+
+#~ msgid "Remote location — only searching the current folder"
+#~ msgstr "Lokasi jauh — hanya mencari folder saat ini"
+
+#~ msgid "Folder Name"
+#~ msgstr "Nama Folder"
+
+#~ msgid "_Create"
+#~ msgstr "_Buat"
+
+#~ msgid "Select Font"
+#~ msgstr "Pilih Fonta"
+
+#~ msgid "Search font name"
+#~ msgstr "Cari nama fonta"
+
+#~ msgid "Filter by"
+#~ msgstr "Filter berdasarkan"
+
+#~ msgid "Monospace"
+#~ msgstr "Monospace"
+
+#~ msgid "Language"
+#~ msgstr "Bahasa"
+
+#~ msgid "Preview text"
+#~ msgstr "Pratampil teks"
+
+#~ msgid "horizontal"
+#~ msgstr "horisontal"
+
+#~ msgid "No Fonts Found"
+#~ msgstr "Tak Ada Fonta yang Ditemukan"
+
+#~ msgid "_Format for:"
+#~ msgstr "_Bentuk untuk:"
+
+#~ msgid "_Paper size:"
+#~ msgstr "_Ukuran kertas:"
+
+#~ msgid "_Orientation:"
+#~ msgstr "_Orientasi:"
+
+#~ msgid "Server Addresses"
+#~ msgstr "Alamat Server"
+
+#~ msgid ""
+#~ "Server addresses are made up of a protocol prefix and an address. "
+#~ "Examples:"
+#~ msgstr ""
+#~ "Alamat server disusuh antas prefiks protokol dan suatu alamat. Contoh:"
+
+#~ msgid "Available Protocols"
+#~ msgstr "Protokol Yang Tersedia"
+
+#~ msgid "No recent servers found"
+#~ msgstr "Tak ada server baru-baru ini yang ditemukan"
+
+#~ msgid "Recent Servers"
+#~ msgstr "Server Baru-baru Ini"
+
+#~ msgid "No results found"
+#~ msgstr "Tak ditemukan hasil"
+
+#~ msgid "Connect to _Server"
+#~ msgstr "Menyambung ke _Server"
+
+#~ msgid "Enter server address…"
+#~ msgstr "Masukkan alamat server…"
+
+#~ msgid "Status"
+#~ msgstr "Status"
+
+#~ msgid "Range"
+#~ msgstr "Jangkauan"
+
+#~ msgid "_All Pages"
+#~ msgstr "Semu_a Halaman"
+
+#~ msgid "C_urrent Page"
+#~ msgstr "Halaman Sekarang"
+
+#~ msgid "Se_lection"
+#~ msgstr "Se_leksi"
+
+#~ msgid "Pag_es:"
+#~ msgstr "_Halaman:"
+
+#~ msgid ""
+#~ "Specify one or more page ranges,\n"
+#~ " e.g. 1–3, 7, 11"
+#~ msgstr ""
+#~ "Nyatakan satu atau lebih rentang halaman,\n"
+#~ "mis. 1-3, 7, 11"
+
+#~ msgid "Copies"
+#~ msgstr "Rangkap"
+
+#~ msgid "Copie_s:"
+#~ msgstr "_Rangkap:"
+
+#~ msgid "C_ollate"
+#~ msgstr "K_olasi"
+
+#~ msgid "_Reverse"
+#~ msgstr "Te_rbalik"
+
+#~ msgid "General"
+#~ msgstr "Umum"
+
+#~ msgid "T_wo-sided:"
+#~ msgstr "D_ua sisi:"
+
+#~ msgid "Pages per _side:"
+#~ msgstr "Halaman per _sisi:"
+
+#~ msgid "Page or_dering:"
+#~ msgstr "U_rutan halaman:"
+
+#~ msgid "_Only print:"
+#~ msgstr "_Hanya cetak:"
+
+#~ msgid "Sc_ale:"
+#~ msgstr "Sk_ala:"
+
+#~ msgid "Paper"
+#~ msgstr "Kertas"
+
+#~ msgid "Paper _type:"
+#~ msgstr "Jenis ker_tas:"
+
+#~ msgid "Paper _source:"
+#~ msgstr "_Sumber kertas:"
+
+#~ msgid "Output t_ray:"
+#~ msgstr "Baki kelua_ran:"
+
+#~ msgid "Or_ientation:"
+#~ msgstr "Or_ientasi:"
+
+#~ msgid "Job Details"
+#~ msgstr "Rincian Tugas"
+
+#~ msgid "Pri_ority:"
+#~ msgstr "Pri_oritas:"
+
+#~ msgid "_Billing info:"
+#~ msgstr "Info _Billing:"
+
+#~ msgid "Print Document"
+#~ msgstr "Cetak Dokumen"
+
+#~ msgid "_Now"
+#~ msgstr "Sekara_ng"
+
+#~ msgid "A_t:"
+#~ msgstr "_Pada:"
+
+#~ msgid ""
+#~ "Specify the time of print,\n"
+#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+#~ msgstr ""
+#~ "Nyatakan waktu pencetakan,\n"
+#~ " mis. 15:30, 14:15:20, 4"
+
+#~ msgid "On _hold"
+#~ msgstr "_Tahan"
+
+#~ msgid "Hold the job until it is explicitly released"
+#~ msgstr "Tahan tugas sampai dilepas secara eksplisit"
+
+#~ msgid "Add Cover Page"
+#~ msgstr "Tambahkan Sampulan Halaman"
+
+#~ msgid "Be_fore:"
+#~ msgstr "_Sebelum:"
+
+#~ msgid "_After:"
+#~ msgstr "Sesud_ah:"
+
+#~ msgid "Job"
+#~ msgstr "Tugas"
+
+#~ msgid "Image Quality"
+#~ msgstr "Kualitas Gambar"
+
+#~ msgid "Color"
+#~ msgstr "Warna"
+
+#~ msgid "Finishing"
+#~ msgstr "Penyelesaian"
+
+#~ msgid "Advanced"
+#~ msgstr "Diperluas"
+
+#~ msgid "Some of the settings in the dialog conflict"
+#~ msgstr "Beberapa ketentuan pada dialog konflik"
