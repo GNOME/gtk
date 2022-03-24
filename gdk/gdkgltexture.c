@@ -365,6 +365,42 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
       texture->format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
       break;
 
+    case GL_RGBA:
+      {
+        GLint red_size = 0;
+        GLint green_size = 0;
+        GLint blue_size = 0;
+        GLint alpha_size = 0;
+        GLint red_type = 0;
+        GLint green_type = 0;
+        GLint blue_type = 0;
+        GLint alpha_type = 0;
+
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_RED_TYPE, &red_type);
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_GREEN_TYPE, &green_type);
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_BLUE_TYPE, &blue_type);
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_TYPE, &alpha_type);
+
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_RED_SIZE, &red_size);
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_GREEN_SIZE, &green_size);
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_BLUE_SIZE, &blue_size);
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_SIZE, &alpha_size);
+
+#define CHECK_RGBA(rt,gt,bt,at,rs,gs,bs,as) \
+        (red_type == rt && green_type == gt && blue_type == bt && alpha_type == at && \
+         red_size == rs && green_size == gs && blue_size == bs && alpha_size == as)
+
+        if (CHECK_RGBA (GL_UNSIGNED_NORMALIZED, GL_UNSIGNED_NORMALIZED, GL_UNSIGNED_NORMALIZED, GL_UNSIGNED_NORMALIZED, 8, 8, 8, 8))
+          {
+            texture->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+            break;
+          }
+
+#undef CHECK_RGBA
+      }
+
+      G_GNUC_FALLTHROUGH;
+
     default:
       g_warning ("Texture in unexpected format 0x%X (%d). File a bug about adding it to GTK", internal_format, internal_format);
       /* fallback to the dumbest possible format
