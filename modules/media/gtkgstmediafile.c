@@ -180,7 +180,7 @@ gtk_gst_media_file_media_info_updated_cb (GstPlayer          *player,
   /* clock_time == 0: https://gitlab.freedesktop.org/gstreamer/gst-plugins-bad/-/issues/1588
    * GstPlayer's first media-info-updated comes with 0 duration
    *
-   * click_time == -1: Seen on loading an audio-only ogg
+   * clock_time == -1: Seen on loading an audio-only ogg
    */
   GstClockTime clock_time = gst_player_media_info_get_duration (media_info);
   if (clock_time == 0 || clock_time == -1)
