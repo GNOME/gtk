@@ -113,6 +113,7 @@ struct _GdkWaylandSurface
 
   PopupState popup_state;
 
+  unsigned int popup_thaw_upon_show : 1;
   unsigned int initial_configure_received : 1;
   unsigned int has_uncommitted_ack_configure : 1;
   unsigned int mapped : 1;
@@ -2984,6 +2985,9 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
 
       if (GDK_IS_POPUP (surface))
         {
+          impl->popup_thaw_upon_show = TRUE;
+          gdk_surface_freeze_updates (surface);
+
           switch (impl->popup_state)
             {
             case POPUP_STATE_WAITING_FOR_REPOSITIONED:
@@ -3222,6 +3226,12 @@ show_popup (GdkSurface     *surface,
 
   if (!impl->display_server.wl_surface)
     gdk_wayland_surface_create_surface (surface);
+
+  if (impl->popup_thaw_upon_show)
+    {
+      impl->popup_thaw_upon_show = FALSE;
+      gdk_surface_thaw_updates (surface);
+    }
 
   gdk_wayland_surface_map_popup (surface, width, height, layout);
 }
