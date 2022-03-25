@@ -57,7 +57,7 @@ if get_option('gtk_doc')
   )
 endif
 
-rst2man = find_program('rst2man', required: false)
+rst2man = find_program('rst2man', 'rst2man.py', required: false)
 if get_option('man-pages') and not rst2man.found()
   error('No rst2man found, but man pages were explicitly enabled')
 endif
