@@ -906,7 +906,8 @@ gtk_check_button_set_label (GtkCheckButton *self,
           priv->label_widget = gtk_label_new (NULL);
           gtk_widget_set_hexpand (priv->label_widget, TRUE);
           gtk_label_set_xalign (GTK_LABEL (priv->label_widget), 0.0f);
-          gtk_label_set_use_underline (GTK_LABEL (priv->label_widget), priv->use_underline);
+          if (priv->use_underline)
+            gtk_label_set_use_underline (GTK_LABEL (priv->label_widget), priv->use_underline);
           gtk_widget_insert_after (priv->label_widget, GTK_WIDGET (self), priv->indicator_widget);
         }
       gtk_widget_add_css_class (GTK_WIDGET (self), "text-button");
