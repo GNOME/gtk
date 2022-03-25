@@ -55,6 +55,8 @@ void                    gsk_contour_copy                        (GskContour *   
                                                                  const GskContour       *src);
 GskContour *            gsk_contour_dup                         (const GskContour       *src);
 
+GskContour *            gsk_contour_reverse                     (const GskContour       *src);
+
 gsize                   gsk_contour_get_size                    (const GskContour       *self);
 GskPathFlags            gsk_contour_get_flags                   (const GskContour       *self);
 void                    gsk_contour_print                       (const GskContour       *self,

@@ -110,6 +110,9 @@ gboolean                gsk_path_foreach                        (GskPath        
                                                                  gpointer                user_data);
 
 GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_reverse                        (GskPath                *self);
+
+GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_stroke                         (GskPath                *self,
                                                                  GskStroke              *stroke);
 
