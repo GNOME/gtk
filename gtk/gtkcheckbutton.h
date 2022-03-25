@@ -95,6 +95,11 @@ gboolean        gtk_check_button_get_use_underline  (GtkCheckButton *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_check_button_set_use_underline  (GtkCheckButton *self,
                                                      gboolean        setting);
+GDK_AVAILABLE_IN_4_8
+GtkWidget *     gtk_check_button_get_child          (GtkCheckButton *button);
+GDK_AVAILABLE_IN_4_8
+void            gtk_check_button_set_child          (GtkCheckButton *button,
+                                                     GtkWidget *child);
 
 G_END_DECLS
 
