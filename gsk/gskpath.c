@@ -1241,6 +1241,28 @@ gsk_path_get_stroke_bounds (GskPath         *path,
 }
 
 /**
+ * gsk_path_reverse:
+ * @self: a `GskPath`
+ *
+ * Creates a path that traverses the same contours as
+ * @self, in the opposite direction.
+ *
+ * Returns: the reverse of @self
+ */
+GskPath *
+gsk_path_reverse (GskPath *self)
+{
+  GskPathBuilder *builder;
+
+  builder = gsk_path_builder_new ();
+
+  for (int i = self->n_contours - 1; i >= 0; i--)
+    gsk_path_builder_add_contour (builder, gsk_contour_reverse (gsk_path_get_contour (self, i)));
+
+  return gsk_path_builder_free_to_path (builder);
+}
+
+/**
  * gsk_path_stroke:
  * @self: a `GskPath`
  * @stroke: stroke parameters
