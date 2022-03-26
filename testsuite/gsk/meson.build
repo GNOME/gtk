@@ -359,6 +359,7 @@ tests = [
   ['path'],
   ['path-special-cases'],
   ['path-stroke'],
+  ['path-ops'],
   ['transform'],
   ['shader'],
 ]
