@@ -1030,7 +1030,12 @@ if broadway_enabled
 endif
 
 if win32_enabled
-  gtk_cargs += ['-DGTK_PRINT_BACKENDS="file,lpr"']
+  gtk_cargs += [
+    '-DGTK_PRINT_BACKENDS="file,lpr"',
+    '-D_WIN32_WINNT=0x0601',  # Windows 7 or later
+    '-DWINVER=0x0601',
+    '-DNTDDI_VERSION=NTDDI_WIN7',
+  ]
   gtk_deps += [ giowin32_dep, pangowin32_dep ]
 
   gtk_deps += [
