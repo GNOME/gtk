@@ -395,8 +395,9 @@ internal_tests = [
   [ 'curve-performance' ],
   [ 'diff' ],
   [ 'half-float' ],
-  ['rounded-rect'],
-  ['misc'],
+  [ 'path-ops' ],
+  [ 'rounded-rect' ],
+  [ 'misc' ],
 ]
 
 foreach t : internal_tests
