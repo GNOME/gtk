@@ -408,6 +408,7 @@ internal_tests = [
   [ 'curve-special-cases' ],
   [ 'curve-intersect' ],
   [ 'path-private' ],
+  ['path-ops', [ 'path-utils.c' ] ],
   [ 'diff' ],
   [ 'half-float' ],
   ['rounded-rect'],
