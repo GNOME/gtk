@@ -215,6 +215,7 @@ tests = [
   ['path'],
   ['path-special-cases'],
   ['path-stroke'],
+  ['path-ops'],
   ['rounded-rect'],
   ['transform'],
   ['shader'],
