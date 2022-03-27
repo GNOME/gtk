@@ -1583,6 +1583,9 @@ gsk_standard_contour_add_segment (const GskContour *contour,
     }
 }
 
+/* Returns twice the winding number, so we can record the
+ * 'point on ray' case by returning an odd number.
+ */
 static inline int
 line_get_crossing (const graphene_point_t *p,
                    const graphene_point_t *p1,
@@ -1590,6 +1593,7 @@ line_get_crossing (const graphene_point_t *p,
                    gboolean               *on_edge)
 {
   int dir = 1;
+  float r;
 
   if (p1->x >= p->x && p2->x >= p->x)
     return 0;
@@ -1603,21 +1607,32 @@ line_get_crossing (const graphene_point_t *p,
       dir = -1;
     }
 
-  if ((p1->x >= p->x && p1->y == p->y) ||
-      (p2->x >= p->x && p2->y == p->y))
+  if ((p1->x <= p->x && p1->y == p->y) ||
+      (p2->x <= p->x && p2->y == p->y))
     {
-        *on_edge = TRUE;
-        return 0;
+      if (p1->y == p2->y)
+        {
+          if (p1->x >= p->x || p2->x >= p->x)
+            *on_edge = TRUE;
+
+          return 0;
+        }
+
+      return dir;
     }
 
   if (p2->y <= p->y || p1->y > p->y)
     return 0;
 
   if (p1->x <= p->x && p2->x <= p->x)
-    return dir;
+    return 2 * dir;
 
-  if (p->x > p1->x + (p->y - p1->y) * (p2->x - p1->x) / (p2->y - p1->y))
-    return dir;
+  r = p1->x + (p->y - p1->y) * (p2->x - p1->x) / (p2->y - p1->y);
+  if (p->x > r)
+    return 2 * dir;
+
+  if (p->x == r)
+    *on_edge = TRUE;
 
   return 0;
 }
@@ -1652,6 +1667,8 @@ gsk_standard_contour_get_winding (const GskContour       *contour,
     }
 
   winding += line_get_crossing (point, &last_point, &self->points[0], on_edge);
+
+  winding /= 2;
 
   return winding;
 }
