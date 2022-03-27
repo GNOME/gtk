@@ -346,10 +346,10 @@ gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
   gboolean is_left, is_right, is_top, is_bottom;
   gboolean has_left, has_right, has_top, has_bottom;
 
-  has_left = gtk_widget_has_css_class (widget, "left");
-  has_right = gtk_widget_has_css_class (widget, "right");
-  has_top = gtk_widget_has_css_class (widget, "top");
-  has_bottom = gtk_widget_has_css_class (widget, "bottom");
+  has_left = gtk_widget_has_css_class (child, "left");
+  has_right = gtk_widget_has_css_class (child, "right");
+  has_top = gtk_widget_has_css_class (child, "top");
+  has_bottom = gtk_widget_has_css_class (child, "bottom");
 
   is_left = is_right = is_top = is_bottom = FALSE;
 
@@ -372,24 +372,24 @@ gtk_overlay_child_update_style_classes (GtkOverlay *overlay,
     is_bottom = (child_allocation->y + child_allocation->height == height);
 
   if (has_left && !is_left)
-    gtk_widget_remove_css_class (widget, "left");
+    gtk_widget_remove_css_class (child, "left");
   else if (!has_left && is_left)
-    gtk_widget_add_css_class (widget, "left");
+    gtk_widget_add_css_class (child, "left");
 
   if (has_right && !is_right)
-    gtk_widget_remove_css_class (widget, "right");
+    gtk_widget_remove_css_class (child, "right");
   else if (!has_right && is_right)
-    gtk_widget_add_css_class (widget, "right");
+    gtk_widget_add_css_class (child, "right");
 
   if (has_top && !is_top)
-    gtk_widget_remove_css_class (widget, "top");
+    gtk_widget_remove_css_class (child, "top");
   else if (!has_top && is_top)
-    gtk_widget_add_css_class (widget, "top");
+    gtk_widget_add_css_class (child, "top");
 
   if (has_bottom && !is_bottom)
-    gtk_widget_remove_css_class (widget, "bottom");
+    gtk_widget_remove_css_class (child, "bottom");
   else if (!has_bottom && is_bottom)
-    gtk_widget_add_css_class (widget, "bottom");
+    gtk_widget_add_css_class (child, "bottom");
 }
 
 static void
