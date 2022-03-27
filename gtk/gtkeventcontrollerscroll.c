@@ -238,28 +238,26 @@ gtk_event_controller_scroll_get_property (GObject    *object,
     }
 }
 
-static gboolean
+static void
 gtk_event_controller_scroll_begin (GtkEventController *controller)
 {
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
 
   if (scroll->active)
-    return FALSE;
+    return;
 
   g_signal_emit (controller, signals[SCROLL_BEGIN], 0);
   scroll_history_reset (scroll);
   scroll->active = TRUE;
-
-  return TRUE;
 }
 
-static gboolean
+static void
 gtk_event_controller_scroll_end (GtkEventController *controller)
 {
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
 
   if (!scroll->active)
-    return FALSE;
+    return;
 
   g_signal_emit (controller, signals[SCROLL_END], 0);
   scroll->active = FALSE;
@@ -271,8 +269,6 @@ gtk_event_controller_scroll_end (GtkEventController *controller)
       scroll_history_finish (scroll, &vel_x, &vel_y);
       g_signal_emit (controller, signals[DECELERATE], 0, vel_x, vel_y);
     }
-
-  return TRUE;
 }
 
 static gboolean
@@ -295,30 +291,29 @@ gtk_event_controller_scroll_handle_hold_event (GtkEventController *controller,
                                                GdkEvent           *event)
 {
   GtkEventControllerScroll *scroll = GTK_EVENT_CONTROLLER_SCROLL (controller);
-  gboolean handled = GDK_EVENT_PROPAGATE;
   GdkTouchpadGesturePhase phase;
   guint n_fingers = 0;
 
   if (gdk_event_get_event_type (event) != GDK_TOUCHPAD_HOLD)
-    return handled;
+    return GDK_EVENT_PROPAGATE;
 
   n_fingers = gdk_touchpad_event_get_n_fingers (event);
   if (n_fingers != 1 && n_fingers != 2)
-    return handled;
+    return GDK_EVENT_PROPAGATE;
 
   if (scroll->hold_timeout_id != 0)
-    return handled;
+    return GDK_EVENT_PROPAGATE;
 
   phase = gdk_touchpad_event_get_gesture_phase (event);
 
   switch (phase)
     {
     case GDK_TOUCHPAD_GESTURE_PHASE_BEGIN:
-      handled = gtk_event_controller_scroll_begin (controller);
+      gtk_event_controller_scroll_begin (controller);
       break;
 
     case GDK_TOUCHPAD_GESTURE_PHASE_END:
-      handled = gtk_event_controller_scroll_end (controller);
+      gtk_event_controller_scroll_end (controller);
       break;
 
     case GDK_TOUCHPAD_GESTURE_PHASE_CANCEL:
@@ -336,7 +331,7 @@ gtk_event_controller_scroll_handle_hold_event (GtkEventController *controller,
       break;
     }
 
-  return handled;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static gboolean
