@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-19 14:59+0000\n"
-"PO-Revision-Date: 2022-01-22 15:13+0100\n"
+"POT-Creation-Date: 2022-03-25 11:03+0000\n"
+"PO-Revision-Date: 2022-03-27 11:55+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -8543,11 +8543,11 @@ msgstr "En gränssnittskomponent att visa istället för den vanliga etiketten"
 
 #: gtk/gtktoolitemgroup.c:1653
 msgid "Collapsed"
-msgstr "Utfälld"
+msgstr "Ihopfälld"
 
 #: gtk/gtktoolitemgroup.c:1654
 msgid "Whether the group has been collapsed and items are hidden"
-msgstr "Huruvida gruppen har fällts ut och objekten är dolda"
+msgstr "Huruvida gruppen har fällts ihop och objekten är dolda"
 
 #: gtk/gtktoolitemgroup.c:1660
 msgid "ellipsize"
