@@ -904,9 +904,9 @@ gsk_circle_contour_get_winding (const GskContour       *contour,
   if (fabs (self->start_angle - self->end_angle) >= 360)
     {
       if (self->start_angle < self->end_angle)
-        return -1;
-      else
         return 1;
+      else
+        return -1;
     }
 
   return 0;

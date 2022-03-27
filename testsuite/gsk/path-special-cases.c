@@ -321,6 +321,10 @@ test_path_winding (void)
     { "M 100 100  L 200 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (150, 100), TRUE },
     { "M 100 100  L 200 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (250, 100), TRUE },
     { "M 100 100  L 200 100 L 300 200 L 300 0 Z", GRAPHENE_POINT_INIT (400, 100), FALSE },
+    /* the following check that our elementary contours wind as expected.
+     * our rect contour is clockwise, our circle contour is counterclockwise
+     */
+    { "M100,100h100v100h-100z M200,150A50,50,0,1,0,100,150A50,50,0,1,0,200,150z", GRAPHENE_POINT_INIT (150,150), FALSE },
   };
   GskPath *path;
   GskPathMeasure *measure;
