@@ -15,9 +15,9 @@ pacman --noconfirm -Suy
 pacman --noconfirm -S --needed \
     base-devel \
     git \
-    mingw-w64-$MSYS2_ARCH-toolchain \
+    mingw-w64-$MSYS2_ARCH-cc \
     mingw-w64-$MSYS2_ARCH-ccache \
-    mingw-w64-$MSYS2_ARCH-pkg-config \
+    mingw-w64-$MSYS2_ARCH-pkgconf \
     mingw-w64-$MSYS2_ARCH-gobject-introspection \
     mingw-w64-$MSYS2_ARCH-meson \
     mingw-w64-$MSYS2_ARCH-adwaita-icon-theme \
@@ -30,7 +30,7 @@ pacman --noconfirm -S --needed \
     mingw-w64-$MSYS2_ARCH-libepoxy \
     mingw-w64-$MSYS2_ARCH-pango \
     mingw-w64-$MSYS2_ARCH-fribidi \
-    mingw-w64-$MSYS2_ARCH-gst-plugins-bad \
+    mingw-w64-$MSYS2_ARCH-gst-plugins-bad-libs \
     mingw-w64-$MSYS2_ARCH-shared-mime-info \
     mingw-w64-$MSYS2_ARCH-python-gobject
 
