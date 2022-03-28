@@ -223,6 +223,73 @@ test_errant_intersection2 (void)
   g_assert_true (n == 1);
 }
 
+static void
+test_line_intersection_parallel (void)
+{
+  GskCurve l1;
+  GskCurve l2;
+  graphene_point_t p1[1];
+  graphene_point_t p2[2];
+  float t1[3], t2[3];
+  graphene_point_t s[3];
+  int n;
+
+  graphene_point_init (&p1[0], 0, 100);
+  graphene_point_init (&p1[1], 100, 100);
+  gsk_curve_init (&l1, gsk_pathop_encode (GSK_PATH_LINE, p1));
+
+  graphene_point_init (&p2[0], 0, 110);
+  graphene_point_init (&p2[1], 100, 110);
+  gsk_curve_init (&l2, gsk_pathop_encode (GSK_PATH_LINE, p2));
+
+  n = gsk_curve_intersect (&l1, &l2, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 0);
+
+  graphene_point_init (&p2[0], 110, 100);
+  graphene_point_init (&p2[1], 210, 100);
+  gsk_curve_init (&l2, gsk_pathop_encode (GSK_PATH_LINE, p2));
+
+  n = gsk_curve_intersect (&l1, &l2, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 0);
+
+  graphene_point_init (&p2[0], 0, 100);
+  graphene_point_init (&p2[1], -100, 100);
+  gsk_curve_init (&l2, gsk_pathop_encode (GSK_PATH_LINE, p2));
+
+  n = gsk_curve_intersect (&l1, &l2, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 1);
+  g_assert_cmpfloat_with_epsilon (t1[0], 0, 0.001);
+  g_assert_cmpfloat_with_epsilon (t2[0], 0, 0.001);
+
+  graphene_point_init (&p2[0], 20, 100);
+  graphene_point_init (&p2[1], 80, 100);
+  gsk_curve_init (&l2, gsk_pathop_encode (GSK_PATH_LINE, p2));
+
+  n = gsk_curve_intersect (&l1, &l2, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 2);
+  g_assert_cmpfloat_with_epsilon (t1[0], 0.2, 0.001);
+  g_assert_cmpfloat_with_epsilon (t1[1], 0.8, 0.001);
+  g_assert_cmpfloat_with_epsilon (t2[0], 0, 0.001);
+  g_assert_cmpfloat_with_epsilon (t2[1], 1, 0.001);
+
+  graphene_point_init (&p2[0], 150, 100);
+  graphene_point_init (&p2[1], 50, 100);
+  gsk_curve_init (&l2, gsk_pathop_encode (GSK_PATH_LINE, p2));
+
+  n = gsk_curve_intersect (&l1, &l2, t1, t2, s, G_N_ELEMENTS (s));
+
+  g_assert_true (n == 2);
+  g_assert_cmpfloat_with_epsilon (t1[0], 1, 0.001);
+  g_assert_cmpfloat_with_epsilon (t1[1], 0.5, 0.001);
+  g_assert_cmpfloat_with_epsilon (t2[0], 0.5, 0.001);
+  g_assert_cmpfloat_with_epsilon (t2[1], 1, 0.001);
+
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -234,6 +301,7 @@ main (int   argc,
   g_test_add_func ("/curve/special/degenerate-tangents", test_curve_degenerate_tangents);
   g_test_add_func ("/curve/errant-intersection", test_errant_intersection);
   g_test_add_func ("/curve/errant-intersection2", test_errant_intersection2);
+  g_test_add_func ("/curve/line-intersection-parallel", test_line_intersection_parallel);
 
   return g_test_run ();
 }

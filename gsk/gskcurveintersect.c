@@ -33,7 +33,8 @@ line_intersect (const GskCurve   *curve1,
                 const GskCurve   *curve2,
                 float            *t1,
                 float            *t2,
-                graphene_point_t *p)
+                graphene_point_t *p,
+                int               n)
 {
   const graphene_point_t *pts1 = curve1->line.points;
   const graphene_point_t *pts2 = curve2->line.points;
@@ -43,21 +44,113 @@ line_intersect (const GskCurve   *curve1,
   float b2 = pts2[0].y - pts2[1].y;
   float det = a1 * b2 - b1 * a2;
 
-  if (det != 0)
+  if (fabs(det) > 0.01)
     {
       float tt =   ((pts1[0].x - pts2[0].x) * b2 - (pts1[0].y - pts2[0].y) * a2) / det;
       float ss = - ((pts1[0].y - pts2[0].y) * a1 - (pts1[0].x - pts2[0].x) * b1) / det;
 
       if (acceptable (tt) && acceptable (ss))
         {
-          p->x = pts1[0].x + tt * (pts1[1].x - pts1[0].x);
-          p->y = pts1[0].y + tt * (pts1[1].y - pts1[0].y);
+          p[0].x = pts1[0].x + tt * (pts1[1].x - pts1[0].x);
+          p[0].y = pts1[0].y + tt * (pts1[1].y - pts1[0].y);
 
-          *t1 = tt;
-          *t2 = ss;
+          t1[0] = tt;
+          t2[0] = ss;
 
           return 1;
         }
+    }
+  else /* parallel lines */
+    {
+      float r = a1 * (pts1[1].y - pts2[0].y) - (pts1[1].x - pts2[0].x) * b1;
+      float dist = (r * r) / (a1 * a1 + b1 * b1);
+      float t, s, tt, ss;
+
+      if (dist > 0.01)
+        return 0;
+
+      if (pts1[1].x != pts1[0].x)
+        {
+          t = (pts2[0].x - pts1[0].x) / (pts1[1].x - pts1[0].x);
+          s = (pts2[1].x - pts1[0].x) / (pts1[1].x - pts1[0].x);
+        }
+      else
+        {
+          t = (pts2[0].y - pts1[0].y) / (pts1[1].y - pts1[0].y);
+          s = (pts2[1].y - pts1[0].y) / (pts1[1].y - pts1[0].y);
+        }
+
+      if ((t < 0 && s < 0) || (t > 1 && s > 1))
+        return 0;
+
+      if (acceptable (t))
+        {
+          t1[0] = t;
+          t2[0] = 0;
+          p[0] = pts2[0];
+        }
+      else if (t < 0)
+        {
+          if (pts2[1].x != pts2[0].x)
+            tt = (pts1[0].x - pts2[0].x) / (pts2[1].x - pts2[0].x);
+          else
+            tt = (pts1[0].y - pts2[0].y) / (pts2[1].y - pts2[0].y);
+
+          t1[0] = 0;
+          t2[0] = tt;
+          p[0] = pts1[0];
+        }
+      else
+        {
+          if (pts2[1].x != pts2[0].x)
+            tt = (pts1[1].x - pts2[0].x) / (pts2[1].x - pts2[0].x);
+          else
+            tt = (pts1[1].y - pts2[0].y) / (pts2[1].y - pts2[0].y);
+
+          t1[0] = 1;
+          t2[0] = tt;
+          p[0] = pts1[1];
+        }
+
+      if (acceptable (s))
+        {
+          if (t2[0] == 1)
+            return 1;
+
+          t1[1] = s;
+          t2[1] = 1;
+          p[1] = pts2[1];
+        }
+      else if (s < 0)
+        {
+          if (t1[0] == 0)
+            return 1;
+
+          if (pts2[1].x != pts2[0].x)
+            ss = (pts1[0].x - pts2[0].x) / (pts2[1].x - pts2[0].x);
+          else
+            ss = (pts1[0].y - pts2[0].y) / (pts2[1].y - pts2[0].y);
+
+          t1[1] = 0;
+          t2[1] = ss;
+          p[1] = pts1[0];
+        }
+      else
+        {
+          if (t1[0] == 1)
+            return 1;
+
+          if (pts2[1].x != pts2[0].x)
+            ss = (pts1[1].x - pts2[0].x) / (pts2[1].x - pts2[0].x);
+          else
+            ss = (pts1[1].y - pts2[0].y) / (pts2[1].y - pts2[0].y);
+
+          t1[1] = 1;
+          t2[1] = ss;
+          p[1] = pts1[1];
+        }
+
+      return 2;
     }
 
   return 0;
@@ -451,7 +544,7 @@ gsk_curve_intersect (const GskCurve   *curve1,
    * Everything else is done via bisection.
    */
   if (op1 == GSK_PATH_LINE && op2 == GSK_PATH_LINE)
-    return line_intersect (curve1, curve2, t1, t2, p);
+    return line_intersect (curve1, curve2, t1, t2, p, n);
   else if (op1 == GSK_PATH_LINE && op2 == GSK_PATH_CURVE)
     return line_curve_intersect (curve1, curve2, t1, t2, p, n);
   else if (op1 == GSK_PATH_CURVE && op2 == GSK_PATH_LINE)
