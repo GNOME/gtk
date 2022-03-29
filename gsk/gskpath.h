@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 /**
  * GskPathForeachFlags:
- * @GSK_PATH_FOREACH_ALLOW_CURVES: Allow emission of `GSK_PATH_CURVE` operations.
+ * @GSK_PATH_FOREACH_ALLOW_CURVE: Allow emission of `GSK_PATH_CURVE` operations.
  * @GSK_PATH_FOREACH_ALLOW_CONIC: Allow emission of `GSK_PATH_CONIC` operations.
  *
  * Flags that can be passed to [method@Gsk.Path.foreach] to enable additional
