@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 /**
@@ -502,7 +502,7 @@ gtk_editable_insert_text (GtkEditable *editable,
 
   if (length < 0)
     length = strlen (text);
-  
+
   GTK_EDITABLE_GET_IFACE (editable)->do_insert_text (editable, text, length, position);
 }
 
@@ -597,7 +597,7 @@ gtk_editable_get_text (GtkEditable *editable)
 /**
  * gtk_editable_set_text: (attributes org.gtk.Method.set_property=text)
  * @editable: a `GtkEditable`
- * @text: the text to set
+ * @text: (nullable): the text to set
  *
  * Sets the text in the editable to the given value.
  *
@@ -614,7 +614,11 @@ gtk_editable_set_text (GtkEditable *editable,
   g_object_freeze_notify (G_OBJECT (editable));
   gtk_editable_delete_text (editable, 0, -1);
   pos = 0;
-  gtk_editable_insert_text (editable, text, -1, &pos);
+
+  if (text == NULL)
+    gtk_editable_insert_text (editable, "", 0, &pos);
+  else
+    gtk_editable_insert_text (editable, text, -1, &pos);
   g_object_thaw_notify (G_OBJECT (editable));
 }
 
