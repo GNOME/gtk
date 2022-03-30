@@ -45,11 +45,11 @@
 
 #ifdef GDK_WINDOWING_WIN32
 #include "win32/gdkwin32.h"
+#include "gdkglcontextprivate.h"
 #include <epoxy/wgl.h>
-#endif
-
 #ifdef GDK_WIN32_ENABLE_EGL
 #include <epoxy/egl.h>
+#endif
 #endif
 
 #ifdef GDK_WINDOWING_MACOS
@@ -387,7 +387,8 @@ init_gl (GtkInspectorGeneral *gen)
   else
 #endif
 #ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (gen->display))
+  if (GDK_IS_WIN32_DISPLAY (gen->display) &&
+      gdk_gl_backend_can_be_used (GDK_GL_WGL, NULL))
     {
       int gl_version;
       char *version;
