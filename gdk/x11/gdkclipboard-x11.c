@@ -248,6 +248,10 @@ gdk_x11_clipboard_formats_from_atoms (GdkDisplay *display,
       const char *name;
 
       name = gdk_x11_get_xatom_name_for_display (display , atoms[i]);
+      if (!name)
+        {
+          continue;
+        }
       if (strchr (name, '/'))
         {
           gdk_content_formats_builder_add_mime_type (builder, name);
