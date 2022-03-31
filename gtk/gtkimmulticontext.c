@@ -314,6 +314,11 @@ gtk_im_multicontext_set_client_widget (GtkIMContext *context,
   GtkIMContext *delegate;
   GtkSettings *settings;
 
+  if (priv->client_widget == widget)
+    return;
+
+  gtk_im_multicontext_set_delegate (self, NULL, TRUE);
+
   if (priv->client_widget != NULL)
     {
       settings = gtk_widget_get_settings (priv->client_widget);
@@ -332,11 +337,11 @@ gtk_im_multicontext_set_client_widget (GtkIMContext *context,
       g_signal_connect (settings, "notify::gtk-im-module",
                         G_CALLBACK (im_module_setting_changed),
                         self);
-    }
 
-  delegate = gtk_im_multicontext_get_delegate (self);
-  if (delegate)
-    gtk_im_context_set_client_widget (delegate, widget);
+      delegate = gtk_im_multicontext_get_delegate (self);
+      if (delegate)
+        gtk_im_context_set_client_widget (delegate, widget);
+    }
 }
 
 static void
