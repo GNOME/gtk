@@ -59,11 +59,9 @@ main (int argc, char **argv)
 
   setlocale (LC_ALL, "");
 
-#ifdef ENABLE_NLS
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
 #ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-#endif
 #endif
 
   g_set_prgname ("gtk-encode-symbolic-svg");
