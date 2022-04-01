@@ -1331,7 +1331,7 @@ gtk_file_chooser_set_current_folder_file (GtkFileChooser  *chooser,
  * Gets the current folder of @chooser as #GFile.
  * See gtk_file_chooser_get_current_folder_uri().
  *
- * Returns: (transfer full): the #GFile for the current folder.
+ * Returns: (nullable) (transfer full): the #GFile for the current folder.
  *
  * Since: 2.14
  */
