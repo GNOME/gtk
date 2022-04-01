@@ -2687,6 +2687,113 @@ test_expressions (void)
     }
 }
 
+#define MY_GTK_BOX_TEMPLATE "\
+<interface>\n\
+ <template class=\"MyGtkBox\" parent=\"GtkWidget\">\n\
+  <child>\n\
+   <object class=\"GtkLabel\" id=\"label\">\n\
+    <property name=\"label\">First</property>\n\
+   </object>\n\
+  </child>\n\
+  <child>\n\
+   <object class=\"GtkLabel\" id=\"label2\">\n\
+    <property name=\"label\">Second</property>\n\
+   </object>\n\
+  </child>\n\
+ </template>\n\
+</interface>\n"
+
+#define MY_TYPE_GTK_BOX (my_gtk_box_get_type ())
+G_DECLARE_FINAL_TYPE    (MyGtkBox, my_gtk_box, MY, GTK_BOX, GtkWidget)
+
+struct _MyGtkBox
+{
+  GtkWidget  parent_instance;
+  GtkLabel  *label;
+  GtkLabel  *label2;
+};
+
+G_DEFINE_TYPE (MyGtkBox, my_gtk_box, GTK_TYPE_WIDGET);
+
+static void
+my_gtk_box_init (MyGtkBox *grid)
+{
+  gtk_widget_init_template (GTK_WIDGET (grid));
+}
+
+static void
+my_gtk_box_dispose (GObject *obj)
+{
+  MyGtkBox  *my_gtk_box = MY_GTK_BOX (obj);
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (my_gtk_box))))
+    gtk_widget_unparent (child);
+
+  G_OBJECT_CLASS (my_gtk_box_parent_class)->dispose (obj);
+}
+
+static void
+my_gtk_box_class_init (MyGtkBoxClass *klass)
+{
+  GBytes *template = g_bytes_new_static (MY_GTK_BOX_TEMPLATE, strlen (MY_GTK_BOX_TEMPLATE));
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  gtk_widget_class_set_template (widget_class, template);
+  gtk_widget_class_bind_template_child (widget_class, MyGtkBox, label);
+  gtk_widget_class_bind_template_child (widget_class, MyGtkBox, label2);
+
+  G_OBJECT_CLASS (klass)->dispose = my_gtk_box_dispose;
+}
+
+typedef struct
+{
+  MyGtkBox *my_gtk_box;
+  guint     destroy_count;
+} BoxDestroyData;
+
+static void
+my_label_destroy (GtkLabel *label, BoxDestroyData *data)
+{
+  g_assert_true (MY_IS_GTK_BOX (data->my_gtk_box));
+  /* Make sure the other label is null if it was disposed first */
+  g_assert_true (!data->my_gtk_box->label2 || GTK_IS_LABEL (data->my_gtk_box->label2));
+  data->destroy_count++;
+}
+
+static void
+my_label2_destroy (GtkLabel *label2, BoxDestroyData *data)
+{
+  g_assert_true (MY_IS_GTK_BOX (data->my_gtk_box));
+  /* Make sure the other label is null if it was disposed first */
+  g_assert_true (!data->my_gtk_box->label || GTK_IS_LABEL (data->my_gtk_box->label));
+  data->destroy_count++;
+}
+
+static void
+test_child_dispose_order (void)
+{
+  BoxDestroyData data = { 0, };
+
+  /* make sure the type we are trying to register does not exist */
+  g_assert_false (g_type_from_name ("MyGtkBox"));
+
+  /* create the template object */
+  data.my_gtk_box = g_object_ref_sink (g_object_new (MY_TYPE_GTK_BOX, NULL));
+
+  /* Check everything is fine */
+  g_assert_true (g_type_from_name ("MyGtkBox"));
+  g_assert_true (MY_IS_GTK_BOX (data.my_gtk_box));
+  g_assert_true (GTK_IS_LABEL (data.my_gtk_box->label));
+  g_assert_true (GTK_IS_LABEL (data.my_gtk_box->label2));
+
+  /* Check if both labels are destroyed */
+  g_signal_connect (data.my_gtk_box->label, "destroy", G_CALLBACK (my_label_destroy), &data);
+  g_signal_connect (data.my_gtk_box->label2, "destroy", G_CALLBACK (my_label2_destroy), &data);
+  g_object_unref (data.my_gtk_box);
+  g_assert_cmpuint (data.destroy_count, ==, 2);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2734,6 +2841,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Shortcuts", test_shortcuts);
   g_test_add_func ("/Builder/Transforms", test_transforms);
   g_test_add_func ("/Builder/Expressions", test_expressions);
+  g_test_add_func ("/Builder/Child Dispose Order", test_child_dispose_order);
 
   return g_test_run();
 }

@@ -7405,6 +7405,7 @@ gtk_widget_real_destroy (GtkWidget *object)
     {
       GtkWidgetClass *class;
       GSList *l;
+      GHashTable *auto_children;
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
       GSList *assertions = NULL;
@@ -7462,8 +7463,52 @@ gtk_widget_real_destroy (GtkWidget *object)
         }
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
-      /* Release references to all automated children */
-      g_object_set_qdata (G_OBJECT (widget), quark_auto_children, NULL);
+      /* Prepare to release references to all automated children */
+      auto_children = g_object_steal_qdata (G_OBJECT (widget), quark_auto_children);
+
+      /* Set any automatic private data pointers to NULL and release child references */
+      for (class = GTK_WIDGET_GET_CLASS (widget);
+           GTK_IS_WIDGET_CLASS (class);
+           class = g_type_class_peek_parent (class))
+        {
+          GHashTable *auto_child_hash = NULL;
+
+          if (!class->priv->template)
+            continue;
+
+          if (auto_children)
+            {
+              GType type = G_TYPE_FROM_CLASS (class);
+
+              g_hash_table_steal_extended (auto_children,
+                                           GSIZE_TO_POINTER (type),
+                                           NULL,
+                                           (gpointer *) &auto_child_hash);
+            }
+
+          for (l = class->priv->template->children; l; l = l->next)
+            {
+              AutomaticChildClass *child_class = l->data;
+
+              if (child_class->offset != 0)
+                {
+                  gpointer field_p;
+
+                  /* Nullify instance private data for internal children */
+                  field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
+                  (* (gpointer *) field_p) = NULL;
+                }
+
+              /* Release the references in order after setting the pointer to NULL */
+              if (auto_child_hash)
+                g_hash_table_remove (auto_child_hash, child_class->name);
+            }
+
+          g_clear_pointer (&auto_child_hash, g_hash_table_unref);
+        }
+
+      /* Free the child reference hash table */
+      g_clear_pointer (&auto_children, g_hash_table_unref);
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
       for (l = assertions; l; l = l->next)
@@ -7481,29 +7526,6 @@ gtk_widget_real_destroy (GtkWidget *object)
         }
       g_slist_free (assertions);
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
-
-      /* Set any automatic private data pointers to NULL */
-      for (class = GTK_WIDGET_GET_CLASS (widget);
-           GTK_IS_WIDGET_CLASS (class);
-           class = g_type_class_peek_parent (class))
-        {
-          if (!class->priv->template)
-            continue;
-
-          for (l = class->priv->template->children; l; l = l->next)
-            {
-              AutomaticChildClass *child_class = l->data;
-
-              if (child_class->offset != 0)
-                {
-                  gpointer field_p;
-
-                  /* Nullify instance private data for internal children */
-                  field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
-                  (* (gpointer *) field_p) = NULL;
-                }
-            }
-        }
     }
 
   /* Callers of add_mnemonic_label() should disconnect on ::destroy */
