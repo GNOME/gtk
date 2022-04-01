@@ -43,12 +43,14 @@
  * [signal@Gtk.SelectionModel::selection-changed] signal by calling the
  * [method@Gtk.SelectionModel.selection_changed] function. The positions given
  * in that signal may have their selection state changed, though that is not a
- * requirement. If new items added to the model via the ::items-changed signal
- * are selected or not is up to the implementation.
+ * requirement. If new items added to the model via the
+ * [signal@Gio.ListModel::items-changed] signal are selected or not is up to the
+ * implementation.
  *
- * Note that items added via ::items-changed may already be selected and no
- * [Gtk.SelectionModel::selection-changed] will be emitted for them. So to
- * track which items are selected, it is necessary to listen to both signals.
+ * Note that items added via [signal@Gio.ListModel::items-changed] may already
+ * be selected and no [signal@Gtk.SelectionModel::selection-changed] will be
+ * emitted for them. So to track which items are selected, it is necessary to
+ * listen to both signals.
  *
  * Additionally, the interface can expose functionality to select and unselect
  * items. If these functions are implemented, GTK's list widgets will allow users
