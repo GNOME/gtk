@@ -4,17 +4,17 @@
 #
 # Mohammad DAMT <mdamt@bisnisweb.com>, 2003, 2005.
 # Ahmad Riza H Nst  <rizahnst@id.gnome.org>, 2006.
-# Andika Triwidada <andika@gmail.com>, 2010-2017, 2020, 2021.
+# Andika Triwidada <andika@gmail.com>, 2010-2017, 2020-2022.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2010.
 # Dirgita Devina <dirgitadevina@yahoo.co.id>, 2010, 2012.
 # Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017, 2019, 2020, 2022.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties gtk-4-4\n"
+"Project-Id-Version: gtk+-properties main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-02-23 03:12+0000\n"
-"PO-Revision-Date: 2022-03-02 10:06+0700\n"
-"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
+"POT-Creation-Date: 2022-03-27 20:20+0000\n"
+"PO-Revision-Date: 2022-04-01 10:52+0700\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.0\n"
 
 #: gdk/gdkapplaunchcontext.c:128 gdk/gdkdrawcontext.c:172 gdk/gdkseat.c:188
 #: gdk/gdkseat.c:189 gdk/gdksurface.c:522 gdk/gdksurface.c:523
@@ -210,27 +210,27 @@ msgstr "Permukaan"
 msgid "The GDK surface bound to the context"
 msgstr "Permukaan GDK yang diikat ke konteks"
 
-#: gdk/gdkglcontext.c:687
+#: gdk/gdkglcontext.c:693
 msgid "Shared context"
 msgstr "Konteks bersama"
 
-#: gdk/gdkglcontext.c:688
+#: gdk/gdkglcontext.c:694
 msgid "The GL context this context shares data with"
 msgstr "Konteks GL tempat konteks ini berbagi data"
 
-#: gdk/gdkglcontext.c:704
+#: gdk/gdkglcontext.c:710
 msgid "Allowed APIs"
 msgstr "API yang diizinkan"
 
-#: gdk/gdkglcontext.c:705
+#: gdk/gdkglcontext.c:711
 msgid "The list of allowed APIs for this context"
 msgstr "Daftar API yang diizinkan untuk konteks ini"
 
-#: gdk/gdkglcontext.c:721
+#: gdk/gdkglcontext.c:727
 msgid "API"
 msgstr "API"
 
-#: gdk/gdkglcontext.c:722
+#: gdk/gdkglcontext.c:728
 msgid "The API currently in use"
 msgstr "API yang saat ini sedang digunakan"
 
@@ -794,7 +794,7 @@ msgid "Bookmark file to load"
 msgstr "Berkas markah yang akan dimuat"
 
 #: gtk/gtkbookmarklist.c:228 gtk/gtkcellrenderertext.c:267 gtk/gtkentry.c:965
-#: gtk/gtklabel.c:2298 gtk/gtktext.c:929
+#: gtk/gtklabel.c:2298 gtk/gtktext.c:931
 msgid "Attributes"
 msgstr "Atribut"
 
@@ -1665,7 +1665,7 @@ msgid "How to align the lines"
 msgstr "Bagaimana meratakan garis"
 
 #: gtk/gtkcellrenderertext.c:544 gtk/gtkentry.c:653 gtk/gtkpasswordentry.c:467
-#: gtk/gtksearchentry.c:301 gtk/gtktext.c:860
+#: gtk/gtksearchentry.c:309 gtk/gtktext.c:862
 msgid "Placeholder text"
 msgstr "Teks pesan tempat"
 
@@ -2571,7 +2571,7 @@ msgstr "Panjang teks"
 msgid "Length of the text currently in the buffer"
 msgstr "Panjang teks yang tengah berada di penyangga"
 
-#: gtk/gtkentrybuffer.c:372 gtk/gtkentry.c:499 gtk/gtktext.c:773
+#: gtk/gtkentrybuffer.c:372 gtk/gtkentry.c:499 gtk/gtktext.c:775
 msgid "Maximum length"
 msgstr "Panjang maksimum"
 
@@ -2579,7 +2579,7 @@ msgstr "Panjang maksimum"
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Jumlah karakter maksimum pada isian ini. Nol bila tak hingga"
 
-#: gtk/gtkentry.c:487 gtk/gtktext.c:759
+#: gtk/gtkentry.c:487 gtk/gtktext.c:761
 msgid "Text Buffer"
 msgstr "Penyangga Teks"
 
@@ -2587,11 +2587,11 @@ msgstr "Penyangga Teks"
 msgid "Text buffer object which actually stores entry text"
 msgstr "Objek penyangga teks yang sebenarnya menyimpan teks entri"
 
-#: gtk/gtkentry.c:513 gtk/gtktext.c:965
+#: gtk/gtkentry.c:513 gtk/gtktext.c:967
 msgid "Visibility"
 msgstr "Visibilitas"
 
-#: gtk/gtkentry.c:514 gtk/gtktext.c:966
+#: gtk/gtkentry.c:514 gtk/gtktext.c:968
 msgid ""
 "FALSE displays the “invisible char” instead of the actual text (password "
 "mode)"
@@ -2603,7 +2603,7 @@ msgstr ""
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE akan menghapus bingkai dari isian ini"
 
-#: gtk/gtkentry.c:537 gtk/gtktext.c:786
+#: gtk/gtkentry.c:537 gtk/gtktext.c:788
 msgid "Invisible character"
 msgstr "Huruf tak kelihatan"
 
@@ -2611,13 +2611,13 @@ msgstr "Huruf tak kelihatan"
 msgid "The character to use when masking entry contents (in “password mode”)"
 msgstr "Huruf yang dipakai ketika menutupi isi entri (dalam \"mode password\")"
 
-#: gtk/gtkentry.c:549 gtk/gtkpasswordentry.c:479 gtk/gtksearchentry.c:313
-#: gtk/gtktext.c:798
+#: gtk/gtkentry.c:549 gtk/gtkpasswordentry.c:479 gtk/gtksearchentry.c:321
+#: gtk/gtktext.c:800
 msgid "Activates default"
 msgstr "Mengaktifkan default"
 
-#: gtk/gtkentry.c:550 gtk/gtkpasswordentry.c:480 gtk/gtksearchentry.c:314
-#: gtk/gtktext.c:799
+#: gtk/gtkentry.c:550 gtk/gtkpasswordentry.c:480 gtk/gtksearchentry.c:322
+#: gtk/gtktext.c:801
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2625,7 +2625,7 @@ msgstr ""
 "Apakah widget default diaktifkan atau tidak (misalnya tombol default pada "
 "dialog) pada saat tombol Enter ditekan"
 
-#: gtk/gtkentry.c:561 gtk/gtktext.c:810
+#: gtk/gtkentry.c:561 gtk/gtktext.c:812
 msgid "Scroll offset"
 msgstr "Letak scroll"
 
@@ -2634,19 +2634,19 @@ msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Cacah piksel pada isian yang bisa dinaik turunkan pada layar pada sisi kiri"
 
-#: gtk/gtkentry.c:574 gtk/gtktext.c:823
+#: gtk/gtkentry.c:574 gtk/gtktext.c:825
 msgid "Truncate multiline"
 msgstr "Penggal multibaris"
 
-#: gtk/gtkentry.c:575 gtk/gtktext.c:824
+#: gtk/gtkentry.c:575 gtk/gtktext.c:826
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Aoakah memotong penempelan multi baris ke satu baris."
 
-#: gtk/gtkentry.c:586 gtk/gtktext.c:835 gtk/gtktextview.c:1069
+#: gtk/gtkentry.c:586 gtk/gtktext.c:837 gtk/gtktextview.c:1069
 msgid "Overwrite mode"
 msgstr "Modus Timpa"
 
-#: gtk/gtkentry.c:587 gtk/gtktext.c:836
+#: gtk/gtkentry.c:587 gtk/gtktext.c:838
 msgid "Whether new text overwrites existing text"
 msgstr "Apakah teks baru menimpa yang telah ada"
 
@@ -2654,11 +2654,11 @@ msgstr "Apakah teks baru menimpa yang telah ada"
 msgid "Length of the text currently in the entry"
 msgstr "Panjang teks kini di entri"
 
-#: gtk/gtkentry.c:611 gtk/gtktext.c:847
+#: gtk/gtkentry.c:611 gtk/gtktext.c:849
 msgid "Invisible character set"
 msgstr "Karakter jadi tak nampak"
 
-#: gtk/gtkentry.c:612 gtk/gtktext.c:848
+#: gtk/gtkentry.c:612 gtk/gtktext.c:850
 msgid "Whether the invisible character has been set"
 msgstr "Apakah karakter tak nampak telah ditata"
 
@@ -2682,7 +2682,7 @@ msgstr ""
 "Fraksi dari lebar entri total untuk memindah blok memantul yang menunjukkan "
 "kemajuan bagi setial panggilan ke gtk_entry_progress_pulse()"
 
-#: gtk/gtkentry.c:654 gtk/gtkpasswordentry.c:468 gtk/gtksearchentry.c:302
+#: gtk/gtkentry.c:654 gtk/gtkpasswordentry.c:468 gtk/gtksearchentry.c:310
 msgid "Show text in the entry when it’s empty and unfocused"
 msgstr "Tampilkan teks pada entri ketika kosong dan tak menerima fokus"
 
@@ -2806,11 +2806,11 @@ msgstr "Markup tooltip ikon primer"
 msgid "Secondary icon tooltip markup"
 msgstr "Markup tooltip ikon sekunder"
 
-#: gtk/gtkentry.c:901 gtk/gtktext.c:878 gtk/gtktextview.c:1100
+#: gtk/gtkentry.c:901 gtk/gtktext.c:880 gtk/gtktextview.c:1100
 msgid "IM module"
 msgstr "Modul IM"
 
-#: gtk/gtkentry.c:902 gtk/gtktext.c:879 gtk/gtktextview.c:1101
+#: gtk/gtkentry.c:902 gtk/gtktext.c:881 gtk/gtktextview.c:1101
 msgid "Which IM module should be used"
 msgstr "Modul IM mana yang mesti dipakai"
 
@@ -2822,22 +2822,22 @@ msgstr "Pelengkapan"
 msgid "The auxiliary completion object"
 msgstr "Objek pelengkapan tambahan"
 
-#: gtk/gtkentry.c:932 gtk/gtkimcontext.c:338 gtk/gtktext.c:897
+#: gtk/gtkentry.c:932 gtk/gtkimcontext.c:338 gtk/gtktext.c:899
 #: gtk/gtktextview.c:1116
 msgid "Purpose"
 msgstr "Kegunaan"
 
-#: gtk/gtkentry.c:933 gtk/gtkimcontext.c:339 gtk/gtktext.c:898
+#: gtk/gtkentry.c:933 gtk/gtkimcontext.c:339 gtk/gtktext.c:900
 #: gtk/gtktextview.c:1117
 msgid "Purpose of the text field"
 msgstr "Kegunaan ruas teks"
 
-#: gtk/gtkentry.c:947 gtk/gtkimcontext.c:352 gtk/gtktext.c:911
+#: gtk/gtkentry.c:947 gtk/gtkimcontext.c:352 gtk/gtktext.c:913
 #: gtk/gtktextview.c:1132
 msgid "hints"
 msgstr "petunjuk"
 
-#: gtk/gtkentry.c:948 gtk/gtkimcontext.c:353 gtk/gtktext.c:912
+#: gtk/gtkentry.c:948 gtk/gtkimcontext.c:353 gtk/gtktext.c:914
 #: gtk/gtktextview.c:1133
 msgid "Hints for the text field behaviour"
 msgstr "Petunjuk bagi perilaku ruas teks"
@@ -2846,7 +2846,7 @@ msgstr "Petunjuk bagi perilaku ruas teks"
 msgid "A list of style attributes to apply to the text of the entry"
 msgstr "Daftar atribut gaya untuk diterapkan pada teks entri"
 
-#: gtk/gtkentry.c:977 gtk/gtktext.c:941 gtk/gtktexttag.c:735
+#: gtk/gtkentry.c:977 gtk/gtktext.c:943 gtk/gtktexttag.c:735
 #: gtk/gtktextview.c:1030
 msgid "Tabs"
 msgstr "Tab"
@@ -2864,7 +2864,7 @@ msgid "Whether to show an icon for Emoji"
 msgstr "Menentukan apakah menampilkan ikon untuk Emoji"
 
 #: gtk/gtkentry.c:1002 gtk/gtklabel.c:2568 gtk/gtkpasswordentry.c:504
-#: gtk/gtktext.c:990 gtk/gtktextview.c:1163
+#: gtk/gtktext.c:992 gtk/gtktextview.c:1163
 msgid "Extra menu"
 msgstr "Menu ekstra"
 
@@ -2872,11 +2872,11 @@ msgstr "Menu ekstra"
 msgid "Model menu to append to the context menu"
 msgstr "Menu model untuk ditambahkan ke menu konteks"
 
-#: gtk/gtkentry.c:1015 gtk/gtktext.c:953
+#: gtk/gtkentry.c:1015 gtk/gtktext.c:955
 msgid "Enable Emoji completion"
 msgstr "Aktifkan pelengkap Emoji"
 
-#: gtk/gtkentry.c:1016 gtk/gtktext.c:954
+#: gtk/gtkentry.c:1016 gtk/gtktext.c:956
 msgid "Whether to suggest Emoji replacements"
 msgstr "Apakah akan menyarankan penggantian Emoji"
 
@@ -2975,23 +2975,23 @@ msgstr "Batas propagasi untuk peristiwa yang ditangani oleh pengontrol ini"
 msgid "Name for this controller"
 msgstr "Nama untuk pengontrol ini"
 
-#: gtk/gtkeventcontrollerfocus.c:203
+#: gtk/gtkeventcontrollerfocus.c:204
 msgid "Is Focus"
 msgstr "Fokus"
 
-#: gtk/gtkeventcontrollerfocus.c:204
+#: gtk/gtkeventcontrollerfocus.c:205
 msgid "Whether the focus is in the controllers widget"
 msgstr "Apakah fokus ada di widget pengontrol"
 
-#: gtk/gtkeventcontrollerfocus.c:222
+#: gtk/gtkeventcontrollerfocus.c:223
 msgid "Contains Focus"
 msgstr "Berisi Fokus"
 
-#: gtk/gtkeventcontrollerfocus.c:223
+#: gtk/gtkeventcontrollerfocus.c:224
 msgid "Whether the focus is in a descendant of the controllers widget"
 msgstr "Apakah fokus ada di turunan widget pengontrol"
 
-#: gtk/gtkeventcontrollerscroll.c:469 gtk/gtkeventcontrollerscroll.c:470
+#: gtk/gtkeventcontrollerscroll.c:490 gtk/gtkeventcontrollerscroll.c:491
 msgid "Flags"
 msgstr "Bendera"
 
@@ -3817,7 +3817,7 @@ msgstr "Cacah baris"
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr "Banyaknya baris yang diinginkan ketika menyingkat label yang melipat"
 
-#: gtk/gtklabel.c:2569 gtk/gtktext.c:991 gtk/gtktextview.c:1164
+#: gtk/gtklabel.c:2569 gtk/gtktext.c:993 gtk/gtktextview.c:1164
 msgid "Menu model to append to the context menu"
 msgstr "Model menu untuk ditambahkan ke menu konteks"
 
@@ -4639,19 +4639,19 @@ msgstr "Dapat disusutkan"
 msgid "Allow self to be smaller than contents"
 msgstr "Biarkan diri lebih kecil dari konten"
 
-#: gtk/gtkplacessidebar.c:4327
+#: gtk/gtkplacessidebar.c:4328
 msgid "Location to Select"
 msgstr "Lokasi untu Dipilih"
 
-#: gtk/gtkplacessidebar.c:4328
+#: gtk/gtkplacessidebar.c:4329
 msgid "The location to highlight in the sidebar"
 msgstr "Lokasi yang akan disorot di bilah sisi"
 
-#: gtk/gtkplacessidebar.c:4333 gtk/gtkplacesview.c:2262
+#: gtk/gtkplacessidebar.c:4334 gtk/gtkplacesview.c:2262
 msgid "Open Flags"
 msgstr "Flag Buka"
 
-#: gtk/gtkplacessidebar.c:4334 gtk/gtkplacesview.c:2263
+#: gtk/gtkplacessidebar.c:4335 gtk/gtkplacesview.c:2263
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4659,55 +4659,55 @@ msgstr ""
 "Mode dimana aplikasi yang memanggil dapat membuka lokasi yang dipilih pada "
 "bilah sisi"
 
-#: gtk/gtkplacessidebar.c:4340
+#: gtk/gtkplacessidebar.c:4341
 msgid "Show recent files"
 msgstr "Tampilkan berkas baru-baru ini"
 
-#: gtk/gtkplacessidebar.c:4341
+#: gtk/gtkplacessidebar.c:4342
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Apakah bilah sisi termasuk pintasan bawaan bagi berkas berkas baru-baru ini"
 
-#: gtk/gtkplacessidebar.c:4346
+#: gtk/gtkplacessidebar.c:4347
 msgid "Show “Desktop”"
 msgstr "Tampilkan \"Desktop\""
 
-#: gtk/gtkplacessidebar.c:4347
+#: gtk/gtkplacessidebar.c:4348
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Apakah bilah sisi termasuk pintasan bawaan ke folder Desktop"
 
-#: gtk/gtkplacessidebar.c:4352
+#: gtk/gtkplacessidebar.c:4353
 msgid "Show “Enter Location”"
 msgstr "Tampilkan \"Masukkan Lokasi\""
 
-#: gtk/gtkplacessidebar.c:4353
+#: gtk/gtkplacessidebar.c:4354
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Apakah bilah sisi memuat pintasan bawaan ke memasukkan suatu lokasi secara "
 "manual"
 
-#: gtk/gtkplacessidebar.c:4358
+#: gtk/gtkplacessidebar.c:4359
 msgid "Show “Trash”"
 msgstr "Tampilkan \"Tong Sampah\""
 
-#: gtk/gtkplacessidebar.c:4359
+#: gtk/gtkplacessidebar.c:4360
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Apakah bilah sisi memuat pintasan bawaan ke lokasi Tong Sampah"
 
-#: gtk/gtkplacessidebar.c:4364
+#: gtk/gtkplacessidebar.c:4365
 msgid "Show “Other locations”"
 msgstr "Tampilkan \"Lokasi lain\""
 
-#: gtk/gtkplacessidebar.c:4365
+#: gtk/gtkplacessidebar.c:4366
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Apakah bilah sisi memuat butir untuk menampilkan lokasi eksternal"
 
-#: gtk/gtkplacessidebar.c:4370
+#: gtk/gtkplacessidebar.c:4371
 msgid "Show “Starred Location”"
 msgstr "Tampilkan \"Lokasi yang Dibintangi\""
 
-#: gtk/gtkplacessidebar.c:4371
+#: gtk/gtkplacessidebar.c:4372
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
 "Apakah bilah sisi memuat butir untuk menampilkan berkas yang dibintangi"
@@ -5497,6 +5497,18 @@ msgstr "Apakah menampilkan tombol tutup dalam bilah alat"
 #: gtk/gtksearchbar.c:345 gtk/gtksearchbar.c:346
 msgid "Key Capture Widget"
 msgstr "Widget Tangkap Kunci"
+
+#: gtk/gtksearchentry.c:336
+msgid "Search delay"
+msgstr "Tundaan pencarian"
+
+#: gtk/gtksearchentry.c:337
+msgid ""
+"The delay from last keypress to the search-changed signal. If this is not "
+"set, it defaults to 150ms"
+msgstr ""
+"Penundaan dari penekanan tombol terakhir ke sinyal pencarian-berubah. Jika "
+"ini tidak diatur, nilai baku 150ms"
 
 #: gtk/gtksettings.c:341
 msgid "Double Click Time"
@@ -6407,41 +6419,41 @@ msgid ""
 "The position of the insert mark (as offset from the beginning of the buffer)"
 msgstr "Posisi tanda sisip (sebagai ofset dari awal penyangga)"
 
-#: gtk/gtktext.c:760
+#: gtk/gtktext.c:762
 msgid "Text buffer object which actually stores self text"
 msgstr "Objek buffer teks yang sebenarnya menyimpan teks diri"
 
-#: gtk/gtktext.c:774
+#: gtk/gtktext.c:776
 msgid "Maximum number of characters for this self. Zero if no maximum"
 msgstr "Jumlah karakter maksimum untuk diri ini. Nol jika tidak maksimal"
 
-#: gtk/gtktext.c:787
+#: gtk/gtktext.c:789
 msgid "The character to use when masking self contents (in “password mode”)"
 msgstr ""
 "Karakter yang digunakan saat menyembunyikan konten diri (dalam \"mode kata "
 "sandi\")"
 
-#: gtk/gtktext.c:811
+#: gtk/gtktext.c:813
 msgid "Number of pixels of the text scrolled off the screen to the left"
 msgstr "Cacah piksel teks yang digulir keluar layar ke kiri"
 
-#: gtk/gtktext.c:861
+#: gtk/gtktext.c:863
 msgid "Show text in the GtkText when it’s empty and unfocused"
 msgstr "Tampilkan teks dalam GtkText ketika itu kosong dan tak menerima fokus"
 
-#: gtk/gtktext.c:930
+#: gtk/gtktext.c:932
 msgid "A list of style attributes to apply to the text of the GtkText"
 msgstr "Daftar atribut gaya untuk diterapkan pada teks GtkText"
 
-#: gtk/gtktext.c:942
+#: gtk/gtktext.c:944
 msgid "A list of tabstop locations to apply to the text of the GtkText"
 msgstr "Daftar lokasi tab stop untuk diterapkan pada teks GtkText"
 
-#: gtk/gtktext.c:977
+#: gtk/gtktext.c:979
 msgid "Propagate text width"
 msgstr "Propagasikan lebar teks"
 
-#: gtk/gtktext.c:978
+#: gtk/gtktext.c:980
 msgid "Whether the entry should grow and shrink with the content"
 msgstr "Apakah entri harus tumbuh dan menyusut dengan konten"
 
@@ -7869,7 +7881,3 @@ msgstr "Judul Profil Warna"
 #: modules/printbackends/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Judul profil warna yang akan dipakai"
-
-#~| msgid "Context"
-#~ msgid "gl-context"
-#~ msgstr "gl-context"
