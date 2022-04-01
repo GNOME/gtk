@@ -142,9 +142,13 @@ gdk_win32_clipboard_claim_remote (GdkWin32Clipboard *cb)
   cb->sequence_number = -1;
 
   formats = gdk_win32_clipboard_request_contentformats (cb);
-  gdk_clipboard_claim_remote (GDK_CLIPBOARD (cb), formats);
-  gdk_content_formats_unref (formats);
-  cb->sequence_number = GetClipboardSequenceNumber ();
+
+  if (formats != NULL)
+    {
+      gdk_clipboard_claim_remote (GDK_CLIPBOARD (cb), formats);
+      gdk_content_formats_unref (formats);
+      cb->sequence_number = GetClipboardSequenceNumber ();
+    }
 }
 
 static void
