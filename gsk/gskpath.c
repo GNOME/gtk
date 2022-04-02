@@ -203,6 +203,12 @@ gsk_path_get_contour (GskPath *path,
   return path->contours[i];
 }
 
+GskPathFlags
+gsk_path_get_flags (GskPath *self)
+{
+  return self->flags;
+}
+
 /**
  * gsk_path_print:
  * @self: a `GskPath`
