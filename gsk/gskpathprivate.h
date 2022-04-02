@@ -36,6 +36,9 @@ GskPath *               gsk_path_new_from_contours              (const GSList   
 gsize                   gsk_path_get_n_contours                 (GskPath                *path);
 const GskContour *      gsk_path_get_contour                    (GskPath                *path,
                                                                  gsize                   i);
+
+GskPathFlags            gsk_path_get_flags                      (GskPath                *self);
+
 gboolean                gsk_path_foreach_with_tolerance         (GskPath                *self,
                                                                  GskPathForeachFlags     flags,
                                                                  double                  tolerance,
