@@ -27,7 +27,11 @@
 
 G_BEGIN_DECLS
 
-typedef enum 
+/* A path is flat if it contains no cubic or conic segments.
+ * A path is closed if all its contours end with a GSK_PATH_CLOSE
+ * operation.
+ */
+typedef enum
 {
   GSK_PATH_FLAT,
   GSK_PATH_CLOSED
