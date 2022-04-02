@@ -274,7 +274,6 @@ gtk_im_context_simple_init_compose_table (void)
   char **lang = NULL;
   const char * const sys_langs[] = { "el_gr", "fi_fi", "pt_br", NULL };
   const char * const *sys_lang = NULL;
-  char *x11_compose_file_dir = get_x11_compose_file_dir ();
 
   path = g_build_filename (g_get_user_config_dir (), "gtk-4.0", "Compose", NULL);
   if (g_file_test (path, G_FILE_TEST_EXISTS))
@@ -323,7 +322,9 @@ gtk_im_context_simple_init_compose_table (void)
         {
           if (g_ascii_strncasecmp (*lang, *sys_lang, strlen (*sys_lang)) == 0)
             {
+              char *x11_compose_file_dir = get_x11_compose_file_dir ();
               path = g_build_filename (x11_compose_file_dir, *lang, "Compose", NULL);
+              g_free (x11_compose_file_dir);
               break;
             }
         }
@@ -336,7 +337,6 @@ gtk_im_context_simple_init_compose_table (void)
       g_clear_pointer (&path, g_free);
     }
 
-  g_free (x11_compose_file_dir);
   g_strfreev (langs);
 
   if (path != NULL &&
@@ -406,7 +406,7 @@ gtk_im_context_simple_finalize (GObject *obj)
 
 /**
  * gtk_im_context_simple_new:
- * 
+ *
  * Creates a new `GtkIMContextSimple`.
  *
  * Returns: a new `GtkIMContextSimple`
@@ -483,14 +483,14 @@ check_hex (GtkIMContextSimple *context_simple,
   priv->tentative_match_len = 0;
 
   str = g_string_new (NULL);
-  
+
   i = 0;
   while (i < n_compose)
     {
       gunichar ch;
-      
+
       ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
-      
+
       if (ch == 0)
         return FALSE;
 
@@ -500,7 +500,7 @@ check_hex (GtkIMContextSimple *context_simple,
       buf[g_unichar_to_utf8 (ch, buf)] = '\0';
 
       g_string_append (str, buf);
-      
+
       ++i;
     }
 
@@ -523,7 +523,7 @@ check_hex (GtkIMContextSimple *context_simple,
       g_string_append_unichar (priv->tentative_match, n);
       priv->tentative_match_len = n_compose;
     }
-  
+
   return TRUE;
 }
 
@@ -665,7 +665,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
                                                    FALSE,
                                                    &translated,
                                                    &translated);
-	  
+
 	  gtk_im_context_filter_keypress (context, tmp_event);
 	  gdk_event_unref (tmp_event);
 	}
@@ -725,7 +725,7 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
           g_signal_emit_by_name (context, "preedit-end");
 	  return TRUE;
 	}
-  
+
       keyval = gdk_key_event_get_keyval (event);
       ch = gdk_keyval_to_unicode (keyval);
       if (ch != 0 && !g_unichar_iscntrl (ch))
@@ -783,7 +783,7 @@ canonical_hex_keyval (GdkEvent *event)
     }
 
   g_free (keyvals);
-  
+
   if (keyval)
     return keyval;
   else
@@ -954,7 +954,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
       if (!priv->in_hex_sequence)
         g_signal_emit_by_name (context_simple, "preedit-end");
-      
+
       return TRUE;
     }
 
@@ -991,7 +991,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 	  priv->compose_buffer[0] = 0;
 	}
     }
-  
+
   /* Check for hex sequence start */
   if (!priv->in_hex_sequence && have_hex_mods && is_hex_start)
     {
@@ -1002,7 +1002,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
 
       g_signal_emit_by_name (context_simple, "preedit-start");
       g_signal_emit_by_name (context_simple, "preedit-changed");
-  
+
       return TRUE;
     }
 
