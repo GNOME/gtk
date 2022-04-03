@@ -171,6 +171,11 @@ typedef NSString *CALayerContentsGravity;
   return inMove;
 }
 
+- (BOOL)inFullscreenTransition;
+{
+  return inFullscreenTransition;
+}
+
 -(void)checkSendEnterNotify
 {
   /* When a new window has been created, and the mouse is in the window
@@ -759,31 +764,37 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowWillEnterFullScreen:(NSNotification *)aNotification
 {
+  inFullscreenTransition = YES;
   lastUnfullscreenFrame = [self frame];
 }
 
 -(void)windowDidEnterFullScreen:(NSNotification *)aNotification
 {
+  inFullscreenTransition = NO;
   initialPositionKnown = NO;
   [self checkSendEnterNotify];
 }
 
 -(void)windowWillExitFullScreen:(NSNotification *)aNotification
 {
+  inFullscreenTransition = YES;
 }
 
 -(void)windowDidExitFullScreen:(NSNotification *)aNotification
 {
+  inFullscreenTransition = NO;
   initialPositionKnown = NO;
   [self checkSendEnterNotify];
 }
 
 -(void)windowDidFailToEnterFullScreen:(NSNotification *)aNotification
 {
+  inFullscreenTransition = NO;
 }
 
 -(void)windowDidFailToExitFullScreen:(NSNotification *)aNotification
 {
+  inFullscreenTransition = NO;
 }
 
 -(void)windowDidChangeScreen:(NSNotification *)aNotification
