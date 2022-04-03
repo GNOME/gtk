@@ -405,7 +405,7 @@ attr_list_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY (data);
   GValue val = G_VALUE_INIT;
-  char *str;
+  char *str = NULL;
   const char *text;
   PangoAttrList *attrs;
 
@@ -413,7 +413,8 @@ attr_list_changed (GObject *object, GParamSpec *pspec, gpointer data)
   get_property_value (object, pspec, &val);
 
   attrs = g_value_get_boxed (&val);
-  str = pango_attr_list_to_string (attrs);
+  if (attrs)
+    str = pango_attr_list_to_string (attrs);
   if (str == NULL)
     str = g_strdup ("");
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
