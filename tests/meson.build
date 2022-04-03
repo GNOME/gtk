@@ -7,6 +7,7 @@ gtk_tests = [
   ['bigfont'],
   ['blur-performance', ['../gsk/gskcairoblur.c']],
   ['motion-compression'],
+  ['movingtext'],
   ['overlayscroll'],
   ['curve2'],
   ['testupload'],
