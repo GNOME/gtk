@@ -113,6 +113,8 @@ void             gsk_transform_node_get_translate       (const GskRenderNode *no
                                                          float               *dy);
 gboolean       gsk_render_node_prefers_high_depth       (const GskRenderNode *node);
 
+gboolean       gsk_container_node_is_disjoint           (const GskRenderNode *node);
+
 
 G_END_DECLS
 

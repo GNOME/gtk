@@ -2576,6 +2576,7 @@ struct _GskContainerNode
 {
   GskRenderNode render_node;
 
+  gboolean disjoint;
   guint n_children;
   GskRenderNode **children;
 };
@@ -2724,6 +2725,7 @@ gsk_container_node_new (GskRenderNode **children,
   self = gsk_render_node_alloc (GSK_CONTAINER_NODE);
   node = (GskRenderNode *) self;
 
+  self->disjoint = TRUE;
   self->n_children = n_children;
 
   if (n_children == 0)
@@ -2743,6 +2745,7 @@ gsk_container_node_new (GskRenderNode **children,
       for (guint i = 1; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
+          self->disjoint &= !graphene_rect_intersection (&bounds, &(children[i]->bounds), NULL);
           graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
           node->prefers_high_depth |= gsk_render_node_prefers_high_depth (children[i]);
         }
@@ -2799,6 +2802,24 @@ gsk_container_node_get_children (const GskRenderNode *node,
   *n_children = self->n_children;
 
   return self->children;
+}
+
+/*< private>
+ * gsk_container_node_is_disjoint:
+ * @node: a container `GskRenderNode`
+ *
+ * Returns `TRUE` if it is known that the child nodes are not
+ * overlapping. There is no guarantee that they do overlap
+ * if this function return FALSE.
+ *
+ * Returns: `TRUE` if children don't overlap
+ */
+gboolean
+gsk_container_node_is_disjoint (const GskRenderNode *node)
+{
+  const GskContainerNode *self = (const GskContainerNode *) node;
+
+  return self->disjoint;
 }
 
 /*** GSK_TRANSFORM_NODE ***/
