@@ -49,7 +49,9 @@
 #include "gskgldriverprivate.h"
 #include "gskglglyphylibraryprivate.h"
 
-#include <glyphy-harfbuzz.h>
+#include "gskpath.h"
+
+#include <glyphy.h>
 
 #define TOLERANCE (1/2048.)
 #define MIN_FONT_SIZE 10
@@ -228,6 +230,109 @@ accumulate_endpoint (glyphy_arc_endpoint_t *endpoint,
   return TRUE;
 }
 
+static void
+move_to (hb_draw_funcs_t *dfuncs,
+         GskPathBuilder  *builder,
+         hb_draw_state_t *st,
+         float            x,
+         float            y,
+         void            *data)
+{
+  gsk_path_builder_move_to (builder, x, y);
+}
+
+static void
+line_to (hb_draw_funcs_t *dfuncs,
+         GskPathBuilder  *builder,
+         hb_draw_state_t *st,
+         float            x,
+         float            y,
+         void            *data)
+{
+  gsk_path_builder_line_to (builder, x, y);
+}
+
+static void
+cubic_to (hb_draw_funcs_t *dfuncs,
+          GskPathBuilder  *builder,
+          hb_draw_state_t *st,
+          float            x1,
+          float            y1,
+          float            x2,
+          float            y2,
+          float            x3,
+          float            y3,
+          void            *data)
+{
+  gsk_path_builder_curve_to (builder, x1, y1, x2, y2, x3, y3);
+}
+
+static void
+close_path (hb_draw_funcs_t *dfuncs,
+            GskPathBuilder  *builder,
+            hb_draw_state_t *st,
+            void            *data)
+{
+  gsk_path_builder_close (builder);
+}
+
+static hb_draw_funcs_t *
+gsk_path_get_draw_funcs (void)
+{
+  static hb_draw_funcs_t *funcs = NULL;
+
+  if (!funcs)
+    {
+      funcs = hb_draw_funcs_create ();
+
+      hb_draw_funcs_set_move_to_func (funcs, (hb_draw_move_to_func_t) move_to, NULL, NULL);
+      hb_draw_funcs_set_line_to_func (funcs, (hb_draw_line_to_func_t) line_to, NULL, NULL);
+      hb_draw_funcs_set_cubic_to_func (funcs, (hb_draw_cubic_to_func_t) cubic_to, NULL, NULL);
+      hb_draw_funcs_set_close_path_func (funcs, (hb_draw_close_path_func_t) close_path, NULL, NULL);
+
+      hb_draw_funcs_make_immutable (funcs);
+    }
+
+  return funcs;
+}
+
+static gboolean
+acc_callback (GskPathOperation        op,
+              const graphene_point_t *pts,
+              gsize                   n_pts,
+              float                   weight,
+              gpointer                user_data)
+{
+  glyphy_arc_accumulator_t *acc = user_data;
+  glyphy_point_t p0, p1, p2, p3;
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      p0.x = pts[0].x; p0.y = pts[0].y;
+      glyphy_arc_accumulator_move_to (acc, &p0);
+      break;
+    case GSK_PATH_CLOSE:
+      glyphy_arc_accumulator_close_path (acc);
+      break;
+    case GSK_PATH_LINE:
+      p1.x = pts[1].x; p1.y = pts[1].y;
+      glyphy_arc_accumulator_line_to (acc, &p1);
+      break;
+    case GSK_PATH_CURVE:
+      p1.x = pts[1].x; p1.y = pts[1].y;
+      p2.x = pts[2].x; p2.y = pts[2].y;
+      p3.x = pts[3].x; p3.y = pts[3].y;
+      glyphy_arc_accumulator_cubic_to (acc, &p1, &p2, &p3);
+      break;
+    case GSK_PATH_CONIC:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
 static inline gboolean
 encode_glyph (GskGLGlyphyLibrary *self,
               hb_font_t          *font,
@@ -245,6 +350,8 @@ encode_glyph (GskGLGlyphyLibrary *self,
   double tolerance = upem * tolerance_per_em;
   double faraway = (double)upem / (MIN_FONT_SIZE * M_SQRT2);
   double avg_fetch_achieved;
+  GskPathBuilder *builder;
+  GskPath *path, *simplified;
 
   self->acc_endpoints->len = 0;
 
@@ -254,7 +361,15 @@ encode_glyph (GskGLGlyphyLibrary *self,
                                        (glyphy_arc_endpoint_accumulator_callback_t)accumulate_endpoint,
                                        self->acc_endpoints);
 
-  glyphy_harfbuzz(font_get_glyph_shape) (font, glyph_index, self->acc);
+  builder = gsk_path_builder_new ();
+  hb_font_get_glyph_shape (font, glyph_index, gsk_path_get_draw_funcs (), builder);
+  path = gsk_path_builder_free_to_path (builder);
+  simplified = gsk_path_simplify (path);
+
+  gsk_path_foreach (simplified, GSK_PATH_FOREACH_ALLOW_CURVE, acc_callback, self->acc);
+  gsk_path_unref (simplified);
+  gsk_path_unref (path);
+
   if (!glyphy_arc_accumulator_successful (self->acc))
     return FALSE;
 
