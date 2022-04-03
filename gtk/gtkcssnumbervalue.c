@@ -69,11 +69,18 @@ gtk_css_calc_value_new_from_array (GtkCssValue **values,
   return result;
 }
 
-
 static void
-gtk_css_value_number_free (GtkCssValue *value)
+gtk_css_value_number_free (GtkCssValue *number)
 {
-  g_slice_free (GtkCssValue, value);
+  if (number->type == TYPE_CALC)
+    {
+      const guint n_terms = number->calc.n_terms;
+
+      for (guint i = 0; i < n_terms; i++)
+        _gtk_css_value_unref (number->calc.terms[i]);
+    }
+
+  g_slice_free (GtkCssValue, number);
 }
 
 static double
