@@ -4,6 +4,7 @@ gtk_tests = [
   ['testpopup'],
   ['animated-resizing', ['frame-stats.c', 'variable.c']],
   ['animated-revealing', ['frame-stats.c', 'variable.c']],
+  ['bigfont'],
   ['blur-performance', ['../gsk/gskcairoblur.c']],
   ['motion-compression'],
   ['overlayscroll'],
