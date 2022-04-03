@@ -53,6 +53,7 @@
   NSRect           lastMaximizedFrame;
   NSRect           lastUnfullscreenFrame;
   BOOL             inMaximizeTransition;
+  BOOL             inFullscreenTransition;
 }
 
 -(void)beginManualMove;
@@ -70,5 +71,6 @@
 -(void)setDecorated:(BOOL)decorated;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;
 -(BOOL)needsMouseDownQuirk;
+-(BOOL)inFullscreenTransition;
 
 @end

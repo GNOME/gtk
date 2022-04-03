@@ -33,26 +33,26 @@
 static void
 _gdk_macos_toplevel_surface_fullscreen (GdkMacosToplevelSurface *self)
 {
-  NSWindow *window;
+  GdkMacosWindow *window;
 
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
 
-  window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  window = (GdkMacosWindow *)_gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
-  if (([window styleMask] & NSWindowStyleMaskFullScreen) == 0)
+  if (![window inFullscreenTransition] && ([window styleMask] & NSWindowStyleMaskFullScreen) == 0)
     [window toggleFullScreen:window];
 }
 
 static void
 _gdk_macos_toplevel_surface_unfullscreen (GdkMacosToplevelSurface *self)
 {
-  NSWindow *window;
+  GdkMacosWindow *window;
 
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
 
-  window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  window = (GdkMacosWindow *)_gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
 
-  if (([window styleMask] & NSWindowStyleMaskFullScreen) != 0)
+  if (![window inFullscreenTransition] && ([window styleMask] & NSWindowStyleMaskFullScreen) != 0)
     [window toggleFullScreen:window];
 }
 
