@@ -348,7 +348,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
   /* Use XMacros to register all of our programs and their uniforms */
 #define GSK_GL_NO_UNIFORMS
 #define GSK_GL_SHADER_RESOURCE(name)                                                            \
-  g_bytes_ref(g_resources_lookup_data("/org/gtk/libgsk/gl/" name, 0, NULL))
+  g_resources_lookup_data("/org/gtk/libgsk/gl/" name, 0, NULL)
 #define GSK_GL_SHADER_STRING(str)                                                               \
   g_bytes_new_static(str, strlen(str))
 #define GSK_GL_SHADER_SINGLE(bytes)                                                             \
