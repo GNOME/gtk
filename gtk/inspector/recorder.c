@@ -1807,7 +1807,7 @@ static char *
 get_event_summary (GdkEvent *event)
 {
   double x, y;
-  int type;
+  GdkEventType type;
   const char *name;
 
   gdk_event_get_position (event, &x, &y);
@@ -1829,6 +1829,7 @@ get_event_summary (GdkEvent *event)
     case GDK_TOUCH_CANCEL:
     case GDK_TOUCHPAD_SWIPE:
     case GDK_TOUCHPAD_PINCH:
+    case GDK_TOUCHPAD_HOLD:
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       return g_strdup_printf ("%s (%.2f %.2f)", name, x, y);
@@ -1854,6 +1855,7 @@ get_event_summary (GdkEvent *event)
     case GDK_PAD_RING:
     case GDK_PAD_STRIP:
     case GDK_PAD_GROUP_MODE:
+    case GDK_DELETE:
       return g_strdup_printf ("%s", name);
 
     case GDK_SCROLL:
@@ -1868,6 +1870,7 @@ get_event_summary (GdkEvent *event)
         }
       break;
 
+    case GDK_EVENT_LAST:
     default:
       g_assert_not_reached ();
     }
