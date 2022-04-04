@@ -605,7 +605,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      GTK_PARAM_READWRITE));
 
   /**
-   * GtkTexTag:line-height:
+   * GtkTextTag:line-height:
    *
    * Factor to scale line height by.
    *
