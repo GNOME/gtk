@@ -33,6 +33,7 @@
 #include <gsk/gskroundedrectprivate.h>
 #include <math.h>
 #include <string.h>
+#include <pango/pangofc-font.h>
 
 #include "gskglcommandqueueprivate.h"
 #include "gskgldriverprivate.h"
@@ -3123,6 +3124,21 @@ add_encoded_glyph (GskGLDrawVertex    *vertices,
   *vertices = (GskGLDrawVertex) { .position = { eg->x, eg->y}, .uv = { eg->g16hi, eg->g16lo}, .color = { c[0], c[1], c[2], c[3] } };
 }
 
+static gboolean
+font_is_synthetic_bold (PangoFont *font)
+{
+  if (PANGO_IS_FC_FONT (font))
+    {
+      FcPattern *pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
+      gboolean ret;
+
+      if (FcPatternGetBool (pattern, FC_EMBOLDEN, 0, &ret) == FcResultMatch)
+        return ret;
+    }
+
+  return FALSE;
+}
+
 static inline void
 gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
                                           const GskRenderNode *node,
@@ -3146,6 +3162,7 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   guint i;
   int x_position = 0;
   float font_scale;
+  gboolean synthetic_bold;
 
   g_assert (!gsk_text_node_has_color_glyphs (node));
 
@@ -3156,6 +3173,8 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
     return;
 
   font = (PangoFont *)gsk_text_node_get_font (node);
+  synthetic_bold = font_is_synthetic_bold (font);
+
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   library = job->driver->glyphy_library;
   offset = gsk_text_node_get_offset (node);
@@ -3218,6 +3237,10 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
           gsk_gl_program_set_uniform1f (job->current_program,
                                         UNIFORM_GLYPHY_CONTRAST, 0,
                                         1.0);
+          gsk_gl_program_set_uniform1f (job->current_program,
+                                        UNIFORM_GLYPHY_BOLDNESS, 0,
+                                        synthetic_bold ? 0.1 : 0.0);
+
 #if 0
           gsk_gl_program_set_uniform1f (job->current_program,
                                         UNIFORM_GLYPHY_OUTLINE_THICKNESS, 0,
