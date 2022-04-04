@@ -28,7 +28,7 @@
  * GtkFilter:
  *
  * A `GtkFilter` object describes the filtering to be performed by a
- * `GtkFilterListModel`.
+ * [class@Gtk.FilterListModel].
  *
  * The model will use the filter to determine if it should include items
  * or not by calling [method@Gtk.Filter.match] for each item and only
