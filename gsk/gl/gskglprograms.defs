@@ -99,5 +99,4 @@ GSK_GL_DEFINE_PROGRAM (glyphy,
                        GSK_GL_ADD_UNIFORM (2, GLYPHY_OUTLINE_THICKNESS, u_outline_thickness)
                        GSK_GL_ADD_UNIFORM (3, GLYPHY_OUTLINE, u_outline)
                        GSK_GL_ADD_UNIFORM (4, GLYPHY_BOLDNESS, u_boldness)
-                       GSK_GL_ADD_UNIFORM (5, GLYPHY_DEBUG, u_debug)
                        GSK_GL_ADD_UNIFORM (6, GLYPHY_ATLAS_INFO, u_atlas_info))
