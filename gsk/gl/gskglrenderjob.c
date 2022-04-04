@@ -3218,6 +3218,14 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
           gsk_gl_program_set_uniform1f (job->current_program,
                                         UNIFORM_GLYPHY_CONTRAST, 0,
                                         1.0);
+#if 0
+          gsk_gl_program_set_uniform1f (job->current_program,
+                                        UNIFORM_GLYPHY_OUTLINE_THICKNESS, 0,
+                                        1.0);
+          gsk_gl_program_set_uniform1f (job->current_program,
+                                        UNIFORM_GLYPHY_OUTLINE, 0,
+                                        1.0);
+#endif
 
           last_texture = texture_id;
         }
