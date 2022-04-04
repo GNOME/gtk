@@ -83,6 +83,19 @@ _gdk_macos_toplevel_surface_unmaximize (GdkMacosToplevelSurface *self)
 }
 
 static void
+_gdk_macos_toplevel_surface_unminimize (GdkMacosToplevelSurface *self)
+{
+  NSWindow *window;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+
+  window = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+
+  if ([window isMiniaturized])
+    [window deminiaturize:window];
+}
+
+static void
 _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
                                      GdkToplevelLayout *layout)
 {
@@ -201,6 +214,8 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
       else
         _gdk_macos_toplevel_surface_unfullscreen (self);
     }
+
+  _gdk_macos_toplevel_surface_unminimize (self);
 
   if (!GDK_MACOS_SURFACE (self)->did_initial_present)
     {

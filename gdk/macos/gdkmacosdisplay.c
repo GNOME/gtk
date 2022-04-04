@@ -434,7 +434,8 @@ select_key_in_idle_cb (gpointer data)
         {
           GdkMacosSurface *surface = iter->data;
 
-          if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (surface)))
+          if (GDK_SURFACE_IS_MAPPED (GDK_SURFACE (surface)) &&
+              ([surface->window styleMask] & NSWindowStyleMaskMiniaturizable) == 0)
             {
               [surface->window showAndMakeKey:YES];
               break;
