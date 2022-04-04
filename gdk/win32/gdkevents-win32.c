@@ -2322,60 +2322,35 @@ gdk_event_translate (MSG *msg,
 
       pen_touch_input = FALSE;
 
-      new_window = window;
+      g_set_object (&window, find_window_for_mouse_event (window, msg));
 
-      if (pointer_grab != NULL)
-	{
-	  POINT pt;
-	  pt = msg->pt;
-
-	  new_window = NULL;
-	  hwnd = WindowFromPoint (pt);
-	  if (hwnd != NULL)
-	    {
-	      POINT client_pt = pt;
-
-	      ScreenToClient (hwnd, &client_pt);
-	      GetClientRect (hwnd, &rect);
-	      if (PtInRect (&rect, client_pt))
-		new_window = gdk_win32_handle_table_lookup (hwnd);
-	    }
-
-	  if (!pointer_grab->owner_events &&
-	      new_window != NULL &&
-	      new_window != pointer_grab->surface)
-	    new_window = NULL;
-	}
-
-      if (mouse_window != new_window)
+      if (mouse_window != window)
 	{
 	  GDK_NOTE (EVENTS, g_print (" mouse_window %p -> %p",
 				     mouse_window ? GDK_SURFACE_HWND (mouse_window) : NULL,
-				     new_window ? GDK_SURFACE_HWND (new_window) : NULL));
+                                     window ? GDK_SURFACE_HWND (window) : NULL));
 	  synthesize_crossing_events (display,
                                       _gdk_device_manager->system_pointer,
-				      mouse_window, new_window,
+                                      mouse_window, window,
 				      GDK_CROSSING_NORMAL,
 				      &msg->pt,
 				      0, /* TODO: Set right mask */
 				      _gdk_win32_get_next_tick (msg->time),
 				      FALSE);
-	  g_set_object (&mouse_window, new_window);
+	  g_set_object (&mouse_window, window);
 	  mouse_window_ignored_leave = NULL;
-	  if (new_window != NULL)
-	    track_mouse_event (TME_LEAVE, GDK_SURFACE_HWND (new_window));
+	  if (window != NULL)
+	    track_mouse_event (TME_LEAVE, GDK_SURFACE_HWND (window));
 	}
-      else if (new_window != NULL &&
-	       new_window == mouse_window_ignored_leave)
+      else if (window != NULL && window == mouse_window_ignored_leave)
 	{
 	  /* If we ignored a leave event for this window and we're now getting
 	     input again we need to re-arm the mouse tracking, as that was
 	     cancelled by the mouseleave. */
 	  mouse_window_ignored_leave = NULL;
-	  track_mouse_event (TME_LEAVE, GDK_SURFACE_HWND (new_window));
+          track_mouse_event (TME_LEAVE, GDK_SURFACE_HWND (window));
 	}
 
-      g_set_object (&window, find_window_for_mouse_event (window, msg));
       impl = GDK_WIN32_SURFACE (window);
 
       /* If we haven't moved, don't create any GDK event. Windows
