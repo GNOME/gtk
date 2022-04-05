@@ -291,6 +291,7 @@
     <file>gears.c</file>
     <file>gestures.c</file>
     <file>glarea.c</file>
+    <file>glyphs.c</file>
     <file>gltransition.c</file>
     <file>headerbar.c</file>
     <file>hypertext.c</file>
