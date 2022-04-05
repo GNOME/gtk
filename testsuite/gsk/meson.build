@@ -83,6 +83,7 @@ compare_render_tests = [
   'repeat-texture',
   'transform-in-transform',
   'transform-in-transform-in-transform',
+  'unaligned-offscreen',
   'rounded-clip-in-clip-3d', # not really 3d, but cairo fails it
 ]
 

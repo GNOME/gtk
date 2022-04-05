@@ -3871,7 +3871,6 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
 
   filter = offscreen->linear_filter ? GL_LINEAR : GL_NEAREST;
 
-  /* Check if we've already cached the drawn texture. */
   key.pointer = node;
   key.pointer_is_child = TRUE; /* Don't conflict with the child using the cache too */
   key.parent_rect = *offscreen->bounds;
@@ -3879,61 +3878,111 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
   key.scale_y = job->scale_y;
   key.filter = filter;
 
-  cached_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+  float offset_x = job->offset_x;
+  float offset_y = job->offset_y;
+  gboolean flipped_x = job->scale_x < 0;
+  gboolean flipped_y = job->scale_y < 0;
+  graphene_rect_t viewport;
 
-  if (cached_id != 0)
+  if (flipped_x || flipped_y)
     {
-      offscreen->texture_id = cached_id;
-      init_full_texture_region (offscreen);
-      /* We didn't render it offscreen, but hand out an offscreen texture id */
-      offscreen->was_offscreen = TRUE;
-      return TRUE;
+      GskTransform *transform = gsk_transform_scale (NULL,
+                                                     flipped_x ? -1 : 1,
+                                                     flipped_y ? -1 : 1);
+      gsk_gl_render_job_push_modelview (job, transform);
     }
 
-  float scaled_width;
-  float scaled_height;
-  float downscale_x = 1;
-  float downscale_y = 1;
+  gsk_gl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
 
-  g_assert (job->command_queue->max_texture_size > 0);
+  float aligned_x = floorf (viewport.origin.x);
+  float padding_left = viewport.origin.x - aligned_x;
+  float aligned_width = ceilf (viewport.size.width + padding_left);
+  float padding_right = aligned_width - viewport.size.width - padding_left;
+
+  float aligned_y = floorf (viewport.origin.y);
+  float padding_top = viewport.origin.y - aligned_y;
+  float aligned_height = ceilf (viewport.size.height + padding_top);
+  float padding_bottom = aligned_height - viewport.size.height - padding_top;
 
   /* Tweak the scale factor so that the required texture doesn't
    * exceed the max texture limit. This will render with a lower
    * resolution, but this is better than clipping.
    */
-  {
-    int max_texture_size = job->command_queue->max_texture_size;
 
-    scaled_width = ceilf (offscreen->bounds->size.width * fabs (job->scale_x));
-    if (scaled_width > max_texture_size)
-      {
-        downscale_x = (float)max_texture_size / scaled_width;
-        scaled_width = max_texture_size;
-      }
-    if (job->scale_x < 0)
-      downscale_x = -downscale_x;
+  g_assert (job->command_queue->max_texture_size > 0);
 
-    scaled_height = ceilf (offscreen->bounds->size.height * fabs (job->scale_y));
-    if (scaled_height > max_texture_size)
-      {
-        downscale_y = (float)max_texture_size / scaled_height;
-        scaled_height = max_texture_size;
-      }
-    if (job->scale_y < 0)
-      downscale_y = -downscale_y;
-  }
+  float downscale_x = 1;
+  float downscale_y = 1;
+  int texture_width;
+  int texture_height;
+  int max_texture_size = job->command_queue->max_texture_size;
+
+  if (aligned_width > max_texture_size)
+    downscale_x = (float)max_texture_size / viewport.size.width;
+
+  if (aligned_height > max_texture_size)
+    downscale_y = (float)max_texture_size / viewport.size.height;
+
+  if (downscale_x != 1 || downscale_y != 1)
+    {
+      GskTransform *transform = gsk_transform_scale (NULL, downscale_x, downscale_y);
+      gsk_gl_render_job_push_modelview (job, transform);
+      gsk_gl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
+    }
+
+  if (downscale_x == 1)
+    {
+      viewport.origin.x = aligned_x;
+      viewport.size.width = aligned_width;
+      offscreen->area.x = padding_left / aligned_width;
+      offscreen->area.x2 = 1.0f - (padding_right / aligned_width);
+      texture_width = aligned_width;
+    }
+  else
+    {
+      offscreen->area.x = 0;
+      offscreen->area.x2 = 1;
+      texture_width = max_texture_size;
+    }
+
+  if (downscale_y == 1)
+    {
+      viewport.origin.y = aligned_y;
+      viewport.size.height = aligned_height;
+      offscreen->area.y = padding_bottom / aligned_height;
+      offscreen->area.y2 = 1.0f - padding_top / aligned_height;
+      texture_height = aligned_height;
+    }
+   else
+    {
+      offscreen->area.y = 0;
+      offscreen->area.y2 = 1;
+      texture_height = max_texture_size;
+    }
+
+  /* Check if we've already cached the drawn texture. */
+  cached_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+
+  if (cached_id != 0)
+    {
+      if (downscale_x != 1 || downscale_y != 1)
+        gsk_gl_render_job_pop_modelview (job);
+      if (flipped_x || flipped_y)
+        gsk_gl_render_job_pop_modelview (job);
+      offscreen->texture_id = cached_id;
+      /* We didn't render it offscreen, but hand out an offscreen texture id */
+      offscreen->was_offscreen = TRUE;
+      return TRUE;
+    }
 
   GskGLRenderTarget *render_target;
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
-  graphene_rect_t viewport;
-  float offset_x = job->offset_x;
-  float offset_y = job->offset_y;
   float prev_alpha;
   guint prev_fbo;
 
   if (!gsk_gl_driver_create_render_target (job->driver,
-                                           scaled_width, scaled_height,
+                                           texture_width, texture_height,
                                            get_target_format (job, node),
                                            filter, filter,
                                            &render_target))
@@ -3955,19 +4004,6 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
                                           render_target->framebuffer_id);
     }
 
-  if (downscale_x != 1 || downscale_y != 1)
-    {
-      GskTransform *transform = gsk_transform_scale (NULL, downscale_x, downscale_y);
-      gsk_gl_render_job_push_modelview (job, transform);
-      gsk_transform_unref (transform);
-    }
-
-  gsk_gl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
-  /* Code above will scale the size with the scale we use in the render ops,
-   * but for the viewport size, we need our own size limited by the texture size */
-  viewport.size.width = scaled_width;
-  viewport.size.height = scaled_height;
-
   gsk_gl_render_job_set_viewport (job, &viewport, &prev_viewport);
   gsk_gl_render_job_set_projection_from_rect (job, &job->viewport, &prev_projection);
   prev_alpha = gsk_gl_render_job_set_alpha (job, 1.0f);
@@ -3985,6 +4021,10 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
 
   if (downscale_x != 1 || downscale_y != 1)
     gsk_gl_render_job_pop_modelview (job);
+
+  if (flipped_x || flipped_y)
+    gsk_gl_render_job_pop_modelview (job);
+
   gsk_gl_render_job_set_viewport (job, &prev_viewport, NULL);
   gsk_gl_render_job_set_projection (job, &prev_projection);
   gsk_gl_render_job_set_alpha (job, prev_alpha);
@@ -3997,8 +4037,6 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
   offscreen->texture_id = gsk_gl_driver_release_render_target (job->driver,
                                                                render_target,
                                                                FALSE);
-
-  init_full_texture_region (offscreen);
 
   if (!offscreen->do_not_cache)
     gsk_gl_driver_cache_texture (job->driver, &key, offscreen->texture_id);
