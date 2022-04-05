@@ -3124,19 +3124,32 @@ add_encoded_glyph (GskGLDrawVertex    *vertices,
   *vertices = (GskGLDrawVertex) { .position = { eg->x, eg->y}, .uv = { eg->g16hi, eg->g16lo}, .color = { c[0], c[1], c[2], c[3] } };
 }
 
-static gboolean
-font_is_synthetic_bold (PangoFont *font)
+static void
+get_synthetic_font_params (PangoFont   *font,
+                           gboolean    *embolden,
+                           PangoMatrix *matrix)
 {
+  *embolden = FALSE;
+
   if (PANGO_IS_FC_FONT (font))
     {
       FcPattern *pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
-      gboolean ret;
+      FcBool b;
+      FcMatrix mat;
+      FcMatrix *m;
 
-      if (FcPatternGetBool (pattern, FC_EMBOLDEN, 0, &ret) == FcResultMatch)
-        return ret;
+      if (FcPatternGetBool (pattern, FC_EMBOLDEN, 0, &b) == FcResultMatch)
+        *embolden = b;
+
+      FcMatrixInit (&mat);
+      for (int i = 0; FcPatternGetMatrix (pattern, FC_MATRIX, i, &m) == FcResultMatch; i++)
+        FcMatrixMultiply (&mat, &mat, m);
+
+      matrix->xx = mat.xx;
+      matrix->xy = mat.xy;
+      matrix->yx = mat.yx;
+      matrix->yy = mat.yy;
     }
-
-  return FALSE;
 }
 
 static inline void
@@ -3162,7 +3175,8 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   guint i;
   int x_position = 0;
   float font_scale;
-  gboolean synthetic_bold;
+  gboolean embolden;
+  PangoMatrix matrix = PANGO_MATRIX_INIT;
 
 #define GRID_SIZE 20
 
@@ -3175,7 +3189,7 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
     return;
 
   font = (PangoFont *)gsk_text_node_get_font (node);
-  synthetic_bold = font_is_synthetic_bold (font);
+  get_synthetic_font_params (font, &embolden, &matrix);
 
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   library = job->driver->glyphy_library;
@@ -3243,7 +3257,7 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
           /* 0.0208 is the value used by freetype for synthetic emboldening */
           gsk_gl_program_set_uniform1f (job->current_program,
                                         UNIFORM_GLYPHY_BOLDNESS, 0,
-                                        synthetic_bold ? 0.0208 * GRID_SIZE : 0.0);
+                                        embolden ? 0.0208 * GRID_SIZE : 0.0);
 
 #if 0
           gsk_gl_program_set_uniform1f (job->current_program,
@@ -3266,8 +3280,10 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
       EncodedGlyph encoded[4];
 #define ENCODE_CORNER(_cx, _cy) \
   G_STMT_START { \
-    float _vx = x + cx + font_scale * ((1-_cx) * glyph->extents.min_x + _cx * glyph->extents.max_x); \
-    float _vy = y + cy - font_scale * ((1-_cy) * glyph->extents.min_y + _cy * glyph->extents.max_y); \
+    float _dx = _cx * (glyph->extents.max_x - glyph->extents.min_x); \
+    float _dy = _cy * (glyph->extents.max_y - glyph->extents.min_y); \
+    float _vx = x + cx + font_scale * (glyph->extents.min_x + matrix.xx * _dx + matrix.xy * _dy); \
+    float _vy = y + cy - font_scale * (glyph->extents.min_y + matrix.yx * _dx + matrix.yy * _dy); \
     encoded_glyph_init (&encoded[_cx * 2 + _cy], _vx, _vy, _cx, _cy, glyph); \
   } G_STMT_END
       ENCODE_CORNER (0, 0);
