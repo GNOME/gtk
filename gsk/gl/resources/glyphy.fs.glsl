@@ -27,7 +27,6 @@ glyph_info_decode (vec4 v)
   return gi;
 }
 
-
 float
 antialias (float d)
 {
@@ -46,6 +45,7 @@ main()
   float m = length (vec2 (length (dpdx), length (dpdy))) * SQRT2_INV;
 
   float gsdist = glyphy_sdf (p, gi.nominal_size GLYPHY_DEMO_EXTRA_ARGS);
+  gsdist -= u_boldness;
   float sdist = gsdist / m * u_contrast;
 
   if (u_outline)

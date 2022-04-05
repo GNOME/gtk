@@ -54,7 +54,10 @@
 #include <glyphy.h>
 
 #define TOLERANCE (1/2048.)
-#define MIN_FONT_SIZE 10
+#define MIN_FONT_SIZE 14
+#define GRID_SIZE 20 /* Per EM */
+#define ENLIGHTEN_MAX .01 /* Per EM */
+#define EMBOLDEN_MAX .024 /* Per EM */
 #define ITEM_W 64
 #define ITEM_H_QUANTUM 8
 
@@ -349,6 +352,9 @@ encode_glyph (GskGLGlyphyLibrary *self,
   guint upem = hb_face_get_upem (face);
   double tolerance = upem * tolerance_per_em;
   double faraway = (double)upem / (MIN_FONT_SIZE * M_SQRT2);
+  double unit_size = (double) upem / GRID_SIZE;
+  double enlighten_max = (double) upem * ENLIGHTEN_MAX;
+  double embolden_max = (double) upem * EMBOLDEN_MAX;
   double avg_fetch_achieved;
   GskPathBuilder *builder;
   GskPath *path, *simplified;
@@ -380,17 +386,19 @@ encode_glyph (GskGLGlyphyLibrary *self,
                                           self->acc_endpoints->len,
                                           FALSE);
 
-  if (!glyphy_arc_list_encode_blob ((gpointer)self->acc_endpoints->data,
-                                    self->acc_endpoints->len,
-                                    buffer,
-                                    buffer_len,
-                                    faraway,
-                                    4, /* UNUSED */
-                                    &avg_fetch_achieved,
-                                    output_len,
-                                    nominal_width,
-                                    nominal_height,
-                                    extents))
+  if (!glyphy_arc_list_encode_blob2 ((gpointer)self->acc_endpoints->data,
+                                     self->acc_endpoints->len,
+                                     buffer,
+                                     buffer_len,
+                                     faraway,
+                                     unit_size,
+                                     enlighten_max,
+                                     embolden_max,
+                                     &avg_fetch_achieved,
+                                     output_len,
+                                     nominal_width,
+                                     nominal_height,
+                                     extents))
     return FALSE;
 
   glyphy_extents_scale (extents, 1./upem, 1./upem);

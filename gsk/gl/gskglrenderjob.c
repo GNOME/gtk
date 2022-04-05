@@ -3164,6 +3164,8 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   float font_scale;
   gboolean synthetic_bold;
 
+#define GRID_SIZE 20
+
   g_assert (!gsk_text_node_has_color_glyphs (node));
 
   if (!(num_glyphs = gsk_text_node_get_num_glyphs (node)))
@@ -3237,9 +3239,11 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
           gsk_gl_program_set_uniform1f (job->current_program,
                                         UNIFORM_GLYPHY_CONTRAST, 0,
                                         1.0);
+
+          /* 0.0208 is the value used by freetype for synthetic emboldening */
           gsk_gl_program_set_uniform1f (job->current_program,
                                         UNIFORM_GLYPHY_BOLDNESS, 0,
-                                        synthetic_bold ? 0.1 : 0.0);
+                                        synthetic_bold ? 0.0208 * GRID_SIZE : 0.0);
 
 #if 0
           gsk_gl_program_set_uniform1f (job->current_program,
