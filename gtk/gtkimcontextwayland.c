@@ -71,6 +71,7 @@ struct _GtkIMContextWayland
 {
   GtkIMContextSimple parent_instance;
   GtkWidget *widget;
+  GtkWidget *controller_widget;
 
   GtkGesture *gesture;
   double press_x;
@@ -555,16 +556,21 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
     return;
 
   if (context_wayland->widget)
+    gtk_im_context_wayland_focus_out (context);
+
+  if (context_wayland->controller_widget)
     {
-      gtk_im_context_wayland_focus_out (context);
-      gtk_widget_remove_controller (context_wayland->widget, GTK_EVENT_CONTROLLER (context_wayland->gesture));
+      gtk_widget_remove_controller (context_wayland->controller_widget,
+                                    GTK_EVENT_CONTROLLER (context_wayland->gesture));
       context_wayland->gesture = NULL;
+      g_clear_object (&context_wayland->controller_widget);
     }
 
   g_set_object (&context_wayland->widget, widget);
 
   if (widget)
     {
+      GtkWidget *parent;
       GtkGesture *gesture;
 
       gesture = gtk_gesture_click_new ();
@@ -575,7 +581,18 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
                         G_CALLBACK (pressed_cb), context);
       g_signal_connect (gesture, "released",
                         G_CALLBACK (released_cb), context);
-      gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
+
+      parent = gtk_widget_get_parent (widget);
+
+      if (parent &&
+          GTK_IS_EDITABLE (widget) &&
+          GTK_IS_EDITABLE (parent))
+        g_set_object (&context_wayland->controller_widget, parent);
+      else
+        g_set_object (&context_wayland->controller_widget, widget);
+
+      gtk_widget_add_controller (context_wayland->controller_widget,
+                                 GTK_EVENT_CONTROLLER (gesture));
       context_wayland->gesture = gesture;
     }
 }
@@ -893,17 +910,20 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
 
+  if (context_wayland->surrounding.text && text &&
+      (len < 0 || len == strlen (context_wayland->surrounding.text)) &&
+      strncmp (context_wayland->surrounding.text, text, len) == 0 &&
+      context_wayland->surrounding.cursor_idx == cursor_index &&
+      context_wayland->surrounding.anchor_idx == selection_bound)
+    return;
+
   g_free (context_wayland->surrounding.text);
   context_wayland->surrounding.text = g_strndup (text, len);
   context_wayland->surrounding.cursor_idx = cursor_index;
   context_wayland->surrounding.anchor_idx = selection_bound;
 
   notify_surrounding_text (context_wayland);
-  /* State changes coming from reset don't have any other opportunity to get
-   * committed. */
-  if (context_wayland->surrounding_change !=
-      ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD)
-    commit_state (context_wayland);
+  commit_state (context_wayland);
 }
 
 static gboolean
