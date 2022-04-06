@@ -757,15 +757,21 @@ gdk_motion_event_push_history (GdkEvent *event,
 
   memset (&hist, 0, sizeof (GdkTimeCoord));
   hist.time = gdk_event_get_time (history_event);
+
   if (tool)
     {
       hist.flags = gdk_device_tool_get_axes (tool);
       for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
         gdk_event_get_axis (history_event, i, &hist.axes[i]);
     }
-  else
+
+  /* GdkTimeCoord has no dedicated fields to record event position. For plain
+   * pointer events, and for tools which don't report GDK_AXIS_X/GDK_AXIS_Y
+   * on their own, we surface the position using the X and Y input axes.
+   */
+  if (!(hist.flags & GDK_AXIS_FLAG_X) || !(hist.flags & GDK_AXIS_FLAG_Y))
     {
-      hist.flags = GDK_AXIS_FLAG_X | GDK_AXIS_FLAG_Y;
+      hist.flags |= GDK_AXIS_FLAG_X | GDK_AXIS_FLAG_Y;
       gdk_event_get_position (history_event, &hist.axes[GDK_AXIS_X], &hist.axes[GDK_AXIS_Y]);
     }
 
