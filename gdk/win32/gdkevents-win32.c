@@ -873,6 +873,7 @@ _gdk_win32_append_event (GdkEvent *event)
 {
   GdkDisplay *display;
   GList *link;
+  gulong serial;
 
   display = gdk_display_get_default ();
 
@@ -880,8 +881,9 @@ _gdk_win32_append_event (GdkEvent *event)
 #if 1
   link = _gdk_event_queue_append (display, event);
   GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
+  serial = _gdk_display_get_next_serial (display);
   /* event morphing, the passed in may not be valid afterwards */
-  _gdk_windowing_got_event (display, link, event, 0);
+  _gdk_windowing_got_event (display, link, event, serial);
 #else
   _gdk_event_queue_append (display, event);
   GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
