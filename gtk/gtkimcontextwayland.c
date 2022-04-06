@@ -910,17 +910,20 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
 
+  if (context_wayland->surrounding.text && text &&
+      (len < 0 || len == strlen (context_wayland->surrounding.text)) &&
+      strncmp (context_wayland->surrounding.text, text, len) == 0 &&
+      context_wayland->surrounding.cursor_idx == cursor_index &&
+      context_wayland->surrounding.anchor_idx == selection_bound)
+    return;
+
   g_free (context_wayland->surrounding.text);
   context_wayland->surrounding.text = g_strndup (text, len);
   context_wayland->surrounding.cursor_idx = cursor_index;
   context_wayland->surrounding.anchor_idx = selection_bound;
 
   notify_surrounding_text (context_wayland);
-  /* State changes coming from reset don't have any other opportunity to get
-   * committed. */
-  if (context_wayland->surrounding_change !=
-      ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD)
-    commit_state (context_wayland);
+  commit_state (context_wayland);
 }
 
 static gboolean
