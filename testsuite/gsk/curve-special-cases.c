@@ -121,6 +121,163 @@ test_curve_tangents (void)
   g_assert_true (graphene_vec2_near (&t, graphene_vec2_y_axis (), 0.0001));
 }
 
+static gboolean
+near_one_point (const graphene_point_t *p,
+                const graphene_point_t *q,
+                int                     n,
+                float                   epsilon)
+{
+  for (int i = 0; i < n; i++)
+    {
+      if (graphene_point_near (p, &q[i], epsilon))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+pathop_cb (GskPathOperation        op,
+           const graphene_point_t *pts,
+           gsize                   n_pts,
+           float                   weight,
+           gpointer                user_data)
+{
+  GskCurve *curve = user_data;
+
+  g_assert (op != GSK_PATH_CLOSE);
+
+  if (op == GSK_PATH_MOVE)
+    return TRUE;
+
+  gsk_curve_init_foreach (curve, op, pts, n_pts, weight);
+  return FALSE;
+}
+
+static void
+parse_curve (GskCurve   *c,
+             const char *str)
+{
+  GskPath *path = gsk_path_parse (str);
+
+  gsk_path_foreach (path, GSK_PATH_FOREACH_ALLOW_CUBIC | GSK_PATH_FOREACH_ALLOW_CONIC, pathop_cb, c);
+
+  gsk_path_unref (path);
+}
+
+static void
+test_curve_intersections (void)
+{
+  struct {
+    const char *c1;
+    const char *c2;
+    int n;
+    graphene_point_t p[9];
+  } tests[] = {
+    { "M 0 100 L 100 100",
+      "M 0 110 L 100 110",
+      0, { { 0, 0 }, },
+    },
+    { "M 0 100 L 100 100",
+      "M 110 100 L 210 100",
+      0, { { 0, 0 }, },
+    },
+    { "M 0 100 L 100 100",
+      "M 0 100 L -100 100",
+      1, { { 0, 100 }, },
+    },
+    { "M 0 100 L 100 100",
+      "M 20 100 L 80 100",
+      2, { { 20, 100 }, { 80, 100 }, },
+    },
+    { "M 0 100 L 100 100",
+      "M 150 100 L 50 100",
+      2, { { 100, 100 }, { 50, 100 }, },
+    },
+    { "M 888 482 C 999.333313 508.666687 1080.83325 544.333313 1132.5 589",
+      "M 886 680 L 642 618",
+      0, { { 0, 0 }, },
+    },
+    { "M 1119.5 772 C 1039.16675 850.666687 925.333313 890 778 890",
+      "M 1052 1430 734 762",
+      1, { { 794.851257, 889.825439 }, },
+    },
+    { "M 844.085 271.845 Q 985.723 94.0499 836.718 817.477",
+      "M 790.206 34.4028 L 965.236 893.041",
+      1,
+      { { 890.685, 527.323 }, }
+    },
+    { "M 521.412 466.917 Q 838.809 472.131 51.3819 192.985",
+      "M 854.519 682.333 Q 154.655 -50.3073 260.046 627.56",
+      3, { { 611.932129, 450.019135 }, { 518.727844, 377.701019 }, { 343.737976, 301.792297 } }
+    },
+    { "M 521.412 466.917 Q 838.809 472.131 51.3819 192.985",
+      "M 854.519 682.333 O 154.655 -50.3073 260.046 627.56 1",
+      3, { { 611.932129, 450.019135 }, { 518.727844, 377.701019 }, { 343.737976, 301.792297 } }
+    },
+    { "M 521.412 466.917 Q 838.809 472.131 51.3819 192.985",
+      "M 854.519 682.333 O 154.655 50.3073 260.046 627.56 1.53362",
+      3, { { 597.725, 460.362 }, { 426.752, 335.879 }, { 310.528, 288.720 }, },
+    },
+  };
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      GskCurve c1, c2;
+      float t1[9], t2[9];
+      graphene_point_t p[9];
+      int n;
+
+      parse_curve (&c1, tests[i].c1);
+      parse_curve (&c2, tests[i].c2);
+
+      n = gsk_curve_intersect (&c1, &c2, t1, t2, p, 9);
+
+      if (g_test_verbose ())
+        g_print ("expected %d intersections, got %d\n", tests[i].n, n);
+
+      if (c1.op == GSK_PATH_CONIC || c2.op == GSK_PATH_CONIC)
+        {
+          /* Our conic intersection code can produce duplicate intersections */
+
+          for (unsigned int j = 0; j < tests[i].n; j++)
+            {
+              if (g_test_verbose ())
+                g_print ("looking for %f %f\n", tests[i].p[j].x, tests[i].p[j].y);
+              g_assert_true (near_one_point (&tests[i].p[j], p, n, 0.01));
+              if (g_test_verbose ())
+                g_print ("found expected intersection %d\n", j);
+            }
+          for (unsigned int j = 0; j < n; j++)
+            {
+              if (g_test_verbose ())
+                g_print ("looking for %f %f\n", p[j].x, p[j].y);
+              g_assert_true (near_one_point (&p[j], tests[i].p, tests[i].n, 0.01));
+              if (g_test_verbose ())
+                g_print ("intersection %d is expected\n", j);
+            }
+        }
+      else
+        {
+          g_assert_true (n == tests[i].n);
+
+          for (unsigned int j = 0; j < n; j++)
+            {
+              if (g_test_verbose ())
+                g_print ("expected %f %f got %f %f\n",
+                         tests[i].p[j].x, tests[i].p[j].y,
+                         p[j].x, p[j].y);
+              g_assert_true (graphene_point_near (&p[j], &tests[i].p[j], 0.001));
+              if (g_test_verbose ())
+                g_test_message ("intersection %d OK", j);
+            }
+        }
+
+      if (g_test_verbose ())
+        g_test_message ("test %d OK", i);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -129,6 +286,7 @@ main (int   argc,
 
   g_test_add_func ("/curve/special/conic-segment", test_conic_segment);
   g_test_add_func ("/curve/special/tangents", test_curve_tangents);
+  g_test_add_func ("/curve/special/intersections", test_curve_intersections);
 
   return g_test_run ();
 }
