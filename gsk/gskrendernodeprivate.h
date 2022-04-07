@@ -29,6 +29,7 @@ struct _GskRenderNode
   graphene_rect_t bounds;
 
   guint prefers_high_depth : 1;
+  guint offscreen_for_opacity : 1;
 };
 
 struct _GskRenderNodeClass
@@ -112,6 +113,10 @@ void             gsk_transform_node_get_translate       (const GskRenderNode *no
                                                          float               *dx,
                                                          float               *dy);
 gboolean       gsk_render_node_prefers_high_depth       (const GskRenderNode *node);
+
+gboolean       gsk_container_node_is_disjoint           (const GskRenderNode *node);
+
+gboolean       gsk_render_node_use_offscreen_for_opacity (const GskRenderNode *node);
 
 
 G_END_DECLS

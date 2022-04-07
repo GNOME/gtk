@@ -58,14 +58,14 @@ value_render_node_init (GValue *value)
 {
   value->data[0].v_pointer = NULL;
 }
- 
+
 static void
 value_render_node_free_value (GValue *value)
 {
   if (value->data[0].v_pointer != NULL)
     gsk_render_node_unref (value->data[0].v_pointer);
 }
- 
+
 static void
 value_render_node_copy_value (const GValue *src,
                               GValue       *dst)
@@ -75,7 +75,7 @@ value_render_node_copy_value (const GValue *src,
   else
     dst->data[0].v_pointer = NULL;
 }
- 
+
 static gpointer
 value_render_node_peek_pointer (const GValue *value)
 {
@@ -737,4 +737,17 @@ gboolean
 gsk_render_node_prefers_high_depth (const GskRenderNode *node)
 {
   return node->prefers_high_depth;
+}
+
+/* Whether we need an offscreen to handle opacity correctly for this node.
+ * We don't if there is only one drawing node inside (could be child
+ * node, or grandchild, or...).
+ *
+ * For containers with multiple children, we can avoid the offscreen if
+ * the children are known not to overlap.
+ */
+gboolean
+gsk_render_node_use_offscreen_for_opacity (const GskRenderNode *node)
+{
+  return node->offscreen_for_opacity;
 }
