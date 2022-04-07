@@ -24,6 +24,7 @@
 #include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
 #include "gskstrokeprivate.h"
+#include "gsktransform.h"
 
 #include "gdk/gdk-private.h"
 
@@ -1288,6 +1289,91 @@ gsk_path_is_convex (GskPath *self)
     return FALSE;
 
   return gsk_contour_is_convex (gsk_path_get_contour (self, 0));
+}
+
+typedef struct
+{
+  GskTransform *transform;
+  GskPathBuilder *builder;
+} TransformData;
+
+static gboolean
+transform_cb (GskPathOperation        op,
+              const graphene_point_t *pts,
+              gsize                   n_pts,
+              float                   weight,
+              gpointer                user_data)
+{
+  TransformData *data = user_data;
+  graphene_point_t tp[4];
+
+  switch (op)
+    {
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (data->builder);
+      break;
+
+    case GSK_PATH_MOVE:
+      gsk_transform_transform_point (data->transform, &pts[0], &tp[0]);
+      gsk_path_builder_move_to (data->builder, tp[0].x, tp[0].y);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_transform_transform_point (data->transform, &pts[1], &tp[1]);
+      gsk_path_builder_line_to (data->builder, tp[1].x, tp[1].y);
+      break;
+
+    case GSK_PATH_CURVE:
+      gsk_transform_transform_point (data->transform, &pts[1], &tp[1]);
+      gsk_transform_transform_point (data->transform, &pts[2], &tp[2]);
+      gsk_transform_transform_point (data->transform, &pts[3], &tp[3]);
+      gsk_path_builder_curve_to (data->builder,
+                                 tp[1].x, tp[1].y,
+                                 tp[2].x, tp[2].y,
+                                 tp[3].x, tp[3].y);
+      break;
+
+    case GSK_PATH_CONIC:
+      gsk_transform_transform_point (data->transform, &pts[1], &tp[1]);
+      gsk_transform_transform_point (data->transform, &pts[3], &tp[3]);
+      gsk_path_builder_conic_to (data->builder,
+                                 tp[1].x, tp[1].y,
+                                 tp[3].x, tp[3].y,
+                                 weight);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+/**
+ * gsk_path_transform:
+ * @self: a `GskPath`
+ * @transform: the transform to apply
+ *
+ * Applies the transform to all points of @self
+ * and returns the resulting path.
+ *
+ * Returns: a new `GskPath`
+ */
+GskPath *
+gsk_path_transform (GskPath      *self,
+                    GskTransform *transform)
+{
+  TransformData data;
+
+  data.transform = transform;
+  data.builder = gsk_path_builder_new ();
+
+  gsk_path_foreach (self,
+                    GSK_PATH_FOREACH_ALLOW_CURVE | GSK_PATH_FOREACH_ALLOW_CONIC,
+                    transform_cb,
+                    &data);
+
+  return gsk_path_builder_free_to_path (data.builder);
 }
 
 /**
