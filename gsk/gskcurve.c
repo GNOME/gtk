@@ -78,6 +78,8 @@ struct _GskCurveClass
   void                          (* print)               (const GskCurve         *curve);
 };
 
+/* {{{ Line implementation */
+
 static void
 get_tangent (const graphene_point_t *p0,
              const graphene_point_t *p1,
@@ -366,7 +368,8 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_print,
 };
 
-/** CURVE **/
+/* }}} */
+/* {{{ Curve implementation */
 
 static void
 gsk_curve_curve_init_from_points (GskCurveCurve          *self,
@@ -913,7 +916,8 @@ static const GskCurveClass GSK_CURVE_CURVE_CLASS = {
   gsk_curve_curve_print,
 };
 
-/** CONIC **/
+/* }}} */
+/* {{{ Conic implementation */
 
 static void
 gsk_conic_curve_init_from_points (GskConicCurve          *self,
@@ -1646,7 +1650,8 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_print,
 };
 
-/** API **/
+/* }}} */
+/* {{{ API */
 
 static const GskCurveClass *
 get_class (GskPathOperation op)
@@ -1800,6 +1805,12 @@ gsk_curve_reverse (const GskCurve *curve,
 }
 
 void
+gsk_curve_print (const GskCurve *curve)
+{
+  get_class (curve->op)->print (curve);
+}
+
+void
 gsk_curve_get_normal (const GskCurve  *curve,
                       float            t,
                       graphene_vec2_t *normal)
@@ -1836,6 +1847,9 @@ gsk_curve_get_curvature (const GskCurve   *curve,
 
   return k;
 }
+
+/* }}} */
+/* {{{ Utilities */
 
 static void
 align_points (const graphene_point_t *p,
@@ -1984,8 +1998,6 @@ gsk_curve_get_cusps (const GskCurve *curve,
   return n;
 }
 
-void
-gsk_curve_print (const GskCurve *curve)
-{
-  get_class (curve->op)->print (curve);
-}
+/* }}} */
+
+/* vim:set foldmethod=marker expandtab: */
