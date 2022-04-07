@@ -113,6 +113,10 @@ gboolean                gsk_path_foreach                        (GskPath        
 GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_path_reverse                        (GskPath                *self);
 
+GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_path_transform                      (GskPath                *self,
+                                                                 GskTransform           *transform);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPath, gsk_path_unref)
 
 G_END_DECLS
