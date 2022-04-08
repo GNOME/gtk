@@ -40,6 +40,7 @@ typedef enum
 typedef struct _GskContour GskContour;
 
 GskContour *            gsk_rect_contour_new                    (const graphene_rect_t  *rect);
+GskContour *            gsk_rounded_rect_contour_new            (const GskRoundedRect   *rounded_rect);
 GskContour *            gsk_circle_contour_new                  (const graphene_point_t *center,
                                                                  float                   radius,
                                                                  float                   start_angle,

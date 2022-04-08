@@ -109,6 +109,8 @@ gsk_contour_get_size_default (const GskContour *contour)
   return contour->klass->struct_size;
 }
 
+/* {{{ Utilities */
+
 static void
 gsk_find_point_on_line (const graphene_point_t *a,
                         const graphene_point_t *b,
@@ -142,25 +144,6 @@ gsk_find_point_on_line (const graphene_point_t *a,
     }
 }
 
-/* {{{ Rectangle contour */
-
-typedef struct _GskRectContour GskRectContour;
-struct _GskRectContour
-{
-  GskContour contour;
-
-  float x;
-  float y;
-  float width;
-  float height;
-};
-
-static GskPathFlags
-gsk_rect_contour_get_flags (const GskContour *contour)
-{
-  return GSK_PATH_FLAT | GSK_PATH_CLOSED;
-}
-
 static void
 _g_string_append_double (GString *string,
                          double   d)
@@ -178,6 +161,42 @@ _g_string_append_point (GString                *string,
   _g_string_append_double (string, pt->x);
   g_string_append_c (string, ' ');
   _g_string_append_double (string, pt->y);
+}
+
+static gboolean
+stroke_is_simple (GskStroke *stroke)
+{
+  if (stroke->line_join == GSK_LINE_JOIN_ROUND ||
+      stroke->line_join == GSK_LINE_JOIN_BEVEL)
+    return FALSE;
+
+  if (stroke->miter_limit < 1.5)
+    return FALSE;
+
+  if (stroke->dash_length != 0)
+    return FALSE;
+
+  return TRUE;
+}
+
+/* }}} */
+/* {{{ Rectangle contour */
+
+typedef struct _GskRectContour GskRectContour;
+struct _GskRectContour
+{
+  GskContour contour;
+
+  float x;
+  float y;
+  float width;
+  float height;
+};
+
+static GskPathFlags
+gsk_rect_contour_get_flags (const GskContour *contour)
+{
+  return GSK_PATH_FLAT | GSK_PATH_CLOSED;
 }
 
 static void
@@ -513,22 +532,6 @@ gsk_rect_contour_get_stroke_bounds (const GskContour       *contour,
   const GskRectContour *self = (const GskRectContour *) contour;
   graphene_rect_init (bounds, self->x, self->y, self->width, self->height);
   graphene_rect_inset (bounds, - stroke->line_width / 2, - stroke->line_width / 2);
-  return TRUE;
-}
-
-static gboolean
-stroke_is_simple (GskStroke *stroke)
-{
-  if (stroke->line_join == GSK_LINE_JOIN_ROUND ||
-      stroke->line_join == GSK_LINE_JOIN_BEVEL)
-    return FALSE;
-
-  if (stroke->miter_limit < 1.5)
-    return FALSE;
-
-  if (stroke->dash_length != 0)
-    return FALSE;
-
   return TRUE;
 }
 
@@ -1921,6 +1924,479 @@ gsk_standard_contour_new (GskPathFlags            flags,
   gsk_standard_contour_init (contour, flags, points, n_points, ops, n_ops, offset);
 
   return contour;
+}
+
+/* }}} */
+/* {{{ Rounded rectangle contour */
+
+typedef struct _GskRoundedRectContour GskRoundedRectContour;
+struct _GskRoundedRectContour
+{
+  GskContour contour;
+
+  GskRoundedRect rect;
+  gboolean ccw;
+};
+
+static GskPathFlags
+gsk_rounded_rect_contour_get_flags (const GskContour *contour)
+{
+  return GSK_PATH_CLOSED;
+}
+
+static inline void
+get_rounded_rect_points (const GskRoundedRect *rect,
+                         graphene_point_t     *pts)
+{
+  pts[0] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width, rect->bounds.origin.y);
+  pts[1] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_TOP_RIGHT].width, rect->bounds.origin.y);
+  pts[2] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->bounds.size.width, rect->bounds.origin.y);
+  pts[3] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->bounds.size.width, rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_RIGHT].height);
+  pts[4] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->bounds.size.width, rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
+  pts[5] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->bounds.size.width, rect->bounds.origin.y + rect->bounds.size.height);
+  pts[6] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_TOP_RIGHT].width, rect->bounds.origin.y + rect->bounds.size.height);
+  pts[7] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->corner[GSK_CORNER_BOTTOM_LEFT].width, rect->bounds.origin.y + rect->bounds.size.height);
+  pts[8] = GRAPHENE_POINT_INIT (rect->bounds.origin.x, rect->bounds.origin.y + rect->bounds.size.height);
+  pts[9] = GRAPHENE_POINT_INIT (rect->bounds.origin.x, rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_LEFT].height);
+  pts[10] = GRAPHENE_POINT_INIT (rect->bounds.origin.x, rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_LEFT].height);
+  pts[11] = GRAPHENE_POINT_INIT (rect->bounds.origin.x, rect->bounds.origin.y);
+  pts[12] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width, rect->bounds.origin.y);
+}
+
+static void
+gsk_rounded_rect_contour_print (const GskContour *contour,
+                                GString          *string)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  graphene_point_t pts[13];
+
+  get_rounded_rect_points (&self->rect, pts);
+
+#define APPEND_MOVE(p) \
+  g_string_append (string, "M "); \
+  _g_string_append_point (string, p);
+#define APPEND_LINE(p) \
+  g_string_append (string, " L "); \
+  _g_string_append_point (string, p);
+#define APPEND_CONIC(p1, p2) \
+  g_string_append (string, " O "); \
+  _g_string_append_point (string, p1); \
+  g_string_append (string, ", "); \
+  _g_string_append_point (string, p2); \
+  g_string_append (string, ", "); \
+  _g_string_append_double (string, M_SQRT1_2);
+#define APPEND_CLOSE g_string_append (string, " z");
+  if (self->ccw)
+    {
+      graphene_point_t p;
+#define SWAP(a,b,c) a = b; b = c; c = a;
+      SWAP (p, pts[1], pts[11]);
+      SWAP (p, pts[2], pts[10]);
+      SWAP (p, pts[3], pts[9]);
+      SWAP (p, pts[4], pts[8]);
+      SWAP (p, pts[5], pts[7]);
+#undef SWAP
+
+      APPEND_MOVE (&pts[0]);
+      APPEND_CONIC (&pts[1], &pts[2]);
+      APPEND_LINE (&pts[3]);
+      APPEND_CONIC (&pts[4], &pts[5]);
+      APPEND_LINE (&pts[6]);
+      APPEND_CONIC (&pts[7], &pts[8]);
+      APPEND_LINE (&pts[9]);
+      APPEND_CONIC (&pts[10], &pts[11]);
+      APPEND_LINE (&pts[12]);
+      APPEND_CLOSE
+    }
+  else
+    {
+      APPEND_MOVE (&pts[0]);
+      APPEND_LINE (&pts[1]);
+      APPEND_CONIC (&pts[2], &pts[3]);
+      APPEND_LINE (&pts[4]);
+      APPEND_CONIC (&pts[5], &pts[6]);
+      APPEND_LINE (&pts[7]);
+      APPEND_CONIC (&pts[8], &pts[9]);
+      APPEND_LINE (&pts[10]);
+      APPEND_CONIC (&pts[11], &pts[12]);
+      APPEND_CLOSE;
+    }
+#undef APPEND_MOVE
+#undef APPEND_LINE
+#undef APPEND_CONIC
+#undef APPEND_CLOSE
+}
+
+static gboolean
+gsk_rounded_rect_contour_get_bounds (const GskContour *contour,
+                                     graphene_rect_t  *rect)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+
+  graphene_rect_init_from_rect (rect, &self->rect.bounds);
+
+  return TRUE;
+}
+
+static void
+gsk_rounded_rect_contour_get_start_end (const GskContour *contour,
+                                        graphene_point_t *start,
+                                        graphene_point_t *end)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+
+  if (start)
+    *start = GRAPHENE_POINT_INIT (self->rect.bounds.origin.x + self->rect.corner[GSK_CORNER_TOP_LEFT].width,
+                                  self->rect.bounds.origin.y);
+
+  if (end)
+    *end = GRAPHENE_POINT_INIT (self->rect.bounds.origin.x + self->rect.corner[GSK_CORNER_TOP_LEFT].width,
+                                self->rect.bounds.origin.y);
+}
+
+static gboolean
+gsk_rounded_rect_contour_foreach (const GskContour   *contour,
+                                  float               tolerance,
+                                  GskPathForeachFunc  func,
+                                  gpointer            user_data)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  graphene_point_t pts[13];
+
+  get_rounded_rect_points (&self->rect, pts);
+  if (self->ccw)
+    {
+      graphene_point_t p;
+#define SWAP(a,b,c) a = b; b = c; c = a;
+      SWAP (p, pts[1], pts[11]);
+      SWAP (p, pts[2], pts[10]);
+      SWAP (p, pts[3], pts[9]);
+      SWAP (p, pts[4], pts[8]);
+      SWAP (p, pts[5], pts[7]);
+#undef SWAP
+
+      return func (GSK_PATH_MOVE, &pts[0], 1, 0, user_data) &&
+             func (GSK_PATH_CONIC, &pts[0], 3, M_SQRT1_2, user_data) &&
+             func (GSK_PATH_LINE, &pts[2], 2, 0, user_data) &&
+             func (GSK_PATH_CONIC, &pts[3], 3, M_SQRT1_2, user_data) &&
+             func (GSK_PATH_LINE, &pts[5], 2, 0, user_data) &&
+             func (GSK_PATH_CONIC, &pts[6], 3, M_SQRT1_2, user_data) &&
+             func (GSK_PATH_LINE, &pts[8], 2, 0, user_data) &&
+             func (GSK_PATH_CONIC, &pts[9], 3, M_SQRT1_2, user_data) &&
+             func (GSK_PATH_LINE, &pts[11], 2, 0, user_data) &&
+             func (GSK_PATH_CLOSE, &pts[12], 2, 0, user_data);
+    }
+  else
+    {
+      return func (GSK_PATH_MOVE, &pts[0], 1, 0, user_data) &&
+             func (GSK_PATH_LINE, &pts[0], 2, 0, user_data) &&
+             func (GSK_PATH_CONIC, &pts[1], 3, M_SQRT1_2, user_data) &&
+             func (GSK_PATH_LINE, &pts[3], 2, 0, user_data) &&
+             func (GSK_PATH_CONIC, &pts[4], 3, M_SQRT1_2, user_data) &&
+             func (GSK_PATH_LINE, &pts[6], 2, 0, user_data) &&
+             func (GSK_PATH_CONIC, &pts[7], 3, M_SQRT1_2, user_data) &&
+             func (GSK_PATH_LINE, &pts[9], 2, 0, user_data) &&
+             func (GSK_PATH_CONIC, &pts[10], 3, M_SQRT1_2, user_data) &&
+             func (GSK_PATH_CLOSE, &pts[12], 2, 0, user_data);
+    }
+}
+
+typedef struct
+{
+  GskPath *path;
+  const GskContour *contour;
+  gpointer measure_data;
+} RoundedRectMeasureData;
+
+static gboolean
+add_cb (GskPathOperation        op,
+        const graphene_point_t *pts,
+        gsize                   n_pts,
+        float                   weight,
+        gpointer                user_data)
+{
+  GskPathBuilder *builder = user_data;
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
+      break;
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      break;
+    case GSK_PATH_CURVE:
+      gsk_path_builder_curve_to (builder,
+                                 pts[1].x, pts[1].y,
+                                 pts[2].x, pts[2].y,
+                                 pts[3].x, pts[3].y);
+      break;
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder,
+                                 pts[1].x, pts[1].y,
+                                 pts[3].x, pts[3].y,
+                                 weight);
+      break;
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (builder);
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static gpointer
+gsk_rounded_rect_contour_init_measure (const GskContour *contour,
+                                       float             tolerance,
+                                       float            *out_length)
+{
+  GskPathBuilder *builder;
+  RoundedRectMeasureData *data;
+
+  builder = gsk_path_builder_new ();
+
+  gsk_contour_foreach (contour, tolerance, add_cb, builder);
+
+  data = g_new (RoundedRectMeasureData, 1);
+  data->path = gsk_path_builder_free_to_path (builder);
+  data->contour = gsk_path_get_contour (data->path, 0);
+  data->measure_data = gsk_standard_contour_init_measure (data->contour, tolerance, out_length);
+
+  return data;
+}
+
+static void
+gsk_rounded_rect_contour_free_measure (const GskContour *contour,
+                                       gpointer          measure_data)
+{
+  RoundedRectMeasureData *data = measure_data;
+
+  gsk_standard_contour_free_measure (data->contour, data->measure_data);
+  gsk_path_unref (data->path);
+  g_free (data);
+}
+
+static void
+gsk_rounded_rect_contour_get_point (const GskContour *contour,
+                                    gpointer          measure_data,
+                                    float             distance,
+                                    graphene_point_t *pos,
+                                    graphene_vec2_t  *tangent)
+{
+  RoundedRectMeasureData *data = measure_data;
+
+  gsk_standard_contour_get_point (data->contour,
+                                  data->measure_data,
+                                  distance,
+                                  pos,
+                                  tangent);
+}
+
+static float
+gsk_rounded_rect_contour_get_curvature (const GskContour *contour,
+                                        gpointer          measure_data,
+                                        float             distance,
+                                        graphene_point_t *center)
+{
+  RoundedRectMeasureData *data = measure_data;
+
+  return gsk_standard_contour_get_curvature (data->contour,
+                                             data->measure_data,
+                                             distance,
+                                             center);
+}
+
+static gboolean
+gsk_rounded_rect_contour_get_closest_point (const GskContour       *contour,
+                                            gpointer                measure_data,
+                                            float                   tolerance,
+                                            const graphene_point_t *point,
+                                            float                   threshold,
+                                            float                  *out_distance,
+                                            graphene_point_t       *out_pos,
+                                            float                  *out_offset,
+                                            graphene_vec2_t        *out_tangent)
+{
+  RoundedRectMeasureData *data = measure_data;
+
+  return gsk_standard_contour_get_closest_point (data->contour,
+                                                 data->measure_data,
+                                                 tolerance,
+                                                 point,
+                                                 threshold,
+                                                 out_distance,
+                                                 out_pos,
+                                                 out_offset,
+                                                 out_tangent);
+}
+
+static void
+gsk_rounded_rect_contour_copy (const GskContour *contour,
+                               GskContour       *dest)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  GskRoundedRectContour *target = (GskRoundedRectContour *) dest;
+
+  *target = *self;
+}
+
+static void
+gsk_rounded_rect_contour_add_segment (const GskContour *contour,
+                                      GskPathBuilder   *builder,
+                                      gpointer          measure_data,
+                                      gboolean          emit_move_to,
+                                      float             start,
+                                      float             end)
+{
+  RoundedRectMeasureData *data = measure_data;
+
+  gsk_standard_contour_add_segment (data->contour,
+                                    builder,
+                                    data->measure_data,
+                                    emit_move_to,
+                                    start,
+                                    end);
+}
+
+static int
+gsk_rounded_rect_contour_get_winding (const GskContour       *contour,
+                                      gpointer                measure_data,
+                                      const graphene_point_t *point,
+                                      gboolean               *on_edge)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+
+  if (gsk_rounded_rect_contains_point (&self->rect, point))
+    return self->ccw ? 1 : -1;
+
+  return 0;
+}
+
+static gboolean
+gsk_rounded_rect_contour_get_stroke_bounds (const GskContour *contour,
+                                            const GskStroke  *stroke,
+                                            graphene_rect_t  *bounds)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+
+  graphene_rect_init_from_rect (bounds, &self->rect.bounds);
+  graphene_rect_inset (bounds, - stroke->line_width / 2, - stroke->line_width / 2);
+
+  return TRUE;
+}
+
+static void
+gsk_rounded_rect_contour_add_stroke (const GskContour *contour,
+                                     GskPathBuilder   *builder,
+                                     GskStroke        *stroke)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+
+  if (stroke_is_simple (stroke))
+    {
+      GskRoundedRect rect;
+      GskContour *c;
+
+      gsk_rounded_rect_init_copy (&rect, &self->rect);
+
+      gsk_rounded_rect_shrink (&rect,
+                               stroke->line_width / 2,
+                               stroke->line_width / 2,
+                               stroke->line_width / 2,
+                               stroke->line_width / 2);
+      c = gsk_rounded_rect_contour_new (&rect);
+      gsk_path_builder_add_contour (builder, c);
+
+      gsk_rounded_rect_init_copy (&rect, &self->rect);
+      gsk_rounded_rect_shrink (&rect,
+                               - stroke->line_width / 2,
+                               - stroke->line_width / 2,
+                               - stroke->line_width / 2,
+                               - stroke->line_width / 2);
+      c = gsk_rounded_rect_contour_new (&rect);
+      ((GskRoundedRectContour *)c)->ccw = TRUE;
+      gsk_path_builder_add_contour (builder, c);
+    }
+  else
+    gsk_contour_default_add_stroke (contour, builder, stroke);
+}
+
+static void
+gsk_rounded_rect_contour_offset (const GskContour *contour,
+                                 GskPathBuilder   *builder,
+                                 float             distance,
+                                 GskLineJoin       line_join,
+                                 float             miter_limit)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  GskRoundedRect rect;
+  GskContour *c;
+
+  gsk_rounded_rect_init_copy (&rect, &self->rect);
+  if (self->ccw)
+    distance = - distance;
+  gsk_rounded_rect_shrink (&rect, - distance, - distance, - distance, - distance);
+  c = gsk_rounded_rect_contour_new (&rect);
+  gsk_path_builder_add_contour (builder, c);
+}
+
+static GskContour *
+gsk_rounded_rect_contour_reverse (const GskContour *contour)
+{
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  GskRoundedRectContour *copy;
+
+  copy = g_new0 (GskRoundedRectContour, 1);
+  gsk_rounded_rect_contour_copy (contour, (GskContour *)copy);
+  copy->ccw = !self->ccw;
+
+  return (GskContour *)copy;
+}
+
+static gboolean
+gsk_rounded_rect_contour_is_convex (const GskContour *contour)
+{
+  return TRUE;
+}
+
+static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
+{
+  sizeof (GskRoundedRectContour),
+  "GskRoundedRectContour",
+  gsk_contour_get_size_default,
+  gsk_rounded_rect_contour_get_flags,
+  gsk_rounded_rect_contour_print,
+  gsk_rounded_rect_contour_get_bounds,
+  gsk_rounded_rect_contour_get_start_end,
+  gsk_rounded_rect_contour_foreach,
+  gsk_rounded_rect_contour_init_measure,
+  gsk_rounded_rect_contour_free_measure,
+  gsk_rounded_rect_contour_get_point,
+  gsk_rounded_rect_contour_get_curvature,
+  gsk_rounded_rect_contour_get_closest_point,
+  gsk_rounded_rect_contour_copy,
+  gsk_rounded_rect_contour_add_segment,
+  gsk_rounded_rect_contour_get_winding,
+  gsk_rounded_rect_contour_get_stroke_bounds,
+  gsk_rounded_rect_contour_add_stroke,
+  gsk_rounded_rect_contour_offset,
+  gsk_rounded_rect_contour_reverse,
+  gsk_rounded_rect_contour_is_convex,
+};
+
+GskContour *
+gsk_rounded_rect_contour_new (const GskRoundedRect *rect)
+{
+  GskRoundedRectContour *self;
+
+  self = g_new0 (GskRoundedRectContour, 1);
+
+  self->contour.klass = &GSK_ROUNDED_RECT_CONTOUR_CLASS;
+
+  self->rect = *rect;
+
+  return (GskContour *) self;
 }
 
 /* }}} */
