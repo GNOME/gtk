@@ -473,6 +473,8 @@ GskRenderNode *         gsk_stroke_node_get_child               (const GskRender
 GDK_AVAILABLE_IN_ALL
 GskPath *               gsk_stroke_node_get_path                (const GskRenderNode      *node);
 GDK_AVAILABLE_IN_ALL
+GskPath *               gsk_stroke_node_get_stroke_path         (const GskRenderNode      *node);
+GDK_AVAILABLE_IN_ALL
 const GskStroke *       gsk_stroke_node_get_stroke              (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
