@@ -127,6 +127,7 @@
     <file>fishbowl.ui</file>
     <file>gtkfishbowl.c</file>
     <file>gtkfishbowl.h</file>
+    <file>tiger.node</file>
   </gresource>
   <gresource prefix="/frames">
     <file>frames.ui</file>
