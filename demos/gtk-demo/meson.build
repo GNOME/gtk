@@ -136,6 +136,8 @@ extra_demo_sources = files([
   'suggestionentry.c',
   'language-names.c',
   'curve-editor.c',
+  'nodewidget.c',
+  'graphwidget.c',
 ])
 
 if os_unix

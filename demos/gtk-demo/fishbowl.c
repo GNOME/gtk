@@ -11,6 +11,9 @@
 #include "gtkgears.h"
 #include "gskshaderpaintable.h"
 
+#include "nodewidget.h"
+#include "graphwidget.h"
+
 const char *const css =
 ".blurred-button {"
 "  box-shadow: 0px 0px 5px 10px rgba(0, 0, 0, 0.5);"
@@ -201,6 +204,18 @@ create_menu_button (void)
   return w;
 }
 
+static GtkWidget *
+create_tiger (void)
+{
+  return node_widget_new ("/fishbowl/tiger.node");
+}
+
+static GtkWidget *
+create_graph (void)
+{
+  return graph_widget_new ();
+}
+
 static const struct {
   const char *name;
   GtkWidget * (*create_func) (void);
@@ -218,6 +233,8 @@ static const struct {
   { "Switch",     create_switch         },
   { "Menubutton", create_menu_button    },
   { "Shader",     create_cogs           },
+  { "Tiger",      create_tiger          },
+  { "Graph",      create_graph          },
 };
 
 static int selected_widget_type = -1;
