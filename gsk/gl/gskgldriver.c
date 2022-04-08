@@ -831,7 +831,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
  * to upload data, map to a framebuffer, or other uses which may
  * modify the texture immediately.
  *
- * Typical examples for @format are GK_RGBA8, GL_RGBA16F or GL_RGBA32F.
+ * Typical examples for @format are GL_RGBA8, GL_RGBA16F or GL_RGBA32F.
  *
  * Use gsk_gl_driver_release_texture() to release this texture back into
  * the pool so it may be reused later in the pipeline.
