@@ -4563,6 +4563,7 @@ struct _GskStrokeNode
 
   GskRenderNode *child;
   GskPath *path;
+  GskPath *stroke_path;
   GskStroke stroke;
 };
 
@@ -4574,6 +4575,7 @@ gsk_stroke_node_finalize (GskRenderNode *node)
 
   gsk_render_node_unref (self->child);
   gsk_path_unref (self->path);
+  gsk_path_unref (self->stroke_path);
   gsk_stroke_clear (&self->stroke);
 
   parent_class->finalize (node);
@@ -4669,6 +4671,7 @@ gsk_stroke_node_new (GskRenderNode   *child,
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
   gsk_stroke_init_copy (&self->stroke, stroke);
+  self->stroke_path = gsk_path_stroke (path, &self->stroke);
 
   if (gsk_path_get_stroke_bounds (self->path, &self->stroke, &stroke_bounds))
     graphene_rect_intersection (&stroke_bounds, &child->bounds, &node->bounds);
@@ -4713,6 +4716,16 @@ gsk_stroke_node_get_path (const GskRenderNode *node)
   g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_STROKE_NODE), NULL);
 
   return self->path;
+}
+
+GskPath *
+gsk_stroke_node_get_stroke_path (const GskRenderNode *node)
+{
+  const GskStrokeNode *self = (const GskStrokeNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_STROKE_NODE), NULL);
+
+  return self->stroke_path;
 }
 
 /**

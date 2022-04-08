@@ -87,6 +87,7 @@ gboolean        gsk_container_node_is_disjoint          (const GskRenderNode    
 
 gboolean        gsk_render_node_use_offscreen_for_opacity (const GskRenderNode       *node);
 
+GskPath *      gsk_stroke_node_get_stroke_path           (const GskRenderNode *node);
 
 G_END_DECLS
 
