@@ -361,13 +361,23 @@ curve_intersect_recurse (const GskCurve   *curve1,
                          graphene_point_t *p,
                          int               n,
                          int              *pos,
-                         float             tolerance)
+                         float             tolerance,
+                         int               level)
 {
   GskCurve p11, p12, p21, p22;
   GskBoundingBox b1, b2;
   float d1, d2;
 
   if (*pos == n)
+    return;
+
+  if (level == 20)
+    return;
+
+  gsk_curve_get_bounds (curve1, &b1);
+  gsk_curve_get_bounds (curve2, &b2);
+
+  if (!gsk_bounding_box_intersection (&b1, &b2, NULL))
     return;
 
   gsk_curve_get_tight_bounds (curve1, &b1);
@@ -402,10 +412,10 @@ curve_intersect_recurse (const GskCurve   *curve1,
   gsk_curve_split (curve1, 0.5, &p11, &p12);
   gsk_curve_split (curve2, 0.5, &p21, &p22);
 
-  curve_intersect_recurse (&p11, &p21, t1l,      t1l + d1, t2l,      t2l + d2, t1, t2, p, n, pos, tolerance);
-  curve_intersect_recurse (&p11, &p22, t1l,      t1l + d1, t2l + d2, t2r,      t1, t2, p, n, pos, tolerance);
-  curve_intersect_recurse (&p12, &p21, t1l + d1, t1r,      t2l,      t2l + d2, t1, t2, p, n, pos, tolerance);
-  curve_intersect_recurse (&p12, &p22, t1l + d1, t1r,      t2l + d2, t2r,      t1, t2, p, n, pos, tolerance);
+  curve_intersect_recurse (&p11, &p21, t1l,      t1l + d1, t2l,      t2l + d2, t1, t2, p, n, pos, tolerance, level + 1);
+  curve_intersect_recurse (&p11, &p22, t1l,      t1l + d1, t2l + d2, t2r,      t1, t2, p, n, pos, tolerance, level + 1);
+  curve_intersect_recurse (&p12, &p21, t1l + d1, t1r,      t2l,      t2l + d2, t1, t2, p, n, pos, tolerance, level + 1);
+  curve_intersect_recurse (&p12, &p22, t1l + d1, t1r,      t2l + d2, t2r,      t1, t2, p, n, pos, tolerance, level + 1);
 }
 
 static int
@@ -419,7 +429,7 @@ curve_intersect (const GskCurve   *curve1,
 {
   int pos = 0;
 
-  curve_intersect_recurse (curve1, curve2, 0, 1, 0, 1, t1, t2, p, n, &pos, tolerance);
+  curve_intersect_recurse (curve1, curve2, 0, 1, 0, 1, t1, t2, p, n, &pos, tolerance, 0);
 
   return pos;
 }
@@ -448,12 +458,16 @@ general_intersect_recurse (const GskCurve   *curve1,
                            graphene_point_t *p,
                            int               n,
                            int              *pos,
-                           float             tolerance)
+                           float             tolerance,
+                           int               level)
 {
   GskBoundingBox b1, b2;
   float d1, d2;
 
   if (*pos == n)
+    return;
+
+  if (level == 20)
     return;
 
   get_bounds (curve1, t1l, t1r, &b1);
@@ -493,10 +507,10 @@ general_intersect_recurse (const GskCurve   *curve1,
    * from the original curve. That is a bit less efficient, but also works
    * for conics.
    */
-  general_intersect_recurse (curve1, curve2, t1l,      t1l + d1, t2l,      t2l + d2, t1, t2, p, n, pos, tolerance);
-  general_intersect_recurse (curve1, curve2, t1l,      t1l + d1, t2l + d2, t2r,      t1, t2, p, n, pos, tolerance);
-  general_intersect_recurse (curve1, curve2, t1l + d1, t1r,      t2l,      t2l + d2, t1, t2, p, n, pos, tolerance);
-  general_intersect_recurse (curve1, curve2, t1l + d1, t1r,      t2l + d2, t2r,      t1, t2, p, n, pos, tolerance);
+  general_intersect_recurse (curve1, curve2, t1l,      t1l + d1, t2l,      t2l + d2, t1, t2, p, n, pos, tolerance, level + 1);
+  general_intersect_recurse (curve1, curve2, t1l,      t1l + d1, t2l + d2, t2r,      t1, t2, p, n, pos, tolerance, level + 1);
+  general_intersect_recurse (curve1, curve2, t1l + d1, t1r,      t2l,      t2l + d2, t1, t2, p, n, pos, tolerance, level + 1);
+  general_intersect_recurse (curve1, curve2, t1l + d1, t1r,      t2l + d2, t2r,      t1, t2, p, n, pos, tolerance, level + 1);
 }
 
 static int
@@ -510,7 +524,7 @@ general_intersect (const GskCurve   *curve1,
 {
   int pos = 0;
 
-  general_intersect_recurse (curve1, curve2, 0, 1, 0, 1, t1, t2, p, n, &pos, tolerance);
+  general_intersect_recurse (curve1, curve2, 0, 1, 0, 1, t1, t2, p, n, &pos, tolerance, 0);
 
   return pos;
 }
@@ -578,6 +592,21 @@ curve_self_intersect (const GskCurve   *curve,
   return 0;
 }
 
+static inline gboolean
+curve_equal (const GskCurve *c1,
+             const GskCurve *c2)
+{
+  gsize curve_size[] = {
+    sizeof (GskLineCurve),
+    sizeof (GskLineCurve),
+    sizeof (GskLineCurve),
+    sizeof (GskCurveCurve),
+    sizeof (GskConicCurve)
+  };
+
+  return c1->op == c2->op && memcmp (c1, c2, curve_size[c1->op]) == 0;
+}
+
 /* Place intersections between the curves in p, and their Bezier positions
  * in t1 and t2, up to n. Return the number of intersections found.
  *
@@ -600,7 +629,7 @@ gsk_curve_intersect (const GskCurve   *curve1,
   if (op2 == GSK_PATH_CLOSE)
     op2 = GSK_PATH_LINE;
 
-  if (memcmp (curve1, curve2, sizeof (GskCurve)) == 0)
+  if (curve_equal (curve1, curve2))
     return curve_self_intersect (curve1, t1, t2, p, n);
 
   /* We special-case line-line and line-curve intersections,
