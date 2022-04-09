@@ -2547,7 +2547,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * The number of lines to which an ellipsized, wrapping label
    * should be limited.
    *
-   * This property has no effect if the label is not wrapping or ellipsized.
+   * This property has no effect if the label is not wrapping and ellipsized.
    * Set this property to -1 if you don't want to limit the number of lines.
    */
   label_props[PROP_LINES] =
@@ -4168,8 +4168,10 @@ gtk_label_ensure_layout (GtkLabel *self)
   pango_layout_set_ellipsize (self->layout, self->ellipsize);
   pango_layout_set_wrap (self->layout, self->wrap_mode);
   pango_layout_set_single_paragraph_mode (self->layout, self->single_line_mode);
-  if (self->lines > 0)
+  if (self->wrap && self->lines > 0)
     pango_layout_set_height (self->layout, - self->lines);
+  else
+    pango_layout_set_height (self->layout, -1);
 
   if (self->ellipsize || self->wrap)
     pango_layout_set_width (self->layout, gtk_widget_get_width (GTK_WIDGET (self)) * PANGO_SCALE);
@@ -5777,7 +5779,7 @@ _gtk_label_get_selection_bound (GtkLabel *self)
  * Sets the number of lines to which an ellipsized, wrapping label
  * should be limited.
  *
- * This has no effect if the label is not wrapping or ellipsized.
+ * This has no effect if the label is not wrapping and ellipsized.
  * Set this to -1 if you don’t want to limit the number of lines.
  */
 void
