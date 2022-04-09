@@ -6407,22 +6407,10 @@ gtk_entry_create_layout (GtkEntry *entry,
 
       if (pango_dir == PANGO_DIRECTION_NEUTRAL)
         {
-          if (gtk_widget_has_focus (widget))
-	    {
-	      GdkDisplay *display = gtk_widget_get_display (widget);
-	      GdkKeymap *keymap = gdk_keymap_get_for_display (display);
-	      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_RTL)
-		pango_dir = PANGO_DIRECTION_RTL;
-	      else
-		pango_dir = PANGO_DIRECTION_LTR;
-	    }
+          if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+            pango_dir = PANGO_DIRECTION_RTL;
           else
-	    {
-	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-		pango_dir = PANGO_DIRECTION_RTL;
-	      else
-		pango_dir = PANGO_DIRECTION_LTR;
-	    }
+            pango_dir = PANGO_DIRECTION_LTR;
         }
 
       pango_context_set_base_dir (gtk_widget_get_pango_context (widget), pango_dir);
