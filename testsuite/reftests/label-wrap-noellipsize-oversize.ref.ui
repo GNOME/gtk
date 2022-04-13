@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow">
+    <property name="default-width">10</property>
+    <property name="default-height">200</property>
+    <property name="decorated">0</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Hello
+World
+multi
+line</property>
+      </object>
+    </child>
+  </object>
+</interface>
