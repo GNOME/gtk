@@ -3625,7 +3625,11 @@ static void
 gtk_label_ensure_has_tooltip (GtkLabel *self)
 {
   guint i;
-  gboolean has_tooltip = FALSE;
+  gboolean has_tooltip = gtk_widget_get_has_tooltip(GTK_WIDGET(self));
+
+  if (has_tooltip) {
+    return;
+  }
 
   for (i = 0; i < self->select_info->n_links; i++)
     {
