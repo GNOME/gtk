@@ -1793,6 +1793,7 @@ gtk_label_focus (GtkWidget        *widget,
                     {
                       info->selection_anchor = focus_link->start;
                       info->selection_end = focus_link->start;
+                      break;
                     }
                 }
             }
@@ -1856,7 +1857,6 @@ gtk_label_focus (GtkWidget        *widget,
     {
       int focus_link_index;
       int new_index = -1;
-      int i;
 
       if (info->n_links == 0)
         goto out;
@@ -1870,29 +1870,39 @@ gtk_label_focus (GtkWidget        *widget,
         {
         case GTK_DIR_TAB_FORWARD:
           if (focus_link)
-            new_index = (focus_link_index + 1) % info->n_links;
+            new_index = focus_link_index + 1;
           else
             new_index = 0;
 
-          for (i = new_index; i < info->n_links; i++)
+          if (new_index >= info->n_links)
+            goto out;
+
+          while (new_index < info->n_links)
             {
-              const GtkLabelLink *link = &info->links[i];
+              const GtkLabelLink *link = &info->links[new_index];
               if (!range_is_in_ellipsis (self, link->start, link->end))
                 break;
+
+              new_index++;
             }
           break;
 
         case GTK_DIR_TAB_BACKWARD:
           if (focus_link)
-            new_index = focus_link_index == 0 ? info->n_links  - 1 : focus_link_index - 1;
+            new_index = focus_link_index - 1;
           else
             new_index = info->n_links - 1;
 
-          for (i = new_index; i >= 0; i--)
+          if (new_index < 0)
+            goto out;
+
+          while (new_index >= 0)
             {
-              const GtkLabelLink *link = &info->links[i];
+              const GtkLabelLink *link = &info->links[new_index];
               if (!range_is_in_ellipsis (self, link->start, link->end))
                 break;
+
+              new_index--;
             }
           break;
 
@@ -1904,7 +1914,7 @@ gtk_label_focus (GtkWidget        *widget,
           goto out;
         }
 
-      if (new_index != -1)
+      if (new_index != -1 && new_index < info->n_links)
         {
           focus_link = &info->links[new_index];
           info->selection_anchor = focus_link->start;
