@@ -1571,9 +1571,11 @@ gtk_paned_new (GtkOrientation orientation)
 /**
  * gtk_paned_set_start_child: (attributes org.gtk.Method.set_property=start-child)
  * @paned: a `GtkPaned`
- * @child: the widget to add
+ * @child: (nullable): the widget to add
  *
  * Sets the start child of @paned to @child.
+ *
+ * If @child is `NULL`, the existing child will be removed.
  */
 void
 gtk_paned_set_start_child (GtkPaned *paned,
@@ -1686,9 +1688,11 @@ gtk_paned_get_shrink_start_child (GtkPaned *paned)
 /**
  * gtk_paned_set_end_child: (attributes org.gtk.Method.set_property=end-child)
  * @paned: a `GtkPaned`
- * @child: the widget to add
+ * @child: (nullable): the widget to add
  *
  * Sets the end child of @paned to @child.
+ *
+ * If @child is `NULL`, the existing child will be removed.
  */
 void
 gtk_paned_set_end_child (GtkPaned *paned,
