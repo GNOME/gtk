@@ -418,7 +418,6 @@ update_label_width (GtkLabel *label)
 
       len = g_utf8_strlen (text, -1);
 
-      gtk_label_set_width_chars (label, MIN (len, 50));
       gtk_label_set_max_width_chars (label, MIN (len, 50));
       gtk_label_set_wrap (label, TRUE);
     }
