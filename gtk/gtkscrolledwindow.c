@@ -379,6 +379,7 @@ static void     gtk_scrolled_window_measure (GtkWidget      *widget,
 static void  gtk_scrolled_window_map                   (GtkWidget           *widget);
 static void  gtk_scrolled_window_unmap                 (GtkWidget           *widget);
 static void  gtk_scrolled_window_realize               (GtkWidget           *widget);
+static void  gtk_scrolled_window_unrealize             (GtkWidget           *widget);
 static void _gtk_scrolled_window_set_adjustment_value  (GtkScrolledWindow *scrolled_window,
                                                         GtkAdjustment     *adjustment,
                                                         double             value);
@@ -587,6 +588,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->map = gtk_scrolled_window_map;
   widget_class->unmap = gtk_scrolled_window_unmap;
   widget_class->realize = gtk_scrolled_window_realize;
+  widget_class->unrealize = gtk_scrolled_window_unrealize;
   widget_class->direction_changed = gtk_scrolled_window_direction_changed;
   widget_class->compute_expand = gtk_scrolled_window_compute_expand;
   widget_class->get_request_mode = gtk_scrolled_window_get_request_mode;
@@ -3864,13 +3866,30 @@ gtk_scrolled_window_realize (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+  GtkSettings *settings;
 
   priv->hindicator.scrollbar = priv->hscrollbar;
   priv->vindicator.scrollbar = priv->vscrollbar;
 
   gtk_scrolled_window_sync_use_indicators (scrolled_window);
 
+  settings = gtk_widget_get_settings (widget);
+  g_signal_connect_swapped (settings, "notify::gtk-overlay-scrolling",
+                            G_CALLBACK (gtk_scrolled_window_update_use_indicators), widget);
+
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->realize (widget);
+}
+
+static void
+gtk_scrolled_window_unrealize (GtkWidget *widget)
+{
+  GtkSettings *settings;
+
+  settings = gtk_widget_get_settings (widget);
+
+  g_signal_handlers_disconnect_by_func (settings, gtk_scrolled_window_sync_use_indicators, widget);
+
+  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
 }
 
 /**
