@@ -700,7 +700,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:kinetic-scrolling: (attributes org.gtk.Property.get=gtk_scrolled_window_get_kinetic_scrolling org.gtk.Property.set=gtk_scrolled_window_set_overlay_scrolling)
+   * GtkScrolledWindow:kinetic-scrolling: (attributes org.gtk.Property.get=gtk_scrolled_window_get_kinetic_scrolling org.gtk.Property.set=gtk_scrolled_window_set_kinetic_scrolling)
    *
    * Whether kinetic scrolling is enabled or not.
    *
