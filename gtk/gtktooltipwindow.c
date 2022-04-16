@@ -388,8 +388,6 @@ gtk_tooltip_window_class_init (GtkTooltipWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkTooltipWindow, box);
   gtk_widget_class_bind_template_child (widget_class, GtkTooltipWindow, image);
   gtk_widget_class_bind_template_child (widget_class, GtkTooltipWindow, label);
-
-  gtk_widget_class_set_css_name (widget_class, "tooltip");
 }
 
 static void
@@ -420,7 +418,6 @@ update_label_width (GtkLabel *label)
 
       len = g_utf8_strlen (text, -1);
 
-      gtk_label_set_width_chars (label, MIN (len, 50));
       gtk_label_set_max_width_chars (label, MIN (len, 50));
       gtk_label_set_wrap (label, TRUE);
     }
