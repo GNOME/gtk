@@ -180,6 +180,12 @@ do_preview (int          *argc,
   };
   GError *error = NULL;
 
+  if (gdk_display_get_default () == NULL)
+    {
+      g_printerr ("Could not initialize windowing system\n");
+      exit (1);
+    }
+
   context = g_option_context_new (NULL);
   g_option_context_set_help_enabled (context, FALSE);
   g_option_context_add_main_entries (context, entries, NULL);
