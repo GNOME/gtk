@@ -405,6 +405,7 @@ tools/encodesymbolic.c
 tools/gtk-builder-tool.c
 tools/gtk-builder-tool-enumerate.c
 tools/gtk-builder-tool-preview.c
+tools/gtk-builder-tool-screenshot.c
 tools/gtk-builder-tool-simplify.c
 tools/gtk-builder-tool-validate.c
 tools/gtk-launch.c

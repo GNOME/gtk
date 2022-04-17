@@ -17,6 +17,8 @@
  * Author: Matthias Clasen
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -41,6 +43,7 @@ usage (void)
              "  simplify     Simplify the file\n"
              "  enumerate    List all named objects\n"
              "  preview      Preview the file\n"
+             "  screenshot   Take a screenshot of the file\n"
              "\n"));
   exit (1);
 }
@@ -127,6 +130,8 @@ main (int argc, const char *argv[])
     do_enumerate (&argc, &argv);
   else if (strcmp (argv[0], "preview") == 0)
     do_preview (&argc, &argv);
+  else if (strcmp (argv[0], "screenshot") == 0)
+    do_screenshot (&argc, &argv);
   else
     usage ();
 

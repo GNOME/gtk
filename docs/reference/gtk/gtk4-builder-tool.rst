@@ -16,6 +16,7 @@ SYNOPSIS
 |   **gtk4-builder-tool** enumerate <FILE>
 |   **gtk4-builder-tool** simplify [OPTIONS...] <FILE>
 |   **gtk4-builder-tool** preview [OPTIONS...] <FILE>
+|   **gtk4-builder-tool** screenshot [OPTIONS...] <FILE>
 
 DESCRIPTION
 -----------
@@ -41,7 +42,7 @@ definition file.
 Preview
 ^^^^^^^
 
-The ``preview`` command displays the UI dfinition file.
+The ``preview`` command displays the UI definition file.
 
 This command accepts options to specify the ID of the toplevel object and a CSS
 file to use.
@@ -54,6 +55,33 @@ file to use.
 ``--css=FILE``
 
   Load style information from the given CSS file.
+
+Screenshot
+^^^^^^^^^^
+
+The ``screenshot`` command saves a rendering of the UI definition file
+as a png image or node file. The name of the file to write can be specified as
+a second FILE argument.
+
+This command accepts options to specify the ID of the toplevel object and a CSS
+file to use.
+
+``--id=ID``
+
+  The ID of the object to preview. If not specified, gtk4-builder-tool will
+  choose a suitable object on its own.
+
+``--css=FILE``
+
+  Load style information from the given CSS file.
+
+``--node``
+
+  Write a serialized node file instead of a png image.
+
+``--force``
+
+  Overwrite an existing file.
 
 Simplification
 ^^^^^^^^^^^^^^
