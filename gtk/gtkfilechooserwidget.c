@@ -4748,9 +4748,15 @@ update_chooser_entry (GtkFileChooserWidget *impl)
 
           if (change_entry && !impl->auto_selecting_first_row)
             {
+              GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (impl->location_entry));
+
+              if (completion)
+                gtk_entry_completion_set_popup_completion (completion, FALSE);
               g_signal_handlers_block_by_func (impl->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
               gtk_editable_set_text (GTK_EDITABLE (impl->location_entry), impl->browse_files_last_selected_name);
               g_signal_handlers_unblock_by_func (impl->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
+              if (completion)
+                gtk_entry_completion_set_popup_completion (completion, TRUE);
 
               if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
                 _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (impl->location_entry));
