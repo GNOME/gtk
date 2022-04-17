@@ -17,6 +17,8 @@
  * Author: Matthias Clasen
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -46,12 +48,42 @@ do_enumerate (int *argc, const char ***argv)
   GSList *list, *l;
   GObject *object;
   const char *name;
-  const char *filename;
+  char **filenames = NULL;
+  GOptionContext *context;
+  const GOptionEntry entries[] = {
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
+    { NULL, }
+  };
 
-  filename = (*argv)[1];
+  g_set_prgname ("gtk4-builder-tool enumerate");
+  context = g_option_context_new (NULL);
+  g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
+  g_option_context_add_main_entries (context, entries, NULL);
+  g_option_context_set_summary (context, _("List all named objects."));
+
+  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      g_error_free (error);
+      exit (1);
+    }
+
+  g_option_context_free (context);
+
+  if (filenames == NULL)
+    {
+      g_printerr ("No .ui file specified\n");
+      exit (1);
+    }
+
+  if (g_strv_length (filenames) > 1)
+    {
+      g_printerr ("Can only enumerate a single .ui file\n");
+      exit (1);
+    }
 
   builder = gtk_builder_new ();
-  ret = gtk_builder_add_from_file (builder, filename, &error);
+  ret = gtk_builder_add_from_file (builder, filenames[0], &error);
 
   if (ret == 0)
     {
@@ -72,4 +104,6 @@ do_enumerate (int *argc, const char ***argv)
   g_slist_free (list);
 
   g_object_unref (builder);
+
+  g_strfreev (filenames);
 }

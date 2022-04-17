@@ -17,6 +17,8 @@
  * Author: Matthias Clasen
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -173,16 +175,24 @@ do_preview (int          *argc,
   char *css = NULL;
   char **filenames = NULL;
   const GOptionEntry entries[] = {
-    { "id", 0, 0, G_OPTION_ARG_STRING, &id, NULL, NULL },
-    { "css", 0, 0, G_OPTION_ARG_FILENAME, &css, NULL, NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL },
+    { "id", 0, 0, G_OPTION_ARG_STRING, &id, N_("Preview only the named object"), N_("ID") },
+    { "css", 0, 0, G_OPTION_ARG_FILENAME, &css, N_("Use style from CSS file"), N_("FILE") },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
   GError *error = NULL;
 
+  if (gdk_display_get_default () == NULL)
+    {
+      g_printerr ("Could not initialize windowing system\n");
+      exit (1);
+    }
+
+  g_set_prgname ("gtk4-builder-tool preview");
   context = g_option_context_new (NULL);
-  g_option_context_set_help_enabled (context, FALSE);
+  g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
+  g_option_context_set_summary (context, _("Preview the file."));
 
   if (!g_option_context_parse (context, argc, (char ***)argv, &error))
     {
