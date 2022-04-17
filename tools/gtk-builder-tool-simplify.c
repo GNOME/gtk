@@ -17,6 +17,8 @@
  * Author: Matthias Clasen
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -2351,28 +2353,30 @@ do_simplify (int          *argc,
   gboolean replace = FALSE;
   gboolean convert3to4 = FALSE;
   char **filenames = NULL;
-  GOptionContext *ctx;
+  GOptionContext *context;
   const GOptionEntry entries[] = {
-    { "replace", 0, 0, G_OPTION_ARG_NONE, &replace, NULL, NULL },
-    { "3to4", 0, 0, G_OPTION_ARG_NONE, &convert3to4, NULL, NULL },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, NULL },
+    { "replace", 0, 0, G_OPTION_ARG_NONE, &replace, N_("Replace the file"), NULL },
+    { "3to4", 0, 0, G_OPTION_ARG_NONE, &convert3to4, N_("Convert from GTK 3 to GTK 4"), NULL },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
   GError *error = NULL;
   int i;
 
-  ctx = g_option_context_new (NULL);
-  g_option_context_set_help_enabled (ctx, FALSE);
-  g_option_context_add_main_entries (ctx, entries, NULL);
+  g_set_prgname ("gtk4-builder-tool simplify");
+  context = g_option_context_new (NULL);
+  g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
+  g_option_context_add_main_entries (context, entries, NULL);
+  g_option_context_set_summary (context, _("Simplify the file."));
 
-  if (!g_option_context_parse (ctx, argc, (char ***)argv, &error))
+  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
     {
       g_printerr ("%s\n", error->message);
       g_error_free (error);
       exit (1);
     }
 
-  g_option_context_free (ctx);
+  g_option_context_free (context);
 
   if (filenames == NULL)
     {
@@ -2391,4 +2395,6 @@ do_simplify (int          *argc,
       if (!simplify_file (filenames[i], replace, convert3to4))
         exit (1);
     }
+
+  g_strfreev (filenames);
 }

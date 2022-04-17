@@ -17,6 +17,8 @@
  * Author: Matthias Clasen
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -150,11 +152,35 @@ validate_file (const char *filename)
 void
 do_validate (int *argc, const char ***argv)
 {
+  GError *error = NULL;
+  char **filenames = NULL;
+  GOptionContext *context;
+  const GOptionEntry entries[] = {
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
+    { NULL, }
+  };
   int i;
 
-  for (i = 1; i < *argc; i++)
+  g_set_prgname ("gtk4-builder-tool validate");
+  context = g_option_context_new (NULL);
+  g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
+  g_option_context_add_main_entries (context, entries, NULL);
+  g_option_context_set_summary (context, _("Validate the file."));
+
+  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
     {
-      if (!validate_file ((*argv)[i]))
+      g_printerr ("%s\n", error->message);
+      g_error_free (error);
+      exit (1);
+    }
+
+  g_option_context_free (context);
+
+  for (i = 0; filenames[i]; i++)
+    {
+      if (!validate_file (filenames[i]))
         exit (1);
     }
+
+  g_strfreev (filenames);
 }

@@ -34,21 +34,14 @@ usage (void)
   g_print (_("Usage:\n"
              "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
              "\n"
+             "Perform various tasks on GtkBuilder .ui files.\n"
+             "\n"
              "Commands:\n"
              "  validate     Validate the file\n"
              "  simplify     Simplify the file\n"
              "  enumerate    List all named objects\n"
              "  preview      Preview the file\n"
-             "\n"
-             "Simplify Options:\n"
-             "  --replace    Replace the file\n"
-             "  --3to4       Convert from GTK 3 to GTK 4\n"
-             "\n"
-             "Preview Options:\n"
-             "  --id=ID      Preview only the named object\n"
-             "  --css=FILE   Use style from CSS file\n"
-             "\n"
-             "Perform various tasks on GtkBuilder .ui files.\n"));
+             "\n"));
   exit (1);
 }
 
@@ -117,10 +110,10 @@ main (int argc, const char *argv[])
 
   gtk_test_register_all_types ();
 
-  if (argc < 3)
+  if (argc < 2)
     usage ();
 
-  if (strcmp (argv[2], "--help") == 0)
+  if (strcmp (argv[1], "--help") == 0)
     usage ();
 
   argv++;
