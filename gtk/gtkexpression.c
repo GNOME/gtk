@@ -125,7 +125,7 @@
  * a `GtkExpression` object is needed like in a `<property>` tag for an expression
  * property, or in a `<binding name="property">` tag to bind a property to an expression.
  *
- * To create an property expression, use the `<lookup>` element. It can have a `type`
+ * To create a property expression, use the `<lookup>` element. It can have a `type`
  * attribute to specify the object type, and a `name` attribute to specify the property
  * to look up. The content of `<lookup>` can either be an element specfiying the expression
  * to use the object, or a string that specifies the name of the object to use.
