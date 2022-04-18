@@ -85,6 +85,11 @@ option('gtk_doc',
        value: false,
        description : 'Build API reference and tools documentation')
 
+option('update_screenshots',
+       type: 'boolean',
+       value: false,
+       description : 'Regenerate screenshots for the documentation')
+
 option('man-pages',
        type: 'boolean',
        value: false,
