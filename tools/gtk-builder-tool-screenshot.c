@@ -256,6 +256,12 @@ screenshot_file (const char *filename,
 
   g_object_unref (builder);
 
+  if (texture == NULL)
+    {
+      g_printerr ("Failed to take a screenshot\n");
+      exit (1);
+    }
+
   save_to = (char *)save_file;
 
   if (save_to == NULL)
