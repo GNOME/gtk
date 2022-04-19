@@ -11345,7 +11345,7 @@ gtk_widget_activate_action_variant (GtkWidget  *widget,
  * gtk_widget_activate_action:
  * @widget: a `GtkWidget`
  * @name: the name of the action to activate
- * @format_string: GVariant format string for arguments or %NULL
+ * @format_string: (nullable): GVariant format string for arguments or %NULL
  *   for no arguments
  * @...: arguments, as given by format string
  *
