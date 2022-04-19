@@ -474,15 +474,23 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
                                     window_ref);
 }
 
+typedef struct {
+  GtkAtSpiRoot *root;
+  GtkAtSpiRootRegisterFunc register_func;
+} RegistrationData;
+
 static void
 on_registration_reply (GObject      *gobject,
                        GAsyncResult *result,
                        gpointer      user_data)
 {
-  GtkAtSpiRoot *self = user_data;
+  RegistrationData *data = user_data;
+  GtkAtSpiRoot *self = data->root;
 
   GError *error = NULL;
   GVariant *reply = g_dbus_connection_call_finish (G_DBUS_CONNECTION (gobject), result, &error);
+
+  self->register_id = 0;
 
   if (error != NULL)
     {
@@ -509,19 +517,27 @@ on_registration_reply (GObject      *gobject,
   /* Drain the list of queued GtkAtSpiContexts, and add them to the cache */
   if (self->queued_contexts != NULL)
     {
-      for (GList *l = self->queued_contexts; l != NULL; l = l->next)
-        gtk_at_spi_cache_add_context (self->cache, l->data);
+      for (GList *l = g_list_reverse (self->queued_contexts); l != NULL; l = l->next)
+        {
+          if (data->register_func != NULL)
+            data->register_func (self, l->data);
+
+          gtk_at_spi_cache_add_context (self->cache, l->data);
+        }
 
       g_clear_pointer (&self->queued_contexts, g_list_free);
     }
 
   self->toplevels = gtk_window_get_toplevels ();
+
+  g_free (data);
 }
 
 static gboolean
-root_register (gpointer data)
+root_register (gpointer user_data)
 {
-  GtkAtSpiRoot *self = data;
+  RegistrationData *data = user_data;
+  GtkAtSpiRoot *self = data->root;
   const char *unique_name;
 
   /* Register the root element; every application has a single root, so we only
@@ -577,9 +593,7 @@ root_register (gpointer data)
                           G_DBUS_CALL_FLAGS_NONE, -1,
                           NULL,
                           on_registration_reply,
-                          self);
-
-  self->register_id = 0;
+                          data);
 
   return G_SOURCE_REMOVE;
 }
@@ -587,18 +601,24 @@ root_register (gpointer data)
 /*< private >
  * gtk_at_spi_root_queue_register:
  * @self: a `GtkAtSpiRoot`
+ * @context: the AtSpi context to register
+ * @func: the function to call when the root has been registered
  *
  * Queues the registration of the root object on the AT-SPI bus.
  */
 void
-gtk_at_spi_root_queue_register (GtkAtSpiRoot    *self,
-                                GtkAtSpiContext *context)
+gtk_at_spi_root_queue_register (GtkAtSpiRoot             *self,
+                                GtkAtSpiContext          *context,
+                                GtkAtSpiRootRegisterFunc  func)
 {
   /* The cache is available if the root has finished registering itself; if we
    * are still waiting for the registration to finish, add the context to a queue
    */
   if (self->cache != NULL)
     {
+      if (func != NULL)
+        func (self, context);
+
       gtk_at_spi_cache_add_context (self->cache, context);
       return;
     }
@@ -612,7 +632,11 @@ gtk_at_spi_root_queue_register (GtkAtSpiRoot    *self,
   if (self->register_id != 0)
     return;
 
-  self->register_id = g_idle_add (root_register, self);
+  RegistrationData *data = g_new (RegistrationData, 1);
+  data->root = self;
+  data->register_func = func;
+
+  self->register_id = g_idle_add (root_register, data);
   gdk_source_set_static_name_by_id (self->register_id, "[gtk] ATSPI root registration");
 }
 
