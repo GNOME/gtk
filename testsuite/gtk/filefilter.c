@@ -116,6 +116,44 @@ test_mime_type (void)
   g_object_unref (filter);
 }
 
+static void
+test_buildable (void)
+{
+  GtkBuilder *builder;
+  const char *buffer =
+  "<interface>\n"
+  "<object class=\"GtkFileFilter\" id=\"filter\">\n"
+  "<property name=\"name\">Audio Files</property>\n"
+  "<mime-types>\n"
+  "<mime-type>audio/*</mime-type>\n"
+  "</mime-types>\n"
+  "</object>\n"
+  "</interface>";
+  GtkFileFilter *filter;
+  GVariant *v1, *v2;
+  char *s1, *s2;
+
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_string (builder, buffer, strlen (buffer), NULL);
+  filter = GTK_FILE_FILTER (gtk_builder_get_object (builder, "filter"));
+
+  v1 = gtk_file_filter_to_gvariant (filter);
+  v2 = g_variant_parse (NULL, "('Audio Files', [(1, 'audio/*')])", NULL, NULL, NULL);
+
+  s1 = g_variant_print (v1, FALSE);
+  s2 = g_variant_print (v2, FALSE);
+
+  g_assert_true (strcmp (s1, s2) == 0);
+
+  g_free (s1);
+  g_free (s2);
+
+  g_variant_unref (v1);
+  g_variant_unref (v2);
+
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -126,6 +164,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filefilter/pattern", test_pattern);
   g_test_add_func ("/filefilter/suffix", test_suffix);
   g_test_add_func ("/filefilter/mimetype", test_mime_type);
+  g_test_add_func ("/filefilter/buildable", test_buildable);
 
   return g_test_run ();
 }

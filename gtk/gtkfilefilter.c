@@ -339,7 +339,7 @@ parser_end_element (GtkBuildableParseContext  *context,
 {
   SubParserData *data = (SubParserData*)user_data;
 
-  if (data->string)
+  if (data->string && data->parsing)
     {
       switch (data->type)
         {
