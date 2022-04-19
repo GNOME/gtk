@@ -1703,9 +1703,8 @@ gtk_column_view_sort_by_column (GtkColumnView       *self,
   g_return_if_fail (column == NULL || GTK_IS_COLUMN_VIEW_COLUMN (column));
   g_return_if_fail (column == NULL || gtk_column_view_column_get_column_view (column) == self);
 
-  if (column == NULL)
-    gtk_column_view_sorter_clear (GTK_COLUMN_VIEW_SORTER (self->sorter));
-  else
+  gtk_column_view_sorter_clear (GTK_COLUMN_VIEW_SORTER (self->sorter));
+  if (column != NULL)
     gtk_column_view_sorter_set_column (GTK_COLUMN_VIEW_SORTER (self->sorter),
                                        column,
                                        direction == GTK_SORT_DESCENDING);
