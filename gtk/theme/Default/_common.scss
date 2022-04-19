@@ -1165,7 +1165,6 @@ spinbutton {
         color: transparent;
         &:focus-within {
           background-color: $selected_text_bg_color;
-          color: $selected_fg_color;
         }
       }
       > block-cursor { @include entry(block_cursor); }
