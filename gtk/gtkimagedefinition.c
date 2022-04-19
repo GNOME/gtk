@@ -132,7 +132,9 @@ gtk_image_definition_new_paintable (GdkPaintable *paintable)
 GtkImageDefinition *
 gtk_image_definition_ref (GtkImageDefinition *def)
 {
-  def->empty.ref_count++;
+  GtkImageDefinitionEmpty *empty = (GtkImageDefinitionEmpty *) def;
+
+  empty->ref_count++;
 
   return def;
 }
@@ -140,9 +142,11 @@ gtk_image_definition_ref (GtkImageDefinition *def)
 void
 gtk_image_definition_unref (GtkImageDefinition *def)
 {
-  def->empty.ref_count--;
+  GtkImageDefinitionEmpty *empty = (GtkImageDefinitionEmpty *) def;
 
-  if (def->empty.ref_count > 0)
+  empty->ref_count--;
+
+  if (empty->ref_count > 0)
     return;
 
   switch (def->type)
@@ -152,13 +156,22 @@ gtk_image_definition_unref (GtkImageDefinition *def)
       g_assert_not_reached ();
       break;
     case GTK_IMAGE_PAINTABLE:
-      g_object_unref (def->paintable.paintable);
+      {
+        GtkImageDefinitionPaintable *paintable = (GtkImageDefinitionPaintable *) def;
+        g_object_unref (paintable->paintable);
+      }
       break;
     case GTK_IMAGE_ICON_NAME:
-      g_free (def->icon_name.icon_name);
+      {
+        GtkImageDefinitionIconName *icon_name = (GtkImageDefinitionIconName *) def;
+        g_free (icon_name->icon_name);
+      }
       break;
     case GTK_IMAGE_GICON:
-      g_object_unref (def->gicon.gicon);
+      {
+        GtkImageDefinitionGIcon *gicon = (GtkImageDefinitionGIcon *) def;
+        g_object_unref (gicon->gicon);
+      }
       break;
     }
 
@@ -189,27 +202,32 @@ gtk_image_definition_get_scale (const GtkImageDefinition *def)
 const char *
 gtk_image_definition_get_icon_name (const GtkImageDefinition *def)
 {
+  const GtkImageDefinitionIconName *icon_name = (const GtkImageDefinitionIconName *) def;
+
   if (def->type != GTK_IMAGE_ICON_NAME)
     return NULL;
 
-  return def->icon_name.icon_name;
+  return icon_name->icon_name;
 }
 
 GIcon *
 gtk_image_definition_get_gicon (const GtkImageDefinition *def)
 {
+  const GtkImageDefinitionGIcon *gicon = (const GtkImageDefinitionGIcon *) def;
+
   if (def->type != GTK_IMAGE_GICON)
     return NULL;
 
-  return def->gicon.gicon;
+  return gicon->gicon;
 }
 
 GdkPaintable *
 gtk_image_definition_get_paintable (const GtkImageDefinition *def)
 {
+  const GtkImageDefinitionPaintable *paintable = (const GtkImageDefinitionPaintable *) def;
+
   if (def->type != GTK_IMAGE_PAINTABLE)
     return NULL;
 
-  return def->paintable.paintable;
+  return paintable->paintable;
 }
-
