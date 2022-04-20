@@ -1418,7 +1418,7 @@ gtk_at_spi_context_unregister_object (GtkAtSpiContext *self)
   g_clear_pointer (&self->interfaces, g_variant_unref);
 }
 /* }}} */
-/* {{{ GObject boilerplate */ 
+/* {{{ GObject boilerplate */
 static void
 gtk_at_spi_context_finalize (GObject *gobject)
 {
@@ -1442,6 +1442,22 @@ gtk_at_spi_context_constructed (GObject *gobject)
 }
 
 static const char *get_bus_address (GdkDisplay *display);
+
+static void
+register_object (GtkAtSpiRoot *root,
+                 GtkAtSpiContext *context)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (context));
+
+  gtk_atspi_connect_text_signals (accessible,
+                                  (GtkAtspiTextChangedCallback *)emit_text_changed,
+                                  (GtkAtspiTextSelectionCallback *)emit_text_selection_changed,
+                                  context);
+  gtk_atspi_connect_selection_signals (accessible,
+                                       (GtkAtspiSelectionCallback *)emit_selection_changed,
+                                       context);
+  gtk_at_spi_context_register_object (context);
+}
 
 static void
 gtk_at_spi_context_realize (GtkATContext *context)
@@ -1489,11 +1505,10 @@ gtk_at_spi_context_realize (GtkATContext *context)
   if (self->connection == NULL)
     return;
 
-  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
-
 #ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (A11Y))
     {
+      GtkAccessible *accessible = gtk_at_context_get_accessible (context);
       GtkAccessibleRole role = gtk_at_context_get_accessible_role (context);
       char *role_name = g_enum_to_string (GTK_TYPE_ACCESSIBLE_ROLE, role);
       g_message ("Realizing ATSPI context “%s” for accessible “%s”, with role: “%s”",
@@ -1504,16 +1519,7 @@ gtk_at_spi_context_realize (GtkATContext *context)
     }
 #endif
 
-  gtk_atspi_connect_text_signals (accessible,
-                                  (GtkAtspiTextChangedCallback *)emit_text_changed,
-                                  (GtkAtspiTextSelectionCallback *)emit_text_selection_changed,
-                                  self);
-  gtk_atspi_connect_selection_signals (accessible,
-                                       (GtkAtspiSelectionCallback *)emit_selection_changed,
-                                       self);
-  gtk_at_spi_context_register_object (self);
-
-  gtk_at_spi_root_queue_register (self->root, self);
+  gtk_at_spi_root_queue_register (self->root, self, register_object);
 }
 
 static void
