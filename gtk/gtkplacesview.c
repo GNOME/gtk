@@ -1701,6 +1701,24 @@ get_menu_model (void)
   return G_MENU_MODEL (menu);
 }
 
+static void
+_popover_set_pointing_to_widget (GtkPopover *popover,
+                                 GtkWidget  *target)
+{
+  GtkWidget *parent;
+  double x, y, w, h;
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (popover));
+
+  if (!gtk_widget_translate_coordinates (target, parent, 0, 0, &x, &y))
+    return;
+
+  w = gtk_widget_get_allocated_width (GTK_WIDGET (target));
+  h = gtk_widget_get_allocated_height (GTK_WIDGET (target));
+
+  gtk_popover_set_pointing_to (popover, &(GdkRectangle){x, y, w, h});
+}
+
 static gboolean
 on_row_popup_menu (GtkWidget *widget,
                    GVariant  *args,
@@ -1736,6 +1754,7 @@ on_row_popup_menu (GtkWidget *widget,
 
       gtk_popover_set_has_arrow (GTK_POPOVER (view->popup_menu), FALSE);
       gtk_widget_set_halign (view->popup_menu, GTK_ALIGN_CENTER);
+      gtk_widget_set_parent (view->popup_menu, GTK_WIDGET (view));
 
       g_object_unref (model);
     }
@@ -1743,10 +1762,7 @@ on_row_popup_menu (GtkWidget *widget,
   if (view->row_for_action)
     g_object_set_data (G_OBJECT (view->row_for_action), "menu", NULL);
 
-  g_object_ref (view->popup_menu);
-  gtk_widget_unparent (view->popup_menu);
-  gtk_widget_set_parent (view->popup_menu, GTK_WIDGET (row));
-  g_object_unref (view->popup_menu);
+  _popover_set_pointing_to_widget (GTK_POPOVER (view->popup_menu), GTK_WIDGET (row));
 
   view->row_for_action = row;
   if (view->row_for_action)
