@@ -148,6 +148,10 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
 
   self->list = GTK_LIST_BOX (gtk_list_box_new ());
   gtk_widget_add_css_class (GTK_WIDGET (self->list), "navigation-sidebar");
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->list),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, "Sidebar",
+                                  -1);
+
 
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), GTK_WIDGET (self->list));
 
