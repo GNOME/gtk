@@ -1720,15 +1720,16 @@ _popover_set_pointing_to_widget (GtkPopover *popover,
 }
 
 static gboolean
-on_row_popup_menu (GtkWidget *widget,
-                   GVariant  *args,
-                   gpointer   user_data)
+real_popup_menu (GtkWidget *widget,
+                 double x,
+                 double y)
 {
   GtkPlacesViewRow *row = GTK_PLACES_VIEW_ROW (widget);
   GtkPlacesView *view;
   GMount *mount;
   GFile *file;
   gboolean is_network;
+  double x_in_view, y_in_view;
 
   view = GTK_PLACES_VIEW (gtk_widget_get_ancestor (GTK_WIDGET (row), GTK_TYPE_PLACES_VIEW));
 
@@ -1753,7 +1754,7 @@ on_row_popup_menu (GtkWidget *widget,
       gtk_popover_set_position (GTK_POPOVER (view->popup_menu), GTK_POS_BOTTOM);
 
       gtk_popover_set_has_arrow (GTK_POPOVER (view->popup_menu), FALSE);
-      gtk_widget_set_halign (view->popup_menu, GTK_ALIGN_CENTER);
+      gtk_widget_set_halign (view->popup_menu, GTK_ALIGN_START);
       gtk_widget_set_parent (view->popup_menu, GTK_WIDGET (view));
 
       g_object_unref (model);
@@ -1762,7 +1763,15 @@ on_row_popup_menu (GtkWidget *widget,
   if (view->row_for_action)
     g_object_set_data (G_OBJECT (view->row_for_action), "menu", NULL);
 
-  _popover_set_pointing_to_widget (GTK_POPOVER (view->popup_menu), GTK_WIDGET (row));
+  if (x == -1 && y == -1)
+    _popover_set_pointing_to_widget (GTK_POPOVER (view->popup_menu), GTK_WIDGET (row));
+  else
+    {
+      gtk_widget_translate_coordinates (widget, GTK_WIDGET (view),
+                                        x, y, &x_in_view, &y_in_view);
+      gtk_popover_set_pointing_to (GTK_POPOVER (view->popup_menu),
+                                   &(GdkRectangle){x_in_view, y_in_view, 0, 0});
+    }
 
   view->row_for_action = row;
   if (view->row_for_action)
@@ -1773,6 +1782,14 @@ on_row_popup_menu (GtkWidget *widget,
   return TRUE;
 }
 
+static gboolean
+on_row_popup_menu (GtkWidget *widget,
+                   GVariant *args,
+                   gpointer user_data)
+{
+  return real_popup_menu (widget, -1, -1);
+}
+
 static void
 click_cb (GtkGesture *gesture,
           int         n_press,
@@ -1780,7 +1797,7 @@ click_cb (GtkGesture *gesture,
           double      y,
           gpointer    user_data)
 {
-  on_row_popup_menu (GTK_WIDGET (user_data), NULL, NULL);
+  real_popup_menu (GTK_WIDGET (user_data), x, y);
 }
 
 static gboolean
