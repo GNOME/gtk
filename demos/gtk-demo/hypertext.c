@@ -100,7 +100,7 @@ show_page (GtkTextView *text_view,
 
       theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)));
       icon = gtk_icon_theme_lookup_icon (theme,
-                                         "eye-not-looking-symbolic",
+                                         "view-conceal-symbolic",
                                          NULL,
                                          16,
                                          1,

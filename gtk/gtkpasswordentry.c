@@ -169,12 +169,12 @@ visibility_toggled (GObject          *object,
 {
   if (gtk_text_get_visibility (GTK_TEXT (entry->entry)))
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (entry->peek_icon), "eye-open-negative-filled-symbolic");
+      gtk_image_set_from_icon_name (GTK_IMAGE (entry->peek_icon), "view-conceal-symbolic");
       gtk_widget_set_tooltip_text (entry->peek_icon, _("Hide Text"));
     }
   else
     {
-      gtk_image_set_from_icon_name (GTK_IMAGE (entry->peek_icon), "eye-not-looking-symbolic");
+      gtk_image_set_from_icon_name (GTK_IMAGE (entry->peek_icon), "view-reveal-symbolic");
       gtk_widget_set_tooltip_text (entry->peek_icon, _("Show Text"));
     }
 
@@ -625,7 +625,7 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
     {
       GtkGesture *press;
 
-      entry->peek_icon = gtk_image_new_from_icon_name ("eye-not-looking-symbolic");
+      entry->peek_icon = gtk_image_new_from_icon_name ("view-reveal-symbolic");
       gtk_widget_set_tooltip_text (entry->peek_icon, _("Show Text"));
       gtk_widget_set_parent (entry->peek_icon, GTK_WIDGET (entry));
 
@@ -703,7 +703,7 @@ gtk_password_entry_set_extra_menu (GtkPasswordEntry *entry,
 
   section = g_menu_new ();
   item = g_menu_item_new (_("_Show Text"), "misc.toggle-visibility");
-  g_menu_item_set_attribute (item, "touch-icon", "s", "eye-not-looking-symbolic");
+  g_menu_item_set_attribute (item, "touch-icon", "s", "view-reveal-symbolic");
   g_menu_append_item (section, item);
   g_object_unref (item);
 
