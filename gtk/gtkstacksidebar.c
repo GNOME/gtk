@@ -34,6 +34,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkintl.h"
 
+#include <glib/gi18n-lib.h>
+
 /**
  * GtkStackSidebar:
  *
@@ -149,7 +151,8 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
   self->list = GTK_LIST_BOX (gtk_list_box_new ());
   gtk_widget_add_css_class (GTK_WIDGET (self->list), "navigation-sidebar");
   gtk_accessible_update_property (GTK_ACCESSIBLE (self->list),
-                                  GTK_ACCESSIBLE_PROPERTY_LABEL, "Sidebar",
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                  NC_("accessibility", "Sidebar"),
                                   -1);
 
 
