@@ -152,7 +152,7 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
   gtk_widget_add_css_class (GTK_WIDGET (self->list), "navigation-sidebar");
   gtk_accessible_update_property (GTK_ACCESSIBLE (self->list),
                                   GTK_ACCESSIBLE_PROPERTY_LABEL,
-                                  NC_("accessibility", "Sidebar"),
+                                  C_("accessibility", "Sidebar"),
                                   -1);
 
 
