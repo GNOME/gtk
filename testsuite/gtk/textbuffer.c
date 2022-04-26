@@ -22,6 +22,7 @@
 
 #include <gtk/gtk.h>
 #include "gtk/gtktexttypes.h" /* Private header, for UNKNOWN_CHAR */
+#include "gtk/a11y/gtkatspitextbufferprivate.h" /* Private header */
 
 static void
 gtk_text_iter_spew (const GtkTextIter *iter, const char *desc)
@@ -1818,6 +1819,63 @@ test_undo3 (void)
   g_object_unref (buffer);
 }
 
+static void
+test_serialize_wrap_mode (void)
+{
+  GtkTextBuffer *buffer = gtk_text_buffer_new (NULL);
+  struct val {
+    GtkWrapMode mode;
+    const char *name;
+  } values[] = {
+    { .mode = GTK_WRAP_NONE,      .name = "none" },
+    { .mode = GTK_WRAP_CHAR,      .name = "char" },
+    { .mode = GTK_WRAP_WORD,      .name = "word" },
+    { .mode = GTK_WRAP_WORD_CHAR, .name = "word-char" },
+  };
+  gsize i;
+
+  /* Four lines, each with a 2-byte run (digit plus newline) */
+  gtk_text_buffer_set_text (buffer, "0\n1\n2\n3\n", -1);
+
+  for (i = 0; i < G_N_ELEMENTS (values); i++)
+    {
+      GtkTextTag *tag = gtk_text_buffer_create_tag (buffer, NULL, "wrap-mode", values[i].mode, NULL);
+      GtkTextIter start;
+      GtkTextIter end;
+
+      gtk_text_buffer_get_iter_at_offset (buffer, &start, i * 2);
+      gtk_text_buffer_get_iter_at_offset (buffer, &end, (i + 1) * 2);
+      gtk_text_buffer_apply_tag (buffer, tag, &start, &end);
+    }
+
+  /* Get the attributes for each line run as a GVariant */
+
+  for (i = 0; i < G_N_ELEMENTS (values); i++)
+    {
+      /* Each line has a { wrap-mode: name } run */
+      GVariantBuilder expected_builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      g_variant_builder_add (&expected_builder, "{ss}", "wrap-mode", values[i].name);
+
+      GVariant *expected = g_variant_builder_end (&expected_builder);
+
+      GVariantBuilder result_builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      int run_start, run_end;
+
+      gtk_text_buffer_get_run_attributes (buffer, &result_builder, 2 * i, &run_start, &run_end);
+
+      GVariant *result = g_variant_builder_end (&result_builder);
+
+      g_assert_cmpint (run_start, ==, 2 * i);
+      g_assert_cmpint (run_end, ==, 2 * (i + 1));
+      g_assert_cmpvariant (result, expected);
+
+      g_variant_unref (result);
+      g_variant_unref (expected);
+    }
+
+  g_assert_finalize_object (buffer);
+}
+
 int
 main (int argc, char** argv)
 {
@@ -1843,6 +1901,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextBuffer/Undo 1", test_undo1);
   g_test_add_func ("/TextBuffer/Undo 2", test_undo2);
   g_test_add_func ("/TextBuffer/Undo 3", test_undo3);
+  g_test_add_func ("/TextBuffer/Serialize wrap-mode", test_serialize_wrap_mode);
 
   return g_test_run();
 }
