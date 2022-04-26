@@ -483,7 +483,7 @@ gtk_ff_media_file_open (GtkMediaFile *file)
 {
   GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (file);
   AVStream *stream;
-  AVCodec *codec;
+  const AVCodec *codec;
   int errnum;
 
   video->format_ctx = avformat_alloc_context ();
