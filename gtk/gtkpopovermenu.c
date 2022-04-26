@@ -762,7 +762,7 @@ gtk_popover_menu_new_from_model (GMenuModel *model)
  * %GTK_POPOVER_MENU_NESTED, which makes GTK create traditional,
  * nested submenus instead of the default sliding submenus.
  *
- * Returns: (transfer full): the new `GtkPopoverMenu`
+ * Returns: the new `GtkPopoverMenu`
  */
 GtkWidget *
 gtk_popover_menu_new_from_model_full (GMenuModel          *model,
