@@ -9,7 +9,7 @@ import sys
 # be loaded successfully by Python.  Make things easiler for people
 # by calling os.add_dll_directory() on the valid paths in %PATH%.
 if hasattr(os, 'add_dll_directory'):
-    paths = os.environ['PATH'].split(os.pathsep)
+    paths = reversed(os.environ['PATH'].split(os.pathsep))
     for path in paths:
         if path != '' and os.path.isdir(path):
             os.add_dll_directory(path)
