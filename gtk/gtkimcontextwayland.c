@@ -174,6 +174,9 @@ text_input_preedit_apply (GtkIMContextWaylandGlobal *global)
     return;
 
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
+  if (context->pending_preedit.text == NULL &&
+      context->current_preedit.text == NULL)
+    return;
 
   state_change = ((context->pending_preedit.text == NULL)
                  != (context->current_preedit.text == NULL));
