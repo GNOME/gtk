@@ -76,7 +76,6 @@ tests = [
   { 'name': 'spinbutton' },
   { 'name': 'stringlist' },
   { 'name': 'templates' },
-  { 'name': 'textbuffer' },
   { 'name': 'textiter' },
   { 'name': 'theme-validate' },
   { 'name': 'tooltips' },
@@ -119,6 +118,7 @@ internal_tests = [
   { 'name': 'propertylookuplistmodel' },
   { 'name': 'rbtree' },
   { 'name': 'timsort' },
+  { 'name': 'textbuffer' },
   { 'name': 'texthistory' },
   { 'name': 'fnmatch' },
 ]
