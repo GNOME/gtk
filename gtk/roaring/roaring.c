@@ -2979,7 +2979,6 @@ int array_container_shrink_to_fit(array_container_t *src) {
       uint16_t *oldarray = src->array;
       src->array =
         (uint16_t *)realloc(oldarray, src->capacity * sizeof(uint16_t));
-      if (src->array == NULL) free(oldarray);  // should never happen?
     }
     return savings;
 }
@@ -3016,7 +3015,6 @@ void array_container_grow(array_container_t *container, int32_t min,
     if (preserve) {
         container->array =
             (uint16_t *)realloc(array, new_capacity * sizeof(uint16_t));
-        if (container->array == NULL) free(array);
     } else {
         // Jon Strabala reports that some tools complain otherwise
         if (array != NULL) {
@@ -6691,7 +6689,6 @@ int run_container_shrink_to_fit(run_container_t *src) {
     src->capacity = src->n_runs;
     rle16_t *oldruns = src->runs;
     src->runs = (rle16_t *)realloc(oldruns, src->capacity * sizeof(rle16_t));
-    if (src->runs == NULL) free(oldruns);  // should never happen?
     return savings;
 }
 /* Create a new run container. Return NULL in case of failure. */
@@ -6731,7 +6728,6 @@ void run_container_grow(run_container_t *run, int32_t min, bool copy) {
         rle16_t *oldruns = run->runs;
         run->runs =
             (rle16_t *)realloc(oldruns, run->capacity * sizeof(rle16_t));
-        if (run->runs == NULL) free(oldruns);
     } else {
         // Jon Strabala reports that some tools complain otherwise
         if (run->runs != NULL) {
