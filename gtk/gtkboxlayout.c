@@ -288,6 +288,12 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
   *natural = largest_nat;
 }
 
+/* if widgets haven't reached their min opposite size at this
+ * huge value, things went massively wrong and we need to bail to not
+ * cause an infinite loop.
+ */
+#define MAX_ALLOWED_SIZE (1 << 20)
+
 static int
 distribute_remaining_size (GtkRequestedSize *sizes,
                            gsize             n_sizes,
@@ -321,7 +327,40 @@ distribute_remaining_size (GtkRequestedSize *sizes,
     {
       int test;
 
-      if (max == G_MAXINT)
+      if (min > MAX_ALLOWED_SIZE)
+        {
+          /* sanity check! */
+          for (i = 0; i < n_sizes; i++)
+            {
+              int check_min, check_nat;
+              gtk_widget_measure (sizes[i].data,
+                                  orientation,
+                                  MAX_ALLOWED_SIZE,
+                                  &sizes[i].minimum_size, &sizes[i].natural_size,
+                                  NULL, NULL);
+              gtk_widget_measure (sizes[i].data,
+                                  orientation,
+                                  -1,
+                                  &check_min, &check_nat,
+                                  NULL, NULL);
+              if (check_min < sizes[i].minimum_size)
+                {
+                  g_critical ("%s %p reports a minimum %s of %u, but minimum %s for %s of %u is %u. Expect overlapping widgets.",
+                              G_OBJECT_TYPE_NAME (sizes[i].data), sizes[i].data,
+                              orientation == GTK_ORIENTATION_HORIZONTAL ? "width" : "height",
+                              check_min,
+                              orientation == GTK_ORIENTATION_HORIZONTAL ? "width" : "height",
+                              orientation == GTK_ORIENTATION_HORIZONTAL ? "height" : "width",
+                              MAX_ALLOWED_SIZE, sizes[i].minimum_size);
+                  sizes[i].minimum_size = check_min;
+                  sizes[i].natural_size = check_nat;
+                }
+              total_size += sizes[i].minimum_size;
+            }
+          return MAX (0, available - total_size);
+        }
+
+      if (max == MAX_ALLOWED_SIZE)
         test = min * 2;
       else
         test = (min + max) / 2;
@@ -465,7 +504,7 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                                              self->orientation,
                                              available,
                                              min_size,
-                                             G_MAXINT);
+                                             MAX_ALLOWED_SIZE);
 
       /* Bring children up to size first */
       available = gtk_distribute_natural_allocation (available, nvis_children, sizes);
