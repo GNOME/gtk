@@ -2193,7 +2193,9 @@ update_default (GtkFileChooserWidget *impl)
     return;
 
   files = gtk_file_chooser_get_files (GTK_FILE_CHOOSER (impl));
-  sensitive = (g_list_model_get_n_items (files) > 0 || impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
+  sensitive = (g_list_model_get_n_items (files) > 0 ||
+               impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+               impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
   gtk_widget_set_sensitive (button, sensitive);
 
   g_object_unref (files);
