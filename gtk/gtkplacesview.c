@@ -1319,6 +1319,7 @@ volume_mount_ready_cb (GObject      *source_volume,
       return;
     }
 
+  view->row_for_action = NULL;
   view->mounting_volume = FALSE;
   update_loading (view);
 
