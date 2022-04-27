@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-04-21 23:29+0000\n"
+"POT-Creation-Date: 2022-04-27 12:01+0000\n"
 "PO-Revision-Date: 2022-04-27 14:58+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <GNOME Hebrew Translation Project>\n"
@@ -6947,14 +6947,17 @@ msgstr ""
 "אין קובץ אינדקס לערכות עיצוב „%s”.\n"
 "כדי באמת ליצור דרך כאן מטמון סמלים, יש להשתמש ב־‎--ignore-theme-index.\n"
 
-#~ msgid "About"
-#~ msgstr "על אודות"
+#: gtk/ui/gtkaboutdialog.ui:62
+msgid "About"
+msgstr "על אודות"
 
-#~ msgid "Credits"
-#~ msgstr "תודות"
+#: gtk/ui/gtkaboutdialog.ui:123
+msgid "Credits"
+msgstr "תודות"
 
-#~ msgid "System"
-#~ msgstr "מערכת"
+#: gtk/ui/gtkaboutdialog.ui:206
+msgid "System"
+msgstr "מערכת"
 
 #~| msgid "Can't parse file: %s\n"
 #~ msgid "Can't parse “%s”: %s\n"
