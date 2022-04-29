@@ -204,6 +204,8 @@ struct _GdkTouchEvent
  * @direction: the direction to scroll to (one of %GDK_SCROLL_UP,
  *   %GDK_SCROLL_DOWN, %GDK_SCROLL_LEFT, %GDK_SCROLL_RIGHT or
  *   %GDK_SCROLL_SMOOTH).
+ * @x: the x coordinate of the pointer
+ * @y: the y coordinate of the pointer
  * @delta_x: the x coordinate of the scroll delta
  * @delta_y: the y coordinate of the scroll delta
  * @pointer_emulated: whether the scroll event was the result of
@@ -229,6 +231,8 @@ struct _GdkScrollEvent
 
   GdkModifierType state;
   GdkScrollDirection direction;
+  double x;
+  double y;
   double delta_x;
   double delta_y;
   gboolean pointer_emulated;
@@ -486,6 +490,8 @@ GdkEvent * gdk_scroll_event_new         (GdkSurface      *surface,
                                          GdkDeviceTool   *tool,
                                          guint32          time,
                                          GdkModifierType  state,
+                                         double           x,
+                                         double           y,
                                          double           delta_x,
                                          double           delta_y,
                                          gboolean         is_stop,
@@ -496,6 +502,8 @@ GdkEvent * gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                           GdkDeviceTool      *tool,
                                           guint32             time,
                                           GdkModifierType     state,
+                                          double              x,
+                                          double              y,
                                           GdkScrollDirection  direction,
                                           gboolean            emulated);
 

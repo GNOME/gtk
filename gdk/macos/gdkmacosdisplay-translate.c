@@ -644,6 +644,7 @@ fill_scroll_event (GdkMacosDisplay *self,
                                  NULL,
                                  get_time_from_ns_event (nsevent),
                                  state,
+                                 x, y,
                                  0.0, 0.0, TRUE,
                                  GDK_SCROLL_UNIT_SURFACE);
 
@@ -664,6 +665,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                     NULL,
                                     get_time_from_ns_event (nsevent),
                                     state,
+                                    x,
+                                    y,
                                     -sx,
                                     -sy,
                                     FALSE,
@@ -700,6 +703,8 @@ fill_scroll_event (GdkMacosDisplay *self,
                                            NULL,
                                            get_time_from_ns_event (nsevent),
                                            state,
+                                           x,
+                                           y,
                                            direction,
                                            FALSE);
     }
@@ -716,6 +721,7 @@ fill_scroll_event (GdkMacosDisplay *self,
                                   NULL,
                                   get_time_from_ns_event (nsevent),
                                   state,
+                                  x, y,
                                   0.0, 0.0, TRUE,
                                   GDK_SCROLL_UNIT_SURFACE);
     }

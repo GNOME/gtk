@@ -187,6 +187,8 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                                NULL,
                                                message->base.time,
                                                message->pointer.state,
+                                               message->pointer.win_x,
+                                               message->pointer.win_y,
                                                message->scroll.dir == 0
                                                  ? GDK_SCROLL_UP
                                                  : GDK_SCROLL_DOWN,
