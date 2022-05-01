@@ -5448,7 +5448,7 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
        * So we want the selection to be "bar/foo.txt".  Jump to the case for the
        * filename entry to see if that is the case.
        */
-      if (info.result == NULL && impl->location_entry)
+      if (g_list_model_get_n_items (G_LIST_MODEL (info.result)) == 0 && impl->location_entry)
         goto file_entry;
     }
   else if (impl->location_entry &&
@@ -5497,7 +5497,7 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
    * then we fall back to the current directory
    */
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER &&
-      info.result == NULL)
+      g_list_model_get_n_items (G_LIST_MODEL (info.result)) == 0)
     {
       GFile *current_folder;
 
