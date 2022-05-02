@@ -991,13 +991,15 @@ gtk_action_muxer_unregister_observer (GtkActionObservable *observable,
                                       GtkActionObserver   *observer)
 {
   GtkActionMuxer *muxer = GTK_ACTION_MUXER (observable);
-  Action *action;
+  Action *action = find_observers (muxer, name);
 
-  action = find_observers (muxer, name);
   if (action)
     {
-      g_object_weak_unref (G_OBJECT (observer), gtk_action_muxer_weak_notify, action);
-      gtk_action_muxer_unregister_internal (action, observer);
+      if (g_slist_find (action->watchers, observer) != NULL)
+        {
+          g_object_weak_unref (G_OBJECT (observer), gtk_action_muxer_weak_notify, action);
+          gtk_action_muxer_unregister_internal (action, observer);
+        }
     }
 }
 
