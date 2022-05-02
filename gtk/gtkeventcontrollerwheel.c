@@ -54,6 +54,8 @@
  * [signal@Gtk.EventControllerScroll::decelerate] signal, emitted at the end
  * of scrolling with two X/Y velocity arguments that are consistent with the
  * motion that was received.
+ *
+ * Since: 4.8
  */
 #include "config.h"
 
@@ -66,6 +68,8 @@
 struct _GtkEventControllerWheel
 {
   GtkEventController parent_instance;
+
+  GdkScrollUnit cur_unit;
 };
 
 struct _GtkEventControllerWheelClass
@@ -106,6 +110,7 @@ gtk_event_controller_wheel_handle_event (GtkEventController *controller,
                                          double              x,
                                          double              y)
 {
+  GtkEventControllerWheel *self = GTK_EVENT_CONTROLLER_WHEEL (controller);
   GdkScrollDirection direction = GDK_SCROLL_SMOOTH;
   double dx = 0, dy = 0;
   gboolean handled = GDK_EVENT_PROPAGATE;
@@ -139,6 +144,8 @@ gtk_event_controller_wheel_handle_event (GtkEventController *controller,
 
   if (dx != 0 || dy != 0)
     g_signal_emit (controller, signals[SCROLL], 0, dx, dy, &handled);
+
+  self->cur_unit = gdk_scroll_event_get_unit (event);
 
   return handled;
 }
@@ -186,10 +193,35 @@ gtk_event_controller_wheel_init (GtkEventControllerWheel *self)
  * Creates a new event controller that will handle scroll events.
  *
  * Returns: a new `GtkEventControllerWheel`
+ *
+ * Since: 4.8
  */
 GtkEventController *
 gtk_event_controller_wheel_new (void)
 {
   return g_object_new (GTK_TYPE_EVENT_CONTROLLER_WHEEL,
                        NULL);
+}
+
+/**
+ * gtk_event_controller_wheel_get_unit:
+ * @self: a `GtkEventControllerWheel`.
+ *
+ * Gets the scroll unit of the last
+ * [signal@Gtk.GtkEventControllerWheel::scroll] signal received.
+ *
+ * Always returns %GDK_SCROLL_UNIT_WHEEL if the
+ * %GTK_EVENT_CONTROLLER_SCROLL_DISCRETE flag is set.
+ *
+ * Returns: the scroll unit.
+ *
+ * Since: 4.8
+ */
+GdkScrollUnit
+gtk_event_controller_wheel_get_unit (GtkEventControllerWheel *self)
+{
+  g_return_val_if_fail (GTK_IS_EVENT_CONTROLLER_WHEEL (self),
+                        GDK_SCROLL_UNIT_WHEEL);
+
+  return self->cur_unit;
 }

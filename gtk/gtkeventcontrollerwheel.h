@@ -38,10 +38,13 @@ G_BEGIN_DECLS
 typedef struct _GtkEventControllerWheel GtkEventControllerWheel;
 typedef struct _GtkEventControllerWheelClass GtkEventControllerWheelClass;
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_8
 GType               gtk_event_controller_wheel_get_type  (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_8
 GtkEventController *gtk_event_controller_wheel_new       (void);
+
+GDK_AVAILABLE_IN_4_8
+GdkScrollUnit       gtk_event_controller_wheel_get_unit (GtkEventControllerWheel *self);
 
 G_END_DECLS
