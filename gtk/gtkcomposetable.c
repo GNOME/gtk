@@ -1150,7 +1150,8 @@ parse:
    * is probably a copy of the system one, we take steps to keep things working,
    * and thell the user about it.
    */
-  if (found_old_cache && !found_include && compose_table->n_sequences < 100)
+  if (found_old_cache && !found_include &&
+      compose_table != NULL && compose_table->n_sequences < 100)
     {
       if (rewrite_compose_file (compose_file))
         {
