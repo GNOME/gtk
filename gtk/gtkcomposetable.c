@@ -942,7 +942,12 @@ parser_get_compose_table (GtkComposeParser *parser)
           if (char_data->len > 0)
             g_string_append_c (char_data, 0);
 
-          g_assert (char_data->len < 0x8000);
+          if (char_data->len >= 0x8000)
+            {
+              g_warning ("GTK can't handle compose tables this large (%s)", parser->compose_file ? parser->compose_file : "");
+              g_string_free (char_data, TRUE);
+              return NULL;
+            }
 
           encoded_value = (guint16) (char_data->len | 0x8000);
           g_string_append (char_data, value);
@@ -1150,7 +1155,8 @@ parse:
    * is probably a copy of the system one, we take steps to keep things working,
    * and thell the user about it.
    */
-  if (found_old_cache && !found_include && compose_table->n_sequences < 100)
+  if (found_old_cache && !found_include &&
+      compose_table != NULL && compose_table->n_sequences < 100)
     {
       if (rewrite_compose_file (compose_file))
         {
