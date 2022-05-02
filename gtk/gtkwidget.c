@@ -7390,6 +7390,8 @@ gtk_widget_dispose (GObject *object)
   GSList *sizegroups;
   GtkATContext *at_context;
 
+  g_clear_object (&priv->action_parent);
+
   if (priv->muxer != NULL)
     g_object_run_dispose (G_OBJECT (priv->muxer));
 
@@ -10808,13 +10810,20 @@ void
 _gtk_widget_update_parent_muxer (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkActionMuxer *parent_muxer;
   GtkWidget *child;
 
   if (priv->muxer == NULL)
     return;
 
-  gtk_action_muxer_set_parent (priv->muxer,
-                               gtk_widget_get_parent_muxer (widget, FALSE));
+  if (priv->action_parent != NULL &&
+      !gtk_widget_is_ancestor (priv->action_parent, widget))
+    parent_muxer = _gtk_widget_get_action_muxer (priv->action_parent, FALSE);
+  else
+    parent_muxer = gtk_widget_get_parent_muxer (widget, FALSE);
+
+  gtk_action_muxer_set_parent (priv->muxer, parent_muxer);
+
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
        child = gtk_widget_get_next_sibling (child))
@@ -12933,4 +12942,60 @@ gtk_widget_set_active_state (GtkWidget *widget,
       if (priv->n_active == 0)
         gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_ACTIVE);
     }
+}
+
+/**
+ * gtk_widget_set_action_parent:
+ * @widget: a [class@Gtk.Widget]
+ * @action_parent: (nullable): a [class@Gtk.Widget]
+ *
+ * Sets the action parent for @widget.
+ *
+ * Actions will resolve through @action_parent for @widget and all of
+ * it's descendants unless otherwise specified with
+ * [method@Gtk.Widget.set_action_parent].
+ *
+ * Setting an action parent can be useful when you want actions within
+ * a menu or toolbar to resolve through a document widget.
+ *
+ * To unset an action parent, use `NULL` for @action_parent and the widget
+ * will resume using the parent widget as the action parent.
+ *
+ * It is a programming error to set an action parent which will cause a
+ * cycle to occur.
+ *
+ * Since: 4.8
+ */
+void
+gtk_widget_set_action_parent (GtkWidget *widget,
+                              GtkWidget *action_parent)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkActionMuxer *muxer;
+  GtkActionMuxer *parent_muxer;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (action_parent != widget);
+  g_return_if_fail (!action_parent || GTK_IS_WIDGET (action_parent));
+  g_return_if_fail (!action_parent || !gtk_widget_is_ancestor (action_parent, widget));
+
+  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+
+  if (action_parent == NULL)
+    {
+      if (muxer != NULL)
+        {
+          parent_muxer = gtk_widget_get_parent_muxer (widget, FALSE);
+          gtk_action_muxer_set_parent (muxer, parent_muxer);
+        }
+    }
+  else
+    {
+      if (muxer == NULL)
+        muxer = _gtk_widget_get_action_muxer (widget, TRUE);
+      parent_muxer = _gtk_widget_get_action_muxer (action_parent, TRUE);
+      gtk_action_muxer_set_parent (muxer, parent_muxer);
+    }
+
+  g_set_object (&priv->action_parent, action_parent);
 }

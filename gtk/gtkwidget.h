@@ -924,6 +924,9 @@ char **                 gtk_widget_get_css_classes      (GtkWidget   *widget);
 GDK_AVAILABLE_IN_ALL
 void                    gtk_widget_set_css_classes      (GtkWidget   *widget,
                                                          const char **classes);
+GDK_AVAILABLE_IN_4_8
+void                    gtk_widget_set_action_parent    (GtkWidget   *widget,
+                                                         GtkWidget   *action_parent);
 
 
 

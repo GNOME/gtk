@@ -185,6 +185,7 @@ struct _GtkWidgetPrivate
   GtkListListModel *children_observer;
   GtkListListModel *controller_observer;
   GtkActionMuxer *muxer;
+  GtkWidget *action_parent;
 
   GtkWidget *focus_child;
 
