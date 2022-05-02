@@ -1269,7 +1269,7 @@ gtk_action_muxer_insert (GtkActionMuxer *muxer,
   if (!muxer->groups)
     muxer->groups = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, gtk_action_muxer_free_group);
 
-  group = g_slice_new (Group);
+  group = g_slice_new0 (Group);
   group->muxer = muxer;
   group->group = g_object_ref (action_group);
   group->prefix = g_strdup (prefix);
