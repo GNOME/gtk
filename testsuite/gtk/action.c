@@ -15,6 +15,8 @@
  */
 #include <gtk/gtk.h>
 
+#include "gtkwidgetprivate.h"
+
 static void
 activate (GSimpleAction *action,
           GVariant      *parameter,
@@ -717,6 +719,109 @@ test_enabled (void)
   g_object_unref (g_object_ref_sink (text));
 }
 
+static void
+test_action_parent_action1 (GSimpleAction *action,
+                            GVariant      *param,
+                            gpointer       user_data)
+{
+  guint *count = user_data;
+  (*count)++;
+}
+
+static void
+test_action_parent_action2 (GSimpleAction *action,
+                            GVariant      *param,
+                            gpointer       user_data)
+{
+  g_simple_action_set_state (action, param);
+}
+
+static void
+test_action_parent (void)
+{
+  static const GActionEntry test_actions[] = {
+    { "action1", test_action_parent_action1 },
+    { "action2", test_action_parent_action2, "s", "'initial'", test_action_parent_action2 },
+  };
+  GSimpleActionGroup *group;
+  GAction *action2;
+  GtkWidget *window;
+  GtkWidget *header;
+  GtkWidget *content;
+  GtkWidget *label1;
+  GtkWidget *label2;
+  GVariant *state = NULL;
+  const GVariantType *state_type = NULL;
+  GtkActionMuxer *muxer;
+  guint count = 0;
+
+  window = g_object_new (GTK_TYPE_WINDOW, NULL);
+  g_object_ref_sink (window);
+
+  header = g_object_new (GTK_TYPE_BUTTON, NULL);
+  content = g_object_new (GTK_TYPE_BOX, NULL);
+  label1 = g_object_new (GTK_TYPE_LABEL, NULL);
+  label2 = g_object_new (GTK_TYPE_LABEL, NULL);
+  gtk_box_append (GTK_BOX (content), label1);
+  gtk_box_append (GTK_BOX (content), label2);
+  gtk_window_set_titlebar (GTK_WINDOW (window), header);
+  gtk_window_set_child (GTK_WINDOW (window), content);
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   test_actions,
+                                   G_N_ELEMENTS (test_actions),
+                                   &count);
+  action2 = g_action_map_lookup_action (G_ACTION_MAP (group), "action2");
+
+  gtk_widget_insert_action_group (content, "test", G_ACTION_GROUP (group));
+  gtk_widget_activate_action (label1, "test.action1", NULL);
+  g_assert_cmpint (count, ==, 1);
+
+  gtk_widget_activate_action (header, "test.action1", NULL);
+  g_assert_cmpint (count, ==, 1);
+
+  gtk_widget_set_action_parent (header, label1);
+  gtk_widget_activate_action (header, "test.action1", NULL);
+  g_assert_cmpint (count, ==, 2);
+
+  gtk_widget_activate_action (header, "test.action2", "s", "changed");
+  g_assert_cmpstr ("changed", ==, g_variant_get_string (g_action_get_state (action2), NULL));
+  muxer = _gtk_widget_get_action_muxer (header, FALSE);
+  gtk_action_muxer_query_action (muxer, "test.action2", NULL, NULL, &state_type, NULL, &state);
+  g_assert_nonnull (state_type);
+  g_assert_nonnull (state);
+  g_assert_cmpstr ((const char *)state_type, ==, "s");
+  g_assert_cmpstr ("changed", ==, g_variant_get_string (state, NULL));
+  g_variant_unref (state);
+
+  gtk_widget_set_action_parent (header, label2);
+  gtk_widget_activate_action (header, "test.action1", NULL);
+  g_assert_cmpint (count, ==, 3);
+
+  gtk_widget_set_action_parent (header, NULL);
+  gtk_widget_activate_action (header, "test.action1", NULL);
+  gtk_widget_activate_action (header, "test.action2", "s", "third");
+  g_assert_cmpint (count, ==, 3);
+  g_assert_cmpstr ("changed", ==, g_variant_get_string (g_action_get_state (action2), NULL));
+
+  gtk_widget_set_action_parent (label2, header);
+  gtk_widget_activate_action (label2, "test.action1", NULL);
+  g_assert_cmpint (count, ==, 3);
+
+  gtk_widget_insert_action_group (content, "test", NULL);
+  gtk_widget_activate_action (label1, "test.action1", NULL);
+  gtk_widget_activate_action (header, "test.action1", NULL);
+  g_assert_cmpint (count, ==, 3);
+
+  gtk_widget_activate_action (label2, "test.action2", "s", "third");
+  g_assert_cmpstr ("changed", ==, g_variant_get_string (g_action_get_state (action2), NULL));
+
+  gtk_window_destroy (GTK_WINDOW (window));
+
+  g_assert_finalize_object (group);
+  g_assert_finalize_object (window);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -732,6 +837,7 @@ main (int   argc,
   g_test_add_func ("/action/overlap2", test_overlap2);
   g_test_add_func ("/action/introspection", test_introspection);
   g_test_add_func ("/action/enabled", test_enabled);
+  g_test_add_func ("/action/action_parent", test_action_parent);
 
   return g_test_run();
 }

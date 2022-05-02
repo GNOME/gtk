@@ -23,7 +23,6 @@ tests = [
   { 'name': 'accel' },
 # sadly, mesons xfail support seems busted
 #  { 'name': 'accessor-apis' },
-  { 'name': 'action' },
   { 'name': 'adjustment' },
   { 'name': 'bitset' },
   {
@@ -105,6 +104,7 @@ tests = [
 
 # Tests that test private apis and therefore are linked against libgtk-4.a
 internal_tests = [
+  { 'name': 'action' },
   { 'name': 'bitmask' },
   {
     'name': 'composetable',
