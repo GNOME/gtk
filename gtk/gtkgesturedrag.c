@@ -62,10 +62,8 @@ static GtkFilterEventStatus
 gtk_gesture_drag_filter_event (GtkEventController *controller,
                                GdkEvent           *event)
 {
-  GdkEventType event_type = gdk_event_get_event_type (event);
-
   /* Let touchpad swipe events go through, only if they match n-points  */
-  if (event_type == GDK_TOUCHPAD_SWIPE)
+  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_SWIPE)
     {
       guint n_points;
       guint n_fingers;
@@ -78,9 +76,6 @@ gtk_gesture_drag_filter_event (GtkEventController *controller,
       else
         return GTK_EVENT_SKIP;
     }
-
-  if (event_type == GDK_SCROLL)
-    return GTK_EVENT_HANDLE;
 
   return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_drag_parent_class)->filter_event (controller, event);
 }
