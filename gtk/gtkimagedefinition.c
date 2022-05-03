@@ -121,12 +121,14 @@ gtk_image_definition_alloc (GtkImageType type)
     sizeof (GtkImageDefinitionSurface)
   };
   GtkImageDefinition *def;
+  GtkImageDefinitionEmpty *empty_def;
 
   g_assert (type < G_N_ELEMENTS (sizes));
 
   def = g_malloc0 (sizes[type]);
-  def->type = type;
-  def->empty.ref_count = 1;
+  empty_def = (GtkImageDefinitionEmpty *) def;
+  empty_def->type = type;
+  empty_def->ref_count = 1;
 
   return def;
 }
@@ -136,13 +138,15 @@ gtk_image_definition_new_pixbuf (GdkPixbuf *pixbuf,
                                  int        scale)
 {
   GtkImageDefinition *def;
+  GtkImageDefinitionPixbuf *pixbuf_def;
 
   if (pixbuf == NULL || scale <= 0)
     return NULL;
 
   def = gtk_image_definition_alloc (GTK_IMAGE_PIXBUF);
-  def->pixbuf.pixbuf = g_object_ref (pixbuf);
-  def->pixbuf.scale = scale;
+  pixbuf_def = (GtkImageDefinitionPixbuf *) def;
+  pixbuf_def->pixbuf = g_object_ref (pixbuf);
+  pixbuf_def->scale = scale;
 
   return def;
 }
@@ -151,12 +155,14 @@ GtkImageDefinition *
 gtk_image_definition_new_stock (const char *stock_id)
 {
   GtkImageDefinition *def;
+  GtkImageDefinitionStock *stock_def;
 
   if (stock_id == NULL || stock_id[0] == '\0')
     return NULL;
 
   def = gtk_image_definition_alloc (GTK_IMAGE_STOCK);
-  def->stock.id = g_strdup (stock_id);
+  stock_def = (GtkImageDefinitionStock *) def;
+  stock_def->id = g_strdup (stock_id);
 
   return def;
 }
@@ -165,13 +171,15 @@ GtkImageDefinition *
 gtk_image_definition_new_icon_set (GtkIconSet *icon_set)
 {
   GtkImageDefinition *def;
+  GtkImageDefinitionIconSet *icon_set_def;
 
   if (icon_set == NULL)
     return NULL;
 
   def = gtk_image_definition_alloc (GTK_IMAGE_ICON_SET);
+  icon_set_def = (GtkImageDefinitionIconSet *) def;
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  def->icon_set.icon_set = gtk_icon_set_ref (icon_set);
+  icon_set_def->icon_set = gtk_icon_set_ref (icon_set);
 G_GNUC_END_IGNORE_DEPRECATIONS;
 
   return def;
@@ -182,13 +190,15 @@ gtk_image_definition_new_animation (GdkPixbufAnimation *animation,
                                     int                 scale)
 {
   GtkImageDefinition *def;
+  GtkImageDefinitionAnimation *animation_def;
 
   if (animation == NULL || scale <= 0)
     return NULL;
 
   def = gtk_image_definition_alloc (GTK_IMAGE_ANIMATION);
-  def->animation.animation = g_object_ref (animation);
-  def->animation.scale = scale;
+  animation_def = (GtkImageDefinitionAnimation *) def;
+  animation_def->animation = g_object_ref (animation);
+  animation_def->scale = scale;
 
   return def;
 }
@@ -197,12 +207,14 @@ GtkImageDefinition *
 gtk_image_definition_new_icon_name (const char *icon_name)
 {
   GtkImageDefinition *def;
+  GtkImageDefinitionIconName *icon_name_def;
 
   if (icon_name == NULL || icon_name[0] == '\0')
     return NULL;
 
   def = gtk_image_definition_alloc (GTK_IMAGE_ICON_NAME);
-  def->icon_name.icon_name = g_strdup (icon_name);
+  icon_name_def = (GtkImageDefinitionIconName *) def;
+  icon_name_def->icon_name = g_strdup (icon_name);
 
   return def;
 }
@@ -211,12 +223,14 @@ GtkImageDefinition *
 gtk_image_definition_new_gicon (GIcon *gicon)
 {
   GtkImageDefinition *def;
+  GtkImageDefinitionGIcon *gicon_def;
 
   if (gicon == NULL)
     return NULL;
 
   def = gtk_image_definition_alloc (GTK_IMAGE_GICON);
-  def->gicon.gicon = g_object_ref (gicon);
+  gicon_def = (GtkImageDefinitionGIcon *) def;
+  gicon_def->gicon = g_object_ref (gicon);
 
   return def;
 }
@@ -225,12 +239,14 @@ GtkImageDefinition *
 gtk_image_definition_new_surface (cairo_surface_t *surface)
 {
   GtkImageDefinition *def;
+  GtkImageDefinitionSurface *surface_def;
 
   if (surface == NULL)
     return NULL;
 
   def = gtk_image_definition_alloc (GTK_IMAGE_SURFACE);
-  def->surface.surface = cairo_surface_reference (surface);
+  surface_def = (GtkImageDefinitionSurface *) def;
+  surface_def->surface = cairo_surface_reference (surface);
 
   return def;
 }
@@ -238,7 +254,10 @@ gtk_image_definition_new_surface (cairo_surface_t *surface)
 GtkImageDefinition *
 gtk_image_definition_ref (GtkImageDefinition *def)
 {
-  def->empty.ref_count++;
+  GtkImageDefinitionEmpty *empty_def;
+
+  empty_def = (GtkImageDefinitionEmpty *) def;
+  empty_def->ref_count++;
 
   return def;
 }
@@ -246,9 +265,19 @@ gtk_image_definition_ref (GtkImageDefinition *def)
 void
 gtk_image_definition_unref (GtkImageDefinition *def)
 {
-  def->empty.ref_count--;
+  GtkImageDefinitionEmpty *empty_def;
+  GtkImageDefinitionPixbuf *pixbuf_def;
+  GtkImageDefinitionAnimation *animation_def;
+  GtkImageDefinitionSurface *surface_def;
+  GtkImageDefinitionStock *stock_def;
+  GtkImageDefinitionIconSet *icon_set_def;
+  GtkImageDefinitionIconName *icon_name_def;
+  GtkImageDefinitionGIcon *gicon_def;
 
-  if (def->empty.ref_count > 0)
+  empty_def = (GtkImageDefinitionEmpty *) def;
+  empty_def->ref_count--;
+
+  if (empty_def->ref_count > 0)
     return;
 
   switch (def->type)
@@ -258,27 +287,34 @@ gtk_image_definition_unref (GtkImageDefinition *def)
       g_assert_not_reached ();
       break;
     case GTK_IMAGE_PIXBUF:
-      g_object_unref (def->pixbuf.pixbuf);
+      pixbuf_def = (GtkImageDefinitionPixbuf *) def;
+      g_object_unref (pixbuf_def->pixbuf);
       break;
     case GTK_IMAGE_ANIMATION:
-      g_object_unref (def->animation.animation);
+      animation_def = (GtkImageDefinitionAnimation *) def;
+      g_object_unref (animation_def->animation);
       break;
     case GTK_IMAGE_SURFACE:
-      cairo_surface_destroy (def->surface.surface);
+      surface_def = (GtkImageDefinitionSurface *) def;
+      cairo_surface_destroy (surface_def->surface);
       break;
     case GTK_IMAGE_STOCK:
-      g_free (def->stock.id);
+      stock_def = (GtkImageDefinitionStock *) def;
+      g_free (stock_def->id);
       break;
     case GTK_IMAGE_ICON_SET:
+      icon_set_def = (GtkImageDefinitionIconSet *) def;
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_icon_set_unref (def->icon_set.icon_set);
+      gtk_icon_set_unref (icon_set_def->icon_set);
 G_GNUC_END_IGNORE_DEPRECATIONS;
       break;
     case GTK_IMAGE_ICON_NAME:
-      g_free (def->icon_name.icon_name);
+      icon_name_def = (GtkImageDefinitionIconName *) def;
+      g_free (icon_name_def->icon_name);
       break;
     case GTK_IMAGE_GICON:
-      g_object_unref (def->gicon.gicon);
+      gicon_def = (GtkImageDefinitionGIcon *) def;
+      g_object_unref (gicon_def->gicon);
       break;
     }
 
