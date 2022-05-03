@@ -594,19 +594,6 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
           XRRFreeCrtcInfo (crtc);
         }
 
-      monitor = find_monitor_by_output (x11_display, output);
-      if (monitor)
-        monitor->remove = FALSE;
-      else
-        {
-          monitor = g_object_new (GDK_TYPE_X11_MONITOR,
-                                  "display", display,
-                                  NULL);
-          monitor->output = output;
-          monitor->add = TRUE;
-          g_ptr_array_add (x11_display->monitors, monitor);
-        }
-
       /* Fetch minimal manufacturer information (PNP ID) from EDID */
       {
         #define EDID_LENGTH 128
@@ -619,6 +606,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
 
         edid_atom = XInternAtom (disp, RR_PROPERTY_RANDR_EDID, FALSE);
 
+        gdk_x11_display_error_trap_push (display);
         XRRGetOutputProperty (disp, output,
                               edid_atom,
                               0,
@@ -631,6 +619,11 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
                               &nbytes,
                               &bytes_left,
                               &prop);
+        if (gdk_x11_display_error_trap_pop (display))
+          {
+            XRRFreeOutputInfo (output_info);
+            continue;
+          }
 
         // Check partial EDID header (whole header: 00 ff ff ff ff ff ff 00)
         if (nbytes >= EDID_LENGTH && prop[0] == 0x00 && prop[1] == 0xff)
@@ -650,6 +643,19 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
         XFree(prop);
         #undef EDID_LENGTH
       }
+
+      monitor = find_monitor_by_output (x11_display, output);
+      if (monitor)
+        monitor->remove = FALSE;
+      else
+        {
+          monitor = g_object_new (GDK_TYPE_X11_MONITOR,
+                                  "display", display,
+                                  NULL);
+          monitor->output = output;
+          monitor->add = TRUE;
+          g_ptr_array_add (x11_display->monitors, monitor);
+        }
 
       gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
       name = g_strndup (output_info->name, output_info->nameLen);
