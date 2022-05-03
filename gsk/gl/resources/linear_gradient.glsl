@@ -87,7 +87,8 @@ void main() {
   }
 
   if (offset >= get_offset(u_num_color_stops - 1)) {
-    gskSetOutputColor(gsk_scaled_premultiply(get_color(u_num_color_stops - 1), u_alpha));
+    vec4 color = get_color(u_num_color_stops - 1);
+    gskSetDitheredOutputColor(gsk_scaled_premultiply(color, u_alpha));
     return;
   }
 
@@ -99,8 +100,7 @@ void main() {
       float f = (offset - curr_offset) / (next_offset - curr_offset);
       vec4 curr_color = gsk_premultiply(get_color(i));
       vec4 next_color = gsk_premultiply(get_color(i + 1));
-      vec4 color = mix(curr_color, next_color, f);
-      gskSetScaledOutputColor(color, u_alpha);
+      gskSetScaledDitheredOutputColor(mix(curr_color, next_color, f), u_alpha);
       return;
     }
   }

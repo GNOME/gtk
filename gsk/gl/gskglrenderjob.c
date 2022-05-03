@@ -173,6 +173,10 @@ struct _GskGLRenderJob
    * looking at the format of the framebuffer we are rendering on.
    */
   int target_format;
+
+  /* Bit depth of the framebuffer we render into
+   */
+  int bit_depth;
 };
 
 typedef struct _GskGLRenderOffscreen
@@ -208,6 +212,39 @@ static void     gsk_gl_render_job_visit_node                (GskGLRenderJob     
 static gboolean gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
                                                              const GskRenderNode  *node,
                                                              GskGLRenderOffscreen *offscreen);
+
+static int
+get_framebuffer_bit_depth (GdkGLContext *context,
+                           guint         framebuffer)
+{
+  int size;
+
+  if (!gdk_gl_context_check_version (context, 0, 0, 3, 0))
+    return 8;
+
+  glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);
+  glGetFramebufferAttachmentParameteriv (GL_FRAMEBUFFER,
+                                         framebuffer ? GL_COLOR_ATTACHMENT0
+                                                     : gdk_gl_context_get_use_es (context) ? GL_BACK
+                                                                                           : GL_BACK_LEFT,
+                                         GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &size);
+
+  return size;
+}
+
+static int
+get_framebuffer_format (GdkGLContext *context,
+                        guint         framebuffer)
+{
+  int size = get_framebuffer_bit_depth (context, framebuffer);
+
+  if (size > 16)
+    return GL_RGBA32F;
+  else if (size > 8)
+    return GL_RGBA16F;
+  else
+    return GL_RGBA8;
+}
 
 static inline int
 get_target_format (GskGLRenderJob      *job,
@@ -473,6 +510,21 @@ init_projection_matrix (graphene_matrix_t     *projection,
                               ORTHO_NEAR_PLANE,
                               ORTHO_FAR_PLANE);
   graphene_matrix_scale (projection, 1, -1, 1);
+}
+
+static inline int
+gsk_gl_render_job_set_bit_depth (GskGLRenderJob *job,
+                                 int             bit_depth)
+{
+  if (job->bit_depth != bit_depth)
+    {
+      int ret = job->bit_depth;
+      job->bit_depth = bit_depth;
+      job->driver->stamps[UNIFORM_SHARED_BIT_DEPTH]++;
+      return ret;
+    }
+
+  return bit_depth;
 }
 
 static inline float
@@ -1157,6 +1209,12 @@ gsk_gl_render_job_begin_draw (GskGLRenderJob *job,
                               UNIFORM_SHARED_ALPHA,
                               job->driver->stamps[UNIFORM_SHARED_ALPHA],
                               job->alpha);
+
+  gsk_gl_uniform_state_set1f (program->uniforms,
+                              program->program_info,
+                              UNIFORM_SHARED_BIT_DEPTH,
+                              job->driver->stamps[UNIFORM_SHARED_BIT_DEPTH],
+                              job->bit_depth);
 }
 
 #define CHOOSE_PROGRAM(job,name) \
@@ -1312,6 +1370,7 @@ blur_offscreen (GskGLRenderJob       *job,
   graphene_matrix_t prev_projection;
   graphene_rect_t prev_viewport;
   guint prev_fbo;
+  int prev_bit_depth;
 
   g_assert (blur_radius_x > 0);
   g_assert (blur_radius_y > 0);
@@ -1346,6 +1405,7 @@ blur_offscreen (GskGLRenderJob       *job,
   /* Bind new framebuffer and clear it */
   prev_fbo = gsk_gl_command_queue_bind_framebuffer (job->command_queue, pass1->framebuffer_id);
   gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
+  prev_bit_depth = gsk_gl_render_job_set_bit_depth (job, pass1->bit_depth);
 
   /* Begin drawing the first horizontal pass, using offscreen as the
    * source texture for the program.
@@ -1375,6 +1435,7 @@ blur_offscreen (GskGLRenderJob       *job,
   /* Bind second pass framebuffer and clear it */
   gsk_gl_command_queue_bind_framebuffer (job->command_queue, pass2->framebuffer_id);
   gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
+  gsk_gl_render_job_set_bit_depth (job, pass2->bit_depth);
 
   /* Draw using blur program with first pass as source texture */
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blur));
@@ -1404,6 +1465,7 @@ blur_offscreen (GskGLRenderJob       *job,
   gsk_gl_render_job_set_viewport (job, &prev_viewport, NULL);
   gsk_gl_render_job_set_projection (job, &prev_projection);
   gsk_gl_command_queue_bind_framebuffer (job->command_queue, prev_fbo);
+  gsk_gl_render_job_set_bit_depth (job, prev_bit_depth);
 
   gsk_gl_driver_release_render_target (job->driver, pass1, TRUE);
 
@@ -2223,6 +2285,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
       graphene_matrix_t prev_projection;
       graphene_rect_t prev_viewport;
       guint prev_fbo;
+      int prev_bit_depth;
 
       /* TODO: In the following code, we have to be careful about where we apply the scale.
        * We're manually scaling stuff (e.g. the outline) so we can later use texture_width
@@ -2265,6 +2328,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
 
       prev_fbo = gsk_gl_command_queue_bind_framebuffer (job->command_queue, render_target->framebuffer_id);
       gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
+      prev_bit_depth = gsk_gl_render_job_set_bit_depth (job, render_target->bit_depth);
 
       gsk_gl_render_job_transform_rounded_rect (job, &outline_to_blur, &transformed_outline);
 
@@ -2291,6 +2355,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
       gsk_gl_render_job_set_projection (job, &prev_projection);
       gsk_gl_render_job_set_viewport (job, &prev_viewport, NULL);
       gsk_gl_command_queue_bind_framebuffer (job->command_queue, prev_fbo);
+      gsk_gl_render_job_set_bit_depth (job, prev_bit_depth);
 
       offscreen.texture_id = render_target->texture_id;
       init_full_texture_region (&offscreen);
@@ -2523,6 +2588,7 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
       graphene_matrix_t prev_projection;
       graphene_rect_t prev_viewport;
       guint prev_fbo;
+      int prev_bit_depth;
 
       gsk_gl_driver_create_render_target (job->driver,
                                           texture_width, texture_height,
@@ -2553,6 +2619,7 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
       /* Bind render target and clear it */
       prev_fbo = gsk_gl_command_queue_bind_framebuffer (job->command_queue, render_target->framebuffer_id);
       gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
+      prev_bit_depth = gsk_gl_render_job_set_bit_depth (job, render_target->bit_depth);
 
       /* Draw the outline using color program */
       gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color));
@@ -2582,6 +2649,7 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
                                     blurred_texture_id);
 
       gsk_gl_command_queue_bind_framebuffer (job->command_queue, prev_fbo);
+      gsk_gl_render_job_set_bit_depth (job, prev_bit_depth);
     }
   else
     {
@@ -3924,6 +3992,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
   graphene_rect_t prev_viewport;
   float prev_alpha;
   guint prev_fbo;
+  int prev_bit_depth;
 
   if (!gsk_gl_driver_create_render_target (job->driver,
                                            texture_width, texture_height,
@@ -3954,6 +4023,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
 
   prev_fbo = gsk_gl_command_queue_bind_framebuffer (job->command_queue, render_target->framebuffer_id);
   gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
+  prev_bit_depth = gsk_gl_render_job_set_bit_depth (job, render_target->bit_depth);
 
   if (offscreen->reset_clip)
     gsk_gl_render_job_push_clip (job, &GSK_ROUNDED_RECT_INIT_FROM_RECT (job->viewport));
@@ -3973,6 +4043,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
   gsk_gl_render_job_set_projection (job, &prev_projection);
   gsk_gl_render_job_set_alpha (job, prev_alpha);
   gsk_gl_command_queue_bind_framebuffer (job->command_queue, prev_fbo);
+  gsk_gl_render_job_set_bit_depth (job, prev_bit_depth);
 
   job->offset_x = offset_x;
   job->offset_y = offset_y;
@@ -3996,6 +4067,8 @@ gsk_gl_render_job_render_flipped (GskGLRenderJob *job,
   guint framebuffer_id;
   guint texture_id;
   guint surface_height;
+  int bit_depth;
+  int prev_bit_depth;
 
   g_return_if_fail (job != NULL);
   g_return_if_fail (root != NULL);
@@ -4017,12 +4090,14 @@ gsk_gl_render_job_render_flipped (GskGLRenderJob *job,
                                                   MAX (1, job->viewport.size.height),
                                                   job->target_format,
                                                   GL_NEAREST, GL_NEAREST,
-                                                  &framebuffer_id, &texture_id))
+                                                  &framebuffer_id, &texture_id,
+                                                  &bit_depth))
     return;
 
   /* Setup drawing to our offscreen texture/framebuffer which is flipped */
   gsk_gl_command_queue_bind_framebuffer (job->command_queue, framebuffer_id);
   gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
+  prev_bit_depth = gsk_gl_render_job_set_bit_depth (job, bit_depth);
 
   /* Visit all nodes creating batches */
   gdk_gl_context_push_debug_group (job->command_queue->context, "Building command queue");
@@ -4033,6 +4108,7 @@ gsk_gl_render_job_render_flipped (GskGLRenderJob *job,
   gsk_gl_render_job_set_alpha (job, 1.0f);
   gsk_gl_command_queue_bind_framebuffer (job->command_queue, job->framebuffer);
   gsk_gl_command_queue_clear (job->command_queue, 0, &job->viewport);
+  gsk_gl_render_job_set_bit_depth (job, prev_bit_depth);
   gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit));
   gsk_gl_program_set_uniform_texture (job->current_program,
                                       UNIFORM_SHARED_SOURCE, 0,
@@ -4107,30 +4183,6 @@ gsk_gl_render_job_set_debug_fallback (GskGLRenderJob *job,
   job->debug_fallback = !!debug_fallback;
 }
 
-static int
-get_framebuffer_format (GdkGLContext *context,
-                        guint         framebuffer)
-{
-  int size;
-
-  if (!gdk_gl_context_check_version (context, 0, 0, 3, 0))
-    return GL_RGBA8;
-
-  glBindFramebuffer (GL_FRAMEBUFFER, framebuffer);
-  glGetFramebufferAttachmentParameteriv (GL_FRAMEBUFFER,
-                                         framebuffer ? GL_COLOR_ATTACHMENT0
-                                                     : gdk_gl_context_get_use_es (context) ? GL_BACK
-                                                                                           : GL_BACK_LEFT,
-                                         GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE, &size);
-
-  if (size > 16)
-    return GL_RGBA32F;
-  else if (size > 8)
-    return GL_RGBA16F;
-  else
-    return GL_RGBA8;
-}
-
 GskGLRenderJob *
 gsk_gl_render_job_new (GskGLDriver           *driver,
                        const graphene_rect_t *viewport,
@@ -4177,6 +4229,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   gsk_gl_render_job_set_alpha (job, 1.0f);
   gsk_gl_render_job_set_projection_from_rect (job, viewport, NULL);
   gsk_gl_render_job_set_modelview (job, gsk_transform_scale (NULL, scale_factor, scale_factor));
+  gsk_gl_render_job_set_bit_depth (job, get_framebuffer_bit_depth (job->command_queue->context, framebuffer));
 
   /* Setup our initial clip. If region is NULL then we are drawing the
    * whole viewport. Otherwise, we need to convert the region to a

@@ -78,7 +78,7 @@ void main() {
       vec4 curr_color = gsk_premultiply(get_color(i));
       vec4 next_color = gsk_premultiply(get_color(i + 1));
       vec4 color = mix(curr_color, next_color, f);
-      gskSetScaledOutputColor(color, u_alpha);
+      gskSetScaledDitheredOutputColor(color, u_alpha);
       return;
     }
   }

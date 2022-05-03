@@ -35,6 +35,7 @@ enum {
   UNIFORM_SHARED_VIEWPORT,
   UNIFORM_SHARED_PROJECTION,
   UNIFORM_SHARED_MODELVIEW,
+  UNIFORM_SHARED_BIT_DEPTH,
 
   UNIFORM_SHARED_LAST
 };
@@ -91,6 +92,7 @@ struct _GskGLRenderTarget
   int format;
   int width;
   int height;
+  int bit_depth;
 };
 
 struct _GskGLDriver

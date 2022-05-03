@@ -4,6 +4,7 @@ uniform mat4 u_modelview;
 uniform float u_alpha;
 uniform vec4 u_viewport;
 uniform vec4[3] u_clip_rect;
+uniform float u_bit_depth;
 
 #if defined(GSK_LEGACY)
 _OUT_ vec4 outputColor;
@@ -117,29 +118,25 @@ vec2 gsk_get_frag_coord() {
   return fc;
 }
 
-void gskSetOutputColor(vec4 color) {
-  vec4 result;
-
-#if defined(NO_CLIP)
-  result = color;
-#elif defined(RECT_CLIP)
-  float coverage = gsk_rect_coverage(gsk_get_bounds(u_clip_rect),
-                                     gsk_get_frag_coord());
-  result = color * coverage;
-#else
-  float coverage = gsk_rounded_rect_coverage(gsk_create_rect(u_clip_rect),
-                                             gsk_get_frag_coord());
-  result = color * coverage;
-#endif
-
-#if defined(GSK_GLES) || defined(GSK_LEGACY)
-  gl_FragColor = result;
-#else
-  outputColor = result;
-#endif
+// from "NEXT GENERATION POST PROCESSING IN CALL OF DUTY: ADVANCED WARFARE"
+// http://advances.realtimerendering.com/s2014/index.html
+float gsk_interleaved_gradient_noise(vec2 uv) {
+    const vec3 magic = vec3(0.06711056, 0.00583715, 52.9829189);
+    return fract(magic.z * fract(dot(uv, magic.xy)));
 }
 
-void gskSetScaledOutputColor(vec4 color, float alpha) {
+vec4 gskDither(vec4 color) {
+  if (u_bit_depth > 10)
+    return color;
+
+  float noise = gsk_interleaved_gradient_noise(gsk_get_frag_coord()) - 0.5;
+  // scale the noise to the number of steps we have
+  noise = noise / (pow(2.0, u_bit_depth) - 1.0);
+  color = vec4(color.rgb + noise, color.a);
+  return color;
+}
+
+vec4 gsk_get_output_color(vec4 color, float alpha) {
   vec4 result;
 
 #if defined(NO_CLIP)
@@ -154,9 +151,35 @@ void gskSetScaledOutputColor(vec4 color, float alpha) {
   result = color * (alpha * coverage);
 #endif
 
+  return result;
+}
+
+void gsk_set_output_color(vec4 color) {
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
-  gl_FragColor = result;
+  gl_FragColor = color;
 #else
-  outputColor = result;
+  outputColor = color;
 #endif
+}
+
+void gskSetOutputColor(vec4 color) {
+  vec4 result = gsk_get_output_color(color, 1.0);
+  gsk_set_output_color(result);
+}
+
+void gskSetDitheredOutputColor(vec4 color) {
+  vec4 result = gsk_get_output_color(color, 1.0);
+  result = gskDither(result);
+  gsk_set_output_color(result);
+}
+
+void gskSetScaledOutputColor(vec4 color, float alpha) {
+  vec4 result = gsk_get_output_color(color, alpha);
+  gsk_set_output_color(result);
+}
+
+void gskSetScaledDitheredOutputColor(vec4 color, float alpha) {
+  vec4 result = gsk_get_output_color(color, alpha);
+  result = gskDither(result);
+  gsk_set_output_color(result);
 }

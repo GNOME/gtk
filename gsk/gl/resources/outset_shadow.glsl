@@ -30,5 +30,5 @@ void main() {
 
   alpha *= (1.0 -  clamp(gsk_rounded_rect_coverage(gsk_decode_rect(transformed_outline), frag), 0.0, 1.0));
 
-  gskSetScaledOutputColor(final_color, alpha);
+  gskSetScaledDitheredOutputColor(final_color, alpha);
 }

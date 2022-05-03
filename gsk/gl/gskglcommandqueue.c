@@ -1246,10 +1246,13 @@ gsk_gl_command_queue_create_render_target (GskGLCommandQueue *self,
                                            int                min_filter,
                                            int                mag_filter,
                                            guint             *out_fbo_id,
-                                           guint             *out_texture_id)
+                                           guint             *out_texture_id,
+                                           int               *out_bit_depth)
 {
+  GdkGLContext *context = self->context;
   GLuint fbo_id = 0;
   GLint texture_id;
+  int bit_depth;
 
   g_assert (GSK_IS_GL_COMMAND_QUEUE (self));
   g_assert (width > 0);
@@ -1266,6 +1269,7 @@ gsk_gl_command_queue_create_render_target (GskGLCommandQueue *self,
     {
       *out_fbo_id = 0;
       *out_texture_id = 0;
+      *out_bit_depth = 0;
       return FALSE;
     }
 
@@ -1275,8 +1279,18 @@ gsk_gl_command_queue_create_render_target (GskGLCommandQueue *self,
   glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_id, 0);
   g_assert_cmphex (glCheckFramebufferStatus (GL_FRAMEBUFFER), ==, GL_FRAMEBUFFER_COMPLETE);
 
+  bit_depth = 8;
+  if (context && gdk_gl_context_check_version (context, 0, 0, 3, 0))
+    {
+      glGetFramebufferAttachmentParameteriv (GL_FRAMEBUFFER,
+                                             GL_COLOR_ATTACHMENT0,
+                                             GL_FRAMEBUFFER_ATTACHMENT_RED_SIZE,
+                                             &bit_depth);
+    }
+
   *out_fbo_id = fbo_id;
   *out_texture_id = texture_id;
+  *out_bit_depth = bit_depth;
 
   return TRUE;
 }

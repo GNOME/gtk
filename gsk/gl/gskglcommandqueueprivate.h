@@ -298,7 +298,8 @@ gboolean            gsk_gl_command_queue_create_render_target (GskGLCommandQueue
                                                                int                   min_filter,
                                                                int                   mag_filter,
                                                                guint                *out_fbo_id,
-                                                               guint                *out_texture_id);
+                                                               guint                *out_texture_id,
+                                                               int                  *out_bit_depth);
 void                gsk_gl_command_queue_delete_program       (GskGLCommandQueue    *self,
                                                                guint                 program_id);
 void                gsk_gl_command_queue_clear                (GskGLCommandQueue    *self,

@@ -387,6 +387,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
     gsk_gl_program_add_uniform (program, "u_viewport", UNIFORM_SHARED_VIEWPORT);                \
     gsk_gl_program_add_uniform (program, "u_projection", UNIFORM_SHARED_PROJECTION);            \
     gsk_gl_program_add_uniform (program, "u_modelview", UNIFORM_SHARED_MODELVIEW);              \
+    gsk_gl_program_add_uniform (program, "u_bit_depth", UNIFORM_SHARED_BIT_DEPTH);              \
                                                                                                 \
     uniforms                                                                                    \
                                                                                                 \
@@ -899,6 +900,7 @@ gsk_gl_driver_create_render_target (GskGLDriver        *self,
 {
   guint framebuffer_id;
   guint texture_id;
+  int bit_depth;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (self), FALSE);
   g_return_val_if_fail (GSK_IS_GL_COMMAND_QUEUE (self->command_queue), FALSE);
@@ -927,7 +929,8 @@ gsk_gl_driver_create_render_target (GskGLDriver        *self,
                                                   width, height,
                                                   format,
                                                   min_filter, mag_filter,
-                                                  &framebuffer_id, &texture_id))
+                                                  &framebuffer_id, &texture_id,
+                                                  &bit_depth))
     {
       GskGLRenderTarget *render_target;
 
@@ -939,6 +942,7 @@ gsk_gl_driver_create_render_target (GskGLDriver        *self,
       render_target->height = height;
       render_target->framebuffer_id = framebuffer_id;
       render_target->texture_id = texture_id;
+      render_target->bit_depth = bit_depth;
 
       *out_render_target = render_target;
 
@@ -1098,6 +1102,7 @@ gsk_gl_driver_lookup_shader (GskGLDriver  *self,
           gsk_gl_program_add_uniform (program, "u_viewport", UNIFORM_SHARED_VIEWPORT);
           gsk_gl_program_add_uniform (program, "u_projection", UNIFORM_SHARED_PROJECTION);
           gsk_gl_program_add_uniform (program, "u_modelview", UNIFORM_SHARED_MODELVIEW);
+          gsk_gl_program_add_uniform (program, "u_bit_depth", UNIFORM_SHARED_BIT_DEPTH);
           have_alpha = gsk_gl_program_add_uniform (program, "u_alpha", UNIFORM_SHARED_ALPHA);
 
           gsk_gl_program_add_uniform (program, "u_size", UNIFORM_CUSTOM_SIZE);
