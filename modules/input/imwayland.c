@@ -47,6 +47,7 @@ struct _GtkIMContextWaylandGlobal
   gboolean focused;
 
   guint serial;
+  guint done_serial;
 };
 
 struct _GtkIMContextWaylandClass
@@ -170,6 +171,9 @@ text_input_preedit_apply (GtkIMContextWaylandGlobal *global)
     return;
 
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
+  if (context->pending_preedit.text == NULL &&
+      context->current_preedit.text == NULL)
+    return;
 
   state_change = ((context->pending_preedit.text == NULL)
                  != (context->current_preedit.text == NULL));
@@ -205,11 +209,11 @@ text_input_commit (void                     *data,
 }
 
 static void
-text_input_commit_apply (GtkIMContextWaylandGlobal *global, gboolean valid)
+text_input_commit_apply (GtkIMContextWaylandGlobal *global)
 {
   GtkIMContextWayland *context;
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
-  if (context->pending_commit && valid)
+  if (context->pending_commit)
     g_signal_emit_by_name (global->current, "commit", context->pending_commit);
   g_free (context->pending_commit);
   context->pending_commit = NULL;
@@ -234,8 +238,7 @@ text_input_delete_surrounding_text (void                     *data,
 }
 
 static void
-text_input_delete_surrounding_text_apply (GtkIMContextWaylandGlobal *global,
-  gboolean valid)
+text_input_delete_surrounding_text_apply (GtkIMContextWaylandGlobal *global)
 {
   GtkIMContextWayland *context;
   gboolean retval;
@@ -246,7 +249,7 @@ text_input_delete_surrounding_text_apply (GtkIMContextWaylandGlobal *global,
 
   len = context->pending_surrounding_delete.after_length
       + context->pending_surrounding_delete.before_length;
-  if (len > 0 && valid)
+  if (len > 0)
     g_signal_emit_by_name (global->current, "delete-surrounding",
                            -context->pending_surrounding_delete.before_length,
                            len, &retval);
@@ -260,16 +263,16 @@ text_input_done (void                     *data,
 {
   GtkIMContextWaylandGlobal *global = data;
   gboolean result;
-  gboolean valid;
-  
+
+  global->done_serial = serial;
+
   if (!global->current)
     return;
 
-  valid = serial == global->serial;
-  text_input_delete_surrounding_text_apply(global, valid);
-  text_input_commit_apply(global, valid);
+  text_input_delete_surrounding_text_apply (global);
+  text_input_commit_apply (global);
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
-  text_input_preedit_apply(global);
+  text_input_preedit_apply (global);
 }
 
 static void
@@ -285,6 +288,8 @@ notify_surrounding_text (GtkIMContextWayland *context)
   if (global->current != GTK_IM_CONTEXT (context))
     return;
   if (!context->enabled || !context->surrounding.text)
+    return;
+  if (global->done_serial != global->serial)
     return;
 
   len = strlen (context->surrounding.text);
@@ -360,6 +365,8 @@ notify_cursor_location (GtkIMContextWayland *context)
   if (global->current != GTK_IM_CONTEXT (context))
     return;
   if (!context->enabled || !context->window)
+    return;
+  if (global->done_serial != global->serial)
     return;
 
   rect = context->cursor_rect;
@@ -442,6 +449,8 @@ notify_content_type (GtkIMContextWayland *context)
     return;
 
   if (!context->enabled)
+    return;
+  if (global->done_serial != global->serial)
     return;
 
   g_object_get (context,
@@ -870,6 +879,13 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
 
+  if (context_wayland->surrounding.text && text &&
+      (len < 0 || len == strlen (context_wayland->surrounding.text)) &&
+      strncmp (context_wayland->surrounding.text, text, len) == 0 &&
+      context_wayland->surrounding.cursor_idx == cursor_index &&
+      context_wayland->surrounding.anchor_idx == cursor_index)
+    return;
+
   g_free (context_wayland->surrounding.text);
   context_wayland->surrounding.text = g_strndup (text, len);
   context_wayland->surrounding.cursor_idx = cursor_index;
@@ -877,11 +893,7 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
   context_wayland->surrounding.anchor_idx = cursor_index;
 
   notify_surrounding_text (context_wayland);
-  /* State changes coming from reset don't have any other opportunity to get
-   * committed. */
-  if (context_wayland->surrounding_change !=
-      ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD)
-    commit_state (context_wayland);
+  commit_state (context_wayland);
 }
 
 static gboolean
