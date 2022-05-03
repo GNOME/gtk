@@ -60,30 +60,42 @@ typedef struct {
 
 
 static void
-filechooser_portal_data_free (FilechooserPortalData *data)
+filechooser_portal_data_clear (FilechooserPortalData *data)
 {
   if (data->portal_response_signal_id != 0)
-    g_dbus_connection_signal_unsubscribe (data->connection,
-                                          data->portal_response_signal_id);
+    {
+      g_dbus_connection_signal_unsubscribe (data->connection,
+                                            data->portal_response_signal_id);
+      data->portal_response_signal_id = 0;
+    }
 
-  g_object_unref (data->connection);
+  g_clear_object (&data->connection);
 
   if (data->grab_widget)
     {
       gtk_grab_remove (data->grab_widget);
-      g_object_unref (data->grab_widget);
+      g_clear_object (&data->grab_widget);
     }
 
   g_clear_object (&data->self);
 
   if (data->exported_window)
-    gtk_window_unexport_handle (data->exported_window);
+    {
+      gtk_window_unexport_handle (data->exported_window);
+      g_clear_object (&data->exported_window);
+    }
 
-  g_clear_object (&data->exported_window);
+  g_clear_pointer (&data->portal_handle, g_free);
+}
 
-  g_free (data->portal_handle);
-
-  g_free (data);
+static void
+filechooser_portal_data_free (FilechooserPortalData *data)
+{
+  if (data != NULL)
+    {
+      filechooser_portal_data_clear (data);
+      g_free (data);
+    }
 }
 
 static void
@@ -175,10 +187,18 @@ response_cb (GDBusConnection  *connection,
       break;
     }
 
+  /* Keep a reference on the native dialog until we can emit the response
+   * signal; filechooser_portal_data_free() will drop a reference on the
+   * dialog as well
+   */
+  g_object_ref (self);
+
   filechooser_portal_data_free (data);
   self->mode_data = NULL;
 
   _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (self), gtk_response);
+
+  g_object_unref (self);
 }
 
 static void
@@ -239,7 +259,6 @@ open_file_msg_cb (GObject *source_object,
   if (data->hidden)
     {
       /* The dialog was hidden before we got the handle, close it now */
-      send_close (data);
       filechooser_portal_data_free (data);
       self->mode_data = NULL;
     }
@@ -344,15 +363,15 @@ show_portal_file_chooser (GtkFileChooserNative *self,
 
   data->portal_handle = gtk_get_portal_request_path (data->connection, &token);
   data->portal_response_signal_id =
-        g_dbus_connection_signal_subscribe (data->connection,
-                                            PORTAL_BUS_NAME,
-                                            PORTAL_REQUEST_INTERFACE,
-                                            "Response",
-                                            data->portal_handle,
-                                            NULL,
-                                            G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
-                                            response_cb,
-                                            self, NULL);
+    g_dbus_connection_signal_subscribe (data->connection,
+                                        PORTAL_BUS_NAME,
+                                        PORTAL_REQUEST_INTERFACE,
+                                        "Response",
+                                        data->portal_handle,
+                                        NULL,
+                                        G_DBUS_SIGNAL_FLAGS_NO_MATCH_RULE,
+                                        response_cb,
+                                        self, NULL);
 
   multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (self));
   directory = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self)) == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
@@ -527,7 +546,9 @@ gtk_file_chooser_native_portal_hide (GtkFileChooserNative *self)
   if (data->portal_handle)
     send_close (data);
 
-  filechooser_portal_data_free (data);
-
+  /* We clear the data because we might have in-flight async
+   * operations that can still access it
+   */
+  filechooser_portal_data_clear (data);
   self->mode_data = NULL;
 }
