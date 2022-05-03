@@ -113,6 +113,7 @@ pango_underline_to_string (PangoUnderline value)
 const char *
 pango_wrap_mode_to_string (PangoWrapMode mode)
 {
+  /* Keep these in sync with gtk_wrap_mode_to_string() */
   switch (mode)
     {
     case PANGO_WRAP_WORD:

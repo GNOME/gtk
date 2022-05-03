@@ -55,6 +55,27 @@ gtk_text_direction_to_string (GtkTextDirection direction)
     }
 }
 
+static const char *
+gtk_wrap_mode_to_string (GtkWrapMode wrap_mode)
+{
+  /* Keep these in sync with pango_wrap_mode_to_string(); note that
+   * here we have an extra case for NONE.
+   */
+  switch (wrap_mode)
+    {
+    case GTK_WRAP_NONE:
+      return "none";
+    case GTK_WRAP_CHAR:
+      return "char";
+    case GTK_WRAP_WORD:
+      return "word";
+    case GTK_WRAP_WORD_CHAR:
+      return "word-char";
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 void
 gtk_text_view_add_default_attributes (GtkTextView     *view,
                                       GVariantBuilder *builder)
@@ -75,7 +96,7 @@ gtk_text_view_add_default_attributes (GtkTextView     *view,
   g_variant_builder_add (builder, "{ss}", "direction",
                          gtk_text_direction_to_string (text_attrs->direction));
   g_variant_builder_add (builder, "{ss}", "wrap-mode",
-                         pango_wrap_mode_to_string ((PangoWrapMode)text_attrs->wrap_mode));
+                         gtk_wrap_mode_to_string (text_attrs->wrap_mode));
   g_variant_builder_add (builder, "{ss}", "editable",
                          text_attrs->editable ? "true" : "false");
   g_variant_builder_add (builder, "{ss}", "invisible",
@@ -256,7 +277,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "wrap-mode", &wrap_mode,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "wrap-mode", pango_wrap_mode_to_string ((PangoWrapMode)wrap_mode));
+        g_variant_builder_add (builder, "{ss}", "wrap-mode", gtk_wrap_mode_to_string (wrap_mode));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
