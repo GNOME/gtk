@@ -86,9 +86,10 @@
  * ```
  *
  * A `GtkCheckButton` has a main node with name checkbutton. If the
- * [property@Gtk.CheckButton:label] property is set, it contains a label
- * child. The indicator node is named check when no group is set, and
- * radio if the checkbutton is grouped together with other checkbuttons.
+ * [property@Gtk.CheckButton:label] or [property@Gtk.CheckButton:child]
+ * properties are set, it contains a child widget. The indicator node
+ * is named check when no group is set, and radio if the checkbutton
+ * is grouped together with other checkbuttons.
  *
  * # Accessibility
  *
@@ -97,11 +98,12 @@
 
 typedef struct {
   GtkWidget *indicator_widget;
-  GtkWidget *label_widget;
+  GtkWidget *child;
 
-  guint inconsistent: 1;
-  guint active: 1;
+  guint inconsistent:  1;
+  guint active:        1;
   guint use_underline: 1;
+  guint child_type:    1;
 
   GtkCheckButton *group_next;
   GtkCheckButton *group_prev;
@@ -116,6 +118,7 @@ enum {
   PROP_LABEL,
   PROP_INCONSISTENT,
   PROP_USE_UNDERLINE,
+  PROP_CHILD,
 
   /* actionable properties */
   PROP_ACTION_NAME,
@@ -127,6 +130,11 @@ enum {
   TOGGLED,
   ACTIVATE,
   LAST_SIGNAL
+};
+
+enum {
+  LABEL_CHILD,
+  WIDGET_CHILD
 };
 
 static void gtk_check_button_actionable_iface_init (GtkActionableInterface *iface);
@@ -146,7 +154,7 @@ gtk_check_button_dispose (GObject *object)
   g_clear_object (&priv->action_helper);
 
   g_clear_pointer (&priv->indicator_widget, gtk_widget_unparent);
-  g_clear_pointer (&priv->label_widget, gtk_widget_unparent);
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
 
   gtk_check_button_set_group (GTK_CHECK_BUTTON (object), NULL);
 
@@ -226,6 +234,9 @@ gtk_check_button_set_property (GObject      *object,
     case PROP_USE_UNDERLINE:
       gtk_check_button_set_use_underline (GTK_CHECK_BUTTON (object), g_value_get_boolean (value));
       break;
+    case PROP_CHILD:
+      gtk_check_button_set_child (GTK_CHECK_BUTTON (object), g_value_get_object (value));
+      break;
     case PROP_ACTION_NAME:
       gtk_check_button_set_action_name (GTK_ACTIONABLE (object), g_value_get_string (value));
       break;
@@ -259,6 +270,9 @@ gtk_check_button_get_property (GObject    *object,
       break;
     case PROP_USE_UNDERLINE:
       g_value_set_boolean (value, gtk_check_button_get_use_underline (GTK_CHECK_BUTTON (object)));
+      break;
+    case PROP_CHILD:
+      g_value_set_object (value, gtk_check_button_get_child (GTK_CHECK_BUTTON (object)));
       break;
     case PROP_ACTION_NAME:
       g_value_set_string (value, gtk_action_helper_get_action_name (priv->action_helper));
@@ -489,6 +503,36 @@ gtk_check_button_focus (GtkWidget         *widget,
 }
 
 static void
+gtk_check_button_real_set_child (GtkCheckButton *self,
+                                 GtkWidget      *child,
+                                 guint           child_type)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
+
+  g_return_if_fail (GTK_IS_CHECK_BUTTON (self));
+
+  g_clear_pointer (&priv->child, gtk_widget_unparent);
+
+  priv->child = child;
+
+  if (priv->child)
+    {
+      gtk_widget_set_parent (priv->child, GTK_WIDGET (self));
+      gtk_widget_insert_after (priv->child, GTK_WIDGET (self), priv->indicator_widget);
+    }
+
+  if (child_type == priv->child_type)
+    return;
+
+  priv->child_type = child_type;
+  if (child_type != LABEL_CHILD)
+    g_object_notify_by_pspec (G_OBJECT (self), props[PROP_LABEL]);
+  else
+    g_object_notify_by_pspec (G_OBJECT (self), props[PROP_CHILD]);
+
+}
+
+static void
 gtk_check_button_real_activate (GtkCheckButton *self)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
@@ -591,6 +635,20 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkCheckButton:child: (attributes org.gtk.Property.get=gtk_check_button_get_child org.gtk.Property.set=gtk_check_button_set_child)
+   *
+   * The child widget.
+   *
+   * Since: 4.8
+   */
+  props[PROP_CHILD] =
+      g_param_spec_object ("child",
+                           P_("Child"),
+                           P_("The child widget"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
@@ -856,7 +914,7 @@ gtk_check_button_set_active (GtkCheckButton *self,
  * gtk_check_button_get_label: (attributes org.gtk.Method.get_property=label)
  * @self: a `GtkCheckButton`
  *
- * Returns the label of the check button.
+ * Returns the label of the check button or `NULL` if [property@CheckButton:child] is set.
  *
  * Returns: (nullable) (transfer none): The label @self shows next
  *   to the indicator. If no label is shown, %NULL will be returned.
@@ -868,8 +926,8 @@ gtk_check_button_get_label (GtkCheckButton *self)
 
   g_return_val_if_fail (GTK_IS_CHECK_BUTTON (self), "");
 
-  if (priv->label_widget)
-    return gtk_label_get_label (GTK_LABEL (priv->label_widget));
+  if (priv->child_type == LABEL_CHILD && priv->child != NULL)
+    return gtk_label_get_label (GTK_LABEL (priv->child));
 
   return NULL;
 }
@@ -891,33 +949,41 @@ gtk_check_button_set_label (GtkCheckButton *self,
                             const char     *label)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
+  GtkWidget *child;
 
   g_return_if_fail (GTK_IS_CHECK_BUTTON (self));
 
+  g_object_freeze_notify (G_OBJECT (self));
+
   if (label == NULL || label[0] == '\0')
     {
-      g_clear_pointer (&priv->label_widget, gtk_widget_unparent);
+      gtk_check_button_real_set_child (self, NULL, LABEL_CHILD);
       gtk_widget_remove_css_class (GTK_WIDGET (self), "text-button");
     }
   else
     {
-      if (!priv->label_widget)
+      if (priv->child_type != LABEL_CHILD || priv->child == NULL)
         {
-          priv->label_widget = gtk_label_new (NULL);
-          gtk_widget_set_hexpand (priv->label_widget, TRUE);
-          gtk_label_set_xalign (GTK_LABEL (priv->label_widget), 0.0f);
-          gtk_label_set_use_underline (GTK_LABEL (priv->label_widget), priv->use_underline);
-          gtk_widget_insert_after (priv->label_widget, GTK_WIDGET (self), priv->indicator_widget);
+          child = gtk_label_new (NULL);
+          gtk_widget_set_hexpand (child, TRUE);
+          gtk_label_set_xalign (GTK_LABEL (child), 0.0f);
+          if (priv->use_underline)
+            gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
+          gtk_check_button_real_set_child (self, GTK_WIDGET (child), LABEL_CHILD);
         }
+      
       gtk_widget_add_css_class (GTK_WIDGET (self), "text-button");
-      gtk_label_set_label (GTK_LABEL (priv->label_widget), label);
+      gtk_label_set_label (GTK_LABEL (priv->child), label);
     }
+
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (self),
                                   GTK_ACCESSIBLE_PROPERTY_LABEL, label,
                                   -1);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_LABEL]);
+
+  g_object_thaw_notify (G_OBJECT (self));
 }
 
 /**
@@ -1045,8 +1111,64 @@ gtk_check_button_set_use_underline (GtkCheckButton *self,
     return;
 
   priv->use_underline = setting;
-  if (priv->label_widget)
-    gtk_label_set_use_underline (GTK_LABEL (priv->label_widget), priv->use_underline);
+  if (priv->child_type == LABEL_CHILD)
+    gtk_label_set_use_underline (GTK_LABEL (priv->child), priv->use_underline);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_USE_UNDERLINE]);
+}
+
+/**
+ * gtk_check_button_set_child: (attributes org.gtk.Method.set_property=child)
+ * @button: a `GtkCheckButton`
+ * @child: (nullable): the child widget
+ *
+ * Sets the child widget of @button.
+ *
+ * Note that by using this API, you take full responsibility for setting
+ * up the proper accessibility label and description information for @button.
+ * Most likely, you'll either set the accessibility label or description
+ * for @button explicitly, or you'll set a labelled-by or described-by
+ * relations from @child to @button.
+ *
+ * Since: 4.8
+ */
+void
+gtk_check_button_set_child (GtkCheckButton *button,
+                            GtkWidget      *child)
+{
+  g_return_if_fail (GTK_IS_CHECK_BUTTON (button));
+  g_return_if_fail (child == NULL || GTK_IS_WIDGET (child));
+
+  g_object_freeze_notify (G_OBJECT (button));
+
+  gtk_widget_remove_css_class (GTK_WIDGET (button), "text-button");
+
+  gtk_check_button_real_set_child (button, child, WIDGET_CHILD);
+
+  g_object_notify_by_pspec (G_OBJECT (button), props[PROP_CHILD]);
+
+  g_object_thaw_notify (G_OBJECT (button));
+}
+
+/**
+ * gtk_check_button_get_child: (attributes org.gtk.Method.get_property=child)
+ * @button: a `GtkCheckButton`
+ *
+ * Gets the child widget of @button or `NULL` if [property@CheckButton:label] is set.
+ *
+ * Returns: (nullable) (transfer none): the child widget of @button
+ *
+ * Since: 4.8
+ */
+GtkWidget *
+gtk_check_button_get_child (GtkCheckButton *button)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (button);
+
+  g_return_val_if_fail (GTK_IS_CHECK_BUTTON (button), NULL);
+
+  if (priv->child_type == WIDGET_CHILD)
+    return priv->child;
+
+  return NULL;
 }
