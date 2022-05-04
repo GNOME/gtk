@@ -196,6 +196,9 @@ void       _gdk_remove_modal_window (GdkSurface *window);
 GdkSurface *_gdk_modal_current       (void);
 gboolean   _gdk_modal_blocked       (GdkSurface *window);
 
+gboolean gdk_win32_ensure_com (void);
+gboolean gdk_win32_ensure_ole (void);
+
 #ifdef G_ENABLE_DEBUG
 void   _gdk_win32_print_paletteentries (const PALETTEENTRY *pep,
                                         const int           nentries);
@@ -251,6 +254,13 @@ void    _gdk_other_api_failed        (const char *where,
 
 #define GDI_CALL(api, arglist) (api arglist ? 1 : (WIN32_GDI_FAILED (#api), 0))
 #define API_CALL(api, arglist) (api arglist ? 1 : (WIN32_API_FAILED (#api), 0))
+
+#define HR_LOG(hr)
+
+#define HR_CHECK_RETURN(hr) { if G_UNLIKELY (FAILED (hr)) return; }
+#define HR_CHECK_RETURN_VAL(hr, val) { if G_UNLIKELY (FAILED (hr)) return val; }
+#define HR_CHECK(hr)
+#define HR_CHECK_GOTO(hr, label) { if G_UNLIKELY (FAILED (hr)) goto label; }
 
 extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM);
 

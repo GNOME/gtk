@@ -36,6 +36,7 @@
 #include "gdkkeysyms.h"
 #include "gdkintl.h"
 #include "gdkprivate-win32.h"
+#include "gdkinput-dmanipulation.h"
 #include "gdkwin32.h"
 
 #include <objbase.h>
@@ -48,6 +49,12 @@
 #include <shlobj.h>
 
 static gboolean gdk_synchronize = FALSE;
+
+/* Whether GDK initialized COM */
+static gboolean co_initialized = FALSE;
+
+/* Whether GDK initialized OLE */
+static gboolean ole_initialized = FALSE;
 
 void
 _gdk_win32_surfaceing_init (void)
@@ -67,6 +74,82 @@ _gdk_win32_surfaceing_init (void)
   GDK_NOTE (EVENTS, g_print ("input_locale: %p\n", _gdk_input_locale));
 
   _gdk_win32_clipdrop_init ();
+
+  gdk_dmanipulation_initialize ();
+}
+
+gboolean
+gdk_win32_ensure_com (void)
+{
+  if (!co_initialized)
+    {
+      /* UI thread should only use STA model. See
+       * -> https://devblogs.microsoft.com/oldnewthing/20080424-00/?p=22603
+       * -> https://devblogs.microsoft.com/oldnewthing/20071018-00/?p=24743
+       */
+      const DWORD flags = COINIT_APARTMENTTHREADED |
+                          COINIT_DISABLE_OLE1DDE;
+      HRESULT hr;
+
+      hr = CoInitializeEx (NULL, flags);
+      if (SUCCEEDED (hr))
+        co_initialized = TRUE;
+      else switch (hr)
+        {
+        case RPC_E_CHANGED_MODE:
+          g_warning ("COM runtime already initialized on the main "
+                     "thread with an incompatible apartment model");
+        break;
+        default:
+          HR_LOG (hr);
+        break;
+        }
+    }
+
+  return co_initialized;
+}
+
+static void
+gdk_win32_finalize_com (void)
+{
+  if (co_initialized)
+    {
+      CoUninitialize ();
+      co_initialized = FALSE;
+    }
+}
+
+gboolean
+gdk_win32_ensure_ole (void)
+{
+  if (!ole_initialized)
+    {
+      HRESULT hr = OleInitialize (NULL);
+      if (SUCCEEDED (hr))
+        ole_initialized = TRUE;
+      else switch (hr)
+        {
+        case RPC_E_CHANGED_MODE:
+          g_warning ("Failed to initialize the OLE2 runtime because "
+                     "the thread has an incompatible apartment model");
+        break;
+        default:
+          HR_LOG (hr);
+        break;
+        }
+    }
+
+  return ole_initialized;
+}
+
+static void
+gdk_win32_finalize_ole (void)
+{
+  if (ole_initialized)
+    {
+      OleUninitialize ();
+      ole_initialized = FALSE;
+    }
 }
 
 void

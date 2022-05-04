@@ -32,6 +32,7 @@
 #include "gdk/gdkcursor.h"
 
 #include <windows.h>
+#include <directmanipulation.h>
 
 #ifdef HAVE_EGL
 # include <epoxy/egl.h>
@@ -338,6 +339,9 @@ struct _GdkWin32Surface
     RECT configured_rect;
   } next_layout;
   gboolean force_recompute_size;
+
+  IDirectManipulationViewport *dmanipulation_viewport_pan;
+  IDirectManipulationViewport *dmanipulation_viewport_zoom;
 
 #ifdef HAVE_EGL
   guint egl_force_redraw_all : 1;
