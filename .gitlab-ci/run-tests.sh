@@ -13,13 +13,15 @@ export G_SLICE=always-malloc
 
 case "${backend}" in
   x11full)
-    xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
-          meson test -C ${builddir} \
-                --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
-                --print-errorlogs \
-                --setup=${backend} \
-                --suite=gtk \
-                --no-suite=gsk-compare-broadway
+    xvfb-run -a -s "-screen 0 1920x1080x24 -noreset" \
+          dbus-run-session \
+              mutter --x11 -- \
+                  meson test -C ${builddir} \
+                        --timeout-multiplier "${MESON_TEST_TIMEOUT_MULTIPLIER}" \
+                        --print-errorlogs \
+                        --setup=${backend} \
+                        --suite=gtk \
+                        --no-suite=gsk-compare-broadway
 
     # Store the exit code for the CI run, but always
     # generate the reports
