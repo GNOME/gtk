@@ -204,7 +204,7 @@ cell_augment (GtkRbTree *tree,
  *   index of the returned row
  * @offset: (out caller-allocates) (optional): stores the offset
  *   in pixels between y and top of cell.
- * @offset: (out caller-allocates) (optional): stores the height
+ * @size: (out caller-allocates) (optional): stores the height
  *   of the cell
  *
  * Gets the Cell that occupies the leftmost position in the row at offset
