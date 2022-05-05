@@ -12,10 +12,15 @@ common_env = [
 ]
 
 if x11_enabled
-  add_test_setup ('x11',
+  add_test_setup ('x11bare',
                   env: common_env + [
                        'GDK_BACKEND=x11',
-                       'TEST_OUTPUT_SUBDIR=x11',
+                       'TEST_OUTPUT_SUBDIR=x11bare',
+                       ])
+  add_test_setup ('x11full',
+                  env: common_env + [
+                       'GDK_BACKEND=x11',
+                       'TEST_OUTPUT_SUBDIR=x11full',
                        ])
 endif
 

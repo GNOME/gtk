@@ -49,7 +49,7 @@ style-check-diff:
     when: always
     reports:
       junit:
-        - "${CI_PROJECT_DIR}/_build/report-x11.xml"
+        - "${CI_PROJECT_DIR}/_build/report-x11full.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
         - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
@@ -90,7 +90,8 @@ fedora-x86_64:
     - meson install -C _build
     - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
-    - .gitlab-ci/run-tests.sh _build x11
+    - .gitlab-ci/run-tests.sh _build x11bare
+    - .gitlab-ci/run-tests.sh _build x11full
     - .gitlab-ci/run-tests.sh _build wayland
     - .gitlab-ci/run-tests.sh _build waylandgles
     - .gitlab-ci/run-tests.sh _build broadway
@@ -107,7 +108,7 @@ release-build:
     - meson ${COMMON_MESON_FLAGS} ${EXTRA_MESON_FLAGS} ${BACKEND_FLAGS} ${FEATURE_FLAGS}
             _build
     - ninja -C _build
-    - .gitlab-ci/run-tests.sh _build x11
+    - .gitlab-ci/run-tests.sh _build x11full
 
 installed-tests:
   extends: .build-fedora-default
