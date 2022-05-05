@@ -100,6 +100,7 @@ snapshot_widget (GtkWidget *widget)
    * to delay the snapshot.
    */
   paintable = gtk_widget_paintable_new (widget);
+  gtk_widget_paintable_set_observed_area (GTK_WIDGET_PAINTABLE (paintable), GTK_WIDGET_PAINTABLE_AREA_RENDERED);
   g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), &texture);
   g_main_loop_run (loop);
 
