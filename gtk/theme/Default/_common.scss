@@ -468,6 +468,15 @@ treeview entry {
  *******************/
 editablelabel > stack > text {
   @include entry(normal);
+
+ > selection {
+    background-color: $backdrop_selected_bg_color;
+    color: transparent;
+    &:focus-within {
+      background-color: $selected_text_bg_color;
+      color: $fg_color;
+    }
+  }
 }
 
 /***********

@@ -302,6 +302,13 @@ gtk_editable_label_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_EDITING:
+      if (g_value_get_boolean (value))
+        gtk_editable_label_start_editing (self);
+      else
+        gtk_editable_label_stop_editing (self, FALSE);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -371,7 +378,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
                           P_("Editing"),
                           P_("Whether the widget is in editing mode"),
                           FALSE,
-                          GTK_PARAM_READABLE);
+                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, properties);
 
