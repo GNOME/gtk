@@ -112,6 +112,7 @@ gtk_magnifier_snapshot (GtkWidget   *widget,
 
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
+
   paintable_width = gdk_paintable_get_intrinsic_width (magnifier->paintable);
   paintable_height = gdk_paintable_get_intrinsic_height (magnifier->paintable);
   if (paintable_width <= 0.0 || paintable_height <= 0.0)
@@ -216,6 +217,8 @@ gtk_magnifier_init (GtkMagnifier *magnifier)
   magnifier->magnification = 1;
   magnifier->resize = FALSE;
   magnifier->paintable = gtk_widget_paintable_new (NULL);
+  gtk_widget_paintable_set_observed_area (GTK_WIDGET_PAINTABLE (magnifier->paintable),
+                                          GTK_WIDGET_PAINTABLE_AREA_RENDERED);
   g_signal_connect_swapped (magnifier->paintable, "invalidate-contents", G_CALLBACK (gtk_widget_queue_draw), magnifier);
   g_signal_connect_swapped (magnifier->paintable, "invalidate-size", G_CALLBACK (gtk_widget_queue_resize), magnifier);
 }
