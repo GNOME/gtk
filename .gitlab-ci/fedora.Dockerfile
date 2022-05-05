@@ -42,6 +42,7 @@ RUN dnf -y install \
     iso-codes \
     itstool \
     json-glib-devel \
+    lcms2-devel \
     lcov \
     libasan \
     libattr-devel \
@@ -71,6 +72,7 @@ RUN dnf -y install \
     mesa-libEGL-devel \
     mesa-libGLES-devel \
     meson \
+    mutter \
     ninja-build \
     pango-devel \
     pcre-devel \
