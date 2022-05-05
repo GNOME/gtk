@@ -484,8 +484,8 @@ gtk_grid_view_get_items_in_rect (GtkListBase        *base,
   if (n_items == 0)
     return result;
 
-  first_column = floor (rect->x / self->column_width);
-  last_column = floor ((rect->x + rect->width) / self->column_width);
+  first_column = fmax (floor (rect->x / self->column_width), 0);
+  last_column = fmin (floor ((rect->x + rect->width) / self->column_width), self->n_columns - 1);
   if (!gtk_grid_view_get_cell_at_y (self, rect->y, &first_row, NULL, NULL))
     first_row = rect->y < 0 ? 0 : n_items - 1;
   if (!gtk_grid_view_get_cell_at_y (self, rect->y + rect->height, &last_row, NULL, NULL))
