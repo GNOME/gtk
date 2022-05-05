@@ -24,6 +24,7 @@
 #include "gtkintl.h"
 #include "gtksnapshot.h"
 #include "gtkrendernodepaintableprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
 /**
@@ -61,6 +62,8 @@ struct _GtkWidgetPaintable
 
   GdkPaintable *current_image;          /* the image that we are presenting */
   GdkPaintable *pending_image;          /* the image that we should be presenting */
+
+  GtkWidgetPaintableArea area;
 };
 
 struct _GtkWidgetPaintableClass
@@ -71,11 +74,27 @@ struct _GtkWidgetPaintableClass
 enum {
   PROP_0,
   PROP_WIDGET,
+  PROP_OBSERVED_AREA,
 
   N_PROPS,
 };
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
+
+static gboolean
+gtk_widget_paintable_compute_bounds (GtkWidgetPaintable *self,
+                                     graphene_rect_t    *bounds)
+{
+  if (self->area == GTK_WIDGET_PAINTABLE_AREA_WIDGET)
+    return gtk_widget_compute_bounds (self->widget, self->widget, bounds);
+  else if (self->widget->priv->render_node)
+    {
+      gsk_render_node_get_bounds (self->widget->priv->render_node, bounds);
+      return TRUE;
+    }
+
+  return FALSE;
+}
 
 static void
 gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
@@ -94,7 +113,7 @@ gtk_widget_paintable_paintable_snapshot (GdkPaintable *paintable,
       gtk_snapshot_push_clip (snapshot,
                               &GRAPHENE_RECT_INIT(0, 0, width, height));
 
-      if (gtk_widget_compute_bounds (self->widget, self->widget, &bounds))
+      if (gtk_widget_paintable_compute_bounds (self, &bounds))
         {
           gtk_snapshot_scale (snapshot, width / bounds.size.width, height / bounds.size.height);
           gtk_snapshot_translate (snapshot, &bounds.origin);
@@ -162,6 +181,10 @@ gtk_widget_paintable_set_property (GObject      *object,
       gtk_widget_paintable_set_widget (self, g_value_get_object (value));
       break;
 
+    case PROP_OBSERVED_AREA:
+      gtk_widget_paintable_set_observed_area (self, g_value_get_enum (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -180,6 +203,10 @@ gtk_widget_paintable_get_property (GObject    *object,
     {
     case PROP_WIDGET:
       g_value_set_object (value, self->widget);
+      break;
+
+    case PROP_OBSERVED_AREA:
+      g_value_set_enum (value, self->area);
       break;
 
     default:
@@ -249,6 +276,14 @@ gtk_widget_paintable_class_init (GtkWidgetPaintableClass *klass)
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  properties[PROP_OBSERVED_AREA] =
+    g_param_spec_enum ("observed-area",
+                       P_("Area"),
+                       P_("Observed area"),
+                       GTK_TYPE_WIDGET_PAINTABLE_AREA,
+                       GTK_WIDGET_PAINTABLE_AREA_WIDGET,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
@@ -256,6 +291,7 @@ static void
 gtk_widget_paintable_init (GtkWidgetPaintable *self)
 {
   self->current_image = gdk_paintable_new_empty (0, 0);
+  self->area = GTK_WIDGET_PAINTABLE_AREA_WIDGET;
 }
 
 /**
@@ -284,12 +320,12 @@ gtk_widget_paintable_snapshot_widget (GtkWidgetPaintable *self)
   if (self->widget == NULL)
     return gdk_paintable_new_empty (0, 0);
 
-  if (!gtk_widget_compute_bounds (self->widget, self->widget, &bounds))
+  if (!gtk_widget_paintable_compute_bounds (self, &bounds))
     return gdk_paintable_new_empty (0, 0);
 
   if (self->widget->priv->render_node == NULL)
     return gdk_paintable_new_empty (bounds.size.width, bounds.size.height);
-  
+
   return gtk_render_node_paintable_new (self->widget->priv->render_node, &bounds);
 }
 
@@ -403,4 +439,33 @@ void
 gtk_widget_paintable_pop_snapshot_count (GtkWidgetPaintable *self)
 {
   self->snapshot_count--;
+}
+
+/**
+ * gtk_widget_paintable_set_observed_area:
+ * @self: a `GtkWidgetPaintable`
+ * @area: the area to observe
+ *
+ * Sets what area the paintable should observe.
+ *
+ * Since: 4.8
+ */
+void
+gtk_widget_paintable_set_observed_area (GtkWidgetPaintable     *self,
+                                        GtkWidgetPaintableArea  area)
+{
+  if (self->area == area)
+    return;
+
+  self->area = area;
+
+  g_object_notify (G_OBJECT (self), "observed-area");
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
+}
+
+GtkWidgetPaintableArea
+gtk_widget_paintable_get_observed_area (GtkWidgetPaintable *self)
+{
+  return self->area;
 }

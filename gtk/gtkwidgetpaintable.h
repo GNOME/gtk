@@ -38,6 +38,27 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_widget_paintable_set_widget         (GtkWidgetPaintable     *self,
                                                          GtkWidget              *widget);
 
+/**
+ * GtkWidgetPaintableArea:
+ * @GTK_WIDGET_PAINTABLE_AREA_WIDGET: Restrict the paintable to the widget bounds
+ * @GTK_WIDGET_PAINTABLE_AREA_RENDERED: Include all render nodes produced by the
+ *   widget in the paintable area
+ *
+ * Used to indicate what area should be captured by a widget paintable.
+ */
+typedef enum {
+  GTK_WIDGET_PAINTABLE_AREA_WIDGET,
+  GTK_WIDGET_PAINTABLE_AREA_RENDERED
+} GtkWidgetPaintableArea;
+
+GDK_AVAILABLE_IN_4_8
+void            gtk_widget_paintable_set_observed_area  (GtkWidgetPaintable     *self,
+                                                         GtkWidgetPaintableArea  area);
+
+GDK_AVAILABLE_IN_4_8
+GtkWidgetPaintableArea
+                gtk_widget_paintable_get_observed_area  (GtkWidgetPaintable     *self);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PAINTABLE_H__ */
