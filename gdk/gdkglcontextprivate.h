@@ -139,6 +139,8 @@ gboolean                gdk_gl_context_has_debug                (GdkGLContext   
 
 gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);
 
+gboolean                gdk_gl_context_has_vertex_half_float    (GdkGLContext    *self) G_GNUC_PURE;
+
 G_END_DECLS
 
 #endif /* __GDK_GL_CONTEXT_PRIVATE_H__ */
