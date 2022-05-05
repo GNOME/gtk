@@ -48,6 +48,7 @@ draw_paintable (GdkPaintable *paintable,
   GskRenderNode *node;
   GdkTexture *texture;
   GskRenderer *renderer;
+  graphene_rect_t bounds;
 
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (paintable,
@@ -62,16 +63,29 @@ draw_paintable (GdkPaintable *paintable,
   if (node == NULL)
     return;
 
+  if (gsk_render_node_get_node_type (node) == GSK_CLIP_NODE)
+    {
+      GskRenderNode *child;
+
+      child = gsk_render_node_ref (gsk_clip_node_get_child (node));
+      gsk_render_node_unref (node);
+      node = child;
+    }
+
   renderer = gtk_native_get_renderer (
                  gtk_widget_get_native (
                      gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (paintable))));
-  texture = gsk_renderer_render_texture (renderer,
-                                         node,
-                                         &GRAPHENE_RECT_INIT (
-                                           0, 0,
-                                           gdk_paintable_get_intrinsic_width (paintable),
-                                           gdk_paintable_get_intrinsic_height (paintable)
-                                         ));
+
+  gsk_render_node_get_bounds (node, &bounds);
+  graphene_rect_union (&bounds,
+                       &GRAPHENE_RECT_INIT (
+                         0, 0,
+                         gdk_paintable_get_intrinsic_width (paintable),
+                         gdk_paintable_get_intrinsic_height (paintable)
+                       ),
+                       &bounds);
+
+  texture = gsk_renderer_render_texture (renderer, node, &bounds);
   g_object_set_data_full (G_OBJECT (texture),
                           "source-render-node",
                           node,
