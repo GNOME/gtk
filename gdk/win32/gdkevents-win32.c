@@ -78,6 +78,8 @@
 #include <tchar.h>
 #include <tpcshrd.h>
 
+#include <stdint.h>
+
 #define GDK_MOD2_MASK (1 << 4)
 
 #ifndef XBUTTON1
@@ -1760,9 +1762,6 @@ gdk_event_translate (MSG *msg,
 
   int i;
 
-  double delta_x, delta_y;
-  GdkScrollDirection direction;
-
   display = gdk_display_get_default ();
   win32_display = GDK_WIN32_DISPLAY (display);
 
@@ -2659,65 +2658,56 @@ gdk_event_translate (MSG *msg,
 
     case WM_MOUSEWHEEL:
     case WM_MOUSEHWHEEL:
+    {
+      int16_t scroll_x = 0;
+      int16_t scroll_y = 0;
+
+      char classname[64];
+
       GDK_NOTE (EVENTS, g_print (" %d", (short) HIWORD (msg->wParam)));
 
-      /* WM_MOUSEWHEEL is delivered to the focus window. Work around
-       * that. Also, the position is in screen coordinates, not client
-       * coordinates as with the button messages. I love the
-       * consistency of Windows.
-       */
+      /* On versions of Windows before Windows 10, the WM_MOUSEWHEEL
+       * is delivered to the window that has keyboard focus, not the
+       * window under the pointer. Work around that.
+       * Also, the position is in screen coordinates, not client
+       * coordinates as with the button messages. */
       point.x = GET_X_LPARAM (msg->lParam);
       point.y = GET_Y_LPARAM (msg->lParam);
 
-      if ((hwnd = WindowFromPoint (point)) == NULL)
-	break;
+      hwnd = WindowFromPoint (point);
+      if (!hwnd)
+        break;
 
-      {
-	char classname[64];
+      /* The synapitics trackpad drivers have this irritating
+         feature where it pops up a window right under the pointer
+         when you scroll. We backtrack and to the toplevel and
+         find the innermost child instead. */
+      if (GetClassNameA (hwnd, classname, sizeof(classname)) &&
+          strcmp (classname, SYNAPSIS_ICON_WINDOW_CLASS) == 0)
+        {
+          HWND hwndc;
 
-	/* The synapitics trackpad drivers have this irritating
-	   feature where it pops up a window right under the pointer
-	   when you scroll. We backtrack and to the toplevel and
-	   find the innermost child instead. */
-	if (GetClassNameA (hwnd, classname, sizeof(classname)) &&
-	    strcmp (classname, SYNAPSIS_ICON_WINDOW_CLASS) == 0)
-	  {
-	    HWND hwndc;
+          /* Find our toplevel window */
+          hwnd = GetAncestor (msg->hwnd, GA_ROOT);
 
-	    /* Find our toplevel window */
-	    hwnd = GetAncestor (msg->hwnd, GA_ROOT);
-
-	    /* Walk back up to the outermost child at the desired point */
-	    do {
-	      ScreenToClient (hwnd, &point);
-	      hwndc = ChildWindowFromPoint (hwnd, point);
-	      ClientToScreen (hwnd, &point);
-	    } while (hwndc != hwnd && (hwnd = hwndc, 1));
-	  }
-      }
+          /* Walk back up to the outermost child at the desired point */
+          do {
+            ScreenToClient (hwnd, &point);
+            hwndc = ChildWindowFromPoint (hwnd, point);
+            ClientToScreen (hwnd, &point);
+          } while (hwndc != hwnd && (hwnd = hwndc, 1));
+        }
 
       msg->hwnd = hwnd;
-      if ((new_window = gdk_win32_handle_table_lookup (msg->hwnd)) == NULL)
-	break;
 
-      if (new_window != window)
-	{
-	  g_set_object (&window, new_window);
-	}
-
-      impl = GDK_WIN32_SURFACE (window);
-      ScreenToClient (msg->hwnd, &point);
-
-      delta_x = delta_y = 0.0;
+      g_set_object (&window, gdk_win32_handle_table_lookup (hwnd));
+      if (!window)
+        break;
 
       if (msg->message == WM_MOUSEWHEEL)
-        delta_y = (double) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (double) WHEEL_DELTA;
+        scroll_y = GET_WHEEL_DELTA_WPARAM (msg->wParam);
       else if (msg->message == WM_MOUSEHWHEEL)
-        delta_x = (double) GET_WHEEL_DELTA_WPARAM (msg->wParam) / (double) WHEEL_DELTA;
-      /* Positive delta scrolls up, not down,
-         see API documentation for WM_MOUSEWHEEL message.
-       */
-      delta_y *= -1.0;
+        scroll_x = GET_WHEEL_DELTA_WPARAM (msg->wParam);
 
       _gdk_device_virtual_set_active (_gdk_device_manager->core_pointer,
                                       _gdk_device_manager->system_pointer);
@@ -2727,34 +2717,17 @@ gdk_event_translate (MSG *msg,
                                     NULL,
                                     _gdk_win32_get_next_tick (msg->time),
                                     build_pointer_event_state (msg),
-                                    delta_x,
-                                    delta_y,
+                                    (double) scroll_x / (double) WHEEL_DELTA,
+                                    (double) -scroll_y / (double) WHEEL_DELTA,
                                     FALSE,
                                     GDK_SCROLL_UNIT_WHEEL);
 
-      /* Append the discrete version too */
-      direction = 0;
-      if (msg->message == WM_MOUSEWHEEL)
-	direction = (((short) HIWORD (msg->wParam)) > 0)
-	              ? GDK_SCROLL_UP
-                      : GDK_SCROLL_DOWN;
-      else if (msg->message == WM_MOUSEHWHEEL)
-	direction = (((short) HIWORD (msg->wParam)) > 0)
-                      ? GDK_SCROLL_RIGHT
-                      : GDK_SCROLL_LEFT;
-
-      event = gdk_scroll_event_new_discrete (window,
-                                             device_manager_win32->core_pointer,
-                                             NULL,
-                                             _gdk_win32_get_next_tick (msg->time),
-                                             build_pointer_event_state (msg),
-                                             direction,
-                                             TRUE);
-
       _gdk_win32_append_event (event);
 
+      *ret_valp = 0;
       return_val = TRUE;
-      break;
+    }
+    break;
 
      case WM_MOUSEACTIVATE:
        {
