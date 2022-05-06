@@ -177,11 +177,11 @@ static gboolean gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *b
                                                            const char         *tagname,
                                                            GtkBuildableParser *parser,
                                                            gpointer           *data);
-static void     gtk_tree_store_buildable_custom_finished  (GtkBuildable       *buildable,
+static void     gtk_tree_store_buildable_custom_tag_end   (GtkBuildable       *buildable,
                                                            GtkBuilder         *builder,
                                                            GObject            *child,
                                                            const char         *tagname,
-                                                           gpointer            user_data);
+                                                           gpointer            parser_data);
 
 static void     gtk_tree_store_move                    (GtkTreeStore           *tree_store,
                                                         GtkTreeIter            *iter,
@@ -275,7 +275,7 @@ void
 gtk_tree_store_buildable_init (GtkBuildableIface *iface)
 {
   iface->custom_tag_start = gtk_tree_store_buildable_custom_tag_start;
-  iface->custom_finished = gtk_tree_store_buildable_custom_finished;
+  iface->custom_tag_end = gtk_tree_store_buildable_custom_tag_end;
 }
 
 static void
@@ -390,10 +390,10 @@ gtk_tree_store_newv (int    n_columns,
  * @tree_store: A `GtkTreeStore`
  * @n_columns: Number of columns for the tree store
  * @types: (array length=n_columns): An array of `GType` types, one for each column
- * 
- * This function is meant primarily for `GObjects` that inherit from 
- * `GtkTreeStore`, and should only be used when constructing a new 
- * `GtkTreeStore`.  It will not function after a row has been added, 
+ *
+ * This function is meant primarily for `GObjects` that inherit from
+ * `GtkTreeStore`, and should only be used when constructing a new
+ * `GtkTreeStore`.  It will not function after a row has been added,
  * or a method on the `GtkTreeModel` interface is called.
  **/
 void
@@ -924,7 +924,7 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
-  
+
   retval = TRUE;
   if (converted)
     g_value_unset (&real_value);
@@ -1197,7 +1197,7 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
  * gtk_tree_store_remove:
  * @tree_store: A `GtkTreeStore`
  * @iter: A valid `GtkTreeIter`
- * 
+ *
  * Removes @iter from @tree_store.  After being removed, @iter is set to the
  * next valid row at that level, or invalidated if it previously pointed to the
  * last one.
@@ -1657,7 +1657,7 @@ gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
  * @tree_store: A `GtkTreeStore`
  * @iter: (out): An unset `GtkTreeIter` to set to the prepended row
  * @parent: (nullable): A valid `GtkTreeIter`
- * 
+ *
  * Prepends a new row to @tree_store.  If @parent is non-%NULL, then it will prepend
  * the new row before the first child of @parent, otherwise it will prepend a row
  * to the top level.  @iter will be changed to point to this new row.  The row
@@ -1687,7 +1687,7 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
   if (parent_node->children == NULL)
     {
       GtkTreePath *path;
-      
+
       iter->stamp = priv->stamp;
       iter->user_data = g_node_new (NULL);
 
@@ -1716,7 +1716,7 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
  * @tree_store: A `GtkTreeStore`
  * @iter: (out): An unset `GtkTreeIter` to set to the appended row
  * @parent: (nullable): A valid `GtkTreeIter`
- * 
+ *
  * Appends a new row to @tree_store.  If @parent is non-%NULL, then it will append the
  * new row after the last child of @parent, otherwise it will append a row to
  * the top level.  @iter will be changed to point to this new row.  The row will
@@ -1775,10 +1775,10 @@ gtk_tree_store_append (GtkTreeStore *tree_store,
  * @tree_store: A `GtkTreeStore`
  * @iter: A valid `GtkTreeIter`
  * @descendant: A valid `GtkTreeIter`
- * 
+ *
  * Returns %TRUE if @iter is an ancestor of @descendant.  That is, @iter is the
  * parent (or grandparent or great-grandparent) of @descendant.
- * 
+ *
  * Returns: %TRUE, if @iter is an ancestor of @descendant
  **/
 gboolean
@@ -1799,10 +1799,10 @@ gtk_tree_store_is_ancestor (GtkTreeStore *tree_store,
  * gtk_tree_store_iter_depth:
  * @tree_store: A `GtkTreeStore`
  * @iter: A valid `GtkTreeIter`
- * 
+ *
  * Returns the depth of @iter.  This will be 0 for anything on the root level, 1
  * for anything down a level, etc.
- * 
+ *
  * Returns: The depth of @iter
  **/
 int
@@ -1870,7 +1870,7 @@ gtk_tree_store_increment_stamp (GtkTreeStore *tree_store)
 /**
  * gtk_tree_store_clear:
  * @tree_store: a `GtkTreeStore`
- * 
+ *
  * Removes all rows from @tree_store
  **/
 void
@@ -1908,7 +1908,7 @@ gtk_tree_store_iter_is_valid_helper (GtkTreeIter *iter,
 
 /**
  * gtk_tree_store_iter_is_valid:
- * @tree_store: a tree store 
+ * @tree_store: a tree store
  * @iter: the iterator to check
  *
  * Checks if the given iter is a valid iter for this `GtkTreeStore`.
@@ -1939,7 +1939,7 @@ static gboolean real_gtk_tree_store_row_draggable (GtkTreeDragSource *drag_sourc
 {
   return TRUE;
 }
-               
+
 static gboolean
 gtk_tree_store_drag_data_delete (GtkTreeDragSource *drag_source,
                                  GtkTreePath       *path)
@@ -2159,7 +2159,7 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
   GtkTreePath *src_path = NULL;
   GtkTreePath *tmp = NULL;
   gboolean retval = FALSE;
-  
+
   /* don't accept drops if the tree has been sorted */
   if (GTK_TREE_STORE_IS_SORTED (drag_dest))
     return FALSE;
@@ -2168,7 +2168,7 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
 				   &src_model,
 				   &src_path))
     goto out;
-    
+
   /* can only drag to ourselves */
   if (src_model != GTK_TREE_MODEL (drag_dest))
     goto out;
@@ -2186,13 +2186,13 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
       {
 	tmp = gtk_tree_path_copy (dest_path);
 	gtk_tree_path_up (tmp);
-	
+
 	if (!gtk_tree_store_get_iter (GTK_TREE_MODEL (drag_dest),
 				      &iter, tmp))
 	  goto out;
       }
   }
-  
+
   /* Can otherwise drop anywhere. */
   retval = TRUE;
 
@@ -2551,7 +2551,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 
   if (depth)
     {
-      gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store), 
+      gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store),
 			       &parent_iter, path);
 
       parent = G_NODE (parent_iter.user_data);
@@ -2570,7 +2570,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
       if (gtk_tree_path_get_indices (pos_path)[gtk_tree_path_get_depth (pos_path) - 1] > 0)
         {
           gtk_tree_path_prev (pos_path);
-          if (gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store), 
+          if (gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store),
 				       &dst_a, pos_path))
             a = G_NODE (dst_a.user_data);
           else
@@ -2668,7 +2668,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
       parent->children = node;
 
       node->next = tmp;
-      if (tmp) 
+      if (tmp)
 	tmp->prev = node;
 
       handle_b = FALSE;
@@ -2761,7 +2761,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 
   if (depth)
     {
-      tmppath = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), 
+      tmppath = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store),
 					 &parent_iter);
       gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store),
 				     tmppath, &parent_iter, order);
@@ -3316,22 +3316,160 @@ validate_gnode (GNode* node)
  * </columns>
  */
 typedef struct {
+  gboolean translatable;
+  char *context;
+  int id;
+} ColInfo;
+
+typedef struct {
   GtkBuilder *builder;
   GObject *object;
-  GSList *items;
-} GSListSubParserData;
+  GSList *column_type_names;
+  GType *column_types;
+  GValue *values;
+  int *colids;
+  ColInfo **columns;
+  int last_row;
+  int n_columns;
+  int row_column;
+  gboolean is_data;
+  const char *domain;
+  GList *parents;
+  gboolean row_is_open;
+} SubParserData;
 
 static void
-tree_model_start_element (GtkBuildableParseContext  *context,
+append_current_row (SubParserData *data)
+{
+  GtkTreeIter *parent;
+  GtkTreeIter iter;
+  int i;
+
+  if (data->parents)
+    parent = data->parents->data;
+  else
+    parent = NULL;
+
+  gtk_tree_store_insert_with_valuesv (GTK_TREE_STORE (data->object),
+                                      &iter,
+                                      parent,
+                                      -1,
+                                      data->colids,
+                                      data->values,
+                                      data->row_column);
+
+  data->parents = g_list_prepend (data->parents, gtk_tree_iter_copy (&iter));
+
+  for (i = 0; i < data->row_column; i++)
+    {
+      ColInfo *info = data->columns[i];
+      g_free (info->context);
+      g_slice_free (ColInfo, info);
+      data->columns[i] = NULL;
+      g_value_unset (&data->values[i]);
+    }
+  g_free (data->values);
+  data->values = g_new0 (GValue, data->n_columns);
+  data->last_row++;
+  data->row_column = 0;
+  data->row_is_open = FALSE;
+}
+
+static void
+tree_store_start_element (GtkBuildableParseContext  *context,
                           const char                *element_name,
                           const char               **names,
                           const char               **values,
                           gpointer                   user_data,
                           GError                   **error)
 {
-  GSListSubParserData *data = (GSListSubParserData*)user_data;
+  SubParserData *data = (SubParserData*)user_data;
 
-  if (strcmp (element_name, "columns") == 0)
+  if (strcmp (element_name, "col") == 0)
+    {
+      int id = -1;
+      const char *id_str;
+      const char *msg_context = NULL;
+      gboolean translatable = FALSE;
+      ColInfo *info;
+      GValue val = G_VALUE_INIT;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "row", error))
+        return;
+
+      if (!data->row_is_open)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_TAG,
+                       "Can't use <col> here");
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      if (data->row_column >= data->n_columns)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Too many columns, maximum is %d", data->n_columns - 1);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "id", &id_str,
+                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &msg_context,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+     if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_INT, id_str, &val, error))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      id = g_value_get_int (&val);
+      if (id < 0 || id >= data->n_columns)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "id value %d out of range", id);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      info = g_slice_new0 (ColInfo);
+      info->translatable = translatable;
+      info->context = g_strdup (msg_context);
+      info->id = id;
+
+      data->colids[data->row_column] = id;
+      data->columns[data->row_column] = info;
+      data->row_column++;
+      data->is_data = TRUE;
+    }
+  else if (strcmp (element_name, "row") == 0)
+    {
+      if (!_gtk_builder_check_parents (data->builder, context, error, "data", "row", NULL))
+        return;
+
+      if (data->row_is_open)
+        append_current_row (data);
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+
+      data->row_is_open = TRUE;
+    }
+  else if (strcmp (element_name, "columns") == 0 ||
+           strcmp (element_name, "data") == 0)
     {
       if (!_gtk_builder_check_parent (data->builder, context, "object", error))
         return;
@@ -3340,7 +3478,6 @@ tree_model_start_element (GtkBuildableParseContext  *context,
                                         G_MARKUP_COLLECT_INVALID, NULL, NULL,
                                         G_MARKUP_COLLECT_INVALID))
         _gtk_builder_prefix_error (data->builder, context, error);
-
     }
   else if (strcmp (element_name, "column") == 0)
     {
@@ -3357,8 +3494,9 @@ tree_model_start_element (GtkBuildableParseContext  *context,
           return;
         }
 
-      data->items = g_slist_prepend (data->items, g_strdup (type));
+      data->column_type_names = g_slist_prepend (data->column_type_names, g_strdup (type));
     }
+
   else
     {
       _gtk_builder_error_unhandled_tag (data->builder, context,
@@ -3368,27 +3506,38 @@ tree_model_start_element (GtkBuildableParseContext  *context,
 }
 
 static void
-tree_model_end_element (GtkBuildableParseContext  *context,
+tree_store_end_element (GtkBuildableParseContext  *context,
                         const char                *element_name,
                         gpointer                   user_data,
                         GError                   **error)
 {
-  GSListSubParserData *data = (GSListSubParserData*)user_data;
+  SubParserData *data = (SubParserData*)user_data;
 
   g_assert(data->builder);
 
-  if (strcmp (element_name, "columns") == 0)
+  if (strcmp (element_name, "row") == 0)
     {
+      GtkTreeIter *parent;
+
+      if (data->row_column > 0)
+        append_current_row (data);
+
+      parent = data->parents->data;
+      data->parents = g_list_remove (data->parents, parent);
+      gtk_tree_iter_free (parent);
+    }
+  else if (strcmp (element_name, "columns") == 0)
+    {
+      GType *column_types;
       GSList *l;
-      GType *types;
       int i;
       GType type;
 
-      data = (GSListSubParserData*)user_data;
-      data->items = g_slist_reverse (data->items);
-      types = g_new0 (GType, g_slist_length (data->items));
+      data = (SubParserData*)user_data;
+      data->column_type_names = g_slist_reverse (data->column_type_names);
+      column_types = g_new0 (GType, g_slist_length (data->column_type_names));
 
-      for (l = data->items, i = 0; l; l = l->next, i++)
+      for (l = data->column_type_names, i = 0; l; l = l->next, i++)
         {
           type = gtk_builder_get_type_from_name (data->builder, l->data);
           if (type == G_TYPE_INVALID)
@@ -3398,23 +3547,72 @@ tree_model_end_element (GtkBuildableParseContext  *context,
                          gtk_buildable_get_buildable_id (GTK_BUILDABLE (data->object)));
               continue;
             }
-          types[i] = type;
+          column_types[i] = type;
 
           g_free (l->data);
         }
 
-      gtk_tree_store_set_column_types (GTK_TREE_STORE (data->object), i, types);
+      gtk_tree_store_set_column_types (GTK_TREE_STORE (data->object), i, column_types);
 
-      g_free (types);
+      g_free (column_types);
+    }
+  else if (strcmp (element_name, "col") == 0)
+    {
+      data->is_data = FALSE;
     }
 }
 
-static const GtkBuildableParser tree_model_parser =
-  {
-    tree_model_start_element,
-    tree_model_end_element
-  };
+static void
+tree_store_text (GtkBuildableParseContext  *context,
+                 const char                *text,
+                 gsize                      text_len,
+                 gpointer                   user_data,
+                 GError                   **error)
+{
+  SubParserData *data = (SubParserData*)user_data;
+  int i;
+  char *string;
+  ColInfo *info;
 
+  if (!data->is_data)
+    return;
+
+  i = data->row_column - 1;
+  info = data->columns[i];
+
+  string = g_strndup (text, text_len);
+  if (info->translatable && text_len)
+    {
+      char *translated;
+
+      /* FIXME: This will not use the domain set in the .ui file,
+       * since the parser is not telling the builder about the domain.
+       * However, it will work for gtk_builder_set_translation_domain() calls.
+       */
+      translated = g_strdup (_gtk_builder_parser_translate (data->domain,
+                                                            info->context,
+                                                            string));
+      g_free (string);
+      string = translated;
+    }
+
+  if (!gtk_builder_value_from_string_type (data->builder,
+                                           data->column_types[info->id],
+                                           string,
+                                           &data->values[i],
+                                           error))
+    {
+      _gtk_builder_prefix_error (data->builder, context, error);
+    }
+  g_free (string);
+}
+
+static const GtkBuildableParser tree_store_parser =
+{
+  tree_store_start_element,
+  tree_store_end_element,
+  tree_store_text
+};
 
 static gboolean
 gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *buildable,
@@ -3424,19 +3622,41 @@ gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *buildable,
                                            GtkBuildableParser *parser,
                                            gpointer           *parser_data)
 {
-  GSListSubParserData *data;
+  SubParserData *data;
 
   if (child)
     return FALSE;
 
   if (strcmp (tagname, "columns") == 0)
     {
-      data = g_slice_new0 (GSListSubParserData);
+      data = g_slice_new0 (SubParserData);
       data->builder = builder;
-      data->items = NULL;
+      data->column_type_names = NULL;
       data->object = G_OBJECT (buildable);
 
-      *parser = tree_model_parser;
+      *parser = tree_store_parser;
+      *parser_data = data;
+
+      return TRUE;
+    }
+  else if (strcmp (tagname, "data") == 0)
+    {
+      int n_columns = gtk_tree_store_get_n_columns (GTK_TREE_MODEL (buildable));
+      if (n_columns == 0)
+        g_error ("Cannot append data to an empty model");
+
+      data = g_slice_new0 (SubParserData);
+      data->builder = builder;
+      data->object = G_OBJECT (buildable);
+      data->values = g_new0 (GValue, n_columns);
+      data->colids = g_new0 (int, n_columns);
+      data->columns = g_new0 (ColInfo *, n_columns);
+      data->column_types = GTK_TREE_STORE (buildable)->priv->column_headers;
+      data->n_columns = n_columns;
+      data->last_row = 0;
+      data->domain = gtk_builder_get_translation_domain (builder);
+
+      *parser = tree_store_parser;
       *parser_data = data;
 
       return TRUE;
@@ -3446,19 +3666,34 @@ gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *buildable,
 }
 
 static void
-gtk_tree_store_buildable_custom_finished (GtkBuildable *buildable,
-                                          GtkBuilder   *builder,
-                                          GObject      *child,
-                                          const char   *tagname,
-                                          gpointer      user_data)
+gtk_tree_store_buildable_custom_tag_end (GtkBuildable *buildable,
+                                         GtkBuilder   *builder,
+                                         GObject      *child,
+                                         const char   *tagname,
+                                         gpointer      parser_data)
 {
-  GSListSubParserData *data;
+  SubParserData *data = (SubParserData*)parser_data;
 
-  if (strcmp (tagname, "columns"))
-    return;
-
-  data = (GSListSubParserData*)user_data;
-
-  g_slist_free (data->items);
-  g_slice_free (GSListSubParserData, data);
+  if (strcmp (tagname, "columns") == 0)
+    {
+      g_slist_free (data->column_type_names);
+      g_slice_free (SubParserData, data);
+    }
+  else if (strcmp (tagname, "data") == 0)
+    {
+      int i;
+      for (i = 0; i < data->n_columns; i++)
+        {
+          ColInfo *info = data->columns[i];
+          if (info)
+            {
+              g_free (info->context);
+              g_slice_free (ColInfo, info);
+            }
+        }
+      g_free (data->colids);
+      g_free (data->columns);
+      g_free (data->values);
+      g_slice_free (SubParserData, data);
+    }
 }

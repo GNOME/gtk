@@ -278,6 +278,10 @@ gboolean _gtk_builder_check_parent        (GtkBuilder                *builder,
                                            GtkBuildableParseContext  *context,
                                            const char                *parent_name,
                                            GError                   **error);
+gboolean _gtk_builder_check_parents       (GtkBuilder                *builder,
+                                           GtkBuildableParseContext  *context,
+                                           GError                   **error,
+                                           ...);
 GObject *gtk_builder_lookup_object        (GtkBuilder                *builder,
                                            const char                *name,
                                            int                        line,

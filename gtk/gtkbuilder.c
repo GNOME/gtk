@@ -2997,20 +2997,46 @@ _gtk_builder_check_parent (GtkBuilder                *builder,
                            const char                *parent_name,
                            GError                   **error)
 {
+  return _gtk_builder_check_parents (builder, context, error, parent_name, NULL);
+}
+
+gboolean
+_gtk_builder_check_parents (GtkBuilder                *builder,
+                            GtkBuildableParseContext  *context,
+                            GError                   **error,
+                            ...)
+{
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   GPtrArray *stack;
   int line, col;
   const char *parent;
   const char *element;
+  va_list args;
+  gboolean in_template;
 
   stack = gtk_buildable_parse_context_get_element_stack (context);
 
   element = g_ptr_array_index (stack, stack->len - 1);
   parent = stack->len > 1 ? g_ptr_array_index (stack, stack->len - 2) : "";
 
-  if (g_str_equal (parent_name, parent) ||
-      (g_str_equal (parent_name, "object") && g_str_equal (parent, "template")))
-    return TRUE;
+  in_template = g_str_equal (parent, "template");
+
+  va_start (args, error);
+
+  while (1) {
+    char *parent_name = va_arg (args, char *);
+
+    if (parent_name == NULL)
+      break;
+
+    if (g_str_equal (parent_name, parent) || (in_template && g_str_equal (parent_name, "object")))
+      {
+        va_end (args);
+        return TRUE;
+      }
+  }
+
+  va_end (args);
 
   gtk_buildable_parse_context_get_position (context, &line, &col);
   g_set_error (error,
