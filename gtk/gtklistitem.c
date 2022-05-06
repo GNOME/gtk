@@ -247,6 +247,22 @@ gtk_list_item_new (void)
   return g_object_new (GTK_TYPE_LIST_ITEM, NULL);
 }
 
+void
+gtk_list_item_do_notify (GtkListItem *list_item,
+                         gboolean notify_item,
+                         gboolean notify_position,
+                         gboolean notify_selected)
+{
+  GObject *object = G_OBJECT (list_item);
+
+  if (notify_item)
+    g_object_notify_by_pspec (object, properties[PROP_ITEM]);
+  if (notify_position)
+    g_object_notify_by_pspec (object, properties[PROP_POSITION]);
+  if (notify_selected)
+    g_object_notify_by_pspec (object, properties[PROP_SELECTED]);
+}
+
 /**
  * gtk_list_item_get_item: (attributes org.gtk.Method.get_property=item)
  * @self: a `GtkListItem`
