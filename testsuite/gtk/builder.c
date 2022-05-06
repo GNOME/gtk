@@ -661,9 +661,34 @@ test_tree_store (void)
     "    </data>"
     "  </object>"
     "</interface>";
+  const char buffer4[] =
+    "<interface>"
+    "  <object class=\"GtkTreeStore\" id=\"treestore1\">"
+    "    <columns>"
+    "      <column type=\"gchararray\"/>"
+    "      <column type=\"gchararray\"/>"
+    "      <column type=\"gint\"/>"
+    "    </columns>"
+    "    <data>"
+    "      <row>"
+    "        <col id=\"1\" context=\"foo\">Doe</col>"
+    "        <col id=\"0\" translatable=\"yes\">John</col>"
+    "        <col id=\"2\" comments=\"foobar\">25</col>"
+    "        <row>"
+    "          <col id=\"2\">50</col>"
+    "          <col id=\"1\">Dole</col>"
+    "          <col id=\"0\">Johan</col>"
+    "        </row>"
+    "      </row>"
+    "      <row>"
+    "        <col id=\"2\">19</col>"
+    "      </row>"
+    "    </data>"
+    "  </object>"
+    "</interface>";
   GtkBuilder *builder;
   GObject *store;
-  GtkTreeIter iter;
+  GtkTreeIter iter, parent;
   char *surname, *lastname;
   int age;
 
@@ -741,6 +766,54 @@ test_tree_store (void)
   g_assert_cmpstr (lastname, ==, "Dole");
   g_free (lastname);
   g_assert_cmpint (age, ==, 50);
+  g_assert_true (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
+
+  gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                      0, &surname,
+                      1, &lastname,
+                      2, &age,
+                      -1);
+  g_assert_null (surname);
+  g_assert_null (lastname);
+  g_assert_cmpint (age, ==, 19);
+  g_assert_false (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
+
+  g_object_unref (builder);
+
+  builder = builder_new_from_string (buffer4, -1, NULL);
+  store = gtk_builder_get_object (builder, "treestore1");
+  g_assert_true (GTK_IS_TREE_STORE (store));
+  g_assert_cmpint (gtk_tree_model_get_n_columns (GTK_TREE_MODEL (store)), ==, 3);
+  g_assert_cmpint (gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), 0), ==, G_TYPE_STRING);
+  g_assert_cmpint (gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), 1), ==, G_TYPE_STRING);
+  g_assert_cmpint (gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), 2), ==, G_TYPE_INT);
+
+  g_assert_true (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter));
+  gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                      0, &surname,
+                      1, &lastname,
+                      2, &age,
+                      -1);
+  g_assert_cmpstr (surname, ==, "John");
+  g_free (surname);
+  g_assert_cmpstr (lastname, ==, "Doe");
+  g_free (lastname);
+  g_assert_cmpint (age, ==, 25);
+  parent = iter;
+  g_assert_true (gtk_tree_model_iter_children (GTK_TREE_MODEL (store), &iter, &parent));
+
+  gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,
+                      0, &surname,
+                      1, &lastname,
+                      2, &age,
+                      -1);
+  g_assert_cmpstr (surname, ==, "Johan");
+  g_free (surname);
+  g_assert_cmpstr (lastname, ==, "Dole");
+  g_free (lastname);
+  g_assert_cmpint (age, ==, 50);
+  g_assert_false (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
+  iter = parent;
   g_assert_true (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter));
 
   gtk_tree_model_get (GTK_TREE_MODEL (store), &iter,

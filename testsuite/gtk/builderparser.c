@@ -51,7 +51,7 @@ test_file (const char *filename, GString *string)
     {
       g_string_append_printf (string, "ERROR: %s %d\n%s\n",
                               g_quark_to_string (error->domain),
-                              error->code, 
+                              error->code,
                               error->message);
       g_error_free (error);
     }
@@ -66,12 +66,12 @@ get_expected_filename (const char *filename)
 
   f = g_strdup (filename);
   p = strstr (f, ".ui");
-  if (p) 
+  if (p)
     *p = 0;
   expected = g_strconcat (f, ".expected", NULL);
-  
+
   g_free (f);
-  
+
   return expected;
 }
 
