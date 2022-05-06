@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  *
  * gdkglcontext.c: GL context abstraction
- * 
+ *
  * Copyright © 2014  Emmanuele Bassi
  *
  * This library is free software; you can redistribute it and/or
@@ -258,178 +258,185 @@ gdk_gl_context_get_property (GObject    *object,
 #define N_EGL_ATTRS     16
 
 static GdkGLAPI
-gdk_gl_context_real_realize (GdkGLContext  *context,
-                             GError       **error)
+gdk_gl_context_realize_egl (GdkGLContext  *context,
+                            GError       **error)
 {
-#ifdef HAVE_EGL
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
 
-  if (egl_display)
+  EGLConfig egl_config;
+  GdkGLContext *share = gdk_display_get_gl_context (display);
+  GdkGLContextPrivate *share_priv = gdk_gl_context_get_instance_private (share);
+  EGLContext ctx;
+  EGLint context_attribs[N_EGL_ATTRS];
+  int major, minor, flags;
+  gboolean debug_bit, forward_bit, legacy_bit;
+  GdkGLAPI api;
+  int i = 0;
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+
+  if (share != NULL)
+    gdk_gl_context_get_required_version (share, &major, &minor);
+  else
+    gdk_gl_context_get_required_version (context, &major, &minor);
+
+  debug_bit = gdk_gl_context_get_debug_enabled (context);
+  forward_bit = gdk_gl_context_get_forward_compatible (context);
+  legacy_bit = GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY) ||
+    (share != NULL && gdk_gl_context_is_legacy (share));
+
+  if (display->have_egl_no_config_context)
+    egl_config = NULL;
+  else
+    egl_config = gdk_display_get_egl_config (display);
+
+  flags = 0;
+
+  if (debug_bit)
+    flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
+  if (forward_bit)
+    flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+
+  if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL) &&
+      eglBindAPI (EGL_OPENGL_API))
     {
-      EGLConfig egl_config;
-      GdkGLContext *share = gdk_display_get_gl_context (display);
-      GdkGLContextPrivate *share_priv = gdk_gl_context_get_instance_private (share);
-      EGLContext ctx;
-      EGLint context_attribs[N_EGL_ATTRS];
-      int major, minor, flags;
-      gboolean debug_bit, forward_bit, legacy_bit;
-      GdkGLAPI api;
-      int i = 0;
-      G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
+      /* We want a core profile, unless in legacy mode */
+      context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+      context_attribs[i++] = legacy_bit
+        ? EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR
+        : EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
 
-      if (share != NULL)
-        gdk_gl_context_get_required_version (share, &major, &minor);
+      /* Specify the version */
+      context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
+      context_attribs[i++] = legacy_bit ? 3 : major;
+      context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
+      context_attribs[i++] = legacy_bit ? 0 : minor;
+      api = GDK_GL_API_GL;
+    }
+  else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL) &&
+           eglBindAPI (EGL_OPENGL_ES_API))
+    {
+      context_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
+      if (major == 3)
+        context_attribs[i++] = 3;
       else
-        gdk_gl_context_get_required_version (context, &major, &minor);
+        context_attribs[i++] = 2;
+      api = GDK_GL_API_GLES;
+    }
+  else
+    {
+      g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("The EGL implementation does not support any allowed APIs"));
+      return 0;
+    }
 
-      debug_bit = gdk_gl_context_get_debug_enabled (context);
-      forward_bit = gdk_gl_context_get_forward_compatible (context);
-      legacy_bit = GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY) ||
-                   (share != NULL && gdk_gl_context_is_legacy (share));
+  /* Specify the flags */
+  context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
+  context_attribs[i++] = flags;
 
-      if (display->have_egl_no_config_context)
-        egl_config = NULL;
-      else
-        egl_config = gdk_display_get_egl_config (display);
+  context_attribs[i++] = EGL_NONE;
+  g_assert (i < N_EGL_ATTRS);
 
-      flags = 0;
+  GDK_DISPLAY_NOTE (display, OPENGL,
+                    g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
+                               major, minor,
+                               debug_bit ? "yes" : "no",
+                               forward_bit ? "yes" : "no",
+                               legacy_bit ? "yes" : "no",
+                               api == GDK_GL_API_GLES ? "yes" : "no"));
 
-      if (debug_bit)
-        flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
-      if (forward_bit)
-        flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+  ctx = eglCreateContext (egl_display,
+                          egl_config,
+                          share != NULL ? share_priv->egl_context
+                          : EGL_NO_CONTEXT,
+                          context_attribs);
 
-      if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL) &&
-          eglBindAPI (EGL_OPENGL_API))
-        {
-          /* We want a core profile, unless in legacy mode */
-          context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
-          context_attribs[i++] = legacy_bit
-                               ? EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR
-                               : EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
-
-          /* Specify the version */
-          context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
-          context_attribs[i++] = legacy_bit ? 3 : major;
-          context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
-          context_attribs[i++] = legacy_bit ? 0 : minor;
-          api = GDK_GL_API_GL;
-        }
-      else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL) &&
-               eglBindAPI (EGL_OPENGL_ES_API))
-        {
-          context_attribs[i++] = EGL_CONTEXT_CLIENT_VERSION;
-          if (major == 3)
-            context_attribs[i++] = 3;
-          else
-            context_attribs[i++] = 2;
-          api = GDK_GL_API_GLES;
-        }
-      else
-        {
-          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("The EGL implementation does not support any allowed APIs"));
-          return 0;
-        }
-
-      /* Specify the flags */
+  /* If context creation failed without the ES bit, let's try again with it */
+  if (ctx == NULL && gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL) && eglBindAPI (EGL_OPENGL_ES_API))
+    {
+      i = 0;
+      context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
+      context_attribs[i++] = 2;
+      context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
+      context_attribs[i++] = 0;
       context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
-      context_attribs[i++] = flags;
-
+      context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
       context_attribs[i++] = EGL_NONE;
       g_assert (i < N_EGL_ATTRS);
 
-      GDK_DISPLAY_NOTE (display, OPENGL,
-                g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
-                                   major, minor,
-                                   debug_bit ? "yes" : "no",
-                                   forward_bit ? "yes" : "no",
-                                   legacy_bit ? "yes" : "no",
-                                   api == GDK_GL_API_GLES ? "yes" : "no"));
+      legacy_bit = FALSE;
+      api = GDK_GL_API_GLES;
 
+      GDK_DISPLAY_NOTE (display, OPENGL,
+                        g_message ("eglCreateContext failed, switching to OpenGL ES"));
       ctx = eglCreateContext (egl_display,
                               egl_config,
                               share != NULL ? share_priv->egl_context
-                                            : EGL_NO_CONTEXT,
+                              : EGL_NO_CONTEXT,
                               context_attribs);
-
-      /* If context creation failed without the ES bit, let's try again with it */
-      if (ctx == NULL && gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL) && eglBindAPI (EGL_OPENGL_ES_API))
-        {
-          i = 0;
-          context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
-          context_attribs[i++] = 2;
-          context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
-          context_attribs[i++] = 0;
-          context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
-          context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
-          context_attribs[i++] = EGL_NONE;
-          g_assert (i < N_EGL_ATTRS);
-
-          legacy_bit = FALSE;
-          api = GDK_GL_API_GLES;
-
-          GDK_DISPLAY_NOTE (display, OPENGL,
-                    g_message ("eglCreateContext failed, switching to OpenGL ES"));
-          ctx = eglCreateContext (egl_display,
-                                  egl_config,
-                                  share != NULL ? share_priv->egl_context
-                                                : EGL_NO_CONTEXT,
-                                  context_attribs);
-        }
-
-      /* If context creation failed without the legacy bit, let's try again with it */
-      if (ctx == NULL && gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL) && eglBindAPI (EGL_OPENGL_API))
-        {
-          i = 0;
-          context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
-          context_attribs[i++] = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR;
-          context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
-          context_attribs[i++] = 3;
-          context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
-          context_attribs[i++] = 0;
-          context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
-          context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
-          context_attribs[i++] = EGL_NONE;
-          g_assert (i < N_EGL_ATTRS);
-
-          legacy_bit = TRUE;
-          api = GDK_GL_API_GL;
-
-          GDK_DISPLAY_NOTE (display, OPENGL,
-                    g_message ("eglCreateContext failed, switching to legacy"));
-          ctx = eglCreateContext (egl_display,
-                                  egl_config,
-                                  share != NULL ? share_priv->egl_context
-                                                : EGL_NO_CONTEXT,
-                                  context_attribs);
-        }
-
-      if (ctx == NULL)
-        {
-          g_set_error_literal (error, GDK_GL_ERROR,
-                               GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("Unable to create a GL context"));
-          return 0;
-        }
-
-      GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Created EGL context[%p]", ctx));
-
-      priv->egl_context = ctx;
-
-      gdk_gl_context_set_is_legacy (context, legacy_bit);
-
-      if (epoxy_has_egl_extension (egl_display, "EGL_KHR_swap_buffers_with_damage"))
-        priv->eglSwapBuffersWithDamage = (gpointer)epoxy_eglGetProcAddress ("eglSwapBuffersWithDamageKHR");
-      else if (epoxy_has_egl_extension (egl_display, "EGL_EXT_swap_buffers_with_damage"))
-        priv->eglSwapBuffersWithDamage = (gpointer)epoxy_eglGetProcAddress ("eglSwapBuffersWithDamageEXT");
-
-      gdk_profiler_end_mark (start_time, "realize GdkWaylandGLContext", NULL);
-
-      return api;
     }
+
+  /* If context creation failed without the legacy bit, let's try again with it */
+  if (ctx == NULL && gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL) && eglBindAPI (EGL_OPENGL_API))
+    {
+      i = 0;
+      context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+      context_attribs[i++] = EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT_KHR;
+      context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION;
+      context_attribs[i++] = 3;
+      context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION;
+      context_attribs[i++] = 0;
+      context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
+      context_attribs[i++] = flags & ~EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+      context_attribs[i++] = EGL_NONE;
+      g_assert (i < N_EGL_ATTRS);
+
+      legacy_bit = TRUE;
+      api = GDK_GL_API_GL;
+
+      GDK_DISPLAY_NOTE (display, OPENGL,
+                        g_message ("eglCreateContext failed, switching to legacy"));
+      ctx = eglCreateContext (egl_display,
+                              egl_config,
+                              share != NULL ? share_priv->egl_context
+                              : EGL_NO_CONTEXT,
+                              context_attribs);
+    }
+
+  if (ctx == NULL)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
+      return 0;
+    }
+
+  GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Created EGL context[%p]", ctx));
+
+  priv->egl_context = ctx;
+
+  gdk_gl_context_set_is_legacy (context, legacy_bit);
+
+  if (epoxy_has_egl_extension (egl_display, "EGL_KHR_swap_buffers_with_damage"))
+    priv->eglSwapBuffersWithDamage = (gpointer)epoxy_eglGetProcAddress ("eglSwapBuffersWithDamageKHR");
+  else if (epoxy_has_egl_extension (egl_display, "EGL_EXT_swap_buffers_with_damage"))
+    priv->eglSwapBuffersWithDamage = (gpointer)epoxy_eglGetProcAddress ("eglSwapBuffersWithDamageEXT");
+
+  gdk_profiler_end_mark (start_time, "realize GdkWaylandGLContext", NULL);
+
+  return api;
+}
+
+static GdkGLAPI
+gdk_gl_context_default_realize (GdkGLContext  *context,
+                                GError       **error)
+{
+#ifdef HAVE_EGL
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+
+  if (gdk_display_get_egl_display (display))
+    return gdk_gl_context_realize_egl (context, error);
 #endif
 
   g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
@@ -666,7 +673,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
 
-  klass->realize = gdk_gl_context_real_realize;
+  klass->realize = gdk_gl_context_default_realize;
   klass->get_damage = gdk_gl_context_real_get_damage;
   klass->is_shared = gdk_gl_context_real_is_shared;
   klass->make_current = gdk_gl_context_real_make_current;
@@ -1799,7 +1806,7 @@ gboolean
 gdk_gl_backend_can_be_used (GdkGLBackend   backend_type,
                             GError       **error)
 {
-  if (the_gl_backend_type == GDK_GL_NONE || 
+  if (the_gl_backend_type == GDK_GL_NONE ||
       the_gl_backend_type == backend_type)
     return TRUE;
 
@@ -1837,4 +1844,3 @@ gdk_gl_backend_use (GdkGLBackend backend_type)
 
   g_assert (the_gl_backend_type == backend_type);
 }
-
