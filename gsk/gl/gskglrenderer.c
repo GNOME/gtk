@@ -24,6 +24,7 @@
 #include <gdk/gdkdisplayprivate.h>
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdksurfaceprivate.h>
+#include <gdk/gdkintl.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
@@ -93,6 +94,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   GdkDisplay *display;
   gboolean ret = FALSE;
   gboolean debug_shaders = FALSE;
+  GdkGLAPI api;
 
   if (self->context != NULL)
     return TRUE;
@@ -114,6 +116,24 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
 
   if (!context || !gdk_gl_context_realize (context, error))
     goto failure;
+
+  api = gdk_gl_context_get_api (context);
+  if (api == GDK_GL_API_GLES)
+    {
+      gdk_gl_context_make_current (context);
+
+      if (!gdk_gl_context_has_vertex_half_float (context))
+        {
+          int major, minor;
+
+          gdk_gl_context_get_version (context, &major, &minor);
+          g_set_error (error,
+                       GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                       _("This GLES %d.%d implementation does not support half-float vertex data"),
+                       major, minor);
+          goto failure;
+        }
+    }
 
 #ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
@@ -331,7 +351,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
         {
           for (x = 0; x < width; x += max_size)
             {
-              texture = gsk_gl_renderer_render_texture (renderer, root, 
+              texture = gsk_gl_renderer_render_texture (renderer, root,
                                                         &GRAPHENE_RECT_INIT (x, y,
                                                                              MIN (max_size, viewport->size.width - x),
                                                                              MIN (max_size, viewport->size.height - y)));

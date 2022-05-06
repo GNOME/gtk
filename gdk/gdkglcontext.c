@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  *
  * gdkglcontext.c: GL context abstraction
- * 
+ *
  * Copyright © 2014  Emmanuele Bassi
  *
  * This library is free software; you can redistribute it and/or
@@ -103,6 +103,7 @@ typedef struct {
 
   guint has_khr_debug : 1;
   guint use_khr_debug : 1;
+  guint has_half_float : 1;
   guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
   guint extensions_checked : 1;
@@ -1542,18 +1543,23 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
     }
 
+  priv->has_half_float = gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
+                         epoxy_has_gl_extension ("OES_vertex_half_float");
+
   GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
     g_message ("%s version: %d.%d (%s)\n"
                        "* GLSL version: %s\n"
                        "* Extensions checked:\n"
                        " - GL_KHR_debug: %s\n"
-                       " - GL_EXT_unpack_subimage: %s",
+                       " - GL_EXT_unpack_subimage: %s\n"
+                       " - OES_vertex_half_float: %s",
                        gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
                        priv->gl_version / 10, priv->gl_version % 10,
                        priv->is_legacy ? "legacy" : "core",
                        glGetString (GL_SHADING_LANGUAGE_VERSION),
                        priv->has_khr_debug ? "yes" : "no",
-                       priv->has_unpack_subimage ? "yes" : "no"));
+                       priv->has_unpack_subimage ? "yes" : "no",
+                       priv->has_half_float ? "yes" : "no"));
 
   priv->extensions_checked = TRUE;
 }
@@ -1757,6 +1763,14 @@ gdk_gl_context_has_debug (GdkGLContext *self)
   return priv->debug_enabled || priv->use_khr_debug;
 }
 
+gboolean
+gdk_gl_context_has_vertex_half_float (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  return priv->has_half_float;
+}
+
 /* This is currently private! */
 /* When using GL/ES, don't flip the 'R' and 'B' bits on Windows/ANGLE for glReadPixels() */
 gboolean
@@ -1799,7 +1813,7 @@ gboolean
 gdk_gl_backend_can_be_used (GdkGLBackend   backend_type,
                             GError       **error)
 {
-  if (the_gl_backend_type == GDK_GL_NONE || 
+  if (the_gl_backend_type == GDK_GL_NONE ||
       the_gl_backend_type == backend_type)
     return TRUE;
 
