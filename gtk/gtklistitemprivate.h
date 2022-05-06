@@ -40,6 +40,11 @@ struct _GtkListItem
 
 GtkListItem *   gtk_list_item_new                               (void);
 
+void            gtk_list_item_do_notify                         (GtkListItem *list_item,
+                                                                 gboolean notify_item,
+                                                                 gboolean notify_position,
+                                                                 gboolean notify_selected);
+
 
 G_END_DECLS
 

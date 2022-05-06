@@ -576,14 +576,7 @@ gtk_list_item_widget_default_update (GtkListItemWidget *self,
     }
 
   if (list_item)
-    {
-      if (notify_item)
-        g_object_notify (G_OBJECT (list_item), "item");
-      if (notify_position)
-        g_object_notify (G_OBJECT (list_item), "position");
-      if (notify_selected)
-        g_object_notify (G_OBJECT (list_item), "selected");
-    }
+    gtk_list_item_do_notify (list_item, notify_item, notify_position, notify_selected);
 }
 
 void
