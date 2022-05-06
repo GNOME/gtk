@@ -3334,7 +3334,46 @@ typedef struct {
   int row_column;
   gboolean is_data;
   const char *domain;
+  GList *parents;
+  gboolean row_is_open;
 } SubParserData;
+
+static void
+append_current_row (SubParserData *data)
+{
+  GtkTreeIter *parent;
+  GtkTreeIter iter;
+  int i;
+
+  if (data->parents)
+    parent = data->parents->data;
+  else
+    parent = NULL;
+
+  gtk_tree_store_insert_with_valuesv (GTK_TREE_STORE (data->object),
+                                      &iter,
+                                      parent,
+                                      -1,
+                                      data->colids,
+                                      data->values,
+                                      data->row_column);
+
+  data->parents = g_list_prepend (data->parents, gtk_tree_iter_copy (&iter));
+
+  for (i = 0; i < data->row_column; i++)
+    {
+      ColInfo *info = data->columns[i];
+      g_free (info->context);
+      g_slice_free (ColInfo, info);
+      data->columns[i] = NULL;
+      g_value_unset (&data->values[i]);
+    }
+  g_free (data->values);
+  data->values = g_new0 (GValue, data->n_columns);
+  data->last_row++;
+  data->row_column = 0;
+  data->row_is_open = FALSE;
+}
 
 static void
 tree_store_start_element (GtkBuildableParseContext  *context,
@@ -3357,6 +3396,16 @@ tree_store_start_element (GtkBuildableParseContext  *context,
 
       if (!_gtk_builder_check_parent (data->builder, context, "row", error))
         return;
+
+      if (!data->row_is_open)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_TAG,
+                       "Can't use <col> here");
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
 
       if (data->row_column >= data->n_columns)
         {
@@ -3406,13 +3455,18 @@ tree_store_start_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "row") == 0)
     {
-      if (!_gtk_builder_check_parent (data->builder, context, "data", error))
+      if (!_gtk_builder_check_parents (data->builder, context, error, "data", "row", NULL))
         return;
+
+      if (data->row_is_open)
+        append_current_row (data);
 
       if (!g_markup_collect_attributes (element_name, names, values, error,
                                         G_MARKUP_COLLECT_INVALID, NULL, NULL,
                                         G_MARKUP_COLLECT_INVALID))
         _gtk_builder_prefix_error (data->builder, context, error);
+
+      data->row_is_open = TRUE;
     }
   else if (strcmp (element_name, "columns") == 0 ||
            strcmp (element_name, "data") == 0)
@@ -3463,28 +3517,14 @@ tree_store_end_element (GtkBuildableParseContext  *context,
 
   if (strcmp (element_name, "row") == 0)
     {
-      GtkTreeIter iter;
-      int i;
+      GtkTreeIter *parent;
 
-      gtk_tree_store_insert_with_valuesv (GTK_TREE_STORE (data->object),
-                                          &iter,
-                                          NULL,
-                                          data->last_row,
-                                          data->colids,
-                                          data->values,
-                                          data->row_column);
-      for (i = 0; i < data->row_column; i++)
-        {
-          ColInfo *info = data->columns[i];
-          g_free (info->context);
-          g_slice_free (ColInfo, info);
-          data->columns[i] = NULL;
-          g_value_unset (&data->values[i]);
-        }
-      g_free (data->values);
-      data->values = g_new0 (GValue, data->n_columns);
-      data->last_row++;
-      data->row_column = 0;
+      if (data->row_column > 0)
+        append_current_row (data);
+
+      parent = data->parents->data;
+      data->parents = g_list_remove (data->parents, parent);
+      gtk_tree_iter_free (parent);
     }
   else if (strcmp (element_name, "columns") == 0)
     {
