@@ -390,10 +390,10 @@ gtk_tree_store_newv (int    n_columns,
  * @tree_store: A `GtkTreeStore`
  * @n_columns: Number of columns for the tree store
  * @types: (array length=n_columns): An array of `GType` types, one for each column
- * 
- * This function is meant primarily for `GObjects` that inherit from 
- * `GtkTreeStore`, and should only be used when constructing a new 
- * `GtkTreeStore`.  It will not function after a row has been added, 
+ *
+ * This function is meant primarily for `GObjects` that inherit from
+ * `GtkTreeStore`, and should only be used when constructing a new
+ * `GtkTreeStore`.  It will not function after a row has been added,
  * or a method on the `GtkTreeModel` interface is called.
  **/
 void
@@ -924,7 +924,7 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
-  
+
   retval = TRUE;
   if (converted)
     g_value_unset (&real_value);
@@ -1197,7 +1197,7 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
  * gtk_tree_store_remove:
  * @tree_store: A `GtkTreeStore`
  * @iter: A valid `GtkTreeIter`
- * 
+ *
  * Removes @iter from @tree_store.  After being removed, @iter is set to the
  * next valid row at that level, or invalidated if it previously pointed to the
  * last one.
@@ -1657,7 +1657,7 @@ gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
  * @tree_store: A `GtkTreeStore`
  * @iter: (out): An unset `GtkTreeIter` to set to the prepended row
  * @parent: (nullable): A valid `GtkTreeIter`
- * 
+ *
  * Prepends a new row to @tree_store.  If @parent is non-%NULL, then it will prepend
  * the new row before the first child of @parent, otherwise it will prepend a row
  * to the top level.  @iter will be changed to point to this new row.  The row
@@ -1687,7 +1687,7 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
   if (parent_node->children == NULL)
     {
       GtkTreePath *path;
-      
+
       iter->stamp = priv->stamp;
       iter->user_data = g_node_new (NULL);
 
@@ -1716,7 +1716,7 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
  * @tree_store: A `GtkTreeStore`
  * @iter: (out): An unset `GtkTreeIter` to set to the appended row
  * @parent: (nullable): A valid `GtkTreeIter`
- * 
+ *
  * Appends a new row to @tree_store.  If @parent is non-%NULL, then it will append the
  * new row after the last child of @parent, otherwise it will append a row to
  * the top level.  @iter will be changed to point to this new row.  The row will
@@ -1775,10 +1775,10 @@ gtk_tree_store_append (GtkTreeStore *tree_store,
  * @tree_store: A `GtkTreeStore`
  * @iter: A valid `GtkTreeIter`
  * @descendant: A valid `GtkTreeIter`
- * 
+ *
  * Returns %TRUE if @iter is an ancestor of @descendant.  That is, @iter is the
  * parent (or grandparent or great-grandparent) of @descendant.
- * 
+ *
  * Returns: %TRUE, if @iter is an ancestor of @descendant
  **/
 gboolean
@@ -1799,10 +1799,10 @@ gtk_tree_store_is_ancestor (GtkTreeStore *tree_store,
  * gtk_tree_store_iter_depth:
  * @tree_store: A `GtkTreeStore`
  * @iter: A valid `GtkTreeIter`
- * 
+ *
  * Returns the depth of @iter.  This will be 0 for anything on the root level, 1
  * for anything down a level, etc.
- * 
+ *
  * Returns: The depth of @iter
  **/
 int
@@ -1870,7 +1870,7 @@ gtk_tree_store_increment_stamp (GtkTreeStore *tree_store)
 /**
  * gtk_tree_store_clear:
  * @tree_store: a `GtkTreeStore`
- * 
+ *
  * Removes all rows from @tree_store
  **/
 void
@@ -1908,7 +1908,7 @@ gtk_tree_store_iter_is_valid_helper (GtkTreeIter *iter,
 
 /**
  * gtk_tree_store_iter_is_valid:
- * @tree_store: a tree store 
+ * @tree_store: a tree store
  * @iter: the iterator to check
  *
  * Checks if the given iter is a valid iter for this `GtkTreeStore`.
@@ -1939,7 +1939,7 @@ static gboolean real_gtk_tree_store_row_draggable (GtkTreeDragSource *drag_sourc
 {
   return TRUE;
 }
-               
+
 static gboolean
 gtk_tree_store_drag_data_delete (GtkTreeDragSource *drag_source,
                                  GtkTreePath       *path)
@@ -2159,7 +2159,7 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
   GtkTreePath *src_path = NULL;
   GtkTreePath *tmp = NULL;
   gboolean retval = FALSE;
-  
+
   /* don't accept drops if the tree has been sorted */
   if (GTK_TREE_STORE_IS_SORTED (drag_dest))
     return FALSE;
@@ -2168,7 +2168,7 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
 				   &src_model,
 				   &src_path))
     goto out;
-    
+
   /* can only drag to ourselves */
   if (src_model != GTK_TREE_MODEL (drag_dest))
     goto out;
@@ -2186,13 +2186,13 @@ gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
       {
 	tmp = gtk_tree_path_copy (dest_path);
 	gtk_tree_path_up (tmp);
-	
+
 	if (!gtk_tree_store_get_iter (GTK_TREE_MODEL (drag_dest),
 				      &iter, tmp))
 	  goto out;
       }
   }
-  
+
   /* Can otherwise drop anywhere. */
   retval = TRUE;
 
@@ -2551,7 +2551,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 
   if (depth)
     {
-      gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store), 
+      gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store),
 			       &parent_iter, path);
 
       parent = G_NODE (parent_iter.user_data);
@@ -2570,7 +2570,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
       if (gtk_tree_path_get_indices (pos_path)[gtk_tree_path_get_depth (pos_path) - 1] > 0)
         {
           gtk_tree_path_prev (pos_path);
-          if (gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store), 
+          if (gtk_tree_store_get_iter (GTK_TREE_MODEL (tree_store),
 				       &dst_a, pos_path))
             a = G_NODE (dst_a.user_data);
           else
@@ -2668,7 +2668,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
       parent->children = node;
 
       node->next = tmp;
-      if (tmp) 
+      if (tmp)
 	tmp->prev = node;
 
       handle_b = FALSE;
@@ -2761,7 +2761,7 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
 
   if (depth)
     {
-      tmppath = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), 
+      tmppath = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store),
 					 &parent_iter);
       gtk_tree_model_rows_reordered (GTK_TREE_MODEL (tree_store),
 				     tmppath, &parent_iter, order);
@@ -3318,18 +3318,18 @@ validate_gnode (GNode* node)
 typedef struct {
   GtkBuilder *builder;
   GObject *object;
-  GSList *items;
-} GSListSubParserData;
+  GSList *column_type_names;
+} SubParserData;
 
 static void
-tree_model_start_element (GtkBuildableParseContext  *context,
+tree_store_start_element (GtkBuildableParseContext  *context,
                           const char                *element_name,
                           const char               **names,
                           const char               **values,
                           gpointer                   user_data,
                           GError                   **error)
 {
-  GSListSubParserData *data = (GSListSubParserData*)user_data;
+  SubParserData *data = (SubParserData*)user_data;
 
   if (strcmp (element_name, "columns") == 0)
     {
@@ -3357,7 +3357,7 @@ tree_model_start_element (GtkBuildableParseContext  *context,
           return;
         }
 
-      data->items = g_slist_prepend (data->items, g_strdup (type));
+      data->column_type_names = g_slist_prepend (data->column_type_names, g_strdup (type));
     }
   else
     {
@@ -3368,12 +3368,12 @@ tree_model_start_element (GtkBuildableParseContext  *context,
 }
 
 static void
-tree_model_end_element (GtkBuildableParseContext  *context,
+tree_store_end_element (GtkBuildableParseContext  *context,
                         const char                *element_name,
                         gpointer                   user_data,
                         GError                   **error)
 {
-  GSListSubParserData *data = (GSListSubParserData*)user_data;
+  SubParserData *data = (SubParserData*)user_data;
 
   g_assert(data->builder);
 
@@ -3384,11 +3384,11 @@ tree_model_end_element (GtkBuildableParseContext  *context,
       int i;
       GType type;
 
-      data = (GSListSubParserData*)user_data;
-      data->items = g_slist_reverse (data->items);
-      types = g_new0 (GType, g_slist_length (data->items));
+      data = (SubParserData*)user_data;
+      data->column_type_names = g_slist_reverse (data->column_type_names);
+      types = g_new0 (GType, g_slist_length (data->column_type_names));
 
-      for (l = data->items, i = 0; l; l = l->next, i++)
+      for (l = data->column_type_names, i = 0; l; l = l->next, i++)
         {
           type = gtk_builder_get_type_from_name (data->builder, l->data);
           if (type == G_TYPE_INVALID)
@@ -3409,10 +3409,10 @@ tree_model_end_element (GtkBuildableParseContext  *context,
     }
 }
 
-static const GtkBuildableParser tree_model_parser =
+static const GtkBuildableParser tree_store_parser =
   {
-    tree_model_start_element,
-    tree_model_end_element
+    tree_store_start_element,
+    tree_store_end_element
   };
 
 
@@ -3424,19 +3424,19 @@ gtk_tree_store_buildable_custom_tag_start (GtkBuildable       *buildable,
                                            GtkBuildableParser *parser,
                                            gpointer           *parser_data)
 {
-  GSListSubParserData *data;
+  SubParserData *data;
 
   if (child)
     return FALSE;
 
   if (strcmp (tagname, "columns") == 0)
     {
-      data = g_slice_new0 (GSListSubParserData);
+      data = g_slice_new0 (SubParserData);
       data->builder = builder;
-      data->items = NULL;
+      data->column_type_names = NULL;
       data->object = G_OBJECT (buildable);
 
-      *parser = tree_model_parser;
+      *parser = tree_store_parser;
       *parser_data = data;
 
       return TRUE;
@@ -3452,13 +3452,13 @@ gtk_tree_store_buildable_custom_finished (GtkBuildable *buildable,
                                           const char   *tagname,
                                           gpointer      user_data)
 {
-  GSListSubParserData *data;
+  SubParserData *data;
 
   if (strcmp (tagname, "columns"))
     return;
 
-  data = (GSListSubParserData*)user_data;
+  data = (SubParserData*)user_data;
 
-  g_slist_free (data->items);
-  g_slice_free (GSListSubParserData, data);
+  g_slist_free (data->column_type_names);
+  g_slice_free (SubParserData, data);
 }
