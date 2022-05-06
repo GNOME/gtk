@@ -239,7 +239,7 @@ gtk_css_node_dispose (GObject *object)
     }
 
   gtk_css_node_set_invalid (cssnode, FALSE);
-  
+
   g_clear_pointer (&cssnode->cache, gtk_css_node_style_cache_unref);
 
   G_OBJECT_CLASS (gtk_css_node_parent_class)->dispose (object);
@@ -292,7 +292,7 @@ may_use_global_parent_cache (GtkCssNode *node)
 {
   GtkStyleProvider *provider;
   GtkCssNode *parent;
-  
+
   parent = gtk_css_node_get_parent (node);
   if (parent == NULL)
     return FALSE;
@@ -700,10 +700,10 @@ gtk_css_node_invalidate_style (GtkCssNode *cssnode)
 
   cssnode->style_is_invalid = TRUE;
   gtk_css_node_set_invalid (cssnode, TRUE);
-  
+
   if (cssnode->first_child)
     gtk_css_node_invalidate_style (cssnode->first_child);
-  
+
   if (cssnode->next_sibling)
     gtk_css_node_invalidate_style (cssnode->next_sibling);
 }
@@ -796,7 +796,7 @@ gtk_css_node_reposition (GtkCssNode *node,
         gtk_css_node_invalidate_style (node->next_sibling);
     }
 
-  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT
+  gtk_css_node_invalidate (node, (old_parent != new_parent ? GTK_CSS_CHANGE_ANY_PARENT : 0)
                                  | GTK_CSS_CHANGE_ANY_SIBLING
                                  | GTK_CSS_CHANGE_NTH_CHILD
                                  | (node->previous_sibling ? 0 : GTK_CSS_CHANGE_FIRST_CHILD)
@@ -842,7 +842,7 @@ gtk_css_node_insert_before (GtkCssNode *parent,
   g_return_if_fail (next_sibling == NULL || next_sibling->parent == parent);
   g_return_if_fail (cssnode != next_sibling);
 
-  if (cssnode->next_sibling == next_sibling && 
+  if (cssnode->next_sibling == next_sibling &&
       cssnode->parent == parent)
     return;
 
@@ -1067,7 +1067,7 @@ gtk_css_node_set_visible (GtkCssNode *cssnode,
             }
         }
     }
-               
+
   if (cssnode->previous_sibling)
     {
       if (gtk_css_node_is_last_child (cssnode))
@@ -1424,7 +1424,7 @@ gtk_css_node_print (GtkCssNode                *cssnode,
 
       change = gtk_css_static_style_get_change (gtk_css_style_get_static_style (style));
       g_string_append (string, "    ");
-      gtk_css_change_print (change, string); 
+      gtk_css_change_print (change, string);
     }
 
   g_string_append_c (string, '\n');
