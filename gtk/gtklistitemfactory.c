@@ -162,9 +162,5 @@ gtk_list_item_factory_update (GtkListItemFactory *self,
 
   list_item = gtk_list_item_widget_get_list_item (widget);
 
-  g_object_freeze_notify (G_OBJECT (list_item));
-
   GTK_LIST_ITEM_FACTORY_GET_CLASS (self)->update (self, widget, list_item, position, item, selected);
-
-  g_object_thaw_notify (G_OBJECT (list_item));
 }
