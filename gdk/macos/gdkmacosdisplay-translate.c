@@ -700,8 +700,7 @@ fill_scroll_event (GdkMacosDisplay *self,
                                            NULL,
                                            get_time_from_ns_event (nsevent),
                                            state,
-                                           direction,
-                                           FALSE);
+                                           direction);
     }
 
   if (phase == NSEventPhaseEnded || phase == NSEventPhaseCancelled)

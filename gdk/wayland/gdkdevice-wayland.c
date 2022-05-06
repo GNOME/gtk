@@ -1394,8 +1394,7 @@ flush_discrete_scroll_event (GdkWaylandSeat     *seat,
                                          NULL,
                                          seat->pointer_info.time,
                                          device_get_modifiers (seat->logical_pointer),
-                                         direction,
-                                         TRUE);
+                                         direction);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }

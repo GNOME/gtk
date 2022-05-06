@@ -920,14 +920,6 @@ gdk_event_get_pointer_emulated (GdkEvent *event)
         return tevent->pointer_emulated;
       }
 
-    case GDK_SCROLL:
-    case GDK_SCROLL_SMOOTH:
-      {
-        GdkScrollEvent *sevent = (GdkScrollEvent *) event;
-
-        return sevent->pointer_emulated;
-      }
-
     default:
       break;
     }
@@ -2373,15 +2365,13 @@ gdk_scroll_event_new_discrete (GdkSurface         *surface,
                                GdkDeviceTool      *tool,
                                guint32             time,
                                GdkModifierType     state,
-                               GdkScrollDirection  direction,
-                               gboolean            emulated)
+                               GdkScrollDirection  direction)
 {
   GdkScrollEvent *self = gdk_event_alloc (GDK_SCROLL, surface, device, time);
 
   self->tool = tool != NULL ? g_object_ref (tool) : NULL;
   self->state = state;
   self->direction = direction;
-  self->pointer_emulated = emulated;
   self->unit = GDK_SCROLL_UNIT_WHEEL;
 
   return (GdkEvent *) self;

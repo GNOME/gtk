@@ -189,8 +189,7 @@ _gdk_broadway_events_got_input (GdkDisplay *display,
                                                message->pointer.state,
                                                message->scroll.dir == 0
                                                  ? GDK_SCROLL_UP
-                                                 : GDK_SCROLL_DOWN,
-                                               FALSE);
+                                                 : GDK_SCROLL_DOWN);
 
         node = _gdk_event_queue_append (display, event);
         _gdk_windowing_got_event (display, node, event, message->base.serial);
