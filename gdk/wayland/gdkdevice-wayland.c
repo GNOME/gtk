@@ -3999,17 +3999,6 @@ tablet_tool_handle_wheel (void                      *data,
                                 GDK_SCROLL_UNIT_WHEEL);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
-
-  /* Send discrete event */
-  event = gdk_scroll_event_new_discrete (tablet->pointer_info.focus,
-                                         tablet->stylus_device,
-                                         tablet->current_tool->tool,
-                                         tablet->pointer_info.time,
-                                         device_get_modifiers (tablet->logical_device),
-                                         clicks > 0 ? GDK_SCROLL_DOWN : GDK_SCROLL_UP,
-                                         TRUE);
-
-  _gdk_wayland_display_deliver_event (seat->display, event);
 }
 
 static void
