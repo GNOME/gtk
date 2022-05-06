@@ -554,27 +554,34 @@ gtk_list_item_widget_default_update (GtkListItemWidget *self,
                                      gpointer           item,
                                      gboolean           selected)
 {
+  /* Track notify manually instead of freeze/thaw_notify for performance reasons. */
+  gboolean notify_item = FALSE, notify_position = FALSE, notify_selected = FALSE;
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
   /* FIXME: It's kinda evil to notify external objects from here... */
   
   if (g_set_object (&priv->item, item))
-    {
-      if (list_item)
-        g_object_notify (G_OBJECT (list_item), "item");
-    }
+    notify_item = TRUE;
 
   if (priv->position != position)
     {
       priv->position = position;
-      if (list_item)
-        g_object_notify (G_OBJECT (list_item), "position");
+      notify_position = TRUE;
     }
 
   if (priv->selected != selected)
     {
       priv->selected = selected;
-      if (list_item)
+      notify_selected = TRUE;
+    }
+
+  if (list_item)
+    {
+      if (notify_item)
+        g_object_notify (G_OBJECT (list_item), "item");
+      if (notify_position)
+        g_object_notify (G_OBJECT (list_item), "position");
+      if (notify_selected)
         g_object_notify (G_OBJECT (list_item), "selected");
     }
 }
