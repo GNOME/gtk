@@ -27,6 +27,10 @@ expand_content_md_files = [
   'visual_index.md'
 ]
 
+gtk_images = []
+
+subdir('images')
+
 if get_option('gtk_doc')
   gtk4_toml = configure_file(
     input: 'gtk4.toml.in',
@@ -46,10 +50,11 @@ if get_option('gtk_doc')
       '--add-include-path=@0@'.format(meson.current_build_dir() / '../../../gtk'),
       '--config=@INPUT0@',
       '--output-dir=@OUTPUT@',
+      '--content-dir=@0@'.format(meson.current_build_dir()),
       '--content-dir=@0@'.format(meson.current_source_dir()),
       '@INPUT1@',
     ],
-    depends: [ gdk_gir[0], gsk_gir[0] ],
+    depends: [ gdk_gir[0], gsk_gir[0] ] + gtk_images,
     depend_files: [ expand_content_md_files ],
     build_by_default: true,
     install: true,

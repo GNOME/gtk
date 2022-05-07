@@ -894,7 +894,6 @@ endif
 subdir('po')
 subdir('po-properties')
 
-subdir('docs/tools')
 subdir('docs/reference')
 
 if not meson.is_cross_build()
