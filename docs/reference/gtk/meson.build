@@ -78,6 +78,7 @@ if get_option('man-pages') and rst2man.found()
       [ 'gtk4-demo-application', '1', ],
       [ 'gtk4-widget-factory', '1', ],
       [ 'gtk4-icon-browser', '1', ],
+      [ 'gtk4-node-editor', '1', ],
     ]
   endif
 
