@@ -53,6 +53,7 @@ gdk/x11/gdkglcontext-x11.c
 gdk/x11/gdkmain-x11.c
 gdk/x11/gdkselectioninputstream-x11.c
 gdk/x11/gdktextlistconverter-x11.c
+gsk/gl/gskglrenderer.c
 gsk/gskrendernodeimpl.c
 gtk/a11y/gtkatspiaction.c
 gtk/a11y/gtkatspiroot.c

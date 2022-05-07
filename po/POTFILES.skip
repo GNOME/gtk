@@ -59,6 +59,7 @@ demos/print-editor/print-editor.c
 demos/widget-factory/menus.ui
 demos/widget-factory/widget-factory.c
 demos/widget-factory/widget-factory.ui
+docs/reference/gtk/images/shortcuts-window.ui
 docs/tools/shortcuts-boxes.ui
 examples/application10/app-menu.ui
 examples/application10/gears-menu.ui
