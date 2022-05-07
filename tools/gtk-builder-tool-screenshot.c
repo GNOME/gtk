@@ -119,7 +119,6 @@ snapshot_widget (GtkWidget *widget)
 
   g_main_loop_unref (loop);
   g_object_unref (paintable);
-  gtk_window_destroy (GTK_WINDOW (widget));
 
   return texture;
 }
@@ -177,6 +176,8 @@ screenshot_file (const char *filename,
   GError *error = NULL;
   GObject *object;
   GtkWidget *window;
+  GtkWidget *menu_button = NULL;
+  GtkWidget *target = NULL;
   GdkTexture *texture;
   char *save_to;
   GBytes *bytes;
@@ -245,7 +246,25 @@ screenshot_file (const char *filename,
     }
 
   if (GTK_IS_WINDOW (object))
-    window = GTK_WIDGET (object);
+    {
+      window = GTK_WIDGET (object);
+      target = window;
+    }
+  else if (GTK_IS_POPOVER (object))
+    {
+      window = gtk_window_new ();
+
+      if (GTK_IS_BUILDABLE (object))
+        id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (object));
+
+      set_window_title (GTK_WINDOW (window), filename, id);
+
+      menu_button = gtk_menu_button_new ();
+      gtk_menu_button_set_popover (GTK_MENU_BUTTON (menu_button), GTK_WIDGET (object));
+      gtk_window_set_child (GTK_WINDOW (window), menu_button);
+
+      target = GTK_WIDGET (object);
+    }
   else
     {
       GtkWidget *widget = GTK_WIDGET (object);
@@ -262,11 +281,15 @@ screenshot_file (const char *filename,
         gtk_box_remove (GTK_BOX (gtk_widget_get_parent (widget)), widget);
       gtk_window_set_child (GTK_WINDOW (window), widget);
       g_object_unref (widget);
+
+      target = widget;
     }
 
   gtk_widget_show (window);
+  if (menu_button)
+    gtk_menu_button_popup (GTK_MENU_BUTTON (menu_button));
 
-  texture = snapshot_widget (window);
+  texture = snapshot_widget (target);
 
   g_object_unref (builder);
 
