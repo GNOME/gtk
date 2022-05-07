@@ -1,5 +1,5 @@
-Overview of Changes
-===================
+Overview of Changes in 4.7.0, 07-05-2022
+========================================
 
 * GtkTextView:
  - Reduce overdraws
