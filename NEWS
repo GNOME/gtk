@@ -1,3 +1,153 @@
+Overview of Changes
+===================
+
+* GtkTextView:
+ - Reduce overdraws
+
+* GtkViewport:
+ - Default scroll-to-focus to TRUE
+
+* GtkText:
+ - Stop blinking when we lose focus
+
+* GtkSearchEntry:
+ - Make search delay configurable
+
+* GtkPopoverMenu:
+ - Fix RTL positioning of buttons
+
+* GtkLabel:
+ - Fix focus keynav with links
+
+* GtkFileChooser:
+ - Prevent undesirable completion popups
+ - Fix a corner case in save mode
+ - Keep the portal filechooser alive long enough
+
+* GtkCheckButton:
+ - Allow setting a custom child
+
+* GtkEditableLabel:
+ - Make the :editing property writable
+
+* GtkColumnView:
+ - Various optimizations to improve scrolling performance
+
+* GtkTreeStore:
+ - Allow populating tree stores from ui files
+
+* GtkBoxLayout:
+ - Avoid infinite loops
+
+* CSS:
+ - Optimize reordering within the same parent
+
+* Emoji:
+ - Update to CLDR v40 / Unicode 14
+ - Add more locales
+
+* Input:
+ - Add scroll unit handling
+ - Handle display changes in GtkIMMultiContext
+ - Always populate GDK_AXIS_X/Y in event history
+ - Don't crash for large compose tables
+
+* Accessibility:
+ - Fix a crash at start when orca is running
+
+* Theme:
+ - Refresh icons
+ - Fix selection in vertical spin buttons
+ - Fix selection in editable labels
+
+* gdk:
+ - Optimize pixel format conversions
+ - Use EGL_KHR_swap_buffers_with_damage for NVidia
+
+* gsk:
+ - Handle large viewports
+ - Prepare texture libraries for glyphy rendering
+ - Don't leak big glyphs in the glyph cache
+ - Align offscreen rendering with th pixel grid
+ - Check for half-float support before using it
+
+* Wayland:
+ - Use xdg-activation protocol
+ - Fix text caret coordinates
+ - Fix on-screen keyboard activation
+
+* MacOS:
+ - Fix sluggish and reversed scrolling
+ - Improve monitor detection
+ - Event handling fixes
+ - Fix keyboard input on popovers
+ - Support OpenGL-based video playback
+ - Suport fullscreen
+ - Improve native filechoooser size allocation
+ - Use CALayer and IOSurface for rendering
+ - Use a per-monitor CVDisplayLink
+ - Fix kinetic scrolling
+ - Improve window placement
+ - Improve multi-monitor handling
+ - Start applications in the foreground
+ - Fix cursor blink time
+
+* Windows:
+ - Fix preedit window placement on HiDPI
+
+* Tools:
+ - gtk4-builder-tool: Don't require a display for all commands
+ - gtk4-builder-tool: Add a screenshot command
+ - gtk4-node-editor: Install this utility
+
+* Debugging:
+ - inspector: Show more application data
+ - inspector: Allow viewing PangoAttrList properties
+
+* Documentation:
+ - Use the gtk-builder-tool to generate screenshots
+
+* Build:
+ - Fix cross-compilation
+ - Fix build on aarch64
+ - Fix build with gcc 12
+
+* Translation updates
+ Basque
+ Brazilian Portuguese
+ British English
+ Catalan
+ Chinese (China)
+ Chinese (Taiwan)
+ Croatian
+ Czech
+ Danish
+ Finnish
+ Galician
+ Georgian
+ German
+ Hebrew
+ Hungarian
+ Indonesian
+ Italian
+ Kazakh
+ Korean
+ Latvian
+ Lithuanian
+ Norwegian Bokmål
+ Persian
+ Polish
+ Portuguese
+ Russian
+ Serbian
+ Slovak
+ Slovenian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.6.1, 11-02-2022
 ========================================
 
