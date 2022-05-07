@@ -522,12 +522,10 @@ gtk_list_item_widget_default_setup (GtkListItemWidget *self,
 
   gtk_list_item_widget_set_activatable (self, list_item->activatable);
 
-  if (priv->item)
-    g_object_notify (G_OBJECT (list_item), "item");
-  if (priv->position != GTK_INVALID_LIST_POSITION)
-    g_object_notify (G_OBJECT (list_item), "position");
-  if (priv->selected)
-    g_object_notify (G_OBJECT (list_item), "selected");
+  gtk_list_item_do_notify (list_item,
+                           priv->item != NULL,
+                           priv->position != GTK_INVALID_LIST_POSITION,
+                           priv->selected);
 }
 
 void
@@ -546,12 +544,10 @@ gtk_list_item_widget_default_teardown (GtkListItemWidget *self,
 
   gtk_list_item_widget_set_activatable (self, FALSE);
 
-  if (priv->item)
-    g_object_notify (G_OBJECT (list_item), "item");
-  if (priv->position != GTK_INVALID_LIST_POSITION)
-    g_object_notify (G_OBJECT (list_item), "position");
-  if (priv->selected)
-    g_object_notify (G_OBJECT (list_item), "selected");
+  gtk_list_item_do_notify (list_item,
+                           priv->item != NULL,
+                           priv->position != GTK_INVALID_LIST_POSITION,
+                           priv->selected);
 }
 
 void
