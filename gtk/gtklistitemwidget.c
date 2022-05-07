@@ -485,20 +485,27 @@ gtk_list_item_widget_update (GtkListItemWidget *self,
                              gboolean           selected)
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+  gboolean was_selected;
+
+  was_selected = priv->selected;
 
   if (priv->list_item)
     gtk_list_item_factory_update (priv->factory, self, position, item, selected);
   else
     gtk_list_item_widget_default_update (self, NULL, position, item, selected);
 
-  if (selected)
-    gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
-  else
-    gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
+  /* don't look at selected variable, it's not reentrancy safe */
+  if (was_selected != priv->selected)
+    {
+      if (priv->selected)
+        gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
+      else
+        gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
 
-  gtk_accessible_update_state (GTK_ACCESSIBLE (self),
-                               GTK_ACCESSIBLE_STATE_SELECTED, selected,
-                               -1);
+      gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                                   GTK_ACCESSIBLE_STATE_SELECTED, priv->selected,
+                                   -1);
+    }
 }
 
 void
@@ -559,7 +566,7 @@ gtk_list_item_widget_default_update (GtkListItemWidget *self,
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
   /* FIXME: It's kinda evil to notify external objects from here... */
-  
+
   if (g_set_object (&priv->item, item))
     notify_item = TRUE;
 
