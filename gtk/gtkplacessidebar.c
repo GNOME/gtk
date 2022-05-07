@@ -2351,22 +2351,41 @@ update_popover_shadowing (GtkWidget *row,
 }
 
 static void
-set_prelight (GtkPopover *popover)
+set_prelight (GtkPlacesSidebar *sidebar)
 {
-  update_popover_shadowing (gtk_widget_get_parent (GTK_WIDGET (popover)), TRUE);
+  update_popover_shadowing (GTK_WIDGET (sidebar->context_row), TRUE);
 }
 
 static void
-unset_prelight (GtkPopover *popover)
+unset_prelight (GtkPlacesSidebar *sidebar)
 {
-  update_popover_shadowing (gtk_widget_get_parent (GTK_WIDGET (popover)), FALSE);
+  update_popover_shadowing (GTK_WIDGET (sidebar->context_row), FALSE);
 }
 
 static void
-setup_popover_shadowing (GtkWidget *popover)
+setup_popover_shadowing (GtkWidget        *popover,
+                         GtkPlacesSidebar *sidebar)
 {
-  g_signal_connect (popover, "map", G_CALLBACK (set_prelight), NULL);
-  g_signal_connect (popover, "unmap", G_CALLBACK (unset_prelight), NULL);
+  g_signal_connect_swapped (popover, "map", G_CALLBACK (set_prelight), sidebar);
+  g_signal_connect_swapped (popover, "unmap", G_CALLBACK (unset_prelight), sidebar);
+}
+
+static void
+_popover_set_pointing_to_widget (GtkPopover *popover,
+                                 GtkWidget  *target)
+{
+  GtkWidget *parent;
+  double x, y, w, h;
+
+  parent = gtk_widget_get_parent (GTK_WIDGET (popover));
+
+  if (!gtk_widget_translate_coordinates (target, parent, 0, 0, &x, &y))
+    return;
+
+  w = gtk_widget_get_allocated_width (GTK_WIDGET (target));
+  h = gtk_widget_get_allocated_height (GTK_WIDGET (target));
+
+  gtk_popover_set_pointing_to (popover, &(GdkRectangle){x, y, w, h});
 }
 
 static void
@@ -2389,12 +2408,11 @@ show_rename_popover (GtkSidebarRow *row)
   sidebar->rename_uri = g_strdup (uri);
 
   gtk_editable_set_text (GTK_EDITABLE (sidebar->rename_entry), name);
-  g_object_ref (sidebar->rename_popover);
-  gtk_widget_unparent (sidebar->rename_popover);
-  gtk_widget_set_parent (sidebar->rename_popover, GTK_WIDGET (row));
-  g_object_unref (sidebar->rename_popover);
 
-  setup_popover_shadowing (sidebar->rename_popover);
+  _popover_set_pointing_to_widget (GTK_POPOVER (sidebar->rename_popover),
+                                   GTK_WIDGET (row));
+
+  setup_popover_shadowing (sidebar->rename_popover, sidebar);
 
   gtk_popover_popup (GTK_POPOVER (sidebar->rename_popover));
   gtk_widget_grab_focus (sidebar->rename_entry);
@@ -3325,9 +3343,10 @@ create_row_popover (GtkPlacesSidebar *sidebar,
 
   sidebar->popover = gtk_popover_menu_new_from_model (G_MENU_MODEL (menu));
   g_object_unref (menu);
+  gtk_widget_set_parent (sidebar->popover, GTK_WIDGET (sidebar));
   g_signal_connect (sidebar->popover, "destroy", G_CALLBACK (on_row_popover_destroy), sidebar);
 
-  setup_popover_shadowing (sidebar->popover);
+  setup_popover_shadowing (sidebar->popover, sidebar);
 }
 
 static void
@@ -3341,7 +3360,7 @@ show_row_popover (GtkSidebarRow *row)
 
   create_row_popover (sidebar, row);
 
-  gtk_widget_set_parent (sidebar->popover, GTK_WIDGET (row));
+  _popover_set_pointing_to_widget (GTK_POPOVER (sidebar->popover), GTK_WIDGET (row));
 
   sidebar->context_row = row;
   gtk_popover_popup (GTK_POPOVER (sidebar->popover));
