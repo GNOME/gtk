@@ -22,9 +22,21 @@ executable('gtk4-node-editor',
   install: false,
 )
 
-# icons, don't install them until we decide to install gtk4-node-editor
-#icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
+# icons
+icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
 
-#foreach size: ['scalable', 'symbolic']
-#  install_subdir('data/' + size, install_dir: icontheme_dir)
-#endforeach
+foreach size: ['scalable', 'symbolic']
+  install_subdir('data/' + size, install_dir: icontheme_dir)
+endforeach
+
+# desktop file
+install_data('org.gtk.gtk4.NodeEditor.desktop', install_dir: gtk_applicationsdir)
+
+# appdata
+configure_file(
+  input: 'org.gtk.gtk4.NodeEditor.appdata.xml.in',
+  output: 'org.gtk.gtk4.NodeEditor.appdata.xml',
+  configuration: appdata_config,
+  install_dir: gtk_appdatadir
+)
+
