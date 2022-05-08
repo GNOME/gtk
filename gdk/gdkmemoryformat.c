@@ -74,6 +74,223 @@ TYPED_FUNCS (b8g8r8, guchar, 2, 1, 0, -1, 3, 255)
 TYPED_FUNCS (r16g16b16, guint16, 0, 1, 2, -1, 6, 65535)
 TYPED_FUNCS (r16g16b16a16, guint16, 0, 1, 2, 3, 8, 65535)
 
+#define PREMULTIPLY_FUNCS(type, A, scale) \
+static void \
+type ## _premultiply_ ## A (guchar       *dest_data, \
+                            const guchar *src_data, \
+                            gsize         n) \
+{ \
+  type *dest = (type *) dest_data; \
+  const type *src = (const type *) src_data; \
+  for (gsize i = 0; i < n; i++) \
+    { \
+      unsigned a = src[A]; \
+      if (A != 0) dest[0] = src[0] * a / scale; \
+      if (A != 1) dest[1] = src[1] * a / scale; \
+      if (A != 2) dest[2] = src[2] * a / scale; \
+      if (A != 3) dest[3] = src[3] * a / scale; \
+      dest[A] = a; \
+      src += 4; \
+      dest += 4; \
+    } \
+} \
+\
+static void \
+type ## _unpremultiply_ ## A (guchar       *dest_data, \
+                              const guchar *src_data, \
+                              gsize         n) \
+{ \
+  type *dest = (type *) dest_data; \
+  const type *src = (const type *) src_data; \
+  for (gsize i = 0; i < n; i++) \
+    { \
+      unsigned a = src[A]; \
+      if (a == 0) \
+        { \
+          dest[0] = dest[1] = dest[2] = dest[3] = 0; \
+        } \
+      else \
+        { \
+          if (A != 0) dest[0] = (src[0] * scale + a / 2) / a; \
+          if (A != 1) dest[1] = (src[1] * scale + a / 2) / a; \
+          if (A != 2) dest[2] = (src[2] * scale + a / 2) / a; \
+          if (A != 3) dest[3] = (src[3] * scale + a / 2) / a; \
+          dest[A] = a; \
+        } \
+      src += 4; \
+      dest += 4; \
+    } \
+}
+
+PREMULTIPLY_FUNCS (guint8, 0, G_MAXUINT8)
+PREMULTIPLY_FUNCS (guint8, 3, G_MAXUINT8)
+PREMULTIPLY_FUNCS (guint16, 3, G_MAXUINT16)
+
+static void
+half_float_premultiply (guchar       *dest_data,
+                        const guchar *src_data,
+                        gsize  n)
+{
+  guint16 *dest = (guint16 *) dest_data;
+  const float *src = (const float *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      float tmp[4];
+      tmp[0] = src[0] * src[3];
+      tmp[1] = src[1] * src[3];
+      tmp[2] = src[2] * src[3];
+      tmp[3] = src[3];
+      float_to_half4 (tmp, dest);
+      dest += 4;
+      src += 4;
+    }
+}
+
+static void
+half_float_unpremultiply (guchar       *dest_data,
+                          const guchar *src_data,
+                          gsize  n)
+{
+  float *dest = (float *) dest_data;
+  const guint16 *src = (const guint16 *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      half_to_float4 (src, dest);
+      if (dest[3] <= 1/255.0)
+        {
+          memset (dest, 0, sizeof (guint) * 4);
+        }
+      else
+        {
+          dest[0] = dest[0] / dest[3];
+          dest[1] = dest[1] / dest[3];
+          dest[2] = dest[2] / dest[3];
+        }
+      dest += 4;
+      src += 4;
+    }
+}
+
+static void
+float_premultiply (guchar       *dest_data,
+                   const guchar *src_data,
+                   gsize  n)
+{
+  float *dest = (float *) dest_data;
+  const float *src = (const float *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      float a = src[3];
+      dest[0] = src[0] * a;
+      dest[1] = src[1] * a;
+      dest[2] = src[2] * a;
+      dest[3] = a;
+      dest += 4;
+      src += 4;
+    }
+}
+
+static void
+float_unpremultiply (guchar       *dest_data,
+                     const guchar *src_data,
+                     gsize  n)
+{
+  float *dest = (float *) dest_data;
+  const float *src = (const float *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      float a = src[3];
+      if (a <= 1/255.0)
+        {
+          memset (dest, 0, sizeof (float) * 4);
+        }
+      else
+        {
+          dest[0] = src[0] / a;
+          dest[1] = src[1] / a;
+          dest[2] = src[2] / a;
+          dest[3] = a;
+        }
+      dest += 4;
+      src += 4;
+    }
+}
+
+#define COMPRESS_FUNCS(type, scale) \
+static void \
+type ## _expand (guchar       *dest_data, \
+                 const guchar *src_data, \
+                 gsize         n) \
+{ \
+  type *dest = (type *) dest_data; \
+  const type *src = (const type *) src_data; \
+  for (gsize i = 0; i < n; i++) \
+    { \
+      dest[0] = src[0]; \
+      dest[1] = src[1]; \
+      dest[2] = src[2]; \
+      dest[3] = scale; \
+      dest += 4; \
+      src += 3; \
+    } \
+} \
+\
+static void \
+type ## _compress (guchar       *dest_data, \
+                   const guchar *src_data, \
+                   gsize         n) \
+{ \
+  type *dest = (type *) dest_data; \
+  const type *src = (const type *) src_data; \
+  for (gsize i = 0; i < n; i++) \
+    { \
+      dest[0] = src[0] * src[3] / scale; \
+      dest[1] = src[1] * src[3] / scale; \
+      dest[2] = src[2] * src[3] / scale; \
+      dest += 3; \
+      src += 4; \
+    } \
+}
+
+COMPRESS_FUNCS (guint8, G_MAXUINT8)
+COMPRESS_FUNCS (guint16, G_MAXUINT16)
+COMPRESS_FUNCS (float, 1.0f)
+
+static void
+half_float_expand (guchar       *dest_data,
+                   const guchar *src_data,
+                   gsize         n)
+{
+  float *dest = (float *) dest_data;
+  const guint16 *src = (const guint16 *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      half_to_float (src, dest, 3);
+      dest[3] = 1.0;
+      dest += 4;
+      src += 3;
+    }
+}
+
+static void
+half_float_compress (guchar       *dest_data,
+                     const guchar *src_data,
+                     gsize         n)
+{
+  guint16 *dest = (guint16 *) dest_data;
+  const float *src = (const float *) src_data;
+  for (gsize i = 0; i < n; i++)
+    {
+      float tmp[3];
+      tmp[0] = src[0] * src[3];
+      tmp[1] = src[1] * src[3];
+      tmp[2] = src[2] * src[3];
+      float_to_half (tmp, dest, 3);
+      dest += 3;
+      src += 4;
+    }
+}
+
 static void
 r16g16b16_float_to_float (float        *dest,
                           const guchar *src_data,
@@ -168,54 +385,6 @@ r32g32b32a32_float_from_float (guchar      *dest,
   memcpy (dest, src, sizeof (float) * n * 4);
 }
 
-#define PREMULTIPLY_FUNC(name, R1, G1, B1, A1, R2, G2, B2, A2) \
-static void \
-name (guchar *dest, \
-      const guchar *src, \
-      gsize n) \
-{ \
-  for (; n > 0; n--) \
-    { \
-      guchar a = src[A1]; \
-      guint16 r = (guint16)src[R1] * a + 127; \
-      guint16 g = (guint16)src[G1] * a + 127; \
-      guint16 b = (guint16)src[B1] * a + 127; \
-      dest[R2] = (r + (r >> 8) + 1) >> 8; \
-      dest[G2] = (g + (g >> 8) + 1) >> 8; \
-      dest[B2] = (b + (b >> 8) + 1) >> 8; \
-      dest[A2] = a; \
-      dest += 4; \
-      src += 4; \
-    } \
-}
-
-PREMULTIPLY_FUNC(r8g8b8a8_to_r8g8b8a8_premultiplied, 0, 1, 2, 3, 0, 1, 2, 3)
-PREMULTIPLY_FUNC(r8g8b8a8_to_b8g8r8a8_premultiplied, 0, 1, 2, 3, 2, 1, 0, 3)
-PREMULTIPLY_FUNC(r8g8b8a8_to_a8r8g8b8_premultiplied, 0, 1, 2, 3, 1, 2, 3, 0)
-PREMULTIPLY_FUNC(r8g8b8a8_to_a8b8g8r8_premultiplied, 0, 1, 2, 3, 3, 2, 1, 0)
-
-#define ADD_ALPHA_FUNC(name, R1, G1, B1, R2, G2, B2, A2) \
-static void \
-name (guchar *dest, \
-      const guchar *src, \
-      gsize n) \
-{ \
-  for (; n > 0; n--) \
-    { \
-      dest[R2] = src[R1]; \
-      dest[G2] = src[G1]; \
-      dest[B2] = src[B1]; \
-      dest[A2] = 255; \
-      dest += 4; \
-      src += 3; \
-    } \
-}
-
-ADD_ALPHA_FUNC(r8g8b8_to_r8g8b8a8, 0, 1, 2, 0, 1, 2, 3)
-ADD_ALPHA_FUNC(r8g8b8_to_b8g8r8a8, 0, 1, 2, 2, 1, 0, 3)
-ADD_ALPHA_FUNC(r8g8b8_to_a8r8g8b8, 0, 1, 2, 1, 2, 3, 0)
-ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
-
 struct _GdkMemoryFormatDescription
 {
   const char *name;
@@ -232,6 +401,12 @@ struct _GdkMemoryFormatDescription
   /* no premultiplication going on here */
   void (* to_float) (float *, const guchar*, gsize);
   void (* from_float) (guchar *, const float *, gsize);
+  struct {
+    guint type;
+    gsize bpp;
+  } lcms;
+  void (* to_lcms) (guchar *, const guchar *, gsize);
+  void (* from_lcms) (guchar *, const guchar *, gsize);
 };
 
 #if  G_BYTE_ORDER == G_LITTLE_ENDIAN
@@ -253,6 +428,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE },
     b8g8r8a8_premultiplied_to_float,
     b8g8r8a8_premultiplied_from_float,
+    { TYPE_BGRA_8, 4 },
+    guint8_unpremultiply_3,
+    guint8_premultiply_3,
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
     "A8R8G8B8_PREMULTIPLIED",
@@ -264,6 +442,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
     a8r8g8b8_premultiplied_to_float,
     a8r8g8b8_premultiplied_from_float,
+    { TYPE_ARGB_8, 4 },
+    guint8_unpremultiply_0,
+    guint8_premultiply_0,
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
     "R8G8B8A8_PREMULTIPLIED",
@@ -275,6 +456,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE },
     r8g8b8a8_premultiplied_to_float,
     r8g8b8a8_premultiplied_from_float,
+    { TYPE_RGBA_8, 4 },
+    guint8_unpremultiply_3,
+    guint8_premultiply_3,
   },
   [GDK_MEMORY_B8G8R8A8] = {
     "B8G8R8A8",
@@ -286,6 +470,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE },
     b8g8r8a8_to_float,
     b8g8r8a8_from_float,
+    { TYPE_BGRA_8, 4 },
+    NULL,
+    NULL,
   },
   [GDK_MEMORY_A8R8G8B8] = {
     "A8R8G8B8",
@@ -297,6 +484,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
     a8r8g8b8_to_float,
     a8r8g8b8_from_float,
+    { TYPE_ARGB_8, 4 },
+    NULL,
+    NULL,
   },
   [GDK_MEMORY_R8G8B8A8] = {
     "R8G8B8A8",
@@ -308,6 +498,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE },
     r8g8b8a8_to_float,
     r8g8b8a8_from_float,
+    { TYPE_RGBA_8, 4 },
+    NULL,
+    NULL,
   },
   [GDK_MEMORY_A8B8G8R8] = {
     "A8B8G8R8",
@@ -319,6 +512,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED },
     a8b8g8r8_to_float,
     a8b8g8r8_from_float,
+    { TYPE_ABGR_8, 4 },
+    NULL,
+    NULL,
   },
   [GDK_MEMORY_R8G8B8] = {
     "R8G8B8",
@@ -330,6 +526,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE },
     r8g8b8_to_float,
     r8g8b8_from_float,
+    { TYPE_RGBA_8, 4 },
+    guint8_expand,
+    guint8_compress,
   },
   [GDK_MEMORY_B8G8R8] = {
     "B8G8R8",
@@ -341,6 +540,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE },
     b8g8r8_to_float,
     b8g8r8_from_float,
+    { TYPE_BGRA_8, 4 },
+    guint8_expand,
+    guint8_compress,
   },
   [GDK_MEMORY_R16G16B16] = {
     "R16G16B16",
@@ -352,6 +554,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGB16, GL_RGB, GL_UNSIGNED_SHORT },
     r16g16b16_to_float,
     r16g16b16_from_float,
+    { TYPE_RGBA_16, 8 },
+    guint16_expand,
+    guint16_compress,
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
     "R16G16B16A16_PREMULTIPLIED",
@@ -363,6 +568,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT },
     r16g16b16a16_to_float,
     r16g16b16a16_from_float,
+    { TYPE_RGBA_16, 8 },
+    guint16_unpremultiply_3,
+    guint16_premultiply_3,
   },
   [GDK_MEMORY_R16G16B16A16] = {
     "R16G16B16A16",
@@ -374,6 +582,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT },
     r16g16b16a16_to_float,
     r16g16b16a16_from_float,
+    { TYPE_RGBA_16, 8 },
+    NULL,
+    NULL,
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
     "R16G16B16_FLOAT",
@@ -385,6 +596,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGB16F, GL_RGB, GL_HALF_FLOAT },
     r16g16b16_float_to_float,
     r16g16b16_float_from_float,
+    { TYPE_RGBA_FLT, 16 },
+    half_float_expand,
+    half_float_compress,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
     "R16G16B16A16_FLOAT_PREMULTIPLIED",
@@ -396,6 +610,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT },
     r16g16b16a16_float_to_float,
     r16g16b16a16_float_from_float,
+    { TYPE_RGBA_FLT, 16 },
+    half_float_unpremultiply,
+    half_float_premultiply,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT] = {
     "R16G16B16A16_FLOAT",
@@ -407,6 +624,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT },
     r16g16b16a16_float_to_float,
     r16g16b16a16_float_from_float,
+    { TYPE_RGBA_FLT, 16 },
+    NULL,
+    NULL
   },
   [GDK_MEMORY_R32G32B32_FLOAT] = {
     "R32G32B32_FLOAT",
@@ -418,6 +638,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGB32F, GL_RGB, GL_FLOAT },
     r32g32b32_float_to_float,
     r32g32b32_float_from_float,
+    { TYPE_RGBA_FLT, 16 },
+    float_expand,
+    float_compress,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
     "R32G32B32A32_FLOAT_PREMULTIPLIED",
@@ -429,6 +652,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA32F, GL_RGBA, GL_FLOAT },
     r32g32b32a32_float_to_float,
     r32g32b32a32_float_from_float,
+    { TYPE_RGBA_FLT, 16 },
+    float_unpremultiply,
+    float_premultiply,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT] = {
     "R32G32B32A32_FLOAT",
@@ -440,6 +666,9 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     { GL_RGBA32F, GL_RGBA, GL_FLOAT },
     r32g32b32a32_float_to_float,
     r32g32b32a32_float_from_float,
+    { TYPE_RGBA_FLT, 16 },
+    NULL,
+    NULL,
   }
 };
 
@@ -604,37 +833,55 @@ static void
 gdk_memory_convert_transform (guchar              *dest_data,
                               gsize                dest_stride,
                               GdkMemoryFormat      dest_format,
+                              GdkColorSpace       *dest_space,
                               const guchar        *src_data,
                               gsize                src_stride,
                               GdkMemoryFormat      src_format,
+                              GdkColorSpace       *src_space,
                               gsize                width,
-                              gsize                height,
-                              cmsHTRANSFORM        transform)
+                              gsize                height)
 {
   const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
   const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
-  float *tmp;
+  cmsHTRANSFORM transform;
+  guchar *src_tmp, *dest_tmp;
   gsize y;
 
-  tmp = g_new (float, width * 4);
+  transform = cmsCreateTransform (gdk_lcms_color_space_get_lcms_profile (src_space),
+                                  src_desc->lcms.type,
+                                  gdk_lcms_color_space_get_lcms_profile (dest_space),
+                                  dest_desc->lcms.type,
+                                  INTENT_PERCEPTUAL,
+                                  cmsFLAGS_COPY_ALPHA);
+  if (src_desc->to_lcms)
+    src_tmp = g_malloc_n (src_desc->lcms.bpp, width);
+  else
+    src_tmp = NULL;
+  if (dest_desc->from_lcms)
+    dest_tmp = g_malloc_n (dest_desc->lcms.bpp, width);
+  else
+    dest_tmp = NULL;
 
   for (y = 0; y < height; y++)
     {
-      src_desc->to_float (tmp, src_data, width);
-      if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        unpremultiply (tmp, width);
+      if (src_desc->to_lcms)
+        src_desc->to_lcms (src_tmp, src_data, width);
+
       cmsDoTransform (transform,
-                      tmp,
-                      tmp,
+                      src_tmp ? src_tmp : src_data,
+                      dest_tmp ? dest_tmp : dest_data,
                       width);
-      if (dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
-        premultiply (tmp, width);
-      dest_desc->from_float (dest_data, tmp, width);
+
+      if (dest_desc->from_lcms)
+        dest_desc->from_lcms (dest_data, dest_tmp, width);
+
       src_data += src_stride;
       dest_data += dest_stride;
     }
 
-  g_free (tmp);
+  g_free (src_tmp);
+  g_free (dest_tmp);
+  cmsDeleteTransform (transform);
 }
 
 void
@@ -650,93 +897,28 @@ gdk_memory_convert (guchar              *dest_data,
                     gsize                height)
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
-  cmsHTRANSFORM transform;
-  gsize y;
-  void (*func) (guchar *, const guchar *, gsize) = NULL;
+  gboolean need_transform;
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
 
-  if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_r8g8b8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_b8g8r8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_b8g8r8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_r8g8b8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8a8_to_a8r8g8b8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8a8_to_a8b8g8r8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8_to_a8r8g8b8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8_to_a8b8g8r8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8)
-    func = r8g8b8_to_a8r8g8b8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8)
-    func = r8g8b8_to_a8b8g8r8;
-
-  if (func != NULL)
-    {
-      for (y = 0; y < height; y++)
-        {
-          func (dest_data, src_data, width);
-          src_data += src_stride;
-          dest_data += dest_stride;
-        }
-      return;
-    }
-
-  if (gdk_color_space_equal (src_color_space, dest_color_space))
-    {
-      transform = NULL;
-    }
-  else
-    {
-      transform = cmsCreateTransform (gdk_lcms_color_space_get_lcms_profile (src_color_space),
-                                      TYPE_RGBA_FLT,
-                                      gdk_lcms_color_space_get_lcms_profile (dest_color_space),
-                                      TYPE_RGBA_FLT,
-                                      INTENT_PERCEPTUAL,
-                                      cmsFLAGS_COPY_ALPHA);
-    }
-
-  if (transform)
-    {
-      gdk_memory_convert_transform (dest_data, dest_stride, dest_format,
-                                    src_data, src_stride, src_format,
-                                    width, height,
-                                    transform);
-      cmsDeleteTransform (transform);
-    }
-  else
+  need_transform = !gdk_color_space_equal (src_color_space, dest_color_space);
+  if (!need_transform)
     {
       gdk_memory_convert_no_transform (dest_data, dest_stride, dest_format,
                                        src_data, src_stride, src_format,
                                        width, height);
+    }
+  else
+    {
+      gdk_memory_convert_transform (dest_data, dest_stride, dest_format, dest_color_space,
+                                    src_data, src_stride, src_format, src_color_space,
+                                    width, height);
     }
 
   gdk_profiler_end_markf (start_time, "memory convert", "%zu pixels %s => %s%s",
                           width * height,
                           memory_formats[src_format].name,
                           memory_formats[dest_format].name,
-                          transform ? " transformed" : "");
+                          need_transform ? " transformed" : "");
 }
