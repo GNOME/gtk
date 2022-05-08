@@ -40,6 +40,7 @@
 
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkdisplayprivate.h>
+#include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
@@ -684,6 +685,79 @@ gsk_gl_driver_cache_texture (GskGLDriver         *self,
   g_hash_table_insert (self->texture_id_to_key, GUINT_TO_POINTER (texture_id), k);
 }
 
+static void
+draw_offscreen (GskGLCommandQueue *command_queue,
+                float              min_x,
+                float              min_y,
+                float              max_x,
+                float              max_y)
+{
+  GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (command_queue);
+  float min_u = 0;
+  float min_v = 1;
+  float max_u = 1;
+  float max_v = 0;
+  guint16 c[4] = { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO };
+
+  vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c[0], c[1], c[2
+], c[3] } };
+  vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c[0], c[1], c[2
+], c[3] } };
+  vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c[0], c[1], c[2
+], c[3] } };
+  vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .uv = { max_u, max_v }, .color = { c[0], c[1], c[2
+], c[3] } };
+  vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c[0], c[1], c[2
+], c[3] } };
+  vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c[0], c[1], c[2], c[3] } };
+}
+
+static void
+set_viewport_for_size (GskGLProgram *program,
+                         float         width,
+                         float         height)
+{
+  float viewport[4] = { 0, 0, width, height };
+
+  gsk_gl_uniform_state_set4fv (program->uniforms,
+                               program->program_info,
+                               UNIFORM_SHARED_VIEWPORT, 0,
+                               1,
+                               (const float *)&viewport);
+}
+
+#define ORTHO_NEAR_PLANE   -10000
+#define ORTHO_FAR_PLANE     10000
+
+static void
+set_projection_for_size (GskGLProgram *program,
+                       float            width,
+                       float            height)
+{
+  graphene_matrix_t projection;
+
+  graphene_matrix_init_ortho (&projection, 0, width, 0, height, ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+  graphene_matrix_scale (&projection, 1, -1, 1);
+
+  gsk_gl_uniform_state_set_matrix (program->uniforms,
+                                   program->program_info,
+                                   UNIFORM_SHARED_PROJECTION, 0,
+                                   &projection);
+}
+
+static void
+reset_modelview (GskGLProgram *program)
+{
+  graphene_matrix_t modelview;
+
+  graphene_matrix_init_identity (&modelview);
+
+  gsk_gl_uniform_state_set_matrix (program->uniforms,
+                                   program->program_info,
+                                   UNIFORM_SHARED_MODELVIEW, 0,
+                                   &modelview);
+}
+
 /**
  * gsk_gl_driver_load_texture:
  * @self: a `GdkTexture`
@@ -714,9 +788,9 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
                             int          mag_filter)
 {
   GdkGLContext *context;
-  GdkMemoryTexture *downloaded_texture;
+  GdkMemoryTexture *downloaded_texture = NULL;
+  guint texture_id = 0;
   GskGLTexture *t;
-  guint texture_id;
   int height;
   int width;
   int format;
@@ -726,8 +800,10 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
   g_return_val_if_fail (GSK_IS_GL_COMMAND_QUEUE (self->command_queue), 0);
 
   context = self->command_queue->context;
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
 
-  format = GL_RGBA8;
+  format = gdk_memory_format_prefers_high_depth (gdk_texture_get_format (texture)) ? GL_RGBA16F : GL_RGBA8;
 
   if (GDK_IS_GL_TEXTURE (texture))
     {
@@ -736,8 +812,66 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
 
       if (gdk_gl_context_is_shared (context, texture_context))
         {
+          guint gl_texture_id;
+
+          gl_texture_id = gdk_gl_texture_get_id (gl_texture);
+
           /* A GL texture from the same GL context is a simple task... */
-          return gdk_gl_texture_get_id (gl_texture);
+          if (gdk_color_profile_is_linear (gdk_texture_get_color_profile (texture)))
+            {
+              return gl_texture_id;
+            }
+          else
+            {
+              GskGLRenderTarget *target;
+              guint prev_fbo;
+
+              /* The GL texture isn't linear sRGB, so we need to convert
+               * it before we can use it. For now, we just assume that it
+               * is nonlinear sRGB. Eventually, we should figure out how
+               * to convert from other color spaces to linear sRGB
+               */
+              gdk_gl_context_make_current (context);
+
+              gsk_gl_driver_create_render_target (self,
+                                                  width, height,
+                                                  format,
+                                                  min_filter, mag_filter,
+                                                  &target);
+
+              prev_fbo = gsk_gl_command_queue_bind_framebuffer (self->command_queue, target->framebuffer_id);
+              gsk_gl_command_queue_clear (self->command_queue, 0, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+              gsk_gl_command_queue_begin_draw (self->command_queue,
+                                               self->linearize_no_clip->program_info,
+                                               width, height);
+
+              set_projection_for_size (self->linearize_no_clip, width, height);
+              set_viewport_for_size (self->linearize_no_clip, width, height);
+              reset_modelview (self->linearize_no_clip);
+
+              gsk_gl_program_set_uniform_texture (self->linearize_no_clip,
+                                                  UNIFORM_SHARED_SOURCE, 0,
+                                                  GL_TEXTURE_2D, GL_TEXTURE0, gl_texture_id);
+              draw_offscreen (self->command_queue, 0, 0, width, height);
+
+              gsk_gl_command_queue_end_draw (self->command_queue);
+
+              gsk_gl_command_queue_bind_framebuffer (self->command_queue, prev_fbo);
+
+              texture_id = gsk_gl_driver_release_render_target (self, target, FALSE);
+
+              t = gsk_gl_texture_new (texture_id,
+                                      width, height, format, min_filter, mag_filter,
+                                      self->current_frame_id);
+
+              /* Use gsk_gl_texture_free() as destroy notify here since we are
+               * not inserting this GskGLTexture into self->textures!
+               */
+              gdk_texture_set_render_data (texture, self, t, (GDestroyNotify)gsk_gl_texture_free);
+
+              return texture_id;
+            }
         }
       else
         {
