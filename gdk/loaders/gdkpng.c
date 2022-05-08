@@ -20,11 +20,14 @@
 #include "gdkpngprivate.h"
 
 #include <glib/gi18n-lib.h>
+#include "gdkcolorstateprivate.h"
+#include "gdkcolorstateprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytexture.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexturedownloaderprivate.h"
 #include "gsk/gl/fp16private.h"
+
 #include <png.h>
 #include <stdio.h>
 
@@ -127,6 +130,182 @@ png_simple_warning_callback (png_structp     png,
 }
 
 /* }}} */
+/* {{{ Color profile handling */
+
+typedef struct
+{
+  gboolean cicp_chunk_read;
+  int color_primaries;
+  int transfer_function;
+  int matrix_coefficients;
+  int full_range;
+} CICPData;
+
+static int
+png_read_chunk_func (png_structp        png,
+                     png_unknown_chunkp chunk)
+{
+  if (strcmp ((char *) chunk->name, "cICP") == 0 &&
+      chunk->size == 4)
+    {
+      CICPData *cicp = png_get_user_chunk_ptr (png);
+
+      cicp->cicp_chunk_read = TRUE;
+
+      cicp->color_primaries = chunk->data[0];
+      cicp->transfer_function = chunk->data[1];
+      cicp->matrix_coefficients = chunk->data[2];
+      cicp->full_range = chunk->data[3];
+
+      return 1;
+    }
+
+  return 0;
+}
+
+static GdkColorState *
+gdk_png_get_color_state (png_struct *png,
+                         png_info   *info)
+{
+  GdkColorState *color_state;
+  guchar *icc_data;
+  png_uint_32 icc_len;
+  char *name;
+  double gamma;
+  cmsCIExyY whitepoint;
+  cmsCIExyYTRIPLE primaries;
+  cmsToneCurve *curve;
+  cmsHPROFILE lcms_profile;
+  int intent;
+  CICPData *cicp;
+
+  cicp = png_get_user_chunk_ptr (png);
+
+  if (cicp->cicp_chunk_read)
+    {
+      color_state = gdk_color_state_new_from_cicp_data (cicp->color_primaries,
+                                                        cicp->transfer_function,
+                                                        cicp->matrix_coefficients,
+                                                        cicp->full_range);
+      if (color_state)
+        {
+          g_debug ("Color state from cICP data: %s\n", gdk_color_state_get_name (color_state));
+          return color_state;
+        }
+      else
+        {
+          g_debug ("Failed to create color state from cICP data: %d/%d/%d %d\n",
+                   cicp->color_primaries,
+                   cicp->transfer_function,
+                   cicp->matrix_coefficients,
+                   cicp->full_range);
+        }
+    }
+
+  if (png_get_iCCP (png, info, &name, NULL, &icc_data, &icc_len))
+    {
+      GBytes *bytes = g_bytes_new (icc_data, icc_len);
+
+      color_state = gdk_color_state_new_from_icc_profile (bytes, NULL);
+      g_bytes_unref (bytes);
+      if (color_state)
+        return color_state;
+    }
+
+  if (png_get_sRGB (png, info, &intent))
+    return gdk_color_state_get_srgb ();
+
+  /* If neither of those is valid, the result is sRGB */
+  if (!png_get_valid (png, info, PNG_INFO_gAMA) &&
+      !png_get_valid (png, info, PNG_INFO_cHRM))
+    return gdk_color_state_get_srgb ();
+
+  if (!png_get_gAMA (png, info, &gamma))
+    gamma = 2.4;
+
+  if (!png_get_cHRM (png, info,
+                     &whitepoint.x, &whitepoint.y,
+                     &primaries.Red.x, &primaries.Red.y,
+                     &primaries.Green.x, &primaries.Green.y,
+                     &primaries.Blue.x, &primaries.Blue.y))
+    {
+      if (gamma == 2.4)
+        return gdk_color_state_get_srgb ();
+
+      whitepoint = (cmsCIExyY) { 0.3127, 0.3290, 1.0 };
+      primaries = (cmsCIExyYTRIPLE) {
+                    { 0.6400, 0.3300, 1.0 },
+                    { 0.3000, 0.6000, 1.0 },
+                    { 0.1500, 0.0600, 1.0 }
+                  };
+    }
+  else
+    {
+      primaries.Red.Y = 1.0;
+      primaries.Green.Y = 1.0;
+      primaries.Blue.Y = 1.0;
+    }
+
+  curve = cmsBuildGamma (NULL, 1.0 / gamma);
+  lcms_profile = cmsCreateRGBProfile (&whitepoint,
+                                      &primaries,
+                                      (cmsToneCurve*[3]) { curve, curve, curve });
+  color_state = gdk_color_state_new_from_lcms_profile (lcms_profile);
+  /* FIXME: errors? */
+  if (color_state == NULL)
+    color_state = gdk_color_state_get_srgb ();
+  cmsFreeToneCurve (curve);
+
+  return color_state;
+}
+
+static void
+gdk_png_set_color_state (png_struct    *png,
+                         png_info      *info,
+                         GdkColorState *color_state,
+                         png_byte      *chunk_data)
+{
+  int cp, tc, mc;
+  gboolean fr;
+
+  if (gdk_color_state_save_to_cicp_data (color_state, &cp, &tc, &mc, &fr, NULL))
+    {
+      png_unknown_chunk chunk = {
+        .name = { 'c', 'I', 'C', 'P', '\0' },
+        .data = chunk_data,
+        .size = 4,
+        .location = PNG_HAVE_IHDR,
+      };
+
+      chunk_data[0] = (png_byte)cp;
+      chunk_data[1] = (png_byte)tc;
+      chunk_data[2] = (png_byte)mc;
+      chunk_data[3] = (png_byte)fr;
+
+      g_debug ("got cicp %d/%d/%d %d\n", cp, tc, mc, fr);
+
+      png_set_unknown_chunks (png, info, &chunk, 1);
+    }
+  else if (color_state == gdk_color_state_get_srgb ())
+    {
+      png_set_sRGB_gAMA_and_cHRM (png, info, /* FIXME */ PNG_sRGB_INTENT_PERCEPTUAL);
+    }
+  else
+    {
+      GBytes *bytes = gdk_color_state_save_to_icc_profile (color_state, NULL);
+      if (bytes)
+        {
+          png_set_iCCP (png, info,
+                        "ICC profile",
+                        0,
+                        g_bytes_get_data (bytes, NULL),
+                        g_bytes_get_size (bytes));
+          g_bytes_unref (bytes);
+        }
+    }
+}
+
+/* }}} */
 /* {{{ Public API */
 
 GdkTexture *
@@ -147,8 +326,11 @@ gdk_load_png (GBytes      *bytes,
   guchar *buffer = NULL;
   guchar **row_pointers = NULL;
   GBytes *out_bytes;
+  GdkColorState *color_state;
   GdkTexture *texture;
   int bpp;
+  CICPData cicp = { FALSE, };
+
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
   io.data = (guchar *)g_bytes_get_data (bytes, &io.size);
@@ -169,6 +351,7 @@ gdk_load_png (GBytes      *bytes,
     g_error ("Out of memory");
 
   png_set_read_fn (png, &io, png_read_func);
+  png_set_read_user_chunk_fn (png, &cicp, png_read_chunk_func);
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
@@ -266,6 +449,8 @@ gdk_load_png (GBytes      *bytes,
       return NULL;
     }
 
+  color_state = gdk_png_get_color_state (png, info);
+
   bpp = gdk_memory_format_bytes_per_pixel (format);
   if (!g_size_checked_mul (&stride, width, bpp) ||
       !g_size_checked_add (&stride, stride, (8 - stride % 8) % 8))
@@ -281,6 +466,7 @@ gdk_load_png (GBytes      *bytes,
 
   if (!buffer || !row_pointers)
     {
+      gdk_color_state_unref (color_state);
       g_free (buffer);
       g_free (row_pointers);
       png_destroy_read_struct (&png, &info, NULL);
@@ -297,8 +483,11 @@ gdk_load_png (GBytes      *bytes,
   png_read_end (png, info);
 
   out_bytes = g_bytes_new_take (buffer, height * stride);
-  texture = gdk_memory_texture_new (width, height, format, out_bytes, stride);
+  texture = gdk_memory_texture_new_with_color_state (width, height,
+                                                     format, color_state,
+                                                     out_bytes, stride);
   g_bytes_unref (out_bytes);
+  gdk_color_state_unref (color_state);
 
   if (options && png_get_text (png, info, &text, &num_texts))
     {
@@ -337,11 +526,14 @@ gdk_save_png (GdkTexture *texture)
   GBytes *bytes;
   gsize stride;
   const guchar *data;
+  GdkColorState *color_state;
   int png_format;
   int depth;
+  png_byte chunk_data[4];
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
+  color_state = gdk_texture_get_color_state (texture);
   format = gdk_texture_get_format (texture);
 
   switch (format)
@@ -436,6 +628,8 @@ gdk_save_png (GdkTexture *texture)
   /* 2^31-1 is the maximum size for PNG files */
   png_set_user_limits (png, (1u << 31) - 1, (1u << 31) - 1);
 
+  png_set_keep_unknown_chunks (png, PNG_HANDLE_CHUNK_ALWAYS, NULL, 0);
+
   info = png_create_info_struct (png);
   if (!info)
     {
@@ -464,6 +658,8 @@ gdk_save_png (GdkTexture *texture)
                 PNG_INTERLACE_NONE,
                 PNG_COMPRESSION_TYPE_DEFAULT,
                 PNG_FILTER_TYPE_DEFAULT);
+
+  gdk_png_set_color_state (png, info, color_state, chunk_data);
 
   png_write_info (png, info);
 
