@@ -24,6 +24,7 @@
 #include "gdkmemorytexture.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexturedownloaderprivate.h"
+#include "gdkcolorstate.h"
 
 #include <tiffio.h>
 
@@ -220,6 +221,49 @@ tiff_open_write (GBytes **result)
 }
 
 /* }}} */
+/* {{{ Color profile handling */
+
+static GdkColorState *
+gdk_tiff_get_color_state (TIFF *tiff)
+{
+  const char *icc_data;
+  guint icc_len;
+
+  if (TIFFGetField (tiff, TIFFTAG_ICCPROFILE, &icc_len, &icc_data))
+    {
+      GBytes *icc_bytes;
+      GdkColorState *color_state;
+
+      icc_bytes = g_bytes_new (icc_data, icc_len);
+      color_state = gdk_color_state_new_from_icc_profile (icc_bytes, NULL);
+      g_bytes_unref (icc_bytes);
+
+      if (color_state)
+        return color_state;
+    }
+
+  return gdk_color_state_get_srgb ();
+}
+
+static void
+gdk_tiff_set_color_state (TIFF          *tiff,
+                          GdkColorState *color_state)
+{
+  GBytes *bytes;
+
+  bytes = gdk_color_state_save_to_icc_profile (color_state, NULL);
+
+  if (bytes)
+    {
+      TIFFSetField (tiff, TIFFTAG_ICCPROFILE,
+                    g_bytes_get_size (bytes),
+                    g_bytes_get_data (bytes, NULL));
+
+      g_bytes_unref (bytes);
+    }
+}
+
+/* }}} */
 /* {{{ Public API */
 
 typedef struct _FormatData FormatData;
@@ -282,6 +326,7 @@ gdk_save_tiff (GdkTexture *texture)
   GBytes *bytes, *result = NULL;
   GdkTextureDownloader downloader;
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   const FormatData *fdata = NULL;
 
   tif = tiff_open_write (&result);
@@ -289,6 +334,7 @@ gdk_save_tiff (GdkTexture *texture)
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
   format = gdk_texture_get_format (texture);
+  color_state = gdk_texture_get_color_state (texture);
   fdata = &format_data[format];
 
   if (fdata == NULL)
@@ -307,6 +353,8 @@ gdk_save_tiff (GdkTexture *texture)
 
   TIFFSetField (tif, TIFFTAG_PHOTOMETRIC, fdata->photometric);
   TIFFSetField (tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+
+  gdk_tiff_set_color_state (tif, color_state);
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, fdata->format);
@@ -344,6 +392,7 @@ load_fallback (TIFF    *tif,
   int width, height;
   guchar *data;
   GBytes *bytes;
+  GdkColorState *color_state;
   GdkTexture *texture;
 
   TIFFGetField (tif, TIFFTAG_IMAGEWIDTH, &width);
@@ -360,12 +409,15 @@ load_fallback (TIFF    *tif,
       return NULL;
     }
 
+  color_state = gdk_tiff_get_color_state (tif);
+
   bytes = g_bytes_new_take (data, width * height * 4);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                                    bytes,
-                                    width * 4);
+  texture = gdk_memory_texture_new_with_color_state (width, height,
+                                                     GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                                                     color_state,
+                                                     bytes,
+                                                     width * 4);
 
   g_bytes_unref (bytes);
 
@@ -390,6 +442,7 @@ gdk_load_tiff (GBytes  *input_bytes,
   gsize stride;
   int bpp;
   GBytes *bytes;
+  GdkColorState *color_state;
   GdkTexture *texture;
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
@@ -490,13 +543,16 @@ gdk_load_tiff (GBytes  *input_bytes,
       line += stride;
     }
 
+  color_state = gdk_tiff_get_color_state (tif);
+
   bpp = gdk_memory_format_bytes_per_pixel (format);
   bytes = g_bytes_new_take (data, width * height * bpp);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    bytes, width * bpp);
+  texture = gdk_memory_texture_new_with_color_state (width, height,
+                                                     format, color_state,
+                                                     bytes, width * bpp);
   g_bytes_unref (bytes);
+  gdk_color_state_unref (color_state);
 
   TIFFClose (tif);
 
