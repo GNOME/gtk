@@ -344,31 +344,33 @@
       return;
     }
 
-  /* Clear our own bookkeeping of regions that need display */
   if (impl->needs_display_region)
     {
+      _gdk_window_process_updates_recurse (gdk_window, impl->needs_display_region);
       cairo_region_destroy (impl->needs_display_region);
       impl->needs_display_region = NULL;
     }
-
-  [self getRectsBeingDrawn: &drawn_rects count: &count];
-  region = cairo_region_create ();
-
-  for (i = 0; i < count; i++)
+  else
     {
-      gdk_rect.x = drawn_rects[i].origin.x;
-      gdk_rect.y = drawn_rects[i].origin.y;
-      gdk_rect.width = drawn_rects[i].size.width;
-      gdk_rect.height = drawn_rects[i].size.height;
+      [self getRectsBeingDrawn: &drawn_rects count: &count];
+      cairo_region_t* region = cairo_region_create ();
 
-      cairo_region_union_rectangle (region, &gdk_rect);
+      for (i = 0; i < count; i++)
+        {
+          gdk_rect.x = drawn_rects[i].origin.x;
+          gdk_rect.y = drawn_rects[i].origin.y;
+          gdk_rect.width = drawn_rects[i].size.width;
+          gdk_rect.height = drawn_rects[i].size.height;
+
+          cairo_region_union_rectangle (region, &gdk_rect);
+        }
+
+      impl->in_paint_rect_count++;
+      _gdk_window_process_updates_recurse (gdk_window, region);
+      impl->in_paint_rect_count--;
+
+      cairo_region_destroy (region);
     }
-
-  impl->in_paint_rect_count++;
-  _gdk_window_process_updates_recurse (gdk_window, region);
-  impl->in_paint_rect_count--;
-
-  cairo_region_destroy (region);
 
   if (needsInvalidateShadow)
     {
