@@ -27,6 +27,7 @@
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdkrgbaprivate.h>
 #include <gdk/gdkcolorspaceprivate.h>
+#include <gdk/gdkmemoryformatprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskglshaderprivate.h>
 #include <gdk/gdktextureprivate.h>
@@ -989,11 +990,23 @@ gsk_gl_render_job_update_clip (GskGLRenderJob        *job,
   return TRUE;
 }
 
+/* Convert from sRGB floats to linear sRGB half-floats */
 static inline void
 rgba_to_half (const GdkRGBA *rgba,
               guint16        h[4])
 {
-  float_to_half4 ((const float *)rgba, h);
+  GdkRGBA d;
+  gdk_memory_convert ((guchar *) &d,
+                      sizeof (float) * 4,
+                      GDK_MEMORY_R32G32B32A32_FLOAT,
+                      gdk_color_space_get_srgb_linear (),
+                      (guchar *) rgba,
+                      sizeof (float) * 4,
+                      GDK_MEMORY_R32G32B32A32_FLOAT,
+                      gdk_color_space_get_srgb (),
+                      1,
+                      1);
+  float_to_half4 ((const float *)&d, h);
 }
 
 /* fill_vertex_data */
