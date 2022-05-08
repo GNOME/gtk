@@ -82,3 +82,8 @@ GSK_GL_DEFINE_PROGRAM (unblurred_outset_shadow,
                        GSK_GL_ADD_UNIFORM (1, UNBLURRED_OUTSET_SHADOW_SPREAD, u_spread)
                        GSK_GL_ADD_UNIFORM (2, UNBLURRED_OUTSET_SHADOW_OFFSET, u_offset)
                        GSK_GL_ADD_UNIFORM (3, UNBLURRED_OUTSET_SHADOW_OUTLINE_RECT, u_outline_rect))
+
+GSK_GL_DEFINE_PROGRAM (postprocessing,
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("postprocessing.glsl")),
+                       GSK_GL_NO_UNIFORMS)
+
