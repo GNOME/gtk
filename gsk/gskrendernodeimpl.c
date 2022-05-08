@@ -49,6 +49,13 @@
 
 #include <hb-ot.h>
 
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-font.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_PARAMETER_TAGS_H
+#endif
+
 /* for oversized image fallback - we use a smaller size than Cairo actually
  * allows to avoid rounding errors in Cairo */
 #define MAX_CAIRO_IMAGE_WIDTH 16384
@@ -5777,12 +5784,22 @@ gsk_text_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 gsk_text_node_draw (GskRenderNode *node,
                     cairo_t       *cr)
 {
   GskTextNode *self = (GskTextNode *) node;
   PangoGlyphString glyphs;
+#ifdef HAVE_PANGOFT
+  FT_Face face;
+  FT_Bool darken = 1;
+  FT_Parameter property = { FT_PARAM_TAG_STEM_DARKENING, &darken };
+
+  face = pango_fc_font_lock_face (PANGO_FC_FONT (self->font));
+  FT_Face_Properties (face, 1, &property);
+#endif
 
   glyphs.num_glyphs = self->num_glyphs;
   glyphs.glyphs = self->glyphs;
@@ -5795,7 +5812,13 @@ gsk_text_node_draw (GskRenderNode *node,
   pango_cairo_show_glyph_string (cr, self->font, &glyphs);
 
   cairo_restore (cr);
+
+#ifdef HAVE_PANGOFT
+  pango_fc_font_unlock_face (PANGO_FC_FONT (self->font));
+#endif
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 gsk_text_node_diff (GskRenderNode *node1,
