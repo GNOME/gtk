@@ -21,6 +21,8 @@ gsk_private_gl_shaders = [
   'gl/resources/filled_border.glsl',
   'gl/resources/postprocessing.glsl',
   'gl/resources/linearize.glsl',
+  'gl/resources/premultiply.glsl',
+  'gl/resources/linearize_premultiply.glsl',
 ]
 
 gsk_public_sources = files([
