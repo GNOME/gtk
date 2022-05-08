@@ -290,17 +290,20 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       GstGLSyncMeta *sync_meta;
 
       sync_meta = gst_buffer_get_gl_sync_meta (buffer);
-      if (sync_meta) {
-        gst_gl_sync_meta_set_sync_point (sync_meta, self->gst_context);
-        gst_gl_sync_meta_wait (sync_meta, self->gst_context);
-      }
+      if (sync_meta)
+        {
+          gst_gl_sync_meta_set_sync_point (sync_meta, self->gst_context);
+          gst_gl_sync_meta_wait (sync_meta, self->gst_context);
+        }
 
-      texture = gdk_gl_texture_new (self->gdk_context,
-                                    *(guint *) frame->data[0],
-                                    frame->info.width,
-                                    frame->info.height,
-                                    (GDestroyNotify) video_frame_free,
-                                    frame);
+      texture = gdk_gl_texture_new_with_color_space (self->gdk_context,
+                                                     *(guint *) frame->data[0],
+                                                     frame->info.width,
+                                                     frame->info.height,
+                                                     0, /* Neither premultiplied nor flipped */
+                                                     gdk_color_space_get_srgb (),
+                                                     (GDestroyNotify) video_frame_free,
+                                                     frame);
 
       *pixel_aspect_ratio = ((double) frame->info.par_n) / ((double) frame->info.par_d);
     }
