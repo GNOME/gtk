@@ -248,7 +248,8 @@ gdk_memory_texture_new_subtexture (GdkMemoryTexture  *source,
 
 GdkMemoryTexture *
 gdk_memory_texture_from_texture (GdkTexture      *texture,
-                                 GdkMemoryFormat  format)
+                                 GdkMemoryFormat  format,
+                                 GdkColorProfile *profile)
 {
   GdkTexture *result;
   GBytes *bytes;
@@ -261,20 +262,22 @@ gdk_memory_texture_from_texture (GdkTexture      *texture,
     {
       GdkMemoryTexture *memtex = GDK_MEMORY_TEXTURE (texture);
 
-      if (gdk_texture_get_format (texture) == format)
+      if (gdk_texture_get_format (texture) == format &&
+          gdk_texture_get_color_profile (texture) == profile)
         return g_object_ref (memtex);
     }
 
   stride = texture->width * gdk_memory_format_bytes_per_pixel (format);
   data = g_malloc_n (stride, texture->height);
 
-  gdk_texture_do_download (texture, format, gdk_color_profile_get_srgb (), data, stride);
+  gdk_texture_do_download (texture, format, profile, data, stride);
   bytes = g_bytes_new_take (data, stride);
-  result = gdk_memory_texture_new (texture->width,
-                                   texture->height,
-                                   format,
-                                   bytes,
-                                   stride);
+  result = gdk_memory_texture_new_with_color_profile (texture->width,
+                                                      texture->height,
+                                                      format,
+                                                      profile,
+                                                      bytes,
+                                                      stride);
   g_bytes_unref (bytes);
 
   return GDK_MEMORY_TEXTURE (result);

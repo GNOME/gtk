@@ -256,7 +256,7 @@ gdk_load_jpeg (GBytes  *input_bytes,
   g_bytes_unref (bytes);
 
   gdk_profiler_end_mark (before, "jpeg load", NULL);
- 
+
   return texture;
 }
 
@@ -308,7 +308,8 @@ gdk_save_jpeg (GdkTexture *texture)
   jpeg_mem_dest (&info, &data, &size);
 
   memtex = gdk_memory_texture_from_texture (texture,
-                                            GDK_MEMORY_R8G8B8);
+                                            GDK_MEMORY_R8G8B8,
+                                            gdk_color_profile_get_srgb ());
   texdata = gdk_memory_texture_get_data (memtex);
   texstride = gdk_memory_texture_get_stride (memtex);
 

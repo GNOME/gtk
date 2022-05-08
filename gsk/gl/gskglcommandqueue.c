@@ -1391,7 +1391,7 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
         }
     }
 
-  memtex = gdk_memory_texture_from_texture (texture, data_format);
+  memtex = gdk_memory_texture_from_texture (texture, data_format, gdk_color_profile_get_srgb ());
   data = gdk_memory_texture_get_data (memtex);
   stride = gdk_memory_texture_get_stride (memtex);
   bpp = gdk_memory_format_bytes_per_pixel (data_format);

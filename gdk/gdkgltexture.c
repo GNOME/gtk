@@ -300,7 +300,8 @@ gdk_gl_texture_release (GdkGLTexture *self)
 
   texture = GDK_TEXTURE (self);
   self->saved = GDK_TEXTURE (gdk_memory_texture_from_texture (texture,
-                                                              gdk_texture_get_format (texture)));
+                                                              gdk_texture_get_format (texture),
+                                                              gdk_texture_get_color_profile (texture)));
 
   if (self->destroy)
     {

@@ -128,7 +128,7 @@ png_simple_warning_callback (png_structp     png,
 }
 
 /* }}} */
-/* {{{ Public API */ 
+/* {{{ Public API */
 
 GdkTexture *
 gdk_load_png (GBytes  *bytes,
@@ -369,7 +369,7 @@ gdk_save_png (GdkTexture *texture)
       return NULL;
     }
 
-  memtex = gdk_memory_texture_from_texture (texture, format);
+  memtex = gdk_memory_texture_from_texture (texture, format, gdk_color_profile_get_srgb ());
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
