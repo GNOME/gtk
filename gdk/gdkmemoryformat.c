@@ -22,6 +22,7 @@
 #include "gdkmemoryformatprivate.h"
 
 #include "gdklcmscolorspaceprivate.h"
+#include "gdkprofilerprivate.h"
 #include "gsk/gl/fp16private.h"
 
 #include <epoxy/gl.h>
@@ -217,6 +218,7 @@ ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 
 struct _GdkMemoryFormatDescription
 {
+  const char *name;
   GdkMemoryAlpha alpha;
   gsize bytes_per_pixel;
   gsize alignment;
@@ -242,6 +244,7 @@ struct _GdkMemoryFormatDescription
 
 static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
   [GDK_MEMORY_B8G8R8A8_PREMULTIPLIED] = {
+    "B8G8R8A8_PREMULTIPLIED",
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
     G_ALIGNOF (guchar),
@@ -252,6 +255,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     b8g8r8a8_premultiplied_from_float,
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
+    "A8R8G8B8_PREMULTIPLIED",
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
     G_ALIGNOF (guchar),
@@ -262,6 +266,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     a8r8g8b8_premultiplied_from_float,
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
+    "R8G8B8A8_PREMULTIPLIED",
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     4,
     G_ALIGNOF (guchar),
@@ -272,6 +277,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r8g8b8a8_premultiplied_from_float,
   },
   [GDK_MEMORY_B8G8R8A8] = {
+    "B8G8R8A8",
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
@@ -282,6 +288,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     b8g8r8a8_from_float,
   },
   [GDK_MEMORY_A8R8G8B8] = {
+    "A8R8G8B8",
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
@@ -292,6 +299,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     a8r8g8b8_from_float,
   },
   [GDK_MEMORY_R8G8B8A8] = {
+    "R8G8B8A8",
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
@@ -302,6 +310,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r8g8b8a8_from_float,
   },
   [GDK_MEMORY_A8B8G8R8] = {
+    "A8B8G8R8",
     GDK_MEMORY_ALPHA_STRAIGHT,
     4,
     G_ALIGNOF (guchar),
@@ -312,6 +321,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     a8b8g8r8_from_float,
   },
   [GDK_MEMORY_R8G8B8] = {
+    "R8G8B8",
     GDK_MEMORY_ALPHA_OPAQUE,
     3,
     G_ALIGNOF (guchar),
@@ -322,6 +332,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r8g8b8_from_float,
   },
   [GDK_MEMORY_B8G8R8] = {
+    "B8G8R8",
     GDK_MEMORY_ALPHA_OPAQUE,
     3,
     G_ALIGNOF (guchar),
@@ -332,6 +343,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     b8g8r8_from_float,
   },
   [GDK_MEMORY_R16G16B16] = {
+    "R16G16B16",
     GDK_MEMORY_ALPHA_OPAQUE,
     6,
     G_ALIGNOF (guint16),
@@ -342,6 +354,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r16g16b16_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
+    "R16G16B16A16_PREMULTIPLIED",
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     8,
     G_ALIGNOF (guint16),
@@ -352,6 +365,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r16g16b16a16_from_float,
   },
   [GDK_MEMORY_R16G16B16A16] = {
+    "R16G16B16A16",
     GDK_MEMORY_ALPHA_STRAIGHT,
     8,
     G_ALIGNOF (guint16),
@@ -362,6 +376,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r16g16b16a16_from_float,
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
+    "R16G16B16_FLOAT",
     GDK_MEMORY_ALPHA_OPAQUE,
     6,
     G_ALIGNOF (guint16),
@@ -372,6 +387,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r16g16b16_float_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
+    "R16G16B16A16_FLOAT_PREMULTIPLIED",
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     8,
     G_ALIGNOF (guint16),
@@ -382,6 +398,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r16g16b16a16_float_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT] = {
+    "R16G16B16A16_FLOAT",
     GDK_MEMORY_ALPHA_STRAIGHT,
     8,
     G_ALIGNOF (guint16),
@@ -392,6 +409,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r16g16b16a16_float_from_float,
   },
   [GDK_MEMORY_R32G32B32_FLOAT] = {
+    "R32G32B32_FLOAT",
     GDK_MEMORY_ALPHA_OPAQUE,
     12,
     G_ALIGNOF (float),
@@ -402,6 +420,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r32g32b32_float_from_float,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
+    "R32G32B32A32_FLOAT_PREMULTIPLIED",
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     16,
     G_ALIGNOF (float),
@@ -412,6 +431,7 @@ static const GdkMemoryFormatDescription memory_formats[GDK_MEMORY_N_FORMATS] = {
     r32g32b32a32_float_from_float,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT] = {
+    "R32G32B32A32_FLOAT",
     GDK_MEMORY_ALPHA_STRAIGHT,
     16,
     G_ALIGNOF (float),
@@ -510,6 +530,113 @@ unpremultiply (float *rgba,
     }
 }
 
+static void
+gdk_memory_convert_same_format (guchar          *dest_data,
+                                gsize            dest_stride,
+                                const guchar    *src_data,
+                                gsize            src_stride,
+                                gsize            width,
+                                gsize            height,
+                                GdkMemoryFormat  format)
+{
+  const GdkMemoryFormatDescription *desc = &memory_formats[format];
+  gsize y, stride;
+
+  stride = desc->bytes_per_pixel * width;
+  if (stride == src_stride && stride == dest_stride)
+    {
+      memcpy (dest_data, src_data, stride * height);
+    }
+  else
+    {
+      for (y = 0; y < height; y++)
+        {
+          memcpy (dest_data + y * dest_stride,
+                  src_data + y * src_stride,
+                  stride);
+        }
+    }
+}
+
+static void
+gdk_memory_convert_no_transform (guchar              *dest_data,
+                                 gsize                dest_stride,
+                                 GdkMemoryFormat      dest_format,
+                                 const guchar        *src_data,
+                                 gsize                src_stride,
+                                 GdkMemoryFormat      src_format,
+                                 gsize                width,
+                                 gsize                height)
+{
+  if (dest_format == src_format)
+    {
+      gdk_memory_convert_same_format (dest_data, dest_stride,
+                                      src_data, src_stride,
+                                      width, height,
+                                      dest_format);
+    }
+  else
+    {
+      const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
+      const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+      float *tmp;
+      gsize y;
+
+      tmp = g_new (float, width * 4);
+
+      for (y = 0; y < height; y++)
+        {
+          src_desc->to_float (tmp, src_data, width);
+          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
+            unpremultiply (tmp, width);
+          else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+            premultiply (tmp, width);
+          dest_desc->from_float (dest_data, tmp, width);
+          src_data += src_stride;
+          dest_data += dest_stride;
+        }
+
+      g_free (tmp);
+    }
+}
+
+static void
+gdk_memory_convert_transform (guchar              *dest_data,
+                              gsize                dest_stride,
+                              GdkMemoryFormat      dest_format,
+                              const guchar        *src_data,
+                              gsize                src_stride,
+                              GdkMemoryFormat      src_format,
+                              gsize                width,
+                              gsize                height,
+                              cmsHTRANSFORM        transform)
+{
+  const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
+  const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+  float *tmp;
+  gsize y;
+
+  tmp = g_new (float, width * 4);
+
+  for (y = 0; y < height; y++)
+    {
+      src_desc->to_float (tmp, src_data, width);
+      if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        unpremultiply (tmp, width);
+      cmsDoTransform (transform,
+                      tmp,
+                      tmp,
+                      width);
+      if (dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+        premultiply (tmp, width);
+      dest_desc->from_float (dest_data, tmp, width);
+      src_data += src_stride;
+      dest_data += dest_stride;
+    }
+
+  g_free (tmp);
+}
+
 void
 gdk_memory_convert (guchar              *dest_data,
                     gsize                dest_stride,
@@ -522,10 +649,8 @@ gdk_memory_convert (guchar              *dest_data,
                     gsize                width,
                     gsize                height)
 {
-  const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
-  const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   cmsHTRANSFORM transform;
-  float *tmp;
   gsize y;
   void (*func) (guchar *, const guchar *, gsize) = NULL;
 
@@ -580,8 +705,6 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  tmp = g_new (float, width * 4);
-
   if (gdk_color_space_equal (src_color_space, dest_color_space))
     {
       transform = NULL;
@@ -596,29 +719,24 @@ gdk_memory_convert (guchar              *dest_data,
                                       cmsFLAGS_COPY_ALPHA);
     }
 
-  for (y = 0; y < height; y++)
+  if (transform)
     {
-      src_desc->to_float (tmp, src_data, width);
-      if (transform)
-        {
-          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-            unpremultiply (tmp, width);
-          cmsDoTransform (transform, tmp, tmp, width);
-          if (dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
-            premultiply (tmp, width);
-        }
-      else
-        {
-          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
-            unpremultiply (tmp, width);
-          else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
-            premultiply (tmp, width);
-        }
-      dest_desc->from_float (dest_data, tmp, width);
-      src_data += src_stride;
-      dest_data += dest_stride;
+      gdk_memory_convert_transform (dest_data, dest_stride, dest_format,
+                                    src_data, src_stride, src_format,
+                                    width, height,
+                                    transform);
+      cmsDeleteTransform (transform);
+    }
+  else
+    {
+      gdk_memory_convert_no_transform (dest_data, dest_stride, dest_format,
+                                       src_data, src_stride, src_format,
+                                       width, height);
     }
 
-  g_free (tmp);
-  g_clear_pointer (&transform, cmsDeleteTransform);
+  gdk_profiler_end_markf (start_time, "memory convert", "%zu pixels %s => %s%s",
+                          width * height,
+                          memory_formats[src_format].name,
+                          memory_formats[dest_format].name,
+                          transform ? " transformed" : "");
 }
