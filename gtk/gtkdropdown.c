@@ -68,6 +68,21 @@
  * useful if the list of options is long. To enable the search entry,
  * use [method@Gtk.DropDown.set_enable_search].
  *
+ * Here is a UI definition example for `GtkDropDown` with a simple model:
+ * ```xml
+ * <object class="GtkDropDown">
+ *   <property name="model">
+ *     <object class="GtkStringList">
+ *       <items>
+ *         <item translatable="yes">Factory</item>
+ *         <item translatable="yes">Home</item>
+ *         <item translatable="yes">Subway</item>
+ *       </items>
+ *     </object>
+ *   </property>
+ * </object>
+ * ```
+ *
  * # CSS nodes
  *
  * `GtkDropDown` has a single CSS node with name dropdown,
