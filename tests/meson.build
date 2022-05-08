@@ -149,3 +149,10 @@ if libsysprof_dep.found()
     dependencies: [libsysprof_dep, platform_gio_dep, libm],
   )
 endif
+
+if libheif_dep.found()
+  executable('testheif',
+    sources: 'testheif.c',
+    dependencies: [libgtk_dep, libheif_dep],
+  )
+endif
