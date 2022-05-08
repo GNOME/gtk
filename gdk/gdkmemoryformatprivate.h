@@ -21,6 +21,7 @@
 #define __GDK_MEMORY_CONVERT_PRIVATE_H__
 
 #include "gdkenums.h"
+#include "gdkcolorspace.h"
 
 G_BEGIN_DECLS
 
@@ -43,9 +44,11 @@ gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat    
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,
                                                              GdkMemoryFormat             dest_format,
+                                                             GdkColorSpace              *dest_color_space,
                                                              const guchar               *src_data,
                                                              gsize                       src_stride,
                                                              GdkMemoryFormat             src_format,
+                                                             GdkColorSpace              *src_color_space,
                                                              gsize                       width,
                                                              gsize                       height);
 

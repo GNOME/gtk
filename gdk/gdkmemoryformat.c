@@ -21,6 +21,7 @@
 
 #include "gdkmemoryformatprivate.h"
 
+#include "gdklcmscolorspaceprivate.h"
 #include "gsk/gl/fp16private.h"
 
 #include <epoxy/gl.h>
@@ -513,14 +514,17 @@ void
 gdk_memory_convert (guchar              *dest_data,
                     gsize                dest_stride,
                     GdkMemoryFormat      dest_format,
+                    GdkColorSpace       *dest_color_space,
                     const guchar        *src_data,
                     gsize                src_stride,
                     GdkMemoryFormat      src_format,
+                    GdkColorSpace       *src_color_space,
                     gsize                width,
                     gsize                height)
 {
   const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
   const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+  cmsHTRANSFORM transform;
   float *tmp;
   gsize y;
   void (*func) (guchar *, const guchar *, gsize) = NULL;
@@ -578,17 +582,43 @@ gdk_memory_convert (guchar              *dest_data,
 
   tmp = g_new (float, width * 4);
 
+  if (gdk_color_space_equal (src_color_space, dest_color_space))
+    {
+      transform = NULL;
+    }
+  else
+    {
+      transform = cmsCreateTransform (gdk_lcms_color_space_get_lcms_profile (src_color_space),
+                                      TYPE_RGBA_FLT,
+                                      gdk_lcms_color_space_get_lcms_profile (dest_color_space),
+                                      TYPE_RGBA_FLT,
+                                      INTENT_PERCEPTUAL,
+                                      cmsFLAGS_COPY_ALPHA);
+    }
+
   for (y = 0; y < height; y++)
     {
       src_desc->to_float (tmp, src_data, width);
-      if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
-        unpremultiply (tmp, width);
-      else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
-        premultiply (tmp, width);
+      if (transform)
+        {
+          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+            unpremultiply (tmp, width);
+          cmsDoTransform (transform, tmp, tmp, width);
+          if (dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+            premultiply (tmp, width);
+        }
+      else
+        {
+          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
+            unpremultiply (tmp, width);
+          else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+            premultiply (tmp, width);
+        }
       dest_desc->from_float (dest_data, tmp, width);
       src_data += src_stride;
       dest_data += dest_stride;
     }
 
   g_free (tmp);
+  g_clear_pointer (&transform, cmsDeleteTransform);
 }

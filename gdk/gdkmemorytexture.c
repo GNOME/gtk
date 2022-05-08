@@ -60,6 +60,7 @@ gdk_memory_texture_dispose (GObject *object)
 static void
 gdk_memory_texture_download (GdkTexture      *texture,
                              GdkMemoryFormat  format,
+                             GdkColorSpace   *color_space,
                              guchar          *data,
                              gsize            stride)
 {
@@ -67,9 +68,11 @@ gdk_memory_texture_download (GdkTexture      *texture,
 
   gdk_memory_convert (data, stride,
                       format,
+                      color_space,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       texture->format,
+                      gdk_texture_get_color_space (texture),
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }
@@ -266,7 +269,7 @@ gdk_memory_texture_from_texture (GdkTexture      *texture,
   stride = texture->width * gdk_memory_format_bytes_per_pixel (format);
   data = g_malloc_n (stride, texture->height);
 
-  gdk_texture_do_download (texture, format, data, stride);
+  gdk_texture_do_download (texture, format, gdk_color_space_get_srgb (), data, stride);
   bytes = g_bytes_new_take (data, stride);
   result = gdk_memory_texture_new (texture->width,
                                    texture->height,

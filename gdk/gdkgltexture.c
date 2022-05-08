@@ -116,6 +116,7 @@ typedef struct _Download Download;
 struct _Download
 {
   GdkMemoryFormat format;
+  GdkColorSpace *color_space;
   guchar *data;
   gsize stride;
 };
@@ -213,9 +214,11 @@ gdk_gl_texture_do_download (gpointer texture_,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              download->color_space,
                               pixels,
                               texture->width * actual_bpp,
                               actual_format,
+                              gdk_color_space_get_srgb (),
                               texture->width,
                               texture->height);
 
@@ -229,6 +232,7 @@ gdk_gl_texture_do_download (gpointer texture_,
 static void
 gdk_gl_texture_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
+                         GdkColorSpace   *color_space,
                          guchar          *data,
                          gsize            stride)
 {
@@ -237,11 +241,12 @@ gdk_gl_texture_download (GdkTexture      *texture,
 
   if (self->saved)
     {
-      gdk_texture_do_download (self->saved, format, data, stride);
+      gdk_texture_do_download (self->saved, format, color_space, data, stride);
       return;
     }
 
   download.format = format;
+  download.color_space = color_space;
   download.data = data;
   download.stride = stride;
 

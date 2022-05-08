@@ -31,6 +31,7 @@ struct _GdkTextureClass {
   /* mandatory: Download in the given format into data */
   void                  (* download)                    (GdkTexture             *texture,
                                                          GdkMemoryFormat         format,
+                                                         GdkColorSpace          *color_space,
                                                          guchar                 *data,
                                                          gsize                   stride);
 };
@@ -42,6 +43,7 @@ cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             
 
 void                    gdk_texture_do_download         (GdkTexture             *texture,
                                                          GdkMemoryFormat         format,
+                                                         GdkColorSpace          *color_space,
                                                          guchar                 *data,
                                                          gsize                   stride);
 GdkMemoryFormat         gdk_texture_get_format          (GdkTexture             *self);
