@@ -146,7 +146,7 @@ gtk_printer_option_widget_finalize (GObject *object)
 {
   GtkPrinterOptionWidget *widget = GTK_PRINTER_OPTION_WIDGET (object);
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
-  
+
   if (priv->source)
     {
       g_signal_handler_disconnect (priv->source,
@@ -154,7 +154,7 @@ gtk_printer_option_widget_finalize (GObject *object)
       g_object_unref (priv->source);
       priv->source = NULL;
     }
-  
+
   G_OBJECT_CLASS (gtk_printer_option_widget_parent_class)->finalize (object);
 }
 
@@ -165,7 +165,7 @@ gtk_printer_option_widget_set_property (GObject         *object,
 					GParamSpec      *pspec)
 {
   GtkPrinterOptionWidget *widget;
-  
+
   widget = GTK_PRINTER_OPTION_WIDGET (object);
 
   switch (prop_id)
@@ -246,7 +246,7 @@ gtk_printer_option_widget_set_source (GtkPrinterOptionWidget *widget,
 
   if (source)
     g_object_ref (source);
-  
+
   if (priv->source)
     {
       g_signal_handler_disconnect (priv->source,
@@ -672,6 +672,17 @@ dialog_response_callback (GtkDialog              *dialog,
           g_free (filename_short);
           g_object_unref (info);
         }
+      else
+        {
+          const char *path = g_file_peek_path (new_location);
+          char *filename_utf8 = g_utf8_make_valid (path, -1);
+
+          char *filename_short = trim_long_filename (filename_utf8);
+          gtk_button_set_label (GTK_BUTTON (priv->button), filename_short);
+
+          g_free (filename_short);
+          g_free (filename_utf8);
+        }
     }
 
   gtk_window_destroy (GTK_WINDOW (dialog));
@@ -719,18 +730,7 @@ filesave_choose_cb (GtkWidget              *button,
     {
       priv->last_location = g_file_new_for_uri (priv->source->value);
       if (priv->last_location)
-        {
-          char *basename;
-          char *basename_utf8;
-
-          gtk_file_chooser_select_file (GTK_FILE_CHOOSER (dialog), priv->last_location, NULL);
-
-          basename = g_file_get_basename (priv->last_location);
-          basename_utf8 = g_filename_to_utf8 (basename, -1, NULL, NULL, NULL);
-          gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), basename_utf8);
-          g_free (basename_utf8);
-          g_free (basename);
-        }
+        gtk_file_chooser_set_file (GTK_FILE_CHOOSER (dialog), priv->last_location, NULL);
     }
 
   g_signal_connect (dialog, "response",
@@ -760,7 +760,7 @@ filter_numeric (const char *val,
           filtered_val[j] = val[i];
 	  j++;
 	}
-      else if (allow_dec && !dec_set && 
+      else if (allow_dec && !dec_set &&
                (val[i] == '.' || val[i] == ','))
         {
 	  /* allow one period or comma
@@ -796,7 +796,7 @@ combo_changed_cb (GtkWidget              *combo,
   gboolean custom = TRUE;
 
   g_signal_handler_block (priv->source, priv->source_changed_handler);
-  
+
   value = combo_box_get (priv->combo, &custom);
 
   /* Handle constraints if the user entered a custom value. */
@@ -851,7 +851,7 @@ entry_changed_cb (GtkWidget              *entry,
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   const char *value;
-  
+
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   value = gtk_editable_get_text (GTK_EDITABLE (entry));
   if (value)
@@ -867,7 +867,7 @@ radio_changed_cb (GtkWidget              *button,
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   char *value;
- 
+
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   value = g_object_get_data (G_OBJECT (button), "value");
   if (value)
@@ -928,9 +928,9 @@ construct_widgets (GtkPrinterOptionWidget *widget)
   GtkWidget *group;
 
   source = priv->source;
-  
+
   deconstruct_widgets (widget);
-  
+
   gtk_widget_set_sensitive (GTK_WIDGET (widget), TRUE);
 
   if (source == NULL)
@@ -1112,7 +1112,7 @@ update_widgets (GtkPrinterOptionWidget *widget)
   GtkPrinterOption *source;
 
   source = priv->source;
-  
+
   if (source == NULL)
     {
       gtk_widget_hide (priv->image);
