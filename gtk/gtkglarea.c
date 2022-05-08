@@ -735,24 +735,19 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
       priv->texture = NULL;
       priv->textures = g_list_prepend (priv->textures, texture);
 
-      texture->holder = gdk_gl_texture_new (priv->context,
-                                            texture->id,
-                                            texture->width,
-                                            texture->height,
-                                            release_texture, texture);
+      texture->holder = gdk_gl_texture_new_with_color_space (priv->context,
+                                                             texture->id,
+                                                             texture->width,
+                                                             texture->height,
+                                                             GDK_GL_TEXTURE_PREMULTIPLIED|GDK_GL_TEXTURE_FLIPPED,
+                                                             gdk_color_space_get_srgb (),
+                                                             release_texture, texture);
 
-      /* Our texture is rendered by OpenGL, so it is upside down,
-       * compared to what GSK expects, so flip it back.
-       */
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, gtk_widget_get_height (widget)));
-      gtk_snapshot_scale (snapshot, 1, -1);
       gtk_snapshot_append_texture (snapshot,
                                    texture->holder,
                                    &GRAPHENE_RECT_INIT (0, 0,
                                                         gtk_widget_get_width (widget),
                                                         gtk_widget_get_height (widget)));
-      gtk_snapshot_restore (snapshot);
 
       g_object_unref (texture->holder);
     }
