@@ -221,6 +221,44 @@ tiff_open_write (GBytes **result)
 }
 
 /* }}} */
+/* {{{ Color profile handling */
+
+static GdkColorSpace *
+gdk_tiff_get_color_space (TIFF *tiff)
+{
+  const char *icc_data;
+  guint icc_len;
+
+  if (TIFFGetField (tiff, TIFFTAG_ICCPROFILE, &icc_len, &icc_data))
+    {
+      GBytes *icc_bytes;
+      GdkColorSpace *color_space;
+
+      icc_bytes = g_bytes_new (icc_data, icc_len);
+      color_space = gdk_color_space_new_from_icc_profile (icc_bytes, NULL);
+      g_bytes_unref (icc_bytes);
+
+      if (color_space)
+        return color_space;
+    }
+
+  return g_object_ref (gdk_color_space_get_srgb ());
+}
+
+static void
+gdk_tiff_set_color_space (TIFF          *tiff,
+                          GdkColorSpace *color_space)
+{
+  GBytes *bytes = gdk_color_space_save_to_icc_profile (color_space, NULL);
+
+  TIFFSetField (tiff, TIFFTAG_ICCPROFILE,
+                g_bytes_get_size (bytes),
+                g_bytes_get_data (bytes, NULL));
+
+  g_bytes_unref (bytes);
+}
+
+/* }}} */
 /* {{{ Public API */
 
 typedef struct _FormatData FormatData;
@@ -266,6 +304,7 @@ gdk_save_tiff (GdkTexture *texture)
   GBytes *result = NULL;
   GdkMemoryTexture *memtex;
   GdkMemoryFormat format;
+  GdkColorSpace *color_space;
   const FormatData *fdata = NULL;
 
   tif = tiff_open_write (&result);
@@ -273,6 +312,7 @@ gdk_save_tiff (GdkTexture *texture)
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
   format = gdk_texture_get_format (texture);
+  color_space = gdk_texture_get_color_space (texture);
   fdata = &format_data[format];
 
   if (fdata == NULL)
@@ -292,7 +332,9 @@ gdk_save_tiff (GdkTexture *texture)
   TIFFSetField (tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_RGB);
   TIFFSetField (tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 
-  memtex = gdk_memory_texture_from_texture (texture, fdata->format, gdk_color_space_get_srgb ());
+  gdk_tiff_set_color_space (tif, color_space);
+
+  memtex = gdk_memory_texture_from_texture (texture, fdata->format, color_space);
   data = gdk_memory_texture_get_data (memtex);
   stride = gdk_memory_texture_get_stride (memtex);
 
@@ -326,6 +368,7 @@ load_fallback (TIFF    *tif,
   int width, height;
   guchar *data;
   GBytes *bytes;
+  GdkColorSpace *color_space;
   GdkTexture *texture;
 
   TIFFGetField (tif, TIFFTAG_IMAGEWIDTH, &width);
@@ -342,12 +385,15 @@ load_fallback (TIFF    *tif,
       return NULL;
     }
 
+  color_space = gdk_tiff_get_color_space (tif);
+
   bytes = g_bytes_new_take (data, width * height * 4);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                                    bytes,
-                                    width * 4);
+  texture = gdk_memory_texture_new_with_color_space (width, height,
+                                                     GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                                                     color_space,
+                                                     bytes,
+                                                     width * 4);
 
   g_bytes_unref (bytes);
 
@@ -372,6 +418,7 @@ gdk_load_tiff (GBytes  *input_bytes,
   gsize stride;
   int bpp;
   GBytes *bytes;
+  GdkColorSpace *color_space;
   GdkTexture *texture;
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
@@ -471,12 +518,14 @@ gdk_load_tiff (GBytes  *input_bytes,
       line += stride;
     }
 
+  color_space = gdk_tiff_get_color_space (tif);
+
   bpp = gdk_memory_format_bytes_per_pixel (format);
   bytes = g_bytes_new_take (data, width * height * bpp);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    bytes, width * bpp);
+  texture = gdk_memory_texture_new_with_color_space (width, height,
+                                                     format, color_space,
+                                                     bytes, width * bpp);
   g_bytes_unref (bytes);
 
   TIFFClose (tif);
