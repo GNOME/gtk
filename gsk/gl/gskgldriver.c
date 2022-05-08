@@ -686,17 +686,18 @@ gsk_gl_driver_cache_texture (GskGLDriver         *self,
 }
 
 static void
-draw_offscreen (GskGLCommandQueue *command_queue,
-                float              min_x,
-                float              min_y,
-                float              max_x,
-                float              max_y)
+draw_rect (GskGLCommandQueue *command_queue,
+           float              min_x,
+           float              min_y,
+           float              max_x,
+           float              max_y,
+           gboolean           flip)
 {
   GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (command_queue);
   float min_u = 0;
-  float min_v = 1;
   float max_u = 1;
-  float max_v = 0;
+  float min_v = flip ? 0 : 1;
+  float max_v = flip ? 1 : 0;
   guint16 c[4] = { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO };
 
   vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c[0], c[1], c[2
@@ -778,7 +779,7 @@ gsk_gl_driver_convert_texture (GskGLDriver   *self,
   int prev_fbo;
   GskGLProgram *program;
 
-  if (conversion == (GSK_CONVERSION_LINEARIZE | GSK_CONVERSION_PREMULTIPLY))
+  if ((conversion & (GSK_CONVERSION_LINEARIZE | GSK_CONVERSION_PREMULTIPLY)) == (GSK_CONVERSION_LINEARIZE | GSK_CONVERSION_PREMULTIPLY))
     program = self->linearize_premultiply_no_clip;
   else if (conversion & GSK_CONVERSION_LINEARIZE)
     program = self->linearize_no_clip;
@@ -810,7 +811,7 @@ gsk_gl_driver_convert_texture (GskGLDriver   *self,
                                       UNIFORM_SHARED_SOURCE, 0,
                                       GL_TEXTURE_2D, GL_TEXTURE0, texture_id);
 
-  draw_offscreen (self->command_queue, 0, 0, width, height);
+  draw_rect (self->command_queue, 0, 0, width, height, (conversion & GSK_CONVERSION_FLIP) != 0);
 
   gsk_gl_command_queue_end_draw (self->command_queue);
 
