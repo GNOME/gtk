@@ -26,6 +26,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdkrgbaprivate.h>
+#include <gdk/gdkcolorspaceprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskglshaderprivate.h>
 #include <gdk/gdktextureprivate.h>
@@ -1225,6 +1226,8 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
     rendered_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                    surface_width,
                                                    surface_height);
+
+    gdk_cairo_surface_set_color_space (rendered_surface, gdk_color_space_get_srgb_linear ());
 
     cairo_surface_set_device_scale (rendered_surface, scale_x, scale_y);
     cr = cairo_create (rendered_surface);

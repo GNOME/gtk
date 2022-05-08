@@ -23,6 +23,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
+#include <gdk/gdkcolorspaceprivate.h>
 #include <gdk/gdktextureprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
 
@@ -107,7 +108,7 @@ gsk_ngl_texture_prepare_upload (GdkGLContext *context,
         }
     }
 
-  return gdk_memory_texture_from_texture (texture, format, color_space);
+  return gdk_memory_texture_from_texture (texture, format, gdk_color_space_get_srgb_linear ());
 }
 
 static void

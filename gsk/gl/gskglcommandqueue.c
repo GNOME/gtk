@@ -28,6 +28,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
+#include <gdk/gdkcolorspaceprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskroundedrectprivate.h>
