@@ -42,6 +42,7 @@
 #include <gdk/gdkdisplayprivate.h>
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
+#include <gdk/gdkcolorprofileprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
 
@@ -883,28 +884,40 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
 
       if (gdk_gl_context_is_shared (context, texture_context))
         {
+          GdkColorProfile *profile;
           guint gl_texture_id;
+          GdkGLTextureFlags flags;
 
           gl_texture_id = gdk_gl_texture_get_id (gl_texture);
+          profile = gdk_texture_get_color_profile (texture);
+          flags = gdk_gl_texture_get_flags (gl_texture);
 
           /* A GL texture from the same GL context is a simple task... */
-          if (gdk_color_profile_is_linear (gdk_texture_get_color_profile (texture)))
+          if (profile == gdk_color_profile_get_srgb_linear () &&
+              flags == GDK_GL_TEXTURE_PREMULTIPLIED)
             {
               return gl_texture_id;
             }
-          else
+          else if (profile == gdk_color_profile_get_srgb () ||
+                   profile == gdk_color_profile_get_srgb_linear ())
             {
-              /* The GL texture isn't linear sRGB, so we need to convert
-               * it before we can use it. For now, we just assume that it
-               * is nonlinear sRGB. Eventually, we should figure out how
-               * to convert from other color spaces to linear sRGB
-               */
+              conversion = 0;
+
+              if (profile == gdk_color_profile_get_srgb ())
+                conversion |= GSK_CONVERSION_LINEARIZE;
+
+              if ((flags & GDK_GL_TEXTURE_PREMULTIPLIED) == 0)
+                conversion |= GSK_CONVERSION_PREMULTIPLY;
+
+              if ((flags & GDK_GL_TEXTURE_FLIPPED) != 0)
+                conversion |= GSK_CONVERSION_FLIP;
+
               t = gsk_gl_driver_convert_texture (self,
                                                  gl_texture_id,
                                                  width, height,
                                                  format,
                                                  min_filter, mag_filter,
-                                                 GSK_CONVERSION_LINEARIZE);
+                                                 conversion);
               if (gdk_texture_set_render_data (texture, self, t, gsk_gl_texture_destroyed))
                 t->user = texture;
 
