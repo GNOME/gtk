@@ -23,6 +23,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
+#include <gdk/gdkcolorprofileprivate.h>
 #include <gdk/gdktextureprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
 
@@ -97,7 +98,6 @@ gsk_ngl_texture_prepare_upload (GdkGLContext *context,
       g_object_unref (memtex);
 
       format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      profile = gdk_color_profile_get_srgb ();
       if (!gdk_memory_format_gl_format (format,
                                         gdk_gl_context_get_use_es (context),
                                         gl_internalformat,
@@ -108,7 +108,7 @@ gsk_ngl_texture_prepare_upload (GdkGLContext *context,
         }
     }
 
-  return gdk_memory_texture_from_texture (texture, format, profile);
+  return gdk_memory_texture_from_texture (texture, format, gdk_color_profile_get_srgb_linear ());
 }
 
 static void
