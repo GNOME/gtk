@@ -116,8 +116,11 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
       pixel_data = free_data = g_malloc (width * height * 4);
       gdk_memory_convert (pixel_data, width * 4,
                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                          gdk_color_profile_get_srgb (),
                           surface_data, cairo_image_surface_get_stride (surface),
-                          GDK_MEMORY_DEFAULT, width, height);
+                          GDK_MEMORY_DEFAULT,
+                          gdk_color_profile_get_srgb (),
+                          width, height);
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
     }

@@ -157,7 +157,7 @@ gdk_gl_texture_do_download (gpointer texture_,
   expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
 
   if (download->stride == expected_stride &&
-      !gdk_gl_context_get_use_es (self->context) && 
+      !gdk_gl_context_get_use_es (self->context) &&
       gdk_memory_format_gl_format (download->format, TRUE, &gl_internal_format, &gl_format, &gl_type))
     {
       glGetTexImage (GL_TEXTURE_2D,
@@ -193,7 +193,7 @@ gdk_gl_texture_do_download (gpointer texture_,
           (download->stride == expected_stride))
         {
           glReadPixels (0, 0,
-                        texture->width, texture->height, 
+                        texture->width, texture->height,
                         gl_read_format,
                         gl_read_type,
                         download->data);
@@ -204,7 +204,7 @@ gdk_gl_texture_do_download (gpointer texture_,
           guchar *pixels = g_malloc_n (texture->width * actual_bpp, texture->height);
 
           glReadPixels (0, 0,
-                        texture->width, texture->height, 
+                        texture->width, texture->height,
                         gl_read_format,
                         gl_read_type,
                         pixels);
@@ -212,9 +212,11 @@ gdk_gl_texture_do_download (gpointer texture_,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              gdk_color_profile_get_srgb (),
                               pixels,
                               texture->width * actual_bpp,
                               actual_format,
+                              gdk_color_profile_get_srgb (),
                               texture->width,
                               texture->height);
 

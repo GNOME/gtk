@@ -284,9 +284,11 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
       gdk_memory_convert (pixel_data,
                           width * 4,
                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                          gdk_color_profile_get_srgb (),
                           cairo_image_surface_get_data (surface),
                           width * 4,
                           GDK_MEMORY_DEFAULT,
+                          gdk_color_profile_get_srgb (),
                           width, height);
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
