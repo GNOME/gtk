@@ -90,3 +90,11 @@ GSK_GL_DEFINE_PROGRAM (postprocessing,
 GSK_GL_DEFINE_PROGRAM (linearize,
                        GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("linearize.glsl")),
                        GSK_GL_NO_UNIFORMS)
+
+GSK_GL_DEFINE_PROGRAM (premultiply,
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("premultiply.glsl")),
+                       GSK_GL_NO_UNIFORMS)
+
+GSK_GL_DEFINE_PROGRAM (linearize_premultiply,
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("linearize_premultiply.glsl")),
+                       GSK_GL_NO_UNIFORMS)

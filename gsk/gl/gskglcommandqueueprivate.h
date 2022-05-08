@@ -280,10 +280,17 @@ void                gsk_gl_command_queue_execute              (GskGLCommandQueue
                                                                guint                 scale_factor,
                                                                const cairo_region_t *scissor,
                                                                guint                 default_framebuffer);
+
+typedef enum {
+  GSK_CONVERSION_LINEARIZE   = 1 << 0,
+  GSK_CONVERSION_PREMULTIPLY = 1 << 1,
+} GskConversion;
+
 int                 gsk_gl_command_queue_upload_texture       (GskGLCommandQueue    *self,
                                                                GdkTexture           *texture,
                                                                int                   min_filter,
-                                                               int                   mag_filter);
+                                                               int                   mag_filter,
+                                                               GskConversion        *remaining);
 int                 gsk_gl_command_queue_create_texture       (GskGLCommandQueue    *self,
                                                                int                   width,
                                                                int                   height,
