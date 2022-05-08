@@ -21,7 +21,7 @@
 
 #include <glib/gi18n-lib.h>
 #include "gdkmemoryformatprivate.h"
-#include "gdkmemorytexture.h"
+#include "gdkmemorytexturebuilder.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexturedownloaderprivate.h"
 #include "gsk/gl/fp16private.h"
@@ -143,6 +143,7 @@ gdk_load_png (GBytes      *bytes,
   gsize i, stride;
   int depth, color_type;
   int interlace;
+  GdkMemoryTextureBuilder *builder;
   GdkMemoryFormat format;
   guchar *buffer = NULL;
   guchar **row_pointers = NULL;
@@ -297,7 +298,14 @@ gdk_load_png (GBytes      *bytes,
   png_read_end (png, info);
 
   out_bytes = g_bytes_new_take (buffer, height * stride);
-  texture = gdk_memory_texture_new (width, height, format, out_bytes, stride);
+  builder = gdk_memory_texture_builder_new ();
+  gdk_memory_texture_builder_set_format (builder, format);
+  gdk_memory_texture_builder_set_width (builder, width);
+  gdk_memory_texture_builder_set_height (builder, height);
+  gdk_memory_texture_builder_set_bytes (builder, out_bytes);
+  gdk_memory_texture_builder_set_stride (builder, stride);
+  texture = gdk_memory_texture_builder_build (builder);
+  g_object_unref (builder);
   g_bytes_unref (out_bytes);
 
   if (options && png_get_text (png, info, &text, &num_texts))
