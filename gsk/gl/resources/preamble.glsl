@@ -46,6 +46,26 @@ vec4 gsk_premultiply(vec4 c) {
   return vec4(c.rgb * c.a, c.a);
 }
 
+vec4 gsk_unpremultiply(vec4 c)
+{
+  if (c.a != 0)
+    return vec4(c.rgb / c.a, c.a);
+  else
+    return c;
+}
+
+vec4 gsk_srgb_to_linear(vec4 srgb)
+{
+  vec3 linear_rgb = pow(srgb.rgb, vec3(2.2));
+  return vec4(linear_rgb, srgb.a);
+}
+
+vec4 gsk_linear_to_srgb(vec4 linear_rgba)
+{
+  vec3 srgb = pow(linear_rgba.rgb , vec3(1/2.2));
+  return vec4(srgb, linear_rgba.a);
+}
+
 vec4 gsk_scaled_premultiply(vec4 c, float s) {
   // Fast version of gsk_premultiply(c) * s
   // 4 muls instead of 7
