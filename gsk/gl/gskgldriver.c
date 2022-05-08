@@ -746,7 +746,9 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
         }
       else
         {
-          downloaded_texture = gdk_memory_texture_from_texture (texture, gdk_texture_get_format (texture));
+          downloaded_texture = gdk_memory_texture_from_texture (texture,
+                                                                gdk_texture_get_format (texture),
+                                                                gdk_texture_get_color_space (texture));
         }
     }
   else
@@ -757,7 +759,9 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
             return t->texture_id;
         }
 
-      downloaded_texture = gdk_memory_texture_from_texture (texture, gdk_texture_get_format (texture));
+      downloaded_texture = gdk_memory_texture_from_texture (texture,
+                                                            gdk_texture_get_format (texture),
+                                                            gdk_texture_get_color_space (texture));
     }
 
   /* The download_texture() call may have switched the GL context. Make sure
@@ -1232,7 +1236,8 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   n_slices = cols * rows;
   slices = g_new0 (GskGLTextureSlice, n_slices);
   memtex = gdk_memory_texture_from_texture (texture,
-                                            gdk_texture_get_format (texture));
+                                            gdk_texture_get_format (texture),
+                                            gdk_texture_get_color_space (texture));
 
   for (guint col = 0; col < cols; col ++)
     {

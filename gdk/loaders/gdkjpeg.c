@@ -313,7 +313,8 @@ gdk_save_jpeg (GdkTexture *texture)
   jpeg_mem_dest (&info, &data, &size);
 
   memtex = gdk_memory_texture_from_texture (texture,
-                                            GDK_MEMORY_R8G8B8);
+                                            GDK_MEMORY_R8G8B8,
+                                            gdk_color_space_get_srgb ());
   texdata = gdk_memory_texture_get_data (memtex);
   texstride = gdk_memory_texture_get_stride (memtex);
 

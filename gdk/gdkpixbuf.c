@@ -245,7 +245,8 @@ gdk_pixbuf_get_from_texture (GdkTexture *texture)
 
   memtex = gdk_memory_texture_from_texture (texture,
                                             alpha ? GDK_MEMORY_GDK_PIXBUF_ALPHA
-                                                  : GDK_MEMORY_GDK_PIXBUF_OPAQUE);
+                                                  : GDK_MEMORY_GDK_PIXBUF_OPAQUE,
+                                            gdk_color_space_get_srgb ());
 
   return gdk_pixbuf_new_from_data (gdk_memory_texture_get_data (memtex),
                                    GDK_COLORSPACE_RGB,
