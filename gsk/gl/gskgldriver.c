@@ -805,6 +805,12 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
 
   format = gdk_memory_format_prefers_high_depth (gdk_texture_get_format (texture)) ? GL_RGBA16F : GL_RGBA8;
 
+  if ((t = gdk_texture_get_render_data (texture, self)))
+    {
+      if (t->min_filter == min_filter && t->mag_filter == mag_filter)
+        return t->texture_id;
+    }
+
   if (GDK_IS_GL_TEXTURE (texture))
     {
       GdkGLTexture *gl_texture = (GdkGLTexture *) texture;
@@ -873,25 +879,11 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
               return texture_id;
             }
         }
-      else
-        {
-          downloaded_texture = gdk_memory_texture_from_texture (texture,
-                                                                gdk_texture_get_format (texture),
-                                                                gdk_texture_get_color_profile (texture));
-        }
     }
-  else
-    {
-      if ((t = gdk_texture_get_render_data (texture, self)))
-        {
-          if (t->min_filter == min_filter && t->mag_filter == mag_filter)
-            return t->texture_id;
-        }
 
-      downloaded_texture = gdk_memory_texture_from_texture (texture,
-                                                            gdk_texture_get_format (texture),
-                                                            gdk_texture_get_color_profile (texture));
-    }
+  downloaded_texture = gdk_memory_texture_from_texture (texture,
+                                                        gdk_texture_get_format (texture),
+                                                        gdk_texture_get_color_profile (texture));
 
   /* The download_texture() call may have switched the GL context. Make sure
    * the right context is at work again. */
