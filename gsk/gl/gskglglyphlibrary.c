@@ -29,6 +29,14 @@
 #include "gskgldriverprivate.h"
 #include "gskglglyphlibraryprivate.h"
 
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-font.h>
+#include <cairo-ft.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_PARAMETER_TAGS_H
+#endif
+
 #define MAX_GLYPH_SIZE 128
 
 G_DEFINE_TYPE (GskGLGlyphLibrary, gsk_gl_glyph_library, GSK_TYPE_GL_TEXTURE_LIBRARY)
@@ -210,6 +218,8 @@ gsk_gl_glyph_library_create_surface (GskGLGlyphLibrary *self,
   return surface;
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 render_glyph (cairo_surface_t           *surface,
               const GskGLGlyphKey       *key,
@@ -218,6 +228,14 @@ render_glyph (cairo_surface_t           *surface,
   cairo_t *cr;
   PangoGlyphString glyph_string;
   PangoGlyphInfo glyph_info;
+#ifdef HAVE_PANGOFT
+  FT_Face face;
+  FT_Bool darken = 1;
+  FT_Parameter property = { FT_PARAM_TAG_STEM_DARKENING, &darken };
+
+  face = pango_fc_font_lock_face (PANGO_FC_FONT (key->font));
+  FT_Face_Properties (face, 1, &property);
+#endif
 
   g_assert (surface != NULL);
 
@@ -236,7 +254,13 @@ render_glyph (cairo_surface_t           *surface,
   cairo_destroy (cr);
 
   cairo_surface_flush (surface);
+
+#ifdef HAVE_PANGOFT
+  pango_fc_font_unlock_face (PANGO_FC_FONT (key->font));
+#endif
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
