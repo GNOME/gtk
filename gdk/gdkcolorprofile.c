@@ -371,6 +371,27 @@ gdk_color_profile_is_linear (GdkColorProfile *self)
 }
 
 /**
+ * gdk_color_profile_get_n_components:
+ * @self: a `GdkColorProfile
+ *
+ * Gets the number of color components - also called channels - for
+ * the given profile. Note that this does not consider an alpha
+ * channel because color profiles have no alpha information. So
+ * for any form of RGB profile, this returned number will be 3.
+ *
+ * Returns: The number of components
+ *
+ * Since: 4.8
+ */
+gsize
+gdk_color_profile_get_n_components (GdkColorProfile *self)
+{
+  g_return_val_if_fail (GDK_IS_COLOR_PROFILE (self), 3);
+
+  return cmsChannelsOf (cmsGetColorSpace (self->lcms_profile));
+}
+
+/**
  * gdk_color_profile_equal:
  * @profile1: (type GdkColorProfile): a `GdkColorProfile`
  * @profile2: (type GdkColorProfile): another `GdkColorProfile`
@@ -486,3 +507,5 @@ gdk_color_profile_lookup_transform (GdkColorProfile *source,
 
   return transform;
 }
+
+

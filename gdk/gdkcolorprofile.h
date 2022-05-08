@@ -58,6 +58,10 @@ GDK_AVAILABLE_IN_4_8
 gboolean                     gdk_color_profile_is_linear                  (GdkColorProfile      *self) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_4_8
+gsize                        gdk_color_profile_get_n_components           (GdkColorProfile      *self) G_GNUC_PURE;
+
+
+GDK_AVAILABLE_IN_4_8
 gboolean                     gdk_color_profile_equal                      (gconstpointer         profile1,
                                                                            gconstpointer         profile2);
 
