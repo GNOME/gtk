@@ -62,6 +62,7 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   cairo_t *cr;
 
   surface = gdk_draw_context_get_surface (draw_context);
+  gdk_win32_surface_handle_queued_move_resize (surface);
 
   self->hwnd_surface = create_cairo_surface_for_surface (surface);
 
