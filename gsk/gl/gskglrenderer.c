@@ -25,6 +25,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdksurfaceprivate.h>
 #include <glib/gi18n-lib.h>
+#include <gdk/gdkcolorspaceprivate.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
@@ -390,7 +391,10 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 #endif
       gsk_gl_render_job_render_flipped (job, root);
       texture_id = gsk_gl_driver_release_render_target (self->driver, render_target, FALSE);
-      texture = gsk_gl_driver_create_gdk_texture (self->driver, texture_id);
+      texture = gsk_gl_driver_create_gdk_texture (self->driver,
+                                                  texture_id,
+                                                  GDK_GL_TEXTURE_PREMULTIPLIED,
+                                                  gdk_color_space_get_srgb_linear ());
       gsk_gl_driver_end_frame (self->driver);
       gsk_gl_render_job_free (job);
 

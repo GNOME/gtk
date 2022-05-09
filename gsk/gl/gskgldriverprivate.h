@@ -155,7 +155,9 @@ void                gsk_gl_driver_begin_frame            (GskGLDriver         *s
 void                gsk_gl_driver_end_frame              (GskGLDriver         *self);
 void                gsk_gl_driver_after_frame            (GskGLDriver         *self);
 GdkTexture        * gsk_gl_driver_create_gdk_texture     (GskGLDriver         *self,
-                                                          guint                texture_id);
+                                                          guint                texture_id,
+                                                          GdkGLTextureFlags    flags,
+                                                          GdkColorSpace       *color_space);
 void                gsk_gl_driver_cache_texture          (GskGLDriver         *self,
                                                           const GskTextureKey *key,
                                                           guint                texture_id);
