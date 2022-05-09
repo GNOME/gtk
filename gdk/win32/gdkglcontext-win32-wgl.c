@@ -189,7 +189,7 @@ gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext  *draw_context,
                                       GdkColorState  **out_color_state,
                                       GdkMemoryDepth  *out_depth)
 {
-  gdk_win32_surface_handle_queued_move_resize (draw_context);
+  gdk_win32_surface_handle_queued_move_resize (gdk_draw_context_get_surface (draw_context));
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, depth, update_area, out_color_state, out_depth);
 }

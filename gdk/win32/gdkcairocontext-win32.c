@@ -68,7 +68,7 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   surface = gdk_draw_context_get_surface (draw_context);
   scale = gdk_surface_get_scale_factor (surface);
 
-  queued_hwnd_rect = gdk_win32_surface_handle_queued_move_resize (draw_context);
+  queued_hwnd_rect = gdk_win32_surface_handle_queued_move_resize (surface);
 
   width = queued_hwnd_rect.right - queued_hwnd_rect.left;
   height = queued_hwnd_rect.bottom - queued_hwnd_rect.top;
