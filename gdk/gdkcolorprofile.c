@@ -26,8 +26,14 @@
  *
  * Each `GdkColorProfile` encapsulates an
  * [ICC profile](https://en.wikipedia.org/wiki/ICC_profile). That profile
- * can be queried via the using [property@Gdk.ColorProfile:icc-profile]
- * property.
+ * can be queried via the [property@Gdk.ColorProfile:icc-profile] property.
+ *
+ * GDK provides a predefined color profile for the standard sRGB profile,
+ * which can be obtained with [func@Gdk.ColorProfile.get_srgb].
+ *
+ * The main source for color profiles in GTK is loading images which contain
+ * ICC profile information. GTK's image loaders will attach the resulting
+ * color profiles to the textures they produce.
  *
  * `GdkColorProfile` objects are immutable and therefore threadsafe.
  *
@@ -375,9 +381,11 @@ gdk_color_profile_is_linear (GdkColorProfile *self)
  * @self: a `GdkColorProfile
  *
  * Gets the number of color components - also called channels - for
- * the given profile. Note that this does not consider an alpha
- * channel because color profiles have no alpha information. So
- * for any form of RGB profile, this returned number will be 3.
+ * the given profile.
+ *
+ * Note that this does not consider an alpha channel because color
+ * profiles have no alpha information. So for any form of RGB profile,
+ * this returned number will be 3, but for CMYK, it will be 4.
  *
  * Returns: The number of components
  *
