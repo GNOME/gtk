@@ -5096,14 +5096,12 @@ gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
 }
 
 RECT
-gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context)
+gdk_win32_surface_handle_queued_move_resize (GdkSurface *surface)
 {
-  GdkSurface *surface;
   GdkWin32Surface *impl;
   int scale;
   RECT queued_window_rect;
 
-  surface = gdk_draw_context_get_surface (draw_context);
   impl = GDK_WIN32_SURFACE (surface);
   scale = gdk_surface_get_scale_factor (surface);
 

@@ -359,7 +359,7 @@ void gdk_win32_surface_move_resize (GdkSurface *window,
 GdkSurface *gdk_win32_drag_surface_new       (GdkDisplay *display);
 
 RECT
-gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context);
+gdk_win32_surface_handle_queued_move_resize  (GdkSurface *surface);
 
 #ifdef HAVE_EGL
 EGLSurface gdk_win32_surface_get_egl_surface (GdkSurface *surface,

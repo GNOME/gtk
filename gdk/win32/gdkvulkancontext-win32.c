@@ -68,7 +68,9 @@ gdk_win32_vulkan_context_begin_frame (GdkDrawContext *draw_context,
                                       GdkMemoryDepth  depth,
                                       cairo_region_t *update_area)
 {
-  gdk_win32_surface_handle_queued_move_resize (draw_context);
+  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+
+  gdk_win32_surface_handle_queued_move_resize (surface);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_vulkan_context_parent_class)->begin_frame (draw_context, depth, update_area);
 }
