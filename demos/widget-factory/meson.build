@@ -73,10 +73,18 @@ else
   )
 endif
 
+widgetfactory_cflags = []
+widgetfactory_sources = [ 'widget-factory.c' ]
+
+if libheif_dep.found()
+  widgetfactory_cflags += '-DHAVE_LIBHEIF'
+  widgetfactory_sources += 'heif-loader.c'
+endif
+
 executable('gtk4-widget-factory',
-  sources: ['widget-factory.c', widgetfactory_resources],
-  c_args: common_cflags,
-  dependencies: [ libgtk_dep, demo_conf_h ],
+  sources: [ widgetfactory_sources, widgetfactory_resources],
+  c_args: [ common_cflags, widgetfactory_cflags ],
+  dependencies: [ libgtk_dep, libheif_dep, demo_conf_h ],
   include_directories: confinc,
   win_subsystem: 'windows',
   link_args: extra_demo_ldflags,

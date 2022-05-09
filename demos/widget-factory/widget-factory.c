@@ -27,6 +27,8 @@
 
 #include "demo_conf.h"
 
+#include "heif-loader.h"
+
 static void
 change_dark_state (GSimpleAction *action,
                     GVariant      *state,
@@ -2382,6 +2384,20 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "box_for_context");
   model = (GMenuModel *)gtk_builder_get_object (builder, "new_style_context_menu_model");
   set_up_context_popover (widget, model);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "hdr_picture");
+#ifdef HAVE_LIBHEIF
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "hdr_label");
+  GString *details = g_string_new ("");
+  GdkTexture *texture = load_heif_image ("/org/gtk/WidgetFactory4/hdr-example.heif", details, NULL);
+  gtk_picture_set_paintable (GTK_PICTURE (widget), GDK_PAINTABLE (texture));
+  gtk_label_set_label (GTK_LABEL (widget2), details->str);
+  g_string_free (details, TRUE);
+  g_object_unref (texture);
+#else
+  widget2 = gtk_widget_get_ancestor (widget, GTK_TYPE_NOTEBOOK);
+  gtk_notebook_remove_page (GTK_NOTEBOOK (widget2), 2);
+#endif
 
   gtk_window_present (window);
 

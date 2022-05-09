@@ -1587,6 +1587,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                       <object class="GtkImage">
                                         <property name="paintable">resource:///org/gtk/WidgetFactory4/color-profile-check.tiff</property>
                                         <layout>
+
                                           <property name="column">0</property>
                                           <property name="row">3</property>
                                         </layout>
@@ -1616,12 +1617,26 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="position">2</property>
                                 <property name="child">
                                   <object class="GtkBox" id="box11">
-                                    <property name="orientation">1</property>
+                                    <property name="orientation">vertical</property>
+                                    <child>
+                                      <object class="GtkPicture" id="hdr_picture">
+                                        <property name="can-shrink">1</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel" id="hdr_label">
+                                        <property name="margin-start">10</property>
+                                        <property name="margin-end">10</property>
+                                        <property name="margin-top">10</property>
+                                        <property name="margin-bottom">10</property>
+                                        <property name="use-markup">1</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label10">
-                                    <property name="label" translatable="1">page 3</property>
+                                    <property name="label" translatable="1">HDR</property>
                                   </object>
                                 </property>
                               </object>
