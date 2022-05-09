@@ -1676,6 +1676,10 @@ gdk_gl_context_get_shared_context (GdkGLContext *context)
  * Retrieves the OpenGL version of the @context.
  *
  * The @context must be realized prior to calling this function.
+ *
+ * If the @context has never been made current, the version cannot
+ * be known and it will return 0 for both @major and @minor.
+ *
  */
 void
 gdk_gl_context_get_version (GdkGLContext *context,
