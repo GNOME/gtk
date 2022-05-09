@@ -73,10 +73,12 @@ else
   )
 endif
 
+libheif_dep = dependency('libheif')
+
 executable('gtk4-widget-factory',
-  sources: ['widget-factory.c', widgetfactory_resources],
+  sources: ['widget-factory.c', 'heif-loader.c', widgetfactory_resources],
   c_args: common_cflags,
-  dependencies: [ libgtk_dep, demo_conf_h ],
+  dependencies: [ libgtk_dep, libheif_dep, demo_conf_h ],
   include_directories: confinc,
   win_subsystem: 'windows',
   link_args: extra_demo_ldflags,

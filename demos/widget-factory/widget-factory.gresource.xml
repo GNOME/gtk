@@ -110,6 +110,7 @@
     <file>icons/scalable/status/weather-severe-alert-symbolic.svg</file>
     <file>icons/scalable/status/weather-showers-symbolic.svg</file>
     <file>icons/scalable/status/weather-snow-symbolic.svg</file>
+    <file>hdr-example.heif</file>
 
   </gresource>
   <gresource prefix="/org/gtk/WidgetFactory4">
