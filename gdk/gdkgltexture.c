@@ -442,6 +442,10 @@ gdk_gl_texture_determine_format (GdkGLTexture *self)
  * which will happen when the GdkTexture object is finalized, or due to
  * an explicit call of [method@Gdk.GLTexture.release].
  *
+ * The texture data is assumed to be premultiplied, not flipped, and in the
+ * sRGB colorspace, see [ctor@Gdk.GLTexture.new_with_color_profile] to override
+ * this.
+ *
  * Return value: (transfer full) (type GdkGLTexture): A newly-created
  *   `GdkTexture`
  */
@@ -472,7 +476,8 @@ gdk_gl_texture_new (GdkGLContext   *context,
  *   are released
  * @data: data that gets passed to @destroy
  *
- * Creates a new texture for an existing GL texture with a given color profile.
+ * Creates a new texture for an existing GL texture with a given color profile
+ * and flags.
  *
  * Note that the GL texture must not be modified until @destroy is called,
  * which will happen when the GdkTexture object is finalized, or due to

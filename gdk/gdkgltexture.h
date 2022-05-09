@@ -51,8 +51,9 @@ GdkTexture *            gdk_gl_texture_new                     (GdkGLContext    
 
 /**
  * GdkGLTextureFlags:
- * @GDK_GL_TEXTURE_FLAGS_PREMULTIPLIED: The alpha in the data is not premultiplied
- * @GDK_GL_TEXTURE_FLAGS_FLIPPED: The data has the origin at the bottom
+ * @GDK_GL_TEXTURE_FLAGS_PREMULTIPLIED: The alpha in the data is premultiplied
+ * @GDK_GL_TEXTURE_FLAGS_FLIPPED: The data has the origin at the bottom (this is usually
+ *   th case for textures that are produced by GL rendering)
  *
  * Flags that describe the content of a GL texture.
  */
