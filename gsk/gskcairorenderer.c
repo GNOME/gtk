@@ -82,8 +82,8 @@ gsk_cairo_renderer_do_render (GskRenderer   *renderer,
                               cairo_t       *cr,
                               GskRenderNode *root)
 {
-  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
 #ifdef G_ENABLE_DEBUG
+  GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   GskProfiler *profiler;
   gint64 cpu_time;
 #endif
