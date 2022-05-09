@@ -694,24 +694,21 @@ draw_rect (GskGLCommandQueue *command_queue,
            float              max_y,
            gboolean           flip)
 {
-  GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (command_queue);
+  GskGLDrawVertex *vertices;
   float min_u = 0;
   float max_u = 1;
   float min_v = flip ? 0 : 1;
   float max_v = flip ? 1 : 0;
-  guint16 c[4] = { FP16_ZERO, FP16_ZERO, FP16_ZERO, FP16_ZERO };
+  guint16 c = FP16_ZERO;
 
-  vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c[0], c[1], c[2
-], c[3] } };
-  vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c[0], c[1], c[2
-], c[3] } };
-  vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c[0], c[1], c[2
-], c[3] } };
-  vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .uv = { max_u, max_v }, .color = { c[0], c[1], c[2
-], c[3] } };
-  vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c[0], c[1], c[2
-], c[3] } };
-  vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c[0], c[1], c[2], c[3] } };
+  vertices = gsk_gl_command_queue_add_vertices (command_queue);
+
+  vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c, c, c, c } };
+  vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c, c, c, c } };
+  vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c, c, c, c } };
+  vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .uv = { max_u, max_v }, .color = { c, c, c, c } };
+  vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c, c, c, c } };
+  vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c, c, c, c } };
 }
 
 static void
