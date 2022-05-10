@@ -1102,7 +1102,7 @@ parse_conic_gradient_node (GtkCssParser *parser)
       g_array_append_val (stops, to);
     }
 
-  result = gsk_conic_gradient_node_new (&bounds, &center, rotation, 
+  result = gsk_conic_gradient_node_new (&bounds, &center, rotation,
                                         (GskColorStop *) stops->data, stops->len);
 
   g_array_free (stops, TRUE);
@@ -1388,7 +1388,7 @@ parse_cairo_node (GtkCssParser *parser)
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
 
   node = gsk_cairo_node_new (&bounds);
-  
+
   if (surface != NULL)
     {
       cairo_t *cr = gsk_cairo_node_get_draw_context (node);
@@ -2698,10 +2698,10 @@ render_node_print (Printer       *p,
         start_node (p, "texture");
         append_rect_param (p, "bounds", &node->bounds);
 
-        bytes = gdk_texture_save_to_png_bytes (texture);
+        bytes = gdk_texture_save_to_tiff_bytes (texture);
 
         _indent (p);
-        g_string_append (p->str, "texture: url(\"data:image/png;base64,");
+        g_string_append (p->str, "texture: url(\"data:image/tiff;base64,");
         b64 = base64_encode_with_linebreaks (g_bytes_get_data (bytes, NULL),
                                              g_bytes_get_size (bytes));
         append_escaping_newlines (p->str, b64);
