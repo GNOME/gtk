@@ -8,8 +8,10 @@
 
 G_BEGIN_DECLS
 
+GDK_AVAILABLE_IN_ALL
 GdkColorProfile *            gdk_color_profile_get_srgb_linear            (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_ALL
 GdkColorProfile *            gdk_color_profile_new_from_lcms_profile      (cmsHPROFILE           lcms_profile,
                                                                            GError              **error);
 

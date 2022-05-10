@@ -50,9 +50,21 @@ GdkColorProfile *            gdk_color_profile_get_srgb                   (void)
 GDK_AVAILABLE_IN_4_8
 GdkColorProfile *            gdk_color_profile_new_from_icc_bytes         (GBytes               *bytes,
                                                                            GError              **error);
-
 GDK_AVAILABLE_IN_4_8
 GBytes *                     gdk_color_profile_get_icc_profile            (GdkColorProfile      *self);
+
+GDK_AVAILABLE_IN_4_8
+GdkColorProfile *            gdk_color_profile_new_from_cicp              (int                   color_primaries,
+                                                                           int                   transfer_characteristics,
+                                                                           int                   matrix_coefficients,
+                                                                           gboolean              full_range,
+                                                                           GError              **error);
+GDK_AVAILABLE_IN_4_8
+void                         gdk_color_profile_get_cicp_data              (GdkColorProfile      *self,
+                                                                           int                  *color_primaries,
+                                                                           int                  *transfer_characteristics,
+                                                                           int                  *matrix_coefficients,
+                                                                           gboolean             *full_range);
 
 GDK_AVAILABLE_IN_4_8
 gboolean                     gdk_color_profile_is_linear                  (GdkColorProfile      *self) G_GNUC_PURE;
