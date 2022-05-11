@@ -213,9 +213,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
    * The bookmark file to load.
    */
   properties[PROP_FILENAME] =
-      g_param_spec_string ("filename",
-                           P_("Filename"),
-                           P_("Bookmark file to load"),
+      g_param_spec_string ("filename", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
   /**
@@ -224,9 +222,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
    * The attributes to query.
    */
   properties[PROP_ATTRIBUTES] =
-      g_param_spec_string ("attributes",
-                           P_("Attributes"),
-                           P_("Attributes to query"),
+      g_param_spec_string ("attributes", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -236,9 +232,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
    * Priority used when loading.
    */
   properties[PROP_IO_PRIORITY] =
-      g_param_spec_int ("io-priority",
-                        P_("IO priority"),
-                        P_("Priority used when loading"),
+      g_param_spec_int ("io-priority", NULL, NULL,
                         -G_MAXINT, G_MAXINT, G_PRIORITY_DEFAULT,
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -248,9 +242,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
    * %TRUE if files are being loaded.
    */
   properties[PROP_LOADING] =
-      g_param_spec_boolean ("loading",
-                            P_("loading"),
-                            P_("TRUE if files are being loaded"),
+      g_param_spec_boolean ("loading", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 

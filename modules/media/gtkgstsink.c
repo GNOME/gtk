@@ -710,9 +710,7 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
    * The paintable that provides the picture for this sink.
    */
   properties[PROP_PAINTABLE] =
-    g_param_spec_object ("paintable",
-                         P_("paintable"),
-                         P_("Paintable providing the picture"),
+    g_param_spec_object ("paintable", NULL, NULL,
                          GTK_TYPE_GST_PAINTABLE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -722,9 +720,7 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
    * The #GdkGLContext to use for GL rendering.
    */
   properties[PROP_GL_CONTEXT] =
-    g_param_spec_object ("gl-context",
-                         P_("GL context"),
-                         P_("GL context to use for rendering"),
+    g_param_spec_object ("gl-context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

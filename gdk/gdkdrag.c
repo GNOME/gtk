@@ -379,9 +379,7 @@ gdk_drag_class_init (GdkDragClass *klass)
    * The `GdkContentProvider`.
    */
   properties[PROP_CONTENT] =
-    g_param_spec_object ("content",
-                         "Content",
-                         "The content being dragged",
+    g_param_spec_object ("content", NULL, NULL,
                          GDK_TYPE_CONTENT_PROVIDER,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -394,9 +392,7 @@ gdk_drag_class_init (GdkDragClass *klass)
    * The `GdkDevice` that is performing the drag.
    */
   properties[PROP_DEVICE] =
-    g_param_spec_object ("device",
-                         "Device",
-                         "The device performing the drag",
+    g_param_spec_object ("device", NULL, NULL,
                          GDK_TYPE_DEVICE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -409,9 +405,7 @@ gdk_drag_class_init (GdkDragClass *klass)
    * The `GdkDisplay` that the drag belongs to.
    */
   properties[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         "Display",
-                         "Display this drag belongs to",
+    g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS |
@@ -423,9 +417,7 @@ gdk_drag_class_init (GdkDragClass *klass)
    * The possible formats that the drag can provide its data in.
    */
   properties[PROP_FORMATS] =
-    g_param_spec_boxed ("formats",
-                        "Formats",
-                        "The possible formats for data",
+    g_param_spec_boxed ("formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
@@ -438,9 +430,7 @@ gdk_drag_class_init (GdkDragClass *klass)
    * The currently selected action of the drag.
    */
   properties[PROP_SELECTED_ACTION] =
-    g_param_spec_flags ("selected-action",
-                        "Selected action",
-                        "The currently selected action",
+    g_param_spec_flags ("selected-action", NULL, NULL,
                         GDK_TYPE_DRAG_ACTION,
                         0,
                         G_PARAM_READWRITE |
@@ -453,9 +443,7 @@ gdk_drag_class_init (GdkDragClass *klass)
    * The possible actions of this drag.
    */
   properties[PROP_ACTIONS] =
-    g_param_spec_flags ("actions",
-                        "Actions",
-                        "The possible actions",
+    g_param_spec_flags ("actions", NULL, NULL,
                         GDK_TYPE_DRAG_ACTION,
                         0,
                         G_PARAM_READWRITE |
@@ -468,9 +456,7 @@ gdk_drag_class_init (GdkDragClass *klass)
    * The surface where the drag originates.
    */
   properties[PROP_SURFACE] =
-    g_param_spec_object ("surface",
-                         "Surface",
-                         "The surface where the drag originates",
+    g_param_spec_object ("surface", NULL, NULL,
                          GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |

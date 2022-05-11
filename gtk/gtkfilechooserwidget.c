@@ -7639,16 +7639,12 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                          "(i)", i);
 
   g_object_class_install_property (gobject_class, PROP_SEARCH_MODE,
-                                   g_param_spec_boolean ("search-mode",
-                                                         P_("Search mode"),
-                                                         P_("Search mode"),
+                                   g_param_spec_boolean ("search-mode", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class, PROP_SUBTITLE,
-                                   g_param_spec_string ("subtitle",
-                                                        P_("Subtitle"),
-                                                        P_("Subtitle"),
+                                   g_param_spec_string ("subtitle", NULL, NULL,
                                                         "",
                                                         GTK_PARAM_READABLE));
 

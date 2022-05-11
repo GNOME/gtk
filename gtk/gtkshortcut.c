@@ -152,9 +152,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
    * The action that gets activated by this shortcut.
    */
   properties[PROP_ACTION] =
-    g_param_spec_object ("action",
-                         P_("Action"),
-                         P_("The action activated by this shortcut"),
+    g_param_spec_object ("action", NULL, NULL,
                          GTK_TYPE_SHORTCUT_ACTION,
                          G_PARAM_READWRITE |
                          G_PARAM_EXPLICIT_NOTIFY |
@@ -166,9 +164,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
    * Arguments passed to activation.
    */
   properties[PROP_ARGUMENTS] =
-    g_param_spec_variant ("arguments",
-                          P_("Arguments"),
-                          P_("Arguments passed to activation"),
+    g_param_spec_variant ("arguments", NULL, NULL,
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -179,9 +175,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
    * The trigger that triggers this shortcut.
    */
   properties[PROP_TRIGGER] =
-    g_param_spec_object ("trigger",
-                         P_("Trigger"),
-                         P_("The trigger for this shortcut"),
+    g_param_spec_object ("trigger", NULL, NULL,
                          GTK_TYPE_SHORTCUT_TRIGGER,
                          G_PARAM_READWRITE |
                          G_PARAM_EXPLICIT_NOTIFY |

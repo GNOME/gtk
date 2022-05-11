@@ -123,9 +123,7 @@ gtk_layout_child_class_init (GtkLayoutChildClass *klass)
    * The layout manager that created the `GtkLayoutChild` instance.
    */
   layout_child_properties[PROP_LAYOUT_MANAGER] =
-    g_param_spec_object ("layout-manager",
-                         "Layout Manager",
-                         "The layout manager that created this object",
+    g_param_spec_object ("layout-manager", NULL, NULL,
                          GTK_TYPE_LAYOUT_MANAGER,
                          GTK_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY);
@@ -136,9 +134,7 @@ gtk_layout_child_class_init (GtkLayoutChildClass *klass)
    * The widget that is associated to the `GtkLayoutChild` instance.
    */
   layout_child_properties[PROP_CHILD_WIDGET] =
-    g_param_spec_object ("child-widget",
-                         "Child Widget",
-                         "The child widget that is associated to this object",
+    g_param_spec_object ("child-widget", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY);

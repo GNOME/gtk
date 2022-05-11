@@ -297,9 +297,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * audio and video is known.
    */
   properties[PROP_PREPARED] =
-    g_param_spec_boolean ("prepared",
-                          P_("Prepared"),
-                          P_("Whether the stream has finished initializing"),
+    g_param_spec_boolean ("prepared", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -310,9 +308,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * that the stream is in.
    */
   properties[PROP_ERROR] =
-    g_param_spec_boxed ("error",
-                        P_("Error"),
-                        P_("Error the stream is in"),
+    g_param_spec_boxed ("error", NULL, NULL,
                         G_TYPE_ERROR,
                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -322,9 +318,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Whether the stream contains audio.
    */
   properties[PROP_HAS_AUDIO] =
-    g_param_spec_boolean ("has-audio",
-                          P_("Has audio"),
-                          P_("Whether the stream contains audio"),
+    g_param_spec_boolean ("has-audio", NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -334,9 +328,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Whether the stream contains video.
    */
   properties[PROP_HAS_VIDEO] =
-    g_param_spec_boolean ("has-video",
-                          P_("Has video"),
-                          P_("Whether the stream contains video"),
+    g_param_spec_boolean ("has-video", NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -346,9 +338,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Whether the stream is currently playing.
    */
   properties[PROP_PLAYING] =
-    g_param_spec_boolean ("playing",
-                          P_("Playing"),
-                          P_("Whether the stream is playing"),
+    g_param_spec_boolean ("playing", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -358,9 +348,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Set when playback has finished.
    */
   properties[PROP_ENDED] =
-    g_param_spec_boolean ("ended",
-                          P_("Ended"),
-                          P_("Set when playback has finished"),
+    g_param_spec_boolean ("ended", NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -370,9 +358,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * The current presentation timestamp in microseconds.
    */
   properties[PROP_TIMESTAMP] =
-    g_param_spec_int64 ("timestamp",
-                        P_("Timestamp"),
-                        P_("Timestamp in microseconds"),
+    g_param_spec_int64 ("timestamp", NULL, NULL,
                         0, G_MAXINT64, 0,
                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -382,9 +368,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * The stream's duration in microseconds or 0 if unknown.
    */
   properties[PROP_DURATION] =
-    g_param_spec_int64 ("duration",
-                        P_("Duration"),
-                        P_("Timestamp in microseconds"),
+    g_param_spec_int64 ("duration", NULL, NULL,
                         0, G_MAXINT64, 0,
                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -394,9 +378,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Set unless the stream is known to not support seeking.
    */
   properties[PROP_SEEKABLE] =
-    g_param_spec_boolean ("seekable",
-                          P_("Seekable"),
-                          P_("Set unless seeking is not supported"),
+    g_param_spec_boolean ("seekable", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -406,9 +388,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Set while a seek is in progress.
    */
   properties[PROP_SEEKING] =
-    g_param_spec_boolean ("seeking",
-                          P_("Seeking"),
-                          P_("Set while a seek is in progress"),
+    g_param_spec_boolean ("seeking", NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -418,9 +398,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Try to restart the media from the beginning once it ended.
    */
   properties[PROP_LOOP] =
-    g_param_spec_boolean ("loop",
-                          P_("Loop"),
-                          P_("Try to restart the media from the beginning once it ended."),
+    g_param_spec_boolean ("loop", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -430,9 +408,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Whether the audio stream should be muted.
    */
   properties[PROP_MUTED] =
-    g_param_spec_boolean ("muted",
-                          P_("Muted"),
-                          P_("Whether the audio stream should be muted."),
+    g_param_spec_boolean ("muted", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -442,9 +418,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
    * Volume of the audio stream.
    */
   properties[PROP_VOLUME] =
-    g_param_spec_double ("volume",
-                         P_("Volume"),
-                         P_("Volume of the audio stream."),
+    g_param_spec_double ("volume", NULL, NULL,
                          0.0, 1.0, 1.0,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

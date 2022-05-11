@@ -368,15 +368,11 @@ gtk_pad_controller_class_init (GtkPadControllerClass *klass)
   object_class->finalize = gtk_pad_controller_finalize;
 
   pspecs[PROP_ACTION_GROUP] =
-    g_param_spec_object ("action-group",
-                         P_("Action group"),
-                         P_("Action group to launch actions from"),
+    g_param_spec_object ("action-group", NULL, NULL,
                          G_TYPE_ACTION_GROUP,
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
   pspecs[PROP_PAD] =
-    g_param_spec_object ("pad",
-                         P_("Pad device"),
-                         P_("Pad device to control"),
+    g_param_spec_object ("pad", NULL, NULL,
                          GDK_TYPE_DEVICE,
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 

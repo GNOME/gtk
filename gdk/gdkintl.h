@@ -27,6 +27,4 @@
 
 #include <glib/gi18n-lib.h>
 
-#define P_(String) dgettext (GETTEXT_PACKAGE "-properties", String)
-
 #endif

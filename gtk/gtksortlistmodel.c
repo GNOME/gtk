@@ -784,9 +784,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
    * If the model should sort items incrementally.
    */
   properties[PROP_INCREMENTAL] =
-      g_param_spec_boolean ("incremental",
-                            P_("Incremental"),
-                            P_("Sort items incrementally"),
+      g_param_spec_boolean ("incremental", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -796,9 +794,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
    * The model being sorted.
    */
   properties[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Model"),
-                           P_("The model being sorted"),
+      g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -808,9 +804,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
    * Estimate of unsorted items remaining.
    */
   properties[PROP_PENDING] =
-      g_param_spec_uint ("pending",
-                         P_("Pending"),
-                         P_("Estimate of unsorted items remaining"),
+      g_param_spec_uint ("pending", NULL, NULL,
                          0, G_MAXUINT, 0,
                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -820,9 +814,7 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
    * The sorter for this model.
    */
   properties[PROP_SORTER] =
-      g_param_spec_object ("sorter",
-                            P_("Sorter"),
-                            P_("The sorter for this model"),
+      g_param_spec_object ("sorter", NULL, NULL,
                             GTK_TYPE_SORTER,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

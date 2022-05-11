@@ -946,9 +946,7 @@ gtk_signal_action_class_init (GtkSignalActionClass *klass)
    * The name of the signal to emit.
    */
   signal_props[SIGNAL_PROP_SIGNAL_NAME] =
-    g_param_spec_string (I_("signal-name"),
-                         P_("Signal Name"),
-                         P_("The name of the signal to emit"),
+    g_param_spec_string (I_("signal-name"), NULL, NULL,
                          NULL,
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_READWRITE |
@@ -1188,9 +1186,7 @@ gtk_named_action_class_init (GtkNamedActionClass *klass)
    * The name of the action to activate.
    */
   named_props[NAMED_PROP_ACTION_NAME] =
-    g_param_spec_string (I_("action-name"),
-                         P_("Action Name"),
-                         P_("The name of the action to activate"),
+    g_param_spec_string (I_("action-name"), NULL, NULL,
                          NULL,
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_READWRITE |

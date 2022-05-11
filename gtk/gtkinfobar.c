@@ -353,9 +353,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * The type may be used to determine the appearance of the info bar.
    */
   props[PROP_MESSAGE_TYPE] =
-    g_param_spec_enum ("message-type",
-                       P_("Message Type"),
-                       P_("The type of message"),
+    g_param_spec_enum ("message-type", NULL, NULL,
                        GTK_TYPE_MESSAGE_TYPE,
                        GTK_MESSAGE_INFO,
                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
@@ -366,9 +364,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * Whether to include a standard close button.
    */
   props[PROP_SHOW_CLOSE_BUTTON] =
-    g_param_spec_boolean ("show-close-button",
-                          P_("Show Close Button"),
-                          P_("Whether to include a standard close button"),
+    g_param_spec_boolean ("show-close-button", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -378,9 +374,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
    * Whether the info bar shows its contents.
    */
   props[PROP_REVEALED] =
-    g_param_spec_boolean ("revealed",
-                          P_("Reveal"),
-                          P_("Controls whether the info bar shows its contents or not"),
+    g_param_spec_boolean ("revealed", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

@@ -272,128 +272,94 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                   G_TYPE_NONE, 0);
 
   tree_column_props[PROP_VISIBLE] =
-      g_param_spec_boolean ("visible",
-                            P_("Visible"),
-                            P_("Whether to display the column"),
+      g_param_spec_boolean ("visible", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_RESIZABLE] =
-      g_param_spec_boolean ("resizable",
-                            P_("Resizable"),
-                            P_("Column is user-resizable"),
+      g_param_spec_boolean ("resizable", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_X_OFFSET] =
-      g_param_spec_int ("x-offset",
-                        P_("X position"),
-                        P_("Current X position of the column"),
+      g_param_spec_int ("x-offset", NULL, NULL,
                         -G_MAXINT, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE);
 
   tree_column_props[PROP_WIDTH] =
-      g_param_spec_int ("width",
-                        P_("Width"),
-                        P_("Current width of the column"),
+      g_param_spec_int ("width", NULL, NULL,
                         0, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE);
 
   tree_column_props[PROP_SPACING] =
-      g_param_spec_int ("spacing",
-                        P_("Spacing"),
-                        P_("Space which is inserted between cells"),
+      g_param_spec_int ("spacing", NULL, NULL,
                         0, G_MAXINT,
                         0,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_SIZING] =
-      g_param_spec_enum ("sizing",
-                         P_("Sizing"),
-                         P_("Resize mode of the column"),
+      g_param_spec_enum ("sizing", NULL, NULL,
                          GTK_TYPE_TREE_VIEW_COLUMN_SIZING,
                          GTK_TREE_VIEW_COLUMN_GROW_ONLY,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_FIXED_WIDTH] =
-      g_param_spec_int ("fixed-width",
-                         P_("Fixed Width"),
-                         P_("Current fixed width of the column"),
+      g_param_spec_int ("fixed-width", NULL, NULL,
                          -1, G_MAXINT,
                          -1,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_MIN_WIDTH] =
-      g_param_spec_int ("min-width",
-                        P_("Minimum Width"),
-                        P_("Minimum allowed width of the column"),
+      g_param_spec_int ("min-width", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_MAX_WIDTH] =
-      g_param_spec_int ("max-width",
-                        P_("Maximum Width"),
-                        P_("Maximum allowed width of the column"),
+      g_param_spec_int ("max-width", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_TITLE] =
-      g_param_spec_string ("title",
-                           P_("Title"),
-                           P_("Title to appear in column header"),
+      g_param_spec_string ("title", NULL, NULL,
                            "",
                            GTK_PARAM_READWRITE);
 
   tree_column_props[PROP_EXPAND] =
-      g_param_spec_boolean ("expand",
-                            P_("Expand"),
-                            P_("Column gets share of extra width allocated to the widget"),
+      g_param_spec_boolean ("expand", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_CLICKABLE] =
-      g_param_spec_boolean ("clickable",
-                            P_("Clickable"),
-                            P_("Whether the header can be clicked"),
+      g_param_spec_boolean ("clickable", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_WIDGET] =
-      g_param_spec_object ("widget",
-                           P_("Widget"),
-                           P_("Widget to put in column header button instead of column title"),
+      g_param_spec_object ("widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 
   tree_column_props[PROP_ALIGNMENT] =
-      g_param_spec_float ("alignment",
-                          P_("Alignment"),
-                          P_("X Alignment of the column header text or widget"),
+      g_param_spec_float ("alignment", NULL, NULL,
                           0.0, 1.0, 0.0,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_REORDERABLE] =
-      g_param_spec_boolean ("reorderable",
-                            P_("Reorderable"),
-                            P_("Whether the column can be reordered around the headers"),
+      g_param_spec_boolean ("reorderable", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_SORT_INDICATOR] =
-      g_param_spec_boolean ("sort-indicator",
-                            P_("Sort indicator"),
-                            P_("Whether to show a sort indicator"),
+      g_param_spec_boolean ("sort-indicator", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_column_props[PROP_SORT_ORDER] =
-      g_param_spec_enum ("sort-order",
-                         P_("Sort order"),
-                         P_("Sort direction the sort indicator should indicate"),
+      g_param_spec_enum ("sort-order", NULL, NULL,
                          GTK_TYPE_SORT_TYPE,
                          GTK_SORT_ASCENDING,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -405,9 +371,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
    * clickable. Set to -1 to make the column unsortable.
    **/
   tree_column_props[PROP_SORT_COLUMN_ID] =
-      g_param_spec_int ("sort-column-id",
-                        P_("Sort column ID"),
-                        P_("Logical sort column ID this column sorts on when selected for sorting"),
+      g_param_spec_int ("sort-column-id", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -421,9 +385,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
    * a horizontally oriented `GtkCellAreaBox` will be used.
    */
   tree_column_props[PROP_CELL_AREA] =
-      g_param_spec_object ("cell-area",
-                           P_("Cell Area"),
-                           P_("The GtkCellArea used to layout cells"),
+      g_param_spec_object ("cell-area", NULL, NULL,
                            GTK_TYPE_CELL_AREA,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
 

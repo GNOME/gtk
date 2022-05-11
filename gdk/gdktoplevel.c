@@ -131,9 +131,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * The state of the toplevel.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_flags ("state",
-                          P_("State"),
-                          P_("State"),
+      g_param_spec_flags ("state", NULL, NULL,
                           GDK_TYPE_TOPLEVEL_STATE, 0,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
@@ -143,9 +141,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * The title of the surface.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_string ("title",
-                           "Title",
-                           "The title of the surface",
+      g_param_spec_string ("title", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -158,9 +154,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * startup feedback.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_string ("startup-id",
-                           "Startup ID",
-                           "The startup ID of the surface",
+      g_param_spec_string ("startup-id", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -170,9 +164,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * The transient parent of the surface.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_object ("transient-for",
-                           "Transient For",
-                           "The transient parent of the surface",
+      g_param_spec_object ("transient-for", NULL, NULL,
                            GDK_TYPE_SURFACE,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -182,9 +174,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * Whether the surface is modal.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("modal",
-                            "Modal",
-                            "Whether the surface is modal",
+      g_param_spec_boolean ("modal", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -194,9 +184,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * A list of textures to use as icon.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_pointer ("icon-list",
-                            "Icon List",
-                            "The list of icon textures",
+      g_param_spec_pointer ("icon-list", NULL, NULL,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
@@ -205,9 +193,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * Whether the window manager should add decorations.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("decorated",
-                            "Decorated",
-                            "Decorated",
+      g_param_spec_boolean ("decorated", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -217,9 +203,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * Whether the window manager should allow to close the surface.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("deletable",
-                            "Deletable",
-                            "Deletable",
+      g_param_spec_boolean ("deletable", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -229,9 +213,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * The fullscreen mode of the surface.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_enum ("fullscreen-mode",
-                         "Fullscreen mode",
-                         "Fullscreen mode",
+      g_param_spec_enum ("fullscreen-mode", NULL, NULL,
                          GDK_TYPE_FULLSCREEN_MODE,
                          GDK_FULLSCREEN_ON_CURRENT_MONITOR,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
@@ -242,9 +224,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * Whether the surface should inhibit keyboard shortcuts.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("shortcuts-inhibited",
-                            "Shortcuts inhibited",
-                            "Whether keyboard shortcuts are inhibited",
+      g_param_spec_boolean ("shortcuts-inhibited", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
 

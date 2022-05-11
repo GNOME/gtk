@@ -749,7 +749,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    * objects that are in this shortcuts window.
    */
   properties[PROP_SECTION_NAME] =
-    g_param_spec_string ("section-name", P_("Section Name"), P_("Section Name"),
+    g_param_spec_string ("section-name", NULL, NULL,
                          "internal-search",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -765,7 +765,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    * Set this to %NULL to show all groups.
    */
   properties[PROP_VIEW_NAME] =
-    g_param_spec_string ("view-name", P_("View Name"), P_("View Name"),
+    g_param_spec_string ("view-name", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

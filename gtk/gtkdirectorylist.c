@@ -278,9 +278,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
    * The attributes to query.
    */
   properties[PROP_ATTRIBUTES] =
-      g_param_spec_string ("attributes",
-                           P_("attributes"),
-                           P_("Attributes to query"),
+      g_param_spec_string ("attributes", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -290,9 +288,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
    * Error encountered while loading files.
    */
   properties[PROP_ERROR] =
-      g_param_spec_boxed ("error",
-                          P_("error"),
-                          P_("Error encountered while loading files"),
+      g_param_spec_boxed ("error", NULL, NULL,
                           G_TYPE_ERROR,
                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -302,9 +298,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
    * File to query.
    */
   properties[PROP_FILE] =
-      g_param_spec_object ("file",
-                           P_("File"),
-                           P_("The file to query"),
+      g_param_spec_object ("file", NULL, NULL,
                            G_TYPE_FILE,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -314,9 +308,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
    * Priority used when loading.
    */
   properties[PROP_IO_PRIORITY] =
-      g_param_spec_int ("io-priority",
-                        P_("IO priority"),
-                        P_("Priority used when loading"),
+      g_param_spec_int ("io-priority", NULL, NULL,
                         -G_MAXINT, G_MAXINT, G_PRIORITY_DEFAULT,
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -326,9 +318,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
    * %TRUE if files are being loaded.
    */
   properties[PROP_LOADING] =
-      g_param_spec_boolean ("loading",
-                            P_("loading"),
-                            P_("TRUE if files are being loaded"),
+      g_param_spec_boolean ("loading", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -338,9 +328,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
    * %TRUE if the directory is monitored for changed.
    */
   properties[PROP_MONITORED] =
-      g_param_spec_boolean ("monitored",
-                            P_("monitored"),
-                            P_("TRUE if the directory is monitored for changes"),
+      g_param_spec_boolean ("monitored", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

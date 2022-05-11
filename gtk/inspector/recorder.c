@@ -2056,20 +2056,16 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   object_class->dispose = gtk_inspector_recorder_dispose;
 
   props[PROP_RECORDING] =
-    g_param_spec_boolean ("recording",
-                          "Recording",
-                          "Whether the recorder is currently recording",
+    g_param_spec_boolean ("recording", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE);
   props[PROP_DEBUG_NODES] =
-    g_param_spec_boolean ("debug-nodes",
-                          "Debug nodes",
-                          "Whether to insert extra debug nodes in the tree",
+    g_param_spec_boolean ("debug-nodes", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE);
 
-  props[PROP_HIGHLIGHT_SEQUENCES] = g_param_spec_boolean ("highlight-sequences", "", "", FALSE, G_PARAM_READWRITE);
-  props[PROP_SELECTED_SEQUENCE] = g_param_spec_pointer ("selected-sequence", "", "", G_PARAM_READWRITE);
+  props[PROP_HIGHLIGHT_SEQUENCES] = g_param_spec_boolean ("highlight-sequences", NULL, NULL, FALSE, G_PARAM_READWRITE);
+  props[PROP_SELECTED_SEQUENCE] = g_param_spec_pointer ("selected-sequence", NULL, NULL, G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

@@ -690,9 +690,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    *   can be shared.
    */
   properties[PROP_SHARED_CONTEXT] =
-    g_param_spec_object ("shared-context",
-                         P_("Shared context"),
-                         P_("The GL context this context shares data with"),
+    g_param_spec_object ("shared-context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -707,9 +705,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    * Since: 4.6
    */
   properties[PROP_ALLOWED_APIS] =
-    g_param_spec_flags ("allowed-apis",
-                        P_("Allowed APIs"),
-                        P_("The list of allowed APIs for this context"),
+    g_param_spec_flags ("allowed-apis", NULL, NULL,
                         GDK_TYPE_GL_API,
                         DEFAULT_ALLOWED_APIS,
                         G_PARAM_READWRITE |
@@ -724,9 +720,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    * Since: 4.6
    */
   properties[PROP_API] =
-    g_param_spec_flags ("api",
-                        P_("API"),
-                        P_("The API currently in use"),
+    g_param_spec_flags ("api", NULL, NULL,
                         GDK_TYPE_GL_API,
                         0,
                         G_PARAM_READABLE |

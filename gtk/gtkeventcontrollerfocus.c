@@ -200,9 +200,7 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
    * [signal@Gtk.EventControllerFocus::leave] are emitted.
    */
   props[PROP_IS_FOCUS] =
-      g_param_spec_boolean ("is-focus",
-                            P_("Is Focus"),
-                            P_("Whether the focus is in the controllers widget"),
+      g_param_spec_boolean ("is-focus", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE);
 
@@ -219,9 +217,7 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
    * [signal@Gtk.EventControllerFocus::leave] are emitted.
    */
   props[PROP_CONTAINS_FOCUS] =
-      g_param_spec_boolean ("contains-focus",
-                            P_("Contains Focus"),
-                            P_("Whether the focus is in a descendant of the controllers widget"),
+      g_param_spec_boolean ("contains-focus", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE);
 

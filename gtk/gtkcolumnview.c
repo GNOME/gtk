@@ -678,9 +678,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * The list of columns.
    */
   properties[PROP_COLUMNS] =
-    g_param_spec_object ("columns",
-                         P_("Columns"),
-                         P_("List of columns"),
+    g_param_spec_object ("columns", NULL, NULL,
                          G_TYPE_LIST_MODEL,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -690,9 +688,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * Model for the items displayed.
    */
   properties[PROP_MODEL] =
-    g_param_spec_object ("model",
-                         P_("Model"),
-                         P_("Model for the items displayed"),
+    g_param_spec_object ("model", NULL, NULL,
                          GTK_TYPE_SELECTION_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -702,9 +698,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * Show separators between rows.
    */
   properties[PROP_SHOW_ROW_SEPARATORS] =
-    g_param_spec_boolean ("show-row-separators",
-                          P_("Show row separators"),
-                          P_("Show separators between rows"),
+    g_param_spec_boolean ("show-row-separators", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -714,9 +708,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * Show separators between columns.
    */
   properties[PROP_SHOW_COLUMN_SEPARATORS] =
-    g_param_spec_boolean ("show-column-separators",
-                          P_("Show column separators"),
-                          P_("Show separators between columns"),
+    g_param_spec_boolean ("show-column-separators", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -726,9 +718,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * Sorter with the sorting choices of the user.
    */
   properties[PROP_SORTER] =
-    g_param_spec_object ("sorter",
-                         P_("Sorter"),
-                         P_("Sorter with sorting choices of the user"),
+    g_param_spec_object ("sorter", NULL, NULL,
                          GTK_TYPE_SORTER,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -738,9 +728,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * Activate rows on single click and select them on hover.
    */
   properties[PROP_SINGLE_CLICK_ACTIVATE] =
-    g_param_spec_boolean ("single-click-activate",
-                          P_("Single click activate"),
-                          P_("Activate rows on single click"),
+    g_param_spec_boolean ("single-click-activate", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -750,9 +738,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * Whether columns are reorderable.
    */
   properties[PROP_REORDERABLE] =
-    g_param_spec_boolean ("reorderable",
-                          P_("Reorderable"),
-                          P_("Whether columns are reorderable"),
+    g_param_spec_boolean ("reorderable", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -762,9 +748,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * Allow rubberband selection.
    */
   properties[PROP_ENABLE_RUBBERBAND] =
-    g_param_spec_boolean ("enable-rubberband",
-                          P_("Enable rubberband selection"),
-                          P_("Allow selecting items by dragging with the mouse"),
+    g_param_spec_boolean ("enable-rubberband", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

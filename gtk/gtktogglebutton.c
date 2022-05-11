@@ -280,9 +280,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
    * If the toggle button should be pressed in.
    */
   toggle_button_props[PROP_ACTIVE] =
-      g_param_spec_boolean ("active",
-                            P_("Active"),
-                            P_("If the toggle button should be pressed in"),
+      g_param_spec_boolean ("active", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -292,9 +290,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
    * The toggle button whose group this widget belongs to.
    */
   toggle_button_props[PROP_GROUP] =
-      g_param_spec_object ("group",
-                           P_("Group"),
-                           P_("The toggle button whose group this widget belongs to."),
+      g_param_spec_object ("group", NULL, NULL,
                            GTK_TYPE_TOGGLE_BUTTON,
                            GTK_PARAM_WRITABLE);
 

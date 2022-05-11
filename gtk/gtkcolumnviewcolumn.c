@@ -237,9 +237,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * The `GtkColumnView` this column is a part of.
    */
   properties[PROP_COLUMN_VIEW] =
-    g_param_spec_object ("column-view",
-                         P_("Column view"),
-                         P_("Column view this column is a part of"),
+    g_param_spec_object ("column-view", NULL, NULL,
                          GTK_TYPE_COLUMN_VIEW,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -249,9 +247,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * Factory for populating list items.
    */
   properties[PROP_FACTORY] =
-    g_param_spec_object ("factory",
-                         P_("Factory"),
-                         P_("Factory for populating list items"),
+    g_param_spec_object ("factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -261,9 +257,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * Title displayed in the header.
    */
   properties[PROP_TITLE] =
-    g_param_spec_string ("title",
-                          P_("Title"),
-                          P_("Title displayed in the header"),
+    g_param_spec_string ("title", NULL, NULL,
                           NULL,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -273,9 +267,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * Sorter for sorting items according to this column.
    */
   properties[PROP_SORTER] =
-    g_param_spec_object ("sorter",
-                         P_("Sorter"),
-                         P_("Sorter for sorting items according to this column"),
+    g_param_spec_object ("sorter", NULL, NULL,
                          GTK_TYPE_SORTER,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -285,9 +277,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * Whether this column is visible.
    */
   properties[PROP_VISIBLE] =
-    g_param_spec_boolean ("visible",
-                          P_("Visible"),
-                          P_("Whether this column is visible"),
+    g_param_spec_boolean ("visible", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -297,9 +287,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * Menu model used to create the context menu for the column header.
    */
   properties[PROP_HEADER_MENU] =
-    g_param_spec_object ("header-menu",
-                         P_("Header menu"),
-                         P_("Menu to use on the title of this column"),
+    g_param_spec_object ("header-menu", NULL, NULL,
                          G_TYPE_MENU_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -309,9 +297,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * Whether this column is resizable.
    */
   properties[PROP_RESIZABLE] =
-    g_param_spec_boolean ("resizable",
-                          P_("Resizable"),
-                          P_("Whether this column is resizable"),
+    g_param_spec_boolean ("resizable", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -321,9 +307,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * Column gets share of extra width allocated to the view.
    */
   properties[PROP_EXPAND] =
-    g_param_spec_boolean ("expand",
-                          P_("Expand"),
-                          P_("column gets share of extra width"),
+    g_param_spec_boolean ("expand", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -334,9 +318,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * regardless of the size of its content.
    */
   properties[PROP_FIXED_WIDTH] =
-    g_param_spec_int ("fixed-width",
-                      P_("Fixed width"),
-                      P_("Fixed width of this column"),
+    g_param_spec_int ("fixed-width", NULL, NULL,
                       -1, G_MAXINT, -1,
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

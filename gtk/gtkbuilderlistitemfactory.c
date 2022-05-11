@@ -264,9 +264,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
    * `GBytes` containing the UI definition.
    */
   properties[PROP_BYTES] =
-    g_param_spec_boxed ("bytes",
-                        P_("Bytes"),
-                        P_("bytes containing the UI definition"),
+    g_param_spec_boxed ("bytes", NULL, NULL,
                         G_TYPE_BYTES,
                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -276,9 +274,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
    * Path of the resource containing the UI definition.
    */
   properties[PROP_RESOURCE] =
-    g_param_spec_string ("resource",
-                         P_("Resource"),
-                         P_("resource containing the UI definition"),
+    g_param_spec_string ("resource", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -288,9 +284,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
    * `GtkBuilderScope` to use when instantiating listitems
    */
   properties[PROP_SCOPE] =
-    g_param_spec_object ("scope",
-                         P_("Scope"),
-                         P_("scope to use when instantiating listitems"),
+    g_param_spec_object ("scope", NULL, NULL,
                          GTK_TYPE_BUILDER_SCOPE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

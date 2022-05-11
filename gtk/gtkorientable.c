@@ -52,9 +52,7 @@ gtk_orientable_default_init (GtkOrientableInterface *iface)
    * The orientation of the orientable.
    **/
   g_object_interface_install_property (iface,
-                                       g_param_spec_enum ("orientation",
-                                                          P_("Orientation"),
-                                                          P_("The orientation of the orientable"),
+                                       g_param_spec_enum ("orientation", NULL, NULL,
                                                           GTK_TYPE_ORIENTATION,
                                                           GTK_ORIENTATION_HORIZONTAL,
                                                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));

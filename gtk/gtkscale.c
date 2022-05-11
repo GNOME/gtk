@@ -677,9 +677,7 @@ gtk_scale_class_init (GtkScaleClass *class)
    * The number of decimal places that are displayed in the value.
    */
   properties[PROP_DIGITS] =
-      g_param_spec_int ("digits",
-                        P_("Digits"),
-                        P_("The number of decimal places that are displayed in the value"),
+      g_param_spec_int ("digits", NULL, NULL,
                         -1, MAX_DIGITS,
                         1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -690,9 +688,7 @@ gtk_scale_class_init (GtkScaleClass *class)
    * Whether the current value is displayed as a string next to the slider.
    */
   properties[PROP_DRAW_VALUE] =
-      g_param_spec_boolean ("draw-value",
-                            P_("Draw Value"),
-                            P_("Whether the current value is displayed as a string next to the slider"),
+      g_param_spec_boolean ("draw-value", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -702,9 +698,7 @@ gtk_scale_class_init (GtkScaleClass *class)
    * Whether the scale has an origin.
    */
   properties[PROP_HAS_ORIGIN] =
-      g_param_spec_boolean ("has-origin",
-                            P_("Has Origin"),
-                            P_("Whether the scale has an origin"),
+      g_param_spec_boolean ("has-origin", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -714,9 +708,7 @@ gtk_scale_class_init (GtkScaleClass *class)
    * The position in which the current value is displayed.
    */
   properties[PROP_VALUE_POS] =
-      g_param_spec_enum ("value-pos",
-                         P_("Value Position"),
-                         P_("The position in which the current value is displayed"),
+      g_param_spec_enum ("value-pos", NULL, NULL,
                          GTK_TYPE_POSITION_TYPE,
                          GTK_POS_TOP,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);

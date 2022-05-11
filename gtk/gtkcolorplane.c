@@ -487,27 +487,21 @@ gtk_color_plane_class_init (GtkColorPlaneClass *class)
 
   g_object_class_install_property (object_class,
                                    PROP_H_ADJUSTMENT,
-                                   g_param_spec_object ("h-adjustment",
-                                                        "Hue Adjustment",
-                                                        "Hue Adjustment",
+                                   g_param_spec_object ("h-adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
                                                         GTK_PARAM_WRITABLE |
                                                         G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
                                    PROP_S_ADJUSTMENT,
-                                   g_param_spec_object ("s-adjustment",
-                                                        "Saturation Adjustment",
-                                                        "Saturation Adjustment",
+                                   g_param_spec_object ("s-adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
                                                         GTK_PARAM_WRITABLE |
                                                         G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
                                    PROP_V_ADJUSTMENT,
-                                   g_param_spec_object ("v-adjustment",
-                                                        "Value Adjustment",
-                                                        "Value Adjustment",
+                                   g_param_spec_object ("v-adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
                                                         GTK_PARAM_WRITABLE |
                                                         G_PARAM_CONSTRUCT_ONLY));

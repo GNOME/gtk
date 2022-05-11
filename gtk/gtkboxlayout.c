@@ -896,9 +896,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
    * equally among the children.
    */
   box_layout_props[PROP_HOMOGENEOUS] =
-    g_param_spec_boolean ("homogeneous",
-                          P_("Homogeneous"),
-                          P_("Distribute space homogeneously"),
+    g_param_spec_boolean ("homogeneous", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE |
                           G_PARAM_EXPLICIT_NOTIFY);
@@ -909,9 +907,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
    * The space to put between the children.
    */
   box_layout_props[PROP_SPACING] =
-    g_param_spec_int ("spacing",
-                      P_("Spacing"),
-                      P_("Spacing between widgets"),
+    g_param_spec_int ("spacing", NULL, NULL,
                       0, G_MAXINT, 0,
                       GTK_PARAM_READWRITE |
                       G_PARAM_EXPLICIT_NOTIFY);
@@ -926,9 +922,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
    * at least one child with a baseline alignment.
    */
   box_layout_props[PROP_BASELINE_POSITION] =
-    g_param_spec_enum ("baseline-position",
-                       P_("Baseline position"),
-                       P_("The position of the baseline aligned widgets if extra space is available"),
+    g_param_spec_enum ("baseline-position", NULL, NULL,
                        GTK_TYPE_BASELINE_POSITION,
                        GTK_BASELINE_POSITION_CENTER,
                        GTK_PARAM_READWRITE |

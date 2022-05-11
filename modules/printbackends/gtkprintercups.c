@@ -89,9 +89,7 @@ gtk_printer_cups_class_init (GtkPrinterCupsClass *class)
 
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_PROFILE_TITLE,
-                                   g_param_spec_string ("profile-title",
-                                                        P_("Color Profile Title"),
-                                                        P_("The title of the color profile to use"),
+                                   g_param_spec_string ("profile-title", NULL, NULL,
                                                         "",
                                                         G_PARAM_READABLE));
 }

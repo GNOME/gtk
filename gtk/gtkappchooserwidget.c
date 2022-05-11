@@ -906,9 +906,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * If %FALSE, the default handler is listed among the recommended
    * applications.
    */
-  pspec = g_param_spec_boolean ("show-default",
-                                P_("Show default app"),
-                                P_("Whether the widget should show the default application"),
+  pspec = g_param_spec_boolean ("show-default", NULL, NULL,
                                 FALSE,
                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_DEFAULT, pspec);
@@ -922,9 +920,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * If %FALSE, the recommended applications are listed
    * among the other applications.
    */
-  pspec = g_param_spec_boolean ("show-recommended",
-                                P_("Show recommended apps"),
-                                P_("Whether the widget should show recommended applications"),
+  pspec = g_param_spec_boolean ("show-recommended", NULL, NULL,
                                 TRUE,
                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_RECOMMENDED, pspec);
@@ -938,9 +934,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * If %FALSE, the fallback applications are listed among the
    * other applications.
    */
-  pspec = g_param_spec_boolean ("show-fallback",
-                                P_("Show fallback apps"),
-                                P_("Whether the widget should show fallback applications"),
+  pspec = g_param_spec_boolean ("show-fallback", NULL, NULL,
                                 FALSE,
                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_FALLBACK, pspec);
@@ -951,9 +945,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * Determines whether the app chooser should show a section
    * for other applications.
    */
-  pspec = g_param_spec_boolean ("show-other",
-                                P_("Show other apps"),
-                                P_("Whether the widget should show other applications"),
+  pspec = g_param_spec_boolean ("show-other", NULL, NULL,
                                 FALSE,
                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_OTHER, pspec);
@@ -965,9 +957,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * in a single list, without subsections for default,
    * recommended or related applications.
    */
-  pspec = g_param_spec_boolean ("show-all",
-                                P_("Show all apps"),
-                                P_("Whether the widget should show all applications"),
+  pspec = g_param_spec_boolean ("show-all", NULL, NULL,
                                 FALSE,
                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_SHOW_ALL, pspec);
@@ -978,9 +968,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * The text that appears in the widget when there are no applications
    * for the given content type.
    */
-  pspec = g_param_spec_string ("default-text",
-                               P_("Widget’s default text"),
-                               P_("The default text appearing when there are no applications"),
+  pspec = g_param_spec_string ("default-text", NULL, NULL,
                                NULL,
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (gobject_class, PROP_DEFAULT_TEXT, pspec);

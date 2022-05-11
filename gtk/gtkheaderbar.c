@@ -565,9 +565,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->get_request_mode = gtk_header_bar_get_request_mode;
 
   header_bar_props[PROP_TITLE_WIDGET] =
-      g_param_spec_object ("title-widget",
-                           P_("Title Widget"),
-                           P_("Title widget to display"),
+      g_param_spec_object ("title-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
@@ -582,9 +580,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    * be shown if the window can't be closed).
    */
   header_bar_props[PROP_SHOW_TITLE_BUTTONS] =
-      g_param_spec_boolean ("show-title-buttons",
-                            P_("Show title buttons"),
-                            P_("Whether to show title buttons"),
+      g_param_spec_boolean ("show-title-buttons", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -597,9 +593,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    * [property@Gtk.Settings:gtk-decoration-layout] setting is used.
    */
   header_bar_props[PROP_DECORATION_LAYOUT] =
-      g_param_spec_string ("decoration-layout",
-                           P_("Decoration Layout"),
-                           P_("The layout for window decorations"),
+      g_param_spec_string ("decoration-layout", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 

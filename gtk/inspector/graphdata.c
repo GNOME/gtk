@@ -95,9 +95,7 @@ gtk_graph_data_class_init (GtkGraphDataClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_N_VALUES,
-                                   g_param_spec_uint ("n-values",
-                                                      "n values",
-                                                      "Number of values in the graph",
+                                   g_param_spec_uint ("n-values", NULL, NULL,
                                                       1, G_MAXUINT, 1,
                                                       G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 }

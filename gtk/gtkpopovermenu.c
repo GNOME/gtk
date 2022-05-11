@@ -595,9 +595,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE_SUBMENU,
-                                   g_param_spec_string ("visible-submenu",
-                                                        P_("Visible submenu"),
-                                                        P_("The name of the visible submenu"),
+                                   g_param_spec_string ("visible-submenu", NULL, NULL,
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -608,9 +606,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_MENU_MODEL,
-                                   g_param_spec_object ("menu-model",
-                                                        P_("Menu model"),
-                                                        P_("The model from which the menu is made."),
+                                   g_param_spec_object ("menu-model", NULL, NULL,
                                                         G_TYPE_MENU_MODEL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 

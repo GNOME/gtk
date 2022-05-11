@@ -202,17 +202,13 @@ gtk_tree_popover_class_init (GtkTreePopoverClass *class)
 
   g_object_class_install_property (object_class,
                                    PROP_MODEL,
-                                   g_param_spec_object ("model",
-                                                        P_("model"),
-                                                        P_("The model for the popover"),
+                                   g_param_spec_object ("model", NULL, NULL,
                                                         GTK_TYPE_TREE_MODEL,
                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
                                    PROP_CELL_AREA,
-                                   g_param_spec_object ("cell-area",
-                                                        P_("Cell Area"),
-                                                        P_("The GtkCellArea used to layout cells"),
+                                   g_param_spec_object ("cell-area", NULL, NULL,
                                                         GTK_TYPE_CELL_AREA,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 

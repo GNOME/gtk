@@ -218,9 +218,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * Text of the label inside the button, if the button contains a label widget.
    */
   props[PROP_LABEL] =
-    g_param_spec_string ("label",
-                         P_("Label"),
-                         P_("Text of the label widget inside the button, if the button contains a label widget"),
+    g_param_spec_string ("label", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -231,9 +229,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * to be used as mnemonic.
    */
   props[PROP_USE_UNDERLINE] =
-    g_param_spec_boolean ("use-underline",
-                          P_("Use underline"),
-                          P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+    g_param_spec_boolean ("use-underline", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -243,9 +239,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * Whether the button has a frame.
    */
   props[PROP_HAS_FRAME] =
-    g_param_spec_boolean ("has-frame",
-                          P_("Has Frame"),
-                          P_("Whether the button has a frame"),
+    g_param_spec_boolean ("has-frame", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -255,9 +249,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * The name of the icon used to automatically populate the button.
    */
   props[PROP_ICON_NAME] =
-    g_param_spec_string ("icon-name",
-                         P_("Icon Name"),
-                         P_("The name of the icon used to automatically populate the button"),
+    g_param_spec_string ("icon-name", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -267,9 +259,7 @@ gtk_button_class_init (GtkButtonClass *klass)
    * The child widget.
    */
   props[PROP_CHILD] =
-    g_param_spec_object ("child",
-                         P_("Child"),
-                         P_("The child widget"),
+    g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

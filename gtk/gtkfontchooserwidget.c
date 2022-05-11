@@ -890,9 +890,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
    * The action will be enabled or disabled depending on whether
    * the selected font has any features or axes.
    */
-  pspec = g_param_spec_object ("tweak-action",
-                               P_("The tweak action"),
-                               P_("The toggle action to switch to the tweak page"),
+  pspec = g_param_spec_object ("tweak-action", NULL, NULL,
                                G_TYPE_ACTION,
                                G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (gobject_class, PROP_TWEAK_ACTION, pspec);

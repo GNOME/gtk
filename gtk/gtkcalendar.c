@@ -372,9 +372,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_YEAR,
-                                   g_param_spec_int ("year",
-                                                     P_("Year"),
-                                                     P_("The selected year"),
+                                   g_param_spec_int ("year", NULL, NULL,
                                                      1, 9999, 1,
                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -387,9 +385,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MONTH,
-                                   g_param_spec_int ("month",
-                                                     P_("Month"),
-                                                     P_("The selected month (as a number between 0 and 11)"),
+                                   g_param_spec_int ("month", NULL, NULL,
                                                      0, 11, 0,
                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -400,9 +396,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DAY,
-                                   g_param_spec_int ("day",
-                                                     P_("Day"),
-                                                     P_("The selected day (as a number between 1 and 31)"),
+                                   g_param_spec_int ("day", NULL, NULL,
                                                      1, 31, 1,
                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -413,9 +407,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_HEADING,
-                                   g_param_spec_boolean ("show-heading",
-                                                         P_("Show Heading"),
-                                                         P_("If TRUE, a heading is displayed"),
+                                   g_param_spec_boolean ("show-heading", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -426,9 +418,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_DAY_NAMES,
-                                   g_param_spec_boolean ("show-day-names",
-                                                         P_("Show Day Names"),
-                                                         P_("If TRUE, day names are displayed"),
+                                   g_param_spec_boolean ("show-day-names", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
@@ -438,9 +428,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_WEEK_NUMBERS,
-                                   g_param_spec_boolean ("show-week-numbers",
-                                                         P_("Show Week Numbers"),
-                                                         P_("If TRUE, week numbers are displayed"),
+                                   g_param_spec_boolean ("show-week-numbers", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

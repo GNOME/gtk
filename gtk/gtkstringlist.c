@@ -134,7 +134,7 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
    *
    * The string.
    */
-  pspec = g_param_spec_string ("string", "String", "String",
+  pspec = g_param_spec_string ("string", NULL, NULL,
                                NULL,
                                G_PARAM_READABLE |
                                G_PARAM_STATIC_STRINGS);

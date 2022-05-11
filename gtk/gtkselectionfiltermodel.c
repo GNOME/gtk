@@ -226,9 +226,7 @@ gtk_selection_filter_model_class_init (GtkSelectionFilterModelClass *class)
    * The model being filtered.
    */
   properties[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Model"),
-                           P_("The model being filtered"),
+      g_param_spec_object ("model", NULL, NULL,
                            GTK_TYPE_SELECTION_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

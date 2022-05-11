@@ -578,9 +578,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * the check button and the indicator CSS node.
    */
   props[PROP_ACTIVE] =
-      g_param_spec_boolean ("active",
-                            P_("Active"),
-                            P_("If the toggle button should be pressed in"),
+      g_param_spec_boolean ("active", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -590,9 +588,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * The check button whose group this widget belongs to.
    */
   props[PROP_GROUP] =
-      g_param_spec_object ("group",
-                           P_("Group"),
-                           P_("The check button whose group this widget belongs to."),
+      g_param_spec_object ("group", NULL, NULL,
                            GTK_TYPE_CHECK_BUTTON,
                            GTK_PARAM_WRITABLE);
 
@@ -602,9 +598,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * Text of the label inside the check button, if it contains a label widget.
    */
   props[PROP_LABEL] =
-    g_param_spec_string ("label",
-                         P_("Label"),
-                         P_("Text of the label widget inside the button, if the button contains a label widget"),
+    g_param_spec_string ("label", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -617,9 +611,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * not the semantics of the button.
    */
   props[PROP_INCONSISTENT] =
-      g_param_spec_boolean ("inconsistent",
-                            P_("Inconsistent"),
-                            P_("If the check button is in an “in between” state"),
+      g_param_spec_boolean ("inconsistent", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -630,9 +622,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * character is to be used as mnemonic.
    */
   props[PROP_USE_UNDERLINE] =
-      g_param_spec_boolean ("use-underline",
-                            P_("Use underline"),
-                            P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+      g_param_spec_boolean ("use-underline", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -644,9 +634,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
    * Since: 4.8
    */
   props[PROP_CHILD] =
-      g_param_spec_object ("child",
-                           P_("Child"),
-                           P_("The child widget"),
+      g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

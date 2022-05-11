@@ -383,9 +383,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
    * If the selection will always select an item.
    */
   properties[PROP_AUTOSELECT] =
-    g_param_spec_boolean ("autoselect",
-                          P_("Autoselect"),
-                          P_("If the selection will always select an item"),
+    g_param_spec_boolean ("autoselect", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -395,9 +393,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
    * If unselecting the selected item is allowed.
    */
   properties[PROP_CAN_UNSELECT] =
-    g_param_spec_boolean ("can-unselect",
-                          P_("Can unselect"),
-                          P_("If unselecting the selected item is allowed"),
+    g_param_spec_boolean ("can-unselect", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -407,9 +403,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
    * Position of the selected item.
    */
   properties[PROP_SELECTED] =
-    g_param_spec_uint ("selected",
-                       P_("Selected"),
-                       P_("Position of the selected item"),
+    g_param_spec_uint ("selected", NULL, NULL,
                        0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -419,9 +413,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
    * The selected item.
    */
   properties[PROP_SELECTED_ITEM] =
-    g_param_spec_object ("selected-item",
-                       P_("Selected Item"),
-                       P_("The selected item"),
+    g_param_spec_object ("selected-item", NULL, NULL,
                        G_TYPE_OBJECT,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -431,9 +423,7 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
    * The model being managed.
    */
   properties[PROP_MODEL] =
-    g_param_spec_object ("model",
-                       P_("The model"),
-                       P_("The model being managed"),
+    g_param_spec_object ("model", NULL, NULL,
                        G_TYPE_LIST_MODEL,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 

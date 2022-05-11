@@ -312,9 +312,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_SPACING,
-                                   g_param_spec_int ("spacing",
-                                                     P_("Spacing"),
-                                                     P_("Space which is inserted between cells"),
+                                   g_param_spec_int ("spacing", NULL, NULL,
                                                      0,
                                                      G_MAXINT,
                                                      0,
@@ -330,9 +328,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   gtk_cell_area_class_install_cell_property (area_class,
                                              CELL_PROP_EXPAND,
                                              g_param_spec_boolean
-                                             ("expand",
-                                              P_("Expand"),
-                                              P_("Whether the cell expands"),
+                                             ("expand", NULL, NULL,
                                               FALSE,
                                               GTK_PARAM_READWRITE));
 
@@ -344,9 +340,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   gtk_cell_area_class_install_cell_property (area_class,
                                              CELL_PROP_ALIGN,
                                              g_param_spec_boolean
-                                             ("align",
-                                              P_("Align"),
-                                              P_("Whether cell should align with adjacent rows"),
+                                             ("align", NULL, NULL,
                                               FALSE,
                                               GTK_PARAM_READWRITE));
 
@@ -359,9 +353,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   gtk_cell_area_class_install_cell_property (area_class,
                                              CELL_PROP_FIXED_SIZE,
                                              g_param_spec_boolean
-                                             ("fixed-size",
-                                              P_("Fixed Size"),
-                                              P_("Whether cells should be the same size in all rows"),
+                                             ("fixed-size", NULL, NULL,
                                               TRUE,
                                               GTK_PARAM_READWRITE));
 
@@ -374,10 +366,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   gtk_cell_area_class_install_cell_property (area_class,
                                              CELL_PROP_PACK_TYPE,
                                              g_param_spec_enum
-                                             ("pack-type",
-                                              P_("Pack Type"),
-                                              P_("A GtkPackType indicating whether the cell is packed with "
-                                                 "reference to the start or end of the cell area"),
+                                             ("pack-type", NULL, NULL,
                                               GTK_TYPE_PACK_TYPE, GTK_PACK_START,
                                               GTK_PARAM_READWRITE));
 }

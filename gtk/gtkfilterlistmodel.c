@@ -557,9 +557,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
    * The filter for this model.
    */
   properties[PROP_FILTER] =
-      g_param_spec_object ("filter",
-                           P_("Filter"),
-                           P_("The filter set for this model"),
+      g_param_spec_object ("filter", NULL, NULL,
                            GTK_TYPE_FILTER,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -569,9 +567,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
    * If the model should filter items incrementally.
    */
   properties[PROP_INCREMENTAL] =
-      g_param_spec_boolean ("incremental",
-                            P_("Incremental"),
-                            P_("Filter items incrementally"),
+      g_param_spec_boolean ("incremental", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -581,9 +577,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
    * The model being filtered.
    */
   properties[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Model"),
-                           P_("The model being filtered"),
+      g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -593,9 +587,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
    * Number of items not yet filtered.
    */
   properties[PROP_PENDING] =
-      g_param_spec_uint ("pending",
-                         P_("Pending"),
-                         P_("Number of items not yet filtered"),
+      g_param_spec_uint ("pending", NULL, NULL,
                          0, G_MAXUINT, 0,
                          GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 

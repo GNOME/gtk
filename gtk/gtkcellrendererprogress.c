@@ -617,9 +617,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    **/
   g_object_class_install_property (object_class,
 				   PROP_VALUE,
-				   g_param_spec_int ("value",
-						     P_("Value"),
-						     P_("Value of the progress bar"),
+				   g_param_spec_int ("value", NULL, NULL,
 						     0, 100, 0,
 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -633,9 +631,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    **/
   g_object_class_install_property (object_class,
 				   PROP_TEXT,
-				   g_param_spec_string ("text",
-							P_("Text"),
-							P_("Text on the progress bar"),
+				   g_param_spec_string ("text", NULL, NULL,
 							NULL,
 							GTK_PARAM_READWRITE));
 
@@ -655,9 +651,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_PULSE,
-                                   g_param_spec_int ("pulse",
-                                                     P_("Pulse"),
-                                                     P_("Set this to positive values to indicate that some progress is made, but you don’t know how much."),
+                                   g_param_spec_int ("pulse", NULL, NULL,
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -670,9 +664,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_TEXT_XALIGN,
-                                   g_param_spec_float ("text-xalign",
-                                                       P_("Text x alignment"),
-                                                       P_("The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
+                                   g_param_spec_float ("text-xalign", NULL, NULL,
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE));
 
@@ -685,9 +677,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_TEXT_YALIGN,
-                                   g_param_spec_float ("text-yalign",
-                                                       P_("Text y alignment"),
-                                                       P_("The vertical text alignment, from 0 (top) to 1 (bottom)."),
+                                   g_param_spec_float ("text-yalign", NULL, NULL,
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE));
 
@@ -697,9 +687,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_INVERTED,
-                                   g_param_spec_boolean ("inverted",
-                                                         P_("Inverted"),
-                                                         P_("Invert the direction in which the progress bar grows"),
+                                   g_param_spec_boolean ("inverted", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }

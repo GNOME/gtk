@@ -168,9 +168,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
    * The `GdkDisplay` used to create the `GdkDrawContext`.
    */
   pspecs[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         P_("Display"),
-                         P_("The GDK display used to create the context"),
+    g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -182,9 +180,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
    * The `GdkSurface` the context is bound to.
    */
   pspecs[PROP_SURFACE] =
-    g_param_spec_object ("surface",
-                         P_("Surface"),
-                         P_("The GDK surface bound to the context"),
+    g_param_spec_object ("surface", NULL, NULL,
                          GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |

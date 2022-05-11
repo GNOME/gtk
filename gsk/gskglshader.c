@@ -444,9 +444,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
    * The source code for the shader, as a `GBytes`.
    */
   gsk_gl_shader_properties[GLSHADER_PROP_SOURCE] =
-    g_param_spec_boxed ("source",
-                        "Source",
-                        "The sourcecode for the shader",
+    g_param_spec_boxed ("source", NULL, NULL,
                         G_TYPE_BYTES,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
@@ -461,9 +459,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
    * will be %NULL.
    */
   gsk_gl_shader_properties[GLSHADER_PROP_RESOURCE] =
-    g_param_spec_string ("resource",
-                         "Resources",
-                         "Resource path to the source code",
+    g_param_spec_string ("resource", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |

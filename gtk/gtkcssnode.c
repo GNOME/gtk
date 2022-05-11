@@ -599,28 +599,28 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 		  G_TYPE_POINTER);
 
   cssnode_properties[PROP_CLASSES] =
-    g_param_spec_boxed ("classes", P_("Style Classes"), P_("List of classes"),
+    g_param_spec_boxed ("classes", NULL, NULL,
                          G_TYPE_STRV,
                          G_PARAM_READWRITE
                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_ID] =
-    g_param_spec_string ("id", P_("ID"), P_("Unique ID"),
+    g_param_spec_string ("id", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE
                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_NAME] =
-    g_param_spec_string ("name", P_("Name"), "Name identifying the type of node",
+    g_param_spec_string ("name", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE
                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_STATE] =
-    g_param_spec_flags ("state", P_("State"), P_("State flags"),
+    g_param_spec_flags ("state", NULL, NULL,
                         GTK_TYPE_STATE_FLAGS,
                         0,
                         G_PARAM_READWRITE
                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_VISIBLE] =
-    g_param_spec_boolean ("visible", P_("Visible"), P_("If other nodes can see this node"),
+    g_param_spec_boolean ("visible", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE
                           | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);

@@ -349,9 +349,7 @@ gtk_multi_selection_class_init (GtkMultiSelectionClass *klass)
    * The list managed by this selection.
    */
   properties[PROP_MODEL] =
-    g_param_spec_object ("model",
-                         P_("Model"),
-                         P_("List managed by this selection"),
+    g_param_spec_object ("model", NULL, NULL,
                          G_TYPE_LIST_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

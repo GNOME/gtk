@@ -1218,14 +1218,12 @@ gtk_action_muxer_class_init (GObjectClass *class)
   class->finalize = gtk_action_muxer_finalize;
   class->dispose = gtk_action_muxer_dispose;
 
-  properties[PROP_PARENT] = g_param_spec_object ("parent", "Parent",
-                                                 "The parent muxer",
+  properties[PROP_PARENT] = g_param_spec_object ("parent", NULL, NULL,
                                                  GTK_TYPE_ACTION_MUXER,
                                                  G_PARAM_READWRITE |
                                                  G_PARAM_STATIC_STRINGS);
 
-  properties[PROP_WIDGET] = g_param_spec_object ("widget", "Widget",
-                                                 "The widget that owns the muxer",
+  properties[PROP_WIDGET] = g_param_spec_object ("widget", NULL, NULL,
                                                  GTK_TYPE_WIDGET,
                                                  G_PARAM_READWRITE |
                                                  G_PARAM_CONSTRUCT_ONLY |

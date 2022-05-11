@@ -165,9 +165,7 @@ gtk_data_viewer_class_init (GtkDataViewerClass *klass)
   gobject_class->set_property = gtk_data_viewer_set_property;
 
   properties[PROP_LOADING] =
-    g_param_spec_boolean ("loading",
-                          "Loading",
-                          "If the widget is currently loading the data to display",
+    g_param_spec_boolean ("loading", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

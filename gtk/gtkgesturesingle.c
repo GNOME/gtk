@@ -265,9 +265,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
    * Whether the gesture handles only touch events.
    */
   properties[PROP_TOUCH_ONLY] =
-      g_param_spec_boolean ("touch-only",
-                            P_("Handle only touch events"),
-                            P_("Whether the gesture handles only touch events"),
+      g_param_spec_boolean ("touch-only", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -279,9 +277,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
    * Exclusive gestures only listen to pointer and pointer emulated events.
    */
   properties[PROP_EXCLUSIVE] =
-      g_param_spec_boolean ("exclusive",
-                            P_("Whether the gesture is exclusive"),
-                            P_("Whether the gesture is exclusive"),
+      g_param_spec_boolean ("exclusive", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -291,9 +287,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
    * Mouse button number to listen to, or 0 to listen for any button.
    */
   properties[PROP_BUTTON] =
-      g_param_spec_uint ("button",
-                         P_("Button number"),
-                         P_("Button number to listen to"),
+      g_param_spec_uint ("button", NULL, NULL,
                          0, G_MAXUINT,
                          GDK_BUTTON_PRIMARY,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);

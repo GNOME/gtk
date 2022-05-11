@@ -530,9 +530,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_CHILD,
-                                   g_param_spec_object ("child",
-                                                        P_("Child"),
-                                                        P_("The child widget"),
+                                   g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -3608,9 +3606,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * The selection mode used by the flow box.
    */
   props[PROP_SELECTION_MODE] =
-    g_param_spec_enum ("selection-mode",
-                       P_("Selection mode"),
-                       P_("The selection mode"),
+    g_param_spec_enum ("selection-mode", NULL, NULL,
                        GTK_TYPE_SELECTION_MODE,
                        GTK_SELECTION_SINGLE,
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
@@ -3622,9 +3618,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * click, or require a double-click.
    */
   props[PROP_ACTIVATE_ON_SINGLE_CLICK] =
-    g_param_spec_boolean ("activate-on-single-click",
-                          P_("Activate on Single Click"),
-                          P_("Activate row on a single click"),
+    g_param_spec_boolean ("activate-on-single-click", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3634,9 +3628,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * Whether to accept unpaired release events.
    */
   props[PROP_ACCEPT_UNPAIRED_RELEASE] =
-    g_param_spec_boolean ("accept-unpaired-release",
-                          P_("Accept unpaired release"),
-                          P_("Accept an unpaired release event"),
+    g_param_spec_boolean ("accept-unpaired-release", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3647,9 +3639,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * same size.
    */
   props[PROP_HOMOGENEOUS] =
-    g_param_spec_boolean ("homogeneous",
-                          P_("Homogeneous"),
-                          P_("Whether the children should all be the same size"),
+    g_param_spec_boolean ("homogeneous", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3664,10 +3654,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * for the overall minimum width of the box.
    */
   props[PROP_MIN_CHILDREN_PER_LINE] =
-    g_param_spec_uint ("min-children-per-line",
-                       P_("Minimum Children Per Line"),
-                       P_("The minimum number of children to allocate "
-                       "consecutively in the given orientation."),
+    g_param_spec_uint ("min-children-per-line", NULL, NULL,
                        0, G_MAXUINT, 0,
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3678,10 +3665,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * in the given orientation.
    */
   props[PROP_MAX_CHILDREN_PER_LINE] =
-    g_param_spec_uint ("max-children-per-line",
-                       P_("Maximum Children Per Line"),
-                       P_("The maximum amount of children to request space for "
-                          "consecutively in the given orientation."),
+    g_param_spec_uint ("max-children-per-line", NULL, NULL,
                        1, G_MAXUINT, DEFAULT_MAX_CHILDREN_PER_LINE,
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3691,9 +3675,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * The amount of vertical space between two children.
    */
   props[PROP_ROW_SPACING] =
-    g_param_spec_uint ("row-spacing",
-                       P_("Vertical spacing"),
-                       P_("The amount of vertical space between two children"),
+    g_param_spec_uint ("row-spacing", NULL, NULL,
                        0, G_MAXUINT, 0,
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3703,9 +3685,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * The amount of horizontal space between two children.
    */
   props[PROP_COLUMN_SPACING] =
-    g_param_spec_uint ("column-spacing",
-                       P_("Horizontal spacing"),
-                       P_("The amount of horizontal space between two children"),
+    g_param_spec_uint ("column-spacing", NULL, NULL,
                        0, G_MAXUINT, 0,
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

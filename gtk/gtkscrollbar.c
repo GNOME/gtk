@@ -217,9 +217,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
    * The `GtkAdjustment` controlled by this scrollbar.
    */
   props[PROP_ADJUSTMENT] =
-      g_param_spec_object ("adjustment",
-                           P_("Adjustment"),
-                           P_("The GtkAdjustment that contains the current value of this scrollbar"),
+      g_param_spec_object ("adjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
 

@@ -130,9 +130,7 @@ gtk_tree_selection_class_init (GtkTreeSelectionClass *class)
    * Selection mode.
    * See gtk_tree_selection_set_mode() for more information on this property.
    */
-  properties[PROP_MODE] = g_param_spec_enum ("mode",
-                                             P_("Mode"),
-                                             P_("Selection mode"),
+  properties[PROP_MODE] = g_param_spec_enum ("mode", NULL, NULL,
                                              GTK_TYPE_SELECTION_MODE,
                                              GTK_SELECTION_SINGLE,
                                              GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);

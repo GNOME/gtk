@@ -319,9 +319,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SCROLL_TO_FOCUS,
-                                   g_param_spec_boolean ("scroll-to-focus",
-                                                         P_("Scroll to focus"),
-                                                         P_("Whether to scroll when the focus changes"),
+                                   g_param_spec_boolean ("scroll-to-focus", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -332,9 +330,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
-                                   g_param_spec_object ("child",
-                                                        P_("Child"),
-                                                        P_("The child widget"),
+                                   g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 

@@ -194,25 +194,19 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF,
-				   g_param_spec_object ("pixbuf",
-							P_("Pixbuf Object"),
-							P_("The pixbuf to render"),
+				   g_param_spec_object ("pixbuf", NULL, NULL,
 							GDK_TYPE_PIXBUF,
 							GTK_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_OPEN,
-				   g_param_spec_object ("pixbuf-expander-open",
-							P_("Pixbuf Expander Open"),
-							P_("Pixbuf for open expander"),
+				   g_param_spec_object ("pixbuf-expander-open", NULL, NULL,
 							GDK_TYPE_PIXBUF,
 							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_CLOSED,
-				   g_param_spec_object ("pixbuf-expander-closed",
-							P_("Pixbuf Expander Closed"),
-							P_("Pixbuf for closed expander"),
+				   g_param_spec_object ("pixbuf-expander-closed", NULL, NULL,
 							GDK_TYPE_PIXBUF,
 							GTK_PARAM_READWRITE));
 
@@ -221,9 +215,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    */
   g_object_class_install_property (object_class,
 				   PROP_TEXTURE,
-				   g_param_spec_object ("texture",
-						        P_("Texture"),
-						        P_("The texture to render"),
+				   g_param_spec_object ("texture", NULL, NULL,
                                                         GDK_TYPE_TEXTURE,
 						        GTK_PARAM_READWRITE));
 
@@ -234,9 +226,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    */
   g_object_class_install_property (object_class,
 				   PROP_ICON_SIZE,
-				   g_param_spec_enum ("icon-size",
-						      P_("Icon Size"),
-						      P_("The GtkIconSize value that specifies the size of the rendered icon"),
+				   g_param_spec_enum ("icon-size", NULL, NULL,
                                                       GTK_TYPE_ICON_SIZE,
 						      GTK_ICON_SIZE_INHERIT,
 						      GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
@@ -249,9 +239,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    */
   g_object_class_install_property (object_class,
 				   PROP_ICON_NAME,
-				   g_param_spec_string ("icon-name",
-							P_("Icon Name"),
-							P_("The name of the icon from the icon theme"),
+				   g_param_spec_string ("icon-name", NULL, NULL,
 							NULL,
 							GTK_PARAM_READWRITE));
 
@@ -264,9 +252,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_GICON,
-                                   g_param_spec_object ("gicon",
-                                                        P_("Icon"),
-                                                        P_("The GIcon being displayed"),
+                                   g_param_spec_object ("gicon", NULL, NULL,
                                                         G_TYPE_ICON,
                                                         GTK_PARAM_READWRITE));
 }

@@ -1167,9 +1167,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * from the action and does not have to be set explicitly.
    */
   properties[PROP_ROLE] =
-    g_param_spec_enum ("role",
-                       P_("Role"),
-                       P_("The role of this button"),
+    g_param_spec_enum ("role", NULL, NULL,
                        GTK_TYPE_BUTTON_ROLE,
                        GTK_BUTTON_ROLE_NORMAL,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -1181,9 +1179,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * desired.
    */
   properties[PROP_ICON] = 
-    g_param_spec_object ("icon",
-                         P_("Icon"),
-                         P_("The icon"),
+    g_param_spec_object ("icon", NULL, NULL,
                          G_TYPE_ICON,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -1193,9 +1189,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * The label for the button.
    */
   properties[PROP_TEXT] =
-    g_param_spec_string ("text",
-                         P_("Text"),
-                         P_("The text"),
+    g_param_spec_string ("text", NULL, NULL,
                          "",
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -1207,9 +1201,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * text will be displayed verbatim.
    */
   properties[PROP_USE_MARKUP] =
-    g_param_spec_boolean ("use-markup",
-                          P_("Use markup"),
-                          P_("The text of the button includes XML markup. See pango_parse_markup()"),
+    g_param_spec_boolean ("use-markup", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -1220,9 +1212,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * GAction.
    */
   properties[PROP_ACTIVE] =
-    g_param_spec_boolean ("active",
-                          P_("Active"),
-                          P_("Active"),
+    g_param_spec_boolean ("active", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -1232,16 +1222,12 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * The name of a submenu to open when the button is activated.  * If this is set, the button should not have an action associated with it.
    */
   properties[PROP_MENU_NAME] =
-    g_param_spec_string ("menu-name",
-                         P_("Menu name"),
-                         P_("The name of the menu to open"),
+    g_param_spec_string ("menu-name", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
  properties[PROP_POPOVER] =
-   g_param_spec_object ("popover",
-                        P_("Popover"),
-                        P_("Popover to open"),
+   g_param_spec_object ("popover", NULL, NULL,
                         GTK_TYPE_POPOVER,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -1253,9 +1239,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * horizontal sections of linked buttons.
    */
   properties[PROP_ICONIC] =
-    g_param_spec_boolean ("iconic",
-                          P_("Iconic"),
-                          P_("Whether to prefer the icon over text"),
+    g_param_spec_boolean ("iconic", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -1267,15 +1251,11 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    * the model buttons in a menu.
    */
   properties[PROP_INDICATOR_SIZE_GROUP] =
-    g_param_spec_object ("indicator-size-group",
-                          P_("Size group"),
-                          P_("Size group for checks and radios"),
+    g_param_spec_object ("indicator-size-group", NULL, NULL,
                           GTK_TYPE_SIZE_GROUP,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   properties[PROP_ACCEL] =
-    g_param_spec_string ("accel",
-                         P_("Accel"),
-                         P_("The accelerator"),
+    g_param_spec_string ("accel", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (object_class, LAST_PROP, properties);

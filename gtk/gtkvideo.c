@@ -314,9 +314,7 @@ gtk_video_class_init (GtkVideoClass *klass)
    * If the video should automatically begin playing.
    */
   properties[PROP_AUTOPLAY] =
-    g_param_spec_boolean ("autoplay",
-                          P_("Autoplay"),
-                          P_("If playback should begin automatically"),
+    g_param_spec_boolean ("autoplay", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -326,9 +324,7 @@ gtk_video_class_init (GtkVideoClass *klass)
    * The file played by this video if the video is playing a file.
    */
   properties[PROP_FILE] =
-    g_param_spec_object ("file",
-                         P_("File"),
-                         P_("The video file played back"),
+    g_param_spec_object ("file", NULL, NULL,
                          G_TYPE_FILE,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -338,9 +334,7 @@ gtk_video_class_init (GtkVideoClass *klass)
    * If new media files should be set to loop.
    */
   properties[PROP_LOOP] =
-    g_param_spec_boolean ("loop",
-                          P_("Loop"),
-                          P_("If new media streams should be set to loop"),
+    g_param_spec_boolean ("loop", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -350,9 +344,7 @@ gtk_video_class_init (GtkVideoClass *klass)
    * The media-stream played
    */
   properties[PROP_MEDIA_STREAM] =
-    g_param_spec_object ("media-stream",
-                         P_("Media Stream"),
-                         P_("The media stream played"),
+    g_param_spec_object ("media-stream", NULL, NULL,
                          GTK_TYPE_MEDIA_STREAM,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

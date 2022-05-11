@@ -174,9 +174,7 @@ gtk_image_class_init (GtkImageClass *class)
    * The `GdkPaintable` to display.
    */
   image_props[PROP_PAINTABLE] =
-      g_param_spec_object ("paintable",
-                           P_("Paintable"),
-                           P_("A GdkPaintable to display"),
+      g_param_spec_object ("paintable", NULL, NULL,
                            GDK_TYPE_PAINTABLE,
                            GTK_PARAM_READWRITE);
 
@@ -186,9 +184,7 @@ gtk_image_class_init (GtkImageClass *class)
    * The `GFile to display.
    */
   image_props[PROP_FILE] =
-      g_param_spec_string ("file",
-                           P_("Filename"),
-                           P_("Filename to load and display"),
+      g_param_spec_string ("file", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -198,9 +194,7 @@ gtk_image_class_init (GtkImageClass *class)
    * The symbolic size to display icons at.
    */
   image_props[PROP_ICON_SIZE] =
-      g_param_spec_enum ("icon-size",
-                         P_("Icon size"),
-                         P_("Symbolic size to use for icon set or named icon"),
+      g_param_spec_enum ("icon-size", NULL, NULL,
                          GTK_TYPE_ICON_SIZE,
                          GTK_ICON_SIZE_INHERIT,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -215,9 +209,7 @@ gtk_image_class_init (GtkImageClass *class)
    * `GTK_IMAGE_ICON_NAME`.
    */
   image_props[PROP_PIXEL_SIZE] =
-      g_param_spec_int ("pixel-size",
-                        P_("Pixel size"),
-                        P_("Pixel size to use for named icon"),
+      g_param_spec_int ("pixel-size", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -230,9 +222,7 @@ gtk_image_class_init (GtkImageClass *class)
    * If the icon theme is changed, the image will be updated automatically.
    */
   image_props[PROP_ICON_NAME] =
-      g_param_spec_string ("icon-name",
-                           P_("Icon Name"),
-                           P_("The name of the icon from the icon theme"),
+      g_param_spec_string ("icon-name", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -245,9 +235,7 @@ gtk_image_class_init (GtkImageClass *class)
    * automatically.
    */
   image_props[PROP_GICON] =
-      g_param_spec_object ("gicon",
-                           P_("Icon"),
-                           P_("The GIcon being displayed"),
+      g_param_spec_object ("gicon", NULL, NULL,
                            G_TYPE_ICON,
                            GTK_PARAM_READWRITE);
 
@@ -257,9 +245,7 @@ gtk_image_class_init (GtkImageClass *class)
    * A path to a resource file to display.
    */
   image_props[PROP_RESOURCE] =
-      g_param_spec_string ("resource",
-                           P_("Resource"),
-                           P_("The resource path being displayed"),
+      g_param_spec_string ("resource", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -269,9 +255,7 @@ gtk_image_class_init (GtkImageClass *class)
    * The representation being used for image data.
    */
   image_props[PROP_STORAGE_TYPE] =
-      g_param_spec_enum ("storage-type",
-                         P_("Storage type"),
-                         P_("The representation being used for image data"),
+      g_param_spec_enum ("storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
                          GTK_PARAM_READABLE);
@@ -286,9 +270,7 @@ gtk_image_class_init (GtkImageClass *class)
    * %GTK_IMAGE_ICON_NAME and %GTK_IMAGE_GICON.
    */
   image_props[PROP_USE_FALLBACK] =
-      g_param_spec_boolean ("use-fallback",
-                            P_("Use Fallback"),
-                            P_("Whether to use icon names fallback"),
+      g_param_spec_boolean ("use-fallback", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

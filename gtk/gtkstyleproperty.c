@@ -99,9 +99,7 @@ _gtk_style_property_class_init (GtkStylePropertyClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_NAME,
-                                   g_param_spec_string ("name",
-                                                        P_("Property name"),
-                                                        P_("The name of the property"),
+                                   g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 

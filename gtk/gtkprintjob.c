@@ -143,9 +143,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_TITLE,
-                                   g_param_spec_string ("title",
-						        P_("Title"),
-						        P_("Title of the print job"),
+                                   g_param_spec_string ("title", NULL, NULL,
 						        NULL,
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
@@ -157,9 +155,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_PRINTER,
-                                   g_param_spec_object ("printer",
-						        P_("Printer"),
-						        P_("Printer to print the job to"),
+                                   g_param_spec_object ("printer", NULL, NULL,
 						        GTK_TYPE_PRINTER,
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
@@ -171,9 +167,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_SETTINGS,
-                                   g_param_spec_object ("settings",
-						        P_("Settings"),
-						        P_("Printer settings"),
+                                   g_param_spec_object ("settings", NULL, NULL,
 						        GTK_TYPE_PRINT_SETTINGS,
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
@@ -185,9 +179,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_PAGE_SETUP,
-                                   g_param_spec_object ("page-setup",
-						        P_("Page Setup"),
-						        P_("Page Setup"),
+                                   g_param_spec_object ("page-setup", NULL, NULL,
 						        GTK_TYPE_PAGE_SETUP,
 							GTK_PARAM_READWRITE |
 						        G_PARAM_CONSTRUCT_ONLY));
@@ -200,11 +192,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
    */
   g_object_class_install_property (object_class,
 				   PROP_TRACK_PRINT_STATUS,
-				   g_param_spec_boolean ("track-print-status",
-							 P_("Track Print Status"),
-							 P_("TRUE if the print job will continue to emit "
-							    "status-changed signals after the print data "
-							    "has been sent to the printer or print server."),
+				   g_param_spec_boolean ("track-print-status", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 

@@ -65,9 +65,7 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
    * The accessible role cannot be changed once set.
    */
   GParamSpec *pspec =
-    g_param_spec_enum ("accessible-role",
-                       "Accessible Role",
-                       "The role of the accessible object",
+    g_param_spec_enum ("accessible-role", NULL, NULL,
                        GTK_TYPE_ACCESSIBLE_ROLE,
                        GTK_ACCESSIBLE_ROLE_NONE,
                        G_PARAM_READWRITE |

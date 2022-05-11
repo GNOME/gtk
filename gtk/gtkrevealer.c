@@ -315,9 +315,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
    * The type of animation used to transition.
    */
   props[PROP_TRANSITION_TYPE] =
-    g_param_spec_enum ("transition-type",
-                       P_("Transition type"),
-                       P_("The type of animation used to transition"),
+    g_param_spec_enum ("transition-type", NULL, NULL,
                        GTK_TYPE_REVEALER_TRANSITION_TYPE,
                        GTK_REVEALER_TRANSITION_TYPE_SLIDE_DOWN,
                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
@@ -328,9 +326,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
    * The animation duration, in milliseconds.
    */
   props[PROP_TRANSITION_DURATION] =
-    g_param_spec_uint ("transition-duration",
-                       P_("Transition duration"),
-                       P_("The animation duration, in milliseconds"),
+    g_param_spec_uint ("transition-duration", NULL, NULL,
                        0, G_MAXUINT, 250,
                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -340,9 +336,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
    * Whether the revealer should reveal the child.
    */
   props[PROP_REVEAL_CHILD] =
-    g_param_spec_boolean ("reveal-child",
-                          P_("Reveal Child"),
-                          P_("Whether the container should reveal the child"),
+    g_param_spec_boolean ("reveal-child", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -352,9 +346,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
    * Whether the child is revealed and the animation target reached.
    */
   props[PROP_CHILD_REVEALED] =
-    g_param_spec_boolean ("child-revealed",
-                          P_("Child Revealed"),
-                          P_("Whether the child is revealed and the animation target reached"),
+    g_param_spec_boolean ("child-revealed", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READABLE);
 
@@ -364,9 +356,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
    * The child widget.
    */
   props[PROP_CHILD] =
-    g_param_spec_object ("child",
-                         P_("Child"),
-                         P_("The child widget"),
+    g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

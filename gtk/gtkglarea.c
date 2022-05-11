@@ -798,9 +798,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * depth, etc), use render buffers.
    */
   obj_props[PROP_CONTEXT] =
-    g_param_spec_object ("context",
-                         P_("Context"),
-                         P_("The GL context"),
+    g_param_spec_object ("context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS);
@@ -820,9 +818,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * to redraw.
    */
   obj_props[PROP_AUTO_RENDER] =
-    g_param_spec_boolean ("auto-render",
-                          P_("Auto render"),
-                          P_("Whether the GtkGLArea renders on each redraw"),
+    g_param_spec_boolean ("auto-render", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
@@ -839,9 +835,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * in your `GtkGLArea::render` handler.
    */
   obj_props[PROP_HAS_DEPTH_BUFFER] =
-    g_param_spec_boolean ("has-depth-buffer",
-                          P_("Has depth buffer"),
-                          P_("Whether a depth buffer is allocated"),
+    g_param_spec_boolean ("has-depth-buffer", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
@@ -854,9 +848,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * target framebuffer.
    */
   obj_props[PROP_HAS_STENCIL_BUFFER] =
-    g_param_spec_boolean ("has-stencil-buffer",
-                          P_("Has stencil buffer"),
-                          P_("Whether a stencil buffer is allocated"),
+    g_param_spec_boolean ("has-stencil-buffer", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
@@ -869,9 +861,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * OpenGL ES instead of OpenGL.
    */
   obj_props[PROP_USE_ES] =
-    g_param_spec_boolean ("use-es",
-                          P_("Use OpenGL ES"),
-                          P_("Whether the context uses OpenGL or OpenGL ES"),
+    g_param_spec_boolean ("use-es", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |

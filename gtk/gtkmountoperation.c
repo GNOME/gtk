@@ -169,9 +169,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_PARENT,
-                                   g_param_spec_object ("parent",
-                                                        P_("Parent"),
-                                                        P_("The parent window"),
+                                   g_param_spec_object ("parent", NULL, NULL,
                                                         GTK_TYPE_WINDOW,
                                                         GTK_PARAM_READWRITE));
 
@@ -182,9 +180,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_IS_SHOWING,
-                                   g_param_spec_boolean ("is-showing",
-                                                         P_("Is Showing"),
-                                                         P_("Are we showing a dialog"),
+                                   g_param_spec_boolean ("is-showing", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READABLE));
 
@@ -195,9 +191,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_DISPLAY,
-                                   g_param_spec_object ("display",
-                                                        P_("Display"),
-                                                        P_("The display where this window will be displayed."),
+                                   g_param_spec_object ("display", NULL, NULL,
                                                         GDK_TYPE_DISPLAY,
                                                         GTK_PARAM_READWRITE));
 }

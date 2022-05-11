@@ -234,9 +234,7 @@ gtk_inspector_css_node_tree_class_init (GtkInspectorCssNodeTreeClass *klass)
   object_class->finalize = gtk_inspector_css_node_tree_finalize;
 
   properties[PROP_NODE] =
-    g_param_spec_object ("node",
-                         "Node",
-                         "Currently inspected CSS node",
+    g_param_spec_object ("node", NULL, NULL,
                          GTK_TYPE_CSS_NODE,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

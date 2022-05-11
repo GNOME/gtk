@@ -255,25 +255,19 @@ gtk_cell_renderer_graph_class_init (GtkCellRendererGraphClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_DATA,
-                                   g_param_spec_object ("data",
-                                                        "Data",
-                                                        "The data to display",
+                                   g_param_spec_object ("data", NULL, NULL,
                                                          GTK_TYPE_GRAPH_DATA,
                                                          G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_MINIMUM,
-                                   g_param_spec_double ("minimum",
-                                                        "Minimum",
-                                                        "Minimum value to use (or -G_MAXDOUBLE for graph's value",
+                                   g_param_spec_double ("minimum", NULL, NULL,
                                                         -G_MAXDOUBLE, G_MAXDOUBLE, -G_MAXDOUBLE,
                                                         G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   g_object_class_install_property (object_class,
                                    PROP_MINIMUM,
-                                   g_param_spec_double ("maximum",
-                                                        "Maximum",
-                                                        "Maximum value to use (or G_MAXDOUBLE for graph's value",
+                                   g_param_spec_double ("maximum", NULL, NULL,
                                                         -G_MAXDOUBLE, G_MAXDOUBLE, G_MAXDOUBLE,
                                                         G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 }

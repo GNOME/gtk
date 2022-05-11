@@ -137,9 +137,7 @@ gtk_overlay_layout_child_class_init (GtkOverlayLayoutChildClass *klass)
    * measurement.
    */
   child_props[PROP_MEASURE] =
-    g_param_spec_boolean ("measure",
-                          P_("Measure"),
-                          P_("Include in size measurement"),
+    g_param_spec_boolean ("measure", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -149,9 +147,7 @@ gtk_overlay_layout_child_class_init (GtkOverlayLayoutChildClass *klass)
    * Whether the child should be clipped to fit the parent's size.
    */
   child_props[PROP_CLIP_OVERLAY] =
-    g_param_spec_boolean ("clip-overlay",
-                          P_("Clip Overlay"),
-                          P_("Clip the overlay child widget so as to fit the parent"),
+    g_param_spec_boolean ("clip-overlay", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

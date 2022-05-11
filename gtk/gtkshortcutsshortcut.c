@@ -580,9 +580,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * in .ui files.
    */
   properties[PROP_ACCELERATOR] =
-    g_param_spec_string ("accelerator",
-                         P_("Accelerator"),
-                         P_("The accelerator keys for shortcuts of type “Accelerator”"),
+    g_param_spec_string ("accelerator", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -597,9 +595,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * For the other predefined gesture types, GTK provides an icon on its own.
    */
   properties[PROP_ICON] =
-    g_param_spec_object ("icon",
-                         P_("Icon"),
-                         P_("The icon to show for shortcuts of type “Other Gesture”"),
+    g_param_spec_object ("icon", NULL, NULL,
                          G_TYPE_ICON,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -609,9 +605,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * %TRUE if an icon has been set.
    */
   properties[PROP_ICON_SET] =
-    g_param_spec_boolean ("icon-set",
-                          P_("Icon Set"),
-                          P_("Whether an icon has been set"),
+    g_param_spec_boolean ("icon-set", NULL, NULL,
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -624,9 +618,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * This should be a short string that can fit in a single line.
    */
   properties[PROP_TITLE] =
-    g_param_spec_string ("title",
-                         P_("Title"),
-                         P_("A short description for the shortcut"),
+    g_param_spec_string ("title", NULL, NULL,
                          "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -640,9 +632,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * types, GTK provides a subtitle on its own.
    */
   properties[PROP_SUBTITLE] =
-    g_param_spec_string ("subtitle",
-                         P_("Subtitle"),
-                         P_("A short description for the gesture"),
+    g_param_spec_string ("subtitle", NULL, NULL,
                          "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -652,9 +642,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * %TRUE if a subtitle has been set.
    */
   properties[PROP_SUBTITLE_SET] =
-    g_param_spec_boolean ("subtitle-set",
-                          P_("Subtitle Set"),
-                          P_("Whether a subtitle has been set"),
+    g_param_spec_boolean ("subtitle-set", NULL, NULL,
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -666,9 +654,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * This is used internally by GTK, and must not be modified by applications.
    */
   properties[PROP_ACCEL_SIZE_GROUP] =
-    g_param_spec_object ("accel-size-group",
-                         P_("Accelerator Size Group"),
-                         P_("Accelerator Size Group"),
+    g_param_spec_object ("accel-size-group", NULL, NULL,
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
@@ -680,9 +666,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * This is used internally by GTK, and must not be modified by applications.
    */
   properties[PROP_TITLE_SIZE_GROUP] =
-    g_param_spec_object ("title-size-group",
-                         P_("Title Size Group"),
-                         P_("Title Size Group"),
+    g_param_spec_object ("title-size-group", NULL, NULL,
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
@@ -695,9 +679,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * set this property to %GTK_TEXT_DIR_NONE.
    */
   properties[PROP_DIRECTION] =
-    g_param_spec_enum ("direction",
-                       P_("Direction"),
-                       P_("Text direction for which this shortcut is active"),
+    g_param_spec_enum ("direction", NULL, NULL,
                        GTK_TYPE_TEXT_DIRECTION,
                        GTK_TEXT_DIR_NONE,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
@@ -708,9 +690,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * The type of shortcut that is represented.
    */
   properties[PROP_SHORTCUT_TYPE] =
-    g_param_spec_enum ("shortcut-type",
-                       P_("Shortcut Type"),
-                       P_("The type of shortcut that is represented"),
+    g_param_spec_enum ("shortcut-type", NULL, NULL,
                        GTK_TYPE_SHORTCUT_TYPE,
                        GTK_SHORTCUT_ACCELERATOR,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
@@ -726,9 +706,7 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * setting [property@Gtk.ShortcutsShortcut:accelerator] is not necessary.
    */
   properties[PROP_ACTION_NAME] =
-    g_param_spec_string ("action-name",
-                         P_("Action Name"),
-                         P_("The name of the action"),
+    g_param_spec_string ("action-name", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

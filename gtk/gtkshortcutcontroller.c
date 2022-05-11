@@ -568,9 +568,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
    * The modifiers that need to be pressed to allow mnemonics activation.
    */
   properties[PROP_MNEMONICS_MODIFIERS] =
-      g_param_spec_flags ("mnemonic-modifiers",
-                          P_("Mnemonic modifiers"),
-                          P_("The modifiers to be pressed to allow mnemonics activation"),
+      g_param_spec_flags ("mnemonic-modifiers", NULL, NULL,
                           GDK_TYPE_MODIFIER_TYPE,
                           GDK_ALT_MASK,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -581,9 +579,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
    * A list model to take shortcuts from.
    */
   properties[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Model"),
-                           P_("A list model to take shortcuts from"),
+      g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -593,9 +589,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
    * What scope the shortcuts will be handled in.
    */
   properties[PROP_SCOPE] =
-      g_param_spec_enum ("scope",
-                         P_("Scope"),
-                         P_("What scope the shortcuts will be handled in"),
+      g_param_spec_enum ("scope", NULL, NULL,
                          GTK_TYPE_SHORTCUT_SCOPE,
                          GTK_SHORTCUT_SCOPE_LOCAL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);

@@ -133,9 +133,7 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_NAME,
-                                   g_param_spec_string ("name",
-                                                        P_("Name"),
-                                                        P_("Mark name"),
+                                   g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -150,9 +148,7 @@ gtk_text_mark_class_init (GtkTextMarkClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_LEFT_GRAVITY,
-                                   g_param_spec_boolean ("left-gravity",
-                                                         P_("Left gravity"),
-                                                         P_("Whether the mark has left gravity"),
+                                   g_param_spec_boolean ("left-gravity", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }

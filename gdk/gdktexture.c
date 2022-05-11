@@ -304,9 +304,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
    * The width of the texture, in pixels.
    */
   properties[PROP_WIDTH] =
-    g_param_spec_int ("width",
-                      "Width",
-                      "The width of the texture",
+    g_param_spec_int ("width", NULL, NULL,
                       1,
                       G_MAXINT,
                       1,
@@ -321,9 +319,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
    * The height of the texture, in pixels.
    */
   properties[PROP_HEIGHT] =
-    g_param_spec_int ("height",
-                      "Height",
-                      "The height of the texture",
+    g_param_spec_int ("height", NULL, NULL,
                       1,
                       G_MAXINT,
                       1,

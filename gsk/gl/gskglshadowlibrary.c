@@ -127,9 +127,7 @@ gsk_gl_shadow_library_class_init (GskGLShadowLibraryClass *klass)
   object_class->set_property = gsk_gl_shadow_library_set_property;
 
   properties [PROP_DRIVER] =
-    g_param_spec_object ("driver",
-                         "Driver",
-                         "Driver",
+    g_param_spec_object ("driver", NULL, NULL,
                          GSK_TYPE_GL_DRIVER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

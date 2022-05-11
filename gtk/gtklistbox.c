@@ -500,9 +500,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * The selection mode used by the list box.
    */
   properties[PROP_SELECTION_MODE] =
-    g_param_spec_enum ("selection-mode",
-                       P_("Selection mode"),
-                       P_("The selection mode"),
+    g_param_spec_enum ("selection-mode", NULL, NULL,
                        GTK_TYPE_SELECTION_MODE,
                        GTK_SELECTION_SINGLE,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
@@ -514,9 +512,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * click, or require a double-click.
    */
   properties[PROP_ACTIVATE_ON_SINGLE_CLICK] =
-    g_param_spec_boolean ("activate-on-single-click",
-                          P_("Activate on Single Click"),
-                          P_("Activate row on a single click"),
+    g_param_spec_boolean ("activate-on-single-click", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -526,9 +522,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * Whether to accept unpaired release events.
    */
   properties[PROP_ACCEPT_UNPAIRED_RELEASE] =
-    g_param_spec_boolean ("accept-unpaired-release",
-                          P_("Accept unpaired release"),
-                          P_("Accept unpaired release"),
+    g_param_spec_boolean ("accept-unpaired-release", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -539,9 +533,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * Whether to show separators between rows.
    */
   properties[PROP_SHOW_SEPARATORS] =
-    g_param_spec_boolean ("show-separators",
-                          P_("Show separators"),
-                          P_("Show separators between rows"),
+    g_param_spec_boolean ("show-separators", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3554,9 +3546,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
    * signal will be emitted for this row.
    */
   row_properties[ROW_PROP_ACTIVATABLE] =
-    g_param_spec_boolean ("activatable",
-                          P_("Activatable"),
-                          P_("Whether this row can be activated"),
+    g_param_spec_boolean ("activatable", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3566,9 +3556,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
    * Determines whether this row can be selected.
    */
   row_properties[ROW_PROP_SELECTABLE] =
-    g_param_spec_boolean ("selectable",
-                          P_("Selectable"),
-                          P_("Whether this row can be selected"),
+    g_param_spec_boolean ("selectable", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -3578,9 +3566,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
    * The child widget.
    */
   row_properties[ROW_PROP_CHILD] =
-    g_param_spec_object ("child",
-                         P_("Child"),
-                         P_("The child widget"),
+    g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

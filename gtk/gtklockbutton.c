@@ -270,9 +270,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * The `GPermission object controlling this button.
    */
   g_object_class_install_property (gobject_class, PROP_PERMISSION,
-    g_param_spec_object ("permission",
-                         P_("Permission"),
-                         P_("The GPermission object controlling this button"),
+    g_param_spec_object ("permission", NULL, NULL,
                          G_TYPE_PERMISSION,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS));
@@ -283,9 +281,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * The text to display when prompting the user to lock.
    */
   g_object_class_install_property (gobject_class, PROP_TEXT_LOCK,
-    g_param_spec_string ("text-lock",
-                         P_("Lock Text"),
-                         P_("The text to display when prompting the user to lock"),
+    g_param_spec_string ("text-lock", NULL, NULL,
                          _("Lock"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
@@ -297,9 +293,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * The text to display when prompting the user to unlock.
    */
   g_object_class_install_property (gobject_class, PROP_TEXT_UNLOCK,
-    g_param_spec_string ("text-unlock",
-                         P_("Unlock Text"),
-                         P_("The text to display when prompting the user to unlock"),
+    g_param_spec_string ("text-unlock", NULL, NULL,
                          _("Unlock"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
@@ -311,9 +305,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * The tooltip to display when prompting the user to lock.
    */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_LOCK,
-    g_param_spec_string ("tooltip-lock",
-                         P_("Lock Tooltip"),
-                         P_("The tooltip to display when prompting the user to lock"),
+    g_param_spec_string ("tooltip-lock", NULL, NULL,
                          _("Dialog is unlocked.\nClick to prevent further changes"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
@@ -325,9 +317,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * The tooltip to display when prompting the user to unlock.
    */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_UNLOCK,
-    g_param_spec_string ("tooltip-unlock",
-                         P_("Unlock Tooltip"),
-                         P_("The tooltip to display when prompting the user to unlock"),
+    g_param_spec_string ("tooltip-unlock", NULL, NULL,
                          _("Dialog is locked.\nClick to make changes"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |
@@ -339,9 +329,7 @@ gtk_lock_button_class_init (GtkLockButtonClass *klass)
    * The tooltip to display when the user cannot obtain authorization.
    */
   g_object_class_install_property (gobject_class, PROP_TOOLTIP_NOT_AUTHORIZED,
-    g_param_spec_string ("tooltip-not-authorized",
-                         P_("Not Authorized Tooltip"),
-                         P_("The tooltip to display when prompting the user cannot obtain authorization"),
+    g_param_spec_string ("tooltip-not-authorized", NULL, NULL,
                          _("System policy prevents changes.\nContact your system administrator"),
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT |

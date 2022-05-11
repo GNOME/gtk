@@ -71,11 +71,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
    *
    * This adjustment is shared between the scrollable widget and its parent.
    */
-  pspec = g_param_spec_object ("hadjustment",
-                               P_("Horizontal adjustment"),
-                               P_("Horizontal adjustment that is shared "
-                                  "between the scrollable widget and its "
-                                  "controller"),
+  pspec = g_param_spec_object ("hadjustment", NULL, NULL,
                                GTK_TYPE_ADJUSTMENT,
                                GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
   g_object_interface_install_property (iface, pspec);
@@ -87,11 +83,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
    *
    * This adjustment is shared between the scrollable widget and its parent.
    */
-  pspec = g_param_spec_object ("vadjustment",
-                               P_("Vertical adjustment"),
-                               P_("Vertical adjustment that is shared "
-                                  "between the scrollable widget and its "
-                                  "controller"),
+  pspec = g_param_spec_object ("vadjustment", NULL, NULL,
                                GTK_TYPE_ADJUSTMENT,
                                GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
   g_object_interface_install_property (iface, pspec);
@@ -101,9 +93,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
    *
    * Determines when horizontal scrolling should start.
    */
-  pspec = g_param_spec_enum ("hscroll-policy",
-			     P_("Horizontal Scrollable Policy"),
-			     P_("How the size of the content should be determined"),
+  pspec = g_param_spec_enum ("hscroll-policy", NULL, NULL,
 			     GTK_TYPE_SCROLLABLE_POLICY,
 			     GTK_SCROLL_MINIMUM,
 			     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -114,9 +104,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
    *
    * Determines when vertical scrolling should start.
    */
-  pspec = g_param_spec_enum ("vscroll-policy",
-			     P_("Vertical Scrollable Policy"),
-			     P_("How the size of the content should be determined"),
+  pspec = g_param_spec_enum ("vscroll-policy", NULL, NULL,
 			     GTK_TYPE_SCROLLABLE_POLICY,
 			     GTK_SCROLL_MINIMUM,
 			     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);

@@ -172,7 +172,7 @@ size_group_row_class_init (SizeGroupRowClass *class)
   widget_class->state_flags_changed = size_group_state_flags_changed;
 
   properties[PROP_WIDGET] =
-    g_param_spec_pointer ("widget", "Widget", "Widget", G_PARAM_READWRITE);
+    g_param_spec_pointer ("widget", NULL, NULL, G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 

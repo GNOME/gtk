@@ -2244,23 +2244,17 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                         G_TYPE_STRING);
 
   properties[PROP_LOADING] =
-          g_param_spec_boolean ("loading",
-                                P_("Loading"),
-                                P_("Whether the view is loading locations"),
+          g_param_spec_boolean ("loading", NULL, NULL,
                                 FALSE,
                                 GTK_PARAM_READABLE);
 
   properties[PROP_FETCHING_NETWORKS] =
-          g_param_spec_boolean ("fetching-networks",
-                                P_("Fetching networks"),
-                                P_("Whether the view is fetching networks"),
+          g_param_spec_boolean ("fetching-networks", NULL, NULL,
                                 FALSE,
                                 GTK_PARAM_READABLE);
 
   properties[PROP_OPEN_FLAGS] =
-          g_param_spec_flags ("open-flags",
-                              P_("Open Flags"),
-                              P_("Modes in which the calling application can open locations selected in the sidebar"),
+          g_param_spec_flags ("open-flags", NULL, NULL,
                               GTK_TYPE_PLACES_OPEN_FLAGS,
                               GTK_PLACES_OPEN_NORMAL,
                               GTK_PARAM_READWRITE);

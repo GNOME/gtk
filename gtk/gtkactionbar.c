@@ -171,9 +171,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
    * Controls whether the action bar shows its contents.
    */
   props[PROP_REVEALED] =
-    g_param_spec_boolean ("revealed",
-                          P_("Reveal"),
-                          P_("Controls whether the action bar shows its contents or not"),
+    g_param_spec_boolean ("revealed", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

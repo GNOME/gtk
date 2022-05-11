@@ -657,9 +657,7 @@ gtk_keyval_trigger_class_init (GtkKeyvalTriggerClass *klass)
    * The key value for the trigger.
    */
   keyval_props[KEYVAL_PROP_KEYVAL] =
-    g_param_spec_uint (I_("keyval"),
-                       P_("Key value"),
-                       P_("The key value for the trigger"),
+    g_param_spec_uint (I_("keyval"), NULL, NULL,
                        0, G_MAXINT,
                        0,
                        G_PARAM_STATIC_STRINGS |
@@ -672,9 +670,7 @@ gtk_keyval_trigger_class_init (GtkKeyvalTriggerClass *klass)
    * The key modifiers for the trigger.
    */
   keyval_props[KEYVAL_PROP_MODIFIERS] =
-    g_param_spec_flags (I_("modifiers"),
-                        P_("Modifiers"),
-                        P_("The key modifiers for the trigger"),
+    g_param_spec_flags (I_("modifiers"), NULL, NULL,
                         GDK_TYPE_MODIFIER_TYPE,
                         0,
                         G_PARAM_STATIC_STRINGS |
@@ -913,9 +909,7 @@ gtk_mnemonic_trigger_class_init (GtkMnemonicTriggerClass *klass)
    * The key value for the trigger.
    */
   mnemonic_props[KEYVAL_PROP_KEYVAL] =
-    g_param_spec_uint (I_("keyval"),
-                       P_("Key value"),
-                       P_("The key value for the trigger"),
+    g_param_spec_uint (I_("keyval"), NULL, NULL,
                        0, G_MAXINT,
                        0,
                        G_PARAM_STATIC_STRINGS |
@@ -1159,9 +1153,7 @@ gtk_alternative_trigger_class_init (GtkAlternativeTriggerClass *klass)
    * The first `GtkShortcutTrigger` to check.
    */
   alternative_props[ALTERNATIVE_PROP_FIRST] =
-    g_param_spec_object (I_("first"),
-                         P_("First"),
-                         P_("The first trigger to check"),
+    g_param_spec_object (I_("first"), NULL, NULL,
                          GTK_TYPE_SHORTCUT_TRIGGER,
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -1173,9 +1165,7 @@ gtk_alternative_trigger_class_init (GtkAlternativeTriggerClass *klass)
    * The second `GtkShortcutTrigger` to check.
    */
   alternative_props[ALTERNATIVE_PROP_SECOND] =
-    g_param_spec_object (I_("second"),
-                         P_("Second"),
-                         P_("The second trigger to check"),
+    g_param_spec_object (I_("second"), NULL, NULL,
                          GTK_TYPE_SHORTCUT_TRIGGER,
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_CONSTRUCT_ONLY |

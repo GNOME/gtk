@@ -249,37 +249,27 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   cell_class->get_aligned_area = gtk_cell_renderer_text_get_aligned_area;
 
   text_cell_renderer_props[PROP_TEXT] =
-      g_param_spec_string ("text",
-                           P_("Text"),
-                           P_("Text to render"),
+      g_param_spec_string ("text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_MARKUP] =
-      g_param_spec_string ("markup",
-                           P_("Markup"),
-                           P_("Marked up text to render"),
+      g_param_spec_string ("markup", NULL, NULL,
                            NULL,
                            GTK_PARAM_WRITABLE);
 
   text_cell_renderer_props[PROP_ATTRIBUTES] =
-      g_param_spec_boxed ("attributes",
-                          P_("Attributes"),
-                          P_("A list of style attributes to apply to the text of the renderer"),
+      g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_SINGLE_PARAGRAPH_MODE] =
-      g_param_spec_boolean ("single-paragraph-mode",
-                            P_("Single Paragraph Mode"),
-                            P_("Whether to keep all text in a single paragraph"),
+      g_param_spec_boolean ("single-paragraph-mode", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   text_cell_renderer_props[PROP_BACKGROUND] =
-      g_param_spec_string ("background",
-                           P_("Background color name"),
-                           P_("Background color as a string"),
+      g_param_spec_string ("background", NULL, NULL,
                            NULL,
                            GTK_PARAM_WRITABLE);
 
@@ -289,15 +279,11 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Background color as a `GdkRGBA`
    */
   text_cell_renderer_props[PROP_BACKGROUND_RGBA] =
-      g_param_spec_boxed ("background-rgba",
-                          P_("Background color as RGBA"),
-                          P_("Background color as a GdkRGBA"),
+      g_param_spec_boxed ("background-rgba", NULL, NULL,
                           GDK_TYPE_RGBA,
                           GTK_PARAM_READWRITE);
   text_cell_renderer_props[PROP_FOREGROUND] =
-      g_param_spec_string ("foreground",
-                           P_("Foreground color name"),
-                           P_("Foreground color as a string"),
+      g_param_spec_string ("foreground", NULL, NULL,
                            NULL,
                            GTK_PARAM_WRITABLE);
 
@@ -307,127 +293,93 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Foreground color as a `GdkRGBA`
    */
   text_cell_renderer_props[PROP_FOREGROUND_RGBA] =
-      g_param_spec_boxed ("foreground-rgba",
-                          P_("Foreground color as RGBA"),
-                          P_("Foreground color as a GdkRGBA"),
+      g_param_spec_boxed ("foreground-rgba", NULL, NULL,
                           GDK_TYPE_RGBA,
                           GTK_PARAM_READWRITE);
 
 
   text_cell_renderer_props[PROP_EDITABLE] =
-      g_param_spec_boolean ("editable",
-                            P_("Editable"),
-                            P_("Whether the text can be modified by the user"),
+      g_param_spec_boolean ("editable", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_FONT] =
-      g_param_spec_string ("font",
-                           P_("Font"),
-                           P_("Font description as a string, e.g. “Sans Italic 12”"),
+      g_param_spec_string ("font", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_FONT_DESC] =
-      g_param_spec_boxed ("font-desc",
-                          P_("Font"),
-                          P_("Font description as a PangoFontDescription struct"),
+      g_param_spec_boxed ("font-desc", NULL, NULL,
                           PANGO_TYPE_FONT_DESCRIPTION,
                           GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_FAMILY] =
-      g_param_spec_string ("family",
-                           P_("Font family"),
-                           P_("Name of the font family, e.g. Sans, Helvetica, Times, Monospace"),
+      g_param_spec_string ("family", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_STYLE] =
-      g_param_spec_enum ("style",
-                         P_("Font style"),
-                         P_("Font style"),
+      g_param_spec_enum ("style", NULL, NULL,
                          PANGO_TYPE_STYLE,
                          PANGO_STYLE_NORMAL,
                          GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_VARIANT] =
-      g_param_spec_enum ("variant",
-                         P_("Font variant"),
-                         P_("Font variant"),
+      g_param_spec_enum ("variant", NULL, NULL,
                          PANGO_TYPE_VARIANT,
                          PANGO_VARIANT_NORMAL,
                          GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_WEIGHT] =
-      g_param_spec_int ("weight",
-                        P_("Font weight"),
-                        P_("Font weight"),
+      g_param_spec_int ("weight", NULL, NULL,
                         0, G_MAXINT,
                         PANGO_WEIGHT_NORMAL,
                         GTK_PARAM_READWRITE);
 
    text_cell_renderer_props[PROP_STRETCH] =
-       g_param_spec_enum ("stretch",
-                          P_("Font stretch"),
-                          P_("Font stretch"),
+       g_param_spec_enum ("stretch", NULL, NULL,
                           PANGO_TYPE_STRETCH,
                           PANGO_STRETCH_NORMAL,
                           GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_SIZE] =
-      g_param_spec_int ("size",
-                        P_("Font size"),
-                        P_("Font size"),
+      g_param_spec_int ("size", NULL, NULL,
                         0, G_MAXINT,
                         0,
                         GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_SIZE_POINTS] =
-      g_param_spec_double ("size-points",
-                           P_("Font points"),
-                           P_("Font size in points"),
+      g_param_spec_double ("size-points", NULL, NULL,
                            0.0, G_MAXDOUBLE,
                            0.0,
                            GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_SCALE] =
-      g_param_spec_double ("scale",
-                           P_("Font scale"),
-                           P_("Font scaling factor"),
+      g_param_spec_double ("scale", NULL, NULL,
                            0.0, G_MAXDOUBLE,
                            1.0,
                            GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_RISE] =
-      g_param_spec_int ("rise",
-                        P_("Rise"),
-                        P_("Offset of text above the baseline (below the baseline if rise is negative)"),
+      g_param_spec_int ("rise", NULL, NULL,
                         -G_MAXINT, G_MAXINT,
                         0,
                         GTK_PARAM_READWRITE);
 
 
   text_cell_renderer_props[PROP_STRIKETHROUGH] =
-      g_param_spec_boolean ("strikethrough",
-                            P_("Strikethrough"),
-                            P_("Whether to strike through the text"),
+      g_param_spec_boolean ("strikethrough", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_UNDERLINE] =
-      g_param_spec_enum ("underline",
-                         P_("Underline"),
-                         P_("Style of underline for this text"),
+      g_param_spec_enum ("underline", NULL, NULL,
                          PANGO_TYPE_UNDERLINE,
                          PANGO_UNDERLINE_NONE,
                          GTK_PARAM_READWRITE);
 
   text_cell_renderer_props[PROP_LANGUAGE] =
-      g_param_spec_string ("language",
-                           P_("Language"),
-                           P_("The language this text is in, as an ISO code. "
-                              "Pango can use this as a hint when rendering the text. "
-                              "If you don’t understand this parameter, you probably don’t need it"),
+      g_param_spec_string ("language", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -440,11 +392,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * for another way of making the text fit into a given width.
    */
   text_cell_renderer_props[PROP_ELLIPSIZE] =
-      g_param_spec_enum ("ellipsize",
-                         P_("Ellipsize"),
-                         P_("The preferred place to ellipsize the string, "
-                            "if the cell renderer does not have enough room "
-                            "to display the entire string"),
+      g_param_spec_enum ("ellipsize", NULL, NULL,
                          PANGO_TYPE_ELLIPSIZE_MODE,
                          PANGO_ELLIPSIZE_NONE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -457,9 +405,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * request either 3 characters or the property value, whichever is greater.
    **/
   text_cell_renderer_props[PROP_WIDTH_CHARS] =
-      g_param_spec_int ("width-chars",
-                        P_("Width In Characters"),
-                        P_("The desired width of the label, in characters"),
+      g_param_spec_int ("width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -477,9 +423,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * have received their natural width.
    **/
   text_cell_renderer_props[PROP_MAX_WIDTH_CHARS] =
-      g_param_spec_int ("max-width-chars",
-                        P_("Maximum Width In Characters"),
-                        P_("The maximum width of the cell, in characters"),
+      g_param_spec_int ("max-width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -492,11 +436,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * This property has no effect unless the wrap-width property is set.
    */
   text_cell_renderer_props[PROP_WRAP_MODE] =
-      g_param_spec_enum ("wrap-mode",
-                         P_("Wrap mode"),
-                         P_("How to break the string into multiple lines, "
-                            "if the cell renderer does not have enough room "
-                            "to display the entire string"),
+      g_param_spec_enum ("wrap-mode", NULL, NULL,
                          PANGO_TYPE_WRAP_MODE,
                          PANGO_WRAP_CHAR,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -509,9 +449,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Setting wrap-width to -1 turns wrapping off.
    */
   text_cell_renderer_props[PROP_WRAP_WIDTH] =
-      g_param_spec_int ("wrap-width",
-                        P_("Wrap width"),
-                        P_("The width at which the text is wrapped"),
+      g_param_spec_int ("wrap-width", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -526,9 +464,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * on the other hand, sets the horizontal alignment of the whole text.
    */
   text_cell_renderer_props[PROP_ALIGN] =
-      g_param_spec_enum ("alignment",
-                         P_("Alignment"),
-                         P_("How to align the lines"),
+      g_param_spec_enum ("alignment", NULL, NULL,
                          PANGO_TYPE_ALIGNMENT,
                          PANGO_ALIGN_LEFT,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -540,9 +476,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * `GtkCellRendererText:editable` is %TRUE and the cell is empty.
    */
   text_cell_renderer_props[PROP_PLACEHOLDER_TEXT] =
-      g_param_spec_string ("placeholder-text",
-                           P_("Placeholder text"),
-                           P_("Text rendered when an editable cell is empty"),
+      g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -550,69 +484,37 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) text_cell_renderer_props[propval] = g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE)
 
-  ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
-                P_("Background set"),
-                P_("Whether this tag affects the background color"));
+  ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET, NULL, NULL);
 
-  ADD_SET_PROP ("foreground-set", PROP_FOREGROUND_SET,
-                P_("Foreground set"),
-                P_("Whether this tag affects the foreground color"));
+  ADD_SET_PROP ("foreground-set", PROP_FOREGROUND_SET, NULL, NULL);
 
-  ADD_SET_PROP ("editable-set", PROP_EDITABLE_SET,
-                P_("Editability set"),
-                P_("Whether this tag affects text editability"));
+  ADD_SET_PROP ("editable-set", PROP_EDITABLE_SET, NULL, NULL);
 
-  ADD_SET_PROP ("family-set", PROP_FAMILY_SET,
-                P_("Font family set"),
-                P_("Whether this tag affects the font family"));
+  ADD_SET_PROP ("family-set", PROP_FAMILY_SET, NULL, NULL);
 
-  ADD_SET_PROP ("style-set", PROP_STYLE_SET,
-                P_("Font style set"),
-                P_("Whether this tag affects the font style"));
+  ADD_SET_PROP ("style-set", PROP_STYLE_SET, NULL, NULL);
 
-  ADD_SET_PROP ("variant-set", PROP_VARIANT_SET,
-                P_("Font variant set"),
-                P_("Whether this tag affects the font variant"));
+  ADD_SET_PROP ("variant-set", PROP_VARIANT_SET, NULL, NULL);
 
-  ADD_SET_PROP ("weight-set", PROP_WEIGHT_SET,
-                P_("Font weight set"),
-                P_("Whether this tag affects the font weight"));
+  ADD_SET_PROP ("weight-set", PROP_WEIGHT_SET, NULL, NULL);
 
-  ADD_SET_PROP ("stretch-set", PROP_STRETCH_SET,
-                P_("Font stretch set"),
-                P_("Whether this tag affects the font stretch"));
+  ADD_SET_PROP ("stretch-set", PROP_STRETCH_SET, NULL, NULL);
 
-  ADD_SET_PROP ("size-set", PROP_SIZE_SET,
-                P_("Font size set"),
-                P_("Whether this tag affects the font size"));
+  ADD_SET_PROP ("size-set", PROP_SIZE_SET, NULL, NULL);
 
-  ADD_SET_PROP ("scale-set", PROP_SCALE_SET,
-                P_("Font scale set"),
-                P_("Whether this tag scales the font size by a factor"));
+  ADD_SET_PROP ("scale-set", PROP_SCALE_SET, NULL, NULL);
 
-  ADD_SET_PROP ("rise-set", PROP_RISE_SET,
-                P_("Rise set"),
-                P_("Whether this tag affects the rise"));
+  ADD_SET_PROP ("rise-set", PROP_RISE_SET, NULL, NULL);
 
-  ADD_SET_PROP ("strikethrough-set", PROP_STRIKETHROUGH_SET,
-                P_("Strikethrough set"),
-                P_("Whether this tag affects strikethrough"));
+  ADD_SET_PROP ("strikethrough-set", PROP_STRIKETHROUGH_SET, NULL, NULL);
 
-  ADD_SET_PROP ("underline-set", PROP_UNDERLINE_SET,
-                P_("Underline set"),
-                P_("Whether this tag affects underlining"));
+  ADD_SET_PROP ("underline-set", PROP_UNDERLINE_SET, NULL, NULL);
 
-  ADD_SET_PROP ("language-set", PROP_LANGUAGE_SET,
-                P_("Language set"),
-                P_("Whether this tag affects the language the text is rendered as"));
+  ADD_SET_PROP ("language-set", PROP_LANGUAGE_SET, NULL, NULL);
 
-  ADD_SET_PROP ("ellipsize-set", PROP_ELLIPSIZE_SET,
-                P_("Ellipsize set"),
-                P_("Whether this tag affects the ellipsize mode"));
+  ADD_SET_PROP ("ellipsize-set", PROP_ELLIPSIZE_SET, NULL, NULL);
 
-  ADD_SET_PROP ("align-set", PROP_ALIGN_SET,
-                P_("Align set"),
-                P_("Whether this tag affects the alignment mode"));
+  ADD_SET_PROP ("align-set", PROP_ALIGN_SET, NULL, NULL);
 
   g_object_class_install_properties (object_class, LAST_PROP, text_cell_renderer_props);
 

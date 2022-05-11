@@ -4324,52 +4324,36 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         GTK_TYPE_PLACES_OPEN_FLAGS);
 
   properties[PROP_LOCATION] =
-          g_param_spec_object ("location",
-                               P_("Location to Select"),
-                               P_("The location to highlight in the sidebar"),
+          g_param_spec_object ("location", NULL, NULL,
                                G_TYPE_FILE,
                                GTK_PARAM_READWRITE);
   properties[PROP_OPEN_FLAGS] =
-          g_param_spec_flags ("open-flags",
-                              P_("Open Flags"),
-                              P_("Modes in which the calling application can open locations selected in the sidebar"),
+          g_param_spec_flags ("open-flags", NULL, NULL,
                               GTK_TYPE_PLACES_OPEN_FLAGS,
                               GTK_PLACES_OPEN_NORMAL,
                               GTK_PARAM_READWRITE);
   properties[PROP_SHOW_RECENT] =
-          g_param_spec_boolean ("show-recent",
-                                P_("Show recent files"),
-                                P_("Whether the sidebar includes a builtin shortcut for recent files"),
+          g_param_spec_boolean ("show-recent", NULL, NULL,
                                 TRUE,
                                 GTK_PARAM_READWRITE);
   properties[PROP_SHOW_DESKTOP] =
-          g_param_spec_boolean ("show-desktop",
-                                P_("Show “Desktop”"),
-                                P_("Whether the sidebar includes a builtin shortcut to the Desktop folder"),
+          g_param_spec_boolean ("show-desktop", NULL, NULL,
                                 TRUE,
                                 GTK_PARAM_READWRITE);
   properties[PROP_SHOW_ENTER_LOCATION] =
-          g_param_spec_boolean ("show-enter-location",
-                                P_("Show “Enter Location”"),
-                                P_("Whether the sidebar includes a builtin shortcut to manually enter a location"),
+          g_param_spec_boolean ("show-enter-location", NULL, NULL,
                                 FALSE,
                                 GTK_PARAM_READWRITE);
   properties[PROP_SHOW_TRASH] =
-          g_param_spec_boolean ("show-trash",
-                                P_("Show “Trash”"),
-                                P_("Whether the sidebar includes a builtin shortcut to the Trash location"),
+          g_param_spec_boolean ("show-trash", NULL, NULL,
                                 TRUE,
                                 GTK_PARAM_READWRITE);
   properties[PROP_SHOW_OTHER_LOCATIONS] =
-          g_param_spec_boolean ("show-other-locations",
-                                P_("Show “Other locations”"),
-                                P_("Whether the sidebar includes an item to show external locations"),
+          g_param_spec_boolean ("show-other-locations", NULL, NULL,
                                 TRUE,
                                 GTK_PARAM_READWRITE);
   properties[PROP_SHOW_STARRED_LOCATION] =
-          g_param_spec_boolean ("show-starred-location",
-                                P_("Show “Starred Location”"),
-                                P_("Whether the sidebar includes an item to show starred files"),
+          g_param_spec_boolean ("show-starred-location", NULL, NULL,
                                 FALSE,
                                 GTK_PARAM_READWRITE);
 

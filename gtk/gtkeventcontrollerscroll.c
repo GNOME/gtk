@@ -481,9 +481,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
    * The flags affecting event controller behavior.
    */
   pspecs[PROP_FLAGS] =
-    g_param_spec_flags ("flags",
-                        P_("Flags"),
-                        P_("Flags"),
+    g_param_spec_flags ("flags", NULL, NULL,
                         GTK_TYPE_EVENT_CONTROLLER_SCROLL_FLAGS,
                         GTK_EVENT_CONTROLLER_SCROLL_NONE,
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);

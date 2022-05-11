@@ -461,9 +461,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * The GtkTextTagTable for the buffer.
    */
   text_buffer_props[PROP_TAG_TABLE] =
-      g_param_spec_object ("tag-table",
-                           P_("Tag Table"),
-                           P_("Text Tag Table"),
+      g_param_spec_object ("tag-table", NULL, NULL,
                            GTK_TYPE_TEXT_TAG_TABLE,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
@@ -478,9 +476,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * see [method@Gtk.TextBuffer.get_text] for more information.
    */
   text_buffer_props[PROP_TEXT] =
-      g_param_spec_string ("text",
-                           P_("Text"),
-                           P_("Current text of the buffer"),
+      g_param_spec_string ("text", NULL, NULL,
                            "",
                            GTK_PARAM_READWRITE);
 
@@ -490,9 +486,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * Whether the buffer has some text currently selected.
    */
   text_buffer_props[PROP_HAS_SELECTION] =
-      g_param_spec_boolean ("has-selection",
-                            P_("Has selection"),
-                            P_("Whether the buffer has some text currently selected"),
+      g_param_spec_boolean ("has-selection", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READABLE);
 
@@ -502,9 +496,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * Denotes that the buffer can undo the last applied action.
    */
   text_buffer_props[PROP_CAN_UNDO] =
-    g_param_spec_boolean ("can-undo",
-                          P_("Can Undo"),
-                          P_("If the buffer can have the last action undone"),
+    g_param_spec_boolean ("can-undo", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READABLE);
 
@@ -514,9 +506,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * Denotes that the buffer can reapply the last undone action.
    */
   text_buffer_props[PROP_CAN_REDO] =
-    g_param_spec_boolean ("can-redo",
-                          P_("Can Redo"),
-                          P_("If the buffer can have the last undone action reapplied"),
+    g_param_spec_boolean ("can-redo", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READABLE);
 
@@ -526,9 +516,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * Denotes if support for undoing and redoing changes to the buffer is allowed.
    */
   text_buffer_props[PROP_ENABLE_UNDO] =
-    g_param_spec_boolean ("enable-undo",
-                          "Enable Undo",
-                          "Enable support for undo and redo in the text view",
+    g_param_spec_boolean ("enable-undo", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -541,9 +529,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
    * It is useful for getting notified when the cursor moves.
    */
   text_buffer_props[PROP_CURSOR_POSITION] =
-      g_param_spec_int ("cursor-position",
-                        P_("Cursor position"),
-                        P_("The position of the insert mark (as offset from the beginning of the buffer)"),
+      g_param_spec_int ("cursor-position", NULL, NULL,
 			0, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE);

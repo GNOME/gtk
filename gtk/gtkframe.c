@@ -166,9 +166,7 @@ gtk_frame_class_init (GtkFrameClass *class)
    * Text of the frame's label.
    */
   frame_props[PROP_LABEL] =
-      g_param_spec_string ("label",
-                           P_("Label"),
-                           P_("Text of the frame’s label"),
+      g_param_spec_string ("label", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -178,9 +176,7 @@ gtk_frame_class_init (GtkFrameClass *class)
    * The horizontal alignment of the label.
    */
   frame_props[PROP_LABEL_XALIGN] =
-      g_param_spec_float ("label-xalign",
-                          P_("Label xalign"),
-                          P_("The horizontal alignment of the label"),
+      g_param_spec_float ("label-xalign", NULL, NULL,
                           0.0, 1.0,
                           0.0,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -191,9 +187,7 @@ gtk_frame_class_init (GtkFrameClass *class)
    * Widget to display in place of the usual frame label.
    */
   frame_props[PROP_LABEL_WIDGET] =
-      g_param_spec_object ("label-widget",
-                           P_("Label widget"),
-                           P_("A widget to display in place of the usual frame label"),
+      g_param_spec_object ("label-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 
@@ -203,9 +197,7 @@ gtk_frame_class_init (GtkFrameClass *class)
    * The child widget.
    */
   frame_props[PROP_CHILD] =
-      g_param_spec_object ("child",
-                           P_("Child"),
-                           P_("The child widget"),
+      g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 

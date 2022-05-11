@@ -291,9 +291,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
    * The expression to evaluate on item to get a string to compare with.
    */
   properties[PROP_EXPRESSION] =
-    gtk_param_spec_expression ("expression",
-                               P_("Expression"),
-                               P_("Expression to compare with"),
+    gtk_param_spec_expression ("expression", NULL, NULL,
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -302,9 +300,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
    * If matching is case sensitive.
    */
   properties[PROP_IGNORE_CASE] =
-      g_param_spec_boolean ("ignore-case",
-                            P_("Ignore case"),
-                            P_("If matching is case sensitive"),
+      g_param_spec_boolean ("ignore-case", NULL, NULL,
                             TRUE,
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

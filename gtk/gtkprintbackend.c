@@ -268,9 +268,7 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   
   g_object_class_install_property (object_class, 
                                    PROP_STATUS,
-                                   g_param_spec_int ("status",
-                                                     "Status",
-                                                     "The status of the print backend",
+                                   g_param_spec_int ("status", NULL, NULL,
                                                      GTK_PRINT_BACKEND_STATUS_UNKNOWN,
                                                      GTK_PRINT_BACKEND_STATUS_UNAVAILABLE,
                                                      GTK_PRINT_BACKEND_STATUS_UNKNOWN,

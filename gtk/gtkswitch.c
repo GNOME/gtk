@@ -518,9 +518,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    * Whether the `GtkSwitch` widget is in its on or off state.
    */
   switch_props[PROP_ACTIVE] =
-    g_param_spec_boolean ("active",
-                          P_("Active"),
-                          P_("Whether the switch is on or off"),
+    g_param_spec_boolean ("active", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -532,9 +530,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
    * See [signal@GtkSwitch::state-set] for details.
    */
   switch_props[PROP_STATE] =
-    g_param_spec_boolean ("state",
-                          P_("State"),
-                          P_("The backend state"),
+    g_param_spec_boolean ("state", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

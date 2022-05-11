@@ -316,9 +316,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_EXPANDED,
-                                   g_param_spec_boolean ("expanded",
-                                                         P_("Expanded"),
-                                                         P_("Whether the expander has been opened to reveal the child widget"),
+                                   g_param_spec_boolean ("expanded", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -329,9 +327,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL,
-                                   g_param_spec_string ("label",
-                                                        P_("Label"),
-                                                        P_("Text of the expander’s label"),
+                                   g_param_spec_string ("label", NULL, NULL,
                                                         NULL,
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
@@ -342,9 +338,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_UNDERLINE,
-                                   g_param_spec_boolean ("use-underline",
-                                                         P_("Use underline"),
-                                                         P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+                                   g_param_spec_boolean ("use-underline", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -355,9 +349,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_MARKUP,
-                                   g_param_spec_boolean ("use-markup",
-                                                         P_("Use markup"),
-                                                         P_("The text of the label includes XML markup. See pango_parse_markup()"),
+                                   g_param_spec_boolean ("use-markup", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -368,9 +360,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_LABEL_WIDGET,
-                                   g_param_spec_object ("label-widget",
-                                                        P_("Label widget"),
-                                                        P_("A widget to display in place of the usual expander label"),
+                                   g_param_spec_object ("label-widget", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 
@@ -382,9 +372,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZE_TOPLEVEL,
-                                   g_param_spec_boolean ("resize-toplevel",
-                                                         P_("Resize toplevel"),
-                                                         P_("Whether the expander will resize the toplevel window upon expanding and collapsing"),
+                                   g_param_spec_boolean ("resize-toplevel", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -395,9 +383,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
-                                   g_param_spec_object ("child",
-                                                        P_("Child"),
-                                                        P_("The child widget"),
+                                   g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE));
 

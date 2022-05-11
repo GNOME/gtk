@@ -293,7 +293,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * to this string will make this section shown in the `GtkShortcutsWindow`.
    */
   properties[PROP_SECTION_NAME] =
-    g_param_spec_string ("section-name", P_("Section Name"), P_("Section Name"),
+    g_param_spec_string ("section-name", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -309,7 +309,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * for this purpose.
    */
   properties[PROP_VIEW_NAME] =
-    g_param_spec_string ("view-name", P_("View Name"), P_("View Name"),
+    g_param_spec_string ("view-name", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -323,7 +323,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * since the section selector will not be shown in this case.
    */
   properties[PROP_TITLE] =
-    g_param_spec_string ("title", P_("Title"), P_("Title"),
+    g_param_spec_string ("title", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -337,7 +337,7 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * value of 15 should work in most cases.
    */
   properties[PROP_MAX_HEIGHT] =
-    g_param_spec_uint ("max-height", P_("Maximum Height"), P_("Maximum Height"),
+    g_param_spec_uint ("max-height", NULL, NULL,
                        0, G_MAXUINT, 15,
                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY));
 

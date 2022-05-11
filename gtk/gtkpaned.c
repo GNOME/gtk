@@ -422,9 +422,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * Position of the separator in pixels, from the left/top.
    */
   paned_props[PROP_POSITION] =
-    g_param_spec_int ("position",
-                      P_("Position"),
-                      P_("Position of paned separator in pixels (0 means all the way to the left/top)"),
+    g_param_spec_int ("position", NULL, NULL,
                       0, G_MAXINT, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -434,9 +432,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * Whether the [property@Gtk.Paned:position] property has been set.
    */
   paned_props[PROP_POSITION_SET] =
-    g_param_spec_boolean ("position-set",
-                          P_("Position Set"),
-                          P_("TRUE if the Position property should be used"),
+    g_param_spec_boolean ("position-set", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -450,9 +446,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * of the widget's children.
    */
   paned_props[PROP_MIN_POSITION] =
-    g_param_spec_int ("min-position",
-                      P_("Minimal Position"),
-                      P_("Smallest possible value for the “position” property"),
+    g_param_spec_int ("min-position", NULL, NULL,
                       0, G_MAXINT, 0,
                       GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -466,9 +460,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * of the widget's children.
    */
   paned_props[PROP_MAX_POSITION] =
-    g_param_spec_int ("max-position",
-                      P_("Maximal Position"),
-                      P_("Largest possible value for the “position” property"),
+    g_param_spec_int ("max-position", NULL, NULL,
                       0, G_MAXINT, G_MAXINT,
                       GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -481,9 +473,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * [class@Gtk.Notebook]s, whose tab rows would otherwise merge visually.
    */
   paned_props[PROP_WIDE_HANDLE] =
-    g_param_spec_boolean ("wide-handle",
-                          P_("Wide Handle"),
-                          P_("Whether the paned should have a prominent handle"),
+    g_param_spec_boolean ("wide-handle", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -494,9 +484,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * along with the paned widget.
    */
   paned_props[PROP_RESIZE_START_CHILD] =
-    g_param_spec_boolean ("resize-start-child",
-                          P_("Resize first child"),
-                          P_("If TRUE, the first child expands and shrinks along with the paned widget"),
+    g_param_spec_boolean ("resize-start-child", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -507,9 +495,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * along with the paned widget.
    */
   paned_props[PROP_RESIZE_END_CHILD] =
-    g_param_spec_boolean ("resize-end-child",
-                          P_("Resize second child"),
-                          P_("If TRUE, the second child expands and shrinks along with the paned widget"),
+    g_param_spec_boolean ("resize-end-child", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -520,9 +506,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * than its requisition.
    */
   paned_props[PROP_SHRINK_START_CHILD] =
-    g_param_spec_boolean ("shrink-start-child",
-                          P_("Shrink first child"),
-                          P_("If TRUE, the first child can be made smaller than its requisition"),
+    g_param_spec_boolean ("shrink-start-child", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -533,9 +517,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * than its requisition.
    */
   paned_props[PROP_SHRINK_END_CHILD] =
-    g_param_spec_boolean ("shrink-end-child",
-                          P_("Shrink second child"),
-                          P_("If TRUE, the second child can be made smaller than its requisition"),
+    g_param_spec_boolean ("shrink-end-child", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -545,9 +527,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * The first child.
    */
   paned_props[PROP_START_CHILD] =
-    g_param_spec_object ("start-child",
-                          P_("First child"),
-                          P_("The first child"),
+    g_param_spec_object ("start-child", NULL, NULL,
                           GTK_TYPE_WIDGET,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -557,9 +537,7 @@ gtk_paned_class_init (GtkPanedClass *class)
    * The second child.
    */
   paned_props[PROP_END_CHILD] =
-    g_param_spec_object ("end-child",
-                          P_("Second child"),
-                          P_("The second child"),
+    g_param_spec_object ("end-child", NULL, NULL,
                           GTK_TYPE_WIDGET,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

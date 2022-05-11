@@ -323,9 +323,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    * The data that is offered by drag operations from this source.
    */
   properties[PROP_CONTENT] =
-       g_param_spec_object ("content",
-                            P_("Content"),
-                            P_("The content provider for the dragged data"),
+       g_param_spec_object ("content", NULL, NULL,
                            GDK_TYPE_CONTENT_PROVIDER,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -338,9 +336,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
    * if the actions include %GDK_ACTION_MOVE.
    */
   properties[PROP_ACTIONS] =
-       g_param_spec_flags ("actions",
-                           P_("Actions"),
-                           P_("Supported actions"),
+       g_param_spec_flags ("actions", NULL, NULL,
                            GDK_TYPE_DRAG_ACTION, GDK_ACTION_COPY,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

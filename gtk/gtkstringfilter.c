@@ -253,9 +253,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
    * The expression to evaluate on item to get a string to compare with.
    */
   properties[PROP_EXPRESSION] =
-    gtk_param_spec_expression ("expression",
-                               P_("Expression"),
-                               P_("Expression to compare with"),
+    gtk_param_spec_expression ("expression", NULL, NULL,
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -264,9 +262,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
    * If matching is case sensitive.
    */
   properties[PROP_IGNORE_CASE] =
-      g_param_spec_boolean ("ignore-case",
-                            P_("Ignore case"),
-                            P_("If matching is case sensitive"),
+      g_param_spec_boolean ("ignore-case", NULL, NULL,
                             TRUE,
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -276,9 +272,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
    * If exact matches are necessary or if substrings are allowed.
    */
   properties[PROP_MATCH_MODE] =
-      g_param_spec_enum ("match-mode",
-                         P_("Match mode"),
-                         P_("If exact matches are necessary or if substrings are allowed"),
+      g_param_spec_enum ("match-mode", NULL, NULL,
                          GTK_TYPE_STRING_FILTER_MATCH_MODE,
                          GTK_STRING_FILTER_MATCH_MODE_SUBSTRING,
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
@@ -289,9 +283,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
    * The search term.
    */
   properties[PROP_SEARCH] =
-      g_param_spec_string ("search",
-                           P_("Search"),
-                           P_("The search term"),
+      g_param_spec_string ("search", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

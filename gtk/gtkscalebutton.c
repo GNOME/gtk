@@ -193,9 +193,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_VALUE,
-				   g_param_spec_double ("value",
-							P_("Value"),
-							P_("The value of the scale"),
+				   g_param_spec_double ("value", NULL, NULL,
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0,
@@ -208,9 +206,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
-                                   g_param_spec_object ("adjustment",
-							P_("Adjustment"),
-							P_("The GtkAdjustment that contains the current value of this scale button object"),
+                                   g_param_spec_object ("adjustment", NULL, NULL,
                                                         GTK_TYPE_ADJUSTMENT,
                                                         GTK_PARAM_READWRITE));
 
@@ -236,9 +232,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ICONS,
-                                   g_param_spec_boxed ("icons",
-                                                       P_("Icons"),
-                                                       P_("List of icon names"),
+                                   g_param_spec_boxed ("icons", NULL, NULL,
                                                        G_TYPE_STRV,
                                                        GTK_PARAM_READWRITE));
 

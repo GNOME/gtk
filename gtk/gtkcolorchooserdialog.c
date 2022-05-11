@@ -223,7 +223,7 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
   g_object_class_override_property (object_class, PROP_RGBA, "rgba");
   g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
-      g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
+      g_param_spec_boolean ("show-editor", NULL, NULL,
                             FALSE, GTK_PARAM_READWRITE));
 
   /* Bind class to template

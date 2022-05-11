@@ -430,9 +430,7 @@ gtk_grid_class_init (GtkGridClass *class)
    * The amount of space between two consecutive rows.
    */
   obj_properties[PROP_ROW_SPACING] =
-    g_param_spec_int ("row-spacing",
-                      P_("Row spacing"),
-                      P_("The amount of space between two consecutive rows"),
+    g_param_spec_int ("row-spacing", NULL, NULL,
                       0, G_MAXINT16, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -442,9 +440,7 @@ gtk_grid_class_init (GtkGridClass *class)
    * The amount of space between two consecutive columns.
    */
   obj_properties[PROP_COLUMN_SPACING] =
-    g_param_spec_int ("column-spacing",
-                      P_("Column spacing"),
-                      P_("The amount of space between two consecutive columns"),
+    g_param_spec_int ("column-spacing", NULL, NULL,
                       0, G_MAXINT16, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -454,9 +450,7 @@ gtk_grid_class_init (GtkGridClass *class)
    * If %TRUE, the rows are all the same height.
    */
   obj_properties[PROP_ROW_HOMOGENEOUS] =
-    g_param_spec_boolean ("row-homogeneous",
-                          P_("Row Homogeneous"),
-                          P_("If TRUE, the rows are all the same height"),
+    g_param_spec_boolean ("row-homogeneous", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -466,9 +460,7 @@ gtk_grid_class_init (GtkGridClass *class)
    * If %TRUE, the columns are all the same width.
    */
   obj_properties[PROP_COLUMN_HOMOGENEOUS] =
-    g_param_spec_boolean ("column-homogeneous",
-                          P_("Column Homogeneous"),
-                          P_("If TRUE, the columns are all the same width"),
+    g_param_spec_boolean ("column-homogeneous", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -478,9 +470,7 @@ gtk_grid_class_init (GtkGridClass *class)
    * The row to align to the baseline when valign is %GTK_ALIGN_BASELINE.
    */
   obj_properties[PROP_BASELINE_ROW] =
-    g_param_spec_int ("baseline-row",
-                      P_("Baseline Row"),
-                      P_("The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"),
+    g_param_spec_int ("baseline-row", NULL, NULL,
                       0, G_MAXINT, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

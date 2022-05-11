@@ -120,9 +120,7 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   object_class->get_property = gtk_style_context_impl_get_property;
 
   properties[PROP_DISPLAY] =
-      g_param_spec_object ("display",
-                           P_("Display"),
-                           P_("The associated GdkDisplay"),
+      g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
                            GTK_PARAM_READWRITE);
 

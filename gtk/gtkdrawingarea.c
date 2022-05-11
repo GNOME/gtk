@@ -287,9 +287,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
    * The content width.
    */
   props[PROP_CONTENT_WIDTH] =
-    g_param_spec_int ("content-width",
-                      P_("Content Width"),
-                      P_("Desired width for displayed content"),
+    g_param_spec_int ("content-width", NULL, NULL,
                       0, G_MAXINT, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -299,9 +297,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
    * The content height.
    */
   props[PROP_CONTENT_HEIGHT] =
-    g_param_spec_int ("content-height",
-                      P_("Content Height"),
-                      P_("Desired height for displayed content"),
+    g_param_spec_int ("content-height", NULL, NULL,
                       0, G_MAXINT, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

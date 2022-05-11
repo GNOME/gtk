@@ -958,9 +958,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
    * Determines the currently filled value of the level bar.
    */
   properties[PROP_VALUE] =
-    g_param_spec_double ("value",
-                         P_("Currently filled value level"),
-                         P_("Currently filled value level of the level bar"),
+    g_param_spec_double ("value", NULL, NULL,
                          0.0, G_MAXDOUBLE, 0.0,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -970,9 +968,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
    * Determines the minimum value of the interval that can be displayed by the bar.
    */
   properties[PROP_MIN_VALUE] =
-    g_param_spec_double ("min-value",
-                         P_("Minimum value level for the bar"),
-                         P_("Minimum value level that can be displayed by the bar"),
+    g_param_spec_double ("min-value", NULL, NULL,
                          0.0, G_MAXDOUBLE, 0.0,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -982,9 +978,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
    * Determines the maximum value of the interval that can be displayed by the bar.
    */
   properties[PROP_MAX_VALUE] =
-    g_param_spec_double ("max-value",
-                         P_("Maximum value level for the bar"),
-                         P_("Maximum value level that can be displayed by the bar"),
+    g_param_spec_double ("max-value", NULL, NULL,
                          0.0, G_MAXDOUBLE, 1.0,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1003,9 +997,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
    * [property@Gtk.LevelBar:max-value].
    */
   properties[PROP_MODE] =
-    g_param_spec_enum ("mode",
-                       P_("The mode of the value indicator"),
-                       P_("The mode of the value indicator displayed by the bar"),
+    g_param_spec_enum ("mode", NULL, NULL,
                        GTK_TYPE_LEVEL_BAR_MODE,
                        GTK_LEVEL_BAR_MODE_CONTINUOUS,
                        G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
@@ -1019,9 +1011,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
    * Inverted level bars grow in the opposite direction.
    */
   properties[PROP_INVERTED] =
-    g_param_spec_boolean ("inverted",
-                          P_("Inverted"),
-                          P_("Invert the direction in which the level bar grows"),
+    g_param_spec_boolean ("inverted", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 

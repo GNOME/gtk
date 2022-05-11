@@ -175,9 +175,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_URI,
-                                   g_param_spec_string ("uri",
-                                                        P_("URI"),
-                                                        P_("The URI bound to this button"),
+                                   g_param_spec_string ("uri", NULL, NULL,
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
@@ -190,9 +188,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_VISITED,
-                                   g_param_spec_boolean ("visited",
-                                                         P_("Visited"),
-                                                         P_("Whether this link has been visited."),
+                                   g_param_spec_boolean ("visited", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

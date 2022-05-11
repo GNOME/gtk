@@ -334,9 +334,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
    * methods to adjust their behaviour.
    */
   properties[PROP_INPUT_PURPOSE] =
-    g_param_spec_enum ("input-purpose",
-                         P_("Purpose"),
-                         P_("Purpose of the text field"),
+    g_param_spec_enum ("input-purpose", NULL, NULL,
                          GTK_TYPE_INPUT_PURPOSE,
                          GTK_INPUT_PURPOSE_FREE_FORM,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
@@ -348,9 +346,7 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
    * their behaviour.
    */
   properties[PROP_INPUT_HINTS] =
-    g_param_spec_flags ("input-hints",
-                         P_("hints"),
-                         P_("Hints for the text field behaviour"),
+    g_param_spec_flags ("input-hints", NULL, NULL,
                          GTK_TYPE_INPUT_HINTS,
                          GTK_INPUT_HINT_NONE,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);

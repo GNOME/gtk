@@ -58,9 +58,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    */
   g_object_interface_install_property
      (iface,
-      g_param_spec_string ("font",
-                          P_("Font"),
-                           P_("Font description as a string, e.g. “Sans Italic 12”"),
+      g_param_spec_string ("font", NULL, NULL,
                            GTK_FONT_CHOOSER_DEFAULT_FONT_NAME,
                            GTK_PARAM_READWRITE));
 
@@ -71,9 +69,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    */
   g_object_interface_install_property
      (iface,
-      g_param_spec_boxed ("font-desc",
-                          P_("Font description"),
-                          P_("Font description as a PangoFontDescription struct"),
+      g_param_spec_boxed ("font-desc", NULL, NULL,
                           PANGO_TYPE_FONT_DESCRIPTION,
                           GTK_PARAM_READWRITE));
 
@@ -84,9 +80,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    */
   g_object_interface_install_property
      (iface,
-      g_param_spec_string ("preview-text",
-                          P_("Preview text"),
-                          P_("The text to display in order to demonstrate the selected font"),
+      g_param_spec_string ("preview-text", NULL, NULL,
                           pango_language_get_sample_string (NULL),
                           GTK_PARAM_READWRITE));
 
@@ -97,9 +91,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    */
   g_object_interface_install_property
      (iface,
-      g_param_spec_boolean ("show-preview-entry",
-                          P_("Show preview text entry"),
-                          P_("Whether the preview text entry is shown or not"),
+      g_param_spec_boolean ("show-preview-entry", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -110,9 +102,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    */
   g_object_interface_install_property
      (iface,
-      g_param_spec_flags ("level",
-                          P_("Selection level"),
-                          P_("Whether to select family, face or font"),
+      g_param_spec_flags ("level", NULL, NULL,
                           GTK_TYPE_FONT_CHOOSER_LEVEL,
                           GTK_FONT_CHOOSER_LEVEL_FAMILY |
                           GTK_FONT_CHOOSER_LEVEL_STYLE |
@@ -129,9 +119,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    */
   g_object_interface_install_property
      (iface,
-      g_param_spec_string ("font-features",
-                          P_("Font features"),
-                          P_("Font features as a string"),
+      g_param_spec_string ("font-features", NULL, NULL,
                           "",
                           GTK_PARAM_READABLE));
 
@@ -142,9 +130,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    */
   g_object_interface_install_property
      (iface,
-      g_param_spec_string ("language",
-                          P_("Language"),
-                          P_("Language for which features have been selected"),
+      g_param_spec_string ("language", NULL, NULL,
                           "",
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

@@ -256,9 +256,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
    * Child model to take slice from.
    */
   properties[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Model"),
-                           P_("Child model to take slice from"),
+      g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -268,9 +266,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
    * Offset of slice.
    */
   properties[PROP_OFFSET] =
-      g_param_spec_uint ("offset",
-                         P_("Offset"),
-                         P_("Offset of slice"),
+      g_param_spec_uint ("offset", NULL, NULL,
                          0, G_MAXUINT, 0,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -280,9 +276,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
    * Maximum size of slice.
    */
   properties[PROP_SIZE] =
-      g_param_spec_uint ("size",
-                         P_("Size"),
-                         P_("Maximum size of slice"),
+      g_param_spec_uint ("size", NULL, NULL,
                          0, G_MAXUINT, DEFAULT_SIZE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

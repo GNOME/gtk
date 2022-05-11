@@ -483,9 +483,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The buffer object which actually stores the text.
    */
   entry_props[PROP_BUFFER] =
-      g_param_spec_object ("buffer",
-                           P_("Text Buffer"),
-                           P_("Text buffer object which actually stores entry text"),
+      g_param_spec_object ("buffer", NULL, NULL,
                            GTK_TYPE_ENTRY_BUFFER,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -495,9 +493,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Maximum number of characters for this entry.
    */
   entry_props[PROP_MAX_LENGTH] =
-      g_param_spec_int ("max-length",
-                        P_("Maximum length"),
-                        P_("Maximum number of characters for this entry. Zero if no maximum"),
+      g_param_spec_int ("max-length", NULL, NULL,
                         0, GTK_ENTRY_BUFFER_MAX_SIZE,
                         0,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -509,9 +505,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * actual text (“password mode”).
    */
   entry_props[PROP_VISIBILITY] =
-      g_param_spec_boolean ("visibility",
-                            P_("Visibility"),
-                            P_("FALSE displays the “invisible char” instead of the actual text (password mode)"),
+      g_param_spec_boolean ("visibility", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -521,9 +515,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Whehter the entry should draw a frame.
    */
   entry_props[PROP_HAS_FRAME] =
-      g_param_spec_boolean ("has-frame",
-                            P_("Has Frame"),
-                            P_("FALSE removes outside bevel from entry"),
+      g_param_spec_boolean ("has-frame", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -533,9 +525,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The character to use when masking entry contents (“password mode”).
    */
   entry_props[PROP_INVISIBLE_CHAR] =
-      g_param_spec_unichar ("invisible-char",
-                            P_("Invisible character"),
-                            P_("The character to use when masking entry contents (in “password mode”)"),
+      g_param_spec_unichar ("invisible-char", NULL, NULL,
                             '*',
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -545,9 +535,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Whether to activate the default widget when Enter is pressed.
    */
   entry_props[PROP_ACTIVATES_DEFAULT] =
-      g_param_spec_boolean ("activates-default",
-                            P_("Activates default"),
-                            P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
+      g_param_spec_boolean ("activates-default", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -557,9 +545,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Number of pixels of the entry scrolled off the screen to the left.
    */
   entry_props[PROP_SCROLL_OFFSET] =
-      g_param_spec_int ("scroll-offset",
-                        P_("Scroll offset"),
-                        P_("Number of pixels of the entry scrolled off the screen to the left"),
+      g_param_spec_int ("scroll-offset", NULL, NULL,
                         0, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
@@ -570,9 +556,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * When %TRUE, pasted multi-line text is truncated to the first line.
    */
   entry_props[PROP_TRUNCATE_MULTILINE] =
-      g_param_spec_boolean ("truncate-multiline",
-                            P_("Truncate multiline"),
-                            P_("Whether to truncate multiline pastes to one line."),
+      g_param_spec_boolean ("truncate-multiline", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -582,9 +566,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * If text is overwritten when typing in the `GtkEntry`.
    */
   entry_props[PROP_OVERWRITE_MODE] =
-      g_param_spec_boolean ("overwrite-mode",
-                            P_("Overwrite mode"),
-                            P_("Whether new text overwrites existing text"),
+      g_param_spec_boolean ("overwrite-mode", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -594,9 +576,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The length of the text in the `GtkEntry`.
    */
   entry_props[PROP_TEXT_LENGTH] =
-      g_param_spec_uint ("text-length",
-                         P_("Text length"),
-                         P_("Length of the text currently in the entry"),
+      g_param_spec_uint ("text-length", NULL, NULL,
                          0, G_MAXUINT16,
                          0,
                          GTK_PARAM_READABLE);
@@ -607,9 +587,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Whether the invisible char has been set for the `GtkEntry`.
    */
   entry_props[PROP_INVISIBLE_CHAR_SET] =
-      g_param_spec_boolean ("invisible-char-set",
-                            P_("Invisible character set"),
-                            P_("Whether the invisible character has been set"),
+      g_param_spec_boolean ("invisible-char-set", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE);
 
@@ -619,9 +597,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The current fraction of the task that's been completed.
    */
   entry_props[PROP_PROGRESS_FRACTION] =
-      g_param_spec_double ("progress-fraction",
-                           P_("Progress Fraction"),
-                           P_("The current fraction of the task that’s been completed"),
+      g_param_spec_double ("progress-fraction", NULL, NULL,
                            0.0, 1.0,
                            0.0,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -635,9 +611,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * See [method@Gtk.Entry.progress_pulse].
    */
   entry_props[PROP_PROGRESS_PULSE_STEP] =
-      g_param_spec_double ("progress-pulse-step",
-                           P_("Progress Pulse Step"),
-                           P_("The fraction of total entry width to move the progress bouncing block for each call to gtk_entry_progress_pulse()"),
+      g_param_spec_double ("progress-pulse-step", NULL, NULL,
                            0.0, 1.0,
                            0.0,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -649,9 +623,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   * and unfocused.
   */
   entry_props[PROP_PLACEHOLDER_TEXT] =
-      g_param_spec_string ("placeholder-text",
-                           P_("Placeholder text"),
-                           P_("Show text in the entry when it’s empty and unfocused"),
+      g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -661,9 +633,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * A `GdkPaintable` to use as the primary icon for the entry.
    */
   entry_props[PROP_PAINTABLE_PRIMARY] =
-      g_param_spec_object ("primary-icon-paintable",
-                           P_("Primary paintable"),
-                           P_("Primary paintable for the entry"),
+      g_param_spec_object ("primary-icon-paintable", NULL, NULL,
                            GDK_TYPE_PAINTABLE,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -673,9 +643,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * A `GdkPaintable` to use as the secondary icon for the entry.
    */
   entry_props[PROP_PAINTABLE_SECONDARY] =
-      g_param_spec_object ("secondary-icon-paintable",
-                           P_("Secondary paintable"),
-                           P_("Secondary paintable for the entry"),
+      g_param_spec_object ("secondary-icon-paintable", NULL, NULL,
                            GDK_TYPE_PAINTABLE,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -685,9 +653,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The icon name to use for the primary icon for the entry.
    */
   entry_props[PROP_ICON_NAME_PRIMARY] =
-      g_param_spec_string ("primary-icon-name",
-                           P_("Primary icon name"),
-                           P_("Icon name for primary icon"),
+      g_param_spec_string ("primary-icon-name", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -697,9 +663,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The icon name to use for the secondary icon for the entry.
    */
   entry_props[PROP_ICON_NAME_SECONDARY] =
-      g_param_spec_string ("secondary-icon-name",
-                           P_("Secondary icon name"),
-                           P_("Icon name for secondary icon"),
+      g_param_spec_string ("secondary-icon-name", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -709,9 +673,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The `GIcon` to use for the primary icon for the entry.
    */
   entry_props[PROP_GICON_PRIMARY] =
-      g_param_spec_object ("primary-icon-gicon",
-                           P_("Primary GIcon"),
-                           P_("GIcon for primary icon"),
+      g_param_spec_object ("primary-icon-gicon", NULL, NULL,
                            G_TYPE_ICON,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -721,9 +683,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The `GIcon` to use for the secondary icon for the entry.
    */
   entry_props[PROP_GICON_SECONDARY] =
-      g_param_spec_object ("secondary-icon-gicon",
-                           P_("Secondary GIcon"),
-                           P_("GIcon for secondary icon"),
+      g_param_spec_object ("secondary-icon-gicon", NULL, NULL,
                            G_TYPE_ICON,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -733,9 +693,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The representation which is used for the primary icon of the entry.
    */
   entry_props[PROP_STORAGE_TYPE_PRIMARY] =
-      g_param_spec_enum ("primary-icon-storage-type",
-                         P_("Primary storage type"),
-                         P_("The representation being used for primary icon"),
+      g_param_spec_enum ("primary-icon-storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
                          GTK_PARAM_READABLE);
@@ -746,9 +704,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The representation which is used for the secondary icon of the entry.
    */
   entry_props[PROP_STORAGE_TYPE_SECONDARY] =
-      g_param_spec_enum ("secondary-icon-storage-type",
-                         P_("Secondary storage type"),
-                         P_("The representation being used for secondary icon"),
+      g_param_spec_enum ("secondary-icon-storage-type", NULL, NULL,
                          GTK_TYPE_IMAGE_TYPE,
                          GTK_IMAGE_EMPTY,
                          GTK_PARAM_READABLE);
@@ -766,9 +722,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * informational purposes.
    */
   entry_props[PROP_ACTIVATABLE_PRIMARY] =
-      g_param_spec_boolean ("primary-icon-activatable",
-                            P_("Primary icon activatable"),
-                            P_("Whether the primary icon is activatable"),
+      g_param_spec_boolean ("primary-icon-activatable", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -785,9 +739,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * informational purposes.
    */
   entry_props[PROP_ACTIVATABLE_SECONDARY] =
-      g_param_spec_boolean ("secondary-icon-activatable",
-                            P_("Secondary icon activatable"),
-                            P_("Whether the secondary icon is activatable"),
+      g_param_spec_boolean ("secondary-icon-activatable", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -804,9 +756,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * when clicked is currently not available.
    */
   entry_props[PROP_SENSITIVE_PRIMARY] =
-      g_param_spec_boolean ("primary-icon-sensitive",
-                            P_("Primary icon sensitive"),
-                            P_("Whether the primary icon is sensitive"),
+      g_param_spec_boolean ("primary-icon-sensitive", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -823,9 +773,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * when clicked is currently not available.
    */
   entry_props[PROP_SENSITIVE_SECONDARY] =
-      g_param_spec_boolean ("secondary-icon-sensitive",
-                            P_("Secondary icon sensitive"),
-                            P_("Whether the secondary icon is sensitive"),
+      g_param_spec_boolean ("secondary-icon-sensitive", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -837,9 +785,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Also see [method@Gtk.Entry.set_icon_tooltip_text].
    */
   entry_props[PROP_TOOLTIP_TEXT_PRIMARY] =
-      g_param_spec_string ("primary-icon-tooltip-text",
-                           P_("Primary icon tooltip text"),
-                           P_("The contents of the tooltip on the primary icon"),
+      g_param_spec_string ("primary-icon-tooltip-text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -851,9 +797,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Also see [method@Gtk.Entry.set_icon_tooltip_text].
    */
   entry_props[PROP_TOOLTIP_TEXT_SECONDARY] =
-      g_param_spec_string ("secondary-icon-tooltip-text",
-                           P_("Secondary icon tooltip text"),
-                           P_("The contents of the tooltip on the secondary icon"),
+      g_param_spec_string ("secondary-icon-tooltip-text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -865,9 +809,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Also see [method@Gtk.Entry.set_icon_tooltip_markup].
    */
   entry_props[PROP_TOOLTIP_MARKUP_PRIMARY] =
-      g_param_spec_string ("primary-icon-tooltip-markup",
-                           P_("Primary icon tooltip markup"),
-                           P_("The contents of the tooltip on the primary icon"),
+      g_param_spec_string ("primary-icon-tooltip-markup", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -879,9 +821,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Also see [method@Gtk.Entry.set_icon_tooltip_markup].
    */
   entry_props[PROP_TOOLTIP_MARKUP_SECONDARY] =
-      g_param_spec_string ("secondary-icon-tooltip-markup",
-                           P_("Secondary icon tooltip markup"),
-                           P_("The contents of the tooltip on the secondary icon"),
+      g_param_spec_string ("secondary-icon-tooltip-markup", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -897,9 +837,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * property.
    */
   entry_props[PROP_IM_MODULE] =
-      g_param_spec_string ("im-module",
-                           P_("IM module"),
-                           P_("Which IM module should be used"),
+      g_param_spec_string ("im-module", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -909,9 +847,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * The auxiliary completion object to use with the entry.
    */
   entry_props[PROP_COMPLETION] =
-      g_param_spec_object ("completion",
-                           P_("Completion"),
-                           P_("The auxiliary completion object"),
+      g_param_spec_object ("completion", NULL, NULL,
                            GTK_TYPE_ENTRY_COMPLETION,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -928,9 +864,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * [property@Gtk.Entry:visibility].
    */
   entry_props[PROP_INPUT_PURPOSE] =
-      g_param_spec_enum ("input-purpose",
-                         P_("Purpose"),
-                         P_("Purpose of the text field"),
+      g_param_spec_enum ("input-purpose", NULL, NULL,
                          GTK_TYPE_INPUT_PURPOSE,
                          GTK_INPUT_PURPOSE_FREE_FORM,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -943,9 +877,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * Also see [property@Gtk.Entry:input-purpose]
    */
   entry_props[PROP_INPUT_HINTS] =
-      g_param_spec_flags ("input-hints",
-                          P_("hints"),
-                          P_("Hints for the text field behaviour"),
+      g_param_spec_flags ("input-hints", NULL, NULL,
                           GTK_TYPE_INPUT_HINTS,
                           GTK_INPUT_HINT_NONE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -961,9 +893,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * [class@Gtk.EntryBuffer] text, i.e. without the preedit string.
    */
   entry_props[PROP_ATTRIBUTES] =
-      g_param_spec_boxed ("attributes",
-                          P_("Attributes"),
-                          P_("A list of style attributes to apply to the text of the entry"),
+      g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -973,9 +903,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * A list of tabstops to apply to the text of the entry.
    */
   entry_props[PROP_TABS] =
-      g_param_spec_boxed ("tabs",
-                          P_("Tabs"),
-                          P_("A list of tabstop locations to apply to the text of the entry"),
+      g_param_spec_boxed ("tabs", NULL, NULL,
                           PANGO_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -986,9 +914,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * to open the Emoji chooser.
    */
   entry_props[PROP_SHOW_EMOJI_ICON] =
-      g_param_spec_boolean ("show-emoji-icon",
-                            P_("Emoji icon"),
-                            P_("Whether to show an icon for Emoji"),
+      g_param_spec_boolean ("show-emoji-icon", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -998,9 +924,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * A menu model whose contents will be appended to the context menu.
    */
   entry_props[PROP_EXTRA_MENU] =
-      g_param_spec_object ("extra-menu",
-                           P_("Extra menu"),
-                           P_("Model menu to append to the context menu"),
+      g_param_spec_object ("extra-menu", NULL, NULL,
                            G_TYPE_MENU_MODEL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1011,9 +935,7 @@ gtk_entry_class_init (GtkEntryClass *class)
    * like `:heart:`.
    */
   entry_props[PROP_ENABLE_EMOJI_COMPLETION] =
-      g_param_spec_boolean ("enable-emoji-completion",
-                            P_("Enable Emoji completion"),
-                            P_("Whether to suggest Emoji replacements"),
+      g_param_spec_boolean ("enable-emoji-completion", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

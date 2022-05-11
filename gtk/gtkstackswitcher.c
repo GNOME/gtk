@@ -549,9 +549,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_STACK,
-                                   g_param_spec_object ("stack",
-                                                        P_("Stack"),
-                                                        P_("Stack"),
+                                   g_param_spec_object ("stack", NULL, NULL,
                                                         GTK_TYPE_STACK,
                                                         GTK_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT));
