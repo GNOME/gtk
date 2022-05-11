@@ -66,10 +66,10 @@ do_links (GtkWidget *do_widget)
                              "as hyperlinks, which can be clicked "
                              "or activated via <a href=\"keynav\">keynav</a> "
                              "and they work fine with other markup, like when "
-                             "searching on <a href=\"http://www.google.com/\">"
-                             "<span color=\"#0266C8\">G</span><span color=\"#F90101\">o</span>"
-                             "<span color=\"#F2B50F\">o</span><span color=\"#0266C8\">g</span>"
-                             "<span color=\"#00933B\">l</span><span color=\"#F90101\">e</span>"
+                             "searching on <a href=\"https://www.linkedin.com/company/hooli\">"
+                             "<span color=\"#0266C8\">H</span><span color=\"#F90101\">o</span>"
+                             "<span color=\"#F2B50F\">o</span><span color=\"#0266C8\">l</span>"
+                             "<span color=\"#00933B\">i</span>"
                              "</a>.");
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
       gtk_label_set_max_width_chars (GTK_LABEL (label), 40);
