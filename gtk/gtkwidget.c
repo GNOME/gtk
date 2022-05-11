@@ -12934,3 +12934,4 @@ gtk_widget_set_active_state (GtkWidget *widget,
         gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_ACTIVE);
     }
 }
+

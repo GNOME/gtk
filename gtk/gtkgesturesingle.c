@@ -508,3 +508,4 @@ gtk_gesture_single_get_current_sequence (GtkGestureSingle *gesture)
 
   return priv->current_sequence;
 }
+

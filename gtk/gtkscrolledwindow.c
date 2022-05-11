@@ -32,10 +32,10 @@
 #include "gtkdragsourceprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerprivate.h"
-#include "gtkeventcontrollerwheel.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturelongpress.h"
 #include "gtkgesturepan.h"
+#include "gtkgesturescroll.h"
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
 #include "gtkgestureprivate.h"
@@ -1363,18 +1363,36 @@ start_scroll_deceleration_cb (gpointer user_data)
   return FALSE;
 }
 
-static gboolean
-scroll_controller_scroll (GtkEventControllerWheel *controller,
-                          double                   delta_x,
-                          double                   delta_y,
-                          GtkScrolledWindow       *scrolled_window)
+static void
+scroll_controller_scroll_begin (GtkGestureScroll  *gesture,
+                                GtkScrolledWindow *scrolled_window)
+{
+}
+
+static void
+scroll_controller_scroll (GtkGestureScroll  *gesture,
+                          double             delta_x,
+                          double             delta_y,
+                          GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv =
     gtk_scrolled_window_get_instance_private (scrolled_window);
   gboolean shifted;
   GdkModifierType state;
 
-  state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (controller));
+  if (may_hscroll (scrolled_window) && !may_vscroll (scrolled_window) && ABS (delta_x) > ABS (delta_y)) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+//    g_print ("claim horz\n");
+  }
+
+  if (may_vscroll (scrolled_window) && !may_hscroll (scrolled_window) && ABS (delta_y) > ABS (delta_x)) {
+    gtk_gesture_set_state (gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+//    g_print ("claim vert\n");
+  }
+
+//  g_print ("WTF %p\n", gesture);
+
+  state = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (gesture));
   shifted = (state & GDK_SHIFT_MASK) != 0;
 
   gtk_scrolled_window_cancel_deceleration (scrolled_window);
@@ -1397,13 +1415,13 @@ scroll_controller_scroll (GtkEventControllerWheel *controller,
       GdkScrollUnit scroll_unit;
 
       adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar));
-      scroll_unit = gtk_event_controller_wheel_get_unit (controller);
+/*      scroll_unit = gtk_event_controller_wheel_get_unit (controller);
 
       if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
         {
           delta_x *= get_wheel_detent_scroll_step (scrolled_window,
                                                    GTK_ORIENTATION_HORIZONTAL);
-        }
+        } FIXME */
 
       new_value = priv->unclamped_hadj_value + delta_x;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
@@ -1418,13 +1436,13 @@ scroll_controller_scroll (GtkEventControllerWheel *controller,
       GdkScrollUnit scroll_unit;
 
       adj = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
-      scroll_unit = gtk_event_controller_wheel_get_unit (controller);
+/*      scroll_unit = gtk_event_controller_wheel_get_unit (controller);
 
       if (scroll_unit == GDK_SCROLL_UNIT_WHEEL)
         {
           delta_y *= get_wheel_detent_scroll_step (scrolled_window,
                                                    GTK_ORIENTATION_VERTICAL);
-        }
+        } FIXME */
 
       new_value = priv->unclamped_vadj_value + delta_y;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
@@ -1440,8 +1458,13 @@ scroll_controller_scroll (GtkEventControllerWheel *controller,
       gdk_source_set_static_name_by_id (priv->scroll_events_overshoot_id,
                                       "[gtk] start_scroll_deceleration_cb");
     }
+}
 
-  return GDK_EVENT_STOP;
+static void
+scroll_controller_scroll_end (GtkGestureScroll  *gesture,
+                              GtkScrolledWindow *scrolled_window)
+{
+
 }
 
 static void
@@ -2073,9 +2096,13 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   gtk_css_node_set_state (priv->junction_node, gtk_css_node_get_state (widget_node));
   g_object_unref (priv->junction_node);
 
-  controller = gtk_event_controller_wheel_new ();
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_scroll_new ());
+  g_signal_connect (controller, "scroll-begin",
+                    G_CALLBACK (scroll_controller_scroll_begin), scrolled_window);
   g_signal_connect (controller, "scroll",
                     G_CALLBACK (scroll_controller_scroll), scrolled_window);
+  g_signal_connect (controller, "scroll-end",
+                    G_CALLBACK (scroll_controller_scroll_end), scrolled_window);
   gtk_widget_add_controller (widget, controller);
 
   controller = gtk_event_controller_motion_new ();
