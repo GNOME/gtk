@@ -401,11 +401,6 @@ gtk_color_editor_init (GtkColorEditor *editor)
   g_type_ensure (GTK_TYPE_COLOR_SWATCH);
   gtk_widget_init_template (GTK_WIDGET (editor));
 
-  if (gtk_widget_get_direction (editor->h_slider) == GTK_TEXT_DIR_RTL)
-    gtk_widget_add_css_class (editor->h_slider, "marks-before");
-  else
-    gtk_widget_add_css_class (editor->h_slider, "marks-after");
-
   /* Create the scaled popup adjustments manually here because connecting user data is not
    * supported by template GtkBuilder xml (it would be possible to set this up in the xml
    * but require 4 separate callbacks and would be rather ugly).

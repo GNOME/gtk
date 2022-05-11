@@ -102,9 +102,6 @@
                 <property name="adjustment">a_adj</property>
                 <property name="scale-type">1</property>
                 <property name="has-origin">False</property>
-                <style>
-                  <class name="marks-before"/>
-                </style>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">2</property>
