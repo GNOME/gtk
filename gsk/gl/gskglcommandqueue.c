@@ -1379,7 +1379,7 @@ gsk_gl_command_queue_do_upload_texture (GskGLCommandQueue *self,
     *conversion = GSK_CONVERSION_LINEARIZE;
   else if (data_profile == gdk_color_profile_get_srgb_linear ())
     *conversion = 0;
-  else
+  else /* FIXME: do colorspace conversion in a shader */
     convert_locally = TRUE;
 
   width = gdk_texture_get_width (texture);

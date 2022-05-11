@@ -920,6 +920,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
 
               return t->texture_id;
             }
+          /* FIXME: do colorspace conversion in a shader */
         }
     }
 
