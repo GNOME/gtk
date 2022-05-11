@@ -1247,9 +1247,6 @@ property_editor (GObject                *object,
       gtk_widget_set_valign (prop_edit, GTK_ALIGN_CENTER);
     }
 
-  if (g_param_spec_get_blurb (spec))
-    gtk_widget_set_tooltip_text (prop_edit, g_param_spec_get_blurb (spec));
-
   notify_property (object, spec);
 
   return prop_edit;
