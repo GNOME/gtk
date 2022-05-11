@@ -1,5 +1,0 @@
-The .po files in this directory contain only the property nicks
-and blurbs in the gtk20-properties domain. See ../po for the 
-ui and error messages in the gtk20 domain.
-
-All the .po files are in UTF-8.

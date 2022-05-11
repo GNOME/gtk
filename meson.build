@@ -892,7 +892,6 @@ if os_unix
 endif
 
 subdir('po')
-subdir('po-properties')
 
 subdir('docs/reference')
 

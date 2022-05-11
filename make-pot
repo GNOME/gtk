@@ -9,11 +9,7 @@
 #
 #   ./make-pot
 #
-# to generate po/gtk40.pot, and like this:
-#
-#   ./make-pot properties
-#
-# to generate po-properties/gtk40-properties.pot.
+# to generate po/gtk40.pot.
 #
 # Various things can be passed in by environment variables, which
 # are heavily inspired by the variables used in po/Makefile.in.in:
@@ -26,19 +22,17 @@
 #          .pot file (defaults to gtk40 or gtk40-properties)
 # XGETTEXT_KEYWORDS - --keyword arguments to pass to xgettext
 
+if test "$1" = "properties"; then
+  echo "'properties' is no longer supported" >&2
+  exit 1
+fi
 
 XGETTEXT="${XGETTEXT:-xgettext}"
 top_srcdir="${top_srcdir:-.}"
 
-if test "$1" = "properties"; then
-  srcdir="${srcdir:-$top_srcdir/po-properties}"
-  GETTEXT_PACKAGE="${GETTEXT_PACKAGE:-gtk40-properties}"
-  XGETTEXT_KEYWORDS="${XGETTEXT_KEYWORDS:- --keyword --keyword=P_ }"
-else
-  srcdir="${srcdir:-$top_srcdir/po}"
-  GETTEXT_PACKAGE="${GETTEXT_PACKAGE:-gtk40}"
-  XGETTEXT_KEYWORDS="${XGETTEXT_KEYWORDS:- --keyword=_ --keyword=N_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --keyword=g_dngettext:2,3 }"
-fi
+srcdir="${srcdir:-$top_srcdir/po}"
+GETTEXT_PACKAGE="${GETTEXT_PACKAGE:-gtk40}"
+XGETTEXT_KEYWORDS="${XGETTEXT_KEYWORDS:- --keyword=_ --keyword=N_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --keyword=g_dngettext:2,3 }"
 
 $XGETTEXT --default-domain="$GETTEXT_PACKAGE" \
           --directory="$top_srcdir" \
