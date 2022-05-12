@@ -833,11 +833,11 @@ static void
 gdk_memory_convert_transform (guchar              *dest_data,
                               gsize                dest_stride,
                               GdkMemoryFormat      dest_format,
-                              GdkColorSpace       *dest_space,
+                              GdkColorSpace       *dest_color_space,
                               const guchar        *src_data,
                               gsize                src_stride,
                               GdkMemoryFormat      src_format,
-                              GdkColorSpace       *src_space,
+                              GdkColorSpace       *src_color_space,
                               gsize                width,
                               gsize                height)
 {
@@ -847,12 +847,11 @@ gdk_memory_convert_transform (guchar              *dest_data,
   guchar *src_tmp, *dest_tmp;
   gsize y;
 
-  transform = cmsCreateTransform (gdk_lcms_color_space_get_lcms_profile (src_space),
-                                  src_desc->lcms.type,
-                                  gdk_lcms_color_space_get_lcms_profile (dest_space),
-                                  dest_desc->lcms.type,
-                                  INTENT_PERCEPTUAL,
-                                  cmsFLAGS_COPY_ALPHA);
+  transform = gdk_color_space_lookup_transform (src_color_space,
+                                                src_desc->lcms.type,
+                                                dest_color_space,
+                                                dest_desc->lcms.type);
+
   if (src_desc->to_lcms)
     src_tmp = g_malloc_n (src_desc->lcms.bpp, width);
   else
@@ -881,7 +880,6 @@ gdk_memory_convert_transform (guchar              *dest_data,
 
   g_free (src_tmp);
   g_free (dest_tmp);
-  cmsDeleteTransform (transform);
 }
 
 void

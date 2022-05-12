@@ -253,3 +253,83 @@ gdk_color_space_get_srgb_linear (void)
 
   return srgb_linear_color_space;
 }
+
+typedef struct _GdkColorTransformCache GdkColorTransformCache;
+
+struct _GdkColorTransformCache
+{
+  GdkColorSpace *source;
+  guint          source_type;
+  GdkColorSpace *dest;
+  guint          dest_type;
+};
+
+static void
+gdk_color_transform_cache_free (gpointer data)
+{
+  g_free (data);
+}
+
+static guint
+gdk_color_transform_cache_hash (gconstpointer data)
+{
+  const GdkColorTransformCache *cache = data;
+
+  return g_direct_hash (cache->source) ^
+         (g_direct_hash (cache->dest) >> 2) ^
+         ((cache->source_type << 16) | (cache->source_type >> 16)) ^
+         cache->dest_type;
+}
+
+static gboolean
+gdk_color_transform_cache_equal (gconstpointer data1,
+                                 gconstpointer data2)
+{
+  const GdkColorTransformCache *cache1 = data1;
+  const GdkColorTransformCache *cache2 = data2;
+
+  return cache1->source == cache2->source &&
+         cache1->source_type == cache2->source_type &&
+         cache1->dest == cache2->dest &&
+         cache1->dest_type == cache2->dest_type;
+}
+
+cmsHTRANSFORM *
+gdk_color_space_lookup_transform (GdkColorSpace *source,
+                                  guint          source_type,
+                                  GdkColorSpace *dest,
+                                  guint          dest_type)
+{
+  GdkColorTransformCache *entry;
+  static GHashTable *cache = NULL;
+  cmsHTRANSFORM *transform;
+
+  if (cache == NULL)
+    cache = g_hash_table_new_full (gdk_color_transform_cache_hash,
+                                   gdk_color_transform_cache_equal,
+                                   gdk_color_transform_cache_free,
+                                   cmsDeleteTransform);
+
+  transform = g_hash_table_lookup (cache,
+                                   &(GdkColorTransformCache) {
+                                     source, source_type,
+                                     dest, dest_type
+                                   });
+  if (G_UNLIKELY (transform == NULL && source && dest))
+    {
+      transform = cmsCreateTransform (gdk_lcms_color_space_get_lcms_profile (source),
+                                      source_type,
+                                      gdk_lcms_color_space_get_lcms_profile (dest),
+                                      dest_type,
+                                      INTENT_PERCEPTUAL,
+                                      cmsFLAGS_COPY_ALPHA);
+      entry = g_new (GdkColorTransformCache, 1);
+      *entry = (GdkColorTransformCache) {
+                 source, source_type,
+                 dest, dest_type
+               };
+      g_hash_table_insert (cache, entry, transform);
+    }
+
+  return transform;
+}

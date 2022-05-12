@@ -2,6 +2,7 @@
 #define __GDK_COLOR_SPACE_PRIVATE_H__
 
 #include "gdkcolorspace.h"
+#include <lcms2.h>
 
 G_BEGIN_DECLS
 
@@ -27,6 +28,11 @@ struct _GdkColorSpaceClass
 
 
 GdkColorSpace *          gdk_color_space_get_srgb_linear            (void) G_GNUC_CONST;
+
+cmsHTRANSFORM *          gdk_color_space_lookup_transform           (GdkColorSpace          *source,
+                                                                     guint                   source_type,
+                                                                     GdkColorSpace          *dest,
+                                                                     guint                   dest_type);
 
 G_END_DECLS
 
