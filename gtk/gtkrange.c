@@ -30,6 +30,7 @@
 #include "gtkaccessible.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkcolorscaleprivate.h"
+#include "gtkcssboxesprivate.h"
 #include "gtkenums.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkeventcontrollerscroll.h"
@@ -42,6 +43,7 @@
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkscale.h"
+#include "gtksnapshot.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -1670,9 +1672,15 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
    * so we let it...
    */
   if (GTK_IS_COLOR_SCALE (widget))
-    gtk_color_scale_snapshot_trough (GTK_COLOR_SCALE (widget), snapshot,
-                                     gtk_widget_get_width (GTK_WIDGET (gizmo)),
-                                     gtk_widget_get_height (GTK_WIDGET (gizmo)));
+    {
+      GtkCssBoxes boxes;
+      gtk_css_boxes_init (&boxes, GTK_WIDGET (gizmo));
+      gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
+      gtk_color_scale_snapshot_trough (GTK_COLOR_SCALE (widget), snapshot,
+                                       gtk_widget_get_width (GTK_WIDGET (gizmo)),
+                                       gtk_widget_get_height (GTK_WIDGET (gizmo)));
+      gtk_snapshot_pop (snapshot);
+    }
 
   if (priv->show_fill_level &&
       gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
