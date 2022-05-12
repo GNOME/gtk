@@ -598,9 +598,7 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
    * The dialog's `GtkAppChooserWidget` content type will
    * be guessed from the file, if present.
    */
-  pspec = g_param_spec_object ("gfile",
-                               P_("GFile"),
-                               P_("The GFile used by the app chooser dialog"),
+  pspec = g_param_spec_object ("gfile", NULL, NULL,
                                G_TYPE_FILE,
                                G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
                                G_PARAM_STATIC_STRINGS);
@@ -613,9 +611,7 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
    *
    * The string may contain Pango markup.
    */
-  pspec = g_param_spec_string ("heading",
-                               P_("Heading"),
-                               P_("The text to show at the top of the dialog"),
+  pspec = g_param_spec_string ("heading", NULL, NULL,
                                NULL,
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS |
                                G_PARAM_EXPLICIT_NOTIFY);

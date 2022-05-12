@@ -582,9 +582,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_CHILD,
-                                   g_param_spec_object ("child",
-                                                        P_("Child"),
-                                                        P_("The child for this page"),
+                                   g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
@@ -595,9 +593,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_TAB,
-                                   g_param_spec_object ("tab",
-                                                        P_("Tab"),
-                                                        P_("The tab widget for this page"),
+                                   g_param_spec_object ("tab", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
@@ -608,9 +604,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_MENU,
-                                   g_param_spec_object ("menu",
-                                                        P_("Menu"),
-                                                        P_("The label widget displayed in the child’s menu entry"),
+                                   g_param_spec_object ("menu", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
@@ -621,9 +615,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_TAB_LABEL,
-                                   g_param_spec_string ("tab-label",
-                                                        P_("Tab label"),
-                                                        P_("The text of the tab widget"),
+                                   g_param_spec_string ("tab-label", NULL, NULL,
                                                         NULL,
                                                          GTK_PARAM_READWRITE));
 
@@ -634,9 +626,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_MENU_LABEL,
-                                   g_param_spec_string ("menu-label",
-                                                        P_("Menu label"),
-                                                        P_("The text of the menu widget"),
+                                   g_param_spec_string ("menu-label", NULL, NULL,
                                                         NULL,
                                                          GTK_PARAM_READWRITE));
 
@@ -647,9 +637,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_POSITION,
-                                   g_param_spec_int ("position",
-                                                     P_("Position"),
-                                                     P_("The index of the child in the parent"),
+                                   g_param_spec_int ("position", NULL, NULL,
                                                      -1, G_MAXINT, 0,
                                                      GTK_PARAM_READWRITE));
 
@@ -660,9 +648,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_TAB_EXPAND,
-                                   g_param_spec_boolean ("tab-expand",
-                                                         P_("Tab expand"),
-                                                         P_("Whether to expand the child’s tab"),
+                                   g_param_spec_boolean ("tab-expand", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -673,9 +659,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_TAB_FILL,
-                                   g_param_spec_boolean ("tab-fill",
-                                                         P_("Tab fill"),
-                                                         P_("Whether the child’s tab should fill the allocated area"),
+                                   g_param_spec_boolean ("tab-fill", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -686,9 +670,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_REORDERABLE,
-                                   g_param_spec_boolean ("reorderable",
-                                                         P_("Tab reorderable"),
-                                                         P_("Whether the tab is reorderable by user action"),
+                                   g_param_spec_boolean ("reorderable", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -699,9 +681,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_DETACHABLE,
-                                   g_param_spec_boolean ("detachable",
-                                                         P_("Tab detachable"),
-                                                         P_("Whether the tab is detachable"),
+                                   g_param_spec_boolean ("detachable", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1122,9 +1102,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * The index of the current page.
    */
   properties[PROP_PAGE] =
-      g_param_spec_int ("page",
-                        P_("Page"),
-                        P_("The index of the current page"),
+      g_param_spec_int ("page", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -1135,9 +1113,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Which side of the notebook holds the tabs.
    */
   properties[PROP_TAB_POS] =
-      g_param_spec_enum ("tab-pos",
-                         P_("Tab Position"),
-                         P_("Which side of the notebook holds the tabs"),
+      g_param_spec_enum ("tab-pos", NULL, NULL,
                          GTK_TYPE_POSITION_TYPE,
                          GTK_POS_TOP,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -1148,9 +1124,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Whether tabs should be shown.
    */
   properties[PROP_SHOW_TABS] =
-      g_param_spec_boolean ("show-tabs",
-                            P_("Show Tabs"),
-                            P_("Whether tabs should be shown"),
+      g_param_spec_boolean ("show-tabs", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1160,9 +1134,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Whether the border should be shown.
    */
   properties[PROP_SHOW_BORDER] =
-      g_param_spec_boolean ("show-border",
-                            P_("Show Border"),
-                            P_("Whether the border should be shown"),
+      g_param_spec_boolean ("show-border", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1172,9 +1144,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * If %TRUE, scroll arrows are added if there are too many pages to fit.
    */
   properties[PROP_SCROLLABLE] =
-      g_param_spec_boolean ("scrollable",
-                            P_("Scrollable"),
-                            P_("If TRUE, scroll arrows are added if there are too many tabs to fit"),
+      g_param_spec_boolean ("scrollable", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1184,9 +1154,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * If %TRUE, pressing the right mouse button on the notebook shows a page switching menu.
    */
   properties[PROP_ENABLE_POPUP] =
-      g_param_spec_boolean ("enable-popup",
-                            P_("Enable Popup"),
-                            P_("If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"),
+      g_param_spec_boolean ("enable-popup", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1196,9 +1164,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * Group name for tab drag and drop.
    */
   properties[PROP_GROUP_NAME] =
-      g_param_spec_string ("group-name",
-                           P_("Group Name"),
-                           P_("Group name for tab drag and drop"),
+      g_param_spec_string ("group-name", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1208,9 +1174,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * A selection model with the pages.
    */
   properties[PROP_PAGES] = 
-      g_param_spec_object ("pages",
-                           P_("Pages"),
-                           P_("The pages of the notebook."),
+      g_param_spec_object ("pages", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READABLE);
 

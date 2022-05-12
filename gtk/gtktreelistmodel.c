@@ -686,9 +686,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
    * If all rows should be expanded by default.
    */
   properties[PROP_AUTOEXPAND] =
-      g_param_spec_boolean ("autoexpand",
-                            P_("autoexpand"),
-                            P_("If all rows should be expanded by default"),
+      g_param_spec_boolean ("autoexpand", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -698,9 +696,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
    * The root model displayed.
    */
   properties[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Model"),
-                           P_("The root model displayed"),
+      g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -714,9 +710,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
    * models are pass through unmodified.
    */
   properties[PROP_PASSTHROUGH] =
-      g_param_spec_boolean ("passthrough",
-                            P_("passthrough"),
-                            P_("If child model values are passed through"),
+      g_param_spec_boolean ("passthrough", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1055,9 +1049,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
    * The model holding the row's children.
    */
   row_properties[ROW_PROP_CHILDREN] =
-      g_param_spec_object ("children",
-                           P_("Children"),
-                           P_("Model holding the row’s children"),
+      g_param_spec_object ("children", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READABLE);
 
@@ -1067,9 +1059,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
    * The depth in the tree of this row.
    */
   row_properties[ROW_PROP_DEPTH] =
-      g_param_spec_uint ("depth",
-                         P_("Depth"),
-                         P_("Depth in the tree"),
+      g_param_spec_uint ("depth", NULL, NULL,
                          0, G_MAXUINT, 0,
                          GTK_PARAM_READABLE);
 
@@ -1079,9 +1069,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
    * If this row can ever be expanded.
    */
   row_properties[ROW_PROP_EXPANDABLE] =
-      g_param_spec_boolean ("expandable",
-                            P_("Expandable"),
-                            P_("If this row can ever be expanded"),
+      g_param_spec_boolean ("expandable", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READABLE);
 
@@ -1091,9 +1079,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
    * If this row is currently expanded.
    */
   row_properties[ROW_PROP_EXPANDED] =
-      g_param_spec_boolean ("expanded",
-                            P_("Expanded"),
-                            P_("If this row is currently expanded"),
+      g_param_spec_boolean ("expanded", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1103,9 +1089,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
    * The item held in this row.
    */
   row_properties[ROW_PROP_ITEM] =
-      g_param_spec_object ("item",
-                           P_("Item"),
-                           P_("The item held in this row"),
+      g_param_spec_object ("item", NULL, NULL,
                            G_TYPE_OBJECT,
                            GTK_PARAM_READABLE);
 

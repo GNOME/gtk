@@ -1247,9 +1247,6 @@ property_editor (GObject                *object,
       gtk_widget_set_valign (prop_edit, GTK_ALIGN_CENTER);
     }
 
-  if (g_param_spec_get_blurb (spec))
-    gtk_widget_set_tooltip_text (prop_edit, g_param_spec_get_blurb (spec));
-
   notify_property (object, spec);
 
   return prop_edit;
@@ -1791,15 +1788,15 @@ gtk_inspector_prop_editor_class_init (GtkInspectorPropEditorClass *klass)
                   G_TYPE_NONE, 3, G_TYPE_OBJECT, G_TYPE_STRING, G_TYPE_STRING);
 
   g_object_class_install_property (object_class, PROP_OBJECT,
-      g_param_spec_object ("object", "Object", "The object owning the property",
+      g_param_spec_object ("object", NULL, NULL,
                            G_TYPE_OBJECT, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (object_class, PROP_NAME,
-      g_param_spec_string ("name", "Name", "The property name",
+      g_param_spec_string ("name", NULL, NULL,
                            NULL, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (object_class, PROP_SIZE_GROUP,
-      g_param_spec_object ("size-group", "Size group", "The size group for the value part",
+      g_param_spec_object ("size-group", NULL, NULL,
                            GTK_TYPE_SIZE_GROUP, G_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 }
 

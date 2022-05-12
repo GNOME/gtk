@@ -208,7 +208,7 @@ gtk_inspector_type_popover_class_init (GtkInspectorTypePopoverClass *klass)
   object_class->set_property = gtk_inspector_type_popover_set_property;
 
   g_object_class_install_property (object_class, PROP_TYPE,
-      g_param_spec_gtype ("type", "Type", "Type",
+      g_param_spec_gtype ("type", NULL, NULL,
                           G_TYPE_NONE, G_PARAM_READWRITE));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/type-info.ui");

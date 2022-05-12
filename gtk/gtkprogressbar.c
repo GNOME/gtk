@@ -184,9 +184,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * Invert the direction in which the progress bar grows.
    */
   progress_props[PROP_INVERTED] =
-      g_param_spec_boolean ("inverted",
-                            P_("Inverted"),
-                            P_("Invert the direction in which the progress bar grows"),
+      g_param_spec_boolean ("inverted", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -196,9 +194,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * The fraction of total work that has been completed.
    */
   progress_props[PROP_FRACTION] =
-      g_param_spec_double ("fraction",
-                           P_("Fraction"),
-                           P_("The fraction of total work that has been completed"),
+      g_param_spec_double ("fraction", NULL, NULL,
                            0.0, 1.0,
                            0.0,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -209,9 +205,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * The fraction of total progress to move the bounding block when pulsed.
    */
   progress_props[PROP_PULSE_STEP] =
-      g_param_spec_double ("pulse-step",
-                           P_("Pulse Step"),
-                           P_("The fraction of total progress to move the bouncing block when pulsed"),
+      g_param_spec_double ("pulse-step", NULL, NULL,
                            0.0, 1.0,
                            0.1,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -222,9 +216,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * Text to be displayed in the progress bar.
    */
   progress_props[PROP_TEXT] =
-      g_param_spec_string ("text",
-                           P_("Text"),
-                           P_("Text to be displayed in the progress bar"),
+      g_param_spec_string ("text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -243,9 +235,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * to %TRUE and [property@Gtk.ProgressBar:text] to the empty string (not %NULL).
    */
   progress_props[PROP_SHOW_TEXT] =
-      g_param_spec_boolean ("show-text",
-                            P_("Show text"),
-                            P_("Whether the progress is shown as text."),
+      g_param_spec_boolean ("show-text", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -263,10 +253,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    * progress bar's width is [method@Gtk.Widget.set_size_request].
    */
   progress_props[PROP_ELLIPSIZE] =
-      g_param_spec_enum ("ellipsize",
-                         P_("Ellipsize"),
-                         P_("The preferred place to ellipsize the string, if the progress bar "
-                            "does not have enough room to display the entire string, if at all."),
+      g_param_spec_enum ("ellipsize", NULL, NULL,
                          PANGO_TYPE_ELLIPSIZE_MODE,
                          PANGO_ELLIPSIZE_NONE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);

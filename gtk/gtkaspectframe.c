@@ -140,9 +140,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
-                                   g_param_spec_float ("xalign",
-                                                       P_("Horizontal Alignment"),
-                                                       P_("X alignment of the child"),
+                                   g_param_spec_float ("xalign", NULL, NULL,
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
@@ -152,9 +150,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
-                                   g_param_spec_float ("yalign",
-                                                       P_("Vertical Alignment"),
-                                                       P_("Y alignment of the child"),
+                                   g_param_spec_float ("yalign", NULL, NULL,
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
@@ -167,9 +163,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_RATIO,
-                                   g_param_spec_float ("ratio",
-                                                       P_("Ratio"),
-                                                       P_("Aspect ratio if obey_child is FALSE"),
+                                   g_param_spec_float ("ratio", NULL, NULL,
                                                        MIN_RATIO, MAX_RATIO, 1.0,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
@@ -179,9 +173,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_OBEY_CHILD,
-                                   g_param_spec_boolean ("obey-child",
-                                                         P_("Obey child"),
-                                                         P_("Force aspect ratio to match that of the frame’s child"),
+                                   g_param_spec_boolean ("obey-child", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
@@ -191,9 +183,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
-                                   g_param_spec_object ("child",
-                                                        P_("Child"),
-                                                        P_("The child widget"),
+                                   g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

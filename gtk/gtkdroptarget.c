@@ -624,9 +624,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * The `GdkDragActions` that this drop target supports.
    */
   properties[PROP_ACTIONS] =
-       g_param_spec_flags ("actions",
-                           P_("Actions"),
-                           P_("The actions supported by this drop target"),
+       g_param_spec_flags ("actions", NULL, NULL,
                            GDK_TYPE_DRAG_ACTION, 0,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -638,9 +636,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * Deprecated: 4.4: Use [property@Gtk.DropTarget:current-drop] instead
    */
   properties[PROP_DROP] =
-       g_param_spec_object ("drop",
-                            P_("Drop"),
-                            P_("Current drop"),
+       g_param_spec_object ("drop", NULL, NULL,
                             GDK_TYPE_DROP,
                             GTK_PARAM_READABLE | G_PARAM_DEPRECATED);
 
@@ -652,9 +648,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * Since: 4.4
    */
   properties[PROP_CURRENT_DROP] =
-       g_param_spec_object ("current-drop",
-                            P_("Current drop"),
-                            P_("Current drop"),
+       g_param_spec_object ("current-drop", NULL, NULL,
                             GDK_TYPE_DROP,
                             GTK_PARAM_READABLE);
 
@@ -664,9 +658,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * The `GdkContentFormats` that determine the supported data formats.
    */
   properties[PROP_FORMATS] =
-       g_param_spec_boxed ("formats",
-                           P_("Formats"),
-                           P_("The supported formats"),
+       g_param_spec_boxed ("formats", NULL, NULL,
                            GDK_TYPE_CONTENT_FORMATS,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
@@ -693,9 +685,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * so enabling it there is free.
    */
   properties[PROP_PRELOAD] =
-       g_param_spec_boolean ("preload",
-                             P_("Preload"),
-                             P_("Whether drop data should be preloaded while hovering"),
+       g_param_spec_boolean ("preload", NULL, NULL,
                              FALSE,
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -713,9 +703,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
    * of available data.
    */
   properties[PROP_VALUE] =
-       g_param_spec_boxed ("value",
-                           P_("Value"),
-                           P_("The value for this drop operation"),
+       g_param_spec_boxed ("value", NULL, NULL,
                            G_TYPE_VALUE,
                            GTK_PARAM_READABLE);
 

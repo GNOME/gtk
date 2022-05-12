@@ -207,9 +207,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
    * [signal@Gtk.EventControllerMotion::leave] is emitted.
    */
   props[PROP_IS_POINTER] =
-      g_param_spec_boolean ("is-pointer",
-                            P_("Is Pointer"),
-                            P_("Whether the pointer is in the controllers widget"),
+      g_param_spec_boolean ("is-pointer", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE);
 
@@ -225,9 +223,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
    * [signal@Gtk.EventControllerMotion::leave] is emitted.
    */
   props[PROP_CONTAINS_POINTER] =
-      g_param_spec_boolean ("contains-pointer",
-                            P_("Contains Pointer"),
-                            P_("Whether the pointer is in the controllers widget or a descendant"),
+      g_param_spec_boolean ("contains-pointer", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE);
 

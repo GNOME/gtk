@@ -2292,9 +2292,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * for the label to display them.
    */
   label_props[PROP_LABEL] =
-      g_param_spec_string ("label",
-                           P_("Label"),
-                           P_("The text of the label"),
+      g_param_spec_string ("label", NULL, NULL,
                            "",
                            GTK_PARAM_READWRITE);
 
@@ -2304,9 +2302,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * A list of style attributes to apply to the text of the label.
    */
   label_props[PROP_ATTRIBUTES] =
-      g_param_spec_boxed ("attributes",
-                          P_("Attributes"),
-                          P_("A list of style attributes to apply to the text of the label"),
+      g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE);
 
@@ -2318,9 +2314,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * See [func@Pango.parse_markup].
    */
   label_props[PROP_USE_MARKUP] =
-      g_param_spec_boolean ("use-markup",
-                            P_("Use markup"),
-                            P_("The text of the label includes XML markup. See pango_parse_markup()"),
+      g_param_spec_boolean ("use-markup", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -2330,9 +2324,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * %TRUE if the text of the label indicates a mnemonic with _.
    */
   label_props[PROP_USE_UNDERLINE] =
-      g_param_spec_boolean ("use-underline",
-                            P_("Use underline"),
-                            P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+      g_param_spec_boolean ("use-underline", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -2345,9 +2337,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * See [property@Gtk.Label:xalign] for that.
    */
   label_props[PROP_JUSTIFY] =
-      g_param_spec_enum ("justify",
-                         P_("Justification"),
-                         P_("The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkLabel:xalign for that"),
+      g_param_spec_enum ("justify", NULL, NULL,
                          GTK_TYPE_JUSTIFICATION,
                          GTK_JUSTIFY_LEFT,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2361,9 +2351,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * labels size allocation is positioned in the space available for the label.
    */
   label_props[PROP_XALIGN] =
-      g_param_spec_float ("xalign",
-                          P_("X align"),
-                          P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
+      g_param_spec_float ("xalign", NULL, NULL,
                           0.0, 1.0,
                           0.5,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2377,9 +2365,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * labels size allocation is positioned in the space available for the label.
    */
   label_props[PROP_YALIGN] =
-      g_param_spec_float ("yalign",
-                          P_("Y align"),
-                          P_("The vertical alignment, from 0 (top) to 1 (bottom)"),
+      g_param_spec_float ("yalign", NULL, NULL,
                           0.0, 1.0,
                           0.5,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2390,9 +2376,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * %TRUE if the label text will wrap if it gets too wide.
    */
   label_props[PROP_WRAP] =
-      g_param_spec_boolean ("wrap",
-                            P_("Line wrap"),
-                            P_("If set, wrap lines if the text becomes too wide"),
+      g_param_spec_boolean ("wrap", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -2409,9 +2393,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * property.
    */
   label_props[PROP_WRAP_MODE] =
-      g_param_spec_enum ("wrap-mode",
-                         P_("Line wrap mode"),
-                         P_("If wrap is set, controls how linewrapping is done"),
+      g_param_spec_enum ("wrap-mode", NULL, NULL,
                          PANGO_TYPE_WRAP_MODE,
                          PANGO_WRAP_WORD,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2430,9 +2412,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * Since: 4.6
    */
   label_props[PROP_NATURAL_WRAP_MODE] =
-      g_param_spec_enum ("natural-wrap-mode",
-                         P_("Natural wrap mode"),
-                         P_("If wrap is set, controls linewrapping for natural size requests"),
+      g_param_spec_enum ("natural-wrap-mode", NULL, NULL,
                          GTK_TYPE_NATURAL_WRAP_MODE,
                          GTK_NATURAL_WRAP_INHERIT,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2443,9 +2423,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * Whether the label text can be selected with the mouse.
    */
   label_props[PROP_SELECTABLE] =
-      g_param_spec_boolean ("selectable",
-                            P_("Selectable"),
-                            P_("Whether the label text can be selected with the mouse"),
+      g_param_spec_boolean ("selectable", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -2455,9 +2433,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * The mnemonic accelerator key for the label.
    */
   label_props[PROP_MNEMONIC_KEYVAL] =
-      g_param_spec_uint ("mnemonic-keyval",
-                         P_("Mnemonic key"),
-                         P_("The mnemonic accelerator key for this label"),
+      g_param_spec_uint ("mnemonic-keyval", NULL, NULL,
                          0, G_MAXUINT,
                          GDK_KEY_VoidSymbol,
                          GTK_PARAM_READABLE);
@@ -2468,9 +2444,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * The widget to be activated when the labels mnemonic key is pressed.
    */
   label_props[PROP_MNEMONIC_WIDGET] =
-      g_param_spec_object ("mnemonic-widget",
-                           P_("Mnemonic widget"),
-                           P_("The widget to be activated when the label’s mnemonic key is pressed"),
+      g_param_spec_object ("mnemonic-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE);
 
@@ -2489,9 +2463,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * and [method@Gtk.Label.set_width_chars].
    */
   label_props[PROP_ELLIPSIZE] =
-      g_param_spec_enum ("ellipsize",
-                         P_("Ellipsize"),
-                         P_("The preferred place to ellipsize the string, if the label does not have enough room to display the entire string"),
+      g_param_spec_enum ("ellipsize", NULL, NULL,
                          PANGO_TYPE_ELLIPSIZE_MODE,
                          PANGO_ELLIPSIZE_NONE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2508,9 +2480,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * determine the width of ellipsized and wrapped labels.
    */
   label_props[PROP_WIDTH_CHARS] =
-      g_param_spec_int ("width-chars",
-                        P_("Width In Characters"),
-                        P_("The desired width of the label, in characters"),
+      g_param_spec_int ("width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2526,9 +2496,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * of text changes would be distracting, e.g. in a statusbar.
    */
   label_props[PROP_SINGLE_LINE_MODE] =
-      g_param_spec_boolean ("single-line-mode",
-                            P_("Single Line Mode"),
-                            P_("Whether the label is in single line mode"),
+      g_param_spec_boolean ("single-line-mode", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -2544,9 +2512,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * determine the width of ellipsized and wrapped labels.
    */
   label_props[PROP_MAX_WIDTH_CHARS] =
-      g_param_spec_int ("max-width-chars",
-                        P_("Maximum Width In Characters"),
-                        P_("The desired maximum width of the label, in characters"),
+      g_param_spec_int ("max-width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2561,9 +2527,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * Set this property to -1 if you don't want to limit the number of lines.
    */
   label_props[PROP_LINES] =
-      g_param_spec_int ("lines",
-                        P_("Number of lines"),
-                        P_("The desired number of lines, when ellipsizing a wrapping label"),
+      g_param_spec_int ("lines", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -2574,9 +2538,7 @@ gtk_label_class_init (GtkLabelClass *class)
    * A menu model whose contents will be appended to the context menu.
    */
   label_props[PROP_EXTRA_MENU] =
-      g_param_spec_object ("extra-menu",
-                          P_("Extra menu"),
-                          P_("Menu model to append to the context menu"),
+      g_param_spec_object ("extra-menu", NULL, NULL,
                           G_TYPE_MENU_MODEL,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

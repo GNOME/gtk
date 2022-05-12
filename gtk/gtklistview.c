@@ -815,9 +815,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * Factory for populating list items.
    */
   properties[PROP_FACTORY] =
-    g_param_spec_object ("factory",
-                         P_("Factory"),
-                         P_("Factory for populating list items"),
+    g_param_spec_object ("factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -827,9 +825,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * Model for the items displayed.
    */
   properties[PROP_MODEL] =
-    g_param_spec_object ("model",
-                         P_("Model"),
-                         P_("Model for the items displayed"),
+    g_param_spec_object ("model", NULL, NULL,
                          GTK_TYPE_SELECTION_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -839,9 +835,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * Show separators between rows.
    */
   properties[PROP_SHOW_SEPARATORS] =
-    g_param_spec_boolean ("show-separators",
-                          P_("Show separators"),
-                          P_("Show separators between rows"),
+    g_param_spec_boolean ("show-separators", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -851,9 +845,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * Activate rows on single click and select them on hover.
    */
   properties[PROP_SINGLE_CLICK_ACTIVATE] =
-    g_param_spec_boolean ("single-click-activate",
-                          P_("Single click activate"),
-                          P_("Activate rows on single click"),
+    g_param_spec_boolean ("single-click-activate", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -863,9 +855,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * Allow rubberband selection.
    */
   properties[PROP_ENABLE_RUBBERBAND] =
-    g_param_spec_boolean ("enable-rubberband",
-                          P_("Enable rubberband selection"),
-                          P_("Allow selecting items by dragging with the mouse"),
+    g_param_spec_boolean ("enable-rubberband", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

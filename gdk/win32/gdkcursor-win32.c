@@ -231,22 +231,16 @@ gdk_win32_hcursor_class_init (GdkWin32HCursorClass *klass)
   object_class->set_property = gdk_win32_hcursor_set_property;
 
   hcursor_props[PROP_DISPLAY] =
-      g_param_spec_object ("display",
-                           P_("Display"),
-                           P_("The display that will use this cursor"),
+      g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
                            G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 
   hcursor_props[PROP_HANDLE] =
-      g_param_spec_pointer ("handle",
-                            P_("Handle"),
-                            P_("The HCURSOR handle for this cursor"),
+      g_param_spec_pointer ("handle", NULL, NULL,
                             G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 
   hcursor_props[PROP_DESTROYABLE] =
-      g_param_spec_boolean ("destroyable",
-                            P_("Destroyable"),
-                            P_("Whether calling DestroyCursor() is allowed on this cursor"),
+      g_param_spec_boolean ("destroyable", NULL, NULL,
                             TRUE,
                             G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE);
 

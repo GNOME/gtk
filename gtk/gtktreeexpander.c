@@ -528,9 +528,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
    * The child widget with the actual contents.
    */
   properties[PROP_CHILD] =
-    g_param_spec_object ("child",
-                         P_("Child"),
-                         P_("The child widget with the actual contents"),
+    g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -540,9 +538,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
    * The item held by this expander's row.
    */
   properties[PROP_ITEM] =
-      g_param_spec_object ("item",
-                           P_("Item"),
-                           P_("The item held by this expander's row"),
+      g_param_spec_object ("item", NULL, NULL,
                            G_TYPE_OBJECT,
                            G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -552,9 +548,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
    * The list row to track for expander state.
    */
   properties[PROP_LIST_ROW] =
-    g_param_spec_object ("list-row",
-                         P_("List row"),
-                         P_("The list row to track for expander state"),
+    g_param_spec_object ("list-row", NULL, NULL,
                          GTK_TYPE_TREE_LIST_ROW,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -566,9 +560,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
    * Since: 4.6
    */
   properties[PROP_INDENT_FOR_ICON] =
-      g_param_spec_boolean ("indent-for-icon",
-                            P_ ("Indent without expander"),
-                            P_ ("If the TreeExpander should indent the child if no expander-icon is shown"),
+      g_param_spec_boolean ("indent-for-icon", NULL, NULL,
                             TRUE,
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

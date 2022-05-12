@@ -200,9 +200,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
    * The widget receiving the `GdkEvents` that the controller will handle.
    */
   properties[PROP_WIDGET] =
-      g_param_spec_object ("widget",
-                           P_("Widget"),
-                           P_("Widget the gesture relates to"),
+      g_param_spec_object ("widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READABLE);
 
@@ -212,9 +210,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
    * The propagation phase at which this controller will handle events.
    */
   properties[PROP_PROPAGATION_PHASE] =
-      g_param_spec_enum ("propagation-phase",
-                         P_("Propagation phase"),
-                         P_("Propagation phase at which this controller is run"),
+      g_param_spec_enum ("propagation-phase", NULL, NULL,
                          GTK_TYPE_PROPAGATION_PHASE,
                          GTK_PHASE_BUBBLE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -225,9 +221,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
    * The limit for which events this controller will handle.
    */
   properties[PROP_PROPAGATION_LIMIT] =
-      g_param_spec_enum ("propagation-limit",
-                         P_("Propagation limit"),
-                         P_("Propagation limit for events handled by this controller"),
+      g_param_spec_enum ("propagation-limit", NULL, NULL,
                          GTK_TYPE_PROPAGATION_LIMIT,
                          GTK_LIMIT_SAME_NATIVE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -238,9 +232,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
    * The name for this controller, typically used for debugging purposes.
    */
   properties[PROP_NAME] =
-      g_param_spec_string ("name",
-                           P_("Name"),
-                           P_("Name for this controller"),
+      g_param_spec_string ("name", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 

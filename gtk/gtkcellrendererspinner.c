@@ -177,9 +177,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
-                                   g_param_spec_boolean ("active",
-                                                         P_("Active"),
-                                                         P_("Whether the spinner is active (ie. shown) in the cell"),
+                                   g_param_spec_boolean ("active", NULL, NULL,
                                                          FALSE,
                                                          G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -194,9 +192,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_PULSE,
-                                   g_param_spec_uint ("pulse",
-                                                      P_("Pulse"),
-                                                      P_("Pulse of the spinner"),
+                                   g_param_spec_uint ("pulse", NULL, NULL,
                                                       0, G_MAXUINT, 0,
                                                       G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -207,9 +203,7 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_SIZE,
-                                   g_param_spec_enum ("size",
-                                                      P_("Size"),
-                                                      P_("The GtkIconSize value that specifies the size of the rendered spinner"),
+                                   g_param_spec_enum ("size", NULL, NULL,
                                                       GTK_TYPE_ICON_SIZE, GTK_ICON_SIZE_INHERIT,
                                                       G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

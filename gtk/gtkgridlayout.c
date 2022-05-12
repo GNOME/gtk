@@ -164,9 +164,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
    * The column to place the child in.
    */
   child_props[PROP_CHILD_COLUMN] =
-    g_param_spec_int ("column",
-                      P_("Column"),
-                      P_("The column to place the child in"),
+    g_param_spec_int ("column", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -176,9 +174,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
    * The row to place the child in.
    */
   child_props[PROP_CHILD_ROW] =
-    g_param_spec_int ("row",
-                      P_("Row"),
-                      P_("The row to place the child in"),
+    g_param_spec_int ("row", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -188,9 +184,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
    * The number of columns the child spans to.
    */
   child_props[PROP_CHILD_COLUMN_SPAN] =
-    g_param_spec_int ("column-span",
-                      P_("Column span"),
-                      P_("The number of columns that a child spans"),
+    g_param_spec_int ("column-span", NULL, NULL,
                       1, G_MAXINT, 1,
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -200,9 +194,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
    * The number of rows the child spans to.
    */
   child_props[PROP_CHILD_ROW_SPAN] =
-    g_param_spec_int ("row-span",
-                      P_("Row span"),
-                      P_("The number of rows that a child spans"),
+    g_param_spec_int ("row-span", NULL, NULL,
                       1, G_MAXINT, 1,
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1666,9 +1658,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
    * The amount of space between to consecutive rows.
    */
   layout_props[PROP_ROW_SPACING] =
-    g_param_spec_int ("row-spacing",
-                      P_("Row spacing"),
-                      P_("The amount of space between two consecutive rows"),
+    g_param_spec_int ("row-spacing", NULL, NULL,
                       0, G_MAXINT16, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1678,9 +1668,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
    * The amount of space between to consecutive columns.
    */
   layout_props[PROP_COLUMN_SPACING] =
-    g_param_spec_int ("column-spacing",
-                      P_("Column spacing"),
-                      P_("The amount of space between two consecutive columns"),
+    g_param_spec_int ("column-spacing", NULL, NULL,
                       0, G_MAXINT16, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1690,9 +1678,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
    * Whether all the rows in the grid have the same height.
    */
   layout_props[PROP_ROW_HOMOGENEOUS] =
-    g_param_spec_boolean ("row-homogeneous",
-                          P_("Row Homogeneous"),
-                          P_("If TRUE, the rows are all the same height"),
+    g_param_spec_boolean ("row-homogeneous", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1702,9 +1688,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
    * Whether all the columns in the grid have the same width.
    */
   layout_props[PROP_COLUMN_HOMOGENEOUS] =
-    g_param_spec_boolean ("column-homogeneous",
-                          P_("Column Homogeneous"),
-                          P_("If TRUE, the columns are all the same width"),
+    g_param_spec_boolean ("column-homogeneous", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1715,9 +1699,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
    * to %GTK_ALIGN_BASELINE.
    */
   layout_props[PROP_BASELINE_ROW] =
-    g_param_spec_int ("baseline-row",
-                      P_("Baseline Row"),
-                      P_("The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"),
+    g_param_spec_int ("baseline-row", NULL, NULL,
                       0, G_MAXINT, 0,
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

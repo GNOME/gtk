@@ -125,7 +125,7 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
    * The display that the `GdkAppLaunchContext` is on.
    */
   g_object_class_install_property (gobject_class, PROP_DISPLAY,
-    g_param_spec_object ("display", P_("Display"), P_("Display"),
+    g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 }

@@ -243,9 +243,7 @@ gtk_widget_paintable_class_init (GtkWidgetPaintableClass *klass)
    * The observed widget or %NULL if none.
    */
   properties[PROP_WIDGET] =
-    g_param_spec_object ("widget",
-                         P_("Widget"),
-                         P_("Observed widget"),
+    g_param_spec_object ("widget", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

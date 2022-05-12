@@ -184,9 +184,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    * `GdkDisplay` of this seat.
    */
   props[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         P_("Display"),
-                         P_("Display"),
+    g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |

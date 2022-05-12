@@ -632,9 +632,7 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
    * The model should only contain submenus as toplevel elements.
    */
   bar_props[PROP_MENU_MODEL] =
-      g_param_spec_object ("menu-model",
-                           P_("Menu model"),
-                           P_("The model from which the bar is made."),
+      g_param_spec_object ("menu-model", NULL, NULL,
                            G_TYPE_MENU_MODEL,
                            GTK_PARAM_READWRITE);
 

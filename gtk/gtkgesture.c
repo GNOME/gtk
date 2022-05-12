@@ -808,10 +808,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_N_POINTS,
-                                   g_param_spec_uint ("n-points",
-                                                      P_("Number of points"),
-                                                      P_("Number of points needed "
-                                                         "to trigger the gesture"),
+                                   g_param_spec_uint ("n-points", NULL, NULL,
                                                       1, G_MAXUINT, 1,
                                                       GTK_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT_ONLY));

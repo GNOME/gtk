@@ -81,9 +81,7 @@ gtk_inspector_recording_class_init (GtkInspectorRecordingClass *klass)
   object_class->set_property = gtk_inspector_recording_set_property;
 
   props[PROP_TIMESTAMP] =
-    g_param_spec_int64 ("timestamp",
-                        "Timestamp",
-                        "Timestamp when this event was recorded",
+    g_param_spec_int64 ("timestamp", NULL, NULL,
                         G_MININT64, G_MAXINT64, 0,
                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 

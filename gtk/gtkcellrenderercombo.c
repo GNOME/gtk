@@ -130,9 +130,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    */
   g_object_class_install_property (object_class,
 				   PROP_MODEL,
-				   g_param_spec_object ("model",
-							P_("Model"),
-							P_("The model containing the possible values for the combo box"),
+				   g_param_spec_object ("model", NULL, NULL,
 							GTK_TYPE_TREE_MODEL,
 							GTK_PARAM_READWRITE));
 
@@ -151,9 +149,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_TEXT_COLUMN,
-                                   g_param_spec_int ("text-column",
-                                                     P_("Text Column"),
-                                                     P_("A column in the data source model to get the strings from"),
+                                   g_param_spec_int ("text-column", NULL, NULL,
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
@@ -167,9 +163,7 @@ gtk_cell_renderer_combo_class_init (GtkCellRendererComboClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_HAS_ENTRY,
-                                   g_param_spec_boolean ("has-entry",
-							 P_("Has Entry"),
-							 P_("If FALSE, don’t allow to enter strings other than the chosen ones"),
+                                   g_param_spec_boolean ("has-entry", NULL, NULL,
 							 TRUE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

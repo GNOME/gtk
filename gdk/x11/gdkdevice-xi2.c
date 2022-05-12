@@ -116,9 +116,7 @@ gdk_x11_device_xi2_class_init (GdkX11DeviceXI2Class *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_DEVICE_ID,
-                                   g_param_spec_int ("device-id",
-                                                     P_("Device ID"),
-                                                     P_("Device identifier"),
+                                   g_param_spec_int ("device-id", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                      G_PARAM_STATIC_STRINGS));

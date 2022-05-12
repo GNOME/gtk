@@ -230,9 +230,7 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_ORIENTATION,
-                                   g_param_spec_enum ("orientation",
-                                                      P_("Orientation"),
-                                                      P_("Allowed orientations"),
+                                   g_param_spec_enum ("orientation", NULL, NULL,
                                                       GTK_TYPE_ORIENTATION,
                                                       GTK_ORIENTATION_HORIZONTAL,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));

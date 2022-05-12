@@ -540,9 +540,7 @@ gtk_tree_list_row_sorter_class_init (GtkTreeListRowSorterClass *class)
    * The underlying sorter
    */
   properties[PROP_SORTER] =
-      g_param_spec_object ("sorter",
-                          P_("Sorter"),
-                          P_("The underlying sorter"),
+      g_param_spec_object ("sorter", NULL, NULL,
                           GTK_TYPE_SORTER,
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

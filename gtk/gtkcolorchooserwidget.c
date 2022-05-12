@@ -718,7 +718,7 @@ gtk_color_chooser_widget_class_init (GtkColorChooserWidgetClass *class)
    * It can be set to switch the color chooser into single-color editing mode.
    */
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
-      g_param_spec_boolean ("show-editor", P_("Show editor"), P_("Show editor"),
+      g_param_spec_boolean ("show-editor", NULL, NULL,
                             FALSE, GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_css_name (widget_class, I_("colorchooser"));

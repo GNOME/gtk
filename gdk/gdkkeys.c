@@ -123,9 +123,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
   klass->keys_changed = gdk_keymap_keys_changed;
 
   props[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         "Display",
-                         "The display of the keymap",
+    g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

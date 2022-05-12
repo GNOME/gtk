@@ -370,9 +370,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * The adjustment that is controlled by the range.
    */
   properties[PROP_ADJUSTMENT] =
-      g_param_spec_object ("adjustment",
-                           P_("Adjustment"),
-                           P_("The GtkAdjustment that contains the current value of this range object"),
+      g_param_spec_object ("adjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
 
@@ -382,9 +380,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * If %TRUE, the direction in which the slider moves is inverted.
    */
   properties[PROP_INVERTED] =
-      g_param_spec_boolean ("inverted",
-                            P_("Inverted"),
-                            P_("Invert direction slider moves to increase range value"),
+      g_param_spec_boolean ("inverted", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -395,9 +391,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * on the trough.
    */
   properties[PROP_SHOW_FILL_LEVEL] =
-      g_param_spec_boolean ("show-fill-level",
-                            P_("Show Fill Level"),
-                            P_("Whether to display a fill level indicator graphics on trough."),
+      g_param_spec_boolean ("show-fill-level", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -408,9 +402,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * upper boundary set by the fill level.
    */
   properties[PROP_RESTRICT_TO_FILL_LEVEL] =
-      g_param_spec_boolean ("restrict-to-fill-level",
-                            P_("Restrict to Fill Level"),
-                            P_("Whether to restrict the upper boundary to the fill level."),
+      g_param_spec_boolean ("restrict-to-fill-level", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -420,9 +412,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * The fill level (e.g. prebuffering of a network stream).
    */
   properties[PROP_FILL_LEVEL] =
-      g_param_spec_double ("fill-level",
-                           P_("Fill Level"),
-                           P_("The fill level."),
+      g_param_spec_double ("fill-level", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            G_MAXDOUBLE,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -436,9 +426,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * See [signal@Gtk.Range::change-value].
    */
   properties[PROP_ROUND_DIGITS] =
-      g_param_spec_int ("round-digits",
-                        P_("Round Digits"),
-                        P_("The number of digits to round the value to."),
+      g_param_spec_int ("round-digits", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);

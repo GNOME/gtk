@@ -256,9 +256,7 @@ gsk_gl_texture_library_class_init (GskGLTextureLibraryClass *klass)
   klass->allocate = gsk_gl_texture_library_real_allocate;
 
   properties [PROP_DRIVER] =
-    g_param_spec_object ("driver",
-                         "Driver",
-                         "Driver",
+    g_param_spec_object ("driver", NULL, NULL,
                          GSK_TYPE_GL_DRIVER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 

@@ -175,9 +175,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
-                                   g_param_spec_string ("title",
-                                                        P_("Title"),
-                                                        P_("The title of the color selection dialog"),
+                                   g_param_spec_string ("title", NULL, NULL,
                                                         _("Pick a Color"),
                                                         GTK_PARAM_READWRITE));
 
@@ -236,8 +234,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_EDITOR,
-                                   g_param_spec_boolean ("show-editor", P_("Show Editor"),
-                                                         P_("Whether to show the color editor right away"),
+                                   g_param_spec_boolean ("show-editor", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -248,8 +245,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MODAL,
-                                   g_param_spec_boolean ("modal", P_("Modal"),
-                                                         P_("Whether the dialog is modal"),
+                                   g_param_spec_boolean ("modal", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

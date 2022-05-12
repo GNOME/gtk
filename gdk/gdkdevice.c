@@ -109,9 +109,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * The `GdkDisplay` the `GdkDevice` pertains to.
    */
   device_props[PROP_DISPLAY] =
-      g_param_spec_object ("display",
-                           P_("Device Display"),
-                           P_("Display which the device belongs to"),
+      g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -121,9 +119,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * The device name.
    */
   device_props[PROP_NAME] =
-      g_param_spec_string ("name",
-                           P_("Device name"),
-                           P_("Device name"),
+      g_param_spec_string ("name", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS);
@@ -134,9 +130,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * Source type for the device.
    */
   device_props[PROP_SOURCE] =
-      g_param_spec_enum ("source",
-                         P_("Input source"),
-                         P_("Source type for the device"),
+      g_param_spec_enum ("source", NULL, NULL,
                          GDK_TYPE_INPUT_SOURCE,
                          GDK_SOURCE_MOUSE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -148,9 +142,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * Whether the device is represented by a cursor on the screen.
    */
   device_props[PROP_HAS_CURSOR] =
-      g_param_spec_boolean ("has-cursor",
-                            P_("Whether the device has a cursor"),
-                            P_("Whether there is a visible cursor following device motion"),
+      g_param_spec_boolean ("has-cursor", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                             G_PARAM_STATIC_STRINGS);
@@ -161,9 +153,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * Number of axes in the device.
    */
   device_props[PROP_N_AXES] =
-      g_param_spec_uint ("n-axes",
-                         P_("Number of axes in the device"),
-                         P_("Number of axes in the device"),
+      g_param_spec_uint ("n-axes", NULL, NULL,
                          0, G_MAXUINT,
                          0,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -176,9 +166,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * See [method@Gdk.Device.get_vendor_id].
    */
   device_props[PROP_VENDOR_ID] =
-      g_param_spec_string ("vendor-id",
-                           P_("Vendor ID"),
-                           P_("Vendor ID"),
+      g_param_spec_string ("vendor-id", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS);
@@ -191,9 +179,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * See [method@Gdk.Device.get_product_id].
    */
   device_props[PROP_PRODUCT_ID] =
-      g_param_spec_string ("product-id",
-                           P_("Product ID"),
-                           P_("Product ID"),
+      g_param_spec_string ("product-id", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS);
@@ -204,9 +190,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * `GdkSeat` of this device.
    */
   device_props[PROP_SEAT] =
-      g_param_spec_object ("seat",
-                           P_("Seat"),
-                           P_("Seat"),
+      g_param_spec_object ("seat", NULL, NULL,
                            GDK_TYPE_SEAT,
                            G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS);
@@ -220,9 +204,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * of touches is unknown.
    */
   device_props[PROP_NUM_TOUCHES] =
-      g_param_spec_uint ("num-touches",
-                         P_("Number of concurrent touches"),
-                         P_("Number of concurrent touches"),
+      g_param_spec_uint ("num-touches", NULL, NULL,
                          0, G_MAXUINT,
                          0,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -234,9 +216,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * The `GdkDeviceTool` that is currently used with this device.
    */
   device_props[PROP_TOOL] =
-    g_param_spec_object ("tool",
-                         P_("Tool"),
-                         P_("The tool that is currently used with this device"),
+    g_param_spec_object ("tool", NULL, NULL,
                          GDK_TYPE_DEVICE_TOOL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -248,9 +228,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * This is only relevant for keyboard devices.
    */
   device_props[PROP_DIRECTION] =
-      g_param_spec_enum ("direction",
-                         P_("Direction"),
-                         P_("The direction of the current layout of the keyboard"),
+      g_param_spec_enum ("direction", NULL, NULL,
                          PANGO_TYPE_DIRECTION, PANGO_DIRECTION_NEUTRAL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -262,9 +240,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * This is only relevant for keyboard devices.
    */
   device_props[PROP_HAS_BIDI_LAYOUTS] =
-      g_param_spec_boolean ("has-bidi-layouts",
-                            P_("Has bidi layouts"),
-                            P_("Whether the keyboard has bidi layouts"),
+      g_param_spec_boolean ("has-bidi-layouts", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -276,9 +252,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * This is only relevant for keyboard devices.
    */
   device_props[PROP_CAPS_LOCK_STATE] =
-      g_param_spec_boolean ("caps-lock-state",
-                            P_("Caps lock state"),
-                            P_("Whether the keyboard caps lock is on"),
+      g_param_spec_boolean ("caps-lock-state", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -290,9 +264,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * This is only relevant for keyboard devices.
    */
   device_props[PROP_NUM_LOCK_STATE] =
-      g_param_spec_boolean ("num-lock-state",
-                            P_("Num lock state"),
-                            P_("Whether the keyboard num lock is on"),
+      g_param_spec_boolean ("num-lock-state", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -304,9 +276,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * This is only relevant for keyboard devices.
    */
   device_props[PROP_SCROLL_LOCK_STATE] =
-      g_param_spec_boolean ("scroll-lock-state",
-                            P_("Scroll lock state"),
-                            P_("Whether the keyboard scroll lock is on"),
+      g_param_spec_boolean ("scroll-lock-state", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -318,9 +288,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * This is only relevant for keyboard devices.
    */
   device_props[PROP_MODIFIER_STATE] =
-      g_param_spec_flags ("modifier-state",
-                          P_("Modifier state"),
-                          P_("The modifier state of the keyboard"),
+      g_param_spec_flags ("modifier-state", NULL, NULL,
                           GDK_TYPE_MODIFIER_TYPE, 0,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 

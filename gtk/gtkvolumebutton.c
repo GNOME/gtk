@@ -169,9 +169,7 @@ gtk_volume_button_class_init (GtkVolumeButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SYMBOLIC,
-                                   g_param_spec_boolean ("use-symbolic",
-                                                         P_("Use symbolic icons"),
-                                                         P_("Whether to use symbolic icons"),
+                                   g_param_spec_boolean ("use-symbolic", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 

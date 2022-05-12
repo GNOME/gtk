@@ -379,9 +379,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * The contents of the entry.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_string ("text",
-                           P_("Text"),
-                           P_("The contents of the entry"),
+      g_param_spec_string ("text", NULL, NULL,
                            "",
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -391,9 +389,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * The current position of the insertion cursor in chars.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_int ("cursor-position",
-                        P_("Cursor Position"),
-                        P_("The current position of the insertion cursor in chars"),
+      g_param_spec_int ("cursor-position", NULL, NULL,
                         0, GTK_ENTRY_BUFFER_MAX_SIZE,
                         0,
                         GTK_PARAM_READABLE));
@@ -404,9 +400,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * If undo/redo should be enabled for the editable.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("enable-undo",
-                            P_("Enable Undo"),
-                            P_("If undo/redo should be enabled for the editable"),
+      g_param_spec_boolean ("enable-undo", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -416,9 +410,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * The position of the opposite end of the selection from the cursor in chars.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_int ("selection-bound",
-                        P_("Selection Bound"),
-                        P_("The position of the opposite end of the selection from the cursor in chars"),
+      g_param_spec_int ("selection-bound", NULL, NULL,
                         0, GTK_ENTRY_BUFFER_MAX_SIZE,
                         0,
                         GTK_PARAM_READABLE));
@@ -429,9 +421,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * Whether the entry contents can be edited.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_boolean ("editable",
-                            P_("Editable"),
-                            P_("Whether the entry contents can be edited"),
+      g_param_spec_boolean ("editable", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -441,9 +431,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * Number of characters to leave space for in the entry.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_int ("width-chars",
-                        P_("Width in chars"),
-                        P_("Number of characters to leave space for in the entry"),
+      g_param_spec_int ("width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
@@ -454,9 +442,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * The desired maximum width of the entry, in characters.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_int ("max-width-chars",
-                        P_("Maximum width in characters"),
-                        P_("The desired maximum width of the entry, in characters"),
+      g_param_spec_int ("max-width-chars", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
@@ -469,9 +455,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
    * Reversed for RTL layouts.
    */
   g_object_interface_install_property (iface,
-      g_param_spec_float ("xalign",
-                          P_("X align"),
-                          P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
+      g_param_spec_float ("xalign", NULL, NULL,
                           0.0, 1.0,
                           0.0,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));

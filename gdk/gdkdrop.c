@@ -325,9 +325,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    * The possible actions for this drop
    */
   properties[PROP_ACTIONS] =
-    g_param_spec_flags ("actions",
-                        "Actions",
-                        "The possible actions for this drop",
+    g_param_spec_flags ("actions", NULL, NULL,
                          GDK_TYPE_DRAG_ACTION,
                          GDK_ACTION_ALL,
                          G_PARAM_READWRITE |
@@ -341,9 +339,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    * The `GdkDevice` performing the drop
    */
   properties[PROP_DEVICE] =
-    g_param_spec_object ("device",
-                         "Device",
-                         "The device performing the drop",
+    g_param_spec_object ("device", NULL, NULL,
                          GDK_TYPE_DEVICE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -356,9 +352,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    * The `GdkDisplay` that the drop belongs to.
    */
   properties[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         "Display",
-                         "Display this drag belongs to",
+    g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READABLE |
                          G_PARAM_STATIC_STRINGS |
@@ -370,9 +364,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    * The `GdkDrag` that initiated this drop
    */
   properties[PROP_DRAG] =
-    g_param_spec_object ("drag",
-                         "Drag",
-                         "The drag that initiated this drop",
+    g_param_spec_object ("drag", NULL, NULL,
                          GDK_TYPE_DRAG,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -385,9 +377,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    * The possible formats that the drop can provide its data in.
    */
   properties[PROP_FORMATS] =
-    g_param_spec_boxed ("formats",
-                        "Formats",
-                        "The possible formats for data",
+    g_param_spec_boxed ("formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
@@ -400,9 +390,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    * The `GdkSurface` the drop happens on
    */
   properties[PROP_SURFACE] =
-    g_param_spec_object ("surface",
-                         "Surface",
-                         "The surface the drop is happening on",
+    g_param_spec_object ("surface", NULL, NULL,
                          GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |

@@ -239,16 +239,12 @@ gtk_list_item_widget_class_init (GtkListItemWidgetClass *klass)
   gobject_class->dispose = gtk_list_item_widget_dispose;
 
   properties[PROP_FACTORY] =
-    g_param_spec_object ("factory",
-                         "Factory",
-                         "Factory managing this list item",
+    g_param_spec_object ("factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   properties[PROP_SINGLE_CLICK_ACTIVATE] =
-    g_param_spec_boolean ("single-click-activate",
-                          "Single click activate",
-                          "Activate on single click",
+    g_param_spec_boolean ("single-click-activate", NULL, NULL,
                           FALSE,
                           G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

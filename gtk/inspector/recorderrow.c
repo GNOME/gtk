@@ -129,8 +129,8 @@ gtk_inspector_recorder_row_class_init (GtkInspectorRecorderRowClass *klass)
   object_class->set_property = gtk_inspector_recorder_row_set_property;
   object_class->get_property = gtk_inspector_recorder_row_get_property;
 
-  props[PROP_SEQUENCE] = g_param_spec_pointer ("sequence", "", "", G_PARAM_READWRITE);
-  props[PROP_MATCH_SEQUENCE] = g_param_spec_pointer ("match-sequence", "", "", G_PARAM_READWRITE);
+  props[PROP_SEQUENCE] = g_param_spec_pointer ("sequence", NULL, NULL, G_PARAM_READWRITE);
+  props[PROP_MATCH_SEQUENCE] = g_param_spec_pointer ("match-sequence", NULL, NULL, G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 

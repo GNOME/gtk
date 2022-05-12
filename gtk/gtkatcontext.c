@@ -209,9 +209,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
    * set or retrieved.
    */
   obj_props[PROP_ACCESSIBLE_ROLE] =
-    g_param_spec_enum ("accessible-role",
-                       "Accessible Role",
-                       "The accessible role of the AT context",
+    g_param_spec_enum ("accessible-role", NULL, NULL,
                        GTK_TYPE_ACCESSIBLE_ROLE,
                        GTK_ACCESSIBLE_ROLE_NONE,
                        G_PARAM_READWRITE |
@@ -224,9 +222,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
    * The `GtkAccessible` that created the `GtkATContext` instance.
    */
   obj_props[PROP_ACCESSIBLE] =
-    g_param_spec_object ("accessible",
-                         "Accessible",
-                         "The accessible implementation",
+    g_param_spec_object ("accessible", NULL, NULL,
                          GTK_TYPE_ACCESSIBLE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -238,9 +234,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
    * The `GdkDisplay` for the `GtkATContext`.
    */
   obj_props[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         "Display",
-                         "The display connection",
+    g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |

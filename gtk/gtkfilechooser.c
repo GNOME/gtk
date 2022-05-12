@@ -83,9 +83,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * The type of operation that the file chooser is performing.
    */
   g_object_interface_install_property (iface,
-                                       g_param_spec_enum ("action",
-                                                          P_("Action"),
-                                                          P_("The type of operation that the file selector is performing"),
+                                       g_param_spec_enum ("action", NULL, NULL,
                                                           GTK_TYPE_FILE_CHOOSER_ACTION,
                                                           GTK_FILE_CHOOSER_ACTION_OPEN,
                                                           GTK_PARAM_READWRITE));
@@ -97,9 +95,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * The current filter for selecting files that are displayed.
    */
   g_object_interface_install_property (iface,
-                                       g_param_spec_object ("filter",
-                                                            P_("Filter"),
-                                                            P_("The current filter for selecting which files are displayed"),
+                                       g_param_spec_object ("filter", NULL, NULL,
                                                             GTK_TYPE_FILE_FILTER,
                                                             GTK_PARAM_READWRITE));
 
@@ -109,9 +105,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * Whether to allow multiple files to be selected.
    */
   g_object_interface_install_property (iface,
-                                       g_param_spec_boolean ("select-multiple",
-                                                             P_("Select Multiple"),
-                                                             P_("Whether to allow multiple files to be selected"),
+                                       g_param_spec_boolean ("select-multiple", NULL, NULL,
                                                              FALSE,
                                                              GTK_PARAM_READWRITE));
 
@@ -125,9 +119,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * or may not be updated for later changes.
    */
   g_object_interface_install_property (iface,
-                                       g_param_spec_object ("filters",
-                                                          P_("Filters"),
-                                                          P_("List model of filters"),
+                                       g_param_spec_object ("filters", NULL, NULL,
                                                           G_TYPE_LIST_MODEL,
                                                           GTK_PARAM_READABLE));
 
@@ -141,9 +133,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * or may not be updated for later changes.
    */
   g_object_interface_install_property (iface,
-                                       g_param_spec_object ("shortcut-folders",
-                                                          P_("Shortcut Folders"),
-                                                          P_("List model of shortcut folders"),
+                                       g_param_spec_object ("shortcut-folders", NULL, NULL,
                                                           G_TYPE_LIST_MODEL,
                                                           GTK_PARAM_READABLE));
 
@@ -154,10 +144,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * will offer the user to create new folders.
    */
   g_object_interface_install_property (iface,
-                                       g_param_spec_boolean ("create-folders",
-                                                             P_("Allow folder creation"),
-                                                             P_("Whether a file chooser not in open mode "
-                                                                "will offer the user to create new folders."),
+                                       g_param_spec_boolean ("create-folders", NULL, NULL,
                                                              TRUE,
                                                              GTK_PARAM_READWRITE));
 }

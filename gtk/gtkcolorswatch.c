@@ -509,19 +509,19 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->state_flags_changed = swatch_state_flags_changed;
 
   g_object_class_install_property (object_class, PROP_RGBA,
-      g_param_spec_boxed ("rgba", P_("RGBA Color"), P_("Color as RGBA"),
+      g_param_spec_boxed ("rgba", NULL, NULL,
                           GDK_TYPE_RGBA, GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class, PROP_SELECTABLE,
-      g_param_spec_boolean ("selectable", P_("Selectable"), P_("Whether the swatch is selectable"),
+      g_param_spec_boolean ("selectable", NULL, NULL,
                             TRUE, GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class, PROP_HAS_MENU,
-      g_param_spec_boolean ("has-menu", P_("Has Menu"), P_("Whether the swatch should offer customization"),
+      g_param_spec_boolean ("has-menu", NULL, NULL,
                             TRUE, GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class, PROP_CAN_DROP,
-      g_param_spec_boolean ("can-drop", P_("Can Drop"), P_("Whether the swatch should accept drops"),
+      g_param_spec_boolean ("can-drop", NULL, NULL,
                             FALSE, GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class, PROP_CAN_DRAG,
-      g_param_spec_boolean ("can-drag", P_("Can Drag"), P_("Whether the swatch should allow drags"),
+      g_param_spec_boolean ("can-drag", NULL, NULL,
                             TRUE, GTK_PARAM_READWRITE));
 
   /**

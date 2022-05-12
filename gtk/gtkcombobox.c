@@ -664,9 +664,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_MODEL,
-                                   g_param_spec_object ("model",
-                                                        P_("ComboBox model"),
-                                                        P_("The model for the combo box"),
+                                   g_param_spec_object ("model", NULL, NULL,
                                                         GTK_TYPE_TREE_MODEL,
                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -683,9 +681,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
-                                   g_param_spec_int ("active",
-                                                     P_("Active item"),
-                                                     P_("The item which is currently active"),
+                                   g_param_spec_int ("active", NULL, NULL,
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
@@ -698,9 +694,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_HAS_FRAME,
-                                   g_param_spec_boolean ("has-frame",
-                                                         P_("Has Frame"),
-                                                         P_("Whether the combo box draws a frame around the child"),
+                                   g_param_spec_boolean ("has-frame", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -714,9 +708,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_POPUP_SHOWN,
-                                   g_param_spec_boolean ("popup-shown",
-                                                         P_("Popup shown"),
-                                                         P_("Whether the combo’s dropdown is shown"),
+                                   g_param_spec_boolean ("popup-shown", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READABLE));
 
@@ -729,9 +721,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     */
    g_object_class_install_property (object_class,
                                     PROP_BUTTON_SENSITIVITY,
-                                    g_param_spec_enum ("button-sensitivity",
-                                                       P_("Button Sensitivity"),
-                                                       P_("Whether the dropdown button is sensitive when the model is empty"),
+                                    g_param_spec_enum ("button-sensitivity", NULL, NULL,
                                                        GTK_TYPE_SENSITIVITY_TYPE,
                                                        GTK_SENSITIVITY_AUTO,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
@@ -743,9 +733,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     */
    g_object_class_install_property (object_class,
                                     PROP_HAS_ENTRY,
-                                    g_param_spec_boolean ("has-entry",
-                                                          P_("Has Entry"),
-                                                          P_("Whether combo box has an entry"),
+                                    g_param_spec_boolean ("has-entry", NULL, NULL,
                                                           FALSE,
                                                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
@@ -759,11 +747,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     */
    g_object_class_install_property (object_class,
                                     PROP_ENTRY_TEXT_COLUMN,
-                                    g_param_spec_int ("entry-text-column",
-                                                      P_("Entry Text Column"),
-                                                      P_("The column in the combo box’s model to associate "
-                                                         "with strings from the entry if the combo was "
-                                                         "created with GtkComboBox:has-entry = %TRUE"),
+                                    g_param_spec_int ("entry-text-column", NULL, NULL,
                                                       -1, G_MAXINT, -1,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -775,10 +759,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     */
    g_object_class_install_property (object_class,
                                     PROP_ID_COLUMN,
-                                    g_param_spec_int ("id-column",
-                                                      P_("ID Column"),
-                                                      P_("The column in the combo box’s model that provides "
-                                                      "string IDs for the values in the model"),
+                                    g_param_spec_int ("id-column", NULL, NULL,
                                                       -1, G_MAXINT, -1,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -789,10 +770,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     */
    g_object_class_install_property (object_class,
                                     PROP_ACTIVE_ID,
-                                    g_param_spec_string ("active-id",
-                                                         P_("Active id"),
-                                                         P_("The value of the id column "
-                                                         "for the active row"),
+                                    g_param_spec_string ("active-id", NULL, NULL,
                                                          NULL,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -804,11 +782,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     */
    g_object_class_install_property (object_class,
                                     PROP_POPUP_FIXED_WIDTH,
-                                    g_param_spec_boolean ("popup-fixed-width",
-                                                          P_("Popup Fixed Width"),
-                                                          P_("Whether the popup’s width should be a "
-                                                             "fixed width matching the allocated width "
-                                                             "of the combo box"),
+                                    g_param_spec_boolean ("popup-fixed-width", NULL, NULL,
                                                           TRUE,
                                                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -819,9 +793,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
     */
    g_object_class_install_property (object_class,
                                     PROP_CHILD,
-                                    g_param_spec_object ("child",
-                                                         P_("Child"),
-                                                         P_("The child_widget"),
+                                    g_param_spec_object ("child", NULL, NULL,
                                                          GTK_TYPE_WIDGET,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

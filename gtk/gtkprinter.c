@@ -119,9 +119,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_NAME,
-                                   g_param_spec_string ("name",
-						        P_("Name"),
-						        P_("Name of the printer"),
+                                   g_param_spec_string ("name", NULL, NULL,
 						        "",
 							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -132,9 +130,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_BACKEND,
-                                   g_param_spec_object ("backend",
-						        P_("Backend"),
-						        P_("Backend for the printer"),
+                                   g_param_spec_object ("backend", NULL, NULL,
 						        GTK_TYPE_PRINT_BACKEND,
 							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -145,9 +141,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_IS_VIRTUAL,
-                                   g_param_spec_boolean ("is-virtual",
-							 P_("Is Virtual"),
-							 P_("FALSE if this represents a real hardware printer"),
+                                   g_param_spec_boolean ("is-virtual", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -158,9 +152,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_ACCEPTS_PDF,
-                                   g_param_spec_boolean ("accepts-pdf",
-							 P_("Accepts PDF"),
-							 P_("TRUE if this printer can accept PDF"),
+                                   g_param_spec_boolean ("accepts-pdf", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -171,9 +163,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_ACCEPTS_PS,
-                                   g_param_spec_boolean ("accepts-ps",
-							 P_("Accepts PostScript"),
-							 P_("TRUE if this printer can accept PostScript"),
+                                   g_param_spec_boolean ("accepts-ps", NULL, NULL,
 							 TRUE,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -184,9 +174,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_STATE_MESSAGE,
-                                   g_param_spec_string ("state-message",
-						        P_("State Message"),
-						        P_("String giving the current state of the printer"),
+                                   g_param_spec_string ("state-message", NULL, NULL,
 						        "",
 							GTK_PARAM_READABLE));
 
@@ -197,9 +185,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_LOCATION,
-                                   g_param_spec_string ("location",
-						        P_("Location"),
-						        P_("The location of the printer"),
+                                   g_param_spec_string ("location", NULL, NULL,
 						        "",
 							GTK_PARAM_READABLE));
 
@@ -210,9 +196,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_ICON_NAME,
-                                   g_param_spec_string ("icon-name",
-						        P_("Icon Name"),
-						        P_("The icon name to use for the printer"),
+                                   g_param_spec_string ("icon-name", NULL, NULL,
 						        "printer",
 							GTK_PARAM_READABLE));
 
@@ -223,9 +207,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_JOB_COUNT,
-				   g_param_spec_int ("job-count",
- 						     P_("Job Count"),
- 						     P_("Number of jobs queued in the printer"),
+				   g_param_spec_int ("job-count", NULL, NULL,
  						     0,
  						     G_MAXINT,
  						     0,
@@ -241,9 +223,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_PAUSED,
-                                   g_param_spec_boolean ("paused",
-							 P_("Paused Printer"),
-							 P_("TRUE if this printer is paused"),
+                                   g_param_spec_boolean ("paused", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READABLE));
 
@@ -254,9 +234,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
    */
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_ACCEPTING_JOBS,
-                                   g_param_spec_boolean ("accepting-jobs",
-							 P_("Accepting Jobs"),
-							 P_("TRUE if this printer is accepting new jobs"),
+                                   g_param_spec_boolean ("accepting-jobs", NULL, NULL,
 							 TRUE,
 							 GTK_PARAM_READABLE));
 

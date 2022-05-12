@@ -272,9 +272,7 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
    * The media-stream managed by this object or %NULL if none.
    */
   properties[PROP_MEDIA_STREAM] =
-    g_param_spec_object ("media-stream",
-                         P_("Media Stream"),
-                         P_("The media stream managed"),
+    g_param_spec_object ("media-stream", NULL, NULL,
                          GTK_TYPE_MEDIA_STREAM,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

@@ -369,9 +369,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
    * The `GType` for elements of this object
    */
   properties[PROP_ITEM_TYPE] =
-      g_param_spec_gtype ("item-type",
-                          P_("Item type"),
-                          P_("The type of elements of this object"),
+      g_param_spec_gtype ("item-type", NULL, NULL,
                           G_TYPE_OBJECT,
                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -381,9 +379,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
    * Name of the property used for lookups
    */
   properties[PROP_PROPERTY] =
-      g_param_spec_string ("property",
-                           P_("type"),
-                           P_("Name of the property used for lookups"),
+      g_param_spec_string ("property", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -393,9 +389,7 @@ gtk_property_lookup_list_model_class_init (GtkPropertyLookupListModelClass *klas
    * The root object
    */
   properties[PROP_OBJECT] =
-      g_param_spec_object ("object",
-                           P_("Object"),
-                           P_("The root object"),
+      g_param_spec_object ("object", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

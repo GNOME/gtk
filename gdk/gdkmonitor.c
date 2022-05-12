@@ -176,9 +176,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The `GdkDisplay` of the monitor.
    */
   props[PROP_DISPLAY] =
-    g_param_spec_object ("display",
-                         "Display",
-                         "The display of the monitor",
+    g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
@@ -188,9 +186,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The manufacturer name.
    */
   props[PROP_MANUFACTURER] =
-    g_param_spec_string ("manufacturer",
-                         "Manufacturer",
-                         "The manufacturer name",
+    g_param_spec_string ("manufacturer", NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -200,9 +196,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The model name.
    */
   props[PROP_MODEL] =
-    g_param_spec_string ("model",
-                         "Model",
-                         "The model name",
+    g_param_spec_string ("model", NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -212,9 +206,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The connector name.
    */
   props[PROP_CONNECTOR] =
-    g_param_spec_string ("connector",
-                         "Connector",
-                         "The connector name",
+    g_param_spec_string ("connector", NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -224,9 +216,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The scale factor.
    */
   props[PROP_SCALE_FACTOR] =
-    g_param_spec_int ("scale-factor",
-                      "Scale factor",
-                      "The scale factor",
+    g_param_spec_int ("scale-factor", NULL, NULL,
                       0, G_MAXINT,
                       1,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -237,9 +227,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The geometry of the monitor.
    */
   props[PROP_GEOMETRY] =
-    g_param_spec_boxed ("geometry",
-                        "Geometry",
-                        "The geometry of the monitor",
+    g_param_spec_boxed ("geometry", NULL, NULL,
                         GDK_TYPE_RECTANGLE,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -249,9 +237,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The width of the monitor, in millimeters.
    */
   props[PROP_WIDTH_MM] =
-    g_param_spec_int ("width-mm",
-                      "Physical width",
-                      "The width of the monitor, in millimeters",
+    g_param_spec_int ("width-mm", NULL, NULL,
                       0, G_MAXINT,
                       0,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -262,9 +248,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The height of the monitor, in millimeters.
    */
   props[PROP_HEIGHT_MM] =
-    g_param_spec_int ("height-mm",
-                      "Physical height",
-                      "The height of the monitor, in millimeters",
+    g_param_spec_int ("height-mm", NULL, NULL,
                       0, G_MAXINT,
                       0,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -275,9 +259,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The refresh rate, in milli-Hertz.
    */
   props[PROP_REFRESH_RATE] =
-    g_param_spec_int ("refresh-rate",
-                      "Refresh rate",
-                      "The refresh rate, in millihertz",
+    g_param_spec_int ("refresh-rate", NULL, NULL,
                       0, G_MAXINT,
                       0,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -288,9 +270,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The subpixel layout.
    */
   props[PROP_SUBPIXEL_LAYOUT] =
-    g_param_spec_enum ("subpixel-layout",
-                       "Subpixel layout",
-                       "The subpixel layout",
+    g_param_spec_enum ("subpixel-layout", NULL, NULL,
                        GDK_TYPE_SUBPIXEL_LAYOUT,
                        GDK_SUBPIXEL_LAYOUT_UNKNOWN,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -301,9 +281,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * Whether the object is still valid.
    */
   props[PROP_VALID] =
-    g_param_spec_boolean ("valid",
-                          "Valid",
-                          "Whether the monitor is still valid",
+    g_param_spec_boolean ("valid", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 

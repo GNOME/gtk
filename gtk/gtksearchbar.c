@@ -307,9 +307,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
    *
    * Whether the search mode is on and the search bar shown.
    */
-  widget_props[PROP_SEARCH_MODE_ENABLED] = g_param_spec_boolean ("search-mode-enabled",
-                                                                 P_("Search Mode Enabled"),
-                                                                 P_("Whether the search mode is on and the search bar shown"),
+  widget_props[PROP_SEARCH_MODE_ENABLED] = g_param_spec_boolean ("search-mode-enabled", NULL, NULL,
                                                                  FALSE,
                                                                  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -318,9 +316,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
    *
    * Whether to show the close button in the search bar.
    */
-  widget_props[PROP_SHOW_CLOSE_BUTTON] = g_param_spec_boolean ("show-close-button",
-                                                               P_("Show Close Button"),
-                                                               P_("Whether to show the close button in the toolbar"),
+  widget_props[PROP_SHOW_CLOSE_BUTTON] = g_param_spec_boolean ("show-close-button", NULL, NULL,
                                                                FALSE,
                                                                GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -329,9 +325,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
    *
    * The child widget.
    */
-  widget_props[PROP_CHILD] = g_param_spec_object ("child",
-                                                  P_("Child"),
-                                                  P_("The child widget"),
+  widget_props[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
                                                   GTK_TYPE_WIDGET,
                                                   GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -341,9 +335,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
    * The key capture widget.
    */
   widget_props[PROP_KEY_CAPTURE_WIDGET]
-      = g_param_spec_object ("key-capture-widget",
-                             P_("Key Capture Widget"),
-                             P_("Key Capture Widget"),
+      = g_param_spec_object ("key-capture-widget", NULL, NULL,
                              GTK_TYPE_WIDGET,
                              GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 

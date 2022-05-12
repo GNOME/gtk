@@ -315,11 +315,11 @@ gtk_inspector_action_editor_class_init (GtkInspectorActionEditorClass *klass)
   object_class->set_property = set_property;
 
   g_object_class_install_property (object_class, PROP_OWNER,
-      g_param_spec_object ("owner", "Owner", "The owner of the action",
+      g_param_spec_object ("owner", NULL, NULL,
                            G_TYPE_OBJECT, G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class, PROP_NAME,
-      g_param_spec_string ("name", "Name", "The action name",
+      g_param_spec_string ("name", NULL, NULL,
                            NULL, G_PARAM_READWRITE));
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);

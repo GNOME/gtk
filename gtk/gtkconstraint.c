@@ -189,9 +189,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    *
    */
   obj_props[PROP_TARGET] =
-    g_param_spec_object ("target",
-                         P_("Target"),
-                         P_("The target of the constraint"),
+    g_param_spec_object ("target", NULL, NULL,
                          GTK_TYPE_CONSTRAINT_TARGET,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
@@ -203,9 +201,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    * The attribute of the [property@Gtk.Constraint:target] set by the constraint.
    */
   obj_props[PROP_TARGET_ATTRIBUTE] =
-    g_param_spec_enum ("target-attribute",
-                       P_("Target Attribute"),
-                       P_("The attribute of the target set by the constraint"),
+    g_param_spec_enum ("target-attribute", NULL, NULL,
                        GTK_TYPE_CONSTRAINT_ATTRIBUTE,
                        GTK_CONSTRAINT_ATTRIBUTE_NONE,
                        G_PARAM_READWRITE |
@@ -218,9 +214,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    * The order relation between the terms of the constraint.
    */
   obj_props[PROP_RELATION] =
-    g_param_spec_enum ("relation",
-                       P_("Relation"),
-                       P_("The relation between the source and target attributes"),
+    g_param_spec_enum ("relation", NULL, NULL,
                        GTK_TYPE_CONSTRAINT_RELATION,
                        GTK_CONSTRAINT_RELATION_EQ,
                        G_PARAM_READWRITE |
@@ -237,9 +231,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    * property of the source.
    */
   obj_props[PROP_SOURCE] =
-    g_param_spec_object ("source",
-                         P_("Source"),
-                         P_("The source of the constraint"),
+    g_param_spec_object ("source", NULL, NULL,
                          GTK_TYPE_CONSTRAINT_TARGET,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
@@ -251,9 +243,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    * constraint.
    */
   obj_props[PROP_SOURCE_ATTRIBUTE] =
-    g_param_spec_enum ("source-attribute",
-                       P_("Source Attribute"),
-                       P_("The attribute of the source widget set by the constraint"),
+    g_param_spec_enum ("source-attribute", NULL, NULL,
                        GTK_TYPE_CONSTRAINT_ATTRIBUTE,
                        GTK_CONSTRAINT_ATTRIBUTE_NONE,
                        G_PARAM_READWRITE |
@@ -267,9 +257,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    * the [property@Gtk.Constraint:source-attribute].
    */
   obj_props[PROP_MULTIPLIER] =
-    g_param_spec_double ("multiplier",
-                         P_("Multiplier"),
-                         P_("The multiplication factor to be applied to the source attribute"),
+    g_param_spec_double ("multiplier", NULL, NULL,
                          -G_MAXDOUBLE, G_MAXDOUBLE, 1.0,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
@@ -281,9 +269,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    * The constant value to be added to the [property@Gtk.Constraint:source-attribute].
    */
   obj_props[PROP_CONSTANT] =
-    g_param_spec_double ("constant",
-                         P_("Constant"),
-                         P_("The constant to be added to the source attribute"),
+    g_param_spec_double ("constant", NULL, NULL,
                          -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS |
@@ -299,9 +285,7 @@ gtk_constraint_class_init (GtkConstraintClass *klass)
    * value.
    */
   obj_props[PROP_STRENGTH] =
-    g_param_spec_int ("strength",
-                      P_("Strength"),
-                      P_("The strength of the constraint"),
+    g_param_spec_int ("strength", NULL, NULL,
                       0, GTK_CONSTRAINT_STRENGTH_REQUIRED,
                       GTK_CONSTRAINT_STRENGTH_REQUIRED,
                       G_PARAM_READWRITE |

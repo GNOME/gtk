@@ -1817,9 +1817,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * Rectangle in the parent widget that the popover points to.
    */
   properties[PROP_POINTING_TO] =
-      g_param_spec_boxed ("pointing-to",
-                          P_("Pointing to"),
-                          P_("Rectangle the bubble window points to"),
+      g_param_spec_boxed ("pointing-to", NULL, NULL,
                           GDK_TYPE_RECTANGLE,
                           GTK_PARAM_READWRITE);
 
@@ -1829,9 +1827,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * How to place the popover, relative to its parent.
    */
   properties[PROP_POSITION] =
-      g_param_spec_enum ("position",
-                         P_("Position"),
-                         P_("Position to place the bubble window"),
+      g_param_spec_enum ("position", NULL, NULL,
                          GTK_TYPE_POSITION_TYPE, GTK_POS_BOTTOM,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1841,9 +1837,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * Whether to dismiss the popover on outside clicks.
    */
   properties[PROP_AUTOHIDE] =
-      g_param_spec_boolean ("autohide",
-                            P_("Autohide"),
-                            P_("Whether to dismiss the popover on outside clicks"),
+      g_param_spec_boolean ("autohide", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1853,9 +1847,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * The default widget inside the popover.
    */
   properties[PROP_DEFAULT_WIDGET] =
-      g_param_spec_object ("default-widget",
-                           P_("Default widget"),
-                           P_("The default widget"),
+      g_param_spec_object ("default-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1865,9 +1857,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * Whether to draw an arrow.
    */
   properties[PROP_HAS_ARROW] =
-      g_param_spec_boolean ("has-arrow",
-                            P_("Has Arrow"),
-                            P_("Whether to draw an arrow"),
+      g_param_spec_boolean ("has-arrow", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1877,9 +1867,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * Whether mnemonics are currently visible in this popover.
    */
   properties[PROP_MNEMONICS_VISIBLE] =
-      g_param_spec_boolean ("mnemonics-visible",
-                            P_("Mnemonics visible"),
-                            P_("Whether mnemonics are currently visible in this popover"),
+      g_param_spec_boolean ("mnemonics-visible", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1889,9 +1877,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * The child widget.
    */
   properties[PROP_CHILD] =
-      g_param_spec_object ("child",
-                           P_("Child"),
-                           P_("The child widget"),
+      g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1903,9 +1889,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * This is used to implement the expected behavior of submenus.
    */
   properties[PROP_CASCADE_POPDOWN] =
-      g_param_spec_boolean ("cascade-popdown",
-                            P_("Cascade popdown"),
-                            P_("Whether the popover pops down after a child popover"),
+      g_param_spec_boolean ("cascade-popdown", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

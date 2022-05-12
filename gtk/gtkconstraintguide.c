@@ -351,9 +351,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
    * The minimum width of the guide.
    */
   guide_props[PROP_MIN_WIDTH] =
-      g_param_spec_int ("min-width",
-                        "Minimum width",
-                        "Minimum width",
+      g_param_spec_int ("min-width", NULL, NULL,
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
@@ -364,9 +362,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
    * The minimum height of the guide.
    */
   guide_props[PROP_MIN_HEIGHT] =
-      g_param_spec_int ("min-height",
-                        "Minimum height",
-                        "Minimum height",
+      g_param_spec_int ("min-height", NULL, NULL,
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
@@ -377,9 +373,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
    * The preferred, or natural, width of the guide.
    */
   guide_props[PROP_NAT_WIDTH] =
-      g_param_spec_int ("nat-width",
-                        "Natural width",
-                        "Natural width",
+      g_param_spec_int ("nat-width", NULL, NULL,
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
@@ -390,9 +384,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
    * The preferred, or natural, height of the guide.
    */
   guide_props[PROP_NAT_HEIGHT] =
-      g_param_spec_int ("nat-height",
-                        "Natural height",
-                        "Natural height",
+      g_param_spec_int ("nat-height", NULL, NULL,
                         0, G_MAXINT, 0,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
@@ -403,9 +395,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
    * The maximum width of the guide.
    */
   guide_props[PROP_MAX_WIDTH] =
-      g_param_spec_int ("max-width",
-                        "Maximum width",
-                        "Maximum width",
+      g_param_spec_int ("max-width", NULL, NULL,
                         0, G_MAXINT, G_MAXINT,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
@@ -416,9 +406,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
    * The maximum height of the guide.
    */
   guide_props[PROP_MAX_HEIGHT] =
-      g_param_spec_int ("max-height",
-                        "Maximum height",
-                        "Maximum height",
+      g_param_spec_int ("max-height", NULL, NULL,
                         0, G_MAXINT, G_MAXINT,
                         G_PARAM_READWRITE|
                         G_PARAM_EXPLICIT_NOTIFY);
@@ -430,9 +418,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
    * the natural size of the guide.
    */
   guide_props[PROP_STRENGTH] =
-      g_param_spec_enum ("strength",
-                         "Strength",
-                         "The strength to use for natural size",
+      g_param_spec_enum ("strength", NULL, NULL,
                          GTK_TYPE_CONSTRAINT_STRENGTH,
                          GTK_CONSTRAINT_STRENGTH_MEDIUM,
                          G_PARAM_READWRITE|
@@ -444,9 +430,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
    * A name that identifies the `GtkConstraintGuide`, for debugging.
    */
   guide_props[PROP_NAME] =
-      g_param_spec_string ("name",
-                           "Name",
-                           "A name to use in debug message",
+      g_param_spec_string ("name", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE);
 

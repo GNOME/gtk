@@ -305,9 +305,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * when it is empty and unfocused.
    */
   props[PROP_PLACEHOLDER_TEXT] =
-      g_param_spec_string ("placeholder-text",
-                           P_("Placeholder text"),
-                           P_("Show text in the entry when it’s empty and unfocused"),
+      g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -317,9 +315,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * Whether to activate the default widget when Enter is pressed.
    */
   props[PROP_ACTIVATES_DEFAULT] =
-      g_param_spec_boolean ("activates-default",
-                            P_("Activates default"),
-                            P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
+      g_param_spec_boolean ("activates-default", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -332,9 +328,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * Since: 4.8
    */
   props[PROP_SEARCH_DELAY] =
-      g_param_spec_uint ("search-delay",
-                         P_("Search delay"),
-                         P_("The delay from last keypress to the search-changed signal. If this is not set, it defaults to 150ms"),
+      g_param_spec_uint ("search-delay", NULL, NULL,
                          0, G_MAXUINT, 150,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

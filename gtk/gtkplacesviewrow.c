@@ -336,51 +336,37 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
   widget_class->size_allocate = gtk_places_view_row_size_allocate;
 
   properties[PROP_ICON] =
-          g_param_spec_object ("icon",
-                               P_("Icon of the row"),
-                               P_("The icon representing the volume"),
+          g_param_spec_object ("icon", NULL, NULL,
                                G_TYPE_ICON,
                                G_PARAM_READWRITE);
 
   properties[PROP_NAME] =
-          g_param_spec_string ("name",
-                               P_("Name of the volume"),
-                               P_("The name of the volume"),
+          g_param_spec_string ("name", NULL, NULL,
                                "",
                                G_PARAM_READWRITE);
 
   properties[PROP_PATH] =
-          g_param_spec_string ("path",
-                               P_("Path of the volume"),
-                               P_("The path of the volume"),
+          g_param_spec_string ("path", NULL, NULL,
                                "",
                                G_PARAM_READWRITE);
 
   properties[PROP_VOLUME] =
-          g_param_spec_object ("volume",
-                               P_("Volume represented by the row"),
-                               P_("The volume represented by the row"),
+          g_param_spec_object ("volume", NULL, NULL,
                                G_TYPE_VOLUME,
                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   properties[PROP_MOUNT] =
-          g_param_spec_object ("mount",
-                               P_("Mount represented by the row"),
-                               P_("The mount point represented by the row, if any"),
+          g_param_spec_object ("mount", NULL, NULL,
                                G_TYPE_MOUNT,
                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   properties[PROP_FILE] =
-          g_param_spec_object ("file",
-                               P_("File represented by the row"),
-                               P_("The file represented by the row, if any"),
+          g_param_spec_object ("file", NULL, NULL,
                                G_TYPE_FILE,
                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   properties[PROP_IS_NETWORK] =
-          g_param_spec_boolean ("is-network",
-                                P_("Whether the row represents a network location"),
-                                P_("Whether the row represents a network location"),
+          g_param_spec_boolean ("is-network", NULL, NULL,
                                 FALSE,
                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 

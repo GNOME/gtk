@@ -356,9 +356,7 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
    * If a map is set for this model
    */
   properties[PROP_HAS_MAP] =
-      g_param_spec_boolean ("has-map",
-                            P_("has map"),
-                            P_("If a map is set for this model"),
+      g_param_spec_boolean ("has-map", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -368,9 +366,7 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
    * The model being mapped.
    */
   properties[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Model"),
-                           P_("The model being mapped"),
+      g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
 

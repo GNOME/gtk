@@ -463,9 +463,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
    * when it is empty and unfocused.
    */
   props[PROP_PLACEHOLDER_TEXT] =
-      g_param_spec_string ("placeholder-text",
-                           P_("Placeholder text"),
-                           P_("Show text in the entry when it’s empty and unfocused"),
+      g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -475,9 +473,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
    * Whether to activate the default widget when Enter is pressed.
    */
   props[PROP_ACTIVATES_DEFAULT] =
-      g_param_spec_boolean ("activates-default",
-                            P_("Activates default"),
-                            P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
+      g_param_spec_boolean ("activates-default", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -487,9 +483,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
    * Whether to show an icon for revealing the content.
    */
   props[PROP_SHOW_PEEK_ICON] =
-      g_param_spec_boolean ("show-peek-icon",
-                            P_("Show Peek Icon"),
-                            P_("Whether to show an icon for revealing the content"),
+      g_param_spec_boolean ("show-peek-icon", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -500,9 +494,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
    * the context menu.
    */
   props[PROP_EXTRA_MENU] =
-      g_param_spec_object ("extra-menu",
-                           P_("Extra menu"),
-                           P_("Model menu to append to the context menu"),
+      g_param_spec_object ("extra-menu", NULL, NULL,
                            G_TYPE_MENU_MODEL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

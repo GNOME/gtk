@@ -253,9 +253,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_PAGE_TYPE,
-                                   g_param_spec_enum ("page-type",
-                                                      P_("Page type"),
-                                                      P_("The type of the assistant page"),
+                                   g_param_spec_enum ("page-type", NULL, NULL,
                                                       GTK_TYPE_ASSISTANT_PAGE_TYPE,
                                                       GTK_ASSISTANT_PAGE_CONTENT,
                                                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
@@ -267,9 +265,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_PAGE_TITLE,
-                                   g_param_spec_string ("title",
-                                                        P_("Page title"),
-                                                        P_("The title of the assistant page"),
+                                   g_param_spec_string ("title", NULL, NULL,
                                                         NULL,
                                                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -283,9 +279,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_PAGE_COMPLETE,
-                                   g_param_spec_boolean ("complete",
-                                                         P_("Page complete"),
-                                                         P_("Whether all required fields on the page have been filled out"),
+                                   g_param_spec_boolean ("complete", NULL, NULL,
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -296,9 +290,7 @@ gtk_assistant_page_class_init (GtkAssistantPageClass *class)
    */
   g_object_class_install_property (object_class,
                                    CHILD_PROP_CHILD,
-                                   g_param_spec_object ("child",
-                                                        P_("Child widget"),
-                                                        P_("The content the assistant page"),
+                                   g_param_spec_object ("child", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
@@ -604,9 +596,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_HEADER_BAR,
-                                   g_param_spec_int ("use-header-bar",
-                                                     P_("Use Header Bar"),
-                                                     P_("Use Header Bar for actions."),
+                                   g_param_spec_int ("use-header-bar", NULL, NULL,
                                                      -1, 1, -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
@@ -617,9 +607,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_PAGES,
-                                   g_param_spec_object ("pages",
-                                                        P_("Pages"),
-                                                        P_("The pages of the assistant."),
+                                   g_param_spec_object ("pages", NULL, NULL,
                                                         G_TYPE_LIST_MODEL,
                                                         GTK_PARAM_READABLE));
 

@@ -479,9 +479,7 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *class)
   /* Properties */
   g_object_class_install_property (object_class,
                                    PROP_MODEL,
-                                   g_param_spec_object ("model",
-							P_("TreeModelSort Model"),
-							P_("The model for the TreeModelSort to sort"),
+                                   g_param_spec_object ("model", NULL, NULL,
 							GTK_TYPE_TREE_MODEL,
 							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }

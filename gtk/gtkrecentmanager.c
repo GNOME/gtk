@@ -267,9 +267,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_FILENAME,
-                                   g_param_spec_string ("filename",
-                                                        P_("Filename"),
-                                                        P_("The full path to the file to be used to store and read the list"),
+                                   g_param_spec_string ("filename", NULL, NULL,
                                                         NULL,
                                                         (G_PARAM_CONSTRUCT_ONLY | GTK_PARAM_READWRITE)));
 
@@ -280,9 +278,7 @@ gtk_recent_manager_class_init (GtkRecentManagerClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SIZE,
-                                   g_param_spec_int ("size",
-                                                     P_("Size"),
-                                                     P_("The size of the recently used resources list"),
+                                   g_param_spec_int ("size", NULL, NULL,
                                                      -1, G_MAXINT, 0,
                                                      GTK_PARAM_READABLE));
 

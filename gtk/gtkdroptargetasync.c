@@ -385,7 +385,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
    * The `GdkDragActions` that this drop target supports.
    */
   properties[PROP_ACTIONS] =
-       g_param_spec_flags ("actions", P_("Actions"), P_("Actions"),
+       g_param_spec_flags ("actions", NULL, NULL,
                            GDK_TYPE_DRAG_ACTION, 0,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -395,7 +395,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
    * The `GdkContentFormats` that determines the supported data formats.
    */
   properties[PROP_FORMATS] =
-       g_param_spec_boxed ("formats", P_("Formats"), P_("Formats"),
+       g_param_spec_boxed ("formats", NULL, NULL,
                            GDK_TYPE_CONTENT_FORMATS,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

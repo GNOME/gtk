@@ -502,9 +502,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
-                                   g_param_spec_string ("title",
-                                                        P_("Title"),
-                                                        P_("The title of the font chooser dialog"),
+                                   g_param_spec_string ("title", NULL, NULL,
                                                         _("Pick a Font"),
                                                         GTK_PARAM_READWRITE));
 
@@ -515,9 +513,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_FONT,
-                                   g_param_spec_boolean ("use-font",
-                                                         P_("Use font in label"),
-                                                         P_("Whether the label is drawn in the selected font"),
+                                   g_param_spec_boolean ("use-font", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -528,9 +524,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_SIZE,
-                                   g_param_spec_boolean ("use-size",
-                                                         P_("Use size in label"),
-                                                         P_("Whether the label is drawn with the selected font size"),
+                                   g_param_spec_boolean ("use-size", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -541,9 +535,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MODAL,
-                                   g_param_spec_boolean ("modal",
-                                                         P_("Modal"),
-                                                         P_("Whether the dialog is modal"),
+                                   g_param_spec_boolean ("modal", NULL, NULL,
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

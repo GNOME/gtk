@@ -134,9 +134,7 @@ _gtk_css_shorthand_property_class_init (GtkCssShorthandPropertyClass *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_SUBPROPERTIES,
-                                   g_param_spec_boxed ("subproperties",
-                                                       P_("Subproperties"),
-                                                       P_("The list of subproperties"),
+                                   g_param_spec_boxed ("subproperties", NULL, NULL,
                                                        G_TYPE_STRV,
                                                        G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 

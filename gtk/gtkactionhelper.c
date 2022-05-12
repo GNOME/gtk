@@ -346,11 +346,11 @@ gtk_action_helper_class_init (GtkActionHelperClass *class)
   class->get_property = gtk_action_helper_get_property;
   class->finalize = gtk_action_helper_finalize;
 
-  gtk_action_helper_pspecs[PROP_ENABLED] = g_param_spec_boolean ("enabled", "enabled", "enabled", FALSE,
+  gtk_action_helper_pspecs[PROP_ENABLED] = g_param_spec_boolean ("enabled", NULL, NULL, FALSE,
                                                                  G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-  gtk_action_helper_pspecs[PROP_ACTIVE] = g_param_spec_boolean ("active", "active", "active", FALSE,
+  gtk_action_helper_pspecs[PROP_ACTIVE] = g_param_spec_boolean ("active", NULL, NULL, FALSE,
                                                                 G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-  gtk_action_helper_pspecs[PROP_ROLE] = g_param_spec_enum ("role", "role", "role",
+  gtk_action_helper_pspecs[PROP_ROLE] = g_param_spec_enum ("role", NULL, NULL,
                                                            GTK_TYPE_BUTTON_ROLE,
                                                            GTK_BUTTON_ROLE_NORMAL,
                                                            G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);

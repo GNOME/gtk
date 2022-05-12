@@ -225,9 +225,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SPINNING,
-                                   g_param_spec_boolean ("spinning",
-                                                         P_("Spinning"),
-                                                         P_("Whether the spinner is spinning"),
+                                   g_param_spec_boolean ("spinning", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 

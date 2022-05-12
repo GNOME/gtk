@@ -374,9 +374,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
    * This property is %TRUE while the widget is in edit mode.
    */
   properties[PROP_EDITING] =
-    g_param_spec_boolean ("editing",
-                          P_("Editing"),
-                          P_("Whether the widget is in editing mode"),
+    g_param_spec_boolean ("editing", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

@@ -208,9 +208,7 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    * The title of the dialog window
    */
   native_props[PROP_TITLE] =
-    g_param_spec_string ("title",
-                         P_("Dialog Title"),
-                         P_("The title of the file chooser dialog"),
+    g_param_spec_string ("title", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE);
 
@@ -220,9 +218,7 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    * Whether the window should be modal with respect to its transient parent.
    */
   native_props[PROP_MODAL] =
-    g_param_spec_boolean ("modal",
-                          P_("Modal"),
-                          P_("If TRUE, the dialog is modal (other windows are not usable while this one is up)"),
+    g_param_spec_boolean ("modal", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -232,9 +228,7 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    * Whether the window is currently visible.
    */
   native_props[PROP_VISIBLE] =
-    g_param_spec_boolean ("visible",
-                          P_("Visible"),
-                          P_("Whether the dialog is currently visible"),
+    g_param_spec_boolean ("visible", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -244,9 +238,7 @@ gtk_native_dialog_class_init (GtkNativeDialogClass *class)
    * The transient parent of the dialog, or %NULL for none.
    */
   native_props[PROP_TRANSIENT_FOR] =
-    g_param_spec_object ("transient-for",
-                         P_("Transient for Window"),
-                         P_("The transient parent of the dialog"),
+    g_param_spec_object ("transient-for", NULL, NULL,
                          GTK_TYPE_WINDOW,
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 

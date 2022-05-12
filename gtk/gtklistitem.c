@@ -165,9 +165,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
    * If the item can be activated by the user.
    */
   properties[PROP_ACTIVATABLE] =
-    g_param_spec_boolean ("activatable",
-                          P_("Activatable"),
-                          P_("If the item can be activated by the user"),
+    g_param_spec_boolean ("activatable", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -177,9 +175,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
    * Widget used for display.
    */
   properties[PROP_CHILD] =
-    g_param_spec_object ("child",
-                         P_("Child"),
-                         P_("Widget used for display"),
+    g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -189,9 +185,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
    * Displayed item.
    */
   properties[PROP_ITEM] =
-    g_param_spec_object ("item",
-                         P_("Item"),
-                         P_("Displayed item"),
+    g_param_spec_object ("item", NULL, NULL,
                          G_TYPE_OBJECT,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -201,9 +195,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
    * Position of the item.
    */
   properties[PROP_POSITION] =
-    g_param_spec_uint ("position",
-                       P_("Position"),
-                       P_("Position of the item"),
+    g_param_spec_uint ("position", NULL, NULL,
                        0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -213,9 +205,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
    * If the item can be selected by the user.
    */
   properties[PROP_SELECTABLE] =
-    g_param_spec_boolean ("selectable",
-                          P_("Selectable"),
-                          P_("If the item can be selected by the user"),
+    g_param_spec_boolean ("selectable", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -225,9 +215,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
    * If the item is currently selected.
    */
   properties[PROP_SELECTED] =
-    g_param_spec_boolean ("selected",
-                          P_("Selected"),
-                          P_("If the item is currently selected"),
+    g_param_spec_boolean ("selected", NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

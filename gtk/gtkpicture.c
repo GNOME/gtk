@@ -328,9 +328,7 @@ gtk_picture_class_init (GtkPictureClass *class)
    * The `GdkPaintable` to be displayed by this `GtkPicture`.
    */
   properties[PROP_PAINTABLE] =
-      g_param_spec_object ("paintable",
-                           P_("Paintable"),
-                           P_("The GdkPaintable to display"),
+      g_param_spec_object ("paintable", NULL, NULL,
                            GDK_TYPE_PAINTABLE,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -340,9 +338,7 @@ gtk_picture_class_init (GtkPictureClass *class)
    * The `GFile` that is displayed or %NULL if none.
    */
   properties[PROP_FILE] =
-      g_param_spec_object ("file",
-                           P_("File"),
-                           P_("File to load and display"),
+      g_param_spec_object ("file", NULL, NULL,
                            G_TYPE_FILE,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -352,9 +348,7 @@ gtk_picture_class_init (GtkPictureClass *class)
    * The alternative textual description for the picture.
    */
   properties[PROP_ALTERNATIVE_TEXT] =
-      g_param_spec_string ("alternative-text",
-                           P_("Alternative text"),
-                           P_("The alternative textual description"),
+      g_param_spec_string ("alternative-text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -365,9 +359,7 @@ gtk_picture_class_init (GtkPictureClass *class)
    * ratio.
    */
   properties[PROP_KEEP_ASPECT_RATIO] =
-      g_param_spec_boolean ("keep-aspect-ratio",
-                            P_("Keep aspect ratio"),
-                            P_("Render contents respecting the aspect ratio"),
+      g_param_spec_boolean ("keep-aspect-ratio", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -377,9 +369,7 @@ gtk_picture_class_init (GtkPictureClass *class)
    * If the `GtkPicture` can be made smaller than the natural size of its contents.
    */
   properties[PROP_CAN_SHRINK] =
-      g_param_spec_boolean ("can-shrink",
-                            P_("Can shrink"),
-                            P_("Allow self to be smaller than contents"),
+      g_param_spec_boolean ("can-shrink", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

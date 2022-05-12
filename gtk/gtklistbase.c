@@ -1141,9 +1141,7 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
    * for details.
    */
   properties[PROP_ORIENTATION] =
-    g_param_spec_enum ("orientation",
-                       P_("Orientation"),
-                       P_("The orientation of the orientable"),
+    g_param_spec_enum ("orientation", NULL, NULL,
                        GTK_TYPE_ORIENTATION,
                        GTK_ORIENTATION_VERTICAL,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);

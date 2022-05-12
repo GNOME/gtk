@@ -159,9 +159,7 @@ gtk_fixed_layout_child_class_init (GtkFixedLayoutChildClass *klass)
    * The transform of the child.
    */
   child_props[PROP_CHILD_TRANSFORM] =
-    g_param_spec_boxed ("transform",
-                        P_("transform"),
-                        P_("The transform of a child of a fixed layout"),
+    g_param_spec_boxed ("transform", NULL, NULL,
                         GSK_TYPE_TRANSFORM,
                         G_PARAM_READWRITE |
                         G_PARAM_STATIC_STRINGS |

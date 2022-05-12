@@ -410,9 +410,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * with the [property@Gtk.MenuButton:popover] property.
    */
   menu_button_props[PROP_MENU_MODEL] =
-      g_param_spec_object ("menu-model",
-                           P_("Menu model"),
-                           P_("The model from which the popup is made."),
+      g_param_spec_object ("menu-model", NULL, NULL,
                            G_TYPE_MENU_MODEL,
                            GTK_PARAM_READWRITE);
 
@@ -423,9 +421,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * menu or popover will be popped out.
    */
   menu_button_props[PROP_DIRECTION] =
-      g_param_spec_enum ("direction",
-                         P_("Direction"),
-                         P_("The direction the arrow should point."),
+      g_param_spec_enum ("direction", NULL, NULL,
                          GTK_TYPE_ARROW_TYPE,
                          GTK_ARROW_DOWN,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -436,9 +432,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * The `GtkPopover` that will be popped up when the button is clicked.
    */
   menu_button_props[PROP_POPOVER] =
-      g_param_spec_object ("popover",
-                           P_("Popover"),
-                           P_("The popover"),
+      g_param_spec_object ("popover", NULL, NULL,
                            GTK_TYPE_POPOVER,
                            G_PARAM_READWRITE);
 
@@ -448,9 +442,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * The name of the icon used to automatically populate the button.
    */
   menu_button_props[PROP_ICON_NAME] =
-      g_param_spec_string ("icon-name",
-                           P_("Icon Name"),
-                           P_("The name of the icon used to automatically populate the button"),
+      g_param_spec_string ("icon-name", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -462,9 +454,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * Since: 4.4
    */
   menu_button_props[PROP_ALWAYS_SHOW_ARROW] =
-      g_param_spec_boolean ("always-show-arrow",
-                            P_("Always Show Arrow"),
-                            P_("Whether to show a dropdown arrow even when using an icon or a custom child"),
+      g_param_spec_boolean ("always-show-arrow", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -474,9 +464,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * The label for the button.
    */
   menu_button_props[PROP_LABEL] =
-      g_param_spec_string ("label",
-                           P_("Label"),
-                           P_("The label for the button"),
+      g_param_spec_string ("label", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -486,9 +474,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * If set an underscore in the text indicates a mnemonic.
    */
   menu_button_props[PROP_USE_UNDERLINE] =
-      g_param_spec_boolean ("use-underline",
-                            P_("Use underline"),
-                            P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+      g_param_spec_boolean ("use-underline", NULL, NULL,
                            FALSE,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -498,9 +484,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * Whether the button has a frame.
    */
   menu_button_props[PROP_HAS_FRAME] =
-    g_param_spec_boolean ("has-frame",
-                          P_("Has frame"),
-                          P_("Whether the button has a frame"),
+    g_param_spec_boolean ("has-frame", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -514,9 +498,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * Since: 4.4
    */
   menu_button_props[PROP_PRIMARY] =
-    g_param_spec_boolean ("primary",
-                          P_("Primary"),
-                          P_("Whether the menubutton acts as a primary menu"),
+    g_param_spec_boolean ("primary", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -528,9 +510,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    * Since: 4.6
    */
   menu_button_props[PROP_CHILD] =
-    g_param_spec_object ("child",
-                         P_("Child"),
-                         P_("The child widget"),
+    g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

@@ -601,9 +601,7 @@ gdk_macos_drag_class_init (GdkMacosDragClass *klass)
   drag_class->handle_event = gdk_macos_drag_handle_event;
 
   properties [PROP_DRAG_SURFACE] =
-    g_param_spec_object ("drag-surface",
-                         P_("Drag Surface"),
-                         P_("Drag Surface"),
+    g_param_spec_object ("drag-surface", NULL, NULL,
                          GDK_TYPE_MACOS_DRAG_SURFACE,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 

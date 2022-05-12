@@ -544,9 +544,7 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
    * The expression to evaluate on items to get a number to compare with.
    */
   properties[PROP_EXPRESSION] =
-    gtk_param_spec_expression ("expression",
-                               P_("Expression"),
-                               P_("Expression to compare with"),
+    gtk_param_spec_expression ("expression", NULL, NULL,
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -555,9 +553,7 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
    * Whether the sorter will sort smaller numbers first.
    */
   properties[PROP_SORT_ORDER] =
-    g_param_spec_enum ("sort-order",
-                       P_("Sort order"),
-                       P_("Whether to sort smaller numbers first"),
+    g_param_spec_enum ("sort-order", NULL, NULL,
                        GTK_TYPE_SORT_TYPE,
                        GTK_SORT_ASCENDING,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);

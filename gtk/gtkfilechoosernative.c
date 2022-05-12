@@ -772,9 +772,7 @@ gtk_file_chooser_native_class_init (GtkFileChooserNativeClass *class)
    * %NULL to use the default text.
    */
  native_props[PROP_ACCEPT_LABEL] =
-      g_param_spec_string ("accept-label",
-                           P_("Accept label"),
-                           P_("The label on the accept button"),
+      g_param_spec_string ("accept-label", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -785,9 +783,7 @@ gtk_file_chooser_native_class_init (GtkFileChooserNativeClass *class)
    * %NULL to use the default text.
    */
   native_props[PROP_CANCEL_LABEL] =
-      g_param_spec_string ("cancel-label",
-                           P_("Cancel label"),
-                           P_("The label on the cancel button"),
+      g_param_spec_string ("cancel-label", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 

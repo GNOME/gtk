@@ -361,17 +361,13 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MESSAGE_TYPE,
-                                   g_param_spec_enum ("message-type",
-                                                      P_("Message Type"),
-                                                      P_("The type of message"),
+                                   g_param_spec_enum ("message-type", NULL, NULL,
                                                       GTK_TYPE_MESSAGE_TYPE,
                                                       GTK_MESSAGE_INFO,
                                                       GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
   g_object_class_install_property (gobject_class,
                                    PROP_BUTTONS,
-                                   g_param_spec_enum ("buttons",
-                                                      P_("Message Buttons"),
-                                                      P_("The buttons shown in the message dialog"),
+                                   g_param_spec_enum ("buttons", NULL, NULL,
                                                       GTK_TYPE_BUTTONS_TYPE,
                                                       GTK_BUTTONS_NONE,
                                                       GTK_PARAM_WRITABLE|G_PARAM_CONSTRUCT_ONLY));
@@ -384,9 +380,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_TEXT,
-                                   g_param_spec_string ("text",
-                                                        P_("Text"),
-                                                        P_("The primary text of the message dialog"),
+                                   g_param_spec_string ("text", NULL, NULL,
                                                         "",
                                                         GTK_PARAM_READWRITE));
   /**
@@ -398,9 +392,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_MARKUP,
-                                   g_param_spec_boolean ("use-markup",
-                                                         P_("Use Markup"),
-                                                         P_("The primary text of the title includes Pango markup."),
+                                   g_param_spec_boolean ("use-markup", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
@@ -410,9 +402,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SECONDARY_TEXT,
-                                   g_param_spec_string ("secondary-text",
-                                                        P_("Secondary Text"),
-                                                        P_("The secondary text of the message dialog"),
+                                   g_param_spec_string ("secondary-text", NULL, NULL,
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
   /**
@@ -424,9 +414,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_SECONDARY_USE_MARKUP,
-                                   g_param_spec_boolean ("secondary-use-markup",
-                                                         P_("Use Markup in secondary"),
-                                                         P_("The secondary text includes Pango markup."),
+                                   g_param_spec_boolean ("secondary-use-markup", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
@@ -439,9 +427,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MESSAGE_AREA,
-                                   g_param_spec_object ("message-area",
-                                                        P_("Message area"),
-                                                        P_("GtkBox that holds the dialog’s primary and secondary labels"),
+                                   g_param_spec_object ("message-area", NULL, NULL,
                                                         GTK_TYPE_WIDGET,
                                                         GTK_PARAM_READABLE));
 

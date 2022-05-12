@@ -378,9 +378,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * `g_get_application_name()`.
    */
   props[PROP_NAME] =
-    g_param_spec_string ("program-name",
-                         P_("Program name"),
-                         P_("The name of the program. If this is not set, it defaults to g_get_application_name()"),
+    g_param_spec_string ("program-name", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -390,9 +388,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * The version of the program.
    */
   props[PROP_VERSION] =
-    g_param_spec_string ("version",
-                         P_("Program version"),
-                         P_("The version of the program"),
+    g_param_spec_string ("version", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -402,9 +398,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * Copyright information for the program.
    */
   props[PROP_COPYRIGHT] =
-    g_param_spec_string ("copyright",
-                         P_("Copyright string"),
-                         P_("Copyright information for the program"),
+    g_param_spec_string ("copyright", NULL, NULL,
                         NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -418,9 +412,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * not a detailed list of features.
    */
   props[PROP_COMMENTS] =
-    g_param_spec_string ("comments",
-                         P_("Comments string"),
-                         P_("Comments about the program"),
+    g_param_spec_string ("comments", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -443,9 +435,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * be converted into clickable links.
    */
   props[PROP_LICENSE] =
-    g_param_spec_string ("license",
-                         P_("License"),
-                         P_("The license of the program"),
+    g_param_spec_string ("license", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -463,9 +453,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * be converted into clickable links.
    */
   props[PROP_SYSTEM_INFORMATION] =
-    g_param_spec_string ("system-information",
-                         P_("System Information"),
-                         P_("Information about the system on which the program is running"),
+    g_param_spec_string ("system-information", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -489,9 +477,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * a side effect.
    */
   props[PROP_LICENSE_TYPE] =
-    g_param_spec_enum ("license-type",
-                       P_("License Type"),
-                       P_("The license type of the program"),
+    g_param_spec_enum ("license-type", NULL, NULL,
                        GTK_TYPE_LICENSE,
                        GTK_LICENSE_UNKNOWN,
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
@@ -504,9 +490,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * This should be a string starting with `http://` or `https://`.
    */
   props[PROP_WEBSITE] =
-    g_param_spec_string ("website",
-                         P_("Website URL"),
-                         P_("The URL for the link to the website of the program"),
+    g_param_spec_string ("website", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -516,9 +500,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * The label for the link to the website of the program.
    */
   props[PROP_WEBSITE_LABEL] =
-    g_param_spec_string ("website-label",
-                         P_("Website label"),
-                         P_("The label for the link to the website of the program"),
+    g_param_spec_string ("website-label", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -531,9 +513,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * as links, see the introduction for more details.
    */
   props[PROP_AUTHORS] =
-    g_param_spec_boxed ("authors",
-                        P_("Authors"),
-                        P_("List of authors of the program"),
+    g_param_spec_boxed ("authors", NULL, NULL,
                         G_TYPE_STRV,
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -546,9 +526,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * as links, see the introduction for more details.
    */
   props[PROP_DOCUMENTERS] =
-    g_param_spec_boxed ("documenters",
-                        P_("Documenters"),
-                        P_("List of people documenting the program"),
+    g_param_spec_boxed ("documenters", NULL, NULL,
                         G_TYPE_STRV,
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -562,9 +540,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * as links.
    */
   props[PROP_ARTISTS] =
-    g_param_spec_boxed ("artists",
-                        P_("Artists"),
-                        P_("List of people who have contributed artwork to the program"),
+    g_param_spec_boxed ("artists", NULL, NULL,
                         G_TYPE_STRV,
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -579,9 +555,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * as links, see the introduction for more details.
    */
   props[PROP_TRANSLATOR_CREDITS] =
-    g_param_spec_string ("translator-credits",
-                         P_("Translator credits"),
-                         P_("Credits to the translators. This string should be marked as translatable"),
+    g_param_spec_string ("translator-credits", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -594,9 +568,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * [id@gtk_window_set_default_icon_name] will be used.
    */
   props[PROP_LOGO] =
-    g_param_spec_object ("logo",
-                         P_("Logo"),
-                         P_("A logo for the about box."),
+    g_param_spec_object ("logo", NULL, NULL,
                          GDK_TYPE_PAINTABLE,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -608,9 +580,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * This property overrides the [property@Gtk.AboutDialog:logo] property.
    */
   props[PROP_LOGO_ICON_NAME] =
-    g_param_spec_string ("logo-icon-name",
-                         P_("Logo Icon Name"),
-                         P_("A named icon to use as the logo for the about box."),
+    g_param_spec_string ("logo-icon-name", NULL, NULL,
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -620,9 +590,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * Whether to wrap the text in the license dialog.
    */
   props[PROP_WRAP_LICENSE] =
-    g_param_spec_boolean ("wrap-license",
-                          P_("Wrap license"),
-                          P_("Whether to wrap the license text."),
+    g_param_spec_boolean ("wrap-license", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

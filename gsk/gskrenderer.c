@@ -192,9 +192,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
    * Whether the renderer has been associated with a surface or draw context.
    */
   gsk_renderer_properties[PROP_REALIZED] =
-    g_param_spec_boolean ("realized",
-                          "Realized",
-                          "The renderer has been associated with a surface or draw context",
+    g_param_spec_boolean ("realized", NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -204,9 +202,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
    * The surface associated with renderer.
    */
   gsk_renderer_properties[PROP_SURFACE] =
-    g_param_spec_object ("surface",
-                         "Surface",
-                         "The surface associated to the renderer",
+    g_param_spec_object ("surface", NULL, NULL,
                          GDK_TYPE_SURFACE,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

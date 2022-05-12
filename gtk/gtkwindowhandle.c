@@ -533,9 +533,7 @@ gtk_window_handle_class_init (GtkWindowHandleClass *klass)
    * The child widget.
    */
   props[PROP_CHILD] =
-      g_param_spec_object ("child",
-                           P_("Child"),
-                           P_("The child widget"),
+      g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

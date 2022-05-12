@@ -99,9 +99,7 @@ gtk_printer_option_class_init (GtkPrinterOptionClass *class)
 
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_VALUE,
-                                   g_param_spec_string ("value",
-                                                        P_("Option Value"),
-                                                        P_("Value of the option"),
+                                   g_param_spec_string ("value", NULL, NULL,
                                                         "",
                                                         GTK_PARAM_READWRITE));
 }

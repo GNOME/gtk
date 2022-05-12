@@ -111,9 +111,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
    *
    * The serial number of the tool.
    */
-  tool_props[TOOL_PROP_SERIAL] = g_param_spec_uint64 ("serial",
-                                                      "Serial",
-                                                      "Serial number",
+  tool_props[TOOL_PROP_SERIAL] = g_param_spec_uint64 ("serial", NULL, NULL,
                                                       0, G_MAXUINT64, 0,
                                                       G_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT_ONLY |
@@ -124,9 +122,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
    *
    * The type of the tool.
    */
-  tool_props[TOOL_PROP_TOOL_TYPE] = g_param_spec_enum ("tool-type",
-                                                       "Tool type",
-                                                       "Tool type",
+  tool_props[TOOL_PROP_TOOL_TYPE] = g_param_spec_enum ("tool-type", NULL, NULL,
                                                        GDK_TYPE_DEVICE_TOOL_TYPE,
                                                        GDK_DEVICE_TOOL_TYPE_UNKNOWN,
                                                        G_PARAM_READWRITE |
@@ -138,9 +134,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
    *
    * The axes of the tool.
    */
-  tool_props[TOOL_PROP_AXES] = g_param_spec_flags ("axes",
-                                                   "Axes",
-                                                   "Tool axes",
+  tool_props[TOOL_PROP_AXES] = g_param_spec_flags ("axes", NULL, NULL,
                                                    GDK_TYPE_AXIS_FLAGS, 0,
                                                    G_PARAM_READWRITE |
                                                    G_PARAM_CONSTRUCT_ONLY);
@@ -150,9 +144,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
    *
    * The hardware ID of the tool.
    */
-  tool_props[TOOL_PROP_HARDWARE_ID] = g_param_spec_uint64 ("hardware-id",
-                                                           "Hardware ID",
-                                                           "Hardware ID",
+  tool_props[TOOL_PROP_HARDWARE_ID] = g_param_spec_uint64 ("hardware-id", NULL, NULL,
                                                            0, G_MAXUINT64, 0,
                                                            G_PARAM_READWRITE |
                                                            G_PARAM_CONSTRUCT_ONLY |

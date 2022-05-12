@@ -515,9 +515,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
    * See [property@Gtk.WindowControls:decoration_layout].
    */
   props[PROP_SIDE] =
-      g_param_spec_enum ("side",
-                         P_("Side"),
-                         P_("Whether the widget shows start or end portion of the decoration layout"),
+      g_param_spec_enum ("side", NULL, NULL,
                          GTK_TYPE_PACK_TYPE,
                          GTK_PACK_START,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
@@ -531,9 +529,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
    * [property@Gtk.Settings:gtk-decoration-layout] setting is used.
    */
   props[PROP_DECORATION_LAYOUT] =
-      g_param_spec_string ("decoration-layout",
-                           P_("Decoration Layout"),
-                           P_("The layout for window decorations"),
+      g_param_spec_string ("decoration-layout", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -543,9 +539,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
    * Whether the widget has any window buttons.
    */
   props[PROP_EMPTY] =
-    g_param_spec_boolean ("empty",
-                          P_("Empty"),
-                          P_("Whether the widget has any window buttons"),
+    g_param_spec_boolean ("empty", NULL, NULL,
                           TRUE,
                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 

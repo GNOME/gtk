@@ -295,16 +295,12 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                   G_TYPE_NONE, 0);
 
   entry_completion_props[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Completion Model"),
-                           P_("The model to find matches in"),
+      g_param_spec_object ("model", NULL, NULL,
                            GTK_TYPE_TREE_MODEL,
                            GTK_PARAM_READWRITE);
 
   entry_completion_props[PROP_MINIMUM_KEY_LENGTH] =
-      g_param_spec_int ("minimum-key-length",
-                        P_("Minimum Key Length"),
-                        P_("Minimum length of the search key in order to look up matches"),
+      g_param_spec_int ("minimum-key-length", NULL, NULL,
                         0, G_MAXINT, 1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -316,9 +312,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * Note that the strings must be UTF-8.
    */
   entry_completion_props[PROP_TEXT_COLUMN] =
-    g_param_spec_int ("text-column",
-                      P_("Text column"),
-                      P_("The column of the model containing the strings."),
+    g_param_spec_int ("text-column", NULL, NULL,
                       -1, G_MAXINT, -1,
                       GTK_PARAM_READWRITE);
 
@@ -332,9 +326,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * using a custom match function.
    */
   entry_completion_props[PROP_INLINE_COMPLETION] =
-      g_param_spec_boolean ("inline-completion",
-                            P_("Inline completion"),
-                            P_("Whether the common prefix should be inserted automatically"),
+      g_param_spec_boolean ("inline-completion", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -345,9 +337,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * shown in a popup window.
    */
   entry_completion_props[PROP_POPUP_COMPLETION] =
-      g_param_spec_boolean ("popup-completion",
-                            P_("Popup completion"),
-                            P_("Whether the completions should be shown in a popup window"),
+      g_param_spec_boolean ("popup-completion", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -358,9 +348,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * resized to the width of the entry.
    */
   entry_completion_props[PROP_POPUP_SET_WIDTH] =
-      g_param_spec_boolean ("popup-set-width",
-                            P_("Popup set width"),
-                            P_("If TRUE, the popup window will have the same size as the entry"),
+      g_param_spec_boolean ("popup-set-width", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -374,9 +362,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * [property@Gtk.EntryCompletion:inline-completion].
    */
   entry_completion_props[PROP_POPUP_SINGLE_MATCH] =
-      g_param_spec_boolean ("popup-single-match",
-                            P_("Popup single match"),
-                            P_("If TRUE, the popup window will appear for a single match."),
+      g_param_spec_boolean ("popup-single-match", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -387,9 +373,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * will appear in the entry as you navigate through them.
    */
   entry_completion_props[PROP_INLINE_SELECTION] =
-      g_param_spec_boolean ("inline-selection",
-                            P_("Inline selection"),
-                            P_("Your description here"),
+      g_param_spec_boolean ("inline-selection", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -403,9 +387,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
    * [class@Gtk.CellAreaBox] will be used.
    */
   entry_completion_props[PROP_CELL_AREA] =
-      g_param_spec_object ("cell-area",
-                           P_("Cell Area"),
-                           P_("The GtkCellArea used to layout cells"),
+      g_param_spec_object ("cell-area", NULL, NULL,
                            GTK_TYPE_CELL_AREA,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 

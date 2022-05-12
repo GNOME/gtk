@@ -372,9 +372,7 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
    * The widget to display as drag icon.
    */
   properties[PROP_CHILD] =
-    g_param_spec_object ("child",
-                         P_("Child"),
-                         P_("The widget to display as drag icon."),
+    g_param_spec_object ("child", NULL, NULL,
                          GTK_TYPE_WIDGET,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

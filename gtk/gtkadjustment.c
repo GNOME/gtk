@@ -137,9 +137,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * The value of the adjustment.
    */
   adjustment_props[PROP_VALUE] =
-      g_param_spec_double ("value",
-                           P_("Value"),
-                           P_("The value of the adjustment"),
+      g_param_spec_double ("value", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
                            GTK_PARAM_READWRITE);
@@ -150,9 +148,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * The minimum value of the adjustment.
    */
   adjustment_props[PROP_LOWER] =
-      g_param_spec_double ("lower",
-                           P_("Minimum Value"),
-                           P_("The minimum value of the adjustment"),
+      g_param_spec_double ("lower", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
                            GTK_PARAM_READWRITE);
@@ -166,9 +162,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * property is nonzero.
    */
   adjustment_props[PROP_UPPER] =
-      g_param_spec_double ("upper",
-                           P_("Maximum Value"),
-                           P_("The maximum value of the adjustment"),
+      g_param_spec_double ("upper", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
                            GTK_PARAM_READWRITE);
@@ -179,9 +173,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * The step increment of the adjustment.
    */
   adjustment_props[PROP_STEP_INCREMENT] =
-      g_param_spec_double ("step-increment",
-                           P_("Step Increment"),
-                           P_("The step increment of the adjustment"),
+      g_param_spec_double ("step-increment", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
                            GTK_PARAM_READWRITE);
@@ -192,9 +184,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * The page increment of the adjustment.
    */
   adjustment_props[PROP_PAGE_INCREMENT] =
-      g_param_spec_double ("page-increment",
-                           P_("Page Increment"),
-                           P_("The page increment of the adjustment"),
+      g_param_spec_double ("page-increment", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
                            GTK_PARAM_READWRITE);
@@ -209,9 +199,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
    * `GtkSpinButton`.
    */
   adjustment_props[PROP_PAGE_SIZE] =
-      g_param_spec_double ("page-size",
-                           P_("Page Size"),
-                           P_("The page size of the adjustment"),
+      g_param_spec_double ("page-size", NULL, NULL,
                            -G_MAXDOUBLE, G_MAXDOUBLE,
                            0.0,
                            GTK_PARAM_READWRITE);

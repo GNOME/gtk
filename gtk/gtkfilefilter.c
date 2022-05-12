@@ -235,9 +235,7 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
    * user interface if there is a selectable list of filters.
    */
   props[PROP_NAME] =
-      g_param_spec_string ("name",
-                           P_("Name"),
-                           P_("The human-readable name for this filter"),
+      g_param_spec_string ("name", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

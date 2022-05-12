@@ -276,7 +276,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * The title for this group of shortcuts.
    */
   properties[PROP_TITLE] =
-    g_param_spec_string ("title", P_("Title"), P_("Title"),
+    g_param_spec_string ("title", NULL, NULL,
                          "",
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -291,7 +291,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * Set this to %NULL to make the group always visible.
    */
   properties[PROP_VIEW] =
-    g_param_spec_string ("view", P_("View"), P_("View"),
+    g_param_spec_string ("view", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -303,9 +303,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * This is used internally by GTK, and must not be modified by applications.
    */
   properties[PROP_ACCEL_SIZE_GROUP] =
-    g_param_spec_object ("accel-size-group",
-                         P_("Accelerator Size Group"),
-                         P_("Accelerator Size Group"),
+    g_param_spec_object ("accel-size-group", NULL, NULL,
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
@@ -317,9 +315,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * This is used internally by GTK, and must not be modified by applications.
    */
   properties[PROP_TITLE_SIZE_GROUP] =
-    g_param_spec_object ("title-size-group",
-                         P_("Title Size Group"),
-                         P_("Title Size Group"),
+    g_param_spec_object ("title-size-group", NULL, NULL,
                          GTK_TYPE_SIZE_GROUP,
                          (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
 
@@ -331,7 +327,7 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * This is used internally by GTK, and is not useful for applications.
    */
   properties[PROP_HEIGHT] =
-    g_param_spec_uint ("height", P_("Height"), P_("Height"),
+    g_param_spec_uint ("height", NULL, NULL,
                        0, G_MAXUINT, 1,
                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 

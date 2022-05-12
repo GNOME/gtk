@@ -757,9 +757,7 @@ gtk_text_class_init (GtkTextClass *class)
    * The `GtkEntryBuffer` object which stores the text.
    */
   text_props[PROP_BUFFER] =
-      g_param_spec_object ("buffer",
-                           P_("Text Buffer"),
-                           P_("Text buffer object which actually stores self text"),
+      g_param_spec_object ("buffer", NULL, NULL,
                            GTK_TYPE_ENTRY_BUFFER,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -771,9 +769,7 @@ gtk_text_class_init (GtkTextClass *class)
    * Zero indicates no limit.
    */
   text_props[PROP_MAX_LENGTH] =
-      g_param_spec_int ("max-length",
-                        P_("Maximum length"),
-                        P_("Maximum number of characters for this self. Zero if no maximum"),
+      g_param_spec_int ("max-length", NULL, NULL,
                         0, GTK_ENTRY_BUFFER_MAX_SIZE,
                         0,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -784,9 +780,7 @@ gtk_text_class_init (GtkTextClass *class)
    * The character to used when masking contents (in “password mode”).
    */
   text_props[PROP_INVISIBLE_CHAR] =
-      g_param_spec_unichar ("invisible-char",
-                            P_("Invisible character"),
-                            P_("The character to use when masking self contents (in “password mode”)"),
+      g_param_spec_unichar ("invisible-char", NULL, NULL,
                             '*',
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -796,9 +790,7 @@ gtk_text_class_init (GtkTextClass *class)
    * Whether to activate the default widget when Enter is pressed.
    */
   text_props[PROP_ACTIVATES_DEFAULT] =
-      g_param_spec_boolean ("activates-default",
-                            P_("Activates default"),
-                            P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
+      g_param_spec_boolean ("activates-default", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -808,9 +800,7 @@ gtk_text_class_init (GtkTextClass *class)
    * Number of pixels scrolled of the screen to the left.
    */
   text_props[PROP_SCROLL_OFFSET] =
-      g_param_spec_int ("scroll-offset",
-                        P_("Scroll offset"),
-                        P_("Number of pixels of the text scrolled off the screen to the left"),
+      g_param_spec_int ("scroll-offset", NULL, NULL,
                         0, G_MAXINT,
                         0,
                         GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
@@ -821,9 +811,7 @@ gtk_text_class_init (GtkTextClass *class)
    * When %TRUE, pasted multi-line text is truncated to the first line.
    */
   text_props[PROP_TRUNCATE_MULTILINE] =
-      g_param_spec_boolean ("truncate-multiline",
-                            P_("Truncate multiline"),
-                            P_("Whether to truncate multiline pastes to one line."),
+      g_param_spec_boolean ("truncate-multiline", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -833,9 +821,7 @@ gtk_text_class_init (GtkTextClass *class)
    * If text is overwritten when typing in the `GtkText`.
    */
   text_props[PROP_OVERWRITE_MODE] =
-      g_param_spec_boolean ("overwrite-mode",
-                            P_("Overwrite mode"),
-                            P_("Whether new text overwrites existing text"),
+      g_param_spec_boolean ("overwrite-mode", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -845,9 +831,7 @@ gtk_text_class_init (GtkTextClass *class)
    * Whether the invisible char has been set for the `GtkText`.
    */
   text_props[PROP_INVISIBLE_CHAR_SET] =
-      g_param_spec_boolean ("invisible-char-set",
-                            P_("Invisible character set"),
-                            P_("Whether the invisible character has been set"),
+      g_param_spec_boolean ("invisible-char-set", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE);
 
@@ -858,9 +842,7 @@ gtk_text_class_init (GtkTextClass *class)
   * and unfocused.
   */
   text_props[PROP_PLACEHOLDER_TEXT] =
-      g_param_spec_string ("placeholder-text",
-                           P_("Placeholder text"),
-                           P_("Show text in the GtkText when it’s empty and unfocused"),
+      g_param_spec_string ("placeholder-text", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -876,9 +858,7 @@ gtk_text_class_init (GtkTextClass *class)
    * property.
    */
   text_props[PROP_IM_MODULE] =
-      g_param_spec_string ("im-module",
-                           P_("IM module"),
-                           P_("Which IM module should be used"),
+      g_param_spec_string ("im-module", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -895,9 +875,7 @@ gtk_text_class_init (GtkTextClass *class)
    * [property@Gtk.Text:visibility].
    */
   text_props[PROP_INPUT_PURPOSE] =
-      g_param_spec_enum ("input-purpose",
-                         P_("Purpose"),
-                         P_("Purpose of the text field"),
+      g_param_spec_enum ("input-purpose", NULL, NULL,
                          GTK_TYPE_INPUT_PURPOSE,
                          GTK_INPUT_PURPOSE_FREE_FORM,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -909,9 +887,7 @@ gtk_text_class_init (GtkTextClass *class)
    * their behaviour.
    */
   text_props[PROP_INPUT_HINTS] =
-      g_param_spec_flags ("input-hints",
-                          P_("hints"),
-                          P_("Hints for the text field behaviour"),
+      g_param_spec_flags ("input-hints", NULL, NULL,
                           GTK_TYPE_INPUT_HINTS,
                           GTK_INPUT_HINT_NONE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -927,9 +903,7 @@ gtk_text_class_init (GtkTextClass *class)
    * `GtkEntryBuffer` text, i.e. without the preedit string.
    */
   text_props[PROP_ATTRIBUTES] =
-      g_param_spec_boxed ("attributes",
-                          P_("Attributes"),
-                          P_("A list of style attributes to apply to the text of the GtkText"),
+      g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -939,9 +913,7 @@ gtk_text_class_init (GtkTextClass *class)
    * A list of tabstops to apply to the text of the `GtkText`.
    */
   text_props[PROP_TABS] =
-      g_param_spec_boxed ("tabs",
-                          P_("Tabs"),
-                          P_("A list of tabstop locations to apply to the text of the GtkText"),
+      g_param_spec_boxed ("tabs", NULL, NULL,
                           PANGO_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -951,9 +923,7 @@ gtk_text_class_init (GtkTextClass *class)
    * Whether to suggest Emoji replacements.
    */
   text_props[PROP_ENABLE_EMOJI_COMPLETION] =
-      g_param_spec_boolean ("enable-emoji-completion",
-                            P_("Enable Emoji completion"),
-                            P_("Whether to suggest Emoji replacements"),
+      g_param_spec_boolean ("enable-emoji-completion", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -963,9 +933,7 @@ gtk_text_class_init (GtkTextClass *class)
    * If %FALSE, the text is masked with the “invisible char”.
    */
   text_props[PROP_VISIBILITY] =
-      g_param_spec_boolean ("visibility",
-                            P_("Visibility"),
-                            P_("FALSE displays the “invisible char” instead of the actual text (password mode)"),
+      g_param_spec_boolean ("visibility", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -975,9 +943,7 @@ gtk_text_class_init (GtkTextClass *class)
    * Whether the widget should grow and shrink with the content.
    */
   text_props[PROP_PROPAGATE_TEXT_WIDTH] =
-      g_param_spec_boolean ("propagate-text-width",
-                            P_("Propagate text width"),
-                            P_("Whether the entry should grow and shrink with the content"),
+      g_param_spec_boolean ("propagate-text-width", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -988,9 +954,7 @@ gtk_text_class_init (GtkTextClass *class)
    * the context menu.
    */
   text_props[PROP_EXTRA_MENU] =
-      g_param_spec_object ("extra-menu",
-                          P_("Extra menu"),
-                          P_("Menu model to append to the context menu"),
+      g_param_spec_object ("extra-menu", NULL, NULL,
                           G_TYPE_MENU_MODEL,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

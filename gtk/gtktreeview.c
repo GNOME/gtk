@@ -992,51 +992,37 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   g_object_class_override_property (o_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   tree_view_props[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("TreeView Model"),
-                           P_("The model for the tree view"),
+      g_param_spec_object ("model", NULL, NULL,
                            GTK_TYPE_TREE_MODEL,
                            GTK_PARAM_READWRITE);
 
   tree_view_props[PROP_HEADERS_VISIBLE] =
-      g_param_spec_boolean ("headers-visible",
-                            P_("Headers Visible"),
-                            P_("Show the column header buttons"),
+      g_param_spec_boolean ("headers-visible", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_HEADERS_CLICKABLE] =
-      g_param_spec_boolean ("headers-clickable",
-                            P_("Headers Clickable"),
-                            P_("Column headers respond to click events"),
+      g_param_spec_boolean ("headers-clickable", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_EXPANDER_COLUMN] =
-      g_param_spec_object ("expander-column",
-                           P_("Expander Column"),
-                           P_("Set the column for the expander column"),
+      g_param_spec_object ("expander-column", NULL, NULL,
                            GTK_TYPE_TREE_VIEW_COLUMN,
                            GTK_PARAM_READWRITE);
 
   tree_view_props[PROP_REORDERABLE] =
-      g_param_spec_boolean ("reorderable",
-                            P_("Reorderable"),
-                            P_("View is reorderable"),
+      g_param_spec_boolean ("reorderable", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_ENABLE_SEARCH] =
-      g_param_spec_boolean ("enable-search",
-                            P_("Enable Search"),
-                            P_("View allows user to search through columns interactively"),
+      g_param_spec_boolean ("enable-search", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_SEARCH_COLUMN] =
-      g_param_spec_int ("search-column",
-                        P_("Search Column"),
-                        P_("Model column to search through during interactive search"),
+      g_param_spec_int ("search-column", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -1051,9 +1037,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * information on this option.
    */
   tree_view_props[PROP_FIXED_HEIGHT_MODE] =
-      g_param_spec_boolean ("fixed-height-mode",
-                            P_("Fixed Height Mode"),
-                            P_("Speeds up GtkTreeView by assuming that all rows have the same height"),
+      g_param_spec_boolean ("fixed-height-mode", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1069,9 +1053,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * in `GtkComboBox` or `GtkEntryCompletion`.
    */
   tree_view_props[PROP_HOVER_SELECTION] =
-      g_param_spec_boolean ("hover-selection",
-                            P_("Hover Selection"),
-                            P_("Whether the selection should follow the pointer"),
+      g_param_spec_boolean ("hover-selection", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1086,9 +1068,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * in `GtkComboBox` or `GtkEntryCompletion`.
    */
   tree_view_props[PROP_HOVER_EXPAND] =
-      g_param_spec_boolean ("hover-expand",
-                            P_("Hover Expand"),
-                            P_("Whether rows should be expanded/collapsed when the pointer moves over them"),
+      g_param_spec_boolean ("hover-expand", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1098,9 +1078,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * %TRUE if the view has expanders.
    */
   tree_view_props[PROP_SHOW_EXPANDERS] =
-      g_param_spec_boolean ("show-expanders",
-                            P_("Show Expanders"),
-                            P_("View has expanders"),
+      g_param_spec_boolean ("show-expanders", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -1110,39 +1088,29 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * Extra indentation for each level.
    */
   tree_view_props[PROP_LEVEL_INDENTATION] =
-      g_param_spec_int ("level-indentation",
-                        P_("Level Indentation"),
-                        P_("Extra indentation for each level"),
+      g_param_spec_int ("level-indentation", NULL, NULL,
                         0, G_MAXINT,
                         0,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_RUBBER_BANDING] =
-      g_param_spec_boolean ("rubber-banding",
-                            P_("Rubber Banding"),
-                            P_("Whether to enable selection of multiple items by dragging the mouse pointer"),
+      g_param_spec_boolean ("rubber-banding", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_ENABLE_GRID_LINES] =
-      g_param_spec_enum ("enable-grid-lines",
-                         P_("Enable Grid Lines"),
-                         P_("Whether grid lines should be drawn in the tree view"),
+      g_param_spec_enum ("enable-grid-lines", NULL, NULL,
                          GTK_TYPE_TREE_VIEW_GRID_LINES,
                          GTK_TREE_VIEW_GRID_LINES_NONE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_ENABLE_TREE_LINES] =
-      g_param_spec_boolean ("enable-tree-lines",
-                            P_("Enable Tree Lines"),
-                            P_("Whether tree lines should be drawn in the tree view"),
+      g_param_spec_boolean ("enable-tree-lines", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   tree_view_props[PROP_TOOLTIP_COLUMN] =
-      g_param_spec_int ("tooltip-column",
-                        P_("Tooltip Column"),
-                        P_("The column in the model containing the tooltip texts for the rows"),
+      g_param_spec_int ("tooltip-column", NULL, NULL,
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -1154,9 +1122,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    * will be emitted after a single click.
    */
   tree_view_props[PROP_ACTIVATE_ON_SINGLE_CLICK] =
-      g_param_spec_boolean ("activate-on-single-click",
-                            P_("Activate on Single Click"),
-                            P_("Activate row on a single click"),
+      g_param_spec_boolean ("activate-on-single-click", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

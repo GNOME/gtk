@@ -305,9 +305,7 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   * otherwise g_dgettext().
   */
   builder_props[PROP_TRANSLATION_DOMAIN] =
-      g_param_spec_string ("translation-domain",
-                           P_("Translation Domain"),
-                           P_("The translation domain used by gettext"),
+      g_param_spec_string ("translation-domain", NULL, NULL,
                            NULL,
                            GTK_PARAM_READWRITE);
 
@@ -317,9 +315,7 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   * The object the builder is evaluating for.
   */
   builder_props[PROP_CURRENT_OBJECT] =
-      g_param_spec_object ("current-object",
-                           P_("Current object"),
-                           P_("The object the builder is evaluating for"),
+      g_param_spec_object ("current-object", NULL, NULL,
                            G_TYPE_OBJECT,
                            GTK_PARAM_READWRITE);
 
@@ -329,9 +325,7 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   * The scope the builder is operating in
   */
   builder_props[PROP_SCOPE] =
-      g_param_spec_object ("scope",
-                           P_("Scope"),
-                           P_("The scope the builder is operating in"),
+      g_param_spec_object ("scope", NULL, NULL,
                            GTK_TYPE_BUILDER_SCOPE,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
 

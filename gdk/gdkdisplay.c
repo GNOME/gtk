@@ -213,9 +213,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    * %TRUE if the display properly composites the alpha channel.
    */
   props[PROP_COMPOSITED] =
-    g_param_spec_boolean ("composited",
-                          P_("Composited"),
-                          P_("Composited"),
+    g_param_spec_boolean ("composited", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -225,9 +223,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    * %TRUE if the display supports an alpha channel.
    */
   props[PROP_RGBA] =
-    g_param_spec_boolean ("rgba",
-                          P_("RGBA"),
-                          P_("RGBA"),
+    g_param_spec_boolean ("rgba", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -237,9 +233,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    * %TRUE if the display supports input shapes.
    */
   props[PROP_INPUT_SHAPES] =
-    g_param_spec_boolean ("input-shapes",
-                          P_("Input shapes"),
-                          P_("Input shapes"),
+    g_param_spec_boolean ("input-shapes", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 

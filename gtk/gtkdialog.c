@@ -563,9 +563,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_HEADER_BAR,
-                                   g_param_spec_int ("use-header-bar",
-                                                     P_("Use Header Bar"),
-                                                     P_("Use Header Bar for actions."),
+                                   g_param_spec_int ("use-header-bar", NULL, NULL,
                                                      -1, 1, -1,
                                                      GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 

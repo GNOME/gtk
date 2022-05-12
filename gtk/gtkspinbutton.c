@@ -371,9 +371,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * The adjustment that holds the value of the spin button.
    */
   spinbutton_props[PROP_ADJUSTMENT] =
-    g_param_spec_object ("adjustment",
-                         P_("Adjustment"),
-                         P_("The adjustment that holds the value of the spin button"),
+    g_param_spec_object ("adjustment", NULL, NULL,
                          GTK_TYPE_ADJUSTMENT,
                          GTK_PARAM_READWRITE);
 
@@ -383,9 +381,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * The acceleration rate when you hold down a button or key.
    */
   spinbutton_props[PROP_CLIMB_RATE] =
-    g_param_spec_double ("climb-rate",
-                         P_("Climb Rate"),
-                         P_("The acceleration rate when you hold down a button or key"),
+    g_param_spec_double ("climb-rate", NULL, NULL,
                          0.0, G_MAXDOUBLE, 0.0,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -395,9 +391,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * The number of decimal places to display.
    */
   spinbutton_props[PROP_DIGITS] =
-    g_param_spec_uint ("digits",
-                       P_("Digits"),
-                       P_("The number of decimal places to display"),
+    g_param_spec_uint ("digits", NULL, NULL,
                        0, MAX_DIGITS, 0,
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -408,9 +402,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * nearest step increment.
    */
   spinbutton_props[PROP_SNAP_TO_TICKS] =
-    g_param_spec_boolean ("snap-to-ticks",
-                          P_("Snap to Ticks"),
-                          P_("Whether erroneous values are automatically changed to a spin button’s nearest step increment"),
+    g_param_spec_boolean ("snap-to-ticks", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -420,9 +412,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * Whether non-numeric characters should be ignored.
    */
   spinbutton_props[PROP_NUMERIC] =
-    g_param_spec_boolean ("numeric",
-                          P_("Numeric"),
-                          P_("Whether non-numeric characters should be ignored"),
+    g_param_spec_boolean ("numeric", NULL, NULL,
                           FALSE,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -432,9 +422,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * Whether a spin button should wrap upon reaching its limits.
    */
   spinbutton_props[PROP_WRAP] =
-    g_param_spec_boolean ("wrap",
-                          P_("Wrap"),
-                          P_("Whether a spin button should wrap upon reaching its limits"),
+    g_param_spec_boolean ("wrap", NULL, NULL,
                           FALSE,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -445,9 +433,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * is acceptable.
    */
   spinbutton_props[PROP_UPDATE_POLICY] =
-    g_param_spec_enum ("update-policy",
-                       P_("Update Policy"),
-                       P_("Whether the spin button should update always, or only when the value is legal"),
+    g_param_spec_enum ("update-policy", NULL, NULL,
                        GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY,
                        GTK_UPDATE_ALWAYS,
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -458,9 +444,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * The current value.
    */
   spinbutton_props[PROP_VALUE] =
-    g_param_spec_double ("value",
-                         P_("Value"),
-                         P_("Reads the current value, or sets a new value"),
+    g_param_spec_double ("value", NULL, NULL,
                          -G_MAXDOUBLE, G_MAXDOUBLE, 0.0,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

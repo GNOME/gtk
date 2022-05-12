@@ -405,9 +405,7 @@ gtk_flatten_list_model_class_init (GtkFlattenListModelClass *class)
    * The model being flattened.
    */
   properties[PROP_MODEL] =
-      g_param_spec_object ("model",
-                           P_("Model"),
-                           P_("The model being flattened"),
+      g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 

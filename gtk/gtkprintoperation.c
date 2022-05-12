@@ -1082,9 +1082,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_DEFAULT_PAGE_SETUP,
-				   g_param_spec_object ("default-page-setup",
-							P_("Default Page Setup"),
-							P_("The GtkPageSetup used by default"),
+				   g_param_spec_object ("default-page-setup", NULL, NULL,
 							GTK_TYPE_PAGE_SETUP,
 							GTK_PARAM_READWRITE));
 
@@ -1099,9 +1097,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_PRINT_SETTINGS,
-				   g_param_spec_object ("print-settings",
-							P_("Print Settings"),
-							P_("The GtkPrintSettings used for initializing the dialog"),
+				   g_param_spec_object ("print-settings", NULL, NULL,
 							GTK_TYPE_PRINT_SETTINGS,
 							GTK_PARAM_READWRITE));
 
@@ -1116,9 +1112,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_JOB_NAME,
-				   g_param_spec_string ("job-name",
-							P_("Job Name"),
-							P_("A string used for identifying the print job."),
+				   g_param_spec_string ("job-name", NULL, NULL,
 							"",
 							GTK_PARAM_READWRITE));
 
@@ -1139,9 +1133,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_N_PAGES,
-				   g_param_spec_int ("n-pages",
-						     P_("Number of Pages"),
-						     P_("The number of pages in the document."),
+				   g_param_spec_int ("n-pages", NULL, NULL,
 						     -1,
 						     G_MAXINT,
 						     -1,
@@ -1159,9 +1151,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_CURRENT_PAGE,
-				   g_param_spec_int ("current-page",
-						     P_("Current Page"),
-						     P_("The current page in the document"),
+				   g_param_spec_int ("current-page", NULL, NULL,
 						     -1,
 						     G_MAXINT,
 						     -1,
@@ -1181,9 +1171,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_USE_FULL_PAGE,
-				   g_param_spec_boolean ("use-full-page",
-							 P_("Use full page"),
-							 P_("TRUE if the origin of the context should be at the corner of the page and not the corner of the imageable area"),
+				   g_param_spec_boolean ("use-full-page", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1200,9 +1188,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_TRACK_PRINT_STATUS,
-				   g_param_spec_boolean ("track-print-status",
-							 P_("Track Print Status"),
-							 P_("TRUE if the print operation will continue to report on the print job status after the print data has been sent to the printer or print server."),
+				   g_param_spec_boolean ("track-print-status", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1215,9 +1201,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_UNIT,
-				   g_param_spec_enum ("unit",
-						      P_("Unit"),
-						      P_("The unit in which distances can be measured in the context"),
+				   g_param_spec_enum ("unit", NULL, NULL,
 						      GTK_TYPE_UNIT,
 						      GTK_UNIT_NONE,
 						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
@@ -1230,9 +1214,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_PROGRESS,
-				   g_param_spec_boolean ("show-progress",
-							 P_("Show Dialog"),
-							 P_("TRUE if a progress dialog is shown while printing."),
+				   g_param_spec_boolean ("show-progress", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1252,9 +1234,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_ALLOW_ASYNC,
-				   g_param_spec_boolean ("allow-async",
-							 P_("Allow Async"),
-							 P_("TRUE if print process may run asynchronous."),
+				   g_param_spec_boolean ("allow-async", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1274,9 +1254,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_EXPORT_FILENAME,
-				   g_param_spec_string ("export-filename",
-							P_("Export filename"),
-							P_("Export filename"),
+				   g_param_spec_string ("export-filename", NULL, NULL,
 							NULL,
 							GTK_PARAM_READWRITE));
 
@@ -1287,9 +1265,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_STATUS,
-				   g_param_spec_enum ("status",
-						      P_("Status"),
-						      P_("The status of the print operation"),
+				   g_param_spec_enum ("status", NULL, NULL,
 						      GTK_TYPE_PRINT_STATUS,
 						      GTK_PRINT_STATUS_INITIAL,
 						      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
@@ -1307,9 +1283,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_STATUS_STRING,
-				   g_param_spec_string ("status-string",
-							P_("Status String"),
-							P_("A human-readable description of the status"),
+				   g_param_spec_string ("status-string", NULL, NULL,
 							"",
 							GTK_PARAM_READABLE));
   
@@ -1325,9 +1299,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_CUSTOM_TAB_LABEL,
-				   g_param_spec_string ("custom-tab-label",
-							P_("Custom tab label"),
-							P_("Label for the tab containing custom widgets."),
+				   g_param_spec_string ("custom-tab-label", NULL, NULL,
 							NULL,
 							GTK_PARAM_READWRITE));
 
@@ -1340,9 +1312,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_SUPPORT_SELECTION,
-				   g_param_spec_boolean ("support-selection",
-							 P_("Support Selection"),
-							 P_("TRUE if the print operation will support print of selection."),
+				   g_param_spec_boolean ("support-selection", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1356,9 +1326,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_SELECTION,
-				   g_param_spec_boolean ("has-selection",
-							 P_("Has Selection"),
-							 P_("TRUE if a selection exists."),
+				   g_param_spec_boolean ("has-selection", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1371,9 +1339,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_EMBED_PAGE_SETUP,
-				   g_param_spec_boolean ("embed-page-setup",
-							 P_("Embed Page Setup"),
-							 P_("TRUE if page setup combos are embedded in GtkPrintUnixDialog"),
+				   g_param_spec_boolean ("embed-page-setup", NULL, NULL,
 							 FALSE,
 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1393,9 +1359,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    */
   g_object_class_install_property (gobject_class,
 				   PROP_N_PAGES_TO_PRINT,
-				   g_param_spec_int ("n-pages-to-print",
-						     P_("Number of Pages To Print"),
-						     P_("The number of pages that will be printed."),
+				   g_param_spec_int ("n-pages-to-print", NULL, NULL,
 						     -1,
 						     G_MAXINT,
 						     -1,

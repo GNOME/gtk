@@ -155,9 +155,7 @@ gtk_media_file_class_init (GtkMediaFileClass *class)
    * The file being played back or %NULL if not playing a file.
    */
   properties[PROP_FILE] =
-    g_param_spec_object ("file",
-                         P_("File"),
-                         P_("File being played back"),
+    g_param_spec_object ("file", NULL, NULL,
                          G_TYPE_FILE,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -169,9 +167,7 @@ gtk_media_file_class_init (GtkMediaFileClass *class)
    * This is %NULL when playing a file.
    */
   properties[PROP_INPUT_STREAM] =
-    g_param_spec_object ("input-stream",
-                         P_("Input stream"),
-                         P_("Input stream being played back"),
+    g_param_spec_object ("input-stream", NULL, NULL,
                          G_TYPE_INPUT_STREAM,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

@@ -145,33 +145,25 @@ gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
 
   g_object_class_install_property (object_class,
                                    PROP_DISPLAY,
-                                   g_param_spec_object ("display",
-                                                        "Display",
-                                                        "Display for the device manager",
+                                   g_param_spec_object ("display", NULL, NULL,
                                                         GDK_TYPE_DISPLAY,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
                                    PROP_OPCODE,
-                                   g_param_spec_int ("opcode",
-                                                     P_("Opcode"),
-                                                     P_("Opcode for XInput2 requests"),
+                                   g_param_spec_int ("opcode", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                      G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
                                    PROP_MAJOR,
-                                   g_param_spec_int ("major",
-                                                     P_("Major"),
-                                                     P_("Major version number"),
+                                   g_param_spec_int ("major", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                      G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class,
                                    PROP_MINOR,
-                                   g_param_spec_int ("minor",
-                                                     P_("Minor"),
-                                                     P_("Minor version number"),
+                                   g_param_spec_int ("minor", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                      G_PARAM_STATIC_STRINGS));

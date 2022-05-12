@@ -469,9 +469,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * Factory for populating list items.
    */
   properties[PROP_FACTORY] =
-    g_param_spec_object ("factory",
-                         P_("Factory"),
-                         P_("Factory for populating list items"),
+    g_param_spec_object ("factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -483,9 +481,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * If this is not set, [property@Gtk.DropDown:factory] is used.
    */
   properties[PROP_LIST_FACTORY] =
-    g_param_spec_object ("list-factory",
-                         P_("List Factory"),
-                         P_("Factory for populating list items"),
+    g_param_spec_object ("list-factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -495,9 +491,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * Model for the displayed items.
    */
   properties[PROP_MODEL] =
-    g_param_spec_object ("model",
-                         P_("Model"),
-                         P_("Model for the displayed items"),
+    g_param_spec_object ("model", NULL, NULL,
                          G_TYPE_LIST_MODEL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -510,9 +504,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * %GTK_INVALID_LIST_POSITION.
    */
   properties[PROP_SELECTED] =
-    g_param_spec_uint ("selected",
-                         P_("Selected"),
-                         P_("Position of the selected item"),
+    g_param_spec_uint ("selected", NULL, NULL,
                          0, G_MAXUINT, GTK_INVALID_LIST_POSITION,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -522,9 +514,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * The selected item.
    */
   properties[PROP_SELECTED_ITEM] =
-    g_param_spec_object ("selected-item",
-                       P_("Selected Item"),
-                       P_("The selected item"),
+    g_param_spec_object ("selected-item", NULL, NULL,
                        G_TYPE_OBJECT,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -537,9 +527,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * to be set.
    */
   properties[PROP_ENABLE_SEARCH] =
-    g_param_spec_boolean  ("enable-search",
-                         P_("Enable search"),
-                         P_("Whether to show a search entry in the popup"),
+    g_param_spec_boolean  ("enable-search", NULL, NULL,
                          FALSE,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -554,9 +542,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * used to bind strings to labels produced by a default factory.
    */
   properties[PROP_EXPRESSION] =
-    gtk_param_spec_expression ("expression",
-                               P_("Expression"),
-                               P_("Expression to determine strings to search for"),
+    gtk_param_spec_expression ("expression", NULL, NULL,
                                G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -567,9 +553,7 @@ gtk_drop_down_class_init (GtkDropDownClass *klass)
    * Since: 4.6
    */
   properties[PROP_SHOW_ARROW] =
-    g_param_spec_boolean  ("show-arrow",
-                           P_("Show arrow"),
-                           P_("Whether to show an arrow within the widget"),
+    g_param_spec_boolean  ("show-arrow", NULL, NULL,
                            TRUE,
                            G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 

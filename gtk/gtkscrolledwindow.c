@@ -602,9 +602,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * The `GtkAdjustment` for the horizontal position.
    */
   properties[PROP_HADJUSTMENT] =
-      g_param_spec_object ("hadjustment",
-                           P_("Horizontal Adjustment"),
-                           P_("The GtkAdjustment for the horizontal position"),
+      g_param_spec_object ("hadjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
 
@@ -614,9 +612,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * The `GtkAdjustment` for the vertical position.
    */
   properties[PROP_VADJUSTMENT] =
-      g_param_spec_object ("vadjustment",
-                           P_("Vertical Adjustment"),
-                           P_("The GtkAdjustment for the vertical position"),
+      g_param_spec_object ("vadjustment", NULL, NULL,
                            GTK_TYPE_ADJUSTMENT,
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
 
@@ -629,9 +625,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * this property.
    */
   properties[PROP_HSCROLLBAR_POLICY] =
-      g_param_spec_enum ("hscrollbar-policy",
-                         P_("Horizontal Scrollbar Policy"),
-                         P_("When the horizontal scrollbar is displayed"),
+      g_param_spec_enum ("hscrollbar-policy", NULL, NULL,
                          GTK_TYPE_POLICY_TYPE,
                          GTK_POLICY_AUTOMATIC,
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -645,9 +639,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * this property.
    */
   properties[PROP_VSCROLLBAR_POLICY] =
-      g_param_spec_enum ("vscrollbar-policy",
-                         P_("Vertical Scrollbar Policy"),
-                         P_("When the vertical scrollbar is displayed"),
+      g_param_spec_enum ("vscrollbar-policy", NULL, NULL,
                         GTK_TYPE_POLICY_TYPE,
                         GTK_POLICY_AUTOMATIC,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -658,9 +650,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * Where the contents are located with respect to the scrollbars.
    */
   properties[PROP_WINDOW_PLACEMENT] =
-      g_param_spec_enum ("window-placement",
-                         P_("Window Placement"),
-                         P_("Where the contents are located with respect to the scrollbars."),
+      g_param_spec_enum ("window-placement", NULL, NULL,
                         GTK_TYPE_CORNER_TYPE,
                         GTK_CORNER_TOP_LEFT,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -671,9 +661,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * Whether to draw a frame around the contents.
    */
   properties[PROP_HAS_FRAME] =
-      g_param_spec_boolean ("has-frame",
-                            P_("Has Frame"),
-                            P_("Whether to draw a frame around the contents"),
+      g_param_spec_boolean ("has-frame", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -683,9 +671,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * The minimum content width of @scrolled_window.
    */
   properties[PROP_MIN_CONTENT_WIDTH] =
-      g_param_spec_int ("min-content-width",
-                        P_("Minimum Content Width"),
-                        P_("The minimum width that the scrolled window will allocate to its content"),
+      g_param_spec_int ("min-content-width", NULL, NULL,
                         -1, G_MAXINT, -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -695,9 +681,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * The minimum content height of @scrolled_window.
    */
   properties[PROP_MIN_CONTENT_HEIGHT] =
-      g_param_spec_int ("min-content-height",
-                        P_("Minimum Content Height"),
-                        P_("The minimum height that the scrolled window will allocate to its content"),
+      g_param_spec_int ("min-content-height", NULL, NULL,
                         -1, G_MAXINT, -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -709,9 +693,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * Kinetic scrolling only applies to devices with source %GDK_SOURCE_TOUCHSCREEN.
    */
   properties[PROP_KINETIC_SCROLLING] =
-      g_param_spec_boolean ("kinetic-scrolling",
-                            P_("Kinetic Scrolling"),
-                            P_("Kinetic scrolling mode."),
+      g_param_spec_boolean ("kinetic-scrolling", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -728,9 +710,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * the [property@Gtk.Settings:gtk-overlay-scrolling] setting.
    */
   properties[PROP_OVERLAY_SCROLLING] =
-      g_param_spec_boolean ("overlay-scrolling",
-                            P_("Overlay Scrolling"),
-                            P_("Overlay scrolling mode"),
+      g_param_spec_boolean ("overlay-scrolling", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -740,9 +720,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * The maximum content width of @scrolled_window.
    */
   properties[PROP_MAX_CONTENT_WIDTH] =
-      g_param_spec_int ("max-content-width",
-                        P_("Maximum Content Width"),
-                        P_("The maximum width that the scrolled window will allocate to its content"),
+      g_param_spec_int ("max-content-width", NULL, NULL,
                         -1, G_MAXINT, -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -752,9 +730,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * The maximum content height of @scrolled_window.
    */
   properties[PROP_MAX_CONTENT_HEIGHT] =
-      g_param_spec_int ("max-content-height",
-                        P_("Maximum Content Height"),
-                        P_("The maximum height that the scrolled window will allocate to its content"),
+      g_param_spec_int ("max-content-height", NULL, NULL,
                         -1, G_MAXINT, -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -768,9 +744,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * enough space for the natural size of the child.
    */
   properties[PROP_PROPAGATE_NATURAL_WIDTH] =
-      g_param_spec_boolean ("propagate-natural-width",
-                            P_("Propagate Natural Width"),
-                            P_("Propagate Natural Width"),
+      g_param_spec_boolean ("propagate-natural-width", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -784,9 +758,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * enough space for the natural size of the child.
    */
   properties[PROP_PROPAGATE_NATURAL_HEIGHT] =
-      g_param_spec_boolean ("propagate-natural-height",
-                            P_("Propagate Natural Height"),
-                            P_("Propagate Natural Height"),
+      g_param_spec_boolean ("propagate-natural-height", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -796,9 +768,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * The child widget.
    */
   properties[PROP_CHILD] =
-      g_param_spec_object ("child",
-                           P_("Child"),
-                           P_("The child widget"),
+      g_param_spec_object ("child", NULL, NULL,
                            GTK_TYPE_WIDGET,
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

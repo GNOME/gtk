@@ -173,9 +173,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    * The possible formats that the provider can provide its data in.
    */
   properties[PROP_FORMATS] =
-    g_param_spec_boxed ("formats",
-                        "Formats",
-                        "The possible formats for data",
+    g_param_spec_boxed ("formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READABLE |
                         G_PARAM_STATIC_STRINGS |
@@ -187,9 +185,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    * The subset of formats that clipboard managers should store this provider's data in.
    */
   properties[PROP_STORABLE_FORMATS] =
-    g_param_spec_boxed ("storable-formats",
-                        "Storable formats",
-                        "The formats that data should be stored in",
+    g_param_spec_boxed ("storable-formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READABLE |
                         G_PARAM_STATIC_STRINGS |

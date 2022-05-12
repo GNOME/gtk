@@ -94,9 +94,7 @@ gsk_gl_profiler_class_init (GskGLProfilerClass *klass)
   gobject_class->finalize = gsk_gl_profiler_finalize;
 
   gsk_gl_profiler_properties[PROP_GL_CONTEXT] =
-    g_param_spec_object ("gl-context",
-                         "GL Context",
-                         "The GdkGLContext used by the GL profiler",
+    g_param_spec_object ("gl-context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |

@@ -159,9 +159,7 @@ gtk_bool_filter_class_init (GtkBoolFilterClass *class)
    * The boolean expression to evaluate on item.
    */
   properties[PROP_EXPRESSION] =
-    gtk_param_spec_expression ("expression",
-                               P_("Expression"),
-                               P_("Expression to evaluate"),
+    gtk_param_spec_expression ("expression", NULL, NULL,
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
@@ -170,9 +168,7 @@ gtk_bool_filter_class_init (GtkBoolFilterClass *class)
    * If the expression result should be inverted.
    */
   properties[PROP_INVERT] =
-      g_param_spec_boolean ("invert",
-                            P_("Invert"),
-                            P_("If the expression result should be inverted"),
+      g_param_spec_boolean ("invert", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 

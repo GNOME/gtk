@@ -67,9 +67,7 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
    *
    * See `GContentType` for more information about content types.
    */
-  pspec = g_param_spec_string ("content-type",
-                               P_("Content type"),
-                               P_("The content type used by the open with object"),
+  pspec = g_param_spec_string ("content-type", NULL, NULL,
                                NULL,
                                G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
                                G_PARAM_STATIC_STRINGS);

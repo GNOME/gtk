@@ -256,6 +256,9 @@ widget_test_properties (GtkWidget   *widget,
   for (i = 0; i < n_pspecs; i++)
     {
       GParamSpec *pspec = pspecs[i];
+      /* we want to test if the nick is null, but the getter defaults to the name */
+      g_assert_cmpstr (g_param_spec_get_nick (pspec), ==, g_param_spec_get_name (pspec));
+      g_assert_cmpstr (g_param_spec_get_blurb (pspec), ==, NULL);
       if (pspec->flags & G_PARAM_WRITABLE &&
           !(pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)))
         object_test_property (G_OBJECT (widget), pspecs[i], dvalue);

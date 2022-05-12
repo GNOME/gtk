@@ -109,9 +109,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_CELL_AREA,
-                                   g_param_spec_object ("area",
-                                                        P_("Area"),
-                                                        P_("The Cell Area this context was created for"),
+                                   g_param_spec_object ("area", NULL, NULL,
                                                         GTK_TYPE_CELL_AREA,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
@@ -124,9 +122,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_MIN_WIDTH,
-                                   g_param_spec_int ("minimum-width",
-                                                     P_("Minimum Width"),
-                                                     P_("Minimum cached width"),
+                                   g_param_spec_int ("minimum-width", NULL, NULL,
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READABLE));
 
@@ -139,9 +135,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_NAT_WIDTH,
-                                   g_param_spec_int ("natural-width",
-                                                     P_("Minimum Width"),
-                                                     P_("Minimum cached width"),
+                                   g_param_spec_int ("natural-width", NULL, NULL,
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READABLE));
 
@@ -154,9 +148,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_MIN_HEIGHT,
-                                   g_param_spec_int ("minimum-height",
-                                                     P_("Minimum Height"),
-                                                     P_("Minimum cached height"),
+                                   g_param_spec_int ("minimum-height", NULL, NULL,
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READABLE));
 
@@ -169,9 +161,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
    */
   g_object_class_install_property (object_class,
                                    PROP_NAT_HEIGHT,
-                                   g_param_spec_int ("natural-height",
-                                                     P_("Minimum Height"),
-                                                     P_("Minimum cached height"),
+                                   g_param_spec_int ("natural-height", NULL, NULL,
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READABLE));
 }

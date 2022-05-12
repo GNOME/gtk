@@ -127,9 +127,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    */
   g_object_class_install_property (object_class,
 				   PROP_ADJUSTMENT,
-				   g_param_spec_object ("adjustment",
-							P_("Adjustment"),
-							P_("The adjustment that holds the value of the spin button"),
+				   g_param_spec_object ("adjustment", NULL, NULL,
 							GTK_TYPE_ADJUSTMENT,
 							GTK_PARAM_READWRITE));
 
@@ -141,9 +139,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    */
   g_object_class_install_property (object_class,
 				   PROP_CLIMB_RATE,
-				   g_param_spec_double ("climb-rate",
-							P_("Climb rate"),
-							P_("The acceleration rate when you hold down a button"),
+				   g_param_spec_double ("climb-rate", NULL, NULL,
 							0.0, G_MAXDOUBLE, 0.0,
 							GTK_PARAM_READWRITE));  
   /**
@@ -153,9 +149,7 @@ gtk_cell_renderer_spin_class_init (GtkCellRendererSpinClass *klass)
    */
   g_object_class_install_property (object_class,
 				   PROP_DIGITS,
-				   g_param_spec_uint ("digits",
-						      P_("Digits"),
-						      P_("The number of decimal places to display"),
+				   g_param_spec_uint ("digits", NULL, NULL,
 						      0, 20, 0,
 						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY)); 
 }

@@ -171,9 +171,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_KEY,
-                                   g_param_spec_uint ("accel-key",
-                                                     P_("Accelerator key"),
-                                                     P_("The keyval of the accelerator"),
+                                   g_param_spec_uint ("accel-key", NULL, NULL,
                                                       0,
                                                       G_MAXINT,
                                                       0,
@@ -186,9 +184,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_MODS,
-                                   g_param_spec_flags ("accel-mods",
-                                                       P_("Accelerator modifiers"),
-                                                       P_("The modifier mask of the accelerator"),
+                                   g_param_spec_flags ("accel-mods", NULL, NULL,
                                                        GDK_TYPE_MODIFIER_TYPE,
                                                        0,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
@@ -202,9 +198,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    */ 
   g_object_class_install_property (object_class,
                                    PROP_KEYCODE,
-                                   g_param_spec_uint ("keycode",
-                                                      P_("Accelerator keycode"),
-                                                      P_("The hardware keycode of the accelerator"),
+                                   g_param_spec_uint ("keycode", NULL, NULL,
                                                       0,
                                                       G_MAXINT,
                                                       0,
@@ -220,9 +214,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
    */
   g_object_class_install_property (object_class,
                                    PROP_ACCEL_MODE,
-                                   g_param_spec_enum ("accel-mode",
-                                                      P_("Accelerator Mode"),
-                                                      P_("The type of accelerators"),
+                                   g_param_spec_enum ("accel-mode", NULL, NULL,
                                                       GTK_TYPE_CELL_RENDERER_ACCEL_MODE,
                                                       GTK_CELL_RENDERER_ACCEL_MODE_GTK,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));

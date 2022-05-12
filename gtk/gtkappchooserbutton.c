@@ -682,9 +682,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * a `GtkAppChooserDialog`.
    */
   properties[PROP_SHOW_DIALOG_ITEM] =
-    g_param_spec_boolean ("show-dialog-item",
-                          P_("Include an “Other…” item"),
-                          P_("Whether the combobox should include an item that triggers a GtkAppChooserDialog"),
+    g_param_spec_boolean ("show-dialog-item", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -695,9 +693,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * on top for the provided content type.
    */
   properties[PROP_SHOW_DEFAULT_ITEM] =
-    g_param_spec_boolean ("show-default-item",
-                          P_("Show default item"),
-                          P_("Whether the combobox should show the default application on top"),
+    g_param_spec_boolean ("show-default-item", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -710,9 +706,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * The string may contain Pango markup.
    */
   properties[PROP_HEADING] =
-    g_param_spec_string ("heading",
-                         P_("Heading"),
-                         P_("The text to show at the top of the dialog"),
+    g_param_spec_string ("heading", NULL, NULL,
                          NULL,
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -722,9 +716,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * Whether the app chooser dialog should be modal.
    */
   properties[PROP_MODAL] =
-    g_param_spec_boolean ("modal",
-                          P_("Modal"),
-                          P_("Whether the dialog should be modal"),
+    g_param_spec_boolean ("modal", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);

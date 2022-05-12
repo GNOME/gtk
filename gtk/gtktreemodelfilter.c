@@ -527,17 +527,13 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
 
   g_object_class_install_property (object_class,
                                    PROP_CHILD_MODEL,
-                                   g_param_spec_object ("child-model",
-                                                        P_("The child model"),
-                                                        P_("The model for the filtermodel to filter"),
+                                   g_param_spec_object ("child-model", NULL, NULL,
                                                         GTK_TYPE_TREE_MODEL,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
                                    PROP_VIRTUAL_ROOT,
-                                   g_param_spec_boxed ("virtual-root",
-                                                       P_("The virtual root"),
-                                                       P_("The virtual root (relative to the child model) for this filtermodel"),
+                                   g_param_spec_boxed ("virtual-root", NULL, NULL,
                                                        GTK_TYPE_TREE_PATH,
                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }

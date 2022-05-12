@@ -482,7 +482,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
    * for the accepted syntax.
    */
   properties[PROP_ACCELERATOR] =
-    g_param_spec_string ("accelerator", P_("Accelerator"), P_("Accelerator"),
+    g_param_spec_string ("accelerator", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -492,7 +492,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
    * The text that is displayed when no accelerator is set.
    */
   properties[PROP_DISABLED_TEXT] =
-    g_param_spec_string ("disabled-text", P_("Disabled text"), P_("Disabled text"),
+    g_param_spec_string ("disabled-text", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
