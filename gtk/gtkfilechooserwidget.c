@@ -236,6 +236,7 @@ struct _GtkFileChooserWidget
   LocationMode location_mode;
 
   GtkWidget *external_entry;
+  GtkEventController *external_entry_controller;
 
   GtkWidget *choice_box;
   GHashTable *choices;
@@ -2302,6 +2303,28 @@ forward_key (GtkEventControllerKey *key,
   return gtk_event_controller_key_forward (key, GTK_WIDGET (impl));
 }
 
+static void
+external_entry_setup (GtkFileChooserWidget *impl)
+{
+  /* Make keybindings (for example, Ctrl+H to toggle showing hidden files)
+   * work even when the focus is on the external entry (which is outside
+   * the hierarchy of GtkFileChooserWidget) */
+
+  impl->external_entry_controller = gtk_event_controller_key_new ();
+  gtk_event_controller_set_propagation_phase (impl->external_entry_controller,
+                                              GTK_PHASE_BUBBLE);
+  g_signal_connect (impl->external_entry_controller, "key-pressed",
+                    G_CALLBACK (forward_key), impl);
+  gtk_widget_add_controller (impl->external_entry, impl->external_entry_controller);
+}
+
+static void
+external_entry_disconnect (GtkFileChooserWidget *impl)
+{
+  gtk_widget_remove_controller (impl->external_entry, impl->external_entry_controller);
+  impl->external_entry_controller = NULL;
+}
+
 /* Creates the widgets specific to Save mode */
 static void
 save_widgets_create (GtkFileChooserWidget *impl)
@@ -2323,10 +2346,7 @@ save_widgets_create (GtkFileChooserWidget *impl)
       impl->location_entry = impl->external_entry;
       g_object_add_weak_pointer (G_OBJECT (impl->external_entry), (gpointer *)&impl->location_entry);
       location_entry_setup (impl);
-
-      g_signal_connect_after (gtk_entry_get_key_controller (GTK_ENTRY (impl->external_entry)),
-                              "key-pressed",
-                              G_CALLBACK (forward_key), impl);
+      external_entry_setup (impl);
       return;
     }
 
@@ -2363,9 +2383,7 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
 {
   if (impl->external_entry && impl->external_entry == impl->location_entry)
     {
-      g_signal_handlers_disconnect_by_func (gtk_entry_get_key_controller (GTK_ENTRY (impl->external_entry)),
-                                            forward_key, impl);
-
+      external_entry_disconnect (impl);
       location_entry_disconnect (impl);
       impl->location_entry = NULL;
     }
@@ -3104,7 +3122,6 @@ gtk_file_chooser_widget_dispose (GObject *object)
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) object;
 
   cancel_all_operations (impl);
-
   g_clear_pointer (&impl->rename_file_popover, gtk_widget_unparent);
   g_clear_pointer (&impl->browse_files_popover, gtk_widget_unparent);
   g_clear_object (&impl->extra_widget);
@@ -3112,6 +3129,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
 
   if (impl->external_entry && impl->location_entry == impl->external_entry)
     {
+      external_entry_disconnect (impl);
       location_entry_disconnect (impl);
       impl->external_entry = NULL;
     }
@@ -7854,11 +7872,11 @@ gtk_file_chooser_widget_set_save_entry (GtkFileChooserWidget *impl,
   g_return_if_fail (GTK_IS_FILE_CHOOSER_WIDGET (impl));
   g_return_if_fail (entry == NULL || GTK_IS_FILE_CHOOSER_ENTRY (entry));
 
-  impl->external_entry = entry;
-
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
       save_widgets_destroy (impl);
+
+      impl->external_entry = entry;
       save_widgets_create (impl);
     }
 }
