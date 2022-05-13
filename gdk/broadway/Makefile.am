@@ -1,5 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 include $(top_srcdir)/Makefile.decl
+include gdk-broadway-sources.inc
 NULL =
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
@@ -23,15 +24,7 @@ noinst_LTLIBRARIES = libgdk-broadway.la
 
 bin_PROGRAMS = broadwayd
 
-libgdkinclude_HEADERS = 	\
-	gdkbroadway.h
-
-libgdkbroadwayinclude_HEADERS = 	\
-	gdkbroadwaydisplay.h		\
-	gdkbroadwaywindow.h		\
-	gdkbroadwaycursor.h		\
-	gdkbroadwaymonitor.h		\
-	gdkbroadwayvisual.h
+libgdkinclude_HEADERS = $(GDK_PUBLIC_H_SRCS_BROADWAY)
 
 EXTRA_DIST += toarray.pl
 
@@ -46,56 +39,18 @@ broadwayjs.h: broadway.js rawinflate.min.js
 EXTRA_DIST += broadway.js rawinflate.min.js
 
 # built headers that don't get installed
-broadway_built_private_headers =	\
-	clienthtml.h			\
-	broadwayjs.h
-
 broadway_built_sources =		\
 	${broadway_built_private_headers}
 
 libgdk_broadway_la_SOURCES =		\
 	${broadway_built_private_headers}\
-	gdkcursor-broadway.c	\
-	gdkdevice-broadway.h	\
-	gdkdevice-broadway.c	\
-	gdkdevicemanager-broadway.h \
-	gdkdevicemanager-broadway.c \
-	gdkdisplay-broadway.c	\
-	gdkdisplay-broadway.h	\
-	gdkdnd-broadway.c	\
-	gdkeventsource.c	\
-	gdkeventsource.h	\
-	gdkglobals-broadway.c	\
-	gdkkeys-broadway.c	\
-	gdkmonitor-broadway.c	\
-	gdkmonitor-broadway.h	\
-	gdkproperty-broadway.c	\
-	gdkscreen-broadway.c	\
-	gdkscreen-broadway.h	\
-	gdkselection-broadway.c	\
-	gdktestutils-broadway.c	\
-	gdkvisual-broadway.c	\
-	gdkwindow-broadway.c	\
-	gdkwindow-broadway.h	\
-	gdkprivate-broadway.h   \
-	gdkbroadway-server.h	\
-	gdkbroadway-server.c
+	$(GDK_BROADWAY_NON_GENERATED_SOURCES)
 
 if OS_UNIX
 libgdk_broadway_la_LIBADD = \
 	$(SHM_LIBS)         \
 	$(NULL)
 endif
-
-broadwayd_SOURCES = \
-	broadway-protocol.h		\
-	broadwayd.c 			\
-	broadway-server.h		\
-	broadway-server.c		\
-	broadway-buffer.c		\
-	broadway-buffer.h		\
-	broadway-output.h		\
-	broadway-output.c
 
 if OS_WIN32
 broadwayd_LDADD = $(GDK_DEP_LIBS) -lws2_32
