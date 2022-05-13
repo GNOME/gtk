@@ -1,5 +1,7 @@
 #include <gtk.h>
 
+#include "gdk/gdkmemorytextureprivate.h"
+
 static void
 compare_pixels (int     width,
                 int     height,
@@ -108,6 +110,56 @@ test_texture_save_to_png (void)
   g_object_unref (texture2);
 }
 
+static void
+test_texture_subtexture (void)
+{
+  cairo_t *cr;
+  cairo_surface_t *surface;
+  cairo_pattern_t *pattern;
+  GdkTexture *texture, *subtexture;
+  guchar *data, *subdata;
+  gsize stride, substride;
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 64, 64);
+  cr = cairo_create (surface);
+
+  pattern = cairo_pattern_create_linear (0, 0, 64, 64);
+  cairo_pattern_add_color_stop_rgba (pattern, 0, 1, 0, 0, 0.2);
+  cairo_pattern_add_color_stop_rgba (pattern, 1, 1, 0, 1, 1);
+
+  cairo_set_source (cr, pattern);
+  cairo_paint (cr);
+
+  texture = gdk_texture_new_for_surface (surface);
+
+  cairo_pattern_destroy (pattern);
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+
+  subtexture = gdk_memory_texture_new_subtexture (GDK_MEMORY_TEXTURE (texture), 0, 0, 32, 32);
+
+  g_assert_cmpint (gdk_texture_get_width (subtexture), ==, 32);
+  g_assert_cmpint (gdk_texture_get_height (subtexture), ==, 32);
+
+  data = g_new0 (guchar, 64 * 64 * 4);
+  stride = 64 * 4;
+  gdk_texture_download (texture, data, stride);
+
+  subdata = g_new0 (guchar, 32 * 32 * 4);
+  substride = 32 * 4;
+  gdk_texture_download (subtexture, subdata, substride);
+
+  compare_pixels (32, 32,
+                  data, stride,
+                  subdata, substride);
+
+  g_free (data);
+  g_free (subdata);
+
+  g_object_unref (subtexture);
+  g_object_unref (texture);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -117,6 +169,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/texture/from-pixbuf", test_texture_from_pixbuf);
   g_test_add_func ("/texture/from-resource", test_texture_from_resource);
   g_test_add_func ("/texture/save-to-png", test_texture_save_to_png);
+  g_test_add_func ("/texture/subtexture", test_texture_subtexture);
 
   return g_test_run ();
 }
