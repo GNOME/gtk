@@ -24,6 +24,7 @@
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdkmemorytextureprivate.h>
 
 #include "gskglcommandqueueprivate.h"
 #include "gskgldriverprivate.h"
@@ -71,25 +72,107 @@ gsk_gl_icon_library_init (GskGLIconLibrary *self)
                                     gsk_gl_icon_data_free);
 }
 
+static GdkMemoryTexture *
+gsk_ngl_texture_prepare_upload (GdkGLContext *context,
+                                GdkTexture   *texture,
+                                GLenum       *gl_internalformat,
+                                GLenum       *gl_format,
+                                GLenum       *gl_type)
+{
+  GdkMemoryTexture *memtex;
+  GdkColorSpace *color_space;
+  GdkMemoryFormat format;
+
+  format = gdk_texture_get_format (texture);
+  color_space = gdk_texture_get_color_space (texture);
+
+  memtex = gdk_memory_texture_from_texture (texture, format, color_space);
+
+  if (!gdk_memory_format_gl_format (format,
+                                    gdk_gl_context_get_use_es (context),
+                                    gl_internalformat,
+                                    gl_format,
+                                    gl_type))
+    {
+      g_object_unref (memtex);
+
+      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      if (!gdk_memory_format_gl_format (format,
+                                        gdk_gl_context_get_use_es (context),
+                                        gl_internalformat,
+                                        gl_format,
+                                        gl_type))
+        {
+          g_assert_not_reached ();
+        }
+    }
+
+  return gdk_memory_texture_from_texture (texture, format, color_space);
+}
+
+static void
+straightTexSubImage2D (int           tex,
+                       int           level,
+                       int           x,
+                       int           y,
+                       int           width,
+                       int           height,
+                       GLenum        gl_format,
+                       GLenum        gl_type,
+                       const guchar *data,
+                       gsize         stride)
+{
+  glTexSubImage2D (tex, level,
+                   x, y,
+                   width, height,
+                   gl_format, gl_type,
+                   data);
+}
+
+static void
+strideTexSubImage2D (int           tex,
+                     int           level,
+                     int           x,
+                     int           y,
+                     int           width,
+                     int           height,
+                     GLenum        gl_format,
+                     GLenum        gl_type,
+                     const guchar *data,
+                     gsize         stride)
+{
+  for (int i = 0; i < height; i++)
+    {
+      glTexSubImage2D (tex, level,
+                       x, y + i,
+                       width, height,
+                       gl_format, gl_type,
+                       data + i * stride);
+    }
+}
+
 void
 gsk_gl_icon_library_add (GskGLIconLibrary     *self,
                          GdkTexture           *key,
                          const GskGLIconData **out_value)
 {
   GskGLTextureLibrary *tl = (GskGLTextureLibrary *)self;
+  GdkGLContext *context = gdk_gl_context_get_current ();
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
-  cairo_surface_t *surface;
+  GdkMemoryTexture *memtex;
   GskGLIconData *icon_data;
-  guint8 *pixel_data;
-  guint8 *surface_data;
-  guint8 *free_data = NULL;
-  guint gl_format;
-  guint gl_type;
+  const guchar *pixel_data;
+  gsize stride, bpp;
+  GdkMemoryFormat format;
+  GLenum gl_internalformat;
+  GLenum gl_format;
+  GLenum gl_type;
   guint packed_x;
   guint packed_y;
   int width;
   int height;
   guint texture_id;
+  void (* upload_func) (int, int, int, int, int, int, GLenum, GLenum, const guchar *, gsize);
 
   g_assert (GSK_IS_GL_ICON_LIBRARY (self));
   g_assert (GDK_IS_TEXTURE (key));
@@ -106,107 +189,114 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
   icon_data->source_texture = g_object_ref (key);
 
   /* actually upload the texture */
-  surface = gdk_texture_download_surface (key, NULL);
-  surface_data = cairo_image_surface_get_data (surface);
-  gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
-                                          "Uploading texture");
+  gdk_gl_context_push_debug_group_printf (context, "Uploading texture");
+  memtex = gsk_ngl_texture_prepare_upload (context,
+                                           key,
+                                           &gl_internalformat,
+                                           &gl_format,
+                                           &gl_type);
 
-  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
-    {
-      pixel_data = free_data = g_malloc (width * height * 4);
-      gdk_memory_convert (pixel_data, width * 4,
-                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                          gdk_color_space_get_srgb (),
-                          surface_data, cairo_image_surface_get_stride (surface),
-                          GDK_MEMORY_DEFAULT,
-                          gdk_color_space_get_srgb (),
-                          width, height);
-      gl_format = GL_RGBA;
-      gl_type = GL_UNSIGNED_BYTE;
-    }
-  else
-    {
-      pixel_data = surface_data;
-      gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
-    }
+  pixel_data = gdk_memory_texture_get_data (memtex);
+  stride = gdk_memory_texture_get_stride (memtex);
+  format = gdk_texture_get_format (GDK_TEXTURE (memtex));
+  bpp = gdk_memory_format_bytes_per_pixel (format);
 
   texture_id = GSK_GL_TEXTURE_ATLAS_ENTRY_TEXTURE (icon_data);
 
   glBindTexture (GL_TEXTURE_2D, texture_id);
 
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x + 1, packed_y + 1,
-                   width, height,
-                   gl_format, gl_type,
-                   pixel_data);
+  glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+  /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
+   * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
+   */
+  if ((stride % bpp == 0) &&
+      (gdk_gl_context_get_api (context) == GDK_GL_API_GL ||
+       gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
+       gdk_gl_context_has_unpack_subimage (context)))
+    {
+      upload_func = straightTexSubImage2D;
+      glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
+    }
+  else
+    {
+      upload_func = strideTexSubImage2D;
+    }
+
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x + 1, packed_y + 1,
+               width, height,
+               gl_format, gl_type,
+               pixel_data,
+               stride);
   /* Padding top */
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x + 1, packed_y,
-                   width, 1,
-                   gl_format, gl_type,
-                   pixel_data);
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x + 1, packed_y,
+               width, 1,
+               gl_format, gl_type,
+               pixel_data,
+               stride);
   /* Padding left */
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x, packed_y + 1,
-                   1, height,
-                   gl_format, gl_type,
-                   pixel_data);
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x, packed_y + 1,
+               1, height,
+               gl_format, gl_type,
+               pixel_data,
+               stride);
   /* Padding top left */
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x, packed_y,
-                   1, 1,
-                   gl_format, gl_type,
-                   pixel_data);
-
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x, packed_y,
+               1, 1,
+               gl_format, gl_type,
+               pixel_data,
+               stride);
   /* Padding right */
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, width);
-  glPixelStorei (GL_UNPACK_SKIP_PIXELS, width - 1);
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x + width + 1, packed_y + 1,
-                   1, height,
-                   gl_format, gl_type,
-                   pixel_data);
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x + width + 1, packed_y + 1,
+               1, height,
+               gl_format, gl_type,
+               pixel_data + (width - 1) * bpp,
+               stride);
   /* Padding top right */
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x + width + 1, packed_y,
-                   1, 1,
-                   gl_format, gl_type,
-                   pixel_data);
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x + width + 1, packed_y,
+               1, 1,
+               gl_format, gl_type,
+               pixel_data + (width - 1) * bpp,
+               stride);
   /* Padding bottom */
-  glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
-  glPixelStorei (GL_UNPACK_SKIP_ROWS, height - 1);
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x + 1, packed_y + 1 + height,
-                   width, 1,
-                   gl_format, gl_type,
-                   pixel_data);
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x + 1, packed_y + 1 + height,
+               width, 1,
+               gl_format, gl_type,
+               pixel_data + (height - 1) * stride,
+               stride);
   /* Padding bottom left */
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x, packed_y + 1 + height,
-                   1, 1,
-                   gl_format, gl_type,
-                   pixel_data);
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x, packed_y + 1 + height,
+               1, 1,
+               gl_format, gl_type,
+               pixel_data + (height - 1) * stride,
+               stride);
   /* Padding bottom right */
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, width);
-  glPixelStorei (GL_UNPACK_SKIP_PIXELS, width - 1);
-  glTexSubImage2D (GL_TEXTURE_2D, 0,
-                   packed_x + 1 + width, packed_y + 1 + height,
-                   1, 1,
-                   gl_format, gl_type,
-                   pixel_data);
+  upload_func (GL_TEXTURE_2D, 0,
+               packed_x + 1 + width, packed_y + 1 + height,
+               1, 1,
+               gl_format, gl_type,
+               pixel_data + (width - 1) * bpp + (height - 1) * stride,
+               stride);
   /* Reset this */
-  glPixelStorei (GL_UNPACK_SKIP_PIXELS, 0);
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
-  glPixelStorei (GL_UNPACK_SKIP_ROWS, 0);
+  glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
+  if ((stride % bpp == 0) &&
+      (gdk_gl_context_get_api (context) == GDK_GL_API_GL ||
+      gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
+      gdk_gl_context_has_unpack_subimage (context)))
+    glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
 
-  gdk_gl_context_pop_debug_group (gdk_gl_context_get_current ());
+  gdk_gl_context_pop_debug_group (context);
 
   *out_value = icon_data;
 
-  cairo_surface_destroy (surface);
-  g_free (free_data);
+  g_object_unref (memtex);
 
   tl->driver->command_queue->n_uploads++;
 
