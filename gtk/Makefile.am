@@ -114,7 +114,7 @@ endif
 include $(srcdir)/a11y/Makefile.inc
 include $(srcdir)/deprecated/Makefile.inc
 include $(srcdir)/inspector/Makefile.inc
-include $(srcdir)/gtk-mkenums-headers.mak
+include $(srcdir)/gtk-sources.inc
 
 # GTK+ header files for public installation (non-generated, or generated
 # by configure)

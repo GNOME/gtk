@@ -65,7 +65,7 @@ NULL=
 !endif
 
 # For GTK enumeration sources
-!include ..\gtk\gtk-mkenums-headers.mak
+!include ..\gtk\gtk-sources.inc
 !include ..\gtk\a11y\Makefile.inc
 !include ..\gtk\deprecated\Makefile.inc
 
