@@ -3,6 +3,7 @@ gdk_public_sources = files([
   'gdkapplaunchcontext.c',
   'gdkcairo.c',
   'gdkcairocontext.c',
+  'gdkcicpcolorspace.c',
   'gdkclipboard.c',
   'gdkcolorspace.c',
   'gdkcolor.c',

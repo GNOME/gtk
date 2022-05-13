@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include "gdklcmscolorspaceprivate.h"
+#include "gdkcicpcolorspaceprivate.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -303,6 +304,12 @@ gdk_color_space_lookup_transform (GdkColorSpace *source,
   GdkColorTransformCache *entry;
   static GHashTable *cache = NULL;
   cmsHTRANSFORM *transform;
+
+  if (GDK_IS_CICP_COLOR_SPACE (dest))
+    dest = gdk_cicp_color_space_get_lcms_color_space (dest);
+
+  if (GDK_IS_CICP_COLOR_SPACE (source))
+    source = gdk_cicp_color_space_get_lcms_color_space (source);
 
   if (cache == NULL)
     cache = g_hash_table_new_full (gdk_color_transform_cache_hash,

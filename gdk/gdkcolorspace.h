@@ -53,6 +53,13 @@ GdkColorSpace *         gdk_color_space_new_from_icc_profile    (GBytes         
                                                                  GError              **error);
 
 GDK_AVAILABLE_IN_4_10
+GdkColorSpace *         gdk_color_space_new_from_cicp           (int                   color_primaries,
+                                                                 int                   transfer_characteristics,
+                                                                 int                   matrix_coefficients,
+                                                                 gboolean              full_range);
+
+
+GDK_AVAILABLE_IN_4_10
 gboolean                gdk_color_space_supports_format         (GdkColorSpace        *self,
                                                                  GdkMemoryFormat       format);
 GDK_AVAILABLE_IN_4_10

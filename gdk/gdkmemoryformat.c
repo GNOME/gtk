@@ -22,6 +22,7 @@
 #include "gdkmemoryformatprivate.h"
 
 #include "gdklcmscolorspaceprivate.h"
+#include "gdkcicpcolorspaceprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gsk/gl/fp16private.h"
 
