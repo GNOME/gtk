@@ -1,3 +1,34 @@
+Overview of Changes in 4.6.4, 13-05-2022
+========================================
+
+* GtkFileChooser:
+ - Fix select button sensitivity in select_folder mode
+ - Fix some fallout from list model porting
+
+* GtkListView, GtkColumnView:
+ - Optimize scrolling
+
+* print-to-file:
+ - Handle nonexisting files better in the dialog
+
+* Avoid infinite loops in size allocation
+
+* CSS:
+ - Optimize a case of reparenting that is important in GtkListView
+
+* GSK:
+ - Check for half-float support before using it
+
+* Wayland:
+ - Ignore empty preedit updates This fixes a problem with
+   textview scrolling
+ - Freeze popups when hidden. This addresses a frame rate drop
+
+* Translation updates
+ Hebrew
+ Nepali
+
+
 Overview of Changes in 4.6.3, 21-04-2022
 ========================================
 
