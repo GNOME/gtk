@@ -238,7 +238,9 @@ static void
 gdk_quartz_cairo_surface_destroy (void *data)
 {
   GdkQuartzCairoSurfaceData *surface_data = data;
+  cairo_surface_t *surface = surface_data->window_impl->cairo_surface;
 
+  if (!cairo_surface_get_reference_count (surface))
   surface_data->window_impl->cairo_surface = NULL;
 
   g_free (surface_data);
@@ -258,7 +260,6 @@ gdk_quartz_create_cairo_surface (GdkWindowImplQuartz *impl,
   surface_data->cg_context = NULL;
 
   surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-
   cairo_surface_set_user_data (surface, &gdk_quartz_cairo_key,
                                surface_data,
                                gdk_quartz_cairo_surface_destroy);
@@ -291,9 +292,27 @@ gdk_quartz_ref_cairo_surface (GdkWindow *window)
       cairo_surface_reference (impl->cairo_surface); // The caller will destroy the returned one.
     }
   else
-    cairo_surface_reference (impl->cairo_surface);
+    {
+      cairo_surface_reference (impl->cairo_surface);
+    }
 
   return impl->cairo_surface;
+}
+
+void
+_gdk_quartz_unref_cairo_surface (GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (impl->cairo_surface)
+    {
+      cairo_surface_destroy (impl->cairo_surface);
+      if (impl->cairo_surface &&
+          !cairo_surface_get_reference_count (impl->cairo_surface))
+          impl->cairo_surface = NULL;
+    }
 }
 
 static void
@@ -1312,6 +1331,7 @@ move_resize_window_internal (GdkWindow *window,
 
       frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       [impl->toplevel setFrame:frame_rect display:YES];
+      impl->cairo_surface = gdk_quartz_ref_cairo_surface (window);
     }
   else 
     {

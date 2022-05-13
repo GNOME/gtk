@@ -448,6 +448,7 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
   copy_rectangle_argb32 (cvpb_surface, impl->cairo_surface, &extents);
 
   cairo_surface_destroy (cvpb_surface);
+  _gdk_quartz_unref_cairo_surface (gdk_window);
   CVPixelBufferUnlockBaseAddress (pixels, 0);
   --impl->in_paint_rect_count;
   self.layer.contents = NULL;
@@ -522,6 +523,8 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
                             kCVPixelFormatType_32BGRA,
                             cfpb_props, &pixels);
 
+  //Force a new cairo_surface for drawing
+  _gdk_quartz_unref_cairo_surface (gdk_window);
   [super setFrame: frame];
 
   if ([self window])
