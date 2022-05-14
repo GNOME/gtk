@@ -354,6 +354,7 @@ typedef struct {
 
 typedef union {
   BroadwayReplyBase base;
+  BroadwayReplySync sync;
   BroadwayReplyEvent event;
   BroadwayReplyQueryMouse query_mouse;
   BroadwayReplyNewSurface new_surface;
