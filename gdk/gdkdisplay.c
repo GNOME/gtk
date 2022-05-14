@@ -1628,10 +1628,10 @@ gdk_display_check_egl_extensions (EGLDisplay   egl_display,
                    /* translators: Arguments are the number of missing extensions
                     * followed by a comma-separated list of their names */
                    g_dngettext (GETTEXT_PACKAGE,
-                                "EGL implementation is missing extension %2$s",
-                                "EGL implementation is missing %d extensions: %s",
+                                "EGL implementation is missing extension %s",
+                                "EGL implementation is missing %2$d extensions: %1$s",
                                 n_missing),
-                   (int) n_missing, missing->str);
+                   missing->str, (int) n_missing);
 
       g_string_free (missing, TRUE);
       return FALSE;
