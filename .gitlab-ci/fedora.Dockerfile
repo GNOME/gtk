@@ -1,4 +1,4 @@
-FROM fedora:34
+FROM fedora:36
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -87,7 +87,6 @@ RUN dnf -y install \
     python3-wheel \
     redhat-rpm-config \
     sassc \
-    systemtap-sdt-devel \
     vulkan-devel \
     wayland-devel \
     wayland-protocols-devel \
