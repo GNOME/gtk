@@ -4,7 +4,7 @@ stages:
 
 # Common variables
 variables:
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v35"
+  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v38"
 
 reference:
   image: $FEDORA_IMAGE
