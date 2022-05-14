@@ -1074,7 +1074,7 @@ gtk_list_item_manager_release_list_item (GtkListItemManager *self,
     {
       if (!g_hash_table_replace (change, gtk_list_item_widget_get_item (GTK_LIST_ITEM_WIDGET (item)), item))
         {
-          g_warning ("FIXME: Handle the same item multiple times in the list.\nLars says this totally should not happen, but here we are.");
+          g_warning ("Duplicate item detected in list. Picking one randomly.");
         }
 
       return;

@@ -219,11 +219,7 @@ static void
 client_handle_request (BroadwayClient *client,
                        BroadwayRequest *request)
 {
-  BroadwayReplyNewSurface reply_new_surface;
-  BroadwayReplySync reply_sync;
-  BroadwayReplyQueryMouse reply_query_mouse;
-  BroadwayReplyGrabPointer reply_grab_pointer;
-  BroadwayReplyUngrabPointer reply_ungrab_pointer;
+  BroadwayReply reply;
   guint32 before_serial, now_serial;
   guint32 global_id;
   int fd;
@@ -233,7 +229,7 @@ client_handle_request (BroadwayClient *client,
   switch (request->base.type)
     {
     case BROADWAY_REQUEST_NEW_SURFACE:
-      reply_new_surface.id =
+      reply.new_surface.id =
         broadway_server_new_surface (server, client->id,
                                      request->new_surface.x,
                                      request->new_surface.y,
@@ -241,9 +237,9 @@ client_handle_request (BroadwayClient *client,
                                      request->new_surface.height);
       client->surfaces =
         g_list_prepend (client->surfaces,
-                        GUINT_TO_POINTER (reply_new_surface.id));
+                        GUINT_TO_POINTER (reply.new_surface.id));
 
-      send_reply (client, request, (BroadwayReply *)&reply_new_surface, sizeof (reply_new_surface),
+      send_reply (client, request, &reply, sizeof (reply.new_surface),
                   BROADWAY_REPLY_NEW_SURFACE);
       break;
     case BROADWAY_REQUEST_FLUSH:
@@ -251,7 +247,7 @@ client_handle_request (BroadwayClient *client,
       break;
     case BROADWAY_REQUEST_SYNC:
       broadway_server_flush (server);
-      send_reply (client, request, (BroadwayReply *)&reply_sync, sizeof (reply_sync),
+      send_reply (client, request, &reply, sizeof (reply.sync),
                   BROADWAY_REPLY_SYNC);
       break;
     case BROADWAY_REQUEST_ROUNDTRIP:
@@ -261,11 +257,11 @@ client_handle_request (BroadwayClient *client,
       break;
     case BROADWAY_REQUEST_QUERY_MOUSE:
       broadway_server_query_mouse (server,
-                                   &reply_query_mouse.surface,
-                                   &reply_query_mouse.root_x,
-                                   &reply_query_mouse.root_y,
-                                   &reply_query_mouse.mask);
-      send_reply (client, request, (BroadwayReply *)&reply_query_mouse, sizeof (reply_query_mouse),
+                                   &reply.query_mouse.surface,
+                                   &reply.query_mouse.root_x,
+                                   &reply.query_mouse.root_y,
+                                   &reply.query_mouse.mask);
+      send_reply (client, request, &reply, sizeof (reply.query_mouse),
                   BROADWAY_REPLY_QUERY_MOUSE);
       break;
     case BROADWAY_REQUEST_DESTROY_SURFACE:
@@ -361,21 +357,21 @@ client_handle_request (BroadwayClient *client,
                                            request->move_resize.height);
       break;
     case BROADWAY_REQUEST_GRAB_POINTER:
-      reply_grab_pointer.status =
+      reply.grab_pointer.status =
         broadway_server_grab_pointer (server,
                                       client->id,
                                       request->grab_pointer.id,
                                       request->grab_pointer.owner_events,
                                       request->grab_pointer.event_mask,
                                       request->grab_pointer.time_);
-      send_reply (client, request, (BroadwayReply *)&reply_grab_pointer, sizeof (reply_grab_pointer),
+      send_reply (client, request, &reply, sizeof (reply.grab_pointer),
                   BROADWAY_REPLY_GRAB_POINTER);
       break;
     case BROADWAY_REQUEST_UNGRAB_POINTER:
-      reply_ungrab_pointer.status =
+      reply.ungrab_pointer.status =
         broadway_server_ungrab_pointer (server,
                                         request->ungrab_pointer.time_);
-      send_reply (client, request, (BroadwayReply *)&reply_ungrab_pointer, sizeof (reply_ungrab_pointer),
+      send_reply (client, request, &reply, sizeof (reply.ungrab_pointer),
                   BROADWAY_REPLY_UNGRAB_POINTER);
       break;
     case BROADWAY_REQUEST_FOCUS_SURFACE:
