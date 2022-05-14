@@ -14,6 +14,9 @@ Each Docker image has a tag composed of two parts:
 See the [container registry][registry] for the available images for each
 branch, as well as their available versions.
 
+Note that using `latest` as version number will overwrite the most
+recently uploaded image in the registry.
+
 ### Checklist for Updating a CI image
 
  - [ ] Update the `${image}.Dockerfile` file with the dependencies
