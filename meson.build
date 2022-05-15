@@ -12,6 +12,7 @@ project('gtk', 'c',
 
 glib_req           = '>= 2.66.0'
 pango_req          = '>= 1.50.0' # keep this in sync with .gitlab-ci/test-msys.sh
+harfbuzz_req	   = '>= 2.6.0'
 fribidi_req        = '>= 0.19.7'
 cairo_req          = '>= 1.14.0'
 gdk_pixbuf_req     = '>= 2.30.0'
@@ -393,6 +394,9 @@ pango_dep      = dependency('pango', version: pango_req,
                             fallback : ['pango', 'libpango_dep'])
 fribidi_dep    = dependency('fribidi', version: fribidi_req,
                             fallback : ['fribidi', 'libfribidi_dep'])
+harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
+                            fallback: ['harfbuzz', 'libharfbuzz_dep'],
+                            default_options: ['coretext=enabled'])
 
 # Require PangoFT2 if on X11 or wayland
 require_pangoft2 = wayland_enabled or x11_enabled
