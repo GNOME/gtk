@@ -58,6 +58,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdevice-wintab.h"
+#include "gdkinput-dmanipulation.h"
 #include "gdkinput-winpointer.h"
 #include "gdkwin32dnd.h"
 #include "gdkwin32dnd-private.h"
@@ -2656,6 +2657,13 @@ gdk_event_translate (MSG *msg,
       return_val = TRUE;
       break;
 
+    case DM_POINTERHITTEST:
+      gdk_dmanipulation_maybe_add_contact (window, msg);
+
+      *ret_valp = 0;
+      return_val = TRUE;
+      break;
+
     case WM_MOUSEWHEEL:
     case WM_MOUSEHWHEEL:
     {
@@ -3155,6 +3163,8 @@ gdk_event_translate (MSG *msg,
     case WM_DESTROY:
       if (win32_display->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
         gdk_winpointer_finalize_surface (window);
+
+      gdk_dmanipulation_finalize_surface (window);
 
       return_val = FALSE;
       break;

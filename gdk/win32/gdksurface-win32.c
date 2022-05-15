@@ -44,6 +44,7 @@
 #include "gdktoplevelprivate.h"
 #include "gdkwin32surface.h"
 #include "gdkwin32cursor.h"
+#include "gdkinput-dmanipulation.h"
 #include "gdkinput-winpointer.h"
 #include "gdkglcontext-win32.h"
 #include "gdkdisplay-win32.h"
@@ -639,8 +640,14 @@ _gdk_win32_display_create_surface (GdkDisplay     *display,
     }
 
   gdk_surface_set_egl_native_window (surface, (void *) impl->handle);
-  if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
-    gdk_winpointer_initialize_surface (surface);
+
+  if (surface_type != GDK_SURFACE_TEMP)
+    {
+      if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
+        gdk_winpointer_initialize_surface (surface);
+
+      gdk_dmanipulation_initialize_surface (surface);
+    }
 
   _gdk_win32_surface_enable_transparency (surface);
   _gdk_win32_surface_register_dnd (surface);
