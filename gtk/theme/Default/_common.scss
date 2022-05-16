@@ -1934,6 +1934,10 @@ $_menu-padding: 12px; //inner menuitem padding
 popover.menu {
   padding: 0;
 
+  @at-root list row & button:not(.suggested-action):not(.destructive-action) { //crazy hotfix for #4919
+   color: $text_color;
+  }
+
   box.inline-buttons {
     padding: 0 $_menu-padding;
 
