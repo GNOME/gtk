@@ -17,7 +17,6 @@ GENERATED_ITEMS = \
 	gtk3-demo-application.vcproj	\
 	gtk3-icon-browser.vcproj	\
 	gailutil-3.vcproj		\
-	gtk3-install.vsprops		\
 	gtk3-version-paths.vsprops
 
 EXTRA_DIST += \
@@ -42,7 +41,6 @@ EXTRA_DIST += \
 	gtk3-build-defines.vsprops	\
 	gtk3-copy-gdk-broadway.vsprops	\
 	gtk3-ignore-broadway.vsprops	\
-	gtk3-install.vspropsin		\
 	gtk3-version-paths.vsprops.in	\
 	$(GENERATED_ITEMS)
 

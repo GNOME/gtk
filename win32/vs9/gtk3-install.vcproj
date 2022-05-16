@@ -21,113 +21,98 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(GlibEtcInstallRoot)"
-			ConfigurationType="10"
-			InheritedPropertySheets=".\gtk3-install.vsprops"
+			ConfigurationType="0"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkPostInstall)"
+				Name="VCNMakeTool"
+				BuildCommandLine="$(InstallBuildsBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) GTK_VERSION=$(GtkVersion)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(GlibEtcInstallRoot)"
-			ConfigurationType="10"
-			InheritedPropertySheets=".\gtk3-install.vsprops"
+			ConfigurationType="0"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkPostInstall)"
+				Name="VCNMakeTool"
+				BuildCommandLine="$(InstallBuildsBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) GTK_VERSION=$(GtkVersion)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug_Broadway|Win32"
-			OutputDirectory="$(GlibEtcInstallRoot)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="10"
-			InheritedPropertySheets=".\gtk3-install.vsprops"
+			ConfigurationType="0"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)$(GtkPostInstall)"
+				Name="VCNMakeTool"
+				BuildCommandLine="$(InstallBuildsBase) CFG=Debug $(IntrospectPythonParam) GTK_VERSION=$(GtkVersion) BROADWAY=1"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug_Broadway|x64"
-			OutputDirectory="$(GlibEtcInstallRoot)"
-			ConfigurationType="10"
-			InheritedPropertySheets=".\gtk3-install.vsprops"
+			ConfigurationType="0"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
 			>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)$(GtkPostInstall)"
+				Name="VCNMakeTool"
+				BuildCommandLine="$(InstallBuildsBase) CFG=Debug $(IntrospectPythonParam) GTK_VERSION=$(GtkVersion) BROADWAY=1"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(GlibEtcInstallRoot)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="10"
-			InheritedPropertySheets=".\gtk3-install.vsprops"
+			ConfigurationType="0"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
-			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkPostInstall)"
+				Name="VCNMakeTool"
+				BuildCommandLine="$(InstallBuildsBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) GTK_VERSION=$(GtkVersion)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(GlibEtcInstallRoot)"
-			ConfigurationType="10"
-			InheritedPropertySheets=".\gtk3-install.vsprops"
+			ConfigurationType="0"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
-			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkPostInstall)"
+				Name="VCNMakeTool"
+				BuildCommandLine="$(InstallBuildsBase) CFG=$(ConfigurationName) $(IntrospectPythonParam) GTK_VERSION=$(GtkVersion)"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release_Broadway|Win32"
-			OutputDirectory="$(GlibEtcInstallRoot)"
-			IntermediateDirectory="$(ConfigurationName)"
-			ConfigurationType="10"
-			InheritedPropertySheets=".\gtk3-install.vsprops"
+			ConfigurationType="0"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
-			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)$(GtkPostInstall)"
+				Name="VCNMakeTool"
+				BuildCommandLine="$(InstallBuildsBase) CFG=Release $(IntrospectPythonParam) GTK_VERSION=$(GtkVersion) BROADWAY=1"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release_Broadway|x64"
-			OutputDirectory="$(GlibEtcInstallRoot)"
-			ConfigurationType="10"
-			InheritedPropertySheets=".\gtk3-install.vsprops"
+			ConfigurationType="0"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
 			CharacterSet="2"
 			DeleteExtensionsOnClean=""
-			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPostBuildEventTool"
-				CommandLine="$(GtkDoInstallBin)$(GtkDoInstall)$(GtkDoInstallBroadwayHeaders)$(GtkPostInstall)"
+				Name="VCNMakeTool"
+				BuildCommandLine="$(InstallBuildsBase) CFG=Release $(IntrospectPythonParam) GTK_VERSION=$(GtkVersion) BROADWAY=1"
 			/>
 		</Configuration>
 	</Configurations>

@@ -19,7 +19,6 @@ GENERATED_ITEMS = \
 	gtk3-icon-browser.vcxproj.filters	\
 	gailutil-3.vcxproj			\
 	gailutil-3.vcxproj.filters		\
-	gtk3-install.props			\
 	gtk3-version-paths.props
 
 MSVC10_HEADERS_LISTS =	\
@@ -60,12 +59,10 @@ EXTRA_DIST += \
 	gailutil-3.vcxprojin			\
 	gailutil-3.vcxproj.filtersin		\
 	gtk3-install.vcxproj			\
-	gtk3-install.vcxproj.filters		\
 	gtk3-introspect.vcxproj			\
 	gtk3-build-defines.props		\
 	gtk3-copy-gdk-broadway.props		\
 	gtk3-ignore-broadway.props		\
-	gtk3-install.propsin			\
 	gtk3-version-paths.props.in		\
 	$(GENERATED_ITEMS)
 

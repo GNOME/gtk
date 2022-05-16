@@ -32,6 +32,9 @@ nmake -f gtk-introspection-msvc.mak CFG=$(Configuration) PREFIX=$(GlibEtcInstall
     <GenerateRequiredSourcesBase>cd ..
 set VCInstallDir=$(VCInstallDir)
 nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)</GenerateRequiredSourcesBase>
+    <InstallBuildsBase>cd ..
+set VCInstallDir=$(VCInstallDir)
+nmake -f install-msvc.mak PREFIX=$(GlibEtcInstallRoot)</InstallBuildsBase>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtk3builddefinesprops</_PropertySheetDisplayName>
@@ -116,6 +119,9 @@ nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)</GenerateRequiredSources
     </BuildMacro>
     <BuildMacro Include="GenerateRequiredSourcesBase">
       <Value>$(GenerateRequiredSourcesBase)</Value>
+    </BuildMacro>
+    <BuildMacro Include="InstallBuildsBase">
+      <Value>$(InstallBuildsBase)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

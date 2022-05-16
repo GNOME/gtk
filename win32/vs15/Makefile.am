@@ -27,7 +27,6 @@ EXTRA_DIST_COPIED =	\
 	gailutil-3.vcxproj	\
 	gailutil-3.vcxproj.filters	\
 	gtk3-install.vcxproj	\
-	gtk3-install.vcxproj.filters	\
 	gtk3-introspect.vcxproj		\
 	broadwayd.vcxproj	\
 	broadwayd.vcxproj.filters	\
@@ -36,7 +35,6 @@ EXTRA_DIST_COPIED =	\
 	gtk3-build-defines.props	\
 	gtk3-copy-gdk-broadway.props	\
 	gtk3-ignore-broadway.props	\
-	gtk3-install.props	\
 	gtk3-version-paths.props
 
 DISTCLEANFILES = $(EXTRA_DIST_COPIED)

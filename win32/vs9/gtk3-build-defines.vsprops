@@ -99,4 +99,8 @@
 		Name="GenerateRequiredSourcesBase"
 		Value="cd ..&#x0D;&#x0A;set VCInstallDir=$(VCInstallDir)&#x0D;&#x0A;nmake -f generate-msvc.mak PREFIX=$(GlibEtcInstallRoot)"
 	/>
+	<UserMacro
+		Name="InstallBuildsBase"
+		Value="cd ..&#x0D;&#x0A;set VCInstallDir=$(VCInstallDir)&#x0D;&#x0A;nmake -f install-msvc.mak PREFIX=$(GlibEtcInstallRoot)"
+	/>
 </VisualStudioPropertySheet>

@@ -46,6 +46,7 @@ EXTRA_DIST +=	\
 	generate-msvc.mak	\
 	gtk-introspection-msvc.mak	\
 	introspection-msvc.mak		\
+	install-msvc.mak		\
 	replace.py			\
 	pc_base.py			\
 	gtkpc.py			\
