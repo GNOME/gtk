@@ -10979,6 +10979,86 @@ out:
 }
 
 /**
+ * gtk_widget_clear_template:
+ * @widget: the widget with a template
+ * @widget_type: the type of the widget to finalize the template for
+ *
+ * Clears the template data for the given widget.
+ *
+ * This function is the opposite of [method@Gtk.Widget.init_template], and
+ * it is used to clear all the template data from a widget instance.
+ *
+ * You should call this function inside the `GObjectClass.dispose()`
+ * implementation of any widget that called `gtk_widget_init_template()`.
+ * Typically, you will want to call this function last, right before
+ * chaining up to the parent type's dispose implementation, e.g.
+ *
+ * ```c
+ * static void
+ * some_widget_dispose (GObject *gobject)
+ * {
+ *   SomeWidget *self = SOME_WIDGET (gobject);
+ *
+ *   // Clear the template data for SomeWidget
+ *   gtk_widget_clear_template (GTK_WIDGET (self), SOME_TYPE_WIDGET);
+ *
+ *   G_OBJECT_CLASS (some_widget_parent_class)->dispose (gobject);
+ * }
+ * ```
+ *
+ * Since: 4.8
+ */
+void
+gtk_widget_clear_template (GtkWidget *widget,
+                           GType      widget_type)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (g_type_name (widget_type) != NULL);
+
+  GtkWidgetTemplate *template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
+  g_return_if_fail (template != NULL);
+
+  g_clear_object (&template->scope);
+
+  /* Tear down the automatic child data */
+  GHashTable *auto_child_hash = get_auto_child_hash (widget, widget_type, FALSE);
+
+  for (GSList *l = template->children; l != NULL; l = l->next)
+    {
+      AutomaticChildClass *child_class = l->data;
+
+      /* This will drop the reference on the template children */
+      if (auto_child_hash != NULL)
+        {
+          gpointer child = g_hash_table_lookup (auto_child_hash, child_class->name);
+
+          /* We have to explicitly unparent the child */
+          if (GTK_IS_WIDGET (child))
+            {
+              /* auto_child_hash has a reference on the child, and will drop it
+               * when the child is removed from the hash table; unparent() will
+               * also drop a reference, so we need to acquire a reference here
+               * before unparenting it
+               */
+              g_object_ref (child);
+              gtk_widget_unparent (child);
+            }
+
+          g_hash_table_remove (auto_child_hash, child_class->name);
+        }
+
+      /* Nullify the field last, to avoid re-entrancy issues */
+      if (child_class->offset != 0)
+        {
+          gpointer field_p;
+
+          field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
+          (* (gpointer *) field_p) = NULL;
+        }
+    }
+}
+
+/**
  * gtk_widget_class_set_template:
  * @widget_class: A `GtkWidgetClass`
  * @template_bytes: A `GBytes` holding the `GtkBuilder` XML
