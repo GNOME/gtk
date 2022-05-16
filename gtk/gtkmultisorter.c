@@ -409,6 +409,33 @@ gtk_multi_sorter_append (GtkMultiSorter *self,
 }
 
 /**
+ * gtk_multi_sorter_prepend:
+ * @self: a `GtkMultiSorter`
+ * @sorter: (transfer full): a sorter to add
+ *
+ * Add @sorter to @self to use for sorting at the beginning.
+ *
+ * @self will consult @sorter first before all existing sorters.
+ *
+ * Since: 4.8
+ */
+void
+gtk_multi_sorter_prepend (GtkMultiSorter *self,
+                          GtkSorter      *sorter)
+{
+  g_return_if_fail (GTK_IS_MULTI_SORTER (self));
+  g_return_if_fail (GTK_IS_SORTER (sorter));
+
+  g_signal_connect (sorter, "changed", G_CALLBACK (gtk_multi_sorter_changed_cb), self);
+
+  gtk_sorters_splice (&self->sorters, 0, 0, FALSE, &sorter, 1);
+
+  gtk_sorter_changed_with_keys (GTK_SORTER (self),
+                                GTK_SORTER_CHANGE_DIFFERENT,
+                                gtk_multi_sort_keys_new (self));
+}
+
+/**
  * gtk_multi_sorter_remove:
  * @self: a `GtkMultiSorter`
  * @position: position of sorter to remove

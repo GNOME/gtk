@@ -40,6 +40,10 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_multi_sorter_append                 (GtkMultiSorter         *self,
                                                                  GtkSorter              *sorter);
 
+GDK_AVAILABLE_IN_4_8
+void                    gtk_multi_sorter_prepend                (GtkMultiSorter         *self,
+                                                                 GtkSorter              *sorter);
+
 GDK_AVAILABLE_IN_ALL
 void                    gtk_multi_sorter_remove                 (GtkMultiSorter         *self,
                                                                  guint                   position);
