@@ -158,6 +158,10 @@ failure:
 
   gdk_profiler_end_mark (start_time, "realize GskGLRenderer", NULL);
 
+  /* Assert either all or no state was set */
+  g_assert ((ret && self->driver != NULL && self->context != NULL && self->command_queue != NULL) ||
+            (!ret && self->driver == NULL && self->context == NULL && self->command_queue == NULL));
+
   return ret;
 }
 
@@ -403,11 +407,11 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 static void
 gsk_gl_renderer_dispose (GObject *object)
 {
-#ifdef G_ENABLE_DEBUG
   GskGLRenderer *self = (GskGLRenderer *)object;
 
-  g_assert (self->driver == NULL);
-#endif
+  if (self->driver != NULL)
+    g_critical ("Attempt to dispose %s without calling gsk_renderer_unrealize()",
+                G_OBJECT_TYPE_NAME (self));
 
   G_OBJECT_CLASS (gsk_gl_renderer_parent_class)->dispose (object);
 }
