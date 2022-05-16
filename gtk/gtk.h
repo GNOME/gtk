@@ -155,6 +155,7 @@
 #include <gtk/gtkimcontextsimple.h>
 #include <gtk/gtkimmulticontext.h>
 #include <gtk/gtkinfobar.h>
+#include <gtk/gtkinvertiblesorter.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklayoutmanager.h>
 #include <gtk/gtklayoutchild.h>
