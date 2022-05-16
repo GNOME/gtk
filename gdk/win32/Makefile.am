@@ -47,16 +47,10 @@ MSVCPROJS = gdk3-win32
 
 gdk3_win32_FILES = $(libgdk_win32_la_SOURCES)
 gdk3_win32_EXCLUDES = dummy
-gdk3_win32_HEADERS_DIR = $(libgdkwin32includedir)
-
-gdk3_win32_HEADERS_INST = $(libgdkwin32include_HEADERS)
-
-gdk3_win32_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/win32/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/win32/vs9/gdk3-win32.vcproj	\
-	$(top_builddir)/win32/vs9/gdk3-win32.headers
+	$(top_builddir)/win32/vs9/gdk3-win32.vcproj
 
 -include $(top_srcdir)/git.mk

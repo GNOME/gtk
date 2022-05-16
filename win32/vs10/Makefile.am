@@ -21,13 +21,6 @@ GENERATED_ITEMS = \
 	gailutil-3.vcxproj.filters		\
 	gtk3-version-paths.props
 
-MSVC10_HEADERS_LISTS =	\
-	gdk3-win32.vs10.headers		\
-	gdk3-broadway.vs10.headers	\
-	gdk-3.vs10.headers		\
-	gtk-3.vs10.headers		\
-	gailutil-3.vs10.headers
-
 EXTRA_DIST += \
 	README.txt				\
 	gtk+.sln				\
@@ -68,14 +61,5 @@ EXTRA_DIST += \
 
 DISTCLEANFILES = \
 	$(GENERATED_ITEMS)
-
-gtk3-install.props: $(top_srcdir)/win32/vs10/gtk3-install.propsin $(MSVC10_HEADERS_LISTS)
-	-$(RM) $(top_builddir)/win32/vs11/gtk3-install.props
-	-$(RM) $(top_builddir)/win32/vs12/gtk3-install.props
-	-$(RM) $(top_builddir)/win32/vs14/gtk3-install.props
-	-$(RM) $(top_builddir)/win32/vs15/gtk3-install.props
-	-$(RM) $(top_builddir)/win32/vs16/gtk3-install.props
-	$(CPP) -P - <$(top_srcdir)/win32/vs10/gtk3-install.propsin >$@
-	rm $(MSVC10_HEADERS_LISTS)
 
 -include $(top_srcdir)/git.mk

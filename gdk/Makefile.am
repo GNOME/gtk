@@ -459,13 +459,6 @@ MSVCPROJS = gdk-3
 
 gdk_3_FILES = $(gdk_c_sources)
 gdk_3_EXCLUDES = dummy
-gdk_3_HEADERS_DIR = $(gdkincludedir)
-
-gdk_3_HEADERS_INST = \
-	$(gdkinclude_HEADERS)		\
-	$(deprecatedinclude_HEADERS)
-
-gdk_3_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/win32/Makefile.msvcproj
 
@@ -510,7 +503,6 @@ endif
 
 dist-hook: \
 	$(top_builddir)/win32/vs9/gdk-3.vcproj	\
-	$(top_builddir)/win32/vs9/gdk-3.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h

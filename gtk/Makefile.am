@@ -526,14 +526,6 @@ gtk_3_FILES = \
 	$(gtk_use_win32_c_sources)
 
 gtk_3_EXCLUDES = dummy
-gtk_3_HEADERS_DIR = $(gtkincludedir)
-
-gtk_3_HEADERS_INST = \
-	$(filter-out gtkversion.h, $(gtkinclude_HEADERS))	\
-	$(a11y_h_sources)	\
-	$(gtk_deprecated_h_sources)
-
-gtk_3_HEADERS_EXCLUDES = gtktypebuiltins.h
 
 include $(top_srcdir)/win32/Makefile.msvcproj
 
@@ -590,7 +582,6 @@ endif
 
 dist-hook: \
 	$(top_builddir)/win32/vs9/gtk-3.vcproj	\
-	$(top_builddir)/win32/vs9/gtk-3.headers	\
 	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 # Install a RC file for the default GTK+ theme, and key themes

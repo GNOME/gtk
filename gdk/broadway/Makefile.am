@@ -72,11 +72,6 @@ MSVCPROJS = gdk3-broadway broadwayd
 
 gdk3_broadway_FILES = $(libgdk_broadway_la_SOURCES)
 gdk3_broadway_EXCLUDES = dummy
-gdk3_broadway_HEADERS_DIR = $(libgdkbroadwayincludedir)
-
-gdk3_broadway_HEADERS_INST = $(libgdkbroadwayinclude_HEADERS)
-
-gdk3_broadway_HEADERS_EXCLUDES = dummy
 
 broadwayd_FILES = $(broadwayd_SOURCES)
 broadwayd_EXCLUDES = dummy
@@ -85,7 +80,6 @@ include $(top_srcdir)/win32/Makefile.msvcproj
 
 dist-hook: \
 	$(top_builddir)/win32/vs9/gdk3-broadway.vcproj		\
-	$(top_builddir)/win32/vs9/broadwayd.vcproj		\
-	$(top_builddir)/win32/vs9/gdk3-broadway.headers
+	$(top_builddir)/win32/vs9/broadwayd.vcproj
 
 -include $(top_srcdir)/git.mk
