@@ -97,19 +97,19 @@ NULL=
 
 # For GTK resources
 
-!if [for %f in (..\gtk\theme\Adwaita\gtk.css ..\gtk\theme\Adwaita\gtk-dark.css ..\gtk\theme\Adwaita\gtk-contained.css ..\gtk\theme\Adwaita\gtk-contained-dark.css) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in ($(adwaita_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
 !endif
 
 !if [for %x in (png svg) do @(for %f in (..\gtk\theme\Adwaita\assets\*.%x) do @call create-lists.bat file resources_sources.mak %f)]
 !endif
 
-!if [for %f in (..\gtk\theme\HighContrast\gtk.css ..\gtk\theme\HighContrast\gtk-inverse.css ..\gtk\theme\HighContrast\gtk-contained.css ..\gtk\theme\HighContrast\gtk-contained-inverse.css) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in ($(highcontrast_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
 !endif
 
 !if [for %x in (png svg) do @(for %f in (..\gtk\theme\HighContrast\assets\*.%x) do @call create-lists.bat file resources_sources.mak %f)]
 !endif
 
-!if [for %f in (..\gtk\theme\win32\gtk-win32-base.css ..\gtk\theme\win32\gtk.css) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in ($(win32_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
 !endif
 
 !if [for %f in (..\gtk\cursor\*.png ..\gtk\gesture\*.symbolic.png ..\gtk\ui\*.ui) do @call create-lists.bat file resources_sources.mak %f]
