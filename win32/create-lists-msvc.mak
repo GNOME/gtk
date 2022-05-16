@@ -45,6 +45,12 @@ NULL=
 !if [call create-lists.bat footer gdk_headers.mak]
 !endif
 
+# For GDK-Win32 public headers
+!include ..\gdk\win32\gdk-win32-sources.inc
+
+# For GDK-Broadway public headers
+!include ..\gdk\broadway\gdk-broadway-sources.inc
+
 !include gdk_headers.mak
 
 !if [del /f /q gdk_headers.mak]
@@ -94,6 +100,9 @@ NULL=
 
 !if [del /f /q gtk_headers.mak]
 !endif
+
+# For the libgail-util public headers
+!include ..\libgail-util\libgail-util-sources.inc
 
 # For GTK resources
 
