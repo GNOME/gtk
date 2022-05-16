@@ -1,4 +1,5 @@
 include $(top_srcdir)/Makefile.decl
+include libgail-util-sources.inc
 
 EXTRA_DIST += \
 	gailutil.def \
@@ -35,16 +36,7 @@ endif
 
 lib_LTLIBRARIES = libgailutil-3.la
 
-util_c_sources =		\
-	gailmisc.c		\
-	gailtextutil.c
-
 libgailutilincludedir=$(includedir)/gail-3.0/libgail-util
-
-util_public_h_sources =		\
-	gailmisc.h		\
-	gailtextutil.h		\
-	gail-util.h
 
 libgailutil_3_la_SOURCES = 	\
 	$(util_c_sources)
