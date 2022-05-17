@@ -62,6 +62,8 @@ enum
 
 G_DEFINE_TYPE (GtkListItem, gtk_list_item, G_TYPE_OBJECT)
 
+#define parent_class ((GObjectClass *)gtk_list_item_parent_class)
+
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void
@@ -72,7 +74,7 @@ gtk_list_item_dispose (GObject *object)
   g_assert (self->owner == NULL); /* would hold a reference */
   g_clear_object (&self->child);
 
-  G_OBJECT_CLASS (gtk_list_item_parent_class)->dispose (object);
+  parent_class->dispose (object);
 }
 
 static void

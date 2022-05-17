@@ -62,6 +62,9 @@ enum
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkListItemWidget, gtk_list_item_widget, GTK_TYPE_WIDGET)
 
+#define ancestor_class(T_N) ((T_N##Class *)gtk_list_item_widget_parent_class)
+#define parent_class ancestor_class(GtkWidget)
+
 static GParamSpec *properties[N_PROPS] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -137,7 +140,7 @@ gtk_list_item_widget_grab_focus (GtkWidget *widget)
       !priv->list_item->selectable)
     return FALSE;
 
-  return GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->grab_focus (widget);
+  return parent_class->grab_focus (widget);
 }
 
 static void
@@ -146,7 +149,7 @@ gtk_list_item_widget_root (GtkWidget *widget)
   GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->root (widget);
+  parent_class->root (widget);
 
   if (priv->factory)
     gtk_list_item_factory_setup (priv->factory, self);
@@ -158,7 +161,7 @@ gtk_list_item_widget_unroot (GtkWidget *widget)
   GtkListItemWidget *self = GTK_LIST_ITEM_WIDGET (widget);
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
 
-  GTK_WIDGET_CLASS (gtk_list_item_widget_parent_class)->unroot (widget);
+  parent_class->unroot (widget);
 
   if (priv->list_item)
       gtk_list_item_factory_teardown (priv->factory, self);
@@ -199,7 +202,7 @@ gtk_list_item_widget_dispose (GObject *object)
   g_clear_object (&priv->item);
   g_clear_object (&priv->factory);
 
-  G_OBJECT_CLASS (gtk_list_item_widget_parent_class)->dispose (object);
+  ancestor_class(GObject)->dispose (object);
 }
 
 static void

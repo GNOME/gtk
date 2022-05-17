@@ -96,7 +96,7 @@ gtk_list_item_factory_default_teardown (GtkListItemFactory *self,
   gtk_list_item_set_child (list_item, NULL);
 }
 
-static void                  
+static void
 gtk_list_item_factory_default_update (GtkListItemFactory *self,
                                       GtkListItemWidget  *widget,
                                       GtkListItem        *list_item,
