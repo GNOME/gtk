@@ -963,7 +963,6 @@ DISTCLEANFILES += gtk-win32.rc
 endif
 
 EXTRA_DIST += $(gtk_all_private_h_sources) $(gtk_extra_sources)
-EXTRA_DIST += $(gtk_built_sources)
 
 
 pkgdatadir = $(datadir)/gtk-$(GTK_API_VERSION)
