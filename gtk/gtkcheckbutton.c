@@ -959,7 +959,7 @@ gtk_check_button_set_label (GtkCheckButton *self,
             gtk_label_set_use_underline (GTK_LABEL (child), priv->use_underline);
           gtk_check_button_real_set_child (self, GTK_WIDGET (child), LABEL_CHILD);
         }
-      
+
       gtk_widget_add_css_class (GTK_WIDGET (self), "text-button");
       gtk_label_set_label (GTK_LABEL (priv->child), label);
     }
@@ -1099,7 +1099,7 @@ gtk_check_button_set_use_underline (GtkCheckButton *self,
     return;
 
   priv->use_underline = setting;
-  if (priv->child_type == LABEL_CHILD)
+  if (priv->child_type == LABEL_CHILD && priv->child != NULL)
     gtk_label_set_use_underline (GTK_LABEL (priv->child), priv->use_underline);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_USE_UNDERLINE]);
