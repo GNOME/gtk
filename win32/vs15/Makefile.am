@@ -31,9 +31,7 @@ EXTRA_DIST_COPIED =	\
 	broadwayd.vcxproj	\
 	broadwayd.vcxproj.filters	\
 	gdk3-broadway.vcxproj	\
-	gdk3-broadway.vcxproj.filters	\
-	gtk3-build-defines.props	\
-	gtk3-version-paths.props
+	gdk3-broadway.vcxproj.filters
 
 DISTCLEANFILES = $(EXTRA_DIST_COPIED)
 EXTRA_DIST += $(EXTRA_DIST_COPIED) Directory.Build.props

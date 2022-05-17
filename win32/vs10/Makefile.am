@@ -18,8 +18,7 @@ GENERATED_ITEMS = \
 	gtk3-icon-browser.vcxproj		\
 	gtk3-icon-browser.vcxproj.filters	\
 	gailutil-3.vcxproj			\
-	gailutil-3.vcxproj.filters		\
-	gtk3-version-paths.props
+	gailutil-3.vcxproj.filters
 
 EXTRA_DIST += \
 	README.txt				\
@@ -53,8 +52,6 @@ EXTRA_DIST += \
 	gailutil-3.vcxproj.filtersin		\
 	gtk3-install.vcxproj			\
 	gtk3-introspect.vcxproj			\
-	gtk3-build-defines.props		\
-	gtk3-version-paths.props.in		\
 	$(GENERATED_ITEMS)
 
 DISTCLEANFILES = \

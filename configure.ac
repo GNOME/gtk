@@ -1963,13 +1963,14 @@ win32/config-msvc.mak
 win32/vs9/Makefile
 win32/vs9/gtk3-version-paths.vsprops
 win32/vs10/Makefile
-win32/vs10/gtk3-version-paths.props
 win32/vs11/Makefile
 win32/vs12/Makefile
 win32/vs14/Makefile
 win32/vs15/Makefile
 win32/vs16/Makefile
 win32/vs17/Makefile
+win32/vs1x-props/Makefile
+win32/vs1x-props/gtk3-version-paths.props
 gdk/Makefile
 gdk/broadway/Makefile
 gdk/x11/Makefile

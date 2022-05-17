@@ -1,7 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="UserMacros">
-    <VSVer>10</VSVer>
+    <VSVer Condition="'$(VisualStudioVersion)' == ''">10</VSVer>
+    <VSVer Condition="'$(VisualStudioVersion)' == '10.0'">10</VSVer>
+    <VSVer Condition="'$(VisualStudioVersion)' == '11.0'">11</VSVer>
+    <VSVer Condition="'$(VisualStudioVersion)' == '12.0'">12</VSVer>
+    <VSVer Condition="'$(VisualStudioVersion)' == '14.0'">14</VSVer>
+    <VSVer Condition="'$(VisualStudioVersion)' == '15.0'">15</VSVer>
+    <VSVer Condition="'$(VisualStudioVersion)' == '16.0'">16</VSVer>
+    <VSVer Condition="'$(VisualStudioVersion)' == '17.0'">17</VSVer>
     <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\vs$(VSVer)\$(Platform)</GlibEtcInstallRoot>
     <CopyDir>..\..\..\vs$(VSVer)\$(Platform)</CopyDir>
     <ApiVersion>3.0</ApiVersion>

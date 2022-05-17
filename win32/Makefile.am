@@ -34,7 +34,8 @@ SUBDIRS =	\
 	vs14	\
 	vs15	\
 	vs16	\
-	vs17
+	vs17	\
+	vs1x-props
 
 EXTRA_DIST +=	\
 	config-msvc.mak		\
