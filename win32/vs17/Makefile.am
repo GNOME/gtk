@@ -33,7 +33,6 @@ EXTRA_DIST +=	\
 	gdk3-broadway.vcxproj	\
 	gdk3-broadway.vcxproj.filters	\
 	gtk3-build-defines.props	\
-	gtk3-copy-gdk-broadway.props	\
 	gtk3-version-paths.props
 
 DISTCLEANFILES = $(EXTRA_DIST)

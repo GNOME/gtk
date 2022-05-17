@@ -54,7 +54,6 @@ EXTRA_DIST += \
 	gtk3-install.vcxproj			\
 	gtk3-introspect.vcxproj			\
 	gtk3-build-defines.props		\
-	gtk3-copy-gdk-broadway.props		\
 	gtk3-version-paths.props.in		\
 	$(GENERATED_ITEMS)
 

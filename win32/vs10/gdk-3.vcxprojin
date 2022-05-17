@@ -105,19 +105,19 @@
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-copy-gdk-broadway.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-copy-gdk-broadway.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-copy-gdk-broadway.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="gtk3-copy-gdk-broadway.props" />
+    <Import Project="gtk3-build-defines.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -181,6 +181,7 @@
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>/EXPORT:gdk_win32_display_manager_get_type</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -232,6 +233,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>/EXPORT:gdk_win32_display_manager_get_type</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -285,6 +287,7 @@
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalOptions>/EXPORT:gdk_win32_display_manager_get_type</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -336,7 +339,20 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalOptions>/EXPORT:gdk_win32_display_manager_get_type</AdditionalOptions>
     </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <PostBuildEvent>
+      <Command Condition="'$(Configuration)' == 'Debug_Broadway'">
+if not exist $(OutDir)\..\..\..\Debug\$(Platform)\bin\ mkdir $(OutDir)\..\..\..\Debug\$(Platform)\bin
+copy /b "$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll" "$(OutDir)\..\..\..\Debug\$(Platform)\bin"
+copy /b "$(TargetDir)$(ProjectName).0.lib" "$(OutDir)\..\..\..\Debug\$(Platform)\bin"</Command>
+      <Command Condition="'$(Configuration)' == 'Release_Broadway'">
+if not exist $(OutDir)\..\..\..\Release\$(Platform)\bin\ mkdir $(OutDir)\..\..\..\Release\$(Platform)\bin
+copy /b "$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll" "$(OutDir)\..\..\..\Release\$(Platform)\bin"
+copy /b "$(TargetDir)$(ProjectName).0.lib" "$(OutDir)\..\..\..\Release\$(Platform)\bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="$(GdkGenSrcDir)\gdk\gdk.rc" />
