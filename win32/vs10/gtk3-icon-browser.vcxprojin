@@ -160,6 +160,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
 #include "gtk3-icon-browser.vs10.sourcefiles"
+    <ClCompile Include="..\..\demos\icon-browser\resources.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-3.vcxproj">
