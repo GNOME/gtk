@@ -2020,6 +2020,12 @@ gtk_label_mnemonic_activate (GtkWidget *widget,
   if (self->mnemonic_widget)
     return gtk_widget_mnemonic_activate (self->mnemonic_widget, group_cycling);
 
+  /* Not a label for something else, but is selectable, so set focus into
+   * the label itself.
+  */
+  if (gtk_label_get_selectable (self) && gtk_widget_get_focusable (widget))
+    return gtk_label_grab_focus (widget);
+
   /* Try to find the widget to activate by traversing the
    * widget's ancestry.
    */
