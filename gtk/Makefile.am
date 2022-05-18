@@ -964,6 +964,9 @@ endif
 
 EXTRA_DIST += $(gtk_all_private_h_sources) $(gtk_extra_sources)
 
+# We need to dist this for `make distcheck`, apparently...
+EXTRA_DIST += gtk.gresource.xml
+
 
 pkgdatadir = $(datadir)/gtk-$(GTK_API_VERSION)
 pkgdata_DATA = gtkbuilder.rng
