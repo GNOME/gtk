@@ -34,7 +34,7 @@
 NULL=
 
 # For GDK enumeration sources
-!include ..\gdk\gdk-pub-headers.mak
+!include ..\gdk\gdk-sources.inc
 
 !if [call create-lists.bat header gdk_headers.mak GDK_PUBLIC_HEADERS]
 !endif

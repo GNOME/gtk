@@ -1,6 +1,6 @@
 ## Makefile.am for gtk+/gdk
 include $(top_srcdir)/Makefile.decl
-include gdk-pub-headers.mak
+include gdk-sources.inc
 
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
