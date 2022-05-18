@@ -69,6 +69,23 @@ parse_rect (GtkCssParser    *parser,
 }
 
 static gboolean
+parse_vec4 (GtkCssParser    *parser,
+            gpointer         out_vec4)
+{
+  double numbers[4];
+
+  if (!gtk_css_parser_consume_number (parser, &numbers[0]) ||
+      !gtk_css_parser_consume_number (parser, &numbers[1]) ||
+      !gtk_css_parser_consume_number (parser, &numbers[2]) ||
+      !gtk_css_parser_consume_number (parser, &numbers[3]))
+    return FALSE;
+
+  graphene_vec4_init (out_vec4, numbers[0], numbers[1], numbers[2], numbers[3]);
+
+  return TRUE;
+}
+
+static gboolean
 parse_texture (GtkCssParser *parser,
                gpointer      out_data)
 {
@@ -1490,22 +1507,19 @@ parse_color_matrix_node (GtkCssParser *parser)
   GskRenderNode *child = NULL;
   graphene_matrix_t matrix;
   GskTransform *transform = NULL;
-  graphene_rect_t offset_rect = GRAPHENE_RECT_INIT (0, 0, 0, 0);
   graphene_vec4_t offset;
   const Declaration declarations[] = {
     { "matrix", parse_transform, clear_transform, &transform },
-    { "offset", parse_rect, NULL, &offset_rect },
+    { "offset", parse_vec4, NULL, &offset },
     { "child", parse_node, clear_node, &child }
   };
   GskRenderNode *result;
 
+  graphene_vec4_init (&offset, 0, 0, 0, 0);
+
   parse_declarations (parser, declarations, G_N_ELEMENTS(declarations));
   if (child == NULL)
     child = create_default_render_node ();
-
-  graphene_vec4_init (&offset,
-                      offset_rect.origin.x, offset_rect.origin.y,
-                      offset_rect.size.width, offset_rect.size.height);
 
   gsk_transform_to_matrix (transform, &matrix);
 

@@ -36,6 +36,7 @@ compare_render_tests = [
   'clip-nested1',
   'color-blur0',
   'color-matrix-identity',
+  'color-matrix-parsing',
   'cross-fade-in-opacity',
   'css-background',
   'empty-blend',
