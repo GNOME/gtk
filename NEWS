@@ -1,3 +1,33 @@
+Overview of Changes in GTK+ 3.24.34, 05-18-2022
+===============================================
+
+* Include legacy hicolor icons
+
+* Fix the build with gcc 12
+
+* MacOS:
+ - Restore QUARTZ_RELOCATION support
+
+* X11:
+ - Trap errors when getting output properties
+
+* Wayland:
+ - Ignore empty preedit updates This fixes a problem with
+   textview scrolling
+
+* Translation updates
+ Danish
+ Dutch
+ French
+ German
+ Hungarian
+ Italian
+ Kazakh
+ Latvian
+ Lithuanian
+ Norwegian Bokmål
+ Swedish
+
 Overview of Changes in GTK+ 3.24.33, 04-03-2022
 ===============================================
 
