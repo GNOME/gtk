@@ -185,6 +185,8 @@ ul.images li {
                 <li><img alt="ref" src="{{ failure.image_data.ref }}" /></li>
                 <li><img alt="out" src="{{ failure.image_data.out }}" /></li>
                 <li><img alt="diff" src="{{ failure.image_data.diff }}" /></li>
+                <li><a href="{{ failure.image_data.refnode }}">ref node</a></li>
+                <li><a href="{{ failure.image_data.outnode }}">out node</a></li>
               </ul>
               {% endif %}
             </li>
@@ -311,6 +313,8 @@ for line in args.infile:
         image_data = {
             'ref': os.path.join(args.reftest_output_dir, '{}.ref.png'.format(basename)),
             'out': os.path.join(args.reftest_output_dir, '{}.out.png'.format(basename)),
+            'refnode': os.path.join(args.reftest_output_dir, '{}.ref.node'.format(basename)),
+            'outnode': os.path.join(args.reftest_output_dir, '{}.out.node'.format(basename)),
             'diff': os.path.join(args.reftest_output_dir, '{}.diff.png'.format(basename)),
         }
 

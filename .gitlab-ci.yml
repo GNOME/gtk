@@ -58,6 +58,7 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/report*.xml"
       - "${CI_PROJECT_DIR}/_build/report*.html"
       - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.node"
       - "${CI_PROJECT_DIR}/_build/testsuite/tools/output/*/*"
       - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.png"
       - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
