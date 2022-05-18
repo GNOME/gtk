@@ -485,8 +485,10 @@ gtk_base_private_h_sources =	\
 	language-names.h	\
 	script-names.h
 
-# GTK base sources
-gtk_base_c_sources_base =	\
+# GTK base sources (had to split those in 2 parts to avoid U1095 error :|, order unchanged from before)
+# gtk_base_c_sources_base_gtka_gtkh: sources from gtka* to gtkh*, mostly
+# gtk_base_c_sources_base_gtki_gtkw: sources from gtki* to gtkw*, mostly
+gtk_base_c_sources_base_gtka_gtkh =	\
 	gtkactionmuxer.c	\
 	gtkactionobserver.c	\
 	gtkactionobservable.c	\
@@ -684,7 +686,9 @@ gtk_base_c_sources_base =	\
 	gtkglarea.c		\
 	gtkgrid.c		\
 	gtkheaderbar.c		\
-	gtkhsla.c		\
+	gtkhsla.c
+
+gtk_base_c_sources_base_gtki_gtkw =	\
 	gtkicon.c		\
 	gtkiconcache.c		\
 	gtkiconcachevalidator.c	\
@@ -698,7 +702,7 @@ gtk_base_c_sources_base =	\
 	gtkimmodule.c		\
 	gtkimmulticontext.c	\
 	gtkinfobar.c		\
-	gtkinvisible.c		\
+	gtkinvisible.c	\
 	gtkkeyhash.c		\
 	gtkkineticscrolling.c	\
 	gtklabel.c		\
@@ -855,6 +859,8 @@ gtk_base_c_sources_base =	\
 	gdkpixbufutils.c	\
 	language-names.c	\
 	script-names.c
+
+gtk_base_c_sources_base = $(gtk_base_c_sources_base_gtka_gtkh) $(gtk_base_c_sources_base_gtki_gtkw)
 
 # Clipboard/dnd platform-specific sources
 gtk_clipboard_dnd_c_sources_quartz =	\
