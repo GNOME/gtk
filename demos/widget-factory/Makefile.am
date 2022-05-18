@@ -69,4 +69,6 @@ EXTRA_DIST += 				\
 	data/symbolic-source.svg	\
 	meson.build
 
+DISTCLEANFILES = widget_factory_resources.c
+
 -include $(top_srcdir)/git.mk

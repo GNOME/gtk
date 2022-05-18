@@ -27,6 +27,8 @@ gtk3_icon_browser_SOURCES = \
 BUILT_SOURCES = \
 	resources.c
 
+DISTCLEANFILES = resources.c
+
 resources.c: iconbrowser.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(srcdir)/iconbrowser.gresource.xml)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $(srcdir)/iconbrowser.gresource.xml \
 		--target=$@ --sourcedir=$(srcdir) --generate-source

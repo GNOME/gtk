@@ -129,6 +129,6 @@ dist-hook: \
 	$(top_builddir)/win32/vs9/gtk3-demo.vcproj	\
 	$(top_builddir)/win32/vs9/gtk3-demo-application.vcproj
 
-DISTCLEANFILES = demos.h demos.h.win32
+DISTCLEANFILES = demos.h demos.h.win32 demo_resources.c
 
 -include $(top_srcdir)/git.mk
