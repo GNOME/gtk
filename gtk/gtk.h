@@ -256,6 +256,7 @@
 #include <gtk/gtktextmark.h>
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktexttagtable.h>
+#include <gtk/gtktexttile.h>
 #include <gtk/gtktextview.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktooltip.h>
