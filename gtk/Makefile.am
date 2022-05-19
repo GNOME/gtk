@@ -529,60 +529,8 @@ gtk_3_EXCLUDES = dummy
 
 include $(top_srcdir)/win32/Makefile.msvcproj
 
-if HAVE_INTROSPECTION
-# Introspection Items for MSVC
-MSVC_INTROSPECT_GIRS = Gtk-3.0.gir
-
-GTK_MSVC_GIR_CFLAGS =						\
-	$(GTK_BASE_CFLAGS_DEFINES)				\
-	-DGTK_LIBDIR=\\\"/dummy/lib\\\"				\
-	-DGTK_DATADIR=\\\"/dummy/share\\\"			\
-	-DGTK_DATA_PREFIX=\\\"/dummy\\\"			\
-	-DGTK_SYSCONFDIR=\\\"/dummy/etc\\\"			\
-	-DGTK_HOST=\\\"'$$$$(AT_PLAT)'-pc-vs'$$$$(VSVER)'\\\"	\
-	-DGTK_PRINT_BACKENDS=\\\"file\\\"			\
-	-DINCLUDE_IM_am_et			\
-	-DINCLUDE_IM_cedilla			\
-	-DINCLUDE_IM_cyrillic_translit		\
-	-DINCLUDE_IM_ime			\
-	-DINCLUDE_IM_inuktitu			\
-	-DINCLUDE_IM_ipa			\
-	-DINCLUDE_IM_multipress			\
-	-DINCLUDE_IM_thai			\
-	-DINCLUDE_IM_ti_er			\
-	-DINCLUDE_IM_ti_et			\
-	-DINCLUDE_IM_viqr			\
-	-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API	\
-	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gtk-3'	\
-	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gdk-3' -I..	\
-	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gtk-3/gtk' -I../gtk	\
-	-I'./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/obj/gdk-3/gdk' -I../gdk
-
-INTROSPECTION_INTERMEDIATE_ITEMS = \
-	$(top_builddir)/win32/Gtk-3.0.gir.msvc.introspect		\
-	$(top_builddir)/win32/Gtk_3_0_gir_list
-
-Gtk_3_0_gir_MSVC_FILES =		\
-	$(filter-out gtktypebuiltins.h gtkversion.h, $(introspected_pub_headers)) \
-	$(gtk_base_c_sources)		\
-	$(gtk_os_win32_c_sources)
-
-Gtk_3_0_gir_MSVC_EXPORT_PACKAGES = $(Gtk_3_0_gir_EXPORT_PACKAGES)
-Gtk_3_0_gir_MSVC_INCLUDE_GIRS = Atk-1.0
-Gtk_3_0_gir_MSVC_LIBS = gtk-3.0 gdk-3.0
-Gtk_3_0_gir_MSVC_CFLAGS = $(GTK_MSVC_GIR_CFLAGS)
-Gtk_3_0_gir_MSVC_SCANNERFLAGS = --warn-all --include-uninstalled='./vs$$$$(VSVER)/$$$$(CFG)/$$$$(PLAT)/bin/Gdk-3.0.gir'
-
-include $(top_srcdir)/win32/Makefile.msvc-introspection
-
-else
-INTROSPECTION_INTERMEDIATE_ITEMS =
-
-endif
-
 dist-hook: \
-	$(top_builddir)/win32/vs9/gtk-3.vcproj	\
-	$(INTROSPECTION_INTERMEDIATE_ITEMS)
+	$(top_builddir)/win32/vs9/gtk-3.vcproj
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme

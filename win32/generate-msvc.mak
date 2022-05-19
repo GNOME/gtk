@@ -299,20 +299,6 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs16\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v142<"
 	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs17\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v143<"
 
-Gdk_3_0_gir_list_final: Gdk_3_0_gir_list $(GDK_GENERATED_SOURCES)
-	@echo Generating $@...
-	@type Gdk_3_0_gir_list>$@
-	@for %%s in ($(GDK_GENERATED_SOURCES)) do echo %%s>>$@
-
-Gtk_3_0_gir_list_final: Gtk_3_0_gir_list $(GTK_TYPEBUILTIN_SOURCES)
-	@echo Generating $@...
-	@type Gtk_3_0_gir_list>$@
-	@for %%s in ($(GTK_TYPEBUILTIN_SOURCES) .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkversion.h) do echo %%s>>$@
-
-GdkWin32_3_0_gir_list_final: GdkWin32_3_0_gir_list
-	@echo Copying $@...
-	@copy $** $@
-
 # Remove the generated files
 clean:
 	@-del /f /q ..\demos\icon-browser\resources.c
