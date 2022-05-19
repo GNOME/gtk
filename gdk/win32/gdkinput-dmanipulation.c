@@ -355,6 +355,8 @@ reset_viewport (IDirectManipulationViewport *viewport)
   hr = IDirectManipulationContent_SyncContentTransform (content, identity,
                                                         G_N_ELEMENTS (identity));
   HR_CHECK (hr);
+
+  IUnknown_Release (content);
 }
 
 static void
