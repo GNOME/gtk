@@ -813,7 +813,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   gboolean compose_match;
   guint keyval, state;
 
-  while (priv->compose_buffer[n_compose] != 0 && n_compose < priv->compose_buffer_len)
+  while (n_compose < priv->compose_buffer_len && priv->compose_buffer[n_compose] != 0)
     n_compose++;
 
   keyval = gdk_key_event_get_keyval (event);
