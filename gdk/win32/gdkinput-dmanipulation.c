@@ -167,8 +167,10 @@ DManipEventHandler_OnContentUpdated (IDirectManipulationViewportEventHandler *se
     {
     case GESTURE_PAN:
       {
+        GdkWin32Surface *surface_win32;
         GdkModifierType state;
         uint32_t time;
+        int scale;
         float pan_x;
         float pan_y;
         GdkEvent *event;
@@ -176,14 +178,16 @@ DManipEventHandler_OnContentUpdated (IDirectManipulationViewportEventHandler *se
         pan_x = transform[4];
         pan_y = transform[5];
 
+        surface_win32 = GDK_WIN32_SURFACE (self->surface);
+        scale = surface_win32->surface_scale;
         state = util_get_modifier_state ();
         time = (uint32_t) GetMessageTime ();
 
         event = gdk_scroll_event_new (self->surface,
                                       self->device,
                                       NULL, time, state,
-                                      self->pan_x - pan_x,
-                                      self->pan_y - pan_y,
+                                      (self->pan_x - pan_x) / scale,
+                                      (self->pan_y - pan_y) / scale,
                                       FALSE,
                                       GDK_SCROLL_UNIT_SURFACE);
         _gdk_win32_append_event (event);
