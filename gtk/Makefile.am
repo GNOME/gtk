@@ -136,7 +136,7 @@ gtk_private_h_sources =		\
 # GTK+ C sources to build the library from
 gtk_base_c_sources = 		\
 	$(a11y_c_sources)	\
-	$(deprecated_c_sources)	\
+	$(gtk_deprecated_c_sources)	\
 	$(inspector_c_sources)	\
 	$(gtk_base_c_sources_base)
 
@@ -207,7 +207,7 @@ endif
 
 gtk_all_private_h_sources = \
 	$(a11y_private_h_sources) \
-	$(deprecated_private_h_sources) \
+	$(gtk_deprecated_private_h_sources) \
 	$(gtk_private_h_sources) \
 	$(gtk_use_x11_private_h_sources) \
 	$(gtk_use_win32_private_h_sources) \
