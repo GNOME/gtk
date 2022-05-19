@@ -33,7 +33,7 @@
 
 NULL=
 
-# For GDK enumeration sources
+# For GDK public headers and sources
 !include ..\gdk\gdk-sources.inc
 
 !if [call create-lists.bat header gdk_headers.mak GDK_PUBLIC_HEADERS]
@@ -45,8 +45,35 @@ NULL=
 !if [call create-lists.bat footer gdk_headers.mak]
 !endif
 
-# For GDK-Win32 public headers
+!if [call create-lists.bat header gdk_headers.mak GDK_C_SRCS]
+!endif
+
+!if [for %f in ($(gdk_c_sources)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!endif
+
+!if [call create-lists.bat footer gdk_headers.mak]
+!endif
+
+# For GDK-Win32 public headers and sources
 !include ..\gdk\win32\gdk-win32-sources.inc
+
+!if [call create-lists.bat header gdk_headers.mak GDK_WIN32_PUBLIC_HEADERS]
+!endif
+
+!if [for %f in ($(libgdkwin32include_HEADERS)) do @call create-lists.bat file gdk_headers.mak ../gdk/win32/%f]
+!endif
+
+!if [call create-lists.bat footer gdk_headers.mak]
+!endif
+
+!if [call create-lists.bat header gdk_headers.mak GDK_WIN32_INTROSPECTION_SRCS]
+!endif
+
+!if [for %f in ($(w32_introspection_files)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!endif
+
+!if [call create-lists.bat footer gdk_headers.mak]
+!endif
 
 # For GDK-Broadway public headers
 !include ..\gdk\broadway\gdk-broadway-sources.inc
@@ -70,10 +97,11 @@ NULL=
 !if [call create-lists.bat header resources_sources.mak GTK_RESOURCES]
 !endif
 
-# For GTK enumeration sources
+# For GTK public headers and sources
 !include ..\gtk\gtk-sources.inc
 !include ..\gtk\a11y\Makefile.inc
 !include ..\gtk\deprecated\Makefile.inc
+!include ..\gtk\inspector\Makefile.inc
 
 !if [call create-lists.bat header gtk_headers.mak GTK_PUBLIC_ENUM_HEADERS]
 !endif
@@ -91,6 +119,33 @@ NULL=
 !endif
 
 !if [for %f in ($(GTK_PRIVATE_TYPE_HDRS)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!endif
+
+!if [call create-lists.bat footer gtk_headers.mak]
+!endif
+
+!if [call create-lists.bat header gtk_headers.mak GTK_SEMI_PRIVATE_HEADERS]
+!endif
+
+!if [for %f in ($(gtk_semi_private_h_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!endif
+
+!if [call create-lists.bat footer gtk_headers.mak]
+!endif
+
+!if [call create-lists.bat header gtk_headers.mak GTK_C_SRCS]
+!endif
+
+!if [for %f in ($(a11y_c_sources) $(gtk_deprecated_c_sources) $(inspector_c_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!endif
+
+!if [for %f in ($(gtk_base_c_sources_base_gtka_gtkh:.c=)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f.c]
+!endif
+
+!if [for %f in ($(gtk_base_c_sources_base_gtki_gtkw:.c=)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f.c]
+!endif
+
+!if [for %f in ($(gtk_os_win32_c_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
 !endif
 
 !if [call create-lists.bat footer gtk_headers.mak]
