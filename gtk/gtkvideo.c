@@ -653,7 +653,7 @@ gtk_video_set_media_stream (GtkVideo       *self,
 }
 
 /**
- * gtk_video_get_file: (attributes org.gtk.Method.get_propert=file)
+ * gtk_video_get_file: (attributes org.gtk.Method.get_property=file)
  * @self: a `GtkVideo`
  *
  * Gets the file played by @self or %NULL if not playing back
