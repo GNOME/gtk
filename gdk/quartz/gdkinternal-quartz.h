@@ -284,5 +284,10 @@ void     _gdk_quartz_window_change_property   (GdkWindow    *window,
 void     _gdk_quartz_window_delete_property   (GdkWindow    *window,
                                                GdkAtom       property);
 
+/* Display methods - frame clock */
+void        _gdk_quartz_display_add_frame_callback    (GdkDisplay             *display,
+                                                       GdkWindow              *window);
+void        _gdk_quartz_display_remove_frame_callback (GdkDisplay             *display,
+                                                       GdkWindow              *window);
 
 #endif /* __GDK_INTERNAL_QUARTZ_H__ */

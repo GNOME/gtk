@@ -21,6 +21,7 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkdisplayprivate.h>
 #include <gdk/gdkmonitorprivate.h>
+#include <gdk/gdkframeclockprivate.h>
 
 #include "gdkprivate-quartz.h"
 #include "gdkquartzscreen.h"
@@ -29,6 +30,7 @@
 #include "gdkquartzdevicemanager-core.h"
 #include "gdkscreen.h"
 #include "gdkmonitorprivate.h"
+#include "gdkdisplaylinksource.h"
 #include "gdkdisplay-quartz.h"
 #include "gdkmonitor-quartz.h"
 #include "gdkglcontext-quartz.h"
@@ -84,6 +86,112 @@ _gdk_device_manager_new (GdkDisplay *display)
                        NULL);
 }
 
+void
+_gdk_quartz_display_add_frame_callback (GdkDisplay             *display,
+                                        GdkWindow              *window)
+{
+  GdkQuartzDisplay *display_quartz;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  display_quartz = GDK_QUARTZ_DISPLAY (display);
+
+  impl->frame_link.data = window;
+  impl->frame_link.prev = NULL;
+  impl->frame_link.next = display_quartz->windows_awaiting_frame;
+
+  display_quartz->windows_awaiting_frame = &impl->frame_link;
+
+  if (impl->frame_link.next == NULL)
+    gdk_display_link_source_unpause ((GdkDisplayLinkSource *)display_quartz->frame_source);
+}
+
+void
+_gdk_quartz_display_remove_frame_callback (GdkDisplay             *display,
+                                           GdkWindow              *window)
+{
+  GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (display);
+  GList *link;
+
+  link = g_list_find (display_quartz->windows_awaiting_frame, window);
+
+  if (link != NULL)
+    {
+      display_quartz->windows_awaiting_frame =
+        g_list_remove_link (display_quartz->windows_awaiting_frame, link);
+    }
+
+  if (display_quartz->windows_awaiting_frame == NULL)
+    gdk_display_link_source_pause ((GdkDisplayLinkSource *)display_quartz->frame_source);
+}
+
+static gboolean
+gdk_quartz_display_frame_cb (gpointer data)
+{
+  GdkDisplayLinkSource *source;
+  GdkQuartzDisplay *display_quartz = data;
+  GList *iter;
+  gint64 presentation_time;
+  gint64 now;
+
+  source = (GdkDisplayLinkSource *)display_quartz->frame_source;
+
+  iter = display_quartz->windows_awaiting_frame;
+  display_quartz->windows_awaiting_frame = NULL;
+
+  if (iter == NULL)
+    {
+      gdk_display_link_source_pause (source);
+      return G_SOURCE_CONTINUE;
+    }
+
+  presentation_time = source->presentation_time;
+  now = g_source_get_time (display_quartz->frame_source);
+
+  for (; iter != NULL; iter = iter->next)
+    {
+      GdkWindow *window = iter->data;
+      GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+      GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
+      GdkFrameTimings *timings;
+
+      if (frame_clock == NULL)
+        continue;
+
+      _gdk_frame_clock_thaw (frame_clock);
+
+      if (impl->pending_frame_counter)
+        {
+          timings = gdk_frame_clock_get_timings (frame_clock, impl->pending_frame_counter);
+          if (timings != NULL)
+            timings->presentation_time = presentation_time - source->refresh_interval;
+          impl->pending_frame_counter = 0;
+        }
+
+      timings = gdk_frame_clock_get_current_timings (frame_clock);
+
+      if (timings != NULL)
+        {
+          timings->refresh_interval = source->refresh_interval;
+          timings->predicted_presentation_time = source->presentation_time;
+        }
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+gdk_quartz_display_init_display_link (GdkDisplay *display)
+{
+  GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (display);
+
+  display_quartz->frame_source = gdk_display_link_source_new ();
+  g_source_set_callback (display_quartz->frame_source,
+                         gdk_quartz_display_frame_cb,
+                         display,
+                         NULL);
+  g_source_attach (display_quartz->frame_source, NULL);
+}
+
 GdkDisplay *
 _gdk_quartz_display_open (const gchar *display_name)
 {
@@ -102,6 +210,8 @@ _gdk_quartz_display_open (const gchar *display_name)
 
   /* Initialize application */
   [NSApplication sharedApplication];
+  gdk_quartz_display_init_display_link (_gdk_display);
+
 #if 0
   /* FIXME: Remove the #if 0 when we have these functions */
   _gdk_quartz_dnd_init ();

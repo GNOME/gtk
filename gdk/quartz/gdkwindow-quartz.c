@@ -22,6 +22,7 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkdeviceprivate.h>
 #include <gdk/gdkdisplayprivate.h>
+#include <gdk/gdkframeclockprivate.h>
 
 #include "gdkwindowimpl.h"
 #include "gdkwindow-quartz.h"
@@ -46,8 +47,6 @@ static GSList   *update_nswindows;
 static gboolean  in_process_all_updates = FALSE;
 
 static GSList *main_window_stack;
-
-void _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl);
 
 typedef struct
 {
@@ -149,7 +148,6 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
 				    gboolean             antialias)
 {
   CGContextRef cg_context = NULL;
-  CGSize scale;
 
   if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
     return NULL;
@@ -160,38 +158,31 @@ gdk_window_impl_quartz_get_context (GdkWindowImplQuartz *window_impl,
    * and for widgets that send fake expose events like the arrow
    * buttons in spinbuttons or the position marker in rulers.
    */
-  if (window_impl->in_paint_rect_count == 0)
+#if MAC_OS_X_VERSION_MAX_ALLOWED < 101400
+  if (gdk_quartz_osx_version() < GDK_OSX_MOJAVE &&
+      window_impl->in_paint_rect_count == 0)
     {
       /* The NSView focus-locking API set was deprecated in MacOS 10.14 and
-       * has a significant cost in MacOS 11 - every lock/unlock seems to 
+       * has a significant cost in MacOS 11 - every lock/unlock seems to
        * trigger a drawRect: call for the entire window.  To return the
        * lost performance, do not use the locking API in MacOS 11+
        */
-      if(gdk_quartz_osx_version() < GDK_OSX_BIGSUR)
-        {
-          if (![window_impl->view lockFocusIfCanDraw])
+         if (![window_impl->view lockFocusIfCanDraw])
             return NULL;
-        }
     }
-#if MAC_OS_X_VERSION_MAX_ALLOWED < 101000
-    cg_context = [[NSGraphicsContext currentContext] graphicsPort];
-#else
+#endif
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101000
   if (gdk_quartz_osx_version () < GDK_OSX_YOSEMITE)
     cg_context = [[NSGraphicsContext currentContext] graphicsPort];
   else
-    cg_context = [[NSGraphicsContext currentContext] CGContext];
 #endif
+    cg_context = [[NSGraphicsContext currentContext] CGContext];
 
   if (!cg_context)
     return NULL;
   CGContextSaveGState (cg_context);
   CGContextSetAllowsAntialiasing (cg_context, antialias);
 
-  /* Undo the default scaling transform, since we apply our own
-   * in gdk_quartz_ref_cairo_surface () */
-  scale = CGContextConvertSizeToDeviceSpace (cg_context,
-                                             CGSizeMake (1.0, 1.0));
-  CGContextScaleCTM (cg_context, 1.0 / fabs(scale.width), 1.0 / fabs(scale.height));
   return cg_context;
 }
 
@@ -206,19 +197,14 @@ gdk_window_impl_quartz_release_context (GdkWindowImplQuartz *window_impl,
     }
 
   /* See comment in gdk_quartz_window_get_context(). */
-  if (window_impl->in_paint_rect_count == 0)
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
+  if (gdk_quartz_osx_version() < GDK_OSX_MOJAVE &&
+      window_impl->in_paint_rect_count == 0)
     {
-      _gdk_quartz_window_flush (window_impl);
-
-      /* As per gdk_window_impl_quartz_get_context(), the NSView
-        * focus-locking API set was deprecated in MacOS 10.14 and has
-        * a significant cost in MacOS 11 - every lock/unlock seems to 
-        * trigger a drawRect: call for the entire window.  To return the
-        * lost performance, do not use the locking API in MacOS 11+
-        */
-      if(gdk_quartz_osx_version() < GDK_OSX_BIGSUR)
-        [window_impl->view unlockFocus];
+      [window_impl->toplevel flushWindow];
+      [window_impl->view unlockFocus];
     }
+#endif
 }
 
 static void
@@ -241,52 +227,6 @@ gdk_window_impl_quartz_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-/* Help preventing "beam sync penalty" where CG makes all graphics code
- * block until the next vsync if we try to flush (including call display on
- * a view) too often. We do this by limiting the manual flushing done
- * outside of expose calls to less than some frequency when measured over
- * the last 4 flushes. This is a bit arbitray, but seems to make it possible
- * for some quick manual flushes (such as gtkruler or gimp’s marching ants)
- * without hitting the max flush frequency.
- *
- * If drawable NULL, no flushing is done, only registering that a flush was
- * done externally.
- *
- * Note: As of MacOS 10.14 NSWindow flushWindow is deprecated because
- * Quartz has the ability to handle deferred drawing on its own.
- */
-void
-_gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl)
-{
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
-  static struct timeval prev_tv;
-  static gint intervals[4];
-  static gint index;
-  struct timeval tv;
-  gint ms;
-
-  gettimeofday (&tv, NULL);
-  ms = (tv.tv_sec - prev_tv.tv_sec) * 1000 + (tv.tv_usec - prev_tv.tv_usec) / 1000;
-  intervals[index++ % 4] = ms;
-
-  if (window_impl)
-    {
-      ms = intervals[0] + intervals[1] + intervals[2] + intervals[3];
-
-      /* ~25Hz on average. */
-      if (ms > 4*40)
-        {
-          if (window_impl)
-            [window_impl->toplevel flushWindow];
-
-          prev_tv = tv;
-        }
-    }
-  else
-    prev_tv = tv;
-#endif
-}
-
 static cairo_user_data_key_t gdk_quartz_cairo_key;
 
 typedef struct {
@@ -298,11 +238,10 @@ static void
 gdk_quartz_cairo_surface_destroy (void *data)
 {
   GdkQuartzCairoSurfaceData *surface_data = data;
+  cairo_surface_t *surface = surface_data->window_impl->cairo_surface;
 
+  if (!cairo_surface_get_reference_count (surface))
   surface_data->window_impl->cairo_surface = NULL;
-
-  gdk_quartz_window_release_context (surface_data->window_impl,
-                                     surface_data->cg_context);
 
   g_free (surface_data);
 }
@@ -312,22 +251,15 @@ gdk_quartz_create_cairo_surface (GdkWindowImplQuartz *impl,
 				 int                  width,
 				 int                  height)
 {
-  CGContextRef cg_context;
   GdkQuartzCairoSurfaceData *surface_data;
   cairo_surface_t *surface;
 
-  cg_context = gdk_quartz_window_get_context (impl, TRUE);
 
   surface_data = g_new (GdkQuartzCairoSurfaceData, 1);
   surface_data->window_impl = impl;
-  surface_data->cg_context = cg_context;
+  surface_data->cg_context = NULL;
 
-  if (cg_context)
-    surface = cairo_quartz_surface_create_for_cg_context (cg_context,
-                                                          width, height);
-  else
-    surface = cairo_quartz_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-
+  surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
   cairo_surface_set_user_data (surface, &gdk_quartz_cairo_key,
                                surface_data,
                                gdk_quartz_cairo_surface_destroy);
@@ -345,19 +277,42 @@ gdk_quartz_ref_cairo_surface (GdkWindow *window)
 
   if (!impl->cairo_surface)
     {
+      gint width = gdk_window_get_width (impl->wrapper);
+      gint height = gdk_window_get_height (impl->wrapper);
       gint scale = gdk_window_get_scale_factor (impl->wrapper);
+      gint scaled_width = width * scale;
 
-      impl->cairo_surface = 
-          gdk_quartz_create_cairo_surface (impl,
-                                           gdk_window_get_width (impl->wrapper) * scale,
-                                           gdk_window_get_height (impl->wrapper) * scale);
+      if (scaled_width % 16)
+          scaled_width += 16 - scaled_width % 16; // Surface widths must be 4-pixel aligned
 
+      impl->cairo_surface = gdk_quartz_create_cairo_surface (impl,
+                                                             scaled_width,
+                                                             height * scale);
       cairo_surface_set_device_scale (impl->cairo_surface, scale, scale);
+      cairo_surface_reference (impl->cairo_surface); // The caller will destroy the returned one.
     }
   else
-    cairo_surface_reference (impl->cairo_surface);
+    {
+      cairo_surface_reference (impl->cairo_surface);
+    }
 
   return impl->cairo_surface;
+}
+
+void
+_gdk_quartz_unref_cairo_surface (GdkWindow *window)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (impl->cairo_surface)
+    {
+      cairo_surface_destroy (impl->cairo_surface);
+      if (impl->cairo_surface &&
+          !cairo_surface_get_reference_count (impl->cairo_surface))
+          impl->cairo_surface = NULL;
+    }
 }
 
 static void
@@ -369,6 +324,7 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 static gboolean
 gdk_window_impl_quartz_begin_paint (GdkWindow *window)
 {
+  gdk_quartz_ref_cairo_surface (window);
   return FALSE;
 }
 
@@ -419,13 +375,14 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
           /* In theory, we could skip the flush disabling, since we only
            * have one NSView.
            */
-          if (nswindow && ![nswindow isFlushWindowDisabled]) 
+          if (gdk_quartz_osx_version() < GDK_OSX_MOJAVE &&
+               nswindow && ![nswindow isFlushWindowDisabled])
             {
               [nswindow retain];
               [nswindow disableFlushWindow];
-              update_nswindows = g_slist_prepend (update_nswindows, nswindow);
             }
 #endif
+          update_nswindows = g_slist_prepend (update_nswindows, nswindow);
         }
     }
 
@@ -470,10 +427,12 @@ _gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
 
       [[nswindow contentView] displayIfNeeded];
 
-      _gdk_quartz_window_flush (NULL);
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
-      [nswindow enableFlushWindow];
-      [nswindow flushWindow];
+      if(gdk_quartz_osx_version() < GDK_OSX_BIGSUR)
+        {
+          [nswindow enableFlushWindow];
+          [nswindow flushWindow];
+        }
 #endif
       [nswindow release];
 
@@ -852,6 +811,29 @@ get_nsscreen_for_point (gint x, gint y)
   return screen;
 }
 
+static void
+on_frame_clock_before_paint (GdkFrameClock *frame_clock,
+                             GdkWindow     *window)
+{
+}
+
+static void
+on_frame_clock_after_paint (GdkFrameClock *frame_clock,
+                            GdkWindow     *window)
+{
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkFrameTimings *timings;
+
+  timings = gdk_frame_clock_get_current_timings (frame_clock);
+  if (timings != NULL)
+    impl->pending_frame_counter = timings->frame_counter;
+
+  _gdk_quartz_display_add_frame_callback (display, window);
+
+  _gdk_frame_clock_freeze (frame_clock);
+}
+
 void
 _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                                         GdkWindow     *window,
@@ -864,6 +846,7 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
   GdkWindowImplQuartz *impl;
   GdkWindowImplQuartz *parent_impl;
   GdkWindowTypeHint    type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+  GdkFrameClock *frame_clock;
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -1008,6 +991,16 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
     }
 
   GDK_QUARTZ_RELEASE_POOL;
+
+  if (attributes_mask & GDK_WA_TYPE_HINT)
+    gdk_window_set_type_hint (window, attributes->type_hint);
+
+  frame_clock = gdk_window_get_frame_clock (window);
+
+  g_signal_connect (frame_clock, "before-paint",
+                    G_CALLBACK (on_frame_clock_before_paint), window);
+  g_signal_connect (frame_clock, "after-paint",
+                    G_CALLBACK (on_frame_clock_after_paint), window);
 }
 
 void
@@ -1063,8 +1056,13 @@ gdk_quartz_window_destroy (GdkWindow *window,
 {
   GdkWindowImplQuartz *impl;
   GdkWindow *parent;
+  GdkDisplay *display;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  display = gdk_window_get_display (window);
+
+  _gdk_quartz_display_remove_frame_callback (display, window);
 
   main_window_stack = g_slist_remove (main_window_stack, window);
 
@@ -1257,6 +1255,7 @@ move_resize_window_internal (GdkWindow *window,
   cairo_region_t *old_region;
   cairo_region_t *expose_region;
   NSSize delta;
+  gboolean resized = FALSE;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -1304,10 +1303,18 @@ move_resize_window_internal (GdkWindow *window,
     }
 
   if (width != -1)
-    window->width = width;
+    {
+      if (window->width != width)
+        resized = TRUE;
+      window->width = width;
+    }
 
   if (height != -1)
-    window->height = height;
+    {
+      if (window->height != height)
+        resized = TRUE;
+      window->height = height;
+    }
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -1324,6 +1331,7 @@ move_resize_window_internal (GdkWindow *window,
 
       frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       [impl->toplevel setFrame:frame_rect display:YES];
+      impl->cairo_surface = gdk_quartz_ref_cairo_surface (window);
     }
   else 
     {
@@ -3211,40 +3219,19 @@ gdk_quartz_window_release_context (GdkWindowImplQuartz  *window,
       return;
     }
 
+  g_return_if_fail (cg_context);
   GDK_WINDOW_IMPL_QUARTZ_GET_CLASS (window)->release_context (window, cg_context);
 }
 
+/* macOS doesn't define a root window, but Gdk needs one for two
+ * purposes: To be a parent reference for some toplevels and to be a
+ * fallback window when gdk_window_create_image_surface is called with
+ * a NULL GdkWindow.
+ *
+ */
 
-
-static CGContextRef
-gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window,
-                                         gboolean             antialias)
-{
-  CGColorSpaceRef colorspace;
-  CGContextRef cg_context;
-  GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (window);
-
-  if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
-    return NULL;
-
-  /* We do not have the notion of a root window on OS X.  We fake this
-   * by creating a 1x1 bitmap and return a context to that.
-   */
-  colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
-  cg_context = CGBitmapContextCreate (NULL,
-                                      1, 1, 8, 4, colorspace,
-                                      (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
-  CGColorSpaceRelease (colorspace);
-
-  return cg_context;
-}
-
-static void
-gdk_root_window_impl_quartz_release_context (GdkWindowImplQuartz *window,
-                                             CGContextRef         cg_context)
-{
-  CGContextRelease (cg_context);
-}
+static CGContextRef gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window, gboolean antialias);
+static void gdk_root_window_impl_quartz_release_context (GdkWindowImplQuartz *window, CGContextRef cg_context);
 
 static void
 gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
@@ -3260,6 +3247,22 @@ gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
 static void
 gdk_root_window_impl_quartz_init (GdkRootWindowImplQuartz *impl)
 {
+  CGColorSpaceRef colorspace =  CGColorSpaceCreateDeviceRGB ();
+  /* Alpha channel Info: Cairo, CGImage, and CVPixelBuffer all use
+   * kCGImageAlphaPremultipliedFirst, CALayer.contents wants
+   * kCGImageAlphaPremultipliedLast.
+   */
+  CGBitmapInfo info = (CGBitmapInfo)kCGImageAlphaPremultipliedLast;
+  impl->cg_context = CGBitmapContextCreate (NULL, 1, 1, 8, 4,
+                                            colorspace, info);
+  CGColorSpaceRelease (colorspace);
+  impl->cg_layers = NULL;
+}
+
+static void
+gdk_root_window_impl_quartz_dispose (GdkRootWindowImplQuartz *impl)
+{
+  g_list_free_full (impl->cg_layers, (GDestroyNotify)CGLayerRelease);
 }
 
 GType
@@ -3288,4 +3291,31 @@ _gdk_root_window_impl_quartz_get_type (void)
     }
 
   return object_type;
+}
+
+
+static CGContextRef
+gdk_root_window_impl_quartz_get_context (GdkWindowImplQuartz *window,
+                                         gboolean             antialias)
+{
+   GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (window);
+   GdkRootWindowImplQuartz *impl = GDK_ROOT_WINDOW_IMPL_QUARTZ (window);
+   CGSize size;
+   CGLayerRef layer;
+
+  if (GDK_WINDOW_DESTROYED (window_impl->wrapper))
+    return NULL;
+
+  size.width = gdk_window_get_width (window_impl->wrapper);
+  size.height = gdk_window_get_height (window_impl->wrapper);
+  layer = CGLayerCreateWithContext(impl->cg_context, size, NULL);
+  impl->cg_layers = g_list_prepend(impl->cg_layers, CGLayerRetain (layer));
+  return CGContextRetain (CGLayerGetContext (layer));
+}
+
+static void
+gdk_root_window_impl_quartz_release_context (GdkWindowImplQuartz *window,
+                                             CGContextRef         cg_context)
+{
+  CGContextRelease (cg_context);
 }

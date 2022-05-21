@@ -396,7 +396,7 @@ get_window_point_from_screen_point (GdkWindow *window,
 static gboolean
 is_mouse_button_press_event (NSEventType type)
 {
-  switch (type)
+  switch ((int)type)
     {
       case GDK_QUARTZ_LEFT_MOUSE_DOWN:
       case GDK_QUARTZ_RIGHT_MOUSE_DOWN:
@@ -1029,7 +1029,7 @@ fill_button_event (GdkWindow *window,
   state = get_keyboard_modifiers_from_ns_event (nsevent) |
          _gdk_quartz_events_get_current_mouse_modifiers ();
 
-  switch ([nsevent type])
+  switch ((int)[nsevent type])
     {
     case GDK_QUARTZ_LEFT_MOUSE_DOWN:
     case GDK_QUARTZ_RIGHT_MOUSE_DOWN:

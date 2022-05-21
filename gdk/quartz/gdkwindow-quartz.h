@@ -64,6 +64,10 @@ struct _GdkWindowImplQuartz
   gint shadow_top;
 
   gint shadow_max;
+
+  gboolean use_cg_context;
+  GList frame_link;
+  gint pending_frame_counter;
 };
  
 struct _GdkWindowImplQuartzClass 
@@ -99,6 +103,8 @@ typedef struct _GdkRootWindowImplQuartzClass GdkRootWindowImplQuartzClass;
 struct _GdkRootWindowImplQuartz
 {
   GdkWindowImplQuartz parent_instance;
+  CGContextRef cg_context;
+  GList* cg_layers;
 };
  
 struct _GdkRootWindowImplQuartzClass 

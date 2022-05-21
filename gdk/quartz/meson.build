@@ -8,6 +8,7 @@ gdk_quartz_sources = files(
   'gdkdevice-core-quartz.c',
   'gdkdevicemanager-core-quartz.c',
   'gdkdisplay-quartz.c',
+  'gdkdisplaylinksource.c',
   'gdkdisplaymanager-quartz.c',
   'gdkdnd-quartz.c',
   'gdkevents-quartz.c',
@@ -49,8 +50,9 @@ appkit_dep = dependency('appleframeworks', modules : 'AppKit', required : true)
 cocoa_dep = dependency('appleframeworks', modules : 'Cocoa', required : true)
 carbon_dep = dependency('appleframeworks', modules : 'Carbon', required : true)
 quartzcore_dep = dependency('appleframeworks', modules : 'QuartzCore', required : true)
+iosurface_dep = dependency('appleframeworks', modules: 'IOSurface', required: true)
 
-gdk_quartz_deps = [ core_graphics_dep, appkit_dep, cocoa_dep, carbon_dep, quartzcore_dep ]
+gdk_quartz_deps = [ core_graphics_dep, appkit_dep, cocoa_dep, carbon_dep, quartzcore_dep, iosurface_dep ]
 
 libgdk_quartz = static_library('gdk-quartz',
   gdk_quartz_sources, gdkconfig, gdkenum_h,
