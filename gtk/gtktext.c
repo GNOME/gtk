@@ -6535,7 +6535,13 @@ blink_cb (GtkWidget     *widget,
       return G_SOURCE_REMOVE;
     }
 
-  g_assert (priv->selection_bound == priv->current_pos);
+  if (priv->selection_bound != priv->current_pos)
+    {
+      g_warning ("GtkText - unexpected blinking selection. Removing");
+
+      gtk_text_check_cursor_blink (self);
+      return G_SOURCE_REMOVE;
+    }
 
   blink_timeout = get_cursor_blink_timeout (self);
   blink_time = get_cursor_time (self);
