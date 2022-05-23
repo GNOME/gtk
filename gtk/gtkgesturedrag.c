@@ -230,7 +230,7 @@ gtk_gesture_drag_new (void)
  *
  * If the @gesture is active, this function returns %TRUE
  * and fills in @x and @y with the drag start coordinates,
- * in surface-relative coordinates.
+ * in widget-relative coordinates.
  *
  * Returns: %TRUE if the gesture is active
  */
