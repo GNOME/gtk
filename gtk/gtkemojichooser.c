@@ -250,6 +250,14 @@ gtk_emoji_chooser_finalize (GObject *object)
 }
 
 static void
+gtk_emoji_chooser_dispose (GObject *object)
+{
+  gtk_widget_clear_template (GTK_WIDGET (object), GTK_TYPE_EMOJI_CHOOSER);
+
+  G_OBJECT_CLASS (gtk_emoji_chooser_parent_class)->dispose (object);
+}
+
+static void
 scroll_to_section (EmojiSection *section)
 {
   GtkEmojiChooser *chooser;
@@ -866,7 +874,7 @@ filter_func (GtkFlowBoxChild *child,
     goto out;
 
   term_tokens = g_str_tokenize_and_fold (text, "en", NULL);
-  
+
   g_variant_get_child (emoji_data, 1, "&s", &name);
   name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
   g_variant_get_child (emoji_data, 2, "^a&s", &keywords);
@@ -1203,6 +1211,7 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gtk_emoji_chooser_finalize;
+  object_class->dispose = gtk_emoji_chooser_dispose;
   widget_class->show = gtk_emoji_chooser_show;
   widget_class->map = gtk_emoji_chooser_map;
 
@@ -1278,7 +1287,7 @@ gtk_emoji_chooser_class_init (GtkEmojiChooserClass *klass)
    * @direction: 1 to scroll forward, -1 to scroll back
    *
    * Scrolls to the next or previous section.
-   */ 
+   */
   gtk_widget_class_install_action (widget_class, "scroll.section", "i",
                                    gtk_emoji_chooser_scroll_section);
 
