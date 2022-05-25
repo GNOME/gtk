@@ -1009,7 +1009,10 @@ gdk_gl_context_get_matching_version (GdkGLAPI  api,
  *
  * Setting @major and @minor to zero will use the default values.
  *
- * The `GdkGLContext` must not be realized or made current prior to calling
+ * Setting @major and @minor lower than the minimum versions required
+ * by GTK will result in the context choosing the minimum version.
+ *
+ * The @context must not be realized or made current prior to calling
  * this function.
  */
 void
@@ -1018,44 +1021,12 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
                                      int           minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  gboolean force_gles = FALSE;
-  int version, min_ver;
-#ifdef G_ENABLE_DEBUG
-  GdkDisplay *display;
-#endif
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!gdk_gl_context_is_realized (context));
 
-  /* this will take care of the default */
-  if (major == 0 && minor == 0)
-    {
-      priv->major = 0;
-      priv->minor = 0;
-      return;
-    }
-
-  version = (major * 100) + minor;
-
-#ifdef G_ENABLE_DEBUG
-  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-  force_gles = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES);
-#endif
-  /* Enforce a minimum context version number of 3.2 for desktop GL,
-   * and 2.0 for GLES
-   */
-  if (gdk_gl_context_get_use_es (context) || force_gles)
-    min_ver = 200;
-  else
-    min_ver = 302;
-
-  if (version < min_ver)
-    {
-      g_warning ("gdk_gl_context_set_required_version - GL context versions less than 3.2 are not supported.");
-      version = min_ver;
-    }
-  priv->major = version / 100;
-  priv->minor = version % 100;
+  priv->major = major;
+  priv->minor = minor;
 }
 
 gboolean
