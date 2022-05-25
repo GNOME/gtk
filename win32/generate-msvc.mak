@@ -271,7 +271,7 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 	@cd ..\..\win32
 	@echo Regenerating gtk3-demo VS project files...
 	@-del vs9\$(DEMO_VS9_PROJ) vs10\$(DEMO_VS10_PROJ) vs10\$(DEMO_VS10_PROJ_FILTERS)
-	@for %%s in ($(demo_sources) gtkfishbowl.c demo_resources.c main.c) do	\
+	@for %%s in ($(demo_sources) gtkfishbowl.c main.c) do	\
 	@echo.   ^<File RelativePath^="..\..\demos\gtk-demo\%%s" /^>>>gtk3-demo.sourcefiles & \
 	@echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s" /^>>>gtk3-demo.vs10.sourcefiles & \
 	@echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>gtk3-demo.vs10.sourcefiles.filters

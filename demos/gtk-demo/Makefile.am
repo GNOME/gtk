@@ -61,22 +61,21 @@ demos.h: $(demos) geninclude.pl
 demos.h.win32: $(demos_base) geninclude.pl
 	 $(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos_base)) > demos.h.win32
 
-nodist_gtk3_demo_SOURCES = demos.h
+nodist_gtk3_demo_SOURCES = demos.h demo_resources.c
 
 gtk3_demo_SOURCES = 		\
 	$(demos)		\
 	gtkfishbowl.c		\
 	gtkfishbowl.h		\
-	demo_resources.c	\
 	main.c
 
 gtk3_demo_DEPENDENCIES = $(DEPS)
 gtk3_demo_LDADD = $(LDADDS)
 gtk3_demo_LDFLAGS = -export-dynamic
 
-gtk3_demo_application_SOURCES = \
-	application.c 		\
-	demo_resources.c
+nodist_gtk3_demo_application_SOURCES = demo_resources.c
+
+gtk3_demo_application_SOURCES = application.c
 
 gtk3_demo_application_LDADD = $(LDADDS)
 
@@ -130,6 +129,6 @@ dist-hook: \
 	$(top_builddir)/win32/vs9/gtk3-demo.vcproj	\
 	$(top_builddir)/win32/vs9/gtk3-demo-application.vcproj
 
-DISTCLEANFILES = demos.h demos.h.win32
+DISTCLEANFILES = demos.h demos.h.win32 demo_resources.c
 
 -include $(top_srcdir)/git.mk

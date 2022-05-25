@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
 #include "gtk3-demo-application.vs10.sourcefiles"
+    <ClCompile Include="..\..\demos\gtk-demo\demo_resources.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-3.vcxproj">

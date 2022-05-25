@@ -203,7 +203,6 @@ lib_LTLIBRARIES = libgdk-3.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += \
-	$(gdk_built_sources)	\
 	fallback-c89.c
 
 install-exec-hook:

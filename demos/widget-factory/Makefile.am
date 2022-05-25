@@ -5,9 +5,9 @@ bin_PROGRAMS = gtk3-widget-factory
 desktopdir = $(datadir)/applications
 dist_desktop_DATA = gtk3-widget-factory.desktop
 
-gtk3_widget_factory_SOURCES = 		\
-	widget-factory.c		\
-	widget_factory_resources.c
+nodist_gtk3_widget_factory_SOURCES = widget_factory_resources.c
+
+gtk3_widget_factory_SOURCES = widget-factory.c
 
 BUILT_SOURCES = 			\
 	widget_factory_resources.c
@@ -68,5 +68,7 @@ EXTRA_DIST += 				\
 	data/source.svg			\
 	data/symbolic-source.svg	\
 	meson.build
+
+DISTCLEANFILES = widget_factory_resources.c
 
 -include $(top_srcdir)/git.mk
