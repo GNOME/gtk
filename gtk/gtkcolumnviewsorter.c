@@ -247,6 +247,26 @@ gtk_column_view_sorter_remove_column (GtkColumnViewSorter *self,
   return FALSE;
 }
 
+static Sorter *
+sorter_for_column (GtkColumnViewSorter *self,
+                   GtkColumnViewColumn *column,
+                   gboolean             inverted)
+{
+  Sorter *s;
+  GtkSorter *sorter;
+
+  sorter = gtk_column_view_column_get_sorter (column);
+
+  s = g_new (Sorter, 1);
+
+  s->column = g_object_ref (column);
+  s->sorter = g_object_ref (sorter);
+  s->changed_id = g_signal_connect (sorter, "changed", G_CALLBACK (gtk_column_view_sorter_changed_cb), self);
+  s->inverted = inverted;
+
+  return s;
+}
+
 gboolean
 gtk_column_view_sorter_set_column (GtkColumnViewSorter *self,
                                    GtkColumnViewColumn *column,
@@ -267,16 +287,11 @@ gtk_column_view_sorter_set_column (GtkColumnViewSorter *self,
   g_sequence_remove_range (g_sequence_get_begin_iter (self->sorters),
                            g_sequence_get_end_iter (self->sorters));
 
-  s = g_new (Sorter, 1);
-  s->column = g_object_ref (column);
-  s->sorter = g_object_ref (sorter);
-  s->changed_id = g_signal_connect (sorter, "changed", G_CALLBACK (gtk_column_view_sorter_changed_cb), self);
-  s->inverted = inverted;
- 
+  s = sorter_for_column (self, column, inverted);
+
   g_sequence_prepend (self->sorters, s);
 
   gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
-
   gtk_column_view_column_notify_sort (column);
 
   g_object_unref (column);
@@ -328,4 +343,88 @@ gtk_column_view_sorter_get_sort_column (GtkColumnViewSorter *self,
   *inverted = s->inverted;
 
   return s->column;
+}
+
+char *
+gtk_column_view_sorter_serialize (GtkColumnViewSorter *self)
+{
+  GString *string;
+  GSequenceIter *iter;
+
+  string = g_string_new ("");
+
+  for (iter = g_sequence_get_begin_iter (self->sorters);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      Sorter *s = g_sequence_get (iter);
+
+      if (string->len > 0)
+        g_string_append_c (string, ',');
+      if (s->inverted)
+        g_string_append_c (string, '-');
+      g_string_append (string, gtk_column_view_column_get_id (s->column));
+    }
+
+  return g_string_free (string, FALSE);
+}
+
+static GtkColumnViewColumn *
+find_column_by_id (GtkColumnView *view,
+                   const char    *id)
+{
+  GListModel *columns = gtk_column_view_get_columns (view);
+
+  for (guint i = 0; i < g_list_model_get_n_items (columns); i++)
+    {
+      GtkColumnViewColumn *column = g_list_model_get_item (columns, i);
+      g_object_unref (column);
+      if (strcmp (id, gtk_column_view_column_get_id (column)) == 0)
+        return column;
+    }
+
+  return NULL;
+}
+
+void
+gtk_column_view_sorter_deserialize (GtkColumnViewSorter *self,
+                                    GtkColumnView       *view,
+                                    const char          *config)
+{
+  GtkColumnViewColumn *column;
+  GListModel *columns;
+  char **cols;
+
+  gtk_column_view_sorter_clear (self);
+
+  cols = g_strsplit (config, ",", 0);
+
+  for (int i = 0; cols[i]; i++)
+    {
+      const char *id = cols[i];
+      gboolean inverted = FALSE;
+      Sorter *s;
+
+      if (id[0] == '-')
+        {
+          inverted = TRUE;
+          id++;
+        }
+
+      column = find_column_by_id (view, id);
+      s = sorter_for_column (self, column, inverted);
+      g_sequence_append (self->sorters, s);
+    }
+
+  g_strfreev (cols);
+
+  gtk_sorter_changed (GTK_SORTER (self), GTK_SORTER_CHANGE_DIFFERENT);
+
+  columns = gtk_column_view_get_columns (view);
+  for (guint i = 0; i < g_list_model_get_n_items (columns); i++)
+    {
+      column = g_list_model_get_item (columns, i);
+      gtk_column_view_column_notify_sort (column);
+      g_object_unref (column);
+    }
 }

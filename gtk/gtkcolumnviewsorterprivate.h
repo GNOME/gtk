@@ -51,6 +51,11 @@ gboolean   gtk_column_view_sorter_set_column    (GtkColumnViewSorter *self,
                                                  gboolean             inverted);
 
 
+char *     gtk_column_view_sorter_serialize   (GtkColumnViewSorter *self);
+void       gtk_column_view_sorter_deserialize (GtkColumnViewSorter *self,
+                                               GtkColumnView       *view,
+                                               const char          *config);
+
 G_END_DECLS
 
 #endif /* __GTK_SORTER_H__ */
