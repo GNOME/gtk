@@ -54,6 +54,12 @@ void                    gtk_column_view_column_set_factory              (GtkColu
 GDK_AVAILABLE_IN_ALL
 GtkListItemFactory *    gtk_column_view_column_get_factory              (GtkColumnViewColumn    *self);
 
+GDK_AVAILABLE_IN_4_8
+void                    gtk_column_view_column_set_id                   (GtkColumnViewColumn    *self,
+                                                                         const char             *id);
+GDK_AVAILABLE_IN_4_8
+const char *            gtk_column_view_column_get_id                   (GtkColumnViewColumn    *self);
+
 GDK_AVAILABLE_IN_ALL
 void                    gtk_column_view_column_set_title                (GtkColumnViewColumn    *self,
                                                                          const char             *title);

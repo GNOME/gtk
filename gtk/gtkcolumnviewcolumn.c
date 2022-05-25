@@ -56,6 +56,7 @@ struct _GtkColumnViewColumn
   GObject parent_instance;
 
   GtkListItemFactory *factory;
+  char *id;
   char *title;
   GtkSorter *sorter;
 
@@ -91,6 +92,7 @@ enum
   PROP_0,
   PROP_COLUMN_VIEW,
   PROP_FACTORY,
+  PROP_ID,
   PROP_TITLE,
   PROP_SORTER,
   PROP_VISIBLE,
@@ -140,6 +142,10 @@ gtk_column_view_column_get_property (GObject    *object,
       g_value_set_object (value, self->factory);
       break;
 
+    case PROP_ID:
+      g_value_set_string (value, self->id);
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, self->title);
       break;
@@ -186,6 +192,10 @@ gtk_column_view_column_set_property (GObject      *object,
     {
     case PROP_FACTORY:
       gtk_column_view_column_set_factory (self, g_value_get_object (value));
+      break;
+
+    case PROP_ID:
+      gtk_column_view_column_set_id (self, g_value_get_string (value));
       break;
 
     case PROP_TITLE:
@@ -250,6 +260,20 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
     g_param_spec_object ("factory", NULL, NULL,
                          GTK_TYPE_LIST_ITEM_FACTORY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkColumnViewColumn:id: (attributes org.gtk.Property.get=gtk_column_view_column_get_id org.gtk.Property.set=gtk_column_view_column_set_id)
+   *
+   * ID of the column.
+   *
+   * This is used when storing sort configuration.
+   *
+   * Since: 4.8
+   */
+  properties[PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL,
+                          NULL,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkColumnViewColumn:title: (attributes org.gtk.Property.get=gtk_column_view_column_get_title org.gtk.Property.set=gtk_column_view_column_set_title)
@@ -698,6 +722,54 @@ gtk_column_view_column_get_title (GtkColumnViewColumn *self)
   g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), FALSE);
 
   return self->title;
+}
+
+/**
+ * gtk_column_view_column_set_id: (attributes org.gtk.Method.set_property=id)
+ * @self: a `GtkColumnViewColumn`
+ * @id: (nullable): Id to use for this column
+ *
+ * Sets the id of this column.
+ *
+ * The id is used when storing sort configuration.
+ *
+ * Since: 4.8
+ */
+void
+gtk_column_view_column_set_id (GtkColumnViewColumn *self,
+                               const char          *id)
+{
+  g_return_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self));
+
+  if (g_strcmp0 (self->id, id) == 0)
+    return;
+
+  if (!g_param_spec_is_valid_name (id))
+    {
+      g_warning ("%s is not a valid column ID", id);
+      return;
+    }
+
+  g_free (self->id);
+  self->id = g_strdup (id);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ID]);
+}
+
+/**
+ * gtk_column_view_column_get_id: (attributes org.gtk.Method.get_property=id)
+ * @self: a `GtkColumnViewColumn`
+ *
+ * Returns the id set with gtk_column_view_column_set_id().
+ *
+ * Returns: (nullable): The column's id
+ */
+const char *
+gtk_column_view_column_get_id (GtkColumnViewColumn *self)
+{
+  g_return_val_if_fail (GTK_IS_COLUMN_VIEW_COLUMN (self), NULL);
+
+  return self->id;
 }
 
 #if 0
