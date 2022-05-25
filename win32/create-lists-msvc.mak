@@ -33,8 +33,8 @@
 
 NULL=
 
-# For GDK enumeration sources
-!include ..\gdk\gdk-pub-headers.mak
+# For GDK public headers and sources
+!include ..\gdk\gdk-sources.inc
 
 !if [call create-lists.bat header gdk_headers.mak GDK_PUBLIC_HEADERS]
 !endif
@@ -44,6 +44,39 @@ NULL=
 
 !if [call create-lists.bat footer gdk_headers.mak]
 !endif
+
+!if [call create-lists.bat header gdk_headers.mak GDK_C_SRCS]
+!endif
+
+!if [for %f in ($(gdk_c_sources)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!endif
+
+!if [call create-lists.bat footer gdk_headers.mak]
+!endif
+
+# For GDK-Win32 public headers and sources
+!include ..\gdk\win32\gdk-win32-sources.inc
+
+!if [call create-lists.bat header gdk_headers.mak GDK_WIN32_PUBLIC_HEADERS]
+!endif
+
+!if [for %f in ($(libgdkwin32include_HEADERS)) do @call create-lists.bat file gdk_headers.mak ../gdk/win32/%f]
+!endif
+
+!if [call create-lists.bat footer gdk_headers.mak]
+!endif
+
+!if [call create-lists.bat header gdk_headers.mak GDK_WIN32_INTROSPECTION_SRCS]
+!endif
+
+!if [for %f in ($(w32_introspection_files)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!endif
+
+!if [call create-lists.bat footer gdk_headers.mak]
+!endif
+
+# For GDK-Broadway public headers
+!include ..\gdk\broadway\gdk-broadway-sources.inc
 
 !include gdk_headers.mak
 
@@ -64,10 +97,11 @@ NULL=
 !if [call create-lists.bat header resources_sources.mak GTK_RESOURCES]
 !endif
 
-# For GTK enumeration sources
-!include ..\gtk\gtk-mkenums-headers.mak
+# For GTK public headers and sources
+!include ..\gtk\gtk-sources.inc
 !include ..\gtk\a11y\Makefile.inc
 !include ..\gtk\deprecated\Makefile.inc
+!include ..\gtk\inspector\Makefile.inc
 
 !if [call create-lists.bat header gtk_headers.mak GTK_PUBLIC_ENUM_HEADERS]
 !endif
@@ -90,26 +124,56 @@ NULL=
 !if [call create-lists.bat footer gtk_headers.mak]
 !endif
 
+!if [call create-lists.bat header gtk_headers.mak GTK_SEMI_PRIVATE_HEADERS]
+!endif
+
+!if [for %f in ($(gtk_semi_private_h_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!endif
+
+!if [call create-lists.bat footer gtk_headers.mak]
+!endif
+
+!if [call create-lists.bat header gtk_headers.mak GTK_C_SRCS]
+!endif
+
+!if [for %f in ($(a11y_c_sources) $(gtk_deprecated_c_sources) $(inspector_c_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!endif
+
+!if [for %f in ($(gtk_base_c_sources_base_gtka_gtkh:.c=)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f.c]
+!endif
+
+!if [for %f in ($(gtk_base_c_sources_base_gtki_gtkw:.c=)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f.c]
+!endif
+
+!if [for %f in ($(gtk_os_win32_c_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!endif
+
+!if [call create-lists.bat footer gtk_headers.mak]
+!endif
+
 !include gtk_headers.mak
 
 !if [del /f /q gtk_headers.mak]
 !endif
 
+# For the libgail-util public headers
+!include ..\libgail-util\libgail-util-sources.inc
+
 # For GTK resources
 
-!if [for %f in (..\gtk\theme\Adwaita\gtk.css ..\gtk\theme\Adwaita\gtk-dark.css ..\gtk\theme\Adwaita\gtk-contained.css ..\gtk\theme\Adwaita\gtk-contained-dark.css) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in ($(adwaita_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
 !endif
 
 !if [for %x in (png svg) do @(for %f in (..\gtk\theme\Adwaita\assets\*.%x) do @call create-lists.bat file resources_sources.mak %f)]
 !endif
 
-!if [for %f in (..\gtk\theme\HighContrast\gtk.css ..\gtk\theme\HighContrast\gtk-inverse.css ..\gtk\theme\HighContrast\gtk-contained.css ..\gtk\theme\HighContrast\gtk-contained-inverse.css) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in ($(highcontrast_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
 !endif
 
 !if [for %x in (png svg) do @(for %f in (..\gtk\theme\HighContrast\assets\*.%x) do @call create-lists.bat file resources_sources.mak %f)]
 !endif
 
-!if [for %f in (..\gtk\theme\win32\gtk-win32-base.css ..\gtk\theme\win32\gtk.css) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in ($(win32_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
 !endif
 
 !if [for %f in (..\gtk\cursor\*.png ..\gtk\gesture\*.symbolic.png ..\gtk\ui\*.ui) do @call create-lists.bat file resources_sources.mak %f]

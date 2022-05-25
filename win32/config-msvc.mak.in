@@ -38,12 +38,18 @@ GLIB_COMPILE_RESOURCES = $(PREFIX)\bin\glib-compile-resources.exe
 GDBUS_CODEGEN = $(PREFIX)\bin\gdbus-codegen
 !endif
 
+!ifndef GLIB_COMPILE_SCHEMAS
+GLIB_COMPILE_SCHEMAS = $(PREFIX)\bin\glib-compile-schemas.exe
+!endif
+
 !if "$(PLAT)" == "x64"
 AT_PLAT=x86_64
 !elseif "$(PLAT)" == "arm64"
 AT_PLAT=aarch64
-!else
+!elseif "$(PLAT)" == "Win32"
 AT_PLAT=i686
+!else
+AT_PLAT=unknown
 !endif
 
 demo_sources = $(demos_base)

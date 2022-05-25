@@ -1,4 +1,5 @@
 include $(top_srcdir)/Makefile.decl
+include libgail-util-sources.inc
 
 EXTRA_DIST += \
 	gailutil.def \
@@ -35,16 +36,7 @@ endif
 
 lib_LTLIBRARIES = libgailutil-3.la
 
-util_c_sources =		\
-	gailmisc.c		\
-	gailtextutil.c
-
 libgailutilincludedir=$(includedir)/gail-3.0/libgail-util
-
-util_public_h_sources =		\
-	gailmisc.h		\
-	gailtextutil.h		\
-	gail-util.h
 
 libgailutil_3_la_SOURCES = 	\
 	$(util_c_sources)
@@ -90,16 +82,10 @@ MSVCPROJS = gailutil-3
 gailutil_3_FILES = $(libgailutil_3_la_SOURCES)
 
 gailutil_3_EXCLUDES = dummy
-gailutil_3_HEADERS_DIR = $(libgailutilincludedir)
-
-gailutil_3_HEADERS_INST = $(libgailutilinclude_HEADERS)
-
-gailutil_3_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/win32/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/win32/vs9/gailutil-3.vcproj	\
-	$(top_builddir)/win32/vs9/gailutil-3.headers
+	$(top_builddir)/win32/vs9/gailutil-3.vcproj
 
 -include $(top_srcdir)/git.mk
