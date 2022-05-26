@@ -62,7 +62,7 @@ Please note that the font features demo is not built into gtk3-demo
 by default.  To do that, run in a Visual Studio command prompt, go to
 $(srcroot)\win32, and run
 "nmake /f generate-msvc.mak regenerate-demos-h-win32 FONT_FEATURES_DEMO=1".
-To undo that, run that command without "FONT_FEATURES_DEMO=1".  Python must
+To undo that, run that command without "FONT_FEATURES_DEMO=1".  Python 3.x must
 be present in your PATH or passed in via PYTHON=<path_to_python_interpreter>.
 If you are building the font features demo with the older PangoFT2-style
 (i.e. pre-Pango-1.44.x and pre-HarfBuzz-2.2.0) support, pass in 

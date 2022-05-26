@@ -52,7 +52,7 @@
 	/>
 	<UserMacro
 		Name="PythonDir"
-		Value="c:\python27"
+		Value="c:\python37"
 	/>
 	<UserMacro
 		Name="PythonDirX64"
