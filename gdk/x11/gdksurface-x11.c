@@ -280,7 +280,7 @@ compute_toplevel_size (GdkSurface *surface,
   gdk_toplevel_size_init (&size, bounds_width, bounds_height);
   gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
 
-  if (size.shadow.is_valid && update_geometry)
+  if (size.shadow.is_valid)
     {
       update_shadow_size (surface,
                           size.shadow.left,
