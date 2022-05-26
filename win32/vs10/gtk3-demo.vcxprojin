@@ -44,7 +44,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(GtkBaseIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(Gtk3DemoIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader></PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <CompileAs>CompileAsC</CompileAs>
@@ -80,7 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
 #include "gtk3-demo.vs10.sourcefiles"
-    <ClCompile Include="..\..\demos\gtk-demo\demo_resources.c" />
+    <ClCompile Include="$(IntDir)\demo_resources.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-3.vcxproj">

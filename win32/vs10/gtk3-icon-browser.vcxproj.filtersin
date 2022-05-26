@@ -16,6 +16,5 @@
   </ItemGroup>
   <ItemGroup>
 #include "gtk3-icon-browser.vs10.sourcefiles.filters"
-    <ClCompile Include="..\..\demos\icon-browser\resources.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
 </Project>

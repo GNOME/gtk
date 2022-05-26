@@ -157,7 +157,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 #include "gtk3-icon-browser.sourcefiles"
-			<File RelativePath="..\..\demos\icon-browser\resources.c" />
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk3-icon-browser\resources.c">
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk3-icon-browser\resources.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Headers"

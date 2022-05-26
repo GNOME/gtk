@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GtkBaseIncludesDebug)"
+				AdditionalIncludeDirectories="$(Gtk3DemoIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(GtkBaseIncludesDebug)"
+				AdditionalIncludeDirectories="$(Gtk3DemoIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -95,7 +95,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(GtkBaseIncludesRelease)"
+				AdditionalIncludeDirectories="$(Gtk3DemoIncludesRelease)"
 				PreprocessorDefinitions="$(GtkPrefixDefine)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -127,7 +127,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(GtkBaseIncludesRelease)"
+				AdditionalIncludeDirectories="$(Gtk3DemoIncludesRelease)"
 				PreprocessorDefinitions="$(GtkPrefixDefine)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -157,7 +157,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 #include "gtk3-demo.sourcefiles"
-			<File RelativePath="..\..\demos\gtk-demo\demo_resources.c" />
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk3-demo\demo_resources.c">
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk3-demo\demo_resources.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

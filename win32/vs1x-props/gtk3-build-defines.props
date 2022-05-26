@@ -15,6 +15,7 @@
     <BaseConfigIncludes>$(GtkGenSrcDir);$(GdkGenSrcDir);..\..</BaseConfigIncludes>
     <GdkBaseIncludes>$(GdkGenSrcDir)\gdk;..\..\gdk;$(BaseConfigIncludes)</GdkBaseIncludes>
     <GtkBaseIncludes>$(GtkGenSrcDir)\gtk;..\..\gtk;$(GdkBaseIncludes)</GtkBaseIncludes>
+    <Gtk3DemoIncludes>.\$(Configuration)\$(Platform)\obj\gtk3-demo;..\..\gtk;$(GtkBaseIncludes)</Gtk3DemoIncludes>
     <GtkIncludedImmodulesDefines>INCLUDE_IM_am_et;INCLUDE_IM_cedilla;INCLUDE_IM_cyrillic_translit;INCLUDE_IM_ime;INCLUDE_IM_inuktitut;INCLUDE_IM_ipa;INCLUDE_IM_multipress;INCLUDE_IM_thai;INCLUDE_IM_ti_er;INCLUDE_IM_ti_et;INCLUDE_IM_viqr</GtkIncludedImmodulesDefines>
     <GtkHostMachine Condition="'$(Platform)' == 'Win32'">i686</GtkHostMachine>
     <GtkHostMachine Condition="'$(Platform)' == 'x64'">x86_64</GtkHostMachine>
@@ -89,6 +90,9 @@ nmake -f install-msvc.mak PREFIX=$(GlibEtcInstallRoot)</InstallBuildsBase>
     </BuildMacro>
     <BuildMacro Include="GtkBaseIncludes">
       <Value>$(GtkBaseIncludes)</Value>
+    </BuildMacro>
+    <BuildMacro Include="Gtk3DemoIncludes">
+      <Value>$(Gtk3DemoIncludes)</Value>
     </BuildMacro>
     <BuildMacro Include="GtkIncludedImmodulesDefines">
       <Value>$(GtkIncludedImmodulesDefines)</Value>

@@ -88,13 +88,13 @@ generate-base-sources:	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk-win32.rc	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\libgtk3.manifest	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml	\
-	..\demos\gtk-demo\demos.h	\
-	..\demos\gtk-demo\demo_resources.c	\
-	..\demos\icon-browser\resources.c
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c
 
 # Copy the pre-defined config.h.win32 and demos.h.win32
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h: ..\config.h.win32
-..\demos\gtk-demo\demos.h: ..\demos\gtk-demo\demos.h.win32
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h: ..\demos\gtk-demo\demos.h.win32
 
 # Generate the versioned headers and resource scripts (*.rc)
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h: ..\gdk\gdkversionmacros.h.in
@@ -112,7 +112,7 @@ generate-base-sources:	\
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkconfig.h	\
-..\demos\gtk-demo\demos.h:
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h:
 	@echo Copying $@...
 	@if not exist $(@D)\ md $(@D)
 	@copy $** $@
@@ -278,13 +278,17 @@ generate-base-sources:	\
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --body $** >> $@.tmp
 	@move $@.tmp $@
 
-..\demos\gtk-demo\demo_resources.c: ..\demos\gtk-demo\demo.gresource.xml $(GTK_DEMO_RESOURCES)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c: ..\demos\gtk-demo\demo.gresource.xml $(GTK_DEMO_RESOURCES)
 	@echo Generating $@...
-	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\demo.gresource.xml
+	@if not exist $(@D)\ md $(@D)
+	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=..\demos\gtk-demo	\
+	--generate-source ..\demos\gtk-demo\demo.gresource.xml
 
-..\demos\icon-browser\resources.c: ..\demos\icon-browser\iconbrowser.gresource.xml $(ICON_BROWSER_RESOURCES)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c: ..\demos\icon-browser\iconbrowser.gresource.xml $(ICON_BROWSER_RESOURCES)
 	@echo Generating $@...
-	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\iconbrowser.gresource.xml
+	@if not exist $(@D)\ md $(@D)
+	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=..\demos\icon-browser	\
+	--generate-source ..\demos\icon-browser\iconbrowser.gresource.xml
 
 gtk3-demo.sourcefiles: $(demo_actual_sources)
 	@-del vs9\$(DEMO_VS9_PROJ)
@@ -409,9 +413,9 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 
 # Remove the generated files
 clean:
-	@-del /f /q ..\demos\icon-browser\resources.c
-	@-del /f /q ..\demos\gtk-demo\demo_resources.c
-	@-del /f /q ..\demos\gtk-demo\demos.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.c
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.h
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.c
