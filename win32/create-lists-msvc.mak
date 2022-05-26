@@ -36,65 +36,65 @@ NULL=
 # For GDK public headers and sources
 !include ..\gdk\gdk-sources.inc
 
-!if [call create-lists.bat header gdk_headers.mak GDK_PUBLIC_HEADERS]
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_PUBLIC_HEADERS]
 !endif
 
-!if [for %f in ($(gdk_public_h_sources) $(gdk_deprecated_h_sources)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!if [for %f in ($(gdk_public_h_sources) $(gdk_deprecated_h_sources)) do @call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ../gdk/%f]
 !endif
 
-!if [call create-lists.bat footer gdk_headers.mak]
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header gdk_headers.mak GDK_C_SRCS]
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_C_SRCS]
 !endif
 
-!if [for %f in ($(gdk_c_sources)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!if [for %f in ($(gdk_c_sources)) do @call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ../gdk/%f]
 !endif
 
-!if [call create-lists.bat footer gdk_headers.mak]
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
 # For GDK-Win32 public headers and sources
 !include ..\gdk\win32\gdk-win32-sources.inc
 
-!if [call create-lists.bat header gdk_headers.mak GDK_WIN32_PUBLIC_HEADERS]
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_WIN32_PUBLIC_HEADERS]
 !endif
 
-!if [for %f in ($(libgdkwin32include_HEADERS)) do @call create-lists.bat file gdk_headers.mak ../gdk/win32/%f]
+!if [for %f in ($(libgdkwin32include_HEADERS)) do @call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ../gdk/win32/%f]
 !endif
 
-!if [call create-lists.bat footer gdk_headers.mak]
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header gdk_headers.mak GDK_WIN32_INTROSPECTION_SRCS]
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_WIN32_INTROSPECTION_SRCS]
 !endif
 
-!if [for %f in ($(w32_introspection_files)) do @call create-lists.bat file gdk_headers.mak ../gdk/%f]
+!if [for %f in ($(w32_introspection_files)) do @call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ../gdk/%f]
 !endif
 
-!if [call create-lists.bat footer gdk_headers.mak]
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
 # For GDK-Broadway public headers
 !include ..\gdk\broadway\gdk-broadway-sources.inc
 
-!include gdk_headers.mak
+!include gdk_sources_msvc$(VSVER)_$(PLAT).mak
 
-!if [del /f /q gdk_headers.mak]
+!if [del /f /q gdk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
 # For GDK resources
 
-!if [call create-lists.bat header resources_sources.mak GDK_RESOURCES]
+!if [call create-lists.bat header resource_sources_msvc$(VSVER)_$(PLAT).mak GDK_RESOURCES]
 !endif
 
-!if [for %f in (..\gdk\resources\glsl\*.glsl) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in (..\gdk\resources\glsl\*.glsl) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f]
 !endif
 
-!if [call create-lists.bat footer resources_sources.mak]
+!if [call create-lists.bat footer resource_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header resources_sources.mak GTK_RESOURCES]
+!if [call create-lists.bat header resource_sources_msvc$(VSVER)_$(PLAT).mak GTK_RESOURCES]
 !endif
 
 # For GTK public headers and sources
@@ -103,57 +103,57 @@ NULL=
 !include ..\gtk\deprecated\Makefile.inc
 !include ..\gtk\inspector\Makefile.inc
 
-!if [call create-lists.bat header gtk_headers.mak GTK_PUBLIC_ENUM_HEADERS]
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_PUBLIC_ENUM_HEADERS]
 !endif
 
-!if [for %f in ($(GTK_PUB_HDRS:.h=)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f.h]
+!if [for %f in ($(GTK_PUB_HDRS:.h=)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f.h]
 !endif
 
-!if [for %f in ($(a11y_h_sources) $(gtk_deprecated_h_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!if [for %f in ($(a11y_h_sources) $(gtk_deprecated_h_sources)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f]
 !endif
 
-!if [call create-lists.bat footer gtk_headers.mak]
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header gtk_headers.mak GTK_PRIVATE_ENUM_HEADERS]
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_PRIVATE_ENUM_HEADERS]
 !endif
 
-!if [for %f in ($(GTK_PRIVATE_TYPE_HDRS)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!if [for %f in ($(GTK_PRIVATE_TYPE_HDRS)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f]
 !endif
 
-!if [call create-lists.bat footer gtk_headers.mak]
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header gtk_headers.mak GTK_SEMI_PRIVATE_HEADERS]
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_SEMI_PRIVATE_HEADERS]
 !endif
 
-!if [for %f in ($(gtk_semi_private_h_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!if [for %f in ($(gtk_semi_private_h_sources)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f]
 !endif
 
-!if [call create-lists.bat footer gtk_headers.mak]
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header gtk_headers.mak GTK_C_SRCS]
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_C_SRCS]
 !endif
 
-!if [for %f in ($(a11y_c_sources) $(gtk_deprecated_c_sources) $(inspector_c_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!if [for %f in ($(a11y_c_sources) $(gtk_deprecated_c_sources) $(inspector_c_sources)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f]
 !endif
 
-!if [for %f in ($(gtk_base_c_sources_base_gtka_gtkh:.c=)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f.c]
+!if [for %f in ($(gtk_base_c_sources_base_gtka_gtkh:.c=)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f.c]
 !endif
 
-!if [for %f in ($(gtk_base_c_sources_base_gtki_gtkw:.c=)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f.c]
+!if [for %f in ($(gtk_base_c_sources_base_gtki_gtkw:.c=)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f.c]
 !endif
 
-!if [for %f in ($(gtk_os_win32_c_sources)) do @call create-lists.bat file gtk_headers.mak ../gtk/%f]
+!if [for %f in ($(gtk_os_win32_c_sources)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f]
 !endif
 
-!if [call create-lists.bat footer gtk_headers.mak]
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!include gtk_headers.mak
+!include gtk_sources_msvc$(VSVER)_$(PLAT).mak
 
-!if [del /f /q gtk_headers.mak]
+!if [del /f /q gtk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
 # For the libgail-util public headers
@@ -161,71 +161,71 @@ NULL=
 
 # For GTK resources
 
-!if [for %f in ($(adwaita_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
+!if [for %f in ($(adwaita_theme_css_sources:/=\)) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak ..\gtk\%f]
 !endif
 
-!if [for %x in (png svg) do @(for %f in (..\gtk\theme\Adwaita\assets\*.%x) do @call create-lists.bat file resources_sources.mak %f)]
+!if [for %x in (png svg) do @(for %f in (..\gtk\theme\Adwaita\assets\*.%x) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f)]
 !endif
 
-!if [for %f in ($(highcontrast_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
+!if [for %f in ($(highcontrast_theme_css_sources:/=\)) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak ..\gtk\%f]
 !endif
 
-!if [for %x in (png svg) do @(for %f in (..\gtk\theme\HighContrast\assets\*.%x) do @call create-lists.bat file resources_sources.mak %f)]
+!if [for %x in (png svg) do @(for %f in (..\gtk\theme\HighContrast\assets\*.%x) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f)]
 !endif
 
-!if [for %f in ($(win32_theme_css_sources:/=\)) do @call create-lists.bat file resources_sources.mak ..\gtk\%f]
+!if [for %f in ($(win32_theme_css_sources:/=\)) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak ..\gtk\%f]
 !endif
 
-!if [for %f in (..\gtk\cursor\*.png ..\gtk\gesture\*.symbolic.png ..\gtk\ui\*.ui) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in (..\gtk\cursor\*.png ..\gtk\gesture\*.symbolic.png ..\gtk\ui\*.ui) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f]
 !endif
 
-!if [for %s in (16 22 24 32 48) do @(for %c in (actions status categories) do @(for %f in (..\gtk\icons\%sx%s\%c\*.png) do @call create-lists.bat file resources_sources.mak %f))]
+!if [for %s in (16 22 24 32 48) do @(for %c in (actions status categories) do @(for %f in (..\gtk\icons\%sx%s\%c\*.png) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f))]
 !endif
 
-!if [for %s in (scalable) do @(for %c in (status) do @(for %f in (..\gtk\icons\%s\%c\*.svg) do @call create-lists.bat file resources_sources.mak %f))]
+!if [for %s in (scalable) do @(for %c in (status) do @(for %f in (..\gtk\icons\%s\%c\*.svg) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f))]
 !endif
 
-!if [for %f in (..\gtk\inspector\*.ui ..\gtk\inspector\logo.png ..\gtk\emoji\*.data) do @call create-lists.bat file resources_sources.mak %f]
+!if [for %f in (..\gtk\inspector\*.ui ..\gtk\inspector\logo.png ..\gtk\emoji\*.data) do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f]
 !endif
 
-!if [call create-lists.bat footer resources_sources.mak]
+!if [call create-lists.bat footer resource_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
 # For gtk demo program resources
 
-!if [call create-lists.bat header resources_sources.mak GTK_DEMO_RESOURCES]
+!if [call create-lists.bat header resource_sources_msvc$(VSVER)_$(PLAT).mak GTK_DEMO_RESOURCES]
 !endif
 
-!if [for /f %f in ('$(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir=..\demos\gtk-demo ..\demos\gtk-demo\demo.gresource.xml') do @call create-lists.bat file resources_sources.mak %f]
+!if [for /f %f in ('$(GLIB_COMPILE_RESOURCES) --generate-dependencies --sourcedir=..\demos\gtk-demo ..\demos\gtk-demo\demo.gresource.xml') do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f]
 !endif
 
-!if [call create-lists.bat footer resources_sources.mak]
+!if [call create-lists.bat footer resource_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header resources_sources.mak ICON_BROWSER_RESOURCES]
+!if [call create-lists.bat header resource_sources_msvc$(VSVER)_$(PLAT).mak ICON_BROWSER_RESOURCES]
 !endif
 
-!if [for /f %f in ('$(GLIB_COMPILE_RESOURCES) --sourcedir=..\demos\icon-browser --generate-dependencies ..\demos\icon-browser\iconbrowser.gresource.xml') do @call create-lists.bat file resources_sources.mak %f]
+!if [for /f %f in ('$(GLIB_COMPILE_RESOURCES) --sourcedir=..\demos\icon-browser --generate-dependencies ..\demos\icon-browser\iconbrowser.gresource.xml') do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f]
 !endif
 
-!if [call create-lists.bat footer resources_sources.mak]
+!if [call create-lists.bat footer resource_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!include resources_sources.mak
+!include resource_sources_msvc$(VSVER)_$(PLAT).mak
 
-!if [del /f /q resources_sources.mak]
+!if [del /f /q resource_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header demo_sources.mak demo_actual_sources]
+!if [call create-lists.bat header demo_sources_msvc$(VSVER)_$(PLAT).mak demo_actual_sources]
 !endif
 
-!if [for %f in ($(demo_sources)) do @call create-lists.bat file demo_sources.mak ..\demos\gtk-demo\%f]
+!if [for %f in ($(demo_sources)) do @call create-lists.bat file demo_sources_msvc$(VSVER)_$(PLAT).mak ..\demos\gtk-demo\%f]
 !endif
 
-!if [call create-lists.bat footer demo_sources.mak]
+!if [call create-lists.bat footer demo_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!include demo_sources.mak
+!include demo_sources_msvc$(VSVER)_$(PLAT).mak
 
-!if [del /f /q demo_sources.mak]
+!if [del /f /q demo_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
