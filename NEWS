@@ -1,3 +1,31 @@
+Overview of Changes in 4.6.5, 27-05-2022
+========================================
+
+* GtkFileChooser:
+ - Fix pasting text into the name field
+
+* GtkText:
+ - Remove an assertion that is sometimes hit
+
+* Wayland:
+ - Ensure that our cursor surfaces don't violate
+   protocol constraints
+
+* Accssibility:
+ - Fix a problem in the accessibility tree
+
+* Translation updates:
+ Brazilian Portuguese
+ German
+ Persian
+ Polish
+ Portuguese
+ Russian
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.6.4, 13-05-2022
 ========================================
 
