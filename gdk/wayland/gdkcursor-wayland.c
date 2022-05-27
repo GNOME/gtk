@@ -178,6 +178,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
       if (c)
         {
           struct wl_cursor_image *image;
+          int cursor_scale;
 
           if (image_index >= c->image_count)
             {
@@ -189,12 +190,22 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
 
           image = c->images[image_index];
 
-          *hotspot_x = image->hotspot_x / desired_scale;
-          *hotspot_y = image->hotspot_y / desired_scale;
+          cursor_scale = desired_scale;
+          if ((image->width % cursor_scale != 0) ||
+              (image->height % cursor_scale != 0))
+            {
+              g_warning (G_STRLOC " cursor image size (%dx%d) not an integer"
+                         "multiple of scale (%d)", image->width, image->height,
+                         cursor_scale);
+              cursor_scale = 1;
+            }
 
-          *width = image->width / desired_scale;
-          *height = image->height / desired_scale;
-          *scale = desired_scale;
+          *hotspot_x = image->hotspot_x / cursor_scale;
+          *hotspot_y = image->hotspot_y / cursor_scale;
+
+          *width = image->width / cursor_scale;
+          *height = image->height / cursor_scale;
+          *scale = cursor_scale;
 
           return wl_cursor_image_get_buffer (image);
         }
