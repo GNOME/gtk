@@ -178,7 +178,9 @@ main (int argc, char **argv)
 	  all_types[i] != GDK_TYPE_PIXBUF_LOADER &&
 	  all_types[i] != gdk_pixbuf_simple_anim_iter_get_type() &&
           !g_type_is_a (all_types[i], GTK_TYPE_SHORTCUT_TRIGGER) &&
-          !g_type_is_a (all_types[i], GTK_TYPE_SHORTCUT_ACTION))
+          !g_type_is_a (all_types[i], GTK_TYPE_SHORTCUT_ACTION) &&
+          /* can't instantiate empty stack pages */
+          all_types[i] != GTK_TYPE_STACK_PAGE)
 	{
 	  char *test_path = g_strdup_printf ("/FinalizeObject/%s", g_type_name (all_types[i]));
 

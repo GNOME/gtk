@@ -409,6 +409,9 @@ test_type (gconstpointer data)
   if (g_str_equal (g_type_name (type), "GtkPlacesSidebar"))
     return;
 
+  if (g_type_is_a (type, GTK_TYPE_STACK_PAGE))
+    return;
+
   /* These rely on a d-bus session bus */
   if (g_type_is_a (type, GTK_TYPE_MOUNT_OPERATION))
     return;
