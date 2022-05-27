@@ -23,7 +23,7 @@ do_headerbar (GtkWidget *do_widget)
     {
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Welcome to Facebook - Log in, sign up or learn more");
+      gtk_window_set_title (GTK_WINDOW (window), "Welcome to the Hotel California");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
@@ -31,6 +31,7 @@ do_headerbar (GtkWidget *do_widget)
       header = gtk_header_bar_new ();
 
       button = gtk_button_new_from_icon_name ("mail-send-receive-symbolic");
+      gtk_widget_set_tooltip_text (button, "Check out");
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
