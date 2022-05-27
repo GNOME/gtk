@@ -15,6 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-#include "gtk3-demo-application.vs10.sourcefiles.filters"
+    <ClCompile Include="..\..\demos\gtk-demo\application.c"><Filter>Source Files</Filter></ClCompile>
   </ItemGroup>
 </Project>

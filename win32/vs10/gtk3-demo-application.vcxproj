@@ -78,7 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-#include "gtk3-demo-application.vs10.sourcefiles"
+    <ClCompile Include="..\..\demos\gtk-demo\application.c" />
     <ClCompile Include=".\$(Configuration)\$(Platform)\obj\gtk3-demo\demo_resources.c" />
   </ItemGroup>
   <ItemGroup>
