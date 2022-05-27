@@ -1558,13 +1558,11 @@ gtk_stack_add_internal (GtkStack   *stack,
 
   g_return_val_if_fail (child != NULL, NULL);
 
-  child_info = g_object_new (GTK_TYPE_STACK_PAGE, NULL);
-  child_info->widget = g_object_ref (child);
-  child_info->name = g_strdup (name);
-  child_info->title = g_strdup (title);
-  child_info->icon_name = NULL;
-  child_info->needs_attention = FALSE;
-  child_info->last_focus = NULL;
+  child_info = g_object_new (GTK_TYPE_STACK_PAGE,
+                             "child", child,
+                             "name", name,
+                             "title", title,
+                             NULL);
 
   gtk_stack_add_page (stack, child_info);
 
