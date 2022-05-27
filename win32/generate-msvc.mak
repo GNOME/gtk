@@ -90,7 +90,8 @@ generate-base-sources:	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c	\
-	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-widget-factory\widget_factory_resources.c
 
 # Copy the pre-defined config.h.win32 and demos.h.win32
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h: ..\config.h.win32
@@ -289,6 +290,13 @@ generate-base-sources:	\
 	@if not exist $(@D)\ md $(@D)
 	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=..\demos\icon-browser	\
 	--generate-source ..\demos\icon-browser\iconbrowser.gresource.xml
+
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-widget-factory\widget_factory_resources.c:	\
+..\demos\icon-browser\iconbrowser.gresource.xml $(WIDGET_FACTORY_RESOURCES)
+	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
+	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=..\demos\widget-factory	\
+	--generate-source ..\demos\widget-factory\widget-factory.gresource.xml
 
 gtk3-demo.sourcefiles: $(demo_actual_sources)
 	@-del vs9\$(DEMO_VS9_PROJ)

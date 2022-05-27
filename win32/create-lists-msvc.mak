@@ -211,6 +211,15 @@ NULL=
 !if [call create-lists.bat footer resource_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
+!if [call create-lists.bat header resource_sources_msvc$(VSVER)_$(PLAT).mak WIDGET_FACTORY_RESOURCES]
+!endif
+
+!if [for /f %f in ('$(GLIB_COMPILE_RESOURCES) --sourcedir=..\demos\widget-factory --generate-dependencies ..\demos\widget-factory\widget-factory.gresource.xml') do @call create-lists.bat file resource_sources_msvc$(VSVER)_$(PLAT).mak %f]
+!endif
+
+!if [call create-lists.bat footer resource_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
 !include resource_sources_msvc$(VSVER)_$(PLAT).mak
 
 !if [del /f /q resource_sources_msvc$(VSVER)_$(PLAT).mak]
