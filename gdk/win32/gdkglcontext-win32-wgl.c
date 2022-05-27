@@ -548,17 +548,12 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
    * wglCreateContextAttribsARB() may only give us the GL context version
    * that we ask for here, and nothing more.  So, improve things here by
    * asking for the GL version that is reported to us via epoxy_gl_version(),
-   * rather than the default GL core 3.2 context.  Save this up in our
-   * GdkGLContext so that subsequent contexts that are shared with this
-   * context are created likewise too.
+   * rather than the default GL core 3.2 context.
    */
-  if (share != NULL)
-    gdk_gl_context_get_required_version (share, &major, &minor);
-  else
-    {
-      major = display_win32->gl_version / 10;
-      minor = display_win32->gl_version % 10;
-    }
+  gdk_gl_context_get_clipped_version (context,
+                                      display_win32->gl_version / 10,
+                                      display_win32->gl_version % 10,
+                                      &major, &minor);
 
   if (surface != NULL)
     hdc = GDK_WIN32_SURFACE (surface)->hdc;
@@ -626,7 +621,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
   /* Ensure that any other context is created with a legacy bit set */
   gdk_gl_context_set_is_legacy (context, legacy_bit);
-  gdk_gl_context_set_required_version (context, major, minor);
 
   return GDK_GL_API_GL;
 }
