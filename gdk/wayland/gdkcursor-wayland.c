@@ -223,6 +223,7 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
   if (wayland_cursor->wl_cursor)
     {
       struct wl_cursor_image *image;
+      int cursor_scale;
 
       if (image_index >= wayland_cursor->wl_cursor->image_count)
         {
@@ -234,12 +235,22 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       image = wayland_cursor->wl_cursor->images[image_index];
 
-      *hotspot_x = image->hotspot_x / wayland_cursor->scale;
-      *hotspot_y = image->hotspot_y / wayland_cursor->scale;
+      cursor_scale = wayland_cursor->scale;
+      if ((image->width % cursor_scale != 0) ||
+          (image->height % cursor_scale != 0))
+        {
+          g_warning (G_STRLOC " cursor image size (%dx%d) not an integer"
+                     "multiple of scale (%d)", image->width, image->height,
+                     cursor_scale);
+          cursor_scale = 1;
+        }
 
-      *w = image->width / wayland_cursor->scale;
-      *h = image->height / wayland_cursor->scale;
-      *scale = wayland_cursor->scale;
+      *hotspot_x = image->hotspot_x / cursor_scale;
+      *hotspot_y = image->hotspot_y / cursor_scale;
+
+      *w = image->width / cursor_scale;
+      *h = image->height / cursor_scale;
+      *scale = cursor_scale;
 
       return wl_cursor_image_get_buffer (image);
     }
