@@ -387,7 +387,7 @@ get_window_point_from_screen_point (GdkWindow *window,
   NSPoint point;
   GdkQuartzNSWindow *nswindow;
 
-  nswindow = (GdkQuartzNSWindow*)(((GdkWindowImplQuartz *)window->impl)->toplevel);
+  nswindow = gdk_quartz_window_search_for_nearest_nswindow (window);
   point = [nswindow convertPointFromScreen:screen_point];
   *x = point.x;
   *y = window->height - point.y;
@@ -658,18 +658,25 @@ find_toplevel_under_pointer (GdkDisplay *display,
 
     }
 
-  if (toplevel)
-    {
-      get_window_point_from_screen_point (toplevel, screen_point, x, y);
-      /* If the coordinates are out of window bounds, this toplevel is not
-       * under the pointer and we thus return NULL. This can occur when
-       * toplevel under pointer has not yet been updated due to a very recent
-       * window resize. Alternatively, we should no longer be relying on
-       * the toplevel_under_pointer value which is maintained in gdkwindow.c.
-       */
-      if (*x < 0 || *y < 0 || *x >= toplevel->width || *y >= toplevel->height)
-        return NULL;
-    }
+  if (toplevel == NULL)
+    return NULL;
+
+  /*
+   * Root window type does not need translation, but also does not have
+   * an associated NSWindow and therefore can't translate screen points
+   */
+  if (toplevel == _gdk_root)
+    return toplevel;
+
+  get_window_point_from_screen_point (toplevel, screen_point, x, y);
+  /* If the coordinates are out of window bounds, this toplevel is not
+    * under the pointer and we thus return NULL. This can occur when
+    * toplevel under pointer has not yet been updated due to a very recent
+    * window resize. Alternatively, we should no longer be relying on
+    * the toplevel_under_pointer value which is maintained in gdkwindow.c.
+    */
+  if (*x < 0 || *y < 0 || *x >= toplevel->width || *y >= toplevel->height)
+    return NULL;
 
   return toplevel;
 }
@@ -793,7 +800,7 @@ find_toplevel_for_mouse_event (NSEvent    *nsevent,
 
           toplevel = toplevel_under_pointer;
 
-          toplevel_impl = (GdkWindowImplQuartz *)toplevel->impl;
+          toplevel_impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
 
           *x = x_tmp;
           *y = y_tmp;
@@ -1405,7 +1412,7 @@ test_resize (NSEvent *event, GdkWindow *toplevel, gint x, gint y)
   /* Resizing from the resize indicator only begins if an GDK_QUARTZ_LEFT_MOUSE_BUTTON
    * event is received in the resizing area.
    */
-  toplevel_impl = (GdkWindowImplQuartz *)toplevel->impl;
+  toplevel_impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
   if ([toplevel_impl->toplevel showsResizeIndicator])
   if ([event type] == GDK_QUARTZ_LEFT_MOUSE_DOWN &&
       [toplevel_impl->toplevel showsResizeIndicator])
