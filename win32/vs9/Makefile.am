@@ -7,7 +7,6 @@ GENERATED_ITEMS = \
 	gdk-3.vcproj			\
 	gtk-3.vcproj			\
 	gtk3-demo.vcproj		\
-	gtk3-icon-browser.vcproj	\
 	gailutil-3.vcproj		\
 	gtk3-version-paths.vsprops
 
@@ -24,7 +23,7 @@ EXTRA_DIST += \
 	gtk-update-icon-cache.vcproj	\
 	gtk3-demo.vcprojin		\
 	gtk3-demo-application.vcproj	\
-	gtk3-icon-browser.vcprojin	\
+	gtk3-icon-browser.vcproj	\
 	gailutil-3.vcprojin		\
 	gtk3-install.vcproj		\
 	gtk3-introspect.vcproj		\

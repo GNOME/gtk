@@ -156,7 +156,10 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-#include "gtk3-icon-browser.sourcefiles"
+			<File RelativePath="..\..\demos\icon-browser\main.c" />
+			<File RelativePath="..\..\demos\icon-browser\iconbrowserapp.c" />
+			<File RelativePath="..\..\demos\icon-browser\iconbrowserwin.c" />
+			<File RelativePath="..\..\demos\icon-browser\iconstore.c" />
 			<File RelativePath=".\Release\$(PlatformName)\obj\gtk3-icon-browser\resources.c">
 				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
 				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>

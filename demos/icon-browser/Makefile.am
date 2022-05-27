@@ -40,14 +40,4 @@ EXTRA_DIST = \
 	icon.list \
 	meson.build
 
-# ------------------- MSVC Build Items ----------------
-MSVCPROJS = gtk3-icon-browser
-
-gtk3_icon_browser_FILES = $(gtk3_icon_browser_SOURCES)
-gtk3_icon_browser_EXCLUDES = dummy
-
-include $(top_srcdir)/win32/Makefile.msvcproj
-
-dist-hook: $(top_builddir)/win32/vs9/gtk3-icon-browser.vcproj
-
 -include $(top_srcdir)/git.mk
