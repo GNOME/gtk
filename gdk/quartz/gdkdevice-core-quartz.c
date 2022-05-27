@@ -228,11 +228,9 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
     }
   else
     {
-      GdkWindowImplQuartz *impl;
       NSWindow *nswindow;
 
-      impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
-      nswindow = impl->toplevel;
+      nswindow = gdk_quartz_window_search_for_nearest_nswindow (window);
 
       point = [nswindow mouseLocationOutsideOfEventStream];
 

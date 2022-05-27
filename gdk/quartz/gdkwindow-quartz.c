@@ -125,22 +125,74 @@ gdk_quartz_window_init (GdkQuartzWindow *quartz_window)
  * GdkQuartzWindowImpl
  */
 
-NSView *
-gdk_quartz_window_get_nsview (GdkWindow *window)
+static inline NSObject *
+gdk_quartz_window_search_for_nearest_nsobject (GdkWindow *window, bool get_nswindow_instead_of_nsview)
 {
+  GdkWindow *onscreen_window = window;
+  NSObject  *nsobject        = NULL;
+
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
-  return ((GdkWindowImplQuartz *)window->impl)->view;
+  /*
+   * if window is type GDK_WINDOW_OFFSCREEN
+   * you need to get the embedder in order to find the NSView
+   * see: gdkdevice.c:1461
+   */
+  while (1)
+    {
+      g_return_val_if_fail (onscreen_window != NULL, NULL);
+
+      if (GDK_IS_WINDOW_IMPL_QUARTZ (onscreen_window->impl))
+        {
+          if (get_nswindow_instead_of_nsview)
+            nsobject = GDK_WINDOW_IMPL_QUARTZ (onscreen_window->impl)->toplevel;
+          else
+            nsobject = GDK_WINDOW_IMPL_QUARTZ (onscreen_window->impl)->view;
+
+          if (nsobject != NULL)
+            break;
+        }
+
+      if (onscreen_window->window_type == GDK_WINDOW_OFFSCREEN)
+        onscreen_window = gdk_offscreen_window_get_embedder (onscreen_window);
+      else
+        onscreen_window = onscreen_window->parent;
+    }
+
+  g_return_val_if_fail (nsobject != NULL, NULL);
+
+  return nsobject;
+}
+
+NSView *
+gdk_quartz_window_search_for_nearest_nsview (GdkWindow *window)
+{
+  return (NSView *)gdk_quartz_window_search_for_nearest_nsobject (window, FALSE);
+}
+
+NSWindow *
+gdk_quartz_window_search_for_nearest_nswindow (GdkWindow *window)
+{
+  return (NSWindow *)gdk_quartz_window_search_for_nearest_nsobject (window, TRUE);
+}
+
+NSView *
+gdk_quartz_window_get_nsview (GdkWindow *window)
+{
+  if (GDK_WINDOW_DESTROYED (window) || !GDK_IS_WINDOW_IMPL_QUARTZ (window->impl))
+    return NULL;
+
+  return GDK_WINDOW_IMPL_QUARTZ (window->impl)->view;
 }
 
 NSWindow *
 gdk_quartz_window_get_nswindow (GdkWindow *window)
 {
-  if (GDK_WINDOW_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window) || !GDK_IS_WINDOW_IMPL_QUARTZ (window->impl))
     return NULL;
 
-  return ((GdkWindowImplQuartz *)window->impl)->toplevel;
+  return GDK_WINDOW_IMPL_QUARTZ (window->impl)->toplevel;
 }
 
 static CGContextRef
@@ -220,9 +272,12 @@ gdk_window_impl_quartz_finalize (GObject *object)
     g_object_unref (impl->transient_for);
 
   if (impl->view)
-    [[NSNotificationCenter defaultCenter] removeObserver: impl->toplevel
-                                       name: @"NSViewFrameDidChangeNotification"
-                                     object: impl->view];
+    {
+      [[NSNotificationCenter defaultCenter] removeObserver: impl->toplevel
+                                        name: @"NSViewFrameDidChangeNotification"
+                                      object: impl->view];
+      [impl->view release];
+    }
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -319,6 +374,8 @@ static void
 gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 {
   impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+  impl->view      = NULL;
+  impl->toplevel  = NULL;
 }
 
 static gboolean
@@ -369,7 +426,7 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
           GdkWindowImplQuartz *toplevel_impl;
           NSWindow *nswindow;
 
-          toplevel_impl = (GdkWindowImplQuartz *)toplevel->impl;
+          toplevel_impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
           nswindow = toplevel_impl->toplevel;
 #if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
           /* In theory, we could skip the flush disabling, since we only
@@ -877,9 +934,6 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 				  (attributes->cursor) :
 				  NULL));
 
-  impl->view = NULL;
-  impl->toplevel = NULL;
-
   if (attributes_mask & GDK_WA_TYPE_HINT)
     {
       type_hint = attributes->type_hint;
@@ -959,7 +1013,6 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                                       selector: @selector (windowDidResize:)
                                       name: @"NSViewFrameDidChangeNotification"
                                       object: impl->view];
-	[impl->view release];
       }
       break;
 
@@ -981,7 +1034,6 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 	    /* GdkWindows should be hidden by default */
 	    [impl->view setHidden:YES];
 	    [parent_impl->view addSubview:impl->view];
-	    [impl->view release];
 	  }
       }
       break;
@@ -1580,7 +1632,7 @@ gdk_window_quartz_raise (GdkWindow *window)
         {
           GdkWindowImplQuartz *impl;
 
-          impl = (GdkWindowImplQuartz *)parent->impl;
+          impl = GDK_WINDOW_IMPL_QUARTZ (parent->impl);
 
           impl->sorted_children = g_list_remove (impl->sorted_children, window);
           impl->sorted_children = g_list_prepend (impl->sorted_children, window);
@@ -1611,7 +1663,7 @@ gdk_window_quartz_lower (GdkWindow *window)
         {
           GdkWindowImplQuartz *impl;
 
-          impl = (GdkWindowImplQuartz *)parent->impl;
+          impl = GDK_WINDOW_IMPL_QUARTZ (parent->impl);
 
           impl->sorted_children = g_list_remove (impl->sorted_children, window);
           impl->sorted_children = g_list_append (impl->sorted_children, window);
