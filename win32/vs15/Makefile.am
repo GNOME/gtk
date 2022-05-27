@@ -24,6 +24,8 @@ EXTRA_DIST_COPIED =	\
 	gtk3-demo-application.vcxproj.filters	\
 	gtk3-icon-browser.vcxproj	\
 	gtk3-icon-browser.vcxproj.filters	\
+	gtk3-widget-factory.vcxproj		\
+	gtk3-widget-factory.vcxproj.filters	\
 	gailutil-3.vcxproj	\
 	gailutil-3.vcxproj.filters	\
 	gtk3-install.vcxproj	\

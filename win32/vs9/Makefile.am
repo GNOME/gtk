@@ -24,6 +24,7 @@ EXTRA_DIST += \
 	gtk3-demo.vcprojin		\
 	gtk3-demo-application.vcproj	\
 	gtk3-icon-browser.vcproj	\
+	gtk3-widget-factory.vcproj	\
 	gailutil-3.vcprojin		\
 	gtk3-install.vcproj		\
 	gtk3-introspect.vcproj		\

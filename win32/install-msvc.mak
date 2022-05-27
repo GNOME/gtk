@@ -29,7 +29,7 @@ GTK_LIB = $(BASE_BUILT_BIN_DIR)\gtk-$(IMPLIB_SUFFIX)
 LIBGAIL_UTIL_DLL_FILENAME = gailutil-$(GTK_API_VERSION)-vs$(VSVER)
 LIBGAIL_UTIL_LIB = $(BASE_BUILT_BIN_DIR)\gailutil-$(IMPLIB_SUFFIX)
 GTK_PROGRAMS_NAMES = builder-tool encode-symbolic-svg query-settings update-icon-cache
-GTK3_PROGRAMS_NAMES = demo demo-application icon-browser
+GTK3_PROGRAMS_NAMES = demo demo-application icon-browser widget-factory
 GDK_GIR_FILE = $(BASE_BUILT_BIN_DIR)\Gdk-$(IMPLIB_SUFFIX:.lib=.gir)
 GDKWIN32_GIR_FILE = $(BASE_BUILT_BIN_DIR)\GdkWin32-$(IMPLIB_SUFFIX:.lib=.gir)
 GTK_GIR_FILE = $(BASE_BUILT_BIN_DIR)\Gtk-$(IMPLIB_SUFFIX:.lib=.gir)
@@ -123,4 +123,5 @@ install-data:
 	@-$(GLIB_COMPILE_SCHEMAS) $(PREFIX)\share\glib-2.0\schemas
 # Demo icons
 	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\gtk-demo\data\%tx%t\gtk3-demo.png "%d")
+	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\widget-factory\data\%tx%t\gtk3-widget-factory*.png "%d")
 	@-$(BASE_BUILT_BIN_DIR)\gtk-update-icon-cache.exe --ignore-theme-index --force "$(PREFIX)\share\icons\hicolor"

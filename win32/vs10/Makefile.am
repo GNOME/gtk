@@ -44,6 +44,8 @@ EXTRA_DIST += \
 	gtk3-demo-application.vcxproj.filters	\
 	gtk3-icon-browser.vcxproj		\
 	gtk3-icon-browser.vcxproj.filters	\
+	gtk3-widget-factory.vcxproj		\
+	gtk3-widget-factory.vcxproj.filters	\
 	gailutil-3.vcxprojin			\
 	gailutil-3.vcxproj.filtersin		\
 	gtk3-install.vcxproj			\
