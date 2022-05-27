@@ -37,10 +37,11 @@ gsk_vulkan_command_pool_new (GdkVulkanContext *context)
 static void
 gsk_vulkan_command_pool_free_buffers (GskVulkanCommandPool *self)
 {
-  vkFreeCommandBuffers (gdk_vulkan_context_get_device (self->vulkan),
-                        self->vk_command_pool,
-                        self->buffers->len,
-                        (VkCommandBuffer *) self->buffers->pdata);
+  if (self->buffers->len != 0)
+    vkFreeCommandBuffers (gdk_vulkan_context_get_device (self->vulkan),
+                          self->vk_command_pool,
+                          self->buffers->len,
+                          (VkCommandBuffer *) self->buffers->pdata);
 
   g_ptr_array_set_size (self->buffers, 0);
 }
