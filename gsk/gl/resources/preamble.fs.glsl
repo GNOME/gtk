@@ -118,11 +118,12 @@ vec2 gsk_get_frag_coord() {
   return fc;
 }
 
-// from "NEXT GENERATION POST PROCESSING IN CALL OF DUTY: ADVANCED WARFARE"
-// http://advances.realtimerendering.com/s2014/index.html
-float gsk_interleaved_gradient_noise(vec2 uv) {
-    const vec3 magic = vec3(0.06711056, 0.00583715, 52.9829189);
-    return fract(magic.z * fract(dot(uv, magic.xy)));
+// hash12() from https://www.shadertoy.com/view/4djSRW
+float gsk_interleaved_gradient_noise (vec2 p)
+{
+    vec3 p3  = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
 }
 
 vec4 gskDither(vec4 color) {
