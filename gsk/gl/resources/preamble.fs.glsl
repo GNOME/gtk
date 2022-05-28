@@ -127,6 +127,9 @@ float gsk_interleaved_gradient_noise (vec2 p)
 }
 
 vec4 gskDither(vec4 color) {
+#if defined(GSK_NO_DITHER)
+  return color;
+#else
   if (u_bit_depth > 10)
     return color;
 
@@ -135,6 +138,7 @@ vec4 gskDither(vec4 color) {
   noise = noise / (pow(2.0, u_bit_depth) - 1.0);
   color = vec4(color.rgb + noise, color.a);
   return color;
+#endif
 }
 
 vec4 gsk_get_output_color(vec4 color, float alpha) {

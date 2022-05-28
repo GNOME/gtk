@@ -543,6 +543,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
   const char *legacy = "";
   const char *gl3 = "";
   const char *gles = "";
+  const char *dither = "";
   int program_id;
   int vertex_id;
   int fragment_id;
@@ -572,11 +573,14 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
   if (self->gl3)
     gl3 = "#define GSK_GL3 1\n";
 
+  if (GSK_DEBUG_CHECK (NO_DITHER))
+    dither = "#define GSK_NO_DITHER 1\n";
+
   vertex_id = glCreateShader (GL_VERTEX_SHADER);
   glShaderSource (vertex_id,
-                  10,
+                  11,
                   (const char *[]) {
-                    version, debug, legacy, gl3, gles,
+                    version, debug, legacy, gl3, gles, dither,
                     clip,
                     get_shader_string (self->all_preamble),
                     get_shader_string (self->vertex_preamble),
@@ -589,6 +593,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
                     strlen (legacy),
                     strlen (gl3),
                     strlen (gles),
+                    strlen (dither),
                     strlen (clip),
                     g_bytes_get_size (self->all_preamble),
                     g_bytes_get_size (self->vertex_preamble),
@@ -607,9 +612,9 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
 
   fragment_id = glCreateShader (GL_FRAGMENT_SHADER);
   glShaderSource (fragment_id,
-                  10,
+                  11,
                   (const char *[]) {
-                    version, debug, legacy, gl3, gles,
+                    version, debug, legacy, gl3, gles, dither,
                     clip,
                     get_shader_string (self->all_preamble),
                     get_shader_string (self->fragment_preamble),
@@ -622,6 +627,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
                     strlen (legacy),
                     strlen (gl3),
                     strlen (gles),
+                    strlen (dither),
                     strlen (clip),
                     g_bytes_get_size (self->all_preamble),
                     g_bytes_get_size (self->fragment_preamble),
