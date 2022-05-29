@@ -485,6 +485,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
         input_source = GDK_SOURCE_TABLET_PAD;
       else if (strstr (tmp_name, "wacom") ||
                strstr (tmp_name, "pen") ||
+               strstr (tmp_name, "stylus") ||
                strstr (tmp_name, "eraser"))
         input_source = GDK_SOURCE_PEN;
       else if (!strstr (tmp_name, "mouse") &&
