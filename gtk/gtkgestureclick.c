@@ -411,7 +411,7 @@ gtk_gesture_click_class_init (GtkGestureClickClass *klass)
    * @x: X coordinate of the event
    * @y: Y coordinate of the event
    * @button: Button being released
-   * @sequence: Sequence being released
+   * @sequence: (nullable): Sequence being released
    *
    * Emitted whenever the gesture receives a release
    * event that had no previous corresponding press.
