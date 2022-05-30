@@ -871,7 +871,7 @@ gtk_shortcut_controller_get_scope (GtkShortcutController *self)
 }
 
 /**
- * gtk_shortcut_controller_set_mnemonics_modifiers: (attributes org.gtk.MEthod.set_property=mnemonic-modifiers)
+ * gtk_shortcut_controller_set_mnemonics_modifiers: (attributes org.gtk.Method.set_property=mnemonic-modifiers)
  * @self: a `GtkShortcutController`
  * @modifiers: the new mnemonics_modifiers to use
  *
