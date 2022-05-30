@@ -1348,7 +1348,9 @@ gdk_gl_context_set_use_es (GdkGLContext *context,
  *
  * Checks whether the @context is using an OpenGL or OpenGL ES profile.
  *
- * Returns: %TRUE if the `GdkGLContext` is using an OpenGL ES profile
+ * Returns: %TRUE if the `GdkGLContext` is using an OpenGL ES profile;
+ * %FALSE if other profile is in use of if the @context has not yet
+ * been realized.
  */
 gboolean
 gdk_gl_context_get_use_es (GdkGLContext *context)
