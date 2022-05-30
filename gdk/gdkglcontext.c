@@ -1065,7 +1065,10 @@ gdk_gl_context_check_version (GdkGLContext *self,
  * @major: (out) (nullable): return location for the major version to request
  * @minor: (out) (nullable): return location for the minor version to request
  *
- * Retrieves required OpenGL version.
+ * Retrieves required OpenGL version set as a requirement for the @context
+ * realization. It will not change even if a greater OpenGL version is supported
+ * and used after the @context is realized. See
+ * [method@Gdk.GLContext.get_version] for the real version in use.
  *
  * See [method@Gdk.GLContext.set_required_version].
  */
@@ -1075,47 +1078,14 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
                                      int          *minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  gboolean force_gles = FALSE;
-  GdkDisplay *display;
-  int default_major, default_minor;
-  int maj, min;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-
-#ifdef G_ENABLE_DEBUG
-  force_gles = GDK_DISPLAY_DEBUG_CHECK (display, GL_GLES);
-#endif
-
-  /* libANGLE on Windows at least requires GLES 3.0+ */
-  if (display->have_egl_win32_libangle)
-    force_gles = TRUE;
-
-  /* Default fallback values for uninitialised contexts; we
-   * enforce a context version number of 3.2 for desktop GL,
-   * and 2.0 for GLES
-   */
-  if (gdk_gl_context_get_use_es (context) || force_gles)
-    {
-      default_major = display->have_egl_win32_libangle ? 3 : 2;
-      default_minor = 0;
-    }
-  else
-    {
-      default_major = 3;
-      default_minor = 2;
-    }
-
-  if (priv->major > 0)
-    maj = priv->major;
-  else
-    maj = default_major;
-
-  if (priv->minor > 0)
-    min = priv->minor;
-  else
-    min = default_minor;
+  if (major != NULL)
+    *major = priv->major;
+  if (minor != NULL)
+    *minor = priv->minor;
+}
 
 void
 gdk_gl_context_get_clipped_version (GdkGLContext *context,
