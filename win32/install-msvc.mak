@@ -125,3 +125,8 @@ install-data:
 	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\gtk-demo\data\%tx%t\gtk3-demo*.png "%d")
 	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\widget-factory\data\%tx%t\gtk3-widget-factory*.png "%d")
 	@-$(BASE_BUILT_BIN_DIR)\gtk-update-icon-cache.exe --ignore-theme-index --force "$(PREFIX)\share\icons\hicolor"
+# Auxiliary build-related data files (m4, ITS files, RelaxNG files)
+	@for %d in (aclocal gettext\its gtk-3.0) do @if not exist $(PREFIX)\share\%d\ mkdir $(PREFIX)\share\%d
+	@copy ..\m4macros\gtk-3.0.m4 $(PREFIX)\share\aclocal
+	@for %x in (its loc) do @copy ..\gtk\gtkbuilder.%x $(PREFIX)\share\gettext\its
+	@for %x in (rng) do @copy ..\gtk\gtkbuilder.%x $(PREFIX)\share\gtk-3.0
