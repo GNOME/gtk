@@ -122,6 +122,6 @@ install-data:
 	@for %f in (..\gtk\org.gtk.Settings.*.gschema.xml ..\demos\gtk-demo\org.gtk.Demo.gschema.xml) do @copy %f "$(PREFIX)\share\glib-2.0\schemas"
 	@-$(GLIB_COMPILE_SCHEMAS) $(PREFIX)\share\glib-2.0\schemas
 # Demo icons
-	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\gtk-demo\data\%tx%t\gtk3-demo.png "%d")
+	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\gtk-demo\data\%tx%t\gtk3-demo*.png "%d")
 	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\widget-factory\data\%tx%t\gtk3-widget-factory*.png "%d")
 	@-$(BASE_BUILT_BIN_DIR)\gtk-update-icon-cache.exe --ignore-theme-index --force "$(PREFIX)\share\icons\hicolor"
