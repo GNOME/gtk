@@ -117,6 +117,11 @@ gboolean                gdk_gl_context_check_version            (GdkGLContext   
                                                                  int              required_gl_minor,
                                                                  int              required_gles_major,
                                                                  int              required_gles_minor);
+void                    gdk_gl_context_get_clipped_version      (GdkGLContext    *context,
+                                                                 int              min_major,
+                                                                 int              min_minor,
+                                                                 int             *major,
+                                                                 int             *minor);
 
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,

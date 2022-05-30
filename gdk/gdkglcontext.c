@@ -1113,6 +1113,24 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
   else
     min = default_minor;
 
+void
+gdk_gl_context_get_clipped_version (GdkGLContext *context,
+                                    int           min_major,
+                                    int           min_minor,
+                                    int          *major,
+                                    int          *minor)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  int maj = min_major, min = min_minor;
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+
+  if (priv->major > maj || (priv->major == maj && priv->minor > min))
+    {
+      maj = priv->major;
+      min = priv->minor;
+    }
+
   if (major != NULL)
     *major = maj;
   if (minor != NULL)
