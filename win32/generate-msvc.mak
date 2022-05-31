@@ -447,6 +447,29 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 	@$(PYTHON) geninclude.py demos.h.win32 $(demo_sources)
 	@cd ..\..\win32
 
+..\po\gtk30.pot: ..\gtk\gtkbuilder.its
+	$(XGETTEXT) --default-domain="$(@B)"	\
+	--copyright-holder="GTK+ Team and others. See AUTHORS"	\
+	--package-name="gtk+"	\
+	--package-version="$(GTK_VERSION)"	\
+	--msgid-bugs-address="https://gitlab.gnome.org/GNOME/gtk/-/issues/"	\
+	--directory=".." \
+	--add-comments=TRANSLATORS: --from-code=UTF-8 --keyword=_ --keyword=N_	\
+	--keyword=C_:1c,2 --keyword=NC_:1c,2 --keyword=g_dngettext:2,3 --add-comments	\
+	--files-from="$(@D:\=/)/POTFILES.in" --output=$(@F)
+	@move $(@F) $@
+
+..\po-properties\gtk30-properties.pot:
+	$(XGETTEXT) --default-domain="$(@B)"	\
+	--copyright-holder="GTK+ Team and others. See AUTHORS"	\
+	--package-name="gtk+"	\
+	--package-version="$(GTK_VERSION)"	\
+	--msgid-bugs-address="https://gitlab.gnome.org/GNOME/gtk/-/issues/"	\
+	--directory=".." \
+	--from-code=UTF-8 --keyword --keyword=P_ --add-comments	\
+	--files-from="$(@D:\=/)/POTFILES.in"
+	@move $(@B).po $@
+
 # Remove the generated files
 clean:
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.gresource
