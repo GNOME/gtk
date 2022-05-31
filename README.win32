@@ -198,6 +198,10 @@ ARM64 build configs by copying the settings from the x64 configs, and then build
 The build instructions for such builds otherwise follow the standard Win32 (x86) and
 x64 builds, but you need to ensure that you have ARM64 builds of the various dependencies.
 
+It may still be possible to carry out the build and build the introspection files with Python 2.7.x
+using older versions of GLib and GObject-Introspection, but please note that this is not recommended
+and one is on his/her own by doing so.
+
 3) Using Meson (for Visual Studio and MinGW builds)
 ---
 
