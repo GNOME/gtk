@@ -3,8 +3,8 @@
 # Items in here should not need to be edited unless
 # one is maintaining the NMake build files.
 
-!include ../demos/gtk-demo/demos-sources.mak
 !include config-msvc.mak
+!include ../demos/gtk-demo/demos-sources.mak
 !include create-lists-msvc.mak
 
 # Copy the pre-defined gdkconfig.h.[win32|win32_broadway]
@@ -189,15 +189,16 @@ generate-base-sources:	\
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.c: .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkdbusgenerated.h
 
-.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypefuncs.inc: ..\gtk\gentypefuncs.py
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypefuncs.inc:	\
+..\gtk\gentypefuncs.py	\
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkversion.h	\
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.h
 	@echo Generating $@...
 	@if not exist $(@D)\ md $(@D)
-	@if not exist $(@D)\gtktypebuiltins.h $(MAKE) /f generate-msvc.mak CFG=$(CFG) $(@D)\gtktypebuiltins.h
-	@if not exist $(@D)\gtkversion.h $(MAKE) /f generate-msvc.mak CFG=$(CFG) $(@D)\gtkversion.h
 	@echo #undef GTK_COMPILATION > $(@R).preproc.c
 	@echo #include "gtkx.h" >> $(@R).preproc.c
 	@cl /EP $(GTK_PREPROCESSOR_FLAGS) $(@R).preproc.c > $(@R).combined.c
-	@$(PYTHON) $** $@ $(@R).combined.c
+	@$(PYTHON) ..\gtk\gentypefuncs.py $@ $(@R).combined.c
 	@del $(@R).preproc.c $(@R).combined.c
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml: $(GTK_RESOURCES)
