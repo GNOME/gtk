@@ -309,11 +309,11 @@ gdk_quartz_create_cairo_surface (GdkWindowImplQuartz *impl,
   GdkQuartzCairoSurfaceData *surface_data;
   cairo_surface_t *surface;
 
-
   surface_data = g_new (GdkQuartzCairoSurfaceData, 1);
   surface_data->window_impl = impl;
   surface_data->cg_context = NULL;
 
+  [impl->view createBackingStoreWithWidth: width andHeight: height];
   surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
   cairo_surface_set_user_data (surface, &gdk_quartz_cairo_key,
                                surface_data,

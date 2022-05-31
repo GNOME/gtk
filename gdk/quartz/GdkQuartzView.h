@@ -34,7 +34,7 @@
 #define GIC_FILTER_PASSTHRU	0
 #define GIC_FILTER_FILTERED	1
 
-@interface GdkQuartzView : NSView <NSTextInputClient>
+@interface GdkQuartzView : NSView <NSTextInputClient, NSViewLayerContentScaleDelegate>
 {
   GdkWindow *gdk_window;
   NSTrackingRectTag trackingRect;
@@ -50,5 +50,6 @@
 - (GdkWindow *)gdkWindow;
 - (NSTrackingRectTag)trackingRect;
 - (void)setNeedsInvalidateShadow: (BOOL)invalidate;
+- (void)createBackingStoreWithWidth: (CGFloat) width andHeight: (CGFloat) height;
 
 @end
