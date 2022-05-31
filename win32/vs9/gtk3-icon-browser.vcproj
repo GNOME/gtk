@@ -2,11 +2,11 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="gtk3-demo"
-	ProjectGUID="{BDAE6DE2-6BCC-4107-94F0-DA12214A02DE}"
-	RootNamespace="gtk3demo"
+	Name="gtk3-icon-browser"
+	ProjectGUID="{343333C4-D46C-4C97-A986-959CCA6F1DE0}"
+	RootNamespace="gtk3iconbrowser"
 	Keyword="Win32Proj"
-	TargetFrameworkVersion="131072"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -21,8 +21,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			ConfigurationType="1"
 			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
+			ConfigurationType="1"
 			CharacterSet="2"
 			>
 			<Tool
@@ -31,15 +31,45 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(Gtk3DemoIncludesDebug)"
-				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
+				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesDebug)"
+				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="4"
-				CompileAs="1"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies=""
+				LinkIncremental="2"
+				GenerateDebugInformation="true"
+				SubSystem="1"
+				TargetMachine="1"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
+			ConfigurationType="1"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesRelease)"
+				EnableIntrinsicFunctions="true"
+				PreprocessorDefinitions=""
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -47,93 +77,64 @@
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
-				DataExecutionPrevention="0"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
 				TargetMachine="1"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			ConfigurationType="1"
 			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
+			ConfigurationType="1"
 			CharacterSet="2"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="$(Gtk3DemoIncludesDebug)"
-				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
+				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesDebug)"
+				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				CompileAs="1"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies=""
-				LinkIncremental="1"
+				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
-				DataExecutionPrevention="0"
 				TargetMachine="17"
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
-			ConfigurationType="1"
-			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
-			CharacterSet="2"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(Gtk3DemoIncludesRelease)"
-				PreprocessorDefinitions="$(GtkPrefixDefine)"
-				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-				CompileAs="1"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				LinkIncremental="1"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				DataExecutionPrevention="0"
-				TargetMachine="1"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Release|x64"
-			ConfigurationType="1"
 			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
+			ConfigurationType="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCPreBuildEventTool"
+				Name="VCMIDLTool"
+				TargetEnvironment="3"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="$(Gtk3DemoIncludesRelease)"
-				PreprocessorDefinitions="$(GtkPrefixDefine)"
+				Optimization="2"
+				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesRelease)"
+				EnableIntrinsicFunctions="true"
+				PreprocessorDefinitions=""
 				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
-				CompileAs="1"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -143,7 +144,6 @@
 				SubSystem="1"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				DataExecutionPrevention="0"
 				TargetMachine="17"
 			/>
 		</Configuration>
@@ -152,24 +152,33 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Source Files"
+			Name="Sources"
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-#include "gtk3-demo.sourcefiles"
-			<File RelativePath=".\Release\$(PlatformName)\obj\gtk3-demo\demo_resources.c">
+			<File RelativePath="..\..\demos\icon-browser\main.c" />
+			<File RelativePath="..\..\demos\icon-browser\iconbrowserapp.c" />
+			<File RelativePath="..\..\demos\icon-browser\iconbrowserwin.c" />
+			<File RelativePath="..\..\demos\icon-browser\iconstore.c" />
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk3-icon-browser\resources.c">
 				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
 				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
 			</File>
-			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk3-demo\demo_resources.c" >
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk3-icon-browser\resources.c" >
 				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
 				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
-			Name="Header Files"
+			Name="Headers"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
 	</Files>

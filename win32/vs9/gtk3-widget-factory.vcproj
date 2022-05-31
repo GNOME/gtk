@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="gtk3-icon-browser"
-	ProjectGUID="{343333C4-D46C-4C97-A986-959CCA6F1DE0}"
-	RootNamespace="gtk3iconbrowser"
+	Name="gtk3-widget-factory"
+	ProjectGUID="{BE6B4973-C6FF-4C8F-8E97-A70793C50F44}"
+	RootNamespace="gtk3widgetfactory"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesDebug)"
+				AdditionalIncludeDirectories="$(BaseIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -42,7 +42,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
+				AdditionalDependencies="atk-1.0.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesRelease)"
+				AdditionalIncludeDirectories="$(BaseIncludesRelease)"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions=""
 				RuntimeLibrary="2"
@@ -73,7 +73,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
+				AdditionalDependencies="atk-1.0.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesDebug)"
+				AdditionalIncludeDirectories="$(BaseIncludesDebug)"
 				PreprocessorDefinitions="_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -106,7 +106,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
+				AdditionalDependencies="atk-1.0.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -127,7 +127,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\demos\icon-browser;$(GdkBaseIncludesRelease)"
+				AdditionalIncludeDirectories="$(BaseIncludesRelease)"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions=""
 				RuntimeLibrary="2"
@@ -138,7 +138,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
+				AdditionalDependencies="atk-1.0.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -156,8 +156,15 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-#include "gtk3-icon-browser.sourcefiles"
-			<File RelativePath="..\..\demos\icon-browser\resources.c" />
+			<File RelativePath="..\..\demos\widget-factory\widget-factory.c" />
+			<File RelativePath=".\Release\$(PlatformName)\obj\gtk3-widget-factory\widget_factory_resources.c">
+				<FileConfiguration Name="Debug|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Debug|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
+			<File RelativePath=".\Debug\$(PlatformName)\obj\gtk3-widget-factory\widget_factory_resources.c" >
+				<FileConfiguration Name="Release|Win32" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+				<FileConfiguration Name="Release|x64" ExcludedFromBuild="true" ><Tool Name="VCCLCompilerTool" /></FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Headers"

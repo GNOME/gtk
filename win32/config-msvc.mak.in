@@ -120,8 +120,8 @@ GTK_PREPROCESSOR_FLAGS =	\
 	 /DISOLATION_AWARE_ENABLED
 
 DEMO_VS9_PROJ = gtk3-demo.vcproj
-DEMO_VS10_PROJ = gtk3-demo.vcxproj
-DEMO_VS10_PROJ_FILTERS = gtk3-demo.vcxproj.filters
+DEMO_VS1X_PROJ = $(DEMO_VS9_PROJ:.vcproj=.vcxproj)
+DEMO_VS1X_PROJ_FILTERS = $(DEMO_VS9_PROJ:.vcproj=.vcxproj.filters)
 DEMO_DEP_LIBS_NEW_PANGO=harfbuzz.lib
 DEMO_DEP_LIBS_PANGOFT2_VS1X=pangoft2-1.0.lib;harfbuzz.lib;freetype.lib
 DEMO_DEP_LIBS_PANGOFT2_VS9=$(DEMO_DEP_LIBS_PANGOFT2_VS1X:;= )

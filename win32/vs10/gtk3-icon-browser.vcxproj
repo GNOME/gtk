@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BDAE6DE2-6BCC-4107-94F0-DA12214A02DE}</ProjectGuid>
-    <RootNamespace>gtk3demo</RootNamespace>
+    <ProjectGuid>{343333C4-D46C-4C97-A986-959CCA6F1DE0}</ProjectGuid>
+    <RootNamespace>gtk3iconbrowser</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -43,34 +43,36 @@
     <LinkIncremental Condition="'$(Configuration)' == 'Release'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup>
+    <Midl>
+      <TargetEnvironment Condition="'$(Platform)'=='x64'">X64</TargetEnvironment>
+    </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(Gtk3DemoIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\demos\icon-browser;$(BaseConfigIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader></PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <CompileAs>CompileAsC</CompileAs>
 
       <!-- For Debug -->
-      <Optimization Condition="'$(Configuration)' == 'Debug'">Disabled</Optimization>
-      <PreprocessorDefinitions Condition="'$(Configuration)' == 'Debug'">_DEBUG;$(GtkPrefixDefine);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization Condition="'$(Configuration)' == 'Debug|Win32'">Disabled</Optimization>
+      <PreprocessorDefinitions Condition="'$(Configuration)' == 'Debug'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild Condition="'$(Configuration)' == 'Debug'">true</MinimalRebuild>
       <BasicRuntimeChecks Condition="'$(Configuration)' == 'Debug'">EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)' == 'Debug'">MultiThreadedDebugDLL</RuntimeLibrary>
       <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'== 'Debug|Win32'">EditAndContinue</DebugInformationFormat>
       <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'== 'Debug|x64'">ProgramDatabase</DebugInformationFormat>
-
+      
       <!-- For Release -->
-      <PreprocessorDefinitions Condition="'$(Configuration)' == 'Release'">$(GtkPrefixDefine);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization Condition="'$(Configuration)' == 'Release'">MaxSpeed</Optimization>
+      <IntrinsicFunctions Condition="'$(Configuration)' == 'Release'">true</IntrinsicFunctions>
+      <PreprocessorDefinitions Condition="'$(Configuration)' == 'Release'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary Condition="'$(Configuration)' == 'Release'">MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking Condition="'$(Configuration)' == 'Release'">false</FunctionLevelLinking>
       <DebugInformationFormat Condition="'$(Configuration)' == 'Release'">ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <DataExecutionPrevention></DataExecutionPrevention>
 
       <!-- For Release -->
-      <FunctionLevelLinking Condition="'$(Configuration)' == 'Release'">false</FunctionLevelLinking>
       <OptimizeReferences Condition="'$(Configuration)' == 'Release'">true</OptimizeReferences>
       <EnableCOMDATFolding Condition="'$(Configuration)' == 'Release'">true</EnableCOMDATFolding>
 
@@ -79,8 +81,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-#include "gtk3-demo.vs10.sourcefiles"
-    <ClCompile Include="$(IntDir)\demo_resources.c" />
+    <ClCompile Include="..\..\demos\icon-browser\main.c" />
+    <ClCompile Include="..\..\demos\icon-browser\iconbrowserapp.c" />
+    <ClCompile Include="..\..\demos\icon-browser\iconbrowserwin.c" />
+    <ClCompile Include="..\..\demos\icon-browser\iconstore.c" />
+    <ClCompile Include="$(IntDir)\resources.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-3.vcxproj">

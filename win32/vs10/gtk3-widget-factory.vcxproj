@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{343333C4-D46C-4C97-A986-959CCA6F1DE0}</ProjectGuid>
-    <RootNamespace>gtk3iconbrowser</RootNamespace>
+    <ProjectGuid>{BE6B4973-C6FF-4C8F-8E97-A70793C50F44}</ProjectGuid>
+    <RootNamespace>gtk3widgetfactory</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -43,23 +43,20 @@
     <LinkIncremental Condition="'$(Configuration)' == 'Release'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup>
-    <Midl>
-      <TargetEnvironment Condition="'$(Platform)'=='x64'">X64</TargetEnvironment>
-    </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\..\demos\icon-browser;$(BaseConfigIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BaseConfigIncludes);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader></PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
 
       <!-- For Debug -->
-      <Optimization Condition="'$(Configuration)' == 'Debug|Win32'">Disabled</Optimization>
+      <Optimization Condition="'$(Configuration)' == 'Debug'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)' == 'Debug'">_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild Condition="'$(Configuration)' == 'Debug'">true</MinimalRebuild>
       <BasicRuntimeChecks Condition="'$(Configuration)' == 'Debug'">EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary Condition="'$(Configuration)' == 'Debug'">MultiThreadedDebugDLL</RuntimeLibrary>
       <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'== 'Debug|Win32'">EditAndContinue</DebugInformationFormat>
       <DebugInformationFormat Condition="'$(Configuration)|$(Platform)'== 'Debug|x64'">ProgramDatabase</DebugInformationFormat>
-      
+
       <!-- For Release -->
       <Optimization Condition="'$(Configuration)' == 'Release'">MaxSpeed</Optimization>
       <IntrinsicFunctions Condition="'$(Configuration)' == 'Release'">true</IntrinsicFunctions>
@@ -71,18 +68,19 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>atk-1.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
 
       <!-- For Release -->
-      <OptimizeReferences Condition="'$(Configuration)' == 'Release'">true</OptimizeReferences>
-      <EnableCOMDATFolding Condition="'$(Configuration)' == 'Release'">true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
 
       <TargetMachine Condition="'$(Platform)'=='Win32'">MachineX86</TargetMachine>
       <TargetMachine Condition="'$(Platform)'=='x64'">MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-#include "gtk3-icon-browser.vs10.sourcefiles"
-    <ClCompile Include="..\..\demos\icon-browser\resources.c" />
+    <ClCompile Include="..\..\demos\widget-factory\widget-factory.c" />
+    <ClCompile Include=".\$(Configuration)\$(Platform)\obj\gtk3-widget-factory\widget_factory_resources.c" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="gdk-3.vcxproj">

@@ -58,6 +58,28 @@ GTK_GENERATED_SOURCES =	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.c	\
 	$(GTK_VERSION_H)
 
+GTK3_DEMO_VC1X_PROJS =	\
+	vs10\$(DEMO_VS1X_PROJ)	\
+	vs11\$(DEMO_VS1X_PROJ)	\
+	vs12\$(DEMO_VS1X_PROJ)	\
+	vs14\$(DEMO_VS1X_PROJ)	\
+	vs15\$(DEMO_VS1X_PROJ)	\
+	vs16\$(DEMO_VS1X_PROJ)	\
+	vs17\$(DEMO_VS1X_PROJ)
+
+GTK3_DEMO_VC1X_PROJ_FILTERS =	\
+	vs11\$(DEMO_VS1X_PROJ_FILTERS)	\
+	vs12\$(DEMO_VS1X_PROJ_FILTERS)	\
+	vs14\$(DEMO_VS1X_PROJ_FILTERS)	\
+	vs15\$(DEMO_VS1X_PROJ_FILTERS)	\
+	vs16\$(DEMO_VS1X_PROJ_FILTERS)	\
+	vs17\$(DEMO_VS1X_PROJ_FILTERS)
+
+GTK3_DEMO_VCPROJS =	\
+	vs9\$(DEMO_VS9_PROJ)	\
+	$(GTK3_DEMO_VC1X_PROJS)	\
+	$(GTK3_DEMO_VC1X_PROJ_FILTERS)
+
 generate-base-sources:	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
 	$(GDK_GENERATED_SOURCES)	\
@@ -66,13 +88,14 @@ generate-base-sources:	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk-win32.rc	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\libgtk3.manifest	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtk.gresource.xml	\
-	..\demos\gtk-demo\demos.h	\
-	..\demos\gtk-demo\demo_resources.c	\
-	..\demos\icon-browser\resources.c
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-widget-factory\widget_factory_resources.c
 
 # Copy the pre-defined config.h.win32 and demos.h.win32
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h: ..\config.h.win32
-..\demos\gtk-demo\demos.h: ..\demos\gtk-demo\demos.h.win32
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h: ..\demos\gtk-demo\demos.h.win32
 
 # Generate the versioned headers and resource scripts (*.rc)
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkversionmacros.h: ..\gdk\gdkversionmacros.h.in
@@ -90,7 +113,7 @@ generate-base-sources:	\
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk\gdkconfig.h	\
-..\demos\gtk-demo\demos.h:
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h:
 	@echo Copying $@...
 	@if not exist $(@D)\ md $(@D)
 	@copy $** $@
@@ -256,55 +279,151 @@ generate-base-sources:	\
 	@$(PYTHON) $(GLIB_GENMARSHAL) $(GTK_MARSHALERS_FLAGS) --body $** >> $@.tmp
 	@move $@.tmp $@
 
-..\demos\gtk-demo\demo_resources.c: ..\demos\gtk-demo\demo.gresource.xml $(GTK_DEMO_RESOURCES)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c: ..\demos\gtk-demo\demo.gresource.xml $(GTK_DEMO_RESOURCES)
 	@echo Generating $@...
-	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\demo.gresource.xml
+	@if not exist $(@D)\ md $(@D)
+	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=..\demos\gtk-demo	\
+	--generate-source ..\demos\gtk-demo\demo.gresource.xml
 
-..\demos\icon-browser\resources.c: ..\demos\icon-browser\iconbrowser.gresource.xml $(ICON_BROWSER_RESOURCES)
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c: ..\demos\icon-browser\iconbrowser.gresource.xml $(ICON_BROWSER_RESOURCES)
 	@echo Generating $@...
-	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(@D) --generate-source $(@D)\iconbrowser.gresource.xml
+	@if not exist $(@D)\ md $(@D)
+	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=..\demos\icon-browser	\
+	--generate-source ..\demos\icon-browser\iconbrowser.gresource.xml
 
-regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
-	@echo Regenerating demos.h.win32...
+.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-widget-factory\widget_factory_resources.c:	\
+..\demos\icon-browser\iconbrowser.gresource.xml $(WIDGET_FACTORY_RESOURCES)
+	@echo Generating $@...
+	@if not exist $(@D)\ md $(@D)
+	@$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=..\demos\widget-factory	\
+	--generate-source ..\demos\widget-factory\widget-factory.gresource.xml
+
+gtk3-demo.sourcefiles: $(demo_actual_sources)
+	@-del vs9\$(DEMO_VS9_PROJ)
+	@for %%s in ($**) do @echo.   ^<File RelativePath^="..\%%s" /^>>>$@
+	@for %%s in (gtkfishbowl.c main.c) do @echo.   ^<File RelativePath^="..\..\demos\gtk-demo\%%s" /^>>>$@
+
+gtk3-demo.vs10.sourcefiles: $(demo_actual_sources)
+	@-del vs10\$(DEMO_VS1X_PROJ)
+	@for %%s in ($**) do @echo.   ^<ClCompile Include^="..\%%s" /^>>>$@
+	@for %%s in (gtkfishbowl.c main.c) do @echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s" /^>>>$@
+
+gtk3-demo.vs10.sourcefiles.filters: $(demo_actual_sources)
+	@-del vs10\$(DEMO_VS1X_PROJ_FILTERS)
+	@for %%s in ($**) do @echo.   ^<ClCompile Include^="..\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>$@
+	@for %%s in (gtkfishbowl.c main.c) do @echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>$@
+
+vs9\$(DEMO_VS9_PROJ).pre: gtk3-demo.sourcefiles vs9\$(DEMO_VS9_PROJ)in
+vs10\$(DEMO_VS1X_PROJ).pre: gtk3-demo.vs10.sourcefiles vs10\$(DEMO_VS1X_PROJ)in
+vs10\$(DEMO_VS1X_PROJ_FILTERS): gtk3-demo.vs10.sourcefiles.filters vs10\$(DEMO_VS1X_PROJ_FILTERS)in
+
+vs9\$(DEMO_VS9_PROJ).pre vs10\$(DEMO_VS1X_PROJ).pre vs10\$(DEMO_VS1X_PROJ_FILTERS):
+	@$(CPP) /nologo /EP /I. $(@:.pre=)in>$(@F:.pre=).tmp
+	@for /f "usebackq tokens=* delims=" %%l in ($(@F:.pre=).tmp) do @echo %%l>>$@
+	@-del $(@F:.pre=).tmp
+	@-if "$@" == "vs9\$(DEMO_VS9_PROJ).pre" del gtk3-demo.sourcefiles
+	@-if "$@" == "vs10\$(DEMO_VS1X_PROJ).pre" del gtk3-demo.vs10.sourcefiles
+	@-if "$@" == "vs10\$(DEMO_VS1X_PROJ_FILTERS)" del gtk3-demo.vs10.sourcefiles.filters
+
+!ifdef FONT_FEATURES_DEMO
+!ifdef FONT_FEATURES_USE_PANGOFT2
+vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
+	@echo Generating $@...
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
+	--instring="AdditionalDependencies=\"\""	\
+	--outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_PANGOFT2_VS9)\""
+	@-del $**
+
+vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
+	@echo Generating $@...
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
+	--instring=">%(AdditionalDependencies)<"	\
+	--outstring=">$(DEMO_DEP_LIBS_PANGOFT2_VS1X);%(AdditionalDependencies)<"
+	@-del $**
+!else
+vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
+	@echo Generating $@...
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
+	--instring="AdditionalDependencies=\"\""	\
+	--outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_NEW_PANGO)\""
+	@-del $**
+
+vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
+	@echo Generating $@...
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
+	--instring=">%(AdditionalDependencies)<"	\
+	--outstring=">$(DEMO_DEP_LIBS_NEW_PANGO);%(AdditionalDependencies)<"
+	@-del $**
+!endif
+!else
+vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
+vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
+
+vs9\$(DEMO_VS9_PROJ) vs10\$(DEMO_VS1X_PROJ):
+	@echo Renaming $** to $@...
+	@move $** $@
+!endif
+
+vs11\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
+vs12\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
+vs14\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
+vs15\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
+vs16\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
+vs17\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
+
+vs11\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
+vs12\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
+vs14\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
+vs15\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
+vs16\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
+vs17\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
+
+vs11\$(DEMO_VS1X_PROJ):
+	@echo Copying and updating $** for VS2012
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v110<"
+
+vs12\$(DEMO_VS1X_PROJ):
+	@echo Copying and updating $** for VS2013
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v120<"
+
+vs14\$(DEMO_VS1X_PROJ):
+	@echo Copying and updating $** for VS2015
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v140<"
+
+vs15\$(DEMO_VS1X_PROJ):
+	@echo Copying and updating $** for VS2017
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v141<"
+
+vs16\$(DEMO_VS1X_PROJ):
+	@echo Copying and updating $** for VS2019
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v142<"
+
+vs17\$(DEMO_VS1X_PROJ):
+	@echo Copying and updating $** for VS2022
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v143<"
+
+# VS2012+ .vcxproj.filters: We simply copy the VS2010 ones
+vs11\$(DEMO_VS1X_PROJ_FILTERS)	\
+vs12\$(DEMO_VS1X_PROJ_FILTERS)	\
+vs14\$(DEMO_VS1X_PROJ_FILTERS)	\
+vs15\$(DEMO_VS1X_PROJ_FILTERS)	\
+vs16\$(DEMO_VS1X_PROJ_FILTERS)	\
+vs17\$(DEMO_VS1X_PROJ_FILTERS):
+	@echo Copying $** to $@...
+	@copy $** $@
+
+regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources) $(GTK3_DEMO_VCPROJS)
+	@echo Regenerating demos.h.win32 and gtk3-demo VS project files...
 	@-del ..\demos\gtk-demo\demos.h.win32
 	@cd ..\demos\gtk-demo
 	@$(PYTHON) geninclude.py demos.h.win32 $(demo_sources)
 	@cd ..\..\win32
-	@echo Regenerating gtk3-demo VS project files...
-	@-del vs9\$(DEMO_VS9_PROJ) vs10\$(DEMO_VS10_PROJ) vs10\$(DEMO_VS10_PROJ_FILTERS)
-	@for %%s in ($(demo_sources) gtkfishbowl.c main.c) do	\
-	@echo.   ^<File RelativePath^="..\..\demos\gtk-demo\%%s" /^>>>gtk3-demo.sourcefiles & \
-	@echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s" /^>>>gtk3-demo.vs10.sourcefiles & \
-	@echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>gtk3-demo.vs10.sourcefiles.filters
-	@$(CPP) /nologo /EP /I. vs9\$(DEMO_VS9_PROJ)in>$(DEMO_VS9_PROJ).tmp
-	@for /f "usebackq tokens=* delims=" %%l in ($(DEMO_VS9_PROJ).tmp) do @echo %%l>>$(DEMO_VS9_PROJ).tmp1
-	@$(CPP) /nologo /EP /I. vs10\$(DEMO_VS10_PROJ)in>$(DEMO_VS10_PROJ).tmp
-	@for /f "usebackq tokens=* delims=" %%l in ($(DEMO_VS10_PROJ).tmp) do @echo %%l>>$(DEMO_VS10_PROJ).tmp1
-	@$(CPP) /nologo /EP /I. vs10\$(DEMO_VS10_PROJ_FILTERS)in> $(DEMO_VS10_PROJ_FILTERS).tmp
-	@for /f "usebackq tokens=* delims=" %%l in ($(DEMO_VS10_PROJ_FILTERS).tmp) do @ echo %%l>>vs10\$(DEMO_VS10_PROJ_FILTERS)
-	@if not "$(FONT_FEATURES_DEMO)" == ""	\
-	 if not "$(FONT_FEATURES_USE_PANGOFT2)" == ""	\
-	 ($(PYTHON) replace.py -a=replace-str -i=$(DEMO_VS9_PROJ).tmp1 -o=vs9\$(DEMO_VS9_PROJ) --instring="AdditionalDependencies=\"\"" --outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_PANGOFT2_VS9)\"") & \
-	 ($(PYTHON) replace.py -a=replace-str -i=$(DEMO_VS10_PROJ).tmp1 -o=vs10\$(DEMO_VS10_PROJ) --instring=">%(AdditionalDependencies)<" --outstring=">$(DEMO_DEP_LIBS_PANGOFT2_VS1X);%(AdditionalDependencies)<")
-	@if not "$(FONT_FEATURES_DEMO)" == ""	\
-	 if "$(FONT_FEATURES_USE_PANGOFT2)" == ""	\
-	 ($(PYTHON) replace.py -a=replace-str -i=$(DEMO_VS9_PROJ).tmp1 -o=vs9\$(DEMO_VS9_PROJ) --instring="AdditionalDependencies=\"\"" --outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_NEW_PANGO)\"") & \
-	 ($(PYTHON) replace.py -a=replace-str -i=$(DEMO_VS10_PROJ).tmp1 -o=vs10\$(DEMO_VS10_PROJ) --instring=">%(AdditionalDependencies)<" --outstring=">$(DEMO_DEP_LIBS_NEW_PANGO);%(AdditionalDependencies)<")
-	@if "$(FONT_FEATURES_DEMO)" == "" copy $(DEMO_VS9_PROJ).tmp1 vs9\$(DEMO_VS9_PROJ) & copy $(DEMO_VS10_PROJ).tmp1 vs10\$(DEMO_VS10_PROJ)
-	@del *vc*proj*.tmp* gtk3-demo.*sourcefiles*
-	@for %%v in (11 12 14 15 16 17) do @(copy /y vs10\$(DEMO_VS10_PROJ_FILTERS) vs%v\ & del vs%v\gtk3-demo.vcxproj)
-	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs11\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v110<"
-	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs12\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v120<"
-	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs14\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v140<"
-	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs15\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v141<"
-	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs16\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v142<"
-	@$(PYTHON) replace.py -a=replace-str -i=vs10\$(DEMO_VS10_PROJ) -o=vs17\$(DEMO_VS10_PROJ) --instring=">v100<" --outstring=">v143<"
 
 # Remove the generated files
 clean:
-	@-del /f /q ..\demos\icon-browser\resources.c
-	@-del /f /q ..\demos\gtk-demo\demo_resources.c
-	@-del /f /q ..\demos\gtk-demo\demos.h
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.c
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.h
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkprivatetypebuiltins.c

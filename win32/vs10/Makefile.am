@@ -13,10 +13,6 @@ GENERATED_ITEMS = \
 	gtk-3.vcxproj.filters			\
 	gtk3-demo.vcxproj			\
 	gtk3-demo.vcxproj.filters		\
-	gtk3-demo-application.vcxproj		\
-	gtk3-demo-application.vcxproj.filters	\
-	gtk3-icon-browser.vcxproj		\
-	gtk3-icon-browser.vcxproj.filters	\
 	gailutil-3.vcxproj			\
 	gailutil-3.vcxproj.filters
 
@@ -44,10 +40,12 @@ EXTRA_DIST += \
 	gtk-update-icon-cache.vcxproj.filters	\
 	gtk3-demo.vcxprojin			\
 	gtk3-demo.vcxproj.filtersin		\
-	gtk3-demo-application.vcxprojin		\
-	gtk3-demo-application.vcxproj.filtersin	\
-	gtk3-icon-browser.vcxprojin		\
-	gtk3-icon-browser.vcxproj.filtersin	\
+	gtk3-demo-application.vcxproj		\
+	gtk3-demo-application.vcxproj.filters	\
+	gtk3-icon-browser.vcxproj		\
+	gtk3-icon-browser.vcxproj.filters	\
+	gtk3-widget-factory.vcxproj		\
+	gtk3-widget-factory.vcxproj.filters	\
 	gailutil-3.vcxprojin			\
 	gailutil-3.vcxproj.filtersin		\
 	gtk3-install.vcxproj			\

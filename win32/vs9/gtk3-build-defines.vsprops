@@ -56,6 +56,14 @@
 		Value=".\Release\$(PlatformName)\obj\gtk-3\gtk;..\..\gtk;$(GdkBaseIncludesRelease)"
 	/>
 	<UserMacro
+		Name="Gtk3DemoIncludesDebug"
+		Value=".\Debug\$(PlatformName)\obj\gtk3-demo;$(GtkBaseIncludesDebug)"
+	/>
+	<UserMacro
+		Name="Gtk3DemoIncludesRelease"
+		Value=".\Release\$(PlatformName)\obj\gtk3-demo;$(GtkBaseIncludesRelease)"
+	/>
+	<UserMacro
 		Name="GdkDefines"
 		Value="GDK_COMPILATION;G_LOG_DOMAIN=\&quot;Gdk\&quot;"
 	/>
