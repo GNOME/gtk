@@ -19,21 +19,8 @@
     <GtkSeparateVSDllSuffix>-vs$(VSVer)</GtkSeparateVSDllSuffix>
     <GtkDllPrefix>$(GtkSeparateVSDllPrefix)</GtkDllPrefix>
     <GtkDllSuffix>$(GtkSeparateVSDllSuffix)</GtkDllSuffix>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '10.0|Win32'">c:\python34</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '11.0|Win32'">c:\python34</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '12.0|Win32'">c:\python34</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '14.0|Win32'">c:\python36</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|Win32'">c:\python36</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '16.0|Win32'">c:\python36</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '17.0|Win32'">c:\python36</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '10.0|x64'">c:\python34.x64</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '11.0|x64'">c:\python34.x64</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '12.0|x64'">c:\python34.x64</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '14.0|x64'">c:\python36.x64</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '15.0|x64'">c:\python36.x64</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '16.0|x64'">c:\python36.x64</PythonDir>
-    <PythonDir Condition="'$(VisualStudioVersion)|$(Platform)' == '17.0|x64'">c:\python36.x64</PythonDir>
-
+    <PythonDir Condition="'$(Platform)' == 'Win32'">c:\python37</PythonDir>
+    <PythonDir Condition="'$(Platform)' == 'x64'">c:\python37.x64</PythonDir>
     <IntrospectPythonParam>PYTHON=$(PythonDir)\python.exe</IntrospectPythonParam>
   </PropertyGroup>
   <PropertyGroup>

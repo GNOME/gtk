@@ -181,7 +181,7 @@ If desiring to build binaries for ARM64 (aarch64), one needs to use the
 Visual Studio 2017 or 2019 solution files, or use Meson with a
 cross-compilation file, with a Windows 10 SDK that supports ARM64
 builds.  At this point, building the introspection files is not supported
-for ARM64 builds, and you will need a Python interpreter and
+for ARM64 builds, and you will need a Python 3.x interpreter and
 glib-compile-resources binaries that run on the build machine.  For Visual Studio
 2017 ARM64 builds, do also check the Directory.Build.props file in $(srcroot)/win32/vs15
 indicates a Windows 10 SDK version that supports ARM64 builds exists on the build machine.
@@ -192,11 +192,15 @@ GLIB_GENMARSHAL, GDBUS_CODEGEN and/or GLIB_COMPILE_RESOURCES in the nmake comman
 indicated by <GenerateRequiredSourcesBase>  so that they point to the glib-mkenums,
 glib-genmarshal, gdbus-codegen and glib-compile-resources that will run on the build
 machine.  You may also need to update gtk3-version-paths.props to update PythonDir to
-the installation of the Python interpreter that will run on the build machine.  To carry
+the installation of the Python 3.x interpreter that will run on the build machine.  To carry
 out the actual build using the solution files, use the "Configuration Manager" to add the
 ARM64 build configs by copying the settings from the x64 configs, and then build the solution.
 The build instructions for such builds otherwise follow the standard Win32 (x86) and
 x64 builds, but you need to ensure that you have ARM64 builds of the various dependencies.
+
+It may still be possible to carry out the build and build the introspection files with Python 2.7.x
+using older versions of GLib and GObject-Introspection, but please note that this is not recommended
+and one is on his/her own by doing so.
 
 3) Using Meson (for Visual Studio and MinGW builds)
 ---
@@ -222,7 +226,7 @@ as the source tree, and launch the Visual Studio command prompt that
 matches the build configuration (Visual Studio version and architecture),
 and run the following:
 
-- Ensure that both the installation directory of Python and its script
+- Ensure that both the installation directory of Python 3.5+ and its script
   directory is in your PATH, as well as the Ninja, CMake and pkg-config
   executables (if used).  If a pkg-config compatible drop-in replacement
   tool is being used, ensure that PKG_CONFIG is set to point to the
