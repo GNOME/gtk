@@ -479,7 +479,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page1</property>
-                <property name="title" translatable="1">Page _1</property>
+                <property name="title" translatable="yes">Page _1</property>
                 <property name="use-underline">1</property>
                 <property name="child">
                   <object class="GtkBox" id="page1">
@@ -497,7 +497,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="has-entry">1</property>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="comboboxtext-entry">
-                                    <property name="text" translatable="1">comboboxentry</property>
+                                    <property name="text" translatable="yes">comboboxentry</property>
                                   </object>
                                 </child>
                                 <items>
@@ -514,7 +514,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <child internal-child="entry">
                                   <object class="GtkEntry" id="comboboxtext-entry2">
                                     <property name="invisible-char">•</property>
-                                    <property name="text" translatable="1">comboboxentry</property>
+                                    <property name="text" translatable="yes">comboboxentry</property>
                                   </object>
                                 </child>
                               </object>
@@ -523,7 +523,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkEntry" id="entry1">
                                 <property name="enable-emoji-completion">1</property>
                                 <property name="invisible_char">•</property>
-                                <property name="placeholder-text" translatable="1">Click icon to change mode</property>
+                                <property name="placeholder-text" translatable="yes">Click icon to change mode</property>
                                 <property name="secondary-icon-name">view-refresh-symbolic</property>
                                 <property name="secondary-icon-tooltip-text">Change mode</property>
                                 <signal name="icon-release" handler="on_entry_icon_release" swapped="no"/>
@@ -532,7 +532,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkEntry" id="entry2">
                                 <property name="sensitive">0</property>
-                                <property name="text" translatable="1">entry</property>
+                                <property name="text" translatable="yes">entry</property>
                               </object>
                             </child>
                             <child>
@@ -543,7 +543,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <child>
                                   <object class="GtkEntry" id="entry24">
                                     <property name="enable-emoji-completion">1</property>
-                                    <property name="text" translatable="1">entry</property>
+                                    <property name="text" translatable="yes">entry</property>
                                     <property name="hexpand">1</property>
                                   </object>
                                 </child>
@@ -557,7 +557,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <child>
                               <object class="GtkPasswordEntry">
                                 <property name="show-peek-icon">1</property>
-                                <property name="placeholder-text" translatable="1">Password…</property>
+                                <property name="placeholder-text" translatable="yes">Password…</property>
                               </object>
                             </child>
                             <child>
@@ -612,13 +612,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="spacing">20</property>
                                 <child>
                                   <object class="GtkLabel" id="label3">
-                                    <property name="label" translatable="1">label</property>
+                                    <property name="label" translatable="yes">label</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="label4">
                                     <property name="sensitive">0</property>
-                                    <property name="label" translatable="1">label</property>
+                                    <property name="label" translatable="yes">label</property>
                                   </object>
                                 </child>
                                 <child>
@@ -644,13 +644,13 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="row-spacing">6</property>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton1">
-                                    <property name="label" translatable="1">checkbutton</property>
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="active">1</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton2">
-                                    <property name="label" translatable="1">checkbutton</property>
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <layout>
                                       <property name="column">0</property>
                                       <property name="row">1</property>
@@ -659,7 +659,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton3">
-                                    <property name="label" translatable="1">checkbutton</property>
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="inconsistent">1</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -669,7 +669,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton4">
-                                    <property name="label" translatable="1">checkbutton</property>
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="active">1</property>
                                     <layout>
@@ -680,7 +680,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton5">
-                                    <property name="label" translatable="1">checkbutton</property>
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
                                     <layout>
                                       <property name="column">0</property>
@@ -690,7 +690,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="checkbutton6">
-                                    <property name="label" translatable="1">checkbutton</property>
+                                    <property name="label" translatable="yes">checkbutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="inconsistent">1</property>
                                     <layout>
@@ -701,7 +701,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="radiobutton1">
-                                    <property name="label" translatable="1">radiobutton</property>
+                                    <property name="label" translatable="yes">radiobutton</property>
                                     <property name="active">1</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -711,7 +711,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton">
-                                    <property name="label" translatable="1">radiobutton</property>
+                                    <property name="label" translatable="yes">radiobutton</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
                                       <property name="column">1</property>
@@ -721,7 +721,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="radiobutton3">
-                                    <property name="label" translatable="1">radiobutton</property>
+                                    <property name="label" translatable="yes">radiobutton</property>
                                     <property name="inconsistent">1</property>
                                     <property name="group">radiobutton1</property>
                                     <layout>
@@ -732,7 +732,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="radiobutton4">
-                                    <property name="label" translatable="1">radiobutton</property>
+                                    <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="active">1</property>
                                     <layout>
@@ -743,7 +743,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="radiobutton5">
-                                    <property name="label" translatable="1">radiobutton</property>
+                                    <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="group">radiobutton4</property>
                                     <layout>
@@ -754,7 +754,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="radiobutton6">
-                                    <property name="label" translatable="1">radiobutton</property>
+                                    <property name="label" translatable="yes">radiobutton</property>
                                     <property name="sensitive">0</property>
                                     <property name="inconsistent">1</property>
                                     <property name="group">radiobutton4</property>
@@ -809,27 +809,27 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkToggleButton" id="togglebutton1">
-                                <property name="label" translatable="1">togglebutton</property>
+                                <property name="label" translatable="yes">togglebutton</property>
                                 <property name="receives-default">1</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkToggleButton" id="togglebutton2">
-                                <property name="label" translatable="1">togglebutton</property>
+                                <property name="label" translatable="yes">togglebutton</property>
                                 <property name="sensitive">0</property>
                                 <property name="receives-default">1</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkToggleButton" id="togglebutton3">
-                                <property name="label" translatable="1">togglebutton</property>
+                                <property name="label" translatable="yes">togglebutton</property>
                                 <property name="receives-default">1</property>
                                 <property name="active">1</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkToggleButton" id="togglebutton4">
-                                <property name="label" translatable="1">togglebutton</property>
+                                <property name="label" translatable="yes">togglebutton</property>
                                 <property name="sensitive">0</property>
                                 <property name="receives-default">1</property>
                                 <property name="active">1</property>
@@ -874,7 +874,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             </child>
                             <child>
                               <object class="GtkLinkButton" id="linkbutton1">
-                                <property name="label" translatable="1">link button</property>
+                                <property name="label" translatable="yes">link button</property>
                                 <property name="receives-default">1</property>
                                 <property name="has-tooltip">1</property>
                                 <property name="has-frame">0</property>
@@ -1061,7 +1061,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkFrame">
                                 <child type="label">
                                   <object class="GtkLabel" id="label1">
-                                    <property name="label" translatable="1">&lt;b&gt;Text Styles&lt;/b&gt;</property>
+                                    <property name="label" translatable="yes">&lt;b&gt;Text Styles&lt;/b&gt;</property>
                                     <property name="use-markup">1</property>
                                   </object>
                                 </child>
@@ -1176,7 +1176,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                                        <property name="title" translatable="1">Cool</property>
+                                        <property name="title" translatable="yes">Cool</property>
                                         <child>
                                           <object class="GtkCellRendererToggle" id="cellrenderertoggle1"/>
                                           <attributes>
@@ -1188,7 +1188,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                                        <property name="title" translatable="1">Icon</property>
+                                        <property name="title" translatable="yes">Icon</property>
                                         <property name="reorderable">1</property>
                                         <child>
                                           <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1"/>
@@ -1200,7 +1200,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                                        <property name="title" translatable="1">Name</property>
+                                        <property name="title" translatable="yes">Name</property>
                                         <property name="resizable">1</property>
                                         <property name="reorderable">1</property>
                                         <property name="sort-indicator">1</property>
@@ -1217,7 +1217,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                                        <property name="title" translatable="1">Nick</property>
+                                        <property name="title" translatable="yes">Nick</property>
                                         <property name="resizable">1</property>
                                         <property name="reorderable">1</property>
                                         <property name="sort-indicator">1</property>
@@ -1281,7 +1281,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label5">
-                                    <property name="label" translatable="1">Sunset</property>
+                                    <property name="label" translatable="yes">Sunset</property>
                                   </object>
                                 </property>
                               </object>
@@ -1307,7 +1307,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label6">
-                                    <property name="label" translatable="1">NYC</property>
+                                    <property name="label" translatable="yes">NYC</property>
                                   </object>
                                 </property>
                               </object>
@@ -1333,7 +1333,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label7">
-                                    <property name="label" translatable="1">Beach</property>
+                                    <property name="label" translatable="yes">Beach</property>
                                   </object>
                                 </property>
                               </object>
@@ -1352,7 +1352,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label8">
-                                    <property name="label" translatable="1">page 1</property>
+                                    <property name="label" translatable="yes">page 1</property>
                                   </object>
                                 </property>
                               </object>
@@ -1367,7 +1367,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label9">
-                                    <property name="label" translatable="1">page 2</property>
+                                    <property name="label" translatable="yes">page 2</property>
                                   </object>
                                 </property>
                               </object>
@@ -1382,7 +1382,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label10">
-                                    <property name="label" translatable="1">page 3</property>
+                                    <property name="label" translatable="yes">page 3</property>
                                   </object>
                                 </property>
                               </object>
@@ -1401,7 +1401,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label11">
-                                    <property name="label" translatable="1">page 1</property>
+                                    <property name="label" translatable="yes">page 1</property>
                                   </object>
                                 </property>
                               </object>
@@ -1416,7 +1416,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label12">
-                                    <property name="label" translatable="1">page 2</property>
+                                    <property name="label" translatable="yes">page 2</property>
                                   </object>
                                 </property>
                               </object>
@@ -1431,7 +1431,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label13">
-                                    <property name="label" translatable="1">page 3</property>
+                                    <property name="label" translatable="yes">page 3</property>
                                   </object>
                                 </property>
                               </object>
@@ -1450,7 +1450,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label14">
-                                    <property name="label" translatable="1">page 1</property>
+                                    <property name="label" translatable="yes">page 1</property>
                                   </object>
                                 </property>
                               </object>
@@ -1465,7 +1465,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label15">
-                                    <property name="label" translatable="1">page 2</property>
+                                    <property name="label" translatable="yes">page 2</property>
                                   </object>
                                 </property>
                               </object>
@@ -1480,7 +1480,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel" id="label16">
-                                    <property name="label" translatable="1">page 3</property>
+                                    <property name="label" translatable="yes">page 3</property>
                                   </object>
                                 </property>
                               </object>
@@ -1496,7 +1496,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page2</property>
-                <property name="title" translatable="1">Page _2</property>
+                <property name="title" translatable="yes">Page _2</property>
                 <property name="use-underline">1</property>
                 <property name="child">
                   <object class="GtkOverlay" id="page2">
@@ -1527,7 +1527,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <child>
                                   <object class="GtkButton" id="page2reset">
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1">Reset</property>
+                                    <property name="label" translatable="yes">Reset</property>
                                   </object>
                                 </child>
                                 <child>
@@ -1700,7 +1700,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Row 1</property>
+                                                <property name="label" translatable="yes">Row 1</property>
                                                 <property name="halign">1</property>
                                                 <property name="valign">3</property>
                                                 <property name="hexpand">1</property>
@@ -1723,7 +1723,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Row 2</property>
+                                                <property name="label" translatable="yes">Row 2</property>
                                                 <property name="halign">1</property>
                                                 <property name="valign">3</property>
                                                 <property name="hexpand">1</property>
@@ -1747,7 +1747,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Row 3</property>
+                                                <property name="label" translatable="yes">Row 3</property>
                                                 <property name="halign">1</property>
                                                 <property name="valign">3</property>
                                                 <property name="hexpand">1</property>
@@ -1772,7 +1772,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Row 4</property>
+                                                <property name="label" translatable="yes">Row 4</property>
                                                 <property name="halign">1</property>
                                                 <property name="valign">3</property>
                                                 <property name="hexpand">1</property>
@@ -1797,7 +1797,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Row 5</property>
+                                                <property name="label" translatable="yes">Row 5</property>
                                                 <property name="halign">1</property>
                                                 <property name="valign">3</property>
                                                 <property name="hexpand">1</property>
@@ -1821,7 +1821,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Row 6</property>
+                                                <property name="label" translatable="yes">Row 6</property>
                                                 <property name="halign">1</property>
                                                 <property name="valign">3</property>
                                                 <property name="hexpand">1</property>
@@ -1843,7 +1843,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Row 7</property>
+                                                <property name="label" translatable="yes">Row 7</property>
                                                 <property name="halign">1</property>
                                                 <property name="valign">3</property>
                                                 <property name="hexpand">1</property>
@@ -1859,7 +1859,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           <object class="GtkBox">
                                             <child>
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Row 8</property>
+                                                <property name="label" translatable="yes">Row 8</property>
                                                 <property name="halign">1</property>
                                                 <property name="valign">3</property>
                                                 <property name="hexpand">1</property>
@@ -1896,16 +1896,16 @@ microphone-sensitivity-medium-symbolic</property>
                                         </style>
                                         <child>
                                           <object class="GtkButton">
-                                            <property name="label" translatable="1">New</property>
+                                            <property name="label" translatable="yes">New</property>
                                             <property name="icon-name">document-new</property>
-                                            <property name="tooltip-text" translatable="1">Create a new document</property>
+                                            <property name="tooltip-text" translatable="yes">Create a new document</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkButton">
-                                            <property name="label" translatable="1">Save</property>
+                                            <property name="label" translatable="yes">Save</property>
                                             <property name="icon-name">document-save</property>
-                                            <property name="tooltip-text" translatable="1">Save the current document</property>
+                                            <property name="tooltip-text" translatable="yes">Save the current document</property>
                                           </object>
                                         </child>
                                         <child>
@@ -1913,24 +1913,24 @@ microphone-sensitivity-medium-symbolic</property>
                                         </child>
                                         <child>
                                           <object class="GtkButton">
-                                            <property name="label" translatable="1">Search</property>
+                                            <property name="label" translatable="yes">Search</property>
                                             <property name="icon-name">edit-find</property>
                                             <property name="action-name">win.search</property>
-                                            <property name="tooltip-text" translatable="1">Search for it</property>
+                                            <property name="tooltip-text" translatable="yes">Search for it</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkButton">
                                             <property name="sensitive">0</property>
-                                            <property name="label" translatable="1">Insert</property>
+                                            <property name="label" translatable="yes">Insert</property>
                                             <property name="icon-name">insert-image</property>
-                                            <property name="tooltip-text" translatable="1">Insert something</property>
+                                            <property name="tooltip-text" translatable="yes">Insert something</property>
                                           </object>
                                         </child>
                                         <child>
                                           <object class="GtkColorButton">
                                             <property name="rgba">#9141AC</property>
-                                            <property name="tooltip-text" translatable="1">Select a color</property>
+                                            <property name="tooltip-text" translatable="yes">Select a color</property>
                                           </object>
                                         </child>
                                       </object>
@@ -2107,32 +2107,32 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                                 <child type="label">
                                   <object class="GtkLabel" id="label19">
-                                    <property name="label" translatable="1">Expander</property>
+                                    <property name="label" translatable="yes">Expander</property>
                                   </object>
                                 </child>
                               </object>
                             </child>
                             <child>
                               <object class="GtkButton" id="info_dialog_button">
-                                <property name="label" translatable="1">_Inform</property>
+                                <property name="label" translatable="yes">_Inform</property>
                                 <property name="use-underline">1</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkButton" id="action_dialog_button">
-                                <property name="label" translatable="1">_Act</property>
+                                <property name="label" translatable="yes">_Act</property>
                                 <property name="use-underline">1</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkButton" id="preference_dialog_button">
-                                <property name="label" translatable="1">_Configure</property>
+                                <property name="label" translatable="yes">_Configure</property>
                                 <property name="use-underline">1</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkButton" id="selection_dialog_button">
-                                <property name="label" translatable="1">S_elect</property>
+                                <property name="label" translatable="yes">S_elect</property>
                                 <property name="use-underline">1</property>
                               </object>
                             </child>
@@ -2147,7 +2147,7 @@ microphone-sensitivity-medium-symbolic</property>
             <child>
               <object class="GtkStackPage">
                 <property name="name">page3</property>
-                <property name="title" translatable="1">Page _3</property>
+                <property name="title" translatable="yes">Page _3</property>
                 <property name="use-underline">1</property>
                 <property name="child">
                   <object class="GtkBox">
@@ -2179,7 +2179,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
-                                        <property name="title" translatable="1">Name</property>
+                                        <property name="title" translatable="yes">Name</property>
                                         <child>
                                           <object class="GtkCellRendererText"/>
                                           <attributes>
@@ -2190,7 +2190,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
-                                        <property name="title" translatable="1">Birth</property>
+                                        <property name="title" translatable="yes">Birth</property>
                                         <child>
                                           <object class="GtkCellRendererText"/>
                                           <attributes>
@@ -2201,7 +2201,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkTreeViewColumn">
-                                        <property name="title" translatable="1">Death</property>
+                                        <property name="title" translatable="yes">Death</property>
                                         <child>
                                           <object class="GtkCellRendererText"/>
                                           <attributes>
@@ -2219,7 +2219,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="selectable">1</property>
                                 <property name="halign">1</property>
                                 <property name="use-markup">1</property>
-                                <property name="label" translatable="1">&lt;small&gt;Data source: &lt;a href=&quot;http://en.wikipedia.org/wiki/Charlemagne#Ancestry&quot;&gt;Wikipedia&lt;/a&gt;&lt;/small&gt;</property>
+                                <property name="label" translatable="yes">&lt;small&gt;Data source: &lt;a href=&quot;http://en.wikipedia.org/wiki/Charlemagne#Ancestry&quot;&gt;Wikipedia&lt;/a&gt;&lt;/small&gt;</property>
                               </object>
                             </child>
                           </object>
@@ -2553,28 +2553,28 @@ microphone-sensitivity-medium-symbolic</property>
                                   <object class="GtkButton" id="toolbutton1">
                                     <property name="icon-name">document-open-symbolic</property>
                                     <property name="focus-on-click">0</property>
-                                    <property name="tooltip-text" translatable="1">Insert ⌘</property>
+                                    <property name="tooltip-text" translatable="yes">Insert ⌘</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="toolbutton2">
                                     <property name="icon-name">send-to-symbolic</property>
                                     <property name="focus-on-click">0</property>
-                                    <property name="tooltip-text" translatable="1">Insert ⚽</property>
+                                    <property name="tooltip-text" translatable="yes">Insert ⚽</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="toolbutton3">
                                     <property name="icon-name">view-fullscreen-symbolic</property>
                                     <property name="focus-on-click">0</property>
-                                    <property name="tooltip-text" translatable="1">Insert ⤢</property>
+                                    <property name="tooltip-text" translatable="yes">Insert ⤢</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkButton" id="toolbutton4">
                                     <property name="icon-name">star-new-symbolic</property>
                                     <property name="focus-on-click">0</property>
-                                    <property name="tooltip-text" translatable="1">Insert ☆</property>
+                                    <property name="tooltip-text" translatable="yes">Insert ☆</property>
                                   </object>
                                 </child>
                               </object>
@@ -2602,7 +2602,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="sensitive">0</property>
                                         <property name="icon-name">edit-cut-symbolic</property>
                                         <property name="focus-on-click">0</property>
-                                        <property name="tooltip-text" translatable="1">Cut</property>
+                                        <property name="tooltip-text" translatable="yes">Cut</property>
                                       </object>
                                     </child>
                                     <child>
@@ -2610,7 +2610,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="sensitive">0</property>
                                         <property name="icon-name">edit-copy-symbolic</property>
                                         <property name="focus-on-click">0</property>
-                                        <property name="tooltip-text" translatable="1">Copy</property>
+                                        <property name="tooltip-text" translatable="yes">Copy</property>
                                       </object>
                                     </child>
                                     <child>
@@ -2618,7 +2618,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="sensitive">0</property>
                                         <property name="icon-name">edit-paste-symbolic</property>
                                         <property name="focus-on-click">0</property>
-                                        <property name="tooltip-text" translatable="1">Paste</property>
+                                        <property name="tooltip-text" translatable="yes">Paste</property>
                                       </object>
                                     </child>
                                   </object>
@@ -2629,7 +2629,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="valign">2</property>
                                     <property name="icon-name">edit-delete-symbolic</property>
                                     <property name="focus-on-click">0</property>
-                                    <property name="tooltip-text" translatable="1">Delete</property>
+                                    <property name="tooltip-text" translatable="yes">Delete</property>
                                   </object>
                                 </child>
                               </object>
@@ -2715,7 +2715,7 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkBox">
                                                 <child>
                                                   <object class="GtkLabel">
-                                                    <property name="label" translatable="1">Page 1</property>
+                                                    <property name="label" translatable="yes">Page 1</property>
                                                     <property name="halign">3</property>
                                                     <property name="hexpand">1</property>
                                                   </object>
@@ -2747,7 +2747,7 @@ microphone-sensitivity-medium-symbolic</property>
                                               <object class="GtkBox">
                                                 <child>
                                                   <object class="GtkLabel">
-                                                    <property name="label" translatable="1">Page 2</property>
+                                                    <property name="label" translatable="yes">Page 2</property>
                                                     <property name="halign">3</property>
                                                     <property name="hexpand">1</property>
                                                   </object>
@@ -2781,7 +2781,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             </property>
                                             <property name="tab">
                                               <object class="GtkLabel">
-                                                <property name="label" translatable="1">Page 3</property>
+                                                <property name="label" translatable="yes">Page 3</property>
                                               </object>
                                             </property>
                                           </object>
@@ -2810,7 +2810,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkEntry">
                                 <property name="hexpand">1</property>
-                                <property name="placeholder-text" translatable="1">Name…</property>
+                                <property name="placeholder-text" translatable="yes">Name…</property>
                                 <property name="completion">name_completion</property>
                               </object>
                             </child>
@@ -2818,7 +2818,7 @@ microphone-sensitivity-medium-symbolic</property>
                               <object class="GtkEntry">
                                 <property name="hexpand">1</property>
                                 <property name="show-emoji-icon">1</property>
-                                <property name="placeholder-text" translatable="1">Age…</property>
+                                <property name="placeholder-text" translatable="yes">Age…</property>
                                 <signal name="notify::text" handler="age_entry_changed"/>
                               </object>
                             </child>
@@ -2851,7 +2851,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Page 1</property>
+                                    <property name="label" translatable="yes">Page 1</property>
                                   </object>
                                 </property>
                               </object>
@@ -2866,7 +2866,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Page 2</property>
+                                    <property name="label" translatable="yes">Page 2</property>
                                   </object>
                                 </property>
                               </object>
@@ -2879,7 +2879,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Page 3</property>
+                                    <property name="label" translatable="yes">Page 3</property>
                                   </object>
                                 </property>
                               </object>
@@ -2892,7 +2892,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Page 4</property>
+                                    <property name="label" translatable="yes">Page 4</property>
                                   </object>
                                 </property>
                               </object>
@@ -2905,7 +2905,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </property>
                                 <property name="tab">
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Page 5</property>
+                                    <property name="label" translatable="yes">Page 5</property>
                                   </object>
                                 </property>
                               </object>
@@ -2932,19 +2932,19 @@ microphone-sensitivity-medium-symbolic</property>
     <property name="transient-for">window</property>
     <property name="resizable">0</property>
     <property name="modal">1</property>
-    <property name="text" translatable="1">Do something?</property>
-    <property name="secondary-text" translatable="1">If you don't do something,
+    <property name="text" translatable="yes">Do something?</property>
+    <property name="secondary-text" translatable="yes">If you don't do something,
 bad things might happen.</property>
     <property name="hide-on-close">1</property>
     <child type="action">
       <object class="GtkButton" id="cancel_info_dialog">
-        <property name="label" translatable="1">_Cancel</property>
+        <property name="label" translatable="yes">_Cancel</property>
         <property name="use-underline">1</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="doit_info_dialog">
-        <property name="label" translatable="1">_Do It</property>
+        <property name="label" translatable="yes">_Do It</property>
         <property name="use-underline">1</property>
       </object>
     </child>
@@ -2958,7 +2958,7 @@ bad things might happen.</property>
     <property name="resizable">0</property>
     <property name="modal">1</property>
     <property name="use-header-bar">1</property>
-    <property name="title" translatable="1">Zelda</property>
+    <property name="title" translatable="yes">Zelda</property>
     <property name="hide-on-close">1</property>
     <property name="default-widget">act_action_dialog</property>
     <child internal-child="content_area">
@@ -2969,20 +2969,20 @@ bad things might happen.</property>
             <property name="margin-end">20</property>
             <property name="margin-top">20</property>
             <property name="margin-bottom">20</property>
-            <property name="label" translatable="1">To free the princess, you have to slay the dragon.</property>
+            <property name="label" translatable="yes">To free the princess, you have to slay the dragon.</property>
           </object>
         </child>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="cancel_action_dialog">
-        <property name="label" translatable="1">_Run</property>
+        <property name="label" translatable="yes">_Run</property>
         <property name="use-underline">1</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="act_action_dialog">
-        <property name="label" translatable="1">_Act</property>
+        <property name="label" translatable="yes">_Act</property>
         <property name="use-underline">1</property>
       </object>
     </child>
@@ -2996,7 +2996,7 @@ bad things might happen.</property>
     <property name="modal">1</property>
     <property name="resizable">0</property>
     <property name="use-header-bar">1</property>
-    <property name="title" translatable="1">Settings</property>
+    <property name="title" translatable="yes">Settings</property>
     <property name="hide-on-close">1</property>
     <child internal-child="content_area">
       <object class="GtkBox">
@@ -3141,7 +3141,7 @@ bad things might happen.</property>
     <property name="transient-for">window</property>
     <property name="modal">1</property>
     <property name="use-header-bar">1</property>
-    <property name="title" translatable="1">Choose one</property>
+    <property name="title" translatable="yes">Choose one</property>
     <property name="hide-on-close">1</property>
     <property name="default-widget">select_selection_dialog</property>
     <child internal-child="content_area">
@@ -3162,13 +3162,13 @@ bad things might happen.</property>
     </child>
     <child type="action">
       <object class="GtkButton" id="cancel_selection_dialog">
-        <property name="label" translatable="1">_Cancel</property>
+        <property name="label" translatable="yes">_Cancel</property>
         <property name="use-underline">1</property>
       </object>
     </child>
     <child type="action">
       <object class="GtkButton" id="select_selection_dialog">
-        <property name="label" translatable="1">_Select</property>
+        <property name="label" translatable="yes">_Select</property>
         <property name="use-underline">1</property>
       </object>
     </child>

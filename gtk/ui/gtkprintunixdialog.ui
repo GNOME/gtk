@@ -80,7 +80,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkColumnViewColumn">
-                                        <property name="title" translatable="1">Name</property>
+                                        <property name="title" translatable="yes">Name</property>
                                         <property name="factory">
                                           <object class="GtkBuilderListItemFactory">
                                             <property name="bytes"><![CDATA[
@@ -111,7 +111,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkColumnViewColumn">
-                                        <property name="title" translatable="1" comments="this is the header for the location column in the print dialog">Location</property>
+                                        <property name="title" translatable="yes" comments="this is the header for the location column in the print dialog">Location</property>
                                         <property name="factory">
                                           <object class="GtkBuilderListItemFactory">
                                             <property name="bytes"><![CDATA[
@@ -142,7 +142,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkColumnViewColumn">
-                                        <property name="title" translatable="1" comments="this is the header for the printer status column in the print dialog">Status</property>
+                                        <property name="title" translatable="yes" comments="this is the header for the printer status column in the print dialog">Status</property>
                                         <property name="expand">1</property>
                                         <property name="factory">
                                           <object class="GtkBuilderListItemFactory">
@@ -196,7 +196,7 @@
                                   <object class="GtkLabel" id="label_widget1">
                                     <property name="halign">1</property>
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1">Range</property>
+                                    <property name="label" translatable="yes">Range</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"></attribute>
                                     </attributes>
@@ -209,7 +209,7 @@
                                     <property name="column-spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="all_pages_radio">
-                                        <property name="label" translatable="1">_All Pages</property>
+                                        <property name="label" translatable="yes">_All Pages</property>
                                         <property name="use-underline">1</property>
                                         <property name="active">1</property>
                                         <layout>
@@ -221,7 +221,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="current_page_radio">
-                                        <property name="label" translatable="1">C_urrent Page</property>
+                                        <property name="label" translatable="yes">C_urrent Page</property>
                                         <property name="sensitive">0</property>
                                         <property name="use-underline">1</property>
                                         <property name="group">all_pages_radio</property>
@@ -234,7 +234,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="selection_radio">
-                                        <property name="label" translatable="1">Se_lection</property>
+                                        <property name="label" translatable="yes">Se_lection</property>
                                         <property name="sensitive">0</property>
                                         <property name="use-underline">1</property>
                                         <property name="group">all_pages_radio</property>
@@ -247,8 +247,8 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="page_range_radio">
-                                        <property name="label" translatable="1">Pag_es:</property>
-                                        <property name="tooltip-text" translatable="1">Specify one or more page ranges,
+                                        <property name="label" translatable="yes">Pag_es:</property>
+                                        <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                         <property name="use-underline">1</property>
                                         <property name="group">all_pages_radio</property>
@@ -261,7 +261,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkEntry" id="page_range_entry">
-                                        <property name="tooltip-text" translatable="1">Specify one or more page ranges,
+                                        <property name="tooltip-text" translatable="yes">Specify one or more page ranges,
  e.g. 1–3, 7, 11</property>
                                         <property name="activates-default">1</property>
                                         <signal name="notify::has-focus" handler="page_range_entry_focus_changed" swapped="no"/>
@@ -284,7 +284,7 @@
                                   <object class="GtkLabel" id="label_widget2">
                                     <property name="halign">1</property>
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1">Copies</property>
+                                    <property name="label" translatable="yes">Copies</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"></attribute>
                                     </attributes>
@@ -299,7 +299,7 @@
                                       <object class="GtkLabel" id="label4">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">Copie_s:</property>
+                                        <property name="label" translatable="yes">Copie_s:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">copies_spin</property>
                                         <layout>
@@ -322,7 +322,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="collate_check">
-                                        <property name="label" translatable="1">C_ollate</property>
+                                        <property name="label" translatable="yes">C_ollate</property>
                                         <property name="use-underline">1</property>
                                         <signal name="toggled" handler="update_collate_icon" swapped="no"/>
                                         <layout>
@@ -333,7 +333,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkCheckButton" id="reverse_check">
-                                        <property name="label" translatable="1">_Reverse</property>
+                                        <property name="label" translatable="yes">_Reverse</property>
                                         <property name="use-underline">1</property>
                                         <signal name="toggled" handler="update_collate_icon" swapped="no"/>
                                         <layout>
@@ -363,7 +363,7 @@
                     </property>
                     <property name="tab">
                       <object class="GtkLabel" id="label1">
-                        <property name="label" translatable="1">General</property>
+                        <property name="label" translatable="yes">General</property>
                       </object>
                     </property>
                   </object>
@@ -390,7 +390,7 @@
                                   <object class="GtkLabel" id="label_widget3">
                                     <property name="halign">1</property>
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1">Layout</property>
+                                    <property name="label" translatable="yes">Layout</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"></attribute>
                                     </attributes>
@@ -405,7 +405,7 @@
                                       <object class="GtkLabel" id="label5">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">T_wo-sided:</property>
+                                        <property name="label" translatable="yes">T_wo-sided:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">duplex</property>
                                         <layout>
@@ -427,7 +427,7 @@
                                       <object class="GtkLabel" id="label6">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">Pages per _side:</property>
+                                        <property name="label" translatable="yes">Pages per _side:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">pages_per_sheet</property>
                                         <layout>
@@ -451,7 +451,7 @@
                                       <object class="GtkLabel" id="label7">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">Page or_dering:</property>
+                                        <property name="label" translatable="yes">Page or_dering:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">number_up_layout</property>
                                         <layout>
@@ -474,7 +474,7 @@
                                       <object class="GtkLabel" id="label8">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">_Only print:</property>
+                                        <property name="label" translatable="yes">_Only print:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">page_set_combo</property>
                                         <layout>
@@ -506,7 +506,7 @@
                                       <object class="GtkLabel" id="label9">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">Sc_ale:</property>
+                                        <property name="label" translatable="yes">Sc_ale:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">scale_spin</property>
                                         <layout>
@@ -551,7 +551,7 @@
                                   <object class="GtkLabel" id="label_widget4">
                                     <property name="halign">1</property>
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1">Paper</property>
+                                    <property name="label" translatable="yes">Paper</property>
                                     <attributes>
                                       <attribute name="weight" value="bold"></attribute>
                                     </attributes>
@@ -566,7 +566,7 @@
                                       <object class="GtkLabel" id="label11">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">Paper _type:</property>
+                                        <property name="label" translatable="yes">Paper _type:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">paper_type</property>
                                         <layout>
@@ -588,7 +588,7 @@
                                       <object class="GtkLabel" id="label12">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">Paper _source:</property>
+                                        <property name="label" translatable="yes">Paper _source:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">paper_source</property>
                                         <layout>
@@ -610,7 +610,7 @@
                                       <object class="GtkLabel" id="label13">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">Output t_ray:</property>
+                                        <property name="label" translatable="yes">Output t_ray:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">output_tray</property>
                                         <layout>
@@ -632,7 +632,7 @@
                                       <object class="GtkLabel" id="paper_size_combo_label">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">_Paper size:</property>
+                                        <property name="label" translatable="yes">_Paper size:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">paper_size_combo</property>
                                         <layout>
@@ -655,7 +655,7 @@
                                       <object class="GtkLabel" id="orientation_combo_label">
                                         <property name="halign">1</property>
                                         <property name="valign">4</property>
-                                        <property name="label" translatable="1">Or_ientation:</property>
+                                        <property name="label" translatable="yes">Or_ientation:</property>
                                         <property name="use-underline">1</property>
                                         <property name="mnemonic-widget">orientation_combo</property>
                                         <layout>
@@ -706,7 +706,7 @@
                     </property>
                     <property name="tab">
                       <object class="GtkLabel" id="label2">
-                        <property name="label" translatable="1">Page Setup</property>
+                        <property name="label" translatable="yes">Page Setup</property>
                       </object>
                     </property>
                   </object>
@@ -729,7 +729,7 @@
                               <object class="GtkLabel" id="label_widget5">
                                 <property name="halign">1</property>
                                 <property name="valign">3</property>
-                                <property name="label" translatable="1">Job Details</property>
+                                <property name="label" translatable="yes">Job Details</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
                                 </attributes>
@@ -744,7 +744,7 @@
                                   <object class="GtkLabel" id="label16">
                                     <property name="halign">1</property>
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1">Pri_ority:</property>
+                                    <property name="label" translatable="yes">Pri_ority:</property>
                                     <property name="use-underline">1</property>
                                     <property name="mnemonic-widget">job_prio</property>
                                     <layout>
@@ -765,7 +765,7 @@
                                   <object class="GtkLabel" id="label17">
                                     <property name="halign">1</property>
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1">_Billing info:</property>
+                                    <property name="label" translatable="yes">_Billing info:</property>
                                     <property name="use-underline">1</property>
                                     <property name="mnemonic-widget">billing_info</property>
                                     <layout>
@@ -798,7 +798,7 @@
                               <object class="GtkLabel" id="label_widget6">
                                 <property name="halign">1</property>
                                 <property name="valign">3</property>
-                                <property name="label" translatable="1">Print Document</property>
+                                <property name="label" translatable="yes">Print Document</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
                                 </attributes>
@@ -811,7 +811,7 @@
                                 <property name="column-spacing">12</property>
                                 <child>
                                   <object class="GtkCheckButton" id="print_now_radio">
-                                    <property name="label" translatable="1" comments="this is one of the choices for the print at option in the print dialog">_Now</property>
+                                    <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog">_Now</property>
                                     <property name="use-underline">1</property>
                                     <property name="active">1</property>
                                     <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
@@ -825,11 +825,11 @@
                                 <child>
                                   <object class="GtkCheckButton" id="print_at_radio">
                                     <property name="sensitive">0</property>
-                                    <property name="label" translatable="1" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
+                                    <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.">A_t:</property>
                                     <property name="has-tooltip">1</property>
-                                    <property name="tooltip-markup" translatable="1">Specify the time of print,
+                                    <property name="tooltip-markup" translatable="yes">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                    <property name="tooltip-text" translatable="1" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
+                                    <property name="tooltip-text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                     <property name="use-underline">1</property>
                                     <property name="group">print_now_radio</property>
@@ -845,9 +845,9 @@
                                   <object class="GtkEntry" id="print_at_entry">
                                     <property name="sensitive">0</property>
                                     <property name="has-tooltip">1</property>
-                                    <property name="tooltip-markup" translatable="1">Specify the time of print,
+                                    <property name="tooltip-markup" translatable="yes">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
-                                    <property name="tooltip-text" translatable="1" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
+                                    <property name="tooltip-text" translatable="yes" comments="Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.">Specify the time of print,
  e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm</property>
                                     <signal name="changed" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
                                     <layout>
@@ -859,10 +859,10 @@
                                 <child>
                                   <object class="GtkCheckButton" id="print_hold_radio">
                                     <property name="sensitive">0</property>
-                                    <property name="label" translatable="1" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
+                                    <property name="label" translatable="yes" comments="this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets &apos;released&apos;.">On _hold</property>
                                     <property name="has-tooltip">1</property>
-                                    <property name="tooltip-markup" translatable="1">Hold the job until it is explicitly released</property>
-                                    <property name="tooltip-text" translatable="1">Hold the job until it is explicitly released</property>
+                                    <property name="tooltip-markup" translatable="yes">Hold the job until it is explicitly released</property>
+                                    <property name="tooltip-text" translatable="yes">Hold the job until it is explicitly released</property>
                                     <property name="use-underline">1</property>
                                     <property name="group">print_now_radio</property>
                                     <signal name="toggled" handler="update_print_at_option" object="GtkPrintUnixDialog" swapped="yes"/>
@@ -889,7 +889,7 @@
                               <object class="GtkLabel" id="label_widget7">
                                 <property name="halign">1</property>
                                 <property name="valign">3</property>
-                                <property name="label" translatable="1">Add Cover Page</property>
+                                <property name="label" translatable="yes">Add Cover Page</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
                                 </attributes>
@@ -904,7 +904,7 @@
                                   <object class="GtkLabel" id="label18">
                                     <property name="halign">1</property>
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1" comments="this is the label used for the option in the print dialog that controls the front cover page.">Be_fore:</property>
+                                    <property name="label" translatable="yes" comments="this is the label used for the option in the print dialog that controls the front cover page.">Be_fore:</property>
                                     <property name="use-underline">1</property>
                                     <property name="mnemonic-widget">cover_before</property>
                                     <layout>
@@ -925,7 +925,7 @@
                                   <object class="GtkLabel" id="label19">
                                     <property name="halign">1</property>
                                     <property name="valign">3</property>
-                                    <property name="label" translatable="1" comments="this is the label used for the option in the print dialog that controls the back cover page.">_After:</property>
+                                    <property name="label" translatable="yes" comments="this is the label used for the option in the print dialog that controls the back cover page.">_After:</property>
                                     <property name="use-underline">1</property>
                                     <property name="mnemonic-widget">cover_after</property>
                                     <layout>
@@ -954,7 +954,7 @@
                     </property>
                     <property name="tab">
                       <object class="GtkLabel" id="label3">
-                        <property name="label" translatable="1">Job</property>
+                        <property name="label" translatable="yes">Job</property>
                       </object>
                     </property>
                   </object>
@@ -984,7 +984,7 @@
                     </property>
                     <property name="tab">
                       <object class="GtkLabel" id="label20">
-                        <property name="label" translatable="1" comments="This will appear as a tab label in the print dialog.">Image Quality</property>
+                        <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog.">Image Quality</property>
                       </object>
                     </property>
                   </object>
@@ -1013,7 +1013,7 @@
                     </property>
                     <property name="tab">
                       <object class="GtkLabel" id="label21">
-                        <property name="label" translatable="1" comments="This will appear as a tab label in the print dialog.">Color</property>
+                        <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog.">Color</property>
                       </object>
                     </property>
                   </object>
@@ -1042,7 +1042,7 @@
                     </property>
                     <property name="tab">
                       <object class="GtkLabel" id="label22">
-                        <property name="label" translatable="1" comments="This will appear as a tab label in the print dialog. It&apos;s a typographical term, as in &quot;Binding and finishing&quot;">Finishing</property>
+                        <property name="label" translatable="yes" comments="This will appear as a tab label in the print dialog. It&apos;s a typographical term, as in &quot;Binding and finishing&quot;">Finishing</property>
                       </object>
                     </property>
                   </object>
@@ -1071,7 +1071,7 @@
                     </property>
                     <property name="tab">
                       <object class="GtkLabel" id="label23">
-                        <property name="label" translatable="1">Advanced</property>
+                        <property name="label" translatable="yes">Advanced</property>
                       </object>
                     </property>
                   </object>
@@ -1087,7 +1087,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="label24">
-                    <property name="label" translatable="1">Some of the settings in the dialog conflict</property>
+                    <property name="label" translatable="yes">Some of the settings in the dialog conflict</property>
                   </object>
                 </child>
               </object>

@@ -40,7 +40,7 @@
                 <property name="icon-name">color-select-symbolic</property>
                 <property name="halign">3</property>
                 <property name="valign">3</property>
-                <property name="tooltip-text" translatable="1">Pick a color from the screen</property>
+                <property name="tooltip-text" translatable="yes">Pick a color from the screen</property>
                 <signal name="clicked" handler="pick_color"/>
                 <style>
                   <class name="circular"/>
@@ -50,7 +50,7 @@
                   <property name="row">0</property>
                 </layout>
                 <accessibility>
-                  <property name="label" translatable="1">Pick a color from the screen</property>
+                  <property name="label" translatable="yes">Pick a color from the screen</property>
                 </accessibility>
               </object>
             </child>
@@ -77,7 +77,7 @@
                   <property name="row">0</property>
                 </layout>
                 <accessibility>
-                  <property name="label" translatable="1">Hexadecimal color or color name</property>
+                  <property name="label" translatable="yes">Hexadecimal color or color name</property>
                 </accessibility>
               </object>
             </child>
@@ -92,7 +92,7 @@
                   <property name="row">1</property>
                 </layout>
                 <accessibility>
-                  <property name="label" translatable="1">Hue</property>
+                  <property name="label" translatable="yes">Hue</property>
                 </accessibility>
               </object>
             </child>
@@ -111,7 +111,7 @@
                   <property name="column-span">2</property>
                 </layout>
                 <accessibility>
-                  <property name="label" translatable="1">Alpha value</property>
+                  <property name="label" translatable="yes">Alpha value</property>
                 </accessibility>
               </object>
             </child>
@@ -129,7 +129,7 @@
                   <property name="column-span">2</property>
                 </layout>
                 <accessibility>
-                  <property name="label" translatable="1">Saturation and value</property>
+                  <property name="label" translatable="yes">Saturation and value</property>
                 </accessibility>
               </object>
             </child>
@@ -153,7 +153,7 @@
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label4">
-            <property name="label" translatable="1" context="Color channel">A</property>
+            <property name="label" translatable="yes" context="Color channel">A</property>
             <layout>
               <property name="column">0</property>
               <property name="row">0</property>
@@ -189,7 +189,7 @@
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label3">
-            <property name="label" translatable="1" context="Color channel">H</property>
+            <property name="label" translatable="yes" context="Color channel">H</property>
             <layout>
               <property name="column">0</property>
               <property name="row">0</property>
@@ -226,7 +226,7 @@
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel" id="label1">
-            <property name="label" translatable="1" context="Color Channel">S</property>
+            <property name="label" translatable="yes" context="Color Channel">S</property>
             <layout>
               <property name="column">0</property>
               <property name="row">0</property>
@@ -235,7 +235,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="label2">
-            <property name="label" translatable="1" context="Color Channel">V</property>
+            <property name="label" translatable="yes" context="Color Channel">V</property>
             <layout>
               <property name="column">0</property>
               <property name="row">1</property>

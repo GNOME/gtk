@@ -59,7 +59,7 @@
                 <child>
                   <object class="GtkStackPage">
                     <property name="name">main</property>
-                    <property name="title" translatable="1">About</property>
+                    <property name="title" translatable="yes">About</property>
                     <property name="child">
                       <object class="GtkBox" id="page_vbox">
                         <property name="orientation">1</property>
@@ -120,7 +120,7 @@
                   <object class="GtkStackPage">
                     <property name="name">credits</property>
                     <property name="visible">0</property>
-                    <property name="title" translatable="1">Credits</property>
+                    <property name="title" translatable="yes">Credits</property>
                     <property name="child">
                       <object class="GtkBox" id="credits_page">
                         <property name="orientation">1</property>
@@ -160,7 +160,7 @@
                   <object class="GtkStackPage">
                     <property name="name">license</property>
                     <property name="visible">0</property>
-                    <property name="title" translatable="1">License</property>
+                    <property name="title" translatable="yes">License</property>
                     <property name="child">
                       <object class="GtkBox" id="license_page">
                         <property name="orientation">1</property>
@@ -203,7 +203,7 @@
                   <object class="GtkStackPage">
                     <property name="name">system</property>
                     <property name="visible">0</property>
-                    <property name="title" translatable="1">System</property>
+                    <property name="title" translatable="yes">System</property>
                     <property name="child">
                       <object class="GtkBox" id="system_page">
                         <property name="orientation">1</property>
