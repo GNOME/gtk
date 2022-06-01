@@ -59,6 +59,11 @@
 #include <gtk/gtkbuilderscope.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
+#include <gtk/gtkcanvas.h>
+#include <gtk/gtkcanvasbox.h>
+#include <gtk/gtkcanvasitem.h>
+#include <gtk/gtkcanvaspoint.h>
+#include <gtk/gtkcanvassize.h>
 #include <gtk/gtkcellarea.h>
 #include <gtk/gtkcellareabox.h>
 #include <gtk/gtkcellareacontext.h>
