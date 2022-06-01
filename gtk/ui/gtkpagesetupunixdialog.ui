@@ -2,7 +2,7 @@
 <interface domain="gtk40">
   <template class="GtkPageSetupUnixDialog" parent="GtkDialog">
     <property name="resizable">0</property>
-    <property name="title" translatable="1">Page Setup</property>
+    <property name="title" translatable="yes">Page Setup</property>
     <child internal-child="content_area">
       <object class="GtkBox" id="dialog-vbox1">
         <property name="orientation">1</property>
@@ -24,7 +24,7 @@
               <object class="GtkLabel" id="printer_combo_label">
                 <property name="halign">1</property>
                 <property name="valign">3</property>
-                <property name="label" translatable="1">_Format for:</property>
+                <property name="label" translatable="yes">_Format for:</property>
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">printer_combo</property>
                 <layout>
@@ -48,7 +48,7 @@
               <object class="GtkLabel" id="paper_size_combo_label">
                 <property name="halign">1</property>
                 <property name="valign">3</property>
-                <property name="label" translatable="1">_Paper size:</property>
+                <property name="label" translatable="yes">_Paper size:</property>
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">paper_size_combo</property>
                 <layout>
@@ -83,7 +83,7 @@
               <object class="GtkLabel" id="orientation_label">
                 <property name="halign">1</property>
                 <property name="valign">3</property>
-                <property name="label" translatable="1">_Orientation:</property>
+                <property name="label" translatable="yes">_Orientation:</property>
                 <property name="use-underline">1</property>
                 <property name="mnemonic-widget">portrait_radio</property>
                 <layout>
@@ -95,7 +95,7 @@
             <child>
               <object class="GtkCheckButton" id="portrait_radio">
                 <property name="active">1</property>
-                <property name="label" translatable="1">Portrait</property>
+                <property name="label" translatable="yes">Portrait</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">3</property>
@@ -106,7 +106,7 @@
               <object class="GtkCheckButton" id="reverse_portrait_radio">
                 <property name="active">1</property>
                 <property name="group">portrait_radio</property>
-                <property name="label" translatable="1">Reverse portrait</property>
+                <property name="label" translatable="yes">Reverse portrait</property>
                 <layout>
                   <property name="column">2</property>
                   <property name="row">3</property>
@@ -118,7 +118,7 @@
                 <property name="hexpand">1</property>
                 <property name="active">1</property>
                 <property name="group">portrait_radio</property>
-                <property name="label" translatable="1">Landscape</property>
+                <property name="label" translatable="yes">Landscape</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">4</property>
@@ -129,7 +129,7 @@
               <object class="GtkCheckButton" id="reverse_landscape_radio">
                 <property name="hexpand">1</property>
                 <property name="group">portrait_radio</property>
-                <property name="label" translatable="1">Reverse landscape</property>
+                <property name="label" translatable="yes">Reverse landscape</property>
                 <layout>
                   <property name="column">2</property>
                   <property name="row">4</property>

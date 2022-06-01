@@ -25,7 +25,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="1">Server Addresses</property>
+            <property name="label" translatable="yes">Server Addresses</property>
             <attributes>
               <attribute name="weight" value="bold"></attribute>
             </attributes>
@@ -37,7 +37,7 @@
         <child>
           <object class="GtkLabel">
             <property name="hexpand">1</property>
-            <property name="label" translatable="1">Server addresses are made up of a protocol prefix and an address. Examples:</property>
+            <property name="label" translatable="yes">Server addresses are made up of a protocol prefix and an address. Examples:</property>
             <property name="wrap">1</property>
             <property name="width-chars">40</property>
             <property name="max-width-chars">40</property>
@@ -63,7 +63,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="hexpand">1</property>
-                <property name="label" translatable="1">Available Protocols</property>
+                <property name="label" translatable="yes">Available Protocols</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"></attribute>
@@ -76,7 +76,7 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">Prefix</property>
+                <property name="label" translatable="yes">Prefix</property>
                 <property name="xalign">0</property>
                 <attributes>
                   <attribute name="weight" value="bold"></attribute>
@@ -115,7 +115,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
+                    <property name="label" translatable="yes" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -138,7 +138,7 @@
                 <property name="margin-bottom">12</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Recent Servers</property>
+                    <property name="label" translatable="yes">Recent Servers</property>
                     <attributes>
                       <attribute name="weight" value="bold"></attribute>
                     </attributes>
@@ -218,7 +218,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">No results found</property>
+                    <property name="label" translatable="yes">No results found</property>
                     <attributes>
                       <attribute name="weight" value="bold"></attribute>
                       <attribute name="scale" value="1.44"></attribute>
@@ -227,7 +227,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Try a different search</property>
+                    <property name="label" translatable="yes">Try a different search</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -249,7 +249,7 @@
           <object class="GtkLabel">
             <property name="hexpand">1</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="1">Connect to _Server</property>
+            <property name="label" translatable="yes">Connect to _Server</property>
             <property name="mnemonic-widget">address_entry</property>
             <property name="use-underline">1</property>
             <attributes>
@@ -259,7 +259,7 @@
         </child>
         <child type="end">
           <object class="GtkButton" id="connect_button">
-            <property name="label" translatable="1">Con_nect</property>
+            <property name="label" translatable="yes">Con_nect</property>
             <property name="use-underline">1</property>
             <property name="sensitive">0</property>
             <property name="receives-default">1</property>
@@ -274,7 +274,7 @@
               <object class="GtkEntry" id="address_entry">
                 <property name="hexpand">1</property>
                 <property name="width-chars">20</property>
-                <property name="placeholder-text" translatable="1">Enter server address…</property>
+                <property name="placeholder-text" translatable="yes">Enter server address…</property>
                 <property name="secondary-icon-name">dialog-question-symbolic</property>
                 <property name="completion">address_entry_completion</property>
                 <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes"/>

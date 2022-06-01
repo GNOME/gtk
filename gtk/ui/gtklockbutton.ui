@@ -17,13 +17,13 @@
             <child>
               <object class="GtkLabel" id="label_lock">
                 <property name="xalign">0</property>
-                <property name="label" translatable="1">Lock</property>
+                <property name="label" translatable="yes">Lock</property>
               </object>
             </child>
             <child>
               <object class="GtkLabel" id="label_unlock">
                 <property name="xalign">0</property>
-                <property name="label" translatable="1">Unlock</property>
+                <property name="label" translatable="yes">Unlock</property>
               </object>
             </child>
           </object>
