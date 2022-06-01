@@ -203,6 +203,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
   { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
   { "iconfallback", GTK_DEBUG_ICONFALLBACK, "Information about icon fallback" },
+  { "invert-text-dir", GTK_DEBUG_INVERT_TEXT_DIR, "Invert the default text direction" },
 };
 
 /* This checks to see if the process is running suid or sgid
@@ -523,6 +524,7 @@ static void
 do_post_parse_initialization (void)
 {
   GdkDisplayManager *display_manager;
+  GtkTextDirection text_dir;
   gint64 before G_GNUC_UNUSED;
 
   if (gtk_initialized)
@@ -536,7 +538,16 @@ do_post_parse_initialization (void)
   signal (SIGPIPE, SIG_IGN);
 #endif
 
-  gtk_widget_set_default_direction (gtk_get_locale_direction ());
+  text_dir = gtk_get_locale_direction ();
+
+  /* We always allow inverting the text direction, even in
+   * production builds, as SDK/IDE tooling may provide the
+   * ability for developers to test rtl/ltr inverted.
+   */
+  if (gtk_get_debug_flags () & GTK_DEBUG_INVERT_TEXT_DIR)
+    text_dir = (text_dir == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+
+  gtk_widget_set_default_direction (text_dir);
 
   gdk_event_init_types ();
 
