@@ -1098,7 +1098,47 @@ text_view_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetCharacterExtents") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      int offset = 0;
+      guint coords_type;
+
+      g_variant_get (parameters, "(iu)", &offset, &coords_type);
+
+      if (coords_type != ATSPI_COORD_TYPE_WINDOW)
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_NOT_SUPPORTED,
+                                                         "Unsupported coordinate space");
+          return;
+        }
+
+      GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+
+      GtkTextIter iter;
+      gtk_text_buffer_get_iter_at_offset (buffer, &iter, offset);
+
+      GdkRectangle rect = { 0, };
+      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (widget), &iter, &rect);
+
+      int x, y;
+      gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (widget),
+                                             GTK_TEXT_WINDOW_WIDGET,
+                                             rect.x, rect.y,
+                                             &x, &y);
+
+      double dx, dy;
+      gtk_widget_translate_coordinates (widget,
+                                        GTK_WIDGET (gtk_widget_get_native (widget)),
+                                        (double) x, (double) y, &dx, &dy);
+      x = floor (dx);
+      y = floor (dy);
+
+      g_dbus_method_invocation_return_value (invocation,
+                                             g_variant_new ("(iiii)",
+                                                            x,
+                                                            y,
+                                                            rect.width,
+                                                            rect.height));
     }
   else if (g_strcmp0 (method_name, "GetRangeExtents") == 0)
     {
