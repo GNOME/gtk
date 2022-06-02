@@ -60,6 +60,7 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
     {
       struct xdg_activation_token_v1 *token;
       struct wl_event_queue *event_queue;
+      struct wl_surface *wl_surface = NULL;
       GdkWaylandSeat *seat;
       GdkSurface *focus_surface;
       AppLaunchData app_launch_data = { 0 };
@@ -67,7 +68,6 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
       event_queue = wl_display_create_queue (display->wl_display);
 
       seat = GDK_WAYLAND_SEAT (gdk_display_get_default_seat (GDK_DISPLAY (display)));
-      focus_surface = gdk_wayland_device_get_focus (gdk_seat_get_keyboard (GDK_SEAT (seat)));
       token = xdg_activation_v1_get_activation_token (display->xdg_activation);
       wl_proxy_set_queue ((struct wl_proxy *) token, event_queue);
 
@@ -77,9 +77,13 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
       xdg_activation_token_v1_set_serial (token,
                                           _gdk_wayland_seat_get_last_implicit_grab_serial (seat, NULL),
                                           gdk_wayland_seat_get_wl_seat (GDK_SEAT (seat)));
+
+      focus_surface = gdk_wayland_device_get_focus (gdk_seat_get_keyboard (GDK_SEAT (seat)));
       if (focus_surface)
-        xdg_activation_token_v1_set_surface (token,
-                                             gdk_wayland_surface_get_wl_surface (focus_surface));
+        wl_surface = gdk_wayland_surface_get_wl_surface (focus_surface);
+      if (wl_surface)
+        xdg_activation_token_v1_set_surface (token, wl_surface);
+
       xdg_activation_token_v1_commit (token);
 
       while (app_launch_data.token == NULL)
