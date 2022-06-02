@@ -1126,6 +1126,13 @@ text_view_handle_method (GDBusConnection       *connection,
                                              rect.x, rect.y,
                                              &x, &y);
 
+      double dx, dy;
+      gtk_widget_translate_coordinates (widget,
+                                        GTK_WIDGET (gtk_widget_get_native (widget)),
+                                        (double) x, (double) y, &dx, &dy);
+      x = floor (dx);
+      y = floor (dy);
+
       g_dbus_method_invocation_return_value (invocation,
                                              g_variant_new ("(iiii)",
                                                             x,
