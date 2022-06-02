@@ -1638,9 +1638,9 @@ gtk_stack_remove (GtkStack  *stack,
  * @stack: a `GtkStack`
  * @child: a child of @stack
  *
- * Returns the `GtkStackPage` object for @child.
+ * Returns the `GtkStackPage` object for @child or NULL if @child isn't a `GtkStack` child.
  *
- * Returns: (transfer none): the `GtkStackPage` for @child
+ * Returns: (transfer none) (nullable): the `GtkStackPage` for @child
  */
 GtkStackPage *
 gtk_stack_get_page (GtkStack  *stack,
@@ -2583,7 +2583,7 @@ gtk_stack_measure (GtkWidget      *widget,
               int min_for_size;
 
               gtk_widget_measure (child, OPPOSITE_ORIENTATION (orientation), -1, &min_for_size, NULL, NULL, NULL);
-              
+
               gtk_widget_measure (child, orientation, MAX (min_for_size, for_size), &child_min, &child_nat, NULL, NULL);
             }
           else
