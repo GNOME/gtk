@@ -1719,7 +1719,7 @@ static const char builtin_hicolor_index[] =
 "[Icon Theme]\n"
 "Name=Hicolor\n"
 "Hidden=True\n"
-"Directories=16x16/actions,16x16/status,22x22/actions,24x24/actions,24x24/status,32x32/actions,32x32/status,48x48/status,64x64/actions\n"
+"Directories=16x16/actions,16x16/status,22x22/actions,24x24/actions,24x24/status,32x32/actions,32x32/status,48x48/status,64x64/actions,scalable/status,scalable/actions\n"
 "[16x16/actions]\n"
 "Size=16\n"
 "Type=Threshold\n"
@@ -1746,7 +1746,17 @@ static const char builtin_hicolor_index[] =
 "Type=Threshold\n"
 "[64x64/actions]\n"
 "Size=64\n"
-"Type=Threshold\n";
+"Type=Threshold\n"
+"[scalable/status]\n"
+"MinSize=1\n"
+"Size=128\n"
+"MaxSize=256\n"
+"Type=Scalable\n"
+"[scalable/actions]\n"
+"MinSize=1\n"
+"Size=128\n"
+"MaxSize=256\n"
+"Type=Scalable\n";
 
 static void
 insert_theme (GtkIconTheme *self,
