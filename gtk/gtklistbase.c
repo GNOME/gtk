@@ -1721,7 +1721,11 @@ gtk_list_base_drag_end (GtkGestureDrag *gesture,
                         double          offset_y,
                         GtkListBase    *self)
 {
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
   gboolean modify, extend;
+
+  if (!priv->rubberband)
+    return;
 
   gtk_list_base_drag_update (gesture, offset_x, offset_y, self);
   get_selection_modifiers (GTK_GESTURE (gesture), &modify, &extend);
