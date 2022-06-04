@@ -213,7 +213,7 @@ gdk_x11_gl_context_glx_clear_current (GdkGLContext *context)
 static gboolean
 gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
                                      gboolean      surfaceless)
-                                     
+
 {
   GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
@@ -300,68 +300,6 @@ gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
     }
 
   return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->get_damage (context);
-}
-
-static GLXContext
-create_gl3_context (GdkDisplay   *display,
-                    GLXFBConfig   config,
-                    GdkGLContext *share,
-                    int           profile,
-                    int           flags,
-                    int           major,
-                    int           minor)
-{
-  int attrib_list[] = {
-    GLX_CONTEXT_PROFILE_MASK_ARB, profile,
-    GLX_CONTEXT_MAJOR_VERSION_ARB, major,
-    GLX_CONTEXT_MINOR_VERSION_ARB, minor,
-    GLX_CONTEXT_FLAGS_ARB, flags,
-    None,
-  };
-  GLXContext res;
-
-  GdkX11GLContextGLX *share_glx = NULL;
-
-  if (share != NULL)
-    share_glx = GDK_X11_GL_CONTEXT_GLX (share);
-
-  gdk_x11_display_error_trap_push (display);
-
-  res = glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
-                                    config,
-                                    share_glx != NULL ? share_glx->glx_context : NULL,
-                                    True,
-                                    attrib_list);
-
-  if (gdk_x11_display_error_trap_pop (display))
-    return NULL;
-
-  return res;
-}
-
-static GLXContext
-create_legacy_context (GdkDisplay   *display,
-                       GLXFBConfig   config,
-                       GdkGLContext *share)
-{
-  GdkX11GLContextGLX *share_glx = NULL;
-  GLXContext res;
-
-  if (share != NULL)
-    share_glx = GDK_X11_GL_CONTEXT_GLX (share);
-
-  gdk_x11_display_error_trap_push (display);
-
-  res = glXCreateNewContext (gdk_x11_display_get_xdisplay (display),
-                             config,
-                             GLX_RGBA_TYPE,
-                             share_glx != NULL ? share_glx->glx_context : NULL,
-                             TRUE);
-
-  if (gdk_x11_display_error_trap_pop (display))
-    return NULL;
-
-  return res;
 }
 
 #ifdef HAVE_XDAMAGE
@@ -507,133 +445,110 @@ on_surface_state_changed (GdkGLContext *context)
    */
   finish_frame (context);
 }
-#endif
+#endif /* HAVE_XDAMAGE */
+
+#define N_GLX_ATTRS 16
 
 static GdkGLAPI
-gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
-                                GError       **error)
+gdk_x11_context_create_glx_context (GdkGLContext *context,
+                                    GdkGLAPI      api,
+                                    gboolean      legacy)
 {
-  GdkX11Display *display_x11;
-  GdkDisplay *display;
-  GdkX11GLContextGLX *context_glx;
-  Display *dpy;
-  GdkSurface *surface;
-  GdkGLContext *share;
-  gboolean debug_bit, compat_bit, legacy_bit;
-  int major, minor, flags;
-  GdkGLAPI api = 0;
+  GdkX11GLContextGLX *context_glx = GDK_X11_GL_CONTEXT_GLX (context);;
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+  GdkGLContext *share = gdk_display_get_gl_context (display);
+  GdkX11GLContextGLX *share_glx = NULL;
+  GdkSurface *surface = gdk_gl_context_get_surface (context);
+  GLXContext ctx;
+  int context_attribs[N_GLX_ATTRS], i = 0, flags = 0;
+  int min_major, min_minor, major, minor;
+  gboolean debug_bit, compat_bit;
 
-  display = gdk_gl_context_get_display (context);
-  dpy = gdk_x11_display_get_xdisplay (display);
-  context_glx = GDK_X11_GL_CONTEXT_GLX (context);
-  display_x11 = GDK_X11_DISPLAY (display);
-  share = gdk_display_get_gl_context (display);
-  surface = gdk_gl_context_get_surface (context);
+  if (!gdk_gl_context_is_api_allowed (context, api, NULL))
+    return 0;
 
-  gdk_gl_context_get_required_version (context, &major, &minor);
+  if (api == GDK_GL_API_GLES && legacy)
+    return 0;
+
+  /* We will use the default version matching the context status
+   * unless the user requested a version which makes sense */
+  gdk_gl_context_get_matching_version (api, legacy, 0,
+                                       &min_major, &min_minor);
+  gdk_gl_context_get_clipped_version (context, min_major, min_minor,
+                                      &major, &minor);
+
   debug_bit = gdk_gl_context_get_debug_enabled (context);
   compat_bit = gdk_gl_context_get_forward_compatible (context);
 
-  /* If there is no glXCreateContextAttribsARB() then we default to legacy */
-  legacy_bit = !display_x11->has_glx_create_context || GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY);
-
-  /* We cannot share legacy contexts with core profile ones, so the
-   * shared context is the one that decides if we're going to create
-   * a legacy context or not.
-   */
-  if (share != NULL && gdk_gl_context_is_legacy (share))
-    legacy_bit = TRUE;
-
-  flags = 0;
   if (debug_bit)
     flags |= GLX_CONTEXT_DEBUG_BIT_ARB;
   if (compat_bit)
     flags |= GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
 
+  context_attribs[i++] = GLX_CONTEXT_PROFILE_MASK_ARB;
+  if (api == GDK_GL_API_GL)
+    if (legacy)
+      context_attribs[i++] = GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB;
+    else
+      context_attribs[i++] = GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
+  else if (api == GDK_GL_API_GLES)
+    context_attribs[i++] = GLX_CONTEXT_ES2_PROFILE_BIT_EXT;
+
+  context_attribs[i++] = GLX_CONTEXT_MAJOR_VERSION_ARB;
+  context_attribs[i++] = major;
+  context_attribs[i++] = GLX_CONTEXT_MINOR_VERSION_ARB;
+  context_attribs[i++] = minor;
+  context_attribs[i++] = GLX_CONTEXT_FLAGS_ARB;
+  context_attribs[i++] = flags;
+
+  context_attribs[i++] = None;
+  g_assert (i < N_GLX_ATTRS);
+
   GDK_DISPLAY_NOTE (display, OPENGL,
-            g_message ("Creating GLX context (GL version:%d.%d, debug:%s, forward:%s, legacy:%s, GL:%s, GLES:%s)",
-                       major, minor,
-                       debug_bit ? "yes" : "no",
-                       compat_bit ? "yes" : "no",
-                       legacy_bit ? "yes" : "no",
-                       gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL) ? "yes" : "no",
-                       gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL) ? "yes" : "no"));
+                    g_message ("Creating GLX context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
+                               major, minor,
+                               debug_bit ? "yes" : "no",
+                               compat_bit ? "yes" : "no",
+                               legacy ? "yes" : "no",
+                               api == GDK_GL_API_GLES ? "yes" : "no"));
 
-  /* If we have access to GLX_ARB_create_context_profile then we can ask for
-   * a compatibility profile; if we don't, then we have to fall back to the
-   * old GLX 1.3 API.
+  if (share != NULL)
+    share_glx = GDK_X11_GL_CONTEXT_GLX (share);
+
+  gdk_x11_display_error_trap_push (display);
+
+  /* If we don't have access to GLX_ARB_create_context_profile, then
+   * we have to fall back to the old GLX 1.3 API.
    */
-  if (legacy_bit && !GDK_X11_DISPLAY (display)->has_glx_create_context)
-    {
-      GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating legacy GL context on request"));
-      /* do it below */
-    }
+  if (legacy && !display_x11->has_glx_create_context)
+    ctx = glXCreateNewContext (gdk_x11_display_get_xdisplay (display),
+                               display_x11->glx_config,
+                               GLX_RGBA_TYPE,
+                               share_glx != NULL ? share_glx->glx_context : NULL,
+                               TRUE);
+
   else
-    {
-      if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
-        {
-          int profile = legacy_bit ? GLX_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB
-                                   : GLX_CONTEXT_CORE_PROFILE_BIT_ARB;
+    ctx = glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
+                                      display_x11->glx_config,
+                                      share_glx != NULL ? share_glx->glx_context : NULL,
+                                      True,
+                                      context_attribs);
 
-          /* We need to tweak the version, otherwise we may end up requesting
-           * a compatibility context with a minimum version of 3.2, which is
-           * an error
-           */
-          if (legacy_bit)
-            {
-              major = 3;
-              minor = 0;
-            }
-
-          GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating GL3 context"));
-          context_glx->glx_context = create_gl3_context (display,
-                                                         display_x11->glx_config,
-                                                         share,
-                                                         profile,
-                                                         flags, major, minor);
-          api = GDK_GL_API_GL;
-        }
-
-      if (context_glx->glx_context == NULL && !legacy_bit &&
-          gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL))
-        {
-          GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating GL3 GLES context"));
-          context_glx->glx_context = create_gl3_context (display,
-                                                         display_x11->glx_config,
-                                                         share,
-                                                         GLX_CONTEXT_ES2_PROFILE_BIT_EXT,
-                                                         flags, major, minor);
-          api = GDK_GL_API_GLES;
-        }
-    }
-
-  /* Fall back to legacy in case the GL3 context creation failed */
-  if (context_glx->glx_context == NULL && 
-      gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
-    {
-      GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Creating fallback legacy context"));
-      context_glx->glx_context = create_legacy_context (display, display_x11->glx_config, share);
-      legacy_bit = TRUE;
-      api = GDK_GL_API_GL;
-    }
-
-  if (context_glx->glx_context == NULL)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("Unable to create a GL context"));
-      return 0;
-    }
-
-  /* Ensure that any other context is created with a legacy bit set */
-  gdk_gl_context_set_is_legacy (context, legacy_bit);
+  if (gdk_x11_display_error_trap_pop (display) || ctx == NULL)
+    return 0;
 
   GDK_DISPLAY_NOTE (display, OPENGL,
             g_message ("Realized GLX context[%p], %s, version: %d.%d",
                        context_glx->glx_context,
                        glXIsDirect (dpy, context_glx->glx_context) ? "direct" : "indirect",
                        display_x11->glx_version / 10,
+
                        display_x11->glx_version % 10));
+
+  context_glx->glx_context = ctx;
+  gdk_gl_context_set_is_legacy (context, legacy);
 
 #ifdef HAVE_XDAMAGE
   if (display_x11->have_damage &&
@@ -663,9 +578,69 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
         }
     }
 #endif
-
   return api;
 }
+
+static GdkGLAPI
+gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
+                                GError       **error)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkGLContext *share = gdk_display_get_gl_context (display);
+  gboolean legacy;
+  GdkGLAPI api, preferred_api;
+
+  if (share && gdk_gl_context_is_api_allowed (context,
+                                              gdk_gl_context_get_api (share),
+                                              NULL))
+    preferred_api = gdk_gl_context_get_api (share);
+  else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
+    preferred_api = GDK_GL_API_GL;
+  else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL))
+    preferred_api = GDK_GL_API_GLES;
+  else
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("No GL API allowed."));
+      return 0;
+    }
+
+  /* If there is no glXCreateContextAttribsARB() then we default to legacy */
+  legacy = !GDK_X11_DISPLAY (display)->has_glx_create_context;
+
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY))
+    legacy = TRUE;
+
+  /* We cannot share legacy contexts with core profile ones, so the
+   * shared context is the one that decides if we're going to create
+   * a legacy context or not.
+   */
+  if (share != NULL && gdk_gl_context_is_legacy (share))
+    legacy = TRUE;
+
+  if (preferred_api == GDK_GL_API_GL)
+    {
+      if ((api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy)) ||
+          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, legacy)) ||
+          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE)))
+        return api;
+    }
+  else
+    {
+      if ((api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GLES, FALSE)) ||
+          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, legacy)) ||
+          (api = gdk_x11_context_create_glx_context (context, GDK_GL_API_GL, TRUE)))
+        return api;
+    }
+
+  g_set_error_literal (error, GDK_GL_ERROR,
+                       GDK_GL_ERROR_NOT_AVAILABLE,
+                       _("Unable to create a GL context"));
+  return 0;
+}
+
+#undef N_GLX_ATTRS
 
 static void
 gdk_x11_gl_context_glx_dispose (GObject *gobject)
@@ -820,7 +795,7 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
           XFree (visinfo);
           continue;
         }
-    
+
       if (!visual_is_rgba (visinfo))
         {
           if (best_features < NO_ALPHA_VISUAL)
@@ -894,7 +869,7 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
 
 /*< private >
  * gdk_x11_display_init_glx:
- * @display_x11: an X11 display that has not been inited yet. 
+ * @display_x11: an X11 display that has not been inited yet.
  * @out_visual: set to the Visual to be used with the returned config
  * @out_depth: set to the depth to be used with the returned config
  * @error: Return location for error
