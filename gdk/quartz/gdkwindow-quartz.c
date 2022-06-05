@@ -279,6 +279,10 @@ gdk_window_impl_quartz_finalize (GObject *object)
       [impl->view release];
     }
 
+  impl->view = NULL;
+  impl->transient_for = NULL;
+  impl->toplevel = NULL;
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -376,6 +380,7 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
   impl->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   impl->view      = NULL;
   impl->toplevel  = NULL;
+  impl->transient_for = NULL;
 }
 
 static gboolean
@@ -755,7 +760,7 @@ find_child_window_helper (GdkWindow *window,
                                            get_toplevel);
 	}
     }
-  
+
   return window;
 }
 
@@ -1146,6 +1151,9 @@ gdk_quartz_window_destroy (GdkWindow *window,
       else if (impl->view)
 	[impl->view removeFromSuperview];
 
+      impl->view = NULL;
+      impl->toplevel = NULL;
+
       GDK_QUARTZ_RELEASE_POOL;
     }
 }
@@ -1206,7 +1214,7 @@ gdk_window_quartz_show (GdkWindow *window, gboolean already_mapped)
 }
 
 /* Temporarily unsets the parent window, if the window is a
- * transient. 
+ * transient.
  */
 void
 _gdk_quartz_window_detach_from_parent (GdkWindow *window)
