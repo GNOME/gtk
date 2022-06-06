@@ -40,7 +40,7 @@
 #include "gtklabel.h"
 #include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
-#include "gdk/quartz/gdkinternal-quartz.h"
+#include <quartz/gdkquartz-cocoa-access.h>
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= 1060
 typedef struct {
@@ -533,7 +533,7 @@ gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self)
   if (transient_for)
     {
       gtk_widget_realize (GTK_WIDGET (transient_for));
-      data->parent = gdk_quartz_window_search_for_nearest_nswindow (gtk_widget_get_window (GTK_WIDGET (transient_for)));
+      data->parent = gdk_quartz_window_get_nswindow (gtk_widget_get_window (GTK_WIDGET (transient_for)));
 
       if (gtk_native_dialog_get_modal (GTK_NATIVE_DIALOG (self)))
         data->modal = TRUE;

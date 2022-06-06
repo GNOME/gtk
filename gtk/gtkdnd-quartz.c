@@ -42,7 +42,7 @@
 #include "gtkintl.h"
 #include "gtkquartz.h"
 #include "gdk/quartz/gdkquartz.h"
-#include "gdk/quartz/gdkinternal-quartz.h"
+#include "gdk/quartz/gdkquartz-cocoa-access.h"
 #include "gdk/quartz/gdkquartz-gtk-only.h"
 #include "gdk/quartz/gdkquartzdnd.h"
 #include "gtkselectionprivate.h"
@@ -364,7 +364,7 @@ get_toplevel_nswindow (GtkWidget *widget)
     return NULL;
 
   if (gtk_widget_is_toplevel (toplevel) && window)
-    return [gdk_quartz_window_search_for_nearest_nsview (window) window];
+    return [gdk_quartz_window_get_nsview (window) window];
   else
     return NULL;
 }

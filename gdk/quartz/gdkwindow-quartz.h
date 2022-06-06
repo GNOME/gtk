@@ -87,11 +87,6 @@ CGContextRef gdk_quartz_window_get_context     (GdkWindowImplQuartz *window,
 void         gdk_quartz_window_release_context (GdkWindowImplQuartz *window,
                                                 CGContextRef         context);
 
-_GDK_EXTERN /* Required for immmodule.cache */
-NSView *     gdk_quartz_window_search_for_nearest_nsview   (GdkWindow *window);
-_GDK_EXTERN /* Required for immmodule.cache */
-NSWindow *   gdk_quartz_window_search_for_nearest_nswindow (GdkWindow *window);
-
 /* Root window implementation for Quartz
  */
 

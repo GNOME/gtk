@@ -35,6 +35,7 @@
 #include "gdkquartzdisplay.h"
 #include "gdkprivate-quartz.h"
 #include "gdkinternal-quartz.h"
+#include "gdkquartz-cocoa-access.h"
 #include "gdkquartzdevicemanager-core.h"
 #include "gdkquartzkeys.h"
 #include "gdkkeys-quartz.h"
@@ -387,7 +388,7 @@ get_window_point_from_screen_point (GdkWindow *window,
   NSPoint point;
   GdkQuartzNSWindow *nswindow;
 
-  nswindow = gdk_quartz_window_search_for_nearest_nswindow (window);
+  nswindow = gdk_quartz_window_get_nswindow (window);
   point = [nswindow convertPointFromScreen:screen_point];
   *x = point.x;
   *y = window->height - point.y;

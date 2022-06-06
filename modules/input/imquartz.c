@@ -227,7 +227,7 @@ quartz_filter_keypress (GtkIMContext *context,
         return gtk_im_context_filter_keypress (qc->slave, event);
     }
 
-  nsview = gdk_quartz_window_search_for_nearest_nsview (qc->client_window);
+  nsview = gdk_quartz_window_get_nsview (qc->client_window);
 
   win = (GdkWindow *)[(GdkQuartzView *)[[nsevent window] contentView] gdkWindow];
   GTK_NOTE (MISC, g_print ("client_window: %p, win: %p, nsview: %p\n",
@@ -272,7 +272,7 @@ discard_preedit (GtkIMContext *context)
   if (!GDK_IS_QUARTZ_WINDOW (qc->client_window))
     return;
 
-  NSView *nsview = gdk_quartz_window_search_for_nearest_nsview (qc->client_window);
+  NSView *nsview = gdk_quartz_window_get_nsview (qc->client_window);
   if (!nsview)
     return;
 
@@ -361,7 +361,7 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   if (!GDK_IS_QUARTZ_WINDOW (qc->client_window))
     return;
 
-  nsview = gdk_quartz_window_search_for_nearest_nsview (qc->client_window);
+  nsview = gdk_quartz_window_get_nsview (qc->client_window);
   if (nsview == NULL)
     return;
 

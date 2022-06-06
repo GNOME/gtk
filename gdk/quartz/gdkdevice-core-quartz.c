@@ -27,6 +27,7 @@
 #include "gdkprivate-quartz.h"
 #include "gdkquartzdevice-core.h"
 #include "gdkinternal-quartz.h"
+#include "gdkquartz-cocoa-access.h"
 
 struct _GdkQuartzDeviceCore
 {
@@ -230,7 +231,7 @@ gdk_quartz_device_core_query_state_helper (GdkWindow       *window,
     {
       NSWindow *nswindow;
 
-      nswindow = gdk_quartz_window_search_for_nearest_nswindow (window);
+      nswindow = gdk_quartz_window_get_nswindow (window);
 
       point = [nswindow mouseLocationOutsideOfEventStream];
 

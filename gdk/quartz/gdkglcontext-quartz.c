@@ -28,7 +28,7 @@
 #include "gdkquartzglcontext.h"
 #include "gdkquartzwindow.h"
 #include "gdkprivate-quartz.h"
-#include "gdkinternal-quartz.h"
+#include "gdkquartz-cocoa-access.h"
 
 #include "gdkinternals.h"
 
@@ -138,7 +138,7 @@ gdk_quartz_window_create_gl_context (GdkWindow     *window,
 
   if (attached)
     {
-      NSView *view = gdk_quartz_window_search_for_nearest_nsview (window);
+      NSView *view = gdk_quartz_window_get_nsview (window);
 
       if ([view respondsToSelector:@selector(setWantsBestResolutionOpenGLSurface:)])
         [view setWantsBestResolutionOpenGLSurface:YES];
