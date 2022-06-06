@@ -47,7 +47,7 @@
                 <property name="valign">3</property>
                 <property name="margin-start">4px</property>
                 <property name="icon-name">media-eject-symbolic</property>
-                <property name="tooltip-text" translatable="1">Unmount</property>
+                <property name="tooltip-text" translatable="yes">Unmount</property>
                 <style>
                   <class name="sidebar-button"/>
                 </style>

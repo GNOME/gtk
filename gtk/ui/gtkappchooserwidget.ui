@@ -97,7 +97,7 @@
             </child>
             <child>
               <object class="GtkLabel" id="no_apps_label">
-                <property name="label" translatable="1">No applications found.</property>
+                <property name="label" translatable="yes">No applications found.</property>
                 <property name="halign">3</property>
                 <property name="valign">3</property>
                 <property name="wrap">1</property>

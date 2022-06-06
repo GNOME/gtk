@@ -61,7 +61,7 @@
                                         </child>
                                         <child>
                                           <object class="GtkMenuButton" id="browse_new_folder_button">
-                                            <property name="tooltip-text" translatable="1">Create Folder</property>
+                                            <property name="tooltip-text" translatable="yes">Create Folder</property>
                                             <property name="popover">new_folder_popover</property>
                                             <property name="icon-name">folder-new-symbolic</property>
                                           </object>
@@ -165,7 +165,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkTreeViewColumn" id="list_name_column">
-                                                <property name="title" translatable="1">Name</property>
+                                                <property name="title" translatable="yes">Name</property>
                                                 <property name="resizable">1</property>
                                                 <property name="expand">1</property>
                                                 <child>
@@ -183,7 +183,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkTreeViewColumn" id="list_location_column">
-                                                <property name="title" translatable="1">Location</property>
+                                                <property name="title" translatable="yes">Location</property>
                                                 <property name="resizable">1</property>
                                                 <property name="visible">0</property>
                                                 <property name="expand">1</property>
@@ -199,7 +199,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkTreeViewColumn" id="list_size_column">
-                                                <property name="title" translatable="1">Size</property>
+                                                <property name="title" translatable="yes">Size</property>
                                                 <property name="sizing">2</property>
                                                 <child>
                                                   <object class="GtkCellRendererText" id="list_size_renderer">
@@ -211,7 +211,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkTreeViewColumn" id="list_type_column">
-                                                <property name="title" translatable="1">Type</property>
+                                                <property name="title" translatable="yes">Type</property>
                                                 <property name="resizable">1</property>
                                                 <child>
                                                   <object class="GtkCellRendererText" id="list_type_renderer">
@@ -223,7 +223,7 @@
                                             </child>
                                             <child>
                                               <object class="GtkTreeViewColumn" id="list_time_column">
-                                                <property name="title" translatable="1">Modified</property>
+                                                <property name="title" translatable="yes">Modified</property>
                                                 <property name="sizing">2</property>
                                                 <child>
                                                   <object class="GtkCellRendererText" id="list_date_renderer">
@@ -246,7 +246,7 @@
                                         <property name="visible">0</property>
                                         <child type="center">
                                           <object class="GtkLabel">
-                                            <property name="label" translatable="1">Remote location — only searching the current folder</property>
+                                            <property name="label" translatable="yes">Remote location — only searching the current folder</property>
                                           </object>
                                         </child>
                                       </object>
@@ -294,7 +294,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="label" translatable="1">No Results Found</property>
+                                        <property name="label" translatable="yes">No Results Found</property>
                                         <attributes>
                                           <attribute name="weight" value="bold"></attribute>
                                           <attribute name="scale" value="1.44"></attribute>
@@ -307,7 +307,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkLabel">
-                                        <property name="label" translatable="1">Try a different search</property>
+                                        <property name="label" translatable="yes">Try a different search</property>
                                         <style>
                                           <class name="dim-label"/>
                                         </style>
@@ -343,7 +343,7 @@
               <object class="GtkBox" id="filter_combo_hbox">
                 <child>
                   <object class="GtkDropDown" id="filter_combo">
-                    <property name="tooltip-text" translatable="1">Select which types of files are shown</property>
+                    <property name="tooltip-text" translatable="yes">Select which types of files are shown</property>
                     <property name="focus-on-click">0</property>
                     <property name="valign">1</property>
                     <signal name="notify::selected" handler="filter_combo_changed" swapped="no"/>
@@ -375,7 +375,7 @@
         <property name="row-spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Folder Name</property>
+            <property name="label" translatable="yes">Folder Name</property>
             <property name="halign">1</property>
             <property name="mnemonic-widget">new_folder_name_entry</property>
             <attributes>
@@ -401,7 +401,7 @@
         <child>
           <object class="GtkButton" id="new_folder_create_button">
             <property name="sensitive">0</property>
-            <property name="label" translatable="1">_Create</property>
+            <property name="label" translatable="yes">_Create</property>
             <property name="use-underline">1</property>
             <signal name="clicked" handler="new_folder_create_clicked"/>
             <style>
@@ -437,7 +437,7 @@
         <property name="column-spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Name</property>
+            <property name="label" translatable="yes">Name</property>
             <property name="halign">1</property>
             <property name="mnemonic-widget">rename_file_name_entry</property>
             <attributes>
@@ -462,7 +462,7 @@
         <child>
           <object class="GtkButton" id="rename_file_rename_button">
             <property name="sensitive">0</property>
-            <property name="label" translatable="1">_Rename</property>
+            <property name="label" translatable="yes">_Rename</property>
             <property name="use-underline">1</property>
             <signal name="clicked" handler="rename_file_rename_clicked"/>
             <style>

@@ -37,7 +37,7 @@
                 <child>
                   <object class="GtkButton" id="close">
                     <property name="visible">0</property>
-                    <property name="label" translatable="1">_Close</property>
+                    <property name="label" translatable="yes">_Close</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -49,7 +49,7 @@
                 <child>
                   <object class="GtkButton" id="cancel">
                     <property name="visible">0</property>
-                    <property name="label" translatable="1">_Cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -61,7 +61,7 @@
                 <child>
                   <object class="GtkButton" id="last">
                     <property name="visible">0</property>
-                    <property name="label" translatable="1">_Finish</property>
+                    <property name="label" translatable="yes">_Finish</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -72,7 +72,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="back">
-                    <property name="label" translatable="1">_Back</property>
+                    <property name="label" translatable="yes">_Back</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -83,7 +83,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="forward">
-                    <property name="label" translatable="1">_Next</property>
+                    <property name="label" translatable="yes">_Next</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
@@ -95,7 +95,7 @@
                 <child>
                   <object class="GtkButton" id="apply">
                     <property name="visible">0</property>
-                    <property name="label" translatable="1">_Apply</property>
+                    <property name="label" translatable="yes">_Apply</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
                     <style>
