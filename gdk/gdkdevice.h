@@ -66,10 +66,15 @@ typedef enum
 /**
  * GdkTimeCoord:
  * @time: The timestamp for this event
- * @flags: Flags indicating what axes are present
- * @axes: (array fixed-size=12): axis values
+ * @flags: Flags indicating what axes are present, see [flags@Gdk.AxisFlags]
+ * @axes: (array fixed-size=12): axis values, indexed by [enum@Gdk.AxisUse]
  *
  * A `GdkTimeCoord` stores a single event in a motion history.
+ *
+ * To check whether an axis is present, check whether the corresponding
+ * flag from the [flags@Gdk.AxisFlags] enumeration is set in the @flags
+ * To access individual axis values, use the values of the values of
+ * the [enum@Gdk.AxisUse] enumerations as indices.
  */
 struct _GdkTimeCoord
 {
