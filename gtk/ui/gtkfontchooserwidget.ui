@@ -61,7 +61,7 @@
                       <object class="GtkSearchEntry" id="search_entry">
                         <property name="hexpand">1</property>
                         <property name="activates-default">1</property>
-                        <property name="placeholder-text" translatable="1">Search font name</property>
+                        <property name="placeholder-text" translatable="yes">Search font name</property>
                         <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
                       </object>
                     </child>
@@ -76,7 +76,7 @@
                                 <property name="spacing">6</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Filter by</property>
+                                    <property name="label" translatable="yes">Filter by</property>
                                     <property name="width-chars">20</property>
                                     <property name="margin-bottom">10</property>
                                     <style>
@@ -86,13 +86,13 @@
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="monospace_button">
-                                    <property name="label" translatable="1">Monospace</property>
+                                    <property name="label" translatable="yes">Monospace</property>
                                     <signal name="notify::active" handler="monospace_check_changed"/>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="GtkCheckButton" id="language_button">
-                                    <property name="label" translatable="1">Language</property>
+                                    <property name="label" translatable="yes">Language</property>
                                     <signal name="notify::active" handler="language_check_changed"/>
                                   </object>
                                 </child>
@@ -185,10 +185,10 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="preview">
-                                <property name="placeholder-text" translatable="1">Preview text</property>
+                                <property name="placeholder-text" translatable="yes">Preview text</property>
                                 <child>
                                   <object class="GtkEventControllerScroll">
-                                    <property name="flags" translatable="1">horizontal</property>
+                                    <property name="flags" translatable="yes">horizontal</property>
                                     <signal name="scroll" handler="resize_by_scroll_cb"/>
                                   </object>
                                 </child>
@@ -201,7 +201,7 @@
                             </child>
                             <child>
                               <object class="GtkLabel" id="size_label">
-                                <property name="label" translatable="1">Size</property>
+                                <property name="label" translatable="yes">Size</property>
                                 <property name="xalign">0</property>
                                 <property name="valign">4</property>
                                 <layout>
@@ -217,7 +217,7 @@
                                 <property name="round-digits">0</property>
                                 <child>
                                   <object class="GtkEventControllerScroll">
-                                    <property name="flags" translatable="1">horizontal</property>
+                                    <property name="flags" translatable="yes">horizontal</property>
                                     <signal name="scroll" handler="resize_by_scroll_cb"/>
                                   </object>
                                 </child>
@@ -267,7 +267,7 @@
                             </child>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">No Fonts Found</property>
+                                <property name="label" translatable="yes">No Fonts Found</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"></attribute>
                                   <attribute name="scale" value="1.2"></attribute>
@@ -321,7 +321,7 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="preview2">
-                    <property name="placeholder-text" translatable="1">Preview text</property>
+                    <property name="placeholder-text" translatable="yes">Preview text</property>
                     <property name="text" bind-source="preview" bind-property="text" bind-flags="bidirectional"/>
                     <property name="attributes" bind-source="preview" bind-property="attributes" bind-flags="bidirectional"/>
                   </object>
@@ -348,7 +348,7 @@
                             <property name="column-spacing">12</property>
                             <child>
                               <object class="GtkLabel" id="size_label2">
-                                <property name="label" translatable="1">Size</property>
+                                <property name="label" translatable="yes">Size</property>
                                 <property name="xalign">0</property>
                                 <property name="valign">4</property>
                                 <layout>
