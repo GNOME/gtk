@@ -1363,34 +1363,20 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
   self_width = gtk_widget_get_width (GTK_WIDGET (self));
   self_height = gtk_widget_get_height (GTK_WIDGET (self));
 
-  if (y + height + GTK_LIST_BASE_CHILD_MAX_OVERDRAW <= 0 ||
-      y - GTK_LIST_BASE_CHILD_MAX_OVERDRAW >= self_height ||
-      x + width + GTK_LIST_BASE_CHILD_MAX_OVERDRAW <= 0 ||
-      x - GTK_LIST_BASE_CHILD_MAX_OVERDRAW >= self_width)
-    {
-      /* child is fully outside the viewport, hide it and don't allocate it */
-      gtk_widget_set_child_visible (child, FALSE);
-      return;
-    }
-
-  gtk_widget_set_child_visible (child, TRUE);
-
   if (gtk_list_base_get_orientation (GTK_LIST_BASE (self)) == GTK_ORIENTATION_VERTICAL)
     {
       if (_gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_LTR)
         {
           child_allocation.x = x;
           child_allocation.y = y;
-          child_allocation.width = width;
-          child_allocation.height = height;
         }
       else
         {
           child_allocation.x = self_width - x - width;
           child_allocation.y = y;
-          child_allocation.width = width;
-          child_allocation.height = height;
         }
+      child_allocation.width = width;
+      child_allocation.height = height;
     }
   else
     {
@@ -1398,17 +1384,31 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
         {
           child_allocation.x = y;
           child_allocation.y = x;
-          child_allocation.width = height;
-          child_allocation.height = width;
         }
       else
         {
           child_allocation.x = self_width - y - height;
           child_allocation.y = x;
-          child_allocation.width = height;
-          child_allocation.height = width;
         }
+      child_allocation.width = height;
+      child_allocation.height = width;
     }
+
+  if (!gdk_rectangle_intersect (&child_allocation,
+                                &(GdkRectangle) {
+                                  - GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
+                                  - GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
+                                  self_width + GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
+                                  self_height + GTK_LIST_BASE_CHILD_MAX_OVERDRAW
+                                },
+                                NULL))
+    {
+      /* child is fully outside the viewport, hide it and don't allocate it */
+      gtk_widget_set_child_visible (child, FALSE);
+      return;
+    }
+
+  gtk_widget_set_child_visible (child, TRUE);
 
   gtk_widget_size_allocate (child, &child_allocation, -1);
 }
