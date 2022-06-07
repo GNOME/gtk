@@ -200,7 +200,7 @@ row_data_bind (RowData        *data,
 
   row_data_update_info (data, info);
 
-  gtk_label_set_label (GTK_LABEL (data->name), g_file_info_get_display_name (info));
+  gtk_inscription_set_text (GTK_LABEL (data->name), g_file_info_get_display_name (info));
 
   g_object_unref (info);
 }
@@ -237,10 +237,10 @@ setup_widget (GtkListItem *list_item,
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_container_add (GTK_CONTAINER (list_item), box);
 
-  child = gtk_label_new (NULL);
-  gtk_label_set_width_chars (GTK_LABEL (child), 5);
-  gtk_label_set_xalign (GTK_LABEL (child), 1.0);
-  g_object_bind_property (list_item, "position", child, "label", G_BINDING_SYNC_CREATE);
+  child = gtk_inscription_new (NULL);
+  gtk_inscription_set_min_chars (GTK_LABEL (child), 5);
+  gtk_inscription_set_xalign (GTK_LABEL (child), 1.0);
+  g_object_bind_property (list_item, "position", child, "text", G_BINDING_SYNC_CREATE);
   gtk_container_add (GTK_CONTAINER (box), child);
 
   data->expander = gtk_tree_expander_new ();
@@ -252,9 +252,8 @@ setup_widget (GtkListItem *list_item,
   data->icon = gtk_image_new ();
   gtk_container_add (GTK_CONTAINER (box), data->icon);
 
-  data->name = gtk_label_new (NULL);
-  gtk_label_set_max_width_chars (GTK_LABEL (data->name), 25);
-  gtk_label_set_ellipsize (GTK_LABEL (data->name), PANGO_ELLIPSIZE_END);
+  data->name = gtk_inscription_new (NULL);
+  gtk_inscription_set_nat_chars (GTK_LABEL (data->name), 25);
   gtk_container_add (GTK_CONTAINER (box), data->name);
 }
 #endif
@@ -441,10 +440,8 @@ const char *ui_file =
 "              </object>\n"
 "            </child>\n"
 "            <child>\n"
-"              <object class='GtkLabel'>\n"
-"                <property name='halign'>start</property>\n"
-"                <property name='label'>start</property>\n"
-"                <binding name='label'>\n"
+"              <object class='GtkInscription'>\n"
+"                <binding name='text'>\n"
 "                  <closure type='gchararray' function='get_string'>\n"
 "                    <lookup name='item'>expander</lookup>\n"
 "                    <constant type='gchararray'>standard::display-name</constant>"
@@ -480,9 +477,8 @@ const char *ui_file =
 "<interface>\n" \
 "  <template class='GtkListItem'>\n" \
 "    <property name='child'>\n" \
-"      <object class='GtkLabel'>\n" \
-"        <property name='halign'>start</property>\n" \
-"        <binding name='label'>\n" \
+"      <object class='GtkInscription'>\n" \
+"        <binding name='text'>\n" \
 "          <closure type='gchararray' function='get_string'>\n" \
 "            <lookup name='item' type='GtkTreeListRow'><lookup name='item'>GtkListItem</lookup></lookup>\n" \
 "            <constant type='gchararray'>" attr "</constant>" \
@@ -623,6 +619,7 @@ const char *factory_ui =
 "  <template class='GtkListItem'>\n"
 "    <property name='child'>\n"
 "      <object class='GtkLabel'>\n"
+"        <property name='xalign'>0</property>\n"
 "        <binding name='label'>\n"
 "          <lookup name='title' type='GtkColumnViewColumn'>\n"
 "            <lookup name='item'>GtkListItem</lookup>\n"
