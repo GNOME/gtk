@@ -841,6 +841,8 @@ match_object (GObject    *object,
     return match_string (gtk_window_get_title (GTK_WINDOW (object)), text);
   else if (GTK_IS_TREE_VIEW_COLUMN (object))
     return match_string (gtk_tree_view_column_get_title (GTK_TREE_VIEW_COLUMN (object)), text);
+  else if (GTK_IS_EDITABLE (object))
+    return match_string (gtk_editable_get_text (GTK_EDITABLE (object)), text);
 
   address = g_strdup_printf ("%p", object);
   ret = match_string (address, text);
@@ -1094,6 +1096,8 @@ bind_label_cb (GtkSignalListItemFactory *factory,
     binding = g_object_bind_property (item, "title", label, "label", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_TREE_VIEW_COLUMN (item))
     binding = g_object_bind_property (item, "title", label, "label", G_BINDING_SYNC_CREATE);
+  else if (GTK_IS_EDITABLE (item))
+    binding = g_object_bind_property (item, "text", label, "label", G_BINDING_SYNC_CREATE);
   else
     gtk_label_set_label (GTK_LABEL (label), NULL);
 
