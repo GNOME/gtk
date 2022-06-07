@@ -1068,8 +1068,7 @@ gdk_wayland_screen_get_setting (GdkScreen   *screen,
     {
       if (strcmp (name, "gtk-decoration-layout") == 0)
         set_decoration_layout_from_entry (screen, entry, value);
-      else if (strcmp (name, "gtk-theme-name") == 0 ||
-               strcmp (name, "gtk-icon-theme-name") == 0)
+      else if (strcmp (name, "gtk-theme-name") == 0)
         set_theme_from_entry (screen, entry, value);
       else
         set_value_from_entry (screen, entry, value);
