@@ -836,6 +836,8 @@ match_object (GObject    *object,
 
   if (GTK_IS_LABEL (object))
     return match_string (gtk_label_get_label (GTK_LABEL (object)), text);
+  if (GTK_IS_INSCRIPTION (object))
+    return match_string (gtk_inscription_get_text (GTK_INSCRIPTION (object)), text);
   else if (GTK_IS_BUTTON (object))
     return match_string (gtk_button_get_label (GTK_BUTTON (object)), text);
   else if (GTK_IS_WINDOW (object))
@@ -1086,6 +1088,8 @@ bind_label_cb (GtkSignalListItemFactory *factory,
 
   if (GTK_IS_LABEL (item))
     binding = g_object_bind_property (item, "label", inscription, "text", G_BINDING_SYNC_CREATE);
+  if (GTK_IS_INSCRIPTION (item))
+    binding = g_object_bind_property (item, "text", inscription, "text", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_BUTTON (item))
     binding = g_object_bind_property (item, "label", inscription, "text", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_WINDOW (item))
