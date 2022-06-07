@@ -41,6 +41,7 @@
 #include "gtkflattenlistmodel.h"
 #include "gtkbuiltiniconprivate.h"
 #include "gtkiconview.h"
+#include "gtkinscription.h"
 #include "gtklabel.h"
 #include "gtklistitem.h"
 #include "gtkpopover.h"
@@ -975,24 +976,23 @@ static void
 setup_type_cb (GtkSignalListItemFactory *factory,
                GtkListItem              *list_item)
 {
-  GtkWidget *expander, *label;
+  GtkWidget *expander, *inscription;
 
   /* expander */
   expander = gtk_tree_expander_new ();
   gtk_list_item_set_child (list_item, expander);
 
   /* label */
-  label = gtk_label_new (NULL);
-  gtk_label_set_width_chars (GTK_LABEL (label), 30);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), label);
+  inscription = gtk_inscription_new (NULL);
+  gtk_inscription_set_nat_chars (GTK_INSCRIPTION (inscription), 30);
+  gtk_tree_expander_set_child (GTK_TREE_EXPANDER (expander), inscription);
 }
 
 static void
 bind_type_cb (GtkSignalListItemFactory *factory,
               GtkListItem              *list_item)
 {
-  GtkWidget *expander, *label;
+  GtkWidget *expander, *inscription;
   GtkTreeListRow *list_row;
   gpointer item;
 
@@ -1001,17 +1001,17 @@ bind_type_cb (GtkSignalListItemFactory *factory,
   gtk_tree_expander_set_list_row (GTK_TREE_EXPANDER (expander), list_row);
   item = gtk_tree_list_row_get_item (list_row);
   expander = gtk_list_item_get_child (list_item);
-  label = gtk_tree_expander_get_child (GTK_TREE_EXPANDER (expander));
+  inscription = gtk_tree_expander_get_child (GTK_TREE_EXPANDER (expander));
 
-  gtk_label_set_label (GTK_LABEL (label), G_OBJECT_TYPE_NAME (item));
+  gtk_inscription_set_text (GTK_INSCRIPTION (inscription), G_OBJECT_TYPE_NAME (item));
 
   if (GTK_IS_WIDGET (item))
     {
-      g_signal_connect (item, "map", G_CALLBACK (widget_mapped), label);
-      g_signal_connect (item, "unmap", G_CALLBACK (widget_unmapped), label);
+      g_signal_connect (item, "map", G_CALLBACK (widget_mapped), inscription);
+      g_signal_connect (item, "unmap", G_CALLBACK (widget_unmapped), inscription);
       if (!gtk_widget_get_mapped (item))
-        widget_unmapped (item, label);
-      g_object_set_data (G_OBJECT (label), "binding", g_object_ref (item));
+        widget_unmapped (item, inscription);
+      g_object_set_data (G_OBJECT (inscription), "binding", g_object_ref (item));
     }
 
   g_object_unref (item);
@@ -1040,26 +1040,24 @@ static void
 setup_name_cb (GtkSignalListItemFactory *factory,
                GtkListItem              *list_item)
 {
-  GtkWidget *label;
+  GtkWidget *inscription;
 
-  label = gtk_label_new (NULL);
-  gtk_label_set_width_chars (GTK_LABEL (label), 15);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_list_item_set_child (list_item, label);
+  inscription = gtk_inscription_new (NULL);
+  gtk_inscription_set_nat_chars (GTK_INSCRIPTION (inscription), 15);
+  gtk_list_item_set_child (list_item, inscription);
 }
 
 static void
 bind_name_cb (GtkSignalListItemFactory *factory,
               GtkListItem              *list_item)
 {
-  GtkWidget *label;
+  GtkWidget *inscription;
   gpointer item;
 
   item = gtk_tree_list_row_get_item (gtk_list_item_get_item (list_item));
-  label = gtk_list_item_get_child (list_item);
+  inscription = gtk_list_item_get_child (list_item);
 
-  gtk_label_set_label (GTK_LABEL (label), gtk_inspector_get_object_name (item));
+  gtk_inscription_set_text (GTK_INSCRIPTION (inscription), gtk_inspector_get_object_name (item));
 
   g_object_unref (item);
 }
@@ -1068,54 +1066,52 @@ static void
 setup_label_cb (GtkSignalListItemFactory *factory,
                 GtkListItem              *list_item)
 {
-  GtkWidget *label;
+  GtkWidget *inscription;
 
-  label = gtk_label_new (NULL);
-  gtk_label_set_width_chars (GTK_LABEL (label), 25);
-  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_list_item_set_child (list_item, label);
+  inscription = gtk_inscription_new (NULL);
+  gtk_inscription_set_nat_chars (GTK_INSCRIPTION (inscription), 25);
+  gtk_list_item_set_child (list_item, inscription);
 }
 
 static void
 bind_label_cb (GtkSignalListItemFactory *factory,
                GtkListItem              *list_item)
 {
-  GtkWidget *label;
+  GtkWidget *inscription;
   gpointer item;
   GBinding *binding = NULL;
 
   item = gtk_tree_list_row_get_item (gtk_list_item_get_item (list_item));
-  label = gtk_list_item_get_child (list_item);
+  inscription = gtk_list_item_get_child (list_item);
 
   if (GTK_IS_LABEL (item))
-    binding = g_object_bind_property (item, "label", label, "label", G_BINDING_SYNC_CREATE);
+    binding = g_object_bind_property (item, "label", inscription, "text", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_BUTTON (item))
-    binding = g_object_bind_property (item, "label", label, "label", G_BINDING_SYNC_CREATE);
+    binding = g_object_bind_property (item, "label", inscription, "text", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_WINDOW (item))
-    binding = g_object_bind_property (item, "title", label, "label", G_BINDING_SYNC_CREATE);
+    binding = g_object_bind_property (item, "title", inscription, "text", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_TREE_VIEW_COLUMN (item))
-    binding = g_object_bind_property (item, "title", label, "label", G_BINDING_SYNC_CREATE);
+    binding = g_object_bind_property (item, "title", inscription, "text", G_BINDING_SYNC_CREATE);
   else if (GTK_IS_EDITABLE (item))
-    binding = g_object_bind_property (item, "text", label, "label", G_BINDING_SYNC_CREATE);
+    binding = g_object_bind_property (item, "text", inscription, "text", G_BINDING_SYNC_CREATE);
   else
-    gtk_label_set_label (GTK_LABEL (label), NULL);
+    gtk_inscription_set_text (GTK_INSCRIPTION (inscription), NULL);
 
   g_object_unref (item);
 
   if (binding)
-    g_object_set_data (G_OBJECT (label), "binding", binding);
+    g_object_set_data (G_OBJECT (inscription), "binding", binding);
 }
 
 static void
 unbind_label_cb (GtkSignalListItemFactory *factory,
                  GtkListItem              *list_item)
 {
-  GtkWidget *label;
+  GtkWidget *inscription;
   GBinding *binding;
 
-  label = gtk_list_item_get_child (list_item);
-  binding = g_object_steal_data (G_OBJECT (label), "binding");
+  inscription = gtk_list_item_get_child (list_item);
+  binding = g_object_steal_data (G_OBJECT (inscription), "binding");
   if (binding)
     g_binding_unbind (binding);
 }
