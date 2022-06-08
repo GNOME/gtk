@@ -41,6 +41,11 @@ const char *            gtk_inscription_get_text                (GtkInscription 
 GDK_AVAILABLE_IN_4_8
 void                    gtk_inscription_set_text                (GtkInscription         *self,
                                                                  const char             *text);
+GDK_AVAILABLE_IN_4_8
+PangoAttrList *         gtk_inscription_get_attributes          (GtkInscription         *self);
+GDK_AVAILABLE_IN_4_8
+void                    gtk_inscription_set_attributes          (GtkInscription         *self,
+                                                                 PangoAttrList          *attrs);
 
 GDK_AVAILABLE_IN_4_8
 guint                   gtk_inscription_get_min_chars           (GtkInscription         *self);

@@ -21,7 +21,9 @@
 
 #include "gtkinscription.h"
 
+#include "gtkcssnodeprivate.h"
 #include "gtkcssstylechangeprivate.h"
+#include "gtkpango.h"
 #include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 
@@ -66,6 +68,7 @@ struct _GtkInscription
   guint nat_lines;
   float xalign;
   float yalign;
+  PangoAttrList *attrs;
 
   PangoLayout *layout;
 };
@@ -73,6 +76,7 @@ struct _GtkInscription
 enum
 {
   PROP_0,
+  PROP_ATTRIBUTES,
   PROP_MIN_CHARS,
   PROP_MIN_LINES,
   PROP_NAT_CHARS,
@@ -118,6 +122,10 @@ gtk_inscription_get_property (GObject    *object,
 
   switch (property_id)
     {
+    case PROP_ATTRIBUTES:
+      g_value_set_boxed (value, self->attrs);
+      break;
+
     case PROP_MIN_CHARS:
       g_value_set_uint (value, self->min_chars);
       break;
@@ -162,6 +170,10 @@ gtk_inscription_set_property (GObject      *object,
 
   switch (property_id)
     {
+    case PROP_ATTRIBUTES:
+      gtk_inscription_set_attributes (self, g_value_get_boxed (value));
+      break;
+
     case PROP_MIN_CHARS:
       gtk_inscription_set_min_chars (self, g_value_get_uint (value));
       break;
@@ -197,6 +209,23 @@ gtk_inscription_set_property (GObject      *object,
 }
 
 static void
+gtk_inscription_update_layout_attributes (GtkInscription *self,
+                                          PangoAttrList  *css_attrs)
+{
+  PangoAttrList *new_attrs;
+
+  if (css_attrs == NULL)
+    css_attrs = gtk_css_style_get_pango_attributes (gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (self))));
+
+  new_attrs = css_attrs;
+
+  new_attrs = _gtk_pango_attr_list_merge (new_attrs, self->attrs);
+
+  pango_layout_set_attributes (self->layout, new_attrs);
+  pango_attr_list_unref (new_attrs);
+}
+
+static void
 gtk_inscription_css_changed (GtkWidget         *widget,
                              GtkCssStyleChange *change)
 {
@@ -206,12 +235,9 @@ gtk_inscription_css_changed (GtkWidget         *widget,
 
   if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_ATTRS))
     {
-      PangoAttrList *new_attrs;
-
-      new_attrs = gtk_css_style_get_pango_attributes (gtk_css_style_change_get_new_style (change));
-      pango_layout_set_attributes (self->layout, new_attrs);
-      pango_attr_list_unref (new_attrs);
-
+      gtk_inscription_update_layout_attributes (self,
+          gtk_css_style_get_pango_attributes (gtk_css_style_change_get_new_style (change)));
+      
       gtk_widget_queue_draw (widget);
     }
 }
@@ -407,6 +433,18 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
   widget_class->measure = gtk_inscription_measure;
   widget_class->size_allocate = gtk_inscription_allocate;
   widget_class->snapshot = gtk_inscription_snapshot;
+
+  /**
+   * GtkInscription:attributes: (attributes org.gtk.Property.get=gtk_inscription_get_attributes org.gtk.Property.set=gtk_inscription_set_attributes)
+   *
+   * A list of style attributes to apply to the text of the inscription.
+   *
+   * Since: 4.8
+   */
+  properties[PROP_ATTRIBUTES] =
+      g_param_spec_boxed ("attributes", NULL, NULL,
+                          PANGO_TYPE_ATTR_LIST,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkInscription:min-chars: (attributes org.gtk.Property.get=gtk_inscription_get_min_chars org.gtk.Property.set=gtk_inscription_set_min_chars)
@@ -904,5 +942,57 @@ gtk_inscription_get_yalign (GtkInscription *self)
   g_return_val_if_fail (GTK_IS_INSCRIPTION (self), DEFAULT_YALIGN);
 
   return self->yalign;
+}
+
+/**
+ * gtk_inscription_set_attributes: (attributes org.gtk.Method.set_property=attributes)
+ * @self: a `GtkInscription`
+ * @attrs: (nullable): a [struct@Pango.AttrList]
+ *
+ * Apply attributes to the inscription text.
+ *
+ * These attributes will not be evaluated for sizing the inscription.
+ *
+ * Since: 4.8
+ */
+void
+gtk_inscription_set_attributes (GtkInscription *self,
+                                PangoAttrList  *attrs)
+{
+  g_return_if_fail (GTK_IS_INSCRIPTION (self));
+
+  if (self->attrs == attrs)
+    return;
+
+  if (attrs)
+    pango_attr_list_ref (attrs);
+
+  if (self->attrs)
+    pango_attr_list_unref (self->attrs);
+  self->attrs = attrs;
+
+  gtk_inscription_update_layout_attributes (self, NULL);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ATTRIBUTES]);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+/**
+ * gtk_inscription_get_attributes: (attributes org.gtk.Method.get_property=attributes)
+ * @self: a `GtkInscription`
+ *
+ * Gets the inscription's attribute list.
+ *
+ * Returns: (nullable) (transfer none): the attribute list
+ *
+ * Since: 4.8
+ */
+PangoAttrList *
+gtk_inscription_get_attributes (GtkInscription *self)
+{
+  g_return_val_if_fail (GTK_IS_INSCRIPTION (self), NULL);
+
+  return self->attrs;
 }
 
