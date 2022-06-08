@@ -128,6 +128,8 @@ if x11_enabled
   gtk_tests += [['testerrors']]
 endif
 
+libpixman = cc.find_library('pixman-1', required: true)
+
 # Pass the source dir here so programs can change into the source directory
 # and find .ui files and .png files and such that they load at runtime
 test_args = ['-DGTK_SRCDIR="@0@"'.format(meson.current_source_dir())]
@@ -139,7 +141,7 @@ foreach t: gtk_tests
     sources: test_srcs,
     include_directories: [confinc, gdkinc],
     c_args: test_args + common_cflags,
-    dependencies: [libgtk_dep, libm],
+    dependencies: [libgtk_dep, libm, libpixman],
   )
 endforeach
 

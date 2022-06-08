@@ -21,10 +21,259 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <pixman.h>
+#include <drm/drm_fourcc.h>
 
 static struct wl_compositor *wl_compositor;
 static struct wl_subcompositor *wl_subcompositor;
 static struct wl_shm *wl_shm;
+
+struct yuv_buffer {
+        void *data;
+        size_t bytes;
+        struct wl_buffer *proxy;
+        int width;
+        int height;
+};
+
+static struct yuv_buffer *
+yuv_buffer_create(size_t bytes,
+                  int width,
+                  int height,
+                  int stride_bytes,
+                  uint32_t drm_format)
+{
+        struct wl_shm_pool *pool;
+        struct yuv_buffer *buf;
+        int fd;
+        const char *xdg_runtime_dir;
+
+        buf = g_malloc(sizeof *buf);
+        buf->bytes = bytes;
+        buf->width = width;
+        buf->height = height;
+
+        xdg_runtime_dir = getenv ("XDG_RUNTIME_DIR");
+        fd = open (xdg_runtime_dir, O_TMPFILE|O_RDWR|O_EXCL, 0600);
+        ftruncate (fd, buf->bytes);
+        g_assert(fd >= 0);
+
+        buf->data = mmap(NULL, buf->bytes,
+                         PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+        if (buf->data == MAP_FAILED) {
+                close(fd);
+                g_assert(buf->data != MAP_FAILED);
+        }
+
+        pool = wl_shm_create_pool(wl_shm, fd, buf->bytes);
+        buf->proxy = wl_shm_pool_create_buffer(pool, 0, buf->width, buf->height,
+                                               stride_bytes, drm_format);
+        wl_shm_pool_destroy(pool);
+        close(fd);
+
+        return buf;
+}
+
+/*
+ * Based on Rec. ITU-R BT.601-7
+ *
+ * This is intended to be obvious and accurate, not fast.
+ */
+static void
+x8r8g8b8_to_ycbcr8_bt601(uint32_t xrgb,
+                         uint8_t *y_out, uint8_t *cb_out, uint8_t *cr_out)
+{
+        double y, cb, cr;
+        double r = (xrgb >> 16) & 0xff;
+        double g = (xrgb >> 8) & 0xff;
+        double b = (xrgb >> 0) & 0xff;
+
+        /* normalize to [0.0, 1.0] */
+        r /= 255.0;
+        g /= 255.0;
+        b /= 255.0;
+
+        /* Y normalized to [0.0, 1.0], Cb and Cr [-0.5, 0.5] */
+        y = 0.299 * r + 0.587 * g + 0.114 * b;
+        cr = (r - y) / 1.402;
+        cb = (b - y) / 1.772;
+
+        /* limited range quantization to 8 bit */
+        *y_out = round(219.0 * y + 16.0);
+        if (cr_out)
+                *cr_out = round(224.0 * cr + 128.0);
+        if (cb_out)
+                *cb_out = round(224.0 * cb + 128.0);
+}
+
+static struct yuv_buffer *
+yuv420_create_buffer(pixman_image_t *rgb_image)
+{
+        struct yuv_buffer *buf;
+        size_t bytes;
+        int width;
+        int height;
+        int x, y;
+        void *rgb_pixels;
+        int rgb_stride_bytes;
+        uint32_t *rgb_row;
+        uint8_t *y_base;
+        uint8_t *u_base;
+        uint8_t *v_base;
+        uint8_t *y_row;
+        uint8_t *u_row;
+        uint8_t *v_row;
+        uint32_t argb;
+        uint32_t drm_format = DRM_FORMAT_YUV420;
+
+        g_assert(drm_format == DRM_FORMAT_YUV420);
+
+        width = pixman_image_get_width(rgb_image);
+        height = pixman_image_get_height(rgb_image);
+        rgb_pixels = pixman_image_get_data(rgb_image);
+        rgb_stride_bytes = pixman_image_get_stride(rgb_image);
+
+        /* Full size Y, quarter U and V */
+        bytes = width * height + (width / 2) * (height / 2) * 2;
+        buf = yuv_buffer_create(bytes, width, height, width, drm_format);
+
+        y_base = buf->data;
+        u_base = y_base + width * height;
+        v_base = u_base + (width / 2) * (height / 2);
+
+        for (y = 0; y < height; y++) {
+                rgb_row = rgb_pixels + (y / 2 * 2) * rgb_stride_bytes;
+                y_row = y_base + y * width;
+                u_row = u_base + (y / 2) * (width / 2);
+                v_row = v_base + (y / 2) * (width / 2);
+
+                for (x = 0; x < width; x++) {
+                        /*
+                         * Sub-sample the source image instead, so that U and V
+                         * sub-sampling does not require proper
+                         * filtering/averaging/siting.
+                         */
+                        argb = *(rgb_row + x / 2 * 2);
+
+                        /*
+                         * A stupid way of "sub-sampling" chroma. This does not
+                         * do the necessary filtering/averaging/siting or
+                         * alternate Cb/Cr rows.
+                         */
+                        if ((y & 1) == 0 && (x & 1) == 0) {
+                                x8r8g8b8_to_ycbcr8_bt601(argb, y_row + x,
+                                                         u_row + x / 2,
+                                                         v_row + x / 2);
+                        } else {
+                                x8r8g8b8_to_ycbcr8_bt601(argb, y_row + x,
+                                                         NULL, NULL);
+                        }
+                }
+        }
+
+        return buf;
+}
+
+static void
+destroy_cairo_surface(pixman_image_t *image, void *data)
+{
+        cairo_surface_t *surface = data;
+
+        cairo_surface_destroy(surface);
+}
+
+struct format_map_entry {
+        cairo_format_t cairo;
+        pixman_format_code_t pixman;
+};
+
+static const struct format_map_entry format_map[] = {
+        { CAIRO_FORMAT_ARGB32,    PIXMAN_a8r8g8b8 },
+        { CAIRO_FORMAT_RGB24,     PIXMAN_x8r8g8b8 },
+        { CAIRO_FORMAT_A8,        PIXMAN_a8 },
+        { CAIRO_FORMAT_RGB16_565, PIXMAN_r5g6b5 },
+};
+
+static pixman_format_code_t
+format_cairo2pixman(cairo_format_t fmt)
+{
+        unsigned i;
+
+        for (i = 0; i < G_N_ELEMENTS(format_map); i++)
+                if (format_map[i].cairo == fmt)
+                        return format_map[i].pixman;
+
+        g_assert_not_reached ();
+}
+
+static pixman_image_t *
+image_convert_to_a8r8g8b8(pixman_image_t *image)
+{
+        pixman_image_t *ret;
+        int width;
+        int height;
+
+        if (pixman_image_get_format(image) == PIXMAN_a8r8g8b8)
+                return pixman_image_ref(image);
+
+        width = pixman_image_get_width(image);
+        height = pixman_image_get_height(image);
+
+        ret = pixman_image_create_bits_no_clear(PIXMAN_a8r8g8b8, width, height,
+                                                NULL, 0);
+        g_assert(ret);
+
+        pixman_image_composite32(PIXMAN_OP_SRC, image, NULL, ret,
+                                 0, 0, 0, 0, 0, 0, width, height);
+
+        return ret;
+}
+
+static pixman_image_t *
+load_image_from_png(const char *fname)
+{
+        pixman_image_t *image;
+        pixman_image_t *converted;
+        cairo_format_t cairo_fmt;
+        pixman_format_code_t pixman_fmt;
+        cairo_surface_t *reference_cairo_surface;
+        cairo_status_t status;
+        int width;
+        int height;
+        int stride;
+        void *data;
+
+        reference_cairo_surface = cairo_image_surface_create_from_png(fname);
+        cairo_surface_flush(reference_cairo_surface);
+        status = cairo_surface_status(reference_cairo_surface);
+        if (status != CAIRO_STATUS_SUCCESS) {
+                g_error ("Could not open %s: %s\n", fname,
+                        cairo_status_to_string(status));
+                cairo_surface_destroy(reference_cairo_surface);
+                return NULL;
+        }
+
+        cairo_fmt = cairo_image_surface_get_format(reference_cairo_surface);
+        pixman_fmt = format_cairo2pixman(cairo_fmt);
+
+        width = cairo_image_surface_get_width(reference_cairo_surface);
+        height = cairo_image_surface_get_height(reference_cairo_surface);
+        stride = cairo_image_surface_get_stride(reference_cairo_surface);
+        data = cairo_image_surface_get_data(reference_cairo_surface);
+
+        /* The Cairo surface will own the data, so we keep it around. */
+        image = pixman_image_create_bits_no_clear(pixman_fmt,
+                                                  width, height, data, stride);
+        g_assert(image);
+
+        pixman_image_set_destroy_function(image, destroy_cairo_surface,
+                                          reference_cairo_surface);
+
+        converted = image_convert_to_a8r8g8b8(image);
+        pixman_image_unref(image);
+
+        return converted;
+}
 
 static void
 gdk_registry_handle_global (void               *data,
@@ -101,6 +350,7 @@ surface_fill (struct wl_surface *surface,
   struct wl_shm_pool *pool;
   struct wl_buffer *buffer;
 
+#if 0
   size = width * height * 4;
   xdg_runtime_dir = getenv ("XDG_RUNTIME_DIR");
   fd = open (xdg_runtime_dir, O_TMPFILE|O_RDWR|O_EXCL, 0600);
@@ -118,6 +368,11 @@ surface_fill (struct wl_surface *surface,
   wl_shm_pool_destroy (pool);
 
   close (fd);
+#else
+  pixman_image_t *img = load_image_from_png ("tests/chocolate-cake.png");
+  struct yuv_buffer *buf = yuv420_create_buffer (img);
+  buffer = buf->proxy;
+#endif
 
   wl_surface_attach (surface, buffer, 0, 0);
   wl_surface_commit (surface);
