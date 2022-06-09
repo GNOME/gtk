@@ -25,6 +25,7 @@
 #include "gtkcssstylechangeprivate.h"
 #include "gtkpango.h"
 #include "gtksnapshot.h"
+#include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
 /**
@@ -69,6 +70,7 @@ struct _GtkInscription
   float xalign;
   float yalign;
   PangoAttrList *attrs;
+  GtkInscriptionOverflow overflow;
 
   PangoLayout *layout;
 };
@@ -83,6 +85,7 @@ enum
   PROP_NAT_CHARS,
   PROP_NAT_LINES,
   PROP_TEXT,
+  PROP_TEXT_OVERFLOW,
   PROP_XALIGN,
   PROP_YALIGN,
 
@@ -147,6 +150,10 @@ gtk_inscription_get_property (GObject    *object,
       g_value_set_string (value, self->text);
       break;
 
+    case PROP_TEXT_OVERFLOW:
+      g_value_set_enum (value, self->overflow);
+      break;
+
     case PROP_XALIGN:
       g_value_set_float (value, self->xalign);
       break;
@@ -197,6 +204,10 @@ gtk_inscription_set_property (GObject      *object,
 
     case PROP_TEXT:
       gtk_inscription_set_text (self, g_value_get_string (value));
+      break;
+
+    case PROP_TEXT_OVERFLOW:
+      gtk_inscription_set_text_overflow (self, g_value_get_enum (value));
       break;
 
     case PROP_XALIGN:
@@ -402,6 +413,36 @@ gtk_inscription_allocate (GtkWidget *widget,
   GtkInscription *self = GTK_INSCRIPTION (widget);
 
   pango_layout_set_width (self->layout, width * PANGO_SCALE);
+
+  switch (self->overflow)
+    {
+    case GTK_INSCRIPTION_OVERFLOW_CLIP:
+      pango_layout_set_height (self->layout, -1);
+      /* figure out if we're single line (clip horizontally)
+       * or multiline (clip vertically):
+       * If we can't fit 2 rows, we're single line.
+       */
+      {
+        PangoLayoutIter *iter = pango_layout_get_iter (self->layout);
+        if (pango_layout_iter_next_line (iter))
+          {
+            PangoRectangle rect;
+            pango_layout_iter_get_line_extents (iter, NULL, &rect);
+            if (rect.y + rect.height > height * PANGO_SCALE)
+              pango_layout_set_width (self->layout, -1);
+          }
+      }
+      break;
+
+    case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_START:
+    case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_MIDDLE:
+    case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_END:
+      pango_layout_set_height (self->layout, height * PANGO_SCALE);
+      break;
+    default:
+      g_assert_not_reached();
+      break;
+    }
 }
 
 static void
@@ -567,6 +608,19 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkInscription:text-overflow: (attributes org.gtk.Property.get=gtk_inscription_get_text_overflow org.gtk.Property.set=gtk_inscription_set_text_overflow)
+   *
+   * The overflow method to use for the text.
+   *
+   * Since: 4.8
+   */
+  properties[PROP_TEXT_OVERFLOW] =
+    g_param_spec_enum ("text-overflow", NULL, NULL,
+                       GTK_TYPE_INSCRIPTION_OVERFLOW,
+                       GTK_INSCRIPTION_OVERFLOW_CLIP,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkInscription:xalign: (attributes org.gtk.Property.get=gtk_inscription_get_xalign org.gtk.Property.set=gtk_inscription_set_xalign)
    *
    * The horizontal alignment of the text inside the allocated size.
@@ -612,6 +666,7 @@ gtk_inscription_init (GtkInscription *self)
   self->yalign = DEFAULT_YALIGN;
 
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), NULL);
+  pango_layout_set_wrap (self->layout, PANGO_WRAP_WORD_CHAR);
 }
 
 /**
@@ -1017,6 +1072,68 @@ gtk_inscription_get_attributes (GtkInscription *self)
   g_return_val_if_fail (GTK_IS_INSCRIPTION (self), NULL);
 
   return self->attrs;
+}
+
+/**
+ * gtk_inscription_set_text_overflow: (attributes org.gtk.Method.set_property=text-overflow)
+ * @self: a `GtkInscription`
+ * @overflow: the overflow method to use
+ *
+ * Sets what to do when the text doesn't fit.
+ *
+ * Since: 4.8
+ */
+void
+gtk_inscription_set_text_overflow (GtkInscription         *self,
+                                   GtkInscriptionOverflow  overflow)
+{
+  g_return_if_fail (GTK_IS_INSCRIPTION (self));
+
+  if (self->overflow == overflow)
+    return;
+
+  self->overflow = overflow;
+
+  switch (self->overflow)
+    {
+    case GTK_INSCRIPTION_OVERFLOW_CLIP:
+      pango_layout_set_ellipsize (self->layout, PANGO_ELLIPSIZE_NONE);
+      break;
+    case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_START:
+      pango_layout_set_ellipsize (self->layout, PANGO_ELLIPSIZE_START);
+      break;
+    case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_MIDDLE:
+      pango_layout_set_ellipsize (self->layout, PANGO_ELLIPSIZE_MIDDLE);
+      break;
+    case GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_END:
+      pango_layout_set_ellipsize (self->layout, PANGO_ELLIPSIZE_END);
+      break;
+    default:
+      g_assert_not_reached();
+      break;
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TEXT_OVERFLOW]);
+}
+
+/**
+ * gtk_inscription_get_text_overflow: (attributes org.gtk.Method.get_property=text-overflow)
+ * @self: a `GtkInscription`
+ *
+ * Gets the inscription's overflow method.
+ *
+ * Returns: the overflow method
+ *
+ * Since: 4.8
+ */
+GtkInscriptionOverflow
+gtk_inscription_get_text_overflow (GtkInscription *self)
+{
+  g_return_val_if_fail (GTK_IS_INSCRIPTION (self), GTK_INSCRIPTION_OVERFLOW_CLIP);
+
+  return self->overflow;
 }
 
 /**

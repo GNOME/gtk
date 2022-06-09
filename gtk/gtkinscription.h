@@ -30,6 +30,23 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_INSCRIPTION         (gtk_inscription_get_type ())
 
+/**
+ * GtkInscriptionOverflow:
+ * @GTK_INSCRIPTION_OVERFLOW_CLIP: Clip the remaining text
+ * @GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_START: Omit characters at the start of the text
+ * @GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_MIDDLE: Omit characters at the middle of the text
+ * @GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_END: Omit characters at the end of the text
+ *
+ * The different methods to handle text in #GtkInscription when it doesn't
+ * fit the available space.
+ */
+typedef enum {
+  GTK_INSCRIPTION_OVERFLOW_CLIP,
+  GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_START,
+  GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_MIDDLE,
+  GTK_INSCRIPTION_OVERFLOW_ELLIPSIZE_END
+} GtkInscriptionOverflow;
+
 GDK_AVAILABLE_IN_4_8
 G_DECLARE_FINAL_TYPE (GtkInscription, gtk_inscription, GTK, INSCRIPTION, GtkWidget)
 
@@ -49,6 +66,11 @@ void                    gtk_inscription_set_attributes          (GtkInscription 
 GDK_AVAILABLE_IN_4_8
 void                    gtk_inscription_set_markup              (GtkInscription         *self,
                                                                  const char             *markup);
+GDK_AVAILABLE_IN_4_8
+GtkInscriptionOverflow  gtk_inscription_get_text_overflow       (GtkInscription         *self);
+GDK_AVAILABLE_IN_4_8
+void                    gtk_inscription_set_text_overflow       (GtkInscription         *self,
+                                                                 GtkInscriptionOverflow  overflow);
 
 GDK_AVAILABLE_IN_4_8
 guint                   gtk_inscription_get_min_chars           (GtkInscription         *self);
