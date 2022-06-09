@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkinscription.h"
+#include "gtkinscriptionprivate.h"
 
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylechangeprivate.h"
@@ -653,6 +653,8 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
+
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LABEL);
 }
 
 static void
@@ -667,6 +669,13 @@ gtk_inscription_init (GtkInscription *self)
 
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), NULL);
   pango_layout_set_wrap (self->layout, PANGO_WRAP_WORD_CHAR);
+}
+
+/* for a11y */
+PangoLayout *
+gtk_inscription_get_layout (GtkInscription *self)
+{
+  return self->layout;
 }
 
 /**
