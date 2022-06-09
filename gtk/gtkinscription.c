@@ -77,6 +77,7 @@ enum
 {
   PROP_0,
   PROP_ATTRIBUTES,
+  PROP_MARKUP,
   PROP_MIN_CHARS,
   PROP_MIN_LINES,
   PROP_NAT_CHARS,
@@ -172,6 +173,10 @@ gtk_inscription_set_property (GObject      *object,
     {
     case PROP_ATTRIBUTES:
       gtk_inscription_set_attributes (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_MARKUP:
+      gtk_inscription_set_markup (self, g_value_get_string (value));
       break;
 
     case PROP_MIN_CHARS:
@@ -445,6 +450,24 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
       g_param_spec_boxed ("attributes", NULL, NULL,
                           PANGO_TYPE_ATTR_LIST,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkInscription:markup: (attributes org.gtk.Property.set=gtk_inscription_set_markup)
+   *
+   * Utility property that sets both the [property@Gtk.Inscription:text] and
+   * [property@Gtk.Inscription:attributes] properties, mainly intended for use in
+   * GtkBuilder ui files to ease translation support and bindings.
+   *
+   * This function uses [func@Pango.parse_markup] to parse the markup into text and
+   * attributes. The markup must be valid. If you cannot ensure that, consider using
+   * [func@Pango.parse_markup] and setting the two properties yourself.
+   *
+   * Since: 4.8
+   */
+  properties[PROP_MARKUP] =
+    g_param_spec_string ("markup", NULL, NULL,
+                         NULL,
+                         G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkInscription:min-chars: (attributes org.gtk.Property.get=gtk_inscription_get_min_chars org.gtk.Property.set=gtk_inscription_set_min_chars)
@@ -996,3 +1019,46 @@ gtk_inscription_get_attributes (GtkInscription *self)
   return self->attrs;
 }
 
+/**
+ * gtk_inscription_set_markup: (attributes org.gtk.Method.set_property=markup)
+ * @self: a `GtkInscription`
+ * @markup: (nullable): The markup to display
+ *
+ * Utility function to set the text and attributes to be displayed.
+ *
+ * See the [property@Gtk.Inscription:markup] property.
+ *
+ * Since: 4.8
+ */
+void
+gtk_inscription_set_markup (GtkInscription *self,
+                            const char     *markup)
+{
+  PangoAttrList *attrs;
+  char *text;
+  GError *error = NULL;
+
+  g_return_if_fail (GTK_IS_INSCRIPTION (self));
+
+  if (markup == NULL)
+    {
+      text = NULL;
+      attrs = NULL;
+    }
+  else if (!pango_parse_markup (markup, -1,
+                           0,
+                           &attrs, &text,
+                           NULL,
+                           &error))
+    {
+      g_warning ("Failed to set text '%s' from markup due to error parsing markup: %s",
+                 markup, error->message);
+      return;
+    }
+
+  gtk_inscription_set_text (self, text);
+  gtk_inscription_set_attributes (self, attrs);
+
+  g_clear_pointer (&text, g_free);
+  g_clear_pointer (&attrs, pango_attr_list_unref);
+}

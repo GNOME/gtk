@@ -46,6 +46,9 @@ PangoAttrList *         gtk_inscription_get_attributes          (GtkInscription 
 GDK_AVAILABLE_IN_4_8
 void                    gtk_inscription_set_attributes          (GtkInscription         *self,
                                                                  PangoAttrList          *attrs);
+GDK_AVAILABLE_IN_4_8
+void                    gtk_inscription_set_markup              (GtkInscription         *self,
+                                                                 const char             *markup);
 
 GDK_AVAILABLE_IN_4_8
 guint                   gtk_inscription_get_min_chars           (GtkInscription         *self);
