@@ -29,16 +29,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-05-15 14:19+0000\n"
-"PO-Revision-Date: 2022-05-17 04:53-0300\n"
+"POT-Creation-Date: 2022-06-08 18:48+0000\n"
+"PO-Revision-Date: 2022-06-09 20:43-0300\n"
 "Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"X-Generator: Gtranslator 40.0\n"
 "X-DL-Team: pt_BR\n"
 "X-DL-Module: gtk\n"
 "X-DL-Branch: main\n"
@@ -986,7 +986,7 @@ msgstr "Dados malformados: URL"
 msgid "Could not unescape string"
 msgstr "Não foi possível retirar escape da string"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:124 gtk/ui/gtkaboutdialog.ui:163
 msgid "License"
 msgstr "Licença"
 
@@ -1579,6 +1579,7 @@ msgid "Other application…"
 msgstr "Outro aplicativo…"
 
 #: gtk/gtkappchooserdialog.c:205 gtk/gtkappchooserdialog.c:256
+#: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select Application"
 msgstr "Selecionar aplicativo"
 
@@ -2029,6 +2030,7 @@ msgid "Margins from Printer…"
 msgstr "Margens da impressora…"
 
 #: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:162
+#: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_Fechar"
 
@@ -2153,7 +2155,9 @@ msgstr "Um arquivo com esse nome já existe"
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:724
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
 #: gtk/gtkwindow.c:6154 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1706
+#: gtk/inspector/recorder.c:1706 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
+#: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2168,7 +2172,7 @@ msgstr "A_brir"
 msgid "_Save"
 msgstr "_Salvar"
 
-#: gtk/gtkfilechoosernativequartz.c:338
+#: gtk/gtkfilechoosernativequartz.c:338 gtk/ui/gtkfilechooserwidget.ui:346
 msgid "Select which types of files are shown"
 msgstr "Seleciona quais tipos de arquivos são mostrados"
 
@@ -2271,7 +2275,7 @@ msgid "_Add to Bookmarks"
 msgstr "_Adicionar aos marcadores"
 
 #: gtk/gtkfilechooserwidget.c:1823 gtk/gtkplacessidebar.c:2310
-#: gtk/gtkplacessidebar.c:3249
+#: gtk/gtkplacessidebar.c:3249 gtk/ui/gtkfilechooserwidget.ui:465
 msgid "_Rename"
 msgstr "_Renomear"
 
@@ -2299,7 +2303,9 @@ msgstr "Mostrar a _hora"
 msgid "Sort _Folders Before Files"
 msgstr "Ordenar _pastas antes de arquivos"
 
+#. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2256 gtk/inspector/css-node-tree.ui:135
+#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkprintunixdialog.ui:114
 msgid "Location"
 msgstr "Localização"
 
@@ -2322,6 +2328,7 @@ msgid "Enter location or URL"
 msgstr "Inserir localização ou URL"
 
 #: gtk/gtkfilechooserwidget.c:3811 gtk/gtkfilechooserwidget.c:6635
+#: gtk/ui/gtkfilechooserwidget.ui:226
 msgid "Modified"
 msgstr "Modificado"
 
@@ -2548,11 +2555,11 @@ msgstr "_Copiar URL"
 msgid "Invalid URI"
 msgstr "URI inválida"
 
-#: gtk/gtklockbutton.c:289
+#: gtk/gtklockbutton.c:289 gtk/ui/gtklockbutton.ui:20
 msgid "Lock"
 msgstr "Bloquear"
 
-#: gtk/gtklockbutton.c:303
+#: gtk/gtklockbutton.c:303 gtk/ui/gtklockbutton.ui:26
 msgid "Unlock"
 msgstr "Desbloquear"
 
@@ -2786,7 +2793,7 @@ msgstr "Não é um arquivo de configuração de página válido"
 msgid "Manage Custom Sizes…"
 msgstr "Gerenciar tamanhos personalizados…"
 
-#: gtk/gtkpagesetupunixdialog.c:284
+#: gtk/gtkpagesetupunixdialog.c:284 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
 msgstr "_Aplicar"
 
@@ -2813,7 +2820,8 @@ msgstr ""
 " Cima: %s %s\n"
 " Baixo: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:784
+#: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
+#: gtk/ui/gtkprintunixdialog.ui:709
 msgid "Page Setup"
 msgstr "Configurar página"
 
@@ -2933,6 +2941,8 @@ msgstr "Este nome já foi escolhido"
 
 #: gtk/gtkplacessidebar.c:2304 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:24
+#: gtk/ui/gtkfilechooserwidget.ui:168 gtk/ui/gtkfilechooserwidget.ui:440
+#: gtk/ui/gtkprintunixdialog.ui:83
 msgid "Name"
 msgstr "Nome"
 
@@ -3057,7 +3067,7 @@ msgid "Unable to access location"
 msgstr "Não foi possível acessar a localização"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1228
+#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
 msgid "Con_nect"
 msgstr "Co_nectar"
 
@@ -3145,7 +3155,8 @@ msgstr[1] "%s de %s disponíveis"
 msgid "Disconnect"
 msgstr "Desconectar"
 
-#: gtk/gtkplacesviewrow.c:485
+#: gtk/gtkplacesviewrow.c:485 gtk/ui/gtkplacesviewrow.ui:53
+#: gtk/ui/gtksidebarrow.ui:50
 msgid "Unmount"
 msgstr "Desmontar"
 
@@ -3161,7 +3172,8 @@ msgstr "Lemb_rar senha"
 msgid "Select a filename"
 msgstr "Selecione um nome de arquivo"
 
-#: gtk/gtkprinteroptionwidget.c:725
+#: gtk/gtkprinteroptionwidget.c:725 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "_Selecionar"
 
@@ -3517,12 +3529,14 @@ msgstr "Resultados da pesquisa"
 msgid "Search Shortcuts"
 msgstr "Pesquisar atalhos"
 
-#: gtk/gtkshortcutswindow.c:968
+#: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
+#: gtk/ui/gtkfilechooserwidget.ui:297
 msgid "No Results Found"
 msgstr "Nenhum resultado encontrado"
 
 #  Texto exibido abaixo do título anterior (No Results Found).
-#: gtk/gtkshortcutswindow.c:974
+#: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:362
+#: gtk/ui/gtkfilechooserwidget.ui:310 gtk/ui/gtkplacesview.ui:230
 msgid "Try a different search"
 msgstr "Tente uma pesquisa diferente"
 
@@ -3844,7 +3858,7 @@ msgstr "ID do aplicativo"
 msgid "Resource Path"
 msgstr "Caminho de recursos"
 
-#: gtk/inspector/general.ui:268
+#: gtk/inspector/general.ui:268 gtk/ui/gtkplacesview.ui:79
 msgid "Prefix"
 msgstr "Prefixo"
 
@@ -3906,7 +3920,7 @@ msgstr "Endereço"
 
 #  Cabeçalho de tabela
 #: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
-#: gtk/inspector/statistics.ui:46
+#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:214
 msgid "Type"
 msgstr "Tipo"
 
@@ -4137,7 +4151,8 @@ msgstr "Caminho"
 msgid "Count"
 msgstr "Número"
 
-#: gtk/inspector/resource-list.ui:82
+#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:202
+#: gtk/ui/gtkfontchooserwidget.ui:204 gtk/ui/gtkfontchooserwidget.ui:351
 msgid "Size"
 msgstr "Tamanho"
 
@@ -4390,7 +4405,7 @@ msgstr "Próximo irmão"
 msgid "Miscellaneous"
 msgstr "Geral"
 
-#: gtk/inspector/window.ui:407
+#: gtk/inspector/window.ui:407 gtk/ui/gtkprintunixdialog.ui:393
 msgid "Layout"
 msgstr "Layout"
 
@@ -6079,6 +6094,30 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
+#: gtk/ui/gtkaboutdialog.ui:62
+msgid "About"
+msgstr "Sobre"
+
+#: gtk/ui/gtkaboutdialog.ui:123
+msgid "Credits"
+msgstr "Créditos"
+
+#: gtk/ui/gtkaboutdialog.ui:206
+msgid "System"
+msgstr "Sistema"
+
+#: gtk/ui/gtkappchooserdialog.ui:60
+msgid "_View All Applications"
+msgstr "_Ver todos os aplicativos"
+
+#: gtk/ui/gtkappchooserdialog.ui:66
+msgid "_Find New Applications"
+msgstr "_Localizar novos aplicativos"
+
+#: gtk/ui/gtkappchooserwidget.ui:100
+msgid "No applications found."
+msgstr "Nenhum aplicativo encontrado."
+
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "Preferências"
@@ -6105,6 +6144,304 @@ msgstr "Mostrar todos"
 msgid "Quit %s"
 msgstr "Sair do %s"
 
+#: gtk/ui/gtkassistant.ui:64
+msgid "_Finish"
+msgstr "_Concluir"
+
+#: gtk/ui/gtkassistant.ui:75
+msgid "_Back"
+msgstr "_Voltar"
+
+#: gtk/ui/gtkassistant.ui:86
+msgid "_Next"
+msgstr "Pró_ximo"
+
+#: gtk/ui/gtkcolorchooserdialog.ui:4
+msgid "Select a Color"
+msgstr "Escolha uma cor"
+
+#: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
+msgid "Pick a color from the screen"
+msgstr "Escolha uma cor da tela"
+
+#: gtk/ui/gtkcoloreditor.ui:80
+msgid "Hexadecimal color or color name"
+msgstr "Cor hexadecimal ou nome da cor"
+
+#: gtk/ui/gtkcoloreditor.ui:95
+msgid "Hue"
+msgstr "Matiz"
+
+#: gtk/ui/gtkcoloreditor.ui:114
+msgid "Alpha value"
+msgstr "Valor alfa"
+
+#: gtk/ui/gtkcoloreditor.ui:132
+msgid "Saturation and value"
+msgstr "Saturação e valor"
+
+#: gtk/ui/gtkcoloreditor.ui:156
+msgctxt "Color channel"
+msgid "A"
+msgstr "A"
+
+#: gtk/ui/gtkcoloreditor.ui:192
+msgctxt "Color channel"
+msgid "H"
+msgstr "H"
+
+#: gtk/ui/gtkcoloreditor.ui:229
+msgctxt "Color Channel"
+msgid "S"
+msgstr "S"
+
+#: gtk/ui/gtkcoloreditor.ui:238
+msgctxt "Color Channel"
+msgid "V"
+msgstr "V"
+
+#: gtk/ui/gtkdropdown.ui:19
+msgid "(None)"
+msgstr "(Nenhum)"
+
+#: gtk/ui/gtkdropdown.ui:68
+msgid "Search…"
+msgstr "Pesquisar…"
+
+#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
+msgctxt "emoji category"
+msgid "Smileys & People"
+msgstr "Smileys & pessoas"
+
+#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
+msgctxt "emoji category"
+msgid "Body & Clothing"
+msgstr "Corpo & roupas"
+
+#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
+msgctxt "emoji category"
+msgid "Animals & Nature"
+msgstr "Animais & natureza"
+
+#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
+msgctxt "emoji category"
+msgid "Food & Drink"
+msgstr "Comida & bebida"
+
+#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
+msgctxt "emoji category"
+msgid "Travel & Places"
+msgstr "Viagem & lugares"
+
+#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
+msgctxt "emoji category"
+msgid "Activities"
+msgstr "Atividades"
+
+#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
+msgctxt "emoji category"
+msgid "Objects"
+msgstr "Objetos"
+
+#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
+msgctxt "emoji category"
+msgid "Symbols"
+msgstr "Símbolos"
+
+#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
+msgctxt "emoji category"
+msgid "Flags"
+msgstr "Bandeiras"
+
+#: gtk/ui/gtkemojichooser.ui:230
+msgctxt "emoji category"
+msgid "Recent"
+msgstr "Recentes"
+
+#: gtk/ui/gtkfilechooserwidget.ui:64
+msgid "Create Folder"
+msgstr "Criar pasta"
+
+#: gtk/ui/gtkfilechooserwidget.ui:249
+msgid "Remote location — only searching the current folder"
+msgstr "Localização remota — pesquisando apenas a pasta atual"
+
+#: gtk/ui/gtkfilechooserwidget.ui:378
+msgid "Folder Name"
+msgstr "Nome da pasta"
+
+#: gtk/ui/gtkfilechooserwidget.ui:404
+msgid "_Create"
+msgstr "_Criar"
+
+#  Título da janela
+#: gtk/ui/gtkfontchooserdialog.ui:4
+msgid "Select Font"
+msgstr "Selecionar fonte"
+
+#: gtk/ui/gtkfontchooserwidget.ui:64
+msgid "Search font name"
+msgstr "Pesquisar o nome da fonte"
+
+#: gtk/ui/gtkfontchooserwidget.ui:79
+msgid "Filter by"
+msgstr "Filtrar por"
+
+#: gtk/ui/gtkfontchooserwidget.ui:89
+msgid "Monospace"
+msgstr "Monoespaçado"
+
+#: gtk/ui/gtkfontchooserwidget.ui:95
+msgid "Language"
+msgstr "Idioma"
+
+#: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
+msgid "Preview text"
+msgstr "Visualização de texto"
+
+#: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
+msgid "horizontal"
+msgstr "horizontal"
+
+#: gtk/ui/gtkfontchooserwidget.ui:270
+msgid "No Fonts Found"
+msgstr "Nenhuma fonte encontrada"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:27
+msgid "_Format for:"
+msgstr "_Formatar para:"
+
+# Conflito com "Im_primir"
+#: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:635
+msgid "_Paper size:"
+msgstr "_Tamanho do papel:"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:86
+msgid "_Orientation:"
+msgstr "_Orientação:"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:98 gtk/ui/gtkprintunixdialog.ui:675
+msgid "Portrait"
+msgstr "Retrato"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:109 gtk/ui/gtkprintunixdialog.ui:677
+msgid "Reverse portrait"
+msgstr "Retrato invertido"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:121 gtk/ui/gtkprintunixdialog.ui:676
+msgid "Landscape"
+msgstr "Paisagem"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:132 gtk/ui/gtkprintunixdialog.ui:678
+msgid "Reverse landscape"
+msgstr "Paisagem invertida"
+
+#: gtk/ui/gtkplacesview.ui:28
+msgid "Server Addresses"
+msgstr "Endereços de servidor"
+
+#: gtk/ui/gtkplacesview.ui:40
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:"
+msgstr ""
+"Endereços de servidor são feitos de um prefixo de protocolo e um endereço. "
+"Exemplos:"
+
+#: gtk/ui/gtkplacesview.ui:66
+msgid "Available Protocols"
+msgstr "Protocolos disponíveis"
+
+#. Translators: Server as any successfully connected network address
+#: gtk/ui/gtkplacesview.ui:118
+msgid "No recent servers found"
+msgstr "Nenhum servidor recente encontrado"
+
+#: gtk/ui/gtkplacesview.ui:141
+msgid "Recent Servers"
+msgstr "Servidores recentes"
+
+#: gtk/ui/gtkplacesview.ui:221
+msgid "No results found"
+msgstr "Nenhum resultado encontrado"
+
+#: gtk/ui/gtkplacesview.ui:252
+msgid "Connect to _Server"
+msgstr "Conectar a _servidor"
+
+#: gtk/ui/gtkplacesview.ui:277
+msgid "Enter server address…"
+msgstr "Insira o endereço do servidor…"
+
+#. this is the header for the printer status column in the print dialog
+#: gtk/ui/gtkprintunixdialog.ui:145
+msgid "Status"
+msgstr "Status"
+
+#: gtk/ui/gtkprintunixdialog.ui:199
+msgid "Range"
+msgstr "Intervalo"
+
+#: gtk/ui/gtkprintunixdialog.ui:212
+msgid "_All Pages"
+msgstr "_Todas as páginas"
+
+#: gtk/ui/gtkprintunixdialog.ui:224
+msgid "C_urrent Page"
+msgstr "Página _atual"
+
+#: gtk/ui/gtkprintunixdialog.ui:237
+msgid "Se_lection"
+msgstr "S_eleção"
+
+# Não modificar para "_Páginas:", conflito com "Im_primir"
+#: gtk/ui/gtkprintunixdialog.ui:250
+msgid "Pag_es:"
+msgstr "Pá_ginas:"
+
+#: gtk/ui/gtkprintunixdialog.ui:251 gtk/ui/gtkprintunixdialog.ui:264
+msgid ""
+"Specify one or more page ranges,\n"
+" e.g. 1–3, 7, 11"
+msgstr ""
+"Especifique um ou mais intervalos de página,\n"
+" ex.: 1–3, 7, 11"
+
+#: gtk/ui/gtkprintunixdialog.ui:287
+msgid "Copies"
+msgstr "Cópias"
+
+#: gtk/ui/gtkprintunixdialog.ui:302
+msgid "Copie_s:"
+msgstr "Cópia_s:"
+
+#: gtk/ui/gtkprintunixdialog.ui:325
+msgid "C_ollate"
+msgstr "_Intercalar"
+
+#: gtk/ui/gtkprintunixdialog.ui:336
+msgid "_Reverse"
+msgstr "Inverte_r"
+
+#: gtk/ui/gtkprintunixdialog.ui:366
+msgid "General"
+msgstr "Geral"
+
+#: gtk/ui/gtkprintunixdialog.ui:408
+msgid "T_wo-sided:"
+msgstr "Frente e _verso:"
+
+#: gtk/ui/gtkprintunixdialog.ui:430
+msgid "Pages per _side:"
+msgstr "Páginas por _lado:"
+
+#: gtk/ui/gtkprintunixdialog.ui:454
+msgid "Page or_dering:"
+msgstr "O_rdem das páginas:"
+
+#: gtk/ui/gtkprintunixdialog.ui:477
+msgid "_Only print:"
+msgstr "_Apenas imprimir:"
+
 #: gtk/ui/gtkprintunixdialog.ui:493
 msgid "All sheets"
 msgstr "Todas as páginas"
@@ -6117,21 +6454,115 @@ msgstr "Páginas pares"
 msgid "Odd sheets"
 msgstr "Páginas ímpares"
 
-#: gtk/ui/gtkprintunixdialog.ui:675
-msgid "Portrait"
-msgstr "Retrato"
+#: gtk/ui/gtkprintunixdialog.ui:509
+msgid "Sc_ale:"
+msgstr "E_scala:"
 
-#: gtk/ui/gtkprintunixdialog.ui:676
-msgid "Landscape"
-msgstr "Paisagem"
+#: gtk/ui/gtkprintunixdialog.ui:554
+msgid "Paper"
+msgstr "Papel"
 
-#: gtk/ui/gtkprintunixdialog.ui:677
-msgid "Reverse portrait"
-msgstr "Retrato invertido"
+#: gtk/ui/gtkprintunixdialog.ui:569
+msgid "Paper _type:"
+msgstr "_Tipo de papel:"
 
-#: gtk/ui/gtkprintunixdialog.ui:678
-msgid "Reverse landscape"
-msgstr "Paisagem invertida"
+#: gtk/ui/gtkprintunixdialog.ui:591
+msgid "Paper _source:"
+msgstr "_Origem do papel:"
+
+#: gtk/ui/gtkprintunixdialog.ui:613
+msgid "Output t_ray:"
+msgstr "_Bandeja de saída:"
+
+#: gtk/ui/gtkprintunixdialog.ui:658
+msgid "Or_ientation:"
+msgstr "Ori_entação:"
+
+#: gtk/ui/gtkprintunixdialog.ui:732
+msgid "Job Details"
+msgstr "Detalhes do trabalho"
+
+#: gtk/ui/gtkprintunixdialog.ui:747
+msgid "Pri_ority:"
+msgstr "Pri_oridade:"
+
+#: gtk/ui/gtkprintunixdialog.ui:768
+msgid "_Billing info:"
+msgstr "Inf. de _faturamento:"
+
+#: gtk/ui/gtkprintunixdialog.ui:801
+msgid "Print Document"
+msgstr "Imprimir documento"
+
+#. this is one of the choices for the print at option in the print dialog
+#: gtk/ui/gtkprintunixdialog.ui:814
+msgid "_Now"
+msgstr "A_gora"
+
+#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
+#: gtk/ui/gtkprintunixdialog.ui:828
+msgid "A_t:"
+msgstr "À_s:"
+
+#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
+#: gtk/ui/gtkprintunixdialog.ui:830 gtk/ui/gtkprintunixdialog.ui:832
+#: gtk/ui/gtkprintunixdialog.ui:848 gtk/ui/gtkprintunixdialog.ui:850
+msgid ""
+"Specify the time of print,\n"
+" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+msgstr ""
+"Especifique o horário da impressão,\n"
+" ex.: 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+
+#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
+#: gtk/ui/gtkprintunixdialog.ui:862
+msgid "On _hold"
+msgstr "Em _espera"
+
+#: gtk/ui/gtkprintunixdialog.ui:864 gtk/ui/gtkprintunixdialog.ui:865
+msgid "Hold the job until it is explicitly released"
+msgstr "Mantém a impressão em espera até ser explicitamente liberada"
+
+#: gtk/ui/gtkprintunixdialog.ui:892
+msgid "Add Cover Page"
+msgstr "Adicionar página de capa"
+
+#. this is the label used for the option in the print dialog that controls the front cover page.
+#: gtk/ui/gtkprintunixdialog.ui:907
+msgid "Be_fore:"
+msgstr "_Antes:"
+
+#. this is the label used for the option in the print dialog that controls the back cover page.
+#: gtk/ui/gtkprintunixdialog.ui:928
+msgid "_After:"
+msgstr "_Depois:"
+
+#: gtk/ui/gtkprintunixdialog.ui:957
+msgid "Job"
+msgstr "Trabalho"
+
+#. This will appear as a tab label in the print dialog.
+#: gtk/ui/gtkprintunixdialog.ui:987
+msgid "Image Quality"
+msgstr "Qualidade da imagem"
+
+#. This will appear as a tab label in the print dialog.
+#: gtk/ui/gtkprintunixdialog.ui:1016
+msgid "Color"
+msgstr "Cor"
+
+#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
+#: gtk/ui/gtkprintunixdialog.ui:1045
+msgid "Finishing"
+msgstr "Finalização"
+
+#: gtk/ui/gtkprintunixdialog.ui:1074
+msgid "Advanced"
+msgstr "Avançado"
+
+#: gtk/ui/gtkprintunixdialog.ui:1090
+msgid "Some of the settings in the dialog conflict"
+msgstr "Há conflitos em algumas das configurações no diálogo"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
@@ -7655,314 +8086,3 @@ msgstr ""
 
 #~ msgid "EGL is not supported"
 #~ msgstr "Sem suporte a EGL"
-
-#~ msgid "About"
-#~ msgstr "Sobre"
-
-#~ msgid "Credits"
-#~ msgstr "Créditos"
-
-#~ msgid "System"
-#~ msgstr "Sistema"
-
-#~ msgid "_View All Applications"
-#~ msgstr "_Ver todos os aplicativos"
-
-#~ msgid "_Find New Applications"
-#~ msgstr "_Localizar novos aplicativos"
-
-#~ msgid "No applications found."
-#~ msgstr "Nenhum aplicativo encontrado."
-
-#~ msgid "_Finish"
-#~ msgstr "_Concluir"
-
-#~ msgid "_Back"
-#~ msgstr "_Voltar"
-
-#~ msgid "_Next"
-#~ msgstr "Pró_ximo"
-
-#~ msgid "Select a Color"
-#~ msgstr "Escolha uma cor"
-
-#~ msgid "Pick a color from the screen"
-#~ msgstr "Escolha uma cor da tela"
-
-#~ msgid "Hexadecimal color or color name"
-#~ msgstr "Cor hexadecimal ou nome da cor"
-
-#~ msgid "Hue"
-#~ msgstr "Matiz"
-
-#~ msgid "Alpha value"
-#~ msgstr "Valor alfa"
-
-#~ msgid "Saturation and value"
-#~ msgstr "Saturação e valor"
-
-#~ msgctxt "Color channel"
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgctxt "Color channel"
-#~ msgid "H"
-#~ msgstr "H"
-
-#~ msgctxt "Color Channel"
-#~ msgid "S"
-#~ msgstr "S"
-
-#~ msgctxt "Color Channel"
-#~ msgid "V"
-#~ msgstr "V"
-
-#~ msgid "(None)"
-#~ msgstr "(Nenhum)"
-
-#~ msgid "Search…"
-#~ msgstr "Pesquisar…"
-
-#~ msgctxt "emoji category"
-#~ msgid "Smileys & People"
-#~ msgstr "Smileys & pessoas"
-
-#~ msgctxt "emoji category"
-#~ msgid "Body & Clothing"
-#~ msgstr "Corpo & roupas"
-
-#~ msgctxt "emoji category"
-#~ msgid "Animals & Nature"
-#~ msgstr "Animais & natureza"
-
-#~ msgctxt "emoji category"
-#~ msgid "Food & Drink"
-#~ msgstr "Comida & bebida"
-
-#~ msgctxt "emoji category"
-#~ msgid "Travel & Places"
-#~ msgstr "Viagem & lugares"
-
-#~ msgctxt "emoji category"
-#~ msgid "Activities"
-#~ msgstr "Atividades"
-
-#~ msgctxt "emoji category"
-#~ msgid "Objects"
-#~ msgstr "Objetos"
-
-#~ msgctxt "emoji category"
-#~ msgid "Symbols"
-#~ msgstr "Símbolos"
-
-#~ msgctxt "emoji category"
-#~ msgid "Flags"
-#~ msgstr "Bandeiras"
-
-#~ msgctxt "emoji category"
-#~ msgid "Recent"
-#~ msgstr "Recentes"
-
-#~ msgid "Create Folder"
-#~ msgstr "Criar pasta"
-
-#~ msgid "Remote location — only searching the current folder"
-#~ msgstr "Localização remota — pesquisando apenas a pasta atual"
-
-#~ msgid "Folder Name"
-#~ msgstr "Nome da pasta"
-
-#~ msgid "_Create"
-#~ msgstr "_Criar"
-
-#  Título da janela
-#~ msgid "Select Font"
-#~ msgstr "Selecionar fonte"
-
-#~ msgid "Search font name"
-#~ msgstr "Pesquisar o nome da fonte"
-
-#~ msgid "Filter by"
-#~ msgstr "Filtrar por"
-
-#~ msgid "Monospace"
-#~ msgstr "Monoespaçado"
-
-#~ msgid "Language"
-#~ msgstr "Idioma"
-
-#~ msgid "Preview text"
-#~ msgstr "Visualização de texto"
-
-#~ msgid "horizontal"
-#~ msgstr "horizontal"
-
-#~ msgid "No Fonts Found"
-#~ msgstr "Nenhuma fonte encontrada"
-
-#~ msgid "_Format for:"
-#~ msgstr "_Formatar para:"
-
-# Conflito com "Im_primir"
-#~ msgid "_Paper size:"
-#~ msgstr "_Tamanho do papel:"
-
-#~ msgid "_Orientation:"
-#~ msgstr "_Orientação:"
-
-#~ msgid "Server Addresses"
-#~ msgstr "Endereços de servidor"
-
-#~ msgid ""
-#~ "Server addresses are made up of a protocol prefix and an address. "
-#~ "Examples:"
-#~ msgstr ""
-#~ "Endereços de servidor são feitos de um prefixo de protocolo e um "
-#~ "endereço. Exemplos:"
-
-#~ msgid "Available Protocols"
-#~ msgstr "Protocolos disponíveis"
-
-#~ msgid "No recent servers found"
-#~ msgstr "Nenhum servidor recente encontrado"
-
-#~ msgid "Recent Servers"
-#~ msgstr "Servidores recentes"
-
-#~ msgid "No results found"
-#~ msgstr "Nenhum resultado encontrado"
-
-#~ msgid "Connect to _Server"
-#~ msgstr "Conectar a _servidor"
-
-#~ msgid "Enter server address…"
-#~ msgstr "Insira o endereço do servidor…"
-
-#~ msgid "Status"
-#~ msgstr "Status"
-
-#~ msgid "Range"
-#~ msgstr "Intervalo"
-
-#~ msgid "_All Pages"
-#~ msgstr "_Todas as páginas"
-
-#~ msgid "C_urrent Page"
-#~ msgstr "Página _atual"
-
-#~ msgid "Se_lection"
-#~ msgstr "S_eleção"
-
-# Não modificar para "_Páginas:", conflito com "Im_primir"
-#~ msgid "Pag_es:"
-#~ msgstr "Pá_ginas:"
-
-#~ msgid ""
-#~ "Specify one or more page ranges,\n"
-#~ " e.g. 1–3, 7, 11"
-#~ msgstr ""
-#~ "Especifique um ou mais intervalos de página,\n"
-#~ " ex.: 1–3, 7, 11"
-
-#~ msgid "Copies"
-#~ msgstr "Cópias"
-
-#~ msgid "Copie_s:"
-#~ msgstr "Cópia_s:"
-
-#~ msgid "C_ollate"
-#~ msgstr "_Intercalar"
-
-#~ msgid "_Reverse"
-#~ msgstr "Inverte_r"
-
-#~ msgid "General"
-#~ msgstr "Geral"
-
-#~ msgid "T_wo-sided:"
-#~ msgstr "Frente e _verso:"
-
-#~ msgid "Pages per _side:"
-#~ msgstr "Páginas por _lado:"
-
-#~ msgid "Page or_dering:"
-#~ msgstr "O_rdem das páginas:"
-
-#~ msgid "_Only print:"
-#~ msgstr "_Apenas imprimir:"
-
-#~ msgid "Sc_ale:"
-#~ msgstr "E_scala:"
-
-#~ msgid "Paper"
-#~ msgstr "Papel"
-
-#~ msgid "Paper _type:"
-#~ msgstr "_Tipo de papel:"
-
-#~ msgid "Paper _source:"
-#~ msgstr "_Origem do papel:"
-
-#~ msgid "Output t_ray:"
-#~ msgstr "_Bandeja de saída:"
-
-#~ msgid "Or_ientation:"
-#~ msgstr "Ori_entação:"
-
-#~ msgid "Job Details"
-#~ msgstr "Detalhes do trabalho"
-
-#~ msgid "Pri_ority:"
-#~ msgstr "Pri_oridade:"
-
-#~ msgid "_Billing info:"
-#~ msgstr "Inf. de _faturamento:"
-
-#~ msgid "Print Document"
-#~ msgstr "Imprimir documento"
-
-#~ msgid "_Now"
-#~ msgstr "A_gora"
-
-#~ msgid "A_t:"
-#~ msgstr "À_s:"
-
-#~ msgid ""
-#~ "Specify the time of print,\n"
-#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-#~ msgstr ""
-#~ "Especifique o horário da impressão,\n"
-#~ " ex.: 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-
-#~ msgid "On _hold"
-#~ msgstr "Em _espera"
-
-#~ msgid "Hold the job until it is explicitly released"
-#~ msgstr "Mantém a impressão em espera até ser explicitamente liberada"
-
-#~ msgid "Add Cover Page"
-#~ msgstr "Adicionar página de capa"
-
-#~ msgid "Be_fore:"
-#~ msgstr "_Antes:"
-
-#~ msgid "_After:"
-#~ msgstr "_Depois:"
-
-#~ msgid "Job"
-#~ msgstr "Trabalho"
-
-#~ msgid "Image Quality"
-#~ msgstr "Qualidade da imagem"
-
-#~ msgid "Color"
-#~ msgstr "Cor"
-
-#~ msgid "Finishing"
-#~ msgstr "Finalização"
-
-#~ msgid "Advanced"
-#~ msgstr "Avançado"
-
-#~ msgid "Some of the settings in the dialog conflict"
-#~ msgstr "Há conflitos em algumas das configurações no diálogo"
