@@ -654,6 +654,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
+  gtk_widget_class_set_css_name (widget_class, "label");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LABEL);
 }
 
