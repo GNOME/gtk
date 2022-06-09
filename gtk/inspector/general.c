@@ -97,7 +97,7 @@ struct _GtkInspectorGeneral
   GtkWidget *vk_device;
   GtkWidget *vk_api_version;
   GtkWidget *vk_driver_version;
-  GtkWidget *app_id_frame;
+  GtkWidget *app_id_box;
   GtkWidget *app_id;
   GtkWidget *resource_path;
   GtkWidget *prefix;
@@ -185,7 +185,7 @@ init_app_id (GtkInspectorGeneral *gen)
   app = g_application_get_default ();
   if (!app)
     {
-      gtk_widget_set_visible (gen->app_id_frame, FALSE);
+      gtk_widget_set_visible (gen->app_id_box, FALSE);
       return;
     }
 
@@ -1137,7 +1137,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_device);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_api_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_driver_version);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id_frame);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, resource_path);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, prefix);
