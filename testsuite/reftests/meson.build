@@ -369,6 +369,8 @@ testdata = [
   'image-load-from-file.ui',
   'inscription-markup.ref.ui',
   'inscription-markup.ui',
+  'inscription-overflow.ref.ui',
+  'inscription-overflow.ui',
   'label-attribute-preference.css',
   'label-attribute-preference.ref.ui',
   'label-attribute-preference.ui',

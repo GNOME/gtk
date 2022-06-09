@@ -367,8 +367,8 @@ gtk_inscription_measure (GtkWidget      *widget,
 
 static void
 gtk_inscription_get_layout_location (GtkInscription *self,
-                                     int            *x_out,
-                                     int            *y_out)
+                                     float          *x_out,
+                                     float          *y_out)
 {
   GtkWidget *widget = GTK_WIDGET (self);
   const int widget_width = gtk_widget_get_width (widget);
@@ -376,7 +376,7 @@ gtk_inscription_get_layout_location (GtkInscription *self,
   PangoRectangle logical;
   float xalign;
   int baseline;
-  int x, y;
+  float x, y;
 
   g_assert (x_out);
   g_assert (y_out);
@@ -451,7 +451,7 @@ gtk_inscription_snapshot (GtkWidget   *widget,
 {
   GtkInscription *self = GTK_INSCRIPTION (widget);
   GtkStyleContext *context;
-  int lx, ly;
+  float lx, ly;
 
   if (!self->text || (*self->text == '\0'))
     return;
