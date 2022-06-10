@@ -24,7 +24,7 @@
 #include <gtk/gtkdragsource.h>
 #include <gtk/gtkeventcontroller.h>
 #include <gtk/gtkfilechooserdialog.h>
-#include <gtk/gtksignallistitemfactory.h>
+#include <gtk/gtkinscription.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtklistbox.h>
 #include <gtk/gtklistitem.h>
@@ -33,6 +33,7 @@
 #include <gtk/gtkmessagedialog.h>
 #include <gtk/gtkpicture.h>
 #include <gtk/gtkpopover.h>
+#include <gtk/gtksignallistitemfactory.h>
 #include <gtk/gtksingleselection.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktreeexpander.h>
@@ -401,7 +402,8 @@ setup_widget_for_render_node (GtkSignalListItemFactory *factory,
   gtk_box_append (GTK_BOX (box), child);
 
   /* name */
-  child = gtk_label_new (NULL);
+  child = gtk_inscription_new (NULL);
+  gtk_widget_set_hexpand (child, TRUE);
   gtk_box_append (GTK_BOX (box), child);
 }
 
@@ -431,7 +433,7 @@ bind_widget_for_render_node (GtkSignalListItemFactory *factory,
   /* name */
   name = node_name (node);
   child = gtk_widget_get_last_child (box);
-  gtk_label_set_label (GTK_LABEL (child), name);
+  gtk_inscription_set_text (GTK_INSCRIPTION (child), name);
   g_free (name);
 
   g_object_unref (paintable);
