@@ -165,6 +165,14 @@ items_changed (GListModel *model,
 }
 
 static void
+notify_n_items (GObject    *object,
+                GParamSpec *pspec,
+                GString    *changes)
+{
+  g_string_append_c (changes, '*');
+}
+
+static void
 free_changes (gpointer data)
 {
   GString *changes = data;
@@ -202,6 +210,7 @@ new_model (GListStore *store)
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
   g_signal_connect (result, "items-changed", G_CALLBACK (items_changed), changes);
+  g_signal_connect (result, "notify::n-items", G_CALLBACK (notify_n_items), changes);
 
   return result;
 }
@@ -249,11 +258,11 @@ test_set_model (void)
   store = new_store (1, 5, 1);
   gtk_map_list_model_set_model (map, G_LIST_MODEL (store));
   assert_model (map, "2 4 6 8 10");
-  assert_changes (map, "0+5");
+  assert_changes (map, "0+5*");
 
   gtk_map_list_model_set_model (map, NULL);
   assert_model (map, "");
-  assert_changes (map, "0-5");
+  assert_changes (map, "0-5*");
 
   g_object_unref (store);
   g_object_unref (map);
