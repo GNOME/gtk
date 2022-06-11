@@ -71,6 +71,16 @@ struct _GtkMultiFilterClass
   GtkFilterChange removal_change;
 };
 
+enum {
+  PROP_0,
+  PROP_ITEM_TYPE,
+  PROP_N_ITEMS,
+
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS] = { NULL, };
+
 static GType
 gtk_multi_filter_get_item_type (GListModel *list)
 {
@@ -140,6 +150,30 @@ gtk_multi_filter_changed_cb (GtkFilter       *filter,
 }
 
 static void
+gtk_multi_filter_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GtkMultiFilter *self = GTK_MULTI_FILTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, GTK_TYPE_FILTER);
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, gtk_filters_get_size (&self->filters));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_multi_filter_dispose (GObject *object)
 {
   GtkMultiFilter *self = GTK_MULTI_FILTER (object);
@@ -161,7 +195,34 @@ gtk_multi_filter_class_init (GtkMultiFilterClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
+  object_class->get_property = gtk_multi_filter_get_property;
   object_class->dispose = gtk_multi_filter_dispose;
+
+  /**
+   * GtkMultiFilter:item-type:
+   *
+   * The type of items. See [method@Gio.ListModel.get_item_type].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        GTK_TYPE_FILTER,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkMultiFilter:n-items:
+   *
+   * The number of items. See [method@Gio.ListModel.get_n_items].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -187,6 +248,7 @@ gtk_multi_filter_append (GtkMultiFilter *self,
   g_signal_connect (filter, "changed", G_CALLBACK (gtk_multi_filter_changed_cb), self);
   gtk_filters_append (&self->filters, filter);
   g_list_model_items_changed (G_LIST_MODEL (self), gtk_filters_get_size (&self->filters) - 1, 0, 1);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 
   gtk_filter_changed (GTK_FILTER (self),
                       GTK_MULTI_FILTER_GET_CLASS (self)->addition_change);
@@ -218,6 +280,7 @@ gtk_multi_filter_remove (GtkMultiFilter *self,
   g_signal_handlers_disconnect_by_func (filter, gtk_multi_filter_changed_cb, self);
   gtk_filters_splice (&self->filters, position, 1, FALSE, NULL, 0);
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 
   gtk_filter_changed (GTK_FILTER (self),
                       GTK_MULTI_FILTER_GET_CLASS (self)->removal_change);
