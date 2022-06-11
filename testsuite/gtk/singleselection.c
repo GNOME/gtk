@@ -221,6 +221,14 @@ items_changed (GListModel *model,
 }
 
 static void
+notify_n_items (GObject    *object,
+                GParamSpec *pspec,
+                GString    *changes)
+{
+  g_string_append_c (changes, '*');
+}
+
+static void
 selection_changed (GListModel *model,
                    guint       position,
                    guint       n_items,
@@ -265,6 +273,7 @@ new_model (GListStore *store, gboolean autoselect, gboolean can_unselect)
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
   g_signal_connect (result, "items-changed", G_CALLBACK (items_changed), changes);
+  g_signal_connect (result, "notify::n-items", G_CALLBACK (notify_n_items), changes);
 
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), selection_quark, changes, free_changes);
@@ -336,19 +345,19 @@ test_changes (void)
 
   g_list_store_remove (store, 3);
   assert_model (selection, "1 2 3 5");
-  assert_changes (selection, "-3");
+  assert_changes (selection, "-3*");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
   insert (store, 3, 99);
   assert_model (selection, "1 2 3 99 5");
-  assert_changes (selection, "+3");
+  assert_changes (selection, "+3*");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
   splice (store, 3, 2, (guint[]) { 97 }, 1);
   assert_model (selection, "1 2 3 97");
-  assert_changes (selection, "3-2+1");
+  assert_changes (selection, "3-2+1*");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
@@ -434,31 +443,31 @@ test_autoselect (void)
 
   add (store, 1);
   assert_model (selection, "1");
-  assert_changes (selection, "+0");
+  assert_changes (selection, "+0*");
   assert_selection (selection, "1");
   assert_selection_changes (selection, "");
 
   splice (store, 0, 1, (guint[]) { 7, 8, 9 }, 3);
   assert_model (selection, "7 8 9");
-  assert_changes (selection, "0-1+3");
+  assert_changes (selection, "0-1+3*");
   assert_selection (selection, "7");
   assert_selection_changes (selection, "");
 
   splice (store, 0, 0, (guint[]) { 5, 6 }, 2);
   assert_model (selection, "5 6 7 8 9");
-  assert_changes (selection, "0+2");
+  assert_changes (selection, "0+2*");
   assert_selection (selection, "7");
   assert_selection_changes (selection, "");
 
   g_list_store_remove (store, 2);
   assert_model (selection, "5 6 8 9");
-  assert_changes (selection, "2-2+1");
+  assert_changes (selection, "2-2+1*");
   assert_selection (selection, "8");
   assert_selection_changes (selection, "");
 
   splice (store, 2, 2, NULL, 0);
   assert_model (selection, "5 6");
-  assert_changes (selection, "1-3+1");
+  assert_changes (selection, "1-3+1*");
   assert_selection (selection, "6");
   assert_selection_changes (selection, "");
 
@@ -470,13 +479,13 @@ test_autoselect (void)
 
   g_list_store_remove (store, 0);
   assert_model (selection, "2");
-  assert_changes (selection, "-0");
+  assert_changes (selection, "-0*");
   assert_selection (selection, "2");
   assert_selection_changes (selection, "");
 
   g_list_store_remove (store, 0);
   assert_model (selection, "");
-  assert_changes (selection, "-0");
+  assert_changes (selection, "-0*");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
@@ -671,24 +680,24 @@ test_set_model (void)
 
   /* we retain the selected item across model changes */
   gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), m2);
-  assert_changes (selection, "0-5+3");
+  assert_changes (selection, "0-5+3*");
   assert_selection (selection, "1");
   assert_selection_changes (selection, "");
 
   gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), NULL);
-  assert_changes (selection, "0-3");
+  assert_changes (selection, "0-3*");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
   gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), m2);
-  assert_changes (selection, "0+3");
+  assert_changes (selection, "0+3*");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
   /* we retain no selected item across model changes */
   gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), m1);
-  assert_changes (selection, "0-3+5");
+  assert_changes (selection, "0-3+5*");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
@@ -697,7 +706,7 @@ test_set_model (void)
   assert_selection_changes (selection, "4:1");
 
   gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), m2);
-  assert_changes (selection, "0-5+3");
+  assert_changes (selection, "0-5+3*");
   assert_selection (selection, "");
   assert_selection_changes (selection, "");
 
