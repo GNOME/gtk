@@ -186,6 +186,7 @@ gtk_multi_filter_append (GtkMultiFilter *self,
 
   g_signal_connect (filter, "changed", G_CALLBACK (gtk_multi_filter_changed_cb), self);
   gtk_filters_append (&self->filters, filter);
+  g_list_model_items_changed (G_LIST_MODEL (self), gtk_filters_get_size (&self->filters) - 1, 0, 1);
 
   gtk_filter_changed (GTK_FILTER (self),
                       GTK_MULTI_FILTER_GET_CLASS (self)->addition_change);
@@ -216,6 +217,7 @@ gtk_multi_filter_remove (GtkMultiFilter *self,
   filter = gtk_filters_get (&self->filters, position);
   g_signal_handlers_disconnect_by_func (filter, gtk_multi_filter_changed_cb, self);
   gtk_filters_splice (&self->filters, position, 1, FALSE, NULL, 0);
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
 
   gtk_filter_changed (GTK_FILTER (self),
                       GTK_MULTI_FILTER_GET_CLASS (self)->removal_change);
