@@ -158,6 +158,30 @@ struct _GtkAssistantClass
   void (* cancel)  (GtkAssistant *assistant);
 };
 
+#define GTK_TYPE_ASSISTANT_PAGES (gtk_assistant_pages_get_type ())
+G_DECLARE_FINAL_TYPE (GtkAssistantPages, gtk_assistant_pages, GTK, ASSISTANT_PAGES, GObject)
+
+struct _GtkAssistantPages
+{
+  GObject parent_instance;
+  GtkAssistant *assistant;
+};
+
+struct _GtkAssistantPagesClass
+{
+  GObjectClass parent_class;
+};
+
+enum {
+  PAGES_PROP_0,
+  PAGES_PROP_ITEM_TYPE,
+  PAGES_PROP_N_ITEMS,
+
+  PAGES_N_PROPS
+};
+
+static GParamSpec *pages_properties[PAGES_N_PROPS] = { NULL, };
+
 static void     gtk_assistant_dispose            (GObject           *object);
 static void     gtk_assistant_map                (GtkWidget         *widget);
 static void     gtk_assistant_unmap              (GtkWidget         *widget);
@@ -1289,8 +1313,11 @@ gtk_assistant_dispose (GObject *object)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (object);
 
-  if (assistant->model)
-    g_list_model_items_changed (G_LIST_MODEL (assistant->model), 0, g_list_length (assistant->pages), 0);
+  if (assistant->model && g_list_length (assistant->pages))
+    {
+      g_list_model_items_changed (G_LIST_MODEL (assistant->model), 0, g_list_length (assistant->pages), 0);
+      g_object_notify_by_pspec (G_OBJECT (assistant->model), pages_properties[PAGES_PROP_N_ITEMS]);
+    }  
 
   /* We set current to NULL so that the remove code doesn't try
    * to do anything funny
@@ -1733,7 +1760,10 @@ gtk_assistant_add_page (GtkAssistant *assistant,
     }
 
   if (assistant->model)
-    g_list_model_items_changed (assistant->model, position, 0, 1);
+    {
+      g_list_model_items_changed (assistant->model, position, 0, 1);
+      g_object_notify_by_pspec (G_OBJECT (assistant->model), pages_properties[PAGES_PROP_N_ITEMS]);
+    }
 
   return position;
 }
@@ -1759,7 +1789,10 @@ gtk_assistant_remove_page (GtkAssistant *assistant,
     assistant_remove_page (assistant, page);
 
   if (assistant->model)
-    g_list_model_items_changed (assistant->model, page_num, 1, 0);
+    {
+      g_list_model_items_changed (assistant->model, page_num, 1, 0);
+      g_object_notify_by_pspec (G_OBJECT (assistant->model), pages_properties[PAGES_PROP_N_ITEMS]);
+    }
 }
 
 /**
@@ -2184,20 +2217,6 @@ gtk_assistant_page_get_child (GtkAssistantPage *page)
   return page->page;
 }
 
-#define GTK_TYPE_ASSISTANT_PAGES (gtk_assistant_pages_get_type ())
-G_DECLARE_FINAL_TYPE (GtkAssistantPages, gtk_assistant_pages, GTK, ASSISTANT_PAGES, GObject)
-
-struct _GtkAssistantPages
-{
-  GObject parent_instance;
-  GtkAssistant *assistant;
-};
-
-struct _GtkAssistantPagesClass
-{
-  GObjectClass parent_class;
-};
-
 static GType
 gtk_assistant_pages_get_item_type (GListModel *model)
 {
@@ -2231,8 +2250,33 @@ gtk_assistant_pages_list_model_init (GListModelInterface *iface)
   iface->get_n_items = gtk_assistant_pages_get_n_items;
   iface->get_item = gtk_assistant_pages_get_item;
 }
+
 G_DEFINE_TYPE_WITH_CODE (GtkAssistantPages, gtk_assistant_pages, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_assistant_pages_list_model_init))
+
+static void
+gtk_assistant_pages_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GtkAssistantPages *self = GTK_ASSISTANT_PAGES (object);
+
+  switch (prop_id)
+    {
+    case PAGES_PROP_ITEM_TYPE:
+      g_value_set_gtype (value, GTK_TYPE_ASSISTANT_PAGE);
+      break;
+
+    case PAGES_PROP_N_ITEMS:
+      g_value_set_uint (value, gtk_assistant_pages_get_n_items (G_LIST_MODEL (self)));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
 static void
 gtk_assistant_pages_init (GtkAssistantPages *pages)
@@ -2240,8 +2284,23 @@ gtk_assistant_pages_init (GtkAssistantPages *pages)
 }
 
 static void
-gtk_assistant_pages_class_init (GtkAssistantPagesClass *class)
+gtk_assistant_pages_class_init (GtkAssistantPagesClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gtk_assistant_pages_get_property;
+
+  pages_properties[PAGES_PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        GTK_TYPE_ASSISTANT_PAGE,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  pages_properties[PAGES_PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, PAGES_N_PROPS, pages_properties);
 }
 
 static GtkAssistantPages *
