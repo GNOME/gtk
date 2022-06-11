@@ -175,6 +175,14 @@ items_changed (GListModel *model,
 }
 
 static void
+notify_n_items (GObject    *object,
+                GParamSpec *pspec,
+                GString    *changes)
+{
+  g_string_append_c (changes, '*');
+}
+
+static void
 free_changes (gpointer data)
 {
   GString *changes = data;
@@ -198,6 +206,7 @@ new_model (GListStore *store, guint offset, guint size)
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
   g_signal_connect (result, "items-changed", G_CALLBACK (items_changed), changes);
+  g_signal_connect (result, "notify::n-items", G_CALLBACK (notify_n_items), changes);
 
   return result;
 }
@@ -245,11 +254,11 @@ test_set_model (void)
   store = new_store (1, 7, 2);
   gtk_slice_list_model_set_model (slice, G_LIST_MODEL (store));
   assert_model (slice, "1 3");
-  assert_changes (slice, "0+2");
+  assert_changes (slice, "0+2*");
 
   gtk_slice_list_model_set_model (slice, NULL);
   assert_model (slice, "");
-  assert_changes (slice, "0-2");
+  assert_changes (slice, "0-2*");
 
   g_object_unref (store);
   g_object_unref (slice);
@@ -272,11 +281,11 @@ test_set_slice (void)
 
   gtk_slice_list_model_set_size (slice, 2);
   assert_model (slice, "3 5");
-  assert_changes (slice, "-2");
+  assert_changes (slice, "-2*");
 
   gtk_slice_list_model_set_size (slice, 10);
   assert_model (slice, "3 5 7");
-  assert_changes (slice, "+2");
+  assert_changes (slice, "+2*");
 
   g_object_unref (store);
   g_object_unref (slice);
@@ -306,15 +315,15 @@ test_changes (void)
 
   splice (store, 13, 6, (guint[]) { 97 }, 1);
   assert_model (slice, "12 13 99 97");
-  assert_changes (slice, "3-2+1");
+  assert_changes (slice, "3-2+1*");
 
   splice (store, 13, 1, (guint[]) { 36, 37, 38 }, 3);
   assert_model (slice, "12 13 99 36 37");
-  assert_changes (slice, "3-1+2");
+  assert_changes (slice, "3-1+2*");
 
   g_list_store_remove_all (store);
   assert_model (slice, "");
-  assert_changes (slice, "0-5");
+  assert_changes (slice, "0-5*");
 
   g_object_unref (store);
   g_object_unref (slice);
