@@ -402,6 +402,7 @@ gtk_multi_sorter_append (GtkMultiSorter *self,
 
   g_signal_connect (sorter, "changed", G_CALLBACK (gtk_multi_sorter_changed_cb), self);
   gtk_sorters_append (&self->sorters, sorter);
+  g_list_model_items_changed (G_LIST_MODEL (self), gtk_sorters_get_size (&self->sorters) - 1, 0, 1);
 
   gtk_sorter_changed_with_keys (GTK_SORTER (self),
                                 GTK_SORTER_CHANGE_MORE_STRICT,
@@ -434,6 +435,7 @@ gtk_multi_sorter_remove (GtkMultiSorter *self,
   sorter = gtk_sorters_get (&self->sorters, position);
   g_signal_handlers_disconnect_by_func (sorter, gtk_multi_sorter_changed_cb, self);
   gtk_sorters_splice (&self->sorters, position, 1, FALSE, NULL, 0);
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
 
   gtk_sorter_changed_with_keys (GTK_SORTER (self),
                                 GTK_SORTER_CHANGE_LESS_STRICT,
