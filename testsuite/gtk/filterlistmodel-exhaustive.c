@@ -75,6 +75,9 @@ assert_items_changed_correctly (GListModel *model,
 {
   guint i, n_items;
 
+  //sanity check that we got all notifies
+  g_assert_cmpuint (g_list_model_get_n_items (compare), ==, GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (compare), "last-notified-n-items")));
+
   //g_print ("%s => %u -%u +%u => %s\n", model_to_string (compare), position, removed, added, model_to_string (model));
 
   g_assert_cmpint (g_list_model_get_n_items (model), ==, g_list_model_get_n_items (compare) - removed + added);
@@ -127,6 +130,21 @@ assert_items_changed_correctly (GListModel *model,
     }
 }
 
+static void
+assert_n_items_notified_properly (GListModel *model,
+                                  GParamSpec *pspec,
+                                  GListModel *compare)
+{
+  g_assert_cmpuint (g_list_model_get_n_items (model), !=, GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (compare), "last-notified-n-items")));
+
+  /* These should hve been updated in items-changed, which should have been emitted first */
+  g_assert_cmpuint (g_list_model_get_n_items (model), ==, g_list_model_get_n_items (compare));
+
+  g_object_set_data (G_OBJECT (compare),
+                     "last-notified-n-items",
+                     GUINT_TO_POINTER (g_list_model_get_n_items (model)));
+}
+
 static GtkFilterListModel *
 filter_list_model_new (GListModel *source,
                        GtkFilter  *filter)
@@ -151,6 +169,16 @@ filter_list_model_new (GListModel *source,
                          "items-changed",
                          G_CALLBACK (assert_items_changed_correctly), 
                          check,
+                         (GClosureNotify) g_object_unref,
+                         0);
+
+  g_object_set_data (G_OBJECT (check),
+                     "last-notified-n-items",
+                     GUINT_TO_POINTER (g_list_model_get_n_items (G_LIST_MODEL (check))));
+  g_signal_connect_data (model,
+                         "notify::n-items",
+                         G_CALLBACK (assert_n_items_notified_properly), 
+                         g_object_ref (check),
                          (GClosureNotify) g_object_unref,
                          0);
 
