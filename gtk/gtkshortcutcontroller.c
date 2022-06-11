@@ -103,8 +103,10 @@ struct _GtkShortcutControllerClass
 
 enum {
   PROP_0,
+  PROP_ITEM_TYPE,
   PROP_MNEMONICS_MODIFIERS,
   PROP_MODEL,
+  PROP_N_ITEMS,
   PROP_SCOPE,
 
   N_PROPS
@@ -187,6 +189,18 @@ gtk_shortcut_controller_is_rooted (GtkShortcutController *self)
 }
 
 static void
+gtk_shortcut_controller_items_changed_cb (GListModel            *model,
+                                          guint                  position,
+                                          guint                  removed,
+                                          guint                  added,
+                                          GtkShortcutController *self)
+{
+  g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+  if (removed != added)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
+}
+
+static void
 gtk_shortcut_controller_set_property (GObject      *object,
                                       guint         prop_id,
                                       const GValue *value,
@@ -214,10 +228,10 @@ gtk_shortcut_controller_set_property (GObject      *object,
             self->custom_shortcuts = FALSE;
           }
 
-        self->shortcuts_changed_id =  g_signal_connect_swapped (self->shortcuts,
-                                                                "items-changed",
-                                                                G_CALLBACK (g_list_model_items_changed),
-                                                                self);
+        self->shortcuts_changed_id =  g_signal_connect (self->shortcuts,
+                                                        "items-changed",
+                                                        G_CALLBACK (gtk_shortcut_controller_items_changed_cb),
+                                                        self);
       }
       break;
 
@@ -240,8 +254,16 @@ gtk_shortcut_controller_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, G_TYPE_OBJECT);
+      break;
+
     case PROP_MNEMONICS_MODIFIERS:
       g_value_set_flags (value, self->mnemonics_modifiers);
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, g_list_model_get_n_items (self->shortcuts));
       break;
 
     case PROP_SCOPE:
@@ -563,6 +585,18 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
   controller_class->unset_widget = gtk_shortcut_controller_unset_widget;
 
   /**
+   * GtkShortCutController:item-type:
+   *
+   * The type of items. See [method@Gio.ListModel.get_item_type].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        G_TYPE_OBJECT,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkShortcutController:mnemonic-modifiers: (attributes org.gtk.Property.get=gtk_shortcut_controller_get_mnemonics_modifiers org.gtk.Property.set=gtk_shortcut_controller_set_mnemonics_modifiers)
    *
    * The modifiers that need to be pressed to allow mnemonics activation.
@@ -582,6 +616,18 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
       g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkShortcutController:n-items:
+   *
+   * The number of items. See [method@Gio.ListModel.get_n_items].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkShortcutController:scope: (attributes org.gtk.Property.get=gtk_shortcut_controller_get_scope org.gtk.Property.set=gtk_shortcut_controller_set_scope)
