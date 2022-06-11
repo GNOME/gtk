@@ -60,8 +60,11 @@ enum {
   PROP_ERROR,
   PROP_FILE,
   PROP_IO_PRIORITY,
+  PROP_ITEM_TYPE,
   PROP_LOADING,
   PROP_MONITORED,
+  PROP_N_ITEMS,
+
   NUM_PROPERTIES
 };
 
@@ -204,12 +207,20 @@ gtk_directory_list_get_property (GObject     *object,
       g_value_set_int (value, self->io_priority);
       break;
 
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, G_TYPE_FILE_INFO);
+      break;
+
     case PROP_LOADING:
       g_value_set_boolean (value, gtk_directory_list_is_loading (self));
       break;
 
     case PROP_MONITORED:
       g_value_set_boolean (value, gtk_directory_list_get_monitored (self));
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, g_sequence_get_length (self->items));
       break;
 
     default:
@@ -313,6 +324,18 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
                         GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * GtkDirectoryList:item-type:
+   *
+   * The type of items. See [method@Gio.ListModel.get_item_type].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        G_TYPE_FILE_INFO,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkDirectoryList:loading: (attributes org.gtk.Property.get=gtk_directory_list_is_loading)
    *
    * %TRUE if files are being loaded.
@@ -331,6 +354,18 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
       g_param_spec_boolean ("monitored", NULL, NULL,
                             TRUE,
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkDirectoryList:n-items:
+   *
+   * The number of items. See [method@Gio.ListModel.get_n_items].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
@@ -380,6 +415,7 @@ gtk_directory_list_clear_items (GtkDirectoryList *self)
                                g_sequence_get_end_iter (self->items));
 
       g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, 0);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
     }
 
   if (self->error)
@@ -462,7 +498,10 @@ gtk_directory_list_got_files_cb (GObject      *source,
                                       self);
 
   if (n > 0)
-    g_list_model_items_changed (G_LIST_MODEL (self), g_sequence_get_length (self->items) - n, 0, n);
+    {
+      g_list_model_items_changed (G_LIST_MODEL (self), g_sequence_get_length (self->items) - n, 0, n);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
+    }
 }
 
 static void
@@ -580,6 +619,7 @@ handle_event (QueuedEvent *event)
           position = g_sequence_get_length (self->items);
           g_sequence_append (self->items, g_object_ref (info));
           g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
         }
       break;
 
@@ -591,6 +631,7 @@ handle_event (QueuedEvent *event)
           position = g_sequence_iter_get_position (iter);
           g_sequence_remove (iter);
           g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+          g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
         }
       break;
 
