@@ -395,9 +395,15 @@ gtk_inscription_get_layout_location (GtkInscription *self,
       /* yalign is 0 because we can't support yalign while baseline aligning */
       y = baseline - layout_baseline;
     }
+  else if (pango_layout_is_ellipsized (self->layout))
+    {
+      y = 0.f;
+    }
   else
     {
       y = floor ((widget_height - logical.height) * self->yalign);
+      if (y < 0)
+        y = 0.f;
     }
 
   *x_out = x;
