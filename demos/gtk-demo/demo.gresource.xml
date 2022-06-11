@@ -329,6 +329,7 @@
     <file>pickers.c</file>
     <file>printing.c</file>
     <file>revealer.c</file>
+    <file>read_more.c</file>
     <file>rotated_text.c</file>
     <file>scale.c</file>
     <file>search_entry.c</file>
