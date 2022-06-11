@@ -7,9 +7,9 @@
           <lookup name="item">GtkListItem</lookup>
         </binding>
         <property name="child">
-          <object class="GtkLabel">
-            <property name="halign">start</property>
-            <binding name="label">
+          <object class="GtkInscription">
+            <property name="hexpand">1</property>
+            <binding name="text">
               <lookup name="title" type="GtkDemo">
                 <lookup name="item">expander</lookup>
               </lookup>
