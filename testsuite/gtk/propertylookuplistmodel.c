@@ -91,6 +91,14 @@ items_changed (GListModel *model,
 }
 
 static void
+notify_n_items (GObject    *object,
+                GParamSpec *pspec,
+                GString    *changes)
+{
+  g_string_append_c (changes, '*');
+}
+
+static void
 free_changes (gpointer data)
 {
   GString *changes = data;
@@ -145,6 +153,7 @@ new_model (gboolean fill)
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
   g_signal_connect (result, "items-changed", G_CALLBACK (items_changed), changes);
+  g_signal_connect (result, "notify::n-items", G_CALLBACK (notify_n_items), changes);
 
   return result;
 }
@@ -185,14 +194,14 @@ test_set_object (void)
   model = new_model (FALSE);
   gtk_property_lookup_list_model_set_object (model, widget);
   assert_model (model, "GtkLabel GtkGrid GtkBox GtkWindow");
-  assert_changes (model, "+0");
+  assert_changes (model, "+0*");
   g_object_unref (model);
 
   model = new_model (FALSE);
   assert_model (model, "");
   gtk_property_lookup_list_model_set_object (model, widget);
   assert_model (model, "GtkLabel GtkGrid GtkBox GtkWindow");
-  assert_changes (model, "0+4");
+  assert_changes (model, "0+4*");
   g_object_unref (model);
 
   destroy_widgets ();
@@ -212,15 +221,15 @@ test_change_property (void)
   assert_model (model, ""); /* make sure the model has a definite size */
   gtk_property_lookup_list_model_set_object (model, widget);
   assert_model (model, "GtkLabel GtkGrid GtkBox GtkWindow");
-  assert_changes (model, "0+4");
+  assert_changes (model, "0+4*");
 
   gtk_grid_remove (GTK_GRID (parent), widget);
   assert_model (model, "GtkLabel");
-  assert_changes (model, "1-3");
+  assert_changes (model, "1-3*");
 
   gtk_box_append (GTK_BOX (grandparent), widget);
   assert_model (model, "GtkLabel GtkBox GtkWindow");
-  assert_changes (model, "1+2");
+  assert_changes (model, "1+2*");
 
   g_object_unref (model);
   destroy_widgets ();
