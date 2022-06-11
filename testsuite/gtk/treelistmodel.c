@@ -143,6 +143,14 @@ items_changed (GListModel *model,
 }
 
 static void
+notify_n_items (GObject    *object,
+                GParamSpec *pspec,
+                GString    *changes)
+{
+  g_string_append_c (changes, '*');
+}
+
+static void
 free_changes (gpointer data)
 {
   GString *changes = data;
@@ -174,6 +182,7 @@ new_model (guint    size,
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(tree), changes_quark, changes, free_changes);
   g_signal_connect (tree, "items-changed", G_CALLBACK (items_changed), changes);
+  g_signal_connect (tree, "notify::n-items", G_CALLBACK (notify_n_items), changes);
 
   return tree;
 }
@@ -193,7 +202,7 @@ test_expand (void)
       g_object_unref (row);
     }
   assert_model (tree, "100 100 90 80 70 60 50 40 30 20 10");
-  assert_changes (tree, "1+10");
+  assert_changes (tree, "1+10*");
 
   for (i = g_list_model_get_n_items (G_LIST_MODEL (tree)); i > 0; i--)
     {
@@ -202,7 +211,7 @@ test_expand (void)
       g_object_unref (row);
     }
   assert_model (tree, "100 100 100 99 98 97 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 70 70 69 68 67 66 65 64 63 62 61 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2 1");
-  assert_changes (tree, "11+10, 10+10, 9+10, 8+10, 7+10, 6+10, 5+10, 4+10, 3+10, 2+10");
+  assert_changes (tree, "11+10*, 10+10*, 9+10*, 8+10*, 7+10*, 6+10*, 5+10*, 4+10*, 3+10*, 2+10*");
 
   for (i = g_list_model_get_n_items (G_LIST_MODEL (tree)); i > 0; i--)
     {
@@ -229,25 +238,25 @@ test_remove_some (void)
   g_assert_true (G_IS_LIST_MODEL (item));
   g_list_store_remove (item, 3);
   assert_model (tree, "100 100 100 99 98 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 70 70 69 68 67 66 65 64 63 62 61 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2 1");
-  assert_changes (tree, "-5");
+  assert_changes (tree, "-5*");
 
   item = g_list_model_get_item (G_LIST_MODEL (tree), 0);
   g_assert_true (G_IS_LIST_MODEL (item));
   g_list_store_remove (item, 3);
   assert_model (tree, "100 100 100 99 98 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2 1");
-  assert_changes (tree, "33-11");
+  assert_changes (tree, "33-11*");
 
   item = g_list_model_get_item (G_LIST_MODEL (tree), 88);
   g_assert_true (G_IS_LIST_MODEL (item));
   g_list_store_remove (item, 9);
   assert_model (tree, "100 100 100 99 98 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11 10 10 9 8 7 6 5 4 3 2");
-  assert_changes (tree, "-98");
+  assert_changes (tree, "-98*");
 
   item = g_list_model_get_item (G_LIST_MODEL (tree), 0);
   g_assert_true (G_IS_LIST_MODEL (item));
   g_list_store_remove (item, 8);
   assert_model (tree, "100 100 100 99 98 96 95 94 93 92 91 90 90 89 88 87 86 85 84 83 82 81 80 80 79 78 77 76 75 74 73 72 71 60 60 59 58 57 56 55 54 53 52 51 50 50 49 48 47 46 45 44 43 42 41 40 40 39 38 37 36 35 34 33 32 31 30 30 29 28 27 26 25 24 23 22 21 20 20 19 18 17 16 15 14 13 12 11");
-  assert_changes (tree, "88-10");
+  assert_changes (tree, "88-10*");
 
   g_object_unref (tree);
 }

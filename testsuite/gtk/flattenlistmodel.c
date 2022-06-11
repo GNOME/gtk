@@ -194,6 +194,14 @@ items_changed (GListModel *model,
 }
 
 static void
+notify_n_items (GObject    *object,
+                GParamSpec *pspec,
+                GString    *changes)
+{
+  g_string_append_c (changes, '*');
+}
+
+static void
 free_changes (gpointer data)
 {
   GString *changes = data;
@@ -216,6 +224,7 @@ new_model (GListStore *store)
   changes = g_string_new ("");
   g_object_set_qdata_full (G_OBJECT(result), changes_quark, changes, free_changes);
   g_signal_connect (result, "items-changed", G_CALLBACK (items_changed), changes);
+  g_signal_connect (result, "notify::n-items", G_CALLBACK (notify_n_items), changes);
 
   return result;
 }
@@ -271,7 +280,7 @@ test_model_add (void)
   add_store (model, 8, 10, 1);
 
   assert_model (flat, "1 2 3 4 5 6 7 8 9 10");
-  assert_changes (flat, "0+3, +3, 4+3, 7+3");
+  assert_changes (flat, "0+3*, +3*, 4+3*, 7+3*");
 
   g_object_unref (model);
   g_object_unref (flat);
@@ -293,13 +302,13 @@ test_submodel_add (void)
   store[2] = add_store (model, 5, 4, 1);
   store[3] = add_store (model, 8, 8, 1);
   assert_model (flat, "2 3 4 8");
-  assert_changes (flat, "0+2, +2, +3");
+  assert_changes (flat, "0+2*, +2*, +3*");
 
   insert (store[0], 0, 1);
   splice (store[2], 0, 0, (guint[3]) { 5, 6, 7 }, 3);
   splice (store[3], 1, 0, (guint[2]) { 9, 10 }, 2);
   assert_model (flat, "1 2 3 4 5 6 7 8 9 10");
-  assert_changes (flat, "+0, 4+3, 8+2");
+  assert_changes (flat, "+0*, 4+3*, 8+2*");
 
   g_object_unref (model);
   g_object_unref (flat);
@@ -325,19 +334,19 @@ test_submodel_add2 (void)
 
   add (store[0], 1);
   assert_model (flat, "1");
-  assert_changes (flat, "+0");
+  assert_changes (flat, "+0*");
 
   add (store[1], 3);
   assert_model (flat, "1 3");
-  assert_changes (flat, "+1");
+  assert_changes (flat, "+1*");
 
   add (store[0], 2);
   assert_model (flat, "1 2 3");
-  assert_changes (flat, "+1");
+  assert_changes (flat, "+1*");
 
   add (store[1], 4);
   assert_model (flat, "1 2 3 4");
-  assert_changes (flat, "+3");
+  assert_changes (flat, "+3*");
 
   g_object_unref (model);
   g_object_unref (flat);
@@ -363,7 +372,7 @@ test_model_remove (void)
   g_list_store_remove (model, 0);
   g_object_unref (model);
   assert_model (flat, "");
-  assert_changes (flat, "3-4, 3-3, 0-3");
+  assert_changes (flat, "3-4*, 3-3*, 0-3*");
 
   g_object_unref (flat);
 }
@@ -389,7 +398,7 @@ test_submodel_remove (void)
   g_object_unref (model);
 
   assert_model (flat, "2 3 4 8");
-  assert_changes (flat, "-0, 3-3, 4-2");
+  assert_changes (flat, "-0*, 3-3*, 4-2*");
 
   g_object_unref (flat);
 }

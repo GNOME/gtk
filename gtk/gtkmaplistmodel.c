@@ -60,7 +60,10 @@
 enum {
   PROP_0,
   PROP_HAS_MAP,
+  PROP_ITEM_TYPE,
   PROP_MODEL,
+  PROP_N_ITEMS,
+
   NUM_PROPERTIES
 };
 
@@ -221,6 +224,8 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
   if (self->items == NULL)
     {
       g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+      if (removed != added)
+        g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
       return;
     }
 
@@ -269,6 +274,8 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
     }
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+  if (removed != added)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 }
 
 static void
@@ -305,8 +312,16 @@ gtk_map_list_model_get_property (GObject     *object,
       g_value_set_boolean (value, self->items != NULL);
       break;
 
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, gtk_map_list_model_get_item_type (G_LIST_MODEL (self)));
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, gtk_map_list_model_get_n_items (G_LIST_MODEL (self)));
       break;
 
     default:
@@ -361,6 +376,18 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * GtkMapListModel:item-type:
+   *
+   * The type of items. See [method@Gio.ListModel.get_item_type].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        G_TYPE_OBJECT,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkMapListModel:model: (attributes org.gtk.Property.get=gtk_map_list_model_get_model org.gtk.Property.set=gtk_map_list_model_set_model)
    *
    * The model being mapped.
@@ -369,6 +396,18 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
       g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkMapListModel:n-items:
+   *
+   * The number of items. See [method@Gio.ListModel.get_n_items].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
 }
@@ -578,6 +617,8 @@ gtk_map_list_model_set_model (GtkMapListModel *self,
   
   if (removed > 0 || added > 0)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
+  if (removed != added)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }

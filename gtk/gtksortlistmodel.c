@@ -79,7 +79,9 @@
 enum {
   PROP_0,
   PROP_INCREMENTAL,
+  PROP_ITEM_TYPE,
   PROP_MODEL,
+  PROP_N_ITEMS,
   PROP_PENDING,
   PROP_SORTER,
   NUM_PROPERTIES
@@ -580,6 +582,8 @@ gtk_sort_list_model_items_changed_cb (GListModel       *model,
     {
       self->n_items = self->n_items - removed + added;
       g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+      if (removed != added)
+        g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
       return;
     }
 
@@ -620,6 +624,8 @@ gtk_sort_list_model_items_changed_cb (GListModel       *model,
 
   n_items = self->n_items - start - end;
   g_list_model_items_changed (G_LIST_MODEL (self), start, n_items - added + removed, n_items);
+  if (removed != added)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 }
 
 static void
@@ -664,8 +670,16 @@ gtk_sort_list_model_get_property (GObject     *object,
       g_value_set_boolean (value, self->incremental);
       break;
 
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, gtk_sort_list_model_get_item_type (G_LIST_MODEL (self)));
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, gtk_sort_list_model_get_n_items (G_LIST_MODEL (self)));
       break;
 
     case PROP_PENDING:
@@ -789,6 +803,18 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
+   * GtkSortListModel:item-type:
+   *
+   * The type of items. See [method@Gio.ListModel.get_item_type].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        G_TYPE_OBJECT,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkSortListModel:model: (attributes org.gtk.Property.get=gtk_sort_list_model_get_model org.gtk.Property.set=gtk_sort_list_model_set_model)
    *
    * The model being sorted.
@@ -797,6 +823,18 @@ gtk_sort_list_model_class_init (GtkSortListModelClass *class)
       g_param_spec_object ("model", NULL, NULL,
                            G_TYPE_LIST_MODEL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkSortListModel:n-items:
+   *
+   * The number of items. See [method@Gio.ListModel.get_n_items].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkSortListModel:pending: (attributes org.gtk.Property.get=gtk_sort_list_model_get_pending)
@@ -898,6 +936,8 @@ gtk_sort_list_model_set_model (GtkSortListModel *self,
   
   if (removed > 0 || self->n_items > 0)
     g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, self->n_items);
+  if (removed != self->n_items)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }

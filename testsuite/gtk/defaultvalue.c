@@ -298,6 +298,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           strcmp (pspec->name, "model") == 0)
         check = FALSE;
 
+      if (g_type_is_a (type, GTK_TYPE_TREE_LIST_MODEL) &&
+	  (strcmp (pspec->name, "item-type") == 0)) /* might be a treelistrow */
+	check = FALSE;
+
       /* This is set in init() */
       if (g_type_is_a (type, GTK_TYPE_FONT_CHOOSER_WIDGET) &&
           strcmp (pspec->name, "tweak-action") == 0)

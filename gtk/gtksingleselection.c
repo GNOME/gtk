@@ -57,9 +57,11 @@ enum {
   PROP_0,
   PROP_AUTOSELECT,
   PROP_CAN_UNSELECT,
+  PROP_ITEM_TYPE,
+  PROP_MODEL,
+  PROP_N_ITEMS,
   PROP_SELECTED,
   PROP_SELECTED_ITEM,
-  PROP_MODEL,
   N_PROPS
 };
 
@@ -271,6 +273,8 @@ gtk_single_selection_items_changed_cb (GListModel         *model,
     }
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+  if (removed != added)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 
   g_object_thaw_notify (G_OBJECT (self));
 }
@@ -337,8 +341,17 @@ gtk_single_selection_get_property (GObject    *object,
     case PROP_CAN_UNSELECT:
       g_value_set_boolean (value, self->can_unselect);
       break;
+
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, gtk_single_selection_get_item_type (G_LIST_MODEL (self)));
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, gtk_single_selection_get_n_items (G_LIST_MODEL (self)));
       break;
 
     case PROP_SELECTED:
@@ -398,6 +411,40 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GtkSingleSelection:item-type:
+   *
+   * The type of items. See [method@Gio.ListModel.get_item_type].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        G_TYPE_OBJECT,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkSingleSelection:model: (attributes org.gtk.Property.get=gtk_single_selection_get_model org.gtk.Property.set=gtk_single_selection_set_model)
+   *
+   * The model being managed.
+   */
+  properties[PROP_MODEL] =
+    g_param_spec_object ("model", NULL, NULL,
+                         G_TYPE_LIST_MODEL,
+                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkSingleSelection:n-items:
+   *
+   * The number of items. See [method@Gio.ListModel.get_n_items].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkSingleSelection:selected: (attributes org.gtk.Property.get=gtk_single_selection_get_selected org.gtk.Property.set=gtk_single_selection_set_selected)
    *
    * Position of the selected item.
@@ -414,18 +461,8 @@ gtk_single_selection_class_init (GtkSingleSelectionClass *klass)
    */
   properties[PROP_SELECTED_ITEM] =
     g_param_spec_object ("selected-item", NULL, NULL,
-                       G_TYPE_OBJECT,
-                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GtkSingleSelection:model: (attributes org.gtk.Property.get=gtk_single_selection_get_model org.gtk.Property.set=gtk_single_selection_set_model)
-   *
-   * The model being managed.
-   */
-  properties[PROP_MODEL] =
-    g_param_spec_object ("model", NULL, NULL,
-                       G_TYPE_LIST_MODEL,
-                       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+                         G_TYPE_OBJECT,
+                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -528,6 +565,8 @@ gtk_single_selection_set_model (GtkSingleSelection *self,
           g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTED_ITEM]);
         }
       g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items_before, 0);
+      if (n_items_before)
+        g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);

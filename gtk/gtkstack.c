@@ -498,6 +498,16 @@ struct _GtkStackPagesClass
   GObjectClass parent_class;
 };
 
+enum {
+  PAGES_PROP_0,
+  PAGES_PROP_ITEM_TYPE,
+  PAGES_PROP_N_ITEMS,
+
+  PAGES_N_PROPS
+};
+
+static GParamSpec *pages_properties[PAGES_N_PROPS] = { NULL, };
+
 static GType
 gtk_stack_pages_get_item_type (GListModel *model)
 {
@@ -583,13 +593,52 @@ G_DEFINE_TYPE_WITH_CODE (GtkStackPages, gtk_stack_pages, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SELECTION_MODEL, gtk_stack_pages_selection_model_init))
 
 static void
+gtk_stack_pages_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GtkStackPages *self = GTK_STACK_PAGES (object);
+
+  switch (prop_id)
+    {
+    case PAGES_PROP_ITEM_TYPE:
+      g_value_set_gtype (value, GTK_TYPE_STACK_PAGE);
+      break;
+
+    case PAGES_PROP_N_ITEMS:
+      g_value_set_uint (value, gtk_stack_pages_get_n_items (G_LIST_MODEL (self)));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_stack_pages_init (GtkStackPages *pages)
 {
 }
 
 static void
-gtk_stack_pages_class_init (GtkStackPagesClass *class)
+gtk_stack_pages_class_init (GtkStackPagesClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gtk_stack_pages_get_property;
+
+  pages_properties[PAGES_PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        GTK_TYPE_STACK_PAGE,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  pages_properties[PAGES_PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, PAGES_N_PROPS, pages_properties);
 }
 
 static GtkStackPages *
@@ -680,8 +729,11 @@ gtk_stack_dispose (GObject *obj)
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (stack))))
     stack_remove (stack, child, TRUE);
 
-  if (priv->pages)
-    g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, n_pages, 0);
+  if (priv->pages && n_pages > 0)
+    {
+      g_list_model_items_changed (G_LIST_MODEL (priv->pages), 0, n_pages, 0);
+      g_object_notify_by_pspec (G_OBJECT (priv->pages), pages_properties[PAGES_PROP_N_ITEMS]);
+    }
 
   G_OBJECT_CLASS (gtk_stack_parent_class)->dispose (obj);
 }
@@ -1535,7 +1587,10 @@ gtk_stack_add_page (GtkStack     *stack,
   gtk_widget_set_parent (child_info->widget, GTK_WIDGET (stack));
 
   if (priv->pages)
-    g_list_model_items_changed (G_LIST_MODEL (priv->pages), g_list_length (priv->children) - 1, 0, 1);
+    {
+      g_list_model_items_changed (G_LIST_MODEL (priv->pages), g_list_length (priv->children) - 1, 0, 1);
+      g_object_notify_by_pspec (G_OBJECT (priv->pages), pages_properties[PAGES_PROP_N_ITEMS]);
+    }
 
   g_signal_connect (child_info->widget, "notify::visible",
                     G_CALLBACK (stack_child_visibility_notify_cb), stack);
@@ -1616,7 +1671,10 @@ gtk_stack_remove (GtkStack  *stack,
   stack_remove (stack, child, FALSE);
 
   if (priv->pages)
-    g_list_model_items_changed (G_LIST_MODEL (priv->pages), position, 1, 0);
+    {
+      g_list_model_items_changed (G_LIST_MODEL (priv->pages), position, 1, 0);
+      g_object_notify_by_pspec (G_OBJECT (priv->pages), pages_properties[PAGES_PROP_N_ITEMS]);
+    }
 }
 
 /**

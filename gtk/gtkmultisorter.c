@@ -66,6 +66,16 @@ struct _GtkMultiSortKeys
   GtkMultiSortKey keys[];
 };
 
+enum {
+  PROP_0,
+  PROP_ITEM_TYPE,
+  PROP_N_ITEMS,
+
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS] = { NULL, };
+
 static void
 gtk_multi_sort_keys_free (GtkSortKeys *keys)
 {
@@ -328,6 +338,30 @@ gtk_multi_sorter_changed_cb (GtkSorter       *sorter,
 }
 
 static void
+gtk_multi_sorter_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GtkMultiSorter *self = GTK_MULTI_SORTER (object);
+
+  switch (prop_id)
+    {
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, GTK_TYPE_SORTER);
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, gtk_sorters_get_size (&self->sorters));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_multi_sorter_dispose (GObject *object)
 {
   GtkMultiSorter *self = GTK_MULTI_SORTER (object);
@@ -352,7 +386,34 @@ gtk_multi_sorter_class_init (GtkMultiSorterClass *class)
   sorter_class->compare = gtk_multi_sorter_compare;
   sorter_class->get_order = gtk_multi_sorter_get_order;
 
+  object_class->get_property = gtk_multi_sorter_get_property;
   object_class->dispose = gtk_multi_sorter_dispose;
+
+  /**
+   * GtkMultiSorter:item-type:
+   *
+   * The type of items. See [method@Gio.ListModel.get_item_type].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        GTK_TYPE_SORTER,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkMultiSorter:n-items:
+   *
+   * The number of items. See [method@Gio.ListModel.get_n_items].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -402,6 +463,8 @@ gtk_multi_sorter_append (GtkMultiSorter *self,
 
   g_signal_connect (sorter, "changed", G_CALLBACK (gtk_multi_sorter_changed_cb), self);
   gtk_sorters_append (&self->sorters, sorter);
+  g_list_model_items_changed (G_LIST_MODEL (self), gtk_sorters_get_size (&self->sorters) - 1, 0, 1);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 
   gtk_sorter_changed_with_keys (GTK_SORTER (self),
                                 GTK_SORTER_CHANGE_MORE_STRICT,
@@ -434,6 +497,8 @@ gtk_multi_sorter_remove (GtkMultiSorter *self,
   sorter = gtk_sorters_get (&self->sorters, position);
   g_signal_handlers_disconnect_by_func (sorter, gtk_multi_sorter_changed_cb, self);
   gtk_sorters_splice (&self->sorters, position, 1, FALSE, NULL, 0);
+  g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 
   gtk_sorter_changed_with_keys (GTK_SORTER (self),
                                 GTK_SORTER_CHANGE_LESS_STRICT,
