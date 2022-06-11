@@ -48,7 +48,9 @@ struct _GtkNoSelectionClass
 
 enum {
   PROP_0,
+  PROP_ITEM_TYPE,
   PROP_MODEL,
+  PROP_N_ITEMS,
   N_PROPS
 };
 
@@ -120,13 +122,25 @@ G_DEFINE_TYPE_EXTENDED (GtkNoSelection, gtk_no_selection, G_TYPE_OBJECT, 0,
                                                gtk_no_selection_selection_model_init))
 
 static void
+gtk_no_selection_items_changed_cb (GListModel     *model,
+                                   guint           position,
+                                   guint           removed,
+                                   guint           added,
+                                   GtkNoSelection *self)
+{
+  g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
+  if (removed != added)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
+}
+
+static void
 gtk_no_selection_clear_model (GtkNoSelection *self)
 {
   if (self->model == NULL)
     return;
 
   g_signal_handlers_disconnect_by_func (self->model, 
-                                        g_list_model_items_changed,
+                                        gtk_no_selection_items_changed_cb,
                                         self);
   g_clear_object (&self->model);
 }
@@ -162,9 +176,18 @@ gtk_no_selection_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, gtk_no_selection_get_item_type (G_LIST_MODEL (self)));
+      break;
+
     case PROP_MODEL:
       g_value_set_object (value, self->model);
       break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, gtk_no_selection_get_n_items (G_LIST_MODEL (self)));
+      break;
+
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -192,6 +215,18 @@ gtk_no_selection_class_init (GtkNoSelectionClass *klass)
   gobject_class->dispose = gtk_no_selection_dispose;
 
   /**
+   * GtkNoSelection:item-type:
+   *
+   * The type of items. See [method@Gio.ListModel.get_item_type].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        G_TYPE_OBJECT,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkNoSelection:model: (attributes org.gtk.property.get=gtk_no_selection_get_model org.gtk.Property.set=gtk_no_selection_set_model)
    *
    * The model being managed.
@@ -200,6 +235,18 @@ gtk_no_selection_class_init (GtkNoSelectionClass *klass)
     g_param_spec_object ("model", NULL, NULL,
                        G_TYPE_LIST_MODEL,
                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkNoSelection:n-items:
+   *
+   * The number of items. See [method@Gio.ListModel.get_n_items].
+   *
+   * Since: 4.8
+   **/
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
@@ -263,7 +310,7 @@ void
 gtk_no_selection_set_model (GtkNoSelection *self,
                             GListModel     *model)
 {
-  guint n_items_before;
+  guint n_items_before, n_items_after;
 
   g_return_if_fail (GTK_IS_NO_SELECTION (self));
   g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
@@ -277,14 +324,19 @@ gtk_no_selection_set_model (GtkNoSelection *self,
   if (model)
     {
       self->model = g_object_ref (model);
-      g_signal_connect_swapped (self->model, "items-changed",
-                                G_CALLBACK (g_list_model_items_changed), self);
+      g_signal_connect (self->model, "items-changed",
+                        G_CALLBACK (gtk_no_selection_items_changed_cb), self);
+      n_items_after = g_list_model_get_n_items (self->model);
     }
+  else
+    n_items_after = 0;
 
   g_list_model_items_changed (G_LIST_MODEL (self),
                               0,
                               n_items_before,
-                              model ? g_list_model_get_n_items (self->model) : 0);
+                              n_items_after);
+  if (n_items_before != n_items_after)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
