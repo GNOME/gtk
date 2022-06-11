@@ -48,6 +48,16 @@ struct _GtkListListModelClass
   GObjectClass parent_class;
 };
 
+enum {
+  PROP_0,
+  PROP_ITEM_TYPE,
+  PROP_N_ITEMS,
+
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS] = { NULL, };
+
 static GType
 gtk_list_list_model_get_item_type (GListModel *list)
 {
@@ -110,6 +120,30 @@ G_DEFINE_TYPE_WITH_CODE (GtkListListModel, gtk_list_list_model,
                          G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, gtk_list_list_model_list_model_init))
 
 static void
+gtk_list_list_model_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GtkListListModel *self = GTK_LIST_LIST_MODEL (object);
+
+  switch (prop_id)
+    {
+    case PROP_ITEM_TYPE:
+      g_value_set_gtype (value, G_TYPE_OBJECT);
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, self->n_items);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_list_list_model_dispose (GObject *object)
 {
   GtkListListModel *self = GTK_LIST_LIST_MODEL (object);
@@ -128,7 +162,20 @@ gtk_list_list_model_class_init (GtkListListModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->get_property = gtk_list_list_model_get_property;
   object_class->dispose = gtk_list_list_model_dispose;
+
+  properties[PROP_ITEM_TYPE] =
+    g_param_spec_gtype ("item-type", NULL, NULL,
+                        G_TYPE_OBJECT,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -231,6 +278,7 @@ gtk_list_list_model_item_added_at (GtkListListModel *self,
   self->n_items += 1;
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 }
 
 void
@@ -292,6 +340,7 @@ gtk_list_list_model_item_removed_at (GtkListListModel *self,
   self->n_items -= 1;
 
   g_list_model_items_changed (G_LIST_MODEL (self), position, 1, 0);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
 }
 
 void
@@ -310,7 +359,10 @@ gtk_list_list_model_clear (GtkListListModel *self)
   self->notify = NULL;
 
   if (n_items > 0)
-    g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, 0);
+    {
+      g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, 0);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_ITEMS]);
+    }
 }
 
 
