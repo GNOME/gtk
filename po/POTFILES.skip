@@ -226,6 +226,14 @@ testsuite/reftests/info-bar-message-types.ref.ui
 testsuite/reftests/info-bar-message-types.ui
 testsuite/reftests/inherit-and-initial.ref.ui
 testsuite/reftests/inherit-and-initial.ui
+testsuite/reftests/inscription-markup.ref.ui
+testsuite/reftests/inscription-markup.ui
+testsuite/reftests/inscription-overflow-multiline.ref.ui
+testsuite/reftests/inscription-overflow-multiline.ui
+testsuite/reftests/inscription-overflow.ref.ui
+testsuite/reftests/inscription-overflow.ui
+testsuite/reftests/inscription-overflow-yalign.ref.ui
+testsuite/reftests/inscription-overflow-yalign.ui
 testsuite/reftests/label-attribute-preference.ref.ui
 testsuite/reftests/label-attribute-preference.ui
 testsuite/reftests/label-background.ref.ui
@@ -242,6 +250,8 @@ testsuite/reftests/label-fonts.ref.ui
 testsuite/reftests/label-fonts.ui
 testsuite/reftests/label-max-width-chars-and-halign-and-infinite-width.ref.ui
 testsuite/reftests/label-max-width-chars-and-halign-and-infinite-width.ui
+testsuite/reftests/label-overdraw-vertical.ref.ui
+testsuite/reftests/label-overdraw-vertical.ui
 testsuite/reftests/label-shadows.ref.ui
 testsuite/reftests/label-shadows.ui
 testsuite/reftests/label-sizing.ref.ui
