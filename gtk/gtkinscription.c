@@ -234,6 +234,27 @@ gtk_inscription_set_property (GObject      *object,
 }
 
 static void
+update_pango_alignment (GtkInscription *self)
+{
+  PangoAlignment align;
+  gboolean ltr;
+
+  g_assert (self->layout != NULL);
+  g_assert (self->xalign >= 0.0 && self->xalign <= 1.0);
+
+  ltr = _gtk_widget_get_direction (GTK_WIDGET (self)) != GTK_TEXT_DIR_RTL;
+
+  if (self->xalign < 0.33)
+      align = ltr ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
+  else if (self->xalign < 0.67)
+      align = PANGO_ALIGN_CENTER;
+  else
+      align = ltr ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
+
+  pango_layout_set_alignment (self->layout, align);
+}
+
+static void
 gtk_inscription_update_layout_attributes (GtkInscription *self,
                                           PangoAttrList  *css_attrs)
 {
@@ -265,6 +286,17 @@ gtk_inscription_css_changed (GtkWidget         *widget,
       
       gtk_widget_queue_draw (widget);
     }
+}
+
+static void
+gtk_inscription_direction_changed (GtkWidget        *widget,
+                                   GtkTextDirection  previous_direction)
+{
+  GtkInscription *self = GTK_INSCRIPTION (widget);
+
+  GTK_WIDGET_CLASS (gtk_inscription_parent_class)->direction_changed (widget, previous_direction);
+
+  update_pango_alignment (self);
 }
 
 static PangoFontMetrics *
@@ -491,6 +523,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
   gobject_class->set_property = gtk_inscription_set_property;
 
   widget_class->css_changed = gtk_inscription_css_changed;
+  widget_class->direction_changed = gtk_inscription_direction_changed;
   widget_class->measure = gtk_inscription_measure;
   widget_class->size_allocate = gtk_inscription_allocate;
   widget_class->snapshot = gtk_inscription_snapshot;
@@ -987,6 +1020,8 @@ gtk_inscription_set_xalign (GtkInscription *self,
     return;
 
   self->xalign = xalign;
+
+  update_pango_alignment (self);
 
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
