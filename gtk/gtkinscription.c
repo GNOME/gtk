@@ -86,6 +86,7 @@ enum
   PROP_NAT_LINES,
   PROP_TEXT,
   PROP_TEXT_OVERFLOW,
+  PROP_WRAP_MODE,
   PROP_XALIGN,
   PROP_YALIGN,
 
@@ -154,6 +155,10 @@ gtk_inscription_get_property (GObject    *object,
       g_value_set_enum (value, self->overflow);
       break;
 
+    case PROP_WRAP_MODE:
+      g_value_set_enum (value, pango_layout_get_wrap (self->layout));
+      break;
+
     case PROP_XALIGN:
       g_value_set_float (value, self->xalign);
       break;
@@ -208,6 +213,10 @@ gtk_inscription_set_property (GObject      *object,
 
     case PROP_TEXT_OVERFLOW:
       gtk_inscription_set_text_overflow (self, g_value_get_enum (value));
+      break;
+
+    case PROP_WRAP_MODE:
+      gtk_inscription_set_wrap_mode (self, g_value_get_enum (value));
       break;
 
     case PROP_XALIGN:
@@ -395,9 +404,15 @@ gtk_inscription_get_layout_location (GtkInscription *self,
       /* yalign is 0 because we can't support yalign while baseline aligning */
       y = baseline - layout_baseline;
     }
+  else if (pango_layout_is_ellipsized (self->layout))
+    {
+      y = 0.f;
+    }
   else
     {
       y = floor ((widget_height - logical.height) * self->yalign);
+      if (y < 0)
+        y = 0.f;
     }
 
   *x_out = x;
@@ -619,6 +634,21 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                        GTK_TYPE_INSCRIPTION_OVERFLOW,
                        GTK_INSCRIPTION_OVERFLOW_CLIP,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkInscription:wrap-mode: (attributes org.gtk.Property.get=gtk_inscription_get_wrap_mode org.gtk.Property.set=gtk_inscription_set_wrap_mode)
+   *
+   * Controls how the line wrapping is done.
+   *
+   * Note that unlike `GtkLabel`, the default here is %PANGO_WRAP_WORD_CHAR.
+   *
+   * Since: 4.8
+   */
+  properties[PROP_WRAP_MODE] =
+      g_param_spec_enum ("wrap-mode", NULL, NULL,
+                         PANGO_TYPE_WRAP_MODE,
+                         PANGO_WRAP_WORD_CHAR,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkInscription:xalign: (attributes org.gtk.Property.get=gtk_inscription_get_xalign org.gtk.Property.set=gtk_inscription_set_xalign)
@@ -1144,6 +1174,51 @@ gtk_inscription_get_text_overflow (GtkInscription *self)
   g_return_val_if_fail (GTK_IS_INSCRIPTION (self), GTK_INSCRIPTION_OVERFLOW_CLIP);
 
   return self->overflow;
+}
+
+/**
+ * gtk_inscription_set_wrap_mode: (attributes org.gtk.Method.set_property=wrap-mode)
+ * @self: a `GtkInscription`
+ * @wrap_mode: the line wrapping mode
+ *
+ * Controls how line wrapping is done.
+ *
+ * Since:4.8
+ */
+void
+gtk_inscription_set_wrap_mode (GtkInscription *self,
+                               PangoWrapMode   wrap_mode)
+{
+  g_return_if_fail (GTK_IS_INSCRIPTION (self));
+
+  if (pango_layout_get_wrap (self->layout) == wrap_mode)
+    return;
+
+  pango_layout_set_wrap (self->layout, wrap_mode);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WRAP_MODE]);
+}
+
+/**
+ * gtk_inscription_get_wrap_mode: (attributes org.gtk.Method.get_property=wrap-mode)
+ * @self: a `GtkInscription`
+ *
+ * Returns line wrap mode used by the inscription.
+ *
+ * See [method@Gtk.Inscription.set_wrap_mode].
+ *
+ * Returns: the line wrap mode
+ *
+ * Since:4.8
+ */
+PangoWrapMode
+gtk_inscription_get_wrap_mode (GtkInscription *self)
+{
+  g_return_val_if_fail (GTK_IS_INSCRIPTION (self), PANGO_WRAP_WORD_CHAR);
+
+  return pango_layout_get_wrap (self->layout);
 }
 
 /**

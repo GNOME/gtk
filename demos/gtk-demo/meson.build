@@ -73,6 +73,7 @@ demos = files([
   'peg_solitaire.c',
   'pickers.c',
   'printing.c',
+  'read_more.c',
   'revealer.c',
   'rotated_text.c',
   'scale.c',
