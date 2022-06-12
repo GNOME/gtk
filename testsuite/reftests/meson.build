@@ -371,6 +371,8 @@ testdata = [
   'inscription-markup.ui',
   'inscription-overflow.ref.ui',
   'inscription-overflow.ui',
+  'inscription-overflow-multiline.ref.ui',
+  'inscription-overflow-multiline.ui',
   'inscription-overflow-yalign.ref.ui',
   'inscription-overflow-yalign.ui',
   'label-attribute-preference.css',
