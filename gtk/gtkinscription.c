@@ -424,7 +424,10 @@ gtk_inscription_get_layout_location (GtkInscription *self,
     xalign = 1.0 - xalign;
 
   pango_layout_get_pixel_extents (self->layout, NULL, &logical);
-  x = floor ((xalign * (widget_width - logical.width)) - logical.x);
+  if (pango_layout_get_width (self->layout) > 0)
+    x = 0.f;
+  else
+    x = floor ((xalign * (widget_width - logical.width)) - logical.x);
 
   baseline = gtk_widget_get_allocated_baseline (widget);
   if (baseline != -1)
