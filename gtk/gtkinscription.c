@@ -476,7 +476,17 @@ gtk_inscription_allocate (GtkWidget *widget,
             PangoRectangle rect;
             pango_layout_iter_get_line_extents (iter, NULL, &rect);
             if (rect.y + rect.height > height * PANGO_SCALE)
-              pango_layout_set_width (self->layout, -1);
+              {
+                while (!pango_layout_line_is_paragraph_start (pango_layout_iter_get_line_readonly (iter)))
+                  {
+                    if (!pango_layout_iter_next_line (iter))
+                      break;
+                  }
+                if (!pango_layout_line_is_paragraph_start (pango_layout_iter_get_line_readonly (iter)))
+                  {
+                    pango_layout_set_width (self->layout, -1);
+                  }
+              }
           }
       }
       break;
