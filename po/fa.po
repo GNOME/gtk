@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-06-05 12:35+0000\n"
-"PO-Revision-Date: 2022-06-06 12:42+0430\n"
+"POT-Creation-Date: 2022-06-10 06:06+0000\n"
+"PO-Revision-Date: 2022-06-13 10:18+0430\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -926,7 +926,7 @@ msgstr "دادهٔ بدریخت: URL"
 msgid "Could not unescape string"
 msgstr "نمی‌توان رشته را ناگریز کرد"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:124 gtk/ui/gtkaboutdialog.ui:163
 msgid "License"
 msgstr "پروانه"
 
@@ -1509,6 +1509,7 @@ msgid "Other application…"
 msgstr "برنامهٔ دیگر…"
 
 #: gtk/gtkappchooserdialog.c:205 gtk/gtkappchooserdialog.c:256
+#: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select Application"
 msgstr "گزینش برنامه"
 
@@ -1959,6 +1960,7 @@ msgid "Margins from Printer…"
 msgstr "حاشیه‌ها از چاپگر…"
 
 #: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:162
+#: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_بستن"
 
@@ -2082,7 +2084,9 @@ msgstr "یک پرونده با همان نام در حال حاضر وجود د�
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:640
 #: gtk/gtkprinteroptionwidget.c:722 gtk/gtkprintunixdialog.c:651
 #: gtk/gtkprintunixdialog.c:807 gtk/gtkwindow.c:6106 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1721
+#: gtk/inspector/recorder.c:1721 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
+#: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "_انصراف"
 
@@ -2096,7 +2100,7 @@ msgstr "_گشودن"
 msgid "_Save"
 msgstr "_ذخیره"
 
-#: gtk/gtkfilechoosernativequartz.c:339
+#: gtk/gtkfilechoosernativequartz.c:339 gtk/ui/gtkfilechooserwidget.ui:346
 msgid "Select which types of files are shown"
 msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش داده شوند"
 
@@ -2198,7 +2202,7 @@ msgid "_Add to Bookmarks"
 msgstr "_افزودن به نشانک‌ها"
 
 #: gtk/gtkfilechooserwidget.c:1823 gtk/gtkplacessidebar.c:2310
-#: gtk/gtkplacessidebar.c:3249
+#: gtk/gtkplacessidebar.c:3249 gtk/ui/gtkfilechooserwidget.ui:465
 msgid "_Rename"
 msgstr "_تغییر نام"
 
@@ -2226,7 +2230,9 @@ msgstr "نمایش _زمان"
 msgid "Sort _Folders Before Files"
 msgstr "مرتب کردن _شاخه‌ها پیش از پرونده‌ها"
 
+#. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2256 gtk/inspector/css-node-tree.ui:135
+#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkprintunixdialog.ui:114
 msgid "Location"
 msgstr "مکان"
 
@@ -2249,6 +2255,7 @@ msgid "Enter location or URL"
 msgstr "وارد کردن مکان یا URL"
 
 #: gtk/gtkfilechooserwidget.c:3811 gtk/gtkfilechooserwidget.c:6635
+#: gtk/ui/gtkfilechooserwidget.ui:226
 msgid "Modified"
 msgstr "تغییریافته"
 
@@ -2473,11 +2480,11 @@ msgstr "_رونوشت از نشانی"
 msgid "Invalid URI"
 msgstr "نشانی نامعتبر"
 
-#: gtk/gtklockbutton.c:285
+#: gtk/gtklockbutton.c:285 gtk/ui/gtklockbutton.ui:20
 msgid "Lock"
 msgstr "قفل"
 
-#: gtk/gtklockbutton.c:297
+#: gtk/gtklockbutton.c:297 gtk/ui/gtklockbutton.ui:26
 msgid "Unlock"
 msgstr "قفل‌گشایی"
 
@@ -2709,7 +2716,7 @@ msgstr "پروندهٔ برپایی صفحهٔ نامعتبر"
 msgid "Manage Custom Sizes…"
 msgstr "مدیریت اندازه‌های سفارشی…"
 
-#: gtk/gtkpagesetupunixdialog.c:284
+#: gtk/gtkpagesetupunixdialog.c:284 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
 msgstr "_اعمال"
 
@@ -2736,7 +2743,8 @@ msgstr ""
 "بالا:%s %s\n"
 "پایین:%s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:784
+#: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
+#: gtk/ui/gtkprintunixdialog.ui:709
 msgid "Page Setup"
 msgstr "برپایی صفحه"
 
@@ -2856,6 +2864,8 @@ msgstr "این نام از پیش گرفته شده"
 
 #: gtk/gtkplacessidebar.c:2304 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:24
+#: gtk/ui/gtkfilechooserwidget.ui:168 gtk/ui/gtkfilechooserwidget.ui:440
+#: gtk/ui/gtkprintunixdialog.ui:83
 msgid "Name"
 msgstr "نام"
 
@@ -2974,7 +2984,7 @@ msgid "Unable to access location"
 msgstr "نتوانست به موقعیت دسترسی یابد"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1228
+#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
 msgid "Con_nect"
 msgstr "اتّ_صال"
 
@@ -3061,7 +3071,8 @@ msgstr[0] "%s / %s در دسترس"
 msgid "Disconnect"
 msgstr "قطع ارتباط"
 
-#: gtk/gtkplacesviewrow.c:471
+#: gtk/gtkplacesviewrow.c:471 gtk/ui/gtkplacesviewrow.ui:53
+#: gtk/ui/gtksidebarrow.ui:50
 msgid "Unmount"
 msgstr "پیاده کردن"
 
@@ -3077,7 +3088,8 @@ msgstr "_به‌خاطرسپاری گذرواژه"
 msgid "Select a filename"
 msgstr "نام پرونده‌ای برگزینید"
 
-#: gtk/gtkprinteroptionwidget.c:723
+#: gtk/gtkprinteroptionwidget.c:723 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "_گزینش"
 
@@ -3401,11 +3413,13 @@ msgstr "نتایج جست‌وجو"
 msgid "Search Shortcuts"
 msgstr "میانبرهای جست‌وجو"
 
-#: gtk/gtkshortcutswindow.c:968
+#: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
+#: gtk/ui/gtkfilechooserwidget.ui:297
 msgid "No Results Found"
 msgstr "هیچ نتیجه‌ای پیدا نشد"
 
-#: gtk/gtkshortcutswindow.c:974
+#: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:362
+#: gtk/ui/gtkfilechooserwidget.ui:310 gtk/ui/gtkplacesview.ui:230
 msgid "Try a different search"
 msgstr "جست‌وجو دیگری را امتحان کنید"
 
@@ -3716,7 +3730,7 @@ msgstr "شناسهٔ برنامه"
 msgid "Resource Path"
 msgstr "مسیر منبع"
 
-#: gtk/inspector/general.ui:268
+#: gtk/inspector/general.ui:268 gtk/ui/gtkplacesview.ui:79
 msgid "Prefix"
 msgstr "پیشوند"
 
@@ -3777,7 +3791,7 @@ msgid "Address"
 msgstr "نشانی"
 
 #: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
-#: gtk/inspector/statistics.ui:46
+#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:214
 msgid "Type"
 msgstr "نوع"
 
@@ -4009,7 +4023,8 @@ msgstr "مسیر"
 msgid "Count"
 msgstr "تعداد"
 
-#: gtk/inspector/resource-list.ui:82
+#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:202
+#: gtk/ui/gtkfontchooserwidget.ui:204 gtk/ui/gtkfontchooserwidget.ui:351
 msgid "Size"
 msgstr "اندازه"
 
@@ -4262,7 +4277,7 @@ msgstr "هم‌نیای بعدی"
 msgid "Miscellaneous"
 msgstr "گوناگون"
 
-#: gtk/inspector/window.ui:407
+#: gtk/inspector/window.ui:407 gtk/ui/gtkprintunixdialog.ui:393
 msgid "Layout"
 msgstr "صفحه‌بندی"
 
@@ -5940,6 +5955,30 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
+#: gtk/ui/gtkaboutdialog.ui:62
+msgid "About"
+msgstr "درباره"
+
+#: gtk/ui/gtkaboutdialog.ui:123
+msgid "Credits"
+msgstr "دست‌اندرکاران"
+
+#: gtk/ui/gtkaboutdialog.ui:206
+msgid "System"
+msgstr "سامانه"
+
+#: gtk/ui/gtkappchooserdialog.ui:60
+msgid "_View All Applications"
+msgstr "_نمایش تمام برنامه‌ها"
+
+#: gtk/ui/gtkappchooserdialog.ui:66
+msgid "_Find New Applications"
+msgstr "برنامه‌های جدید _پیدا کنید"
+
+#: gtk/ui/gtkappchooserwidget.ui:100
+msgid "No applications found."
+msgstr "هیچ برنامه‌ای پیدا نشد."
+
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "ترجیحات"
@@ -5966,6 +6005,299 @@ msgstr "نمایش همه"
 msgid "Quit %s"
 msgstr "خروج از %s"
 
+#: gtk/ui/gtkassistant.ui:64
+msgid "_Finish"
+msgstr "_پایان"
+
+#: gtk/ui/gtkassistant.ui:75
+msgid "_Back"
+msgstr "_قبلی"
+
+#: gtk/ui/gtkassistant.ui:86
+msgid "_Next"
+msgstr "_بعدی"
+
+#: gtk/ui/gtkcolorchooserdialog.ui:4
+msgid "Select a Color"
+msgstr "یک رنگ انتخاب کنید"
+
+#: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
+msgid "Pick a color from the screen"
+msgstr "گزینش رنگی از صفحه"
+
+#: gtk/ui/gtkcoloreditor.ui:80
+msgid "Hexadecimal color or color name"
+msgstr "رنگ شانزده‌تایی یا نام رنگ"
+
+#: gtk/ui/gtkcoloreditor.ui:95
+msgid "Hue"
+msgstr "پرده"
+
+#: gtk/ui/gtkcoloreditor.ui:111
+msgid "Alpha value"
+msgstr "مقدار آلفا"
+
+#: gtk/ui/gtkcoloreditor.ui:129
+msgid "Saturation and value"
+msgstr "غلظت و مقدار"
+
+#: gtk/ui/gtkcoloreditor.ui:153
+msgctxt "Color channel"
+msgid "A"
+msgstr "A"
+
+#: gtk/ui/gtkcoloreditor.ui:189
+msgctxt "Color channel"
+msgid "H"
+msgstr "H"
+
+#: gtk/ui/gtkcoloreditor.ui:226
+msgctxt "Color Channel"
+msgid "S"
+msgstr "S"
+
+#: gtk/ui/gtkcoloreditor.ui:235
+msgctxt "Color Channel"
+msgid "V"
+msgstr "V"
+
+# farmaan
+#: gtk/ui/gtkdropdown.ui:19
+msgid "(None)"
+msgstr "(هیچ‌کدام)"
+
+#: gtk/ui/gtkdropdown.ui:68
+msgid "Search…"
+msgstr "جست‌وجو…"
+
+#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
+msgctxt "emoji category"
+msgid "Smileys & People"
+msgstr "شکلک‌ها و افراد"
+
+#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
+msgctxt "emoji category"
+msgid "Body & Clothing"
+msgstr "بدن و لباس‌ها"
+
+#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
+msgctxt "emoji category"
+msgid "Animals & Nature"
+msgstr "حیوانات و طبعیت"
+
+#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
+msgctxt "emoji category"
+msgid "Food & Drink"
+msgstr "غذا و نوشیدنی"
+
+#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
+msgctxt "emoji category"
+msgid "Travel & Places"
+msgstr "سفر و مکان‌ها"
+
+#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
+msgctxt "emoji category"
+msgid "Activities"
+msgstr "فعّالیت‌ها"
+
+#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
+msgctxt "emoji category"
+msgid "Objects"
+msgstr "اشیاء"
+
+#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
+msgctxt "emoji category"
+msgid "Symbols"
+msgstr "نمادها"
+
+#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
+msgctxt "emoji category"
+msgid "Flags"
+msgstr "پرچم‌ها"
+
+#: gtk/ui/gtkemojichooser.ui:230
+msgctxt "emoji category"
+msgid "Recent"
+msgstr "اخیر"
+
+#: gtk/ui/gtkfilechooserwidget.ui:64
+msgid "Create Folder"
+msgstr "ایجاد پوشه"
+
+#: gtk/ui/gtkfilechooserwidget.ui:249
+msgid "Remote location — only searching the current folder"
+msgstr "مکان دوردست — تنها با جست‌وجو در پوشه فعلی"
+
+#: gtk/ui/gtkfilechooserwidget.ui:378
+msgid "Folder Name"
+msgstr "نام پوشه"
+
+#: gtk/ui/gtkfilechooserwidget.ui:404
+msgid "_Create"
+msgstr "_ایجاد"
+
+#: gtk/ui/gtkfontchooserdialog.ui:4
+msgid "Select Font"
+msgstr "انتخاب قلم"
+
+#: gtk/ui/gtkfontchooserwidget.ui:64
+msgid "Search font name"
+msgstr "جست‌وجو نام قلم"
+
+#: gtk/ui/gtkfontchooserwidget.ui:79
+msgid "Filter by"
+msgstr "پالایش با"
+
+#: gtk/ui/gtkfontchooserwidget.ui:89
+msgid "Monospace"
+msgstr "تک‌عرض"
+
+#: gtk/ui/gtkfontchooserwidget.ui:95
+msgid "Language"
+msgstr "زبان"
+
+#: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
+msgid "Preview text"
+msgstr "متن پیش‌نمایش"
+
+#: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
+msgid "horizontal"
+msgstr "افقی"
+
+#: gtk/ui/gtkfontchooserwidget.ui:270
+msgid "No Fonts Found"
+msgstr "هیچ قلمی پیدا نشد"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:27
+msgid "_Format for:"
+msgstr "_قالب‌بندی برای:"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:635
+msgid "_Paper size:"
+msgstr "اندازهٔ _کاغذ:"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:86
+msgid "_Orientation:"
+msgstr "_جهت:"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:98 gtk/ui/gtkprintunixdialog.ui:675
+msgid "Portrait"
+msgstr "عمودی"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:109 gtk/ui/gtkprintunixdialog.ui:677
+msgid "Reverse portrait"
+msgstr "عمودی معکوس"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:121 gtk/ui/gtkprintunixdialog.ui:676
+msgid "Landscape"
+msgstr "منظره‌‌ای"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:132 gtk/ui/gtkprintunixdialog.ui:678
+msgid "Reverse landscape"
+msgstr "منظره‌ای معکوس"
+
+#: gtk/ui/gtkplacesview.ui:28
+msgid "Server Addresses"
+msgstr "آدرس کارساز"
+
+#: gtk/ui/gtkplacesview.ui:40
+msgid "Server addresses are made up of a protocol prefix and an address. Examples:"
+msgstr "آدرس کارسازها از یک پیشوند پروتکل و یک آدرس تشکیل شده‌اند. مثال‌ها:"
+
+#: gtk/ui/gtkplacesview.ui:66
+msgid "Available Protocols"
+msgstr "پروتکل‌های موجود"
+
+#. Translators: Server as any successfully connected network address
+#: gtk/ui/gtkplacesview.ui:118
+msgid "No recent servers found"
+msgstr "هیچ کارسازی که اخیرا استفاده شده باشد پیدا نشد"
+
+#: gtk/ui/gtkplacesview.ui:141
+msgid "Recent Servers"
+msgstr "کارسازهای اخیر"
+
+#: gtk/ui/gtkplacesview.ui:221
+msgid "No results found"
+msgstr "هیچ نتیجه‌ای پیدا نشد"
+
+#: gtk/ui/gtkplacesview.ui:252
+msgid "Connect to _Server"
+msgstr "اتصال به _کارساز"
+
+#: gtk/ui/gtkplacesview.ui:277
+msgid "Enter server address…"
+msgstr "وارد کردن نشانی کارساز…"
+
+#. this is the header for the printer status column in the print dialog
+#: gtk/ui/gtkprintunixdialog.ui:145
+msgid "Status"
+msgstr "وضعیت"
+
+#: gtk/ui/gtkprintunixdialog.ui:199
+msgid "Range"
+msgstr "محدوده"
+
+#: gtk/ui/gtkprintunixdialog.ui:212
+msgid "_All Pages"
+msgstr "_همهٔ صفحات"
+
+#: gtk/ui/gtkprintunixdialog.ui:224
+msgid "C_urrent Page"
+msgstr "صفحهٔ _جاری"
+
+#: gtk/ui/gtkprintunixdialog.ui:237
+msgid "Se_lection"
+msgstr "_انتخاب"
+
+#: gtk/ui/gtkprintunixdialog.ui:250
+msgid "Pag_es:"
+msgstr "_صفحه‌ها:"
+
+#: gtk/ui/gtkprintunixdialog.ui:251 gtk/ui/gtkprintunixdialog.ui:264
+msgid ""
+"Specify one or more page ranges,\n"
+" e.g. 1–3, 7, 11"
+msgstr ""
+"یک یا چند محدوده برای صفحه‌ها مشخص کنید، \n"
+"مثلا: ۱-۳،۷،۱۱"
+
+#: gtk/ui/gtkprintunixdialog.ui:287
+msgid "Copies"
+msgstr "رونوشت‌ها"
+
+#: gtk/ui/gtkprintunixdialog.ui:302
+msgid "Copie_s:"
+msgstr "_رونوشت‌ها:"
+
+#: gtk/ui/gtkprintunixdialog.ui:325
+msgid "C_ollate"
+msgstr "_تلفیق"
+
+#: gtk/ui/gtkprintunixdialog.ui:336
+msgid "_Reverse"
+msgstr "ترتیب _معکوس"
+
+#: gtk/ui/gtkprintunixdialog.ui:366
+msgid "General"
+msgstr "عمومی"
+
+#: gtk/ui/gtkprintunixdialog.ui:408
+msgid "T_wo-sided:"
+msgstr "_دو رو:"
+
+#: gtk/ui/gtkprintunixdialog.ui:430
+msgid "Pages per _side:"
+msgstr "_تعداد صفحه‌ها در یک رو:"
+
+#: gtk/ui/gtkprintunixdialog.ui:454
+msgid "Page or_dering:"
+msgstr "_ترتیب صفحه‌ها:"
+
+#: gtk/ui/gtkprintunixdialog.ui:477
+msgid "_Only print:"
+msgstr "_فقط چاپِ:"
+
 #: gtk/ui/gtkprintunixdialog.ui:493
 msgid "All sheets"
 msgstr "همهٔ صفحه‌ها"
@@ -5978,21 +6310,115 @@ msgstr "صفحه‌های زوج"
 msgid "Odd sheets"
 msgstr "صفحه‌های فرد"
 
-#: gtk/ui/gtkprintunixdialog.ui:675
-msgid "Portrait"
-msgstr "عمودی"
+#: gtk/ui/gtkprintunixdialog.ui:509
+msgid "Sc_ale:"
+msgstr "م_قیاس:"
 
-#: gtk/ui/gtkprintunixdialog.ui:676
-msgid "Landscape"
-msgstr "منظره‌‌ای"
+#: gtk/ui/gtkprintunixdialog.ui:554
+msgid "Paper"
+msgstr "کاغذ"
 
-#: gtk/ui/gtkprintunixdialog.ui:677
-msgid "Reverse portrait"
-msgstr "عمودی معکوس"
+#: gtk/ui/gtkprintunixdialog.ui:569
+msgid "Paper _type:"
+msgstr "نو_ع کاغذ:"
 
-#: gtk/ui/gtkprintunixdialog.ui:678
-msgid "Reverse landscape"
-msgstr "منظره‌ای معکوس"
+#: gtk/ui/gtkprintunixdialog.ui:591
+msgid "Paper _source:"
+msgstr "_منبع کاغذ:"
+
+#: gtk/ui/gtkprintunixdialog.ui:613
+msgid "Output t_ray:"
+msgstr "_سینی خروجی:"
+
+#: gtk/ui/gtkprintunixdialog.ui:658
+msgid "Or_ientation:"
+msgstr "_جهت:"
+
+#: gtk/ui/gtkprintunixdialog.ui:732
+msgid "Job Details"
+msgstr "جزییات کار"
+
+#: gtk/ui/gtkprintunixdialog.ui:747
+msgid "Pri_ority:"
+msgstr "او_لویت:"
+
+#: gtk/ui/gtkprintunixdialog.ui:768
+msgid "_Billing info:"
+msgstr "ا_طلاعات صورتحساب:"
+
+#: gtk/ui/gtkprintunixdialog.ui:801
+msgid "Print Document"
+msgstr "چاپ سند"
+
+#. this is one of the choices for the print at option in the print dialog
+#: gtk/ui/gtkprintunixdialog.ui:814
+msgid "_Now"
+msgstr "_اکنون"
+
+#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
+#: gtk/ui/gtkprintunixdialog.ui:828
+msgid "A_t:"
+msgstr "_در:"
+
+#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
+#: gtk/ui/gtkprintunixdialog.ui:830 gtk/ui/gtkprintunixdialog.ui:832
+#: gtk/ui/gtkprintunixdialog.ui:848 gtk/ui/gtkprintunixdialog.ui:850
+msgid ""
+"Specify the time of print,\n"
+" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+msgstr ""
+"زمان چاپ را مشخص کنید،\n"
+"مثلا ۱۵:۳۰، ۲:۳۵ ب.ظ، ۱۴:۱۵:۲۰، ۱۱:۴۶ ق.ظ، ۴ ب.ظ"
+
+#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
+#: gtk/ui/gtkprintunixdialog.ui:862
+msgid "On _hold"
+msgstr "_در حال انتظار"
+
+#: gtk/ui/gtkprintunixdialog.ui:864 gtk/ui/gtkprintunixdialog.ui:865
+msgid "Hold the job until it is explicitly released"
+msgstr "متوقف کردن کار تا زمانی که به صراحت منتشر شود"
+
+#: gtk/ui/gtkprintunixdialog.ui:892
+msgid "Add Cover Page"
+msgstr "اضافه‌کردن صفحهٔ جلد"
+
+#. this is the label used for the option in the print dialog that controls the front cover page.
+#: gtk/ui/gtkprintunixdialog.ui:907
+msgid "Be_fore:"
+msgstr "_پیش از:"
+
+#. this is the label used for the option in the print dialog that controls the back cover page.
+#: gtk/ui/gtkprintunixdialog.ui:928
+msgid "_After:"
+msgstr "_پس از:"
+
+#: gtk/ui/gtkprintunixdialog.ui:957
+msgid "Job"
+msgstr "کار"
+
+#. This will appear as a tab label in the print dialog.
+#: gtk/ui/gtkprintunixdialog.ui:987
+msgid "Image Quality"
+msgstr "کیفیت تصویر"
+
+#. This will appear as a tab label in the print dialog.
+#: gtk/ui/gtkprintunixdialog.ui:1016
+msgid "Color"
+msgstr "رنگ"
+
+#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
+#: gtk/ui/gtkprintunixdialog.ui:1045
+msgid "Finishing"
+msgstr "در حال پایان بردن"
+
+#: gtk/ui/gtkprintunixdialog.ui:1074
+msgid "Advanced"
+msgstr "پیشرفته"
+
+#: gtk/ui/gtkprintunixdialog.ui:1090
+msgid "Some of the settings in the dialog conflict"
+msgstr "بعضی از تنظیمات در محاوره ناسازگارند"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
@@ -7552,309 +7978,6 @@ msgstr ""
 
 #~ msgid "EGL is not supported"
 #~ msgstr "EGL پشتیبانی نمی‌شود"
-
-#~ msgid "About"
-#~ msgstr "درباره"
-
-#~ msgid "Credits"
-#~ msgstr "دست‌اندرکاران"
-
-#~ msgid "System"
-#~ msgstr "سامانه"
-
-#~ msgid "_View All Applications"
-#~ msgstr "_نمایش تمام برنامه‌ها"
-
-#~ msgid "_Find New Applications"
-#~ msgstr "برنامه‌های جدید _پیدا کنید"
-
-#~ msgid "No applications found."
-#~ msgstr "هیچ برنامه‌ای پیدا نشد."
-
-#~ msgid "_Finish"
-#~ msgstr "_پایان"
-
-#~ msgid "_Back"
-#~ msgstr "_قبلی"
-
-#~ msgid "_Next"
-#~ msgstr "_بعدی"
-
-#~ msgid "Select a Color"
-#~ msgstr "یک رنگ انتخاب کنید"
-
-#~ msgid "Pick a color from the screen"
-#~ msgstr "گزینش رنگی از صفحه"
-
-#~ msgid "Hexadecimal color or color name"
-#~ msgstr "رنگ شانزده‌تایی یا نام رنگ"
-
-#~ msgid "Hue"
-#~ msgstr "پرده"
-
-#~ msgid "Alpha value"
-#~ msgstr "مقدار آلفا"
-
-#~ msgid "Saturation and value"
-#~ msgstr "غلظت و مقدار"
-
-#~ msgctxt "Color channel"
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgctxt "Color channel"
-#~ msgid "H"
-#~ msgstr "H"
-
-#~ msgctxt "Color Channel"
-#~ msgid "S"
-#~ msgstr "S"
-
-#~ msgctxt "Color Channel"
-#~ msgid "V"
-#~ msgstr "V"
-
-# farmaan
-#~ msgid "(None)"
-#~ msgstr "(هیچ‌کدام)"
-
-#~ msgid "Search…"
-#~ msgstr "جست‌وجو…"
-
-#~ msgctxt "emoji category"
-#~ msgid "Smileys & People"
-#~ msgstr "شکلک‌ها و افراد"
-
-#~ msgctxt "emoji category"
-#~ msgid "Body & Clothing"
-#~ msgstr "بدن و لباس‌ها"
-
-#~ msgctxt "emoji category"
-#~ msgid "Animals & Nature"
-#~ msgstr "حیوانات و طبعیت"
-
-#~ msgctxt "emoji category"
-#~ msgid "Food & Drink"
-#~ msgstr "غذا و نوشیدنی"
-
-#~ msgctxt "emoji category"
-#~ msgid "Travel & Places"
-#~ msgstr "سفر و مکان‌ها"
-
-#~ msgctxt "emoji category"
-#~ msgid "Activities"
-#~ msgstr "فعّالیت‌ها"
-
-#~ msgctxt "emoji category"
-#~ msgid "Objects"
-#~ msgstr "اشیاء"
-
-#~ msgctxt "emoji category"
-#~ msgid "Symbols"
-#~ msgstr "نمادها"
-
-#~ msgctxt "emoji category"
-#~ msgid "Flags"
-#~ msgstr "پرچم‌ها"
-
-#~ msgctxt "emoji category"
-#~ msgid "Recent"
-#~ msgstr "اخیر"
-
-#~ msgid "Create Folder"
-#~ msgstr "ایجاد پوشه"
-
-#~ msgid "Remote location — only searching the current folder"
-#~ msgstr "مکان دوردست — تنها با جست‌وجو در پوشه فعلی"
-
-#~ msgid "Folder Name"
-#~ msgstr "نام پوشه"
-
-#~ msgid "_Create"
-#~ msgstr "_ایجاد"
-
-#~ msgid "Select Font"
-#~ msgstr "انتخاب قلم"
-
-#~ msgid "Search font name"
-#~ msgstr "جست‌وجو نام قلم"
-
-#~ msgid "Filter by"
-#~ msgstr "پالایش با"
-
-#~ msgid "Monospace"
-#~ msgstr "تک‌عرض"
-
-#~ msgid "Language"
-#~ msgstr "زبان"
-
-#~ msgid "horizontal"
-#~ msgstr "افقی"
-
-#~ msgid "No Fonts Found"
-#~ msgstr "هیچ قلمی پیدا نشد"
-
-#~ msgid "_Format for:"
-#~ msgstr "_قالب‌بندی برای:"
-
-#~ msgid "_Paper size:"
-#~ msgstr "اندازهٔ _کاغذ:"
-
-#~ msgid "_Orientation:"
-#~ msgstr "_جهت:"
-
-#~ msgid "Server Addresses"
-#~ msgstr "آدرس کارساز"
-
-#~ msgid ""
-#~ "Server addresses are made up of a protocol prefix and an address. Examples:"
-#~ msgstr "آدرس کارسازها از یک پیشوند پروتکل و یک آدرس تشکیل شده‌اند. مثال‌ها:"
-
-#~ msgid "Available Protocols"
-#~ msgstr "پروتکل‌های موجود"
-
-#~ msgid "No recent servers found"
-#~ msgstr "هیچ کارسازی که اخیرا استفاده شده باشد پیدا نشد"
-
-#~ msgid "Recent Servers"
-#~ msgstr "کارسازهای اخیر"
-
-#~ msgid "No results found"
-#~ msgstr "هیچ نتیجه‌ای پیدا نشد"
-
-#~ msgid "Connect to _Server"
-#~ msgstr "اتصال به _کارساز"
-
-#~ msgid "Enter server address…"
-#~ msgstr "وارد کردن نشانی کارساز…"
-
-#~ msgid "Status"
-#~ msgstr "وضعیت"
-
-#~ msgid "Range"
-#~ msgstr "محدوده"
-
-#~ msgid "_All Pages"
-#~ msgstr "_همهٔ صفحات"
-
-#~ msgid "C_urrent Page"
-#~ msgstr "صفحهٔ _جاری"
-
-#~ msgid "Se_lection"
-#~ msgstr "_انتخاب"
-
-#~ msgid "Pag_es:"
-#~ msgstr "_صفحه‌ها:"
-
-#~ msgid ""
-#~ "Specify one or more page ranges,\n"
-#~ " e.g. 1–3, 7, 11"
-#~ msgstr ""
-#~ "یک یا چند محدوده برای صفحه‌ها مشخص کنید، \n"
-#~ "مثلا: ۱-۳،۷،۱۱"
-
-#~ msgid "Copies"
-#~ msgstr "رونوشت‌ها"
-
-#~ msgid "Copie_s:"
-#~ msgstr "_رونوشت‌ها:"
-
-#~ msgid "C_ollate"
-#~ msgstr "_تلفیق"
-
-#~ msgid "_Reverse"
-#~ msgstr "ترتیب _معکوس"
-
-#~ msgid "General"
-#~ msgstr "عمومی"
-
-#~ msgid "T_wo-sided:"
-#~ msgstr "_دو رو:"
-
-#~ msgid "Pages per _side:"
-#~ msgstr "_تعداد صفحه‌ها در یک رو:"
-
-#~ msgid "Page or_dering:"
-#~ msgstr "_ترتیب صفحه‌ها:"
-
-#~ msgid "_Only print:"
-#~ msgstr "_فقط چاپِ:"
-
-#~ msgid "Sc_ale:"
-#~ msgstr "م_قیاس:"
-
-#~ msgid "Paper"
-#~ msgstr "کاغذ"
-
-#~ msgid "Paper _type:"
-#~ msgstr "نو_ع کاغذ:"
-
-#~ msgid "Paper _source:"
-#~ msgstr "_منبع کاغذ:"
-
-#~ msgid "Output t_ray:"
-#~ msgstr "_سینی خروجی:"
-
-#~ msgid "Or_ientation:"
-#~ msgstr "_جهت:"
-
-#~ msgid "Job Details"
-#~ msgstr "جزییات کار"
-
-#~ msgid "Pri_ority:"
-#~ msgstr "او_لویت:"
-
-#~ msgid "_Billing info:"
-#~ msgstr "ا_طلاعات صورتحساب:"
-
-#~ msgid "Print Document"
-#~ msgstr "چاپ سند"
-
-#~ msgid "_Now"
-#~ msgstr "_اکنون"
-
-#~ msgid "A_t:"
-#~ msgstr "_در:"
-
-#~ msgid ""
-#~ "Specify the time of print,\n"
-#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-#~ msgstr ""
-#~ "زمان چاپ را مشخص کنید،\n"
-#~ "مثلا ۱۵:۳۰، ۲:۳۵ ب.ظ، ۱۴:۱۵:۲۰، ۱۱:۴۶ ق.ظ، ۴ ب.ظ"
-
-#~ msgid "On _hold"
-#~ msgstr "_در حال انتظار"
-
-#~ msgid "Hold the job until it is explicitly released"
-#~ msgstr "متوقف کردن کار تا زمانی که به صراحت منتشر شود"
-
-#~ msgid "Add Cover Page"
-#~ msgstr "اضافه‌کردن صفحهٔ جلد"
-
-#~ msgid "Be_fore:"
-#~ msgstr "_پیش از:"
-
-#~ msgid "_After:"
-#~ msgstr "_پس از:"
-
-#~ msgid "Job"
-#~ msgstr "کار"
-
-#~ msgid "Image Quality"
-#~ msgstr "کیفیت تصویر"
-
-#~ msgid "Color"
-#~ msgstr "رنگ"
-
-#~ msgid "Finishing"
-#~ msgstr "در حال پایان بردن"
-
-#~ msgid "Advanced"
-#~ msgstr "پیشرفته"
-
-#~ msgid "Some of the settings in the dialog conflict"
-#~ msgstr "بعضی از تنظیمات در محاوره ناسازگارند"
 
 #~ msgid "No available configurations for the given RGBA pixel format"
 #~ msgstr "هیچ پیکربندی‌ای برای قالب نقطه‌ای RGBA وارد شده موجود نیست"
