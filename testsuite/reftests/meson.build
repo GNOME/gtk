@@ -377,6 +377,8 @@ testdata = [
   'inscription-overflow-yalign.ui',
   'inscription-xalign.ref.ui',
   'inscription-xalign.ui',
+  'inscription-xalign-rtl.ref.ui',
+  'inscription-xalign-rtl.ui',
   'label-attribute-preference.css',
   'label-attribute-preference.ref.ui',
   'label-attribute-preference.ui',
