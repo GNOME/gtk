@@ -1,4 +1,5 @@
 /* Read More
+ * #Keywords: GtkInscription
  *
  * A simple implementation of a widget that can either
  * display a lot of text or just the first few lines with a
