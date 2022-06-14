@@ -2525,7 +2525,7 @@ msgstr "_Afegeix a les adreces d'interès"
 #: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2744
 #: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
-msgstr "Canvia el _nom…"
+msgstr "Canvia el _nom"
 
 #: gtk/gtkfilechooserwidget.c:2336
 msgid "_Move to Trash"
@@ -4964,7 +4964,7 @@ msgstr "Amplada completa"
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Half Forms"
-msgstr "Formes mitjanes"
+msgstr "Mitges formes"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
@@ -5004,7 +5004,7 @@ msgstr "Formes Hojo Kanji"
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr "Amplada mitja"
+msgstr "Mitges amplades"
 
 #: gtk/open-type-layout.h:55
 msgctxt "OpenType layout"
@@ -6790,7 +6790,7 @@ msgstr "Lidi"
 #: gtk/script-names.c:94
 msgctxt "Script"
 msgid "Avestan"
-msgstr "avèstic"
+msgstr "Avèstic"
 
 #: gtk/script-names.c:95
 msgctxt "Script"
@@ -6825,7 +6825,7 @@ msgstr "Javanès"
 #: gtk/script-names.c:101
 msgctxt "Script"
 msgid "Kaithi"
-msgstr "kaithi"
+msgstr "Kaithi"
 
 #: gtk/script-names.c:102
 msgctxt "Script"
