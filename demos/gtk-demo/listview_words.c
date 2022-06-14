@@ -1,5 +1,5 @@
 /* Lists/Words
- * #Keywords: GtkListView, GtkFilterListModel
+ * #Keywords: GtkListView, GtkFilterListModel, GtkInscription
  *
  * This demo shows filtering a long list - of words.
  *
