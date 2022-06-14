@@ -4594,7 +4594,7 @@ msgstr "Amplada completa"
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Half Forms"
-msgstr "Formes mitjanes"
+msgstr "Mitges formes"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
@@ -4634,7 +4634,7 @@ msgstr "Formes Hojo Kanji"
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr "Amplada mitja"
+msgstr "Mitges amplades"
 
 #: gtk/open-type-layout.h:55
 msgctxt "OpenType layout"
@@ -6059,7 +6059,7 @@ msgstr "_Cerca aplicacions noves"
 
 #: gtk/ui/gtkappchooserwidget.ui:100
 msgid "No applications found."
-msgstr "No s'ha trobat cap aplicació"
+msgstr "No s'ha trobat cap aplicació."
 
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
