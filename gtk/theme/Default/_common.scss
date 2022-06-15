@@ -89,6 +89,13 @@ iconview {
 
   @include focus-ring();
 
+  @if $contrast == 'high' {
+    &:selected {
+      box-shadow: inset 0 0 0 1px $borders_color;
+    }
+  }
+
+
   &:drop(active) {
     box-shadow: none;
   }
@@ -135,6 +142,11 @@ gridview {
       outline-color: $alt_focus_border_color;
 
       @extend %selected_items;
+
+      @if $contrast == 'high' {
+        box-shadow: inset 0 0 0 1px $borders_color;
+      }
+
     }
 
     box { //cells
@@ -1947,7 +1959,13 @@ popover.menu {
       outline: none;
       transition: none;
 
-      &:selected { background: image($menu_selected_color); }
+      &:selected {
+        background: image($menu_selected_color);
+
+        @if $contrast == 'high' {
+          box-shadow: inset 0 0 0 1px $borders_color;
+        }
+      }
     }
   }
 
@@ -3624,6 +3642,11 @@ separator.sidebar {
       background-color: $menu_selected_color;
       color: inherit;
 
+      @if $contrast == 'high' {
+        box-shadow: inset 0 0 0 1px $borders_color;
+      }
+
+
       &:hover {
         background-color: darken($menu_selected_color,5%);
       }
@@ -4269,6 +4292,10 @@ popover.emoji-picker emoji {
   &:focus,
   &:hover {
     background: $selected_bg_color;
+
+    @if $contrast == 'high' {
+      box-shadow: inset 0 0 0 1px $borders_color;
+    }
   }
 }
 
