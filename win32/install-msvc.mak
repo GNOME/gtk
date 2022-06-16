@@ -51,7 +51,13 @@ GTK_TYPE_BULITINS_H = .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-$(GTK_API_VERSION)\gtk
 GTK_VERSION_H = .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-$(GTK_API_VERSION)\gtk\gtkversion.h
 GTK_GENERATED_PUBLIC_H = $(GTK_TYPE_BULITINS_H) $(GTK_VERSION_H)
 
-all: install-bin install-headers install-data
+!ifdef INSTALL_TRANSLATIONS
+DATA_TARGETS = install-data install-translations
+!else
+DATA_TARGETS = install-data
+!endif
+
+all: install-bin install-headers $(DATA_TARGETS)
 
 # Copy the built files
 install-bin:
@@ -122,6 +128,18 @@ install-data:
 	@for %f in (..\gtk\org.gtk.Settings.*.gschema.xml ..\demos\gtk-demo\org.gtk.Demo.gschema.xml) do @copy %f "$(PREFIX)\share\glib-2.0\schemas"
 	@-$(GLIB_COMPILE_SCHEMAS) $(PREFIX)\share\glib-2.0\schemas
 # Demo icons
-	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\gtk-demo\data\%tx%t\gtk3-demo.png "%d")
+	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\gtk-demo\data\%tx%t\gtk3-demo*.png "%d")
 	@for %t in (16 22 24 32 48 256) do @for %d in ($(PREFIX)\share\icons\hicolor\%tx%t\apps) do @((if not exist %d\ mkdir %d) & copy /b ..\demos\widget-factory\data\%tx%t\gtk3-widget-factory*.png "%d")
 	@-$(BASE_BUILT_BIN_DIR)\gtk-update-icon-cache.exe --ignore-theme-index --force "$(PREFIX)\share\icons\hicolor"
+# Auxiliary build-related data files (m4, ITS files, RelaxNG files)
+	@for %d in (aclocal gettext\its gtk-3.0\emoji) do @if not exist $(PREFIX)\share\%d\ mkdir $(PREFIX)\share\%d
+	@copy ..\m4macros\gtk-3.0.m4 $(PREFIX)\share\aclocal
+	@for %x in (its loc) do @copy ..\gtk\gtkbuilder.%x $(PREFIX)\share\gettext\its
+	@for %x in (rng) do @copy ..\gtk\gtkbuilder.%x $(PREFIX)\share\gtk-3.0
+	@for %l in (de es fr zh) do @for %f in ($(BASE_BUILT_BIN_DIR)\%l.gresource) do @copy %f $(PREFIX)\share\gtk-3.0\emoji
+
+# Generate and install the translations
+install-translations:
+	@for %d in (po po-properties) do @for %l in (..\%d\*.po) do @if not exist $(PREFIX)\share\locale\%~nl\LC_MESSAGES\ md $(PREFIX)\share\locale\%~nl\LC_MESSAGES
+	@for %l in (..\po\*.po) do @$(MSGFMT) -c -v -o $(PREFIX)\share\locale\%~nl\LC_MESSAGES\gtk30.mo %l
+	@for %l in (..\po-properties\*.po) do @$(MSGFMT) -c -v -o $(PREFIX)\share\locale\%~nl\LC_MESSAGES\gtk30-properties.mo %l

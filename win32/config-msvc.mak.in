@@ -42,6 +42,10 @@ GDBUS_CODEGEN = $(PREFIX)\bin\gdbus-codegen
 GLIB_COMPILE_SCHEMAS = $(PREFIX)\bin\glib-compile-schemas.exe
 !endif
 
+!ifndef MSGFMT
+MSGFMT = msgfmt
+!endif
+
 !if "$(PLAT)" == "x64"
 AT_PLAT=x86_64
 !elseif "$(PLAT)" == "arm64"

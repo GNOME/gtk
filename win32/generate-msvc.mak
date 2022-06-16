@@ -80,6 +80,14 @@ GTK3_DEMO_VCPROJS =	\
 	$(GTK3_DEMO_VC1X_PROJS)	\
 	$(GTK3_DEMO_VC1X_PROJ_FILTERS)
 
+EMOJI_GRESOURCE_XML =	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\de.gresource.xml	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\es.gresource.xml	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\fr.gresource.xml	\
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\zh.gresource.xml
+
+EMOJI_GRESOURCE = $(EMOJI_GRESOURCE_XML:.gresource.xml=.gresource)
+
 generate-base-sources:	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h	\
 	$(GDK_GENERATED_SOURCES)	\
@@ -91,7 +99,8 @@ generate-base-sources:	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c	\
-	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-widget-factory\widget_factory_resources.c
+	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-widget-factory\widget_factory_resources.c	\
+	$(EMOJI_GRESOURCE)
 
 # Copy the pre-defined config.h.win32 and demos.h.win32
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h: ..\config.h.win32
@@ -412,6 +421,25 @@ vs17\$(DEMO_VS1X_PROJ_FILTERS):
 	@echo Copying $** to $@...
 	@copy $** $@
 
+.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\de.gresource.xml: ..\gtk\emoji\gresource.xml.in
+.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\es.gresource.xml: ..\gtk\emoji\gresource.xml.in
+.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\fr.gresource.xml: ..\gtk\emoji\gresource.xml.in
+.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\zh.gresource.xml: ..\gtk\emoji\gresource.xml.in
+
+.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\de.gresource: .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\de.gresource.xml ..\gtk\emoji\de.data
+.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\es.gresource: .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\es.gresource.xml ..\gtk\emoji\es.data
+.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\fr.gresource: .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\fr.gresource.xml ..\gtk\emoji\fr.data
+.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\zh.gresource: .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\zh.gresource.xml ..\gtk\emoji\zh.data
+
+$(EMOJI_GRESOURCE_XML):
+	@echo Generating $@...
+	@if not exist $(@D)\ mkdir $(@D)
+	@$(PYTHON) replace.py -i=$** -o=$@ --action=replace-var --var=lang --outstring=$(@B:.gresource=)
+
+$(EMOJI_GRESOURCE):
+	@echo Generating $@...
+	@$(GLIB_COMPILE_RESOURCES) --sourcedir=..\gtk\emoji $@.xml --target=$@
+
 regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources) $(GTK3_DEMO_VCPROJS)
 	@echo Regenerating demos.h.win32 and gtk3-demo VS project files...
 	@-del ..\demos\gtk-demo\demos.h.win32
@@ -421,6 +449,8 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 
 # Remove the generated files
 clean:
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.gresource
+	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\*.gresource.xml
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-icon-browser\resources.c
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demo_resources.c
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk3-demo\demos.h
