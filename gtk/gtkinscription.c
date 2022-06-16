@@ -43,6 +43,8 @@
  *
  * As it is a common occurrence that text doesn't fit, users of this widget should
  * plan for that case.
+ *
+ * Since: 4.8
  */
 
 /* 3 chars are enough to display ellipsizing "..." */
