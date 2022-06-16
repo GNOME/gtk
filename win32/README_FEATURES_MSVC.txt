@@ -71,3 +71,14 @@ NMake command line.  The gtk3-demo project files will also be updated with the
 appropriate dependent libraries linked in-please check that the project settings 
 contain the correct .lib file names for your system, as they assume the most 
 common names are used there.
+
+=========================
+Building the translations
+=========================
+Building translations is supported via Meson builds or via the Visual Studio projects,
+both of which require a working msgfmt.exe (from gettext-tools, a part of gettext) in the
+PATH, or for the Visual Studio projects, passed into the arguments in "InstallBuildsBase"
+in gtk3-build-defines.[props|vsprops] with MSGFMT=xxx.  For the Visual Studio projects, for
+this to work one needs to also supply a "INSTALL_TRANSLATIONS=1" (without the quotes)
+argument to the same "InstallBuildsBase" in the afore-mentioned property sheet.  Using
+msgfmt.exe from Cygwin or MSYS2 is supported as well.
