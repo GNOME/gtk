@@ -427,6 +427,19 @@ _gdk_win32_screen_get_setting (GdkScreen   *screen,
 
       return TRUE;
     }
+  else if (strcmp ("gtk-overlay-scrolling", name) == 0)
+    {
+      DWORD val = 0;
+      DWORD sz = sizeof (val);
+      LSTATUS ret = 0;
+
+      ret = RegGetValueW (HKEY_CURRENT_USER, L"Control Panel\\Accessibility", L"DynamicScrollbars", RRF_RT_DWORD, NULL, &val, &sz);
+      if (ret == ERROR_SUCCESS)
+        {
+          g_value_set_boolean (value, val != 0);
+          return TRUE;
+        }
+    }
 
   return FALSE;
 }
