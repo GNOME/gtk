@@ -39,6 +39,8 @@ G_BEGIN_DECLS
  *
  * The different methods to handle text in #GtkInscription when it doesn't
  * fit the available space.
+ *
+ * Since: 4.8
  */
 typedef enum {
   GTK_INSCRIPTION_OVERFLOW_CLIP,
