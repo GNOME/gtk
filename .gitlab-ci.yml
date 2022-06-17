@@ -7,13 +7,13 @@ cache:
     - _ccache/
 
 fedora-autotools:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v35
   stage: build
   script:
     - bash -x ./.gitlab-ci/test-docker-autotools.sh
 
 fedora-distcheck:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v35
   variables:
     DO_DISTCHECK: "yes"
   when: manual
@@ -22,7 +22,7 @@ fedora-distcheck:
     - bash -x ./.gitlab-ci/test-docker-autotools.sh
 
 fedora-meson:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v35
   stage: build
   variables:
     EXTRA_MESON_FLAGS: "-Ddefault_library=both"
@@ -50,7 +50,7 @@ debian-meson:
       - "_build/testsuite/reftests/output"
 
 reference:
-  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v1
+  image: registry.gitlab.gnome.org/gnome/gtk/fedora-gtk3:v35
   stage: docs
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release -Dgtk_doc=true -Dman=true"

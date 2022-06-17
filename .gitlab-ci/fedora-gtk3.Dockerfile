@@ -1,4 +1,4 @@
-FROM fedora:31
+FROM fedora:35
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -44,7 +44,7 @@ RUN dnf -y install \
     libXtst-devel \
     make \
     mesa-libEGL-devel \
-    mesa-libwayland-egl-devel \
+    'pkgconfig(wayland-egl)' \
     meson \
     ninja-build \
     pango-devel \
