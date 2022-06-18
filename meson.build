@@ -6,6 +6,7 @@ project('gtk', 'c',
           # We only need c99, but glib needs GNU-specific features
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
+          'cpp_std=c++11',
         ],
         meson_version : '>= 0.59',
         license: 'LGPL-2.1-or-later')
