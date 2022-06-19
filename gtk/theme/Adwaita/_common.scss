@@ -4601,6 +4601,8 @@ decoration {
   // just doing borders, wm draws actual shadows
   .ssd & { box-shadow: 0 0 0 1px $_wm_border; }
   .ssd &:backdrop { box-shadow: 0 0 0 1px $_wm_border_backdrop; }
+  .ssd.maximized &,
+  .ssd.maximized &:backdrop { box-shadow: none; }
 
   .csd.popup & {
     border-radius: $menu_radius;
