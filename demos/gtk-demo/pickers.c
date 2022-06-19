@@ -28,7 +28,13 @@ filter_font_cb (const PangoFontFamily *family,
 
   family_name = pango_font_family_get_name (PANGO_FONT_FAMILY (family));
 
-  return g_strv_contains (alias_families, family_name);
+  for (int i = 0; alias_families[i]; i++)
+    {
+      if (g_ascii_strcasecmp (alias_families[i], family_name) == 0)
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 #define COLOR(r,g,b) { r/255., g/255., b/255., 1.0 }
