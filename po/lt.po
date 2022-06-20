@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-05-28 15:34+0000\n"
-"PO-Revision-Date: 2022-05-29 23:05+0300\n"
+"POT-Creation-Date: 2022-06-17 22:38+0000\n"
+"PO-Revision-Date: 2022-06-20 22:18+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -55,7 +55,7 @@ msgstr "Nepavyko pateikti turinio kaip „%s“"
 msgid "Cannot provide contents as %s"
 msgstr "Nepavyko pateikti turinio kaip %s"
 
-#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:437
+#: gdk/gdkdisplay.c:154 gdk/gdkglcontext.c:435
 msgid "The current backend does not support OpenGL"
 msgstr "Dabartinė realizacija nepalaiko OpenGL"
 
@@ -81,8 +81,6 @@ msgstr "Nerasta puikiai tinkanti EGL konfigūracija"
 
 #: gdk/gdkdisplay.c:1625
 #, c-format
-#| msgid "EGL implementation is missing extension %2$s"
-#| msgid_plural "EGL implementation is missing %d extensions: %s"
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "EGL realizacijai trūksta %2$d plėtinio: %1$s"
@@ -118,27 +116,27 @@ msgstr "Tempimas iš kitų programų nepalaikomas."
 msgid "No compatible formats to transfer contents."
 msgstr "Nėra suderinamų formatų turinio perdavimui."
 
-#: gdk/gdkglcontext.c:334
-msgid "The EGL implementation does not support any allowed APIs"
-msgstr "EGL realizacija nepalaiko jokių leistinų API"
+#: gdk/gdkglcontext.c:394 gdk/x11/gdkglcontext-glx.c:605
+msgid "No GL API allowed."
+msgstr "Nėra leidžiamas GL API."
 
-#: gdk/gdkglcontext.c:415 gdk/win32/gdkglcontext-win32-wgl.c:616
-#: gdk/x11/gdkglcontext-glx.c:624
+#: gdk/gdkglcontext.c:418 gdk/win32/gdkglcontext-win32-wgl.c:611
+#: gdk/x11/gdkglcontext-glx.c:639
 msgid "Unable to create a GL context"
 msgstr "Nepavyko sukurti GL konteksto"
 
-#: gdk/gdkglcontext.c:1274
+#: gdk/gdkglcontext.c:1273
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Bet kas išskyrus OpenGL ES išjungta naudojant GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1283
+#: gdk/gdkglcontext.c:1282
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Programa nepalaiko API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1817
+#: gdk/gdkglcontext.c:1822
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Bandoma naudoti %s, bet %s jau naudojama"
@@ -711,7 +709,7 @@ msgstr "Nepavyko konvertuoti tempiamų duomenų W32 formato 0x%x į %p (%s)"
 msgid "No GL implementation is available"
 msgstr "Nėra galimo GL realizacijos"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:582
+#: gdk/win32/gdkglcontext-win32-wgl.c:577
 msgid "No available configurations for the given pixel format"
 msgstr "Nėra galimų konfigūracijų nurodytam pikselių formatui"
 
@@ -775,15 +773,15 @@ msgstr "Iškarpinės valdyklė negali įrašyti žymėjimo."
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Nepavyko įrašyti iškarpinės. Nėra aktyvios iškarpinės valdyklės."
 
-#: gdk/x11/gdkglcontext-glx.c:780
+#: gdk/x11/gdkglcontext-glx.c:755
 msgid "No GLX configurations available"
 msgstr "Nėra prieinamų GLX configūracijų"
 
-#: gdk/x11/gdkglcontext-glx.c:853
+#: gdk/x11/gdkglcontext-glx.c:828
 msgid "No GLX configuration with required features found"
 msgstr "Nėra GLX konfigūracijos su reikiamomis savybėmis"
 
-#: gdk/x11/gdkglcontext-glx.c:927
+#: gdk/x11/gdkglcontext-glx.c:902
 msgid "GLX is not supported"
 msgstr "GLX nepalaikoma"
 
@@ -816,7 +814,6 @@ msgstr "Nepalaikoma koduotė „%s“"
 
 #: gsk/gl/gskglrenderer.c:132
 #, c-format
-#| msgid "The EGL implementation does not support any allowed APIs"
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr "Ši GLES %d.%d realizacija nepalaiko pusės tikslumo viršūnių duomenų"
 
@@ -943,7 +940,7 @@ msgstr "Blogai suformuoti duomenys: URL"
 msgid "Could not unescape string"
 msgstr "Nepavyko pašalinti kaitos iš eilutės"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:124 gtk/ui/gtkaboutdialog.ui:163
 msgid "License"
 msgstr "Licencija"
 
@@ -1532,6 +1529,7 @@ msgid "Other application…"
 msgstr "Kita programa..."
 
 #: gtk/gtkappchooserdialog.c:205 gtk/gtkappchooserdialog.c:256
+#: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select Application"
 msgstr "Pasirinkite programą"
 
@@ -1982,6 +1980,7 @@ msgid "Margins from Printer…"
 msgstr "Paraštės iš spausdintuvo…"
 
 #: gtk/gtkcustompaperunixdialog.c:348 gtk/gtkmessagedialog.c:162
+#: gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_Užverti"
 
@@ -2106,7 +2105,9 @@ msgstr "Jau yra failas tokiu pavadinimu"
 #: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:722
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
 #: gtk/gtkwindow.c:6106 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1721
+#: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
+#: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
 msgstr "_Atsisakyti"
 
@@ -2117,11 +2118,11 @@ msgid "_Open"
 msgstr "At_verti"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1722
+#: gtk/inspector/recorder.c:1724
 msgid "_Save"
 msgstr "Į_rašyti"
 
-#: gtk/gtkfilechoosernativequartz.c:339
+#: gtk/gtkfilechoosernativequartz.c:339 gtk/ui/gtkfilechooserwidget.ui:346
 msgid "Select which types of files are shown"
 msgstr "Pasirinkite kokių tipų failus rodyti"
 
@@ -2223,7 +2224,7 @@ msgid "_Add to Bookmarks"
 msgstr "Į_dėti į žymeles"
 
 #: gtk/gtkfilechooserwidget.c:1823 gtk/gtkplacessidebar.c:2310
-#: gtk/gtkplacessidebar.c:3249
+#: gtk/gtkplacessidebar.c:3249 gtk/ui/gtkfilechooserwidget.ui:465
 msgid "_Rename"
 msgstr "Per_vadinti"
 
@@ -2251,7 +2252,9 @@ msgstr "Rodyti _laiką"
 msgid "Sort _Folders Before Files"
 msgstr "Rikiuoti _aplankus prieš failus"
 
+#. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2256 gtk/inspector/css-node-tree.ui:135
+#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkprintunixdialog.ui:114
 msgid "Location"
 msgstr "Vieta"
 
@@ -2274,6 +2277,7 @@ msgid "Enter location or URL"
 msgstr "Įveskite vietą arba URL"
 
 #: gtk/gtkfilechooserwidget.c:3811 gtk/gtkfilechooserwidget.c:6635
+#: gtk/ui/gtkfilechooserwidget.ui:226
 msgid "Modified"
 msgstr "Pakeista"
 
@@ -2497,11 +2501,11 @@ msgstr "_Kopijuoti URL"
 msgid "Invalid URI"
 msgstr "Netinkamas URI"
 
-#: gtk/gtklockbutton.c:285
+#: gtk/gtklockbutton.c:285 gtk/ui/gtklockbutton.ui:20
 msgid "Lock"
 msgstr "Užrakinti"
 
-#: gtk/gtklockbutton.c:297
+#: gtk/gtklockbutton.c:297 gtk/ui/gtklockbutton.ui:26
 msgid "Unlock"
 msgstr "Atrakinti"
 
@@ -2534,7 +2538,7 @@ msgstr ""
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:775
+#: gtk/gtkmain.c:786
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2733,7 +2737,7 @@ msgstr "Netinkamas puslapio sąrankos failas"
 msgid "Manage Custom Sizes…"
 msgstr "Tvarkyti pasirinktinius dydžius..."
 
-#: gtk/gtkpagesetupunixdialog.c:284
+#: gtk/gtkpagesetupunixdialog.c:284 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
 msgstr "Prit_aikyti"
 
@@ -2760,7 +2764,8 @@ msgstr ""
 " Viršus: %s %s\n"
 " Apačia: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:784
+#: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
+#: gtk/ui/gtkprintunixdialog.ui:709
 msgid "Page Setup"
 msgstr "Puslapio sąranka"
 
@@ -2880,6 +2885,8 @@ msgstr "Šis pavadinimas jau užimtas"
 
 #: gtk/gtkplacessidebar.c:2304 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:35 gtk/inspector/prop-list.ui:24
+#: gtk/ui/gtkfilechooserwidget.ui:168 gtk/ui/gtkfilechooserwidget.ui:440
+#: gtk/ui/gtkprintunixdialog.ui:83
 msgid "Name"
 msgstr "Pavadinimas"
 
@@ -3000,7 +3007,7 @@ msgid "Unable to access location"
 msgstr "Nepavyko pasiekti vietos"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1228
+#: gtk/gtkplacesview.c:1228 gtk/ui/gtkplacesview.ui:262
 msgid "Con_nect"
 msgstr "Prisi_jungti"
 
@@ -3089,7 +3096,8 @@ msgstr[2] "Prieinama %s / %s"
 msgid "Disconnect"
 msgstr "Atsijungti"
 
-#: gtk/gtkplacesviewrow.c:471
+#: gtk/gtkplacesviewrow.c:471 gtk/ui/gtkplacesviewrow.ui:53
+#: gtk/ui/gtksidebarrow.ui:50
 msgid "Unmount"
 msgstr "Atjungti"
 
@@ -3105,7 +3113,8 @@ msgstr "Į_siminti slaptažodį"
 msgid "Select a filename"
 msgstr "Pasirinkite failo pavadinimą"
 
-#: gtk/gtkprinteroptionwidget.c:723
+#: gtk/gtkprinteroptionwidget.c:723 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "Pa_sirinkti"
 
@@ -3437,11 +3446,13 @@ msgstr "Paieškos rezultatai"
 msgid "Search Shortcuts"
 msgstr "Paieškos trumpiniai"
 
-#: gtk/gtkshortcutswindow.c:968
+#: gtk/gtkshortcutswindow.c:968 gtk/ui/gtkemojichooser.ui:349
+#: gtk/ui/gtkfilechooserwidget.ui:297
 msgid "No Results Found"
 msgstr "Rezultatų nerasta"
 
-#: gtk/gtkshortcutswindow.c:974
+#: gtk/gtkshortcutswindow.c:974 gtk/ui/gtkemojichooser.ui:362
+#: gtk/ui/gtkfilechooserwidget.ui:310 gtk/ui/gtkplacesview.ui:230
 msgid "Try a different search"
 msgstr "Bandykite kitą paiešką"
 
@@ -3749,7 +3760,7 @@ msgstr "Programos ID"
 msgid "Resource Path"
 msgstr "Ištekliaus kelias"
 
-#: gtk/inspector/general.ui:268
+#: gtk/inspector/general.ui:268 gtk/ui/gtkplacesview.ui:79
 msgid "Prefix"
 msgstr "Priešdėlis"
 
@@ -3810,7 +3821,7 @@ msgid "Address"
 msgstr "Adresas"
 
 #: gtk/inspector/misc-info.ui:62 gtk/inspector/prop-list.ui:35
-#: gtk/inspector/statistics.ui:46
+#: gtk/inspector/statistics.ui:46 gtk/ui/gtkfilechooserwidget.ui:214
 msgid "Type"
 msgstr "Tipas"
 
@@ -3996,7 +4007,7 @@ msgstr "Šaltinis:"
 msgid "Defined At"
 msgstr "Apibrėžtas"
 
-#: gtk/inspector/recorder.c:1692
+#: gtk/inspector/recorder.c:1694
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Nepavyko įrašyti RenderNode"
@@ -4041,7 +4052,8 @@ msgstr "Kelias"
 msgid "Count"
 msgstr "Kiekis"
 
-#: gtk/inspector/resource-list.ui:82
+#: gtk/inspector/resource-list.ui:82 gtk/ui/gtkfilechooserwidget.ui:202
+#: gtk/ui/gtkfontchooserwidget.ui:204 gtk/ui/gtkfontchooserwidget.ui:351
 msgid "Size"
 msgstr "Dydis"
 
@@ -4293,7 +4305,7 @@ msgstr "Kitas porininkas"
 msgid "Miscellaneous"
 msgstr "Įvairūs"
 
-#: gtk/inspector/window.ui:407
+#: gtk/inspector/window.ui:407 gtk/ui/gtkprintunixdialog.ui:393
 msgid "Layout"
 msgstr "Išdėstymas"
 
@@ -5971,6 +5983,30 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
+#: gtk/ui/gtkaboutdialog.ui:62
+msgid "About"
+msgstr "Apie"
+
+#: gtk/ui/gtkaboutdialog.ui:123
+msgid "Credits"
+msgstr "Padėkos"
+
+#: gtk/ui/gtkaboutdialog.ui:206
+msgid "System"
+msgstr "Sistema"
+
+#: gtk/ui/gtkappchooserdialog.ui:60
+msgid "_View All Applications"
+msgstr "_Rodyti visas programas"
+
+#: gtk/ui/gtkappchooserdialog.ui:66
+msgid "_Find New Applications"
+msgstr "_Rasti naujas programas"
+
+#: gtk/ui/gtkappchooserwidget.ui:100
+msgid "No applications found."
+msgstr "Nerasta programų."
+
 #: gtk/ui/gtkapplication-quartz.ui:13
 msgid "Preferences"
 msgstr "Nustatymai"
@@ -5997,6 +6033,300 @@ msgstr "Rodyti viską"
 msgid "Quit %s"
 msgstr "Išeiti iš %s"
 
+#: gtk/ui/gtkassistant.ui:64
+msgid "_Finish"
+msgstr "_Baigti"
+
+#: gtk/ui/gtkassistant.ui:75
+msgid "_Back"
+msgstr "_Grįžti"
+
+#: gtk/ui/gtkassistant.ui:86
+msgid "_Next"
+msgstr "_Kitas"
+
+#: gtk/ui/gtkcolorchooserdialog.ui:4
+msgid "Select a Color"
+msgstr "Pasirinkite spalvą"
+
+#: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
+msgid "Pick a color from the screen"
+msgstr "Pasirinkite spalvą ekrane"
+
+#: gtk/ui/gtkcoloreditor.ui:80
+msgid "Hexadecimal color or color name"
+msgstr "Šešioliktainė spalva arba spalvos pavadinimas"
+
+#: gtk/ui/gtkcoloreditor.ui:95
+msgid "Hue"
+msgstr "Atspalvis"
+
+#: gtk/ui/gtkcoloreditor.ui:111
+msgid "Alpha value"
+msgstr "Alfa vertė"
+
+#: gtk/ui/gtkcoloreditor.ui:129
+msgid "Saturation and value"
+msgstr "Sodrumas ir vertė"
+
+#: gtk/ui/gtkcoloreditor.ui:153
+msgctxt "Color channel"
+msgid "A"
+msgstr "A"
+
+#: gtk/ui/gtkcoloreditor.ui:189
+msgctxt "Color channel"
+msgid "H"
+msgstr "H"
+
+#: gtk/ui/gtkcoloreditor.ui:226
+msgctxt "Color Channel"
+msgid "S"
+msgstr "S"
+
+#: gtk/ui/gtkcoloreditor.ui:235
+msgctxt "Color Channel"
+msgid "V"
+msgstr "V"
+
+#: gtk/ui/gtkdropdown.ui:19
+msgid "(None)"
+msgstr "(Joks)"
+
+#: gtk/ui/gtkdropdown.ui:68
+msgid "Search…"
+msgstr "Ieškoti…"
+
+#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
+msgctxt "emoji category"
+msgid "Smileys & People"
+msgstr "Šypsenėlės ir žmonės"
+
+#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
+msgctxt "emoji category"
+msgid "Body & Clothing"
+msgstr "Kūnas ir drabužiai"
+
+#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
+msgctxt "emoji category"
+msgid "Animals & Nature"
+msgstr "Gyvūnai ir gamta"
+
+#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
+msgctxt "emoji category"
+msgid "Food & Drink"
+msgstr "Maistas ir gėrimai"
+
+#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
+msgctxt "emoji category"
+msgid "Travel & Places"
+msgstr "Kelionės ir vietos"
+
+#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
+msgctxt "emoji category"
+msgid "Activities"
+msgstr "Veiklos"
+
+#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
+msgctxt "emoji category"
+msgid "Objects"
+msgstr "Objektai"
+
+#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
+msgctxt "emoji category"
+msgid "Symbols"
+msgstr "Simboliai"
+
+#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
+msgctxt "emoji category"
+msgid "Flags"
+msgstr "Vėliavos"
+
+#: gtk/ui/gtkemojichooser.ui:230
+msgctxt "emoji category"
+msgid "Recent"
+msgstr "Neseniai naudotieji"
+
+#: gtk/ui/gtkfilechooserwidget.ui:64
+msgid "Create Folder"
+msgstr "Sukurti aplanką"
+
+#: gtk/ui/gtkfilechooserwidget.ui:249
+msgid "Remote location — only searching the current folder"
+msgstr "Nutolusi vieta — ieškoma tik esamame aplanke"
+
+#: gtk/ui/gtkfilechooserwidget.ui:378
+msgid "Folder Name"
+msgstr "Aplanko pavadinimas"
+
+#: gtk/ui/gtkfilechooserwidget.ui:404
+msgid "_Create"
+msgstr "Su_kurti"
+
+#: gtk/ui/gtkfontchooserdialog.ui:4
+msgid "Select Font"
+msgstr "Pa_sirinkti šriftą"
+
+#: gtk/ui/gtkfontchooserwidget.ui:64
+msgid "Search font name"
+msgstr "Ieškoti šrifto pavadinimo"
+
+#: gtk/ui/gtkfontchooserwidget.ui:79
+msgid "Filter by"
+msgstr "Filtruoti pagal"
+
+#: gtk/ui/gtkfontchooserwidget.ui:89
+msgid "Monospace"
+msgstr "Lygiaplotis"
+
+#: gtk/ui/gtkfontchooserwidget.ui:95
+msgid "Language"
+msgstr "Kalba"
+
+#: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
+#| msgid "Pre_view"
+msgid "Preview text"
+msgstr "Peržiūros tekstas"
+
+#: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
+msgid "horizontal"
+msgstr "horizontalus"
+
+#: gtk/ui/gtkfontchooserwidget.ui:270
+msgid "No Fonts Found"
+msgstr "Šriftų nerasta"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:27
+msgid "_Format for:"
+msgstr "_Formatas kam:"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:635
+msgid "_Paper size:"
+msgstr "_Popieriaus dydis:"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:86
+msgid "_Orientation:"
+msgstr "_Orientacija:"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:98 gtk/ui/gtkprintunixdialog.ui:675
+msgid "Portrait"
+msgstr "Stačiai"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:109 gtk/ui/gtkprintunixdialog.ui:677
+msgid "Reverse portrait"
+msgstr "Apverstai stačiai"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:121 gtk/ui/gtkprintunixdialog.ui:676
+msgid "Landscape"
+msgstr "Gulsčiai"
+
+#: gtk/ui/gtkpagesetupunixdialog.ui:132 gtk/ui/gtkprintunixdialog.ui:678
+msgid "Reverse landscape"
+msgstr "Apverstai gulsčiai"
+
+#: gtk/ui/gtkplacesview.ui:28
+msgid "Server Addresses"
+msgstr "Serverio adresai"
+
+#: gtk/ui/gtkplacesview.ui:40
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:"
+msgstr "Serverio adresai susideda iš protokolo ir adreso. Pavyzdžiai:"
+
+#: gtk/ui/gtkplacesview.ui:66
+msgid "Available Protocols"
+msgstr "Prieinami protokolai"
+
+#. Translators: Server as any successfully connected network address
+#: gtk/ui/gtkplacesview.ui:118
+msgid "No recent servers found"
+msgstr "Nerasta neseniai naudotų serverių"
+
+#: gtk/ui/gtkplacesview.ui:141
+msgid "Recent Servers"
+msgstr "Neseniai naudoti serveriai"
+
+#: gtk/ui/gtkplacesview.ui:221
+msgid "No results found"
+msgstr "Nerasta rezultatų"
+
+#: gtk/ui/gtkplacesview.ui:252
+msgid "Connect to _Server"
+msgstr "Prisijungti prie _serverio"
+
+#: gtk/ui/gtkplacesview.ui:277
+msgid "Enter server address…"
+msgstr "Įveskite serverio adresą…"
+
+#. this is the header for the printer status column in the print dialog
+#: gtk/ui/gtkprintunixdialog.ui:145
+msgid "Status"
+msgstr "Būsena"
+
+#: gtk/ui/gtkprintunixdialog.ui:199
+msgid "Range"
+msgstr "Intervalas"
+
+#: gtk/ui/gtkprintunixdialog.ui:212
+msgid "_All Pages"
+msgstr "_Visus puslapius"
+
+#: gtk/ui/gtkprintunixdialog.ui:224
+msgid "C_urrent Page"
+msgstr "Šį _puslapį"
+
+#: gtk/ui/gtkprintunixdialog.ui:237
+msgid "Se_lection"
+msgstr "Pa_sirinkimas"
+
+#: gtk/ui/gtkprintunixdialog.ui:250
+msgid "Pag_es:"
+msgstr "_Puslapiai:"
+
+#: gtk/ui/gtkprintunixdialog.ui:251 gtk/ui/gtkprintunixdialog.ui:264
+msgid ""
+"Specify one or more page ranges,\n"
+" e.g. 1–3, 7, 11"
+msgstr ""
+"Nurodykite vieną ar kelis puslapių intervalus,\n"
+" pvz., 1-3, 7, 11"
+
+#: gtk/ui/gtkprintunixdialog.ui:287
+msgid "Copies"
+msgstr "Kopijos"
+
+#: gtk/ui/gtkprintunixdialog.ui:302
+msgid "Copie_s:"
+msgstr "Kopijo_s:"
+
+#: gtk/ui/gtkprintunixdialog.ui:325
+msgid "C_ollate"
+msgstr "Su_dėstyti"
+
+#: gtk/ui/gtkprintunixdialog.ui:336
+msgid "_Reverse"
+msgstr "_Atvirkščiai"
+
+#: gtk/ui/gtkprintunixdialog.ui:366
+msgid "General"
+msgstr "Bendra"
+
+#: gtk/ui/gtkprintunixdialog.ui:408
+msgid "T_wo-sided:"
+msgstr "D_vipusis:"
+
+#: gtk/ui/gtkprintunixdialog.ui:430
+msgid "Pages per _side:"
+msgstr "Puslapių vienoje pu_sėje:"
+
+#: gtk/ui/gtkprintunixdialog.ui:454
+msgid "Page or_dering:"
+msgstr "Puslapių _tvarka:"
+
+#: gtk/ui/gtkprintunixdialog.ui:477
+msgid "_Only print:"
+msgstr "Spa_usdinti tik:"
+
 #: gtk/ui/gtkprintunixdialog.ui:493
 msgid "All sheets"
 msgstr "Visus puslapius"
@@ -6009,21 +6339,115 @@ msgstr "Lyginius puslapius"
 msgid "Odd sheets"
 msgstr "Nelyginius puslapius"
 
-#: gtk/ui/gtkprintunixdialog.ui:675
-msgid "Portrait"
-msgstr "Stačiai"
+#: gtk/ui/gtkprintunixdialog.ui:509
+msgid "Sc_ale:"
+msgstr "_Mastelis:"
 
-#: gtk/ui/gtkprintunixdialog.ui:676
-msgid "Landscape"
-msgstr "Gulsčiai"
+#: gtk/ui/gtkprintunixdialog.ui:554
+msgid "Paper"
+msgstr "Popierius"
 
-#: gtk/ui/gtkprintunixdialog.ui:677
-msgid "Reverse portrait"
-msgstr "Apverstai stačiai"
+#: gtk/ui/gtkprintunixdialog.ui:569
+msgid "Paper _type:"
+msgstr "Popieriaus _tipas:"
 
-#: gtk/ui/gtkprintunixdialog.ui:678
-msgid "Reverse landscape"
-msgstr "Apverstai gulsčiai"
+#: gtk/ui/gtkprintunixdialog.ui:591
+msgid "Paper _source:"
+msgstr "Popieriau_s šaltinis:"
+
+#: gtk/ui/gtkprintunixdialog.ui:613
+msgid "Output t_ray:"
+msgstr "Išvėsties _dėklas:"
+
+#: gtk/ui/gtkprintunixdialog.ui:658
+msgid "Or_ientation:"
+msgstr "Or_ientacija:"
+
+#: gtk/ui/gtkprintunixdialog.ui:732
+msgid "Job Details"
+msgstr "Užduoties informacija"
+
+#: gtk/ui/gtkprintunixdialog.ui:747
+msgid "Pri_ority:"
+msgstr "Pri_oritetas:"
+
+#: gtk/ui/gtkprintunixdialog.ui:768
+msgid "_Billing info:"
+msgstr "_Našumo informacija:"
+
+#: gtk/ui/gtkprintunixdialog.ui:801
+msgid "Print Document"
+msgstr "Spausdinti dokumentą"
+
+#. this is one of the choices for the print at option in the print dialog
+#: gtk/ui/gtkprintunixdialog.ui:814
+msgid "_Now"
+msgstr "_Dabar"
+
+#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
+#: gtk/ui/gtkprintunixdialog.ui:828
+msgid "A_t:"
+msgstr "_Laiku:"
+
+#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
+#: gtk/ui/gtkprintunixdialog.ui:830 gtk/ui/gtkprintunixdialog.ui:832
+#: gtk/ui/gtkprintunixdialog.ui:848 gtk/ui/gtkprintunixdialog.ui:850
+msgid ""
+"Specify the time of print,\n"
+" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+msgstr ""
+"Nurodykite spausdinimo laiką,\n"
+"  pvz., 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+
+#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
+#: gtk/ui/gtkprintunixdialog.ui:862
+msgid "On _hold"
+msgstr "Susta_bdyta"
+
+#: gtk/ui/gtkprintunixdialog.ui:864 gtk/ui/gtkprintunixdialog.ui:865
+msgid "Hold the job until it is explicitly released"
+msgstr "Sulaikyti užduotį tol, kol ji bus betarpiškai išleista"
+
+#: gtk/ui/gtkprintunixdialog.ui:892
+msgid "Add Cover Page"
+msgstr "Pridėti titulinį puslapį"
+
+#. this is the label used for the option in the print dialog that controls the front cover page.
+#: gtk/ui/gtkprintunixdialog.ui:907
+msgid "Be_fore:"
+msgstr "P_rieš:"
+
+#. this is the label used for the option in the print dialog that controls the back cover page.
+#: gtk/ui/gtkprintunixdialog.ui:928
+msgid "_After:"
+msgstr "_Po:"
+
+#: gtk/ui/gtkprintunixdialog.ui:957
+msgid "Job"
+msgstr "Užduotis"
+
+#. This will appear as a tab label in the print dialog.
+#: gtk/ui/gtkprintunixdialog.ui:987
+msgid "Image Quality"
+msgstr "Paveikslėlių kokybė"
+
+#. This will appear as a tab label in the print dialog.
+#: gtk/ui/gtkprintunixdialog.ui:1016
+msgid "Color"
+msgstr "Spalva"
+
+#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
+#: gtk/ui/gtkprintunixdialog.ui:1045
+msgid "Finishing"
+msgstr "Baigiama"
+
+#: gtk/ui/gtkprintunixdialog.ui:1074
+msgid "Advanced"
+msgstr "Išsamiau"
+
+#: gtk/ui/gtkprintunixdialog.ui:1090
+msgid "Some of the settings in the dialog conflict"
+msgstr "Kai kurie nustatymai lange konfliktuoja"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
@@ -6645,25 +7069,6 @@ msgstr "Nepavyko užverti srauto"
 
 #: tools/gtk-builder-tool.c:36
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "\n"
-#| "Simplify Options:\n"
-#| "  --replace    Replace the file\n"
-#| "  --3to4       Convert from GTK 3 to GTK 4\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID      Preview only the named object\n"
-#| "  --css=FILE   Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -6711,7 +7116,6 @@ msgid "Use style from CSS file"
 msgstr "Naudoti stilių iš CSS failo"
 
 #: tools/gtk-builder-tool-preview.c:195
-#| msgid "Preview text"
 msgid "Preview the file."
 msgstr "Peržiūrėti failą."
 
@@ -6724,7 +7128,6 @@ msgid "Save as node file instead of png"
 msgstr "Įrašyti viršūnės failą vietoje png"
 
 #: tools/gtk-builder-tool-screenshot.c:361
-#| msgid "Overwrite an existing cache, even if up to date"
 msgid "Overwrite existing file"
 msgstr "Perrašyti esamą failą"
 
@@ -6769,7 +7172,6 @@ msgid "Failed to write %s: “%s”\n"
 msgstr "Nepavyko įrašyti %s: „%s“\n"
 
 #: tools/gtk-builder-tool-simplify.c:2358
-#| msgid "Recent files"
 msgid "Replace the file"
 msgstr "Perrašyti failą"
 
@@ -6958,6 +7360,9 @@ msgstr ""
 "„%s“ nėra temos indekso failo.\n"
 "Jei tikrai čia norite sukurti piktogramos podėlį, naudokite --ignore-theme-"
 "index.\n"
+
+#~ msgid "The EGL implementation does not support any allowed APIs"
+#~ msgstr "EGL realizacija nepalaiko jokių leistinų API"
 
 #~ msgid "Can't parse “%s”: %s\n"
 #~ msgstr "Nepavyko suprasti „%s“: %s\n"
@@ -7601,309 +8006,6 @@ msgstr ""
 
 #~ msgid "EGL is not supported"
 #~ msgstr "EGL nepalaikoma"
-
-#~ msgid "About"
-#~ msgstr "Apie"
-
-#~ msgid "Credits"
-#~ msgstr "Padėkos"
-
-#~ msgid "System"
-#~ msgstr "Sistema"
-
-#~ msgid "_View All Applications"
-#~ msgstr "_Rodyti visas programas"
-
-#~ msgid "_Find New Applications"
-#~ msgstr "_Rasti naujas programas"
-
-#~ msgid "No applications found."
-#~ msgstr "Nerasta programų."
-
-#~ msgid "_Finish"
-#~ msgstr "_Baigti"
-
-#~ msgid "_Back"
-#~ msgstr "_Grįžti"
-
-#~ msgid "_Next"
-#~ msgstr "_Kitas"
-
-#~ msgid "Select a Color"
-#~ msgstr "Pasirinkite spalvą"
-
-#~ msgid "Pick a color from the screen"
-#~ msgstr "Pasirinkite spalvą ekrane"
-
-#~ msgid "Hexadecimal color or color name"
-#~ msgstr "Šešioliktainė spalva arba spalvos pavadinimas"
-
-#~ msgid "Hue"
-#~ msgstr "Atspalvis"
-
-#~ msgid "Alpha value"
-#~ msgstr "Alfa vertė"
-
-#~ msgid "Saturation and value"
-#~ msgstr "Sodrumas ir vertė"
-
-#~ msgctxt "Color channel"
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgctxt "Color channel"
-#~ msgid "H"
-#~ msgstr "H"
-
-#~ msgctxt "Color Channel"
-#~ msgid "S"
-#~ msgstr "S"
-
-#~ msgctxt "Color Channel"
-#~ msgid "V"
-#~ msgstr "V"
-
-#~ msgid "(None)"
-#~ msgstr "(Joks)"
-
-#~ msgid "Search…"
-#~ msgstr "Ieškoti…"
-
-#~ msgctxt "emoji category"
-#~ msgid "Smileys & People"
-#~ msgstr "Šypsenėlės ir žmonės"
-
-#~ msgctxt "emoji category"
-#~ msgid "Body & Clothing"
-#~ msgstr "Kūnas ir drabužiai"
-
-#~ msgctxt "emoji category"
-#~ msgid "Animals & Nature"
-#~ msgstr "Gyvūnai ir gamta"
-
-#~ msgctxt "emoji category"
-#~ msgid "Food & Drink"
-#~ msgstr "Maistas ir gėrimai"
-
-#~ msgctxt "emoji category"
-#~ msgid "Travel & Places"
-#~ msgstr "Kelionės ir vietos"
-
-#~ msgctxt "emoji category"
-#~ msgid "Activities"
-#~ msgstr "Veiklos"
-
-#~ msgctxt "emoji category"
-#~ msgid "Objects"
-#~ msgstr "Objektai"
-
-#~ msgctxt "emoji category"
-#~ msgid "Symbols"
-#~ msgstr "Simboliai"
-
-#~ msgctxt "emoji category"
-#~ msgid "Flags"
-#~ msgstr "Vėliavos"
-
-#~ msgctxt "emoji category"
-#~ msgid "Recent"
-#~ msgstr "Neseniai naudotieji"
-
-#~ msgid "Create Folder"
-#~ msgstr "Sukurti aplanką"
-
-#~ msgid "Remote location — only searching the current folder"
-#~ msgstr "Nutolusi vieta — ieškoma tik esamame aplanke"
-
-#~ msgid "Folder Name"
-#~ msgstr "Aplanko pavadinimas"
-
-#~ msgid "_Create"
-#~ msgstr "Su_kurti"
-
-#~ msgid "Select Font"
-#~ msgstr "Pa_sirinkti šriftą"
-
-#~ msgid "Search font name"
-#~ msgstr "Ieškoti šrifto pavadinimo"
-
-#~ msgid "Filter by"
-#~ msgstr "Filtruoti pagal"
-
-#~ msgid "Monospace"
-#~ msgstr "Lygiaplotis"
-
-#~ msgid "Language"
-#~ msgstr "Kalba"
-
-#~ msgid "horizontal"
-#~ msgstr "horizontalus"
-
-#~ msgid "No Fonts Found"
-#~ msgstr "Šriftų nerasta"
-
-#~ msgid "_Format for:"
-#~ msgstr "_Formatas kam:"
-
-#~ msgid "_Paper size:"
-#~ msgstr "_Popieriaus dydis:"
-
-#~ msgid "_Orientation:"
-#~ msgstr "_Orientacija:"
-
-#~ msgid "Server Addresses"
-#~ msgstr "Serverio adresai"
-
-#~ msgid ""
-#~ "Server addresses are made up of a protocol prefix and an address. "
-#~ "Examples:"
-#~ msgstr "Serverio adresai susideda iš protokolo ir adreso. Pavyzdžiai:"
-
-#~ msgid "Available Protocols"
-#~ msgstr "Prieinami protokolai"
-
-#~ msgid "No recent servers found"
-#~ msgstr "Nerasta neseniai naudotų serverių"
-
-#~ msgid "Recent Servers"
-#~ msgstr "Neseniai naudoti serveriai"
-
-#~ msgid "No results found"
-#~ msgstr "Nerasta rezultatų"
-
-#~ msgid "Connect to _Server"
-#~ msgstr "Prisijungti prie _serverio"
-
-#~ msgid "Enter server address…"
-#~ msgstr "Įveskite serverio adresą…"
-
-#~ msgid "Status"
-#~ msgstr "Būsena"
-
-#~ msgid "Range"
-#~ msgstr "Intervalas"
-
-#~ msgid "_All Pages"
-#~ msgstr "_Visus puslapius"
-
-#~ msgid "C_urrent Page"
-#~ msgstr "Šį _puslapį"
-
-#~ msgid "Se_lection"
-#~ msgstr "Pa_sirinkimas"
-
-#~ msgid "Pag_es:"
-#~ msgstr "_Puslapiai:"
-
-#~ msgid ""
-#~ "Specify one or more page ranges,\n"
-#~ " e.g. 1–3, 7, 11"
-#~ msgstr ""
-#~ "Nurodykite vieną ar kelis puslapių intervalus,\n"
-#~ " pvz., 1-3, 7, 11"
-
-#~ msgid "Copies"
-#~ msgstr "Kopijos"
-
-#~ msgid "Copie_s:"
-#~ msgstr "Kopijo_s:"
-
-#~ msgid "C_ollate"
-#~ msgstr "Su_dėstyti"
-
-#~ msgid "_Reverse"
-#~ msgstr "_Atvirkščiai"
-
-#~ msgid "General"
-#~ msgstr "Bendra"
-
-#~ msgid "T_wo-sided:"
-#~ msgstr "D_vipusis:"
-
-#~ msgid "Pages per _side:"
-#~ msgstr "Puslapių vienoje pu_sėje:"
-
-#~ msgid "Page or_dering:"
-#~ msgstr "Puslapių _tvarka:"
-
-#~ msgid "_Only print:"
-#~ msgstr "Spa_usdinti tik:"
-
-#~ msgid "Sc_ale:"
-#~ msgstr "_Mastelis:"
-
-#~ msgid "Paper"
-#~ msgstr "Popierius"
-
-#~ msgid "Paper _type:"
-#~ msgstr "Popieriaus _tipas:"
-
-#~ msgid "Paper _source:"
-#~ msgstr "Popieriau_s šaltinis:"
-
-#~ msgid "Output t_ray:"
-#~ msgstr "Išvėsties _dėklas:"
-
-#~ msgid "Or_ientation:"
-#~ msgstr "Or_ientacija:"
-
-#~ msgid "Job Details"
-#~ msgstr "Užduoties informacija"
-
-#~ msgid "Pri_ority:"
-#~ msgstr "Pri_oritetas:"
-
-#~ msgid "_Billing info:"
-#~ msgstr "_Našumo informacija:"
-
-#~ msgid "Print Document"
-#~ msgstr "Spausdinti dokumentą"
-
-#~ msgid "_Now"
-#~ msgstr "_Dabar"
-
-#~ msgid "A_t:"
-#~ msgstr "_Laiku:"
-
-#~ msgid ""
-#~ "Specify the time of print,\n"
-#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-#~ msgstr ""
-#~ "Nurodykite spausdinimo laiką,\n"
-#~ "  pvz., 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
-
-#~ msgid "On _hold"
-#~ msgstr "Susta_bdyta"
-
-#~ msgid "Hold the job until it is explicitly released"
-#~ msgstr "Sulaikyti užduotį tol, kol ji bus betarpiškai išleista"
-
-#~ msgid "Add Cover Page"
-#~ msgstr "Pridėti titulinį puslapį"
-
-#~ msgid "Be_fore:"
-#~ msgstr "P_rieš:"
-
-#~ msgid "_After:"
-#~ msgstr "_Po:"
-
-#~ msgid "Job"
-#~ msgstr "Užduotis"
-
-#~ msgid "Image Quality"
-#~ msgstr "Paveikslėlių kokybė"
-
-#~ msgid "Color"
-#~ msgstr "Spalva"
-
-#~ msgid "Finishing"
-#~ msgstr "Baigiama"
-
-#~ msgid "Advanced"
-#~ msgstr "Išsamiau"
-
-#~ msgid "Some of the settings in the dialog conflict"
-#~ msgstr "Kai kurie nustatymai lange konfliktuoja"
 
 #~ msgid "No available configurations for the given RGBA pixel format"
 #~ msgstr "Nėra galimų konfigūracijų nurodytam RGBA pikselių formatui"
