@@ -679,20 +679,16 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 static GdkDisplay *
 get_inspector_display (void)
 {
-  static GdkDisplay *display = NULL;
+  GdkDisplay *display;
+  const char *name;
 
-  if (display == NULL)
-    {
-      const char *name;
+  name = g_getenv ("GTK_INSPECTOR_DISPLAY");
+  display = gdk_display_open (name);
 
-      name = g_getenv ("GTK_INSPECTOR_DISPLAY");
-      display = gdk_display_open (name);
-
-      if (display)
-        g_debug ("Using display %s for GtkInspector", name);
-      else
-        g_message ("Failed to open display %s", name);
-    }
+  if (display)
+    g_debug ("Using display %s for GtkInspector", name);
+  else
+    g_message ("Failed to open display %s", name);
 
   if (!display)
     {
@@ -706,7 +702,6 @@ get_inspector_display (void)
 
   if (display)
     {
-      const char *name;
       GdkDebugFlags flags;
 
       name = g_getenv ("GTK_INSPECTOR_RENDERER");
