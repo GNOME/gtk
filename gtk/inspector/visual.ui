@@ -697,6 +697,32 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkFrame" id="inspector_frame">
+                    <property name="halign">center</property>
+                    <child>
+                      <object class="GtkListBox">
+                        <property name="selection-mode">none</property>
+                        <property name="show-separators">1</property>
+                        <style>
+                          <class name="rich-list"/>
+                        </style>
+                        <child>
+                          <object class="GtkListBoxRow">
+                            <child>
+                              <object class="GtkButton">
+                                <property name="label" translatable="yes">Inspect Inspector</property>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <signal name="clicked" handler="inspect_inspector"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -744,6 +770,7 @@
       <widget name="visual_frame"/>
       <widget name="debug_frame"/>
       <widget name="misc_frame"/>
+      <widget name="inspector_frame"/>
     </widgets>
   </object>
 </interface>

@@ -29,6 +29,7 @@
 
 #include "gtkadjustment.h"
 #include "gtkbox.h"
+#include "gtkbutton.h"
 #include "gtkdropdown.h"
 #include "gtkcssproviderprivate.h"
 #include "gtkdebug.h"
@@ -1060,13 +1061,23 @@ update_gl_flag (GtkSwitch     *sw,
 }
 
 static void
-software_gl_activate (GtkSwitch *sw,
-                      GParamSpec *pspec,
+software_gl_activate (GtkSwitch          *sw,
+                      GParamSpec         *pspec,
                       GtkInspectorVisual *vis)
 {
   update_gl_flag (sw, GDK_DEBUG_GL_SOFTWARE, vis);
 }
 
+static void
+inspect_inspector (GtkButton          *button,
+                   GtkInspectorVisual *vis)
+{
+  GtkWidget *inspector_window;
+
+  inspector_window = gtk_inspector_window_get (gtk_widget_get_display (GTK_WIDGET (button)));
+  gtk_window_present (GTK_WINDOW (inspector_window));
+}
+                
 static void
 gtk_inspector_visual_init (GtkInspectorVisual *vis)
 {
@@ -1177,6 +1188,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, focus_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
+  gtk_widget_class_bind_template_callback (widget_class, inspect_inspector);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
