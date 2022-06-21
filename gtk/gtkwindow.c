@@ -94,6 +94,10 @@
 #include "wayland/gdksurface-wayland.h"
 #endif
 
+#ifdef GDK_WINDOWING_MACOS
+#include "macos/gdkmacos.h"
+#endif
+
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gdkbroadway.h"
 #endif
@@ -6264,6 +6268,27 @@ gtk_window_export_handle (GtkWindow               *window,
         }
     }
 #endif
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    {
+      callback (window, NULL, user_data);
+      return TRUE;
+    }
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    {
+      callback (window, NULL, user_data);
+      return TRUE;
+    }
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+  if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    {
+      callback (window, NULL, user_data);
+      return TRUE;
+    }
+#endif
 
   g_warning ("Couldn't export handle for %s surface, unsupported windowing system",
              G_OBJECT_TYPE_NAME (priv->surface));
@@ -6285,6 +6310,18 @@ gtk_window_unexport_handle (GtkWindow *window)
 #endif
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return;
+#endif
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return;
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return;
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+  if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
     return;
 #endif
 
