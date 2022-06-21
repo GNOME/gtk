@@ -34,7 +34,11 @@
 #define GIC_FILTER_PASSTHRU	0
 #define GIC_FILTER_FILTERED	1
 
+#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
+@interface GdkQuartzView : NSView <NSTextInputClient>
+#else
 @interface GdkQuartzView : NSView <NSTextInputClient, NSViewLayerContentScaleDelegate>
+#endif
 {
   GdkWindow *gdk_window;
   NSTrackingRectTag trackingRect;
