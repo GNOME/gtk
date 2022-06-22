@@ -168,6 +168,10 @@ struct _GdkWaylandSurface
 
   struct {
     GdkToplevelLayout *layout;
+
+    int bounds_width;
+    int bounds_height;
+    gboolean has_bounds;
   } toplevel;
 
   struct {
@@ -182,6 +186,10 @@ struct _GdkWaylandSurface
       int height;
       GdkToplevelState state;
       gboolean is_resizing;
+
+      int bounds_width;
+      int bounds_height;
+      gboolean has_bounds;
     } toplevel;
 
     struct {
@@ -1394,19 +1402,28 @@ configure_toplevel_geometry (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkMonitor *monitor;
-  GdkRectangle monitor_geometry;
   int bounds_width, bounds_height;
   GdkToplevelSize size;
   GdkToplevelLayout *layout;
   GdkGeometry geometry;
   GdkSurfaceHints mask;
 
-  monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-  gdk_monitor_get_geometry (monitor, &monitor_geometry);
-  g_object_unref (monitor);
-  bounds_width = monitor_geometry.width;
-  bounds_height = monitor_geometry.height;
+  if (impl->toplevel.has_bounds)
+    {
+      bounds_width = impl->toplevel.bounds_width;
+      bounds_height = impl->toplevel.bounds_height;
+    }
+  else
+    {
+      GdkMonitor *monitor;
+      GdkRectangle monitor_geometry;
+
+      monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
+      gdk_monitor_get_geometry (monitor, &monitor_geometry);
+      bounds_width = monitor_geometry.width;
+      bounds_height = monitor_geometry.height;
+      g_object_unref (monitor);
+    }
 
   gdk_toplevel_size_init (&size, bounds_width, bounds_height);
   gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
@@ -1507,6 +1524,13 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
 
   is_resizing = impl->pending.toplevel.is_resizing;
   impl->pending.toplevel.is_resizing = FALSE;
+
+  if (impl->pending.toplevel.has_bounds)
+    {
+      impl->toplevel.bounds_width = impl->pending.toplevel.bounds_width;
+      impl->toplevel.bounds_height = impl->pending.toplevel.bounds_height;
+      impl->toplevel.has_bounds = TRUE;
+    }
 
   fixed_size =
     new_state & (GDK_TOPLEVEL_STATE_MAXIMIZED |
@@ -1847,9 +1871,24 @@ xdg_toplevel_close (void                *data,
   gdk_wayland_surface_handle_close (surface);
 }
 
+static void
+xdg_toplevel_configure_bounds (void                *data,
+                               struct xdg_toplevel *xdg_toplevel,
+                               int32_t              width,
+                               int32_t              height)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  impl->pending.toplevel.bounds_width = width;
+  impl->pending.toplevel.bounds_height = height;
+  impl->pending.toplevel.has_bounds = TRUE;
+}
+
 static const struct xdg_toplevel_listener xdg_toplevel_listener = {
   xdg_toplevel_configure,
   xdg_toplevel_close,
+  xdg_toplevel_configure_bounds,
 };
 
 static void
