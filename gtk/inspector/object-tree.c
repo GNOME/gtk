@@ -1136,9 +1136,6 @@ toplevel_filter_func (gpointer item,
   if (!GTK_IS_WINDOW (item))
     return FALSE;
 
-  if (g_str_equal (G_OBJECT_TYPE_NAME (item), "GtkInspectorWindow"))
-    return FALSE;
-
   return gtk_widget_get_display (item) == display;
 }
 
