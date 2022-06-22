@@ -2,7 +2,7 @@
  * #Keywords: GtkColorChooser, GtkFontChooser, GtkApplicationChooser
  *
  * These widgets are mainly intended for use in preference dialogs.
- * They allow to select colors, fonts, directories and applications.
+ * They allow to select colors, fonts and applications.
  *
  * This demo shows both the default appearance for these dialogs,
  * as well as some of the customizations that are possible.
