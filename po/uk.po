@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-06-06 22:45+0000\n"
-"PO-Revision-Date: 2022-06-07 09:15+0300\n"
+"POT-Creation-Date: 2022-06-22 18:25+0000\n"
+"PO-Revision-Date: 2022-06-22 22:03+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -102,7 +102,8 @@ msgstr "Не вдалося ініціалізувати дисплей EGL"
 #: gdk/gdkdisplay.c:1690
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
-msgstr "Версія EGL %d.%d є надто давньою. Для роботи GTK потрібна версія %d.%d"
+msgstr ""
+"Версія EGL %d.%d є надто давньою. Для роботи GTK потрібна версія %d.%d"
 
 #: gdk/gdkdrop.c:130
 msgid "Drag’n’drop from other applications is not supported."
@@ -587,7 +588,8 @@ msgstr ""
 
 #: gdk/win32/gdkclipdrop-win32.c:731
 #, c-format
-msgid "Cannot claim clipboard ownership. Another process claimed it before us."
+msgid ""
+"Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Не вдалося отримати буфер обміну у власність. Інший процес пов'язав його із "
 "собою до нас."
@@ -614,7 +616,8 @@ msgstr ""
 
 #: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
 #, c-format
-msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
+msgid ""
+"Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Не вдалося встановити дані буфера обміну. Інший процес пов'язав його із "
 "собою до нас."
@@ -2135,8 +2138,8 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkmountoperation.c:604 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:722
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6106 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1721 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkwindow.c:6110 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2149,7 +2152,7 @@ msgid "_Open"
 msgstr "_Відкрити"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1722
+#: gtk/inspector/recorder.c:1724
 msgid "_Save"
 msgstr "З_берегти"
 
@@ -2622,7 +2625,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6107
+#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6111
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -3232,7 +3235,8 @@ msgstr "Помилка при створенні перегляду"
 
 #: gtk/gtkprintoperation.c:2888
 #, c-format
-msgid "The most probable reason is that a temporary file could not be created."
+msgid ""
+"The most probable reason is that a temporary file could not be created."
 msgstr "Найімовірніша причина: не вдалось створити тимчасовий файл."
 
 #. window
@@ -3530,12 +3534,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6094
+#: gtk/gtkwindow.c:6098
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Бажаєте використовувати інспектор GTK?"
 
-#: gtk/gtkwindow.c:6096
+#: gtk/gtkwindow.c:6100
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3546,7 +3550,7 @@ msgstr ""
 "редагувати внутрішні частини будь-які програми GTK. Його використання може "
 "спричинити збої в програмі."
 
-#: gtk/gtkwindow.c:6101
+#: gtk/gtkwindow.c:6105
 msgid "Don’t show this message again"
 msgstr "Не показувати це повідомлення надалі"
 
@@ -4041,7 +4045,7 @@ msgstr "Джерело:"
 msgid "Defined At"
 msgstr "Визначено в"
 
-#: gtk/inspector/recorder.c:1692
+#: gtk/inspector/recorder.c:1694
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Не вдалося зберегти RenderNode"
@@ -4175,15 +4179,15 @@ msgstr "Ієрархія"
 msgid "Implements"
 msgstr "Реалізує"
 
-#: gtk/inspector/visual.c:603 gtk/inspector/visual.c:622
+#: gtk/inspector/visual.c:604 gtk/inspector/visual.c:623
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Тему пришито через GTK_THEME"
 
-#: gtk/inspector/visual.c:853
+#: gtk/inspector/visual.c:854
 msgid "Backend does not support window scaling"
 msgstr "Модуль не підтримує масштабування вікна"
 
-#: gtk/inspector/visual.c:1043
+#: gtk/inspector/visual.c:1044
 msgid "GL rendering is disabled"
 msgstr "Відтворення GL вимкнено"
 
@@ -4282,6 +4286,10 @@ msgstr "Емулювати сенсорну панель"
 #: gtk/inspector/visual.ui:678
 msgid "Software GL"
 msgstr "Програмний GL"
+
+#: gtk/inspector/visual.ui:714
+msgid "Inspect Inspector"
+msgstr "Ревізувати Інспектор"
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
@@ -6218,7 +6226,6 @@ msgid "Language"
 msgstr "Мова"
 
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
-#| msgid "Pre_view"
 msgid "Preview text"
 msgstr "Перегляд тексту"
 
@@ -6265,7 +6272,8 @@ msgstr "Серверні адреси"
 #: gtk/ui/gtkplacesview.ui:40
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr "Серверні адреси складаються з префіксу протоколу та адреси. Наприклад:"
+msgstr ""
+"Серверні адреси складаються з префіксу протоколу та адреси. Наприклад:"
 
 #: gtk/ui/gtkplacesview.ui:66
 msgid "Available Protocols"
@@ -6573,7 +6581,8 @@ msgstr "Щоб надрукувати документ «%s», потрібно 
 #: modules/printbackends/gtkprintbackendcups.c:1490
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "Для друкування документа на принтері %s потрібно пройти автентифікацію"
+msgstr ""
+"Для друкування документа на принтері %s потрібно пройти автентифікацію"
 
 #: modules/printbackends/gtkprintbackendcups.c:1492
 msgid "Authentication is required to print this document"
