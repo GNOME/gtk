@@ -585,7 +585,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
   controller_class->unset_widget = gtk_shortcut_controller_unset_widget;
 
   /**
-   * GtkShortCutController:item-type:
+   * GtkShortcutController:item-type:
    *
    * The type of items. See [method@Gio.ListModel.get_item_type].
    *
