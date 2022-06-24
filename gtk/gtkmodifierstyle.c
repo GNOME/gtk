@@ -226,16 +226,18 @@ _gtk_modifier_style_map_color (GtkModifierStyle *style,
 
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
   g_return_if_fail (name != NULL);
+  g_return_if_fail (color != NULL);
 
   priv = style->priv;
 
-  if (color)
-    symbolic_color = gtk_symbolic_color_new_literal (color);
-
-  gtk_style_properties_map_color (priv->style,
-                                  name, symbolic_color);
-
-  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (style));
+  symbolic_color = gtk_symbolic_color_new_literal (color);
+  if (symbolic_color)
+    {
+      gtk_style_properties_map_color (priv->style,
+                                      name, symbolic_color);
+      gtk_symbolic_color_unref (symbolic_color);
+      _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (style));
+    }
 }
 
 void
