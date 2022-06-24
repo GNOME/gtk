@@ -1567,24 +1567,15 @@ gtk_list_base_start_rubberband (GtkListBase *self,
 }
 
 static void
-gtk_list_base_stop_rubberband (GtkListBase *self,
-                               gboolean     modify,
-                               gboolean     extend)
+gtk_list_base_apply_rubberband_selection (GtkListBase *self,
+                                          gboolean     modify,
+                                          gboolean     extend)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
-  GtkListItemManagerItem *item;
   GtkSelectionModel *model;
 
   if (!priv->rubberband)
     return;
-
-  for (item = gtk_list_item_manager_get_first (priv->item_manager);
-       item != NULL;
-       item = gtk_rb_tree_node_get_next (item))
-    {
-      if (item->widget)
-        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
-    }
 
   model = gtk_list_item_manager_get_model (priv->item_manager);
   if (model != NULL)
@@ -1645,6 +1636,24 @@ gtk_list_base_stop_rubberband (GtkListBase *self,
       gtk_bitset_unref (selected);
       gtk_bitset_unref (mask);
       gtk_bitset_unref (rubberband_selection);
+    }
+}
+
+static void
+gtk_list_base_stop_rubberband (GtkListBase *self)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkListItemManagerItem *item;
+
+  if (!priv->rubberband)
+    return;
+
+  for (item = gtk_list_item_manager_get_first (priv->item_manager);
+       item != NULL;
+       item = gtk_rb_tree_node_get_next (item))
+    {
+      if (item->widget)
+        gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
     }
 
   gtk_list_item_tracker_free (priv->item_manager, priv->rubberband->start_tracker);
@@ -1758,14 +1767,23 @@ gtk_list_base_drag_end (GtkGestureDrag *gesture,
                         GtkListBase    *self)
 {
   GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GdkEventSequence *sequence;
   gboolean modify, extend;
 
   if (!priv->rubberband)
     return;
 
+  sequence = gtk_gesture_get_last_updated_sequence (GTK_GESTURE (gesture));
+  if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
+    {
+      gtk_list_base_stop_rubberband (self);
+      return;
+    }
+
   gtk_list_base_drag_update (gesture, offset_x, offset_y, self);
   get_selection_modifiers (GTK_GESTURE (gesture), &modify, &extend);
-  gtk_list_base_stop_rubberband (self, modify, extend);
+  gtk_list_base_apply_rubberband_selection (self, modify, extend);
+  gtk_list_base_stop_rubberband (self);
 }
 
 void
