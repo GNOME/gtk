@@ -117,6 +117,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "selection",       GDK_DEBUG_SELECTION, "Information about selections" },
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
   { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)" },
+  { "portals",         GDK_DEBUG_PORTALS, "Force the use of portals" },
   { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
   { "gl-software",     GDK_DEBUG_GL_SOFTWARE, "Force OpenGL software rendering" },
   { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT, "Use OpenGL texture rectangle extension" },
@@ -360,21 +361,13 @@ gdk_running_in_sandbox (void)
 gboolean
 gdk_should_use_portal (void)
 {
-  static const char *use_portal = NULL;
+  if (GDK_DISPLAY_DEBUG_CHECK (NULL, PORTALS))
+    return TRUE;
 
-  if (G_UNLIKELY (use_portal == NULL))
-    {
-      if (gdk_running_in_sandbox ())
-        use_portal = "1";
-      else
-        {
-          use_portal = g_getenv ("GTK_USE_PORTAL");
-          if (!use_portal)
-            use_portal = "";
-        }
-    }
+  if (gdk_running_in_sandbox ())
+    return TRUE;
 
-  return use_portal[0] == '1';
+  return FALSE;
 }
 
 PangoDirection
