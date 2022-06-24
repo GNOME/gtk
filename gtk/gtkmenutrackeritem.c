@@ -201,13 +201,10 @@ gtk_menu_tracker_item_finalize (GObject *object)
 {
   GtkMenuTrackerItem *self = GTK_MENU_TRACKER_ITEM (object);
 
-  g_free (self->action_namespace);
-  g_free (self->action_and_target);
-
-  if (self->observable)
-    g_object_unref (self->observable);
-
-  g_object_unref (self->item);
+  g_clear_pointer (&self->action_namespace, g_free);
+  g_clear_pointer (&self->action_and_target, g_free);
+  g_clear_object (&self->observable);
+  g_clear_object (&self->item);
 
   G_OBJECT_CLASS (gtk_menu_tracker_item_parent_class)->finalize (object);
 }
@@ -884,7 +881,7 @@ gtk_menu_tracker_opener_finalize (GObject *object)
 
   gtk_menu_tracker_item_set_submenu_shown (opener->item, FALSE);
 
-  g_free (opener->submenu_action);
+  g_clear_pointer (&opener->submenu_action, g_free);
 
   G_OBJECT_CLASS (gtk_menu_tracker_opener_parent_class)->finalize (object);
 }
