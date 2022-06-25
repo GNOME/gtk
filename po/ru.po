@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-06-07 06:16+0000\n"
-"PO-Revision-Date: 2022-06-07 14:48+0300\n"
+"POT-Creation-Date: 2022-06-22 19:18+0000\n"
+"PO-Revision-Date: 2022-06-23 12:41+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -1393,7 +1393,7 @@ msgstr "индикатор выполнения"
 #: gtk/gtkaccessible.c:603
 msgctxt "accessibility"
 msgid "radio"
-msgstr "кнопвыб"
+msgstr "радио"
 
 #: gtk/gtkaccessible.c:604
 msgctxt "accessibility"
@@ -2135,8 +2135,8 @@ msgstr "Файл с таким именем уже существует"
 #: gtk/gtkmountoperation.c:604 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:722
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6106 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1721 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkwindow.c:6110 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2149,7 +2149,7 @@ msgid "_Open"
 msgstr "_Открыть"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1722
+#: gtk/inspector/recorder.c:1724
 msgid "_Save"
 msgstr "_Сохранить"
 
@@ -2626,7 +2626,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6107
+#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6111
 msgid "_OK"
 msgstr "_OK"
 
@@ -2802,7 +2802,7 @@ msgstr ""
 #: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
 #: gtk/ui/gtkprintunixdialog.ui:709
 msgid "Page Setup"
-msgstr "Параметры страницы"
+msgstr "Настройка страницы"
 
 #: gtk/gtkpasswordentry.c:173
 msgid "Hide Text"
@@ -3536,12 +3536,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6094
+#: gtk/gtkwindow.c:6098
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Вы хотите использовать GTK Inspector?"
 
-#: gtk/gtkwindow.c:6096
+#: gtk/gtkwindow.c:6100
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3552,7 +3552,7 @@ msgstr ""
 "изменять внутренние компоненты любого GTK-приложения. Его использование "
 "может привести к поломке или аварийному завершению работы приложения."
 
-#: gtk/gtkwindow.c:6101
+#: gtk/gtkwindow.c:6105
 msgid "Don’t show this message again"
 msgstr "Не показывать это сообщение снова"
 
@@ -3616,7 +3616,7 @@ msgstr "Включено"
 
 #: gtk/inspector/actions.ui:41
 msgid "Parameter Type"
-msgstr "Тип параметры"
+msgstr "Тип параметра"
 
 #: gtk/inspector/actions.ui:52 gtk/inspector/css-node-tree.ui:74
 #: gtk/inspector/misc-info.ui:121
@@ -4051,7 +4051,7 @@ msgstr "Источник:"
 msgid "Defined At"
 msgstr "Определён в"
 
-#: gtk/inspector/recorder.c:1692
+#: gtk/inspector/recorder.c:1694
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Сбой при сохранении RenderNode"
@@ -4185,15 +4185,15 @@ msgstr "Иерархия"
 msgid "Implements"
 msgstr "Реализует"
 
-#: gtk/inspector/visual.c:603 gtk/inspector/visual.c:622
+#: gtk/inspector/visual.c:604 gtk/inspector/visual.c:623
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Тема жёстко задана с помощью GTK_THEME"
 
-#: gtk/inspector/visual.c:853
+#: gtk/inspector/visual.c:854
 msgid "Backend does not support window scaling"
 msgstr "Движок не поддерживает масштабирование окон"
 
-#: gtk/inspector/visual.c:1043
+#: gtk/inspector/visual.c:1044
 msgid "GL rendering is disabled"
 msgstr "Рендеринг GL выключен"
 
@@ -4292,6 +4292,10 @@ msgstr "Эмулировать сенсорный экран"
 #: gtk/inspector/visual.ui:678
 msgid "Software GL"
 msgstr "Программный GL"
+
+#: gtk/inspector/visual.ui:714
+msgid "Inspect Inspector"
+msgstr "Инспектор контроля"
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
@@ -4395,7 +4399,7 @@ msgstr "Информация"
 
 #: gtk/inspector/window.ui:554
 msgid "Settings"
-msgstr "Параметры"
+msgstr "Настройки"
 
 #: gtk/inspector/window.ui:563
 msgid "Resources"
