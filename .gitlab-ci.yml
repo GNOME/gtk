@@ -346,6 +346,7 @@ reference:
       - _reference
 
 publish-docs:
+  image: fedora:latest
   stage: publish
   needs: ['reference']
   script:
