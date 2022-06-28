@@ -30,6 +30,7 @@
 
 #include "gtkcanvasbox.h"
 #include "gtkcanvasitem.h"
+#include "gtkcanvaspoint.h"
 #include "gtkwidget.h"
 
 /* {{{ Boilerplate */
@@ -204,6 +205,92 @@ gtk_canvas_size_new_from_box (const GtkCanvasBox *box)
   self->box = gtk_canvas_box_copy (box);
 
   return (GtkCanvasSize *) self;
+}
+
+/* }}} */
+/* {{{ DISTANCE */
+
+static void
+gtk_canvas_size_distance_copy (GtkCanvasSize       *size,
+                               const GtkCanvasSize *source_size)
+{
+  const GtkCanvasSizeDistance *source = &source_size->distance;
+
+  gtk_canvas_size_init_distance (size, source->from, source->to);
+}
+
+static void
+gtk_canvas_size_distance_finish (GtkCanvasSize *size)
+{
+  GtkCanvasSizeDistance *self = &size->distance;
+
+  gtk_canvas_point_free (self->from);
+  gtk_canvas_point_free (self->to);
+}
+
+static gboolean
+gtk_canvas_size_distance_eval (const GtkCanvasSize *size,
+                               float               *width,
+                               float               *height)
+{
+  const GtkCanvasSizeDistance *self = &size->distance;
+  float x1, y1, x2, y2;
+
+  if (!gtk_canvas_point_eval (self->from, &x1, &y1) ||
+      !gtk_canvas_point_eval (self->from, &x2, &y2))
+    return FALSE;
+
+  *width = x1 - x2;
+  *height = y1 - y2;
+
+  return TRUE;
+}
+
+static const GtkCanvasSizeClass GTK_CANVAS_SIZE_DISTANCE_CLASS =
+{
+  "GtkCanvasSizeDistance",
+  gtk_canvas_size_distance_copy,
+  gtk_canvas_size_distance_finish,
+  gtk_canvas_size_distance_eval,
+};
+
+void
+gtk_canvas_size_init_distance (GtkCanvasSize        *size,
+                               const GtkCanvasPoint *from,
+                               const GtkCanvasPoint *to)
+{
+  GtkCanvasSizeDistance *self = &size->distance;
+  
+  self->class = &GTK_CANVAS_SIZE_DISTANCE_CLASS;
+
+  self->from = gtk_canvas_point_copy (from);
+  self->to = gtk_canvas_point_copy (to);
+}
+
+/**
+ * gtk_canvas_size_new_distance:
+ * @from: point from where to compute the distance
+ * @to: point to where to compute the distance
+ *
+ * Creates a size for the given distance. Note that both width and height
+ * can be negative if @to is smaller than @from in the corresponding dimension.
+ *
+ * Returns: a new size
+ **/
+GtkCanvasSize *
+gtk_canvas_size_new_distance (const GtkCanvasPoint *from,
+                              const GtkCanvasPoint *to)
+{
+  GtkCanvasSize *self;
+
+  g_return_val_if_fail (from != NULL, NULL);
+  g_return_val_if_fail (to != NULL, NULL);
+
+  self = gtk_canvas_size_alloc (&GTK_CANVAS_SIZE_DISTANCE_CLASS);
+
+  gtk_canvas_size_init_distance (self, from, to);
+
+  return self;
 }
 
 /* }}} */

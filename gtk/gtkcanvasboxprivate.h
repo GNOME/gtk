@@ -8,35 +8,12 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkCanvasBoxClass GtkCanvasBoxClass;
-typedef struct _GtkCanvasBoxPoints GtkCanvasBoxPoints;
-typedef struct _GtkCanvasBoxSize GtkCanvasBoxSize;
-
-struct _GtkCanvasBoxPoints
+struct _GtkCanvasBox
 {
-  const GtkCanvasBoxClass *class;
-
-  GtkCanvasPoint point1;
-  GtkCanvasPoint point2;
-};
-
-struct _GtkCanvasBoxSize
-{
-  const GtkCanvasBoxClass *class;
-
   GtkCanvasPoint point;
   GtkCanvasSize size;
   float origin_x;
   float origin_y;
-};
-
-struct _GtkCanvasBox
-{
-  union {
-    const GtkCanvasBoxClass *class;
-    GtkCanvasBoxPoints points;
-    GtkCanvasBoxSize size;
-  };
 };
 
 
