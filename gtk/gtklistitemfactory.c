@@ -80,31 +80,36 @@ G_DEFINE_TYPE (GtkListItemFactory, gtk_list_item_factory, G_TYPE_OBJECT)
 
 static void
 gtk_list_item_factory_default_setup (GtkListItemFactory *self,
-                                     GtkListItemWidget  *widget,
-                                     GtkListItem        *list_item)
+                                     GObject            *item,
+                                     gboolean            bind,
+                                     GFunc               func,
+                                     gpointer            data)
 {
-  gtk_list_item_widget_default_setup (widget, list_item);
+  if (func)
+    func (item, data);
 }
 
 static void
 gtk_list_item_factory_default_teardown (GtkListItemFactory *self,
-                                        GtkListItemWidget  *widget,
-                                        GtkListItem        *list_item)
+                                        GObject            *item,
+                                        gboolean            unbind,
+                                        GFunc               func,
+                                        gpointer            data)
 {
-  gtk_list_item_widget_default_teardown (widget, list_item);
-
-  gtk_list_item_set_child (list_item, NULL);
+  if (func)
+    func (item, data);
 }
 
 static void                  
 gtk_list_item_factory_default_update (GtkListItemFactory *self,
-                                      GtkListItemWidget  *widget,
-                                      GtkListItem        *list_item,
-                                      guint               position,
-                                      gpointer            item,
-                                      gboolean            selected)
+                                      GObject            *item,
+                                      gboolean            unbind,
+                                      gboolean            bind,
+                                      GFunc               func,
+                                      gpointer            data)
 {
-  gtk_list_item_widget_default_update (widget, list_item, position, item, selected);
+  if (func)
+    func (item, data);
 }
 
 static void
@@ -122,45 +127,38 @@ gtk_list_item_factory_init (GtkListItemFactory *self)
 
 void
 gtk_list_item_factory_setup (GtkListItemFactory *self,
-                             GtkListItemWidget  *widget)
+                             GObject            *item,
+                             gboolean            bind,
+                             GFunc               func,
+                             gpointer            data)
 {
-  GtkListItem *list_item;
-
   g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
 
-  list_item = gtk_list_item_new ();
-
-  GTK_LIST_ITEM_FACTORY_GET_CLASS (self)->setup (self, widget, list_item);
+  GTK_LIST_ITEM_FACTORY_GET_CLASS (self)->setup (self, item, bind, func, data);
 }
 
 void
 gtk_list_item_factory_teardown (GtkListItemFactory *self,
-                                GtkListItemWidget  *widget)
+                                GObject            *item,
+                                gboolean            unbind,
+                                GFunc               func,
+                                gpointer            data)
 {
-  GtkListItem *list_item;
-
   g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
 
-  list_item = gtk_list_item_widget_get_list_item (widget);
-
-  GTK_LIST_ITEM_FACTORY_GET_CLASS (self)->teardown (self, widget, list_item);
-
-  g_object_unref (list_item);
+  GTK_LIST_ITEM_FACTORY_GET_CLASS (self)->teardown (self, item, unbind, func, data);
 }
 
 void
 gtk_list_item_factory_update (GtkListItemFactory *self,
-                              GtkListItemWidget  *widget,
-                              guint               position,
-                              gpointer            item,
-                              gboolean            selected)
+                              GObject            *item,
+                              gboolean            unbind,
+                              gboolean            bind,
+                              GFunc               func,
+                              gpointer            data)
 {
-  GtkListItem *list_item;
-
   g_return_if_fail (GTK_IS_LIST_ITEM_FACTORY (self));
-  g_return_if_fail (GTK_IS_LIST_ITEM_WIDGET (widget));
+  g_return_if_fail (G_IS_OBJECT (item));
 
-  list_item = gtk_list_item_widget_get_list_item (widget);
-
-  GTK_LIST_ITEM_FACTORY_GET_CLASS (self)->update (self, widget, list_item, position, item, selected);
+  GTK_LIST_ITEM_FACTORY_GET_CLASS (self)->update (self, item, unbind, bind, func, data);
 }

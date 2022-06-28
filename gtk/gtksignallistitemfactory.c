@@ -103,45 +103,49 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static void
 gtk_signal_list_item_factory_setup (GtkListItemFactory *factory,
-                                    GtkListItemWidget  *widget,
-                                    GtkListItem        *list_item)
+                                    GObject            *item,
+                                    gboolean            bind,
+                                    GFunc               func,
+                                    gpointer            data)
 {
-  g_signal_emit (factory, signals[SETUP], 0, list_item);
+  g_signal_emit (factory, signals[SETUP], 0, item);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->setup (factory, widget, list_item);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->setup (factory, item, bind, func, data);
 
-  if (gtk_list_item_get_item (list_item))
-    g_signal_emit (factory, signals[BIND], 0, list_item);
+  if (bind)
+    g_signal_emit (factory, signals[BIND], 0, item);
 }
 
 static void                  
 gtk_signal_list_item_factory_update (GtkListItemFactory *factory,
-                                     GtkListItemWidget  *widget,
-                                     GtkListItem        *list_item,
-                                     guint               position,
-                                     gpointer            item,
-                                     gboolean            selected)
+                                     GObject            *item,
+                                     gboolean            unbind,
+                                     gboolean            bind,
+                                     GFunc               func,
+                                     gpointer            data)
 {
-  if (gtk_list_item_get_item (list_item))
-    g_signal_emit (factory, signals[UNBIND], 0, list_item);
+  if (unbind)
+    g_signal_emit (factory, signals[UNBIND], 0, item);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->update (factory, widget, list_item, position, item, selected);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->update (factory, item, unbind, bind, func, data);
 
-  if (item)
-    g_signal_emit (factory, signals[BIND], 0, list_item);
+  if (bind)
+    g_signal_emit (factory, signals[BIND], 0, item);
 }
 
 static void
 gtk_signal_list_item_factory_teardown (GtkListItemFactory *factory,
-                                       GtkListItemWidget  *widget,
-                                       GtkListItem        *list_item)
+                                       GObject            *item,
+                                       gboolean            unbind,
+                                       GFunc               func,
+                                       gpointer            data)
 {
-  if (gtk_list_item_get_item (list_item))
-    g_signal_emit (factory, signals[UNBIND], 0, list_item);
+  if (unbind)
+    g_signal_emit (factory, signals[UNBIND], 0, item);
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->teardown (factory, widget, list_item);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_signal_list_item_factory_parent_class)->teardown (factory, item, unbind, func, data);
 
-  g_signal_emit (factory, signals[TEARDOWN], 0, list_item);
+  g_signal_emit (factory, signals[TEARDOWN], 0, item);
 }
 
 static void
@@ -156,7 +160,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::setup:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The `GtkListItem` to set up
+   * @object: The `GObject` to set up
    *
    * Emitted when a new listitem has been created and needs to be setup for use.
    *
@@ -173,7 +177,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_LIST_ITEM);
+                  G_TYPE_OBJECT);
   g_signal_set_va_marshaller (signals[SETUP],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__OBJECTv);
@@ -181,13 +185,14 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::bind:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The `GtkListItem` to bind
+   * @object: The `GObject` to bind
    *
-   * Emitted when a new [property@Gtk.ListItem:item] has been set
-   * on the @listitem and should be bound for use.
+   * Emitted when an object has been bound, for example when a
+   * new [property@Gtk.ListItem:item] has been set on a
+   * `GtkListItem` and should be bound for use.
    *
-   * After this signal was emitted, the listitem might be shown in
-   * a [class@Gtk.ListView] or other list widget.
+   * After this signal was emitted, the object might be shown in
+   * a [class@Gtk.ListView] or other widget.
    *
    * The [signal@Gtk.SignalListItemFactory::unbind] signal is the
    * opposite of this signal and can be used to undo everything done
@@ -201,7 +206,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_LIST_ITEM);
+                  G_TYPE_OBJECT);
   g_signal_set_va_marshaller (signals[BIND],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__OBJECTv);
@@ -209,9 +214,10 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::unbind:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The `GtkListItem` to unbind
+   * @object: The `GObject` to unbind
    *
-   * Emitted when a listitem has been removed from use in a list widget
+   * Emitted when a object has been unbound from its item, for example when
+   * a listitem was removed from use in a list widget
    * and its new [property@Gtk.ListItem:item] is about to be unset.
    *
    * This signal is the opposite of the [signal@Gtk.SignalListItemFactory::bind]
@@ -225,7 +231,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_LIST_ITEM);
+                  G_TYPE_OBJECT);
   g_signal_set_va_marshaller (signals[UNBIND],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__OBJECTv);
@@ -233,11 +239,11 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::teardown:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The `GtkListItem` to teardown
+   * @object: The `GObject` to tear down
    *
-   * Emitted when a listitem is about to be destroyed.
+   * Emitted when an object is about to be destroyed.
    *
-   * It is the last signal ever emitted for this @listitem.
+   * It is the last signal ever emitted for this @object.
    *
    * This signal is the opposite of the [signal@Gtk.SignalListItemFactory::setup]
    * signal and should be used to undo everything done in that signal.
@@ -250,7 +256,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_LIST_ITEM);
+                  G_TYPE_OBJECT);
   g_signal_set_va_marshaller (signals[TEARDOWN],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__OBJECTv);
