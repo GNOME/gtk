@@ -296,11 +296,48 @@ gtk_picture_get_property (GObject     *object,
 }
 
 static void
+gtk_picture_paintable_invalidate_contents (GdkPaintable *paintable,
+                                           GtkPicture   *self)
+{
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+gtk_picture_paintable_invalidate_size (GdkPaintable *paintable,
+                                       GtkPicture   *self)
+{
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+}
+
+static void
+gtk_picture_clear_paintable (GtkPicture *self)
+{
+  guint flags;
+
+  if (self->paintable == NULL)
+    return;
+
+  flags = gdk_paintable_get_flags (self->paintable);
+
+  if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+    g_signal_handlers_disconnect_by_func (self->paintable,
+                                          gtk_picture_paintable_invalidate_contents,
+                                          self);
+
+  if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
+    g_signal_handlers_disconnect_by_func (self->paintable,
+                                          gtk_picture_paintable_invalidate_size,
+                                          self);
+
+  g_object_unref (self->paintable);
+}
+
+static void
 gtk_picture_dispose (GObject *object)
 {
   GtkPicture *self = GTK_PICTURE (object);
 
-  gtk_picture_set_paintable (self, NULL);
+  gtk_picture_clear_paintable (self);
 
   g_clear_object (&self->file);
   g_clear_pointer (&self->alternative_text, g_free);
@@ -707,20 +744,6 @@ gtk_picture_set_pixbuf (GtkPicture *self,
     g_object_unref (texture);
 }
 
-static void
-gtk_picture_paintable_invalidate_contents (GdkPaintable *paintable,
-                                           GtkPicture   *self)
-{
-  gtk_widget_queue_draw (GTK_WIDGET (self));
-}
-
-static void
-gtk_picture_paintable_invalidate_size (GdkPaintable *paintable,
-                                       GtkPicture   *self)
-{
-  gtk_widget_queue_resize (GTK_WIDGET (self));
-}
-
 /**
  * gtk_picture_set_paintable: (attributes org.gtk.Method.set_property=paintable)
  * @self: a `GtkPicture`
@@ -747,22 +770,7 @@ gtk_picture_set_paintable (GtkPicture   *self,
   if (paintable)
     g_object_ref (paintable);
 
-  if (self->paintable)
-    {
-      const guint flags = gdk_paintable_get_flags (self->paintable);
-
-      if ((flags & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
-        g_signal_handlers_disconnect_by_func (self->paintable,
-                                              gtk_picture_paintable_invalidate_contents,
-                                              self);
-
-      if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
-        g_signal_handlers_disconnect_by_func (self->paintable,
-                                              gtk_picture_paintable_invalidate_size,
-                                              self);
-
-      g_object_unref (self->paintable);
-    }
+  gtk_picture_clear_paintable (self);
 
   self->paintable = paintable;
 
