@@ -1495,7 +1495,7 @@ parse_signal (ParserData   *data,
       return;
     }
 
-  if (!g_signal_parse_name (name, object_info->type, &id, &detail, FALSE))
+  if (!g_signal_parse_name (name, object_info->type, &id, &detail, TRUE))
     {
       g_set_error (error,
                    GTK_BUILDER_ERROR,
