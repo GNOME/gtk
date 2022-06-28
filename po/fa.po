@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-06-10 06:06+0000\n"
-"PO-Revision-Date: 2022-06-13 11:14+0430\n"
+"POT-Creation-Date: 2022-06-25 00:19+0000\n"
+"PO-Revision-Date: 2022-06-28 15:00+0430\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Bookmarks: 133,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -641,8 +641,8 @@ msgstr "نتوانست دادهٔ تخته‌گیره را تنظیم کند. م
 #, c-format
 msgid "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
-"نتوانست دادهٔ تخته‌گیره را بگیرد. داده‌ّای تخته‌گیره پیش از این که بتوانیم بگیریمشان عوض "
-"شدند."
+"نتوانست دادهٔ تخته‌گیره را بگیرد. داده‌ّای تخته‌گیره پیش از این که بتوانیم بگیریمشان "
+"عوض شدند."
 
 #: gdk/win32/gdkclipdrop-win32.c:969
 #, c-format
@@ -710,7 +710,8 @@ msgstr "در حال نوشتن روی جریان بسته‌شده"
 msgid "g_try_realloc () failed"
 msgstr "g_try_realloc () شکست خورد"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:93 gdk/win32/gdkhdataoutputstream-win32.c:231
+#: gdk/win32/gdkhdataoutputstream-win32.c:93
+#: gdk/win32/gdkhdataoutputstream-win32.c:231
 msgid "GlobalReAlloc() failed: "
 msgstr "GlobalReAlloc() شکست خورد: "
 
@@ -2082,8 +2083,8 @@ msgstr "یک پرونده با همان نام در حال حاضر وجود د�
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175 gtk/gtkmountoperation.c:604
 #: gtk/gtkpagesetupunixdialog.c:283 gtk/gtkprintbackend.c:640
 #: gtk/gtkprinteroptionwidget.c:722 gtk/gtkprintunixdialog.c:651
-#: gtk/gtkprintunixdialog.c:807 gtk/gtkwindow.c:6106 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1721 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkprintunixdialog.c:807 gtk/gtkwindow.c:6110 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2095,7 +2096,7 @@ msgid "_Open"
 msgstr "_گشودن"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1722
+#: gtk/inspector/recorder.c:1724
 msgid "_Save"
 msgstr "_ذخیره"
 
@@ -2171,8 +2172,8 @@ msgstr "آیا مطمئنید که می‌خواهید برای همیشه «%s�
 msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
-#: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827 gtk/gtklabel.c:5627
-#: gtk/gtktext.c:6041 gtk/gtktextview.c:8914
+#: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
+#: gtk/gtklabel.c:5627 gtk/gtktext.c:6041 gtk/gtktextview.c:8914
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2296,7 +2297,8 @@ msgstr "برنامه"
 msgid "Audio"
 msgstr "صدا"
 
-#: gtk/gtkfilechooserwidget.c:4323 gtk/gtkfontbutton.c:596 gtk/inspector/visual.ui:170
+#: gtk/gtkfilechooserwidget.c:4323 gtk/gtkfontbutton.c:596
+#: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "قلم"
 
@@ -2356,7 +2358,8 @@ msgstr "پرونده‌ای با نام «%s» از قبل وجود دارد.  �
 #: gtk/gtkfilechooserwidget.c:5794 gtk/gtkprintunixdialog.c:646
 #, c-format
 msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "پرونده از قبل در «%s» وجود دارد.  با جایگزینی آن تمام محتوایش بازنویسی می‌شود."
+msgstr ""
+"پرونده از قبل در «%s» وجود دارد.  با جایگزینی آن تمام محتوایش بازنویسی می‌شود."
 
 #: gtk/gtkfilechooserwidget.c:5799 gtk/gtkprintunixdialog.c:654
 msgid "_Replace"
@@ -2567,7 +2570,7 @@ msgid "%d:%02d"
 msgstr "%Id:%I02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176 gtk/gtkprintbackend.c:641
-#: gtk/gtkwindow.c:6107
+#: gtk/gtkwindow.c:6111
 msgid "_OK"
 msgstr "_تأیید"
 
@@ -2811,7 +2814,8 @@ msgstr "زباله‌دان"
 msgid "Open the trash"
 msgstr "گشودن زباله‌دان"
 
-#: gtk/gtkplacessidebar.c:1183 gtk/gtkplacessidebar.c:1211 gtk/gtkplacessidebar.c:1411
+#: gtk/gtkplacessidebar.c:1183 gtk/gtkplacessidebar.c:1211
+#: gtk/gtkplacessidebar.c:1411
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "سوار و گشودن «%s»"
@@ -3067,7 +3071,8 @@ msgstr[0] "%s / %s در دسترس"
 msgid "Disconnect"
 msgstr "قطع ارتباط"
 
-#: gtk/gtkplacesviewrow.c:471 gtk/ui/gtkplacesviewrow.ui:53 gtk/ui/gtksidebarrow.ui:50
+#: gtk/gtkplacesviewrow.c:471 gtk/ui/gtkplacesviewrow.ui:53
+#: gtk/ui/gtksidebarrow.ui:50
 msgid "Unmount"
 msgstr "پیاده کردن"
 
@@ -3190,7 +3195,8 @@ msgid "Out of paper"
 msgstr "بدون کاغذ"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:638 modules/printbackends/gtkprintbackendcups.c:2660
+#: gtk/gtkprintoperation-win32.c:638
+#: modules/printbackends/gtkprintbackendcups.c:2660
 msgid "Paused"
 msgstr "مکث شده"
 
@@ -3315,8 +3321,9 @@ msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%I.0f ٪"
 
-#: gtk/gtkrecentmanager.c:1023 gtk/gtkrecentmanager.c:1036 gtk/gtkrecentmanager.c:1174
-#: gtk/gtkrecentmanager.c:1184 gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
+#: gtk/gtkrecentmanager.c:1023 gtk/gtkrecentmanager.c:1036
+#: gtk/gtkrecentmanager.c:1174 gtk/gtkrecentmanager.c:1184
+#: gtk/gtkrecentmanager.c:1234 gtk/gtkrecentmanager.c:1243
 #, c-format
 msgid "Unable to find an item with URI “%s”"
 msgstr "نمی‌توان موردی با نشانی «%s» یافت"
@@ -3455,22 +3462,22 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%Id ٪"
 
-#: gtk/gtkwindow.c:6094
+#: gtk/gtkwindow.c:6098
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "می‌خواهید از بازرس +GTK استفاده کنید؟"
 
-#: gtk/gtkwindow.c:6096
+#: gtk/gtkwindow.c:6100
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify the "
 "internals of any GTK application. Using it may cause the application to break or "
 "crash."
 msgstr ""
-"بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK را "
-"می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
+"بازرس +GTK یک بازرس تعاملی است که به شما اجازه پیمایش و تغییر هسته برنامه‌های +GTK "
+"را می‌دهد. استفاده از آن ممکن است باعث شود که برنامه‌ها قفل کنند یا از هم بپاشند."
 
-#: gtk/gtkwindow.c:6101
+#: gtk/gtkwindow.c:6105
 msgid "Don’t show this message again"
 msgstr "این پیام را دوباره نشان نده"
 
@@ -3608,7 +3615,8 @@ msgstr "در این‌جا می‌توانید هر قاعدهٔ CSS قابل ش
 
 #: gtk/inspector/css-editor.c:130
 msgid ""
-"You can temporarily disable this custom CSS by clicking on the “Pause” button above."
+"You can temporarily disable this custom CSS by clicking on the “Pause” button "
+"above."
 msgstr ""
 "می‌توانید با کلیک روی دکمهٔ «مکث» در بالا، این CSS سفارشی را موقّتاً از کار بیندازید."
 
@@ -3970,7 +3978,7 @@ msgstr "منبع:"
 msgid "Defined At"
 msgstr "تعریف شده در"
 
-#: gtk/inspector/recorder.c:1692
+#: gtk/inspector/recorder.c:1694
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "ذخیرهٔ RenderNode شکست خورد"
@@ -4105,15 +4113,15 @@ msgstr "سلسله مراتب"
 msgid "Implements"
 msgstr "پیاده‌سازی‌ها"
 
-#: gtk/inspector/visual.c:603 gtk/inspector/visual.c:622
+#: gtk/inspector/visual.c:604 gtk/inspector/visual.c:623
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "تم با استفاده از GTK_THEME رونویسی شده است"
 
-#: gtk/inspector/visual.c:853
+#: gtk/inspector/visual.c:854
 msgid "Backend does not support window scaling"
 msgstr "پسانه از تغییر اندازه پنجره پشتیبانی نمی‌کند"
 
-#: gtk/inspector/visual.c:1043
+#: gtk/inspector/visual.c:1044
 msgid "GL rendering is disabled"
 msgstr "پرداخت GL از کار افتاده"
 
@@ -4213,9 +4221,13 @@ msgstr "شبیه‌سازی صفحهٔ لمسی"
 msgid "Software GL"
 msgstr "GL نرم‌افزاری"
 
+#: gtk/inspector/visual.ui:714
+msgid "Inspect Inspector"
+msgstr "بازرسی بازرس"
+
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
-msgstr "یک شیء انتخاب کنید"
+msgstr "گزینش یک شی"
 
 #: gtk/inspector/window.ui:42 gtk/inspector/window.ui:107
 msgid "Show Details"
@@ -4223,7 +4235,7 @@ msgstr "نمایش جزییات"
 
 #: gtk/inspector/window.ui:57
 msgid "Show all Objects"
-msgstr "نمایش تمام اشیاء"
+msgstr "نمایش تمام اشیا"
 
 #: gtk/inspector/window.ui:121
 msgid "Show all Resources"
@@ -7321,8 +7333,8 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "پروندهٔ نمایهٔ زمینه در «%s» نیست.\n"
-"اگر به‌راستی می‌خواهید این‌جا انبارهٔ نقشکی ایجاد کنید، از ‪--ignore-theme-index‬ استفاده "
-"کنید.\n"
+"اگر به‌راستی می‌خواهید این‌جا انبارهٔ نقشکی ایجاد کنید، از ‪--ignore-theme-index‬ "
+"استفاده کنید.\n"
 
 #~ msgid "The EGL implementation does not support any allowed APIs"
 #~ msgstr "پشتیبانی EGL از هیچ API مجازی پیشتیبانی نمی‌کند"
@@ -8567,8 +8579,8 @@ msgstr ""
 #~ "The folder could not be created, as a file with the same name already exists.  "
 #~ "Try using a different name for the folder, or rename the file first."
 #~ msgstr ""
-#~ "پوشه نمی‌تواند ایجاد شود، چون پرونده‌ای با همین نام از قبل وجود دارد.  از نام‌ دیگری "
-#~ "برای پوشه استفاده کنید، یا نام پرونده را تغییر دهید."
+#~ "پوشه نمی‌تواند ایجاد شود، چون پرونده‌ای با همین نام از قبل وجود دارد.  از نام‌ "
+#~ "دیگری برای پوشه استفاده کنید، یا نام پرونده را تغییر دهید."
 
 #~ msgid "Enter location"
 #~ msgstr "وارد کردن مکان"
@@ -8622,18 +8634,18 @@ msgstr ""
 #~ msgstr "در حال باز کردن %s"
 
 #~ msgid ""
-#~ "Select the color you want from the outer ring. Select the darkness or lightness "
-#~ "of that color using the inner triangle."
+#~ "Select the color you want from the outer ring. Select the darkness or "
+#~ "lightness of that color using the inner triangle."
 #~ msgstr ""
 #~ "رنگی را که می‌خواهید از حلقه‌ی خارجی انتخاب کنید. تیرگی یا روشنی آن رنگ را با "
 #~ "استفاده از مثلث داخلی انتخاب کنید."
 
 #~ msgid ""
-#~ "Click the eyedropper, then click a color anywhere on your screen to select that "
-#~ "color."
+#~ "Click the eyedropper, then click a color anywhere on your screen to select "
+#~ "that color."
 #~ msgstr ""
-#~ "روی قطره‌چکان کلیک کنید، سپس روی رنگی در هر جای صفحه‌تان کلیک کنید تا آن رنگ انتخاب "
-#~ "شود"
+#~ "روی قطره‌چکان کلیک کنید، سپس روی رنگی در هر جای صفحه‌تان کلیک کنید تا آن رنگ "
+#~ "انتخاب شود"
 
 #~ msgid "_Hue:"
 #~ msgstr "_پرده:"
@@ -8675,8 +8687,8 @@ msgstr ""
 #~ msgstr "_نام رنگ:"
 
 #~ msgid ""
-#~ "You can enter an HTML-style hexadecimal color value, or simply a color name such "
-#~ "as “orange” in this entry."
+#~ "You can enter an HTML-style hexadecimal color value, or simply a color name "
+#~ "such as “orange” in this entry."
 #~ msgstr ""
 #~ "می‌توانید یک مقدار رنگ شانزده‌شانزدهی به سبک HTML وارد کنید، یا به سادگی نام "
 #~ "انگلیسی یک رنگ مثل «orange» را برای نارنجی را وارد کنید."
@@ -8688,13 +8700,13 @@ msgstr ""
 #~ msgstr "چرخ رنگ"
 
 #~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re selecting now. "
-#~ "You can drag this color to a palette entry, or select this color as current by "
-#~ "dragging it to the other color swatch alongside."
+#~ "The previously-selected color, for comparison to the color you’re selecting "
+#~ "now. You can drag this color to a palette entry, or select this color as "
+#~ "current by dragging it to the other color swatch alongside."
 #~ msgstr ""
-#~ "رنگی که پیش‌تر انتخاب شده بود، برای مقایسه با رنگی که حالا انتخاب کردید. می‌توانید "
-#~ "این رنگ را تا یک مدخل تخته‌رنگ بکشید، یا با کشیدنش به نمونه‌ی دیگر در کنار آن، این "
-#~ "رنگ را به عنوان رنگ فعلی انتخاب کنید."
+#~ "رنگی که پیش‌تر انتخاب شده بود، برای مقایسه با رنگی که حالا انتخاب کردید. "
+#~ "می‌توانید این رنگ را تا یک مدخل تخته‌رنگ بکشید، یا با کشیدنش به نمونه‌ی دیگر در "
+#~ "کنار آن، این رنگ را به عنوان رنگ فعلی انتخاب کنید."
 
 #~ msgid ""
 #~ "The color you’ve chosen. You can drag this color to a palette entry to save it "
@@ -8704,7 +8716,8 @@ msgstr ""
 #~ "استفاده در آینده ذخیره شود."
 
 #~ msgid ""
-#~ "The previously-selected color, for comparison to the color you’re selecting now."
+#~ "The previously-selected color, for comparison to the color you’re selecting "
+#~ "now."
 #~ msgstr "رنگ انتخابی پیشین، برای مقایسه با رنگی که اکنون انتخاب می‌کنید."
 
 #~ msgid "The color you’ve chosen."
@@ -8714,12 +8727,12 @@ msgstr ""
 #~ msgstr "_ذخیره‌ی رنگ در اینجا"
 
 #~ msgid ""
-#~ "Click this palette entry to make it the current color. To change this entry, drag "
-#~ "a color swatch here or right-click it and select “Save color here.”"
+#~ "Click this palette entry to make it the current color. To change this entry, "
+#~ "drag a color swatch here or right-click it and select “Save color here.”"
 #~ msgstr ""
 #~ "روی این مدخل تخته‌رنگ کلیک کنید تا رنگ فعلی شود. برای تغییر این مدخل، یک نمونه‌ی "
-#~ "رنگ را به اینجا بکشید یا روی آن کلیک راست کنید و «ذخیره‌ی رنگ در اینجا» را انتخاب "
-#~ "کنید."
+#~ "رنگ را به اینجا بکشید یا روی آن کلیک راست کنید و «ذخیره‌ی رنگ در اینجا» را "
+#~ "انتخاب کنید."
 
 #~ msgid "_Help"
 #~ msgstr "_راهنما"
@@ -8988,7 +9001,8 @@ msgstr ""
 #~ msgid "\"%s\" is not a valid attribute name"
 #~ msgstr "«%s» نام خصیصه‌ی معتبری نیست"
 
-#~ msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+#~ msgid ""
+#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 #~ msgstr "«%s» نمی‌تواند به یک مقدار معتبر از نوع «%s» برای خصیصه‌ی «%s» تبدیل شود"
 
 #~ msgid "\"%s\" is not a valid value for attribute \"%s\""
@@ -9012,7 +9026,8 @@ msgstr ""
 #~ msgid "Serialized data is malformed"
 #~ msgstr "داده‌ی متوالی شده بد‌ریخت است"
 
-#~ msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+#~ msgid ""
+#~ "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 #~ msgstr "داده‌ی متوالی شده بد‌ریخت است. اولین بخش GTKTEXTBUFFERCONTENTS-0001 نیست"
 
 #~ msgid "LRE Left-to-right _embedding"
@@ -9209,8 +9224,8 @@ msgstr ""
 #~ "The program was not able to create a connection to the indexer daemon. Please "
 #~ "make sure it is running."
 #~ msgstr ""
-#~ "برنامه نتوانست اتصالی به شبح نمایه‌گذار برقرار کند. لطفا مطمئن شوید که در حال اجرا "
-#~ "است."
+#~ "برنامه نتوانست اتصالی به شبح نمایه‌گذار برقرار کند. لطفا مطمئن شوید که در حال "
+#~ "اجرا است."
 
 #~ msgid "smb://foo.example.com, ssh://192.168.0.1"
 #~ msgstr "smb://foo.example.com, ssh://192.168.0.1"
@@ -9219,7 +9234,8 @@ msgstr ""
 #~ "The GLX_ARB_create_context_profile extension needed to create core profiles is "
 #~ "not available"
 #~ msgstr ""
-#~ "افزونه GLX_ARB_create_context_profile که برای ساخت نمایه هسته لازم است، موجود نیست"
+#~ "افزونه GLX_ARB_create_context_profile که برای ساخت نمایه هسته لازم است، موجود "
+#~ "نیست"
 
 #~ msgid "Error launching preview"
 #~ msgstr "خطا هنگام راه‌اندازی پیش‌نمایش"
@@ -9422,8 +9438,8 @@ msgstr ""
 
 #~ msgid "No fonts matched your search. You can revise your search and try again."
 #~ msgstr ""
-#~ "هیچ قلمی با جستجو شما تطابق ندارد. می‌توانید در جستجو خود تجدید نظر کنید و مجددا "
-#~ "تلاش کنید."
+#~ "هیچ قلمی با جستجو شما تطابق ندارد. می‌توانید در جستجو خود تجدید نظر کنید و "
+#~ "مجددا تلاش کنید."
 
 #~ msgid "Failed to look for applications online"
 #~ msgstr "جستجو برای برنامه بصورت برخط شکست خورد"
@@ -9616,9 +9632,11 @@ msgstr ""
 #~ msgid "Failed to open file '%s': %s"
 #~ msgstr "باز کردن پرونده‌ی «%s» شکست خورد: %s"
 
-#~ msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+#~ msgid ""
+#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
 #~ msgstr ""
-#~ "بار کردن تصویر «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی تصویری خراب است"
+#~ "بار کردن تصویر «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی تصویری خراب "
+#~ "است"
 
 #~ msgid "_Browse for other folders"
 #~ msgstr "_مرور برای سایر پوشه‌ها"
@@ -9680,20 +9698,21 @@ msgstr ""
 #~ msgstr "پرونده‌ی تصویری «%s» هیچ داده‌ای ندارد"
 
 #~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt animation file"
+#~ "Failed to load animation '%s': reason not known, probably a corrupt animation "
+#~ "file"
 #~ msgstr ""
-#~ "بار کردن پویانمایی «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی پویانمایی "
-#~ "خراب است"
+#~ "بار کردن پویانمایی «%s» شکست خورد: دلیل آن معلوم نیست، احتمالاً پرونده‌ی "
+#~ "پویانمایی خراب است"
 
 #~ msgid "Unable to load image-loading module: %s: %s"
 #~ msgstr "نمی‌توان پیمانه‌ی تصویربارکن را بار کرد: %s: %s"
 
 #~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps it's from a "
-#~ "different GTK version?"
+#~ "Image-loading module %s does not export the proper interface; perhaps it's "
+#~ "from a different GTK version?"
 #~ msgstr ""
-#~ "پیمانه‌ی بار کردن پرونده %s رابط مناسب را صادر نمی‌کند؛ شاید از نسخه‌ی دیگری از GTK "
-#~ "است؟"
+#~ "پیمانه‌ی بار کردن پرونده %s رابط مناسب را صادر نمی‌کند؛ شاید از نسخه‌ی دیگری از "
+#~ "GTK است؟"
 
 #~ msgid "Couldn't recognize the image file format for file '%s'"
 #~ msgstr "قالب پرونده‌ی تصویر برای پرونده‌ی «%s» تشخیص داده نشد"
@@ -9719,7 +9738,8 @@ msgstr ""
 #~ msgid ""
 #~ "Failed to close '%s' while writing image, all data may not have been saved: %s"
 #~ msgstr ""
-#~ "بستن «%s» هنگام نوشتن تصویر شکست خورد، ممکن است همه‌ی داده‌ها ذخیره نشده باشند: %s"
+#~ "بستن «%s» هنگام نوشتن تصویر شکست خورد، ممکن است همه‌ی داده‌ها ذخیره نشده باشند: "
+#~ "%s"
 
 #~ msgid "Insufficient memory to save image into a buffer"
 #~ msgstr "حافظه برای ذخیره کردن تصویر در میان‌گیر کافی نیست"
@@ -9733,8 +9753,8 @@ msgstr ""
 #~ "Internal error: Image loader module '%s' failed to complete an operation, but "
 #~ "didn't give a reason for the failure"
 #~ msgstr ""
-#~ "خطای داخلی: پیمانه‌ی بارکننده‌ی تصویر «%s» در بار کردن یک تصویر شکست خورد،ولی دلیلی "
-#~ "برای این شکست اعلام نکرد"
+#~ "خطای داخلی: پیمانه‌ی بارکننده‌ی تصویر «%s» در بار کردن یک تصویر شکست خورد،ولی "
+#~ "دلیلی برای این شکست اعلام نکرد"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr "بار کردن افزایشی تصویر نوع «%s» پشتیبانی نمی‌شود"
@@ -9797,7 +9817,8 @@ msgstr ""
 #~ msgstr "شکست در خواندن GIF: %s"
 
 #~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr "بعضی از داده‌های پرونده‌ی GIF مفقود شده‌اند (شاید پرونده به شکلی قطع شده است؟)‏"
+#~ msgstr ""
+#~ "بعضی از داده‌های پرونده‌ی GIF مفقود شده‌اند (شاید پرونده به شکلی قطع شده است؟)‏"
 
 #~ msgid "Internal error in the GIF loader (%s)"
 #~ msgstr "خطای داخلی در بارگذار GIF (%s)"
@@ -9833,7 +9854,8 @@ msgstr ""
 #~ msgid ""
 #~ "GIF image has no global colormap, and a frame inside it has no local colormap."
 #~ msgstr ""
-#~ "تصویر GIF نقشه‌رنگ سراسری‌ای ندارد، و یکی از چارچوب‌های داخل آن نقشه‌رنگ محلی ندارد."
+#~ "تصویر GIF نقشه‌رنگ سراسری‌ای ندارد، و یکی از چارچوب‌های داخل آن نقشه‌رنگ محلی "
+#~ "ندارد."
 
 #~ msgid "GIF image was truncated or incomplete."
 #~ msgstr "تصویر GIF قطع شده یا ناقص است."
@@ -9911,8 +9933,8 @@ msgstr ""
 #~ msgid ""
 #~ "Insufficient memory to load image, try exiting some applications to free memory"
 #~ msgstr ""
-#~ "حافظه برای بار کردن تصویر کافی نیست، برای آزاد کردن حافظه خروج از بعضی برنامه‌ها "
-#~ "را امتحان کنید"
+#~ "حافظه برای بار کردن تصویر کافی نیست، برای آزاد کردن حافظه خروج از بعضی "
+#~ "برنامه‌ها را امتحان کنید"
 
 #~ msgid "Couldn't allocate memory for loading JPEG file"
 #~ msgstr "نمی‌توان برای بار کردن پرونده‌ی JPEG حافظه تخصیص داد"
@@ -9925,7 +9947,8 @@ msgstr ""
 #~ "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%s» قابل درک نیست."
 
-#~ msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%Id» مجاز نیست."
 
 #~ msgid "The JPEG image format"
@@ -9986,11 +10009,11 @@ msgstr ""
 #~ msgstr "حافظه برای بار کردن پرونده‌ی PNG کافی نیست"
 
 #~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some applications to "
-#~ "reduce memory usage"
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some applications "
+#~ "to reduce memory usage"
 #~ msgstr ""
-#~ "حافظه برای ذخیره‌ی یک تصویر %Ild در %Ild کافی نیست؛ برای کاهش مصرف حافظه خروج از "
-#~ "بعضی برنامه‌ها را امتحان کنید"
+#~ "حافظه برای ذخیره‌ی یک تصویر %Ild در %Ild کافی نیست؛ برای کاهش مصرف حافظه خروج "
+#~ "از بعضی برنامه‌ها را امتحان کنید"
 
 #~ msgid "Fatal error reading PNG image file"
 #~ msgstr "خطای مهلک در خواندن پرونده‌ی تصویری PNG"
@@ -10012,7 +10035,8 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
 #~ msgstr "کیفیت JPEG باید مقداری بین ۰ و ۱۰۰ باشد؛ مقدار «%Id» مجاز نیست."
 
 #~ msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
@@ -10281,8 +10305,8 @@ msgstr ""
 #~ msgstr "پوشه قابل خواندن نیست: %s"
 
 #~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be available "
-#~ "to this program.\n"
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
 #~ "پرونده‌ی «%s» روی دستگاه دیگری (به نام %s) است و ممکن است برای این برنامه قابل "
@@ -10339,8 +10363,8 @@ msgstr ""
 #~ msgstr "تغییر نام پرونده‌ی «%s» به:"
 
 #~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment "
-#~ "variable G_FILENAME_ENCODING): %s"
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
 #~ msgstr ""
 #~ "نام پرونده‌ی «%s» را نمی‌توان به UTF-8 تبدیل کرد. (تنظیم متغیر محیطی "
 #~ "G_FILENAME_ENCODING را امتحان کنید): %s"
@@ -10469,8 +10493,8 @@ msgstr ""
 #~ msgstr "این سیستم پرونده‌ها از سوار شدن پشتیبانی نمی‌کند"
 
 #~ msgid ""
-#~ "The name \"%s\" is not valid because it contains the character \"%s\". Please use "
-#~ "a different name."
+#~ "The name \"%s\" is not valid because it contains the character \"%s\". Please "
+#~ "use a different name."
 #~ msgstr ""
 #~ "نام «%s» معتبر نیست چون شامل نویسه‌ی «%s» است. لطفاً از نام دیگری استفاده کنید."
 
