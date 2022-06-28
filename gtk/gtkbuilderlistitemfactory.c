@@ -85,22 +85,24 @@ static GParamSpec *properties[N_PROPS] = { NULL, };
 
 static void
 gtk_builder_list_item_factory_setup (GtkListItemFactory *factory,
-                                     GtkListItemWidget  *widget,
-                                     GtkListItem        *list_item)
+                                     GObject            *item,
+                                     gboolean            bind,
+                                     GFunc               func,
+                                     gpointer            data)
 {
   GtkBuilderListItemFactory *self = GTK_BUILDER_LIST_ITEM_FACTORY (factory);
   GtkBuilder *builder;
   GError *error = NULL;
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_builder_list_item_factory_parent_class)->setup (factory, widget, list_item);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_builder_list_item_factory_parent_class)->setup (factory, item, bind, func, data);
 
   builder = gtk_builder_new ();
 
-  gtk_builder_set_current_object (builder, G_OBJECT (list_item));
+  gtk_builder_set_current_object (builder, item);
   if (self->scope)
     gtk_builder_set_scope (builder, self->scope);
 
-  if (!gtk_builder_extend_with_template (builder, G_OBJECT (list_item), G_OBJECT_TYPE (list_item),
+  if (!gtk_builder_extend_with_template (builder, G_OBJECT (item), G_OBJECT_TYPE (item),
                                          (const char *)g_bytes_get_data (self->data, NULL),
                                          g_bytes_get_size (self->data),
                                          &error))

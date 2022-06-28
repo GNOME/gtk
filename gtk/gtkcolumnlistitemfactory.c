@@ -43,10 +43,13 @@ G_DEFINE_TYPE (GtkColumnListItemFactory, gtk_column_list_item_factory, GTK_TYPE_
 
 static void
 gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
-                                    GtkListItemWidget  *widget,
-                                    GtkListItem        *list_item)
+                                    GObject            *item,
+                                    gboolean            bind,
+                                    GFunc               func,
+                                    gpointer            data)
 {
   GtkColumnListItemFactory *self = GTK_COLUMN_LIST_ITEM_FACTORY (factory);
+  GtkListItemWidget *widget = data;
   GListModel *columns;
   guint i;
 
@@ -54,7 +57,7 @@ gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
   gtk_widget_set_layout_manager (GTK_WIDGET (widget),
                                  gtk_column_view_layout_new (self->view));
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->setup (factory, widget, list_item);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->setup (factory, item, bind, func, data);
 
   columns = gtk_column_view_get_columns (self->view);
 
@@ -63,7 +66,7 @@ gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
       GtkColumnViewColumn *column = g_list_model_get_item (columns, i);
 
       gtk_column_list_item_factory_add_column (self,
-                                               list_item->owner,
+                                               widget,
                                                column,
                                                FALSE);
 
@@ -73,12 +76,15 @@ gtk_column_list_item_factory_setup (GtkListItemFactory *factory,
 
 static void
 gtk_column_list_item_factory_teardown (GtkListItemFactory *factory,
-                                       GtkListItemWidget  *widget,
-                                       GtkListItem        *list_item)
+                                       GObject            *item,
+                                       gboolean            unbind,
+                                       GFunc               func,
+                                       gpointer            data)
 {
+  GtkListItemWidget *widget = data;
   GtkWidget *child;
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->teardown (factory, widget, list_item);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->teardown (factory, item, unbind, func, data);
 
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (widget))))
     {
@@ -88,21 +94,25 @@ gtk_column_list_item_factory_teardown (GtkListItemFactory *factory,
 
 static void
 gtk_column_list_item_factory_update (GtkListItemFactory *factory,
-                                     GtkListItemWidget  *widget,
-                                     GtkListItem        *list_item,
-                                     guint               position,
-                                     gpointer            item,
-                                     gboolean            selected)
+                                     GObject            *item,
+                                     gboolean            unbind,
+                                     gboolean            bind,
+                                     GFunc               func,
+                                     gpointer            data)
 {
+  GtkListItem *list_item = GTK_LIST_ITEM (item);
   GtkWidget *child;
 
-  GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->update (factory, widget, list_item, position, item, selected);
+  GTK_LIST_ITEM_FACTORY_CLASS (gtk_column_list_item_factory_parent_class)->update (factory, item, unbind, bind, func, data);
 
-  for (child = gtk_widget_get_first_child (GTK_WIDGET (widget));
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (list_item->owner));
        child;
        child = gtk_widget_get_next_sibling (child))
     {
-      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (child), position, item, selected);
+      gtk_list_item_widget_update (GTK_LIST_ITEM_WIDGET (child),
+                                   gtk_list_item_get_position (list_item),
+                                   gtk_list_item_get_item (list_item),
+                                   gtk_list_item_get_selected (list_item));
     }
 }
 

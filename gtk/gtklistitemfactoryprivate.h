@@ -37,33 +37,44 @@ struct _GtkListItemFactoryClass
 
   /* setup @list_item so it can be bound */
   void                  (* setup)                               (GtkListItemFactory     *self,
-                                                                 GtkListItemWidget      *widget,
-                                                                 GtkListItem            *list_item);
+                                                                 GObject                *item,
+                                                                 gboolean                bind,
+                                                                 GFunc                   func,
+                                                                 gpointer                data);
   /* undo the effects of GtkListItemFactoryClass::setup() */
   void                  (* teardown)                            (GtkListItemFactory     *self,
-                                                                 GtkListItemWidget      *widget,
-                                                                 GtkListItem            *list_item);
+                                                                 GObject                *item,
+                                                                 gboolean                unbind,
+                                                                 GFunc                   func,
+                                                                 gpointer                data);
 
   /* Update properties on @list_item to the given @item, which is in @position and @selected state.
    * One or more of those properties might be unchanged. */
   void                  (* update)                              (GtkListItemFactory     *self,
-                                                                 GtkListItemWidget      *widget,
-                                                                 GtkListItem            *list_item,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
+                                                                 GObject                *item,
+                                                                 gboolean                unbind,
+                                                                 gboolean                bind,
+                                                                 GFunc                   func,
+                                                                 gpointer                data);
 };
 
 void                    gtk_list_item_factory_setup             (GtkListItemFactory     *self,
-                                                                 GtkListItemWidget      *widget);
+                                                                 GObject                *item,
+                                                                 gboolean                bind,
+                                                                 GFunc                   func,
+                                                                 gpointer                data);
 void                    gtk_list_item_factory_teardown          (GtkListItemFactory     *self,
-                                                                 GtkListItemWidget      *widget);
+                                                                 GObject                *item,
+                                                                 gboolean                unbind,
+                                                                 GFunc                   func,
+                                                                 gpointer                data);
 
 void                    gtk_list_item_factory_update            (GtkListItemFactory     *self,
-                                                                 GtkListItemWidget      *widget,
-                                                                 guint                   position,
-                                                                 gpointer                item,
-                                                                 gboolean                selected);
+                                                                 GObject                *item,
+                                                                 gboolean                unbind,
+                                                                 gboolean                bind,
+                                                                 GFunc                   func,
+                                                                 gpointer                data);
 
 
 G_END_DECLS
