@@ -160,7 +160,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::setup:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The `GtkListItem` to set up
+   * @object: The `GObject` to set up
    *
    * Emitted when a new listitem has been created and needs to be setup for use.
    *
@@ -177,7 +177,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_LIST_ITEM);
+                  G_TYPE_OBJECT);
   g_signal_set_va_marshaller (signals[SETUP],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__OBJECTv);
@@ -185,13 +185,14 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::bind:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The `GtkListItem` to bind
+   * @object: The `GObject` to bind
    *
-   * Emitted when a new [property@Gtk.ListItem:item] has been set
-   * on the @listitem and should be bound for use.
+   * Emitted when an object has been bound, for example when a
+   * new [property@Gtk.ListItem:item] has been set on a
+   * `GtkListItem` and should be bound for use.
    *
-   * After this signal was emitted, the listitem might be shown in
-   * a [class@Gtk.ListView] or other list widget.
+   * After this signal was emitted, the object might be shown in
+   * a [class@Gtk.ListView] or other widget.
    *
    * The [signal@Gtk.SignalListItemFactory::unbind] signal is the
    * opposite of this signal and can be used to undo everything done
@@ -205,7 +206,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_LIST_ITEM);
+                  G_TYPE_OBJECT);
   g_signal_set_va_marshaller (signals[BIND],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__OBJECTv);
@@ -213,9 +214,10 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::unbind:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The `GtkListItem` to unbind
+   * @object: The `GObject` to unbind
    *
-   * Emitted when a listitem has been removed from use in a list widget
+   * Emitted when a object has been unbound from its item, for example when
+   * a listitem was removed from use in a list widget
    * and its new [property@Gtk.ListItem:item] is about to be unset.
    *
    * This signal is the opposite of the [signal@Gtk.SignalListItemFactory::bind]
@@ -229,7 +231,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_LIST_ITEM);
+                  G_TYPE_OBJECT);
   g_signal_set_va_marshaller (signals[UNBIND],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__OBJECTv);
@@ -237,11 +239,11 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
   /**
    * GtkSignalListItemFactory::teardown:
    * @self: The `GtkSignalListItemFactory`
-   * @listitem: The `GtkListItem` to teardown
+   * @object: The `GObject` to tear down
    *
-   * Emitted when a listitem is about to be destroyed.
+   * Emitted when an object is about to be destroyed.
    *
-   * It is the last signal ever emitted for this @listitem.
+   * It is the last signal ever emitted for this @object.
    *
    * This signal is the opposite of the [signal@Gtk.SignalListItemFactory::setup]
    * signal and should be used to undo everything done in that signal.
@@ -254,7 +256,7 @@ gtk_signal_list_item_factory_class_init (GtkSignalListItemFactoryClass *klass)
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
-                  GTK_TYPE_LIST_ITEM);
+                  G_TYPE_OBJECT);
   g_signal_set_va_marshaller (signals[TEARDOWN],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__OBJECTv);
