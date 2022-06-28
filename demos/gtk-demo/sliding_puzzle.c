@@ -322,7 +322,7 @@ start_puzzle (GdkPaintable *paintable)
         {
           GdkPaintable *piece;
 
-          /* Don't paint anything for the lsiding part of the video */
+          /* Don't paint anything for the sliding part of the video */
           if (x == pos_x && y == pos_y)
             piece = NULL;
           else
