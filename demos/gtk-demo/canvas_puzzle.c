@@ -7,66 +7,125 @@
 
 #include <gtk/gtk.h>
 
-#define WIDTH 400
-#define HEIGHT 300
+#include "puzzlepiece.h"
+
+static void
+set_item_position (GtkCanvasItem *ci,
+                   float          x,
+                   float          y)
+{
+  GtkCanvasPoint *point;
+  GtkCanvasSize *size;
+  GtkCanvasBox *box, *viewport;
+
+  x = CLAMP (x, 0, 1);
+  y = CLAMP (y, 0, 1);
+
+  point = gtk_canvas_point_new (0, 0);
+  viewport = gtk_canvas_box_new (point,
+                                 gtk_canvas_get_viewport_size (gtk_canvas_item_get_canvas (ci)),
+                                 0.0, 0.0);
+  gtk_canvas_point_free (point);
+
+  point = gtk_canvas_point_new_from_box (viewport, x, y, 0, 0);
+  gtk_canvas_box_free (viewport);
+  size = gtk_canvas_size_new (0, 0);
+  box = gtk_canvas_box_new (point, size, x, y);
+  gtk_canvas_point_free (point);
+  gtk_canvas_size_free (size);
+
+  gtk_canvas_item_set_bounds (ci, box);
+  gtk_canvas_box_free (box);
+}
+
+static void
+move_item (GtkGestureDrag *gesture,
+           double          x,
+           double          y,
+           GtkCanvasItem  *ci)
+{
+  GtkCanvas *canvas = gtk_canvas_item_get_canvas (ci);
+  graphene_rect_t bounds;
+
+  if (!gtk_canvas_box_eval (gtk_canvas_item_get_bounds (ci), &bounds))
+    return;
+
+  set_item_position (ci,
+                     (bounds.origin.x + x) / (gtk_widget_get_width (GTK_WIDGET (canvas)) - bounds.size.width),
+                     (bounds.origin.y + y) / (gtk_widget_get_height (GTK_WIDGET (canvas)) - bounds.size.height));
+}
 
 static void
 bind_item (GtkListItemFactory *factory,
            GtkCanvasItem      *ci)
 {
-  GtkCanvasPoint *point;
-  GtkCanvasSize *size;
-  GtkCanvasBox *box;
+  GtkWidget *widget;
+  GtkGesture *gesture;
 
   widget = gtk_picture_new_for_paintable (gtk_canvas_item_get_item (ci));
+  gtk_picture_set_can_shrink (GTK_PICTURE (widget), FALSE);
+  gesture = gtk_gesture_drag_new ();
+  g_signal_connect (gesture, "drag-update", G_CALLBACK (move_item), ci);
+  g_signal_connect (gesture, "drag-end", G_CALLBACK (move_item), ci);
+  gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
   gtk_canvas_item_set_widget (ci, widget);
 
-  /* Also cener the item, so we do something interesting */
-  point = gtk_canvas_point_new (WIDTH / 2.0, HEIGHT / 2.0);
-  size = gtk_canvas_size_new_measure_item (ci, GTK_CANVAS_ITEM_MEASURE_MIN_FOR_MIN);
-  box = gtk_canvas_box_new (point, size, 0.5, 0.5);
-  gtk_canvas_item_set_bounds (ci, box);
-  gtk_canvas_box_free (box);
-  gtk_canvas_size_free (size);
-  gtk_canvas_point_free (point);
+  /* Also center the item, so we do something interesting */
+  set_item_position (ci, g_random_double (), g_random_double ());
+}
+
+static GListModel *
+create_puzzle (GdkPaintable *puzzle)
+{
+  GListStore *store = g_list_store_new (GDK_TYPE_PAINTABLE);
+  int width = 5;
+  int height = 5;
+  int x, y;
+
+  /* add a picture for every cell */
+  for (y = 0; y < height; y++)
+    {
+      for (x = 0; x < width; x++)
+        {
+          GdkPaintable *piece;
+
+          piece = gtk_puzzle_piece_new (puzzle,
+                                        x, y,
+                                        width, height);
+          g_list_store_append (store, piece);
+          g_object_unref (piece);
+        }
+    }
+
+  return G_LIST_MODEL (store);
 }
 
 GtkWidget *
-do_canvas_intro (GtkWidget *do_widget)
+do_canvas_puzzle (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
 
   if (!window)
     {
-      GtkWidget *canvas, *widget;
-      GListStore *store;
+      GtkWidget *canvas;
+      GListModel *model;
       GtkListItemFactory *factory;
+      GdkPaintable *puzzle;
 
       window = gtk_window_new ();
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
-      gtk_window_set_default_size (GTK_WINDOW (window), WIDTH, HEIGHT);
+      gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
-      /* GtkCanvas manages its items using an external list.
-       * We do a very simple thing and put the widgets in the list
-       * that the canvas should display.
-       */
-      store = g_list_store_new (GTK_TYPE_WIDGET);
-      widget = gtk_label_new ("Hello World");
-      g_list_store_append (store, widget);
+      puzzle = GDK_PAINTABLE (gdk_texture_new_from_resource ("/sliding_puzzle/portland-rose.jpg"));
+      model = create_puzzle (puzzle);
+      g_object_unref (puzzle);
 
-      /* GtkCanvas maps the items from the list to the canvas using factories.
-       * Set up a simple factory here that just maps the widget directly
-       * onto the canvas.
-       */
       factory = gtk_signal_list_item_factory_new ();
       g_signal_connect (factory, "bind", G_CALLBACK (bind_item), NULL);
 
-      /* Create the canvas.
-       * We hand it the factory and the model, and then everything happens by itself.
-       */
-      canvas = gtk_canvas_new (G_LIST_MODEL (store), factory);
+      canvas = gtk_canvas_new (model, factory);
       gtk_window_set_child (GTK_WINDOW (window), canvas);
     }
 
