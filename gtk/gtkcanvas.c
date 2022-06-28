@@ -23,6 +23,7 @@
 
 #include "gtkcanvasbox.h"
 #include "gtkcanvasitemprivate.h"
+#include "gtkcanvassizeprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemfactory.h"
 #include "gtkwidgetprivate.h"
@@ -50,6 +51,8 @@ struct _GtkCanvas
   GtkListItemFactory *factory;
 
   GtkCanvasItems items;
+
+  GtkCanvasSize viewport_size;
 };
 
 enum
@@ -150,6 +153,17 @@ gtk_canvas_dispose (GObject *object)
 }
 
 static void
+gtk_canvas_finalize (GObject *object)
+{
+  GtkCanvas *self = GTK_CANVAS (object);
+
+  gtk_canvas_clear_model (self);
+  gtk_canvas_size_finish (&self->viewport_size);
+
+  G_OBJECT_CLASS (gtk_canvas_parent_class)->finalize (object);
+}
+
+static void
 gtk_canvas_get_property (GObject    *object,
                          guint       property_id,
                          GValue     *value,
@@ -206,6 +220,9 @@ gtk_canvas_allocate (GtkWidget *widget,
   GtkCanvas *self = GTK_CANVAS (widget);
   gsize i;
 
+  self->viewport_size.reference.reference->width = width;
+  self->viewport_size.reference.reference->height = height;
+
   for (i = 0; i < gtk_canvas_items_get_size (&self->items); i++)
     {
       GtkCanvasItem *ci = gtk_canvas_items_get (&self->items, i);
@@ -251,6 +268,7 @@ gtk_canvas_class_init (GtkCanvasClass *klass)
   widget_class->size_allocate = gtk_canvas_allocate;
 
   gobject_class->dispose = gtk_canvas_dispose;
+  gobject_class->finalize = gtk_canvas_finalize;
   gobject_class->get_property = gtk_canvas_get_property;
   gobject_class->set_property = gtk_canvas_set_property;
 
@@ -282,6 +300,8 @@ gtk_canvas_class_init (GtkCanvasClass *klass)
 static void
 gtk_canvas_init (GtkCanvas *self)
 {
+  gtk_canvas_size_init_reference (&self->viewport_size,
+                                  g_rc_box_new0 (graphene_size_t));
 }
 
 /**
@@ -425,3 +445,8 @@ gtk_canvas_get_model (GtkCanvas *self)
   return self->model;
 }
 
+const GtkCanvasSize *
+gtk_canvas_get_viewport_size (GtkCanvas *self)
+{
+  return &self->viewport_size;
+}

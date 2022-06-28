@@ -349,6 +349,58 @@ gtk_canvas_size_new_measure_item (GtkCanvasItem            *item,
 }
 
 /* }}} */
+/* {{{ REFERENCE */
+
+static void
+gtk_canvas_size_reference_copy (GtkCanvasSize       *size,
+                                const GtkCanvasSize *source_size)
+{
+  const GtkCanvasSizeReference *source = &source_size->reference;
+
+  gtk_canvas_size_init_reference (size, g_rc_box_acquire (source->reference));
+}
+
+static void
+gtk_canvas_size_reference_finish (GtkCanvasSize *size)
+{
+  const GtkCanvasSizeReference *self = &size->reference;
+
+  g_rc_box_release (self->reference);
+}
+
+static gboolean
+gtk_canvas_size_reference_eval (const GtkCanvasSize *size,
+                                float               *width,
+                                float               *height)
+{
+  const GtkCanvasSizeReference *self = &size->reference;
+
+  *width = self->reference->width;
+  *height = self->reference->height;
+
+  return TRUE;
+}
+
+static const GtkCanvasSizeClass GTK_CANVAS_SIZE_REFERENCE_CLASS =
+{
+  "GtkCanvasSizeReference",
+  gtk_canvas_size_reference_copy,
+  gtk_canvas_size_reference_finish,
+  gtk_canvas_size_reference_eval,
+};
+
+void
+gtk_canvas_size_init_reference (GtkCanvasSize   *size,
+                                graphene_size_t *reference)
+{
+  GtkCanvasSizeReference *self = &size->reference;
+
+  self->class = &GTK_CANVAS_SIZE_REFERENCE_CLASS;
+  
+  self->reference = reference;
+}
+
+/* }}} */
 /* {{{ PUBLIC API */
 
 GtkCanvasSize *

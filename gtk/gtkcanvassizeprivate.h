@@ -3,12 +3,15 @@
 
 #include "gtkcanvassize.h"
 
+#include <graphene.h>
+
 G_BEGIN_DECLS
 
 typedef struct _GtkCanvasSizeClass GtkCanvasSizeClass;
 typedef struct _GtkCanvasSizeAbsolute GtkCanvasSizeAbsolute;
 typedef struct _GtkCanvasSizeBox GtkCanvasSizeBox;
 typedef struct _GtkCanvasSizeMeasure GtkCanvasSizeMeasure;
+typedef struct _GtkCanvasSizeReference GtkCanvasSizeReference;
 
 struct _GtkCanvasSizeAbsolute
 {
@@ -33,6 +36,13 @@ struct _GtkCanvasSizeMeasure
   GtkCanvasItemMeasurement measure;
 };
 
+struct _GtkCanvasSizeReference
+{
+  const GtkCanvasSizeClass *class;
+
+  graphene_size_t *reference;
+};
+
 struct _GtkCanvasSize
 {
   union {
@@ -40,6 +50,7 @@ struct _GtkCanvasSize
     GtkCanvasSizeAbsolute absolute;
     GtkCanvasSizeBox box;
     GtkCanvasSizeMeasure measure;
+    GtkCanvasSizeReference reference;
   };
 };
 
@@ -50,6 +61,10 @@ void                    gtk_canvas_size_init_measure_item       (GtkCanvasSize  
 void                    gtk_canvas_size_init_copy               (GtkCanvasSize         *self,
                                                                  const GtkCanvasSize   *source);
 void                    gtk_canvas_size_finish                  (GtkCanvasSize         *self);
+
+/* NB: Takes ownership of reference */
+void                    gtk_canvas_size_init_reference          (GtkCanvasSize         *size,
+                                                                 graphene_size_t       *reference);
 
 G_END_DECLS
 
