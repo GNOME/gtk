@@ -41,6 +41,15 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_canvas_box_free                   (GtkCanvasBox         *self);
 
 GDK_AVAILABLE_IN_ALL
+const GtkCanvasPoint *  gtk_canvas_box_get_point              (const GtkCanvasBox   *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_ALL
+const GtkCanvasSize *   gtk_canvas_box_get_size               (const GtkCanvasBox   *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_ALL
+void                    gtk_canvas_box_get_origin             (const GtkCanvasBox   *self,
+                                                               float                *x,
+                                                               float                *y);
+
+GDK_AVAILABLE_IN_ALL
 gboolean                gtk_canvas_box_eval                   (const GtkCanvasBox   *self,
                                                                graphene_rect_t      *rect) G_GNUC_WARN_UNUSED_RESULT;
 

@@ -160,3 +160,31 @@ gtk_canvas_box_eval (const GtkCanvasBox *self,
   return FALSE;
 }
 
+const GtkCanvasPoint *
+gtk_canvas_box_get_point (const GtkCanvasBox *self)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+
+  return &self->point;
+}
+
+const GtkCanvasSize *
+gtk_canvas_box_get_size (const GtkCanvasBox *self)
+{
+  g_return_val_if_fail (self != NULL, NULL);
+
+  return &self->size;
+}
+
+void
+gtk_canvas_box_get_origin (const GtkCanvasBox *self,
+                           float              *x,
+                           float              *y)
+{
+  g_return_if_fail (self != NULL);
+
+  if (x)
+    *x = self->origin_x;
+  if (y)
+    *y = self->origin_y;
+}
