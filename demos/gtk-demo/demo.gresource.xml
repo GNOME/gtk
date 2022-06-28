@@ -254,6 +254,7 @@
     <file>application_demo.c</file>
     <file>assistant.c</file>
     <file>builder.c</file>
+    <file>canvas_intro.c</file>
     <file>clipboard.c</file>
     <file>combobox.c</file>
     <file>constraints.c</file>

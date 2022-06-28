@@ -4,6 +4,7 @@ demos = files([
   'application_demo.c',
   'assistant.c',
   'builder.c',
+  'canvas_intro.c',
   'clipboard.c',
   'combobox.c',
   'constraints.c',
