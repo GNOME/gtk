@@ -227,13 +227,16 @@ gtk_canvas_allocate (GtkWidget *widget,
     {
       GtkCanvasItem *ci = gtk_canvas_items_get (&self->items, i);
       GtkWidget *child = gtk_canvas_item_get_widget (ci);
+      const GtkCanvasBox *bounds;
+      float origin_x, origin_y;
       graphene_rect_t rect;
       int x, y, w, h;
 
       if (child == NULL)
         continue;
 
-      if (!gtk_canvas_box_eval (gtk_canvas_item_get_bounds (ci), &rect))
+      bounds = gtk_canvas_item_get_bounds (ci);
+      if (!gtk_canvas_box_eval (bounds, &rect))
         rect = *graphene_rect_zero ();
 
       if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
@@ -251,9 +254,15 @@ gtk_canvas_allocate (GtkWidget *widget,
           w = MAX (w, ceil (rect.size.width));
         }
 
-      /* FIXME: Adapt to growing rect */
-      x = round (rect.origin.x);
-      y = round (rect.origin.y);
+      gtk_canvas_box_get_origin (bounds, &origin_x, &origin_y);
+      if (w > rect.size.width)
+        x = round (rect.origin.x + origin_x * (rect.size.width - w));
+      else
+        x = round (rect.origin.x);
+      if (h > rect.size.height)
+        y = round (rect.origin.y + origin_y * (rect.size.height - h));
+      else
+        y = round (rect.origin.y);
 
       gtk_widget_size_allocate (child, &(GtkAllocation) { x, y, w, h }, -1);
     }
