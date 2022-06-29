@@ -5,6 +5,7 @@ demos = files([
   'assistant.c',
   'builder.c',
   'canvas_intro.c',
+  'canvas_planarity.c',
   'canvas_puzzle.c',
   'clipboard.c',
   'combobox.c',
