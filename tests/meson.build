@@ -116,7 +116,8 @@ gtk_tests = [
   ['testtexture'],
   ['testwindowdrag'],
   ['testinhibitshortcuts'],
-  ['testzoom']
+  ['testzoom'],
+  ['testdatatable', ['frame-stats.c', 'variable.c']]
 ]
 
 if os_unix
