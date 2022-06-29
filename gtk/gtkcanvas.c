@@ -51,6 +51,7 @@ struct _GtkCanvas
   GtkListItemFactory *factory;
 
   GtkCanvasItems items;
+  GHashTable *item_lookup;
 
   GtkCanvasSize viewport_size;
 };
@@ -84,10 +85,14 @@ gtk_canvas_remove_items (GtkCanvas *self,
 {
   guint i;
 
-  /* We first run the factory code on all items, so that the
-   * factory code can reference the items.
-   * Only then do we get rid of them.
+  /* We first remove the items, and then do teardown. That way we have a consistent
+   * state in the canvas.
    */
+  for (i = pos; i < pos + n_items; i++)
+    {
+      GtkCanvasItem *ci = gtk_canvas_items_get (&self->items, i);
+      g_hash_table_remove (self->item_lookup, gtk_canvas_item_get_item (ci));
+    }
   for (i = pos; i < pos + n_items; i++)
     {
       gtk_canvas_item_teardown (gtk_canvas_items_get (&self->items, i), self->factory);
@@ -106,8 +111,9 @@ gtk_canvas_add_items (GtkCanvas *self,
    */
   for (i = pos; i < pos + n_items; i++)
     {
-      *gtk_canvas_items_index (&self->items, i) = gtk_canvas_item_new (self,
-                                                                       g_list_model_get_item (self->model, i));
+      gpointer item = g_list_model_get_item (self->model, i);
+      *gtk_canvas_items_index (&self->items, i) = gtk_canvas_item_new (self, item);
+      g_hash_table_insert (self->item_lookup, item, gtk_canvas_items_get (&self->items, i));
     }
   for (i = pos; i < pos + n_items; i++)
     {
@@ -157,7 +163,7 @@ gtk_canvas_finalize (GObject *object)
 {
   GtkCanvas *self = GTK_CANVAS (object);
 
-  gtk_canvas_clear_model (self);
+  g_hash_table_unref (self->item_lookup);
   gtk_canvas_size_finish (&self->viewport_size);
 
   G_OBJECT_CLASS (gtk_canvas_parent_class)->finalize (object);
@@ -309,6 +315,8 @@ gtk_canvas_class_init (GtkCanvasClass *klass)
 static void
 gtk_canvas_init (GtkCanvas *self)
 {
+  self->item_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
+
   gtk_canvas_size_init_reference (&self->viewport_size,
                                   g_rc_box_new0 (graphene_size_t));
 }
@@ -452,6 +460,35 @@ gtk_canvas_get_model (GtkCanvas *self)
   g_return_val_if_fail (GTK_IS_CANVAS (self), NULL);
 
   return self->model;
+}
+
+/**
+ * gtk_canvas_lookup_item:
+ * @self: a `GtkCanvas`
+ * @item: an item in the model
+ *
+ * Gets the `GtkCanvasItem` that manages the given item.
+ * If the item is not part of the model, %NULL will be returned.
+ *
+ * The resulting canvas item will return @item from a call to
+ * [method@Gtk.CanvasItem.get_item].
+ *
+ * During addition of multiple items, this function will work
+ * but may return potentially uninitialized canvasitems when the
+ * factory has not run on them yet.
+ * During item removal, all removed items can not be queried with
+ * this function, even if the factory has not unbound the yet.
+ *
+ * Returns: (nullable) (transfer none): The canvasitem for item
+ **/
+GtkCanvasItem *
+gtk_canvas_lookup_item (GtkCanvas *self,
+                        gpointer   item)
+{
+  g_return_val_if_fail (GTK_IS_CANVAS (self), NULL);
+  g_return_val_if_fail (G_IS_OBJECT (item), NULL);
+
+  return g_hash_table_lookup (self->item_lookup, item);
 }
 
 const GtkCanvasSize *

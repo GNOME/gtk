@@ -47,7 +47,11 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_canvas_set_factory                  (GtkCanvas              *self,
                                                                  GtkListItemFactory     *factory);
 GDK_AVAILABLE_IN_ALL
-GtkListItemFactory*     gtk_canvas_get_factory                  (GtkCanvas              *self);
+GtkListItemFactory *    gtk_canvas_get_factory                  (GtkCanvas              *self);
+
+GDK_AVAILABLE_IN_ALL
+GtkCanvasItem *         gtk_canvas_lookup_item                  (GtkCanvas              *self,
+                                                                 gpointer                item);
 
 GDK_AVAILABLE_IN_ALL
 const GtkCanvasSize *   gtk_canvas_get_viewport_size            (GtkCanvas              *self);
