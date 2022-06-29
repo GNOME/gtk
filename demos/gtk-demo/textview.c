@@ -137,7 +137,7 @@ insert_text (GtkTextView *view)
 
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (widget));
   icon = gtk_icon_theme_lookup_icon (icon_theme,
-                                     "face-cool",
+                                     "drive-harddisk",
                                      NULL,
                                      32, 1,
                                      gtk_widget_get_direction (widget),
@@ -239,8 +239,6 @@ insert_text (GtkTextView *view)
 
   gtk_text_buffer_insert (buffer, &iter, "The buffer can have images in it: ", -1);
   gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE (icon));
-  gtk_text_buffer_insert_paintable (buffer, &iter, GDK_PAINTABLE (icon));
-
   gtk_text_buffer_insert_paintable (buffer, &iter, nuclear);
 
   gtk_text_buffer_insert (buffer, &iter, " for example.\n\n", -1);
@@ -441,11 +439,12 @@ attach_widgets (GtkTextView *text_view)
         {
           widget = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, NULL);
           gtk_range_set_range (GTK_RANGE (widget), 0, 100);
-          gtk_widget_set_size_request (widget, 70, -1);
+          gtk_widget_set_size_request (widget, 100, -1);
         }
       else if (i == 3)
         {
           widget = gtk_entry_new ();
+          gtk_editable_set_width_chars (GTK_EDITABLE (widget), 10);
         }
       else
         {
