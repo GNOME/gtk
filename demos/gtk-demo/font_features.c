@@ -44,6 +44,9 @@ typedef struct {
   guint32 tag;
   GtkAdjustment *adjustment;
   double default_value;
+  guint tick_cb;
+  guint64 start_time;
+  gboolean increasing;
 } Axis;
 
 typedef struct {
@@ -961,6 +964,73 @@ axes_equal (gconstpointer v1, gconstpointer v2)
   return p1->tag == p2->tag;
 }
 
+static double
+ease_out_cubic (double t)
+{
+  double p = t - 1;
+
+  return p * p * p + 1;
+}
+
+static gboolean
+animate_axis (GtkWidget     *widget,
+              GdkFrameClock *frame_clock,
+              gpointer       data)
+{
+  Axis *axis = data;
+  guint64 now;
+  double upper, lower, value;
+
+  now = g_get_monotonic_time ();
+
+  if (now >= axis->start_time + G_TIME_SPAN_SECOND)
+    {
+      axis->start_time += G_TIME_SPAN_SECOND;
+      axis->increasing = !axis->increasing;
+    }
+
+  value = (now - axis->start_time) / (double) G_TIME_SPAN_SECOND;
+
+  value = ease_out_cubic (value);
+
+  lower = gtk_adjustment_get_lower (axis->adjustment);
+  upper = gtk_adjustment_get_upper (axis->adjustment);
+
+  if (axis->increasing)
+    gtk_adjustment_set_value (axis->adjustment, lower + (upper - lower) * value);
+  else
+    gtk_adjustment_set_value (axis->adjustment, upper - (upper - lower) * value);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+start_axis_animation (GtkButton *button,
+                      gpointer   data)
+{
+  Axis *axis = data;
+
+  if (axis->tick_cb)
+    {
+      gtk_widget_remove_tick_callback (GTK_WIDGET (button), axis->tick_cb);
+      axis->tick_cb = 0;
+      gtk_button_set_icon_name (button, "media-playback-start");
+    }
+  else
+    {
+      double value, upper, lower;
+
+      gtk_button_set_icon_name (button, "media-playback-stop");
+      axis->tick_cb = gtk_widget_add_tick_callback (GTK_WIDGET (button), animate_axis, axis, NULL);
+      value = gtk_adjustment_get_value (axis->adjustment);
+      lower = gtk_adjustment_get_lower (axis->adjustment);
+      upper = gtk_adjustment_get_upper (axis->adjustment);
+      value = value / (upper - lower);
+      axis->start_time = g_get_monotonic_time () - value * G_TIME_SPAN_SECOND;
+      axis->increasing = TRUE;
+    }
+}
+
 static void
 add_axis (hb_face_t             *hb_face,
           hb_ot_var_axis_info_t *ax,
@@ -974,6 +1044,7 @@ add_axis (hb_face_t             *hb_face,
   Axis *axis;
   char name[20];
   unsigned int name_len = 20;
+  GtkWidget *button;
 
   hb_ot_name_get_utf8 (hb_face, ax->name_id, HB_LANGUAGE_INVALID, &name_len, name);
 
@@ -1001,6 +1072,12 @@ add_axis (hb_face_t             *hb_face,
   axis->adjustment = adjustment;
   axis->default_value = ax->default_value;
   g_hash_table_add (demo->axes, axis);
+
+  button = gtk_button_new_from_icon_name ("media-playback-start");
+  gtk_widget_add_css_class (GTK_WIDGET (button), "circular");
+  gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
+  g_signal_connect (button, "clicked", G_CALLBACK (start_axis_animation), axis);
+  gtk_grid_attach (GTK_GRID (demo->variations_grid), button, 3, i, 1, 1);
 
   adjustment_changed (adjustment, GTK_ENTRY (axis_entry));
 
