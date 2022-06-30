@@ -376,7 +376,7 @@
     <file>glarea-gles.vs.glsl</file>
   </gresource>
   <gresource prefix="/font_features">
-    <file>font-features.ui</file>
+    <file>font_features.ui</file>
     <file>fontplane.c</file>
   </gresource>
   <gresource prefix="/spinbutton">
