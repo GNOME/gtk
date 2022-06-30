@@ -1348,7 +1348,7 @@ do_font_features (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback (scope, basic_entry_activated);
       gtk_builder_set_scope (builder, scope);
 
-      gtk_builder_add_from_resource (builder, "/font_features/font-features.ui", NULL);
+      gtk_builder_add_from_resource (builder, "/font_features/font_features.ui", NULL);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
