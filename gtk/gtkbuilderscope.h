@@ -114,10 +114,14 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_builder_cscope_add_callback_symbols (GtkBuilderCScope       *self,
                                                                  const char             *first_callback_name,
                                                                  GCallback               first_callback_symbol,
-						                 ...) G_GNUC_NULL_TERMINATED;
+                                                                 ...) G_GNUC_NULL_TERMINATED;
+
+#define gtk_builder_cscope_add_callback(scope, callback) \
+  gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), #callback, G_CALLBACK (callback))
+
 GDK_AVAILABLE_IN_ALL
 GCallback               gtk_builder_cscope_lookup_callback_symbol(GtkBuilderCScope      *self,
-						                  const char            *callback_name);
+                                                                  const char            *callback_name);
 
 
 G_END_DECLS
