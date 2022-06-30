@@ -526,7 +526,7 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
 
 }
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 101400
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 10700
 -(BOOL)layer:(CALayer*) layer shouldInheritContentsScale: (CGFloat)scale fromWindow: (NSWindow *) window
 {
   if (layer == self.layer && window == self.window)
