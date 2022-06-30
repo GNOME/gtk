@@ -36,6 +36,63 @@ static GtkWidget *variations_heading;
 static GtkWidget *variations_grid;
 static GtkWidget *instance_combo;
 static GtkWidget *edit_toggle;
+static GtkAdjustment *size_adjustment;
+static GtkAdjustment *letterspacing_adjustment;
+static GtkAdjustment *line_height_adjustment;
+static GtkWidget *size_entry;
+static GtkWidget *letterspacing_entry;
+static GtkWidget *line_height_entry;
+
+static void update_display (void);
+
+typedef struct {
+  GtkAdjustment *adjustment;
+  GtkEntry *entry;
+} BasicData;
+
+static gboolean
+update_in_idle (gpointer data)
+{
+  BasicData *bd = data;
+  char *str;
+
+  str = g_strdup_printf ("%g", gtk_adjustment_get_value (bd->adjustment));
+  gtk_editable_set_text (GTK_EDITABLE (bd->entry), str);
+  g_free (str);
+
+  update_display ();
+
+  g_free (bd);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+basic_value_changed (GtkAdjustment *adjustment,
+                     gpointer       data)
+{
+  BasicData *bd;
+
+  bd = g_new (BasicData, 1);
+  bd->adjustment = adjustment;
+  bd->entry = GTK_ENTRY (data);
+
+  g_idle_add (update_in_idle, bd);
+}
+
+static void
+basic_entry_activated (GtkEntry *entry,
+                       gpointer  data)
+{
+  GtkAdjustment *adjustment = data;
+
+  double value;
+  char *err = NULL;
+
+  value = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
+  if (err != NULL)
+    gtk_adjustment_set_value (adjustment, value);
+}
 
 typedef struct {
   unsigned int tag;
@@ -145,8 +202,6 @@ get_feature_display_name (unsigned int tag)
 
   return buf;
 }
-
-static void update_display (void);
 
 static void
 set_inconsistent (GtkCheckButton *button,
@@ -325,6 +380,7 @@ update_display (void)
   PangoLanguage *lang;
   char *font_desc;
   char *features;
+  double value;
 
   text = gtk_editable_get_text (GTK_EDITABLE (the_entry));
 
@@ -340,6 +396,9 @@ update_display (void)
     }
 
   desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font));
+
+  value = gtk_adjustment_get_value (size_adjustment);
+  pango_font_description_set_size (desc, value * PANGO_SCALE);
 
   s = g_string_new ("");
   add_font_variations (s);
@@ -411,6 +470,22 @@ update_display (void)
   ensure_range (start, end, desc, features, lang);
 
   attrs = pango_attr_list_new ();
+
+  if (gtk_adjustment_get_value (letterspacing_adjustment) != 0.)
+    {
+      attr = pango_attr_letter_spacing_new (gtk_adjustment_get_value (letterspacing_adjustment));
+      attr->start_index = start;
+      attr->end_index = end;
+      pango_attr_list_insert (attrs, attr);
+    }
+
+  if (gtk_adjustment_get_value (line_height_adjustment) != 1.)
+    {
+      attr = pango_attr_line_height_new (gtk_adjustment_get_value (line_height_adjustment));
+      attr->start_index = start;
+      attr->end_index = end;
+      pango_attr_list_insert (attrs, attr);
+    }
 
   for (l = ranges; l; l = l->next)
     {
@@ -533,6 +608,11 @@ update_script_combo (void)
   tags = g_hash_table_new_full (tag_pair_hash, tag_pair_equal, g_free, NULL);
 
   pair = g_new (TagPair, 1);
+  pair->script_tag = 0;
+  pair->lang_tag = 0;
+  g_hash_table_add (tags, pair);
+
+  pair = g_new (TagPair, 1);
   pair->script_tag = HB_OT_TAG_DEFAULT_SCRIPT;
   pair->lang_tag = HB_OT_TAG_DEFAULT_LANGUAGE;
   g_hash_table_add (tags, pair);
@@ -578,7 +658,9 @@ update_script_combo (void)
       char langbuf[5];
       GtkTreeIter tree_iter;
 
-      if (pair->lang_tag == HB_OT_TAG_DEFAULT_LANGUAGE)
+      if (pair->lang_tag == 0 && pair->script_tag == 0)
+        langname = NC_("Language", "None");
+      else if (pair->lang_tag == HB_OT_TAG_DEFAULT_LANGUAGE)
         langname = NC_("Language", "Default");
       else
         {
@@ -625,18 +707,10 @@ update_features (void)
   GtkTreeModel *model;
   GtkTreeIter iter;
   guint script_index, lang_index;
+  hb_tag_t lang_tag;
   PangoFont *pango_font;
   hb_font_t *hb_font;
   GList *l;
-
-  for (l = feature_items; l; l = l->next)
-    {
-      FeatureItem *item = l->data;
-      gtk_widget_hide (item->feat);
-      gtk_widget_hide (gtk_widget_get_parent (item->feat));
-      if (strcmp (item->name, "xxxx") == 0)
-        gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), TRUE);
-    }
 
   /* set feature presence checks from the font features */
 
@@ -647,7 +721,31 @@ update_features (void)
   gtk_tree_model_get (model, &iter,
                       1, &script_index,
                       2, &lang_index,
+                      3, &lang_tag,
                       -1);
+
+  if (lang_tag == 0) /* None is selected */
+    {
+      for (l = feature_items; l; l = l->next)
+        {
+          FeatureItem *item = l->data;
+          gtk_widget_show (item->feat);
+          gtk_widget_show (gtk_widget_get_parent (item->feat));
+          if (strcmp (item->name, "xxxx") == 0)
+            gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), TRUE);
+        }
+
+      return;
+    }
+
+  for (l = feature_items; l; l = l->next)
+    {
+      FeatureItem *item = l->data;
+      gtk_widget_hide (item->feat);
+      gtk_widget_hide (gtk_widget_get_parent (item->feat));
+      if (strcmp (item->name, "xxxx") == 0)
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (item->feat), TRUE);
+    }
 
   pango_font = get_pango_font ();
   hb_font = pango_font_get_hb_font (pango_font);
@@ -843,11 +941,12 @@ add_axis (hb_face_t             *hb_face,
   gtk_widget_set_valign (axis_scale, GTK_ALIGN_BASELINE);
   gtk_widget_set_hexpand (axis_scale, TRUE);
   gtk_widget_set_size_request (axis_scale, 100, -1);
-  gtk_scale_set_draw_value (GTK_SCALE (axis_scale), FALSE);
   gtk_grid_attach (GTK_GRID (variations_grid), axis_scale, 1, i, 1, 1);
   axis_entry = gtk_entry_new ();
   gtk_widget_set_valign (axis_entry, GTK_ALIGN_BASELINE);
   gtk_editable_set_width_chars (GTK_EDITABLE (axis_entry), 4);
+  gtk_editable_set_max_width_chars (GTK_EDITABLE (axis_entry), 4);
+  gtk_widget_set_hexpand (axis_entry, FALSE);
   gtk_grid_attach (GTK_GRID (variations_grid), axis_entry, 2, i, 1, 1);
 
   axis = g_new (Axis, 1);
@@ -1228,6 +1327,8 @@ entry_key_press (GtkEventController *controller,
   return GDK_EVENT_PROPAGATE;
 }
 
+#define gtk_builder_cscope_add_callback(scope, callback) \
+  gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), #callback, G_CALLBACK (callback))
 GtkWidget *
 do_font_features (GtkWidget *do_widget)
 {
@@ -1236,10 +1337,18 @@ do_font_features (GtkWidget *do_widget)
   if (!window)
     {
       GtkBuilder *builder;
+      GtkBuilderScope *scope;
       GtkWidget *feature_list;
       GtkEventController *controller;
 
-      builder = gtk_builder_new_from_resource ("/font_features/font-features.ui");
+      builder = gtk_builder_new ();
+
+      scope = gtk_builder_cscope_new ();
+      gtk_builder_cscope_add_callback (scope, basic_value_changed);
+      gtk_builder_cscope_add_callback (scope, basic_entry_activated);
+      gtk_builder_set_scope (builder, scope);
+
+      gtk_builder_add_from_resource (builder, "/font_features/font-features.ui", NULL);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
       feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
@@ -1252,6 +1361,16 @@ do_font_features (GtkWidget *do_widget)
       stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
       the_entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
       edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
+      size_entry = GTK_WIDGET (gtk_builder_get_object (builder, "size_entry"));
+      size_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "size_adjustment"));
+      letterspacing_entry = GTK_WIDGET (gtk_builder_get_object (builder, "letterspacing_entry"));
+      letterspacing_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "letterspacing_adjustment"));
+      line_height_entry = GTK_WIDGET (gtk_builder_get_object (builder, "line_height_entry"));
+      line_height_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "line_height_adjustment"));
+
+      basic_value_changed (size_adjustment, size_entry);
+      basic_value_changed (letterspacing_adjustment, letterspacing_entry);
+      basic_value_changed (line_height_adjustment, line_height_entry);
 
       controller = gtk_event_controller_key_new ();
       g_object_set_data_full (G_OBJECT (the_entry), "controller", g_object_ref (controller), g_object_unref);

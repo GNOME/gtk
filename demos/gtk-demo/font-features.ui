@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <object class="GtkAdjustment" id="size_adjustment">
+    <property name="lower">7</property>
+    <property name="value">14</property>
+    <property name="step_increment">0.5</property>
+    <property name="page_increment">10</property>
+    <property name="upper">100</property>
+    <signal name="value-changed" handler="basic_value_changed" object="size_entry" swapped="false"/>
+  </object>
+  <object class="GtkAdjustment" id="letterspacing_adjustment">
+    <property name="lower">0</property>
+    <property name="value">0</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">512</property>
+    <property name="upper">10240</property>
+    <signal name="value-changed" handler="basic_value_changed" object="letterspacing_entry" swapped="false"/>
+  </object>
+  <object class="GtkAdjustment" id="line_height_adjustment">
+    <property name="lower">1</property>
+    <property name="value">1</property>
+    <property name="step_increment">0.1</property>
+    <property name="page_increment">1</property>
+    <property name="upper">3</property>
+    <signal name="value-changed" handler="basic_value_changed" object="line_height_entry" swapped="false"/>
+  </object>
   <object class="GtkWindow" id="window">
     <property name="default-width">600</property>
     <property name="default-height">500</property>
@@ -40,11 +64,128 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkGrid">
+                        <property name="column-spacing">10</property>
+                        <property name="row-spacing">10</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Size</property>
+                            <property name="xalign">0</property>
+                            <property name="valign">baseline</property>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkScale">
+                            <property name="hexpand">1</property>
+                            <property name="width-request">100</property>
+                            <property name="valign">baseline</property>
+                            <property name="adjustment">size_adjustment</property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="size_entry">
+                            <property name="width-chars">4</property>
+                            <property name="max-width-chars">4</property>
+                            <property name="hexpand">0</property>
+                            <property name="valign">baseline</property>
+                            <signal name="activate" handler="basic_entry_activated"
+                                    object="size_adjustment" swapped="false"/>
+                            <layout>
+                              <property name="column">2</property>
+                              <property name="row">0</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Letterspacing</property>
+                            <property name="xalign">0</property>
+                            <property name="valign">baseline</property>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkScale">
+                            <property name="hexpand">1</property>
+                            <property name="width-request">100</property>
+                            <property name="valign">baseline</property>
+                            <property name="adjustment">letterspacing_adjustment</property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="letterspacing_entry">
+                            <property name="width-chars">4</property>
+                            <property name="max-width-chars">4</property>
+                            <property name="hexpand">0</property>
+                            <property name="valign">baseline</property>
+                            <signal name="activate" handler="basic_entry_activated"
+                                    object="letterspacing_adjustment" swapped="false"/>
+                            <layout>
+                              <property name="column">2</property>
+                              <property name="row">1</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">Line Height</property>
+                            <property name="xalign">0</property>
+                            <property name="valign">baseline</property>
+                            <layout>
+                              <property name="column">0</property>
+                              <property name="row">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkScale">
+                            <property name="hexpand">1</property>
+                            <property name="width-request">100</property>
+                            <property name="valign">baseline</property>
+                            <property name="adjustment">line_height_adjustment</property>
+                            <layout>
+                              <property name="column">1</property>
+                              <property name="row">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="line_height_entry">
+                            <property name="width-chars">4</property>
+                            <property name="max-width-chars">4</property>
+                            <property name="hexpand">0</property>
+                            <property name="valign">baseline</property>
+                            <signal name="activate" handler="basic_entry_activated"
+                                    object="line_height_adjustment" swapped="false"/>
+                            <layout>
+                              <property name="column">2</property>
+                              <property name="row">2</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkExpander">
                         <child type="label">
                           <object class="GtkLabel">
                             <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Font Features</property>
+                            <property name="label" translatable="yes">OpenType Features</property>
                             <attributes>
                               <attribute name="weight" value="bold"></attribute>
                             </attributes>
@@ -55,6 +196,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkComboBox" id="script_lang">
+                                <property name="tooltip-text" translatable="yes">Language System</property>
                                 <property name="margin-top">10</property>
                                 <signal name="changed" handler="font_features_script_changed" swapped="no"/>
                                 <child>
@@ -73,7 +215,7 @@
                       <object class="GtkExpander">
                         <child type="label">
                           <object class="GtkLabel" id="variations_heading">
-                            <property name="label" translatable="yes">Font Variations</property>
+                            <property name="label" translatable="yes">Variation Axes</property>
                             <property name="xalign">0</property>
                             <attributes>
                               <attribute name="weight" value="bold"></attribute>
@@ -162,6 +304,7 @@
                 <child>
                   <object class="GtkLabel" id="description">
                     <property name="wrap">1</property>
+                    <property name="wrap-mode">char</property>
                     <property name="xalign">0</property>
                     <property name="valign">end</property>
                     <property name="width-chars">50</property>
