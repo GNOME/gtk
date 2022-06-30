@@ -352,7 +352,7 @@ gdk_window_impl_quartz_init (GdkWindowImplQuartz *impl)
 static gboolean
 gdk_window_impl_quartz_begin_paint (GdkWindow *window)
 {
-  gdk_quartz_ref_cairo_surface (window);
+     gdk_quartz_ref_cairo_surface (window); //unreffed in GdkQuartzView::updateLayer
   return FALSE;
 }
 
@@ -1386,6 +1386,7 @@ move_resize_window_internal (GdkWindow *window,
       frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
       [impl->toplevel setFrame:frame_rect display:YES];
       impl->cairo_surface = gdk_quartz_ref_cairo_surface (window);
+      cairo_surface_destroy (impl->cairo_surface); // Remove the extra reference
     }
   else 
     {

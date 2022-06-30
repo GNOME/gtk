@@ -453,7 +453,7 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
 
   cairo_surface_destroy (cvpb_surface);
   cairo_region_destroy (bounds_region);
-  _gdk_quartz_unref_cairo_surface (gdk_window);
+  _gdk_quartz_unref_cairo_surface (gdk_window); // reffed in gdk_window_impl_quartz_begin_paint
   CVPixelBufferUnlockBaseAddress (pixels, 0);
   --impl->in_paint_rect_count;
   self.layer.contents = NULL;
