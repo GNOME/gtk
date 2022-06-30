@@ -24,24 +24,65 @@
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
 
-static GtkWidget *the_label;
-static GtkWidget *settings;
-static GtkWidget *description;
-static GtkWidget *font;
-static GtkWidget *script_lang;
-static GtkWidget *resetbutton;
-static GtkWidget *stack;
-static GtkWidget *the_entry;
-static GtkWidget *variations_heading;
-static GtkWidget *variations_grid;
-static GtkWidget *instance_combo;
-static GtkWidget *edit_toggle;
-static GtkAdjustment *size_adjustment;
-static GtkAdjustment *letterspacing_adjustment;
-static GtkAdjustment *line_height_adjustment;
-static GtkWidget *size_entry;
-static GtkWidget *letterspacing_entry;
-static GtkWidget *line_height_entry;
+typedef struct {
+  unsigned int tag;
+  const char *name;
+  GtkWidget *icon;
+  GtkWidget *dflt;
+  GtkWidget *feat;
+} FeatureItem;
+
+typedef struct {
+  unsigned int start;
+  unsigned int end;
+  PangoFontDescription *desc;
+  char *features;
+  PangoLanguage *language;
+} Range;
+
+typedef struct {
+  guint32 tag;
+  GtkAdjustment *adjustment;
+} Axis;
+
+typedef struct {
+  GtkWidget *the_label;
+  GtkWidget *settings;
+  GtkWidget *description;
+  GtkWidget *font;
+  GtkWidget *script_lang;
+  GtkWidget *feature_list;
+  GtkWidget *variations_grid;
+  GtkWidget *instance_combo;
+  GtkWidget *stack;
+  GtkWidget *the_entry;
+  GtkWidget *edit_toggle;
+  GtkAdjustment *size_adjustment;
+  GtkAdjustment *letterspacing_adjustment;
+  GtkAdjustment *line_height_adjustment;
+  GtkWidget *size_entry;
+  GtkWidget *letterspacing_entry;
+  GtkWidget *line_height_entry;
+  GList *feature_items;
+  GList *ranges;
+  GHashTable *instances;
+  GHashTable *axes;
+} FontFeaturesDemo;
+
+static void
+demo_free (gpointer data)
+{
+  FontFeaturesDemo *demo = data;
+
+  g_list_free_full (demo->feature_items, g_free);
+  g_list_free_full (demo->ranges, g_free);
+  g_clear_pointer (&demo->instances, g_hash_table_unref);
+  g_clear_pointer (&demo->axes, g_hash_table_unref);
+
+  g_free (demo);
+}
+
+static FontFeaturesDemo *demo;
 
 static void update_display (void);
 
@@ -94,26 +135,6 @@ basic_entry_activated (GtkEntry *entry,
     gtk_adjustment_set_value (adjustment, value);
 }
 
-typedef struct {
-  unsigned int tag;
-  const char *name;
-  GtkWidget *icon;
-  GtkWidget *dflt;
-  GtkWidget *feat;
-} FeatureItem;
-
-static GList *feature_items;
-
-typedef struct {
-  unsigned int start;
-  unsigned int end;
-  PangoFontDescription *desc;
-  char *features;
-  PangoLanguage *language;
-} Range;
-
-static GList *ranges;
-
 static void add_font_variations (GString *s);
 
 static void
@@ -155,7 +176,7 @@ ensure_range (unsigned int          start,
   GList *l;
   Range *range;
 
-  for (l = ranges; l; l = l->next)
+  for (l = demo->ranges; l; l = l->next)
     {
       Range *r = l->data;
 
@@ -170,7 +191,7 @@ ensure_range (unsigned int          start,
   range->start = start;
   range->end = end;
 
-  ranges = g_list_insert_sorted (ranges, range, compare_range);
+  demo->ranges = g_list_insert_sorted (demo->ranges, range, compare_range);
 
 set:
   if (range->desc)
@@ -299,7 +320,7 @@ add_check_group (GtkWidget   *box,
       item->dflt = NULL;
       item->feat = feat;
 
-      feature_items = g_list_prepend (feature_items, item);
+      demo->feature_items = g_list_prepend (demo->feature_items, item);
     }
 
   gtk_box_append (GTK_BOX (box), group);
@@ -357,7 +378,7 @@ add_radio_group (GtkWidget *box,
       item->dflt = NULL;
       item->feat = feat;
 
-      feature_items = g_list_prepend (feature_items, item);
+      demo->feature_items = g_list_prepend (demo->feature_items, item);
     }
 
   gtk_box_append (GTK_BOX (box), group);
@@ -382,9 +403,9 @@ update_display (void)
   char *features;
   double value;
 
-  text = gtk_editable_get_text (GTK_EDITABLE (the_entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (demo->the_entry));
 
-  if (gtk_label_get_selection_bounds (GTK_LABEL (the_label), &ins, &bound))
+  if (gtk_label_get_selection_bounds (GTK_LABEL (demo->the_label), &ins, &bound))
     {
       start = g_utf8_offset_to_pointer (text, ins) - text;
       end = g_utf8_offset_to_pointer (text, bound) - text;
@@ -395,9 +416,9 @@ update_display (void)
       end = PANGO_ATTR_INDEX_TO_TEXT_END;
     }
 
-  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font));
+  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
 
-  value = gtk_adjustment_get_value (size_adjustment);
+  value = gtk_adjustment_get_value (demo->size_adjustment);
   pango_font_description_set_size (desc, value * PANGO_SCALE);
 
   s = g_string_new ("");
@@ -413,7 +434,7 @@ update_display (void)
   s = g_string_new ("");
 
   has_feature = FALSE;
-  for (l = feature_items; l; l = l->next)
+  for (l = demo->feature_items; l; l = l->next)
     {
       FeatureItem *item = l->data;
 
@@ -453,11 +474,11 @@ update_display (void)
 
   features = g_string_free (s, FALSE);
 
-  if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (script_lang), &iter))
+  if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (demo->script_lang), &iter))
     {
       hb_tag_t lang_tag;
 
-      model = gtk_combo_box_get_model (GTK_COMBO_BOX (script_lang));
+      model = gtk_combo_box_get_model (GTK_COMBO_BOX (demo->script_lang));
       gtk_tree_model_get (model, &iter,
                           3, &lang_tag,
                           -1);
@@ -471,23 +492,23 @@ update_display (void)
 
   attrs = pango_attr_list_new ();
 
-  if (gtk_adjustment_get_value (letterspacing_adjustment) != 0.)
+  if (gtk_adjustment_get_value (demo->letterspacing_adjustment) != 0.)
     {
-      attr = pango_attr_letter_spacing_new (gtk_adjustment_get_value (letterspacing_adjustment));
+      attr = pango_attr_letter_spacing_new (gtk_adjustment_get_value (demo->letterspacing_adjustment));
       attr->start_index = start;
       attr->end_index = end;
       pango_attr_list_insert (attrs, attr);
     }
 
-  if (gtk_adjustment_get_value (line_height_adjustment) != 1.)
+  if (gtk_adjustment_get_value (demo->line_height_adjustment) != 1.)
     {
-      attr = pango_attr_line_height_new (gtk_adjustment_get_value (line_height_adjustment));
+      attr = pango_attr_line_height_new (gtk_adjustment_get_value (demo->line_height_adjustment));
       attr->start_index = start;
       attr->end_index = end;
       pango_attr_list_insert (attrs, attr);
     }
 
-  for (l = ranges; l; l = l->next)
+  for (l = demo->ranges; l; l = l->next)
     {
       Range *range = l->data;
 
@@ -510,10 +531,10 @@ update_display (void)
         }
     }
 
-  gtk_label_set_text (GTK_LABEL (description), font_desc);
-  gtk_label_set_text (GTK_LABEL (settings), features);
-  gtk_label_set_text (GTK_LABEL (the_label), text);
-  gtk_label_set_attributes (GTK_LABEL (the_label), attrs);
+  gtk_label_set_text (GTK_LABEL (demo->description), font_desc);
+  gtk_label_set_text (GTK_LABEL (demo->settings), features);
+  gtk_label_set_text (GTK_LABEL (demo->the_label), text);
+  gtk_label_set_attributes (GTK_LABEL (demo->the_label), attrs);
 
   g_free (font_desc);
   pango_font_description_free (desc);
@@ -527,8 +548,8 @@ get_pango_font (void)
   PangoFontDescription *desc;
   PangoContext *context;
 
-  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (font));
-  context = gtk_widget_get_pango_context (font);
+  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
+  context = gtk_widget_get_pango_context (demo->font);
 
   return pango_context_load_font (context, desc);
 }
@@ -592,7 +613,7 @@ update_script_combo (void)
   GtkTreeIter active_iter;
   gboolean have_active = FALSE;
 
-  lang = gtk_font_chooser_get_language (GTK_FONT_CHOOSER (font));
+  lang = gtk_font_chooser_get_language (GTK_FONT_CHOOSER (demo->font));
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   active = hb_ot_tag_from_language (hb_language_from_string (lang, -1));
@@ -693,11 +714,11 @@ update_script_combo (void)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
                                         GTK_SORT_ASCENDING);
-  gtk_combo_box_set_model (GTK_COMBO_BOX (script_lang), GTK_TREE_MODEL (store));
+  gtk_combo_box_set_model (GTK_COMBO_BOX (demo->script_lang), GTK_TREE_MODEL (store));
   if (have_active)
-    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (script_lang), &active_iter);
+    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (demo->script_lang), &active_iter);
   else
-    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (script_lang), 0);
+    gtk_combo_box_set_active_iter (GTK_COMBO_BOX (demo->script_lang), 0);
 }
 
 static void
@@ -714,10 +735,10 @@ update_features (void)
 
   /* set feature presence checks from the font features */
 
-  if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (script_lang), &iter))
+  if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (demo->script_lang), &iter))
     return;
 
-  model = gtk_combo_box_get_model (GTK_COMBO_BOX (script_lang));
+  model = gtk_combo_box_get_model (GTK_COMBO_BOX (demo->script_lang));
   gtk_tree_model_get (model, &iter,
                       1, &script_index,
                       2, &lang_index,
@@ -726,7 +747,7 @@ update_features (void)
 
   if (lang_tag == 0) /* None is selected */
     {
-      for (l = feature_items; l; l = l->next)
+      for (l = demo->feature_items; l; l = l->next)
         {
           FeatureItem *item = l->data;
           gtk_widget_show (item->feat);
@@ -738,7 +759,7 @@ update_features (void)
       return;
     }
 
-  for (l = feature_items; l; l = l->next)
+  for (l = demo->feature_items; l; l = l->next)
     {
       FeatureItem *item = l->data;
       gtk_widget_hide (item->feat);
@@ -779,7 +800,7 @@ update_features (void)
               buf[4] = 0;
               g_print ("%s present in %s\n", buf, i == 0 ? "GSUB" : "GPOS");
 #endif
-              for (l = feature_items; l; l = l->next)
+              for (l = demo->feature_items; l; l = l->next)
                 {
                   FeatureItem *item = l->data;
 
@@ -804,10 +825,10 @@ update_features (void)
             }
         }
 
-      feat = gtk_font_chooser_get_font_features (GTK_FONT_CHOOSER (font));
+      feat = gtk_font_chooser_get_font_features (GTK_FONT_CHOOSER (demo->font));
       if (feat)
         {
-          for (l = feature_items; l; l = l->next)
+          for (l = demo->feature_items; l; l = l->next)
             {
               FeatureItem *item = l->data;
               char buf[5];
@@ -867,13 +888,6 @@ entry_activated (GtkEntry *entry,
 
 static void unset_instance (GtkAdjustment *adjustment);
 
-typedef struct {
-  guint32 tag;
-  GtkAdjustment *adjustment;
-} Axis;
-
-static GHashTable *axes;
-
 static void
 add_font_variations (GString *s)
 {
@@ -882,7 +896,7 @@ add_font_variations (GString *s)
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
   const char *sep = "";
 
-  g_hash_table_iter_init (&iter, axes);
+  g_hash_table_iter_init (&iter, demo->axes);
   while (g_hash_table_iter_next (&iter, (gpointer *)NULL, (gpointer *)&axis))
     {
       char tag[5];
@@ -933,7 +947,7 @@ add_axis (hb_face_t             *hb_face,
   axis_label = gtk_label_new (name);
   gtk_widget_set_halign (axis_label, GTK_ALIGN_START);
   gtk_widget_set_valign (axis_label, GTK_ALIGN_BASELINE);
-  gtk_grid_attach (GTK_GRID (variations_grid), axis_label, 0, i, 1, 1);
+  gtk_grid_attach (GTK_GRID (demo->variations_grid), axis_label, 0, i, 1, 1);
   adjustment = gtk_adjustment_new (value, ax->min_value, ax->max_value,
                                    1.0, 10.0, 0.0);
   axis_scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
@@ -941,18 +955,18 @@ add_axis (hb_face_t             *hb_face,
   gtk_widget_set_valign (axis_scale, GTK_ALIGN_BASELINE);
   gtk_widget_set_hexpand (axis_scale, TRUE);
   gtk_widget_set_size_request (axis_scale, 100, -1);
-  gtk_grid_attach (GTK_GRID (variations_grid), axis_scale, 1, i, 1, 1);
+  gtk_grid_attach (GTK_GRID (demo->variations_grid), axis_scale, 1, i, 1, 1);
   axis_entry = gtk_entry_new ();
   gtk_widget_set_valign (axis_entry, GTK_ALIGN_BASELINE);
   gtk_editable_set_width_chars (GTK_EDITABLE (axis_entry), 4);
   gtk_editable_set_max_width_chars (GTK_EDITABLE (axis_entry), 4);
   gtk_widget_set_hexpand (axis_entry, FALSE);
-  gtk_grid_attach (GTK_GRID (variations_grid), axis_entry, 2, i, 1, 1);
+  gtk_grid_attach (GTK_GRID (demo->variations_grid), axis_entry, 2, i, 1, 1);
 
   axis = g_new (Axis, 1);
   axis->tag = ax->tag;
   axis->adjustment = adjustment;
-  g_hash_table_add (axes, axis);
+  g_hash_table_add (demo->axes, axis);
 
   adjustment_changed (adjustment, GTK_ENTRY (axis_entry));
 
@@ -992,8 +1006,6 @@ free_instance (gpointer data)
   g_free (instance);
 }
 
-static GHashTable *instances;
-
 static void
 add_instance (hb_face_t    *face,
               unsigned int  index,
@@ -1013,15 +1025,15 @@ add_instance (hb_face_t    *face,
   instance->name = g_strdup (name);
   instance->index = index;
 
-  g_hash_table_add (instances, instance);
+  g_hash_table_add (demo->instances, instance);
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), instance->name);
 }
 
 static void
 unset_instance (GtkAdjustment *adjustment)
 {
-  if (instance_combo)
-    gtk_combo_box_set_active (GTK_COMBO_BOX (instance_combo), 0);
+  if (demo->instance_combo)
+    gtk_combo_box_set_active (GTK_COMBO_BOX (demo->instance_combo), 0);
 }
 
 static void
@@ -1044,7 +1056,7 @@ instance_changed (GtkComboBox *combo)
     goto out;
 
   ikey.name = text;
-  instance = g_hash_table_lookup (instances, &ikey);
+  instance = g_hash_table_lookup (demo->instances, &ikey);
   if (!instance)
     {
       g_print ("did not find instance %s\n", text);
@@ -1074,7 +1086,7 @@ instance_changed (GtkComboBox *combo)
       value = coords[ai[i].axis_index];
 
       akey.tag = ai[i].tag;
-      axis = g_hash_table_lookup (axes, &akey);
+      axis = g_hash_table_lookup (demo->axes, &akey);
       if (axis)
         {
           g_signal_handlers_block_by_func (axis->adjustment, unset_instance, NULL);
@@ -1125,9 +1137,9 @@ add_font_plane (int i)
   Axis key;
 
   key.tag = MAKE_TAG('w','g','h','t');
-  weight_axis = g_hash_table_lookup (axes, &key);
+  weight_axis = g_hash_table_lookup (demo->axes, &key);
   key.tag = MAKE_TAG('w','d','t','h');
-  width_axis = g_hash_table_lookup (axes, &key);
+  width_axis = g_hash_table_lookup (demo->axes, &key);
 
   if (weight_axis && width_axis)
     {
@@ -1136,7 +1148,7 @@ add_font_plane (int i)
 
       gtk_widget_set_size_request (plane, 300, 300);
       gtk_widget_set_halign (plane, GTK_ALIGN_CENTER);
-      gtk_grid_attach (GTK_GRID (variations_grid), plane, 0, i, 3, 1);
+      gtk_grid_attach (GTK_GRID (demo->variations_grid), plane, 0, i, 3, 1);
     }
 }
 
@@ -1166,13 +1178,13 @@ update_font_variations (void)
   unsigned int length;
   int i;
 
-  while ((child = gtk_widget_get_first_child (variations_grid)))
-    gtk_grid_remove (GTK_GRID (variations_grid), child);
+  while ((child = gtk_widget_get_first_child (demo->variations_grid)))
+    gtk_grid_remove (GTK_GRID (demo->variations_grid), child);
 
-  instance_combo = NULL;
+  demo->instance_combo = NULL;
 
-  g_hash_table_remove_all (axes);
-  g_hash_table_remove_all (instances);
+  g_hash_table_remove_all (demo->axes);
+  g_hash_table_remove_all (demo->instances);
 
   pango_font = get_pango_font ();
   hb_font = pango_font_get_hb_font (pango_font);
@@ -1199,7 +1211,7 @@ update_font_variations (void)
       gtk_label_set_xalign (GTK_LABEL (label), 0);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_grid_attach (GTK_GRID (variations_grid), label, 0, -1, 2, 1);
+      gtk_grid_attach (GTK_GRID (demo->variations_grid), label, 0, -1, 2, 1);
 
       combo = gtk_combo_box_text_new ();
       gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
@@ -1218,9 +1230,9 @@ update_font_variations (void)
             }
         }
 
-      gtk_grid_attach (GTK_GRID (variations_grid), combo, 1, -1, 2, 1);
+      gtk_grid_attach (GTK_GRID (demo->variations_grid), combo, 1, -1, 2, 1);
       g_signal_connect (combo, "changed", G_CALLBACK (instance_changed), NULL);
-      instance_combo = combo;
+      demo->instance_combo = combo;
    }
 
   for (i = 0; i < n_axes; i++)
@@ -1254,12 +1266,12 @@ font_features_reset_features (void)
 {
   GList *l;
 
-  gtk_label_select_region (GTK_LABEL (the_label), 0, 0);
+  gtk_label_select_region (GTK_LABEL (demo->the_label), 0, 0);
 
-  g_list_free_full (ranges, free_range);
-  ranges = NULL;
+  g_list_free_full (demo->ranges, free_range);
+  demo->ranges = NULL;
 
-  for (l = feature_items; l; l = l->next)
+  for (l = demo->feature_items; l; l = l->next)
     {
       FeatureItem *item = l->data;
 
@@ -1281,9 +1293,9 @@ static char *text;
 static void
 switch_to_entry (void)
 {
-  text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (the_entry)));
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "entry");
-  gtk_widget_grab_focus (the_entry);
+  text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (demo->the_entry)));
+  gtk_stack_set_visible_child_name (GTK_STACK (demo->stack), "entry");
+  gtk_widget_grab_focus (demo->the_entry);
 }
 
 static void
@@ -1291,14 +1303,14 @@ switch_to_label (void)
 {
   g_free (text);
   text = NULL;
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "label");
+  gtk_stack_set_visible_child_name (GTK_STACK (demo->stack), "label");
   update_display ();
 }
 
 G_MODULE_EXPORT void
 font_features_toggle_edit (void)
 {
-  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (stack)), "label") == 0)
+  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (demo->stack)), "label") == 0)
     switch_to_entry ();
   else
     switch_to_label ();
@@ -1307,7 +1319,7 @@ font_features_toggle_edit (void)
 G_MODULE_EXPORT void
 font_features_stop_edit (void)
 {
-  g_signal_emit_by_name (edit_toggle, "clicked");
+  g_signal_emit_by_name (demo->edit_toggle, "clicked");
 }
 
 static gboolean
@@ -1327,8 +1339,6 @@ entry_key_press (GtkEventController *controller,
   return GDK_EVENT_PROPAGATE;
 }
 
-#define gtk_builder_cscope_add_callback(scope, callback) \
-  gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), #callback, G_CALLBACK (callback))
 GtkWidget *
 do_font_features (GtkWidget *do_widget)
 {
@@ -1338,7 +1348,6 @@ do_font_features (GtkWidget *do_widget)
     {
       GtkBuilder *builder;
       GtkBuilderScope *scope;
-      GtkWidget *feature_list;
       GtkEventController *controller;
 
       builder = gtk_builder_new ();
@@ -1348,132 +1357,84 @@ do_font_features (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback (scope, basic_entry_activated);
       gtk_builder_set_scope (builder, scope);
 
+      demo = g_new0 (FontFeaturesDemo, 1);
+
       gtk_builder_add_from_resource (builder, "/font_features/font_features.ui", NULL);
 
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
-      feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
-      the_label = GTK_WIDGET (gtk_builder_get_object (builder, "label"));
-      settings = GTK_WIDGET (gtk_builder_get_object (builder, "settings"));
-      description = GTK_WIDGET (gtk_builder_get_object (builder, "description"));
-      resetbutton = GTK_WIDGET (gtk_builder_get_object (builder, "reset"));
-      font = GTK_WIDGET (gtk_builder_get_object (builder, "font"));
-      script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
-      stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
-      the_entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
-      edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
-      size_entry = GTK_WIDGET (gtk_builder_get_object (builder, "size_entry"));
-      size_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "size_adjustment"));
-      letterspacing_entry = GTK_WIDGET (gtk_builder_get_object (builder, "letterspacing_entry"));
-      letterspacing_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "letterspacing_adjustment"));
-      line_height_entry = GTK_WIDGET (gtk_builder_get_object (builder, "line_height_entry"));
-      line_height_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "line_height_adjustment"));
+      g_object_set_data_full  (G_OBJECT (window), "demo", demo, demo_free);
 
-      basic_value_changed (size_adjustment, size_entry);
-      basic_value_changed (letterspacing_adjustment, letterspacing_entry);
-      basic_value_changed (line_height_adjustment, line_height_entry);
+      demo->the_label = GTK_WIDGET (gtk_builder_get_object (builder, "label"));
+      demo->settings = GTK_WIDGET (gtk_builder_get_object (builder, "settings"));
+      demo->description = GTK_WIDGET (gtk_builder_get_object (builder, "description"));
+      demo->font = GTK_WIDGET (gtk_builder_get_object (builder, "font"));
+      demo->script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
+      demo->feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
+      demo->stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
+      demo->the_entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
+      demo->edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
+      demo->size_entry = GTK_WIDGET (gtk_builder_get_object (builder, "size_entry"));
+      demo->size_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "size_adjustment"));
+      demo->letterspacing_entry = GTK_WIDGET (gtk_builder_get_object (builder, "letterspacing_entry"));
+      demo->letterspacing_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "letterspacing_adjustment"));
+      demo->line_height_entry = GTK_WIDGET (gtk_builder_get_object (builder, "line_height_entry"));
+      demo->line_height_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "line_height_adjustment"));
+
+      basic_value_changed (demo->size_adjustment, demo->size_entry);
+      basic_value_changed (demo->letterspacing_adjustment, demo->letterspacing_entry);
+      basic_value_changed (demo->line_height_adjustment, demo->line_height_entry);
 
       controller = gtk_event_controller_key_new ();
-      g_object_set_data_full (G_OBJECT (the_entry), "controller", g_object_ref (controller), g_object_unref);
-      g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), the_entry);
-      gtk_widget_add_controller (the_entry, controller);
+      g_object_set_data_full (G_OBJECT (demo->the_entry), "controller", g_object_ref (controller), g_object_unref);
+      g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), demo->the_entry);
+      gtk_widget_add_controller (demo->the_entry, controller);
 
-      add_check_group (feature_list, _("Kerning"), (const char *[]){ "kern", NULL });
-      add_check_group (feature_list, _("Ligatures"), (const char *[]){ "liga",
-                                                                       "dlig",
-                                                                       "hlig",
-                                                                       "clig",
-                                                                       "rlig", NULL });
-      add_check_group (feature_list, _("Letter Case"), (const char *[]){ "smcp",
-                                                                         "c2sc",
-                                                                         "pcap",
-                                                                         "c2pc",
-                                                                         "unic",
-                                                                         "cpsp",
-                                                                         "case",NULL });
-      add_radio_group (feature_list, _("Number Case"), (const char *[]){ "xxxx",
-                                                                         "lnum",
-                                                                         "onum", NULL });
-      add_radio_group (feature_list, _("Number Spacing"), (const char *[]){ "xxxx",
-                                                                            "pnum",
-                                                                            "tnum", NULL });
-      add_radio_group (feature_list, _("Fractions"), (const char *[]){ "xxxx",
-                                                                       "frac",
-                                                                       "afrc", NULL });
-      add_check_group (feature_list, _("Numeric Extras"), (const char *[]){ "zero",
-                                                                            "nalt",
-                                                                            "sinf", NULL });
-      add_check_group (feature_list, _("Character Alternatives"), (const char *[]){ "swsh",
-                                                                                    "cswh",
-                                                                                    "locl",
-                                                                                    "calt",
-                                                                                    "falt",
-                                                                                    "hist",
-                                                                                    "salt",
-                                                                                    "jalt",
-                                                                                    "titl",
-                                                                                    "rand",
-                                                                                    "subs",
-                                                                                    "sups",
-                                                                                    "ordn",
-                                                                                    "ltra",
-                                                                                    "ltrm",
-                                                                                    "rtla",
-                                                                                    "rtlm",
-                                                                                    "rclt", NULL });
-      add_check_group (feature_list, _("Positional Alternatives"), (const char *[]){ "init",
-                                                                                     "medi",
-                                                                                     "med2",
-                                                                                     "fina",
-                                                                                     "fin2",
-                                                                                     "fin3",
-                                                                                     "isol", NULL });
-      add_check_group (feature_list, _("Width Variants"), (const char *[]){ "fwid",
-                                                                            "hwid",
-                                                                            "halt",
-                                                                            "pwid",
-                                                                            "palt",
-                                                                            "twid",
-                                                                            "qwid", NULL });
-      add_check_group (feature_list, _("Alternative Stylistic Sets"), (const char *[]){ "ss01",
-                                                                                        "ss02",
-                                                                                        "ss03",
-                                                                                        "ss04",
-                                                                                        "ss05",
-                                                                                        "ss06",
-                                                                                        "ss07",
-                                                                                        "ss08",
-                                                                                        "ss09",
-                                                                                        "ss10",
-                                                                                        "ss11",
-                                                                                        "ss12",
-                                                                                        "ss13",
-                                                                                        "ss14",
-                                                                                        "ss15",
-                                                                                        "ss16",
-                                                                                        "ss17",
-                                                                                        "ss18",
-                                                                                        "ss19",
-                                                                                        "ss20", NULL });
-      add_check_group (feature_list, _("Mathematical"), (const char *[]){ "dtls",
-                                                                          "flac",
-                                                                          "mgrk",
-                                                                          "ssty", NULL });
-      add_check_group (feature_list, _("Optical Bounds"), (const char *[]){ "opbd",
-                                                                            "lfbd",
-                                                                            "rtbd", NULL });
-      feature_items = g_list_reverse (feature_items);
+      add_check_group (demo->feature_list, _("Kerning"),
+                       (const char *[]){ "kern", NULL });
+      add_check_group (demo->feature_list, _("Ligatures"),
+                       (const char *[]){ "liga", "dlig", "hlig", "clig", "rlig", NULL });
+      add_check_group (demo->feature_list, _("Letter Case"),
+                       (const char *[]){ "smcp", "c2sc", "pcap", "c2pc", "unic", "cpsp",
+                                         "case",NULL });
+      add_radio_group (demo->feature_list, _("Number Case"),
+                       (const char *[]){ "xxxx", "lnum", "onum", NULL });
+      add_radio_group (demo->feature_list, _("Number Spacing"),
+                       (const char *[]){ "xxxx", "pnum", "tnum", NULL });
+      add_radio_group (demo->feature_list, _("Fractions"),
+                       (const char *[]){ "xxxx", "frac", "afrc", NULL });
+      add_check_group (demo->feature_list, _("Numeric Extras"),
+                       (const char *[]){ "zero", "nalt", "sinf", NULL });
+      add_check_group (demo->feature_list, _("Character Alternatives"),
+                       (const char *[]){ "swsh", "cswh", "locl", "calt", "falt", "hist",
+                                         "salt", "jalt", "titl", "rand", "subs", "sups",
+                                         "ordn", "ltra", "ltrm", "rtla", "rtlm", "rclt", NULL });
+      add_check_group (demo->feature_list, _("Positional Alternatives"),
+                       (const char *[]){ "init", "medi", "med2", "fina", "fin2", "fin3",
+                                         "isol", NULL });
+      add_check_group (demo->feature_list, _("Width Variants"),
+                       (const char *[]){ "fwid", "hwid", "halt", "pwid", "palt", "twid",
+                                         "qwid", NULL });
+      add_check_group (demo->feature_list, _("Alternative Stylistic Sets"),
+                       (const char *[]){ "ss01", "ss02", "ss03", "ss04", "ss05", "ss06",
+                                         "ss07", "ss08", "ss09", "ss10", "ss11", "ss12",
+                                         "ss13", "ss14", "ss15", "ss16", "ss17", "ss18",
+                                         "ss19", "ss20", NULL });
+      add_check_group (demo->feature_list, _("Mathematical"),
+                       (const char *[]){ "dtls", "flac", "mgrk", "ssty", NULL });
+      add_check_group (demo->feature_list, _("Optical Bounds"),
+                       (const char *[]){ "opbd", "lfbd", "rtbd", NULL });
+      demo->feature_items = g_list_reverse (demo->feature_items);
 
-      variations_heading = GTK_WIDGET (gtk_builder_get_object (builder, "variations_heading"));
-      variations_grid = GTK_WIDGET (gtk_builder_get_object (builder, "variations_grid"));
-      if (instances == NULL)
-        instances = g_hash_table_new_full (instance_hash, instance_equal, NULL, free_instance);
+      demo->variations_grid = GTK_WIDGET (gtk_builder_get_object (builder, "variations_grid"));
+      if (demo->instances == NULL)
+        demo->instances = g_hash_table_new_full (instance_hash, instance_equal, NULL, free_instance);
       else
-        g_hash_table_remove_all (instances);
+        g_hash_table_remove_all (demo->instances);
 
-      if (axes == NULL)
-        axes = g_hash_table_new_full (axes_hash, axes_equal, NULL, g_free);
+      if (demo->axes == NULL)
+        demo->axes = g_hash_table_new_full (axes_hash, axes_equal, NULL, g_free);
       else
-        g_hash_table_remove_all (axes);
+        g_hash_table_remove_all (demo->axes);
 
       font_features_font_changed ();
 
