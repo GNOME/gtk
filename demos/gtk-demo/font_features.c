@@ -43,6 +43,7 @@ typedef struct {
 typedef struct {
   guint32 tag;
   GtkAdjustment *adjustment;
+  double default_value;
 } Axis;
 
 typedef struct {
@@ -133,6 +134,25 @@ basic_entry_activated (GtkEntry *entry,
   value = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
   if (err != NULL)
     gtk_adjustment_set_value (adjustment, value);
+}
+
+static void
+font_features_reset_basic (void)
+{
+  gtk_adjustment_set_value (demo->size_adjustment, 20);
+  gtk_adjustment_set_value (demo->letterspacing_adjustment, 0);
+  gtk_adjustment_set_value (demo->line_height_adjustment, 1);
+}
+
+static void
+update_basic (void)
+{
+  PangoFontDescription *desc;
+
+  desc = gtk_font_chooser_get_font_desc (GTK_FONT_CHOOSER (demo->font));
+
+  gtk_adjustment_set_value (demo->size_adjustment,
+                            pango_font_description_get_size (desc) / (double) PANGO_SCALE);
 }
 
 static void add_font_variations (GString *s);
@@ -889,6 +909,19 @@ entry_activated (GtkEntry *entry,
 static void unset_instance (GtkAdjustment *adjustment);
 
 static void
+font_features_reset_variations (void)
+{
+  GHashTableIter iter;
+  Axis *axis;
+
+  g_hash_table_iter_init (&iter, demo->axes);
+  while (g_hash_table_iter_next (&iter, (gpointer *)NULL, (gpointer *)&axis))
+    {
+      gtk_adjustment_set_value (axis->adjustment, axis->default_value);
+    }
+}
+
+static void
 add_font_variations (GString *s)
 {
   GHashTableIter iter;
@@ -966,6 +999,7 @@ add_axis (hb_face_t             *hb_face,
   axis = g_new (Axis, 1);
   axis->tag = ax->tag;
   axis->adjustment = adjustment;
+  axis->default_value = ax->default_value;
   g_hash_table_add (demo->axes, axis);
 
   adjustment_changed (adjustment, GTK_ENTRY (axis_entry));
@@ -1249,6 +1283,7 @@ done:
 G_MODULE_EXPORT void
 font_features_font_changed (void)
 {
+  update_basic ();
   update_script_combo ();
   update_features ();
   update_font_variations ();
@@ -1261,7 +1296,7 @@ font_features_script_changed (void)
   update_display ();
 }
 
-G_MODULE_EXPORT void
+static void
 font_features_reset_features (void)
 {
   GList *l;
@@ -1355,6 +1390,9 @@ do_font_features (GtkWidget *do_widget)
       scope = gtk_builder_cscope_new ();
       gtk_builder_cscope_add_callback (scope, basic_value_changed);
       gtk_builder_cscope_add_callback (scope, basic_entry_activated);
+      gtk_builder_cscope_add_callback (scope, font_features_reset_basic);
+      gtk_builder_cscope_add_callback (scope, font_features_reset_features);
+      gtk_builder_cscope_add_callback (scope, font_features_reset_variations);
       gtk_builder_set_scope (builder, scope);
 
       demo = g_new0 (FontFeaturesDemo, 1);
