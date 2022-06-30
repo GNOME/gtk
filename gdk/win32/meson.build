@@ -54,7 +54,6 @@ if have_egl
 endif
 
 gdk_win32_deps = [
-  pangowin32_dep, # FIXME
   cc.find_library('hid'),
 ]
 

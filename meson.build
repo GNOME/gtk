@@ -780,9 +780,8 @@ configure_file(output: 'config.h',
                configuration: cdata)
 
 # Requires
-pango_pkgname = win32_enabled ? 'pangowin32' : 'pango'
 gdk_packages = [
-  '@0@ @1@'.format(pango_pkgname, pango_req),
+  'pango @0@'.format(pango_req),
   'pangocairo @0@'.format(pango_req),
   'gdk-pixbuf-2.0 @0@'.format(gdk_pixbuf_req),
 ]

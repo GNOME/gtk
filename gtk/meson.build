@@ -1141,7 +1141,7 @@ endif
 
 if win32_enabled
   gtk_cargs += ['-DGTK_PRINT_BACKENDS="file,lpr"']
-  gtk_deps += [ giowin32_dep, pangowin32_dep ]
+  gtk_deps += [ giowin32_dep ]
 
   gtk_deps += [
     cc.find_library('advapi32'),
