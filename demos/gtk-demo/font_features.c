@@ -47,6 +47,7 @@ typedef struct {
   guint tick_cb;
   guint64 start_time;
   gboolean increasing;
+  GtkWidget *button;
 } Axis;
 
 typedef struct {
@@ -60,10 +61,13 @@ typedef struct {
   GtkWidget *instance_combo;
   GtkWidget *stack;
   GtkWidget *the_entry;
+  GtkWidget *plain_toggle;
+  GtkWidget *waterfall_toggle;
   GtkWidget *edit_toggle;
   GtkAdjustment *size_adjustment;
   GtkAdjustment *letterspacing_adjustment;
   GtkAdjustment *line_height_adjustment;
+  GtkWidget *size_scale;
   GtkWidget *size_entry;
   GtkWidget *letterspacing_entry;
   GtkWidget *line_height_entry;
@@ -71,6 +75,8 @@ typedef struct {
   GList *ranges;
   GHashTable *instances;
   GHashTable *axes;
+  char *text;
+  GtkWidget *swin;
 } FontFeaturesDemo;
 
 static void
@@ -82,6 +88,7 @@ demo_free (gpointer data)
   g_list_free_full (demo->ranges, g_free);
   g_clear_pointer (&demo->instances, g_hash_table_unref);
   g_clear_pointer (&demo->axes, g_hash_table_unref);
+  g_clear_pointer (&demo->text, g_free);
 
   g_free (demo);
 }
@@ -89,6 +96,27 @@ demo_free (gpointer data)
 static FontFeaturesDemo *demo;
 
 static void update_display (void);
+
+static void
+font_features_toggle_plain (void)
+{
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (demo->plain_toggle)) ||
+      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (demo->waterfall_toggle)))
+    {
+      gtk_stack_set_visible_child_name (GTK_STACK (demo->stack), "label");
+      update_display ();
+    }
+}
+
+static void
+font_features_notify_waterfall (void)
+{
+  gboolean can_change_size;
+
+  can_change_size = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (demo->waterfall_toggle));
+  gtk_widget_set_sensitive (demo->size_scale, can_change_size);
+  gtk_widget_set_sensitive (demo->size_entry, can_change_size);
+}
 
 typedef struct {
   GtkAdjustment *adjustment;
@@ -425,10 +453,23 @@ update_display (void)
   char *font_desc;
   char *features;
   double value;
+  int text_len;
+  gboolean do_waterfall;
+  GString *waterfall;
 
   text = gtk_editable_get_text (GTK_EDITABLE (demo->the_entry));
+  text_len = strlen (text);
 
-  if (gtk_label_get_selection_bounds (GTK_LABEL (demo->the_label), &ins, &bound))
+  do_waterfall = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (demo->waterfall_toggle));
+
+  gtk_label_set_wrap (GTK_LABEL (demo->the_label), !do_waterfall);
+
+  if (do_waterfall)
+    {
+      start = PANGO_ATTR_INDEX_FROM_TEXT_BEGINNING;
+      end = PANGO_ATTR_INDEX_TO_TEXT_END;
+    }
+  else if (gtk_label_get_selection_bounds (GTK_LABEL (demo->the_label), &ins, &bound))
     {
       start = g_utf8_offset_to_pointer (text, ins) - text;
       end = g_utf8_offset_to_pointer (text, bound) - text;
@@ -502,16 +543,12 @@ update_display (void)
       hb_tag_t lang_tag;
 
       model = gtk_combo_box_get_model (GTK_COMBO_BOX (demo->script_lang));
-      gtk_tree_model_get (model, &iter,
-                          3, &lang_tag,
-                          -1);
+      gtk_tree_model_get (model, &iter, 3, &lang_tag, -1);
 
       lang = pango_language_from_string (hb_language_to_string (hb_ot_tag_to_language (lang_tag)));
     }
   else
     lang = NULL;
-
-  ensure_range (start, end, desc, features, lang);
 
   attrs = pango_attr_list_new ();
 
@@ -531,32 +568,69 @@ update_display (void)
       pango_attr_list_insert (attrs, attr);
     }
 
-  for (l = demo->ranges; l; l = l->next)
+  if (do_waterfall)
     {
-      Range *range = l->data;
-
-      attr = pango_attr_font_desc_new (range->desc);
-      attr->start_index = range->start;
-      attr->end_index = range->end;
+      attr = pango_attr_font_desc_new (desc);
       pango_attr_list_insert (attrs, attr);
-
-      attr = pango_attr_font_features_new (range->features);
-      attr->start_index = range->start;
-      attr->end_index = range->end;
+      attr = pango_attr_font_features_new (features);
       pango_attr_list_insert (attrs, attr);
+      attr = pango_attr_language_new (lang);
+      pango_attr_list_insert (attrs, attr);
+    }
+  else
+    {
+      ensure_range (start, end, desc, features, lang);
 
-      if (range->language)
+      for (l = demo->ranges; l; l = l->next)
         {
-          attr = pango_attr_language_new (range->language);
+          Range *range = l->data;
+
+          attr = pango_attr_font_desc_new (range->desc);
           attr->start_index = range->start;
           attr->end_index = range->end;
           pango_attr_list_insert (attrs, attr);
+
+          attr = pango_attr_font_features_new (range->features);
+          attr->start_index = range->start;
+          attr->end_index = range->end;
+          pango_attr_list_insert (attrs, attr);
+
+          if (range->language)
+            {
+              attr = pango_attr_language_new (range->language);
+              attr->start_index = range->start;
+              attr->end_index = range->end;
+              pango_attr_list_insert (attrs, attr);
+            }
         }
     }
 
   gtk_label_set_text (GTK_LABEL (demo->description), font_desc);
   gtk_label_set_text (GTK_LABEL (demo->settings), features);
-  gtk_label_set_text (GTK_LABEL (demo->the_label), text);
+
+  if (do_waterfall)
+    {
+      waterfall = g_string_new ("");
+      int sizes[] = { 7, 8, 9, 10, 12, 14, 16, 20, 24, 30, 40, 50, 60, 70, 90 };
+      start = 0;
+      for (int i = 0; i < G_N_ELEMENTS (sizes); i++)
+        {
+          g_string_append (waterfall, text);
+          g_string_append_c (waterfall, '\n');
+
+          attr = pango_attr_size_new (sizes[i] * PANGO_SCALE);
+          attr->start_index = start;
+          attr->end_index = start + text_len;
+          pango_attr_list_insert (attrs, attr);
+
+          start += text_len + 1;
+        }
+      gtk_label_set_text (GTK_LABEL (demo->the_label), waterfall->str);
+      g_string_free (waterfall, TRUE);
+    }
+  else
+    gtk_label_set_text (GTK_LABEL (demo->the_label), text);
+
   gtk_label_set_attributes (GTK_LABEL (demo->the_label), attrs);
 
   g_free (font_desc);
@@ -911,6 +985,9 @@ entry_activated (GtkEntry *entry,
 
 static void unset_instance (GtkAdjustment *adjustment);
 
+static void start_or_stop_axis_animation (GtkButton *button,
+                                          gpointer   data);
+
 static void
 font_features_reset_variations (void)
 {
@@ -920,6 +997,8 @@ font_features_reset_variations (void)
   g_hash_table_iter_init (&iter, demo->axes);
   while (g_hash_table_iter_next (&iter, (gpointer *)NULL, (gpointer *)&axis))
     {
+      if (axis->tick_cb)
+        start_or_stop_axis_animation (GTK_BUTTON (axis->button), axis);
       gtk_adjustment_set_value (axis->adjustment, axis->default_value);
     }
 }
@@ -1005,8 +1084,8 @@ animate_axis (GtkWidget     *widget,
 }
 
 static void
-start_axis_animation (GtkButton *button,
-                      gpointer   data)
+start_or_stop_axis_animation (GtkButton *button,
+                              gpointer   data)
 {
   Axis *axis = data;
 
@@ -1044,7 +1123,6 @@ add_axis (hb_face_t             *hb_face,
   Axis *axis;
   char name[20];
   unsigned int name_len = 20;
-  GtkWidget *button;
 
   hb_ot_name_get_utf8 (hb_face, ax->name_id, HB_LANGUAGE_INVALID, &name_len, name);
 
@@ -1067,17 +1145,17 @@ add_axis (hb_face_t             *hb_face,
   gtk_widget_set_hexpand (axis_entry, FALSE);
   gtk_grid_attach (GTK_GRID (demo->variations_grid), axis_entry, 2, i, 1, 1);
 
-  axis = g_new (Axis, 1);
+  axis = g_new0 (Axis, 1);
   axis->tag = ax->tag;
   axis->adjustment = adjustment;
   axis->default_value = ax->default_value;
   g_hash_table_add (demo->axes, axis);
 
-  button = gtk_button_new_from_icon_name ("media-playback-start");
-  gtk_widget_add_css_class (GTK_WIDGET (button), "circular");
-  gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
-  g_signal_connect (button, "clicked", G_CALLBACK (start_axis_animation), axis);
-  gtk_grid_attach (GTK_GRID (demo->variations_grid), button, 3, i, 1, 1);
+  axis->button = gtk_button_new_from_icon_name ("media-playback-start");
+  gtk_widget_add_css_class (GTK_WIDGET (axis->button), "circular");
+  gtk_widget_set_valign (GTK_WIDGET (axis->button), GTK_ALIGN_CENTER);
+  g_signal_connect (axis->button, "clicked", G_CALLBACK (start_or_stop_axis_animation), axis);
+  gtk_grid_attach (GTK_GRID (demo->variations_grid), axis->button, 3, i, 1, 1);
 
   adjustment_changed (adjustment, GTK_ENTRY (axis_entry));
 
@@ -1357,7 +1435,7 @@ done:
   g_free (design_coords);
 }
 
-G_MODULE_EXPORT void
+static void
 font_features_font_changed (void)
 {
   update_basic ();
@@ -1366,7 +1444,7 @@ font_features_font_changed (void)
   update_font_variations ();
 }
 
-G_MODULE_EXPORT void
+static void
 font_features_script_changed (void)
 {
   update_features ();
@@ -1400,35 +1478,26 @@ font_features_reset_features (void)
     }
 }
 
-static char *text;
-
 static void
-switch_to_entry (void)
-{
-  text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (demo->the_entry)));
-  gtk_stack_set_visible_child_name (GTK_STACK (demo->stack), "entry");
-  gtk_widget_grab_focus (demo->the_entry);
-}
-
-static void
-switch_to_label (void)
-{
-  g_free (text);
-  text = NULL;
-  gtk_stack_set_visible_child_name (GTK_STACK (demo->stack), "label");
-  update_display ();
-}
-
-G_MODULE_EXPORT void
 font_features_toggle_edit (void)
 {
-  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (demo->stack)), "label") == 0)
-    switch_to_entry ();
+  if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (demo->stack)), "entry") != 0)
+    {
+      g_free (demo->text);
+      demo->text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (demo->the_entry)));
+      gtk_stack_set_visible_child_name (GTK_STACK (demo->stack), "entry");
+      gtk_widget_grab_focus (demo->the_entry);
+      gtk_adjustment_set_value (gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (demo->swin)), 0);
+    }
   else
-    switch_to_label ();
+    {
+      g_clear_pointer (&demo->text, g_free);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (demo->plain_toggle), TRUE);
+      update_display ();
+    }
 }
 
-G_MODULE_EXPORT void
+static void
 font_features_stop_edit (void)
 {
   g_signal_emit_by_name (demo->edit_toggle, "clicked");
@@ -1443,8 +1512,7 @@ entry_key_press (GtkEventController *controller,
 {
   if (keyval == GDK_KEY_Escape)
     {
-      gtk_editable_set_text (GTK_EDITABLE (entry), text);
-      font_features_stop_edit ();
+      gtk_editable_set_text (GTK_EDITABLE (entry), demo->text);
       return GDK_EVENT_STOP;
     }
 
@@ -1470,6 +1538,12 @@ do_font_features (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback (scope, font_features_reset_basic);
       gtk_builder_cscope_add_callback (scope, font_features_reset_features);
       gtk_builder_cscope_add_callback (scope, font_features_reset_variations);
+      gtk_builder_cscope_add_callback (scope, font_features_toggle_plain);
+      gtk_builder_cscope_add_callback (scope, font_features_toggle_edit);
+      gtk_builder_cscope_add_callback (scope, font_features_stop_edit);
+      gtk_builder_cscope_add_callback (scope, font_features_font_changed);
+      gtk_builder_cscope_add_callback (scope, font_features_script_changed);
+      gtk_builder_cscope_add_callback (scope, font_features_notify_waterfall);
       gtk_builder_set_scope (builder, scope);
 
       demo = g_new0 (FontFeaturesDemo, 1);
@@ -1487,13 +1561,17 @@ do_font_features (GtkWidget *do_widget)
       demo->feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
       demo->stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
       demo->the_entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
+      demo->plain_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "plain_toggle"));
+      demo->waterfall_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "waterfall_toggle"));
       demo->edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
+      demo->size_scale = GTK_WIDGET (gtk_builder_get_object (builder, "size_scale"));
       demo->size_entry = GTK_WIDGET (gtk_builder_get_object (builder, "size_entry"));
       demo->size_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "size_adjustment"));
       demo->letterspacing_entry = GTK_WIDGET (gtk_builder_get_object (builder, "letterspacing_entry"));
       demo->letterspacing_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "letterspacing_adjustment"));
       demo->line_height_entry = GTK_WIDGET (gtk_builder_get_object (builder, "line_height_entry"));
       demo->line_height_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "line_height_adjustment"));
+      demo->swin = GTK_WIDGET (gtk_builder_get_object (builder, "swin"));
 
       basic_value_changed (demo->size_adjustment, demo->size_entry);
       basic_value_changed (demo->letterspacing_adjustment, demo->letterspacing_entry);
