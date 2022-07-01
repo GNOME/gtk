@@ -325,7 +325,6 @@ add_check_group (GtkWidget   *box,
 {
   GtkWidget *label;
   GtkWidget *group;
-  PangoAttrList *attrs;
   int i;
 
   group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -335,10 +334,7 @@ add_check_group (GtkWidget   *box,
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
+  gtk_widget_add_css_class (label, "heading");
   gtk_box_append (GTK_BOX (group), label);
 
   for (i = 0; tags[i]; i++)
@@ -386,7 +382,6 @@ add_radio_group (GtkWidget *box,
   GtkWidget *group;
   int i;
   GtkWidget *group_button = NULL;
-  PangoAttrList *attrs;
 
   group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_halign (group, GTK_ALIGN_START);
@@ -395,10 +390,7 @@ add_radio_group (GtkWidget *box,
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
+  gtk_widget_add_css_class (label, "heading");
   gtk_box_append (GTK_BOX (group), label);
 
   for (i = 0; tags[i]; i++)
@@ -1400,9 +1392,10 @@ update_font_variations (void)
       gtk_label_set_xalign (GTK_LABEL (label), 0);
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
-      gtk_grid_attach (GTK_GRID (demo->variations_grid), label, 0, -1, 2, 1);
+      gtk_grid_attach (GTK_GRID (demo->variations_grid), label, 0, -1, 1, 1);
 
       combo = gtk_combo_box_text_new ();
+      gtk_widget_set_halign (combo, GTK_ALIGN_START);
       gtk_widget_set_valign (combo, GTK_ALIGN_BASELINE);
 
       gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "");
@@ -1419,7 +1412,7 @@ update_font_variations (void)
             }
         }
 
-      gtk_grid_attach (GTK_GRID (demo->variations_grid), combo, 1, -1, 2, 1);
+      gtk_grid_attach (GTK_GRID (demo->variations_grid), combo, 1, -1, 3, 1);
       g_signal_connect (combo, "changed", G_CALLBACK (instance_changed), NULL);
       demo->instance_combo = combo;
    }
