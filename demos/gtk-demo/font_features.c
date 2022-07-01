@@ -1067,7 +1067,7 @@ add_axis (hb_face_t             *hb_face,
   gtk_widget_set_hexpand (axis_entry, FALSE);
   gtk_grid_attach (GTK_GRID (demo->variations_grid), axis_entry, 2, i, 1, 1);
 
-  axis = g_new (Axis, 1);
+  axis = g_new0 (Axis, 1);
   axis->tag = ax->tag;
   axis->adjustment = adjustment;
   axis->default_value = ax->default_value;
