@@ -356,10 +356,10 @@ do_listview_settings (GtkWidget *do_widget)
       g_type_ensure (SETTINGS_TYPE_KEY);
 
       scope = gtk_builder_cscope_new ();
-      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_enabled", (GCallback)search_enabled);
-      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "search_changed", (GCallback)search_changed);
-      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "stop_search", (GCallback)stop_search);
-      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope), "item_value_changed", (GCallback)item_value_changed);
+      gtk_builder_cscope_add_callback (scope, search_enabled);
+      gtk_builder_cscope_add_callback (scope, search_changed);
+      gtk_builder_cscope_add_callback (scope, stop_search);
+      gtk_builder_cscope_add_callback (scope, item_value_changed);
 
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);

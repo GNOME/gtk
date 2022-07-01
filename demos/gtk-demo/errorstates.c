@@ -90,12 +90,9 @@ do_errorstates (GtkWidget *do_widget)
       toplevel = GTK_WIDGET (gtk_widget_get_root (do_widget));
 
       scope = gtk_builder_cscope_new ();
-      gtk_builder_cscope_add_callback_symbols (GTK_BUILDER_CSCOPE (scope),
-              "validate_more_details", G_CALLBACK (validate_more_details),
-              "mode_switch_state_set", G_CALLBACK (mode_switch_state_set),
-              "level_scale_value_changed", G_CALLBACK (level_scale_value_changed),
-              NULL);
-
+      gtk_builder_cscope_add_callback (scope, validate_more_details);
+      gtk_builder_cscope_add_callback (scope, mode_switch_state_set);
+      gtk_builder_cscope_add_callback (scope, level_scale_value_changed);
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
       gtk_builder_expose_object (builder, "toplevel", G_OBJECT (toplevel));

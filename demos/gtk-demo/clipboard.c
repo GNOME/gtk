@@ -341,16 +341,13 @@ do_clipboard (GtkWidget *do_widget)
       GtkWidget *button;
 
       scope = gtk_builder_cscope_new ();
-      gtk_builder_cscope_add_callback_symbols (GTK_BUILDER_CSCOPE (scope),
-                                               "copy_button_clicked", G_CALLBACK (copy_button_clicked),
-                                               "paste_button_clicked", G_CALLBACK (paste_button_clicked),
-                                               "source_changed_cb", G_CALLBACK (source_changed_cb),
-                                               "text_changed_cb", G_CALLBACK (text_changed_cb),
-                                               "open_file_cb", G_CALLBACK (open_file_cb),
-                                               "on_drop", G_CALLBACK (on_drop),
-                                               "drag_prepare", G_CALLBACK (drag_prepare),
-                                               NULL);
-
+      gtk_builder_cscope_add_callback (scope, copy_button_clicked);
+      gtk_builder_cscope_add_callback (scope, paste_button_clicked);
+      gtk_builder_cscope_add_callback (scope, source_changed_cb);
+      gtk_builder_cscope_add_callback (scope, text_changed_cb);
+      gtk_builder_cscope_add_callback (scope, open_file_cb);
+      gtk_builder_cscope_add_callback (scope, on_drop);
+      gtk_builder_cscope_add_callback (scope, drag_prepare);
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
       gtk_builder_add_from_resource (builder, "/clipboard/clipboard.ui", NULL);

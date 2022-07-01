@@ -2081,26 +2081,23 @@ activate (GApplication *app)
 
   builder = gtk_builder_new ();
   scope = gtk_builder_cscope_new ();
-  gtk_builder_cscope_add_callback_symbols (GTK_BUILDER_CSCOPE (scope),
-          "on_entry_icon_release", (GCallback)on_entry_icon_release,
-          "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed,
-          "on_record_button_toggled", (GCallback)on_record_button_toggled,
-          "on_page_combo_changed", (GCallback)on_page_combo_changed,
-          "on_range_from_changed", (GCallback)on_range_from_changed,
-          "on_range_to_changed", (GCallback)on_range_to_changed,
-          "on_picture_drag_prepare", (GCallback)on_picture_drag_prepare,
-          "on_picture_drop", (GCallback)on_picture_drop,
-          "tab_close_cb", (GCallback)tab_close_cb,
-          "increase_icon_size", (GCallback)increase_icon_size,
-          "decrease_icon_size", (GCallback)decrease_icon_size,
-          "reset_icon_size", (GCallback)reset_icon_size,
-          "osd_frame_pressed", (GCallback)osd_frame_pressed,
-          "age_entry_changed", (GCallback)age_entry_changed,
-          "validate_more_details", (GCallback)validate_more_details,
-          "mode_switch_state_set", (GCallback)mode_switch_state_set,
-          "level_scale_value_changed", (GCallback)level_scale_value_changed,
-          "transition_speed_changed", (GCallback)transition_speed_changed,
-          NULL);
+  gtk_builder_cscope_add_callback (scope, on_entry_icon_release);
+  gtk_builder_cscope_add_callback (scope, on_scale_button_value_changed);
+  gtk_builder_cscope_add_callback (scope, on_record_button_toggled);
+  gtk_builder_cscope_add_callback (scope, on_page_combo_changed);
+  gtk_builder_cscope_add_callback (scope, on_range_from_changed);
+  gtk_builder_cscope_add_callback (scope, on_range_to_changed);
+  gtk_builder_cscope_add_callback (scope, on_picture_drag_prepare);
+  gtk_builder_cscope_add_callback (scope, on_picture_drop);
+  gtk_builder_cscope_add_callback (scope, tab_close_cb);
+  gtk_builder_cscope_add_callback (scope, increase_icon_size);
+  gtk_builder_cscope_add_callback (scope, decrease_icon_size);
+  gtk_builder_cscope_add_callback (scope, osd_frame_pressed);
+  gtk_builder_cscope_add_callback (scope, age_entry_changed);
+  gtk_builder_cscope_add_callback (scope, validate_more_details);
+  gtk_builder_cscope_add_callback (scope, mode_switch_state_set);
+  gtk_builder_cscope_add_callback (scope, level_scale_value_changed);
+  gtk_builder_cscope_add_callback (scope, transition_speed_changed);
   gtk_builder_set_scope (builder, scope);
   g_object_unref (scope);
   if (!gtk_builder_add_from_resource (builder, "/org/gtk/WidgetFactory4/widget-factory.ui", &error))
