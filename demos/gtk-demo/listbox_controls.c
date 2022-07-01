@@ -42,8 +42,7 @@ do_listbox_controls (GtkWidget *do_widget)
       GtkBuilder *builder;
 
       scope = gtk_builder_cscope_new ();
-      gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (scope),
-                                              "row_activated", G_CALLBACK (row_activated));
+      gtk_builder_cscope_add_callback (scope, row_activated);
       builder = gtk_builder_new ();
       gtk_builder_set_scope (builder, scope);
 
