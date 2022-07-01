@@ -188,9 +188,11 @@
                           <object class="GtkLabel">
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">OpenType Features</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"></attribute>
-                            </attributes>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <style>
+                              <class name="title-4"/>
+                            </style>
                           </object>
                         </child>
                         <child>
@@ -219,9 +221,11 @@
                           <object class="GtkLabel" id="variations_heading">
                             <property name="label" translatable="yes">Variation Axes</property>
                             <property name="xalign">0</property>
-                            <attributes>
-                              <attribute name="weight" value="bold"></attribute>
-                            </attributes>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <style>
+                              <class name="title-4"/>
+                            </style>
                           </object>
                         </child>
                         <child>
