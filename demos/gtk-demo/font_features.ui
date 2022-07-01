@@ -81,7 +81,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkScale">
+                          <object class="GtkScale" id="size_scale">
                             <property name="hexpand">1</property>
                             <property name="width-request">100</property>
                             <property name="valign">baseline</property>
@@ -242,19 +242,21 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="hscrollbar-policy">never</property>
-            <property name="vscrollbar-policy">automatic</property>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
+            <property name="margin-start">20</property>
+            <property name="margin-end">20</property>
+            <property name="margin-top">20</property>
+            <property name="margin-bottom">20</property>
+            <property name="spacing">20</property>
             <child>
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <property name="hexpand">1</property>
+              <object class="GtkScrolledWindow" id="swin">
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">automatic</property>
+                <property name="propagate-natural-height">1</property>
                 <property name="vexpand">1</property>
-                <property name="margin-start">20</property>
-                <property name="margin-end">20</property>
-                <property name="margin-top">20</property>
-                <property name="margin-bottom">20</property>
-                <property name="spacing">20</property>
                 <child>
                   <object class="GtkStack" id="stack">
                     <child>
@@ -290,15 +292,34 @@
                     </child>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="settings">
+                <property name="wrap">1</property>
+                <property name="xalign">0</property>
+                <property name="valign">end</property>
+                <property name="width-chars">50</property>
+                <property name="max-width-chars">50</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <style>
+                  <class name="monospace"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="spacing">10</property>
                 <child>
-                  <object class="GtkLabel" id="settings">
+                  <object class="GtkLabel" id="description">
                     <property name="wrap">1</property>
+                    <property name="wrap-mode">char</property>
                     <property name="xalign">0</property>
                     <property name="valign">end</property>
                     <property name="width-chars">50</property>
                     <property name="max-width-chars">50</property>
                     <property name="hexpand">1</property>
-                    <property name="vexpand">1</property>
                     <style>
                       <class name="monospace"/>
                     </style>
@@ -306,29 +327,36 @@
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="spacing">10</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <property name="valign">end</property>
                     <child>
-                      <object class="GtkLabel" id="description">
-                        <property name="wrap">1</property>
-                        <property name="wrap-mode">char</property>
-                        <property name="xalign">0</property>
-                        <property name="valign">end</property>
-                        <property name="width-chars">50</property>
-                        <property name="max-width-chars">50</property>
-                        <property name="hexpand">1</property>
-                        <style>
-                          <class name="monospace"/>
-                        </style>
+                      <object class="GtkToggleButton" id="plain_toggle">
+                        <property name="label" translatable="yes">Plain</property>
+                        <property name="active">1</property>
+                        <property name="valign">baseline</property>
+                        <signal name="toggled" handler="font_features_toggle_plain"/>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkToggleButton" id="edit_toggle">
-                        <property name="icon-name">document-edit-symbolic</property>
-                        <property name="halign">end</property>
-                        <property name="valign">end</property>
-                        <signal name="toggled" handler="font_features_toggle_edit"/>
+                      <object class="GtkToggleButton" id="waterfall_toggle">
+                        <property name="label" translatable="yes">Waterfall</property>
+                        <property name="valign">baseline</property>
+                        <property name="group">plain_toggle</property>
+                        <signal name="toggled" handler="font_features_toggle_plain"/>
+                        <signal name="notify::active" handler="font_features_notify_waterfall"/>
                       </object>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="edit_toggle">
+                    <property name="group">waterfall_toggle</property>
+                    <property name="icon-name">document-edit-symbolic</property>
+                    <property name="halign">end</property>
+                    <property name="valign">end</property>
+                    <signal name="clicked" handler="font_features_toggle_edit"/>
                   </object>
                 </child>
               </object>
