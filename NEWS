@@ -1,3 +1,22 @@
+Overview of Changes in 4.6.6, 02-07-2022
+========================================
+
+* Fix translations in GTKs own ui files
+
+* Wayland:
+ - Fix a problem with the activation protocol
+ - Don't force the HighContrast icontheme
+
+* Windows:
+ - Fix a problem with builtin icons if the
+   hicolor icontheme is not installed
+
+* Translation updates:
+ Brazilian Portuguese
+ Russian
+ Turkish
+
+
 Overview of Changes in 4.6.5, 27-05-2022
 ========================================
 
