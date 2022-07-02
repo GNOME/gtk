@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-06-22 19:18+0000\n"
-"PO-Revision-Date: 2022-06-23 12:41+0300\n"
+"POT-Creation-Date: 2022-06-25 18:36+0000\n"
+"PO-Revision-Date: 2022-06-30 11:34+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -532,7 +532,7 @@ msgstr "Выход из спящего режима"
 #: gdk/keyname-table.h:6916
 msgctxt "keyboard label"
 msgid "Suspend"
-msgstr "Ждущий режим"
+msgstr "Режим ожидания"
 
 #: gdk/loaders/gdkjpeg.c:63
 #, c-format
@@ -2688,7 +2688,7 @@ msgstr "_Забыть пароль немедленно"
 
 #: gtk/gtkmountoperation.c:764
 msgid "Remember password until you _logout"
-msgstr "Запомнить пароль _до выхода из сеанса"
+msgstr "Запомнить пароль до _выхода из системы"
 
 #: gtk/gtkmountoperation.c:775
 msgid "Remember _forever"
