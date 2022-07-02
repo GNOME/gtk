@@ -60,13 +60,15 @@ typedef struct {
   GtkWidget *variations_grid;
   GtkWidget *instance_combo;
   GtkWidget *stack;
-  GtkWidget *the_entry;
+  GtkWidget *entry;
   GtkWidget *plain_toggle;
   GtkWidget *waterfall_toggle;
   GtkWidget *edit_toggle;
   GtkAdjustment *size_adjustment;
   GtkAdjustment *letterspacing_adjustment;
   GtkAdjustment *line_height_adjustment;
+  GtkWidget *foreground;
+  GtkWidget *background;
   GtkWidget *size_scale;
   GtkWidget *size_entry;
   GtkWidget *letterspacing_entry;
@@ -77,6 +79,7 @@ typedef struct {
   GHashTable *axes;
   char *text;
   GtkWidget *swin;
+  GtkCssProvider *provider;
 } FontFeaturesDemo;
 
 static void
@@ -168,11 +171,31 @@ basic_entry_activated (GtkEntry *entry,
 }
 
 static void
+color_set_cb (void)
+{
+  update_display ();
+}
+
+static void
+swap_colors (void)
+{
+  GdkRGBA fg;
+  GdkRGBA bg;
+
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->foreground), &fg);
+  gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->background), &bg);
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (demo->foreground), &bg);
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (demo->background), &fg);
+}
+
+static void
 font_features_reset_basic (void)
 {
   gtk_adjustment_set_value (demo->size_adjustment, 20);
   gtk_adjustment_set_value (demo->letterspacing_adjustment, 0);
   gtk_adjustment_set_value (demo->line_height_adjustment, 1);
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (demo->foreground), &(GdkRGBA){0.,0.,0.,1.});
+  gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (demo->background), &(GdkRGBA){1.,1.,1.,1.});
 }
 
 static void
@@ -431,7 +454,7 @@ static void
 update_display (void)
 {
   GString *s;
-  const char *text;
+  char *text;
   gboolean has_feature;
   GtkTreeIter iter;
   GtkTreeModel *model;
@@ -449,8 +472,15 @@ update_display (void)
   gboolean do_waterfall;
   GString *waterfall;
 
-  text = gtk_editable_get_text (GTK_EDITABLE (demo->the_entry));
-  text_len = strlen (text);
+  {
+    GtkTextBuffer *buffer;
+    GtkTextIter start_iter, end_iter;
+
+    buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (demo->entry));
+    gtk_text_buffer_get_bounds (buffer, &start_iter, &end_iter);
+    text = gtk_text_buffer_get_text (buffer, &start_iter, &end_iter, FALSE);
+    text_len = strlen (text);
+  }
 
   do_waterfall = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (demo->waterfall_toggle));
 
@@ -560,6 +590,32 @@ update_display (void)
       pango_attr_list_insert (attrs, attr);
     }
 
+    {
+      GdkRGBA rgba;
+      char *fg, *bg, *css;
+
+      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->foreground), &rgba);
+      attr = pango_attr_foreground_new (65535 * rgba.red,
+                                        65535 * rgba.green,
+                                        65535 * rgba.blue);
+      attr->start_index = start;
+      attr->end_index = end;
+      pango_attr_list_insert (attrs, attr);
+      attr = pango_attr_foreground_alpha_new (65535 * rgba.alpha);
+      attr->start_index = start;
+      attr->end_index = end;
+      pango_attr_list_insert (attrs, attr);
+
+      fg = gdk_rgba_to_string (&rgba);
+      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (demo->background), &rgba);
+      bg = gdk_rgba_to_string (&rgba);
+      css = g_strdup_printf (".font_features_background { caret-color: %s; background-color: %s; }", fg, bg);
+      gtk_css_provider_load_from_data (demo->provider, css, strlen (css));
+      g_free (css);
+      g_free (fg);
+      g_free (bg);
+    }
+
   if (do_waterfall)
     {
       attr = pango_attr_font_desc_new (desc);
@@ -629,6 +685,7 @@ update_display (void)
   pango_font_description_free (desc);
   g_free (features);
   pango_attr_list_unref (attrs);
+  g_free (text);
 }
 
 static PangoFont *
@@ -1477,9 +1534,9 @@ font_features_toggle_edit (void)
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (demo->stack)), "entry") != 0)
     {
       g_free (demo->text);
-      demo->text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (demo->the_entry)));
+      demo->text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (demo->entry)));
       gtk_stack_set_visible_child_name (GTK_STACK (demo->stack), "entry");
-      gtk_widget_grab_focus (demo->the_entry);
+      gtk_widget_grab_focus (demo->entry);
       gtk_adjustment_set_value (gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (demo->swin)), 0);
     }
   else
@@ -1501,11 +1558,11 @@ entry_key_press (GtkEventController *controller,
                  guint               keyval,
                  guint               keycode,
                  GdkModifierType     modifiers,
-                 GtkEntry           *entry)
+                 GtkTextView        *entry)
 {
   if (keyval == GDK_KEY_Escape)
     {
-      gtk_editable_set_text (GTK_EDITABLE (entry), demo->text);
+      gtk_text_buffer_set_text (gtk_text_view_get_buffer (entry), demo->text, -1);
       return GDK_EVENT_STOP;
     }
 
@@ -1528,6 +1585,8 @@ do_font_features (GtkWidget *do_widget)
       scope = gtk_builder_cscope_new ();
       gtk_builder_cscope_add_callback (scope, basic_value_changed);
       gtk_builder_cscope_add_callback (scope, basic_entry_activated);
+      gtk_builder_cscope_add_callback (scope, color_set_cb);
+      gtk_builder_cscope_add_callback (scope, swap_colors);
       gtk_builder_cscope_add_callback (scope, font_features_reset_basic);
       gtk_builder_cscope_add_callback (scope, font_features_reset_features);
       gtk_builder_cscope_add_callback (scope, font_features_reset_variations);
@@ -1553,7 +1612,7 @@ do_font_features (GtkWidget *do_widget)
       demo->script_lang = GTK_WIDGET (gtk_builder_get_object (builder, "script_lang"));
       demo->feature_list = GTK_WIDGET (gtk_builder_get_object (builder, "feature_list"));
       demo->stack = GTK_WIDGET (gtk_builder_get_object (builder, "stack"));
-      demo->the_entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
+      demo->entry = GTK_WIDGET (gtk_builder_get_object (builder, "entry"));
       demo->plain_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "plain_toggle"));
       demo->waterfall_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "waterfall_toggle"));
       demo->edit_toggle = GTK_WIDGET (gtk_builder_get_object (builder, "edit_toggle"));
@@ -1564,16 +1623,21 @@ do_font_features (GtkWidget *do_widget)
       demo->letterspacing_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "letterspacing_adjustment"));
       demo->line_height_entry = GTK_WIDGET (gtk_builder_get_object (builder, "line_height_entry"));
       demo->line_height_adjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "line_height_adjustment"));
+      demo->foreground = GTK_WIDGET (gtk_builder_get_object (builder, "foreground"));
+      demo->background = GTK_WIDGET (gtk_builder_get_object (builder, "background"));
       demo->swin = GTK_WIDGET (gtk_builder_get_object (builder, "swin"));
+
+      demo->provider = gtk_css_provider_new ();
+      gtk_style_context_add_provider (gtk_widget_get_style_context (demo->swin),
+                                      GTK_STYLE_PROVIDER (demo->provider), 800);
 
       basic_value_changed (demo->size_adjustment, demo->size_entry);
       basic_value_changed (demo->letterspacing_adjustment, demo->letterspacing_entry);
       basic_value_changed (demo->line_height_adjustment, demo->line_height_entry);
 
       controller = gtk_event_controller_key_new ();
-      g_object_set_data_full (G_OBJECT (demo->the_entry), "controller", g_object_ref (controller), g_object_unref);
-      g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), demo->the_entry);
-      gtk_widget_add_controller (demo->the_entry, controller);
+      g_signal_connect (controller, "key-pressed", G_CALLBACK (entry_key_press), demo->entry);
+      gtk_widget_add_controller (demo->entry, controller);
 
       add_check_group (demo->feature_list, _("Kerning"),
                        (const char *[]){ "kern", NULL });
