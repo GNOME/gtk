@@ -3,10 +3,17 @@
 
 #include "gtkcanvasitem.h"
 
+#include "gtkcanvassize.h"
+#include "gtkcanvasvec2private.h"
+
 G_BEGIN_DECLS
 
 GtkCanvasItem *         gtk_canvas_item_new                      (GtkCanvas             *canvas,
                                                                   gpointer               item);
+
+void                    gtk_canvas_item_validate_variables       (GtkCanvasItem         *self);
+const GtkCanvasVec2 *   gtk_canvas_item_get_measure_vec2         (GtkCanvasItem         *self,
+                                                                  GtkCanvasItemMeasurement measure);
 
 void                    gtk_canvas_item_clear_canvas             (GtkCanvasItem         *self);
 

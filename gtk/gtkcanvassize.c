@@ -26,93 +26,27 @@
 
 #include "config.h"
 
-#include "gtkcanvassizeprivate.h"
+#include "gtkcanvassize.h"
 
-#include "gtkcanvasbox.h"
-#include "gtkcanvasitem.h"
+#include "gtkcanvasboxprivate.h"
+#include "gtkcanvasitemprivate.h"
 #include "gtkcanvaspoint.h"
-#include "gtkwidget.h"
-
-/* {{{ Boilerplate */
-
-struct _GtkCanvasSizeClass
-{
-  const char *type_name;
-
-  void                  (* copy)                (GtkCanvasSize          *self,
-                                                 const GtkCanvasSize    *source);
-  void                  (* finish)              (GtkCanvasSize          *self);
-  gboolean              (* eval)                (const GtkCanvasSize    *self,
-                                                 float                  *width,
-                                                 float                  *height);
-};
+#include "gtkcanvasvec2private.h"
 
 G_DEFINE_BOXED_TYPE (GtkCanvasSize, gtk_canvas_size,
                      gtk_canvas_size_copy,
                      gtk_canvas_size_free)
 
-static gpointer
-gtk_canvas_size_alloc (const GtkCanvasSizeClass *class)
+struct _GtkCanvasSize
 {
-  GtkCanvasSize *self = g_slice_new (GtkCanvasSize);
-
-  self->class = class;
-
-  return self;
-}
-
-void
-gtk_canvas_size_init_copy (GtkCanvasSize       *self,
-                           const GtkCanvasSize *source)
-{
-  self->class = source->class;
-  self->class->copy (self, source);
-}
-
-void
-gtk_canvas_size_finish (GtkCanvasSize *self)
-{
-  self->class->finish (self);
-}
-
-/* }}} */
-/* {{{ ABSOLUTE */
-
-static void
-gtk_canvas_size_absolute_copy (GtkCanvasSize       *size,
-                               const GtkCanvasSize *source_size)
-{
-  GtkCanvasSizeAbsolute *self = &size->absolute;
-  const GtkCanvasSizeAbsolute *source = &source_size->absolute;
-
-  *self = *source;
-}
-
-static void
-gtk_canvas_size_absolute_finish (GtkCanvasSize *size)
-{
-}
-
-static gboolean
-gtk_canvas_size_absolute_eval (const GtkCanvasSize *size,
-                               float               *width,
-                               float               *height)
-{
-  const GtkCanvasSizeAbsolute *self = &size->absolute;
-
-  *width = self->width;
-  *height = self->height;
-
-  return TRUE;
-}
-
-static const GtkCanvasSizeClass GTK_CANVAS_SIZE_ABSOLUTE_CLASS =
-{
-  "GtkCanvasSizeAbsolute",
-  gtk_canvas_size_absolute_copy,
-  gtk_canvas_size_absolute_finish,
-  gtk_canvas_size_absolute_eval,
+  GtkCanvasVec2 vec2;
 };
+
+static GtkCanvasSize *
+gtk_canvas_size_alloc (void)
+{
+  return g_slice_new (GtkCanvasSize);
+}
 
 /**
  * gtk_canvas_size_new:
@@ -127,62 +61,13 @@ GtkCanvasSize *
 gtk_canvas_size_new (float width,
                      float height)
 {
-  GtkCanvasSizeAbsolute *self;
+  GtkCanvasSize *self;
 
-  self = gtk_canvas_size_alloc (&GTK_CANVAS_SIZE_ABSOLUTE_CLASS);
-  self->width = width;
-  self->height = height;
+  self = gtk_canvas_size_alloc ();
+  gtk_canvas_vec2_init_constant (&self->vec2, width, height);
 
-  return (GtkCanvasSize *) self;
+  return self;
 }
-
-/* }}} */
-/* {{{ BOX */
-
-static void
-gtk_canvas_size_box_copy (GtkCanvasSize       *size,
-                          const GtkCanvasSize *source_size)
-{
-  GtkCanvasSizeBox *self = &size->box;
-  const GtkCanvasSizeBox *source = &source_size->box;
-
-  *self = *source;
-
-  self->box = gtk_canvas_box_copy (source->box);
-}
-
-static void
-gtk_canvas_size_box_finish (GtkCanvasSize *size)
-{
-  GtkCanvasSizeBox *self = &size->box;
-
-  gtk_canvas_box_free (self->box);
-}
-
-static gboolean
-gtk_canvas_size_box_eval (const GtkCanvasSize *size,
-                          float               *width,
-                          float               *height)
-{
-  const GtkCanvasSizeBox *self = &size->box;
-  graphene_rect_t rect;
-
-  if (!gtk_canvas_box_eval (self->box, &rect))
-    return FALSE;
-
-  *width = rect.size.width;
-  *height = rect.size.height;
-
-  return TRUE;
-}
-
-static const GtkCanvasSizeClass GTK_CANVAS_SIZE_BOX_CLASS =
-{
-  "GtkCanvasSizeBox",
-  gtk_canvas_size_box_copy,
-  gtk_canvas_size_box_finish,
-  gtk_canvas_size_box_eval,
-};
 
 /**
  * gtk_canvas_size_new_from_box:
@@ -195,76 +80,12 @@ static const GtkCanvasSizeClass GTK_CANVAS_SIZE_BOX_CLASS =
 GtkCanvasSize *
 gtk_canvas_size_new_from_box (const GtkCanvasBox *box)
 {
-  GtkCanvasSizeBox *self;
+  GtkCanvasSize *self;
 
-  g_return_val_if_fail (box != NULL, NULL);
+  self = gtk_canvas_size_alloc ();
+  gtk_canvas_vec2_init_copy (&self->vec2, &box->size);
 
-  self = gtk_canvas_size_alloc (&GTK_CANVAS_SIZE_BOX_CLASS);
-
-  /* FIXME: We could potentially just copy the box's size here */
-  self->box = gtk_canvas_box_copy (box);
-
-  return (GtkCanvasSize *) self;
-}
-
-/* }}} */
-/* {{{ DISTANCE */
-
-static void
-gtk_canvas_size_distance_copy (GtkCanvasSize       *size,
-                               const GtkCanvasSize *source_size)
-{
-  const GtkCanvasSizeDistance *source = &source_size->distance;
-
-  gtk_canvas_size_init_distance (size, source->from, source->to);
-}
-
-static void
-gtk_canvas_size_distance_finish (GtkCanvasSize *size)
-{
-  GtkCanvasSizeDistance *self = &size->distance;
-
-  gtk_canvas_point_free (self->from);
-  gtk_canvas_point_free (self->to);
-}
-
-static gboolean
-gtk_canvas_size_distance_eval (const GtkCanvasSize *size,
-                               float               *width,
-                               float               *height)
-{
-  const GtkCanvasSizeDistance *self = &size->distance;
-  float x1, y1, x2, y2;
-
-  if (!gtk_canvas_point_eval (self->from, &x1, &y1) ||
-      !gtk_canvas_point_eval (self->from, &x2, &y2))
-    return FALSE;
-
-  *width = x1 - x2;
-  *height = y1 - y2;
-
-  return TRUE;
-}
-
-static const GtkCanvasSizeClass GTK_CANVAS_SIZE_DISTANCE_CLASS =
-{
-  "GtkCanvasSizeDistance",
-  gtk_canvas_size_distance_copy,
-  gtk_canvas_size_distance_finish,
-  gtk_canvas_size_distance_eval,
-};
-
-void
-gtk_canvas_size_init_distance (GtkCanvasSize        *size,
-                               const GtkCanvasPoint *from,
-                               const GtkCanvasPoint *to)
-{
-  GtkCanvasSizeDistance *self = &size->distance;
-  
-  self->class = &GTK_CANVAS_SIZE_DISTANCE_CLASS;
-
-  self->from = gtk_canvas_point_copy (from);
-  self->to = gtk_canvas_point_copy (to);
+  return self;
 }
 
 /**
@@ -273,7 +94,8 @@ gtk_canvas_size_init_distance (GtkCanvasSize        *size,
  * @to: point to where to compute the distance
  *
  * Creates a size for the given distance. Note that both width and height
- * can be negative if @to is smaller than @from in the corresponding dimension.
+ * can be negative if the coordinate of @to is smaller than @from in the
+ * corresponding dimension.
  *
  * Returns: a new size
  **/
@@ -282,132 +104,22 @@ gtk_canvas_size_new_distance (const GtkCanvasPoint *from,
                               const GtkCanvasPoint *to)
 {
   GtkCanvasSize *self;
+  graphene_vec2_t minus_one;
 
   g_return_val_if_fail (from != NULL, NULL);
   g_return_val_if_fail (to != NULL, NULL);
 
-  self = gtk_canvas_size_alloc (&GTK_CANVAS_SIZE_DISTANCE_CLASS);
+  graphene_vec2_init (&minus_one, -1.f, -1.f);
 
-  gtk_canvas_size_init_distance (self, from, to);
+  self = gtk_canvas_size_alloc ();
+  gtk_canvas_vec2_init_sum (&self->vec2,
+                            graphene_vec2_one (),
+                            from,
+                            &minus_one,
+                            to,
+                            NULL);
 
   return self;
-}
-
-/* }}} */
-/* {{{ MEASURE */
-
-static void
-gtk_canvas_size_measure_copy (GtkCanvasSize       *size,
-                              const GtkCanvasSize *source_size)
-{
-  const GtkCanvasSizeMeasure *source = &source_size->measure;
-
-  gtk_canvas_size_init_measure_item (size, source->item, source->measure);
-}
-
-static void
-gtk_canvas_size_measure_finish (GtkCanvasSize *size)
-{
-}
-
-static gboolean
-gtk_canvas_size_measure_eval (const GtkCanvasSize *size,
-                              float               *width,
-                              float               *height)
-{
-  const GtkCanvasSizeMeasure *self = &size->measure;
-  GtkWidget *widget;
-  int w, h;
-
-  if (self->item == NULL)
-    return FALSE;
-
-  widget = gtk_canvas_item_get_widget (self->item);
-  if (widget == NULL)
-    {
-      *width = 0;
-      *height = 0;
-      return TRUE;
-    }
-
-  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    {
-      switch (self->measure)
-      {
-        case GTK_CANVAS_ITEM_MEASURE_MIN_FOR_MIN:
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1, &w, NULL, NULL, NULL);
-          gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, w, &h, NULL, NULL, NULL);
-          break;
-        case GTK_CANVAS_ITEM_MEASURE_MIN_FOR_NAT:
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1, NULL, &w, NULL, NULL);
-          gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, w, &h, NULL, NULL, NULL);
-          break;
-        case GTK_CANVAS_ITEM_MEASURE_NAT_FOR_MIN:
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1, &w, NULL, NULL, NULL);
-          gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, w, NULL, &h, NULL, NULL);
-          break;
-        case GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT:
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1, NULL, &w, NULL, NULL);
-          gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, w, NULL, &h, NULL, NULL);
-          break;
-        default:
-          g_assert_not_reached ();
-          w = h = 0;
-          break;
-      }
-    }
-  else
-    {
-      switch (self->measure)
-      {
-        case GTK_CANVAS_ITEM_MEASURE_MIN_FOR_MIN:
-          gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1, &h, NULL, NULL, NULL);
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, h, &w, NULL, NULL, NULL);
-          break;
-        case GTK_CANVAS_ITEM_MEASURE_MIN_FOR_NAT:
-          gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1, NULL, &h, NULL, NULL);
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, h, &w, NULL, NULL, NULL);
-          break;
-        case GTK_CANVAS_ITEM_MEASURE_NAT_FOR_MIN:
-          gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1, &h, NULL, NULL, NULL);
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, h, NULL, &w, NULL, NULL);
-          break;
-        case GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT:
-          gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1, NULL, &h, NULL, NULL);
-          gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, h, NULL, &w, NULL, NULL);
-          break;
-        default:
-          g_assert_not_reached ();
-          w = h = 0;
-          break;
-      }
-    }
-
-  *width = w;
-  *height = h;
-
-  return TRUE;
-}
-
-static const GtkCanvasSizeClass GTK_CANVAS_SIZE_MEASURE_CLASS =
-{
-  "GtkCanvasSizeMeasure",
-  gtk_canvas_size_measure_copy,
-  gtk_canvas_size_measure_finish,
-  gtk_canvas_size_measure_eval,
-};
-
-void
-gtk_canvas_size_init_measure_item (GtkCanvasSize            *size,
-                                   GtkCanvasItem            *item,
-                                   GtkCanvasItemMeasurement  measure)
-{
-  GtkCanvasSizeMeasure *self = &size->measure;
-
-  self->class = &GTK_CANVAS_SIZE_MEASURE_CLASS;
-  
-  self->item = item;
-  self->measure = measure;
 }
 
 /**
@@ -428,67 +140,12 @@ gtk_canvas_size_new_measure_item (GtkCanvasItem            *item,
 
   g_return_val_if_fail (GTK_IS_CANVAS_ITEM (item), NULL);
 
-  self = gtk_canvas_size_alloc (&GTK_CANVAS_SIZE_MEASURE_CLASS);
-
-  gtk_canvas_size_init_measure_item (self, item, measure);
+  self = gtk_canvas_size_alloc ();
+  gtk_canvas_vec2_init_copy (&self->vec2,
+                             gtk_canvas_item_get_measure_vec2 (item, measure));
 
   return self;
 }
-
-/* }}} */
-/* {{{ REFERENCE */
-
-static void
-gtk_canvas_size_reference_copy (GtkCanvasSize       *size,
-                                const GtkCanvasSize *source_size)
-{
-  const GtkCanvasSizeReference *source = &source_size->reference;
-
-  gtk_canvas_size_init_reference (size, g_rc_box_acquire (source->reference));
-}
-
-static void
-gtk_canvas_size_reference_finish (GtkCanvasSize *size)
-{
-  const GtkCanvasSizeReference *self = &size->reference;
-
-  g_rc_box_release (self->reference);
-}
-
-static gboolean
-gtk_canvas_size_reference_eval (const GtkCanvasSize *size,
-                                float               *width,
-                                float               *height)
-{
-  const GtkCanvasSizeReference *self = &size->reference;
-
-  *width = self->reference->width;
-  *height = self->reference->height;
-
-  return TRUE;
-}
-
-static const GtkCanvasSizeClass GTK_CANVAS_SIZE_REFERENCE_CLASS =
-{
-  "GtkCanvasSizeReference",
-  gtk_canvas_size_reference_copy,
-  gtk_canvas_size_reference_finish,
-  gtk_canvas_size_reference_eval,
-};
-
-void
-gtk_canvas_size_init_reference (GtkCanvasSize   *size,
-                                graphene_size_t *reference)
-{
-  GtkCanvasSizeReference *self = &size->reference;
-
-  self->class = &GTK_CANVAS_SIZE_REFERENCE_CLASS;
-  
-  self->reference = reference;
-}
-
-/* }}} */
-/* {{{ PUBLIC API */
 
 GtkCanvasSize *
 gtk_canvas_size_copy (const GtkCanvasSize *self)
@@ -497,9 +154,8 @@ gtk_canvas_size_copy (const GtkCanvasSize *self)
 
   g_return_val_if_fail (self != NULL, NULL);
 
-  copy = gtk_canvas_size_alloc (self->class);
-
-  gtk_canvas_size_init_copy (copy, self);
+  copy = gtk_canvas_size_alloc ();
+  gtk_canvas_vec2_init_copy (&copy->vec2, &self->vec2);
 
   return copy;
 }
@@ -507,7 +163,9 @@ gtk_canvas_size_copy (const GtkCanvasSize *self)
 void
 gtk_canvas_size_free (GtkCanvasSize *self)
 {
-  gtk_canvas_size_finish (self);
+  g_return_if_fail (self != NULL);
+
+  gtk_canvas_vec2_finish (&self->vec2);
 
   g_slice_free (GtkCanvasSize, self);
 }
@@ -517,15 +175,21 @@ gtk_canvas_size_eval (const GtkCanvasSize *self,
                       float                *width,
                       float                *height)
 {
+  graphene_vec2_t vec2;
+
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (width != NULL, FALSE);
   g_return_val_if_fail (height != NULL, FALSE);
 
-  if (self->class->eval (self, width, height))
-    return TRUE;
+  if (!gtk_canvas_vec2_eval (&self->vec2, &vec2))
+    {
+      *width = 0;
+      *height = 0;
+      return FALSE;
+    }
 
-  *width = 0;
-  *height = 0;
-  return FALSE;
+  *width = graphene_vec2_get_x (&vec2);
+  *height = graphene_vec2_get_y (&vec2);
+  return TRUE;
 }
 

@@ -27,7 +27,7 @@ set_item_position (GtkCanvasItem *ci,
                                  0.0, 0.0);
   gtk_canvas_point_free (point);
 
-  point = gtk_canvas_point_new_from_box (viewport, x, y, 0, 0);
+  point = gtk_canvas_point_new_from_box (viewport, x, y);
   gtk_canvas_box_free (viewport);
   size = gtk_canvas_size_new (0, 0);
   box = gtk_canvas_box_new (point, size, x, y);

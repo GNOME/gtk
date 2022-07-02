@@ -3,25 +3,22 @@
 
 #include "gtkcanvasbox.h"
 
-#include "gtkcanvaspointprivate.h"
-#include "gtkcanvassizeprivate.h"
+#include "gtkcanvasvec2private.h"
 
 G_BEGIN_DECLS
 
 struct _GtkCanvasBox
 {
-  GtkCanvasPoint point;
-  GtkCanvasSize size;
-  float origin_x;
-  float origin_y;
+  GtkCanvasVec2 point;
+  GtkCanvasVec2 size;
+  graphene_vec2_t origin;
 };
 
 
 void                    gtk_canvas_box_init                     (GtkCanvasBox           *self,
-                                                                 const GtkCanvasPoint   *point,
-                                                                 const GtkCanvasSize    *size,
-                                                                 float                   origin_x,
-                                                                 float                   origin_y);
+                                                                 const GtkCanvasVec2    *point,
+                                                                 const GtkCanvasVec2    *size,
+                                                                 const graphene_vec2_t  *origin);
 void                    gtk_canvas_box_init_copy                (GtkCanvasBox           *self,
                                                                  const GtkCanvasBox     *source);
 void                    gtk_canvas_box_finish                   (GtkCanvasBox           *self);

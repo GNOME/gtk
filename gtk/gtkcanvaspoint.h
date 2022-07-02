@@ -50,9 +50,7 @@ GtkCanvasPoint *        gtk_canvas_point_new                    (float          
 GDK_AVAILABLE_IN_ALL
 GtkCanvasPoint *        gtk_canvas_point_new_from_box           (const GtkCanvasBox     *box,
                                                                  float                   origin_x,
-                                                                 float                   origin_y,
-                                                                 float                   offset_x,
-                                                                 float                   offset_y);
+                                                                 float                   origin_y);
 GDK_AVAILABLE_IN_ALL
 GtkCanvasPoint *        gtk_canvas_point_new_from_item          (GtkCanvasItem          *item,
                                                                  float                   origin_x,

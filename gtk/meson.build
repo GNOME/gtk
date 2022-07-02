@@ -32,6 +32,7 @@ gtk_private_sources = files([
   'gtkbuilderprecompile.c',
   'gtkbuiltinicon.c',
   'gtkcellareaboxcontext.c',
+  'gtkcanvasvec2.c',
   'gtkcoloreditor.c',
   'gtkcolorplane.c',
   'gtkcolorpicker.c',

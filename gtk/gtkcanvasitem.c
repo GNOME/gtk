@@ -23,8 +23,6 @@
 
 #include "gtkcanvas.h"
 #include "gtkcanvasboxprivate.h"
-#include "gtkcanvaspointprivate.h"
-#include "gtkcanvassizeprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtkwidget.h"
@@ -44,6 +42,8 @@ struct _GtkCanvasItem
   gpointer item;
   GtkWidget *widget;
   GtkCanvasBox bounds;
+
+  GtkCanvasVec2 size_vecs[4];
 };
 
 enum
@@ -75,6 +75,18 @@ gtk_canvas_item_dispose (GObject *object)
   gtk_canvas_box_finish (&self->bounds);
 
   G_OBJECT_CLASS (gtk_canvas_item_parent_class)->dispose (object);
+}
+
+static void
+gtk_canvas_item_finalize (GObject *object)
+{
+  GtkCanvasItem *self = GTK_CANVAS_ITEM (object);
+  int i;
+
+  for (i = 0; i < 4; i++)
+    gtk_canvas_vec2_finish (&self->size_vecs[i]);
+
+  G_OBJECT_CLASS (gtk_canvas_item_parent_class)->finalize (object);
 }
 
 static void
@@ -139,6 +151,7 @@ gtk_canvas_item_class_init (GtkCanvasItemClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->dispose = gtk_canvas_item_dispose;
+  gobject_class->finalize = gtk_canvas_item_finalize;
   gobject_class->get_property = gtk_canvas_item_get_property;
   gobject_class->set_property = gtk_canvas_item_set_property;
 
@@ -188,14 +201,14 @@ gtk_canvas_item_class_init (GtkCanvasItemClass *klass)
 static void
 gtk_canvas_item_init (GtkCanvasItem *self)
 {
-  GtkCanvasPoint point;
-  GtkCanvasSize size;
+  int i;
 
-  gtk_canvas_point_init (&point, 0, 0);
-  gtk_canvas_size_init_measure_item (&size, self, GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT);
-  gtk_canvas_box_init (&self->bounds, &point, &size, 0, 0);
-  gtk_canvas_size_finish (&size);
-  gtk_canvas_point_finish (&point);
+  for (i = 0; i < 4; i++)
+    gtk_canvas_vec2_init_variable (&self->size_vecs[i]);
+
+  gtk_canvas_vec2_init_constant (&self->bounds.point, 0, 0);
+  gtk_canvas_vec2_init_copy (&self->bounds.size, &self->size_vecs[GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT]);
+  graphene_vec2_init (&self->bounds.origin, 0, 0);
 }
 
 GtkCanvasItem *
@@ -213,6 +226,51 @@ gtk_canvas_item_new (GtkCanvas *canvas,
   self->item = item;
 
   return self;
+}
+
+void
+gtk_canvas_item_validate_variables (GtkCanvasItem *self)
+{
+  int w[4], h[4], i;
+
+  if (self->widget == NULL)
+    {
+      memset (w, 0, sizeof (w));
+      memset (h, 0, sizeof (h));
+    }
+  else
+    {
+      if (gtk_widget_get_request_mode (self->widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+        {
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_HORIZONTAL, -1, &w[0], &w[2], NULL, NULL);
+          w[1] = w[0];
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_VERTICAL, w[0], &h[0], &h[1], NULL, NULL);
+          w[3] = w[2];
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_VERTICAL, w[2], &h[2], &h[3], NULL, NULL);
+        }
+      else
+        {
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_VERTICAL, -1, &h[0], &h[2], NULL, NULL);
+          h[1] = h[0];
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_HORIZONTAL, h[0], &w[0], &w[1], NULL, NULL);
+          h[3] = h[2];
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_HORIZONTAL, h[2], &w[2], &w[3], NULL, NULL);
+        }
+    }
+
+  for (i = 0; i < 4; i++)
+    {
+      gtk_canvas_vec2_init_constant (
+          gtk_canvas_vec2_get_variable (&self->size_vecs[i]),
+          0, 0);
+    }
+}
+
+const GtkCanvasVec2 *
+gtk_canvas_item_get_measure_vec2 (GtkCanvasItem            *self,
+                                  GtkCanvasItemMeasurement  measure)
+{
+  return &self->size_vecs[measure];
 }
 
 /**

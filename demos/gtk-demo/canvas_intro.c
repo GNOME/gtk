@@ -27,7 +27,7 @@ bind_item (GtkListItemFactory *factory,
                             0.0, 0.0);
   gtk_canvas_point_free (point);
 
-  point = gtk_canvas_point_new_from_box (box, 0.5, 0.5, 0, 0);
+  point = gtk_canvas_point_new_from_box (box, 0.5, 0.5);
   gtk_canvas_box_free (box);
   size = gtk_canvas_size_new_measure_item (ci, GTK_CANVAS_ITEM_MEASURE_MIN_FOR_MIN);
   box = gtk_canvas_box_new (point, size, 0.5, 0.5);

@@ -23,7 +23,8 @@
 
 #include "gtkcanvasbox.h"
 #include "gtkcanvasitemprivate.h"
-#include "gtkcanvassizeprivate.h"
+#include "gtkcanvassize.h"
+#include "gtkcanvasvec2private.h"
 #include "gtkintl.h"
 #include "gtklistitemfactory.h"
 #include "gtkwidgetprivate.h"
@@ -53,7 +54,7 @@ struct _GtkCanvas
   GtkCanvasItems items;
   GHashTable *item_lookup;
 
-  GtkCanvasSize viewport_size;
+  GtkCanvasVec2 viewport_size;
 };
 
 enum
@@ -164,7 +165,7 @@ gtk_canvas_finalize (GObject *object)
   GtkCanvas *self = GTK_CANVAS (object);
 
   g_hash_table_unref (self->item_lookup);
-  gtk_canvas_size_finish (&self->viewport_size);
+  gtk_canvas_vec2_finish (&self->viewport_size);
 
   G_OBJECT_CLASS (gtk_canvas_parent_class)->finalize (object);
 }
@@ -218,6 +219,19 @@ gtk_canvas_set_property (GObject      *object,
 }
 
 static void
+gtk_canvas_validate_variables (GtkCanvas *self)
+{
+  int i;
+
+  for (i = 0; i < gtk_canvas_items_get_size (&self->items); i++)
+    {
+      GtkCanvasItem *ci = gtk_canvas_items_get (&self->items, i);
+
+      gtk_canvas_item_validate_variables (ci);
+    }
+}
+
+static void
 gtk_canvas_allocate (GtkWidget *widget,
                      int        width,
                      int        height,
@@ -226,8 +240,9 @@ gtk_canvas_allocate (GtkWidget *widget,
   GtkCanvas *self = GTK_CANVAS (widget);
   gsize i;
 
-  self->viewport_size.reference.reference->width = width;
-  self->viewport_size.reference.reference->height = height;
+  gtk_canvas_validate_variables (self);
+
+  gtk_canvas_vec2_init_constant (gtk_canvas_vec2_get_variable (&self->viewport_size), width, height);
 
   for (i = 0; i < gtk_canvas_items_get_size (&self->items); i++)
     {
@@ -317,8 +332,7 @@ gtk_canvas_init (GtkCanvas *self)
 {
   self->item_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  gtk_canvas_size_init_reference (&self->viewport_size,
-                                  g_rc_box_new0 (graphene_size_t));
+  gtk_canvas_vec2_init_variable (&self->viewport_size);
 }
 
 /**
@@ -494,5 +508,5 @@ gtk_canvas_lookup_item (GtkCanvas *self,
 const GtkCanvasSize *
 gtk_canvas_get_viewport_size (GtkCanvas *self)
 {
-  return &self->viewport_size;
+  return (const GtkCanvasSize *) &self->viewport_size;
 }
