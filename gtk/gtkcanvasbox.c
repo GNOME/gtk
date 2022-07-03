@@ -62,6 +62,23 @@ gtk_canvas_box_finish (GtkCanvasBox *self)
   gtk_canvas_vec2_finish (&self->size);
 }
 
+void
+gtk_canvas_box_init_variable (GtkCanvasBox *self)
+{
+  gtk_canvas_vec2_init_variable (&self->point);
+  gtk_canvas_vec2_init_variable (&self->size);
+  graphene_vec2_init (&self->origin, 0, 0);
+}
+
+void
+gtk_canvas_box_update_variable (GtkCanvasBox       *self,
+                                const GtkCanvasBox *other)
+{
+  gtk_canvas_vec2_init_copy (gtk_canvas_vec2_get_variable (&self->point), &other->point);
+  gtk_canvas_vec2_init_copy (gtk_canvas_vec2_get_variable (&self->size), &other->size);
+  graphene_vec2_init_from_vec2 (&self->origin, &other->origin);
+}
+
 /**
  * gtk_canvas_box_new_points:
  * @point1: the first point

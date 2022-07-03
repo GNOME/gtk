@@ -12,6 +12,10 @@ GtkCanvasItem *         gtk_canvas_item_new                      (GtkCanvas     
                                                                   gpointer               item);
 
 void                    gtk_canvas_item_validate_variables       (GtkCanvasItem         *self);
+void                    gtk_canvas_item_allocate                 (GtkCanvasItem         *self,
+                                                                  graphene_rect_t       *rect);
+gboolean                gtk_canvas_item_has_allocation           (GtkCanvasItem         *self,
+                                                                  graphene_rect_t       *rect);
 const GtkCanvasVec2 *   gtk_canvas_item_get_measure_vec2         (GtkCanvasItem         *self,
                                                                   GtkCanvasItemMeasurement measure);
 

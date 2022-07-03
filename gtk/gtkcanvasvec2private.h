@@ -91,8 +91,10 @@ void                    gtk_canvas_vec2_init_sum                (GtkCanvasVec2  
                                                                  const graphene_vec2_t  *scale,
                                                                  ...) G_GNUC_NULL_TERMINATED;
 
-void                    gtk_canvas_vec2_init_variable          (GtkCanvasVec2           *vec2);
-GtkCanvasVec2 *         gtk_canvas_vec2_get_variable           (GtkCanvasVec2           *vec2);
+void                    gtk_canvas_vec2_init_variable           (GtkCanvasVec2          *vec2);
+GtkCanvasVec2 *         gtk_canvas_vec2_get_variable            (GtkCanvasVec2          *vec2);
+
+gboolean                gtk_canvas_vec2_is_invalid              (GtkCanvasVec2          *vec2);
 
 G_END_DECLS
 

@@ -62,6 +62,11 @@ GDK_AVAILABLE_IN_ALL
 GtkCanvasBox *          gtk_canvas_box_new_points             (const GtkCanvasPoint     *point1,
                                                                const GtkCanvasPoint     *point2);
 
+GDK_AVAILABLE_IN_ALL
+const GtkCanvasBox *    gtk_canvas_box_get_item_bounds        (GtkCanvasItem            *item);
+GDK_AVAILABLE_IN_ALL
+const GtkCanvasBox *    gtk_canvas_box_get_item_allocation    (GtkCanvasItem            *item);
+
 G_END_DECLS
 
 #endif /* __GTK_BOX_H__ */

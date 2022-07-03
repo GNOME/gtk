@@ -23,6 +23,10 @@ void                    gtk_canvas_box_init_copy                (GtkCanvasBox   
                                                                  const GtkCanvasBox     *source);
 void                    gtk_canvas_box_finish                   (GtkCanvasBox           *self);
 
+void                    gtk_canvas_box_init_variable            (GtkCanvasBox           *self);
+void                    gtk_canvas_box_update_variable          (GtkCanvasBox           *self,
+                                                                 const GtkCanvasBox     *other);
+
 G_END_DECLS
 
 #endif /* __GTK_CANVAS_BOX_PRIVATE_H__ */

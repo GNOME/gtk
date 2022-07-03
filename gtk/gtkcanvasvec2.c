@@ -77,6 +77,12 @@ gtk_canvas_vec2_init_invalid (GtkCanvasVec2 *vec2)
   vec2->class = &GTK_CANVAS_VEC2_INVALID_CLASS;
 }
 
+gboolean
+gtk_canvas_vec2_is_invalid (GtkCanvasVec2 *vec2)
+{
+  return vec2->class == &GTK_CANVAS_VEC2_INVALID_CLASS;
+}
+
 /* }}} */
 /* {{{ CONSTANT */
 
