@@ -59,6 +59,8 @@ typedef struct {
   GtkWidget *script_lang;
   GtkWidget *feature_list;
   GtkWidget *variations_grid;
+  GtkWidget *colors_grid;
+  GtkWidget *first_palette;
   GtkWidget *instance_combo;
   GtkWidget *stack;
   GtkWidget *entry;
@@ -82,6 +84,7 @@ typedef struct {
   GtkWidget *swin;
   GtkCssProvider *provider;
   int sample;
+  int palette;
 } FontFeaturesDemo;
 
 static void
@@ -490,6 +493,7 @@ update_display (void)
   int text_len;
   gboolean do_waterfall;
   GString *waterfall;
+  char *palette;
 
   {
     GtkTextBuffer *buffer;
@@ -533,6 +537,10 @@ update_display (void)
       pango2_font_description_set_variations (desc, s->str);
       g_string_free (s, TRUE);
     }
+
+  palette = g_strdup_printf ("palette%u", demo->palette);
+  pango2_font_description_set_palette (desc, palette);
+  g_free (palette);
 
   font_desc = pango2_font_description_to_string (desc);
 
@@ -1190,6 +1198,8 @@ ease_out_cubic (double t)
   return p * p * p + 1;
 }
 
+static const guint64 period = G_TIME_SPAN_SECOND * 3;
+
 static gboolean
 animate_axis (GtkWidget     *widget,
               GdkFrameClock *frame_clock,
@@ -1201,13 +1211,13 @@ animate_axis (GtkWidget     *widget,
 
   now = g_get_monotonic_time ();
 
-  if (now >= axis->start_time + G_TIME_SPAN_SECOND)
+  if (now >= axis->start_time + period)
     {
-      axis->start_time += G_TIME_SPAN_SECOND;
+      axis->start_time += period;
       axis->increasing = !axis->increasing;
     }
 
-  value = (now - axis->start_time) / (double) G_TIME_SPAN_SECOND;
+  value = (now - axis->start_time) / (double) period;
 
   value = ease_out_cubic (value);
 
@@ -1244,7 +1254,7 @@ start_or_stop_axis_animation (GtkButton *button,
       lower = gtk_adjustment_get_lower (axis->adjustment);
       upper = gtk_adjustment_get_upper (axis->adjustment);
       value = value / (upper - lower);
-      axis->start_time = g_get_monotonic_time () - value * G_TIME_SPAN_SECOND;
+      axis->start_time = g_get_monotonic_time () - value * period;
       axis->increasing = TRUE;
     }
 }
@@ -1493,7 +1503,7 @@ denorm_coord (hb_ot_var_axis_info_t *axis, int coord)
 }
 
 static void
-update_font_variations (void)
+update_variations (void)
 {
   GtkWidget *child;
   Pango2Font *pango_font = NULL;
@@ -1576,12 +1586,124 @@ done:
 }
 
 static void
+palette_changed (GtkCheckButton *button)
+{
+  demo->palette = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "palette"));
+  update_display ();
+}
+
+static void
+update_colors (void)
+{
+  Pango2Font *pango_font = NULL;
+  hb_font_t *hb_font;
+  hb_face_t *hb_face;
+  GtkWidget *child;
+
+  while ((child = gtk_widget_get_first_child (demo->colors_grid)))
+    gtk_grid_remove (GTK_GRID (demo->colors_grid), child);
+
+  pango_font = get_pango_font ();
+  hb_font = pango2_font_get_hb_font (pango_font);
+  hb_face = hb_font_get_face (hb_font);
+
+  if (hb_ot_color_has_palettes (hb_face))
+    {
+      demo->first_palette = NULL;
+
+      for (unsigned int i = 0; i < hb_ot_color_palette_get_count (hb_face); i++)
+        {
+          hb_ot_name_id_t name_id;
+          char *name;
+          unsigned int n_colors;
+          hb_color_t *colors;
+          GtkWidget *palette;
+          GtkWidget *swatch;
+          hb_ot_color_palette_flags_t flags;
+          const char *str;
+          GtkWidget *toggle;
+
+          name_id = hb_ot_color_palette_get_name_id (hb_face, i);
+          if (name_id != HB_OT_NAME_ID_INVALID)
+            {
+              unsigned int len;
+              char buf[80];
+
+              len = sizeof (buf);
+              hb_ot_name_get_utf8 (hb_face, name_id, HB_LANGUAGE_INVALID, &len, buf);
+              name = g_strdup (buf);
+            }
+          else
+            name = g_strdup_printf ("Palette %d", i);
+
+          toggle = gtk_check_button_new_with_label (name);
+          if (i == demo->palette)
+            gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), TRUE);
+
+          g_object_set_data (G_OBJECT (toggle), "palette", GUINT_TO_POINTER (i));
+          g_signal_connect (toggle, "toggled", G_CALLBACK (palette_changed), NULL);
+
+          if (demo->first_palette)
+            gtk_check_button_set_group (GTK_CHECK_BUTTON (toggle), GTK_CHECK_BUTTON (demo->first_palette));
+          else
+            demo->first_palette = toggle;
+
+          g_free (name);
+
+          gtk_grid_attach (GTK_GRID (demo->colors_grid), toggle, 0, i, 1, 1);
+
+          flags = hb_ot_color_palette_get_flags (hb_face, i);
+          if ((flags & (HB_OT_COLOR_PALETTE_FLAG_USABLE_WITH_LIGHT_BACKGROUND |
+                        HB_OT_COLOR_PALETTE_FLAG_USABLE_WITH_DARK_BACKGROUND)) ==
+                        (HB_OT_COLOR_PALETTE_FLAG_USABLE_WITH_LIGHT_BACKGROUND |
+                         HB_OT_COLOR_PALETTE_FLAG_USABLE_WITH_DARK_BACKGROUND))
+            str = "(light, dark)";
+          else if (flags & HB_OT_COLOR_PALETTE_FLAG_USABLE_WITH_LIGHT_BACKGROUND)
+            str = "(light)";
+          else if (flags & HB_OT_COLOR_PALETTE_FLAG_USABLE_WITH_DARK_BACKGROUND)
+            str = "(dark)";
+          else
+            str = NULL;
+          if (str)
+            gtk_grid_attach (GTK_GRID (demo->colors_grid), gtk_label_new (str), 1, i, 1, 1);
+
+          n_colors = hb_ot_color_palette_get_colors (hb_face, i, 0, NULL, NULL);
+          colors = g_new (hb_color_t, n_colors);
+          n_colors = hb_ot_color_palette_get_colors (hb_face, i, 0, &n_colors, colors);
+
+          palette = gtk_grid_new ();
+          gtk_grid_attach (GTK_GRID (demo->colors_grid), palette, 2, i, 1, 1);
+
+          for (int k = 0; k < n_colors; k++)
+            {
+              swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
+                                     "rgba", &(GdkRGBA){ hb_color_get_red (colors[k])/255.,
+                                                         hb_color_get_green (colors[k])/255.,
+                                                         hb_color_get_blue (colors[k])/255.,
+                                                         hb_color_get_alpha (colors[k])/255.},
+                                     "width-request", 16,
+                                     "height-request", 16,
+                                     NULL);
+              gtk_grid_attach (GTK_GRID (palette), swatch, k % 8, k / 8, 1, 1);
+            }
+        }
+    }
+}
+
+static void
+font_features_reset_colors (void)
+{
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (demo->first_palette), TRUE);
+}
+
+static void
 font_features_font_changed (void)
 {
   update_basic ();
   update_script_combo ();
   update_features ();
-  update_font_variations ();
+  update_variations ();
+  update_colors ();
 }
 
 static void
@@ -1718,6 +1840,7 @@ do_font_features (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback (scope, font_features_reset_basic);
       gtk_builder_cscope_add_callback (scope, font_features_reset_features);
       gtk_builder_cscope_add_callback (scope, font_features_reset_variations);
+      gtk_builder_cscope_add_callback (scope, font_features_reset_colors);
       gtk_builder_cscope_add_callback (scope, font_features_toggle_plain);
       gtk_builder_cscope_add_callback (scope, font_features_toggle_edit);
       gtk_builder_cscope_add_callback (scope, font_features_stop_edit);
@@ -1756,6 +1879,8 @@ do_font_features (GtkWidget *do_widget)
       demo->foreground = GTK_WIDGET (gtk_builder_get_object (builder, "foreground"));
       demo->background = GTK_WIDGET (gtk_builder_get_object (builder, "background"));
       demo->swin = GTK_WIDGET (gtk_builder_get_object (builder, "swin"));
+      demo->variations_grid = GTK_WIDGET (gtk_builder_get_object (builder, "variations_grid"));
+      demo->colors_grid = GTK_WIDGET (gtk_builder_get_object (builder, "colors_grid"));
 
       demo->provider = gtk_css_provider_new ();
       gtk_style_context_add_provider (gtk_widget_get_style_context (demo->swin),
@@ -1810,7 +1935,6 @@ do_font_features (GtkWidget *do_widget)
                        (const char *[]){ "opbd", "lfbd", "rtbd", NULL });
       demo->feature_items = g_list_reverse (demo->feature_items);
 
-      demo->variations_grid = GTK_WIDGET (gtk_builder_get_object (builder, "variations_grid"));
       if (demo->instances == NULL)
         demo->instances = g_hash_table_new_full (instance_hash, instance_equal, NULL, free_instance);
       else

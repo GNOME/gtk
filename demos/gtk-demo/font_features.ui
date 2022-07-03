@@ -38,6 +38,7 @@
             <signal name="clicked" handler="font_features_reset_basic" swapped="no"/>
             <signal name="clicked" handler="font_features_reset_features" swapped="no"/>
             <signal name="clicked" handler="font_features_reset_variations" swapped="no"/>
+            <signal name="clicked" handler="font_features_reset_colors" swapped="no"/>
           </object>
         </child>
       </object>
@@ -290,6 +291,27 @@
                         </child>
                         <child>
                           <object class="GtkGrid" id="variations_grid">
+                            <property name="column-spacing">10</property>
+                            <property name="row-spacing">10</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkExpander">
+                        <child type="label">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Color Palettes</property>
+                            <property name="xalign">0</property>
+                            <property name="margin-top">10</property>
+                            <property name="margin-bottom">10</property>
+                            <style>
+                              <class name="title-4"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkGrid" id="colors_grid">
                             <property name="column-spacing">10</property>
                             <property name="row-spacing">10</property>
                           </object>
