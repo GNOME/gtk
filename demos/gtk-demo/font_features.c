@@ -1533,8 +1533,13 @@ font_features_toggle_edit (void)
 {
   if (strcmp (gtk_stack_get_visible_child_name (GTK_STACK (demo->stack)), "entry") != 0)
     {
+      GtkTextBuffer *buffer;
+      GtkTextIter start, end;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (demo->entry));
+      gtk_text_buffer_get_bounds (buffer, &start, &end);
       g_free (demo->text);
-      demo->text = g_strdup (gtk_editable_get_text (GTK_EDITABLE (demo->entry)));
+      demo->text = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
       gtk_stack_set_visible_child_name (GTK_STACK (demo->stack), "entry");
       gtk_widget_grab_focus (demo->entry);
       gtk_adjustment_set_value (gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (demo->swin)), 0);
