@@ -1780,15 +1780,30 @@ typedef struct {
   GtkWidget *example;
 } FeatureItem;
 
-static const char *
+static char *
 get_feature_display_name (hb_tag_t tag)
 {
   int i;
+  char buf[5] = { 0, };
+
+  hb_tag_to_string (tag, buf);
+
+  if (buf[0] == 's' && buf[1] == 's' && g_ascii_isdigit (buf[2]) && g_ascii_isdigit (buf[3]))
+    {
+      int num = (buf[2] - '0') * 10 + (buf[3] - '0');
+      return g_strdup_printf (g_dpgettext2 (NULL, "OpenType layout", "Stylistic Set %d"), num);
+    }
+
+  if (buf[0] == 'c' && buf[1] == 'v' && g_ascii_isdigit (buf[2]) && g_ascii_isdigit (buf[3]))
+    {
+      int num = (buf[2] - '0') * 10 + (buf[3] - '0');
+      return g_strdup_printf (g_dpgettext2 (NULL, "OpenType layout", "Character Variant %d"), num);
+    }
 
   for (i = 0; i < G_N_ELEMENTS (open_type_layout_features); i++)
     {
       if (tag == open_type_layout_features[i].tag)
-        return g_dpgettext2 (NULL, "OpenType layout", open_type_layout_features[i].name);
+        return g_strdup (g_dpgettext2 (NULL, "OpenType layout", open_type_layout_features[i].name));
     }
 
   return NULL;
@@ -1854,7 +1869,12 @@ find_affected_text (GtkFontChooserWidget *fontchooser,
   hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
   G_GNUC_END_IGNORE_DEPRECATIONS
 
-  if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, feature_tag, &feature_index))
+  if (hb_ot_layout_language_find_feature (hb_face,
+                                          HB_OT_TAG_GSUB,
+                                          script_index,
+                                          lang_index,
+                                          feature_tag,
+                                          &feature_index))
     {
       unsigned int lookup_indexes[32];
       unsigned int lookup_count = 32;
@@ -1869,22 +1889,27 @@ find_affected_text (GtkFontChooserWidget *fontchooser,
                                                  lookup_indexes);
       if (count > 0)
         {
-          hb_set_t* glyphs_before = NULL;
-          hb_set_t* glyphs_input  = NULL;
-          hb_set_t* glyphs_after  = NULL;
-          hb_set_t* glyphs_output = NULL;
+          hb_set_t *glyphs_before = NULL;
+          hb_set_t *glyphs_after = NULL;
+          hb_set_t *glyphs_output = NULL;
+          hb_set_t *glyphs_input;
           hb_codepoint_t gid;
+          char buf[5] = { 0, };
 
-          glyphs_input  = hb_set_create ();
+          hb_tag_to_string (feature_tag, buf);
 
-          // XXX For now, just look at first index
-          hb_ot_layout_lookup_collect_glyphs (hb_face,
-                                              HB_OT_TAG_GSUB,
-                                              lookup_indexes[0],
-                                              glyphs_before,
-                                              glyphs_input,
-                                              glyphs_after,
-                                              glyphs_output);
+          glyphs_input = hb_set_create ();
+
+          for (int i = 0; i < count; i++)
+            {
+              hb_ot_layout_lookup_collect_glyphs (hb_face,
+                                                  HB_OT_TAG_GSUB,
+                                                  lookup_indexes[i],
+                                                  glyphs_before,
+                                                  glyphs_input,
+                                                  glyphs_after,
+                                                  glyphs_output);
+            }
 
           if (!fontchooser->glyphmap)
             {
@@ -1898,6 +1923,7 @@ find_affected_text (GtkFontChooserWidget *fontchooser,
                 }
             }
 
+          gid = HB_SET_VALUE_INVALID;
           while (hb_set_next (glyphs_input, &gid))
             {
               hb_codepoint_t ch;
@@ -1920,6 +1946,53 @@ find_affected_text (GtkFontChooserWidget *fontchooser,
     }
 
   return g_string_free (chars, FALSE);
+}
+
+static void
+update_feature_label (GtkFontChooserWidget *fontchooser,
+                      FeatureItem          *item,
+                      hb_font_t            *hb_font,
+                      hb_tag_t              script_tag,
+                      hb_tag_t              lang_tag)
+{
+  hb_face_t *hb_face;
+  unsigned int script_index, lang_index, feature_index;
+  hb_ot_name_id_t id;
+  unsigned int len;
+  char *label;
+
+  hb_face = hb_font_get_face (hb_font);
+
+  if (!(g_str_has_prefix (item->name, "ss") || g_str_has_prefix (item->name, "cv")) ||
+      !g_ascii_isdigit (item->name[2]) || !g_ascii_isdigit (item->name[3]))
+    return;
+
+  hb_ot_layout_table_find_script (hb_face, HB_OT_TAG_GSUB, script_tag, &script_index);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
+  if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, item->tag, &feature_index) &&
+      hb_ot_layout_feature_get_name_ids (hb_face, HB_OT_TAG_GSUB, feature_index, &id, NULL, NULL, NULL, NULL))
+    {
+      len = hb_ot_name_get_utf8 (hb_face, id, HB_LANGUAGE_INVALID, NULL, NULL);
+      len++;
+      label = g_new (char, len);
+      hb_ot_name_get_utf8 (hb_face, id, HB_LANGUAGE_INVALID, &len, label);
+
+      char *s = g_strdup_printf ("%s (%s)", label, item->name);
+      gtk_check_button_set_label (GTK_CHECK_BUTTON (item->feat), s);
+      g_free (s);
+
+      g_free (label);
+    }
+  else
+    {
+      label = get_feature_display_name (item->tag);
+      gtk_check_button_set_label (GTK_CHECK_BUTTON (item->feat), label);
+      g_free (label);
+    }
 }
 
 static void
@@ -2062,10 +2135,13 @@ add_check_group (GtkFontChooserWidget *fontchooser,
       GtkGesture *gesture;
       GtkWidget *box;
       GtkWidget *example;
+      char *name;
 
       tag = hb_tag_from_string (tags[i], -1);
 
-      feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
+      name = get_feature_display_name (tag);
+      feat = gtk_check_button_new_with_label (name);
+      g_free (name);
       set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
       g_signal_connect (feat, "toggled", G_CALLBACK (font_feature_toggled_cb), fontchooser);
       g_signal_connect_swapped (feat, "notify::inconsistent", G_CALLBACK (update_font_features), fontchooser);
@@ -2127,14 +2203,14 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
       hb_tag_t tag;
       GtkWidget *feat;
       FeatureItem *item;
-      const char *name;
+      char *name;
       GtkWidget *box;
       GtkWidget *example;
 
       tag = hb_tag_from_string (tags[i], -1);
       name = get_feature_display_name (tag);
-
       feat = gtk_check_button_new_with_label (name ? name : _("Default"));
+      g_free (name);
       if (group_button == NULL)
         group_button = feat;
       else
@@ -2261,6 +2337,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
               gtk_widget_show (item->top);
               gtk_widget_show (gtk_widget_get_parent (item->top));
 
+              update_feature_label (fontchooser, item, hb_font, script_tag, lang_tag);
               update_feature_example (fontchooser, item, hb_font, script_tag, lang_tag, fontchooser->font_desc);
 
               if (GTK_IS_CHECK_BUTTON (item->feat))
