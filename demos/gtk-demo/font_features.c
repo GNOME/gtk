@@ -682,13 +682,13 @@ update_display (void)
       for (int i = 0; i < G_N_ELEMENTS (sizes); i++)
         {
           g_string_append (waterfall, text);
-          g_string_append_c (waterfall, '\n');
+          g_string_append (waterfall, " "); /* Unicode line separator */
 
           attr = pango2_attr_size_new (sizes[i] * PANGO2_SCALE);
           pango2_attribute_set_range (attr, start, start + text_len);
           pango2_attr_list_insert (attrs, attr);
 
-          start += text_len + 1;
+          start += text_len + strlen (" ");
         }
       gtk_label_set_text (GTK_LABEL (demo->the_label), waterfall->str);
       g_string_free (waterfall, TRUE);
