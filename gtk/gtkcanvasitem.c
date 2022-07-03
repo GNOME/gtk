@@ -292,14 +292,36 @@ gtk_canvas_item_allocate (GtkCanvasItem   *self,
   graphene_vec2_init_from_vec2 (&self->allocation_var.origin, &self->bounds.origin);
 }
 
-gboolean
-gtk_canvas_item_has_allocation (GtkCanvasItem   *self,
-                                graphene_rect_t *rect)
+void
+gtk_canvas_item_allocate_widget (GtkCanvasItem *self,
+                                 float          dx,
+                                 float          dy)
 {
-  if (rect == NULL)
-    return !gtk_canvas_vec2_is_invalid (gtk_canvas_vec2_get_variable (&self->allocation_var.point));
+  graphene_rect_t allocation;
 
-  return gtk_canvas_box_eval (&self->allocation_var, rect);
+  if (self->widget == NULL)
+    return;
+
+  if (!gtk_canvas_box_eval (&self->allocation_var, &allocation))
+    {
+      /* gtkcanvas.c will not call this function otherwise */
+      g_assert_not_reached ();
+    }
+
+  graphene_rect_normalize (&allocation);
+  gtk_widget_size_allocate (self->widget,
+                            &(GtkAllocation) {
+                              allocation.origin.x - dx,
+                              allocation.origin.y - dy,
+                              allocation.size.width,
+                              allocation.size.height
+                            }, -1);
+}
+
+gboolean
+gtk_canvas_item_has_allocation (GtkCanvasItem *self)
+{
+  return !gtk_canvas_vec2_is_invalid (gtk_canvas_vec2_get_variable (&self->allocation_var.point));
 }
 
 const GtkCanvasVec2 *

@@ -191,11 +191,10 @@ gtk_canvas_box_eval (const GtkCanvasBox *self,
   graphene_vec2_multiply (&self->origin, &size, &tmp);
   graphene_vec2_subtract (&point, &tmp, &point);
 
-  graphene_rect_init (rect,
-                      graphene_vec2_get_x (&point),
-                      graphene_vec2_get_y (&point),
-                      graphene_vec2_get_x (&size),
-                      graphene_vec2_get_y (&size));
+  *rect = GRAPHENE_RECT_INIT (graphene_vec2_get_x (&point),
+                              graphene_vec2_get_y (&point),
+                              graphene_vec2_get_x (&size),
+                              graphene_vec2_get_y (&size));
 
   return TRUE;
 }

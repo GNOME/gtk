@@ -261,7 +261,7 @@ gtk_canvas_allocate (GtkWidget *widget,
           graphene_rect_t rect;
           int x, y, w, h;
 
-          if (child == NULL || gtk_canvas_item_has_allocation (ci, NULL))
+          if (child == NULL || gtk_canvas_item_has_allocation (ci))
             continue;
 
           bounds = gtk_canvas_item_get_bounds (ci);
@@ -282,24 +282,28 @@ gtk_canvas_allocate (GtkWidget *widget,
           if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
             {
               gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, &w, NULL, NULL, NULL);
-              w = MAX (w, ceil (rect.size.width));
+              w = MAX (w, ceil (ABS (rect.size.width)));
               gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, w, &h, NULL, NULL, NULL);
-              h = MAX (h, ceil (rect.size.height));
+              h = MAX (h, ceil (ABS (rect.size.height)));
             }
           else
             {
               gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, -1, &h, NULL, NULL, NULL);
-              h = MAX (h, ceil (rect.size.height));
+              h = MAX (h, ceil (ABS (rect.size.height)));
               gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, h, &w, NULL, NULL, NULL);
-              w = MAX (w, ceil (rect.size.width));
+              w = MAX (w, ceil (ABS (rect.size.width)));
             }
 
+          if (rect.size.width < 0)
+            w = -w;
+          if (rect.size.height < 0)
+            h = -h;
           gtk_canvas_box_get_origin (bounds, &origin_x, &origin_y);
-          if (w > rect.size.width)
+          if (ABS (w) > ABS (rect.size.width))
             x = round (rect.origin.x + origin_x * (rect.size.width - w));
           else
             x = round (rect.origin.x);
-          if (h > rect.size.height)
+          if (ABS (h) > ABS (rect.size.height))
             y = round (rect.origin.y + origin_y * (rect.size.height - h));
           else
             y = round (rect.origin.y);
@@ -319,23 +323,8 @@ gtk_canvas_allocate (GtkWidget *widget,
   for (i = 0; i < gtk_canvas_items_get_size (&self->items); i++)
     {
       GtkCanvasItem *ci = gtk_canvas_items_get (&self->items, i);
-      GtkWidget *child = gtk_canvas_item_get_widget (ci);
-      graphene_rect_t allocation;
 
-      if (child == NULL)
-        continue;
-
-      if (!gtk_canvas_item_has_allocation (ci, &allocation))
-        {
-          g_assert_not_reached ();
-        }
-      gtk_widget_size_allocate (child,
-                                &(GtkAllocation) {
-                                  allocation.origin.x,
-                                  allocation.origin.y,
-                                  allocation.size.width,
-                                  allocation.size.height
-                                }, -1);
+      gtk_canvas_item_allocate_widget (ci, 0, 0);
     }
 }
 
