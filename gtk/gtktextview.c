@@ -4291,7 +4291,9 @@ gtk_text_view_measure (GtkWidget      *widget,
 static void
 gtk_text_view_compute_child_allocation (GtkTextView         *text_view,
                                         const AnchoredChild *vc,
-                                        GtkAllocation       *allocation)
+                                        GtkAllocation       *allocation,
+                                        int                  gutter_width,
+                                        int                  gutter_height)
 {
   int buffer_y;
   GtkTextIter iter;
@@ -4306,8 +4308,8 @@ gtk_text_view_compute_child_allocation (GtkTextView         *text_view,
 
   buffer_y += vc->from_top_of_line;
 
-  allocation->x = vc->from_left_of_buffer - text_view->priv->xoffset;
-  allocation->y = buffer_y - text_view->priv->yoffset;
+  allocation->x = vc->from_left_of_buffer - text_view->priv->xoffset + gutter_width;
+  allocation->y = buffer_y - text_view->priv->yoffset + gutter_height;
 
   gtk_widget_get_preferred_size (vc->widget, &req, NULL);
   allocation->width = req.width;
@@ -4316,11 +4318,13 @@ gtk_text_view_compute_child_allocation (GtkTextView         *text_view,
 
 static void
 gtk_text_view_update_child_allocation (GtkTextView         *text_view,
-                                       const AnchoredChild *vc)
+                                       const AnchoredChild *vc,
+                                       int                  gutter_width,
+                                       int                  gutter_height)
 {
   GtkAllocation allocation;
 
-  gtk_text_view_compute_child_allocation (text_view, vc, &allocation);
+  gtk_text_view_compute_child_allocation (text_view, vc, &allocation, gutter_width, gutter_height);
 
   gtk_widget_size_allocate (vc->widget, &allocation, -1);
 
@@ -4334,6 +4338,44 @@ gtk_text_view_update_child_allocation (GtkTextView         *text_view,
 }
 
 static void
+calculate_gutter_offsets (GtkTextView *text_view,
+                          int         *width,
+                          int         *height)
+{
+  GtkWidget *x_gutter;
+  GtkWidget *y_gutter;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (width != NULL && height != NULL);
+
+  x_gutter = gtk_text_view_get_gutter (text_view, GTK_TEXT_WINDOW_LEFT);
+
+  if (x_gutter != NULL)
+    {
+      GtkRequisition x_req = {0};
+      gtk_widget_get_preferred_size (x_gutter, &x_req, NULL);
+      *width = x_req.width;
+    }
+  else
+    {
+      *width = 0;
+    }
+
+  y_gutter = gtk_text_view_get_gutter (text_view, GTK_TEXT_WINDOW_TOP);
+
+  if (y_gutter != NULL)
+    {
+      GtkRequisition y_req = {0};
+      gtk_widget_get_preferred_size (y_gutter, &y_req, NULL);
+      *height = y_req.height;
+    }
+  else
+    {
+      *height = 0;
+    }
+}
+
+static void
 gtk_anchored_child_allocated (GtkTextLayout *layout,
                               GtkWidget     *child,
                               int            x,
@@ -4342,6 +4384,10 @@ gtk_anchored_child_allocated (GtkTextLayout *layout,
 {
   AnchoredChild *vc = NULL;
   GtkTextView *text_view = data;
+  int x_offset = 0;
+  int y_offset = 0;
+
+  calculate_gutter_offsets (text_view, &x_offset, &y_offset);
 
   /* x,y is the position of the child from the top of the line, and
    * from the left of the buffer. We have to translate that into text
@@ -4357,7 +4403,7 @@ gtk_anchored_child_allocated (GtkTextLayout *layout,
   vc->from_left_of_buffer = x;
   vc->from_top_of_line = y;
 
-  gtk_text_view_update_child_allocation (text_view, vc);
+  gtk_text_view_update_child_allocation (text_view, vc, x_offset, y_offset);
 }
 
 static void
@@ -4858,6 +4904,10 @@ changed_handler (GtkTextLayout     *layout,
       GtkTextIter first;
       int new_first_para_top;
       int old_first_para_top;
+      int x_offset = 0;
+      int y_offset = 0;
+
+      calculate_gutter_offsets (text_view, &x_offset, &y_offset);
 
       /* If the bottom of the old area was above the top of the
        * screen, we need to scroll to keep the current top of the
@@ -4887,7 +4937,7 @@ changed_handler (GtkTextLayout     *layout,
       for (iter = priv->anchored_children.head; iter; iter = iter->next)
         {
           const AnchoredChild *ac = iter->data;
-          gtk_text_view_update_child_allocation (text_view, ac);
+          gtk_text_view_update_child_allocation (text_view, ac, x_offset, y_offset);
         }
 
       gtk_widget_queue_resize (widget);
