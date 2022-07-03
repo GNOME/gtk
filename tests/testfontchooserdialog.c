@@ -80,11 +80,33 @@ quit_cb (GtkWidget *widget,
   g_main_context_wakeup (NULL);
 }
 
+static void
+level_changed (GtkCheckButton *button,
+               GParamSpec     *pspec,
+               gpointer        data)
+{
+  GtkFontChooser *chooser = data;
+  GtkFontChooserLevel flags;
+  GtkFontChooserLevel flag;
+
+  flags = gtk_font_chooser_get_level (chooser);
+  flag = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (button), "flag"));
+
+  if (gtk_check_button_get_active (button))
+    flags |= flag;
+  else
+    flags &= ~flag;
+
+  gtk_font_chooser_set_level (chooser, flags);
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *font_button;
+  GtkWidget *box;
+  GtkWidget *toggle;
   gboolean done = FALSE;
 
   gtk_init ();
@@ -114,7 +136,31 @@ main (int argc, char *argv[])
   gtk_font_button_set_use_font (GTK_FONT_BUTTON (font_button), TRUE);
 
   window = gtk_window_new ();
-  gtk_window_set_child (GTK_WINDOW (window), font_button);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+
+  gtk_window_set_child (GTK_WINDOW (window), box);
+
+  gtk_box_append (GTK_BOX (box), font_button);
+
+  toggle = gtk_check_button_new_with_label ("Style");
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), TRUE);
+  g_object_set_data (G_OBJECT (toggle), "flag", GUINT_TO_POINTER (GTK_FONT_CHOOSER_LEVEL_STYLE));
+  g_signal_connect (toggle, "notify::active", G_CALLBACK (level_changed), font_button);
+  gtk_box_append (GTK_BOX (box), toggle);
+  toggle = gtk_check_button_new_with_label ("Size");
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), TRUE);
+  g_object_set_data (G_OBJECT (toggle), "flag", GUINT_TO_POINTER (GTK_FONT_CHOOSER_LEVEL_SIZE));
+  g_signal_connect (toggle, "notify::active", G_CALLBACK (level_changed), font_button);
+  gtk_box_append (GTK_BOX (box), toggle);
+  toggle = gtk_check_button_new_with_label ("Variations");
+  g_object_set_data (G_OBJECT (toggle), "flag", GUINT_TO_POINTER (GTK_FONT_CHOOSER_LEVEL_VARIATIONS));
+  g_signal_connect (toggle, "notify::active", G_CALLBACK (level_changed), font_button);
+  gtk_box_append (GTK_BOX (box), toggle);
+  toggle = gtk_check_button_new_with_label ("Features");
+  g_object_set_data (G_OBJECT (toggle), "flag", GUINT_TO_POINTER (GTK_FONT_CHOOSER_LEVEL_FEATURES));
+  g_signal_connect (toggle, "notify::active", G_CALLBACK (level_changed), font_button);
+  gtk_box_append (GTK_BOX (box), toggle);
+
   gtk_widget_show (window);
 
   g_signal_connect (font_button, "notify::font",
