@@ -80,6 +80,7 @@ typedef struct {
   char *text;
   GtkWidget *swin;
   GtkCssProvider *provider;
+  int sample;
 } FontFeaturesDemo;
 
 static void
@@ -1574,6 +1575,39 @@ entry_key_press (GtkEventController *controller,
   return GDK_EVENT_PROPAGATE;
 }
 
+static const char *paragraphs[] = {
+  "Grumpy wizards make toxic brew for the evil Queen and Jack. A quick movement of the enemy will jeopardize six gunboats. The job of waxing linoleum frequently peeves chintzy kids. My girl wove six dozen plaid jackets before she quit. Twelve ziggurats quickly jumped a finch box.",
+  "Разъяренный чтец эгоистично бьёт пятью жердями шустрого фехтовальщика. Наш банк вчера же выплатил Ф.Я. Эйхгольду комиссию за ценные вещи. Эх, чужак, общий съём цен шляп (юфть) – вдрызг! В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!",
+  "Τάχιστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός",
+};
+
+static const char *alphabets[] = {
+  "abcdefghijklmnopqrstuvwxzy",
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  "0123456789",
+  "!@#$%^&*/?;",
+};
+
+static void
+set_text_alphabet (void)
+{
+  demo->sample++;
+  gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (demo->entry)),
+                            alphabets[demo->sample % G_N_ELEMENTS (alphabets)],
+                            -1);
+  update_display ();
+}
+
+static void
+set_text_paragraph (void)
+{
+  demo->sample++;
+  gtk_text_buffer_set_text (gtk_text_view_get_buffer (GTK_TEXT_VIEW (demo->entry)),
+                            paragraphs[demo->sample % G_N_ELEMENTS (paragraphs)],
+                            -1);
+  update_display ();
+}
+
 GtkWidget *
 do_font_features (GtkWidget *do_widget)
 {
@@ -1601,6 +1635,8 @@ do_font_features (GtkWidget *do_widget)
       gtk_builder_cscope_add_callback (scope, font_features_font_changed);
       gtk_builder_cscope_add_callback (scope, font_features_script_changed);
       gtk_builder_cscope_add_callback (scope, font_features_notify_waterfall);
+      gtk_builder_cscope_add_callback (scope, set_text_alphabet);
+      gtk_builder_cscope_add_callback (scope, set_text_paragraph);
       gtk_builder_set_scope (builder, scope);
 
       demo = g_new0 (FontFeaturesDemo, 1);

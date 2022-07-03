@@ -354,9 +354,6 @@
     Τάχιστη αλώπηξ βαφής ψημένη γη, δρασκελίζει υπέρ νωθρού κυνός</property>
                               </object>
                             </property>
-<!--
-                            <signal name="activate" handler="font_features_stop_edit"/>
--->
                             <property name="valign">fill</property>
                           </object>
                         </property>
@@ -367,16 +364,33 @@
               </object>
             </child>
             <child>
-              <object class="GtkLabel" id="settings">
-                <property name="wrap">1</property>
-                <property name="xalign">0</property>
-                <property name="valign">end</property>
-                <property name="width-chars">50</property>
-                <property name="max-width-chars">50</property>
-                <property name="hexpand">1</property>
-                <style>
-                  <class name="monospace"/>
-                </style>
+              <object class="GtkBox">
+                <property name="spacing">10</property>
+                <child>
+                  <object class="GtkLabel" id="settings">
+                    <property name="wrap">1</property>
+                    <property name="xalign">0</property>
+                    <property name="valign">end</property>
+                    <property name="width-chars">50</property>
+                    <property name="max-width-chars">50</property>
+                    <property name="hexpand">1</property>
+                    <style>
+                      <class name="monospace"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Alphabet</property>
+                    <signal name="clicked" handler="set_text_alphabet"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Paragraph</property>
+                    <signal name="clicked" handler="set_text_paragraph"/>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
