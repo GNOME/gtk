@@ -116,6 +116,8 @@ struct _GtkFontChooserWidget
   GtkWidget *size_label;
   GtkWidget *size_spin;
   GtkWidget *size_slider;
+  GtkWidget *size_label2;
+  GtkWidget *size_spin2;
   GtkWidget *size_slider2;
 
   GtkWidget       *axis_grid;
@@ -913,6 +915,8 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_label);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_spin);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_slider);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_label2);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_spin2);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, size_slider2);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, stack);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, grid);
@@ -2637,12 +2641,18 @@ gtk_font_chooser_widget_set_level (GtkFontChooserWidget *fontchooser,
       gtk_widget_show (fontchooser->size_label);
       gtk_widget_show (fontchooser->size_slider);
       gtk_widget_show (fontchooser->size_spin);
+      gtk_widget_show (fontchooser->size_label2);
+      gtk_widget_show (fontchooser->size_slider2);
+      gtk_widget_show (fontchooser->size_spin2);
     }
   else
    {
       gtk_widget_hide (fontchooser->size_label);
       gtk_widget_hide (fontchooser->size_slider);
       gtk_widget_hide (fontchooser->size_spin);
+      gtk_widget_hide (fontchooser->size_label2);
+      gtk_widget_hide (fontchooser->size_slider2);
+      gtk_widget_hide (fontchooser->size_spin2);
    }
 
   update_fontlist (fontchooser);
