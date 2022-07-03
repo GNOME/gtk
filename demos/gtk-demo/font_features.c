@@ -278,25 +278,36 @@ set:
   range->language = language;
 }
 
-static const char *
+static char *
 get_feature_display_name (unsigned int tag)
 {
   int i;
   static char buf[5] = { 0, };
 
   if (tag == MAKE_TAG ('x', 'x', 'x', 'x'))
-    return _("Default");
+    return g_strdup (_("Default"));
+
+  hb_tag_to_string (tag, buf);
+  if (g_str_has_prefix (buf, "ss") && g_ascii_isdigit (buf[2]) && g_ascii_isdigit (buf[3]))
+    {
+      int num = (buf[2] - '0') * 10 + (buf[3] - '0');
+      return g_strdup_printf (g_dpgettext2 (NULL, "OpenType layout", "Stylistic Set %d"), num);
+    }
+  else if (g_str_has_prefix (buf, "cv") && g_ascii_isdigit (buf[2]) && g_ascii_isdigit (buf[3]))
+    {
+      int num = (buf[2] - '0') * 10 + (buf[3] - '0');
+      return g_strdup_printf (g_dpgettext2 (NULL, "OpenType layout", "Character Variant %d"), num);
+    }
 
   for (i = 0; i < G_N_ELEMENTS (open_type_layout_features); i++)
     {
       if (tag == open_type_layout_features[i].tag)
-        return g_dpgettext2 (NULL, "OpenType layout", open_type_layout_features[i].name);
+        return g_strdup (g_dpgettext2 (NULL, "OpenType layout", open_type_layout_features[i].name));
     }
 
-  hb_tag_to_string (tag, buf);
   g_warning ("unknown OpenType layout feature tag: %s", buf);
 
-  return buf;
+  return g_strdup (buf);
 }
 
 static void
@@ -367,10 +378,13 @@ add_check_group (GtkWidget   *box,
       GtkWidget *feat;
       FeatureItem *item;
       GtkGesture *gesture;
+      char *name;
 
       tag = hb_tag_from_string (tags[i], -1);
 
-      feat = gtk_check_button_new_with_label (get_feature_display_name (tag));
+      name = get_feature_display_name (tag);
+      feat = gtk_check_button_new_with_label (name);
+      g_free (name);
       set_inconsistent (GTK_CHECK_BUTTON (feat), TRUE);
 
       g_signal_connect (feat, "notify::active", G_CALLBACK (update_display), NULL);
@@ -422,12 +436,12 @@ add_radio_group (GtkWidget *box,
       unsigned int tag;
       GtkWidget *feat;
       FeatureItem *item;
-      const char *name;
+      char *name;
 
       tag = hb_tag_from_string (tags[i], -1);
       name = get_feature_display_name (tag);
-
       feat = gtk_check_button_new_with_label (name ? name : _("Default"));
+      g_free (name);
       if (group_button == NULL)
         group_button = feat;
       else
@@ -868,6 +882,24 @@ update_script_combo (void)
     gtk_combo_box_set_active_iter (GTK_COMBO_BOX (demo->script_lang), 0);
 }
 
+static char *
+get_name (hb_face_t       *hbface,
+          hb_ot_name_id_t  id)
+{
+  unsigned int len;
+  char *text;
+
+  if (id == HB_OT_NAME_ID_INVALID)
+    return NULL;
+
+  len = hb_ot_name_get_utf8 (hbface, id, HB_LANGUAGE_INVALID, NULL, NULL);
+  len++;
+  text = g_new (char, len);
+  hb_ot_name_get_utf8 (hbface, id, HB_LANGUAGE_INVALID, &len, text);
+
+  return text;
+}
+
 static void
 update_features (void)
 {
@@ -941,12 +973,55 @@ update_features (void)
 
           for (j = 0; j < count; j++)
             {
-#if 0
               char buf[5];
               hb_tag_to_string (features[j], buf);
               buf[4] = 0;
+#if 0
               g_print ("%s present in %s\n", buf, i == 0 ? "GSUB" : "GPOS");
 #endif
+
+              if (g_str_has_prefix (buf, "ss") || g_str_has_prefix (buf, "cv"))
+                {
+                  unsigned int feature_index;
+                  hb_ot_name_id_t label_id, tooltip_id, sample_id, first_param_id;
+                  unsigned int num_params;
+
+                  hb_ot_layout_language_find_feature (hb_face,
+                                                      tables[i],
+                                                      script_index,
+                                                      lang_index,
+                                                      features[j],
+                                                      &feature_index);
+
+                  if (hb_ot_layout_feature_get_name_ids (hb_face,
+                                                         tables[i],
+                                                         feature_index,
+                                                         &label_id,
+                                                         &tooltip_id,
+                                                         &sample_id,
+                                                         &num_params,
+                                                         &first_param_id))
+                    {
+                      char *label = get_name (hb_face, label_id);
+
+                      if (label)
+                        {
+                          for (l = demo->feature_items; l; l = l->next)
+                            {
+                              FeatureItem *item = l->data;
+
+                              if (item->tag == features[j])
+                                {
+                                  gtk_check_button_set_label (GTK_CHECK_BUTTON (item->feat), label);
+                                  break;
+                                }
+                            }
+                        }
+
+                      g_free (label);
+                    }
+                }
+
               for (l = demo->feature_items; l; l = l->next)
                 {
                   FeatureItem *item = l->data;
@@ -1710,6 +1785,11 @@ do_font_features (GtkWidget *do_widget)
                                          "ss07", "ss08", "ss09", "ss10", "ss11", "ss12",
                                          "ss13", "ss14", "ss15", "ss16", "ss17", "ss18",
                                          "ss19", "ss20", NULL });
+      add_check_group (demo->feature_list, _("Character Variants"),
+                       (const char *[]){ "cv01", "cv02", "cv03", "cv04", "cv05", "cv06",
+                                         "cv07", "cv08", "cv09", "cv10", "cv11", "cv12",
+                                         "cv13", "cv14", "cv15", "cv16", "cv17", "cv18",
+                                         "cv19", "cv20", NULL });
       add_check_group (demo->feature_list, _("Mathematical"),
                        (const char *[]){ "dtls", "flac", "mgrk", "ssty", NULL });
       add_check_group (demo->feature_list, _("Optical Bounds"),
