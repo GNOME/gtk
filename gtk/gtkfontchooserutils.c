@@ -142,6 +142,9 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
                                     GTK_FONT_CHOOSER_PROP_FONT_FEATURES,
                                     "font-features");
   g_object_class_override_property (klass,
+                                    GTK_FONT_CHOOSER_PROP_PALETTE,
+                                    "palette");
+  g_object_class_override_property (klass,
                                     GTK_FONT_CHOOSER_PROP_LANGUAGE,
                                     "language");
 }

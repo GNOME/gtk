@@ -62,6 +62,8 @@
 #include "gtklistview.h"
 #include "gtksortlistmodel.h"
 #include "gtkstringsorter.h"
+#include "gtkcolorswatchprivate.h"
+#include "gtkpicture.h"
 
 #include <hb-ot.h>
 
@@ -122,6 +124,7 @@ struct _GtkFontChooserWidget
 
   GtkWidget       *axis_grid;
   GtkWidget       *feature_box;
+  GtkWidget       *palette_grid;
 
   GtkFrame          *language_button;
   GtkFrame          *language_frame;
@@ -136,7 +139,8 @@ struct _GtkFontChooserWidget
   Pango2FontMap         *font_map;
 
   Pango2FontDescription *font_desc;
-  char                 *font_features;
+  char                  *font_features;
+  char                  *palette;
   Pango2Language        *language;
 
   GtkFontFilterFunc filter_func;
@@ -275,6 +279,9 @@ gtk_font_chooser_widget_get_property (GObject         *object,
       break;
     case GTK_FONT_CHOOSER_PROP_FONT_FEATURES:
       g_value_set_string (value, fontchooser->font_features);
+      break;
+    case GTK_FONT_CHOOSER_PROP_PALETTE:
+      g_value_set_string (value, fontchooser->palette);
       break;
     case GTK_FONT_CHOOSER_PROP_LANGUAGE:
       g_value_set_string (value, pango2_language_to_string (fontchooser->language));
@@ -718,6 +725,8 @@ gtk_font_chooser_widget_update_preview_attributes (GtkFontChooserWidget *fontcho
   pango2_attr_list_insert (attrs, pango2_attr_font_desc_new (fontchooser->font_desc));
   if (fontchooser->font_features)
     pango2_attr_list_insert (attrs, pango2_attr_font_features_new (fontchooser->font_features));
+  if (fontchooser->palette)
+    pango2_attr_list_insert (attrs, pango2_attr_palette_new (fontchooser->palette));
   if (fontchooser->language)
     pango2_attr_list_insert (attrs, pango2_attr_language_new (fontchooser->language));
 
@@ -884,6 +893,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, grid);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, font_name_label);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, feature_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, palette_grid);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, axis_grid);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, language_button);
   gtk_widget_class_bind_template_child (widget_class, GtkFontChooserWidget, language_frame);
@@ -1285,6 +1295,7 @@ gtk_font_chooser_widget_finalize (GObject *object)
   g_hash_table_unref (fontchooser->axes);
 
   g_free (fontchooser->font_features);
+  g_free (fontchooser->palette);
 
   G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->finalize (object);
 }
@@ -2069,18 +2080,11 @@ font_feature_toggled_cb (GtkCheckButton *check_button,
   update_font_features (fontchooser);
 }
 
-static void
-add_check_group (GtkFontChooserWidget *fontchooser,
-                 const char  *title,
-                 const char **tags)
+static GtkWidget *
+make_title_label (const char *title)
 {
   GtkWidget *label;
-  GtkWidget *group;
   Pango2AttrList *attrs;
-  int i;
-
-  group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  gtk_widget_set_halign (group, GTK_ALIGN_FILL);
 
   label = gtk_label_new (title);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
@@ -2090,7 +2094,22 @@ add_check_group (GtkFontChooserWidget *fontchooser,
   pango2_attr_list_insert (attrs, pango2_attr_weight_new (PANGO2_WEIGHT_BOLD));
   gtk_label_set_attributes (GTK_LABEL (label), attrs);
   pango2_attr_list_unref (attrs);
-  gtk_box_append (GTK_BOX (group), label);
+
+  return label;
+}
+
+static void
+add_check_group (GtkFontChooserWidget *fontchooser,
+                 const char  *title,
+                 const char **tags)
+{
+  GtkWidget *group;
+  int i;
+
+  group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_widget_set_halign (group, GTK_ALIGN_FILL);
+
+  gtk_box_append (GTK_BOX (group), make_title_label (title));
 
   for (i = 0; tags[i]; i++)
     {
@@ -2144,24 +2163,14 @@ add_radio_group (GtkFontChooserWidget *fontchooser,
                  const char  *title,
                  const char **tags)
 {
-  GtkWidget *label;
   GtkWidget *group;
   int i;
   GtkWidget *group_button = NULL;
-  Pango2AttrList *attrs;
 
   group = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_set_halign (group, GTK_ALIGN_FILL);
 
-  label = gtk_label_new (title);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
-  attrs = pango2_attr_list_new ();
-  pango2_attr_list_insert (attrs, pango2_attr_weight_new (PANGO2_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango2_attr_list_unref (attrs);
-  gtk_box_append (GTK_BOX (group), label);
+  gtk_box_append (GTK_BOX (group), make_title_label (title));
 
   for (i = 0; tags[i]; i++)
     {
@@ -2387,6 +2396,164 @@ update_font_features (GtkFontChooserWidget *fontchooser)
 }
 
 static void
+palette_changed (GtkCheckButton *button,
+                 gpointer        data)
+{
+  GtkFontChooserWidget *fontchooser = data;
+  const char *palette;
+
+  palette = (const char *) g_object_get_data (G_OBJECT (button), "palette");
+
+  if (g_strcmp0 (fontchooser->palette, palette) != 0)
+    {
+      g_free (fontchooser->palette);
+      fontchooser->palette = g_strdup (palette);
+      g_object_notify (G_OBJECT (fontchooser), "palette");
+    }
+
+  gtk_font_chooser_widget_update_preview_attributes (fontchooser);
+}
+
+static gboolean
+gtk_font_chooser_widget_update_palettes (GtkFontChooserWidget *fontchooser)
+{
+  GtkWidget *child;
+  Pango2Font *font;
+  Pango2FontFace *face;
+  hb_font_t *hb_font;
+  hb_face_t *hb_face;
+
+  if ((fontchooser->level & GTK_FONT_CHOOSER_LEVEL_PALETTE) == 0)
+    return FALSE;
+
+  while ((child = gtk_widget_get_first_child (fontchooser->palette_grid)))
+    gtk_grid_remove (GTK_GRID (fontchooser->palette_grid), child);
+
+  font = pango2_context_load_font (gtk_widget_get_pango_context (GTK_WIDGET (fontchooser)),
+                                   fontchooser->font_desc);
+  face = pango2_font_get_face (font);
+
+  hb_font = pango2_font_get_hb_font (font);
+  hb_face = hb_font_get_face (hb_font);
+
+  if (hb_ot_color_has_palettes (hb_face))
+    {
+      GtkWidget *first_palette = NULL;
+      GtkWidget *toggle;
+      GtkWidget *box;
+
+      gtk_grid_attach (GTK_GRID (fontchooser->palette_grid),
+                                 make_title_label (_("Color Palettes")),
+                                 0, -2, 3, 1);
+
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+      gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
+      gtk_grid_attach (GTK_GRID (fontchooser->palette_grid), box, 0, -1, 4, 1);
+
+      toggle = gtk_check_button_new_with_label (_("Default"));
+      g_object_set_data (G_OBJECT (toggle), "palette", (gpointer) "default");
+      g_signal_connect (toggle, "toggled", G_CALLBACK (palette_changed), fontchooser);
+      if (fontchooser->palette == NULL ||
+        g_strcmp0 (fontchooser->palette, "default") == 0)
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), TRUE);
+      gtk_box_append (GTK_BOX (box), toggle);
+      first_palette = toggle;
+
+      toggle = gtk_check_button_new_with_label (_("Light"));
+      g_object_set_data (G_OBJECT (toggle), "palette", (gpointer) "light");
+      g_signal_connect (toggle, "toggled", G_CALLBACK (palette_changed), fontchooser);
+      if (g_strcmp0 (fontchooser->palette, "light") == 0)
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), TRUE);
+      gtk_check_button_set_group (GTK_CHECK_BUTTON (toggle), GTK_CHECK_BUTTON (first_palette));
+      gtk_box_append (GTK_BOX (box), toggle);
+
+      toggle = gtk_check_button_new_with_label (_("Dark"));
+      g_object_set_data (G_OBJECT (toggle), "palette", (gpointer) "dark");
+      g_signal_connect (toggle, "toggled", G_CALLBACK (palette_changed), fontchooser);
+      if (g_strcmp0 (fontchooser->palette, "dark") == 0)
+        gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), TRUE);
+      gtk_check_button_set_group (GTK_CHECK_BUTTON (toggle), GTK_CHECK_BUTTON (first_palette));
+      gtk_box_append (GTK_BOX (box), toggle);
+
+      for (unsigned int i = 0; i < hb_ot_color_palette_get_count (hb_face); i++)
+        {
+          char *palette;
+          char *label;
+          hb_ot_name_id_t name_id;
+          unsigned int n_colors;
+          hb_color_t *colors;
+          GtkWidget *colors_grid;
+
+          palette = g_strdup (pango2_hb_face_get_palette_name (PANGO2_HB_FACE (face), i));
+
+          /* Look for a display name in the font, unlikely as it is */
+          name_id = hb_ot_color_palette_get_name_id (hb_face, i);
+          if (name_id != HB_OT_NAME_ID_INVALID)
+            {
+              char buf[80];
+              unsigned int len;
+
+              len = sizeof (buf);
+              hb_ot_name_get_utf8 (hb_face, name_id, HB_LANGUAGE_INVALID, &len, buf);
+              label = g_strdup (buf);
+            }
+          else if (palette)
+            label = g_strdup_printf (_("Palette %s"), palette);
+          else
+            label = g_strdup_printf (_("Palette %u"), i);
+
+          if (!palette)
+            palette = g_strdup_printf ("palette%u", i);
+
+          toggle = gtk_check_button_new_with_label (label);
+          g_object_set_data_full (G_OBJECT (toggle), "palette", palette, g_free);
+          if (g_strcmp0 (fontchooser->palette, palette) == 0)
+            gtk_check_button_set_active (GTK_CHECK_BUTTON (toggle), TRUE);
+
+          g_signal_connect (toggle, "toggled", G_CALLBACK (palette_changed), fontchooser);
+
+          gtk_check_button_set_group (GTK_CHECK_BUTTON (toggle), GTK_CHECK_BUTTON (first_palette));
+
+          g_free (label);
+
+          int row = i / 3;
+          int col = i % 3;
+          gtk_grid_attach (GTK_GRID (fontchooser->palette_grid), toggle, 2 * col, row, 1, 1);
+
+          n_colors = hb_ot_color_palette_get_colors (hb_face, i, 0, NULL, NULL);
+          colors = g_new (hb_color_t, n_colors);
+          n_colors = hb_ot_color_palette_get_colors (hb_face, i, 0, &n_colors, colors);
+
+          colors_grid = gtk_grid_new ();
+          gtk_grid_attach (GTK_GRID (fontchooser->palette_grid), colors_grid, 2 * col + 1, row, 1, 1);
+          gtk_widget_set_valign (colors_grid, GTK_ALIGN_CENTER);
+
+          /* HACK - defeat first-child/last-child theming */
+          gtk_grid_attach (GTK_GRID (colors_grid), gtk_picture_new (), -1, 0, 1, 1);
+
+          for (int k = 0; k < n_colors; k++)
+            {
+              GtkWidget *color;
+
+              color = gtk_color_swatch_new ();
+              gtk_color_swatch_set_rgba (GTK_COLOR_SWATCH (color),
+                                         &(GdkRGBA){ hb_color_get_red (colors[k])/255.,
+                                                     hb_color_get_green (colors[k])/255.,
+                                                     hb_color_get_blue (colors[k])/255.,
+                                                     hb_color_get_alpha (colors[k])/255.});
+              gtk_widget_set_size_request (color, 16, 16);
+              gtk_grid_attach (GTK_GRID (colors_grid), color, k % 5, k / 5, 1, 1);
+            }
+
+          /* HACK - defeat first-child/last-child theming */
+          gtk_grid_attach (GTK_GRID (colors_grid), gtk_picture_new (), 6, 0, 1, 1);
+        }
+    }
+
+  return TRUE;
+}
+
+static void
 gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser,
                                          const Pango2FontDescription *font_desc)
 {
@@ -2423,6 +2590,8 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget       *fontchooser
       if (gtk_font_chooser_widget_update_font_features (fontchooser))
         has_tweak = TRUE;
       if (gtk_font_chooser_widget_update_font_variations (fontchooser))
+        has_tweak = TRUE;
+      if (gtk_font_chooser_widget_update_palettes (fontchooser))
         has_tweak = TRUE;
 
       g_simple_action_set_enabled (G_SIMPLE_ACTION (fontchooser->tweak_action), has_tweak);

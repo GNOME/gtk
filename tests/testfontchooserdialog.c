@@ -173,6 +173,10 @@ main (int argc, char *argv[])
   g_object_set_data (G_OBJECT (toggle), "flag", GUINT_TO_POINTER (GTK_FONT_CHOOSER_LEVEL_FEATURES));
   g_signal_connect (toggle, "notify::active", G_CALLBACK (level_changed), font_button);
   gtk_box_append (GTK_BOX (box), toggle);
+  toggle = gtk_check_button_new_with_label ("Palette");
+  g_object_set_data (G_OBJECT (toggle), "flag", GUINT_TO_POINTER (GTK_FONT_CHOOSER_LEVEL_PALETTE));
+  g_signal_connect (toggle, "notify::active", G_CALLBACK (level_changed), font_button);
+  gtk_box_append (GTK_BOX (box), toggle);
 
   gtk_widget_show (window);
 

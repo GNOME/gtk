@@ -387,6 +387,12 @@
                             <property name="spacing">12</property>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkGrid" id="palette_grid">
+                            <property name="row-spacing">12</property>
+                            <property name="column-spacing">12</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>

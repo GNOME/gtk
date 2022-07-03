@@ -124,6 +124,17 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READABLE));
 
   /**
+   * GtkFontChooser:palette: (attributes org.gtk.Property.get=gtk_font_chooser_get_palette)
+   *
+   * The selected palette.
+   */
+  g_object_interface_install_property
+     (iface,
+      g_param_spec_string ("palette", NULL, NULL,
+                           "default",
+                           GTK_PARAM_READABLE));
+
+  /**
    * GtkFontChooser:language: (attributes org.gtk.Property.get=gtk_font_chooser_get_language org.gtk.Property.set=gtk_font_chooser_set_language)
    *
    * The language for which the font features were selected.
@@ -534,6 +545,26 @@ gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
 
   g_object_get (fontchooser, "font-features", &text, NULL);
+
+  return text;
+}
+
+/**
+ * gtk_font_chooser_get_palette: (attributes org.gtk.Method.get_property=palette)
+ * @fontchooser: a `GtkFontChooser`
+ *
+ * Gets the currently-selected palette.
+ *
+ * Returns: the currently selected palette
+ */
+char *
+gtk_font_chooser_get_palette (GtkFontChooser *fontchooser)
+{
+  char *text;
+
+  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
+
+  g_object_get (fontchooser, "palette", &text, NULL);
 
   return text;
 }

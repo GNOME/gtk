@@ -53,6 +53,7 @@ typedef gboolean (*GtkFontFilterFunc) (const Pango2FontFamily *family,
  * @GTK_FONT_CHOOSER_LEVEL_SIZE: Allow selecting a specific font size
  * @GTK_FONT_CHOOSER_LEVEL_VARIATIONS: Allow changing OpenType font variation axes
  * @GTK_FONT_CHOOSER_LEVEL_FEATURES: Allow selecting specific OpenType font features
+ * @GTK_FONT_CHOOSER_LEVEL_PALETTE: Allow selecting a color palette
  *
  * Specifies the granularity of font selection
  * that is desired in a `GtkFontChooser`.
@@ -65,7 +66,8 @@ typedef enum {
   GTK_FONT_CHOOSER_LEVEL_STYLE      = 1 << 0,
   GTK_FONT_CHOOSER_LEVEL_SIZE       = 1 << 1,
   GTK_FONT_CHOOSER_LEVEL_VARIATIONS = 1 << 2,
-  GTK_FONT_CHOOSER_LEVEL_FEATURES   = 1 << 3
+  GTK_FONT_CHOOSER_LEVEL_FEATURES   = 1 << 3,
+  GTK_FONT_CHOOSER_LEVEL_PALETTE    = 1 << 4,
 } GtkFontChooserLevel;
 
 #define GTK_TYPE_FONT_CHOOSER			(gtk_font_chooser_get_type ())
@@ -155,6 +157,8 @@ GtkFontChooserLevel
                  gtk_font_chooser_get_level                (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
 char *           gtk_font_chooser_get_font_features        (GtkFontChooser   *fontchooser);
+GDK_AVAILABLE_IN_ALL
+char *           gtk_font_chooser_get_palette              (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL
 char *           gtk_font_chooser_get_language             (GtkFontChooser   *fontchooser);
 GDK_AVAILABLE_IN_ALL

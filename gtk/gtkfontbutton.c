@@ -96,13 +96,13 @@ struct _GtkFontButton
   Pango2FontFamily      *font_family;
   Pango2FontFace        *font_face;
   Pango2FontMap         *font_map;
-  char                 *font_features;
+  char                  *font_features;
+  char                  *palette;
   Pango2Language        *language;
   char                 *preview_text;
   GtkFontFilterFunc     font_filter;
   gpointer              font_filter_data;
   GDestroyNotify        font_filter_data_destroy;
-  GtkCssProvider       *provider;
 };
 
 struct _GtkFontButtonClass
@@ -200,6 +200,7 @@ clear_font_data (GtkFontButton *font_button)
   g_clear_pointer (&font_button->font_desc, pango2_font_description_free);
   g_clear_pointer (&font_button->fontname, g_free);
   g_clear_pointer (&font_button->font_features, g_free);
+  g_clear_pointer (&font_button->palette, g_free);
 }
 
 static void
@@ -623,8 +624,6 @@ gtk_font_button_finalize (GObject *object)
 
   g_free (font_button->preview_text);
 
-  g_clear_object (&font_button->provider);
-
   gtk_widget_unparent (font_button->button);
 
   G_OBJECT_CLASS (gtk_font_button_parent_class)->finalize (object);
@@ -703,6 +702,9 @@ gtk_font_button_get_property (GObject    *object,
       break;
     case GTK_FONT_CHOOSER_PROP_FONT_FEATURES:
       g_value_set_string (value, font_button->font_features);
+      break;
+    case GTK_FONT_CHOOSER_PROP_PALETTE:
+      g_value_set_string (value, font_button->palette);
       break;
     case GTK_FONT_CHOOSER_PROP_LANGUAGE:
       g_value_set_string (value, pango2_language_to_string (font_button->language));
@@ -1044,6 +1046,8 @@ response_cb (GtkDialog *dialog,
   font_button->font_size = gtk_font_chooser_get_font_size (font_chooser);
   g_free (font_button->font_features);
   font_button->font_features = gtk_font_chooser_get_font_features (font_chooser);
+  g_free (font_button->palette);
+  font_button->palette = gtk_font_chooser_get_palette (font_chooser);
   font_button->language = pango2_language_from_string (gtk_font_chooser_get_language (font_chooser));
 
   /* Set label font */
@@ -1052,6 +1056,7 @@ response_cb (GtkDialog *dialog,
   g_object_notify (G_OBJECT (font_button), "font");
   g_object_notify (G_OBJECT (font_button), "font-desc");
   g_object_notify (G_OBJECT (font_button), "font-features");
+  g_object_notify (G_OBJECT (font_button), "palette");
 
   g_object_thaw_notify (object);
 
@@ -1070,259 +1075,37 @@ dialog_destroy (GtkWidget *widget,
 }
 
 static void
-add_css_variations (GString    *s,
-                    const char *variations)
-{
-  const char *p;
-  const char *sep = "";
-
-  if (variations == NULL || variations[0] == '\0')
-    {
-      g_string_append (s, "normal");
-      return;
-    }
-
-  p = variations;
-  while (p && *p)
-    {
-      const char *start;
-      const char *end, *end2;
-      double value;
-      char name[5];
-
-      while (g_ascii_isspace (*p)) p++;
-
-      start = p;
-      end = strchr (p, ',');
-      if (end && (end - p < 6))
-        goto skip;
-
-      name[0] = p[0];
-      name[1] = p[1];
-      name[2] = p[2];
-      name[3] = p[3];
-      name[4] = '\0';
-
-      p += 4;
-      while (g_ascii_isspace (*p)) p++;
-      if (*p == '=') p++;
-
-      if (p - start < 5)
-        goto skip;
-
-      value = g_ascii_strtod (p, (char **) &end2);
-
-      while (end2 && g_ascii_isspace (*end2)) end2++;
-
-      if (end2 && (*end2 != ',' && *end2 != '\0'))
-        goto skip;
-
-      g_string_append_printf (s, "%s\"%s\" %g", sep, name, value);
-      sep = ", ";
-
-skip:
-      p = end ? end + 1 : NULL;
-    }
-}
-
-static char *
-pango2_font_description_to_css (Pango2FontDescription *desc,
-                               const char           *features,
-                               const char           *language)
-{
-  GString *s;
-  Pango2FontMask set;
-
-  s = g_string_new ("* { ");
-
-  set = pango2_font_description_get_set_fields (desc);
-  if (set & PANGO2_FONT_MASK_FAMILY)
-    {
-      g_string_append (s, "font-family: \"");
-      g_string_append (s, pango2_font_description_get_family (desc));
-      g_string_append (s, "\"; ");
-    }
-  if (set & PANGO2_FONT_MASK_STYLE)
-    {
-      switch (pango2_font_description_get_style (desc))
-        {
-        case PANGO2_STYLE_NORMAL:
-          g_string_append (s, "font-style: normal; ");
-          break;
-        case PANGO2_STYLE_OBLIQUE:
-          g_string_append (s, "font-style: oblique; ");
-          break;
-        case PANGO2_STYLE_ITALIC:
-          g_string_append (s, "font-style: italic; ");
-          break;
-        default:
-          break;
-        }
-    }
-  if (set & PANGO2_FONT_MASK_VARIANT)
-    {
-      switch (pango2_font_description_get_variant (desc))
-        {
-        case PANGO2_VARIANT_NORMAL:
-          g_string_append (s, "font-variant: normal; ");
-          break;
-        case PANGO2_VARIANT_SMALL_CAPS:
-          g_string_append (s, "font-variant: small-caps; ");
-          break;
-        case PANGO2_VARIANT_ALL_SMALL_CAPS:
-          g_string_append (s, "font-variant: all-small-caps; ");
-          break;
-        case PANGO2_VARIANT_PETITE_CAPS:
-          g_string_append (s, "font-variant: petite-caps; ");
-          break;
-        case PANGO2_VARIANT_ALL_PETITE_CAPS:
-          g_string_append (s, "font-variant: all-petite-caps; ");
-          break;
-        case PANGO2_VARIANT_UNICASE:
-          g_string_append (s, "font-variant: unicase; ");
-          break;
-        case PANGO2_VARIANT_TITLE_CAPS:
-          g_string_append (s, "font-variant: titling-caps; ");
-          break;
-        default:
-          break;
-        }
-    }
-  if (set & PANGO2_FONT_MASK_WEIGHT)
-    {
-      switch (pango2_font_description_get_weight (desc))
-        {
-        case PANGO2_WEIGHT_THIN:
-          g_string_append (s, "font-weight: 100; ");
-          break;
-        case PANGO2_WEIGHT_ULTRALIGHT:
-          g_string_append (s, "font-weight: 200; ");
-          break;
-        case PANGO2_WEIGHT_LIGHT:
-        case PANGO2_WEIGHT_SEMILIGHT:
-          g_string_append (s, "font-weight: 300; ");
-          break;
-        case PANGO2_WEIGHT_BOOK:
-        case PANGO2_WEIGHT_NORMAL:
-          g_string_append (s, "font-weight: 400; ");
-          break;
-        case PANGO2_WEIGHT_MEDIUM:
-          g_string_append (s, "font-weight: 500; ");
-          break;
-        case PANGO2_WEIGHT_SEMIBOLD:
-          g_string_append (s, "font-weight: 600; ");
-          break;
-        case PANGO2_WEIGHT_BOLD:
-          g_string_append (s, "font-weight: 700; ");
-          break;
-        case PANGO2_WEIGHT_ULTRABOLD:
-          g_string_append (s, "font-weight: 800; ");
-          break;
-        case PANGO2_WEIGHT_HEAVY:
-        case PANGO2_WEIGHT_ULTRAHEAVY:
-          g_string_append (s, "font-weight: 900; ");
-          break;
-        default:
-          break;
-        }
-    }
-  if (set & PANGO2_FONT_MASK_STRETCH)
-    {
-      switch (pango2_font_description_get_stretch (desc))
-        {
-        case PANGO2_STRETCH_ULTRA_CONDENSED:
-          g_string_append (s, "font-stretch: ultra-condensed; ");
-          break;
-        case PANGO2_STRETCH_EXTRA_CONDENSED:
-          g_string_append (s, "font-stretch: extra-condensed; ");
-          break;
-        case PANGO2_STRETCH_CONDENSED:
-          g_string_append (s, "font-stretch: condensed; ");
-          break;
-        case PANGO2_STRETCH_SEMI_CONDENSED:
-          g_string_append (s, "font-stretch: semi-condensed; ");
-          break;
-        case PANGO2_STRETCH_NORMAL:
-          g_string_append (s, "font-stretch: normal; ");
-          break;
-        case PANGO2_STRETCH_SEMI_EXPANDED:
-          g_string_append (s, "font-stretch: semi-expanded; ");
-          break;
-        case PANGO2_STRETCH_EXPANDED:
-          g_string_append (s, "font-stretch: expanded; ");
-          break;
-        case PANGO2_STRETCH_EXTRA_EXPANDED:
-          break;
-        case PANGO2_STRETCH_ULTRA_EXPANDED:
-          g_string_append (s, "font-stretch: ultra-expanded; ");
-          break;
-        default:
-          break;
-        }
-    }
-  if (set & PANGO2_FONT_MASK_SIZE)
-    {
-      g_string_append_printf (s, "font-size: %dpt; ", pango2_font_description_get_size (desc) / PANGO2_SCALE);
-    }
-
-  if (set & PANGO2_FONT_MASK_VARIATIONS)
-    {
-      const char *variations;
-
-      g_string_append (s, "font-variation-settings: ");
-      variations = pango2_font_description_get_variations (desc);
-      add_css_variations (s, variations);
-      g_string_append (s, "; ");
-    }
-  if (features)
-    {
-      g_string_append_printf (s, "font-feature-settings: %s;", features);
-    }
-
-  g_string_append (s, "}");
-
-  return g_string_free (s, FALSE);
-}
-
-static void
 gtk_font_button_label_use_font (GtkFontButton *font_button)
 {
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (font_button->font_label);
-
   if (!font_button->use_font)
     {
-      if (font_button->provider)
-        {
-          gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (font_button->provider));
-          g_clear_object (&font_button->provider);
-        }
+      gtk_label_set_attributes (GTK_LABEL (font_button->font_label), NULL);
     }
   else
     {
       Pango2FontDescription *desc;
-      char *data;
-
-      if (!font_button->provider)
-        {
-          font_button->provider = gtk_css_provider_new ();
-          gtk_style_context_add_provider (context,
-                                          GTK_STYLE_PROVIDER (font_button->provider),
-                                          GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-        }
 
       desc = pango2_font_description_copy (font_button->font_desc);
 
       if (!font_button->use_size)
         pango2_font_description_unset_fields (desc, PANGO2_FONT_MASK_SIZE);
 
-      data = pango2_font_description_to_css (desc,
-                                            font_button->font_features,
-                                            pango2_language_to_string (font_button->language));
-      gtk_css_provider_load_from_data (font_button->provider, data, -1);
+      Pango2AttrList *attrs = pango2_attr_list_new ();
 
-      g_free (data);
+      if ((font_button->level & GTK_FONT_CHOOSER_LEVEL_FEATURES) != 0 &&
+          font_button->font_features != NULL)
+        pango2_attr_list_insert (attrs, pango2_attr_font_features_new (font_button->font_features));
+
+      if ((font_button->level & GTK_FONT_CHOOSER_LEVEL_PALETTE) != 0 && font_button->palette != NULL)
+        {
+          pango2_attr_list_insert (attrs, pango2_attr_palette_new (font_button->palette));
+          g_print ("using palette %s\n", font_button->palette);
+        }
+
+      pango2_attr_list_insert (attrs, pango2_attr_font_desc_new (desc));
+      gtk_label_set_attributes (GTK_LABEL (font_button->font_label), attrs);
+      pango2_attr_list_unref (attrs);
+
       pango2_font_description_free (desc);
     }
 }
