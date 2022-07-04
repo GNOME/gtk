@@ -48,8 +48,8 @@ GDK_AVAILABLE_IN_ALL
 GtkCanvasSize *         gtk_canvas_size_new                     (float                   width,
                                                                  float                   height);
 GDK_AVAILABLE_IN_ALL
-GtkCanvasSize *         gtk_canvas_size_new_distance            (const GtkCanvasPoint   *from,
-                                                                 const GtkCanvasPoint   *to);
+GtkCanvasSize *         gtk_canvas_size_new_distance            (const GtkCanvasVector  *from,
+                                                                 const GtkCanvasVector  *to);
 GDK_AVAILABLE_IN_ALL
 GtkCanvasSize *         gtk_canvas_size_new_from_box            (const GtkCanvasBox     *box);
 

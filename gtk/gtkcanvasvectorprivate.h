@@ -20,7 +20,8 @@
 #ifndef __GTK_CANVAS_VECTOR_PRIVATE_H__
 #define __GTK_CANVAS_VECTOR_PRIVATE_H__
 
-#include <glib.h>
+#include "gtkcanvasvector.h"
+
 #include <graphene.h>
 
 G_BEGIN_DECLS
@@ -77,9 +78,6 @@ struct _GtkCanvasVectorSummand
 void                    gtk_canvas_vector_init_copy             (GtkCanvasVector        *self,
                                                                  const GtkCanvasVector  *source);
 void                    gtk_canvas_vector_finish                (GtkCanvasVector        *self);
-
-gboolean                gtk_canvas_vector_eval                  (const GtkCanvasVector  *self,
-                                                                 graphene_vec2_t        *result);
 
 void                    gtk_canvas_vector_init_invalid          (GtkCanvasVector        *vector);
 void                    gtk_canvas_vector_init_constant         (GtkCanvasVector        *vector,

@@ -30,7 +30,7 @@
 
 #include "gtkcanvasboxprivate.h"
 #include "gtkcanvasitemprivate.h"
-#include "gtkcanvaspoint.h"
+#include "gtkcanvasvector.h"
 #include "gtkcanvasvectorprivate.h"
 
 G_DEFINE_BOXED_TYPE (GtkCanvasSize, gtk_canvas_size,
@@ -100,8 +100,8 @@ gtk_canvas_size_new_from_box (const GtkCanvasBox *box)
  * Returns: a new size
  **/
 GtkCanvasSize *
-gtk_canvas_size_new_distance (const GtkCanvasPoint *from,
-                              const GtkCanvasPoint *to)
+gtk_canvas_size_new_distance (const GtkCanvasVector *from,
+                              const GtkCanvasVector *to)
 {
   GtkCanvasSize *self;
   graphene_vec2_t minus_one;
@@ -113,11 +113,11 @@ gtk_canvas_size_new_distance (const GtkCanvasPoint *from,
 
   self = gtk_canvas_size_alloc ();
   gtk_canvas_vector_init_sum (&self->vec2,
-                            graphene_vec2_one (),
-                            from,
-                            &minus_one,
-                            to,
-                            NULL);
+                              graphene_vec2_one (),
+                              from,
+                              &minus_one,
+                              to,
+                              NULL);
 
   return self;
 }

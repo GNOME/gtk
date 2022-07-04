@@ -90,8 +90,8 @@ gtk_canvas_box_update_variable (GtkCanvasBox       *self,
  * Returns: a new box
  **/
 GtkCanvasBox *
-gtk_canvas_box_new_points (const GtkCanvasPoint *point1,
-                           const GtkCanvasPoint *point2)
+gtk_canvas_box_new_points (const GtkCanvasVector *point1,
+                           const GtkCanvasVector *point2)
 {
   GtkCanvasVector size;
   GtkCanvasBox *result;
@@ -129,10 +129,10 @@ gtk_canvas_box_new_points (const GtkCanvasPoint *point1,
  * Returns: a new box
  **/
 GtkCanvasBox *
-gtk_canvas_box_new (const GtkCanvasPoint *point,
-                    const GtkCanvasSize  *size,
-                    float                 origin_x,
-                    float                 origin_y)
+gtk_canvas_box_new (const GtkCanvasVector *point,
+                    const GtkCanvasSize   *size,
+                    float                  origin_x,
+                    float                  origin_y)
 {
   GtkCanvasBox *self;
   graphene_vec2_t origin;
@@ -199,12 +199,12 @@ gtk_canvas_box_eval (const GtkCanvasBox *self,
   return TRUE;
 }
 
-const GtkCanvasPoint *
+const GtkCanvasVector *
 gtk_canvas_box_get_point (const GtkCanvasBox *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
 
-  return (GtkCanvasPoint *) &self->point;
+  return &self->point;
 }
 
 const GtkCanvasSize *

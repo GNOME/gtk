@@ -332,6 +332,21 @@ gtk_canvas_vector_finish (GtkCanvasVector *self)
   self->class->finish (self);
 }
 
+/**
+ * gtk_canvas_vector_eval:
+ * @self: a `GtkCanvasVector`
+ * @result: (out) (caller-allocates): The current value
+ *   of the vector
+ *
+ * Evaluates the given vector and returns its x and y value.
+ *
+ * If the vector currently has no value - because it
+ * references and object that has been deleted or because
+ * the value is in the process of being updated - %FALSE
+ * is returned. Think of this as an exception being raised.
+ *
+ * Returns: %FALSE if the vector currently has no value.
+ **/
 gboolean
 gtk_canvas_vector_eval (const GtkCanvasVector *self,
                         graphene_vec2_t       *result)

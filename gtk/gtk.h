@@ -62,7 +62,7 @@
 #include <gtk/gtkcanvas.h>
 #include <gtk/gtkcanvasbox.h>
 #include <gtk/gtkcanvasitem.h>
-#include <gtk/gtkcanvaspoint.h>
+#include <gtk/gtkcanvasvector.h>
 #include <gtk/gtkcanvassize.h>
 #include <gtk/gtkcellarea.h>
 #include <gtk/gtkcellareabox.h>

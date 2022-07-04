@@ -14,24 +14,24 @@ static void
 bind_item (GtkListItemFactory *factory,
            GtkCanvasItem      *ci)
 {
-  GtkCanvasPoint *point;
+  GtkCanvasVector *point;
   GtkCanvasSize *size;
   GtkCanvasBox *box;
 
   gtk_canvas_item_set_widget (ci, gtk_canvas_item_get_item (ci));
 
   /* Also center the item, so we do something interesting */
-  point = gtk_canvas_point_new (0, 0);
+  point = gtk_canvas_vector_new (0, 0);
   box = gtk_canvas_box_new (point,
                             gtk_canvas_get_viewport_size (gtk_canvas_item_get_canvas (ci)),
                             0.0, 0.0);
-  gtk_canvas_point_free (point);
+  gtk_canvas_vector_free (point);
 
-  point = gtk_canvas_point_new_from_box (box, 0.5, 0.5);
+  point = gtk_canvas_vector_new_from_box (box, 0.5, 0.5);
   gtk_canvas_box_free (box);
   size = gtk_canvas_size_new_measure_item (ci, GTK_CANVAS_ITEM_MEASURE_MIN_FOR_MIN);
   box = gtk_canvas_box_new (point, size, 0.5, 0.5);
-  gtk_canvas_point_free (point);
+  gtk_canvas_vector_free (point);
   gtk_canvas_size_free (size);
 
   gtk_canvas_item_set_bounds (ci, box);
