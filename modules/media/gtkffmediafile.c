@@ -292,9 +292,15 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
           if (errnum >= 0)
             {
               errnum = avcodec_receive_frame (video->codec_ctx, frame);
+              if (errnum == AVERROR (EAGAIN))
+                {
+                  // Just retry with the next packet
+                  errnum = 0;
+                  continue;
+                }
               if (errnum < 0)
                 G_BREAKPOINT();
-              if (errnum >= 0)
+              else
                 {
                   av_packet_unref (&packet);
                   break;
