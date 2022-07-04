@@ -48,10 +48,23 @@ GDK_AVAILABLE_IN_ALL
 GtkCanvasVector *       gtk_canvas_vector_new                   (float                   x,
                                                                  float                   y);
 GDK_AVAILABLE_IN_ALL
+GtkCanvasVector *       gtk_canvas_vector_new_distance          (const GtkCanvasVector  *from,
+                                                                 const GtkCanvasVector  *to);
+GDK_AVAILABLE_IN_ALL
 GtkCanvasVector *       gtk_canvas_vector_new_from_box          (const GtkCanvasBox     *box,
                                                                  float                   origin_x,
                                                                  float                   origin_y);
 
+typedef enum {
+  GTK_CANVAS_ITEM_MEASURE_MIN_FOR_MIN,
+  GTK_CANVAS_ITEM_MEASURE_MIN_FOR_NAT,
+  GTK_CANVAS_ITEM_MEASURE_NAT_FOR_MIN,
+  GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT
+} GtkCanvasItemMeasure;
+
+GDK_AVAILABLE_IN_ALL
+const GtkCanvasVector * gtk_canvas_vector_get_item_measure      (GtkCanvasItem          *item,
+                                                                 GtkCanvasItemMeasure    measure);
 G_END_DECLS
 
 #endif /* __GTK_VECTOR_H__ */

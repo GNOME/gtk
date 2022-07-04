@@ -3,7 +3,6 @@
 
 #include "gtkcanvasitem.h"
 
-#include "gtkcanvassize.h"
 #include "gtkcanvasvectorprivate.h"
 
 G_BEGIN_DECLS
@@ -18,8 +17,6 @@ void                    gtk_canvas_item_allocate_widget          (GtkCanvasItem 
                                                                   float                  dx,
                                                                   float                  dy);
 gboolean                gtk_canvas_item_has_allocation           (GtkCanvasItem         *self);
-const GtkCanvasVector *   gtk_canvas_item_get_measure_vec2         (GtkCanvasItem         *self,
-                                                                  GtkCanvasItemMeasurement measure);
 
 void                    gtk_canvas_item_clear_canvas             (GtkCanvasItem         *self);
 

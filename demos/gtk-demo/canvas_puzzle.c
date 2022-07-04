@@ -14,8 +14,7 @@ set_item_position (GtkCanvasItem *ci,
                    float          x,
                    float          y)
 {
-  GtkCanvasVector *point;
-  GtkCanvasSize *size;
+  GtkCanvasVector *point, *size;
   GtkCanvasBox *box, *viewport;
 
   x = CLAMP (x, 0, 1);
@@ -29,10 +28,10 @@ set_item_position (GtkCanvasItem *ci,
 
   point = gtk_canvas_vector_new_from_box (viewport, x, y);
   gtk_canvas_box_free (viewport);
-  size = gtk_canvas_size_new (0, 0);
+  size = gtk_canvas_vector_new (0, 0);
   box = gtk_canvas_box_new (point, size, x, y);
   gtk_canvas_vector_free (point);
-  gtk_canvas_size_free (size);
+  gtk_canvas_vector_free (size);
 
   gtk_canvas_item_set_bounds (ci, box);
   gtk_canvas_box_free (box);

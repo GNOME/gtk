@@ -41,7 +41,6 @@ typedef struct _GtkCanvas              GtkCanvas;
 typedef struct _GtkCanvasBox           GtkCanvasBox;
 typedef struct _GtkCanvasItem          GtkCanvasItem;
 typedef struct _GtkCanvasVector        GtkCanvasVector;
-typedef struct _GtkCanvasSize          GtkCanvasSize;
 typedef struct _GtkCssStyleChange      GtkCssStyleChange;
 typedef struct _GtkEventController     GtkEventController;
 typedef struct _GtkGesture             GtkGesture;

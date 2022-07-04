@@ -103,6 +103,40 @@ gtk_canvas_vector_new_from_box (const GtkCanvasBox *box,
   return self;
 }
 
+/**
+ * gtk_canvas_vector_new_distance:
+ * @from: point from where to compute the distance
+ * @to: point to where to compute the distance
+ *
+ * Creates a size for the given distance. Note that both width and height
+ * can be negative if the coordinate of @to is smaller than @from in the
+ * corresponding dimension.
+ *
+ * Returns: a new size
+ **/
+GtkCanvasVector *
+gtk_canvas_vector_new_distance (const GtkCanvasVector *from,
+                                const GtkCanvasVector *to)
+{
+  GtkCanvasVector *self;
+  graphene_vec2_t minus_one;
+
+  g_return_val_if_fail (from != NULL, NULL);
+  g_return_val_if_fail (to != NULL, NULL);
+
+  graphene_vec2_init (&minus_one, -1.f, -1.f);
+
+  self = gtk_canvas_vector_alloc ();
+  gtk_canvas_vector_init_sum (self,
+                              graphene_vec2_one (),
+                              from,
+                              &minus_one,
+                              to,
+                              NULL);
+
+  return self;
+}
+
 GtkCanvasVector *
 gtk_canvas_vector_copy (const GtkCanvasVector *self)
 {

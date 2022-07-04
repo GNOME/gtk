@@ -15,7 +15,7 @@ bind_item (GtkListItemFactory *factory,
            GtkCanvasItem      *ci)
 {
   GtkCanvasVector *point;
-  GtkCanvasSize *size;
+  const GtkCanvasVector *size;
   GtkCanvasBox *box;
 
   gtk_canvas_item_set_widget (ci, gtk_canvas_item_get_item (ci));
@@ -29,10 +29,9 @@ bind_item (GtkListItemFactory *factory,
 
   point = gtk_canvas_vector_new_from_box (box, 0.5, 0.5);
   gtk_canvas_box_free (box);
-  size = gtk_canvas_size_new_measure_item (ci, GTK_CANVAS_ITEM_MEASURE_MIN_FOR_MIN);
+  size = gtk_canvas_vector_get_item_measure (ci, GTK_CANVAS_ITEM_MEASURE_MIN_FOR_MIN);
   box = gtk_canvas_box_new (point, size, 0.5, 0.5);
   gtk_canvas_vector_free (point);
-  gtk_canvas_size_free (size);
 
   gtk_canvas_item_set_bounds (ci, box);
   gtk_canvas_box_free (box);

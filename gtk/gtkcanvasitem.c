@@ -325,21 +325,27 @@ gtk_canvas_item_has_allocation (GtkCanvasItem *self)
 }
 
 const GtkCanvasVector *
-gtk_canvas_item_get_measure_vec2 (GtkCanvasItem            *self,
-                                  GtkCanvasItemMeasurement  measure)
+gtk_canvas_vector_get_item_measure (GtkCanvasItem        *item,
+                                    GtkCanvasItemMeasure  measure)
 {
-  return &self->size_vecs[measure];
+  g_return_val_if_fail (GTK_IS_CANVAS_ITEM (item), NULL);
+
+  return &item->size_vecs[measure];
 }
 
 const GtkCanvasBox *
 gtk_canvas_box_get_item_bounds (GtkCanvasItem *item)
 {
+  g_return_val_if_fail (GTK_IS_CANVAS_ITEM (item), NULL);
+
   return &item->bounds_var;
 }
 
 const GtkCanvasBox *
 gtk_canvas_box_get_item_allocation (GtkCanvasItem *item)
 {
+  g_return_val_if_fail (GTK_IS_CANVAS_ITEM (item), NULL);
+
   return &item->allocation_var;
 }
 

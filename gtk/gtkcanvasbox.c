@@ -130,7 +130,7 @@ gtk_canvas_box_new_points (const GtkCanvasVector *point1,
  **/
 GtkCanvasBox *
 gtk_canvas_box_new (const GtkCanvasVector *point,
-                    const GtkCanvasSize   *size,
+                    const GtkCanvasVector *size,
                     float                  origin_x,
                     float                  origin_y)
 {
@@ -207,12 +207,12 @@ gtk_canvas_box_get_point (const GtkCanvasBox *self)
   return &self->point;
 }
 
-const GtkCanvasSize *
+const GtkCanvasVector *
 gtk_canvas_box_get_size (const GtkCanvasBox *self)
 {
   g_return_val_if_fail (self != NULL, NULL);
 
-  return (GtkCanvasSize *) &self->size;
+  return &self->size;
 }
 
 void

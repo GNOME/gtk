@@ -54,7 +54,7 @@ GtkCanvasItem *         gtk_canvas_lookup_item                  (GtkCanvas      
                                                                  gpointer                item);
 
 GDK_AVAILABLE_IN_ALL
-const GtkCanvasSize *   gtk_canvas_get_viewport_size            (GtkCanvas              *self);
+const GtkCanvasVector * gtk_canvas_get_viewport_size            (GtkCanvas              *self);
 
 G_END_DECLS
 

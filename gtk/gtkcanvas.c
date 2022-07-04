@@ -23,7 +23,6 @@
 
 #include "gtkcanvasbox.h"
 #include "gtkcanvasitemprivate.h"
-#include "gtkcanvassize.h"
 #include "gtkcanvasvectorprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemfactory.h"
@@ -544,8 +543,8 @@ gtk_canvas_lookup_item (GtkCanvas *self,
   return g_hash_table_lookup (self->item_lookup, item);
 }
 
-const GtkCanvasSize *
+const GtkCanvasVector *
 gtk_canvas_get_viewport_size (GtkCanvas *self)
 {
-  return (const GtkCanvasSize *) &self->viewport_size;
+  return &self->viewport_size;
 }
