@@ -41,11 +41,11 @@ void
 gtk_canvas_box_init (GtkCanvasBox          *self,
                      const GtkCanvasVector *point,
                      const GtkCanvasVector *size,
-                     const graphene_vec2_t *origin)
+                     const GtkCanvasVector *origin)
 {
   gtk_canvas_vector_init_copy (&self->point, point);
   gtk_canvas_vector_init_copy (&self->size, size);
-  graphene_vec2_init_from_vec2 (&self->origin, origin);
+  gtk_canvas_vector_init_copy (&self->origin, origin);
 }
 
 void
@@ -60,6 +60,7 @@ gtk_canvas_box_finish (GtkCanvasBox *self)
 {
   gtk_canvas_vector_finish (&self->point);
   gtk_canvas_vector_finish (&self->size);
+  gtk_canvas_vector_finish (&self->origin);
 }
 
 void
@@ -67,7 +68,7 @@ gtk_canvas_box_init_variable (GtkCanvasBox *self)
 {
   gtk_canvas_vector_init_variable (&self->point);
   gtk_canvas_vector_init_variable (&self->size);
-  graphene_vec2_init (&self->origin, 0, 0);
+  gtk_canvas_vector_init_variable (&self->origin);
 }
 
 void
@@ -76,7 +77,7 @@ gtk_canvas_box_update_variable (GtkCanvasBox       *self,
 {
   gtk_canvas_vector_init_copy (gtk_canvas_vector_get_variable (&self->point), &other->point);
   gtk_canvas_vector_init_copy (gtk_canvas_vector_get_variable (&self->size), &other->size);
-  graphene_vec2_init_from_vec2 (&self->origin, &other->origin);
+  gtk_canvas_vector_init_copy (gtk_canvas_vector_get_variable (&self->origin), &other->origin);
 }
 
 /**
@@ -93,7 +94,7 @@ GtkCanvasBox *
 gtk_canvas_box_new_points (const GtkCanvasVector *point1,
                            const GtkCanvasVector *point2)
 {
-  GtkCanvasVector size;
+  GtkCanvasVector size, origin;
   GtkCanvasBox *result;
   graphene_vec2_t minus_one;
 
@@ -107,9 +108,11 @@ gtk_canvas_box_new_points (const GtkCanvasVector *point1,
                               &minus_one,
                               point1,
                               NULL);
+  gtk_canvas_vector_init_constant (&origin, 0, 0);
   result = g_slice_new (GtkCanvasBox);
-  gtk_canvas_box_init (result, (GtkCanvasVector *) point1, &size, graphene_vec2_zero ());
+  gtk_canvas_box_init (result, (GtkCanvasVector *) point1, &size, &origin);
   gtk_canvas_vector_finish (&size);
+  gtk_canvas_vector_finish (&origin);
 
   return result;
 }
@@ -135,18 +138,17 @@ gtk_canvas_box_new (const GtkCanvasVector *point,
                     float                  origin_y)
 {
   GtkCanvasBox *self;
-  graphene_vec2_t origin;
+  GtkCanvasVector origin;
 
   g_return_val_if_fail (point != NULL, NULL);
   g_return_val_if_fail (size != NULL, NULL);
 
-  graphene_vec2_init (&origin, origin_x, origin_y);
+  gtk_canvas_vector_init_constant (&origin, origin_x, origin_y);
 
   self = g_slice_new (GtkCanvasBox);
-  gtk_canvas_box_init (self,
-                       (GtkCanvasVector *) point,
-                       (GtkCanvasVector *) size,
-                       &origin);
+  gtk_canvas_box_init (self, point, size, &origin);
+
+  gtk_canvas_vector_finish (&origin);
 
   return self;
 }
@@ -176,20 +178,21 @@ gboolean
 gtk_canvas_box_eval (const GtkCanvasBox *self,
                      graphene_rect_t    *rect)
 {
-  graphene_vec2_t point, size, tmp;
+  graphene_vec2_t point, size, origin;
 
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (rect != NULL, FALSE);
 
   if (!gtk_canvas_vector_eval (&self->point, &point) ||
-      !gtk_canvas_vector_eval (&self->size, &size))
+      !gtk_canvas_vector_eval (&self->size, &size) ||
+      !gtk_canvas_vector_eval (&self->origin, &origin))
     {
       *rect = *graphene_rect_zero ();
       return FALSE;
     }
 
-  graphene_vec2_multiply (&self->origin, &size, &tmp);
-  graphene_vec2_subtract (&point, &tmp, &point);
+  graphene_vec2_multiply (&origin, &size, &origin);
+  graphene_vec2_subtract (&point, &origin, &point);
 
   *rect = GRAPHENE_RECT_INIT (graphene_vec2_get_x (&point),
                               graphene_vec2_get_y (&point),
@@ -215,15 +218,10 @@ gtk_canvas_box_get_size (const GtkCanvasBox *self)
   return &self->size;
 }
 
-void
-gtk_canvas_box_get_origin (const GtkCanvasBox *self,
-                           float              *x,
-                           float              *y)
+const GtkCanvasVector *
+gtk_canvas_box_get_origin (const GtkCanvasBox *self)
 {
-  g_return_if_fail (self != NULL);
+  g_return_val_if_fail (self != NULL, NULL);
 
-  if (x)
-    *x = graphene_vec2_get_x (&self->origin);
-  if (y)
-    *y = graphene_vec2_get_y (&self->origin);
+  return &self->origin;
 }

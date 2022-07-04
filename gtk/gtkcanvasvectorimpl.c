@@ -244,6 +244,63 @@ gtk_canvas_vector_init_sum (GtkCanvasVector         *vector,
 }
 
 /* }}} */
+/* {{{ MULTIPLY */
+
+static void
+gtk_canvas_vector_multiply_copy (GtkCanvasVector       *vector,
+                                 const GtkCanvasVector *source_vector)
+{
+  const GtkCanvasVectorMultiply *source = &source_vector->multiply;
+
+  gtk_canvas_vector_init_multiply (vector, source->a, source->b);
+}
+
+static void
+gtk_canvas_vector_multiply_finish (GtkCanvasVector *vector)
+{
+  const GtkCanvasVectorMultiply *self = &vector->multiply;
+
+  gtk_canvas_vector_free (self->a);
+  gtk_canvas_vector_free (self->b);
+}
+
+static gboolean
+gtk_canvas_vector_multiply_eval (const GtkCanvasVector *vector,
+                                 graphene_vec2_t       *result)
+{
+  const GtkCanvasVectorMultiply *self = &vector->multiply;
+  graphene_vec2_t a, b;
+
+  if (!gtk_canvas_vector_eval (self->a, &a) ||
+      !gtk_canvas_vector_eval (self->b, &b))
+    return FALSE;
+
+  graphene_vec2_multiply (&a, &b, result);
+  return TRUE;
+}
+
+static const GtkCanvasVectorClass GTK_CANVAS_VECTOR_MULTIPLY_CLASS =
+{
+  "GtkCanvasVectorMultiply",
+  gtk_canvas_vector_multiply_copy,
+  gtk_canvas_vector_multiply_finish,
+  gtk_canvas_vector_multiply_eval,
+};
+
+void
+gtk_canvas_vector_init_multiply (GtkCanvasVector       *vector,
+                                 const GtkCanvasVector *a,
+                                 const GtkCanvasVector *b)
+{
+  GtkCanvasVectorMultiply *self = &vector->multiply;
+
+  self->class = &GTK_CANVAS_VECTOR_MULTIPLY_CLASS;
+  
+  self->a = gtk_canvas_vector_copy (a);
+  self->b = gtk_canvas_vector_copy (b);
+}
+
+/* }}} */
 /* {{{ VARIABLE */
 
 static void

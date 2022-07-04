@@ -11,14 +11,14 @@ struct _GtkCanvasBox
 {
   GtkCanvasVector point;
   GtkCanvasVector size;
-  graphene_vec2_t origin;
+  GtkCanvasVector origin;
 };
 
 
 void                    gtk_canvas_box_init                     (GtkCanvasBox           *self,
                                                                  const GtkCanvasVector  *point,
                                                                  const GtkCanvasVector  *size,
-                                                                 const graphene_vec2_t  *origin);
+                                                                 const GtkCanvasVector  *origin);
 void                    gtk_canvas_box_init_copy                (GtkCanvasBox           *self,
                                                                  const GtkCanvasBox     *source);
 void                    gtk_canvas_box_finish                   (GtkCanvasBox           *self);

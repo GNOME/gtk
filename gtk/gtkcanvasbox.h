@@ -45,9 +45,7 @@ const GtkCanvasVector * gtk_canvas_box_get_point              (const GtkCanvasBo
 GDK_AVAILABLE_IN_ALL
 const GtkCanvasVector * gtk_canvas_box_get_size               (const GtkCanvasBox       *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-void                    gtk_canvas_box_get_origin             (const GtkCanvasBox       *self,
-                                                               float                    *x,
-                                                               float                    *y);
+const GtkCanvasVector * gtk_canvas_box_get_origin             (const GtkCanvasBox       *self) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_canvas_box_eval                   (const GtkCanvasBox       *self,

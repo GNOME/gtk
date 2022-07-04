@@ -256,7 +256,6 @@ gtk_canvas_allocate (GtkWidget *widget,
           GtkCanvasItem *ci = gtk_canvas_items_get (&self->items, i);
           GtkWidget *child = gtk_canvas_item_get_widget (ci);
           const GtkCanvasBox *bounds;
-          float origin_x, origin_y;
           graphene_rect_t rect;
           int x, y, w, h;
 
@@ -297,15 +296,27 @@ gtk_canvas_allocate (GtkWidget *widget,
             w = -w;
           if (rect.size.height < 0)
             h = -h;
-          gtk_canvas_box_get_origin (bounds, &origin_x, &origin_y);
-          if (ABS (w) > ABS (rect.size.width))
-            x = round (rect.origin.x + origin_x * (rect.size.width - w));
+          if (ABS (w) > ABS (rect.size.width) || ABS (h) > ABS (rect.size.height))
+            {
+              graphene_vec2_t origin;
+
+              if (!gtk_canvas_vector_eval (gtk_canvas_box_get_origin (bounds), &origin))
+                graphene_vec2_init_from_vec2 (&origin, graphene_vec2_zero ());
+
+              if (ABS (w) > ABS (rect.size.width))
+                x = round (rect.origin.x + graphene_vec2_get_x (&origin) * (rect.size.width - w));
+              else
+                x = round (rect.origin.x);
+              if (ABS (h) > ABS (rect.size.height))
+                y = round (rect.origin.y + graphene_vec2_get_y (&origin) * (rect.size.height - h));
+              else
+                y = round (rect.origin.y);
+            }
           else
-            x = round (rect.origin.x);
-          if (ABS (h) > ABS (rect.size.height))
-            y = round (rect.origin.y + origin_y * (rect.size.height - h));
-          else
-            y = round (rect.origin.y);
+            {
+              x = round (rect.origin.x);
+              y = round (rect.origin.y);
+            }
 
           gtk_canvas_item_allocate (ci, &GRAPHENE_RECT_INIT (x, y, w, h));
           success = TRUE;

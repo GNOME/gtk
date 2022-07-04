@@ -86,12 +86,14 @@ gtk_canvas_vector_new_from_box (const GtkCanvasBox *box,
                                 float               origin_y)
 {
   GtkCanvasVector *self;
-  graphene_vec2_t origin;
+  GtkCanvasVector mult;
+  graphene_vec2_t origin, minus_one;
  
   g_return_val_if_fail (box != NULL, NULL);
  
   graphene_vec2_init (&origin, origin_x, origin_y);
-  graphene_vec2_subtract (&origin, &box->origin, &origin);
+  graphene_vec2_init (&minus_one, -1, -1);
+  gtk_canvas_vector_init_multiply (&mult, &box->origin, &box->size);
  
   self = gtk_canvas_vector_alloc ();
   gtk_canvas_vector_init_sum (self,
@@ -99,7 +101,12 @@ gtk_canvas_vector_new_from_box (const GtkCanvasBox *box,
                               &box->point,
                               &origin,
                               &box->size,
+                              &minus_one,
+                              &mult,
                               NULL);
+
+  gtk_canvas_vector_finish (&mult);
+
   return self;
 }
 

@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 typedef struct _GtkCanvasVector GtkCanvasVector;
 typedef struct _GtkCanvasVectorClass GtkCanvasVectorClass;
 typedef struct _GtkCanvasVectorConstant GtkCanvasVectorConstant;
+typedef struct _GtkCanvasVectorMultiply GtkCanvasVectorMultiply;
 typedef struct _GtkCanvasVectorSum GtkCanvasVectorSum;
 typedef struct _GtkCanvasVectorSummand GtkCanvasVectorSummand;
 typedef struct _GtkCanvasVectorVariable GtkCanvasVectorVariable;
@@ -38,6 +39,14 @@ struct _GtkCanvasVectorConstant
   const GtkCanvasVectorClass *class;
 
   graphene_vec2_t value;
+};
+
+struct _GtkCanvasVectorMultiply
+{
+  const GtkCanvasVectorClass *class;
+
+  GtkCanvasVector *a;
+  GtkCanvasVector *b;
 };
 
 struct _GtkCanvasVectorSum
@@ -63,6 +72,7 @@ struct _GtkCanvasVector
   union {
     const GtkCanvasVectorClass *class;
     GtkCanvasVectorConstant constant;
+    GtkCanvasVectorMultiply multiply;
     GtkCanvasVectorSum sum;
     GtkCanvasVectorVariable variable;
   };
@@ -88,6 +98,9 @@ void                    gtk_canvas_vector_init_constant_from_vector (GtkCanvasVe
 void                    gtk_canvas_vector_init_sum              (GtkCanvasVector        *vector,
                                                                  const graphene_vec2_t  *scale,
                                                                  ...) G_GNUC_NULL_TERMINATED;
+void                    gtk_canvas_vector_init_multiply         (GtkCanvasVector        *vector,
+                                                                 const GtkCanvasVector  *a,
+                                                                 const GtkCanvasVector  *b);
 
 void                    gtk_canvas_vector_init_variable         (GtkCanvasVector        *vector);
 GtkCanvasVector *       gtk_canvas_vector_get_variable          (GtkCanvasVector        *vector);
