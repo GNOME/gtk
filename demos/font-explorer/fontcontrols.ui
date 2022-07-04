@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="FontControls" parent="GtkWidget">
+    <property name="layout-manager"><object class="GtkGridLayout"/></property>
+    <child>
+      <object class="GtkLabel">
+        <property name="sensitive" bind-source="FontControls" bind-property="disable-size" bind-flags="invert-boolean"/>
+        <property name="label">Size</property>
+        <property name="xalign">0</property>
+        <property name="valign">baseline</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="RangeEdit">
+        <property name="sensitive" bind-source="FontControls" bind-property="disable-size" bind-flags="invert-boolean"/>
+        <property name="hexpand">1</property>
+        <property name="width-request">160</property>
+        <property name="valign">baseline</property>
+        <property name="adjustment">
+          <object class="GtkAdjustment" id="size_adjustment">
+            <property name="lower">7</property>
+            <property name="upper">100</property>
+            <property name="value">14</property>
+            <property name="step_increment">0.5</property>
+            <property name="page_increment">10</property>
+            <signal name="value-changed" handler="size_changed"/>
+          </object>
+        </property>
+        <property name="default-value">12</property>
+        <property name="n-chars">5</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Letterspacing</property>
+        <property name="xalign">0</property>
+        <property name="valign">baseline</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="RangeEdit">
+        <property name="hexpand">1</property>
+        <property name="width-request">160</property>
+        <property name="valign">baseline</property>
+        <property name="adjustment">
+          <object class="GtkAdjustment" id="letterspacing_adjustment">
+            <property name="lower">-1024</property>
+            <property name="upper">8192</property>
+            <property name="value">0</property>
+            <property name="step_increment">1</property>
+            <property name="page_increment">512</property>
+            <signal name="value-changed" handler="letterspacing_changed"/>
+          </object>
+        </property>
+        <property name="default-value">0</property>
+        <property name="n-chars">5</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">1</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Line Height</property>
+        <property name="xalign">0</property>
+        <property name="valign">baseline</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="RangeEdit">
+        <property name="hexpand">1</property>
+        <property name="width-request">160</property>
+        <property name="valign">baseline</property>
+        <property name="adjustment">
+          <object class="GtkAdjustment" id="line_height_adjustment">
+            <property name="lower">0.75</property>
+            <property name="upper">2.5</property>
+            <property name="value">1.0</property>
+            <property name="step_increment">0.1</property>
+            <property name="page_increment">1</property>
+            <signal name="value-changed" handler="line_height_changed"/>
+          </object>
+        </property>
+        <property name="default-value">1</property>
+        <property name="n-chars">5</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">2</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Foreground</property>
+        <property name="xalign">0</property>
+        <property name="valign">baseline</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkColorButton" id="foreground">
+        <property name="rgba">black</property>
+        <signal name="notify::rgba" handler="color_set"/>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">3</property>
+        </layout>
+      </object>
+    </child>
+
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Background</property>
+        <property name="xalign">0</property>
+        <property name="valign">baseline</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkColorButton" id="background">
+        <property name="rgba">white</property>
+        <signal name="notify::rgba" handler="color_set"/>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <property name="icon-name">object-flip-vertical-symbolic</property>
+        <property name="halign">start</property>
+        <property name="valign">center</property>
+        <style>
+          <class name="circular"/>
+        </style>
+        <signal name="clicked" handler="swap_colors"/>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">3</property>
+          <property name="row-span">2</property>
+        </layout>
+      </object>
+    </child>
+  </template>
+</interface>

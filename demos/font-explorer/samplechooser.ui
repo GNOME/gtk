@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="SampleChooser" parent="GtkWidget">
+    <property name="layout-manager"><object class="GtkGridLayout"/></property>
+    <child>
+      <object class="GtkButton">
+        <property name="label">Pangram</property>
+        <signal name="clicked" handler="next_pangram"/>
+        <layout>
+          <property name="row">0</property>
+          <property name="column">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <property name="label">Paragraph</property>
+        <signal name="clicked" handler="next_paragraph"/>
+        <layout>
+          <property name="row">0</property>
+          <property name="column">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <property name="label">Alphabet</property>
+        <signal name="clicked" handler="next_alphabet"/>
+        <layout>
+          <property name="row">1</property>
+          <property name="column">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton">
+        <property name="label">Title</property>
+        <signal name="clicked" handler="next_title"/>
+        <layout>
+          <property name="row">1</property>
+          <property name="column">1</property>
+        </layout>
+      </object>
+    </child>
+  </template>
+</interface>

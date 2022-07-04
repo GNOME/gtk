@@ -1,0 +1,20 @@
+box.sidebar {
+  padding: 20px;
+  border-spacing: 20px;
+}
+fontcontrols {
+  border-spacing: 10px;
+}
+fontvariations > grid {
+  border-spacing: 10px;
+}
+fontcolors > grid {
+  border-spacing: 10px;
+}
+samplechooser {
+  border-spacing: 10px;
+}
+fontview {
+  padding: 10px;
+  border-spacing: 10px;
+}

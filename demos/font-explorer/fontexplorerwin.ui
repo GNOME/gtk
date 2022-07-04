@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="gear_menu">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Inspector</attribute>
+        <attribute name="action">app.inspector</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_About GTK Font Explorer</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+  </menu>
+  <template class="FontExplorerWindow" parent="GtkApplicationWindow">
+    <property name="title" translatable="yes">Font Explorer</property>
+    <property name="default-width">1024</property>
+    <property name="default-height">768</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <child>
+          <object class="GtkButton" id="reset">
+            <property name="receives-default">1</property>
+            <property name="tooltip-text">Reset</property>
+            <property name="icon-name">view-refresh-symbolic</property>
+            <property name="action-name">win.reset</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkMenuButton" id="gear_menu_button">
+            <property name="focus-on-click">0</property>
+            <property name="valign">center</property>
+            <property name="menu-model">gear_menu</property>
+            <property name="icon-name">open-menu-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <style>
+                  <class name="sidebar"/>
+                </style>
+                <child>
+                  <object class="GtkFontButton" id="fontbutton">
+                    <property name="level">family|style</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="FontControls" id="controls">
+                    <property name="disable-size" bind-source="view" bind-property="ignore-size" bind-flags="sync-create"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="SampleChooser" id="samplechooser"/>
+                </child>
+                <child>
+                  <object class="FontVariations" id="variations">
+                    <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="FontFeatures" id="features">
+                    <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                    <property name="language" bind-source="fontbutton" bind-flags="sync-create"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="FontColors" id="colors">
+                    <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="FontView" id="view">
+            <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+            <property name="size" bind-source="controls" bind-flags="sync-create"/>
+            <property name="letterspacing" bind-source="controls" bind-flags="sync-create"/>
+            <property name="line-height" bind-source="controls" bind-flags="sync-create"/>
+            <property name="foreground" bind-source="controls" bind-flags="sync-create"/>
+            <property name="background" bind-source="controls" bind-flags="sync-create"/>
+            <property name="sample-text" bind-source="samplechooser" bind-flags="sync-create"/>
+            <property name="features" bind-source="features" bind-flags="sync-create"/>
+            <property name="variations" bind-source="variations" bind-flags="sync-create"/>
+            <property name="palette" bind-source="colors" bind-flags="sync-create"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

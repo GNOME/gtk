@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="FontColors" parent="GtkWidget">
+    <property name="layout-manager"><object class="GtkBinLayout"/></property>
+    <child>
+      <object class="GtkGrid" id="grid">
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="label" translatable="yes">Colors</property>
+            <property name="margin-bottom">10</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="heading"/>
+            </style>
+            <layout>
+              <property name="row">-2</property>
+              <property name="column">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

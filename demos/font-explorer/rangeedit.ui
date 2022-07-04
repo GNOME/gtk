@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="RangeEdit" parent="GtkWidget">
+    <property name="layout-manager">
+      <object class="GtkBoxLayout">
+        <property name="spacing">10</property>
+      </object>
+    </property>
+    <child>
+      <object class="GtkScale" id="scale">
+        <property name="orientation">horizontal</property>
+        <property name="hexpand">1</property>
+        <property name="adjustment" bind-source="RangeEdit" bind-flags="sync-create"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="entry">
+        <property name="width-chars" bind-source="RangeEdit" bind-property="n-chars" bind-flags="sync-create"/>
+        <property name="max-width-chars" bind-source="RangeEdit" bind-property="n-chars" bind-flags="sync-create"/>
+        <signal name="activate" handler="entry_activated"/>
+      </object>
+    </child>
+  </template>
+</interface>

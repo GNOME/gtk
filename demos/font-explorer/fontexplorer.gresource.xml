@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gtk/fontexplorer">
+    <file preprocess="xml-stripblanks">fontexplorerwin.ui</file>
+    <file preprocess="xml-stripblanks">fontview.ui</file>
+    <file preprocess="xml-stripblanks">fontcontrols.ui</file>
+    <file preprocess="xml-stripblanks">samplechooser.ui</file>
+    <file preprocess="xml-stripblanks">fontcolors.ui</file>
+    <file preprocess="xml-stripblanks">fontfeatures.ui</file>
+    <file preprocess="xml-stripblanks">fontvariations.ui</file>
+    <file preprocess="xml-stripblanks">rangeedit.ui</file>
+    <file>fontexplorer.css</file>
+  </gresource>
+</gresources>
