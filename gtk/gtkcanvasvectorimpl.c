@@ -361,6 +361,7 @@ gtk_canvas_vector_init_multiply (GtkCanvasVector       *vector,
 
 static void
 gtk_canvas_vector_init_variable_with_variable (GtkCanvasVector *vector,
+                                               const char      *name,
                                                GtkCanvasVector *variable);
 
 static void
@@ -369,7 +370,9 @@ gtk_canvas_vector_variable_copy (GtkCanvasVector       *vector,
 {
   const GtkCanvasVectorVariable *source = &source_vector->variable;
 
-  gtk_canvas_vector_init_variable_with_variable (vector, g_rc_box_acquire (source->variable));
+  gtk_canvas_vector_init_variable_with_variable (vector,
+                                                 source->name,
+                                                 g_rc_box_acquire (source->variable));
 }
 
 static void
@@ -377,6 +380,7 @@ gtk_canvas_vector_variable_finish (GtkCanvasVector *vector)
 {
   const GtkCanvasVectorVariable *self = &vector->variable;
 
+  g_free (self->name);
   g_rc_box_release (self->variable);
 }
 
@@ -386,9 +390,7 @@ gtk_canvas_vector_variable_print (const GtkCanvasVector *vector,
 {
   const GtkCanvasVectorVariable *self = &vector->variable;
 
-  g_string_append (string, "(");
-  gtk_canvas_vector_print (self->variable, string);
-  g_string_append (string, ")");
+  g_string_append (string, self->name);
 }
 
 static gboolean
@@ -411,24 +413,36 @@ static const GtkCanvasVectorClass GTK_CANVAS_VECTOR_VARIABLE_CLASS =
 
 static void
 gtk_canvas_vector_init_variable_with_variable (GtkCanvasVector *vector,
+                                               const char      *name,
                                                GtkCanvasVector *variable)
 {
   GtkCanvasVectorVariable *self = &vector->variable;
 
   self->class = &GTK_CANVAS_VECTOR_VARIABLE_CLASS;
   
+  self->name = g_strdup (name);
   self->variable = variable;
 }
 
 void
-gtk_canvas_vector_init_variable (GtkCanvasVector *vector)
+gtk_canvas_vector_init_variable (GtkCanvasVector *vector,
+                                 const char      *format,
+                                 ...)
 {
   GtkCanvasVector *variable;
+  char *name;
+  va_list args;
 
   variable = g_rc_box_new (GtkCanvasVector);
   gtk_canvas_vector_init_invalid (variable);
 
-  gtk_canvas_vector_init_variable_with_variable (vector, variable);
+  va_start (args, format);
+  name = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  gtk_canvas_vector_init_variable_with_variable (vector, name, variable);
+
+  g_free (name);
 }
 
 GtkCanvasVector *

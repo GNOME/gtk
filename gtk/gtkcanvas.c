@@ -381,7 +381,7 @@ gtk_canvas_init (GtkCanvas *self)
 {
   self->item_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  gtk_canvas_vector_init_variable (&self->viewport_size);
+  gtk_canvas_vector_init_variable (&self->viewport_size, "viewport.size");
 }
 
 /**

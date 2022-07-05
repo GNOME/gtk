@@ -64,11 +64,22 @@ gtk_canvas_box_finish (GtkCanvasBox *self)
 }
 
 void
-gtk_canvas_box_init_variable (GtkCanvasBox *self)
+gtk_canvas_box_init_variable (GtkCanvasBox *self,
+                              const char   *format,
+                              ...)
 {
-  gtk_canvas_vector_init_variable (&self->point);
-  gtk_canvas_vector_init_variable (&self->size);
-  gtk_canvas_vector_init_variable (&self->origin);
+  char *name;
+  va_list args;
+
+  va_start (args, format);
+  name = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  gtk_canvas_vector_init_variable (&self->point, "%s.point", name);
+  gtk_canvas_vector_init_variable (&self->size, "%s.size", name);
+  gtk_canvas_vector_init_variable (&self->origin, "%s.origin", name);
+
+  g_free (name);
 }
 
 void

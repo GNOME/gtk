@@ -205,17 +205,17 @@ gtk_canvas_item_class_init (GtkCanvasItemClass *klass)
 static void
 gtk_canvas_item_init (GtkCanvasItem *self)
 {
-  int i;
-
-  for (i = 0; i < 4; i++)
-    gtk_canvas_vector_init_variable (&self->size_vecs[i]);
+  gtk_canvas_vector_init_variable (&self->size_vecs[0], "item%p.min_for_min", self);
+  gtk_canvas_vector_init_variable (&self->size_vecs[1], "item%p.min_for_nat", self);
+  gtk_canvas_vector_init_variable (&self->size_vecs[2], "item%p.nat_for_min", self);
+  gtk_canvas_vector_init_variable (&self->size_vecs[3], "item%p.nat_for_nat", self);
 
   gtk_canvas_vector_init_constant (&self->bounds.point, 0, 0);
   gtk_canvas_vector_init_copy (&self->bounds.size, &self->size_vecs[GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT]);
   gtk_canvas_vector_init_constant (&self->bounds.origin, 0.5, 0.5);
-  gtk_canvas_box_init_variable (&self->bounds_var);
+  gtk_canvas_box_init_variable (&self->bounds_var, "item%p.bounds", self);
   gtk_canvas_box_update_variable (&self->bounds_var, &self->bounds);
-  gtk_canvas_box_init_variable (&self->allocation_var);
+  gtk_canvas_box_init_variable (&self->allocation_var, "item%p.allocation", self);
 }
 
 GtkCanvasItem *

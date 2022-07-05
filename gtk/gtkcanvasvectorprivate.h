@@ -63,6 +63,7 @@ struct _GtkCanvasVectorVariable
 {
   const GtkCanvasVectorClass *class;
 
+  char *name;
   /* a GtkRcBox */
   GtkCanvasVector *variable;
 };
@@ -102,7 +103,9 @@ void                    gtk_canvas_vector_init_multiply         (GtkCanvasVector
                                                                  const GtkCanvasVector  *a,
                                                                  const GtkCanvasVector  *b);
 
-void                    gtk_canvas_vector_init_variable         (GtkCanvasVector        *vector);
+void                    gtk_canvas_vector_init_variable         (GtkCanvasVector        *vector,
+                                                                 const char             *format,
+                                                                 ...) G_GNUC_PRINTF(2,3);
 GtkCanvasVector *       gtk_canvas_vector_get_variable          (GtkCanvasVector        *vector);
 
 gboolean                gtk_canvas_vector_is_invalid            (GtkCanvasVector        *vector);
