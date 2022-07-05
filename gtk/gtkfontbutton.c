@@ -383,6 +383,9 @@ gtk_font_button_take_font_desc (GtkFontButton        *font_button,
   else
     font_button->font_size = pango2_font_description_get_size (font_button->font_desc) / PANGO2_SCALE;
 
+  font_button->font_features = g_strdup ("");
+  font_button->palette = g_strdup (PANGO2_COLOR_PALETTE_DEFAULT);
+
   gtk_font_button_update_font_data (font_button);
   gtk_font_button_update_font_info (font_button);
 
@@ -392,6 +395,8 @@ gtk_font_button_take_font_desc (GtkFontButton        *font_button,
 
   g_object_notify (G_OBJECT (font_button), "font");
   g_object_notify (G_OBJECT (font_button), "font-desc");
+  g_object_notify (G_OBJECT (font_button), "font-features");
+  g_object_notify (G_OBJECT (font_button), "palette");
 
   g_object_thaw_notify (object);
 }
@@ -1099,7 +1104,6 @@ gtk_font_button_label_use_font (GtkFontButton *font_button)
       if ((font_button->level & GTK_FONT_CHOOSER_LEVEL_PALETTE) != 0 && font_button->palette != NULL)
         {
           pango2_attr_list_insert (attrs, pango2_attr_palette_new (font_button->palette));
-          g_print ("using palette %s\n", font_button->palette);
         }
 
       pango2_attr_list_insert (attrs, pango2_attr_font_desc_new (desc));

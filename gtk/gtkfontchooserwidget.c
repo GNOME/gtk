@@ -1233,6 +1233,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
                 GTK_FONT_CHOOSER_LEVEL_STYLE |
                 GTK_FONT_CHOOSER_LEVEL_SIZE;
   self->language = pango2_language_get_default ();
+  self->palette = g_strdup (PANGO2_COLOR_PALETTE_DEFAULT);
 
   /* Set default preview text */
   gtk_editable_set_text (GTK_EDITABLE (self->preview), self->preview_text);
