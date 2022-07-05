@@ -27,7 +27,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <glib/gprintf.h>
-#include <pango/pangowin32.h>
+#include <pango2/pangodwrite-fontmap.h>
 
 #include "gdkdisplayprivate.h"
 #include "gdkprivate-win32.h"
@@ -47,9 +47,9 @@ _get_system_font_name (HDC hdc)
     return NULL;
 
   logpixelsy = GetDeviceCaps (hdc, LOGPIXELSY);
-  font_desc = pango_win32_font_description_from_logfontw (&ncm.lfMessageFont);
-  font_desc_string = pango_font_description_to_string (font_desc);
-  pango_font_description_free (font_desc);
+  font_desc = pango2_direct_write_get_font_description_from_logfontw (&ncm.lfMessageFont, NULL);
+  font_desc_string = pango2_font_description_to_string (font_desc);
+  pango2_font_description_free (font_desc);
 
   /* https://docs.microsoft.com/en-us/windows/desktop/api/wingdi/ns-wingdi-taglogfonta */
   font_size = -MulDiv (ncm.lfMessageFont.lfHeight, 72, logpixelsy);
@@ -192,15 +192,6 @@ _gdk_win32_get_setting (const char *name,
 
       if (font_name)
         {
-          /* The pango font fallback list got fixed during 1.43, before that
-           * using anything but "Segoe UI" would lead to a poor glyph coverage */
-          if (pango_version_check (1, 43, 0) != NULL &&
-              g_ascii_strncasecmp (font_name, "Segoe UI", strlen ("Segoe UI")) != 0)
-            {
-              g_free (font_name);
-              return FALSE;
-            }
-
           GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, font_name));
           g_value_take_string (value, font_name);
           return TRUE;

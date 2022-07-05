@@ -732,10 +732,10 @@ get_hkl_direction (HKL hkl)
 #endif
     case LANG_FARSI:
       /* Others? */
-      return PANGO_DIRECTION_RTL;
+      return PANGO2_DIRECTION_RTL;
 
     default:
-      return PANGO_DIRECTION_LTR;
+      return PANGO2_DIRECTION_LTR;
     }
 }
 
@@ -745,7 +745,7 @@ gdk_win32_keymap_get_direction (GdkKeymap *gdk_keymap)
   GdkWin32Keymap *keymap;
   HKL             active_hkl;
   
-  g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), PANGO_DIRECTION_LTR);
+  g_return_val_if_fail (GDK_IS_KEYMAP (gdk_keymap), PANGO2_DIRECTION_LTR);
 
   keymap = GDK_WIN32_KEYMAP (gdk_keymap);
 
@@ -777,7 +777,7 @@ gdk_win32_keymap_have_bidi_layouts (GdkKeymap *gdk_keymap)
   for (group = 0; group < keymap->layout_handles->len; group++)
     {
       if (get_hkl_direction (g_array_index (keymap->layout_handles, HKL,
-                             group)) == PANGO_DIRECTION_RTL)
+                             group)) == PANGO2_DIRECTION_RTL)
         have_rtl = TRUE;
       else
         have_ltr = TRUE;
