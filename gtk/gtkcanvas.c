@@ -24,7 +24,7 @@
 #include "gtkcanvasbox.h"
 #include "gtkcanvasitemprivate.h"
 #include "gtkcanvassize.h"
-#include "gtkcanvasvec2private.h"
+#include "gtkcanvasvectorprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemfactory.h"
 #include "gtkwidgetprivate.h"
@@ -54,7 +54,7 @@ struct _GtkCanvas
   GtkCanvasItems items;
   GHashTable *item_lookup;
 
-  GtkCanvasVec2 viewport_size;
+  GtkCanvasVector viewport_size;
 };
 
 enum
@@ -165,7 +165,7 @@ gtk_canvas_finalize (GObject *object)
   GtkCanvas *self = GTK_CANVAS (object);
 
   g_hash_table_unref (self->item_lookup);
-  gtk_canvas_vec2_finish (&self->viewport_size);
+  gtk_canvas_vector_finish (&self->viewport_size);
 
   G_OBJECT_CLASS (gtk_canvas_parent_class)->finalize (object);
 }
@@ -243,7 +243,7 @@ gtk_canvas_allocate (GtkWidget *widget,
 
   gtk_canvas_validate_variables (self);
 
-  gtk_canvas_vec2_init_constant (gtk_canvas_vec2_get_variable (&self->viewport_size), width, height);
+  gtk_canvas_vector_init_constant (gtk_canvas_vector_get_variable (&self->viewport_size), width, height);
 
   force = FALSE;
   do
@@ -371,7 +371,7 @@ gtk_canvas_init (GtkCanvas *self)
 {
   self->item_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  gtk_canvas_vec2_init_variable (&self->viewport_size);
+  gtk_canvas_vector_init_variable (&self->viewport_size);
 }
 
 /**

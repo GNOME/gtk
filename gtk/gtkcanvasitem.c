@@ -45,7 +45,7 @@ struct _GtkCanvasItem
   GtkCanvasBox bounds_var;
   GtkCanvasBox allocation_var;
 
-  GtkCanvasVec2 size_vecs[4];
+  GtkCanvasVector size_vecs[4];
 };
 
 enum
@@ -84,7 +84,7 @@ gtk_canvas_item_finalize (GObject *object)
   int i;
 
   for (i = 0; i < 4; i++)
-    gtk_canvas_vec2_finish (&self->size_vecs[i]);
+    gtk_canvas_vector_finish (&self->size_vecs[i]);
 
   gtk_canvas_box_finish (&self->bounds);
   gtk_canvas_box_finish (&self->bounds_var);
@@ -208,10 +208,10 @@ gtk_canvas_item_init (GtkCanvasItem *self)
   int i;
 
   for (i = 0; i < 4; i++)
-    gtk_canvas_vec2_init_variable (&self->size_vecs[i]);
+    gtk_canvas_vector_init_variable (&self->size_vecs[i]);
 
-  gtk_canvas_vec2_init_constant (&self->bounds.point, 0, 0);
-  gtk_canvas_vec2_init_copy (&self->bounds.size, &self->size_vecs[GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT]);
+  gtk_canvas_vector_init_constant (&self->bounds.point, 0, 0);
+  gtk_canvas_vector_init_copy (&self->bounds.size, &self->size_vecs[GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT]);
   graphene_vec2_init (&self->bounds.origin, 0, 0);
   gtk_canvas_box_init_variable (&self->bounds_var);
   gtk_canvas_box_update_variable (&self->bounds_var, &self->bounds);
@@ -267,27 +267,27 @@ gtk_canvas_item_validate_variables (GtkCanvasItem *self)
 
   for (i = 0; i < 4; i++)
     {
-      gtk_canvas_vec2_init_constant (
-          gtk_canvas_vec2_get_variable (&self->size_vecs[i]),
+      gtk_canvas_vector_init_constant (
+          gtk_canvas_vector_get_variable (&self->size_vecs[i]),
           0, 0);
     }
 
-  gtk_canvas_vec2_init_invalid (
-      gtk_canvas_vec2_get_variable (&self->allocation_var.point));
-  gtk_canvas_vec2_init_invalid (
-      gtk_canvas_vec2_get_variable (&self->allocation_var.size));
+  gtk_canvas_vector_init_invalid (
+      gtk_canvas_vector_get_variable (&self->allocation_var.point));
+  gtk_canvas_vector_init_invalid (
+      gtk_canvas_vector_get_variable (&self->allocation_var.size));
 }
 
 void
 gtk_canvas_item_allocate (GtkCanvasItem   *self,
                           graphene_rect_t *rect)
 {
-  gtk_canvas_vec2_init_constant (
-      gtk_canvas_vec2_get_variable (&self->allocation_var.point),
+  gtk_canvas_vector_init_constant (
+      gtk_canvas_vector_get_variable (&self->allocation_var.point),
       rect->origin.x + graphene_vec2_get_x (&self->bounds.origin) * rect->size.width,
       rect->origin.y + graphene_vec2_get_y (&self->bounds.origin) * rect->size.height);
-  gtk_canvas_vec2_init_constant (
-      gtk_canvas_vec2_get_variable (&self->allocation_var.size),
+  gtk_canvas_vector_init_constant (
+      gtk_canvas_vector_get_variable (&self->allocation_var.size),
       rect->size.width, rect->size.height);
   graphene_vec2_init_from_vec2 (&self->allocation_var.origin, &self->bounds.origin);
 }
@@ -321,10 +321,10 @@ gtk_canvas_item_allocate_widget (GtkCanvasItem *self,
 gboolean
 gtk_canvas_item_has_allocation (GtkCanvasItem *self)
 {
-  return !gtk_canvas_vec2_is_invalid (gtk_canvas_vec2_get_variable (&self->allocation_var.point));
+  return !gtk_canvas_vector_is_invalid (gtk_canvas_vector_get_variable (&self->allocation_var.point));
 }
 
-const GtkCanvasVec2 *
+const GtkCanvasVector *
 gtk_canvas_item_get_measure_vec2 (GtkCanvasItem            *self,
                                   GtkCanvasItemMeasurement  measure)
 {

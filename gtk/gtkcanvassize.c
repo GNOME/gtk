@@ -31,7 +31,7 @@
 #include "gtkcanvasboxprivate.h"
 #include "gtkcanvasitemprivate.h"
 #include "gtkcanvaspoint.h"
-#include "gtkcanvasvec2private.h"
+#include "gtkcanvasvectorprivate.h"
 
 G_DEFINE_BOXED_TYPE (GtkCanvasSize, gtk_canvas_size,
                      gtk_canvas_size_copy,
@@ -39,7 +39,7 @@ G_DEFINE_BOXED_TYPE (GtkCanvasSize, gtk_canvas_size,
 
 struct _GtkCanvasSize
 {
-  GtkCanvasVec2 vec2;
+  GtkCanvasVector vec2;
 };
 
 static GtkCanvasSize *
@@ -64,7 +64,7 @@ gtk_canvas_size_new (float width,
   GtkCanvasSize *self;
 
   self = gtk_canvas_size_alloc ();
-  gtk_canvas_vec2_init_constant (&self->vec2, width, height);
+  gtk_canvas_vector_init_constant (&self->vec2, width, height);
 
   return self;
 }
@@ -83,7 +83,7 @@ gtk_canvas_size_new_from_box (const GtkCanvasBox *box)
   GtkCanvasSize *self;
 
   self = gtk_canvas_size_alloc ();
-  gtk_canvas_vec2_init_copy (&self->vec2, &box->size);
+  gtk_canvas_vector_init_copy (&self->vec2, &box->size);
 
   return self;
 }
@@ -112,7 +112,7 @@ gtk_canvas_size_new_distance (const GtkCanvasPoint *from,
   graphene_vec2_init (&minus_one, -1.f, -1.f);
 
   self = gtk_canvas_size_alloc ();
-  gtk_canvas_vec2_init_sum (&self->vec2,
+  gtk_canvas_vector_init_sum (&self->vec2,
                             graphene_vec2_one (),
                             from,
                             &minus_one,
@@ -141,7 +141,7 @@ gtk_canvas_size_new_measure_item (GtkCanvasItem            *item,
   g_return_val_if_fail (GTK_IS_CANVAS_ITEM (item), NULL);
 
   self = gtk_canvas_size_alloc ();
-  gtk_canvas_vec2_init_copy (&self->vec2,
+  gtk_canvas_vector_init_copy (&self->vec2,
                              gtk_canvas_item_get_measure_vec2 (item, measure));
 
   return self;
@@ -155,7 +155,7 @@ gtk_canvas_size_copy (const GtkCanvasSize *self)
   g_return_val_if_fail (self != NULL, NULL);
 
   copy = gtk_canvas_size_alloc ();
-  gtk_canvas_vec2_init_copy (&copy->vec2, &self->vec2);
+  gtk_canvas_vector_init_copy (&copy->vec2, &self->vec2);
 
   return copy;
 }
@@ -165,7 +165,7 @@ gtk_canvas_size_free (GtkCanvasSize *self)
 {
   g_return_if_fail (self != NULL);
 
-  gtk_canvas_vec2_finish (&self->vec2);
+  gtk_canvas_vector_finish (&self->vec2);
 
   g_slice_free (GtkCanvasSize, self);
 }
@@ -181,7 +181,7 @@ gtk_canvas_size_eval (const GtkCanvasSize *self,
   g_return_val_if_fail (width != NULL, FALSE);
   g_return_val_if_fail (height != NULL, FALSE);
 
-  if (!gtk_canvas_vec2_eval (&self->vec2, &vec2))
+  if (!gtk_canvas_vector_eval (&self->vec2, &vec2))
     {
       *width = 0;
       *height = 0;

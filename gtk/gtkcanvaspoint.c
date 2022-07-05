@@ -29,7 +29,7 @@
 #include "gtkcanvaspoint.h"
 
 #include "gtkcanvasboxprivate.h"
-#include "gtkcanvasvec2private.h"
+#include "gtkcanvasvectorprivate.h"
 
 G_DEFINE_BOXED_TYPE (GtkCanvasPoint, gtk_canvas_point,
                      gtk_canvas_point_copy,
@@ -37,7 +37,7 @@ G_DEFINE_BOXED_TYPE (GtkCanvasPoint, gtk_canvas_point,
 
 struct _GtkCanvasPoint
 {
-  GtkCanvasVec2 vec2;
+  GtkCanvasVector vec2;
 };
 
 static GtkCanvasPoint *
@@ -62,7 +62,7 @@ gtk_canvas_point_new (float x,
   GtkCanvasPoint *self;
 
   self = gtk_canvas_point_alloc ();
-  gtk_canvas_vec2_init_constant (&self->vec2, x, y);
+  gtk_canvas_vector_init_constant (&self->vec2, x, y);
 
   return self;
 }
@@ -95,7 +95,7 @@ gtk_canvas_point_new_from_box (const GtkCanvasBox *box,
   graphene_vec2_subtract (&origin, &box->origin, &origin);
  
   self = gtk_canvas_point_alloc ();
-  gtk_canvas_vec2_init_sum (&self->vec2,
+  gtk_canvas_vector_init_sum (&self->vec2,
                             graphene_vec2_one (),
                             &box->point,
                             &origin,
@@ -112,7 +112,7 @@ gtk_canvas_point_copy (const GtkCanvasPoint *self)
   g_return_val_if_fail (self != NULL, NULL);
 
   copy = gtk_canvas_point_alloc ();
-  gtk_canvas_vec2_init_copy (&copy->vec2, &self->vec2);
+  gtk_canvas_vector_init_copy (&copy->vec2, &self->vec2);
 
   return copy;
 }
@@ -120,7 +120,7 @@ gtk_canvas_point_copy (const GtkCanvasPoint *self)
 void
 gtk_canvas_point_free (GtkCanvasPoint *self)
 {
-  gtk_canvas_vec2_finish (&self->vec2);
+  gtk_canvas_vector_finish (&self->vec2);
 
   g_slice_free (GtkCanvasPoint, self);
 }
@@ -136,7 +136,7 @@ gtk_canvas_point_eval (const GtkCanvasPoint *self,
   g_return_val_if_fail (x != NULL, FALSE);
   g_return_val_if_fail (y != NULL, FALSE);
 
-  if (!gtk_canvas_vec2_eval (&self->vec2, &vec2))
+  if (!gtk_canvas_vector_eval (&self->vec2, &vec2))
     {
       *x = 0;
       *y = 0;
