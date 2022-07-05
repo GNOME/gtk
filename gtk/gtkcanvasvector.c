@@ -144,6 +144,20 @@ gtk_canvas_vector_new_distance (const GtkCanvasVector *from,
   return self;
 }
 
+char *
+gtk_canvas_vector_to_string (const GtkCanvasVector *self)
+{
+  GString *string;
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  string = g_string_new ("");
+
+  gtk_canvas_vector_print (self, string);
+
+  return g_string_free (string, FALSE);
+}
+
 GtkCanvasVector *
 gtk_canvas_vector_copy (const GtkCanvasVector *self)
 {

@@ -37,6 +37,8 @@ struct _GtkCanvasVectorClass
   void                  (* copy)                (GtkCanvasVector        *self,
                                                  const GtkCanvasVector  *source);
   void                  (* finish)              (GtkCanvasVector        *self);
+  void                  (* print)               (const GtkCanvasVector  *self,
+                                                 GString                *string);
   gboolean              (* eval)                (const GtkCanvasVector  *self,
                                                  graphene_vec2_t        *result);
 };
@@ -56,6 +58,13 @@ gtk_canvas_vector_invalid_finish (GtkCanvasVector *vector)
 {
 }
 
+static void
+gtk_canvas_vector_invalid_print (const GtkCanvasVector *vector,
+                                 GString               *string)
+{
+  g_string_append (string, "#error");
+}
+
 static gboolean
 gtk_canvas_vector_invalid_eval (const GtkCanvasVector *vector,
                                 graphene_vec2_t       *result)
@@ -68,6 +77,7 @@ static const GtkCanvasVectorClass GTK_CANVAS_VECTOR_INVALID_CLASS =
   "GtkCanvasVectorInvalid",
   gtk_canvas_vector_invalid_copy,
   gtk_canvas_vector_invalid_finish,
+  gtk_canvas_vector_invalid_print,
   gtk_canvas_vector_invalid_eval,
 };
 
@@ -100,6 +110,17 @@ gtk_canvas_vector_constant_finish (GtkCanvasVector *vector)
 {
 }
 
+static void
+gtk_canvas_vector_constant_print (const GtkCanvasVector *vector,
+                                  GString               *string)
+{
+  const GtkCanvasVectorConstant *self = &vector->constant;
+
+  g_string_append_printf (string, "[%g, %g]",
+                          graphene_vec2_get_x (&self->value),
+                          graphene_vec2_get_y (&self->value));
+}
+
 static gboolean
 gtk_canvas_vector_constant_eval (const GtkCanvasVector *vector,
                                  graphene_vec2_t       *result)
@@ -116,6 +137,7 @@ static const GtkCanvasVectorClass GTK_CANVAS_VECTOR_CONSTANT_CLASS =
   "GtkCanvasVectorConstant",
   gtk_canvas_vector_constant_copy,
   gtk_canvas_vector_constant_finish,
+  gtk_canvas_vector_constant_print,
   gtk_canvas_vector_constant_eval,
 };
 
@@ -161,6 +183,27 @@ gtk_canvas_vector_sum_finish (GtkCanvasVector *vector)
   g_free (self->summands);
 }
 
+static void
+gtk_canvas_vector_sum_print (const GtkCanvasVector *vector,
+                             GString               *string)
+{
+  const GtkCanvasVectorSum *self = &vector->sum;
+  gsize i;
+
+  for (i = 0; i < self->n_summands; i++)
+    {
+      if (i > 0)
+        g_string_append (string, " + ");
+      if (!graphene_vec2_equal (&self->summands[i].scale, graphene_vec2_one()))
+        {
+          g_string_append_printf (string, "[%g, %g] * ",
+                                  graphene_vec2_get_x (&self->summands[i].scale),
+                                  graphene_vec2_get_y (&self->summands[i].scale));
+        }
+      gtk_canvas_vector_print (&self->summands[i].value, string);
+    }
+}
+
 static gboolean
 gtk_canvas_vector_sum_eval (const GtkCanvasVector *vector,
                             graphene_vec2_t       *result)
@@ -190,6 +233,7 @@ static const GtkCanvasVectorClass GTK_CANVAS_VECTOR_SUM_CLASS =
   "GtkCanvasVectorSum",
   gtk_canvas_vector_sum_copy,
   gtk_canvas_vector_sum_finish,
+  gtk_canvas_vector_sum_print,
   gtk_canvas_vector_sum_eval,
 };
 
@@ -264,6 +308,17 @@ gtk_canvas_vector_multiply_finish (GtkCanvasVector *vector)
   gtk_canvas_vector_free (self->b);
 }
 
+static void
+gtk_canvas_vector_multiply_print (const GtkCanvasVector *vector,
+                                  GString               *string)
+{
+  const GtkCanvasVectorMultiply *self = &vector->multiply;
+
+  gtk_canvas_vector_print (self->a, string);
+  g_string_append (string, " * ");
+  gtk_canvas_vector_print (self->b, string);
+}
+
 static gboolean
 gtk_canvas_vector_multiply_eval (const GtkCanvasVector *vector,
                                  graphene_vec2_t       *result)
@@ -284,6 +339,7 @@ static const GtkCanvasVectorClass GTK_CANVAS_VECTOR_MULTIPLY_CLASS =
   "GtkCanvasVectorMultiply",
   gtk_canvas_vector_multiply_copy,
   gtk_canvas_vector_multiply_finish,
+  gtk_canvas_vector_multiply_print,
   gtk_canvas_vector_multiply_eval,
 };
 
@@ -324,6 +380,17 @@ gtk_canvas_vector_variable_finish (GtkCanvasVector *vector)
   g_rc_box_release (self->variable);
 }
 
+static void
+gtk_canvas_vector_variable_print (const GtkCanvasVector *vector,
+                                  GString               *string)
+{
+  const GtkCanvasVectorVariable *self = &vector->variable;
+
+  g_string_append (string, "(");
+  gtk_canvas_vector_print (self->variable, string);
+  g_string_append (string, ")");
+}
+
 static gboolean
 gtk_canvas_vector_variable_eval (const GtkCanvasVector *vector,
                                  graphene_vec2_t       *result)
@@ -338,6 +405,7 @@ static const GtkCanvasVectorClass GTK_CANVAS_VECTOR_VARIABLE_CLASS =
   "GtkCanvasVectorVariable",
   gtk_canvas_vector_variable_copy,
   gtk_canvas_vector_variable_finish,
+  gtk_canvas_vector_variable_print,
   gtk_canvas_vector_variable_eval,
 };
 
@@ -416,5 +484,15 @@ gtk_canvas_vector_eval (const GtkCanvasVector *self,
 
   graphene_vec2_init_from_vec2 (result, graphene_vec2_zero ());
   return FALSE;
+}
+
+void
+gtk_canvas_vector_print (const GtkCanvasVector *self,
+                         GString               *string)
+{
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (string != NULL);
+
+  self->class->print (self, string);
 }
 

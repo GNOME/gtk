@@ -43,6 +43,11 @@ void                    gtk_canvas_vector_free                  (GtkCanvasVector
 GDK_AVAILABLE_IN_ALL
 gboolean                gtk_canvas_vector_eval                  (const GtkCanvasVector  *self,
                                                                  graphene_vec2_t        *result) G_GNUC_WARN_UNUSED_RESULT;
+GDK_AVAILABLE_IN_ALL
+char *                  gtk_canvas_vector_to_string             (const GtkCanvasVector  *self);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_canvas_vector_print                 (const GtkCanvasVector  *self,
+                                                                 GString                *string);
 
 GDK_AVAILABLE_IN_ALL
 GtkCanvasVector *       gtk_canvas_vector_new                   (float                   x,
