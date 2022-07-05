@@ -538,10 +538,6 @@ update_display (void)
       g_string_free (s, TRUE);
     }
 
-  palette = g_strdup_printf ("palette%u", demo->palette);
-  pango2_font_description_set_palette (desc, palette);
-  g_free (palette);
-
   font_desc = pango2_font_description_to_string (desc);
 
   s = g_string_new ("");
