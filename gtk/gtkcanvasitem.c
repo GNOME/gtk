@@ -305,20 +305,28 @@ gtk_canvas_item_allocate_widget (GtkCanvasItem *self,
                                  float          dy)
 {
   graphene_rect_t allocation;
+  GskTransform *transform;
 
   if (self->widget == NULL)
     return;
 
   gtk_canvas_box_to_rect (&self->allocation, &allocation);
-  graphene_rect_normalize (&allocation);
 
-  gtk_widget_size_allocate (self->widget,
-                            &(GtkAllocation) {
-                              allocation.origin.x - dx,
-                              allocation.origin.y - dy,
-                              allocation.size.width,
-                              allocation.size.height
-                            }, -1);
+  transform = gsk_transform_translate (NULL,
+                                       &GRAPHENE_POINT_INIT (
+                                         allocation.origin.x - dx
+                                         + (signbit (self->allocation.size.width) ? allocation.size.width : 0),
+                                         allocation.origin.y - dy
+                                         + (signbit (self->allocation.size.height) ? allocation.size.height : 0)));
+  transform = gsk_transform_scale (transform,
+                                   signbit (self->allocation.size.width) ? -1 : 1,
+                                   signbit (self->allocation.size.height) ? -1 : 1);
+
+  gtk_widget_allocate (self->widget,
+                       allocation.size.width,
+                       allocation.size.height,
+                       -1,
+                       transform);
 }
 
 gboolean
