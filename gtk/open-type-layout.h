@@ -9,6 +9,7 @@ typedef struct {
 
 #define MAKE_TAG(a,b,c,d) (unsigned int)(((a) << 24) | ((b) << 16) | ((c) <<  8) | (d))
 
+/* These don't include ss01 - ss19 and cv01 - cv99 */
 static NamedTag open_type_layout_features[] = {
   { MAKE_TAG('a','a','l','t'), NC_("OpenType layout", "Access All Alternates") },
   { MAKE_TAG('a','b','v','f'), NC_("OpenType layout", "Above-base Forms") },
@@ -107,26 +108,6 @@ static NamedTag open_type_layout_features[] = {
   { MAKE_TAG('s','i','z','e'), NC_("OpenType layout", "Optical size") },
   { MAKE_TAG('s','m','c','p'), NC_("OpenType layout", "Small Capitals") },
   { MAKE_TAG('s','m','p','l'), NC_("OpenType layout", "Simplified Forms") },
-  { MAKE_TAG('s','s','0','1'), NC_("OpenType layout", "Stylistic Set 1") },
-  { MAKE_TAG('s','s','0','2'), NC_("OpenType layout", "Stylistic Set 2") },
-  { MAKE_TAG('s','s','0','3'), NC_("OpenType layout", "Stylistic Set 3") },
-  { MAKE_TAG('s','s','0','4'), NC_("OpenType layout", "Stylistic Set 4") },
-  { MAKE_TAG('s','s','0','5'), NC_("OpenType layout", "Stylistic Set 5") },
-  { MAKE_TAG('s','s','0','6'), NC_("OpenType layout", "Stylistic Set 6") },
-  { MAKE_TAG('s','s','0','7'), NC_("OpenType layout", "Stylistic Set 7") },
-  { MAKE_TAG('s','s','0','8'), NC_("OpenType layout", "Stylistic Set 8") },
-  { MAKE_TAG('s','s','0','9'), NC_("OpenType layout", "Stylistic Set 9") },
-  { MAKE_TAG('s','s','1','0'), NC_("OpenType layout", "Stylistic Set 10") },
-  { MAKE_TAG('s','s','1','1'), NC_("OpenType layout", "Stylistic Set 11") },
-  { MAKE_TAG('s','s','1','2'), NC_("OpenType layout", "Stylistic Set 12") },
-  { MAKE_TAG('s','s','1','3'), NC_("OpenType layout", "Stylistic Set 13") },
-  { MAKE_TAG('s','s','1','4'), NC_("OpenType layout", "Stylistic Set 14") },
-  { MAKE_TAG('s','s','1','5'), NC_("OpenType layout", "Stylistic Set 15") },
-  { MAKE_TAG('s','s','1','6'), NC_("OpenType layout", "Stylistic Set 16") },
-  { MAKE_TAG('s','s','1','7'), NC_("OpenType layout", "Stylistic Set 17") },
-  { MAKE_TAG('s','s','1','8'), NC_("OpenType layout", "Stylistic Set 18") },
-  { MAKE_TAG('s','s','1','9'), NC_("OpenType layout", "Stylistic Set 19") },
-  { MAKE_TAG('s','s','2','0'), NC_("OpenType layout", "Stylistic Set 20") },
   { MAKE_TAG('s','s','t','y'), NC_("OpenType layout", "Math script style alternates") },
   { MAKE_TAG('s','t','c','h'), NC_("OpenType layout", "Stretching Glyph Decomposition") },
   { MAKE_TAG('s','u','b','s'), NC_("OpenType layout", "Subscript") },
