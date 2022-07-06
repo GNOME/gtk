@@ -373,8 +373,16 @@ entry {
 
     }
 
-    &.password image.caps-lock-indicator {
-      color: mix($backdrop_fg_color, $backdrop_base_color, 80%);
+    &.password {
+      > text {
+        @extend .monospace; 
+        > placeholder {
+          font-family: initial; // as to not be monospace
+        }
+      }
+      > image.caps-lock-indicator {
+        color: mix($backdrop_fg_color, $backdrop_base_color, 80%);
+      }
     }
 
     &:drop(active) {
