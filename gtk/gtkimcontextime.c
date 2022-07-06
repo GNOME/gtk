@@ -39,16 +39,8 @@
 #include "gtk/gtkstylecontextprivate.h"
 #include "gtk/gtkcssstyleprivate.h"
 
-/* avoid warning */
-#ifdef STRICT
-# undef STRICT
-# include <pango/pangowin32.h>
-# ifndef STRICT
-#   define STRICT 1
-# endif
-#else /* STRICT */
-#   include <pango/pangowin32.h>
-#endif /* STRICT */
+#include <pango2/pango.h>
+#include <hb-uniscribe.h>
 
 /* Determines what happens when focus is lost while preedit is in process. */
 typedef enum {
@@ -557,7 +549,7 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const char *utf8str)
               switch (buf[spos])
                 {
                 case ATTR_TARGET_CONVERTED:
-                  attr = pango2_attr_underline_new (PANGO_UNDERLINE_DOUBLE);
+                  attr = pango2_attr_underline_new (PANGO2_LINE_STYLE_DOUBLE);
                   pango2_attribute_set_range (attr, sidx, eidx);
                   pango2_attr_list_change (attrs, attr);
                   f_red = f_green = f_blue = 0;
@@ -572,16 +564,16 @@ get_pango_attr_list (GtkIMContextIME *context_ime, const char *utf8str)
                   b_red = b_green = b_blue = 0x7fff;
                   break;
                 default:        /* ATTR_INPUT,ATTR_CONVERTED,ATTR_FIXEDCONVERTED */
-                  attr = pango2_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+                  attr = pango2_attr_underline_new (PANGO2_LINE_STYLE_SOLID);
                   pango2_attribute_set_range (attr, sidx, eidx);
                   pango2_attr_list_change (attrs, attr);
                   f_red = f_green = f_blue = 0;
                   b_red = b_green = b_blue = 0xffff;
                 }
-              attr = pango2_attr_foreground_new (&(PangoColor){f_red, f_green, f_blue});
+              attr = pango2_attr_foreground_new (&(Pango2Color){f_red, f_green, f_blue});
               pango2_attribute_set_range (attr, sidx, eidx);
               pango2_attr_list_change (attrs, attr);
-              attr = pango2_attr_background_new (&(PangoColor){b_red, b_green, b_blue};
+              attr = pango2_attr_background_new (&(Pango2Color){b_red, b_green, b_blue});
               pango2_attribute_set_range (attr, sidx, eidx);
               pango2_attr_list_change (attrs, attr);
 
@@ -828,10 +820,11 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
   HKL ime = GetKeyboardLayout (0);
   const char *lang;
   gunichar wc;
-  PangoContext *pango_context;
-  PangoFont *font;
-  LOGFONT *logfont;
-  PangoFontDescription *font_desc;
+  Pango2Context *pango_context;
+  Pango2Font *font;
+  LOGFONTW *logfont;
+  Pango2FontDescription *font_desc;
+  hb_font_t *hbfont;
 
   g_return_if_fail (GTK_IS_IM_CONTEXT_IME (context));
 
@@ -888,13 +881,13 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
       /* We know what language it is. Look for a character, any
        * character, that language needs.
        */
-      PangoLanguage *pango_lang = pango_language_from_string (lang);
-      PangoFontset *fontset =
-        pango_context_load_fontset (pango_context,
+      Pango2Language *pango_lang = pango2_language_from_string (lang);
+      Pango2Fontset *fontset =
+        pango2_context_load_fontset (pango_context,
 				                            font_desc,
 				                            pango_lang);
       gunichar *sample =
-	g_utf8_to_ucs4 (pango_language_get_sample_string (pango_lang),
+	g_utf8_to_ucs4 (pango2_language_get_sample_string (pango_lang),
 			-1, NULL, NULL, NULL);
       wc = 0x4E00;		/* In all CJK languages? */
       if (sample != NULL)
@@ -909,18 +902,23 @@ gtk_im_context_ime_set_preedit_font (GtkIMContext *context)
 	      }
 	  g_free (sample);
 	}
-      font = pango_fontset_get_font (fontset, wc);
+      font = pango2_fontset_get_font (fontset, wc);
       g_object_unref (fontset);
     }
   else
-    font = pango_context_load_font (pango_context, font_desc);
+    font = pango2_context_load_font (pango_context, font_desc);
 
   if (!font)
     goto ERROR_OUT;
 
-  logfont = pango_win32_font_logfont (font);
+  /*
+   * XXX: This awaits a solution to be found for HarfBuzz on platform items
+   *      https://github.com/harfbuzz/harfbuzz/issues/3683
+   */
+  hbfont = pango2_font_get_hb_font (font);
+  logfont = hb_uniscribe_font_get_logfontw (hbfont);
   if (logfont)
-    ImmSetCompositionFont (himc, logfont);
+    ImmSetCompositionFontW (himc, logfont);
 
   g_object_unref (font);
 
