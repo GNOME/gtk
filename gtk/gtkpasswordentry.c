@@ -207,6 +207,7 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
   entry->entry = gtk_text_new ();
   gtk_text_set_buffer (GTK_TEXT (entry->entry), buffer);
   gtk_text_set_visibility (GTK_TEXT (entry->entry), FALSE);
+  gtk_text_set_input_purpose (GTK_TEXT (entry->entry), GTK_INPUT_PURPOSE_PASSWORD);
   gtk_widget_set_parent (entry->entry, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   g_signal_connect_swapped (entry->entry, "notify::has-focus", G_CALLBACK (focus_changed), entry);
