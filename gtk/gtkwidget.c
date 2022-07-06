@@ -11018,7 +11018,7 @@ gtk_widget_clear_template (GtkWidget *widget,
   GtkWidgetTemplate *template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
   g_return_if_fail (template != NULL);
 
-  g_clear_object (&template->scope);
+  //g_clear_object (&template->scope);
 
   /* Tear down the automatic child data */
   GHashTable *auto_child_hash = get_auto_child_hash (widget, widget_type, FALSE);
