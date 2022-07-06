@@ -397,7 +397,7 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
                             fallback : ['fribidi', 'libfribidi_dep'])
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             fallback: ['harfbuzz', 'libharfbuzz_dep'],
-                            default_options: ['coretext=enabled'])
+                            default_options: ['coretext=enabled', 'directwrite=auto', 'gdi=auto'])
 
 pangocairo_dep = pango_dep
 
@@ -417,9 +417,6 @@ jpeg_dep       = dependency('libjpeg',
 
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
-harfbuzz_dep   = dependency('harfbuzz', version: '>= 2.1.0', required: false,
-                            fallback: ['harfbuzz', 'libharfbuzz_dep'],
-                            default_options: ['coretext=enabled'])
 xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
 graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
                             fallback: ['graphene', 'graphene_dep'],
@@ -495,6 +492,17 @@ cdata.set('HAVE_CAIRO_SCRIPT_INTERPRETER', cairo_csi_dep.found())
 if have_egl
   cdata.set('HAVE_EGL', 1)
 endif
+
+if os_win32
+  if harfbuzz_dep.type_name() == 'pkgconfig'
+    if not cc.has_header_symbol('hb-uniscribe.h',
+                                'hb_uniscribe_font_get_logfontw',
+                                dependencies: harfbuzz_dep)
+      error ('HarfBuzz must be built with GDI/Uniscribe support')
+    endif
+  endif
+endif
+
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
 
 wayland_pkgs = []
