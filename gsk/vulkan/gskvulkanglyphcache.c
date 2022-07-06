@@ -113,8 +113,8 @@ gsk_vulkan_glyph_cache_class_init (GskVulkanGlyphCacheClass *klass)
 }
 
 typedef struct {
-  PangoFont *font;
-  PangoGlyph glyph;
+  Pango2Font *font;
+  Pango2Glyph glyph;
   guint xshift;
   guint yshift;
   guint scale; /* times 1024 */
@@ -257,8 +257,8 @@ render_glyph (Atlas          *atlas,
   GskVulkanCachedGlyph *value = glyph->value;
   cairo_surface_t *surface;
   cairo_t *cr;
-  PangoGlyphString glyphs;
-  PangoGlyphInfo gi;
+  Pango2GlyphString glyphs;
+  Pango2GlyphInfo gi;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         value->draw_width * key->scale / 1024,
@@ -270,7 +270,7 @@ render_glyph (Atlas          *atlas,
 
   gi.glyph = key->glyph;
   gi.geometry.width = value->draw_width * 1024;
-  if (key->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
+  if (key->glyph & PANGO2_GLYPH_UNKNOWN_FLAG)
     gi.geometry.x_offset = key->xshift * 256;
   else
     gi.geometry.x_offset = key->xshift * 256 - value->draw_x * 1024;
@@ -279,7 +279,7 @@ render_glyph (Atlas          *atlas,
   glyphs.num_glyphs = 1;
   glyphs.glyphs = &gi;
 
-  pango_cairo_show_glyph_string (cr, key->font, &glyphs);
+  pango2_cairo_show_glyph_string (cr, key->font, &glyphs);
 
   cairo_destroy (cr);
 
@@ -332,13 +332,13 @@ gsk_vulkan_glyph_cache_new (GskRenderer      *renderer,
   return cache;
 }
 
-#define PHASE(x) ((x % PANGO_SCALE) * 4 / PANGO_SCALE)
+#define PHASE(x) ((x % PANGO2_SCALE) * 4 / PANGO2_SCALE)
 
 GskVulkanCachedGlyph *
 gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
                                gboolean             create,
-                               PangoFont           *font,
-                               PangoGlyph           glyph,
+                               Pango2Font          *font,
+                               Pango2Glyph          glyph,
                                int                  x,
                                int                  y,
                                float                scale)
@@ -373,13 +373,13 @@ gsk_vulkan_glyph_cache_lookup (GskVulkanGlyphCache *cache,
   if (create && value == NULL)
     {
       GlyphCacheKey *key;
-      PangoRectangle ink_rect;
+      Pango2Rectangle ink_rect;
 
       key = g_new (GlyphCacheKey, 1);
       value = g_new0 (GskVulkanCachedGlyph, 1);
 
-      pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
-      pango_extents_to_pixels (&ink_rect, NULL);
+      pango2_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
+      pango2_extents_to_pixels (&ink_rect, NULL);
 
       value->draw_x = ink_rect.x;
       value->draw_y = ink_rect.y;

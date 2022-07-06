@@ -378,8 +378,8 @@ gsk_vulkan_renderer_ref_glyph_image (GskVulkanRenderer  *self,
 
 guint
 gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
-                                 PangoFont         *font,
-                                 PangoGlyph         glyph,
+                                 Pango2Font        *font,
+                                 Pango2Glyph        glyph,
                                  int                x,
                                  int                y,
                                  float              scale)
@@ -389,8 +389,8 @@ gsk_vulkan_renderer_cache_glyph (GskVulkanRenderer *self,
 
 GskVulkanCachedGlyph *
 gsk_vulkan_renderer_get_cached_glyph (GskVulkanRenderer *self,
-                                      PangoFont         *font,
-                                      PangoGlyph         glyph,
+                                      Pango2Font        *font,
+                                      Pango2Glyph        glyph,
                                       int                x,
                                       int                y,
                                       float              scale)

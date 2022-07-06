@@ -20,8 +20,8 @@ GskVulkanImage *     gsk_vulkan_glyph_cache_get_glyph_image (GskVulkanGlyphCache
 
 GskVulkanCachedGlyph *gsk_vulkan_glyph_cache_lookup         (GskVulkanGlyphCache *cache,
                                                              gboolean             create,
-                                                             PangoFont           *font,
-                                                             PangoGlyph           glyph,
+                                                             Pango2Font          *font,
+                                                             Pango2Glyph          glyph,
                                                              int                  x,
                                                              int                  y,
 

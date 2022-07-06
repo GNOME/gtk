@@ -104,9 +104,9 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
                                               guchar                 *data,
                                               GskVulkanRenderer      *renderer,
                                               const graphene_rect_t  *rect,
-                                              PangoFont              *font,
+                                              Pango2Font             *font,
                                               guint                   total_glyphs,
-                                              const PangoGlyphInfo   *glyphs,
+                                              const Pango2GlyphInfo  *glyphs,
                                               const GdkRGBA          *color,
                                               const graphene_point_t *offset,
                                               guint                   start_glyph,
@@ -123,12 +123,12 @@ gsk_vulkan_text_pipeline_collect_vertex_data (GskVulkanTextPipeline  *pipeline,
 
   for (; i < total_glyphs && count < num_glyphs; i++)
     {
-      const PangoGlyphInfo *gi = &glyphs[i];
+      const Pango2GlyphInfo *gi = &glyphs[i];
 
-      if (gi->glyph != PANGO_GLYPH_EMPTY)
+      if (gi->glyph != PANGO2_GLYPH_EMPTY)
         {
-          double cx = (x_position + gi->geometry.x_offset) / PANGO_SCALE;
-          double cy = gi->geometry.y_offset / PANGO_SCALE;
+          double cx = (x_position + gi->geometry.x_offset) / PANGO2_SCALE;
+          double cy = gi->geometry.y_offset / PANGO2_SCALE;
           GskVulkanTextInstance *instance = &instances[count];
           GskVulkanCachedGlyph *glyph;
 
