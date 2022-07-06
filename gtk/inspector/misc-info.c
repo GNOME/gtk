@@ -120,7 +120,7 @@ format_state_flags (GtkStateFlags state)
                 g_string_append (str, " | ");
               g_string_append (str, fclass->values[i].value_nick);
             }
-        } 
+        }
       g_type_class_unref (fclass);
     }
   else
@@ -603,7 +603,7 @@ dispose (GObject *o)
 {
   GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (o);
 
-  g_clear_pointer (&sl->swin, gtk_widget_unparent);
+  gtk_widget_clear_template (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_MISC_INFO);
 
   G_OBJECT_CLASS (gtk_inspector_misc_info_parent_class)->dispose (o);
 }

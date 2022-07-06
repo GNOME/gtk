@@ -190,10 +190,8 @@ static void
 dispose (GObject *object)
 {
   GtkInspectorListData *sl = GTK_INSPECTOR_LIST_DATA (object);
-  GtkWidget *child;
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl))))
-    gtk_widget_unparent (child);
+  gtk_widget_clear_template (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_LIST_DATA);
 
   G_OBJECT_CLASS (gtk_inspector_list_data_parent_class)->dispose (object);
 }
