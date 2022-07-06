@@ -504,6 +504,8 @@ demo_application_window_dispose (GObject *object)
 
   demo_application_window_store_state (window);
 
+  gtk_widget_clear_template (GTK_WIDGET (window), demo_application_window_get_type ());
+
   G_OBJECT_CLASS (demo_application_window_parent_class)->dispose (object);
 }
 

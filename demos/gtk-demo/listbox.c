@@ -261,11 +261,18 @@ gtk_message_row_state_flags_changed (GtkWidget    *widget,
 }
 
 static void
+gtk_message_row_dispose (GObject *obj)
+{
+  gtk_widget_clear_template (GTK_WIDGET (obj), GTK_TYPE_MESSAGE_ROW);
+  G_OBJECT_CLASS (gtk_message_row_parent_class)->dispose (obj);
+}
+
+static void
 gtk_message_row_finalize (GObject *obj)
 {
   GtkMessageRowPrivate *priv = GTK_MESSAGE_ROW (obj)->priv;
   g_object_unref (priv->message);
-  G_OBJECT_CLASS (gtk_message_row_parent_class)->finalize(obj);
+  G_OBJECT_CLASS (gtk_message_row_parent_class)->finalize (obj);
 }
 
 static void
@@ -274,6 +281,7 @@ gtk_message_row_class_init (GtkMessageRowClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = gtk_message_row_dispose;
   object_class->finalize = gtk_message_row_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/listbox/listbox.ui");
