@@ -386,10 +386,28 @@
  * static void
  * foo_widget_init (FooWidget *self)
  * {
- *   // ...
  *   gtk_widget_init_template (GTK_WIDGET (self));
+ *
+ *   // Initialize the rest of the widget...
  * }
  * ```
+ *
+ * as well as calling [method@Gtk.Widget.clear_template] from the dispose
+ * function:
+ *
+ * ```c
+ * static void
+ * foo_widget_dispose (GObject *gobject)
+ * {
+ *   FooWidget *self = FOO_WIDGET (gobject);
+ *
+ *   // Dispose objects for which you have a reference...
+ *
+ *   // Clear the template children for this widget type
+ *   gtk_widget_clear_template (GTK_WIDGET (self), FOO_TYPE_WIDGET);
+ *
+ *   G_OBJECT_CLASS (foo_widget_parent_class)->dispose (gobject);
+ * }
  *
  * You can access widgets defined in the template using the
  * [id@gtk_widget_get_template_child] function, but you will typically declare
@@ -408,9 +426,19 @@
  * G_DEFINE_TYPE_WITH_PRIVATE (FooWidget, foo_widget, GTK_TYPE_BOX)
  *
  * static void
+ * foo_widget_dispose (GObject *gobject)
+ * {
+ *   gtk_widget_clear_template (GTK_WIDGET (gobject), FOO_TYPE_WIDGET);
+ *
+ *   G_OBJECT_CLASS (foo_widget_parent_class)->dispose (gobject);
+ * }
+ *
+ * static void
  * foo_widget_class_init (FooWidgetClass *klass)
  * {
  *   // ...
+ *   G_OBJECT_CLASS (klass)->dispose = foo_widget_dispose;
+ *
  *   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
  *                                                "/com/example/ui/foowidget.ui");
  *   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass),
@@ -422,7 +450,7 @@
  * static void
  * foo_widget_init (FooWidget *widget)
  * {
- *
+ *   gtk_widget_init_template (GTK_WIDGET (widget));
  * }
  * ```
  *
