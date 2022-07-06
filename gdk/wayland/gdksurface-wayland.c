@@ -3516,9 +3516,10 @@ static const struct xdg_activation_token_v1_listener token_listener = {
 };
 
 static void
-gdk_wayland_surface_focus (GdkSurface *surface,
-                           guint32     timestamp)
+gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
+                            guint32      timestamp)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -3873,18 +3874,19 @@ gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
   gdk_wayland_surface_sync_parent (GDK_SURFACE (toplevel), NULL);
 }
 
-static void
-gdk_wayland_surface_minimize (GdkSurface *surface)
+static gboolean
+gdk_wayland_toplevel_minimize (GdkToplevel *toplevel)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland;
 
   if (GDK_SURFACE_DESTROYED (surface) ||
       !SURFACE_IS_TOPLEVEL (surface))
-    return;
+    return TRUE;
 
   if (!is_realized_toplevel (GDK_WAYLAND_SURFACE (surface)))
-    return;
+    return TRUE;
 
   /* FIXME: xdg_toplevel does not come with a minimized state that we can
    * query or get notified of. This means we cannot implement the full
@@ -3902,11 +3904,14 @@ gdk_wayland_surface_minimize (GdkSurface *surface)
     default:
       g_assert_not_reached ();
     }
+
+  return TRUE;
 }
 
 static void
-gdk_wayland_surface_maximize (GdkSurface *surface)
+gdk_wayland_toplevel_maximize (GdkToplevel *toplevel)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -3938,8 +3943,9 @@ gdk_wayland_surface_maximize (GdkSurface *surface)
 }
 
 static void
-gdk_wayland_surface_unmaximize (GdkSurface *surface)
+gdk_wayland_toplevel_unmaximize (GdkToplevel *toplevel)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   if (GDK_SURFACE_DESTROYED (surface))
@@ -4247,9 +4253,10 @@ gdk_wayland_surface_set_opaque_region (GdkSurface     *surface,
 }
 
 static gboolean
-gdk_wayland_surface_show_window_menu (GdkSurface *surface,
-                                      GdkEvent   *event)
+gdk_wayland_toplevel_show_window_menu (GdkToplevel *toplevel,
+                                       GdkEvent    *event)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
@@ -4323,9 +4330,10 @@ translate_gesture (GdkTitlebarGesture         gesture,
 }
 
 static gboolean
-gdk_wayland_surface_titlebar_gesture (GdkSurface         *surface,
-                                      GdkTitlebarGesture  gesture)
+gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
+                                       GdkTitlebarGesture  gesture)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
   enum gtk_surface1_gesture gtk_gesture;
@@ -4356,8 +4364,9 @@ gdk_wayland_surface_titlebar_gesture (GdkSurface         *surface,
 }
 
 static gboolean
-gdk_wayland_surface_supports_edge_constraints (GdkSurface *surface)
+gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 {
+  GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
 
@@ -5084,9 +5093,9 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
   if (gdk_toplevel_layout_get_maximized (layout, &maximize))
     {
       if (maximize)
-        gdk_wayland_surface_maximize (surface);
+        gdk_wayland_toplevel_maximize (toplevel);
       else
-        gdk_wayland_surface_unmaximize (surface);
+        gdk_wayland_toplevel_unmaximize (toplevel);
       pending_configure = TRUE;
     }
 
@@ -5122,44 +5131,9 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
 }
 
 static gboolean
-gdk_wayland_toplevel_minimize (GdkToplevel *toplevel)
-{
-  gdk_wayland_surface_minimize (GDK_SURFACE (toplevel));
-
-  return TRUE;
-}
-
-static gboolean
 gdk_wayland_toplevel_lower (GdkToplevel *toplevel)
 {
   return FALSE;
-}
-
-static void
-gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
-                            guint32      timestamp)
-{
-  gdk_wayland_surface_focus (GDK_SURFACE (toplevel), timestamp);
-}
-
-static gboolean
-gdk_wayland_toplevel_show_window_menu (GdkToplevel *toplevel,
-                                       GdkEvent    *event)
-{
-  return gdk_wayland_surface_show_window_menu (GDK_SURFACE (toplevel), event);
-}
-
-static gboolean
-gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
-                                       GdkTitlebarGesture  gesture)
-{
-  return gdk_wayland_surface_titlebar_gesture (GDK_SURFACE (toplevel), gesture);
-}
-
-static gboolean
-gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
-{
-  return gdk_wayland_surface_supports_edge_constraints (GDK_SURFACE (toplevel));
 }
 
 static void
