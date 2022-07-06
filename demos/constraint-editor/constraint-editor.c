@@ -607,9 +607,10 @@ constraint_editor_dispose (GObject *object)
 {
   ConstraintEditor *self = (ConstraintEditor *)object;
 
-  g_clear_pointer (&self->grid, gtk_widget_unparent);
   g_clear_object (&self->model);
   g_clear_object (&self->constraint);
+
+  gtk_widget_clear_template (GTK_WIDGET (object), CONSTRAINT_EDITOR_TYPE);
 
   G_OBJECT_CLASS (constraint_editor_parent_class)->dispose (object);
 }
