@@ -10974,10 +10974,13 @@ out:
  * @widget: the widget with a template
  * @widget_type: the type of the widget to finalize the template for
  *
- * Clears the template data for the given widget.
+ * Clears the template children for the given widget.
  *
  * This function is the opposite of [method@Gtk.Widget.init_template], and
- * it is used to clear all the template data from a widget instance.
+ * it is used to clear all the template children from a widget instance.
+ * If you bound a template child to a field in the instance structure, or
+ * in the instance private data structure, the field will be set to `NULL`
+ * after this function returns.
  *
  * You should call this function inside the `GObjectClass.dispose()`
  * implementation of any widget that called `gtk_widget_init_template()`.
