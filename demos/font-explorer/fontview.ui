@@ -48,9 +48,26 @@
                       <object class="GtkSignalListItemFactory">
                         <signal name="setup" handler="setup_glyph"/>
                         <signal name="bind" handler="bind_glyph"/>
-                        <signal name="unbind" handler="unbind_glyph"/>
                       </object>
                     </property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">info</property>
+            <property name="child">
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">automatic</property>
+                <child>
+                  <object class="GtkGrid" id="info">
+                    <style>
+                      <class name="fontinfo"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -101,6 +118,13 @@
                 <property name="label" translatable="yes">Glyphs</property>
                 <property name="group">plain_toggle</property>
                 <signal name="notify::active" handler="glyphs_changed"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkToggleButton" id="info_toggle">
+                <property name="label" translatable="yes">Info</property>
+                <property name="group">plain_toggle</property>
+                <signal name="notify::active" handler="info_changed"/>
               </object>
             </child>
           </object>

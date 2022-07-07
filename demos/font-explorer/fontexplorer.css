@@ -25,3 +25,7 @@ glyphview {
   padding: 0;
   border: 0.6px solid gray;
 }
+grid.fontinfo {
+  padding: 20px;
+  border-spacing: 10px;
+}

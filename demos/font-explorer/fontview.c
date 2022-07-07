@@ -4,6 +4,8 @@
 #include "glyphview.h"
 #include <gtk/gtk.h>
 
+#include <hb-ot.h>
+
 enum {
   PROP_FONT_DESC = 1,
   PROP_SIZE,
@@ -30,6 +32,8 @@ struct _FontView
   GtkScrolledWindow *swin;
   GtkGridView *glyphs;
   GtkToggleButton *glyphs_toggle;
+  GtkGrid *info;
+  GtkToggleButton *info_toggle;
 
   Pango2FontDescription *font_desc;
   float size;
@@ -193,7 +197,9 @@ toggle_edit (GtkToggleButton *button,
 
       update_view (self);
 
-      if (gtk_toggle_button_get_active (self->glyphs_toggle))
+      if (gtk_toggle_button_get_active (self->info_toggle))
+        gtk_stack_set_visible_child_name (self->stack, "info");
+      else if (gtk_toggle_button_get_active (self->glyphs_toggle))
         gtk_stack_set_visible_child_name (self->stack, "glyphs");
       else
         gtk_stack_set_visible_child_name (self->stack, "content");
@@ -242,13 +248,32 @@ glyphs_changed (GtkToggleButton *button,
     }
 }
 
+static void
+info_changed (GtkToggleButton *button,
+              GParamSpec      *pspec,
+              FontView        *self)
+{
+  if (gtk_toggle_button_get_active (button))
+    {
+      gtk_stack_set_visible_child_name (self->stack, "info");
+      self->do_waterfall = FALSE;
+    }
+}
+
 static Pango2Font *
 get_font (FontView *self)
 {
   Pango2Context *context;
+  Pango2FontDescription *desc;
+  Pango2Font *font;
 
+  desc = pango2_font_description_copy_static (self->font_desc);
+  pango2_font_description_set_variations (desc, self->variations);
   context = gtk_widget_get_pango_context (GTK_WIDGET (self));
-  return pango2_context_load_font (context, self->font_desc);
+  font = pango2_context_load_font (context, desc);
+  pango2_font_description_free (desc);
+
+  return font;
 }
 
 static void
@@ -284,10 +309,185 @@ bind_glyph (GtkSignalListItemFactory *factory,
   glyph_view_set_glyph (view, glyph_item_get_glyph (GLYPH_ITEM (item)));
 }
 
-static void
-unbind_glyph (GtkSignalListItemFactory *factory,
-              GObject                  *listitem)
+static GtkWidget *
+make_title_label (const char *title)
 {
+  GtkWidget *label;
+
+  label = gtk_label_new (title);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
+  gtk_widget_add_css_class (label, "heading");
+
+  return label;
+}
+
+static void
+add_misc_line (FontView   *self,
+               const char *title,
+               const char *value,
+               int         row)
+{
+  GtkWidget *label;
+
+  label = gtk_label_new (title);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_widget_set_valign (label, GTK_ALIGN_START);
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_widget_set_hexpand (label, TRUE);
+  gtk_grid_attach (self->info, label, 0, row, 1, 1);
+
+  label = gtk_label_new (value);
+  gtk_widget_set_halign (label, GTK_ALIGN_END);
+  gtk_widget_set_valign (label, GTK_ALIGN_START);
+  gtk_label_set_xalign (GTK_LABEL (label), 1);
+  gtk_label_set_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_width_chars (GTK_LABEL (label), 40);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), 40);
+  gtk_grid_attach (self->info, label, 1, row, 1, 1);
+}
+
+static void
+add_info_line (FontView        *self,
+               hb_face_t       *face,
+               hb_ot_name_id_t  name_id,
+               const char      *title,
+               int              row)
+{
+  char info[256];
+  unsigned int len = sizeof (info);
+
+  if (hb_ot_name_get_utf8 (face, name_id, HB_LANGUAGE_INVALID, &len, info) > 0)
+    add_misc_line (self, title, info, row);
+}
+
+static void
+add_metrics_line (FontView            *self,
+                  hb_font_t           *font,
+                  hb_ot_metrics_tag_t  metrics_tag,
+                  const char          *title,
+                  int                  row)
+{
+  hb_position_t pos;
+
+  if (hb_ot_metrics_get_position (font, metrics_tag, &pos))
+    {
+      char buf[128];
+
+      g_snprintf (buf, sizeof (buf), "%d", pos);
+      add_misc_line (self, title, buf, row);
+    }
+}
+
+static void
+add_style_line (FontView       *self,
+                hb_font_t      *font,
+                hb_style_tag_t  style_tag,
+                const char     *title,
+                int             row)
+{
+  float value;
+  char buf[16];
+
+  value = hb_style_get_value (font, style_tag);
+  g_snprintf (buf, sizeof (buf), "%.2f", value);
+  add_misc_line (self, title, buf, row);
+}
+
+static void
+update_info (FontView *self)
+{
+  GtkWidget *child;
+  Pango2Font *pango_font = get_font (self);
+  hb_font_t *font1 = pango2_font_get_hb_font (pango_font);
+  hb_face_t *face = hb_font_get_face (font1);
+  hb_font_t *font = hb_font_create_sub_font (font1);
+  int row = 0;
+  char buf[128];
+  unsigned int count;
+  GString *s;
+  hb_tag_t *tables;
+
+  hb_font_set_scale (font, hb_face_get_upem (face), hb_face_get_upem (face));
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->info))) != NULL)
+    gtk_widget_unparent (child);
+
+  gtk_grid_attach (self->info, make_title_label ("General Info"), 0, row++, 2, 1);
+  add_info_line (self, face, HB_OT_NAME_ID_FONT_FAMILY, "Font Family Name", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_FONT_SUBFAMILY, "Font Subfamily Name", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_UNIQUE_ID, "Unique Font Identifier", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_FULL_NAME, "Full Name", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_VERSION_STRING, "Version", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_POSTSCRIPT_NAME, "Postscript Name", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_TYPOGRAPHIC_FAMILY, "Typographic Family Name", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_TYPOGRAPHIC_SUBFAMILY, "Typographic Subfamily Name", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_MANUFACTURER, "Vendor ID", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_DESIGNER, "Designer", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_DESCRIPTION, "Description", row++);
+  add_info_line (self, face, HB_OT_NAME_ID_COPYRIGHT, "Copyright", row++);
+
+  gtk_grid_attach (self->info, make_title_label ("Metrics"), 0, row++, 2, 1);
+  g_snprintf (buf, sizeof (buf), "%d", hb_face_get_upem (face));
+  add_misc_line (self, "Units per Em", buf, row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, "Ascender", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, "Descender", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_HORIZONTAL_LINE_GAP, "Line Gap", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_HORIZONTAL_CARET_RISE, "Caret Rise", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_HORIZONTAL_CARET_RUN, "Caret Run", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_HORIZONTAL_CARET_OFFSET, "Caret Offset", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_X_HEIGHT, "x Height", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_CAP_HEIGHT, "Cap Height", row++);
+
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, "Strikeout Size", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, "Strikeout Offset", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, "Underline Size", row++);
+  add_metrics_line (self, font, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, "Underline Offset", row++);
+
+  gtk_grid_attach (self->info, make_title_label ("Style"), 0, row++, 2, 1);
+
+  add_style_line (self, font, HB_STYLE_TAG_ITALIC, "Italic", row++);
+  add_style_line (self, font, HB_STYLE_TAG_OPTICAL_SIZE, "Optical Size", row++);
+  add_style_line (self, font, HB_STYLE_TAG_SLANT_ANGLE, "Slant Angle", row++);
+  add_style_line (self, font, HB_STYLE_TAG_WIDTH, "Width", row++);
+  add_style_line (self, font, HB_STYLE_TAG_WEIGHT, "Weight", row++);
+
+  gtk_grid_attach (self->info, make_title_label ("Miscellaneous"), 0, row++, 2, 1);
+
+  count = hb_face_get_glyph_count (face);
+  g_snprintf (buf, sizeof (buf), "%d", count);
+  add_misc_line (self, "Glyph Count", buf, row++);
+
+  s = g_string_new ("");
+  count = hb_face_get_table_tags (face, 0, NULL, NULL);
+  tables = g_newa (hb_tag_t, count);
+  hb_face_get_table_tags (face, 0, &count, tables);
+  for (int i = 0; i < count; i++)
+    {
+      memset (buf, 0, sizeof (buf));
+      hb_tag_to_string (tables[i], buf);
+      if (s->len > 0)
+        g_string_append (s, ", ");
+      g_string_append (s, buf);
+    }
+  add_misc_line (self, "Tables", s->str, row++);
+  g_string_free (s, TRUE);
+
+  s = g_string_new ("");
+  if (hb_ot_color_has_palettes (face))
+    g_string_append_printf (s, "%s", "Palettes");
+  if (hb_ot_color_has_layers (face))
+    g_string_append_printf (s, "%s%s", s->len > 0 ? ", " : "", "Layers");
+  if (hb_ot_color_has_svg (face))
+    g_string_append_printf (s, "%s%s", s->len > 0 ? ", " : "", "SVG");
+  if (hb_ot_color_has_png (face))
+    g_string_append_printf (s, "%s%s", s->len > 0 ? ", " : "", "PNG");
+  if (s->len > 0)
+    add_misc_line (self, "Color", s->str, row++);
+  g_string_free (s, TRUE);
+
+  hb_font_destroy (font);
 }
 
 static void
@@ -304,6 +504,7 @@ font_view_set_property (GObject      *object,
       pango2_font_description_free (self->font_desc);
       self->font_desc = pango2_font_description_copy (g_value_get_boxed (value));
       update_glyph_model (self);
+      update_info (self);
       break;
 
     case PROP_SIZE:
@@ -329,6 +530,7 @@ font_view_set_property (GObject      *object,
     case PROP_VARIATIONS:
       g_free (self->variations);
       self->variations = g_strdup (g_value_get_string (value));
+      update_info (self);
       break;
 
     case PROP_FEATURES:
@@ -479,14 +681,16 @@ font_view_class_init (FontViewClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, edit);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, glyphs);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, glyphs_toggle);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, info);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, info_toggle);
 
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), toggle_edit);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), plain_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), waterfall_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), glyphs_changed);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), info_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), setup_glyph);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), bind_glyph);
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), unbind_glyph);
 
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "fontview");
 }
