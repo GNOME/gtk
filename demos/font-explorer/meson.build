@@ -10,6 +10,9 @@ fontexplorer_sources = [
   'fontview.c',
   'rangeedit.c',
   'language-names.c',
+  'glyphitem.c',
+  'glyphmodel.c',
+  'glyphview.c',
 ]
 
 fontexplorer_resources = gnome.compile_resources('fontexplorer_resources',

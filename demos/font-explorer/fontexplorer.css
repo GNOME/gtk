@@ -18,3 +18,10 @@ fontview {
   padding: 10px;
   border-spacing: 10px;
 }
+gridview > child {
+  padding: 0;
+}
+glyphview {
+  padding: 0;
+  border: 0.6px solid gray;
+}

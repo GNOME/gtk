@@ -1,4 +1,7 @@
 #include "fontview.h"
+#include "glyphitem.h"
+#include "glyphmodel.h"
+#include "glyphview.h"
 #include <gtk/gtk.h>
 
 enum {
@@ -26,6 +29,8 @@ struct _FontView
   GtkTextView *edit;
   GtkLabel *content;
   GtkScrolledWindow *swin;
+  GtkGridView *glyphs;
+  GtkToggleButton *glyphs_toggle;
 
   Pango2FontDescription *font_desc;
   float size;
@@ -188,10 +193,28 @@ toggle_edit (GtkToggleButton *button,
 
       update_view (self);
 
-      gtk_stack_set_visible_child_name (self->stack, "content");
+      if (gtk_toggle_button_get_active (self->glyphs_toggle))
+        gtk_stack_set_visible_child_name (self->stack, "glyphs");
+      else
+        gtk_stack_set_visible_child_name (self->stack, "content");
 
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SAMPLE_TEXT]);
     }
+}
+
+static void
+plain_changed (GtkToggleButton *button,
+               GParamSpec      *pspec,
+               FontView        *self)
+{
+  if (gtk_toggle_button_get_active (button))
+    {
+      gtk_stack_set_visible_child_name (self->stack, "content");
+      self->do_waterfall = FALSE;
+    }
+
+  update_view (self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_SIZE]);
 }
 
 static void
@@ -199,9 +222,76 @@ waterfall_changed (GtkToggleButton *button,
                    GParamSpec      *pspec,
                    FontView        *self)
 {
-  self->do_waterfall = gtk_toggle_button_get_active (button);
+  if (gtk_toggle_button_get_active (button))
+    {
+      gtk_stack_set_visible_child_name (self->stack, "content");
+      self->do_waterfall = TRUE;
+    }
+
   update_view (self);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_SIZE]);
+}
+
+static void
+glyphs_changed (GtkToggleButton *button,
+                GParamSpec      *pspec,
+                FontView        *self)
+{
+  if (gtk_toggle_button_get_active (button))
+    {
+      gtk_stack_set_visible_child_name (self->stack, "glyphs");
+      self->do_waterfall = FALSE;
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_SIZE]);
+}
+
+static Pango2Font *
+get_font (FontView *self)
+{
+  Pango2Context *context;
+
+  context = gtk_widget_get_pango_context (GTK_WIDGET (self));
+  return pango2_context_load_font (context, self->font_desc);
+}
+
+static void
+update_glyph_model (FontView *self)
+{
+  Pango2Font *font = get_font (self);
+  GlyphModel *gm;
+  GtkSelectionModel *model;
+
+  gm = glyph_model_new (pango2_font_get_face (font));
+  model = GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (gm)));
+  gtk_grid_view_set_model (self->glyphs, model);
+  g_object_unref (model);
+}
+
+static void
+setup_glyph (GtkSignalListItemFactory *factory,
+             GObject                  *listitem)
+{
+  gtk_list_item_set_child (GTK_LIST_ITEM (listitem), GTK_WIDGET (glyph_view_new ()));
+}
+
+static void
+bind_glyph (GtkSignalListItemFactory *factory,
+            GObject                  *listitem)
+{
+  GlyphView *view;
+  GObject *item;
+
+  view = GLYPH_VIEW (gtk_list_item_get_child (GTK_LIST_ITEM (listitem)));
+  item = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
+  glyph_view_set_font (view, glyph_item_get_font (GLYPH_ITEM (item)));
+  glyph_view_set_glyph (view, glyph_item_get_glyph (GLYPH_ITEM (item)));
+}
+
+static void
+unbind_glyph (GtkSignalListItemFactory *factory,
+              GObject                  *listitem)
+{
 }
 
 static void
@@ -217,6 +307,7 @@ font_view_set_property (GObject      *object,
     case PROP_FONT_DESC:
       pango2_font_description_free (self->font_desc);
       self->font_desc = pango2_font_description_copy (g_value_get_boxed (value));
+      update_glyph_model (self);
       break;
 
     case PROP_SIZE:
@@ -400,8 +491,16 @@ font_view_class_init (FontViewClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, content);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, stack);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, edit);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, glyphs);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontView, glyphs_toggle);
+
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), toggle_edit);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), plain_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), waterfall_changed);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), glyphs_changed);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), setup_glyph);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), bind_glyph);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), unbind_glyph);
 
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "fontview");
 }
