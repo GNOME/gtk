@@ -229,10 +229,10 @@ gtk_font_chooser_dialog_dispose (GObject *object)
                                             dialog);
     }
 
-  g_clear_pointer (&dialog->select_button, gtk_widget_unparent);
-  g_clear_pointer (&dialog->cancel_button, gtk_widget_unparent);
+  /* tweak_button is not a template child */
   g_clear_pointer (&dialog->tweak_button, gtk_widget_unparent);
-  g_clear_pointer (&dialog->fontchooser, gtk_widget_unparent);
+
+  gtk_widget_clear_template (GTK_WIDGET (dialog), GTK_TYPE_FONT_CHOOSER_DIALOG);
 
   G_OBJECT_CLASS (gtk_font_chooser_dialog_parent_class)->dispose (object);
 }
