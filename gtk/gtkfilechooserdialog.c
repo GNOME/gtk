@@ -380,9 +380,7 @@ gtk_file_chooser_dialog_activate_response (GtkWidget  *widget,
 static void
 gtk_file_chooser_dialog_dispose (GObject *object)
 {
-  GtkFileChooserDialogPrivate *priv = gtk_file_chooser_dialog_get_instance_private (GTK_FILE_CHOOSER_DIALOG (object));
-
-  g_clear_pointer ((GtkWidget **)&priv->widget, gtk_widget_unparent);
+  gtk_widget_clear_template (GTK_WIDGET (object), GTK_TYPE_FILE_CHOOSER_DIALOG);
 
   G_OBJECT_CLASS (gtk_file_chooser_dialog_parent_class)->dispose (object);
 }
