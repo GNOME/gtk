@@ -412,7 +412,7 @@ icon_browser_window_init (IconBrowserWindow *win)
 static void
 icon_browser_window_dispose (GObject *object)
 {
-  gtk_widget_clear_template (GTK_WIDGET (object), ICON_BROWSER_WINDOW_TYPE);
+  gtk_widget_dispose_template (GTK_WIDGET (object), ICON_BROWSER_WINDOW_TYPE);
 
   G_OBJECT_CLASS (icon_browser_window_parent_class)->dispose (object);
 }

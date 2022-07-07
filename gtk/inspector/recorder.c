@@ -2043,7 +2043,7 @@ gtk_inspector_recorder_dispose (GObject *object)
   g_clear_object (&recorder->render_node_root_model);
   g_clear_object (&recorder->render_node_selection);
 
-  gtk_widget_clear_template (GTK_WIDGET (recorder), GTK_TYPE_INSPECTOR_RECORDER);
+  gtk_widget_dispose_template (GTK_WIDGET (recorder), GTK_TYPE_INSPECTOR_RECORDER);
 
   G_OBJECT_CLASS (gtk_inspector_recorder_parent_class)->dispose (object);
 }

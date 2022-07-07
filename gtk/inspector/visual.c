@@ -1134,7 +1134,7 @@ gtk_inspector_visual_dispose (GObject *object)
 {
   GtkInspectorVisual *vis = GTK_INSPECTOR_VISUAL (object);
 
-  gtk_widget_clear_template (GTK_WIDGET (vis), GTK_TYPE_INSPECTOR_VISUAL);
+  gtk_widget_dispose_template (GTK_WIDGET (vis), GTK_TYPE_INSPECTOR_VISUAL);
 
   G_OBJECT_CLASS (gtk_inspector_visual_parent_class)->dispose (object);
 }

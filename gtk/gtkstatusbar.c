@@ -143,7 +143,7 @@ gtk_statusbar_dispose (GObject *object)
   g_slist_free_full (self->keys, g_free);
   self->keys = NULL;
 
-  gtk_widget_clear_template (GTK_WIDGET (self), GTK_TYPE_STATUSBAR);
+  gtk_widget_dispose_template (GTK_WIDGET (self), GTK_TYPE_STATUSBAR);
 
   G_OBJECT_CLASS (gtk_statusbar_parent_class)->dispose (object);
 }

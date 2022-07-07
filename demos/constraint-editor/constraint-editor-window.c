@@ -363,7 +363,7 @@ save_cb (GtkWidget              *button,
 static void
 constraint_editor_window_dispose (GObject *object)
 {
-  gtk_widget_clear_template (GTK_WIDGET (object), CONSTRAINT_EDITOR_WINDOW_TYPE);
+  gtk_widget_dispose_template (GTK_WIDGET (object), CONSTRAINT_EDITOR_WINDOW_TYPE);
 
   G_OBJECT_CLASS (constraint_editor_window_parent_class)->dispose (object);
 }

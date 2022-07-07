@@ -263,7 +263,7 @@ gtk_message_row_state_flags_changed (GtkWidget    *widget,
 static void
 gtk_message_row_dispose (GObject *obj)
 {
-  gtk_widget_clear_template (GTK_WIDGET (obj), GTK_TYPE_MESSAGE_ROW);
+  gtk_widget_dispose_template (GTK_WIDGET (obj), GTK_TYPE_MESSAGE_ROW);
   G_OBJECT_CLASS (gtk_message_row_parent_class)->dispose (obj);
 }
 

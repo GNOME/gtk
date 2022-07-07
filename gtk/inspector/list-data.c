@@ -191,7 +191,7 @@ dispose (GObject *object)
 {
   GtkInspectorListData *sl = GTK_INSPECTOR_LIST_DATA (object);
 
-  gtk_widget_clear_template (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_LIST_DATA);
+  gtk_widget_dispose_template (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_LIST_DATA);
 
   G_OBJECT_CLASS (gtk_inspector_list_data_parent_class)->dispose (object);
 }

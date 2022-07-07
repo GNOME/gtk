@@ -834,7 +834,7 @@ GObject *gtk_widget_get_template_child                  (GtkWidget             *
                                                          GType                  widget_type,
                                                          const char            *name);
 GDK_AVAILABLE_IN_4_8
-void    gtk_widget_clear_template                       (GtkWidget             *widget,
+void    gtk_widget_dispose_template                     (GtkWidget             *widget,
                                                          GType                  widget_type);
 GDK_AVAILABLE_IN_ALL
 void    gtk_widget_class_set_template                   (GtkWidgetClass        *widget_class,

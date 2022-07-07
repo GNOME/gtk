@@ -603,7 +603,7 @@ dispose (GObject *o)
 {
   GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (o);
 
-  gtk_widget_clear_template (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_MISC_INFO);
+  gtk_widget_dispose_template (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_MISC_INFO);
 
   G_OBJECT_CLASS (gtk_inspector_misc_info_parent_class)->dispose (o);
 }

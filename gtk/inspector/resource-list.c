@@ -768,7 +768,7 @@ dispose (GObject *object)
   g_clear_object (&rl->selection);
   g_clear_object (&rl->tree_model);
 
-  gtk_widget_clear_template (GTK_WIDGET (rl), GTK_TYPE_INSPECTOR_RESOURCE_LIST);
+  gtk_widget_dispose_template (GTK_WIDGET (rl), GTK_TYPE_INSPECTOR_RESOURCE_LIST);
 
   G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->dispose (object);
 }

@@ -392,7 +392,7 @@
  * }
  * ```
  *
- * as well as calling [method@Gtk.Widget.clear_template] from the dispose
+ * as well as calling [method@Gtk.Widget.dispose_template] from the dispose
  * function:
  *
  * ```c
@@ -404,7 +404,7 @@
  *   // Dispose objects for which you have a reference...
  *
  *   // Clear the template children for this widget type
- *   gtk_widget_clear_template (GTK_WIDGET (self), FOO_TYPE_WIDGET);
+ *   gtk_widget_dispose_template (GTK_WIDGET (self), FOO_TYPE_WIDGET);
  *
  *   G_OBJECT_CLASS (foo_widget_parent_class)->dispose (gobject);
  * }
@@ -428,7 +428,7 @@
  * static void
  * foo_widget_dispose (GObject *gobject)
  * {
- *   gtk_widget_clear_template (GTK_WIDGET (gobject), FOO_TYPE_WIDGET);
+ *   gtk_widget_dispose_template (GTK_WIDGET (gobject), FOO_TYPE_WIDGET);
  *
  *   G_OBJECT_CLASS (foo_widget_parent_class)->dispose (gobject);
  * }
@@ -10998,7 +10998,7 @@ out:
 }
 
 /**
- * gtk_widget_clear_template:
+ * gtk_widget_dispose_template:
  * @widget: the widget with a template
  * @widget_type: the type of the widget to finalize the template for
  *
@@ -11022,7 +11022,7 @@ out:
  *   SomeWidget *self = SOME_WIDGET (gobject);
  *
  *   // Clear the template data for SomeWidget
- *   gtk_widget_clear_template (GTK_WIDGET (self), SOME_TYPE_WIDGET);
+ *   gtk_widget_dispose_template (GTK_WIDGET (self), SOME_TYPE_WIDGET);
  *
  *   G_OBJECT_CLASS (some_widget_parent_class)->dispose (gobject);
  * }
@@ -11031,8 +11031,8 @@ out:
  * Since: 4.8
  */
 void
-gtk_widget_clear_template (GtkWidget *widget,
-                           GType      widget_type)
+gtk_widget_dispose_template (GtkWidget *widget,
+                             GType      widget_type)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (g_type_name (widget_type) != NULL);

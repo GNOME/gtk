@@ -296,7 +296,7 @@ guide_editor_dispose (GObject *object)
 
   g_clear_object (&self->guide);
 
-  gtk_widget_clear_template (GTK_WIDGET (self), GUIDE_EDITOR_TYPE);
+  gtk_widget_dispose_template (GTK_WIDGET (self), GUIDE_EDITOR_TYPE);
 
   G_OBJECT_CLASS (guide_editor_parent_class)->dispose (object);
 }

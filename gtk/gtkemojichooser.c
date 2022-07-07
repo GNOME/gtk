@@ -252,7 +252,7 @@ gtk_emoji_chooser_finalize (GObject *object)
 static void
 gtk_emoji_chooser_dispose (GObject *object)
 {
-  gtk_widget_clear_template (GTK_WIDGET (object), GTK_TYPE_EMOJI_CHOOSER);
+  gtk_widget_dispose_template (GTK_WIDGET (object), GTK_TYPE_EMOJI_CHOOSER);
 
   G_OBJECT_CLASS (gtk_emoji_chooser_parent_class)->dispose (object);
 }

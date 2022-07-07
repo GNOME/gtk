@@ -314,7 +314,7 @@ gtk_inspector_window_dispose (GObject *object)
   g_clear_object (&iw->flash_overlay);
   g_clear_pointer (&iw->objects, g_array_unref);
 
-  gtk_widget_clear_template (GTK_WIDGET (iw), GTK_TYPE_INSPECTOR_WINDOW);
+  gtk_widget_dispose_template (GTK_WIDGET (iw), GTK_TYPE_INSPECTOR_WINDOW);
 
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->dispose (object);
 }

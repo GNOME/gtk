@@ -355,7 +355,7 @@ gtk_inspector_clipboard_dispose (GObject *object)
 
   gtk_inspector_clipboard_unset_display (self);
 
-  gtk_widget_clear_template (GTK_WIDGET (self), GTK_TYPE_INSPECTOR_CLIPBOARD);
+  gtk_widget_dispose_template (GTK_WIDGET (self), GTK_TYPE_INSPECTOR_CLIPBOARD);
 
   G_OBJECT_CLASS (gtk_inspector_clipboard_parent_class)->dispose (object);
 }

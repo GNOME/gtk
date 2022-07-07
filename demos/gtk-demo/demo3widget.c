@@ -38,7 +38,7 @@ demo3_widget_dispose (GObject *object)
 
   g_clear_object (&self->paintable);
 
-  gtk_widget_clear_template (GTK_WIDGET (self), DEMO3_TYPE_WIDGET);
+  gtk_widget_dispose_template (GTK_WIDGET (self), DEMO3_TYPE_WIDGET);
 
   G_OBJECT_CLASS (demo3_widget_parent_class)->dispose (object);
 }

@@ -876,7 +876,7 @@ dark_mode_cb (GtkToggleButton *button,
 static void
 node_editor_window_dispose (GObject *object)
 {
-  gtk_widget_clear_template (GTK_WIDGET (object), NODE_EDITOR_WINDOW_TYPE);
+  gtk_widget_dispose_template (GTK_WIDGET (object), NODE_EDITOR_WINDOW_TYPE);
 
   G_OBJECT_CLASS (node_editor_window_parent_class)->dispose (object);
 }

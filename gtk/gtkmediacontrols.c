@@ -208,7 +208,7 @@ gtk_media_controls_dispose (GObject *object)
 
   gtk_media_controls_set_media_stream (controls, NULL);
 
-  gtk_widget_clear_template (GTK_WIDGET (object), GTK_TYPE_MEDIA_CONTROLS);
+  gtk_widget_dispose_template (GTK_WIDGET (object), GTK_TYPE_MEDIA_CONTROLS);
 
   G_OBJECT_CLASS (gtk_media_controls_parent_class)->dispose (object);
 }

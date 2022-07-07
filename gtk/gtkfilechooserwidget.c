@@ -3137,7 +3137,7 @@ gtk_file_chooser_widget_dispose (GObject *object)
 
   remove_settings_signal (impl);
 
-  gtk_widget_clear_template (GTK_WIDGET (impl), GTK_TYPE_FILE_CHOOSER_WIDGET);
+  gtk_widget_dispose_template (GTK_WIDGET (impl), GTK_TYPE_FILE_CHOOSER_WIDGET);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
 }
