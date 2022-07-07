@@ -15,7 +15,6 @@ enum {
   PROP_FEATURES,
   PROP_PALETTE,
   PROP_SAMPLE_TEXT,
-  PROP_IGNORE_SIZE,
   NUM_PROPERTIES
 };
 
@@ -131,7 +130,7 @@ update_view (FontView *self)
     {
       GString *str;
       int sizes[] = { 7, 8, 9, 10, 12, 14, 16, 20, 24, 30, 40, 50, 60, 70, 90 };
-      int start, text_len;
+      int start, end, text_len;
 
       str = g_string_new ("");
       start = 0;
@@ -142,11 +141,12 @@ update_view (FontView *self)
 
           g_string_append (str, self->sample_text);
           g_string_append (str, " "); /* Unicode line separator */
+          end = start + text_len + strlen (" ");
 
           attr = pango2_attr_size_new (sizes[i] * PANGO2_SCALE);
-          pango2_attribute_set_range (attr, start, start + text_len);
+          pango2_attribute_set_range (attr, start, end);
           pango2_attr_list_insert (attrs, attr);
-          start += text_len + strlen (" ");
+          start = end;
         }
       gtk_label_set_text (self->content, str->str);
       gtk_label_set_attributes (self->content, attrs);
@@ -214,7 +214,6 @@ plain_changed (GtkToggleButton *button,
     }
 
   update_view (self);
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_SIZE]);
 }
 
 static void
@@ -229,7 +228,6 @@ waterfall_changed (GtkToggleButton *button,
     }
 
   update_view (self);
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_SIZE]);
 }
 
 static void
@@ -242,8 +240,6 @@ glyphs_changed (GtkToggleButton *button,
       gtk_stack_set_visible_child_name (self->stack, "glyphs");
       self->do_waterfall = FALSE;
     }
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_IGNORE_SIZE]);
 }
 
 static Pango2Font *
@@ -407,10 +403,6 @@ font_view_get_property (GObject    *object,
       g_value_set_string (value, self->sample_text);
       break;
 
-    case PROP_IGNORE_SIZE:
-      g_value_set_boolean (value, self->do_waterfall);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -475,12 +467,6 @@ font_view_class_init (FontViewClass *class)
       g_param_spec_string ("sample-text", "", "",
                            "",
                            G_PARAM_READWRITE);
-
-  properties[PROP_IGNORE_SIZE] =
-      g_param_spec_boolean ("ignore-size", "", "",
-                            FALSE,
-                            G_PARAM_READWRITE);
-
 
   g_object_class_install_properties (G_OBJECT_CLASS (class), NUM_PROPERTIES, properties);
 

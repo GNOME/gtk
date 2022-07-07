@@ -10,7 +10,6 @@ enum {
   PROP_LINE_HEIGHT,
   PROP_FOREGROUND,
   PROP_BACKGROUND,
-  PROP_DISABLE_SIZE,
   NUM_PROPERTIES
 };
 
@@ -27,7 +26,6 @@ struct _FontControls
   GtkColorButton *background;
 
   GSimpleAction *reset_action;
-  gboolean disable_size;
 };
 
 struct _FontControlsClass
@@ -141,10 +139,6 @@ font_controls_set_property (GObject      *object,
       gtk_adjustment_set_value (self->size_adjustment, g_value_get_float (value));
       break;
 
-    case PROP_DISABLE_SIZE:
-      self->disable_size = g_value_get_boolean (value);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -188,10 +182,6 @@ font_controls_get_property (GObject      *object,
       }
       break;
 
-    case PROP_DISABLE_SIZE:
-      g_value_set_boolean (value, self->disable_size);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -233,11 +223,6 @@ font_controls_class_init (FontControlsClass *class)
       g_param_spec_boxed ("background", "", "",
                           GDK_TYPE_RGBA,
                           G_PARAM_READABLE);
-
-  properties[PROP_DISABLE_SIZE] =
-      g_param_spec_boolean ("disable-size", "", "",
-                            FALSE,
-                            G_PARAM_READWRITE);
 
   g_object_class_install_properties (G_OBJECT_CLASS (class), NUM_PROPERTIES, properties);
 
