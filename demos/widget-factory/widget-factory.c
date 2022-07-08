@@ -2098,6 +2098,7 @@ activate (GApplication *app)
   gtk_builder_cscope_add_callback (scope, mode_switch_state_set);
   gtk_builder_cscope_add_callback (scope, level_scale_value_changed);
   gtk_builder_cscope_add_callback (scope, transition_speed_changed);
+  gtk_builder_cscope_add_callback (scope, reset_icon_size);
   gtk_builder_set_scope (builder, scope);
   g_object_unref (scope);
   if (!gtk_builder_add_from_resource (builder, "/org/gtk/WidgetFactory4/widget-factory.ui", &error))
