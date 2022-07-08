@@ -22,7 +22,7 @@
 #include "gtkcanvasitemprivate.h"
 
 #include "gtkcanvas.h"
-#include "gtkcanvasboxprivate.h"
+#include "gtkcanvasbox.h"
 #include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtkwidget.h"
@@ -41,17 +41,19 @@ struct _GtkCanvasItem
   GtkCanvas *canvas;
   gpointer item;
   GtkWidget *widget;
-  GtkCanvasBox bounds;
-  GtkCanvasBox bounds_var;
-  GtkCanvasBox allocation_var;
+  GtkCanvasItemComputeBoundsFunc compute_bounds_func;
+  gpointer user_data;
+  GDestroyNotify user_destroy;
 
-  GtkCanvasVector size_vecs[4];
+  GtkCanvasBox bounds;
+  GtkCanvasBox allocation;
+
+  guint has_allocation : 1;
 };
 
 enum
 {
   PROP_0,
-  PROP_BOUNDS,
   PROP_CANVAS,
   PROP_ITEM,
   PROP_WIDGET,
@@ -74,23 +76,12 @@ gtk_canvas_item_dispose (GObject *object)
   g_assert (self->item == NULL);
   g_assert (self->widget == NULL);
 
+  if (self->user_destroy)
+    self->user_destroy (self->user_data);
+  self->user_destroy = NULL;
+  self->user_data = NULL;
+
   G_OBJECT_CLASS (gtk_canvas_item_parent_class)->dispose (object);
-}
-
-static void
-gtk_canvas_item_finalize (GObject *object)
-{
-  GtkCanvasItem *self = GTK_CANVAS_ITEM (object);
-  int i;
-
-  for (i = 0; i < 4; i++)
-    gtk_canvas_vector_finish (&self->size_vecs[i]);
-
-  gtk_canvas_box_finish (&self->bounds);
-  gtk_canvas_box_finish (&self->bounds_var);
-  gtk_canvas_box_finish (&self->allocation_var);
-
-  G_OBJECT_CLASS (gtk_canvas_item_parent_class)->finalize (object);
 }
 
 static void
@@ -103,10 +94,6 @@ gtk_canvas_item_get_property (GObject    *object,
 
   switch (property_id)
     {
-    case PROP_BOUNDS:
-      g_value_set_boxed (value, &self->bounds);
-      break;
-
     case PROP_CANVAS:
       g_value_set_object (value, self->canvas);
       break;
@@ -135,10 +122,6 @@ gtk_canvas_item_set_property (GObject      *object,
 
   switch (property_id)
     {
-    case PROP_BOUNDS:
-      gtk_canvas_item_set_bounds (self, g_value_get_boxed (value));
-      break;
-
     case PROP_WIDGET:
       gtk_canvas_item_set_widget (self, g_value_get_object (value));
       break;
@@ -155,19 +138,8 @@ gtk_canvas_item_class_init (GtkCanvasItemClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->dispose = gtk_canvas_item_dispose;
-  gobject_class->finalize = gtk_canvas_item_finalize;
   gobject_class->get_property = gtk_canvas_item_get_property;
   gobject_class->set_property = gtk_canvas_item_set_property;
-
-  /**
-   * GtkCanvasItem:bounds: (attributes org.gtk.Property.get=gtk_canvas_item_get_bounds org.gtk.Property.set=gtk_canvas_item_set_bounds)
-   *
-   * The bounds to place the widget into.
-   */
-  properties[PROP_BOUNDS] =
-    g_param_spec_boxed ("bounds", NULL, NULL,
-                        GTK_TYPE_CANVAS_BOX,
-                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkCanvasItem:canvas: (attributes org.gtk.Property.get=gtk_canvas_item_get_canvas org.gtk.Property.set=gtk_canvas_item_set_canvas)
@@ -205,17 +177,6 @@ gtk_canvas_item_class_init (GtkCanvasItemClass *klass)
 static void
 gtk_canvas_item_init (GtkCanvasItem *self)
 {
-  gtk_canvas_vector_init_variable (&self->size_vecs[0], "item%p.min_for_min", self);
-  gtk_canvas_vector_init_variable (&self->size_vecs[1], "item%p.min_for_nat", self);
-  gtk_canvas_vector_init_variable (&self->size_vecs[2], "item%p.nat_for_min", self);
-  gtk_canvas_vector_init_variable (&self->size_vecs[3], "item%p.nat_for_nat", self);
-
-  gtk_canvas_vector_init_constant (&self->bounds.point, 0, 0);
-  gtk_canvas_vector_init_copy (&self->bounds.size, &self->size_vecs[GTK_CANVAS_ITEM_MEASURE_NAT_FOR_NAT]);
-  gtk_canvas_vector_init_constant (&self->bounds.origin, 0.5, 0.5);
-  gtk_canvas_box_init_variable (&self->bounds_var, "item%p.bounds", self);
-  gtk_canvas_box_update_variable (&self->bounds_var, &self->bounds);
-  gtk_canvas_box_init_variable (&self->allocation_var, "item%p.allocation", self);
 }
 
 GtkCanvasItem *
@@ -236,70 +197,72 @@ gtk_canvas_item_new (GtkCanvas *canvas,
 }
 
 void
-gtk_canvas_item_validate_variables (GtkCanvasItem *self)
+gtk_canvas_item_invalidate_allocation (GtkCanvasItem *self)
 {
-  int w[4], h[4], i;
+  self->has_allocation = FALSE;
+}
 
-  if (self->widget == NULL)
+gboolean
+gtk_canvas_item_allocate (GtkCanvasItem *self,
+                          gboolean       force)
+{
+  int w, h;
+
+  g_assert (!self->has_allocation);
+
+  if (!self->compute_bounds_func)
     {
-      memset (w, 0, sizeof (w));
-      memset (h, 0, sizeof (h));
+      gtk_canvas_box_init (&self->bounds, 0, 0, 0, 0, 0.5, 0.5);
     }
-  else
+  else if (!self->compute_bounds_func (self, &self->bounds, self->user_data))
+    {
+      if (!force)
+        return FALSE;
+      gtk_canvas_box_init (&self->bounds, 0, 0, 0, 0, 0.5, 0.5);
+    }
+
+  if (self->widget)
     {
       if (gtk_widget_get_request_mode (self->widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
         {
-          gtk_widget_measure (self->widget, GTK_ORIENTATION_HORIZONTAL, -1, &w[0], &w[2], NULL, NULL);
-          w[1] = w[0];
-          gtk_widget_measure (self->widget, GTK_ORIENTATION_VERTICAL, w[0], &h[0], &h[1], NULL, NULL);
-          w[3] = w[2];
-          gtk_widget_measure (self->widget, GTK_ORIENTATION_VERTICAL, w[2], &h[2], &h[3], NULL, NULL);
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_HORIZONTAL, -1, &w, NULL, NULL, NULL);
+          w = MAX (w, ceil (ABS (self->bounds.size.width)));
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_VERTICAL, w, &h, NULL, NULL, NULL);
+          h = MAX (h, ceil (ABS (self->bounds.size.height)));
         }
       else
         {
-          gtk_widget_measure (self->widget, GTK_ORIENTATION_VERTICAL, -1, &h[0], &h[2], NULL, NULL);
-          h[1] = h[0];
-          gtk_widget_measure (self->widget, GTK_ORIENTATION_HORIZONTAL, h[0], &w[0], &w[1], NULL, NULL);
-          h[3] = h[2];
-          gtk_widget_measure (self->widget, GTK_ORIENTATION_HORIZONTAL, h[2], &w[2], &w[3], NULL, NULL);
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_VERTICAL, -1, &h, NULL, NULL, NULL);
+          h = MAX (h, ceil (ABS (self->bounds.size.height)));
+          gtk_widget_measure (self->widget, GTK_ORIENTATION_HORIZONTAL, h, &w, NULL, NULL, NULL);
+          w = MAX (w, ceil (ABS (self->bounds.size.width)));
         }
-    }
 
-  for (i = 0; i < 4; i++)
+      if (self->bounds.size.width >= 0)
+        w = MAX (self->bounds.size.width, w);
+      else
+        w = MIN (self->bounds.size.width, -w);
+      if (self->bounds.size.height >= 0)
+        h = MAX (self->bounds.size.height, h);
+      else
+        h = MIN (self->bounds.size.height, -h);
+    }
+  else
     {
-      gtk_canvas_vector_init_constant (
-          gtk_canvas_vector_get_variable (&self->size_vecs[i]),
-          0, 0);
+      w = 0;
+      h = 0;
     }
 
-  gtk_canvas_vector_init_invalid (
-      gtk_canvas_vector_get_variable (&self->allocation_var.point));
-  gtk_canvas_vector_init_invalid (
-      gtk_canvas_vector_get_variable (&self->allocation_var.size));
-  gtk_canvas_vector_init_invalid (
-      gtk_canvas_vector_get_variable (&self->allocation_var.origin));
-}
+  gtk_canvas_box_init (&self->allocation,
+                       round (self->bounds.point.x - self->bounds.origin.horizontal * w)
+                         + self->bounds.origin.horizontal * w,
+                       round (self->bounds.point.y - self->bounds.origin.vertical * h)
+                         + self->bounds.origin.vertical * h,
+                       w, h,
+                       self->bounds.origin.horizontal, self->bounds.origin.vertical);
+  self->has_allocation = TRUE;
 
-void
-gtk_canvas_item_allocate (GtkCanvasItem   *self,
-                          graphene_rect_t *rect)
-{
-  graphene_vec2_t origin;
-
-  if (!gtk_canvas_vector_eval (&self->bounds.origin, &origin))
-    graphene_vec2_init_from_vec2 (&origin, graphene_vec2_zero ());
-
-  gtk_canvas_vector_init_constant (
-      gtk_canvas_vector_get_variable (&self->allocation_var.point),
-      rect->origin.x + graphene_vec2_get_x (&origin) * rect->size.width,
-      rect->origin.y + graphene_vec2_get_y (&origin) * rect->size.height);
-  gtk_canvas_vector_init_constant (
-      gtk_canvas_vector_get_variable (&self->allocation_var.size),
-      rect->size.width, rect->size.height);
-  gtk_canvas_vector_init_constant (
-      gtk_canvas_vector_get_variable (&self->allocation_var.origin),
-      graphene_vec2_get_x (&origin),
-      graphene_vec2_get_y (&origin));
+  return TRUE;
 }
 
 void
@@ -312,13 +275,9 @@ gtk_canvas_item_allocate_widget (GtkCanvasItem *self,
   if (self->widget == NULL)
     return;
 
-  if (!gtk_canvas_box_eval (&self->allocation_var, &allocation))
-    {
-      /* gtkcanvas.c will not call this function otherwise */
-      g_assert_not_reached ();
-    }
-
+  gtk_canvas_box_to_rect (&self->allocation, &allocation);
   graphene_rect_normalize (&allocation);
+
   gtk_widget_size_allocate (self->widget,
                             &(GtkAllocation) {
                               allocation.origin.x - dx,
@@ -331,32 +290,7 @@ gtk_canvas_item_allocate_widget (GtkCanvasItem *self,
 gboolean
 gtk_canvas_item_has_allocation (GtkCanvasItem *self)
 {
-  return !gtk_canvas_vector_is_invalid (gtk_canvas_vector_get_variable (&self->allocation_var.point));
-}
-
-const GtkCanvasVector *
-gtk_canvas_vector_get_item_measure (GtkCanvasItem        *item,
-                                    GtkCanvasItemMeasure  measure)
-{
-  g_return_val_if_fail (GTK_IS_CANVAS_ITEM (item), NULL);
-
-  return &item->size_vecs[measure];
-}
-
-const GtkCanvasBox *
-gtk_canvas_box_get_item_bounds (GtkCanvasItem *item)
-{
-  g_return_val_if_fail (GTK_IS_CANVAS_ITEM (item), NULL);
-
-  return &item->bounds_var;
-}
-
-const GtkCanvasBox *
-gtk_canvas_box_get_item_allocation (GtkCanvasItem *item)
-{
-  g_return_val_if_fail (GTK_IS_CANVAS_ITEM (item), NULL);
-
-  return &item->allocation_var;
+  return self->has_allocation;
 }
 
 /**
@@ -395,42 +329,96 @@ gtk_canvas_item_get_item (GtkCanvasItem *self)
 }
 
 /**
- * gtk_canvas_item_set_bounds: (attributes org.gtk.Method.set_property=bounds)
+ * gtk_canvas_item_set_compute_bounds:
  * @self: a `GtkCanvasItem`
- * @bounds: (transfer none): the bounds to allocate the widget in
+ * @compute_bounds_func: the function to compute bounds
+ * @user_data: (nullable): user data to pass to @compute_bounds_func
+ * @user_destroy: destroy notify for @user_data
  *
- * Sets the box to allocate the widget into.
+ * Sets the function to call to compute bounds during allocation.
+ *
+ * This function may be called multiple times if it returned %FALSE
+ * previously.
+ *
+ * Because of that the function is expected to be pure - not set
+ * any properties or have other side effects - and idempotent - 
+ * return the same result if called multiple times in order.
  */
 void
-gtk_canvas_item_set_bounds (GtkCanvasItem      *self,
-                            const GtkCanvasBox *bounds)
+gtk_canvas_item_set_compute_bounds (GtkCanvasItem                  *self,
+                                    GtkCanvasItemComputeBoundsFunc  compute_bounds_func,
+                                    gpointer                        user_data,
+                                    GDestroyNotify                  user_destroy)
 {
   g_return_if_fail (GTK_IS_CANVAS_ITEM (self));
-  g_return_if_fail (bounds != NULL);
 
-  gtk_canvas_box_init_copy (&self->bounds, bounds);
-  gtk_canvas_box_update_variable (&self->bounds_var, bounds);
+  if (self->user_destroy)
+    self->user_destroy (self->user_data);
+
+  self->compute_bounds_func = compute_bounds_func;
+  self->user_data = user_data;
+  self->user_destroy = user_destroy;
+}
+
+void
+gtk_canvas_item_invalidate_bounds (GtkCanvasItem *self)
+{
+  g_return_if_fail (GTK_IS_CANVAS_ITEM (self));
 
   if (self->canvas)
     gtk_widget_queue_allocate (GTK_WIDGET (self->canvas));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BOUNDS]);
 }
 
 /**
- * gtk_canvas_item_get_bounds: (attributes org.gtk.Method.get_property=bounds)
+ * gtk_canvas_item_get_bounds:
  * @self: a `GtkCanvasItem`
  *
  * Gets the bounds that are used to allocate the widget
  *
- * Returns: (transfer none): The bounds
+ * If the bounds are not known yet - for example when called during the size
+ * allocation phase before this item has succesfully computed its bounds -
+ * this function returns %NULL.
+ *
+ * See also gtk_canvas_item_get_allocation().
+ *
+ * Returns: (transfer none) (nullable): The bounds
  */
 const GtkCanvasBox *
 gtk_canvas_item_get_bounds (GtkCanvasItem *self)
 {
   g_return_val_if_fail (GTK_IS_CANVAS_ITEM (self), NULL);
 
+  if (!self->has_allocation)
+    return NULL;
+
   return &self->bounds;
+}
+
+/**
+ * gtk_canvas_item_get_allocation:
+ * @self: a `GtkCanvasItem`
+ *
+ * Gets the allocation assigned to the widget.
+ *
+ * If the bounds are not known yet - for example when called during the size
+ * allocation phase before this item has succesfully computed its bounds -
+ * this function returns %NULL.
+ *
+ * Compared with gtk_canvas_item_get_bounds(), this function returns the actual
+ * box used to allocate the widget, which may be different from the bounds
+ * to conform to its size requirements.
+ *
+ * Returns: (transfer none) (nullable): The allocation
+ */
+const GtkCanvasBox *
+gtk_canvas_item_get_allocation (GtkCanvasItem *self)
+{
+  g_return_val_if_fail (GTK_IS_CANVAS_ITEM (self), NULL);
+
+  if (!self->has_allocation)
+    return NULL;
+
+  return &self->allocation;
 }
 
 /**

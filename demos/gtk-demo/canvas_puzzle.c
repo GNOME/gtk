@@ -9,32 +9,25 @@
 
 #include "puzzlepiece.h"
 
-static void
-set_item_position (GtkCanvasItem *ci,
-                   float          x,
-                   float          y)
+static gboolean
+set_position_from_origin (GtkCanvasItem *ci,
+                          GtkCanvasBox  *out_box,
+                          gpointer       user_data)
 {
-  GtkCanvasVector *point, *size;
-  GtkCanvasBox *box, *viewport;
+  GtkOrigin *origin = g_object_get_data (G_OBJECT (ci), "position");
+  const GtkCanvasBox *viewport = gtk_canvas_get_viewport (gtk_canvas_item_get_canvas (ci));
 
-  x = CLAMP (x, 0, 1);
-  y = CLAMP (y, 0, 1);
+  if (viewport == NULL)
+    return FALSE;
 
-  point = gtk_canvas_vector_new (0, 0);
-  viewport = gtk_canvas_box_new (point,
-                                 gtk_canvas_get_viewport_size (gtk_canvas_item_get_canvas (ci)),
-                                 0.0, 0.0);
-  gtk_canvas_vector_free (point);
+  gtk_canvas_box_init (out_box,
+                       viewport->size.width * origin->horizontal,
+                       viewport->size.height * origin->vertical,
+                       0, 0,
+                       origin->horizontal,
+                       origin->vertical);
 
-  point = gtk_canvas_vector_new_from_box (viewport, x, y);
-  gtk_canvas_box_free (viewport);
-  size = gtk_canvas_vector_new (0, 0);
-  box = gtk_canvas_box_new (point, size, x, y);
-  gtk_canvas_vector_free (point);
-  gtk_canvas_vector_free (size);
-
-  gtk_canvas_item_set_bounds (ci, box);
-  gtk_canvas_box_free (box);
+  return TRUE;
 }
 
 static void
@@ -44,14 +37,15 @@ move_item (GtkGestureDrag *gesture,
            GtkCanvasItem  *ci)
 {
   GtkCanvas *canvas = gtk_canvas_item_get_canvas (ci);
-  graphene_rect_t bounds;
+  GtkOrigin *origin = g_object_get_data (G_OBJECT (ci), "position");
 
-  if (!gtk_canvas_box_eval (gtk_canvas_item_get_bounds (ci), &bounds))
-    return;
+  origin->horizontal += x / gtk_widget_get_width (GTK_WIDGET (canvas));
+  origin->vertical += y / gtk_widget_get_height (GTK_WIDGET (canvas));
+  origin->horizontal = CLAMP (origin->horizontal, 0, 1);
+  origin->vertical = CLAMP (origin->vertical, 0, 1);
+  g_print ("%g %g\n", origin->horizontal, origin->vertical);
 
-  set_item_position (ci,
-                     (bounds.origin.x + x) / (gtk_widget_get_width (GTK_WIDGET (canvas)) - bounds.size.width),
-                     (bounds.origin.y + y) / (gtk_widget_get_height (GTK_WIDGET (canvas)) - bounds.size.height));
+  gtk_canvas_item_invalidate_bounds (ci);
 }
 
 static void
@@ -60,6 +54,7 @@ bind_item (GtkListItemFactory *factory,
 {
   GtkWidget *widget;
   GtkGesture *gesture;
+  GtkOrigin *origin;
 
   widget = gtk_picture_new_for_paintable (gtk_canvas_item_get_item (ci));
   gtk_picture_set_can_shrink (GTK_PICTURE (widget), FALSE);
@@ -69,8 +64,15 @@ bind_item (GtkListItemFactory *factory,
   gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
   gtk_canvas_item_set_widget (ci, widget);
 
-  /* Also center the item, so we do something interesting */
-  set_item_position (ci, g_random_double (), g_random_double ());
+  /* Set a random position */
+  origin = g_new (GtkOrigin, 1);
+  origin->horizontal = g_random_double ();
+  origin->vertical = g_random_double ();
+  g_object_set_data_full (G_OBJECT (ci), "position", origin, g_free);
+
+  gtk_canvas_item_set_compute_bounds (ci,
+                                      set_position_from_origin,
+                                      NULL, NULL);
 }
 
 static GListModel *

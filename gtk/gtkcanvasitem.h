@@ -35,6 +35,9 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (GtkCanvasItem, gtk_canvas_item, GTK, CANVAS_ITEM, GObject)
 
+typedef gboolean        (* GtkCanvasItemComputeBoundsFunc)      (GtkCanvasItem          *ci,
+                                                                 GtkCanvasBox           *out_box,
+                                                                 gpointer                user_data);
 GDK_AVAILABLE_IN_ALL
 GtkCanvas *             gtk_canvas_item_get_canvas              (GtkCanvasItem          *self);
 GDK_AVAILABLE_IN_ALL
@@ -47,10 +50,17 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget *             gtk_canvas_item_get_widget              (GtkCanvasItem          *self);
 
 GDK_AVAILABLE_IN_ALL
-void                    gtk_canvas_item_set_bounds              (GtkCanvasItem          *self,
-                                                                 const GtkCanvasBox     *box);
+void                    gtk_canvas_item_set_compute_bounds      (GtkCanvasItem          *self,
+                                                                 GtkCanvasItemComputeBoundsFunc compute_bounds_func,
+                                                                 gpointer                user_data,
+                                                                 GDestroyNotify          user_destroy);
+GDK_AVAILABLE_IN_ALL
+void                    gtk_canvas_item_invalidate_bounds       (GtkCanvasItem          *self);
+
 GDK_AVAILABLE_IN_ALL
 const GtkCanvasBox *    gtk_canvas_item_get_bounds              (GtkCanvasItem          *self);
+GDK_AVAILABLE_IN_ALL
+const GtkCanvasBox *    gtk_canvas_item_get_allocation          (GtkCanvasItem          *self);
 
 G_END_DECLS
 

@@ -30,6 +30,20 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkOrigin GtkOrigin;
+
+struct _GtkOrigin {
+  float           horizontal;
+  float           vertical;
+};
+
+struct _GtkCanvasBox
+{
+  graphene_point_t point;
+  graphene_size_t  size;
+  GtkOrigin        origin;
+};
+
 #define GTK_TYPE_CANVAS_BOX (gtk_canvas_box_get_type ())
 
 GDK_AVAILABLE_IN_ALL
@@ -41,30 +55,17 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_canvas_box_free                   (GtkCanvasBox             *self);
 
 GDK_AVAILABLE_IN_ALL
-const GtkCanvasVector * gtk_canvas_box_get_point              (const GtkCanvasBox       *self) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const GtkCanvasVector * gtk_canvas_box_get_size               (const GtkCanvasBox       *self) G_GNUC_PURE;
-GDK_AVAILABLE_IN_ALL
-const GtkCanvasVector * gtk_canvas_box_get_origin             (const GtkCanvasBox       *self) G_GNUC_PURE;
+void                    gtk_canvas_box_init                   (GtkCanvasBox             *self,
+                                                               float                     point_x,
+                                                               float                     point_y,
+                                                               float                     width,
+                                                               float                     height,
+                                                               float                     origin_horizontal,
+                                                               float                     origin_vertical);
 
 GDK_AVAILABLE_IN_ALL
-gboolean                gtk_canvas_box_eval                   (const GtkCanvasBox       *self,
-                                                               graphene_rect_t          *rect) G_GNUC_WARN_UNUSED_RESULT;
-
-GDK_AVAILABLE_IN_ALL
-GtkCanvasBox *          gtk_canvas_box_new                    (const GtkCanvasVector    *point,
-                                                               const GtkCanvasVector    *size,
-                                                               float                     origin_x,
-                                                               float                     origin_y);
-GDK_AVAILABLE_IN_ALL
-GtkCanvasBox *          gtk_canvas_box_new_points             (const GtkCanvasVector    *point1,
-                                                               const GtkCanvasVector    *point2);
-
-GDK_AVAILABLE_IN_ALL
-const GtkCanvasBox *    gtk_canvas_box_get_item_bounds        (GtkCanvasItem            *item);
-GDK_AVAILABLE_IN_ALL
-const GtkCanvasBox *    gtk_canvas_box_get_item_allocation    (GtkCanvasItem            *item);
-
+void                    gtk_canvas_box_to_rect                (const GtkCanvasBox       *self,
+                                                               graphene_rect_t          *rect);
 G_END_DECLS
 
 #endif /* __GTK_BOX_H__ */

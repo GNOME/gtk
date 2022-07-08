@@ -23,7 +23,6 @@
 
 #include "gtkcanvasbox.h"
 #include "gtkcanvasitemprivate.h"
-#include "gtkcanvasvectorprivate.h"
 #include "gtkintl.h"
 #include "gtklistitemfactory.h"
 #include "gtkwidgetprivate.h"
@@ -53,7 +52,8 @@ struct _GtkCanvas
   GtkCanvasItems items;
   GHashTable *item_lookup;
 
-  GtkCanvasVector viewport_size;
+  GtkCanvasBox viewport;
+  guint viewport_valid : 1;
 };
 
 enum
@@ -164,7 +164,6 @@ gtk_canvas_finalize (GObject *object)
   GtkCanvas *self = GTK_CANVAS (object);
 
   g_hash_table_unref (self->item_lookup);
-  gtk_canvas_vector_finish (&self->viewport_size);
 
   G_OBJECT_CLASS (gtk_canvas_parent_class)->finalize (object);
 }
@@ -218,15 +217,17 @@ gtk_canvas_set_property (GObject      *object,
 }
 
 static void
-gtk_canvas_validate_variables (GtkCanvas *self)
+gtk_canvas_invalidate_allocation (GtkCanvas *self)
 {
   int i;
+
+  self->viewport_valid = FALSE;
 
   for (i = 0; i < gtk_canvas_items_get_size (&self->items); i++)
     {
       GtkCanvasItem *ci = gtk_canvas_items_get (&self->items, i);
 
-      gtk_canvas_item_validate_variables (ci);
+      gtk_canvas_item_invalidate_allocation (ci);
     }
 }
 
@@ -240,9 +241,13 @@ gtk_canvas_allocate (GtkWidget *widget,
   gboolean missing, force, success;
   gsize i;
 
-  gtk_canvas_validate_variables (self);
+  gtk_canvas_invalidate_allocation (self);
 
-  gtk_canvas_vector_init_constant (gtk_canvas_vector_get_variable (&self->viewport_size), width, height);
+  self->viewport_valid = TRUE;
+  gtk_canvas_box_init (&self->viewport,
+                       0, 0,
+                       width, height,
+                       0, 0);
 
   force = FALSE;
   do
@@ -254,71 +259,17 @@ gtk_canvas_allocate (GtkWidget *widget,
       for (i = 0; i < gtk_canvas_items_get_size (&self->items); i++)
         {
           GtkCanvasItem *ci = gtk_canvas_items_get (&self->items, i);
-          GtkWidget *child = gtk_canvas_item_get_widget (ci);
-          const GtkCanvasBox *bounds;
-          graphene_rect_t rect;
-          int x, y, w, h;
 
-          if (child == NULL || gtk_canvas_item_has_allocation (ci))
+          if (gtk_canvas_item_has_allocation (ci))
             continue;
 
-          bounds = gtk_canvas_item_get_bounds (ci);
-          if (!gtk_canvas_box_eval (bounds, &rect))
+          if (!gtk_canvas_item_allocate (ci, force))
             {
-              if (force)
-                {
-                  rect = *graphene_rect_zero ();
-                  /* XXX: set force to FALSE? */
-                }
-              else
-                {
-                  missing = TRUE;
-                  continue;
-                }
+              g_assert (!force);
+              missing = TRUE;
+              continue;
             }
 
-          if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-            {
-              gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1, &w, NULL, NULL, NULL);
-              w = MAX (w, ceil (ABS (rect.size.width)));
-              gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, w, &h, NULL, NULL, NULL);
-              h = MAX (h, ceil (ABS (rect.size.height)));
-            }
-          else
-            {
-              gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, -1, &h, NULL, NULL, NULL);
-              h = MAX (h, ceil (ABS (rect.size.height)));
-              gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, h, &w, NULL, NULL, NULL);
-              w = MAX (w, ceil (ABS (rect.size.width)));
-            }
-
-          if (rect.size.width < 0)
-            w = -w;
-          if (rect.size.height < 0)
-            h = -h;
-          if (ABS (w) > ABS (rect.size.width) || ABS (h) > ABS (rect.size.height))
-            {
-              graphene_vec2_t origin;
-
-              if (!gtk_canvas_vector_eval (gtk_canvas_box_get_origin (bounds), &origin))
-                graphene_vec2_init_from_vec2 (&origin, graphene_vec2_zero ());
-
-              if (ABS (w) > ABS (rect.size.width))
-                x = round (rect.origin.x + graphene_vec2_get_x (&origin) * (rect.size.width - w));
-              else
-                x = round (rect.origin.x);
-              if (ABS (h) > ABS (rect.size.height))
-                y = round (rect.origin.y + graphene_vec2_get_y (&origin) * (rect.size.height - h));
-              else
-                y = round (rect.origin.y);
-            }
-          else
-            {
-              x = round (rect.origin.x);
-              y = round (rect.origin.y);
-            }
-
-          gtk_canvas_item_allocate (ci, &GRAPHENE_RECT_INIT (x, y, w, h));
           success = TRUE;
         }
       if (!success)
@@ -380,8 +331,6 @@ static void
 gtk_canvas_init (GtkCanvas *self)
 {
   self->item_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
-
-  gtk_canvas_vector_init_variable (&self->viewport_size, "viewport.size");
 }
 
 /**
@@ -554,8 +503,23 @@ gtk_canvas_lookup_item (GtkCanvas *self,
   return g_hash_table_lookup (self->item_lookup, item);
 }
 
-const GtkCanvasVector *
-gtk_canvas_get_viewport_size (GtkCanvas *self)
+/**
+ * gtk_canvas_get_viewport:
+ * @self: a `GtkCanvas`
+ *
+ * Gets the viewport of the canvas. If no viewport is available,
+ * in particular if it has not been determined during size
+ * allocation, %NULL is returned.
+ *
+ * Returns: The viewport
+ **/
+const GtkCanvasBox *
+gtk_canvas_get_viewport (GtkCanvas *self)
 {
-  return &self->viewport_size;
+  g_return_val_if_fail (GTK_IS_CANVAS (self), NULL);
+
+  if (!self->viewport_valid)
+    return NULL;
+
+  return &self->viewport;
 }

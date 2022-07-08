@@ -78,7 +78,7 @@ struct _PlanarityVertex
 {
   GObject parent_instance;
 
-  graphene_point_t position;
+  GtkOrigin position;
 };
 
 #define PLANARITY_TYPE_VERTEX (planarity_vertex_get_type ())
@@ -97,14 +97,15 @@ planarity_vertex_init (PlanarityVertex *self)
 }
 
 static PlanarityVertex *
-planarity_vertex_new (float x,
-                      float y)
+planarity_vertex_new (float horizontal,
+                      float vertical)
 {
   PlanarityVertex *self;
 
   self = g_object_new (PLANARITY_TYPE_VERTEX, NULL);
 
-  graphene_point_init (&self->position, x, y);
+  self->position.horizontal = horizontal;
+  self->position.vertical = vertical;
 
   return self;
 }
@@ -147,54 +148,83 @@ planarity_edge_new (PlanarityVertex *from,
   return edge;
 }
 
-static void
-set_item_position (GtkCanvasItem *ci)
+static gboolean
+set_vertex_bounds (GtkCanvasItem *ci,
+                   GtkCanvasBox  *out_box,
+                   gpointer       user_data)
 {
   PlanarityVertex *vertex = gtk_canvas_item_get_item (ci);
-  GtkCanvasVector *point, *size;
-  GtkCanvasBox *box, *viewport;
-  float x = vertex->position.x;
-  float y = vertex->position.y;
+  const GtkCanvasBox *viewport;
 
-  point = gtk_canvas_vector_new (0, 0);
-  viewport = gtk_canvas_box_new (point,
-                                 gtk_canvas_get_viewport_size (gtk_canvas_item_get_canvas (ci)),
-                                 0.0, 0.0);
-  gtk_canvas_vector_free (point);
+  viewport = gtk_canvas_get_viewport (gtk_canvas_item_get_canvas (ci));
+  if (viewport == NULL)
+    return FALSE;
 
-  point = gtk_canvas_vector_new_from_box (viewport, x, y);
-  gtk_canvas_box_free (viewport);
-  size = gtk_canvas_vector_new (0, 0);
-  box = gtk_canvas_box_new (point, size, x, y);
-  gtk_canvas_vector_free (point);
-  gtk_canvas_vector_free (size);
+  gtk_canvas_box_init (out_box,
+                       viewport->size.width * vertex->position.horizontal,
+                       viewport->size.height * vertex->position.vertical,
+                       0, 0,
+                       vertex->position.horizontal,
+                       vertex->position.vertical);
 
-  gtk_canvas_item_set_bounds (ci, box);
-  gtk_canvas_box_free (box);
+  return TRUE;
 }
 
 static void
-move_item (GtkGestureDrag *gesture,
-           double          x,
-           double          y,
-           GtkCanvasItem  *ci)
+move_vertex (GtkGestureDrag *gesture,
+             double          x,
+             double          y,
+             GtkCanvasItem  *ci)
 {
   GtkCanvas *canvas = gtk_canvas_item_get_canvas (ci);
-  GtkWidget *widget = gtk_canvas_item_get_widget (ci);
   PlanarityVertex *vertex = gtk_canvas_item_get_item (ci);
 
-  x /= (gtk_widget_get_width (GTK_WIDGET (canvas)) - gtk_widget_get_width (widget));
-  y /= (gtk_widget_get_height (GTK_WIDGET (canvas)) - gtk_widget_get_height (widget));
+  x /= gtk_widget_get_width (GTK_WIDGET (canvas));
+  y /= gtk_widget_get_height (GTK_WIDGET (canvas));
 
-  vertex->position = GRAPHENE_POINT_INIT (CLAMP (vertex->position.x + x, 0, 1), CLAMP (vertex->position.y + y, 0, 1));
-  set_item_position (ci);
+  vertex->position.horizontal = CLAMP (vertex->position.horizontal + x, 0, 1);
+  vertex->position.vertical = CLAMP (vertex->position.vertical + y, 0, 1);
+
+  gtk_canvas_item_invalidate_bounds (ci);
+}
+
+static gboolean
+set_edge_bounds (GtkCanvasItem *ci,
+                 GtkCanvasBox  *out_box,
+                 gpointer       user_data)
+{
+  PlanarityEdge *edge = gtk_canvas_item_get_item (ci);
+  GtkCanvas *canvas = gtk_canvas_item_get_canvas (ci);
+  GtkCanvasItem *from_item, *to_item;
+  const GtkCanvasBox *from_box, *to_box;
+  graphene_rect_t from_rect, to_rect;
+  graphene_point_t from_center, to_center;
+
+  from_item = gtk_canvas_lookup_item (canvas, edge->from);
+  to_item = gtk_canvas_lookup_item (canvas, edge->to);
+  from_box = gtk_canvas_item_get_allocation (from_item);
+  to_box = gtk_canvas_item_get_allocation (to_item);
+  if (from_box == NULL || to_box == NULL)
+    return FALSE;
+
+  gtk_canvas_box_to_rect (from_box, &from_rect);
+  gtk_canvas_box_to_rect (to_box, &to_rect);
+  graphene_rect_get_center (&from_rect, &from_center);
+  graphene_rect_get_center (&to_rect, &to_center);
+
+  gtk_canvas_box_init (out_box,
+                       from_center.x, from_center.y,
+                       to_center.x - from_center.x,
+                       to_center.y - from_center.y,
+                       0, 0);
+
+  return TRUE;
 }
 
 static void
 bind_item (GtkListItemFactory *factory,
            GtkCanvasItem      *ci)
 {
-  GtkCanvasBox *box;
   gpointer item;
 
   item = gtk_canvas_item_get_item (ci);
@@ -207,34 +237,17 @@ bind_item (GtkListItemFactory *factory,
       widget = gtk_image_new_from_icon_name ("media-record-symbolic");
       gtk_image_set_icon_size (GTK_IMAGE (widget), GTK_ICON_SIZE_LARGE);
       gesture = gtk_gesture_drag_new ();
-      g_signal_connect (gesture, "drag-update", G_CALLBACK (move_item), ci);
-      g_signal_connect (gesture, "drag-end", G_CALLBACK (move_item), ci);
+      g_signal_connect (gesture, "drag-update", G_CALLBACK (move_vertex), ci);
+      g_signal_connect (gesture, "drag-end", G_CALLBACK (move_vertex), ci);
       gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
       gtk_canvas_item_set_widget (ci, widget);
 
-      set_item_position (ci);
+      gtk_canvas_item_set_compute_bounds (ci, set_vertex_bounds, NULL, NULL);
     }
   else if (PLANARITY_IS_EDGE (item))
     {
-      GtkCanvas *canvas = gtk_canvas_item_get_canvas (ci);
-      PlanarityEdge *edge = PLANARITY_EDGE (item);
-      GtkCanvasItem *from_item, *to_item;
-      const GtkCanvasBox *from_box, *to_box;
-      GtkCanvasVector *from_point, *to_point;
-
       gtk_canvas_item_set_widget (ci, gtk_diagonal_line_new ());
-
-      from_item = gtk_canvas_lookup_item (canvas, edge->from);
-      to_item = gtk_canvas_lookup_item (canvas, edge->to);
-      from_box = gtk_canvas_box_get_item_allocation (from_item);
-      to_box = gtk_canvas_box_get_item_allocation (to_item);
-      from_point = gtk_canvas_vector_new_from_box (from_box, 0.5, 0.5);
-      to_point = gtk_canvas_vector_new_from_box (to_box, 0.5, 0.5);
-      box = gtk_canvas_box_new_points (from_point, to_point);
-      gtk_canvas_item_set_bounds (ci, box);
-      gtk_canvas_box_free (box);
-      gtk_canvas_vector_free (from_point);
-      gtk_canvas_vector_free (to_point);
+      gtk_canvas_item_set_compute_bounds (ci, set_edge_bounds, NULL, NULL);
     }
 }
 

@@ -3,16 +3,14 @@
 
 #include "gtkcanvasitem.h"
 
-#include "gtkcanvasvectorprivate.h"
-
 G_BEGIN_DECLS
 
 GtkCanvasItem *         gtk_canvas_item_new                      (GtkCanvas             *canvas,
                                                                   gpointer               item);
 
-void                    gtk_canvas_item_validate_variables       (GtkCanvasItem         *self);
-void                    gtk_canvas_item_allocate                 (GtkCanvasItem         *self,
-                                                                  graphene_rect_t       *rect);
+void                    gtk_canvas_item_invalidate_allocation    (GtkCanvasItem         *self);
+gboolean                gtk_canvas_item_allocate                 (GtkCanvasItem         *self,
+                                                                  gboolean               force);
 void                    gtk_canvas_item_allocate_widget          (GtkCanvasItem         *self,
                                                                   float                  dx,
                                                                   float                  dy);
