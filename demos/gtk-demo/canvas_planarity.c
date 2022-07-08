@@ -242,12 +242,12 @@ bind_item (GtkListItemFactory *factory,
       gtk_widget_add_controller (widget, GTK_EVENT_CONTROLLER (gesture));
       gtk_canvas_item_set_widget (ci, widget);
 
-      gtk_canvas_item_set_compute_bounds (ci, set_vertex_bounds, NULL, NULL);
+      g_signal_connect (ci, "compute-bounds", G_CALLBACK (set_vertex_bounds), NULL);
     }
   else if (PLANARITY_IS_EDGE (item))
     {
       gtk_canvas_item_set_widget (ci, gtk_diagonal_line_new ());
-      gtk_canvas_item_set_compute_bounds (ci, set_edge_bounds, NULL, NULL);
+      g_signal_connect (ci, "compute-bounds", G_CALLBACK (set_edge_bounds), NULL);
     }
 }
 

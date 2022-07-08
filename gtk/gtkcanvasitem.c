@@ -25,6 +25,8 @@
 #include "gtkcanvasbox.h"
 #include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
+#include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkwidget.h"
 
 /**
@@ -41,9 +43,6 @@ struct _GtkCanvasItem
   GtkCanvas *canvas;
   gpointer item;
   GtkWidget *widget;
-  GtkCanvasItemComputeBoundsFunc compute_bounds_func;
-  gpointer user_data;
-  GDestroyNotify user_destroy;
 
   GtkCanvasBox bounds;
   GtkCanvasBox allocation;
@@ -61,9 +60,15 @@ enum
   N_PROPS
 };
 
+enum {
+  COMPUTE_BOUNDS,
+  LAST_SIGNAL
+};
+
 G_DEFINE_FINAL_TYPE (GtkCanvasItem, gtk_canvas_item, G_TYPE_OBJECT)
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static void
 gtk_canvas_item_dispose (GObject *object)
@@ -75,11 +80,6 @@ gtk_canvas_item_dispose (GObject *object)
   /* must have been deleted in teardown */
   g_assert (self->item == NULL);
   g_assert (self->widget == NULL);
-
-  if (self->user_destroy)
-    self->user_destroy (self->user_data);
-  self->user_destroy = NULL;
-  self->user_data = NULL;
 
   G_OBJECT_CLASS (gtk_canvas_item_parent_class)->dispose (object);
 }
@@ -172,6 +172,41 @@ gtk_canvas_item_class_init (GtkCanvasItemClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
+
+  /**
+   * GtkCanvasItem::compute-bounds
+   * @self: the `GtkCanvasItem`
+   * @bounds: (type Gtk.CanvasBox) (out caller-allocates): return
+   *   location for the bounds
+   *
+   * Emitted to determine the bounds for the widget of this canvasitem
+   * during a size allocation cycle.
+   *
+   * A handler for this signal should fill @bounds with
+   * the desired box to place the widget in.
+   *
+   * If the size depends on other items and cannot be computed yet,
+   * handlers should return %FALSE and the signal will then be emitted
+   * again once more items have been allocated.
+   *
+   * Because of that signal handlers are expected to be pure - not set
+   * any properties or have other side effects - and idempotent - 
+   * return the same result if called multiple times in order.
+   *
+   * returns: %TRUE if @bounds was set successfully
+   */
+  signals[COMPUTE_BOUNDS] =
+    g_signal_new (I_("compute-bounds"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__BOXED,
+                  G_TYPE_BOOLEAN, 1,
+                  GTK_TYPE_CANVAS_BOX | G_SIGNAL_TYPE_STATIC_SCOPE);
+  g_signal_set_va_marshaller (signals[COMPUTE_BOUNDS],
+                              G_TYPE_FROM_CLASS (gobject_class),
+                              _gtk_marshal_BOOLEAN__BOXEDv);
 }
 
 static void
@@ -206,15 +241,14 @@ gboolean
 gtk_canvas_item_allocate (GtkCanvasItem *self,
                           gboolean       force)
 {
+  gboolean result;
   int w, h;
 
   g_assert (!self->has_allocation);
 
-  if (!self->compute_bounds_func)
-    {
-      gtk_canvas_box_init (&self->bounds, 0, 0, 0, 0, 0.5, 0.5);
-    }
-  else if (!self->compute_bounds_func (self, &self->bounds, self->user_data))
+  g_signal_emit (self, signals[COMPUTE_BOUNDS], 0, &self->bounds, &result);
+
+  if (!result)
     {
       if (!force)
         return FALSE;
@@ -326,38 +360,6 @@ gtk_canvas_item_get_item (GtkCanvasItem *self)
   g_return_val_if_fail (GTK_IS_CANVAS_ITEM (self), NULL);
 
   return self->item;
-}
-
-/**
- * gtk_canvas_item_set_compute_bounds:
- * @self: a `GtkCanvasItem`
- * @compute_bounds_func: the function to compute bounds
- * @user_data: (nullable): user data to pass to @compute_bounds_func
- * @user_destroy: destroy notify for @user_data
- *
- * Sets the function to call to compute bounds during allocation.
- *
- * This function may be called multiple times if it returned %FALSE
- * previously.
- *
- * Because of that the function is expected to be pure - not set
- * any properties or have other side effects - and idempotent - 
- * return the same result if called multiple times in order.
- */
-void
-gtk_canvas_item_set_compute_bounds (GtkCanvasItem                  *self,
-                                    GtkCanvasItemComputeBoundsFunc  compute_bounds_func,
-                                    gpointer                        user_data,
-                                    GDestroyNotify                  user_destroy)
-{
-  g_return_if_fail (GTK_IS_CANVAS_ITEM (self));
-
-  if (self->user_destroy)
-    self->user_destroy (self->user_data);
-
-  self->compute_bounds_func = compute_bounds_func;
-  self->user_data = user_data;
-  self->user_destroy = user_destroy;
 }
 
 void

@@ -43,7 +43,6 @@ move_item (GtkGestureDrag *gesture,
   origin->vertical += y / gtk_widget_get_height (GTK_WIDGET (canvas));
   origin->horizontal = CLAMP (origin->horizontal, 0, 1);
   origin->vertical = CLAMP (origin->vertical, 0, 1);
-  g_print ("%g %g\n", origin->horizontal, origin->vertical);
 
   gtk_canvas_item_invalidate_bounds (ci);
 }
@@ -70,9 +69,7 @@ bind_item (GtkListItemFactory *factory,
   origin->vertical = g_random_double ();
   g_object_set_data_full (G_OBJECT (ci), "position", origin, g_free);
 
-  gtk_canvas_item_set_compute_bounds (ci,
-                                      set_position_from_origin,
-                                      NULL, NULL);
+  g_signal_connect (ci, "compute-bounds", G_CALLBACK (set_position_from_origin), NULL);
 }
 
 static GListModel *

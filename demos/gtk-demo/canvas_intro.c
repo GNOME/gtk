@@ -52,9 +52,7 @@ bind_item (GtkListItemFactory *factory,
   gtk_canvas_item_set_widget (ci, gtk_canvas_item_get_item (ci));
 
   /* Set a function to compute the position */
-  gtk_canvas_item_set_compute_bounds (ci,
-                                      center_item,
-                                      NULL, NULL);
+  g_signal_connect (ci, "compute-bounds", G_CALLBACK (center_item), NULL);
 }
 
 GtkWidget *
