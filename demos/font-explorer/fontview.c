@@ -471,6 +471,49 @@ update_info (FontView *self)
   g_snprintf (buf, sizeof (buf), "%d", count);
   add_misc_line (self, "Glyph Count", buf, row++);
 
+  if (hb_ot_var_get_axis_count (face) > 0)
+    {
+      s = g_string_new ("");
+      hb_ot_var_axis_info_t *axes;
+
+      axes = g_newa (hb_ot_var_axis_info_t, hb_ot_var_get_axis_count (face));
+      count = hb_ot_var_get_axis_count (face);
+      hb_ot_var_get_axis_infos (face, 0, &count, axes);
+      for (int i = 0; i < count; i++)
+        {
+          char name[256];
+          unsigned int len;
+
+          len = sizeof (buf);
+          hb_ot_name_get_utf8 (face, axes[i].name_id, HB_LANGUAGE_INVALID, &len, name);
+          if (s->len > 0)
+            g_string_append (s, ", ");
+          g_string_append (s, name);
+        }
+      add_misc_line (self, "Axes", s->str, row++);
+      g_string_free (s, TRUE);
+    }
+
+  if (hb_ot_var_get_named_instance_count (face) > 0)
+    {
+      s = g_string_new ("");
+      for (int i = 0; i < hb_ot_var_get_named_instance_count (face); i++)
+        {
+          hb_ot_name_id_t name_id;
+          char name[256];
+          unsigned int len;
+
+          name_id = hb_ot_var_named_instance_get_subfamily_name_id (face, i);
+          len = sizeof (buf);
+          hb_ot_name_get_utf8 (face, name_id, HB_LANGUAGE_INVALID, &len, name);
+          if (s->len > 0)
+            g_string_append (s, ", ");
+          g_string_append (s, name);
+        }
+      add_misc_line (self, "Named Instances", s->str, row++);
+      g_string_free (s, TRUE);
+    }
+
   s = g_string_new ("");
   count = hb_face_get_table_tags (face, 0, NULL, NULL);
   tables = g_newa (hb_tag_t, count);
