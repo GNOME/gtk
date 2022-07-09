@@ -13,4 +13,6 @@ typedef struct _FontVariationsClass    FontVariationsClass;
 
 GType            font_variations_get_type          (void);
 FontVariations * font_variations_new               (void);
+void             font_variations_set_font_map      (FontVariations *self,
+                                                    Pango2FontMap  *map);
 GAction *        font_variations_get_reset_action  (FontVariations *self);

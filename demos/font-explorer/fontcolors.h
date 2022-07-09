@@ -13,4 +13,6 @@ typedef struct _FontColorsClass    FontColorsClass;
 
 GType        font_colors_get_type          (void);
 FontColors * font_colors_new               (void);
-GAction *    font_colors_get_reset_action  (FontColors *self);
+void         font_colors_set_font_map      (FontColors    *self,
+                                            Pango2FontMap *map);
+GAction *    font_colors_get_reset_action  (FontColors    *self);

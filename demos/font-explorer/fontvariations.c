@@ -24,6 +24,8 @@ struct _FontVariations
   GtkWidget *instance_combo;
   GHashTable *axes;
   GHashTable *instances;
+
+  Pango2FontMap *map;
 };
 
 struct _FontVariationsClass
@@ -37,9 +39,15 @@ static Pango2Font *
 get_font (FontVariations *self)
 {
   Pango2Context *context;
+  Pango2Font *font;
 
-  context = gtk_widget_get_pango_context (GTK_WIDGET (self));
-  return pango2_context_load_font (context, self->font_desc);
+  context = pango2_context_new ();
+  if (self->map)
+    pango2_context_set_font_map (context, self->map);
+  font = pango2_context_load_font (context, self->font_desc);
+  g_object_unref (context);
+
+  return font;
 }
 
 typedef struct {
@@ -401,6 +409,7 @@ font_variations_finalize (GObject *object)
   FontVariations *self = FONT_VARIATIONS (object);
 
   g_clear_pointer (&self->font_desc, pango2_font_description_free);
+  g_clear_object (&self->map);
 
   G_OBJECT_CLASS (font_variations_parent_class)->finalize (object);
 }
@@ -485,4 +494,12 @@ GAction *
 font_variations_get_reset_action (FontVariations *self)
 {
   return G_ACTION (self->reset_action);
+}
+
+void
+font_variations_set_font_map (FontVariations *self,
+                              Pango2FontMap  *map)
+{
+  g_set_object (&self->map, map);
+  update_variations (self);
 }

@@ -22,6 +22,8 @@ struct _FontColors
   gboolean has_colors;
   char *palette;
   GtkCheckButton *default_check;
+
+  Pango2FontMap *map;
 };
 
 struct _FontColorsClass
@@ -35,9 +37,16 @@ static Pango2Font *
 get_font (FontColors *self)
 {
   Pango2Context *context;
+  Pango2Font *font;
 
-  context = gtk_widget_get_pango_context (GTK_WIDGET (self));
-  return pango2_context_load_font (context, self->font_desc);
+  context = pango2_context_new ();
+  if (self->map)
+    pango2_context_set_font_map (context, self->map);
+
+  font = pango2_context_load_font (context, self->font_desc);
+  g_object_unref (context);
+
+  return font;
 }
 
 static void
@@ -201,6 +210,8 @@ font_colors_finalize (GObject *object)
   g_clear_pointer (&self->font_desc, pango2_font_description_free);
   g_free (self->palette);
 
+  g_clear_object (&self->map);
+
   G_OBJECT_CLASS (font_colors_parent_class)->finalize (object);
 }
 
@@ -285,3 +296,12 @@ font_colors_get_reset_action (FontColors *self)
 {
   return G_ACTION (self->reset_action);
 }
+
+void
+font_colors_set_font_map (FontColors    *self,
+                          Pango2FontMap *map)
+{
+  g_set_object (&self->map, map);
+  update_colors (self);
+}
+

@@ -11,4 +11,4 @@ typedef struct _GlyphModelClass    GlyphModelClass;
 
 
 GType        glyph_model_get_type (void);
-GlyphModel * glyph_model_new      (Pango2FontFace *face);
+GlyphModel * glyph_model_new      (Pango2Font *font);

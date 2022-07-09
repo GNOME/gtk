@@ -150,10 +150,28 @@ font_explorer_app_activate (GApplication *app)
 }
 
 static void
+font_explorer_app_open (GApplication  *app,
+                        GFile        **files,
+                        int            n_files,
+                        const char    *hint)
+{
+  FontExplorerWindow *win;
+  int i;
+
+  for (i = 0; i < n_files; i++)
+    {
+      win = font_explorer_window_new (FONT_EXPLORER_APP (app));
+      font_explorer_window_load (win, files[i]);
+      gtk_window_present (GTK_WINDOW (win));
+    }
+}
+
+static void
 font_explorer_app_class_init (FontExplorerAppClass *class)
 {
   G_APPLICATION_CLASS (class)->startup = font_explorer_app_startup;
   G_APPLICATION_CLASS (class)->activate = font_explorer_app_activate;
+  G_APPLICATION_CLASS (class)->open = font_explorer_app_open;
 }
 
 FontExplorerApp *
@@ -161,5 +179,6 @@ font_explorer_app_new (void)
 {
   return g_object_new (FONT_EXPLORER_APP_TYPE,
                        "application-id", "org.gtk.FontExplorer",
+                       "flags", G_APPLICATION_HANDLES_OPEN,
                        NULL);
 }

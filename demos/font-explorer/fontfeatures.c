@@ -32,6 +32,8 @@ struct _FontFeatures
   GSimpleAction *reset_action;
   Pango2Language *lang;
   GList *feature_items;
+
+  Pango2FontMap *map;
 };
 
 struct _FontFeaturesClass
@@ -45,9 +47,16 @@ static Pango2Font *
 get_font (FontFeatures *self)
 {
   Pango2Context *context;
+  Pango2Font *font;
 
-  context = gtk_widget_get_pango_context (GTK_WIDGET (self));
-  return pango2_context_load_font (context, self->font_desc);
+  context = pango2_context_new ();
+  if (self->map)
+    pango2_context_set_font_map (context, self->map);
+
+  font = pango2_context_load_font (context, self->font_desc);
+  g_object_unref (context);
+
+  return font;
 }
 
 static gboolean
@@ -629,6 +638,7 @@ font_features_finalize (GObject *object)
   FontFeatures *self = FONT_FEATURES (object);
 
   g_clear_pointer (&self->font_desc, pango2_font_description_free);
+  g_clear_object (&self->map);
 
   G_OBJECT_CLASS (font_features_parent_class)->finalize (object);
 }
@@ -724,4 +734,12 @@ GAction *
 font_features_get_reset_action (FontFeatures *self)
 {
   return G_ACTION (self->reset_action);
+}
+
+void
+font_features_set_font_map (FontFeatures  *self,
+                            Pango2FontMap *map)
+{
+  g_set_object (&self->map, map);
+  update_features (self);
 }

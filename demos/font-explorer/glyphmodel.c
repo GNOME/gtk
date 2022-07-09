@@ -80,18 +80,15 @@ glyph_model_class_init (GlyphModelClass *class)
 }
 
 GlyphModel *
-glyph_model_new (Pango2FontFace *face)
+glyph_model_new (Pango2Font *font)
 {
   GlyphModel *self;
-  Pango2FontDescription *desc;
   hb_face_t *hb_face;
 
   self = g_object_new (GLYPH_MODEL_TYPE, NULL);
 
-  desc = pango2_font_description_new ();
-  pango2_font_description_set_size (desc, 60 * PANGO2_SCALE);
-  self->font = PANGO2_FONT (pango2_hb_font_new_for_description (PANGO2_HB_FACE (face), desc, 96., NULL));
-  hb_face = pango2_hb_face_get_hb_face (PANGO2_HB_FACE (face));
+  self->font = g_object_ref (font);
+  hb_face = pango2_hb_face_get_hb_face (PANGO2_HB_FACE (pango2_font_get_face (font)));
   self->num_glyphs = hb_face_get_glyph_count (hb_face);
   self->glyphs = g_new0 (GlyphItem *, self->num_glyphs);
 

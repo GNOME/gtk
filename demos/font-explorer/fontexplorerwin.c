@@ -129,3 +129,42 @@ font_explorer_window_new (FontExplorerApp *app)
 {
   return g_object_new (FONT_EXPLORER_WINDOW_TYPE, "application", app, NULL);
 }
+
+void
+font_explorer_window_load (FontExplorerWindow *win,
+                           GFile              *file)
+{
+  const char *path;
+  Pango2FontMap *map;
+  Pango2HbFace *face;
+  Pango2FontDescription *desc;
+  char *title;
+
+  path = g_file_peek_path (file);
+
+  face = pango2_hb_face_new_from_file (path, 0, -2, NULL, NULL);
+  desc = pango2_font_face_describe (PANGO2_FONT_FACE (face));
+
+  map = pango2_font_map_new ();
+  pango2_font_map_add_face (map, PANGO2_FONT_FACE (face));
+  pango2_font_map_set_fallback (map, pango2_font_map_get_default ());
+
+  font_features_set_font_map (win->features, map);
+  font_variations_set_font_map (win->variations, map);
+  font_colors_set_font_map (win->colors, map);
+  font_view_set_font_map (win->view, map);
+
+  g_object_unref (map);
+
+  gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (win->fontbutton), desc);
+
+  gtk_widget_hide (GTK_WIDGET (win->fontbutton));
+
+  title = g_strdup_printf ("%s — %s",
+                           pango2_font_description_get_family (desc),
+                           path);
+  gtk_window_set_title (GTK_WINDOW (win), title);
+  g_free (title);
+
+  pango2_font_description_free (desc);
+}

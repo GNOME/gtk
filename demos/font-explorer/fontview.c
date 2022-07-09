@@ -47,6 +47,8 @@ struct _FontView
   GtkCssProvider *bg_provider;
   char *sample_text;
   gboolean do_waterfall;
+
+  Pango2FontMap *map;
 };
 
 struct _FontViewClass
@@ -96,6 +98,7 @@ font_view_finalize (GObject *object)
   g_free (self->variations);
   g_free (self->features);
   g_free (self->palette);
+  g_clear_object (&self->map);
 
   G_OBJECT_CLASS (font_view_parent_class)->finalize (object);
 }
@@ -261,17 +264,24 @@ info_changed (GtkToggleButton *button,
 }
 
 static Pango2Font *
-get_font (FontView *self)
+get_font (FontView *self,
+          int       size)
 {
   Pango2Context *context;
   Pango2FontDescription *desc;
   Pango2Font *font;
 
+  context = pango2_context_new ();
+  if (self->map)
+    pango2_context_set_font_map (context, self->map);
+
   desc = pango2_font_description_copy_static (self->font_desc);
   pango2_font_description_set_variations (desc, self->variations);
-  context = gtk_widget_get_pango_context (GTK_WIDGET (self));
+  pango2_font_description_set_size (desc, size);
   font = pango2_context_load_font (context, desc);
   pango2_font_description_free (desc);
+
+  g_object_unref (context);
 
   return font;
 }
@@ -279,14 +289,15 @@ get_font (FontView *self)
 static void
 update_glyph_model (FontView *self)
 {
-  Pango2Font *font = get_font (self);
+  Pango2Font *font = get_font (self, 60 * PANGO2_SCALE);
   GlyphModel *gm;
   GtkSelectionModel *model;
 
-  gm = glyph_model_new (pango2_font_get_face (font));
+  gm = glyph_model_new (font);
   model = GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (gm)));
   gtk_grid_view_set_model (self->glyphs, model);
   g_object_unref (model);
+  g_object_unref (font);
 }
 
 static void
@@ -399,7 +410,8 @@ static void
 update_info (FontView *self)
 {
   GtkWidget *child;
-  Pango2Font *pango_font = get_font (self);
+  int size = pango2_font_description_get_size (self->font_desc);
+  Pango2Font *pango_font = get_font (self, MAX (size, 10 * PANGO2_SCALE));
   hb_font_t *font1 = pango2_font_get_hb_font (pango_font);
   hb_face_t *face = hb_font_get_face (font1);
   hb_font_t *font = hb_font_create_sub_font (font1);
@@ -530,6 +542,7 @@ font_view_set_property (GObject      *object,
     case PROP_VARIATIONS:
       g_free (self->variations);
       self->variations = g_strdup (g_value_get_string (value));
+      update_glyph_model (self);
       update_info (self);
       break;
 
@@ -700,3 +713,13 @@ font_view_new (void)
 {
   return g_object_new (FONT_VIEW_TYPE, NULL);
 }
+
+void
+font_view_set_font_map (FontView      *self,
+                        Pango2FontMap *map)
+{
+  g_set_object (&self->map, map);
+  gtk_widget_set_font_map (GTK_WIDGET (self->content), self->map);
+  update_view (self);
+}
+
