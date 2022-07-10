@@ -40,6 +40,7 @@ struct _FontView
   char *variations;
   char *features;
   char *palette;
+  GQuark palette_quark;
   int letterspacing;
   float line_height;
   GdkRGBA foreground;
@@ -68,6 +69,7 @@ font_view_init (FontView *self)
   self->variations = g_strdup ("");
   self->features = g_strdup ("");
   self->palette = g_strdup (PANGO2_COLOR_PALETTE_DEFAULT);
+  self->palette_quark = g_quark_from_string (self->palette);
   self->foreground = (GdkRGBA){0., 0., 0., 1. };
   self->background = (GdkRGBA){1., 1., 1., 1. };
   self->sample_text = g_strdup ("Some sample text is better than other sample text");
@@ -309,7 +311,8 @@ setup_glyph (GtkSignalListItemFactory *factory,
 
 static void
 bind_glyph (GtkSignalListItemFactory *factory,
-            GObject                  *listitem)
+            GObject                  *listitem,
+            FontView                 *self)
 {
   GlyphView *view;
   GObject *item;
@@ -318,6 +321,7 @@ bind_glyph (GtkSignalListItemFactory *factory,
   item = gtk_list_item_get_item (GTK_LIST_ITEM (listitem));
   glyph_view_set_font (view, glyph_item_get_font (GLYPH_ITEM (item)));
   glyph_view_set_glyph (view, glyph_item_get_glyph (GLYPH_ITEM (item)));
+  glyph_view_set_palette (view, self->palette_quark);
 }
 
 static GtkWidget *
@@ -597,6 +601,8 @@ font_view_set_property (GObject      *object,
     case PROP_PALETTE:
       g_free (self->palette);
       self->palette = g_strdup (g_value_get_string (value));
+      self->palette_quark = g_quark_from_string (self->palette);
+      update_glyph_model (self);
       break;
 
     case PROP_SAMPLE_TEXT:
