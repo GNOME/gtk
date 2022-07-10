@@ -21,7 +21,7 @@
             <property name="halign">fill</property>
             <property name="valign">fill</property>
             <style>
-              <class name="view_background"/>
+              <class name="content"/>
             </style>
           </object>
         </child>

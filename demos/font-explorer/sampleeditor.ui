@@ -13,6 +13,10 @@
         <child>
           <object class="GtkTextView" id="edit">
             <property name="wrap-mode">word-char</property>
+            <property name="left-margin">20</property>
+            <property name="right-margin">20</property>
+            <property name="top-margin">20</property>
+            <property name="bottom-margin">20</property>
           </object>
         </child>
       </object>

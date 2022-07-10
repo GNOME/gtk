@@ -14,24 +14,17 @@ fontcolors > grid {
 samplechooser {
   border-spacing: 10px;
 }
-plainview {
-  padding: 10px;
-  border-spacing: 10px;
+plainview .content {
+  padding: 20px;
 }
-waterfallview {
-  padding: 10px;
-  border-spacing: 10px;
+waterfallview .content {
+  padding: 20px;
 }
-infoview {
-  padding: 10px;
-  border-spacing: 10px;
+glyphsview .content {
+  padding: 20px;
 }
-glyphsview {
-  padding: 10px;
-  border-spacing: 10px;
-}
-sampleeditor {
-  padding: 10px;
+infoview .content {
+  padding: 20px;
   border-spacing: 10px;
 }
 gridview > child {
@@ -41,7 +34,7 @@ glyphview {
   padding: 0;
   border: 0.6px solid gray;
 }
-grid.fontinfo {
+.viewcontrols {
   padding: 20px;
   border-spacing: 10px;
 }

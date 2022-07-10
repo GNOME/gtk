@@ -4,7 +4,8 @@
 #include <hb-ot.h>
 
 enum {
-  PROP_FONT_DESC = 1,
+  PROP_FONT_MAP = 1,
+  PROP_FONT_DESC,
   PROP_VARIATIONS,
   NUM_PROPERTIES
 };
@@ -25,7 +26,7 @@ struct _FontVariations
   GHashTable *axes;
   GHashTable *instances;
 
-  Pango2FontMap *map;
+  Pango2FontMap *font_map;
 };
 
 struct _FontVariationsClass
@@ -41,9 +42,7 @@ get_font (FontVariations *self)
   Pango2Context *context;
   Pango2Font *font;
 
-  context = pango2_context_new ();
-  if (self->map)
-    pango2_context_set_font_map (context, self->map);
+  context = pango2_context_new_with_font_map (self->font_map);
   font = pango2_context_load_font (context, self->font_desc);
   g_object_unref (context);
 
@@ -378,6 +377,8 @@ reset (GSimpleAction *action,
 static void
 font_variations_init (FontVariations *self)
 {
+  self->font_map = g_object_ref (pango2_font_map_get_default ());
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->reset_action = g_simple_action_new ("reset", NULL);
@@ -409,7 +410,7 @@ font_variations_finalize (GObject *object)
   FontVariations *self = FONT_VARIATIONS (object);
 
   g_clear_pointer (&self->font_desc, pango2_font_description_free);
-  g_clear_object (&self->map);
+  g_clear_object (&self->font_map);
 
   G_OBJECT_CLASS (font_variations_parent_class)->finalize (object);
 }
@@ -424,15 +425,20 @@ font_variations_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FONT_MAP:
+      g_set_object (&self->font_map, g_value_get_object (value));
+      break;
+
     case PROP_FONT_DESC:
       pango2_font_description_free (self->font_desc);
       self->font_desc = pango2_font_description_copy (g_value_get_boxed (value));
-      update_variations (self);
       break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+
+  update_variations (self);
 }
 
 static void
@@ -445,6 +451,10 @@ font_variations_get_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FONT_MAP:
+      g_value_set_object (value, self->font_map);
+      break;
+
     case PROP_VARIATIONS:
       g_value_take_string (value, get_variations (self));
       break;
@@ -463,6 +473,11 @@ font_variations_class_init (FontVariationsClass *class)
   object_class->finalize = font_variations_finalize;
   object_class->get_property = font_variations_get_property;
   object_class->set_property = font_variations_set_property;
+
+  properties[PROP_FONT_MAP] =
+      g_param_spec_object ("font-map", "", "",
+                           PANGO2_TYPE_FONT_MAP,
+                           G_PARAM_READWRITE);
 
   properties[PROP_FONT_DESC] =
       g_param_spec_boxed ("font-desc", "", "",
@@ -484,22 +499,8 @@ font_variations_class_init (FontVariationsClass *class)
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "fontvariations");
 }
 
-FontVariations *
-font_variations_new (void)
-{
-  return g_object_new (FONT_VARIATIONS_TYPE, NULL);
-}
-
 GAction *
 font_variations_get_reset_action (FontVariations *self)
 {
   return G_ACTION (self->reset_action);
-}
-
-void
-font_variations_set_font_map (FontVariations *self,
-                              Pango2FontMap  *map)
-{
-  g_set_object (&self->map, map);
-  update_variations (self);
 }

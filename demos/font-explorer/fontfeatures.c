@@ -8,7 +8,8 @@
 
 
 enum {
-  PROP_FONT_DESC = 1,
+  PROP_FONT_MAP = 1,
+  PROP_FONT_DESC,
   PROP_LANGUAGE,
   PROP_FEATURES,
   NUM_PROPERTIES
@@ -33,7 +34,7 @@ struct _FontFeatures
   Pango2Language *lang;
   GList *feature_items;
 
-  Pango2FontMap *map;
+  Pango2FontMap *font_map;
 };
 
 struct _FontFeaturesClass
@@ -49,10 +50,7 @@ get_font (FontFeatures *self)
   Pango2Context *context;
   Pango2Font *font;
 
-  context = pango2_context_new ();
-  if (self->map)
-    pango2_context_set_font_map (context, self->map);
-
+  context = pango2_context_new_with_font_map (self->font_map);
   font = pango2_context_load_font (context, self->font_desc);
   g_object_unref (context);
 
@@ -608,6 +606,8 @@ reset (GSimpleAction *action,
 static void
 font_features_init (FontFeatures *self)
 {
+  self->font_map = g_object_ref (pango2_font_map_get_default ());
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->font_desc = pango2_font_description_from_string ("sans 12");
@@ -638,7 +638,7 @@ font_features_finalize (GObject *object)
   FontFeatures *self = FONT_FEATURES (object);
 
   g_clear_pointer (&self->font_desc, pango2_font_description_free);
-  g_clear_object (&self->map);
+  g_clear_object (&self->font_map);
 
   G_OBJECT_CLASS (font_features_parent_class)->finalize (object);
 }
@@ -653,32 +653,40 @@ font_features_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FONT_MAP:
+      g_set_object (&self->font_map, g_value_get_object (value));
+      break;
+
     case PROP_FONT_DESC:
       pango2_font_description_free (self->font_desc);
       self->font_desc = pango2_font_description_copy (g_value_get_boxed (value));
-      update_features (self);
       break;
 
     case PROP_LANGUAGE:
       self->lang = pango2_language_from_string (g_value_get_string (value));
-      update_features (self);
       break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+
+  update_features (self);
 }
 
 static void
 font_features_get_property (GObject      *object,
-                              unsigned int  prop_id,
-                              GValue       *value,
-                              GParamSpec   *pspec)
+                            unsigned int  prop_id,
+                            GValue       *value,
+                            GParamSpec   *pspec)
 {
   FontFeatures *self = FONT_FEATURES (object);
 
   switch (prop_id)
     {
+    case PROP_FONT_MAP:
+      g_value_set_object (value, self->font_map);
+      break;
+
     case PROP_FEATURES:
       g_value_take_string (value, get_features (self));
       break;
@@ -697,6 +705,11 @@ font_features_class_init (FontFeaturesClass *class)
   object_class->finalize = font_features_finalize;
   object_class->get_property = font_features_get_property;
   object_class->set_property = font_features_set_property;
+
+  properties[PROP_FONT_MAP] =
+      g_param_spec_object ("font-map", "", "",
+                           PANGO2_TYPE_FONT_MAP,
+                           G_PARAM_READWRITE);
 
   properties[PROP_FONT_DESC] =
       g_param_spec_boxed ("font-desc", "", "",
@@ -724,22 +737,8 @@ font_features_class_init (FontFeaturesClass *class)
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "fontfeatures");
 }
 
-FontFeatures *
-font_features_new (void)
-{
-  return g_object_new (FONT_FEATURES_TYPE, NULL);
-}
-
 GAction *
 font_features_get_reset_action (FontFeatures *self)
 {
   return G_ACTION (self->reset_action);
-}
-
-void
-font_features_set_font_map (FontFeatures  *self,
-                            Pango2FontMap *map)
-{
-  g_set_object (&self->map, map);
-  update_features (self);
 }

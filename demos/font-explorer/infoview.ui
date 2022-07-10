@@ -13,7 +13,7 @@
         <child>
           <object class="GtkGrid" id="info">
             <style>
-              <class name="fontinfo"/>
+              <class name="content"/>
             </style>
           </object>
         </child>

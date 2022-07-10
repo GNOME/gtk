@@ -23,6 +23,7 @@ struct _FontExplorerWindow
   Pango2FontMap *font_map;
 
   GtkFontButton *fontbutton;
+  GtkLabel *path;
   FontControls *controls;
   FontFeatures *features;
   FontVariations *variations;
@@ -206,6 +207,7 @@ font_explorer_window_class_init (FontExplorerWindowClass *class)
                                                "/org/gtk/fontexplorer/fontexplorerwin.ui");
 
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, fontbutton);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, path);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, controls);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, variations);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, colors);
@@ -218,8 +220,6 @@ font_explorer_window_class_init (FontExplorerWindowClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, edit_toggle);
 
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), update_view);
-
-  gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "fontexplorer");
 }
 
 FontExplorerWindow *
@@ -236,9 +236,10 @@ font_explorer_window_load (FontExplorerWindow *self,
   Pango2FontMap *map;
   Pango2HbFace *face;
   Pango2FontDescription *desc;
-  char *title;
+  char *basename;
 
   path = g_file_peek_path (file);
+  basename = g_path_get_basename (path);
 
   face = pango2_hb_face_new_from_file (path, 0, -2, NULL, NULL);
   desc = pango2_font_face_describe (PANGO2_FONT_FACE (face));
@@ -246,10 +247,6 @@ font_explorer_window_load (FontExplorerWindow *self,
   map = pango2_font_map_new ();
   pango2_font_map_add_face (map, PANGO2_FONT_FACE (face));
   pango2_font_map_set_fallback (map, pango2_font_map_get_default ());
-
-  font_features_set_font_map (self->features, map);
-  font_variations_set_font_map (self->variations, map);
-  font_colors_set_font_map (self->colors, map);
 
   g_set_object (&self->font_map, map);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FONT_MAP]);
@@ -259,12 +256,10 @@ font_explorer_window_load (FontExplorerWindow *self,
   gtk_font_chooser_set_font_desc (GTK_FONT_CHOOSER (self->fontbutton), desc);
 
   gtk_widget_hide (GTK_WIDGET (self->fontbutton));
-
-  title = g_strdup_printf ("%s — %s",
-                           pango2_font_description_get_family (desc),
-                           path);
-  gtk_window_set_title (GTK_WINDOW (self), title);
-  g_free (title);
+  gtk_widget_show (GTK_WIDGET (self->path));
+  gtk_label_set_label (self->path, basename);
+  gtk_widget_set_tooltip_text (GTK_WIDGET (self->path), path);
 
   pango2_font_description_free (desc);
+  g_free (basename);
 }

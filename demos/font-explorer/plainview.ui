@@ -3,13 +3,13 @@
   <template class="PlainView" parent="GtkWidget">
     <property name="hexpand">1</property>
     <property name="vexpand">1</property>
-    <style>
-      <class name="view"/>
-    </style>
     <child>
       <object class="GtkScrolledWindow" id="swin">
         <property name="hscrollbar-policy">never</property>
         <property name="vscrollbar-policy">automatic</property>
+        <style>
+          <class name="view"/>
+        </style>
         <child>
           <object class="GtkLabel" id="content">
             <property name="label">Content</property>
@@ -22,7 +22,7 @@
             <property name="halign">fill</property>
             <property name="valign">fill</property>
             <style>
-              <class name="view_background"/>
+              <class name="content"/>
             </style>
           </object>
         </child>

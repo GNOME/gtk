@@ -12,6 +12,9 @@
         <property name="vscrollbar-policy">automatic</property>
         <child>
           <object class="GtkGridView" id="glyphs">
+            <style>
+              <class name="content"/>
+            </style>
             <property name="factory">
               <object class="GtkSignalListItemFactory">
                 <signal name="setup" handler="setup_glyph"/>

@@ -131,7 +131,7 @@ update_view (PlainView *self)
 
   fg = gdk_rgba_to_string (&self->foreground);
   bg = gdk_rgba_to_string (&self->background);
-  css = g_strdup_printf (".view_background { caret-color: %s; background-color: %s; }", fg, bg);
+  css = g_strdup_printf (".content { caret-color: %s; background-color: %s; }", fg, bg);
   gtk_css_provider_load_from_data (self->bg_provider, css, strlen (css));
   g_free (css);
   g_free (fg);

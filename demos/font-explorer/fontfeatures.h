@@ -12,7 +12,4 @@ typedef struct _FontFeaturesClass    FontFeaturesClass;
 
 
 GType          font_features_get_type          (void);
-FontFeatures * font_features_new               (void);
-void           font_features_set_font_map      (FontFeatures  *self,
-                                                Pango2FontMap *map);
 GAction *      font_features_get_reset_action  (FontFeatures  *self);

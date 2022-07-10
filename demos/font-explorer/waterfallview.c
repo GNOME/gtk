@@ -106,7 +106,7 @@ update_view (WaterfallView *self)
   Pango2AttrList *attrs;
   char *fg, *bg, *css;
   GString *str;
-  int sizes[] = { 7, 8, 9, 10, 12, 14, 16, 20, 24, 30, 40, 50, 60, 70, 90 };
+  int sizes[] = { 7, 8, 9, 10, 12, 14, 16, 20, 24, 30, 40, 50, 60, 70, 90, 120 };
   int start, end, text_len;
 
   desc = pango2_font_description_copy_static (self->font_desc);
@@ -151,7 +151,7 @@ update_view (WaterfallView *self)
 
   fg = gdk_rgba_to_string (&self->foreground);
   bg = gdk_rgba_to_string (&self->background);
-  css = g_strdup_printf (".view_background { caret-color: %s; background-color: %s; }", fg, bg);
+  css = g_strdup_printf (".content { caret-color: %s; background-color: %s; }", fg, bg);
   gtk_css_provider_load_from_data (self->bg_provider, css, strlen (css));
   g_free (css);
   g_free (fg);

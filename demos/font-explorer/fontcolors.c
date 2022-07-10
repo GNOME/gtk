@@ -4,7 +4,8 @@
 #include <hb-ot.h>
 
 enum {
-  PROP_FONT_DESC = 1,
+  PROP_FONT_MAP = 1,
+  PROP_FONT_DESC,
   PROP_PALETTE,
   NUM_PROPERTIES
 };
@@ -23,7 +24,7 @@ struct _FontColors
   char *palette;
   GtkCheckButton *default_check;
 
-  Pango2FontMap *map;
+  Pango2FontMap *font_map;
 };
 
 struct _FontColorsClass
@@ -39,10 +40,7 @@ get_font (FontColors *self)
   Pango2Context *context;
   Pango2Font *font;
 
-  context = pango2_context_new ();
-  if (self->map)
-    pango2_context_set_font_map (context, self->map);
-
+  context = pango2_context_new_with_font_map (self->font_map);
   font = pango2_context_load_font (context, self->font_desc);
   g_object_unref (context);
 
@@ -185,6 +183,8 @@ reset (GSimpleAction *action,
 static void
 font_colors_init (FontColors *self)
 {
+  self->font_map = g_object_ref (pango2_font_map_get_default ());
+
   self->palette = g_strdup (PANGO2_COLOR_PALETTE_DEFAULT);
 
   gtk_widget_init_template (GTK_WIDGET (self));
@@ -209,8 +209,7 @@ font_colors_finalize (GObject *object)
 
   g_clear_pointer (&self->font_desc, pango2_font_description_free);
   g_free (self->palette);
-
-  g_clear_object (&self->map);
+  g_clear_object (&self->font_map);
 
   G_OBJECT_CLASS (font_colors_parent_class)->finalize (object);
 }
@@ -225,15 +224,20 @@ font_colors_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FONT_MAP:
+      g_set_object (&self->font_map, g_value_get_object (value));
+      break;
+
     case PROP_FONT_DESC:
       pango2_font_description_free (self->font_desc);
       self->font_desc = pango2_font_description_copy (g_value_get_boxed (value));
-      update_colors (self);
       break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+
+  update_colors (self);
 }
 
 static void
@@ -265,6 +269,11 @@ font_colors_class_init (FontColorsClass *class)
   object_class->get_property = font_colors_get_property;
   object_class->set_property = font_colors_set_property;
 
+  properties[PROP_FONT_MAP] =
+      g_param_spec_object ("font-map", "", "",
+                           PANGO2_TYPE_FONT_MAP,
+                           G_PARAM_READWRITE);
+
   properties[PROP_FONT_DESC] =
       g_param_spec_boxed ("font-desc", "", "",
                           PANGO2_TYPE_FONT_DESCRIPTION,
@@ -285,23 +294,8 @@ font_colors_class_init (FontColorsClass *class)
   gtk_widget_class_set_css_name (GTK_WIDGET_CLASS (class), "fontcolors");
 }
 
-FontColors *
-font_colors_new (void)
-{
-  return g_object_new (FONT_COLORS_TYPE, NULL);
-}
-
 GAction *
 font_colors_get_reset_action (FontColors *self)
 {
   return G_ACTION (self->reset_action);
 }
-
-void
-font_colors_set_font_map (FontColors    *self,
-                          Pango2FontMap *map)
-{
-  g_set_object (&self->map, map);
-  update_colors (self);
-}
-
