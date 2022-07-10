@@ -80,17 +80,141 @@
           </object>
         </child>
         <child>
-          <object class="FontView" id="view">
-            <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
-            <property name="size" bind-source="controls" bind-flags="sync-create"/>
-            <property name="letterspacing" bind-source="controls" bind-flags="sync-create"/>
-            <property name="line-height" bind-source="controls" bind-flags="sync-create"/>
-            <property name="foreground" bind-source="controls" bind-flags="sync-create"/>
-            <property name="background" bind-source="controls" bind-flags="sync-create"/>
-            <property name="sample-text" bind-source="samplechooser" bind-flags="sync-create"/>
-            <property name="features" bind-source="features" bind-flags="sync-create"/>
-            <property name="variations" bind-source="variations" bind-flags="sync-create"/>
-            <property name="palette" bind-source="colors" bind-flags="sync-create"/>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkStack" id="stack">
+                <property name="hexpand">1</property>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">plain</property>
+                    <property name="child">
+                      <object class="PlainView">
+                        <property name="font-map" bind-source="FontExplorerWindow" bind-flags="sync-create"/>
+                        <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                        <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                        <property name="size" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="letterspacing" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="line-height" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="foreground" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="background" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="sample-text" bind-source="sampleeditor" bind-flags="sync-create"/>
+                        <property name="features" bind-source="features" bind-flags="sync-create"/>
+                        <property name="variations" bind-source="variations" bind-flags="sync-create"/>
+                        <property name="palette" bind-source="colors" bind-flags="sync-create"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">waterfall</property>
+                    <property name="child">
+                      <object class="WaterfallView">
+                        <property name="font-map" bind-source="FontExplorerWindow" bind-flags="sync-create"/>
+                        <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                        <property name="size" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="letterspacing" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="line-height" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="foreground" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="background" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="sample-text" bind-source="sampleeditor" bind-flags="sync-create"/>
+                        <property name="features" bind-source="features" bind-flags="sync-create"/>
+                        <property name="variations" bind-source="variations" bind-flags="sync-create"/>
+                        <property name="palette" bind-source="colors" bind-flags="sync-create"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">glyphs</property>
+                    <property name="child">
+                      <object class="GlyphsView">
+                        <property name="font-map" bind-source="FontExplorerWindow" bind-flags="sync-create"/>
+                        <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                        <property name="variations" bind-source="variations" bind-flags="sync-create"/>
+                        <property name="palette" bind-source="colors" bind-flags="sync-create"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">info</property>
+                    <property name="child">
+                      <object class="InfoView">
+                        <property name="font-map" bind-source="FontExplorerWindow" bind-flags="sync-create"/>
+                        <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                        <property name="size" bind-source="controls" bind-flags="sync-create"/>
+                        <property name="variations" bind-source="variations" bind-flags="sync-create"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="name">edit</property>
+                    <property name="child">
+                      <object class="SampleEditor" id="sampleeditor">
+                        <property name="sample-text" bind-source="samplechooser" bind-flags="sync-create"/>
+                        <property name="editing" bind-source="edit_toggle" bind-property="active" bind-flags="sync-create"/>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">horizontal</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
+                    <child>
+                      <object class="GtkToggleButton" id="plain_toggle">
+                        <property name="label">Plain</property>
+                        <property name="active">1</property>
+                        <signal name="toggled" handler="update_view"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="waterfall_toggle">
+                        <property name="label">Waterfall</property>
+                        <property name="group">plain_toggle</property>
+                        <signal name="toggled" handler="update_view"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="glyphs_toggle">
+                        <property name="label">Glyphs</property>
+                        <property name="group">plain_toggle</property>
+                        <signal name="toggled" handler="update_view"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="info_toggle">
+                        <property name="label">Info</property>
+                        <property name="group">plain_toggle</property>
+                        <signal name="toggled" handler="update_view"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkToggleButton" id="edit_toggle">
+                    <property name="hexpand">1</property>
+                    <property name="halign">end</property>
+                    <property name="icon-name">document-edit-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Edit the sample</property>
+                    <signal name="toggled" handler="update_view"/>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>

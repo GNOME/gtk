@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GlyphsView" parent="GtkWidget">
+    <style>
+      <class name="view"/>
+    </style>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">automatic</property>
+        <child>
+          <object class="GtkGridView" id="glyphs">
+            <property name="factory">
+              <object class="GtkSignalListItemFactory">
+                <signal name="setup" handler="setup_glyph"/>
+                <signal name="bind" handler="bind_glyph"/>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -14,5 +14,5 @@ typedef struct _FontExplorerWindowClass    FontExplorerWindowClass;
 
 GType                   font_explorer_window_get_type     (void);
 FontExplorerWindow *    font_explorer_window_new          (FontExplorerApp    *app);
-void                    font_explorer_window_load         (FontExplorerWindow *win,
+void                    font_explorer_window_load         (FontExplorerWindow *self,
                                                            GFile              *file);

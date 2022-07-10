@@ -14,7 +14,23 @@ fontcolors > grid {
 samplechooser {
   border-spacing: 10px;
 }
-fontview {
+plainview {
+  padding: 10px;
+  border-spacing: 10px;
+}
+waterfallview {
+  padding: 10px;
+  border-spacing: 10px;
+}
+infoview {
+  padding: 10px;
+  border-spacing: 10px;
+}
+glyphsview {
+  padding: 10px;
+  border-spacing: 10px;
+}
+sampleeditor {
   padding: 10px;
   border-spacing: 10px;
 }
