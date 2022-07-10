@@ -165,7 +165,15 @@ update_allocation (GtkWidget            *w,
   gtk_label_set_label (GTK_LABEL (sl->request_mode), value->value_nick);
   g_type_class_unref (class);
 
-  gtk_inspector_measure_graph_measure (GTK_INSPECTOR_MEASURE_GRAPH (sl->measure_graph), w);
+  if (gtk_widget_get_visible (sl->measure_row))
+    gtk_inspector_measure_graph_measure (GTK_INSPECTOR_MEASURE_GRAPH (sl->measure_graph), w);
+}
+
+static void
+measure_graph_measure (GtkWidget            *button,
+                       GtkInspectorMiscInfo *sl)
+{
+  gtk_inspector_measure_graph_measure (GTK_INSPECTOR_MEASURE_GRAPH (sl->measure_graph), GTK_WIDGET (sl->object));
 }
 
 static void
@@ -500,7 +508,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_show (sl->state_row);
       gtk_widget_show (sl->direction_row);
       gtk_widget_show (sl->request_mode_row);
-      gtk_widget_show (sl->measure_row);
       gtk_widget_show (sl->allocated_size_row);
       gtk_widget_show (sl->baseline_row);
       gtk_widget_show (sl->mnemonic_label_row);
@@ -662,6 +669,7 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, update_measure_picture);
   gtk_widget_class_bind_template_callback (widget_class, measure_picture_drag_prepare);
+  gtk_widget_class_bind_template_callback (widget_class, measure_graph_measure);
   gtk_widget_class_bind_template_callback (widget_class, show_surface);
   gtk_widget_class_bind_template_callback (widget_class, show_renderer);
   gtk_widget_class_bind_template_callback (widget_class, show_frame_clock);
