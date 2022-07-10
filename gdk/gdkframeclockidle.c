@@ -373,6 +373,9 @@ gdk_frame_clock_flush_idle (void *data)
   else
     priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
+  g_clear_handle_id (&priv->paint_idle_id, g_source_remove);
+  gdk_frame_clock_paint_idle (data);
+
   return FALSE;
 }
 
