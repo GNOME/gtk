@@ -596,7 +596,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   GtkTextDecorationStyle decoration_style;
   const GdkRGBA *color;
   const GdkRGBA *decoration_color;
-  int letter_spacing;
+  double letter_spacing;
 
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
