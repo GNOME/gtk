@@ -12,6 +12,7 @@
     <file preprocess="xml-stripblanks">rangeedit.ui</file>
     <file preprocess="xml-stripblanks">samplechooser.ui</file>
     <file preprocess="xml-stripblanks">sampleeditor.ui</file>
+    <file preprocess="xml-stripblanks">styleview.ui</file>
     <file preprocess="xml-stripblanks">waterfallview.ui</file>
     <file>fontexplorer.css</file>
   </gresource>

@@ -16,6 +16,7 @@ fontexplorer_sources = [
   'rangeedit.c',
   'samplechooser.c',
   'sampleeditor.c',
+  'styleview.c',
   'waterfallview.c',
 ]
 

@@ -47,6 +47,14 @@
               </object>
             </child>
             <child>
+              <object class="GtkToggleButton" id="style_toggle">
+                <property name="label">Styles</property>
+                <property name="group">plain_toggle</property>
+                <property name="sensitive" bind-source="styleview" bind-property="has-styles" bind-flags="sync-create"/>
+                <signal name="toggled" handler="update_view"/>
+              </object>
+            </child>
+            <child>
               <object class="GtkToggleButton" id="glyphs_toggle">
                 <property name="label">Glyphs</property>
                 <property name="group">plain_toggle</property>
@@ -164,6 +172,26 @@
                 <property name="name">waterfall</property>
                 <property name="child">
                   <object class="WaterfallView">
+                    <property name="font-map" bind-source="FontExplorerWindow" bind-flags="sync-create"/>
+                    <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
+                    <property name="size" bind-source="controls" bind-flags="sync-create"/>
+                    <property name="letterspacing" bind-source="controls" bind-flags="sync-create"/>
+                    <property name="line-height" bind-source="controls" bind-flags="sync-create"/>
+                    <property name="foreground" bind-source="controls" bind-flags="sync-create"/>
+                    <property name="background" bind-source="controls" bind-flags="sync-create"/>
+                    <property name="sample-text" bind-source="sampleeditor" bind-flags="sync-create"/>
+                    <property name="features" bind-source="features" bind-flags="sync-create"/>
+                    <property name="variations" bind-source="variations" bind-flags="sync-create"/>
+                    <property name="palette" bind-source="colors" bind-flags="sync-create"/>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">style</property>
+                <property name="child">
+                  <object class="StyleView" id="styleview">
                     <property name="font-map" bind-source="FontExplorerWindow" bind-flags="sync-create"/>
                     <property name="font-desc" bind-source="fontbutton" bind-flags="sync-create"/>
                     <property name="size" bind-source="controls" bind-flags="sync-create"/>

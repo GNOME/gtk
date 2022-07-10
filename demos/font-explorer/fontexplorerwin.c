@@ -10,6 +10,7 @@
 #include "plainview.h"
 #include "samplechooser.h"
 #include "sampleeditor.h"
+#include "styleview.h"
 #include "waterfallview.h"
 
 #include <gtk/gtk.h>
@@ -31,6 +32,7 @@ struct _FontExplorerWindow
   GtkStack *stack;
   GtkToggleButton *plain_toggle;
   GtkToggleButton *waterfall_toggle;
+  GtkToggleButton *style_toggle;
   GtkToggleButton *glyphs_toggle;
   GtkToggleButton *info_toggle;
   GtkToggleButton *edit_toggle;
@@ -113,6 +115,8 @@ update_view (GtkToggleButton    *button,
     gtk_stack_set_visible_child_name (self->stack, "plain");
   else if (gtk_toggle_button_get_active (self->waterfall_toggle))
     gtk_stack_set_visible_child_name (self->stack, "waterfall");
+  else if (gtk_toggle_button_get_active (self->style_toggle))
+    gtk_stack_set_visible_child_name (self->stack, "style");
   else if (gtk_toggle_button_get_active (self->glyphs_toggle))
     gtk_stack_set_visible_child_name (self->stack, "glyphs");
   else if (gtk_toggle_button_get_active (self->info_toggle))
@@ -189,6 +193,7 @@ font_explorer_window_class_init (FontExplorerWindowClass *class)
   g_type_ensure (PLAIN_VIEW_TYPE);
   g_type_ensure (SAMPLE_CHOOSER_TYPE);
   g_type_ensure (SAMPLE_EDITOR_TYPE);
+  g_type_ensure (STYLE_VIEW_TYPE);
   g_type_ensure (WATERFALL_VIEW_TYPE);
 
   object_class->set_property = font_explorer_window_set_property;
@@ -215,6 +220,7 @@ font_explorer_window_class_init (FontExplorerWindowClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, stack);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, plain_toggle);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, waterfall_toggle);
+  gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, style_toggle);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, glyphs_toggle);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, info_toggle);
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), FontExplorerWindow, edit_toggle);

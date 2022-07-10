@@ -20,6 +20,9 @@ plainview .content {
 waterfallview .content {
   padding: 20px;
 }
+styleview .content {
+  padding: 20px;
+}
 glyphsview .content {
   padding: 20px;
 }
