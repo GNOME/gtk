@@ -274,6 +274,15 @@
                               </object>
                             </child>
                             <child>
+                              <object class="GtkToggleButton" id="measure_show">
+                                <property name="label" translatable="yes">Show</property>
+                                <property name="halign">end</property>
+                                <property name="valign">baseline</property>
+                                <signal name="clicked" handler="update_measure_picture" swapped="yes" after="1" object="measure_picture"/>
+                                <signal name="clicked" handler="measure_graph_measure" after="1"/>
+                              </object>
+                            </child>
+                            <child>
                               <object class="GtkToggleButton" id="measure_expand_toggle">
                                 <property name="label" translatable="yes">Expand</property>
                                 <property name="halign">end</property>
@@ -288,6 +297,7 @@
                     <child>
                       <object class="GtkListBoxRow" id="measure_row">
                         <property name="activatable">0</property>
+                        <property name="visible" bind-source="measure_show" bind-property="active" bind-flags="sync-create"/>
                         <child>
                           <object class="GtkBox">
                             <property name="margin-start">10</property>
