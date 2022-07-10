@@ -258,7 +258,6 @@ font_explorer_window_load (FontExplorerWindow *self,
   gtk_widget_hide (GTK_WIDGET (self->fontbutton));
   gtk_widget_show (GTK_WIDGET (self->path));
   gtk_label_set_label (self->path, basename);
-  gtk_widget_set_tooltip_text (GTK_WIDGET (self->path), path);
 
   pango2_font_description_free (desc);
   g_free (basename);

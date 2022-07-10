@@ -120,6 +120,7 @@ add_misc_line (InfoView   *self,
   gtk_label_set_wrap (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars (GTK_LABEL (label), 40);
   gtk_label_set_max_width_chars (GTK_LABEL (label), 40);
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_grid_attach (self->info, label, 1, row, 1, 1);
 }
 
@@ -184,6 +185,7 @@ update_info (InfoView *self)
   unsigned int count;
   GString *s;
   hb_tag_t *tables;
+  const char *path;
 
   hb_font_set_scale (font, hb_face_get_upem (face), hb_face_get_upem (face));
 
@@ -191,6 +193,11 @@ update_info (InfoView *self)
     gtk_widget_unparent (child);
 
   gtk_grid_attach (self->info, make_title_label ("General Info"), 0, row++, 2, 1);
+
+  path = pango2_hb_face_get_file (PANGO2_HB_FACE (pango2_font_get_face (pango_font)));
+  if (path)
+    add_misc_line (self, "File ", path, row++);
+
   add_info_line (self, face, HB_OT_NAME_ID_FONT_FAMILY, "Font Family Name", row++);
   add_info_line (self, face, HB_OT_NAME_ID_FONT_SUBFAMILY, "Font Subfamily Name", row++);
   add_info_line (self, face, HB_OT_NAME_ID_UNIQUE_ID, "Unique Font Identifier", row++);
