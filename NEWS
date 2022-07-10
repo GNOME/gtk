@@ -1,3 +1,84 @@
+Overview of Changes in 4.7.1
+========================================
+
+* GtkInscription:
+ - A new label-like widget for use in list views
+
+* GtkColorChooser:
+ - Style improvements
+
+* GtkFontChooser:
+ - Improve support for OpenType features a bit
+
+* GtkLabel:
+ - Allow selectable labels to be activated via mnemonic
+
+* GtkTextView:
+ - Implement GetCharacterExtents for accessibility
+
+* GtkStack:
+ - Fix a poblem with stack page accessibility
+
+* GtkListView:
+ - Cull listitems that are out of view
+ - Make all our list models implement ::n-items and
+   ::item-type properties
+
+* Translations:
+ - Stop translating property nicks and blurbs
+ - Fix extracting translations from ui files
+
+* Debugging:
+ - Support GTK_DEBUG=invert-text-dir
+ - Allow inspecting inspectors
+ - Replace GTK_USE_PORTAL with GDK_DEBUG=portals
+ - Improve responsiveness of the inspector
+
+* CSS:
+ - Allow fractional letterspacing
+
+* Theme:
+ - Improve legibility of selectable labels
+
+* Demos:
+ - Improve the font features demo
+ - Add demos for GtkInscription
+
+* Wayland:
+ - Freeze popups when hidden
+ - Only send smooth scroll events for tablet tools
+ - Make scaled cursor image have the right size
+ - Fix problems with the activation protocol
+ - Don't force the HighContrast icon theme
+ - Support xdg_toplevel.bounds
+
+* X11:
+ - Always update the shadoe size
+
+* Windows:
+ - Improve touchpad support by using DirectManipulation
+ - Add more directories to the builtin hicolor icon theme
+
+* Translation updates:
+ Basque
+ Catalan
+ Chinese (China)
+ Galician
+ German
+ Lithuanian
+ Nepali
+ Occitan
+ Persian
+ Polish
+ Portuguese
+ Russian
+ Serbian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.7.0, 07-05-2022
 ========================================
 
