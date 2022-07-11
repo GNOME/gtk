@@ -942,6 +942,7 @@ static void
 gtk_print_unix_dialog_finalize (GObject *object)
 {
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (object);
+  GList *iter;
 
   unschedule_idle_mark_conflicts (dialog);
   disconnect_printer_details_request (dialog, FALSE);
@@ -967,7 +968,9 @@ gtk_print_unix_dialog_finalize (GObject *object)
   g_clear_pointer (&dialog->waiting_for_printer, (GDestroyNotify)g_free);
   g_clear_pointer (&dialog->format_for_printer, (GDestroyNotify)g_free);
 
-  g_list_free (dialog->print_backends);
+  for (iter = dialog->print_backends; iter != NULL; iter = iter->next)
+    gtk_print_backend_destroy (GTK_PRINT_BACKEND (iter->data));
+  g_list_free_full (dialog->print_backends, g_object_unref);
   dialog->print_backends = NULL;
 
   g_clear_object (&dialog->page_setup_list);
