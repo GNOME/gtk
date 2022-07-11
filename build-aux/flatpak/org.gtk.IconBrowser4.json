@@ -115,7 +115,7 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=/app/lib",
-                "-Denable_vulkan=no",
+                "-Dvulkan=disabled",
                 "-Dbuildtype=debugoptimized",
                 "-Dprofile=devel"
             ],
