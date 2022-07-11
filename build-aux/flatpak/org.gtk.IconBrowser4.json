@@ -54,8 +54,7 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=/app/lib",
-                "-Dtests=false",
-                "-Dbenchmarks=false"
+                "-Dtests=false"
             ],
             "sources" : [
                 {
