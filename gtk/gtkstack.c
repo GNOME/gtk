@@ -1638,9 +1638,11 @@ gtk_stack_remove (GtkStack  *stack,
  * @stack: a `GtkStack`
  * @child: a child of @stack
  *
- * Returns the `GtkStackPage` object for @child or NULL if @child isn't a `GtkStack` child.
+ * Retrieves the stack page for the given @child.
  *
- * Returns: (transfer none) (nullable): the `GtkStackPage` for @child
+ * If the given @child is not a child widget of the stack, this function will return `NULL`.
+ *
+ * Returns: (transfer none) (nullable): the stack page object
  */
 GtkStackPage *
 gtk_stack_get_page (GtkStack  *stack,
