@@ -515,7 +515,7 @@ static GSList  *get_selected_infos           (GtkFileChooserWidget *impl);
 static void     search_setup_widgets         (GtkFileChooserWidget *impl);
 static void     search_stop_searching        (GtkFileChooserWidget *impl,
                                               gboolean               remove_query);
-static void     search_clear_model           (GtkFileChooserWidget *impl, 
+static void     search_clear_model           (GtkFileChooserWidget *impl,
                                               gboolean               remove_from_treeview);
 static void     search_entry_activate_cb     (GtkFileChooserWidget *impl);
 static void     search_entry_stop_cb         (GtkFileChooserWidget *impl);
@@ -720,8 +720,8 @@ error_creating_folder_dialog (GtkFileChooserWidget *impl,
                               GFile                 *file,
                               GError                *error)
 {
-  error_dialog (impl, 
-                _("The folder could not be created"), 
+  error_dialog (impl,
+                _("The folder could not be created"),
                 error);
 }
 
@@ -3122,10 +3122,11 @@ gtk_file_chooser_widget_dispose (GObject *object)
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) object;
 
   cancel_all_operations (impl);
-  g_clear_pointer (&impl->rename_file_popover, gtk_widget_unparent);
+
+  /* browse_files_popover is not a template child */
   g_clear_pointer (&impl->browse_files_popover, gtk_widget_unparent);
-  g_clear_object (&impl->extra_widget);
   g_clear_pointer (&impl->bookmarks_manager, _gtk_bookmarks_manager_free);
+  g_clear_object (&impl->extra_widget);
 
   if (impl->external_entry && impl->location_entry == impl->external_entry)
     {
@@ -3133,9 +3134,10 @@ gtk_file_chooser_widget_dispose (GObject *object)
       location_entry_disconnect (impl);
       impl->external_entry = NULL;
     }
+
   remove_settings_signal (impl);
 
-  g_clear_pointer (&impl->box, gtk_widget_unparent);
+  gtk_widget_dispose_template (GTK_WIDGET (impl), GTK_TYPE_FILE_CHOOSER_WIDGET);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
 }
@@ -6258,7 +6260,7 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserWidget *impl)
         case SAVE_ENTRY:
           goto save_entry;
 
-        case NOT_REACHED: 
+        case NOT_REACHED:
         default:
           g_assert_not_reached ();
         }

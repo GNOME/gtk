@@ -695,12 +695,12 @@ constructed (GObject *object)
   GListModel *sort_model;
   GtkSorter *column_sorter;
   GtkSorter *sorter;
- 
+
   g_signal_connect (rl->open_details_button, "clicked",
                     G_CALLBACK (open_details), rl);
   g_signal_connect (rl->close_details_button, "clicked",
                     G_CALLBACK (close_details), rl);
- 
+
   rl->tree_model = gtk_tree_list_model_new (load_resources (),
                                             FALSE,
                                             FALSE,
@@ -745,7 +745,7 @@ set_property (GObject      *object,
               GParamSpec   *pspec)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
-  
+
   switch (param_id)
     {
     case PROP_BUTTONS:
@@ -765,9 +765,10 @@ dispose (GObject *object)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
 
-  g_clear_pointer (&rl->stack, gtk_widget_unparent);
   g_clear_object (&rl->selection);
   g_clear_object (&rl->tree_model);
+
+  gtk_widget_dispose_template (GTK_WIDGET (rl), GTK_TYPE_INSPECTOR_RESOURCE_LIST);
 
   G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->dispose (object);
 }

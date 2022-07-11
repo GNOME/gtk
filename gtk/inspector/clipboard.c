@@ -221,7 +221,7 @@ add_content_type_row (GtkInspectorClipboard *self,
     {
       GtkEventController *controller = gtk_drop_controller_motion_new ();
       g_signal_connect (controller, "enter", G_CALLBACK (on_drop_row_enter), viewer);
-      gtk_widget_add_controller (vbox, controller); 
+      gtk_widget_add_controller (vbox, controller);
 
       gtk_widget_set_visible (viewer, FALSE);
 
@@ -355,7 +355,7 @@ gtk_inspector_clipboard_dispose (GObject *object)
 
   gtk_inspector_clipboard_unset_display (self);
 
-  g_clear_pointer (&self->swin, gtk_widget_unparent);
+  gtk_widget_dispose_template (GTK_WIDGET (self), GTK_TYPE_INSPECTOR_CLIPBOARD);
 
   G_OBJECT_CLASS (gtk_inspector_clipboard_parent_class)->dispose (object);
 }

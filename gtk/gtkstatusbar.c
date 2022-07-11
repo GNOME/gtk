@@ -143,7 +143,7 @@ gtk_statusbar_dispose (GObject *object)
   g_slist_free_full (self->keys, g_free);
   self->keys = NULL;
 
-  g_clear_pointer (&self->message_area, gtk_widget_unparent);
+  gtk_widget_dispose_template (GTK_WIDGET (self), GTK_TYPE_STATUSBAR);
 
   G_OBJECT_CLASS (gtk_statusbar_parent_class)->dispose (object);
 }
@@ -225,7 +225,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
  *
  * Returns: the new `GtkStatusbar`
  */
-GtkWidget* 
+GtkWidget*
 gtk_statusbar_new (void)
 {
   return g_object_new (GTK_TYPE_STATUSBAR, NULL);
@@ -263,7 +263,7 @@ gtk_statusbar_get_context_id (GtkStatusbar *statusbar,
 {
   char *string;
   guint id;
-  
+
   g_return_val_if_fail (GTK_IS_STATUSBAR (statusbar), 0);
   g_return_val_if_fail (context_description != NULL, 0);
 
@@ -417,18 +417,18 @@ gtk_statusbar_remove (GtkStatusbar *statusbar,
 	  gtk_statusbar_pop (statusbar, context_id);
 	  return;
 	}
-      
+
       for (list = statusbar->messages; list; list = list->next)
 	{
 	  msg = list->data;
-	  
+
 	  if (msg->context_id == context_id &&
 	      msg->message_id == message_id)
 	    {
 	      statusbar->messages = g_slist_remove_link (statusbar->messages, list);
 	      gtk_statusbar_msg_free (msg);
 	      g_slist_free_1 (list);
-	      
+
 	      break;
 	    }
 	}

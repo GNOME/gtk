@@ -462,7 +462,7 @@ dispose (GObject *o)
 
   g_clear_object (&sl->object);
 
-  g_clear_pointer (&sl->box, gtk_widget_unparent);
+  gtk_widget_dispose_template (GTK_WIDGET (o), GTK_TYPE_INSPECTOR_A11Y);
 
   G_OBJECT_CLASS (gtk_inspector_a11y_parent_class)->dispose (o);
 }

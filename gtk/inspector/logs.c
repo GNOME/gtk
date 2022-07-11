@@ -99,10 +99,7 @@ gtk_inspector_logs_init (GtkInspectorLogs *logs)
 static void
 dispose (GObject *object)
 {
-  GtkWidget *child;
-
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (object))))
-    gtk_widget_unparent (child);
+  gtk_widget_dispose_template (GTK_WIDGET (object), GTK_TYPE_INSPECTOR_LOGS);
 
   G_OBJECT_CLASS (gtk_inspector_logs_parent_class)->dispose (object);
 }

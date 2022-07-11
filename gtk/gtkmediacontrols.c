@@ -138,7 +138,7 @@ time_adjustment_changed (GtkAdjustment    *adjustment,
   if (gtk_adjustment_get_value (adjustment) == (double) gtk_media_stream_get_timestamp (controls->stream) / G_USEC_PER_SEC)
     return;
 
-  gtk_media_stream_seek (controls->stream, 
+  gtk_media_stream_seek (controls->stream,
                          gtk_adjustment_get_value (adjustment) * G_USEC_PER_SEC + 0.5);
 }
 
@@ -208,7 +208,7 @@ gtk_media_controls_dispose (GObject *object)
 
   gtk_media_controls_set_media_stream (controls, NULL);
 
-  g_clear_pointer (&controls->box, gtk_widget_unparent);
+  gtk_widget_dispose_template (GTK_WIDGET (object), GTK_TYPE_MEDIA_CONTROLS);
 
   G_OBJECT_CLASS (gtk_media_controls_parent_class)->dispose (object);
 }

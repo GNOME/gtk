@@ -361,11 +361,11 @@ save_cb (GtkWidget              *button,
 }
 
 static void
-constraint_editor_window_finalize (GObject *object)
+constraint_editor_window_dispose (GObject *object)
 {
-  //ConstraintEditorWindow *self = (ConstraintEditorWindow *)object;
+  gtk_widget_dispose_template (GTK_WIDGET (object), CONSTRAINT_EDITOR_WINDOW_TYPE);
 
-  G_OBJECT_CLASS (constraint_editor_window_parent_class)->finalize (object);
+  G_OBJECT_CLASS (constraint_editor_window_parent_class)->dispose (object);
 }
 
 static int child_counter;
@@ -497,7 +497,7 @@ constraint_editor_window_class_init (ConstraintEditorWindowClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  object_class->finalize = constraint_editor_window_finalize;
+  object_class->dispose = constraint_editor_window_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gtk/gtk4/constraint-editor/constraint-editor-window.ui");

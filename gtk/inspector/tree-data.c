@@ -100,7 +100,7 @@ add_columns (GtkInspectorTreeData *sl)
       gtk_tree_view_column_set_cell_data_func (col, cell, cell_data_func, sl, NULL);
       gtk_tree_view_append_column (sl->view, col);
       g_free (title);
-    } 
+    }
 }
 
 static void
@@ -175,10 +175,8 @@ static void
 dispose (GObject *object)
 {
   GtkInspectorTreeData *sl = GTK_INSPECTOR_TREE_DATA (object);
-  GtkWidget *child;
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl))))
-    gtk_widget_unparent (child);
+  gtk_widget_dispose_template (GTK_WIDGET (sl), GTK_TYPE_INSPECTOR_TREE_DATA);
 
   G_OBJECT_CLASS (gtk_inspector_tree_data_parent_class)->dispose (object);
 }

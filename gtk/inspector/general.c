@@ -1087,8 +1087,6 @@ gtk_inspector_general_dispose (GObject *object)
   GtkInspectorGeneral *gen = GTK_INSPECTOR_GENERAL (object);
   GList *list, *l;
 
-  g_clear_pointer (&gen->swin, gtk_widget_unparent);
-
   g_signal_handlers_disconnect_by_func (gen->display, G_CALLBACK (seat_added), gen);
   g_signal_handlers_disconnect_by_func (gen->display, G_CALLBACK (seat_removed), gen);
   g_signal_handlers_disconnect_by_func (gen->display, G_CALLBACK (populate_display_notify_cb), gen);
@@ -1098,6 +1096,8 @@ gtk_inspector_general_dispose (GObject *object)
   for (l = list; l; l = l->next)
     disconnect_seat (gen, GDK_SEAT (l->data));
   g_list_free (list);
+
+  gtk_widget_dispose_template (GTK_WIDGET (gen), GTK_TYPE_INSPECTOR_GENERAL);
 
   G_OBJECT_CLASS (gtk_inspector_general_parent_class)->dispose (object);
 }

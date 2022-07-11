@@ -386,10 +386,28 @@
  * static void
  * foo_widget_init (FooWidget *self)
  * {
- *   // ...
  *   gtk_widget_init_template (GTK_WIDGET (self));
+ *
+ *   // Initialize the rest of the widget...
  * }
  * ```
+ *
+ * as well as calling [method@Gtk.Widget.dispose_template] from the dispose
+ * function:
+ *
+ * ```c
+ * static void
+ * foo_widget_dispose (GObject *gobject)
+ * {
+ *   FooWidget *self = FOO_WIDGET (gobject);
+ *
+ *   // Dispose objects for which you have a reference...
+ *
+ *   // Clear the template children for this widget type
+ *   gtk_widget_dispose_template (GTK_WIDGET (self), FOO_TYPE_WIDGET);
+ *
+ *   G_OBJECT_CLASS (foo_widget_parent_class)->dispose (gobject);
+ * }
  *
  * You can access widgets defined in the template using the
  * [id@gtk_widget_get_template_child] function, but you will typically declare
@@ -408,9 +426,19 @@
  * G_DEFINE_TYPE_WITH_PRIVATE (FooWidget, foo_widget, GTK_TYPE_BOX)
  *
  * static void
+ * foo_widget_dispose (GObject *gobject)
+ * {
+ *   gtk_widget_dispose_template (GTK_WIDGET (gobject), FOO_TYPE_WIDGET);
+ *
+ *   G_OBJECT_CLASS (foo_widget_parent_class)->dispose (gobject);
+ * }
+ *
+ * static void
  * foo_widget_class_init (FooWidgetClass *klass)
  * {
  *   // ...
+ *   G_OBJECT_CLASS (klass)->dispose = foo_widget_dispose;
+ *
  *   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (klass),
  *                                                "/com/example/ui/foowidget.ui");
  *   gtk_widget_class_bind_template_child_private (GTK_WIDGET_CLASS (klass),
@@ -422,7 +450,7 @@
  * static void
  * foo_widget_init (FooWidget *widget)
  * {
- *
+ *   gtk_widget_init_template (GTK_WIDGET (widget));
  * }
  * ```
  *
@@ -7437,16 +7465,7 @@ gtk_widget_real_destroy (GtkWidget *object)
                   GObject *child_object = gtk_widget_get_template_child (widget,
                                                                          class_type,
                                                                          child_class->name);
-
-                  g_assert (child_object);
-
-                  if (!G_IS_OBJECT (child_object))
-                    {
-                      g_critical ("Automated component '%s' of class '%s' seems to"
-                                  " have been prematurely finalized",
-                                  child_class->name, g_type_name (class_type));
-                    }
-                  else
+                  if (G_IS_OBJECT (child_object))
                     {
                       FinalizeAssertion *assertion = g_slice_new0 (FinalizeAssertion);
                       assertion->child_class = child_class;
@@ -10976,6 +10995,81 @@ gtk_widget_init_template (GtkWidget *widget)
 
 out:
   g_object_unref (builder);
+}
+
+/**
+ * gtk_widget_dispose_template:
+ * @widget: the widget with a template
+ * @widget_type: the type of the widget to finalize the template for
+ *
+ * Clears the template children for the given widget.
+ *
+ * This function is the opposite of [method@Gtk.Widget.init_template], and
+ * it is used to clear all the template children from a widget instance.
+ * If you bound a template child to a field in the instance structure, or
+ * in the instance private data structure, the field will be set to `NULL`
+ * after this function returns.
+ *
+ * You should call this function inside the `GObjectClass.dispose()`
+ * implementation of any widget that called `gtk_widget_init_template()`.
+ * Typically, you will want to call this function last, right before
+ * chaining up to the parent type's dispose implementation, e.g.
+ *
+ * ```c
+ * static void
+ * some_widget_dispose (GObject *gobject)
+ * {
+ *   SomeWidget *self = SOME_WIDGET (gobject);
+ *
+ *   // Clear the template data for SomeWidget
+ *   gtk_widget_dispose_template (GTK_WIDGET (self), SOME_TYPE_WIDGET);
+ *
+ *   G_OBJECT_CLASS (some_widget_parent_class)->dispose (gobject);
+ * }
+ * ```
+ *
+ * Since: 4.8
+ */
+void
+gtk_widget_dispose_template (GtkWidget *widget,
+                             GType      widget_type)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (g_type_name (widget_type) != NULL);
+
+  GtkWidgetTemplate *template = GTK_WIDGET_GET_CLASS (widget)->priv->template;
+  g_return_if_fail (template != NULL);
+
+  /* Tear down the automatic child data */
+  GHashTable *auto_child_hash = get_auto_child_hash (widget, widget_type, FALSE);
+
+  for (GSList *l = template->children; l != NULL; l = l->next)
+    {
+      AutomaticChildClass *child_class = l->data;
+
+      /* This will drop the reference on the template children */
+      if (auto_child_hash != NULL)
+        {
+          gpointer child = g_hash_table_lookup (auto_child_hash, child_class->name);
+
+          g_assert (child != NULL);
+
+          /* We have to explicitly unparent direct children of this widget */
+          if (GTK_IS_WIDGET (child) && _gtk_widget_get_parent (child) == widget)
+            gtk_widget_unparent (child);
+
+          g_hash_table_remove (auto_child_hash, child_class->name);
+        }
+
+      /* Nullify the field last, to avoid re-entrancy issues */
+      if (child_class->offset != 0)
+        {
+          gpointer field_p;
+
+          field_p = G_STRUCT_MEMBER_P (widget, child_class->offset);
+          (* (gpointer *) field_p) = NULL;
+        }
+    }
 }
 
 /**
