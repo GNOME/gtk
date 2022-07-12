@@ -34,7 +34,6 @@
 #include "gtkliststore.h"
 #include "gtkcheckbutton.h"
 #include "gtkgrid.h"
-#include "gtktogglebutton.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkstringlist.h"
@@ -629,14 +628,14 @@ deconstruct_widgets (GtkPrinterOptionWidget *widget)
 }
 
 static void
-check_toggled_cb (GtkToggleButton        *toggle_button,
+check_toggled_cb (GtkCheckButton         *check_button,
 		  GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
 
   g_signal_handler_block (priv->source, priv->source_changed_handler);
   gtk_printer_option_set_boolean (priv->source,
-				  gtk_toggle_button_get_active (toggle_button));
+                                  gtk_check_button_get_active (check_button));
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
   emit_changed (widget);
 }
