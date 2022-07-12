@@ -596,7 +596,10 @@ gtk_list_view_size_allocate (GtkWidget *widget,
 
   /* step 0: exit early if list is empty */
   if (gtk_list_item_manager_get_root (self->item_manager) == NULL)
-    return;
+    {
+      gtk_list_base_update_adjustments (GTK_LIST_BASE (self), 0, 0, 0, 0, &x, &y);
+      return;
+    }
 
   /* step 1: determine width of the list */
   gtk_widget_measure (widget, opposite_orientation,
