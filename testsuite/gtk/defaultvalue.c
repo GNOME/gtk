@@ -78,6 +78,7 @@ test_type (gconstpointer data)
   if (g_type_is_a (type, GTK_TYPE_APPLICATION) ||
       g_type_is_a (type, GDK_TYPE_PIXBUF_LOADER) ||
       g_type_is_a (type, GTK_TYPE_LAYOUT_CHILD) ||
+      g_type_is_a (type, GTK_TYPE_STACK_PAGE) ||
 #ifdef G_OS_UNIX
       g_type_is_a (type, GTK_TYPE_PRINT_JOB) ||
 #endif

@@ -395,6 +395,20 @@ gtk_stack_page_set_property (GObject      *object,
       break;
     }
 }
+
+static void
+gtk_stack_page_constructed (GObject *gobject)
+{
+  GtkStackPage *self = GTK_STACK_PAGE (gobject);
+
+  if (G_UNLIKELY (self->widget == NULL))
+    g_error ("GtkStackPage '%s' [%p] is missing a child widget",
+             self->name != NULL ? self->name : "<unnamed>",
+             self);
+
+  G_OBJECT_CLASS (gtk_stack_page_parent_class)->constructed (gobject);
+}
+
 static void
 gtk_stack_page_class_init (GtkStackPageClass *class)
 {
@@ -404,6 +418,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   object_class->dispose = gtk_stack_page_dispose;
   object_class->get_property = gtk_stack_page_get_property;
   object_class->set_property = gtk_stack_page_set_property;
+  object_class->constructed = gtk_stack_page_constructed;
 
   /**
    * GtkStackPage:child: (attributes org.gtk.Property.get=gtk_stack_page_get_child)
@@ -1543,13 +1558,11 @@ gtk_stack_add_internal (GtkStack   *stack,
 
   g_return_val_if_fail (child != NULL, NULL);
 
-  child_info = g_object_new (GTK_TYPE_STACK_PAGE, NULL);
-  child_info->widget = g_object_ref (child);
-  child_info->name = g_strdup (name);
-  child_info->title = g_strdup (title);
-  child_info->icon_name = NULL;
-  child_info->needs_attention = FALSE;
-  child_info->last_focus = NULL;
+  child_info = g_object_new (GTK_TYPE_STACK_PAGE,
+                             "child", child,
+                             "name", name,
+                             "title", title,
+                             NULL);
 
   gtk_stack_add_page (stack, child_info);
 
@@ -2627,7 +2640,7 @@ gtk_stack_measure (GtkWidget      *widget,
               int min_for_size;
 
               gtk_widget_measure (child, OPPOSITE_ORIENTATION (orientation), -1, &min_for_size, NULL, NULL, NULL);
-              
+
               gtk_widget_measure (child, orientation, MAX (min_for_size, for_size), &child_min, &child_nat, NULL, NULL);
             }
           else
