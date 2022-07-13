@@ -656,11 +656,10 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
       if (context_wayland->current_preedit.cursor_begin
           != context_wayland->current_preedit.cursor_end)
         {
-          /* FIXME: Oh noes, how to highlight while taking into account user preferences? */
-          PangoAttribute *cursor = pango_attr_weight_new (PANGO_WEIGHT_BOLD);
-          cursor->start_index = context_wayland->current_preedit.cursor_begin;
-          cursor->end_index = context_wayland->current_preedit.cursor_end;
-          pango_attr_list_insert (*attrs, cursor);
+          attr = gtk_im_context_preedit_attr_new (GTK_IM_CONTEXT_PREEDIT_CURSOR);
+          attr->start_index = context_wayland->current_preedit.cursor_begin;
+          attr->end_index = context_wayland->current_preedit.cursor_end;
+          pango_attr_list_insert (*attrs, attr);
         }
     }
 }
