@@ -19,7 +19,6 @@ flatpak build ${builddir} meson \
                 --buildtype=release \
                 -Dx11-backend=true \
                 -Dwayland-backend=true \
-                -Dprint-backends=file \
                 -Dbuild-tests=false \
                 -Dbuild-examples=false \
                 -Dintrospection=disabled \
