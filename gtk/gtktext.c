@@ -217,6 +217,8 @@ struct _GtkTextPrivate
 
   guint16       preedit_length;              /* length of preedit string, in bytes */
   guint16       preedit_cursor;              /* offset of cursor within preedit string, in chars */
+  guint16       preedit_highlight_start;
+  guint16       preedit_highlight_end;
 
   gint64        handle_place_time;
 
@@ -4235,6 +4237,32 @@ gtk_text_commit_cb (GtkIMContext *context,
 }
 
 static void
+get_preedit_highlight (PangoAttrList *attrs,
+                       guint16       *start,
+                       guint16       *end)
+{
+  GSList *l, *list = pango_attr_list_get_attributes (attrs);
+
+  *start = *end = 0;
+
+  for (l = list; l; l = l->next)
+    {
+      PangoAttribute *attr = l->data;
+
+      if (pango_attr_type_get_name (attr->klass->type) == g_intern_static_string ("GtkIMContextPreeditProperties"))
+        {
+          *start = attr->start_index;
+          *end = attr->end_index;
+          break;
+        }
+    }
+
+  g_slist_free_full (list, (GDestroyNotify) pango_attribute_destroy);
+}
+
+static void update_selection_node (GtkText *self);
+
+static void
 gtk_text_preedit_changed_cb (GtkIMContext *context,
                              GtkText      *self)
 {
@@ -4243,18 +4271,26 @@ gtk_text_preedit_changed_cb (GtkIMContext *context,
   if (priv->editable)
     {
       char *preedit_string;
+      PangoAttrList *preedit_attrs;
       int cursor_pos;
 
       gtk_text_obscure_mouse_cursor (self);
 
       gtk_im_context_get_preedit_string (priv->im_context,
-                                         &preedit_string, NULL,
+                                         &preedit_string,
+                                         &preedit_attrs,
                                          &cursor_pos);
       g_signal_emit (self, signals[PREEDIT_CHANGED], 0, preedit_string);
       priv->preedit_length = strlen (preedit_string);
       cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
       priv->preedit_cursor = cursor_pos;
+      if (priv->preedit_length > 0)
+        get_preedit_highlight (preedit_attrs, &priv->preedit_highlight_start, &priv->preedit_highlight_end);
+
+      update_selection_node (self);
+
       g_free (preedit_string);
+      pango_attr_list_unref (preedit_attrs);
 
       gtk_text_recompute (self);
       update_placeholder_visibility (self);
@@ -4329,6 +4365,35 @@ gtk_text_enter_text (GtkText    *self,
   priv->need_im_reset = old_need_im_reset;
 }
 
+static void
+update_selection_node (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if ((priv->current_pos != priv->selection_bound) ||
+      (priv->preedit_length > 0 && priv->preedit_highlight_start != priv->preedit_highlight_end))
+    {
+      if (!priv->selection_node)
+        {
+          GtkCssNode *widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
+
+          priv->selection_node = gtk_css_node_new ();
+          gtk_css_node_set_name (priv->selection_node, g_quark_from_static_string ("selection"));
+          gtk_css_node_set_parent (priv->selection_node, widget_node);
+          gtk_css_node_set_state (priv->selection_node, gtk_css_node_get_state (widget_node));
+          g_object_unref (priv->selection_node);
+        }
+    }
+  else
+    {
+      if (priv->selection_node)
+        {
+          gtk_css_node_set_parent (priv->selection_node, NULL);
+          priv->selection_node = NULL;
+        }
+    }
+}
+
 /* All changes to priv->current_pos and priv->selection_bound
  * should go through this function.
  */
@@ -4362,27 +4427,7 @@ gtk_text_set_positions (GtkText *self,
 
   g_object_thaw_notify (G_OBJECT (self));
 
-  if (priv->current_pos != priv->selection_bound)
-    {
-      if (!priv->selection_node)
-        {
-          GtkCssNode *widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
-
-          priv->selection_node = gtk_css_node_new ();
-          gtk_css_node_set_name (priv->selection_node, g_quark_from_static_string ("selection"));
-          gtk_css_node_set_parent (priv->selection_node, widget_node);
-          gtk_css_node_set_state (priv->selection_node, gtk_css_node_get_state (widget_node));
-          g_object_unref (priv->selection_node);
-        }
-    }
-  else
-    {
-      if (priv->selection_node)
-        {
-          gtk_css_node_set_parent (priv->selection_node, NULL);
-          priv->selection_node = NULL;
-        }
-    }
+  update_selection_node (self);
 
   if (changed)
     {
@@ -4595,6 +4640,8 @@ gtk_text_draw_text (GtkText     *self,
   GtkStyleContext *context;
   PangoLayout *layout;
   int x, y;
+  int start_index, end_index;
+  const char *text;
 
   /* Nothing to display at all */
   if (gtk_text_get_display_mode (self) == DISPLAY_BLANK)
@@ -4602,6 +4649,7 @@ gtk_text_draw_text (GtkText     *self,
 
   context = gtk_widget_get_style_context (widget);
   layout = gtk_text_ensure_layout (self, TRUE);
+  text = pango_layout_get_text (layout);
 
   gtk_text_get_layout_offsets (self, &x, &y);
 
@@ -4609,9 +4657,23 @@ gtk_text_draw_text (GtkText     *self,
 
   if (priv->selection_bound != priv->current_pos)
     {
-      const char *text = pango_layout_get_text (layout);
-      int start_index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
-      int end_index = g_utf8_offset_to_pointer (text, priv->current_pos) - text;
+      start_index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
+      end_index = g_utf8_offset_to_pointer (text, priv->current_pos) - text;
+    }
+  else if (priv->preedit_length > 0)
+    {
+      start_index = end_index = g_utf8_offset_to_pointer (text, priv->selection_bound) - text;
+      start_index += priv->preedit_highlight_start;
+      end_index += priv->preedit_highlight_end;
+    }
+  else
+    {
+      start_index = 0;
+      end_index = 0;
+    }
+
+  if (start_index != end_index)
+    {
       cairo_region_t *clip;
       cairo_rectangle_int_t clip_extents;
       int range[2];
