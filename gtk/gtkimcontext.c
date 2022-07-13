@@ -1005,3 +1005,50 @@ gtk_im_context_set_property (GObject      *obj,
       break;
     }
 }
+
+
+static PangoAttribute *
+attr_preedit_properties_copy (const PangoAttribute *attr)
+{
+  const PangoAttrInt *int_attr = (PangoAttrInt *)attr;
+
+  return gtk_im_context_preedit_attr_new (int_attr->value);
+}
+
+static void
+attr_preedit_properties_destroy (PangoAttribute *attr)
+{
+  PangoAttrInt *iattr = (PangoAttrInt *)attr;
+
+  g_slice_free (PangoAttrInt, iattr);
+}
+
+static gboolean
+attr_preedit_properties_equal (const PangoAttribute *attr1,
+                               const PangoAttribute *attr2)
+{
+  const PangoAttrInt *int_attr1 = (const PangoAttrInt *)attr1;
+  const PangoAttrInt *int_attr2 = (const PangoAttrInt *)attr2;
+
+  return (int_attr1->value == int_attr2->value);
+}
+
+PangoAttribute *
+gtk_im_context_preedit_attr_new (GtkIMContextPreeditProperties value)
+{
+  PangoAttrInt *result = g_slice_new (PangoAttrInt);
+    static PangoAttrClass klass = {
+    0,
+    attr_preedit_properties_copy,
+    attr_preedit_properties_destroy,
+    attr_preedit_properties_equal
+  };
+
+  if (!klass.type)
+    klass.type = pango_attr_type_register ("GtkIMContextPreeditProperties");
+
+  pango_attribute_init (&result->attr, &klass);
+  result->value = value;
+
+  return (PangoAttribute *)result;
+}

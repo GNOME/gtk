@@ -168,6 +168,16 @@ gboolean gtk_im_context_delete_surrounding  (GtkIMContext       *context,
 					     int                 offset,
 					     int                 n_chars);
 
+
+typedef enum
+{
+  GTK_IM_CONTEXT_PREEDIT_CURSOR,
+} GtkIMContextPreeditProperties;
+
+GDK_AVAILABLE_IN_4_8
+PangoAttribute *        gtk_im_context_preedit_attr_new (GtkIMContextPreeditProperties value);
+
+
 G_END_DECLS
 
 #endif /* __GTK_IM_CONTEXT_H__ */
