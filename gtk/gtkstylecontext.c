@@ -896,12 +896,35 @@ gtk_style_context_get_valist (GtkStyleContext *context,
  * gtk_style_context_get:
  * @context: a #GtkStyleContext
  * @state: state to retrieve the property values for
- * @...: property name /return value pairs, followed by %NULL
+ * @...: property name / return value pairs, followed by %NULL
  *
  * Retrieves several style property values from @context for a
  * given state.
  *
  * See gtk_style_context_get_property() for details.
+ *
+ * For the property name / return value pairs, it works similarly as
+ * g_object_get(). Example:
+ *
+ * |[<!-- language="C" -->
+ * GdkRGBA *background_color = NULL;
+ * PangoFontDescription *font_desc = NULL;
+ * gint border_radius = 0;
+ *
+ * gtk_style_context_get (style_context,
+ *                        gtk_style_context_get_state (style_context),
+ *                        GTK_STYLE_PROPERTY_BACKGROUND_COLOR, &background_color,
+ *                        GTK_STYLE_PROPERTY_FONT, &font_desc,
+ *                        GTK_STYLE_PROPERTY_BORDER_RADIUS, &border_radius,
+ *                        NULL);
+ *
+ * // Do something with the property values.
+ *
+ * if (background_color != NULL)
+ *   gdk_rgba_free (background_color);
+ * if (font_desc != NULL)
+ *   pango_font_description_free (font_desc);
+ * ]|
  *
  * Since: 3.0
  */
