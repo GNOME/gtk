@@ -220,6 +220,7 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
 {
   MapNode *node;
   guint start, end;
+  guint count;
 
   if (self->items == NULL)
     {
@@ -232,21 +233,22 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
   node = gtk_map_list_model_get_nth (self->items, position, &start);
   g_assert (start <= position);
 
-  while (removed > 0)
+  count = removed;
+  while (count > 0)
     {
       end = start + node->n_items;
-      if (start == position && end <= position + removed)
+      if (start == position && end <= position + count)
         {
           MapNode *next = gtk_rb_tree_node_get_next (node);
-          removed -= node->n_items;
+          count -= node->n_items;
           gtk_rb_tree_remove (self->items, node);
           node = next;
         }
       else
         {
-          if (end >= position + removed)
+          if (end >= position + count)
             {
-              node->n_items -= removed;
+              node->n_items -= count;
               removed = 0;
               gtk_rb_tree_node_mark_dirty (node);
             }
@@ -255,7 +257,7 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
               guint overlap = node->n_items - (position - start);
               node->n_items -= overlap;
               gtk_rb_tree_node_mark_dirty (node);
-              removed -= overlap;
+              count -= overlap;
               start = position;
               node = gtk_rb_tree_node_get_next (node);
             }
