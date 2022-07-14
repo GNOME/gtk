@@ -223,6 +223,11 @@ test_create_empty (void)
   map = new_model (NULL);
   assert_model (map, "");
   assert_changes (map, "");
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (map)) == G_TYPE_OBJECT);
+  g_assert_true (g_list_model_get_n_items (G_LIST_MODEL (map)) == 0);
+  g_assert_true (g_list_model_get_item (G_LIST_MODEL (map), 0) == NULL);
+  g_assert_true (gtk_map_list_model_get_model (map) == NULL);
+  g_assert_true (gtk_map_list_model_has_map (map));
 
   g_object_unref (map);
 }
@@ -280,14 +285,17 @@ test_set_map_func (void)
   assert_changes (map, "");
 
   gtk_map_list_model_set_map_func (map, map_multiply, GUINT_TO_POINTER (3), NULL);
+  g_assert_true (gtk_map_list_model_has_map (map));
   assert_model (map, "3 6 9 12 15");
   assert_changes (map, "0-5+5");
 
   gtk_map_list_model_set_map_func (map, NULL, NULL, NULL);
+  g_assert_false (gtk_map_list_model_has_map (map));
   assert_model (map, "1 2 3 4 5");
   assert_changes (map, "0-5+5");
 
   gtk_map_list_model_set_map_func (map, map_multiply, GUINT_TO_POINTER (2), NULL);
+  g_assert_true (gtk_map_list_model_has_map (map));
   assert_model (map, "2 4 6 8 10");
   assert_changes (map, "0-5+5");
 
@@ -309,6 +317,9 @@ test_add_items (void)
   add (store, 6);
   assert_model (map, "2 4 6 8 10 12");
   assert_changes (map, "+5*");
+
+  g_object_unref (store);
+  g_object_unref (map);
 }
 
 static void
@@ -325,6 +336,9 @@ test_remove_items (void)
   g_list_store_remove (store, 2);
   assert_model (map, "2 4 8 10");
   assert_changes (map, "-2*");
+
+  g_object_unref (store);
+  g_object_unref (map);
 }
 
 static void
@@ -332,6 +346,7 @@ test_splice (void)
 {
   GtkMapListModel *map;
   GListStore *store;
+  GObject *items[5];
 
   store = new_store (1, 5, 1);
   map = new_model (store);
@@ -341,6 +356,29 @@ test_splice (void)
   splice (store, 2, 2, (guint[]){ 4, 3 }, 2);
   assert_model (map, "2 4 8 6 10");
   assert_changes (map, "2-2+2");
+
+  for (int i = 0; i < 5; i++)
+    {
+      items[i] = g_list_model_get_item (G_LIST_MODEL (map), i);
+      g_assert_true (items[i] != NULL);
+    }
+
+  splice (store, 1, 1, (guint[]){ 1, 2, 5 }, 3);
+  assert_model (map, "2 2 4 10 8 6 10");
+  assert_changes (map, "1-1+3*");
+
+  for (int i = 0; i < 5; i++)
+    {
+      GObject *item = g_list_model_get_item (G_LIST_MODEL (map), i);
+      g_assert_true (item != NULL);
+      if (i == 0)
+        g_assert (item == items[0]);
+      g_object_unref (item);
+      g_object_unref (items[i]);
+    }
+
+  g_object_unref (store);
+  g_object_unref (map);
 }
 
 int
