@@ -57,7 +57,6 @@ new_store (guint start,
            guint end,
            guint step);
 
-#if 0
 static void
 splice (GListStore *store,
         guint       pos,
@@ -65,8 +64,10 @@ splice (GListStore *store,
         guint      *numbers,
         guint       added)
 {
-  GObject *objects[added];
+  GObject **objects;
   guint i;
+
+  objects = g_newa (GObject*, added);
 
   for (i = 0; i < added; i++)
     {
@@ -81,7 +82,6 @@ splice (GListStore *store,
   for (i = 0; i < added; i++)
     g_object_unref (objects[i]);
 }
-#endif
 
 static void
 add (GListStore *store,
@@ -295,6 +295,54 @@ test_set_map_func (void)
   g_object_unref (map);
 }
 
+static void
+test_add_items (void)
+{
+  GtkMapListModel *map;
+  GListStore *store;
+
+  store = new_store (1, 5, 1);
+  map = new_model (store);
+  assert_model (map, "2 4 6 8 10");
+  assert_changes (map, "");
+
+  add (store, 6);
+  assert_model (map, "2 4 6 8 10 12");
+  assert_changes (map, "+5*");
+}
+
+static void
+test_remove_items (void)
+{
+  GtkMapListModel *map;
+  GListStore *store;
+
+  store = new_store (1, 5, 1);
+  map = new_model (store);
+  assert_model (map, "2 4 6 8 10");
+  assert_changes (map, "");
+
+  g_list_store_remove (store, 2);
+  assert_model (map, "2 4 8 10");
+  assert_changes (map, "-2*");
+}
+
+static void
+test_splice (void)
+{
+  GtkMapListModel *map;
+  GListStore *store;
+
+  store = new_store (1, 5, 1);
+  map = new_model (store);
+  assert_model (map, "2 4 6 8 10");
+  assert_changes (map, "");
+
+  splice (store, 2, 2, (guint[]){ 4, 3 }, 2);
+  assert_model (map, "2 4 8 6 10");
+  assert_changes (map, "2-2+2");
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -308,6 +356,9 @@ main (int argc, char *argv[])
   g_test_add_func ("/maplistmodel/create", test_create);
   g_test_add_func ("/maplistmodel/set-model", test_set_model);
   g_test_add_func ("/maplistmodel/set-map-func", test_set_map_func);
+  g_test_add_func ("/maplistmodel/add_items", test_add_items);
+  g_test_add_func ("/maplistmodel/remove_items", test_remove_items);
+  g_test_add_func ("/maplistmodel/splice", test_splice);
 
   return g_test_run ();
 }
