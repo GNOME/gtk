@@ -1269,6 +1269,7 @@ pango_font_description_to_css (PangoFontDescription *desc,
           g_string_append (s, "font-stretch: expanded; ");
           break;
         case PANGO_STRETCH_EXTRA_EXPANDED:
+          g_string_append (s, "font-stretch: extra-expanded; ");
           break;
         case PANGO_STRETCH_ULTRA_EXPANDED:
           g_string_append (s, "font-stretch: ultra-expanded; ");
