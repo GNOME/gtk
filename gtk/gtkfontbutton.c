@@ -1206,43 +1206,8 @@ pango_font_description_to_css (PangoFontDescription *desc,
         }
     }
   if (set & PANGO_FONT_MASK_WEIGHT)
-    {
-      switch (pango_font_description_get_weight (desc))
-        {
-        case PANGO_WEIGHT_THIN:
-          g_string_append (s, "font-weight: 100; ");
-          break;
-        case PANGO_WEIGHT_ULTRALIGHT:
-          g_string_append (s, "font-weight: 200; ");
-          break;
-        case PANGO_WEIGHT_LIGHT:
-        case PANGO_WEIGHT_SEMILIGHT:
-          g_string_append (s, "font-weight: 300; ");
-          break;
-        case PANGO_WEIGHT_BOOK:
-        case PANGO_WEIGHT_NORMAL:
-          g_string_append (s, "font-weight: 400; ");
-          break;
-        case PANGO_WEIGHT_MEDIUM:
-          g_string_append (s, "font-weight: 500; ");
-          break;
-        case PANGO_WEIGHT_SEMIBOLD:
-          g_string_append (s, "font-weight: 600; ");
-          break;
-        case PANGO_WEIGHT_BOLD:
-          g_string_append (s, "font-weight: 700; ");
-          break;
-        case PANGO_WEIGHT_ULTRABOLD:
-          g_string_append (s, "font-weight: 800; ");
-          break;
-        case PANGO_WEIGHT_HEAVY:
-        case PANGO_WEIGHT_ULTRAHEAVY:
-          g_string_append (s, "font-weight: 900; ");
-          break;
-        default:
-          break;
-        }
-    }
+    g_string_append_printf (s, "font-weight: %d; ", pango_font_description_get_weight (desc));
+
   if (set & PANGO_FONT_MASK_STRETCH)
     {
       switch (pango_font_description_get_stretch (desc))
