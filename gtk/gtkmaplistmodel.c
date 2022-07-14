@@ -249,7 +249,7 @@ gtk_map_list_model_items_changed_cb (GListModel      *model,
           if (end >= position + count)
             {
               node->n_items -= count;
-              removed = 0;
+              count = 0;
               gtk_rb_tree_node_mark_dirty (node);
             }
           else if (start < position)
