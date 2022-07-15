@@ -69,10 +69,10 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_picture_set_pixbuf                  (GtkPicture             *self,
                                                          GdkPixbuf              *pixbuf);
 
-GDK_DEPRECATED_IN_4_8_FOR(gtk_picture_set_fit_mode)
+GDK_DEPRECATED_IN_4_8_FOR(gtk_picture_set_content_fit)
 void            gtk_picture_set_keep_aspect_ratio       (GtkPicture             *self,
                                                          gboolean                keep_aspect_ratio);
-GDK_DEPRECATED_IN_4_8_FOR(gtk_picture_get_fit_mode)
+GDK_DEPRECATED_IN_4_8_FOR(gtk_picture_get_content_fit)
 gboolean        gtk_picture_get_keep_aspect_ratio       (GtkPicture             *self);
 GDK_AVAILABLE_IN_ALL
 void            gtk_picture_set_can_shrink              (GtkPicture             *self,
