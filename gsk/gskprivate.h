@@ -8,8 +8,6 @@ G_BEGIN_DECLS
 
 void gsk_ensure_resources (void);
 
-int pango_glyph_string_num_glyphs (PangoGlyphString *glyphs) G_GNUC_PURE;
-
 typedef struct _GskVulkanRender GskVulkanRender;
 typedef struct _GskVulkanRenderPass GskVulkanRenderPass;
 

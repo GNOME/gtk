@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <gsk/gskroundedrectprivate.h>
 
 static void
 test_contains_rect (void)
@@ -114,6 +115,51 @@ test_contains_point (void)
   g_assert_true (gsk_rounded_rect_contains_point (&rect, &GRAPHENE_POINT_INIT (10, 95)));
 }
 
+static void
+test_is_circular (void)
+{
+  GskRoundedRect rect;
+
+  gsk_rounded_rect_init (&rect,
+                         &GRAPHENE_RECT_INIT (0, 0, 100, 100),
+                         &GRAPHENE_SIZE_INIT (0, 0),
+                         &GRAPHENE_SIZE_INIT (10, 10),
+                         &GRAPHENE_SIZE_INIT (10, 20),
+                         &GRAPHENE_SIZE_INIT (20, 10));
+
+  g_assert_false (gsk_rounded_rect_is_circular (&rect));
+
+  gsk_rounded_rect_init (&rect,
+                         &GRAPHENE_RECT_INIT (0, 0, 100, 100),
+                         &GRAPHENE_SIZE_INIT (0, 0),
+                         &GRAPHENE_SIZE_INIT (10, 10),
+                         &GRAPHENE_SIZE_INIT (20, 20),
+                         &GRAPHENE_SIZE_INIT (30, 30));
+
+  g_assert_true (gsk_rounded_rect_is_circular (&rect));
+}
+
+static void
+test_to_float (void)
+{
+  GskRoundedRect rect;
+  float flt[12];
+
+  gsk_rounded_rect_init (&rect,
+                         &GRAPHENE_RECT_INIT (0, 11, 22, 33),
+                         &GRAPHENE_SIZE_INIT (4, 5),
+                         &GRAPHENE_SIZE_INIT (6, 7),
+                         &GRAPHENE_SIZE_INIT (8, 9),
+                         &GRAPHENE_SIZE_INIT (10, 11));
+
+  gsk_rounded_rect_to_float (&rect, flt);
+  g_assert_true (flt[0] == 0. && flt[1] == 11. && flt[2] == 22. && flt[3] == 33.);
+  g_assert_true (flt[4] == 4. && flt[5] == 6.);
+  g_assert_true (flt[6] == 8. && flt[7] == 10.);
+  g_assert_true (flt[8] == 5. && flt[9] == 7.);
+  g_assert_true (flt[10] == 9. && flt[11] == 11.);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -123,6 +169,8 @@ main (int   argc,
   g_test_add_func ("/rounded-rect/contains-rect", test_contains_rect);
   g_test_add_func ("/rounded-rect/intersects-rect", test_intersects_rect);
   g_test_add_func ("/rounded-rect/contains-point", test_contains_point);
+  g_test_add_func ("/rounded-rect/is-circular", test_is_circular);
+  g_test_add_func ("/rounded-rect/to-float", test_to_float);
 
   return g_test_run ();
 }

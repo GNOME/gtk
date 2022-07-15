@@ -15,23 +15,3 @@ gsk_ensure_resources (void)
 
   g_once (&register_resources_once, register_resources, NULL);
 }
-
-int
-pango_glyph_string_num_glyphs (PangoGlyphString *glyphs)
-{
-  int i, count;
-
-  count = 0;
-  for (i = 0; i < glyphs->num_glyphs; i++)
-    {
-      PangoGlyphInfo *gi = &glyphs->glyphs[i];
-      if (gi->glyph != PANGO_GLYPH_EMPTY)
-        {
-          if (!(gi->glyph & PANGO_GLYPH_UNKNOWN_FLAG))
-            count++;
-        }
-    }
-
-  return count;
-}
-

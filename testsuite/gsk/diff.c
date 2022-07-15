@@ -25,6 +25,7 @@ test_can_diff_basic (void)
 {
   GskRenderNode *container1, *container2;
   GskRenderNode *color1, *color2;
+  GskRenderNode *debug1, *debug2;
 
   color1 = gsk_color_node_new (&(GdkRGBA){0, 1, 0, 1 }, &GRAPHENE_RECT_INIT (0, 0, 10, 10));
   color2 = gsk_color_node_new (&(GdkRGBA){1, 1, 0, 1 }, &GRAPHENE_RECT_INIT (0, 0, 10, 10));
@@ -32,10 +33,15 @@ test_can_diff_basic (void)
   container1 = gsk_container_node_new (&color1, 1);
   container2 = gsk_container_node_new (&color2, 1);
 
+  debug1 = gsk_debug_node_new (color1, g_strdup ("Debug node!"));
+  debug2 = gsk_debug_node_new (color2, g_strdup ("Debug node!"));
+
   /* We can diff two color nodes */
   g_assert_true (gsk_render_node_can_diff (color1, color2));
   /* We can diff two container nodes */
   g_assert_true (gsk_render_node_can_diff (container1, container2));
+  /* We can diff two debug nodes */
+  g_assert_true (gsk_render_node_can_diff (debug1, debug2));
   /* We can diff container nodes against anything else */
   g_assert_true (gsk_render_node_can_diff (container1, color2));
   g_assert_true (gsk_render_node_can_diff (color1, container2));
@@ -45,6 +51,9 @@ test_can_diff_basic (void)
 
   gsk_render_node_unref (container1);
   gsk_render_node_unref (container2);
+
+  gsk_render_node_unref (debug1);
+  gsk_render_node_unref (debug2);
 }
 
 static void
