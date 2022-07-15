@@ -33,16 +33,16 @@
  *
  * `GtkInscription` is a widget to show text in a predefined area.
  *
- * You likely want to use `GtkLabel` instead as this widget is intended only for
- * a small subset of use cases. The main use case is usage inside lists
+ * You likely want to use `GtkLabel` instead as this widget is intended only
+ * for a small subset of use cases. The main scenario envisaged is inside lists
  * such as `GtkColumnView`.
  *
- * While a `GtkLabel` sizes itself according to the text that is displayed,
- * `GtkInscription` is given a size and inscribes the given text into that space
- * as good as it can.
+ * While a `GtkLabel` sizes itself depending on the text that is displayed,
+ * `GtkInscription` is given a size and inscribes the given text into that
+ * space as well as it can.
  *
- * As it is a common occurrence that text doesn't fit, users of this widget should
- * plan for that case.
+ * Users of this widget should take care to plan behaviour for the common case
+ * where the text doesn't fit exactly in the allocated space, .
  *
  * Since: 4.8
  */
@@ -282,7 +282,7 @@ gtk_inscription_css_changed (GtkWidget         *widget,
     {
       gtk_inscription_update_layout_attributes (self,
           gtk_css_style_get_pango_attributes (gtk_css_style_change_get_new_style (change)));
-      
+
       gtk_widget_queue_draw (widget);
     }
 }
