@@ -58,6 +58,7 @@ tests = [
   { 'name': 'main' },
   { 'name': 'maplistmodel' },
   { 'name': 'multiselection' },
+  { 'name': 'noselection' },
   { 'name': 'notify' },
   { 'name': 'no-gtk-init' },
   { 'name': 'object' },
