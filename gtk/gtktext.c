@@ -3695,6 +3695,7 @@ buffer_notify_text (GtkEntryBuffer *buffer,
                     GtkText        *self)
 {
   emit_changed (self);
+  update_placeholder_visibility (self);
   g_object_notify (G_OBJECT (self), "text");
 }
 
