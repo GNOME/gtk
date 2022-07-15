@@ -484,7 +484,10 @@ gtk_map_list_model_clear_node (gpointer _node)
   MapNode *node = _node;
 
   if (node->item)
-    g_object_remove_weak_pointer (node->item, &node->item);
+    {
+      g_object_remove_weak_pointer (node->item, &node->item);
+      node->item = NULL;
+    }
 }
 
 static void
