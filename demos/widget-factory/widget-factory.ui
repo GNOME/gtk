@@ -1265,6 +1265,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="child">
                                   <object class="GtkPicture">
                                     <property name="file">resource:///org/gtk/WidgetFactory4/sunset.jpg</property>
+                                    <property name="content-fit">cover</property>
+                                    <property name="overflow">hidden</property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>

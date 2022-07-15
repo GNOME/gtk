@@ -216,7 +216,6 @@
                     <child>
                       <object class="GtkPicture" id="picture">
                         <property name="can-shrink">0</property>
-                        <property name="keep-aspect-ratio">1</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
                         <child>

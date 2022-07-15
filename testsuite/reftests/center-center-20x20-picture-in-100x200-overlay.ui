@@ -9,7 +9,7 @@
         <child type="overlay">
           <object class="GtkPicture">
             <property name="paintable">green-20x20.png</property>
-            <property name="keep-aspect-ratio">0</property>
+            <property name="content-fit">fill</property>
             <property name="can-shrink">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>

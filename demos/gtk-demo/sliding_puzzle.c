@@ -330,7 +330,7 @@ start_puzzle (GdkPaintable *paintable)
                                           x, y,
                                           width, height);
           picture = gtk_picture_new_for_paintable (piece);
-          gtk_picture_set_keep_aspect_ratio (GTK_PICTURE (picture), FALSE);
+          gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_FILL);
           gtk_grid_attach (GTK_GRID (grid),
                            picture,
                            x, y,
