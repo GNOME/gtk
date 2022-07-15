@@ -13,6 +13,8 @@ Each node has its own `<node-name>` and supports a custom set of properties, eac
 
 When serializing and the value of a property equals the default value, this value will not be serialized. Serialization aims to produce an output as small as possible.
 
+To embed newlines in strings, use \A. To break a long string into multiple lines, escape the newline with a \.
+
 # Nodes
 
 ### container
