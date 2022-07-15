@@ -137,6 +137,23 @@ Creates a node like `gsk_cross_fade_node_new()` with the given properties.
 
 Creates a node like `gsk_debug_node_new()` with the given properties.
 
+### glshader
+
+| property   | syntax             | default                | printed     |
+| ---------- | ------------------ | ---------------------- | ----------- |
+| bounds     | `<rect>`           | 50                     | always      |
+| sourcecode | `<string>`         | ""                     | always      |
+| args       | `<uniform values>` | none                   | non-default |
+| child1     | `<node>`           | none                   | non-default |
+| child2     | `<node>`           | none                   | non-default |
+| child3     | `<node>`           | none                   | non-default |
+| child4     | `<node>`           | none                   | non-default |
+
+Creates a GLShader node. The `sourcecode` must be a GLSL fragment shader.
+The `args` must match the uniforms of simple types declared in that shader,
+in order and comma-separated. The `child` properties must match the sampler
+uniforms in the shader.
+
 ### inset-shadow
 
 | property | syntax           | default                | printed     |
@@ -288,20 +305,3 @@ representation for this texture is `url("data:image/png;base64,iVBORw0KGgoAAAANS
 | transform| `<transform>`    | none                   | non-default |
 
 Creates a node like `gsk_transform_node_new()` with the given properties.
-
-### glshader
-
-| property   | syntax             | default                | printed     |
-| ---------- | ------------------ | ---------------------- | ----------- |
-| bounds     | `<rect>`           | 50                     | always      |
-| sourcecode | `<string>`         | ""                     | always      |
-| args       | `<uniform values>` | none                   | non-default |
-| child1     | `<node>`           | none                   | non-default |
-| child2     | `<node>`           | none                   | non-default |
-| child3     | `<node>`           | none                   | non-default |
-| child4     | `<node>`           | none                   | non-default |
-
-Creates a GLShader node. The `sourcecode` must be a GLSL fragment shader.
-The `args` must match the uniforms of simple types declared in that shader,
-in order and comma-separated. The `child` properties must match the sampler
-uniforms in the shader.
