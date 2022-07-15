@@ -979,13 +979,15 @@ void
 gtk_picture_set_content_fit (GtkPicture    *self,
                              GtkContentFit  content_fit)
 {
+  gboolean notify_keep_aspect_ratio;
+
   g_return_if_fail (GTK_IS_PICTURE (self));
 
   if (self->content_fit == content_fit)
     return;
 
-  gboolean notify_keep_aspect_ratio = (content_fit == GTK_CONTENT_FIT_FILL ||
-                                       self->content_fit == GTK_CONTENT_FIT_FILL);
+  notify_keep_aspect_ratio = (content_fit == GTK_CONTENT_FIT_FILL ||
+                              self->content_fit == GTK_CONTENT_FIT_FILL);
 
   self->content_fit = content_fit;
 
