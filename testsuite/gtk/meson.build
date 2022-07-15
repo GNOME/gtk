@@ -54,6 +54,7 @@ tests = [
   { 'name': 'icontheme' },
   { 'name': 'label' },
   { 'name': 'listbox' },
+  { 'name': 'listlistmodel' },
   { 'name': 'main' },
   { 'name': 'maplistmodel' },
   { 'name': 'multiselection' },
