@@ -655,6 +655,19 @@ test_to_2d (void)
   g_assert_cmpfloat (yy, ==, 1);
   g_assert_cmpfloat (dx, ==, 0.0);
   g_assert_cmpfloat (dy, ==, 0.0);
+
+  transform = gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10.0, 5.0));
+  transform = gsk_transform_rotate (transform, 33.0);
+
+  gsk_transform_to_2d (transform, &xx, &yx, &xy, &yy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_cmpfloat (xx, ==, 0.838670552f);
+  g_assert_cmpfloat (yx, ==, 0.544639051f);
+  g_assert_cmpfloat (xy, ==, -0.544639051f);
+  g_assert_cmpfloat (yy, ==, 0.838670552f);
+  g_assert_cmpfloat (dx, ==, 10.f);
+  g_assert_cmpfloat (dy, ==, 5.f);
 }
 
 static void
@@ -735,6 +748,101 @@ test_transform_point (void)
   gsk_transform_unref (t2);
 }
 
+static void
+test_skew_transform (void)
+{
+  GskTransform *t1, *t2, *t3;
+  char *string;
+  gboolean res;
+  GskTransform *x;
+
+  t1 = gsk_transform_skew (NULL, 30, 60);
+  t2 = gsk_transform_skew (NULL, 0, 30);
+  t3 = gsk_transform_skew (NULL, 0, -30);
+
+  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_false (gsk_transform_equal (t1, t2));
+
+  t2 = gsk_transform_invert (t2);
+  graphene_assert_fuzzy_transform_equal (t2, t3, EPSILON);
+
+  string = gsk_transform_to_string (t1);
+  res = gsk_transform_parse (string, &x);
+  g_assert_true (res);
+  g_assert_true (gsk_transform_equal (t1, x));
+
+  gsk_transform_unref (t1);
+  gsk_transform_unref (t2);
+  gsk_transform_unref (t3);
+  g_free (string);
+  gsk_transform_unref (x);
+}
+
+static void
+test_perspective_transform (void)
+{
+  GskTransform *t1, *t2;
+
+  t1 = gsk_transform_perspective (NULL, 1000);
+  t2 = gsk_transform_perspective (NULL, 300);
+
+  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_ANY);
+  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_ANY);
+  g_assert_false (gsk_transform_equal (t1, t2));
+
+  t2 = gsk_transform_perspective (t2, 700);
+
+  g_assert_true (gsk_transform_equal (t1, t2));
+
+  gsk_transform_unref (t1);
+  gsk_transform_unref (t2);
+}
+
+static void
+test_rotate_transform (void)
+{
+  GskTransform *t1, *t2, *t3;
+
+  t1 = gsk_transform_rotate (NULL, 60);
+  t2 = gsk_transform_rotate (NULL, 20);
+
+  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_false (gsk_transform_equal (t1, t2));
+
+  t2 = gsk_transform_rotate (t2, 40);
+  g_assert_true (gsk_transform_equal (t1, t2));
+
+  t1 = gsk_transform_invert (t1);
+  t3 = gsk_transform_rotate (NULL, -60);
+  g_assert_true (gsk_transform_equal (t1, t3));
+
+  gsk_transform_unref (t1);
+  gsk_transform_unref (t2);
+  gsk_transform_unref (t3);
+}
+
+static void
+test_rotate3d_transform (void)
+{
+  GskTransform *t1, *t2;
+  graphene_vec3_t vec;
+
+  t1 = gsk_transform_rotate_3d (NULL, 60, graphene_vec3_init (&vec, 1, 2, 3));
+  t2 = gsk_transform_rotate_3d (NULL, -60, graphene_vec3_init (&vec, 1, 2, 3));
+
+  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_3D);
+  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_3D);
+  g_assert_false (gsk_transform_equal (t1, t2));
+
+  t2 = gsk_transform_invert (t2);
+  g_assert_true (gsk_transform_equal (t1, t2));
+
+  gsk_transform_unref (t1);
+  gsk_transform_unref (t2);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -753,6 +861,10 @@ main (int   argc,
   g_test_add_func ("/transform/point", test_transform_point);
   g_test_add_func ("/transform/to-2d", test_to_2d);
   g_test_add_func ("/transform/to-2d-components", test_to_2d_components);
+  g_test_add_func ("/transform/skew", test_skew_transform);
+  g_test_add_func ("/transform/perspective", test_perspective_transform);
+  g_test_add_func ("/transform/rotate", test_rotate_transform);
+  g_test_add_func ("/transform/rotate3d", test_rotate3d_transform);
 
   return g_test_run ();
 }

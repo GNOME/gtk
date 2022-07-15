@@ -76,6 +76,7 @@ test_create_simple (void)
 {
   GBytes *bytes;
   GskGLShader *shader;
+  GBytes *source;
 
   bytes = g_bytes_new_static (shader1, sizeof (shader1));
   shader = gsk_gl_shader_new_from_bytes (bytes);
@@ -100,19 +101,48 @@ test_create_simple (void)
   g_assert_cmpstr (gsk_gl_shader_get_uniform_name (shader, 7), ==, "test5");
   g_assert_cmpint (gsk_gl_shader_get_uniform_type (shader, 7), ==, GSK_GL_UNIFORM_TYPE_VEC4);
 
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "progress"), ==, 0);
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "dots"), ==, 1);
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "center"), ==, 2);
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "test1"), ==, 3);
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "test2"), ==, 4);
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "test3"), ==, 5);
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "test4"), ==, 6);
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "test5"), ==, 7);
+  g_assert_cmpint (gsk_gl_shader_find_uniform_by_name (shader, "nosucharg"), ==, -1);
+
+  g_assert_cmpint (gsk_gl_shader_get_uniform_offset (shader, 0), ==, 0);
+  g_assert_cmpint (gsk_gl_shader_get_uniform_offset (shader, 1), >, 0);
+  g_assert_cmpint (gsk_gl_shader_get_uniform_offset (shader, 2), >, 0);
+  g_assert_cmpint (gsk_gl_shader_get_uniform_offset (shader, 3), >, 0);
+  g_assert_cmpint (gsk_gl_shader_get_uniform_offset (shader, 4), >, 0);
+  g_assert_cmpint (gsk_gl_shader_get_uniform_offset (shader, 5), >, 0);
+  g_assert_cmpint (gsk_gl_shader_get_uniform_offset (shader, 6), >, 0);
+  g_assert_cmpint (gsk_gl_shader_get_uniform_offset (shader, 7), >, 0);
+
+  g_assert_null (gsk_gl_shader_get_resource (shader));
+
+  g_object_get (shader, "source", &source, NULL);
+  g_assert_true (g_bytes_equal (source, bytes));
+
   g_object_unref (shader);
   g_bytes_unref (bytes);
+  g_bytes_unref (source);
 }
 
 static void
 test_create_data (void)
 {
   GBytes *bytes;
+  GBytes *bytes2;
   GskGLShader *shader;
   GskShaderArgsBuilder *builder;
+  GskShaderArgsBuilder *builder2;
   graphene_vec2_t v2, vv2;
   graphene_vec3_t v3, vv3;
   graphene_vec4_t v4, vv4;
+  GskRenderNode *node;
+  GskRenderNode *children[2];
 
   bytes = g_bytes_new_static (shader1, sizeof (shader1));
   shader = gsk_gl_shader_new_from_bytes (bytes);
@@ -150,6 +180,31 @@ test_create_data (void)
   gsk_gl_shader_get_arg_vec4 (shader, bytes, 7, &vv4);
   g_assert_true (graphene_vec4_equal (&v4, &vv4));
 
+  children[0] = gsk_color_node_new (&(GdkRGBA){0,0,0,1}, &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+  children[1] = gsk_color_node_new (&(GdkRGBA){1,0,0,1}, &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+  node = gsk_gl_shader_node_new (shader,
+                                 &GRAPHENE_RECT_INIT (0, 0, 50, 50),
+                                 bytes,
+                                 children,
+                                 2);
+
+  g_assert_true (gsk_gl_shader_node_get_shader (node) == shader);
+  g_assert_cmpuint (gsk_gl_shader_node_get_n_children (node), ==, 2);
+  g_assert_true (gsk_gl_shader_node_get_child (node, 0) == children[0]);
+  g_assert_true (gsk_gl_shader_node_get_child (node, 1) == children[1]);
+
+  gsk_render_node_unref (children[0]);
+  gsk_render_node_unref (children[1]);
+  gsk_render_node_unref (node);
+
+  builder2 = gsk_shader_args_builder_new (shader, bytes);
+  gsk_shader_args_builder_ref (builder2);
+  bytes2 = gsk_shader_args_builder_free_to_args (builder2);
+  gsk_shader_args_builder_unref (builder2);
+
+  g_assert_true (g_bytes_equal (bytes, bytes2));
+
+  g_bytes_unref (bytes2);
   g_bytes_unref (bytes);
 
   gsk_shader_args_builder_unref (builder);
