@@ -121,10 +121,9 @@ typedef enum
  *   content will appear as letterboxed if its aspect ratio is different
  *   from the allocation aspect ratio.
  * @GTK_CONTENT_FIT_COVER: Cover the entire allocation, while taking
- *   the content aspect ratio in consideration. This can result in an overflow
- *   if the content aspect ratio is different from the allocation aspect ratio.
- *   For this reason, you may also want to set [property@Gtk.Widget:overflow]
- *   to %GTK_OVERFLOW_HIDDEN.
+ *   the content aspect ratio in consideration. The resulting content
+ *   will appear as clipped if its aspect ratio is different from the
+ *   allocation aspect ratio.
  * @GTK_CONTENT_FIT_SCALE_DOWN: The content is scaled down to fit the
  *   allocation, if needed, otherwise its original size is used.
  *
