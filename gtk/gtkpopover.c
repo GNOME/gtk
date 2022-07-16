@@ -1451,7 +1451,7 @@ gtk_popover_measure (GtkWidget      *widget,
   GtkCssStyle *style;
   GtkBorder shadow_width;
 
-  if (for_size >= 0)
+  if (for_size >= 0 && (POS_IS_VERTICAL (priv->position) == (orientation == GTK_ORIENTATION_HORIZONTAL)))
     for_size -= tail_height;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
