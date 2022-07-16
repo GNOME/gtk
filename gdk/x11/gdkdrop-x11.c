@@ -361,9 +361,9 @@ gdk_x11_drop_update_actions (GdkX11Drop *drop_x11)
   if (!drop_x11->xdnd_have_actions)
     actions = drop_x11->suggested_action;
   else if (drop_x11->suggested_action & GDK_ACTION_ASK)
-    actions = drop_x11->xdnd_actions & GDK_ACTION_ALL;
+    actions = drop_x11->xdnd_actions | GDK_ACTION_ASK;
   else
-    actions = drop_x11->suggested_action;
+    actions = drop_x11->xdnd_actions & GDK_ACTION_ALL;
 
   gdk_drop_set_actions (GDK_DROP (drop_x11), actions);
 }
