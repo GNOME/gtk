@@ -89,8 +89,6 @@ struct _GdkKeymap
 
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
-GdkDisplay *   gdk_keymap_get_display              (GdkKeymap           *keymap);
-
 guint          gdk_keymap_lookup_key               (GdkKeymap           *keymap,
                                                     const GdkKeymapKey  *key);
 gboolean       gdk_keymap_translate_keyboard_state (GdkKeymap           *keymap,

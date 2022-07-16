@@ -428,6 +428,8 @@
     <file>icons/16x16/emotes/face-laugh-symbolic.symbolic.png</file>
     <file>icons/16x16/status/battery-caution-charging-symbolic.symbolic.png</file>
     <file>icons/16x16/categories/applications-other.png</file>
+    <file>icons/48x48/status/starred.png</file>
+    <file alias="icons/scalable/apps/org.gtk.Demo4.svg">data/scalable/apps/org.gtk.Demo4.svg</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo4/gtk">
     <file preprocess="xml-stripblanks">help-overlay.ui</file>

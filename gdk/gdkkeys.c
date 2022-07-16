@@ -199,22 +199,6 @@ gdk_keymap_init (GdkKeymap *keymap)
   keymap->cache = g_hash_table_new (g_direct_hash, g_direct_equal);
 }
 
-/*< private >
- * gdk_keymap_get_display:
- * @keymap: a `GdkKeymap`
- *
- * Retrieves the `GdkDisplay` associated to the @keymap.
- *
- * Returns: (transfer none): a `GdkDisplay`
- */
-GdkDisplay *
-gdk_keymap_get_display (GdkKeymap *keymap)
-{
-  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), NULL);
-
-  return keymap->display;
-}
-
 /* Other key-handling stuff
  */
 
