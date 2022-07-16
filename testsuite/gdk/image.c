@@ -129,6 +129,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/image/load/tiff", "image.tiff", test_load_image);
   g_test_add_data_func ("/image/load/tiff2", "image-unassoc.tiff", test_load_image);
   g_test_add_data_func ("/image/load/tiff3", "image-tile.tiff", test_load_image);
+  g_test_add_data_func ("/image/load/tiff4", "image-float.tiff", test_load_image);
   g_test_add_data_func ("/image/load/jpeg", "image.jpeg", test_load_image);
   g_test_add_data_func ("/image/load/jpeg2", "image-cmyk.jpeg", test_load_image);
   g_test_add_data_func ("/image/load/jpeg3", "image-gray.jpeg", test_load_image);

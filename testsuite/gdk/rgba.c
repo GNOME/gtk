@@ -178,6 +178,33 @@ test_color_parse_nonsense (void)
 
   res = gdk_rgba_parse (&color, "rgb(0,0,0)  moo");
   g_assert_false (res);
+
+  res = gdk_rgba_parse (&color, "#XGB");
+  g_assert_false (res);
+
+  res = gdk_rgba_parse (&color, "#XGBQ");
+  g_assert_false (res);
+
+  res = gdk_rgba_parse (&color, "#AAAAXGBQ");
+  g_assert_false (res);
+}
+
+static void
+test_color_hash (void)
+{
+  GdkRGBA color1;
+  GdkRGBA color2;
+  guint hash1, hash2;
+
+  gdk_rgba_parse (&color1, "hsla (120, 255, 50%, 0.1)");
+  gdk_rgba_parse (&color2, "rgb(0,0,0)");
+
+  hash1 = gdk_rgba_hash (&color1);
+  hash2 = gdk_rgba_hash (&color2);
+
+  g_assert_cmpuint (hash1, !=, 0);
+  g_assert_cmpuint (hash2, !=, 0);
+  g_assert_cmpuint (hash1, !=, hash2);
 }
 
 int
@@ -189,6 +216,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/rgba/parse/nonsense", test_color_parse_nonsense);
   g_test_add_func ("/rgba/to-string", test_color_to_string);
   g_test_add_func ("/rgba/copy", test_color_copy);
+  g_test_add_func ("/rgba/hash", test_color_hash);
 
   return g_test_run ();
 }
