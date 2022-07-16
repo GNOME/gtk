@@ -474,6 +474,8 @@ gtk_picture_init (GtkPicture *self)
 {
   self->can_shrink = TRUE;
   self->content_fit = GTK_CONTENT_FIT_CONTAIN;
+
+  gtk_widget_set_overflow (GTK_WIDGET (self), GTK_OVERFLOW_HIDDEN);
 }
 
 /**
@@ -972,23 +974,20 @@ gtk_picture_get_can_shrink (GtkPicture *self)
  * Sets how the content should be resized to fit the `GtkPicture`.
  *
  * See [enum@Gtk.ContentFit] for details.
- *
- * If you use `GTK_CONTENT_FIT_COVER`, you may also want to set the
- * [property@Gtk.Widget:overflow] to `GTK_OVERFLOW_HIDDEN`, otherwise the
- * paintable will overflow the widget allocation if the aspect ratio of the
- * paintable is different from the one of the `GtkPicture` allocation.
  */
 void
 gtk_picture_set_content_fit (GtkPicture    *self,
                              GtkContentFit  content_fit)
 {
+  gboolean notify_keep_aspect_ratio;
+
   g_return_if_fail (GTK_IS_PICTURE (self));
 
   if (self->content_fit == content_fit)
     return;
 
-  gboolean notify_keep_aspect_ratio = (content_fit == GTK_CONTENT_FIT_FILL ||
-                                       self->content_fit == GTK_CONTENT_FIT_FILL);
+  notify_keep_aspect_ratio = (content_fit == GTK_CONTENT_FIT_FILL ||
+                              self->content_fit == GTK_CONTENT_FIT_FILL);
 
   self->content_fit = content_fit;
 
