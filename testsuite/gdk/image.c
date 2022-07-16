@@ -89,6 +89,8 @@ test_save_image (gconstpointer test_data)
     bytes = gdk_save_png (texture);
   else if (g_str_has_suffix (filename, ".tiff"))
     bytes = gdk_save_tiff (texture);
+  else if (g_str_has_suffix (filename, ".jpeg"))
+    bytes = gdk_save_jpeg (texture);
   else
     g_assert_not_reached ();
 
@@ -104,7 +106,9 @@ test_save_image (gconstpointer test_data)
   texture2 = gdk_texture_new_from_file (file2, &error);
   g_assert_no_error (error);
 
-  assert_texture_equal (texture, texture2);
+
+  if (!g_str_has_suffix (filename, ".jpeg"))
+    assert_texture_equal (texture, texture2);
 
   g_bytes_unref (bytes);
   g_object_unref (texture2);
@@ -120,10 +124,17 @@ main (int argc, char *argv[])
   (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_data_func ("/image/load/png", "image.png", test_load_image);
+  g_test_add_data_func ("/image/load/png2", "image-gray.png", test_load_image);
+  g_test_add_data_func ("/image/load/png3", "image-palette.png", test_load_image);
   g_test_add_data_func ("/image/load/tiff", "image.tiff", test_load_image);
+  g_test_add_data_func ("/image/load/tiff2", "image-unassoc.tiff", test_load_image);
+  g_test_add_data_func ("/image/load/tiff3", "image-tile.tiff", test_load_image);
   g_test_add_data_func ("/image/load/jpeg", "image.jpeg", test_load_image);
+  g_test_add_data_func ("/image/load/jpeg2", "image-cmyk.jpeg", test_load_image);
+  g_test_add_data_func ("/image/load/jpeg3", "image-gray.jpeg", test_load_image);
   g_test_add_data_func ("/image/save/png", "image.png", test_save_image);
   g_test_add_data_func ("/image/save/tiff", "image.tiff", test_save_image);
+  g_test_add_data_func ("/image/save/jpeg", "image.jpeg", test_save_image);
 
   return g_test_run ();
 }
