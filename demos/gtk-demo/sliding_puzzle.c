@@ -5,6 +5,7 @@
  * small sliding puzzle game.
  */
 
+#include "config.h"
 #include <gtk/gtk.h>
 
 /* Include the header for the puzzle piece */
@@ -23,6 +24,30 @@ static guint width = 3;
 static guint height = 3;
 static guint pos_x;
 static guint pos_y;
+
+static void
+ended (GObject *object)
+{
+  g_object_unref (object);
+}
+
+static void
+celebrate (gboolean win)
+{
+  char *path;
+  GtkMediaStream *stream;
+
+  if (win)
+    path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "complete.oga", NULL);
+  else
+    path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "dialog-error.oga", NULL);
+  stream = gtk_media_file_new_for_filename (path);
+  gtk_media_stream_set_volume (stream, 1.0);
+  gtk_media_stream_play (stream);
+
+  g_signal_connect (stream, "notify::ended", G_CALLBACK (ended), NULL);
+  g_free (path);
+}
 
 static gboolean
 move_puzzle (GtkWidget *grid,
@@ -156,6 +181,8 @@ check_solved (GtkWidget *grid)
                                 width, height);
   picture = gtk_grid_get_child_at (GTK_GRID (grid), pos_x, pos_y);
   gtk_picture_set_paintable (GTK_PICTURE (picture), piece);
+
+  celebrate (TRUE);
 
   return TRUE;
 }
