@@ -361,9 +361,9 @@ gdk_x11_drop_update_actions (GdkX11Drop *drop_x11)
   if (!drop_x11->xdnd_have_actions)
     actions = drop_x11->suggested_action;
   else if (drop_x11->suggested_action & GDK_ACTION_ASK)
-    actions = drop_x11->xdnd_actions & GDK_ACTION_ALL;
+    actions = drop_x11->xdnd_actions | GDK_ACTION_ASK;
   else
-    actions = drop_x11->suggested_action;
+    actions = drop_x11->xdnd_actions & GDK_ACTION_ALL;
 
   gdk_drop_set_actions (GDK_DROP (drop_x11), actions);
 }
@@ -769,22 +769,18 @@ gdk_x11_drop_status (GdkDrop       *drop,
 
   possible_actions = actions & gdk_drop_get_actions (drop);
 
-  if (drop_x11->suggested_action != 0)
+  if (preferred & possible_actions)
+    suggested_action = preferred;
+  else if (drop_x11->suggested_action & possible_actions)
     suggested_action = drop_x11->suggested_action;
+  else if (possible_actions & GDK_ACTION_COPY)
+    suggested_action = GDK_ACTION_COPY;
+  else if (possible_actions & GDK_ACTION_MOVE)
+    suggested_action = GDK_ACTION_MOVE;
+  else if (possible_actions & GDK_ACTION_ASK)
+    suggested_action = GDK_ACTION_ASK;
   else
-    suggested_action = preferred & possible_actions;
-
-  if (suggested_action == 0 && possible_actions != 0)
-    {
-      if (possible_actions & GDK_ACTION_COPY)
-        suggested_action = GDK_ACTION_COPY;
-      else if (possible_actions & GDK_ACTION_MOVE)
-        suggested_action = GDK_ACTION_MOVE;
-      else if (possible_actions & GDK_ACTION_ASK)
-        suggested_action = GDK_ACTION_ASK;
-      else
-        suggested_action = 0;
-    }
+    suggested_action = 0;
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
