@@ -268,6 +268,10 @@ test_create (void)
   assert_model (sort, "2 4 6 8 10");
   assert_changes (sort, "");
 
+  g_assert_false (gtk_sort_list_model_get_incremental (sort));
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (sort)) == G_TYPE_OBJECT);
+  g_assert_nonnull (gtk_sort_list_model_get_sorter (sort));
+
   g_object_unref (sort);
 }
 
