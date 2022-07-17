@@ -9,3 +9,7 @@ box {
 label {
   background-image: radial-gradient(farthest-corner at 50% 30px, yellow, red 30%, blue);
 }
+
+image {
+  background-image: conic-gradient(from 25deg at 50% 30px, yellow, red 30%, blue);
+}
