@@ -305,6 +305,15 @@ test_changes (void)
   g_list_store_remove (store, 19);
   assert_changes (slice, "");
 
+  splice (store, 1, 1, (guint[]) { 111 }, 1);
+  assert_changes (slice, "");
+
+  splice (store, 18, 1, (guint[]) { 19, 20 }, 2);
+  assert_changes (slice, "");
+
+  g_list_store_remove (store, 19);
+  assert_changes (slice, "");
+
   g_list_store_remove (store, 1);
   assert_model (slice, "12 13 14 15 16");
   assert_changes (slice, "0-5+5");
