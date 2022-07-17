@@ -63,11 +63,11 @@
  *
  * ## Sizing the paintable
  *
- * You can influence how the paintable is displayed inside the `GtkPicture`.
- * By turning off [property@Gtk.Picture:keep-aspect-ratio] you can allow the
- * paintable to get stretched. [property@Gtk.Picture:can-shrink] can be unset
- * to make sure that paintables are never made smaller than their ideal size -
- * but be careful if you do not know the size of the paintable in use (like
+ * You can influence how the paintable is displayed inside the `GtkPicture`
+ * by changing [property@Gtk.Picture:content-fit]. See [enum@Gtk.ContentFit]
+ * for details. [property@Gtk.Picture:can-shrink] can be unset to make sure
+ * that paintables are never made smaller than their ideal size - but
+ * be careful if you do not know the size of the paintable in use (like
  * when displaying user-loaded images). This can easily cause the picture to
  * grow larger than the screen. And [property@GtkWidget:halign] and
  * [property@GtkWidget:valign] can be used to make sure the paintable doesn't
