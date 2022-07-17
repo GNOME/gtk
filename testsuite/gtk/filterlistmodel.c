@@ -414,6 +414,36 @@ test_empty (void)
   g_object_unref (filter);
 }
 
+static void
+test_add_remove_item (void)
+{
+  GtkFilterListModel *filter;
+  GListStore *store;
+
+  filter = new_model (10, is_smaller_than, GUINT_TO_POINTER (7));
+  assert_model (filter, "1 2 3 4 5 6");
+  assert_changes (filter, "");
+
+  store = G_LIST_STORE (gtk_filter_list_model_get_model (filter));
+  add (store, 9);
+  assert_model (filter, "1 2 3 4 5 6");
+  assert_changes (filter, "");
+
+  add (store, 1);
+  assert_model (filter, "1 2 3 4 5 6 1");
+  assert_changes (filter, "+6*");
+
+  g_list_store_remove (store, 10);
+  assert_model (filter, "1 2 3 4 5 6 1");
+  assert_changes (filter, "");
+
+  g_list_store_remove (store, 10);
+  assert_model (filter, "1 2 3 4 5 6");
+  assert_changes (filter, "-6*");
+
+  g_object_unref (filter);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -428,6 +458,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/filterlistmodel/change_filter", test_change_filter);
   g_test_add_func ("/filterlistmodel/incremental", test_incremental);
   g_test_add_func ("/filterlistmodel/empty", test_empty);
+  g_test_add_func ("/filterlistmodel/add_remove_item", test_add_remove_item);
 
   return g_test_run ();
 }
