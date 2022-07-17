@@ -26,6 +26,7 @@ tests = [
   { 'name': 'action' },
   { 'name': 'adjustment' },
   { 'name': 'bitset' },
+  { 'name': 'border' },
   {
     'name': 'builder',
     'link_args': gtk_tests_export_dynamic_ldflag,
