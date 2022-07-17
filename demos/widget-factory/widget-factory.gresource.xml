@@ -111,6 +111,8 @@
     <file>icons/scalable/status/weather-showers-symbolic.svg</file>
     <file>icons/scalable/status/weather-snow-symbolic.svg</file>
 
+    <file alias='icons/scalable/apps/org.gtk.WidgetFactory4.svg'>data/scalable/apps/org.gtk.WidgetFactory4.svg</file>
+
   </gresource>
   <gresource prefix="/org/gtk/WidgetFactory4">
     <file>gtk-logo.webm</file>
