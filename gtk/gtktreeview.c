@@ -2758,8 +2758,6 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
       return;
     }
 
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
   if (n_press > 1)
     gtk_gesture_set_state (priv->drag_gesture,
                            GTK_EVENT_SEQUENCE_DENIED);
@@ -2787,6 +2785,7 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
         }
 
       grab_focus_and_unset_draw_keyfocus (tree_view);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
       return;
     }
 
@@ -2910,6 +2909,7 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
             {
               GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (column));
               cell_editable = gtk_cell_area_get_edit_widget (area);
+              gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
               if (cell_editable != NULL)
                 {
@@ -2967,7 +2967,10 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
     }
 
   if (button == GDK_BUTTON_PRIMARY && n_press == 2)
-    gtk_tree_view_row_activated (tree_view, path, column);
+    {
+      gtk_tree_view_row_activated (tree_view, path, column);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+    }
   else
     {
       if (n_press == 1)
