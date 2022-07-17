@@ -208,6 +208,21 @@ gtk_drop_target_end_drop (GtkDropTarget *self)
   g_object_thaw_notify (G_OBJECT (self));
 }
 
+static GdkDragAction
+make_action_unique (GdkDragAction actions)
+{
+  if (actions & GDK_ACTION_COPY)
+    return GDK_ACTION_COPY;
+
+  if (actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_LINK)
+    return GDK_ACTION_LINK;
+
+  return 0;
+}
+
 static void
 gtk_drop_target_do_drop (GtkDropTarget *self)
 {
@@ -219,7 +234,7 @@ gtk_drop_target_do_drop (GtkDropTarget *self)
   g_signal_emit (self, signals[DROP], 0, &self->value, self->coords.x, self->coords.y, &success);
 
   if (success)
-    gdk_drop_finish (self->drop, gdk_drop_get_actions (self->drop));
+    gdk_drop_finish (self->drop, make_action_unique (self->actions & gdk_drop_get_actions (self->drop)));
   else
     gdk_drop_finish (self->drop, 0);
 
@@ -346,21 +361,6 @@ gtk_drop_target_accept (GtkDropTarget *self,
     return TRUE;
 
   return gdk_content_formats_match_gtype (self->formats, gdk_drop_get_formats (drop)) != G_TYPE_INVALID;
-}
-
-static GdkDragAction
-make_action_unique (GdkDragAction actions)
-{
-  if (actions & GDK_ACTION_COPY)
-    return GDK_ACTION_COPY;
-
-  if (actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  if (actions & GDK_ACTION_LINK)
-    return GDK_ACTION_LINK;
-
-  return 0;
 }
 
 static GdkDragAction
