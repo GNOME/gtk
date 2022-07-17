@@ -2736,6 +2736,13 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
   gboolean rtl;
   GtkWidget *target;
 
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+                                                     &bin_x, &bin_y);
+
+  /* Are we clicking a column header? */
+  if (bin_y < 0)
+    return;
+
   /* check if this is a click in a child widget */
   target = gtk_event_controller_get_target (GTK_EVENT_CONTROLLER (gesture));
   if (gtk_widget_is_ancestor (target, widget))
@@ -2751,11 +2758,6 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
       return;
     }
 
-  /* Because grab_focus can cause reentrancy, we delay grab_focus until after
-   * we're done handling the button press.
-   */
-  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
-                                                     &bin_x, &bin_y);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   if (n_press > 1)
@@ -3002,6 +3004,11 @@ gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
 
   gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
                                                      &bin_x, &bin_y);
+
+  /* Are we dragging a column header? */
+  if (bin_y < 0)
+    return;
+
   priv->press_start_x = priv->rubber_band_x = bin_x;
   priv->press_start_y = priv->rubber_band_y = bin_y;
   gtk_tree_rbtree_find_offset (priv->tree, bin_y + priv->dy,
