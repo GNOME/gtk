@@ -263,6 +263,8 @@ gdk_wayland_primary_claim (GdkClipboard       *clipboard,
       GdkWaylandDisplay *wdisplay = GDK_WAYLAND_DISPLAY (gdk_clipboard_get_display (clipboard));
       const char * const *mime_types;
       gsize i, n_mime_types;
+      GdkSeat *seat;
+      guint32 serial;
 
       gdk_wayland_primary_discard_offer (cb);
       gdk_wayland_primary_discard_source (cb);
@@ -276,9 +278,11 @@ gdk_wayland_primary_claim (GdkClipboard       *clipboard,
           zwp_primary_selection_source_v1_offer (cb->source, mime_types[i]);
         }
 
+      seat = gdk_display_get_default_seat (GDK_DISPLAY (wdisplay));
+      serial = _gdk_wayland_seat_get_implicit_grab_serial (seat, NULL);
       zwp_primary_selection_device_v1_set_selection (cb->primary_data_device,
                                                      cb->source,
-                                                     _gdk_wayland_display_get_serial (wdisplay));
+                                                     serial);
     }
 
   return GDK_CLIPBOARD_CLASS (gdk_wayland_primary_parent_class)->claim (clipboard, formats, local, content);
