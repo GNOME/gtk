@@ -216,10 +216,19 @@ static void
 test_create (void)
 {
   GtkFilterListModel *filter;
-  
+
   filter = new_model (10, NULL, NULL);
   assert_model (filter, "1 2 3 4 5 6 7 8 9 10");
   assert_changes (filter, "");
+
+  g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (filter)) == G_TYPE_OBJECT);
+  g_assert_false (gtk_filter_list_model_get_incremental (filter));
+  g_assert_null (gtk_filter_list_model_get_filter (filter));
+
+  gtk_filter_list_model_set_model (GTK_FILTER_LIST_MODEL (filter), NULL);
+  assert_model (filter, "");
+  assert_changes (filter, "0-10*");
+
   g_object_unref (filter);
 
   filter = new_model (10, is_smaller_than, GUINT_TO_POINTER (20));
@@ -379,6 +388,10 @@ test_incremental (void)
   while (g_main_context_pending (NULL))
     g_main_context_iteration (NULL, TRUE);
   assert_model (filter, "510 511 512 513 514");
+
+  gtk_filter_list_model_set_incremental (filter, FALSE);
+  assert_model (filter, "510 511 512 513 514");
+
   /* implementation detail */
   ignore_changes (filter);
 
