@@ -145,10 +145,6 @@ zxdg_shell_v6_ping (void                 *data,
                     struct zxdg_shell_v6 *xdg_shell,
                     uint32_t              serial)
 {
-  GdkWaylandDisplay *display_wayland = data;
-
-  _gdk_wayland_display_update_serial (display_wayland, serial);
-
   GDK_DISPLAY_NOTE (GDK_DISPLAY (data), EVENTS,
             g_message ("ping, shell %p, serial %u\n", xdg_shell, serial));
 
@@ -1122,19 +1118,6 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
 
   gdk_profiler_end_mark (before, "wayland", "load cursor theme");
 
-}
-
-guint32
-_gdk_wayland_display_get_serial (GdkWaylandDisplay *display_wayland)
-{
-  return display_wayland->serial;
-}
-
-void
-_gdk_wayland_display_update_serial (GdkWaylandDisplay *display_wayland,
-                                    guint32            serial)
-{
-  display_wayland->serial = serial;
 }
 
 /**

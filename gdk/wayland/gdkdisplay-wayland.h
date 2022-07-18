@@ -84,9 +84,6 @@ struct _GdkWaylandDisplay
   /* Startup notification */
   char *startup_notification_id;
 
-  /* Most recent serial */
-  guint32 serial;
-
   uint32_t xdg_wm_base_id;
   int xdg_wm_base_version;
   uint32_t zxdg_shell_v6_id;

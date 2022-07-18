@@ -1514,8 +1514,6 @@ pointer_handle_enter (void              *data,
   if (!GDK_IS_SURFACE (wl_surface_get_user_data (surface)))
     return;
 
-  _gdk_wayland_display_update_serial (display_wayland, serial);
-
   seat->pointer_info.focus = wl_surface_get_user_data (surface);
   g_object_ref (seat->pointer_info.focus);
 
@@ -1566,7 +1564,6 @@ pointer_handle_leave (void              *data,
   if (!seat->pointer_info.focus)
     return;
 
-  _gdk_wayland_display_update_serial (display_wayland, serial);
   grab = _gdk_display_get_last_device_grab (seat->display,
                                             seat->logical_pointer);
 
@@ -1665,8 +1662,6 @@ pointer_handle_button (void              *data,
 
   if (!seat->pointer_info.focus)
     return;
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   switch (button)
     {
@@ -1986,15 +1981,12 @@ keyboard_handle_enter (void               *data,
 {
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!surface)
     return;
 
   if (!GDK_IS_SURFACE (wl_surface_get_user_data (surface)))
     return;
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   seat->keyboard_focus = wl_surface_get_user_data (surface);
   g_object_ref (seat->keyboard_focus);
@@ -2021,7 +2013,6 @@ keyboard_handle_leave (void               *data,
 {
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!seat->keyboard_focus)
     return;
@@ -2031,8 +2022,6 @@ keyboard_handle_leave (void               *data,
    * surface before losing keyboard focus.
    */
   stop_key_repeat (seat);
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   event = gdk_focus_event_new (seat->keyboard_focus,
                                seat->logical_keyboard,
@@ -2272,7 +2261,6 @@ keyboard_handle_key (void               *data,
                      uint32_t            state_w)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!seat->keyboard_focus)
     return;
@@ -2280,7 +2268,6 @@ keyboard_handle_key (void               *data,
   seat->keyboard_time = time;
   seat->keyboard_key_serial = serial;
   seat->repeat_count = 0;
-  _gdk_wayland_display_update_serial (display, serial);
   deliver_key_event (data, time, key + 8, state_w, FALSE);
 
 }
@@ -2470,11 +2457,8 @@ touch_handle_down (void              *data,
                    wl_fixed_t         y)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkWaylandTouchData *touch;
   GdkEvent *event;
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   if (!wl_surface)
     return;
@@ -2519,11 +2503,8 @@ touch_handle_up (void            *data,
                  int32_t          id)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkWaylandTouchData *touch;
   GdkEvent *event;
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   touch = gdk_wayland_seat_get_touch (seat, id);
   if (!touch)
@@ -2704,9 +2685,6 @@ gesture_swipe_begin (void                                *data,
                      uint32_t                             fingers)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   emit_gesture_swipe_event (seat,
                             GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
@@ -2739,10 +2717,7 @@ gesture_swipe_end (void                                *data,
                    int32_t                              cancelled)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkTouchpadGesturePhase phase;
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   phase = (cancelled) ?
     GDK_TOUCHPAD_GESTURE_PHASE_CANCEL :
@@ -2806,9 +2781,7 @@ gesture_pinch_begin (void                                *data,
                      uint32_t                             fingers)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
 
-  _gdk_wayland_display_update_serial (display, serial);
   emit_gesture_pinch_event (seat,
                             GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
                             time, fingers, 0, 0, 1, 0);
@@ -2843,10 +2816,7 @@ gesture_pinch_end (void                                *data,
                    int32_t                              cancelled)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkTouchpadGesturePhase phase;
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   phase = (cancelled) ?
     GDK_TOUCHPAD_GESTURE_PHASE_CANCEL :
@@ -2901,9 +2871,6 @@ gesture_hold_begin (void                               *data,
                     uint32_t                            fingers)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   emit_gesture_hold_event (seat,
                            GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
@@ -2919,10 +2886,7 @@ gesture_hold_end (void                               *data,
                   int32_t                             cancelled)
 {
   GdkWaylandSeat *seat = data;
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (seat->display);
   GdkTouchpadGesturePhase phase;
-
-  _gdk_wayland_display_update_serial (display, serial);
 
   phase = (cancelled) ?
     GDK_TOUCHPAD_GESTURE_PHASE_CANCEL :
@@ -3630,8 +3594,6 @@ tablet_tool_handle_proximity_in (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = zwp_tablet_v2_get_user_data (wp_tablet);
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   GdkSurface *surface;
   GdkEvent *event;
 
@@ -3648,7 +3610,6 @@ tablet_tool_handle_proximity_in (void                      *data,
   tool->current_tablet = tablet;
   tablet->current_tool = tool;
 
-  _gdk_wayland_display_update_serial (display_wayland, serial);
   tablet->pointer_info.enter_serial = serial;
 
   tablet->pointer_info.focus = g_object_ref (surface);
@@ -3669,9 +3630,9 @@ tablet_tool_handle_proximity_in (void                      *data,
                     gdk_wayland_surface_get_wl_output (surface));
   pointer_surface_update_scale (tablet->logical_device);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
+  GDK_SEAT_NOTE (tablet->seat, EVENTS,
             g_message ("proximity in, seat %p surface %p tool %d",
-                       seat, tablet->pointer_info.focus,
+                       tablet->seat, tablet->pointer_info.focus,
                        gdk_device_tool_get_tool_type (tool->tool)));
 }
 
@@ -3748,13 +3709,10 @@ tablet_tool_handle_down (void                      *data,
 {
   GdkWaylandTabletToolData *tool = data;
   GdkWaylandTabletData *tablet = tool->current_tablet;
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
 
   if (!tablet || !tablet->pointer_info.focus)
     return;
 
-  _gdk_wayland_display_update_serial (display_wayland, serial);
   tablet->pointer_info.press_serial = serial;
 
   tablet_create_button_event_frame (tablet, GDK_BUTTON_PRESS, GDK_BUTTON_PRIMARY);
@@ -5305,15 +5263,13 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
                                   struct wl_data_source *source)
 {
   GdkWaylandSeat *seat;
-  GdkWaylandDisplay *display_wayland;
+  guint32 serial;
 
   g_return_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device));
 
   seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (gdk_device));
-  display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
-
-  wl_data_device_set_selection (seat->data_device, source,
-                                _gdk_wayland_display_get_serial (display_wayland));
+  serial = _gdk_wayland_seat_get_implicit_grab_serial (GDK_SEAT (seat), NULL);
+  wl_data_device_set_selection (seat->data_device, source, serial);
 }
 
 /**

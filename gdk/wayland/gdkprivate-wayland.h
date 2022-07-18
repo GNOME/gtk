@@ -170,10 +170,6 @@ GdkMonitor *gdk_wayland_display_get_monitor_for_output (GdkDisplay       *displa
 void _gdk_wayland_surface_set_grab_seat (GdkSurface      *surface,
                                         GdkSeat        *seat);
 
-guint32 _gdk_wayland_display_get_serial (GdkWaylandDisplay *display_wayland);
-void _gdk_wayland_display_update_serial (GdkWaylandDisplay *display_wayland,
-                                         guint32            serial);
-
 cairo_surface_t * _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
                                                            int                width,
                                                            int                height,
