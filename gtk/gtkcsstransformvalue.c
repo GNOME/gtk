@@ -287,6 +287,7 @@ gtk_css_transform_compute (GtkCssTransform  *dest,
   switch (src->type)
     {
     case GTK_CSS_TRANSFORM_MATRIX:
+      memcpy (dest, src, sizeof (GtkCssTransform));
       return TRUE;
     case GTK_CSS_TRANSFORM_TRANSLATE:
       dest->translate.x = _gtk_css_value_compute (src->translate.x, property_id, provider, style, parent_style);
