@@ -7761,6 +7761,14 @@ captured_key (GtkEventControllerKey *controller,
   if (keyval == GDK_KEY_slash)
     return GDK_EVENT_PROPAGATE;
 
+  if (impl->location_entry)
+    {
+      GtkWidget *focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (impl)));
+
+      if (focus && gtk_widget_is_ancestor (focus, impl->location_entry))
+        return GDK_EVENT_PROPAGATE;
+    }
+
   handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (impl->search_entry));
   if (handled == GDK_EVENT_STOP)
     operation_mode_set (impl, OPERATION_MODE_SEARCH);
