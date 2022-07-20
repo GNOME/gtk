@@ -59,7 +59,7 @@ typedef guint8 * (* GtkTextBufferSerializeFunc)   (GtkTextBuffer     *register_b
  * @length: length of @data
  * @create_tags: %TRUE if deserializing may create tags
  * @user_data: user data that was specified when registering the format
- * @error: (allow-none): return location for a #GError
+ * @error: return location for a #GError
  *
  * A function that is called to deserialize rich text that has been
  * serialized with gtk_text_buffer_serialize(), and insert it at @iter.
