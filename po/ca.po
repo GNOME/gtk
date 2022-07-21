@@ -34,7 +34,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-06-10 06:06+0000\n"
+"POT-Creation-Date: 2022-07-13 21:12+0000\n"
 "PO-Revision-Date: 2022-02-12 11:18+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -2038,7 +2038,7 @@ msgid "_Close"
 msgstr "_Tanca"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:3013
+#: gtk/gtkcustompaperunixdialog.c:402 gtk/gtkprintunixdialog.c:3016
 msgid "Manage Custom Sizes"
 msgstr "Gestioneu mides personalitzades"
 
@@ -2091,7 +2091,7 @@ msgstr "Marges del paper"
 msgid "Insert Emoji"
 msgstr "Insereix un emoji"
 
-#: gtk/gtkfilechooserdialog.c:551
+#: gtk/gtkfilechooserdialog.c:549
 msgid "_Name"
 msgstr "_Nom"
 
@@ -2152,13 +2152,13 @@ msgid "A file with that name already exists"
 msgstr "Ja existeix un fitxer amb aquest nom"
 
 #: gtk/gtkfilechoosernative.c:509 gtk/gtkfilechoosernative.c:580
-#: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:5798
+#: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:5800
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175
 #: gtk/gtkmountoperation.c:604 gtk/gtkpagesetupunixdialog.c:283
-#: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:722
+#: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:721
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6106 gtk/inspector/css-editor.c:248
-#: gtk/inspector/recorder.c:1721 gtk/ui/gtkappchooserdialog.ui:45
+#: gtk/gtkwindow.c:6110 gtk/inspector/css-editor.c:248
+#: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
 msgid "_Cancel"
@@ -2171,7 +2171,7 @@ msgid "_Open"
 msgstr "_Obre"
 
 #: gtk/gtkfilechoosernative.c:574 gtk/inspector/css-editor.c:249
-#: gtk/inspector/recorder.c:1722
+#: gtk/inspector/recorder.c:1724
 msgid "_Save"
 msgstr "_Desa"
 
@@ -2249,7 +2249,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si suprimiu un element, es perdrà definitivament."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5627 gtk/gtktext.c:6041 gtk/gtktextview.c:8914
+#: gtk/gtklabel.c:5627 gtk/gtktext.c:6041 gtk/gtktextview.c:8964
 msgid "_Delete"
 msgstr "_Suprimeix"
 
@@ -2330,108 +2330,108 @@ msgstr "S'està cercant"
 msgid "Enter location or URL"
 msgstr "Introduïu una ubicació o URL"
 
-#: gtk/gtkfilechooserwidget.c:3811 gtk/gtkfilechooserwidget.c:6635
+#: gtk/gtkfilechooserwidget.c:3813 gtk/gtkfilechooserwidget.c:6637
 #: gtk/ui/gtkfilechooserwidget.ui:226
 msgid "Modified"
 msgstr "Modificat"
 
-#: gtk/gtkfilechooserwidget.c:4070
+#: gtk/gtkfilechooserwidget.c:4072
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No s'ha pogut llegir el contingut de %s"
 
-#: gtk/gtkfilechooserwidget.c:4074
+#: gtk/gtkfilechooserwidget.c:4076
 msgid "Could not read the contents of the folder"
 msgstr "No s'ha pogut llegir el contingut de la carpeta"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:4214 gtk/gtkfilechooserwidget.c:4257
+#: gtk/gtkfilechooserwidget.c:4216 gtk/gtkfilechooserwidget.c:4259
 msgid "%H:%M"
 msgstr "%-H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4216 gtk/gtkfilechooserwidget.c:4259
+#: gtk/gtkfilechooserwidget.c:4218 gtk/gtkfilechooserwidget.c:4261
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4220
+#: gtk/gtkfilechooserwidget.c:4222
 msgid "Yesterday"
 msgstr "Ahir"
 
-#: gtk/gtkfilechooserwidget.c:4228
+#: gtk/gtkfilechooserwidget.c:4230
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4232
+#: gtk/gtkfilechooserwidget.c:4234
 msgid "%-e %b %Y"
 msgstr "%-e %b de %Y"
 
-#: gtk/gtkfilechooserwidget.c:4321 gtk/gtkfilechooserwidget.c:4329
+#: gtk/gtkfilechooserwidget.c:4323 gtk/gtkfilechooserwidget.c:4331
 msgid "Program"
 msgstr "Programa"
 
-#: gtk/gtkfilechooserwidget.c:4322
+#: gtk/gtkfilechooserwidget.c:4324
 msgid "Audio"
 msgstr "Àudio"
 
-#: gtk/gtkfilechooserwidget.c:4323 gtk/gtkfontbutton.c:596
+#: gtk/gtkfilechooserwidget.c:4325 gtk/gtkfontbutton.c:596
 #: gtk/inspector/visual.ui:170
 msgid "Font"
 msgstr "Tipus de lletra"
 
-#: gtk/gtkfilechooserwidget.c:4324
+#: gtk/gtkfilechooserwidget.c:4326
 msgid "Image"
 msgstr "Imatge"
 
-#: gtk/gtkfilechooserwidget.c:4325
+#: gtk/gtkfilechooserwidget.c:4327
 msgid "Archive"
 msgstr "Arxiva"
 
-#: gtk/gtkfilechooserwidget.c:4326
+#: gtk/gtkfilechooserwidget.c:4328
 msgid "Markup"
 msgstr "Marcatge"
 
-#: gtk/gtkfilechooserwidget.c:4327 gtk/gtkfilechooserwidget.c:4328
+#: gtk/gtkfilechooserwidget.c:4329 gtk/gtkfilechooserwidget.c:4330
 msgid "Text"
 msgstr "Text"
 
-#: gtk/gtkfilechooserwidget.c:4330
+#: gtk/gtkfilechooserwidget.c:4332
 msgid "Video"
 msgstr "Vídeo"
 
-#: gtk/gtkfilechooserwidget.c:4331
+#: gtk/gtkfilechooserwidget.c:4333
 msgid "Contacts"
 msgstr "Contactes"
 
-#: gtk/gtkfilechooserwidget.c:4332
+#: gtk/gtkfilechooserwidget.c:4334
 msgid "Calendar"
 msgstr "Calendari"
 
-#: gtk/gtkfilechooserwidget.c:4333
+#: gtk/gtkfilechooserwidget.c:4335
 msgid "Document"
 msgstr "Document"
 
-#: gtk/gtkfilechooserwidget.c:4334
+#: gtk/gtkfilechooserwidget.c:4336
 msgid "Presentation"
 msgstr "Presentació"
 
-#: gtk/gtkfilechooserwidget.c:4335
+#: gtk/gtkfilechooserwidget.c:4337
 msgid "Spreadsheet"
 msgstr "Full de càlcul"
 
-#: gtk/gtkfilechooserwidget.c:4366 gtk/gtkfilechooserwidget.c:4559
+#: gtk/gtkfilechooserwidget.c:4368 gtk/gtkfilechooserwidget.c:4561
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserwidget.c:4598 gtk/gtkplacessidebar.c:1027
+#: gtk/gtkfilechooserwidget.c:4600 gtk/gtkplacessidebar.c:1027
 msgid "Home"
 msgstr "Carpeta de l'usuari"
 
-#: gtk/gtkfilechooserwidget.c:5791 gtk/gtkprintunixdialog.c:642
+#: gtk/gtkfilechooserwidget.c:5793 gtk/gtkprintunixdialog.c:642
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-lo?"
 
-#: gtk/gtkfilechooserwidget.c:5794 gtk/gtkprintunixdialog.c:646
+#: gtk/gtkfilechooserwidget.c:5796 gtk/gtkprintunixdialog.c:646
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2439,19 +2439,19 @@ msgstr ""
 "El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu el "
 "contingut."
 
-#: gtk/gtkfilechooserwidget.c:5799 gtk/gtkprintunixdialog.c:654
+#: gtk/gtkfilechooserwidget.c:5801 gtk/gtkprintunixdialog.c:654
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserwidget.c:5960
+#: gtk/gtkfilechooserwidget.c:5962
 msgid "You do not have access to the specified folder."
 msgstr "No teniu accés el contingut de la carpeta especificada."
 
-#: gtk/gtkfilechooserwidget.c:6564
+#: gtk/gtkfilechooserwidget.c:6566
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
-#: gtk/gtkfilechooserwidget.c:6874
+#: gtk/gtkfilechooserwidget.c:6876
 msgid "Accessed"
 msgstr "Accedit"
 
@@ -2468,58 +2468,58 @@ msgctxt "font"
 msgid "None"
 msgstr "Cap"
 
-#: gtk/gtkfontchooserwidget.c:1529
+#: gtk/gtkfontchooserwidget.c:1533
 msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Amplada"
 
-#: gtk/gtkfontchooserwidget.c:1530
+#: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Pes"
 
-#: gtk/gtkfontchooserwidget.c:1531
+#: gtk/gtkfontchooserwidget.c:1535
 msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Cursiva"
 
-#: gtk/gtkfontchooserwidget.c:1532
+#: gtk/gtkfontchooserwidget.c:1536
 msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Inclinació"
 
-#: gtk/gtkfontchooserwidget.c:1533
+#: gtk/gtkfontchooserwidget.c:1537
 msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Mida òptica"
 
 # Premi a qui va ficar "Per defecte:LTR. M'ha costat
 # trobar en quin mòdul estava l'error. jm
-#: gtk/gtkfontchooserwidget.c:2137
+#: gtk/gtkfontchooserwidget.c:2216
 msgid "Default"
 msgstr "Per defecte"
 
-#: gtk/gtkfontchooserwidget.c:2183
+#: gtk/gtkfontchooserwidget.c:2263
 msgid "Ligatures"
 msgstr "Lligadures"
 
-#: gtk/gtkfontchooserwidget.c:2184
+#: gtk/gtkfontchooserwidget.c:2264
 msgid "Letter Case"
 msgstr "Majúscules i minúscules"
 
-#: gtk/gtkfontchooserwidget.c:2185
+#: gtk/gtkfontchooserwidget.c:2265
 msgid "Number Case"
 msgstr "Mida del número"
 
-#: gtk/gtkfontchooserwidget.c:2186
+#: gtk/gtkfontchooserwidget.c:2266
 msgid "Number Spacing"
 msgstr "Espaiat entre números"
 
-#: gtk/gtkfontchooserwidget.c:2187
+#: gtk/gtkfontchooserwidget.c:2267
 msgid "Number Formatting"
 msgstr "Formatació de nombres"
 
-#: gtk/gtkfontchooserwidget.c:2188
+#: gtk/gtkfontchooserwidget.c:2268
 msgid "Character Variants"
 msgstr "Variants de caràcters"
 
@@ -2527,19 +2527,19 @@ msgstr "Variants de caràcters"
 msgid "OpenGL context creation failed"
 msgstr "S'ha produït un error en la creació del context OpenGL"
 
-#: gtk/gtklabel.c:5624 gtk/gtktext.c:6029 gtk/gtktextview.c:8902
+#: gtk/gtklabel.c:5624 gtk/gtktext.c:6029 gtk/gtktextview.c:8952
 msgid "Cu_t"
 msgstr "Re_talla"
 
-#: gtk/gtklabel.c:5625 gtk/gtktext.c:6033 gtk/gtktextview.c:8906
+#: gtk/gtklabel.c:5625 gtk/gtktext.c:6033 gtk/gtktextview.c:8956
 msgid "_Copy"
 msgstr "_Copia"
 
-#: gtk/gtklabel.c:5626 gtk/gtktext.c:6037 gtk/gtktextview.c:8910
+#: gtk/gtklabel.c:5626 gtk/gtktext.c:6037 gtk/gtktextview.c:8960
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: gtk/gtklabel.c:5632 gtk/gtktext.c:6050 gtk/gtktextview.c:8935
+#: gtk/gtklabel.c:5632 gtk/gtktext.c:6050 gtk/gtktextview.c:8985
 msgid "Select _All"
 msgstr "Seleccion_a-ho tot"
 
@@ -2646,7 +2646,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6107
+#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6111
 msgid "_OK"
 msgstr "_D'acord"
 
@@ -2830,15 +2830,15 @@ msgstr "Configuració de la pàgina"
 msgid "Hide Text"
 msgstr "Amaga el text"
 
-#: gtk/gtkpasswordentry.c:178 gtk/gtkpasswordentry.c:621
+#: gtk/gtkpasswordentry.c:178 gtk/gtkpasswordentry.c:622
 msgid "Show Text"
 msgstr "Mostra el text"
 
-#: gtk/gtkpasswordentry.c:216
+#: gtk/gtkpasswordentry.c:217
 msgid "Caps Lock is on"
 msgstr "La fixació de majúscules està activada"
 
-#: gtk/gtkpasswordentry.c:697
+#: gtk/gtkpasswordentry.c:698
 msgid "_Show Text"
 msgstr "M_ostra el text"
 
@@ -3165,16 +3165,16 @@ msgstr "Autenticació"
 msgid "_Remember password"
 msgstr "_Recorda la contrasenya"
 
-#: gtk/gtkprinteroptionwidget.c:719
+#: gtk/gtkprinteroptionwidget.c:718
 msgid "Select a filename"
 msgstr "Seleccioneu un nom de fitxer"
 
-#: gtk/gtkprinteroptionwidget.c:723 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/gtkprinteroptionwidget.c:722 gtk/ui/gtkappchooserdialog.ui:50
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "_Selecciona"
 
-#: gtk/gtkprinteroptionwidget.c:937
+#: gtk/gtkprinteroptionwidget.c:936
 msgid "Not available"
 msgstr "No està disponible"
 
@@ -3260,7 +3260,7 @@ msgstr ""
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
-#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3053
+#: gtk/gtkprintoperation-portal.c:623 gtk/gtkprintunixdialog.c:3056
 msgid "Print"
 msgstr "Imprimeix"
 
@@ -3336,7 +3336,7 @@ msgstr "_Imprimeix"
 msgid "Getting printer information failed"
 msgstr "Ha fallat l'obtenció d'informació de la impressora"
 
-#: gtk/gtkprintunixdialog.c:1872
+#: gtk/gtkprintunixdialog.c:1875
 msgid "Getting printer information…"
 msgstr "S'està obtenint informació de la impressora…"
 
@@ -3345,63 +3345,63 @@ msgstr "S'està obtenint informació de la impressora…"
 #. gtkprintbackendcups.c)
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
-#: gtk/gtkprintunixdialog.c:2798
+#: gtk/gtkprintunixdialog.c:2801
 #: modules/printbackends/gtkprintbackendcups.c:5675
 msgid "Left to right, top to bottom"
 msgstr "D'esquerra a dreta, de dalt a baix"
 
-#: gtk/gtkprintunixdialog.c:2798
+#: gtk/gtkprintunixdialog.c:2801
 #: modules/printbackends/gtkprintbackendcups.c:5675
 msgid "Left to right, bottom to top"
 msgstr "D'esquerra a dreta, de baix a dalt"
 
-#: gtk/gtkprintunixdialog.c:2799
+#: gtk/gtkprintunixdialog.c:2802
 #: modules/printbackends/gtkprintbackendcups.c:5676
 msgid "Right to left, top to bottom"
 msgstr "De dreta a esquerra, de dalt a baix"
 
-#: gtk/gtkprintunixdialog.c:2799
+#: gtk/gtkprintunixdialog.c:2802
 #: modules/printbackends/gtkprintbackendcups.c:5676
 msgid "Right to left, bottom to top"
 msgstr "De dreta a esquerra, de baix a dalt"
 
-#: gtk/gtkprintunixdialog.c:2800
+#: gtk/gtkprintunixdialog.c:2803
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Top to bottom, left to right"
 msgstr "De dalt a baix, d'esquerra a dreta"
 
-#: gtk/gtkprintunixdialog.c:2800
+#: gtk/gtkprintunixdialog.c:2803
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Top to bottom, right to left"
 msgstr "De dalt a baix, de dreta a esquerra"
 
-#: gtk/gtkprintunixdialog.c:2801
+#: gtk/gtkprintunixdialog.c:2804
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Bottom to top, left to right"
 msgstr "De baix a dalt, d'esquerra a dreta"
 
-#: gtk/gtkprintunixdialog.c:2801
+#: gtk/gtkprintunixdialog.c:2804
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Bottom to top, right to left"
 msgstr "De baix a dalt, de dreta a esquerra"
 
-#: gtk/gtkprintunixdialog.c:2805 gtk/gtkprintunixdialog.c:2818
+#: gtk/gtkprintunixdialog.c:2808 gtk/gtkprintunixdialog.c:2821
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
 
-#: gtk/gtkprintunixdialog.c:2834
+#: gtk/gtkprintunixdialog.c:2837
 msgid "Left to right"
 msgstr "D'esquerra a dreta"
 
-#: gtk/gtkprintunixdialog.c:2835
+#: gtk/gtkprintunixdialog.c:2838
 msgid "Right to left"
 msgstr "De dreta a esquerra"
 
-#: gtk/gtkprintunixdialog.c:2847
+#: gtk/gtkprintunixdialog.c:2850
 msgid "Top to bottom"
 msgstr "De dalt a baix"
 
-#: gtk/gtkprintunixdialog.c:2848
+#: gtk/gtkprintunixdialog.c:2851
 msgid "Bottom to top"
 msgstr "De baix a dalt"
 
@@ -3519,19 +3519,19 @@ msgstr "Proveu una cerca diferent"
 msgid "Could not show link"
 msgstr "No s'ha pogut mostrar l'enllaç"
 
-#: gtk/gtktext.c:6055 gtk/gtktextview.c:8940
+#: gtk/gtktext.c:6055 gtk/gtktextview.c:8990
 msgid "Insert _Emoji"
 msgstr "Insereix _emoji"
 
-#: gtk/gtktextview.c:8922
+#: gtk/gtktextview.c:8972
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: gtk/gtktextview.c:8926
+#: gtk/gtktextview.c:8976
 msgid "_Redo"
 msgstr "_Refés"
 
-#: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:278
+#: gtk/gtktreeexpander.c:205 gtk/inspector/misc-info.ui:287
 msgid "Expand"
 msgstr "Expandeix"
 
@@ -3553,12 +3553,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6094
+#: gtk/gtkwindow.c:6098
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Voleu utilitzar l'inspector del GTK?"
 
-#: gtk/gtkwindow.c:6096
+#: gtk/gtkwindow.c:6100
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3569,7 +3569,7 @@ msgstr ""
 "modificar qualsevol aplicació GTK internament. Podeu arribar a trencar o fer"
 " fallar l'aplicació si l'utilitzeu."
 
-#: gtk/gtkwindow.c:6101
+#: gtk/gtkwindow.c:6105
 msgid "Don’t show this message again"
 msgstr "No tornis a mostrar aquest missatge"
 
@@ -3640,7 +3640,7 @@ msgstr "Tipus de paràmetre"
 msgid "State"
 msgstr "Estat"
 
-#: gtk/inspector/clipboard.c:211
+#: gtk/inspector/clipboard.c:211 gtk/inspector/misc-info.ui:278
 msgid "Show"
 msgstr "Mostra"
 
@@ -3907,57 +3907,57 @@ msgstr "Demana el mode"
 msgid "Measure map"
 msgstr "Mapa de mida"
 
-#: gtk/inspector/misc-info.ui:328
+#: gtk/inspector/misc-info.ui:338
 msgid "Allocation"
 msgstr "Assignació"
 
-#: gtk/inspector/misc-info.ui:357
+#: gtk/inspector/misc-info.ui:367
 msgid "Baseline"
 msgstr "Línia base"
 
-#: gtk/inspector/misc-info.ui:386
+#: gtk/inspector/misc-info.ui:396
 msgid "Surface"
 msgstr "Superfície"
 
-#: gtk/inspector/misc-info.ui:405 gtk/inspector/misc-info.ui:444
-#: gtk/inspector/misc-info.ui:483 gtk/inspector/prop-editor.c:1162
+#: gtk/inspector/misc-info.ui:415 gtk/inspector/misc-info.ui:454
+#: gtk/inspector/misc-info.ui:493 gtk/inspector/prop-editor.c:1162
 #: gtk/inspector/prop-editor.c:1531 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Propietats"
 
-#: gtk/inspector/misc-info.ui:425
+#: gtk/inspector/misc-info.ui:435
 msgid "Renderer"
 msgstr "Renderització"
 
-#: gtk/inspector/misc-info.ui:464
+#: gtk/inspector/misc-info.ui:474
 msgid "Frame Clock"
 msgstr "Rellotge del fotograma"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:513
 msgid "Tick Callback"
 msgstr "Crida de retorn del tick"
 
-#: gtk/inspector/misc-info.ui:533
+#: gtk/inspector/misc-info.ui:543
 msgid "Frame Count"
 msgstr "Compte de quadres"
 
-#: gtk/inspector/misc-info.ui:562
+#: gtk/inspector/misc-info.ui:572
 msgid "Frame Rate"
 msgstr "Quadres per segon"
 
-#: gtk/inspector/misc-info.ui:591
+#: gtk/inspector/misc-info.ui:601
 msgid "Mapped"
 msgstr "Mapat"
 
-#: gtk/inspector/misc-info.ui:621
+#: gtk/inspector/misc-info.ui:631
 msgid "Realized"
 msgstr "Fet"
 
-#: gtk/inspector/misc-info.ui:651
+#: gtk/inspector/misc-info.ui:661
 msgid "Is Toplevel"
 msgstr "És el nivell més alt"
 
-#: gtk/inspector/misc-info.ui:681
+#: gtk/inspector/misc-info.ui:691
 msgid "Child Visible"
 msgstr "Secundari visible"
 
@@ -4060,7 +4060,7 @@ msgstr "Font:"
 msgid "Defined At"
 msgstr "Definit a"
 
-#: gtk/inspector/recorder.c:1692
+#: gtk/inspector/recorder.c:1694
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "S'ha produït un error en desar el RenderNode"
@@ -4194,15 +4194,15 @@ msgstr "Jerarquia"
 msgid "Implements"
 msgstr "Implementa"
 
-#: gtk/inspector/visual.c:603 gtk/inspector/visual.c:622
+#: gtk/inspector/visual.c:604 gtk/inspector/visual.c:623
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "El tema està definit manualment per al GTK_THEME"
 
-#: gtk/inspector/visual.c:853
+#: gtk/inspector/visual.c:854
 msgid "Backend does not support window scaling"
 msgstr "El rerefons no és compatible amb l'escalat de finestres"
 
-#: gtk/inspector/visual.c:1043
+#: gtk/inspector/visual.c:1044
 msgid "GL rendering is disabled"
 msgstr "La renderització GL està desactivada"
 
@@ -4301,6 +4301,10 @@ msgstr "Simula una pantalla tàctil"
 #: gtk/inspector/visual.ui:678
 msgid "Software GL"
 msgstr "Programari GL"
+
+#: gtk/inspector/visual.ui:714
+msgid "Inspect Inspector"
+msgstr "Inspector d'inspectors"
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
@@ -4426,702 +4430,602 @@ msgstr "CSS"
 msgid "Recorder"
 msgstr "Enregistrador"
 
-#: gtk/open-type-layout.h:13
+#: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
 msgstr "Accedeix a totes les alternatives"
 
-#: gtk/open-type-layout.h:14
+#: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
 msgstr "Formes sobre la base"
 
-#: gtk/open-type-layout.h:15
+#: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
 msgstr "Marca de posicionament sobre la base"
 
-#: gtk/open-type-layout.h:16
+#: gtk/open-type-layout.h:17
 msgctxt "OpenType layout"
 msgid "Above-base Substitutions"
 msgstr "Substitucions sobre la base"
 
-#: gtk/open-type-layout.h:17
+#: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
 msgstr "Fraccions alternatives"
 
-#: gtk/open-type-layout.h:18
+#: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Akhands"
 msgstr "Akhands"
 
-#: gtk/open-type-layout.h:19
+#: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
 msgstr "Formes sota la base"
 
-#: gtk/open-type-layout.h:20
+#: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
 msgstr "Marca de posicionament sota la base"
 
-#: gtk/open-type-layout.h:21
+#: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
 msgid "Below-base Substitutions"
 msgstr "Substitucions sota la base"
 
-#: gtk/open-type-layout.h:22
+#: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Contextual Alternates"
 msgstr "Alternatives contextuals"
 
-#: gtk/open-type-layout.h:23
+#: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
 msgid "Case-Sensitive Forms"
 msgstr "Formes sensitives a majúscules i minúscules"
 
-#: gtk/open-type-layout.h:24
+#: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
 msgstr "Composició / descomposició de glifs"
 
-#: gtk/open-type-layout.h:25
+#: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
 msgstr "Forma de conjunt després de Ro"
 
-#: gtk/open-type-layout.h:26
+#: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
 msgstr "Formes conjuntes"
 
-#: gtk/open-type-layout.h:27
+#: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Contextual Ligatures"
 msgstr "Lligadures contextuals"
 
-#: gtk/open-type-layout.h:28
+#: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
 msgid "Centered CJK Punctuation"
 msgstr "Puntuació CJK centrada"
 
-#: gtk/open-type-layout.h:29
+#: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
 msgid "Capital Spacing"
 msgstr "Espaiat a les majúscules"
 
-#: gtk/open-type-layout.h:30
+#: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
 msgstr "Swash contextual"
 
-#: gtk/open-type-layout.h:31
+#: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
 msgstr "Posicionament de la cursiva"
 
-#: gtk/open-type-layout.h:32
+#: gtk/open-type-layout.h:33
 msgctxt "OpenType layout"
 msgid "Petite Capitals From Capitals"
 msgstr "Versaletes de majúscules"
 
-#: gtk/open-type-layout.h:33
+#: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Small Capitals From Capitals"
 msgstr "Versaletes de capitals"
 
-#: gtk/open-type-layout.h:34
+#: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
 msgid "Distances"
 msgstr "Distàncies"
 
-#: gtk/open-type-layout.h:35
+#: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
 msgid "Discretionary Ligatures"
 msgstr "Lligadures discrecionals"
 
-#: gtk/open-type-layout.h:36
+#: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Denominators"
 msgstr "Denominadors"
 
-#: gtk/open-type-layout.h:37
+#: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
 msgid "Dotless Forms"
 msgstr "Formes sense punts"
 
-#: gtk/open-type-layout.h:38
+#: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
 msgid "Expert Forms"
 msgstr "Formes expertes"
 
-#: gtk/open-type-layout.h:39
+#: gtk/open-type-layout.h:40
 msgctxt "OpenType layout"
 msgid "Final Glyph on Line Alternates"
 msgstr "Glif final en línies alternatives"
 
-#: gtk/open-type-layout.h:40
+#: gtk/open-type-layout.h:41
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
 msgstr "Formes de terminal núm. 2"
 
-#: gtk/open-type-layout.h:41
+#: gtk/open-type-layout.h:42
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
 msgstr "Formes de terminal núm. 3"
 
-#: gtk/open-type-layout.h:42
+#: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
 msgstr "Formes de terminal"
 
-#: gtk/open-type-layout.h:43
+#: gtk/open-type-layout.h:44
 msgctxt "OpenType layout"
 msgid "Flattened accent forms"
 msgstr "Formes amb accents aplanats"
 
-#: gtk/open-type-layout.h:44
+#: gtk/open-type-layout.h:45
 msgctxt "OpenType layout"
 msgid "Fractions"
 msgstr "Fraccions"
 
-#: gtk/open-type-layout.h:45
+#: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
 msgid "Full Widths"
 msgstr "Amplada completa"
 
-#: gtk/open-type-layout.h:46
+#: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
 msgid "Half Forms"
 msgstr "Mitges formes"
 
-#: gtk/open-type-layout.h:47
+#: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
 msgid "Halant Forms"
 msgstr "Formes Halant"
 
-#: gtk/open-type-layout.h:48
+#: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
 msgstr "Formes mitjanes alternatives"
 
-#: gtk/open-type-layout.h:49
+#: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
 msgid "Historical Forms"
 msgstr "Formes històriques"
 
-#: gtk/open-type-layout.h:50
+#: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
 msgstr "Alternativa Kana horitzontal"
 
-#: gtk/open-type-layout.h:51
+#: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Historical Ligatures"
 msgstr "Lligadures històriques"
 
-#: gtk/open-type-layout.h:52
+#: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
 msgid "Hangul"
 msgstr "Hangul"
 
-#: gtk/open-type-layout.h:53
+#: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Hojo Kanji Forms"
 msgstr "Formes Hojo Kanji"
 
-#: gtk/open-type-layout.h:54
+#: gtk/open-type-layout.h:55
 msgctxt "OpenType layout"
 msgid "Half Widths"
 msgstr "Mitges amplades"
 
-#: gtk/open-type-layout.h:55
+#: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
 msgid "Initial Forms"
 msgstr "Formes inicials"
 
-#: gtk/open-type-layout.h:56
+#: gtk/open-type-layout.h:57
 msgctxt "OpenType layout"
 msgid "Isolated Forms"
 msgstr "Formes aïllades"
 
-#: gtk/open-type-layout.h:57
+#: gtk/open-type-layout.h:58
 msgctxt "OpenType layout"
 msgid "Italics"
 msgstr "Cursives"
 
-#: gtk/open-type-layout.h:58
+#: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
 msgstr "Alternatives de justificació"
 
-#: gtk/open-type-layout.h:59
+#: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
 msgstr "Formes JIS78"
 
-#: gtk/open-type-layout.h:60
+#: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS83 Forms"
 msgstr "Formes JIS83"
 
-#: gtk/open-type-layout.h:61
+#: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
 msgstr "Formes JIS90"
 
-#: gtk/open-type-layout.h:62
+#: gtk/open-type-layout.h:63
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
 msgstr "Formes JIS2004"
 
-#: gtk/open-type-layout.h:63
+#: gtk/open-type-layout.h:64
 msgctxt "OpenType layout"
 msgid "Kerning"
 msgstr "Interlletratge"
 
-#: gtk/open-type-layout.h:64
+#: gtk/open-type-layout.h:65
 msgctxt "OpenType layout"
 msgid "Left Bounds"
 msgstr "Límit esquerre"
 
-#: gtk/open-type-layout.h:65
+#: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
 msgstr "Lligadures estàndards"
 
-#: gtk/open-type-layout.h:66
+#: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
 msgstr "Formes principals Jamo"
 
-#: gtk/open-type-layout.h:67
+#: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
 msgid "Lining Figures"
 msgstr "Figures de línia"
 
-#: gtk/open-type-layout.h:68
+#: gtk/open-type-layout.h:69
 msgctxt "OpenType layout"
 msgid "Localized Forms"
 msgstr "Formes localitzades"
 
-#: gtk/open-type-layout.h:69
+#: gtk/open-type-layout.h:70
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
 msgstr "Alternatives esquerra-dreta"
 
-#: gtk/open-type-layout.h:70
+#: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
 msgstr "Formes emmirallades esquerra-dreta"
 
-#: gtk/open-type-layout.h:71
+#: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
 msgstr "Marca posicionament"
 
-#: gtk/open-type-layout.h:72
+#: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
 msgstr "Formes medials #2"
 
-#: gtk/open-type-layout.h:73
+#: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Medial Forms"
 msgstr "Formes medials"
 
-#: gtk/open-type-layout.h:74
+#: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
 msgstr "Matemàtica grega"
 
-#: gtk/open-type-layout.h:75
+#: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
 msgstr "Posicionament marca a marca"
 
-#: gtk/open-type-layout.h:76
+#: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
 msgstr "Marca posicionament a través de substitució"
 
-#: gtk/open-type-layout.h:77
+#: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
 msgstr "Formes d'anotació alternatives"
 
-#: gtk/open-type-layout.h:78
+#: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
 msgstr "Formes NLC Kanji"
 
-#: gtk/open-type-layout.h:79
+#: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
 msgstr "Formes Nukta"
 
-#: gtk/open-type-layout.h:80
+#: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Numerators"
 msgstr "Numeradors"
 
-#: gtk/open-type-layout.h:81
+#: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
 msgstr "Figures antigues"
 
-#: gtk/open-type-layout.h:82
+#: gtk/open-type-layout.h:83
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
 msgstr "Límits òptics"
 
-#: gtk/open-type-layout.h:83
+#: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
 msgid "Ordinals"
 msgstr "Ordinals"
 
-#: gtk/open-type-layout.h:84
+#: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
 msgid "Ornaments"
 msgstr "Ornaments"
 
-#: gtk/open-type-layout.h:85
+#: gtk/open-type-layout.h:86
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Widths"
 msgstr "Amplades alternatives proporcionals"
 
-#: gtk/open-type-layout.h:86
+#: gtk/open-type-layout.h:87
 msgctxt "OpenType layout"
 msgid "Petite Capitals"
 msgstr "Majúscules petites"
 
-#: gtk/open-type-layout.h:87
+#: gtk/open-type-layout.h:88
 msgctxt "OpenType layout"
 msgid "Proportional Kana"
 msgstr "Kana proporcional"
 
-#: gtk/open-type-layout.h:88
+#: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
 msgstr "Figures proporcionals"
 
-#: gtk/open-type-layout.h:89
+#: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
 msgstr "Formes de pre-base"
 
-#: gtk/open-type-layout.h:90
+#: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
 msgstr "Substitucions de pre-base"
 
-#: gtk/open-type-layout.h:91
+#: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
 msgstr "Formes de post-base"
 
-#: gtk/open-type-layout.h:92
+#: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
 msgstr "Substitucions de post-base"
 
-#: gtk/open-type-layout.h:93
+#: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Proportional Widths"
 msgstr "Amplades proporcionals"
 
-#: gtk/open-type-layout.h:94
+#: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
 msgstr "Quarts d'amplada"
 
-#: gtk/open-type-layout.h:95
+#: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
 msgid "Randomize"
 msgstr "Aleatoritza"
 
-#: gtk/open-type-layout.h:96
+#: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Required Contextual Alternates"
 msgstr "Alternatives contextuals requerides"
 
-#: gtk/open-type-layout.h:97
+#: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
 msgid "Rakar Forms"
 msgstr "Formes Rakar"
 
-#: gtk/open-type-layout.h:98
+#: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
 msgstr "Lligadures requerides"
 
-#: gtk/open-type-layout.h:99
+#: gtk/open-type-layout.h:100
 msgctxt "OpenType layout"
 msgid "Reph Forms"
 msgstr "Formes Reph"
 
-#: gtk/open-type-layout.h:100
+#: gtk/open-type-layout.h:101
 msgctxt "OpenType layout"
 msgid "Right Bounds"
 msgstr "Límits drets"
 
-#: gtk/open-type-layout.h:101
+#: gtk/open-type-layout.h:102
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
 msgstr "Alternatives de dreta a esquerra"
 
-#: gtk/open-type-layout.h:102
+#: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
 msgstr "Formes emmirallades dreta-esquerra"
 
-#: gtk/open-type-layout.h:103
+#: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
 msgstr "Formes de notació Ruby"
 
-#: gtk/open-type-layout.h:104
+#: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
 msgstr "Alternatives de variació requerides"
 
-#: gtk/open-type-layout.h:105
+#: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
 msgstr "Alternatives estilístiques"
 
-#: gtk/open-type-layout.h:106
+#: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
 msgid "Scientific Inferiors"
 msgstr "Inferiors científics"
 
-#: gtk/open-type-layout.h:107
+#: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
 msgid "Optical size"
 msgstr "Mida òptica"
 
-#: gtk/open-type-layout.h:108
+#: gtk/open-type-layout.h:109
 msgctxt "OpenType layout"
 msgid "Small Capitals"
 msgstr "Versaletes"
 
-#: gtk/open-type-layout.h:109
+#: gtk/open-type-layout.h:110
 msgctxt "OpenType layout"
 msgid "Simplified Forms"
 msgstr "Formes simplificades"
 
-#: gtk/open-type-layout.h:110
-msgctxt "OpenType layout"
-msgid "Stylistic Set 1"
-msgstr "Conjunt estilístic 1"
-
 #: gtk/open-type-layout.h:111
-msgctxt "OpenType layout"
-msgid "Stylistic Set 2"
-msgstr "Conjunt estilístic 2"
-
-#: gtk/open-type-layout.h:112
-msgctxt "OpenType layout"
-msgid "Stylistic Set 3"
-msgstr "Conjunt estilístic 3"
-
-#: gtk/open-type-layout.h:113
-msgctxt "OpenType layout"
-msgid "Stylistic Set 4"
-msgstr "Conjunt estilístic 4"
-
-#: gtk/open-type-layout.h:114
-msgctxt "OpenType layout"
-msgid "Stylistic Set 5"
-msgstr "Conjunt estilístic 5"
-
-#: gtk/open-type-layout.h:115
-msgctxt "OpenType layout"
-msgid "Stylistic Set 6"
-msgstr "Conjunt estilístic 6"
-
-#: gtk/open-type-layout.h:116
-msgctxt "OpenType layout"
-msgid "Stylistic Set 7"
-msgstr "Conjunt estilístic 7"
-
-#: gtk/open-type-layout.h:117
-msgctxt "OpenType layout"
-msgid "Stylistic Set 8"
-msgstr "Conjunt estilístic 8"
-
-#: gtk/open-type-layout.h:118
-msgctxt "OpenType layout"
-msgid "Stylistic Set 9"
-msgstr "Conjunt estilístic 9"
-
-#: gtk/open-type-layout.h:119
-msgctxt "OpenType layout"
-msgid "Stylistic Set 10"
-msgstr "Conjunt estilístic 10"
-
-#: gtk/open-type-layout.h:120
-msgctxt "OpenType layout"
-msgid "Stylistic Set 11"
-msgstr "Conjunt estilístic 11"
-
-#: gtk/open-type-layout.h:121
-msgctxt "OpenType layout"
-msgid "Stylistic Set 12"
-msgstr "Conjunt estilístic 12"
-
-#: gtk/open-type-layout.h:122
-msgctxt "OpenType layout"
-msgid "Stylistic Set 13"
-msgstr "Conjunt estilístic 13"
-
-#: gtk/open-type-layout.h:123
-msgctxt "OpenType layout"
-msgid "Stylistic Set 14"
-msgstr "Conjunt estilístic 14"
-
-#: gtk/open-type-layout.h:124
-msgctxt "OpenType layout"
-msgid "Stylistic Set 15"
-msgstr "Conjunt estilístic 15"
-
-#: gtk/open-type-layout.h:125
-msgctxt "OpenType layout"
-msgid "Stylistic Set 16"
-msgstr "Conjunt estilístic 16"
-
-#: gtk/open-type-layout.h:126
-msgctxt "OpenType layout"
-msgid "Stylistic Set 17"
-msgstr "Conjunt estilístic 17"
-
-#: gtk/open-type-layout.h:127
-msgctxt "OpenType layout"
-msgid "Stylistic Set 18"
-msgstr "Conjunt estilístic 18"
-
-#: gtk/open-type-layout.h:128
-msgctxt "OpenType layout"
-msgid "Stylistic Set 19"
-msgstr "Conjunt estilístic 19"
-
-#: gtk/open-type-layout.h:129
-msgctxt "OpenType layout"
-msgid "Stylistic Set 20"
-msgstr "Conjunt estilístic 20"
-
-#: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
 msgstr "Alternatives d'estil de script matemàtic"
 
-#: gtk/open-type-layout.h:131
+#: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
 msgstr "Descomposició del glif estirat"
 
-#: gtk/open-type-layout.h:132
+#: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
 msgid "Subscript"
 msgstr "Subíndex"
 
-#: gtk/open-type-layout.h:133
+#: gtk/open-type-layout.h:114
 msgctxt "OpenType layout"
 msgid "Superscript"
 msgstr "Superíndex"
 
-#: gtk/open-type-layout.h:134
+#: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Swash"
 msgstr "Picar"
 
-#: gtk/open-type-layout.h:135
+#: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Titling"
 msgstr "Inclinada"
 
-#: gtk/open-type-layout.h:136
+#: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
 msgstr "Formes d'arrossegament Jamo"
 
-#: gtk/open-type-layout.h:137
+#: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Traditional Name Forms"
 msgstr "Formes de noms tradicionals"
 
-#: gtk/open-type-layout.h:138
+#: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
 msgstr "Figures tabulars"
 
-#: gtk/open-type-layout.h:139
+#: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
 msgstr "Formes tradicionals"
 
-#: gtk/open-type-layout.h:140
+#: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Third Widths"
 msgstr "Amplades dividides per tres"
 
-#: gtk/open-type-layout.h:141
+#: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Unicase"
 msgstr "Caixa única"
 
-#: gtk/open-type-layout.h:142
+#: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
 msgstr "Mètriques verticals alternatives"
 
-#: gtk/open-type-layout.h:143
+#: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
 msgstr "Variants Vattu"
 
-#: gtk/open-type-layout.h:144
+#: gtk/open-type-layout.h:125
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
 msgstr "Escriptura vertical"
 
-#: gtk/open-type-layout.h:145
+#: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
 msgstr "Mitges mètriques verticals alternatives"
 
-#: gtk/open-type-layout.h:146
+#: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
 msgstr "Formes de vocal Jamo"
 
-#: gtk/open-type-layout.h:147
+#: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
 msgstr "Alternatives de Kana verticals"
 
-#: gtk/open-type-layout.h:148
+#: gtk/open-type-layout.h:129
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
 msgstr "Interlletratge vertical"
 
-#: gtk/open-type-layout.h:149
+#: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Vertical Metrics"
 msgstr "Mètriques verticals proporcionalment alternatives"
 
-#: gtk/open-type-layout.h:150
+#: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
 msgstr "Alternatives verticals i rotació"
 
-#: gtk/open-type-layout.h:151
+#: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
 msgstr "Alternatives verticals per rotació"
 
-#: gtk/open-type-layout.h:152
+#: gtk/open-type-layout.h:133
 msgctxt "OpenType layout"
 msgid "Slashed Zero"
 msgstr "Zero barrat"
@@ -6449,13 +6353,12 @@ msgstr "_A:"
 #. the am/pm values below for your locale if they are not supported.
 #: gtk/ui/gtkprintunixdialog.ui:830 gtk/ui/gtkprintunixdialog.ui:832
 #: gtk/ui/gtkprintunixdialog.ui:848 gtk/ui/gtkprintunixdialog.ui:850
-#, fuzzy
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "Especifiqueu el temps d'impressió,\n"
-" pp. ex. 153030, 23535 pm, 1420152020, 1130463030 am, 4 pm"
+" p. ex. 15:30, 14:15:20"
 
 #. this is one of the choices for the print at option in the print dialog. It
 #. means that the print job will not be printed until it explicitly gets
@@ -6519,15 +6422,15 @@ msgstr "Alguns dels ajustaments del diàleg de conflicte"
 msgid "Unspecified error decoding video"
 msgstr "S'ha produït un error no especificat descodificant vídeo"
 
-#: modules/media/gtkffmediafile.c:322 modules/media/gtkffmediafile.c:496
+#: modules/media/gtkffmediafile.c:328 modules/media/gtkffmediafile.c:502
 msgid "Not enough memory"
 msgstr "No hi ha prou memòria"
 
-#: modules/media/gtkffmediafile.c:519
+#: modules/media/gtkffmediafile.c:525
 msgid "Not a video file"
 msgstr "No és un fitxer de vídeo"
 
-#: modules/media/gtkffmediafile.c:538
+#: modules/media/gtkffmediafile.c:544
 msgid "Unsupported video codec"
 msgstr "Còdec de vídeo no compatible"
 
@@ -7430,6 +7333,86 @@ msgid ""
 msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
 "Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-theme-index.\n"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 1"
+#~ msgstr "Conjunt estilístic 1"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 2"
+#~ msgstr "Conjunt estilístic 2"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 3"
+#~ msgstr "Conjunt estilístic 3"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 4"
+#~ msgstr "Conjunt estilístic 4"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 5"
+#~ msgstr "Conjunt estilístic 5"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 6"
+#~ msgstr "Conjunt estilístic 6"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 7"
+#~ msgstr "Conjunt estilístic 7"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 8"
+#~ msgstr "Conjunt estilístic 8"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 9"
+#~ msgstr "Conjunt estilístic 9"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 10"
+#~ msgstr "Conjunt estilístic 10"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 11"
+#~ msgstr "Conjunt estilístic 11"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 12"
+#~ msgstr "Conjunt estilístic 12"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 13"
+#~ msgstr "Conjunt estilístic 13"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 14"
+#~ msgstr "Conjunt estilístic 14"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 15"
+#~ msgstr "Conjunt estilístic 15"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 16"
+#~ msgstr "Conjunt estilístic 16"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 17"
+#~ msgstr "Conjunt estilístic 17"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 18"
+#~ msgstr "Conjunt estilístic 18"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 19"
+#~ msgstr "Conjunt estilístic 19"
+
+#~ msgctxt "OpenType layout"
+#~ msgid "Stylistic Set 20"
+#~ msgstr "Conjunt estilístic 20"
 
 #~ msgid "The EGL implementation does not support any allowed APIs"
 #~ msgstr "La implementació EGL no admet cap API permesa"
