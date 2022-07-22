@@ -253,8 +253,8 @@ if cc.get_id() == 'msvc'
   # in GLib, based on _Win32_Programming_ by Rector and Newcomer
   test_cflags = [
     '-FImsvc_recommended_pragmas.h',
-	'-D_USE_MATH_DEFINES',
-	'-utf-8',
+	  '-D_USE_MATH_DEFINES',
+	  '-utf-8',
   ]
   add_project_arguments(cc.get_supported_arguments(test_cflags), language: 'c')
 
