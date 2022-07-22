@@ -255,13 +255,17 @@ if cc.get_id() == 'msvc'
     '-FImsvc_recommended_pragmas.h',
 	  '-D_USE_MATH_DEFINES',
 	  '-utf-8',
+	  '/bigobg',
+	  '/GL',
   ]
   add_project_arguments(cc.get_supported_arguments(test_cflags), language: 'c')
+  add_project_link_arguments('/LTCG', language: 'c')
 
   add_languages('cpp')
   cxx = meson.get_compiler('cpp')
   if cxx.get_id() == 'msvc'
     add_project_arguments(cxx.get_supported_arguments(test_cflags), language: 'cpp')
+    add_project_link_arguments('/LTCG', language: 'cpp')
   endif
 elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
   test_cflags = [
