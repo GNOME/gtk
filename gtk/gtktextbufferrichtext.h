@@ -34,14 +34,14 @@ G_BEGIN_DECLS
  * @content_buffer: the #GtkTextBuffer to serialize
  * @start: start of the block of text to serialize
  * @end: end of the block of text to serialize
- * @length: Return location for the length of the serialized data
+ * @length: (out): return location for the length of the serialized data
  * @user_data: user data that was specified when registering the format
  *
  * A function that is called to serialize the content of a text buffer.
  * It must return the serialized form of the content.
  *
- * Returns: (nullable): a newly-allocated array of guint8 which contains
- * the serialized data, or %NULL if an error occurred
+ * Returns: (array length=length) (nullable): a newly-allocated array of guint8
+ * which contains the serialized data, or %NULL if an error occurred
  */
 typedef guint8 * (* GtkTextBufferSerializeFunc)   (GtkTextBuffer     *register_buffer,
                                                    GtkTextBuffer     *content_buffer,
