@@ -659,15 +659,11 @@ find_toplevel_under_pointer (GdkDisplay *display,
 
     }
 
-  if (toplevel == NULL)
-    return NULL;
-
-  /*
-   * Root window type does not need translation, but also does not have
-   * an associated NSWindow and therefore can't translate screen points
+  /* If the stored toplevel is NULL or _gdk_root it's not useful,
+   * return NULL to regenerate.
    */
-  if (toplevel == _gdk_root)
-    return toplevel;
+  if (toplevel == NULL || toplevel == _gdk_root )
+    return NULL;
 
   get_window_point_from_screen_point (toplevel, screen_point, x, y);
   /* If the coordinates are out of window bounds, this toplevel is not
