@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-01 15:48+0000\n"
-"PO-Revision-Date: 2021-12-02 16:46+0100\n"
+"POT-Creation-Date: 2022-07-22 12:42+0000\n"
+"PO-Revision-Date: 2022-07-23 00:22+0200\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -626,7 +626,7 @@ msgstr "Afichar l'emplaçament"
 #: gtk/a11y/gtkfilechooserwidgetaccessible.c:110
 msgctxt "Action description"
 msgid "Show the File Chooser's Location text field"
-msgstr ""
+msgstr "Afichar lo camp tèxt d’emplaçament del selector de fichièr"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -1493,16 +1493,12 @@ msgid "GNU Affero General Public License, version 3 or later"
 msgstr "Licéncia publica generala GNU Affero, version 3 o ulteriora"
 
 #: gtk/gtkaboutdialog.c:128
-#, fuzzy
-#| msgid "GNU General Public License, version 3 only"
 msgid "GNU Affero General Public License, version 3 only"
-msgstr "Licéncia publica generala GNU, version 3 unicament"
+msgstr "Licéncia publica generala GNU Affero, version 3 solament"
 
 #: gtk/gtkaboutdialog.c:129
-#, fuzzy
-#| msgid "BSD 2-Clause License"
 msgid "BSD 3-Clause License"
-msgstr "Licéncia BSD a 2 clausas"
+msgstr "Licéncia BSD a 3 clausas"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "Apache License, Version 2.0"
@@ -1901,7 +1897,7 @@ msgstr "Invalid"
 msgid "New accelerator…"
 msgstr "Acorchi novèl…"
 
-#: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:470
+#: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:481
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
@@ -2251,44 +2247,44 @@ msgstr "_Dreita :"
 msgid "Paper Margins"
 msgstr "Marges del papièr"
 
-#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6687 gtk/gtktextview.c:9520
+#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6687 gtk/gtktextview.c:9525
 msgid "Cu_t"
 msgstr "_Talhar"
 
-#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6688 gtk/gtktextview.c:9524
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6688 gtk/gtktextview.c:9529
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6689 gtk/gtktextview.c:9526
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6689 gtk/gtktextview.c:9531
 msgid "_Paste"
 msgstr "_Pegar"
 
 #: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1500
-#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9529
+#: gtk/gtkfilechooserwidget.c:2335 gtk/gtklabel.c:6691 gtk/gtktextview.c:9534
 msgid "_Delete"
 msgstr "_Suprimir"
 
-#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6700 gtk/gtktextview.c:9543
+#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6700 gtk/gtktextview.c:9548
 msgid "Select _All"
 msgstr "Seleccionar _tot"
 
-#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9553
+#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9558
 msgid "Insert _Emoji"
 msgstr "Inserir un emoji"
 
-#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9777
+#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9782
 msgid "Select all"
 msgstr "Seleccionar tot"
 
-#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9780
+#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9785
 msgid "Cut"
 msgstr "Talhar"
 
-#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9783
+#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9788
 msgid "Copy"
 msgstr "Copiar"
 
-#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9786
+#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9791
 msgid "Paste"
 msgstr "Pegar"
 
@@ -2304,7 +2300,7 @@ msgstr "Inserir un emoji"
 msgid "Select a File"
 msgstr "Seleccionar un fichièr"
 
-#: gtk/gtkfilechooserbutton.c:113 gtk/gtkplacessidebar.c:1109
+#: gtk/gtkfilechooserbutton.c:113 gtk/gtkplacessidebar.c:1112
 msgid "Desktop"
 msgstr "Burèu"
 
@@ -2322,7 +2318,7 @@ msgstr "_Nom"
 
 #. Open item is always present
 #: gtk/gtkfilechoosernative.c:546 gtk/gtkfilechoosernative.c:631
-#: gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693
+#: gtk/gtkplacessidebar.c:3628 gtk/gtkplacessidebar.c:3696
 #: gtk/gtkplacesview.c:1705
 msgid "_Open"
 msgstr "_Dobrir"
@@ -2510,7 +2506,7 @@ msgstr "_Copiar l'emplaçament"
 msgid "_Add to Bookmarks"
 msgstr "A_pondre als signets"
 
-#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2741
+#: gtk/gtkfilechooserwidget.c:2334 gtk/gtkplacessidebar.c:2744
 #: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
 msgstr "_Renomenar…"
@@ -2659,7 +2655,7 @@ msgstr "Fuèlh de calcul"
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1097
 msgid "Home"
 msgstr "Dorsièr personal"
 
@@ -2720,58 +2716,53 @@ msgctxt "font"
 msgid "None"
 msgstr "Pas cap"
 
-#: gtk/gtkfontchooserwidget.c:1601
+#: gtk/gtkfontchooserwidget.c:1602
 msgid "Width"
 msgstr "Largor"
 
-#: gtk/gtkfontchooserwidget.c:1602
+#: gtk/gtkfontchooserwidget.c:1603
 msgid "Weight"
 msgstr "Graissa"
 
-#: gtk/gtkfontchooserwidget.c:1603
+#: gtk/gtkfontchooserwidget.c:1604
 msgid "Italic"
 msgstr "Italica"
 
-#: gtk/gtkfontchooserwidget.c:1604
+#: gtk/gtkfontchooserwidget.c:1605
 msgid "Slant"
 msgstr ""
 
-#: gtk/gtkfontchooserwidget.c:1605
+#: gtk/gtkfontchooserwidget.c:1606
 msgid "Optical Size"
 msgstr "Talha optica"
 
-#: gtk/gtkfontchooserwidget.c:2305 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2306 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Per defaut"
 
-#: gtk/gtkfontchooserwidget.c:2352
+#: gtk/gtkfontchooserwidget.c:2353
 msgid "Ligatures"
 msgstr "Ligaturas"
 
-#: gtk/gtkfontchooserwidget.c:2353
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "US Letter Plus"
-msgid "Letter Case"
-msgstr "US Letter Plus"
-
 #: gtk/gtkfontchooserwidget.c:2354
+msgid "Letter Case"
+msgstr "Cassa de las letras"
+
+#: gtk/gtkfontchooserwidget.c:2355
 msgid "Number Case"
 msgstr "Cassa del nombres"
 
-#: gtk/gtkfontchooserwidget.c:2355
+#: gtk/gtkfontchooserwidget.c:2356
 msgid "Number Spacing"
 msgstr "Espaçament dels nombres"
 
-#: gtk/gtkfontchooserwidget.c:2356
+#: gtk/gtkfontchooserwidget.c:2357
 msgid "Number Formatting"
 msgstr "Mesa en forma dels nombres"
 
-#: gtk/gtkfontchooserwidget.c:2357
-#, fuzzy
-#| msgid "Dark Variant"
+#: gtk/gtkfontchooserwidget.c:2358
 msgid "Character Variants"
-msgstr "Varianta escura"
+msgstr "Variantas de caractèrs"
 
 #: gtk/gtkglarea.c:314
 msgid "OpenGL context creation failed"
@@ -3030,11 +3021,8 @@ msgid "_Hidden"
 msgstr "_Amagats"
 
 #: gtk/gtkmountoperation.c:724
-#, fuzzy
-#| msgctxt "input method menu"
-#| msgid "Windows IME"
 msgid "_Windows system"
-msgstr "Windows IME"
+msgstr "_Gestionari de fenèstras"
 
 #: gtk/gtkmountoperation.c:727
 msgid "_PIM"
@@ -3149,226 +3137,221 @@ msgid "File System Root"
 msgstr "Raiç del sistèma de fichièrs"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:981
+#: gtk/gtkplacessidebar.c:984
 #, c-format
 msgid "Open %s"
 msgstr "Dobrir %s"
 
-#: gtk/gtkplacessidebar.c:1070 gtk/ui/gtkemojichooser.ui:197
+#: gtk/gtkplacessidebar.c:1073 gtk/ui/gtkemojichooser.ui:197
 msgid "Recent"
 msgstr "Recents"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1075
 msgid "Recent files"
 msgstr "Fichièrs recents"
 
-#: gtk/gtkplacessidebar.c:1082
-#, fuzzy
-#| msgid "_Start"
+#: gtk/gtkplacessidebar.c:1085
 msgid "Starred"
-msgstr "A_viar"
+msgstr "Favorit"
 
 #. TODO: Rename to 'Starred files'
-#: gtk/gtkplacessidebar.c:1085
-#, fuzzy
-#| msgctxt "printer option"
-#| msgid "Printer Profile"
+#: gtk/gtkplacessidebar.c:1088
 msgid "Favorite files"
-msgstr "Perfil d'imprimenta"
+msgstr "Fichièrs favorits"
 
-#: gtk/gtkplacessidebar.c:1096
+#: gtk/gtkplacessidebar.c:1099
 msgid "Open your personal folder"
 msgstr "Dobrís vòstre dorsièr personal"
 
-#: gtk/gtkplacessidebar.c:1111
+#: gtk/gtkplacessidebar.c:1114
 msgid "Open the contents of your desktop in a folder"
 msgstr "Dobrís lo contengut de vòstre burèu dins un dorsièr"
 
-#: gtk/gtkplacessidebar.c:1125
+#: gtk/gtkplacessidebar.c:1128
 msgid "Enter Location"
 msgstr "Picar un emplaçament"
 
-#: gtk/gtkplacessidebar.c:1127
+#: gtk/gtkplacessidebar.c:1130
 msgid "Manually enter a location"
 msgstr "Picar manualament un emplaçament"
 
-#: gtk/gtkplacessidebar.c:1137
+#: gtk/gtkplacessidebar.c:1140
 msgid "Trash"
 msgstr "Escobilhièr"
 
-#: gtk/gtkplacessidebar.c:1139
+#: gtk/gtkplacessidebar.c:1142
 msgid "Open the trash"
 msgstr "Dobrís l'escobilhièr"
 
-#: gtk/gtkplacessidebar.c:1248 gtk/gtkplacessidebar.c:1276
-#: gtk/gtkplacessidebar.c:1491
+#: gtk/gtkplacessidebar.c:1251 gtk/gtkplacessidebar.c:1279
+#: gtk/gtkplacessidebar.c:1494
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Montar e dobrir « %s »"
 
-#: gtk/gtkplacessidebar.c:1371
+#: gtk/gtkplacessidebar.c:1374
 msgid "Open the contents of the file system"
 msgstr "Dobrís lo contengut del sistèma de fichièrs"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1458
 msgid "New bookmark"
 msgstr "Signet novèl"
 
-#: gtk/gtkplacessidebar.c:1457
+#: gtk/gtkplacessidebar.c:1460
 msgid "Add a new bookmark"
 msgstr "Apondre un signet novèl"
 
-#: gtk/gtkplacessidebar.c:1470
+#: gtk/gtkplacessidebar.c:1473
 msgid "Connect to Server"
 msgstr "Connexion a un servidor"
 
-#: gtk/gtkplacessidebar.c:1472
+#: gtk/gtkplacessidebar.c:1475
 msgid "Connect to a network server address"
 msgstr "Se connècta a una adreça d'un servidor de la ret"
 
-#: gtk/gtkplacessidebar.c:1534
+#: gtk/gtkplacessidebar.c:1537
 msgid "Other Locations"
 msgstr "Autres emplaçaments"
 
-#: gtk/gtkplacessidebar.c:1535
+#: gtk/gtkplacessidebar.c:1538
 msgid "Show other locations"
 msgstr "Afichar d'autres emplaçaments"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2334 gtk/gtkplacessidebar.c:3713
+#: gtk/gtkplacessidebar.c:2337 gtk/gtkplacessidebar.c:3716
 msgid "_Start"
 msgstr "A_viar"
 
-#: gtk/gtkplacessidebar.c:2335 gtk/gtkplacessidebar.c:3714
+#: gtk/gtkplacessidebar.c:2338 gtk/gtkplacessidebar.c:3717
 msgid "_Stop"
 msgstr "_Arrestar"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2342
+#: gtk/gtkplacessidebar.c:2345
 msgid "_Power On"
 msgstr "A_lucar"
 
-#: gtk/gtkplacessidebar.c:2343
+#: gtk/gtkplacessidebar.c:2346
 msgid "_Safely Remove Drive"
 msgstr "L_evar lo volum sens risc"
 
-#: gtk/gtkplacessidebar.c:2347
+#: gtk/gtkplacessidebar.c:2350
 msgid "_Connect Drive"
 msgstr "_Connectar lo volum"
 
-#: gtk/gtkplacessidebar.c:2348
+#: gtk/gtkplacessidebar.c:2351
 msgid "_Disconnect Drive"
 msgstr "_Desconnectar lo volum"
 
-#: gtk/gtkplacessidebar.c:2352
+#: gtk/gtkplacessidebar.c:2355
 msgid "_Start Multi-disk Device"
 msgstr "A_viar l'aparelh multidisc"
 
-#: gtk/gtkplacessidebar.c:2353
+#: gtk/gtkplacessidebar.c:2356
 msgid "_Stop Multi-disk Device"
 msgstr "_Arrestar l'aparelh multidisc"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2358
+#: gtk/gtkplacessidebar.c:2361
 msgid "_Unlock Device"
 msgstr "_Desverrolhar lo volum"
 
-#: gtk/gtkplacessidebar.c:2359
+#: gtk/gtkplacessidebar.c:2362
 msgid "_Lock Device"
 msgstr "_Verrolhar lo volum"
 
-#: gtk/gtkplacessidebar.c:2397 gtk/gtkplacessidebar.c:3394
+#: gtk/gtkplacessidebar.c:2400 gtk/gtkplacessidebar.c:3397
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Impossible d'aviar « %s »"
 
-#: gtk/gtkplacessidebar.c:2430
+#: gtk/gtkplacessidebar.c:2433
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "Error en desverrolhant « %s »."
 
-#: gtk/gtkplacessidebar.c:2432
+#: gtk/gtkplacessidebar.c:2435
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Impossible d'accedir a « %s »"
 
-#: gtk/gtkplacessidebar.c:2666
+#: gtk/gtkplacessidebar.c:2669
 msgid "This name is already taken"
 msgstr "Aqueste nom es ja atribuit"
 
-#: gtk/gtkplacessidebar.c:2735 gtk/inspector/actions.ui:43
+#: gtk/gtkplacessidebar.c:2738 gtk/inspector/actions.ui:43
 #: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
 #: gtk/ui/gtkfilechooserwidget.ui:220 gtk/ui/gtkfilechooserwidget.ui:543
 msgid "Name"
 msgstr "Nom"
 
-#: gtk/gtkplacessidebar.c:2935
+#: gtk/gtkplacessidebar.c:2938
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Impossible de desmontar « %s »"
 
-#: gtk/gtkplacessidebar.c:3111
+#: gtk/gtkplacessidebar.c:3114
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Impossible d'arrestar « %s »"
 
-#: gtk/gtkplacessidebar.c:3140
+#: gtk/gtkplacessidebar.c:3143
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Impossible d'ejectar « %s »"
 
-#: gtk/gtkplacessidebar.c:3169 gtk/gtkplacessidebar.c:3198
+#: gtk/gtkplacessidebar.c:3172 gtk/gtkplacessidebar.c:3201
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Impossible d'ejectar %s"
 
 # https://developer.gnome.org/gio/2.36/GDrive.html#g-drive-poll-for-media
-#: gtk/gtkplacessidebar.c:3346
+#: gtk/gtkplacessidebar.c:3349
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr ""
 "Impossible d'inspectar « %s » per saber se de mèdias son estats inserits o "
 "levats"
 
-#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696
+#: gtk/gtkplacessidebar.c:3633 gtk/gtkplacessidebar.c:3699
 #: gtk/gtkplacesview.c:1715
 msgid "Open in New _Tab"
 msgstr "Dobrir dins un _onglet novèl"
 
-#: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699
+#: gtk/gtkplacessidebar.c:3639 gtk/gtkplacessidebar.c:3702
 #: gtk/gtkplacesview.c:1726
 msgid "Open in New _Window"
 msgstr "Dobrir dins una _fenèstra novèla"
 
-#: gtk/gtkplacessidebar.c:3703
+#: gtk/gtkplacessidebar.c:3706
 msgid "_Add Bookmark"
 msgstr "A_pondre lo signet"
 
-#: gtk/gtkplacessidebar.c:3704
+#: gtk/gtkplacessidebar.c:3707
 msgid "_Remove"
 msgstr "_Suprimir"
 
-#: gtk/gtkplacessidebar.c:3705
+#: gtk/gtkplacessidebar.c:3708
 msgid "Rename…"
 msgstr "Renomenar…"
 
-#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1760
+#: gtk/gtkplacessidebar.c:3712 gtk/gtkplacesview.c:1760
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1750
+#: gtk/gtkplacessidebar.c:3713 gtk/gtkplacesview.c:1750
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: gtk/gtkplacessidebar.c:3711
+#: gtk/gtkplacessidebar.c:3714
 msgid "_Eject"
 msgstr "E_jectar"
 
-#: gtk/gtkplacessidebar.c:3712
+#: gtk/gtkplacessidebar.c:3715
 msgid "_Detect Media"
 msgstr "_Detectar los mèdias"
 
-#: gtk/gtkplacessidebar.c:4158 gtk/gtkplacesview.c:1122
+#: gtk/gtkplacessidebar.c:4161 gtk/gtkplacesview.c:1122
 msgid "Computer"
 msgstr "Ordenador"
 
@@ -3402,7 +3385,7 @@ msgstr "Anu_llar"
 
 #: gtk/gtkplacesview.c:1657
 msgid "AppleTalk"
-msgstr ""
+msgstr "AppleTalk"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/gtkplacesview.c:1661
@@ -4132,7 +4115,7 @@ msgstr "Activar"
 msgid "State"
 msgstr "Estat"
 
-#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:196
 #: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "Prefix"
@@ -4197,12 +4180,12 @@ msgstr "Valor"
 msgid "Show data"
 msgstr "Aficha las donadas"
 
-#: gtk/inspector/general.c:309
+#: gtk/inspector/general.c:330
 msgctxt "GL version"
 msgid "None"
 msgstr "Pas cap"
 
-#: gtk/inspector/general.c:310
+#: gtk/inspector/general.c:331
 msgctxt "GL vendor"
 msgid "None"
 msgstr "Pas cap"
@@ -4215,23 +4198,33 @@ msgstr "Version de GTK+"
 msgid "GDK Backend"
 msgstr "Motor GDK"
 
-#: gtk/inspector/general.ui:373
+#: gtk/inspector/general.ui:115
+msgid "Application ID"
+msgstr "ID de l'aplicacion"
+
+#: gtk/inspector/general.ui:149
+#, fuzzy
+#| msgid "Resources"
+msgid "Resource Path"
+msgstr "Ressorsas"
+
+#: gtk/inspector/general.ui:454
 msgid "Display"
 msgstr "Afichatge"
 
-#: gtk/inspector/general.ui:408
+#: gtk/inspector/general.ui:489
 msgid "RGBA visual"
 msgstr "Visual RGBA"
 
-#: gtk/inspector/general.ui:442
+#: gtk/inspector/general.ui:523
 msgid "Composited"
 msgstr "Compausat"
 
-#: gtk/inspector/general.ui:489
+#: gtk/inspector/general.ui:570
 msgid "GL Version"
 msgstr "Version de GL"
 
-#: gtk/inspector/general.ui:524
+#: gtk/inspector/general.ui:605
 msgid "GL Vendor"
 msgstr "Provesidor GL"
 
@@ -4840,7 +4833,7 @@ msgstr "Fraccions alternativas"
 #: gtk/open-type-layout.h:18
 msgctxt "OpenType layout"
 msgid "Akhands"
-msgstr ""
+msgstr "Akhands"
 
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
@@ -4920,7 +4913,7 @@ msgstr ""
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Distances"
-msgstr ""
+msgstr "Distàncias"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
@@ -4930,7 +4923,7 @@ msgstr ""
 #: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
 msgid "Denominators"
-msgstr ""
+msgstr "Denominators"
 
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
@@ -5051,22 +5044,22 @@ msgstr ""
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "JIS78 Forms"
-msgstr ""
+msgstr "Fòrmas JIS78"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
 msgid "JIS83 Forms"
-msgstr ""
+msgstr "Fòrmas JIS83"
 
 #: gtk/open-type-layout.h:61
 msgctxt "OpenType layout"
 msgid "JIS90 Forms"
-msgstr ""
+msgstr "Fòrmas JIS90"
 
 #: gtk/open-type-layout.h:62
 msgctxt "OpenType layout"
 msgid "JIS2004 Forms"
-msgstr ""
+msgstr "Fòrmas JIS200"
 
 #: gtk/open-type-layout.h:63
 msgctxt "OpenType layout"
@@ -5432,11 +5425,9 @@ msgid "Stretching Glyph Decomposition"
 msgstr "Descomposicion de glyphe espandida"
 
 #: gtk/open-type-layout.h:132
-#, fuzzy
-#| msgid "Postscript"
 msgctxt "OpenType layout"
 msgid "Subscript"
-msgstr "Postscript"
+msgstr "Soscrit"
 
 #: gtk/open-type-layout.h:133
 #, fuzzy
@@ -6738,7 +6729,7 @@ msgstr ""
 #: gtk/script-names.c:73
 msgctxt "Script"
 msgid "Tifinagh"
-msgstr ""
+msgstr "Tifinagh"
 
 #: gtk/script-names.c:74
 msgctxt "Script"
@@ -7342,10 +7333,8 @@ msgid "Location Layer"
 msgstr "Emplaçament"
 
 #: gtk/ui/gtkfilechooserwidget.ui:137
-#, fuzzy
-#| msgid "Search"
 msgid "Search Layer"
-msgstr "Recercar"
+msgstr "Jaç de recèrca"
 
 #: gtk/ui/gtkfilechooserwidget.ui:199
 msgid "Files"
@@ -7721,7 +7710,7 @@ msgstr "Impossible d'escriure dins lo fichièr de cache : %s\n"
 #: gtk/updateiconcache.c:1558
 #, c-format
 msgid "The generated cache was invalid.\n"
-msgstr "L'cache generat èra pas valide.\n"
+msgstr "Lo cache generat èra pas valide.\n"
 
 #: gtk/updateiconcache.c:1572
 #, c-format
@@ -7873,7 +7862,7 @@ msgid "Vietnamese (VIQR)"
 msgstr "Vietnamian (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:105
+#: modules/input/imwayland.c:106
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
@@ -7882,7 +7871,7 @@ msgstr "Wayland"
 #: modules/input/imwaylandgtk.c:82
 msgctxt "input method menu"
 msgid "Waylandgtk"
-msgstr ""
+msgstr "Waylandgtk"
 
 #. ID
 #: modules/input/imxim.c:26
@@ -8172,106 +8161,94 @@ msgstr "Bòrd cort (revirat)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4738
 msgctxt "output-bin"
 msgid "Top Bin"
-msgstr ""
+msgstr "Nauc superior"
 
 #. Translators: Middle output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4740
 msgctxt "output-bin"
 msgid "Middle Bin"
-msgstr ""
+msgstr "Nauc intermediari"
 
 #. Translators: Bottom output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4742
-#, fuzzy
-#| msgctxt "Stock label, navigation"
-#| msgid "_Bottom"
 msgctxt "output-bin"
 msgid "Bottom Bin"
-msgstr "_Bas"
+msgstr "Nauc inferior"
 
 #. Translators: Side output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4744
 msgctxt "output-bin"
 msgid "Side Bin"
-msgstr ""
+msgstr "Nauc lateral"
 
 #. Translators: Left output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4746
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Left"
 msgctxt "output-bin"
 msgid "Left Bin"
-msgstr "Esquèrra"
+msgstr "Nauc d'esquèrra"
 
 #. Translators: Right output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4748
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgctxt "output-bin"
 msgid "Right Bin"
-msgstr "Dreita"
+msgstr "Nauc de drecha"
 
 #. Translators: Center output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4750
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Center"
 msgctxt "output-bin"
 msgid "Center Bin"
-msgstr "_Centrar"
+msgstr "Nauc central"
 
 #. Translators: Rear output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4752
 msgctxt "output-bin"
 msgid "Rear Bin"
-msgstr ""
+msgstr "Nauc arrièr"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4754
 msgctxt "output-bin"
 msgid "Face Up Bin"
-msgstr ""
+msgstr "Nauc amb fàcia cap amont"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4756
 msgctxt "output-bin"
 msgid "Face Down Bin"
-msgstr ""
+msgstr "Nauc amb fàcia cap aval"
 
 #. Translators: Large capacity output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4758
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
-msgstr ""
+msgstr "Nauc de granda capacitat"
 
 #. Translators: Output stacker number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4780
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
-msgstr ""
+msgstr "Empilador %d"
 
 #. Translators: Output mailbox number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4784
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
-msgstr ""
+msgstr "Bóstia de messatjariá %d"
 
 #. Translators: Private mailbox
 #: modules/printbackends/cups/gtkprintbackendcups.c:4788
 msgctxt "output-bin"
 msgid "My Mailbox"
-msgstr ""
+msgstr "Ma bóstia de recepcion"
 
 #. Translators: Output tray number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4792
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
-msgstr ""
+msgstr "Platèu %d"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:5263
 msgid "Printer Default"
