@@ -400,6 +400,10 @@ pw_dialog_got_response (GtkDialog         *dialog,
   else
     g_mount_operation_reply (op, G_MOUNT_OPERATION_ABORTED);
 
+  if (priv->user_widgets)
+    g_list_free (priv->user_widgets);
+
+  priv->user_widgets = NULL;
   priv->dialog = NULL;
   g_object_notify (G_OBJECT (op), "is-showing");
   gtk_window_destroy (GTK_WINDOW (dialog));
