@@ -678,6 +678,7 @@ gtk_mount_operation_ask_password_do_gtk (GtkMountOperation *operation,
       gtk_grid_attach (GTK_GRID (grid), anon_box, 1, rows++, 1, 1);
 
       choice = gtk_check_button_new_with_mnemonic (_("_Anonymous"));
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (choice), TRUE);
       gtk_box_append (GTK_BOX (anon_box), choice);
       g_signal_connect (choice, "toggled",
                         G_CALLBACK (pw_dialog_anonymous_toggled), operation);
