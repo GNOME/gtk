@@ -456,6 +456,8 @@ gtk_picture_class_init (GtkPictureClass *class)
    * GtkPicture:content-fit: (attributes org.gtk.Property.get=gtk_picture_get_content_fit org.gtk.Property.set=gtk_picture_set_content_fit)
    *
    * How the content should be resized to fit inside the `GtkPicture`.
+   *
+   * Since: 4.8
    */
   properties[PROP_CONTENT_FIT] =
       g_param_spec_enum ("content-fit", NULL, NULL,
@@ -884,9 +886,9 @@ gtk_picture_get_paintable (GtkPicture *self)
  * the contents will be stretched over the picture's whole area.
  *
  * Deprecated: 4.8: Use [method@Gtk.Picture.set_content_fit] instead. If still
- *     used, this method will always set the [property@Gtk.Picture:content-fit]
- *     property to `GTK_CONTENT_FIT_CONTAIN` if @keep_aspect_ratio is true,
- *     otherwise it will set it to `GTK_CONTENT_FIT_FILL`.
+ *   used, this method will always set the [property@Gtk.Picture:content-fit]
+ *   property to `GTK_CONTENT_FIT_CONTAIN` if @keep_aspect_ratio is true,
+ *   otherwise it will set it to `GTK_CONTENT_FIT_FILL`.
  */
 void
 gtk_picture_set_keep_aspect_ratio (GtkPicture *self,
@@ -907,8 +909,8 @@ gtk_picture_set_keep_aspect_ratio (GtkPicture *self,
  * Returns: %TRUE if the self tries to keep the contents' aspect ratio
  *
  * Deprecated: 4.8: Use [method@Gtk.Picture.get_content_fit] instead. This will
- *     now return `FALSE` only if [property@Gtk.Picture:content-fit] is
- *     `GTK_CONTENT_FIT_FILL`. Returns `TRUE` otherwise.
+ *   now return `FALSE` only if [property@Gtk.Picture:content-fit] is
+ *   `GTK_CONTENT_FIT_FILL`. Returns `TRUE` otherwise.
  */
 gboolean
 gtk_picture_get_keep_aspect_ratio (GtkPicture *self)
@@ -974,6 +976,8 @@ gtk_picture_get_can_shrink (GtkPicture *self)
  * Sets how the content should be resized to fit the `GtkPicture`.
  *
  * See [enum@Gtk.ContentFit] for details.
+ *
+ * Since: 4.8
  */
 void
 gtk_picture_set_content_fit (GtkPicture    *self,
@@ -1008,6 +1012,8 @@ gtk_picture_set_content_fit (GtkPicture    *self,
  * See [enum@Gtk.ContentFit] for details.
  *
  * Returns: the content fit mode
+ *
+ * Since: 4.8
  */
 GtkContentFit
 gtk_picture_get_content_fit (GtkPicture *self)
