@@ -481,6 +481,9 @@ gtk_grid_view_get_items_in_rect (GtkListBase        *base,
 
   result = gtk_bitset_new_empty ();
 
+  if (rect->y >= gtk_grid_view_compute_total_height (self))
+    return result;
+
   n_items = gtk_list_base_get_n_items (base);
   if (n_items == 0)
     return result;
