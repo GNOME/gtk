@@ -269,6 +269,18 @@ flatpak-main:icon-browser:
   variables:
     APPID: org.gtk.IconBrowser4
 
+flatpak-manual:node-editor:
+  extends: .flatpak-manual
+  needs: []
+  variables:
+    APPID: org.gtk.gtk4.NodeEditor
+
+flatpak-main:node-editor:
+  extends: .flatpak-main
+  needs: []
+  variables:
+    APPID: org.gtk.gtk4.NodeEditor
+
 # Publish the demo apps to the GNOME Nightly repo
 # https://wiki.gnome.org/Apps/Nightly
 # https://gitlab.gnome.org/GNOME/Initiatives/-/wikis/DevOps-with-Flatpak
@@ -286,6 +298,11 @@ nightly icon-browser:
     extends: '.publish_nightly'
     dependencies: ['flatpak-main:icon-browser']
     needs: ['flatpak-main:icon-browser']
+
+nightly node-editor:
+    extends: '.publish_nightly'
+    dependencies: ['flatpak-main:node-editor']
+    needs: ['flatpak-main:node-editor']
 
 static-scan:
   image: $FEDORA_IMAGE
