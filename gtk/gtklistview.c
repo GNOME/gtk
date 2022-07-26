@@ -393,7 +393,7 @@ gtk_list_view_get_items_in_rect (GtkListBase                 *base,
   if (row)
     last = gtk_list_item_manager_get_item_position (self->item_manager, row);
   else
-    last = rect->y < 0 ? 0 : n_items - 1;
+    last = rect->y + rect->height < 0 ? 0 : n_items - 1;
 
   gtk_bitset_add_range_closed (result, first, last);
   return result;
