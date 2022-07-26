@@ -1566,25 +1566,28 @@ gtk_list_base_stop_rubberband (GtkListBase *self,
         return;
 
       rubberband_selection = gtk_list_base_get_items_in_rect (self, &rect);
-      if (gtk_bitset_is_empty (rubberband_selection))
-        {
-          gtk_bitset_unref (rubberband_selection);
-          return;
-        }
 
       if (modify && extend) /* Ctrl + Shift */
         {
-          GtkBitset *current;
-          guint min = gtk_bitset_get_minimum (rubberband_selection);
-          guint max = gtk_bitset_get_maximum (rubberband_selection);
-          /* toggle the rubberband, keep the rest */
-          current = gtk_selection_model_get_selection_in_range (model, min, max - min + 1);
-          selected = gtk_bitset_copy (current);
-          gtk_bitset_unref (current);
-          gtk_bitset_intersect (selected, rubberband_selection);
-          gtk_bitset_difference (selected, rubberband_selection);
+          if (gtk_bitset_is_empty (rubberband_selection))
+            {
+              selected = gtk_bitset_ref (rubberband_selection);
+              mask = gtk_bitset_ref (rubberband_selection);
+            }
+          else
+            {
+              GtkBitset *current;
+              guint min = gtk_bitset_get_minimum (rubberband_selection);
+              guint max = gtk_bitset_get_maximum (rubberband_selection);
+              /* toggle the rubberband, keep the rest */
+              current = gtk_selection_model_get_selection_in_range (model, min, max - min + 1);
+              selected = gtk_bitset_copy (current);
+              gtk_bitset_unref (current);
+              gtk_bitset_intersect (selected, rubberband_selection);
+              gtk_bitset_difference (selected, rubberband_selection);
 
-          mask = gtk_bitset_ref (rubberband_selection);
+              mask = gtk_bitset_ref (rubberband_selection);
+            }
         }
       else if (modify) /* Ctrl */
         {

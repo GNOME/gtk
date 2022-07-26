@@ -377,6 +377,9 @@ gtk_list_view_get_items_in_rect (GtkListBase                 *base,
 
   result = gtk_bitset_new_empty ();
 
+  if (rect->y >= gtk_list_view_get_list_height (self))
+    return result;
+
   n_items = gtk_list_base_get_n_items (base);
   if (n_items == 0)
     return result;
@@ -390,7 +393,7 @@ gtk_list_view_get_items_in_rect (GtkListBase                 *base,
   if (row)
     last = gtk_list_item_manager_get_item_position (self->item_manager, row);
   else
-    last = rect->y < 0 ? 0 : n_items - 1;
+    last = rect->y + rect->height < 0 ? 0 : n_items - 1;
 
   gtk_bitset_add_range_closed (result, first, last);
   return result;
@@ -424,6 +427,8 @@ gtk_list_view_get_position_from_allocation (GtkListBase           *base,
 
   if (across >= self->list_width)
     return FALSE;
+
+  along = CLAMP (along, 0, gtk_list_view_get_list_height (self) - 1);
 
   row = gtk_list_view_get_row_at_y (self, along, &remaining);
   if (row == NULL)
