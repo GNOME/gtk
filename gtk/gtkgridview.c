@@ -413,6 +413,19 @@ gtk_grid_view_get_allocation_across (GtkListBase *base,
   return TRUE;
 }
 
+static int
+gtk_grid_view_compute_total_height (GtkGridView *self)
+{
+  Cell *cell;
+  CellAugment *aug;
+
+  cell = gtk_list_item_manager_get_root (self->item_manager);
+  if (cell == NULL)
+    return 0;
+  aug = gtk_list_item_manager_get_item_augment (self->item_manager, cell);
+  return aug->size;
+}
+
 static gboolean
 gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
                                             int                    across,
@@ -720,19 +733,6 @@ cell_set_size (Cell  *cell,
 
   cell->size = size;
   gtk_rb_tree_node_mark_dirty (cell);
-}
-
-static int
-gtk_grid_view_compute_total_height (GtkGridView *self)
-{
-  Cell *cell;
-  CellAugment *aug;
-
-  cell = gtk_list_item_manager_get_root (self->item_manager);
-  if (cell == NULL)
-    return 0;
-  aug = gtk_list_item_manager_get_item_augment (self->item_manager, cell);
-  return aug->size;
 }
 
 static void
