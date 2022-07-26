@@ -408,6 +408,7 @@
  *
  *   G_OBJECT_CLASS (foo_widget_parent_class)->dispose (gobject);
  * }
+ * ```
  *
  * You can access widgets defined in the template using the
  * [id@gtk_widget_get_template_child] function, but you will typically declare
