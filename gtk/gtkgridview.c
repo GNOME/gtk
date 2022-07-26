@@ -490,7 +490,7 @@ gtk_grid_view_get_items_in_rect (GtkListBase        *base,
   if (!gtk_grid_view_get_cell_at_y (self, rect->y, &first_row, NULL, NULL))
     first_row = rect->y < 0 ? 0 : n_items - 1;
   if (!gtk_grid_view_get_cell_at_y (self, rect->y + rect->height, &last_row, NULL, NULL))
-    last_row = rect->y < 0 ? 0 : n_items - 1;
+    last_row = rect->y + rect->height < 0 ? 0 : n_items - 1;
 
   gtk_bitset_add_rectangle (result,
                             first_row + first_column,
