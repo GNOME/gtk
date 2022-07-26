@@ -204,7 +204,7 @@ cell_augment (GtkRbTree *tree,
  *   index of the returned row
  * @offset: (out caller-allocates) (optional): stores the offset
  *   in pixels between y and top of cell.
- * @offset: (out caller-allocates) (optional): stores the height
+ * @size: (out caller-allocates) (optional): stores the height
  *   of the cell
  *
  * Gets the Cell that occupies the leftmost position in the row at offset
@@ -413,6 +413,19 @@ gtk_grid_view_get_allocation_across (GtkListBase *base,
   return TRUE;
 }
 
+static int
+gtk_grid_view_compute_total_height (GtkGridView *self)
+{
+  Cell *cell;
+  CellAugment *aug;
+
+  cell = gtk_list_item_manager_get_root (self->item_manager);
+  if (cell == NULL)
+    return 0;
+  aug = gtk_list_item_manager_get_item_augment (self->item_manager, cell);
+  return aug->size;
+}
+
 static gboolean
 gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
                                             int                    across,
@@ -428,6 +441,7 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
     return FALSE;
 
   n_items = gtk_list_base_get_n_items (base);
+  along = CLAMP (along, 0, gtk_grid_view_compute_total_height (self) - 1);
   if (!gtk_grid_view_get_cell_at_y (self,
                                     along,
                                     &pos,
@@ -467,16 +481,19 @@ gtk_grid_view_get_items_in_rect (GtkListBase        *base,
 
   result = gtk_bitset_new_empty ();
 
+  if (rect->y >= gtk_grid_view_compute_total_height (self))
+    return result;
+
   n_items = gtk_list_base_get_n_items (base);
   if (n_items == 0)
     return result;
 
-  first_column = floor (rect->x / self->column_width);
-  last_column = floor ((rect->x + rect->width) / self->column_width);
+  first_column = fmax (floor (rect->x / self->column_width), 0);
+  last_column = fmin (floor ((rect->x + rect->width) / self->column_width), self->n_columns - 1);
   if (!gtk_grid_view_get_cell_at_y (self, rect->y, &first_row, NULL, NULL))
     first_row = rect->y < 0 ? 0 : n_items - 1;
   if (!gtk_grid_view_get_cell_at_y (self, rect->y + rect->height, &last_row, NULL, NULL))
-    last_row = rect->y < 0 ? 0 : n_items - 1;
+    last_row = rect->y + rect->height < 0 ? 0 : n_items - 1;
 
   gtk_bitset_add_rectangle (result,
                             first_row + first_column,
@@ -720,19 +737,6 @@ cell_set_size (Cell  *cell,
 
   cell->size = size;
   gtk_rb_tree_node_mark_dirty (cell);
-}
-
-static int
-gtk_grid_view_compute_total_height (GtkGridView *self)
-{
-  Cell *cell;
-  CellAugment *aug;
-
-  cell = gtk_list_item_manager_get_root (self->item_manager);
-  if (cell == NULL)
-    return 0;
-  aug = gtk_list_item_manager_get_item_augment (self->item_manager, cell);
-  return aug->size;
 }
 
 static void
