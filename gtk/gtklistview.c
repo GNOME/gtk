@@ -428,6 +428,8 @@ gtk_list_view_get_position_from_allocation (GtkListBase           *base,
   if (across >= self->list_width)
     return FALSE;
 
+  along = CLAMP (along, 0, gtk_list_view_get_list_height (self) - 1);
+
   row = gtk_list_view_get_row_at_y (self, along, &remaining);
   if (row == NULL)
     return FALSE;
