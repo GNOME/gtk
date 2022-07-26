@@ -670,6 +670,7 @@ if not get_option('sysprof').disabled()
   libsysprof_capture_dep = dependency('sysprof-capture-4', version: sysprof_req,
     required: get_option('sysprof'),
     default_options: [
+      'agent=false',
       'examples=false',
       'gtk=false',
       'tests=false',
@@ -684,6 +685,7 @@ if not get_option('sysprof').disabled()
   libsysprof_dep = dependency('sysprof-4',
     required: false,
     default_options: [
+      'agent=false',
       'examples=false',
       'gtk=false',
       'tests=false',
