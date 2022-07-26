@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-22 12:42+0000\n"
-"PO-Revision-Date: 2022-07-23 00:22+0200\n"
+"POT-Creation-Date: 2022-07-26 11:14+0000\n"
+"PO-Revision-Date: 2022-07-26 21:24+0200\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -4081,10 +4081,8 @@ msgid "Resize"
 msgstr "Redimensionar"
 
 #: gtk/gtkwindow.c:9343
-#, fuzzy
-#| msgid "Always"
 msgid "Always on Top"
-msgstr "Totjorn"
+msgstr "Totjorn en dessús"
 
 #: gtk/gtkwindow.c:12778
 #, c-format
