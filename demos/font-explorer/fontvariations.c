@@ -1,7 +1,9 @@
 #include "fontvariations.h"
-#include "rangeedit.h"
+
 #include <gtk/gtk.h>
 #include <hb-ot.h>
+
+#include "rangeedit.h"
 
 enum {
   PROP_FONT_MAP = 1,

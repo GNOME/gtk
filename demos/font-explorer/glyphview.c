@@ -1,4 +1,5 @@
 #include "glyphview.h"
+
 #include <gtk/gtk.h>
 #include <hb-ot.h>
 

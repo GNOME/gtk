@@ -1,4 +1,5 @@
 #include "sampleeditor.h"
+
 #include <gtk/gtk.h>
 
 enum {

@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+
 #include <fontexplorerapp.h>
 
 int

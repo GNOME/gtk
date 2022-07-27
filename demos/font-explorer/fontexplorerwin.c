@@ -1,5 +1,8 @@
 #include "fontexplorerwin.h"
 
+#include <gtk/gtk.h>
+#include <string.h>
+
 #include "fontcolors.h"
 #include "fontcontrols.h"
 #include "fontexplorerapp.h"
@@ -12,10 +15,6 @@
 #include "sampleeditor.h"
 #include "styleview.h"
 #include "waterfallview.h"
-
-#include <gtk/gtk.h>
-#include <string.h>
-
 
 struct _FontExplorerWindow
 {

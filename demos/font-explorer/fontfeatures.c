@@ -1,11 +1,11 @@
 #include "fontfeatures.h"
+
 #include <gtk/gtk.h>
 #include <hb-ot.h>
 #include <glib/gi18n.h>
 
 #include "open-type-layout.h"
 #include "language-names.h"
-
 
 enum {
   PROP_FONT_MAP = 1,

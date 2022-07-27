@@ -1,10 +1,11 @@
 #include "plainview.h"
+
+#include <gtk/gtk.h>
+#include <hb-ot.h>
+
 #include "glyphitem.h"
 #include "glyphmodel.h"
 #include "glyphview.h"
-#include <gtk/gtk.h>
-
-#include <hb-ot.h>
 
 enum {
   PROP_FONT_MAP = 1,

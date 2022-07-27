@@ -1,7 +1,9 @@
 #include "config.h"
-#include <gtk/gtk.h>
 
 #include "fontexplorerapp.h"
+
+#include <gtk/gtk.h>
+
 #include "fontexplorerwin.h"
 
 #include "demo_conf.h"

@@ -1,4 +1,5 @@
 #include "glyphmodel.h"
+
 #include "glyphitem.h"
 
 struct _GlyphModel {
