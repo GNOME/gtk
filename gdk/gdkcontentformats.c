@@ -184,7 +184,7 @@ gdk_content_formats_new_for_gtype (GType type)
  * @string: the string to parse
  *
  * Parses the given @string into `GdkContentFormats` and
- * returns the formats. 
+ * returns the formats.
  *
  * Strings printed via [method@Gdk.ContentFormats.to_string]
  * can be read in again successfully using this function.
@@ -540,7 +540,7 @@ gdk_content_formats_get_gtypes (const GdkContentFormats *formats,
 
   if (n_gtypes)
     *n_gtypes = formats->n_gtypes;
-  
+
   return formats->gtypes;
 }
 
@@ -567,7 +567,7 @@ gdk_content_formats_get_mime_types (const GdkContentFormats *formats,
 
   if (n_mime_types)
     *n_mime_types = formats->n_mime_types;
-  
+
   return formats->mime_types;
 }
 
@@ -663,7 +663,7 @@ gdk_content_formats_builder_unref (GdkContentFormatsBuilder *builder)
 
   if (builder->ref_count > 0)
     return;
-  
+
   gdk_content_formats_builder_clear (builder);
   g_slice_free (GdkContentFormatsBuilder, builder);
 }
@@ -860,6 +860,52 @@ GSList *
 gdk_file_list_get_files (GdkFileList *file_list)
 {
   return g_slist_copy ((GSList *) file_list);
+}
+
+/**
+ * gdk_file_list_new_from_list:
+ * @files: (element-type GFile): a list of files
+ *
+ * Creates a new files list container from a singly linked list of
+ * `GFile` instances.
+ *
+ * This function is meant to be used by language bindings
+ *
+ * Returns: (transfer full): the newly created files list
+ *
+ * Since: 4.8
+ */
+GdkFileList *
+gdk_file_list_new_from_list (GSList *files)
+{
+  return gdk_file_list_copy (files);
+}
+
+/**
+ * gdk_file_list_new_from_array:
+ * @files: (array length=n_files): the files to add to the list
+ * @n_files: the number of files in the array
+ *
+ * Creates a new `GdkFileList` for the given array of files.
+ *
+ * This function is meant to be used by language bindings.
+ *
+ * Returns: (transfer full): the newly create files list
+ *
+ * Since: 4.8
+ */
+GdkFileList *
+gdk_file_list_new_from_array (GFile **files,
+                              gsize   n_files)
+{
+  if (files == NULL || n_files == 0)
+    return NULL;
+
+  GSList *res = NULL;
+  for (gssize i = n_files - 1; i >= 0; i--)
+    res = g_slist_prepend (res, g_object_ref (files[i]));
+
+  return (GdkFileList *) res;
 }
 
 /* }}} */
