@@ -1,16 +1,9 @@
-# Copyright (C) 2022 The Abkhazian language development fund named after Bagrat Shinkuba
-# This file is distributed under the same license as the gtk • UI translations package.
-# Нанба Наала <naala-nanba@rambler.ru>, 2022.
-#
-
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk • UI translations\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 15:48+0000\n"
-"PO-Revision-Date: 2022-07-22 16:00+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
-"Language-Team: Abkhazian <LL@li.org>\n"
+"Language-Team: Abkhazian <ab@li.org>\n"
 "Language: ab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1219,7 +1212,7 @@ msgstr ""
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/deprecated/gtkfontsel.c:121
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "абвггьгә АБВГГЬГӘ  бвгде АБВГДЕ abcde ABCDE"
 
 #: gtk/deprecated/gtkfontsel.c:386
 msgid "_Family:"
@@ -1246,7 +1239,7 @@ msgstr ""
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
 #: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12791
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: gtk/deprecated/gtkfontsel.c:1709
 msgid "Font Selection"
@@ -1434,15 +1427,15 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:120
 msgid "BSD 2-Clause License"
-msgstr ""
+msgstr "BSD 2-Clause License"
 
 #: gtk/gtkaboutdialog.c:121
 msgid "The MIT License (MIT)"
-msgstr ""
+msgstr "The MIT License (MIT)"
 
 #: gtk/gtkaboutdialog.c:122
 msgid "Artistic License 2.0"
-msgstr ""
+msgstr "Artistic License 2.0"
 
 #: gtk/gtkaboutdialog.c:123
 msgid "GNU General Public License, version 2 only"
@@ -1470,7 +1463,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:129
 msgid "BSD 3-Clause License"
-msgstr ""
+msgstr "BSD 3-Clause License"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "Apache License, Version 2.0"
@@ -1478,11 +1471,11 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:131
 msgid "Mozilla Public License 2.0"
-msgstr ""
+msgstr "Mozilla Public License 2.0"
 
 #: gtk/gtkaboutdialog.c:703
 msgid "C_redits"
-msgstr ""
+msgstr " _Аҭабурақәа"
 
 #: gtk/gtkaboutdialog.c:711
 msgid "_License"
@@ -1509,7 +1502,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:2320
 msgid "Created by"
-msgstr ""
+msgstr "Аԥҵаҩы"
 
 #: gtk/gtkaboutdialog.c:2323
 msgid "Documented by"
@@ -1758,7 +1751,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:815
 msgid "calendar:MY"
-msgstr ""
+msgstr "calendar:MY"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -2143,7 +2136,7 @@ msgstr ""
 #.
 #: gtk/gtkcustompaperunixdialog.c:117
 msgid "default:mm"
-msgstr ""
+msgstr "default:mm"
 
 #. And show the custom paper dialog
 #: gtk/gtkcustompaperunixdialog.c:405 gtk/gtkprintunixdialog.c:3337
@@ -2290,7 +2283,7 @@ msgstr ""
 #: gtk/gtkfilechooserutils.c:505
 #, c-format
 msgid "%1$s on %2$s"
-msgstr ""
+msgstr "%1$s аҟны %2$s"
 
 #: gtk/gtkfilechooserwidget.c:386
 msgid "Type name of new folder"
@@ -2473,7 +2466,7 @@ msgstr ""
 #: gtk/gtkfilechooserwidget.c:2626 gtk/inspector/css-node-tree.ui:141
 #: gtk/ui/gtkfilechooserwidget.ui:238 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
-msgstr ""
+msgstr "Аҭыӡҭыԥ"
 
 #. Label
 #: gtk/gtkfilechooserwidget.c:2719
@@ -2513,11 +2506,11 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:4893 gtk/gtkfilechooserwidget.c:4941
 msgid "%H:%M"
-msgstr ""
+msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4895 gtk/gtkfilechooserwidget.c:4943
 msgid "%l:%M %p"
-msgstr ""
+msgstr "%l:%M %p"
 
 #: gtk/gtkfilechooserwidget.c:4899
 msgid "Yesterday"
@@ -2525,7 +2518,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:4907
 msgid "%-e %b"
-msgstr ""
+msgstr "%-e %b"
 
 #: gtk/gtkfilechooserwidget.c:4911
 msgid "%-e %b %Y"
@@ -2550,7 +2543,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:5014
 msgid "Archive"
-msgstr ""
+msgstr "Архивтәра"
 
 #: gtk/gtkfilechooserwidget.c:5015
 msgid "Markup"
@@ -2591,7 +2584,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:5283 gtk/gtkplacessidebar.c:1097
 msgid "Home"
-msgstr ""
+msgstr "Home"
 
 #: gtk/gtkfilechooserwidget.c:5780
 msgid "Cannot change to folder because it is not local"
@@ -2639,7 +2632,7 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:379 gtk/gtkfontbutton.c:509
 msgid "Sans 12"
-msgstr ""
+msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:492 gtk/gtkfontbutton.c:626
 msgid "Pick a Font"
@@ -2897,7 +2890,7 @@ msgstr ""
 #.
 #: gtk/gtkmain.c:1276
 msgid "default:LTR"
-msgstr ""
+msgstr "default:LTR"
 
 #: gtk/gtkmessagedialog.c:956
 msgid "_No"
@@ -2905,7 +2898,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:957
 msgid "_Yes"
-msgstr ""
+msgstr "_Ааи"
 
 #: gtk/gtkmountoperation.c:595
 msgid "Co_nnect"
@@ -2945,7 +2938,7 @@ msgstr ""
 
 #: gtk/gtkmountoperation.c:727
 msgid "_PIM"
-msgstr ""
+msgstr "_PIM"
 
 #: gtk/gtkmountoperation.c:733
 msgid "_Password"
@@ -2993,15 +2986,15 @@ msgstr ""
 
 #: gtk/gtkmountoperation-x11.c:956
 msgid "Bourne Again Shell"
-msgstr ""
+msgstr "Bourne Again Shell"
 
 #: gtk/gtkmountoperation-x11.c:957
 msgid "Bourne Shell"
-msgstr ""
+msgstr "Bourne Shell"
 
 #: gtk/gtkmountoperation-x11.c:958
 msgid "Z Shell"
-msgstr ""
+msgstr "Z Shell"
 
 #: gtk/gtkmountoperation-x11.c:1055
 #, c-format
@@ -3294,7 +3287,7 @@ msgstr ""
 
 #: gtk/gtkplacesview.c:1657
 msgid "AppleTalk"
-msgstr ""
+msgstr "AppleTalk"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/gtkplacesview.c:1661
@@ -3311,7 +3304,7 @@ msgstr ""
 
 #: gtk/gtkplacesview.c:1667
 msgid "Samba"
-msgstr ""
+msgstr "Samba"
 
 #. Translators: do not translate sftp:// and ssh://
 #: gtk/gtkplacesview.c:1671
@@ -3325,7 +3318,7 @@ msgstr ""
 #. Translators: do not translate dav:// and davs://
 #: gtk/gtkplacesview.c:1675
 msgid "WebDAV"
-msgstr ""
+msgstr "WebDAV"
 
 #: gtk/gtkplacesview.c:1675
 msgid "dav:// or davs://"
@@ -3470,7 +3463,7 @@ msgstr ""
 #: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:549
 #: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3415
 msgid "Print"
-msgstr ""
+msgstr "Print"
 
 #: gtk/gtkprintoperation-win32.c:654
 msgid "Printer offline"
@@ -3995,7 +3988,7 @@ msgstr ""
 
 #: gtk/inspector/action-editor.c:281
 msgid "Activate"
-msgstr ""
+msgstr "Активациа азура"
 
 #: gtk/inspector/action-editor.c:302 gtk/inspector/actions.ui:82
 #: gtk/inspector/css-node-tree.ui:78 gtk/inspector/misc-info.ui:102
@@ -4044,7 +4037,7 @@ msgstr ""
 
 #: gtk/inspector/css-node-tree.ui:52
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: gtk/inspector/css-node-tree.ui:65 gtk/inspector/object-tree.ui:142
 msgid "Style Classes"
@@ -4131,7 +4124,7 @@ msgstr ""
 
 #: gtk/inspector/menu.c:92
 msgid "Unnamed section"
-msgstr ""
+msgstr "Ихьӡыдоу аҟәша"
 
 #: gtk/inspector/menu.ui:26 gtk/inspector/object-tree.ui:125
 msgid "Label"
@@ -4151,7 +4144,7 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:34
 msgid "Address"
-msgstr ""
+msgstr "Аҭыӡҭыԥ"
 
 #: gtk/inspector/misc-info.ui:68
 msgid "Reference count"
@@ -4275,7 +4268,7 @@ msgstr ""
 #: gtk/inspector/prop-editor.c:1265
 #, c-format
 msgid "%p (%s)"
-msgstr ""
+msgstr "%p (%s)"
 
 #: gtk/inspector/prop-editor.c:1275
 msgid "Column:"
@@ -4325,7 +4318,7 @@ msgstr ""
 
 #: gtk/inspector/prop-editor.c:1682
 msgid "XSettings"
-msgstr ""
+msgstr "XSettings"
 
 #: gtk/inspector/prop-list.ui:34
 msgid "Property"
@@ -4338,7 +4331,7 @@ msgstr ""
 
 #: gtk/inspector/prop-list.ui:86
 msgid "Attribute"
-msgstr ""
+msgstr "Аҟазшьарбага"
 
 #: gtk/inspector/prop-list.ui:102 gtk/inspector/signals-list.ui:73
 msgid "Defined At"
@@ -4375,7 +4368,7 @@ msgstr ""
 
 #: gtk/inspector/signals-list.c:117
 msgid "Yes"
-msgstr ""
+msgstr "Ааи"
 
 #: gtk/inspector/signals-list.ui:36
 msgid "Signal"
@@ -4510,7 +4503,7 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:382
 msgid "Animations"
-msgstr ""
+msgstr "Анимациа"
 
 #: gtk/inspector/visual.ui:415
 msgid "Slowdown"
@@ -4666,7 +4659,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:519
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #: gtk/inspector/window.ui:528
 msgid "Visual"
@@ -6992,7 +6985,7 @@ msgstr ""
 
 #: gtk/ui/gtkaboutdialog.ui:177
 msgid "Credits"
-msgstr ""
+msgstr " Аҭабурақәа"
 
 #: gtk/ui/gtkappchooserdialog.ui:78
 msgid "_View All Applications"
@@ -7069,7 +7062,7 @@ msgstr ""
 
 #: gtk/ui/gtkcoloreditor.ui:196
 msgid "Alpha"
-msgstr ""
+msgstr "Альфа"
 
 #: gtk/ui/gtkcoloreditor.ui:227
 msgctxt "Color channel"
@@ -7078,7 +7071,7 @@ msgstr ""
 
 #: gtk/ui/gtkcoloreditor.ui:243
 msgid "Hue"
-msgstr ""
+msgstr "Hue"
 
 #: gtk/ui/gtkcoloreditor.ui:275
 msgctxt "Color Channel"
@@ -7233,12 +7226,14 @@ msgstr ""
 
 #: gtk/ui/gtkplacesview.ui:30
 msgid "Server Addresses"
-msgstr ""
+msgstr "Асерверқәа рҭыӡҭыԥқәа"
 
 #: gtk/ui/gtkplacesview.ui:43
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr ""
+"Асерверқәа рҭыӡҭыԥқәа шьыкәгылоуп апртотокол апрефиксла, насгьы аҭыӡҭыԥла."
+"Аҿырԥштәқәа:"
 
 #: gtk/ui/gtkplacesview.ui:78
 msgid "Available Protocols"
@@ -7401,7 +7396,7 @@ msgstr ""
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
 #: gtk/ui/gtkprintunixdialog.ui:1003
 msgid "A_t:"
-msgstr ""
+msgstr "_Аҟны:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
 #: gtk/ui/gtkprintunixdialog.ui:1007 gtk/ui/gtkprintunixdialog.ui:1009
@@ -7563,7 +7558,7 @@ msgstr ""
 
 #: gtk/updateiconcache.c:1665
 msgid "Include image data in the cache"
-msgstr ""
+msgstr "Асахьақәа кеш аҟны рҿакра"
 
 #: gtk/updateiconcache.c:1666
 msgid "Output a C header file"
@@ -7847,7 +7842,7 @@ msgstr ""
 #. Translators: this string connects multiple printer states together.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2724
 msgid "; "
-msgstr ""
+msgstr "; "
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4655
 #: modules/printbackends/cups/gtkprintbackendcups.c:4722
@@ -8225,15 +8220,15 @@ msgstr ""
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "Postscript"
-msgstr ""
+msgstr "Postscript"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "SVG"
-msgstr ""
+msgstr "SVG"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:676
 #: modules/printbackends/test/gtkprintbackendtest.c:501
