@@ -5726,8 +5726,35 @@ drag_scroll_timeout (gpointer data)
   return TRUE;
 }
 
+static GdkDragAction
+gtk_icon_view_get_action (GtkWidget *widget,
+                          GdkDrop   *drop)
+{
+  GtkIconView *iconview = GTK_ICON_VIEW (widget);
+  GdkDrag *drag = gdk_drop_get_drag (drop);
+  GdkDragAction actions;
+
+  actions = gdk_drop_get_actions (drop);
+
+  if (drag == iconview->priv->drag &&
+      actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_COPY)
+    return GDK_ACTION_COPY;
+
+  if (actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_LINK)
+    return GDK_ACTION_LINK;
+
+  return 0;
+}
+
 static gboolean
 set_destination (GtkIconView        *icon_view,
+		 GdkDrop            *drop,
 		 GtkDropTargetAsync *dest,
 		 int                 x,
 		 int                 y,
@@ -5814,7 +5841,7 @@ set_destination (GtkIconView        *icon_view,
 out:
   if (can_drop)
     {
-      *suggested_action = GDK_ACTION_ALL;
+      *suggested_action = gtk_icon_view_get_action (widget, drop);
 
       gtk_icon_view_set_drag_dest_item (GTK_ICON_VIEW (widget),
 					path, pos);
@@ -6054,7 +6081,7 @@ gtk_icon_view_drag_motion (GtkDropTargetAsync *dest,
   gboolean empty;
   GdkDragAction result;
 
-  if (!set_destination (icon_view, dest, x, y, &suggested_action, &target))
+  if (!set_destination (icon_view, drop, dest, x, y, &suggested_action, &target))
     return 0;
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &pos);
@@ -6119,7 +6146,7 @@ gtk_icon_view_drag_drop (GtkDropTargetAsync *dest,
   if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drop"))
     return FALSE;
 
-  if (!set_destination (icon_view, dest, x, y, &suggested_action, &target))
+  if (!set_destination (icon_view, drop, dest, x, y, &suggested_action, &target))
     return FALSE;
   
   path = get_logical_destination (icon_view, &drop_append_mode);
@@ -6147,32 +6174,6 @@ gtk_icon_view_drag_drop (GtkDropTargetAsync *dest,
     }
   else
     return FALSE;
-}
-
-static GdkDragAction
-gtk_icon_view_get_action (GtkWidget *widget,
-                          GdkDrop   *drop)
-{
-  GtkIconView *iconview = GTK_ICON_VIEW (widget);
-  GdkDrag *drag = gdk_drop_get_drag (drop);
-  GdkDragAction actions;
-
-  actions = gdk_drop_get_actions (drop);
-
-  if (drag == iconview->priv->drag &&
-      actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  if (actions & GDK_ACTION_COPY)
-    return GDK_ACTION_COPY;
-
-  if (actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  if (actions & GDK_ACTION_LINK)
-    return GDK_ACTION_LINK;
-
-  return 0;
 }
 
 static void

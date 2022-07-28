@@ -2770,6 +2770,13 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
   gboolean rtl;
   GtkWidget *target;
 
+  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
+                                                     &bin_x, &bin_y);
+
+  /* Are we clicking a column header? */
+  if (bin_y < 0)
+    return;
+
   /* check if this is a click in a child widget */
   target = gtk_event_controller_get_target (GTK_EVENT_CONTROLLER (gesture));
   if (gtk_widget_is_ancestor (target, widget))
@@ -2785,11 +2792,6 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
       return;
     }
 
-  /* Because grab_focus can cause reentrancy, we delay grab_focus until after
-   * we're done handling the button press.
-   */
-  gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y,
-                                                     &bin_x, &bin_y);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 
   if (n_press > 1)
@@ -3036,6 +3038,11 @@ gtk_tree_view_drag_gesture_begin (GtkGestureDrag *gesture,
 
   gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, start_x, start_y,
                                                      &bin_x, &bin_y);
+
+  /* Are we dragging a column header? */
+  if (bin_y < 0)
+    return;
+
   priv->press_start_x = priv->rubber_band_x = bin_x;
   priv->press_start_y = priv->rubber_band_y = bin_y;
   gtk_tree_rbtree_find_offset (priv->tree, bin_y + priv->dy,
@@ -6845,9 +6852,36 @@ scroll_row_timeout (gpointer data)
   return TRUE;
 }
 
+static GdkDragAction
+gtk_tree_view_get_action (GtkWidget *widget,
+                          GdkDrop   *drop)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+  TreeViewDragInfo *di;
+  GdkDrag *drag = gdk_drop_get_drag (drop);
+  GdkDragAction actions;
+
+  di = get_info (tree_view);
+
+  actions = gdk_drop_get_actions (drop);
+
+  if (di && di->drag == drag &&
+      actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  if (actions & GDK_ACTION_COPY)
+    return GDK_ACTION_COPY;
+
+  if (actions & GDK_ACTION_MOVE)
+    return GDK_ACTION_MOVE;
+
+  return 0;
+}
+
 /* Returns TRUE if event should not be propagated to parent widgets */
 static gboolean
 set_destination_row (GtkTreeView         *tree_view,
+                     GdkDrop             *drop,
                      GtkDropTargetAsync  *dest,
                      /* coordinates relative to the widget */
                      int                  x,
@@ -6953,7 +6987,7 @@ set_destination_row (GtkTreeView         *tree_view,
 out:
   if (can_drop)
     {
-      *suggested_action = GDK_ACTION_COPY | GDK_ACTION_MOVE;
+      *suggested_action = gtk_tree_view_get_action (widget, drop);
 
       gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (widget),
                                        path, pos);
@@ -7218,7 +7252,7 @@ gtk_tree_view_drag_motion (GtkDropTargetAsync *dest,
   GdkDragAction suggested_action = 0;
   GType target;
 
-  if (!set_destination_row (tree_view, dest, x, y, &suggested_action, &target))
+  if (!set_destination_row (tree_view, drop, dest, x, y, &suggested_action, &target))
     return 0;
 
   priv->event_last_x = x;
@@ -7298,7 +7332,7 @@ gtk_tree_view_drag_drop (GtkDropTargetAsync *dest,
   if (!check_model_dnd (model, GTK_TYPE_TREE_DRAG_DEST, "drag_drop"))
     return FALSE;
 
-  if (!set_destination_row (tree_view, dest, x, y, &suggested_action, &target))
+  if (!set_destination_row (tree_view, drop, dest, x, y, &suggested_action, &target))
     return FALSE;
 
   path = get_logical_dest_row (tree_view, &path_down_mode, &drop_append_mode);
@@ -7329,32 +7363,6 @@ gtk_tree_view_drag_drop (GtkDropTargetAsync *dest,
     }
   else
     return FALSE;
-}
-
-static GdkDragAction
-gtk_tree_view_get_action (GtkWidget *widget,
-                          GdkDrop   *drop)
-{
-  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  TreeViewDragInfo *di;
-  GdkDrag *drag = gdk_drop_get_drag (drop);
-  GdkDragAction actions;
-
-  di = get_info (tree_view);
-
-  actions = gdk_drop_get_actions (drop);
-
-  if (di && di->drag == drag &&
-      actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  if (actions & GDK_ACTION_COPY)
-    return GDK_ACTION_COPY;
-
-  if (actions & GDK_ACTION_MOVE)
-    return GDK_ACTION_MOVE;
-
-  return 0;
 }
 
 static void
