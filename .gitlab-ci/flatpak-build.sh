@@ -16,7 +16,7 @@ flatpak-builder \
 flatpak build ${builddir} meson \
                 --prefix=/app \
                 --libdir=/app/lib \
-                --buildtype=release \
+                --buildtype=debugoptimized \
                 -Dx11-backend=true \
                 -Dwayland-backend=true \
                 -Dbuild-tests=false \
