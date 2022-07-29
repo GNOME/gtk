@@ -142,8 +142,6 @@ struct _drop_target_context
 static void
 gdk_win32_drop_init (GdkWin32Drop *drop)
 {
-  drop->droptarget_w32format_contentformat_map = g_array_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair));
-
   GDK_NOTE (DND, g_print ("gdk_win32_drop_init %p\n", drop));
 }
 
@@ -414,8 +412,12 @@ set_source_actions_helper (GdkDrop       *drop,
                            DWORD          grfKeyState)
 {
   GdkDragAction user_action;
+  GdkWin32Drop *drop_win32;
 
   user_action = get_user_action (grfKeyState);
+
+  drop_win32 = GDK_WIN32_DROP (drop);
+  drop_win32->actions = actions;
 
   if (user_action != 0)
     gdk_drop_set_actions (drop, user_action);
@@ -471,6 +473,7 @@ idroptarget_dragenter (LPDROPTARGET This,
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
   GdkContentFormats *formats;
+  GArray *droptarget_w32format_contentformat_map;
 
   GDK_NOTE (DND, g_print ("idroptarget_dragenter %p @ %ld : %ld"
                           " for dest window 0x%p"
@@ -491,7 +494,8 @@ idroptarget_dragenter (LPDROPTARGET This,
 
   display = gdk_surface_get_display (ctx->surface);
 
-  formats = query_object_formats (pDataObj, NULL);
+  droptarget_w32format_contentformat_map = g_array_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair));
+  formats = query_object_formats (pDataObj, droptarget_w32format_contentformat_map);
   drop = gdk_drop_new (display,
                        gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
                        drag,
@@ -499,7 +503,7 @@ idroptarget_dragenter (LPDROPTARGET This,
                        ctx->surface,
                        GDK_DRAG_PROTO_OLE2);
   drop_win32 = GDK_WIN32_DROP (drop);
-  g_array_set_size (drop_win32->droptarget_w32format_contentformat_map, 0);
+  drop_win32->droptarget_w32format_contentformat_map = droptarget_w32format_contentformat_map;
   gdk_content_formats_unref (formats);
 
   ctx->drop = drop;
@@ -520,7 +524,7 @@ idroptarget_dragenter (LPDROPTARGET This,
   drop_win32->last_key_state = grfKeyState;
   drop_win32->last_x = pt_x;
   drop_win32->last_y = pt_y;
-  dest_actions = filter_actions (drop_win32->actions, source_actions);
+  dest_actions = filter_actions (gdk_drop_get_actions (drop), source_actions);
   *pdwEffect_and_dwOKEffects = drop_effect_for_actions (dest_actions);
 
   GDK_NOTE (DND, g_print ("idroptarget_dragenter returns S_OK with actions %s"
@@ -554,9 +558,7 @@ idroptarget_dragover (LPDROPTARGET This,
   GdkDragAction source_actions;
   GdkDragAction dest_actions;
 
-  source_actions = set_source_actions_helper (ctx->drop,
-                                              actions_for_drop_effects (*pdwEffect_and_dwOKEffects),
-                                              grfKeyState);
+  source_actions = actions_for_drop_effects (*pdwEffect_and_dwOKEffects);
 
   GDK_NOTE (DND, g_print ("idroptarget_dragover %p @ %d : %d"
                           " (raw %ld : %ld)"
@@ -569,7 +571,8 @@ idroptarget_dragover (LPDROPTARGET This,
 
   if (pt_x != drop_win32->last_x ||
       pt_y != drop_win32->last_y ||
-      grfKeyState != drop_win32->last_key_state)
+      grfKeyState != drop_win32->last_key_state ||
+      source_actions != drop_win32->actions)
     {
       double x = 0.0;
       double y = 0.0;
@@ -578,13 +581,15 @@ idroptarget_dragover (LPDROPTARGET This,
       x /= drop_win32->scale;
       y /= drop_win32->scale;
 
+      set_source_actions_helper (ctx->drop, source_actions, grfKeyState);
+
       gdk_drop_emit_motion_event (ctx->drop, TRUE, x, y, GDK_CURRENT_TIME);
       drop_win32->last_key_state = grfKeyState;
       drop_win32->last_x = pt_x;
       drop_win32->last_y = pt_y;
     }
 
-  dest_actions = filter_actions (drop_win32->actions, source_actions);
+  dest_actions = filter_actions (gdk_drop_get_actions (ctx->drop), source_actions);
   *pdwEffect_and_dwOKEffects = drop_effect_for_actions (dest_actions);
 
   GDK_NOTE (DND, g_print ("idroptarget_dragover returns S_OK with actions %s"
@@ -645,7 +650,11 @@ idroptarget_drop (LPDROPTARGET This,
   x /= drop_win32->scale;
   y /= drop_win32->scale;
 
+  gdk_drop_emit_motion_event (ctx->drop, TRUE, x, y, GDK_CURRENT_TIME);
+
   gdk_drop_emit_drop_event (ctx->drop, TRUE, x, y, GDK_CURRENT_TIME);
+
+  gdk_drop_emit_leave_event (ctx->drop, TRUE, GDK_CURRENT_TIME);
 
   while (!drop_win32->drop_finished)
     g_main_context_iteration (NULL, FALSE);
@@ -824,7 +833,10 @@ gdk_win32_drop_status (GdkDrop       *drop,
                           _gdk_win32_drag_action_to_string (gdk_drop_get_actions (drop)),
                           _gdk_win32_drag_action_to_string (preferred)));
 
-  drop_win32->actions = actions;
+  if (preferred != 0)
+    actions = preferred;
+
+  gdk_drop_set_actions (drop, drop_win32->actions & actions);
 }
 
 static void
