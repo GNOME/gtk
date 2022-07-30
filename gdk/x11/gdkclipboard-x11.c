@@ -358,10 +358,10 @@ gdk_x11_clipboard_request_targets_got_stream (GObject      *source,
       g_error_free (error);
       return;
     }
-  else if (!g_str_equal (type, "ATOM") || format != 32)
+  else if (g_strcmp0 (type, "ATOM") != 0 || format != 32)
     {
       GDK_DISPLAY_NOTE (display, CLIPBOARD, g_printerr ("%s: Wrong reply type to TARGETS: type %s != ATOM or format %d != 32\n",
-                                      cb->selection, type, format));
+                                      cb->selection, type ? type : "NULL", format));
       g_input_stream_close (stream, NULL, NULL);
       g_object_unref (stream);
       g_object_unref (cb);
