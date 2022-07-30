@@ -165,7 +165,7 @@ widget_needs_widget_path (GtkWidget *widget)
     }
 
   parent = _gtk_widget_get_parent (widget);
-  if (parent == NULL)
+  if (parent == NULL || !GTK_IS_CONTAINER (parent))
     return FALSE;
 
   parent_func = GTK_CONTAINER_GET_CLASS (GTK_CONTAINER (parent))->get_path_for_child;
