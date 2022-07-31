@@ -138,6 +138,44 @@ update_has_styles (StyleView *self)
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HAS_STYLES]);
 }
 
+static int
+measure_names (Pango2Context *context,
+               hb_face_t     *hb_face)
+{
+  Pango2Layout *layout;
+  Pango2FontDescription *desc;
+  GString *str;
+  int width, height;
+
+  layout = pango2_layout_new (context);
+
+  desc = pango2_font_description_from_string ("Cantarell Regular 12");
+  pango2_layout_set_font_description (layout, desc);
+  pango2_font_description_free (desc);
+
+  str = g_string_new ("");
+
+  for (int i = 0; i < hb_ot_var_get_named_instance_count (hb_face); i++)
+    {
+      hb_ot_name_id_t name_id;
+      char name[20];
+      unsigned int name_len = 20;
+
+      name_id = hb_ot_var_named_instance_get_subfamily_name_id (hb_face, i);
+      hb_ot_name_get_utf8 (hb_face, name_id, HB_LANGUAGE_INVALID, &name_len, name);
+      g_string_append_printf (str, "   %s\n", name);
+    }
+
+  pango2_layout_set_text (layout, str->str, -1);
+  pango2_lines_get_size (pango2_layout_get_lines (layout), &width, &height);
+
+  g_string_free (str, TRUE);
+
+  g_object_unref (layout);
+
+  return width;
+}
+
 static void
 update_view (StyleView *self)
 {
@@ -151,6 +189,9 @@ update_view (StyleView *self)
   unsigned int n_axes;
   float *coords = NULL;
   hb_ot_var_axis_info_t *axes;
+  Pango2FontDescription *label_desc;
+  Pango2TabArray *tabs;
+  int width;
 
   desc = pango2_font_description_copy_static (self->font_desc);
   pango2_font_description_set_variations (desc, self->variations);
@@ -176,11 +217,34 @@ update_view (StyleView *self)
   hb_ot_var_get_axis_infos (hb_face, 0, &n_axes, axes);
   coords = g_newa (float, n_axes);
 
+  label_desc = pango2_font_description_from_string ("Cantarell Regular 12");
+
+  width = measure_names (gtk_widget_get_pango_context (GTK_WIDGET (self->content)), hb_face);
+
+  tabs = pango2_tab_array_new (1, PANGO2_TAB_POSITIONS_DEFAULT);
+  pango2_tab_array_set_tab (tabs, 0, PANGO2_TAB_LEFT, width);
+  gtk_label_set_tabs (self->content, tabs);
+  pango2_tab_array_free (tabs);
+
   for (int i = 0; i < hb_ot_var_get_named_instance_count (hb_face); i++)
     {
       unsigned int n_coords = n_axes;
       Pango2Attribute *attr;
       GString *variations;
+      hb_ot_name_id_t name_id;
+      char name[20];
+      unsigned int name_len = 20;
+
+      name_id = hb_ot_var_named_instance_get_subfamily_name_id (hb_face, i);
+      hb_ot_name_get_utf8 (hb_face, name_id, HB_LANGUAGE_INVALID, &name_len, name);
+
+      g_string_append_printf (str, "%s\t", name);
+      end = str->len;
+
+      attr = pango2_attr_font_desc_new (label_desc);
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
+      start = end;
 
       hb_ot_var_named_instance_get_design_coords (hb_face, i, &n_coords, coords);
       variations = g_string_new ("");
@@ -206,6 +270,8 @@ update_view (StyleView *self)
       pango2_attr_list_insert (attrs, attr);
       start = end;
     }
+
+  pango2_font_description_free (label_desc);
 
   gtk_label_set_text (self->content, str->str);
   gtk_label_set_attributes (self->content, attrs);
