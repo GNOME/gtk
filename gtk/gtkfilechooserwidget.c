@@ -2606,7 +2606,7 @@ location_entry_changed_cb (GtkEditable          *editable,
     }
 
   if (priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    g_signal_emit_by_name (impl, "selection-changed", 0);/* Issue #3277 */
+    g_signal_emit_by_name (impl, "selection-changed", 0);
   else
     reset_location_timeout (impl);
 }
