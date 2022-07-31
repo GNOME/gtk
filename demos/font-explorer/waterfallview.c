@@ -109,6 +109,7 @@ update_view (WaterfallView *self)
   GString *str;
   int sizes[] = { 7, 8, 9, 10, 12, 14, 16, 20, 24, 30, 40, 50, 60, 70, 90, 120 };
   int start, end, text_len;
+  Pango2TabArray *tabs;
 
   desc = pango2_font_description_copy_static (self->font_desc);
   pango2_font_description_set_size (desc, 12 * PANGO2_SCALE);
@@ -117,8 +118,8 @@ update_view (WaterfallView *self)
   attrs = pango2_attr_list_new ();
   pango2_attr_list_insert (attrs, pango2_attr_font_desc_new (desc));
   pango2_attr_list_insert (attrs, pango2_attr_size_new (self->size * PANGO2_SCALE));
-  pango2_attr_list_insert (attrs, pango2_attr_letter_spacing_new (self->letterspacing));
   pango2_attr_list_insert (attrs, pango2_attr_line_height_new (self->line_height));
+  pango2_attr_list_insert (attrs, pango2_attr_letter_spacing_new (self->letterspacing));
   pango2_attr_list_insert (attrs, pango2_attr_foreground_new (&(Pango2Color){65535 * self->foreground.red,
                                                                              65535 * self->foreground.green,
                                                                              65535 * self->foreground.blue,
@@ -128,12 +129,48 @@ update_view (WaterfallView *self)
 
   pango2_font_description_free (desc);
 
+  tabs = pango2_tab_array_new (2, PANGO2_TAB_POSITIONS_SPACES);
+  pango2_tab_array_set_tab (tabs, 0, PANGO2_TAB_RIGHT, 5);
+  pango2_tab_array_set_tab (tabs, 1, PANGO2_TAB_LEFT, 8);
+
+  gtk_label_set_tabs (self->content, tabs);
+  pango2_tab_array_free (tabs);
+
   str = g_string_new ("");
   start = 0;
   text_len = strlen (self->sample_text);
   for (int i = 0; i < G_N_ELEMENTS (sizes); i++)
     {
       Pango2Attribute *attr;
+
+      g_string_append_printf (str, "\t%d\t", sizes[i]);
+
+      end = str->len;
+
+      attr = pango2_attr_family_new ("Cantarell");
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
+
+      attr = pango2_attr_weight_new (PANGO2_WEIGHT_NORMAL);
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
+
+      attr = pango2_attr_style_new (PANGO2_STYLE_NORMAL);
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
+
+      attr = pango2_attr_size_new (12 * PANGO2_SCALE);
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
+
+      attr = pango2_attr_font_features_new ("tnum=1");
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
+
+      attr = pango2_attr_letter_spacing_new (0);
+      pango2_attribute_set_range (attr, start, end);
+      pango2_attr_list_insert (attrs, attr);
+      start = end;
 
       g_string_append (str, self->sample_text);
       g_string_append (str, " "); /* Unicode line separator */
@@ -142,6 +179,7 @@ update_view (WaterfallView *self)
       attr = pango2_attr_size_new (sizes[i] * PANGO2_SCALE);
       pango2_attribute_set_range (attr, start, end);
       pango2_attr_list_insert (attrs, attr);
+
       start = end;
     }
   gtk_label_set_text (self->content, str->str);
