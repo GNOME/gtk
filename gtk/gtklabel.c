@@ -256,6 +256,7 @@ struct _GtkLabel
   PangoAttrList *attrs;
   PangoAttrList *markup_attrs;
   PangoLayout   *layout;
+  PangoTabArray *tabs;
 
   GtkWidget *popup_menu;
   GMenuModel *extra_menu;
@@ -394,6 +395,7 @@ enum {
   PROP_XALIGN,
   PROP_YALIGN,
   PROP_EXTRA_MENU,
+  PROP_TABS,
   NUM_PROPERTIES
 };
 
@@ -520,6 +522,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_EXTRA_MENU:
       gtk_label_set_extra_menu (self, g_value_get_object (value));
       break;
+    case PROP_TABS:
+      gtk_label_set_tabs (self, g_value_get_boxed (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -593,6 +598,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_EXTRA_MENU:
       g_value_set_object (value, gtk_label_get_extra_menu (self));
       break;
+    case PROP_TABS:
+      g_value_set_boxed (value, self->tabs);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -623,6 +631,7 @@ gtk_label_init (GtkLabel *self)
   self->layout = NULL;
   self->text = g_strdup ("");
   self->attrs = NULL;
+  self->tabs = NULL;
 
   self->mnemonic_widget = NULL;
 
@@ -1548,6 +1557,8 @@ gtk_label_finalize (GObject *object)
 
   g_clear_pointer (&self->popup_menu, gtk_widget_unparent);
   g_clear_object (&self->extra_menu);
+
+  g_clear_pointer (&self->tabs, pango_tab_array_free);
 
   G_OBJECT_CLASS (gtk_label_parent_class)->finalize (object);
 }
@@ -2546,6 +2557,18 @@ gtk_label_class_init (GtkLabelClass *class)
   label_props[PROP_EXTRA_MENU] =
       g_param_spec_object ("extra-menu", NULL, NULL,
                           G_TYPE_MENU_MODEL,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkLabel:tabs: (attributes org.gtk.Property.get=gtk_label_get_tabs org.gtk.Property.set=gtk_label_set_tabs)
+   *
+   * Custom tabs for this label.
+   *
+   * Since: 4.8
+   */
+  label_props[PROP_TABS] =
+      g_param_spec_boxed ("tabs", NULL, NULL,
+                          PANGO_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
@@ -4155,6 +4178,8 @@ gtk_label_ensure_layout (GtkLabel *self)
 
   if (self->ellipsize || self->wrap)
     pango_layout_set_width (self->layout, gtk_widget_get_width (GTK_WIDGET (self)) * PANGO_SCALE);
+
+  pango_layout_set_tabs (self->layout, self->tabs);
 }
 
 /**
@@ -5921,4 +5946,54 @@ gtk_label_get_extra_menu (GtkLabel *self)
   g_return_val_if_fail (GTK_IS_LABEL (self), NULL);
 
   return self->extra_menu;
+}
+
+/**
+ * gtk_label_set_tabs: (attributes org.gtk.Method.set_property=tabs)
+ * @self: a `GtkLabel`
+ * @tabs: (nullable): tabs as a `PangoTabArray`
+ *
+ * Sets the default tab stops for paragraphs in @self.
+ *
+ * Since: 4.8
+ */
+void
+gtk_label_set_tabs (GtkLabel      *self,
+                    PangoTabArray *tabs)
+{
+  g_return_if_fail (GTK_IS_LABEL (self));
+
+  if (self->tabs == tabs)
+    return;
+
+  if (self->tabs)
+    pango_tab_array_free (self->tabs);
+  self->tabs = pango_tab_array_copy (tabs);
+
+  gtk_label_clear_layout (self);
+  g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_TABS]);
+  gtk_widget_queue_resize (GTK_WIDGET (self));
+}
+
+/**
+ * gtk_label_get_tabs: (attributes org.gtk.Method.get_property=tabs)
+ * @self: a `GtkLabel`
+ *
+ * Gets the tabs for @self.
+ *
+ * The returned array will be %NULL if “standard” (8-space) tabs are used.
+ * Free the return value with [method@Pango.TabArray.free].
+ *
+ * Returns: (nullable) (transfer full): copy of default tab array,
+ *   or %NULL if standard tabs are used; must be freed with
+ *   [method@Pango.TabArray.free].
+ *
+ * Since: 4.8
+ */
+PangoTabArray *
+gtk_label_get_tabs (GtkLabel *self)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (self), NULL);
+
+  return self->tabs ? pango_tab_array_copy (self->tabs) : NULL;
 }
