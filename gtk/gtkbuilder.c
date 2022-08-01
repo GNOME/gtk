@@ -1353,8 +1353,8 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  * Main private entry point for building composite components
  * from template XML.
  *
- * This is exported purely to let `gtk-builder-tool` validate
- * templates, applications have no need to call this function.
+ * Most likely you do not need to call this function in applications as
+ * templates are handled by `GtkWidget`.
  *
  * Returns: A positive value on success, 0 if an error occurred
  */
