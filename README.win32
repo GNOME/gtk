@@ -3,6 +3,22 @@ The Win32 backend in GTK+ is not as stable or correct as the X11 one.
 For prebuilt runtime and developer packages see
 http://ftp.gnome.org/pub/gnome/binaries/win32/
 
+Notes on using OpenGL (GtkGLArea/GdkGLArea) on Win32
+====================================================
+Note that on Windows, if one is running Nahimic 3 on a system with
+nVidia graphics, one needs to stop the "Nahimic service" or insert
+the GTK application into the Nahimic blacklist, as noted in
+https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/297952/nahimic-and-nvidia-drivers-conflict/2334568/
+if using programs that utilise GtkGLArea and/or GdkGLArea, or use
+GDK_GL=gles if you know that GLES support is enabled for the build.
+
+This is a known issue, as the above link indicates, and affects quite
+a number of applications--sadly, since this issue lies within the
+nVidia graphics driver and/or the Nahimic 3 code, we are not able
+to rememdy this on the GTK side; the best bet before trying the above
+workarounds is to try to update your graphics drivers and Nahimic
+installation.
+
 Building GTK+ on Win32
 ======================
 
