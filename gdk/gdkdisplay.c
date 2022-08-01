@@ -2013,7 +2013,7 @@ gdk_display_get_monitors (GdkDisplay *self)
  * Returns a monitor close to @surface if it is outside
  * of all monitors.
  *
- * Returns: (transfer none): the monitor with the largest
+ * Returns: (transfer none) (nullable): the monitor with the largest
  *   overlap with @surface
  */
 GdkMonitor *
