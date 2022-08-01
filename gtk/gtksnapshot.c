@@ -163,7 +163,10 @@ gtk_snapshot_dispose (GObject *object)
   GtkSnapshot *snapshot = GTK_SNAPSHOT (object);
 
   if (!gtk_snapshot_states_is_empty (&snapshot->state_stack))
-    gsk_render_node_unref (gtk_snapshot_to_node (snapshot));
+    {
+      GskRenderNode *node = gtk_snapshot_to_node (snapshot);
+      g_clear_pointer (&node, gsk_render_node_unref);
+    }
 
   g_assert (gtk_snapshot_states_is_empty (&snapshot->state_stack));
   g_assert (gtk_snapshot_nodes_is_empty (&snapshot->nodes));
@@ -177,11 +180,6 @@ gtk_snapshot_class_init (GtkSnapshotClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   gobject_class->dispose = gtk_snapshot_dispose;
-}
-
-static void
-gtk_snapshot_init (GtkSnapshot *self)
-{
 }
 
 static GskRenderNode *
@@ -270,6 +268,18 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
   gsk_transform_unref (state->transform);
 }
 
+static void
+gtk_snapshot_init (GtkSnapshot *self)
+{
+  gtk_snapshot_states_init (&self->state_stack);
+  gtk_snapshot_nodes_init (&self->nodes);
+
+  gtk_snapshot_push_state (self,
+                           NULL,
+                           gtk_snapshot_collect_default,
+                           NULL);
+}
+
 /**
  * gtk_snapshot_new:
  *
@@ -280,19 +290,7 @@ gtk_snapshot_state_clear (GtkSnapshotState *state)
 GtkSnapshot *
 gtk_snapshot_new (void)
 {
-  GtkSnapshot *snapshot;
-
-  snapshot = g_object_new (GTK_TYPE_SNAPSHOT, NULL);
-
-  gtk_snapshot_states_init (&snapshot->state_stack);
-  gtk_snapshot_nodes_init (&snapshot->nodes);
-
-  gtk_snapshot_push_state (snapshot,
-                           NULL,
-                           gtk_snapshot_collect_default,
-                           NULL);
-
-  return snapshot;
+  return g_object_new (GTK_TYPE_SNAPSHOT, NULL);
 }
 
 /**
@@ -761,7 +759,7 @@ gtk_snapshot_ensure_translate (GtkSnapshot *snapshot,
       gtk_snapshot_autopush_transform (snapshot);
       state = gtk_snapshot_get_current_state (snapshot);
     }
-  
+
   gsk_transform_to_translate (state->transform, dx, dy);
 }
 
@@ -850,7 +848,7 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
 {
   GtkSnapshotState *state;
   float scale_x, scale_y, dx, dy;
- 
+
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
 
   state = gtk_snapshot_push_state (snapshot,
@@ -2517,7 +2515,7 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
 
   node = gsk_border_node_new (&real_outline,
-                              (float[4]) { 
+                              (float[4]) {
                                 border_width[0] * scale_y,
                                 border_width[1] * scale_x,
                                 border_width[2] * scale_y,
