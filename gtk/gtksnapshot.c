@@ -163,7 +163,10 @@ gtk_snapshot_dispose (GObject *object)
   GtkSnapshot *snapshot = GTK_SNAPSHOT (object);
 
   if (!gtk_snapshot_states_is_empty (&snapshot->state_stack))
-    gsk_render_node_unref (gtk_snapshot_to_node (snapshot));
+    {
+      GskRenderNode *node = gtk_snapshot_to_node (snapshot);
+      g_clear_pointer (&node, gsk_render_node_unref);
+    }
 
   g_assert (gtk_snapshot_states_is_empty (&snapshot->state_stack));
   g_assert (gtk_snapshot_nodes_is_empty (&snapshot->nodes));
