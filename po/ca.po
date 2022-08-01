@@ -35,8 +35,8 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-18 00:07+0000\n"
-"PO-Revision-Date: 2019-08-31 22:51+0200\n"
-"Last-Translator: Robert Antoni Buj Gelonch <rbuj@fedoraproject.org>\n"
+"PO-Revision-Date: 2022-08-01 20:44+0200\n"
+"Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -2764,15 +2764,15 @@ msgstr "Lligadures"
 
 #: gtk/gtkfontchooserwidget.c:2354
 msgid "Letter Case"
-msgstr "Ignora les diferències entre majúscules i minúscules"
+msgstr "Majúscules i minúscules"
 
 #: gtk/gtkfontchooserwidget.c:2355
 msgid "Number Case"
-msgstr "Número de cas"
+msgstr "Mida del número"
 
 #: gtk/gtkfontchooserwidget.c:2356
 msgid "Number Spacing"
-msgstr "Espaiat dels nombres"
+msgstr "Espaiat entre números"
 
 #: gtk/gtkfontchooserwidget.c:2357
 msgid "Number Formatting"
