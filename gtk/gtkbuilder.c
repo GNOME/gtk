@@ -1780,6 +1780,11 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  *
  * Add @object to the @builder object pool so it can be
  * referenced just like any other object built by builder.
+ *
+ * Only a single object may be added using @name. However,
+ * it is not an error to expose the same object under multiple
+ * names. `gtk_builder_get_object()` may be used to determine
+ * if an object has already been added with @name.
  */
 void
 gtk_builder_expose_object (GtkBuilder    *builder,
