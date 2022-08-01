@@ -1353,8 +1353,8 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
  * Main private entry point for building composite components
  * from template XML.
  *
- * This is exported purely to let `gtk-builder-tool` validate
- * templates, applications have no need to call this function.
+ * Most likely you do not need to call this function in applications as
+ * templates are handled by `GtkWidget`.
  *
  * Returns: A positive value on success, 0 if an error occurred
  */
@@ -1367,6 +1367,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
                                   GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+  const char *name;
   GError *tmp_error;
   char *filename;
 
@@ -1384,8 +1385,15 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   priv->resource_prefix = NULL;
   priv->template_type = template_type;
 
-  filename = g_strconcat ("<", g_type_name (template_type), " template>", NULL);
-  gtk_builder_expose_object (builder, g_type_name (template_type), object);
+  /* We specifically allow this function to be called multiple times with
+   * the same @template_type as that is used in applications like Builder
+   * to implement UI merging.
+   */
+  name = g_type_name (template_type);
+  if (gtk_builder_get_object (builder, name) != object)
+    gtk_builder_expose_object (builder, name, object);
+
+  filename = g_strconcat ("<", name, " template>", NULL);
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
                                     NULL,
@@ -1772,6 +1780,11 @@ gtk_builder_get_translation_domain (GtkBuilder *builder)
  *
  * Add @object to the @builder object pool so it can be
  * referenced just like any other object built by builder.
+ *
+ * Only a single object may be added using @name. However,
+ * it is not an error to expose the same object under multiple
+ * names. `gtk_builder_get_object()` may be used to determine
+ * if an object has already been added with @name.
  */
 void
 gtk_builder_expose_object (GtkBuilder    *builder,
