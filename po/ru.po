@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-06-03 11:20+0000\n"
-"PO-Revision-Date: 2022-06-03 19:46+0300\n"
+"POT-Creation-Date: 2022-07-28 18:10+0000\n"
+"PO-Revision-Date: 2022-07-29 13:45+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -532,7 +532,7 @@ msgstr "Выход из спящего режима"
 #: gdk/keyname-table.h:6916
 msgctxt "keyboard label"
 msgid "Suspend"
-msgstr "Ждущий режим"
+msgstr "Режим ожидания"
 
 #: gdk/loaders/gdkjpeg.c:63
 #, c-format
@@ -1387,7 +1387,7 @@ msgstr "индикатор выполнения"
 #: gtk/gtkaccessible.c:605
 msgctxt "accessibility"
 msgid "radio"
-msgstr "кнопвыб"
+msgstr "радио"
 
 #: gtk/gtkaccessible.c:606
 msgctxt "accessibility"
@@ -2682,7 +2682,7 @@ msgstr "_Забыть пароль немедленно"
 
 #: gtk/gtkmountoperation.c:770
 msgid "Remember password until you _logout"
-msgstr "Запомнить пароль _до выхода из сеанса"
+msgstr "Запомнить пароль до _выхода из системы"
 
 #: gtk/gtkmountoperation.c:781
 msgid "Remember _forever"
@@ -2796,7 +2796,7 @@ msgstr ""
 #: gtk/gtkpagesetupunixdialog.c:784 gtk/ui/gtkpagesetupunixdialog.ui:5
 #: gtk/ui/gtkprintunixdialog.ui:709
 msgid "Page Setup"
-msgstr "Параметры страницы"
+msgstr "Настройка страницы"
 
 #: gtk/gtkpasswordentry.c:173
 msgid "Hide Text"
@@ -3610,7 +3610,7 @@ msgstr "Включено"
 
 #: gtk/inspector/actions.ui:41
 msgid "Parameter Type"
-msgstr "Тип параметры"
+msgstr "Тип параметра"
 
 #: gtk/inspector/actions.ui:52 gtk/inspector/css-node-tree.ui:74
 #: gtk/inspector/misc-info.ui:121
@@ -4388,7 +4388,7 @@ msgstr "Информация"
 
 #: gtk/inspector/window.ui:554
 msgid "Settings"
-msgstr "Параметры"
+msgstr "Настройки"
 
 #: gtk/inspector/window.ui:563
 msgid "Resources"
@@ -7128,21 +7128,21 @@ msgid ""
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
 "Использование:\n"
-"  gtk-builder-tool [COMMAND] [OPTION...] FILE\n"
+"  gtk-builder-tool [КОМАНДА] [ПАРАМЕТР...] ФАЙЛ\n"
 "\n"
 "Команды:\n"
-"  validate Удостоверить файл\n"
-"  упростить Упростить файл\n"
-"  enumerate Перечислить все именованные объекты\n"
-"  preview Предварительный просмотр файла\n"
+"  validate     Удостоверить файл\n"
+"  упростить     Упростить файл\n"
+"  enumerate    Перечислить все именованные объекты\n"
+"  preview      Предварительный просмотр файла\n"
 "\n"
 "Параметры упрощения:\n"
-"  --replace Заменить файл\n"
-"  --3to4 Преобразование из GTK 3 в GTK 4\n"
+"  --replace    Заменить файл\n"
+"  --3to4       Преобразование из GTK 3 в GTK 4\n"
 "\n"
 "Параметры предварительного просмотра:\n"
-"  --id=ID Предварительный просмотр только названного объекта\n"
-"  --css=FILE Использовать стиль из файла CSS\n"
+"  --id=ID      Предварительный просмотр только названного объекта\n"
+"  --css=FILE   Использовать стиль из файла CSS\n"
 "\n"
 "Выполнение различных задач над файлами GtkBuilder .ui.\n"
 
@@ -7355,3 +7355,45 @@ msgstr ""
 "Нет индексного файла темы в «%s».\n"
 "Если действительно хотите создать здесь кэш значков, используйте --ignore-"
 "theme-index.\n"
+
+#~ msgid "No GL API allowed."
+#~ msgstr "API GL не разрешен."
+
+#~ msgid "FILE"
+#~ msgstr "ФАЙЛ"
+
+#~ msgid "List all named objects."
+#~ msgstr "Список всех названных объектов."
+
+#~ msgid "Preview only the named object"
+#~ msgstr "Предпросмотр только названного объекта"
+
+#~ msgid "Use style from CSS file"
+#~ msgstr "Использовать стиль из файла CSS"
+
+#~ msgid "Preview the file."
+#~ msgstr "Предпросмотр файла."
+
+#~ msgid "Screenshot only the named object"
+#~ msgstr "Снимок экрана только названного объекта"
+
+#~ msgid "Save as node file instead of png"
+#~ msgstr "Сохранить как node файл вместо png"
+
+#~ msgid "Overwrite existing file"
+#~ msgstr "Перезаписать существующий файл"
+
+#~ msgid "Take a screenshot of the file."
+#~ msgstr "Сделать снимок файла."
+
+#~ msgid "Replace the file"
+#~ msgstr "Заменить файл"
+
+#~ msgid "Convert from GTK 3 to GTK 4"
+#~ msgstr "Преобразование из GTK 3 в GTK 4"
+
+#~ msgid "Simplify the file."
+#~ msgstr "Упростить файл."
+
+#~ msgid "Validate the file."
+#~ msgstr "Удостоверить файл."
