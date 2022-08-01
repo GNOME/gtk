@@ -1367,6 +1367,7 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
                                   GError      **error)
 {
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
+  const char *name;
   GError *tmp_error;
   char *filename;
 
@@ -1384,8 +1385,15 @@ gtk_builder_extend_with_template (GtkBuilder   *builder,
   priv->resource_prefix = NULL;
   priv->template_type = template_type;
 
-  filename = g_strconcat ("<", g_type_name (template_type), " template>", NULL);
-  gtk_builder_expose_object (builder, g_type_name (template_type), object);
+  /* We specifically allow this function to be called multiple times with
+   * the same @template_type as that is used in applications like Builder
+   * to implement UI merging.
+   */
+  name = g_type_name (template_type);
+  if (gtk_builder_get_object (builder, name) != object)
+    gtk_builder_expose_object (builder, name, object);
+
+  filename = g_strconcat ("<", name, " template>", NULL);
   _gtk_builder_parser_parse_buffer (builder, filename,
                                     buffer, length,
                                     NULL,
