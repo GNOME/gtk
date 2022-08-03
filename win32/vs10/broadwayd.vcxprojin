@@ -50,7 +50,7 @@
       <AdditionalIncludeDirectories>$(GdkBaseIncludes);..\..\gdk\broadway;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader></PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      
+
       <!-- For Broadway_Debug -->
       <Optimization Condition="'$(Configuration)' == 'Debug_Broadway'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)' == 'Debug_Broadway'">_DEBUG;$(GdkDefines);%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -87,6 +87,24 @@ NULL=
 # For GDK-Broadway public headers
 !include ..\gdk\broadway\gdk-broadway-sources.inc
 
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_BROADWAY_C_SRCS]
+!endif
+
+!if [for %f in ($(GDK_BROADWAY_NON_GENERATED_SOURCES)) do @if "%~xf" == ".c" call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ..\gdk\broadway\%f]
+!endif
+
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak BROADWAYD_C_SRCS]
+!endif
+
+!if [for %f in ($(broadwayd_SOURCES)) do @if "%~xf" == ".c" call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ..\gdk\broadway\%f]
+!endif
+
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
 !include gdk_sources_msvc$(VSVER)_$(PLAT).mak
 
 !if [del /f /q gdk_sources_msvc$(VSVER)_$(PLAT).mak]

@@ -58,6 +58,23 @@ GTK_GENERATED_SOURCES =	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.c	\
 	$(GTK_VERSION_H)
 
+GTK3_GDK_VC1X_PROJS =	\
+	vs10\$(GDK_VS1X_PROJ)	\
+	vs11\$(GDK_VS1X_PROJ)	\
+	vs12\$(GDK_VS1X_PROJ)	\
+	vs14\$(GDK_VS1X_PROJ)	\
+	vs15\$(GDK_VS1X_PROJ)	\
+	vs16\$(GDK_VS1X_PROJ)	\
+	vs17\$(GDK_VS1X_PROJ)
+
+GTK3_GDK_VC1X_PROJ_FILTERS =	\
+	vs11\$(GDK_VS1X_PROJ_FILTERS)	\
+	vs12\$(GDK_VS1X_PROJ_FILTERS)	\
+	vs14\$(GDK_VS1X_PROJ_FILTERS)	\
+	vs15\$(GDK_VS1X_PROJ_FILTERS)	\
+	vs16\$(GDK_VS1X_PROJ_FILTERS)	\
+	vs17\$(GDK_VS1X_PROJ_FILTERS)
+
 GTK3_GDK_WIN32_VC1X_PROJS =	\
 	vs10\$(GDKWIN32_VS1X_PROJ)	\
 	vs11\$(GDKWIN32_VS1X_PROJ)	\
@@ -74,6 +91,40 @@ GTK3_GDK_WIN32_VC1X_PROJ_FILTERS =	\
 	vs15\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
 	vs16\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
 	vs17\$(GDKWIN32_VS1X_PROJ_FILTERS)
+
+GTK3_GDK_BROADWAY_VC1X_PROJS =	\
+	vs10\$(GDKBROADWAY_VS1X_PROJ)	\
+	vs11\$(GDKBROADWAY_VS1X_PROJ)	\
+	vs12\$(GDKBROADWAY_VS1X_PROJ)	\
+	vs14\$(GDKBROADWAY_VS1X_PROJ)	\
+	vs15\$(GDKBROADWAY_VS1X_PROJ)	\
+	vs16\$(GDKBROADWAY_VS1X_PROJ)	\
+	vs17\$(GDKBROADWAY_VS1X_PROJ)
+
+GTK3_GDK_BROADWAY_VC1X_PROJ_FILTERS =	\
+	vs11\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
+	vs12\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
+	vs14\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
+	vs15\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
+	vs16\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
+	vs17\$(GDKBROADWAY_VS1X_PROJ_FILTERS)
+
+GTK3_BROADWAYD_VC1X_PROJS =	\
+	vs10\$(BROADWAYD_VS1X_PROJ)	\
+	vs11\$(BROADWAYD_VS1X_PROJ)	\
+	vs12\$(BROADWAYD_VS1X_PROJ)	\
+	vs14\$(BROADWAYD_VS1X_PROJ)	\
+	vs15\$(BROADWAYD_VS1X_PROJ)	\
+	vs16\$(BROADWAYD_VS1X_PROJ)	\
+	vs17\$(BROADWAYD_VS1X_PROJ)
+
+GTK3_BROADWAYD_VC1X_PROJ_FILTERS =	\
+	vs11\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
+	vs12\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
+	vs14\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
+	vs15\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
+	vs16\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
+	vs17\$(BROADWAYD_VS1X_PROJ_FILTERS)
 
 GTK3_DEMO_VC1X_PROJS =	\
 	vs10\$(DEMO_VS1X_PROJ)	\
@@ -96,6 +147,24 @@ GTK3_GDK_WIN32_VCPROJS =	\
 	vs9\$(GDKWIN32_VS9_PROJ)	\
 	$(GTK3_GDK_WIN32_VC1X_PROJS)	\
 	$(GTK3_GDK_WIN32_VC1X_PROJ_FILTERS)
+
+GTK3_GDK_BROADWAY_VCPROJS =	\
+	vs9\$(GDKBROADWAY_VS9_PROJ)	\
+	$(GTK3_GDK_BROADWAY_VC1X_PROJS)	\
+	$(GTK3_GDK_BROADWAY_VC1X_PROJ_FILTERS)
+
+GTK3_BROADWAYD_VCPROJS =	\
+	vs9\$(BROADWAYD_VS9_PROJ)	\
+	$(GTK3_BROADWAYD_VC1X_PROJS)	\
+	$(GTK3_BROADWAYD_VC1X_PROJ_FILTERS)
+
+GTK3_GDK_VCPROJS =	\
+	vs9\$(GDK_VS9_PROJ)	\
+	$(GTK3_GDK_VC1X_PROJS)	\
+	$(GTK3_GDK_VC1X_PROJ_FILTERS)	\
+	$(GTK3_GDK_WIN32_VCPROJS)	\
+	$(GTK3_GDK_BROADWAY_VCPROJS)	\
+	$(GTK3_BROADWAYD_VCPROJS)
 
 GTK3_DEMO_VCPROJS =	\
 	vs9\$(DEMO_VS9_PROJ)	\
@@ -343,70 +412,114 @@ generate-broadway-items: ..\gdk\broadway\clienthtml.h ..\gdk\broadway\broadwayjs
 	--generate-source ..\demos\widget-factory\widget-factory.gresource.xml
 
 # (Re-) generate Visual Studio projects
+# Dependencies for library projects
+gdk-3.sourcefiles: $(GDK_C_SRCS:/=\)
+gdk-3.vs10.sourcefiles: $(GDK_C_SRCS:/=\)
+gdk-3.vs10.sourcefiles.filters: $(GDK_C_SRCS:/=\)
 gdk3-win32.sourcefiles: $(GDK_WIN32_C_SRCS)
-	@-del vs9\$(GDKWIN32_VS9_PROJ)
-	@for %%s in ($**) do @echo.   ^<File RelativePath^="..\%%s" /^>>>$@
-
 gdk3-win32.vs10.sourcefiles: $(GDK_WIN32_C_SRCS)
-	@-del vs10\$(GDKWIN32_VS1X_PROJ)
-	@for %%s in ($**) do @echo.   ^<ClCompile Include^="..\%%s" /^>>>$@
-
 gdk3-win32.vs10.sourcefiles.filters: $(GDK_WIN32_C_SRCS)
-	@-del vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)
-	@for %%s in ($**) do @echo.   ^<ClCompile Include^="..\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>$@
+gdk3-broadway.sourcefiles: $(GDK_BROADWAY_C_SRCS)
+gdk3-broadway.vs10.sourcefiles: $(GDK_BROADWAY_C_SRCS)
+gdk3-broadway.vs10.sourcefiles.filters: $(GDK_BROADWAY_C_SRCS)
 
-gtk3-demo.sourcefiles: $(demo_actual_sources)
-	@-del vs9\$(DEMO_VS9_PROJ)
+# Dependencies for executable projects
+broadwayd.sourcefiles: $(BROADWAYD_C_SRCS)
+broadwayd.vs10.sourcefiles: $(BROADWAYD_C_SRCS)
+broadwayd.vs10.sourcefiles.filters: $(BROADWAYD_C_SRCS)
+gtk3-demo.sourcefiles: $(demo_actual_sources) $(more_demo_sources)
+gtk3-demo.vs10.sourcefiles: $(demo_actual_sources) $(more_demo_sources)
+gtk3-demo.vs10.sourcefiles.filters: $(demo_actual_sources) $(more_demo_sources)
+
+gdk-3.sourcefiles gdk3-win32.sourcefiles gdk3-broadway.sourcefiles	\
+broadwayd.sourcefiles gtk3-demo.sourcefiles:
+	@-del vs9\$(@B).vcproj
 	@for %%s in ($**) do @echo.   ^<File RelativePath^="..\%%s" /^>>>$@
-	@for %%s in (gtkfishbowl.c main.c) do @echo.   ^<File RelativePath^="..\..\demos\gtk-demo\%%s" /^>>>$@
 
-gtk3-demo.vs10.sourcefiles: $(demo_actual_sources)
-	@-del vs10\$(DEMO_VS1X_PROJ)
+gdk-3.vs10.sourcefiles	\
+gdk3-win32.vs10.sourcefiles	\
+gdk3-broadway.vs10.sourcefiles	\
+broadwayd.vs10.sourcefiles	\
+gtk3-demo.vs10.sourcefiles:
+	@-del vs10\$(@B:.vs10=.vcxproj)
 	@for %%s in ($**) do @echo.   ^<ClCompile Include^="..\%%s" /^>>>$@
-	@for %%s in (gtkfishbowl.c main.c) do @echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s" /^>>>$@
 
-gtk3-demo.vs10.sourcefiles.filters: $(demo_actual_sources)
-	@-del vs10\$(DEMO_VS1X_PROJ_FILTERS)
+gdk-3.vs10.sourcefiles.filters	\
+gdk3-win32.vs10.sourcefiles.filters	\
+gdk3-broadway.vs10.sourcefiles.filters	\
+broadwayd.vs10.sourcefiles.filters	\
+gtk3-demo.vs10.sourcefiles.filters:
+	@-del vs10\$(@F:.vs10.sourcefiles=.vcxproj)
 	@for %%s in ($**) do @echo.   ^<ClCompile Include^="..\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>$@
-	@for %%s in (gtkfishbowl.c main.c) do @echo.   ^<ClCompile Include^="..\..\demos\gtk-demo\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>$@
 
+# Dependencies for GDK projects
+vs9\$(GDK_VS9_PROJ): gdk-3.sourcefiles vs9\$(GDK_VS9_PROJ)in
+vs10\$(GDK_VS1X_PROJ): gdk-3.vs10.sourcefiles vs10\$(GDK_VS1X_PROJ)in
+vs10\$(GDK_VS1X_PROJ_FILTERS): gdk-3.vs10.sourcefiles.filters vs10\$(GDK_VS1X_PROJ_FILTERS)in
 vs9\$(GDKWIN32_VS9_PROJ).pre: gdk3-win32.sourcefiles vs9\$(GDKWIN32_VS9_PROJ)in
 vs10\$(GDKWIN32_VS1X_PROJ).pre: gdk3-win32.vs10.sourcefiles vs10\$(GDKWIN32_VS1X_PROJ)in
 vs10\$(GDKWIN32_VS1X_PROJ_FILTERS): gdk3-win32.vs10.sourcefiles.filters vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)in
+vs9\$(GDKBROADWAY_VS9_PROJ): gdk3-broadway.sourcefiles vs9\$(GDKBROADWAY_VS9_PROJ)in
+vs10\$(GDKBROADWAY_VS1X_PROJ): gdk3-broadway.vs10.sourcefiles vs10\$(GDKBROADWAY_VS1X_PROJ)in
+vs10\$(GDKBROADWAY_VS1X_PROJ_FILTERS): gdk3-broadway.vs10.sourcefiles.filters vs10\$(GDKBROADWAY_VS1X_PROJ_FILTERS)in
+
+# Dependencies for tool executables
+vs9\$(BROADWAYD_VS9_PROJ): broadwayd.sourcefiles vs9\$(BROADWAYD_VS9_PROJ)in
+vs10\$(BROADWAYD_VS1X_PROJ): broadwayd.vs10.sourcefiles vs10\$(BROADWAYD_VS1X_PROJ)in
+vs10\$(BROADWAYD_VS1X_PROJ_FILTERS): broadwayd.vs10.sourcefiles.filters vs10\$(BROADWAYD_VS1X_PROJ_FILTERS)in
+
+# Dependencies for demos
 vs9\$(DEMO_VS9_PROJ).pre: gtk3-demo.sourcefiles vs9\$(DEMO_VS9_PROJ)in
 vs10\$(DEMO_VS1X_PROJ).pre: gtk3-demo.vs10.sourcefiles vs10\$(DEMO_VS1X_PROJ)in
 vs10\$(DEMO_VS1X_PROJ_FILTERS): gtk3-demo.vs10.sourcefiles.filters vs10\$(DEMO_VS1X_PROJ_FILTERS)in
 
-vs9\$(GDKWIN32_VS9_PROJ).pre vs10\$(GDKWIN32_VS1X_PROJ).pre vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-vs9\$(DEMO_VS9_PROJ).pre vs10\$(DEMO_VS1X_PROJ).pre vs10\$(DEMO_VS1X_PROJ_FILTERS):
+# Create the project files themselves without customization with options
+vs9\$(GDKWIN32_VS9_PROJ).pre	\
+vs10\$(GDKWIN32_VS1X_PROJ).pre	\
+vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
+vs9\$(GDKBROADWAY_VS9_PROJ)	\
+vs10\$(GDKBROADWAY_VS1X_PROJ)	\
+vs10\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
+vs9\$(GDK_VS9_PROJ)	\
+vs10\$(GDK_VS1X_PROJ)	\
+vs10\$(GDK_VS1X_PROJ_FILTERS)	\
+vs9\$(BROADWAYD_VS9_PROJ)	\
+vs10\$(BROADWAYD_VS1X_PROJ)	\
+vs10\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
+vs9\$(DEMO_VS9_PROJ).pre	\
+vs10\$(DEMO_VS1X_PROJ).pre	\
+vs10\$(DEMO_VS1X_PROJ_FILTERS):
 	@$(CPP) /nologo /EP /I. $(@:.pre=)in>$(@F:.pre=).tmp
 	@for /f "usebackq tokens=* delims=" %%l in ($(@F:.pre=).tmp) do @echo %%l>>$@
 	@-del $(@F:.pre=).tmp
-	@-for %%f in ($**) do if not "%%f" == "$(@:.pre=)in" del %%f
-
-!ifdef USE_EGL
-regenerate-gdkwin32-vsproj-msg:
-	@echo Regenerating gdk3-win32 Visual Studio projects with EGL support...
+	@-for %%f in ($**) do @if not "%%f" == "$(@:.pre=)in" del %%f
 
 vs9\$(GDKWIN32_VS9_PROJ): vs9\$(GDKWIN32_VS9_PROJ).pre
+vs10\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ).pre
+
+vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
+vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
+
+!ifdef USE_EGL
+regenerate-gdk-vsproj-msg:
+	@echo Regenerating GDK Visual Studio projects with EGL support...
+
+vs9\$(GDKWIN32_VS9_PROJ):
 	@echo Generating $@...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring=";INSIDE_GDK_WIN32\""	\
 	--outstring=";INSIDE_GDK_WIN32;GDK_WIN32_ENABLE_EGL\""
 	@-del $**
 
-vs10\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ).pre
+vs10\$(GDKWIN32_VS1X_PROJ):
 	@echo Generating $@...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring=";INSIDE_GDK_WIN32;%"	\
 	--outstring=";INSIDE_GDK_WIN32;GDK_WIN32_ENABLE_EGL;%"
 	@-del $**
 !else
-regenerate-gdkwin32-vsproj-msg:
-	@echo Regenerating gdk3-win32 Visual Studio projects without EGL support...
-
-vs9\$(GDKWIN32_VS9_PROJ): vs9\$(GDKWIN32_VS9_PROJ).pre
-vs10\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ).pre
+regenerate-gdk-vsproj-msg:
+	@echo Regenerating GDK Visual Studio projects without EGL support...
 
 vs9\$(GDKWIN32_VS9_PROJ) vs10\$(GDKWIN32_VS1X_PROJ):
 	@echo Renaming $** to $@...
@@ -416,14 +529,15 @@ vs9\$(GDKWIN32_VS9_PROJ) vs10\$(GDKWIN32_VS1X_PROJ):
 !ifdef FONT_FEATURES_DEMO
 !ifdef FONT_FEATURES_USE_PANGOFT2
 DEMO_MSG = with font features demo using PangoFT2
-vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
+
+vs9\$(DEMO_VS9_PROJ):
 	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring="AdditionalDependencies=\"\""	\
 	--outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_PANGOFT2_VS9)\""
 	@-del $**
 
-vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
+vs10\$(DEMO_VS1X_PROJ):
 	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring=">%(AdditionalDependencies)<"	\
@@ -431,14 +545,15 @@ vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
 	@-del $**
 !else
 DEMO_MSG = with font features demo
-vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
+
+vs9\$(DEMO_VS9_PROJ):
 	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring="AdditionalDependencies=\"\""	\
 	--outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_NEW_PANGO)\""
 	@-del $**
 
-vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
+vs10\$(DEMO_VS1X_PROJ):
 	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring=">%(AdditionalDependencies)<"	\
@@ -446,89 +561,63 @@ vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
 	@-del $**
 !endif
 !else
-vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
-vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
 
 DEMO_MSG = without font features demo
+
 vs9\$(DEMO_VS9_PROJ) vs10\$(DEMO_VS1X_PROJ):
 	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@move $** $@
 !endif
 
-vs11\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ)
-vs12\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ)
-vs14\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ)
-vs15\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ)
-vs16\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ)
-vs17\$(GDKWIN32_VS1X_PROJ): vs10\$(GDKWIN32_VS1X_PROJ)
-vs11\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
-vs12\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
-vs14\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
-vs15\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
-vs16\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
-vs17\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ)
+# VS2012+ .vcxproj: Update the toolset version as appropriate
+{vs10\}.vcxproj{vs11\}.vcxproj:
+	@echo Copying and updating $< for VS2012
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@ --instring=">v100<" --outstring=">v110<"
 
-vs11\$(GDKWIN32_VS1X_PROJ_FILTERS): vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)
-vs12\$(GDKWIN32_VS1X_PROJ_FILTERS): vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)
-vs14\$(GDKWIN32_VS1X_PROJ_FILTERS): vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)
-vs15\$(GDKWIN32_VS1X_PROJ_FILTERS): vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)
-vs16\$(GDKWIN32_VS1X_PROJ_FILTERS): vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)
-vs17\$(GDKWIN32_VS1X_PROJ_FILTERS): vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)
-vs11\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
-vs12\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
-vs14\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
-vs15\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
-vs16\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
-vs17\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
+{vs10\}.vcxproj{vs12\}.vcxproj:
+	@echo Copying and updating $< for VS2013
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@ --instring=">v100<" --outstring=">v120<"
 
-regenerate-demos-h-win32-msg:
-	@echo (Re-)Generating demos.h.win32 $(DEMO_MSG)...
+{vs10\}.vcxproj{vs14\}.vcxproj:
+	@echo Copying and updating $< for VS2015
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@ --instring=">v100<" --outstring=">v140<"
 
-vs11\$(GDKWIN32_VS1X_PROJ)	\
-vs11\$(DEMO_VS1X_PROJ):
-	@echo Copying and updating $** for VS2012
-	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v110<"
+{vs10\}.vcxproj{vs15\}.vcxproj:
+	@echo Copying and updating $< for VS2017
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@ --instring=">v100<" --outstring=">v141<"
 
-vs12\$(GDKWIN32_VS1X_PROJ)	\
-vs12\$(DEMO_VS1X_PROJ):
-	@echo Copying and updating $** for VS2013
-	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v120<"
+{vs10\}.vcxproj{vs16\}.vcxproj:
+	@echo Copying and updating $< for VS2019
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@ --instring=">v100<" --outstring=">v142<"
 
-vs14\$(GDKWIN32_VS1X_PROJ)	\
-vs14\$(DEMO_VS1X_PROJ):
-	@echo Copying and updating $** for VS2015
-	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v140<"
-
-vs15\$(GDKWIN32_VS1X_PROJ)	\
-vs15\$(DEMO_VS1X_PROJ):
-	@echo Copying and updating $** for VS2017
-	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v141<"
-
-vs16\$(GDKWIN32_VS1X_PROJ)	\
-vs16\$(DEMO_VS1X_PROJ):
-	@echo Copying and updating $** for VS2019
-	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v142<"
-
-vs17\$(GDKWIN32_VS1X_PROJ)	\
-vs17\$(DEMO_VS1X_PROJ):
-	@echo Copying and updating $** for VS2022
-	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@ --instring=">v100<" --outstring=">v143<"
+{vs10\}.vcxproj{vs17\}.vcxproj:
+	@echo Copying and updating $< for VS2022
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@ --instring=">v100<" --outstring=">v143<"
 
 # VS2012+ .vcxproj.filters: We simply copy the VS2010 ones
-vs11\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-vs12\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-vs14\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-vs15\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-vs16\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-vs17\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-vs11\$(DEMO_VS1X_PROJ_FILTERS)	\
-vs12\$(DEMO_VS1X_PROJ_FILTERS)	\
-vs14\$(DEMO_VS1X_PROJ_FILTERS)	\
-vs15\$(DEMO_VS1X_PROJ_FILTERS)	\
-vs16\$(DEMO_VS1X_PROJ_FILTERS)	\
-vs17\$(DEMO_VS1X_PROJ_FILTERS):
-	@echo Copying $** to $@...
-	@copy $** $@
+{vs10\}.filters{vs11\}.filters:
+	@echo Copying $< to $@...
+	@copy $< $@
+
+{vs10\}.filters{vs12\}.filters:
+	@echo Copying $< to $@...
+	@copy $< $@
+
+{vs10\}.filters{vs14\}.filters:
+	@echo Copying $< to $@...
+	@copy $< $@
+
+{vs10\}.filters{vs15\}.filters:
+	@echo Copying $< to $@...
+	@copy $< $@
+
+{vs10\}.filters{vs16\}.filters:
+	@echo Copying $< to $@...
+	@copy $< $@
+
+{vs10\}.filters{vs17\}.filters:
+	@echo Copying $< to $@...
+	@copy $< $@
 
 .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\de.gresource.xml: ..\gtk\emoji\gresource.xml.in
 .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\es.gresource.xml: ..\gtk\emoji\gresource.xml.in
@@ -578,7 +667,7 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 	--files-from="$(@D:\=/)/POTFILES.in"
 	@move $(@B).po $@
 
-regenerate-gdkwin32-vsproj: regenerate-gdkwin32-vsproj-msg $(GTK3_GDK_WIN32_VCPROJS)
+regenerate-gdk-vsproj: regenerate-gdk-vsproj-msg $(GTK3_GDK_VCPROJS)
 
 # Remove the generated files
 clean:
@@ -619,3 +708,6 @@ clean:
 	@if exist ..\gdk-$(CFG)-$(GDK_DEL_CONFIG)-build del ..\gdk-$(CFG)-$(GDK_DEL_CONFIG)-build
 	@-del /f /q .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\config.h
 	@-rd .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3\gdk
+
+.SUFFIXES: .vcxproj .filters .sln 
+
