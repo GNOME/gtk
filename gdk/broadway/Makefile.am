@@ -40,10 +40,10 @@ EXTRA_DIST += broadway.js rawinflate.min.js
 
 # built headers that don't get installed
 broadway_built_sources =		\
-	${broadway_built_private_headers}
+	$(broadway_built_private_headers)
 
 libgdk_broadway_la_SOURCES =		\
-	${broadway_built_private_headers}\
+	$(broadway_built_private_headers)\
 	$(GDK_BROADWAY_NON_GENERATED_SOURCES)
 
 if OS_UNIX
