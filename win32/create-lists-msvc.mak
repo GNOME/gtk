@@ -66,6 +66,15 @@ NULL=
 !if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_WIN32_C_SRCS]
+!endif
+
+!if [for %f in ($(libgdk_win32_la_SOURCES)) do @if "%~xf" == ".c" call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ..\gdk\win32\%f]
+!endif
+
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
 !if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_WIN32_INTROSPECTION_SRCS]
 !endif
 
