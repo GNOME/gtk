@@ -619,6 +619,62 @@ vs9\$(DEMO_VS9_PROJ) vs10\$(DEMO_VS1X_PROJ):
 	@echo Copying $< to $@...
 	@copy $< $@
 
+{vs10\}.sln{vs11\}.sln:
+	@echo Copying and updating $< for VS2012...
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@.tmp	\
+	--instring="Format Version 11.00" --outstring="Format Version 12.00"
+	@$(PYTHON) replace.py -a=replace-str -i=$@.tmp -o=$@	\
+	--instring="# Visual Studio 2010" --outstring="# Visual Studio 2012"
+	@del $@.tmp
+
+{vs10\}.sln{vs12\}.sln:
+	@echo Copying and updating $< for VS2013...
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@.tmp	\
+	--instring="Format Version 11.00" --outstring="Format Version 12.00"
+	@$(PYTHON) replace.py -a=replace-str -i=$@.tmp -o=$@	\
+	--instring="# Visual Studio 2010" --outstring="# Visual Studio 2013"
+	@del $@.tmp
+
+{vs10\}.sln{vs14\}.sln:
+	@echo Copying and updating $< for VS2015...
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@.tmp	\
+	--instring="Format Version 11.00" --outstring="Format Version 12.00"
+	@$(PYTHON) replace.py -a=replace-str -i=$@.tmp -o=$@	\
+	--instring="# Visual Studio 2010" --outstring="# Visual Studio 14"
+	@del $@.tmp
+
+{vs10\}.sln{vs15\}.sln:
+	@echo Copying and updating $< for VS2017...
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@.tmp	\
+	--instring="Format Version 11.00" --outstring="Format Version 12.00"
+	@$(PYTHON) replace.py -a=replace-str -i=$@.tmp -o=$@	\
+	--instring="# Visual Studio 2010" --outstring="# Visual Studio 15"
+	@del $@.tmp
+
+{vs10\}.sln{vs16\}.sln:
+	@echo Copying and updating $< for VS2019...
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@.tmp	\
+	--instring="Format Version 11.00" --outstring="Format Version 12.00"
+	@$(PYTHON) replace.py -a=replace-str -i=$@.tmp -o=$@	\
+	--instring="# Visual Studio 2010" --outstring="# Visual Studio 16"
+	@del $@.tmp
+
+{vs10\}.sln{vs17\}.sln:
+	@echo Copying and updating $< for VS2022...
+	@$(PYTHON) replace.py -a=replace-str -i=$< -o=$@.tmp	\
+	--instring="Format Version 11.00" --outstring="Format Version 12.00"
+	@$(PYTHON) replace.py -a=replace-str -i=$@.tmp -o=$@	\
+	--instring="# Visual Studio 2010" --outstring="# Visual Studio 17"
+	@del $@.tmp
+
+copy-update-static-projects:	\
+$(GTK3_VS11_STATIC_PROJS)	\
+$(GTK3_VS12_STATIC_PROJS)	\
+$(GTK3_VS14_STATIC_PROJS)	\
+$(GTK3_VS15_STATIC_PROJS)	\
+$(GTK3_VS16_STATIC_PROJS)	\
+$(GTK3_VS17_STATIC_PROJS)
+
 .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\de.gresource.xml: ..\gtk\emoji\gresource.xml.in
 .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\es.gresource.xml: ..\gtk\emoji\gresource.xml.in
 .\vs$(VSVER)\$(CFG)\$(PLAT)\bin\fr.gresource.xml: ..\gtk\emoji\gresource.xml.in

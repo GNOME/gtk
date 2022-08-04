@@ -127,6 +127,33 @@ GTK_PREPROCESSOR_FLAGS =	\
 	 /DGDK_DISABLE_DEPRECATED	\
 	 /DISOLATION_AWARE_ENABLED
 
+GTK3_VS10_STATIC_PROJS =	\
+	vs10\gtk+.sln	\
+	vs10\gtk-builder-tool.vcxproj	\
+	vs10\gtk-encode-symbolic-svg.vcxproj	\
+	vs10\gtk-query-settings.vcxproj	\
+	vs10\gtk-update-icon-cache.vcxproj	\
+	vs10\gtk3-demo-application.vcxproj	\
+	vs10\gtk3-icon-browser.vcxproj	\
+	vs10\gtk3-install.vcxproj	\
+	vs10\gtk3-introspect.vcxproj	\
+	vs10\gtk3-prebuild.vcxproj	\
+	vs10\gtk3-widget-factory.vcxproj	\
+	vs10\gtk-builder-tool.vcxproj.filters	\
+	vs10\gtk-encode-symbolic-svg.vcxproj.filters	\
+	vs10\gtk-query-settings.vcxproj.filters	\
+	vs10\gtk-update-icon-cache.vcxproj.filters	\
+	vs10\gtk3-demo-application.vcxproj.filters	\
+	vs10\gtk3-icon-browser.vcxproj.filters	\
+	vs10\gtk3-widget-factory.vcxproj.filters
+
+GTK3_VS11_STATIC_PROJS = $(GTK3_VS10_STATIC_PROJS:vs10\=vs11\)
+GTK3_VS12_STATIC_PROJS = $(GTK3_VS10_STATIC_PROJS:vs10\=vs12\)
+GTK3_VS14_STATIC_PROJS = $(GTK3_VS10_STATIC_PROJS:vs10\=vs14\)
+GTK3_VS15_STATIC_PROJS = $(GTK3_VS10_STATIC_PROJS:vs10\=vs15\)
+GTK3_VS16_STATIC_PROJS = $(GTK3_VS10_STATIC_PROJS:vs10\=vs16\)
+GTK3_VS17_STATIC_PROJS = $(GTK3_VS10_STATIC_PROJS:vs10\=vs17\)
+
 GDK_VS9_PROJ = gdk-3.vcproj
 GDK_VS1X_PROJ = $(GDK_VS9_PROJ:.vcproj=.vcxproj)
 GDK_VS1X_PROJ_FILTERS = $(GDK_VS9_PROJ:.vcproj=.vcxproj.filters)
