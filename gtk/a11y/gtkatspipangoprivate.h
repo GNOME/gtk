@@ -22,12 +22,6 @@
 
 G_BEGIN_DECLS
 
-const char *pango_wrap_mode_to_string (PangoWrapMode mode);
-const char *pango_underline_to_string (PangoUnderline underline);
-const char *pango_stretch_to_string (PangoStretch stretch);
-const char *pango_style_to_string (PangoStyle style);
-const char *pango_variant_to_string (PangoVariant variant);
-
 void gtk_pango_get_font_attributes (PangoFontDescription *font,
                                     GVariantBuilder      *builder);
 void gtk_pango_get_default_attributes (PangoLayout     *layout,
