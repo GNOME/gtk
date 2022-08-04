@@ -1876,15 +1876,6 @@ test_serialize_wrap_mode (void)
   g_assert_finalize_object (buffer);
 }
 
-static void
-add_unix_only_tests (void)
-{
-#ifdef G_OS_UNIX
-  /* The atspi2 code for this is not available in Windows */
-  g_test_add_func ("/TextBuffer/Serialize wrap-mode", test_serialize_wrap_mode);
-#endif
-}
-
 int
 main (int argc, char** argv)
 {
@@ -1910,8 +1901,7 @@ main (int argc, char** argv)
   g_test_add_func ("/TextBuffer/Undo 1", test_undo1);
   g_test_add_func ("/TextBuffer/Undo 2", test_undo2);
   g_test_add_func ("/TextBuffer/Undo 3", test_undo3);
-
-  add_unix_only_tests ();
+  g_test_add_func ("/TextBuffer/Serialize wrap-mode", test_serialize_wrap_mode);
 
   return g_test_run();
 }
