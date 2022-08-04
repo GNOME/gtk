@@ -58,119 +58,6 @@ GTK_GENERATED_SOURCES =	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtkresources.c	\
 	$(GTK_VERSION_H)
 
-GTK3_GDK_VC1X_PROJS =	\
-	vs10\$(GDK_VS1X_PROJ)	\
-	vs11\$(GDK_VS1X_PROJ)	\
-	vs12\$(GDK_VS1X_PROJ)	\
-	vs14\$(GDK_VS1X_PROJ)	\
-	vs15\$(GDK_VS1X_PROJ)	\
-	vs16\$(GDK_VS1X_PROJ)	\
-	vs17\$(GDK_VS1X_PROJ)
-
-GTK3_GDK_VC1X_PROJ_FILTERS =	\
-	vs11\$(GDK_VS1X_PROJ_FILTERS)	\
-	vs12\$(GDK_VS1X_PROJ_FILTERS)	\
-	vs14\$(GDK_VS1X_PROJ_FILTERS)	\
-	vs15\$(GDK_VS1X_PROJ_FILTERS)	\
-	vs16\$(GDK_VS1X_PROJ_FILTERS)	\
-	vs17\$(GDK_VS1X_PROJ_FILTERS)
-
-GTK3_GDK_WIN32_VC1X_PROJS =	\
-	vs10\$(GDKWIN32_VS1X_PROJ)	\
-	vs11\$(GDKWIN32_VS1X_PROJ)	\
-	vs12\$(GDKWIN32_VS1X_PROJ)	\
-	vs14\$(GDKWIN32_VS1X_PROJ)	\
-	vs15\$(GDKWIN32_VS1X_PROJ)	\
-	vs16\$(GDKWIN32_VS1X_PROJ)	\
-	vs17\$(GDKWIN32_VS1X_PROJ)
-
-GTK3_GDK_WIN32_VC1X_PROJ_FILTERS =	\
-	vs11\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-	vs12\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-	vs14\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-	vs15\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-	vs16\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
-	vs17\$(GDKWIN32_VS1X_PROJ_FILTERS)
-
-GTK3_GDK_BROADWAY_VC1X_PROJS =	\
-	vs10\$(GDKBROADWAY_VS1X_PROJ)	\
-	vs11\$(GDKBROADWAY_VS1X_PROJ)	\
-	vs12\$(GDKBROADWAY_VS1X_PROJ)	\
-	vs14\$(GDKBROADWAY_VS1X_PROJ)	\
-	vs15\$(GDKBROADWAY_VS1X_PROJ)	\
-	vs16\$(GDKBROADWAY_VS1X_PROJ)	\
-	vs17\$(GDKBROADWAY_VS1X_PROJ)
-
-GTK3_GDK_BROADWAY_VC1X_PROJ_FILTERS =	\
-	vs11\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
-	vs12\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
-	vs14\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
-	vs15\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
-	vs16\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
-	vs17\$(GDKBROADWAY_VS1X_PROJ_FILTERS)
-
-GTK3_BROADWAYD_VC1X_PROJS =	\
-	vs10\$(BROADWAYD_VS1X_PROJ)	\
-	vs11\$(BROADWAYD_VS1X_PROJ)	\
-	vs12\$(BROADWAYD_VS1X_PROJ)	\
-	vs14\$(BROADWAYD_VS1X_PROJ)	\
-	vs15\$(BROADWAYD_VS1X_PROJ)	\
-	vs16\$(BROADWAYD_VS1X_PROJ)	\
-	vs17\$(BROADWAYD_VS1X_PROJ)
-
-GTK3_BROADWAYD_VC1X_PROJ_FILTERS =	\
-	vs11\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
-	vs12\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
-	vs14\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
-	vs15\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
-	vs16\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
-	vs17\$(BROADWAYD_VS1X_PROJ_FILTERS)
-
-GTK3_DEMO_VC1X_PROJS =	\
-	vs10\$(DEMO_VS1X_PROJ)	\
-	vs11\$(DEMO_VS1X_PROJ)	\
-	vs12\$(DEMO_VS1X_PROJ)	\
-	vs14\$(DEMO_VS1X_PROJ)	\
-	vs15\$(DEMO_VS1X_PROJ)	\
-	vs16\$(DEMO_VS1X_PROJ)	\
-	vs17\$(DEMO_VS1X_PROJ)
-
-GTK3_DEMO_VC1X_PROJ_FILTERS =	\
-	vs11\$(DEMO_VS1X_PROJ_FILTERS)	\
-	vs12\$(DEMO_VS1X_PROJ_FILTERS)	\
-	vs14\$(DEMO_VS1X_PROJ_FILTERS)	\
-	vs15\$(DEMO_VS1X_PROJ_FILTERS)	\
-	vs16\$(DEMO_VS1X_PROJ_FILTERS)	\
-	vs17\$(DEMO_VS1X_PROJ_FILTERS)
-
-GTK3_GDK_WIN32_VCPROJS =	\
-	vs9\$(GDKWIN32_VS9_PROJ)	\
-	$(GTK3_GDK_WIN32_VC1X_PROJS)	\
-	$(GTK3_GDK_WIN32_VC1X_PROJ_FILTERS)
-
-GTK3_GDK_BROADWAY_VCPROJS =	\
-	vs9\$(GDKBROADWAY_VS9_PROJ)	\
-	$(GTK3_GDK_BROADWAY_VC1X_PROJS)	\
-	$(GTK3_GDK_BROADWAY_VC1X_PROJ_FILTERS)
-
-GTK3_BROADWAYD_VCPROJS =	\
-	vs9\$(BROADWAYD_VS9_PROJ)	\
-	$(GTK3_BROADWAYD_VC1X_PROJS)	\
-	$(GTK3_BROADWAYD_VC1X_PROJ_FILTERS)
-
-GTK3_GDK_VCPROJS =	\
-	vs9\$(GDK_VS9_PROJ)	\
-	$(GTK3_GDK_VC1X_PROJS)	\
-	$(GTK3_GDK_VC1X_PROJ_FILTERS)	\
-	$(GTK3_GDK_WIN32_VCPROJS)	\
-	$(GTK3_GDK_BROADWAY_VCPROJS)	\
-	$(GTK3_BROADWAYD_VCPROJS)
-
-GTK3_DEMO_VCPROJS =	\
-	vs9\$(DEMO_VS9_PROJ)	\
-	$(GTK3_DEMO_VC1X_PROJS)	\
-	$(GTK3_DEMO_VC1X_PROJ_FILTERS)
-
 EMOJI_GRESOURCE_XML =	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\de.gresource.xml	\
 	.\vs$(VSVER)\$(CFG)\$(PLAT)\bin\es.gresource.xml	\
@@ -423,6 +310,46 @@ gdk3-broadway.sourcefiles: $(GDK_BROADWAY_C_SRCS)
 gdk3-broadway.vs10.sourcefiles: $(GDK_BROADWAY_C_SRCS)
 gdk3-broadway.vs10.sourcefiles.filters: $(GDK_BROADWAY_C_SRCS)
 
+# GTK projects-Darn the fatal error U1095...!
+gtk-3.misc.sourcefiles: $(GTK_MISC_C_SRCS:/=\)
+gtk-3.a-h.sourcefiles: $(GTK_C_SRCS_A_H:/=\)
+gtk-3.i-w.sourcefiles: $(GTK_C_SRCS_I_W:/=\)
+gtk-3.win32.sourcefiles: $(GTK_OS_WIN32_C_SRCS:/=\) $(GTK_MORE_C_SRCS)
+gtk-3.misc.vs10.sourcefiles: $(GTK_MISC_C_SRCS:/=\)
+gtk-3.a-h.vs10.sourcefiles: $(GTK_C_SRCS_A_H:/=\)
+gtk-3.i-w.vs10.sourcefiles: $(GTK_C_SRCS_I_W:/=\)
+gtk-3.win32.vs10.sourcefiles: $(GTK_OS_WIN32_C_SRCS:/=\) $(GTK_MORE_C_SRCS)
+gtk-3.misc.vs10.sourcefiles.filters: $(GTK_MISC_C_SRCS:/=\)
+gtk-3.a-h.vs10.sourcefiles.filters: $(GTK_C_SRCS_A_H:/=\)
+gtk-3.i-w.vs10.sourcefiles.filters: $(GTK_C_SRCS_I_W:/=\)
+gtk-3.win32.vs10.sourcefiles.filters: $(GTK_OS_WIN32_C_SRCS:/=\) $(GTK_MORE_C_SRCS)
+
+gtk-3.sourcefiles:	\
+	gtk-3.a-h.sourcefiles	\
+	gtk-3.i-w.sourcefiles	\
+	gtk-3.misc.sourcefiles	\
+	gtk-3.win32.sourcefiles
+
+gtk-3.vs10.sourcefiles:	\
+	gtk-3.a-h.vs10.sourcefiles	\
+	gtk-3.i-w.vs10.sourcefiles	\
+	gtk-3.misc.vs10.sourcefiles	\
+	gtk-3.win32.vs10.sourcefiles
+
+gtk-3.vs10.sourcefiles.filters:	\
+	gtk-3.a-h.vs10.sourcefiles.filters	\
+	gtk-3.i-w.vs10.sourcefiles.filters	\
+	gtk-3.misc.vs10.sourcefiles.filters	\
+	gtk-3.win32.vs10.sourcefiles.filters
+
+gtk-3.sourcefiles gtk-3.vs10.sourcefiles gtk-3.vs10.sourcefiles.filters:
+	@echo Genarating the final $@ from $**...
+	@for %%f in ($**) do @type %%f>>$@ & del %%f
+
+gailutil-3.sourcefiles: $(GAILUTIL_C_SRCS)
+gailutil-3.vs10.sourcefiles: $(GAILUTIL_C_SRCS)
+gailutil-3.vs10.sourcefiles.filters: $(GAILUTIL_C_SRCS)
+
 # Dependencies for executable projects
 broadwayd.sourcefiles: $(BROADWAYD_C_SRCS)
 broadwayd.vs10.sourcefiles: $(BROADWAYD_C_SRCS)
@@ -432,36 +359,69 @@ gtk3-demo.vs10.sourcefiles: $(demo_actual_sources) $(more_demo_sources)
 gtk3-demo.vs10.sourcefiles.filters: $(demo_actual_sources) $(more_demo_sources)
 
 gdk-3.sourcefiles gdk3-win32.sourcefiles gdk3-broadway.sourcefiles	\
+gailutil-3.sourcefiles	\
 broadwayd.sourcefiles gtk3-demo.sourcefiles:
 	@-del vs9\$(@B).vcproj
 	@for %%s in ($**) do @echo.   ^<File RelativePath^="..\%%s" /^>>>$@
 
+gtk-3.a-h.sourcefiles gtk-3.i-w.sourcefiles	\
+gtk-3.misc.sourcefiles gtk-3.win32.sourcefiles:
+	@echo Generating $@...
+	@if exist vs9\$(GTK_VS9_PROJ) del vs9\$(GTK_VS9_PROJ)
+	@for %%s in ($(**:..\gtk\=)) do @echo.   ^<File RelativePath^="..\..\gtk\%%s" /^>>>$@
+
 gdk-3.vs10.sourcefiles	\
 gdk3-win32.vs10.sourcefiles	\
 gdk3-broadway.vs10.sourcefiles	\
+gailutil-3.vs10.sourcefiles	\
 broadwayd.vs10.sourcefiles	\
 gtk3-demo.vs10.sourcefiles:
+	@echo Generating $@...
 	@-del vs10\$(@B:.vs10=.vcxproj)
 	@for %%s in ($**) do @echo.   ^<ClCompile Include^="..\%%s" /^>>>$@
+
+gtk-3.a-h.vs10.sourcefiles	\
+gtk-3.i-w.vs10.sourcefiles	\
+gtk-3.misc.vs10.sourcefiles	\
+gtk-3.win32.vs10.sourcefiles:
+	@echo Generating $@...
+	@if exist vs10\$(GTK_VS1X_PROJ) del vs10\$(GTK_VS1X_PROJ)
+	@for %%s in ($(**:..\gtk\=)) do @echo.   ^<ClCompile Include^="..\..\gtk\%%s" /^>>>$@
 
 gdk-3.vs10.sourcefiles.filters	\
 gdk3-win32.vs10.sourcefiles.filters	\
 gdk3-broadway.vs10.sourcefiles.filters	\
+gailutil-3.vs10.sourcefiles.filters	\
 broadwayd.vs10.sourcefiles.filters	\
 gtk3-demo.vs10.sourcefiles.filters:
 	@-del vs10\$(@F:.vs10.sourcefiles=.vcxproj)
 	@for %%s in ($**) do @echo.   ^<ClCompile Include^="..\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>$@
 
+gtk-3.a-h.vs10.sourcefiles.filters	\
+gtk-3.i-w.vs10.sourcefiles.filters	\
+gtk-3.misc.vs10.sourcefiles.filters	\
+gtk-3.win32.vs10.sourcefiles.filters:
+	@if exist vs10\$(GTK_VS1X_PROJ_FILTERS) del vs10\$(GTK_VS1X_PROJ_FILTERS)
+	@for %%s in ($(**:..\gtk\=)) do @echo.   ^<ClCompile Include^="..\..\gtk\%%s"^>^<Filter^>Source Files^</Filter^>^</ClCompile^>>>$@
+
 # Dependencies for GDK projects
 vs9\$(GDK_VS9_PROJ): gdk-3.sourcefiles vs9\$(GDK_VS9_PROJ)in
-vs10\$(GDK_VS1X_PROJ): gdk-3.vs10.sourcefiles vs10\$(GDK_VS1X_PROJ)in
-vs10\$(GDK_VS1X_PROJ_FILTERS): gdk-3.vs10.sourcefiles.filters vs10\$(GDK_VS1X_PROJ_FILTERS)in
 vs9\$(GDKWIN32_VS9_PROJ).pre: gdk3-win32.sourcefiles vs9\$(GDKWIN32_VS9_PROJ)in
-vs10\$(GDKWIN32_VS1X_PROJ).pre: gdk3-win32.vs10.sourcefiles vs10\$(GDKWIN32_VS1X_PROJ)in
-vs10\$(GDKWIN32_VS1X_PROJ_FILTERS): gdk3-win32.vs10.sourcefiles.filters vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)in
 vs9\$(GDKBROADWAY_VS9_PROJ): gdk3-broadway.sourcefiles vs9\$(GDKBROADWAY_VS9_PROJ)in
+vs9\$(GTK_VS9_PROJ): gtk-3.sourcefiles vs9\$(GTK_VS9_PROJ)in
+vs9\$(GAILUTIL_VS9_PROJ): gailutil-3.sourcefiles vs9\$(GAILUTIL_VS9_PROJ)in
+
+vs10\$(GDK_VS1X_PROJ): gdk-3.vs10.sourcefiles vs10\$(GDK_VS1X_PROJ)in
+vs10\$(GDKWIN32_VS1X_PROJ).pre: gdk3-win32.vs10.sourcefiles vs10\$(GDKWIN32_VS1X_PROJ)in
 vs10\$(GDKBROADWAY_VS1X_PROJ): gdk3-broadway.vs10.sourcefiles vs10\$(GDKBROADWAY_VS1X_PROJ)in
+vs10\$(GTK_VS1X_PROJ): gtk-3.vs10.sourcefiles vs10\$(GTK_VS1X_PROJ)in
+vs10\$(GAILUTIL_VS1X_PROJ): gailutil-3.vs10.sourcefiles vs10\$(GAILUTIL_VS1X_PROJ)in
+
+vs10\$(GDK_VS1X_PROJ_FILTERS): gdk-3.vs10.sourcefiles.filters vs10\$(GDK_VS1X_PROJ_FILTERS)in
+vs10\$(GDKWIN32_VS1X_PROJ_FILTERS): gdk3-win32.vs10.sourcefiles.filters vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)in
 vs10\$(GDKBROADWAY_VS1X_PROJ_FILTERS): gdk3-broadway.vs10.sourcefiles.filters vs10\$(GDKBROADWAY_VS1X_PROJ_FILTERS)in
+vs10\$(GTK_VS1X_PROJ_FILTERS): gtk-3.vs10.sourcefiles.filters vs10\$(GTK_VS1X_PROJ_FILTERS)in
+vs10\$(GAILUTIL_VS1X_PROJ_FILTERS): gailutil-3.vs10.sourcefiles.filters vs10\$(GAILUTIL_VS1X_PROJ_FILTERS)in
 
 # Dependencies for tool executables
 vs9\$(BROADWAYD_VS9_PROJ): broadwayd.sourcefiles vs9\$(BROADWAYD_VS9_PROJ)in
@@ -475,19 +435,25 @@ vs10\$(DEMO_VS1X_PROJ_FILTERS): gtk3-demo.vs10.sourcefiles.filters vs10\$(DEMO_V
 
 # Create the project files themselves without customization with options
 vs9\$(GDKWIN32_VS9_PROJ).pre	\
-vs10\$(GDKWIN32_VS1X_PROJ).pre	\
-vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
 vs9\$(GDKBROADWAY_VS9_PROJ)	\
-vs10\$(GDKBROADWAY_VS1X_PROJ)	\
-vs10\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
 vs9\$(GDK_VS9_PROJ)	\
-vs10\$(GDK_VS1X_PROJ)	\
-vs10\$(GDK_VS1X_PROJ_FILTERS)	\
+vs9\$(GTK_VS9_PROJ)	\
+vs9\$(GAILUTIL_VS9_PROJ)	\
 vs9\$(BROADWAYD_VS9_PROJ)	\
-vs10\$(BROADWAYD_VS1X_PROJ)	\
-vs10\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
 vs9\$(DEMO_VS9_PROJ).pre	\
+vs10\$(GDKWIN32_VS1X_PROJ).pre	\
+vs10\$(GDKBROADWAY_VS1X_PROJ)	\
+vs10\$(GDK_VS1X_PROJ)	\
+vs10\$(GTK_VS1X_PROJ)	\
+vs10\$(GAILUTIL_VS1X_PROJ)	\
+vs10\$(BROADWAYD_VS1X_PROJ)	\
 vs10\$(DEMO_VS1X_PROJ).pre	\
+vs10\$(GDKWIN32_VS1X_PROJ_FILTERS)	\
+vs10\$(GDKBROADWAY_VS1X_PROJ_FILTERS)	\
+vs10\$(GDK_VS1X_PROJ_FILTERS)	\
+vs10\$(GTK_VS1X_PROJ_FILTERS)	\
+vs10\$(GAILUTIL_VS1X_PROJ_FILTERS)	\
+vs10\$(BROADWAYD_VS1X_PROJ_FILTERS)	\
 vs10\$(DEMO_VS1X_PROJ_FILTERS):
 	@$(CPP) /nologo /EP /I. $(@:.pre=)in>$(@F:.pre=).tmp
 	@for /f "usebackq tokens=* delims=" %%l in ($(@F:.pre=).tmp) do @echo %%l>>$@
@@ -723,7 +689,17 @@ regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources)
 	--files-from="$(@D:\=/)/POTFILES.in"
 	@move $(@B).po $@
 
+regenerate-gtk-vsproj-msg:
+	@echo Regenerating GTK and gailutil projects...
+
 regenerate-gdk-vsproj: regenerate-gdk-vsproj-msg $(GTK3_GDK_VCPROJS)
+regenerate-gtk-vsproj: regenerate-gtk-vsproj-msg $(GTK3_GTK_VCPROJS) $(GTK3_GAILUTIL_VCPROJS)
+
+regenerate-all-msvc-projs:	\
+	copy-update-static-projects	\
+	regenerate-gdk-vsproj	\
+	regenerate-gtk-vsproj	\
+	regenerate-demos-h-win32
 
 # Remove the generated files
 clean:
