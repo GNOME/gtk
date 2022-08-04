@@ -26,8 +26,11 @@
 #include "gdk/gdkmemorytextureprivate.h"
 
 #include <libavcodec/avcodec.h>
+#include <libavdevice/avdevice.h>
 #include <libavformat/avformat.h>
+#include <libavutil/channel_layout.h>
 #include <libavutil/pixdesc.h>
+#include <libswresample/swresample.h>
 #include <libswscale/swscale.h>
 
 typedef struct _GtkVideoFrameFFMpeg GtkVideoFrameFFMpeg;
@@ -38,6 +41,16 @@ struct _GtkVideoFrameFFMpeg
   gint64 timestamp;
 };
 
+typedef struct _GtkFStream GtkFfStream;
+
+struct _GtkFStream
+{
+  AVCodecContext *codec_ctx;
+  AVStream *stream;
+  int stream_id;
+  int type;
+};
+
 struct _GtkFfMediaFile
 {
   GtkMediaFile parent_instance;
@@ -45,9 +58,21 @@ struct _GtkFfMediaFile
   GFile *file;
   GInputStream *input_stream;
 
+  AVFormatContext *device_ctx; /* used for avdevice audio playback */
   AVFormatContext *format_ctx;
-  AVCodecContext *codec_ctx;
-  int stream_id;
+
+  GtkFfStream *input_audio_stream;
+  GtkFfStream *input_video_stream;
+
+  GtkFfStream *output_audio_stream;
+
+  gint64 audio_samples_count;
+
+  // Resampling
+  struct SwrContext *swr_ctx;
+  AVFrame* audio_frame;
+
+  // Rescaling
   struct SwsContext *sws_ctx;
   enum AVPixelFormat sws_pix_fmt;
   GdkMemoryFormat memory_format;
@@ -101,37 +126,37 @@ gtk_ff_media_file_paintable_snapshot (GdkPaintable *paintable,
                                       double        width,
                                       double        height)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (paintable);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (paintable);
 
-  if (!gtk_video_frame_ffmpeg_is_empty (&video->current_frame))
+  if (!gtk_video_frame_ffmpeg_is_empty (&self->current_frame))
     {
-      gdk_paintable_snapshot (GDK_PAINTABLE (video->current_frame.texture), snapshot, width, height);
+      gdk_paintable_snapshot (GDK_PAINTABLE (self->current_frame.texture), snapshot, width, height);
     }
 }
 
 static GdkPaintable *
 gtk_ff_media_file_paintable_get_current_image (GdkPaintable *paintable)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (paintable);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (paintable);
 
-  if (gtk_video_frame_ffmpeg_is_empty (&video->current_frame))
+  if (gtk_video_frame_ffmpeg_is_empty (&self->current_frame))
     {
-      if (video->codec_ctx)
-        return gdk_paintable_new_empty (video->codec_ctx->width, video->codec_ctx->height);
+      if (self->input_video_stream->codec_ctx)
+        return gdk_paintable_new_empty (self->input_video_stream->codec_ctx->width, self->input_video_stream->codec_ctx->height);
       else
         return gdk_paintable_new_empty (0, 0);
     }
 
-  return GDK_PAINTABLE (g_object_ref (video->current_frame.texture));
+  return GDK_PAINTABLE (g_object_ref (self->current_frame.texture));
 }
 
 static int
 gtk_ff_media_file_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (paintable);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (paintable);
 
-  if (video->codec_ctx)
-    return video->codec_ctx->width;
+  if (self->input_video_stream->codec_ctx)
+    return self->input_video_stream->codec_ctx->width;
 
   return 0;
 }
@@ -139,20 +164,20 @@ gtk_ff_media_file_paintable_get_intrinsic_width (GdkPaintable *paintable)
 static int
 gtk_ff_media_file_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (paintable);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (paintable);
 
-  if (video->codec_ctx)
-    return video->codec_ctx->height;
+  if (self->input_video_stream->codec_ctx)
+    return self->input_video_stream->codec_ctx->height;
 
   return 0;
 }
 
 static double gtk_ff_media_file_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (paintable);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (paintable);
 
-  if (video->codec_ctx)
-    return (double) video->codec_ctx->width / video->codec_ctx->height;
+  if (self->input_video_stream->codec_ctx)
+    return (double) self->input_video_stream->codec_ctx->width / self->input_video_stream->codec_ctx->height;
 
   return 0.0;
 };
@@ -208,22 +233,283 @@ g_io_module_query (void)
 }
 
 static void
-gtk_ff_media_file_set_ffmpeg_error (GtkFfMediaFile *video,
+gtk_ff_stream_close (GtkFfStream *stream)
+{
+  stream->stream_id = -1;
+  g_clear_pointer (&stream->codec_ctx, avcodec_close);
+  g_free (stream);
+}
+
+static void
+gtk_ff_media_file_set_ffmpeg_error (GtkFfMediaFile *self,
                                     int           av_errnum)
 {
   char s[AV_ERROR_MAX_STRING_SIZE];
 
-  if (gtk_media_stream_get_error (GTK_MEDIA_STREAM (video)))
+  if (gtk_media_stream_get_error (GTK_MEDIA_STREAM (self)))
     return;
 
   if (av_strerror (av_errnum, s, sizeof (s) != 0))
-    g_snprintf (s, sizeof (s), _("Unspecified error decoding video"));
+    g_snprintf (s, sizeof (s), _("Unspecified error decoding media"));
 
-  gtk_media_stream_error (GTK_MEDIA_STREAM (video),
+  gtk_media_stream_error (GTK_MEDIA_STREAM (self),
                           G_IO_ERROR,
                           G_IO_ERROR_FAILED,
                           "%s",
                           s);
+}
+
+static GtkFfStream *
+gtk_ff_media_file_find_input_stream (GtkFfMediaFile *self,
+                                     int type)
+{
+  GtkFfStream *ff_stream;
+  const AVCodec *codec;
+  AVCodecContext *codec_ctx;
+  AVStream *stream;
+  int stream_id;
+  int errnum;
+
+  stream_id = av_find_best_stream (self->format_ctx, type, -1, -1, NULL, 0);
+  if (stream_id < 0)
+    {
+      return NULL;
+    }
+
+  stream = self->format_ctx->streams[stream_id];
+  codec = avcodec_find_decoder (stream->codecpar->codec_id);
+  if (codec == NULL)
+    {
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                              G_IO_ERROR,
+                              G_IO_ERROR_NOT_SUPPORTED,
+                              _("Cannot find decoder: %s"),
+                              avcodec_get_name (stream->codecpar->codec_id));
+      return NULL;
+    }
+  codec_ctx = avcodec_alloc_context3 (codec);
+  if (codec_ctx == NULL)
+    {
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                              G_IO_ERROR,
+                              G_IO_ERROR_NOT_SUPPORTED,
+                              _("Failed to allocate a codec context"));
+      return NULL;
+    }
+  errnum = avcodec_parameters_to_context (codec_ctx, stream->codecpar);
+  if (errnum < 0)
+    {
+      gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+      avcodec_close (codec_ctx);
+      return NULL;
+    }
+  errnum = avcodec_open2 (codec_ctx, codec, &stream->metadata);
+  if (errnum < 0)
+    {
+      gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+      avcodec_close (codec_ctx);
+      return NULL;
+    }
+
+  ff_stream = g_new (GtkFfStream, 1);
+  ff_stream->codec_ctx = codec_ctx;
+  ff_stream->stream = stream;
+  ff_stream->stream_id = stream_id;
+  ff_stream->type = type;
+  return ff_stream;
+}
+
+static GtkFfStream *
+gtk_ff_media_file_add_output_stream (GtkFfMediaFile *self,
+                                     AVFormatContext *fmt_ctx,
+                                     enum AVCodecID codec_id)
+{
+  GtkFfStream *ff_media_stream;
+  const AVCodec *codec;
+  AVCodecContext *codec_ctx;
+  AVStream *stream;
+  int stream_id;
+  int errnum;
+
+  // find the encoder
+  codec = avcodec_find_encoder (codec_id);
+  if (codec == NULL)
+    {
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                              G_IO_ERROR,
+                              G_IO_ERROR_NOT_SUPPORTED,
+                              _("Cannot find encoder: %s"),
+                              avcodec_get_name (codec_id));
+      return NULL;
+    }
+
+  stream = avformat_new_stream (fmt_ctx, NULL);
+  if (stream == NULL)
+    {
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                              G_IO_ERROR,
+                              G_IO_ERROR_NOT_SUPPORTED,
+                              _("Cannot add new stream"));
+      return NULL;
+    }
+  stream_id = fmt_ctx->nb_streams - 1;
+
+  codec_ctx = avcodec_alloc_context3 (codec);
+  if (codec_ctx == NULL)
+    {
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                              G_IO_ERROR,
+                              G_IO_ERROR_NOT_SUPPORTED,
+                              _("Failed to allocate a codec context"));
+      return NULL;
+    }
+
+  // set the encoder options
+  codec_ctx->sample_fmt = codec->sample_fmts ? codec->sample_fmts[0] : AV_SAMPLE_FMT_S16;
+  codec_ctx->sample_rate = codec->supported_samplerates ? codec->supported_samplerates[0] : 48000;
+  codec_ctx->channel_layout = codec->channel_layouts ? codec->channel_layouts[0] : AV_CH_LAYOUT_STEREO;
+  codec_ctx->channels = av_get_channel_layout_nb_channels (codec_ctx->channel_layout);
+
+  stream->time_base = (AVRational){ 1, codec_ctx->sample_rate };
+
+  // open the codec
+  errnum = avcodec_open2 (codec_ctx, codec, NULL);
+  if (errnum < 0)
+    {
+      gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+      avcodec_close (codec_ctx);
+      return NULL;
+    }
+
+  errnum = avcodec_parameters_from_context (stream->codecpar, codec_ctx);
+  if (errnum < 0)
+    {
+      gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+      avcodec_close (codec_ctx);
+      return NULL;
+    }
+
+  ff_media_stream = g_new (GtkFfStream, 1);
+  ff_media_stream->codec_ctx = codec_ctx;
+  ff_media_stream->stream = stream;
+  ff_media_stream->stream_id = stream_id;
+  ff_media_stream->type = AVMEDIA_TYPE_AUDIO;
+  return ff_media_stream;
+}
+
+static gboolean
+gtk_ff_media_file_seek_stream (GtkFfMediaFile *self, GtkFfStream *stream, int64_t timestamp)
+{
+  int errnum;
+
+  if (!stream)
+    return TRUE;
+
+  errnum = av_seek_frame (self->format_ctx,
+                          stream->stream_id,
+                          av_rescale_q (timestamp,
+                                        (AVRational){ 1, G_USEC_PER_SEC },
+                                        stream->stream->time_base),
+                          AVSEEK_FLAG_BACKWARD);
+
+  if (errnum < 0)
+    {
+      gtk_media_stream_seek_failed (GTK_MEDIA_STREAM (self));
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static AVFrame *
+gtk_ff_media_file_alloc_audio_frame (enum AVSampleFormat sample_fmt,
+                                     uint64_t channel_layout,
+                                     int sample_rate,
+                                     int nb_samples)
+{
+  AVFrame *frame = av_frame_alloc ();
+  int ret;
+
+  if (!frame)
+    {
+      return NULL;
+    }
+
+  frame->format = sample_fmt;
+  frame->channel_layout = channel_layout;
+  frame->sample_rate = sample_rate;
+  frame->nb_samples = nb_samples;
+
+  if (nb_samples)
+    {
+      ret = av_frame_get_buffer (frame, 0);
+      if (ret < 0)
+        {
+          return NULL;
+        }
+    }
+
+  return frame;
+}
+
+static void
+gtk_ff_media_file_write_audio_frame (GtkFfMediaFile *self, AVFrame* frame)
+{
+  AVFormatContext *device_ctx;
+  AVCodecContext *codec_ctx;
+  AVStream *stream;
+  AVFrame *resampled_frame;
+  int errnum;
+  int dst_nb_samples;
+
+  device_ctx = self->device_ctx;
+  codec_ctx = self->output_audio_stream->codec_ctx;
+  stream = self->output_audio_stream->stream;
+
+  if (frame)
+    {
+      dst_nb_samples = av_rescale_rnd (swr_get_delay (self->swr_ctx, codec_ctx->sample_rate) + frame->nb_samples,
+                                       codec_ctx->sample_rate,
+                                       codec_ctx->sample_rate,
+                                       AV_ROUND_UP);
+
+      resampled_frame = gtk_ff_media_file_alloc_audio_frame (codec_ctx->sample_fmt,
+                                                             codec_ctx->channel_layout,
+                                                             codec_ctx->sample_rate,
+                                                             dst_nb_samples);
+      if (resampled_frame == NULL)
+        {
+          gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                                  G_IO_ERROR,
+                                  G_IO_ERROR_NOT_SUPPORTED,
+                                  _("Failed to allocate an audio frame"));
+          return;
+        }
+
+      errnum = swr_convert (self->swr_ctx,
+                            resampled_frame->data, dst_nb_samples,
+                            (const uint8_t **) frame->data, frame->nb_samples);
+      if (errnum < 0)
+        {
+          gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+          return;
+        }
+      frame = resampled_frame;
+
+
+      frame->pts = av_rescale_q (self->audio_samples_count,
+                                 (AVRational){ 1, codec_ctx->sample_rate },
+                                 codec_ctx->time_base);
+
+      errnum = av_write_uncoded_frame (device_ctx, stream->index, frame);
+      if (errnum < 0)
+        {
+          gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+          return;
+        }
+
+      self->audio_samples_count += frame->nb_samples;
+    }
 }
 
 static int
@@ -231,18 +517,18 @@ gtk_ff_media_file_read_packet_cb (void    *data,
                                   uint8_t *buf,
                                   int      buf_size)
 {
-  GtkFfMediaFile *video = data;
+  GtkFfMediaFile *self = data;
   GError *error = NULL;
   gssize n_read;
 
-  n_read = g_input_stream_read (video->input_stream,
+  n_read = g_input_stream_read (self->input_stream,
                                 buf,
                                 buf_size,
                                 NULL,
                                 &error);
   if (n_read < 0)
     {
-      gtk_media_stream_gerror (GTK_MEDIA_STREAM (video), error);
+      gtk_media_stream_gerror (GTK_MEDIA_STREAM (self), error);
     }
   else if (n_read == 0)
     {
@@ -268,7 +554,7 @@ memory_format_from_pix_fmt (enum AVPixelFormat pix_fmt)
 }
 
 static gboolean
-gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
+gtk_ff_media_file_decode_frame (GtkFfMediaFile      *self,
                                 GtkVideoFrameFFMpeg *result)
 {
   GdkTexture *texture;
@@ -280,18 +566,21 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
 
   frame = av_frame_alloc ();
 
-  for (errnum = av_read_frame (video->format_ctx, &packet);
+  for (errnum = av_read_frame (self->format_ctx, &packet);
        errnum >= 0;
-       errnum = av_read_frame (video->format_ctx, &packet))
+       errnum = av_read_frame (self->format_ctx, &packet))
     {
-      if (packet.stream_index == video->stream_id)
+      if (self->input_audio_stream && packet.stream_index == self->input_audio_stream->stream_id)
         {
-          errnum = avcodec_send_packet (video->codec_ctx, &packet);
+          errnum = avcodec_send_packet (self->input_audio_stream->codec_ctx, &packet);
               if (errnum < 0)
-                G_BREAKPOINT();
+              {
+                gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+                return FALSE;
+              }
           if (errnum >= 0)
             {
-              errnum = avcodec_receive_frame (video->codec_ctx, frame);
+              errnum = avcodec_receive_frame (self->input_audio_stream->codec_ctx, self->audio_frame);
               if (errnum == AVERROR (EAGAIN))
                 {
                   // Just retry with the next packet
@@ -299,7 +588,40 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
                   continue;
                 }
               if (errnum < 0)
-                G_BREAKPOINT();
+                {
+                  gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+                  return FALSE;
+                }
+              else
+                {
+                  av_packet_unref (&packet);
+                }
+            }
+
+            gtk_ff_media_file_write_audio_frame(self, self->audio_frame);
+        }
+      else if (self->input_video_stream && packet.stream_index == self->input_video_stream->stream_id)
+        {
+          errnum = avcodec_send_packet (self->input_video_stream->codec_ctx, &packet);
+          if (errnum < 0)
+            {
+              gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+              return FALSE;
+            }
+          if (errnum >= 0)
+            {
+              errnum = avcodec_receive_frame (self->input_video_stream->codec_ctx, frame);
+              if (errnum == AVERROR (EAGAIN))
+                {
+                  // Just retry with the next packet
+                  errnum = 0;
+                  continue;
+                }
+              if (errnum < 0)
+                {
+                  gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+                  return FALSE;
+                }
               else
                 {
                   av_packet_unref (&packet);
@@ -314,15 +636,15 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
   if (errnum < 0)
     {
       if (errnum != AVERROR_EOF)
-        gtk_ff_media_file_set_ffmpeg_error (video, errnum);
+        gtk_ff_media_file_set_ffmpeg_error (self, errnum);
       av_frame_free (&frame);
       return FALSE;
     }
 
-  data = g_try_malloc0 (video->codec_ctx->width * video->codec_ctx->height * 4);
+  data = g_try_malloc0 (self->input_video_stream->codec_ctx->width * self->input_video_stream->codec_ctx->height * 4);
   if (data == NULL)
     {
-      gtk_media_stream_error (GTK_MEDIA_STREAM (video),
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
                               G_IO_ERROR,
                               G_IO_ERROR_FAILED,
                               _("Not enough memory"));
@@ -330,53 +652,53 @@ gtk_ff_media_file_decode_frame (GtkFfMediaFile      *video,
       return FALSE;
     }
 
-  if (video->sws_ctx == NULL ||
-      video->sws_pix_fmt != frame->format)
+  if (self->sws_ctx == NULL ||
+      self->sws_pix_fmt != frame->format)
     {
       const AVPixFmtDescriptor *desc;
       enum AVPixelFormat gdk_pix_fmt;
 
-      g_clear_pointer (&video->sws_ctx, sws_freeContext);
-      video->sws_pix_fmt = frame->format;
-      desc = av_pix_fmt_desc_get (video->sws_pix_fmt);
+      g_clear_pointer (&self->sws_ctx, sws_freeContext);
+      self->sws_pix_fmt = frame->format;
+      desc = av_pix_fmt_desc_get (self->sws_pix_fmt);
       /* Use gdk-pixbuf formats because ffmpeg can't premultiply */
       if (desc != NULL && (desc->flags & AV_PIX_FMT_FLAG_ALPHA))
         gdk_pix_fmt = AV_PIX_FMT_RGBA;
       else
         gdk_pix_fmt = AV_PIX_FMT_RGB24;
 
-      video->sws_ctx = sws_getContext (video->codec_ctx->width,
-                                       video->codec_ctx->height,
+      self->sws_ctx = sws_getContext (self->input_video_stream->codec_ctx->width,
+                                       self->input_video_stream->codec_ctx->height,
                                        frame->format,
-                                       video->codec_ctx->width,
-                                       video->codec_ctx->height,
+                                       self->input_video_stream->codec_ctx->width,
+                                       self->input_video_stream->codec_ctx->height,
                                        gdk_pix_fmt,
                                        0,
                                        NULL,
                                        NULL,
                                        NULL);
 
-      video->memory_format = memory_format_from_pix_fmt (gdk_pix_fmt);
+      self->memory_format = memory_format_from_pix_fmt (gdk_pix_fmt);
     }
 
-  sws_scale(video->sws_ctx,
+  sws_scale(self->sws_ctx,
             (const uint8_t * const *) frame->data, frame->linesize,
-            0, video->codec_ctx->height,
-            (uint8_t *[1]) { data }, (int[1]) { video->codec_ctx->width * 4 });
+            0, self->input_video_stream->codec_ctx->height,
+            (uint8_t *[1]) { data }, (int[1]) { self->input_video_stream->codec_ctx->width * 4 });
 
-  bytes = g_bytes_new_take (data, video->codec_ctx->width * video->codec_ctx->height * 4);
-  texture = gdk_memory_texture_new (video->codec_ctx->width,
-                                    video->codec_ctx->height,
-                                    video->memory_format,
+  bytes = g_bytes_new_take (data, self->input_video_stream->codec_ctx->width * self->input_video_stream->codec_ctx->height * 4);
+  texture = gdk_memory_texture_new (self->input_video_stream->codec_ctx->width,
+                                    self->input_video_stream->codec_ctx->height,
+                                    self->memory_format,
                                     bytes,
-                                    video->codec_ctx->width * 4);
+                                    self->input_video_stream->codec_ctx->width * 4);
 
   g_bytes_unref (bytes);
 
   gtk_video_frame_ffmpeg_init (result,
                                texture,
                                av_rescale_q (frame->best_effort_timestamp,
-                                             video->format_ctx->streams[video->stream_id]->time_base,
+                                             self->input_video_stream->stream->time_base,
                                              (AVRational) { 1, G_USEC_PER_SEC }));
 
   av_frame_free (&frame);
@@ -389,7 +711,7 @@ gtk_ff_media_file_seek_cb (void    *data,
                            int64_t  offset,
                            int      whence)
 {
-  GtkFfMediaFile *video = data;
+  GtkFfMediaFile *self = data;
   GSeekType seek_type;
   gboolean result;
 
@@ -416,7 +738,7 @@ gtk_ff_media_file_seek_cb (void    *data,
       return -1;
     }
 
-  result = g_seekable_seek (G_SEEKABLE (video->input_stream),
+  result = g_seekable_seek (G_SEEKABLE (self->input_stream),
                             offset,
                             seek_type,
                             NULL,
@@ -424,42 +746,42 @@ gtk_ff_media_file_seek_cb (void    *data,
   if (!result)
     return -1;
 
-  return g_seekable_tell (G_SEEKABLE (video->input_stream));
+  return g_seekable_tell (G_SEEKABLE (self->input_stream));
 }
 
 static gboolean
-gtk_ff_media_file_create_input_stream (GtkFfMediaFile *video)
+gtk_ff_media_file_create_input_stream (GtkFfMediaFile *self)
 {
   GError *error = NULL;
   GFile *file;
 
-  file = gtk_media_file_get_file (GTK_MEDIA_FILE (video));
+  file = gtk_media_file_get_file (GTK_MEDIA_FILE (self));
   if (file)
     {
-      video->input_stream = G_INPUT_STREAM (g_file_read (file, NULL, &error));
-      if (video->input_stream == NULL)
+      self->input_stream = G_INPUT_STREAM (g_file_read (file, NULL, &error));
+      if (self->input_stream == NULL)
         {
-          gtk_media_stream_gerror (GTK_MEDIA_STREAM (video), error);
+          gtk_media_stream_gerror (GTK_MEDIA_STREAM (self), error);
           g_error_free (error);
           return FALSE;
         }
     }
   else
     {
-      video->input_stream = g_object_ref (gtk_media_file_get_input_stream (GTK_MEDIA_FILE (video)));
+      self->input_stream = g_object_ref (gtk_media_file_get_input_stream (GTK_MEDIA_FILE (self)));
     }
 
   return TRUE;
 }
 
 static AVIOContext *
-gtk_ff_media_file_create_io_context (GtkFfMediaFile *video)
+gtk_ff_media_file_create_io_context (GtkFfMediaFile *self)
 {
   AVIOContext *result;
   int buffer_size = 4096; /* it's what everybody else uses... */
   unsigned char *buffer;
 
-  if (!gtk_ff_media_file_create_input_stream (video))
+  if (!gtk_ff_media_file_create_input_stream (self))
     return NULL;
 
   buffer = av_malloc (buffer_size);
@@ -469,10 +791,10 @@ gtk_ff_media_file_create_io_context (GtkFfMediaFile *video)
   result = avio_alloc_context (buffer,
                                buffer_size,
                                AVIO_FLAG_READ,
-                               video,
+                               self,
                                gtk_ff_media_file_read_packet_cb,
                                NULL,
-                               G_IS_SEEKABLE (video->input_stream)
+                               G_IS_SEEKABLE (self->input_stream)
                                ? gtk_ff_media_file_seek_cb
                                : NULL);
 
@@ -482,145 +804,216 @@ gtk_ff_media_file_create_io_context (GtkFfMediaFile *video)
   return result;
 }
 
+static gboolean
+gtk_ff_media_file_init_audio_resampler (GtkFfMediaFile *self)
+{
+  AVCodecContext *in_codec_ctx = self->input_audio_stream->codec_ctx;
+  AVCodecContext *out_codec_ctx = self->output_audio_stream->codec_ctx;
+  int errnum;
+
+  // create resampler context
+  self->swr_ctx = swr_alloc ();
+  if (!self->swr_ctx)
+    {
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                              G_IO_ERROR,
+                              G_IO_ERROR_NOT_SUPPORTED,
+                              _("Could not allocate resampler context"));
+      return FALSE;
+    }
+
+  // set resampler option
+  av_opt_set_int (self->swr_ctx, "in_channel_count", in_codec_ctx->channels, 0);
+  av_opt_set_int (self->swr_ctx, "in_sample_rate", in_codec_ctx->sample_rate, 0);
+  av_opt_set_sample_fmt (self->swr_ctx, "in_sample_fmt", in_codec_ctx->sample_fmt, 0);
+  av_opt_set_int (self->swr_ctx, "out_channel_count", out_codec_ctx->channels, 0);
+  av_opt_set_int (self->swr_ctx, "out_sample_rate", out_codec_ctx->sample_rate, 0);
+  av_opt_set_sample_fmt (self->swr_ctx, "out_sample_fmt", out_codec_ctx->sample_fmt, 0);
+
+  // initialize the resampling context
+  errnum = swr_init (self->swr_ctx);
+  if (errnum < 0)
+    {
+      gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gtk_ff_media_file_open_audio_device (GtkFfMediaFile *self)
+{
+  const AVOutputFormat *candidate;
+  int errnum;
+
+  /* Try finding an audio device that supports setting the volume */
+  for (candidate = av_output_audio_device_next (NULL);
+       candidate != NULL;
+       candidate = av_output_audio_device_next (candidate))
+    {
+      if (candidate->control_message)
+        break;
+    }
+
+  /* fallback to the first format available */
+  if (candidate == NULL)
+    candidate = av_output_audio_device_next (NULL);
+
+  if (candidate == NULL)
+    {
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                              G_IO_ERROR,
+                              G_IO_ERROR_NOT_SUPPORTED,
+                              _ ("No audio output found"));
+      return FALSE;
+    }
+
+  errnum = avformat_alloc_output_context2 (&self->device_ctx, candidate, NULL, NULL);
+  if (errnum != 0)
+    {
+      gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
 static gboolean gtk_ff_media_file_play (GtkMediaStream *stream);
 
 static void
 gtk_ff_media_file_open (GtkMediaFile *file)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (file);
-  AVStream *stream;
-  const AVCodec *codec;
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (file);
   int errnum;
+  int nb_samples;
 
-  video->format_ctx = avformat_alloc_context ();
-  video->format_ctx->pb = gtk_ff_media_file_create_io_context (video);
-  if (video->format_ctx->pb == NULL)
+  self->format_ctx = avformat_alloc_context ();
+  self->format_ctx->pb = gtk_ff_media_file_create_io_context (self);
+  if (self->format_ctx->pb == NULL)
     {
-      gtk_media_stream_error (GTK_MEDIA_STREAM (video),
+      gtk_media_stream_error (GTK_MEDIA_STREAM (self),
                               G_IO_ERROR,
                               G_IO_ERROR_FAILED,
                               _("Not enough memory"));
       return;
     }
-  errnum = avformat_open_input (&video->format_ctx, NULL, NULL, NULL);
+  errnum = avformat_open_input (&self->format_ctx, NULL, NULL, NULL);
   if (errnum != 0)
     {
-      gtk_ff_media_file_set_ffmpeg_error (video, errnum);
+      gtk_ff_media_file_set_ffmpeg_error (self, errnum);
       return;
     }
 
-  errnum = avformat_find_stream_info (video->format_ctx, NULL);
+  errnum = avformat_find_stream_info (self->format_ctx, NULL);
   if (errnum < 0)
     {
-      gtk_ff_media_file_set_ffmpeg_error (video, errnum);
+      gtk_ff_media_file_set_ffmpeg_error (self, errnum);
       return;
     }
 
-  video->stream_id = av_find_best_stream (video->format_ctx, AVMEDIA_TYPE_VIDEO, -1, -1, NULL, 0);
-  if (video->stream_id < 0)
+  self->input_audio_stream = gtk_ff_media_file_find_input_stream (self, AVMEDIA_TYPE_AUDIO);
+  self->input_video_stream = gtk_ff_media_file_find_input_stream (self, AVMEDIA_TYPE_VIDEO);
+
+  // open an audio device when we have an audio stream
+  if (self->input_audio_stream && gtk_ff_media_file_open_audio_device (self))
     {
-      gtk_media_stream_error (GTK_MEDIA_STREAM (video),
-                              G_IO_ERROR,
-                              G_IO_ERROR_INVALID_DATA,
-                              _("Not a video file"));
-      return;
+      self->output_audio_stream = gtk_ff_media_file_add_output_stream (self,
+                                                                       self->device_ctx,
+                                                                       self->device_ctx->oformat->audio_codec);
+
+      gtk_ff_media_file_init_audio_resampler (self);
+
+      if (self->output_audio_stream->codec_ctx->codec->capabilities & AV_CODEC_CAP_VARIABLE_FRAME_SIZE)
+        nb_samples = 10000; // just taken from the ffmpeg muxing example
+      else
+        nb_samples = self->output_audio_stream->codec_ctx->frame_size;
+
+      self->audio_frame = gtk_ff_media_file_alloc_audio_frame (self->output_audio_stream->codec_ctx->sample_fmt,
+                                                               self->output_audio_stream->codec_ctx->channel_layout,
+                                                               self->output_audio_stream->codec_ctx->sample_rate,
+                                                               nb_samples);
+
+      if (self->audio_frame == NULL)
+        {
+          gtk_media_stream_error (GTK_MEDIA_STREAM (self),
+                                  G_IO_ERROR,
+                                  G_IO_ERROR_NOT_SUPPORTED,
+                                  _("Failed to allocate an audio frame"));
+          return;
+        }
+
+      errnum = avformat_write_header (self->device_ctx, NULL);
+      if (errnum != 0)
+        {
+          gtk_ff_media_file_set_ffmpeg_error (self, errnum);
+          return;
+        }
     }
 
-  stream = video->format_ctx->streams[video->stream_id];
-  /* alpha transparency requires the libvpx codecs, not the ffmpeg builtin ones */
-  if (stream->codecpar->codec_id == AV_CODEC_ID_VP8)
-    codec = avcodec_find_decoder_by_name ("libvpx");
-  else if (stream->codecpar->codec_id == AV_CODEC_ID_VP9)
-    codec = avcodec_find_decoder_by_name ("libvpx-vp9");
-  else
-    codec = NULL;
-  if (codec == NULL)
-    codec = avcodec_find_decoder (stream->codecpar->codec_id);
-  if (codec == NULL)
-    {
-      gtk_media_stream_error (GTK_MEDIA_STREAM (video),
-                              G_IO_ERROR,
-                              G_IO_ERROR_NOT_SUPPORTED,
-                              _("Unsupported video codec"));
-      return;
-    }
-
-  video->codec_ctx = avcodec_alloc_context3 (codec);
-  errnum = avcodec_parameters_to_context (video->codec_ctx, stream->codecpar);
-  if (errnum < 0)
-    {
-      gtk_ff_media_file_set_ffmpeg_error (video, errnum);
-      return;
-    }
-  errnum = avcodec_open2 (video->codec_ctx, codec, &stream->metadata);
-  if (errnum < 0)
-    {
-      gtk_ff_media_file_set_ffmpeg_error (video, errnum);
-      return;
-    }
-
-  gtk_media_stream_stream_prepared (GTK_MEDIA_STREAM (video),
-                                    FALSE,
-                                    video->codec_ctx != NULL,
+  gtk_media_stream_stream_prepared (GTK_MEDIA_STREAM (self),
+                                    self->output_audio_stream != NULL,
+                                    self->input_video_stream != NULL,
                                     TRUE,
-                                    video->format_ctx->duration != AV_NOPTS_VALUE
-                                      ? av_rescale (video->format_ctx->duration, G_USEC_PER_SEC, AV_TIME_BASE)
-                                      : 0);
+                                    self->format_ctx->duration != AV_NOPTS_VALUE
+                                        ? av_rescale (self->format_ctx->duration, G_USEC_PER_SEC, AV_TIME_BASE)
+                                        : 0);
 
-  gdk_paintable_invalidate_size (GDK_PAINTABLE (video));
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
 
-  if (gtk_ff_media_file_decode_frame (video, &video->current_frame))
-    gdk_paintable_invalidate_contents (GDK_PAINTABLE (video));
+  if (gtk_ff_media_file_decode_frame (self, &self->current_frame))
+    gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 
-  if (gtk_media_stream_get_playing (GTK_MEDIA_STREAM (video)))
-    gtk_ff_media_file_play (GTK_MEDIA_STREAM (video));
+  if (gtk_media_stream_get_playing (GTK_MEDIA_STREAM (self)))
+    gtk_ff_media_file_play (GTK_MEDIA_STREAM (self));
 }
 
 static void
 gtk_ff_media_file_close (GtkMediaFile *file)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (file);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (file);
 
-  g_clear_object (&video->input_stream);
+  g_clear_object (&self->input_stream);
 
-  g_clear_pointer (&video->sws_ctx, sws_freeContext);
-  g_clear_pointer (&video->codec_ctx, avcodec_close);
-  avformat_close_input (&video->format_ctx);
-  video->stream_id = -1;
-  gtk_video_frame_ffmpeg_clear (&video->next_frame);
-  gtk_video_frame_ffmpeg_clear (&video->current_frame);
+  g_clear_pointer (&self->swr_ctx, swr_close);
+  g_clear_pointer (&self->sws_ctx, sws_freeContext);
+  g_clear_pointer (&self->input_audio_stream, gtk_ff_stream_close);
+  g_clear_pointer (&self->input_video_stream, gtk_ff_stream_close);
+  g_clear_pointer (&self->output_audio_stream, gtk_ff_stream_close);
+  av_frame_free (&self->audio_frame);
+  avformat_free_context(self->device_ctx);
+  avformat_close_input (&self->format_ctx);
+  gtk_video_frame_ffmpeg_clear (&self->next_frame);
+  gtk_video_frame_ffmpeg_clear (&self->current_frame);
 
-  gdk_paintable_invalidate_size (GDK_PAINTABLE (video));
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (video));
+  gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 }
 
 static gboolean
 gtk_ff_media_file_next_frame_cb (gpointer data);
 static void
-gtk_ff_media_file_queue_frame (GtkFfMediaFile *video)
+gtk_ff_media_file_queue_frame (GtkFfMediaFile *self)
 {
   gint64 time, frame_time;
   guint delay;
 
   time = g_get_monotonic_time ();
-  frame_time = video->start_time + video->next_frame.timestamp;
+  frame_time = self->start_time + self->next_frame.timestamp;
   delay = time > frame_time ? 0 : (frame_time - time) / 1000;
 
-  video->next_frame_cb = g_timeout_add (delay, gtk_ff_media_file_next_frame_cb, video);
+  self->next_frame_cb = g_timeout_add (delay, gtk_ff_media_file_next_frame_cb, self);
 }
 
 static gboolean
-gtk_ff_media_file_restart (GtkFfMediaFile *video)
+gtk_ff_media_file_restart (GtkFfMediaFile *self)
 {
-  if (av_seek_frame (video->format_ctx,
-                     video->stream_id,
-                     av_rescale_q (0,
-                                   (AVRational) { 1, G_USEC_PER_SEC },
-                                   video->format_ctx->streams[video->stream_id]->time_base),
-                     AVSEEK_FLAG_BACKWARD) < 0)
+  if (!gtk_ff_media_file_seek_stream (self, self->input_audio_stream, 0))
+    return FALSE;
+  if (!gtk_ff_media_file_seek_stream (self, self->input_video_stream, 0))
     return FALSE;
 
-  if (!gtk_ff_media_file_decode_frame (video, &video->next_frame))
+  if (!gtk_ff_media_file_decode_frame (self, &self->next_frame))
     return FALSE;
 
   return TRUE;
@@ -629,34 +1022,34 @@ gtk_ff_media_file_restart (GtkFfMediaFile *video)
 static gboolean
 gtk_ff_media_file_next_frame_cb (gpointer data)
 {
-  GtkFfMediaFile *video = data;
+  GtkFfMediaFile *self = data;
 
-  video->next_frame_cb = 0;
+  self->next_frame_cb = 0;
 
-  if (gtk_video_frame_ffmpeg_is_empty (&video->next_frame))
+  if (gtk_video_frame_ffmpeg_is_empty (&self->next_frame))
     {
-      if (!gtk_media_stream_get_loop (GTK_MEDIA_STREAM (video)) ||
-          !gtk_ff_media_file_restart (video))
+      if (!gtk_media_stream_get_loop (GTK_MEDIA_STREAM (self)) ||
+          !gtk_ff_media_file_restart (self))
         {
-          gtk_media_stream_stream_ended (GTK_MEDIA_STREAM (video));
+          gtk_media_stream_stream_ended (GTK_MEDIA_STREAM (self));
           return G_SOURCE_REMOVE;
         }
 
-      video->start_time += video->current_frame.timestamp - video->next_frame.timestamp;
+      self->start_time += self->current_frame.timestamp - self->next_frame.timestamp;
     }
 
-  gtk_video_frame_ffmpeg_clear (&video->current_frame);
-  gtk_video_frame_ffmpeg_move (&video->current_frame,
-                               &video->next_frame);
+  gtk_video_frame_ffmpeg_clear (&self->current_frame);
+  gtk_video_frame_ffmpeg_move (&self->current_frame,
+                               &self->next_frame);
 
-  gtk_media_stream_update (GTK_MEDIA_STREAM (video),
-                           video->current_frame.timestamp);
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (video));
+  gtk_media_stream_update (GTK_MEDIA_STREAM (self),
+                           self->current_frame.timestamp);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 
   /* ignore failure here, we'll handle the empty frame case above
    * the next time we're called. */
-  gtk_ff_media_file_decode_frame (video, &video->next_frame);
-  gtk_ff_media_file_queue_frame (video);
+  gtk_ff_media_file_decode_frame (self, &self->next_frame);
+  gtk_ff_media_file_queue_frame (self);
 
   return G_SOURCE_REMOVE;
 }
@@ -664,20 +1057,20 @@ gtk_ff_media_file_next_frame_cb (gpointer data)
 static gboolean
 gtk_ff_media_file_play (GtkMediaStream *stream)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (stream);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (stream);
 
-  if (video->format_ctx == NULL)
+  if (self->format_ctx == NULL)
     return FALSE;
 
   if (!gtk_media_stream_is_prepared (stream))
     return TRUE;
 
-  if (gtk_video_frame_ffmpeg_is_empty (&video->next_frame) &&
-      !gtk_ff_media_file_decode_frame (video, &video->next_frame))
+  if (gtk_video_frame_ffmpeg_is_empty (&self->next_frame) &&
+      !gtk_ff_media_file_decode_frame (self, &self->next_frame))
     {
-      if (gtk_ff_media_file_restart (video))
+      if (gtk_ff_media_file_restart (self))
         {
-          video->start_time = g_get_monotonic_time () - video->next_frame.timestamp;
+          self->start_time = g_get_monotonic_time () - self->next_frame.timestamp;
         }
       else
         {
@@ -686,10 +1079,10 @@ gtk_ff_media_file_play (GtkMediaStream *stream)
     }
   else
     {
-      video->start_time = g_get_monotonic_time () - video->current_frame.timestamp;
+      self->start_time = g_get_monotonic_time () - self->current_frame.timestamp;
     }
 
-  gtk_ff_media_file_queue_frame (video);
+  gtk_ff_media_file_queue_frame (self);
 
   return TRUE;
 }
@@ -697,43 +1090,35 @@ gtk_ff_media_file_play (GtkMediaStream *stream)
 static void
 gtk_ff_media_file_pause (GtkMediaStream *stream)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (stream);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (stream);
 
-  if (video->next_frame_cb)
+  if (self->next_frame_cb)
     {
-      g_source_remove (video->next_frame_cb);
-      video->next_frame_cb = 0;
+      g_source_remove (self->next_frame_cb);
+      self->next_frame_cb = 0;
     }
 
-  video->start_time = 0;
+  self->start_time = 0;
 }
 
 static void
 gtk_ff_media_file_seek (GtkMediaStream *stream,
                         gint64          timestamp)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (stream);
-  int errnum;
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (stream);
 
-  errnum = av_seek_frame (video->format_ctx,
-                          video->stream_id,
-                          av_rescale_q (timestamp,
-                                        (AVRational) { 1, G_USEC_PER_SEC },
-                                        video->format_ctx->streams[video->stream_id]->time_base),
-                                        AVSEEK_FLAG_BACKWARD);
-  if (errnum < 0)
-    {
-      gtk_media_stream_seek_failed (stream);
-      return;
-    }
+  if (!gtk_ff_media_file_seek_stream (self, self->input_audio_stream, timestamp))
+    return;
+  if (!gtk_ff_media_file_seek_stream (self, self->input_video_stream, timestamp))
+    return;
 
   gtk_media_stream_seek_success (stream);
 
-  gtk_video_frame_ffmpeg_clear (&video->next_frame);
-  gtk_video_frame_ffmpeg_clear (&video->current_frame);
-  if (gtk_ff_media_file_decode_frame (video, &video->current_frame))
-    gtk_media_stream_update (stream, video->current_frame.timestamp);
-  gdk_paintable_invalidate_contents (GDK_PAINTABLE (video));
+  gtk_video_frame_ffmpeg_clear (&self->next_frame);
+  gtk_video_frame_ffmpeg_clear (&self->current_frame);
+  if (gtk_ff_media_file_decode_frame (self, &self->current_frame))
+    gtk_media_stream_update (stream, self->current_frame.timestamp);
+  gdk_paintable_invalidate_contents (GDK_PAINTABLE (self));
 
   if (gtk_media_stream_get_playing (stream))
     {
@@ -744,12 +1129,33 @@ gtk_ff_media_file_seek (GtkMediaStream *stream,
 }
 
 static void
+gtk_ff_media_file_update_audio (GtkMediaStream *stream,
+                                gboolean muted,
+                                double volume)
+{
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (stream);
+  int errnum;
+
+  errnum = avdevice_app_to_dev_control_message (self->device_ctx, muted ? AV_APP_TO_DEV_MUTE : AV_APP_TO_DEV_UNMUTE, NULL, 0);
+  if (errnum < 0)
+    {
+      g_warning ("Cannot set audio mute state");
+    }
+
+  errnum = avdevice_app_to_dev_control_message (self->device_ctx, AV_APP_TO_DEV_SET_VOLUME, &volume, sizeof (volume));
+  if (errnum < 0)
+    {
+      g_warning ("Cannot set audio volume");
+    }
+}
+
+static void
 gtk_ff_media_file_dispose (GObject *object)
 {
-  GtkFfMediaFile *video = GTK_FF_MEDIA_FILE (object);
+  GtkFfMediaFile *self = GTK_FF_MEDIA_FILE (object);
 
-  gtk_ff_media_file_pause (GTK_MEDIA_STREAM (video));
-  gtk_ff_media_file_close (GTK_MEDIA_FILE (video));
+  gtk_ff_media_file_pause (GTK_MEDIA_STREAM (self));
+  gtk_ff_media_file_close (GTK_MEDIA_FILE (self));
 
   G_OBJECT_CLASS (gtk_ff_media_file_parent_class)->dispose (object);
 }
@@ -766,14 +1172,14 @@ gtk_ff_media_file_class_init (GtkFfMediaFileClass *klass)
   stream_class->play = gtk_ff_media_file_play;
   stream_class->pause = gtk_ff_media_file_pause;
   stream_class->seek = gtk_ff_media_file_seek;
+  stream_class->update_audio = gtk_ff_media_file_update_audio;
 
   gobject_class->dispose = gtk_ff_media_file_dispose;
 }
 
 static void
-gtk_ff_media_file_init (GtkFfMediaFile *video)
+gtk_ff_media_file_init (GtkFfMediaFile *self)
 {
-  video->stream_id = -1;
 }
 
 

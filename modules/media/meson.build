@@ -14,7 +14,9 @@ ffmpeg_versions = {
   'libavfilter': '>= 6.47.100',
   'libavformat': '>= 57.41.100',
   'libavcodec': '>= 57.48.101',
+  'libavdevice': '>= 57.48.101',
   'libavutil': '>= 55.28.100',
+  'libswresample': '>= 3.9.100',
   'libswscale': '>= 4.6.100',
 }
 ffmpeg_deps = []
