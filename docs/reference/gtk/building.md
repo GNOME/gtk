@@ -83,34 +83,21 @@ configuration option. GTK enables and disables functionality
 depending on the build type used when calling *meson* to
 configure the build.
 
-### Debug builds
+GTK will enable debugging code paths, including
+consistency checks on the internal state of the toolkit,
+when using the `debug` build type. Other build types will
+disable debugging code paths and additional run time safeties,
+like checked casts for object instances. It is recommended to
+use the `debug` build type when developing GTK itself. Additionally,
+`debug` builds of GTK are recommended for profiling and debugging GTK
+applications, as they include additional validation of the internal state.
 
-GTK will enable debugging code paths in both the `debug` and
-`debugoptimized` build types. Builds with `buildtype` set to
-`debug` will additionally enable consistency checks on the
-internal state of the toolkit.
-
-It is recommended to use the `debug` or `debugoptimized` build
-types when developing GTK itself. Additionally, `debug` builds of
-GTK are recommended for profiling and debugging GTK applications,
-as they include additional validation of the internal state.
+All other build types are production build types and will disable
+debugging code paths and extra runtime safety checks, like checked casts
+for object instances.
 
 The `debugoptimized` build type is the default for GTK if no build
 type is specified when calling *meson*.
-
-### Release builds
-
-The `release` build type will disable debugging code paths and
-additional run time safeties, like checked casts for object
-instances.
-
-The `plain` build type provided by Meson should only be used when
-packaging GTK, and it's expected that packagers will provide their
-own compiler flags when building GTK. See the previous section for
-the list of environment variables to be used to define compiler and
-linker flags. Note that with the plain build type, you are also
-responsible for controlling the debugging features of GTK with
-`-DG_ENABLE_DEBUG` and `-DG_DISABLE_CAST_CHECKS`.
 
 ## Dependencies
 
