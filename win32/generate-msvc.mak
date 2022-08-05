@@ -300,28 +300,33 @@ generate-broadway-items: ..\gdk\broadway\clienthtml.h ..\gdk\broadway\broadwayjs
 
 # (Re-) generate Visual Studio projects
 # Dependencies for library projects
-gdk-3.sourcefiles: $(GDK_C_SRCS:/=\)
-gdk-3.vs10.sourcefiles: $(GDK_C_SRCS:/=\)
+gdk-3.sourcefiles	\
+gdk-3.vs10.sourcefiles	\
 gdk-3.vs10.sourcefiles.filters: $(GDK_C_SRCS:/=\)
-gdk3-win32.sourcefiles: $(GDK_WIN32_C_SRCS)
-gdk3-win32.vs10.sourcefiles: $(GDK_WIN32_C_SRCS)
+
+gdk3-win32.sourcefiles	\
+gdk3-win32.vs10.sourcefiles	\
 gdk3-win32.vs10.sourcefiles.filters: $(GDK_WIN32_C_SRCS)
-gdk3-broadway.sourcefiles: $(GDK_BROADWAY_C_SRCS)
-gdk3-broadway.vs10.sourcefiles: $(GDK_BROADWAY_C_SRCS)
+
+gdk3-broadway.sourcefiles	\
+gdk3-broadway.vs10.sourcefiles	\
 gdk3-broadway.vs10.sourcefiles.filters: $(GDK_BROADWAY_C_SRCS)
 
 # GTK projects-Darn the fatal error U1095...!
-gtk-3.misc.sourcefiles: $(GTK_MISC_C_SRCS:/=\)
-gtk-3.a-h.sourcefiles: $(GTK_C_SRCS_A_H:/=\)
-gtk-3.i-w.sourcefiles: $(GTK_C_SRCS_I_W:/=\)
-gtk-3.win32.sourcefiles: $(GTK_OS_WIN32_C_SRCS:/=\) $(GTK_MORE_C_SRCS)
-gtk-3.misc.vs10.sourcefiles: $(GTK_MISC_C_SRCS:/=\)
-gtk-3.a-h.vs10.sourcefiles: $(GTK_C_SRCS_A_H:/=\)
-gtk-3.i-w.vs10.sourcefiles: $(GTK_C_SRCS_I_W:/=\)
-gtk-3.win32.vs10.sourcefiles: $(GTK_OS_WIN32_C_SRCS:/=\) $(GTK_MORE_C_SRCS)
+gtk-3.misc.sourcefiles	\
+gtk-3.misc.vs10.sourcefiles	\
 gtk-3.misc.vs10.sourcefiles.filters: $(GTK_MISC_C_SRCS:/=\)
+
+gtk-3.a-h.sourcefiles	\
+gtk-3.a-h.vs10.sourcefiles	\
 gtk-3.a-h.vs10.sourcefiles.filters: $(GTK_C_SRCS_A_H:/=\)
+
+gtk-3.i-w.sourcefiles	\
+gtk-3.i-w.vs10.sourcefiles	\
 gtk-3.i-w.vs10.sourcefiles.filters: $(GTK_C_SRCS_I_W:/=\)
+
+gtk-3.win32.sourcefiles	\
+gtk-3.win32.vs10.sourcefiles	\
 gtk-3.win32.vs10.sourcefiles.filters: $(GTK_OS_WIN32_C_SRCS:/=\) $(GTK_MORE_C_SRCS)
 
 gtk-3.sourcefiles:	\
@@ -346,20 +351,21 @@ gtk-3.sourcefiles gtk-3.vs10.sourcefiles gtk-3.vs10.sourcefiles.filters:
 	@echo Genarating the final $@ from $**...
 	@for %%f in ($**) do @type %%f>>$@ & del %%f
 
-gailutil-3.sourcefiles: $(GAILUTIL_C_SRCS)
-gailutil-3.vs10.sourcefiles: $(GAILUTIL_C_SRCS)
+gailutil-3.sourcefiles	\
+gailutil-3.vs10.sourcefiles	\
 gailutil-3.vs10.sourcefiles.filters: $(GAILUTIL_C_SRCS)
 
 # Dependencies for executable projects
-broadwayd.sourcefiles: $(BROADWAYD_C_SRCS)
-broadwayd.vs10.sourcefiles: $(BROADWAYD_C_SRCS)
+broadwayd.sourcefiles	\
+broadwayd.vs10.sourcefiles	\
 broadwayd.vs10.sourcefiles.filters: $(BROADWAYD_C_SRCS)
-gtk3-demo.sourcefiles: $(demo_actual_sources) $(more_demo_sources)
-gtk3-demo.vs10.sourcefiles: $(demo_actual_sources) $(more_demo_sources)
+
+gtk3-demo.sourcefiles	\
+gtk3-demo.vs10.sourcefiles	\
 gtk3-demo.vs10.sourcefiles.filters: $(demo_actual_sources) $(more_demo_sources)
 
-gdk-3.sourcefiles gdk3-win32.sourcefiles gdk3-broadway.sourcefiles	\
-gailutil-3.sourcefiles	\
+gdk-3.sourcefiles gdk3-win32.sourcefiles	\
+gdk3-broadway.sourcefiles gailutil-3.sourcefiles	\
 broadwayd.sourcefiles gtk3-demo.sourcefiles:
 	@-del vs9\$(@B).vcproj
 	@for %%s in ($**) do @echo.   ^<File RelativePath^="..\%%s" /^>>>$@
