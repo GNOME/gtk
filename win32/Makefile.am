@@ -19,6 +19,7 @@ EXTRA_DIST +=	\
 	detectenv-msvc.mak		\
 	gen-version-items.py	\
 	generate-msvc.mak	\
+	generate-msvcprojs.mak	\
 	gtk-introspection-msvc.mak	\
 	introspection-msvc.mak		\
 	install-msvc.mak		\
