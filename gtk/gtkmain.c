@@ -973,6 +973,7 @@ rewrite_event_for_surface (GdkEvent  *event,
                                            gdk_touchpad_event_get_pinch_angle_delta (event));
     case GDK_TOUCHPAD_HOLD:
       return gdk_touchpad_event_new_hold (new_surface,
+                                          gdk_event_get_event_sequence (event),
                                           gdk_event_get_device (event),
                                           gdk_event_get_time (event),
                                           gdk_event_get_modifier_state (event),

@@ -2840,7 +2840,11 @@ emit_gesture_hold_event (GdkWaylandSeat          *seat,
 
   seat->pointer_info.time = _time;
 
+  if (phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
+    seat->pointer_info.touchpad_event_sequence++;
+
   event = gdk_touchpad_event_new_hold (seat->pointer_info.focus,
+                                       GDK_SLOT_TO_EVENT_SEQUENCE (seat->pointer_info.touchpad_event_sequence),
                                        seat->logical_pointer,
                                        _time,
                                        device_get_modifiers (seat->logical_pointer),
