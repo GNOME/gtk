@@ -19,12 +19,13 @@ EXTRA_DIST +=	\
 	detectenv-msvc.mak		\
 	gen-version-items.py	\
 	generate-msvc.mak	\
+	generate-msvcprojs.mak	\
 	gtk-introspection-msvc.mak	\
 	introspection-msvc.mak		\
 	install-msvc.mak		\
 	replace.py			\
 	pc_base.py			\
 	gtkpc.py			\
-	README_FEATURES_MSVC.txt
+	README_FEATURES_MSVC.md
 
 -include $(top_srcdir)/git.mk

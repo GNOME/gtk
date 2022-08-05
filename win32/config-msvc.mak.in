@@ -57,6 +57,10 @@ AT_PLAT=unknown
 !endif
 
 demo_sources = $(demos_base)
+more_demo_sources =	\
+	..\demos\gtk-demo\gtkfishbowl.c	\
+	..\demos\gtk-demo\main.c
+
 !ifdef FONT_FEATURES_DEMO
 demo_sources = $(demo_sources) $(font_features_demo)
 !endif
@@ -122,10 +126,3 @@ GTK_PREPROCESSOR_FLAGS =	\
 	 /DGTK_BINARY_VERSION=\"3.0.0\"	\
 	 /DGDK_DISABLE_DEPRECATED	\
 	 /DISOLATION_AWARE_ENABLED
-
-DEMO_VS9_PROJ = gtk3-demo.vcproj
-DEMO_VS1X_PROJ = $(DEMO_VS9_PROJ:.vcproj=.vcxproj)
-DEMO_VS1X_PROJ_FILTERS = $(DEMO_VS9_PROJ:.vcproj=.vcxproj.filters)
-DEMO_DEP_LIBS_NEW_PANGO=harfbuzz.lib
-DEMO_DEP_LIBS_PANGOFT2_VS1X=pangoft2-1.0.lib;harfbuzz.lib;freetype.lib
-DEMO_DEP_LIBS_PANGOFT2_VS9=$(DEMO_DEP_LIBS_PANGOFT2_VS1X:;= )

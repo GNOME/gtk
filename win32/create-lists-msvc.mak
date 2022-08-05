@@ -66,6 +66,15 @@ NULL=
 !if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_WIN32_C_SRCS]
+!endif
+
+!if [for %f in ($(libgdk_win32_la_SOURCES)) do @if "%~xf" == ".c" call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ..\gdk\win32\%f]
+!endif
+
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
 !if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_WIN32_INTROSPECTION_SRCS]
 !endif
 
@@ -77,6 +86,24 @@ NULL=
 
 # For GDK-Broadway public headers
 !include ..\gdk\broadway\gdk-broadway-sources.inc
+
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak GDK_BROADWAY_C_SRCS]
+!endif
+
+!if [for %f in ($(GDK_BROADWAY_NON_GENERATED_SOURCES)) do @if "%~xf" == ".c" call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ..\gdk\broadway\%f]
+!endif
+
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
+!if [call create-lists.bat header gdk_sources_msvc$(VSVER)_$(PLAT).mak BROADWAYD_C_SRCS]
+!endif
+
+!if [for %f in ($(broadwayd_SOURCES)) do @if "%~xf" == ".c" call create-lists.bat file gdk_sources_msvc$(VSVER)_$(PLAT).mak ..\gdk\broadway\%f]
+!endif
+
+!if [call create-lists.bat footer gdk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
 
 !include gdk_sources_msvc$(VSVER)_$(PLAT).mak
 
@@ -102,6 +129,9 @@ NULL=
 !include ..\gtk\a11y\Makefile.inc
 !include ..\gtk\deprecated\Makefile.inc
 !include ..\gtk\inspector\Makefile.inc
+
+# For the libgail-util public headers
+!include ..\libgail-util\libgail-util-sources.inc
 
 !if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_PUBLIC_ENUM_HEADERS]
 !endif
@@ -133,19 +163,58 @@ NULL=
 !if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
 
-!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_C_SRCS]
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_MISC_C_SRCS]
 !endif
 
 !if [for %f in ($(a11y_c_sources) $(gtk_deprecated_c_sources) $(inspector_c_sources)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f]
 !endif
 
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_C_SRCS_A_H]
+!endif
+
 !if [for %f in ($(gtk_base_c_sources_base_gtka_gtkh:.c=)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f.c]
+!endif
+
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_C_SRCS_I_W]
 !endif
 
 !if [for %f in ($(gtk_base_c_sources_base_gtki_gtkw:.c=)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f.c]
 !endif
 
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_OS_WIN32_C_SRCS]
+!endif
+
 !if [for %f in ($(gtk_os_win32_c_sources)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ../gtk/%f]
+!endif
+
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
+!if [echo GTK_C_SRCS = ^$(GTK_MISC_C_SRCS) ^$(GTK_C_SRCS_A_H) ^$(GTK_C_SRCS_I_W) ^$(GTK_OS_WIN32_C_SRCS)>>gtk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GTK_MORE_C_SRCS]
+!endif
+
+!if [for %f in ($(gtk_use_win32_c_sources) $(gtk_clipboard_dnd_c_sources_generic)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ..\gtk\%f]
+!endif
+
+!if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
+!endif
+
+!if [call create-lists.bat header gtk_sources_msvc$(VSVER)_$(PLAT).mak GAILUTIL_C_SRCS]
+!endif
+
+!if [for %f in ($(util_c_sources)) do @call create-lists.bat file gtk_sources_msvc$(VSVER)_$(PLAT).mak ..\libgail-util\%f]
 !endif
 
 !if [call create-lists.bat footer gtk_sources_msvc$(VSVER)_$(PLAT).mak]
@@ -155,9 +224,6 @@ NULL=
 
 !if [del /f /q gtk_sources_msvc$(VSVER)_$(PLAT).mak]
 !endif
-
-# For the libgail-util public headers
-!include ..\libgail-util\libgail-util-sources.inc
 
 # For GTK resources
 

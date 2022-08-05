@@ -218,6 +218,42 @@ It may still be possible to carry out the build and build the introspection file
 using older versions of GLib and GObject-Introspection, but please note that this is not recommended
 and one is on his/her own by doing so.
 
+It is now supported to build with the Visual Studio projects directly
+from a GIT checkout.  Run in a Visual Studio command prompt, in 
+$(srcroot)/win32:
+
+nmake /f bootstrap-msvc.mak [PYTHON=...] [PERL=...] [FONT_FEATURES_DEMO=1] [FONT_FEATURES_USE_PANGOFT2=1] [USE_EGL=1]
+
+where PYTHON and PERL are the respective paths to the Python and PERL
+interpreters, if they are not in your %PATH%-they are both required to
+generate the full sets of project files, as well as the auxiliary build
+files and headers that is not available in a GIT checkout and must be
+generated prior to opening the project files.
+
+For FONT_FEATURES_DEMO, FONT_FEATURES_USE_PANGOFT2 and USE_EGL, please 
+refer to win32\README_FEATURES_MSVC.md for more details, to enable 
+features that is optional and not enabled by default (i.e. in the release
+tarballs).
+
+It is also possible to regenerate some or all of the visual studio 
+projects with the following, if necessary:
+
+nmake /f generate-msvc.mak [PYTHON=...] [FONT_FEATURES_DEMO=1] [FONT_FEATURES_USE_PANGOFT2=1] [USE_EGL=1] <target>
+
+Where target can be (they will update all related VS2008~2022 projects):
+
+regenerate-demos-h-win32: Regenerate the gtk3-demo projects along with 
+demos.h.win32, useful to enable or disable the Font Features demo.
+
+regenerate-gdk-vsproj: Regenerate all the GDK projects with broadwayd,
+useful to enable or disable EGL on Windows.
+
+regenerate-gtk-vsproj: Regenerate the GTK and libgail-util library
+projects.
+
+regenerate-all-msvc-projs: Re-generate all project files, and re-copy all 
+the Visual Studio 2010 project files for VS 2012~2022.
+
 3) Using Meson (for Visual Studio and MinGW builds)
 ---
 
