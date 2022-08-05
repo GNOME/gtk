@@ -142,6 +142,19 @@ generate-base-sources:	\
 	@$(PYTHON) $(GLIB_MKENUMS) --template $(@F).template $(gdk_public_h_sources) $(gdk_deprecated_h_sources) > ..\win32\$@
 	@cd ..\win32
 
+# Generate the private headers needed for broadway-server.c
+generate-broadway-items: ..\gdk\broadway\clienthtml.h ..\gdk\broadway\broadwayjs.h
+
+..\gdk\broadway\clienthtml.h: ..\gdk\broadway\client.html
+	@echo Generating $@...
+	@$(PERL) ..\gdk\broadway\toarray.pl client_html $**>$@
+
+..\gdk\broadway\broadwayjs.h:	\
+..\gdk\broadway\broadway.js	\
+..\gdk\broadway\rawinflate.min.js
+	@echo Generating $@...
+	@$(PERL) ..\gdk\broadway\toarray.pl broadway_js $**>$@
+
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.h	\
 .\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3\gtk\gtktypebuiltins.c:
 	@echo Generating $@...
