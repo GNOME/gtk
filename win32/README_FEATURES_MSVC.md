@@ -35,10 +35,20 @@ do so, please do the following:
   Build and install, making sure the headers and .lib can be located by the
   compiler and linker respectively.
 
-* Open the `vsX/gtk+.sln`, and open the project properties in the 
-  `gdk3-win32` project.  Under "C/C++", add `GDK_WIN32_ENABLE_EGL` in the 
-  `Preprocessor Definitions` to the existing definitions in there for the 
-  configuration that is being built.  Then build the solution.
+*  Either:
+   * Open the `vsX/gtk+.sln`, and open the project properties in the 
+     `gdk3-win32` project.  Under "C/C++", add `GDK_WIN32_ENABLE_EGL` in 
+     the `Preprocessor Definitions` to the existing definitions in there 
+     for the configuration that is being built.  Then build the solution.
+*  Or:
+   * Run in a Visual Studio command prompt:
+     Go to `$(srcroot)\win32`, and run
+     `nmake /f generate-msvc.mak regenerate-gdk-vsproj USE_EGL=1`.
+     To undo that, run that command without `USE_EGL=1`.  Python 3.x
+     must be present in your `%PATH%` or passed in via
+     `PYTHON=<path_to_python_interpreter>`.  This will update all
+     `gdk3-win32` projects (i.e. VS2008~2022).
+   
 * To force the use of the EGL code, set the envvar `GDK_GL=(...,)gles`, 
   where `(...,)` are the other `GDK_GL` options desired.
  
