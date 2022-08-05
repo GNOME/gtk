@@ -26,6 +26,6 @@ EXTRA_DIST +=	\
 	replace.py			\
 	pc_base.py			\
 	gtkpc.py			\
-	README_FEATURES_MSVC.txt
+	README_FEATURES_MSVC.md
 
 -include $(top_srcdir)/git.mk
