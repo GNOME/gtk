@@ -336,29 +336,31 @@ vs9\$(DEMO_VS9_PROJ).pre vs10\$(DEMO_VS1X_PROJ).pre vs10\$(DEMO_VS1X_PROJ_FILTER
 
 !ifdef FONT_FEATURES_DEMO
 !ifdef FONT_FEATURES_USE_PANGOFT2
+DEMO_MSG = with font features demo using PangoFT2
 vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
-	@echo Generating $@...
+	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring="AdditionalDependencies=\"\""	\
 	--outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_PANGOFT2_VS9)\""
 	@-del $**
 
 vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
-	@echo Generating $@...
+	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring=">%(AdditionalDependencies)<"	\
 	--outstring=">$(DEMO_DEP_LIBS_PANGOFT2_VS1X);%(AdditionalDependencies)<"
 	@-del $**
 !else
+DEMO_MSG = with font features demo
 vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
-	@echo Generating $@...
+	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring="AdditionalDependencies=\"\""	\
 	--outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_NEW_PANGO)\""
 	@-del $**
 
 vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
-	@echo Generating $@...
+	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
 	--instring=">%(AdditionalDependencies)<"	\
 	--outstring=">$(DEMO_DEP_LIBS_NEW_PANGO);%(AdditionalDependencies)<"
@@ -368,8 +370,9 @@ vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
 vs9\$(DEMO_VS9_PROJ): vs9\$(DEMO_VS9_PROJ).pre
 vs10\$(DEMO_VS1X_PROJ): vs10\$(DEMO_VS1X_PROJ).pre
 
+DEMO_MSG = without font features demo
 vs9\$(DEMO_VS9_PROJ) vs10\$(DEMO_VS1X_PROJ):
-	@echo Renaming $** to $@...
+	@echo (Re-)Generating $@ $(DEMO_MSG)...
 	@move $** $@
 !endif
 
@@ -386,6 +389,9 @@ vs14\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
 vs15\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
 vs16\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
 vs17\$(DEMO_VS1X_PROJ_FILTERS): vs10\$(DEMO_VS1X_PROJ_FILTERS)
+
+regenerate-demos-h-win32-msg:
+	@echo (Re-)Generating demos.h.win32 $(DEMO_MSG)...
 
 vs11\$(DEMO_VS1X_PROJ):
 	@echo Copying and updating $** for VS2012
@@ -440,8 +446,7 @@ $(EMOJI_GRESOURCE):
 	@echo Generating $@...
 	@$(GLIB_COMPILE_RESOURCES) --sourcedir=..\gtk\emoji $@.xml --target=$@
 
-regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources) $(GTK3_DEMO_VCPROJS)
-	@echo Regenerating demos.h.win32 and gtk3-demo VS project files...
+regenerate-demos-h-win32: ..\demos\gtk-demo\geninclude.py $(demo_actual_sources) regenerate-demos-h-win32-msg $(GTK3_DEMO_VCPROJS)
 	@-del ..\demos\gtk-demo\demos.h.win32
 	@cd ..\demos\gtk-demo
 	@$(PYTHON) geninclude.py demos.h.win32 $(demo_sources)
