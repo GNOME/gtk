@@ -62,6 +62,18 @@ static const GOptionEntry test_args[] = {
 
 static gboolean using_tap;
 
+/* A simplified version of g_log_writer_default_would_drop(), to avoid
+ * bumping up the required version of GLib to 2.68
+ */
+static gboolean
+would_drop (GLogLevelFlags  level,
+            const char     *domain)
+{
+  return (level & (G_LOG_LEVEL_ERROR |
+                   G_LOG_LEVEL_CRITICAL |
+                   G_LOG_LEVEL_WARNING)) == 0;
+}
+
 static gboolean
 parse_command_line (int *argc, char ***argv)
 {
@@ -497,7 +509,7 @@ log_writer (GLogLevelFlags   log_level,
     }
 #endif
 
- if (!g_log_writer_default_would_drop (log_level, NULL))
+ if (!would_drop (log_level, NULL))
     return g_log_writer_standard_streams (log_level, fields, n_fields, user_data);
 
   return G_LOG_WRITER_HANDLED;
