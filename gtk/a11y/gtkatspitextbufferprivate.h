@@ -25,11 +25,6 @@ G_BEGIN_DECLS
 
 void gtk_text_view_add_default_attributes (GtkTextView     *view,
                                            GVariantBuilder *builder);
-void gtk_text_buffer_get_run_attributes   (GtkTextBuffer   *buffer,
-                                           GVariantBuilder *builder,
-                                           int              offset,
-                                           int             *start_offset,
-                                           int             *end_offset);
 
 char *gtk_text_view_get_text_before (GtkTextView           *view,
                                      int                    offset,

@@ -32,13 +32,15 @@
 #include "gtkatcontextprivate.h"
 #include "gtkdebug.h"
 #include "gtkeditable.h"
+#include "gtkentryprivate.h"
 #include "gtkinscriptionprivate.h"
 #include "gtklabelprivate.h"
-#include "gtkentryprivate.h"
-#include "gtksearchentryprivate.h"
+#include "gtkpango.h"
 #include "gtkpasswordentryprivate.h"
+#include "gtksearchentryprivate.h"
 #include "gtkspinbuttonprivate.h"
-#include "gtktextview.h"
+#include "gtktextbufferprivate.h"
+#include "gtktextviewprivate.h"
 
 #include <gio/gio.h>
 
