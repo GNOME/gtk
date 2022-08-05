@@ -1557,12 +1557,6 @@ pointer_handle_leave (void              *data,
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
   GdkDeviceGrabInfo *grab;
 
-  if (!surface)
-    return;
-
-  if (!GDK_IS_SURFACE (wl_surface_get_user_data (surface)))
-    return;
-
   if (!seat->pointer_info.focus)
     return;
 
