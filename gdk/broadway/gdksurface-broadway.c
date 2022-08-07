@@ -47,6 +47,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#if !GLIB_CHECK_VERSION (2, 67, 3)
+# define g_memdup2(mem,size)    g_memdup((mem), (size))
+#endif
+
 /* Forward declarations */
 static void        gdk_broadway_surface_finalize   (GObject            *object);
 
