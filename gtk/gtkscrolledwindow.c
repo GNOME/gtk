@@ -201,7 +201,7 @@
 /* Scrolled off indication */
 #define UNDERSHOOT_SIZE 40
 
-#define MAGIC_SCROLL_FACTOR (42 / 7 / 1.618033 * 2.718281)
+#define MAGIC_SCROLL_FACTOR 2.5
 
 typedef struct _GtkScrolledWindowClass         GtkScrolledWindowClass;
 
