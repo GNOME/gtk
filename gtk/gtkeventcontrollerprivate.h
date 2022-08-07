@@ -28,7 +28,7 @@
  *    events in this case leave from the old active window's focus
  *    location to the new active window's one.
  * @GTK_CROSSING_POINTER: The pointer moved from one widget to another
- * @GTK_CROSSING_POINTER: An active drag moved from one widget to another
+ * @GTK_CROSSING_DROP: An active drag moved from one widget to another
  *
  * We emit various kinds of crossing events when the target widget
  * for keyboard or pointer events changes.

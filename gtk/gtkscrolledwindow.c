@@ -201,6 +201,8 @@
 /* Scrolled off indication */
 #define UNDERSHOOT_SIZE 40
 
+#define MAGIC_SCROLL_FACTOR (42 / 7 / 1.618033 * 2.718281)
+
 typedef struct _GtkScrolledWindowClass         GtkScrolledWindowClass;
 
 struct _GtkScrolledWindow
@@ -1376,6 +1378,8 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
           delta_x *= get_wheel_detent_scroll_step (scrolled_window,
                                                    GTK_ORIENTATION_HORIZONTAL);
         }
+      else if (scroll_unit == GDK_SCROLL_UNIT_SURFACE)
+        delta_x *= MAGIC_SCROLL_FACTOR;
 
       new_value = priv->unclamped_hadj_value + delta_x;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
@@ -1397,6 +1401,8 @@ scrolled_window_scroll (GtkScrolledWindow        *scrolled_window,
           delta_y *= get_wheel_detent_scroll_step (scrolled_window,
                                                    GTK_ORIENTATION_VERTICAL);
         }
+      else if (scroll_unit == GDK_SCROLL_UNIT_SURFACE)
+        delta_y *= MAGIC_SCROLL_FACTOR;
 
       new_value = priv->unclamped_vadj_value + delta_y;
       _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
@@ -1470,6 +1476,11 @@ scroll_controller_decelerate (GtkEventControllerScroll *scroll,
 
       initial_vel_y *= get_wheel_detent_scroll_step (scrolled_window,
                                                      GTK_ORIENTATION_VERTICAL);
+    }
+  else
+    {
+      initial_vel_x *= MAGIC_SCROLL_FACTOR;
+      initial_vel_y *= MAGIC_SCROLL_FACTOR;
     }
 
   gtk_scrolled_window_decelerate (scrolled_window,

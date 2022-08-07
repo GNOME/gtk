@@ -2611,6 +2611,7 @@ gdk_touchpad_event_new_pinch (GdkSurface              *surface,
 
 GdkEvent *
 gdk_touchpad_event_new_hold (GdkSurface              *surface,
+                             GdkEventSequence        *sequence,
                              GdkDevice               *device,
                              guint32                  time,
                              GdkModifierType          state,
@@ -2623,6 +2624,7 @@ gdk_touchpad_event_new_hold (GdkSurface              *surface,
 
   self->state = state;
   self->phase = phase;
+  self->sequence = sequence;
   self->x = x;
   self->y = y;
   self->n_fingers = n_fingers;

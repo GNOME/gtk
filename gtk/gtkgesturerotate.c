@@ -173,8 +173,7 @@ gtk_gesture_rotate_filter_event (GtkEventController *controller,
                                  GdkEvent           *event)
 {
   /* Let 2-finger touchpad pinch and hold events go through */
-  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH ||
-      gdk_event_get_event_type (event) == GDK_TOUCHPAD_HOLD)
+  if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_PINCH)
     {
       guint n_fingers;
 
@@ -185,6 +184,8 @@ gtk_gesture_rotate_filter_event (GtkEventController *controller,
       else
         return TRUE;
     }
+  else if (gdk_event_get_event_type (event) == GDK_TOUCHPAD_HOLD)
+    return TRUE;
 
   return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_rotate_parent_class)->filter_event (controller, event);
 }
