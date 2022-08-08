@@ -61,12 +61,12 @@ the Pango 1.44.0 and HarfBuzz 2.2.0 (or later) headers and libraries
 to ensure that you have your HarfBuzz .lib file named as such, which
 is the default .lib name for HarfBuzz builds.
 
-Alternatively, they can be manually enabled by making sure that 
-`HAVE_HARFBUZZ` and `HAVE_PANGOFT2` are defined in `config.h.win32`,
+Alternatively, they can be manually enabled by running `nmake /f generate-msvc.mak regenerate-gtk-vsproj FONT_FEATURES_USE_PANGOFT2=1`
 meaning that PangoFT2 must be present, which depends on HarfBuzz, 
-FontConfig and FreeType.  You will then need to add to the `gtk3`
-projects the .lib's of PangoFT2, HarfBuzz and FreeType in the 
-`Additional Libraries` entry under the linker settings.
+FontConfig and FreeType.  You will then need to ensure the `gtk-3`
+projects have the correct .lib's of PangoFT2, HarfBuzz and FreeType
+in the `Additional Libraries` entry under the linker settings, as they
+assume the most common names are used there.
 
 Please note that the font features demo is not built into gtk3-demo
 by default.  To do that, run in a Visual Studio command prompt:

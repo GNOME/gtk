@@ -331,13 +331,13 @@ gtk-3.win32.vs10.sourcefiles.filters:
 vs9\$(GDK_VS9_PROJ): gdk-3.sourcefiles vs9\$(GDK_VS9_PROJ)in
 vs9\$(GDKWIN32_VS9_PROJ).pre: gdk3-win32.sourcefiles vs9\$(GDKWIN32_VS9_PROJ)in
 vs9\$(GDKBROADWAY_VS9_PROJ): gdk3-broadway.sourcefiles vs9\$(GDKBROADWAY_VS9_PROJ)in
-vs9\$(GTK_VS9_PROJ): gtk-3.sourcefiles vs9\$(GTK_VS9_PROJ)in
+vs9\$(GTK_VS9_PROJ).pre: gtk-3.sourcefiles vs9\$(GTK_VS9_PROJ)in
 vs9\$(GAILUTIL_VS9_PROJ): gailutil-3.sourcefiles vs9\$(GAILUTIL_VS9_PROJ)in
 
 vs10\$(GDK_VS1X_PROJ): gdk-3.vs10.sourcefiles vs10\$(GDK_VS1X_PROJ)in
 vs10\$(GDKWIN32_VS1X_PROJ).pre: gdk3-win32.vs10.sourcefiles vs10\$(GDKWIN32_VS1X_PROJ)in
 vs10\$(GDKBROADWAY_VS1X_PROJ): gdk3-broadway.vs10.sourcefiles vs10\$(GDKBROADWAY_VS1X_PROJ)in
-vs10\$(GTK_VS1X_PROJ): gtk-3.vs10.sourcefiles vs10\$(GTK_VS1X_PROJ)in
+vs10\$(GTK_VS1X_PROJ).pre: gtk-3.vs10.sourcefiles vs10\$(GTK_VS1X_PROJ)in
 vs10\$(GAILUTIL_VS1X_PROJ): gailutil-3.vs10.sourcefiles vs10\$(GAILUTIL_VS1X_PROJ)in
 
 vs10\$(GDK_VS1X_PROJ_FILTERS): gdk-3.vs10.sourcefiles.filters vs10\$(GDK_VS1X_PROJ_FILTERS)in
@@ -360,14 +360,14 @@ vs10\$(DEMO_VS1X_PROJ_FILTERS): gtk3-demo.vs10.sourcefiles.filters vs10\$(DEMO_V
 vs9\$(GDKWIN32_VS9_PROJ).pre	\
 vs9\$(GDKBROADWAY_VS9_PROJ)	\
 vs9\$(GDK_VS9_PROJ)	\
-vs9\$(GTK_VS9_PROJ)	\
+vs9\$(GTK_VS9_PROJ).pre	\
 vs9\$(GAILUTIL_VS9_PROJ)	\
 vs9\$(BROADWAYD_VS9_PROJ)	\
 vs9\$(DEMO_VS9_PROJ).pre	\
 vs10\$(GDKWIN32_VS1X_PROJ).pre	\
 vs10\$(GDKBROADWAY_VS1X_PROJ)	\
 vs10\$(GDK_VS1X_PROJ)	\
-vs10\$(GTK_VS1X_PROJ)	\
+vs10\$(GTK_VS1X_PROJ).pre	\
 vs10\$(GAILUTIL_VS1X_PROJ)	\
 vs10\$(BROADWAYD_VS1X_PROJ)	\
 vs10\$(DEMO_VS1X_PROJ).pre	\
@@ -412,6 +412,44 @@ regenerate-gdk-vsproj-msg:
 
 vs9\$(GDKWIN32_VS9_PROJ) vs10\$(GDKWIN32_VS1X_PROJ):
 	@echo Renaming $** to $@...
+	@move $** $@
+!endif
+
+# Generate the gtk-3 project with or without using the older PangoFT2 +
+# HarfBuzz APIs for the font features support (this code is not used if
+# Pango 1.44.0 and HarfBuzz 2.2.0 or later are used)
+!ifdef FONT_FEATURES_USE_PANGOFT2
+vs9\$(GTK_VS9_PROJ): vs9\$(GTK_VS9_PROJ).pre2
+	@echo Generating final $@ using older PangoFT2 APIs...
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
+	--instring="AdditionalDependencies=\"$$(" 	\
+	--outstring="AdditionalDependencies=\"$(DEMO_DEP_LIBS_PANGOFT2_VS9) $$("
+	@del $**
+
+vs10\$(GTK_VS1X_PROJ): vs10\$(GTK_VS1X_PROJ).pre2
+	@echo Generating final $@ using older PangoFT2 APIs...
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
+	--instring=";%(AdditionalDependencies)<"	\
+	--outstring=";$(DEMO_DEP_LIBS_PANGOFT2_VS1X);%(AdditionalDependencies)<"
+	@del $**
+
+vs9\$(GTK_VS9_PROJ).pre2: vs9\$(GTK_VS9_PROJ).pre
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
+	--instring="$$(GtkDefines" 	\
+	--outstring="HAVE_HARFBUZZ;HAVE_PANGOFT;$$(GtkDefines"
+	@del $**
+
+vs10\$(GTK_VS1X_PROJ).pre2: vs10\$(GTK_VS1X_PROJ).pre
+	@$(PYTHON) replace.py -a=replace-str -i=$** -o=$@	\
+	--instring="$$(GtkDefines);%"	\
+	--outstring="HAVE_HARFBUZZ;HAVE_PANGOFT;$$(GtkDefines);%"
+	@del $**
+!else
+vs9\$(GTK_VS9_PROJ): vs9\$(GTK_VS9_PROJ).pre
+vs10\$(GTK_VS1X_PROJ): vs10\$(GTK_VS1X_PROJ).pre
+
+vs9\$(GTK_VS9_PROJ) vs10\$(GTK_VS1X_PROJ):
+	@echo Generating final $@...
 	@move $** $@
 !endif
 

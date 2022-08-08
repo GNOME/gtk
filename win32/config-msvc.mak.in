@@ -46,6 +46,14 @@ GLIB_COMPILE_SCHEMAS = $(PREFIX)\bin\glib-compile-schemas.exe
 MSGFMT = msgfmt
 !endif
 
+!ifndef INCLUDEDIR
+INCLUDEDIR=$(PREFIX)\include
+!endif
+
+!ifndef LIBDIR
+LIBDIR=$(PREFIX)\lib
+!endif
+
 !if "$(PLAT)" == "x64"
 AT_PLAT=x86_64
 !elseif "$(PLAT)" == "arm64"
@@ -85,15 +93,15 @@ GTK_PREPROCESSOR_FLAGS =	\
 	 /I.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gtk-3	\
 	 /I.\vs$(VSVER)\$(CFG)\$(PLAT)\obj\gdk-3	\
 	 /I..	\
-	 /I$(PREFIX)\include\gdk-pixbuf-2.0	\
-	 /I$(PREFIX)\include\pango-1.0	\
-	 /I$(PREFIX)\include\atk-1.0	\
-	 /I$(PREFIX)\include\harfbuzz	\
-	 /I$(PREFIX)\include\cairo	\
-	 /I$(PREFIX)\include\gio-win32-2.0	\
-	 /I$(PREFIX)\include\glib-2.0	\
-	 /I$(PREFIX)\lib\glib-2.0\include	\
-	 /I$(PREFIX)\include	\
+	 /I$(INCLUDEDIR)\gdk-pixbuf-2.0	\
+	 /I$(INCLUDEDIR)\pango-1.0	\
+	 /I$(INCLUDEDIR)\atk-1.0	\
+	 /I$(INCLUDEDIR)\harfbuzz	\
+	 /I$(INCLUDEDIR)\cairo	\
+	 /I$(INCLUDEDIR)\gio-win32-2.0	\
+	 /I$(INCLUDEDIR)\glib-2.0	\
+	 /I$(LIBDIR)\glib-2.0\include	\
+	 /I$(INCLUDEDIR)	\
 	 /DHAVE_CONFIG_H	\
 	 /DG_DISABLE_SINGLE_INCLUDES	\
 	 /DATK_DISABLE_SINGLE_INCLUDES	\
