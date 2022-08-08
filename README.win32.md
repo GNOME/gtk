@@ -201,6 +201,31 @@ instance the makefile.msc files might not produce identically named
 DLLs and import libraries as the "autoconfiscated" makefiles and
 libtool do. If this bothers you, you will have to fix the makefiles.
 
+You may need or wish to update `gtk3-build-defines.[vs]props` (under the 
+entry `GenerateRequiredSourcesBase` and/or `GtkIntrospectNMakeCmd` and/or
+`InstallBuildsBase`) to pass in the variables if they are not in:
+
+* `$(PREFIX)\bin` (used for generating code for the build):
+   * `GLIB_MKENUMS` (path to your glib-mkenums script)
+   * `GLIB_GENMARSHAL` (path to your glib-genmarshal script)
+   * `GDBUS_CODEGEN` (path to your gdbus-codegen script)
+   * `GLIB_COMPILE_RESOURCES` (path to your glib-compile-resources program)
+
+* `%PATH%`:
+   * `PYTHON` (path to your Python interpreter, for generating code for 
+     the build as well as for introspection; for introspection, this must 
+     match the version series and architecture for the Python that is used 
+     to build gobject-introspection)
+   * `PKG_CONFIG` (path to your pkg-config or compatible tool, for 
+     building introspection files in the `gtk3-introspect` project)
+   * `MSGFMT` (path to your msgfmt program, if building translations 
+     during install; append ` install-translations` to `InstallBuildsBase`
+     in `gtk3-build-defines.[vs]props])
+
+`LIBDIR` and `INCLUDEDIR` can also be passed in if they are not under 
+`$(PREFIX)\lib` and `$(PREFIX)\include` respectively.  Note that 
+`$(LIBDIR)` is architecture-dependent.
+
 If desiring to build binaries for ARM64 (`aarch64`), one needs to use the
 Visual Studio 2017 or 2019 or 2022 solution files, or use Meson with a
 cross-compilation file, with a Windows 10 SDK that supports ARM64
@@ -214,19 +239,21 @@ indicates a Windows 10 SDK version that supports ARM64 builds
 exists on the build machine.
 
 For building ARM64 binaries with the Visual Studio projects, prior to the 
-build, you may need to update `gtk3-gen-srcs.props` to pass in the variables:
+build, you may need to update `gtk3-build-defines.props` to pass in the variables as indicated earlier:
 
-* GLIB_MKENUMS,
+* GLIB_MKENUMS
 * GLIB_GENMARSHAL
 * GDBUS_CODEGEN
 * GLIB_COMPILE_RESOURCES
+* PYTHON
 
 in the nmake command line indicated by `<GenerateRequiredSourcesBase>` so
 that they point to the respective tools and scripts that will run on the
 build machine.  You may also need to update `gtk3-version-paths.props` to 
 update `<PythonDir>` to the installation of the Python 3.x interpreter 
-that will run on the build machine.  To carry out the actual build using 
-the solution files, use the "Configuration Manager" to add the
+that will run on the build machine (or just update `PYTHON=...` in the 
+command line in `<GenerateRequiredSourcesBase>`).  To carry out the actual 
+build using the solution files, use the "Configuration Manager" to add the
 ARM64 build configs by copying the settings from the x64 configs, and then
 build the solution.
 The build instructions for such builds otherwise follow the standard Win32
