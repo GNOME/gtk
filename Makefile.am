@@ -15,7 +15,7 @@ EXTRA_DIST +=			\
 	INSTALL.in		\
 	NEWS.pre-1-0		\
 	README.commits		\
-	README.win32		\
+	README.win32.md		\
 	check-version.py	\
 	config.h.win32		\
 	makefile.msc		\
