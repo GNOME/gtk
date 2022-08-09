@@ -1995,7 +1995,7 @@ gtk_paned_set_focus_child (GtkWidget *widget,
           /* If there is one or more paned widgets between us and the
            * focus widget, we want the topmost of those as last_focus
            */
-          for (w = last_focus; w != GTK_WIDGET (paned); w = gtk_widget_get_parent (w))
+          for (w = last_focus; w && w != GTK_WIDGET (paned); w = gtk_widget_get_parent (w))
             if (GTK_IS_PANED (w))
               last_focus = w;
 
