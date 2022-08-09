@@ -6462,7 +6462,12 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
 
           old_target = g_object_ref (focus->target);
           gtk_pointer_focus_repick_target (focus);
-          synthesize_focus_change_events (window, old_target, focus->target, GTK_CROSSING_POINTER);
+          gtk_synthesize_crossing_events (GTK_ROOT (window),
+                                          GTK_CROSSING_POINTER,
+                                          old_target, focus->target,
+                                          focus->x, focus->y,
+                                          GDK_CROSSING_NORMAL,
+                                          NULL);
           g_object_unref (old_target);
         }
 

@@ -152,6 +152,15 @@ char * _gtk_elide_underscores (const char *original);
 
 void setlocale_initialization (void);
 
+void gtk_synthesize_crossing_events (GtkRoot         *toplevel,
+                                     GtkCrossingType  crossing_type,
+                                     GtkWidget       *old_target,
+                                     GtkWidget       *new_target,
+                                     double           surface_x,
+                                     double           surface_y,
+                                     GdkCrossingMode  mode,
+                                     GdkDrop         *drop);
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
