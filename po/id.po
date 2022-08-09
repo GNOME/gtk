@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-4-4\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-07-11 18:44+0000\n"
-"PO-Revision-Date: 2022-07-13 19:57+0700\n"
+"POT-Creation-Date: 2022-08-08 20:49+0000\n"
+"PO-Revision-Date: 2022-08-09 09:11+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -532,7 +532,7 @@ msgstr "Galat menginterpretasi berkas citra JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Ruang warna JPEG yang tidak didukung (%d)"
 
-#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:265 gdk/loaders/gdktiff.c:453
+#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:266 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Tidak cukup memori untuk ukuran gambar %ux%u"
@@ -542,12 +542,12 @@ msgstr "Tidak cukup memori untuk ukuran gambar %ux%u"
 msgid "Error reading png (%s)"
 msgstr "Galat membaca png (%s)"
 
-#: gdk/loaders/gdkpng.c:216
+#: gdk/loaders/gdkpng.c:217
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Kedalaman %u yang tidak didukung dalam gambar png"
 
-#: gdk/loaders/gdkpng.c:246
+#: gdk/loaders/gdkpng.c:247
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Jenis warna %u yang tidak didukung dalam gambar png"
@@ -566,8 +566,8 @@ msgid "Reading data failed at row %d"
 msgstr "Gagal membaca data pada baris %d"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
-#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:313
-#: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
+#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:317
+#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
 #: gdk/x11/gdkclipboard-x11.c:791 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Tidak ditemukan format transfer yang kompatibel"
@@ -678,39 +678,39 @@ msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. GetClipboardData() gagal: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:937
+#: gdk/win32/gdkdrop-win32.c:949
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Tidak dapat mendapatkan data DnD. GlobalLock(0x%p) gagal: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:946
+#: gdk/win32/gdkdrop-win32.c:958
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Tidak dapat mendapatkan data DnD. GlobalSize(0x%p) gagal: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:957
+#: gdk/win32/gdkdrop-win32.c:969
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Tidak bisa memperoleh data DnD. Gagal mengalokasikan %s byte untuk menyimpan "
 "data."
 
-#: gdk/win32/gdkdrop-win32.c:1025
+#: gdk/win32/gdkdrop-win32.c:1037
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Permukaan GDK 0x%p tidak terdaftar sebagai target penurunan"
 
-#: gdk/win32/gdkdrop-win32.c:1032
+#: gdk/win32/gdkdrop-win32.c:1044
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Catatan konteks target 0x%p tidak memiliki objek data"
 
-#: gdk/win32/gdkdrop-win32.c:1070
+#: gdk/win32/gdkdrop-win32.c:1082
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) gagal, menghasilkan 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1102
+#: gdk/win32/gdkdrop-win32.c:1114
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Gagal mentransmisikan data DnD format W32 0x%x to %p (%s)"
@@ -2114,10 +2114,10 @@ msgstr "Berkas dengan nama itu sudah ada"
 #: gtk/gtkfilechoosernative.c:509 gtk/gtkfilechoosernative.c:580
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:5800
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175
-#: gtk/gtkmountoperation.c:604 gtk/gtkpagesetupunixdialog.c:283
-#: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:722
+#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
+#: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:721
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6110 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6113 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2208,7 +2208,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jika Anda menghapus suatu butir, itu akan hilang selamanya."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5627 gtk/gtktext.c:6041 gtk/gtktextview.c:8914
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6042 gtk/gtktextview.c:8964
 msgid "_Delete"
 msgstr "_Hapus"
 
@@ -2422,7 +2422,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
-#: gtk/gtkfontbutton.c:1357
+#: gtk/gtkfontbutton.c:1323
 msgctxt "font"
 msgid "None"
 msgstr "Nihil"
@@ -2484,27 +2484,27 @@ msgstr "Varian Karakter"
 msgid "OpenGL context creation failed"
 msgstr "Pembuatan konteks OpenGL gagal"
 
-#: gtk/gtklabel.c:5624 gtk/gtktext.c:6029 gtk/gtktextview.c:8902
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6030 gtk/gtktextview.c:8952
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: gtk/gtklabel.c:5625 gtk/gtktext.c:6033 gtk/gtktextview.c:8906
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6034 gtk/gtktextview.c:8956
 msgid "_Copy"
 msgstr "_Salin"
 
-#: gtk/gtklabel.c:5626 gtk/gtktext.c:6037 gtk/gtktextview.c:8910
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6038 gtk/gtktextview.c:8960
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: gtk/gtklabel.c:5632 gtk/gtktext.c:6050 gtk/gtktextview.c:8935
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6051 gtk/gtktextview.c:8985
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: gtk/gtklabel.c:5637
+#: gtk/gtklabel.c:5662
 msgid "_Open Link"
 msgstr "_Buka Taut"
 
-#: gtk/gtklabel.c:5641
+#: gtk/gtklabel.c:5666
 msgid "Copy _Link Address"
 msgstr "Sa_lin Alamat Taut"
 
@@ -2606,7 +2606,7 @@ msgid "%d:%02d"
 msgstr "%d: %02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6111
+#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6114
 msgid "_OK"
 msgstr "_Ok"
 
@@ -2618,73 +2618,73 @@ msgstr "_Tidak"
 msgid "_Yes"
 msgstr "_Ya"
 
-#: gtk/gtkmountoperation.c:605
+#: gtk/gtkmountoperation.c:609
 msgid "Co_nnect"
 msgstr "Sambu_ng"
 
-#: gtk/gtkmountoperation.c:671
+#: gtk/gtkmountoperation.c:675
 msgid "Connect As"
 msgstr "Sambung sebagai"
 
-#: gtk/gtkmountoperation.c:680
+#: gtk/gtkmountoperation.c:684
 msgid "_Anonymous"
 msgstr "_Anonim"
 
-#: gtk/gtkmountoperation.c:686
+#: gtk/gtkmountoperation.c:691
 msgid "Registered U_ser"
 msgstr "Pengguna _Terdaftar"
 
-#: gtk/gtkmountoperation.c:696
+#: gtk/gtkmountoperation.c:701
 msgid "_Username"
 msgstr "Nama pengg_una"
 
-#: gtk/gtkmountoperation.c:701
+#: gtk/gtkmountoperation.c:706
 msgid "_Domain"
 msgstr "_Domain"
 
-#: gtk/gtkmountoperation.c:710
+#: gtk/gtkmountoperation.c:715
 msgid "Volume type"
 msgstr "Jenis volume"
 
-#: gtk/gtkmountoperation.c:720
+#: gtk/gtkmountoperation.c:725
 msgid "_Hidden"
 msgstr "Tersem_bunyi"
 
-#: gtk/gtkmountoperation.c:723
+#: gtk/gtkmountoperation.c:728
 msgid "_Windows system"
 msgstr "Sistem _Windows"
 
-#: gtk/gtkmountoperation.c:726
+#: gtk/gtkmountoperation.c:731
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:737
 msgid "_Password"
 msgstr "_Sandi"
 
-#: gtk/gtkmountoperation.c:754
+#: gtk/gtkmountoperation.c:759
 msgid "Forget password _immediately"
 msgstr "Lupakan sandi seket_ika"
 
-#: gtk/gtkmountoperation.c:764
+#: gtk/gtkmountoperation.c:769
 msgid "Remember password until you _logout"
 msgstr "Ingat sandi sampai Anda _log keluar"
 
-#: gtk/gtkmountoperation.c:775
+#: gtk/gtkmountoperation.c:780
 msgid "Remember _forever"
 msgstr "Ingat sela_manya"
 
-#: gtk/gtkmountoperation.c:1201
+#: gtk/gtkmountoperation.c:1206
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplikasi Tak Dikenal (PID %d)"
 
-#: gtk/gtkmountoperation.c:1400
+#: gtk/gtkmountoperation.c:1405
 #, c-format
 msgid "Unable to end process"
 msgstr "Tak bisa mengakhiri proses"
 
-#: gtk/gtkmountoperation.c:1430
+#: gtk/gtkmountoperation.c:1435
 msgid "_End Process"
 msgstr "Akhiri Pros_es"
 
@@ -3123,16 +3123,16 @@ msgstr "Otentikasi"
 msgid "_Remember password"
 msgstr "Ingat _sandi"
 
-#: gtk/gtkprinteroptionwidget.c:719
+#: gtk/gtkprinteroptionwidget.c:718
 msgid "Select a filename"
 msgstr "Pilih nama berkas"
 
-#: gtk/gtkprinteroptionwidget.c:723 gtk/ui/gtkappchooserdialog.ui:50
+#: gtk/gtkprinteroptionwidget.c:722 gtk/ui/gtkappchooserdialog.ui:50
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Select"
 msgstr "_Pilih"
 
-#: gtk/gtkprinteroptionwidget.c:937
+#: gtk/gtkprinteroptionwidget.c:936
 msgid "Not available"
 msgstr "Tidak tersedia"
 
@@ -3476,15 +3476,15 @@ msgstr "Cobalah pencarian lain"
 msgid "Could not show link"
 msgstr "Tidak dapat menampilkan tautan"
 
-#: gtk/gtktext.c:6055 gtk/gtktextview.c:8940
+#: gtk/gtktext.c:6056 gtk/gtktextview.c:8990
 msgid "Insert _Emoji"
 msgstr "Sisipkan _Emoji"
 
-#: gtk/gtktextview.c:8922
+#: gtk/gtktextview.c:8972
 msgid "_Undo"
 msgstr "_Tidak Jadi"
 
-#: gtk/gtktextview.c:8926
+#: gtk/gtktextview.c:8976
 msgid "_Redo"
 msgstr "_Jadi Lagi"
 
@@ -3511,12 +3511,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6098
+#: gtk/gtkwindow.c:6101
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Apakah Anda ingin memakai GTK Inspector?"
 
-#: gtk/gtkwindow.c:6100
+#: gtk/gtkwindow.c:6103
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3527,7 +3527,7 @@ msgstr ""
 "mengeksplorasi dan mengubah internal dari sebarang aplikasi GTK. Memakainya "
 "dapat menyebabkan aplikasi rusak atau remuk."
 
-#: gtk/gtkwindow.c:6105
+#: gtk/gtkwindow.c:6108
 msgid "Don’t show this message again"
 msgstr "Jangan tampilkan pesan ini lagi"
 
@@ -6370,22 +6370,44 @@ msgstr "Diperluas"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Beberapa ketentuan pada dialog konflik"
 
-#: modules/media/gtkffmediafile.c:220
+#: modules/media/gtkffmediafile.c:253
 #, c-format
-msgid "Unspecified error decoding video"
-msgstr "Kesalahan mendekode video yang tidak jelas"
+msgid "Unspecified error decoding media"
+msgstr "Kesalahan mendekode media yang tidak jelas"
 
-#: modules/media/gtkffmediafile.c:328 modules/media/gtkffmediafile.c:502
+#: modules/media/gtkffmediafile.c:286
+#, c-format
+msgid "Cannot find decoder: %s"
+msgstr "Tidak dapat menemukan dekoder: %s"
+
+#: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
+msgid "Failed to allocate a codec context"
+msgstr "Gagal mengalokasikan konteks kodek"
+
+#: modules/media/gtkffmediafile.c:341
+#, c-format
+msgid "Cannot find encoder: %s"
+msgstr "Tidak dapat menemukan enkoder: %s"
+
+#: modules/media/gtkffmediafile.c:352
+msgid "Cannot add new stream"
+msgstr "Tidak dapat menambahkan stream baru"
+
+#: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
+msgid "Failed to allocate an audio frame"
+msgstr "Gagal mengalokasikan bingkai audio"
+
+#: modules/media/gtkffmediafile.c:650 modules/media/gtkffmediafile.c:898
 msgid "Not enough memory"
 msgstr "Tidak cukup memori"
 
-#: modules/media/gtkffmediafile.c:525
-msgid "Not a video file"
-msgstr "Bukan berkas video"
+#: modules/media/gtkffmediafile.c:821
+msgid "Could not allocate resampler context"
+msgstr "Tidak dapat mengalokasikan konteks resampler"
 
-#: modules/media/gtkffmediafile.c:544
-msgid "Unsupported video codec"
-msgstr "Kodek video tidak didukung"
+#: modules/media/gtkffmediafile.c:868
+msgid "No audio output found"
+msgstr "Tidak ada keluaran audio yang ditemukan"
 
 #: modules/printbackends/gtkprintbackendcups.c:1152
 #: modules/printbackends/gtkprintbackendcups.c:1461
@@ -7283,6 +7305,12 @@ msgstr ""
 "Tidak ada berkas indeks tema dalam \"%s\".\n"
 "JIka Anda memang ingin membuat singgahan ikon di sini, gunakan --ignore-"
 "theme-index.\n"
+
+#~ msgid "Not a video file"
+#~ msgstr "Bukan berkas video"
+
+#~ msgid "Unsupported video codec"
+#~ msgstr "Kodek video tidak didukung"
 
 #~ msgctxt "OpenType layout"
 #~ msgid "Stylistic Set 1"
