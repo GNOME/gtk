@@ -1106,7 +1106,7 @@ translate_coordinates (double     event_x,
   return TRUE;
 }
 
-static void
+void
 gtk_synthesize_crossing_events (GtkRoot         *toplevel,
                                 GtkCrossingType  crossing_type,
                                 GtkWidget       *old_target,
