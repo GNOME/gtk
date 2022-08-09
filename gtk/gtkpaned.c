@@ -1999,6 +1999,15 @@ gtk_paned_set_focus_child (GtkWidget *widget,
             if (GTK_IS_PANED (w))
               last_focus = w;
 
+          if (w == NULL)
+            {
+              g_warning ("Error finding last focus widget of GtkPaned %p, "
+                         "gtk_paned_set_focus_child was called on widget %p "
+                         "which is not child of %p.",
+                         widget, child, widget);
+              return;
+            }
+
           focus_child = gtk_widget_get_focus_child (widget);
           if (focus_child == paned->start_child)
             gtk_paned_set_last_start_child_focus (paned, last_focus);
