@@ -85,6 +85,8 @@ struct _GtkEventControllerScroll
   /* For discrete event coalescing */
   double cur_dx;
   double cur_dy;
+  double last_cur_dx;
+  double last_cur_dy;
 
   GdkScrollUnit cur_unit;
 
@@ -338,6 +340,17 @@ gtk_event_controller_scroll_handle_hold_event (GtkEventController *controller,
 }
 
 static gboolean
+should_reset_discrete_acc (double current_delta,
+                           double last_delta)
+{
+  if (last_delta == 0)
+    return TRUE;
+
+  return (current_delta < 0 && last_delta > 0) ||
+         (current_delta > 0 && last_delta < 0);
+}
+
+static gboolean
 gtk_event_controller_scroll_handle_event (GtkEventController *controller,
                                           GdkEvent           *event,
                                           double              x,
@@ -416,30 +429,51 @@ gtk_event_controller_scroll_handle_event (GtkEventController *controller,
     }
   else
     {
-      switch (direction)
-        {
-        case GDK_SCROLL_UP:
-          dy -= 1;
-          break;
-        case GDK_SCROLL_DOWN:
-          dy += 1;
-          break;
-        case GDK_SCROLL_LEFT:
-          dx -= 1;
-          break;
-        case GDK_SCROLL_RIGHT:
-          dx += 1;
-          break;
-        case GDK_SCROLL_SMOOTH:
-        default:
-          g_assert_not_reached ();
-          break;
-        }
+      gdk_scroll_event_get_deltas (event, &dx, &dy);
 
       if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_VERTICAL) == 0)
         dy = 0;
       if ((scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_HORIZONTAL) == 0)
         dx = 0;
+
+      if (scroll->flags & GTK_EVENT_CONTROLLER_SCROLL_DISCRETE)
+        {
+          int steps;
+
+          if (dx != 0)
+            {
+              if (should_reset_discrete_acc (dx, scroll->last_cur_dx))
+                scroll->cur_dx = 0;
+
+              scroll->last_cur_dx = dx;
+            }
+
+          if (dy != 0)
+            {
+              if (should_reset_discrete_acc (dy, scroll->last_cur_dy))
+                scroll->cur_dy = 0;
+
+              scroll->last_cur_dy = dy;
+            }
+
+          scroll->cur_dx += dx;
+          scroll->cur_dy += dy;
+          dx = dy = 0;
+
+          if (ABS (scroll->cur_dx) >= 1)
+            {
+              steps = trunc (scroll->cur_dx);
+              scroll->cur_dx -= steps;
+              dx = steps;
+            }
+
+          if (ABS (scroll->cur_dy) >= 1)
+            {
+              steps = trunc (scroll->cur_dy);
+              scroll->cur_dy -= steps;
+              dy = steps;
+            }
+        }
     }
 
   scroll->cur_unit = scroll_unit;

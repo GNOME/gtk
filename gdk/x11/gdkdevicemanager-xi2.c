@@ -1729,6 +1729,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                       &xev->valuators, &delta_x, &delta_y))
           {
             GdkModifierType state;
+            GdkScrollDirection direction;
 
             GDK_DISPLAY_NOTE (display, EVENTS,
                      g_message ("smooth scroll: \n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
@@ -1737,27 +1738,36 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
+            if (delta_x > 0)
+              direction = GDK_SCROLL_RIGHT;
+            else if (delta_x < 0)
+              direction = GDK_SCROLL_LEFT;
+            else if (delta_y > 0)
+              direction = GDK_SCROLL_DOWN;
+            else
+              direction = GDK_SCROLL_UP;
+
             if (gdk_device_get_source (source_device) != GDK_SOURCE_TOUCHPAD &&
                 ((delta_x == 0.0 && ABS (delta_y) == 1.0) ||
                  (ABS (delta_x) == 1.0 && delta_y == 0.0)))
               {
-                GdkScrollDirection direction;
-
-                if (delta_x > 0)
-                  direction = GDK_SCROLL_RIGHT;
-                else if (delta_x < 0)
-                  direction = GDK_SCROLL_LEFT;
-                else if (delta_y > 0)
-                  direction = GDK_SCROLL_DOWN;
-                else
-                  direction = GDK_SCROLL_UP;
-
                 event = gdk_scroll_event_new_discrete (surface,
                                                        device,
                                                        NULL,
                                                        xev->time,
                                                        state,
                                                        direction);
+              }
+            else if (gdk_device_get_source (source_device) == GDK_SOURCE_MOUSE)
+              {
+                event = gdk_scroll_event_new_value120 (surface,
+                                                       device,
+                                                       NULL,
+                                                       xev->time,
+                                                       state,
+                                                       direction,
+                                                       delta_x * 120.0,
+                                                       delta_y * 120.0);
               }
             else
               {
