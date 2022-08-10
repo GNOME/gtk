@@ -161,6 +161,8 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   jpeg_create_decompress (&info);
 
+  info.mem->max_memory_to_use = 100 * 1024 * 1024;
+
   jpeg_mem_src (&info,
                 g_bytes_get_data (input_bytes, NULL),
                 g_bytes_get_size (input_bytes));
@@ -272,6 +274,7 @@ gdk_save_jpeg (GdkTexture *texture)
 
   info.err = jpeg_std_error (&err);
   jpeg_create_compress (&info);
+
   info.image_width = width;
   info.image_height = height;
   info.input_components = 3;
@@ -279,6 +282,8 @@ gdk_save_jpeg (GdkTexture *texture)
 
   jpeg_set_defaults (&info);
   jpeg_set_quality (&info, 75, TRUE);
+
+  info.mem->max_memory_to_use = 100 * 1024 * 1024;
 
   jpeg_mem_dest (&info, &data, &size);
 
