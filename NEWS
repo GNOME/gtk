@@ -1,3 +1,82 @@
+Overview of Changes in 4.7.2, 10-08-2022
+========================================
+
+* GtkTextView:
+ - Fix child positioning with gutters
+
+* GtkText:
+ - Update placeholder visibility when necessary
+
+* GtkPicture:
+ - Add a content-fit property
+
+* GtkPopover:
+ - Fix a size allocation problem with the arrow
+
+* GtkTreeView:
+ - Fix a problem with DND
+
+* GtkTreePopover:
+ - Support scrolling
+
+* GtkGridView:
+ - Fix issues with rubberband selection
+
+* GtkLabel:
+ - Add a tabs property
+
+* GtkSnapshot:
+ - Make GtkSnapshot work from bindings
+
+* GtkScrolledWindow:
+ - Scroll at a reasonable speed
+
+* GtkPaned:
+ - Avoid an infinite loop
+
+* GtkWindow:
+ - Improve generation and handling of crossing events
+
+* CSS:
+ - Fix handling of certain transform values
+
+* Media support:
+ - Add audio support to the ffmpeg backend
+ - Avoid oom with pathological jpeg images
+
+* GDK:
+ - Fix handling of touchpad hold events
+ - Add support for hi-resolution scroll events
+
+* X11:
+ - Fix preferred action for DND
+
+* Windows:
+ - Fix DND
+
+* List models:
+ - Fix items-changed emission
+ - Add more list model tests
+
+* Demos:
+ - Add a winning sound to game demos
+ - Make app icons work uninstalled
+
+* Translation updates:
+ Abkhazian
+ Basque
+ Catalan
+ Georgian
+ German
+ Indonesian
+ Occitan
+ Persian
+ Portuguese
+ Russian
+ Spanish
+ Ukrainian
+
+
 Overview of Changes in 4.7.1, 12-07-2022
 ========================================
 
