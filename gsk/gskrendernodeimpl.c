@@ -3752,7 +3752,7 @@ gsk_rounded_clip_node_diff (GskRenderNode  *node1,
  * Creates a `GskRenderNode` that will clip the @child to the area
  * given by @clip.
  *
- * Returns: (transfer none) (type GskRoundedClipNode): A new `GskRenderNode`
+ * Returns: (transfer full) (type GskRoundedClipNode): A new `GskRenderNode`
  */
 GskRenderNode *
 gsk_rounded_clip_node_new (GskRenderNode         *child,
