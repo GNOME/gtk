@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-07-13 21:12+0000\n"
-"PO-Revision-Date: 2022-02-12 11:18+0100\n"
+"POT-Creation-Date: 2022-08-08 20:49+0000\n"
+"PO-Revision-Date: 2022-08-10 11:18+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -558,7 +558,7 @@ msgstr "S'ha produït un error en interpretar el fitxer gràfic JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Espai de color JPEG no compatible (%d)"
 
-#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:265
+#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:266
 #: gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
@@ -569,12 +569,12 @@ msgstr "No hi ha prou memòria per a la mida de la imatge %ux%u"
 msgid "Error reading png (%s)"
 msgstr "S'ha produït un error en llegir png (%s)"
 
-#: gdk/loaders/gdkpng.c:216
+#: gdk/loaders/gdkpng.c:217
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Profunditat no suportada %u en la imatge png"
 
-#: gdk/loaders/gdkpng.c:246
+#: gdk/loaders/gdkpng.c:247
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Tipus de color no compatible %u a la imatge png"
@@ -593,8 +593,8 @@ msgid "Reading data failed at row %d"
 msgstr "No s'ha pogut llegir les dades a la fila %d"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
-#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:313
-#: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
+#: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:317
+#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
 #: gdk/x11/gdkclipboard-x11.c:791 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "No s'ha trobat cap format de transferència compatible"
@@ -720,44 +720,44 @@ msgstr ""
 "No es poden obtenir les dades del porta-retalls. GetClipboardData() ha "
 "fallat: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:937
+#: gdk/win32/gdkdrop-win32.c:949
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "No s'han pogut obtenir les dades DnD. GlobalLock(0x%p) ha fallat: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:946
+#: gdk/win32/gdkdrop-win32.c:958
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "No s'han pogut obtenir les dades DnD. GlobalSize(0x%p) ha fallat: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:957
+#: gdk/win32/gdkdrop-win32.c:969
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "No s'han pogut obtenir les dades DnD. No s'han pogut assignar %s bytes per a"
 " emmagatzemar les dades."
 
-#: gdk/win32/gdkdrop-win32.c:1025
+#: gdk/win32/gdkdrop-win32.c:1037
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr ""
 "La superfície GDK 0x%p no està registrada com una destinació per a deixar "
 "anar"
 
-#: gdk/win32/gdkdrop-win32.c:1032
+#: gdk/win32/gdkdrop-win32.c:1044
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr ""
 "El registre contextual de destinació 0x%p que no té cap objecte de dades"
 
-#: gdk/win32/gdkdrop-win32.c:1070
+#: gdk/win32/gdkdrop-win32.c:1082
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) ha fallat, retornant 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1102
+#: gdk/win32/gdkdrop-win32.c:1114
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
@@ -2154,10 +2154,10 @@ msgstr "Ja existeix un fitxer amb aquest nom"
 #: gtk/gtkfilechoosernative.c:509 gtk/gtkfilechoosernative.c:580
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:5800
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175
-#: gtk/gtkmountoperation.c:604 gtk/gtkpagesetupunixdialog.c:283
+#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:721
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6110 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6113 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2249,7 +2249,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si suprimiu un element, es perdrà definitivament."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5627 gtk/gtktext.c:6041 gtk/gtktextview.c:8964
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6042 gtk/gtktextview.c:8964
 msgid "_Delete"
 msgstr "_Suprimeix"
 
@@ -2463,7 +2463,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Trieu un tipus de lletra"
 
-#: gtk/gtkfontbutton.c:1357
+#: gtk/gtkfontbutton.c:1323
 msgctxt "font"
 msgid "None"
 msgstr "Cap"
@@ -2527,27 +2527,27 @@ msgstr "Variants de caràcters"
 msgid "OpenGL context creation failed"
 msgstr "S'ha produït un error en la creació del context OpenGL"
 
-#: gtk/gtklabel.c:5624 gtk/gtktext.c:6029 gtk/gtktextview.c:8952
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6030 gtk/gtktextview.c:8952
 msgid "Cu_t"
 msgstr "Re_talla"
 
-#: gtk/gtklabel.c:5625 gtk/gtktext.c:6033 gtk/gtktextview.c:8956
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6034 gtk/gtktextview.c:8956
 msgid "_Copy"
 msgstr "_Copia"
 
-#: gtk/gtklabel.c:5626 gtk/gtktext.c:6037 gtk/gtktextview.c:8960
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6038 gtk/gtktextview.c:8960
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: gtk/gtklabel.c:5632 gtk/gtktext.c:6050 gtk/gtktextview.c:8985
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6051 gtk/gtktextview.c:8985
 msgid "Select _All"
 msgstr "Seleccion_a-ho tot"
 
-#: gtk/gtklabel.c:5637
+#: gtk/gtklabel.c:5662
 msgid "_Open Link"
 msgstr "Obre l'_enllaç"
 
-#: gtk/gtklabel.c:5641
+#: gtk/gtklabel.c:5666
 msgid "Copy _Link Address"
 msgstr "Copia l'adreça de l'en_llaç"
 
@@ -2646,7 +2646,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6111
+#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6114
 msgid "_OK"
 msgstr "_D'acord"
 
@@ -2658,73 +2658,73 @@ msgstr "_No"
 msgid "_Yes"
 msgstr "_Sí"
 
-#: gtk/gtkmountoperation.c:605
+#: gtk/gtkmountoperation.c:609
 msgid "Co_nnect"
 msgstr "C_onnecta"
 
-#: gtk/gtkmountoperation.c:671
+#: gtk/gtkmountoperation.c:675
 msgid "Connect As"
 msgstr "Connecta com a"
 
-#: gtk/gtkmountoperation.c:680
+#: gtk/gtkmountoperation.c:684
 msgid "_Anonymous"
 msgstr "_Anònim"
 
-#: gtk/gtkmountoperation.c:686
+#: gtk/gtkmountoperation.c:691
 msgid "Registered U_ser"
 msgstr "Usuari _registrat"
 
-#: gtk/gtkmountoperation.c:696
+#: gtk/gtkmountoperation.c:701
 msgid "_Username"
 msgstr "_Nom d'usuari"
 
-#: gtk/gtkmountoperation.c:701
+#: gtk/gtkmountoperation.c:706
 msgid "_Domain"
 msgstr "_Domini"
 
-#: gtk/gtkmountoperation.c:710
+#: gtk/gtkmountoperation.c:715
 msgid "Volume type"
 msgstr "Tipus de volum"
 
-#: gtk/gtkmountoperation.c:720
+#: gtk/gtkmountoperation.c:725
 msgid "_Hidden"
 msgstr "_Ocultes"
 
-#: gtk/gtkmountoperation.c:723
+#: gtk/gtkmountoperation.c:728
 msgid "_Windows system"
 msgstr "_Sistema Windows"
 
-#: gtk/gtkmountoperation.c:726
+#: gtk/gtkmountoperation.c:731
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:737
 msgid "_Password"
 msgstr "Contrasen_ya"
 
-#: gtk/gtkmountoperation.c:754
+#: gtk/gtkmountoperation.c:759
 msgid "Forget password _immediately"
 msgstr "Oblida la _contrasenya immediatament"
 
-#: gtk/gtkmountoperation.c:764
+#: gtk/gtkmountoperation.c:769
 msgid "Remember password until you _logout"
 msgstr "Recorda la contrasenya _fins que surti"
 
-#: gtk/gtkmountoperation.c:775
+#: gtk/gtkmountoperation.c:780
 msgid "Remember _forever"
 msgstr "Recorda-la per se_mpre"
 
-#: gtk/gtkmountoperation.c:1201
+#: gtk/gtkmountoperation.c:1206
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplicació desconeguda (PID %d)"
 
-#: gtk/gtkmountoperation.c:1400
+#: gtk/gtkmountoperation.c:1405
 #, c-format
 msgid "Unable to end process"
 msgstr "No es pot finalitzar el procés"
 
-#: gtk/gtkmountoperation.c:1430
+#: gtk/gtkmountoperation.c:1435
 msgid "_End Process"
 msgstr "_Finalitza el procés"
 
@@ -3519,7 +3519,7 @@ msgstr "Proveu una cerca diferent"
 msgid "Could not show link"
 msgstr "No s'ha pogut mostrar l'enllaç"
 
-#: gtk/gtktext.c:6055 gtk/gtktextview.c:8990
+#: gtk/gtktext.c:6056 gtk/gtktextview.c:8990
 msgid "Insert _Emoji"
 msgstr "Insereix _emoji"
 
@@ -3553,12 +3553,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6098
+#: gtk/gtkwindow.c:6101
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Voleu utilitzar l'inspector del GTK?"
 
-#: gtk/gtkwindow.c:6100
+#: gtk/gtkwindow.c:6103
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3569,7 +3569,7 @@ msgstr ""
 "modificar qualsevol aplicació GTK internament. Podeu arribar a trencar o fer"
 " fallar l'aplicació si l'utilitzeu."
 
-#: gtk/gtkwindow.c:6105
+#: gtk/gtkwindow.c:6108
 msgid "Don’t show this message again"
 msgstr "No tornis a mostrar aquest missatge"
 
@@ -6417,22 +6417,44 @@ msgstr "Avançat"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Alguns dels ajustaments del diàleg de conflicte"
 
-#: modules/media/gtkffmediafile.c:220
+#: modules/media/gtkffmediafile.c:253
 #, c-format
-msgid "Unspecified error decoding video"
-msgstr "S'ha produït un error no especificat descodificant vídeo"
+msgid "Unspecified error decoding media"
+msgstr "S'ha produït un error no especificat descodificant un mitjà"
 
-#: modules/media/gtkffmediafile.c:328 modules/media/gtkffmediafile.c:502
+#: modules/media/gtkffmediafile.c:286
+#, c-format
+msgid "Cannot find decoder: %s"
+msgstr "No s'ha pogut trobar el descodificador: %s"
+
+#: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
+msgid "Failed to allocate a codec context"
+msgstr "No s'ha pogut assignar un context de còdec"
+
+#: modules/media/gtkffmediafile.c:341
+#, c-format
+msgid "Cannot find encoder: %s"
+msgstr "No s'ha pogut trobar el codificador: %s"
+
+#: modules/media/gtkffmediafile.c:352
+msgid "Cannot add new stream"
+msgstr "No es pot afegir un flux nou"
+
+#: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
+msgid "Failed to allocate an audio frame"
+msgstr "No s'ha pogut assignar una trama d'àudio"
+
+#: modules/media/gtkffmediafile.c:650 modules/media/gtkffmediafile.c:898
 msgid "Not enough memory"
 msgstr "No hi ha prou memòria"
 
-#: modules/media/gtkffmediafile.c:525
-msgid "Not a video file"
-msgstr "No és un fitxer de vídeo"
+#: modules/media/gtkffmediafile.c:821
+msgid "Could not allocate resampler context"
+msgstr "No s'ha pogut assignar el context del remostreig"
 
-#: modules/media/gtkffmediafile.c:544
-msgid "Unsupported video codec"
-msgstr "Còdec de vídeo no compatible"
+#: modules/media/gtkffmediafile.c:868
+msgid "No audio output found"
+msgstr "No s'ha trobat cap sortida d'àudio"
 
 #: modules/printbackends/gtkprintbackendcups.c:1152
 #: modules/printbackends/gtkprintbackendcups.c:1461
@@ -7334,85 +7356,3 @@ msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
 "Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-theme-index.\n"
 
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 1"
-#~ msgstr "Conjunt estilístic 1"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 2"
-#~ msgstr "Conjunt estilístic 2"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 3"
-#~ msgstr "Conjunt estilístic 3"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 4"
-#~ msgstr "Conjunt estilístic 4"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 5"
-#~ msgstr "Conjunt estilístic 5"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 6"
-#~ msgstr "Conjunt estilístic 6"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 7"
-#~ msgstr "Conjunt estilístic 7"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 8"
-#~ msgstr "Conjunt estilístic 8"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 9"
-#~ msgstr "Conjunt estilístic 9"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 10"
-#~ msgstr "Conjunt estilístic 10"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 11"
-#~ msgstr "Conjunt estilístic 11"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 12"
-#~ msgstr "Conjunt estilístic 12"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 13"
-#~ msgstr "Conjunt estilístic 13"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 14"
-#~ msgstr "Conjunt estilístic 14"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 15"
-#~ msgstr "Conjunt estilístic 15"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 16"
-#~ msgstr "Conjunt estilístic 16"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 17"
-#~ msgstr "Conjunt estilístic 17"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 18"
-#~ msgstr "Conjunt estilístic 18"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 19"
-#~ msgstr "Conjunt estilístic 19"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 20"
-#~ msgstr "Conjunt estilístic 20"
-
-#~ msgid "The EGL implementation does not support any allowed APIs"
-#~ msgstr "La implementació EGL no admet cap API permesa"
