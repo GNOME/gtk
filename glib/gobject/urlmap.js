@@ -1,4 +1,4 @@
-var baseUrls = [
+var baseURLs = [
     [ 'GLib', 'https://docs.gtk.org/glib/' ],
     [ 'GModule', 'https://docs.gtk.org/gmodule/' ],
     [ 'GObject', 'https://docs.gtk.org/gobject/' ],
