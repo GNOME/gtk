@@ -2869,8 +2869,8 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
         continue;
 
       background_area.width = gtk_tree_view_column_get_width (candidate);
-      if ((background_area.x > bin_x) ||
-          (background_area.x + background_area.width <= bin_x))
+      if ((background_area.x > x) ||
+          (background_area.x + background_area.width <= x))
         {
           background_area.x += background_area.width;
           continue;
@@ -2976,7 +2976,7 @@ gtk_tree_view_click_gesture_pressed (GtkGestureClick *gesture,
       focus_cell = _gtk_tree_view_column_get_cell_at_pos (column,
                                                           &cell_area,
                                                           &background_area,
-                                                          bin_x, bin_y);
+                                                          x, y);
 
       if (focus_cell)
         gtk_tree_view_column_focus_cell (column, focus_cell);
