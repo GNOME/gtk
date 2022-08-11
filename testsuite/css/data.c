@@ -81,8 +81,8 @@ test_parse (gconstpointer data)
 
   if (test->contents)
     {
-      g_assert_nonnull (bytes);
       g_assert_no_error (error);
+      g_assert_nonnull (bytes);
       if (test->mimetype == NULL)
         g_assert_null (mimetype);
       else
@@ -94,8 +94,8 @@ test_parse (gconstpointer data)
     }
   else
     {
-      g_assert_null (bytes);
       g_assert_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_FILENAME);
+      g_assert_null (bytes);
       g_error_free (error);
     }
 }
