@@ -1,3 +1,36 @@
+Overview of Changes in 4.6.7, 17-08-2022
+========================================
+
+* Miscellaneous memory leak fixes
+
+* GtkTreeView:
+ - Fix a problem with DND
+ - Fix a problem with row selection
+
+* GtkTreePopover:
+ - Support scrolling
+
+* GtkGridView:
+ - Fix issues with rubberband selection
+
+* GtkSnapshot:
+ - Make GtkSnapshot work from bindings
+
+* X11:
+ - Fix preferred action for DND
+
+* Windows:
+ - Fix DND
+
+* Translation updates
+ Croatian
+ Georgian
+ Indonesian
+ Russian
+ Serbian
+ Spanish
+
+
 Overview of Changes in 4.6.6, 02-07-2022
 ========================================
 
