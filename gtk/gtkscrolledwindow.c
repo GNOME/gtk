@@ -54,6 +54,10 @@
 #include "gtkviewport.h"
 #include "gtkwidgetprivate.h"
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/wayland/gdkwayland.h>
+#endif
+
 #include <math.h>
 
 /**
@@ -1233,6 +1237,7 @@ get_scroll_unit (GtkScrolledWindow        *sw,
                  GtkEventControllerScroll *scroll)
 {
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (sw);
+  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (sw));
   GtkScrollbar *scrollbar;
   GtkAdjustment *adj;
   double page_size;
@@ -1258,6 +1263,18 @@ get_scroll_unit (GtkScrolledWindow        *sw,
         gdk_event_get_event_type (event) == GDK_SCROLL &&
         gdk_scroll_event_get_direction (event) == GDK_SCROLL_SMOOTH)
       scroll_unit = 1;
+  }
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+  {
+    GdkEvent *event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (scroll));
+
+    if (event != NULL &&
+        gdk_event_get_event_type (event) == GDK_SCROLL &&
+        gdk_scroll_event_get_direction (event) == GDK_SCROLL_SMOOTH)
+      scroll_unit = 25;
   }
 #endif
 
