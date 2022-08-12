@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-08-08 20:49+0000\n"
-"PO-Revision-Date: 2022-08-12 16:25+0200\n"
+"PO-Revision-Date: 2022-08-12 16:32+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -4275,7 +4275,7 @@ msgstr "Softverski GL"
 
 #: gtk/inspector/visual.ui:714
 msgid "Inspect Inspector"
-msgstr ""
+msgstr "Provjeri inspektora"
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
@@ -5983,7 +5983,7 @@ msgstr "Odaberi boju sa zaslona"
 
 #: gtk/ui/gtkcoloreditor.ui:80
 msgid "Hexadecimal color or color name"
-msgstr ""
+msgstr "Boja u heksadecimalnom obliku ili naziv boje"
 
 #: gtk/ui/gtkcoloreditor.ui:95
 msgid "Hue"
