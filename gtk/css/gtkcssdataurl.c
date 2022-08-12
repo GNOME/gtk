@@ -165,9 +165,10 @@ gtk_css_data_url_parse (const char  *url,
           g_propagate_error (error, local_error);
           g_free (charset);
           g_free (data);
-          return NULL; 
+          g_free (mimetype);
+          return NULL;
         }
-		
+
 
       bdata = data;
       bsize = written;
