@@ -152,12 +152,23 @@ gtk_css_data_url_parse (const char  *url,
       gsize read;
       gsize written;
       gpointer data;
+      GError *local_error = NULL;
 
       data = g_convert_with_fallback (bdata, bsize,
                                       "UTF-8", charset, 
                                       (char *) "*",
-                                      &read, &written, NULL);
+                                      &read, &written, &local_error);
       g_free (bdata);
+
+      if (local_error)
+        {
+          g_propagate_error (error, local_error);
+          g_free (charset);
+          g_free (data);
+          g_free (mimetype);
+          return NULL;
+        }
+
 
       bdata = data;
       bsize = written;
