@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-08-08 20:49+0000\n"
-"PO-Revision-Date: 2022-08-12 16:21+0200\n"
+"PO-Revision-Date: 2022-08-12 16:25+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -75,7 +75,7 @@ msgstr "Nema pronađenog savršenog EGL pdešavanja"
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
-msgstr[0] "EGL implementaciji nedostaju %2$d proširenje: %1$s"
+msgstr[0] "EGL implementaciji nedostaje %2$d proširenje: %1$s"
 msgstr[1] "EGL implementaciji nedostaju %2$d proširenja: %1$s"
 msgstr[2] "EGL implementaciji nedostaju %2$d proširenja: %1$s"
 
@@ -7072,7 +7072,7 @@ msgstr "Uslikaj samo navedeni objekt"
 
 #: tools/gtk-builder-tool-screenshot.c:360
 msgid "Save as node file instead of png"
-msgstr "Spremi kao node datoteke umjesto png"
+msgstr "Spremi kao node datoteku umjesto png"
 
 #: tools/gtk-builder-tool-screenshot.c:361
 msgid "Overwrite existing file"
