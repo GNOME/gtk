@@ -3726,7 +3726,10 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         attr = ippNextAttribute (response);
 
       if (attr == NULL)
-        break;
+        {
+          printer_setup_info_free (info);
+          break;
+        }
 
       while (attr != NULL && ippGetGroupTag (attr) == IPP_TAG_PRINTER)
         {
@@ -3737,6 +3740,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       if (info->printer_name == NULL ||
 	  (info->printer_uri == NULL && info->member_uris == NULL))
         {
+          printer_setup_info_free (info);
           if (attr == NULL)
             break;
           else
@@ -3747,7 +3751,10 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       iter = g_list_find_custom (GTK_PRINT_BACKEND_CUPS (backend)->temporary_queues_removed,
                                  info->printer_name, (GCompareFunc) g_strcmp0);
       if (iter != NULL)
-        continue;
+        {
+          printer_setup_info_free (info);
+          continue;
+        }
 
       if (info->got_printer_type)
         {
