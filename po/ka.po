@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-07-25 12:56+0000\n"
-"PO-Revision-Date: 2022-07-25 18:03+0200\n"
+"POT-Creation-Date: 2022-08-12 00:09+0000\n"
+"PO-Revision-Date: 2022-08-12 05:31+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -77,7 +77,6 @@ msgstr "EGL-ის მისაღები კონფიგურაცია
 
 #: gdk/gdkdisplay.c:1625
 #, c-format
-#| msgid "No GL implementation is available"
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] ""
@@ -526,12 +525,12 @@ msgstr "ძილი"
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG გამოსახულების ფაილის კითხვის შეცდომა (%s)"
 
-#: gdk/loaders/gdkjpeg.c:190
+#: gdk/loaders/gdkjpeg.c:192
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "მხარდაუჭერელი JPEG ფერთა სივრცე (%d)"
 
-#: gdk/loaders/gdkjpeg.c:199 gdk/loaders/gdkpng.c:266 gdk/loaders/gdktiff.c:453
+#: gdk/loaders/gdkjpeg.c:201 gdk/loaders/gdkpng.c:266 gdk/loaders/gdktiff.c:453
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "არასაკმარისი მეხსიერება გამოსახულების ჩასატვირთად %ux%u"
@@ -566,7 +565,7 @@ msgstr "მონაცემების კითხვის შეცდო�
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:317
-#: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
+#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
 #: gdk/x11/gdkclipboard-x11.c:791 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr ""
@@ -688,41 +687,41 @@ msgstr ""
 "გაცვლის ბუფერის მონაცემების მიღება შეუძლებელია. GetClipboardData()-ის "
 "შეცდომა: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:937
+#: gdk/win32/gdkdrop-win32.c:949
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "DnD-ის მონაცემების მიღების შეცდომა. GlobalLock(0x%p)-ის შეცდომა: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:946
+#: gdk/win32/gdkdrop-win32.c:958
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "DnD-ის მონაცემების მიღების შეცდომა. GlobalSize(0x%p)-ის შეცდომა: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:957
+#: gdk/win32/gdkdrop-win32.c:969
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "DnD-ის მონაცემების მიღების შეცდომა. მონაცემების შესანახად საჭირო %s ბაიტის "
 "გამოყოფა შეუძლებელია."
 
-#: gdk/win32/gdkdrop-win32.c:1025
+#: gdk/win32/gdkdrop-win32.c:1037
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1032
+#: gdk/win32/gdkdrop-win32.c:1044
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1070
+#: gdk/win32/gdkdrop-win32.c:1082
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
 
-#: gdk/win32/gdkdrop-win32.c:1102
+#: gdk/win32/gdkdrop-win32.c:1114
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
@@ -2122,10 +2121,10 @@ msgstr "ფაილი ამ სახელით უკვე არსე�
 #: gtk/gtkfilechoosernative.c:509 gtk/gtkfilechoosernative.c:580
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:5800
 #: gtk/gtkmessagedialog.c:166 gtk/gtkmessagedialog.c:175
-#: gtk/gtkmountoperation.c:604 gtk/gtkpagesetupunixdialog.c:283
+#: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:640 gtk/gtkprinteroptionwidget.c:721
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6110 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6113 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2216,7 +2215,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "თუ წაშლით ელემენტს, ის სამუდამოდ დაიკარგება."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5627 gtk/gtktext.c:6042 gtk/gtktextview.c:8964
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6042 gtk/gtktextview.c:8964
 msgid "_Delete"
 msgstr "წაშლა"
 
@@ -2491,27 +2490,27 @@ msgstr "სიმბოლოების ვარიანტები"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL-ის კონტექსტის შექმნის შეცდომა"
 
-#: gtk/gtklabel.c:5624 gtk/gtktext.c:6030 gtk/gtktextview.c:8952
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6030 gtk/gtktextview.c:8952
 msgid "Cu_t"
 msgstr "ამოჭრა"
 
-#: gtk/gtklabel.c:5625 gtk/gtktext.c:6034 gtk/gtktextview.c:8956
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6034 gtk/gtktextview.c:8956
 msgid "_Copy"
 msgstr "ასლი"
 
-#: gtk/gtklabel.c:5626 gtk/gtktext.c:6038 gtk/gtktextview.c:8960
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6038 gtk/gtktextview.c:8960
 msgid "_Paste"
 msgstr "ჩასმა"
 
-#: gtk/gtklabel.c:5632 gtk/gtktext.c:6051 gtk/gtktextview.c:8985
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6051 gtk/gtktextview.c:8985
 msgid "Select _All"
 msgstr "ყველაფრის _მონიშვნა"
 
-#: gtk/gtklabel.c:5637
+#: gtk/gtklabel.c:5662
 msgid "_Open Link"
 msgstr "_ბმულის გახსნა"
 
-#: gtk/gtklabel.c:5641
+#: gtk/gtklabel.c:5666
 msgid "Copy _Link Address"
 msgstr "დაა_კოპირე ბმულის მისამართი"
 
@@ -2613,7 +2612,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6111
+#: gtk/gtkprintbackend.c:641 gtk/gtkwindow.c:6114
 msgid "_OK"
 msgstr "_დიახ"
 
@@ -2625,73 +2624,73 @@ msgstr "არა"
 msgid "_Yes"
 msgstr "დიახ"
 
-#: gtk/gtkmountoperation.c:605
+#: gtk/gtkmountoperation.c:609
 msgid "Co_nnect"
 msgstr "_დაკავშირება"
 
-#: gtk/gtkmountoperation.c:671
+#: gtk/gtkmountoperation.c:675
 msgid "Connect As"
 msgstr "დაკავშირება, როგორც"
 
-#: gtk/gtkmountoperation.c:680
+#: gtk/gtkmountoperation.c:684
 msgid "_Anonymous"
 msgstr "_ანონიმურად"
 
-#: gtk/gtkmountoperation.c:686
+#: gtk/gtkmountoperation.c:691
 msgid "Registered U_ser"
 msgstr "_რეგისტრირებული მომხმარებელი"
 
-#: gtk/gtkmountoperation.c:696
+#: gtk/gtkmountoperation.c:701
 msgid "_Username"
 msgstr "_მომხმარებელი"
 
-#: gtk/gtkmountoperation.c:701
+#: gtk/gtkmountoperation.c:706
 msgid "_Domain"
 msgstr "_დომენი"
 
-#: gtk/gtkmountoperation.c:710
+#: gtk/gtkmountoperation.c:715
 msgid "Volume type"
 msgstr "ტომის ტიპი"
 
-#: gtk/gtkmountoperation.c:720
+#: gtk/gtkmountoperation.c:725
 msgid "_Hidden"
 msgstr "_დამალული"
 
-#: gtk/gtkmountoperation.c:723
+#: gtk/gtkmountoperation.c:728
 msgid "_Windows system"
 msgstr "Windows-ის სისტემა"
 
-#: gtk/gtkmountoperation.c:726
+#: gtk/gtkmountoperation.c:731
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:732
+#: gtk/gtkmountoperation.c:737
 msgid "_Password"
 msgstr "პაროლი"
 
-#: gtk/gtkmountoperation.c:754
+#: gtk/gtkmountoperation.c:759
 msgid "Forget password _immediately"
 msgstr "პაროლის _მყისვე დავიწყება"
 
-#: gtk/gtkmountoperation.c:764
+#: gtk/gtkmountoperation.c:769
 msgid "Remember password until you _logout"
 msgstr "სესიის _დატოვებამდე პაროლის დამახსოვრება"
 
-#: gtk/gtkmountoperation.c:775
+#: gtk/gtkmountoperation.c:780
 msgid "Remember _forever"
 msgstr "სამუდამოდ დამახსოვრება"
 
-#: gtk/gtkmountoperation.c:1201
+#: gtk/gtkmountoperation.c:1206
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "უცნობი აპლიკაცია (PID %d)"
 
-#: gtk/gtkmountoperation.c:1400
+#: gtk/gtkmountoperation.c:1405
 #, c-format
 msgid "Unable to end process"
 msgstr "პროცესის გაჩერების შეცდომა"
 
-#: gtk/gtkmountoperation.c:1430
+#: gtk/gtkmountoperation.c:1435
 msgid "_End Process"
 msgstr "_პროცესის დასრულება"
 
@@ -3515,12 +3514,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6098
+#: gtk/gtkwindow.c:6101
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "გნებავთ GTK-ის ინსპექტორის გამოყენება?"
 
-#: gtk/gtkwindow.c:6100
+#: gtk/gtkwindow.c:6103
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3528,7 +3527,7 @@ msgid ""
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:6105
+#: gtk/gtkwindow.c:6108
 msgid "Don’t show this message again"
 msgstr "მეტჯერ აღარ მაჩვენო ეს გაფრთხილება"
 
@@ -4750,7 +4749,7 @@ msgstr ""
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr ""
+msgstr "ორნამენტები"
 
 #: gtk/open-type-layout.h:86
 msgctxt "OpenType layout"
@@ -6363,22 +6362,44 @@ msgstr "დამატებითი"
 msgid "Some of the settings in the dialog conflict"
 msgstr ""
 
-#: modules/media/gtkffmediafile.c:220
+#: modules/media/gtkffmediafile.c:253
 #, c-format
-msgid "Unspecified error decoding video"
-msgstr ""
+msgid "Unspecified error decoding media"
+msgstr "შეცდომა მოწოდებული მედიის დეკოდირებისას"
 
-#: modules/media/gtkffmediafile.c:328 modules/media/gtkffmediafile.c:502
+#: modules/media/gtkffmediafile.c:286
+#, c-format
+msgid "Cannot find decoder: %s"
+msgstr "ვერ ვპოულობ დეკოდერს: %s"
+
+#: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
+msgid "Failed to allocate a codec context"
+msgstr "კოდეკის კონტექსტის გამოყოფის შეცდომა"
+
+#: modules/media/gtkffmediafile.c:341
+#, c-format
+msgid "Cannot find encoder: %s"
+msgstr "ვერ ვპოულობ ენკოდერს: %s"
+
+#: modules/media/gtkffmediafile.c:352
+msgid "Cannot add new stream"
+msgstr "ახალი ნაკადის დამატება შეუძლებელია"
+
+#: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
+msgid "Failed to allocate an audio frame"
+msgstr "აუდიო კადრის გამოყოფის შეცდომა"
+
+#: modules/media/gtkffmediafile.c:650 modules/media/gtkffmediafile.c:898
 msgid "Not enough memory"
 msgstr "მეხსიერება საკმარისი არ არის"
 
-#: modules/media/gtkffmediafile.c:525
-msgid "Not a video file"
-msgstr "არ წარმოადგენს ვიდეო ფაილს"
+#: modules/media/gtkffmediafile.c:821
+msgid "Could not allocate resampler context"
+msgstr "რესამპლერის კონტექსტის გამოყოფის შეცდომა"
 
-#: modules/media/gtkffmediafile.c:544
-msgid "Unsupported video codec"
-msgstr "მხარდაუჭერელი ვიდეო კოდეკი"
+#: modules/media/gtkffmediafile.c:868
+msgid "No audio output found"
+msgstr ""
 
 #: modules/printbackends/gtkprintbackendcups.c:1152
 #: modules/printbackends/gtkprintbackendcups.c:1461
@@ -7254,6 +7275,12 @@ msgid ""
 "No theme index file in “%s”.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
+
+#~ msgid "Not a video file"
+#~ msgstr "არ წარმოადგენს ვიდეო ფაილს"
+
+#~ msgid "Unsupported video codec"
+#~ msgstr "მხარდაუჭერელი ვიდეო კოდეკი"
 
 #~ msgctxt "OpenType layout"
 #~ msgid "Stylistic Set 1"
@@ -8722,9 +8749,6 @@ msgstr ""
 #~ msgid "Couldn't allocate memory for header"
 #~ msgstr "შეუძლებელია თავსართისთვის მეხსიერების მინიჭება"
 
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "შეუძლებელია მეხსიერების მინიჭება კონტექსტური ბუფერისთვის"
-
 #~ msgid "Image has invalid width and/or height"
 #~ msgstr "გამოსახულების სიგანე და/ან სიმაღლე ნულოვანია"
 
@@ -8864,16 +8888,8 @@ msgstr ""
 #~ msgstr "თავსართის ჩაწერა ვერ მოხერხდ\n"
 
 #, fuzzy
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "გამოსახულების ბუფერისთვის ვერ ვიყენებ %u ბაიტს"
-
-#, fuzzy
 #~ msgid "File error when reading QTIF atom: %s"
 #~ msgstr "ვერ იკითხება GIF: %s"
-
-#, fuzzy
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "ვერ ვიყენებ მეხსიერებას TGA შიგთავსის სტრუქტურისთვის"
 
 #, fuzzy
 #~ msgid "Failed to create GdkPixbufLoader object."
