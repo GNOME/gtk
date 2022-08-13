@@ -223,6 +223,7 @@ static void
 destroy_gear (struct gear *g)
 {
   g_free (g->strips);
+  g_free (g->vertices);
   g_free (g);
 }
 
