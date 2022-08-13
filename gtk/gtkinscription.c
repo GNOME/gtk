@@ -490,6 +490,7 @@ gtk_inscription_allocate (GtkWidget *widget,
                   }
               }
           }
+        pango_layout_iter_free (iter);
       }
       break;
 
