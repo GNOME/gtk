@@ -215,7 +215,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
       cairo_surface_t *surface;
       struct wl_buffer *buffer;
 
-      texture = gdk_cursor_get_texture (cursor);
+      texture = g_object_ref (gdk_cursor_get_texture (cursor));
 
 from_texture:
       surface = g_hash_table_lookup (display->cursor_surface_cache, cursor);
@@ -244,6 +244,8 @@ from_texture:
       cairo_surface_reference (surface);
       buffer = _gdk_wayland_shm_surface_get_wl_buffer (surface);
       wl_buffer_add_listener (buffer, &buffer_listener, surface);
+
+      g_object_unref (texture);
 
       return buffer;
     }
