@@ -344,9 +344,9 @@ get_line_pixels (GtkInscription *self,
   int ascent, descent;
 
   metrics = gtk_inscription_get_font_metrics (self);
-
   ascent = pango_font_metrics_get_ascent (metrics);
   descent = pango_font_metrics_get_descent (metrics);
+  pango_font_metrics_unref (metrics);
 
   if (baseline)
     *baseline = ascent;
