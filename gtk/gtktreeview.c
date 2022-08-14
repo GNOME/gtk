@@ -6493,6 +6493,9 @@ gtk_tree_view_top_row_to_dy (GtkTreeView *tree_view)
   if (priv->in_top_row_to_dy)
     return;
 
+  if (gtk_adjustment_is_animating (priv->vadjustment))
+    return;
+
   if (priv->top_row)
     path = gtk_tree_row_reference_get_path (priv->top_row);
   else
