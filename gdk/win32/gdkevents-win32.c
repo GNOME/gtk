@@ -2669,6 +2669,7 @@ gdk_event_translate (MSG *msg,
     {
       int16_t scroll_x = 0;
       int16_t scroll_y = 0;
+      GdkScrollDirection direction;
 
       char classname[64];
 
@@ -2720,15 +2721,24 @@ gdk_event_translate (MSG *msg,
       _gdk_device_virtual_set_active (_gdk_device_manager->core_pointer,
                                       _gdk_device_manager->system_pointer);
 
-      event = gdk_scroll_event_new (window,
-                                    device_manager_win32->core_pointer,
-                                    NULL,
-                                    _gdk_win32_get_next_tick (msg->time),
-                                    build_pointer_event_state (msg),
-                                    (double) scroll_x / (double) WHEEL_DELTA,
-                                    (double) -scroll_y / (double) WHEEL_DELTA,
-                                    FALSE,
-                                    GDK_SCROLL_UNIT_WHEEL);
+      direction = 0;
+      if (msg->message == WM_MOUSEWHEEL)
+        direction = (((short) HIWORD (msg->wParam)) > 0)
+                      ? GDK_SCROLL_UP
+                      : GDK_SCROLL_DOWN;
+      else if (msg->message == WM_MOUSEHWHEEL)
+        direction = (((short) HIWORD (msg->wParam)) > 0)
+                      ? GDK_SCROLL_RIGHT
+                      : GDK_SCROLL_LEFT;
+
+      event = gdk_scroll_event_new_value120 (window,
+                                             device_manager_win32->core_pointer,
+                                             NULL,
+                                             _gdk_win32_get_next_tick (msg->time),
+                                             build_pointer_event_state (msg),
+                                             direction,
+                                             (double) scroll_x,
+                                             (double) -scroll_y);
 
       _gdk_win32_append_event (event);
 
