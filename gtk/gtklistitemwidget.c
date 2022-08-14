@@ -209,14 +209,16 @@ static void
 gtk_list_item_widget_teardown_factory (GtkListItemWidget *self)
 {
   GtkListItemWidgetPrivate *priv = gtk_list_item_widget_get_instance_private (self);
+  GtkListItem *list_item = priv->list_item;
 
   gtk_list_item_factory_teardown (priv->factory,
-                                  G_OBJECT (priv->list_item),
+                                  G_OBJECT (list_item),
                                   priv->item != NULL,
                                   gtk_list_item_widget_teardown_func,
                                   self);
 
   g_assert (priv->list_item == NULL);
+  g_object_unref (list_item);
 }
 
 static void
