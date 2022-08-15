@@ -109,7 +109,7 @@ msgstr[1] "Falten %2$d extensions a la implementació d'EGL: %1$s"
 
 #: gdk/gdkdisplay.c:1658
 msgid "libEGL not available in this sandbox"
-msgstr "la libEGL no està disponible en aquest entorn de proves"
+msgstr "libEGL no està disponible en aquest entorn de proves"
 
 #: gdk/gdkdisplay.c:1659
 msgid "libEGL not available"
@@ -572,12 +572,12 @@ msgstr "S'ha produït un error en llegir png (%s)"
 #: gdk/loaders/gdkpng.c:217
 #, c-format
 msgid "Unsupported depth %u in png image"
-msgstr "Profunditat no suportada %u en la imatge png"
+msgstr "Profunditat %u no suportada en la imatge png"
 
 #: gdk/loaders/gdkpng.c:247
 #, c-format
 msgid "Unsupported color type %u in png image"
-msgstr "Tipus de color no compatible %u a la imatge png"
+msgstr "Tipus de color %u no compatible a la imatge png"
 
 #: gdk/loaders/gdktiff.c:340
 msgid "Failed to load RGB data from TIFF file"
@@ -1074,7 +1074,7 @@ msgstr "Llicència BSD de 3 clàusules"
 
 #: gtk/gtkaboutdialog.c:140
 msgid "Apache License, Version 2.0"
-msgstr "Llicència Apache, Versió 2.0"
+msgstr "Llicència Apache, versió 2.0"
 
 #: gtk/gtkaboutdialog.c:141
 msgid "Mozilla Public License 2.0"
@@ -1267,7 +1267,7 @@ msgstr "canal"
 #: gtk/gtkaccessible.c:572
 msgctxt "accessibility"
 msgid "form"
-msgstr "forma"
+msgstr "formulari"
 
 #: gtk/gtkaccessible.c:573
 msgctxt "accessibility"
@@ -1527,7 +1527,7 @@ msgstr "taula"
 #: gtk/gtkaccessible.c:624
 msgctxt "accessibility"
 msgid "tab list"
-msgstr "llista de pestanya"
+msgstr "llista de pestanyes"
 
 #: gtk/gtkaccessible.c:625
 msgctxt "accessibility"
@@ -1602,7 +1602,7 @@ msgstr "S'està obrint «%s»."
 #: gtk/gtkappchooserdialog.c:213
 #, c-format
 msgid "No applications found for “%s”"
-msgstr "No hi ha cap aplicació disponible per «%s»"
+msgstr "No hi ha cap aplicació disponible per a «%s»"
 
 #. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:218
@@ -1766,12 +1766,12 @@ msgstr "Trieu un color"
 #: gtk/gtkcolorbutton.c:496 gtk/gtkcolorchooserwidget.c:308
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-msgstr "Vermell %d%%, Verd %d%%, Blau %d%%, Alfa %d%%"
+msgstr "Vermell %d%%, verd %d%%, blau %d%%, alfa %d%%"
 
 #: gtk/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:314
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
-msgstr "Vermell %d%%, Verd %d%%, Blau %d%%"
+msgstr "Vermell %d%%, verd %d%%, blau %d%%"
 
 #: gtk/gtkcolorchooserwidget.c:371
 #, c-format
@@ -2581,7 +2581,7 @@ msgid ""
 "Click to make changes"
 msgstr ""
 "El diàleg està blocat.\n"
-"Feu clic per a poder fer canvis"
+"Feu clic per a poder fer-hi canvis"
 
 #: gtk/gtklockbutton.c:333
 msgid ""
@@ -3698,7 +3698,7 @@ msgstr "Objectiu"
 #: gtk/inspector/controllers.c:156
 msgctxt "propagation limit"
 msgid "Native"
-msgstr "Acumulatiu"
+msgstr "Nadiu"
 
 #: gtk/inspector/css-editor.c:129
 msgid "You can type here any CSS rule recognized by GTK."
@@ -5138,7 +5138,7 @@ msgstr "A4 extra"
 #: gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr "A4 tabloide"
+msgstr "A4 tabulat"
 
 #: gtk/paper_names_offsets.c:26
 msgctxt "paper size"
