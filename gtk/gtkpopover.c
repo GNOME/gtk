@@ -2127,7 +2127,6 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         {
           if (priv->grab_notify_blocked)
             {
-              g_signal_handler_unblock (priv->widget, priv->grab_notify_id);
               priv->grab_notify_blocked = FALSE;
               had_grab_notify_blocked = TRUE;
             }
