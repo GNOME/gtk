@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-18 00:07+0000\n"
-"PO-Revision-Date: 2022-08-01 20:44+0200\n"
+"PO-Revision-Date: 2022-08-16 20:44+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -5604,7 +5604,7 @@ msgstr "A4 extra"
 #: gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr "A4 tabloide"
+msgstr "A4 tabulat"
 
 #: gtk/paper_names_offsets.c:26
 msgctxt "paper size"
