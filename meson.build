@@ -561,6 +561,8 @@ if wayland_enabled
   wlegldep       = dependency('wayland-egl')
   backend_immodules += ['wayland']
 
+  cdata.set('HAVE_XDG_ACTIVATION', wlprotocolsdep.version().version_compare('>=1.21'))
+
   wayland_pkgs = [
     'wayland-client', wayland_req,
     'xkbcommon', xkbcommon_req,

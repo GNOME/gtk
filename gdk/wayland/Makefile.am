@@ -23,8 +23,6 @@ noinst_LTLIBRARIES =				\
 BUILT_SOURCES = 				\
 	pointer-gestures-unstable-v1-client-protocol.h		\
 	pointer-gestures-unstable-v1-protocol.c			\
-	xdg-activation-v1-client-protocol.h			\
-	xdg-activation-v1-protocol.c				\
 	xdg-shell-client-protocol.h				\
 	xdg-shell-protocol.c					\
 	xdg-shell-unstable-v6-client-protocol.h			\
@@ -45,6 +43,11 @@ BUILT_SOURCES = 				\
 	gtk-shell-protocol.c			\
 	primary-selection-unstable-v1-client-protocol.h		\
 	primary-selection-unstable-v1-protocol.c
+if USE_XDG_ACTIVATION
+BUILT_SOURCES += 				\
+	xdg-activation-v1-client-protocol.h	\
+	xdg-activation-v1-protocol.c
+endif
 
 nodist_libgdk_wayland_la_SOURCES =		\
 	$(BUILT_SOURCES)

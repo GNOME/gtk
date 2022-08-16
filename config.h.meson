@@ -293,3 +293,6 @@
 
 /* Define if tracker3 is available */
 #mesondefine HAVE_TRACKER3
+
+/* Define if xdg_activation's wl-protocols definition is available */
+#mesondefine HAVE_XDG_ACTIVATION

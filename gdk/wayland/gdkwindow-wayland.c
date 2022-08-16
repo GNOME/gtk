@@ -3811,6 +3811,7 @@ gdk_wayland_window_get_input_shape (GdkWindow *window)
   return NULL;
 }
 
+#ifdef HAVE_XDG_ACTIVATION
 static void
 token_done (gpointer                        data,
             struct xdg_activation_token_v1 *provider,
@@ -3824,6 +3825,7 @@ token_done (gpointer                        data,
 static const struct xdg_activation_token_v1_listener token_listener = {
   token_done,
 };
+#endif
 
 static void
 gdk_wayland_window_focus (GdkWindow *window,
@@ -3836,6 +3838,7 @@ gdk_wayland_window_focus (GdkWindow *window,
 
   startup_id = g_steal_pointer (&display_wayland->startup_notification_id);
 
+#ifdef HAVE_XDG_ACTIVATION
   if (display_wayland->xdg_activation)
     {
       GdkSeat *seat = gdk_display_get_default_seat (display);
@@ -3874,7 +3877,9 @@ gdk_wayland_window_focus (GdkWindow *window,
                                   startup_id,
                                   impl->display_server.wl_surface);
     }
-  else if (impl->display_server.gtk_surface)
+  else
+#endif
+  if (impl->display_server.gtk_surface)
     {
       if (timestamp != GDK_CURRENT_TIME)
         gtk_surface1_present (impl->display_server.gtk_surface, timestamp);

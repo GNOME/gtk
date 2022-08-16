@@ -467,6 +467,16 @@ if test "$enable_wayland_backend" = "yes"; then
     [AC_MSG_ERROR([Could not find wayland-scanner in your PATH, required for parsing wayland extension protocols])])
   AC_SUBST([WAYLAND_SCANNER])
 
+  # For xdg-activation support
+  XDG_ACTIVATION_DEPENDENCIES="wayland-protocols >= 1.21"
+  PKG_CHECK_EXISTS($XDG_ACTIVATION_DEPENDENCIES, [have_xdg_activation_deps=yes], [have_xdg_activation_deps=no])
+  AC_MSG_CHECKING([for XDG_ACTIVATION_DEPENDENCIES])
+  AM_CONDITIONAL(USE_XDG_ACTIVATION, test "$have_xdg_activation_deps" = "yes")
+  if test "$have_xdg_activation_deps" = "yes" ; then
+    AC_DEFINE([HAVE_XDG_ACTIVATION], [1],
+      [Define if xdg_activation's wl-protocols definition is available])
+  fi
+
   AM_CONDITIONAL(USE_WAYLAND, true)
 else
   AM_CONDITIONAL(USE_WAYLAND, false)

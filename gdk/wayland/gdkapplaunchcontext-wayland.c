@@ -30,6 +30,7 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+#ifdef HAVE_XDG_ACTIVATION
 typedef struct {
   gchar *token;
 } AppLaunchData;
@@ -47,6 +48,7 @@ token_done (gpointer                        data,
 static const struct xdg_activation_token_v1_listener token_listener = {
   token_done,
 };
+#endif
 
 static char *
 gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
@@ -58,6 +60,7 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
 
   g_object_get (context, "display", &display, NULL);
 
+#ifdef HAVE_XDG_ACTIVATION
   if (display->xdg_activation)
     {
       struct xdg_activation_token_v1 *token;
@@ -95,7 +98,9 @@ gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context
       id = app_launch_data.token;
       wl_event_queue_destroy (event_queue);
     }
-  else if (display->gtk_shell_version >= 3)
+  else
+#endif
+  if (display->gtk_shell_version >= 3)
     {
       id = g_uuid_string_random ();
       gtk_shell1_notify_launch (display->gtk_shell, id);
