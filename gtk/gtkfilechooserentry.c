@@ -115,6 +115,7 @@ static void set_completion_folder (GtkFileChooserEntry *chooser_entry,
 static void finished_loading_cb (GtkFileSystemModel  *model,
                                  GError              *error,
 		                 GtkFileChooserEntry *chooser_entry);
+static void _gtk_file_chooser_entry_unselect_text (GtkFileChooserEntry *chooser_entry);
 
 G_DEFINE_TYPE (GtkFileChooserEntry, _gtk_file_chooser_entry, GTK_TYPE_ENTRY)
 
@@ -483,7 +484,6 @@ static void
 gtk_file_chooser_entry_grab_focus (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->grab_focus (widget);
-  _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (widget));
 }
 
 static void
@@ -543,6 +543,7 @@ gtk_file_chooser_entry_focus_out_event (GtkWidget     *widget,
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (widget);
 
   set_complete_on_load (chooser_entry, FALSE);
+  _gtk_file_chooser_entry_unselect_text (chooser_entry);
  
   return GTK_WIDGET_CLASS (_gtk_file_chooser_entry_parent_class)->focus_out_event (widget, event);
 }
@@ -1048,6 +1049,18 @@ _gtk_file_chooser_entry_select_filename (GtkFileChooserEntry *chooser_entry)
     }
 
   gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, (gint) len);
+}
+
+/*
+ * _gtk_file_chooser_entry_unselect_text:
+ * @chooser_entry: a #GtkFileChooserEntry
+ *
+ * Unselects any existing text selection.
+ */
+static void
+_gtk_file_chooser_entry_unselect_text (GtkFileChooserEntry *chooser_entry)
+{
+  gtk_editable_select_region (GTK_EDITABLE (chooser_entry), 0, 0);
 }
 
 void
