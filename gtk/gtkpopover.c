@@ -456,7 +456,7 @@ window_focus_in (GtkWidget  *widget,
       if (focus == NULL || !gtk_widget_is_ancestor (focus, GTK_WIDGET (popover)))
         gtk_widget_grab_focus (GTK_WIDGET (popover));
 
-      if (priv->grab_notify_blocked)
+      if (priv->grab_notify_blocked && priv->widget)
         g_signal_handler_unblock (priv->widget, priv->grab_notify_id);
 
       priv->grab_notify_blocked = FALSE;
@@ -2159,6 +2159,8 @@ gtk_popover_update_relative_to (GtkPopover *popover,
         g_signal_connect (priv->widget, "grab-notify",
                           G_CALLBACK (_gtk_popover_parent_grab_notify),
                           popover);
+      if (priv->grab_notify_blocked)
+        g_signal_handler_block (priv->widget, priv->grab_notify_id);
 
       /* Give ownership of the popover to widget */
       widget_manage_popover (priv->widget, popover);
