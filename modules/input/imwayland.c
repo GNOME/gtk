@@ -116,6 +116,11 @@ static const GtkIMContextInfo *info_list[] =
 
 static void gtk_im_context_wayland_focus_out (GtkIMContext *context);
 
+static void commit_state (GtkIMContextWayland *context);
+static void notify_surrounding_text (GtkIMContextWayland *context);
+static void notify_cursor_location (GtkIMContextWayland *context);
+static void notify_content_type (GtkIMContextWayland *context);
+
 #define GTK_IM_CONTEXT_WAYLAND(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), type_wayland, GtkIMContextWayland))
 
 #ifndef INCLUDE_IM_wayland
@@ -125,7 +130,8 @@ static void gtk_im_context_wayland_focus_out (GtkIMContext *context);
 #endif
 
 static void
-notify_external_change (GtkIMContextWayland *context)
+notify_im_change (GtkIMContextWayland                 *context,
+                  enum zwp_text_input_v3_change_cause  cause)
 {
   gboolean result;
 
@@ -135,8 +141,12 @@ notify_external_change (GtkIMContextWayland *context)
   if (!context->enabled)
     return;
 
-  context->surrounding_change = ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER;
+  context->surrounding_change = cause;
   g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
+  notify_surrounding_text (context);
+  notify_content_type (context);
+  notify_cursor_location (context);
+  commit_state (context);
 }
 
 static void
@@ -262,17 +272,25 @@ text_input_done (void                     *data,
                  uint32_t                  serial)
 {
   GtkIMContextWaylandGlobal *global = data;
-  gboolean result;
+  GtkIMContextWayland *context;
+  gboolean update_im;
 
   global->done_serial = serial;
 
   if (!global->current)
     return;
 
+  context = GTK_IM_CONTEXT_WAYLAND (global->current);
+  update_im = (context->pending_commit != NULL ||
+               g_strcmp0 (context->pending_preedit.text,
+                          context->current_preedit.text) != 0);
+
   text_input_delete_surrounding_text_apply (global);
   text_input_commit_apply (global);
-  g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
   text_input_preedit_apply (global);
+
+  if (update_im && global->serial == serial)
+    notify_im_change (context, ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD);
 }
 
 static void
@@ -288,8 +306,6 @@ notify_surrounding_text (GtkIMContextWayland *context)
   if (global->current != GTK_IM_CONTEXT (context))
     return;
   if (!context->enabled || !context->surrounding.text)
-    return;
-  if (global->done_serial != global->serial)
     return;
 
   len = strlen (context->surrounding.text);
@@ -365,8 +381,6 @@ notify_cursor_location (GtkIMContextWayland *context)
   if (global->current != GTK_IM_CONTEXT (context))
     return;
   if (!context->enabled || !context->window)
-    return;
-  if (global->done_serial != global->serial)
     return;
 
   rect = context->cursor_rect;
@@ -449,8 +463,6 @@ notify_content_type (GtkIMContextWayland *context)
     return;
 
   if (!context->enabled)
-    return;
-  if (global->done_serial != global->serial)
     return;
 
   g_object_get (context,
@@ -592,16 +604,13 @@ gtk_im_context_wayland_filter_keypress (GtkIMContext *context,
 static void
 enable (GtkIMContextWayland *context_wayland)
 {
-  gboolean result;
   /* Technically, text input isn't enabled until after the commit.
    * In reality, enable can't fail, and notify functions need to know
    * that they are free to send requests. */
   context_wayland->enabled = TRUE;
   zwp_text_input_v3_enable (global->text_input);
-  g_signal_emit_by_name (global->current, "retrieve-surrounding", &result);
-  notify_content_type (context_wayland);
-  notify_cursor_location (context_wayland);
-  commit_state (context_wayland);
+  notify_im_change (context_wayland,
+                    ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
 }
 
 static void
@@ -610,6 +619,12 @@ disable (GtkIMContextWayland *context_wayland)
   zwp_text_input_v3_disable (global->text_input);
   commit_state (context_wayland);
   context_wayland->enabled = FALSE;
+
+  /* The commit above will still count in the .done event accounting,
+   * we should account for it, lest the serial gets out of sync after
+   * a future focus_in/enable.
+   */
+  global->done_serial++;
 
   /* after disable, incoming state changes won't take effect anyway */
   if (context_wayland->current_preedit.text)
@@ -821,7 +836,8 @@ gtk_im_context_wayland_focus_out (GtkIMContext *context)
 static void
 gtk_im_context_wayland_reset (GtkIMContext *context)
 {
-  notify_external_change (GTK_IM_CONTEXT_WAYLAND (context));
+  notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                    ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
 
   GTK_IM_CONTEXT_CLASS (parent_class)->reset (context);
 }
@@ -856,8 +872,6 @@ gtk_im_context_wayland_set_cursor_location (GtkIMContext *context,
     gtk_event_controller_reset (GTK_EVENT_CONTROLLER (context_wayland->gesture));
 
   context_wayland->cursor_rect = *rect;
-  notify_cursor_location (context_wayland);
-  commit_state (context_wayland);
 }
 
 static void
@@ -893,7 +907,6 @@ gtk_im_context_wayland_set_surrounding (GtkIMContext *context,
   context_wayland->surrounding.anchor_idx = cursor_index;
 
   notify_surrounding_text (context_wayland);
-  commit_state (context_wayland);
 }
 
 static gboolean
