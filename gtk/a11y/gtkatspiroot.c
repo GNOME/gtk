@@ -106,6 +106,7 @@ gtk_at_spi_root_dispose (GObject *gobject)
 
   g_clear_object (&self->cache);
   g_clear_object (&self->connection);
+  g_clear_pointer (&self->queued_contexts, g_list_free);
 
   G_OBJECT_CLASS (gtk_at_spi_root_parent_class)->dispose (gobject);
 }
@@ -517,7 +518,8 @@ on_registration_reply (GObject      *gobject,
   /* Drain the list of queued GtkAtSpiContexts, and add them to the cache */
   if (self->queued_contexts != NULL)
     {
-      for (GList *l = g_list_reverse (self->queued_contexts); l != NULL; l = l->next)
+      self->queued_contexts = g_list_reverse (self->queued_contexts);
+      for (GList *l = self->queued_contexts; l != NULL; l = l->next)
         {
           if (data->register_func != NULL)
             data->register_func (self, l->data);

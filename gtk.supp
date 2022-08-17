@@ -285,6 +285,14 @@
   ...
   fun:g_intern_static_string
 }
+{
+  glib GQuark
+  Memcheck:Leak
+  match-leak-kinds: definite
+  fun:malloc
+  ...
+  fun:g_intern_string
+}
 
 # Threads
 {
