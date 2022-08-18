@@ -10090,10 +10090,7 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
     gtk_editable_set_text (GTK_EDITABLE (priv->search_entry), "");
 
   /* Grab focus without selecting all the text. */
-  if (GTK_IS_ENTRY (priv->search_entry))
-    gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
-  else
-    gtk_widget_grab_focus (priv->search_entry);
+  gtk_text_grab_focus_without_selecting (GTK_TEXT (priv->search_entry));
 
   gtk_popover_popup (GTK_POPOVER (priv->search_popover));
   if (priv->search_entry_changed_id == 0)
