@@ -314,11 +314,16 @@
 /* Number of bits in a file offset, on hosts where this is settable. */
 /* #undef _FILE_OFFSET_BITS */
 
+/* Define when building a shared library for Windows */
+#define DLL_EXPORT 1
+
 /* defines how to decorate public symbols while building */
-#ifdef _MSC_VER
-#define _GDK_EXTERN __declspec (dllexport) extern
-#else
-#define _GDK_EXTERN __attribute__((visibility("default")))  __declspec (dllexport) extern
+#ifdef DLL_EXPORT
+# ifdef _MSC_VER
+#  define _GDK_EXTERN __declspec (dllexport) extern
+# else
+#  define _GDK_EXTERN __attribute__((visibility("default")))  __declspec (dllexport) extern
+# endif
 #endif
 
 /* Define for large files, on AIX-style hosts. */
