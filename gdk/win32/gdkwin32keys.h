@@ -61,12 +61,6 @@ typedef struct _GdkWin32KeymapClass GdkWin32KeymapClass;
 
 GType gdk_win32_keymap_get_type (void);
 
-GdkWin32KeymapMatch gdk_win32_keymap_check_compose (GdkWin32Keymap *keymap,
-                                                    guint16        *compose_buffer,
-                                                    gsize           compose_buffer_len,
-                                                    guint16        *output,
-                                                    gsize          *output_len);
-
 G_END_DECLS
 
 #endif /* __GDK_WIN32_KEYMAP_H__ */
