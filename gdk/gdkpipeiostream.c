@@ -75,6 +75,8 @@ gdk_io_pipe_unref (GdkIOPipe *pipe)
 
   g_cond_clear (&pipe->cond);
   g_mutex_clear (&pipe->mutex);
+
+  g_slice_free (GdkIOPipe, pipe);
 }
 
 static void
