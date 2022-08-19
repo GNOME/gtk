@@ -4449,9 +4449,8 @@ static void
 gdk_win32_surface_set_input_region (GdkSurface     *window,
                                     cairo_region_t *input_region)
 {
-  /* Partial input shape support is implemented by handling the
-   * NC_NCHITTEST message
-   */
+  /* Input region support is implemented by handling the
+   * WM_NCHITTEST message. */
 }
 
 static void
