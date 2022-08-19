@@ -6,6 +6,8 @@ gtk_tests_export_dynamic_ldflag = []
 if cc.get_id() != 'msvc'
   if os_darwin
     gtk_tests_export_dynamic_ldflag = ['-Wl,-export_dynamic']
+  elif os_win32
+    gtk_tests_export_dynamic_ldflag = ['-Wl,--export-all-symbols']
   else
     gtk_tests_export_dynamic_ldflag = ['-Wl,--export-dynamic']
   endif
