@@ -359,7 +359,7 @@ test_lookup_order (void)
     }
 
   g_test_trap_subprocess (NULL, 0, 0);
-  g_test_trap_has_passed ();
+  g_test_trap_assert_passed ();
 }
 
 static void
