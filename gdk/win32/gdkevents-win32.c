@@ -1433,35 +1433,42 @@ handle_nchittest (HWND hwnd,
                   gint16 screen_y,
                   int *ret_valp)
 {
-  RECT rect;
   GdkWin32Surface *impl;
+  RECT client_rect;
+  POINT client_pt;
 
-  if (window == NULL || window->input_region == NULL)
+  if (window == NULL)
     return FALSE;
 
-  /* If the window has decorations, DefWindowProc() will take
-   * care of NCHITTEST.
-   */
-  if (!_gdk_win32_surface_lacks_wm_decorations (window))
+  /* If the window has no particular input pass-through region,
+   * then we can simply let DefWindowProc() handle the message */
+  if (window->input_region == NULL)
     return FALSE;
 
-  if (!GetWindowRect (hwnd, &rect))
+  if (!GetClientRect (hwnd, &client_rect))
+    return FALSE;
+
+  client_pt.x = screen_x;
+  client_pt.y = screen_y;
+  if (!ScreenToClient (hwnd, &client_pt))
+    return FALSE;
+
+  /* Check whether the point lies within the client area */
+  if (!PtInRect (&client_rect, client_pt))
     return FALSE;
 
   impl = GDK_WIN32_SURFACE (window);
-  rect.left = screen_x - rect.left;
-  rect.top = screen_y - rect.top;
 
-  /* If it's inside the rect, return FALSE and let DefWindowProc() handle it */
+  /* If the point lies inside the input region, return HTCLIENT,
+   * otherwise return HTTRANSPARENT. */
   if (cairo_region_contains_point (window->input_region,
-                                   rect.left / impl->surface_scale,
-                                   rect.top / impl->surface_scale))
-    return FALSE;
+                                   client_pt.x / impl->surface_scale,
+                                   client_pt.y / impl->surface_scale))
+    *ret_valp = HTCLIENT;
+  else
+    *ret_valp = HTTRANSPARENT;
 
-  /* Otherwise override DefWindowProc() and tell WM that the point is not
-   * within the window
-   */
-  *ret_valp = HTNOWHERE;
+  /* We handled the message, no need to call DefWindowProc() */
   return TRUE;
 }
 
