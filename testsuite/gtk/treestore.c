@@ -1049,30 +1049,26 @@ specific_bug_77977 (void)
   g_object_unref (tree_store);
 }
 
-static GLogWriterOutput
-log_writer_drop_warnings (GLogLevelFlags   log_level,
-                          const GLogField *fields,
-                          gsize            n_fields,
-                          gpointer         user_data)
-{
-  return G_LOG_WRITER_HANDLED;
-}
-
 static void
 specific_bug_698396 (void)
 {
-  GtkTreeStore *tree_store;
-  gint new_order[1] = { 0 };
-
   g_test_bug ("698396");
 
-  tree_store = gtk_tree_store_new (1, G_TYPE_STRING);
+  if (g_test_subprocess ())
+    {
+      GtkTreeStore *tree_store;
+      int new_order[1] = { 0 };
 
-  g_log_set_writer_func (log_writer_drop_warnings, NULL, NULL);
-  gtk_tree_store_reorder (tree_store, NULL, new_order);
-  g_log_set_writer_func (g_log_writer_default, NULL, NULL);
+      tree_store = gtk_tree_store_new (1, G_TYPE_STRING);
+      gtk_tree_store_reorder (tree_store, NULL, new_order);
+      g_object_unref (tree_store);
 
-  g_object_unref (tree_store);
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*Cannot reorder, parent has no children*");
+  g_test_trap_assert_failed ();
 }
 
 /* main */

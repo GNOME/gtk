@@ -121,6 +121,7 @@ assert_icon_lookup_fails (const char         *icon_name,
 }
 
 static GList *lookups = NULL;
+static gboolean collecting_lookups = FALSE;
 
 static GLogWriterOutput
 log_writer (GLogLevelFlags   log_level,
@@ -128,9 +129,16 @@ log_writer (GLogLevelFlags   log_level,
             gsize            n_fields,
             gpointer         user_data)
 {
+  gboolean *ignore_warnings = user_data;
   const char *domain = NULL;
   const char *msg = NULL;
   int i;
+
+  if (log_level == G_LOG_LEVEL_WARNING && *ignore_warnings)
+    return G_LOG_WRITER_HANDLED;
+
+  if (!collecting_lookups)
+    return g_log_writer_default (log_level, fields, n_fields, user_data);
 
   for (i = 0; i < n_fields; i++)
     {
@@ -173,14 +181,14 @@ assert_lookup_order (const char         *icon_name,
 
   debug_flags = gtk_get_debug_flags ();
   gtk_set_debug_flags (debug_flags | GTK_DEBUG_ICONTHEME);
-  g_log_set_writer_func (log_writer, NULL, NULL);
+  collecting_lookups = TRUE;
 
   g_assert (lookups == NULL);
 
   info = gtk_icon_theme_lookup_icon (get_test_icontheme (FALSE), icon_name, size, flags);
   if (info)
     g_object_unref (info);
-  
+
   va_start (args, first);
   s = first;
   l = lookups;
@@ -197,7 +205,7 @@ assert_lookup_order (const char         *icon_name,
   g_list_free_full (lookups, g_free);
   lookups = NULL;
 
-  g_log_set_writer_func (g_log_writer_default, NULL, NULL);
+  collecting_lookups = FALSE;
   gtk_set_debug_flags (debug_flags);
 }
 
@@ -778,20 +786,6 @@ test_nonsquare_symbolic (void)
   g_object_unref (info);
 }
 
-static GLogWriterOutput
-log_writer_drop_warnings (GLogLevelFlags   log_level,
-                          const GLogField *fields,
-                          gsize            n_fields,
-                          gpointer         user_data)
-{
-  gboolean *ignore_warnings = user_data;
-
-  if (log_level == G_LOG_LEVEL_WARNING && *ignore_warnings)
-    return G_LOG_WRITER_HANDLED;
-
-  return g_log_writer_default (log_level, fields, n_fields, user_data);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -801,7 +795,7 @@ main (int argc, char *argv[])
 
   /* Ignore the one-time warning that the fallback icon theme can’t be found
    * (because we’ve changed the search paths). */
-  g_log_set_writer_func (log_writer_drop_warnings, &ignore_warnings, NULL);
+  g_log_set_writer_func (log_writer, &ignore_warnings, NULL);
   assert_icon_lookup_fails ("this-icon-totally-does-not-exist", 16, 0);
   ignore_warnings = FALSE;
 
