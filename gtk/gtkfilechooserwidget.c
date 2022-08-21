@@ -7618,6 +7618,10 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 GDK_KEY_asciitilde, 0,
                                 trigger_location_entry,
                                 "s", "~");
+  gtk_widget_class_add_binding (widget_class,
+                                GDK_KEY_dead_tilde, 0,
+                                trigger_location_entry,
+                                "s", "~");
 
   for (i = 0; i < G_N_ELEMENTS (quick_bookmark_keyvals); i++)
     gtk_widget_class_add_binding_signal (widget_class,
@@ -7729,7 +7733,7 @@ captured_key (GtkEventControllerKey *controller,
        impl->location_mode == LOCATION_MODE_FILENAME_ENTRY))
     return GDK_EVENT_PROPAGATE;
 
-  if (keyval == GDK_KEY_slash)
+  if (keyval == GDK_KEY_slash || keyval == GDK_KEY_asciitilde || keyval == GDK_KEY_dead_tilde || keyval == GDK_KEY_period)
     return GDK_EVENT_PROPAGATE;
 
   handled = gtk_event_controller_key_forward (controller, GTK_WIDGET (impl->search_entry));
