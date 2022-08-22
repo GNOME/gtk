@@ -1,6 +1,19 @@
-gdk_win32_sources = files([
-  'gdkcairocontext-win32.c',
+gdk_win32_public_sources = files([
   'gdkcursor-win32.c',
+  'gdkdisplay-win32.c',
+  'gdkdisplaymanager-win32.c',
+  'gdkdrag-win32.c',
+  'gdkglcontext-win32.c',
+  'gdkglcontext-win32-wgl.c',
+  'gdkwin32id.c',
+  'gdksurface-win32.c',
+  'gdkevents-win32.c',
+  'gdkmonitor-win32.c',
+  'gdkscreen-win32.c',
+])
+
+gdk_win32_sources = gdk_win32_public_sources + files([
+  'gdkcairocontext-win32.c',
   'gdkclipboard-win32.c',
   'gdkclipdrop-win32.c',
   'gdkdevicemanager-win32.c',
@@ -8,13 +21,7 @@ gdk_win32_sources = files([
   'gdkdevice-win32.c',
   'gdkdevice-winpointer.c',
   'gdkdevice-wintab.c',
-  'gdkdisplay-win32.c',
-  'gdkdisplaymanager-win32.c',
-  'gdkdrag-win32.c',
   'gdkdrop-win32.c',
-  'gdkevents-win32.c',
-  'gdkglcontext-win32.c',
-  'gdkglcontext-win32-wgl.c',
   'gdkglobals-win32.c',
   'gdkhdataoutputstream-win32.c',
   'gdkinput-dmanipulation.c',
@@ -24,14 +31,11 @@ gdk_win32_sources = files([
   'gdkkeys-win32-impl-wow64.c',
   'gdkwin32langnotification.c',
   'gdkmain-win32.c',
-  'gdkmonitor-win32.c',
   'gdkproperty-win32.c',
-  'gdkscreen-win32.c',
   'gdkvulkancontext-win32.c',
   'gdkwin32cursor.h',
   'gdkwin32display.h',
-  'gdkwin32id.c',
-  'gdksurface-win32.c',
+  'gdkwin32keys.h',
 ])
 
 gdk_win32_public_headers = files([
@@ -40,7 +44,6 @@ gdk_win32_public_headers = files([
   'gdkwin32displaymanager.h',
   'gdkwin32dnd.h',
   'gdkwin32glcontext.h',
-  'gdkwin32keys.h',
   'gdkwin32misc.h',
   'gdkwin32monitor.h',
   'gdkwin32screen.h',
