@@ -161,7 +161,7 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   jpeg_create_decompress (&info);
 
-  info.mem->max_memory_to_use = 100 * 1024 * 1024;
+  info.mem->max_memory_to_use = 300 * 1024 * 1024;
 
   jpeg_mem_src (&info,
                 g_bytes_get_data (input_bytes, NULL),
@@ -283,7 +283,7 @@ gdk_save_jpeg (GdkTexture *texture)
   jpeg_set_defaults (&info);
   jpeg_set_quality (&info, 75, TRUE);
 
-  info.mem->max_memory_to_use = 100 * 1024 * 1024;
+  info.mem->max_memory_to_use = 300 * 1024 * 1024;
 
   jpeg_mem_dest (&info, &data, &size);
 
