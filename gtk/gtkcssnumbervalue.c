@@ -28,6 +28,7 @@
 static GtkCssValue *        gtk_css_calc_value_new         (guint n_terms);
 static GtkCssValue *        gtk_css_calc_value_new_sum     (GtkCssValue *a,
                                                             GtkCssValue *b);
+static gsize                gtk_css_value_calc_get_size    (gsize n_terms);
 
 enum {
   TYPE_CALC = 0,
@@ -78,9 +79,13 @@ gtk_css_value_number_free (GtkCssValue *number)
 
       for (guint i = 0; i < n_terms; i++)
         _gtk_css_value_unref (number->calc.terms[i]);
-    }
 
-  g_slice_free (GtkCssValue, number);
+      g_slice_free1 (gtk_css_value_calc_get_size (n_terms), number);
+    }
+  else
+    {
+      g_slice_free (GtkCssValue, number);
+    }
 }
 
 static double

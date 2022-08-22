@@ -1523,13 +1523,13 @@ gtk_text_class_init (GtkTextClass *class)
                                        NULL);
 
   /* Emoji */
-  gtk_widget_class_add_binding_signal (widget_class,
+  gtk_widget_class_add_binding_action (widget_class,
                                        GDK_KEY_period, GDK_CONTROL_MASK,
-                                       "insert-emoji",
+                                       "misc.insert-emoji",
                                        NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
+  gtk_widget_class_add_binding_action (widget_class,
                                        GDK_KEY_semicolon, GDK_CONTROL_MASK,
-                                       "insert-emoji",
+                                       "misc.insert-emoji",
                                        NULL);
 
   /* Undo/Redo */
