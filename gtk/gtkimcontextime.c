@@ -741,6 +741,9 @@ gtk_im_context_ime_focus_out (GtkIMContext *context)
 
       case GTK_WIN32_IME_FOCUS_BEHAVIOR_FOLLOW:
         break;
+
+      default:
+        g_assert_not_reached ();
     }
 
   /* remove event filter */
