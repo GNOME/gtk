@@ -51,7 +51,7 @@ option('print-cups',
 option('vulkan',
        type: 'feature',
        value: 'disabled',
-       description : 'Enable support for the experimental Vulkan graphics API')
+       description : 'Enable support for the experimental Vulkan renderer')
 
 option('cloudproviders',
        type: 'feature',
