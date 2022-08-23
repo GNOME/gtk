@@ -51,8 +51,8 @@ static int debug_indent = 0;
 /**
  * gdk_win32_display_add_filter:
  * @display: a `GdkWin32Display`
- * @function: filter callback
- * @data: data to pass to filter callback
+ * @function: (scope notified): filter callback
+ * @data: (closure): data to pass to filter callback
  *
  * Adds an event filter to @window, allowing you to intercept messages
  * before they reach GDK. This is a low-level operation and makes it
@@ -136,8 +136,8 @@ _gdk_win32_message_filter_unref (GdkWin32Display       *display,
 /**
  * gdk_win32_display_remove_filter:
  * @display: A `GdkWin32Display`
- * @function: previously-added filter function
- * @data: user data for previously-added filter function
+ * @function: (scope notified): previously-added filter function
+ * @data: (closure): user data for previously-added filter function
  *
  * Remove a filter previously added with gdk_win32_display_add_filter().
  */
