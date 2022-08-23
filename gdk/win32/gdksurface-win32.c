@@ -1305,19 +1305,27 @@ gdk_win32_surface_raise (GdkSurface *window)
     }
 }
 
+/**
+ * gdk_win32_surface_set_urgency_hint:
+ * @surface: (type GdkWin32Surface): a native `GdkSurface`.
+ * @urgent: if %TRUE, flashes both the window and the taskbar button
+ *          continuously.
+ *
+ * Flashes the specified @surface.
+ */
 void
-gdk_win32_surface_set_urgency_hint (GdkSurface *window,
+gdk_win32_surface_set_urgency_hint (GdkSurface *surface,
                                     gboolean    urgent)
 {
   FLASHWINFO flashwinfo;
 
-  g_return_if_fail (GDK_IS_SURFACE (window));
+  g_return_if_fail (GDK_IS_WIN32_SURFACE (surface));
 
-  if (GDK_SURFACE_DESTROYED (window))
+  if (GDK_SURFACE_DESTROYED (surface))
     return;
 
   flashwinfo.cbSize = sizeof (flashwinfo);
-  flashwinfo.hwnd = GDK_SURFACE_HWND (window);
+  flashwinfo.hwnd = GDK_SURFACE_HWND (surface);
   if (urgent)
     flashwinfo.dwFlags = FLASHW_ALL | FLASHW_TIMER;
   else
