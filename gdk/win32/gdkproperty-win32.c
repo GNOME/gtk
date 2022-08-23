@@ -31,6 +31,7 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkprivate-win32.h"
+#include "gdkdisplay-win32.h"
 #include "gdkwin32.h"
 
 static char *
@@ -161,6 +162,25 @@ _gdk_win32_get_setting (const char *name,
       GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : 1\n", name));
       g_value_set_int (value, 1);
       return TRUE;
+    }
+  else if (strcmp ("gtk-xft-dpi", name) == 0)
+    {
+      GdkWin32Display *display = GDK_WIN32_DISPLAY (_gdk_display);
+
+      if (display->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE &&
+          !display->has_fixed_scale)
+        {
+          int dpi = GetDeviceCaps (GetDC (NULL), LOGPIXELSX);
+          if (dpi >= 96)
+            {
+              int xft_dpi = 1024 * dpi / display->surface_scale;
+              g_value_set_int (value, xft_dpi);
+              GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
+              return TRUE;
+            }
+        }
+
+      return FALSE;
     }
   else if (strcmp ("gtk-xft-hintstyle", name) == 0)
     {
