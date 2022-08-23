@@ -4621,7 +4621,7 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->compute_size = _gdk_win32_surface_compute_size;
 }
 
-HGDIOBJ
+HWND
 gdk_win32_surface_get_handle (GdkSurface *window)
 {
   if (!GDK_IS_WIN32_SURFACE (window))

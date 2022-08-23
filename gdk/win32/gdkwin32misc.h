@@ -78,7 +78,7 @@ GDK_AVAILABLE_IN_ALL
 gpointer      gdk_win32_handle_table_lookup (HWND handle);
 /* Translate from window to Windows handle */
 GDK_AVAILABLE_IN_ALL
-HGDIOBJ       gdk_win32_surface_get_handle (GdkSurface *window);
+HWND          gdk_win32_surface_get_handle (GdkSurface *window);
 
 GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_win32_surface_lookup_for_display (GdkDisplay *display,
