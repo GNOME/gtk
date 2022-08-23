@@ -4287,11 +4287,19 @@ gdk_win32_surface_show_window_menu (GdkSurface *surface,
   return TRUE;
 }
 
+/**
+ * gdk_win32_surface_get_impl_hwnd:
+ * @surface: a `GdkSurface`
+ *
+ * Returns: the associated @surface HWND handle.
+ *
+ * Deprecated: 4.8: Use gdk_win32_surface_get_handle() instead.
+ */
 HWND
-gdk_win32_surface_get_impl_hwnd (GdkSurface *window)
+gdk_win32_surface_get_impl_hwnd (GdkSurface *surface)
 {
-  if (GDK_IS_WIN32_SURFACE (window))
-    return GDK_SURFACE_HWND (window);
+  if (GDK_IS_WIN32_SURFACE (surface))
+    return GDK_SURFACE_HWND (surface);
   return NULL;
 }
 
