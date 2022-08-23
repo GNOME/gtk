@@ -1180,6 +1180,11 @@ gdk_win32_surface_layout_popup (GdkSurface     *surface,
 
   monitor = gdk_surface_get_layout_monitor (surface, layout,
                                             gdk_win32_monitor_get_workarea);
+  if (!monitor)
+    {
+      GdkDisplay *display = gdk_surface_get_display (surface);
+      monitor = gdk_win32_display_get_primary_monitor (display);
+    }
   gdk_win32_monitor_get_workarea (monitor, &bounds);
 
   gdk_popup_layout_get_shadow_width (layout,
