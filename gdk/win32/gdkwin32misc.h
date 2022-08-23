@@ -68,9 +68,8 @@ G_BEGIN_DECLS
 #define XBUTTON2 2
 #endif
 
-/* Return true if the GdkSurface is a win32 implemented window */
-GDK_AVAILABLE_IN_ALL
-gboolean      gdk_win32_surface_is_win32 (GdkSurface *window);
+GDK_DEPRECATED_IN_4_8_FOR(GDK_IS_WIN32_SURFACE)
+gboolean      gdk_win32_surface_is_win32 (GdkSurface *surface);
 GDK_AVAILABLE_IN_ALL
 HWND          gdk_win32_surface_get_impl_hwnd (GdkSurface *window);
 

@@ -4242,10 +4242,18 @@ gdk_win32_surface_lookup_for_display (GdkDisplay *display,
   return (GdkSurface*) gdk_win32_handle_table_lookup (anid);
 }
 
+/**
+ * gdk_win32_surface_is_win32:
+ * @surface: a `GdkSurface`
+ *
+ * Returns: %TRUE if the @surface is a win32 implemented surface.
+ *
+ * Deprecated: 4.8: Use `GDK_IS_WIN32_SURFACE` instead.
+ */
 gboolean
-gdk_win32_surface_is_win32 (GdkSurface *window)
+gdk_win32_surface_is_win32 (GdkSurface *surface)
 {
-  return GDK_IS_WIN32_SURFACE (window);
+  return GDK_IS_WIN32_SURFACE (surface);
 }
 
 static gboolean
