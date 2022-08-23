@@ -4621,16 +4621,20 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->compute_size = _gdk_win32_surface_compute_size;
 }
 
+/**
+ * gdk_win32_surface_get_handle:
+ * @surface: (type GdkWin32Surface): a native `GdkSurface`.
+ *
+ * Returns the HWND handle belonging to @surface.
+ *
+ * Returns: the associated HWND handle.
+ */
 HWND
-gdk_win32_surface_get_handle (GdkSurface *window)
+gdk_win32_surface_get_handle (GdkSurface *surface)
 {
-  if (!GDK_IS_WIN32_SURFACE (window))
-    {
-      g_warning (G_STRLOC " window is not a native Win32 window");
-      return NULL;
-    }
+  g_return_val_if_fail (GDK_IS_WIN32_SURFACE (surface), NULL);
 
-  return GDK_SURFACE_HWND (window);
+  return GDK_SURFACE_HWND (surface);
 }
 
 #define LAST_PROP 1
