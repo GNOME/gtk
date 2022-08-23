@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+.master.is\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-08-22 19:55+0000\n"
-"PO-Revision-Date: 2022-08-23 11:37+0000\n"
+"PO-Revision-Date: 2022-08-23 11:49+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -73,12 +73,12 @@ msgid "No perfect EGL configuration found"
 msgstr "Engin fullkomin EGL-uppsetning fannst"
 
 #: gdk/gdkdisplay.c:1631
-#, fuzzy, c-format
+#, c-format
 #| msgid "No GL implementation is available"
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
-msgstr[0] "Engin GL-uppsetning tiltæk"
-msgstr[1] "Engin GL-uppsetning tiltæk"
+msgstr[0] "EGL-uppsetningu vantar viðaukann %s"
+msgstr[1] "EGL-uppsetningu vantar %2$d viðauka: %1$s"
 
 #: gdk/gdkdisplay.c:1664
 msgid "libEGL not available in this sandbox"
@@ -125,7 +125,7 @@ msgstr "Allt nema OpenGL ES óvirkt með GDK_DEBUG"
 #: gdk/gdkglcontext.c:1289
 #, c-format
 msgid "Application does not support %s API"
-msgstr ""
+msgstr "Forrit styður ekki %s API"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
@@ -753,7 +753,7 @@ msgstr[1] "Opna %d hluti"
 
 #: gdk/x11/gdkclipboard-x11.c:461
 msgid "Clipboard manager could not store selection."
-msgstr ""
+msgstr "Klippispjaldsstjóri gat ekki geymt valið."
 
 #: gdk/x11/gdkclipboard-x11.c:641
 msgid "Cannot store clipboard. No clipboard manager is active."
@@ -884,7 +884,7 @@ msgstr "Virkjar varatáknmynd færslunnar"
 #: gtk/a11y/gtkatspiaction.c:611
 msgctxt "accessibility"
 msgid "Peek"
-msgstr ""
+msgstr "Gægjast"
 
 #: gtk/a11y/gtkatspiaction.c:612
 msgctxt "accessibility"
@@ -4119,7 +4119,7 @@ msgstr "Hamur"
 
 #: gtk/inspector/statistics.c:400
 msgid "GLib must be configured with -Dbuildtype=debug"
-msgstr ""
+msgstr "GLib verður að vera stillt með -Dbuildtype=debug"
 
 #: gtk/inspector/statistics.ui:60
 msgid "Self 1"
@@ -4159,7 +4159,7 @@ msgstr "Stigskipun"
 
 #: gtk/inspector/type-info.ui:35
 msgid "Implements"
-msgstr ""
+msgstr "Kemur með"
 
 #: gtk/inspector/visual.c:603 gtk/inspector/visual.c:622
 msgid "Theme is hardcoded by GTK_THEME"
@@ -4231,7 +4231,7 @@ msgstr "Birta uppfærslur myndefnis"
 
 #: gtk/inspector/visual.ui:440
 msgid "Show Fallback Rendering"
-msgstr ""
+msgstr "Birta varamyndgerð"
 
 #: gtk/inspector/visual.ui:465
 msgid "Show Baselines"
