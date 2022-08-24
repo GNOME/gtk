@@ -1595,7 +1595,8 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                    state,
                                    gdk_x11_keymap_key_is_modifier (keymap, xev->detail),
                                    &translated,
-                                   &no_lock);
+                                   &no_lock,
+                                   NULL);
 
         if (ev->evtype == XI_KeyPress)
           set_user_time (event);
