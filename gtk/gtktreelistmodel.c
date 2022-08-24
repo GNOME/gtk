@@ -437,6 +437,20 @@ gtk_tree_list_model_items_changed_cb (GListModel *model,
 static void gtk_tree_list_row_destroy (GtkTreeListRow *row);
 
 static void
+gtk_tree_list_model_clear_node_children (TreeNode *node)
+{
+  if (node->model)
+    {
+      g_signal_handlers_disconnect_by_func (node->model,
+                                            gtk_tree_list_model_items_changed_cb,
+                                            node);
+      g_clear_object (&node->model);
+    }
+
+  g_clear_pointer (&node->children, gtk_rb_tree_unref);
+}
+
+static void
 gtk_tree_list_model_clear_node (gpointer data)
 {
   TreeNode *node = data;
@@ -444,15 +458,7 @@ gtk_tree_list_model_clear_node (gpointer data)
   if (node->row)
     gtk_tree_list_row_destroy (node->row);
 
-  if (node->model)
-    {
-      g_signal_handlers_disconnect_by_func (node->model,
-                                            gtk_tree_list_model_items_changed_cb,
-                                            node);
-      g_object_unref (node->model);
-    }
-  if (node->children)
-    gtk_rb_tree_unref (node->children);
+  gtk_tree_list_model_clear_node_children (node);
 }
 
 static void
@@ -547,8 +553,7 @@ gtk_tree_list_model_collapse_node (GtkTreeListModel *self,
 
   n_items = tree_node_get_n_children (node);
 
-  g_clear_pointer (&node->children, gtk_rb_tree_unref);
-  g_clear_object (&node->model);
+  gtk_tree_list_model_clear_node_children (node);
 
   tree_node_mark_dirty (node);
 
