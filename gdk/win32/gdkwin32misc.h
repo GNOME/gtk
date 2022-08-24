@@ -84,20 +84,6 @@ GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_win32_surface_lookup_for_display (GdkDisplay *display,
                                                      HWND        anid);
 
-#if defined (INSIDE_GDK_WIN32) || defined (GTK_COMPILATION) || defined (GTK_COMPILATION)
-
-/* For internal GTK use only */
-GDK_AVAILABLE_IN_ALL
-GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
-                                                    double *x_hot,
-                                                    double *y_hot);
-GDK_AVAILABLE_IN_ALL
-HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
-GDK_AVAILABLE_IN_ALL
-void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
-
-#endif
-
 G_END_DECLS
 
 #endif /* __GDK_WIN32_MISC_H__ */

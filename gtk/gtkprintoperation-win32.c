@@ -45,6 +45,7 @@
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtknative.h"
+#include "win32/gdkprivate-win32.h"
 
 #define MAX_PAGE_RANGES 20
 #define STATUS_POLLING_TIME 2000
