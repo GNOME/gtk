@@ -608,7 +608,8 @@ gtk_im_context_filter_key (GtkIMContext    *context,
                            state,
                            FALSE, /* FIXME */
                            &translated,
-                           &no_lock);
+                           &no_lock,
+                           NULL);
 
   ret = GTK_IM_CONTEXT_GET_CLASS (context)->filter_keypress (context, key);
 

@@ -1514,6 +1514,16 @@ gdk_button_event_get_button (GdkEvent *event)
  * An event related to a key-based device.
  */
 
+static void
+gdk_key_event_finalize (GdkEvent *event)
+{
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
+
+  g_free (self->compose_sequence);
+
+  GDK_EVENT_SUPER (event)->finalize (event);
+}
+
 static GdkModifierType
 gdk_key_event_get_state (GdkEvent *event)
 {
@@ -1525,7 +1535,7 @@ gdk_key_event_get_state (GdkEvent *event)
 static const GdkEventTypeInfo gdk_key_event_info = {
   sizeof (GdkKeyEvent),
   NULL,
-  NULL,
+  gdk_key_event_finalize,
   gdk_key_event_get_state,
   NULL,
   NULL,
@@ -1549,6 +1559,10 @@ GDK_DEFINE_EVENT_TYPE (GdkKeyEvent, gdk_key_event,
  * @is_modifier: whether the event is a modifiers only event
  * @translated: the translated key data for the given @state
  * @no_lock: the translated key data without the given @state
+ * @compose_sequence: (transfer none) (nullable):
+ *   The compose sequence string, either partial or only the
+ *   final composed string, if that can be determined at event
+ *   creation time. Used by selected IM modules.
  *
  * Creates a new `GdkKeyEvent`.
  *
@@ -1563,7 +1577,8 @@ gdk_key_event_new (GdkEventType      type,
                    GdkModifierType   state,
                    gboolean          is_modifier,
                    GdkTranslatedKey *translated,
-                   GdkTranslatedKey *no_lock)
+                   GdkTranslatedKey *no_lock,
+                   char             *compose_sequence)
 {
   g_return_val_if_fail (type == GDK_KEY_PRESS ||
                         type == GDK_KEY_RELEASE, NULL);
@@ -1576,6 +1591,7 @@ gdk_key_event_new (GdkEventType      type,
   self->key_is_modifier = is_modifier;
   self->translated[0] = *translated;
   self->translated[1] = *no_lock;
+  self->compose_sequence = g_strdup (compose_sequence);
 
   return event;
 }
@@ -1604,6 +1620,26 @@ gdk_key_event_get_translated_key (GdkEvent *event,
     return &(self->translated[1]);
 
   return &(self->translated[0]);
+}
+
+/*< private >
+ * gdk_key_event_get_compose_sequence:
+ * @event: (type GdkKeyEvent): a key event
+ *
+ * Extracts the compose sequence string from a key event.
+ *
+ * Returns: (transfer none): the compose sequence string
+ */
+char *
+gdk_key_event_get_compose_sequence (GdkEvent *event)
+{
+  GdkKeyEvent *self = (GdkKeyEvent *) event;
+
+  g_return_val_if_fail (GDK_IS_EVENT (event), 0);
+  g_return_val_if_fail (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS) ||
+                        GDK_IS_EVENT_TYPE (event, GDK_KEY_RELEASE), FALSE);
+
+  return self->compose_sequence;
 }
 
 /**

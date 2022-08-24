@@ -235,14 +235,6 @@ struct _GdkWin32Surface
   /* The cursor that GDK set for this window via GdkDevice */
   GdkWin32HCursor *cursor;
 
-  /* When VK_PACKET sends us a leading surrogate, it's stashed here.
-   * Later, when another VK_PACKET sends a tailing surrogate, we make up
-   * a full unicode character from them, or discard the leading surrogate,
-   * if the next key is not a tailing surrogate.
-   */
-  wchar_t leading_surrogate_keydown;
-  wchar_t leading_surrogate_keyup;
-
   /* Window size hints */
   int hint_flags;
   GdkGeometry hints;

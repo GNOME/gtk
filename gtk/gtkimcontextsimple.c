@@ -664,7 +664,8 @@ no_sequence_matches (GtkIMContextSimple *context_simple,
                                                    gdk_event_get_modifier_state (event),
                                                    FALSE,
                                                    &translated,
-                                                   &translated);
+                                                   &translated,
+                                                   NULL);
 
 	  gtk_im_context_filter_keypress (context, tmp_event);
 	  gdk_event_unref (tmp_event);
