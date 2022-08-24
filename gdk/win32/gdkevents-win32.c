@@ -388,7 +388,7 @@ low_level_keyboard_proc (int    code,
     if (kbd_focus_owner == NULL)
       break;
 
-    gdk_kbd_focus_owner = gdk_win32_handle_table_lookup (kbd_focus_owner);
+    gdk_kbd_focus_owner = gdk_win32_handle_table_lookup_ (kbd_focus_owner);
 
     if (gdk_kbd_focus_owner == NULL)
       break;
@@ -618,7 +618,7 @@ find_window_for_mouse_event (GdkSurface* reported_window,
 	  ScreenToClient (hwnd, &client_pt);
 	  GetClientRect (hwnd, &rect);
 	  if (PtInRect (&rect, client_pt))
-	    event_surface = gdk_win32_handle_table_lookup (hwnd);
+	    event_surface = gdk_win32_handle_table_lookup_ (hwnd);
 	}
       if (event_surface == NULL)
 	event_surface = grab->surface;
@@ -1782,7 +1782,7 @@ gdk_event_translate (MSG *msg,
 	return TRUE;
     }
 
-  window = gdk_win32_handle_table_lookup (msg->hwnd);
+  window = gdk_win32_handle_table_lookup_ (msg->hwnd);
 
   if (window == NULL)
     {
@@ -2297,7 +2297,7 @@ gdk_event_translate (MSG *msg,
               ScreenToClient (hwnd, &client_pt);
               GetClientRect (hwnd, &rect);
               if (PtInRect (&rect, client_pt))
-                new_window = gdk_win32_handle_table_lookup (hwnd);
+                new_window = gdk_win32_handle_table_lookup_ (hwnd);
             }
 
           synthesize_crossing_events (display,
@@ -2438,7 +2438,7 @@ gdk_event_translate (MSG *msg,
 	  ScreenToClient (hwnd, &client_pt);
 	  GetClientRect (hwnd, &rect);
 	  if (PtInRect (&rect, client_pt))
-	    new_window = gdk_win32_handle_table_lookup (hwnd);
+	    new_window = gdk_win32_handle_table_lookup_ (hwnd);
 	}
 
       if (!ignore_leave)
@@ -2716,7 +2716,7 @@ gdk_event_translate (MSG *msg,
 
       msg->hwnd = hwnd;
 
-      g_set_object (&window, gdk_win32_handle_table_lookup (hwnd));
+      g_set_object (&window, gdk_win32_handle_table_lookup_ (hwnd));
       if (!window)
         break;
 
@@ -3246,7 +3246,7 @@ gdk_event_translate (MSG *msg,
         {
           if (msg->lParam != 0)
             {
-               GdkSurface *other_surface = gdk_win32_handle_table_lookup ((HWND) msg->lParam);
+               GdkSurface *other_surface = gdk_win32_handle_table_lookup_ ((HWND) msg->lParam);
                if (other_surface != NULL &&
                    (GDK_IS_POPUP (other_surface) || GDK_IS_DRAG_SURFACE (other_surface)))
                 {

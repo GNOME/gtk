@@ -73,9 +73,9 @@ gboolean      gdk_win32_surface_is_win32 (GdkSurface *surface);
 GDK_DEPRECATED_IN_4_8_FOR(gdk_win32_surface_get_handle)
 HWND          gdk_win32_surface_get_impl_hwnd (GdkSurface *surface);
 
-/* Return the Gdk* for a particular HANDLE */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_8
 gpointer      gdk_win32_handle_table_lookup (HWND handle);
+
 /* Translate from window to Windows handle */
 GDK_AVAILABLE_IN_ALL
 HWND          gdk_win32_surface_get_handle (GdkSurface *surface);

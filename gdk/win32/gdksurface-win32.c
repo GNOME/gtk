@@ -4259,7 +4259,7 @@ gdk_win32_surface_lookup_for_display (GdkDisplay *display,
 {
   g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
-  return (GdkSurface*) gdk_win32_handle_table_lookup (anid);
+  return (GdkSurface*) gdk_win32_handle_table_lookup_ (anid);
 }
 
 /**
