@@ -807,6 +807,10 @@ gdk_x11_drop_status (GdkDrop       *drop,
                                           gdk_x11_drop_do_nothing,
                                           display);
     }
+
+    drop_x11->suggested_action = suggested_action;
+    drop_x11->xdnd_have_actions = FALSE;
+    gdk_x11_drop_update_actions (drop_x11);
 }
 
 static void
