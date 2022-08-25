@@ -29,6 +29,7 @@
 #include "gdkintl.h"
 #include "gdkpipeiostreamprivate.h"
 #include "gdktexture.h"
+#include "gdk-private.h"
 
 #include <gobject/gvaluecollector.h>
 
@@ -408,7 +409,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    * Emitted when the clipboard changes ownership.
    */
   signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
                   G_TYPE_FROM_CLASS (class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkClipboardClass, changed),

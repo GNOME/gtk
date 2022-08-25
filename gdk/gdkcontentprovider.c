@@ -23,6 +23,7 @@
 #include "gdkclipboard.h"
 #include "gdkcontentformats.h"
 #include "gdkintl.h"
+#include "gdk-private.h"
 
 /**
  * GdkContentProvider:
@@ -197,7 +198,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    * Emitted whenever the content provided by this provider has changed.
    */
   signals[CONTENT_CHANGED] =
-    g_signal_new ("content-changed",
+    g_signal_new (I_("content-changed"),
                   G_TYPE_FROM_CLASS (class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkContentProviderClass, content_changed),
