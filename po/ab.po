@@ -3,7 +3,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-07-21 03:25+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
-"Language-Team: Abkhazian <ab@li.org>\n"
+"Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -925,19 +925,19 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:126
 msgid "GNU General Public License, version 2 or later"
-msgstr ""
+msgstr "GNU General Public License, аверсиа 2 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:127
 msgid "GNU General Public License, version 3 or later"
-msgstr ""
+msgstr "GNU General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:128
 msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr ""
+msgstr "GNU Lesser General Public License, аверсиа 2.1 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:129
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr ""
+msgstr "GNU Lesser General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "BSD 2-Clause License"
@@ -969,7 +969,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:137
 msgid "GNU Affero General Public License, version 3 or later"
-msgstr ""
+msgstr "GNU Affero General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:138
 msgid "GNU Affero General Public License, version 3 only"
@@ -981,7 +981,7 @@ msgstr "BSD 3-Clause License"
 
 #: gtk/gtkaboutdialog.c:140
 msgid "Apache License, Version 2.0"
-msgstr ""
+msgstr "Apache License, Аверсиа 2.1"
 
 #: gtk/gtkaboutdialog.c:141
 msgid "Mozilla Public License 2.0"
@@ -989,7 +989,7 @@ msgstr "Mozilla Public License 2.0"
 
 #: gtk/gtkaboutdialog.c:937
 msgid "Website"
-msgstr ""
+msgstr "Веб-асаит"
 
 #: gtk/gtkaboutdialog.c:973 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
@@ -1592,7 +1592,7 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:656
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:1"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1981,7 +1981,7 @@ msgstr ""
 
 #: gtk/gtkcustompaperunixdialog.c:950
 msgid "_Height:"
-msgstr ""
+msgstr "_Аҳаракыра:"
 
 #: gtk/gtkcustompaperunixdialog.c:961
 msgid "Paper Size"
@@ -1989,7 +1989,7 @@ msgstr ""
 
 #: gtk/gtkcustompaperunixdialog.c:970
 msgid "_Top:"
-msgstr ""
+msgstr "_Хыхьтәи:"
 
 #: gtk/gtkcustompaperunixdialog.c:981
 msgid "_Bottom:"
@@ -2274,15 +2274,15 @@ msgstr "%l:%M %p"
 
 #: gtk/gtkfilechooserwidget.c:4222
 msgid "Yesterday"
-msgstr ""
+msgstr "Иацы"
 
 #: gtk/gtkfilechooserwidget.c:4230
 msgid "%-e %b"
-msgstr "%-e %b"
+msgstr "%-e %B"
 
 #: gtk/gtkfilechooserwidget.c:4234
 msgid "%-e %b %Y"
-msgstr ""
+msgstr "%-e %b. %Y"
 
 #: gtk/gtkfilechooserwidget.c:4323 gtk/gtkfilechooserwidget.c:4331
 msgid "Program"
@@ -2290,7 +2290,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:4324
 msgid "Audio"
-msgstr ""
+msgstr "Аудио"
 
 #: gtk/gtkfilechooserwidget.c:4325 gtk/gtkfontbutton.c:596
 #: gtk/inspector/visual.ui:170
@@ -2303,7 +2303,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:4327
 msgid "Archive"
-msgstr "Архивтәра"
+msgstr "Архив"
 
 #: gtk/gtkfilechooserwidget.c:4328
 msgid "Markup"
@@ -2315,7 +2315,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:4332
 msgid "Video"
-msgstr ""
+msgstr "Авидео"
 
 #: gtk/gtkfilechooserwidget.c:4333
 msgid "Contacts"
@@ -2436,7 +2436,7 @@ msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2268
 msgid "Character Variants"
-msgstr ""
+msgstr "Асимволқәа рвариантқәа"
 
 #: gtk/gtkglarea.c:284
 msgid "OpenGL context creation failed"
@@ -2741,7 +2741,7 @@ msgstr ""
 
 #: gtk/gtkpasswordentry.c:217
 msgid "Caps Lock is on"
-msgstr ""
+msgstr "Caps Lock аҿакуп"
 
 #: gtk/gtkpasswordentry.c:698
 msgid "_Show Text"
@@ -2937,7 +2937,7 @@ msgstr ""
 
 #: gtk/gtkplacessidebar.c:3313
 msgid "_Safely Remove Drive"
-msgstr ""
+msgstr "_Ишәарҭамкәа аусруга аныхра"
 
 #: gtk/gtkplacessidebar.c:3314
 msgid "_Disconnect Drive"
@@ -3036,7 +3036,7 @@ msgstr ""
 
 #: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
 msgid "Networks"
-msgstr ""
+msgstr "Аҳа аҿы"
 
 #: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
 msgid "On This Computer"
@@ -3064,7 +3064,7 @@ msgstr ""
 
 #: gtk/gtkprintbackend.c:639
 msgid "Authentication"
-msgstr ""
+msgstr "Ахаҭареилкаара"
 
 #: gtk/gtkprintbackend.c:715
 msgid "_Remember password"
@@ -3178,7 +3178,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation-win32.c:636
 msgid "Out of paper"
-msgstr ""
+msgstr "Ақьаад нҵәеит"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:638
@@ -3459,7 +3459,7 @@ msgstr ""
 #: gtk/gtkwindow.c:6098
 #, c-format
 msgid "Do you want to use GTK Inspector?"
-msgstr ""
+msgstr "Шәхы иашәырхәар шәҭахума GTK Inspector?"
 
 #: gtk/gtkwindow.c:6100
 #, c-format
@@ -3529,7 +3529,7 @@ msgstr ""
 
 #: gtk/inspector/actions.ui:30
 msgid "Enabled"
-msgstr ""
+msgstr "Иаҿакуп"
 
 #: gtk/inspector/actions.ui:41
 msgid "Parameter Type"
@@ -3686,7 +3686,7 @@ msgstr ""
 
 #: gtk/inspector/general.ui:32
 msgid "GTK Version"
-msgstr ""
+msgstr "Аверсиа GTK"
 
 #: gtk/inspector/general.ui:58
 msgid "GDK Backend"
@@ -3722,7 +3722,7 @@ msgstr ""
 
 #: gtk/inspector/general.ui:470
 msgid "Display"
-msgstr ""
+msgstr "Аԥшра"
 
 #: gtk/inspector/general.ui:497
 msgid "RGBA Visual"
@@ -3734,7 +3734,7 @@ msgstr ""
 
 #: gtk/inspector/general.ui:575
 msgid "GL Version"
-msgstr ""
+msgstr "Аверсиа GL"
 
 #: gtk/inspector/general.ui:625
 msgid "GL Vendor"
@@ -3746,7 +3746,7 @@ msgstr ""
 
 #: gtk/inspector/general.ui:692
 msgid "Vulkan API version"
-msgstr ""
+msgstr "Аверсиа API Vulkan"
 
 #: gtk/inspector/general.ui:719
 msgid "Vulkan driver version"
@@ -3811,7 +3811,7 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:367
 msgid "Baseline"
-msgstr ""
+msgstr "Абазатә цәаҳәа"
 
 #: gtk/inspector/misc-info.ui:396
 msgid "Surface"
@@ -6204,7 +6204,7 @@ msgstr ""
 
 #: gtk/ui/gtkprintunixdialog.ui:554
 msgid "Paper"
-msgstr ""
+msgstr "Ақьаад"
 
 #: gtk/ui/gtkprintunixdialog.ui:569
 msgid "Paper _type:"
@@ -6403,56 +6403,56 @@ msgstr ""
 #: modules/printbackends/gtkprintbackendcups.c:2589
 #, c-format
 msgid "Printer “%s” is low on toner."
-msgstr ""
+msgstr "Апринтер «%s» аҟны атонер анҵәара иаҿуп"
 
 #: modules/printbackends/gtkprintbackendcups.c:2593
 #, c-format
 msgid "Printer “%s” has no toner left."
-msgstr ""
+msgstr "Апринтер «%s» аҟны атонер нҵәеит"
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/gtkprintbackendcups.c:2598
 #, c-format
 msgid "Printer “%s” is low on developer."
-msgstr ""
+msgstr "Апринтер «%s» аҟны аарԥшыга анҵәара иаҿуп"
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/gtkprintbackendcups.c:2603
 #, c-format
 msgid "Printer “%s” is out of developer."
-msgstr ""
+msgstr "Апринтер «%s» аҟны аарԥшыга нҵәеит"
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/gtkprintbackendcups.c:2608
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
-msgstr ""
+msgstr "Апринтер «%s» аҟны атонерқәа руак анҵәара иаҿуп"
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/gtkprintbackendcups.c:2613
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
-msgstr ""
+msgstr "Апринтер «%s» аҟны атонерқәа руак нҵәеит"
 
 #: modules/printbackends/gtkprintbackendcups.c:2617
 #, c-format
 msgid "The cover is open on printer “%s”."
-msgstr ""
+msgstr "Апринтер «%s» аҟны ахҩа аартуп"
 
 #: modules/printbackends/gtkprintbackendcups.c:2621
 #, c-format
 msgid "The door is open on printer “%s”."
-msgstr ""
+msgstr "Апринтер «%s» аҟны ашә аартуп"
 
 #: modules/printbackends/gtkprintbackendcups.c:2625
 #, c-format
 msgid "Printer “%s” is low on paper."
-msgstr ""
+msgstr "Апринтер «%s» аҟны ақьаад анҵәара иаҿуп"
 
 #: modules/printbackends/gtkprintbackendcups.c:2629
 #, c-format
 msgid "Printer “%s” is out of paper."
-msgstr ""
+msgstr "Апринтер «%s» аҟны ақьаад нҵәеит"
 
 #: modules/printbackends/gtkprintbackendcups.c:2633
 #, c-format
