@@ -3,7 +3,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-13 15:48+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
-"Language-Team: Abkhazian <ab@li.org>\n"
+"Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1411,19 +1411,19 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:116
 msgid "GNU General Public License, version 2 or later"
-msgstr ""
+msgstr "GNU General Public License, аверсиа 2 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:117
 msgid "GNU General Public License, version 3 or later"
-msgstr ""
+msgstr "GNU General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:118
 msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr ""
+msgstr "GNU Lesser General Public License, аверсиа 2.1 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:119
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr ""
+msgstr "GNU Lesser General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:120
 msgid "BSD 2-Clause License"
@@ -1455,7 +1455,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:127
 msgid "GNU Affero General Public License, version 3 or later"
-msgstr ""
+msgstr "GNU Affero General Public License, аверсиа 3 мамзар еиҳа ихьшәоу"
 
 #: gtk/gtkaboutdialog.c:128
 msgid "GNU Affero General Public License, version 3 only"
@@ -1467,7 +1467,7 @@ msgstr "BSD 3-Clause License"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "Apache License, Version 2.0"
-msgstr ""
+msgstr "Apache License, Аверсиа 2.1"
 
 #: gtk/gtkaboutdialog.c:131
 msgid "Mozilla Public License 2.0"
@@ -1492,7 +1492,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:1043
 msgid "Website"
-msgstr ""
+msgstr "Веб-асаит"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/gtkaboutdialog.c:1093 gtk/ui/gtkapplication-quartz.ui:7
@@ -1759,7 +1759,7 @@ msgstr "calendar:MY"
 #.
 #: gtk/gtkcalendar.c:853
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "calendar:week_start:1"
 
 #. Translators:  This is a text measurement template.
 #. * Translate it to the widest year text
@@ -2166,7 +2166,7 @@ msgstr ""
 
 #: gtk/gtkcustompaperunixdialog.c:1131
 msgid "_Height:"
-msgstr ""
+msgstr "_Аҳаракыра:"
 
 #: gtk/gtkcustompaperunixdialog.c:1142
 msgid "Paper Size"
@@ -2174,7 +2174,7 @@ msgstr ""
 
 #: gtk/gtkcustompaperunixdialog.c:1151
 msgid "_Top:"
-msgstr ""
+msgstr "_Хыхьтәи:"
 
 #: gtk/gtkcustompaperunixdialog.c:1162
 msgid "_Bottom:"
@@ -2235,7 +2235,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:10880
 msgid "Caps Lock is on"
-msgstr ""
+msgstr "Caps Lock аҿакуп"
 
 #: gtk/gtkentry.c:11158
 msgid "Insert Emoji"
@@ -2514,15 +2514,15 @@ msgstr "%l:%M %p"
 
 #: gtk/gtkfilechooserwidget.c:4899
 msgid "Yesterday"
-msgstr ""
+msgstr "Иацы"
 
 #: gtk/gtkfilechooserwidget.c:4907
 msgid "%-e %b"
-msgstr "%-e %b"
+msgstr "%-e %B"
 
 #: gtk/gtkfilechooserwidget.c:4911
 msgid "%-e %b %Y"
-msgstr ""
+msgstr "%-e %b. %Y"
 
 #: gtk/gtkfilechooserwidget.c:5010 gtk/gtkfilechooserwidget.c:5018
 msgid "Program"
@@ -2530,7 +2530,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:5011
 msgid "Audio"
-msgstr ""
+msgstr "Аудио"
 
 #: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:230
 #: gtk/ui/gtkfontbutton.ui:13
@@ -2543,7 +2543,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:5014
 msgid "Archive"
-msgstr "Архивтәра"
+msgstr "Архив"
 
 #: gtk/gtkfilechooserwidget.c:5015
 msgid "Markup"
@@ -2555,7 +2555,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:5019
 msgid "Video"
-msgstr ""
+msgstr "Авидео"
 
 #: gtk/gtkfilechooserwidget.c:5020
 msgid "Contacts"
@@ -2649,7 +2649,7 @@ msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:1603
 msgid "Weight"
-msgstr ""
+msgstr "Акапан"
 
 #: gtk/gtkfontchooserwidget.c:1604
 msgid "Italic"
@@ -2689,7 +2689,7 @@ msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2358
 msgid "Character Variants"
-msgstr ""
+msgstr "Асимволқәа рвариантқәа"
 
 #: gtk/gtkglarea.c:314
 msgid "OpenGL context creation failed"
@@ -3138,7 +3138,7 @@ msgstr ""
 
 #: gtk/gtkplacessidebar.c:2346
 msgid "_Safely Remove Drive"
-msgstr ""
+msgstr "_Ишәарҭамкәа аусруга аныхра"
 
 #: gtk/gtkplacessidebar.c:2350
 msgid "_Connect Drive"
@@ -3338,7 +3338,7 @@ msgstr ""
 
 #: gtk/gtkplacesview.c:2096 gtk/gtkplacesview.c:2105
 msgid "Networks"
-msgstr ""
+msgstr "Аҳа аҿы"
 
 #: gtk/gtkplacesview.c:2096 gtk/gtkplacesview.c:2105
 msgid "On This Computer"
@@ -3366,7 +3366,7 @@ msgstr ""
 
 #: gtk/gtkprintbackend.c:778
 msgid "Authentication"
-msgstr ""
+msgstr "Ахаҭареилкаара"
 
 #: gtk/gtkprintbackend.c:849
 msgid "_Remember password"
@@ -3471,7 +3471,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation-win32.c:656
 msgid "Out of paper"
-msgstr ""
+msgstr "Ақьаад нҵәеит"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:658
@@ -3798,7 +3798,7 @@ msgstr ""
 #: gtk/gtktextbufferserialize.c:802 gtk/gtktextbufferserialize.c:828
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
-msgstr ""
+msgstr "Аҟазшьарбага \"%s\" ҩынтәны иԥшаан ахәҭа <%s> аҟны"
 
 #: gtk/gtktextbufferserialize.c:844
 #, c-format
@@ -3813,12 +3813,12 @@ msgstr ""
 #: gtk/gtktextbufferserialize.c:942
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
-msgstr ""
+msgstr "Аҟазшьарбага \"%s\" ҩынтәны еиҭаҟалеит ахәҭа <%s> аҟны"
 
 #: gtk/gtktextbufferserialize.c:960 gtk/gtktextbufferserialize.c:985
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
-msgstr ""
+msgstr "Аҟазшьарбага \"%s\" гхоуп <%s> аелемент аҟны ари аконтекст ала"
 
 #: gtk/gtktextbufferserialize.c:1024
 #, c-format
@@ -4002,7 +4002,7 @@ msgstr ""
 
 #: gtk/inspector/actions.ui:56
 msgid "Enabled"
-msgstr ""
+msgstr "Иаҿакуп"
 
 #: gtk/inspector/actions.ui:69
 msgid "Parameter Type"
@@ -4084,7 +4084,7 @@ msgstr ""
 
 #: gtk/inspector/general.ui:454
 msgid "Display"
-msgstr ""
+msgstr "Аԥшра"
 
 #: gtk/inspector/general.ui:489
 msgid "RGBA visual"
@@ -4096,7 +4096,7 @@ msgstr ""
 
 #: gtk/inspector/general.ui:570
 msgid "GL Version"
-msgstr ""
+msgstr "Аверсиа GL"
 
 #: gtk/inspector/general.ui:605
 msgid "GL Vendor"
@@ -4183,7 +4183,7 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:362
 msgid "Baseline"
-msgstr ""
+msgstr "Абазатә цәаҳәа"
 
 #: gtk/inspector/misc-info.ui:396
 msgid "Clip area"
@@ -4515,7 +4515,7 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:487
 msgid "Similar"
-msgstr ""
+msgstr "Аиԥш"
 
 #: gtk/inspector/visual.ui:489
 msgid "Recording"
@@ -4555,7 +4555,7 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:741
 msgid "Always"
-msgstr ""
+msgstr "Еснагь"
 
 #: gtk/inspector/visual.ui:742
 msgid "Disabled"
@@ -7354,7 +7354,7 @@ msgstr ""
 
 #: gtk/ui/gtkprintunixdialog.ui:649
 msgid "Paper"
-msgstr ""
+msgstr "Ақьаад"
 
 #: gtk/ui/gtkprintunixdialog.ui:672
 msgid "Paper _type:"
@@ -7768,56 +7768,56 @@ msgstr ""
 #: modules/printbackends/cups/gtkprintbackendcups.c:2609
 #, c-format
 msgid "Printer “%s” is low on toner."
-msgstr ""
+msgstr "Апринтер «%s» аҟны атонер анҵәара иаҿуп"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2613
 #, c-format
 msgid "Printer “%s” has no toner left."
-msgstr ""
+msgstr "Апринтер «%s» аҟны атонер нҵәеит"
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2618
 #, c-format
 msgid "Printer “%s” is low on developer."
-msgstr ""
+msgstr "Апринтер «%s» аҟны аарԥшыга анҵәара иаҿуп"
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:2623
 #, c-format
 msgid "Printer “%s” is out of developer."
-msgstr ""
+msgstr "Апринтер «%s» аҟны аарԥшыга нҵәеит"
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2628
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
-msgstr ""
+msgstr "Апринтер «%s» аҟны атонерқәа руак анҵәара иаҿуп"
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:2633
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
-msgstr ""
+msgstr "Апринтер «%s» аҟны атонерқәа руак нҵәеит"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2637
 #, c-format
 msgid "The cover is open on printer “%s”."
-msgstr ""
+msgstr "Апринтер «%s» аҟны ахҩа аартуп"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2641
 #, c-format
 msgid "The door is open on printer “%s”."
-msgstr ""
+msgstr "Апринтер «%s» аҟны ашә аартуп"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2645
 #, c-format
 msgid "Printer “%s” is low on paper."
-msgstr ""
+msgstr "Апринтер «%s» аҟны ақьаад анҵәара иаҿуп"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2649
 #, c-format
 msgid "Printer “%s” is out of paper."
-msgstr ""
+msgstr "Апринтер «%s» аҟны ақьаад нҵәеит"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:2653
 #, c-format
