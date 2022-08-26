@@ -104,7 +104,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
       hwndc = ChildWindowFromPoint (hwnd, point);
 
       if (hwndc && hwndc != hwnd)
-        *child_window = gdk_win32_handle_table_lookup (hwndc);
+        *child_window = gdk_win32_handle_table_lookup_ (hwndc);
       else
         *child_window = NULL; /* Direct child unknown to gdk */
     }

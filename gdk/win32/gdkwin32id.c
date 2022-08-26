@@ -70,7 +70,7 @@ gdk_win32_handle_table_remove (HANDLE handle)
 }
 
 gpointer
-gdk_win32_handle_table_lookup (HWND handle)
+gdk_win32_handle_table_lookup_ (HWND handle)
 {
   gpointer data = NULL;
 
@@ -78,4 +78,10 @@ gdk_win32_handle_table_lookup (HWND handle)
     data = g_hash_table_lookup (handle_ht, &handle);
 
   return data;
+}
+
+gpointer
+gdk_win32_handle_table_lookup (HWND handle)
+{
+  return gdk_win32_handle_table_lookup_ (handle);
 }

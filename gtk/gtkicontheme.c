@@ -36,6 +36,7 @@
 #include <windows.h>
 #include <shellapi.h>
 #include "win32/gdkwin32.h"
+#include "win32/gdkprivate-win32.h"
 #endif /* G_OS_WIN32 */
 
 #include "gtkiconthemeprivate.h"

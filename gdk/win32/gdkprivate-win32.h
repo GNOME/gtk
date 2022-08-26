@@ -441,4 +441,12 @@ typedef enum _GdkWin32ProcessorCheckType
 
 gboolean _gdk_win32_check_processor (GdkWin32ProcessorCheckType check_type);
 
+GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
+                                                    double *x_hot,
+                                                    double *y_hot);
+HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
+void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
+
+gpointer      gdk_win32_handle_table_lookup_       (HWND handle);
+
 #endif /* __GDK_PRIVATE_WIN32_H__ */

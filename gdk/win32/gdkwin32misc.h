@@ -73,9 +73,9 @@ gboolean      gdk_win32_surface_is_win32 (GdkSurface *surface);
 GDK_DEPRECATED_IN_4_8_FOR(gdk_win32_surface_get_handle)
 HWND          gdk_win32_surface_get_impl_hwnd (GdkSurface *surface);
 
-/* Return the Gdk* for a particular HANDLE */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_8
 gpointer      gdk_win32_handle_table_lookup (HWND handle);
+
 /* Translate from window to Windows handle */
 GDK_AVAILABLE_IN_ALL
 HWND          gdk_win32_surface_get_handle (GdkSurface *surface);
@@ -83,20 +83,6 @@ HWND          gdk_win32_surface_get_handle (GdkSurface *surface);
 GDK_AVAILABLE_IN_ALL
 GdkSurface *   gdk_win32_surface_lookup_for_display (GdkDisplay *display,
                                                      HWND        anid);
-
-#if defined (INSIDE_GDK_WIN32) || defined (GTK_COMPILATION) || defined (GTK_COMPILATION)
-
-/* For internal GTK use only */
-GDK_AVAILABLE_IN_ALL
-GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
-                                                    double *x_hot,
-                                                    double *y_hot);
-GDK_AVAILABLE_IN_ALL
-HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
-GDK_AVAILABLE_IN_ALL
-void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
-
-#endif
 
 G_END_DECLS
 

@@ -1247,6 +1247,8 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
  * Retrieves the EGL display connection object for the given GDK display.
  *
  * Returns: (nullable): the EGL display
+ *
+ * Since: 4.4
  */
 gpointer
 gdk_win32_display_get_egl_display (GdkDisplay *display)

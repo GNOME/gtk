@@ -105,7 +105,7 @@ gdk_device_win32_query_state (GdkDevice        *device,
       hwndc = ChildWindowFromPoint (hwnd, point);
 
       if (hwndc && hwndc != hwnd)
-        *child_window = gdk_win32_handle_table_lookup (hwndc);
+        *child_window = gdk_win32_handle_table_lookup_ (hwndc);
       else
         *child_window = NULL; /* Direct child unknown to gdk */
     }
@@ -183,7 +183,7 @@ _gdk_device_win32_surface_at_position (GdkDevice       *device,
   if (!PtInRect (&rect, client_pt))
     hwnd = NULL;
 
-  window = gdk_win32_handle_table_lookup (hwnd);
+  window = gdk_win32_handle_table_lookup_ (hwnd);
 
   if (window && (win_x || win_y))
     {
