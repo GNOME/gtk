@@ -7386,7 +7386,7 @@ msgstr "Connecta al _servidor"
 
 #: gtk/ui/gtkplacesview.ui:340
 msgid "Enter server address…"
-msgstr "Introduïu l'adreça del servidor..."
+msgstr "Introduïu l'adreça del servidor…"
 
 #: gtk/ui/gtkprintunixdialog.ui:112
 msgid "Printer"

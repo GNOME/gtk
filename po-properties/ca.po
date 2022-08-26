@@ -9302,7 +9302,7 @@ msgstr "Memòria intermèdia doble"
 
 #: gtk/gtkwidget.c:1364
 msgid "Whether the widget is double buffered"
-msgstr "Si el giny utilitza una doble memòria intermèdia"
+msgstr "Si el giny utilitza una memòria intermèdia doble"
 
 #: gtk/gtkwidget.c:1378
 msgid "How to position in extra horizontal space"
