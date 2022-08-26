@@ -793,7 +793,10 @@ if os_win32
   ])
 
   gtk_sources += gtk_win32_print_sources
-  gtk_sources += ['gtkimcontextime.c']
+  gtk_sources += [
+    'gtkcolorpickerwin32.c',
+    'gtkimcontextime.c'
+  ]
 
   if cc.has_header_symbol('windows.h', 'IPrintDialogCallback')
     cdata.set('HAVE_IPRINTDIALOGCALLBACK', 1)

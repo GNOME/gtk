@@ -21,6 +21,11 @@
 #include "gtkcolorpickerportalprivate.h"
 #include "gtkcolorpickershellprivate.h"
 #include "gtkcolorpickerkwinprivate.h"
+
+#ifdef G_OS_WIN32
+#include "gtkcolorpickerwin32private.h"
+#endif
+
 #include <gio/gio.h>
 
 
@@ -51,13 +56,19 @@ gtk_color_picker_pick_finish (GtkColorPicker  *picker,
 GtkColorPicker *
 gtk_color_picker_new (void)
 {
-  GtkColorPicker *picker;
+  GtkColorPicker *picker = NULL;
 
-  picker = gtk_color_picker_portal_new ();
+#if defined (G_OS_UNIX)
+  if (!picker)
+    picker = gtk_color_picker_portal_new ();
   if (!picker)
     picker = gtk_color_picker_shell_new ();
   if (!picker)
     picker = gtk_color_picker_kwin_new ();
+#elif defined (G_OS_WIN32)
+  if (!picker)
+    picker = gtk_color_picker_win32_new ();
+#endif
 
   if (!picker)
     g_debug ("No suitable GtkColorPicker implementation");
