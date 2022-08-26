@@ -59,4 +59,8 @@ void gdk_source_set_static_name_by_id (guint       tag,
 #define g_source_set_static_name(source, name) g_source_set_name ((source), (name))
 #endif
 
+#ifndef I_
+#define I_(string) g_intern_static_string (string)
+#endif
+
 #endif /* __GDK__PRIVATE_H__ */

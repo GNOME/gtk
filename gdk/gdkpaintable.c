@@ -22,6 +22,7 @@
 #include "gdkpaintable.h"
 
 #include "gdksnapshotprivate.h"
+#include "gdk-private.h"
 
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 void            gtk_snapshot_push_debug                 (GdkSnapshot            *snapshot,
@@ -170,7 +171,7 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
    * the icon theme for an icon changing.
    */
   signals[INVALIDATE_CONTENTS] =
-    g_signal_new ("invalidate-contents",
+    g_signal_new (I_("invalidate-contents"),
                   GDK_TYPE_PAINTABLE,
                   G_SIGNAL_RUN_LAST,
                   0,
@@ -194,7 +195,7 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
    * the contents of a toplevel surface being resized.
    */
   signals[INVALIDATE_SIZE] =
-    g_signal_new ("invalidate-size",
+    g_signal_new (I_("invalidate-size"),
                   GDK_TYPE_PAINTABLE,
                   G_SIGNAL_RUN_LAST,
                   0,

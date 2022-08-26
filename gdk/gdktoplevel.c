@@ -24,6 +24,7 @@
 #include "gdkdisplay.h"
 #include "gdkenumtypes.h"
 #include "gdkintl.h"
+#include "gdk-private.h"
 
 #include <graphene-gobject.h>
 #include <math.h>
@@ -247,7 +248,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * will result in an arbitrary size being used as a result.
    */
   signals[COMPUTE_SIZE] =
-    g_signal_new ("compute-size",
+    g_signal_new (I_("compute-size"),
                   GDK_TYPE_TOPLEVEL,
                   G_SIGNAL_RUN_LAST,
                   0,
