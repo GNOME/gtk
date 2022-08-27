@@ -176,7 +176,12 @@ gsk_gl_driver_shader_weak_cb (gpointer  data,
   g_assert (GSK_IS_GL_DRIVER (self));
 
   if (self->shader_cache != NULL)
-    g_hash_table_remove (self->shader_cache, where_object_was);
+    {
+      if (self->command_queue != NULL)
+        gsk_gl_command_queue_make_current (self->command_queue);
+
+      g_hash_table_remove (self->shader_cache, where_object_was);
+    }
 }
 
 G_GNUC_NULL_TERMINATED static inline GBytes *
