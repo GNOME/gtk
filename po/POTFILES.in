@@ -15,6 +15,7 @@ gdk/gdkdrawcontext.c
 gdk/gdkdrop.c
 gdk/gdkevents.c
 gdk/gdkglcontext.c
+gdk/gdkpaintable.c
 gdk/gdkpango.c
 gdk/gdkpopup.c
 gdk/gdkseat.c

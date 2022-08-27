@@ -23,7 +23,7 @@ demos/gtk-demo/expander.c
 demos/gtk-demo/filtermodel.ui
 demos/gtk-demo/fishbowl.ui
 demos/gtk-demo/font_features.c
-demos/gtk-demo/font-features.ui
+demos/gtk-demo/font_features.ui
 demos/gtk-demo/fontrendering.ui
 demos/gtk-demo/iconview.c
 demos/gtk-demo/infobar.c
@@ -234,6 +234,8 @@ testsuite/reftests/inscription-overflow.ref.ui
 testsuite/reftests/inscription-overflow.ui
 testsuite/reftests/inscription-overflow-yalign.ref.ui
 testsuite/reftests/inscription-overflow-yalign.ui
+testsuite/reftests/inscription-xalign.ref.ui
+testsuite/reftests/inscription-xalign.ui
 testsuite/reftests/label-attribute-preference.ref.ui
 testsuite/reftests/label-attribute-preference.ui
 testsuite/reftests/label-background.ref.ui
