@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-20 11:17+0000\n"
-"PO-Revision-Date: 2022-02-20 13:55+0100\n"
+"POT-Creation-Date: 2022-08-28 14:43+0000\n"
+"PO-Revision-Date: 2022-08-28 23:32+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -4083,7 +4083,7 @@ msgstr "Przedrostek"
 
 #: gtk/inspector/actions.ui:56
 msgid "Enabled"
-msgstr "Wyłączone"
+msgstr "Włączone"
 
 #: gtk/inspector/actions.ui:69
 msgid "Parameter Type"
@@ -7761,7 +7761,7 @@ msgid "Vietnamese (VIQR)"
 msgstr "wietnamska (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:105
+#: modules/input/imwayland.c:106
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
