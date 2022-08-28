@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-26 22:11+0000\n"
-"PO-Revision-Date: 2022-08-27 16:15+0200\n"
+"POT-Creation-Date: 2022-08-28 14:53+0000\n"
+"PO-Revision-Date: 2022-08-28 23:34+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2477,7 +2477,7 @@ msgstr "Brak"
 #: gtk/gtkfontchooserwidget.c:2110
 msgctxt "Font feature value"
 msgid "Enable"
-msgstr "Wyłączone"
+msgstr "Włączone"
 
 #: gtk/gtkfontchooserwidget.c:2437
 msgid "Default"
@@ -3622,7 +3622,7 @@ msgstr "Ustawienie stanu"
 
 #: gtk/inspector/actions.ui:30
 msgid "Enabled"
-msgstr "Wyłączone"
+msgstr "Włączone"
 
 #: gtk/inspector/actions.ui:41
 msgid "Parameter Type"
