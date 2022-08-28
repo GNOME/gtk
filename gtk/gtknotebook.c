@@ -976,11 +976,11 @@ add_tab_bindings (GtkWidgetClass   *widget_class,
 {
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Tab, modifiers,
-                                       "move_focus_out",
+                                       "move-focus-out",
                                        "(i)", direction);
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_KP_Tab, modifiers,
-                                       "move_focus_out",
+                                       "move-focus-out",
                                        "(i)", direction);
 }
 
@@ -993,11 +993,11 @@ add_arrow_bindings (GtkWidgetClass   *widget_class,
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        keysym, GDK_CONTROL_MASK,
-                                       "move_focus_out",
+                                       "move-focus-out",
                                        "(i)", direction);
   gtk_widget_class_add_binding_signal (widget_class,
                                        keypad_keysym, GDK_CONTROL_MASK,
-                                       "move_focus_out",
+                                       "move-focus-out",
                                        "(i)", direction);
 }
 
@@ -1011,11 +1011,11 @@ add_reorder_bindings (GtkWidgetClass   *widget_class,
 
   gtk_widget_class_add_binding_signal (widget_class,
                                        keysym, GDK_ALT_MASK,
-                                       "reorder_tab",
+                                       "reorder-tab",
                                        "(ib)", direction, move_to_last);
   gtk_widget_class_add_binding_signal (widget_class,
                                        keypad_keysym, GDK_ALT_MASK,
-                                       "reorder_tab",
+                                       "reorder-tab",
                                        "(ib)", direction, move_to_last);
 }
 
