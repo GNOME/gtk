@@ -2362,7 +2362,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   if (g_list_model_get_n_items (G_LIST_MODEL (GTK_WIDGET_CLASS (g_class)->priv->shortcuts)) > 0)
     {
       controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (GTK_WIDGET_CLASS (g_class)->priv->shortcuts));
-      gtk_event_controller_set_name (controller, "gtk-widget-class-shortcuts");
+      gtk_event_controller_set_static_name (controller, "gtk-widget-class-shortcuts");
       gtk_widget_add_controller (widget, controller);
     }
 

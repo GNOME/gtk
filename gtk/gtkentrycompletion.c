@@ -2050,12 +2050,12 @@ connect_completion_signals (GtkEntryCompletion *completion)
   GtkEntryBuffer *buffer = gtk_text_get_buffer (text);
 
   controller = completion->entry_key_controller = gtk_event_controller_key_new ();
-  gtk_event_controller_set_name (controller, "gtk-entry-completion");
+  gtk_event_controller_set_static_name (controller, "gtk-entry-completion");
   g_signal_connect (controller, "key-pressed",
                     G_CALLBACK (gtk_entry_completion_key_pressed), completion);
   gtk_widget_add_controller (GTK_WIDGET (text), controller);
   controller = completion->entry_focus_controller = gtk_event_controller_focus_new ();
-  gtk_event_controller_set_name (controller, "gtk-entry-completion");
+  gtk_event_controller_set_static_name (controller, "gtk-entry-completion");
   g_signal_connect_swapped (controller, "leave", G_CALLBACK (text_focus_out), completion);
   gtk_widget_add_controller (GTK_WIDGET (text), controller);
 
