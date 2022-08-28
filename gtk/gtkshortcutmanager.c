@@ -51,13 +51,13 @@ gtk_shortcut_manager_create_controllers (GtkWidget *widget)
   model = gtk_flatten_list_model_new (G_LIST_MODEL (g_list_store_new (GTK_TYPE_SHORTCUT_CONTROLLER)));
   g_object_set_data_full (G_OBJECT (widget), "gtk-shortcut-manager-bubble", model, g_object_unref);
   controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (model));
-  gtk_event_controller_set_name (controller, "gtk-shortcut-manager-bubble");
+  gtk_event_controller_set_static_name (controller, "gtk-shortcut-manager-bubble");
   gtk_widget_add_controller (widget, controller);
 
   model = gtk_flatten_list_model_new (G_LIST_MODEL (g_list_store_new (GTK_TYPE_SHORTCUT_CONTROLLER)));
   g_object_set_data_full (G_OBJECT (widget), "gtk-shortcut-manager-capture", model, g_object_unref);
   controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (model));
-  gtk_event_controller_set_name (controller, "gtk-shortcut-manager-capture");
+  gtk_event_controller_set_static_name (controller, "gtk-shortcut-manager-capture");
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   gtk_widget_add_controller (widget, controller);
 }

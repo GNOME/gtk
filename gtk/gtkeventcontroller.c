@@ -66,6 +66,7 @@ struct _GtkEventControllerPrivate
   char *name;
   GtkWidget *target;
   GdkEvent *event;
+  unsigned int name_is_static : 1;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkEventController, gtk_event_controller, G_TYPE_OBJECT)
@@ -173,8 +174,9 @@ gtk_event_controller_finalize (GObject *object)
 {
   GtkEventController *self = GTK_EVENT_CONTROLLER (object);
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
-  
-  g_free (priv->name);
+
+  if (!priv->name_is_static)
+    g_free (priv->name);
 
   G_OBJECT_CLASS (gtk_event_controller_parent_class)->finalize (object);
 }
@@ -571,8 +573,33 @@ gtk_event_controller_set_name (GtkEventController *controller,
 
   g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
 
-  g_free (priv->name);
+  if (!priv->name_is_static)
+    g_free (priv->name);
   priv->name = g_strdup (name);
+  priv->name_is_static = FALSE;
+}
+
+/**
+ * gtk_event_controller_set_static_name:
+ * @controller: a `GtkEventController`
+ * @name: (nullable): a name for @controller, must be a static string
+ *
+ * Sets a name on the controller that can be used for debugging.
+ *
+ * Since: 4.8
+ */
+void
+gtk_event_controller_set_static_name (GtkEventController *controller,
+                                      const char         *name)
+{
+  GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (controller);
+
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  if (!priv->name_is_static)
+    g_free (priv->name);
+  priv->name = (char *)name;
+  priv->name_is_static = TRUE;
 }
 
 GtkWidget *

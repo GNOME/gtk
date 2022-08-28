@@ -1856,7 +1856,7 @@ gtk_text_init (GtkText *self)
   GTK_TEXT_CONTENT (priv->selection_content)->self = self;
 
   target = gtk_drop_target_new (G_TYPE_STRING, GDK_ACTION_COPY | GDK_ACTION_MOVE);
-  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (target), "gtk-text-drop-target");
+  gtk_event_controller_set_static_name (GTK_EVENT_CONTROLLER (target), "gtk-text-drop-target");
   g_signal_connect (target, "accept", G_CALLBACK (gtk_text_drag_accept), self);
   g_signal_connect (target, "enter", G_CALLBACK (gtk_text_drag_motion), self);
   g_signal_connect (target, "motion", G_CALLBACK (gtk_text_drag_motion), self);
@@ -1881,7 +1881,7 @@ gtk_text_init (GtkText *self)
                     G_CALLBACK (gtk_text_delete_surrounding_cb), self);
 
   priv->drag_gesture = gtk_gesture_drag_new ();
-  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (priv->drag_gesture), "gtk-text-drag-gesture");
+  gtk_event_controller_set_static_name (GTK_EVENT_CONTROLLER (priv->drag_gesture), "gtk-text-drag-gesture");
   g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_text_drag_gesture_update), self);
   g_signal_connect (priv->drag_gesture, "drag-end",
@@ -1891,7 +1891,7 @@ gtk_text_init (GtkText *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (priv->drag_gesture));
 
   gesture = gtk_gesture_click_new ();
-  gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (gesture), "gtk-text-click-gesture");
+  gtk_event_controller_set_static_name (GTK_EVENT_CONTROLLER (gesture), "gtk-text-click-gesture");
   g_signal_connect (gesture, "pressed",
                     G_CALLBACK (gtk_text_click_gesture_pressed), self);
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
@@ -1899,14 +1899,14 @@ gtk_text_init (GtkText *self)
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   controller = gtk_event_controller_motion_new ();
-  gtk_event_controller_set_name (controller, "gtk-text-motion-controller");
+  gtk_event_controller_set_static_name (controller, "gtk-text-motion-controller");
   g_signal_connect (controller, "motion",
                     G_CALLBACK (gtk_text_motion_controller_motion), self);
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 
   priv->key_controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (priv->key_controller, GTK_PHASE_TARGET);
-  gtk_event_controller_set_name (priv->key_controller, "gtk-text-key-controller");
+  gtk_event_controller_set_static_name (priv->key_controller, "gtk-text-key-controller");
   g_signal_connect (priv->key_controller, "key-pressed",
                     G_CALLBACK (gtk_text_key_controller_key_pressed), self);
   g_signal_connect_swapped (priv->key_controller, "im-update",
@@ -1916,7 +1916,7 @@ gtk_text_init (GtkText *self)
   gtk_widget_add_controller (GTK_WIDGET (self), priv->key_controller);
 
   priv->focus_controller = gtk_event_controller_focus_new ();
-  gtk_event_controller_set_name (priv->focus_controller, "gtk-text-focus-controller");
+  gtk_event_controller_set_static_name (priv->focus_controller, "gtk-text-focus-controller");
   g_signal_connect (priv->focus_controller, "notify::is-focus",
                     G_CALLBACK (gtk_text_focus_changed), self);
   gtk_widget_add_controller (GTK_WIDGET (self), priv->focus_controller);

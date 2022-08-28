@@ -588,7 +588,7 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
       GtkGesture *gesture;
 
       gesture = gtk_gesture_click_new ();
-      gtk_event_controller_set_name (GTK_EVENT_CONTROLLER (gesture), "wayland-im-context-click");
+      gtk_event_controller_set_static_name (GTK_EVENT_CONTROLLER (gesture), "wayland-im-context-click");
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                                   GTK_PHASE_CAPTURE);
       g_signal_connect (gesture, "pressed",
