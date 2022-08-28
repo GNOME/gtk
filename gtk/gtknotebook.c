@@ -2605,6 +2605,7 @@ gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
   if (arrow != ARROW_NONE)
     {
       gtk_notebook_arrow_button_press (notebook, arrow, button);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
       return;
     }
 
