@@ -595,7 +595,7 @@ struct _GtkSignalAction
 {
   GtkShortcutAction parent_instance;
 
-  char *name;
+  const char *name; /* interned */
 };
 
 struct _GtkSignalActionClass
@@ -616,9 +616,7 @@ G_DEFINE_TYPE (GtkSignalAction, gtk_signal_action, GTK_TYPE_SHORTCUT_ACTION)
 static void
 gtk_signal_action_finalize (GObject *gobject)
 {
-  GtkSignalAction *self = GTK_SIGNAL_ACTION (gobject);
-
-  g_free (self->name);
+  //GtkSignalAction *self = GTK_SIGNAL_ACTION (gobject);
 
   G_OBJECT_CLASS (gtk_signal_action_parent_class)->finalize (gobject);
 }
@@ -899,7 +897,7 @@ gtk_signal_action_set_property (GObject      *gobject,
   switch (prop_id)
     {
     case SIGNAL_PROP_SIGNAL_NAME:
-      self->name = g_value_dup_string (value);
+      self->name = g_intern_string (g_value_get_string (value));
       break;
 
     default:
@@ -974,11 +972,21 @@ gtk_signal_action_init (GtkSignalAction *self)
 GtkShortcutAction *
 gtk_signal_action_new (const char *signal_name)
 {
+  GtkShortcutAction *action;
+  const char *name = "signal-name";
+  GValue value = G_VALUE_INIT;
+
   g_return_val_if_fail (signal_name != NULL, NULL);
 
-  return g_object_new (GTK_TYPE_SIGNAL_ACTION,
-                       "signal-name", signal_name,
-                       NULL);
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_static_string (&value, signal_name);
+
+  action = GTK_SHORTCUT_ACTION (g_object_new_with_properties (GTK_TYPE_SIGNAL_ACTION,
+                                                              1, &name, &value));
+
+  g_value_unset (&value);
+
+  return action;
 }
 
 /**
