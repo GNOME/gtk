@@ -2674,6 +2674,7 @@ gtk_text_do_popup (GtkText *self,
       model = gtk_text_get_menu_model (self);
       priv->popup_menu = gtk_popover_menu_new_from_model (model);
       gtk_widget_set_parent (priv->popup_menu, GTK_WIDGET (self));
+      g_signal_connect_swapped (priv->popup_menu, "hide", G_CALLBACK (gtk_text_grab_focus_without_selecting), self);
       gtk_popover_set_position (GTK_POPOVER (priv->popup_menu), GTK_POS_BOTTOM);
 
       gtk_popover_set_has_arrow (GTK_POPOVER (priv->popup_menu), FALSE);
