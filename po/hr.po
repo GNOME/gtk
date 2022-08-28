@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-26 22:11+0000\n"
-"PO-Revision-Date: 2022-08-27 22:17+0200\n"
+"POT-Creation-Date: 2022-08-27 20:18+0000\n"
+"PO-Revision-Date: 2022-08-28 16:40+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -979,11 +979,11 @@ msgstr "GNU Opća Javna Licenca, inačice 3 ili novija"
 
 #: gtk/gtkaboutdialog.c:128
 msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr "GNU Sažeta Opća Javna Licenca, inačice 2.1 ili novija"
+msgstr "GNU Manja Opća Javna Licenca, inačice 2.1 ili novija"
 
 #: gtk/gtkaboutdialog.c:129
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr "GNU Sažeta Opća Javna Licenca, inačice 3 ili novija"
+msgstr "GNU Manja Opća Javna Licenca, inačice 3 ili novija"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "BSD 2-Clause License"
@@ -1007,11 +1007,11 @@ msgstr "GNU Opća Javna Licenca, samo inačica 3"
 
 #: gtk/gtkaboutdialog.c:135
 msgid "GNU Lesser General Public License, version 2.1 only"
-msgstr "GNU Sažeta Opća Javna Licenca, samo inačica 2.1"
+msgstr "GNU Manja Opća Javna Licenca, samo inačica 2.1"
 
 #: gtk/gtkaboutdialog.c:136
 msgid "GNU Lesser General Public License, version 3 only"
-msgstr "GNU Sažeta Opća Javna Licenca, samo inačica 3"
+msgstr "GNU Manja Opća Javna Licenca, samo inačica 3"
 
 #: gtk/gtkaboutdialog.c:137
 msgid "GNU Affero General Public License, version 3 or later"
