@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-01 11:32+0000\n"
-"PO-Revision-Date: 2022-03-01 13:41+0100\n"
+"POT-Creation-Date: 2022-08-26 18:50+0000\n"
+"PO-Revision-Date: 2022-08-28 16:42+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "Repor4-Msgid-Bugs-To: \n"
 "X-Launchpad-Export-Date: 2017-04-10 20:36+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -1443,11 +1443,11 @@ msgstr "GNU Opća Javna Licenca, inačice 3 ili novija"
 
 #: gtk/gtkaboutdialog.c:118
 msgid "GNU Lesser General Public License, version 2.1 or later"
-msgstr "GNU Sažeta Opća Javna Licenca, inačice 2.1 ili novija"
+msgstr "GNU Manja Opća Javna Licenca, inačice 2.1 ili novija"
 
 #: gtk/gtkaboutdialog.c:119
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr "GNU Sažeta Opća Javna Licenca, inačice 3 ili novija"
+msgstr "GNU Manja Opća Javna Licenca, inačice 3 ili novija"
 
 #: gtk/gtkaboutdialog.c:120
 msgid "BSD 2-Clause License"
@@ -1471,11 +1471,11 @@ msgstr "GNU Opća Javna Licenca, samo inačica 3"
 
 #: gtk/gtkaboutdialog.c:125
 msgid "GNU Lesser General Public License, version 2.1 only"
-msgstr "GNU Sažeta Opća Javna Licenca, samo inačica 2.1"
+msgstr "GNU Manja Opća Javna Licenca, samo inačica 2.1"
 
 #: gtk/gtkaboutdialog.c:126
 msgid "GNU Lesser General Public License, version 3 only"
-msgstr "GNU Sažeta Opća Javna Licenca, samo inačica 3"
+msgstr "GNU Manja Opća Javna Licenca, samo inačica 3"
 
 #: gtk/gtkaboutdialog.c:127
 msgid "GNU Affero General Public License, version 3 or later"
@@ -7752,7 +7752,7 @@ msgid "Vietnamese (VIQR)"
 msgstr "Vijetnamski (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:105
+#: modules/input/imwayland.c:106
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
