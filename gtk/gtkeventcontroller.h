@@ -68,6 +68,9 @@ const char *        gtk_event_controller_get_name              (GtkEventControll
 GDK_AVAILABLE_IN_ALL
 void                gtk_event_controller_set_name              (GtkEventController *controller,
                                                                 const char         *name);
+GDK_AVAILABLE_IN_4_8
+void                gtk_event_controller_set_static_name       (GtkEventController *controller,
+                                                                const char         *name);
 
 GDK_AVAILABLE_IN_ALL
 GdkEvent *          gtk_event_controller_get_current_event    (GtkEventController *controller);
