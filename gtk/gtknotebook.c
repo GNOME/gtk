@@ -6774,6 +6774,7 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
 
   gtk_widget_insert_after (page->tab_widget, notebook->tabs_widget, sibling);
 
+  update_arrow_state (notebook);
   gtk_notebook_update_labels (notebook);
   gtk_widget_queue_allocate (notebook->tabs_widget);
 }
