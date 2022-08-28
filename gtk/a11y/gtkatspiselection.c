@@ -864,7 +864,7 @@ notebook_handle_method (GDBusConnection       *connection,
 
       for (child = gtk_widget_get_first_child (widget);
            child;
-           child = gtk_widget_get_next_sibling (widget))
+           child = gtk_widget_get_next_sibling (child))
         {
           /* skip actions */
           if (gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (child)) != GTK_ACCESSIBLE_ROLE_TAB)
