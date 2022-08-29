@@ -2002,11 +2002,13 @@ update_feature_label (GtkFontChooserWidget *fontchooser,
   unsigned int script_index, lang_index, feature_index;
   hb_ot_name_id_t label_id, first_param_id;
   unsigned int num_params;
+  const char *feat[] = { "salt", "swsh", "nalt", NULL };
 
   hb_face = hb_font_get_face (hb_font);
 
-  if (!(g_str_has_prefix (item->name, "ss") || g_str_has_prefix (item->name, "cv")) ||
-      !g_ascii_isdigit (item->name[2]) || !g_ascii_isdigit (item->name[3]))
+  if (!g_strv_contains (feat, item->name) &&
+      (!(g_str_has_prefix (item->name, "ss") || g_str_has_prefix (item->name, "cv")) ||
+       !g_ascii_isdigit (item->name[2]) || !g_ascii_isdigit (item->name[3])))
     return;
 
   hb_ot_layout_table_find_script (hb_face, HB_OT_TAG_GSUB, script_tag, &script_index);
@@ -2015,31 +2017,30 @@ update_feature_label (GtkFontChooserWidget *fontchooser,
   hb_ot_layout_script_find_language (hb_face, HB_OT_TAG_GSUB, script_index, lang_tag, &lang_index);
   G_GNUC_END_IGNORE_DEPRECATIONS
 
-  if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, item->tag, &feature_index) &&
-      hb_ot_layout_feature_get_name_ids (hb_face, HB_OT_TAG_GSUB, feature_index, &label_id, NULL, NULL, &num_params, &first_param_id))
+  if (hb_ot_layout_language_find_feature (hb_face, HB_OT_TAG_GSUB, script_index, lang_index, item->tag, &feature_index))
     {
-      if (label_id != HB_OT_NAME_ID_INVALID)
+      char *label;
+
+      if (!hb_ot_layout_feature_get_name_ids (hb_face, HB_OT_TAG_GSUB, feature_index, &label_id, NULL, NULL, &num_params, &first_param_id))
         {
-          char *label = get_name (hb_face, label_id);
-          if (GTK_IS_CHECK_BUTTON (item->feat))
-            gtk_check_button_set_label (GTK_CHECK_BUTTON (item->feat), label);
-          else
-            {
-              GtkWidget *l = gtk_widget_get_prev_sibling (item->feat);
-              gtk_label_set_label (GTK_LABEL (l), label);
-            }
-          g_free (label);
+          label_id = HB_OT_NAME_ID_INVALID;
+          num_params = 0;
         }
+
+      if (label_id != HB_OT_NAME_ID_INVALID)
+        label = get_name (hb_face, label_id);
+      else
+        label = get_feature_display_name (item->tag);
+
+      if (GTK_IS_CHECK_BUTTON (item->feat))
+        gtk_check_button_set_label (GTK_CHECK_BUTTON (item->feat), label);
       else
         {
-          if (GTK_IS_CHECK_BUTTON (item->feat))
-            gtk_check_button_set_label (GTK_CHECK_BUTTON (item->feat), item->name);
-          else
-            {
-              GtkWidget *l = gtk_widget_get_prev_sibling (item->feat);
-              gtk_label_set_label (GTK_LABEL (l), item->name);
-            }
+          GtkWidget *l = gtk_widget_get_prev_sibling (item->feat);
+          gtk_label_set_label (GTK_LABEL (l), label);
         }
+
+      g_free (label);
 
       if (GTK_IS_DROP_DOWN (item->feat))
         {
@@ -2130,9 +2131,9 @@ update_feature_example (GtkFontChooserWidget *fontchooser,
                         PangoFontDescription *font_desc)
 {
   const char *letter_case[] = { "smcp", "c2sc", "pcap", "c2pc", "unic", "cpsp", "case", NULL };
-  const char *number_case[] = { "xxxx", "lnum", "onum", NULL };
-  const char *number_spacing[] = { "xxxx", "pnum", "tnum", NULL };
-  const char *fraction[] = { "xxxx", "frac", "afrc", NULL };
+  const char *number_case[] = { "xxnc", "lnum", "onum", NULL };
+  const char *number_spacing[] = { "xxns", "pnum", "tnum", NULL };
+  const char *fraction[] = { "xxnf", "frac", "afrc", NULL };
   const char *char_variants[] = {
     "zero", "nalt",
     "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
@@ -2189,8 +2190,6 @@ update_feature_example (GtkFontChooserWidget *fontchooser,
         input = g_strdup ("AaBbCc…");
       else if (strcmp (item->name, "zero") == 0)
         input = g_strdup ("0");
-      else if (strcmp (item->name, "nalt") == 0)
-        input = find_affected_text (fontchooser, item->tag, hb_font, script_tag, lang_tag, 3);
       else
         input = find_affected_text (fontchooser, item->tag, hb_font, script_tag, lang_tag, 10);
 
@@ -2346,15 +2345,18 @@ add_enum_group (GtkFontChooserWidget  *fontchooser,
   gtk_grid_set_row_spacing (GTK_GRID (group), 6);
   gtk_grid_set_column_spacing (GTK_GRID (group), 12);
 
-  label = gtk_label_new (title);
-  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
-  gtk_widget_set_halign (label, GTK_ALIGN_START);
-  g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
-  gtk_label_set_attributes (GTK_LABEL (label), attrs);
-  pango_attr_list_unref (attrs);
-  gtk_grid_attach (GTK_GRID (group), label, 0, -1, 3, 1);
+  if (title)
+    {
+      label = gtk_label_new (title);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      g_object_set (label, "margin-top", 10, "margin-bottom", 10, NULL);
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+      gtk_label_set_attributes (GTK_LABEL (label), attrs);
+      pango_attr_list_unref (attrs);
+      gtk_grid_attach (GTK_GRID (group), label, 0, -1, 3, 1);
+    }
 
   for (i = 0; i < n_tags; i++)
     {
@@ -2472,14 +2474,16 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
 {
   const char *ligatures[] = { "liga", "dlig", "hlig", "clig" };
   const char *letter_case[] = { "smcp", "c2sc", "pcap", "c2pc", "unic", "cpsp", "case" };
-  const char *number_case[] = { "xxxx", "lnum", "onum" };
-  const char *number_spacing[] = { "xxxx", "pnum", "tnum" };
-  const char *fractions[] = { "xxxx", "frac", "afrc" };
+  const char *number_case[] = { "xxnc", "lnum", "onum" };
+  const char *number_spacing[] = { "xxns", "pnum", "tnum" };
+  const char *fractions[] = { "xxnf", "frac", "afrc" };
   const char *style_variants[] = {
-    "zero", "nalt",
-    "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
+    "zero", "cswh", "calt", "falt", "hist", "jalt", "titl", "rand",
     "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
     "ss11", "ss12", "ss13", "ss14", "ss15", "ss16", "ss17", "ss18", "ss19", "ss20",
+  };
+  const char *style_variants2[] = {
+    "swsh", "salt", "nalt"
   };
   const char *char_variants[] = {
     "cv01", "cv02", "cv03", "cv04", "cv05", "cv06", "cv07", "cv08", "cv09", "cv10",
@@ -2500,6 +2504,7 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
   add_radio_group (fontchooser, _("Number Spacing"), number_spacing, G_N_ELEMENTS (number_spacing));
   add_radio_group (fontchooser, _("Fractions"), fractions, G_N_ELEMENTS (fractions));
   add_check_group (fontchooser, _("Style Variations"), style_variants, G_N_ELEMENTS (style_variants));
+  add_enum_group (fontchooser, NULL, style_variants2, G_N_ELEMENTS (style_variants2));
   add_enum_group (fontchooser, _("Character Variations"), char_variants, G_N_ELEMENTS (char_variants));
 
   update_font_features (fontchooser);
@@ -2581,6 +2586,13 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
           for (l = fontchooser->feature_items; l; l = l->next)
             {
               FeatureItem *item = l->data;
+
+              if (strncmp (item->name, "xx", 2) == 0)
+                {
+                  update_feature_example (fontchooser, item, hb_font, script_tag, lang_tag, fontchooser->font_desc);
+                  continue;
+                }
+
               if (item->tag != features[j])
                 continue;
 
@@ -2647,7 +2659,7 @@ update_font_features (GtkFontChooserWidget *fontchooser)
       if (GTK_IS_CHECK_BUTTON (item->feat) && g_object_get_data (G_OBJECT (item->feat), "default"))
         {
           if (gtk_check_button_get_active (GTK_CHECK_BUTTON (item->feat)) &&
-              strcmp (item->name, "xxxx") != 0)
+              strncmp (item->name, "xx", 2) != 0)
             {
               hb_feature_to_string (&(hb_feature_t) { item->tag, 1, 0, -1 }, buf, sizeof (buf));
               if (s->len > 0)
