@@ -316,6 +316,7 @@ entry {
 
     > text > placeholder {
       @extend .dim-label;
+      @if $contrast == 'high' { font-style: italic; }
     }
 
     > text > block-cursor {
