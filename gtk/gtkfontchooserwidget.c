@@ -2091,7 +2091,7 @@ update_feature_label (GtkFontChooserWidget *fontchooser,
             }
 
           strings = gtk_string_list_new (NULL);
-          gtk_string_list_append (strings, C_("Font feature value", "None"));
+          gtk_string_list_append (strings, C_("Font feature value", "Default"));
           for (unsigned int i = 0; i < num_params; i++)
             {
               char *name;
