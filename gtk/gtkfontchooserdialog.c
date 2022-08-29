@@ -181,6 +181,7 @@ setup_tweak_button (GtkFontChooserDialog *dialog)
       gtk_widget_set_focus_on_click (button, FALSE);
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       gtk_button_set_icon_name (GTK_BUTTON (button), "emblem-system-symbolic");
+      gtk_widget_set_tooltip_text (button, _("Change Font Features"));
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);

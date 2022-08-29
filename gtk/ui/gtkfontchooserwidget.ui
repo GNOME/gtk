@@ -185,7 +185,7 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="preview">
-                                <property name="placeholder-text" translatable="yes">Preview text</property>
+                                <property name="tooltip-text" translatable="yes">Preview Font</property>
                                 <child>
                                   <object class="GtkEventControllerScroll">
                                     <property name="flags" translatable="yes">horizontal</property>
@@ -321,7 +321,7 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="preview2">
-                    <property name="placeholder-text" translatable="yes">Preview text</property>
+                    <property name="tooltip-text" translatable="yes">Preview Font</property>
                     <property name="text" bind-source="preview" bind-property="text" bind-flags="bidirectional"/>
                     <property name="attributes" bind-source="preview" bind-property="attributes" bind-flags="bidirectional"/>
                   </object>
