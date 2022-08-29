@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-26 22:11+0000\n"
-"PO-Revision-Date: 2022-08-27 12:55+0300\n"
+"POT-Creation-Date: 2022-08-29 18:55+0000\n"
+"PO-Revision-Date: 2022-08-29 22:14+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2446,6 +2446,10 @@ msgctxt "font"
 msgid "None"
 msgstr "Немає"
 
+#: gtk/gtkfontchooserdialog.c:184
+msgid "Change Font Features"
+msgstr "Змінити властивості шрифту"
+
 #: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
 msgid "Width"
@@ -2471,51 +2475,46 @@ msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Оптичний розмір"
 
-#: gtk/gtkfontchooserwidget.c:2093
-#| msgctxt "font"
-#| msgid "None"
+#: gtk/gtkfontchooserwidget.c:2094
+#| msgid "Default"
 msgctxt "Font feature value"
-msgid "None"
-msgstr "Немає"
+msgid "Default"
+msgstr "Типове"
 
-#: gtk/gtkfontchooserwidget.c:2110
-#| msgid "Enabled"
+#: gtk/gtkfontchooserwidget.c:2111
 msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: gtk/gtkfontchooserwidget.c:2437
+#: gtk/gtkfontchooserwidget.c:2439
 msgid "Default"
 msgstr "Типово"
 
-#: gtk/gtkfontchooserwidget.c:2497
+#: gtk/gtkfontchooserwidget.c:2501
 msgid "Ligatures"
 msgstr "Лігатури"
 
-#: gtk/gtkfontchooserwidget.c:2498
+#: gtk/gtkfontchooserwidget.c:2502
 msgid "Letter Case"
 msgstr "Розмір літер"
 
-#: gtk/gtkfontchooserwidget.c:2499
+#: gtk/gtkfontchooserwidget.c:2503
 msgid "Number Case"
 msgstr "Розмір цифр"
 
-#: gtk/gtkfontchooserwidget.c:2500
+#: gtk/gtkfontchooserwidget.c:2504
 msgid "Number Spacing"
 msgstr "Інтервали між цифрами"
 
-#: gtk/gtkfontchooserwidget.c:2501
-#| msgctxt "OpenType layout"
-#| msgid "Fractions"
+#: gtk/gtkfontchooserwidget.c:2505
 msgid "Fractions"
 msgstr "Дроби"
 
-#: gtk/gtkfontchooserwidget.c:2502
+#: gtk/gtkfontchooserwidget.c:2506
 msgid "Style Variations"
 msgstr "Варіанти стилів"
 
-#: gtk/gtkfontchooserwidget.c:2503
-#| msgid "Character Variants"
+#: gtk/gtkfontchooserwidget.c:2508
 msgid "Character Variations"
 msgstr "Варіанти символів"
 
@@ -2768,19 +2767,19 @@ msgstr ""
 msgid "Tab list"
 msgstr "Список вкладок"
 
-#: gtk/gtknotebook.c:3213
+#: gtk/gtknotebook.c:3214
 msgid "Previous tab"
 msgstr "Попередня вкладка"
 
-#: gtk/gtknotebook.c:3217
+#: gtk/gtknotebook.c:3218
 msgid "Next tab"
 msgstr "Наступна вкладка"
 
-#: gtk/gtknotebook.c:4037
+#: gtk/gtknotebook.c:4038
 msgid "Tab"
 msgstr "Вкладка"
 
-#: gtk/gtknotebook.c:4335 gtk/gtknotebook.c:6543
+#: gtk/gtknotebook.c:4336 gtk/gtknotebook.c:6544
 #, c-format
 msgid "Page %u"
 msgstr "Сторінка %u"
@@ -6146,8 +6145,9 @@ msgid "Language"
 msgstr "Мова"
 
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
-msgid "Preview text"
-msgstr "Перегляд тексту"
+#| msgid "Preview text"
+msgid "Preview Font"
+msgstr "Перегляд шрифту"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
 msgid "horizontal"
@@ -7346,6 +7346,12 @@ msgstr ""
 "Немає індексного файла теми в «%s».\n"
 "Якщо ви дійсно бажаєте створити тут кеш значків, використовуйте --ignore-"
 "theme-index.\n"
+
+#~| msgctxt "font"
+#~| msgid "None"
+#~ msgctxt "Font feature value"
+#~ msgid "None"
+#~ msgstr "Немає"
 
 #~ msgid "Number Formatting"
 #~ msgstr "Форматування чисел"
