@@ -56,9 +56,6 @@
   </enum>
 
   <schema id='org.gtk.gtk4.Settings.FileChooser' path='/org/gtk/gtk4/settings/file-chooser/'>
-    <key name='last-folder-uri' type='s'>
-      <default>""</default>
-    </key>
     <key name='location-mode' enum='org.gtk.gtk4.Settings.FileChooser.LocationMode'>
       <default>'path-bar'</default>
       <summary>Location mode</summary>
