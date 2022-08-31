@@ -10070,7 +10070,6 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
 
       gtk_widget_set_parent (chooser, GTK_WIDGET (text_view));
       g_signal_connect (chooser, "emoji-picked", G_CALLBACK (emoji_picked), text_view);
-      g_signal_connect_swapped (chooser, "hide", G_CALLBACK (gtk_widget_grab_focus), text_view);
     }
 
   buffer = get_buffer (text_view);

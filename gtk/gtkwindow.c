@@ -59,6 +59,7 @@
 #include "gtkshortcuttrigger.h"
 #include "gtksizerequest.h"
 #include "gtksnapshot.h"
+#include "gtktext.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
@@ -5130,11 +5131,22 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *child;
+  GtkWidget *child, *parent;
 
   child = priv->focus_widget;
   if (child && (child == widget || gtk_widget_is_ancestor (child, widget)))
-    priv->move_focus = TRUE;
+    {
+      parent = gtk_widget_get_parent (widget);
+      if (parent && gtk_widget_get_focusable (parent))
+        {
+          if (GTK_IS_TEXT (parent))
+            gtk_text_grab_focus_without_selecting (GTK_TEXT (parent));
+          else
+            gtk_widget_grab_focus (parent);
+        }
+      else
+        priv->move_focus = TRUE;
+    }
 
   child = priv->default_widget;
   if (child && (child == widget || gtk_widget_is_ancestor (child, widget)))
