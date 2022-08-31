@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-26 22:11+0000\n"
-"PO-Revision-Date: 2022-08-27 10:01+0430\n"
+"POT-Creation-Date: 2022-08-29 18:55+0000\n"
+"PO-Revision-Date: 2022-08-31 17:14+0430\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -2391,6 +2391,10 @@ msgctxt "font"
 msgid "None"
 msgstr "هیچ‌کدام"
 
+#: gtk/gtkfontchooserdialog.c:184
+msgid "Change Font Features"
+msgstr "تغییر ویژگی‌های قلم"
+
 #: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
 msgid "Width"
@@ -2416,46 +2420,45 @@ msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "اندازهٔ نوری"
 
-# farmaan
-#: gtk/gtkfontchooserwidget.c:2093
+#: gtk/gtkfontchooserwidget.c:2094
 msgctxt "Font feature value"
-msgid "None"
-msgstr "هیچ"
+msgid "Default"
+msgstr "پیش‌گزیده"
 
-#: gtk/gtkfontchooserwidget.c:2110
+#: gtk/gtkfontchooserwidget.c:2111
 msgctxt "Font feature value"
 msgid "Enable"
 msgstr "به کار انداختن"
 
-#: gtk/gtkfontchooserwidget.c:2437
+#: gtk/gtkfontchooserwidget.c:2439
 msgid "Default"
 msgstr "پیش‌گزیده"
 
-#: gtk/gtkfontchooserwidget.c:2497
+#: gtk/gtkfontchooserwidget.c:2501
 msgid "Ligatures"
 msgstr "جایگزین‌ها"
 
-#: gtk/gtkfontchooserwidget.c:2498
+#: gtk/gtkfontchooserwidget.c:2502
 msgid "Letter Case"
 msgstr "حالت حرف"
 
-#: gtk/gtkfontchooserwidget.c:2499
+#: gtk/gtkfontchooserwidget.c:2503
 msgid "Number Case"
 msgstr "حالت عدد"
 
-#: gtk/gtkfontchooserwidget.c:2500
+#: gtk/gtkfontchooserwidget.c:2504
 msgid "Number Spacing"
 msgstr "فاصله‌گذاری عدد"
 
-#: gtk/gtkfontchooserwidget.c:2501
+#: gtk/gtkfontchooserwidget.c:2505
 msgid "Fractions"
 msgstr "کسرها"
 
-#: gtk/gtkfontchooserwidget.c:2502
+#: gtk/gtkfontchooserwidget.c:2506
 msgid "Style Variations"
 msgstr "دگرگونه‌های سبک"
 
-#: gtk/gtkfontchooserwidget.c:2503
+#: gtk/gtkfontchooserwidget.c:2508
 msgid "Character Variations"
 msgstr "دگرگونه‌های نویسه"
 
@@ -2706,19 +2709,19 @@ msgstr "GTK نتوانست پیمانه‌ٔ رسانه‌ای بیابد. نص�
 msgid "Tab list"
 msgstr "فهرست زبانه"
 
-#: gtk/gtknotebook.c:3213
+#: gtk/gtknotebook.c:3214
 msgid "Previous tab"
 msgstr "زبانهٔ پیشین"
 
-#: gtk/gtknotebook.c:3217
+#: gtk/gtknotebook.c:3218
 msgid "Next tab"
 msgstr "_زبانهٔ بعدی"
 
-#: gtk/gtknotebook.c:4037
+#: gtk/gtknotebook.c:4038
 msgid "Tab"
 msgstr "جهش"
 
-#: gtk/gtknotebook.c:4335 gtk/gtknotebook.c:6543
+#: gtk/gtknotebook.c:4336 gtk/gtknotebook.c:6544
 #, c-format
 msgid "Page %u"
 msgstr "صفحهٔ %Iu"
@@ -6076,8 +6079,8 @@ msgid "Language"
 msgstr "زبان"
 
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
-msgid "Preview text"
-msgstr "متن پیش‌نمایش"
+msgid "Preview Font"
+msgstr "پیش‌نمایش قلم"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
 msgid "horizontal"
@@ -7272,6 +7275,11 @@ msgstr ""
 "پروندهٔ نمایهٔ زمینه در «%s» نیست.\n"
 "اگر به‌راستی می‌خواهید این‌جا انبارهٔ نقشکی ایجاد کنید، از ‪--ignore-theme-index‬ "
 "استفاده کنید.\n"
+
+# farmaan
+#~ msgctxt "Font feature value"
+#~ msgid "None"
+#~ msgstr "هیچ"
 
 #~ msgid "Number Formatting"
 #~ msgstr "قالب‌بندی عدد"
