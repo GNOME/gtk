@@ -2605,6 +2605,7 @@ gtk_notebook_gesture_pressed (GtkGestureClick *gesture,
   if (arrow != ARROW_NONE)
     {
       gtk_notebook_arrow_button_press (notebook, arrow, button);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
       return;
     }
 
@@ -6810,6 +6811,7 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
 
   gtk_widget_insert_after (page->tab_widget, notebook->tabs_widget, sibling);
 
+  update_arrow_state (notebook);
   gtk_notebook_update_labels (notebook);
   gtk_widget_queue_allocate (notebook->tabs_widget);
 }
