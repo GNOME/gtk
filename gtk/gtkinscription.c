@@ -795,6 +795,11 @@ gtk_inscription_set_text (GtkInscription *self,
   g_free (self->text);
   self->text = g_strdup (text);
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                 GTK_ACCESSIBLE_PROPERTY_LABEL, self->text,
+                                 -1);
+
+
   pango_layout_set_text (self->layout,
                          self->text ? self->text : "",
                          -1);
