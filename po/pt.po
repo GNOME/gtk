@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-26 22:11+0000\n"
-"PO-Revision-Date: 2022-08-28 14:13+0100\n"
+"POT-Creation-Date: 2022-09-01 12:34+0000\n"
+"PO-Revision-Date: 2022-09-01 18:18+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Português <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -2436,12 +2436,16 @@ msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:506 gtk/gtkfontbutton.c:620
 msgid "Pick a Font"
-msgstr "Escolha uma letra"
+msgstr "Escolha um tipo de letra"
 
 #: gtk/gtkfontbutton.c:1323
 msgctxt "font"
 msgid "None"
 msgstr "Nenhuma"
+
+#: gtk/gtkfontchooserdialog.c:184
+msgid "Change Font Features"
+msgstr "Alterar funcionalidades do tipo de letra"
 
 #: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
@@ -2468,45 +2472,45 @@ msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Tamanho ótico"
 
-#: gtk/gtkfontchooserwidget.c:2093
+#: gtk/gtkfontchooserwidget.c:2094
 msgctxt "Font feature value"
-msgid "None"
-msgstr "Nenhuma"
+msgid "Default"
+msgstr "Predefinição"
 
-#: gtk/gtkfontchooserwidget.c:2110
+#: gtk/gtkfontchooserwidget.c:2111
 msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Ativar"
 
-#: gtk/gtkfontchooserwidget.c:2437
+#: gtk/gtkfontchooserwidget.c:2439
 msgid "Default"
 msgstr "Predefinição"
 
-#: gtk/gtkfontchooserwidget.c:2497
+#: gtk/gtkfontchooserwidget.c:2501
 msgid "Ligatures"
 msgstr "Ligaduras"
 
-#: gtk/gtkfontchooserwidget.c:2498
+#: gtk/gtkfontchooserwidget.c:2502
 msgid "Letter Case"
 msgstr "Letra maiúscula/minúscula"
 
-#: gtk/gtkfontchooserwidget.c:2499
+#: gtk/gtkfontchooserwidget.c:2503
 msgid "Number Case"
 msgstr "Número maiúsculo/minúsculo"
 
-#: gtk/gtkfontchooserwidget.c:2500
+#: gtk/gtkfontchooserwidget.c:2504
 msgid "Number Spacing"
 msgstr "Espaçamento de número"
 
-#: gtk/gtkfontchooserwidget.c:2501
+#: gtk/gtkfontchooserwidget.c:2505
 msgid "Fractions"
 msgstr "Frações"
 
-#: gtk/gtkfontchooserwidget.c:2502
+#: gtk/gtkfontchooserwidget.c:2506
 msgid "Style Variations"
 msgstr "Variações de estilo"
 
-#: gtk/gtkfontchooserwidget.c:2503
+#: gtk/gtkfontchooserwidget.c:2508
 msgid "Character Variations"
 msgstr "Variações de caracteres"
 
@@ -2759,19 +2763,19 @@ msgstr ""
 msgid "Tab list"
 msgstr "Lista de separadores"
 
-#: gtk/gtknotebook.c:3213
+#: gtk/gtknotebook.c:3214
 msgid "Previous tab"
 msgstr "Separador anterior"
 
-#: gtk/gtknotebook.c:3217
+#: gtk/gtknotebook.c:3218
 msgid "Next tab"
 msgstr "Separador seguinte"
 
-#: gtk/gtknotebook.c:4037
+#: gtk/gtknotebook.c:4038
 msgid "Tab"
 msgstr "Separador"
 
-#: gtk/gtknotebook.c:4335 gtk/gtknotebook.c:6543
+#: gtk/gtknotebook.c:4336 gtk/gtknotebook.c:6544
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -6109,7 +6113,7 @@ msgstr "Criar pasta"
 
 #: gtk/ui/gtkfilechooserwidget.ui:249
 msgid "Remote location — only searching the current folder"
-msgstr "Localização remota — procura só na pasta atual"
+msgstr "Localização remota — procurar apenas na pasta atual"
 
 #: gtk/ui/gtkfilechooserwidget.ui:378
 msgid "Folder Name"
@@ -6121,11 +6125,11 @@ msgstr "_Criar"
 
 #: gtk/ui/gtkfontchooserdialog.ui:4
 msgid "Select Font"
-msgstr "Selecionar letra"
+msgstr "Selecionar tipo de letra"
 
 #: gtk/ui/gtkfontchooserwidget.ui:64
 msgid "Search font name"
-msgstr "Procurar o nome da letra"
+msgstr "Procurar o nome do tipo de letra"
 
 #: gtk/ui/gtkfontchooserwidget.ui:79
 msgid "Filter by"
@@ -6140,8 +6144,8 @@ msgid "Language"
 msgstr "Idioma"
 
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
-msgid "Preview text"
-msgstr "Pré-visualizar texto"
+msgid "Preview Font"
+msgstr "Pré-visualizar tipo de letra"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
 msgid "horizontal"
@@ -6149,7 +6153,7 @@ msgstr "horizontal"
 
 #: gtk/ui/gtkfontchooserwidget.ui:270
 msgid "No Fonts Found"
-msgstr "Nenhum letra encontrada"
+msgstr "Nenhum tipo de letra encontrado"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:27
 msgid "_Format for:"
@@ -7340,6 +7344,10 @@ msgstr ""
 "Sem ficheiro de índice de tema em “%s”.\n"
 "Se realmente quiser criar um cache de ícones aqui, use --ignore-theme-"
 "index.\n"
+
+#~ msgctxt "Font feature value"
+#~ msgid "None"
+#~ msgstr "Nenhuma"
 
 #~ msgid "Number Formatting"
 #~ msgstr "Formatação de número"
