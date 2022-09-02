@@ -376,9 +376,12 @@ static int
 gtk_column_view_allocate_columns (GtkColumnView *self,
                                   int            width)
 {
+  gboolean rtl;
   guint i, n;
-  int x;
+  int total_width, x;
   GtkRequestedSize *sizes;
+
+  rtl = gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL;
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->columns));
 
@@ -386,7 +389,11 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
 
   gtk_column_view_distribute_width (self, width, sizes);
 
-  x = 0;
+  total_width = 0;
+  for (i = 0; i < n; i++)
+    total_width += sizes[i].minimum_size;
+
+  x = rtl ? total_width : 0;
   for (i = 0; i < n; i++)
     {
       GtkColumnViewColumn *column;
@@ -397,17 +404,21 @@ gtk_column_view_allocate_columns (GtkColumnView *self,
         {
           col_size = sizes[i].minimum_size;
 
+          if (rtl)
+            x -= col_size;
+
           gtk_column_view_column_allocate (column, x, col_size);
           if (self->in_column_reorder && i == self->drag_pos)
             gtk_column_view_column_set_header_position (column, self->drag_x);
 
-          x += col_size;
+          if (!rtl)
+            x += col_size;
         }
 
       g_object_unref (column);
     }
 
-  return x;
+  return total_width;
 }
 
 static void
