@@ -7,13 +7,13 @@
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
 # Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
-# Balázs Meskó <mesko.balazs at fsf dot hu>, 2021.
+# Balázs Meskó <mesko.balazs at fsf dot hu>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-01-30 21:15+0000\n"
-"PO-Revision-Date: 2022-03-11 02:11+0100\n"
+"POT-Creation-Date: 2022-03-19 12:27+0000\n"
+"PO-Revision-Date: 2022-09-02 23:31+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -479,17 +479,14 @@ msgid "libEGL not available in this sandbox"
 msgstr "A libEGL nem érhető el ebben a biztonságos környezetben"
 
 #: gdk/wayland/gdkglcontext-wayland.c:490
-#| msgid "Not available"
 msgid "libEGL not available"
 msgstr "A libEGL nem érhető el"
 
 #: gdk/wayland/gdkglcontext-wayland.c:503
-#| msgid "Core GL is not available on EGL implementation"
 msgid "Sandbox does not provide an OpenGL implementation"
 msgstr "A biztonságos környezet nem biztosít OpenGL megvalósítást"
 
 #: gdk/wayland/gdkglcontext-wayland.c:504
-#| msgid "No GL implementation is available"
 msgid "No OpenGL implementation available"
 msgstr "Nem érhető el OpenGL megvalósítás"
 
@@ -6680,7 +6677,7 @@ msgstr "Névjegy"
 
 #: gtk/ui/gtkaboutdialog.ui:123
 msgid "Credits"
-msgstr "Köszönet"
+msgstr "Köszönetnyilvánítás"
 
 #: gtk/ui/gtkaboutdialog.ui:206
 msgid "System"
@@ -6688,11 +6685,11 @@ msgstr "Rendszer"
 
 #: gtk/ui/gtkappchooserdialog.ui:60
 msgid "_View All Applications"
-msgstr "_Minden alkalmazás megjelenítése"
+msgstr "Összes alkalmazás meg_tekintése"
 
 #: gtk/ui/gtkappchooserdialog.ui:66
 msgid "_Find New Applications"
-msgstr "Új _alkalmazások keresése"
+msgstr "Új alkalmazások _keresése"
 
 #: gtk/ui/gtkappchooserwidget.ui:100
 msgid "No applications found."
@@ -6726,7 +6723,7 @@ msgstr "%s bezárása"
 
 #: gtk/ui/gtkassistant.ui:64
 msgid "_Finish"
-msgstr "_Befejezés"
+msgstr "Be_fejezés"
 
 #: gtk/ui/gtkassistant.ui:75
 msgid "_Back"
@@ -6738,7 +6735,7 @@ msgstr "_Következő"
 
 #: gtk/ui/gtkcolorchooserdialog.ui:4
 msgid "Select a Color"
-msgstr "Válasszon egy színt"
+msgstr "Válasszon színt"
 
 #: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
 msgid "Pick a color from the screen"
@@ -6796,7 +6793,7 @@ msgstr "Mosolyok és emberek"
 #: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
 msgctxt "emoji category"
 msgid "Body & Clothing"
-msgstr "Test és ruházat"
+msgstr "Test és ruhák"
 
 #: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
 msgctxt "emoji category"
@@ -6806,7 +6803,7 @@ msgstr "Állatok és természet"
 #: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
 msgctxt "emoji category"
 msgid "Food & Drink"
-msgstr "Étel-ital"
+msgstr "Étel és ital"
 
 #: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
 msgctxt "emoji category"
@@ -6848,7 +6845,7 @@ msgstr "Távoli hely – keresés csak a jelenlegi mappában"
 
 #: gtk/ui/gtkfilechooserwidget.ui:378
 msgid "Folder Name"
-msgstr "Mappa neve"
+msgstr "Mappanév"
 
 #: gtk/ui/gtkfilechooserwidget.ui:404
 msgid "_Create"
@@ -6864,7 +6861,7 @@ msgstr "Betűkészletnév keresése"
 
 #: gtk/ui/gtkfontchooserwidget.ui:79
 msgid "Filter by"
-msgstr "Szűrési szempont"
+msgstr "Szűrés eszerint:"
 
 #: gtk/ui/gtkfontchooserwidget.ui:89
 msgid "Monospace"
@@ -6876,7 +6873,7 @@ msgstr "Nyelv"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:328
 msgid "Preview text"
-msgstr "Mintaszöveg"
+msgstr "Szöveg előnézete"
 
 #: gtk/ui/gtkfontchooserwidget.ui:194 gtk/ui/gtkfontchooserwidget.ui:224
 msgid "horizontal"
@@ -6921,8 +6918,7 @@ msgstr "Kiszolgálócímek"
 #: gtk/ui/gtkplacesview.ui:40
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr ""
-"A kiszolgálócímek egy protokollelőtagból és egy címből állnak. Például:"
+msgstr "A kiszolgálócímek egy protokollelőtagból és egy címből állnak. Példák:"
 
 #: gtk/ui/gtkplacesview.ui:66
 msgid "Available Protocols"
@@ -6931,7 +6927,7 @@ msgstr "Elérhető protokollok"
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:118
 msgid "No recent servers found"
-msgstr "Nem található legutóbbi kiszolgáló"
+msgstr "Nem találhatók legutóbbi kiszolgálók"
 
 #: gtk/ui/gtkplacesview.ui:141
 msgid "Recent Servers"
@@ -6960,11 +6956,11 @@ msgstr "Tartomány"
 
 #: gtk/ui/gtkprintunixdialog.ui:214
 msgid "_All Pages"
-msgstr "Min_den oldal"
+msgstr "Össz_es oldal"
 
 #: gtk/ui/gtkprintunixdialog.ui:226
 msgid "C_urrent Page"
-msgstr "J_elenlegi oldal"
+msgstr "_Jelenlegi oldal"
 
 #: gtk/ui/gtkprintunixdialog.ui:239
 msgid "Se_lection"
@@ -6979,16 +6975,16 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
-"Adjon meg oldaltartományokat,\n"
-" például 1–3, 7, 11"
+"Adjon meg egy vagy több oldaltartományt.\n"
+" például: 1-3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:289
 msgid "Copies"
-msgstr "Példányszám"
+msgstr "Példányok"
 
 #: gtk/ui/gtkprintunixdialog.ui:304
 msgid "Copie_s:"
-msgstr "Pél_dányszám:"
+msgstr "_Példányok:"
 
 #: gtk/ui/gtkprintunixdialog.ui:327
 msgid "C_ollate"
@@ -7008,19 +7004,19 @@ msgstr "_Kétoldalas:"
 
 #: gtk/ui/gtkprintunixdialog.ui:432
 msgid "Pages per _side:"
-msgstr "_Lapok oldalanként:"
+msgstr "Oldalak _laponként:"
 
 #: gtk/ui/gtkprintunixdialog.ui:456
 msgid "Page or_dering:"
-msgstr "Ol_dalsorrend:"
+msgstr "Oldal_sorrend:"
 
 #: gtk/ui/gtkprintunixdialog.ui:479
 msgid "_Only print:"
-msgstr "_Nyomtatandó:"
+msgstr "_Csak nyomtatás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:495
 msgid "All sheets"
-msgstr "Minden oldal"
+msgstr "Összes oldal"
 
 #: gtk/ui/gtkprintunixdialog.ui:496
 msgid "Even sheets"
@@ -7040,19 +7036,19 @@ msgstr "Papír"
 
 #: gtk/ui/gtkprintunixdialog.ui:571
 msgid "Paper _type:"
-msgstr "Papír _típusa:"
+msgstr "Papír_típus:"
 
 #: gtk/ui/gtkprintunixdialog.ui:593
 msgid "Paper _source:"
-msgstr "_Papírforrás:"
+msgstr "Papír_forrás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:615
 msgid "Output t_ray:"
-msgstr "Kimeneti tál_ca:"
+msgstr "Kimeneti _tálca:"
 
 #: gtk/ui/gtkprintunixdialog.ui:660
 msgid "Or_ientation:"
-msgstr "_Tájolás:"
+msgstr "Tá_jolás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:734
 msgid "Job Details"
@@ -7060,11 +7056,11 @@ msgstr "Feladat részletei"
 
 #: gtk/ui/gtkprintunixdialog.ui:749
 msgid "Pri_ority:"
-msgstr "_Prioritás:"
+msgstr "Pri_oritás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:770
 msgid "_Billing info:"
-msgstr "_Fizetési információk:"
+msgstr "Fi_zetési információk:"
 
 #: gtk/ui/gtkprintunixdialog.ui:803
 msgid "Print Document"
@@ -7073,7 +7069,7 @@ msgstr "Dokumentum nyomtatása"
 #. this is one of the choices for the print at option in the print dialog
 #: gtk/ui/gtkprintunixdialog.ui:816
 msgid "_Now"
-msgstr "_Azonnal"
+msgstr "_Most"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
 #: gtk/ui/gtkprintunixdialog.ui:830
@@ -7087,17 +7083,17 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
-"A nyomtatás idejének megadása\n"
-" például: 15.30, 2.35 du, 14.15.20, 11.46.30 de, 4 du"
+"Adja meg a nyomtatás idejét,\n"
+" például 15:30, 14:15:20"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
 #: gtk/ui/gtkprintunixdialog.ui:864
 msgid "On _hold"
-msgstr "_Várakoztatás"
+msgstr "_Tartásban"
 
 #: gtk/ui/gtkprintunixdialog.ui:866 gtk/ui/gtkprintunixdialog.ui:867
 msgid "Hold the job until it is explicitly released"
-msgstr "A feladat felfüggesztése kifejezett elengedéséig"
+msgstr "A feladat tartása, amíg explicit módon el nem engedi"
 
 #: gtk/ui/gtkprintunixdialog.ui:894
 msgid "Add Cover Page"
@@ -7106,12 +7102,12 @@ msgstr "Borítóoldal hozzáadása"
 #. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/ui/gtkprintunixdialog.ui:909
 msgid "Be_fore:"
-msgstr "_Elé:"
+msgstr "_Előtte:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
 #: gtk/ui/gtkprintunixdialog.ui:930
 msgid "_After:"
-msgstr "_Mögé:"
+msgstr "_Mögötte:"
 
 #: gtk/ui/gtkprintunixdialog.ui:959
 msgid "Job"
@@ -7138,7 +7134,7 @@ msgstr "Speciális"
 
 #: gtk/ui/gtkprintunixdialog.ui:1092
 msgid "Some of the settings in the dialog conflict"
-msgstr "A párbeszédablak egyes beállításai ütköznek"
+msgstr "A párbeszédablak egyes beállításai ütköznek egymással"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
