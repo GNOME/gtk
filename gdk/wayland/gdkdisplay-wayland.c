@@ -2449,9 +2449,6 @@ output_handle_geometry (void             *data,
 
   if (should_update_monitor (monitor) || !monitor_has_xdg_output (monitor))
     apply_monitor_change (monitor);
-
-  if (should_update_monitor (monitor))
-    update_scale (GDK_MONITOR (monitor)->display);
 }
 
 static void
