@@ -1078,8 +1078,8 @@ msgid ""
 "This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
-"Tento program je šířen bez jakékoliv záruky.\n"
-"Podrobnosti naleznete v <a href=\"%s\">%s</a>."
+"Tento program je šířen bez jakýchkoliv záruk.\n"
+"Podrobnosti viz <a href=\"%s\">%s</a>."
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
