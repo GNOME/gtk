@@ -1324,6 +1324,8 @@ open_submenu (gpointer data)
           gtk_popover_menu_set_open_submenu (GTK_POPOVER_MENU (popover), submenu);
           gtk_popover_menu_set_parent_menu (GTK_POPOVER_MENU (submenu), GTK_WIDGET (popover));
         }
+      else
+        gtk_popover_menu_close_submenus (GTK_POPOVER_MENU (popover));
     }
 
   button->open_timeout = 0;
