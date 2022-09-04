@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-26 22:11+0000\n"
-"PO-Revision-Date: 2022-08-27 13:55+0300\n"
+"POT-Creation-Date: 2022-09-01 17:19+0000\n"
+"PO-Revision-Date: 2022-09-01 23:32+0300\n"
 "Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -2143,7 +2143,7 @@ msgid "_Cancel"
 msgstr "_Отмена"
 
 #: gtk/gtkfilechoosernative.c:510 gtk/gtkfilechoosernative.c:574
-#: gtk/gtkplacessidebar.c:3128 gtk/gtkplacessidebar.c:3213
+#: gtk/gtkplacessidebar.c:3146 gtk/gtkplacessidebar.c:3231
 #: gtk/gtkplacesview.c:1658
 msgid "_Open"
 msgstr "_Открыть"
@@ -2255,7 +2255,7 @@ msgid "_Add to Bookmarks"
 msgstr "_Добавить в закладки"
 
 #: gtk/gtkfilechooserwidget.c:1823 gtk/gtkplacessidebar.c:2310
-#: gtk/gtkplacessidebar.c:3249 gtk/ui/gtkfilechooserwidget.ui:465
+#: gtk/gtkplacessidebar.c:3267 gtk/ui/gtkfilechooserwidget.ui:465
 msgid "_Rename"
 msgstr "_Переименовать"
 
@@ -2446,6 +2446,10 @@ msgctxt "font"
 msgid "None"
 msgstr "Нет"
 
+#: gtk/gtkfontchooserdialog.c:184
+msgid "Change Font Features"
+msgstr "Изменение характеристик шрифта"
+
 #: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
 msgid "Width"
@@ -2471,46 +2475,46 @@ msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Оптический размер"
 
-#: gtk/gtkfontchooserwidget.c:2093
+#: gtk/gtkfontchooserwidget.c:2094
 msgctxt "Font feature value"
-msgid "None"
-msgstr "Нет"
+msgid "Default"
+msgstr "По умолчанию"
 
-#: gtk/gtkfontchooserwidget.c:2110
+#: gtk/gtkfontchooserwidget.c:2111
 msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Включить"
 
-#: gtk/gtkfontchooserwidget.c:2437
+#: gtk/gtkfontchooserwidget.c:2439
 msgid "Default"
 msgstr "По умолчанию"
 
 # Этап передачи событий
-#: gtk/gtkfontchooserwidget.c:2497
+#: gtk/gtkfontchooserwidget.c:2501
 msgid "Ligatures"
 msgstr "Лигатуры"
 
-#: gtk/gtkfontchooserwidget.c:2498
+#: gtk/gtkfontchooserwidget.c:2502
 msgid "Letter Case"
 msgstr "Строчные / Заглавные"
 
-#: gtk/gtkfontchooserwidget.c:2499
+#: gtk/gtkfontchooserwidget.c:2503
 msgid "Number Case"
 msgstr "Написание Цифр"
 
-#: gtk/gtkfontchooserwidget.c:2500
+#: gtk/gtkfontchooserwidget.c:2504
 msgid "Number Spacing"
 msgstr "Пространство между числами"
 
-#: gtk/gtkfontchooserwidget.c:2501
+#: gtk/gtkfontchooserwidget.c:2505
 msgid "Fractions"
 msgstr "Дроби"
 
-#: gtk/gtkfontchooserwidget.c:2502
+#: gtk/gtkfontchooserwidget.c:2506
 msgid "Style Variations"
 msgstr "Вариации стилей"
 
-#: gtk/gtkfontchooserwidget.c:2503
+#: gtk/gtkfontchooserwidget.c:2508
 msgid "Character Variations"
 msgstr "Вариации символов"
 
@@ -2761,19 +2765,19 @@ msgstr "GTK не смог найти мультимедийный модуль. 
 msgid "Tab list"
 msgstr "Список вкладок"
 
-#: gtk/gtknotebook.c:3213
+#: gtk/gtknotebook.c:3214
 msgid "Previous tab"
 msgstr "Предыдущая вкладка"
 
-#: gtk/gtknotebook.c:3217
+#: gtk/gtknotebook.c:3218
 msgid "Next tab"
 msgstr "Следующая вкладка"
 
-#: gtk/gtknotebook.c:4037
+#: gtk/gtknotebook.c:4038
 msgid "Tab"
 msgstr "Tab"
 
-#: gtk/gtknotebook.c:4335 gtk/gtknotebook.c:6543
+#: gtk/gtknotebook.c:4336 gtk/gtknotebook.c:6544
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -2910,7 +2914,7 @@ msgstr "Другие места"
 msgid "Show other locations"
 msgstr "Показать другие расположения"
 
-#: gtk/gtkplacessidebar.c:1962 gtk/gtkplacessidebar.c:2963
+#: gtk/gtkplacessidebar.c:1962 gtk/gtkplacessidebar.c:2981
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Не удалось запустить «%s»"
@@ -2939,106 +2943,106 @@ msgstr "Это имя уже занято"
 msgid "Name"
 msgstr "Имя"
 
-#: gtk/gtkplacessidebar.c:2504
+#: gtk/gtkplacessidebar.c:2522
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Не удалось размонтировать «%s»"
 
-#: gtk/gtkplacessidebar.c:2680
+#: gtk/gtkplacessidebar.c:2698
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Не удалось остановить «%s»"
 
-#: gtk/gtkplacessidebar.c:2709
+#: gtk/gtkplacessidebar.c:2727
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Не удалось извлечь «%s»"
 
-#: gtk/gtkplacessidebar.c:2738 gtk/gtkplacessidebar.c:2767
+#: gtk/gtkplacessidebar.c:2756 gtk/gtkplacessidebar.c:2785
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Не удалось извлечь %s"
 
-#: gtk/gtkplacessidebar.c:2915
+#: gtk/gtkplacessidebar.c:2933
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Не удалось опросить «%s» об изменении носителей"
 
-#: gtk/gtkplacessidebar.c:3134 gtk/gtkplacessidebar.c:3221
+#: gtk/gtkplacessidebar.c:3152 gtk/gtkplacessidebar.c:3239
 #: gtk/gtkplacesview.c:1662
 msgid "Open in New _Tab"
 msgstr "Открыть в новой _вкладке"
 
-#: gtk/gtkplacessidebar.c:3140 gtk/gtkplacessidebar.c:3230
+#: gtk/gtkplacessidebar.c:3158 gtk/gtkplacessidebar.c:3248
 #: gtk/gtkplacesview.c:1667
 msgid "Open in New _Window"
 msgstr "Открыть в новом _окне"
 
-#: gtk/gtkplacessidebar.c:3241
+#: gtk/gtkplacessidebar.c:3259
 msgid "_Add Bookmark"
 msgstr "_Добавить в закладки"
 
-#: gtk/gtkplacessidebar.c:3245
+#: gtk/gtkplacessidebar.c:3263
 msgid "_Remove"
 msgstr "_Удалить"
 
-#: gtk/gtkplacessidebar.c:3261 gtk/gtkplacesview.c:1692
+#: gtk/gtkplacessidebar.c:3279 gtk/gtkplacesview.c:1692
 msgid "_Mount"
 msgstr "_Монтировать"
 
-#: gtk/gtkplacessidebar.c:3270 gtk/gtkplacesview.c:1681
+#: gtk/gtkplacessidebar.c:3288 gtk/gtkplacesview.c:1681
 msgid "_Unmount"
 msgstr "_Размонтировать"
 
-#: gtk/gtkplacessidebar.c:3277
+#: gtk/gtkplacessidebar.c:3295
 msgid "_Eject"
 msgstr "_Извлечь"
 
-#: gtk/gtkplacessidebar.c:3287
+#: gtk/gtkplacessidebar.c:3305
 msgid "_Detect Media"
 msgstr "Определить _носитель"
 
-#: gtk/gtkplacessidebar.c:3296
+#: gtk/gtkplacessidebar.c:3314
 msgid "_Start"
 msgstr "_Запустить"
 
-#: gtk/gtkplacessidebar.c:3298
+#: gtk/gtkplacessidebar.c:3316
 msgid "_Power On"
 msgstr "_Включить"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3317
 msgid "_Connect Drive"
 msgstr "_Подключить диск"
 
-#: gtk/gtkplacessidebar.c:3300
+#: gtk/gtkplacessidebar.c:3318
 msgid "_Start Multi-disk Device"
 msgstr "_Запустить многодисковое устройство"
 
-#: gtk/gtkplacessidebar.c:3301
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Unlock Device"
 msgstr "_Разблокировать устройство"
 
-#: gtk/gtkplacessidebar.c:3311
+#: gtk/gtkplacessidebar.c:3329
 msgid "_Stop"
 msgstr "_Остановить"
 
-#: gtk/gtkplacessidebar.c:3313
+#: gtk/gtkplacessidebar.c:3331
 msgid "_Safely Remove Drive"
 msgstr "_Безопасное извлечение устройства"
 
-#: gtk/gtkplacessidebar.c:3314
+#: gtk/gtkplacessidebar.c:3332
 msgid "_Disconnect Drive"
 msgstr "О_тключить диск"
 
-#: gtk/gtkplacessidebar.c:3315
+#: gtk/gtkplacessidebar.c:3333
 msgid "_Stop Multi-disk Device"
 msgstr "_Остановить многодисковое устройство"
 
-#: gtk/gtkplacessidebar.c:3316
+#: gtk/gtkplacessidebar.c:3334
 msgid "_Lock Device"
 msgstr "_Заблокировать устройство"
 
-#: gtk/gtkplacessidebar.c:3804 gtk/gtkplacesview.c:1103
+#: gtk/gtkplacessidebar.c:3823 gtk/gtkplacesview.c:1103
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -6146,8 +6150,8 @@ msgid "Language"
 msgstr "Язык"
 
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
-msgid "Preview text"
-msgstr "Предпросмотр текста"
+msgid "Preview Font"
+msgstr "Предпросмотр шрифта"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
 msgid "horizontal"
@@ -6171,19 +6175,19 @@ msgstr "_Ориентация:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:98 gtk/ui/gtkprintunixdialog.ui:675
 msgid "Portrait"
-msgstr "Портретное"
+msgstr "Портретная"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:109 gtk/ui/gtkprintunixdialog.ui:677
 msgid "Reverse portrait"
-msgstr "Обратное портретное"
+msgstr "Перевернутая портретная"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:121 gtk/ui/gtkprintunixdialog.ui:676
 msgid "Landscape"
-msgstr "Ландшафтное"
+msgstr "Ландшафтная"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:132 gtk/ui/gtkprintunixdialog.ui:678
 msgid "Reverse landscape"
-msgstr "Обратное ландшафтное"
+msgstr "Перевернутая ландшафтная"
 
 #: gtk/ui/gtkplacesview.ui:28
 msgid "Server Addresses"
@@ -7345,6 +7349,10 @@ msgstr ""
 "Нет индексного файла темы в «%s».\n"
 "Если действительно хотите создать здесь кэш значков, используйте --ignore-"
 "theme-index.\n"
+
+#~ msgctxt "Font feature value"
+#~ msgid "None"
+#~ msgstr "Нет"
 
 #~ msgid "Number Formatting"
 #~ msgstr "Форматирование чисел"
