@@ -1145,7 +1145,10 @@ gtk_text_buffer_get_tag_table (GtkTextBuffer *buffer)
  * @text: UTF-8 text to insert
  * @len: length of @text in bytes
  *
- * Deletes current contents of @buffer, and inserts @text instead.
+ * Deletes current contents of @buffer, and inserts @text instead. This is
+ * automatically marked as an irreversible action in the undo stack. If you
+ * wish to mark this action as part of a larger undo operation, call
+ * [method@TextBuffer.delete] and [method@TextBuffer.insert] directly instead.
  *
  * If @len is -1, @text must be nul-terminated.
  * @text must be valid UTF-8.
