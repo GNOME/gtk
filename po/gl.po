@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-18 23:51+0000\n"
-"PO-Revision-Date: 2022-08-20 13:26+0200\n"
+"POT-Creation-Date: 2022-09-03 07:50+0000\n"
+"PO-Revision-Date: 2022-09-05 00:17+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -42,25 +42,25 @@ msgstr ""
 msgid "Broadway display type not supported: %s"
 msgstr "O tipo de pantalla Broadway non é compatíbel: %s"
 
-#: gdk/gdkclipboard.c:231
+#: gdk/gdkclipboard.c:232
 msgid "This clipboard cannot store data."
 msgstr "Este portapapeis non pode gardar datos."
 
-#: gdk/gdkclipboard.c:286 gdk/gdkclipboard.c:784 gdk/gdkclipboard.c:1084
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
 msgid "Cannot read from empty clipboard."
 msgstr "Non se pode dun portapapeis baleiro."
 
-#: gdk/gdkclipboard.c:317 gdk/gdkclipboard.c:1134 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Formatos non compatíbeis para transferir contidos do portapapeis."
 
-#: gdk/gdkcontentprovider.c:105 gdk/gdkcontentproviderimpl.c:313
+#: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
 #, c-format
 msgid "Cannot provide contents as “%s”"
 msgstr "Non foi posíbel fornecer contidos como «%s»"
 
-#: gdk/gdkcontentprovider.c:126
+#: gdk/gdkcontentprovider.c:127
 #, c-format
 msgid "Cannot provide contents as %s"
 msgstr "Non foi posíbel fornecer contidos como %s"
@@ -2147,7 +2147,7 @@ msgid "_Cancel"
 msgstr "_Cancelar"
 
 #: gtk/gtkfilechoosernative.c:510 gtk/gtkfilechoosernative.c:574
-#: gtk/gtkplacessidebar.c:3128 gtk/gtkplacessidebar.c:3213
+#: gtk/gtkplacessidebar.c:3146 gtk/gtkplacessidebar.c:3231
 #: gtk/gtkplacesview.c:1658
 msgid "_Open"
 msgstr "_Abrir"
@@ -2262,7 +2262,7 @@ msgid "_Add to Bookmarks"
 msgstr "_Engadir aos marcadores"
 
 #: gtk/gtkfilechooserwidget.c:1823 gtk/gtkplacessidebar.c:2310
-#: gtk/gtkplacessidebar.c:3249 gtk/ui/gtkfilechooserwidget.ui:465
+#: gtk/gtkplacessidebar.c:3267 gtk/ui/gtkfilechooserwidget.ui:465
 msgid "_Rename"
 msgstr "_Renomear"
 
@@ -2451,57 +2451,80 @@ msgctxt "font"
 msgid "None"
 msgstr "Ningún"
 
-#: gtk/gtkfontchooserwidget.c:1533
+#: gtk/gtkfontchooserdialog.c:184
+msgid "Change Font Features"
+msgstr "Cambiar as características do tipo de letra"
+
+#: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Anchura"
 
-#: gtk/gtkfontchooserwidget.c:1534
+#: gtk/gtkfontchooserwidget.c:1535
 msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Peso"
 
-#: gtk/gtkfontchooserwidget.c:1535
+#: gtk/gtkfontchooserwidget.c:1536
 msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Cursiva"
 
-#: gtk/gtkfontchooserwidget.c:1536
+#: gtk/gtkfontchooserwidget.c:1537
 msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Inclinación"
 
-#: gtk/gtkfontchooserwidget.c:1537
+#: gtk/gtkfontchooserwidget.c:1538
 msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Tamaño óptico"
 
-#: gtk/gtkfontchooserwidget.c:2216
+#: gtk/gtkfontchooserwidget.c:2094
+#| msgid "Default"
+msgctxt "Font feature value"
+msgid "Default"
+msgstr "Predeterminado"
+
+#: gtk/gtkfontchooserwidget.c:2111
+#| msgid "Enabled"
+msgctxt "Font feature value"
+msgid "Enable"
+msgstr "Activar"
+
+#: gtk/gtkfontchooserwidget.c:2439
 msgid "Default"
 msgstr "Por omisión"
 
-#: gtk/gtkfontchooserwidget.c:2263
+#: gtk/gtkfontchooserwidget.c:2501
 msgid "Ligatures"
 msgstr "Ligaduras"
 
-#: gtk/gtkfontchooserwidget.c:2264
+#: gtk/gtkfontchooserwidget.c:2502
 msgid "Letter Case"
 msgstr "Letra maiúscula"
 
-#: gtk/gtkfontchooserwidget.c:2265
+#: gtk/gtkfontchooserwidget.c:2503
 msgid "Number Case"
 msgstr "Maiúsculas e minúsculas de números"
 
-#: gtk/gtkfontchooserwidget.c:2266
+#: gtk/gtkfontchooserwidget.c:2504
 msgid "Number Spacing"
 msgstr "Espaciado de números"
 
-#: gtk/gtkfontchooserwidget.c:2267
-msgid "Number Formatting"
-msgstr "Formato numérico"
+#: gtk/gtkfontchooserwidget.c:2505
+#| msgctxt "OpenType layout"
+#| msgid "Fractions"
+msgid "Fractions"
+msgstr "Fraccións"
 
-#: gtk/gtkfontchooserwidget.c:2268
-msgid "Character Variants"
+#: gtk/gtkfontchooserwidget.c:2506
+msgid "Style Variations"
+msgstr "Variacións de estilo"
+
+#: gtk/gtkfontchooserwidget.c:2508
+#| msgid "Character Variants"
+msgid "Character Variations"
 msgstr "Variantes de carácter"
 
 #: gtk/gtkglarea.c:284
@@ -2752,19 +2775,19 @@ msgstr "GTK non puido atopar un módulo multimedia. Comprobe a súa instalación
 msgid "Tab list"
 msgstr "Lista de lapelas"
 
-#: gtk/gtknotebook.c:3213
+#: gtk/gtknotebook.c:3214
 msgid "Previous tab"
 msgstr "Anterior lapela"
 
-#: gtk/gtknotebook.c:3217
+#: gtk/gtknotebook.c:3218
 msgid "Next tab"
 msgstr "Seguinte lapela"
 
-#: gtk/gtknotebook.c:4037
+#: gtk/gtknotebook.c:4038
 msgid "Tab"
 msgstr "Lapela"
 
-#: gtk/gtknotebook.c:4335 gtk/gtknotebook.c:6543
+#: gtk/gtknotebook.c:4336 gtk/gtknotebook.c:6544
 #, c-format
 msgid "Page %u"
 msgstr "Páxina %u"
@@ -2901,7 +2924,7 @@ msgstr "Otras localizacións"
 msgid "Show other locations"
 msgstr "Mostrar outras localizacións"
 
-#: gtk/gtkplacessidebar.c:1962 gtk/gtkplacessidebar.c:2963
+#: gtk/gtkplacessidebar.c:1962 gtk/gtkplacessidebar.c:2981
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Non é posíbel iniciar «%s»"
@@ -2930,106 +2953,106 @@ msgstr "Este nome xa está collido"
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkplacessidebar.c:2504
+#: gtk/gtkplacessidebar.c:2522
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Non é posíbel desmontar «%s»"
 
-#: gtk/gtkplacessidebar.c:2680
+#: gtk/gtkplacessidebar.c:2698
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Non é posíbel deter «%s»"
 
-#: gtk/gtkplacessidebar.c:2709
+#: gtk/gtkplacessidebar.c:2727
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Non é posíbel extraer «%s»"
 
-#: gtk/gtkplacessidebar.c:2738 gtk/gtkplacessidebar.c:2767
+#: gtk/gtkplacessidebar.c:2756 gtk/gtkplacessidebar.c:2785
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Non é posíbel extraer %s"
 
-#: gtk/gtkplacessidebar.c:2915
+#: gtk/gtkplacessidebar.c:2933
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Non é posíbel analizar «%s» para saber os cambios no soporte"
 
-#: gtk/gtkplacessidebar.c:3134 gtk/gtkplacessidebar.c:3221
+#: gtk/gtkplacessidebar.c:3152 gtk/gtkplacessidebar.c:3239
 #: gtk/gtkplacesview.c:1662
 msgid "Open in New _Tab"
 msgstr "Abrir unha nova _lapela"
 
-#: gtk/gtkplacessidebar.c:3140 gtk/gtkplacessidebar.c:3230
+#: gtk/gtkplacessidebar.c:3158 gtk/gtkplacessidebar.c:3248
 #: gtk/gtkplacesview.c:1667
 msgid "Open in New _Window"
 msgstr "Abrir nunha nova _xanela"
 
-#: gtk/gtkplacessidebar.c:3241
+#: gtk/gtkplacessidebar.c:3259
 msgid "_Add Bookmark"
 msgstr "_Engadir marcador"
 
-#: gtk/gtkplacessidebar.c:3245
+#: gtk/gtkplacessidebar.c:3263
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: gtk/gtkplacessidebar.c:3261 gtk/gtkplacesview.c:1692
+#: gtk/gtkplacessidebar.c:3279 gtk/gtkplacesview.c:1692
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3270 gtk/gtkplacesview.c:1681
+#: gtk/gtkplacessidebar.c:3288 gtk/gtkplacesview.c:1681
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: gtk/gtkplacessidebar.c:3277
+#: gtk/gtkplacessidebar.c:3295
 msgid "_Eject"
 msgstr "_Expulsar"
 
-#: gtk/gtkplacessidebar.c:3287
+#: gtk/gtkplacessidebar.c:3305
 msgid "_Detect Media"
 msgstr "_Detectar soporte"
 
-#: gtk/gtkplacessidebar.c:3296
+#: gtk/gtkplacessidebar.c:3314
 msgid "_Start"
 msgstr "_Iniciar"
 
-#: gtk/gtkplacessidebar.c:3298
+#: gtk/gtkplacessidebar.c:3316
 msgid "_Power On"
 msgstr "_Encender"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3317
 msgid "_Connect Drive"
 msgstr "_Conectar dispositivo"
 
-#: gtk/gtkplacessidebar.c:3300
+#: gtk/gtkplacessidebar.c:3318
 msgid "_Start Multi-disk Device"
 msgstr "_Iniciar dispositivo multidisco"
 
-#: gtk/gtkplacessidebar.c:3301
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Unlock Device"
 msgstr "_Desbloquear dispositivo"
 
-#: gtk/gtkplacessidebar.c:3311
+#: gtk/gtkplacessidebar.c:3329
 msgid "_Stop"
 msgstr "De_ter"
 
-#: gtk/gtkplacessidebar.c:3313
+#: gtk/gtkplacessidebar.c:3331
 msgid "_Safely Remove Drive"
 msgstr "Extraer unidade de forma _segura"
 
-#: gtk/gtkplacessidebar.c:3314
+#: gtk/gtkplacessidebar.c:3332
 msgid "_Disconnect Drive"
 msgstr "_Desconectar dispositivo"
 
-#: gtk/gtkplacessidebar.c:3315
+#: gtk/gtkplacessidebar.c:3333
 msgid "_Stop Multi-disk Device"
 msgstr "_Deter dispositivo multidisco"
 
-#: gtk/gtkplacessidebar.c:3316
+#: gtk/gtkplacessidebar.c:3334
 msgid "_Lock Device"
 msgstr "_Bloquear dispositivo"
 
-#: gtk/gtkplacessidebar.c:3804 gtk/gtkplacesview.c:1103
+#: gtk/gtkplacessidebar.c:3823 gtk/gtkplacesview.c:1103
 msgid "Computer"
 msgstr "Computador"
 
@@ -3247,62 +3270,62 @@ msgstr ""
 msgid "Print"
 msgstr "Imprimir"
 
-#: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1503
+#: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1504
 msgid "Application"
 msgstr "Aplicación"
 
-#: gtk/gtkprintoperation-win32.c:634
+#: gtk/gtkprintoperation-win32.c:635
 msgid "Printer offline"
 msgstr "Impresora desconectada"
 
-#: gtk/gtkprintoperation-win32.c:636
+#: gtk/gtkprintoperation-win32.c:637
 msgid "Out of paper"
 msgstr "Papel esgotado"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:638
+#: gtk/gtkprintoperation-win32.c:639
 #: modules/printbackends/gtkprintbackendcups.c:2660
 msgid "Paused"
 msgstr "Pausada"
 
-#: gtk/gtkprintoperation-win32.c:640
+#: gtk/gtkprintoperation-win32.c:641
 msgid "Need user intervention"
 msgstr "Precisa da intervención do usuario"
 
-#: gtk/gtkprintoperation-win32.c:747
+#: gtk/gtkprintoperation-win32.c:748
 msgid "Custom size"
 msgstr "Tamaño personalizado"
 
-#: gtk/gtkprintoperation-win32.c:1595
+#: gtk/gtkprintoperation-win32.c:1596
 msgid "No printer found"
 msgstr "Non se atopou ningunha impresora"
 
-#: gtk/gtkprintoperation-win32.c:1622
+#: gtk/gtkprintoperation-win32.c:1623
 msgid "Invalid argument to CreateDC"
 msgstr "Argumento non válido para CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1904
+#: gtk/gtkprintoperation-win32.c:1659 gtk/gtkprintoperation-win32.c:1905
 msgid "Error from StartDoc"
 msgstr "Erro desde StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1759 gtk/gtkprintoperation-win32.c:1782
-#: gtk/gtkprintoperation-win32.c:1830
+#: gtk/gtkprintoperation-win32.c:1760 gtk/gtkprintoperation-win32.c:1783
+#: gtk/gtkprintoperation-win32.c:1831
 msgid "Not enough free memory"
 msgstr "Non hai suficiente memoria libre"
 
-#: gtk/gtkprintoperation-win32.c:1835
+#: gtk/gtkprintoperation-win32.c:1836
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argumento non é válido para PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1840
+#: gtk/gtkprintoperation-win32.c:1841
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Punteiro non é válido para PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1845
+#: gtk/gtkprintoperation-win32.c:1846
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Manexador non válido para PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1850
+#: gtk/gtkprintoperation-win32.c:1851
 msgid "Unspecified error"
 msgstr "Erro non especificado"
 
@@ -6131,9 +6154,9 @@ msgid "Language"
 msgstr "Idioma"
 
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
-#| msgid "Pre_view"
-msgid "Preview text"
-msgstr "Vista previa de texto"
+#| msgid "Preview text"
+msgid "Preview Font"
+msgstr "Vista previa do tipo de letra"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
 msgid "horizontal"
@@ -6400,34 +6423,28 @@ msgstr "Algunhas das configuracións do diálogo están en conflito"
 
 #: modules/media/gtkffmediafile.c:253
 #, c-format
-#| msgid "Unspecified error decoding video"
 msgid "Unspecified error decoding media"
 msgstr "Erro de descodificación multimedia non especificado"
 
 #: modules/media/gtkffmediafile.c:286
 #, c-format
-#| msgid "Cannot provide contents as %s"
 msgid "Cannot find decoder: %s"
 msgstr "Non foi posíbel atopar o decodificador: %s"
 
 #: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
-#| msgid "Unable to create a GL context"
 msgid "Failed to allocate a codec context"
 msgstr "Non é posíbel reservar un contexto do codec"
 
 #: modules/media/gtkffmediafile.c:341
 #, c-format
-#| msgid "Cannot provide contents as %s"
 msgid "Cannot find encoder: %s"
 msgstr "Non foi posíbel atopar un codificador: %s"
 
 #: modules/media/gtkffmediafile.c:352
-#| msgid "Can’t close stream"
 msgid "Cannot add new stream"
 msgstr "Non é posíbel engadir un fluxo novo"
 
 #: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
-#| msgid "Failed to create EGL display"
 msgid "Failed to allocate an audio frame"
 msgstr "Non é posíbel reservar un marco de son"
 
@@ -6436,7 +6453,6 @@ msgid "Not enough memory"
 msgstr "Non hai memoria dabondo"
 
 #: modules/media/gtkffmediafile.c:821
-#| msgid "Could not read the contents of %s"
 msgid "Could not allocate resampler context"
 msgstr "Non foi posíbel reservar o contexto do resampler"
 
@@ -7342,6 +7358,9 @@ msgstr ""
 "Non hai ficheiro de índice de tema en «%s».\n"
 "Se está seguro de que quere crear unha caché de iconas aquí, use --ignore-"
 "theme-index.\n"
+
+#~ msgid "Number Formatting"
+#~ msgstr "Formato numérico"
 
 #~ msgid "The EGL implementation does not support any allowed APIs"
 #~ msgstr "A implementación de EGL non admite algúnha das APIs permitidas"
