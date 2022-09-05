@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-22 16:31+0000\n"
-"PO-Revision-Date: 2022-08-22 23:21+0300\n"
+"POT-Creation-Date: 2022-09-03 07:50+0000\n"
+"PO-Revision-Date: 2022-09-05 22:38+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -32,25 +32,25 @@ msgstr ""
 msgid "Broadway display type not supported: %s"
 msgstr "Broadway vaizduoklio tipas nepalaikomas „%s“"
 
-#: gdk/gdkclipboard.c:231
+#: gdk/gdkclipboard.c:232
 msgid "This clipboard cannot store data."
 msgstr "Ši iškarpinė negali įrašyti duomenų."
 
-#: gdk/gdkclipboard.c:286 gdk/gdkclipboard.c:784 gdk/gdkclipboard.c:1084
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
 msgid "Cannot read from empty clipboard."
 msgstr "Negalima skaityti iš tuščios iškarpinės."
 
-#: gdk/gdkclipboard.c:317 gdk/gdkclipboard.c:1134 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Nėra suderinamų formatų iškarpinės turinio perdavimui."
 
-#: gdk/gdkcontentprovider.c:105 gdk/gdkcontentproviderimpl.c:313
+#: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
 #, c-format
 msgid "Cannot provide contents as “%s”"
 msgstr "Nepavyko pateikti turinio kaip „%s“"
 
-#: gdk/gdkcontentprovider.c:126
+#: gdk/gdkcontentprovider.c:127
 #, c-format
 msgid "Cannot provide contents as %s"
 msgstr "Nepavyko pateikti turinio kaip %s"
@@ -2112,7 +2112,7 @@ msgid "_Cancel"
 msgstr "_Atsisakyti"
 
 #: gtk/gtkfilechoosernative.c:510 gtk/gtkfilechoosernative.c:574
-#: gtk/gtkplacessidebar.c:3128 gtk/gtkplacessidebar.c:3213
+#: gtk/gtkplacessidebar.c:3146 gtk/gtkplacessidebar.c:3231
 #: gtk/gtkplacesview.c:1658
 msgid "_Open"
 msgstr "At_verti"
@@ -2224,7 +2224,7 @@ msgid "_Add to Bookmarks"
 msgstr "Į_dėti į žymeles"
 
 #: gtk/gtkfilechooserwidget.c:1823 gtk/gtkplacessidebar.c:2310
-#: gtk/gtkplacessidebar.c:3249 gtk/ui/gtkfilechooserwidget.ui:465
+#: gtk/gtkplacessidebar.c:3267 gtk/ui/gtkfilechooserwidget.ui:465
 msgid "_Rename"
 msgstr "Per_vadinti"
 
@@ -2412,57 +2412,82 @@ msgctxt "font"
 msgid "None"
 msgstr "Nėra"
 
-#: gtk/gtkfontchooserwidget.c:1533
+#: gtk/gtkfontchooserdialog.c:184
+#| msgid "Change name"
+msgid "Change Font Features"
+msgstr "Keisti šrifto savybes"
+
+#: gtk/gtkfontchooserwidget.c:1534
 msgctxt "Font variation axis"
 msgid "Width"
 msgstr "Plotis"
 
-#: gtk/gtkfontchooserwidget.c:1534
+#: gtk/gtkfontchooserwidget.c:1535
 msgctxt "Font variation axis"
 msgid "Weight"
 msgstr "Aukštis"
 
-#: gtk/gtkfontchooserwidget.c:1535
+#: gtk/gtkfontchooserwidget.c:1536
 msgctxt "Font variation axis"
 msgid "Italic"
 msgstr "Kursyvas"
 
-#: gtk/gtkfontchooserwidget.c:1536
+#: gtk/gtkfontchooserwidget.c:1537
 msgctxt "Font variation axis"
 msgid "Slant"
 msgstr "Pasviręs"
 
-#: gtk/gtkfontchooserwidget.c:1537
+#: gtk/gtkfontchooserwidget.c:1538
 msgctxt "Font variation axis"
 msgid "Optical Size"
 msgstr "Optinis dydis"
 
-#: gtk/gtkfontchooserwidget.c:2216
+#: gtk/gtkfontchooserwidget.c:2094
+#| msgid "Default"
+msgctxt "Font feature value"
 msgid "Default"
 msgstr "Numatyta"
 
-#: gtk/gtkfontchooserwidget.c:2263
+#: gtk/gtkfontchooserwidget.c:2111
+#| msgid "Enabled"
+msgctxt "Font feature value"
+msgid "Enable"
+msgstr "Įjungti"
+
+#: gtk/gtkfontchooserwidget.c:2439
+msgid "Default"
+msgstr "Numatyta"
+
+#: gtk/gtkfontchooserwidget.c:2501
 msgid "Ligatures"
 msgstr "Ligatūros"
 
-#: gtk/gtkfontchooserwidget.c:2264
+#: gtk/gtkfontchooserwidget.c:2502
 msgid "Letter Case"
 msgstr "Raidžių registras"
 
-#: gtk/gtkfontchooserwidget.c:2265
+#: gtk/gtkfontchooserwidget.c:2503
 msgid "Number Case"
 msgstr "Skaitmenų registras"
 
-#: gtk/gtkfontchooserwidget.c:2266
+#: gtk/gtkfontchooserwidget.c:2504
 msgid "Number Spacing"
 msgstr "Skaitmenų tarpai"
 
-#: gtk/gtkfontchooserwidget.c:2267
-msgid "Number Formatting"
-msgstr "Skaitmenų formatas"
+#: gtk/gtkfontchooserwidget.c:2505
+#| msgctxt "OpenType layout"
+#| msgid "Fractions"
+msgid "Fractions"
+msgstr "Trupmenos"
 
-#: gtk/gtkfontchooserwidget.c:2268
-msgid "Character Variants"
+#: gtk/gtkfontchooserwidget.c:2506
+#| msgid "Style Properties"
+msgid "Style Variations"
+msgstr "Stiliaus variacijos"
+
+#: gtk/gtkfontchooserwidget.c:2508
+#| msgid "Character Variants"
+msgid "Character Variations"
 msgstr "Simbolių variantai"
 
 #: gtk/gtkglarea.c:284
@@ -2712,19 +2737,19 @@ msgstr "GTK nepavyko rasti daugialypės terpės modulio. Patikrinkite įdiegtį.
 msgid "Tab list"
 msgstr "Kortelių sąrašas"
 
-#: gtk/gtknotebook.c:3213
+#: gtk/gtknotebook.c:3214
 msgid "Previous tab"
 msgstr "Ankstesnė kortelė"
 
-#: gtk/gtknotebook.c:3217
+#: gtk/gtknotebook.c:3218
 msgid "Next tab"
 msgstr "Kita kortelė"
 
-#: gtk/gtknotebook.c:4037
+#: gtk/gtknotebook.c:4038
 msgid "Tab"
 msgstr "Kortelė"
 
-#: gtk/gtknotebook.c:4335 gtk/gtknotebook.c:6543
+#: gtk/gtknotebook.c:4336 gtk/gtknotebook.c:6544
 #, c-format
 msgid "Page %u"
 msgstr "%u puslapis"
@@ -2861,7 +2886,7 @@ msgstr "Kitos vietos"
 msgid "Show other locations"
 msgstr "Rodyti kitas vietas"
 
-#: gtk/gtkplacessidebar.c:1962 gtk/gtkplacessidebar.c:2963
+#: gtk/gtkplacessidebar.c:1962 gtk/gtkplacessidebar.c:2981
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Nepavyko paleisti „%s“"
@@ -2890,106 +2915,106 @@ msgstr "Šis pavadinimas jau užimtas"
 msgid "Name"
 msgstr "Pavadinimas"
 
-#: gtk/gtkplacessidebar.c:2504
+#: gtk/gtkplacessidebar.c:2522
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Nepavyko atjungti „%s“"
 
-#: gtk/gtkplacessidebar.c:2680
+#: gtk/gtkplacessidebar.c:2698
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Nepavyko sustabdyti „%s“"
 
-#: gtk/gtkplacessidebar.c:2709
+#: gtk/gtkplacessidebar.c:2727
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Nepavyko išstumti „%s“"
 
-#: gtk/gtkplacessidebar.c:2738 gtk/gtkplacessidebar.c:2767
+#: gtk/gtkplacessidebar.c:2756 gtk/gtkplacessidebar.c:2785
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nepavyko išstumti %s"
 
-#: gtk/gtkplacessidebar.c:2915
+#: gtk/gtkplacessidebar.c:2933
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nepavyko užklausti „%s“ dėl laikmenų pasikeitimų"
 
-#: gtk/gtkplacessidebar.c:3134 gtk/gtkplacessidebar.c:3221
+#: gtk/gtkplacessidebar.c:3152 gtk/gtkplacessidebar.c:3239
 #: gtk/gtkplacesview.c:1662
 msgid "Open in New _Tab"
 msgstr "Atverti naujoje _kortelėje"
 
-#: gtk/gtkplacessidebar.c:3140 gtk/gtkplacessidebar.c:3230
+#: gtk/gtkplacessidebar.c:3158 gtk/gtkplacessidebar.c:3248
 #: gtk/gtkplacesview.c:1667
 msgid "Open in New _Window"
 msgstr "Atverti naujame _lange"
 
-#: gtk/gtkplacessidebar.c:3241
+#: gtk/gtkplacessidebar.c:3259
 msgid "_Add Bookmark"
 msgstr "_Pridėti žymelę"
 
-#: gtk/gtkplacessidebar.c:3245
+#: gtk/gtkplacessidebar.c:3263
 msgid "_Remove"
 msgstr "_Pašalinti"
 
-#: gtk/gtkplacessidebar.c:3261 gtk/gtkplacesview.c:1692
+#: gtk/gtkplacessidebar.c:3279 gtk/gtkplacesview.c:1692
 msgid "_Mount"
 msgstr "_Prijungti"
 
-#: gtk/gtkplacessidebar.c:3270 gtk/gtkplacesview.c:1681
+#: gtk/gtkplacessidebar.c:3288 gtk/gtkplacesview.c:1681
 msgid "_Unmount"
 msgstr "_Atjungti"
 
-#: gtk/gtkplacessidebar.c:3277
+#: gtk/gtkplacessidebar.c:3295
 msgid "_Eject"
 msgstr "iš_stumti"
 
-#: gtk/gtkplacessidebar.c:3287
+#: gtk/gtkplacessidebar.c:3305
 msgid "_Detect Media"
 msgstr "_Aptikti laikmeną"
 
-#: gtk/gtkplacessidebar.c:3296
+#: gtk/gtkplacessidebar.c:3314
 msgid "_Start"
 msgstr "_Pradėti"
 
-#: gtk/gtkplacessidebar.c:3298
+#: gtk/gtkplacessidebar.c:3316
 msgid "_Power On"
 msgstr "Į_jungti"
 
-#: gtk/gtkplacessidebar.c:3299
+#: gtk/gtkplacessidebar.c:3317
 msgid "_Connect Drive"
 msgstr "Prijungti laikmeną"
 
-#: gtk/gtkplacessidebar.c:3300
+#: gtk/gtkplacessidebar.c:3318
 msgid "_Start Multi-disk Device"
 msgstr "_Paleisti daugelio diskų įrenginį"
 
-#: gtk/gtkplacessidebar.c:3301
+#: gtk/gtkplacessidebar.c:3319
 msgid "_Unlock Device"
 msgstr "_Atrakinti įrenginį"
 
-#: gtk/gtkplacessidebar.c:3311
+#: gtk/gtkplacessidebar.c:3329
 msgid "_Stop"
 msgstr "_Sustabdyti"
 
-#: gtk/gtkplacessidebar.c:3313
+#: gtk/gtkplacessidebar.c:3331
 msgid "_Safely Remove Drive"
 msgstr "_Saugiai išimti laikmeną"
 
-#: gtk/gtkplacessidebar.c:3314
+#: gtk/gtkplacessidebar.c:3332
 msgid "_Disconnect Drive"
 msgstr "Atj_ungti laikmeną"
 
-#: gtk/gtkplacessidebar.c:3315
+#: gtk/gtkplacessidebar.c:3333
 msgid "_Stop Multi-disk Device"
 msgstr "_Sustabdyti daugelio diskų įrenginį"
 
-#: gtk/gtkplacessidebar.c:3316
+#: gtk/gtkplacessidebar.c:3334
 msgid "_Lock Device"
 msgstr "_Užrakinti įrenginį"
 
-#: gtk/gtkplacessidebar.c:3804 gtk/gtkplacesview.c:1103
+#: gtk/gtkplacessidebar.c:3823 gtk/gtkplacesview.c:1103
 msgid "Computer"
 msgstr "Kompiuteris"
 
@@ -3207,62 +3232,62 @@ msgstr "Labiausiai tikėtina priežastis – nepavyko sukurti laikinojo failo."
 msgid "Print"
 msgstr "Spausdinti"
 
-#: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1503
+#: gtk/gtkprintoperation-unix.c:479 gtk/gtkprintoperation-win32.c:1504
 msgid "Application"
 msgstr "Programa"
 
-#: gtk/gtkprintoperation-win32.c:634
+#: gtk/gtkprintoperation-win32.c:635
 msgid "Printer offline"
 msgstr "Spausdintuvas atjungtas"
 
-#: gtk/gtkprintoperation-win32.c:636
+#: gtk/gtkprintoperation-win32.c:637
 msgid "Out of paper"
 msgstr "Nėra popieriaus"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:638
+#: gtk/gtkprintoperation-win32.c:639
 #: modules/printbackends/gtkprintbackendcups.c:2660
 msgid "Paused"
 msgstr "Pauzė"
 
-#: gtk/gtkprintoperation-win32.c:640
+#: gtk/gtkprintoperation-win32.c:641
 msgid "Need user intervention"
 msgstr "Reikia naudotojo isikišimo"
 
-#: gtk/gtkprintoperation-win32.c:747
+#: gtk/gtkprintoperation-win32.c:748
 msgid "Custom size"
 msgstr "Kitas dydis"
 
-#: gtk/gtkprintoperation-win32.c:1595
+#: gtk/gtkprintoperation-win32.c:1596
 msgid "No printer found"
 msgstr "Spausdintuvų nerasta"
 
-#: gtk/gtkprintoperation-win32.c:1622
+#: gtk/gtkprintoperation-win32.c:1623
 msgid "Invalid argument to CreateDC"
 msgstr "Netinkamas CreateDC argumentas"
 
-#: gtk/gtkprintoperation-win32.c:1658 gtk/gtkprintoperation-win32.c:1904
+#: gtk/gtkprintoperation-win32.c:1659 gtk/gtkprintoperation-win32.c:1905
 msgid "Error from StartDoc"
 msgstr "Klaida iš StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1759 gtk/gtkprintoperation-win32.c:1782
-#: gtk/gtkprintoperation-win32.c:1830
+#: gtk/gtkprintoperation-win32.c:1760 gtk/gtkprintoperation-win32.c:1783
+#: gtk/gtkprintoperation-win32.c:1831
 msgid "Not enough free memory"
 msgstr "Nepakanka laisvos atminties"
 
-#: gtk/gtkprintoperation-win32.c:1835
+#: gtk/gtkprintoperation-win32.c:1836
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Netinkamas PrintDlgEx argumentas"
 
-#: gtk/gtkprintoperation-win32.c:1840
+#: gtk/gtkprintoperation-win32.c:1841
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Netinkama nuoroda į PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1845
+#: gtk/gtkprintoperation-win32.c:1846
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Netinkamas PrintDlgEx valdiklis"
 
-#: gtk/gtkprintoperation-win32.c:1850
+#: gtk/gtkprintoperation-win32.c:1851
 msgid "Unspecified error"
 msgstr "Nenurodyta klaida"
 
@@ -6088,8 +6113,9 @@ msgid "Language"
 msgstr "Kalba"
 
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
-msgid "Preview text"
-msgstr "Peržiūros tekstas"
+#| msgid "Preview text"
+msgid "Preview Font"
+msgstr "Peržiūros šriftas"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
 msgid "horizontal"
@@ -6354,34 +6380,28 @@ msgstr "Kai kurie nustatymai lange konfliktuoja"
 
 #: modules/media/gtkffmediafile.c:253
 #, c-format
-#| msgid "Unspecified error decoding video"
 msgid "Unspecified error decoding media"
 msgstr "Nenurodyta klaida iškoduojant mediją"
 
 #: modules/media/gtkffmediafile.c:286
 #, c-format
-#| msgid "Cannot provide contents as %s"
 msgid "Cannot find decoder: %s"
 msgstr "Nepavyko rasti dekoderio: %s"
 
 #: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
-#| msgid "Unable to create a GL context"
 msgid "Failed to allocate a codec context"
 msgstr "Nepavyko sukurti kodeko konteksto"
 
 #: modules/media/gtkffmediafile.c:341
 #, c-format
-#| msgid "Cannot provide contents as %s"
 msgid "Cannot find encoder: %s"
 msgstr "Nepavyko rasti koduotojo: %s"
 
 #: modules/media/gtkffmediafile.c:352
-#| msgid "Can’t close stream"
 msgid "Cannot add new stream"
 msgstr "Nepavyko pridėti naujo srauto"
 
 #: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
-#| msgid "Failed to create EGL display"
 msgid "Failed to allocate an audio frame"
 msgstr "Nepavyko sukurti garso kadro"
 
@@ -6390,12 +6410,10 @@ msgid "Not enough memory"
 msgstr "Nepakanka atminties"
 
 #: modules/media/gtkffmediafile.c:821
-#| msgid "Could not read the contents of %s"
 msgid "Could not allocate resampler context"
 msgstr "Nepavyko sukurti mėginių konteksto"
 
 #: modules/media/gtkffmediafile.c:868
-#| msgid "No items found"
 msgid "No audio output found"
 msgstr "Nerasta garso išvestis"
 
@@ -7293,6 +7311,9 @@ msgstr ""
 "„%s“ nėra temos indekso failo.\n"
 "Jei tikrai čia norite sukurti piktogramos podėlį, naudokite --ignore-theme-"
 "index.\n"
+
+#~ msgid "Number Formatting"
+#~ msgstr "Skaitmenų formatas"
 
 #~ msgctxt "OpenType layout"
 #~ msgid "Stylistic Set 1"
@@ -9319,9 +9340,6 @@ msgstr ""
 #~ msgid "dialog-question-symbolic"
 #~ msgstr "dialog-question-symbolic"
 
-#~ msgid "Change name"
-#~ msgstr "Keisti pavadinimą"
-
 #~ msgid "Change classes"
 #~ msgstr "Keisti klases"
 
@@ -9370,9 +9388,6 @@ msgstr ""
 
 #~ msgid "Object Hierarchy"
 #~ msgstr "Objektų hierarchija"
-
-#~ msgid "Style Properties"
-#~ msgstr "Stiliaus savybės"
 
 #~| msgid "Address"
 #~ msgid "Address…"
