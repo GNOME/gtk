@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-09-06 04:15+0000\n"
-"PO-Revision-Date: 2022-09-06 18:27+0200\n"
+"PO-Revision-Date: 2022-09-06 18:28+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -2464,8 +2464,6 @@ msgid "Optical Size"
 msgstr "ოპტიკური ზომა"
 
 #: gtk/gtkfontchooserwidget.c:2094
-#, fuzzy
-#| msgid "Default"
 msgctxt "Font feature value"
 msgid "Default"
 msgstr "ნაგულისხმები"
