@@ -6137,9 +6137,12 @@ gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
   GtkEntryPrivate *priv = entry->priv;
 
   if (priv->editable)
-    gtk_editable_delete_text (GTK_EDITABLE (entry),
-                              priv->current_pos + offset,
-                              priv->current_pos + offset + n_chars);
+    {
+      gtk_editable_delete_text (GTK_EDITABLE (entry),
+                                priv->current_pos + offset,
+                                priv->current_pos + offset + n_chars);
+      gtk_im_context_reset (slave);
+    }
 
   return TRUE;
 }
