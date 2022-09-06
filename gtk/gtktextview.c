@@ -5491,9 +5491,6 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  GtkTextMark *insert;
-  GtkTextIter iter;
-  gboolean can_insert;
   gboolean retval = FALSE;
 
   text_view = GTK_TEXT_VIEW (widget);
@@ -5507,14 +5504,9 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   /* Make sure input method knows where it is */
   flush_update_im_spot_location (text_view);
 
-  insert = gtk_text_buffer_get_insert (get_buffer (text_view));
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
-  can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
   if (gtk_im_context_filter_keypress (priv->im_context, event))
     {
       priv->need_im_reset = TRUE;
-      if (can_insert)
-        gtk_text_view_reset_im_context (text_view);
       retval = TRUE;
     }
   /* Binding set */
@@ -9109,6 +9101,7 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
                               GtkTextView   *text_view)
 {
   gtk_text_view_commit_text (text_view, str);
+  gtk_im_context_reset (context);
 }
 
 static void
