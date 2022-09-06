@@ -8687,8 +8687,9 @@ gtk_text_view_delete_surrounding_handler (GtkIMContext  *context,
   gtk_text_iter_forward_chars (&start, offset);
   gtk_text_iter_forward_chars (&end, offset + n_chars);
 
-  gtk_text_buffer_delete_interactive (priv->buffer, &start, &end,
-				      priv->editable);
+  if (gtk_text_buffer_delete_interactive (priv->buffer, &start, &end,
+                                          priv->editable))
+    gtk_im_context_reset (context);
 
   return TRUE;
 }
