@@ -1,3 +1,72 @@
+Overview of Changes in 4.8.0, 06-09-2022
+========================================
+
+* GtkTreeView:
+ - Fix a problem with scrolling animations
+ - Fix some event handling problems
+ - Drop unreachable code
+
+* GtkText:
+ - Respect the no-emoji input hint fully
+
+* GtkEmojiChooser:
+ - Fix arrow key navigation
+
+* GtkFontChooser:
+ - Improve the handling of OpenType font features
+
+* GtkTreeListModel:
+ - Fix handling of collapsed child nodes
+
+* GtkInscription:
+ - Fix accessible name
+
+* Theme:
+ - Fix placeholder text in HighContrast
+
+* Increase the memory limit for the jpeg loader to 300M
+
+* Miscellaneous memory leak fixes
+
+* Wayland:
+ - Refator handling of text protocol client updates
+
+* Windows:
+ - Support high-resolution scroll wheel events
+ - Generate GdkWin32.gir
+ - Implement color picking
+
+* Translation updates
+ Abkhazian
+ Basque
+ Brazilian Portuguese
+ Bulgarian
+ Catalan
+ Chinese (China)
+ Croatian
+ Czech
+ Danish
+ Dutch
+ Galician
+ Georgian
+ German
+ Hungarian
+ Icelandic
+ Indonesian
+ Korean
+ Latvian
+ Lithuanian
+ Persian
+ Polish
+ Portuguese
+ Russian
+ Serbian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.7.2, 10-08-2022
 ========================================
 
