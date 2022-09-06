@@ -5516,17 +5516,8 @@ gtk_text_view_key_controller_im_update (GtkEventControllerKey *controller,
                                         GtkTextView           *text_view)
 {
   GtkTextViewPrivate *priv = text_view->priv;
-  GtkTextMark *insert;
-  GtkTextIter iter;
-  gboolean can_insert;
-
-  insert = gtk_text_buffer_get_insert (get_buffer (text_view));
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
-  can_insert = gtk_text_iter_can_insert (&iter, priv->editable);
 
   priv->need_im_reset = TRUE;
-  if (can_insert)
-    gtk_text_view_reset_im_context (text_view);
 }
 
 static gboolean
@@ -8486,6 +8477,7 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
   gtk_text_view_commit_text (text_view, str);
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
+  gtk_im_context_reset (context);
 }
 
 static void
