@@ -4897,7 +4897,7 @@ gtk_entry_key_press (GtkWidget   *widget,
     {
       if (gtk_im_context_filter_keypress (priv->im_context, event))
 	{
-	  gtk_im_context_reset (priv->im_context);
+	  priv->need_im_reset = TRUE;
 	  retval = TRUE;
           goto out;
 	}
@@ -4939,7 +4939,7 @@ gtk_entry_key_release (GtkWidget   *widget,
     {
       if (gtk_im_context_filter_keypress (priv->im_context, event))
 	{
-	  gtk_im_context_reset (priv->im_context);
+	  priv->need_im_reset = TRUE;
 	  retval = TRUE;
           goto out;
 	}
@@ -6082,7 +6082,10 @@ gtk_entry_commit_cb (GtkIMContext *context,
   GtkEntryPrivate *priv = entry->priv;
 
   if (priv->editable)
-    gtk_entry_enter_text (entry, str);
+    {
+      gtk_entry_enter_text (entry, str);
+      gtk_im_context_reset (context);
+    }
 }
 
 static void 
