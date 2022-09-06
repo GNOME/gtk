@@ -1910,7 +1910,7 @@ gtk_text_init (GtkText *self)
   g_signal_connect (priv->key_controller, "key-pressed",
                     G_CALLBACK (gtk_text_key_controller_key_pressed), self);
   g_signal_connect_swapped (priv->key_controller, "im-update",
-                            G_CALLBACK (gtk_im_context_reset), priv->im_context);
+                            G_CALLBACK (gtk_text_schedule_im_reset), self);
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
   gtk_widget_add_controller (GTK_WIDGET (self), priv->key_controller);
@@ -4241,6 +4241,7 @@ gtk_text_commit_cb (GtkIMContext *context,
     {
       gtk_text_enter_text (self, str);
       gtk_text_obscure_mouse_cursor (self);
+      gtk_im_context_reset (context);
     }
 }
 
