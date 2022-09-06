@@ -127,9 +127,7 @@ gtk_show_uri_full (GtkWindow           *parent,
   data->task = g_task_new (parent, cancellable, callback, user_data);
   g_task_set_source_tag (data->task, gtk_show_uri);
 
-  if (parent)
-    gtk_window_export_handle (parent, window_handle_exported, data);
-  else
+  if (!parent || !gtk_window_export_handle (parent, window_handle_exported, data))
     window_handle_exported (parent, NULL, data);
 }
 
