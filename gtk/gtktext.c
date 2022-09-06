@@ -4333,9 +4333,12 @@ gtk_text_delete_surrounding_cb (GtkIMContext *context,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->editable)
-    gtk_editable_delete_text (GTK_EDITABLE (self),
-                              priv->current_pos + offset,
-                              priv->current_pos + offset + n_chars);
+    {
+      gtk_editable_delete_text (GTK_EDITABLE (self),
+                                priv->current_pos + offset,
+                                priv->current_pos + offset + n_chars);
+      gtk_im_context_reset (context);
+    }
 
   return TRUE;
 }
