@@ -97,7 +97,7 @@ add_files (GDBusProxy  *proxy,
            AddFileData *afd)
 {
   GUnixFDList *fd_list;
-  GVariantBuilder fds;
+  GVariantBuilder fds, options;
   int i;
   char *key;
 
@@ -146,9 +146,10 @@ add_files (GDBusProxy  *proxy,
 
   key = (char *)g_object_get_data (G_OBJECT (afd->task), "key");
 
+  g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
   g_dbus_proxy_call_with_unix_fd_list (proxy,
                                        "AddFiles",
-                                       g_variant_new ("(sah)", key, &fds),
+                                       g_variant_new ("(saha{sv})", key, &fds, &options),
                                        0, -1,
                                        fd_list,
                                        NULL,
