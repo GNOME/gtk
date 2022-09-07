@@ -480,20 +480,8 @@ connection_closed (GDBusConnection *connection,
 }
 
 static void
-got_proxy (GObject *source,
-           GAsyncResult *result,
-           gpointer data)
+finish_registration (void)
 {
-  GError *error = NULL;
-
-  file_transfer_proxy = g_dbus_proxy_new_for_bus_finish (result, &error);
-  if (!file_transfer_proxy)
-    {
-      g_message ("Failed to get file transfer portal: %s", error->message);
-      g_clear_error (&error);
-      return;
-    }
-
   gdk_content_register_serializer (G_TYPE_FILE,
                                    "application/vnd.portal.files",
                                    portal_file_serializer,
@@ -531,7 +519,8 @@ file_transfer_portal_register (void)
   if (!called)
     {
       called = TRUE;
-      g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+
+      file_transfer_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                 G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
                                 | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
                                 | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
@@ -540,8 +529,9 @@ file_transfer_portal_register (void)
                                 "/org/freedesktop/portal/documents",
                                 "org.freedesktop.portal.FileTransfer",
                                 NULL,
-                                got_proxy,
                                 NULL);
+      if (file_transfer_proxy)
+        finish_registration ();
     }
 }
 
