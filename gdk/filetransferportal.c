@@ -512,6 +512,21 @@ finish_registration (void)
                     "closed", G_CALLBACK (connection_closed), NULL);
 }
 
+static gboolean
+proxy_has_owner (GDBusProxy *proxy)
+{
+  char *owner;
+
+  owner = g_dbus_proxy_get_name_owner (proxy);
+  if (owner)
+    {
+      g_free (owner);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 void
 file_transfer_portal_register (void)
 {
@@ -531,6 +546,10 @@ file_transfer_portal_register (void)
                                 "org.freedesktop.portal.FileTransfer",
                                 NULL,
                                 NULL);
+
+      if (file_transfer_proxy && !proxy_has_owner (file_transfer_proxy))
+        g_clear_object (&file_transfer_proxy);
+
       if (file_transfer_proxy)
         finish_registration ();
     }
