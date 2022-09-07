@@ -82,6 +82,10 @@ read_upto_done (GObject      *source,
 
   str = g_data_input_stream_read_upto_finish (out, result, NULL, &error);
   g_assert_no_error (error);
+
+  if (g_test_verbose ())
+    g_test_message ("src formats: %s", str);
+
   g_free (str);
 
   *done = TRUE;
@@ -89,8 +93,8 @@ read_upto_done (GObject      *source,
 }
 
 static void
-assert_texture_equal (GdkTexture *t1,
-                      GdkTexture *t2)
+compare_textures (GdkTexture *t1,
+                  GdkTexture *t2)
 {
   int width;
   int height;
@@ -115,6 +119,28 @@ assert_texture_equal (GdkTexture *t1,
 
   g_free (d1);
   g_free (d2);
+}
+
+static void
+compare_files (const char *file1,
+               const char *file2)
+{
+  char *m1, *m2;
+  gsize l1, l2;
+  GError *error = NULL;
+
+  g_file_get_contents (file1, &m1, &l1, &error);
+  g_assert_no_error (error);
+  g_file_get_contents (file2, &m2, &l2, &error);
+  g_assert_no_error (error);
+
+  if (l1 != l2)
+    g_test_fail_printf ("file length mismatch: %s %s\n", file1, file2);
+  else if (memcmp (m1, m2, l1) != 0)
+    g_test_fail_printf ("file mismatch: %s %s\n", file1, file2);
+
+  g_free (m1);
+  g_free (m2);
 }
 
 static void
@@ -182,9 +208,9 @@ test_clipboard_roundtrip (const char *type,
     g_assert_cmpstr (stdout_buf, ==, result);
   else if (g_str_has_prefix (stdout_buf, "ERROR"))
     {
-      g_test_fail ();
+      g_test_fail_printf ("dest error: %s", stdout_buf);
     }
-  else if (g_str_has_suffix (value, ".png"))
+  else if (g_str_equal (type, "image"))
     {
       GFile *f1, *f2;
       GdkTexture *t1, *t2;
@@ -197,27 +223,30 @@ test_clipboard_roundtrip (const char *type,
       t2 = gdk_texture_new_from_file (f2, &error);
       g_assert_no_error (error);
 
-      assert_texture_equal (t1, t2);
+      compare_textures (t1, t2);
 
       g_object_unref (t1);
       g_object_unref (t2);
       g_object_unref (f1);
       g_object_unref (f2);
     }
-  else
+  else if (g_str_equal (type, "file"))
     {
-      char *m1, *m2;
-      gsize l1, l2;
+      compare_files (value, stdout_buf);
+    }
+  else if (g_str_equal (type, "files"))
+    {
+      char **in_files, **out_files;
 
-      g_file_get_contents (value, &m1, &l1, &error);
-      g_assert_no_error (error);
-      g_file_get_contents (stdout_buf, &m2, &l2, &error);
-      g_assert_no_error (error);
+      in_files = g_strsplit (value, ":", -1);
+      out_files = g_strsplit (stdout_buf, ":", -1);
 
-      g_assert_cmpmem (m1, l1, m2, l2);
+      g_assert_cmpint (g_strv_length (in_files), ==, g_strv_length (out_files));
+      for (int i = 0; in_files[i]; i++)
+        compare_files (in_files[i], out_files[i]);
 
-      g_free (m1);
-      g_free (m2);
+      g_strfreev (in_files);
+      g_strfreev (out_files);
     }
 
   g_assert_null (stderr_buf);
@@ -239,6 +268,8 @@ test_clipboard_text (void)
   filename = g_test_build_filename (G_TEST_DIST, "clipboard-data", "test.txt", NULL);
 
   test_clipboard_roundtrip ("text", filename, NULL);
+
+  g_free (filename);
 }
 
 static void
@@ -260,13 +291,32 @@ test_clipboard_color (void)
 static void
 test_clipboard_file (void)
 {
-  test_clipboard_roundtrip ("file", "/etc/passwd", "/etc/passwd");
+  char *filename;
+
+  filename = g_test_build_filename (G_TEST_DIST, "clipboard-data", "test.txt", NULL);
+
+  test_clipboard_roundtrip ("file", filename, NULL);
+
+  g_free (filename);
 }
 
 static void
 test_clipboard_files (void)
 {
-  test_clipboard_roundtrip ("files", "/etc/passwd:/boot/ostree", "/etc/passwd:/boot/ostree");
+  char **filenames;
+  char *string;
+
+  filenames = g_new (char *, 3);
+  filenames[0] = g_test_build_filename (G_TEST_DIST, "clipboard-data", "image.png", NULL);
+  filenames[1] = g_test_build_filename (G_TEST_DIST, "clipboard-data", "test.txt", NULL);
+  filenames[2] = NULL;
+
+  string = g_strjoinv (":", filenames);
+
+  test_clipboard_roundtrip ("files", string, NULL);
+
+  g_free (string);
+  g_strfreev (filenames);
 }
 
 int
