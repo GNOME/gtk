@@ -217,29 +217,38 @@ update_image (void)
         text = " ";
 
       ch = g_utf8_get_char (text);
-
       str = g_string_new ("");
+      layout = pango_layout_new (context);
 
+retry:
       for (i = 0; i < 4; i++)
         {
           g_string_append_unichar (str, ch);
           g_string_append_unichar (str, 0x200c);
         }
 
-      layout = pango_layout_new (context);
       pango_layout_set_font_description (layout, desc);
       pango_layout_set_text (layout, str->str, -1);
-      g_string_free (str, TRUE);
       pango_layout_get_extents (layout, &ink, &logical);
       pango_extents_to_pixels (&logical, NULL);
+
+      iter = pango_layout_get_iter (layout);
+      run = pango_layout_iter_get_run (iter);
+
+      if (run->glyphs->num_glyphs < 8)
+        {
+          /* not a good char to use */
+          g_string_truncate (str, 0);
+          ch = 'a';
+          goto retry;
+        }
+
+      g_string_free (str, TRUE);
 
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, logical.width * 3 / 2, 4*logical.height);
       cr = cairo_create (surface);
       cairo_set_source_rgb (cr, 1, 1, 1);
       cairo_paint (cr);
-
-      iter = pango_layout_get_iter (layout);
-      run = pango_layout_iter_get_run (iter);
 
       cairo_set_source_rgb (cr, 0, 0, 0);
       for (i = 0; i < 4; i++)
