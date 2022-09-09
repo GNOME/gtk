@@ -7760,7 +7760,7 @@ captured_key (GtkEventControllerKey *controller,
        impl->location_mode == LOCATION_MODE_FILENAME_ENTRY))
     return GDK_EVENT_PROPAGATE;
 
-  if (keyval == GDK_KEY_slash)
+  if (keyval == GDK_KEY_slash || keyval == GDK_KEY_asciitilde || keyval == GDK_KEY_period)
     return GDK_EVENT_PROPAGATE;
 
   if (impl->location_entry)
