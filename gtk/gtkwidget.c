@@ -8465,11 +8465,35 @@ gtk_widget_accessible_get_platform_state (GtkAccessible              *self,
     }
 }
 
+static GtkAccessible *
+gtk_widget_accessible_get_parent (GtkAccessible *self)
+{
+  return GTK_ACCESSIBLE (gtk_widget_get_parent (GTK_WIDGET (self)));
+}
+
+static GtkAccessible *
+gtk_widget_accessible_get_child_at_index (GtkAccessible *self, guint index)
+{
+  guint idx = 0;
+  GtkWidget *child;
+  for (child = gtk_widget_get_first_child (GTK_WIDGET (self));
+               child != NULL;
+               child = gtk_widget_get_next_sibling (child))
+    {
+      if (idx == index)
+        return GTK_ACCESSIBLE (child);
+      idx++;
+    }
+  return NULL;
+}
+
 static void
 gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
 {
   iface->get_at_context = gtk_widget_accessible_get_at_context;
   iface->get_platform_state = gtk_widget_accessible_get_platform_state;
+  iface->get_parent = gtk_widget_accessible_get_parent;
+  iface->get_child_at_index = gtk_widget_accessible_get_child_at_index;
 }
 
 static void
