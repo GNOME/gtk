@@ -214,6 +214,31 @@ activate_background (GSimpleAction *action,
 }
 
 static void
+file_chooser_response (GtkNativeDialog *self,
+                       int              response)
+{
+  gtk_native_dialog_destroy (self);
+}
+
+static void
+activate_open_file (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       user_data)
+{
+  GtkFileChooserNative *chooser;
+
+  chooser = gtk_file_chooser_native_new ("Open file",
+                                         NULL,
+                                         GTK_FILE_CHOOSER_ACTION_OPEN,
+                                         "Open",
+                                         "Cancel");
+
+  g_signal_connect (chooser, "response", G_CALLBACK (file_chooser_response), NULL);
+
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+}
+
+static void
 activate_open (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
@@ -2451,7 +2476,7 @@ main (int argc, char *argv[])
     { "share", activate_action, NULL, NULL, NULL },
     { "labels", activate_action, NULL, NULL, NULL },
     { "new", activate_action, NULL, NULL, NULL },
-    { "open", activate_action, NULL, NULL, NULL },
+    { "open", activate_open_file, NULL, NULL, NULL },
     { "open-in", activate_action, NULL, NULL, NULL },
     { "open-tab", activate_action, NULL, NULL, NULL },
     { "open-window", activate_action, NULL, NULL, NULL },
