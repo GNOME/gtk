@@ -332,24 +332,27 @@ static int
 get_index_in (GtkAccessible *parent, GtkAccessible *child)
 {
   GtkAccessible *candidate;
+  int res;
   int idx;
 
   if (parent == NULL)
     return -1;
 
   idx = 0;
+  res = 0;
   while (true)
     {
       candidate = gtk_accessible_get_child_at_index (parent, idx);
       if (!candidate)
         break;
       if (candidate == child)
-        return idx;
+        return res;
 
+      idx++;
       if (!gtk_accessible_should_present (candidate))
         continue;
 
-      idx++;
+      res++;
     }
 
   return -1;
@@ -489,7 +492,7 @@ handle_accessible_method (GDBusConnection       *connection,
     {
       GtkATContext *context = NULL;
       GtkAccessible *accessible;
-      int idx, real_idx = 0;
+      int idx, presentable_idx, child_idx;
 
       g_variant_get (parameters, "(i)", &idx);
 
@@ -497,17 +500,19 @@ handle_accessible_method (GDBusConnection       *connection,
 
       GtkAccessible *child;
 
-      real_idx = 0;
+      presentable_idx = 0;
+      child_idx = 0;
       do
         {
-          child = gtk_accessible_get_child_at_index (accessible, real_idx);
+          child = gtk_accessible_get_child_at_index (accessible, child_idx);
+          child_idx += 1;
           if (!gtk_accessible_should_present (child))
               continue;
 
-          if (real_idx == idx)
+          if (presentable_idx == idx)
             break;
+          presentable_idx++;
 
-          real_idx += 1;
         }
       while (child != NULL);
 
@@ -1718,15 +1723,16 @@ gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
 
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   int n_children = 0;
+  int idx = 0;
   
   GtkAccessible *child;
 
-    
   while (true)
     {
-      child = gtk_accessible_get_child_at_index (accessible, n_children);
+      child = gtk_accessible_get_child_at_index (accessible, idx);
       if (!child)
         break;
+      idx++;
       if (!gtk_accessible_should_present (child))
         continue;
 
