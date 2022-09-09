@@ -33,6 +33,9 @@ struct _GtkAccessibleInterface
 
   gboolean              (* get_platform_state)  (GtkAccessible              *self,
                                                  GtkAccessiblePlatformState  state);
+
+  GtkAccessible *       (* get_parent)  (GtkAccessible *self);
+  GtkAccessible *       (* get_child_at_index)  (GtkAccessible *self, guint index);
 };
 
 GtkATContext *  gtk_accessible_get_at_context   (GtkAccessible *self);
@@ -48,6 +51,10 @@ void            gtk_accessible_platform_changed (GtkAccessible                *s
                                                  GtkAccessiblePlatformChange   change);
 gboolean        gtk_accessible_get_platform_state (GtkAccessible              *self,
                                                    GtkAccessiblePlatformState  state);
+
+GtkAccessible * gtk_accessible_get_parent(GtkAccessible *self);
+
+GtkAccessible * gtk_accessible_get_child_at_index(GtkAccessible *self, guint index);
 
 void            gtk_accessible_bounds_changed   (GtkAccessible *self);
 
