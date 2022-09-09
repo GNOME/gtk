@@ -40,7 +40,7 @@ celebrate (gboolean win)
   if (win)
     path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "complete.oga", NULL);
   else
-    path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "dialog-error.oga", NULL);
+    path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "suspend-error.oga", NULL);
   stream = gtk_media_file_new_for_filename (path);
   gtk_media_stream_set_volume (stream, 1.0);
   gtk_media_stream_play (stream);
