@@ -3,6 +3,7 @@ include:
     file: 'flatpak/flatpak_ci_initiative.yml'
 
 stages:
+  - check
   - build
   - analysis
   - docs
@@ -37,7 +38,7 @@ variables:
 style-check-diff:
   extends: .only-default
   image: $FEDORA_IMAGE
-  stage: .pre
+  stage: check
   allow_failure: true
   script:
     - .gitlab-ci/run-style-check-diff.sh
