@@ -17,7 +17,6 @@ git config --global --add safe.directory "$PWD"
 if ! git ls-remote --exit-code upstream >/dev/null 2>&1 ; then
     git remote add upstream https://gitlab.gnome.org/GNOME/gtk.git
 fi
-git fetch --shallow-since="$(date --date="${ancestor_horizon} days ago" +%Y-%m-%d)" upstream
 
 # Work out the newest common ancestor between the detached HEAD that this CI job
 # has checked out, and the upstream target branch (which will typically be
@@ -28,9 +27,11 @@ git fetch --shallow-since="$(date --date="${ancestor_horizon} days ago" +%Y-%m-%
 # otherwise.
 
 source_branch="${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME:-${CI_COMMIT_BRANCH}}"
+target_branch="${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-${CI_DEFAULT_BRANCH}}"
 git fetch --shallow-since="$(date --date="${ancestor_horizon} days ago" +%Y-%m-%d)" origin "${source_branch}"
+git fetch --shallow-since="$(date --date="${ancestor_horizon} days ago" +%Y-%m-%d)" upstream "${target_branch}"
 
-newest_common_ancestor_sha=$(diff --old-line-format='' --new-line-format='' <(git rev-list --first-parent "upstream/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME:-${CI_DEFAULT_BRANCH}}") <(git rev-list --first-parent "origin/${source_branch}") | head -1)
+newest_common_ancestor_sha=$(git merge-base upstream/${target_branch} origin/${source_branch})
 if [ -z "${newest_common_ancestor_sha}" ]; then
     echo "Couldn’t find common ancestor with upstream main branch. This typically"
     echo "happens if you branched from main a long time ago. Please update"
