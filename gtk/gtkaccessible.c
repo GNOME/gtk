@@ -90,6 +90,41 @@ gtk_accessible_get_at_context (GtkAccessible *self)
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_at_context (self);
 }
 
+
+/*
+ * gtk_accessible_get_parent:
+ * @self: a `GtkAccessible`
+ *
+ * Retrieves the parent `GtkAccessible` for the given `GtkAccessible`.
+ *
+ * Returns: (transfer none): the parent `GtkAccessible` or NULL, if we this is the root
+ */
+GtkAccessible *
+gtk_accessible_get_parent (GtkAccessible *self)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
+
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_parent (self);
+}
+
+
+/*
+ * gtk_accessible_get_child_at_index:
+ * @self: a `GtkAccessible`
+ * @index: the index of the child to get
+ *
+ * Retrieves the child `GtkAccessible` for this `GtkAccessible` with the given @index.
+ *
+ * Returns: (transfer none): the child `GtkAccessible` with the given @index or NULL if the index is outside range
+ */
+GtkAccessible *
+gtk_accessible_get_child_at_index (GtkAccessible *self, guint index)
+{
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
+
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_child_at_index (self, index);
+}
+
 /**
  * gtk_accessible_get_accessible_role: (attributes org.gtk.Method.get_property=accessible-role)
  * @self: a `GtkAccessible`
@@ -712,7 +747,7 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
 
   /* propagate changes up from ignored widgets */
   if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
-    context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (gtk_widget_get_parent (GTK_WIDGET (self))));
+    context = gtk_accessible_get_at_context (gtk_accessible_get_parent (self));
 
   if (context == NULL)
     return;
@@ -829,7 +864,7 @@ gtk_accessible_update_children (GtkAccessible           *self,
 
   /* propagate changes up from ignored widgets */
   if (gtk_accessible_get_accessible_role (self) == GTK_ACCESSIBLE_ROLE_NONE)
-    context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (gtk_widget_get_parent (GTK_WIDGET (self))));
+    context = gtk_accessible_get_at_context (gtk_accessible_get_parent (self));
 
   if (context == NULL)
     return;
