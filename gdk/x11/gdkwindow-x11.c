@@ -5641,6 +5641,8 @@ gdk_x11_get_server_time (GdkWindow *window)
 XID
 gdk_x11_window_get_xid (GdkWindow *window)
 {
+  g_return_val_if_fail (GDK_IS_X11_WINDOW (window), None);
+
   /* Try to ensure the window has a native window */
   if (!_gdk_window_has_impl (window))
     {
