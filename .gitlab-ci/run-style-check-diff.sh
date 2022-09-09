@@ -4,6 +4,9 @@ set -e
 
 ancestor_horizon=31  # days (one month)
 
+# Recently, git is picky about directory ownership. Tell it not to worry.
+git config --global --add safe.directory "$PWD"
+
 # We need to add a new remote for the upstream target branch, since this script
 # could be running in a personal fork of the repository which has out of date
 # branches.
