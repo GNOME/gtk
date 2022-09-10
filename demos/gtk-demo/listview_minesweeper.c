@@ -8,6 +8,7 @@
  * to implement rather different interaction behavior to a typical list.
  */
 
+#include "config.h"
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
@@ -376,6 +377,23 @@ sweeper_game_init (SweeperGame *self)
 }
 
 static void
+celebrate (gboolean win)
+{
+  char *path;
+  GtkMediaStream *stream;
+
+  if (win)
+    path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "complete.oga", NULL);
+  else
+    path = g_build_filename (GTK_DATADIR, "sounds", "freedesktop", "stereo", "suspend-error.oga", NULL);
+  stream = gtk_media_file_new_for_filename (path);
+  gtk_media_stream_set_volume (stream, 1.0);
+  gtk_media_stream_play (stream);
+  g_signal_connect (stream, "notify::ended", G_CALLBACK (g_object_unref), NULL);
+  g_free (path);
+}
+
+static void
 sweeper_game_end (SweeperGame *self,
                   gboolean     win)
 {
@@ -383,7 +401,9 @@ sweeper_game_end (SweeperGame *self,
     {
       self->playing = FALSE;
       g_object_notify_by_pspec (G_OBJECT (self), game_properties[GAME_PROP_PLAYING]);
+      celebrate (win);
     }
+
   if (self->win != win)
     {
       self->win = win;
