@@ -4,20 +4,22 @@
 # taijuin <taijuin@gmail.com>, 2010.
 # Wei-Lun Chao <chaoweilun@gmail.com>, 2010.
 # Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>, 2012.
+# Freddy Cheng <freddy4212@gmail.com>, 2022.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-19 00:25+0000\n"
-"PO-Revision-Date: 2022-03-22 22:28+0800\n"
+"POT-Creation-Date: 2022-06-05 17:13+0000\n"
+"PO-Revision-Date: 2022-09-10 17:19+0800\n"
 "Last-Translator: Cheng-Chia Tseng <pswo10680@gmail.com>\n"
-"Language-Team: <>\n"
+"Language-Team: Chinese - Taiwan <chinese-l10n@googlegroups.com>\n"
 "Language: zh_TW\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -172,6 +174,8 @@ msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
+# gdk/keyname-table.h:6857
+# gtk/gtkshortcutlabel.c:225
 #: gdk/keyname-table.h:6857 gtk/gtkshortcutlabel.c:225
 msgctxt "keyboard label"
 msgid "Page_Down"
@@ -421,12 +425,12 @@ msgstr "執行1"
 #: gdk/keyname-table.h:6907
 msgctxt "keyboard label"
 msgid "Forward"
-msgstr "向前"
+msgstr "前進鍵"
 
 #: gdk/keyname-table.h:6908
 msgctxt "keyboard label"
 msgid "Back"
-msgstr "向後"
+msgstr "返回鍵"
 
 #: gdk/keyname-table.h:6909
 msgctxt "keyboard label"
@@ -927,12 +931,12 @@ msgstr "屬性(_P)"
 #: gtk/a11y/gtkimageaccessible.c:109 gtk/deprecated/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Quit"
-msgstr "結束(_Q)"
+msgstr "退出(_Q)"
 
 #: gtk/a11y/gtkimageaccessible.c:110 gtk/deprecated/gtkstock.c:438
 msgctxt "Stock label"
 msgid "_Redo"
-msgstr "取消復原(_R)"
+msgstr "重做(_R)"
 
 #: gtk/a11y/gtkimageaccessible.c:111 gtk/deprecated/gtkstock.c:439
 msgctxt "Stock label"
@@ -962,7 +966,7 @@ msgstr "另存新檔(_A)"
 #: gtk/a11y/gtkimageaccessible.c:116 gtk/deprecated/gtkstock.c:444
 msgctxt "Stock label"
 msgid "Select _All"
-msgstr "全部選取(_A)"
+msgstr "全選(_A)"
 
 #. Sorting direction
 #: gtk/a11y/gtkimageaccessible.c:117 gtk/deprecated/gtkstock.c:448
@@ -1001,7 +1005,7 @@ msgstr "底線(_U)"
 #: gtk/a11y/gtkimageaccessible.c:123 gtk/deprecated/gtkstock.c:458
 msgctxt "Stock label"
 msgid "_Undo"
-msgstr "復原(_U)"
+msgstr "還原(_U)"
 
 #: gtk/a11y/gtkimageaccessible.c:124 gtk/deprecated/gtkstock.c:388
 msgctxt "Stock label"
@@ -1285,7 +1289,7 @@ msgstr "取消(_C)"
 #: gtk/deprecated/gtkstock.c:353
 msgctxt "Stock label"
 msgid "C_onnect"
-msgstr "連線(_O)"
+msgstr "連接(_O)"
 
 #: gtk/deprecated/gtkstock.c:354
 msgctxt "Stock label"
@@ -1543,7 +1547,7 @@ msgid ""
 "This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
-"這個程式沒有任何保證。\n"
+"這個程式沒有擔保任何責任。\n"
 "需要更多資訊，請參閱 <a href=\"%s\">%s</a>。"
 
 #. This is the text that should appear next to menu accelerators
@@ -1640,7 +1644,7 @@ msgstr "正在開啟「%s」。"
 #: gtk/gtkappchooserdialog.c:210
 #, c-format
 msgid "No applications found for “%s”"
-msgstr "沒有應用程式可開啟「%s」"
+msgstr "沒有應用程式可以開啟「%s」"
 
 #. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:215
@@ -1651,7 +1655,7 @@ msgstr "正在開啟「%s」檔案。"
 #: gtk/gtkappchooserdialog.c:217
 #, c-format
 msgid "No applications found for “%s” files"
-msgstr "沒有應用程式可開啟「%s」檔案"
+msgstr "沒有應用程式可以開啟「%s」檔案"
 
 #: gtk/gtkappchooserdialog.c:310
 msgid "Forget association"
@@ -1659,28 +1663,28 @@ msgstr "消除關聯"
 
 #: gtk/gtkappchooserdialog.c:453
 msgid "Failed to start GNOME Software"
-msgstr "無法啟動《GNOME 軟體》"
+msgstr "無法啟動《軟體》"
 
 #: gtk/gtkappchooserwidget.c:593
 msgid "Default Application"
-msgstr "預設的應用程式"
+msgstr "預設應用程式"
 
 #: gtk/gtkappchooserwidget.c:643
 #, c-format
 msgid "No applications found for “%s”."
-msgstr "沒有應用程式可開啟「%s」。"
+msgstr "沒有應用程式可以開啟「%s」。"
 
 #: gtk/gtkappchooserwidget.c:726
 msgid "Recommended Applications"
-msgstr "建議的應用程式"
+msgstr "建議應用程式"
 
 #: gtk/gtkappchooserwidget.c:741
 msgid "Related Applications"
-msgstr "相關的應用程式"
+msgstr "相關應用程式"
 
 #: gtk/gtkappchooserwidget.c:755
 msgid "Other Applications"
-msgstr "其他的應用程式"
+msgstr "其他應用程式"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
 #: gtk/gtkprintoperation-win32.c:1589 gtk/inspector/prop-editor.c:1686
@@ -1695,7 +1699,7 @@ msgstr "%s 不在書籤列表中"
 #: gtk/gtkbookmarksmanager.c:362
 #, c-format
 msgid "%s already exists in the bookmarks list"
-msgstr "%s 已存在書籤列表中"
+msgstr "%s 已在書籤列表中"
 
 #: gtk/gtkbuilder-menus.c:223
 #, c-format
@@ -2249,7 +2253,7 @@ msgstr "刪除(_D)"
 
 #: gtk/gtkentry.c:9613 gtk/gtklabel.c:6700 gtk/gtktextview.c:9548
 msgid "Select _All"
-msgstr "全部選取(_A)"
+msgstr "全選(_A)"
 
 #: gtk/gtkentry.c:9623 gtk/gtktextview.c:9558
 msgid "Insert _Emoji"
@@ -2257,7 +2261,7 @@ msgstr "插入繪文字(_E)"
 
 #: gtk/gtkentry.c:9799 gtk/gtktextview.c:9782
 msgid "Select all"
-msgstr "選擇全部"
+msgstr "全選"
 
 #: gtk/gtkentry.c:9802 gtk/gtktextview.c:9785
 msgid "Cut"
@@ -2277,7 +2281,7 @@ msgstr "Caps Lock 已開啟"
 
 #: gtk/gtkentry.c:11158
 msgid "Insert Emoji"
-msgstr "插入顏文字"
+msgstr "插入繪文字"
 
 #: gtk/gtkfilechooserbutton.c:112
 msgid "Select a File"
@@ -2379,7 +2383,7 @@ msgstr "檔案無法被刪除"
 
 #: gtk/gtkfilechooserwidget.c:895
 msgid "The file could not be moved to the Trash"
-msgstr "檔案無法移至垃圾桶"
+msgstr "檔案無法移到垃圾桶"
 
 #: gtk/gtkfilechooserwidget.c:1040
 msgid "A folder with that name already exists"
@@ -2431,11 +2435,11 @@ msgstr "檔案名稱不能以空白結尾"
 
 #: gtk/gtkfilechooserwidget.c:1121
 msgid "Folder names starting with a “.” are hidden"
-msgstr "以「.」開頭的資料夾名稱為隱藏"
+msgstr "以「.」開頭的資料夾為隱藏狀態"
 
 #: gtk/gtkfilechooserwidget.c:1122
 msgid "File names starting with a “.” are hidden"
-msgstr "以「.」開頭的檔案名稱為隱藏"
+msgstr "以「.」開頭的檔案為隱藏狀態"
 
 #: gtk/gtkfilechooserwidget.c:1495
 #, c-format
@@ -2445,7 +2449,7 @@ msgstr "確定要永遠刪除「%s」嗎？"
 #: gtk/gtkfilechooserwidget.c:1498
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
-msgstr "如果刪除本項目，它會無法還原。"
+msgstr "若刪除本項目將永久遺失。"
 
 #: gtk/gtkfilechooserwidget.c:1635
 msgid "The file could not be renamed"
@@ -2478,7 +2482,7 @@ msgstr "重新命名(_R)"
 
 #: gtk/gtkfilechooserwidget.c:2336
 msgid "_Move to Trash"
-msgstr "移至垃圾桶(_M)"
+msgstr "丟進垃圾桶(_M)"
 
 #: gtk/gtkfilechooserwidget.c:2340
 msgid "Show _Hidden Files"
@@ -2498,7 +2502,7 @@ msgstr "顯示時間(_T)"
 
 #: gtk/gtkfilechooserwidget.c:2344
 msgid "Sort _Folders before Files"
-msgstr "在檔案前先列出資料夾(_F)"
+msgstr "在檔案前列出資料夾(_F)"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2626 gtk/inspector/css-node-tree.ui:141
@@ -2531,7 +2535,7 @@ msgstr "輸入位置或 URL"
 #: gtk/gtkfilechooserwidget.c:4451 gtk/gtkfilechooserwidget.c:7493
 #: gtk/ui/gtkfilechooserwidget.ui:278
 msgid "Modified"
-msgstr "已修改"
+msgstr "修改日期"
 
 #: gtk/gtkfilechooserwidget.c:4729
 #, c-format
@@ -2548,7 +2552,7 @@ msgstr "%H:%M"
 
 #: gtk/gtkfilechooserwidget.c:4895 gtk/gtkfilechooserwidget.c:4943
 msgid "%l:%M %p"
-msgstr "%p%l:%M"
+msgstr "%p %l:%M"
 
 #: gtk/gtkfilechooserwidget.c:4899
 msgid "Yesterday"
@@ -2585,11 +2589,11 @@ msgstr "封存檔"
 
 #: gtk/gtkfilechooserwidget.c:5015
 msgid "Markup"
-msgstr "標記"
+msgstr "標記語言"
 
 #: gtk/gtkfilechooserwidget.c:5016 gtk/gtkfilechooserwidget.c:5017
 msgid "Text"
-msgstr "文字"
+msgstr "文字檔"
 
 #: gtk/gtkfilechooserwidget.c:5019
 msgid "Video"
@@ -2653,7 +2657,7 @@ msgstr "無法傳送搜尋要求"
 
 #: gtk/gtkfilechooserwidget.c:7704
 msgid "Accessed"
-msgstr "存取時間"
+msgstr "存取日期"
 
 #: gtk/gtkfilechooserwidget.c:8824 gtk/ui/gtkfilechooserwidget.ui:89
 msgid "Create Folder"
@@ -2748,7 +2752,7 @@ msgstr "圖示「%s」不存在於佈景主題 %s 中"
 
 #: gtk/gtkicontheme.c:4101 gtk/gtkicontheme.c:4468
 msgid "Failed to load icon"
-msgstr "載入圖示失敗"
+msgstr "無法載入圖示"
 
 #: gtk/gtkimmodule.c:547
 msgctxt "input method menu"
@@ -2992,7 +2996,7 @@ msgstr "密碼(_P)"
 
 #: gtk/gtkmountoperation.c:755
 msgid "Forget password _immediately"
-msgstr "立刻忘記密碼(_I)"
+msgstr "立即忘記密碼(_I)"
 
 #: gtk/gtkmountoperation.c:765
 msgid "Remember password until you _logout"
@@ -3159,26 +3163,27 @@ msgstr "新增書籤"
 
 #: gtk/gtkplacessidebar.c:1473
 msgid "Connect to Server"
-msgstr "連接伺服器"
+msgstr "連線到伺服器"
 
 #: gtk/gtkplacessidebar.c:1475
 msgid "Connect to a network server address"
-msgstr "連接到網路伺服器位址"
+msgstr "連線到網路伺服器位址"
 
 #: gtk/gtkplacessidebar.c:1537
 msgid "Other Locations"
-msgstr "其他的位置"
+msgstr "其他位置"
 
 #: gtk/gtkplacessidebar.c:1538
 msgid "Show other locations"
-msgstr "顯示其他的位置"
+msgstr "顯示其他位置"
 
 #. Adjust start/stop items to reflect the type of the drive
 #: gtk/gtkplacessidebar.c:2337 gtk/gtkplacessidebar.c:3716
 msgid "_Start"
-msgstr "起動(_S)"
+msgstr "啟動(_S)"
 
 #: gtk/gtkplacessidebar.c:2338 gtk/gtkplacessidebar.c:3717
+#, fuzzy
 msgid "_Stop"
 msgstr "關閉(_S)"
 
@@ -3244,7 +3249,7 @@ msgstr "名稱"
 #: gtk/gtkplacessidebar.c:2938
 #, c-format
 msgid "Unable to unmount “%s”"
-msgstr "無法卸載 %s"
+msgstr "無法卸載「%s」"
 
 #: gtk/gtkplacessidebar.c:3114
 #, c-format
@@ -3262,19 +3267,19 @@ msgid "Unable to eject %s"
 msgstr "無法退出 %s"
 
 #: gtk/gtkplacessidebar.c:3349
-#, c-format
+#, fuzzy, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "無法監測「%s」的媒體變更"
 
 #: gtk/gtkplacessidebar.c:3633 gtk/gtkplacessidebar.c:3699
 #: gtk/gtkplacesview.c:1715
 msgid "Open in New _Tab"
-msgstr "在新的分頁中開啟(_T)"
+msgstr "在新分頁中開啟(_T)"
 
 #: gtk/gtkplacessidebar.c:3639 gtk/gtkplacessidebar.c:3702
 #: gtk/gtkplacesview.c:1726
 msgid "Open in New _Window"
-msgstr "在新的視窗中開啟(_W)"
+msgstr "在新視窗中開啟(_W)"
 
 #: gtk/gtkplacessidebar.c:3706
 msgid "_Add Bookmark"
@@ -3393,7 +3398,7 @@ msgstr "網路"
 
 #: gtk/gtkplacesview.c:2096 gtk/gtkplacesview.c:2105
 msgid "On This Computer"
-msgstr "這臺電腦上"
+msgstr "本機"
 
 #. Translators: respectively, free and total space of the drive. The plural form
 #. * should be based on the free space available.
@@ -3424,9 +3429,10 @@ msgstr "記住密碼(_R)"
 
 #: gtk/gtkprinteroptionwidget.c:542
 msgid "Select a filename"
-msgstr "選取檔案名稱"
+msgstr "選擇檔案名稱"
 
 #: gtk/gtkprinteroptionwidget.c:769
+#, fuzzy
 msgid "Not available"
 msgstr "不存在"
 
@@ -3435,7 +3441,7 @@ msgstr "不存在"
 #. * by the job number.
 #.
 #: gtk/gtkprintoperation.c:259
-#, c-format
+#, fuzzy, c-format
 msgid "%s job #%d"
 msgstr "%s 的工作 #%d"
 
@@ -3810,7 +3816,7 @@ msgstr "兩指輕掃右方"
 
 #: gtk/gtkshortcutswindow.c:929
 msgid "Shortcuts"
-msgstr "捷徑鍵"
+msgstr "鍵盤快捷鍵"
 
 #: gtk/gtkshortcutswindow.c:934
 msgid "Search Results"
@@ -3818,7 +3824,7 @@ msgstr "搜尋結果"
 
 #: gtk/gtkshortcutswindow.c:988
 msgid "Search Shortcuts"
-msgstr "搜尋捷徑鍵"
+msgstr "搜尋鍵盤快捷鍵"
 
 #: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
 #: gtk/ui/gtkfilechooserwidget.ui:353
@@ -4424,7 +4430,7 @@ msgstr "是"
 
 #: gtk/inspector/signals-list.ui:36
 msgid "Signal"
-msgstr "信號"
+msgstr "訊號"
 
 #: gtk/inspector/signals-list.ui:50
 msgid "Connected"
@@ -7159,7 +7165,7 @@ msgstr "食物和飲品"
 
 #: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:272
 msgid "Travel & Places"
-msgstr "旅遊和地點"
+msgstr "旅行和地點"
 
 #: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:287
 msgid "Activities"
@@ -7347,8 +7353,8 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
-"指定一或多個頁面範圍，\n"
-"例如 1-3,7,11"
+"指定其中 1 頁或多個頁面範圍，\n"
+"例如：1-3,7,11"
 
 #: gtk/ui/gtkprintunixdialog.ui:276
 msgid "Pages"
@@ -7363,6 +7369,7 @@ msgid "Copie_s:"
 msgstr "份數(_S)："
 
 #: gtk/ui/gtkprintunixdialog.ui:361
+#, fuzzy
 msgid "C_ollate"
 msgstr "順序分頁(_O)"
 
@@ -7456,12 +7463,13 @@ msgstr "於(_T)："
 #: gtk/ui/gtkprintunixdialog.ui:1007 gtk/ui/gtkprintunixdialog.ui:1009
 #: gtk/ui/gtkprintunixdialog.ui:1028 gtk/ui/gtkprintunixdialog.ui:1030
 #: gtk/ui/gtkprintunixdialog.ui:1037
+#, fuzzy
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "指定列印的時刻格式，\n"
-" 例如 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+"例如：15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
 #: gtk/ui/gtkprintunixdialog.ui:1036
 msgid "Time of print"
@@ -7729,7 +7737,7 @@ msgid "Vietnamese (VIQR)"
 msgstr "越南文 (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:105
+#: modules/input/imwayland.c:106
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
@@ -7745,7 +7753,7 @@ msgstr "Waylandgtk"
 #: modules/input/imxim.c:26
 msgctxt "input method menu"
 msgid "X Input Method"
-msgstr "一般輸入法 (XIM)"
+msgstr "X 輸入法 (XIM)"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1159
 #: modules/printbackends/cups/gtkprintbackendcups.c:1468
@@ -8275,7 +8283,7 @@ msgstr "輸出"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:537
 msgid "Print to File"
-msgstr "列印至檔案"
+msgstr "列印成檔案儲存"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "PDF"
@@ -8341,7 +8349,7 @@ msgstr "不明"
 
 #. default filename used for print-to-test
 #: modules/printbackends/test/gtkprintbackendtest.c:232
-#, c-format
+#, fuzzy, c-format
 msgid "test-output.%s"
 msgstr "test-output.%s"
 
