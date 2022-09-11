@@ -32,10 +32,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.8.2\n"
+"Project-Id-Version: gtk+ 3.2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-02-18 00:07+0000\n"
-"PO-Revision-Date: 2022-08-16 20:44+0200\n"
+"PO-Revision-Date: 2022-09-11 20:44+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -495,7 +495,7 @@ msgstr "Desperta"
 #: gdk/keyname-table.h:6916
 msgctxt "keyboard label"
 msgid "Suspend"
-msgstr "Atura temporalment"
+msgstr "Suspèn"
 
 #: gdk/quartz/gdkglcontext-quartz.c:123
 msgid "Unable to create a GL pixel format"
