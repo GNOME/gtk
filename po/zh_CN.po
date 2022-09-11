@@ -30,8 +30,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-09-03 07:50+0000\n"
-"PO-Revision-Date: 2022-09-03 17:15-0400\n"
+"POT-Creation-Date: 2022-09-09 14:59+0000\n"
+"PO-Revision-Date: 2022-09-11 15:24-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -2117,7 +2117,7 @@ msgstr "取消(_C)"
 
 #: gtk/gtkfilechoosernative.c:510 gtk/gtkfilechoosernative.c:574
 #: gtk/gtkplacessidebar.c:3146 gtk/gtkplacessidebar.c:3231
-#: gtk/gtkplacesview.c:1658
+#: gtk/gtkplacesview.c:1659
 msgid "_Open"
 msgstr "打开(_O)"
 
@@ -2199,7 +2199,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "如果您删除一个项目，它将永久丢失。"
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5652 gtk/gtktext.c:6051 gtk/gtktextview.c:8975
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6051 gtk/gtktextview.c:8968
 msgid "_Delete"
 msgstr "删除(_D)"
 
@@ -2476,21 +2476,14 @@ msgid "Number Spacing"
 msgstr "数字间隔"
 
 #: gtk/gtkfontchooserwidget.c:2505
-#, fuzzy
-#| msgctxt "OpenType layout"
-#| msgid "Fractions"
 msgid "Fractions"
 msgstr "分数"
 
 #: gtk/gtkfontchooserwidget.c:2506
-#, fuzzy
-#| msgid "Style Properties"
 msgid "Style Variations"
-msgstr "样式属性"
+msgstr "样式变体"
 
 #: gtk/gtkfontchooserwidget.c:2508
-#, fuzzy
-#| msgid "Character Variants"
 msgid "Character Variations"
 msgstr "字符变体"
 
@@ -2498,19 +2491,19 @@ msgstr "字符变体"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL 上下文创建失败"
 
-#: gtk/gtklabel.c:5649 gtk/gtktext.c:6039 gtk/gtktextview.c:8963
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6039 gtk/gtktextview.c:8956
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6043 gtk/gtktextview.c:8967
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6043 gtk/gtktextview.c:8960
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: gtk/gtklabel.c:5651 gtk/gtktext.c:6047 gtk/gtktextview.c:8971
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6047 gtk/gtktextview.c:8964
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6060 gtk/gtktextview.c:8996
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6060 gtk/gtktextview.c:8989
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -2945,12 +2938,12 @@ msgid "Unable to poll “%s” for media changes"
 msgstr "无法轮询“%s”以获取媒体更改"
 
 #: gtk/gtkplacessidebar.c:3152 gtk/gtkplacessidebar.c:3239
-#: gtk/gtkplacesview.c:1662
+#: gtk/gtkplacesview.c:1663
 msgid "Open in New _Tab"
 msgstr "在新标签页中打开(_T)"
 
 #: gtk/gtkplacessidebar.c:3158 gtk/gtkplacessidebar.c:3248
-#: gtk/gtkplacesview.c:1667
+#: gtk/gtkplacesview.c:1668
 msgid "Open in New _Window"
 msgstr "在新窗口中打开(_W)"
 
@@ -2962,11 +2955,11 @@ msgstr "添加到书签(_A)"
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: gtk/gtkplacessidebar.c:3279 gtk/gtkplacesview.c:1692
+#: gtk/gtkplacessidebar.c:3279 gtk/gtkplacesview.c:1693
 msgid "_Mount"
 msgstr "挂载(_M)"
 
-#: gtk/gtkplacessidebar.c:3288 gtk/gtkplacesview.c:1681
+#: gtk/gtkplacessidebar.c:3288 gtk/gtkplacesview.c:1682
 msgid "_Unmount"
 msgstr "卸载(_U)"
 
@@ -3041,71 +3034,71 @@ msgid "Con_nect"
 msgstr "连接(_N)"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1366
+#: gtk/gtkplacesview.c:1367
 msgid "Unable to unmount volume"
 msgstr "不能卸载卷"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1458
+#: gtk/gtkplacesview.c:1459
 msgid "Cance_l"
 msgstr "取消(_L)"
 
-#: gtk/gtkplacesview.c:1605
+#: gtk/gtkplacesview.c:1606
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: gtk/gtkplacesview.c:1611
+#: gtk/gtkplacesview.c:1612
 msgid "File Transfer Protocol"
 msgstr "文件传输协议（FTP）"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1613
+#: gtk/gtkplacesview.c:1614
 msgid "ftp:// or ftps://"
 msgstr "ftp:// 或 ftps://"
 
-#: gtk/gtkplacesview.c:1619
+#: gtk/gtkplacesview.c:1620
 msgid "Network File System"
 msgstr "网络文件系统"
 
-#: gtk/gtkplacesview.c:1625
+#: gtk/gtkplacesview.c:1626
 msgid "Samba"
 msgstr "Samba"
 
-#: gtk/gtkplacesview.c:1631
+#: gtk/gtkplacesview.c:1632
 msgid "SSH File Transfer Protocol"
 msgstr "SSH 文件传输协议（SFTP）"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkplacesview.c:1634
 msgid "sftp:// or ssh://"
 msgstr "sftp:// 或 ssh://"
 
-#: gtk/gtkplacesview.c:1639
+#: gtk/gtkplacesview.c:1640
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1641
+#: gtk/gtkplacesview.c:1642
 msgid "dav:// or davs://"
 msgstr "dav:// 或 davs://"
 
-#: gtk/gtkplacesview.c:1676
+#: gtk/gtkplacesview.c:1677
 msgid "_Disconnect"
 msgstr "断开连接(_D)"
 
-#: gtk/gtkplacesview.c:1687
+#: gtk/gtkplacesview.c:1688
 msgid "_Connect"
 msgstr "连接(_C)"
 
-#: gtk/gtkplacesview.c:1871
+#: gtk/gtkplacesview.c:1905
 msgid "Unable to get remote server location"
 msgstr "无法获取远程服务器位置"
 
-#: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
+#: gtk/gtkplacesview.c:2048 gtk/gtkplacesview.c:2057
 msgid "Networks"
 msgstr "网络"
 
-#: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
+#: gtk/gtkplacesview.c:2048 gtk/gtkplacesview.c:2057
 msgid "On This Computer"
 msgstr "在这台电脑上"
 
@@ -3483,19 +3476,19 @@ msgstr "未找到项目"
 msgid "Try a different search"
 msgstr "尝试不同的搜索"
 
-#: gtk/gtkshow.c:177
+#: gtk/gtkshow.c:175
 msgid "Could not show link"
 msgstr "无法显示链接"
 
-#: gtk/gtktext.c:6065 gtk/gtktextview.c:9001
+#: gtk/gtktext.c:6065 gtk/gtktextview.c:8994
 msgid "Insert _Emoji"
 msgstr "插入表情符号(_E)"
 
-#: gtk/gtktextview.c:8983
+#: gtk/gtktextview.c:8976
 msgid "_Undo"
 msgstr "撤消(_U)"
 
-#: gtk/gtktextview.c:8987
+#: gtk/gtktextview.c:8980
 msgid "_Redo"
 msgstr "重做(_R)"
 
@@ -4277,7 +4270,7 @@ msgstr "软件 GL"
 
 #: gtk/inspector/visual.ui:714
 msgid "Inspect Inspector"
-msgstr ""
+msgstr "检阅本检查器"
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
@@ -6381,50 +6374,39 @@ msgid "Some of the settings in the dialog conflict"
 msgstr "对话框中的某些设置冲突"
 
 #: modules/media/gtkffmediafile.c:253
-#, fuzzy, c-format
-#| msgid "Unspecified error decoding video"
+#, c-format
 msgid "Unspecified error decoding media"
-msgstr "解码视频时发生未指明的错误"
+msgstr "解码媒体时发生未指明的错误"
 
 #: modules/media/gtkffmediafile.c:286
-#, fuzzy, c-format
-#| msgid "Cannot provide contents as %s"
+#, c-format
 msgid "Cannot find decoder: %s"
-msgstr "无法以 %s 提供内容"
+msgstr "无法找到解码器：%s"
 
 #: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
-#, fuzzy
-#| msgid "Unable to create a GL context"
 msgid "Failed to allocate a codec context"
-msgstr "无法创建 GL 上下文"
+msgstr "无法分配编解码器上下文"
 
 #: modules/media/gtkffmediafile.c:341
-#, fuzzy, c-format
-#| msgid "Cannot provide contents as %s"
+#, c-format
 msgid "Cannot find encoder: %s"
-msgstr "无法以 %s 提供内容"
+msgstr "无法找到编码器：%s"
 
 #: modules/media/gtkffmediafile.c:352
-#, fuzzy
-#| msgid "Can’t close stream"
 msgid "Cannot add new stream"
-msgstr "无法关闭流"
+msgstr "无法创建新的流"
 
 #: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
-#, fuzzy
-#| msgid "Failed to create EGL display"
 msgid "Failed to allocate an audio frame"
-msgstr "创建 EGL 显示失败"
+msgstr "分配音频帧失败"
 
 #: modules/media/gtkffmediafile.c:650 modules/media/gtkffmediafile.c:898
 msgid "Not enough memory"
 msgstr "内存不足"
 
 #: modules/media/gtkffmediafile.c:821
-#, fuzzy
-#| msgid "Could not read the contents of %s"
 msgid "Could not allocate resampler context"
-msgstr "无法读取 %s 的内容"
+msgstr "无法分配重采样器上下文"
 
 #: modules/media/gtkffmediafile.c:868
 msgid "No audio output found"
