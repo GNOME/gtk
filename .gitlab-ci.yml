@@ -215,6 +215,39 @@ macos-x86_64:
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
+macos-arm64:
+  extends: .only-default
+  only:
+    - branches@GNOME/gtk
+  stage: build
+  tags:
+    - macos
+  needs: []
+  before_script:
+    - bash .gitlab-ci/show-info-osx.sh
+    - pip3 install --user meson==0.60.3
+    - pip3 install --user ninja
+    - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
+    - export MESON_FORCE_BACKTRACE=1
+    # Cross-compiling needs to force Meson not to look into default
+    # paths for libraries
+    - export PKG_CONFIG_LIBDIR="./_build/lib/pkgconfig"
+  script:
+    - meson --cross-file .gitlab-ci/cross-compile/macos-arm64.txt
+            -Dx11-backend=false
+            -Dbroadway-backend=true
+            -Dmacos-backend=true
+            -Dmedia-gstreamer=disabled
+            -Dintrospection=disabled
+            -Dcpp_std=c++11
+            -Dpixman:tests=disabled
+            _build
+    - ninja -C _build
+  artifacts:
+    when: always
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+
 vs2017-x64:
   extends: .only-default
   # TODO: Uncomment this when ready to merge.
