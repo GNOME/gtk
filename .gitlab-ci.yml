@@ -186,7 +186,7 @@ msys2-mingw64:
     paths:
       - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
 
-macos:
+macos-x86_64:
   extends: .only-default
   only:
     - branches@GNOME/gtk
