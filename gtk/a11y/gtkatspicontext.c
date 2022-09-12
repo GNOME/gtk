@@ -1099,29 +1099,9 @@ gtk_at_spi_context_bounds_change (GtkATContext *ctx)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (ctx);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
-  GtkWidget *widget;
-  GtkWidget *parent;
-  double x, y;
-  int width, height;
-
-  if (!GTK_IS_WIDGET (accessible))
-    return;
-
-  widget = GTK_WIDGET (accessible);
-  if (!gtk_widget_get_realized (widget))
-    return;
-
-  parent = gtk_widget_get_parent (widget);
-
-  if (parent)
-    gtk_widget_translate_coordinates (widget, parent, 0., 0., &x, &y);
-  else
-    x = y = 0.;
-
-  width = gtk_widget_get_width (widget);
-  height = gtk_widget_get_height (widget);
-
-  emit_bounds_changed (self, (int)x, (int)y, width, height);
+  int x, y, width, height;
+  if (gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
+    emit_bounds_changed (self, x, y, width, height);
 }
 
 static void

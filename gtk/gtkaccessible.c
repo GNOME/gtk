@@ -805,6 +805,31 @@ gtk_accessible_bounds_changed (GtkAccessible *self)
   gtk_at_context_bounds_changed (context);
 }
 
+/*
+ * gtk_accessible_get_bounds:
+ * @self: a `GtkAccessible`
+ * @x: the x coordinate of the top left corner of the accessible
+ * @y: the y coordinate of the top left corner of the widget
+ * @width: the width of the widget
+ * @height: the height of the widget
+ *
+ * Query the coordinates and dimensions of this accessible
+ *
+ * See gtk_accessible_bounds_changed().
+ *
+ * This functionality can be overridden by `GtkAccessible`
+ * implementations, e.g. to get the bounds from an ignored
+ * child widget.
+ *
+ * Returns: whether the bounds should be considered valid
+ */
+gboolean
+gtk_accessible_get_bounds (GtkAccessible              *self,
+                                   int *x, int *y, int *width, int *height)
+{
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_bounds (self, x, y, width, height);
+}
+
 /*<private>
  * gtk_accessible_should_present:
  * @self: a `GtkAccessible`

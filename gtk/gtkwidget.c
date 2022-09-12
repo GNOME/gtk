@@ -8487,6 +8487,33 @@ gtk_widget_accessible_get_child_at_index (GtkAccessible *self, guint index)
   return NULL;
 }
 
+static gboolean
+gtk_widget_accessible_get_bounds (GtkAccessible *self, int *x, int *y, int *width, int *height) {
+  GtkWidget *widget;
+  GtkWidget *parent;
+  double translated_x, translated_y;
+   
+  widget = GTK_WIDGET (self);
+  if (!gtk_widget_get_realized (widget))
+    return false;
+
+  parent = gtk_widget_get_parent (widget);
+
+  if (parent)
+    {
+      gtk_widget_translate_coordinates (widget, parent, 0., 0., &translated_x, &translated_y);
+      *x = (int)translated_x;
+      *y = (int)translated_y;
+    }
+  else
+    *x = *y = 0;
+
+  *width = gtk_widget_get_width (widget);
+  *height = gtk_widget_get_height (widget);
+
+  return true;
+}
+
 static void
 gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
 {
@@ -8494,6 +8521,7 @@ gtk_widget_accessible_interface_init (GtkAccessibleInterface *iface)
   iface->get_platform_state = gtk_widget_accessible_get_platform_state;
   iface->get_parent = gtk_widget_accessible_get_parent;
   iface->get_child_at_index = gtk_widget_accessible_get_child_at_index;
+  iface->get_bounds = gtk_widget_accessible_get_bounds;
 }
 
 static void
