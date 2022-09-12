@@ -165,9 +165,12 @@ typedef struct {
 } GtkStackPrivate;
 
 static void gtk_stack_buildable_interface_init (GtkBuildableIface *iface);
+static void gtk_stack_accessible_init (GtkAccessibleInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkStack, gtk_stack, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkStack)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
+                                                gtk_stack_accessible_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_stack_buildable_interface_init))
 enum  {
@@ -253,11 +256,43 @@ gtk_stack_page_accessible_get_platform_state (GtkAccessible              *self,
   return FALSE;
 }
 
+static GtkAccessible *
+gtk_stack_page_accessible_get_parent (GtkAccessible *accessible) {
+  GtkStackPage *page = GTK_STACK_PAGE (accessible);
+
+  if (page->widget == NULL)
+    return NULL;
+  else
+  return GTK_ACCESSIBLE (gtk_widget_get_parent (page->widget));
+}
+
+static GtkAccessible *
+gtk_stack_page_accessible_get_child_at_index(GtkAccessible *accessible, guint index) {
+  GtkStackPage *page = GTK_STACK_PAGE (accessible);
+
+  if (index == 0 && page->widget != NULL)
+    return GTK_ACCESSIBLE (page->widget);
+  else
+    return NULL;
+}
+
+static gboolean
+gtk_stack_page_accessible_get_bounds (GtkAccessible *accessible, int *x, int *y, int *width, int *height) {
+  GtkStackPage *page = GTK_STACK_PAGE (accessible);
+  if (page->widget != NULL)
+    return gtk_accessible_get_bounds (GTK_ACCESSIBLE (page->widget), x, y, width, height);
+  else
+    return false;
+}
+
 static void
 gtk_stack_page_accessible_init (GtkAccessibleInterface *iface)
 {
   iface->get_at_context = gtk_stack_page_accessible_get_at_context;
   iface->get_platform_state = gtk_stack_page_accessible_get_platform_state;
+  iface->get_parent = gtk_stack_page_accessible_get_parent;
+  iface->get_child_at_index = gtk_stack_page_accessible_get_child_at_index;
+  iface->get_bounds = gtk_stack_page_accessible_get_bounds;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GtkStackPage, gtk_stack_page, G_TYPE_OBJECT,
@@ -726,6 +761,21 @@ gtk_stack_buildable_interface_init (GtkBuildableIface *iface)
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
   iface->add_child = gtk_stack_buildable_add_child;
+}
+
+static GtkAccessible *
+gtk_stack_accessible_get_child_at_index (GtkAccessible *accessible, guint index)
+{
+  GtkStack *stack = GTK_STACK (accessible);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  GtkStackPage *page = g_list_nth_data (priv->children, index);
+  return GTK_ACCESSIBLE (page);
+}
+
+static void
+gtk_stack_accessible_init(GtkAccessibleInterface *iface)
+{
+  iface->get_child_at_index = gtk_stack_accessible_get_child_at_index;
 }
 
 static void stack_remove (GtkStack  *stack,
