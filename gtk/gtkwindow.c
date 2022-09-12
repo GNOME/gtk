@@ -5012,6 +5012,9 @@ synthesize_focus_change_events (GtkWindow       *window,
   GtkWidget *prev;
   gboolean seen_ancestor;
 
+  if (old_focus == new_focus)
+    return;
+
   if (old_focus && new_focus)
     ancestor = gtk_widget_common_ancestor (old_focus, new_focus);
   else
@@ -6462,7 +6465,17 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
       else if (focus->target == widget ||
                gtk_widget_is_ancestor (focus->target, widget))
         {
+          GtkWidget *old_target;
+
+          old_target = g_object_ref (focus->target);
           gtk_pointer_focus_repick_target (focus);
+          gtk_synthesize_crossing_events (GTK_ROOT (window),
+                                          GTK_CROSSING_POINTER,
+                                          old_target, focus->target,
+                                          focus->x, focus->y,
+                                          GDK_CROSSING_NORMAL,
+                                          NULL);
+          g_object_unref (old_target);
         }
 
       gtk_pointer_focus_unref (focus);

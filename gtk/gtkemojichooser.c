@@ -1035,6 +1035,34 @@ gtk_emoji_chooser_show (GtkWidget *widget)
 }
 
 static EmojiSection *
+find_section (GtkEmojiChooser *chooser,
+              GtkWidget       *box)
+{
+  if (box == chooser->recent.box)
+    return &chooser->recent;
+  else if (box == chooser->people.box)
+    return &chooser->people;
+  else if (box == chooser->body.box)
+    return &chooser->body;
+  else if (box == chooser->nature.box)
+    return &chooser->nature;
+  else if (box == chooser->food.box)
+    return &chooser->food;
+  else if (box == chooser->travel.box)
+    return &chooser->travel;
+  else if (box == chooser->activities.box)
+    return &chooser->activities;
+  else if (box == chooser->objects.box)
+    return &chooser->objects;
+  else if (box == chooser->symbols.box)
+    return &chooser->symbols;
+  else if (box == chooser->flags.box)
+    return &chooser->flags;
+  else
+    return NULL;
+}
+
+static EmojiSection *
 find_next_section (GtkEmojiChooser *chooser,
                    GtkWidget       *box,
                    gboolean         down)
@@ -1105,81 +1133,111 @@ keynav_failed (GtkWidget        *box,
   GtkWidget *focus;
   GtkWidget *child;
   GtkWidget *sibling;
+  GtkAllocation alloc;
   int i;
   int column;
-  int n_columns = 7;
   int child_x;
 
   focus = gtk_root_get_focus (gtk_widget_get_root (box));
   if (focus == NULL)
     return FALSE;
 
-  /* determine the number of columns */
-  child_x = -1;
-  for (i = 0; i < 20; i++)
-    {
-      GtkAllocation alloc;
-
-      gtk_widget_get_allocation (GTK_WIDGET (gtk_flow_box_get_child_at_index (GTK_FLOW_BOX (box), i)),
-                                 &alloc);
-      if (alloc.x > child_x)
-        child_x = alloc.x;
-      else
-        {
-          n_columns = i;
-          break;
-        }
-    }
-
-  n_columns = MAX (n_columns, 1);
-
   child = gtk_widget_get_ancestor (focus, GTK_TYPE_EMOJI_CHOOSER_CHILD);
 
-  i = 0;
+  column = 0;
+  child_x = G_MAXINT;
   for (sibling = gtk_widget_get_first_child (box);
-       sibling != child;
+       sibling;
        sibling = gtk_widget_get_next_sibling (sibling))
-    i++;
+    {
+      if (!gtk_widget_get_child_visible (sibling))
+        continue;
 
-  column = i % n_columns;
+      gtk_widget_get_allocation (sibling, &alloc);
+
+      if (alloc.x < child_x)
+        column = 0;
+      else
+        column++;
+
+      child_x = alloc.x;
+
+      if (sibling == child)
+        break;
+    }
 
   if (direction == GTK_DIR_DOWN)
-    {
-      next = find_next_section (chooser, box, TRUE);
-      if (next == NULL)
-        return FALSE;
-
-      i = 0;
-      for (sibling = gtk_widget_get_first_child (next->box);
-           sibling;
-           sibling = gtk_widget_get_next_sibling (sibling), i++)
+   {
+      next = find_section (chooser, box);
+      while (TRUE)
         {
-          if (i == column)
+          next = find_next_section (chooser, next->box, TRUE);
+          if (next == NULL)
+            return FALSE;
+
+          i = 0;
+          child_x = G_MAXINT;
+          for (sibling = gtk_widget_get_first_child (next->box);
+               sibling;
+               sibling = gtk_widget_get_next_sibling (sibling))
             {
-              gtk_widget_grab_focus (sibling);
-              return TRUE;
+              if (!gtk_widget_get_child_visible (sibling))
+                continue;
+
+              gtk_widget_get_allocation (sibling, &alloc);
+
+              if (alloc.x < child_x)
+                i = 0;
+              else
+                i++;
+
+              child_x = alloc.x;
+
+              if (i == column)
+                {
+                  gtk_widget_grab_focus (sibling);
+                  return TRUE;
+                }
             }
         }
     }
   else if (direction == GTK_DIR_UP)
     {
-      next = find_next_section (chooser, box, FALSE);
-      if (next == NULL)
-        return FALSE;
+      next = find_section (chooser, box);
+      while (TRUE)
+        {
+          next = find_next_section (chooser, next->box, FALSE);
+          if (next == NULL)
+            return FALSE;
 
-      i = 0;
-      child = NULL;
-      for (sibling = gtk_widget_get_first_child (next->box);
-           sibling;
-           sibling = gtk_widget_get_next_sibling (sibling), i++)
-        {
-          if ((i % n_columns) == column)
-            child = sibling;
-        }
-      if (child)
-        {
-          gtk_widget_grab_focus (child);
-          return TRUE;
+          i = 0;
+          child_x = G_MAXINT;
+          child = NULL;
+          for (sibling = gtk_widget_get_first_child (next->box);
+               sibling;
+               sibling = gtk_widget_get_next_sibling (sibling))
+            {
+              if (!gtk_widget_get_child_visible (sibling))
+                continue;
+
+              gtk_widget_get_allocation (sibling, &alloc);
+
+              if (alloc.x < child_x)
+                i = 0;
+              else
+                i++;
+
+              child_x = alloc.x;
+
+              if (i == column)
+                child = sibling;
+            }
+
+          if (child)
+            {
+              gtk_widget_grab_focus (child);
+              return TRUE;
+            }
         }
     }
 

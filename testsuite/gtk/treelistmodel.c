@@ -252,6 +252,125 @@ test_remove_some (void)
   g_object_unref (tree);
 }
 
+/* Test for https://gitlab.gnome.org/GNOME/gtk/-/issues/4595 */
+typedef struct _DemoNode DemoNode;
+
+struct _DemoNode {
+  GObject parent_instance;
+  char *value;
+  GListStore *children;
+};
+
+G_DECLARE_FINAL_TYPE (DemoNode, demo_node, DEMO, NODE, GObject);
+
+G_DEFINE_TYPE (DemoNode, demo_node, G_TYPE_OBJECT);
+
+static void
+demo_node_init (DemoNode *node)
+{
+}
+
+static void
+demo_node_finalize (GObject *object)
+{
+  g_free (DEMO_NODE (object)->value);
+
+  G_OBJECT_CLASS (demo_node_parent_class)->finalize (object);
+}
+
+static void
+demo_node_class_init (DemoNodeClass *klass)
+{
+  G_OBJECT_CLASS (klass)->finalize = demo_node_finalize;
+}
+
+static DemoNode *
+demo_node_new (const char *value,
+               GListStore *children)
+{
+  DemoNode *result;
+
+  result = g_object_new (demo_node_get_type(), NULL);
+  result->value = g_strdup (value);
+  if (children)
+    result->children = g_object_ref (children);
+
+  return result;
+}
+
+static GListStore *
+create_model (void)
+{
+  DemoNode *aa, *a, *b, *c;
+  GListStore *a_children, *root;
+
+  aa = demo_node_new ("aa", NULL);
+
+  a_children = g_list_store_new (demo_node_get_type ());
+  g_list_store_append (a_children, aa);
+
+  a = demo_node_new ("a", a_children);
+  b = demo_node_new ("b", NULL);
+  c = demo_node_new ("c", NULL);
+
+  root = g_list_store_new (demo_node_get_type ());
+  g_list_store_append (root, a);
+  g_list_store_append (root, b);
+  g_list_store_append (root, c);
+
+  g_object_unref (aa);
+  g_object_unref (a_children);
+  g_object_unref (a);
+  g_object_unref (b);
+  g_object_unref (c);
+
+  return root;
+}
+
+static GListModel *
+model_children (gpointer item,
+                gpointer unused)
+{
+  GListStore *children;
+
+  children = DEMO_NODE (item)->children;
+  if (children)
+    return G_LIST_MODEL (g_object_ref (children));
+
+  return NULL;
+}
+
+static void
+test_collapse_change (void)
+{
+  GListStore *model;
+  GtkTreeListModel *treemodel;
+  DemoNode *a, *ab;
+  GtkTreeListRow *row;
+
+  model = create_model ();
+  a = g_list_model_get_item (G_LIST_MODEL (model), 0);
+
+  treemodel = gtk_tree_list_model_new (G_LIST_MODEL (model),
+                                       FALSE,
+                                       FALSE,
+                                       model_children,
+                                       NULL,
+                                       NULL);
+
+  row = gtk_tree_list_model_get_row (treemodel, 0);
+  gtk_tree_list_row_set_expanded (row, TRUE);
+  gtk_tree_list_row_set_expanded (row, FALSE);
+  g_object_unref (row);
+
+  ab = demo_node_new ("ab", NULL);
+  g_list_store_append (a->children, ab);
+  g_object_unref (ab);
+
+  g_object_unref (treemodel);
+  g_object_unref (a);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -263,6 +382,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/treelistmodel/expand", test_expand);
   g_test_add_func ("/treelistmodel/remove_some", test_remove_some);
+  g_test_add_func ("/treelistmodel/collapse-change", test_collapse_change);
 
   return g_test_run ();
 }

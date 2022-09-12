@@ -1946,7 +1946,7 @@ gtk_text_init (GtkText *self)
   g_signal_connect (priv->key_controller, "key-pressed",
                     G_CALLBACK (gtk_text_key_controller_key_pressed), self);
   g_signal_connect_swapped (priv->key_controller, "im-update",
-                            G_CALLBACK (gtk_im_context_reset), priv->im_context);
+                            G_CALLBACK (gtk_text_schedule_im_reset), self);
   gtk_event_controller_key_set_im_context (GTK_EVENT_CONTROLLER_KEY (priv->key_controller),
                                            priv->im_context);
   gtk_widget_add_controller (GTK_WIDGET (self), priv->key_controller);
@@ -4276,6 +4276,7 @@ gtk_text_commit_cb (GtkIMContext *context,
     {
       gtk_text_enter_text (self, str);
       gtk_text_obscure_mouse_cursor (self);
+      gtk_im_context_reset (context);
     }
 }
 
@@ -4332,9 +4333,12 @@ gtk_text_delete_surrounding_cb (GtkIMContext *context,
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
   if (priv->editable)
-    gtk_editable_delete_text (GTK_EDITABLE (self),
-                              priv->current_pos + offset,
-                              priv->current_pos + offset + n_chars);
+    {
+      gtk_editable_delete_text (GTK_EDITABLE (self),
+                                priv->current_pos + offset,
+                                priv->current_pos + offset + n_chars);
+      gtk_im_context_reset (context);
+    }
 
   return TRUE;
 }
@@ -4349,10 +4353,8 @@ gtk_text_enter_text (GtkText    *self,
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   int tmp_pos;
-  gboolean old_need_im_reset;
   guint text_length;
 
-  old_need_im_reset = priv->need_im_reset;
   priv->need_im_reset = FALSE;
 
   if (priv->selection_bound != priv->current_pos)
@@ -4370,8 +4372,6 @@ gtk_text_enter_text (GtkText    *self,
   tmp_pos = priv->current_pos;
   gtk_editable_insert_text (GTK_EDITABLE (self), str, strlen (str), &tmp_pos);
   gtk_text_set_selection_bounds (self, tmp_pos, tmp_pos);
-
-  priv->need_im_reset = old_need_im_reset;
 }
 
 /* All changes to priv->current_pos and priv->selection_bound
