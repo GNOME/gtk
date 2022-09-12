@@ -40,7 +40,7 @@ typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
  *
  * The values are encoded as follows:
  *
- * If the value is a single Unicode character smaler than 0x8000,
+ * If the value is a single Unicode character smaller than 0x8000,
  * then we place it directly. Otherwise, we put the UTF8-encoded
  * value in the char_data array, and use offset | 0x8000 as the
  * encoded value.
