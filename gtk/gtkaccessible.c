@@ -74,7 +74,7 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
   g_object_interface_install_property (iface, pspec);
 }
 
-/*< private >
+/*
  * gtk_accessible_get_at_context:
  * @self: a `GtkAccessible`
  *
@@ -89,7 +89,6 @@ gtk_accessible_get_at_context (GtkAccessible *self)
 
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_at_context (self);
 }
-
 
 /*
  * gtk_accessible_get_parent:
@@ -756,7 +755,7 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
   gtk_at_context_update (context);
 }
 
-/*<private>
+/*
  * gtk_accessible_get_platform_state:
  * @self: a `GtkAccessible`
  * @state: platform state to query
@@ -778,7 +777,7 @@ gtk_accessible_get_platform_state (GtkAccessible              *self,
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_platform_state (self, state);
 }
 
-/*<private>
+/*
  * gtk_accessible_bounds_changed:
  * @self: a `GtkAccessible`
  *
@@ -787,7 +786,7 @@ gtk_accessible_get_platform_state (GtkAccessible              *self,
  * changed.
  *
  * Note that the bounds are not included in this API.
- * AT backends should use widget API to obtain them.
+ * AT backends should use [method@Gtk.Accessible.get_bounds] to get them.
  */
 void
 gtk_accessible_bounds_changed (GtkAccessible *self)
