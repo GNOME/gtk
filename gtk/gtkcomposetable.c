@@ -28,7 +28,7 @@
 
 
 #define GTK_COMPOSE_TABLE_MAGIC "GtkComposeTable"
-#define GTK_COMPOSE_TABLE_VERSION (3)
+#define GTK_COMPOSE_TABLE_VERSION (4)
 
 extern const GtkComposeTable builtin_compose_table;
 
@@ -504,12 +504,6 @@ parser_remove_duplicates (GtkComposeParser *parser)
           goto next;
         }
 
-      if (sequence[1] == 0)
-        {
-          remove_sequence = TRUE;
-          goto next;
-        }
-
       for (i = 0; i < MAX_COMPOSE_LEN + 1; i++)
         keysyms[i] = 0;
 
@@ -907,7 +901,7 @@ parser_get_compose_table (GtkComposeParser *parser)
                                      (GCompareDataFunc) sequence_compare,
                                      NULL);
 
-  index_rowstride = max_compose_len + 1;
+  index_rowstride = max_compose_len + 2;
   data = g_new0 (guint16, n_first * index_rowstride + size);
 
   char_data = g_string_new ("");
@@ -923,7 +917,7 @@ parser_get_compose_table (GtkComposeParser *parser)
       char *value = g_hash_table_lookup (parser->sequences, sequence);
       int len = sequence_length (sequence);
 
-      g_assert (2 <= len && len <= max_compose_len);
+      g_assert (1 <= len && len <= max_compose_len);
 
       /* Encode the value. If the value is a single
        * character with a value smaller than 1 << 15,
@@ -979,10 +973,10 @@ parser_get_compose_table (GtkComposeParser *parser)
 
       rest_pos += len;
 
-      for (i = len; i <= max_compose_len; i++)
+      for (i = len + 1; i < index_rowstride; i++)
         data[first_pos + i] = rest_pos;
 
-      for (i = 1; i < max_compose_len; i++)
+      for (i = 1; i + 1 < index_rowstride; i++)
         g_assert (data[first_pos + i] <= data[first_pos + i + 1]);
     }
 
@@ -1275,7 +1269,7 @@ gtk_compose_table_check (const GtkComposeTable *table,
                          gboolean              *compose_match,
                          GString               *output)
 {
-  int row_stride;
+  int len;
   guint16 *seq_index;
   guint16 *seq;
   int i;
@@ -1297,7 +1291,7 @@ gtk_compose_table_check (const GtkComposeTable *table,
   seq_index = bsearch (compose_buffer,
                        table->data,
                        table->n_index_size,
-                       sizeof (guint16) * (table->max_seq_len + 1),
+                       sizeof (guint16) * (table->max_seq_len + 2),
                        compare_seq_index);
 
   if (!seq_index)
@@ -1312,21 +1306,21 @@ gtk_compose_table_check (const GtkComposeTable *table,
 
   for (i = n_compose - 1; i < table->max_seq_len; i++)
     {
-      row_stride = i + 1;
+      len = i + 1;
 
-      if (seq_index[i + 1] - seq_index[i] > 0)
+      if (seq_index[len + 1] - seq_index[len] > 0)
         {
           seq = bsearch (compose_buffer + 1,
-                         table->data + seq_index[i],
-                         (seq_index[i + 1] - seq_index[i]) / row_stride,
-                         sizeof (guint16) * row_stride,
+                         table->data + seq_index[len],
+                         (seq_index[len + 1] - seq_index[len]) / len,
+                         sizeof (guint16) * len,
                          compare_seq);
 
           if (seq)
             {
               if (i == n_compose - 1)
                 {
-                  value = seq[row_stride - 1];
+                  value = seq[len - 1];
 
                   if ((value & (1 << 15)) != 0)
                     g_string_append (output, &table->char_data[value & ~(1 << 15)]);
@@ -1367,7 +1361,7 @@ gtk_compose_table_get_prefix (const GtkComposeTable *table,
                               int                    n_compose,
                               int                   *prefix)
 {
-  int index_stride = table->max_seq_len + 1;
+  int index_stride = table->max_seq_len + 2;
   int p = 0;
 
   for (int idx = 0; idx < table->n_index_size; idx++)
@@ -1378,9 +1372,9 @@ gtk_compose_table_get_prefix (const GtkComposeTable *table,
         {
           p = 1;
 
-          for (int i = 1; i < table->max_seq_len; i++)
+          for (int i = 1; i < table->max_seq_len + 1; i++)
             {
-              int len = i + 1;
+              int len = i;
 
               for (int j = seq_index[i]; j < seq_index[i + 1]; j += len)
                 {
@@ -1407,20 +1401,20 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
                            GtkComposeSequenceCallback  callback,
                            gpointer                    data)
 {
-  int index_stride = table->max_seq_len + 1;
+  int index_stride = table->max_seq_len + 2;
   gunichar *sequence;
   int seqno;
 
-  sequence = g_new0 (gunichar, table->max_seq_len + 1);
+  sequence = g_newa (gunichar, table->max_seq_len + 1);
 
   seqno = 0;
   for (int idx = 0; idx < table->n_index_size; idx++)
     {
       const guint16 *seq_index = table->data + (idx * index_stride);
 
-      for (int i = 1; i < table->max_seq_len; i++)
+      for (int i = 1; i <= table->max_seq_len; i++)
         {
-          int len = i + 1;
+          int len = i;
 
           g_assert (seq_index[i] <= seq_index[i + 1]);
           g_assert (seq_index[i + 1] <= table->data_size);
@@ -1433,8 +1427,8 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
               char *value;
 
               sequence[0] = seq_index[0];
-              for (int k = 0; k < len - 1; k++)
-                sequence[k + 1] = (gunichar) table->data[j + k];
+              for (int k = 1; k < len; k++)
+                sequence[k] = (gunichar) table->data[j + k - 1];
               sequence[len] = 0;
 
               encoded_value = table->data[j + len - 1];
@@ -1456,8 +1450,6 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
             }
         }
     }
-
-  g_free (sequence);
 }
 
 /* Checks if a keysym is a dead key.
