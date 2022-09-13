@@ -436,6 +436,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/codepoint", "codepoint", compose_table_compare);
   g_test_add_data_func ("/compose-table/multi", "multi", compose_table_compare);
   g_test_add_data_func ("/compose-table/strings", "strings", compose_table_compare);
+  g_test_add_data_func ("/compose-table/single", "single", compose_table_compare);
   g_test_add_data_func ("/compose-table/include", "include", compose_table_compare);
   g_test_add_data_func ("/compose-table/system", "system", compose_table_compare);
   g_test_add_func ("/compose-table/include-cycle", compose_table_cycle);
