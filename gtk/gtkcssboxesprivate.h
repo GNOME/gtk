@@ -57,16 +57,16 @@ static inline void                      gtk_css_boxes_init                      
                                                                                  GtkWidget        *widget);
 static inline void                      gtk_css_boxes_init_content_box          (GtkCssBoxes      *boxes,
                                                                                  GtkCssStyle      *style,
-                                                                                 double            x,
-                                                                                 double            y,
-                                                                                 double            width,
-                                                                                 double            height);
+                                                                                 float             x,
+                                                                                 float             y,
+                                                                                 float             width,
+                                                                                 float             height);
 static inline void                      gtk_css_boxes_init_border_box           (GtkCssBoxes      *boxes,
                                                                                  GtkCssStyle      *style,
-                                                                                 double            x,
-                                                                                 double            y,
-                                                                                 double            width,
-                                                                                 double            height);
+                                                                                 float             x,
+                                                                                 float             y,
+                                                                                 float             width,
+                                                                                 float             height);
 
 static inline const graphene_rect_t *   gtk_css_boxes_get_rect                  (GtkCssBoxes      *boxes,
                                                                                  GtkCssArea        area);

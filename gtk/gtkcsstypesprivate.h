@@ -355,6 +355,13 @@ typedef enum /*< skip >*/ {
 } GtkCssSide;
 
 typedef enum /*< skip >*/ {
+  GTK_CSS_TOP_LEFT,
+  GTK_CSS_TOP_RIGHT,
+  GTK_CSS_BOTTOM_RIGHT,
+  GTK_CSS_BOTTOM_LEFT
+} GtkCssCorner;
+
+typedef enum /*< skip >*/ {
   GTK_CSS_DIMENSION_PERCENTAGE,
   GTK_CSS_DIMENSION_NUMBER,
   GTK_CSS_DIMENSION_LENGTH,

@@ -387,14 +387,14 @@ gtk_render_line (GtkStyleContext *context,
                  double           x1,
                  double           y1)
 {
-  const GdkRGBA *color;
+  GtkCssStyle *style;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   cairo_save (cr);
 
-  color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  style = gtk_style_context_lookup_style (context);
 
   cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
   cairo_set_line_width (cr, 1);
@@ -402,7 +402,7 @@ gtk_render_line (GtkStyleContext *context,
   cairo_move_to (cr, x0 + 0.5, y0 + 0.5);
   cairo_line_to (cr, x1 + 0.5, y1 + 0.5);
 
-  gdk_cairo_set_source_rgba (cr, color);
+  gdk_cairo_set_source_rgba (cr, &style->core->_color);
   cairo_stroke (cr);
 
   cairo_restore (cr);

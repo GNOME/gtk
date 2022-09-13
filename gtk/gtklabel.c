@@ -828,7 +828,7 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
               g_slist_free (attributes);
             }
 
-          link_color = gtk_css_color_value_get_rgba (style->core->color);
+          link_color = &style->core->_color;
           attr = pango_attr_foreground_new (link_color->red * 65535,
                                             link_color->green * 65535,
                                             link_color->blue * 65535);

@@ -341,16 +341,12 @@ subtract_decoration_corners_from_region (cairo_region_t        *region,
   cairo_region_subtract_rectangle (region, &rect);
 }
 
-static int
-get_translucent_border_edge (const GtkCssValue *color,
-                             const GtkCssValue *border_color,
-                             const GtkCssValue *border_width)
+static inline int
+get_translucent_border_edge (const GdkRGBA *border_color,
+                             float          border_width)
 {
-  if (border_color == NULL)
-    border_color = color;
-
-  if (!gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (border_color)))
-    return round (_gtk_css_number_value_get (border_width, 100));
+  if (!gdk_rgba_is_opaque (border_color))
+    return round (border_width);
 
   return 0;
 }
@@ -362,18 +358,22 @@ get_translucent_border_width (GtkWidget *widget,
   GtkCssNode *css_node = gtk_widget_get_css_node (widget);
   GtkCssStyle *style = gtk_css_node_get_style (css_node);
 
-  border->top = get_translucent_border_edge (style->core->color,
-                                             style->border->border_top_color,
-                                             style->border->border_top_width);
-  border->bottom = get_translucent_border_edge (style->core->color,
-                                                style->border->border_bottom_color,
-                                                style->border->border_bottom_width);
-  border->left = get_translucent_border_edge (style->core->color,
-                                              style->border->border_left_color,
-                                              style->border->border_left_width);
-  border->right = get_translucent_border_edge (style->core->color,
-                                               style->border->border_right_color,
-                                               style->border->border_right_width);
+  border->top = get_translucent_border_edge (style->border->border_top_color
+                                              ? &style->border->_border_color[GTK_CSS_TOP]
+                                              : &style->core->_color,
+                                             style->border->_border_width[GTK_CSS_TOP]);
+  border->right = get_translucent_border_edge (style->border->border_right_color
+                                                ? &style->border->_border_color[GTK_CSS_RIGHT]
+                                                : &style->core->_color,
+                                               style->border->_border_width[GTK_CSS_RIGHT]);
+  border->bottom = get_translucent_border_edge (style->border->border_bottom_color
+                                                 ? &style->border->_border_color[GTK_CSS_BOTTOM]
+                                                 : &style->core->_color,
+                                                style->border->_border_width[GTK_CSS_BOTTOM]);
+  border->left = get_translucent_border_edge (style->border->border_left_color
+                                               ? &style->border->_border_color[GTK_CSS_LEFT]
+                                               : &style->core->_color,
+                                              style->border->_border_width[GTK_CSS_LEFT]);
 }
 
 static gboolean
@@ -381,7 +381,7 @@ get_opaque_rect (GtkWidget             *widget,
                  const GtkCssStyle     *style,
                  cairo_rectangle_int_t *rect)
 {
-  gboolean is_opaque = gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (style->background->background_color));
+  gboolean is_opaque = gdk_rgba_is_opaque (&style->background->_background_color);
 
   if (is_opaque && gtk_widget_get_opacity (widget) < 1.0)
     is_opaque = FALSE;

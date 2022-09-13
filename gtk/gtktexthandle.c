@@ -117,10 +117,10 @@ gtk_text_handle_get_padding (GtkTextHandle *handle,
   GtkWidget *widget = GTK_WIDGET (handle);
   GtkCssStyle *style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
 
-  padding->left = _gtk_css_number_value_get (style->size->padding_left, 100);
-  padding->right = _gtk_css_number_value_get (style->size->padding_right, 100);
-  padding->top = _gtk_css_number_value_get (style->size->padding_top, 100);
-  padding->bottom = _gtk_css_number_value_get (style->size->padding_bottom, 100);
+  padding->left = style->size->_padding[GTK_CSS_LEFT];
+  padding->right = style->size->_padding[GTK_CSS_RIGHT];
+  padding->top = style->size->_padding[GTK_CSS_TOP];
+  padding->bottom = style->size->_padding[GTK_CSS_BOTTOM];
 }
 
 static void

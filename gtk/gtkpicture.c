@@ -213,7 +213,7 @@ gtk_picture_measure (GtkWidget      *widget,
     }
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  default_size = _gtk_css_number_value_get (style->icon->icon_size, 100);
+  default_size = style->icon->_icon_size;
 
   if (self->can_shrink)
     {

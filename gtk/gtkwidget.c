@@ -3671,45 +3671,43 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
     }
 }
 
-static int
-get_number (GtkCssValue *value)
+static inline int
+ceil_or_floor (float d)
 {
-  double d = _gtk_css_number_value_get (value, 100);
-
   if (d < 1)
-    return ceil (d);
+    return ceilf (d);
   else
-    return floor (d);
+    return floorf (d);
 }
 
-static void
+static inline void
 get_box_margin (GtkCssStyle *style,
                 GtkBorder   *margin)
 {
-  margin->top = get_number (style->size->margin_top);
-  margin->left = get_number (style->size->margin_left);
-  margin->bottom = get_number (style->size->margin_bottom);
-  margin->right = get_number (style->size->margin_right);
+  margin->top = ceil_or_floor (style->size->_margin[GTK_CSS_TOP]);
+  margin->right = ceil_or_floor (style->size->_margin[GTK_CSS_RIGHT]);
+  margin->bottom = ceil_or_floor (style->size->_margin[GTK_CSS_BOTTOM]);
+  margin->left = ceil_or_floor (style->size->_margin[GTK_CSS_LEFT]);
 }
 
-static void
+static inline void
 get_box_border (GtkCssStyle *style,
                 GtkBorder   *border)
 {
-  border->top = get_number (style->border->border_top_width);
-  border->left = get_number (style->border->border_left_width);
-  border->bottom = get_number (style->border->border_bottom_width);
-  border->right = get_number (style->border->border_right_width);
+  border->top = ceil_or_floor (style->border->_border_width[GTK_CSS_TOP]);
+  border->right = ceil_or_floor (style->border->_border_width[GTK_CSS_RIGHT]);
+  border->bottom = ceil_or_floor (style->border->_border_width[GTK_CSS_BOTTOM]);
+  border->left = ceil_or_floor (style->border->_border_width[GTK_CSS_LEFT]);
 }
 
-static void
+static inline void
 get_box_padding (GtkCssStyle *style,
-                 GtkBorder   *border)
+                 GtkBorder   *padding)
 {
-  border->top = get_number (style->size->padding_top);
-  border->left = get_number (style->size->padding_left);
-  border->bottom = get_number (style->size->padding_bottom);
-  border->right = get_number (style->size->padding_right);
+  padding->top = ceil_or_floor (style->size->_padding[GTK_CSS_TOP]);
+  padding->right = ceil_or_floor (style->size->_padding[GTK_CSS_RIGHT]);
+  padding->bottom = ceil_or_floor (style->size->_padding[GTK_CSS_BOTTOM]);
+  padding->left = ceil_or_floor (style->size->_padding[GTK_CSS_LEFT]);
 }
 
 /**
@@ -6428,7 +6426,7 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
                                          ? PANGO_DIRECTION_LTR
                                          : PANGO_DIRECTION_RTL);
 
-  pango_cairo_context_set_resolution (context, _gtk_css_number_value_get (style->core->dpi, 100));
+  pango_cairo_context_set_resolution (context, style->core->_dpi);
 
   font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
   if (settings && font_options)

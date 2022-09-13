@@ -84,6 +84,10 @@ struct _GtkCssCoreValues {
   GtkCssValue *dpi;
   GtkCssValue *font_size;
   GtkCssValue *icon_palette;
+
+  GdkRGBA _color;
+  float   _dpi;
+  float   _font_size;
 };
 
 struct _GtkCssBackgroundValues {
@@ -97,6 +101,8 @@ struct _GtkCssBackgroundValues {
   GtkCssValue *background_repeat;
   GtkCssValue *background_image;
   GtkCssValue *background_blend_mode;
+
+  GdkRGBA _background_color;
 };
 
 struct _GtkCssBorderValues {
@@ -121,6 +127,11 @@ struct _GtkCssBorderValues {
   GtkCssValue *border_image_repeat;
   GtkCssValue *border_image_slice;
   GtkCssValue *border_image_width;
+
+  GtkBorderStyle  _border_style[4];
+  float           _border_width[4];
+  graphene_size_t _border_radius[4];
+  GdkRGBA         _border_color[4];
 };
 
 struct _GtkCssIconValues {
@@ -128,6 +139,9 @@ struct _GtkCssIconValues {
   GtkCssValue *icon_size;
   GtkCssValue *icon_shadow;
   GtkCssValue *icon_style;
+
+  int             _icon_size;
+  GtkCssIconStyle _icon_style;
 };
 
 
@@ -137,6 +151,11 @@ struct _GtkCssOutlineValues {
   GtkCssValue *outline_width;
   GtkCssValue *outline_offset;
   GtkCssValue *outline_color; // NULL if currentColor
+
+  GtkBorderStyle _outline_style;
+  float          _outline_width;
+  float          _outline_offset;
+  GdkRGBA        _outline_color;
 };
 
 struct _GtkCssFontValues {
@@ -152,6 +171,14 @@ struct _GtkCssFontValues {
   GtkCssValue *font_feature_settings;
   GtkCssValue *font_variation_settings;
   GtkCssValue *line_height;
+
+  PangoStyle   _font_style;
+  PangoStretch _font_stretch;
+  float        _font_weight;
+  float        _letter_spacing;
+  float        _line_height;
+  GdkRGBA      _caret_color;
+  GdkRGBA      _secondary_caret_color;
 };
 
 struct _GtkCssFontVariantValues {
@@ -167,6 +194,18 @@ struct _GtkCssFontVariantValues {
   GtkCssValue *font_variant_numeric;
   GtkCssValue *font_variant_alternates;
   GtkCssValue *font_variant_east_asian;
+
+  GtkTextDecorationLine       _text_decoration_line;
+  GtkTextDecorationStyle      _text_decoration_style;
+  GtkTextTransform            _text_transform;
+  GtkCssFontKerning           _font_kerning;
+  GtkCssFontVariantLigature   _font_variant_ligatures;
+  GtkCssFontVariantPosition   _font_variant_position;
+  GtkCssFontVariantCaps       _font_variant_caps;
+  GtkCssFontVariantNumeric    _font_variant_numeric;
+  GtkCssFontVariantAlternate  _font_variant_alternates;
+  GtkCssFontVariantEastAsian  _font_variant_east_asian;
+  GdkRGBA                     _text_decoration_color;
 };
 
 struct _GtkCssAnimationValues {
@@ -202,6 +241,11 @@ struct _GtkCssSizeValues {
   GtkCssValue *border_spacing;
   GtkCssValue *min_width;
   GtkCssValue *min_height;
+
+  float _margin[4];
+  float _padding[4];
+  float _border_spacing[2];
+  float _min_size[2];
 };
 
 struct _GtkCssOtherValues {

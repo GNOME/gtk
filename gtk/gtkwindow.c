@@ -1340,25 +1340,23 @@ constraints_for_edge (GdkSurfaceEdge edge)
     }
 }
 
-static int
-get_number (GtkCssValue *value)
+static inline int
+ceil_or_floor (float d)
 {
-  double d = _gtk_css_number_value_get (value, 100);
-
   if (d < 1)
-    return ceil (d);
+    return ceilf (d);
   else
-    return floor (d);
+    return floorf (d);
 }
 
-static void
+static inline void
 get_box_border (GtkCssStyle *style,
                 GtkBorder   *border)
 {
-  border->top = get_number (style->border->border_top_width) + get_number (style->size->padding_top);
-  border->left = get_number (style->border->border_left_width) + get_number (style->size->padding_left);
-  border->bottom = get_number (style->border->border_bottom_width) + get_number (style->size->padding_bottom);
-  border->right = get_number (style->border->border_right_width) + get_number (style->size->padding_right);
+  border->top = ceil_or_floor (style->border->_border_width[GTK_CSS_TOP]) + ceil_or_floor (style->size->_padding[GTK_CSS_TOP]);
+  border->right = ceil_or_floor (style->border->_border_width[GTK_CSS_RIGHT]) + ceil_or_floor (style->size->_padding[GTK_CSS_RIGHT]);
+  border->bottom = ceil_or_floor (style->border->_border_width[GTK_CSS_BOTTOM]) + ceil_or_floor (style->size->_padding[GTK_CSS_BOTTOM]);
+  border->left = ceil_or_floor (style->border->_border_width[GTK_CSS_LEFT]) + ceil_or_floor (style->size->_padding[GTK_CSS_LEFT]);
 }
 
 static int

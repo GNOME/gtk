@@ -89,12 +89,6 @@ gtk_css_value_number_free (GtkCssValue *number)
 }
 
 static double
-get_dpi (GtkCssStyle *style)
-{
-  return _gtk_css_number_value_get (style->core->dpi, 96);
-}
-
-static double
 get_base_font_size_px (guint             property_id,
                        GtkStyleProvider *provider,
                        GtkCssStyle      *style,
@@ -103,12 +97,12 @@ get_base_font_size_px (guint             property_id,
   if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
     {
       if (parent_style)
-        return _gtk_css_number_value_get (parent_style->core->font_size, 100);
+        return parent_style->core->_font_size;
       else
         return gtk_css_font_size_get_default_px (provider, style);
     }
 
-  return _gtk_css_number_value_get (style->core->font_size, 100);
+  return style->core->_font_size;
 }
 
 static GtkCssValue *
@@ -172,19 +166,19 @@ gtk_css_value_number_compute (GtkCssValue      *number,
     case GTK_CSS_S:
       return _gtk_css_value_ref (number);
     case GTK_CSS_PT:
-      return gtk_css_dimension_value_new (value * get_dpi (style) / 72.0,
+      return gtk_css_dimension_value_new (value * style->core->_dpi / 72.0,
                                           GTK_CSS_PX);
     case GTK_CSS_PC:
-      return gtk_css_dimension_value_new (value * get_dpi (style) / 72.0 * 12.0,
+      return gtk_css_dimension_value_new (value * style->core->_dpi / 72.0 * 12.0,
                                           GTK_CSS_PX);
     case GTK_CSS_IN:
-      return gtk_css_dimension_value_new (value * get_dpi (style),
+      return gtk_css_dimension_value_new (value * style->core->_dpi,
                                           GTK_CSS_PX);
     case GTK_CSS_CM:
-      return gtk_css_dimension_value_new (value * get_dpi (style) * 0.39370078740157477,
+      return gtk_css_dimension_value_new (value * style->core->_dpi * 0.39370078740157477,
                                           GTK_CSS_PX);
     case GTK_CSS_MM:
-      return gtk_css_dimension_value_new (value * get_dpi (style) * 0.039370078740157477,
+      return gtk_css_dimension_value_new (value * style->core->_dpi * 0.039370078740157477,
                                           GTK_CSS_PX);
     case GTK_CSS_EM:
       return gtk_css_dimension_value_new (value *

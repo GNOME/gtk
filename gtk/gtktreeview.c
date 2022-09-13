@@ -2687,8 +2687,8 @@ gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
   gtk_style_context_add_class (context, "expander");
 
   style = gtk_style_context_lookup_style (context);
-  min_width = _gtk_css_number_value_get (style->size->min_width, 100);
-  min_height = _gtk_css_number_value_get (style->size->min_height, 100);
+  min_width = style->size->_min_size[GTK_ORIENTATION_HORIZONTAL];
+  min_height = style->size->_min_size[GTK_ORIENTATION_VERTICAL];
 
   gtk_style_context_restore (context);
 
@@ -4173,11 +4173,12 @@ gtk_tree_view_snapshot_grid_line (GtkTreeView            *tree_view,
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkStyleContext *context;
+  GtkCssStyle *style;
   const GdkRGBA *grid_line_color;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-  grid_line_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context,
-                                                                                    GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+  style = gtk_style_context_lookup_style (context);
+  grid_line_color = style->border->border_top_color ? &style->border->_border_color[GTK_CSS_TOP] : &style->core->_color;
 
   if (!gdk_rgba_equal (grid_line_color, &priv->grid_line_color) ||
       (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->horizontal_grid_line_texture) ||
@@ -4248,11 +4249,12 @@ gtk_tree_view_snapshot_tree_line (GtkTreeView            *tree_view,
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkStyleContext *context;
+  GtkCssStyle *style;
   const GdkRGBA *tree_line_color;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-  tree_line_color = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context,
-                                                                                    GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
+  style = gtk_style_context_lookup_style (context);
+  tree_line_color = style->border->border_left_color ? &style->border->_border_color[GTK_CSS_LEFT] : &style->core->_color;
 
   if (!gdk_rgba_equal (tree_line_color, &priv->tree_line_color) ||
       (orientation == GTK_ORIENTATION_HORIZONTAL && !priv->horizontal_tree_line_texture) ||
@@ -5528,7 +5530,7 @@ get_separator_height (GtkTreeView *tree_view)
   gtk_style_context_add_class (context, "separator");
 
   style = gtk_style_context_lookup_style (context);
-  d = _gtk_css_number_value_get (style->size->min_height, 100);
+  d = style->size->_min_size[GTK_ORIENTATION_VERTICAL];
 
   if (d < 1)
     min_size = ceil (d);

@@ -1203,10 +1203,10 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   pos = priv->final_position;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (priv->contents_widget));
-  border_radius = _gtk_css_number_value_get (style->border->border_top_left_radius, 100);
-  border_top = _gtk_css_number_value_get (style->border->border_top_width, 100);
-  border_right = _gtk_css_number_value_get (style->border->border_right_width, 100);
-  border_bottom = _gtk_css_number_value_get (style->border->border_bottom_width, 100);
+  border_radius = style->border->_border_radius[GTK_CSS_TOP_LEFT].width;
+  border_top = style->border->_border_width[GTK_CSS_TOP];
+  border_right = style->border->_border_width[GTK_CSS_RIGHT];
+  border_bottom = style->border->_border_width[GTK_CSS_BOTTOM];
 
   gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
 
@@ -1285,10 +1285,10 @@ get_border (GtkCssNode *node,
 
   style = gtk_css_node_get_style (node);
 
-  border->top = _gtk_css_number_value_get (style->border->border_top_width, 100);
-  border->right = _gtk_css_number_value_get (style->border->border_right_width, 100);
-  border->bottom = _gtk_css_number_value_get (style->border->border_bottom_width, 100);
-  border->left = _gtk_css_number_value_get (style->border->border_left_width, 100);
+  border->top = style->border->_border_width[GTK_CSS_TOP];
+  border->right = style->border->_border_width[GTK_CSS_RIGHT];
+  border->bottom = style->border->_border_width[GTK_CSS_BOTTOM];
+  border->left = style->border->_border_width[GTK_CSS_LEFT];
 }
 
 static void
@@ -1405,7 +1405,7 @@ get_border_radius (GtkWidget *widget)
   GtkCssStyle *style;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  return round (_gtk_css_number_value_get (style->border->border_top_left_radius, 100));
+  return round (style->border->_border_radius[GTK_CSS_TOP_LEFT].width);
 }
 
 static int
@@ -1583,7 +1583,7 @@ create_arrow_render_node (GtkPopover *popover)
       const GdkRGBA *border_color;
 
       style = gtk_css_node_get_style (priv->arrow_node);
-      border_color = gtk_css_color_value_get_rgba (style->border->border_left_color ? style->border->border_left_color : style->core->color);
+      border_color = style->border->border_left_color ? &style->border->_border_color[GTK_CSS_LEFT] : &style->core->_color;
 
       gtk_popover_apply_tail_path (popover, cr);
       gdk_cairo_set_source_rgba (cr, border_color);

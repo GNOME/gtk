@@ -259,7 +259,7 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
     return;
 
   background_image = background->background_image;
-  bg_color = gtk_css_color_value_get_rgba (background->background_color);
+  bg_color = &background->_background_color;
   box_shadow = background->box_shadow;
 
   has_bg_color = !gdk_rgba_is_clear (bg_color);

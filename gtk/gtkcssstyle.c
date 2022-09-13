@@ -405,7 +405,7 @@ get_pango_underline_from_style (GtkTextDecorationStyle style)
 PangoTextTransform
 gtk_css_style_get_pango_text_transform (GtkCssStyle *style)
 {
-  switch (_gtk_css_text_transform_value_get (style->font_variant->text_transform))
+  switch (style->font_variant->_text_transform)
     {
     case GTK_CSS_TEXT_TRANSFORM_NONE:
       return PANGO_TEXT_TRANSFORM_NONE;
@@ -460,7 +460,7 @@ gtk_css_style_compute_font_features (GtkCssStyle *style)
   char *settings;
   GString *s = NULL;
 
-  switch (_gtk_css_font_kerning_value_get (style->font_variant->font_kerning))
+  switch (style->font_variant->_font_kerning)
     {
     case GTK_CSS_FONT_KERNING_NORMAL:
       append_separated (&s, "kern 1");
@@ -473,7 +473,7 @@ gtk_css_style_compute_font_features (GtkCssStyle *style)
       break;
     }
 
-  ligatures = _gtk_css_font_variant_ligature_value_get (style->font_variant->font_variant_ligatures);
+  ligatures = style->font_variant->_font_variant_ligatures;
   if (ligatures == GTK_CSS_FONT_VARIANT_LIGATURE_NORMAL)
     {
       /* all defaults */
@@ -500,7 +500,7 @@ gtk_css_style_compute_font_features (GtkCssStyle *style)
         append_separated (&s, "calt 0");
     }
 
-  switch (_gtk_css_font_variant_position_value_get (style->font_variant->font_variant_position))
+  switch (style->font_variant->_font_variant_position)
     {
     case GTK_CSS_FONT_VARIANT_POSITION_SUB:
       append_separated (&s, "subs 1");
@@ -513,7 +513,7 @@ gtk_css_style_compute_font_features (GtkCssStyle *style)
       break;
     }
 
-  numeric = _gtk_css_font_variant_numeric_value_get (style->font_variant->font_variant_numeric);
+  numeric = style->font_variant->_font_variant_numeric;
   if (numeric == GTK_CSS_FONT_VARIANT_NUMERIC_NORMAL)
     {
       /* all defaults */
@@ -538,7 +538,7 @@ gtk_css_style_compute_font_features (GtkCssStyle *style)
         append_separated (&s, "zero 1");
     }
 
-  switch (_gtk_css_font_variant_alternate_value_get (style->font_variant->font_variant_alternates))
+  switch (style->font_variant->_font_variant_alternates)
     {
     case GTK_CSS_FONT_VARIANT_ALTERNATE_HISTORICAL_FORMS:
       append_separated (&s, "hist 1");
@@ -548,7 +548,7 @@ gtk_css_style_compute_font_features (GtkCssStyle *style)
       break;
     }
 
-  east_asian = _gtk_css_font_variant_east_asian_value_get (style->font_variant->font_variant_east_asian);
+  east_asian = style->font_variant->_font_variant_east_asian;
   if (east_asian == GTK_CSS_FONT_VARIANT_EAST_ASIAN_NORMAL)
     {
       /* all defaults */
@@ -599,12 +599,13 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   double letter_spacing;
 
   /* text-decoration */
-  decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
-  decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
-  color = gtk_css_color_value_get_rgba (style->core->color);
-  decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
-                                                   ? style->font_variant->text_decoration_color
-                                                   : style->core->color);
+  decoration_line = style->font_variant->_text_decoration_line;
+  decoration_style = style->font_variant->_text_decoration_style;
+  color = &style->core->_color;
+  if (style->font_variant->text_decoration_color)
+    decoration_color = &style->font_variant->_text_decoration_color;
+  else
+    decoration_color = &style->core->_color;
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)
     {
@@ -632,7 +633,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     }
 
   /* letter-spacing */
-  letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100);
+  letter_spacing = style->font->_letter_spacing;
   if (letter_spacing != 0)
     {
       attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
@@ -640,7 +641,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
 
   /* line-height */
   {
-    double height = gtk_css_line_height_value_get (style->font->line_height);
+    float height = style->font->_line_height;
     if (height != 0.0)
       {
         if (gtk_css_number_value_get_dimension (style->font->line_height) == GTK_CSS_DIMENSION_LENGTH)
@@ -651,7 +652,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
    }
 
   /* casing variants */
-  switch (_gtk_css_font_variant_caps_value_get (style->font_variant->font_variant_caps))
+  switch (style->font_variant->_font_variant_caps)
     {
     case GTK_CSS_FONT_VARIANT_CAPS_SMALL_CAPS:
       attrs = add_pango_attr (attrs, pango_attr_variant_new (PANGO_VARIANT_SMALL_CAPS));
@@ -729,17 +730,13 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
                                          _gtk_css_string_value_get (_gtk_css_array_value_get_nth (v, 0)));
     }
 
-  v = style->core->font_size;
-  pango_font_description_set_absolute_size (description, round (_gtk_css_number_value_get (v, 100) * PANGO_SCALE));
+  pango_font_description_set_absolute_size (description, round (style->core->_font_size * PANGO_SCALE));
 
-  v = style->font->font_style;
-  pango_font_description_set_style (description, _gtk_css_font_style_value_get (v));
+  pango_font_description_set_style (description, style->font->_font_style);
 
-  v = style->font->font_weight;
-  pango_font_description_set_weight (description, _gtk_css_number_value_get (v, 100));
+  pango_font_description_set_weight (description, style->font->_font_weight);
 
-  v = style->font->font_stretch;
-  pango_font_description_set_stretch (description, _gtk_css_font_stretch_value_get (v));
+  pango_font_description_set_stretch (description, style->font->_font_stretch);
 
   v = style->font->font_variation_settings;
   str = gtk_css_font_variations_value_get_variations (v);
@@ -766,9 +763,13 @@ static const int values_size[] = {
   sizeof (GtkCssOtherValues)
 };
 
+static int n_values[] = {
+  4, 9, 20, 3, 4, 11, 11, 8, 4, 11, 7
+};
+
 #define TYPE_INDEX(type) ((type) - ((type) % 2))
 #define VALUES_SIZE(type) (values_size[(type) / 2])
-#define N_VALUES(type) ((VALUES_SIZE(type) - sizeof (GtkCssValues)) / sizeof (GtkCssValue *))
+#define N_VALUES(type) (n_values[(type) / 2])
 
 #define GET_VALUES(v) (GtkCssValue **)((guint8 *)(v) + sizeof (GtkCssValues))
 
@@ -812,7 +813,7 @@ gtk_css_values_copy (GtkCssValues *values)
   GtkCssValue **v, **v2;
   int i;
 
-  copy = gtk_css_values_new (TYPE_INDEX(values->type));
+  copy = gtk_css_values_new (TYPE_INDEX (values->type));
 
   v = GET_VALUES (values);
   v2 = GET_VALUES (copy);

@@ -2546,7 +2546,7 @@ void
 gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
                                        GdkRGBA      color_out[4])
 {
-  GtkCssValue *palette, *color;
+  GtkCssValue *palette;
   const char *names[4] = {
     [GTK_SYMBOLIC_COLOR_ERROR] = "error",
     [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
@@ -2555,9 +2555,8 @@ gtk_icon_theme_lookup_symbolic_colors (GtkCssStyle *style,
   const GdkRGBA *lookup;
   gsize i;
 
-  color = style->core->color;
   palette = style->core->icon_palette;
-  color_out[GTK_SYMBOLIC_COLOR_FOREGROUND] = *gtk_css_color_value_get_rgba (color);
+  color_out[GTK_SYMBOLIC_COLOR_FOREGROUND] = style->core->_color;
 
   for (i = 1; i < 4; i++)
     {

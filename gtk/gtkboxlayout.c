@@ -188,16 +188,8 @@ get_spacing (GtkBoxLayout *self,
              GtkCssNode   *node)
 {
   GtkCssStyle *style = gtk_css_node_get_style (node);
-  GtkCssValue *border_spacing;
-  int css_spacing;
 
-  border_spacing = style->size->border_spacing;
-  if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
-    css_spacing = _gtk_css_position_value_get_x (border_spacing, 100);
-  else
-    css_spacing = _gtk_css_position_value_get_y (border_spacing, 100);
-
-  return css_spacing + self->spacing;
+  return style->size->_border_spacing[self->orientation] + self->spacing;
 }
 
 static void

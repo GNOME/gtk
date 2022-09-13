@@ -22,7 +22,6 @@
 #include <gdk/gdk.h>
 
 #include "gtkcsscolorvalueprivate.h"
-#include "gtkcssnumbervalueprivate.h"
 #include "gtkcsstransientnodeprivate.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
@@ -856,10 +855,14 @@ void
 gtk_style_context_get_color (GtkStyleContext *context,
                              GdkRGBA         *color)
 {
+  GtkCssStyle *style;
+
   g_return_if_fail (color != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  *color = *gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  style = gtk_style_context_lookup_style (context);
+
+  *color = style->core->_color;
 }
 
 /**
@@ -880,10 +883,10 @@ gtk_style_context_get_border (GtkStyleContext *context,
 
   style = gtk_style_context_lookup_style (context);
 
-  border->top = round (_gtk_css_number_value_get (style->border->border_top_width, 100));
-  border->right = round (_gtk_css_number_value_get (style->border->border_right_width, 100));
-  border->bottom = round (_gtk_css_number_value_get (style->border->border_bottom_width, 100));
-  border->left = round (_gtk_css_number_value_get (style->border->border_left_width, 100));
+  border->top = round (style->border->_border_width[GTK_CSS_TOP]);
+  border->right = round (style->border->_border_width[GTK_CSS_RIGHT]);
+  border->bottom = round (style->border->_border_width[GTK_CSS_BOTTOM]);
+  border->left = round (style->border->_border_width[GTK_CSS_LEFT]);
 }
 
 /**
@@ -904,10 +907,10 @@ gtk_style_context_get_padding (GtkStyleContext *context,
 
   style = gtk_style_context_lookup_style (context);
 
-  padding->top = round (_gtk_css_number_value_get (style->size->padding_top, 100));
-  padding->right = round (_gtk_css_number_value_get (style->size->padding_right, 100));
-  padding->bottom = round (_gtk_css_number_value_get (style->size->padding_bottom, 100));
-  padding->left = round (_gtk_css_number_value_get (style->size->padding_left, 100));
+  padding->top = round (style->size->_padding[GTK_CSS_TOP]);
+  padding->right = round (style->size->_padding[GTK_CSS_RIGHT]);
+  padding->bottom = round (style->size->_padding[GTK_CSS_BOTTOM]);
+  padding->left = round (style->size->_padding[GTK_CSS_LEFT]);
 }
 
 /**
@@ -928,10 +931,10 @@ gtk_style_context_get_margin (GtkStyleContext *context,
 
   style = gtk_style_context_lookup_style (context);
 
-  margin->top = round (_gtk_css_number_value_get (style->size->margin_top, 100));
-  margin->right = round (_gtk_css_number_value_get (style->size->margin_right, 100));
-  margin->bottom = round (_gtk_css_number_value_get (style->size->margin_bottom, 100));
-  margin->left = round (_gtk_css_number_value_get (style->size->margin_left, 100));
+  margin->top = round (style->size->_margin[GTK_CSS_TOP]);
+  margin->right = round (style->size->_margin[GTK_CSS_RIGHT]);
+  margin->bottom = round (style->size->_margin[GTK_CSS_BOTTOM]);
+  margin->left = round (style->size->_margin[GTK_CSS_LEFT]);
 }
 
 void

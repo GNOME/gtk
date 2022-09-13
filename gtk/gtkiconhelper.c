@@ -55,13 +55,10 @@ get_icon_lookup_flags (GtkIconHelper *self,
                        GtkCssStyle   *style)
 {
   GtkIconLookupFlags flags;
-  GtkCssIconStyle icon_style;
 
   flags = 0;
 
-  icon_style = _gtk_css_icon_style_value_get (style->icon->icon_style);
-
-  switch (icon_style)
+  switch (style->icon->_icon_style)
     {
     case GTK_CSS_ICON_STYLE_REGULAR:
       flags |= GTK_ICON_LOOKUP_FORCE_REGULAR;
@@ -455,7 +452,7 @@ gtk_icon_helper_get_size (GtkIconHelper *self)
     return self->pixel_size;
 
   style = gtk_css_node_get_style (self->node);
-  return _gtk_css_number_value_get (style->icon->icon_size, 100);
+  return style->icon->_icon_size;
 }
 
 void

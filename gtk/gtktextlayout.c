@@ -4148,6 +4148,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   if (have_selection)
     {
       GtkCssNode *selection_node;
+      GtkCssStyle *style;
       GdkRGBA text_color;
 
       selection_start_line = gtk_text_iter_get_line (&selection_start);
@@ -4156,9 +4157,11 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       selection_node = gtk_text_view_get_selection_node ((GtkTextView*)widget);
       gtk_style_context_save_to_node (context, selection_node);
 
-      selection = gtk_css_color_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+      style = gtk_style_context_lookup_style (context);
 
-      gtk_style_context_get_color (context, &text_color);
+      selection = &style->background->_background_color;
+      text_color = style->core->_color;
+
       draw_selection_text = text_color.alpha > 0;
 
       gtk_style_context_restore (context);

@@ -7714,10 +7714,8 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (text_view)));
 
-  color = gtk_css_color_value_get_rgba (style->background->background_color);
-  *values->appearance.bg_rgba = *color;
-  color = gtk_css_color_value_get_rgba (style->core->color);
-  *values->appearance.fg_rgba = *color;
+  *values->appearance.bg_rgba = style->background->_background_color;
+  *values->appearance.fg_rgba = style->core->_color;
 
   if (values->font)
     pango_font_description_free (values->font);
@@ -7728,9 +7726,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
   decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
-  decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
-                                                   ? style->font_variant->text_decoration_color
-                                                   : style->core->color);
+  decoration_color = style->font_variant->text_decoration_color ? gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color) : &style->core->_color;
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)
     {

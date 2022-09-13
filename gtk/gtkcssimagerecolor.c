@@ -72,7 +72,7 @@ lookup_symbolic_colors (GtkCssStyle *style,
 {
   const GdkRGBA *lookup;
 
-  *color_out = *gtk_css_color_value_get_rgba (style->core->color);
+  *color_out = style->core->_color;
 
   lookup = gtk_css_palette_value_get_color (palette, "success");
   if (lookup)

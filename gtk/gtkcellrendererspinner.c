@@ -247,7 +247,7 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
   node = gtk_style_context_get_node (context);
   gtk_icon_size_set_style_classes (node, priv->icon_size);
   style = gtk_css_node_get_style (node);
-  priv->size = _gtk_css_number_value_get (style->icon->icon_size, 100);
+  priv->size = style->icon->_icon_size;
 
   gtk_style_context_restore (context);
 }

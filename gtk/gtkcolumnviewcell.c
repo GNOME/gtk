@@ -47,15 +47,13 @@ struct _GtkColumnViewCellClass
 
 G_DEFINE_TYPE (GtkColumnViewCell, gtk_column_view_cell, GTK_TYPE_LIST_ITEM_WIDGET)
 
-static int
-get_number (GtkCssValue *value)
+static inline int
+ceil_or_floor (float d)
 {
-  double d = _gtk_css_number_value_get (value, 100);
-
   if (d < 1)
-    return ceil (d);
+    return ceilf (d);
   else
-    return floor (d);
+    return floorf (d);
 }
 
 static int
@@ -67,12 +65,12 @@ unadjust_width (GtkWidget *widget,
   int css_extra;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  css_extra = get_number (style->size->margin_left) +
-              get_number (style->size->margin_right) +
-              get_number (style->border->border_left_width) +
-              get_number (style->border->border_right_width) +
-              get_number (style->size->padding_left) +
-              get_number (style->size->padding_right);
+  css_extra = ceil_or_floor (style->size->_margin[GTK_CSS_LEFT]) +
+              ceil_or_floor (style->size->_margin[GTK_CSS_RIGHT]) +
+              ceil_or_floor (style->border->_border_width[GTK_CSS_LEFT]) +
+              ceil_or_floor (style->border->_border_width[GTK_CSS_RIGHT]) +
+              ceil_or_floor (style->size->_padding[GTK_CSS_LEFT]) +
+              ceil_or_floor (style->size->_padding[GTK_CSS_RIGHT]);
   widget_margins = widget->priv->margin.left + widget->priv->margin.right;
 
   return MAX (0, width - widget_margins - css_extra);

@@ -84,7 +84,7 @@ gtk_builtin_icon_measure (GtkWidget      *widget,
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
 
-  *minimum = *natural = _gtk_css_number_value_get (style->icon->icon_size, 100);
+  *minimum = *natural = style->icon->_icon_size;
 }
 
 static void

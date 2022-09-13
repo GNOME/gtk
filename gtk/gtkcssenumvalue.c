@@ -197,12 +197,6 @@ _gtk_css_blend_mode_value_get (const GtkCssValue *value)
 
 /* GtkCssFontSize */
 
-static double
-get_dpi (GtkCssStyle *style)
-{
-  return _gtk_css_number_value_get (style->core->dpi, 96);
-}
-
 /* XXX: Kinda bad to have that machinery here, nobody expects vital font
  * size code to appear in gtkcssvalueenum.c.
  */
@@ -217,15 +211,15 @@ gtk_css_font_size_get_default_px (GtkStyleProvider *provider,
 
   settings = gtk_style_provider_get_settings (provider);
   if (settings == NULL)
-    return DEFAULT_FONT_SIZE_PT * get_dpi (style) / 72.0;
+    return DEFAULT_FONT_SIZE_PT * style->core->_dpi / 72.0;
 
   font_size = gtk_settings_get_font_size (settings);
   if (font_size == 0)
-    return DEFAULT_FONT_SIZE_PT * get_dpi (style) / 72.0;
+    return DEFAULT_FONT_SIZE_PT * style->core->_dpi / 72.0;
   else if (gtk_settings_get_font_size_is_absolute (settings))
     return (double) font_size / PANGO_SCALE;
   else
-    return ((double) font_size / PANGO_SCALE) * get_dpi (style) / 72.0;
+    return ((double) font_size / PANGO_SCALE) * style->core->_dpi / 72.0;
 }
 
 static GtkCssValue *
