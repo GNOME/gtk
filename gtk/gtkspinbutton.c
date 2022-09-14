@@ -32,6 +32,7 @@
 #include "gtkspinbuttonprivate.h"
 
 #include "gtkaccessibleprivate.h"
+#include "gtkaccessiblerange.h"
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
@@ -308,6 +309,8 @@ static void gtk_spin_button_update_width_chars (GtkSpinButton *spin_button);
 
 static void gtk_spin_button_accessible_init (GtkAccessibleInterface *iface);
 
+static void gtk_spin_button_accessible_range_init (GtkAccessibleRangeInterface *iface);
+
 static guint spinbutton_signals[LAST_SIGNAL] = {0};
 static GParamSpec *spinbutton_props[NUM_SPINBUTTON_PROPS] = {NULL, };
 
@@ -315,6 +318,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
                                                 gtk_spin_button_accessible_init)
+                                                G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE,
+                                                                       gtk_spin_button_accessible_range_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_spin_button_editable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
@@ -630,6 +635,27 @@ gtk_spin_button_accessible_init (GtkAccessibleInterface *iface)
   GtkAccessibleInterface *parent_iface = g_type_interface_peek_parent (iface);
   iface->get_at_context = parent_iface->get_at_context;
   iface->get_platform_state = gtk_spin_button_accessible_get_platform_state;
+}
+
+static double
+gtk_spin_button_accessible_range_get_minimum_increment (GtkAccessibleRange *accessible_range)
+{
+  GtkSpinButton *button = GTK_SPIN_BUTTON (accessible_range);
+  return gtk_adjustment_get_minimum_increment (gtk_spin_button_get_adjustment (button));
+}
+
+static void
+gtk_spin_button_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
+{
+  GtkSpinButton *button = GTK_SPIN_BUTTON (accessible_range);
+  gtk_spin_button_set_value (button, value);
+}
+
+static void
+gtk_spin_button_accessible_range_init (GtkAccessibleRangeInterface *iface)
+{
+  iface->get_minimum_increment = gtk_spin_button_accessible_range_get_minimum_increment;
+  iface->set_current_value = gtk_spin_button_accessible_range_set_current_value;
 }
 
 static void
