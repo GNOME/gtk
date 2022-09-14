@@ -121,6 +121,7 @@
  */
 #include "config.h"
 
+#include "gtkaccessiblerange.h"
 #include "gtkbinlayout.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
@@ -195,6 +196,7 @@ static void gtk_level_bar_buildable_init (GtkBuildableIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkLevelBar, gtk_level_bar, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_level_bar_buildable_init))
 
