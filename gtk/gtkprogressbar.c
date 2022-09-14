@@ -26,6 +26,7 @@
 
 #include "gtkprogressbar.h"
 
+#include "gtkaccessiblerange.h"
 #include "gtkboxlayout.h"
 #include "gtkgizmoprivate.h"
 #include <glib/gi18n-lib.h>
@@ -158,7 +159,8 @@ static void     gtk_progress_bar_direction_changed (GtkWidget        *widget,
                                                     GtkTextDirection  previous_dir);
 
 G_DEFINE_TYPE_WITH_CODE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_WIDGET,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE, NULL))
 
 static void
 gtk_progress_bar_class_init (GtkProgressBarClass *class)
