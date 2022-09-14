@@ -28,6 +28,7 @@
 #include "gtkrangeprivate.h"
 
 #include "gtkaccessible.h"
+#include "gtkaccessiblerange.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkcolorscaleprivate.h"
 #include "gtkcssboxesprivate.h"
@@ -246,8 +247,12 @@ static gboolean      gtk_range_scroll_controller_scroll (GtkEventControllerScrol
 static void          gtk_range_set_orientation          (GtkRange       *range,
                                                          GtkOrientation  orientation);
 
+static void gtk_range_accessible_range_init (GtkAccessibleRangeInterface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkRange)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE,
+                                                gtk_range_accessible_range_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE,
                                                 NULL))
 
@@ -433,6 +438,27 @@ gtk_range_class_init (GtkRangeClass *class)
   g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
   gtk_widget_class_set_css_name (widget_class, I_("range"));
+}
+
+static double
+gtk_range_accessible_range_get_minimum_increment (GtkAccessibleRange *accessible_range)
+{
+  GtkRange *range = GTK_RANGE (accessible_range);
+  return gtk_adjustment_get_minimum_increment (gtk_range_get_adjustment (range));
+}
+
+static void
+gtk_range_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
+{
+  GtkRange *range = GTK_RANGE (accessible_range);
+  gtk_range_set_value (range, value);
+}
+
+static void
+gtk_range_accessible_range_init (GtkAccessibleRangeInterface *iface)
+{
+  iface->get_minimum_increment = gtk_range_accessible_range_get_minimum_increment;
+  iface->set_current_value = gtk_range_accessible_range_set_current_value;
 }
 
 static void
