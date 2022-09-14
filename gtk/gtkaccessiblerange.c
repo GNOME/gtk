@@ -40,9 +40,23 @@
 
 G_DEFINE_INTERFACE (GtkAccessibleRange, gtk_accessible_range, GTK_TYPE_ACCESSIBLE)
 
+static double
+gtk_accessible_range_default_get_minimum_increment (GtkAccessibleRange *accessible_range)
+{
+  return 0.0;
+}
+
+static void
+gtk_accessible_range_default_set_current_value (GtkAccessibleRange *accessible_range, double value)
+{
+  /* By default, we do nothing */
+}
+
 static void
 gtk_accessible_range_default_init (GtkAccessibleRangeInterface *iface)
 {
+  iface->get_minimum_increment = gtk_accessible_range_default_get_minimum_increment;
+  iface->set_current_value = gtk_accessible_range_default_set_current_value;
 }
 
  /*
@@ -51,7 +65,7 @@ gtk_accessible_range_default_init (GtkAccessibleRangeInterface *iface)
  *
  * Returns the minimum increment which this `GtkAccessibleRange` supports.
  *
- * Returns: the minimum increment
+ * Returns: the minimum increment, or 0.0 if not overridden
  */
 double
 gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self)
@@ -66,11 +80,15 @@ gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self)
  * @self: a `GtkAccessibleRange`
  *
  * Sets the current value of this `GtkAccessibleRange`.
+ * Note that for some widgets implementing this interface, setting a value
+ * through the accessibility API makes no sense, so calling this function may
+ * in some cases do nothing.
  */
 void
 gtk_accessible_range_set_current_value (GtkAccessibleRange *self, double value)
 {
   g_return_if_fail (GTK_IS_ACCESSIBLE_RANGE (self));
 
-  return GTK_ACCESSIBLE_RANGE_GET_IFACE (self)->set_current_value (self, value);
+  GtkAccessibleRangeInterface *iface = GTK_ACCESSIBLE_RANGE_GET_IFACE (self);
+  iface->set_current_value (self, value);
 }
