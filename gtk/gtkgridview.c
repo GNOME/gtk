@@ -442,6 +442,8 @@ gtk_grid_view_get_position_from_allocation (GtkListBase           *base,
 
   n_items = gtk_list_base_get_n_items (base);
   along = CLAMP (along, 0, gtk_grid_view_compute_total_height (self) - 1);
+  across = across < 0 ? 0 : across;
+
   if (!gtk_grid_view_get_cell_at_y (self,
                                     along,
                                     &pos,
