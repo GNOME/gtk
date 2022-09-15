@@ -20,7 +20,7 @@ b {
 
 c {
   background-clip: padding-box, border-box, padding-box, padding-box, padding-box, content-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none, none /* FIXME */, none, none, none /* FIXME */;
   background-origin: padding-box, padding-box, padding-box, padding-box, content-box, content-box, padding-box, border-box;
   background-position: left top, center, left top, left top, left top, left top, 10%, center;
@@ -110,7 +110,7 @@ k {
 
 l {
   background-clip: border-box, content-box, content-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: border-box, padding-box, content-box, padding-box;
   background-position: left top, left top, 10%, 10%;
@@ -290,7 +290,7 @@ cb {
 
 db {
   background-clip: padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none;
   background-origin: border-box;
   background-position: 5px bottom;
@@ -390,7 +390,7 @@ mb {
 
 nb {
   background-clip: border-box, content-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, none;
   background-origin: padding-box, content-box, padding-box;
   background-position: left top, left top, left top;
@@ -480,7 +480,7 @@ vb {
 
 wb {
   background-clip: padding-box, border-box, content-box, padding-box, padding-box, padding-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: content-box, border-box, border-box, padding-box, content-box, padding-box, padding-box;
   background-position: left top, left top, center, left top, 10%, left top, left top;
@@ -530,7 +530,7 @@ ac {
 
 bc {
   background-clip: border-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, padding-box, padding-box;
   background-position: left top, left top, 10%;
@@ -550,7 +550,7 @@ cc {
 
 dc {
   background-clip: content-box, content-box, border-box, content-box, padding-box, content-box, padding-box, border-box, padding-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none /* FIXME */, none, none, none, none /* FIXME */, none, none, none /* FIXME */;
   background-origin: content-box, content-box, border-box, border-box, padding-box, content-box, padding-box, padding-box, padding-box, border-box;
   background-position: 5px bottom, center, 10%, left top, 10%, 5px bottom, 5px bottom, left top, center, center;
@@ -560,7 +560,7 @@ dc {
 
 ec {
   background-clip: content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none;
   background-origin: content-box;
   background-position: left top;
@@ -590,7 +590,7 @@ gc {
 
 hc {
   background-clip: border-box, padding-box, border-box, content-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, none, none /* FIXME */, none /* FIXME */, none;
   background-origin: border-box, padding-box, padding-box, content-box, border-box, padding-box;
   background-position: center, 5px bottom, left top, 10%, center, left top;
@@ -610,7 +610,7 @@ ic {
 
 jc {
   background-clip: border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none /* FIXME */;
   background-origin: border-box, border-box;
   background-position: left top, 10%;
@@ -760,7 +760,7 @@ xc {
 
 yc {
   background-clip: border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none;
   background-origin: padding-box;
   background-position: left top;
@@ -860,7 +860,7 @@ hd {
 
 id {
   background-clip: padding-box, border-box, padding-box, border-box, border-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none /* FIXME */, none /* FIXME */, none /* FIXME */;
   background-origin: padding-box, border-box, padding-box, border-box, border-box, border-box, content-box;
   background-position: 10%, 5px bottom, center, left top, left top, 10%, 10%;
@@ -930,7 +930,7 @@ od {
 
 pd {
   background-clip: content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none;
   background-origin: content-box;
   background-position: 10%;
@@ -1050,7 +1050,7 @@ ae {
 
 be {
   background-clip: border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: content-box, padding-box;
   background-position: 5px bottom, 5px bottom;
@@ -1070,7 +1070,7 @@ ce {
 
 de {
   background-clip: border-box, border-box, border-box, padding-box, border-box, padding-box, border-box, border-box, border-box, padding-box, border-box, padding-box, padding-box, border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none;
   background-origin: border-box, padding-box, content-box, padding-box, border-box, content-box, padding-box, padding-box, border-box, border-box, border-box, border-box, content-box, border-box, content-box;
   background-position: 10%, center, center, left top, center, 5px bottom, left top, left top, left top, left top, 5px bottom, center, left top, 10%, 5px bottom;
@@ -1110,7 +1110,7 @@ ge {
 
 he {
   background-clip: content-box, border-box, border-box, content-box, content-box, content-box, content-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none, none, none, none, none, none;
   background-origin: content-box, border-box, padding-box, content-box, content-box, padding-box, content-box, padding-box, border-box;
   background-position: left top, center, 10%, 5px bottom, left top, left top, 10%, center, 10%;
@@ -1140,7 +1140,7 @@ je {
 
 ke {
   background-clip: padding-box, content-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, none;
   background-origin: padding-box, border-box, content-box;
   background-position: 5px bottom, left top, left top;
@@ -1240,7 +1240,7 @@ te {
 
 ue {
   background-clip: content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none;
   background-origin: padding-box;
   background-position: center;
@@ -1360,7 +1360,7 @@ ff {
 
 gf {
   background-clip: padding-box, content-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none /* FIXME */, none /* FIXME */, none;
   background-origin: padding-box, padding-box, border-box, border-box;
   background-position: 10%, 10%, left top, 10%;
@@ -1400,7 +1400,7 @@ jf {
 
 kf {
   background-clip: border-box, padding-box, border-box, padding-box, border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none /* FIXME */;
   background-origin: padding-box, border-box, padding-box, padding-box, padding-box, border-box;
   background-position: 5px bottom, left top, 5px bottom, 10%, 10%, 5px bottom;
@@ -1540,7 +1540,7 @@ xf {
 
 yf {
   background-clip: content-box, border-box, padding-box, padding-box, padding-box, content-box, content-box, content-box, border-box, border-box, padding-box, border-box, border-box, border-box, content-box, content-box, padding-box, border-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: padding-box, padding-box, padding-box, padding-box, content-box, content-box, content-box, border-box, padding-box, border-box, padding-box, border-box, padding-box, border-box, padding-box, border-box, content-box, padding-box, padding-box;
   background-position: left top, center, center, left top, left top, left top, left top, center, 5px bottom, 5px bottom, left top, left top, left top, 10%, left top, left top, left top, left top, left top;
@@ -1610,7 +1610,7 @@ eg {
 
 fg {
   background-clip: padding-box, border-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none /* FIXME */;
   background-origin: padding-box, border-box, padding-box;
   background-position: center, 5px bottom, 10%;
@@ -1660,7 +1660,7 @@ jg {
 
 kg {
   background-clip: padding-box, border-box, padding-box, border-box, border-box, content-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, padding-box, padding-box, padding-box, padding-box, content-box, padding-box, padding-box;
   background-position: left top, left top, center, left top, 10%, 10%, 10%, left top;
@@ -1840,7 +1840,7 @@ bh {
 
 ch {
   background-clip: border-box, border-box, border-box, content-box, content-box, content-box, content-box, border-box, border-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none;
   background-origin: padding-box, padding-box, padding-box, content-box, padding-box, content-box, content-box, border-box, border-box, padding-box;
   background-position: left top, 5px bottom, 10%, left top, left top, center, 5px bottom, 5px bottom, 10%, left top;
@@ -1850,7 +1850,7 @@ ch {
 
 dh {
   background-clip: padding-box, content-box, padding-box, padding-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none /* FIXME */, none, none;
   background-origin: padding-box, content-box, border-box, padding-box, content-box;
   background-position: 5px bottom, center, 10%, 10%, 5px bottom;
@@ -1990,7 +1990,7 @@ qh {
 
 rh {
   background-clip: border-box, border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, padding-box, content-box;
   background-position: 10%, left top, left top;
@@ -2060,7 +2060,7 @@ xh {
 
 yh {
   background-clip: border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: border-box, padding-box;
   background-position: left top, 10%;
@@ -2130,7 +2130,7 @@ ei {
 
 fi {
   background-clip: border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none;
   background-origin: content-box;
   background-position: left top;
@@ -2150,7 +2150,7 @@ gi {
 
 hi {
   background-clip: content-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, content-box;
   background-position: 10%, left top;
@@ -2160,7 +2160,7 @@ hi {
 
 ii {
   background-clip: content-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: content-box, padding-box;
   background-position: left top, 5px bottom;
@@ -2180,7 +2180,7 @@ ji {
 
 ki {
   background-clip: border-box, border-box, border-box, content-box, border-box, content-box, border-box, border-box, padding-box, padding-box, border-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none, none, none, none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: border-box, padding-box, border-box, content-box, border-box, content-box, content-box, padding-box, content-box, padding-box, padding-box, content-box, border-box;
   background-position: 5px bottom, 10%, left top, left top, 5px bottom, left top, left top, 5px bottom, 10%, left top, center, left top, center;
@@ -2230,7 +2230,7 @@ oi {
 
 pi {
   background-clip: content-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none;
   background-origin: content-box, content-box, border-box;
   background-position: 5px bottom, left top, left top;
@@ -2240,7 +2240,7 @@ pi {
 
 qi {
   background-clip: border-box, content-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: border-box, content-box, border-box;
   background-position: left top, 10%, 5px bottom;
@@ -2260,7 +2260,7 @@ ri {
 
 si {
   background-clip: border-box, border-box, border-box, border-box, padding-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: padding-box, padding-box, padding-box, border-box, padding-box, padding-box;
   background-position: left top, 5px bottom, left top, left top, 10%, left top;
@@ -2460,7 +2460,7 @@ lj {
 
 mj {
   background-clip: border-box, border-box, content-box, content-box, padding-box, border-box, content-box, border-box, content-box, content-box, border-box, border-box, border-box, content-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, none, none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, border-box, content-box, content-box, padding-box, padding-box, border-box, padding-box, content-box, content-box, border-box, padding-box, padding-box, content-box, border-box, padding-box;
   background-position: 5px bottom, center, center, 10%, left top, left top, center, left top, center, center, left top, left top, left top, 10%, 10%, left top;
@@ -2480,7 +2480,7 @@ nj {
 
 oj {
   background-clip: border-box, content-box, border-box, padding-box, border-box, padding-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: padding-box, content-box, padding-box, padding-box, padding-box, padding-box, padding-box, padding-box;
   background-position: 5px bottom, center, center, left top, 5px bottom, left top, center, left top;
@@ -2690,7 +2690,7 @@ ik {
 
 jk {
   background-clip: content-box, content-box, border-box, border-box, content-box, border-box, padding-box, padding-box, border-box, border-box, padding-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, none;
   background-origin: content-box, content-box, padding-box, padding-box, content-box, padding-box, border-box, padding-box, padding-box, border-box, padding-box, content-box, padding-box;
   background-position: left top, center, center, left top, center, left top, 10%, left top, left top, left top, 10%, center, left top;
@@ -2720,7 +2720,7 @@ lk {
 
 mk {
   background-clip: padding-box, border-box, border-box, border-box, content-box, border-box, padding-box, content-box, content-box, border-box, border-box, border-box, border-box, padding-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, border-box, padding-box, border-box, content-box, padding-box, padding-box, content-box, content-box, content-box, padding-box, border-box, border-box, padding-box, padding-box;
   background-position: center, left top, center, left top, left top, 5px bottom, 5px bottom, left top, 5px bottom, left top, 5px bottom, left top, 10%, 5px bottom, 10%;
@@ -2770,7 +2770,7 @@ qk {
 
 rk {
   background-clip: border-box, padding-box, border-box, padding-box, border-box, content-box, border-box, content-box, padding-box, border-box, border-box, border-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, none, none, none, none;
   background-origin: border-box, content-box, border-box, padding-box, padding-box, border-box, border-box, border-box, padding-box, border-box, padding-box, padding-box, padding-box, padding-box;
   background-position: center, center, 10%, left top, left top, left top, left top, center, left top, left top, 5px bottom, 5px bottom, 10%, center;
@@ -2860,7 +2860,7 @@ zk {
 
 al {
   background-clip: content-box, border-box, border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none /* FIXME */, none /* FIXME */;
   background-origin: content-box, border-box, border-box, content-box;
   background-position: center, 5px bottom, 10%, left top;
@@ -3100,7 +3100,7 @@ xl {
 
 yl {
   background-clip: content-box, content-box, padding-box, border-box, border-box, border-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none /* FIXME */, none, none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: border-box, content-box, padding-box, padding-box, border-box, content-box, padding-box, border-box;
   background-position: 10%, left top, left top, 5px bottom, left top, 5px bottom, left top, left top;
@@ -3260,7 +3260,7 @@ nm {
 
 om {
   background-clip: border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none;
   background-origin: border-box;
   background-position: left top;
@@ -3280,7 +3280,7 @@ pm {
 
 qm {
   background-clip: border-box, border-box, border-box, border-box, border-box, border-box, border-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none;
   background-origin: border-box, padding-box, padding-box, content-box, padding-box, border-box, border-box, padding-box;
   background-position: 10%, 10%, left top, center, left top, left top, center, center;
@@ -3490,7 +3490,7 @@ kn {
 
 ln {
   background-clip: content-box, content-box, content-box, border-box, padding-box, border-box, border-box, border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, none;
   background-origin: content-box, content-box, content-box, padding-box, padding-box, border-box, padding-box, padding-box, content-box;
   background-position: center, left top, center, center, 10%, 10%, 10%, center, 10%;
@@ -3530,7 +3530,7 @@ on {
 
 pn {
   background-clip: content-box, padding-box, padding-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: content-box, padding-box, padding-box, content-box;
   background-position: 5px bottom, left top, center, 5px bottom;
@@ -3540,7 +3540,7 @@ pn {
 
 qn {
   background-clip: border-box, border-box, border-box, border-box, content-box, padding-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, none /* FIXME */, none, none;
   background-origin: padding-box, padding-box, padding-box, border-box, content-box, padding-box, border-box;
   background-position: 10%, left top, center, 10%, left top, 10%, 10%;
@@ -3590,7 +3590,7 @@ un {
 
 vn {
   background-clip: border-box, border-box, content-box, border-box, padding-box, content-box, border-box, border-box, border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, content-box, content-box, border-box, content-box, padding-box, border-box, padding-box, border-box, content-box;
   background-position: 5px bottom, 10%, center, 5px bottom, 10%, 5px bottom, center, left top, left top, left top;
@@ -3610,7 +3610,7 @@ wn {
 
 xn {
   background-clip: padding-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: padding-box, border-box;
   background-position: left top, left top;
@@ -3700,7 +3700,7 @@ fo {
 
 go {
   background-clip: border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none;
   background-origin: border-box, border-box;
   background-position: left top, left top;
@@ -3730,7 +3730,7 @@ io {
 
 jo {
   background-clip: padding-box, border-box, padding-box, border-box, padding-box, content-box, padding-box, content-box, content-box, padding-box, content-box, border-box, border-box, padding-box, padding-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none;
   background-origin: content-box, padding-box, padding-box, padding-box, padding-box, padding-box, padding-box, border-box, content-box, padding-box, padding-box, padding-box, padding-box, padding-box, content-box, border-box, padding-box;
   background-position: center, 10%, center, center, left top, center, left top, center, center, left top, left top, left top, left top, center, left top, center, left top;
@@ -3770,7 +3770,7 @@ mo {
 
 no {
   background-clip: border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box;
   background-position: 10%;
@@ -3830,7 +3830,7 @@ so {
 
 to {
   background-clip: border-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none;
   background-origin: padding-box, padding-box, padding-box;
   background-position: left top, left top, 5px bottom;
@@ -3840,7 +3840,7 @@ to {
 
 uo {
   background-clip: content-box, border-box, padding-box, border-box, padding-box, border-box, padding-box, padding-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, none, none, none, none /* FIXME */, none, none;
   background-origin: content-box, padding-box, padding-box, border-box, border-box, border-box, content-box, padding-box, padding-box, padding-box;
   background-position: left top, 10%, 5px bottom, left top, 10%, center, left top, left top, left top, 5px bottom;
@@ -4060,7 +4060,7 @@ pp {
 
 qp {
   background-clip: border-box, padding-box, border-box, padding-box, border-box, content-box, border-box, content-box, border-box, border-box, content-box, border-box, border-box, content-box, padding-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: padding-box, padding-box, padding-box, border-box, padding-box, content-box, padding-box, content-box, padding-box, padding-box, content-box, padding-box, padding-box, content-box, padding-box, border-box, padding-box;
   background-position: left top, 5px bottom, left top, center, center, 5px bottom, center, 5px bottom, 5px bottom, 10%, left top, 5px bottom, 5px bottom, left top, left top, 5px bottom, left top;
@@ -4100,7 +4100,7 @@ tp {
 
 up {
   background-clip: border-box, border-box, content-box, padding-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */;
   background-origin: padding-box, border-box, border-box, padding-box, content-box;
   background-position: 10%, center, 10%, 5px bottom, left top;
@@ -4140,7 +4140,7 @@ xp {
 
 yp {
   background-clip: border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none;
   background-origin: border-box, padding-box;
   background-position: 5px bottom, left top;
@@ -4230,7 +4230,7 @@ gq {
 
 hq {
   background-clip: padding-box, border-box, content-box, border-box, border-box, border-box, border-box, border-box, border-box, padding-box, border-box, border-box, padding-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, padding-box, border-box, padding-box, border-box, padding-box, border-box, content-box, padding-box, content-box, content-box, border-box, padding-box, content-box, padding-box;
   background-position: 5px bottom, left top, left top, 5px bottom, left top, left top, left top, center, 5px bottom, left top, 5px bottom, left top, center, 5px bottom, left top;
@@ -4450,7 +4450,7 @@ cr {
 
 dr {
   background-clip: border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none;
   background-origin: padding-box, content-box;
   background-position: 10%, 5px bottom;
@@ -4480,7 +4480,7 @@ fr {
 
 gr {
   background-clip: padding-box, padding-box, border-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: border-box, padding-box, border-box, content-box;
   background-position: 10%, left top, 5px bottom, left top;
@@ -4620,7 +4620,7 @@ tr {
 
 ur {
   background-clip: border-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none;
   background-origin: padding-box, padding-box, border-box;
   background-position: left top, 5px bottom, left top;
@@ -4640,7 +4640,7 @@ vr {
 
 wr {
   background-clip: padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, content-box;
   background-position: 5px bottom, 10%;
@@ -4730,7 +4730,7 @@ es {
 
 fs {
   background-clip: content-box, content-box, border-box, padding-box, border-box, padding-box, border-box, padding-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */;
   background-origin: content-box, content-box, padding-box, padding-box, padding-box, padding-box, content-box, content-box, padding-box, border-box;
   background-position: 10%, 5px bottom, 5px bottom, center, 10%, left top, center, left top, 5px bottom, 10%;
@@ -4740,7 +4740,7 @@ fs {
 
 gs {
   background-clip: border-box, content-box, border-box, padding-box, border-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */;
   background-origin: border-box, content-box, padding-box, padding-box, padding-box, padding-box, border-box;
   background-position: left top, 5px bottom, 10%, left top, center, left top, 5px bottom;
@@ -4750,7 +4750,7 @@ gs {
 
 hs {
   background-clip: content-box, border-box, content-box, border-box, content-box, border-box, content-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: border-box, border-box, content-box, padding-box, content-box, border-box, border-box, border-box, padding-box;
   background-position: 10%, left top, 10%, 10%, 5px bottom, 5px bottom, left top, center, 5px bottom;
@@ -4800,7 +4800,7 @@ ls {
 
 ms {
   background-clip: border-box, content-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none, none;
   background-origin: border-box, content-box, border-box, border-box;
   background-position: left top, center, 10%, left top;
@@ -4810,7 +4810,7 @@ ms {
 
 ns {
   background-clip: padding-box, border-box, padding-box, content-box, padding-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none;
   background-origin: padding-box, padding-box, padding-box, padding-box, border-box, content-box, padding-box;
   background-position: left top, 5px bottom, 10%, left top, 5px bottom, left top, left top;
@@ -4840,7 +4840,7 @@ ps {
 
 qs {
   background-clip: content-box, border-box, content-box, content-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: content-box, border-box, content-box, content-box, content-box, padding-box;
   background-position: 10%, 10%, 10%, 10%, left top, center;
@@ -4850,7 +4850,7 @@ qs {
 
 rs {
   background-clip: content-box, padding-box, border-box, content-box, content-box, border-box, padding-box, border-box, border-box, padding-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: content-box, padding-box, padding-box, border-box, content-box, padding-box, padding-box, padding-box, border-box, padding-box, padding-box;
   background-position: center, center, left top, left top, 5px bottom, 5px bottom, left top, center, 5px bottom, left top, left top;
@@ -4890,7 +4890,7 @@ us {
 
 vs {
   background-clip: border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: border-box;
   background-position: left top;
@@ -4920,7 +4920,7 @@ xs {
 
 ys {
   background-clip: border-box, border-box, border-box, padding-box, content-box, content-box, border-box, padding-box, padding-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: padding-box, border-box, padding-box, padding-box, content-box, content-box, padding-box, padding-box, padding-box, content-box, border-box;
   background-position: center, 10%, left top, 5px bottom, 5px bottom, 5px bottom, 5px bottom, 5px bottom, left top, 5px bottom, left top;
@@ -4980,7 +4980,7 @@ dt {
 
 et {
   background-clip: border-box, border-box, padding-box, padding-box, border-box, padding-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none /* FIXME */, none, none, none;
   background-origin: padding-box, border-box, padding-box, padding-box, padding-box, padding-box, content-box;
   background-position: left top, left top, left top, center, 10%, left top, left top;
@@ -5270,7 +5270,7 @@ gu {
 
 hu {
   background-clip: border-box, padding-box, border-box, border-box, content-box, border-box, content-box, content-box, padding-box, border-box, border-box, padding-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none;
   background-origin: padding-box, border-box, padding-box, border-box, content-box, padding-box, content-box, content-box, content-box, padding-box, padding-box, padding-box, content-box;
   background-position: 10%, center, center, 10%, 5px bottom, center, left top, left top, left top, 5px bottom, 10%, 5px bottom, 10%;
@@ -5340,7 +5340,7 @@ nu {
 
 ou {
   background-clip: padding-box, padding-box, padding-box, border-box, padding-box, content-box, border-box, padding-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none /* FIXME */, none, none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none;
   background-origin: padding-box, padding-box, padding-box, border-box, padding-box, content-box, padding-box, padding-box, padding-box, border-box;
   background-position: center, center, 10%, left top, 5px bottom, 5px bottom, center, left top, left top, 5px bottom;
@@ -5430,7 +5430,7 @@ wu {
 
 xu {
   background-clip: border-box, padding-box, content-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */;
   background-origin: border-box, padding-box, content-box, content-box;
   background-position: left top, center, 10%, left top;
@@ -5660,7 +5660,7 @@ tv {
 
 uv {
   background-clip: border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none;
   background-origin: padding-box, content-box;
   background-position: left top, left top;
@@ -5690,7 +5690,7 @@ wv {
 
 xv {
   background-clip: border-box, padding-box, border-box, padding-box, border-box, content-box, border-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none /* FIXME */, none, none, none /* FIXME */, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, padding-box, padding-box, padding-box, padding-box, content-box, border-box, content-box, padding-box;
   background-position: 5px bottom, 5px bottom, left top, left top, left top, center, 10%, left top, 10%;
@@ -5710,7 +5710,7 @@ yv {
 
 zv {
   background-clip: padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none;
   background-origin: border-box, border-box;
   background-position: left top, left top;
@@ -5720,7 +5720,7 @@ zv {
 
 aw {
   background-clip: content-box, content-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none;
   background-origin: content-box, content-box, padding-box;
   background-position: left top, left top, center;
@@ -5830,7 +5830,7 @@ kw {
 
 lw {
   background-clip: padding-box, content-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none, none;
   background-origin: padding-box, content-box, padding-box, border-box;
   background-position: center, 10%, center, 5px bottom;
@@ -5930,7 +5930,7 @@ uw {
 
 vw {
   background-clip: padding-box, padding-box, border-box, content-box, border-box, content-box, padding-box, border-box, border-box, content-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: padding-box, padding-box, border-box, content-box, content-box, content-box, border-box, padding-box, padding-box, content-box, padding-box;
   background-position: 5px bottom, center, left top, 10%, left top, 10%, 10%, left top, left top, 5px bottom, 10%;
@@ -5960,7 +5960,7 @@ xw {
 
 yw {
   background-clip: content-box, padding-box, border-box, content-box, content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none, none, none /* FIXME */;
   background-origin: content-box, padding-box, padding-box, content-box, content-box, padding-box;
   background-position: left top, 5px bottom, left top, center, left top, left top;
@@ -6030,7 +6030,7 @@ ex {
 
 fx {
   background-clip: content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */;
   background-origin: border-box;
   background-position: 10%;
@@ -6130,7 +6130,7 @@ ox {
 
 px {
   background-clip: border-box, border-box, content-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, none /* FIXME */, none;
   background-origin: border-box, padding-box, content-box, content-box;
   background-position: 10%, center, center, center;
@@ -6170,7 +6170,7 @@ sx {
 
 tx {
   background-clip: content-box, padding-box, border-box, padding-box, content-box, content-box, padding-box, border-box, border-box, padding-box, border-box, content-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */, none, none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */;
   background-origin: padding-box, padding-box, border-box, padding-box, content-box, padding-box, padding-box, border-box, border-box, content-box, padding-box, content-box, padding-box;
   background-position: center, left top, 5px bottom, center, left top, 10%, left top, left top, left top, 10%, left top, 5px bottom, 5px bottom;
@@ -6260,7 +6260,7 @@ by {
 
 cy {
   background-clip: border-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none /* FIXME */;
   background-origin: padding-box, content-box;
   background-position: 10%, left top;
@@ -6300,7 +6300,7 @@ fy {
 
 gy {
   background-clip: content-box, border-box, content-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: content-box, padding-box, content-box, border-box;
   background-position: 5px bottom, center, 10%, left top;
@@ -6400,7 +6400,7 @@ py {
 
 qy {
   background-clip: border-box, content-box, border-box, border-box, border-box, content-box, border-box, padding-box, content-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none, none /* FIXME */, none, none, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */;
   background-origin: border-box, border-box, content-box, padding-box, padding-box, padding-box, border-box, padding-box, content-box, content-box;
   background-position: center, left top, 10%, center, left top, left top, left top, center, left top, 5px bottom;
@@ -6460,7 +6460,7 @@ vy {
 
 wy {
   background-clip: border-box, border-box, border-box, border-box, padding-box, padding-box, border-box, padding-box, border-box, border-box, border-box, content-box, content-box, border-box, content-box, border-box, padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none /* FIXME */, none, none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, none, none, none /* FIXME */;
   background-origin: padding-box, padding-box, border-box, border-box, padding-box, padding-box, padding-box, padding-box, border-box, padding-box, padding-box, padding-box, content-box, padding-box, content-box, padding-box, content-box;
   background-position: 5px bottom, 10%, 10%, 10%, 5px bottom, left top, left top, 10%, left top, left top, left top, 5px bottom, 10%, 10%, left top, left top, center;
@@ -6490,7 +6490,7 @@ yy {
 
 zy {
   background-clip: border-box, border-box, border-box, border-box, padding-box, border-box, padding-box, border-box, content-box, padding-box, padding-box, border-box, content-box, content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */, none, linear-gradient(rgb(255,192,203), rgb(128,0,128)), none, none, none, none /* FIXME */, none, none, none, none /* FIXME */, none /* FIXME */, none /* FIXME */, none;
   background-origin: padding-box, padding-box, border-box, padding-box, padding-box, border-box, content-box, padding-box, content-box, content-box, padding-box, border-box, border-box, content-box;
   background-position: left top, center, center, 5px bottom, left top, center, left top, 5px bottom, 5px bottom, left top, 5px bottom, 10%, 10%, 5px bottom;
@@ -6500,7 +6500,7 @@ zy {
 
 az {
   background-clip: padding-box, border-box, border-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: linear-gradient(rgb(255,192,203), rgb(128,0,128)), linear-gradient(rgb(255,192,203), rgb(128,0,128)), none /* FIXME */, linear-gradient(rgb(255,192,203), rgb(128,0,128));
   background-origin: border-box, padding-box, content-box, content-box;
   background-position: left top, 5px bottom, 10%, 5px bottom;
@@ -6550,7 +6550,7 @@ ez {
 
 fz {
   background-clip: padding-box, padding-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none, none;
   background-origin: padding-box, padding-box, padding-box;
   background-position: 5px bottom, center, 5px bottom;
@@ -6610,7 +6610,7 @@ kz {
 
 lz {
   background-clip: padding-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none;
   background-origin: padding-box;
   background-position: center;
@@ -6650,7 +6650,7 @@ oz {
 
 pz {
   background-clip: content-box, border-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none, none /* FIXME */;
   background-origin: content-box, border-box;
   background-position: 10%, left top;
@@ -6680,7 +6680,7 @@ rz {
 
 sz {
   background-clip: content-box;
-  background-color: @home;
+  background-color: rgb(165,42,42);
   background-image: none /* FIXME */;
   background-origin: content-box;
   background-position: left top;

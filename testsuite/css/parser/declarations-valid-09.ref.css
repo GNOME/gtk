@@ -1,4 +1,4 @@
 * {
-  background-color: shade(@bg_color, 0.5);
+  background-color: rgb(0,0,0);
   color: rgb(255,0,0);
 }

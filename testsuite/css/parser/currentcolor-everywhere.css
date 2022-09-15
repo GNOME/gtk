@@ -1,5 +1,3 @@
-@define-color some-color currentColor;
-
 a {
   color: currentColor;
 }
@@ -13,9 +11,9 @@ c {
 }
 
 d {
-  color: mix(currentColor, @some-color, 0.5);
+  color: mix(currentColor, pink, 0.5);
 }
 
 e {
-  color: mix(@some-color, currentColor, 0.5);
+  color: mix(pink, currentColor, 0.5);
 }

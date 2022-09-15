@@ -7,7 +7,7 @@ b {
 }
 
 c {
-  background: round no-repeat none padding-box top left / auto auto, round no-repeat center, padding-box, repeat none padding-box, content-box padding-box top left / cover url("test.png") round no-repeat, content-box content-box round no-repeat, round no-repeat 10% none, @home border-box border-box center url("test.png");
+  background: round no-repeat none padding-box top left / auto auto, round no-repeat center, padding-box, repeat none padding-box, content-box padding-box top left / cover url("test.png") round no-repeat, content-box content-box round no-repeat, round no-repeat 10% none, brown border-box border-box center url("test.png");
 }
 
 d {
@@ -43,7 +43,7 @@ k {
 }
 
 l {
-  background: border-box url("test.png"), round no-repeat padding-box content-box top left, repeat 10% content-box, linear-gradient(pink, purple) padding-box 10% @home repeat;
+  background: border-box url("test.png"), round no-repeat padding-box content-box top left, repeat 10% content-box, linear-gradient(pink, purple) padding-box 10% brown repeat;
 }
 
 m {
@@ -115,7 +115,7 @@ cb {
 }
 
 db {
-  background: border-box padding-box @home 5px bottom;
+  background: border-box padding-box brown 5px bottom;
 }
 
 eb {
@@ -155,7 +155,7 @@ mb {
 }
 
 nb {
-  background: url("test.png"), content-box repeat, top left padding-box round no-repeat @home;
+  background: url("test.png"), content-box repeat, top left padding-box round no-repeat brown;
 }
 
 ob {
@@ -191,7 +191,7 @@ vb {
 }
 
 wb {
-  background: content-box padding-box none repeat, border-box, center border-box content-box, repeat url("test.png") top left padding-box, linear-gradient(pink, purple) round no-repeat content-box padding-box 10%, padding-box round no-repeat top left, top left / auto auto padding-box linear-gradient(pink, purple) @home;
+  background: content-box padding-box none repeat, border-box, center border-box content-box, repeat url("test.png") top left padding-box, linear-gradient(pink, purple) round no-repeat content-box padding-box 10%, padding-box round no-repeat top left, top left / auto auto padding-box linear-gradient(pink, purple) brown;
 }
 
 xb {
@@ -211,7 +211,7 @@ ac {
 }
 
 bc {
-  background: repeat top left / auto auto, repeat, 10% / 10% padding-box border-box linear-gradient(pink, purple) repeat @home;
+  background: repeat top left / auto auto, repeat, 10% / 10% padding-box border-box linear-gradient(pink, purple) repeat brown;
 }
 
 cc {
@@ -219,11 +219,11 @@ cc {
 }
 
 dc {
-  background: 5px bottom none content-box round no-repeat, center round no-repeat content-box, 10% url("test.png") border-box repeat, none border-box content-box top left / 10% repeat, repeat padding-box none 10%, 5px bottom round no-repeat content-box, repeat 5px bottom url("test.png") padding-box, repeat none, center padding-box, url("test.png") center border-box padding-box @home;
+  background: 5px bottom none content-box round no-repeat, center round no-repeat content-box, 10% url("test.png") border-box repeat, none border-box content-box top left / 10% repeat, repeat padding-box none 10%, 5px bottom round no-repeat content-box, repeat 5px bottom url("test.png") padding-box, repeat none, center padding-box, url("test.png") center border-box padding-box brown;
 }
 
 ec {
-  background: none content-box round no-repeat @home;
+  background: none content-box round no-repeat brown;
 }
 
 fc {
@@ -235,7 +235,7 @@ gc {
 }
 
 hc {
-  background: url("test.png") border-box center, none padding-box 5px bottom / auto auto, none, repeat url("test.png") 10% / cover content-box, repeat border-box padding-box center url("test.png"), top left / 10% @home;
+  background: url("test.png") border-box center, none padding-box 5px bottom / auto auto, none, repeat url("test.png") 10% / cover content-box, repeat border-box padding-box center url("test.png"), top left / 10% brown;
 }
 
 ic {
@@ -243,7 +243,7 @@ ic {
 }
 
 jc {
-  background: border-box url("test.png") round no-repeat top left, url("test.png") 10% @home border-box repeat;
+  background: border-box url("test.png") round no-repeat top left, url("test.png") 10% brown border-box repeat;
 }
 
 kc {
@@ -303,7 +303,7 @@ xc {
 }
 
 yc {
-  background: @home;
+  background: brown;
 }
 
 zc {
@@ -343,7 +343,7 @@ hd {
 }
 
 id {
-  background: 10% / cover padding-box, none 5px bottom repeat border-box border-box, center / cover linear-gradient(pink, purple) padding-box repeat, border-box round no-repeat url("test.png") top left, border-box repeat url("test.png") top left, 10% border-box padding-box url("test.png") repeat, 10% content-box border-box round no-repeat url("test.png") @home;
+  background: 10% / cover padding-box, none 5px bottom repeat border-box border-box, center / cover linear-gradient(pink, purple) padding-box repeat, border-box round no-repeat url("test.png") top left, border-box repeat url("test.png") top left, 10% border-box padding-box url("test.png") repeat, 10% content-box border-box round no-repeat url("test.png") brown;
 }
 
 jd {
@@ -371,7 +371,7 @@ od {
 }
 
 pd {
-  background: content-box 10% @home round no-repeat;
+  background: content-box 10% brown round no-repeat;
 }
 
 qd {
@@ -419,7 +419,7 @@ ae {
 }
 
 be {
-  background: linear-gradient(pink, purple) content-box border-box 5px bottom, none 5px bottom @home round no-repeat;
+  background: linear-gradient(pink, purple) content-box border-box 5px bottom, none 5px bottom brown round no-repeat;
 }
 
 ce {
@@ -427,7 +427,7 @@ ce {
 }
 
 de {
-  background: border-box url("test.png") round no-repeat 10% / 10%, round no-repeat center, round no-repeat content-box border-box linear-gradient(pink, purple) center / auto auto, linear-gradient(pink, purple) padding-box, url("test.png") border-box border-box center, 5px bottom / auto auto repeat content-box padding-box linear-gradient(pink, purple), linear-gradient(pink, purple) top left, none, linear-gradient(pink, purple) repeat border-box, top left repeat border-box padding-box, 5px bottom round no-repeat border-box, border-box padding-box center repeat, content-box padding-box linear-gradient(pink, purple), 10% / auto auto round no-repeat border-box, 5px bottom / auto auto content-box content-box none @home;
+  background: border-box url("test.png") round no-repeat 10% / 10%, round no-repeat center, round no-repeat content-box border-box linear-gradient(pink, purple) center / auto auto, linear-gradient(pink, purple) padding-box, url("test.png") border-box border-box center, 5px bottom / auto auto repeat content-box padding-box linear-gradient(pink, purple), linear-gradient(pink, purple) top left, none, linear-gradient(pink, purple) repeat border-box, top left repeat border-box padding-box, 5px bottom round no-repeat border-box, border-box padding-box center repeat, content-box padding-box linear-gradient(pink, purple), 10% / auto auto round no-repeat border-box, 5px bottom / auto auto content-box content-box none brown;
 }
 
 ee {
@@ -443,7 +443,7 @@ ge {
 }
 
 he {
-  background: repeat content-box, border-box border-box center repeat, none 10% repeat, 5px bottom content-box content-box none repeat, content-box, padding-box content-box top left repeat, 10% none content-box, repeat padding-box padding-box center, @home repeat 10% / 10% border-box none;
+  background: repeat content-box, border-box border-box center repeat, none 10% repeat, 5px bottom content-box content-box none repeat, content-box, padding-box content-box top left repeat, 10% none content-box, repeat padding-box padding-box center, brown repeat 10% / 10% border-box none;
 }
 
 ie {
@@ -455,7 +455,7 @@ je {
 }
 
 ke {
-  background: round no-repeat url("test.png") padding-box padding-box 5px bottom, none round no-repeat border-box content-box top left, round no-repeat @home content-box;
+  background: round no-repeat url("test.png") padding-box padding-box 5px bottom, none round no-repeat border-box content-box top left, round no-repeat brown content-box;
 }
 
 le {
@@ -495,7 +495,7 @@ te {
 }
 
 ue {
-  background: center padding-box content-box @home round no-repeat;
+  background: center padding-box content-box brown round no-repeat;
 }
 
 ve {
@@ -543,7 +543,7 @@ ff {
 }
 
 gf {
-  background: padding-box 10% url("test.png"), round no-repeat padding-box content-box url("test.png") 10% / cover, repeat border-box url("test.png") top left / 10%, border-box repeat 10% / auto auto @home;
+  background: padding-box 10% url("test.png"), round no-repeat padding-box content-box url("test.png") 10% / cover, repeat border-box url("test.png") top left / 10%, border-box repeat 10% / auto auto brown;
 }
 
 hf {
@@ -559,7 +559,7 @@ jf {
 }
 
 kf {
-  background: padding-box border-box 5px bottom / auto auto, url("test.png") border-box padding-box round no-repeat, round no-repeat url("test.png") 5px bottom, linear-gradient(pink, purple) padding-box 10% / cover, url("test.png") 10% / 10% round no-repeat, @home url("test.png") 5px bottom border-box content-box repeat;
+  background: padding-box border-box 5px bottom / auto auto, url("test.png") border-box padding-box round no-repeat, round no-repeat url("test.png") 5px bottom, linear-gradient(pink, purple) padding-box 10% / cover, url("test.png") 10% / 10% round no-repeat, brown url("test.png") 5px bottom border-box content-box repeat;
 }
 
 lf {
@@ -615,7 +615,7 @@ xf {
 }
 
 yf {
-  background: padding-box content-box round no-repeat none, linear-gradient(pink, purple) center, padding-box center repeat, repeat padding-box, content-box padding-box round no-repeat, content-box url("test.png"), content-box url("test.png") round no-repeat, round no-repeat linear-gradient(pink, purple) center border-box content-box, url("test.png") 5px bottom round no-repeat, 5px bottom / cover border-box url("test.png") repeat, padding-box round no-repeat top left, repeat border-box top left, linear-gradient(pink, purple), border-box round no-repeat 10%, linear-gradient(pink, purple) repeat padding-box content-box, linear-gradient(pink, purple) round no-repeat border-box content-box, url("test.png") content-box padding-box repeat top left, repeat top left linear-gradient(pink, purple), @home padding-box none;
+  background: padding-box content-box round no-repeat none, linear-gradient(pink, purple) center, padding-box center repeat, repeat padding-box, content-box padding-box round no-repeat, content-box url("test.png"), content-box url("test.png") round no-repeat, round no-repeat linear-gradient(pink, purple) center border-box content-box, url("test.png") 5px bottom round no-repeat, 5px bottom / cover border-box url("test.png") repeat, padding-box round no-repeat top left, repeat border-box top left, linear-gradient(pink, purple), border-box round no-repeat 10%, linear-gradient(pink, purple) repeat padding-box content-box, linear-gradient(pink, purple) round no-repeat border-box content-box, url("test.png") content-box padding-box repeat top left, repeat top left linear-gradient(pink, purple), brown padding-box none;
 }
 
 zf {
@@ -643,7 +643,7 @@ eg {
 }
 
 fg {
-  background: none repeat center padding-box, url("test.png") border-box 5px bottom, @home repeat padding-box 10% url("test.png");
+  background: none repeat center padding-box, url("test.png") border-box 5px bottom, brown repeat padding-box 10% url("test.png");
 }
 
 gg {
@@ -663,7 +663,7 @@ jg {
 }
 
 kg {
-  background: padding-box linear-gradient(pink, purple) top left / cover, linear-gradient(pink, purple), padding-box round no-repeat center, round no-repeat url("test.png"), 10%, 10% repeat content-box, round no-repeat 10% padding-box padding-box, linear-gradient(pink, purple) @home top left repeat;
+  background: padding-box linear-gradient(pink, purple) top left / cover, linear-gradient(pink, purple), padding-box round no-repeat center, round no-repeat url("test.png"), 10%, 10% repeat content-box, round no-repeat 10% padding-box padding-box, linear-gradient(pink, purple) brown top left repeat;
 }
 
 lg {
@@ -735,11 +735,11 @@ bh {
 }
 
 ch {
-  background: repeat linear-gradient(pink, purple), repeat 5px bottom, repeat 10% / cover padding-box border-box, repeat content-box, repeat top left padding-box content-box, center url("test.png") content-box, content-box content-box linear-gradient(pink, purple) 5px bottom, border-box border-box 5px bottom repeat, 10% / cover border-box, padding-box @home none;
+  background: repeat linear-gradient(pink, purple), repeat 5px bottom, repeat 10% / cover padding-box border-box, repeat content-box, repeat top left padding-box content-box, center url("test.png") content-box, content-box content-box linear-gradient(pink, purple) 5px bottom, border-box border-box 5px bottom repeat, 10% / cover border-box, padding-box brown none;
 }
 
 dh {
-  background: repeat 5px bottom / 10% padding-box padding-box, content-box content-box none center / 10%, 10% / auto auto border-box padding-box repeat url("test.png"), 10% padding-box, repeat @home none 5px bottom content-box padding-box;
+  background: repeat 5px bottom / 10% padding-box padding-box, content-box content-box none center / 10%, 10% / auto auto border-box padding-box repeat url("test.png"), 10% padding-box, repeat brown none 5px bottom content-box padding-box;
 }
 
 eh {
@@ -795,7 +795,7 @@ qh {
 }
 
 rh {
-  background: round no-repeat 10%, repeat top left, content-box linear-gradient(pink, purple) @home round no-repeat;
+  background: round no-repeat 10%, repeat top left, content-box linear-gradient(pink, purple) brown round no-repeat;
 }
 
 sh {
@@ -823,7 +823,7 @@ xh {
 }
 
 yh {
-  background: border-box repeat linear-gradient(pink, purple), repeat 10% @home;
+  background: border-box repeat linear-gradient(pink, purple), repeat 10% brown;
 }
 
 zh {
@@ -851,7 +851,7 @@ ei {
 }
 
 fi {
-  background: @home content-box border-box top left;
+  background: brown content-box border-box top left;
 }
 
 gi {
@@ -859,11 +859,11 @@ gi {
 }
 
 hi {
-  background: 10% / cover padding-box content-box none repeat, content-box @home linear-gradient(pink, purple);
+  background: 10% / cover padding-box content-box none repeat, content-box brown linear-gradient(pink, purple);
 }
 
 ii {
-  background: content-box content-box round no-repeat linear-gradient(pink, purple), 5px bottom padding-box repeat @home;
+  background: content-box content-box round no-repeat linear-gradient(pink, purple), 5px bottom padding-box repeat brown;
 }
 
 ji {
@@ -871,7 +871,7 @@ ji {
 }
 
 ki {
-  background: repeat 5px bottom border-box, round no-repeat 10% url("test.png"), none border-box, round no-repeat content-box, round no-repeat 5px bottom border-box, top left / 10% repeat url("test.png") content-box, content-box border-box round no-repeat, 5px bottom / 10% round no-repeat, content-box padding-box repeat linear-gradient(pink, purple) 10%, round no-repeat padding-box top left / cover none, center url("test.png"), round no-repeat url("test.png") content-box top left / auto auto, border-box center @home linear-gradient(pink, purple);
+  background: repeat 5px bottom border-box, round no-repeat 10% url("test.png"), none border-box, round no-repeat content-box, round no-repeat 5px bottom border-box, top left / 10% repeat url("test.png") content-box, content-box border-box round no-repeat, 5px bottom / 10% round no-repeat, content-box padding-box repeat linear-gradient(pink, purple) 10%, round no-repeat padding-box top left / cover none, center url("test.png"), round no-repeat url("test.png") content-box top left / auto auto, border-box center brown linear-gradient(pink, purple);
 }
 
 li {
@@ -891,11 +891,11 @@ oi {
 }
 
 pi {
-  background: content-box 5px bottom repeat, repeat content-box content-box, border-box top left @home;
+  background: content-box 5px bottom repeat, repeat content-box content-box, border-box top left brown;
 }
 
 qi {
-  background: repeat border-box linear-gradient(pink, purple) top left / 10%, none 10% / cover content-box, 5px bottom linear-gradient(pink, purple) repeat @home border-box content-box;
+  background: repeat border-box linear-gradient(pink, purple) top left / 10%, none 10% / cover content-box, 5px bottom linear-gradient(pink, purple) repeat brown border-box content-box;
 }
 
 ri {
@@ -903,7 +903,7 @@ ri {
 }
 
 si {
-  background: none top left, 5px bottom / 10%, top left url("test.png") repeat, linear-gradient(pink, purple) border-box round no-repeat, repeat padding-box linear-gradient(pink, purple) 10% / 10%, padding-box none top left @home round no-repeat;
+  background: none top left, 5px bottom / 10%, top left url("test.png") repeat, linear-gradient(pink, purple) border-box round no-repeat, repeat padding-box linear-gradient(pink, purple) 10% / 10%, padding-box none top left brown round no-repeat;
 }
 
 ti {
@@ -983,7 +983,7 @@ lj {
 }
 
 mj {
-  background: repeat linear-gradient(pink, purple) 5px bottom, border-box center / 10% linear-gradient(pink, purple), center / cover round no-repeat content-box, linear-gradient(pink, purple) content-box 10%, url("test.png") top left padding-box padding-box, top left repeat none, center border-box content-box none round no-repeat, url("test.png") top left / 10%, center / cover none content-box content-box, round no-repeat center / cover content-box, top left border-box linear-gradient(pink, purple) repeat, url("test.png"), linear-gradient(pink, purple), linear-gradient(pink, purple) 10% / cover content-box round no-repeat, 10% / auto auto border-box, top left / 10% linear-gradient(pink, purple) repeat @home;
+  background: repeat linear-gradient(pink, purple) 5px bottom, border-box center / 10% linear-gradient(pink, purple), center / cover round no-repeat content-box, linear-gradient(pink, purple) content-box 10%, url("test.png") top left padding-box padding-box, top left repeat none, center border-box content-box none round no-repeat, url("test.png") top left / 10%, center / cover none content-box content-box, round no-repeat center / cover content-box, top left border-box linear-gradient(pink, purple) repeat, url("test.png"), linear-gradient(pink, purple), linear-gradient(pink, purple) 10% / cover content-box round no-repeat, 10% / auto auto border-box, top left / 10% linear-gradient(pink, purple) repeat brown;
 }
 
 nj {
@@ -991,7 +991,7 @@ nj {
 }
 
 oj {
-  background: none 5px bottom / cover, center / 10% linear-gradient(pink, purple) repeat content-box, linear-gradient(pink, purple) center, padding-box top left / 10%, 5px bottom repeat url("test.png"), padding-box top left round no-repeat, center linear-gradient(pink, purple) padding-box content-box, @home round no-repeat top left;
+  background: none 5px bottom / cover, center / 10% linear-gradient(pink, purple) repeat content-box, linear-gradient(pink, purple) center, padding-box top left / 10%, 5px bottom repeat url("test.png"), padding-box top left round no-repeat, center linear-gradient(pink, purple) padding-box content-box, brown round no-repeat top left;
 }
 
 pj {
@@ -1075,7 +1075,7 @@ ik {
 }
 
 jk {
-  background: repeat content-box top left, repeat content-box center linear-gradient(pink, purple), center / auto auto repeat, round no-repeat linear-gradient(pink, purple), linear-gradient(pink, purple) content-box repeat center / auto auto, repeat, linear-gradient(pink, purple) border-box padding-box 10%, top left / auto auto padding-box round no-repeat, repeat padding-box border-box none, linear-gradient(pink, purple) round no-repeat border-box, repeat padding-box 10% url("test.png"), center round no-repeat content-box content-box, @home top left;
+  background: repeat content-box top left, repeat content-box center linear-gradient(pink, purple), center / auto auto repeat, round no-repeat linear-gradient(pink, purple), linear-gradient(pink, purple) content-box repeat center / auto auto, repeat, linear-gradient(pink, purple) border-box padding-box 10%, top left / auto auto padding-box round no-repeat, repeat padding-box border-box none, linear-gradient(pink, purple) round no-repeat border-box, repeat padding-box 10% url("test.png"), center round no-repeat content-box content-box, brown top left;
 }
 
 kk {
@@ -1087,7 +1087,7 @@ lk {
 }
 
 mk {
-  background: repeat padding-box center linear-gradient(pink, purple), border-box repeat, url("test.png") center / 10% repeat, border-box border-box top left none round no-repeat, content-box repeat top left / 10% linear-gradient(pink, purple), 5px bottom url("test.png"), round no-repeat padding-box 5px bottom / 10%, content-box repeat url("test.png"), content-box none round no-repeat 5px bottom / cover, top left / auto auto content-box border-box, repeat 5px bottom linear-gradient(pink, purple), round no-repeat url("test.png") border-box, none 10% round no-repeat border-box, round no-repeat linear-gradient(pink, purple) 5px bottom padding-box, linear-gradient(pink, purple) 10% / auto auto padding-box repeat @home;
+  background: repeat padding-box center linear-gradient(pink, purple), border-box repeat, url("test.png") center / 10% repeat, border-box border-box top left none round no-repeat, content-box repeat top left / 10% linear-gradient(pink, purple), 5px bottom url("test.png"), round no-repeat padding-box 5px bottom / 10%, content-box repeat url("test.png"), content-box none round no-repeat 5px bottom / cover, top left / auto auto content-box border-box, repeat 5px bottom linear-gradient(pink, purple), round no-repeat url("test.png") border-box, none 10% round no-repeat border-box, round no-repeat linear-gradient(pink, purple) 5px bottom padding-box, linear-gradient(pink, purple) 10% / auto auto padding-box repeat brown;
 }
 
 nk {
@@ -1107,7 +1107,7 @@ qk {
 }
 
 rk {
-  background: linear-gradient(pink, purple) border-box round no-repeat center / cover, center content-box padding-box, border-box 10% / 10%, url("test.png") padding-box top left / cover, linear-gradient(pink, purple) top left round no-repeat, border-box content-box repeat url("test.png"), url("test.png") border-box border-box, center linear-gradient(pink, purple) round no-repeat border-box content-box, none top left padding-box, border-box round no-repeat url("test.png"), none 5px bottom, 5px bottom none, padding-box padding-box 10%, repeat center / cover padding-box border-box @home none;
+  background: linear-gradient(pink, purple) border-box round no-repeat center / cover, center content-box padding-box, border-box 10% / 10%, url("test.png") padding-box top left / cover, linear-gradient(pink, purple) top left round no-repeat, border-box content-box repeat url("test.png"), url("test.png") border-box border-box, center linear-gradient(pink, purple) round no-repeat border-box content-box, none top left padding-box, border-box round no-repeat url("test.png"), none 5px bottom, 5px bottom none, padding-box padding-box 10%, repeat center / cover padding-box border-box brown none;
 }
 
 sk {
@@ -1143,7 +1143,7 @@ zk {
 }
 
 al {
-  background: round no-repeat center content-box, border-box 5px bottom / 10%, url("test.png") border-box 10% / cover, repeat @home content-box content-box url("test.png");
+  background: round no-repeat center content-box, border-box 5px bottom / 10%, url("test.png") border-box 10% / cover, repeat brown content-box content-box url("test.png");
 }
 
 bl {
@@ -1239,7 +1239,7 @@ xl {
 }
 
 yl {
-  background: 10% border-box content-box, repeat none content-box, padding-box url("test.png"), 5px bottom repeat, border-box round no-repeat url("test.png"), repeat content-box border-box 5px bottom / auto auto, none, border-box linear-gradient(pink, purple) @home repeat;
+  background: 10% border-box content-box, repeat none content-box, padding-box url("test.png"), 5px bottom repeat, border-box round no-repeat url("test.png"), repeat content-box border-box 5px bottom / auto auto, none, border-box linear-gradient(pink, purple) brown repeat;
 }
 
 zl {
@@ -1303,7 +1303,7 @@ nm {
 }
 
 om {
-  background: top left @home border-box none;
+  background: top left brown border-box none;
 }
 
 pm {
@@ -1311,7 +1311,7 @@ pm {
 }
 
 qm {
-  background: border-box border-box round no-repeat linear-gradient(pink, purple) 10%, 10% / 10% linear-gradient(pink, purple), url("test.png") round no-repeat top left / cover, center content-box border-box none, round no-repeat none top left / cover, top left / cover round no-repeat border-box linear-gradient(pink, purple), repeat border-box center / auto auto, padding-box repeat center @home;
+  background: border-box border-box round no-repeat linear-gradient(pink, purple) 10%, 10% / 10% linear-gradient(pink, purple), url("test.png") round no-repeat top left / cover, center content-box border-box none, round no-repeat none top left / cover, top left / cover round no-repeat border-box linear-gradient(pink, purple), repeat border-box center / auto auto, padding-box repeat center brown;
 }
 
 rm {
@@ -1395,7 +1395,7 @@ kn {
 }
 
 ln {
-  background: content-box center url("test.png"), content-box top left, content-box url("test.png") center, url("test.png") center / auto auto, padding-box round no-repeat 10% linear-gradient(pink, purple), border-box repeat 10%, repeat 10%, round no-repeat center, round no-repeat @home none content-box 10% / cover;
+  background: content-box center url("test.png"), content-box top left, content-box url("test.png") center, url("test.png") center / auto auto, padding-box round no-repeat 10% linear-gradient(pink, purple), border-box repeat 10%, repeat 10%, round no-repeat center, round no-repeat brown none content-box 10% / cover;
 }
 
 mn {
@@ -1411,11 +1411,11 @@ on {
 }
 
 pn {
-  background: content-box content-box 5px bottom / 10% linear-gradient(pink, purple) repeat, url("test.png") top left padding-box padding-box, padding-box center repeat, content-box linear-gradient(pink, purple) 5px bottom / auto auto @home;
+  background: content-box content-box 5px bottom / 10% linear-gradient(pink, purple) repeat, url("test.png") top left padding-box padding-box, padding-box center repeat, content-box linear-gradient(pink, purple) 5px bottom / auto auto brown;
 }
 
 qn {
-  background: none 10%, round no-repeat top left linear-gradient(pink, purple), center / auto auto url("test.png") repeat, border-box 10% / auto auto round no-repeat, round no-repeat content-box url("test.png"), none padding-box 10% / 10%, 10% border-box padding-box @home;
+  background: none 10%, round no-repeat top left linear-gradient(pink, purple), center / auto auto url("test.png") repeat, border-box 10% / auto auto round no-repeat, round no-repeat content-box url("test.png"), none padding-box 10% / 10%, 10% border-box padding-box brown;
 }
 
 rn {
@@ -1435,7 +1435,7 @@ un {
 }
 
 vn {
-  background: none 5px bottom round no-repeat, round no-repeat content-box border-box none 10%, none center round no-repeat content-box, url("test.png") 5px bottom border-box, 10% / cover content-box padding-box, 5px bottom padding-box content-box, round no-repeat linear-gradient(pink, purple) border-box center, url("test.png"), round no-repeat border-box, round no-repeat linear-gradient(pink, purple) @home content-box;
+  background: none 5px bottom round no-repeat, round no-repeat content-box border-box none 10%, none center round no-repeat content-box, url("test.png") 5px bottom border-box, 10% / cover content-box padding-box, 5px bottom padding-box content-box, round no-repeat linear-gradient(pink, purple) border-box center, url("test.png"), round no-repeat border-box, round no-repeat linear-gradient(pink, purple) brown content-box;
 }
 
 wn {
@@ -1443,7 +1443,7 @@ wn {
 }
 
 xn {
-  background: padding-box repeat linear-gradient(pink, purple), border-box padding-box top left none @home;
+  background: padding-box repeat linear-gradient(pink, purple), border-box padding-box top left none brown;
 }
 
 yn {
@@ -1479,7 +1479,7 @@ fo {
 }
 
 go {
-  background: border-box top left / cover round no-repeat, repeat none border-box border-box @home;
+  background: border-box top left / cover round no-repeat, repeat none border-box border-box brown;
 }
 
 ho {
@@ -1491,7 +1491,7 @@ io {
 }
 
 jo {
-  background: content-box padding-box none round no-repeat center, 10% padding-box border-box, repeat center / 10% padding-box none, repeat center, padding-box round no-repeat top left linear-gradient(pink, purple), none round no-repeat padding-box content-box center / cover, padding-box url("test.png") round no-repeat, repeat linear-gradient(pink, purple) border-box content-box center, repeat content-box center / auto auto linear-gradient(pink, purple), top left / cover none padding-box, padding-box content-box linear-gradient(pink, purple) repeat, round no-repeat, top left linear-gradient(pink, purple), repeat center padding-box, content-box padding-box repeat linear-gradient(pink, purple) top left, center border-box border-box, repeat top left / cover @home;
+  background: content-box padding-box none round no-repeat center, 10% padding-box border-box, repeat center / 10% padding-box none, repeat center, padding-box round no-repeat top left linear-gradient(pink, purple), none round no-repeat padding-box content-box center / cover, padding-box url("test.png") round no-repeat, repeat linear-gradient(pink, purple) border-box content-box center, repeat content-box center / auto auto linear-gradient(pink, purple), top left / cover none padding-box, padding-box content-box linear-gradient(pink, purple) repeat, round no-repeat, top left linear-gradient(pink, purple), repeat center padding-box, content-box padding-box repeat linear-gradient(pink, purple) top left, center border-box border-box, repeat top left / cover brown;
 }
 
 ko {
@@ -1507,7 +1507,7 @@ mo {
 }
 
 no {
-  background: linear-gradient(pink, purple) @home 10% repeat;
+  background: linear-gradient(pink, purple) brown 10% repeat;
 }
 
 oo {
@@ -1531,11 +1531,11 @@ so {
 }
 
 to {
-  background: repeat none, top left repeat none padding-box border-box, 5px bottom @home;
+  background: repeat none, top left repeat none padding-box border-box, 5px bottom brown;
 }
 
 uo {
-  background: linear-gradient(pink, purple) content-box, repeat 10% / 10%, padding-box 5px bottom / auto auto, border-box, 10% border-box padding-box, repeat center none border-box, top left content-box padding-box none, url("test.png") padding-box, repeat top left, @home padding-box border-box repeat 5px bottom;
+  background: linear-gradient(pink, purple) content-box, repeat 10% / 10%, padding-box 5px bottom / auto auto, border-box, 10% border-box padding-box, repeat center none border-box, top left content-box padding-box none, url("test.png") padding-box, repeat top left, brown padding-box border-box repeat 5px bottom;
 }
 
 vo {
@@ -1623,7 +1623,7 @@ pp {
 }
 
 qp {
-  background: top left / auto auto url("test.png"), padding-box padding-box 5px bottom / cover linear-gradient(pink, purple) round no-repeat, round no-repeat, center border-box padding-box none round no-repeat, url("test.png") center round no-repeat, 5px bottom / 10% linear-gradient(pink, purple) content-box, center repeat url("test.png"), repeat 5px bottom linear-gradient(pink, purple) content-box, padding-box border-box repeat 5px bottom, url("test.png") 10% round no-repeat, url("test.png") top left content-box content-box, 5px bottom / cover url("test.png"), repeat 5px bottom linear-gradient(pink, purple), round no-repeat linear-gradient(pink, purple) content-box content-box, padding-box none repeat, border-box 5px bottom linear-gradient(pink, purple) repeat, none repeat @home;
+  background: top left / auto auto url("test.png"), padding-box padding-box 5px bottom / cover linear-gradient(pink, purple) round no-repeat, round no-repeat, center border-box padding-box none round no-repeat, url("test.png") center round no-repeat, 5px bottom / 10% linear-gradient(pink, purple) content-box, center repeat url("test.png"), repeat 5px bottom linear-gradient(pink, purple) content-box, padding-box border-box repeat 5px bottom, url("test.png") 10% round no-repeat, url("test.png") top left content-box content-box, 5px bottom / cover url("test.png"), repeat 5px bottom linear-gradient(pink, purple), round no-repeat linear-gradient(pink, purple) content-box content-box, padding-box none repeat, border-box 5px bottom linear-gradient(pink, purple) repeat, none repeat brown;
 }
 
 rp {
@@ -1639,7 +1639,7 @@ tp {
 }
 
 up {
-  background: none repeat 10%, center linear-gradient(pink, purple) border-box round no-repeat, repeat 10% border-box content-box linear-gradient(pink, purple), padding-box round no-repeat 5px bottom / 10%, url("test.png") repeat @home content-box;
+  background: none repeat 10%, center linear-gradient(pink, purple) border-box round no-repeat, repeat 10% border-box content-box linear-gradient(pink, purple), padding-box round no-repeat 5px bottom / 10%, url("test.png") repeat brown content-box;
 }
 
 vp {
@@ -1655,7 +1655,7 @@ xp {
 }
 
 yp {
-  background: repeat url("test.png") 5px bottom / cover border-box, @home padding-box border-box round no-repeat;
+  background: repeat url("test.png") 5px bottom / cover border-box, brown padding-box border-box round no-repeat;
 }
 
 zp {
@@ -1691,7 +1691,7 @@ gq {
 }
 
 hq {
-  background: repeat 5px bottom none padding-box, round no-repeat url("test.png"), border-box content-box none, linear-gradient(pink, purple) 5px bottom, linear-gradient(pink, purple) border-box top left round no-repeat, repeat, none border-box repeat, repeat linear-gradient(pink, purple) content-box border-box center, repeat 5px bottom, round no-repeat linear-gradient(pink, purple) content-box padding-box, content-box border-box 5px bottom / 10% round no-repeat url("test.png"), url("test.png") border-box, center repeat padding-box padding-box, repeat content-box 5px bottom / auto auto none, repeat @home linear-gradient(pink, purple);
+  background: repeat 5px bottom none padding-box, round no-repeat url("test.png"), border-box content-box none, linear-gradient(pink, purple) 5px bottom, linear-gradient(pink, purple) border-box top left round no-repeat, repeat, none border-box repeat, repeat linear-gradient(pink, purple) content-box border-box center, repeat 5px bottom, round no-repeat linear-gradient(pink, purple) content-box padding-box, content-box border-box 5px bottom / 10% round no-repeat url("test.png"), url("test.png") border-box, center repeat padding-box padding-box, repeat content-box 5px bottom / auto auto none, repeat brown linear-gradient(pink, purple);
 }
 
 iq {
@@ -1779,7 +1779,7 @@ cr {
 }
 
 dr {
-  background: 10% padding-box border-box url("test.png"), @home 5px bottom content-box;
+  background: 10% padding-box border-box url("test.png"), brown 5px bottom content-box;
 }
 
 er {
@@ -1791,7 +1791,7 @@ fr {
 }
 
 gr {
-  background: linear-gradient(pink, purple) round no-repeat 10% border-box padding-box, none padding-box top left, repeat none 5px bottom border-box, top left content-box padding-box linear-gradient(pink, purple) @home;
+  background: linear-gradient(pink, purple) round no-repeat 10% border-box padding-box, none padding-box top left, repeat none 5px bottom border-box, top left content-box padding-box linear-gradient(pink, purple) brown;
 }
 
 hr {
@@ -1847,7 +1847,7 @@ tr {
 }
 
 ur {
-  background: round no-repeat, url("test.png") 5px bottom round no-repeat, border-box border-box top left / 10% @home round no-repeat;
+  background: round no-repeat, url("test.png") 5px bottom round no-repeat, border-box border-box top left / 10% brown round no-repeat;
 }
 
 vr {
@@ -1855,7 +1855,7 @@ vr {
 }
 
 wr {
-  background: 5px bottom padding-box none, content-box border-box 10% linear-gradient(pink, purple) repeat @home;
+  background: 5px bottom padding-box none, content-box border-box 10% linear-gradient(pink, purple) repeat brown;
 }
 
 xr {
@@ -1891,15 +1891,15 @@ es {
 }
 
 fs {
-  background: repeat url("test.png") content-box 10%, repeat linear-gradient(pink, purple) 5px bottom / auto auto content-box, round no-repeat 5px bottom / auto auto, padding-box linear-gradient(pink, purple) center / auto auto repeat, url("test.png") repeat 10%, top left / cover padding-box repeat, content-box border-box linear-gradient(pink, purple) center / auto auto repeat, linear-gradient(pink, purple) content-box padding-box round no-repeat, padding-box padding-box 5px bottom linear-gradient(pink, purple), url("test.png") @home 10% border-box;
+  background: repeat url("test.png") content-box 10%, repeat linear-gradient(pink, purple) 5px bottom / auto auto content-box, round no-repeat 5px bottom / auto auto, padding-box linear-gradient(pink, purple) center / auto auto repeat, url("test.png") repeat 10%, top left / cover padding-box repeat, content-box border-box linear-gradient(pink, purple) center / auto auto repeat, linear-gradient(pink, purple) content-box padding-box round no-repeat, padding-box padding-box 5px bottom linear-gradient(pink, purple), url("test.png") brown 10% border-box;
 }
 
 gs {
-  background: linear-gradient(pink, purple) border-box round no-repeat, round no-repeat content-box content-box 5px bottom / auto auto, 10% / auto auto, padding-box linear-gradient(pink, purple) round no-repeat top left / auto auto, repeat center, top left padding-box linear-gradient(pink, purple), @home round no-repeat border-box url("test.png") 5px bottom;
+  background: linear-gradient(pink, purple) border-box round no-repeat, round no-repeat content-box content-box 5px bottom / auto auto, 10% / auto auto, padding-box linear-gradient(pink, purple) round no-repeat top left / auto auto, repeat center, top left padding-box linear-gradient(pink, purple), brown round no-repeat border-box url("test.png") 5px bottom;
 }
 
 hs {
-  background: 10% url("test.png") repeat border-box content-box, border-box repeat, none content-box content-box 10% / auto auto, 10% / 10% round no-repeat linear-gradient(pink, purple), 5px bottom none content-box, none border-box 5px bottom, repeat top left / auto auto border-box content-box none, border-box center / 10% linear-gradient(pink, purple), round no-repeat @home 5px bottom / auto auto none;
+  background: 10% url("test.png") repeat border-box content-box, border-box repeat, none content-box content-box 10% / auto auto, 10% / 10% round no-repeat linear-gradient(pink, purple), 5px bottom none content-box, none border-box 5px bottom, repeat top left / auto auto border-box content-box none, border-box center / 10% linear-gradient(pink, purple), round no-repeat brown 5px bottom / auto auto none;
 }
 
 is {
@@ -1919,11 +1919,11 @@ ls {
 }
 
 ms {
-  background: border-box repeat, center content-box url("test.png"), 10% / 10% repeat none border-box content-box, border-box border-box round no-repeat @home;
+  background: border-box repeat, center content-box url("test.png"), 10% / 10% repeat none border-box content-box, border-box border-box round no-repeat brown;
 }
 
 ns {
-  background: top left / cover url("test.png") padding-box, round no-repeat 5px bottom / auto auto linear-gradient(pink, purple), padding-box padding-box 10% / 10% linear-gradient(pink, purple) repeat, padding-box content-box url("test.png") repeat, linear-gradient(pink, purple) border-box padding-box 5px bottom / cover repeat, content-box top left / 10% url("test.png"), repeat top left @home;
+  background: top left / cover url("test.png") padding-box, round no-repeat 5px bottom / auto auto linear-gradient(pink, purple), padding-box padding-box 10% / 10% linear-gradient(pink, purple) repeat, padding-box content-box url("test.png") repeat, linear-gradient(pink, purple) border-box padding-box 5px bottom / cover repeat, content-box top left / 10% url("test.png"), repeat top left brown;
 }
 
 os {
@@ -1935,11 +1935,11 @@ ps {
 }
 
 qs {
-  background: content-box 10% repeat, border-box url("test.png") 10%, content-box linear-gradient(pink, purple) 10% / cover, none 10% / cover content-box, top left content-box round no-repeat, linear-gradient(pink, purple) @home padding-box border-box center repeat;
+  background: content-box 10% repeat, border-box url("test.png") 10%, content-box linear-gradient(pink, purple) 10% / cover, none 10% / cover content-box, top left content-box round no-repeat, linear-gradient(pink, purple) brown padding-box border-box center repeat;
 }
 
 rs {
-  background: center round no-repeat none content-box, center / auto auto round no-repeat padding-box, repeat linear-gradient(pink, purple), border-box content-box repeat url("test.png"), round no-repeat url("test.png") content-box content-box 5px bottom, 5px bottom linear-gradient(pink, purple), url("test.png") padding-box repeat, center / auto auto url("test.png"), border-box 5px bottom / auto auto repeat url("test.png"), round no-repeat padding-box top left / cover linear-gradient(pink, purple), padding-box round no-repeat @home top left;
+  background: center round no-repeat none content-box, center / auto auto round no-repeat padding-box, repeat linear-gradient(pink, purple), border-box content-box repeat url("test.png"), round no-repeat url("test.png") content-box content-box 5px bottom, 5px bottom linear-gradient(pink, purple), url("test.png") padding-box repeat, center / auto auto url("test.png"), border-box 5px bottom / auto auto repeat url("test.png"), round no-repeat padding-box top left / cover linear-gradient(pink, purple), padding-box round no-repeat brown top left;
 }
 
 ss {
@@ -1955,7 +1955,7 @@ us {
 }
 
 vs {
-  background: @home border-box linear-gradient(pink, purple);
+  background: brown border-box linear-gradient(pink, purple);
 }
 
 ws {
@@ -1967,7 +1967,7 @@ xs {
 }
 
 ys {
-  background: center round no-repeat, 10% border-box repeat, top left / auto auto, padding-box 5px bottom linear-gradient(pink, purple), round no-repeat none 5px bottom content-box, round no-repeat content-box content-box 5px bottom none, round no-repeat 5px bottom, none padding-box 5px bottom, none round no-repeat padding-box, 5px bottom linear-gradient(pink, purple) content-box, border-box round no-repeat @home;
+  background: center round no-repeat, 10% border-box repeat, top left / auto auto, padding-box 5px bottom linear-gradient(pink, purple), round no-repeat none 5px bottom content-box, round no-repeat content-box content-box 5px bottom none, round no-repeat 5px bottom, none padding-box 5px bottom, none round no-repeat padding-box, 5px bottom linear-gradient(pink, purple) content-box, border-box round no-repeat brown;
 }
 
 zs {
@@ -1991,7 +1991,7 @@ dt {
 }
 
 et {
-  background: top left / cover none, border-box round no-repeat, repeat padding-box, padding-box center url("test.png") repeat, round no-repeat 10% / 10%, padding-box round no-repeat none, content-box @home round no-repeat;
+  background: top left / cover none, border-box round no-repeat, repeat padding-box, padding-box center url("test.png") repeat, round no-repeat 10% / 10%, padding-box round no-repeat none, content-box brown round no-repeat;
 }
 
 ft {
@@ -2107,7 +2107,7 @@ gu {
 }
 
 hu {
-  background: 10% url("test.png"), repeat center / 10% border-box padding-box linear-gradient(pink, purple), padding-box border-box repeat none center, 10% border-box repeat none, content-box 5px bottom none, none center round no-repeat, top left content-box linear-gradient(pink, purple), content-box content-box repeat, content-box padding-box top left / 10% round no-repeat, 5px bottom repeat, 10% / auto auto linear-gradient(pink, purple) repeat, 5px bottom padding-box padding-box round no-repeat, 10% / 10% content-box round no-repeat none @home;
+  background: 10% url("test.png"), repeat center / 10% border-box padding-box linear-gradient(pink, purple), padding-box border-box repeat none center, 10% border-box repeat none, content-box 5px bottom none, none center round no-repeat, top left content-box linear-gradient(pink, purple), content-box content-box repeat, content-box padding-box top left / 10% round no-repeat, 5px bottom repeat, 10% / auto auto linear-gradient(pink, purple) repeat, 5px bottom padding-box padding-box round no-repeat, 10% / 10% content-box round no-repeat none brown;
 }
 
 iu {
@@ -2135,7 +2135,7 @@ nu {
 }
 
 ou {
-  background: url("test.png") center padding-box, linear-gradient(pink, purple) center padding-box, 10% repeat padding-box url("test.png"), url("test.png") repeat border-box, padding-box repeat 5px bottom, 5px bottom repeat content-box, repeat center / cover, padding-box top left / cover, round no-repeat linear-gradient(pink, purple), border-box repeat @home 5px bottom;
+  background: url("test.png") center padding-box, linear-gradient(pink, purple) center padding-box, 10% repeat padding-box url("test.png"), url("test.png") repeat border-box, padding-box repeat 5px bottom, 5px bottom repeat content-box, repeat center / cover, padding-box top left / cover, round no-repeat linear-gradient(pink, purple), border-box repeat brown 5px bottom;
 }
 
 pu {
@@ -2171,7 +2171,7 @@ wu {
 }
 
 xu {
-  background: border-box border-box round no-repeat, linear-gradient(pink, purple) padding-box center / 10%, repeat content-box linear-gradient(pink, purple) 10%, url("test.png") content-box content-box @home round no-repeat;
+  background: border-box border-box round no-repeat, linear-gradient(pink, purple) padding-box center / 10%, repeat content-box linear-gradient(pink, purple) 10%, url("test.png") content-box content-box brown round no-repeat;
 }
 
 yu {
@@ -2263,7 +2263,7 @@ tv {
 }
 
 uv {
-  background: repeat, top left / cover content-box repeat @home;
+  background: repeat, top left / cover content-box repeat brown;
 }
 
 vv {
@@ -2275,7 +2275,7 @@ wv {
 }
 
 xv {
-  background: 5px bottom repeat, round no-repeat none padding-box 5px bottom, url("test.png"), repeat top left padding-box, none, url("test.png") center / cover round no-repeat content-box content-box, url("test.png") 10% border-box repeat, top left content-box linear-gradient(pink, purple) repeat, 10% @home linear-gradient(pink, purple) repeat;
+  background: 5px bottom repeat, round no-repeat none padding-box 5px bottom, url("test.png"), repeat top left padding-box, none, url("test.png") center / cover round no-repeat content-box content-box, url("test.png") 10% border-box repeat, top left content-box linear-gradient(pink, purple) repeat, 10% brown linear-gradient(pink, purple) repeat;
 }
 
 yv {
@@ -2283,11 +2283,11 @@ yv {
 }
 
 zv {
-  background: repeat border-box padding-box top left url("test.png"), @home round no-repeat border-box;
+  background: repeat border-box padding-box top left url("test.png"), brown round no-repeat border-box;
 }
 
 aw {
-  background: content-box top left, content-box url("test.png") round no-repeat, center padding-box none @home;
+  background: content-box top left, content-box url("test.png") round no-repeat, center padding-box none brown;
 }
 
 bw {
@@ -2331,7 +2331,7 @@ kw {
 }
 
 lw {
-  background: round no-repeat padding-box center, content-box repeat 10% url("test.png"), padding-box center, border-box 5px bottom @home none;
+  background: round no-repeat padding-box center, content-box repeat 10% url("test.png"), padding-box center, border-box 5px bottom brown none;
 }
 
 mw {
@@ -2371,7 +2371,7 @@ uw {
 }
 
 vw {
-  background: 5px bottom / cover round no-repeat padding-box padding-box, padding-box padding-box round no-repeat center, border-box none, url("test.png") repeat 10% / 10% content-box, content-box border-box linear-gradient(pink, purple) top left, linear-gradient(pink, purple) 10% repeat content-box, border-box padding-box 10% linear-gradient(pink, purple), url("test.png") top left, round no-repeat top left, 5px bottom / 10% linear-gradient(pink, purple) round no-repeat content-box, @home padding-box 10% linear-gradient(pink, purple);
+  background: 5px bottom / cover round no-repeat padding-box padding-box, padding-box padding-box round no-repeat center, border-box none, url("test.png") repeat 10% / 10% content-box, content-box border-box linear-gradient(pink, purple) top left, linear-gradient(pink, purple) 10% repeat content-box, border-box padding-box 10% linear-gradient(pink, purple), url("test.png") top left, round no-repeat top left, 5px bottom / 10% linear-gradient(pink, purple) round no-repeat content-box, brown padding-box 10% linear-gradient(pink, purple);
 }
 
 ww {
@@ -2383,7 +2383,7 @@ xw {
 }
 
 yw {
-  background: repeat content-box, repeat none padding-box 5px bottom / 10%, round no-repeat, none center / auto auto round no-repeat content-box content-box, content-box round no-repeat, top left @home url("test.png");
+  background: repeat content-box, repeat none padding-box 5px bottom / 10%, round no-repeat, none center / auto auto round no-repeat content-box content-box, content-box round no-repeat, top left brown url("test.png");
 }
 
 zw {
@@ -2411,7 +2411,7 @@ ex {
 }
 
 fx {
-  background: @home url("test.png") 10% / auto auto border-box content-box;
+  background: brown url("test.png") 10% / auto auto border-box content-box;
 }
 
 gx {
@@ -2451,7 +2451,7 @@ ox {
 }
 
 px {
-  background: 10% url("test.png") border-box border-box round no-repeat, padding-box border-box center repeat, content-box center / 10% url("test.png"), center content-box @home;
+  background: 10% url("test.png") border-box border-box round no-repeat, padding-box border-box center repeat, content-box center / 10% url("test.png"), center content-box brown;
 }
 
 qx {
@@ -2467,7 +2467,7 @@ sx {
 }
 
 tx {
-  background: none center padding-box content-box, padding-box url("test.png") top left / cover repeat, border-box none 5px bottom, center round no-repeat padding-box, content-box repeat, repeat 10% padding-box content-box, padding-box linear-gradient(pink, purple) repeat top left, border-box repeat, linear-gradient(pink, purple) round no-repeat border-box top left, content-box padding-box 10% / cover none repeat, top left linear-gradient(pink, purple), content-box content-box none 5px bottom / cover, padding-box repeat @home 5px bottom / 10% url("test.png");
+  background: none center padding-box content-box, padding-box url("test.png") top left / cover repeat, border-box none 5px bottom, center round no-repeat padding-box, content-box repeat, repeat 10% padding-box content-box, padding-box linear-gradient(pink, purple) repeat top left, border-box repeat, linear-gradient(pink, purple) round no-repeat border-box top left, content-box padding-box 10% / cover none repeat, top left linear-gradient(pink, purple), content-box content-box none 5px bottom / cover, padding-box repeat brown 5px bottom / 10% url("test.png");
 }
 
 ux {
@@ -2503,7 +2503,7 @@ by {
 }
 
 cy {
-  background: url("test.png") 10% / 10% repeat, @home top left url("test.png") content-box;
+  background: url("test.png") 10% / 10% repeat, brown top left url("test.png") content-box;
 }
 
 dy {
@@ -2519,7 +2519,7 @@ fy {
 }
 
 gy {
-  background: 5px bottom / cover linear-gradient(pink, purple) content-box, center / 10% repeat linear-gradient(pink, purple), none repeat 10% / auto auto content-box content-box, @home linear-gradient(pink, purple) repeat top left border-box padding-box;
+  background: 5px bottom / cover linear-gradient(pink, purple) content-box, center / 10% repeat linear-gradient(pink, purple), none repeat 10% / auto auto content-box content-box, brown linear-gradient(pink, purple) repeat top left border-box padding-box;
 }
 
 hy {
@@ -2559,7 +2559,7 @@ py {
 }
 
 qy {
-  background: border-box center round no-repeat, none border-box content-box repeat, content-box border-box 10% / cover, repeat center / 10% url("test.png"), repeat, round no-repeat padding-box content-box top left / cover, top left none border-box, center / cover padding-box linear-gradient(pink, purple), content-box round no-repeat, content-box 5px bottom / cover @home url("test.png");
+  background: border-box center round no-repeat, none border-box content-box repeat, content-box border-box 10% / cover, repeat center / 10% url("test.png"), repeat, round no-repeat padding-box content-box top left / cover, top left none border-box, center / cover padding-box linear-gradient(pink, purple), content-box round no-repeat, content-box 5px bottom / cover brown url("test.png");
 }
 
 ry {
@@ -2583,7 +2583,7 @@ vy {
 }
 
 wy {
-  background: url("test.png") 5px bottom / cover, 10% / auto auto linear-gradient(pink, purple), repeat 10% border-box, border-box url("test.png") 10% / cover, round no-repeat 5px bottom linear-gradient(pink, purple) padding-box, top left padding-box, repeat url("test.png"), round no-repeat padding-box 10%, border-box url("test.png"), linear-gradient(pink, purple) round no-repeat, linear-gradient(pink, purple), 5px bottom padding-box content-box, content-box 10% repeat, repeat 10%, content-box repeat none top left, none, center / cover url("test.png") content-box padding-box @home;
+  background: url("test.png") 5px bottom / cover, 10% / auto auto linear-gradient(pink, purple), repeat 10% border-box, border-box url("test.png") 10% / cover, round no-repeat 5px bottom linear-gradient(pink, purple) padding-box, top left padding-box, repeat url("test.png"), round no-repeat padding-box 10%, border-box url("test.png"), linear-gradient(pink, purple) round no-repeat, linear-gradient(pink, purple), 5px bottom padding-box content-box, content-box 10% repeat, repeat 10%, content-box repeat none top left, none, center / cover url("test.png") content-box padding-box brown;
 }
 
 xy {
@@ -2595,11 +2595,11 @@ yy {
 }
 
 zy {
-  background: round no-repeat url("test.png"), center / 10% repeat, border-box center linear-gradient(pink, purple), repeat 5px bottom, padding-box padding-box round no-repeat none top left / auto auto, round no-repeat border-box border-box center, repeat content-box padding-box url("test.png"), 5px bottom none, none 5px bottom content-box, top left content-box padding-box round no-repeat, padding-box 5px bottom round no-repeat url("test.png"), round no-repeat border-box url("test.png") 10%, 10% / 10% repeat url("test.png") border-box content-box, content-box repeat @home 5px bottom / auto auto;
+  background: round no-repeat url("test.png"), center / 10% repeat, border-box center linear-gradient(pink, purple), repeat 5px bottom, padding-box padding-box round no-repeat none top left / auto auto, round no-repeat border-box border-box center, repeat content-box padding-box url("test.png"), 5px bottom none, none 5px bottom content-box, top left content-box padding-box round no-repeat, padding-box 5px bottom round no-repeat url("test.png"), round no-repeat border-box url("test.png") 10%, 10% / 10% repeat url("test.png") border-box content-box, content-box repeat brown 5px bottom / auto auto;
 }
 
 az {
-  background: repeat linear-gradient(pink, purple) border-box padding-box, round no-repeat 5px bottom linear-gradient(pink, purple), round no-repeat url("test.png") content-box border-box 10%, content-box border-box linear-gradient(pink, purple) @home 5px bottom;
+  background: repeat linear-gradient(pink, purple) border-box padding-box, round no-repeat 5px bottom linear-gradient(pink, purple), round no-repeat url("test.png") content-box border-box 10%, content-box border-box linear-gradient(pink, purple) brown 5px bottom;
 }
 
 bz {
@@ -2619,7 +2619,7 @@ ez {
 }
 
 fz {
-  background: padding-box 5px bottom round no-repeat, repeat center padding-box, round no-repeat 5px bottom @home;
+  background: padding-box 5px bottom round no-repeat, repeat center padding-box, round no-repeat 5px bottom brown;
 }
 
 gz {
@@ -2643,7 +2643,7 @@ kz {
 }
 
 lz {
-  background: padding-box center @home repeat none;
+  background: padding-box center brown repeat none;
 }
 
 mz {
@@ -2659,7 +2659,7 @@ oz {
 }
 
 pz {
-  background: content-box 10% / cover repeat, round no-repeat @home url("test.png") border-box;
+  background: content-box 10% / cover repeat, round no-repeat brown url("test.png") border-box;
 }
 
 qz {
@@ -2671,7 +2671,7 @@ rz {
 }
 
 sz {
-  background: top left @home content-box url("test.png") round no-repeat;
+  background: top left brown content-box url("test.png") round no-repeat;
 }
 
 tz {

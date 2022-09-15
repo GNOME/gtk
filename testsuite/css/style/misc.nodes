@@ -1,6 +1,6 @@
 window.background:dir(ltr)
   box.horizontal:dir(ltr)
-    -gtk-icon-palette: error rgb(255,255,255), success rgb(255,255,255), warning rgb(255,255,255); /* misc.css:2:3-30 */
+    -gtk-icon-palette: default; /* misc.css:2:3-30 */
     -gtk-icon-transform: none; /* misc.css:3:3-30 */
 
     label:dir(ltr)

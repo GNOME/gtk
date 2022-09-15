@@ -1,1 +1,1 @@
-* { color: red; background-color: shade(@bg_color, 0.5); }
+* { color: red; background-color: shade(black, 0.5); }
