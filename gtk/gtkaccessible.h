@@ -35,12 +35,24 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, GObject)
 
+/**
+ * GtkAccessiblePlatformState:
+ * 
+ * The various platform states which can be queried
+ * using @gtk_accessible_get_platform_state
+ */
 typedef enum {
   GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
   GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
   GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE
 } GtkAccessiblePlatformState;
 
+/**
+ * GtkAccessiblePlatformChange:
+ *
+ * Represents the various platform changes which can occur and are communicated
+ * using @gtk_accessible_platform_changed.
+ */
 typedef enum {
   GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
   GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED   = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED,
@@ -51,14 +63,59 @@ struct _GtkAccessibleInterface
 {
   GTypeInterface g_iface;
 
+  /**
+   * GtkAccessibleInterface::get_at_context:
+   * @self: a `GtkAccessible`
+   * 
+   * Retrieves the `GtkATContext` for this accessible implementation.
+   */
   GtkATContext *        (* get_at_context)      (GtkAccessible *self);
 
+  /**
+   * GtkAccessibleInterface::get_platform_state:
+   * 
+   * @self: A `GtkAccessible`
+   * @state: The state to retrieve
+   * 
+   * Returns whether @self has the given platform state.
+   * @returns: %true if @state is active for @self.
+   * @returns:
+   */
   gboolean              (* get_platform_state)  (GtkAccessible              *self,
                                                  GtkAccessiblePlatformState  state);
 
+  /**
+   * GtkAccessibleInterface::get_parent:
+   * @self: a `GtkAccessible`
+   * 
+   * Returns the parent `GtkAccessible` of @self.
+   * Be sure not to return %NULL, as a top-level `GtkAccessible` which is not a
+   * top-level window is not supported.
+   */
   GtkAccessible *       (* get_parent)  (GtkAccessible *self);
+  
+  /**
+   * GtkaccessibleInterface::get_child_at_index:
+   * @self: a `GtkAccessible`
+   * @index: the index of the child
+   * 
+   * Returns the child of @self whose position corresponds to @index.
+   * If @index is not valid for @self's children, return -1.
+   */
   GtkAccessible *       (* get_child_at_index)  (GtkAccessible *self, guint index);
 
+  /**
+   * GtkAccessibleInterface::get_bounds:
+   * @self: a `GtkAccessible`
+   * @x: an addres of the x coordinate
+   * @y: an address of the y coordinate
+   * @width: address of the width
+   * @height: address of the height
+   * 
+   * Returns the dimensions and position of @self, if this information
+   * can be determined.
+   * @returns: %true if the values are valid, %false otherwise
+   */
   gboolean              (* get_bounds) (GtkAccessible *self, int *x, int *y,
                                         int *width, int *height);
 };

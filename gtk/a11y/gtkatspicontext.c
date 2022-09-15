@@ -82,6 +82,10 @@
  *   hold the TAB_PANEL role and be the target of the CONTROLS
  *   relation with their corresponding tabs (in the stack
  *   switcher or notebook).
+ * 
+ * These are the exceptions implemented by GTK itself, but note that application
+ * developers can customize the accessibility tree by implementing the
+ * GtkAccessible interface in any way they choose.
  */
 
 struct _GtkAtSpiContext

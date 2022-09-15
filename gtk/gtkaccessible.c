@@ -37,6 +37,13 @@
  * a way that should be reflected by assistive technologies. For instance,
  * if a `GtkWidget` visibility changes, the %GTK_ACCESSIBLE_STATE_HIDDEN
  * state will also change to reflect the [property@Gtk.Widget:visible] property.
+ * 
+ * Every accessible implementation is part of a tree of accessible objects.
+ * Normally, this tree corresponds to the widget tree, but can be customized
+ * by reimplementing the #GtkAccessibleInterface.get_parent()
+ * and #GtkAccessibleInterface.get_child_at_index() methods.
+ * Note that you can not create a top-level accessible object as of now,
+ * which means that you must always have a parent accessible object.
  */
 
 #include "config.h"
