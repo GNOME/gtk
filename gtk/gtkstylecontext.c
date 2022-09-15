@@ -838,11 +838,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   g_return_val_if_fail (color_name != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
 
-  value = gtk_style_provider_get_color (GTK_STYLE_PROVIDER (priv->cascade), color_name);
-  if (value == NULL)
-    return FALSE;
-
-  return gtk_style_context_resolve_color (context, value, color);
+  return FALSE;
 }
 
 /**

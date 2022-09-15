@@ -120,31 +120,6 @@ gtk_style_cascade_get_settings (GtkStyleProvider *provider)
   return NULL;
 }
 
-static GtkCssValue *
-gtk_style_cascade_get_color (GtkStyleProvider *provider,
-                             const char              *name)
-{
-  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
-  GtkStyleCascadeIter iter;
-  GtkCssValue *color;
-  GtkStyleProvider *item;
-
-  for (item = gtk_style_cascade_iter_init (cascade, &iter);
-       item;
-       item = gtk_style_cascade_iter_next (cascade, &iter))
-    {
-      color = gtk_style_provider_get_color (item, name);
-      if (color)
-        {
-          gtk_style_cascade_iter_clear (&iter);
-          return color;
-        }
-    }
-
-  gtk_style_cascade_iter_clear (&iter);
-  return NULL;
-}
-
 static int
 gtk_style_cascade_get_scale (GtkStyleProvider *provider)
 {
@@ -205,7 +180,6 @@ gtk_style_cascade_lookup (GtkStyleProvider             *provider,
 static void
 gtk_style_cascade_provider_iface_init (GtkStyleProviderInterface *iface)
 {
-  iface->get_color = gtk_style_cascade_get_color;
   iface->get_settings = gtk_style_cascade_get_settings;
   iface->get_scale = gtk_style_cascade_get_scale;
   iface->get_keyframes = gtk_style_cascade_get_keyframes;

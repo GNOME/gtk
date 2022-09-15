@@ -28,7 +28,6 @@
 
 typedef enum {
   COLOR_TYPE_LITERAL,
-  COLOR_TYPE_NAME,
   COLOR_TYPE_SHADE,
   COLOR_TYPE_ALPHA,
   COLOR_TYPE_MIX,
@@ -69,9 +68,6 @@ gtk_css_value_color_free (GtkCssValue *color)
 
   switch (color->type)
     {
-    case COLOR_TYPE_NAME:
-      g_free (color->sym_col.name);
-      break;
     case COLOR_TYPE_SHADE:
       _gtk_css_value_unref (color->sym_col.shade.color);
       break;
@@ -187,8 +183,6 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
     {
     case COLOR_TYPE_LITERAL:
       return gdk_rgba_equal (&value1->sym_col.rgba, &value2->sym_col.rgba);
-    case COLOR_TYPE_NAME:
-      return g_str_equal (value1->sym_col.name, value2->sym_col.name);
     case COLOR_TYPE_SHADE:
       return value1->sym_col.shade.factor == value2->sym_col.shade.factor &&
              _gtk_css_value_equal (value1->sym_col.shade.color,
@@ -232,10 +226,6 @@ gtk_css_value_color_print (const GtkCssValue *value,
         g_string_append (string, s);
         g_free (s);
       }
-      break;
-    case COLOR_TYPE_NAME:
-      g_string_append (string, "@");
-      g_string_append (string, value->sym_col.name);
       break;
     case COLOR_TYPE_SHADE:
       {
@@ -359,26 +349,7 @@ _gtk_css_color_value_resolve (GtkCssValue      *color,
     {
     case COLOR_TYPE_LITERAL:
       return _gtk_css_value_ref (color);
-    case COLOR_TYPE_NAME:
-      {
-	GtkCssValue *named;
-        GSList cycle = { color, cycle_list };
 
-        /* If color exists in cycle_list, we're currently resolving it.
-         * So we've detected a cycle. */
-        if (g_slist_find (cycle_list, color))
-          return NULL;
-
-        named = gtk_style_provider_get_color (provider, color->sym_col.name);
-	if (named == NULL)
-	  return NULL;
-
-        value = _gtk_css_color_value_resolve (named, provider, current, &cycle);
-	if (value == NULL)
-	  return NULL;
-      }
-
-      break;
     case COLOR_TYPE_SHADE:
       {
         const GdkRGBA *c;
@@ -529,7 +500,6 @@ _gtk_css_color_value_new_name (const char *name)
   gtk_internal_return_val_if_fail (name != NULL, NULL);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
-  value->type = COLOR_TYPE_NAME;
   value->sym_col.name = g_strdup (name);
 
   return value;

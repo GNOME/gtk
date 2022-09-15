@@ -58,26 +58,6 @@ gtk_style_provider_default_init (GtkStyleProviderInterface *iface)
 
 }
 
-GtkCssValue *
-gtk_style_provider_get_color (GtkStyleProvider *provider,
-                              const char       *name)
-{
-  GtkStyleProviderInterface *iface;
-
-  /* for compat with gtk_symbolic_color_resolve() */
-  if (provider == NULL)
-    return NULL;
-
-  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
-
-  iface = GTK_STYLE_PROVIDER_GET_INTERFACE (provider);
-
-  if (!iface->get_color)
-    return NULL;
-
-  return iface->get_color (provider, name);
-}
-
 GtkCssKeyframes *
 gtk_style_provider_get_keyframes (GtkStyleProvider *provider,
                                   const char       *name)

@@ -127,7 +127,6 @@ struct _GtkCssProviderPrivate
 {
   GScanner *scanner;
 
-  GHashTable *symbolic_colors;
   GHashTable *keyframes;
 
   GArray *rulesets;
@@ -395,9 +394,6 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 
   priv->rulesets = g_array_new (FALSE, FALSE, sizeof (GtkCssRuleset));
 
-  priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                 (GDestroyNotify) g_free,
-                                                 (GDestroyNotify) _gtk_css_value_unref);
   priv->keyframes = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify) g_free,
                                            (GDestroyNotify) _gtk_css_keyframes_unref);
@@ -438,16 +434,6 @@ verify_tree_match_results (GtkCssProvider        *provider,
 	}
     }
 #endif
-}
-
-static GtkCssValue *
-gtk_css_style_provider_get_color (GtkStyleProvider *provider,
-                                  const char       *name)
-{
-  GtkCssProvider *css_provider = GTK_CSS_PROVIDER (provider);
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
-
-  return g_hash_table_lookup (priv->symbolic_colors, name);
 }
 
 static GtkCssKeyframes *
@@ -515,7 +501,6 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
 static void
 gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
 {
-  iface->get_color = gtk_css_style_provider_get_color;
   iface->get_keyframes = gtk_css_style_provider_get_keyframes;
   iface->lookup = gtk_css_style_provider_lookup;
   iface->emit_error = gtk_css_style_provider_emit_error;
@@ -534,7 +519,6 @@ gtk_css_provider_finalize (GObject *object)
   g_array_free (priv->rulesets, TRUE);
   _gtk_css_selector_tree_free (priv->tree);
 
-  g_hash_table_destroy (priv->symbolic_colors);
   g_hash_table_destroy (priv->keyframes);
 
   if (priv->resource)
@@ -607,7 +591,6 @@ gtk_css_provider_reset (GtkCssProvider *css_provider)
       priv->path = NULL;
     }
 
-  g_hash_table_remove_all (priv->symbolic_colors);
   g_hash_table_remove_all (priv->keyframes);
 
   for (i = 0; i < priv->rulesets->len; i++)
@@ -689,41 +672,6 @@ parse_import (GtkCssScanner *scanner)
 }
 
 static gboolean
-parse_color_definition (GtkCssScanner *scanner)
-{
-  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
-  GtkCssValue *color;
-  char *name;
-
-  if (!gtk_css_parser_try_at_keyword (scanner->parser, "define-color"))
-    return FALSE;
-
-  name = gtk_css_parser_consume_ident (scanner->parser);
-  if (name == NULL)
-    return TRUE;
-
-  color = _gtk_css_color_value_parse (scanner->parser);
-  if (color == NULL)
-    {
-      g_free (name);
-      return TRUE;
-    }
-
-  if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
-    {
-      g_free (name);
-      _gtk_css_value_unref (color);
-      gtk_css_parser_error_syntax (scanner->parser,
-                                   "Missing semicolon at end of color definition");
-      return TRUE;
-    }
-
-  g_hash_table_insert (priv->symbolic_colors, name, color);
-
-  return TRUE;
-}
-
-static gboolean
 parse_keyframes (GtkCssScanner *scanner)
 {
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (scanner->provider);
@@ -761,7 +709,6 @@ parse_at_keyword (GtkCssScanner *scanner)
   gtk_css_parser_start_semicolon_block (scanner->parser, GTK_CSS_TOKEN_OPEN_CURLY);
 
   if (!parse_import (scanner) &&
-      !parse_color_definition (scanner) &&
       !parse_keyframes (scanner))
     {
       gtk_css_parser_error_syntax (scanner->parser, "Unknown @ rule");
@@ -1459,31 +1406,6 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
 }
 
 static void
-gtk_css_provider_print_colors (GHashTable *colors,
-                               GString    *str)
-{
-  GList *keys, *walk;
-
-  keys = g_hash_table_get_keys (colors);
-  /* so the output is identical for identical styles */
-  keys = g_list_sort (keys, (GCompareFunc) strcmp);
-
-  for (walk = keys; walk; walk = walk->next)
-    {
-      const char *name = walk->data;
-      GtkCssValue *color = g_hash_table_lookup (colors, (gpointer) name);
-
-      g_string_append (str, "@define-color ");
-      g_string_append (str, name);
-      g_string_append (str, " ");
-      _gtk_css_value_print (color, str);
-      g_string_append (str, ";\n");
-    }
-
-  g_list_free (keys);
-}
-
-static void
 gtk_css_provider_print_keyframes (GHashTable *keyframes,
                                   GString    *str)
 {
@@ -1535,7 +1457,6 @@ gtk_css_provider_to_string (GtkCssProvider *provider)
 
   str = g_string_new ("");
 
-  gtk_css_provider_print_colors (priv->symbolic_colors, str);
   gtk_css_provider_print_keyframes (priv->keyframes, str);
 
   for (i = 0; i < priv->rulesets->len; i++)
