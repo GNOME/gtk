@@ -32,6 +32,10 @@
  * In addition to this interface, its implementors are expected to provide the
  * correct values for the following properties: %GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,
  * %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN and %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW.
+ * 
+ * For controls where a minimum increment makes no sense and which do not allow
+ * setting the current value from the user, the default implementation of this
+ * interface suffices.
  */
 
 #include "config.h"

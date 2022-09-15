@@ -37,7 +37,24 @@ struct _GtkAccessibleRangeInterface
 {
   GTypeInterface g_iface;
 
+  /**
+   * GtkAccessibleRangeInterface::get_minimum_increment:
+   * @self: a `GtkAccessibleRange`
+   * 
+   * Returns the minimum increment for this `GtkAccessibleRange`.
+   * The default implementation returns 0.0, which indicates that a minimum
+   * increment does not make sense for this implementation.
+   * @returns: the minimum increment
+   */
   double (* get_minimum_increment) (GtkAccessibleRange *self);
+  /**
+   * GtkAccessibleRangeInterface::set_current_value:
+   * @self: a `GtkAccessibleRange`
+   * @value: the value to set
+   * 
+   * Sets the current value of @self to @value.
+   * This operation should behave similarly as if the user performed the action.
+   */
   void (* set_current_value) (GtkAccessibleRange *self, double value);
 };
 
