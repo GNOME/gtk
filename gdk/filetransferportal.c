@@ -484,6 +484,34 @@ static void
 finish_registration (void)
 {
   gdk_content_register_serializer (G_TYPE_FILE,
+                                   "application/vnd.portal.filetransfer",
+                                   portal_file_serializer,
+                                   NULL,
+                                   NULL);
+
+  gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
+                                   "application/vnd.portal.filetransfer",
+                                   portal_file_serializer,
+                                   NULL,
+                                   NULL);
+
+  gdk_content_register_deserializer ("application/vnd.portal.filetransfer",
+                                     GDK_TYPE_FILE_LIST,
+                                     portal_file_deserializer,
+                                     NULL,
+                                     NULL);
+
+  gdk_content_register_deserializer ("application/vnd.portal.filetransfer",
+                                     G_TYPE_FILE,
+                                     portal_file_deserializer,
+                                     NULL,
+                                     NULL);
+
+  /* FIXME: I missed up and used the wrong mime type here when
+   * I implemented my own protocol. Keep these around for a while
+   * so we can interoperate with existing flatpaks using GTK 4.6
+   */
+  gdk_content_register_serializer (G_TYPE_FILE,
                                    "application/vnd.portal.files",
                                    portal_file_serializer,
                                    NULL,
