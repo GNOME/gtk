@@ -8472,7 +8472,8 @@ gtk_widget_accessible_get_parent (GtkAccessible *self)
 }
 
 static GtkAccessible *
-gtk_widget_accessible_get_child_at_index (GtkAccessible *self, guint index)
+gtk_widget_accessible_get_child_at_index (GtkAccessible *self,
+                                          guint          index)
 {
   guint idx = 0;
   GtkWidget *child;
@@ -8488,7 +8489,12 @@ gtk_widget_accessible_get_child_at_index (GtkAccessible *self, guint index)
 }
 
 static gboolean
-gtk_widget_accessible_get_bounds (GtkAccessible *self, int *x, int *y, int *width, int *height) {
+gtk_widget_accessible_get_bounds (GtkAccessible *self,
+                                  int           *x,
+                                  int           *y,
+                                  int           *width,
+                                  int           *height)
+{
   GtkWidget *widget;
   GtkWidget *parent;
   double translated_x, translated_y;

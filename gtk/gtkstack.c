@@ -773,7 +773,7 @@ gtk_stack_accessible_get_child_at_index (GtkAccessible *accessible, guint index)
 }
 
 static void
-gtk_stack_accessible_init(GtkAccessibleInterface *iface)
+gtk_stack_accessible_init (GtkAccessibleInterface *iface)
 {
   iface->get_child_at_index = gtk_stack_accessible_get_child_at_index;
 }
