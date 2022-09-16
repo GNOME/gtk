@@ -26,6 +26,7 @@
 
 #include "gtkpaned.h"
 
+#include "gtkaccessiblerange.h"
 #include "gtkcssboxesprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgesturepan.h"
@@ -246,8 +247,12 @@ static void     update_drag                     (GtkPaned         *paned,
 
 static void gtk_paned_buildable_iface_init (GtkBuildableIface *iface);
 
+static void gtk_paned_accessible_range_init (GtkAccessibleRangeInterface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (GtkPaned, gtk_paned, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE,
+                                                gtk_paned_accessible_range_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_paned_buildable_iface_init))
 
@@ -802,6 +807,26 @@ gtk_paned_buildable_iface_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
   iface->add_child = gtk_paned_buildable_add_child;
+}
+
+static double
+gtk_paned_accessible_range_get_minimum_increment (GtkAccessibleRange *accessible_range)
+{
+  return 1.0;
+}
+
+static void
+gtk_paned_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
+{
+  GtkPaned *paned = GTK_PANED (accessible_range);
+  gtk_paned_set_position (paned, (int) value + 0.5);
+}
+
+static void
+gtk_paned_accessible_range_init (GtkAccessibleRangeInterface *iface)
+{
+  iface->get_minimum_increment = gtk_paned_accessible_range_get_minimum_increment;
+  iface->set_current_value = gtk_paned_accessible_range_set_current_value;
 }
 
 static gboolean
