@@ -37,9 +37,14 @@ G_DECLARE_INTERFACE (GtkAccessible, gtk_accessible, GTK, ACCESSIBLE, GObject)
 
 /**
  * GtkAccessiblePlatformState:
+ * @GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE: whether the accessible can be focused
+ * @GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED: whether the accessible has focus
+ * @GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE: whether the accessible is active
  * 
  * The various platform states which can be queried
- * using @gtk_accessible_get_platform_state
+ * using [method@Gtk.Accessible.get_platform_state].
+ *
+ * Since: 4.10
  */
 typedef enum {
   GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
@@ -49,9 +54,17 @@ typedef enum {
 
 /**
  * GtkAccessiblePlatformChange:
+ * @GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE: whether the accessible has changed
+ *   its focusable state
+ * @GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED: whether the accessible has changed its
+ *   focused state
+ * @GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE: whether the accessible has changed its
+ *   active state
  *
  * Represents the various platform changes which can occur and are communicated
- * using @gtk_accessible_platform_changed.
+ * using [method@Gtk.Accessible.platform_changed].
+ *
+ * Since: 4.10
  */
 typedef enum {
   GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE = 1 << GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE,
@@ -97,12 +110,12 @@ struct _GtkAccessibleInterface
   /**
    * GtkaccessibleInterface::get_child_at_index:
    * @self: a `GtkAccessible`
-   * @index: the index of the child
+   * @idx: the index of the child
    * 
    * Returns the child of @self whose position corresponds to @index.
    * If @index is not valid for @self's children, return -1.
    */
-  GtkAccessible *       (* get_child_at_index)  (GtkAccessible *self, guint index);
+  GtkAccessible *       (* get_child_at_index)  (GtkAccessible *self, guint idx);
 
   /**
    * GtkAccessibleInterface::get_bounds:
@@ -135,7 +148,7 @@ GDK_AVAILABLE_IN_ALL
 GtkAccessible * gtk_accessible_get_parent(GtkAccessible *self);
 
 GDK_AVAILABLE_IN_ALL
-GtkAccessible * gtk_accessible_get_child_at_index(GtkAccessible *self, guint index);
+GtkAccessible * gtk_accessible_get_child_at_index(GtkAccessible *self, guint idx);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_accessible_get_bounds (GtkAccessible *self, int *x, int *y, int *width, int *height);

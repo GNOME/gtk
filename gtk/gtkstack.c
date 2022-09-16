@@ -257,27 +257,35 @@ gtk_stack_page_accessible_get_platform_state (GtkAccessible              *self,
 }
 
 static GtkAccessible *
-gtk_stack_page_accessible_get_parent (GtkAccessible *accessible) {
+gtk_stack_page_accessible_get_parent (GtkAccessible *accessible)
+{
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
 
   if (page->widget == NULL)
     return NULL;
   else
-  return GTK_ACCESSIBLE (gtk_widget_get_parent (page->widget));
+    return GTK_ACCESSIBLE (gtk_widget_get_parent (page->widget));
 }
 
 static GtkAccessible *
-gtk_stack_page_accessible_get_child_at_index(GtkAccessible *accessible, guint index) {
+gtk_stack_page_accessible_get_child_at_index(GtkAccessible *accessible,
+                                             guint          idx)
+{
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
 
-  if (index == 0 && page->widget != NULL)
+  if (idx == 0 && page->widget != NULL)
     return GTK_ACCESSIBLE (page->widget);
   else
     return NULL;
 }
 
 static gboolean
-gtk_stack_page_accessible_get_bounds (GtkAccessible *accessible, int *x, int *y, int *width, int *height) {
+gtk_stack_page_accessible_get_bounds (GtkAccessible *accessible,
+                                      int           *x,
+                                      int           *y,
+                                      int           *width,
+                                      int           *height)
+{
   GtkStackPage *page = GTK_STACK_PAGE (accessible);
   if (page->widget != NULL)
     return gtk_accessible_get_bounds (GTK_ACCESSIBLE (page->widget), x, y, width, height);
@@ -768,11 +776,11 @@ gtk_stack_buildable_interface_init (GtkBuildableIface *iface)
 }
 
 static GtkAccessible *
-gtk_stack_accessible_get_child_at_index (GtkAccessible *accessible, guint index)
+gtk_stack_accessible_get_child_at_index (GtkAccessible *accessible, guint idx)
 {
   GtkStack *stack = GTK_STACK (accessible);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  GtkStackPage *page = g_ptr_array_index (priv->children, index);
+  GtkStackPage *page = g_ptr_array_index (priv->children, idx);
   return GTK_ACCESSIBLE (page);
 }
 

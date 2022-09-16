@@ -85,7 +85,7 @@
  * 
  * These are the exceptions implemented by GTK itself, but note that application
  * developers can customize the accessibility tree by implementing the
- * GtkAccessible interface in any way they choose.
+ * [iface@Gtk.Accessible] interface in any way they choose.
  */
 
 struct _GtkAtSpiContext
@@ -333,7 +333,8 @@ collect_relations (GtkAtSpiContext *self,
 /* }}} */
 /* {{{ Accessible implementation */
 static int
-get_index_in (GtkAccessible *parent, GtkAccessible *child)
+get_index_in (GtkAccessible *parent,
+              GtkAccessible *child)
 {
   GtkAccessible *candidate;
   int res;

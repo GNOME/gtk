@@ -8473,17 +8473,17 @@ gtk_widget_accessible_get_parent (GtkAccessible *self)
 
 static GtkAccessible *
 gtk_widget_accessible_get_child_at_index (GtkAccessible *self,
-                                          guint          index)
+                                          guint          idx)
 {
-  guint idx = 0;
+  guint i = 0;
   GtkWidget *child;
   for (child = gtk_widget_get_first_child (GTK_WIDGET (self));
                child != NULL;
                child = gtk_widget_get_next_sibling (child))
     {
-      if (idx == index)
+      if (i == idx)
         return GTK_ACCESSIBLE (child);
-      idx++;
+      i++;
     }
   return NULL;
 }

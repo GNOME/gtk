@@ -37,11 +37,11 @@
  * a way that should be reflected by assistive technologies. For instance,
  * if a `GtkWidget` visibility changes, the %GTK_ACCESSIBLE_STATE_HIDDEN
  * state will also change to reflect the [property@Gtk.Widget:visible] property.
- * 
+ *
  * Every accessible implementation is part of a tree of accessible objects.
  * Normally, this tree corresponds to the widget tree, but can be customized
- * by reimplementing the #GtkAccessibleInterface.get_parent()
- * and #GtkAccessibleInterface.get_child_at_index() methods.
+ * by reimplementing the [vfunc@Gtk.Accessible.get_parent]
+ * and [vfunc@Gtk.Accessible.get_child_at_index] virtual functions.
  * Note that you can not create a top-level accessible object as of now,
  * which means that you must always have a parent accessible object.
  */
@@ -81,7 +81,7 @@ gtk_accessible_default_init (GtkAccessibleInterface *iface)
   g_object_interface_install_property (iface, pspec);
 }
 
-/*
+/**
  * gtk_accessible_get_at_context:
  * @self: a `GtkAccessible`
  *
@@ -103,7 +103,7 @@ gtk_accessible_get_at_context (GtkAccessible *self)
  *
  * Retrieves the parent `GtkAccessible` for the given `GtkAccessible`.
  *
- * Returns: (transfer none): the parent `GtkAccessible` or NULL, if we this is the root
+ * Returns: (transfer none): the parent `GtkAccessible`, which can not be %NULL
  */
 GtkAccessible *
 gtk_accessible_get_parent (GtkAccessible *self)
@@ -114,21 +114,23 @@ gtk_accessible_get_parent (GtkAccessible *self)
 }
 
 
-/*
+/**
  * gtk_accessible_get_child_at_index:
  * @self: a `GtkAccessible`
- * @index: the index of the child to get
+ * @idx: the index of the child to get
  *
  * Retrieves the child `GtkAccessible` for this `GtkAccessible` with the given @index.
  *
- * Returns: (transfer none): the child `GtkAccessible` with the given @index or NULL if the index is outside range
+ * Returns: (transfer none) (nullable): the child `GtkAccessible` with the given @index or %NULL if the index is outside range
+ *
+ * since: 4.10
  */
 GtkAccessible *
-gtk_accessible_get_child_at_index (GtkAccessible *self, guint index)
+gtk_accessible_get_child_at_index (GtkAccessible *self, guint idx)
 {
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), NULL);
 
-  return GTK_ACCESSIBLE_GET_IFACE (self)->get_child_at_index (self, index);
+  return GTK_ACCESSIBLE_GET_IFACE (self)->get_child_at_index (self, idx);
 }
 
 /**
@@ -700,10 +702,10 @@ gtk_accessible_role_to_name (GtkAccessibleRole  role,
 /*< private >
  * gtk_accessible_role_is_range_subclass:
  * @role: a `GtkAccessibleRole`
- * 
+ *
  * Checks if @role is considered to be a subclass of %GTK_ACCESSIBLE_ROLE_RANGE
  * according to the WAI-ARIA specification.
- * 
+ *
  * Returns: whether the @role is range-like
  */
 gboolean
@@ -762,7 +764,7 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
   gtk_at_context_update (context);
 }
 
-/*
+/**
  * gtk_accessible_get_platform_state:
  * @self: a `GtkAccessible`
  * @state: platform state to query
@@ -784,7 +786,7 @@ gtk_accessible_get_platform_state (GtkAccessible              *self,
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_platform_state (self, state);
 }
 
-/*
+/**
  * gtk_accessible_bounds_changed:
  * @self: a `GtkAccessible`
  *
@@ -814,20 +816,20 @@ gtk_accessible_bounds_changed (GtkAccessible *self)
 /*
  * gtk_accessible_get_bounds:
  * @self: a `GtkAccessible`
- * @x: the x coordinate of the top left corner of the accessible
- * @y: the y coordinate of the top left corner of the widget
- * @width: the width of the widget
- * @height: the height of the widget
+ * @x: (out): the x coordinate of the top left corner of the accessible
+ * @y: (out): the y coordinate of the top left corner of the widget
+ * @width: (out): the width of the accessible object
+ * @height: (out): the height of the accessible object
  *
- * Query the coordinates and dimensions of this accessible
- *
- * See gtk_accessible_bounds_changed().
+ * Queries the coordinates and dimensions of this accessible
  *
  * This functionality can be overridden by `GtkAccessible`
  * implementations, e.g. to get the bounds from an ignored
  * child widget.
  *
- * Returns: whether the bounds should be considered valid
+ * Returns: true if the bounds are valid, and false otherwise
+ *
+ * Since: 4.10
  */
 gboolean
 gtk_accessible_get_bounds (GtkAccessible              *self,
