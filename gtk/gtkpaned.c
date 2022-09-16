@@ -815,11 +815,12 @@ gtk_paned_accessible_range_get_minimum_increment (GtkAccessibleRange *accessible
   return 1.0;
 }
 
-static void
+static gboolean
 gtk_paned_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
 {
   GtkPaned *paned = GTK_PANED (accessible_range);
   gtk_paned_set_position (paned, (int) value + 0.5);
+  return TRUE;
 }
 
 static void

@@ -24,14 +24,9 @@
 
 #include "a11y/atspi/atspi-value.h"
 
+#include "gtkaccessiblerange.h"
 #include "gtkatcontextprivate.h"
 #include "gtkdebug.h"
-#include "gtklevelbar.h"
-#include "gtkpaned.h"
-#include "gtkprogressbar.h"
-#include "gtkrange.h"
-#include "gtkscalebutton.h"
-#include "gtkspinbutton.h"
 
 #include <gio/gio.h>
 
@@ -69,7 +64,12 @@ handle_value_get_property (GDBusConnection  *connection,
         }
     }
 
-  /* fall back for a) MinimumIncrement b) widgets that should have the
+  if (g_strcmp0 (property_name, "MinimumIncrement") == 0)
+    {
+      GtkAccessibleRange *range = GTK_ACCESSIBLE_RANGE (gtk_at_context_get_accessible (ctx));
+      return g_variant_new_double(gtk_accessible_range_get_minimum_increment (range));
+  }
+  /* fall back for widgets that should have the
    * properties but don't
    */
   return g_variant_new_double (0.0);
@@ -86,22 +86,11 @@ handle_value_set_property (GDBusConnection  *connection,
                            gpointer          user_data)
 {
   GtkATContext *self = user_data;
-  GtkWidget *widget = GTK_WIDGET (gtk_at_context_get_accessible (self));
+  GtkAccessibleRange *range = GTK_ACCESSIBLE_RANGE (gtk_at_context_get_accessible (self));
 
   if (g_strcmp0 (property_name, "CurrentValue") == 0)
     {
-      /* we only allow setting values if that is part of the user-exposed
-       * functionality of the widget.
-       */
-      if (GTK_IS_RANGE (widget))
-        gtk_range_set_value (GTK_RANGE (widget), g_variant_get_double (value));
-      else if (GTK_IS_PANED (widget))
-        gtk_paned_set_position (GTK_PANED (widget), (int)(g_variant_get_double (value) + 0.5));
-      else if (GTK_IS_SPIN_BUTTON (widget))
-        gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), g_variant_get_double (value));
-      else if (GTK_IS_SCALE_BUTTON (widget))
-        gtk_scale_button_set_value (GTK_SCALE_BUTTON (widget), g_variant_get_double (value));
-      return TRUE;
+      return gtk_accessible_range_set_current_value (range, g_variant_get_double (value));
     }
 
   return FALSE;
@@ -116,12 +105,7 @@ static const GDBusInterfaceVTable value_vtable = {
 const GDBusInterfaceVTable *
 gtk_atspi_get_value_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_LEVEL_BAR (accessible) ||
-      GTK_IS_PANED (accessible) ||
-      GTK_IS_PROGRESS_BAR (accessible) ||
-      GTK_IS_RANGE (accessible) ||
-      GTK_IS_SCALE_BUTTON (accessible) ||
-      GTK_IS_SPIN_BUTTON (accessible))
+  if (GTK_IS_ACCESSIBLE_RANGE (accessible))
     return &value_vtable;
 
   return NULL;

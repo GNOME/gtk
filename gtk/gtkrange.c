@@ -447,11 +447,12 @@ gtk_range_accessible_range_get_minimum_increment (GtkAccessibleRange *accessible
   return gtk_adjustment_get_minimum_increment (gtk_range_get_adjustment (range));
 }
 
-static void
+static gboolean
 gtk_range_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
 {
   GtkRange *range = GTK_RANGE (accessible_range);
   gtk_range_set_value (range, value);
+  return TRUE;
 }
 
 static void

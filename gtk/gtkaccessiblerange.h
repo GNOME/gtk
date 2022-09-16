@@ -54,14 +54,15 @@ struct _GtkAccessibleRangeInterface
    * 
    * Sets the current value of @self to @value.
    * This operation should behave similarly as if the user performed the action.
+   * @returns: %true if the operation was performed, %false otherwise
    */
-  void (* set_current_value) (GtkAccessibleRange *self, double value);
+  gboolean (* set_current_value) (GtkAccessibleRange *self, double value);
 };
 
 GDK_AVAILABLE_IN_ALL
 double gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self);
 
 GDK_AVAILABLE_IN_ALL
-void gtk_accessible_range_set_current_value (GtkAccessibleRange *self, double value);
+gboolean gtk_accessible_range_set_current_value (GtkAccessibleRange *self, double value);
 
 G_END_DECLS

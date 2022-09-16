@@ -644,11 +644,12 @@ gtk_spin_button_accessible_range_get_minimum_increment (GtkAccessibleRange *acce
   return gtk_adjustment_get_minimum_increment (gtk_spin_button_get_adjustment (button));
 }
 
-static void
+static gboolean
 gtk_spin_button_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
 {
   GtkSpinButton *button = GTK_SPIN_BUTTON (accessible_range);
   gtk_spin_button_set_value (button, value);
+  return TRUE;
 }
 
 static void

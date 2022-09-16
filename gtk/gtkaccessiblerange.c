@@ -50,10 +50,10 @@ gtk_accessible_range_default_get_minimum_increment (GtkAccessibleRange *accessib
   return 0.0;
 }
 
-static void
+static gboolean
 gtk_accessible_range_default_set_current_value (GtkAccessibleRange *accessible_range, double value)
 {
-  /* By default, we do nothing */
+  return FALSE;
 }
 
 static void
@@ -87,12 +87,13 @@ gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self)
  * Note that for some widgets implementing this interface, setting a value
  * through the accessibility API makes no sense, so calling this function may
  * in some cases do nothing.
+ * @returns: %true if the call changed the value, %false otherwise
  */
-void
+gboolean
 gtk_accessible_range_set_current_value (GtkAccessibleRange *self, double value)
 {
-  g_return_if_fail (GTK_IS_ACCESSIBLE_RANGE (self));
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE_RANGE (self), FALSE);
 
   GtkAccessibleRangeInterface *iface = GTK_ACCESSIBLE_RANGE_GET_IFACE (self);
-  iface->set_current_value (self, value);
+  return iface->set_current_value (self, value);
 }
