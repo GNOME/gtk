@@ -1205,7 +1205,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
           GtkWidget *w;
 
           crossing.old_descendent = NULL;
-          for (w = old_target; w != ancestor; w = _gtk_widget_get_parent (w))
+          for (w = old_target; w && w != ancestor; w = _gtk_widget_get_parent (w))
             crossing.old_descendent = w;
 
           seen_ancestor = TRUE;
