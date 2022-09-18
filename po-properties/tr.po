@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-02-20 11:15+0000\n"
+"POT-Creation-Date: 2022-09-12 23:34+0000\n"
 "PO-Revision-Date: 2022-02-20 17:45+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
@@ -216,27 +216,27 @@ msgstr "Yüzey"
 msgid "The GDK surface bound to the context"
 msgstr "Bağlama bağlı GDK yüzeyi"
 
-#: gdk/gdkglcontext.c:680
+#: gdk/gdkglcontext.c:694
 msgid "Shared context"
 msgstr "Paylaşılan bağlam"
 
-#: gdk/gdkglcontext.c:681
+#: gdk/gdkglcontext.c:695
 msgid "The GL context this context shares data with"
 msgstr "Bu bağlamın kendisiyle veri paylaştığı GL bağlamı"
 
-#: gdk/gdkglcontext.c:697
+#: gdk/gdkglcontext.c:711
 msgid "Allowed APIs"
 msgstr "İzin Verilen APIler"
 
-#: gdk/gdkglcontext.c:698
+#: gdk/gdkglcontext.c:712
 msgid "The list of allowed APIs for this context"
 msgstr "Bu bağlam için izin verilen APIlerin listesi"
 
-#: gdk/gdkglcontext.c:714
+#: gdk/gdkglcontext.c:728
 msgid "API"
 msgstr "API"
 
-#: gdk/gdkglcontext.c:715
+#: gdk/gdkglcontext.c:729
 msgid "The API currently in use"
 msgstr "Kullanımdaki API"
 
@@ -725,7 +725,7 @@ msgstr "Çerçevenin altıyla en-boy oranının eşleşmesini sağlar"
 #: gtk/gtkdragicon.c:376 gtk/gtkexpander.c:399 gtk/gtkflowbox.c:534
 #: gtk/gtkframe.c:207 gtk/gtklistbox.c:3582 gtk/gtklistitem.c:181
 #: gtk/gtkmenubutton.c:532 gtk/gtknotebook.c:586 gtk/gtkoverlay.c:321
-#: gtk/gtkpopover.c:1893 gtk/gtkrevealer.c:368 gtk/gtkscrolledwindow.c:798
+#: gtk/gtkpopover.c:1893 gtk/gtkrevealer.c:368 gtk/gtkscrolledwindow.c:804
 #: gtk/gtksearchbar.c:333 gtk/gtkstack.c:415 gtk/gtktreeexpander.c:532
 #: gtk/gtkviewport.c:336 gtk/gtkwindow.c:1059 gtk/gtkwindowhandle.c:537
 msgid "Child"
@@ -734,7 +734,7 @@ msgstr "Çocuk"
 #: gtk/gtkaspectframe.c:196 gtk/gtkbutton.c:272 gtk/gtkexpander.c:400
 #: gtk/gtkflowbox.c:535 gtk/gtkframe.c:208 gtk/gtklistbox.c:3583
 #: gtk/gtkmenubutton.c:533 gtk/gtkoverlay.c:322 gtk/gtkpopover.c:1894
-#: gtk/gtkrevealer.c:369 gtk/gtkscrolledwindow.c:799 gtk/gtksearchbar.c:334
+#: gtk/gtkrevealer.c:369 gtk/gtkscrolledwindow.c:805 gtk/gtksearchbar.c:334
 #: gtk/gtkviewport.c:337 gtk/gtkwindow.c:1060 gtk/gtkwindowhandle.c:538
 msgid "The child widget"
 msgstr "Çocuk parçacık"
@@ -796,7 +796,7 @@ msgid "Bookmark file to load"
 msgstr "Yüklenecek yer imi dosyası"
 
 #: gtk/gtkbookmarklist.c:228 gtk/gtkcellrenderertext.c:267 gtk/gtkentry.c:965
-#: gtk/gtklabel.c:2298 gtk/gtktext.c:929
+#: gtk/gtklabel.c:2308 gtk/gtktext.c:931
 msgid "Attributes"
 msgstr "Öznitelikler"
 
@@ -837,7 +837,7 @@ msgstr "Evirt"
 msgid "If the expression result should be inverted"
 msgstr "İfade sonucu evirtilmeliyse"
 
-#: gtk/gtkbox.c:262 gtk/gtkboxlayout.c:874 gtk/gtkcellareabox.c:316
+#: gtk/gtkbox.c:262 gtk/gtkboxlayout.c:913 gtk/gtkcellareabox.c:316
 #: gtk/gtkiconview.c:464 gtk/gtktreeviewcolumn.c:306
 msgid "Spacing"
 msgstr "Aralıklar"
@@ -846,7 +846,7 @@ msgstr "Aralıklar"
 msgid "The amount of space between children"
 msgstr "Altlar arasındaki boşluk miktarı"
 
-#: gtk/gtkbox.c:274 gtk/gtkboxlayout.c:861 gtk/gtkflowbox.c:3651
+#: gtk/gtkbox.c:274 gtk/gtkboxlayout.c:900 gtk/gtkflowbox.c:3651
 msgid "Homogeneous"
 msgstr "Eşdağılım"
 
@@ -854,22 +854,22 @@ msgstr "Eşdağılım"
 msgid "Whether the children should all be the same size"
 msgstr "Altların tümünün aynı boyutta olması"
 
-#: gtk/gtkbox.c:286 gtk/gtkboxlayout.c:891 gtk/gtkcenterbox.c:212
+#: gtk/gtkbox.c:286 gtk/gtkboxlayout.c:930 gtk/gtkcenterbox.c:212
 msgid "Baseline position"
 msgstr "Taban çizgisi konumu"
 
-#: gtk/gtkbox.c:287 gtk/gtkboxlayout.c:892 gtk/gtkcenterbox.c:213
+#: gtk/gtkbox.c:287 gtk/gtkboxlayout.c:931 gtk/gtkcenterbox.c:213
 msgid ""
 "The position of the baseline aligned widgets if extra space is available"
 msgstr ""
 "Taban çizgisi konumu eğer fazladan alan kullanılabilir ise parçacık ile "
 "hizalanır"
 
-#: gtk/gtkboxlayout.c:862
+#: gtk/gtkboxlayout.c:901
 msgid "Distribute space homogeneously"
 msgstr "Boşluğu homojen dağıt"
 
-#: gtk/gtkboxlayout.c:875
+#: gtk/gtkboxlayout.c:914
 msgid "Spacing between widgets"
 msgstr "Parçacıklar arası boşluk"
 
@@ -919,7 +919,7 @@ msgid "scope to use when instantiating listitems"
 msgstr "liste ögelerini örneklendirirken kullanılacak kapsam"
 
 #: gtk/gtkbutton.c:222 gtk/gtkcheckbutton.c:562 gtk/gtkexpander.c:333
-#: gtk/gtkframe.c:170 gtk/gtklabel.c:2286 gtk/gtkmenubutton.c:478
+#: gtk/gtkframe.c:170 gtk/gtklabel.c:2296 gtk/gtkmenubutton.c:478
 msgid "Label"
 msgstr "Etiket"
 
@@ -931,12 +931,12 @@ msgstr ""
 "Eğer düğme bir etiket parçası içeriyorsa düğmedeki etiket parçasının metni"
 
 #: gtk/gtkbutton.c:235 gtk/gtkcheckbutton.c:590 gtk/gtkexpander.c:346
-#: gtk/gtklabel.c:2324 gtk/gtkmenubutton.c:490 gtk/gtkstack.c:491
+#: gtk/gtklabel.c:2334 gtk/gtkmenubutton.c:490 gtk/gtkstack.c:491
 msgid "Use underline"
 msgstr "Alt çizgi kullan"
 
 #: gtk/gtkbutton.c:236 gtk/gtkcheckbutton.c:591 gtk/gtkexpander.c:347
-#: gtk/gtklabel.c:2325 gtk/gtkmenubutton.c:491
+#: gtk/gtklabel.c:2335 gtk/gtkmenubutton.c:491
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -945,7 +945,7 @@ msgstr ""
 "kullanılacak sonraki karakteri belirtir"
 
 #: gtk/gtkbutton.c:247 gtk/gtkcombobox.c:702 gtk/gtkentry.c:525
-#: gtk/gtkscrolledwindow.c:673
+#: gtk/gtkscrolledwindow.c:679
 msgid "Has Frame"
 msgstr "Çerçeve Var"
 
@@ -1262,10 +1262,10 @@ msgstr "Hücre arkaplan rengininin ayarlanıp ayarlanmaması"
 
 #: gtk/gtkcellrenderercombo.c:134 gtk/gtkcolumnview.c:694 gtk/gtkdropdown.c:484
 #: gtk/gtkfilterlistmodel.c:585 gtk/gtkflattenlistmodel.c:409
-#: gtk/gtkgridview.c:1098 gtk/gtklistview.c:831 gtk/gtkmaplistmodel.c:372
+#: gtk/gtkgridview.c:1102 gtk/gtklistview.c:836 gtk/gtkmaplistmodel.c:372
 #: gtk/gtkmultiselection.c:353 gtk/gtkselectionfiltermodel.c:230
 #: gtk/gtkshortcutcontroller.c:585 gtk/gtkslicelistmodel.c:260
-#: gtk/gtksortlistmodel.c:800 gtk/gtktreelistmodel.c:702
+#: gtk/gtksortlistmodel.c:800 gtk/gtktreelistmodel.c:707
 msgid "Model"
 msgstr "Model"
 
@@ -1610,7 +1610,7 @@ msgstr ""
 "ipucu olarak kullanabilir. Eğer bu parametreyi anlamadıysanız, büyük "
 "olasılıkla gereksiniminiz yoktur"
 
-#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:2483 gtk/gtkprogressbar.c:267
+#: gtk/gtkcellrenderertext.c:444 gtk/gtklabel.c:2493 gtk/gtkprogressbar.c:267
 msgid "Ellipsize"
 msgstr "Kısaltma"
 
@@ -1622,15 +1622,15 @@ msgstr ""
 "Eğer hücre taracısı tüm dizgiyi göstermek için yeterli alana sahip değilse, "
 "dizginin kısaltılması için tercih edilen konum"
 
-#: gtk/gtkcellrenderertext.c:461 gtk/gtklabel.c:2502
+#: gtk/gtkcellrenderertext.c:461 gtk/gtklabel.c:2512
 msgid "Width In Characters"
 msgstr "Karakter Olarak Genişlik"
 
-#: gtk/gtkcellrenderertext.c:462 gtk/gtklabel.c:2503
+#: gtk/gtkcellrenderertext.c:462 gtk/gtklabel.c:2513
 msgid "The desired width of the label, in characters"
 msgstr "Etiketin arzu edilen genişliği, karakter olarak"
 
-#: gtk/gtkcellrenderertext.c:481 gtk/gtklabel.c:2538
+#: gtk/gtkcellrenderertext.c:481 gtk/gtklabel.c:2548
 msgid "Maximum Width In Characters"
 msgstr "Karakter Olarak Azami Genişlik"
 
@@ -1667,7 +1667,7 @@ msgid "How to align the lines"
 msgstr "Satırların nasıl hizalanacağı"
 
 #: gtk/gtkcellrenderertext.c:544 gtk/gtkentry.c:653 gtk/gtkpasswordentry.c:467
-#: gtk/gtksearchentry.c:301 gtk/gtktext.c:860
+#: gtk/gtksearchentry.c:301 gtk/gtktext.c:862
 msgid "Placeholder text"
 msgstr "Ayrılmış bilgi alanı metni"
 
@@ -1844,12 +1844,12 @@ msgid "The model for cell view"
 msgstr "Hücre görünümü için model"
 
 #: gtk/gtkcellview.c:218 gtk/gtkentrycompletion.c:407 gtk/gtkiconview.c:575
-#: gtk/gtktreepopover.c:214 gtk/gtktreeviewcolumn.c:425
+#: gtk/gtktreepopover.c:216 gtk/gtktreeviewcolumn.c:425
 msgid "Cell Area"
 msgstr "Hücre Alanı"
 
 #: gtk/gtkcellview.c:219 gtk/gtkentrycompletion.c:408 gtk/gtkiconview.c:576
-#: gtk/gtktreepopover.c:215 gtk/gtktreeviewcolumn.c:426
+#: gtk/gtktreepopover.c:217 gtk/gtktreeviewcolumn.c:426
 msgid "The GtkCellArea used to layout cells"
 msgstr "Yerleşim hücreleri için kullanılan GtkCellArea"
 
@@ -1954,7 +1954,7 @@ msgstr "RGBA Rengi"
 msgid "Color as RGBA"
 msgstr "RGBA gibi renk"
 
-#: gtk/gtkcolorswatch.c:515 gtk/gtklabel.c:2437 gtk/gtklistbox.c:3570
+#: gtk/gtkcolorswatch.c:515 gtk/gtklabel.c:2447 gtk/gtklistbox.c:3570
 #: gtk/gtklistitem.c:217
 msgid "Selectable"
 msgstr "Seçilebilir"
@@ -1995,7 +1995,7 @@ msgstr "Sütunlar"
 msgid "List of columns"
 msgstr "Sütunların listesi"
 
-#: gtk/gtkcolumnview.c:695 gtk/gtkgridview.c:1099 gtk/gtklistview.c:832
+#: gtk/gtkcolumnview.c:695 gtk/gtkgridview.c:1103 gtk/gtklistview.c:837
 msgid "Model for the items displayed"
 msgstr "Gösterilen ögelerin modeli"
 
@@ -2003,7 +2003,7 @@ msgstr "Gösterilen ögelerin modeli"
 msgid "Show row separators"
 msgstr "Satır ayraçlarını göster"
 
-#: gtk/gtkcolumnview.c:707 gtk/gtklistbox.c:544 gtk/gtklistview.c:844
+#: gtk/gtkcolumnview.c:707 gtk/gtklistbox.c:544 gtk/gtklistview.c:849
 msgid "Show separators between rows"
 msgstr "Satırlar arasında ayraç göster"
 
@@ -2024,11 +2024,11 @@ msgstr "Sıralayıcı"
 msgid "Sorter with sorting choices of the user"
 msgstr "Kullanıcının sıralama seçenekleriyle sıralayıcı"
 
-#: gtk/gtkcolumnview.c:742 gtk/gtkgridview.c:1110 gtk/gtklistview.c:855
+#: gtk/gtkcolumnview.c:742 gtk/gtkgridview.c:1114 gtk/gtklistview.c:860
 msgid "Single click activate"
 msgstr "Tek tık aktifleştirme"
 
-#: gtk/gtkcolumnview.c:743 gtk/gtkgridview.c:1111 gtk/gtklistview.c:856
+#: gtk/gtkcolumnview.c:743 gtk/gtkgridview.c:1115 gtk/gtklistview.c:861
 msgid "Activate rows on single click"
 msgstr "Satırları tek tıkla aktifleştir"
 
@@ -2041,11 +2041,11 @@ msgstr "Sıralanabilir"
 msgid "Whether columns are reorderable"
 msgstr "Sütunların yeniden sıralanırlığı"
 
-#: gtk/gtkcolumnview.c:766 gtk/gtkgridview.c:1122 gtk/gtklistview.c:867
+#: gtk/gtkcolumnview.c:766 gtk/gtkgridview.c:1126 gtk/gtklistview.c:872
 msgid "Enable rubberband selection"
 msgstr "Paket lastiği seçimi etkinleştir"
 
-#: gtk/gtkcolumnview.c:767 gtk/gtkgridview.c:1123 gtk/gtklistview.c:868
+#: gtk/gtkcolumnview.c:767 gtk/gtkgridview.c:1127 gtk/gtklistview.c:873
 msgid "Allow selecting items by dragging with the mouse"
 msgstr "Fareyi sürükleyerek ögeleri seçmeyi sağla"
 
@@ -2057,13 +2057,13 @@ msgstr "Sütun görünümü"
 msgid "Column view this column is a part of"
 msgstr "Bu sütunun parçası olduğu sütun görünümü"
 
-#: gtk/gtkcolumnviewcolumn.c:253 gtk/gtkdropdown.c:458 gtk/gtkgridview.c:1058
-#: gtk/gtklistview.c:819
+#: gtk/gtkcolumnviewcolumn.c:253 gtk/gtkdropdown.c:458 gtk/gtkgridview.c:1062
+#: gtk/gtklistview.c:824
 msgid "Factory"
 msgstr "Fabrika"
 
 #: gtk/gtkcolumnviewcolumn.c:254 gtk/gtkdropdown.c:459 gtk/gtkdropdown.c:473
-#: gtk/gtkgridview.c:1059 gtk/gtklistview.c:820
+#: gtk/gtkgridview.c:1063 gtk/gtklistview.c:825
 msgid "Factory for populating list items"
 msgstr "Liste ögelerini doldurmak için fabrika"
 
@@ -2543,11 +2543,11 @@ msgstr "Karakterlerde azami genişlik"
 msgid "The desired maximum width of the entry, in characters"
 msgstr "Karakter olarak girdinin istenen azami genişliği"
 
-#: gtk/gtkeditable.c:473 gtk/gtklabel.c:2355
+#: gtk/gtkeditable.c:473 gtk/gtklabel.c:2365
 msgid "X align"
 msgstr "X hizası"
 
-#: gtk/gtkeditable.c:474 gtk/gtklabel.c:2356
+#: gtk/gtkeditable.c:474 gtk/gtklabel.c:2366
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2570,7 +2570,7 @@ msgstr "Metin uzunluğu"
 msgid "Length of the text currently in the buffer"
 msgstr "Tampon bellekteki geçerli metnin uzunluğu"
 
-#: gtk/gtkentrybuffer.c:372 gtk/gtkentry.c:499 gtk/gtktext.c:773
+#: gtk/gtkentrybuffer.c:372 gtk/gtkentry.c:499 gtk/gtktext.c:775
 msgid "Maximum length"
 msgstr "En büyük uzunluk"
 
@@ -2578,7 +2578,7 @@ msgstr "En büyük uzunluk"
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Bu girdi için en çok karakter sayısı. Sınırsız olması için sıfır"
 
-#: gtk/gtkentry.c:487 gtk/gtktext.c:759
+#: gtk/gtkentry.c:487 gtk/gtktext.c:761
 msgid "Text Buffer"
 msgstr "Metin Tampon Belleği"
 
@@ -2586,11 +2586,11 @@ msgstr "Metin Tampon Belleği"
 msgid "Text buffer object which actually stores entry text"
 msgstr "Giriş metni depolayan metin tampon bellek nesnesi"
 
-#: gtk/gtkentry.c:513 gtk/gtktext.c:965
+#: gtk/gtkentry.c:513 gtk/gtktext.c:967
 msgid "Visibility"
 msgstr "Görünürlük"
 
-#: gtk/gtkentry.c:514 gtk/gtktext.c:966
+#: gtk/gtkentry.c:514 gtk/gtktext.c:968
 msgid ""
 "FALSE displays the “invisible char” instead of the actual text (password "
 "mode)"
@@ -2601,7 +2601,7 @@ msgstr ""
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE ise girdinin dış çerçevesi kaldırılır"
 
-#: gtk/gtkentry.c:537 gtk/gtktext.c:786
+#: gtk/gtkentry.c:537 gtk/gtktext.c:788
 msgid "Invisible character"
 msgstr "Görünmez karakter"
 
@@ -2612,12 +2612,12 @@ msgstr ""
 "olduğunda)"
 
 #: gtk/gtkentry.c:549 gtk/gtkpasswordentry.c:479 gtk/gtksearchentry.c:313
-#: gtk/gtktext.c:798
+#: gtk/gtktext.c:800
 msgid "Activates default"
 msgstr "Öntanımlıyı etkinleştirir"
 
 #: gtk/gtkentry.c:550 gtk/gtkpasswordentry.c:480 gtk/gtksearchentry.c:314
-#: gtk/gtktext.c:799
+#: gtk/gtktext.c:801
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -2625,7 +2625,7 @@ msgstr ""
 "Enter tuşuna basıldığında öntanımlı olarak odak alacak parça (bir "
 "penceredeki öntanımlı düğme gibi) etkinleştirmesi"
 
-#: gtk/gtkentry.c:561 gtk/gtktext.c:810
+#: gtk/gtkentry.c:561 gtk/gtktext.c:812
 msgid "Scroll offset"
 msgstr "Kaydırma ofseti"
 
@@ -2633,19 +2633,19 @@ msgstr "Kaydırma ofseti"
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Girdinin ekranda kaydırıldığında sola doğru kaç piksel kaydırılacağı"
 
-#: gtk/gtkentry.c:574 gtk/gtktext.c:823
+#: gtk/gtkentry.c:574 gtk/gtktext.c:825
 msgid "Truncate multiline"
 msgstr "Çoklu satırları birleştir"
 
-#: gtk/gtkentry.c:575 gtk/gtktext.c:824
+#: gtk/gtkentry.c:575 gtk/gtktext.c:826
 msgid "Whether to truncate multiline pastes to one line."
 msgstr "Çoklu satırların tek bir satır olarak yapıştırılması."
 
-#: gtk/gtkentry.c:586 gtk/gtktext.c:835 gtk/gtktextview.c:1069
+#: gtk/gtkentry.c:586 gtk/gtktext.c:837 gtk/gtktextview.c:1069
 msgid "Overwrite mode"
 msgstr "Üzerine yazma kipi"
 
-#: gtk/gtkentry.c:587 gtk/gtktext.c:836
+#: gtk/gtkentry.c:587 gtk/gtktext.c:838
 msgid "Whether new text overwrites existing text"
 msgstr "Yeni metnin var olan içeriğin üstüne yazılması"
 
@@ -2653,11 +2653,11 @@ msgstr "Yeni metnin var olan içeriğin üstüne yazılması"
 msgid "Length of the text currently in the entry"
 msgstr "Girişteki geçerli metnin uzunluğu"
 
-#: gtk/gtkentry.c:611 gtk/gtktext.c:847
+#: gtk/gtkentry.c:611 gtk/gtktext.c:849
 msgid "Invisible character set"
 msgstr "Görünmeyen karakter ayarı"
 
-#: gtk/gtkentry.c:612 gtk/gtktext.c:848
+#: gtk/gtkentry.c:612 gtk/gtktext.c:850
 msgid "Whether the invisible character has been set"
 msgstr "Görünmeyen karakterin ayarlanmış olup olmaması"
 
@@ -2805,11 +2805,11 @@ msgstr "Birincil simge balon makyajı"
 msgid "Secondary icon tooltip markup"
 msgstr "İkincil simge balon makyajı"
 
-#: gtk/gtkentry.c:901 gtk/gtktext.c:878 gtk/gtktextview.c:1100
+#: gtk/gtkentry.c:901 gtk/gtktext.c:880 gtk/gtktextview.c:1100
 msgid "IM module"
 msgstr "IM modülü"
 
-#: gtk/gtkentry.c:902 gtk/gtktext.c:879 gtk/gtktextview.c:1101
+#: gtk/gtkentry.c:902 gtk/gtktext.c:881 gtk/gtktextview.c:1101
 msgid "Which IM module should be used"
 msgstr "Hangi IM modülünün kullanılması gerektiği"
 
@@ -2821,22 +2821,22 @@ msgstr "Tamamlama"
 msgid "The auxiliary completion object"
 msgstr "Yardımcı tamamlama nesnesi"
 
-#: gtk/gtkentry.c:932 gtk/gtkimcontext.c:338 gtk/gtktext.c:897
+#: gtk/gtkentry.c:932 gtk/gtkimcontext.c:338 gtk/gtktext.c:899
 #: gtk/gtktextview.c:1116
 msgid "Purpose"
 msgstr "Amaç"
 
-#: gtk/gtkentry.c:933 gtk/gtkimcontext.c:339 gtk/gtktext.c:898
+#: gtk/gtkentry.c:933 gtk/gtkimcontext.c:339 gtk/gtktext.c:900
 #: gtk/gtktextview.c:1117
 msgid "Purpose of the text field"
 msgstr "Metin alanının amacı"
 
-#: gtk/gtkentry.c:947 gtk/gtkimcontext.c:352 gtk/gtktext.c:911
+#: gtk/gtkentry.c:947 gtk/gtkimcontext.c:352 gtk/gtktext.c:913
 #: gtk/gtktextview.c:1132
 msgid "hints"
 msgstr "ipuçları"
 
-#: gtk/gtkentry.c:948 gtk/gtkimcontext.c:353 gtk/gtktext.c:912
+#: gtk/gtkentry.c:948 gtk/gtkimcontext.c:353 gtk/gtktext.c:914
 #: gtk/gtktextview.c:1133
 msgid "Hints for the text field behaviour"
 msgstr "Metin alanı davranışları için ipuçları"
@@ -2845,7 +2845,7 @@ msgstr "Metin alanı davranışları için ipuçları"
 msgid "A list of style attributes to apply to the text of the entry"
 msgstr "Girdinin metnine uygulanacak biçem özniteliklerinin listesi"
 
-#: gtk/gtkentry.c:977 gtk/gtktext.c:941 gtk/gtktexttag.c:735
+#: gtk/gtkentry.c:977 gtk/gtktext.c:943 gtk/gtktexttag.c:735
 #: gtk/gtktextview.c:1030
 msgid "Tabs"
 msgstr "Sekmeler"
@@ -2862,8 +2862,8 @@ msgstr "Emoji simgesi"
 msgid "Whether to show an icon for Emoji"
 msgstr "Emoji için bir simge gösterilmesi"
 
-#: gtk/gtkentry.c:1002 gtk/gtklabel.c:2568 gtk/gtkpasswordentry.c:504
-#: gtk/gtktext.c:990 gtk/gtktextview.c:1163
+#: gtk/gtkentry.c:1002 gtk/gtklabel.c:2578 gtk/gtkpasswordentry.c:504
+#: gtk/gtktext.c:992 gtk/gtktextview.c:1163
 msgid "Extra menu"
 msgstr "Ek menü"
 
@@ -2871,11 +2871,11 @@ msgstr "Ek menü"
 msgid "Model menu to append to the context menu"
 msgstr "Bağlam menüsüne eklenecek model menü"
 
-#: gtk/gtkentry.c:1015 gtk/gtktext.c:953
+#: gtk/gtkentry.c:1015 gtk/gtktext.c:955
 msgid "Enable Emoji completion"
 msgstr "Emoji tamamlamayı etkinleştir"
 
-#: gtk/gtkentry.c:1016 gtk/gtktext.c:954
+#: gtk/gtkentry.c:1016 gtk/gtktext.c:956
 msgid "Whether to suggest Emoji replacements"
 msgstr "Emojileri yenisiyle değiştirmenin önerilip önerilmeyeceği"
 
@@ -2972,27 +2972,27 @@ msgstr "Bu denetleyicice ele alınan etkinliklerin yayılım sınırı"
 msgid "Name for this controller"
 msgstr "Bu denetleyicinin adı"
 
-#: gtk/gtkeventcontrollerfocus.c:203
+#: gtk/gtkeventcontrollerfocus.c:204
 msgid "Is Focus"
 msgstr "Odak"
 
-#: gtk/gtkeventcontrollerfocus.c:204
+#: gtk/gtkeventcontrollerfocus.c:205
 msgid "Whether the focus is in the controllers widget"
 msgstr "Odağın, denetleyiciler parçacığında olup olmaması"
 
-#: gtk/gtkeventcontrollerfocus.c:222
+#: gtk/gtkeventcontrollerfocus.c:223
 msgid "Contains Focus"
 msgstr "Odak İçerir"
 
-#: gtk/gtkeventcontrollerfocus.c:223
+#: gtk/gtkeventcontrollerfocus.c:224
 msgid "Whether the focus is in a descendant of the controllers widget"
 msgstr "Odağın, denetleyiciler parçacığının çocuğunda olup olmaması"
 
-#: gtk/gtkeventcontrollerscroll.c:469 gtk/gtkeventcontrollerscroll.c:470
+#: gtk/gtkeventcontrollerscroll.c:464 gtk/gtkeventcontrollerscroll.c:465
 msgid "Flags"
 msgstr "Bayraklar"
 
-#: gtk/gtkexpander.c:320 gtk/gtktreelistmodel.c:1095
+#: gtk/gtkexpander.c:320 gtk/gtktreelistmodel.c:1100
 msgid "Expanded"
 msgstr "Genişletilmiş"
 
@@ -3004,11 +3004,11 @@ msgstr "Alt parçasını ortaya çıkarmak için genişleticinin açılması"
 msgid "Text of the expander’s label"
 msgstr "Çerçeve etiketinin metni"
 
-#: gtk/gtkexpander.c:359 gtk/gtklabel.c:2312 gtk/gtkmodelbutton.c:1211
+#: gtk/gtkexpander.c:359 gtk/gtklabel.c:2322 gtk/gtkmodelbutton.c:1211
 msgid "Use markup"
 msgstr "Biçimleme kullan"
 
-#: gtk/gtkexpander.c:360 gtk/gtklabel.c:2313
+#: gtk/gtkexpander.c:360 gtk/gtklabel.c:2323
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "XML biçimleme içeren etiket metni. Bakın: pango_parse_markup()"
 
@@ -3100,11 +3100,11 @@ msgstr "İptal etiketi"
 msgid "The label on the cancel button"
 msgstr "İptal düğmesi üzerindeki etiket"
 
-#: gtk/gtkfilechooserwidget.c:7630 gtk/gtkfilechooserwidget.c:7631
+#: gtk/gtkfilechooserwidget.c:7661 gtk/gtkfilechooserwidget.c:7662
 msgid "Search mode"
 msgstr "Arama kipi"
 
-#: gtk/gtkfilechooserwidget.c:7637 gtk/gtkfilechooserwidget.c:7638
+#: gtk/gtkfilechooserwidget.c:7668 gtk/gtkfilechooserwidget.c:7669
 #: gtk/gtkshortcutsshortcut.c:644
 msgid "Subtitle"
 msgstr "Alt başlık"
@@ -3456,19 +3456,19 @@ msgstr "Satır aralığı"
 msgid "The number of rows that a child spans"
 msgstr "Bir alt açıklığın satırlarının sayısı"
 
-#: gtk/gtkgridview.c:1074
+#: gtk/gtkgridview.c:1078
 msgid "Max columns"
 msgstr "Azami sütunlar"
 
-#: gtk/gtkgridview.c:1075
+#: gtk/gtkgridview.c:1079
 msgid "Maximum number of columns per row"
 msgstr "Satır başı sütunların azami sayısı"
 
-#: gtk/gtkgridview.c:1086
+#: gtk/gtkgridview.c:1090
 msgid "Min columns"
 msgstr "Asgari sütunlar"
 
-#: gtk/gtkgridview.c:1087
+#: gtk/gtkgridview.c:1091
 msgid "Minimum number of columns per row"
 msgstr "Satır başı sütunların asgari sayısı"
 
@@ -3512,27 +3512,27 @@ msgstr "Kaynak yolu"
 msgid "Theme name"
 msgstr "Tema adı"
 
-#: gtk/gtkicontheme.c:3629
+#: gtk/gtkicontheme.c:3639
 msgid "file"
 msgstr "dosya"
 
-#: gtk/gtkicontheme.c:3630
+#: gtk/gtkicontheme.c:3640
 msgid "The file representing the icon"
 msgstr "Simgeyi temsil eden dosya"
 
-#: gtk/gtkicontheme.c:3641 gtk/gtkstack.c:451
+#: gtk/gtkicontheme.c:3651 gtk/gtkstack.c:451
 msgid "Icon name"
 msgstr "Simge adı"
 
-#: gtk/gtkicontheme.c:3642
+#: gtk/gtkicontheme.c:3652
 msgid "The icon name chosen during lookup"
 msgstr "Bulma sırasında seçilen simgenin adı"
 
-#: gtk/gtkicontheme.c:3653
+#: gtk/gtkicontheme.c:3663
 msgid "Is symbolic"
 msgstr "Sembolik"
 
-#: gtk/gtkicontheme.c:3654
+#: gtk/gtkicontheme.c:3664
 msgid "If the icon is symbolic"
 msgstr "Simgenin sembolikliği"
 
@@ -3706,19 +3706,19 @@ msgstr "Standart bir kapatma düğmesi içerip içermemesi"
 msgid "Controls whether the info bar shows its contents or not"
 msgstr "Bilgi çubuğunun kendi içeriğini gösterip göstermeyeceğini denetler"
 
-#: gtk/gtklabel.c:2287
+#: gtk/gtklabel.c:2297
 msgid "The text of the label"
 msgstr "Etiketin metni"
 
-#: gtk/gtklabel.c:2299
+#: gtk/gtklabel.c:2309
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Etiket metnine uygulanacak özniteliklerin listesi"
 
-#: gtk/gtklabel.c:2339 gtk/gtktexttag.c:475 gtk/gtktextview.c:927
+#: gtk/gtklabel.c:2349 gtk/gtktexttag.c:475 gtk/gtktextview.c:927
 msgid "Justification"
 msgstr "İç hizalama"
 
-#: gtk/gtklabel.c:2340
+#: gtk/gtklabel.c:2350
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -3728,60 +3728,60 @@ msgstr ""
 "kendi alan alımındaki hizalamasını ETKİLEMEZ. Onun için GtkLabel:xalign'a "
 "bakınız"
 
-#: gtk/gtklabel.c:2371
+#: gtk/gtklabel.c:2381
 msgid "Y align"
 msgstr "Y hizası"
 
-#: gtk/gtklabel.c:2372
+#: gtk/gtklabel.c:2382
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr "Düşey hizalama; 0'dan (üst) 1'e (alt) kadar"
 
-#: gtk/gtklabel.c:2384
+#: gtk/gtklabel.c:2394
 msgid "Line wrap"
 msgstr "Satır dürme"
 
-#: gtk/gtklabel.c:2385
+#: gtk/gtklabel.c:2395
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Eğer seçiliyse, metin çok uzadığında alttaki satıra geçilir"
 
-#: gtk/gtklabel.c:2403
+#: gtk/gtklabel.c:2413
 msgid "Line wrap mode"
 msgstr "Satır dürme kipi"
 
-#: gtk/gtklabel.c:2404
+#: gtk/gtklabel.c:2414
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr "Eğer dürme seçiliyse, satır dürmenin nasıl yapılacağını denetler"
 
-#: gtk/gtklabel.c:2424
+#: gtk/gtklabel.c:2434
 msgid "Natural wrap mode"
 msgstr "Doğal dürme kipi"
 
-#: gtk/gtklabel.c:2425
+#: gtk/gtklabel.c:2435
 msgid "If wrap is set, controls linewrapping for natural size requests"
 msgstr ""
 "Eğer dürme seçiliyse, doğal boyut istemleri için satır dürmeyi denetler"
 
-#: gtk/gtklabel.c:2438
+#: gtk/gtklabel.c:2448
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Etiket metninin fare ile seçilebilmesi"
 
-#: gtk/gtklabel.c:2449
+#: gtk/gtklabel.c:2459
 msgid "Mnemonic key"
 msgstr "Anımsatıcı tuş"
 
-#: gtk/gtklabel.c:2450
+#: gtk/gtklabel.c:2460
 msgid "The mnemonic accelerator key for this label"
 msgstr "Bu etiket için anımsatıcı hızlandırıcı tuş"
 
-#: gtk/gtklabel.c:2462
+#: gtk/gtklabel.c:2472
 msgid "Mnemonic widget"
 msgstr "Anımsatıcı parça"
 
-#: gtk/gtklabel.c:2463
+#: gtk/gtklabel.c:2473
 msgid "The widget to be activated when the label’s mnemonic key is pressed"
 msgstr "Etiketin anımsatıcı tuşuna basıldığında etkinleştirilecek parçacık"
 
-#: gtk/gtklabel.c:2484
+#: gtk/gtklabel.c:2494
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -3789,27 +3789,27 @@ msgstr ""
 "Eğer etiket tüm dizgiyi gösterecek kadar alana sahip değilse, kısaltma için "
 "tercih edilen yer"
 
-#: gtk/gtklabel.c:2520
+#: gtk/gtklabel.c:2530
 msgid "Single Line Mode"
 msgstr "Tek Satır Kipi"
 
-#: gtk/gtklabel.c:2521
+#: gtk/gtklabel.c:2531
 msgid "Whether the label is in single line mode"
 msgstr "Etiketin tek satır kipinde olması"
 
-#: gtk/gtklabel.c:2539
+#: gtk/gtklabel.c:2549
 msgid "The desired maximum width of the label, in characters"
 msgstr "Etiketin istenen azami genişliği, karakter olarak"
 
-#: gtk/gtklabel.c:2555
+#: gtk/gtklabel.c:2565
 msgid "Number of lines"
 msgstr "Satırların sayısı"
 
-#: gtk/gtklabel.c:2556
+#: gtk/gtklabel.c:2566
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr "Dürme etiketi eksiltilirken istenen satır sayısı"
 
-#: gtk/gtklabel.c:2569 gtk/gtktext.c:991 gtk/gtktextview.c:1164
+#: gtk/gtklabel.c:2579 gtk/gtktext.c:993 gtk/gtktextview.c:1164
 msgid "Menu model to append to the context menu"
 msgstr "Bağlam menüsüne eklenecek menü modeli"
 
@@ -3869,7 +3869,7 @@ msgstr "Bu bağın ziyaret edilmiş olup olmaması."
 msgid "The orientation of the orientable"
 msgstr "Yönelebilirin yönelimi"
 
-#: gtk/gtklistbox.c:543 gtk/gtklistview.c:843
+#: gtk/gtklistbox.c:543 gtk/gtklistview.c:848
 msgid "Show separators"
 msgstr "Ayraçları göster"
 
@@ -3889,7 +3889,7 @@ msgstr "Eğer öge kullanıcıca aktifleştirilebiliyorsa"
 msgid "Widget used for display"
 msgstr "Görüntülemede kullanılan parçacık"
 
-#: gtk/gtklistitem.c:193 gtk/gtktreeexpander.c:544 gtk/gtktreelistmodel.c:1107
+#: gtk/gtklistitem.c:193 gtk/gtktreeexpander.c:544 gtk/gtktreelistmodel.c:1112
 msgid "Item"
 msgstr "Öge"
 
@@ -4510,79 +4510,79 @@ msgstr "Konum Ayarı"
 msgid "TRUE if the Position property should be used"
 msgstr "TRUE ise Position özelliği kullanılacaktır"
 
-#: gtk/gtkpaned.c:453
+#: gtk/gtkpaned.c:454
 msgid "Minimal Position"
 msgstr "Asgari Konum"
 
-#: gtk/gtkpaned.c:454
+#: gtk/gtkpaned.c:455
 msgid "Smallest possible value for the “position” property"
 msgstr "“position” (konum) özelliği için olabilecek en küçük değer"
 
-#: gtk/gtkpaned.c:468
+#: gtk/gtkpaned.c:470
 msgid "Maximal Position"
 msgstr "Azami Konum"
 
-#: gtk/gtkpaned.c:469
+#: gtk/gtkpaned.c:471
 msgid "Largest possible value for the “position” property"
 msgstr "“position” (konum) özelliği için olabilecek en büyük değer"
 
-#: gtk/gtkpaned.c:483
+#: gtk/gtkpaned.c:485
 msgid "Wide Handle"
 msgstr "Geniş Tutamaç"
 
-#: gtk/gtkpaned.c:484
+#: gtk/gtkpaned.c:486
 msgid "Whether the paned should have a prominent handle"
 msgstr "Paned'in belirgin bir tutamacının olup olmayacağı"
 
-#: gtk/gtkpaned.c:496
+#: gtk/gtkpaned.c:498
 msgid "Resize first child"
 msgstr "İlk çocuğu yeniden boyutlandır"
 
-#: gtk/gtkpaned.c:497
+#: gtk/gtkpaned.c:499
 msgid ""
 "If TRUE, the first child expands and shrinks along with the paned widget"
 msgstr ""
 "Eğer TRUE ise, ilk çocuk bölmeli parçacık boyunca genişler veya daralır"
 
-#: gtk/gtkpaned.c:509
+#: gtk/gtkpaned.c:511
 msgid "Resize second child"
 msgstr "İkinci çocuğu yeniden boyutlandır"
 
-#: gtk/gtkpaned.c:510
+#: gtk/gtkpaned.c:512
 msgid ""
 "If TRUE, the second child expands and shrinks along with the paned widget"
 msgstr ""
 "Eğer TRUE ise, ,ikinci çocuk bölmeli parçacık boyunca genişler veya daralır"
 
-#: gtk/gtkpaned.c:522
+#: gtk/gtkpaned.c:524
 msgid "Shrink first child"
 msgstr "İlk çocuğu daralt"
 
-#: gtk/gtkpaned.c:523
+#: gtk/gtkpaned.c:525
 msgid "If TRUE, the first child can be made smaller than its requisition"
 msgstr "Eğer TRUE ise, ilk çocuk gereksinimlerinden daha da küçük olabilir"
 
-#: gtk/gtkpaned.c:535
+#: gtk/gtkpaned.c:537
 msgid "Shrink second child"
 msgstr "İkinci çocuğu daralt"
 
-#: gtk/gtkpaned.c:536
+#: gtk/gtkpaned.c:538
 msgid "If TRUE, the second child can be made smaller than its requisition"
 msgstr "Eğer TRUE ise, ikinci çocuk gereksinimlerinden daha da küçük olabilir"
 
-#: gtk/gtkpaned.c:547
+#: gtk/gtkpaned.c:549
 msgid "First child"
 msgstr "İlk çocuk"
 
-#: gtk/gtkpaned.c:548
+#: gtk/gtkpaned.c:550
 msgid "The first child"
 msgstr "İlk çocuk"
 
-#: gtk/gtkpaned.c:559
+#: gtk/gtkpaned.c:561
 msgid "Second child"
 msgstr "İkinci çocuk"
 
-#: gtk/gtkpaned.c:560
+#: gtk/gtkpaned.c:562
 msgid "The second child"
 msgstr "İkinci çocuk"
 
@@ -4626,19 +4626,19 @@ msgstr "Küçültülebilir"
 msgid "Allow self to be smaller than contents"
 msgstr "Özün, içerikten daha küçük olmasına izin ver"
 
-#: gtk/gtkplacessidebar.c:4327
+#: gtk/gtkplacessidebar.c:4328
 msgid "Location to Select"
 msgstr "Seçim Konumu"
 
-#: gtk/gtkplacessidebar.c:4328
+#: gtk/gtkplacessidebar.c:4329
 msgid "The location to highlight in the sidebar"
 msgstr "Konumu kenar çubuğunda vurgulamak için"
 
-#: gtk/gtkplacessidebar.c:4333 gtk/gtkplacesview.c:2262
+#: gtk/gtkplacessidebar.c:4334 gtk/gtkplacesview.c:2262
 msgid "Open Flags"
 msgstr "Bayrakları Aç"
 
-#: gtk/gtkplacessidebar.c:4334 gtk/gtkplacesview.c:2263
+#: gtk/gtkplacessidebar.c:4335 gtk/gtkplacesview.c:2263
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -4646,56 +4646,56 @@ msgstr ""
 "Çağrılan uygulamanın, yan çubukta seçili konumların hangilerini "
 "açabileceğinin kipleri"
 
-#: gtk/gtkplacessidebar.c:4340
+#: gtk/gtkplacessidebar.c:4341
 msgid "Show recent files"
 msgstr "Son kullanılan dosyaları göster"
 
-#: gtk/gtkplacessidebar.c:4341
+#: gtk/gtkplacessidebar.c:4342
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Kenar çubuğunun son kullanılan dosyalar için gömülü bir kısayol içerip "
 "içermeyeceği"
 
-#: gtk/gtkplacessidebar.c:4346
+#: gtk/gtkplacessidebar.c:4347
 msgid "Show “Desktop”"
 msgstr "“Masaüstü”nü Göster"
 
-#: gtk/gtkplacessidebar.c:4347
+#: gtk/gtkplacessidebar.c:4348
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Kenar çubuğun yerleşik bir Masaüstü klasörüne kısayolu içerip içermemesi"
 
-#: gtk/gtkplacessidebar.c:4352
+#: gtk/gtkplacessidebar.c:4353
 msgid "Show “Enter Location”"
 msgstr "“Konum Gir”i Göster"
 
-#: gtk/gtkplacessidebar.c:4353
+#: gtk/gtkplacessidebar.c:4354
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Kenar çubuğunun, elle konum girin için yerleşik bir kısayol içerip içermemesi"
 
-#: gtk/gtkplacessidebar.c:4358
+#: gtk/gtkplacessidebar.c:4359
 msgid "Show “Trash”"
 msgstr "“Çöp”ü Göster"
 
-#: gtk/gtkplacessidebar.c:4359
+#: gtk/gtkplacessidebar.c:4360
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Kenar çubuğunun Çöp konumu için gömülü bir kısayol içerip içermeyeceği"
 
-#: gtk/gtkplacessidebar.c:4364
+#: gtk/gtkplacessidebar.c:4365
 msgid "Show “Other locations”"
 msgstr "“Diğer konumlar”ı Göster"
 
-#: gtk/gtkplacessidebar.c:4365
+#: gtk/gtkplacessidebar.c:4366
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Kenar çubuğunun dış konumları gösteren bir ögesinin olup olmayacağı"
 
-#: gtk/gtkplacessidebar.c:4370
+#: gtk/gtkplacessidebar.c:4371
 msgid "Show “Starred Location”"
 msgstr "“Yıldızlı Konum”u Göster"
 
-#: gtk/gtkplacessidebar.c:4371
+#: gtk/gtkplacessidebar.c:4372
 msgid "Whether the sidebar includes an item to show starred files"
 msgstr ""
 "Kenar çubuğunun yıldızlı dosyaları gösteren bir ögesinin olup olmayacağı"
@@ -5324,11 +5324,11 @@ msgstr "Değer Konumu"
 msgid "The position in which the current value is displayed"
 msgstr "Geçerli değerin gösterileceği konum"
 
-#: gtk/gtkscrollable.c:76
+#: gtk/gtkscrollable.c:75
 msgid "Horizontal adjustment"
 msgstr "Yatay hizalama"
 
-#: gtk/gtkscrollable.c:77
+#: gtk/gtkscrollable.c:76
 msgid ""
 "Horizontal adjustment that is shared between the scrollable widget and its "
 "controller"
@@ -5336,11 +5336,11 @@ msgstr ""
 "Kaydırılabilir parçacık ve onun denetim birimi arasında paylaşılan yatay "
 "ayarlama"
 
-#: gtk/gtkscrollable.c:92
+#: gtk/gtkscrollable.c:91
 msgid "Vertical adjustment"
 msgstr "Düşey hizalama"
 
-#: gtk/gtkscrollable.c:93
+#: gtk/gtkscrollable.c:92
 msgid ""
 "Vertical adjustment that is shared between the scrollable widget and its "
 "controller"
@@ -5348,15 +5348,15 @@ msgstr ""
 "Kaydırılabilir parçacık ve onun denetim birimi arasında paylaşılan dikey "
 "ayarlama"
 
-#: gtk/gtkscrollable.c:106
+#: gtk/gtkscrollable.c:105
 msgid "Horizontal Scrollable Policy"
 msgstr "Yatay Kaydırma Kuralları"
 
-#: gtk/gtkscrollable.c:107 gtk/gtkscrollable.c:120
+#: gtk/gtkscrollable.c:106 gtk/gtkscrollable.c:119
 msgid "How the size of the content should be determined"
 msgstr "İçeriğin boyutu nasıl belirlenecek"
 
-#: gtk/gtkscrollable.c:119
+#: gtk/gtkscrollable.c:118
 msgid "Vertical Scrollable Policy"
 msgstr "Dikey Kaydırma Kuralları"
 
@@ -5364,105 +5364,105 @@ msgstr "Dikey Kaydırma Kuralları"
 msgid "The GtkAdjustment that contains the current value of this scrollbar"
 msgstr "Bu kaydırma çubuğunun geçerli değerini içeren GtkAdjustment"
 
-#: gtk/gtkscrolledwindow.c:604
+#: gtk/gtkscrolledwindow.c:610
 msgid "Horizontal Adjustment"
 msgstr "Yatay Hizalama"
 
-#: gtk/gtkscrolledwindow.c:605
+#: gtk/gtkscrolledwindow.c:611
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Yatay konum için GtkAdjustment"
 
-#: gtk/gtkscrolledwindow.c:616
+#: gtk/gtkscrolledwindow.c:622
 msgid "Vertical Adjustment"
 msgstr "Düşey Hizalama"
 
-#: gtk/gtkscrolledwindow.c:617
+#: gtk/gtkscrolledwindow.c:623
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Düşey konum için GtkAdjustment"
 
-#: gtk/gtkscrolledwindow.c:631
+#: gtk/gtkscrolledwindow.c:637
 msgid "Horizontal Scrollbar Policy"
 msgstr "Yatay Kaydırma Çubuğu Kuralları"
 
-#: gtk/gtkscrolledwindow.c:632
+#: gtk/gtkscrolledwindow.c:638
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Yatay kaydırma çubuğu gösterildiği zaman"
 
-#: gtk/gtkscrolledwindow.c:647
+#: gtk/gtkscrolledwindow.c:653
 msgid "Vertical Scrollbar Policy"
 msgstr "Düşey Kaydırma Çubuğu Kuralları"
 
-#: gtk/gtkscrolledwindow.c:648
+#: gtk/gtkscrolledwindow.c:654
 msgid "When the vertical scrollbar is displayed"
 msgstr "Düşey kaydırma çubuğu gösterildiği zaman"
 
-#: gtk/gtkscrolledwindow.c:660
+#: gtk/gtkscrolledwindow.c:666
 msgid "Window Placement"
 msgstr "Pencere Yerleşimi"
 
-#: gtk/gtkscrolledwindow.c:661
+#: gtk/gtkscrolledwindow.c:667
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "İçeriğin kaydırma çubuklarına göre bulunduğu yer."
 
-#: gtk/gtkscrolledwindow.c:674
+#: gtk/gtkscrolledwindow.c:680
 msgid "Whether to draw a frame around the contents"
 msgstr "İçerik çevresine çerçeve çizilmesi"
 
-#: gtk/gtkscrolledwindow.c:685
+#: gtk/gtkscrolledwindow.c:691
 msgid "Minimum Content Width"
 msgstr "En küçük İçerik Genişliği"
 
-#: gtk/gtkscrolledwindow.c:686
+#: gtk/gtkscrolledwindow.c:692
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "Kaydırılan pencere içeriğine tahsis edilecek en küçük genişlik"
 
-#: gtk/gtkscrolledwindow.c:697
+#: gtk/gtkscrolledwindow.c:703
 msgid "Minimum Content Height"
 msgstr "En küçük İçerik Yüksekliği"
 
-#: gtk/gtkscrolledwindow.c:698
+#: gtk/gtkscrolledwindow.c:704
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr "Kaydırılan pencere içeriğine tahsis edilecek en küçük yükseklik"
 
-#: gtk/gtkscrolledwindow.c:711
+#: gtk/gtkscrolledwindow.c:717
 msgid "Kinetic Scrolling"
 msgstr "Hareketli Kaydırma"
 
-#: gtk/gtkscrolledwindow.c:712
+#: gtk/gtkscrolledwindow.c:718
 msgid "Kinetic scrolling mode."
 msgstr "Hareketli kaydırma kipi."
 
-#: gtk/gtkscrolledwindow.c:730
+#: gtk/gtkscrolledwindow.c:736
 msgid "Overlay Scrolling"
 msgstr "Bindirme Kaydırması"
 
-#: gtk/gtkscrolledwindow.c:731
+#: gtk/gtkscrolledwindow.c:737
 msgid "Overlay scrolling mode"
 msgstr "Bindirme kaydırması kipi"
 
-#: gtk/gtkscrolledwindow.c:742
+#: gtk/gtkscrolledwindow.c:748
 msgid "Maximum Content Width"
 msgstr "En Büyük İçerik Genişliği"
 
-#: gtk/gtkscrolledwindow.c:743
+#: gtk/gtkscrolledwindow.c:749
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr "Kaydırılan pencere içeriğine tahsis edilecek en büyük genişlik"
 
-#: gtk/gtkscrolledwindow.c:754
+#: gtk/gtkscrolledwindow.c:760
 msgid "Maximum Content Height"
 msgstr "En Büyük İçerik Yüksekliği"
 
-#: gtk/gtkscrolledwindow.c:755
+#: gtk/gtkscrolledwindow.c:761
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr "Kaydırılan pencere içeriğine tahsis edilecek en büyük yükseklik"
 
-#: gtk/gtkscrolledwindow.c:770 gtk/gtkscrolledwindow.c:771
+#: gtk/gtkscrolledwindow.c:776 gtk/gtkscrolledwindow.c:777
 msgid "Propagate Natural Width"
 msgstr "Doğal Genişliği Yay"
 
-#: gtk/gtkscrolledwindow.c:786 gtk/gtkscrolledwindow.c:787
+#: gtk/gtkscrolledwindow.c:792 gtk/gtkscrolledwindow.c:793
 msgid "Propagate Natural Height"
 msgstr "Doğal Yüksekliği Yay"
 
@@ -6391,40 +6391,40 @@ msgid ""
 "The position of the insert mark (as offset from the beginning of the buffer)"
 msgstr "Ekleme işaretinin pozisyonu (tamponun başından itibaren ofset olarak)"
 
-#: gtk/gtktext.c:760
+#: gtk/gtktext.c:762
 msgid "Text buffer object which actually stores self text"
 msgstr "Öz metnini depolayan metin tampon nesnesi"
 
-#: gtk/gtktext.c:774
+#: gtk/gtktext.c:776
 msgid "Maximum number of characters for this self. Zero if no maximum"
 msgstr "Bu öz için azami karakter sayısı. Sınırsız olması için sıfır"
 
-#: gtk/gtktext.c:787
+#: gtk/gtktext.c:789
 msgid "The character to use when masking self contents (in “password mode”)"
 msgstr ""
 "Öz içeriklerini maskelerken kullanılacak karakter ( “parola kipi” olduğunda)"
 
-#: gtk/gtktext.c:811
+#: gtk/gtktext.c:813
 msgid "Number of pixels of the text scrolled off the screen to the left"
 msgstr "Metnin ekranda kaydırıldığında sola doğru kaç piksel kaydırılacağı"
 
-#: gtk/gtktext.c:861
+#: gtk/gtktext.c:863
 msgid "Show text in the GtkText when it’s empty and unfocused"
 msgstr "Boş ve odaklanılmadığında GtkText içindeki metni göster"
 
-#: gtk/gtktext.c:930
+#: gtk/gtktext.c:932
 msgid "A list of style attributes to apply to the text of the GtkText"
 msgstr "GtkText metnine uygulanacak biçem özniteliklerinin listesi"
 
-#: gtk/gtktext.c:942
+#: gtk/gtktext.c:944
 msgid "A list of tabstop locations to apply to the text of the GtkText"
 msgstr "GtkText metinine uygulamak için sekmedurağı konumlarının listesi"
 
-#: gtk/gtktext.c:977
+#: gtk/gtktext.c:979
 msgid "Propagate text width"
 msgstr "Metin genişliğini yay"
 
-#: gtk/gtktext.c:978
+#: gtk/gtktext.c:980
 msgid "Whether the entry should grow and shrink with the content"
 msgstr "Girdinin içerikle birlikte genişlemesi veya daralması"
 
@@ -7051,55 +7051,55 @@ msgstr ""
 "Genişletici simgesi gösterilmiyorsa TreeExpander’in çocuğu girintileyip "
 "girintilemeyeceği"
 
-#: gtk/gtktreelistmodel.c:690
+#: gtk/gtktreelistmodel.c:695
 msgid "autoexpand"
 msgstr "kendiliğinden genişlet"
 
-#: gtk/gtktreelistmodel.c:691
+#: gtk/gtktreelistmodel.c:696
 msgid "If all rows should be expanded by default"
 msgstr "Tüm satırların öntanımlı olarak genişletilmesi gerekiyorsa"
 
-#: gtk/gtktreelistmodel.c:703
+#: gtk/gtktreelistmodel.c:708
 msgid "The root model displayed"
 msgstr "Görüntülenen kök model"
 
-#: gtk/gtktreelistmodel.c:718
+#: gtk/gtktreelistmodel.c:723
 msgid "passthrough"
 msgstr "içinden geçen"
 
-#: gtk/gtktreelistmodel.c:719
+#: gtk/gtktreelistmodel.c:724
 msgid "If child model values are passed through"
 msgstr "Alt model değerleri geçirilirse"
 
-#: gtk/gtktreelistmodel.c:1059
+#: gtk/gtktreelistmodel.c:1064
 msgid "Children"
 msgstr "Çocuklar"
 
-#: gtk/gtktreelistmodel.c:1060
+#: gtk/gtktreelistmodel.c:1065
 msgid "Model holding the row’s children"
 msgstr "Satırın çocuğunu tutan model"
 
-#: gtk/gtktreelistmodel.c:1071
+#: gtk/gtktreelistmodel.c:1076
 msgid "Depth"
 msgstr "Derinlik"
 
-#: gtk/gtktreelistmodel.c:1072
+#: gtk/gtktreelistmodel.c:1077
 msgid "Depth in the tree"
 msgstr "Ağaçtaki derinlik"
 
-#: gtk/gtktreelistmodel.c:1083
+#: gtk/gtktreelistmodel.c:1088
 msgid "Expandable"
 msgstr "Genişletilebilir"
 
-#: gtk/gtktreelistmodel.c:1084
+#: gtk/gtktreelistmodel.c:1089
 msgid "If this row can ever be expanded"
 msgstr "Bu satırın genişletilebilir olup olmaması"
 
-#: gtk/gtktreelistmodel.c:1096
+#: gtk/gtktreelistmodel.c:1101
 msgid "If this row is currently expanded"
 msgstr "Bu satırın genişletilmiş olup olmadığı"
 
-#: gtk/gtktreelistmodel.c:1108
+#: gtk/gtktreelistmodel.c:1113
 msgid "The item held in this row"
 msgstr "Bu satırda tutulan öge"
 
@@ -7131,11 +7131,11 @@ msgstr "TreeModelSort Modeli"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Sıralama için TreeModelSort modeli"
 
-#: gtk/gtktreepopover.c:206
+#: gtk/gtktreepopover.c:208
 msgid "model"
 msgstr "model"
 
-#: gtk/gtktreepopover.c:207
+#: gtk/gtktreepopover.c:209
 msgid "The model for the popover"
 msgstr "Açılan kutucuk için model"
 
@@ -7846,2766 +7846,3 @@ msgstr "Renk Profili Başlığı"
 msgid "The title of the color profile to use"
 msgstr "Kullanılacak renk profili başlığı"
 
-#~ msgid "gl-context"
-#~ msgstr "gl-context"
-
-#~ msgid ""
-#~ "The selected day (as a number between 1 and 31, or 0 to unselect the "
-#~ "currently selected day)"
-#~ msgstr ""
-#~ "Seçilen gün (1 ile 31 arasında bir sayı olarak, ya da geçerli seçili günü "
-#~ "kaldırmak için 0)"
-
-#~ msgid "Number of pixels of the self scrolled off the screen to the left"
-#~ msgstr "Özün, ekranda sola kaydırılan piksel sayısı"
-
-#~ msgid "Show text in the self when it’s empty and unfocused"
-#~ msgstr "Boş ve odaklanılmamış olduğunda özdeki metni göster"
-
-#~ msgid "A list of style attributes to apply to the text of the self"
-#~ msgstr "Özün metnine uygulanacak biçim özniteliklerin listesi"
-
-#~ msgid "A list of tabstop locations to apply to the text of the self"
-#~ msgstr "Özün metnine uygulanacak sekmedurağı konumlarının listesi"
-
-#~ msgid "Cloud Print account"
-#~ msgstr "Bulut Yazdırma hesabı"
-
-#~ msgid "GtkCloudprintAccount instance"
-#~ msgstr "GtkCloudprintAccount örneği"
-
-#~ msgid "Printer ID"
-#~ msgstr "Yazıcı Kimliği"
-
-#~ msgid "Cloud Print printer ID"
-#~ msgstr "Bulut Yazdırma yazıcısı kimliği"
-
-#~ msgid "Whether to give the color an alpha value"
-#~ msgstr "Renge alfa değeri vermek istenmesi"
-
-#~ msgid "Current RGBA Color"
-#~ msgstr "Şu anki RGBA Rengi"
-
-#~ msgid "The selected RGBA color"
-#~ msgstr "Seçilen RGBA rengi"
-
-#~ msgid "Dialog"
-#~ msgstr "Pencere"
-
-#~ msgid "The file chooser dialog to use."
-#~ msgstr "Kullanılacak dosya seçici penceresi."
-
-#~ msgid "The title of the file chooser dialog."
-#~ msgstr "Dosya seçici penceresinin başlığı."
-
-#~ msgid "The desired width of the button widget, in characters."
-#~ msgstr "Düğme parçasının istenen genişliği, karakter olarak."
-
-#, fuzzy
-#~| msgid "Whether the popover is modal"
-#~ msgid "Whether to make the dialog modal"
-#~ msgstr "Açılan kutucuğun kalıcı olup olmadığı"
-
-#~ msgid "Copy target list"
-#~ msgstr "Kopyalama hedef listesi"
-
-#~ msgid ""
-#~ "The list of targets this buffer supports for clipboard copying and DND "
-#~ "source"
-#~ msgstr ""
-#~ "Bu tamponun panoya kopyalama ve TVB kaynağı için desteklediği hedeflerin "
-#~ "listesi"
-
-#~ msgid "Paste target list"
-#~ msgstr "Yapıştırma hedef listesi"
-
-#~ msgid ""
-#~ "The list of targets this buffer supports for clipboard pasting and DND "
-#~ "destination"
-#~ msgstr ""
-#~ "Bu tamponun panodan yapıştırma ve TVB hedefi için desteklediği hedeflerin "
-#~ "listesi"
-
-#~ msgid ""
-#~ "The default width of the window, used when initially showing the window"
-#~ msgstr "Pencere ilk gösterildiğinde pencerenin öntanımlı genişliği"
-
-#~ msgid ""
-#~ "The default height of the window, used when initially showing the window"
-#~ msgstr "Pencere ilk gösterildiğinde pencerenin öntanımlı yüksekliği"
-
-#~ msgid "Draw Indicator"
-#~ msgstr "Çizim Belirteci"
-
-#, fuzzy
-#~| msgid "If the toggle part of the button is displayed"
-#~ msgid "If the indicator part of the button is displayed"
-#~ msgstr "Düğmenin seçim kısmı gösterilmişse"
-
-#~ msgid "Device type"
-#~ msgstr "Aygıt türü"
-
-#~ msgid "Device role in the device manager"
-#~ msgstr "Aygıt yöneticisinde aygıt rolü"
-
-#~ msgid "Associated device"
-#~ msgstr "İlişkili aygıt"
-
-#~ msgid "Associated pointer or keyboard with this device"
-#~ msgstr "Bu aygıt ile ilişkili işaretçi ya da klavye"
-
-#~ msgid "Axes"
-#~ msgstr "Eksen"
-
-#~ msgid "Cell renderer"
-#~ msgstr "Hücre işleyici"
-
-#~ msgid "The cell renderer represented by this accessible"
-#~ msgstr "Hücre oluşturucu, bu erişilebilir tarafından temsil edilmiş"
-
-#~ msgid "The text displayed next to the accelerator"
-#~ msgstr "Hızlandırıcının yanında gösterilecek metin"
-
-#~ msgid "The widget referenced by this accessible."
-#~ msgstr "Bu erişilebilirce atfedilen parçacık."
-
-#~ msgid "Application menu"
-#~ msgstr "Uygulama menüsü"
-
-#~ msgid "The GMenuModel for the application menu"
-#~ msgstr "Uygulama menüsü için GMenuModel"
-
-#~ msgid "has filter"
-#~ msgstr "filtresi var"
-
-#~ msgid "Left attachment"
-#~ msgstr "Sol eklenti"
-
-#~ msgid "The column number to attach the left side of the child to"
-#~ msgstr "Altın sol tarafına eklenecek sütun sayısı"
-
-#~ msgid "Top attachment"
-#~ msgstr "Üst eklenti"
-
-#~ msgid "The row number to attach the top side of a child widget to"
-#~ msgstr "Bir alt parçacığın üst kenarına eklenecek olan satır numarası"
-
-#~ msgid "Align with"
-#~ msgstr "Hizalama"
-
-#~ msgid "The parent widget which the menu should align with."
-#~ msgstr "Menü ile hizalanması gereken ana parçacık."
-
-#~ msgid "has sort"
-#~ msgstr "sıralama var"
-
-#~ msgid "If a sort function is set for this model"
-#~ msgstr "Bu model için bir sıralama işlevi ayarlanmışsa"
-
-#~ msgid "The type of items of this list"
-#~ msgstr "Bu listenin öge türü"
-
-#~ msgid "Input mode for the device"
-#~ msgstr "Aygıt için giriş kipi"
-
-#~ msgid "Event type"
-#~ msgstr "Olay türü"
-
-#~ msgid ""
-#~ "A logo for the about box. If this is not set, it defaults to "
-#~ "gtk_window_get_default_icon_list()"
-#~ msgstr ""
-#~ "Hakkında kutusu için bir logo. Eğer atanmamışsa, "
-#~ "gtk_window_get_default_icon_list() öntanımlı olarak kullanılır"
-
-#~ msgid "Accelerator Closure"
-#~ msgstr "Hızlandırıcı Kapanması"
-
-#~ msgid "The closure to be monitored for accelerator changes"
-#~ msgstr "Hızlandırıcı değişiklikleri için gözlemlenen kapanma"
-
-#~ msgid "Pack type"
-#~ msgstr "Paket türü"
-
-#~ msgid ""
-#~ "A GtkPackType indicating whether the child is packed with reference to "
-#~ "the start or end of the parent"
-#~ msgstr ""
-#~ "Altın, üstün sonuna veya başına refaranslı olarak paketlendiğini belirten "
-#~ "bir GtkPackType"
-
-#~ msgid "Has padding"
-#~ msgstr "Dolgu var"
-
-#~ msgid "Whether the assistant adds padding around the page"
-#~ msgstr "Yardımcının sayfanın etrafına dolgu ekleyip eklemeyeceği"
-
-#~ msgid "Layout style"
-#~ msgstr "Düzen biçemi"
-
-#~ msgid ""
-#~ "How to lay out the buttons in the box. Possible values are: spread, edge, "
-#~ "start and end"
-#~ msgstr ""
-#~ "Kutu içindeki düğmelerin nasıl düzenleneceği. Geçerli değerler: "
-#~ "öntanımlı, genişlemiş, kenar, başlangıç ve son"
-
-#~ msgid ""
-#~ "If TRUE, the child appears in a secondary group of children, suitable "
-#~ "for, e.g., help buttons"
-#~ msgstr ""
-#~ "Eğer TRUE ise; alt, altların ikincil kümeyi içinde görünür, örnek olarak "
-#~ "yardım düğmelerinde kullanışlıdır"
-
-#~ msgid "Non-Homogeneous"
-#~ msgstr "Heterojen"
-
-#~ msgid "If TRUE, the child will not be subject to homogeneous sizing"
-#~ msgstr "Eğer DOĞRU ise, eşdağılımlı boyutlandırmaya tabi olmayacaktır"
-
-#~ msgid "Border relief"
-#~ msgstr "Kenarlık süsü"
-
-#~ msgid "The border relief style"
-#~ msgstr "Kenarlık süsleme biçemi"
-
-#~ msgid "No Month Change"
-#~ msgstr "Ay Değişimi Yok"
-
-#~ msgid "If TRUE, the selected month cannot be changed"
-#~ msgstr "Eğer TRUE ise, seçilen ay değiştirilimez"
-
-#~ msgid "Details Width"
-#~ msgstr "Ayrıntılar Genişliği"
-
-#~ msgid "Details width in characters"
-#~ msgstr "Karakter olarak ayrıntıların genişliği"
-
-#~ msgid "Details Height"
-#~ msgstr "Ayrıntılar Yüksekliği"
-
-#~ msgid "Details height in rows"
-#~ msgstr "Satır türünden ayrıntılar yüksekliği"
-
-#~ msgid "Show Details"
-#~ msgstr "Ayrıntıları Göster"
-
-#~ msgid "If TRUE, details are shown"
-#~ msgstr "Eğer TRUE ise, ayrıntılar gösterilir"
-
-#~ msgid "Whether the menu item is checked"
-#~ msgstr "Menü ögesinin işaretlenmiş olması"
-
-#, fuzzy
-#~| msgid "Whether to display an \"inconsistent\" state"
-#~ msgid "Whether to display an “inconsistent” state"
-#~ msgstr "Bir \"karasız\" durum gösterilmesi"
-
-#~ msgid "Draw as radio menu item"
-#~ msgstr "Radyo menü ögesi olarak çiz"
-
-#~ msgid "Whether the menu item looks like a radio menu item"
-#~ msgstr "Menü ögesinin radyo menü ögesi gibi görünmesi"
-
-#~ msgid "Widget type"
-#~ msgstr "Gereç türü"
-
-#~ msgid "GType of the widget"
-#~ msgstr "Gerecin GType'ı"
-
-#~ msgid "Whether password entries will show a warning when Caps Lock is on"
-#~ msgstr "Parola girişlerinin Caps Lock açık olduğu zaman bir uyarı vermesi"
-
-#~ msgid "Populate all"
-#~ msgstr "Tümünü doldur"
-
-#~ msgid "Whether to emit ::populate-popup for touch popups"
-#~ msgstr "Dokunmatik açılan pencereler için emit ::populate-popup istenmesi"
-
-#~ msgid "Local Only"
-#~ msgstr "Yalnızca Yerel"
-
-#~ msgid "Whether the selected file(s) should be limited to local file: URLs"
-#~ msgstr "Seçilen dosyaların yerel dosya olarak sınırlanması: URL'ler"
-
-#~ msgid "Preview widget"
-#~ msgstr "Önizleme parçası"
-
-#~ msgid "Application supplied widget for custom previews."
-#~ msgstr "Özel önizlemeler için uygulama tarafından sağlanan parça."
-
-#~ msgid "Preview Widget Active"
-#~ msgstr "Önizleme Parçası Aktif"
-
-#~ msgid ""
-#~ "Whether the application supplied widget for custom previews should be "
-#~ "shown."
-#~ msgstr ""
-#~ "Özel önizlemeler için uygulama tarafından sağlanan parçanın gösterilmesi."
-
-#~ msgid "Use Preview Label"
-#~ msgstr "Önizleme Etiketi Kullan"
-
-#~ msgid "Whether to display a label with the name of the previewed file."
-#~ msgstr "Önizlenen dosyanın adıyla etiketin gösterilmesi."
-
-#~ msgid "Application supplied widget for extra options."
-#~ msgstr "Ek özellikler için uygulama tarafından sağlanan parça."
-
-#~ msgid "Show Hidden"
-#~ msgstr "Gizlileri Göster"
-
-#~ msgid "Whether the hidden files and folders should be displayed"
-#~ msgstr "Gizli dosya ve klasörlerin gösterilmesi"
-
-#~ msgid "Do overwrite confirmation"
-#~ msgstr "Üzerine yaz onaylaması yap"
-
-#~ msgid ""
-#~ "Whether a file chooser in save mode will present an overwrite "
-#~ "confirmation dialog if necessary."
-#~ msgstr ""
-#~ "Dosya seçicinin kaydetme kipinde eğer gerekliyse üzerine yazma onaylama "
-#~ "penceresi göstermesi."
-
-#~ msgid "X position of child widget"
-#~ msgstr "Alt parçanın X konumu"
-
-#~ msgid "Y position"
-#~ msgstr "Y konumu"
-
-#~ msgid "Y position of child widget"
-#~ msgstr "Alt parçanın Y konumu"
-
-#~ msgid "Frame shadow"
-#~ msgstr "Çerçeve gölgesi"
-
-#~ msgid "Appearance of the frame"
-#~ msgstr "Çerçevenin görünüşü"
-
-#~ msgid "The subtitle to display"
-#~ msgstr "Gösterilecek alt başlık"
-
-#~ msgid "Custom Title"
-#~ msgstr "Özel Başlık"
-
-#~ msgid "Decoration Layout Set"
-#~ msgstr "Süsleme Yerleşim Kümesi"
-
-#~ msgid "Whether the decoration-layout property has been set"
-#~ msgstr "Süsleme yerleşim özelliklerinin ayarlanmış olup olmaması"
-
-#~ msgid "Has Subtitle"
-#~ msgstr "Altyazı var"
-
-#, fuzzy
-#~| msgid "The screen where this window will be displayed"
-#~ msgid "The display where this window will be displayed"
-#~ msgstr "Bu pencerenin gösterileceği ekran"
-
-#~ msgid "Pattern"
-#~ msgstr "Desen"
-
-#~ msgid ""
-#~ "A string with _ characters in positions correspond to characters in the "
-#~ "text to underline"
-#~ msgstr ""
-#~ "Altçizgili olacak metin karakterlerinin bulunması durumunda ilgili "
-#~ "konumlarda _ karakterler bulunan dizgi"
-
-#~ msgid "Track visited links"
-#~ msgstr "Ziyaret edilen bağlantıları takip et"
-
-#~ msgid "Whether visited links should be tracked"
-#~ msgstr "Ziyaret edilen bağlantıların takip edilmesinin gerekip gerekmemesi"
-
-#~ msgid "The width of the layout"
-#~ msgstr "Düzenin genişliği"
-
-#~ msgid "The height of the layout"
-#~ msgstr "Düzenin yüksekliği"
-
-#~ msgid "Pack direction"
-#~ msgstr "Paketleme yönü"
-
-#~ msgid "Child Pack direction"
-#~ msgstr "Alt Paketleme yönü"
-
-#~ msgid "The child pack direction of the menubar"
-#~ msgstr "Menü çubuğunun alt paketleme yönü"
-
-#~ msgid "Popup"
-#~ msgstr "Açılır Pencere"
-
-#~ msgid "The dropdown menu."
-#~ msgstr "Açılır menü."
-
-#~ msgid "Use a popover"
-#~ msgstr "Açılan kutucuk kullan"
-
-#~ msgid "Use a popover instead of a menu"
-#~ msgstr "Menü yerine bir açılan kutucuk kullan"
-
-#~ msgid "The currently selected menu item"
-#~ msgstr "Şu anda seçili olan menü ögesi"
-
-#~ msgid "Accel Group"
-#~ msgstr "Hızlandırıcı Kümesi"
-
-#~ msgid "The accel group holding accelerators for the menu"
-#~ msgstr "Menü için hızlandırıcıları tutan hızlandırıcı kümesi"
-
-#~ msgid ""
-#~ "An accel path used to conveniently construct accel paths of child items"
-#~ msgstr ""
-#~ "Alt ögelerin hızlandırcı yollarını kolaylıkla oluşturmak için "
-#~ "kullanılacak bir hızlandırıcı yolu"
-
-#~ msgid "Attach Widget"
-#~ msgstr "Ek Parçası"
-
-#~ msgid "The widget the menu is attached to"
-#~ msgstr "Menünün eklendiği parça"
-
-#~ msgid "The monitor the menu will be popped up on"
-#~ msgstr "Menünün belireceği ekran"
-
-#~ msgid "Reserve Toggle Size"
-#~ msgstr "Geçiş Boyutunu Ayır"
-
-#~ msgid ""
-#~ "A boolean that indicates whether the menu reserves space for toggles and "
-#~ "icons"
-#~ msgstr ""
-#~ "Menünün geçişler ve simgeler için alan ayırıp ayırmadığını belirten bir "
-#~ "boolean değer"
-
-#~ msgid "Anchor hints"
-#~ msgstr "Çapa ipuçları"
-
-#~ msgid "Positioning hints for when the menu might fall off-screen"
-#~ msgstr ""
-#~ "Menünün, ekranın dışına taşabileceği durumlar için ipuçlarını konumlama"
-
-#~ msgid "Rect anchor dx"
-#~ msgstr "Dikdörtgen çapa dx"
-
-#~ msgid "Rect anchor horizontal offset"
-#~ msgstr "Dikdörtgen çapa yatay dengeleme"
-
-#~ msgid "Rect anchor dy"
-#~ msgstr "Dikdörtgen çapa dy"
-
-#~ msgid "Rect anchor vertical offset"
-#~ msgstr "Dikdörtgen çapa düşey dengeleme"
-
-#~ msgid "Menu type hint"
-#~ msgstr "Menü türü ipucu"
-
-#~ msgid "Menu window type hint"
-#~ msgstr "Menü penceresi türü ipucu"
-
-#~ msgid "Submenu"
-#~ msgstr "Alt menü"
-
-#~ msgid "The submenu attached to the menu item, or NULL if it has none"
-#~ msgstr "Menü ögesine eklenmiş alt menü, ya da eğer yoksa NULL"
-
-#~ msgid "Sets the accelerator path of the menu item"
-#~ msgstr "Menü ögesinin hızlandırıcı yolunu belirler"
-
-#~ msgid "The text for the child label"
-#~ msgstr "Alt etiket için metin"
-
-#~ msgid "Take Focus"
-#~ msgstr "Odak Alır"
-
-#~ msgid "A boolean that determines whether the menu grabs the keyboard focus"
-#~ msgstr ""
-#~ "Menünün klavye odağını yakalayıp yakalamadığını belirten mantıksal değer"
-
-#~ msgid "The dropdown menu"
-#~ msgstr "Açılır menü"
-
-#, fuzzy
-#~| msgid "The string displayed on the child's tab label"
-#~ msgid "The string displayed on the child’s tab label"
-#~ msgstr "Altların sekme etiketinde gösterilecek dizgi"
-
-#~ msgid "Pass Through"
-#~ msgstr "İçinden Geçen"
-
-#~ msgid "Pass through input, does not affect main child"
-#~ msgstr "Girdinin içinden geç, ana çocuğu etkilemez"
-
-#~ msgid "Blur Radius"
-#~ msgstr "Bulanıklık Yarıçapı"
-
-#~ msgid "Index"
-#~ msgstr "Dizin"
-
-#~ msgid "The index of the overlay in the parent, -1 for the main child"
-#~ msgstr "Ebeveyndeki bindirmenin indisi, ana çocuk için -1"
-
-#~ msgid "Resize"
-#~ msgstr "Yeniden boyutlandır"
-
-#~ msgid "Shrink"
-#~ msgstr "Daralt"
-
-#~ msgid "Whether the sidebar only includes local files"
-#~ msgstr "Kenar çubuğunun yalnızca yerel dosyalar içerip içermemesi"
-
-#~ msgid "Whether to emit ::populate-popup for popups that are not menus"
-#~ msgstr ""
-#~ "Menü olmayan açılır pencereler için ::populate-popup'ın yayılıp "
-#~ "yayılmayacağı"
-
-#~ msgid "Relative to"
-#~ msgstr "Hizalama türü"
-
-#~ msgid "Widget the bubble window points to"
-#~ msgstr "Balon penceresine işaret edecek parçacık"
-
-#~ msgid "Constraint for the popover position"
-#~ msgstr "Açılır menü konumu için kısıt"
-
-#~ msgid "The name of the submenu"
-#~ msgstr "Görünür altmenünün adı"
-
-#~ msgid "The radio menu item whose group this widget belongs to."
-#~ msgstr "Bu parçanın ait olduğu kümenin radyo menü ögesi."
-
-#~ msgid "The radio tool button whose group this button belongs to."
-#~ msgstr "Bu parçanın ait olduğu kümenin radyo düğmesi."
-
-#~ msgid "Shadow Type"
-#~ msgstr "Gölge Türü"
-
-#~ msgid "Style of bevel around the contents"
-#~ msgstr "İçeriğin etrafındaki kenar biçemi"
-
-#~ msgid "Draw"
-#~ msgstr "Çiz"
-
-#~ msgid "Whether the separator is drawn, or just blank"
-#~ msgstr "Ayracın çizilmesi, ya da yalnızca boşluk"
-
-#~ msgid "Key Theme Name"
-#~ msgstr "Anahtar Tema Adı"
-
-#~ msgid "Name of key theme to load"
-#~ msgstr "Yüklenecek anahtar temanın adı"
-
-#~ msgid "Homogeneous sizing"
-#~ msgstr "Eşdağılımlı boyutlandırma"
-
-#~ msgid "Value type"
-#~ msgstr "Değer türü"
-
-#~ msgid "The value type returned by GtkStyleContext"
-#~ msgstr "GtkStyleContext tarafından dönen değer türü"
-
-#~ msgid "Toolbar Style"
-#~ msgstr "Araç Çubuğu Biçemi"
-
-#~ msgid "How to draw the toolbar"
-#~ msgstr "Araç çubuğunun nasıl çizileceği"
-
-#~ msgid "If an arrow should be shown if the toolbar doesn’t fit"
-#~ msgstr "Eğer araç çubuğu tam oturmuyorsa okun gösterilmesi"
-
-#~ msgid "Whether the item should receive extra space when the toolbar grows"
-#~ msgstr "Araç çubuğu büyüdüğü zaman ögenin ek alan alması"
-
-#~ msgid "Whether the item should be the same size as other homogeneous items"
-#~ msgstr "Ögenin diğer eş ögelerle aynı boyutta olması"
-
-#~ msgid "Text to show in the item."
-#~ msgstr "Ögede görüntülenecek metin."
-
-#~ msgid ""
-#~ "If set, an underline in the label property indicates that the next "
-#~ "character should be used for the mnemonic accelerator key in the overflow "
-#~ "menu"
-#~ msgstr ""
-#~ "Eğer atanmışsa, altçizgiden sonra gelen karakter anımsatıcı hızlandırıcı "
-#~ "tuş olarak kullanılacaktır"
-
-#~ msgid "Widget to use as the item label"
-#~ msgstr "Öge etiketi olarak kullanılacak parça"
-
-#~ msgid "The name of the themed icon displayed on the item"
-#~ msgstr "Bu ögede gösterilecek temalı simgenin adı"
-
-#~ msgid "Visible when horizontal"
-#~ msgstr "Yatay ise görüntülenebilir"
-
-#~ msgid ""
-#~ "Whether the toolbar item is visible when the toolbar is in a horizontal "
-#~ "orientation."
-#~ msgstr "Araç çubuğu yatay konumdayken araç çubuğu ögesinin görünürlüğü."
-
-#~ msgid "Visible when vertical"
-#~ msgstr "Dikey ise görünür"
-
-#~ msgid ""
-#~ "Whether the toolbar item is visible when the toolbar is in a vertical "
-#~ "orientation."
-#~ msgstr "Araç çubuğu dikey konumdayken araç çubuğu ögesinin görünürlüğü."
-
-#~ msgid "Is important"
-#~ msgstr "Önemli"
-
-#~ msgid ""
-#~ "Whether the toolbar item is considered important. When TRUE, toolbar "
-#~ "buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-#~ msgstr ""
-#~ "Araç çubuğu ögesinin önemli sayılması. TRUE olduğunda, araç çubuğu "
-#~ "düğmeleri GTK_TOOLBAR_BOTH_HORIZ kipinde metin gösterir"
-
-#~ msgid "TreeMenu model"
-#~ msgstr "Ağaç menü modeli"
-
-#~ msgid "TreeMenu root row"
-#~ msgstr "Ağaç Menü kök satır"
-
-#~ msgid "The TreeMenu will display children of the specified root"
-#~ msgstr "AğaçMenü belirtilen kökün çocuklarını gösterecek"
-
-#~ msgid "Shadow type"
-#~ msgstr "Gölge türü"
-
-#~ msgid "Determines how the shadowed box around the viewport is drawn"
-#~ msgstr "Görünümün çevresindeki gölgeli kutunun çizileceğini saptar"
-
-#~ msgid "Whether the widget is the focus widget within the toplevel"
-#~ msgstr "Üst düzeyde parçanın odak parçası olması"
-
-#~ msgid "Can default"
-#~ msgstr "Öntanımı olabilir"
-
-#~ msgid "Whether the widget can be the default widget"
-#~ msgstr "Parçanın öntanımlı parça olabilmesi"
-
-#, fuzzy
-#~| msgid "The widget's window if it is realized"
-#~ msgid "The widget’s surface if it is realized"
-#~ msgstr "Eğer realize edildiyse parçanın penceresi"
-
-#~ msgid "All Margins"
-#~ msgstr "Tüm Kenar Boşlukları"
-
-#~ msgid "Pixels of extra space on all four sides"
-#~ msgstr "Tüm dört taraftaki fazladan alanların pikselleri"
-
-#~ msgid "Expand Both"
-#~ msgstr "İkisini de Genişlet"
-
-#~ msgid "The type of the window"
-#~ msgstr "Pencerenin türü"
-
-#~ msgid "Window Role"
-#~ msgstr "Pencere Rolü"
-
-#~ msgid "Unique identifier for the window to be used when restoring a session"
-#~ msgstr ""
-#~ "Oturum geri getirilirken kullanılacak pencere için tek olan belirteç"
-
-#~ msgid "Window Position"
-#~ msgstr "Pencere Konumu"
-
-#~ msgid "The initial position of the window"
-#~ msgstr "Pencerenin başlangıç pozisyonu"
-
-#~ msgid "Icon for this window"
-#~ msgstr "Bu pencere için simge"
-
-#~ msgid "Type hint"
-#~ msgstr "Tür ipucu"
-
-#~ msgid ""
-#~ "Hint to help the desktop environment understand what kind of window this "
-#~ "is and how to treat it."
-#~ msgstr ""
-#~ "Masaüstü dağıtımının bu pencerenin ne türde olduğunu ve nasıl "
-#~ "davranacağını anlamasına yardım etmek için gereken ipucu."
-
-#~ msgid "Skip taskbar"
-#~ msgstr "Görev çubuğunu geç"
-
-#~ msgid "TRUE if the window should not be in the task bar."
-#~ msgstr "Eğer TRUE ise, pencere görev çubuğunda bulunmayacak."
-
-#~ msgid "Skip pager"
-#~ msgstr "Görüntüleyiciyi geç"
-
-#~ msgid "TRUE if the window should not be in the pager."
-#~ msgstr "Eğer TRUE ise, pencere görüntüleyicide gösterilmeyecektir."
-
-#~ msgid "Urgent"
-#~ msgstr "Acil"
-
-#~ msgid "TRUE if the window should be brought to the user’s attention."
-#~ msgstr "TRUE ise, pencere kullanıcının ilgisini çekmeye çalışacak."
-
-#~ msgid "Accept focus"
-#~ msgstr "Odaklamayı kabul et"
-
-#~ msgid "TRUE if the window should receive the input focus."
-#~ msgstr "TRUE ise pencere girdi odağını almayacak."
-
-#~ msgid "Focus on map"
-#~ msgstr "Yerleştirme ile odaklan"
-
-#~ msgid "TRUE if the window should receive the input focus when mapped."
-#~ msgstr "TRUE ise pencere yerleştirildiğinde girdi odağını alacak."
-
-#~ msgid "Gravity"
-#~ msgstr "Çekimi"
-
-#~ msgid "The window gravity of the window"
-#~ msgstr "Pencerenin, pencere çekimi"
-
-#~ msgid "Attached to Widget"
-#~ msgstr "Parçacığa Eklendi"
-
-#~ msgid "The widget where the window is attached"
-#~ msgstr "Pencerenin eklendiği parçacık"
-
-#~ msgid "Wrap width for laying out the items in a grid"
-#~ msgstr "Izgara içindeki ögelerin düzeni için satır bölme genişliği"
-
-#~ msgid "Row span column"
-#~ msgstr "Satır atlama sütunu"
-
-#~ msgid "TreeModel column containing the row span values"
-#~ msgstr "Satır atlama sütunu değerlerini içeren TreeModel sütunu"
-
-#~ msgid "Column span column"
-#~ msgstr "Sütun atlama sütunu"
-
-#~ msgid "TreeModel column containing the column span values"
-#~ msgstr "Sütun atlama sütunu değerlerini içeren TreeModel sütunu"
-
-#~ msgid "Left Attach"
-#~ msgstr "Sol Ek"
-
-#~ msgid "Right Attach"
-#~ msgstr "Sağ Ek"
-
-#~ msgid "The column number to attach the right side of the child to"
-#~ msgstr "Altın sağ tarafına eklenecek sütun sayısı"
-
-#~ msgid "Top Attach"
-#~ msgstr "Üst Ek"
-
-#~ msgid "The row number to attach the top of the child to"
-#~ msgstr "Altın üstüne eklenecek satır sayısı"
-
-#~ msgid "Bottom Attach"
-#~ msgstr "Alt Ek"
-
-#~ msgid "The row number to attach the bottom of the child to"
-#~ msgstr "Altın, alt tarafına eklenecek satır sayısı"
-
-#~ msgid "Wrap Width"
-#~ msgstr "Kaydırma Genişliği"
-
-#~ msgid "Wrap width for laying out items in a grid"
-#~ msgstr "Bir ızgaradaki ögelerin yerleşimi için kaydırma genişliği"
-
-#~ msgid "Cursor type"
-#~ msgstr "İmleç türü"
-
-#~ msgid "Standard cursor type"
-#~ msgstr "Standart imleç türü"
-
-#~ msgid "Device manager"
-#~ msgstr "Aygıt yöneticisi"
-
-#~ msgid "Device manager which the device belongs to"
-#~ msgstr "Aygıt yöneticisine ait olan aygıt"
-
-#~ msgid "Display for the device manager"
-#~ msgstr "Aygıt yönetici için ekran"
-
-#~ msgid "Window"
-#~ msgstr "Pencere"
-
-#~ msgid "Font options"
-#~ msgstr "Yazı tipi seçenekleri"
-
-#~ msgid "The default font options for the screen"
-#~ msgstr "Ekran için öntanımlı yazı tipi seçenekleri"
-
-#~ msgid "Font resolution"
-#~ msgstr "Yazı tipi çözünürlüğü"
-
-#~ msgid "The resolution for fonts on the screen"
-#~ msgstr "Ekran üzerindeki yazı tiplerinin çözünürlüğü"
-
-#~ msgid "A unique name for the action."
-#~ msgstr "Eylem için tek olan bir ad."
-
-#~ msgid "The label used for menu items and buttons that activate this action."
-#~ msgstr ""
-#~ "Eylemi etkinleştiren menü ögeleri ve düğmeler için kullanılan etiket."
-
-#~ msgid "Short label"
-#~ msgstr "Kısa etiket"
-
-#~ msgid "A shorter label that may be used on toolbar buttons."
-#~ msgstr "Araç çubuğu düğmelerinde kullanılabilecek daha kısa bir etiket."
-
-#~ msgid "Tooltip"
-#~ msgstr "Balon"
-
-#~ msgid "A tooltip for this action."
-#~ msgstr "Bu eylem için bir balon."
-
-#~ msgid "Stock Icon"
-#~ msgstr "Depo Simgesi"
-
-#~ msgid "The stock icon displayed in widgets representing this action."
-#~ msgstr "Bu eylemi belirten parçalar için gösterilecek olan depo simgesi."
-
-#~ msgid "GIcon"
-#~ msgstr "GIcon"
-
-#~ msgid "Visible when overflown"
-#~ msgstr "Taşmış ise görünür"
-
-#~ msgid ""
-#~ "When TRUE, toolitem proxies for this action are represented in the "
-#~ "toolbar overflow menu."
-#~ msgstr ""
-#~ "TRUE olduğunda, bu eylem için araç ögesi vekilleri araç çubuğunda taşmış "
-#~ "menü olarak görüntülenir."
-
-#~ msgid ""
-#~ "Whether the action is considered important. When TRUE, toolitem proxies "
-#~ "for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-#~ msgstr ""
-#~ "Eylemin önemli sayılması. TRUE ise , bu eylem için araç ögesi vekilleri "
-#~ "metni GTK_TOOLBAR_BOTH_HORIZ kipinde gösterir."
-
-#~ msgid "Hide if empty"
-#~ msgstr "Boş ise gizle"
-
-#~ msgid "When TRUE, empty menu proxies for this action are hidden."
-#~ msgstr "TRUE ise, bu eylem için boş menü vekilleri gizli olur."
-
-#~ msgid "Action Group"
-#~ msgstr "Eylem Kümesi"
-
-#~ msgid ""
-#~ "The GtkActionGroup this GtkAction is associated with, or NULL (for "
-#~ "internal use)."
-#~ msgstr ""
-#~ "Bu GtkAction'ın ilişkilendirildiği GtkActionGroup, veya NULL (dahili "
-#~ "kullanım için)."
-
-#~ msgid "Whether the image will always be shown"
-#~ msgstr "Resmin her zaman gösterilip gösterilmeyeceği"
-
-#~ msgid "A name for the action group."
-#~ msgstr "Eylem kümesi için bir ad."
-
-#~ msgid "Whether the action group is enabled."
-#~ msgstr "Eylem kümesinin etkin olup olmaması."
-
-#~ msgid "Whether the action group is visible."
-#~ msgstr "Eylem kümesinin görünür olup olmaması."
-
-#~ msgid "Accelerator Group"
-#~ msgstr "Hızlandırıcı Küme"
-
-#~ msgid "The accelerator group the actions of this group should use."
-#~ msgstr "Hızlandırıcı küme bu kümenin eylemlerini kullanmalı."
-
-#~ msgid "Related Action"
-#~ msgstr "İlgili Eylem"
-
-#~ msgid "The action this activatable will activate and receive updates from"
-#~ msgstr ""
-#~ "Etkinleştirilebilir eylem etkinleştirilecek ve güncellemeler buradan "
-#~ "alınacak"
-
-#~ msgid "Use Action Appearance"
-#~ msgstr "Eylem Görünümünü Kullan"
-
-#~ msgid "Whether to use the related actions appearance properties"
-#~ msgstr "İlişkili eylem görünüm özelliklerini kullanıp kullanmaması"
-
-#~ msgid "Horizontal alignment"
-#~ msgstr "Yatay hizalama"
-
-#~ msgid ""
-#~ "Horizontal position of child in available space. 0.0 is left aligned, 1.0 "
-#~ "is right aligned"
-#~ msgstr ""
-#~ "Kullanılabilir alanda altın yatay konumu. 0.0 ise sola, 1.0 ise sağa "
-#~ "hizalıdır"
-
-#~ msgid "Vertical alignment"
-#~ msgstr "Dikey hizalama"
-
-#~ msgid ""
-#~ "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
-#~ "bottom aligned"
-#~ msgstr ""
-#~ "Kullanılabilir alanda altın dikey konumu. 0.0 ise üste, 1.0 ise alta "
-#~ "hizalıdır"
-
-#~ msgid "Horizontal scale"
-#~ msgstr "Yatay ölçek"
-
-#~ msgid ""
-#~ "If available horizontal space is bigger than needed for the child, how "
-#~ "much of it to use for the child. 0.0 means none, 1.0 means all"
-#~ msgstr ""
-#~ "Kullanılabilir yatay alan alt için gerekenden büyükse, onun ne kadarının "
-#~ "alt için kullanılacağıdır. 0.0 ise hiç, 1.0 ise tümü demektir"
-
-#~ msgid "Vertical scale"
-#~ msgstr "Dikey ölçek"
-
-#~ msgid ""
-#~ "If available vertical space is bigger than needed for the child, how much "
-#~ "of it to use for the child. 0.0 means none, 1.0 means all"
-#~ msgstr ""
-#~ "Kullanılabilir dikey alan alt için gerekenden büyükse, onun ne kadarının "
-#~ "alt için kullanılacağıdır. 0.0 ise hiç, 1.0 ise tümü demektir"
-
-#~ msgid "Top Padding"
-#~ msgstr "Üst Doldurma"
-
-#~ msgid "The padding to insert at the top of the widget."
-#~ msgstr "Parçanın üstüne eklenecek doldurma."
-
-#~ msgid "Bottom Padding"
-#~ msgstr "Alt Doldurma"
-
-#~ msgid "The padding to insert at the bottom of the widget."
-#~ msgstr "Parçanın altına eklenecek doldurma."
-
-#~ msgid "Left Padding"
-#~ msgstr "Sol Doldurma"
-
-#~ msgid "Right Padding"
-#~ msgstr "Sağ Doldurma"
-
-#~ msgid "The padding to insert at the right of the widget."
-#~ msgstr "Parçanın sağına eklenecek doldurma."
-
-#~ msgid "Arrow direction"
-#~ msgstr "Ok yönü"
-
-#~ msgid "The direction the arrow should point"
-#~ msgstr "Okun hedef aldığı yön"
-
-#~ msgid "Arrow shadow"
-#~ msgstr "Ok gölgesi"
-
-#~ msgid "Appearance of the shadow surrounding the arrow"
-#~ msgstr "Oku çevreleyen gölgenin görünümü"
-
-#~ msgid "Arrow Scaling"
-#~ msgstr "Ok Ölçeği"
-
-#~ msgid "Amount of space used up by arrow"
-#~ msgstr "Ok tarafından kullanılacak alanın boyutu"
-
-#~ msgid "Has Opacity Control"
-#~ msgstr "Matlık Denetimine Sahip"
-
-#~ msgid "Whether the color selector should allow setting opacity"
-#~ msgstr "Renk seçicisinin matlık ayarına izin verebilirliği"
-
-#~ msgid "Has palette"
-#~ msgstr "Palete ahip"
-
-#~ msgid "The current color"
-#~ msgstr "Şu anki renk"
-
-#~ msgid "Current Alpha"
-#~ msgstr "Geçerli Alfa"
-
-#~ msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-#~ msgstr "Şu anki matlık değeri (0 tümüyle saydam, 65535 tümüyle mat)"
-
-#~ msgid "Current RGBA"
-#~ msgstr "Şu anki RGBA"
-
-#~ msgid "The current RGBA color"
-#~ msgstr "Şu anki RGBA rengi"
-
-#~ msgid "Color Selection"
-#~ msgstr "Renk Seçimi"
-
-#~ msgid "The color selection embedded in the dialog."
-#~ msgstr "Pencereye gömülü renk seçimi."
-
-#~ msgid "OK Button"
-#~ msgstr "Tamam Düğmesi"
-
-#~ msgid "The OK button of the dialog."
-#~ msgstr "Pencerenin Tamam düğmesi."
-
-#~ msgid "Cancel Button"
-#~ msgstr "İptal Düğmesi"
-
-#~ msgid "The cancel button of the dialog."
-#~ msgstr "Pencerenin iptal düğmesi."
-
-#~ msgid "Help Button"
-#~ msgstr "Yardım Düğmesi"
-
-#~ msgid "The help button of the dialog."
-#~ msgstr "Pencerenin yardım düğmesi."
-
-#~ msgid "Font name"
-#~ msgstr "Yazı tipi adı"
-
-#~ msgid "The string that represents this font"
-#~ msgstr "Bu yazı tipini belirten dizgi"
-
-#~ msgid "Appearance of the shadow that surrounds the container"
-#~ msgstr "Taşıyıcıyı kuşatan gölgenin görünüşü"
-
-#~ msgid "Handle position"
-#~ msgstr "Tutaç konumu"
-
-#~ msgid "Position of the handle relative to the child widget"
-#~ msgstr "Alt parçaya göre tutaç konumu"
-
-#~ msgid "Snap edge"
-#~ msgstr "Yakalama kenarı"
-
-#~ msgid ""
-#~ "Side of the handlebox that's lined up with the docking point to dock the "
-#~ "handlebox"
-#~ msgstr "Tutaç kutunun bağlanma noktası ile sıralanmış kenarı"
-
-#~ msgid "Snap edge set"
-#~ msgstr "Yakalama kenarı ayarı"
-
-#~ msgid ""
-#~ "Whether to use the value from the snap_edge property or a value derived "
-#~ "from handle_position"
-#~ msgstr ""
-#~ "snap_edge özelliğinden veya handle_position özelliğinden türetilmiş "
-#~ "değerlerin kullanılması"
-
-#~ msgid "Child Detached"
-#~ msgstr "Alt Ayrı"
-
-#~ msgid ""
-#~ "A boolean value indicating whether the handlebox's child is attached or "
-#~ "detached."
-#~ msgstr ""
-#~ "Tutaç kutusunun altını ekli ya da ayrılmış olup olmadıgını belirten "
-#~ "mantıksal değer."
-
-#~ msgid "Image widget"
-#~ msgstr "Resim parçası"
-
-#~ msgid "Child widget to appear next to the menu text"
-#~ msgstr "Menü metninden sonra görünecek alt parçası"
-
-#~ msgid "Use stock"
-#~ msgstr "Depo kullan"
-
-#~ msgid "Whether to use the label text to create a stock menu item"
-#~ msgstr "Bir depo menü ögesi oluşturmak için etiket metni kullanılması"
-
-#~ msgid "The Accel Group to use for stock accelerator keys"
-#~ msgstr "Depo hızlandırıcı tuşları için kullanılacak Hızlandırıcı Kümesi"
-
-#~ msgid "X pad"
-#~ msgstr "X doldurma"
-
-#~ msgid ""
-#~ "The amount of space to add on the left and right of the widget, in pixels"
-#~ msgstr "Parçanın soluna ve sağına eklenecek alanın piksel türünden değeri"
-
-#~ msgid "Y pad"
-#~ msgstr "Y doldurma"
-
-#~ msgid ""
-#~ "The amount of space to add on the top and bottom of the widget, in pixels"
-#~ msgstr "Parçanın üstüne ve altına eklenecek alanın piksel türünden değeri"
-
-#~ msgid "Icon's count"
-#~ msgstr "Simge sayısı"
-
-#~ msgid "The count of the emblem currently displayed"
-#~ msgstr "Şu anda gösterilen amblem sayısı"
-
-#~ msgid "Icon's label"
-#~ msgstr "Simge etiketi"
-
-#~ msgid "The label to be displayed over the icon"
-#~ msgstr "Simge üzerinde gösterilecek etiket"
-
-#~ msgid "Icon's style context"
-#~ msgstr "Simgenin biçem içeriği"
-
-#~ msgid "The style context to theme the icon appearance"
-#~ msgstr "Simge görünüm teması için biçem içeriği"
-
-#~ msgid "Background icon"
-#~ msgstr "Arkaplan simgesi"
-
-#~ msgid "The icon for the number emblem background"
-#~ msgstr "Arkaplan numara amblemi için simge"
-
-#~ msgid "Background icon name"
-#~ msgstr "Arkaplan simge adı"
-
-#~ msgid "The icon name for the number emblem background"
-#~ msgstr "Arkaplan numara amblemi için simge adı"
-
-#~ msgid ""
-#~ "The value returned by gtk_radio_action_get_current_value() when this "
-#~ "action is the current action of its group."
-#~ msgstr ""
-#~ "Bu eylem kümesinin geçerli eylemiyken "
-#~ "gtk_radio_action_get_current_value() tarafından dönen değer."
-
-#~ msgid "The radio action whose group this action belongs to."
-#~ msgstr "Bu eylemin ait olduğu kümenin radyo eylemi."
-
-#~ msgid ""
-#~ "The value property of the currently active member of the group to which "
-#~ "this action belongs."
-#~ msgstr ""
-#~ "Bu eylemin ait olduğu kümenin geçerli etkin ögesinin değer özelliği."
-
-#~ msgid "Show Numbers"
-#~ msgstr "Numaralarını Göster"
-
-#~ msgid "Pixbuf"
-#~ msgstr "Pixbuf"
-
-#~ msgid "Stock ID"
-#~ msgstr "Depo Kimliği"
-
-#~ msgid "Stock ID for a stock image to display"
-#~ msgstr "Gösterilecek bir depo resmi için depo kimliği"
-
-#~ msgid "Screen"
-#~ msgstr "Ekran"
-
-#~ msgid "The screen where this status icon will be displayed"
-#~ msgstr "Durum simgesinin gösterileceği ekran"
-
-#~ msgid "Embedded"
-#~ msgstr "Gömülü"
-
-#~ msgid "Whether the status icon is embedded"
-#~ msgstr "Durum simgesinin gömülü olup olmaması"
-
-#~ msgid "The orientation of the tray"
-#~ msgstr "Tepsinin yönü"
-
-#~ msgid "Whether this tray icon has a tooltip"
-#~ msgstr "Bu uyarı alanı simgesinin bir balona sahip olması"
-
-#~ msgid "The contents of the tooltip for this tray icon"
-#~ msgstr "Bu uyarı alanı simgesi için balonun içeriği"
-
-#~ msgid "Style context"
-#~ msgstr "Biçem içeriği"
-
-#~ msgid "GtkStyleContext to get style from"
-#~ msgstr "Biçem içeriği almak için GtkStyleContext"
-
-#~ msgid "The number of rows in the table"
-#~ msgstr "Tablodaki satır sayısı"
-
-#~ msgid "The number of columns in the table"
-#~ msgstr "Tablodaki sütun sayısı"
-
-#~ msgid "If TRUE, the table cells are all the same width/height"
-#~ msgstr "TRUE ise, tablo hücrelerinin tümü aynı genişlikte/yükseklikte olur"
-
-#~ msgid "Right attachment"
-#~ msgstr "Sağ eklenti"
-
-#~ msgid "The column number to attach the right side of a child widget to"
-#~ msgstr "Altın sağ tarafına eklenecek olan sütun miktarı"
-
-#~ msgid "The row number to attach the top of a child widget to"
-#~ msgstr "Altın üst kısmına eklenecek olan sütun miktarı"
-
-#~ msgid "Bottom attachment"
-#~ msgstr "Alt eklenti"
-
-#~ msgid "Horizontal options"
-#~ msgstr "Yatay seçenekler"
-
-#~ msgid "Options specifying the horizontal behaviour of the child"
-#~ msgstr "Altın yatay işleyişini belirleyen seçenekler"
-
-#~ msgid "Vertical options"
-#~ msgstr "Düşey seçenekler"
-
-#~ msgid "Options specifying the vertical behaviour of the child"
-#~ msgstr "Altın düşey işleyişini belirleyen seçenekler"
-
-#~ msgid "Horizontal padding"
-#~ msgstr "Yatay doldurma"
-
-#~ msgid ""
-#~ "Extra space to put between the child and its left and right neighbors, in "
-#~ "pixels"
-#~ msgstr ""
-#~ "Parçanın ve onun sağ ve sol komşuları arasına eklenecek alanın piksel "
-#~ "türünden değeri"
-
-#~ msgid "Vertical padding"
-#~ msgstr "Dikey doldurma"
-
-#~ msgid ""
-#~ "Extra space to put between the child and its upper and lower neighbors, "
-#~ "in pixels"
-#~ msgstr ""
-#~ "Parçanın ve onun üst ve alt komşuları arasına eklenecek alanın piksel "
-#~ "türünden değeri"
-
-#~ msgid "Theming engine name"
-#~ msgstr "Tema motoru adı"
-
-#~ msgid "Create the same proxies as a radio action"
-#~ msgstr "Aynı vekilleri radyo eylemi olarak oluştur"
-
-#~ msgid "Whether the proxies for this action look like radio action proxies"
-#~ msgstr "Bu eylem için olan vekillerin radyo eylem vekili gibi görünmesi"
-
-#~ msgid "Whether the toggle action should be active"
-#~ msgstr "İki durumlu düğme eyleminin etkin olma gerekliliği"
-
-#~ msgid "Foreground color"
-#~ msgstr "Önplan rengi"
-
-#~ msgid "Foreground color for symbolic icons"
-#~ msgstr "Sembolik simgeler için ön alan rengi"
-
-#~ msgid "Error color"
-#~ msgstr "Hata rengi"
-
-#~ msgid "Error color for symbolic icons"
-#~ msgstr "Sembolik simgeler için hata rengi"
-
-#~ msgid "Warning color"
-#~ msgstr "Uyarı rengi"
-
-#~ msgid "Warning color for symbolic icons"
-#~ msgstr "Sembolik simgeler için uyarı rengi"
-
-#~ msgid "Success color"
-#~ msgstr "Başarı rengi"
-
-#~ msgid "Success color for symbolic icons"
-#~ msgstr "Sembolik simgeler için başarı rengi"
-
-#~ msgid "Padding"
-#~ msgstr "Doldurma"
-
-#~ msgid "Padding that should be put around icons in the tray"
-#~ msgstr "Çubuktaki simge çevresine koyulması gereken doldurma"
-
-#~ msgid "The pixel size that icons should be forced to, or zero"
-#~ msgstr "Simgenin olması gereken piksel boyutu ya da sıfır"
-
-#~ msgid "Add tearoffs to menus"
-#~ msgstr "Menülere ayraçları ekle"
-
-#~ msgid "Whether tearoff menu items should be added to menus"
-#~ msgstr "Menülere ayrılmış menü ögelerinin eklenmesi"
-
-#~ msgid "An XML string describing the merged UI"
-#~ msgstr "Birleşik arayüzün XML dizgesi tanımı"
-
-#~ msgid "Header Padding"
-#~ msgstr "Başlık Doldurma"
-
-#~ msgid "Number of pixels around the header."
-#~ msgstr "Başlığın çevresindeki piksellerin sayısı."
-
-#~ msgid "Content Padding"
-#~ msgstr "İçerik Doldurma"
-
-#~ msgid "Number of pixels around the content pages."
-#~ msgstr "İçerik sayfalarının çevresindeki piksellerin sayısı."
-
-#~ msgid "Header image for the assistant page"
-#~ msgstr "Yardımcı sayfa için başlık resmi"
-
-#~ msgid "Sidebar image"
-#~ msgstr "Kenar çubuğu resmi"
-
-#~ msgid "Sidebar image for the assistant page"
-#~ msgstr "Yardımcı sayfa için kenar çubuğu resmi"
-
-#~ msgid "Minimum child width"
-#~ msgstr "En küçük alt genişliği"
-
-#~ msgid "Minimum width of buttons inside the box"
-#~ msgstr "Kutu içindeki en küçük düğme genişliği"
-
-#~ msgid "Minimum child height"
-#~ msgstr "En küçük alt yüksekliği"
-
-#~ msgid "Minimum height of buttons inside the box"
-#~ msgstr "Kutu içindeki en küçük düğme yüksekliği"
-
-#~ msgid "Child internal width padding"
-#~ msgstr "Alt iç genişlik doldurması"
-
-#~ msgid "Amount to increase child's size on either side"
-#~ msgstr "Altların boyutlarını her iki taraftan arttırma miktarı"
-
-#~ msgid "Child internal height padding"
-#~ msgstr "Alt iç yükseklik doldurması"
-
-#~ msgid "Amount to increase child's size on the top and bottom"
-#~ msgstr "Altların boyutlarını yukarı ve aşağı arttırma miktarı"
-
-#~ msgid "Whether the child should receive extra space when the parent grows"
-#~ msgstr "Altlara üstleri büyüyünce ek yer sağlanması"
-
-#~ msgid "Fill"
-#~ msgstr "Doldur"
-
-#~ msgid ""
-#~ "Whether extra space given to the child should be allocated to the child "
-#~ "or used as padding"
-#~ msgstr ""
-#~ "Verilen ek boşlukların altlara ayrılması veya doldurulmada kullanılması"
-
-#~ msgid "Extra space to put between the child and its neighbors, in pixels"
-#~ msgstr "Altların, diğerleri ile arasında olacak boşluk, piksel değerinde"
-
-#~ msgid ""
-#~ "If set, the label is used to pick a stock item instead of being displayed"
-#~ msgstr ""
-#~ "Eğer seçiliyse, etiket gösterilen yerine bir depo ögesini seçmekte "
-#~ "kullanılacak"
-
-#~ msgid "Horizontal alignment for child"
-#~ msgstr "Alt için yatay hizalama"
-
-#~ msgid "Vertical alignment for child"
-#~ msgstr "Alt için düşey hizalama"
-
-#~ msgid "Child widget to appear next to the button text"
-#~ msgstr "Düğme metninden sonra görünecek alt parçası"
-
-#~ msgid "Image position"
-#~ msgstr "Resim konumu"
-
-#~ msgid "The position of the image relative to the text"
-#~ msgstr "Metne göre resim konumu"
-
-#~ msgid "Default Spacing"
-#~ msgstr "Öntanımlı Aralık"
-
-#~ msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
-#~ msgstr "GTK_CAN_DEFAULT düğmeleri için eklenecek fazladan alan"
-
-#~ msgid "Default Outside Spacing"
-#~ msgstr "Öntanımlı Dış Aralık"
-
-#~ msgid ""
-#~ "Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn "
-#~ "outside the border"
-#~ msgstr ""
-#~ "Kenarlığı daima dışına çizilen GTK_CAN_DEFAULT düğmeleri için eklenecek "
-#~ "fazladan alan"
-
-#~ msgid "Child X Displacement"
-#~ msgstr "Altın X Kayması"
-
-#~ msgid ""
-#~ "How far in the x direction to move the child when the button is depressed"
-#~ msgstr "Düğmeye basıldığında altın x yönünde ne kadar hareket edeceği"
-
-#~ msgid "Child Y Displacement"
-#~ msgstr "Altın Y Kayması"
-
-#~ msgid ""
-#~ "How far in the y direction to move the child when the button is depressed"
-#~ msgstr "Düğmeye basıldığında altın y yönünde ne kadar hareket edeceği"
-
-#~ msgid "Displace focus"
-#~ msgstr "Odak kaydırma"
-
-#~ msgid ""
-#~ "Whether the child_displacement_x/_y properties should also affect the "
-#~ "focus rectangle"
-#~ msgstr ""
-#~ "child_displacement_x/_y özelliklerinin aynı zamanda odak dikdörtgenini "
-#~ "etkilemesi"
-
-#~ msgid "Inner Border"
-#~ msgstr "İç Kenarlık"
-
-#~ msgid "Border between button edges and child."
-#~ msgstr "Düğme sınırları ve alt arasındaki kenarlık."
-
-#~ msgid "Image spacing"
-#~ msgstr "Resim boşluğu"
-
-#~ msgid "Spacing in pixels between the image and label"
-#~ msgstr "Resim ve etiket arasında bırakılacak piksel türünden boşluk"
-
-#~ msgid "Inner border"
-#~ msgstr "İç Kenarlık"
-
-#~ msgid "Inner border space"
-#~ msgstr "İç kenarlık alanı"
-
-#~ msgid "Vertical separation"
-#~ msgstr "Dikey ayırma"
-
-#~ msgid "Space between day headers and main area"
-#~ msgstr "Gün üst bilgileri ve ana alan arasındaki boşluk"
-
-#~ msgid "Horizontal separation"
-#~ msgstr "Yatay ayırma"
-
-#~ msgid "Space between week headers and main area"
-#~ msgstr "Hafta üst bilgileri ve ana alan arasındaki boşluk"
-
-#~ msgid "Cell background color"
-#~ msgstr "Hücre arkaplanın rengi"
-
-#~ msgid "Cell background color as a GdkColor"
-#~ msgstr "Bir GdkColor olarak hücre arkaplanın rengi"
-
-#~ msgid "surface"
-#~ msgstr "yüzey"
-
-#~ msgid "The stock ID of the stock icon to render"
-#~ msgstr "Taranacak depo simgesinin depo numarası"
-
-#~ msgid "Detail"
-#~ msgstr "Ayrıntı"
-
-#~ msgid "Render detail to pass to the theme engine"
-#~ msgstr "Tema aygıtına gönderilmesi için tarama ayrıntısı"
-
-#~ msgid "Follow State"
-#~ msgstr "Takip Durumu"
-
-#~ msgid ""
-#~ "Whether the rendered pixbuf should be colorized according to the state"
-#~ msgstr "Taranmış pixbuf'ın durumuna uygun olarak renklendirilmesi"
-
-#~ msgid "Background color"
-#~ msgstr "Arkaplan rengi"
-
-#~ msgid "Background color as a GdkColor"
-#~ msgstr "Bir GdkColor olarak arkaplan rengi"
-
-#~ msgid "Foreground color as a GdkColor"
-#~ msgstr "Bir GdkColor olarak önplan rengi"
-
-#~ msgid "Indicator size"
-#~ msgstr "Belirteç boyutu"
-
-#~ msgid "Background RGBA color"
-#~ msgstr "Arkaplan RGBA rengi"
-
-#~ msgid "Indicator Size"
-#~ msgstr "Belirteç Boyutu"
-
-#~ msgid "Indicator Spacing"
-#~ msgstr "Belirteç Aralığı"
-
-#~ msgid "Spacing around check or radio indicator"
-#~ msgstr "Onay ya da radyo düğmesi belirteci etrafındaki boşluk"
-
-#~ msgid "The selected color"
-#~ msgstr "Seçilen renk"
-
-#~ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-#~ msgstr "Geçerli matlık değeri (0 tümüyle saydam, 65535 tümüyle mat)"
-
-#~ msgid "Whether dropdowns should have a tearoff menu item"
-#~ msgstr "Açılan menülerin ayıraç menü ögesi içermesi"
-
-#~ msgid "Tearoff Title"
-#~ msgstr "Ayıraç Başlığı"
-
-#~ msgid ""
-#~ "A title that may be displayed by the window manager when the popup is "
-#~ "torn-off"
-#~ msgstr ""
-#~ "Açılanların ayrıldığında pencere yöneticisi tarafından gösterilebilecek "
-#~ "başlık"
-
-#~ msgid "Appears as list"
-#~ msgstr "Liste olarak görünür"
-
-#~ msgid "Whether dropdowns should look like lists rather than menus"
-#~ msgstr "Çoklu kutu açılanlarının menü yerine liste gibi görüntülenmesi"
-
-#~ msgid "Arrow Size"
-#~ msgstr "Ok Boyutu"
-
-#~ msgid "The minimum size of the arrow in the combo box"
-#~ msgstr "Çoklu kutucuğun içindeki okun asgari boyutu"
-
-#~ msgid "The amount of space used by the arrow"
-#~ msgstr "Ok tarafından kullanılan alan miktarı"
-
-#~ msgid "Which kind of shadow to draw around the combo box"
-#~ msgstr "Çoklu kutunun çevresine ne tür bir gölge çizileceği"
-
-#~ msgid "Specify how resize events are handled"
-#~ msgstr "Yeniden boyutlandırma eylemlerinin nasıl işleneceğini belirtiler"
-
-#~ msgid "Border width"
-#~ msgstr "Kenarlık genişliği"
-
-#~ msgid "The width of the empty border outside the containers children"
-#~ msgstr "Taşıyıcı altlarının dış kenarlarındaki boşluğun genişliği"
-
-#~ msgid "Can be used to add a new child to the container"
-#~ msgstr "Taşıyıcıya yeni bir alt eklemek için kullanılabilir"
-
-#~ msgid "Content area border"
-#~ msgstr "İçerik alanı kenarlığı"
-
-#~ msgid "Width of border around the main dialog area"
-#~ msgstr "Ana pencere alanını çevreleyen kenarlığın genişliği"
-
-#~ msgid "Content area spacing"
-#~ msgstr "İçerik alanı boşluğu"
-
-#~ msgid "Spacing between elements of the main dialog area"
-#~ msgstr "Ana iletişim penceresi alanı ögeleri arasındaki boşluk"
-
-#~ msgid "Button spacing"
-#~ msgstr "Düğme aralığı"
-
-#~ msgid "Action area border"
-#~ msgstr "Eylem alanı kenarlığı"
-
-#~ msgid "Width of border around the button area at the bottom of the dialog"
-#~ msgstr "Pencerenin altındaki düğme alanını çevreleyen kenarlığın genişliği"
-
-#~ msgid ""
-#~ "Border between text and frame. Overrides the inner-border style property"
-#~ msgstr ""
-#~ "Metin ve çerçeve arasındaki kenarlık. inner-body biçemi özelliğinin "
-#~ "yerine geçer"
-
-#~ msgid "Which kind of shadow to draw around the entry when has-frame is set"
-#~ msgstr ""
-#~ "Ne tip bir gölgenin has-frame ayarlandığında girişin çevresine çizileceği"
-
-#~ msgid "Primary pixbuf"
-#~ msgstr "Birincil pixbuf"
-
-#~ msgid "Secondary pixbuf"
-#~ msgstr "İkincil pixbuf"
-
-#~ msgid "Primary stock ID"
-#~ msgstr "Birincil depo ID"
-
-#~ msgid "Stock ID for primary icon"
-#~ msgstr "Birincil simge için depo ID"
-
-#~ msgid "Secondary stock ID"
-#~ msgstr "İkincil depo ID"
-
-#~ msgid "Stock ID for secondary icon"
-#~ msgstr "İkincil simge için depo ID"
-
-#~ msgid "Icon Prelight"
-#~ msgstr "Simge Parlaması"
-
-#~ msgid "Progress Border"
-#~ msgstr "İlerleme Sınırı"
-
-#~ msgid "Border around the progress bar"
-#~ msgstr "İlerleme çubuğu etrafındaki kenarlık"
-
-#~ msgid "Border between text and frame."
-#~ msgstr "Metin ve çerçeve arasındaki kenarlık."
-
-#~ msgid "Visible Window"
-#~ msgstr "Görünür Pencere"
-
-#~ msgid ""
-#~ "Whether the event box is visible, as opposed to invisible and only used "
-#~ "to trap events."
-#~ msgstr ""
-#~ "Eylem kutusunun görünürlüğü, yalnızca eylemleri yakalamak için "
-#~ "kullanılması ve görünmez olması aksine."
-
-#~ msgid "Above child"
-#~ msgstr "Altın üstünde"
-
-#~ msgid ""
-#~ "Whether the event-trapping window of the eventbox is above the window of "
-#~ "the child widget as opposed to below it."
-#~ msgstr ""
-#~ "Eylem kutusunun, eylem-yakalama penceresinin alt parça penceresinin "
-#~ "yukarısında olması, aşağısında olmasına aksine."
-
-#~ msgid "Space to put between the label and the child"
-#~ msgstr "Alt ve etiket arasında bırakılacak boşluk"
-
-#~ msgid "Label fill"
-#~ msgstr "Etiket doldurma"
-
-#~ msgid "Whether the label widget should fill all available horizontal space"
-#~ msgstr ""
-#~ "Etiket parçacığının tüm kullanılabilir yatay boşlukları doldurmasının "
-#~ "gerekip gerekmemesi"
-
-#~ msgid "Expander Size"
-#~ msgstr "Genişletici Boyutu"
-
-#~ msgid "Size of the expander arrow"
-#~ msgstr "Genişletici okunun boyutu"
-
-#~ msgid "Spacing around expander arrow"
-#~ msgstr "Genişletici okunun çevresindeki boşluk"
-
-#~ msgid "Show style"
-#~ msgstr "Biçemi göster"
-
-#~ msgid "Whether the selected font style is shown in the label"
-#~ msgstr "Seçilen yazı tipi biçeminin etiket içinde gösterilmesi"
-
-#~ msgid "Show size"
-#~ msgstr "Boyutu göster"
-
-#~ msgid "Whether selected font size is shown in the label"
-#~ msgstr "Seçilen yazı tipi boyutunun etiket içinde gösterilmesi"
-
-#~ msgid "Label yalign"
-#~ msgstr "Etiket yhiza"
-
-#~ msgid "The vertical alignment of the label"
-#~ msgstr "Etiketin düşey hizalaması"
-
-#~ msgid "GdkWindow to receive events about"
-#~ msgstr "İlgili olayları alacak GdkWindow"
-
-#~ msgid "Has alpha"
-#~ msgstr "Alfası var"
-
-#~ msgid "Whether the color buffer has an alpha component"
-#~ msgstr "Renk tamponunun bir alfa bileşeni olup olmadığı"
-
-#~ msgid "Selection Box Color"
-#~ msgstr "Seçim Kutusu Rengi"
-
-#~ msgid "Color of the selection box"
-#~ msgstr "Seçim kutusunun rengi"
-
-#~ msgid "Selection Box Alpha"
-#~ msgstr "Seçim Kutusu Alfası"
-
-#~ msgid "Opacity of the selection box"
-#~ msgstr "Seçim kutusunun matlığı"
-
-#~ msgid "A cairo_surface_t to display"
-#~ msgstr "Gösterilecek cairo_surface_t"
-
-#~ msgid "Icon set"
-#~ msgstr "Simge kümesi"
-
-#~ msgid "Icon set to display"
-#~ msgstr "Gösterilecek simge kümesi"
-
-#~ msgid "Animation"
-#~ msgstr "Canlandırma"
-
-#~ msgid "GdkPixbufAnimation to display"
-#~ msgstr "Gösterilecek GdkPixbufAnimation"
-
-#~ msgid "Width of border around the content area"
-#~ msgstr "İçerik alanı çevresindeki kenarlığın genişliği"
-
-#~ msgid "Spacing between elements of the area"
-#~ msgstr "Alanın ögeleri arasındaki boşluk"
-
-#~ msgid "Width of border around the action area"
-#~ msgstr "Eylem alanı çevresindeki kenarlığın genişliği"
-
-#~ msgid "Angle"
-#~ msgstr "Açı"
-
-#~ msgid "Angle at which the label is rotated"
-#~ msgstr "Etiketin çevirileceği açı"
-
-#~ msgid "Minimum height for filling blocks"
-#~ msgstr "Blokları doldurmak için asgari yükseklik"
-
-#~ msgid "Minimum height for blocks that fill the bar"
-#~ msgstr "Çubuğu dolduran bloklar için asgari yükseklik"
-
-#~ msgid "Minimum width for filling blocks"
-#~ msgstr "Blokları doldurmak için asgari genişlik"
-
-#~ msgid "Minimum width for blocks that fill the bar"
-#~ msgstr "Çubuk dolduran bloklar için asgari genişlik"
-
-#~ msgid "Style of bevel around the menubar"
-#~ msgstr "Menü çubuğunun etrafındaki kenar biçemi"
-
-#~ msgid "Internal padding"
-#~ msgstr "İç doldurma"
-
-#~ msgid "Amount of border space between the menubar shadow and the menu items"
-#~ msgstr "Menü çubuğu gölgesi ile menü ögeleri arasındaki boşluğunun miktarı"
-
-#~ msgid ""
-#~ "A title that may be displayed by the window manager when this menu is "
-#~ "torn-off"
-#~ msgstr ""
-#~ "Bu menü ayrıldığında pencere yöneticisi tarafından gösterilebilecek başlık"
-
-#~ msgid "Tearoff State"
-#~ msgstr "Ayıraç Durumu"
-
-#~ msgid "A boolean that indicates whether the menu is torn-off"
-#~ msgstr "Menünün ayrı olup olmadığını belirten mantıksal değer"
-
-#~ msgid "Horizontal Padding"
-#~ msgstr "Yatay Doldurma"
-
-#~ msgid "Extra space at the left and right edges of the menu"
-#~ msgstr "Menünü sağına ve soluna eklenecek boşluk"
-
-#~ msgid "Vertical Padding"
-#~ msgstr "Dikey Doldurma"
-
-#~ msgid "Extra space at the top and bottom of the menu"
-#~ msgstr "Menünü altına ve üstüne eklenecek boşluk"
-
-#~ msgid "Vertical Offset"
-#~ msgstr "Düşey Ofset"
-
-#~ msgid ""
-#~ "When the menu is a submenu, position it this number of pixels offset "
-#~ "vertically"
-#~ msgstr "Menü alt menü olduğunda, bu sayıdaki düşey ofsette onu konumlandır"
-
-#~ msgid "Horizontal Offset"
-#~ msgstr "Yatay Ofset"
-
-#~ msgid ""
-#~ "When the menu is a submenu, position it this number of pixels offset "
-#~ "horizontally"
-#~ msgstr "Menü alt menü olduğunda, bu sayıdaki yatay ofsette onu konumlandır"
-
-#~ msgid "Double Arrows"
-#~ msgstr "Çift Ok"
-
-#~ msgid "When scrolling, always show both arrows."
-#~ msgstr "Kaydırılırken, her zaman iki oku da göster."
-
-#~ msgid "Arrow Placement"
-#~ msgstr "Ok Yerleşimi"
-
-#~ msgid "Indicates where scroll arrows should be placed"
-#~ msgstr "Kaydırma oklarının nereye yerleştirileceğini belirtir"
-
-#~ msgid "Arbitrary constant to scale down the size of the scroll arrow"
-#~ msgstr ""
-#~ "Kaydırma oklarının boyutunu aşağı ölçeklendirmek için rasgele bir sabit"
-
-#~ msgid "Right Justified"
-#~ msgstr "Sağa Yaslı"
-
-#~ msgid ""
-#~ "Sets whether the menu item appears justified at the right side of a menu "
-#~ "bar"
-#~ msgstr ""
-#~ "Menü ögesinin menü çubuğunun sağ kenarına yaslanmış olarak gösterilmesini "
-#~ "ayarlar"
-
-#~ msgid ""
-#~ "Amount of space used up by arrow, relative to the menu item's font size"
-#~ msgstr ""
-#~ "Ok tarafından kullanılacak alanın boyutu, menü ögesinin yazı tipine "
-#~ "göreceli olarak"
-
-#~ msgid "Width in Characters"
-#~ msgstr "Karakter Olarak Genişlik"
-
-#~ msgid "The minimum desired width of the menu item in characters"
-#~ msgstr "Karakter olarak menü ögesinin arzu edilen en az genişliği"
-
-#~ msgid "label border"
-#~ msgstr "etiket kenarlığı"
-
-#~ msgid "Width of border around the label in the message dialog"
-#~ msgstr "İleti penceresindeki etiket çevresindeki kenarlığın genişliği"
-
-#~ msgid "Image"
-#~ msgstr "Resim"
-
-#~ msgid "The image"
-#~ msgstr "Resim"
-
-#~ msgid "Secondary backward stepper"
-#~ msgstr "İkincil geriye adımlayıcı"
-
-#~ msgid ""
-#~ "Display a second backward arrow button on the opposite end of the tab area"
-#~ msgstr "Sekme alanının karşı ucunda ikincil geriye doğru ok düğmesi göster"
-
-#~ msgid "Secondary forward stepper"
-#~ msgstr "İkincil ileri adımlayıcı"
-
-#~ msgid ""
-#~ "Display a second forward arrow button on the opposite end of the tab area"
-#~ msgstr "Sekme alanının karşı ucunda ikincil ileriye doğru ok düğmesi göster"
-
-#~ msgid "Backward stepper"
-#~ msgstr "Geriye adımlayıcı"
-
-#~ msgid "Display the standard backward arrow button"
-#~ msgstr "Standart geri oku düğmesini göster"
-
-#~ msgid "Forward stepper"
-#~ msgstr "İleriye adımlayıcı"
-
-#~ msgid "Display the standard forward arrow button"
-#~ msgstr "Standart ileri ok düğmesini göster"
-
-#~ msgid "Tab overlap"
-#~ msgstr "Sekme çakışması"
-
-#~ msgid "Size of tab overlap area"
-#~ msgstr "Sekme çakışma alanı boyutu"
-
-#~ msgid "Tab curvature"
-#~ msgstr "Sekme eğriltmesi"
-
-#~ msgid "Size of tab curvature"
-#~ msgstr "Sekme eğriltmesinin boyutu"
-
-#~ msgid "Arrow spacing"
-#~ msgstr "Ok boşluğu"
-
-#~ msgid "Scroll arrow spacing"
-#~ msgstr "Kaydırma oku boşluğu"
-
-#~ msgid "Initial gap"
-#~ msgstr "Başlangıç aralığı"
-
-#~ msgid "Initial gap before the first tab"
-#~ msgstr "İlk sekmeden önce başlangıç aralığı"
-
-#~ msgid "Tab gap"
-#~ msgstr "Sekme aralığı"
-
-#~ msgid "Active tab is drawn with a gap at the bottom"
-#~ msgstr "Etkin sekme altındaki aralık ile çizilir"
-
-#~ msgid "Handle Size"
-#~ msgstr "Tutaç Boyutu"
-
-#~ msgid "Width of handle"
-#~ msgstr "Tutaç genişliği"
-
-#~ msgid "Show 'Connect to Server'"
-#~ msgstr "'Sunucuya Bağlan' Göster"
-
-#~ msgid ""
-#~ "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
-#~ "dialog"
-#~ msgstr ""
-#~ "Kenar çubuğunun yerleşik bir 'Sunucuya Bağlan' penceresi kısayolu içerip "
-#~ "içermemesi"
-
-#~ msgid "Show 'Enter Location'"
-#~ msgstr "'Konum Girin' Göster"
-
-#~ msgid "Whether the plug is embedded"
-#~ msgstr "Fişin gömülü olup olmadığı"
-
-#~ msgid "Socket Window"
-#~ msgstr "Soket Penceresi"
-
-#~ msgid "The window of the socket the plug is embedded in"
-#~ msgstr "Fişin gömülü olduğu soketin penceresi"
-
-#~ msgid "Transitions enabled"
-#~ msgstr "Geçişler etkinleştirildi"
-
-#~ msgid "Whether show/hide transitions are enabled or not"
-#~ msgstr "Göster/gizle geçişlerinin etkinleştirilip etkinleştirilmediği"
-
-#~ msgid "X spacing"
-#~ msgstr "X Aralığı"
-
-#~ msgid "Extra spacing applied to the width of a progress bar."
-#~ msgstr "İlerleme çubuğunun genişliğine eklenecek olan boşluk."
-
-#~ msgid "Y spacing"
-#~ msgstr "Y aralığı"
-
-#~ msgid "Extra spacing applied to the height of a progress bar."
-#~ msgstr "İlerleme çubuğunun yüksekliğine eklenecek olan boşluk."
-
-#~ msgid "Minimum horizontal bar width"
-#~ msgstr "Asgari yatay çubuk genişliği"
-
-#~ msgid "The minimum horizontal width of the progress bar"
-#~ msgstr "İlerleme çubuğunun asgari yatay genişliği"
-
-#~ msgid "Minimum horizontal bar height"
-#~ msgstr "Asgari yatay çubuk yüksekliği"
-
-#~ msgid "Minimum horizontal height of the progress bar"
-#~ msgstr "İlerleme çubuğunun asgari yatay yüksekliği"
-
-#~ msgid "Minimum vertical bar width"
-#~ msgstr "Asgari dikey çubuk genişliği"
-
-#~ msgid "The minimum vertical width of the progress bar"
-#~ msgstr "İlerleme çubuğunun asgari dikey genişliği"
-
-#~ msgid "Minimum vertical bar height"
-#~ msgstr "Asgari dikey çubuk yüksekliği"
-
-#~ msgid "The minimum vertical height of the progress bar"
-#~ msgstr "İlerleme çubuğunun asgari dikey çubuk yüksekliği"
-
-#~ msgid "Lower stepper sensitivity"
-#~ msgstr "Aşağı sürgü duyarlılığı"
-
-#~ msgid ""
-#~ "The sensitivity policy for the stepper that points to the adjustment's "
-#~ "lower side"
-#~ msgstr "Ayarın alt kenarını belirten sürgünün duyarlılık kuralı"
-
-#~ msgid "Upper stepper sensitivity"
-#~ msgstr "Yukarı sürgü duyarlılığı"
-
-#~ msgid ""
-#~ "The sensitivity policy for the stepper that points to the adjustment's "
-#~ "upper side"
-#~ msgstr "Ayarın üst kenarını belirten sürgünün duyarlılık kuralı"
-
-#~ msgid "Slider Width"
-#~ msgstr "Sürgü Genişliği"
-
-#~ msgid "Width of scrollbar or scale thumb"
-#~ msgstr "Kaydırma çubuğunun ya da ölçeğin genişliği"
-
-#~ msgid "Trough Border"
-#~ msgstr "Kanal Kenarlığı"
-
-#~ msgid "Spacing between thumb/steppers and outer trough bevel"
-#~ msgstr "Kanalda hareket eden sürgü ile kanal kenarı arasındaki boşluk"
-
-#~ msgid "Stepper Size"
-#~ msgstr "Adımlayıcı Boyutu"
-
-#~ msgid "Length of step buttons at ends"
-#~ msgstr "İki uçtaki adım düğmelerinin uzunluğu"
-
-#~ msgid "Stepper Spacing"
-#~ msgstr "Adımlayıcı Boşluğu"
-
-#~ msgid "Spacing between step buttons and thumb"
-#~ msgstr "Adım düğmeleri ile kanal arasındaki boşluk"
-
-#~ msgid "Arrow X Displacement"
-#~ msgstr "Ok X Uzaklığı"
-
-#~ msgid ""
-#~ "How far in the x direction to move the arrow when the button is depressed"
-#~ msgstr "Düğmeye basıldığında okun x yönünde ne kadar götürüleceği"
-
-#~ msgid "Arrow Y Displacement"
-#~ msgstr "Ok Y Uzaklığı"
-
-#~ msgid ""
-#~ "How far in the y direction to move the arrow when the button is depressed"
-#~ msgstr "Düğmeye basıldığında okun y yönünde ne kadar götürüleceği"
-
-#~ msgid "Trough Under Steppers"
-#~ msgstr "Adımlayıcı Altındaki Kanal"
-
-#~ msgid ""
-#~ "Whether to draw trough for full length of range or exclude the steppers "
-#~ "and spacing"
-#~ msgstr ""
-#~ "Kanalın aralığın tüm uzunluğunda çizilmesi ya da adımlayıcıların ve "
-#~ "boşlukların hariç tutulması"
-
-#~ msgid "Arrow scaling"
-#~ msgstr "Ok ölçeği"
-
-#~ msgid "Arrow scaling with regard to scroll button size"
-#~ msgstr "Kaydırma düğme boyutuna göre ok ölçekleme"
-
-#~ msgid "The RecentManager object to use"
-#~ msgstr "Kullanılacak RecentManager nesnesi"
-
-#~ msgid "Show Private"
-#~ msgstr "Özelleri Göster"
-
-#~ msgid "Whether the private items should be displayed"
-#~ msgstr "Özel ögelerin gösterilmesi"
-
-#~ msgid "Show Tooltips"
-#~ msgstr "Balonları Göster"
-
-#~ msgid "Whether there should be a tooltip on the item"
-#~ msgstr "Ögeler üzerinde balonların gösterilmesi"
-
-#~ msgid "Whether there should be an icon near the item"
-#~ msgstr "Ögelerin yanında simgelerin gösterilmesi"
-
-#~ msgid "Show Not Found"
-#~ msgstr "Bulunamadı Göster"
-
-#~ msgid ""
-#~ "Whether the items pointing to unavailable resources should be displayed"
-#~ msgstr "Erişilemeyen kaynakları belirten ögelerin gösterilmesi"
-
-#~ msgid "Whether to allow multiple items to be selected"
-#~ msgstr "Çoklu öge seçimine izin verilmesi"
-
-#~ msgid "Local only"
-#~ msgstr "Yalnızca yerel"
-
-#~ msgid ""
-#~ "Whether the selected resource(s) should be limited to local file: URIs"
-#~ msgstr "Seçilen kaynakların yerel dosya olarak sınırlanması: URI'ler"
-
-#~ msgid "Limit"
-#~ msgstr "Sınır"
-
-#~ msgid "The maximum number of items to be displayed"
-#~ msgstr "Gösterilecek azami öge sayısı"
-
-#~ msgid "Sort Type"
-#~ msgstr "Sıralama Türü"
-
-#~ msgid "The current filter for selecting which resources are displayed"
-#~ msgstr "Hangi kaynakların gösterileceğini seçmek için kullanılan filtre"
-
-#~ msgid "The icon size"
-#~ msgstr "Simge boyutu"
-
-#~ msgid "Length of scale's slider"
-#~ msgstr "Ölçeğin sürgüsünün uzunluğu"
-
-#~ msgid "Value spacing"
-#~ msgstr "Değer boşluğu"
-
-#~ msgid "Space between value text and the slider/trough area"
-#~ msgstr "Sürgü/Kanal alanı ile değer metni arasındaki boşluk"
-
-#~ msgid "Minimum Slider Length"
-#~ msgstr "En Küçük Sürgü Uzunluğu"
-
-#~ msgid "Minimum length of scrollbar slider"
-#~ msgstr "Kaydırma çubuğunun en küçük sürgü uzunluğu"
-
-#~ msgid "Fixed slider size"
-#~ msgstr "Sabit sürgü boyutu"
-
-#~ msgid "Don't change slider size, just lock it to the minimum length"
-#~ msgstr ""
-#~ "Sürgü boyutunu değiştirme, yalnızca boyutu en düşük uzunluğa kilitle"
-
-#~ msgid ""
-#~ "Display a second backward arrow button on the opposite end of the "
-#~ "scrollbar"
-#~ msgstr "Kaydırma çubuğunun karşı ucunda ikinci bir geri ok düğmesi göster"
-
-#~ msgid ""
-#~ "Display a second forward arrow button on the opposite end of the scrollbar"
-#~ msgstr "Kaydırma çubuğunun karşı ucunda ikinci bir ileri ok düğmesi göster"
-
-#~ msgid "Window Placement Set"
-#~ msgstr "Pencere Yerleşimi Ayarı"
-
-#~ msgid ""
-#~ "Whether \"window-placement\" should be used to determine the location of "
-#~ "the contents with respect to the scrollbars."
-#~ msgstr ""
-#~ "Kaydırma çubuklarına göre içeriğin nerede konumlandırılacağına karar "
-#~ "vermek için \"window-placement\"in kullanılması."
-
-#~ msgid "Scrollbars within bevel"
-#~ msgstr "Kenar içinde kaydırma çubukları"
-
-#~ msgid "Place scrollbars within the scrolled window's bevel"
-#~ msgstr "Kenar çubuklarını kaydırılan pencerenin kenarının içine yerleştır"
-
-#~ msgid "Scrollbar spacing"
-#~ msgstr "Kaydırma çubuğu boşluğu"
-
-#~ msgid "Number of pixels between the scrollbars and the scrolled window"
-#~ msgstr ""
-#~ "Kaydırma çubuğu ile kaydırılan pencere arasındaki piksel değerinden "
-#~ "uzaklık"
-
-#~ msgid "Fallback Icon Theme Name"
-#~ msgstr "Geri Dönüş Simge Teması Adı"
-
-#~ msgid "Name of a icon theme to fall back to"
-#~ msgstr "Geri dönüş olarak kullanılacak simge teması adı"
-
-#~ msgid "Keybinding to activate the menu bar"
-#~ msgstr "Menü çubuğunu etkinleştiren tuş bağı"
-
-#~ msgid "Icon Sizes"
-#~ msgstr "Simge Boyutları"
-
-#~ msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-#~ msgstr "Simge boyutları listesi (gtk-menu=16,16;gtk-button=20,20..."
-
-#~ msgid "GTK Modules"
-#~ msgstr "GTK Modülleri"
-
-#~ msgid "List of currently active GTK modules"
-#~ msgstr "Şu anda aktif olan GTK modüllerinin listesi"
-
-#~ msgid "Show the 'Input Methods' menu"
-#~ msgstr "'Girdi Yöntemleri' menüsünü göster"
-
-#~ msgid ""
-#~ "Whether the context menus of entries and text views should offer to "
-#~ "change the input method"
-#~ msgstr ""
-#~ "Girişlerin içerik menüsünün ve metin görünümlerinin girdi yöntemini "
-#~ "değiştirme olanağı sağlaması"
-
-#~ msgid "Show the 'Insert Unicode Control Character' menu"
-#~ msgstr "'Unikod Denetim Karakteri Ekle' menüsünü göster"
-
-#~ msgid ""
-#~ "Whether the context menus of entries and text views should offer to "
-#~ "insert control characters"
-#~ msgstr ""
-#~ "Girişlerin içerik menüsünün ve metin görünümlerinin denetim karakteri "
-#~ "ekleme olanağı sağlaması"
-
-#~ msgid "Start timeout"
-#~ msgstr "Başlama zaman aşımı"
-
-#~ msgid "Starting value for timeouts, when button is pressed"
-#~ msgstr "Düğmeye basıldığında zaman aşımı için başlama değeri"
-
-#~ msgid "Repeat timeout"
-#~ msgstr "Yineleme zaman aşımı"
-
-#~ msgid "Repeat value for timeouts, when button is pressed"
-#~ msgstr "Düğmeye basıldığında zaman aşımı için yineleme değeri"
-
-#~ msgid "Expand timeout"
-#~ msgstr "Genişleme zaman aşımı"
-
-#~ msgid "Expand value for timeouts, when a widget is expanding a new region"
-#~ msgstr ""
-#~ "Bir parça yeni bir alana genişlediğinde zaman aşımı için genişleme değeri"
-
-#~ msgid "Color scheme"
-#~ msgstr "Renk şeması"
-
-#~ msgid "A palette of named colors for use in themes"
-#~ msgstr ""
-#~ "Temalar içerisinde kullanılmak için adlandırılmış renklerden oluşan palet"
-
-#~ msgid "Enable Touchscreen Mode"
-#~ msgstr "Dokunmatik Ekran Kipini Etkinleştir"
-
-#~ msgid ""
-#~ "When TRUE, there are no motion notify events delivered on this screen"
-#~ msgstr "TRUE olduğunda, bu ekran için hareket uyarı olayları dağıtılmaz"
-
-#~ msgid "Tooltip timeout"
-#~ msgstr "Balon zaman aşımı"
-
-#~ msgid "Timeout before tooltip is shown"
-#~ msgstr "Balon gösterilmeden önceki zaman aşımı"
-
-#~ msgid "Tooltip browse timeout"
-#~ msgstr "Balon tarama zaman aşımı"
-
-#~ msgid "Timeout before tooltip is shown when browse mode is enabled"
-#~ msgstr "Tarama kipi etkinken balonların gösterilmeden önceki zaman aşımı"
-
-#~ msgid "Tooltip browse mode timeout"
-#~ msgstr "Balon tarama kipi zaman aşımı"
-
-#~ msgid "Timeout after which browse mode is disabled"
-#~ msgstr "Tarama kipinin kapatılmasından önceki zaman aşımı"
-
-#~ msgid "Keynav Cursor Only"
-#~ msgstr "Yalnızca Keynav İmleci"
-
-#~ msgid "When TRUE, there are only cursor keys available to navigate widgets"
-#~ msgstr ""
-#~ "TRUE olduğunda, yalnızca parçaları dolanmak için imleç tuşları "
-#~ "kullanılabilir olur"
-
-#~ msgid "Keynav Wrap Around"
-#~ msgstr "Keynav Başa Dönmesi"
-
-#~ msgid "Whether to wrap around when keyboard-navigating widgets"
-#~ msgstr "Parçaları klavye ile gezerken başa dönmesi"
-
-#~ msgid "Color Hash"
-#~ msgstr "Renk Harmanı"
-
-#~ msgid "A hash table representation of the color scheme."
-#~ msgstr "Renk şemasını temsil eden bir özet tablosu."
-
-#~ msgid "Default file chooser backend"
-#~ msgstr "Öntanımlı dosya seçici arka ucu"
-
-#~ msgid "Name of the GtkFileChooser backend to use by default"
-#~ msgstr "Öntanımlı olarak kullanılacak GtkFileChooser arka ucu adı"
-
-#~ msgid "Enable Mnemonics"
-#~ msgstr "Hatırlatıcıları Etkinleştir"
-
-#~ msgid "Whether labels should have mnemonics"
-#~ msgstr "Etiketlerin hatırlatıcılara sahip olması"
-
-#~ msgid "Recent Files Limit"
-#~ msgstr "Son Kullanılan Dosyalar Sınırı"
-
-#~ msgid "Enable Tooltips"
-#~ msgstr "Balonları Etkinleştir"
-
-#~ msgid "Whether tooltips should be shown on widgets"
-#~ msgstr "Parçalar üzerinde balonların gösterilmesi"
-
-#~ msgid "Toolbar style"
-#~ msgstr "Araç çubuğu biçemi"
-
-#~ msgid ""
-#~ "Whether default toolbars have text only, text and icons, icons only, etc."
-#~ msgstr ""
-#~ "Öntanımlı araç çubuğu düğmelerinde ne gösterileceği: yalnızca metin, "
-#~ "yalnızca simge, simge ve metin, vb."
-
-#~ msgid "Toolbar Icon Size"
-#~ msgstr "Araç Çubuğu Simge Boyutu"
-
-#~ msgid "The size of icons in default toolbars."
-#~ msgstr "Öntanımlı araç çubuklarındaki simgelerin boyutu."
-
-#~ msgid "Auto Mnemonics"
-#~ msgstr "Otomatik Hatırlatıcılar"
-
-#~ msgid ""
-#~ "Whether mnemonics should be automatically shown and hidden when the user "
-#~ "presses the mnemonic activator."
-#~ msgstr ""
-#~ "Kullanıcı, hatırlatıcı etkinleştiriciye bastığında hatırlatıcının "
-#~ "otomatik olarak gösterilebilirliği ve gizlenebilirliği"
-
-#~ msgid "Visible Focus"
-#~ msgstr "Görünür Odak"
-
-#~ msgid ""
-#~ "Whether 'focus rectangles' should be hidden until the user starts to use "
-#~ "the keyboard."
-#~ msgstr ""
-#~ "'odak dikdörtgenler''in kullanıcı klavye kullanmaya başlayana kadar gizli "
-#~ "olmasının gerekip gerekmemesi."
-
-#~ msgid "Show button images"
-#~ msgstr "Düğme resimlerini göster"
-
-#~ msgid "Whether images should be shown on buttons"
-#~ msgstr "Düğmelerde resimlerin gösterilmesi"
-
-#~ msgid "Show menu images"
-#~ msgstr "Menü resimlerini göster"
-
-#~ msgid "Whether images should be shown in menus"
-#~ msgstr "Menülerde resimlerin gösterilmesi"
-
-#~ msgid "Delay before drop down menus appear"
-#~ msgstr "Açılır menüler belirmeden önceki bekleme"
-
-#~ msgid "Delay before the submenus of a menu bar appear"
-#~ msgstr "Menü cubuğunun altmenüleri belirmeden önceki bekleme"
-
-#~ msgid "Scrolled Window Placement"
-#~ msgstr "Kaydırılan Pencere Yerleşimi"
-
-#~ msgid ""
-#~ "Where the contents of scrolled windows are located with respect to the "
-#~ "scrollbars, if not overridden by the scrolled window's own placement."
-#~ msgstr ""
-#~ "Eğer kaydrılılan pencerenin kendi yerleşimi yerine geçmezse kaydırılan "
-#~ "pencerenin kaydırma çubuklarına göre nerede konumlandırılacağı."
-
-#~ msgid "Can change accelerators"
-#~ msgstr "Hızlandırıcılar değiştirilebilir"
-
-#~ msgid ""
-#~ "Whether menu accelerators can be changed by pressing a key over the menu "
-#~ "item"
-#~ msgstr ""
-#~ "Menü hızlandırıcıları menü ögesi için belirtilen bir tuşla "
-#~ "değiştirilebilsin"
-
-#~ msgid "Delay before submenus appear"
-#~ msgstr "Alt menüler belirmeden önceki bekleme süresi"
-
-#~ msgid ""
-#~ "Minimum time the pointer must stay over a menu item before the submenu "
-#~ "appear"
-#~ msgstr ""
-#~ "Alt menünün belirmesi için imlecin menünün üzerinde kalması gereken en az "
-#~ "süre"
-
-#~ msgid "Delay before hiding a submenu"
-#~ msgstr "Bir alt menüyü saklamadan önceki bekleme süresi"
-
-#~ msgid ""
-#~ "The time before hiding a submenu when the pointer is moving towards the "
-#~ "submenu"
-#~ msgstr ""
-#~ "İmleç bir alt menüden geçerken alt menünün saklanması için geçecek süre"
-
-#~ msgid "Custom palette"
-#~ msgstr "Özel palet"
-
-#~ msgid "Palette to use in the color selector"
-#~ msgstr "Renk seçicide kullanılacak palet"
-
-#~ msgid "IM Preedit style"
-#~ msgstr "IM Öndüzenli biçemi"
-
-#~ msgid "How to draw the input method preedit string"
-#~ msgstr "Girdi yöntemi öndüzenli dizginin nasıl çizileceği"
-
-#~ msgid "IM Status style"
-#~ msgstr "IM Durum biçemi"
-
-#~ msgid "How to draw the input method statusbar"
-#~ msgstr "Girdi yöntemi durum çubuğunun nasıl çizileceği"
-
-#~ msgid ""
-#~ "If TRUE, unmapped widgets are ignored when determining the size of the "
-#~ "group"
-#~ msgstr ""
-#~ "TRUE ise, kümenin boyutunu belirlerken eşleme yapılmamış parçalar yok "
-#~ "sayılır"
-
-#~ msgid "Style of bevel around the spin button"
-#~ msgstr "Döndürme düğmesinin çevresindeki kenar biçemi"
-
-#~ msgid "Symbolic size to use for named icon"
-#~ msgstr "Adlandırılmış simge için kullanılacak sembolik boyut"
-
-#~ msgid "Style of bevel around the statusbar text"
-#~ msgstr "Durum çubuğu metni etrafındaki kenar biçemi"
-
-#~ msgid "The associated GdkFrameClock"
-#~ msgstr "İlişkili GdkFrameClock"
-
-#~ msgid "The minimum width of the handle"
-#~ msgstr "İşleyicinin asgari genişliği"
-
-#~ msgid "Slider Height"
-#~ msgstr "Kaydırıcı Yüksekliği"
-
-#~ msgid "The minimum height of the handle"
-#~ msgstr "Tutamacın en düşük yüksekliği"
-
-#~ msgid "Paragraph background color"
-#~ msgstr "Paragraf arkaplanı rengi"
-
-#~ msgid "Paragraph background color as a GdkColor"
-#~ msgstr "Bir GdkColor olarak paragraf arkaplan rengi"
-
-#~ msgid "Error underline color"
-#~ msgstr "Hata altçizgisinin rengi"
-
-#~ msgid "Color with which to draw error-indication underlines"
-#~ msgstr "Hata belirten altçizgilerin çizileceği renk"
-
-#~ msgid "Size of icons in this toolbar"
-#~ msgstr "Bu araç çubuğundaki simgelerin boyutu"
-
-#~ msgid "Whether the icon-size property has been set"
-#~ msgstr "icon-size özelliğinin ayarlanmış olması"
-
-#~ msgid "Spacer size"
-#~ msgstr "Boşlukçu boyutu"
-
-#~ msgid "Size of spacers"
-#~ msgstr "Boşlukçuların boyutu"
-
-#~ msgid "Amount of border space between the toolbar shadow and the buttons"
-#~ msgstr "Araç çubuğu gölgesi ile düğmeler arasındaki kenar boşluğu"
-
-#~ msgid "Maximum child expand"
-#~ msgstr "En büyük alt genişlemesi"
-
-#~ msgid "Maximum amount of space an expandable item will be given"
-#~ msgstr "Genişleyebilir ögeye verilecek azami alan"
-
-#~ msgid "Space style"
-#~ msgstr "Boşluk biçemi"
-
-#~ msgid "Whether spacers are vertical lines or just blank"
-#~ msgstr "Boşlukçuların düşey çizgiler olması ya da yalnızca boşluk olması"
-
-#~ msgid "Button relief"
-#~ msgstr "Düğme süslemesi"
-
-#~ msgid "Type of bevel around toolbar buttons"
-#~ msgstr "Araç çubuğu düğmelerindeki kenarlık türü"
-
-#~ msgid "Style of bevel around the toolbar"
-#~ msgstr "Araç çubuğunun çerçevesinin biçemi"
-
-#~ msgid "Stock Id"
-#~ msgstr "Depo Kimliği"
-
-#~ msgid "The stock icon displayed on the item"
-#~ msgstr "Bu ögede gösterilecek hazır simge"
-
-#~ msgid "Icon spacing"
-#~ msgstr "Simge aralığı"
-
-#~ msgid "Spacing in pixels between the icon and label"
-#~ msgstr "Simge ve etiket arasındaki piksel türünden boşluk"
-
-#~ msgid "A widget to display in place of the usual label"
-#~ msgstr "Genel etiket yerine gösterilecek programcık"
-
-#~ msgid "Collapsed"
-#~ msgstr "Daraltılmış"
-
-#~ msgid "Whether the group has been collapsed and items are hidden"
-#~ msgstr "Kümenin daratılmış ve ögelerin gizlenmiş olup olmaması"
-
-#~ msgid "ellipsize"
-#~ msgstr "kısaltma"
-
-#~ msgid "Ellipsize for item group headers"
-#~ msgstr "Öge kümesi üst bilgileri için kısaltma"
-
-#~ msgid "Header Relief"
-#~ msgstr "Kabartma Başlık"
-
-#~ msgid "Relief of the group header button"
-#~ msgstr "Küme başlık düğmesinin kabartması"
-
-#~ msgid "Header Spacing"
-#~ msgstr "Üst Bilgi Aralığı"
-
-#~ msgid "Spacing between expander arrow and caption"
-#~ msgstr "Resim yazısı ve genişletici ok arasındaki aralık"
-
-#~ msgid "Whether the item should receive extra space when the group grows"
-#~ msgstr "Küme büyüdüğünde ögenin fazladan alan almasının gerekip gerekmemesi"
-
-#~ msgid "Whether the item should fill the available space"
-#~ msgstr "Ögenin kullanılabilir alanı doldurmasının gerekip gerekmemesi"
-
-#~ msgid "New Row"
-#~ msgstr "Yeni Satır"
-
-#~ msgid "Whether the item should start a new row"
-#~ msgstr "Ögenin yeni bir satır başlatmasının gerekip gerekmemesi"
-
-#~ msgid "Position of the item within this group"
-#~ msgstr "Bu küme içindeki ögenin konumu"
-
-#~ msgid "Size of icons in this tool palette"
-#~ msgstr "Bu araç paletindeki simgelerin boyutu"
-
-#~ msgid "Style of items in the tool palette"
-#~ msgstr "Araç paletindeki ögelerin biçemi"
-
-#~ msgid "Exclusive"
-#~ msgstr "Ayrıcalıklı"
-
-#~ msgid "Whether the item group should be the only expanded at a given time"
-#~ msgstr ""
-#~ "Öge kümesinin yalnızca verilen zamanda genişletilmesinin gerekip "
-#~ "gerekmemesi"
-
-#~ msgid ""
-#~ "Whether the item group should receive extra space when the palette grows"
-#~ msgstr ""
-#~ "Palet büyüdüğünde öge kümesinin fazladan alan almasının gerekip "
-#~ "gerekmemesi"
-
-#~ msgid "Tearoff"
-#~ msgstr "Ayıraç"
-
-#~ msgid "Whether the menu has a tearoff item"
-#~ msgstr "Menünün bir ayıraç ögesine sahip olup olmaması"
-
-#~ msgid "Rules Hint"
-#~ msgstr "Kural İpucu"
-
-#~ msgid "Set a hint to the theme engine to draw rows in alternating colors"
-#~ msgstr "Satırlara farklı renkler atamada tema aygıtına bir ipucu belirtir"
-
-#~ msgid "Vertical Separator Width"
-#~ msgstr "Düşey Ayraç Genişliği"
-
-#~ msgid "Vertical space between cells.  Must be an even number"
-#~ msgstr "Hücreler arasındaki düşey boşluk.  Bir çift sayı olmalıdır"
-
-#~ msgid "Horizontal Separator Width"
-#~ msgstr "Yatay Ayraç Genişliği"
-
-#~ msgid "Horizontal space between cells.  Must be an even number"
-#~ msgstr "Hücreler arasındaki yatay boşluk.  Bir çift sayı olmalıdır"
-
-#~ msgid "Allow drawing of alternating color rows"
-#~ msgstr "Ard arda renklerde satırlar çizilmesine izin ver"
-
-#~ msgid "Make the expanders indented"
-#~ msgstr "Genişleticilere girinti ekle"
-
-#~ msgid "Even Row Color"
-#~ msgstr "Çift Satır Rengi"
-
-#~ msgid "Color to use for even rows"
-#~ msgstr "Çift satırlar için kullanılacak renk"
-
-#~ msgid "Odd Row Color"
-#~ msgstr "Tek Satır Rengi"
-
-#~ msgid "Color to use for odd rows"
-#~ msgstr "Tek satırlar için kullanılacak renk"
-
-#~ msgid "Grid line width"
-#~ msgstr "Izgara çizgisi genişliği"
-
-#~ msgid "Width, in pixels, of the tree view grid lines"
-#~ msgstr "Ağaç görünümü ızgara çizgileri genişliği, piksel olarak"
-
-#~ msgid "Tree line width"
-#~ msgstr "Ağaç çizgisi genişliği"
-
-#~ msgid "Width, in pixels, of the tree view lines"
-#~ msgstr "Ağaç görünümü ağaç çizgileri genişliği, piksel olarak"
-
-#~ msgid "Grid line pattern"
-#~ msgstr "Izgara çizgisi deseni"
-
-#~ msgid "Dash pattern used to draw the tree view grid lines"
-#~ msgstr ""
-#~ "Ağaç görünümü ızgara çizgisi çizerken kullanılacak kesik çizgi deseni"
-
-#~ msgid "Tree line pattern"
-#~ msgstr "Ağaç çizgisi deseni"
-
-#~ msgid "Dash pattern used to draw the tree view lines"
-#~ msgstr "Ağaç görünümü ağaç çizgisi çizerken kullanılacak kesik çizgi deseni"
-
-#~ msgid "Application paintable"
-#~ msgstr "Uygulama boyanabilir"
-
-#~ msgid "Whether the application will paint directly on the widget"
-#~ msgstr "Uygulamanın doğrudan parça üzerinde boyama yapması"
-
-#~ msgid "Whether the widget is part of a composite widget"
-#~ msgstr "Parçanın karma parçasının bir bölümü olması"
-
-#~ msgid "Style"
-#~ msgstr "Biçem"
-
-#~ msgid ""
-#~ "The style of the widget, which contains information about how it will "
-#~ "look (colors etc)"
-#~ msgstr ""
-#~ "Parçanın nasıl görüneceği (renkler vb.) hakkında bilgi içeren biçemi"
-
-#~ msgid "Events"
-#~ msgstr "Eylemler"
-
-#~ msgid "The event mask that decides what kind of GdkEvents this widget gets"
-#~ msgstr "Bu parçanın alacağı GdkEvents çeşidini belirleyen eylem maskesi"
-
-#~ msgid "No show all"
-#~ msgstr "Tümünü göster yok"
-
-#~ msgid "Whether gtk_widget_show_all() should not affect this widget"
-#~ msgstr "Bu parçayı gtk_widget_show_all()'un etkilememesi"
-
-#~ msgid "Double Buffered"
-#~ msgstr "Çift Tampon Bellek"
-
-#~ msgid "Whether the widget is double buffered"
-#~ msgstr "Programcığın çift tamponlu bellekli olup olmaması"
-
-#~ msgid "Margin on Left"
-#~ msgstr "Sol Kenar Boşluğu"
-
-#~ msgid "Pixels of extra space on the left side"
-#~ msgstr "Sol taraftaki fazladan alan pikselleri"
-
-#~ msgid "Margin on Right"
-#~ msgstr "Sağ Kenar Boşluğu"
-
-#~ msgid "Pixels of extra space on the right side"
-#~ msgstr "Sağ kenardaki fazladan alanın pikselleri"
-
-#~ msgid "Interior Focus"
-#~ msgstr "İç Odak"
-
-#~ msgid "Width, in pixels, of the focus indicator line"
-#~ msgstr "Odaklama çizgisinin piksel türünden genişliği"
-
-#~ msgid "Focus line dash pattern"
-#~ msgstr "Odak çizgisi deseni"
-
-#~ msgid ""
-#~ "Dash pattern used to draw the focus indicator. The character values are "
-#~ "interpreted as pixel widths of alternating on and off segments of the "
-#~ "line."
-#~ msgstr ""
-#~ "Dash deseni odak göstergesi çizmek için kullanılır. Karakter değerleri "
-#~ "dönüşümlü piksel genişlikleri olarak yorumlanır ve kapalı bölümler atılır"
-
-#~ msgid "Focus padding"
-#~ msgstr "Odak doldurma"
-
-#~ msgid "Width, in pixels, between focus indicator and the widget 'box'"
-#~ msgstr "Odak belirteci ve 'box' parçası arasındaki piksel türünden uzaklık"
-
-#~ msgid "Cursor color"
-#~ msgstr "İmleç rengi"
-
-#~ msgid "Color with which to draw insertion cursor"
-#~ msgstr "Ekleme imlecinin çizileceği renk"
-
-#~ msgid "Secondary cursor color"
-#~ msgstr "İkincil imleç rengi"
-
-#~ msgid ""
-#~ "Color with which to draw the secondary insertion cursor when editing "
-#~ "mixed right-to-left and left-to-right text"
-#~ msgstr ""
-#~ "Karışık sağdan-sola veya soldan-sağa metin düzenlemesi yaparken ikincil "
-#~ "imlecin çizileceği renk"
-
-#~ msgid "Aspect ratio with which to draw insertion cursor"
-#~ msgstr "Ekleme imlecinin çizileceği en boy oranı"
-
-#~ msgid "Window dragging"
-#~ msgstr "Pencere sürükleme"
-
-#~ msgid ""
-#~ "Whether windows can be dragged and maximized by clicking on empty areas"
-#~ msgstr ""
-#~ "Pencerenin sürüklenebilirliği ve boş alan üzerine tıklama ile ekranı "
-#~ "kaplayabilirliği"
-
-#~ msgid "Unvisited Link Color"
-#~ msgstr "Ziyaret Edilmemiş Bağ Rengi"
-
-#~ msgid "Color of unvisited links"
-#~ msgstr "Ziyaret edilmemiş bağların rengi"
-
-#~ msgid "Visited Link Color"
-#~ msgstr "Ziyaret Edilmiş Bağ Rengi"
-
-#~ msgid "Color of visited links"
-#~ msgstr "Ziyaret edilmiş bağların rengi"
-
-#~ msgid "Wide Separators"
-#~ msgstr "Geniş Ayraçlar"
-
-#~ msgid ""
-#~ "Whether separators have configurable width and should be drawn using a "
-#~ "box instead of a line"
-#~ msgstr ""
-#~ "Ayraçların ayarlanmış genişliklerinin olması ve çizgi yerine kutu "
-#~ "kullanılarak çizilmesi"
-
-#~ msgid "Separator Width"
-#~ msgstr "Ayraç Genişliği"
-
-#~ msgid "The width of separators if wide-separators is TRUE"
-#~ msgstr "Eğer wide-separators TRUE ise ayraçların genişliği"
-
-#~ msgid "Separator Height"
-#~ msgstr "Ayraç Yüksekliği"
-
-#~ msgid "The height of separators if \"wide-separators\" is TRUE"
-#~ msgstr "Eğer \"wide-separators\" TRUE ise ayraçların yüksekliği"
-
-#~ msgid "Horizontal Scroll Arrow Length"
-#~ msgstr "Yatay Kaydırma Ok Uzunluğu"
-
-#~ msgid "The length of horizontal scroll arrows"
-#~ msgstr "Yatay kaydırma oklarının uzunluğu"
-
-#~ msgid "Vertical Scroll Arrow Length"
-#~ msgstr "Düşey Kaydırma Ok Uzunluğu"
-
-#~ msgid "The length of vertical scroll arrows"
-#~ msgstr "Düşey kaydırma oklarının uzunluğu"
-
-#~ msgid "Width of text selection handles"
-#~ msgstr "Metin seçim işleyicileri genişliği"
-
-#~ msgid "Height of text selection handles"
-#~ msgstr "Metin seçim işleyicileri yüksekliği"
-
-#~ msgid "Hide the titlebar during maximization"
-#~ msgstr "Büyütme sırasında başlık çubuğunu gizle"
-
-#~ msgid ""
-#~ "If this window's titlebar should be hidden when the window is maximized"
-#~ msgstr ""
-#~ "Pencere büyütüldüğünde başlık çubuğunun gizli olmasının gerekip "
-#~ "gerekmemesi"
-
-#~ msgid "Focus in Toplevel"
-#~ msgstr "Üst Düzeyde Odakla"
-
-#~ msgid "Whether the input focus is within this GtkWindow"
-#~ msgstr "Girdi odaklamasının bu GtkWindow ile yapılması"
-
-#~ msgid "Specifies whether the window should have a resize grip"
-#~ msgstr "Pencerenin sapı yeniden boyutlandırması gerektiğini belirtir"
-
-#~ msgid "Resize grip is visible"
-#~ msgstr "Sapı yeniden boyutlandırma görünür"
-
-#~ msgid "Specifies whether the window's resize grip is visible."
-#~ msgstr "Pencerenin görünür sapı yeniden boyutlandırmasını belirtir"
-
-#~ msgid "Decorated button layout"
-#~ msgstr "Dekore ediliş düğme düzeni"
-
-#~ msgid "Decoration resize handle size"
-#~ msgstr "Dekorasyon sap boyutunu yeniden boyutlandırır"
-
-#~ msgid "Whether the combo box grabs focus when it is clicked with the mouse"
-#~ msgstr "Çoklu kutunun fare ile tıklandığında odağı yakalaması"
-
-#~ msgid "Sans 12"
-#~ msgstr "Sans 12"
-
-#~ msgid "Name of default font to use"
-#~ msgstr "Kullanılacak öntanımlı yazıtipi adı"
