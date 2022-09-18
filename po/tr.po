@@ -1,5 +1,7 @@
 # Turkish translations of gtk+.
 # Copyright (C) 1999-2003, 2004, 2006, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2008-2022 gtk+'s COPYRIGHT HOLDER
+# This file is distributed under the same licence as the gtk+ package.
 #
 # Arman Aksoy <armish@linux-sevenler.de, 2003.
 # Ömer Fadıl USTA <omer_fad@hotmail.com>,2002.
@@ -19,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-20 11:17+0000\n"
+"POT-Creation-Date: 2022-09-14 00:37+0000\n"
 "PO-Revision-Date: 2022-02-20 17:49+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
@@ -2699,51 +2701,51 @@ msgctxt "font"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/gtkfontchooserwidget.c:1602
+#: gtk/gtkfontchooserwidget.c:1604
 msgid "Width"
 msgstr "Genişlik"
 
-#: gtk/gtkfontchooserwidget.c:1603
+#: gtk/gtkfontchooserwidget.c:1605
 msgid "Weight"
 msgstr "Ağırlık"
 
-#: gtk/gtkfontchooserwidget.c:1604
+#: gtk/gtkfontchooserwidget.c:1606
 msgid "Italic"
 msgstr "Eğik"
 
-#: gtk/gtkfontchooserwidget.c:1605
+#: gtk/gtkfontchooserwidget.c:1607
 msgid "Slant"
 msgstr "Eğrilik"
 
-#: gtk/gtkfontchooserwidget.c:1606
+#: gtk/gtkfontchooserwidget.c:1608
 msgid "Optical Size"
 msgstr "Optik Boyut"
 
-#: gtk/gtkfontchooserwidget.c:2306 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2308 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: gtk/gtkfontchooserwidget.c:2353
+#: gtk/gtkfontchooserwidget.c:2355
 msgid "Ligatures"
 msgstr "Bağlamalar"
 
-#: gtk/gtkfontchooserwidget.c:2354
+#: gtk/gtkfontchooserwidget.c:2356
 msgid "Letter Case"
 msgstr "Harf Durumu"
 
-#: gtk/gtkfontchooserwidget.c:2355
+#: gtk/gtkfontchooserwidget.c:2357
 msgid "Number Case"
 msgstr "Sayı Durumu"
 
-#: gtk/gtkfontchooserwidget.c:2356
+#: gtk/gtkfontchooserwidget.c:2358
 msgid "Number Spacing"
 msgstr "Numara Boşluklama"
 
-#: gtk/gtkfontchooserwidget.c:2357
+#: gtk/gtkfontchooserwidget.c:2359
 msgid "Number Formatting"
 msgstr "Numara Biçimlendirme"
 
-#: gtk/gtkfontchooserwidget.c:2358
+#: gtk/gtkfontchooserwidget.c:2360
 msgid "Character Variants"
 msgstr "Karakter Değişkeleri"
 
@@ -7754,7 +7756,7 @@ msgid "Vietnamese (VIQR)"
 msgstr "Vietnamca (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:105
+#: modules/input/imwayland.c:106
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "Wayland"
@@ -8373,436 +8375,3 @@ msgstr "sınama-çıktısı.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Sınama Yazıcısına Yazdır"
-
-#~ msgid "Don't batch GDI requests"
-#~ msgstr "GDI isteklerini yığınlama"
-
-#~ msgid "Don't use the Wintab API for tablet support"
-#~ msgstr "Tablet desteği için Wintab APIʼsini kullanma"
-
-#~ msgid "Same as --no-wintab"
-#~ msgstr "--no-wintab ile aynı"
-
-#~ msgid "Do use the Wintab API [default]"
-#~ msgstr "Wintab API'sini kullan [öntanımlı]"
-
-#~ msgid "Size of the palette in 8 bit mode"
-#~ msgstr "8 bit kipinde paletin boyutu"
-
-#~ msgid "COLORS"
-#~ msgstr "RENKLER"
-
-#~ msgid "Online"
-#~ msgstr "Çevrim İçi"
-
-#~ msgid "Offline"
-#~ msgstr "Çevrim Dışı"
-
-#~ msgid "Dormant"
-#~ msgstr "Uykuda"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark"
-#~ msgstr "Koyu"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Scarlet Red"
-#~ msgstr "Açık Kırmızı Kızıl"
-
-#~ msgctxt "Color name"
-#~ msgid "Scarlet Red"
-#~ msgstr "Kırmızı Kızıl"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Butter"
-#~ msgstr "Açık Sarı"
-
-#~ msgctxt "Color name"
-#~ msgid "Butter"
-#~ msgstr "Sarı"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chameleon"
-#~ msgstr "Açık Bukalemun Rengi"
-
-#~ msgctxt "Color name"
-#~ msgid "Chameleon"
-#~ msgstr "Bukalemun Rengi"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chameleon"
-#~ msgstr "Koyu Bukalemun Rengi"
-
-#~ msgctxt "Color name"
-#~ msgid "Sky Blue"
-#~ msgstr "Gök Mavisi"
-
-#~ msgctxt "Color name"
-#~ msgid "Plum"
-#~ msgstr "Yeşil"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Chocolate"
-#~ msgstr "Açık Çikolata Rengi"
-
-#~ msgctxt "Color name"
-#~ msgid "Chocolate"
-#~ msgstr "Çikolata Rengi"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Chocolate"
-#~ msgstr "Koyu Kahverengi"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 1"
-#~ msgstr "Açık Gri 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 1"
-#~ msgstr "Gri 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 1"
-#~ msgstr "Koyu Gri 1"
-
-#~ msgctxt "Color name"
-#~ msgid "Light Aluminum 2"
-#~ msgstr "Açık Gri 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Aluminum 2"
-#~ msgstr "Gri 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Dark Aluminum 2"
-#~ msgstr "Koyu Gri 2"
-
-#~ msgctxt "Color name"
-#~ msgid "Darker Gray"
-#~ msgstr "Daha Koyu Gri"
-
-#~ msgctxt "Color name"
-#~ msgid "Medium Gray"
-#~ msgstr "Orta Gri"
-
-#~ msgctxt "Color name"
-#~ msgid "Lighter Gray"
-#~ msgstr "Daha Açık Gri"
-
-#~ msgid "3.2 core GL profile is not available on EGL implementation"
-#~ msgstr "3.2 çekirdek profili, EGL uygulamasında kullanılabilir değil"
-
-#~ msgid "Not implemented on OS X"
-#~ msgstr "OS X için geliştirilmedi"
-
-#~ msgctxt "switch"
-#~ msgid "ON"
-#~ msgstr "AÇIK"
-
-#~ msgctxt "switch"
-#~ msgid "OFF"
-#~ msgstr "KAPALI"
-
-#~ msgid "smb://"
-#~ msgstr "smb://"
-
-#~ msgid "This clipboard cannot store data."
-#~ msgstr "Bu pano veri depolayamaz."
-
-#~ msgid "Cannot read from empty clipboard."
-#~ msgstr "Boş panodan okunamaz."
-
-#~ msgid "No compatible formats to transfer clipboard contents."
-#~ msgstr "Pano içeriklerini aktarmak için uyumlu biçim yok."
-
-#~ msgid "Cannot provide contents as “%s”"
-#~ msgstr "İçerikler “%s” olarak sağlanamıyor"
-
-#~ msgid "Cannot provide contents as %s"
-#~ msgstr "İçerikler %s olarak sağlanamıyor"
-
-#~ msgid "Reading not implemented."
-#~ msgstr "Okuma henüz gerçeklenmemiş."
-
-#~ msgid "Vulkan support disabled via GDK_DEBUG"
-#~ msgstr "Vulkan desteği GDK_DEBUG yoluyla devre dışı bırakılmış"
-
-#~ msgid "No compatible transfer format found"
-#~ msgstr "Uyumlu aktarım biçimi bulunamadı"
-
-#~ msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
-#~ msgstr ""
-#~ "Pano sahipliği istemi yapılamıyor. OpenClipboard() zaman aşımına uğradı."
-
-#~ msgid ""
-#~ "Cannot claim clipboard ownership. Another process claimed it before us."
-#~ msgstr ""
-#~ "Pano sahipliği istemi yapılamıyor. Başka bir süreç bizden önce istedi."
-
-#~ msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
-#~ msgstr ""
-#~ "Pano sahipliği istemi yapılamıyor. OpenClipboard() başarısız: 0x%lx."
-
-#~ msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
-#~ msgstr ""
-#~ "Pano sahipliği istemi yapılamıyor. EmptyClipboard() başarısız: 0x%lx."
-
-#~ msgid "Cannot set clipboard data. OpenClipboard() timed out."
-#~ msgstr "Pano verisi belirlenemiyor. OpenClipboard() zaman aşımına uğradı."
-
-#~ msgid ""
-#~ "Cannot set clipboard data. Another process claimed clipboard ownership."
-#~ msgstr ""
-#~ "Pano verisi belirlenemiyor. Başka bir süreç pano sahipliği isteminde "
-#~ "bulundu."
-
-#~ msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
-#~ msgstr "Pano verisi belirlenemiyor. OpenClipboard() başarısız: 0x%lx."
-
-#~ msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
-#~ msgstr "Pano verisi alınamıyor. GlobalLock(0x%p) başarısız: 0x%lx."
-
-#~ msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
-#~ msgstr "Pano verisi alınamıyor. GlobalSize(0x%p) başarısız: 0x%lx."
-
-#~ msgid ""
-#~ "Cannot get clipboard data. Failed to allocate %lu bytes to store the data."
-#~ msgstr ""
-#~ "Pano verisi alınamadı. %lu bayt, veriyi depolamak için tahsis edilemedi."
-
-#~ msgid "Cannot get clipboard data. OpenClipboard() timed out."
-#~ msgstr "Pano verisi alınamıyor. OpenClipboard() zaman aşımına uğradı."
-
-#~ msgid "Cannot get clipboard data. Clipboard ownership changed."
-#~ msgstr "Pano verisi alınamıyor. Pano sahipliği değişti."
-
-#~ msgid ""
-#~ "Cannot get clipboard data. Clipboard data changed before we could get it."
-#~ msgstr "Pano verisi alınamıyor. Pano verisi biz almadan önce değişti."
-
-#~ msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
-#~ msgstr "Pano verisi alınamıyor. OpenClipboard() başarısız: 0x%lx."
-
-#~ msgid "Cannot get clipboard data. No compatible transfer format found."
-#~ msgstr "Pano verisi alınamıyor. Uyumlu aktarım biçimi bulunamadı."
-
-#~ msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
-#~ msgstr "Pano verisi alınamıyor. GetClipboardData() başarısız: 0x%lx."
-
-#~ msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
-#~ msgstr "DnD verisi alınamıyor. GlobalLock(0x%p) başarısız: 0x%lx."
-
-#~ msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
-#~ msgstr "DnD verisi alınamıyor. GlobalSize(0x%p) başarısız: 0x%lx."
-
-#~ msgid "Cannot get DnD data. Failed to allocate %lu bytes to store the data."
-#~ msgstr ""
-#~ "DnD verisi alınamadı. %lu bayt, veriyi depolamak için tahsis edilemedi."
-
-#~ msgid "Failed to find target context record for context 0x%p"
-#~ msgstr "0x%p bağlamı için hedef bağlam kaydı bulma başarısız"
-
-#~ msgid "Target context record 0x%p has no data object"
-#~ msgstr "0x%p hedef bağlam kaydının veri nesnesi yok"
-
-#~ msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
-#~ msgstr "IDataObject_GetData (0x%x) başarısız, 0x%lx döndürüyor"
-
-#~ msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
-#~ msgstr "W32 biçimli 0x%x DnD verisi, %p hedefine dönüştürülürken hata (%s)"
-
-#~ msgid "writing a closed stream"
-#~ msgstr "kapalı akışa yazılıyor"
-
-#~ msgid "g_try_realloc () failed"
-#~ msgstr "g_try_realloc () başarısız"
-
-#~ msgid "GlobalReAlloc() failed: "
-#~ msgstr "GlobalReAlloc() başarısız: "
-
-#~ msgid "Ran out of buffer space (buffer size is fixed)"
-#~ msgstr "Tampon alan bitti (tampon alan sabittir)"
-
-#~ msgid "Can't transmute a single handle"
-#~ msgstr "Eldeki tekli dönüştürülemez"
-
-#~ msgid "Failed to transmute %zu bytes of data from %s to %u"
-#~ msgstr "Verinin %zu baytını %s kaynağından %u hedefine dönüştürme başarısız"
-
-#~ msgid "GlobalLock() failed: "
-#~ msgstr "GlobalLock() başarısız: "
-
-#~ msgid "GlobalAlloc() failed: "
-#~ msgstr "GlobalAlloc() başarısız: "
-
-#~ msgid "Clipboard manager could not store selection."
-#~ msgstr "Pano yöneticisi seçimi depolayamadı."
-
-#~ msgid "Cannot store clipboard. No clipboard manager is active."
-#~ msgstr "Pano depolanamadı. Aktif pano yöneticisi yok."
-
-#~ msgid "Format %s not supported"
-#~ msgstr "%s biçimi desteklenmiyor"
-
-#~ msgid "Not enough space in destination"
-#~ msgstr "Hedefte yeterli alan yok"
-
-#~ msgid "Need complete input to do conversion"
-#~ msgstr "Dönüştürülme için girdinin tamamlanması gerekir"
-
-#~ msgid "Invalid byte sequence in conversion input"
-#~ msgstr "Dönüşüm girdisinde geçersiz bayt dizisi"
-
-#~ msgid "Invalid formats in compound text conversion."
-#~ msgstr "Bileşik metin dönüşümünde geçersiz biçimler."
-
-#~ msgctxt "long time format"
-#~ msgid "%d:%02d:%02d"
-#~ msgstr "%d.%02d.%02d"
-
-#~ msgctxt "long time format"
-#~ msgid "-%d:%02d:%02d"
-#~ msgstr "-%d.%02d.%02d"
-
-#~ msgctxt "short time format"
-#~ msgid "-%d:%02d"
-#~ msgstr "-%d.%02d"
-
-#~ msgctxt "short time format"
-#~ msgid "%d:%02d"
-#~ msgstr "%d.%02d"
-
-#~ msgid "GTK could not find a media module. Check your installation."
-#~ msgstr "GTK, ortam modülü bulamadı. Kurulumunuzu gözden geçirin."
-
-#~ msgid "Starred files"
-#~ msgstr "Yıldızlı dosyalar"
-
-#~ msgid "Swipe left"
-#~ msgstr "Sola kaydır"
-
-#~ msgid "Swipe right"
-#~ msgstr "Sağa kaydır"
-
-#~ msgctxt "Vulkan device"
-#~ msgid "None"
-#~ msgstr "Hiçbiri"
-
-#~ msgctxt "Vulkan version"
-#~ msgid "None"
-#~ msgstr "Hiçbiri"
-
-#~ msgid "GSK Renderer"
-#~ msgstr "GSK Gerçekleme"
-
-#~ msgid "Vulkan Device"
-#~ msgstr "Vulkan Aygıtı"
-
-#~ msgid "Vulkan API version"
-#~ msgstr "Vulkan API sürümü"
-
-#~ msgid "Vulkan driver version"
-#~ msgstr "Vulkan sürücü sürümü"
-
-#~ msgid "Saving RenderNode failed"
-#~ msgstr "RenderNode kaydetme başarısız"
-
-#~ msgid "Record frames"
-#~ msgstr "Kareleri kaydet"
-
-#~ msgid "Clear recorded frames"
-#~ msgstr "Kaydedilen kareleri temizle"
-
-#~ msgid "Add debug nodes"
-#~ msgstr "Hata ayıklama düğümleri ekle"
-
-#~ msgid "Save selected node"
-#~ msgstr "Seçilen düğümü kaydet"
-
-#~ msgid "Show fps overlay"
-#~ msgstr "Fps katmanını göster"
-
-#~ msgid "Logging"
-#~ msgstr "Günlükleme"
-
-#~ msgid "Global"
-#~ msgstr "Küresel"
-
-#~ msgid "Recorder"
-#~ msgstr "Kaydedici"
-
-#~ msgctxt "emoji category"
-#~ msgid "Recent"
-#~ msgstr "Son"
-
-#~ msgid "horizontal"
-#~ msgstr "yatay"
-
-#~ msgid "Unspecified error decoding video"
-#~ msgstr "Video çözülürken belirsiz hata"
-
-#~ msgid "Not enough memory"
-#~ msgstr "Yeterli bellek yok"
-
-#~ msgid "Not a video file"
-#~ msgstr "Video dosyası değil"
-
-#~ msgid "Unsupported video codec"
-#~ msgstr "Desteklenmeyen video çözücüsü"
-
-#~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
-#~ msgstr ""
-#~ "Çekirdek profilleri oluşturmak için ihtiyaç duyulan "
-#~ "WGL_ARB_create_context uzantısı mevcut değil"
-
-#~ msgid ""
-#~ "The GLX_ARB_create_context_profile extension needed to create core "
-#~ "profiles is not available"
-#~ msgstr ""
-#~ "Çekirdek profiller oluşturmak için ihtiyaç duyulan "
-#~ "GLX_ARB_create_context_profile uzantısı mevcut değil"
-
-#~ msgid "Could not start the search process"
-#~ msgstr "Arama süreci başlatılamadı"
-
-#~ msgid ""
-#~ "The program was not able to create a connection to the indexer daemon. "
-#~ "Please make sure it is running."
-#~ msgstr ""
-#~ "Program dizinleyici servisine bağlantı oluşturamadı. Lütfen çalıştığından "
-#~ "emin olun."
-
-#~ msgid "Error launching preview"
-#~ msgstr "Önizleme başlatılırken hata"
-
-#~ msgid "New class"
-#~ msgstr "Yeni sınıf"
-
-#~ msgid "Cancel"
-#~ msgstr "İptal Et"
-
-#~ msgid "Class name"
-#~ msgstr "Sınıf adı"
-
-#~ msgid "Add a class"
-#~ msgstr "Sınıf Ekle"
-
-#~ msgid "Restore defaults for this widget"
-#~ msgstr "Parçacık için öntanımları geri yükle"
-
-#~ msgid "Changes are applied instantly, only for this selected widget."
-#~ msgstr "Değişiklikler, sadece seçilen bu parçacık için doğrudan uygulandı."
-
-#~ msgid "Classes"
-#~ msgstr "Sınıflar"
-
-#~ msgid "Allocated size"
-#~ msgstr "Ayrılmış alan"
-
-#~ msgid "Object Hierarchy"
-#~ msgstr "Nesne Hiyerarşisi"
-
-#~ msgid "Style Properties"
-#~ msgstr "Biçem Özellikleri"
