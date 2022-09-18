@@ -17,25 +17,25 @@
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2010-2013, 2016-2018, 2020.
 # Wolfgang Stöggl <c72578@yahoo.de>, 2011-2012, 2014-2016.
 # Hendrik Knackstedt <hendrik.knackstedt@t-online.de>, 2011.
-# Christian Kirbach <christian.kirbach@gmail.com>, 2009-2013.
 # Benjamin Steinwender <b@stbe.at>, 2014.
 # Tim Sabsch <tim@sabsch.com>, 2019-2020.
 # Philipp Kiemle <philipp.kiemle@gmail.com>, 2020-2022.
+# Christian Kirbach <christian.kirbach@gmail.com>, 2009-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-05-17 07:55+0000\n"
-"PO-Revision-Date: 2022-05-20 23:09+0200\n"
+"POT-Creation-Date: 2022-09-12 23:34+0000\n"
+"PO-Revision-Date: 2022-09-15 22:09+0200\n"
 "Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
-"Language-Team: Deutsch <gnome-de@gnome.org>\n"
-"Language: de\n"
+"Language-Team: German - Germany <gnome-de@gnome.org>\n"
+"Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: gdk/gdkapplaunchcontext.c:128 gdk/gdkdrawcontext.c:172 gdk/gdkseat.c:188
 #: gdk/gdkseat.c:189 gdk/gdksurface.c:522 gdk/gdksurface.c:523
@@ -739,7 +739,7 @@ msgstr ""
 #: gtk/gtkdragicon.c:376 gtk/gtkexpander.c:399 gtk/gtkflowbox.c:534
 #: gtk/gtkframe.c:207 gtk/gtklistbox.c:3582 gtk/gtklistitem.c:181
 #: gtk/gtkmenubutton.c:532 gtk/gtknotebook.c:586 gtk/gtkoverlay.c:321
-#: gtk/gtkpopover.c:1893 gtk/gtkrevealer.c:368 gtk/gtkscrolledwindow.c:800
+#: gtk/gtkpopover.c:1893 gtk/gtkrevealer.c:368 gtk/gtkscrolledwindow.c:804
 #: gtk/gtksearchbar.c:333 gtk/gtkstack.c:415 gtk/gtktreeexpander.c:532
 #: gtk/gtkviewport.c:336 gtk/gtkwindow.c:1059 gtk/gtkwindowhandle.c:537
 msgid "Child"
@@ -748,7 +748,7 @@ msgstr "Kind"
 #: gtk/gtkaspectframe.c:196 gtk/gtkbutton.c:272 gtk/gtkexpander.c:400
 #: gtk/gtkflowbox.c:535 gtk/gtkframe.c:208 gtk/gtklistbox.c:3583
 #: gtk/gtkmenubutton.c:533 gtk/gtkoverlay.c:322 gtk/gtkpopover.c:1894
-#: gtk/gtkrevealer.c:369 gtk/gtkscrolledwindow.c:801 gtk/gtksearchbar.c:334
+#: gtk/gtkrevealer.c:369 gtk/gtkscrolledwindow.c:805 gtk/gtksearchbar.c:334
 #: gtk/gtkviewport.c:337 gtk/gtkwindow.c:1060 gtk/gtkwindowhandle.c:538
 msgid "The child widget"
 msgstr "Das Kind-Widget"
@@ -959,7 +959,7 @@ msgstr ""
 "Zeichen als Tastaturkürzel verwendet werden soll"
 
 #: gtk/gtkbutton.c:247 gtk/gtkcombobox.c:702 gtk/gtkentry.c:525
-#: gtk/gtkscrolledwindow.c:675
+#: gtk/gtkscrolledwindow.c:679
 msgid "Has Frame"
 msgstr "Hat Rahmen"
 
@@ -1278,10 +1278,10 @@ msgstr "Legt fest, ob die Hintergrundfarbe der Zelle gesetzt ist"
 
 #: gtk/gtkcellrenderercombo.c:134 gtk/gtkcolumnview.c:694 gtk/gtkdropdown.c:484
 #: gtk/gtkfilterlistmodel.c:585 gtk/gtkflattenlistmodel.c:409
-#: gtk/gtkgridview.c:1098 gtk/gtklistview.c:831 gtk/gtkmaplistmodel.c:372
+#: gtk/gtkgridview.c:1102 gtk/gtklistview.c:836 gtk/gtkmaplistmodel.c:372
 #: gtk/gtkmultiselection.c:353 gtk/gtkselectionfiltermodel.c:230
 #: gtk/gtkshortcutcontroller.c:585 gtk/gtkslicelistmodel.c:260
-#: gtk/gtksortlistmodel.c:800 gtk/gtktreelistmodel.c:702
+#: gtk/gtksortlistmodel.c:800 gtk/gtktreelistmodel.c:707
 msgid "Model"
 msgstr "Modell"
 
@@ -1871,12 +1871,12 @@ msgid "The model for cell view"
 msgstr "Das Modell für die Cell-View"
 
 #: gtk/gtkcellview.c:218 gtk/gtkentrycompletion.c:407 gtk/gtkiconview.c:575
-#: gtk/gtktreepopover.c:214 gtk/gtktreeviewcolumn.c:425
+#: gtk/gtktreepopover.c:216 gtk/gtktreeviewcolumn.c:425
 msgid "Cell Area"
 msgstr "Zellenbereich"
 
 #: gtk/gtkcellview.c:219 gtk/gtkentrycompletion.c:408 gtk/gtkiconview.c:576
-#: gtk/gtktreepopover.c:215 gtk/gtktreeviewcolumn.c:426
+#: gtk/gtktreepopover.c:217 gtk/gtktreeviewcolumn.c:426
 msgid "The GtkCellArea used to layout cells"
 msgstr "Der zur Anordnung der Zellen verwendete GtkCellArea"
 
@@ -2013,10 +2013,8 @@ msgid "Can Drag"
 msgstr "Kann ziehen"
 
 #: gtk/gtkcolorswatch.c:524
-#, fuzzy
-#| msgid "Whether the swatch should accept drops"
 msgid "Whether the swatch should allow drags"
-msgstr "Legt fest, ob die Farbfelder-Palette Ablagen akzeptieren soll"
+msgstr "Legt fest, ob die Farbfelder-Palette Ablagen erlauben soll"
 
 #: gtk/gtkcolumnview.c:682
 msgid "Columns"
@@ -2026,7 +2024,7 @@ msgstr "Spalten"
 msgid "List of columns"
 msgstr "Liste der Spalten"
 
-#: gtk/gtkcolumnview.c:695 gtk/gtkgridview.c:1099 gtk/gtklistview.c:832
+#: gtk/gtkcolumnview.c:695 gtk/gtkgridview.c:1103 gtk/gtklistview.c:837
 msgid "Model for the items displayed"
 msgstr "Modell für die anzuzeigenden Einträge"
 
@@ -2034,7 +2032,7 @@ msgstr "Modell für die anzuzeigenden Einträge"
 msgid "Show row separators"
 msgstr "Zeilentrenner anzeigen"
 
-#: gtk/gtkcolumnview.c:707 gtk/gtklistbox.c:544 gtk/gtklistview.c:844
+#: gtk/gtkcolumnview.c:707 gtk/gtklistbox.c:544 gtk/gtklistview.c:849
 msgid "Show separators between rows"
 msgstr "Trenner zwischen Zeilen anzeigen"
 
@@ -2055,11 +2053,11 @@ msgstr "Sortierer"
 msgid "Sorter with sorting choices of the user"
 msgstr "Sortierer mit den durch den Benutzer getroffenen Sortierauswahlen"
 
-#: gtk/gtkcolumnview.c:742 gtk/gtkgridview.c:1110 gtk/gtklistview.c:855
+#: gtk/gtkcolumnview.c:742 gtk/gtkgridview.c:1114 gtk/gtklistview.c:860
 msgid "Single click activate"
 msgstr "Einzelklick-Aktivierung"
 
-#: gtk/gtkcolumnview.c:743 gtk/gtkgridview.c:1111 gtk/gtklistview.c:856
+#: gtk/gtkcolumnview.c:743 gtk/gtkgridview.c:1115 gtk/gtklistview.c:861
 msgid "Activate rows on single click"
 msgstr "Zeilen mit einem einfachen Klick aktivieren"
 
@@ -2073,11 +2071,11 @@ msgid "Whether columns are reorderable"
 msgstr "Können die Spalten neu angeordnet werden?"
 
 # CHECK
-#: gtk/gtkcolumnview.c:766 gtk/gtkgridview.c:1122 gtk/gtklistview.c:867
+#: gtk/gtkcolumnview.c:766 gtk/gtkgridview.c:1126 gtk/gtklistview.c:872
 msgid "Enable rubberband selection"
 msgstr "Gummiband-Auswahl aktivieren"
 
-#: gtk/gtkcolumnview.c:767 gtk/gtkgridview.c:1123 gtk/gtklistview.c:868
+#: gtk/gtkcolumnview.c:767 gtk/gtkgridview.c:1127 gtk/gtklistview.c:873
 msgid "Allow selecting items by dragging with the mouse"
 msgstr "Auswählen von Einträgen durch Ziehen des Mauszeigers erlauben"
 
@@ -2089,13 +2087,13 @@ msgstr "Spaltenansicht"
 msgid "Column view this column is a part of"
 msgstr "Spaltenansicht, zu der diese Spalte gehört"
 
-#: gtk/gtkcolumnviewcolumn.c:253 gtk/gtkdropdown.c:458 gtk/gtkgridview.c:1058
-#: gtk/gtklistview.c:819
+#: gtk/gtkcolumnviewcolumn.c:253 gtk/gtkdropdown.c:458 gtk/gtkgridview.c:1062
+#: gtk/gtklistview.c:824
 msgid "Factory"
 msgstr "Factory"
 
 #: gtk/gtkcolumnviewcolumn.c:254 gtk/gtkdropdown.c:459 gtk/gtkdropdown.c:473
-#: gtk/gtkgridview.c:1059 gtk/gtklistview.c:820
+#: gtk/gtkgridview.c:1063 gtk/gtklistview.c:825
 msgid "Factory for populating list items"
 msgstr "Factory zum Erzeugen von Listeneinträgen"
 
@@ -3054,7 +3052,7 @@ msgstr ""
 msgid "Flags"
 msgstr "Markierungen"
 
-#: gtk/gtkexpander.c:320 gtk/gtktreelistmodel.c:1095
+#: gtk/gtkexpander.c:320 gtk/gtktreelistmodel.c:1100
 msgid "Expanded"
 msgstr "Ausgeklappt"
 
@@ -3533,19 +3531,19 @@ msgstr "Zeilenspanne"
 msgid "The number of rows that a child spans"
 msgstr "Die Anzahl der Zeilen, über die sich ein Kindelement erstreckt"
 
-#: gtk/gtkgridview.c:1074
+#: gtk/gtkgridview.c:1078
 msgid "Max columns"
 msgstr "Maximale Spalten"
 
-#: gtk/gtkgridview.c:1075
+#: gtk/gtkgridview.c:1079
 msgid "Maximum number of columns per row"
 msgstr "Maximale Anzahl der Spalten pro Zeile"
 
-#: gtk/gtkgridview.c:1086
+#: gtk/gtkgridview.c:1090
 msgid "Min columns"
 msgstr "Minimale Spalten"
 
-#: gtk/gtkgridview.c:1087
+#: gtk/gtkgridview.c:1091
 msgid "Minimum number of columns per row"
 msgstr "Minimale Anzahl der Spalten pro Zeile"
 
@@ -3589,27 +3587,27 @@ msgstr "Ressourcenpfad"
 msgid "Theme name"
 msgstr "Themenname"
 
-#: gtk/gtkicontheme.c:3629
+#: gtk/gtkicontheme.c:3639
 msgid "file"
 msgstr "Datei"
 
-#: gtk/gtkicontheme.c:3630
+#: gtk/gtkicontheme.c:3640
 msgid "The file representing the icon"
 msgstr "Die Datei, welche durch das Symbol dargestellt wird"
 
-#: gtk/gtkicontheme.c:3641 gtk/gtkstack.c:451
+#: gtk/gtkicontheme.c:3651 gtk/gtkstack.c:451
 msgid "Icon name"
 msgstr "Symbolname"
 
-#: gtk/gtkicontheme.c:3642
+#: gtk/gtkicontheme.c:3652
 msgid "The icon name chosen during lookup"
 msgstr "Der während des Nachschlagens gewählte Symbolname"
 
-#: gtk/gtkicontheme.c:3653
+#: gtk/gtkicontheme.c:3663
 msgid "Is symbolic"
 msgstr "Ist symbolisch"
 
-#: gtk/gtkicontheme.c:3654
+#: gtk/gtkicontheme.c:3664
 msgid "If the icon is symbolic"
 msgstr "Legt fest, ob das Symbol stilisiert ist"
 
@@ -3844,10 +3842,10 @@ msgid "Natural wrap mode"
 msgstr "Natürlicher Zeilenumbruch-Modus"
 
 #: gtk/gtklabel.c:2435
-#, fuzzy
-#| msgid "If wrap is set, controls how linewrapping is done"
 msgid "If wrap is set, controls linewrapping for natural size requests"
-msgstr "Legt fest, wie Zeilen umgebrochen werden"
+msgstr ""
+"Legt fest, wie Zeilen umgebrochen werden bei Anforderung nach natürlicher "
+"Größe"
 
 #: gtk/gtklabel.c:2448
 msgid "Whether the label text can be selected with the mouse"
@@ -3961,7 +3959,7 @@ msgstr "Wurde dieser Verweis besucht?"
 msgid "The orientation of the orientable"
 msgstr "Die Ausrichtung des Orientable-Widgets"
 
-#: gtk/gtklistbox.c:543 gtk/gtklistview.c:843
+#: gtk/gtklistbox.c:543 gtk/gtklistview.c:848
 msgid "Show separators"
 msgstr "Trenner anzeigen"
 
@@ -3981,7 +3979,7 @@ msgstr "Soll der Eintrag durch den Benutzer aktivierbar sein?"
 msgid "Widget used for display"
 msgstr "Für die Anzeige zu verwendendes Widget"
 
-#: gtk/gtklistitem.c:193 gtk/gtktreeexpander.c:544 gtk/gtktreelistmodel.c:1107
+#: gtk/gtklistitem.c:193 gtk/gtktreeexpander.c:544 gtk/gtktreelistmodel.c:1112
 msgid "Item"
 msgstr "Objekt"
 
@@ -5491,105 +5489,105 @@ msgid "The GtkAdjustment that contains the current value of this scrollbar"
 msgstr ""
 "Das GtkAdjustment, das den aktuellen Wert dieser Bildlaufleiste enthält"
 
-#: gtk/gtkscrolledwindow.c:606
+#: gtk/gtkscrolledwindow.c:610
 msgid "Horizontal Adjustment"
 msgstr "Horizontale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:607
+#: gtk/gtkscrolledwindow.c:611
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "Das GtkAdjustment für die horizontale Position"
 
-#: gtk/gtkscrolledwindow.c:618
+#: gtk/gtkscrolledwindow.c:622
 msgid "Vertical Adjustment"
 msgstr "Vertikale Stellgröße"
 
-#: gtk/gtkscrolledwindow.c:619
+#: gtk/gtkscrolledwindow.c:623
 msgid "The GtkAdjustment for the vertical position"
 msgstr "Das GtkAdjustment für die vertikale Position"
 
-#: gtk/gtkscrolledwindow.c:633
+#: gtk/gtkscrolledwindow.c:637
 msgid "Horizontal Scrollbar Policy"
 msgstr "Horizontale Bildlaufleistenrichtlinie"
 
-#: gtk/gtkscrolledwindow.c:634
+#: gtk/gtkscrolledwindow.c:638
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Wenn die horizontale Bildlaufleiste angezeigt wird"
 
-#: gtk/gtkscrolledwindow.c:649
+#: gtk/gtkscrolledwindow.c:653
 msgid "Vertical Scrollbar Policy"
 msgstr "Vertikale Bildlaufleistenrichtlinie"
 
-#: gtk/gtkscrolledwindow.c:650
+#: gtk/gtkscrolledwindow.c:654
 msgid "When the vertical scrollbar is displayed"
 msgstr "Wenn die vertikale Bildlaufleiste angezeigt wird"
 
-#: gtk/gtkscrolledwindow.c:662
+#: gtk/gtkscrolledwindow.c:666
 msgid "Window Placement"
 msgstr "Fensterplatzierung"
 
-#: gtk/gtkscrolledwindow.c:663
+#: gtk/gtkscrolledwindow.c:667
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Wo soll der Inhalt im Verhältnis zu den Bildlaufleisten liegen."
 
-#: gtk/gtkscrolledwindow.c:676
+#: gtk/gtkscrolledwindow.c:680
 msgid "Whether to draw a frame around the contents"
 msgstr "Soll ein Rahmen um den Inhalt gezeichnet werden?"
 
-#: gtk/gtkscrolledwindow.c:687
+#: gtk/gtkscrolledwindow.c:691
 msgid "Minimum Content Width"
 msgstr "Minimale Breite des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:688
+#: gtk/gtkscrolledwindow.c:692
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr "Die minimale Breite, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:699
+#: gtk/gtkscrolledwindow.c:703
 msgid "Minimum Content Height"
 msgstr "Minimale Höhe des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:700
+#: gtk/gtkscrolledwindow.c:704
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr "Die minimale Höhe, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:713
+#: gtk/gtkscrolledwindow.c:717
 msgid "Kinetic Scrolling"
 msgstr "Kinetisches Rollen"
 
-#: gtk/gtkscrolledwindow.c:714
+#: gtk/gtkscrolledwindow.c:718
 msgid "Kinetic scrolling mode."
 msgstr "Kinetischer Rollmodus."
 
-#: gtk/gtkscrolledwindow.c:732
+#: gtk/gtkscrolledwindow.c:736
 msgid "Overlay Scrolling"
 msgstr "Überlagerndes Rollen"
 
-#: gtk/gtkscrolledwindow.c:733
+#: gtk/gtkscrolledwindow.c:737
 msgid "Overlay scrolling mode"
 msgstr "Überlagernder Rollmodus"
 
-#: gtk/gtkscrolledwindow.c:744
+#: gtk/gtkscrolledwindow.c:748
 msgid "Maximum Content Width"
 msgstr "Maximale Breite des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:745
+#: gtk/gtkscrolledwindow.c:749
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr "Die maximale Breite, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:756
+#: gtk/gtkscrolledwindow.c:760
 msgid "Maximum Content Height"
 msgstr "Maximale Höhe des Inhalts"
 
-#: gtk/gtkscrolledwindow.c:757
+#: gtk/gtkscrolledwindow.c:761
 msgid ""
 "The maximum height that the scrolled window will allocate to its content"
 msgstr "Die maximale Höhe, die das rollbare Fenster seinem Inhalt zuweist"
 
-#: gtk/gtkscrolledwindow.c:772 gtk/gtkscrolledwindow.c:773
+#: gtk/gtkscrolledwindow.c:776 gtk/gtkscrolledwindow.c:777
 msgid "Propagate Natural Width"
 msgstr "Übertragung der natürlichen Breite"
 
-#: gtk/gtkscrolledwindow.c:788 gtk/gtkscrolledwindow.c:789
+#: gtk/gtkscrolledwindow.c:792 gtk/gtkscrolledwindow.c:793
 msgid "Propagate Natural Height"
 msgstr "Übertragung der natürlichen Höhe"
 
@@ -7223,56 +7221,56 @@ msgstr ""
 "Legt fest, ob der Baum-Ausklapper das Kindelement einrückt, wenn kein "
 "Ausklapper-Symbol dargestellt wird"
 
-#: gtk/gtktreelistmodel.c:690
+#: gtk/gtktreelistmodel.c:695
 msgid "autoexpand"
 msgstr "automatisch ausklappen"
 
-#: gtk/gtktreelistmodel.c:691
+#: gtk/gtktreelistmodel.c:696
 msgid "If all rows should be expanded by default"
 msgstr ""
 "Legt fest, ob alle Zeilen in der Voreinstellung ausgeklappt sein sollen"
 
-#: gtk/gtktreelistmodel.c:703
+#: gtk/gtktreelistmodel.c:708
 msgid "The root model displayed"
 msgstr "Das angezeigte Ursprungsmodell"
 
-#: gtk/gtktreelistmodel.c:718
+#: gtk/gtktreelistmodel.c:723
 msgid "passthrough"
 msgstr "durchgeben"
 
-#: gtk/gtktreelistmodel.c:719
+#: gtk/gtktreelistmodel.c:724
 msgid "If child model values are passed through"
 msgstr "Legt fest, ob die Werte des Kindmodells durchgegeben werden"
 
-#: gtk/gtktreelistmodel.c:1059
+#: gtk/gtktreelistmodel.c:1064
 msgid "Children"
 msgstr "Kinder"
 
-#: gtk/gtktreelistmodel.c:1060
+#: gtk/gtktreelistmodel.c:1065
 msgid "Model holding the row’s children"
 msgstr "Modell, das die Kinder der Zeile enthält"
 
-#: gtk/gtktreelistmodel.c:1071
+#: gtk/gtktreelistmodel.c:1076
 msgid "Depth"
 msgstr "Tiefe"
 
-#: gtk/gtktreelistmodel.c:1072
+#: gtk/gtktreelistmodel.c:1077
 msgid "Depth in the tree"
 msgstr "Baumtiefe"
 
-#: gtk/gtktreelistmodel.c:1083
+#: gtk/gtktreelistmodel.c:1088
 msgid "Expandable"
 msgstr "Ausklappbar"
 
-#: gtk/gtktreelistmodel.c:1084
+#: gtk/gtktreelistmodel.c:1089
 msgid "If this row can ever be expanded"
 msgstr "Legt fest, ob diese Zeile ausgeklappt werden kann"
 
-#: gtk/gtktreelistmodel.c:1096
+#: gtk/gtktreelistmodel.c:1101
 msgid "If this row is currently expanded"
 msgstr "Legt fest, ob diese Zeile derzeit ausgeklappt ist"
 
-#: gtk/gtktreelistmodel.c:1108
+#: gtk/gtktreelistmodel.c:1113
 msgid "The item held in this row"
 msgstr "Das Objekt, das in dieser Zeile enthalten ist"
 
@@ -7305,11 +7303,11 @@ msgstr "TreeModelSort-Modell"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Das von TreeModelSort zum Sortieren verwendete Modell"
 
-#: gtk/gtktreepopover.c:206
+#: gtk/gtktreepopover.c:208
 msgid "model"
 msgstr "Modell"
 
-#: gtk/gtktreepopover.c:207
+#: gtk/gtktreepopover.c:209
 msgid "The model for the popover"
 msgstr "Das Modell für das Einblendfenster"
 
