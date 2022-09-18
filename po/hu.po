@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-03-19 12:27+0000\n"
-"PO-Revision-Date: 2022-09-02 23:31+0200\n"
+"POT-Creation-Date: 2022-09-02 21:41+0000\n"
+"PO-Revision-Date: 2022-09-18 08:28+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -6319,7 +6319,7 @@ msgstr "Kaithi"
 #: gtk/script-names.c:100
 msgctxt "Script"
 msgid "Lisu"
-msgstr ""
+msgstr "Lisu"
 
 #: gtk/script-names.c:101
 msgctxt "Script"
@@ -6384,17 +6384,17 @@ msgstr "Meroita hieroglifák"
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "Miao"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
 msgid "Sharada"
-msgstr ""
+msgstr "Sharada"
 
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora Sompeng"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
@@ -6404,7 +6404,7 @@ msgstr "Takri"
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "Bassa"
 
 #: gtk/script-names.c:118
 msgctxt "Script"
@@ -6414,22 +6414,22 @@ msgstr "Kaukázusi albaniai"
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "Duployan"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasan"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Khojki"
-msgstr ""
+msgstr "Khojki"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
@@ -6444,7 +6444,7 @@ msgstr "Lineáris A"
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajani"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
@@ -6514,7 +6514,7 @@ msgstr "Tirhuta"
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Warang Citi"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
@@ -6549,12 +6549,12 @@ msgstr "Jelnyelv"
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlam"
 
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
@@ -6589,7 +6589,7 @@ msgstr "Nushu"
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "Soyombo"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
@@ -6609,17 +6609,17 @@ msgstr "Gunjalai gondi"
 #: gtk/script-names.c:158
 msgctxt "Script"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "Hanifi Rohingya"
 
 #: gtk/script-names.c:159
 msgctxt "Script"
 msgid "Makasar"
-msgstr ""
+msgstr "Makasar"
 
 #: gtk/script-names.c:160
 msgctxt "Script"
 msgid "Medefaidrin"
-msgstr ""
+msgstr "Medefaidrin"
 
 #: gtk/script-names.c:161
 msgctxt "Script"
@@ -6634,42 +6634,42 @@ msgstr "Szogd"
 #: gtk/script-names.c:165 gtk/script-names.c:170
 msgctxt "Script"
 msgid "Elym"
-msgstr ""
+msgstr "Elym"
 
 #: gtk/script-names.c:166 gtk/script-names.c:171
 msgctxt "Script"
 msgid "Nand"
-msgstr ""
+msgstr "Nand"
 
 #: gtk/script-names.c:167 gtk/script-names.c:172
 msgctxt "Script"
 msgid "Rohg"
-msgstr ""
+msgstr "Rohg"
 
 #: gtk/script-names.c:168 gtk/script-names.c:173
 msgctxt "Script"
 msgid "Wcho"
-msgstr ""
+msgstr "Wcho"
 
 #: gtk/script-names.c:176 gtk/script-names.c:181
 msgctxt "Script"
 msgid "Chorasmian"
-msgstr ""
+msgstr "Chorasmian"
 
 #: gtk/script-names.c:177 gtk/script-names.c:182
 msgctxt "Script"
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #: gtk/script-names.c:178 gtk/script-names.c:183
 msgctxt "Script"
 msgid "Khitan small script"
-msgstr ""
+msgstr "Khitan kis írásrendszer"
 
 #: gtk/script-names.c:179 gtk/script-names.c:184
 msgctxt "Script"
 msgid "Yezidi"
-msgstr ""
+msgstr "Jezidita"
 
 #: gtk/ui/gtkaboutdialog.ui:62
 msgid "About"
