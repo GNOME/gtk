@@ -1,5 +1,7 @@
 # Turkish translations of gtk+.
 # Copyright (C) 1999-2003, 2004, 2006, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2008-2022 gtk+'s COPYRIGHT HOLDER
+# This file is distributed under the same licence as the gtk+ package.
 #
 # Arman Aksoy <armish@linux-sevenler.de, 2003.
 # Ömer Fadıl USTA <omer_fad@hotmail.com>,2002.
@@ -20,7 +22,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-09-01 20:39+0000\n"
+"POT-Creation-Date: 2022-09-14 18:48+0000\n"
 "PO-Revision-Date: 2022-09-01 01:44+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
@@ -2111,7 +2113,7 @@ msgstr "_İptal Et"
 
 #: gtk/gtkfilechoosernative.c:510 gtk/gtkfilechoosernative.c:574
 #: gtk/gtkplacessidebar.c:3146 gtk/gtkplacessidebar.c:3231
-#: gtk/gtkplacesview.c:1658
+#: gtk/gtkplacesview.c:1659
 msgid "_Open"
 msgstr "_Aç"
 
@@ -2193,7 +2195,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5652 gtk/gtktext.c:6051 gtk/gtktextview.c:8975
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6051 gtk/gtktextview.c:8968
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2488,19 +2490,19 @@ msgstr "Karakter Değişkeleri"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL içerik oluşturulması başarısız oldu"
 
-#: gtk/gtklabel.c:5649 gtk/gtktext.c:6039 gtk/gtktextview.c:8963
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6039 gtk/gtktextview.c:8956
 msgid "Cu_t"
 msgstr "Ke_s"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6043 gtk/gtktextview.c:8967
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6043 gtk/gtktextview.c:8960
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: gtk/gtklabel.c:5651 gtk/gtktext.c:6047 gtk/gtktextview.c:8971
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6047 gtk/gtktextview.c:8964
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6060 gtk/gtktextview.c:8996
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6060 gtk/gtktextview.c:8989
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
@@ -2935,12 +2937,12 @@ msgid "Unable to poll “%s” for media changes"
 msgstr "Ortam değişiklikleri için “%s” sorgulanamadı"
 
 #: gtk/gtkplacessidebar.c:3152 gtk/gtkplacessidebar.c:3239
-#: gtk/gtkplacesview.c:1662
+#: gtk/gtkplacesview.c:1663
 msgid "Open in New _Tab"
 msgstr "Yeni _Sekmede Aç"
 
 #: gtk/gtkplacessidebar.c:3158 gtk/gtkplacessidebar.c:3248
-#: gtk/gtkplacesview.c:1667
+#: gtk/gtkplacesview.c:1668
 msgid "Open in New _Window"
 msgstr "Yeni _Pencerede Aç"
 
@@ -2952,11 +2954,11 @@ msgstr "Yer İmi _Ekle"
 msgid "_Remove"
 msgstr "_Kaldır"
 
-#: gtk/gtkplacessidebar.c:3279 gtk/gtkplacesview.c:1692
+#: gtk/gtkplacessidebar.c:3279 gtk/gtkplacesview.c:1693
 msgid "_Mount"
 msgstr "_Bağla"
 
-#: gtk/gtkplacessidebar.c:3288 gtk/gtkplacesview.c:1681
+#: gtk/gtkplacessidebar.c:3288 gtk/gtkplacesview.c:1682
 msgid "_Unmount"
 msgstr "_Bağı Kaldır"
 
@@ -3031,71 +3033,71 @@ msgid "Con_nect"
 msgstr "Ba_ğlan"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1366
+#: gtk/gtkplacesview.c:1367
 msgid "Unable to unmount volume"
 msgstr "Birim ayrılamıyor"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1458
+#: gtk/gtkplacesview.c:1459
 msgid "Cance_l"
 msgstr "İpta_l"
 
-#: gtk/gtkplacesview.c:1605
+#: gtk/gtkplacesview.c:1606
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: gtk/gtkplacesview.c:1611
+#: gtk/gtkplacesview.c:1612
 msgid "File Transfer Protocol"
 msgstr "Dosya Aktarım İletişim Kuralı (FTP)"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1613
+#: gtk/gtkplacesview.c:1614
 msgid "ftp:// or ftps://"
 msgstr "ftp:// veya ftps://"
 
-#: gtk/gtkplacesview.c:1619
+#: gtk/gtkplacesview.c:1620
 msgid "Network File System"
 msgstr "Ağ Dosya Sistemi (NFS)"
 
-#: gtk/gtkplacesview.c:1625
+#: gtk/gtkplacesview.c:1626
 msgid "Samba"
 msgstr "Samba"
 
-#: gtk/gtkplacesview.c:1631
+#: gtk/gtkplacesview.c:1632
 msgid "SSH File Transfer Protocol"
 msgstr "SSH Dosya Aktarım İletişim Kuralı"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1633
+#: gtk/gtkplacesview.c:1634
 msgid "sftp:// or ssh://"
 msgstr "sftp:// veya ssh://"
 
-#: gtk/gtkplacesview.c:1639
+#: gtk/gtkplacesview.c:1640
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1641
+#: gtk/gtkplacesview.c:1642
 msgid "dav:// or davs://"
 msgstr "dav:// veya davs://"
 
-#: gtk/gtkplacesview.c:1676
+#: gtk/gtkplacesview.c:1677
 msgid "_Disconnect"
 msgstr "_Bağlantıyı Kes"
 
-#: gtk/gtkplacesview.c:1687
+#: gtk/gtkplacesview.c:1688
 msgid "_Connect"
 msgstr "_Bağlan"
 
-#: gtk/gtkplacesview.c:1871
+#: gtk/gtkplacesview.c:1905
 msgid "Unable to get remote server location"
 msgstr "Uzak sunucu konumu alınamıyor"
 
-#: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
+#: gtk/gtkplacesview.c:2048 gtk/gtkplacesview.c:2057
 msgid "Networks"
 msgstr "Ağlar"
 
-#: gtk/gtkplacesview.c:2014 gtk/gtkplacesview.c:2023
+#: gtk/gtkplacesview.c:2048 gtk/gtkplacesview.c:2057
 msgid "On This Computer"
 msgstr "Bu Bilgisayarda"
 
@@ -3473,19 +3475,19 @@ msgstr "Hiçbir Sonuç Bulunamadı"
 msgid "Try a different search"
 msgstr "Başka arama deneyin"
 
-#: gtk/gtkshow.c:177
+#: gtk/gtkshow.c:175
 msgid "Could not show link"
 msgstr "Bağlantı gösterilemedi"
 
-#: gtk/gtktext.c:6065 gtk/gtktextview.c:9001
+#: gtk/gtktext.c:6065 gtk/gtktextview.c:8994
 msgid "Insert _Emoji"
 msgstr "_Emoji Ekle"
 
-#: gtk/gtktextview.c:8983
+#: gtk/gtktextview.c:8976
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: gtk/gtktextview.c:8987
+#: gtk/gtktextview.c:8980
 msgid "_Redo"
 msgstr "_Yinele"
 
@@ -7304,98 +7306,3 @@ msgstr ""
 "“%s” içinde tema dizin dosyası yok.\n"
 "Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-"
 "theme-indexʼi kullanın.\n"
-
-#~ msgid "Number Formatting"
-#~ msgstr "Numara Biçimlendirme"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 1"
-#~ msgstr "Biçimsel Takım 1"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 2"
-#~ msgstr "Biçimsel Takım 2"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 3"
-#~ msgstr "Biçimsel Takım 3"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 4"
-#~ msgstr "Biçimsel Takım 4"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 5"
-#~ msgstr "Biçimsel Takım 5"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 6"
-#~ msgstr "Biçimsel Takım 6"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 7"
-#~ msgstr "Biçimsel Takım 7"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 8"
-#~ msgstr "Biçimsel Takım 8"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 9"
-#~ msgstr "Biçimsel Takım 9"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 10"
-#~ msgstr "Biçimsel Takım 10"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 11"
-#~ msgstr "Biçimsel Takım 11"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 12"
-#~ msgstr "Biçimsel Takım 12"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 13"
-#~ msgstr "Biçimsel Takım 13"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 14"
-#~ msgstr "Biçimsel Takım 14"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 15"
-#~ msgstr "Biçimsel Takım 15"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 16"
-#~ msgstr "Biçimsel Takım 16"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 17"
-#~ msgstr "Biçimsel Takım 17"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 18"
-#~ msgstr "Biçimsel Takım 18"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 19"
-#~ msgstr "Biçimsel Takım 19"
-
-#~ msgctxt "OpenType layout"
-#~ msgid "Stylistic Set 20"
-#~ msgstr "Biçimsel Takım 20"
-
-#~ msgid "Not a video file"
-#~ msgstr "Video dosyası değil"
-
-#~ msgid "Unsupported video codec"
-#~ msgstr "Desteklenmeyen video çözücüsü"
-
-#~ msgid "The EGL implementation does not support any allowed APIs"
-#~ msgstr "EGL uygulaması herhangi bir izin verilen APIyi desteklemiyor"
-
-#~ msgid "Failed to parse png image"
-#~ msgstr "PNG resmi ayrıştırılırken hata"
