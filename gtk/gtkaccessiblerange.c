@@ -36,6 +36,8 @@
  * For controls where a minimum increment makes no sense and which do not allow
  * setting the current value from the user, the default implementation of this
  * interface suffices.
+ *
+ * Since: 4.10
  */
 
 #include "config.h"
@@ -70,6 +72,8 @@ gtk_accessible_range_default_init (GtkAccessibleRangeInterface *iface)
  * Returns the minimum increment which this `GtkAccessibleRange` supports.
  *
  * Returns: the minimum increment, or 0.0 if not overridden
+ *
+ * Since: 4.10
  */
 double
 gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self)
@@ -83,11 +87,13 @@ gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self)
  * gtk_accessible_range_set_current_value:
  * @self: a `GtkAccessibleRange`
  *
- * Sets the current value of this `GtkAccessibleRange`.
+ * Sets the current value of this `GtkAccessibleRange` to @value.
  * Note that for some widgets implementing this interface, setting a value
  * through the accessibility API makes no sense, so calling this function may
  * in some cases do nothing.
  * @returns: %true if the call changed the value, %false otherwise
+ *
+ * Since: 4.10
  */
 gboolean
 gtk_accessible_range_set_current_value (GtkAccessibleRange *self, double value)
