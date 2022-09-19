@@ -1578,11 +1578,31 @@ gtk_list_base_stop_rubberband (GtkListBase *self,
       GtkBitset *selected, *mask;
       GdkRectangle rect;
       GtkBitset *rubberband_selection;
+      guint pos;
 
       if (!gtk_list_base_get_rubberband_coords (self, &rect))
         return;
 
       rubberband_selection = gtk_list_base_get_items_in_rect (self, &rect);
+
+      pos = 0;
+      for (item = gtk_list_item_manager_get_first (priv->item_manager);
+           item != NULL;
+           item = gtk_rb_tree_node_get_next (item))
+      {
+        if (item->widget)
+          {
+            GtkAllocation widget_allocation;
+            /* Make sure we are actually selecting the widget (i.e. if it has margins) */
+            gtk_widget_get_allocation (item->widget, &widget_allocation);
+
+            if (gtk_bitset_contains (rubberband_selection, pos) &&
+                !gdk_rectangle_intersect (&rect, &widget_allocation, NULL))
+              gtk_bitset_remove (rubberband_selection, pos);
+          }
+
+        pos += item->n_items;
+      }
 
       if (modify && extend) /* Ctrl + Shift */
         {
@@ -1662,7 +1682,12 @@ gtk_list_base_update_rubberband_selection (GtkListBase *self)
     {
       if (item->widget)
         {
-          if (gtk_bitset_contains (rubberband_selection, pos))
+          GtkAllocation widget_allocation;
+          /* Make sure we are actually selecting the widget (i.e. if it has margins) */
+          gtk_widget_get_allocation (item->widget, &widget_allocation);
+
+          if (gtk_bitset_contains (rubberband_selection, pos) &&
+              gdk_rectangle_intersect (&rect, &widget_allocation, NULL))
             gtk_widget_set_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE, FALSE);
           else
             gtk_widget_unset_state_flags (item->widget, GTK_STATE_FLAG_ACTIVE);
