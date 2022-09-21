@@ -357,6 +357,9 @@ parse_range (GtkShortcutLabel *self,
 static void
 clear_children (GtkShortcutLabel *self)
 {
+                                 gtk_accessible_reset_relation (GTK_ACCESSIBLE (self),
+                                                                GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+
   GtkWidget *child;
 
   child = gtk_widget_get_first_child (GTK_WIDGET (self));
@@ -376,6 +379,10 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
 {
   char **accels;
   int k;
+  GtkAccessibleRelation relation = GTK_ACCESSIBLE_RELATION_LABELLED_BY;
+  GValue value = G_VALUE_INIT;
+  GList *parts = NULL;
+  GtkWidget *child;
 
   clear_children (self);
 
@@ -402,6 +409,19 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
         }
     }
   g_strfreev (accels);
+
+  /* All of the child labels are a part of our a11y label */
+  for(child = gtk_widget_get_last_child (GTK_WIDGET (self));
+      child != NULL;
+      child = gtk_widget_get_prev_sibling (child))
+    {
+      parts = g_list_prepend (parts, child);
+        }
+  gtk_accessible_relation_init_value (relation, &value);
+  g_value_set_pointer (&value, parts);
+  gtk_accessible_update_relation_value (GTK_ACCESSIBLE (self),
+                                        1, &relation, &value);
+
 }
 
 static void
