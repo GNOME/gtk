@@ -16,28 +16,26 @@ and/or use gtk-doc annotations.  -->
              c:symbol-prefixes="g">
     <record name="Module" c:type="GModule" disguised="1">
       <doc xml:space="preserve"
-           filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+           filename="gmodule-2.0.c"
            line="5">The #GModule struct is an opaque data structure to represent a
 [dynamically-loaded module][glib-Dynamic-Loading-of-Modules].
 It should only be accessed via the following functions.</doc>
-      <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                       line="65"/>
+      <source-position filename="gmodule.h" line="67"/>
       <method name="close" c:identifier="g_module_close">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="185">Closes a module.</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="105"/>
+        <source-position filename="gmodule.h" line="107"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="191">%TRUE on success</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="module" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="187">a #GModule to close</doc>
             <type name="Module" c:type="GModule*"/>
           </instance-parameter>
@@ -45,18 +43,17 @@ It should only be accessed via the following functions.</doc>
       </method>
       <method name="make_resident" c:identifier="g_module_make_resident">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="204">Ensures that a module will never be unloaded.
 Any future g_module_close() calls on the module will be ignored.</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="109"/>
+        <source-position filename="gmodule.h" line="111"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="module" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="206">a #GModule to make permanently resident</doc>
             <type name="Module" c:type="GModule*"/>
           </instance-parameter>
@@ -64,22 +61,21 @@ Any future g_module_close() calls on the module will be ignored.</doc>
       </method>
       <method name="name" c:identifier="g_module_name">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="213">Returns the filename that the module was opened with.
 
 If @module refers to the application itself, "main" is returned.</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="123"/>
+        <source-position filename="gmodule.h" line="125"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="221">the filename of the module</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
         <parameters>
           <instance-parameter name="module" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="215">a #GModule</doc>
             <type name="Module" c:type="GModule*"/>
           </instance-parameter>
@@ -87,27 +83,26 @@ If @module refers to the application itself, "main" is returned.</doc>
       </method>
       <method name="symbol" c:identifier="g_module_symbol">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="273">Gets a symbol pointer from a module, such as one exported
 by %G_MODULE_EXPORT. Note that a valid symbol can be %NULL.</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="117"/>
+        <source-position filename="gmodule.h" line="119"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="282">%TRUE on success</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="module" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="275">a #GModule</doc>
             <type name="Module" c:type="GModule*"/>
           </instance-parameter>
           <parameter name="symbol_name" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="276">the name of the symbol to find</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -117,7 +112,7 @@ by %G_MODULE_EXPORT. Note that a valid symbol can be %NULL.</doc>
                      transfer-ownership="full"
                      nullable="1">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="277">returns the pointer to the symbol value</doc>
             <type name="gpointer" c:type="gpointer*"/>
           </parameter>
@@ -125,7 +120,7 @@ by %G_MODULE_EXPORT. Note that a valid symbol can be %NULL.</doc>
       </method>
       <function name="build_path" c:identifier="g_module_build_path">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="159">A portable way to build the filename of a module. The platform-specific
 prefix and suffix are added to the filename, if needed, and the result
 is added to the directory, using the correct separator character.
@@ -139,11 +134,10 @@ For example, calling g_module_build_path() on a Linux system with a
 @directory of `/lib` and a @module_name of "mylibrary" will return
 `/lib/libmylibrary.so`. On a Windows system, using `\Windows` as the
 directory it will return `\Windows\mylibrary.dll`.</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="137"/>
+        <source-position filename="gmodule.h" line="139"/>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="180">the complete path of the module, including the standard library
     prefix and suffix. This should be freed when no longer needed</doc>
           <type name="utf8" c:type="gchar*"/>
@@ -154,7 +148,7 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
                      nullable="1"
                      allow-none="1">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="161">the directory where the module is. This can be
     %NULL or the empty string to indicate that the standard platform-specific
     directories will be used, though that is not recommended</doc>
@@ -162,7 +156,7 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
           </parameter>
           <parameter name="module_name" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="164">the name of the module</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -170,13 +164,12 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
       </function>
       <function name="error" c:identifier="g_module_error">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="195">Gets a string describing the last module error.</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="113"/>
+        <source-position filename="gmodule.h" line="115"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="200">a string describing the last module error</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
@@ -188,13 +181,12 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
       </function>
       <function name="open" c:identifier="g_module_open" introspectable="0">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="225">A thin wrapper function around g_module_open_full()</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="95"/>
+        <source-position filename="gmodule.h" line="97"/>
         <return-value>
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="234">a #GModule on success, or %NULL on failure</doc>
           <type name="Module" c:type="GModule*"/>
         </return-value>
@@ -204,14 +196,14 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
                      nullable="1"
                      allow-none="1">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="227">the name of the file containing the module, or %NULL
     to obtain a #GModule representing the main program itself</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="flags" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="229">the flags used for opening the module. This can be the
     logical OR of any of the #GModuleFlags.</doc>
             <type name="ModuleFlags" c:type="GModuleFlags"/>
@@ -224,7 +216,7 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
                 introspectable="0"
                 throws="1">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="238">Opens a module. If the module has already been opened,
 its reference count is incremented.
 
@@ -237,11 +229,10 @@ module will be opened. If that fails and @file_name doesn't have the
 ".la"-suffix, this suffix is appended and g_module_open_full() tries to open
 the corresponding module. If eventually that fails as well, %NULL is
 returned.</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="99"/>
+        <source-position filename="gmodule.h" line="101"/>
         <return-value>
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="259">a #GModule on success, or %NULL on failure</doc>
           <type name="Module" c:type="GModule*"/>
         </return-value>
@@ -251,14 +242,14 @@ returned.</doc>
                      nullable="1"
                      allow-none="1">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="240">the name of the file containing the module, or %NULL
     to obtain a #GModule representing the main program itself</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="flags" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+                 filename="gmodule-2.0.c"
                  line="242">the flags used for opening the module. This can be the
     logical OR of any of the #GModuleFlags</doc>
             <type name="ModuleFlags" c:type="GModuleFlags"/>
@@ -267,13 +258,12 @@ returned.</doc>
       </function>
       <function name="supported" c:identifier="g_module_supported">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="264">Checks if modules are supported on the current platform.</doc>
-        <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                         line="91"/>
+        <source-position filename="gmodule.h" line="93"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="269">%TRUE if modules are supported</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
@@ -281,24 +271,23 @@ returned.</doc>
     </record>
     <callback name="ModuleCheckInit" c:type="GModuleCheckInit">
       <doc xml:space="preserve"
-           filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+           filename="gmodule-2.0.c"
            line="14">Specifies the type of the module initialization function.
 If a module contains a function named g_module_check_init() it is called
 automatically when the module is loaded. It is passed the #GModule structure
 and should return %NULL on success or a string describing the initialization
 error.</doc>
-      <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                       line="66"/>
+      <source-position filename="gmodule.h" line="68"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="24">%NULL on success, or a string describing the initialization error</doc>
         <type name="utf8" c:type="const gchar*"/>
       </return-value>
       <parameters>
         <parameter name="module" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="16">the #GModule corresponding to the module which has just been loaded</doc>
           <type name="Module" c:type="GModule*"/>
         </parameter>
@@ -309,67 +298,64 @@ error.</doc>
                  c:type="GModuleError"
                  glib:error-domain="g-module-error-quark">
       <doc xml:space="preserve"
-           filename="gnome/install/include/glib-2.0/gmodule.h"
-           line="73">Errors returned by g_module_open_full().</doc>
-      <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                       line="86"/>
+           filename="gmodule.h"
+           line="75">Errors returned by g_module_open_full().</doc>
+      <source-position filename="gmodule.h" line="88"/>
       <member name="failed" value="0" c:identifier="G_MODULE_ERROR_FAILED">
         <doc xml:space="preserve"
-             filename="gnome/install/include/glib-2.0/gmodule.h"
-             line="75">there was an error loading or opening a module file</doc>
+             filename="gmodule.h"
+             line="77">there was an error loading or opening a module file</doc>
       </member>
       <member name="check_failed"
               value="1"
               c:identifier="G_MODULE_ERROR_CHECK_FAILED">
         <doc xml:space="preserve"
-             filename="gnome/install/include/glib-2.0/gmodule.h"
-             line="76">a module returned an error from its `g_module_check_init()` function</doc>
+             filename="gmodule.h"
+             line="78">a module returned an error from its `g_module_check_init()` function</doc>
       </member>
     </enumeration>
     <bitfield name="ModuleFlags" c:type="GModuleFlags">
       <doc xml:space="preserve"
-           filename="gnome/install/include/glib-2.0/gmodule.h"
-           line="44">Flags passed to g_module_open().
+           filename="gmodule.h"
+           line="46">Flags passed to g_module_open().
 Note that these flags are not supported on all platforms.</doc>
-      <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                       line="63"/>
+      <source-position filename="gmodule.h" line="65"/>
       <member name="lazy" value="1" c:identifier="G_MODULE_BIND_LAZY">
         <doc xml:space="preserve"
-             filename="gnome/install/include/glib-2.0/gmodule.h"
-             line="46">specifies that symbols are only resolved when
+             filename="gmodule.h"
+             line="48">specifies that symbols are only resolved when
     needed. The default action is to bind all symbols when the module
     is loaded.</doc>
       </member>
       <member name="local" value="2" c:identifier="G_MODULE_BIND_LOCAL">
         <doc xml:space="preserve"
-             filename="gnome/install/include/glib-2.0/gmodule.h"
-             line="49">specifies that symbols in the module should
+             filename="gmodule.h"
+             line="51">specifies that symbols in the module should
     not be added to the global name space. The default action on most
     platforms is to place symbols in the module in the global name space,
     which may cause conflicts with existing symbols.</doc>
       </member>
       <member name="mask" value="3" c:identifier="G_MODULE_BIND_MASK">
         <doc xml:space="preserve"
-             filename="gnome/install/include/glib-2.0/gmodule.h"
-             line="53">mask for all flags.</doc>
+             filename="gmodule.h"
+             line="55">mask for all flags.</doc>
       </member>
     </bitfield>
     <callback name="ModuleUnload" c:type="GModuleUnload">
       <doc xml:space="preserve"
-           filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+           filename="gmodule-2.0.c"
            line="28">Specifies the type of the module function called when it is unloaded.
 If a module contains a function named g_module_unload() it is called
 automatically when the module is unloaded.
 It is passed the #GModule structure.</doc>
-      <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                       line="67"/>
+      <source-position filename="gmodule.h" line="69"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="module" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="30">the #GModule about to be unloaded</doc>
           <type name="Module" c:type="GModule*"/>
         </parameter>
@@ -379,7 +365,7 @@ It is passed the #GModule structure.</doc>
               c:identifier="g_module_build_path"
               moved-to="Module.build_path">
       <doc xml:space="preserve"
-           filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+           filename="gmodule-2.0.c"
            line="159">A portable way to build the filename of a module. The platform-specific
 prefix and suffix are added to the filename, if needed, and the result
 is added to the directory, using the correct separator character.
@@ -393,11 +379,10 @@ For example, calling g_module_build_path() on a Linux system with a
 @directory of `/lib` and a @module_name of "mylibrary" will return
 `/lib/libmylibrary.so`. On a Windows system, using `\Windows` as the
 directory it will return `\Windows\mylibrary.dll`.</doc>
-      <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                       line="137"/>
+      <source-position filename="gmodule.h" line="139"/>
       <return-value transfer-ownership="full">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="180">the complete path of the module, including the standard library
     prefix and suffix. This should be freed when no longer needed</doc>
         <type name="utf8" c:type="gchar*"/>
@@ -408,7 +393,7 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
                    nullable="1"
                    allow-none="1">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="161">the directory where the module is. This can be
     %NULL or the empty string to indicate that the standard platform-specific
     directories will be used, though that is not recommended</doc>
@@ -416,7 +401,7 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
         </parameter>
         <parameter name="module_name" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+               filename="gmodule-2.0.c"
                line="164">the name of the module</doc>
           <type name="utf8" c:type="const gchar*"/>
         </parameter>
@@ -426,13 +411,12 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
               c:identifier="g_module_error"
               moved-to="Module.error">
       <doc xml:space="preserve"
-           filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+           filename="gmodule-2.0.c"
            line="195">Gets a string describing the last module error.</doc>
-      <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                       line="113"/>
+      <source-position filename="gmodule.h" line="115"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="200">a string describing the last module error</doc>
         <type name="utf8" c:type="const gchar*"/>
       </return-value>
@@ -448,20 +432,19 @@ directory it will return `\Windows\mylibrary.dll`.</doc>
               c:identifier="g_module_supported"
               moved-to="Module.supported">
       <doc xml:space="preserve"
-           filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+           filename="gmodule-2.0.c"
            line="264">Checks if modules are supported on the current platform.</doc>
-      <source-position filename="gnome/install/include/glib-2.0/gmodule.h"
-                       line="91"/>
+      <source-position filename="gmodule.h" line="93"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+             filename="gmodule-2.0.c"
              line="269">%TRUE if modules are supported</doc>
         <type name="gboolean" c:type="gboolean"/>
       </return-value>
     </function>
     <docsection name="modules">
       <doc xml:space="preserve"
-           filename="Projects/gobject-introspection/gir/gmodule-2.0.c"
+           filename="gmodule-2.0.c"
            line="79">These functions provide a portable way to dynamically load object files
 (commonly known as 'plug-ins'). The current implementation supports all
 systems that provide an implementation of dlopen() (e.g. Linux/Sun), as
