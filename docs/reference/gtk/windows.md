@@ -7,7 +7,7 @@ the default.
 
 More information about GTK on Windows, including detailed build
 instructions, binary downloads, etc, can be found
-[online](https://wiki.gnome.org/Projects/GTK/Win32).
+[online](https://www.gtk.org/docs/installations/windows/).
 
 ## Windows-specific environment variables
 
