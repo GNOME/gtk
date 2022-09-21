@@ -524,6 +524,10 @@ gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
  *
  * Gets the currently-selected font features.
  *
+ * The format of the returned string is compatible with the
+ * [CSS font-feature-settings property](https://www.w3.org/TR/css-fonts-4/#font-rend-desc).
+ * It can be passed to [func@Pango.AttrFontFeatures.new].
+ *
  * Returns: the currently selected font features
  */
 char *
