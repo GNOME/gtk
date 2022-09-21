@@ -84,6 +84,7 @@ gdk_broadway_device_query_state (GdkDevice         *device,
   gint32 device_root_x, device_root_y;
   guint32 mouse_toplevel_id;
   guint32 mask32;
+  int origin_x, origin_y;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
     return;
@@ -97,10 +98,12 @@ gdk_broadway_device_query_state (GdkDevice         *device,
                                     &device_root_y,
                                     &mask32);
 
+  gdk_surface_get_origin (surface, &origin_x, &origin_y);
+
   if (win_x)
-    *win_x = device_root_x;
+    *win_x = device_root_x - origin_x;
   if (win_y)
-    *win_y = device_root_y;
+    *win_y = device_root_y - origin_y;
   if (mask)
     *mask = mask32;
 }
