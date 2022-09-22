@@ -120,7 +120,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "portals",         GDK_DEBUG_PORTALS, "Force the use of portals", TRUE },
   { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support", TRUE },
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context", TRUE },
-  { "gl-gles",         GDK_DEBUG_GL_GLES, "Only allow OpenGL GLES API" },
+  { "gl-gles",         GDK_DEBUG_GL_GLES, "Only allow OpenGL GLES API", TRUE },
   { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
   { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows" },
   { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11" },

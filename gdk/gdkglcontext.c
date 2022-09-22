@@ -1265,7 +1265,7 @@ gdk_gl_context_is_api_allowed (GdkGLContext  *self,
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
-  if (GDK_DISPLAY_DEBUG_CHECK (gdk_gl_context_get_display (self), GL_GLES))
+  if (gdk_display_get_debug_flags (gdk_gl_context_get_display (self)) & GDK_DEBUG_GL_GLES)
     {
       if (!(api & GDK_GL_API_GLES))
         {
