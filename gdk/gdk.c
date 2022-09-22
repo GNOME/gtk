@@ -116,7 +116,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "vulkan",          GDK_DEBUG_VULKAN, "Information about Vulkan" },
   { "selection",       GDK_DEBUG_SELECTION, "Information about selections" },
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
-  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)" },
+  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)", TRUE },
   { "portals",         GDK_DEBUG_PORTALS, "Force the use of portals" },
   { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
   { "gl-software",     GDK_DEBUG_GL_SOFTWARE, "Force OpenGL software rendering" },
