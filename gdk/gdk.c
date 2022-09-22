@@ -127,7 +127,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows" },
   { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11" },
   { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows" },
-  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support" },
+  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support", TRUE },
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer", TRUE },
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings", TRUE },
   { "high-depth",      GDK_DEBUG_HIGH_DEPTH, "Use high bit depth rendering if possible", TRUE },
