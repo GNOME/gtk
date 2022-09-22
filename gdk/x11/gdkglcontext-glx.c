@@ -609,7 +609,7 @@ gdk_x11_gl_context_glx_realize (GdkGLContext  *context,
   /* If there is no glXCreateContextAttribsARB() then we default to legacy */
   legacy = !GDK_X11_DISPLAY (display)->has_glx_create_context;
 
-  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY))
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_LEGACY)
     legacy = TRUE;
 
   /* We cannot share legacy contexts with core profile ones, so the

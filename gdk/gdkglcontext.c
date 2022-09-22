@@ -395,8 +395,8 @@ gdk_gl_context_realize_egl (GdkGLContext  *context,
       return 0;
     }
 
-  prefer_legacy = (GDK_DISPLAY_DEBUG_CHECK (display, GL_LEGACY) ||
-                   (share != NULL && gdk_gl_context_is_legacy (share)));
+  prefer_legacy = (gdk_display_get_debug_flags(display) & GDK_DEBUG_GL_LEGACY) ||
+                   (share != NULL && gdk_gl_context_is_legacy (share));
 
   if (preferred_api == GDK_GL_API_GL)
     {
