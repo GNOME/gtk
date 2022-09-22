@@ -1485,9 +1485,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   gboolean gl_debug = FALSE;
-#ifdef G_ENABLE_DEBUG
   GdkDisplay *display;
-#endif
 
   if (!gdk_gl_context_is_realized (context))
     return;
@@ -1500,16 +1498,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   priv->has_debug_output = epoxy_has_gl_extension ("GL_ARB_debug_output") ||
                            epoxy_has_gl_extension ("GL_KHR_debug");
 
-#ifdef G_ENABLE_DEBUG
   display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-  gl_debug = GDK_DISPLAY_DEBUG_CHECK (display, GL_DEBUG);
-#endif
+  gl_debug = (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_DEBUG) != 0;
 
-  if (priv->has_debug_output
-#ifndef G_ENABLE_CONSISTENCY_CHECKS
-      && gl_debug
-#endif
-      )
+  if (priv->has_debug_output && gl_debug)
     {
       gdk_gl_context_make_current (context);
       glEnable (GL_DEBUG_OUTPUT);
