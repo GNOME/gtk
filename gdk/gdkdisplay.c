@@ -1233,7 +1233,7 @@ gdk_display_init_gl (GdkDisplay *self)
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  if (GDK_DISPLAY_DEBUG_CHECK (self, GL_DISABLE))
+  if (gdk_display_get_debug_flags (self) & GDK_DEBUG_GL_DISABLE)
     {
       g_set_error_literal (&priv->gl_error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,

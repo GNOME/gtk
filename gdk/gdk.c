@@ -118,7 +118,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
   { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)", TRUE },
   { "portals",         GDK_DEBUG_PORTALS, "Force the use of portals", TRUE },
-  { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
+  { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support", TRUE },
   { "gl-software",     GDK_DEBUG_GL_SOFTWARE, "Force OpenGL software rendering" },
   { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT, "Use OpenGL texture rectangle extension" },
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
