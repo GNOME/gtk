@@ -40,7 +40,6 @@ typedef enum {
   GDK_DEBUG_NOGRABS         = 1 << 11,
   GDK_DEBUG_PORTALS         = 1 << 12,
   GDK_DEBUG_GL_DISABLE      = 1 << 13,
-  GDK_DEBUG_GL_TEXTURE_RECT = 1 << 15,
   GDK_DEBUG_GL_LEGACY       = 1 << 16,
   GDK_DEBUG_GL_GLES         = 1 << 17,
   GDK_DEBUG_GL_DEBUG        = 1 << 18,
