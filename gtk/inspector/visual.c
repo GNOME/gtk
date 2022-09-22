@@ -97,7 +97,6 @@ struct _GtkInspectorVisual
 
   GtkWidget *misc_box;
   GtkWidget *touchscreen_switch;
-  GtkWidget *software_gl_switch;
 
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *updates_overlay;
@@ -1021,51 +1020,11 @@ row_activated (GtkListBox         *box,
       GtkSwitch *sw = GTK_SWITCH (vis->touchscreen_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->software_gl_switch, GTK_WIDGET (row)))
-    {
-      GtkSwitch *sw = GTK_SWITCH (vis->software_gl_switch);
-      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
-    }
 }
 
 static void
 init_gl (GtkInspectorVisual *vis)
 {
-  GdkDebugFlags flags = gdk_display_get_debug_flags (vis->display);
-
-  gtk_switch_set_active (GTK_SWITCH (vis->software_gl_switch), flags & GDK_DEBUG_GL_SOFTWARE);
-
-  if (flags & GDK_DEBUG_GL_DISABLE)
-    {
-      GtkWidget *row;
-
-      gtk_widget_set_sensitive (vis->software_gl_switch, FALSE);
-      row = gtk_widget_get_ancestor (vis->software_gl_switch, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("GL rendering is disabled"));
-    }
-}
-
-static void
-update_gl_flag (GtkSwitch     *sw,
-                GdkDebugFlags  flag,
-                GtkInspectorVisual *vis)
-{
-  GdkDebugFlags flags = gdk_display_get_debug_flags (vis->display);
-
-  if (gtk_switch_get_active (sw))
-    flags |= flag;
-  else
-    flags &= ~flag;
-
-  gdk_display_set_debug_flags (vis->display, flags);
-}
-
-static void
-software_gl_activate (GtkSwitch          *sw,
-                      GParamSpec         *pspec,
-                      GtkInspectorVisual *vis)
-{
-  update_gl_flag (sw, GDK_DEBUG_GL_SOFTWARE, vis);
 }
 
 static void
@@ -1170,7 +1129,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, debug_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, misc_box);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, software_gl_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, fps_switch);
@@ -1187,7 +1145,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, focus_activate);
-  gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
   gtk_widget_class_bind_template_callback (widget_class, inspect_inspector);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

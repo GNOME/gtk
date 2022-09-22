@@ -668,31 +668,6 @@
                             </child>
                           </object>
                         </child>
-                        <child>
-                          <object class="GtkListBoxRow">
-                            <child>
-                              <object class="GtkBox">
-                                <property name="spacing">40</property>
-                                <child>
-                                  <object class="GtkLabel" id="software_gl_label">
-                                    <property name="label" translatable="yes">Software GL</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="xalign">0.0</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkSwitch" id="software_gl_switch">
-                                    <property name="halign">end</property>
-                                    <property name="valign">center</property>
-                                    <property name="hexpand">1</property>
-                                    <signal name="notify::active" handler="software_gl_activate"/>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>
@@ -747,7 +722,6 @@
       <widget name="layout_label_box"/>
       <widget name="focus_label"/>
       <widget name="touchscreen_label"/>
-      <widget name="software_gl_label"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
