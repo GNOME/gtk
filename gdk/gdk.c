@@ -117,7 +117,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "selection",       GDK_DEBUG_SELECTION, "Information about selections" },
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
   { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)", TRUE },
-  { "portals",         GDK_DEBUG_PORTALS, "Force the use of portals" },
+  { "portals",         GDK_DEBUG_PORTALS, "Force the use of portals", TRUE },
   { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
   { "gl-software",     GDK_DEBUG_GL_SOFTWARE, "Force OpenGL software rendering" },
   { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT, "Use OpenGL texture rectangle extension" },
@@ -361,7 +361,7 @@ gdk_running_in_sandbox (void)
 gboolean
 gdk_should_use_portal (void)
 {
-  if (GDK_DISPLAY_DEBUG_CHECK (NULL, PORTALS))
+  if (gdk_display_get_debug_flags (NULL) & GDK_DEBUG_PORTALS)
     return TRUE;
 
   if (gdk_running_in_sandbox ())
