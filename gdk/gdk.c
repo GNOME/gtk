@@ -122,9 +122,9 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL", TRUE },
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context", TRUE },
   { "gl-gles",         GDK_DEBUG_GL_GLES, "Only allow OpenGL GLES API", TRUE },
-  { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows" },
-  { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11" },
-  { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows" },
+  { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows", TRUE },
+  { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11", TRUE },
+  { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows", TRUE },
   { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support", TRUE },
   { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer", TRUE },
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings", TRUE },
@@ -296,11 +296,11 @@ gdk_pre_parse (void)
                                           G_N_ELEMENTS (gdk_debug_keys));
 
   /* These are global */
-  if (GDK_DEBUG_CHECK (GL_EGL))
+  if (_gdk_debug_flags & GDK_DEBUG_GL_EGL)
     gdk_gl_backend_use (GDK_GL_EGL);
-  else if (GDK_DEBUG_CHECK (GL_GLX))
+  else if (_gdk_debug_flags & GDK_DEBUG_GL_GLX)
     gdk_gl_backend_use (GDK_GL_GLX);
-  else if (GDK_DEBUG_CHECK (GL_WGL))
+  else if (_gdk_debug_flags & GDK_DEBUG_GL_WGL)
     gdk_gl_backend_use (GDK_GL_WGL);
 
 #ifndef G_HAS_CONSTRUCTORS
