@@ -165,8 +165,9 @@ gdk_x11_drop_read_got_stream (GObject      *source,
         {
           GdkDrop *drop = GDK_DROP (g_task_get_source_object (task));
 
-          GDK_DISPLAY_NOTE (gdk_drop_get_display (drop), DND, g_printerr ("reading %s failed, trying %s next\n",
-                                     (char *) targets->data, (char *) next->data));
+          GDK_DISPLAY_DEBUG (gdk_drop_get_display (drop), DND,
+                             "reading %s failed, trying %s next",
+                             (char *) targets->data, (char *) next->data);
           targets->next = NULL;
           g_task_set_task_data (task, next, (GDestroyNotify) g_slist_free);
           gdk_x11_selection_input_stream_new_async (gdk_drop_get_display (drop),
@@ -202,8 +203,9 @@ gdk_x11_drop_read_got_stream (GObject      *source,
             }
         }
 
-      GDK_NOTE (DND, g_printerr ("reading DND as %s now\n",
-                                 (const char *)((GSList *) g_task_get_task_data (task))->data));
+      GDK_DISPLAY_DEBUG (gdk_drop_get_display (drop), DND,
+                         "reading DND as %s now",
+                         (const char *)((GSList *) g_task_get_task_data (task))->data);
       g_task_return_pointer (task, stream, g_object_unref);
     }
 
@@ -234,8 +236,9 @@ gdk_x11_drop_read_async (GdkDrop             *drop,
       return;
     }
 
-  GDK_DISPLAY_NOTE (gdk_drop_get_display (drop), DND, g_printerr ("new read for %s (%u other options)\n",
-                            (char *) targets->data, g_slist_length (targets->next)));
+  GDK_DISPLAY_DEBUG (gdk_drop_get_display (drop), DND,
+                     "new read for %s (%u other options)",
+                     (char *) targets->data, g_slist_length (targets->next));
   gdk_x11_selection_input_stream_new_async (gdk_drop_get_display (drop),
                                             "XdndSelection",
                                             targets->data,
@@ -495,14 +498,14 @@ xdnd_enter_filter (GdkSurface   *surface,
   display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
 
-  GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndEnter: source_window: %#lx, version: %#x",
-                       source_window, version));
+  GDK_DISPLAY_DEBUG (display, DND,
+                     "XdndEnter: source_window: %#lx, version: %#x",
+                     source_window, version);
 
   if (version < 3)
     {
       /* Old source ignore */
-      GDK_DISPLAY_NOTE (display, DND, g_message ("Ignored old XdndEnter message"));
+      GDK_DISPLAY_DEBUG (display, DND, "Ignored old XdndEnter message");
       return TRUE;
     }
 
@@ -607,9 +610,9 @@ xdnd_leave_filter (GdkSurface   *surface,
   display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
 
-  GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndLeave: source_window: %#lx",
-                       source_window));
+  GDK_DISPLAY_DEBUG (display, DND,
+                     "XdndLeave: source_window: %#lx",
+                     source_window);
 
   if ((display_x11->current_drop != NULL) &&
       (GDK_X11_DROP (display_x11->current_drop)->source_window == source_window))
@@ -641,9 +644,9 @@ xdnd_position_filter (GdkSurface   *surface,
   display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
 
-  GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndPosition: source_window: %#lx position: (%d, %d)  time: %d  action: %ld",
-                       source_window, x_root, y_root, time, action));
+  GDK_DISPLAY_DEBUG (display, DND,
+                     "XdndPosition: source_window: %#lx position: (%d, %d)  time: %d  action: %ld",
+                     source_window, x_root, y_root, time, action);
 
   drop = display_x11->current_drop;
   drop_x11 = GDK_X11_DROP (drop);
@@ -688,9 +691,9 @@ xdnd_drop_filter (GdkSurface   *surface,
   display = gdk_surface_get_display (surface);
   display_x11 = GDK_X11_DISPLAY (display);
 
-  GDK_DISPLAY_NOTE (display, DND,
-            g_message ("XdndDrop: source_window: %#lx  time: %d",
-                       source_window, time));
+  GDK_DISPLAY_DEBUG (display, DND,
+                     "XdndDrop: source_window: %#lx  time: %d",
+                     source_window, time);
 
   drop = display_x11->current_drop;
   drop_x11 = GDK_X11_DROP (drop);
@@ -745,14 +748,10 @@ gdk_x11_drop_do_nothing (Window   window,
                          gboolean success,
                          gpointer data)
 {
-#ifdef G_ENABLE_DEBUG
-  GdkDisplay *display = data;
-
   if (!success)
     {
-      GDK_DISPLAY_NOTE (display, DND, g_message ("Send event to %lx failed", window));
+      GDK_DISPLAY_DEBUG (GDK_DISPLAY (data), DND, "Send event to %lx failed", window);
     }
-#endif
 }
 
 static void

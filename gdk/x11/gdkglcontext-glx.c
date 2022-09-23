@@ -137,11 +137,11 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
 
   drawable = gdk_x11_surface_get_glx_drawable (surface);
 
-  GDK_DISPLAY_NOTE (display, OPENGL,
-            g_message ("Flushing GLX buffers for drawable %lu (window: %lu), frame sync: %s",
-                       (unsigned long) drawable,
-                       (unsigned long) gdk_x11_surface_get_xid (surface),
-                       self->do_frame_sync ? "yes" : "no"));
+  GDK_DISPLAY_DEBUG (display, OPENGL,
+                     "Flushing GLX buffers for drawable %lu (window: %lu), frame sync: %s",
+                     (unsigned long) drawable,
+                     (unsigned long) gdk_x11_surface_get_xid (surface),
+                     self->do_frame_sync ? "yes" : "no");
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "x11", "swap buffers");
 
@@ -228,9 +228,9 @@ gdk_x11_gl_context_glx_make_current (GdkGLContext *context,
     surface = GDK_X11_DISPLAY (display)->leader_gdk_surface;
   drawable = gdk_x11_surface_get_glx_drawable (surface);
 
-  GDK_DISPLAY_NOTE (display, OPENGL,
-                    g_message ("Making GLX context %p current to drawable %lu",
-                               context, (unsigned long) drawable));
+  GDK_DISPLAY_DEBUG (display, OPENGL,
+                     "Making GLX context %p current to drawable %lu",
+                     context, (unsigned long) drawable);
 
   if (!glXMakeContextCurrent (dpy, drawable, drawable, self->glx_context))
     return FALSE;
@@ -506,13 +506,13 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
   context_attribs[i++] = None;
   g_assert (i < N_GLX_ATTRS);
 
-  GDK_DISPLAY_NOTE (display, OPENGL,
-                    g_message ("Creating GLX context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
-                               major, minor,
-                               debug_bit ? "yes" : "no",
-                               compat_bit ? "yes" : "no",
-                               legacy ? "yes" : "no",
-                               api == GDK_GL_API_GLES ? "yes" : "no"));
+  GDK_DISPLAY_DEBUG (display, OPENGL,
+                     "Creating GLX context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
+                     major, minor,
+                     debug_bit ? "yes" : "no",
+                     compat_bit ? "yes" : "no",
+                     legacy ? "yes" : "no",
+                     api == GDK_GL_API_GLES ? "yes" : "no");
 
   if (share != NULL)
     share_glx = GDK_X11_GL_CONTEXT_GLX (share);
@@ -539,13 +539,12 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
   if (gdk_x11_display_error_trap_pop (display) || ctx == NULL)
     return 0;
 
-  GDK_DISPLAY_NOTE (display, OPENGL,
-            g_message ("Realized GLX context[%p], %s, version: %d.%d",
-                       context_glx->glx_context,
-                       glXIsDirect (dpy, context_glx->glx_context) ? "direct" : "indirect",
-                       display_x11->glx_version / 10,
-
-                       display_x11->glx_version % 10));
+  GDK_DISPLAY_DEBUG (display, OPENGL,
+                     "Realized GLX context[%p], %s, version: %d.%d",
+                     context_glx->glx_context,
+                     glXIsDirect (dpy, context_glx->glx_context) ? "direct" : "indirect",
+                     display_x11->glx_version / 10,
+                     display_x11->glx_version % 10);
 
   context_glx->glx_context = ctx;
   gdk_gl_context_set_is_legacy (context, legacy);
@@ -660,7 +659,7 @@ gdk_x11_gl_context_glx_dispose (GObject *gobject)
       if (glXGetCurrentContext () == context_glx->glx_context)
         glXMakeContextCurrent (dpy, None, None, NULL);
 
-      GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Destroying GLX context"));
+      GDK_DISPLAY_DEBUG (display, OPENGL, "Destroying GLX context");
       glXDestroyContext (dpy, context_glx->glx_context);
       context_glx->glx_context = NULL;
     }
@@ -771,7 +770,7 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
         {
           if (best_features < WITH_MULTISAMPLING)
             {
-              GDK_NOTE (OPENGL, g_message ("Best GLX config is %u for visual 0x%lX with multisampling", i, visinfo->visualid));
+              GDK_DISPLAY_DEBUG (display, OPENGL, "Best GLX config is %u for visual 0x%lX with multisampling", i, visinfo->visualid);
               best_features = WITH_MULTISAMPLING;
               *out_visual = visinfo->visual;
               *out_depth = visinfo->depth;
@@ -786,7 +785,7 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
         {
           if (best_features < WITH_STENCIL_AND_DEPTH_BUFFER)
             {
-              GDK_NOTE (OPENGL, g_message ("Best GLX config is %u for visual 0x%lX with a stencil or depth buffer", i, visinfo->visualid));
+              GDK_DISPLAY_DEBUG (display, OPENGL, "Best GLX config is %u for visual 0x%lX with a stencil or depth buffer", i, visinfo->visualid);
               best_features = WITH_STENCIL_AND_DEPTH_BUFFER;
               *out_visual = visinfo->visual;
               *out_depth = visinfo->depth;
@@ -800,7 +799,7 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
         {
           if (best_features < NO_ALPHA_VISUAL)
             {
-              GDK_NOTE (OPENGL, g_message ("Best GLX config is %u for visual 0x%lX with no RGBA Visual", i, visinfo->visualid));
+              GDK_DISPLAY_DEBUG (display, OPENGL, "Best GLX config is %u for visual 0x%lX with no RGBA Visual", i, visinfo->visualid);
               best_features = NO_ALPHA_VISUAL;
               *out_visual = visinfo->visual;
               *out_depth = visinfo->depth;
@@ -810,7 +809,7 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
           continue;
         }
 
-      GDK_NOTE (OPENGL, g_message ("GLX config %u for visual 0x%lX is the perfect choice", i, visinfo->visualid));
+      GDK_DISPLAY_DEBUG (display, OPENGL, "GLX config %u for visual 0x%lX is the perfect choice", i, visinfo->visualid);
       best_features = PERFECT;
       *out_visual = visinfo->visual;
       *out_depth = visinfo->depth;
@@ -966,8 +965,8 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
   if (!gdk_x11_display_create_glx_config (display_x11, out_visual, out_depth, error))
     return FALSE;
 
-  GDK_DISPLAY_NOTE (display, OPENGL,
-            g_message ("GLX version %d.%d found\n"
+  GDK_DISPLAY_DEBUG (display, OPENGL,
+                     "GLX version %d.%d found\n"
                        " - Vendor: %s\n"
                        " - Checked extensions:\n"
                        "\t* GLX_ARB_create_context_profile: %s\n"
@@ -976,8 +975,8 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
                        "\t* GLX_EXT_texture_from_pixmap: %s\n"
                        "\t* GLX_SGI_video_sync: %s\n"
                        "\t* GLX_EXT_buffer_age: %s\n"
-                       "\t* GLX_OML_sync_control: %s"
-                       "\t* GLX_ARB_multisample: %s"
+                       "\t* GLX_OML_sync_control: %s\n"
+                       "\t* GLX_ARB_multisample: %s\n"
                        "\t* GLX_EXT_visual_rating: %s",
                      display_x11->glx_version / 10,
                      display_x11->glx_version % 10,
@@ -990,7 +989,7 @@ gdk_x11_display_init_glx (GdkX11Display  *display_x11,
                      display_x11->has_glx_buffer_age ? "yes" : "no",
                      display_x11->has_glx_sync_control ? "yes" : "no",
                      display_x11->has_glx_multisample ? "yes" : "no",
-                     display_x11->has_glx_visual_rating ? "yes" : "no"));
+                     display_x11->has_glx_visual_rating ? "yes" : "no");
 
   return TRUE;
 }

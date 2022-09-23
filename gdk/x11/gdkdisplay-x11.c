@@ -680,17 +680,17 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   switch (xevent->type)
     {
     case KeymapNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS, g_message ("keymap notify"));
+      GDK_DISPLAY_DEBUG (display, EVENTS, "keymap notify");
 
       /* Not currently handled */
       break;
 
     case Expose:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("expose:\t\twindow: %ld  %d	x,y: %d %d  w,h: %d %d",
-			   xevent->xexpose.window, xevent->xexpose.count,
-			   xevent->xexpose.x, xevent->xexpose.y,
-			   xevent->xexpose.width, xevent->xexpose.height));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "expose:\t\twindow: %ld  %d x,y: %d %d  w,h: %d %d",
+                         xevent->xexpose.window, xevent->xexpose.count,
+                         xevent->xexpose.x, xevent->xexpose.y,
+                         xevent->xexpose.width, xevent->xexpose.height);
 
       if (surface == NULL)
         break;
@@ -718,9 +718,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	GdkRectangle expose_rect;
         int x2, y2;
 
-        GDK_DISPLAY_NOTE (display, EVENTS,
-		  g_message ("graphics expose:\tdrawable: %ld",
-			     xevent->xgraphicsexpose.drawable));
+        GDK_DISPLAY_DEBUG (display, EVENTS,
+                           "graphics expose:\tdrawable: %ld",
+                           xevent->xgraphicsexpose.drawable);
 
         if (surface == NULL)
           break;
@@ -763,23 +763,23 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case CreateNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("create notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  parent: %ld	 ovr: %d",
-			   xevent->xcreatewindow.window,
-			   xevent->xcreatewindow.x,
-			   xevent->xcreatewindow.y,
-			   xevent->xcreatewindow.width,
-			   xevent->xcreatewindow.height,
-			   xevent->xcreatewindow.border_width,
-			   xevent->xcreatewindow.parent,
-			   xevent->xcreatewindow.override_redirect));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "create notify:\twindow: %ld  x,y: %d %d     w,h: %d %d  b-w: %d  parent: %ld         ovr: %d",
+                         xevent->xcreatewindow.window,
+                         xevent->xcreatewindow.x,
+                         xevent->xcreatewindow.y,
+                         xevent->xcreatewindow.width,
+                         xevent->xcreatewindow.height,
+                         xevent->xcreatewindow.border_width,
+                         xevent->xcreatewindow.parent,
+                         xevent->xcreatewindow.override_redirect);
       /* not really handled */
       break;
 
     case DestroyNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("destroy notify:\twindow: %ld",
-			   xevent->xdestroywindow.window));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "destroy notify:\twindow: %ld",
+                         xevent->xdestroywindow.window);
 
       if (surface)
         event = gdk_delete_event_new (surface);
@@ -790,9 +790,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case UnmapNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("unmap notify:\t\twindow: %ld",
-			   xevent->xmap.window));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "unmap notify:\t\twindow: %ld",
+                         xevent->xmap.window);
 
       if (surface)
 	{
@@ -833,9 +833,9 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case MapNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("map notify:\t\twindow: %ld",
-			   xevent->xmap.window));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "map notify:\t\twindow: %ld",
+                         xevent->xmap.window);
 
       if (surface)
 	{
@@ -858,29 +858,29 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case ReparentNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("reparent notify:\twindow: %ld  x,y: %d %d  parent: %ld	ovr: %d",
-			   xevent->xreparent.window,
-			   xevent->xreparent.x,
-			   xevent->xreparent.y,
-			   xevent->xreparent.parent,
-			   xevent->xreparent.override_redirect));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "reparent notify:\twindow: %ld  x,y: %d %d  parent: %ld      ovr: %d",
+                         xevent->xreparent.window,
+                         xevent->xreparent.x,
+                         xevent->xreparent.y,
+                         xevent->xreparent.parent,
+                         xevent->xreparent.override_redirect);
 
       /* Not currently handled */
       break;
 
     case ConfigureNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d%s",
-			   xevent->xconfigure.window,
-			   xevent->xconfigure.x,
-			   xevent->xconfigure.y,
-			   xevent->xconfigure.width,
-			   xevent->xconfigure.height,
-			   xevent->xconfigure.border_width,
-			   xevent->xconfigure.above,
-			   xevent->xconfigure.override_redirect,
-			   !surface ? " (discarding)" : ""));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "configure notify:\twindow: %ld  x,y: %d %d  w,h: %d %d  b-w: %d  above: %ld  ovr: %d%s",
+                         xevent->xconfigure.window,
+                         xevent->xconfigure.x,
+                         xevent->xconfigure.y,
+                         xevent->xconfigure.width,
+                         xevent->xconfigure.height,
+                         xevent->xconfigure.border_width,
+                         xevent->xconfigure.above,
+                         xevent->xconfigure.override_redirect,
+                         !surface ? " (discarding)" : "");
       if (_gdk_x11_display_is_root_window (display, xevent->xconfigure.window))
         {
 	  _gdk_x11_screen_size_changed (x11_screen, xevent);
@@ -980,13 +980,13 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case PropertyNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("property notify:\twindow: %ld, atom(%ld): %s%s%s",
-			   xevent->xproperty.window,
-			   xevent->xproperty.atom,
-			   "\"",
-			   gdk_x11_get_xatom_name_for_display (display, xevent->xproperty.atom),
-			   "\""));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "property notify:\twindow: %ld, atom(%ld): %s%s%s",
+                         xevent->xproperty.window,
+                         xevent->xproperty.atom,
+                         "\"",
+                         gdk_x11_get_xatom_name_for_display (display, xevent->xproperty.atom),
+                         "\"");
 
       if (surface == NULL)
         break;
@@ -1009,24 +1009,23 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       break;
 
     case ColormapNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("colormap notify:\twindow: %ld",
-			   xevent->xcolormap.window));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "colormap notify:\twindow: %ld",
+                         xevent->xcolormap.window);
 
       /* Not currently handled */
       break;
 
     case ClientMessage:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-                g_message ("client message:\twindow: %ld",
-                           xevent->xclient.window));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "client message:\twindow: %ld",
+                         xevent->xclient.window);
 
       /* Not currently handled */
       break;
 
     case MappingNotify:
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("mapping notify"));
+      GDK_DISPLAY_DEBUG (display, EVENTS, "mapping notify");
 
       /* Let XLib know that there is a new keyboard mapping.
        */
@@ -1244,9 +1243,9 @@ _gdk_wm_protocols_filter (const XEvent  *xevent,
        *  the event is passed along to the program,
        *  which should then destroy the window.
        */
-      GDK_DISPLAY_NOTE (display, EVENTS,
-		g_message ("delete window:\t\twindow: %ld",
-			   xevent->xclient.window));
+      GDK_DISPLAY_DEBUG (display, EVENTS,
+                         "delete window:\t\twindow: %ld",
+                         xevent->xclient.window);
 
       *event = gdk_delete_event_new (win);
 
@@ -1592,11 +1591,12 @@ gdk_x11_display_open (const char *display_name)
 					True,
 					&detectable_autorepeat_supported);
 
-	    GDK_NOTE (MISC, g_message ("Detectable autorepeat %s.",
-				       detectable_autorepeat_supported ?
-				       "supported" : "not supported"));
-	    
-	    display_x11->have_xkb_autorepeat = detectable_autorepeat_supported;
+            GDK_DEBUG (MISC, "Detectable autorepeat %s.",
+                             detectable_autorepeat_supported
+                               ? "supported"
+                               : "not supported");
+
+            display_x11->have_xkb_autorepeat = detectable_autorepeat_supported;
           }
       }
   }
