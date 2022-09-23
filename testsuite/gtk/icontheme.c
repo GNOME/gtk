@@ -135,59 +135,22 @@ assert_icon_lookup_fails (const char         *icon_name,
   g_assert_cmpstr (gtk_icon_paintable_get_icon_name (info), ==, "image-missing");
 }
 
-static GList *lookups = NULL;
-static gboolean collecting_lookups = FALSE;
-
-static GLogWriterOutput
-log_writer (GLogLevelFlags   log_level,
-            const GLogField *fields,
-            gsize            n_fields,
-            gpointer         user_data)
-{
-  const char *domain = NULL;
-  const char *msg = NULL;
-  int i;
-
-  if (!collecting_lookups)
-    return g_log_writer_default (log_level, fields, n_fields, user_data);
-
-  for (i = 0; i < n_fields; i++)
-    {
-      if (strcmp (fields[i].key, "GLIB_DOMAIN") == 0)
-        domain = fields[i].value;
-      if (strcmp (fields[i].key, "MESSAGE") == 0)
-        msg = fields[i].value;
-    }
-
-  if (log_level != G_LOG_LEVEL_MESSAGE || g_strcmp0 (domain, "Gtk") != 0)
-    return g_log_writer_default (log_level, fields, n_fields, user_data);
-
-  if (g_str_has_prefix (msg, "\tlookup name: "))
-    {
-      char *s;
-      s = g_strchomp (g_strdup (msg + strlen ("\tlookup name: ")));
-      lookups = g_list_append (lookups, s);
-    }
-
-  return G_LOG_WRITER_HANDLED;
-}
+#ifdef G_ENABLE_DEBUG
+#define require_debug()
+#else
+#define require_debug() \
+  g_test_skip ("requires G_ENABLE_DEBUG"); \
+  return;
+#endif
 
 static void
-assert_lookup_order (const char         *icon_name,
-                     int                 size,
-                     GtkTextDirection    direction,
-                     GtkIconLookupFlags  flags,
-                     gboolean            fallbacks,
-                     const char         *first,
-                     ...)
+do_icon_lookup (const char         *icon_name,
+                int                 size,
+                GtkTextDirection    direction,
+                GtkIconLookupFlags  flags,
+                gboolean            fallbacks)
 {
-  va_list args;
-  const char *s;
-  GtkIconPaintable *info;
-  GList *l;
-
-  g_assert_null (lookups);
-  collecting_lookups = TRUE;
+  GtkIconPaintable *info = NULL;
 
   if (fallbacks)
     {
@@ -203,164 +166,156 @@ assert_lookup_order (const char         *icon_name,
 
   if (info)
     g_object_unref (info);
+}
 
-  collecting_lookups = FALSE;
+static char *
+make_lookup_pattern (const char *first_name,
+                     ...)
+{
+  GString *s;
+  va_list args;
+  char *name;
 
-  va_start (args, first);
-  s = first;
-  l = lookups;
-  while (s != NULL)
-    {
-      g_assert_nonnull (l);
-      g_assert_cmpstr (s, ==, l->data);
-      s = va_arg (args, char *);
-      l = l->next;
-    }
-  g_assert_null (l);
+  s = g_string_new ("");
+  g_string_append_printf (s, "*lookup name: %s", first_name);
+
+  va_start (args, first_name);
+
+  while ((name = va_arg (args, char *)) != NULL)
+    g_string_append_printf (s, "*lookup name: %s", name);
+
   va_end (args);
 
-  g_list_free_full (lookups, g_free);
-  lookups = NULL;
+  g_string_append (s, "*");
+
+  return g_string_free (s, FALSE);
 }
 
-#ifdef G_ENABLE_DEBUG
-#define require_debug()
-#else
-#define require_debug() \
-  g_test_skip ("requires G_ENABLE_DEBUG"); \
-  return;
-#endif
-
-static void
-test_lookup_order (void)
-{
-  require_debug ();
-
-  if (g_test_subprocess ())
-    {
-      guint debug_flags;
-
-      debug_flags = gtk_get_debug_flags ();
-      gtk_set_debug_flags (debug_flags | GTK_DEBUG_ICONTHEME);
-
-      g_log_set_writer_func (log_writer, NULL, NULL);
-
-      assert_lookup_order ("foo-bar-baz", 16, GTK_TEXT_DIR_NONE, 0, TRUE,
-                           "foo-bar-baz",
-                           "foo-bar",
-                           "foo",
-                           "foo-bar-baz-symbolic",
-                           "foo-bar-symbolic",
-                           "foo-symbolic",
-                           NULL);
-      assert_lookup_order ("foo-bar-baz", 16, GTK_TEXT_DIR_RTL, 0, TRUE,
-                           "foo-bar-baz-rtl",
-                           "foo-bar-baz",
-                           "foo-bar-rtl",
-                           "foo-bar",
-                           "foo-rtl",
-                           "foo",
-                           "foo-bar-baz-symbolic-rtl",
-                           "foo-bar-baz-symbolic",
-                           "foo-bar-symbolic-rtl",
-                           "foo-bar-symbolic",
-                           "foo-symbolic-rtl",
-                           "foo-symbolic",
-                           NULL);
-      assert_lookup_order ("foo-bar-baz", 16, GTK_TEXT_DIR_RTL, 0, FALSE,
-                           "foo-bar-baz-rtl",
-                           "foo-bar-baz",
-                           NULL);
-      assert_lookup_order ("foo-bar-baz-symbolic", 16, GTK_TEXT_DIR_NONE, 0, TRUE,
-                           "foo-bar-baz-symbolic",
-                           "foo-bar-symbolic",
-                           "foo-symbolic",
-                           "foo-bar-baz",
-                           "foo-bar",
-                           "foo",
-                           NULL);
-
-      assert_lookup_order ("bla-bla", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
-                           "bla-bla-symbolic",
-                           "bla-symbolic",
-                           "bla-bla-symbolic", /* awkward */
-                           "bla-symbolic", /* awkward */
-                           "bla-bla",
-                           "bla",
-                           NULL);
-      assert_lookup_order ("bla-bla-symbolic", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
-                           "bla-bla-symbolic",
-                           "bla-symbolic",
-                           "bla-bla-symbolic", /* awkward */
-                           "bla-symbolic", /* awkward */
-                           "bla-bla",
-                           "bla",
-                           NULL);
-
-      assert_lookup_order ("bar-baz", 16, GTK_TEXT_DIR_RTL, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
-                           "bar-baz-symbolic-rtl",
-                           "bar-baz-symbolic",
-                           "bar-symbolic-rtl",
-                           "bar-symbolic",
-                           "bar-baz-symbolic-rtl", /* awkward */
-                           "bar-baz-symbolic", /* awkward */
-                           "bar-symbolic-rtl", /* awkward */
-                           "bar-symbolic", /* awkward */
-                           "bar-baz-rtl",
-                           "bar-baz",
-                           "bar-rtl",
-                           "bar",
-                           NULL);
-      assert_lookup_order ("bar-baz-symbolic", 16, GTK_TEXT_DIR_RTL, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
-                           "bar-baz-symbolic-rtl",
-                           "bar-baz-symbolic",
-                           "bar-symbolic-rtl",
-                           "bar-symbolic",
-                           "bar-baz-symbolic-rtl", /* awkward */
-                           "bar-baz-symbolic", /* awkward */
-                           "bar-symbolic-rtl", /* awkward */
-                           "bar-symbolic", /* awkward */
-                           "bar-baz-rtl",
-                           "bar-baz",
-                           "bar-rtl",
-                           "bar",
-                           NULL);
-
-      assert_lookup_order ("bar-baz", 16, GTK_TEXT_DIR_LTR, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
-                           "bar-baz-symbolic-ltr",
-                           "bar-baz-symbolic",
-                           "bar-symbolic-ltr",
-                           "bar-symbolic",
-                           "bar-baz-symbolic-ltr", /* awkward */
-                           "bar-baz-symbolic", /* awkward */
-                           "bar-symbolic-ltr", /* awkward */
-                           "bar-symbolic", /* awkward */
-                           "bar-baz-ltr",
-                           "bar-baz",
-                           "bar-ltr",
-                           "bar",
-                           NULL);
-      assert_lookup_order ("bar-baz-symbolic", 16, GTK_TEXT_DIR_LTR, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
-                           "bar-baz-symbolic-ltr",
-                           "bar-baz-symbolic",
-                           "bar-symbolic-ltr",
-                           "bar-symbolic",
-                           "bar-baz-symbolic-ltr", /* awkward */
-                           "bar-baz-symbolic", /* awkward */
-                           "bar-symbolic-ltr", /* awkward */
-                           "bar-symbolic", /* awkward */
-                           "bar-baz-ltr",
-                           "bar-baz",
-                           "bar-ltr",
-                           "bar",
-                           NULL);
-
-      return;
-    }
-
-  g_test_trap_subprocess (NULL, 0, 0);
-  g_test_trap_assert_passed ();
+#define LOOKUP_ORDER_TEST(func,icon_name,size,direction,flags,fallback,...)           \
+static void                                                                       \
+func (void)                                           \
+{                                                                                 \
+  char *pattern;                                                                  \
+  require_debug ();                                                               \
+  if (g_test_subprocess ())                                                       \
+    {                                                                             \
+      guint debug_flags = gtk_get_debug_flags ();                                 \
+      gtk_set_debug_flags (debug_flags | GTK_DEBUG_ICONTHEME);                    \
+      do_icon_lookup (icon_name, size, direction, flags, fallback);               \
+      return;                                                                     \
+    }                                                                             \
+  g_test_trap_subprocess (NULL, 0, 0);                                            \
+  g_test_trap_assert_passed ();                                                   \
+  pattern = make_lookup_pattern (__VA_ARGS__, NULL);                              \
+  g_test_trap_assert_stderr (pattern);                                            \
+  g_free (pattern);                                                               \
 }
+
+LOOKUP_ORDER_TEST (test_lookup_order0, "foo-bar-baz", 16, GTK_TEXT_DIR_NONE, 0, TRUE,
+                   "foo-bar-baz",
+                   "foo-bar",
+                   "foo",
+                   "foo-bar-baz-symbolic",
+                   "foo-bar-symbolic",
+                   "foo-symbolic")
+
+LOOKUP_ORDER_TEST (test_lookup_order1, "foo-bar-baz", 16, GTK_TEXT_DIR_RTL, 0, TRUE,
+                   "foo-bar-baz-rtl",
+                   "foo-bar-baz",
+                   "foo-bar-rtl",
+                   "foo-bar",
+                   "foo-rtl",
+                   "foo",
+                   "foo-bar-baz-symbolic-rtl",
+                   "foo-bar-baz-symbolic",
+                   "foo-bar-symbolic-rtl",
+                   "foo-bar-symbolic",
+                   "foo-symbolic-rtl",
+                   "foo-symbolic")
+
+LOOKUP_ORDER_TEST (test_lookup_order2, "foo-bar-baz", 16, GTK_TEXT_DIR_RTL, 0, FALSE,
+                   "foo-bar-baz-rtl",
+                   "foo-bar-baz")
+
+LOOKUP_ORDER_TEST (test_lookup_order3, "foo-bar-baz-symbolic", 16, GTK_TEXT_DIR_NONE, 0, TRUE,
+                   "foo-bar-baz-symbolic",
+                   "foo-bar-symbolic",
+                   "foo-symbolic",
+                   "foo-bar-baz",
+                   "foo-bar",
+                   "foo")
+
+LOOKUP_ORDER_TEST (test_lookup_order4, "bla-bla", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
+                   "bla-bla-symbolic",
+                   "bla-symbolic",
+                   "bla-bla-symbolic", /* awkward */
+                   "bla-symbolic", /* awkward */
+                   "bla-bla",
+                   "bla")
+
+LOOKUP_ORDER_TEST (test_lookup_order5, "bla-bla-symbolic", 16, GTK_TEXT_DIR_NONE, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
+                   "bla-bla-symbolic",
+                   "bla-symbolic",
+                   "bla-bla-symbolic", /* awkward */
+                   "bla-symbolic", /* awkward */
+                   "bla-bla",
+                   "bla")
+
+LOOKUP_ORDER_TEST (test_lookup_order6, "bar-baz", 16, GTK_TEXT_DIR_RTL, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
+                   "bar-baz-symbolic-rtl",
+                   "bar-baz-symbolic",
+                   "bar-symbolic-rtl",
+                   "bar-symbolic",
+                   "bar-baz-symbolic-rtl", /* awkward */
+                   "bar-baz-symbolic", /* awkward */
+                   "bar-symbolic-rtl", /* awkward */
+                   "bar-symbolic", /* awkward */
+                   "bar-baz-rtl",
+                   "bar-baz",
+                   "bar-rtl",
+                   "bar")
+
+LOOKUP_ORDER_TEST (test_lookup_order7, "bar-baz-symbolic", 16, GTK_TEXT_DIR_RTL, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
+                   "bar-baz-symbolic-rtl",
+                   "bar-baz-symbolic",
+                   "bar-symbolic-rtl",
+                   "bar-symbolic",
+                   "bar-baz-symbolic-rtl", /* awkward */
+                   "bar-baz-symbolic", /* awkward */
+                   "bar-symbolic-rtl", /* awkward */
+                   "bar-symbolic", /* awkward */
+                   "bar-baz-rtl",
+                   "bar-baz",
+                   "bar-rtl",
+                   "bar")
+
+LOOKUP_ORDER_TEST (test_lookup_order8, "bar-baz", 16, GTK_TEXT_DIR_LTR, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
+                   "bar-baz-symbolic-ltr",
+                   "bar-baz-symbolic",
+                   "bar-symbolic-ltr",
+                   "bar-symbolic",
+                   "bar-baz-symbolic-ltr", /* awkward */
+                   "bar-baz-symbolic", /* awkward */
+                   "bar-symbolic-ltr", /* awkward */
+                   "bar-symbolic", /* awkward */
+                   "bar-baz-ltr",
+                   "bar-baz",
+                   "bar-ltr",
+                   "bar")
+
+LOOKUP_ORDER_TEST (test_lookup_order9, "bar-baz-symbolic", 16, GTK_TEXT_DIR_LTR, GTK_ICON_LOOKUP_FORCE_SYMBOLIC, TRUE,
+                   "bar-baz-symbolic-ltr",
+                   "bar-baz-symbolic",
+                   "bar-symbolic-ltr",
+                   "bar-symbolic",
+                   "bar-baz-symbolic-ltr", /* awkward */
+                   "bar-baz-symbolic", /* awkward */
+                   "bar-symbolic-ltr", /* awkward */
+                   "bar-symbolic", /* awkward */
+                   "bar-baz-ltr",
+                   "bar-baz",
+                   "bar-ltr",
+                   "bar")
 
 static void
 test_basics (void)
@@ -822,7 +777,16 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/list", test_list);
   g_test_add_func ("/icontheme/inherit", test_inherit);
   g_test_add_func ("/icontheme/nonsquare-symbolic", test_nonsquare_symbolic);
-  g_test_add_func ("/icontheme/lookup-order", test_lookup_order);
+  g_test_add_func ("/icontheme/lookup_order0", test_lookup_order0);
+  g_test_add_func ("/icontheme/lookup_order1", test_lookup_order1);
+  g_test_add_func ("/icontheme/lookup_order2", test_lookup_order2);
+  g_test_add_func ("/icontheme/lookup_order3", test_lookup_order3);
+  g_test_add_func ("/icontheme/lookup_order4", test_lookup_order4);
+  g_test_add_func ("/icontheme/lookup_order5", test_lookup_order5);
+  g_test_add_func ("/icontheme/lookup_order6", test_lookup_order6);
+  g_test_add_func ("/icontheme/lookup_order7", test_lookup_order7);
+  g_test_add_func ("/icontheme/lookup_order8", test_lookup_order8);
+  g_test_add_func ("/icontheme/lookup_order9", test_lookup_order9);
 
   return g_test_run();
 }
