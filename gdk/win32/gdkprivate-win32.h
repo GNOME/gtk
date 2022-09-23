@@ -26,6 +26,7 @@
 #define __GDK_PRIVATE_WIN32_H__
 
 #include <gdk/gdkcursorprivate.h>
+#include <gdk/gdkdebug.h>
 #include <gdk/win32/gdksurface-win32.h>
 #include <gdk/win32/gdkwin32display.h>
 #include <gdk/win32/gdkwin32screen.h>
@@ -36,6 +37,23 @@
 
 
 #include "config.h"
+
+
+/* Old debug macros */
+
+#ifdef G_ENABLE_DEBUG
+
+#define GDK_NOTE(type,action)                             \
+    G_STMT_START {                                        \
+      if (GDK_DEBUG_CHECK (type))                         \
+         { action; };                                     \
+    } G_STMT_END
+
+#else
+
+#define GDK_NOTE(type,action)
+
+#endif
 
 /* Make up for some minor w32api or MSVC6 header lossage */
 
