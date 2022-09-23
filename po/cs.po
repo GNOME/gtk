@@ -5946,7 +5946,7 @@ msgstr "O aplikaci"
 
 #: gtk/ui/gtkaboutdialog.ui:123
 msgid "Credits"
-msgstr "Záslohy"
+msgstr "Zásluhy"
 
 #: gtk/ui/gtkaboutdialog.ui:206
 msgid "System"
