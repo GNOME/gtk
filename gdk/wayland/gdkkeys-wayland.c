@@ -489,25 +489,32 @@ _gdk_wayland_keymap_new (GdkDisplay *display)
   return GDK_KEYMAP (keymap);
 }
 
-#ifdef G_ENABLE_DEBUG
 static void
-print_modifiers (struct xkb_keymap *keymap)
+print_modifiers (GdkDisplay        *display,
+                 struct xkb_keymap *keymap)
 {
+#ifdef G_ENABLE_DEBUG
   int i, j;
   uint32_t real;
   struct xkb_state *state;
+  GString *str;
 
-  g_print ("modifiers:\n");
+  if (!GDK_DISPLAY_DEBUG_CHECK (display, INPUT))
+    return;
+
+  str = g_string_new ("");
+
+  g_string_append (str, "modifiers:\n");
   for (i = 0; i < xkb_keymap_num_mods (keymap); i++)
-    g_print ("%s ", xkb_keymap_mod_get_name (keymap, i));
-  g_print ("\n\n");
+    g_string_append_printf (str, "%s ", xkb_keymap_mod_get_name (keymap, i));
+  g_string_append (str, "\n\n");
 
-  g_print ("modifier mapping\n");
+  g_string_append (str, "modifier mapping\n");
   state = xkb_state_new (keymap);
   for (i = 0; i < 8; i++)
     {
       gboolean need_arrow = TRUE;
-      g_print ("%s ", xkb_keymap_mod_get_name (keymap, i));
+      g_string_append_printf (str, "%s ", xkb_keymap_mod_get_name (keymap, i));
       for (j = 8; j < xkb_keymap_num_mods (keymap); j++)
         {
           xkb_state_update_mask (state, 1 << j, 0, 0, 0, 0, 0);
@@ -516,18 +523,21 @@ print_modifiers (struct xkb_keymap *keymap)
             {
               if (need_arrow)
                 {
-                  g_print ("-> ");
+                  g_string_append (str, "-> ");
                   need_arrow = FALSE;
                 }
-              g_print ("%s ", xkb_keymap_mod_get_name (keymap, j));
+              g_string_append_printf (str, "%s ", xkb_keymap_mod_get_name (keymap, j));
             }
         }
-      g_print ("\n");
     }
 
+  gdk_debug_message ("%s", str->str);
+
+  g_string_free (str, TRUE);
+
   xkb_state_unref (state);
-}
 #endif
+}
 
 void
 _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
@@ -549,7 +559,7 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
       return;
     }
 
-  GDK_DISPLAY_NOTE (keymap->display, INPUT, g_message ("keymap:\n%s", map_str));
+  GDK_DISPLAY_DEBUG (keymap->display, INPUT, "keymap:\n%s", map_str);
 
   xkb_keymap = xkb_keymap_new_from_string (context, map_str, format, 0);
   munmap (map_str, size);
@@ -562,7 +572,7 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
       return;
     }
 
-  GDK_DISPLAY_NOTE (keymap->display, INPUT, print_modifiers (xkb_keymap));
+  print_modifiers (keymap->display, xkb_keymap);
 
   xkb_keymap_unref (keymap_wayland->xkb_keymap);
   keymap_wayland->xkb_keymap = xkb_keymap;

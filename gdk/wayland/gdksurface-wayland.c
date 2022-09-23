@@ -553,7 +553,7 @@ frame_callback (void               *data,
   GdkFrameTimings *timings;
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "frame event");
-  GDK_DISPLAY_NOTE (GDK_DISPLAY (display_wayland), EVENTS, g_message ("frame %p", surface));
+  GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), EVENTS, "frame %p", surface);
 
   wl_callback_destroy (callback);
 
@@ -1345,8 +1345,8 @@ surface_enter (void              *data,
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkMonitor *monitor;
 
-  GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
-            g_message ("surface enter, surface %p output %p", surface, output));
+  GDK_DISPLAY_DEBUG(gdk_surface_get_display (surface), EVENTS,
+                    "surface enter, surface %p output %p", surface, output);
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
 
@@ -1366,8 +1366,8 @@ surface_leave (void              *data,
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkMonitor *monitor;
 
-  GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
-            g_message ("surface leave, surface %p output %p", surface, output));
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "surface leave, surface %p output %p", surface, output);
 
   impl->display_server.outputs = g_slist_remove (impl->display_server.outputs, output);
 
@@ -1594,13 +1594,13 @@ gdk_wayland_surface_configure_toplevel (GdkSurface *surface)
   impl->next_layout.surface_geometry_dirty = TRUE;
   gdk_surface_request_layout (surface);
 
-  GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
-            g_message ("configure, surface %p %dx%d,%s%s%s%s",
-                       surface, width, height,
-                       (new_state & GDK_TOPLEVEL_STATE_FULLSCREEN) ? " fullscreen" : "",
-                       (new_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ? " maximized" : "",
-                       (new_state & GDK_TOPLEVEL_STATE_FOCUSED) ? " focused" : "",
-                       (new_state & GDK_TOPLEVEL_STATE_TILED) ? " tiled" : ""));
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "configure, surface %p %dx%d,%s%s%s%s",
+                     surface, width, height,
+                     (new_state & GDK_TOPLEVEL_STATE_FULLSCREEN) ? " fullscreen" : "",
+                     (new_state & GDK_TOPLEVEL_STATE_MAXIMIZED) ? " maximized" : "",
+                     (new_state & GDK_TOPLEVEL_STATE_FOCUSED) ? " focused" : "",
+                     (new_state & GDK_TOPLEVEL_STATE_TILED) ? " tiled" : "");
 
   gdk_surface_queue_state_change (surface, ~0 & ~new_state, new_state);
 
@@ -1753,7 +1753,7 @@ gdk_wayland_surface_handle_close (GdkSurface *surface)
 
   display = gdk_surface_get_display (surface);
 
-  GDK_DISPLAY_NOTE (display, EVENTS, g_message ("close %p", surface));
+  GDK_DISPLAY_DEBUG (display, EVENTS, "close %p", surface);
 
   event = gdk_delete_event_new (surface);
 
@@ -2116,7 +2116,7 @@ xdg_popup_done (void             *data,
 {
   GdkSurface *surface = GDK_SURFACE (data);
 
-  GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS, g_message ("done %p", surface));
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS, "done %p", surface);
 
   gdk_surface_hide (surface);
 }
@@ -2129,8 +2129,8 @@ xdg_popup_repositioned (void             *data,
   GdkSurface *surface = GDK_SURFACE (data);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
-                    g_message ("repositioned %p", surface));
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "repositioned %p", surface);
 
   if (impl->popup_state != POPUP_STATE_WAITING_FOR_REPOSITIONED)
     {
@@ -2167,8 +2167,7 @@ zxdg_popup_v6_done (void                 *data,
 {
   GdkSurface *surface = GDK_SURFACE (data);
 
-  GDK_NOTE (EVENTS,
-            g_message ("done %p", surface));
+  GDK_DEBUG (EVENTS, "done %p", surface);
 
   gdk_surface_hide (surface);
 }

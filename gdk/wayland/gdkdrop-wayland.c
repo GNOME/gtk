@@ -192,9 +192,14 @@ gdk_wayland_drop_read_async (GdkDrop             *drop,
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_wayland_drop_read_async);
 
-  GDK_DISPLAY_NOTE (gdk_drop_get_display (drop), DND, char *s = gdk_content_formats_to_string (formats);
-                    g_message ("%p: read for %s", drop, s);
-                    g_free (s); );
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_drop_get_display (drop), DND))
+    {
+      char *s = gdk_content_formats_to_string (formats);
+      gdk_debug_message ("%p: read for %s", drop, s);
+      g_free (s);
+    }
+#endif
   mime_type = gdk_content_formats_match_mime_type (formats,
                                                    gdk_drop_get_formats (drop));
   if (mime_type == NULL)
