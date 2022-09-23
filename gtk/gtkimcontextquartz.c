@@ -24,6 +24,7 @@
 #include "gtk/gtkimcontextquartz.h"
 #include "gtk/gtkintl.h"
 #include "gtk/gtkimmoduleprivate.h"
+#include "gtk/gtkprivate.h"
 
 #include "gdk/macos/gdkmacos.h"
 #include "gdk/macos/gdkmacosdisplay-private.h"

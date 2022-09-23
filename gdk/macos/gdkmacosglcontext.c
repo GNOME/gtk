@@ -398,10 +398,9 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
         }
     }
 
-  GDK_DISPLAY_NOTE (display,
-                    OPENGL,
-                    g_message ("Creating CGLContextObj (version %d.%d)",
-                               major, minor));
+  GDK_DISPLAY_DEBUG (display, OPENGL,
+                     "Creating CGLContextObj (version %d.%d)",
+                     major, minor);
 
   if (!(pixelFormat = create_pixel_format (major, minor, error)))
     return 0;
@@ -441,11 +440,10 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
       CGLEnable (cgl_context, kCGLCESwapRectangle);
     }
 
-  GDK_DISPLAY_NOTE (display,
-                    OPENGL,
-                    g_message ("Created CGLContextObj@%p using %s",
-                               cgl_context,
-                               get_renderer_name (renderer_id)));
+  GDK_DISPLAY_DEBUG (display, OPENGL,
+                     "Created CGLContextObj@%p using %s",
+                     cgl_context,
+                     get_renderer_name (renderer_id));
 
   self->cgl_context = g_steal_pointer (&cgl_context);
 

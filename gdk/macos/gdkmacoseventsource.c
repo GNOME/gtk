@@ -214,7 +214,7 @@ select_thread_set_state (SelectThreadState new_state)
   if (select_thread_state == new_state)
     return;
 
-  GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Select thread state: %s => %s", state_names[select_thread_state], state_names[new_state]));
+  GDK_DEBUG (EVENTLOOP, "EventLoop: Select thread state: %s => %s", state_names[select_thread_state], state_names[new_state]);
 
   old_state = select_thread_state;
   select_thread_state = new_state;
@@ -225,7 +225,7 @@ select_thread_set_state (SelectThreadState new_state)
 static void
 signal_main_thread (void)
 {
-  GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Waking up main thread"));
+  GDK_DEBUG (EVENTLOOP, "EventLoop: Waking up main thread");
 
   /* If we are in nextEventMatchingMask, then we need to make sure an
    * event gets queued, otherwise it's enough to simply wake up the
@@ -384,7 +384,7 @@ dump_poll_result (GPollFD *ufds,
           g_string_append (s, "\n");
         }
     }
-  g_message ("%s", s->str);
+  gdk_debug_message ("%s", s->str);
   g_string_free (s, TRUE);
 }
 #endif
@@ -439,7 +439,7 @@ select_thread_start_poll (GPollFD *ufds,
   if (nfds == 0 ||
       (nfds == 1 && poll_fd_index >= 0))
     {
-      GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Nothing to poll"));
+      GDK_DEBUG (EVENTLOOP, "EventLoop: Nothing to poll");
       return 0;
     }
 
@@ -458,7 +458,7 @@ select_thread_start_poll (GPollFD *ufds,
 #ifdef G_ENABLE_DEBUG
       if ((_gdk_debug_flags & GDK_DEBUG_EVENTLOOP) && n_ready > 0)
         {
-          g_message ("EventLoop: Found ready file descriptors before waiting");
+          gdk_debug_message ("EventLoop: Found ready file descriptors before waiting");
           dump_poll_result (ufds, nfds);
         }
 #endif
@@ -537,7 +537,7 @@ select_thread_start_poll (GPollFD *ufds,
 
   if (have_new_pollfds)
     {
-      GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Submitting a new set of file descriptor to the select thread"));
+      GDK_DEBUG (EVENTLOOP, "EventLoop: Submitting a new set of file descriptor to the select thread");
 
       g_assert (next_pollfds == NULL);
 
@@ -602,7 +602,7 @@ select_thread_collect_poll (GPollFD *ufds, guint nfds)
 #ifdef G_ENABLE_DEBUG
       if (_gdk_debug_flags & GDK_DEBUG_EVENTLOOP)
         {
-          g_message ("EventLoop: Found ready file descriptors after waiting");
+          gdk_debug_message ("EventLoop: Found ready file descriptors after waiting");
           dump_poll_result (ufds, nfds);
         }
 #endif
@@ -842,7 +842,7 @@ run_loop_entry (void)
     {
       if (g_main_context_acquire (NULL))
         {
-          GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Beginning tracking run loop activity"));
+          GDK_DEBUG (EVENTLOOP, "EventLoop: Beginning tracking run loop activity");
           acquired_loop_level = current_loop_level;
         }
       else
@@ -857,7 +857,7 @@ run_loop_entry (void)
            * thread that does g_main_context_wait() and then wakes us back up, but
            * the gain doesn't seem worth the complexity.
            */
-          GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Can't acquire main loop; skipping tracking run loop activity"));
+          GDK_DEBUG (EVENTLOOP, "EventLoop: Can't acquire main loop; skipping tracking run loop activity");
         }
     }
 }
@@ -895,7 +895,7 @@ run_loop_before_sources (void)
 
   if (g_main_context_check (context, max_priority, run_loop_pollfds, nfds))
     {
-      GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Dispatching high priority sources"));
+      GDK_DEBUG (EVENTLOOP, "EventLoop: Dispatching high priority sources");
       g_main_context_dispatch (context);
     }
 }
@@ -938,7 +938,7 @@ run_loop_before_waiting (void)
        * expires. We do this by adding a dummy timer that we'll remove immediately
        * after the wait wakes up.
        */
-      GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Adding timer to wake us up in %d milliseconds", timeout));
+      GDK_DEBUG (EVENTLOOP, "EventLoop: Adding timer to wake us up in %d milliseconds", timeout);
 
       run_loop_timer = CFRunLoopTimerCreate (NULL, /* allocator */
                                              CFAbsoluteTimeGetCurrent () + timeout / 1000.,
@@ -978,7 +978,7 @@ run_loop_after_waiting (void)
 
   if (g_main_context_check (context, run_loop_max_priority, run_loop_pollfds, run_loop_n_pollfds))
     {
-      GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Dispatching after waiting"));
+      GDK_DEBUG (EVENTLOOP, "EventLoop: Dispatching after waiting");
       g_main_context_dispatch (context);
     }
 }
@@ -991,7 +991,7 @@ run_loop_exit (void)
     {
       g_main_context_release (NULL);
       acquired_loop_level = -1;
-      GDK_NOTE (EVENTLOOP, g_message ("EventLoop: Ended tracking run loop activity"));
+      GDK_DEBUG (EVENTLOOP, "EventLoop: Ended tracking run loop activity");
     }
 }
 

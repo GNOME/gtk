@@ -188,12 +188,11 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
   gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
 
-  GDK_NOTE (MISC,
-            g_message ("Resizing \"%s\" to %dx%d",
-                       GDK_MACOS_SURFACE (self)->title ?
-                         GDK_MACOS_SURFACE (self)->title :
-                         "untitled",
-                       width, height));
+  GDK_DEBUG (MISC, "Resizing \"%s\" to %dx%d",
+                   GDK_MACOS_SURFACE (self)->title ?
+                   GDK_MACOS_SURFACE (self)->title :
+                   "untitled",
+                   width, height);
 
   _gdk_macos_surface_resize (GDK_MACOS_SURFACE (self), width, height);
 
@@ -225,12 +224,11 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
                                            GDK_MACOS_SURFACE (self),
                                            &x, &y);
 
-      GDK_NOTE (MISC,
-                g_message ("Placing new toplevel \"%s\" at %d,%d",
-                           GDK_MACOS_SURFACE (self)->title ?
-                             GDK_MACOS_SURFACE (self)->title :
-                             "untitled",
-                           x, y));
+      GDK_DEBUG (MISC, "Placing new toplevel \"%s\" at %d,%d",
+                       GDK_MACOS_SURFACE (self)->title ?
+                       GDK_MACOS_SURFACE (self)->title :
+                       "untitled",
+                       x, y);
 
       _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
     }
