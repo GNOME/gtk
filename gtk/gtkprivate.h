@@ -140,11 +140,6 @@ GBytes *get_emoji_data (void);
   (gtk_get_any_display_debug_flag_set () &&                     \
    G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type))
 
-#define GTK_DISPLAY_NOTE(display,type,action)                   \
-  G_STMT_START {                                                \
-  if (GTK_DISPLAY_DEBUG_CHECK (display,type)) { action; };      \
-  } G_STMT_END
-
 #define GTK_DEBUG(type,...)                                     \
   G_STMT_START {                                                \
     if (GTK_DEBUG_CHECK (type))                                 \
@@ -160,7 +155,6 @@ GBytes *get_emoji_data (void);
 #else
 
 #define GTK_DISPLAY_DEBUG_CHECK(display,type) 0
-#define GTK_DISPLAY_NOTE(display,type,action)
 #define GTK_DISPLAY_DEBUG(display,type,...)
 #define GTK_DEBUG(type,...)
 
