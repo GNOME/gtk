@@ -28,6 +28,7 @@
 #include <glib-object.h>
 #include <gdk/gdk.h>
 #include <gdk/gdk-private.h>
+#include <gdk/gdkdebug.h>
 
 #include "gtkcsstypesprivate.h"
 #include "gtktexthandleprivate.h"
@@ -135,16 +136,33 @@ GBytes *get_emoji_data (void);
 
 #ifdef G_ENABLE_DEBUG
 
-#define GTK_DISPLAY_DEBUG_CHECK(display,type) (gtk_get_any_display_debug_flag_set () && G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type))
-#define GTK_DISPLAY_NOTE(display,type,action) \
-  G_STMT_START { \
-  if (GTK_DISPLAY_DEBUG_CHECK (display,type)) { action; }; \
+#define GTK_DISPLAY_DEBUG_CHECK(display,type)                   \
+  (gtk_get_any_display_debug_flag_set () &&                     \
+   G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type))
+
+#define GTK_DISPLAY_NOTE(display,type,action)                   \
+  G_STMT_START {                                                \
+  if (GTK_DISPLAY_DEBUG_CHECK (display,type)) { action; };      \
+  } G_STMT_END
+
+#define GTK_DEBUG(type,...)                                     \
+  G_STMT_START {                                                \
+    if (GTK_DEBUG_CHECK (type))                                 \
+      gdk_debug_message (__VA_ARGS__);                          \
+  } G_STMT_END
+
+#define GTK_DISPLAY_DEBUG(display,type,...)                     \
+  G_STMT_START {                                                \
+    if (GTK_DISPLAY_DEBUG_CHECK (display,type))                 \
+      gdk_debug_message (__VA_ARGS__);                          \
   } G_STMT_END
 
 #else
 
 #define GTK_DISPLAY_DEBUG_CHECK(display,type) 0
 #define GTK_DISPLAY_NOTE(display,type,action)
+#define GTK_DISPLAY_DEBUG(display,type,...)
+#define GTK_DEBUG(type,...)
 
 #endif /* G_ENABLE_DEBUG */
 
