@@ -1500,6 +1500,8 @@ headerbar {
     background-image: none;
 
     transition: $backdrop_transition;
+
+    .title { filter: opacity(.5); }
   }
 
   .title {
