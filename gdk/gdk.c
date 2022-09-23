@@ -34,6 +34,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkintl.h"
 #include "gdk-private.h"
+#include <glib/gprintf.h>
 
 #include <string.h>
 #include <stdlib.h>

@@ -21,6 +21,7 @@
 #include <glib.h>
 
 #include "gdktypes.h"
+#include <glib/gstdio.h>
 
 G_BEGIN_DECLS
 
@@ -58,6 +59,8 @@ GdkDebugFlags    gdk_display_get_debug_flags    (GdkDisplay       *display);
 void             gdk_display_set_debug_flags    (GdkDisplay       *display,
                                                  GdkDebugFlags     flags);
 
+#define gdk_debug_message(format, ...) g_fprintf (stderr, format "\n", ##__VA_ARGS__)
+
 #ifdef G_ENABLE_DEBUG
 
 #define GDK_DISPLAY_DEBUG_CHECK(display,type) \
@@ -66,14 +69,20 @@ void             gdk_display_set_debug_flags    (GdkDisplay       *display,
     if (GDK_DISPLAY_DEBUG_CHECK (display,type))                           \
        { action; };                            } G_STMT_END
 
+#define GDK_DISPLAY_DEBUG(display,type,...)                               \
+    if (GDK_DISPLAY_DEBUG_CHECK (display,type))                           \
+      gdk_debug_message (__VA_ARGS__);                                    \
+
 #else /* !G_ENABLE_DEBUG */
 
 #define GDK_DISPLAY_DEBUG_CHECK(display,type) 0
 #define GDK_DISPLAY_NOTE(display,type,action)
+#define GDK_DISPLAY_DEBUG(display,type,...)
 
 #endif /* G_ENABLE_DEBUG */
 
 #define GDK_DEBUG_CHECK(type) GDK_DISPLAY_DEBUG_CHECK (NULL,type)
 #define GDK_NOTE(type,action) GDK_DISPLAY_NOTE (NULL,type,action)
+#define GDK_DEBUG(type,...) GDK_DISPLAY_DEBUG (NULL,type,__VA_ARGS__)
 
 #endif
