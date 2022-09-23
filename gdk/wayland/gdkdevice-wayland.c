@@ -1188,13 +1188,15 @@ data_device_enter (void                  *data,
   seat->pointer_info.surface_x = wl_fixed_to_double (x);
   seat->pointer_info.surface_y = wl_fixed_to_double (y);
 
-  gdk_wayland_drop_context_update_targets (seat->drop_context);
-
   selection = gdk_drag_get_selection (seat->drop_context);
   dnd_owner = gdk_selection_owner_get_for_display (seat->display, selection);
 
   if (!dnd_owner)
     dnd_owner = seat->foreign_dnd_window;
+
+  gdk_wayland_selection_set_offer (seat->display, selection, offer);
+
+  gdk_wayland_drop_context_update_targets (seat->drop_context);
 
   _gdk_wayland_drag_context_set_source_window (seat->drop_context, dnd_owner);
 
@@ -1205,8 +1207,6 @@ data_device_enter (void                  *data,
                                         wl_fixed_to_double (y));
   _gdk_wayland_drag_context_emit_event (seat->drop_context, GDK_DRAG_ENTER,
                                         GDK_CURRENT_TIME);
-
-  gdk_wayland_selection_set_offer (seat->display, selection, offer);
 
   emit_selection_owner_change (dest_window, selection);
 }
