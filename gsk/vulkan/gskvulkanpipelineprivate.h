@@ -25,7 +25,7 @@ gsk_vulkan_handle_result (VkResult    res,
 {
   if (res != VK_SUCCESS)
     {
-      GSK_NOTE (VULKAN,g_printerr ("%s(): %s (%d)\n", called_function, gdk_vulkan_strerror (res), res));
+      GSK_DEBUG (VULKAN, "%s(): %s (%d)", called_function, gdk_vulkan_strerror (res), res);
     }
   return res;
 }

@@ -65,7 +65,7 @@ gsk_vulkan_shader_new_from_resource (GdkVulkanContext     *context,
   g_free (path);
   if (bytes == NULL)
     {
-      GSK_NOTE (VULKAN, g_message ("Error loading shader data: %s", local_error->message));
+      GSK_DEBUG (VULKAN, "Error loading shader data: %s", local_error->message);
       g_propagate_error (error, local_error);
       return NULL;
     }
