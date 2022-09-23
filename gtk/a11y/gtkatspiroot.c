@@ -507,9 +507,9 @@ on_registration_reply (GObject      *gobject,
                      &self->desktop_path);
       g_variant_unref (reply);
 
-      GTK_NOTE (A11Y, g_message ("Connected to the a11y registry at (%s, %s)",
-                                 self->desktop_name,
-                                 self->desktop_path));
+      GTK_DEBUG (A11Y, "Connected to the a11y registry at (%s, %s)",
+                       self->desktop_name,
+                       self->desktop_path);
     }
 
   /* Register the cache object */
@@ -581,9 +581,9 @@ root_register (gpointer user_data)
                                      NULL,
                                      NULL);
 
-  GTK_NOTE (A11Y, g_message ("Registering (%s, %s) on the a11y bus",
-                             unique_name,
-                             self->root_path));
+  GTK_DEBUG (A11Y, "Registering (%s, %s) on the a11y bus",
+                   unique_name,
+                   self->root_path);
 
   g_dbus_connection_call (self->connection,
                           "org.a11y.atspi.Registry",

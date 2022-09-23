@@ -427,26 +427,29 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
   g_assert (min_size <= nat_size);
 
-  GTK_DISPLAY_NOTE (_gtk_widget_get_display (widget), SIZE_REQUEST, {
-            GString *s;
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), SIZE_REQUEST))
+    {
+      GString *s;
 
-            s = g_string_new ("");
-            g_string_append_printf (s, "[%p] %s\t%s: %d is minimum %d and natural: %d",
-                                    widget, G_OBJECT_TYPE_NAME (widget),
-                                    orientation == GTK_ORIENTATION_HORIZONTAL
-                                    ? "width for height"
-                                    : "height for width",
-                                    for_size, min_size, nat_size);
-	    if (min_baseline != -1 || nat_baseline != -1)
-              {
-                g_string_append_printf (s, ", baseline %d/%d",
-                                        min_baseline, nat_baseline);
-              }
-	    g_string_append_printf (s, " (hit cache: %s)\n",
-		                    found_in_cache ? "yes" : "no");
-            g_printerr ("%s", s->str);
-            g_string_free (s, TRUE);
-	    });
+      s = g_string_new ("");
+      g_string_append_printf (s, "[%p] %s\t%s: %d is minimum %d and natural: %d",
+                              widget, G_OBJECT_TYPE_NAME (widget),
+                              orientation == GTK_ORIENTATION_HORIZONTAL
+                              ? "width for height"
+                              : "height for width",
+                              for_size, min_size, nat_size);
+      if (min_baseline != -1 || nat_baseline != -1)
+        {
+          g_string_append_printf (s, ", baseline %d/%d",
+                                  min_baseline, nat_baseline);
+        }
+      g_string_append_printf (s, " (hit cache: %s)\n",
+                              found_in_cache ? "yes" : "no");
+      g_printerr ("%s", s->str);
+      g_string_free (s, TRUE);
+    }
+#endif
 }
 
 /**

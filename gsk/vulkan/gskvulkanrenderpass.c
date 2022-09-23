@@ -235,7 +235,7 @@ gsk_vulkan_render_pass_free (GskVulkanRenderPass *self)
 }
 
 #define FALLBACK(...) G_STMT_START { \
-  GSK_RENDERER_NOTE (gsk_vulkan_render_get_renderer (render), FALLBACK, g_message (__VA_ARGS__)); \
+  GSK_RENDERER_DEBUG (gsk_vulkan_render_get_renderer (render), FALLBACK, __VA_ARGS__); \
   goto fallback; \
 }G_STMT_END
 
@@ -763,9 +763,9 @@ gsk_vulkan_render_pass_get_node_as_texture (GskVulkanRenderPass   *self,
       }
    }
 
-  GSK_RENDERER_NOTE (gsk_vulkan_render_get_renderer (render), FALLBACK, g_message ("Node as texture not implemented for this case. Using %gx%g fallback surface",
-                               ceil (bounds->size.width),
-                               ceil (bounds->size.height)));
+  GSK_RENDERER_DEBUG (gsk_vulkan_render_get_renderer (render), FALLBACK, "Node as texture not implemented for this case. Using %gx%g fallback surface",
+                      ceil (bounds->size.width),
+                      ceil (bounds->size.height));
 #ifdef G_ENABLE_DEBUG
   {
     GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));
@@ -816,13 +816,13 @@ gsk_vulkan_render_pass_upload_fallback (GskVulkanRenderPass  *self,
 
   node = op->node;
 
-  GSK_RENDERER_NOTE (gsk_vulkan_render_get_renderer (render), FALLBACK,
-            g_message ("Upload op=%s, node %s[%p], bounds %gx%g",
-                     op->type == GSK_VULKAN_OP_FALLBACK_CLIP ? "fallback-clip" :
-                     (op->type == GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP ? "fallback-rounded-clip" : "fallback"),
-                     g_type_name_from_instance ((GTypeInstance *) node), node,
-                     ceil (node->bounds.size.width),
-                     ceil (node->bounds.size.height)));
+  GSK_RENDERER_DEBUG (gsk_vulkan_render_get_renderer (render), FALLBACK,
+                      "Upload op=%s, node %s[%p], bounds %gx%g",
+                      op->type == GSK_VULKAN_OP_FALLBACK_CLIP ? "fallback-clip" :
+                      (op->type == GSK_VULKAN_OP_FALLBACK_ROUNDED_CLIP ? "fallback-rounded-clip" : "fallback"),
+                      g_type_name_from_instance ((GTypeInstance *) node), node,
+                      ceil (node->bounds.size.width),
+                      ceil (node->bounds.size.height));
 #ifdef G_ENABLE_DEBUG
   {
     GskProfiler *profiler = gsk_renderer_get_profiler (gsk_vulkan_render_get_renderer (render));

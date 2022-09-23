@@ -130,8 +130,7 @@ xdg_wm_base_ping (void               *data,
                   struct xdg_wm_base *xdg_wm_base,
                   uint32_t            serial)
 {
-  GDK_NOTE (EVENTS,
-            g_message ("ping, shell %p, serial %u\n", xdg_wm_base, serial));
+  GDK_DEBUG (EVENTS, "ping, shell %p, serial %u", xdg_wm_base, serial);
 
   xdg_wm_base_pong (xdg_wm_base, serial);
 }
@@ -145,8 +144,8 @@ zxdg_shell_v6_ping (void                 *data,
                     struct zxdg_shell_v6 *xdg_shell,
                     uint32_t              serial)
 {
-  GDK_DISPLAY_NOTE (GDK_DISPLAY (data), EVENTS,
-            g_message ("ping, shell %p, serial %u\n", xdg_shell, serial));
+  GDK_DISPLAY_DEBUG (GDK_DISPLAY (data), EVENTS,
+                     "ping, shell %p, serial %u", xdg_shell, serial);
 
   zxdg_shell_v6_pong (xdg_shell, serial);
 }
@@ -286,10 +285,12 @@ wl_shm_format (void          *data,
                struct wl_shm *wl_shm,
                uint32_t       format)
 {
-  GDK_NOTE (MISC,
-            char buf[10];
-            g_message ("supported pixel format %s (0x%X)", get_format_name (format, buf), (guint) format);
-            );
+#ifdef G_ENABLE_DEBUG
+  char buf[10];
+#endif
+
+  GDK_DEBUG (MISC, "supported pixel format %s (0x%X)",
+                   get_format_name (format, buf), (guint) format);
 }
 
 static const struct wl_shm_listener wl_shm_listener = {
@@ -302,13 +303,15 @@ server_decoration_manager_default_mode (void                                    
                                         uint32_t                                       mode)
 {
   g_assert (mode <= ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER);
+#ifdef G_ENABLE_DEBUG
   const char *modes[] = {
     [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_NONE]   = "none",
     [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT] = "client",
     [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER] = "server",
   };
+#endif
   GdkWaylandDisplay *display_wayland = data;
-  g_debug ("Compositor prefers decoration mode '%s'", modes[mode]);
+  GDK_DISPLAY_DEBUG (GDK_DISPLAY (data), MISC, "Compositor prefers decoration mode '%s'", modes[mode]);
   display_wayland->server_decoration_mode = mode;
 }
 
@@ -356,8 +359,7 @@ gdk_registry_handle_global (void               *data,
   GdkWaylandDisplay *display_wayland = data;
   struct wl_output *output;
 
-  GDK_NOTE (MISC,
-            g_message ("add global %u, interface %s, version %u", id, interface, version));
+  GDK_DEBUG (MISC, "add global %u, interface %s, version %u", id, interface, version);
 
   if (strcmp (interface, "wl_compositor") == 0)
     {
@@ -511,7 +513,8 @@ gdk_registry_handle_global_remove (void               *data,
 {
   GdkWaylandDisplay *display_wayland = data;
 
-  GDK_NOTE (MISC, g_message ("remove global %u", id));
+  GDK_DEBUG (MISC, "remove global %u", id);
+
   _gdk_wayland_display_remove_seat (display_wayland, id);
   gdk_wayland_display_remove_output (display_wayland, id);
 
@@ -563,7 +566,7 @@ _gdk_wayland_display_open (const char *display_name)
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
 
-  GDK_NOTE (MISC, g_message ("opening display %s", display_name ? display_name : ""));
+  GDK_DEBUG (MISC, "opening display %s", display_name ? display_name : "");
 
   /* If this variable is unset then wayland initialisation will surely
    * fail, logging a fatal error in the process.  Save ourselves from
@@ -2251,9 +2254,8 @@ gdk_wayland_display_init_xdg_output (GdkWaylandDisplay *self)
 {
   guint i, n;
 
-  GDK_NOTE (MISC,
-            g_message ("init xdg-output support, %d monitor(s) already present",
-                       g_list_model_get_n_items (G_LIST_MODEL (self->monitors))));
+  GDK_DEBUG (MISC, "init xdg-output support, %d monitor(s) already present",
+                   g_list_model_get_n_items (G_LIST_MODEL (self->monitors)));
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->monitors));
   for (i = 0; i < n; i++)
@@ -2296,11 +2298,10 @@ should_expect_xdg_output_done (GdkWaylandMonitor *monitor)
 static void
 apply_monitor_change (GdkWaylandMonitor *monitor)
 {
-  GDK_NOTE (MISC,
-            g_message ("monitor %d changed position %d %d, size %d %d",
-                       monitor->id,
-                       monitor->x, monitor->y,
-                       monitor->width, monitor->height));
+  GDK_DEBUG (MISC, "monitor %d changed position %d %d, size %d %d",
+                   monitor->id,
+                   monitor->x, monitor->y,
+                   monitor->width, monitor->height);
 
   gdk_monitor_set_geometry (GDK_MONITOR (monitor),
                             &(GdkRectangle) {
@@ -2321,9 +2322,9 @@ xdg_output_handle_logical_position (void                  *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
 
-  GDK_NOTE (MISC,
-            g_message ("handle logical position xdg-output %d, position %d %d",
-                       monitor->id, x, y));
+  GDK_DEBUG (MISC, "handle logical position xdg-output %d, position %d %d",
+                   monitor->id, x, y);
+
   monitor->x = x;
   monitor->y = y;
 }
@@ -2336,9 +2337,9 @@ xdg_output_handle_logical_size (void                  *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
 
-  GDK_NOTE (MISC,
-            g_message ("handle logical size xdg-output %d, size %d %d",
-                       monitor->id, width, height));
+  GDK_DEBUG (MISC, "handle logical size xdg-output %d, size %d %d",
+                   monitor->id, width, height);
+
   monitor->width = width;
   monitor->height = height;
 }
@@ -2349,8 +2350,7 @@ xdg_output_handle_done (void                  *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
 
-  GDK_NOTE (MISC,
-            g_message ("handle done xdg-output %d", monitor->id));
+  GDK_DEBUG (MISC, "handle done xdg-output %d", monitor->id);
 
   monitor->xdg_output_done = TRUE;
   if (monitor->wl_output_done && should_expect_xdg_output_done (monitor))
@@ -2364,8 +2364,7 @@ xdg_output_handle_name (void                  *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
 
-  GDK_NOTE (MISC,
-            g_message ("handle name xdg-output %d", monitor->id));
+  GDK_DEBUG (MISC, "handle name xdg-output %d", monitor->id);
 
   monitor->name = g_strdup (name);
 }
@@ -2375,11 +2374,8 @@ xdg_output_handle_description (void                  *data,
                                struct zxdg_output_v1 *xdg_output,
                                const char            *description)
 {
-  GDK_NOTE (MISC,
-            {
-              GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
-              g_message ("handle description xdg-output %d", monitor->id);
-            });
+  GDK_DEBUG (MISC, "handle description xdg-output %d",
+                   ((GdkWaylandMonitor *)data)->id);
 }
 
 static const struct zxdg_output_v1_listener xdg_output_listener = {
@@ -2396,8 +2392,7 @@ gdk_wayland_display_get_xdg_output (GdkWaylandMonitor *monitor)
   GdkDisplay *display = GDK_MONITOR (monitor)->display;
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  GDK_NOTE (MISC,
-            g_message ("get xdg-output for monitor %d", monitor->id));
+  GDK_DEBUG (MISC, "get xdg-output for monitor %d", monitor->id);
 
   monitor->xdg_output =
     zxdg_output_manager_v1_get_xdg_output (display_wayland->xdg_output_manager,
@@ -2422,9 +2417,12 @@ output_handle_geometry (void             *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 
-  GDK_NOTE (MISC,
-            g_message ("handle geometry output %d, position %d %d, phys. size %d %d, subpixel layout %s, manufacturer %s, model %s, transform %s",
-                       monitor->id, x, y, physical_width, physical_height, subpixel_to_string (subpixel), make, model, transform_to_string (transform)));
+  GDK_DEBUG (MISC, "handle geometry output %d, position %d %d, phys. size %d %d, subpixel layout %s, manufacturer %s, model %s, transform %s",
+                   monitor->id, x, y,
+                   physical_width, physical_height,
+                   subpixel_to_string (subpixel),
+                   make, model,
+                   transform_to_string (transform));
 
   monitor->x = x;
   monitor->y = y;
@@ -2457,8 +2455,7 @@ output_handle_done (void             *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 
-  GDK_NOTE (MISC,
-            g_message ("handle done output %d", monitor->id));
+  GDK_DEBUG (MISC, "handle done output %d", monitor->id);
 
   monitor->wl_output_done = TRUE;
 
@@ -2477,8 +2474,7 @@ output_handle_scale (void             *data,
   int width;
   int height;
 
-  GDK_NOTE (MISC,
-            g_message ("handle scale output %d, scale %d", monitor->id, scale));
+  GDK_DEBUG (MISC, "handle scale output %d, scale %d", monitor->id, scale);
 
   gdk_monitor_get_geometry (GDK_MONITOR (monitor), &previous_geometry);
   previous_scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
@@ -2510,9 +2506,8 @@ output_handle_mode (void             *data,
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
   int scale;
 
-  GDK_NOTE (MISC,
-            g_message ("handle mode output %d, size %d %d, rate %d",
-                       monitor->id, width, height, refresh));
+  GDK_DEBUG (MISC, "handle mode output %d, size %d %d, rate %d",
+                   monitor->id, width, height, refresh);
 
   if ((flags & WL_OUTPUT_MODE_CURRENT) == 0)
     return;
@@ -2552,9 +2547,8 @@ gdk_wayland_display_add_output (GdkWaylandDisplay *display_wayland,
 
   wl_output_add_listener (output, &output_listener, monitor);
 
-  GDK_NOTE (MISC,
-            g_message ("xdg_output_manager %p",
-                       display_wayland->xdg_output_manager));
+  GDK_DEBUG (MISC, "xdg_output_manager %p",
+                   display_wayland->xdg_output_manager);
 
   if (display_has_xdg_output_support (display_wayland))
     gdk_wayland_display_get_xdg_output (monitor);

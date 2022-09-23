@@ -309,8 +309,8 @@ upload_dirty_glyphs (GskVulkanGlyphCache *cache,
   for (l = atlas->dirty_glyphs, i = 0; l; l = l->next, i++)
     render_glyph (atlas, (DirtyGlyph *)l->data, &regions[i]);
 
-  GSK_RENDERER_NOTE (cache->renderer, GLYPH_CACHE,
-            g_message ("uploading %d glyphs to cache", num_regions));
+  GSK_RENDERER_DEBUG (cache->renderer, GLYPH_CACHE,
+                      "uploading %d glyphs to cache", num_regions);
 
   gsk_vulkan_image_upload_regions (atlas->image, uploader, num_regions, regions);
 
@@ -471,8 +471,9 @@ gsk_vulkan_glyph_cache_begin_frame (GskVulkanGlyphCache *cache)
 
       if (atlas->old_pixels > MAX_OLD * atlas->width * atlas->height)
         {
-          GSK_RENDERER_NOTE(cache->renderer, GLYPH_CACHE,
-                   g_message ("Dropping atlas %d (%g.2%% old)", i, 100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height)));
+          GSK_RENDERER_DEBUG (cache->renderer, GLYPH_CACHE,
+                              "Dropping atlas %d (%g.2%% old)",
+                              i, 100.0 * (double)atlas->old_pixels / (double)(atlas->width * atlas->height));
           g_ptr_array_remove_index (cache->atlases, i);
 
           drops[i] = 1;
@@ -501,5 +502,5 @@ gsk_vulkan_glyph_cache_begin_frame (GskVulkanGlyphCache *cache)
         }
     }
 
-  GSK_RENDERER_NOTE(cache->renderer, GLYPH_CACHE, g_message ("Dropped %d glyphs", dropped));
+  GSK_RENDERER_DEBUG (cache->renderer, GLYPH_CACHE, "Dropped %d glyphs", dropped);
 }

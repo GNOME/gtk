@@ -242,8 +242,7 @@ gtk_im_module_ensure_extension_point (void)
   if (registered)
     return;
 
-  GTK_NOTE (MODULES,
-            g_print ("Registering extension point %s\n", GTK_IM_MODULE_EXTENSION_POINT_NAME));
+  GTK_DEBUG (MODULES, "Registering extension point %s", GTK_IM_MODULE_EXTENSION_POINT_NAME);
 
   ep = g_io_extension_point_register (GTK_IM_MODULE_EXTENSION_POINT_NAME);
   g_io_extension_point_set_required_type (ep, GTK_TYPE_IM_CONTEXT);
@@ -279,8 +278,7 @@ gtk_im_modules_init (void)
   paths = _gtk_get_module_path ("immodules");
   for (i = 0; paths[i]; i++)
     {
-      GTK_NOTE (MODULES,
-                g_print ("Scanning io modules in %s\n", paths[i]));
+      GTK_DEBUG (MODULES, "Scanning io modules in %s", paths[i]);
       g_io_modules_scan_all_in_directory_with_scope (paths[i], scope);
     }
   g_strfreev (paths);

@@ -36,6 +36,7 @@
 #include "gtkaccessiblevalueprivate.h"
 #include "gtkaccessibleprivate.h"
 #include "gtkdebug.h"
+#include "gtkprivate.h"
 #include "gtktestatcontextprivate.h"
 #include "gtktypebuiltins.h"
 
@@ -651,7 +652,7 @@ gtk_at_context_realize (GtkATContext *self)
   if (self->realized)
     return;
 
-  GTK_NOTE (A11Y, g_message ("Realizing AT context '%s'", G_OBJECT_TYPE_NAME (self)));
+  GTK_DEBUG (A11Y, "Realizing AT context '%s'", G_OBJECT_TYPE_NAME (self));
   GTK_AT_CONTEXT_GET_CLASS (self)->realize (self);
 
   self->realized = TRUE;
@@ -663,7 +664,7 @@ gtk_at_context_unrealize (GtkATContext *self)
   if (!self->realized)
     return;
 
-  GTK_NOTE (A11Y, g_message ("Unrealizing AT context '%s'", G_OBJECT_TYPE_NAME (self)));
+  GTK_DEBUG (A11Y, "Unrealizing AT context '%s'", G_OBJECT_TYPE_NAME (self));
   GTK_AT_CONTEXT_GET_CLASS (self)->unrealize (self);
 
   self->realized = FALSE;

@@ -21,6 +21,7 @@
 #include <glib.h>
 
 #include "gdktypes.h"
+#include <glib/gstdio.h>
 
 G_BEGIN_DECLS
 
@@ -40,8 +41,6 @@ typedef enum {
   GDK_DEBUG_NOGRABS         = 1 << 11,
   GDK_DEBUG_PORTALS         = 1 << 12,
   GDK_DEBUG_GL_DISABLE      = 1 << 13,
-  GDK_DEBUG_GL_SOFTWARE     = 1 << 14,
-  GDK_DEBUG_GL_TEXTURE_RECT = 1 << 15,
   GDK_DEBUG_GL_LEGACY       = 1 << 16,
   GDK_DEBUG_GL_GLES         = 1 << 17,
   GDK_DEBUG_GL_DEBUG        = 1 << 18,
@@ -60,22 +59,27 @@ GdkDebugFlags    gdk_display_get_debug_flags    (GdkDisplay       *display);
 void             gdk_display_set_debug_flags    (GdkDisplay       *display,
                                                  GdkDebugFlags     flags);
 
+#define gdk_debug_message(format, ...) g_fprintf (stderr, format "\n", ##__VA_ARGS__)
+
 #ifdef G_ENABLE_DEBUG
 
 #define GDK_DISPLAY_DEBUG_CHECK(display,type) \
     G_UNLIKELY (gdk_display_get_debug_flags (display) & GDK_DEBUG_##type)
-#define GDK_DISPLAY_NOTE(display,type,action)          G_STMT_START {     \
+
+#define GDK_DISPLAY_DEBUG(display,type,...)                               \
+    G_STMT_START {                                                        \
     if (GDK_DISPLAY_DEBUG_CHECK (display,type))                           \
-       { action; };                            } G_STMT_END
+      gdk_debug_message (__VA_ARGS__);                                    \
+    } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
 
 #define GDK_DISPLAY_DEBUG_CHECK(display,type) 0
-#define GDK_DISPLAY_NOTE(display,type,action)
+#define GDK_DISPLAY_DEBUG(display,type,...)
 
 #endif /* G_ENABLE_DEBUG */
 
 #define GDK_DEBUG_CHECK(type) GDK_DISPLAY_DEBUG_CHECK (NULL,type)
-#define GDK_NOTE(type,action) GDK_DISPLAY_NOTE (NULL,type,action)
+#define GDK_DEBUG(type,...) GDK_DISPLAY_DEBUG (NULL,type,__VA_ARGS__)
 
 #endif

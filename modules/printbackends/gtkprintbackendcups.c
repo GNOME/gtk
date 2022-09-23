@@ -48,6 +48,7 @@
 #include <gtk/gtkprintbackendprivate.h>
 #include <gtk/gtkunixprint.h>
 #include <gtk/gtkprinterprivate.h>
+#include <gtk/gtkprivate.h>
 
 #include "gtkprintbackendcups.h"
 #include "gtkprintercups.h"
@@ -291,8 +292,7 @@ g_io_module_query (void)
 GtkPrintBackend *
 gtk_print_backend_cups_new (void)
 {
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: Creating a new CUPS print backend object\n"));
+  GTK_DEBUG (PRINTING, "CUPS Backend: Creating a new CUPS print backend object");
 
   return g_object_new (GTK_TYPE_PRINT_BACKEND_CUPS, NULL);
 }
@@ -365,8 +365,7 @@ _cairo_write_to_cups (void                *closure,
 
   error = NULL;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: Writing %i byte chunk to temp file\n", length));
+  GTK_DEBUG (PRINTING, "CUPS Backend: Writing %i byte chunk to temp file", length);
 
   while (length > 0)
     {
@@ -374,16 +373,15 @@ _cairo_write_to_cups (void                *closure,
 
       if (error != NULL)
 	{
-	  GTK_NOTE (PRINTING,
-                    g_print ("CUPS Backend: Error writing to temp file, %s\n",
-                             error->message));
+	  GTK_DEBUG (PRINTING, "CUPS Backend: Error writing to temp file, %s",
+                             error->message);
 
           g_error_free (error);
 	  return CAIRO_STATUS_WRITE_ERROR;
 	}
 
-      GTK_NOTE (PRINTING,
-                g_print ("CUPS Backend: Wrote %"G_GSIZE_FORMAT" bytes to temp file\n", written));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Wrote %"G_GSIZE_FORMAT" bytes to temp file",
+                           written);
 
       data += written;
       length -= written;
@@ -496,8 +494,7 @@ typedef struct {
 static void
 cups_free_print_stream_data (CupsPrintStreamData *data)
 {
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   if (data->dnotify)
     data->dnotify (data->user_data);
@@ -515,8 +512,7 @@ cups_print_cb (GtkPrintBackendCups *print_backend,
   GError *error = NULL;
   CupsPrintStreamData *ps = user_data;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   if (gtk_cups_result_is_error (result))
     error = g_error_new_literal (gtk_print_error_quark (),
@@ -707,8 +703,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   char  printer_absolute_uri[HTTP_MAX_URI];
   http_t *http = NULL;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   cups_printer = GTK_PRINTER_CUPS (gtk_print_job_get_printer (job));
   settings = gtk_print_job_get_settings (job);
@@ -735,10 +730,9 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
         {
           GError *error = NULL;
 
-          GTK_NOTE (PRINTING,
-                    g_warning ("CUPS Backend: Error connecting to %s:%d",
+          GTK_DEBUG (PRINTING, "CUPS Backend: Error connecting to %s:%d",
                                cups_printer->hostname,
-                               cups_printer->port));
+                               cups_printer->port);
 
           error = g_error_new (gtk_print_error_quark (),
                                GTK_CUPS_ERROR_GENERAL,
@@ -836,9 +830,8 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
       g_strv_length (cups_printer->auth_info_required) == 1 &&
       g_strcmp0 (cups_printer->auth_info_required[0], "negotiate") == 0)
     {
-      GTK_NOTE (PRINTING,
-                g_print ("CUPS Backend: Ignoring auth-info-required \"%s\"\n",
-                         cups_printer->auth_info_required[0]));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Ignoring auth-info-required \"%s\"",
+                           cups_printer->auth_info_required[0]);
     }
   else if (cups_printer->auth_info_required != NULL)
     {
@@ -915,8 +908,7 @@ gtk_print_backend_cups_finalize (GObject *object)
 {
   GtkPrintBackendCups *backend_cups;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: finalizing CUPS backend module\n"));
+  GTK_DEBUG (PRINTING, "CUPS Backend: finalizing CUPS backend module");
 
   backend_cups = GTK_PRINT_BACKEND_CUPS (object);
 
@@ -959,8 +951,7 @@ gtk_print_backend_cups_dispose (GObject *object)
   GtkPrintBackendCups *backend_cups;
   int i;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   backend_cups = GTK_PRINT_BACKEND_CUPS (object);
 
@@ -1061,8 +1052,7 @@ gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
     {
       char *key = g_strconcat (username, "@", hostname, NULL);
       g_hash_table_insert (cups_backend->auth, key, g_strdup (password));
-      GTK_NOTE (PRINTING,
-                g_print ("CUPS backend: caching password for %s\n", key));
+      GTK_DEBUG (PRINTING, "CUPS backend: caching password for %s", key);
     }
 
   g_free (cups_backend->username);
@@ -1160,8 +1150,7 @@ request_password (gpointer data)
 
   if (password && dispatch->request->password_state != GTK_CUPS_PASSWORD_NOT_VALID)
     {
-      GTK_NOTE (PRINTING,
-                g_print ("CUPS backend: using stored password for %s\n", key));
+      GTK_DEBUG (PRINTING, "CUPS backend: using stored password for %s", key);
 
       overwrite_and_free (dispatch->request->password);
       dispatch->request->password = g_strdup (password);
@@ -1348,14 +1337,13 @@ lookup_auth_info_cb (GObject      *source_object,
     {
       if (error != NULL)
         {
-          GTK_NOTE (PRINTING,
-                    g_print ("Failed to look up auth info: %s\n", error->message));
+          GTK_DEBUG (PRINTING, "Failed to look up auth info: %s", error->message);
           g_error_free (error);
         }
       else
         {
           /* Error note should have been shown by the function causing this */
-          GTK_NOTE (PRINTING, g_print ("Failed to look up auth info.\n"));
+          GTK_DEBUG (PRINTING, "Failed to look up auth info.");
         }
       dispatch->backend->authentication_lock = FALSE;
       g_object_unref (task);
@@ -1521,8 +1509,7 @@ cups_dispatch_watch_check (GSource *source)
   GtkCupsPollState poll_state;
   gboolean result;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s <source %p>", G_STRFUNC, source);
 
   dispatch = (GtkPrintCupsDispatchWatch *) source;
 
@@ -1559,8 +1546,7 @@ cups_dispatch_watch_prepare (GSource *source,
 
   dispatch = (GtkPrintCupsDispatchWatch *) source;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s <source %p>", G_STRFUNC, source);
 
   *timeout_ = -1;
 
@@ -1588,17 +1574,15 @@ cups_dispatch_watch_dispatch (GSource     *source,
 
   result = gtk_cups_request_get_result (dispatch->request);
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s <source %p>", G_STRFUNC, source);
 
   if (gtk_cups_result_is_error (result))
     {
-      GTK_NOTE (PRINTING,
-                g_print("Error result: %s (type %i, status %i, code %i)\n",
-                        gtk_cups_result_get_error_string (result),
-                        gtk_cups_result_get_error_type (result),
-                        gtk_cups_result_get_error_status (result),
-                        gtk_cups_result_get_error_code (result)));
+      GTK_DEBUG (PRINTING, "Error result: %s (type %i, status %i, code %i)",
+                           gtk_cups_result_get_error_string (result),
+                           gtk_cups_result_get_error_type (result),
+                           gtk_cups_result_get_error_status (result),
+                           gtk_cups_result_get_error_code (result));
      }
 
   ep_callback (GTK_PRINT_BACKEND (dispatch->backend), result, user_data);
@@ -1612,8 +1596,7 @@ cups_dispatch_watch_finalize (GSource *source)
   GtkPrintCupsDispatchWatch *dispatch;
   GtkCupsResult *result;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s <source %p>\n", G_STRFUNC, source));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s <source %p>", G_STRFUNC, source);
 
   dispatch = (GtkPrintCupsDispatchWatch *) source;
 
@@ -1634,8 +1617,7 @@ cups_dispatch_watch_finalize (GSource *source)
         username = cupsUser ();
 
       key = g_strconcat (username, "@", hostname, NULL);
-      GTK_NOTE (PRINTING,
-                g_print ("CUPS backend: removing stored password for %s\n", key));
+      GTK_DEBUG (PRINTING, "CUPS backend: removing stored password for %s", key);
       g_hash_table_remove (dispatch->backend->auth, key);
       g_free (key);
 
@@ -1693,8 +1675,8 @@ cups_request_execute (GtkPrintBackendCups              *print_backend,
                                                          sizeof (GtkPrintCupsDispatchWatch));
   g_source_set_static_name (&dispatch->source, "GTK CUPS backend");
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s <source %p> - Executing cups request on server '%s' and resource '%s'\n", G_STRFUNC, dispatch, request->server, request->resource));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s <source %p> - Executing cups request on server '%s' and resource '%s'",
+                       G_STRFUNC, dispatch, request->server, request->resource);
 
   dispatch->request = request;
   dispatch->backend = g_object_ref (print_backend);
@@ -2438,8 +2420,7 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
     }
   else
     {
-      GTK_NOTE (PRINTING,
-		g_print ("CUPS Backend: Attribute %s ignored\n", ippGetName (attr)));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Attribute %s ignored", ippGetName (attr));
     }
 }
 
@@ -2482,16 +2463,14 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
     {
       cups_printer->printer_uri = g_strdup (info->member_uris);
       /* TODO if member_uris is a class we need to recursively find a printer */
-      GTK_NOTE (PRINTING,
-		g_print ("CUPS Backend: Found class with printer %s\n",
-			 info->member_uris));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Found class with printer %s",
+                           info->member_uris);
     }
   else
     {
       cups_printer->printer_uri = g_strdup (info->printer_uri);
-      GTK_NOTE (PRINTING,
-		g_print ("CUPS Backend: Found printer %s\n",
-			 info->printer_uri));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Found printer %s",
+                           info->printer_uri);
     }
 
   httpSeparateURI (HTTP_URI_CODING_ALL, cups_printer->printer_uri,
@@ -2504,8 +2483,8 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
   if (strncmp (resource, "/printers/", 10) == 0)
     {
       cups_printer->ppd_name = g_strdup (resource + 10);
-      GTK_NOTE (PRINTING,
-		g_print ("CUPS Backend: Setting ppd name '%s' for printer/class '%s'\n", cups_printer->ppd_name, info->printer_name));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Setting ppd name '%s' for printer/class '%s'",
+                           cups_printer->ppd_name, info->printer_name);
     }
 
   gethostname (uri, sizeof (uri));
@@ -2741,8 +2720,7 @@ typedef struct {
 static void
 request_printer_info_data_free (RequestPrinterInfoData *data)
 {
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
   httpClose (data->http);
   g_object_unref (data->printer);
   g_free (data);
@@ -2761,16 +2739,14 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
   gboolean                status_changed = FALSE;
   ipp_t                  *response;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   if (gtk_cups_result_is_error (result))
     {
-      GTK_NOTE (PRINTING,
-                g_warning ("CUPS Backend: Error getting printer info: %s %d %d",
+      GTK_DEBUG (PRINTING, "CUPS Backend: Error getting printer info: %s %d %d",
                            gtk_cups_result_get_error_string (result),
                            gtk_cups_result_get_error_type (result),
-                           gtk_cups_result_get_error_code (result)));
+                           gtk_cups_result_get_error_code (result));
 
       goto done;
     }
@@ -2979,13 +2955,12 @@ cups_create_local_printer_cb (GtkPrintBackendCups *print_backend,
           printer_name = g_strdup (g_strrstr (ippGetString (attr, 0, NULL), "/") + 1);
         }
 
-      GTK_NOTE (PRINTING,
-                g_print ("CUPS Backend: Created local printer %s\n", printer_name));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Created local printer %s", printer_name);
     }
   else
     {
-      GTK_NOTE (PRINTING,
-                g_print ("CUPS Backend: Creating of local printer failed: %d\n", ippGetStatusCode (response)));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Creating of local printer failed: %d",
+                           ippGetStatusCode (response));
     }
 
   iter = g_list_find_custom (print_backend->temporary_queues_in_construction, printer_name, (GCompareFunc) g_strcmp0);
@@ -3015,8 +2990,7 @@ create_temporary_queue (GtkPrintBackendCups *backend,
   if (iter != NULL)
     return;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: Creating local printer %s\n", printer_name));
+  GTK_DEBUG (PRINTING, "CUPS Backend: Creating local printer %s", printer_name);
 
   backend->temporary_queues_in_construction = g_list_prepend (backend->temporary_queues_in_construction, g_strdup (printer_name));
 
@@ -3175,10 +3149,9 @@ avahi_connection_test_cb (GObject      *source_object,
     }
   else
     {
-      GTK_NOTE (PRINTING,
-                g_warning ("CUPS Backend: Can not connect to %s: %s\n",
+      GTK_DEBUG (PRINTING, "CUPS Backend: Can not connect to %s: %s",
                            data->address,
-                           error->message));
+                           error->message);
       g_error_free (error);
     }
 
@@ -3680,18 +3653,16 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
   list_has_changed = FALSE;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   cups_backend->list_printers_pending = FALSE;
 
   if (gtk_cups_result_is_error (result))
     {
-      GTK_NOTE (PRINTING,
-                g_warning ("CUPS Backend: Error getting printer list: %s %d %d",
+      GTK_DEBUG (PRINTING, "CUPS Backend: Error getting printer list: %s %d %d",
                            gtk_cups_result_get_error_string (result),
                            gtk_cups_result_get_error_type (result),
-                           gtk_cups_result_get_error_code (result)));
+                           gtk_cups_result_get_error_code (result));
 
       if (gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_AUTH &&
           gtk_cups_result_get_error_code (result) == 1)
@@ -3998,8 +3969,7 @@ typedef struct {
 static void
 get_ppd_data_free (GetPPDData *data)
 {
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
   httpClose (data->http);
   g_io_channel_unref (data->ppd_io);
   g_object_unref (data->printer);
@@ -4014,8 +3984,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   GtkPrinter *printer;
   struct stat data_info;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   printer = GTK_PRINTER (data->printer);
   GTK_PRINTER_CUPS (printer)->reading_ppd = FALSE;
@@ -4111,8 +4080,7 @@ cups_request_ppd (GtkPrinter *printer)
 
   error = NULL;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   if (cups_printer->remote && !cups_printer->avahi_browsed)
     {
@@ -4186,9 +4154,8 @@ cups_request_ppd (GtkPrinter *printer)
 
   if (error != NULL)
     {
-      GTK_NOTE (PRINTING,
-                g_warning ("CUPS Backend: Failed to create temp file, %s\n",
-                           error->message));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Failed to create temp file, %s",
+                           error->message);
       g_error_free (error);
       httpClose (http);
       g_free (ppd_filename);
@@ -4220,9 +4187,8 @@ cups_request_ppd (GtkPrinter *printer)
                                     cups_printer->ipp_version_major,
                                     cups_printer->ipp_version_minor);
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: Requesting resource %s to be written to temp file %s\n", resource, ppd_filename));
-
+  GTK_DEBUG (PRINTING, "CUPS Backend: Requesting resource %s to be written to temp file %s",
+                       resource, ppd_filename);
 
   cups_printer->reading_ppd = TRUE;
   GTK_PRINT_BACKEND_CUPS (print_backend)->reading_ppds++;
@@ -4602,8 +4568,7 @@ ppd_text_to_utf8 (ppd_file_t *ppd_file,
 
   if (res == NULL)
     {
-      GTK_NOTE (PRINTING,
-                g_warning ("CUPS Backend: Unable to convert PPD text\n"));
+      GTK_DEBUG (PRINTING, "CUPS Backend: Unable to convert PPD text");
       res = g_strdup ("???");
     }
 

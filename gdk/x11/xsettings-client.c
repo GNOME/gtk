@@ -271,8 +271,8 @@ parse_settings (unsigned char *data,
       !fetch_card32 (&buffer, &n_entries))
     goto out;
 
-  GDK_NOTE (SETTINGS, g_message ("reading %lu settings (serial %lu byte order %u)",
-                                 (unsigned long)n_entries, (unsigned long)serial, buffer.byte_order));
+  GDK_DEBUG (SETTINGS, "reading %lu settings (serial %lu byte order %u)",
+                       (unsigned long)n_entries, (unsigned long)serial, buffer.byte_order);
 
   for (i = 0; i < n_entries; i++)
     {
@@ -303,7 +303,7 @@ parse_settings (unsigned char *data,
           g_value_init (value, G_TYPE_INT);
           g_value_set_int (value, (gint32) v_int);
 
-          GDK_NOTE (SETTINGS, g_message ("  %s = %d", x_name, (gint32) v_int));
+          GDK_DEBUG (SETTINGS, "  %s = %d", x_name, (gint32) v_int);
 	  break;
 	case XSETTINGS_TYPE_STRING:
           {
@@ -317,7 +317,7 @@ parse_settings (unsigned char *data,
             g_value_init (value, G_TYPE_STRING);
             g_value_take_string (value, s);
 
-            GDK_NOTE (SETTINGS, g_message ("  %s = \"%s\"", x_name, s));
+            GDK_DEBUG (SETTINGS, "  %s = \"%s\"", x_name, s);
           }
 	  break;
 	case XSETTINGS_TYPE_COLOR:
@@ -340,12 +340,12 @@ parse_settings (unsigned char *data,
             g_value_init (value, GDK_TYPE_RGBA);
             g_value_set_boxed (value, &rgba);
 
-            GDK_NOTE (SETTINGS, g_message ("  %s = #%02X%02X%02X%02X", x_name, alpha,red, green, blue));
+            GDK_DEBUG (SETTINGS, "  %s = #%02X%02X%02X%02X", x_name, alpha,red, green, blue);
           }
 	  break;
 	default:
 	  /* Quietly ignore unknown types */
-          GDK_NOTE (SETTINGS, g_message ("  %s = ignored (unknown type %u)", x_name, type));
+          GDK_DEBUG (SETTINGS, "  %s = ignored (unknown type %u)", x_name, type);
 	  break;
 	}
 
@@ -355,12 +355,12 @@ parse_settings (unsigned char *data,
 
       if (gdk_name == NULL)
         {
-          GDK_NOTE (SETTINGS, g_message ("    ==> unknown to GTK"));
+          GDK_DEBUG (SETTINGS, "    ==> unknown to GTK");
           free_value (value);
         }
       else
         {
-          GDK_NOTE (SETTINGS, g_message ("    ==> storing as '%s'", gdk_name));
+          GDK_DEBUG (SETTINGS, "    ==> storing as '%s'", gdk_name);
 
           if (settings == NULL)
             settings = g_hash_table_new_full (g_str_hash, g_str_equal,
@@ -487,7 +487,7 @@ check_manager_window (GdkX11Screen *x11_screen,
 
   gdk_x11_display_grab (display);
 
-  if (!GDK_DISPLAY_DEBUG_CHECK (display, DEFAULT_SETTINGS))
+  if (!(gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS))
     x11_screen->xsettings_manager_window = XGetSelectionOwner (xdisplay, get_selection_atom (x11_screen));
 
   if (x11_screen->xsettings_manager_window != 0)

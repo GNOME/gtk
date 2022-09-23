@@ -20,6 +20,7 @@
 #include "config.h"
 #include <gtk/gtk.h>
 #include "gtkcupsutils.h"
+#include "gtkprivate.h"
 
 #include <errno.h>
 #include <unistd.h>
@@ -693,8 +694,7 @@ _post_send (GtkCupsRequest *request)
   char length[255];
   struct stat data_info;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   request->poll_state = GTK_CUPS_HTTP_WRITE;
 
@@ -745,8 +745,7 @@ _post_write_request (GtkCupsRequest *request)
 {
   ipp_state_t ipp_status;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   request->poll_state = GTK_CUPS_HTTP_WRITE;
   
@@ -786,8 +785,7 @@ _post_write_data (GtkCupsRequest *request)
   char buffer[_GTK_CUPS_MAX_CHUNK_SIZE];
   http_status_t http_status;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   request->poll_state = GTK_CUPS_HTTP_WRITE;
   
@@ -941,8 +939,7 @@ _post_check (GtkCupsRequest *request)
 
   http_status = request->last_status;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s - status %i\n", G_STRFUNC, http_status));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s - status %i", G_STRFUNC, http_status);
 
   request->poll_state = GTK_CUPS_HTTP_READ;
 
@@ -1135,8 +1132,7 @@ _post_read_response (GtkCupsRequest *request)
 {
   ipp_state_t ipp_status;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   request->poll_state = GTK_CUPS_HTTP_READ;
 
@@ -1172,8 +1168,7 @@ _post_read_response (GtkCupsRequest *request)
 static void 
 _get_send (GtkCupsRequest *request)
 {
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   request->poll_state = GTK_CUPS_HTTP_WRITE;
 
@@ -1232,8 +1227,7 @@ _get_check (GtkCupsRequest *request)
 {
   http_status_t http_status;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   http_status = request->last_status;
 
@@ -1406,8 +1400,7 @@ _get_read_data (GtkCupsRequest *request)
   GIOStatus io_status;
   GError *error;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %s\n", G_STRFUNC));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %s", G_STRFUNC);
 
   error = NULL;
 
@@ -1416,8 +1409,7 @@ _get_read_data (GtkCupsRequest *request)
   bytes = httpRead2 (request->http, buffer, sizeof (buffer));
   request->bytes_received += bytes;
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS Backend: %"G_GSIZE_FORMAT" bytes read\n", bytes));
+  GTK_DEBUG (PRINTING, "CUPS Backend: %"G_GSIZE_FORMAT" bytes read", bytes);
 
   io_status =
     g_io_channel_write_chars (request->data_io, 

@@ -648,10 +648,10 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
 
       if (gsk_renderer_realize (renderer, surface, &error))
         {
-          GSK_RENDERER_NOTE (renderer, RENDERER,
-              g_message ("Using renderer of type '%s' for surface '%s'\n",
-                         G_OBJECT_TYPE_NAME (renderer),
-                         G_OBJECT_TYPE_NAME (surface)));
+          GSK_RENDERER_DEBUG (renderer, RENDERER,
+                              "Using renderer of type '%s' for surface '%s'",
+                              G_OBJECT_TYPE_NAME (renderer),
+                              G_OBJECT_TYPE_NAME (surface));
           return renderer;
         }
 

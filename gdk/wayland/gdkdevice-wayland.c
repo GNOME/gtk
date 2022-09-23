@@ -83,7 +83,7 @@
 #define BTN_STYLUS3 0x149 /* Linux 4.15 */
 #endif
 
-#define GDK_SEAT_NOTE(seat,type,action) GDK_DISPLAY_NOTE(gdk_seat_get_display (GDK_SEAT (seat)),type,action)
+#define GDK_SEAT_DEBUG(seat,type,...) GDK_DISPLAY_DEBUG(gdk_seat_get_display (GDK_SEAT (seat)),type,__VA_ARGS__)
 
 typedef struct _GdkWaylandDevicePad GdkWaylandDevicePad;
 typedef struct _GdkWaylandDevicePadClass GdkWaylandDevicePadClass;
@@ -1104,9 +1104,9 @@ data_offer_offer (void                 *data,
 
   if (seat->pending_offer != offer)
     {
-      GDK_SEAT_NOTE (seat, EVENTS,
-                        g_message ("%p: offer for unknown offer %p of %s",
-                                   seat, offer, type));
+      GDK_SEAT_DEBUG (seat, EVENTS,
+                      "%p: offer for unknown offer %p of %s",
+                      seat, offer, type);
       return;
     }
 
@@ -1180,9 +1180,9 @@ data_device_data_offer (void                  *data,
 {
   GdkWaylandSeat *seat = data;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("data device data offer, data device %p, offer %p",
-                       data_device, offer));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "data device data offer, data device %p, offer %p",
+                  data_device, offer);
 
   gdk_wayland_seat_discard_pending_offer (seat);
 
@@ -1218,15 +1218,15 @@ data_device_enter (void                  *data,
 
   if (offer != seat->pending_offer)
     {
-      GDK_SEAT_NOTE (seat, EVENTS,
-                        g_message ("%p: enter event for unknown offer %p, expected %p",
-                                   seat, offer, seat->pending_offer));
+      GDK_SEAT_DEBUG (seat, EVENTS,
+                      "%p: enter event for unknown offer %p, expected %p",
+                      seat, offer, seat->pending_offer);
       return;
     }
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("data device enter, data device %p serial %u, surface %p, x %f y %f, offer %p",
-                       data_device, serial, surface, wl_fixed_to_double (x), wl_fixed_to_double (y), offer));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "data device enter, data device %p serial %u, surface %p, x %f y %f, offer %p",
+                  data_device, serial, surface, wl_fixed_to_double (x), wl_fixed_to_double (y), offer);
 
   /* Update pointer state, so device state queries work during DnD */
   seat->pointer_info.focus = g_object_ref (dest_surface);
@@ -1270,8 +1270,8 @@ data_device_leave (void                  *data,
 {
   GdkWaylandSeat *seat = data;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("data device leave, data device %p", data_device));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "data device leave, data device %p", data_device);
 
   if (seat->drop == NULL)
     return;
@@ -1296,9 +1296,9 @@ data_device_motion (void                  *data,
   GdkWaylandSeat *seat = data;
   int origin_x, origin_y;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("data device motion, data_device = %p, time = %d, x = %f, y = %f",
-                       data_device, time, wl_fixed_to_double (x), wl_fixed_to_double (y)));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "data device motion, data_device = %p, time = %d, x = %f, y = %f",
+                  data_device, time, wl_fixed_to_double (x), wl_fixed_to_double (y));
 
   if (seat->drop == NULL)
     return;
@@ -1323,8 +1323,8 @@ data_device_drop (void                  *data,
   GdkWaylandSeat *seat = data;
   int origin_x, origin_y;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("data device drop, data device %p", data_device));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "data device drop, data device %p", data_device);
 
   gdk_surface_get_origin (gdk_drop_get_surface (seat->drop), &origin_x, &origin_y);
 
@@ -1561,9 +1561,9 @@ pointer_handle_enter (void              *data,
 
   gdk_wayland_device_update_surface_cursor (seat->logical_pointer);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("enter, seat %p surface %p",
-                       seat, seat->pointer_info.focus));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "enter, seat %p surface %p",
+                  seat, seat->pointer_info.focus);
 
   if (display_wayland->seat_version < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
@@ -1612,9 +1612,9 @@ pointer_handle_leave (void              *data,
 
   gdk_wayland_device_update_surface_cursor (seat->logical_pointer);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("leave, seat %p surface %p",
-                       seat, seat->pointer_info.focus));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "leave, seat %p surface %p",
+                  seat, seat->pointer_info.focus);
 
   g_object_unref (seat->pointer_info.focus);
   seat->pointer_info.focus = NULL;
@@ -1722,12 +1722,12 @@ pointer_handle_button (void              *data,
   else
     seat->pointer_info.button_modifiers &= ~modifier;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-	    g_message ("button %d %s, seat %p state %d",
-		       gdk_button_event_get_button (event),
-		       state ? "press" : "release",
-                       seat,
-                       gdk_event_get_modifier_state (event)));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "button %d %s, seat %p state %d",
+                  gdk_button_event_get_button (event),
+                  state ? "press" : "release",
+                  seat,
+                  gdk_event_get_modifier_state (event));
 
   if (display->seat_version < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
@@ -1780,10 +1780,10 @@ pointer_handle_axis (void              *data,
 
   seat->pointer_info.time = time;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("scroll, axis %s, value %f, seat %p",
-                       get_axis_name (axis), wl_fixed_to_double (value),
-                       seat));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "scroll, axis %s, value %f, seat %p",
+                  get_axis_name (axis), wl_fixed_to_double (value),
+                  seat);
 
   if (display->seat_version < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
@@ -1795,8 +1795,7 @@ pointer_handle_frame (void              *data,
 {
   GdkWaylandSeat *seat = data;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("frame, seat %p", seat));
+  GDK_SEAT_DEBUG (seat, EVENTS, "frame, seat %p", seat);
 
   gdk_wayland_seat_flush_frame_event (seat);
 }
@@ -1836,8 +1835,8 @@ pointer_handle_axis_source (void                        *data,
 
   pointer_frame->source = source;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("axis source %s, seat %p", get_axis_source_name (source), seat));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "axis source %s, seat %p", get_axis_source_name (source), seat);
 }
 
 static void
@@ -1868,8 +1867,8 @@ pointer_handle_axis_stop (void              *data,
 
   pointer_frame->is_scroll_stop = TRUE;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("axis %s stop, seat %p", get_axis_name (axis), seat));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "axis %s stop, seat %p", get_axis_name (axis), seat);
 }
 
 static void
@@ -1896,9 +1895,9 @@ pointer_handle_axis_discrete (void              *data,
       g_return_if_reached ();
     }
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("discrete scroll, axis %s, value %d, seat %p",
-                       get_axis_name (axis), value, seat));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "discrete scroll, axis %s, value %d, seat %p",
+                  get_axis_name (axis), value, seat);
 }
 
 static void
@@ -1925,9 +1924,9 @@ pointer_handle_axis_value120 (void              *data,
       g_return_if_reached ();
     }
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("value120 scroll, axis %s, value %d, seat %p",
-                       get_axis_name (axis), value, seat));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "value120 scroll, axis %s, value %d, seat %p",
+                  get_axis_name (axis), value, seat);
 }
 
 static int
@@ -1984,7 +1983,8 @@ keyboard_handle_keymap (void               *data,
 
   _gdk_wayland_keymap_update_from_fd (seat->keymap, format, fd, size);
 
-  GDK_DISPLAY_NOTE(seat->keymap->display, INPUT,
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DISPLAY_DEBUG_CHECK (seat->keymap->display, INPUT))
     {
       GString *s = g_string_new ("");
       struct xkb_keymap *xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (seat->keymap);
@@ -1997,9 +1997,10 @@ keyboard_handle_keymap (void               *data,
             g_string_append (s, "*");
           g_string_append (s, xkb_keymap_layout_get_name (xkb_keymap, i));
         }
-      g_print ("layouts: %s\n", s->str);
+      gdk_debug_message ("layouts: %s", s->str);
       g_string_free (s, TRUE);
-    });
+    }
+#endif
 
   g_signal_emit_by_name (seat->keymap, "keys-changed");
   g_signal_emit_by_name (seat->keymap, "state-changed");
@@ -2044,9 +2045,9 @@ keyboard_handle_enter (void               *data,
                                seat->logical_keyboard,
                                TRUE);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("focus in, seat %p surface %p",
-                       seat, seat->keyboard_focus));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "focus in, seat %p surface %p",
+                  seat, seat->keyboard_focus);
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -2080,9 +2081,9 @@ keyboard_handle_leave (void               *data,
   seat->repeat_key = 0;
   seat->key_modifiers = 0;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("focus out, seat %p surface %p",
-                       seat, gdk_event_get_surface (event)));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "focus out, seat %p surface %p",
+                  seat, gdk_event_get_surface (event));
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 }
@@ -2208,18 +2209,18 @@ deliver_key_event (GdkWaylandSeat *seat,
 
   _gdk_wayland_display_deliver_event (seat->display, event);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("keyboard %s event%s, surface %p, code %d, sym %d, "
-                       "mods 0x%x, consumed 0x%x, layout %d level %d",
-                       (state ? "press" : "release"),
-                       (from_key_repeat ? " (repeat)" : ""),
-                       gdk_event_get_surface (event),
-                       gdk_key_event_get_keycode (event),
-                       gdk_key_event_get_keyval (event),
-                       gdk_event_get_modifier_state (event),
-                       gdk_key_event_get_consumed_modifiers (event),
-                       gdk_key_event_get_layout (event),
-                       gdk_key_event_get_level (event)));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "keyboard %s event%s, surface %p, code %d, sym %d, "
+                  "mods 0x%x, consumed 0x%x, layout %d level %d",
+                  (state ? "press" : "release"),
+                  (from_key_repeat ? " (repeat)" : ""),
+                  gdk_event_get_surface (event),
+                  gdk_key_event_get_keycode (event),
+                  gdk_key_event_get_keyval (event),
+                  gdk_event_get_modifier_state (event),
+                  gdk_key_event_get_consumed_modifiers (event),
+                  gdk_key_event_get_layout (event),
+                  gdk_key_event_get_level (event));
 
   if (!xkb_keymap_key_repeats (xkb_keymap, key))
     return;
@@ -2373,7 +2374,7 @@ keyboard_handle_modifiers (void               *data,
   g_signal_emit_by_name (keymap, "state-changed");
   if (layout != get_active_layout (keymap))
     {
-      GDK_DISPLAY_NOTE(keymap->display, INPUT, g_print ("active layout now: %s\n", get_active_layout_name (keymap)));
+      GDK_DISPLAY_DEBUG (keymap->display, INPUT, "active layout now: %s", get_active_layout_name (keymap));
 
       g_signal_emit_by_name (keymap, "keys-changed");
     }
@@ -2663,7 +2664,7 @@ touch_handle_cancel (void            *data,
       g_hash_table_iter_remove (&iter);
     }
 
-  GDK_SEAT_NOTE (seat, EVENTS, g_message ("touch cancel"));
+  GDK_SEAT_DEBUG (seat, EVENTS, "touch cancel");
 }
 
 static void
@@ -3179,11 +3180,11 @@ seat_handle_capabilities (void                    *data,
   GdkWaylandSeat *seat = data;
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
 
-  GDK_SEAT_NOTE (seat, MISC,
-            g_message ("seat %p with %s%s%s", wl_seat,
-                       (caps & WL_SEAT_CAPABILITY_POINTER) ? " pointer, " : "",
-                       (caps & WL_SEAT_CAPABILITY_KEYBOARD) ? " keyboard, " : "",
-                       (caps & WL_SEAT_CAPABILITY_TOUCH) ? " touch" : ""));
+  GDK_SEAT_DEBUG (seat, MISC,
+                  "seat %p with %s%s%s", wl_seat,
+                  (caps & WL_SEAT_CAPABILITY_POINTER) ? " pointer, " : "",
+                  (caps & WL_SEAT_CAPABILITY_KEYBOARD) ? " keyboard, " : "",
+                  (caps & WL_SEAT_CAPABILITY_TOUCH) ? " touch" : "");
 
   if ((caps & WL_SEAT_CAPABILITY_POINTER) && !seat->wl_pointer)
     {
@@ -3401,8 +3402,8 @@ seat_handle_name (void           *data,
                   const char     *name)
 {
   /* We don't care about the name. */
-  GDK_SEAT_NOTE (GDK_WAYLAND_SEAT (data), MISC,
-            g_message ("seat %p name %s", seat, name));
+  GDK_SEAT_DEBUG (GDK_WAYLAND_SEAT (data), MISC,
+                  "seat %p name %s", seat, name);
 }
 
 static const struct wl_seat_listener seat_listener = {
@@ -3683,10 +3684,10 @@ tablet_tool_handle_proximity_in (void                      *data,
                     gdk_wayland_surface_get_wl_output (surface));
   pointer_surface_update_scale (tablet->logical_device);
 
-  GDK_SEAT_NOTE (tablet->seat, EVENTS,
-            g_message ("proximity in, seat %p surface %p tool %d",
-                       tablet->seat, tablet->pointer_info.focus,
-                       gdk_device_tool_get_tool_type (tool->tool)));
+  GDK_SEAT_DEBUG (tablet->seat, EVENTS,
+                  "proximity in, seat %p surface %p tool %d",
+                  tablet->seat, tablet->pointer_info.focus,
+                  gdk_device_tool_get_tool_type (tool->tool));
 }
 
 static void
@@ -3700,9 +3701,9 @@ tablet_tool_handle_proximity_out (void                      *data,
   if (!tablet)
     return;
 
-  GDK_SEAT_NOTE (tool->seat, EVENTS,
-            g_message ("proximity out, seat %p, tool %d", tool->seat,
-                       gdk_device_tool_get_tool_type (tool->tool)));
+  GDK_SEAT_DEBUG (tool->seat, EVENTS,
+                  "proximity out, seat %p, tool %d", tool->seat,
+                  gdk_device_tool_get_tool_type (tool->tool));
 
   event = gdk_proximity_event_new (GDK_PROXIMITY_OUT,
                                    tablet->pointer_info.focus,
@@ -3802,10 +3803,10 @@ tablet_tool_handle_motion (void                      *data,
   tablet->pointer_info.surface_x = wl_fixed_to_double (sx);
   tablet->pointer_info.surface_y = wl_fixed_to_double (sy);
 
-  GDK_SEAT_NOTE (tool->seat, EVENTS,
-            g_message ("tablet motion %f %f",
-                       tablet->pointer_info.surface_x,
-                       tablet->pointer_info.surface_y));
+  GDK_SEAT_DEBUG (tool->seat, EVENTS,
+                  "tablet motion %f %f",
+                  tablet->pointer_info.surface_x,
+                  tablet->pointer_info.surface_y);
 
   event = gdk_motion_event_new (tablet->pointer_info.focus,
                                 tablet->logical_device,
@@ -3836,9 +3837,9 @@ tablet_tool_handle_pressure (void                      *data,
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               pressure, &tablet->axes[GDK_AXIS_PRESSURE]);
 
-  GDK_SEAT_NOTE (tool->seat, EVENTS,
-            g_message ("tablet tool %d pressure %d",
-                       gdk_device_tool_get_tool_type (tool->tool), pressure));
+  GDK_SEAT_DEBUG (tool->seat, EVENTS,
+                  "tablet tool %d pressure %d",
+                  gdk_device_tool_get_tool_type (tool->tool), pressure);
 }
 
 static void
@@ -3858,9 +3859,9 @@ tablet_tool_handle_distance (void                      *data,
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               distance, &tablet->axes[GDK_AXIS_DISTANCE]);
 
-  GDK_SEAT_NOTE (tool->seat, EVENTS,
-            g_message ("tablet tool %d distance %d",
-                       gdk_device_tool_get_tool_type (tool->tool), distance));
+  GDK_SEAT_DEBUG (tool->seat, EVENTS,
+                  "tablet tool %d distance %d",
+                  gdk_device_tool_get_tool_type (tool->tool), distance);
 }
 
 static void
@@ -3887,10 +3888,10 @@ tablet_tool_handle_tilt (void                      *data,
                               wl_fixed_to_double (ytilt),
                               &tablet->axes[GDK_AXIS_YTILT]);
 
-  GDK_SEAT_NOTE (tool->seat, EVENTS,
-            g_message ("tablet tool %d tilt %f/%f",
-                       gdk_device_tool_get_tool_type (tool->tool),
-                       wl_fixed_to_double (xtilt), wl_fixed_to_double (ytilt)));
+  GDK_SEAT_DEBUG (tool->seat, EVENTS,
+                  "tablet tool %d tilt %f/%f",
+                  gdk_device_tool_get_tool_type (tool->tool),
+                  wl_fixed_to_double (xtilt), wl_fixed_to_double (ytilt));
 }
 
 static void
@@ -3947,10 +3948,10 @@ tablet_tool_handle_rotation (void                      *data,
                               wl_fixed_to_double (degrees),
                               &tablet->axes[GDK_AXIS_ROTATION]);
 
-  GDK_SEAT_NOTE (tool->seat, EVENTS,
-            g_message ("tablet tool %d rotation %f",
-                       gdk_device_tool_get_tool_type (tool->tool),
-                       wl_fixed_to_double (degrees)));
+  GDK_SEAT_DEBUG (tool->seat, EVENTS,
+                  "tablet tool %d rotation %f",
+                  gdk_device_tool_get_tool_type (tool->tool),
+                  wl_fixed_to_double (degrees));
 }
 
 static void
@@ -3970,9 +3971,9 @@ tablet_tool_handle_slider (void                      *data,
   _gdk_device_translate_axis (tablet->stylus_device, axis_index,
                               position, &tablet->axes[GDK_AXIS_SLIDER]);
 
-  GDK_SEAT_NOTE (tool->seat, EVENTS,
-            g_message ("tablet tool %d slider %d",
-                       gdk_device_tool_get_tool_type (tool->tool), position));
+  GDK_SEAT_DEBUG (tool->seat, EVENTS,
+                  "tablet tool %d slider %d",
+                  gdk_device_tool_get_tool_type (tool->tool), position);
 }
 
 static void
@@ -3991,9 +3992,9 @@ tablet_tool_handle_wheel (void                      *data,
 
   seat = GDK_WAYLAND_SEAT (tablet->seat);
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("tablet tool %d wheel %d/%d",
-                       gdk_device_tool_get_tool_type (tool->tool), degrees, clicks));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "tablet tool %d wheel %d/%d",
+                  gdk_device_tool_get_tool_type (tool->tool), degrees, clicks);
 
   if (clicks == 0)
     return;
@@ -4023,8 +4024,8 @@ tablet_tool_handle_frame (void                      *data,
   if (!tablet)
     return;
 
-  GDK_SEAT_NOTE (tablet->seat, EVENTS,
-            g_message ("tablet frame, time %d", time));
+  GDK_SEAT_DEBUG (tablet->seat, EVENTS,
+                  "tablet frame, time %d", time);
 
   frame_event = tablet->pointer_info.frame.event;
 
@@ -4067,9 +4068,9 @@ tablet_pad_ring_handle_source (void                          *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad ring handle source, ring = %p source = %d",
-                       wp_tablet_pad_ring, source));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad ring handle source, ring = %p source = %d",
+                  wp_tablet_pad_ring, source);
 
   group->axis_tmp_info.source = source;
 }
@@ -4081,9 +4082,9 @@ tablet_pad_ring_handle_angle (void                          *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad ring handle angle, ring = %p angle = %f",
-                       wp_tablet_pad_ring, wl_fixed_to_double (angle)));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad ring handle angle, ring = %p angle = %f",
+                  wp_tablet_pad_ring, wl_fixed_to_double (angle));
 
   group->axis_tmp_info.value = wl_fixed_to_double (angle);
 }
@@ -4094,8 +4095,8 @@ tablet_pad_ring_handle_stop (void                          *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad ring handle stop, ring = %p", wp_tablet_pad_ring));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad ring handle stop, ring = %p", wp_tablet_pad_ring);
 
   group->axis_tmp_info.is_stop = TRUE;
 }
@@ -4110,8 +4111,8 @@ tablet_pad_ring_handle_frame (void                          *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
   GdkEvent *event;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("tablet pad ring handle frame, ring = %p", wp_tablet_pad_ring));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "tablet pad ring handle frame, ring = %p", wp_tablet_pad_ring);
 
   event = gdk_pad_event_new_ring (seat->keyboard_focus,
                                   pad->device,
@@ -4139,9 +4140,9 @@ tablet_pad_strip_handle_source (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad strip handle source, strip = %p source = %d",
-                       wp_tablet_pad_strip, source));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad strip handle source, strip = %p source = %d",
+                  wp_tablet_pad_strip, source);
 
   group->axis_tmp_info.source = source;
 }
@@ -4153,9 +4154,9 @@ tablet_pad_strip_handle_position (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad strip handle position, strip = %p position = %d",
-                       wp_tablet_pad_strip, position));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad strip handle position, strip = %p position = %d",
+                  wp_tablet_pad_strip, position);
 
   group->axis_tmp_info.value = (double) position / 65535;
 }
@@ -4166,9 +4167,9 @@ tablet_pad_strip_handle_stop (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad strip handle stop, strip = %p",
-                       wp_tablet_pad_strip));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad strip handle stop, strip = %p",
+                  wp_tablet_pad_strip);
 
   group->axis_tmp_info.is_stop = TRUE;
 }
@@ -4183,9 +4184,9 @@ tablet_pad_strip_handle_frame (void                           *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
   GdkEvent *event;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("tablet pad strip handle frame, strip = %p",
-                       wp_tablet_pad_strip));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "tablet pad strip handle frame, strip = %p",
+                  wp_tablet_pad_strip);
 
   event = gdk_pad_event_new_strip (seat->keyboard_focus,
                                    pad->device,
@@ -4214,9 +4215,9 @@ tablet_pad_group_handle_buttons (void                           *data,
   GdkWaylandTabletPadGroupData *group = data;
   uint32_t *p;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad group handle buttons, pad group = %p, n_buttons = %" G_GSIZE_FORMAT,
-                       wp_tablet_pad_group, buttons->size));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad group handle buttons, pad group = %p, n_buttons = %" G_GSIZE_FORMAT,
+                  wp_tablet_pad_group, buttons->size);
 
   wl_array_for_each (p, buttons)
     {
@@ -4233,9 +4234,9 @@ tablet_pad_group_handle_ring (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad group handle ring, pad group = %p, ring = %p",
-                       wp_tablet_pad_group, wp_tablet_pad_ring));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad group handle ring, pad group = %p, ring = %p",
+                  wp_tablet_pad_group, wp_tablet_pad_ring);
 
   zwp_tablet_pad_ring_v2_add_listener (wp_tablet_pad_ring,
                                        &tablet_pad_ring_listener, group);
@@ -4252,9 +4253,9 @@ tablet_pad_group_handle_strip (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad group handle strip, pad group = %p, strip = %p",
-                       wp_tablet_pad_group, wp_tablet_pad_strip));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad group handle strip, pad group = %p, strip = %p",
+                  wp_tablet_pad_group, wp_tablet_pad_strip);
 
   zwp_tablet_pad_strip_v2_add_listener (wp_tablet_pad_strip,
                                        &tablet_pad_strip_listener, group);
@@ -4271,9 +4272,9 @@ tablet_pad_group_handle_modes (void                           *data,
 {
   GdkWaylandTabletPadGroupData *group = data;
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad group handle modes, pad group = %p, n_modes = %d",
-                       wp_tablet_pad_group, modes));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad group handle modes, pad group = %p, n_modes = %d",
+                  wp_tablet_pad_group, modes);
 
   group->n_modes = modes;
 }
@@ -4286,9 +4287,9 @@ tablet_pad_group_handle_done (void                           *data,
   GdkWaylandTabletPadGroupData *group = data;
 #endif
 
-  GDK_SEAT_NOTE (group->pad->seat, EVENTS,
-            g_message ("tablet pad group handle done, pad group = %p",
-                       wp_tablet_pad_group));
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad group handle done, pad group = %p",
+                  wp_tablet_pad_group);
 }
 
 static void
@@ -4304,9 +4305,9 @@ tablet_pad_group_handle_mode (void                           *data,
   GdkEvent *event;
   guint n_group;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("tablet pad group handle mode, pad group = %p, mode = %d",
-                       wp_tablet_pad_group, mode));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "tablet pad group handle mode, pad group = %p, mode = %d",
+                  wp_tablet_pad_group, mode);
 
   group->mode_switch_serial = serial;
   group->current_mode = mode;
@@ -4339,9 +4340,9 @@ tablet_pad_handle_group (void                           *data,
   GdkWaylandTabletPadData *pad = data;
   GdkWaylandTabletPadGroupData *group;
 
-  GDK_SEAT_NOTE (pad->seat, EVENTS,
-            g_message ("tablet pad handle group, pad group = %p, group = %p",
-                       wp_tablet_pad_group, wp_tablet_pad_group));
+  GDK_SEAT_DEBUG (pad->seat, EVENTS,
+                  "tablet pad handle group, pad group = %p, group = %p",
+                  wp_tablet_pad_group, wp_tablet_pad_group);
 
   group = g_new0 (GdkWaylandTabletPadGroupData, 1);
   group->wp_tablet_pad_group = wp_tablet_pad_group;
@@ -4360,9 +4361,9 @@ tablet_pad_handle_path (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  GDK_SEAT_NOTE (pad->seat, EVENTS,
-            g_message ("tablet pad handle path, pad = %p, path = %s",
-                       wp_tablet_pad, path));
+  GDK_SEAT_DEBUG (pad->seat, EVENTS,
+                  "tablet pad handle path, pad = %p, path = %s",
+                  wp_tablet_pad, path);
 
   pad->path = g_strdup (path);
 }
@@ -4374,9 +4375,9 @@ tablet_pad_handle_buttons (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  GDK_SEAT_NOTE (pad->seat, EVENTS,
-            g_message ("tablet pad handle buttons, pad = %p, n_buttons = %d",
-                       wp_tablet_pad, buttons));
+  GDK_SEAT_DEBUG (pad->seat, EVENTS,
+                  "tablet pad handle buttons, pad = %p, n_buttons = %d",
+                  wp_tablet_pad, buttons);
 
   pad->n_buttons = buttons;
 }
@@ -4387,8 +4388,8 @@ tablet_pad_handle_done (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  GDK_SEAT_NOTE (pad->seat, EVENTS,
-            g_message ("tablet pad handle done, pad = %p", wp_tablet_pad));
+  GDK_SEAT_DEBUG (pad->seat, EVENTS,
+                  "tablet pad handle done, pad = %p", wp_tablet_pad);
 
   pad->device =
     g_object_new (GDK_TYPE_WAYLAND_DEVICE_PAD,
@@ -4414,9 +4415,9 @@ tablet_pad_handle_button (void                     *data,
   GdkEvent *event;
   int n_group;
 
-  GDK_SEAT_NOTE (pad->seat, EVENTS,
-            g_message ("tablet pad handle button, pad = %p, button = %d, state = %d",
-                       wp_tablet_pad, button, state));
+  GDK_SEAT_DEBUG (pad->seat, EVENTS,
+                  "tablet pad handle button, pad = %p, button = %d, state = %d",
+                  wp_tablet_pad, button, state);
 
   group = tablet_pad_lookup_button_group (pad, button);
 
@@ -4452,9 +4453,9 @@ tablet_pad_handle_enter (void                     *data,
   GdkWaylandTabletPadData *pad = data;
   GdkWaylandTabletData *tablet = zwp_tablet_v2_get_user_data (wp_tablet);
 
-  GDK_SEAT_NOTE (pad->seat, EVENTS,
-            g_message ("tablet pad handle enter, pad = %p, tablet = %p surface = %p",
-                       wp_tablet_pad, wp_tablet, surface));
+  GDK_SEAT_DEBUG (pad->seat, EVENTS,
+                  "tablet pad handle enter, pad = %p, tablet = %p surface = %p",
+                  wp_tablet_pad, wp_tablet, surface);
 
   /* Relate pad and tablet */
   tablet->pads = g_list_prepend (tablet->pads, pad);
@@ -4469,9 +4470,9 @@ tablet_pad_handle_leave (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  GDK_SEAT_NOTE (pad->seat, EVENTS,
-            g_message ("tablet pad handle leave, pad = %p, surface = %p",
-                       wp_tablet_pad, surface));
+  GDK_SEAT_DEBUG (pad->seat, EVENTS,
+                  "tablet pad handle leave, pad = %p, surface = %p",
+                  wp_tablet_pad, surface);
 
   if (pad->current_tablet)
     {
@@ -4486,8 +4487,8 @@ tablet_pad_handle_removed (void                     *data,
 {
   GdkWaylandTabletPadData *pad = data;
 
-  GDK_SEAT_NOTE (pad->seat, EVENTS,
-            g_message ("tablet pad handle removed, pad = %p", wp_tablet_pad));
+  GDK_SEAT_DEBUG (pad->seat, EVENTS,
+                  "tablet pad handle removed, pad = %p", wp_tablet_pad);
 
   /* Remove from the current tablet */
   if (pad->current_tablet)
@@ -4659,9 +4660,9 @@ pointer_surface_enter (void              *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   GdkWaylandTabletData *tablet;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("pointer surface of seat %p entered output %p",
-                       seat, output));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "pointer surface of seat %p entered output %p",
+                  seat, output);
 
   tablet = gdk_wayland_seat_find_tablet (seat, device);
 
@@ -4688,9 +4689,9 @@ pointer_surface_leave (void              *data,
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   GdkWaylandTabletData *tablet;
 
-  GDK_SEAT_NOTE (seat, EVENTS,
-            g_message ("pointer surface of seat %p left output %p",
-                       seat, output));
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "pointer surface of seat %p left output %p",
+                  seat, output);
 
   tablet = gdk_wayland_seat_find_tablet (seat, device);
 

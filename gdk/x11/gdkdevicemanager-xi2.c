@@ -226,7 +226,8 @@ translate_valuator_class (GdkDisplay          *display,
     }
 
   _gdk_device_add_axis (device, use, min, max, resolution);
-  GDK_DISPLAY_NOTE (display, INPUT,
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DISPLAY_DEBUG_CHECK (display, INPUT))
     {
       const char *label;
 
@@ -235,8 +236,9 @@ translate_valuator_class (GdkDisplay          *display,
       else
         label = NULL;
 
-      g_message ("\n\taxis: %s %s", label, use == GDK_AXIS_IGNORE ? "(ignored)" : "(used)");
-  });
+      gdk_debug_message ("\n\taxis: %s %s", label, use == GDK_AXIS_IGNORE ? "(ignored)" : "(used)");
+    }
+#endif
 }
 
 static void
@@ -281,13 +283,12 @@ translate_device_classes (GdkDisplay      *display,
             else
               direction = GDK_SCROLL_RIGHT;
 
-            GDK_DISPLAY_NOTE (display, INPUT,
-                      g_message ("\n\tscroll valuator %d: %s, increment %f",
-                                 scroll_info->number,
-                                 scroll_info->scroll_type == XIScrollTypeVertical
-                                                ? "vertical"
-                                                : "horizontal",
-                                 scroll_info->increment));
+            GDK_DISPLAY_DEBUG (display, INPUT, "\n\tscroll valuator %d: %s, increment %f",
+                                               scroll_info->number,
+                                               scroll_info->scroll_type == XIScrollTypeVertical
+                                                 ? "vertical"
+                                                 : "horizontal",
+                                               scroll_info->increment);
 
             _gdk_x11_device_xi2_add_scroll_valuator (GDK_X11_DEVICE_XI2 (device),
                                                      scroll_info->number,
@@ -520,17 +521,19 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
       break;
     }
 
-  GDK_DISPLAY_NOTE (display, INPUT,
-            ({
-              const char *type_names[] = { "logical", "physical", "floating" };
-              const char *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
-              g_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\thas cursor: %d\n\ttouches: %d",
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DISPLAY_DEBUG_CHECK (display, INPUT))
+    {
+      const char *type_names[] = { "logical", "physical", "floating" };
+      const char *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
+      gdk_debug_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\thas cursor: %d\n\ttouches: %d",
                          dev->name,
                          type_names[type],
                          source_names[input_source],
                          dev->use == XIMasterPointer,
                          num_touches);
-            }));
+    }
+#endif
 
   if (dev->use != XIMasterKeyboard &&
       dev->use != XIMasterPointer)
@@ -1372,11 +1375,11 @@ _gdk_device_manager_xi2_handle_focus (GdkSurface *surface,
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (source_device == NULL || GDK_IS_DEVICE (source_device));
 
-  GDK_DISPLAY_NOTE (gdk_surface_get_display (surface), EVENTS,
-            g_message ("focus out:\t\twindow: %ld, detail: %s, mode: %s",
-                       GDK_SURFACE_XID (surface),
-                       notify_details[detail],
-                       notify_modes[mode]));
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "focus out:\t\twindow: %ld, detail: %s, mode: %s",
+                     GDK_SURFACE_XID (surface),
+                     notify_details[detail],
+                     notify_modes[mode]);
 
   toplevel = _gdk_x11_surface_get_toplevel (surface);
 
@@ -1525,16 +1528,16 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkTranslatedKey translated;
         GdkTranslatedKey no_lock;
 
-        GDK_DISPLAY_NOTE (display, EVENTS,
-                  g_message ("key %s:\twindow %ld\n"
-                             "\tdevice:%u\n"
-                             "\tsource device:%u\n"
-                             "\tkey number: %u\n",
-                             (ev->evtype == XI_KeyPress) ? "press" : "release",
-                             xev->event,
-                             xev->deviceid,
-                             xev->sourceid,
-                             xev->detail));
+        GDK_DISPLAY_DEBUG (display, EVENTS,
+                           "key %s:\twindow %ld\n"
+                           "\tdevice:%u\n"
+                           "\tsource device:%u\n"
+                           "\tkey number: %u\n",
+                           (ev->evtype == XI_KeyPress) ? "press" : "release",
+                           xev->event,
+                           xev->deviceid,
+                           xev->sourceid,
+                           xev->detail);
 
         state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
@@ -1608,18 +1611,18 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
-        GDK_DISPLAY_NOTE (display, EVENTS,
-                  g_message ("button %s:\twindow %ld\n"
-                             "\tdevice:%u\n"
-                             "\tsource device:%u\n"
-                             "\tbutton number: %u\n"
-                             "\tx,y: %.2f %.2f",
-                             (ev->evtype == XI_ButtonPress) ? "press" : "release",
-                             xev->event,
-                             xev->deviceid,
-                             xev->sourceid,
-                             xev->detail,
-                             xev->event_x, xev->event_y));
+        GDK_DISPLAY_DEBUG (display, EVENTS,
+                           "button %s:\twindow %ld\n"
+                           "\tdevice:%u\n"
+                           "\tsource device:%u\n"
+                           "\tbutton number: %u\n"
+                           "\tx,y: %.2f %.2f",
+                           (ev->evtype == XI_ButtonPress) ? "press" : "release",
+                           xev->event,
+                           xev->deviceid,
+                           xev->sourceid,
+                           xev->detail,
+                           xev->event_x, xev->event_y);
 
 #ifdef XINPUT_2_2
         if (xev->flags & XIPointerEmulated)
@@ -1732,10 +1735,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             GdkModifierType state;
             GdkScrollDirection direction;
 
-            GDK_DISPLAY_NOTE (display, EVENTS,
-                     g_message ("smooth scroll: \n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
+            GDK_DISPLAY_DEBUG (display, EVENTS,
+                               "smooth scroll: \n\tdevice: %u\n\tsource device: %u\n\twindow %ld\n\tdeltas: %f %f",
                                 xev->deviceid, xev->sourceid,
-                                xev->event, delta_x, delta_y));
+                                xev->event, delta_x, delta_y);
 
             state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
@@ -1815,12 +1818,12 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         double x, y;
         double *axes;
 
-        GDK_DISPLAY_NOTE (display, EVENTS,
-                 g_message ("touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
-                            ev->evtype == XI_TouchBegin ? "begin" : "end",
-                            xev->event,
-                            xev->detail,
-                            xev->flags & XITouchEmulatingPointer ? "true" : "false"));
+        GDK_DISPLAY_DEBUG (display, EVENTS,
+                           "touch %s:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
+                           ev->evtype == XI_TouchBegin ? "begin" : "end",
+                           xev->event,
+                           xev->detail,
+                           xev->flags & XITouchEmulatingPointer ? "true" : "false");
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GUINT_TO_POINTER (xev->deviceid));
@@ -1866,11 +1869,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         double x, y;
         double *axes;
 
-        GDK_DISPLAY_NOTE (display, EVENTS,
-                 g_message ("touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
-                            xev->event,
-                            xev->detail,
-                            xev->flags & XITouchEmulatingPointer ? "true" : "false"));
+        GDK_DISPLAY_DEBUG (display, EVENTS,
+                           "touch update:\twindow %ld\n\ttouch id: %u\n\tpointer emulating: %s",
+                           xev->event,
+                           xev->detail,
+                           xev->flags & XITouchEmulatingPointer ? "true" : "false");
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));
@@ -1931,12 +1934,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
 #endif
 
-        GDK_NOTE (EVENTS,
-                  g_message ("pinch gesture %s:\twindow %ld\n\tfinger_count: %u%s",
-                             event_name,
-                             xev->event,
-                             xev->detail,
-                             xev->flags & XIGesturePinchEventCancelled ? "\n\tcancelled" : ""));
+        GDK_DEBUG (EVENTS, "pinch gesture %s:\twindow %ld\n\tfinger_count: %u%s",
+                           event_name,
+                           xev->event,
+                           xev->detail,
+                           xev->flags & XIGesturePinchEventCancelled ? "\n\tcancelled" : "");
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));
@@ -1992,12 +1994,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           }
 #endif
 
-        GDK_NOTE (EVENTS,
-                  g_message ("swipe gesture %s:\twindow %ld\n\tfinger_count: %u%s",
-                             event_name,
-                             xev->event,
-                             xev->detail,
-                             xev->flags & XIGestureSwipeEventCancelled ? "\n\tcancelled" : ""));
+        GDK_DEBUG (EVENTS, "swipe gesture %s:\twindow %ld\n\tfinger_count: %u%s",
+                           event_name,
+                           xev->event,
+                           xev->detail,
+                           xev->flags & XIGestureSwipeEventCancelled ? "\n\tcancelled" : "");
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));
@@ -2031,14 +2032,14 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIEnterEvent *xev = (XIEnterEvent *) ev;
         GdkModifierType state;
 
-        GDK_DISPLAY_NOTE (display, EVENTS,
-                  g_message ("%s notify:\twindow %ld\n\tsubwindow:%ld\n"
-                             "\tdevice: %u\n\tsource device: %u\n"
-                             "\tnotify type: %u\n\tcrossing mode: %u",
-                             (ev->evtype == XI_Enter) ? "enter" : "leave",
-                             xev->event, xev->child,
-                             xev->deviceid, xev->sourceid,
-                             xev->detail, xev->mode));
+        GDK_DISPLAY_DEBUG (display, EVENTS,
+                           "%s notify:\twindow %ld\n\tsubwindow:%ld\n"
+                           "\tdevice: %u\n\tsource device: %u\n"
+                           "\tnotify type: %u\n\tcrossing mode: %u",
+                           (ev->evtype == XI_Enter) ? "enter" : "leave",
+                           xev->event, xev->child,
+                           xev->deviceid, xev->sourceid,
+                           xev->detail, xev->mode);
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));

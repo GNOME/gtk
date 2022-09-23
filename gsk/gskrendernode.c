@@ -439,9 +439,9 @@ gsk_render_node_draw (GskRenderNode *node,
 
   cairo_save (cr);
 
-  GSK_NOTE (CAIRO, g_message ("Rendering node %s[%p]",
-                              g_type_name_from_instance ((GTypeInstance *) node),
-                              node));
+  GSK_DEBUG (CAIRO, "Rendering node %s[%p]",
+                    g_type_name_from_instance ((GTypeInstance *) node),
+                    node);
 
   GSK_RENDER_NODE_GET_CLASS (node)->draw (node, cr);
 

@@ -217,9 +217,8 @@ data_source_target (void                  *data,
                     struct wl_data_source *source,
                     const char            *mime_type)
 {
-  GDK_NOTE (EVENTS,
-            g_message ("data source target, source = %p, mime_type = %s",
-                       source, mime_type));
+  GDK_DEBUG (EVENTS, "data source target, source = %p, mime_type = %s",
+                     source, mime_type);
 }
 
 static void
@@ -231,7 +230,9 @@ gdk_wayland_drag_write_done (GObject      *drag,
 
   if (!gdk_drag_write_finish (GDK_DRAG (drag), result, &error))
     {
-      GDK_DISPLAY_NOTE (gdk_drag_get_display (GDK_DRAG (drag)), DND, g_message ("%p: failed to write stream: %s", drag, error->message));
+      GDK_DISPLAY_DEBUG (gdk_drag_get_display (GDK_DRAG (drag)), DND,
+                         "%p: failed to write stream: %s", drag, error->message);
+
       g_error_free (error);
     }
 }
@@ -245,8 +246,9 @@ data_source_send (void                  *data,
   GdkDrag *drag = data;
   GOutputStream *stream;
 
-  GDK_DISPLAY_NOTE (gdk_drag_get_display (drag), DND, g_message ("%p: data source send request for %s on fd %d\n",
-                    source, mime_type, fd));
+  GDK_DISPLAY_DEBUG (gdk_drag_get_display (drag), DND,
+                     "%p: data source send request for %s on fd %d\n",
+                     source, mime_type, fd);
 
   //mime_type = gdk_intern_mime_type (mime_type);
   mime_type = g_intern_string (mime_type);
@@ -268,8 +270,8 @@ data_source_cancelled (void                  *data,
 {
   GdkDrag *drag = data;
 
-  GDK_DISPLAY_NOTE (gdk_drag_get_display (drag), EVENTS,
-            g_message ("data source cancelled, source = %p", source));
+  GDK_DISPLAY_DEBUG (gdk_drag_get_display (drag), EVENTS,
+                     "data source cancelled, source = %p", source);
 
   gdk_drag_cancel (drag, GDK_DRAG_CANCEL_ERROR);
 }
@@ -302,9 +304,9 @@ data_source_action (void                  *data,
 {
   GdkDrag *drag = data;
 
-  GDK_DISPLAY_NOTE (gdk_drag_get_display (drag), EVENTS,
-            g_message ("data source action, source = %p action=%x",
-                       source, action));
+  GDK_DISPLAY_DEBUG (gdk_drag_get_display (drag), EVENTS,
+                     "data source action, source = %p action=%x",
+                     source, action);
 
   gdk_drag_set_selected_action (drag, _wl_to_gdk_actions (action));
 }
@@ -338,10 +340,14 @@ gdk_wayland_drag_create_data_source (GdkDrag *drag)
 
   mimetypes = gdk_content_formats_get_mime_types (formats, &n_mimetypes);
 
-  GDK_DISPLAY_NOTE (gdk_drag_get_display (drag), EVENTS,
-            {char *s = g_strjoinv (" ", (char **)mimetypes);
-            g_message ("create data source, mime types=%s", s);
-            g_free (s);});
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DISPLAY_DEBUG_CHECK (gdk_drag_get_display (drag), EVENTS))
+    {
+      char *s = g_strjoinv (" ", (char **)mimetypes);
+      gdk_debug_message ("create data source, mime types=%s", s);
+      g_free (s);
+    }
+#endif
 
   wl_data_source_offer (drag_wayland->data_source, GDK_WAYLAND_LOCAL_DND_MIME_TYPE);
   for (i = 0; i < n_mimetypes; i++)

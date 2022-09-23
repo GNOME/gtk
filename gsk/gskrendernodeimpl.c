@@ -2881,10 +2881,10 @@ gsk_transform_node_draw (GskRenderNode *node,
 
   gsk_transform_to_2d (self->transform, &xx, &yx, &xy, &yy, &dx, &dy);
   cairo_matrix_init (&ctm, xx, yx, xy, yy, dx, dy);
-  GSK_NOTE (CAIRO, g_message ("CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }",
-                            ctm.xx, ctm.yx,
-                            ctm.xy, ctm.yy,
-                            ctm.x0, ctm.y0));
+  GSK_DEBUG (CAIRO, "CTM = { .xx = %g, .yx = %g, .xy = %g, .yy = %g, .x0 = %g, .y0 = %g }",
+                    ctm.xx, ctm.yx,
+                    ctm.xy, ctm.yy,
+                    ctm.x0, ctm.y0);
   if (xx * yy == xy * yx)
     {
       /* broken matrix here. This can happen during transitions

@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include "gskdebugprivate.h"
 #include "gdk/gdk-private.h"
 

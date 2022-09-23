@@ -34,6 +34,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkintl.h"
 #include "gdk-private.h"
+#include <glib/gprintf.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -116,19 +117,17 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "vulkan",          GDK_DEBUG_VULKAN, "Information about Vulkan" },
   { "selection",       GDK_DEBUG_SELECTION, "Information about selections" },
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
-  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)" },
-  { "portals",         GDK_DEBUG_PORTALS, "Force the use of portals" },
-  { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
-  { "gl-software",     GDK_DEBUG_GL_SOFTWARE, "Force OpenGL software rendering" },
-  { "gl-texture-rect", GDK_DEBUG_GL_TEXTURE_RECT, "Use OpenGL texture rectangle extension" },
-  { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
-  { "gl-gles",         GDK_DEBUG_GL_GLES, "Only allow OpenGL GLES API" },
-  { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
-  { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows" },
-  { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11" },
-  { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows" },
-  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support" },
-  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer" },
+  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)", TRUE },
+  { "portals",         GDK_DEBUG_PORTALS, "Force the use of portals", TRUE },
+  { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support", TRUE },
+  { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL", TRUE },
+  { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context", TRUE },
+  { "gl-gles",         GDK_DEBUG_GL_GLES, "Only allow OpenGL GLES API", TRUE },
+  { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows", TRUE },
+  { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11", TRUE },
+  { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows", TRUE },
+  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support", TRUE },
+  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer", TRUE },
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings", TRUE },
   { "high-depth",      GDK_DEBUG_HIGH_DEPTH, "Use high bit depth rendering if possible", TRUE },
 };
@@ -258,16 +257,12 @@ gdk_parse_debug_var (const char        *variable,
 
       fprintf (stderr, "Supported %s values:\n", variable);
       for (i = 0; i < nkeys; i++) {
-        fprintf (stderr, "  %s%*s%s", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
-        if (!debug_enabled && !keys[i].always_enabled)
-          fprintf (stderr, " [unavailable]");
-        fprintf (stderr, "\n");
+        if (debug_enabled || keys[i].always_enabled)
+          fprintf (stderr, "  %s%*s%s\n", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
       }
       fprintf (stderr, "  %s%*s%s\n", "all", max_width - 3, " ", "Enable all values");
       fprintf (stderr, "  %s%*s%s\n", "help", max_width - 4, " ", "Print this help");
       fprintf (stderr, "\nMultiple values can be given, separated by : or space.\n");
-      if (!debug_enabled)
-        fprintf (stderr, "Values marked as [unavailable] are only accessible if GTK is built with G_ENABLE_DEBUG.\n");
     }
 
   if (invert)
@@ -298,11 +293,11 @@ gdk_pre_parse (void)
                                           G_N_ELEMENTS (gdk_debug_keys));
 
   /* These are global */
-  if (GDK_DEBUG_CHECK (GL_EGL))
+  if (_gdk_debug_flags & GDK_DEBUG_GL_EGL)
     gdk_gl_backend_use (GDK_GL_EGL);
-  else if (GDK_DEBUG_CHECK (GL_GLX))
+  else if (_gdk_debug_flags & GDK_DEBUG_GL_GLX)
     gdk_gl_backend_use (GDK_GL_GLX);
-  else if (GDK_DEBUG_CHECK (GL_WGL))
+  else if (_gdk_debug_flags & GDK_DEBUG_GL_WGL)
     gdk_gl_backend_use (GDK_GL_WGL);
 
 #ifndef G_HAS_CONSTRUCTORS
@@ -361,7 +356,7 @@ gdk_running_in_sandbox (void)
 gboolean
 gdk_should_use_portal (void)
 {
-  if (GDK_DISPLAY_DEBUG_CHECK (NULL, PORTALS))
+  if (gdk_display_get_debug_flags (NULL) & GDK_DEBUG_PORTALS)
     return TRUE;
 
   if (gdk_running_in_sandbox ())

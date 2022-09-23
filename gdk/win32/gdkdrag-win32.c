@@ -37,6 +37,8 @@
 #include <math.h>
 #include <string.h>
 
+#define GDK_NOTE(a,b)
+
 /*
  * Support for OLE-2 drag and drop added at Archaeopteryx Software, 2001
  * For more information, do not contact Stephan R.A. Deibel (sdeibel@archaeopteryx.com),

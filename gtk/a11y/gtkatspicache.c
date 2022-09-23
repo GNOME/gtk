@@ -26,6 +26,7 @@
 #include "gtkatspirootprivate.h"
 #include "gtkatspiutilsprivate.h"
 #include "gtkdebug.h"
+#include "gtkprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-application.h"
@@ -282,9 +283,8 @@ handle_cache_method (GDBusConnection       *connection,
 {
   GtkAtSpiCache *self = user_data;
 
-  GTK_NOTE (A11Y,
-            g_message ("[Cache] Method '%s' on interface '%s' for object '%s' from '%s'\n",
-                       method_name, interface_name, object_path, sender));
+  GTK_DEBUG (A11Y, "[Cache] Method '%s' on interface '%s' for object '%s' from '%s'",
+                   method_name, interface_name, object_path, sender);
 
 
   if (g_strcmp0 (method_name, "GetItems") == 0)
@@ -304,8 +304,7 @@ handle_cache_method (GDBusConnection       *connection,
 
       self->in_get_items = FALSE;
 
-      GTK_NOTE (A11Y,
-                g_message ("Returning %lu items\n", g_variant_n_children (items)));
+      GTK_DEBUG (A11Y, "Returning %lu items", g_variant_n_children (items));
 
       g_dbus_method_invocation_return_value (invocation, items);
     }
@@ -351,7 +350,7 @@ gtk_at_spi_cache_constructed (GObject *gobject)
                                      NULL,
                                      NULL);
 
-  GTK_NOTE (A11Y, g_message ("Cache registered at %s", self->cache_path));
+  GTK_DEBUG (A11Y, "Cache registered at %s", self->cache_path);
 
   G_OBJECT_CLASS (gtk_at_spi_cache_parent_class)->constructed (gobject);
 }
@@ -428,7 +427,7 @@ gtk_at_spi_cache_add_context (GtkAtSpiCache   *self,
   g_hash_table_insert (self->contexts_by_path, path_key, context);
   g_hash_table_insert (self->contexts_to_path, context, path_key);
 
-  GTK_NOTE (A11Y, g_message ("Adding context '%s' to cache", path_key));
+  GTK_DEBUG (A11Y, "Adding context '%s' to cache", path_key);
 
   /* GetItems is safe from re-entrancy, but we still don't want to
    * emit an unnecessary signal while we're collecting ATContexts
@@ -456,5 +455,5 @@ gtk_at_spi_cache_remove_context (GtkAtSpiCache   *self,
   g_hash_table_remove (self->contexts_to_path, context);
   g_hash_table_remove (self->contexts_by_path, path);
 
-  GTK_NOTE (A11Y, g_message ("Removing context '%s' from cache", path));
+  GTK_DEBUG (A11Y, "Removing context '%s' from cache", path);
 }

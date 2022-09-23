@@ -10,6 +10,10 @@ to determine paths to look for certain files. The [X11](#x11-envar),
 [Broadway](#broadway-envar) GDK backends use some additional
 environment variables.
 
+Note that environment variables are generally used for debugging
+purposes. They are not guaranteed to be API stable, and should not
+be used for end-user configuration and customization.
+
 ### `GTK_DEBUG`
 
 This variable can be set to a list of debug options, which cause GTK to
@@ -74,6 +78,9 @@ A number of keys are influencing behavior instead of just logging:
 
 `snapshot`
 : Include debug render nodes in the generated snapshots
+
+`invert-text-dir`
+: Invert the text direction, compared to the locale
 
 The special value `all` can be used to turn on all debug options.
 The special value `help` can be used to obtain a list of all
@@ -205,23 +212,32 @@ A number of options affect behavior instead of logging:
 `gl-disable`
 : Disable OpenGL support
 
-`gl-software`
-: Force OpenGL software rendering
-
-`gl-texture-rect`
-: Use the OpenGL texture rectangle extension, if available
-
 `gl-legacy`
 : Use a legacy OpenGL context
 
 `gl-gles`
 : Use a GLES OpenGL context
 
+`gl-egl`
+: Use an EGL context on X11 or Windows
+
+`gl-glx`
+: Use GLX on X11
+
+`gl-wgl`
+: Use WGL on Windows
+
 `vulkan-disable`
 : Disable Vulkan support
 
 `vulkan-validate`
 : Load the Vulkan validation layer, if available
+
+`default-settings`
+: Force default values for xsettings
+
+`high-depth`
+: Use high bit depth rendering if possible
 
 The special value `all` can be used to turn on all debug options. The special
 value `help` can be used to obtain a list of all supported debug options.

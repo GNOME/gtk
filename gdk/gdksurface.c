@@ -1220,7 +1220,7 @@ gdk_surface_create_vulkan_context (GdkSurface  *surface,
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  if (GDK_DISPLAY_DEBUG_CHECK (surface->display, VULKAN_DISABLE))
+  if (gdk_display_get_debug_flags (surface->display) & GDK_DEBUG_VULKAN_DISABLE)
     {
       g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
                            _("Vulkan support disabled via GDK_DEBUG"));

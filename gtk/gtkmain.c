@@ -95,10 +95,12 @@ typedef struct {
 #define N_DEBUG_DISPLAYS 4
 
 DisplayDebugFlags debug_flags[N_DEBUG_DISPLAYS];
+
 /* This is a flag to speed up development builds. We set it to TRUE when
  * any of the debug displays has debug flags >0, but we never set it back
  * to FALSE. This way we don't need to call gtk_widget_get_display() in
- * hot paths. */
+ * hot paths.
+ */
 gboolean any_display_debug_flags_set = FALSE;
 
 GtkDebugFlags
@@ -203,7 +205,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
   { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
   { "iconfallback", GTK_DEBUG_ICONFALLBACK, "Information about icon fallback" },
-  { "invert-text-dir", GTK_DEBUG_INVERT_TEXT_DIR, "Invert the default text direction" },
+  { "invert-text-dir", GTK_DEBUG_INVERT_TEXT_DIR, "Invert the default text direction", TRUE },
 };
 
 /* This checks to see if the process is running suid or sgid

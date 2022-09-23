@@ -24,6 +24,7 @@
 #include "gtkdebug.h"
 #include "gtktypebuiltins.h"
 #include "gtkmodelbuttonprivate.h"
+#include "gtkprivate.h"
 
 #include <string.h>
 
@@ -138,7 +139,7 @@ gtk_action_helper_action_added (GtkActionHelper    *helper,
                                 GVariant           *state,
                                 gboolean            should_emit_signals)
 {
-  GTK_NOTE(ACTIONS, g_message("%s: action %s added", "actionhelper", helper->action_name));
+  GTK_DEBUG (ACTIONS, "%s: action %s added", "actionhelper", helper->action_name);
 
   /* we can only activate if we have the correct type of parameter */
   helper->can_activate = (helper->target == NULL && parameter_type == NULL) ||
@@ -156,11 +157,11 @@ gtk_action_helper_action_added (GtkActionHelper    *helper,
       return;
     }
 
-  GTK_NOTE(ACTIONS, g_message ("%s: %s can be activated", "actionhelper", helper->action_name));
+  GTK_DEBUG (ACTIONS, "%s: %s can be activated", "actionhelper", helper->action_name);
 
   helper->enabled = enabled;
 
-  GTK_NOTE(ACTIONS, g_message ("%s: action %s is %s", "actionhelper", helper->action_name, enabled ? "enabled" : "disabled"));
+  GTK_DEBUG (ACTIONS, "%s: action %s is %s", "actionhelper", helper->action_name, enabled ? "enabled" : "disabled");
 
   if (helper->target != NULL && state != NULL)
     {
@@ -193,7 +194,7 @@ static void
 gtk_action_helper_action_removed (GtkActionHelper *helper,
                                   gboolean         should_emit_signals)
 {
-  GTK_NOTE(ACTIONS, g_message ("%s: action %s was removed", "actionhelper", helper->action_name));
+  GTK_DEBUG (ACTIONS, "%s: action %s was removed", "actionhelper", helper->action_name);
 
   if (!helper->can_activate)
     return;
@@ -221,7 +222,7 @@ static void
 gtk_action_helper_action_enabled_changed (GtkActionHelper *helper,
                                           gboolean         enabled)
 {
-  GTK_NOTE(ACTIONS, g_message ("%s: action %s: enabled changed to %d", "actionhelper",  helper->action_name, enabled));
+  GTK_DEBUG (ACTIONS, "%s: action %s: enabled changed to %d", "actionhelper",  helper->action_name, enabled);
 
   if (!helper->can_activate)
     return;
@@ -239,7 +240,7 @@ gtk_action_helper_action_state_changed (GtkActionHelper *helper,
 {
   gboolean was_active;
 
-  GTK_NOTE(ACTIONS, g_message ("%s: %s state changed", "actionhelper", helper->action_name));
+  GTK_DEBUG (ACTIONS, "%s: %s state changed", "actionhelper", helper->action_name);
 
   if (!helper->can_activate)
     return;
@@ -415,11 +416,15 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
   if (g_strcmp0 (action_name, helper->action_name) == 0)
     return;
 
-  GTK_NOTE(ACTIONS,
-           if (action_name == NULL || !strchr (action_name, '.'))
-             g_message ("%s: action name %s doesn't look like 'app.' or 'win.'; "
-                        "it is unlikely to work",
-                        "actionhelper", action_name));
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (ACTIONS))
+    {
+      if (action_name == NULL || !strchr (action_name, '.'))
+        gdk_debug_message ("%s: action name %s doesn't look like 'app.' or 'win.'; "
+                           "it is unlikely to work",
+                           "actionhelper", action_name);
+    }
+#endif
 
   /* Start by recording the current state of our properties so we know
    * what notify signals we will need to send.
@@ -448,7 +453,7 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
                                          &enabled, &parameter_type,
                                          NULL, NULL, &state))
         {
-          GTK_NOTE(ACTIONS, g_message ("%s: action %s existed from the start", "actionhelper", helper->action_name));
+          GTK_DEBUG (ACTIONS, "%s: action %s existed from the start", "actionhelper", helper->action_name);
 
           gtk_action_helper_action_added (helper, enabled, parameter_type, state, FALSE);
 
@@ -457,7 +462,7 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
         }
       else
         {
-          GTK_NOTE(ACTIONS, g_message ("%s: action %s missing from the start", "actionhelper", helper->action_name));
+          GTK_DEBUG (ACTIONS, "%s: action %s missing from the start", "actionhelper", helper->action_name);
           helper->enabled = FALSE;
         }
     }

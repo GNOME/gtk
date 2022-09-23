@@ -36,6 +36,7 @@
 
 #include "gtk/gtk.h"
 #include "gtk/gtkprinterprivate.h"
+#include "gtk/gtkprivate.h"
 
 #include "gtkprintbackendfile.h"
 
@@ -282,8 +283,7 @@ _cairo_write (void                *closure,
 
   error = NULL;
 
-  GTK_NOTE (PRINTING,
-            g_print ("FILE Backend: Writing %u byte chunk to temp file\n", length));
+  GTK_DEBUG (PRINTING, "FILE Backend: Writing %u byte chunk to temp file", length);
 
   while (length > 0) 
     {
@@ -295,8 +295,7 @@ _cairo_write (void                *closure,
         {
           if (error != NULL)
             {
-              GTK_NOTE (PRINTING,
-                        g_print ("FILE Backend: Error writing to temp file, %s\n", error->message));
+              GTK_DEBUG (PRINTING, "FILE Backend: Error writing to temp file, %s", error->message);
 
               g_error_free (error);
             }
@@ -304,8 +303,7 @@ _cairo_write (void                *closure,
 	  return CAIRO_STATUS_WRITE_ERROR;
 	}    
 
-      GTK_NOTE (PRINTING,
-                g_print ("FILE Backend: Wrote %zd bytes to temp file\n", written));
+      GTK_DEBUG (PRINTING, "FILE Backend: Wrote %zd bytes to temp file", written);
       
       data += written;
       length -= written;
@@ -436,8 +434,7 @@ file_write (GIOChannel   *source,
 
       if (error != NULL)
         {
-          GTK_NOTE (PRINTING,
-                    g_print ("FILE Backend: %s\n", error->message));
+          GTK_DEBUG (PRINTING, "FILE Backend: %s", error->message);
 
           g_error_free (error);
         }
@@ -445,8 +442,7 @@ file_write (GIOChannel   *source,
       return FALSE;
     }
 
-  GTK_NOTE (PRINTING,
-            g_print ("FILE Backend: Writing %"G_GSIZE_FORMAT" byte chunk to target file\n", bytes_read));
+  GTK_DEBUG (PRINTING, "FILE Backend: Writing %"G_GSIZE_FORMAT" byte chunk to target file", bytes_read);
 
   return TRUE;
 }

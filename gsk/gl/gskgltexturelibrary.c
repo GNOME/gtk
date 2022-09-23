@@ -74,9 +74,9 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
 
       if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
         {
-          GSK_NOTE (GLYPH_CACHE,
-                    g_message ("Dropping atlas %d (%g.2%% old)", i,
-                               100.0 * gsk_gl_texture_atlas_get_unused_ratio (atlas)));
+          GSK_DEBUG (GLYPH_CACHE,
+                     "Dropping atlas %d (%g.2%% old)", i,
+                     100.0 * gsk_gl_texture_atlas_get_unused_ratio (atlas));
           if (removed == NULL)
             removed = g_ptr_array_new_with_free_func ((GDestroyNotify)gsk_gl_texture_atlas_free);
           g_ptr_array_add (removed, g_ptr_array_steal_index (self->atlases, i - 1));
@@ -122,14 +122,14 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
             }
         }
 
-      GSK_NOTE (GLYPH_CACHE, g_message ("%s: Dropped %d individual items",
-                                        G_OBJECT_TYPE_NAME (self),
-                                        dropped);
-                             g_message ("%s: %d items cached (%d atlased, %d individually)",
-                                        G_OBJECT_TYPE_NAME (self),
-                                        g_hash_table_size (self->hash_table),
-                                        atlased,
-                                        g_hash_table_size (self->hash_table) - atlased));
+      GSK_DEBUG (GLYPH_CACHE, "%s: Dropped %d individual items",
+                              G_OBJECT_TYPE_NAME (self),
+                              dropped);
+      GSK_DEBUG (GLYPH_CACHE, "%s: %d items cached (%d atlased, %d individually)",
+                              G_OBJECT_TYPE_NAME (self),
+                              g_hash_table_size (self->hash_table),
+                              atlased,
+                              g_hash_table_size (self->hash_table) - atlased);
 
       if (dropped > 0)
         gsk_gl_texture_library_clear_cache (self);
@@ -139,17 +139,20 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
       g_clear_pointer (&removed, g_ptr_array_unref);
     }
 
-  GSK_NOTE (GLYPH_CACHE, {
-    static gint64 last_message;
-    gint64 now = g_get_monotonic_time ();
-    if (now - last_message > G_USEC_PER_SEC)
-      {
-        last_message = now;
-        g_message ("%s contains %d atlases",
-                   G_OBJECT_TYPE_NAME (self),
-                   self->atlases->len);
-      }
-  });
+#ifdef G_ENABLE_DEBUG
+  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+    {
+      static gint64 last_message;
+      gint64 now = g_get_monotonic_time ();
+      if (now - last_message > G_USEC_PER_SEC)
+        {
+          last_message = now;
+          gdk_debug_message ("%s contains %d atlases",
+                             G_OBJECT_TYPE_NAME (self),
+                             self->atlases->len);
+        }
+    }
+#endif
 
   return ret;
 }
