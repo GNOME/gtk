@@ -640,9 +640,9 @@ gtk_gesture_handle_event (GtkEventController *controller,
 
   if (event_type == GDK_BUTTON_PRESS ||
       event_type == GDK_TOUCH_BEGIN ||
-      (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
-      (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN) ||
-      (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN))
+      (EVENT_IS_TOUCHPAD_GESTURE (event) &&
+       phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN &&
+       gdk_touchpad_event_get_n_fingers (event) == priv->n_points))
     {
       if (_gtk_gesture_update_point (gesture, event, target, x, y, TRUE))
         {
@@ -673,9 +673,9 @@ gtk_gesture_handle_event (GtkEventController *controller,
     }
   else if (event_type == GDK_BUTTON_RELEASE ||
            event_type == GDK_TOUCH_END ||
-           (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
-           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_END) ||
-           (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
+           (EVENT_IS_TOUCHPAD_GESTURE (event) &&
+            phase == GDK_TOUCHPAD_GESTURE_PHASE_END &&
+            gdk_touchpad_event_get_n_fingers (event) == priv->n_points))
     {
       gboolean was_claimed = FALSE;
 
@@ -695,8 +695,9 @@ gtk_gesture_handle_event (GtkEventController *controller,
     }
   else if (event_type == GDK_MOTION_NOTIFY ||
            event_type == GDK_TOUCH_UPDATE ||
-           (event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE) ||
-           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE))
+           (EVENT_IS_TOUCHPAD_GESTURE (event) &&
+            phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE &&
+            gdk_touchpad_event_get_n_fingers (event) == priv->n_points))
     {
       if (event_type == GDK_MOTION_NOTIFY)
         {
@@ -713,9 +714,9 @@ gtk_gesture_handle_event (GtkEventController *controller,
       if (!priv->touchpad)
         _gtk_gesture_cancel_sequence (gesture, sequence);
     }
-  else if ((event_type == GDK_TOUCHPAD_SWIPE && phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL) ||
-           (event_type == GDK_TOUCHPAD_PINCH && phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL) ||
-           (event_type == GDK_TOUCHPAD_HOLD && phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL))
+  else if (EVENT_IS_TOUCHPAD_GESTURE (event) &&
+           phase == GDK_TOUCHPAD_GESTURE_PHASE_CANCEL &&
+           gdk_touchpad_event_get_n_fingers (event) == priv->n_points)
     {
       if (priv->touchpad)
         _gtk_gesture_cancel_sequence (gesture, sequence);
