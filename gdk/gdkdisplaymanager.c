@@ -420,7 +420,7 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
               (any && strstr (allowed_backends, gdk_backends[j].name)) ||
               g_str_equal (backend, gdk_backends[j].name))
             {
-              GDK_NOTE (MISC, g_message ("Trying %s backend", gdk_backends[j].name));
+              GDK_DEBUG (MISC, "Trying %s backend", gdk_backends[j].name);
               display = gdk_backends[j].open_display (name);
               if (display)
                 break;

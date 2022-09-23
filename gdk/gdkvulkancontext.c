@@ -309,8 +309,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
     }
   else
     {
-      GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)),
-                        VULKAN, g_warning ("Vulkan swapchain doesn't do transparency. Using opaque swapchain instead."));
+      GDK_DISPLAY_DEBUG (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), VULKAN,
+                        "Vulkan swapchain doesn't do transparency. Using opaque swapchain instead.");
       composite_alpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     }
 
@@ -950,7 +950,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               if (has_incremental_present)
                 g_ptr_array_add (device_extensions, (gpointer) VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
-              GDK_DISPLAY_NOTE (display, VULKAN, g_print ("Using Vulkan device %u, queue %u\n", i, j));
+              GDK_DISPLAY_DEBUG (display, VULKAN, "Using Vulkan device %u, queue %u", i, j);
               if (GDK_VK_CHECK (vkCreateDevice, devices[i],
                                                 &(VkDeviceCreateInfo) {
                                                     VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,

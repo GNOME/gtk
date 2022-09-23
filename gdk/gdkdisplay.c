@@ -1729,28 +1729,31 @@ gdk_display_init_egl (GdkDisplay  *self,
   if (priv->egl_config_high_depth == NULL)
     priv->egl_config_high_depth = priv->egl_config;
 
-  GDK_DISPLAY_NOTE (self, OPENGL, {
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DISPLAY_DEBUG_CHECK (self, OPENGL))
+    {
       char *ext = describe_extensions (priv->egl_display);
       char *std_cfg = describe_egl_config (priv->egl_display, priv->egl_config);
       char *hd_cfg = describe_egl_config (priv->egl_display, priv->egl_config_high_depth);
-      g_message ("EGL API version %d.%d found\n"
-                 " - Vendor: %s\n"
-                 " - Version: %s\n"
-                 " - Client APIs: %s\n"
-                 " - Extensions:\n"
-                 "\t%s\n"
-                 " - Selected fbconfig: %s\n"
-                 "          high depth: %s",
-                 major, minor,
-                 eglQueryString (priv->egl_display, EGL_VENDOR),
-                 eglQueryString (priv->egl_display, EGL_VERSION),
-                 eglQueryString (priv->egl_display, EGL_CLIENT_APIS),
-                 ext, std_cfg,
-                 priv->egl_config_high_depth == priv->egl_config ? "none" : hd_cfg);
+      gdk_debug_message ("EGL API version %d.%d found\n"
+                         " - Vendor: %s\n"
+                         " - Version: %s\n"
+                         " - Client APIs: %s\n"
+                         " - Extensions:\n"
+                         "\t%s\n"
+                         " - Selected fbconfig: %s\n"
+                         "          high depth: %s",
+                         major, minor,
+                         eglQueryString (priv->egl_display, EGL_VENDOR),
+                         eglQueryString (priv->egl_display, EGL_VERSION),
+                         eglQueryString (priv->egl_display, EGL_CLIENT_APIS),
+                         ext, std_cfg,
+                         priv->egl_config_high_depth == priv->egl_config ? "none" : hd_cfg);
       g_free (hd_cfg);
       g_free (std_cfg);
       g_free (ext);
-  });
+    }
+#endif
 
   gdk_profiler_end_mark (start_time, "init EGL", NULL);
 

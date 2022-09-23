@@ -193,7 +193,7 @@ gdk_gl_context_dispose (GObject *gobject)
       if (eglGetCurrentContext () == priv->egl_context)
         eglMakeCurrent(egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 
-      GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Destroying EGL context"));
+      GDK_DISPLAY_DEBUG (display, OPENGL, "Destroying EGL context");
 
       eglDestroyContext (egl_display, priv->egl_context);
       priv->egl_context = NULL;
@@ -339,13 +339,13 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   context_attribs[i++] = EGL_NONE;
   g_assert (i < N_EGL_ATTRS);
 
-  GDK_DISPLAY_NOTE (display, OPENGL,
-                    g_message ("Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
-                               major, minor,
-                               debug_bit ? "yes" : "no",
-                               forward_bit ? "yes" : "no",
-                               legacy ? "yes" : "no",
-                               api == GDK_GL_API_GLES ? "yes" : "no"));
+  GDK_DISPLAY_DEBUG (display, OPENGL,
+                     "Creating EGL context version %d.%d (debug:%s, forward:%s, legacy:%s, es:%s)",
+                     major, minor,
+                     debug_bit ? "yes" : "no",
+                     forward_bit ? "yes" : "no",
+                     legacy ? "yes" : "no",
+                     api == GDK_GL_API_GLES ? "yes" : "no");
 
   ctx = eglCreateContext (egl_display,
                           egl_config,
@@ -355,7 +355,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   if (ctx == NULL)
       return 0;
 
-  GDK_DISPLAY_NOTE (display, OPENGL, g_message ("Created EGL context[%p]", ctx));
+  GDK_DISPLAY_DEBUG (display, OPENGL, "Created EGL context[%p]", ctx);
 
   priv->egl_context = ctx;
   gdk_gl_context_set_is_legacy (context, legacy);
@@ -1533,20 +1533,20 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   priv->has_half_float = gdk_gl_context_check_version (context, 3, 0, 3, 0) ||
                          epoxy_has_gl_extension ("OES_vertex_half_float");
 
-  GDK_DISPLAY_NOTE (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
-    g_message ("%s version: %d.%d (%s)\n"
-                       "* GLSL version: %s\n"
-                       "* Extensions checked:\n"
-                       " - GL_KHR_debug: %s\n"
-                       " - GL_EXT_unpack_subimage: %s\n"
-                       " - OES_vertex_half_float: %s",
-                       gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
-                       priv->gl_version / 10, priv->gl_version % 10,
-                       priv->is_legacy ? "legacy" : "core",
-                       glGetString (GL_SHADING_LANGUAGE_VERSION),
-                       priv->has_khr_debug ? "yes" : "no",
-                       priv->has_unpack_subimage ? "yes" : "no",
-                       priv->has_half_float ? "yes" : "no"));
+  GDK_DISPLAY_DEBUG (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
+                     "%s version: %d.%d (%s)\n"
+                     "* GLSL version: %s\n"
+                     "* Extensions checked:\n"
+                     " - GL_KHR_debug: %s\n"
+                     " - GL_EXT_unpack_subimage: %s\n"
+                     " - OES_vertex_half_float: %s",
+                     gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
+                     priv->gl_version / 10, priv->gl_version % 10,
+                     priv->is_legacy ? "legacy" : "core",
+                     glGetString (GL_SHADING_LANGUAGE_VERSION),
+                     priv->has_khr_debug ? "yes" : "no",
+                     priv->has_unpack_subimage ? "yes" : "no",
+                     priv->has_half_float ? "yes" : "no");
 
   priv->extensions_checked = TRUE;
 }
@@ -1836,8 +1836,8 @@ gdk_gl_backend_use (GdkGLBackend backend_type)
       the_gl_backend_type = backend_type;
       /* This is important!!!11eleven
        * (But really: How do I print a message in 2 categories?) */
-      GDK_NOTE (OPENGL, g_print ("Using OpenGL backend %s\n", gl_backend_names[the_gl_backend_type]));
-      GDK_NOTE (MISC, g_message ("Using Opengl backend %s", gl_backend_names[the_gl_backend_type]));
+      GDK_DEBUG (OPENGL, "Using OpenGL backend %s", gl_backend_names[the_gl_backend_type]);
+      GDK_DEBUG (MISC, "Using OpenGL backend %s", gl_backend_names[the_gl_backend_type]);
     }
 
   g_assert (the_gl_backend_type == backend_type);
