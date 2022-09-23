@@ -2,6 +2,7 @@
 #define __GSK_DEBUG_PRIVATE_H__
 
 #include <glib.h>
+#include "gdk/gdkdebug.h"
 
 G_BEGIN_DECLS
 
@@ -41,8 +42,15 @@ gboolean gsk_check_debug_flags (GskDebugFlags flags);
   }                             } G_STMT_END
 #define GSK_RENDERER_NOTE(renderer,type,action)   G_STMT_START {  \
   if (GSK_RENDERER_DEBUG_CHECK (renderer,type)) {                 \
-    action;                                     \
-  }                             } G_STMT_END
+    action;
+
+#define GSK_RENDERER_DEBUG(renderer,type,...)                               \
+    if (GSK_RENDERER_DEBUG_CHECK (renderer,type))                           \
+      gdk_debug_message (__VA_ARGS__);                                      \
+
+#define GSK_DEBUG(type,...)                                                 \
+    if (GSK_DEBUG_CHECK (type))                                             \
+      gdk_debug_message (__VA_ARGS__);                                      \
 
 #else
 
@@ -50,6 +58,8 @@ gboolean gsk_check_debug_flags (GskDebugFlags flags);
 #define GSK_RENDERER_DEBUG_CHECK(renderer,type) 0
 #define GSK_NOTE(type,action)
 #define GSK_RENDERER_NOTE(renderer,type,action)
+#define GSK_RENDERER_DEBUG(display,type,...)
+#define GSK_DEBUG(type,...)
 
 #endif
 
