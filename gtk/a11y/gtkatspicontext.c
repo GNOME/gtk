@@ -42,6 +42,7 @@
 #include "a11y/atspi/atspi-component.h"
 
 #include "gtkdebug.h"
+#include "gtkprivate.h"
 #include "gtkeditable.h"
 #include "gtkentryprivate.h"
 #include "gtkroot.h"
@@ -461,7 +462,7 @@ handle_accessible_method (GDBusConnection       *connection,
 {
   GtkAtSpiContext *self = user_data;
 
-  GTK_NOTE (A11Y, g_message ("handling %s on %s", method_name, object_path));
+  GTK_DEBUG (A11Y, "handling %s on %s", method_name, object_path);
 
   if (g_strcmp0 (method_name, "GetRole") == 0)
     {
@@ -666,7 +667,7 @@ handle_accessible_get_property (GDBusConnection       *connection,
 
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
 
-  GTK_NOTE (A11Y, g_message ("handling GetProperty %s on %s", property_name, object_path));
+  GTK_DEBUG (A11Y, "handling GetProperty %s on %s", property_name, object_path);
 
   if (g_strcmp0 (property_name, "Name") == 0)
     {
@@ -1420,9 +1421,9 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
 
   self->interfaces = g_variant_ref_sink (g_variant_builder_end (&interfaces));
 
-  GTK_NOTE (A11Y, g_message ("Registered %d interfaces on object path '%s'",
-                             self->n_registered_objects,
-                             self->context_path));
+  GTK_DEBUG (A11Y, "Registered %d interfaces on object path '%s'",
+                   self->n_registered_objects,
+                   self->context_path);
 }
 
 static void
@@ -1549,9 +1550,9 @@ gtk_at_spi_context_unrealize (GtkATContext *context)
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);
 
-  GTK_NOTE (A11Y, g_message ("Unrealizing ATSPI context at '%s' for accessible '%s'",
-                             self->context_path,
-                             G_OBJECT_TYPE_NAME (accessible)));
+  GTK_DEBUG (A11Y, "Unrealizing ATSPI context at '%s' for accessible '%s'",
+                   self->context_path,
+                   G_OBJECT_TYPE_NAME (accessible));
 
   /* Notify ATs that the accessible object is going away */
   emit_defunct (self);
@@ -1592,7 +1593,7 @@ gtk_at_spi_context_init (GtkAtSpiContext *self)
 static char *
 get_bus_address_x11 (GdkDisplay *display)
 {
-  GTK_NOTE (A11Y, g_message ("Acquiring a11y bus via X11..."));
+  GTK_DEBUG (A11Y, "Acquiring a11y bus via X11...");
 
   Display *xdisplay = gdk_x11_display_get_xdisplay (display);
   Atom type_return;
@@ -1623,14 +1624,14 @@ get_bus_address_x11 (GdkDisplay *display)
 static char *
 get_bus_address_dbus (GdkDisplay *display)
 {
-  GTK_NOTE (A11Y, g_message ("Acquiring a11y bus via DBus..."));
+  GTK_DEBUG (A11Y, "Acquiring a11y bus via DBus...");
 
   GError *error = NULL;
   GDBusConnection *connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
 
   if (error != NULL)
     {
-      GTK_NOTE (A11Y, g_message ("Unable to acquire session bus: %s", error->message));
+      GTK_DEBUG (A11Y, "Unable to acquire session bus: %s", error->message);
       g_error_free (error);
       return NULL;
     }
@@ -1647,8 +1648,8 @@ get_bus_address_dbus (GdkDisplay *display)
                                   &error);
   if (error != NULL)
     {
-      GTK_NOTE (A11Y, g_message ("Unable to acquire the address of the accessibility bus: %s",
-                                 error->message));
+      GTK_DEBUG (A11Y, "Unable to acquire the address of the accessibility bus: %s",
+                       error->message);
       g_error_free (error);
     }
 
@@ -1681,7 +1682,7 @@ get_bus_address (GdkDisplay *display)
   bus_address = g_getenv ("AT_SPI_BUS_ADDRESS");
   if (bus_address != NULL && *bus_address != '\0')
     {
-      GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from environment: %s", bus_address));
+      GTK_DEBUG (A11Y, "Using ATSPI bus address from environment: %s", bus_address);
       g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-bus-address",
                               g_strdup (bus_address),
                               g_free);
@@ -1695,7 +1696,7 @@ get_bus_address (GdkDisplay *display)
         {
           char *addr = get_bus_address_dbus (display);
 
-          GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from D-Bus: %s", addr));
+          GTK_DEBUG (A11Y, "Using ATSPI bus address from D-Bus: %s", addr);
           g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-bus-address",
                                   addr,
                                   g_free);
@@ -1714,11 +1715,11 @@ get_bus_address (GdkDisplay *display)
           if (addr == NULL)
             {
               addr = get_bus_address_x11 (display);
-              GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from X11: %s", addr));
+              GTK_DEBUG (A11Y, "Using ATSPI bus address from X11: %s", addr);
             }
           else
             {
-              GTK_NOTE (A11Y, g_message ("Using ATSPI bus address from D-Bus: %s", addr));
+              GTK_DEBUG (A11Y, "Using ATSPI bus address from D-Bus: %s", addr);
             }
 
           g_object_set_data_full (G_OBJECT (display), "-gtk-atspi-bus-address",

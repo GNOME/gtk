@@ -22,6 +22,7 @@
 #include "gtkmediafileprivate.h"
 
 #include "gtkdebug.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkmodulesprivate.h"
 #include "gtknomediafileprivate.h"
@@ -186,7 +187,7 @@ gtk_media_file_get_extension (void)
   GIOExtension *e;
   GIOExtensionPoint *ep;
 
-  GTK_NOTE (MODULES, g_print ("Looking up MediaFile extension\n"));
+  GTK_DEBUG (MODULES, "Looking up MediaFile extension");
 
   ep = g_io_extension_point_lookup (GTK_MEDIA_FILE_EXTENSION_POINT_NAME);
   e = NULL;
@@ -246,7 +247,8 @@ gtk_media_file_get_impl_type (void)
   e = gtk_media_file_get_extension ();
   impl_type = g_io_extension_get_type (e);
 
-  GTK_NOTE (MODULES, g_print ("Using %s from \"%s\" extension\n", g_type_name (impl_type), g_io_extension_get_name (e)));
+  GTK_DEBUG (MODULES, "Using %s from \"%s\" extension",
+             g_type_name (impl_type), g_io_extension_get_name (e));
 
   return impl_type;
 }
@@ -609,8 +611,7 @@ gtk_media_file_extension_init (void)
   char **paths;
   int i;
 
-  GTK_NOTE (MODULES,
-            g_print ("Registering extension point %s\n", GTK_MEDIA_FILE_EXTENSION_POINT_NAME));
+  GTK_DEBUG (MODULES, "Registering extension point %s", GTK_MEDIA_FILE_EXTENSION_POINT_NAME);
 
   ep = g_io_extension_point_register (GTK_MEDIA_FILE_EXTENSION_POINT_NAME);
   g_io_extension_point_set_required_type (ep, GTK_TYPE_MEDIA_FILE);
@@ -622,8 +623,7 @@ gtk_media_file_extension_init (void)
   paths = _gtk_get_module_path ("media");
   for (i = 0; paths[i]; i++)
     {
-      GTK_NOTE (MODULES,
-                g_print ("Scanning io modules in %s\n", paths[i]));
+      GTK_DEBUG (MODULES, "Scanning io modules in %s", paths[i]);
       g_io_modules_scan_all_in_directory_with_scope (paths[i], scope);
     }
   g_strfreev (paths);

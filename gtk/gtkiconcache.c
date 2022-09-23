@@ -20,6 +20,7 @@
 #include "gtkdebug.h"
 #include "gtkiconcacheprivate.h"
 #include "gtkiconcachevalidatorprivate.h"
+#include "gtkprivate.h"
 
 #include <glib/gstdio.h>
 #include <gdk-pixbuf/gdk-pixdata.h>
@@ -66,7 +67,7 @@ gtk_icon_cache_unref (GtkIconCache *cache)
 
   if (cache->ref_count == 0)
     {
-      GTK_NOTE (ICONTHEME, g_message ("unmapping icon cache"));
+      GTK_DEBUG (ICONTHEME, "unmapping icon cache");
 
       if (cache->map)
         g_mapped_file_unref (cache->map);
@@ -87,7 +88,7 @@ gtk_icon_cache_new_for_path (const char *path)
    /* Check if we have a cache file */
   cache_filename = g_build_filename (path, "icon-theme.cache", NULL);
 
-  GTK_NOTE (ICONTHEME, g_message ("look for icon cache in %s", path));
+  GTK_DEBUG (ICONTHEME, "look for icon cache in %s", path);
 
   if (g_stat (path, &path_st) < 0)
     goto done;
@@ -98,7 +99,7 @@ gtk_icon_cache_new_for_path (const char *path)
   /* Verify cache is up-to-date */
   if (st.st_mtime < path_st.st_mtime)
     {
-      GTK_NOTE (ICONTHEME, g_message ("icon cache outdated"));
+      GTK_DEBUG (ICONTHEME, "icon cache outdated");
       goto done;
     }
 
@@ -127,7 +128,7 @@ gtk_icon_cache_new_for_path (const char *path)
     }
 #endif
 
-  GTK_NOTE (ICONTHEME, g_message ("found icon cache for %s", path));
+  GTK_DEBUG (ICONTHEME, "found icon cache for %s", path);
 
   cache = g_new0 (GtkIconCache, 1);
   cache->ref_count = 1;

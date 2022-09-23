@@ -8412,9 +8412,9 @@ gtk_widget_accessible_get_at_context (GtkAccessible *accessible)
 
   if (priv->in_destruction)
     {
-      GTK_NOTE (A11Y, g_message ("ATContext for widget “%s” [%p] accessed during destruction",
-                                 G_OBJECT_TYPE_NAME (self),
-                                 self));
+      GTK_DEBUG (A11Y, "ATContext for widget “%s” [%p] accessed during destruction",
+                       G_OBJECT_TYPE_NAME (self),
+                       self);
       return NULL;
     }
 
@@ -12485,9 +12485,9 @@ gtk_widget_class_add_action (GtkWidgetClass  *widget_class,
 {
   GtkWidgetClassPrivate *priv = widget_class->priv;
 
-  GTK_NOTE(ACTIONS, g_message ("%sClass: Adding %s action\n",
-                               g_type_name (G_TYPE_FROM_CLASS (widget_class)),
-                               action->name));
+  GTK_DEBUG (ACTIONS, "%sClass: Adding %s action",
+                      g_type_name (G_TYPE_FROM_CLASS (widget_class)),
+                      action->name);
 
   action->next = priv->actions;
   priv->actions = action;

@@ -71,7 +71,7 @@ quartz_get_preedit_string (GtkIMContext *context,
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
 
-  GTK_NOTE (MODULES, g_print ("quartz_get_preedit_string\n"));
+  GTK_DEBUG (MODULES, "quartz_get_preedit_string\n");
 
   if (str)
     *str = qc->preedit_str ? g_strdup (qc->preedit_str) : g_strdup ("");
@@ -126,7 +126,7 @@ output_result (GtkIMContext *context,
   marked_str = g_strdup (g_object_get_data (G_OBJECT (surface), TIC_MARKED_TEXT));
   if (fixed_str)
     {
-      GTK_NOTE (MODULES, g_print ("tic-insert-text: %s\n", fixed_str));
+      GTK_DEBUG (MODULES, "tic-insert-text: %s", fixed_str);
       g_free (qc->preedit_str);
       qc->preedit_str = NULL;
       g_object_set_data (G_OBJECT (surface), TIC_INSERT_TEXT, NULL);
@@ -136,7 +136,7 @@ output_result (GtkIMContext *context,
       unsigned int filtered =
 	   GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (surface),
 						GIC_FILTER_KEY));
-      GTK_NOTE (MODULES, g_print ("filtered, %d\n", filtered));
+      GTK_DEBUG (MODULES, "filtered, %d", filtered);
       if (filtered)
         retval = TRUE;
       else
@@ -144,7 +144,7 @@ output_result (GtkIMContext *context,
     }
   if (marked_str)
     {
-      GTK_NOTE (MODULES, g_print ("tic-marked-text: %s\n", marked_str));
+      GTK_DEBUG (MODULES, "tic-marked-text: %s", marked_str);
       qc->cursor_index =
 	   GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (surface),
 						TIC_SELECTED_POS));
@@ -177,7 +177,7 @@ quartz_filter_keypress (GtkIMContext *context,
   guint keyval;
   guint keycode;
 
-  GTK_NOTE (MODULES, g_print ("quartz_filter_keypress\n"));
+  GTK_DEBUG (MODULES, "quartz_filter_keypress");
 
   if (!GDK_IS_MACOS_SURFACE (qc->client_surface))
     return FALSE;
@@ -220,7 +220,7 @@ quartz_filter_keypress (GtkIMContext *context,
   g_object_set_data (G_OBJECT (qc->client_surface),
                      TIC_IN_KEY_DOWN,
                      GUINT_TO_POINTER (FALSE));
-  GTK_NOTE (MODULES, g_print ("quartz_filter_keypress done\n"));
+  GTK_DEBUG (MODULES, "quartz_filter_keypress done");
 
   return retval;
 }
@@ -257,7 +257,7 @@ discard_preedit (GtkIMContext *context)
 static void
 quartz_reset (GtkIMContext *context)
 {
-  GTK_NOTE (MODULES, g_print ("quartz_reset\n"));
+  GTK_DEBUG (MODULES, "quartz_reset");
   discard_preedit (context);
 }
 
@@ -267,7 +267,7 @@ quartz_set_client_surface (GtkIMContext *context,
 {
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
 
-  GTK_NOTE (MODULES, g_print ("quartz_set_client_surface: %p\n", widget));
+  GTK_DEBUG (MODULES, "quartz_set_client_surface: %p", widget);
 
   qc->client_widget = widget;
   qc->client_surface = NULL;
@@ -284,7 +284,7 @@ quartz_set_client_surface (GtkIMContext *context,
 static void
 quartz_focus_in (GtkIMContext *context)
 {
-  GTK_NOTE (MODULES, g_print ("quartz_focus_in\n"));
+  GTK_DEBUG (MODULES, "quartz_focus_in");
 
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   qc->focused = TRUE;
@@ -293,7 +293,7 @@ quartz_focus_in (GtkIMContext *context)
 static void
 quartz_focus_out (GtkIMContext *context)
 {
-  GTK_NOTE (MODULES, g_print ("quartz_focus_out\n"));
+  GTK_DEBUG (MODULES, "quartz_focus_out");
 
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (context);
   qc->focused = FALSE;
@@ -310,7 +310,7 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   int sx, sy;
   double wx, wy;
 
-  GTK_NOTE (MODULES, g_print ("quartz_set_cursor_location\n"));
+  GTK_DEBUG (MODULES, "quartz_set_cursor_location");
 
   if (!qc->client_surface || !qc->client_widget)
     return;
@@ -341,7 +341,7 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
 static void
 quartz_set_use_preedit (GtkIMContext *context, gboolean use_preedit)
 {
-  GTK_NOTE (MODULES, g_print ("quartz_set_use_preedit: %d\n", use_preedit));
+  GTK_DEBUG (MODULES, "quartz_set_use_preedit: %d", use_preedit);
 }
 
 static void
@@ -353,7 +353,7 @@ commit_cb (GtkIMContext *context, const char *str, GtkIMContextQuartz *qc)
 static void
 imquartz_finalize (GObject *obj)
 {
-  GTK_NOTE (MODULES, g_print ("imquartz_finalize\n"));
+  GTK_DEBUG (MODULES, "imquartz_finalize");
 
   GtkIMContextQuartz *qc = GTK_IM_CONTEXT_QUARTZ (obj);
   g_free (qc->preedit_str);
@@ -370,7 +370,7 @@ imquartz_finalize (GObject *obj)
 static void
 gtk_im_context_quartz_class_init (GtkIMContextQuartzClass *class)
 {
-  GTK_NOTE (MODULES, g_print ("gtk_im_context_quartz_class_init\n"));
+  GTK_DEBUG (MODULES, "gtk_im_context_quartz_class_init");
 
   GtkIMContextClass *klass = GTK_IM_CONTEXT_CLASS (class);
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -390,7 +390,7 @@ gtk_im_context_quartz_class_init (GtkIMContextQuartzClass *class)
 static void
 gtk_im_context_quartz_init (GtkIMContextQuartz *qc)
 {
-  GTK_NOTE (MODULES, g_print ("gtk_im_context_quartz_init\n"));
+  GTK_DEBUG (MODULES, "gtk_im_context_quartz_init");
 
   qc->preedit_str = g_strdup ("");
   qc->cursor_index = 0;

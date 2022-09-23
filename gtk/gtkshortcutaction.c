@@ -57,6 +57,7 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkdebug.h"
+#include "gtkprivate.h"
 
 /* {{{ GtkShortcutAction */
 
@@ -161,11 +162,14 @@ gtk_shortcut_action_activate (GtkShortcutAction      *self,
   g_return_val_if_fail (GTK_IS_SHORTCUT_ACTION (self), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
-  GTK_NOTE (KEYBINDINGS, {
-            char *act = gtk_shortcut_action_to_string (self);
-            g_print ("Shortcut action activate on %s: %s\n", G_OBJECT_TYPE_NAME (widget), act);
-            g_free (act);
-            });
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (KEYBINDINGS))
+    {
+      char *act = gtk_shortcut_action_to_string (self);
+      gdk_debug_message ("Shortcut action activate on %s: %s", G_OBJECT_TYPE_NAME (widget), act);
+      g_free (act);
+    }
+#endif
 
   return GTK_SHORTCUT_ACTION_GET_CLASS (self)->activate (self, flags, widget, args);
 }

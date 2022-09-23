@@ -998,12 +998,11 @@ gtk_constraint_layout_measure (GtkLayoutManager *manager,
     gtk_constraint_solver_remove_edit_variable (solver, opposite_size);
   gtk_constraint_solver_end_edit (solver);
 
-  GTK_NOTE (LAYOUT,
-            g_print ("layout %p %s size: min %d nat %d (for opposite size: %d)\n",
+  GTK_DEBUG (LAYOUT, "layout %p %s size: min %d nat %d (for opposite size: %d)",
                      self,
                      orientation == GTK_ORIENTATION_HORIZONTAL ? "horizontal" : "vertical",
                      min_value, nat_value,
-                     for_size));
+                     for_size);
 
   if (minimum != NULL)
     *minimum = min_value;
@@ -1054,13 +1053,12 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
   stay_h = gtk_constraint_solver_add_stay_variable (solver,
                                                     layout_height,
                                                     GTK_CONSTRAINT_STRENGTH_REQUIRED);
-  GTK_NOTE (LAYOUT,
-            g_print ("Layout [%p]: { .x: %g, .y: %g, .w: %g, .h: %g }\n",
+  GTK_DEBUG (LAYOUT, "Layout [%p]: { .x: %g, .y: %g, .w: %g, .h: %g }",
                      self,
                      gtk_constraint_variable_get_value (layout_left),
                      gtk_constraint_variable_get_value (layout_top),
                      gtk_constraint_variable_get_value (layout_width),
-                     gtk_constraint_variable_get_value (layout_height)));
+                     gtk_constraint_variable_get_value (layout_height));
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
@@ -1081,14 +1079,13 @@ gtk_constraint_layout_allocate (GtkLayoutManager *manager,
       var_height = get_child_attribute (self, child, GTK_CONSTRAINT_ATTRIBUTE_HEIGHT);
       var_baseline = get_child_attribute (self, child, GTK_CONSTRAINT_ATTRIBUTE_BASELINE);
 
-      GTK_NOTE (LAYOUT,
-                g_print ("Allocating child '%s'[%p] with { .x: %g, .y: %g, .w: %g, .h: %g, .b: %g }\n",
+      GTK_DEBUG (LAYOUT, "Allocating child '%s'[%p] with { .x: %g, .y: %g, .w: %g, .h: %g, .b: %g }",
                          gtk_widget_get_name (child), child,
                          gtk_constraint_variable_get_value (var_left),
                          gtk_constraint_variable_get_value (var_top),
                          gtk_constraint_variable_get_value (var_width),
                          gtk_constraint_variable_get_value (var_height),
-                         gtk_constraint_variable_get_value (var_baseline)));
+                         gtk_constraint_variable_get_value (var_baseline));
 
       child_alloc.x = floor (gtk_constraint_variable_get_value (var_left));
       child_alloc.y = floor (gtk_constraint_variable_get_value (var_top));

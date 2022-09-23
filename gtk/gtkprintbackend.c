@@ -88,8 +88,7 @@ gtk_print_backends_init (void)
   char **paths;
   int i;
 
-  GTK_NOTE (MODULES,
-            g_print ("Registering extension point %s\n", GTK_PRINT_BACKEND_EXTENSION_POINT_NAME));
+  GTK_DEBUG (MODULES, "Registering extension point %s", GTK_PRINT_BACKEND_EXTENSION_POINT_NAME);
 
   ep = g_io_extension_point_register (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME);
   g_io_extension_point_set_required_type (ep, GTK_TYPE_PRINT_BACKEND);
@@ -99,8 +98,7 @@ gtk_print_backends_init (void)
   paths = _gtk_get_module_path ("printbackends");
   for (i = 0; paths[i]; i++)
     {
-      GTK_NOTE (MODULES,
-                g_print ("Scanning io modules in %s\n", paths[i]));
+      GTK_DEBUG (MODULES, "Scanning io modules in %s", paths[i]);
       g_io_modules_scan_all_in_directory_with_scope (paths[i], scope);
     }
   g_strfreev (paths);
@@ -159,8 +157,7 @@ gtk_print_backend_load_modules (void)
       if (!ext)
         continue;
 
-      GTK_NOTE (PRINTING,
-                g_print ("Found %s print backend\n", backends[i]));
+      GTK_DEBUG (PRINTING, "Found %s print backend", backends[i]);
 
       type = g_io_extension_get_type (ext);
       backend = g_object_new (type, NULL);

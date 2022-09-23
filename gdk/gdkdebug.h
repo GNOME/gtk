@@ -67,8 +67,10 @@ void             gdk_display_set_debug_flags    (GdkDisplay       *display,
     G_UNLIKELY (gdk_display_get_debug_flags (display) & GDK_DEBUG_##type)
 
 #define GDK_DISPLAY_DEBUG(display,type,...)                               \
+    G_STMT_START {                                                        \
     if (GDK_DISPLAY_DEBUG_CHECK (display,type))                           \
       gdk_debug_message (__VA_ARGS__);                                    \
+    } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
 

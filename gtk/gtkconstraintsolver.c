@@ -160,6 +160,7 @@
 #include "gtkconstraintexpressionprivate.h"
 
 #include "gtkdebug.h"
+#include "gtkprivate.h"
 
 #include <glib.h>
 #include <string.h>
@@ -796,7 +797,7 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
 
       if (min_ratio == DBL_MAX)
         {
-          GTK_NOTE (CONSTRAINTS, g_message ("Unbounded objective variable during optimization"));
+          GTK_DEBUG (CONSTRAINTS, "Unbounded objective variable during optimization");
           break;
         }
 
@@ -814,10 +815,9 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
       gtk_constraint_solver_pivot (self, entry, exit);
     }
 
-  GTK_NOTE (CONSTRAINTS,
-            g_message ("solver.optimize.time := %.3f ms (pass: %d)",
-                       (float) (g_get_monotonic_time () - start_time) / 1000.f,
-                       self->optimize_count));
+  GTK_DEBUG (CONSTRAINTS, "solver.optimize.time := %.3f ms (pass: %d)",
+                          (float) (g_get_monotonic_time () - start_time) / 1000.f,
+                          self->optimize_count);
 }
 
 /*< private >
@@ -1055,9 +1055,8 @@ gtk_constraint_solver_dual_optimize (GtkConstraintSolver *self)
       gtk_constraint_solver_pivot (self, entry_var, exit_var);
     }
 
-  GTK_NOTE (CONSTRAINTS,
-            g_message ("dual_optimize.time := %.3f ms",
-                       (float) (g_get_monotonic_time () - start_time) / 1000.f));
+  GTK_DEBUG (CONSTRAINTS, "dual_optimize.time := %.3f ms",
+                          (float) (g_get_monotonic_time () - start_time) / 1000.f);
 }
 
 static void
@@ -1198,8 +1197,8 @@ gtk_constraint_solver_choose_subject (GtkConstraintSolver *self,
 
   if (!G_APPROX_VALUE (gtk_constraint_expression_get_constant (expression), 0.0, 0.001))
     {
-      GTK_NOTE (CONSTRAINTS,
-                g_message ("Unable to satisfy required constraint (choose_subject)"));
+      GTK_DEBUG (CONSTRAINTS,
+                 "Unable to satisfy required constraint (choose_subject)");
       return NULL;
     }
 
@@ -1508,9 +1507,8 @@ gtk_constraint_solver_resolve (GtkConstraintSolver *solver)
 
   gtk_constraint_solver_reset_stay_constants (solver);
 
-  GTK_NOTE (CONSTRAINTS,
-            g_message ("resolve.time := %.3f ms",
-                       (float) (g_get_monotonic_time () - start_time) / 1000.f));
+  GTK_DEBUG (CONSTRAINTS, "resolve.time := %.3f ms",
+                          (float) (g_get_monotonic_time () - start_time) / 1000.f);
 
   solver->needs_solving = FALSE;
 }
