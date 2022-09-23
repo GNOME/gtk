@@ -553,6 +553,7 @@ GskRenderNode *         gsk_value_get_render_node               (const GValue   
 GDK_AVAILABLE_IN_4_4
 GskRenderNode *         gsk_value_dup_render_node               (const GValue             *value);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskRenderNode, gsk_render_node_unref)
 
 G_END_DECLS
 
