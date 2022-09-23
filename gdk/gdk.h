@@ -76,8 +76,6 @@
 #include <gdk/gdkversionmacros.h>
 #include <gdk/gdkvulkancontext.h>
 
-#include <gdk/gdk-autocleanup.h>
-
 #undef __GDK_H_INSIDE__
 
 #endif /* __GDK_H__ */

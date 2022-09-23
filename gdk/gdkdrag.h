@@ -99,6 +99,8 @@ GdkContentProvider *
 GDK_AVAILABLE_IN_ALL
 GdkSurface *    gdk_drag_get_surface (GdkDrag *drag);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDrag, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_DND_H__ */

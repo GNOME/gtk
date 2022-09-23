@@ -126,6 +126,9 @@ GdkSurface *        gdk_device_get_surface_at_position  (GdkDevice *device,
 
 GDK_AVAILABLE_IN_4_2
 guint32             gdk_device_get_timestamp            (GdkDevice *device);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDevice, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_H__ */

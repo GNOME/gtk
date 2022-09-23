@@ -111,6 +111,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_provider_get_value                  (GdkContentProvider     *provider,
                                                                          GValue                 *value,
                                                                          GError                **error);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkContentProvider, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_CONTENT_PROVIDER_H__ */

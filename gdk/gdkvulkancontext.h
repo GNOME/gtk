@@ -77,6 +77,8 @@ VkSemaphore             gdk_vulkan_context_get_draw_semaphore       (GdkVulkanCo
 #endif /* GDK_RENDERING_VULKAN */
 #endif /* __GI_SCANNER__ */
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkVulkanContext, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_VULKAN_CONTEXT__ */

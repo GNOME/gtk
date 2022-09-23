@@ -114,6 +114,8 @@ GdkGLContext *          gdk_gl_context_get_current              (void);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_context_clear_current            (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkGLContext, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_GL_CONTEXT_H__ */

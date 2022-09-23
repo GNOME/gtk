@@ -69,6 +69,7 @@ gboolean  gdk_rgba_parse     (GdkRGBA       *rgba,
 GDK_AVAILABLE_IN_ALL
 char *   gdk_rgba_to_string (const GdkRGBA *rgba) G_GNUC_MALLOC;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkRGBA, gdk_rgba_free)
 
 G_END_DECLS
 

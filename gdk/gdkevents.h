@@ -38,7 +38,6 @@
 
 G_BEGIN_DECLS
 
-
 #define GDK_TYPE_EVENT          (gdk_event_get_type ())
 #define GDK_TYPE_EVENT_SEQUENCE (gdk_event_sequence_get_type ())
 
@@ -550,6 +549,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean               gdk_key_event_get_match (GdkEvent        *event,
                                                 guint           *keyval,
                                                 GdkModifierType *modifiers);
+
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkEvent, gdk_event_unref)
 
 G_END_DECLS
 

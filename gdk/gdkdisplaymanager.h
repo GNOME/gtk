@@ -34,7 +34,6 @@
 
 G_BEGIN_DECLS
 
-
 #define GDK_TYPE_DISPLAY_MANAGER              (gdk_display_manager_get_type ())
 #define GDK_DISPLAY_MANAGER(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_MANAGER, GdkDisplayManager))
 #define GDK_IS_DISPLAY_MANAGER(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY_MANAGER))
@@ -58,6 +57,7 @@ GdkDisplay *       gdk_display_manager_open_display        (GdkDisplayManager *m
 GDK_AVAILABLE_IN_ALL
 void               gdk_set_allowed_backends                (const char        *backends);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDisplayManager, g_object_unref)
 
 G_END_DECLS
 

@@ -58,7 +58,6 @@ gdk_public_sources = files([
 ])
 
 gdk_public_headers = files([
-  'gdk-autocleanup.h',
   'gdk.h',
   'gdkapplaunchcontext.h',
   'gdkcairo.h',

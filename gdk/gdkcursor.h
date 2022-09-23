@@ -64,6 +64,7 @@ int         gdk_cursor_get_hotspot_x     (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL
 int         gdk_cursor_get_hotspot_y     (GdkCursor       *cursor);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkCursor, g_object_unref)
 
 G_END_DECLS
 

@@ -36,8 +36,6 @@ G_BEGIN_DECLS
 typedef struct _GdkGLTexture            GdkGLTexture;
 typedef struct _GdkGLTextureClass       GdkGLTextureClass;
 
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkGLTexture, g_object_unref)
-
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_gl_texture_get_type                (void) G_GNUC_CONST;
 
@@ -52,6 +50,7 @@ GdkTexture *            gdk_gl_texture_new                     (GdkGLContext    
 GDK_AVAILABLE_IN_ALL
 void                    gdk_gl_texture_release                 (GdkGLTexture    *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkGLTexture, g_object_unref)
 
 G_END_DECLS
 

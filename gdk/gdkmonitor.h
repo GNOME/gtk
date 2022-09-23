@@ -87,6 +87,8 @@ GdkSubpixelLayout gdk_monitor_get_subpixel_layout (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_ALL
 gboolean          gdk_monitor_is_valid            (GdkMonitor   *monitor);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkMonitor, g_object_unref)
+
 G_END_DECLS
 
 #endif  /* __GDK_MONITOR_H__ */
