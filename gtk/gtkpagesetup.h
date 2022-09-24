@@ -132,6 +132,8 @@ GVariant          *gtk_page_setup_to_gvariant       (GtkPageSetup        *setup)
 GDK_AVAILABLE_IN_ALL
 GtkPageSetup      *gtk_page_setup_new_from_gvariant (GVariant            *variant);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPageSetup, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_PAGE_SETUP_H__ */

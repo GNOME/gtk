@@ -113,6 +113,8 @@ void                  gtk_button_set_child          (GtkButton      *button,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_button_get_child          (GtkButton      *button);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkButton, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_BUTTON_H__ */

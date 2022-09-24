@@ -101,6 +101,8 @@ GDK_AVAILABLE_IN_4_8
 void            gtk_check_button_set_child          (GtkCheckButton *button,
                                                      GtkWidget *child);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCheckButton, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_CHECK_BUTTON_H__ */

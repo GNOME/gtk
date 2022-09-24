@@ -196,6 +196,7 @@ double          gtk_spin_button_get_climb_rate     (GtkSpinButton  *spin_button)
 GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_update             (GtkSpinButton  *spin_button);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSpinButton, g_object_unref)
 
 G_END_DECLS
 

@@ -130,6 +130,8 @@ void                gtk_entry_completion_set_text_column        (GtkEntryComplet
 GDK_AVAILABLE_IN_ALL
 int                 gtk_entry_completion_get_text_column        (GtkEntryCompletion          *completion);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEntryCompletion, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_COMPLETION_H__ */

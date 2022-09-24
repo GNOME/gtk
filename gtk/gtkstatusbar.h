@@ -62,6 +62,8 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_statusbar_remove_all    	(GtkStatusbar *statusbar,
 					 guint	       context_id);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkStatusbar, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_STATUSBAR_H__ */

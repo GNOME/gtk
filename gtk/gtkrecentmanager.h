@@ -251,6 +251,9 @@ gboolean              gtk_recent_info_match                (GtkRecentInfo  *info
 /* private */
 void _gtk_recent_manager_sync (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRecentManager, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRecentInfo, gtk_recent_info_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_RECENT_MANAGER_H__ */

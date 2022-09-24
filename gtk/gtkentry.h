@@ -291,6 +291,8 @@ void           gtk_entry_set_extra_menu                      (GtkEntry          
 GDK_AVAILABLE_IN_ALL
 GMenuModel *   gtk_entry_get_extra_menu                      (GtkEntry             *entry);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEntry, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_H__ */

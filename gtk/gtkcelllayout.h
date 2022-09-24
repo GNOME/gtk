@@ -163,6 +163,8 @@ void     _gtk_cell_layout_buildable_add_child        (GtkBuildable       *builda
                                                       GObject            *child,
                                                       const char         *type);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellLayout, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_CELL_LAYOUT_H__ */

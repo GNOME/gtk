@@ -540,6 +540,8 @@ void          gtk_tree_view_set_tooltip_column (GtkTreeView       *tree_view,
 GDK_AVAILABLE_IN_ALL
 int           gtk_tree_view_get_tooltip_column (GtkTreeView       *tree_view);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeView, g_object_unref)
+
 G_END_DECLS
 
 

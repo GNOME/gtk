@@ -46,6 +46,8 @@ void        gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
 GDK_AVAILABLE_IN_ALL
 GtkStack *  gtk_stack_sidebar_get_stack (GtkStackSidebar *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkStackSidebar, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_STACK_SIDEBAR_H__ */

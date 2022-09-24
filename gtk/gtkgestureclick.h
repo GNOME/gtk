@@ -44,6 +44,8 @@ GType        gtk_gesture_click_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkGesture * gtk_gesture_click_new      (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkGestureClick, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_CLICK_H__ */

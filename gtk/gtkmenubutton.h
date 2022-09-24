@@ -127,6 +127,8 @@ void          gtk_menu_button_set_child   (GtkMenuButton *menu_button,
 GDK_AVAILABLE_IN_4_6
 GtkWidget *   gtk_menu_button_get_child   (GtkMenuButton *menu_button);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkMenuButton, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_MENU_BUTTON_H__ */

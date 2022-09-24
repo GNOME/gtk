@@ -60,6 +60,8 @@ void          gtk_app_chooser_dialog_set_heading          (GtkAppChooserDialog *
 GDK_AVAILABLE_IN_ALL
 const char * gtk_app_chooser_dialog_get_heading          (GtkAppChooserDialog *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAppChooserDialog, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_APP_CHOOSER_DIALOG_H__ */

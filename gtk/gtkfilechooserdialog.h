@@ -43,6 +43,8 @@ GtkWidget *gtk_file_chooser_dialog_new              (const char           *title
 						     const char           *first_button_text,
 						     ...) G_GNUC_NULL_TERMINATED;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFileChooserDialog, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_DIALOG_H__ */

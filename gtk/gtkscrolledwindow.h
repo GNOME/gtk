@@ -182,6 +182,8 @@ void           gtk_scrolled_window_set_child        (GtkScrolledWindow *scrolled
 GDK_AVAILABLE_IN_ALL
 GtkWidget     *gtk_scrolled_window_get_child        (GtkScrolledWindow *scrolled_window);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkScrolledWindow, g_object_unref)
+
 G_END_DECLS
 
 

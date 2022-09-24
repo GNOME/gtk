@@ -106,6 +106,8 @@ void            gtk_drawing_area_set_draw_func          (GtkDrawingArea         
                                                          gpointer                user_data,
                                                          GDestroyNotify          destroy);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkDrawingArea, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_DRAWING_AREA_H__ */

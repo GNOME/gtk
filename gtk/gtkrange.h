@@ -147,6 +147,7 @@ void               gtk_range_set_round_digits              (GtkRange      *range
 GDK_AVAILABLE_IN_ALL
 int                 gtk_range_get_round_digits              (GtkRange      *range);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRange, g_object_unref)
 
 G_END_DECLS
 

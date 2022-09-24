@@ -107,6 +107,7 @@ void        gtk_box_reorder_child_after (GtkBox         *box,
                                          GtkWidget      *child,
                                          GtkWidget      *sibling);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkBox, g_object_unref)
 
 G_END_DECLS
 

@@ -82,6 +82,8 @@ void          gtk_app_chooser_widget_set_default_text     (GtkAppChooserWidget *
 GDK_AVAILABLE_IN_ALL
 const char * gtk_app_chooser_widget_get_default_text     (GtkAppChooserWidget *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAppChooserWidget, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_APP_CHOOSER_WIDGET_H__ */

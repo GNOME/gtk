@@ -81,6 +81,8 @@ GdkDevice *         gtk_event_controller_get_current_event_device (GtkEventContr
 GDK_AVAILABLE_IN_ALL
 GdkModifierType     gtk_event_controller_get_current_event_state (GtkEventController *controller);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEventController, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_EVENT_CONTROLLER_H__ */

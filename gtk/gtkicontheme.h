@@ -154,6 +154,9 @@ const char *         gtk_icon_paintable_get_icon_name     (GtkIconPaintable  *se
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_icon_paintable_is_symbolic       (GtkIconPaintable  *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkIconPaintable, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkIconTheme, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_ICON_THEME_H__ */

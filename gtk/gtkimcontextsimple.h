@@ -72,6 +72,7 @@ GDK_AVAILABLE_IN_ALL
 void          gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
                                                       const char         *compose_file);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkIMContextSimple, g_object_unref)
 
 G_END_DECLS
 

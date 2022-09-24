@@ -403,6 +403,11 @@ void gtk_tree_model_rows_reordered_with_length (GtkTreeModel *tree_model,
 						int          *new_order,
 						int           length);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeModel, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeIter, gtk_tree_iter_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreePath, gtk_tree_path_free)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeRowReference, gtk_tree_row_reference_free)
+
 G_END_DECLS
 
 #endif /* __GTK_TREE_MODEL_H__ */

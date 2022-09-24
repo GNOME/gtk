@@ -149,6 +149,8 @@ void          gtk_tree_model_filter_refilter                   (GtkTreeModelFilt
 GDK_AVAILABLE_IN_ALL
 void          gtk_tree_model_filter_clear_cache                (GtkTreeModelFilter           *filter);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeModelFilter, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_TREE_MODEL_FILTER_H__ */

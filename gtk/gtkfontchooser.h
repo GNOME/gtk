@@ -161,6 +161,8 @@ GDK_AVAILABLE_IN_ALL
 void             gtk_font_chooser_set_language             (GtkFontChooser   *fontchooser,
                                                             const char       *language);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFontChooser, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_FONT_CHOOSER_H__ */

@@ -66,6 +66,8 @@ void             gtk_css_provider_load_named     (GtkCssProvider  *provider,
                                                   const char      *name,
                                                   const char      *variant);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCssProvider, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_PROVIDER_H__ */

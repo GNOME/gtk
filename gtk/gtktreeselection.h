@@ -137,6 +137,7 @@ void             gtk_tree_selection_unselect_range      (GtkTreeSelection       
                                                          GtkTreePath                 *start_path,
 							 GtkTreePath                 *end_path);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeSelection, g_object_unref)
 
 G_END_DECLS
 

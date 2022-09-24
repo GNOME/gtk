@@ -79,6 +79,7 @@ void            gtk_grid_view_set_single_click_activate         (GtkGridView    
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_grid_view_get_single_click_activate         (GtkGridView            *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkGridView, g_object_unref)
 
 G_END_DECLS
 

@@ -76,6 +76,8 @@ void         gtk_print_context_set_cairo_context     (GtkPrintContext *context,
 						      double           dpi_x,
 						      double           dpi_y);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPrintContext, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_PRINT_CONTEXT_H__ */

@@ -104,6 +104,8 @@ GtkTextBuffer*        gtk_text_mark_get_buffer       (GtkTextMark *mark);
 GDK_AVAILABLE_IN_ALL
 gboolean              gtk_text_mark_get_left_gravity (GtkTextMark *mark);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTextMark, g_object_unref)
+
 G_END_DECLS
 
 #endif  /* __GTK_TEXT_MARK_H__ */

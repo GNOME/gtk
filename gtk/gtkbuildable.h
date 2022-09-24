@@ -260,6 +260,8 @@ void          gtk_buildable_parse_context_get_position      (GtkBuildableParseCo
                                                              int                      *line_number,
                                                              int                      *char_number);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkBuildable, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_BUILDABLE_H__ */

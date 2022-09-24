@@ -91,6 +91,8 @@ GDK_AVAILABLE_IN_ALL
 GskTransform *  gtk_fixed_get_child_transform   (GtkFixed     *fixed,
                                                  GtkWidget    *widget);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFixed, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_FIXED_H__ */

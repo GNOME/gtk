@@ -51,6 +51,7 @@ GDK_AVAILABLE_IN_ALL
 void              gtk_gesture_pan_set_orientation (GtkGesturePan  *gesture,
                                                    GtkOrientation  orientation);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkGesturePan, g_object_unref)
 
 G_END_DECLS
 

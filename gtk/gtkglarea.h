@@ -122,6 +122,8 @@ void            gtk_gl_area_set_error                   (GtkGLArea    *area,
 GDK_AVAILABLE_IN_ALL
 GError *        gtk_gl_area_get_error                   (GtkGLArea    *area);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkGLArea, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_GL_AREA_H__ */

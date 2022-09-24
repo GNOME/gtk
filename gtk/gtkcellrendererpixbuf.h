@@ -39,6 +39,7 @@ GType            gtk_cell_renderer_pixbuf_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkCellRenderer *gtk_cell_renderer_pixbuf_new      (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellRendererPixbuf, g_object_unref)
 
 G_END_DECLS
 

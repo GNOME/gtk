@@ -110,6 +110,8 @@ gboolean   gtk_level_bar_get_offset_value   (GtkLevelBar *self,
                                              const char *name,
                                              double      *value);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLevelBar, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_LEVEL_BAR_H__ */

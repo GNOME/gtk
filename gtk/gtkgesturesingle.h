@@ -70,6 +70,8 @@ GDK_AVAILABLE_IN_ALL
 GdkEventSequence * gtk_gesture_single_get_current_sequence
                                               (GtkGestureSingle *gesture);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkGestureSingle, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_GESTURE_SINGLE_H__ */

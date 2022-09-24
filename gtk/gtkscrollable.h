@@ -73,6 +73,8 @@ GDK_AVAILABLE_IN_ALL
 gboolean             gtk_scrollable_get_border             (GtkScrollable       *scrollable,
                                                             GtkBorder           *border);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkScrollable, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_SCROLLABLE_H__ */

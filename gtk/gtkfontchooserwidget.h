@@ -38,6 +38,8 @@ GType        gtk_font_chooser_widget_get_type                 (void) G_GNUC_CONS
 GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_font_chooser_widget_new                      (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFontChooserWidget, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_FONT_CHOOSER_WIDGET_H__ */

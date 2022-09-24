@@ -414,6 +414,8 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_text_iter_order           (GtkTextIter *first,
                                         GtkTextIter *second);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTextIter, gtk_text_iter_free)
+
 G_END_DECLS
 
 #endif

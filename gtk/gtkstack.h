@@ -179,6 +179,8 @@ gboolean               gtk_stack_get_interpolate_size    (GtkStack *stack);
 GDK_AVAILABLE_IN_ALL
 GtkSelectionModel *    gtk_stack_get_pages               (GtkStack *stack);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkStack, g_object_unref)
+
 G_END_DECLS
 
 #endif

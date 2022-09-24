@@ -141,6 +141,8 @@ GDK_AVAILABLE_IN_ALL
 char * gtk_style_context_to_string (GtkStyleContext           *context,
                                     GtkStyleContextPrintFlags  flags);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkStyleContext, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_H__ */

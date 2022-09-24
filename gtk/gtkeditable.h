@@ -195,6 +195,7 @@ gboolean     gtk_editable_delegate_get_property (GObject      *object,
                                                  GValue       *value,
                                                  GParamSpec   *pspec);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkEditable, g_object_unref)
 
 G_END_DECLS
 

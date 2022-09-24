@@ -63,6 +63,8 @@ void         gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
 gboolean    _gtk_cell_area_box_group_visible (GtkCellAreaBox  *box,
                                               int              group_idx);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellAreaBox, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_CELL_AREA_BOX_H__ */

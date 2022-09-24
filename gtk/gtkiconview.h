@@ -282,6 +282,7 @@ void     gtk_icon_view_set_tooltip_column                     (GtkIconView      
 GDK_AVAILABLE_IN_ALL
 int      gtk_icon_view_get_tooltip_column                     (GtkIconView       *icon_view);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkIconView, g_object_unref)
 
 G_END_DECLS
 

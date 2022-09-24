@@ -224,6 +224,9 @@ void                  gtk_flow_box_set_sort_func                (GtkFlowBox     
 GDK_AVAILABLE_IN_ALL
 void                  gtk_flow_box_invalidate_sort              (GtkFlowBox         *box);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFlowBox, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFlowBoxChild, g_object_unref)
+
 G_END_DECLS
 
 

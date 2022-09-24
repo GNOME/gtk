@@ -37,6 +37,8 @@ GType            gtk_cell_renderer_spin_get_type (void);
 GDK_AVAILABLE_IN_ALL
 GtkCellRenderer *gtk_cell_renderer_spin_new      (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellRendererSpin, g_object_unref)
+
 G_END_DECLS
 
 #endif  /* __GTK_CELL_RENDERER_SPIN_H__ */

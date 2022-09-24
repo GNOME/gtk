@@ -518,6 +518,8 @@ void                 _gtk_cell_area_set_cell_data_func_with_proxy  (GtkCellArea 
 								    GDestroyNotify         destroy,
 								    gpointer               proxy);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellArea, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_CELL_AREA_H__ */

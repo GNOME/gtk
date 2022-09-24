@@ -99,6 +99,7 @@ void       gtk_frame_set_child        (GtkFrame      *frame,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_frame_get_child        (GtkFrame      *frame);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFrame, g_object_unref)
 
 G_END_DECLS
 

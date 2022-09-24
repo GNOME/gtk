@@ -142,6 +142,8 @@ void       gtk_grid_query_child            (GtkGrid         *grid,
                                             int             *width,
                                             int             *height);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkGrid, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_GRID_H__ */

@@ -287,8 +287,6 @@
 #include <gtk/gtkwindowgroup.h>
 #include <gtk/gtkwindowhandle.h>
 
-#include <gtk/gtk-autocleanups.h>
-
 #undef __GTK_H_INSIDE__
 
 #endif /* __GTK_H__ */

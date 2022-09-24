@@ -461,6 +461,7 @@ void            gtk_text_buffer_begin_user_action         (GtkTextBuffer *buffer
 GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_end_user_action           (GtkTextBuffer *buffer);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTextBuffer, g_object_unref)
 
 G_END_DECLS
 

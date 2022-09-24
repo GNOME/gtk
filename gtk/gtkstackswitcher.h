@@ -45,6 +45,8 @@ void         gtk_stack_switcher_set_stack         (GtkStackSwitcher *switcher,
 GDK_AVAILABLE_IN_ALL
 GtkStack *   gtk_stack_switcher_get_stack         (GtkStackSwitcher *switcher);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkStackSwitcher, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_STACK_SWITCHER_H__ */
