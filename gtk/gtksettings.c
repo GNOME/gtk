@@ -30,7 +30,7 @@
 #include "gtkversion.h"
 #include "gtkwidgetprivate.h"
 
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 #include <string.h>
 

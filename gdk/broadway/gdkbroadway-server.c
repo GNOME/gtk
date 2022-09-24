@@ -13,7 +13,7 @@
 #include "gdkbroadway-server.h"
 
 #include "gdkprivate-broadway.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <gdk/gdktextureprivate.h>
 

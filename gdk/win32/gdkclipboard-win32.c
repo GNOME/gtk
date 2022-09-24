@@ -24,7 +24,7 @@
 #include "gdkintl.h"
 #include "gdkprivate-win32.h"
 #include "gdkhdataoutputstream-win32.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 #include <string.h>
 

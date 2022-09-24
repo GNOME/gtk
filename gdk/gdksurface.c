@@ -29,7 +29,7 @@
 
 #include "gdksurface.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 #include "gdkcontentprovider.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"

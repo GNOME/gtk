@@ -29,7 +29,7 @@
 
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 #include <hb-ot.h>
 

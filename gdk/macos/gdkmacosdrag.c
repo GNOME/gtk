@@ -30,7 +30,7 @@
 #include "gdk/gdkeventsprivate.h"
 #include "gdk/gdkintl.h"
 #include "gdk/gdkseatprivate.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 #define BIG_STEP 20
 #define SMALL_STEP 1

@@ -22,7 +22,7 @@
 #include "gdkpaintable.h"
 
 #include "gdksnapshotprivate.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 void            gtk_snapshot_push_debug                 (GdkSnapshot            *snapshot,

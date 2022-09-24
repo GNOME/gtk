@@ -30,7 +30,7 @@
 
 #include "gdkeventsprivate.h"
 #include "gdkseatprivate.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <fcntl.h>
 #include <io.h>

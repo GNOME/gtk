@@ -23,7 +23,7 @@
 
 #include "gdkmacosclipboard-private.h"
 #include "gdkmacosutils-private.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 struct _GdkMacosClipboard
 {

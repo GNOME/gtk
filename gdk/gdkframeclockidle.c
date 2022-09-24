@@ -28,7 +28,7 @@
 
 #include "gdkdebugprivate.h"
 #include "gdkframeclockprivate.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 #include "gdkprofilerprivate.h"
 
 #ifdef G_OS_WIN32

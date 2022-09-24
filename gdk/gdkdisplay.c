@@ -25,7 +25,7 @@
 #include "gdkdisplayprivate.h"
 
 #include "gdkintl.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include "gdkapplaunchcontext.h"
 #include "gdkclipboardprivate.h"

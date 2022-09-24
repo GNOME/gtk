@@ -83,7 +83,7 @@
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #ifdef GDK_WINDOWING_WIN32
 # include "gdk/win32/gdkwin32.h"

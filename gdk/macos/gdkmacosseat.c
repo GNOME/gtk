@@ -28,7 +28,7 @@
 #include "gdkmacosdevice.h"
 #include "gdkmacosseat-private.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 typedef struct
 {

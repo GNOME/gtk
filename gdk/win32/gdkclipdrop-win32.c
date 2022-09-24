@@ -287,7 +287,7 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 #include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdragprivate.h"
 #include "gdk/gdkintl.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 #define HIDA_GetPIDLFolder(pida) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[0])
 #define HIDA_GetPIDLItem(pida, i) (LPCITEMIDLIST)(((LPBYTE)pida)+(pida)->aoffset[i+1])

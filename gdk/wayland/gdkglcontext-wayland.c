@@ -31,7 +31,7 @@
 #include "gdkwaylandsurface.h"
 #include "gdkprivate-wayland.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 #include "gdksurfaceprivate.h"
 #include "gdkprofilerprivate.h"
 

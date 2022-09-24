@@ -26,7 +26,7 @@
 
 #include "gdkx11dnd.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 #include "gdkasync.h"
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-x11.h"

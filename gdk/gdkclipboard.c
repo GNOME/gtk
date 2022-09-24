@@ -29,7 +29,7 @@
 #include "gdkintl.h"
 #include "gdkpipeiostreamprivate.h"
 #include "gdktexture.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <gobject/gvaluecollector.h>
 

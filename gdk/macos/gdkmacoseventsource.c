@@ -32,7 +32,7 @@
 #include "gdkmacosdisplay-private.h"
 
 #include "gdk/gdkeventsprivate.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 /*
  * This file implementations integration between the GLib main loop and

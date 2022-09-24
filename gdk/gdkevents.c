@@ -31,7 +31,7 @@
 #include "gdkintl.h"
 #include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <gobject/gvaluecollector.h>
 

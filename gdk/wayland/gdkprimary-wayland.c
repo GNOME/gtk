@@ -23,7 +23,7 @@
 #include "gdkcontentformats.h"
 #include "gdkintl.h"
 #include "gdkprivate-wayland.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <glib-unix.h>
 #include <gio/gunixinputstream.h>

@@ -23,7 +23,7 @@
 #include "gdkclipboard.h"
 #include "gdkcontentformats.h"
 #include "gdkintl.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 /**
  * GdkContentProvider:
