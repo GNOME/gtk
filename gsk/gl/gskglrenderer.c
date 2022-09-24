@@ -24,7 +24,7 @@
 #include <gdk/gdkdisplayprivate.h>
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdksurfaceprivate.h>
-#include <gdk/gdkintl.h>
+#include <glib/gi18n-lib.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>

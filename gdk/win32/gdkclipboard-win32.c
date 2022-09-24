@@ -21,7 +21,7 @@
 #include "gdkclipboard-win32.h"
 
 #include "gdkdebugprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate-win32.h"
 #include "gdkhdataoutputstream-win32.h"
 #include "gdk/gdkprivate.h"

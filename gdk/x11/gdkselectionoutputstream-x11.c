@@ -25,7 +25,7 @@
 
 #include "gdkclipboard-x11.h"
 #include "gdkdisplay-x11.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdktextlistconverter-x11.h"
 #include "gdkx11display.h"
 #include "gdkx11property.h"

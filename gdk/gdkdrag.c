@@ -42,7 +42,7 @@
 #include "gdkdragprivate.h"
 #include "gdkdisplay.h"
 #include "gdksurface.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkcontentformats.h"
 #include "gdkcontentprovider.h"
 #include "gdkcontentserializer.h"

@@ -24,7 +24,7 @@
 #include "gdkselectioninputstream-x11.h"
 
 #include "gdkdisplay-x11.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkx11display.h"
 #include "gdkx11property.h"
 #include "gdkx11surface.h"

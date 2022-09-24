@@ -19,7 +19,7 @@
 
 #include "gdkpango.h"
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include <math.h>
 #include <pango/pangocairo.h>

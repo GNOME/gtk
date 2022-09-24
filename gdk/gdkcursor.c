@@ -30,7 +30,7 @@
 #include "gdkcursor.h"
 #include "gdkcursorprivate.h"
 #include "gdktexture.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include <math.h>
 #include <errno.h>

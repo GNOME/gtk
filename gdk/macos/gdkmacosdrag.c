@@ -28,7 +28,7 @@
 
 #include "gdk/gdkdeviceprivate.h"
 #include "gdk/gdkeventsprivate.h"
-#include "gdk/gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdk/gdkseatprivate.h"
 #include "gdk/gdkprivate.h"
 

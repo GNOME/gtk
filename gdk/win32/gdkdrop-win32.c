@@ -56,7 +56,7 @@
 #include <shlobj.h>
 #include <shlguid.h>
 #include <objidl.h>
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include <gdk/gdk.h>
 #include <glib/gstdio.h>

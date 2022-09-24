@@ -21,7 +21,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-xi2-private.h"
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkasync.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"

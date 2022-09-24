@@ -24,7 +24,7 @@
 #include "gdkdisplay.h"
 #include "gdkdisplayprivate.h"
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate.h"
 
 #include "gdkapplaunchcontext.h"

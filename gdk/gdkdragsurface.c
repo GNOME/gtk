@@ -21,7 +21,7 @@
 
 #include "gdkprivate.h"
 #include "gdkdragsurfaceprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 /**
  * GdkDragSurface:

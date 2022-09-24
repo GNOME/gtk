@@ -34,7 +34,7 @@
 #include "gdk.h"
 #include "gdkdebugprivate.h"
 #include "gdkkeysyms.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate-win32.h"
 #include "gdkinput-dmanipulation.h"
 #include "gdkwin32.h"

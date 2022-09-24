@@ -21,7 +21,7 @@
 
 #include "gdkclipboardprivate.h"
 #include "gdkcontentformats.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate-wayland.h"
 #include "gdkprivate.h"
 

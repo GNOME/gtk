@@ -27,7 +27,7 @@
 
 #include "gdkclipboard-win32.h"
 #include "gdkdisplay-win32.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkwin32display.h"
 #include "gdkwin32surface.h"
 

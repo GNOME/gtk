@@ -22,7 +22,7 @@
 #include "gdkcursor.h"
 #include "gdkwin32.h"
 #include "gdktextureprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include "gdkdisplay-win32.h"
 

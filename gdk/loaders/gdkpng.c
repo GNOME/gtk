@@ -19,7 +19,7 @@
 
 #include "gdkpngprivate.h"
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"

@@ -22,7 +22,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevicetool.h"
 #include "gdkdisplayprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkkeysprivate.h"
 
 /**

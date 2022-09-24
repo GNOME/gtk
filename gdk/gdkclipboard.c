@@ -26,7 +26,7 @@
 #include "gdkcontentproviderprivate.h"
 #include "gdkcontentserializer.h"
 #include "gdkdisplay.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkpipeiostreamprivate.h"
 #include "gdktexture.h"
 #include "gdkprivate.h"

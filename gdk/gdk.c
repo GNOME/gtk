@@ -32,7 +32,7 @@
 #include "gdkdebugprivate.h"
 #include "gdkdisplay.h"
 #include "gdkglcontextprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate.h"
 #include <glib/gprintf.h>
 

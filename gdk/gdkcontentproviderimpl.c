@@ -24,7 +24,7 @@
 
 #include "gdkcontentformats.h"
 #include "gdkcontentserializer.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkcontentproviderimpl.h"
 
 #include "gdkprivate.h"

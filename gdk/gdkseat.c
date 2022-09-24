@@ -25,7 +25,7 @@
 #include "gdkdevicetoolprivate.h"
 #include "gdkseatprivate.h"
 #include "gdkdeviceprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 /**
  * GdkSeat:

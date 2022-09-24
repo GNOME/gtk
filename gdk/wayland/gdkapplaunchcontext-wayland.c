@@ -26,7 +26,7 @@
 #include "gdkwayland.h"
 #include "gdkprivate-wayland.h"
 #include "gdkapplaunchcontextprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 typedef struct {
   gchar *token;

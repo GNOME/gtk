@@ -36,7 +36,7 @@
 #include "gdkdragprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdksurfaceprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkseatprivate.h"
