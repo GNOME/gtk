@@ -33,8 +33,8 @@
 #include "config.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturedragprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 
 typedef struct _GtkGestureDragPrivate GtkGestureDragPrivate;
 typedef struct _EventData EventData;

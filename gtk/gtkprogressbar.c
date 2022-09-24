@@ -28,7 +28,7 @@
 
 #include "gtkboxlayout.h"
 #include "gtkgizmoprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkorientable.h"
 #include "gtkprogresstrackerprivate.h"

@@ -22,7 +22,6 @@
 #include "gtkmultisorter.h"
 
 #include "gtkbuildable.h"
-#include "gtkintl.h"
 #include "gtksorterprivate.h"
 #include "gtktypebuiltins.h"
 

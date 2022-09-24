@@ -21,7 +21,6 @@
 
 #include "focusoverlay.h"
 
-#include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkroot.h"
 #include "gtknative.h"

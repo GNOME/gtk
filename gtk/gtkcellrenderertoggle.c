@@ -21,7 +21,6 @@
 
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsstransientnodeprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkrendericonprivate.h"

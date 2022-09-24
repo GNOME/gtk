@@ -99,7 +99,7 @@
 
 #include "gtkcalendar.h"
 #include "gtkdroptarget.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtktooltip.h"

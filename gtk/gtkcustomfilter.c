@@ -21,7 +21,6 @@
 
 #include "gtkcustomfilter.h"
 
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
 /**

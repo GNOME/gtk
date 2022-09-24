@@ -25,9 +25,9 @@
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkrevealer.h"
-#include "gtkintl.h"
 #include "gtkspinner.h"
 #include "gtkprivatetypebuiltins.h"
+#include "gtkprivate.h"
 
 #ifdef HAVE_CLOUDPROVIDERS
 #include <cloudproviders.h>

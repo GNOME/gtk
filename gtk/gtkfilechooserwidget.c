@@ -62,7 +62,7 @@
 #include "gtkbox.h"
 #include "gtkcheckbutton.h"
 #include "gtkwindowgroup.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkshow.h"
 #include "gtkmain.h"
 #include "gtkscrollable.h"

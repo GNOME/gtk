@@ -21,7 +21,6 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
 
 #include "gdk/gdkeventsprivate.h"
 

@@ -29,7 +29,7 @@
 #include "gtkgestureclick.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtkpasswordentrybuffer.h"
 #include "gtkprivate.h"

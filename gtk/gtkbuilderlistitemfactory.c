@@ -23,7 +23,6 @@
 
 #include "gtkbuilder.h"
 #include "gtkbuilderprivate.h"
-#include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 

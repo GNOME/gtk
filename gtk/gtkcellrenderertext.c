@@ -23,7 +23,6 @@
 #include "gtkeditable.h"
 #include "gtkentry.h"
 #include "gtkentryprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"

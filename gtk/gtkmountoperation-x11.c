@@ -33,7 +33,7 @@
 #include "x11/gdkx.h"
 #include <X11/Xatom.h>
 #include <gtk/gtkicontheme.h>
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
 /* for the kill(2) system call and errno - POSIX.1-2001 and later */
 #include <sys/types.h>

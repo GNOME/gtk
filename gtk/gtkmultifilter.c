@@ -22,7 +22,6 @@
 #include "gtkmultifilter.h"
 
 #include "gtkbuildable.h"
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
 #define GDK_ARRAY_TYPE_NAME GtkFilters

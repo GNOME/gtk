@@ -90,7 +90,6 @@
 #include "gtkactionable.h"
 #include "gtkbuildable.h"
 #include "gtkbuiltiniconprivate.h"
-#include "gtkintl.h"
 #include "gtkimage.h"
 #include "gtkmain.h"
 #include "gtkmenubutton.h"

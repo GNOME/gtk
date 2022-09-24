@@ -47,7 +47,7 @@
 #undef STRICT
 #endif
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include "gtkbox.h"
 #include "gtkdebug.h"

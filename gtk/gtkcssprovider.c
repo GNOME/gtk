@@ -34,7 +34,6 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkversion.h"
 
 #include <string.h>

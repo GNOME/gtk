@@ -32,7 +32,6 @@
 #include "gtkeventcontrollerlegacy.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 struct _GtkEventControllerLegacy

@@ -53,7 +53,7 @@
 #include "gtksettings.h"
 #include "gtkheaderbar.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"

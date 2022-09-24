@@ -25,7 +25,6 @@
 #include "config.h"
 #include "gtkpango.h"
 #include <pango/pangocairo.h>
-#include "gtkintl.h"
 #include "gtkbuilderprivate.h"
 
 static gboolean

@@ -42,7 +42,6 @@
 
 #include "gtkappchooserdialog.h"
 
-#include "gtkintl.h"
 #include "gtkappchooser.h"
 #include "gtkappchooserprivate.h"
 

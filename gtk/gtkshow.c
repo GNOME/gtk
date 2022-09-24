@@ -25,7 +25,7 @@
 #include "gtkshow.h"
 #include "gtkwindowprivate.h"
 #include "gtkmessagedialog.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
 typedef struct {
   GtkWindow *parent;

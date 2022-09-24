@@ -44,7 +44,7 @@
 #include "gtkimageprivate.h"
 #include "gtkimcontextsimple.h"
 #include "gtkimmulticontext.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkmagnifierprivate.h"
 #include "gtkmain.h"

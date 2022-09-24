@@ -18,7 +18,6 @@
 #include "config.h"
 
 #include "gtkentrybuffer.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkwidget.h"

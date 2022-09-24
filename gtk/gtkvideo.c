@@ -24,13 +24,14 @@
 #include "gtkbinlayout.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmediacontrols.h"
 #include "gtkmediafile.h"
 #include "gtknative.h"
 #include "gtkpicture.h"
 #include "gtkrevealer.h"
 #include "gtkwidgetprivate.h"
+#include "gtkprivate.h"
 
 /**
  * GtkVideo:

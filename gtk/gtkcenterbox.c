@@ -64,7 +64,6 @@
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 struct _GtkCenterBox
 {

@@ -44,7 +44,6 @@
 #include "gtkconstraintsolverprivate.h"
 
 #include "gtkdebug.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 

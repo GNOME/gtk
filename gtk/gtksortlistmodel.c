@@ -22,7 +22,6 @@
 #include "gtksortlistmodel.h"
 
 #include "gtkbitset.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksorterprivate.h"
 #include "timsort/gtktimsortprivate.h"

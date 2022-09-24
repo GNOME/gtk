@@ -92,7 +92,6 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
-#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"

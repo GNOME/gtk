@@ -22,7 +22,6 @@
 #include "gtkmenutrackeritemprivate.h"
 #include "gtkactionmuxerprivate.h"
 #include "gtkdebug.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 #include <string.h>

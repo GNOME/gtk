@@ -134,7 +134,6 @@
 #include <errno.h>
 #include "gtkcelllayout.h"
 #include "gtkbuilderprivate.h"
-#include "gtkintl.h"
 
 #define warn_no_cell_area(func)					\
   g_critical ("%s: Called but no GtkCellArea is available yet", func)

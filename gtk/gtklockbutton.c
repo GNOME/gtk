@@ -22,10 +22,11 @@
 
 #include "gtkbox.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtksizegroup.h"
 #include "gtkstack.h"
+#include "gtkprivate.h"
 
 /**
  * GtkLockButton:

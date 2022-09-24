@@ -41,7 +41,6 @@
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

@@ -64,7 +64,6 @@
 #include "gtkbox.h"
 #include "gtkboxlayout.h"
 #include "gtkbuildable.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"

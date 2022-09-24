@@ -50,7 +50,6 @@
 #include "config.h"
 #include "gtktextbtree.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 
 /**

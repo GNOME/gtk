@@ -217,7 +217,6 @@
 #include "gtkexpression.h"
 #include "gtkmain.h"
 #include "gtkicontheme.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkshortcutactionprivate.h"
 #include "gtkshortcuttrigger.h"

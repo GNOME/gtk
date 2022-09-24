@@ -19,7 +19,7 @@
 
 #include "gtkcellrendereraccel.h"
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkaccelgroup.h"
 #include "gtkmarshalers.h"
 #include "gtklabel.h"

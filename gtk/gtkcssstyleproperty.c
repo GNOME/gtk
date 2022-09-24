@@ -26,7 +26,6 @@
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkcssunsetvalueprivate.h"
-#include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkprivate.h"
 

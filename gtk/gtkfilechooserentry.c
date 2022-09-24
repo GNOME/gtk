@@ -30,11 +30,11 @@
 #include "gtkmain.h"
 #include "gtksizerequest.h"
 #include "gtkwindow.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkfilefilterprivate.h"
 #include "gtkfilter.h"
 #include "gtkeventcontrollerfocus.h"
+#include "gtkprivate.h"
 
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
 

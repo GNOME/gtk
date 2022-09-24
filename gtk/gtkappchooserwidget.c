@@ -26,7 +26,6 @@
 
 #include "gtkappchooserwidget.h"
 
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkappchooserwidget.h"
 #include "gtkappchooserprivate.h"
@@ -39,6 +38,7 @@
 #include "gtklabel.h"
 #include "gtkgestureclick.h"
 #include "gtkwidgetprivate.h"
+#include "gtkprivate.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>

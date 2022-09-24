@@ -26,7 +26,6 @@
 #include "gtkwidgetprivate.h"
 #include "gdk/gdkprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 #include "gtkshortcutmanager.h"
 

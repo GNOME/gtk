@@ -23,7 +23,8 @@
 #include "gtksearchengineprivate.h"
 #include "gtksearchenginemodelprivate.h"
 #include "gtksearchenginequartzprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
+#include "gtkprivate.h"
 
 #include <gdk/gdk.h> /* for GDK_WINDOWING_MACOS */
 

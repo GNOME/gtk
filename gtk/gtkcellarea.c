@@ -343,7 +343,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "gtkintl.h"
 #include "gtkcelllayout.h"
 #include "gtkcellarea.h"
 #include "gtkcellareacontext.h"

@@ -22,7 +22,6 @@
 #include "gtkselectionfiltermodel.h"
 #include "gtkbitset.h"
 
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**

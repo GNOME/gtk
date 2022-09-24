@@ -29,7 +29,6 @@
 #include "gtkcelleditable.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 
 typedef GtkCellEditableIface GtkCellEditableInterface;

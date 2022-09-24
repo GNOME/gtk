@@ -120,7 +120,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtknative.h"
 

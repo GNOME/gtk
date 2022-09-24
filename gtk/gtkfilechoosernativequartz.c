@@ -22,6 +22,7 @@
 #include "gtkfilechoosernativeprivate.h"
 #include "gtknativedialogprivate.h"
 
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserprivate.h"
@@ -30,7 +31,6 @@
 #include "gtkfilechooserutils.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
-#include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtktogglebutton.h"
 #include "gtkheaderbar.h"

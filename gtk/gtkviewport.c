@@ -27,7 +27,6 @@
 #include "gtkviewport.h"
 
 #include "gtkadjustmentprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"

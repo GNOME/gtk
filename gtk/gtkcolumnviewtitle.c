@@ -24,7 +24,7 @@
 #include "gtkcolumnviewprivate.h"
 #include "gtkcolumnviewcolumnprivate.h"
 #include "gtkcolumnviewsorterprivate.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtklabel.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbox.h"

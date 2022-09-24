@@ -31,7 +31,6 @@
 #include "gtkshortcuttrigger.h"
 #include "gtkwidgetprivate.h"
 #include "gtkeventcontrollerfocus.h"
-#include "gtkintl.h"
 
 /**
  * GtkEditableLabel:

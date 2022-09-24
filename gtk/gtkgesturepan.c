@@ -41,7 +41,6 @@
 #include "gtkgesturepanprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 
 typedef struct _GtkGesturePanPrivate GtkGesturePanPrivate;

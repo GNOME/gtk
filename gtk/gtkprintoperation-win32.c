@@ -38,9 +38,9 @@
 #include <windows.h>
 #include <cairo-win32.h>
 #include <glib.h>
+#include <glib/gi18n-lib.h>
 #include "gtkprintoperation-private.h"
 #include "gtkprint-win32.h"
-#include "gtkintl.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"

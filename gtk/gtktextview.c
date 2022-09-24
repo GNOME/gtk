@@ -34,7 +34,7 @@
 #include "gtkdebug.h"
 #include "gtkdragsourceprivate.h"
 #include "gtkdropcontrollermotion.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkrenderbackgroundprivate.h"

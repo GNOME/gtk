@@ -20,7 +20,6 @@
 #include <string.h>
 #include <gmodule.h>
 
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkprinteroption.h"
 

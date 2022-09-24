@@ -37,7 +37,6 @@
  */
 
 #include "config.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkcellareacontext.h"
 #include "gtkprivate.h"

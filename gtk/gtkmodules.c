@@ -24,7 +24,6 @@
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtkmodulesprivate.h"
-#include "gtkintl.h"
 
 #include <gmodule.h>
 

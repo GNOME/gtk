@@ -23,7 +23,7 @@
 #include <gtk/gtk.h>
 
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtkplacesviewprivate.h"
 #include "gtkplacesviewrowprivate.h"

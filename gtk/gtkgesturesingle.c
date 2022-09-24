@@ -41,7 +41,6 @@
 #include "gtkgesturesingle.h"
 #include "gtkgesturesingleprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkdebug.h"
 
 typedef struct _GtkGestureSinglePrivate GtkGestureSinglePrivate;

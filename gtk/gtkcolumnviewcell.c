@@ -22,7 +22,7 @@
 #include "gtkcolumnviewcellprivate.h"
 
 #include "gtkcolumnviewcolumnprivate.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtklistitemwidgetprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssnodeprivate.h"

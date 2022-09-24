@@ -21,7 +21,6 @@
 
 #include "gtklistitemprivate.h"
 
-#include "gtkintl.h"
 
 /**
  * GtkListItem:

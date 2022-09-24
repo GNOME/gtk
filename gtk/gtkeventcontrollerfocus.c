@@ -33,7 +33,6 @@
 
 #include "config.h"
 
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"

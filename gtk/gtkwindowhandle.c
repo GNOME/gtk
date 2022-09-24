@@ -28,7 +28,7 @@
 #include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
 #include "gtkgestureprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmodelbuttonprivate.h"
 #include "gtknative.h"
 #include "gtkpopovermenuprivate.h"

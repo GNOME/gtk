@@ -45,7 +45,6 @@
  */
 
 #include "config.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkcelllayout.h"
 #include "gtkcellareabox.h"

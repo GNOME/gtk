@@ -26,7 +26,6 @@
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
 
 enum {

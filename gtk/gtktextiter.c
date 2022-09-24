@@ -27,7 +27,6 @@
 #include "gtktextbtree.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextiterprivate.h"
-#include "gtkintl.h"
 #include "gtkdebug.h"
 
 #include <string.h>

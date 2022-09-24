@@ -51,7 +51,7 @@
 #include "gtktextchild.h"
 #include "gtktextbtree.h"
 #include "gtktextlayoutprivate.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 typedef struct {
   char *replacement;

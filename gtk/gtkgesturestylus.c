@@ -30,7 +30,6 @@
 #include "gtkgesturestylus.h"
 #include "gtkgesturestylusprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"
 #include "gtknative.h"

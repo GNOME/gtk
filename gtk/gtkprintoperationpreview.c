@@ -20,7 +20,7 @@
 
 #include "gtkprintoperationpreview.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 
 /**

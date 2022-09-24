@@ -40,8 +40,7 @@
 #include "gtkgestureswipeprivate.h"
 #include "gtkgestureprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
-#include "gtkmarshalers.h"
+#include "gtkprivate.h"
 
 #define CAPTURE_THRESHOLD_MS 150
 

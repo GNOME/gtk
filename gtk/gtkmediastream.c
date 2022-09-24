@@ -21,7 +21,6 @@
 
 #include "gtkmediastream.h"
 
-#include "gtkintl.h"
 
 /**
  * GtkMediaStream:

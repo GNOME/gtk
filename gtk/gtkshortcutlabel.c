@@ -23,7 +23,8 @@
 #include "gtklabel.h"
 #include "gtkframe.h"
 #include "gtkwidgetprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
+#include "gtkprivate.h"
 
 /**
  * GtkShortcutLabel:

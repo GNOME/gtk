@@ -28,7 +28,6 @@
 
 #include "gtkbox.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"

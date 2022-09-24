@@ -31,7 +31,6 @@
 #include "gtkimagedefinitionprivate.h"
 #include "gtknative.h"
 #include "gtkwidgetprivate.h"
-#include "gtkintl.h"
 #include "gtkimageprivate.h"
 #include "gtkdragicon.h"
 #include "gtkprivate.h"

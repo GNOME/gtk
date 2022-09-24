@@ -50,7 +50,6 @@
 
 #include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 
 typedef struct _GtkAspectFrameClass GtkAspectFrameClass;

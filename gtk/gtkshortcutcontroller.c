@@ -70,7 +70,6 @@
 #include "gtkflattenlistmodel.h"
 #include "gtkbuildable.h"
 #include "gtkeventcontrollerprivate.h"
-#include "gtkintl.h"
 #include "gtkshortcut.h"
 #include "gtkshortcutmanager.h"
 #include "gtkshortcuttrigger.h"

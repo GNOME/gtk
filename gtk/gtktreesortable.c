@@ -19,7 +19,7 @@
 #include "config.h"
 #include "gtktreesortable.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 
 /**

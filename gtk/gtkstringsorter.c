@@ -21,7 +21,6 @@
 
 #include "gtkstringsorter.h"
 
-#include "gtkintl.h"
 #include "gtksorterprivate.h"
 #include "gtktypebuiltins.h"
 

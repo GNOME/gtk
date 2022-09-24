@@ -125,7 +125,6 @@
 #include "gtkbuiltiniconprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkmain.h"

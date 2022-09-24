@@ -20,7 +20,7 @@
 
 #include "config.h"
 
-#include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtktrashmonitor.h"
 

@@ -21,7 +21,6 @@
 
 #include "highlightoverlay.h"
 
-#include "gtkintl.h"
 #include "gtkwidget.h"
 
 struct _GtkHighlightOverlay

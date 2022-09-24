@@ -45,7 +45,6 @@
 #include "gtkmarshalers.h"
 #include "gtkdragsourceprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 
 typedef struct _GtkGestureLongPressPrivate GtkGestureLongPressPrivate;

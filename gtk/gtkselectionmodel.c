@@ -22,7 +22,6 @@
 #include "gtkselectionmodel.h"
 
 #include "gtkbitset.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 
 /**

@@ -24,7 +24,6 @@
 
 #include "gtkrevealer.h"
 
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"

@@ -27,7 +27,7 @@
 #include "gtkenums.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindowprivate.h"

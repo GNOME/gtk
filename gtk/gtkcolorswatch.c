@@ -28,7 +28,7 @@
 #include "gtkgesturesingle.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmain.h"
 #include "gtkmodelbuttonprivate.h"
 #include "gtkpopovermenu.h"

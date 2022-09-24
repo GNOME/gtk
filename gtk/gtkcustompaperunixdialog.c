@@ -25,7 +25,7 @@
 #include <langinfo.h>
 #endif
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 
 #include "gtkliststore.h"

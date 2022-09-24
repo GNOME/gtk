@@ -88,10 +88,10 @@
 #include "gtktextlinedisplaycacheprivate.h"
 #include "gtktextutil.h"
 #include "gskpango.h"
-#include "gtkintl.h"
 #include "gtksnapshotprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtktextviewprivate.h"
+#include "gtkprivate.h"
 
 #include <stdlib.h>
 #include <string.h>

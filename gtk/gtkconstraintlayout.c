@@ -206,7 +206,6 @@
 #include "gtkbuilderprivate.h"
 #include "gtkdebug.h"
 #include "gtklayoutchild.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
 #include "gtkwidgetprivate.h"

@@ -24,7 +24,6 @@
 #include "gtkcellareabox.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkcellrenderertext.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"

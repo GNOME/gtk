@@ -23,7 +23,6 @@
 #include "gtkbuildableprivate.h"
 #include "gtkbuilderscopeprivate.h"
 #include "gtkdebug.h"
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
 #include "gdkprofilerprivate.h"

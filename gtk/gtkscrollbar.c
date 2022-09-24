@@ -29,7 +29,6 @@
 #include "gtkrange.h"
 
 #include "gtkadjustment.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"

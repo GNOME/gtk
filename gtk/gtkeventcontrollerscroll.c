@@ -57,7 +57,6 @@
  */
 #include "config.h"
 
-#include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkeventcontrollerprivate.h"
 #include "gtkeventcontrollerscroll.h"

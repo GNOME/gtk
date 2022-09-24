@@ -24,13 +24,13 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtknativeprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkrendericonprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkprivate.h"
 
 #include "gdk/gdksurfaceprivate.h"
 

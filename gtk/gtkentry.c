@@ -44,7 +44,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkimageprivate.h"
 #include "gtkimcontextsimple.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

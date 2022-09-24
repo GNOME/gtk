@@ -28,7 +28,6 @@
 #include "gtkcellrenderertext.h"
 #include "gtkdragsourceprivate.h"
 #include "gtkentry.h"
-#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"

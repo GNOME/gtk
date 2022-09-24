@@ -21,7 +21,7 @@
 #include <string.h>
 #include <locale.h>
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 
 #include "gtkbutton.h"

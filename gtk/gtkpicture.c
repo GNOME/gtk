@@ -24,7 +24,6 @@
 #include "gtkcssnodeprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstyleprivate.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"
 #include "gtktypebuiltins.h"

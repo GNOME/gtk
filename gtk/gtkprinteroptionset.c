@@ -22,7 +22,7 @@
 #include <gmodule.h>
 
 #include "gtkprinteroptionset.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 /*****************************************
  *         GtkPrinterOptionSet    *

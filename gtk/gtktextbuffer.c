@@ -37,7 +37,6 @@
 #include "gtktexttagtableprivate.h"
 #include "gtkpango.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 #define DEFAULT_MAX_UNDO 200
 

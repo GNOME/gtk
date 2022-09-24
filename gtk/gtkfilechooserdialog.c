@@ -27,7 +27,7 @@
 #include "gtkfilechooserutils.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtksettings.h"
 #include "gtktogglebutton.h"
 #include "gtkheaderbar.h"

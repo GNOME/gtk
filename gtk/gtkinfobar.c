@@ -40,7 +40,6 @@
 #include "gtkenums.h"
 #include "gtkdialog.h"
 #include "gtkrevealer.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"

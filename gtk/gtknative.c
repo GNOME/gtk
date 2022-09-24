@@ -21,7 +21,6 @@
 
 #include <math.h>
 
-#include "gtkintl.h"
 
 #include "gtkcssboxesimplprivate.h"
 #include "gtkcsscolorvalueprivate.h"

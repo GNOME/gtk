@@ -29,7 +29,7 @@
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
 #include "gtkprintoperation.h"  /* for GtkPrintError */
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
 /* _gtk_load_custom_papers() only on Unix so far  */
 #ifdef G_OS_UNIX

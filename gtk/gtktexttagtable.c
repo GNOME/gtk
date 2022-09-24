@@ -31,7 +31,7 @@
 #include "gtktexttagprivate.h"
 #include "gtkmarshalers.h"
 #include "gtktextbufferprivate.h" /* just for the lame notify_will_remove_tag hack */
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 #include <stdlib.h>
 

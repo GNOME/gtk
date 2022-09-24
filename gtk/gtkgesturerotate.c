@@ -32,7 +32,7 @@
 #include "gtkgesturerotate.h"
 #include "gtkgesturerotateprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 typedef struct _GtkGestureRotatePrivate GtkGestureRotatePrivate;
 

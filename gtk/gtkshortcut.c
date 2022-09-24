@@ -21,7 +21,6 @@
 
 #include "gtkshortcut.h"
 
-#include "gtkintl.h"
 #include "gtkshortcutaction.h"
 #include "gtkshortcuttrigger.h"
 #include "gtkwidget.h"

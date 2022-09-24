@@ -21,9 +21,9 @@
 
 #include "gtksignallistitemfactory.h"
 
-#include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitem.h"
+#include "gtkprivate.h"
 
 /**
  * GtkSignalListItemFactory:

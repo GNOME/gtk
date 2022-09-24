@@ -20,7 +20,6 @@
 #include "config.h"
 
 #include "gtkactionbar.h"
-#include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtktypebuiltins.h"
 #include "gtkbox.h"

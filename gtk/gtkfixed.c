@@ -69,7 +69,6 @@
 #include "gtkfixed.h"
 
 #include "gtkfixedlayout.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbuildable.h"

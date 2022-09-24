@@ -41,7 +41,6 @@
 
 #include "gtkconstraintprivate.h"
 #include "gtkconstraintsolverprivate.h"
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidget.h"
 

@@ -25,7 +25,6 @@
 #include "gtkeventcontrollerfocus.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkgestureclick.h"
-#include "gtkintl.h"
 #include "gtklistitemfactoryprivate.h"
 #include "gtklistitemprivate.h"
 #include "gtklistbaseprivate.h"

@@ -77,7 +77,6 @@
 #include "gtkbutton.h"
 #include "gtkframe.h"
 #include "gtkheaderbar.h"
-#include "gtkintl.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtklistlistmodelprivate.h"

@@ -24,7 +24,6 @@
 
 #include "config.h"
 #include "gtkdrawingarea.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"

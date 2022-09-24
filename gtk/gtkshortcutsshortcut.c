@@ -22,7 +22,7 @@
 
 #include "gtkimage.h"
 #include "gtkbox.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"

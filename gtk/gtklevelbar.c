@@ -125,13 +125,13 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkgizmoprivate.h"
-#include "gtkintl.h"
 #include "gtklevelbar.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkcssnodeprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtkprivate.h"
 
 #include <math.h>
 #include <stdlib.h>

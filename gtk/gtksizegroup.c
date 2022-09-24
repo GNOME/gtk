@@ -22,7 +22,6 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkwidget.h"
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtksizegroup-private.h"

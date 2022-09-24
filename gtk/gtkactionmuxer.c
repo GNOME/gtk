@@ -24,7 +24,6 @@
 #include "gtkactionobservableprivate.h"
 #include "gtkactionobserverprivate.h"
 #include "gtkbitmaskprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkwidgetprivate.h"
 #include "gsettings-mapping.h"

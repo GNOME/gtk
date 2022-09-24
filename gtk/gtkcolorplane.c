@@ -23,7 +23,6 @@
 #include "gtkcolorutils.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturelongpress.h"
-#include "gtkintl.h"
 #include "gtksnapshot.h"
 #include "gtkprivate.h"
 #include "gtkeventcontrollerkey.h"

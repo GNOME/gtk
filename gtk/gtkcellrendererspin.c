@@ -23,7 +23,6 @@
 #include "gtkcellrendererspin.h"
 
 #include "gtkadjustment.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkspinbutton.h"
 #include "gtkentry.h"

@@ -47,7 +47,6 @@
 
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkdebug.h"
-#include "gtkintl.h"
 #include "gtklayoutchild.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"

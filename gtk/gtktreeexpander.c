@@ -27,7 +27,7 @@
 #include "gtkdropcontrollermotion.h"
 #include "gtkenums.h"
 #include "gtkgestureclick.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtktreelistmodel.h"
 #include "gtkprivate.h"
 
