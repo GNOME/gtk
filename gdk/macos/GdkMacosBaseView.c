@@ -28,7 +28,7 @@
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacossurface-private.h"
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 
 @implementation GdkMacosBaseView
 

@@ -27,7 +27,6 @@
 #include "gtkaccessibleprivate.h"
 #include "gtkatcontextprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksnapshot.h"

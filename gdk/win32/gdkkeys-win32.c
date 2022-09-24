@@ -28,7 +28,7 @@
 #include "gdk.h"
 
 #include "gdkprivate-win32.h"
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkkeysyms.h"
 #include "gdkkeysprivate.h"

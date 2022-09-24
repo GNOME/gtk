@@ -41,7 +41,6 @@
 
 #include "gtkaccelgroupprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 #define GTK_SHORTCUT_TRIGGER_HASH_NEVER         0u
 #define GTK_SHORTCUT_TRIGGER_HASH_KEYVAL        1u

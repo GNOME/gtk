@@ -25,7 +25,7 @@
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 /**
  * GtkTreeModel:

@@ -41,7 +41,7 @@
 #include "gskrendererprivate.h"
 #include "gtkboxlayout.h"
 
-#include "gdk/gdkdebug.h"
+#include "gdk/gdkdebugprivate.h"
 
 struct _GtkInspectorLogs
 {

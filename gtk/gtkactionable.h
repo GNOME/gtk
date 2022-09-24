@@ -75,6 +75,8 @@ GDK_AVAILABLE_IN_ALL
 void                    gtk_actionable_set_detailed_action_name         (GtkActionable *actionable,
                                                                          const char    *detailed_action_name);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkActionable, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_ACTIONABLE_H__ */

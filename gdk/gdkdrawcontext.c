@@ -22,8 +22,8 @@
 
 #include "gdkdrawcontextprivate.h"
 
-#include "gdkdebug.h"
-#include "gdkintl.h"
+#include "gdkdebugprivate.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprofilerprivate.h"
 #include "gdksurfaceprivate.h"
 

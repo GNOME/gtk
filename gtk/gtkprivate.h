@@ -27,8 +27,8 @@
 
 #include <glib-object.h>
 #include <gdk/gdk.h>
-#include <gdk/gdk-private.h>
-#include <gdk/gdkdebug.h>
+#include <gdk/gdkprivate.h>
+#include <gdk/gdkdebugprivate.h>
 
 #include "gtkcsstypesprivate.h"
 #include "gtktexthandleprivate.h"

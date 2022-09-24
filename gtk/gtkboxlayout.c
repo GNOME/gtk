@@ -21,7 +21,6 @@
 #include "gtkboxlayout.h"
 
 #include "gtkcsspositionvalueprivate.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"

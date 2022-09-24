@@ -22,7 +22,6 @@
 #include "gtkgridview.h"
 
 #include "gtkbitset.h"
-#include "gtkintl.h"
 #include "gtklistbaseprivate.h"
 #include "gtklistitemfactory.h"
 #include "gtklistitemmanagerprivate.h"

@@ -71,6 +71,8 @@ void          gtk_combo_box_text_prepend         (GtkComboBoxText     *combo_box
                                                   const char          *id,
                                                   const char          *text);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkComboBoxText, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_COMBO_BOX_TEXT_H__ */

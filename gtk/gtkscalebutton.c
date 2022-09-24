@@ -43,7 +43,6 @@
 #include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
 #include "gtkgesture.h"
-#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"

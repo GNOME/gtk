@@ -20,7 +20,6 @@
 #include "gtkmagnifierprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtksnapshot.h"
-#include "gtkintl.h"
 
 enum {
   PROP_INSPECTED = 1,

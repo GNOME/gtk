@@ -25,7 +25,6 @@
 #include "gtkbuildable.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkgridlayout.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"

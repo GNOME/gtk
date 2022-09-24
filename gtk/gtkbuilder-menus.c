@@ -21,7 +21,7 @@
 
 #include "gtkbuilderprivate.h"
 #include "gtkbuildableprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include <gio/gio.h>
 #include <string.h>

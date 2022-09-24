@@ -21,7 +21,6 @@
 
 #include "gtkdirectorylist.h"
 
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**

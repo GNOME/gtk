@@ -64,6 +64,7 @@ void            gtk_list_item_set_child                         (GtkListItem    
 GDK_AVAILABLE_IN_ALL
 GtkWidget *     gtk_list_item_get_child                         (GtkListItem            *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListItem, g_object_unref)
 
 G_END_DECLS
 

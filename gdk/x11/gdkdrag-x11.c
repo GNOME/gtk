@@ -26,7 +26,7 @@
 
 #include "gdkx11dnd.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 #include "gdkasync.h"
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-x11.h"
@@ -36,7 +36,7 @@
 #include "gdkdragprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdksurfaceprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkseatprivate.h"

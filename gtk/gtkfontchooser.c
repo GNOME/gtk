@@ -22,7 +22,6 @@
 
 #include "gtkfontchooser.h"
 #include "gtkfontchooserprivate.h"
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 

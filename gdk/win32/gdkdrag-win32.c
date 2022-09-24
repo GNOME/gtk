@@ -30,7 +30,7 @@
 
 #include "gdkeventsprivate.h"
 #include "gdkseatprivate.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <fcntl.h>
 #include <io.h>
@@ -214,7 +214,7 @@
 #include <shlobj.h>
 #include <shlguid.h>
 #include <objidl.h>
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include <gdk/gdk.h>
 #include <glib/gstdio.h>

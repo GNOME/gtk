@@ -54,6 +54,8 @@ void           gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
 GDK_AVAILABLE_IN_ALL
 GtkAdjustment *gtk_scrollbar_get_adjustment (GtkScrollbar  *self);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkScrollbar, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_SCROLLBAR_H__ */

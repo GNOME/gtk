@@ -27,7 +27,7 @@
 #include <stdlib.h>
 
 #include "gtkcellrendererprogress.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"

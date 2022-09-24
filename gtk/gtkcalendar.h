@@ -86,6 +86,8 @@ GDK_AVAILABLE_IN_ALL
 gboolean   gtk_calendar_get_day_is_marked      (GtkCalendar    *calendar,
                                                 guint           day);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCalendar, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_CALENDAR_H__ */

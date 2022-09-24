@@ -23,7 +23,6 @@
 
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**

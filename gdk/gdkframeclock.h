@@ -106,6 +106,8 @@ void gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
 GDK_AVAILABLE_IN_ALL
 double gdk_frame_clock_get_fps (GdkFrameClock *frame_clock);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkFrameClock, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_FRAME_CLOCK_H__ */

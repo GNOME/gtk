@@ -33,7 +33,6 @@
 
 #include "gtkpropertylookuplistmodelprivate.h"
 
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 enum {

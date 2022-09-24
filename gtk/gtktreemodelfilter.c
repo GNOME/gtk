@@ -18,7 +18,6 @@
 
 #include "config.h"
 #include "gtktreemodelfilter.h"
-#include "gtkintl.h"
 #include "gtktreednd.h"
 #include "gtkprivate.h"
 #include <string.h>

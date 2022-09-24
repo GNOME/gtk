@@ -44,7 +44,7 @@
 #include "gtkgestureclick.h"
 #include "gtkheaderbar.h"
 #include "gtkicontheme.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmessagedialog.h"

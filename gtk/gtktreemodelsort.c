@@ -23,7 +23,6 @@
 #include "gtktreesortable.h"
 #include "gtktreestore.h"
 #include "gtktreedatalist.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktreednd.h"
 

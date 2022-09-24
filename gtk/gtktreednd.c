@@ -18,7 +18,6 @@
 #include "config.h"
 #include <string.h>
 #include "gtktreednd.h"
-#include "gtkintl.h"
 
 #include "gtkprivate.h"
 

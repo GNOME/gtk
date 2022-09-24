@@ -28,10 +28,10 @@
 
 #include "gtkdropprivate.h"
 #include "gtkeventcontrollerprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtknative.h"
 #include "gtktypebuiltins.h"
+#include "gtkprivate.h"
 
 
 /**

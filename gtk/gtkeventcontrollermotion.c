@@ -32,7 +32,6 @@
  */
 #include "config.h"
 
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkmarshalers.h"

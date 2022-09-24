@@ -36,7 +36,7 @@
 #include "gdkwayland.h"
 
 #include "gdkprivate-wayland.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 #include "gdkkeysprivate.h"
 
 #include <xkbcommon/xkbcommon.h>

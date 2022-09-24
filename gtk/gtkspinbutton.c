@@ -47,7 +47,6 @@
 #include "gtkgestureclick.h"
 #include "gtkgestureswipe.h"
 #include "gtkicontheme.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"

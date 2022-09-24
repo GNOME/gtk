@@ -243,6 +243,8 @@ GtkWidget *gtk_notebook_page_get_child (GtkNotebookPage *page);
 GDK_AVAILABLE_IN_ALL
 GListModel *gtk_notebook_get_pages (GtkNotebook *notebook);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkNotebook, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_NOTEBOOK_H__ */

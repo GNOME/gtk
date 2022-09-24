@@ -20,7 +20,6 @@
 #include "gtkpopovermenuprivate.h"
 
 #include "gtkstack.h"
-#include "gtkintl.h"
 #include "gtkmenusectionboxprivate.h"
 #include "gtkmenubutton.h"
 #include "gtkactionmuxerprivate.h"

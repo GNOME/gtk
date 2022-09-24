@@ -35,7 +35,7 @@
 #include "gtkpagesetup.h"
 #include "gtkprintbackendprivate.h"
 #include "gtkshow.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkwindowprivate.h"
 #include "gtkprivate.h"
 

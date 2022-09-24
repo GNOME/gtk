@@ -27,7 +27,7 @@
 
 #include "gtkprintoperation-private.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtkmessagedialog.h"
 #include "gtkwindowgroup.h"

@@ -134,6 +134,7 @@ void                    gsk_transform_transform_point           (GskTransform   
                                                                  const graphene_point_t          *point,
                                                                  graphene_point_t                *out_point);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskTransform, gsk_transform_unref)
 
 G_END_DECLS
 

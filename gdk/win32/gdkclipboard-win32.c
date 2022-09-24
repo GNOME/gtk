@@ -20,11 +20,11 @@
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-win32.h"
 
-#include "gdkdebug.h"
-#include "gdkintl.h"
+#include "gdkdebugprivate.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate-win32.h"
 #include "gdkhdataoutputstream-win32.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 #include <string.h>
 

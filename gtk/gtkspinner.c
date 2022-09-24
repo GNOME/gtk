@@ -32,7 +32,6 @@
 #include "gtkspinner.h"
 
 #include "gtkimage.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"

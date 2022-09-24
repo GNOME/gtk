@@ -21,7 +21,6 @@
 
 #include "fpsoverlay.h"
 
-#include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtknative.h"

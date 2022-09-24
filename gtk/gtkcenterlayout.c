@@ -19,7 +19,6 @@
 #include "gtkcenterlayout.h"
 
 #include "gtkcsspositionvalueprivate.h"
-#include "gtkintl.h"
 #include "gtklayoutchild.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"

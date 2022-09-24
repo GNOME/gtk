@@ -64,7 +64,6 @@
 #include "gtkgesturepan.h"
 #include "gtkgesturesingle.h"
 #include "gtkgizmoprivate.h"
-#include "gtkintl.h"
 #include "gtkimage.h"
 #include "gtkcustomlayout.h"
 #include "gtkmarshalers.h"

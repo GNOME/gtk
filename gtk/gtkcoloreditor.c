@@ -27,7 +27,6 @@
 #include "gtkcolorpickerprivate.h"
 #include "gtkgrid.h"
 #include "gtkbutton.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkentry.h"
 #include "gtkoverlay.h"

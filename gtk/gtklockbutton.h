@@ -40,6 +40,7 @@ GDK_AVAILABLE_IN_ALL
 void         gtk_lock_button_set_permission (GtkLockButton *button,
                                              GPermission   *permission);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLockButton, g_object_unref)
 
 G_END_DECLS
 

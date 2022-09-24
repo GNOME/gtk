@@ -22,7 +22,6 @@
 #include "gtkactionable.h"
 
 #include "gtkwidget.h"
-#include "gtkintl.h"
 
 /**
  * GtkActionable:

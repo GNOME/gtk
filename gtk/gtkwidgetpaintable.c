@@ -21,7 +21,6 @@
 
 #include "gtkwidgetpaintableprivate.h"
 
-#include "gtkintl.h"
 #include "gtksnapshot.h"
 #include "gtkrendernodepaintableprivate.h"
 #include "gtkwidgetprivate.h"

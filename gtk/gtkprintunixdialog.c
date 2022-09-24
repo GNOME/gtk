@@ -46,7 +46,7 @@
 #include "gtkbuildable.h"
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkdialogprivate.h"

@@ -29,6 +29,11 @@
 #include "gdkdisplay.h"
 #include "gdkdisplaymanagerprivate.h"
 
+#include "keynamesprivate.h"
+#include <glib/gprintf.h>
+#include <stdlib.h>
+#include <string.h>
+
 enum {
   PROP_0,
   PROP_DISPLAY,
@@ -614,7 +619,73 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 								  consumed_modifiers);
 }
 
-#include "gdkkeynames.c"
+static int
+gdk_keys_keyval_compare (const void *pkey, const void *pbase)
+{
+  return (*(int *) pkey) - ((gdk_key *) pbase)->keyval;
+}
+
+static char *
+_gdk_keyval_name (guint keyval)
+{
+  static char buf[100];
+  gdk_key *found;
+
+  /* Check for directly encoded 24-bit UCS characters: */
+  if ((keyval & 0xff000000) == 0x01000000)
+    {
+      g_sprintf (buf, "U+%.04X", (keyval & 0x00ffffff));
+      return buf;
+    }
+
+  found = bsearch (&keyval,
+                   gdk_keys_by_keyval, G_N_ELEMENTS (gdk_keys_by_keyval),
+                   sizeof (gdk_key),
+                   gdk_keys_keyval_compare);
+
+  if (found != NULL)
+    {
+      while ((found > gdk_keys_by_keyval) &&
+             ((found - 1)->keyval == keyval))
+        found--;
+
+      return (char *) (keynames + found->offset);
+    }
+  else if (keyval != 0)
+    {
+      g_sprintf (buf, "%#x", keyval);
+      return buf;
+    }
+
+  return NULL;
+}
+
+static int
+gdk_keys_name_compare (const void *pkey, const void *pbase)
+{
+  return strcmp ((const char *) pkey,
+                 (const char *) (keynames + ((const gdk_key *) pbase)->offset));
+}
+
+static guint
+_gdk_keyval_from_name (const char *keyval_name)
+{
+  gdk_key *found;
+
+  g_return_val_if_fail (keyval_name != NULL, 0);
+
+  if (strncmp (keyval_name,"XF86", 4) == 0)
+    keyval_name += 4;
+
+  found = bsearch (keyval_name,
+                   gdk_keys_by_name, G_N_ELEMENTS (gdk_keys_by_name),
+                   sizeof (gdk_key),
+                   gdk_keys_name_compare);
+  if (found != NULL)
+    return found->keyval;
+  else
+    return GDK_KEY_VoidSymbol;
+}
 
 /**
  * gdk_keyval_name:

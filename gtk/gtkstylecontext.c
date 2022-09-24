@@ -25,7 +25,6 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsstransientnodeprivate.h"
 #include "gtkdebug.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtksettingsprivate.h"

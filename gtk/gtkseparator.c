@@ -27,7 +27,6 @@
 #include "gtkseparator.h"
 
 #include "gtkaccessible.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"

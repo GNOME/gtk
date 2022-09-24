@@ -67,7 +67,6 @@
 #include "gtkcelllayout.h"
 #include "gtkcellareabox.h"
 
-#include "gtkintl.h"
 #include "gtkcellrenderertext.h"
 #include "gtktreeselection.h"
 #include "gtktreeview.h"

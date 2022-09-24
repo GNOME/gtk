@@ -47,7 +47,6 @@
 
 #include "gtkappchooser.h"
 
-#include "gtkintl.h"
 #include "gtkappchooserprivate.h"
 #include "gtkwidget.h"
 

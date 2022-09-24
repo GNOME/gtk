@@ -24,7 +24,6 @@
 #include <colord.h>
 #endif
 
-#include "gtkintl.h"
 #include "gtkprintercups.h"
 
 enum {

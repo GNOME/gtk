@@ -31,7 +31,7 @@
 #include "gdkx11property.h"
 #include <X11/Xatom.h>
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include <cairo-xlib.h>
 

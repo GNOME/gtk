@@ -49,7 +49,7 @@
 #include "gdkdragprivate.h"
 #include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkpipeiostreamprivate.h"
 #include "gdksurface.h"
 

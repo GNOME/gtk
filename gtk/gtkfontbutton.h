@@ -69,6 +69,8 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_font_button_set_use_size   (GtkFontButton *font_button,
                                                       gboolean       use_size);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFontButton, g_object_unref)
+
 G_END_DECLS
 
 

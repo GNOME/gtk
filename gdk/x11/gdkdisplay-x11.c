@@ -47,7 +47,7 @@
 #include "gdkscreen-x11.h"
 #include "gdkvulkancontext-x11.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>

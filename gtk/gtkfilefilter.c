@@ -75,7 +75,6 @@
 #include "gtkfilefilterprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkfilter.h"
 

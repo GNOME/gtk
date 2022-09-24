@@ -52,6 +52,8 @@ gboolean                gdk_draw_context_is_in_frame            (GdkDrawContext 
 GDK_AVAILABLE_IN_ALL
 const cairo_region_t *  gdk_draw_context_get_frame_region       (GdkDrawContext         *context);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDrawContext, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_DRAW_CONTEXT__ */

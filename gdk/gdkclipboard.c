@@ -26,10 +26,10 @@
 #include "gdkcontentproviderprivate.h"
 #include "gdkcontentserializer.h"
 #include "gdkdisplay.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkpipeiostreamprivate.h"
 #include "gdktexture.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <gobject/gvaluecollector.h>
 

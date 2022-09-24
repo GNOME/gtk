@@ -19,7 +19,6 @@
 
 #include "gtkdragicon.h"
 
-#include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstypesprivate.h"

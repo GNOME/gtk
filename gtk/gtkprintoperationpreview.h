@@ -78,6 +78,8 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_print_operation_preview_is_selected (GtkPrintOperationPreview *preview,
 						  int                       page_nr);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPrintOperationPreview, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_PRINT_OPERATION_PREVIEW_H__ */

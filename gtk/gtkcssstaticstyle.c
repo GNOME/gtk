@@ -32,7 +32,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtkstyleanimationprivate.h"
 #include "gtkstylepropertyprivate.h"

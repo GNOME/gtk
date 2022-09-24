@@ -21,7 +21,7 @@
 
 #include "gdkjpegprivate.h"
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdktexture.h"
 #include "gdkmemorytextureprivate.h"
 

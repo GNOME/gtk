@@ -21,7 +21,7 @@
 
 #include "gdkdevicetoolprivate.h"
 #include "gdkenumtypes.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 /**
  * GdkDeviceTool:

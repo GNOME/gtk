@@ -21,7 +21,7 @@
 
 #include <gmodule.h>
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkdebug.h"
 #include "gtkmodulesprivate.h"
 #include "gtkmarshalers.h"

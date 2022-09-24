@@ -25,7 +25,7 @@
 #include "config.h"
 
 #include "gdk/gdk.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gsk/gskprivate.h"
 #include "gsk/gskrendernodeprivate.h"
@@ -47,7 +47,7 @@
 #undef STRICT
 #endif
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include "gtkbox.h"
 #include "gtkdebug.h"

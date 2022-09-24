@@ -121,6 +121,8 @@ void       gtk_adjustment_configure             (GtkAdjustment   *adjustment,
 GDK_AVAILABLE_IN_ALL
 double     gtk_adjustment_get_minimum_increment (GtkAdjustment   *adjustment);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAdjustment, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_ADJUSTMENT_H__ */

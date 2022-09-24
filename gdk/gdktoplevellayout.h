@@ -78,6 +78,8 @@ void                    gdk_toplevel_layout_set_resizable (GdkToplevelLayout *la
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_toplevel_layout_get_resizable (GdkToplevelLayout *layout);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkToplevelLayout, gdk_toplevel_layout_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_TOPLEVEL_LAYOUT_H__ */

@@ -700,7 +700,6 @@ gtk_public_headers = files([
   'gtkwindowcontrols.h',
   'gtkwindowgroup.h',
   'gtkwindowhandle.h',
-  'gtk-autocleanups.h',
   'gtk.h',
 ])
 

@@ -76,14 +76,14 @@
 
 #include "gdkglcontextprivate.h"
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkdisplayprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #ifdef GDK_WINDOWING_WIN32
 # include "gdk/win32/gdkwin32.h"

@@ -24,10 +24,10 @@
 
 #include "gdkcontentformats.h"
 #include "gdkcontentserializer.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkcontentproviderimpl.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #define GDK_TYPE_CONTENT_PROVIDER_VALUE            (gdk_content_provider_value_get_type ())
 #define GDK_CONTENT_PROVIDER_VALUE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_CONTENT_PROVIDER_VALUE, GdkContentProviderValue))

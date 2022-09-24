@@ -40,7 +40,6 @@
 #include "gtkicontheme.h"
 #include "gtkbuilder.h"
 #include "gtkshortcutswindow.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 /* NB: please do not add backend-specific GDK headers here.  This should

@@ -32,7 +32,7 @@
 #include "gdkdevice-broadway.h"
 #include "gdkdeviceprivate.h"
 #include <gdk/gdktextureprivate.h>
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>

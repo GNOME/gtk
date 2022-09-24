@@ -25,7 +25,6 @@
 #include "gtkbox.h"
 #include "gtkbuildable.h"
 #include "gtkcenterbox.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtknative.h"
 #include "gtkprivate.h"

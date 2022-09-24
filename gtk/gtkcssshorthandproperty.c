@@ -25,7 +25,6 @@
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssunsetvalueprivate.h"
-#include "gtkintl.h"
 
 enum {
   PROP_0,

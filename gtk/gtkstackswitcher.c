@@ -24,7 +24,6 @@
 #include "gtkboxlayout.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"

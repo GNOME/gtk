@@ -2,7 +2,7 @@
 #define __GSK_DEBUG_PRIVATE_H__
 
 #include <glib.h>
-#include "gdk/gdkdebug.h"
+#include "gdk/gdkdebugprivate.h"
 
 G_BEGIN_DECLS
 

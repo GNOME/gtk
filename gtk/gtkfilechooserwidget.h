@@ -39,6 +39,8 @@ GType      gtk_file_chooser_widget_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget *gtk_file_chooser_widget_new              (GtkFileChooserAction  action);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFileChooserWidget, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_CHOOSER_WIDGET_H__ */

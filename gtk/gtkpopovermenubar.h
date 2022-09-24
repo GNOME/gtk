@@ -55,6 +55,9 @@ gboolean     gtk_popover_menu_bar_add_child      (GtkPopoverMenuBar *bar,
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_popover_menu_bar_remove_child   (GtkPopoverMenuBar *bar,
                                                   GtkWidget         *child);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPopoverMenuBar, g_object_unref)
+
 G_END_DECLS
 
 

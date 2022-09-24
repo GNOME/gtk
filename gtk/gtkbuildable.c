@@ -36,7 +36,6 @@
 
 #include "config.h"
 #include "gtkbuildableprivate.h"
-#include "gtkintl.h"
 
 
 typedef GtkBuildableIface GtkBuildableInterface;

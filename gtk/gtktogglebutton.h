@@ -83,6 +83,7 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_toggle_button_set_group         (GtkToggleButton *toggle_button,
                                                 GtkToggleButton *group);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkToggleButton, g_object_unref)
 
 G_END_DECLS
 

@@ -46,7 +46,6 @@
 #include "gtkgesturesingle.h"
 #include "gtkgestureswipe.h"
 #include "gtkgestureprivate.h"
-#include "gtkintl.h"
 #include "gtklayoutmanagerprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

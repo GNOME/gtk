@@ -32,7 +32,6 @@
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"

@@ -42,7 +42,6 @@
 #include <sys/stat.h>
 
 #include <glib/gstdio.h>
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 #include "gtkprintjob.h"

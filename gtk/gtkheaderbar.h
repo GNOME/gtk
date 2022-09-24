@@ -67,6 +67,8 @@ void         gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
 GDK_AVAILABLE_IN_ALL
 const char *gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkHeaderBar, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_HEADER_BAR_H__ */

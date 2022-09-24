@@ -29,7 +29,6 @@
 #include "gtkaccessible.h"
 #include "gtkbuttonprivate.h"
 #include "gtkenums.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

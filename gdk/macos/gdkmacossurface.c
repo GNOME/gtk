@@ -27,7 +27,7 @@
 
 #include "gdkmacossurface-private.h"
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay.h"
 #include "gdkeventsprivate.h"

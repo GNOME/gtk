@@ -19,8 +19,8 @@
 
 #include "config.h"
 
-#include "gdk-private.h"
-#include "gdkintl.h"
+#include "gdkprivate.h"
+#include <glib/gi18n-lib.h>
 #include "gdkpopupprivate.h"
 
 /**

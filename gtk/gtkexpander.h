@@ -85,6 +85,7 @@ void                  gtk_expander_set_child           (GtkExpander *expander,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *           gtk_expander_get_child           (GtkExpander *expander);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkExpander, g_object_unref)
 
 G_END_DECLS
 

@@ -160,6 +160,9 @@ gboolean gtk_tree_get_row_drag_data            (const GValue      *value,
 						GtkTreeModel     **tree_model,
 						GtkTreePath      **path);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeDragDest, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeDragSource, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_TREE_DND_H__ */

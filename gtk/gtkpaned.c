@@ -31,7 +31,6 @@
 #include "gtkgesturepan.h"
 #include "gtkgesturesingle.h"
 #include "gtkpanedhandleprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"

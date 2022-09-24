@@ -25,7 +25,6 @@
 #include "gtkbinlayout.h"
 #include "gtkbuildable.h"
 #include "gtkgestureclick.h"
-#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"

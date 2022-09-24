@@ -22,7 +22,6 @@
 #include "gtkcolumnviewsorterprivate.h"
 
 #include "gtkcolumnviewcolumnprivate.h"
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
 
 typedef struct

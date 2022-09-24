@@ -13,7 +13,7 @@
 #include "gdkbroadway-server.h"
 
 #include "gdkprivate-broadway.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <gdk/gdktextureprivate.h>
 
@@ -34,7 +34,7 @@
 #ifdef G_OS_WIN32
 #include <windows.h>
 #endif
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 typedef struct BroadwayInput BroadwayInput;
 

@@ -21,7 +21,6 @@
 
 #include "gtkslicelistmodel.h"
 
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**

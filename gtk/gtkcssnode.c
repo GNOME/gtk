@@ -22,7 +22,6 @@
 #include "gtkcssstaticstyleprivate.h"
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtksettingsprivate.h"
 #include "gtktypebuiltins.h"

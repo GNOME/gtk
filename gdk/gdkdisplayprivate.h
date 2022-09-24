@@ -22,7 +22,7 @@
 #include "gdksurface.h"
 #include "gdkcursor.h"
 #include "gdkmonitor.h"
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdksurfaceprivate.h"
 #include "gdkkeysprivate.h"
 #include "gdkdeviceprivate.h"

@@ -25,7 +25,6 @@
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
 #include "gtkdebug.h"
-#include "gtkintl.h"
 
 
 /**

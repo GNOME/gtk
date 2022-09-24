@@ -24,7 +24,7 @@
 #include "gtkbuildable.h"
 #include "gtkgrid.h"
 #include "gtkheaderbar.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtklistbox.h"
 #include "gtkmain.h"

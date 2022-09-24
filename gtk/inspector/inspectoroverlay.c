@@ -21,7 +21,6 @@
 
 #include "inspectoroverlay.h"
 
-#include "gtkintl.h"
 
 G_DEFINE_ABSTRACT_TYPE (GtkInspectorOverlay, gtk_inspector_overlay, G_TYPE_OBJECT)
 

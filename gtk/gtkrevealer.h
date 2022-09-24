@@ -74,6 +74,8 @@ void                       gtk_revealer_set_child               (GtkRevealer    
 GDK_AVAILABLE_IN_ALL
 GtkWidget *                gtk_revealer_get_child               (GtkRevealer               *revealer);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRevealer, g_object_unref)
+
 G_END_DECLS
 
 #endif  /* __GTK_REVEALER_H__ */

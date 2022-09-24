@@ -54,7 +54,6 @@
 #include "gtkshortcutactionprivate.h"
 
 #include "gtkbuilder.h"
-#include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"

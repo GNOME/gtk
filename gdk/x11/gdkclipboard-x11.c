@@ -20,13 +20,13 @@
 #include "gdkclipboardprivate.h"
 #include "gdkclipboard-x11.h"
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkselectioninputstream-x11.h"
 #include "gdkselectionoutputstream-x11.h"
 #include "gdktextlistconverter-x11.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 #include <string.h>
 #include <X11/Xatom.h>

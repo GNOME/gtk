@@ -31,7 +31,7 @@
 #include "gtkbuiltiniconprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkgestureclick.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkprivate.h"
 #include "gtkshortcuttrigger.h"

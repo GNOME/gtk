@@ -22,7 +22,6 @@
 #include "gtkbutton.h"
 #include "gtkbox.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtksettings.h"
 
 #include "gtkcolorchooserprivate.h"

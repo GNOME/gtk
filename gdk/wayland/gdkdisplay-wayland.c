@@ -56,7 +56,7 @@
 
 #include "wm-button-layout-translation.h"
 
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 /* Keep g_assert() defined even if we disable it globally,
  * as we use it in many places as a handy mechanism to check

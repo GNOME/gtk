@@ -70,7 +70,6 @@ gsk_public_headers = files([
   'gskroundedrect.h',
   'gsktransform.h',
   'gsktypes.h',
-  'gsk-autocleanup.h',
 ])
 install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
 

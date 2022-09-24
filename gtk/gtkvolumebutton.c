@@ -30,7 +30,7 @@
 #include "gtkvolumebutton.h"
 
 #include "gtkadjustment.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtktooltip.h"
 #include "gtkprivate.h"
 

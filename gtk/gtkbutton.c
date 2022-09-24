@@ -68,7 +68,6 @@
 #include "gtkeventcontrollerkey.h"
 #include "gtkbinlayout.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

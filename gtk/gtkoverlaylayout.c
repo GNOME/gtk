@@ -22,7 +22,6 @@
 
 #include "gtkoverlaylayout.h"
 
-#include "gtkintl.h"
 #include "gtklayoutchild.h"
 #include "gtkoverlay.h"
 #include "gtkprivate.h"

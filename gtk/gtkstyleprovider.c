@@ -19,7 +19,6 @@
 
 #include "gtkstyleproviderprivate.h"
 
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**

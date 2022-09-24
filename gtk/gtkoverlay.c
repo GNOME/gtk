@@ -24,7 +24,6 @@
 
 #include "gtkoverlaylayout.h"
 #include "gtkbuildable.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"

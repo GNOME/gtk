@@ -23,7 +23,6 @@
 
 #include "gtk/gtkdragsourceprivate.h"
 #include "gtk/gtkimcontextwayland.h"
-#include "gtk/gtkintl.h"
 #include "gtk/gtkimmoduleprivate.h"
 
 #include "gdk/wayland/gdkwayland.h"

@@ -32,7 +32,7 @@
 #include <math.h>
 #include "gtkgesturezoom.h"
 #include "gtkgesturezoomprivate.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 typedef struct _GtkGestureZoomPrivate GtkGestureZoomPrivate;
 

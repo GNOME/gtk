@@ -36,7 +36,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdktypes.h"
 #include "gdkwayland.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include "pointer-gestures-unstable-v1-client-protocol.h"
 #include "tablet-unstable-v2-client-protocol.h"

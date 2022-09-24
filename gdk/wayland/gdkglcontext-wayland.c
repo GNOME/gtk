@@ -31,11 +31,11 @@
 #include "gdkwaylandsurface.h"
 #include "gdkprivate-wayland.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 #include "gdksurfaceprivate.h"
 #include "gdkprofilerprivate.h"
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 /**
  * GdkWaylandGLContext:

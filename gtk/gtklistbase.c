@@ -27,7 +27,6 @@
 #include "gtkdropcontrollermotion.h"
 #include "gtkgesturedrag.h"
 #include "gtkgizmoprivate.h"
-#include "gtkintl.h"
 #include "gtklistitemwidgetprivate.h"
 #include "gtkmultiselection.h"
 #include "gtkorientable.h"

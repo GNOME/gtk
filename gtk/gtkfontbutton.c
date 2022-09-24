@@ -35,7 +35,7 @@
 #include "gtkfontchooser.h"
 #include "gtkfontchooserdialog.h"
 #include "gtkfontchooserutils.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"

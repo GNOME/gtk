@@ -29,7 +29,7 @@
 
 #include "gdksurface.h"
 
-#include "gdk-private.h"
+#include "gdkprivate.h"
 #include "gdkcontentprovider.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
@@ -37,7 +37,7 @@
 #include "gdkeventsprivate.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkglcontextprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkmarshalers.h"
 #include "gdkpopupprivate.h"
 #include "gdkrectangle.h"

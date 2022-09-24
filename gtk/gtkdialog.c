@@ -36,7 +36,6 @@
 #include "gtkmarshalers.h"
 #include "gtkbox.h"
 #include "gtkmain.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"

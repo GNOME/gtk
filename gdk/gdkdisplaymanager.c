@@ -28,7 +28,7 @@
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkkeysprivate.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"

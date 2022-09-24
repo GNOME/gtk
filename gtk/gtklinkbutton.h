@@ -59,6 +59,7 @@ GDK_AVAILABLE_IN_ALL
 void                  gtk_link_button_set_visited       (GtkLinkButton *link_button,
                                                          gboolean       visited);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLinkButton, g_object_unref)
 
 G_END_DECLS
 

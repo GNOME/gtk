@@ -24,7 +24,7 @@
 #include "gtkstylecontextprivate.h"
 
 #include "gtkwidgetprivate.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 /* A private class used as the child of GtkPopover. The only thing
  * special here is that we need to queue a resize on the popover when

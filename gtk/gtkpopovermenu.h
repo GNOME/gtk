@@ -70,6 +70,8 @@ GDK_AVAILABLE_IN_ALL
 gboolean    gtk_popover_menu_remove_child (GtkPopoverMenu *popover,
                                            GtkWidget      *child);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPopoverMenu, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_MENU_H__ */

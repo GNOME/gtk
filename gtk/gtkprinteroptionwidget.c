@@ -21,7 +21,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkcheckbutton.h"
 #include "gtkdropdown.h"
 #include "gtklistitem.h"

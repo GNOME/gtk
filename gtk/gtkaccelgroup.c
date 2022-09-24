@@ -28,7 +28,7 @@
 
 #include "gtkaccelgroup.h"
 #include "gtkaccelgroupprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 

@@ -154,6 +154,7 @@ void          gtk_combo_box_set_child            (GtkComboBox *combo_box,
 GDK_AVAILABLE_IN_ALL
 GtkWidget *   gtk_combo_box_get_child            (GtkComboBox *combo_box);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkComboBox, g_object_unref)
 
 G_END_DECLS
 

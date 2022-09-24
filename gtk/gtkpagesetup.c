@@ -21,7 +21,7 @@
 #include "gtkpagesetup.h"
 #include "gtkprintutils.h"
 #include "gtkprintoperation.h" /* for GtkPrintError */
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtktypebuiltins.h"
 
 /**

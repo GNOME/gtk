@@ -26,7 +26,6 @@
 #include "gtklistbox.h"
 #include "gtklabel.h"
 #include "gtkpopover.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkgesturelongpress.h"
 #include "gtkeventcontrollerkey.h"

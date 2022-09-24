@@ -25,7 +25,6 @@
 #include <math.h>
 #include <string.h>
 
-#include "gtkintl.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"
 #include "gtksettings.h"

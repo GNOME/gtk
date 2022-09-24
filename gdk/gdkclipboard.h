@@ -120,6 +120,8 @@ GDK_AVAILABLE_IN_ALL
 void                    gdk_clipboard_set_texture       (GdkClipboard          *clipboard,
                                                          GdkTexture            *texture);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkClipboard, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_CLIPBOARD_H__ */

@@ -33,7 +33,7 @@
 #include "gtkdbusgenerated.h"
 #include "gtkentry.h"
 #include "gtkbox.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkmessagedialog.h"
 #include "gtkmountoperation.h"

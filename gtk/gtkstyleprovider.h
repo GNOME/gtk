@@ -88,6 +88,8 @@ typedef struct _GtkStyleProvider GtkStyleProvider; /* dummy typedef */
 GDK_AVAILABLE_IN_ALL
 GType gtk_style_provider_get_type (void) G_GNUC_CONST;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkStyleProvider, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_PROVIDER_H__ */

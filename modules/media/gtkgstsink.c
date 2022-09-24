@@ -23,7 +23,6 @@
 #include "gtkgstsinkprivate.h"
 
 #include "gtkgstpaintableprivate.h"
-#include "gtkintl.h"
 
 #if GST_GL_HAVE_WINDOW_X11 && (GST_GL_HAVE_PLATFORM_GLX || GST_GL_HAVE_PLATFORM_EGL) && defined (GDK_WINDOWING_X11)
 #define HAVE_GST_X11_SUPPORT

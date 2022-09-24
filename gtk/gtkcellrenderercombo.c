@@ -18,7 +18,6 @@
 #include "config.h"
 #include <string.h>
 
-#include "gtkintl.h"
 #include "gtkentry.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderercombo.h"

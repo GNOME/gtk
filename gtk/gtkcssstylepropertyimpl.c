@@ -28,7 +28,6 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
 
 /* the actual parsers we have */

@@ -22,7 +22,6 @@
 #include "gtkdropdown.h"
 
 #include "gtkbuiltiniconprivate.h"
-#include "gtkintl.h"
 #include "gtklistview.h"
 #include "gtklistitemfactory.h"
 #include "gtksignallistitemfactory.h"

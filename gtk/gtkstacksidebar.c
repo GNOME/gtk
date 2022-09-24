@@ -32,7 +32,6 @@
 #include "gtkstack.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkintl.h"
 
 /**
  * GtkStackSidebar:

@@ -67,7 +67,7 @@
 #include "gtktextmarkprivate.h"
 #include "gtktextsegment.h"
 #include "gtkpango.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 /*
  * Types

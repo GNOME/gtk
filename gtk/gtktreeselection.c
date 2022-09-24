@@ -21,7 +21,6 @@
 #include "gtktreeprivate.h"
 #include "gtktreerbtreeprivate.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 

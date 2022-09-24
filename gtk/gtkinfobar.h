@@ -105,6 +105,8 @@ void           gtk_info_bar_set_revealed           (GtkInfoBar     *info_bar,
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_info_bar_get_revealed           (GtkInfoBar     *info_bar);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkInfoBar, g_object_unref)
+
 G_END_DECLS
 
 #endif  /* __GTK_INFO_BAR_H__  */

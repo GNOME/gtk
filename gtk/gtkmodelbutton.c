@@ -32,7 +32,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkstack.h"
 #include "gtkpopovermenuprivate.h"
-#include "gtkintl.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkbuiltiniconprivate.h"

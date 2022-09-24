@@ -43,7 +43,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtknative.h"
 
 typedef struct _GtkEventControllerPrivate GtkEventControllerPrivate;

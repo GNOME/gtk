@@ -61,6 +61,7 @@ void        gtk_action_bar_set_revealed       (GtkActionBar *action_bar,
 GDK_AVAILABLE_IN_ALL
 gboolean    gtk_action_bar_get_revealed       (GtkActionBar *action_bar);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkActionBar, g_object_unref)
 
 G_END_DECLS
 

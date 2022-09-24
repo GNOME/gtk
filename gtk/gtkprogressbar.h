@@ -83,6 +83,8 @@ void               gtk_progress_bar_set_show_text (GtkProgressBar     *pbar,
 GDK_AVAILABLE_IN_ALL
 gboolean           gtk_progress_bar_get_show_text (GtkProgressBar     *pbar);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkProgressBar, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_PROGRESS_BAR_H__ */

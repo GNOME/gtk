@@ -58,6 +58,7 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_cell_renderer_toggle_set_activatable (GtkCellRendererToggle *toggle,
                                                           gboolean               setting);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellRendererToggle, g_object_unref)
 
 G_END_DECLS
 

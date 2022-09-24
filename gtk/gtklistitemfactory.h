@@ -42,6 +42,7 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 GType        gtk_list_item_factory_get_type       (void) G_GNUC_CONST;
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListItemFactory, g_object_unref)
 
 G_END_DECLS
 

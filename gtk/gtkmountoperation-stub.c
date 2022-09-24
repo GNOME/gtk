@@ -26,8 +26,7 @@
 #include "config.h"
 
 #include <gio/gio.h>
-#include "gtkintl.h"
-
+#include <glib/gi18n-lib.h>
 #include "gtkmountoperationprivate.h"
 
 GtkMountOperationLookupContext *

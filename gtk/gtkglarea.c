@@ -22,7 +22,7 @@
 
 #include "config.h"
 #include "gtkglarea.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"

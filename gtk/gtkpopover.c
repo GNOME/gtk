@@ -111,7 +111,6 @@
 #include "gtkenums.h"
 #include "gtktypebuiltins.h"
 #include "gtkpopovercontentprivate.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkstack.h"

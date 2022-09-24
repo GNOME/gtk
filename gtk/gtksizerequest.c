@@ -24,7 +24,6 @@
 #include "gtksizerequest.h"
 
 #include "gtkdebug.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksizegroup-private.h"
 #include "gtksizerequestcacheprivate.h"

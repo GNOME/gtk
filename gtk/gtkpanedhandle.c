@@ -26,7 +26,7 @@
 #include "gtkcssstyleprivate.h"
 #include "gtkrendericonprivate.h"
 #include "gtkcssboxesprivate.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
 
 #include "gtkpaned.h"
 

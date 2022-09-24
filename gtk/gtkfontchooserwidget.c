@@ -36,7 +36,7 @@
 #include "gtkgrid.h"
 #include "gtkfontchooser.h"
 #include "gtkfontchooserutils.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtksingleselection.h"
 #include "gtkstack.h"

@@ -168,6 +168,8 @@ gboolean gtk_im_context_delete_surrounding  (GtkIMContext       *context,
 					     int                 offset,
 					     int                 n_chars);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkIMContext, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_IM_CONTEXT_H__ */

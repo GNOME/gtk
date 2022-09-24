@@ -22,7 +22,6 @@
 #include "gtkbookmarklist.h"
 
 #include "gtksettings.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**

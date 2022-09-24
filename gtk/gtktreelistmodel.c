@@ -22,7 +22,6 @@
 #include "gtktreelistmodel.h"
 
 #include "gtkrbtreeprivate.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 /**

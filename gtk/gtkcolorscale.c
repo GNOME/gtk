@@ -26,7 +26,6 @@
 #include "gtkorientable.h"
 #include "gtkrangeprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtksnapshot.h"
 #include "gtkshortcutcontroller.h"
 #include "gtkshortcuttrigger.h"

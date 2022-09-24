@@ -38,7 +38,6 @@
 #include "gtkgesturelongpressprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkgizmoprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"

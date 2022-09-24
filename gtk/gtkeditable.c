@@ -161,7 +161,6 @@
 #include "gtkeditable.h"
 #include "gtkentrybuffer.h"
 #include "gtkmarshalers.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 
 G_DEFINE_INTERFACE (GtkEditable, gtk_editable, GTK_TYPE_WIDGET)

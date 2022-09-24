@@ -35,7 +35,7 @@
 #include "gtkgestureclick.h"
 #include "gtktextprivate.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkstylecontext.h"

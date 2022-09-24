@@ -22,7 +22,6 @@
 #include "gtklistviewprivate.h"
 
 #include "gtkbitset.h"
-#include "gtkintl.h"
 #include "gtklistbaseprivate.h"
 #include "gtklistitemmanagerprivate.h"
 #include "gtkmain.h"

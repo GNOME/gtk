@@ -28,7 +28,6 @@
 #include "gtkeventcontrollerscroll.h"
 #include "gtkframe.h"
 #include "gtkbuiltiniconprivate.h"
-#include "gtkintl.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

@@ -29,7 +29,6 @@
 #include "gtkcolumnviewsorterprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkdropcontrollermotion.h"
-#include "gtkintl.h"
 #include "gtklistviewprivate.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"

@@ -21,7 +21,8 @@
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtktypebuiltins.h"
-#include "gtkintl.h"
+#include "gtkprivate.h"
+#include <glib/gi18n-lib.h>
 
 
 static gboolean       delegate_set_current_folder     (GtkFileChooser    *chooser,

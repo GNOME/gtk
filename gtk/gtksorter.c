@@ -21,8 +21,9 @@
 
 #include "gtksorterprivate.h"
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtktypebuiltins.h"
+#include "gtkprivate.h"
 
 /**
  * GtkSorter:

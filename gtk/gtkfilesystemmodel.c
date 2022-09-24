@@ -24,7 +24,6 @@
 #include <string.h>
 
 #include "gtkfilechooserutils.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktreedatalist.h"
 #include "gtktreednd.h"

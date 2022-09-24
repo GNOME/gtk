@@ -34,7 +34,6 @@
 #include "gtkgestureclick.h"
 #include "gtkgestureclickprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
 
 typedef struct _GtkGestureClickPrivate GtkGestureClickPrivate;

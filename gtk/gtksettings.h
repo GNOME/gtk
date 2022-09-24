@@ -45,6 +45,8 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_settings_reset_property       (GtkSettings            *settings,
                                             const char             *name);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSettings, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_SETTINGS_H__ */

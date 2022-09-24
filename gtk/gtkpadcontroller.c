@@ -75,7 +75,6 @@
 #include "gtkpadcontroller.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>

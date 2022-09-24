@@ -25,7 +25,6 @@
 #include "gtkcellarea.h"
 #include "gtkcelllayout.h"
 #include "gtkcellview.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkgizmoprivate.h"
 #include "gtkwidgetprivate.h"

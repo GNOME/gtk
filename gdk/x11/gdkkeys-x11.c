@@ -30,7 +30,7 @@
 #include "gdkkeysyms.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <stdio.h>
 #include <stdlib.h>

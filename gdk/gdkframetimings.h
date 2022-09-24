@@ -51,6 +51,8 @@ gint64           gdk_frame_timings_get_refresh_interval  (GdkFrameTimings *timin
 GDK_AVAILABLE_IN_ALL
 gint64           gdk_frame_timings_get_predicted_presentation_time (GdkFrameTimings *timings);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkFrameTimings, gdk_frame_timings_unref)
+
 G_END_DECLS
 
 #endif /* __GDK_FRAME_TIMINGS_H__ */

@@ -63,7 +63,6 @@
 #include "gtkboxlayout.h"
 #include "gtklabel.h"
 #include "gtkmenubutton.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkgestureclick.h"

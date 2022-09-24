@@ -1,7 +1,7 @@
 #include "config.h"
 
 #include "gskdebugprivate.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 static const GdkDebugKey gsk_debug_keys[] = {
   { "renderer", GSK_DEBUG_RENDERER, "General renderer information" },

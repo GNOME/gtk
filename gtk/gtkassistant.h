@@ -180,6 +180,8 @@ GtkWidget *           gtk_assistant_page_get_child (GtkAssistantPage *page);
 GDK_AVAILABLE_IN_ALL
 GListModel *          gtk_assistant_get_pages (GtkAssistant *assistant);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAssistant, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_ASSISTANT_H__ */

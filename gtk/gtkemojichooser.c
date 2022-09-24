@@ -30,7 +30,6 @@
 #include "gtkgesturelongpress.h"
 #include "gtkpopover.h"
 #include "gtkscrolledwindow.h"
-#include "gtkintl.h"
 #include "gtksearchentryprivate.h"
 #include "gtktext.h"
 #include "gtknative.h"

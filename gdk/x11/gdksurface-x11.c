@@ -42,7 +42,7 @@
 #include "gdktextureprivate.h"
 
 #include "gdkseatprivate.h"
-#include "gdk-private.h"
+#include "gdkprivate.h"
 
 #include <graphene.h>
 #include <stdlib.h>

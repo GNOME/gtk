@@ -20,7 +20,6 @@
 
 #include "gtkcolorchooser.h"
 #include "gtkcolorchooserprivate.h"
-#include "gtkintl.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtksnapshot.h"

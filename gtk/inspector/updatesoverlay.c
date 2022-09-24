@@ -21,7 +21,6 @@
 
 #include "updatesoverlay.h"
 
-#include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtknative.h"
 

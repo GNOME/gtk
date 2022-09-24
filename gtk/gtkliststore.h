@@ -146,6 +146,7 @@ void          gtk_list_store_move_before      (GtkListStore *store,
                                                GtkTreeIter  *iter,
                                                GtkTreeIter  *position);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListStore, g_object_unref)
 
 G_END_DECLS
 

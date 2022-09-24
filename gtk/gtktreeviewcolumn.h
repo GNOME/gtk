@@ -246,6 +246,7 @@ GtkWidget              *gtk_tree_view_column_get_tree_view       (GtkTreeViewCol
 GDK_AVAILABLE_IN_ALL
 GtkWidget              *gtk_tree_view_column_get_button          (GtkTreeViewColumn       *tree_column);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeViewColumn, g_object_unref)
 
 G_END_DECLS
 

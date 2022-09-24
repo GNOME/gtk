@@ -42,7 +42,7 @@
 #include "gtkprinter.h"
 #include "gtkprintjob.h"
 #include "gtklabel.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
 
 typedef struct

@@ -21,7 +21,7 @@
 
 #include "gtknomediafileprivate.h"
 
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
 struct _GtkNoMediaFile
 {

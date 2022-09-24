@@ -21,7 +21,6 @@
 #include "gtksettingsprivate.h"
 
 #include "gtkcssproviderprivate.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstylecontextprivate.h"
@@ -30,7 +29,7 @@
 #include "gtkversion.h"
 #include "gtkwidgetprivate.h"
 
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 
 #include <string.h>
 

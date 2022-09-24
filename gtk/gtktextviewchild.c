@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include "gtkcssnodeprivate.h"
-#include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktextview.h"
 #include "gtktextviewchildprivate.h"

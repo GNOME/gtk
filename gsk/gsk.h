@@ -32,8 +32,6 @@
 #include <gsk/gsktypes.h>
 #include <gsk/gskenumtypes.h>
 
-#include <gsk/gsk-autocleanup.h>
-
 #undef __GSK_H_INSIDE__
 
 #endif /* __GSK_H__ */

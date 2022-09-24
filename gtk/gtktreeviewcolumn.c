@@ -27,7 +27,6 @@
 #include "gtkdragsourceprivate.h"
 #include "gtkframe.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"

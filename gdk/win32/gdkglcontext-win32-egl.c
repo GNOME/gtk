@@ -35,7 +35,7 @@
 
 #include "gdkglcontext.h"
 #include "gdksurface.h"
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 
 #include <cairo.h>
 #include <epoxy/egl.h>

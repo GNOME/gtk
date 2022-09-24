@@ -51,6 +51,7 @@ GType            gtk_cell_renderer_accel_get_type        (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkCellRenderer *gtk_cell_renderer_accel_new             (void);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellRendererAccel, g_object_unref)
 
 G_END_DECLS
 

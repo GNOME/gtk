@@ -24,9 +24,8 @@
 #include "gtknativeprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gdk/gdk-private.h"
+#include "gdk/gdkprivate.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
 
 #include "gtkshortcutmanager.h"
 

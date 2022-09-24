@@ -23,7 +23,7 @@
 
 #include "gtkdebug.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmodulesprivate.h"
 #include "gtknomediafileprivate.h"
 

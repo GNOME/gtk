@@ -25,9 +25,9 @@
 #include "gtkapplicationprivate.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 
-#include "gdk/gdkconstructor.h"
+#include "gdk/gdkconstructorprivate.h"
 
 G_DEFINE_TYPE (GtkApplicationImplDBus, gtk_application_impl_dbus, GTK_TYPE_APPLICATION_IMPL)
 

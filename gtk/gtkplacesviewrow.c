@@ -30,7 +30,7 @@
 #include "gtkbutton.h"
 #include "gtkgesture.h"
 #include "gtkimage.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkspinner.h"
 #include "gtkstack.h"

@@ -54,7 +54,7 @@
 #include <gdkscreen-x11.h>
 #include <gdkprivate-x11.h>
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 
 static int
 parse_boolean (char *v)

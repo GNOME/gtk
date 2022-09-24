@@ -44,7 +44,6 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkdebug.h"
 #include "gtkiconcacheprivate.h"
-#include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtksettingsprivate.h"

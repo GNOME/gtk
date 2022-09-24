@@ -23,8 +23,8 @@
 
 #include "gdkdisplay.h"
 #include "gdkenumtypes.h"
-#include "gdkintl.h"
-#include "gdk-private.h"
+#include <glib/gi18n-lib.h>
+#include "gdkprivate.h"
 
 #include <graphene-gobject.h>
 #include <math.h>

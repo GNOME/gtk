@@ -22,7 +22,7 @@
 
 #include "gdktextlistconverter-x11.h"
 
-#include "gdkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gdkprivate-x11.h"
 
 #define GDK_X11_TEXT_LIST_CONVERTER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GDK_TYPE_X11_TEXT_LIST_CONVERTER, GdkX11TextListConverterClass))

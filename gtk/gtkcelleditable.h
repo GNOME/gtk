@@ -70,6 +70,7 @@ void  gtk_cell_editable_editing_done  (GtkCellEditable *cell_editable);
 GDK_AVAILABLE_IN_ALL
 void  gtk_cell_editable_remove_widget (GtkCellEditable *cell_editable);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellEditable, g_object_unref)
 
 G_END_DECLS
 

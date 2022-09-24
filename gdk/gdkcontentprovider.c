@@ -22,8 +22,8 @@
 
 #include "gdkclipboard.h"
 #include "gdkcontentformats.h"
-#include "gdkintl.h"
-#include "gdk-private.h"
+#include <glib/gi18n-lib.h>
+#include "gdkprivate.h"
 
 /**
  * GdkContentProvider:

@@ -32,7 +32,7 @@
 #include "gtkgesturedrag.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
-#include "gtkintl.h"
+#include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
 #include "gtknotebook.h"
 #include "gtkpango.h"

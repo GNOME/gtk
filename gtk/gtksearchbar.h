@@ -77,6 +77,7 @@ void        gtk_search_bar_set_child          (GtkSearchBar *bar,
 GDK_AVAILABLE_IN_ALL
 GtkWidget * gtk_search_bar_get_child          (GtkSearchBar *bar);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSearchBar, g_object_unref)
 
 G_END_DECLS
 

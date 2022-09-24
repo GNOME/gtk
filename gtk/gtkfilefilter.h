@@ -68,6 +68,8 @@ GVariant      * gtk_file_filter_to_gvariant        (GtkFileFilter *filter);
 GDK_AVAILABLE_IN_ALL
 GtkFileFilter * gtk_file_filter_new_from_gvariant  (GVariant      *variant);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkFileFilter, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_FILTER_H__ */

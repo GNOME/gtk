@@ -77,6 +77,8 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_app_chooser_button_set_modal             (GtkAppChooserButton *self,
                                                        gboolean             modal);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAppChooserButton, g_object_unref)
+
 G_END_DECLS
 
 #endif /* __GTK_APP_CHOOSER_BUTTON_H__ */

@@ -31,7 +31,6 @@
 #include "gtkstylecontextprivate.h"
 #include "gtktextbuffer.h"
 #include "gtktextlayoutprivate.h"
-#include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsscolorvalueprivate.h"
