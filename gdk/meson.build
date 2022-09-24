@@ -35,7 +35,7 @@ gdk_public_sources = files([
   'gdkmonitor.c',
   'gdkpaintable.c',
   'gdkpango.c',
-  'gdkpixbuf-drawable.c',
+  'gdkpixbuf.c',
   'gdkpipeiostream.c',
   'gdkrectangle.c',
   'gdkrgba.c',
