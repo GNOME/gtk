@@ -35,7 +35,7 @@
 #include "gtkmediafileprivate.h"
 #include "gtkimmoduleprivate.h"
 
-#include "gdk/gdkdebug.h"
+#include "gdk/gdkdebugprivate.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"

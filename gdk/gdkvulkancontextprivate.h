@@ -23,7 +23,7 @@
 
 #include "gdkvulkancontext.h"
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkdrawcontextprivate.h"
 #include "gdkenums.h"
 

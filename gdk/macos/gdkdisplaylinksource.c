@@ -26,7 +26,7 @@
 
 #include "gdkdisplaylinksource.h"
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkmacoseventsource-private.h"
 #include "gdkmacosmonitor-private.h"
 #include "gdk-private.h"

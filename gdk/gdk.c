@@ -29,7 +29,7 @@
 #include "gdkresources.h"
 
 #include "gdkconstructor.h"
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkdisplay.h"
 #include "gdkglcontextprivate.h"
 #include "gdkintl.h"

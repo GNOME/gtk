@@ -60,7 +60,7 @@
 #include "broadway/gdkbroadway.h"
 #endif
 
-#include "gdk/gdkdebug.h"
+#include "gdk/gdkdebugprivate.h"
 
 #define EPSILON               1e-10
 

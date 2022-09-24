@@ -49,7 +49,7 @@
 #include "general.h"
 #include "logs.h"
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkmarshalers.h"
 #include "gskrendererprivate.h"
 #include "gtkbutton.h"

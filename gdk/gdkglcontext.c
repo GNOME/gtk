@@ -76,7 +76,7 @@
 
 #include "gdkglcontextprivate.h"
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkintl.h"
 #include "gdkmemoryformatprivate.h"

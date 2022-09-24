@@ -273,7 +273,7 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 /* for CIDA */
 #include <shlobj.h>
 
-#include "gdkdebug.h"
+#include "gdkdebugprivate.h"
 #include "gdkdisplay.h"
 #include "gdkprivate-win32.h"
 #include "gdkclipboardprivate.h"
@@ -284,7 +284,7 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 #include "gdkwin32dnd-private.h"
 #include "gdkwin32.h"
 
-#include "gdk/gdkdebug.h"
+#include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdragprivate.h"
 #include "gdk/gdkintl.h"
 #include "gdk/gdk-private.h"
