@@ -4241,7 +4241,6 @@ gtk_text_commit_cb (GtkIMContext *context,
     {
       gtk_text_enter_text (self, str);
       gtk_text_obscure_mouse_cursor (self);
-      gtk_im_context_reset (context);
     }
 }
 
@@ -4302,7 +4301,6 @@ gtk_text_delete_surrounding_cb (GtkIMContext *context,
       gtk_editable_delete_text (GTK_EDITABLE (self),
                                 priv->current_pos + offset,
                                 priv->current_pos + offset + n_chars);
-      gtk_im_context_reset (context);
     }
 
   return TRUE;
