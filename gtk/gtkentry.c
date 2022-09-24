@@ -6082,10 +6082,7 @@ gtk_entry_commit_cb (GtkIMContext *context,
   GtkEntryPrivate *priv = entry->priv;
 
   if (priv->editable)
-    {
-      gtk_entry_enter_text (entry, str);
-      gtk_im_context_reset (context);
-    }
+    gtk_entry_enter_text (entry, str);
 }
 
 static void 
@@ -6137,12 +6134,9 @@ gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
   GtkEntryPrivate *priv = entry->priv;
 
   if (priv->editable)
-    {
-      gtk_editable_delete_text (GTK_EDITABLE (entry),
-                                priv->current_pos + offset,
-                                priv->current_pos + offset + n_chars);
-      gtk_im_context_reset (slave);
-    }
+    gtk_editable_delete_text (GTK_EDITABLE (entry),
+                              priv->current_pos + offset,
+                              priv->current_pos + offset + n_chars);
 
   return TRUE;
 }

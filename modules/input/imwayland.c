@@ -260,9 +260,14 @@ text_input_delete_surrounding_text_apply (GtkIMContextWaylandGlobal *global)
   len = context->pending_surrounding_delete.after_length
       + context->pending_surrounding_delete.before_length;
   if (len > 0)
-    g_signal_emit_by_name (global->current, "delete-surrounding",
-                           -context->pending_surrounding_delete.before_length,
-                           len, &retval);
+    {
+      g_signal_emit_by_name (global->current, "delete-surrounding",
+                             -context->pending_surrounding_delete.before_length,
+                             len, &retval);
+      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD);
+    }
+
   context->pending_surrounding_delete = defaults;
 }
 
@@ -927,6 +932,17 @@ gtk_im_context_wayland_get_surrounding (GtkIMContext  *context,
 }
 
 static void
+gtk_im_context_wayland_commit (GtkIMContext *context,
+                               const gchar  *str)
+{
+  if (GTK_IM_CONTEXT_CLASS (parent_class)->commit)
+    GTK_IM_CONTEXT_CLASS (parent_class)->commit (context, str);
+
+  notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                    ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD);
+}
+
+static void
 gtk_im_context_wayland_class_init (GtkIMContextWaylandClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -944,6 +960,7 @@ gtk_im_context_wayland_class_init (GtkIMContextWaylandClass *klass)
   im_context_class->set_use_preedit = gtk_im_context_wayland_set_use_preedit;
   im_context_class->set_surrounding = gtk_im_context_wayland_set_surrounding;
   im_context_class->get_surrounding = gtk_im_context_wayland_get_surrounding;
+  im_context_class->commit = gtk_im_context_wayland_commit;
 
   parent_class = g_type_class_peek_parent (klass);
 }
