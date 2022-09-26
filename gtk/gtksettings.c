@@ -906,7 +906,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Determines which buttons should be put in the
    * titlebar of client-side decorated windows, and whether they
-   * should be placed at the left of right.
+   * should be placed on the left or right.
    *
    * The format of the string is button names, separated by commas.
    * A colon separates the buttons that should appear on the left
