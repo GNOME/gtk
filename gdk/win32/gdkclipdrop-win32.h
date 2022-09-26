@@ -126,7 +126,7 @@ typedef BOOL (WINAPI * GetUpdatedClipboardFormatsFunc)(
  */
 struct _GdkWin32Clipdrop
 {
-  GObject *parent_instance;
+  GObject parent_instance;
 
   /* interned strings for well-known image formats */
   const char **known_pixbuf_formats;
