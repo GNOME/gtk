@@ -129,7 +129,8 @@ typedef struct _GdkWin32SelectionClass GdkWin32SelectionClass;
  */
 struct _GdkWin32Selection
 {
-  GObject *parent_instance;
+  GObject parent_instance;
+
   GHashTable *sel_prop_table;
   GdkSelProp *dropfiles_prop;
   /* We store the owner of each selection in this table. Obviously, this only
