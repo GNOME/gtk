@@ -33,6 +33,7 @@
 
 #include <gtk/gtk.h>
 #include "gtkprinterprivate.h"
+#include "gtkprivate.h"
 
 #include "gtkprintbackendlpr.h"
 
