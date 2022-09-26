@@ -256,6 +256,7 @@ if cc.get_id() == 'msvc'
     '-FImsvc_recommended_pragmas.h',
 	'-D_USE_MATH_DEFINES',
 	'-utf-8',
+  '-Zc:preprocessor'
   ]
   add_project_arguments(cc.get_supported_arguments(test_cflags), language: 'c')
 
