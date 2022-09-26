@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-28 14:45+0000\n"
-"PO-Revision-Date: 2022-08-28 23:33+0200\n"
+"POT-Creation-Date: 2022-09-26 15:50+0000\n"
+"PO-Revision-Date: 2022-09-26 17:58+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -2126,7 +2126,7 @@ msgstr "Plik o tej nazwie już istnieje"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:724
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6154 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6157 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1706 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2218,7 +2218,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jeśli element zostanie usunięty, to zostanie on bezpowrotnie utracony."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5659 gtk/gtktext.c:6086 gtk/gtktextview.c:8967
+#: gtk/gtklabel.c:5659 gtk/gtktext.c:6086 gtk/gtktextview.c:8960
 msgid "_Delete"
 msgstr "_Usuń"
 
@@ -2494,19 +2494,19 @@ msgstr "Warianty znaku"
 msgid "OpenGL context creation failed"
 msgstr "Utworzenie kontekstu OpenGL się nie powiodło"
 
-#: gtk/gtklabel.c:5656 gtk/gtktext.c:6074 gtk/gtktextview.c:8955
+#: gtk/gtklabel.c:5656 gtk/gtktext.c:6074 gtk/gtktextview.c:8948
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6078 gtk/gtktextview.c:8959
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6078 gtk/gtktextview.c:8952
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtklabel.c:5658 gtk/gtktext.c:6082 gtk/gtktextview.c:8963
+#: gtk/gtklabel.c:5658 gtk/gtktext.c:6082 gtk/gtktextview.c:8956
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtklabel.c:5664 gtk/gtktext.c:6095 gtk/gtktextview.c:8988
+#: gtk/gtklabel.c:5664 gtk/gtktext.c:6095 gtk/gtktextview.c:8981
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
@@ -2616,7 +2616,7 @@ msgid "%d:%02d"
 msgstr "%d∶%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6155
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6158
 msgid "_OK"
 msgstr "_OK"
 
@@ -2740,19 +2740,19 @@ msgstr ""
 msgid "Tab list"
 msgstr "Lista kart"
 
-#: gtk/gtknotebook.c:3249
+#: gtk/gtknotebook.c:3250
 msgid "Previous tab"
 msgstr "Poprzednia karta"
 
-#: gtk/gtknotebook.c:3253
+#: gtk/gtknotebook.c:3254
 msgid "Next tab"
 msgstr "Następna karta"
 
-#: gtk/gtknotebook.c:4073
+#: gtk/gtknotebook.c:4074
 msgid "Tab"
 msgstr "Karta"
 
-#: gtk/gtknotebook.c:4371 gtk/gtknotebook.c:6579
+#: gtk/gtknotebook.c:4372 gtk/gtknotebook.c:6580
 #, c-format
 msgid "Page %u"
 msgstr "%u. strona"
@@ -3486,19 +3486,24 @@ msgstr "Brak wyników"
 msgid "Try a different search"
 msgstr "Proszę spróbować innych słów"
 
-#: gtk/gtkshow.c:177
+#: gtk/gtkshow.c:175
 msgid "Could not show link"
 msgstr "Nie można wyświetlić odnośnika"
 
-#: gtk/gtktext.c:6100 gtk/gtktextview.c:8993
+#: gtk/gtkstacksidebar.c:155
+msgctxt "accessibility"
+msgid "Sidebar"
+msgstr "Panel boczny"
+
+#: gtk/gtktext.c:6100 gtk/gtktextview.c:8986
 msgid "Insert _Emoji"
 msgstr "Wstaw _emoji"
 
-#: gtk/gtktextview.c:8975
+#: gtk/gtktextview.c:8968
 msgid "_Undo"
 msgstr "Cof_nij"
 
-#: gtk/gtktextview.c:8979
+#: gtk/gtktextview.c:8972
 msgid "_Redo"
 msgstr "P_onów"
 
@@ -3525,12 +3530,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/gtkwindow.c:6142
+#: gtk/gtkwindow.c:6145
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Użyć Inspektora GTK?"
 
-#: gtk/gtkwindow.c:6144
+#: gtk/gtkwindow.c:6147
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3541,7 +3546,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK. Jego użycie może spowodować awarię lub "
 "uszkodzenie programu."
 
-#: gtk/gtkwindow.c:6149
+#: gtk/gtkwindow.c:6152
 msgid "Don’t show this message again"
 msgstr "Bez wyświetlania ponownie"
 
