@@ -430,6 +430,12 @@ gtk_drop_target_handle_event (GtkEventController *controller,
 
         graphene_point_init (&self->coords, x, y);
         g_signal_emit (self, signals[MOTION], 0, x, y, &preferred);
+        if (!gdk_drag_action_is_unique (preferred))
+          {
+            g_critical ("Handler for GtkDropTarget::motion on %s %p did not return a unique preferred action",
+                        G_OBJECT_TYPE_NAME (widget), widget);
+            preferred = make_action_unique (preferred);
+          }
         if (preferred &&
             gtk_drop_status (self->drop, self->actions, preferred))
           {
@@ -497,6 +503,12 @@ gtk_drop_target_handle_crossing (GtkEventController    *controller,
       gtk_drop_target_start_drop (self, crossing->drop);
 
       g_signal_emit (self, signals[ENTER], 0, x, y, &preferred);
+        if (!gdk_drag_action_is_unique (preferred))
+          {
+            g_critical ("Handler for GtkDropTarget::enter on %s %p did not return a unique preferred action",
+                        G_OBJECT_TYPE_NAME (widget), widget);
+            preferred = make_action_unique (preferred);
+          }
       if (preferred &&
           gtk_drop_status (self->drop, self->actions, preferred))
         {
