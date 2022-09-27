@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the gtk+ package.
 #
 # Matic Žgur <mr.zgur@gmail.com>, 2006.
-# Martin Srebotnjak <miles@filmsi.net>, 2007.
+# Martin Srebotnjak <miles@filmsi.net>, 2007, 2022.
 # Klemen Košir <klemen.kosir@gmx.com>, 2010–2011.
 # Matej Urbančič <mateju@src.gnome.org>, 2007–2022.
 #
@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-09-18 08:24+0000\n"
-"PO-Revision-Date: 2022-09-18 13:08+0200\n"
+"POT-Creation-Date: 2022-09-26 15:50+0000\n"
+"PO-Revision-Date: 2022-09-27 10:46+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -3487,6 +3487,11 @@ msgstr "Poskusite drugačno iskanje"
 #: gtk/gtkshow.c:175
 msgid "Could not show link"
 msgstr "Povezave ni mogoče pokazati"
+
+#: gtk/gtkstacksidebar.c:155
+msgctxt "accessibility"
+msgid "Sidebar"
+msgstr "Stranska vrstica"
 
 #: gtk/gtktext.c:6100 gtk/gtktextview.c:8986
 msgid "Insert _Emoji"
