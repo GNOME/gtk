@@ -24,6 +24,7 @@
 #include "gtksnapshot.h"
 #include "gtkrendernodepaintableprivate.h"
 #include "gtkwidgetprivate.h"
+#include "gtkprivate.h"
 
 /**
  * GtkWidgetPaintable:
@@ -383,6 +384,7 @@ gtk_widget_paintable_update_image (GtkWidgetPaintable *self)
                                                  gtk_widget_paintable_update_func,
                                                  self,
                                                  NULL);
+      gdk_source_set_static_name_by_id (self->pending_update_cb, "[gtk] gtk_widget_paintable_update_func");
     }
 
   pending_image = gtk_widget_paintable_snapshot_widget (self);

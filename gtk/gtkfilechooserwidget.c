@@ -6668,6 +6668,7 @@ search_start_query (GtkFileChooserWidget *impl,
 
   set_busy_cursor (impl, TRUE);
   impl->show_progress_timeout = g_timeout_add (1500, show_spinner, impl);
+  gdk_source_set_static_name_by_id (impl->show_progress_timeout, "[gtk] show_spinner");
 
   if (impl->search_engine == NULL)
     impl->search_engine = _gtk_search_engine_new ();

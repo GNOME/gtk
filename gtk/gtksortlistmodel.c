@@ -328,6 +328,7 @@ gtk_sort_list_model_start_sorting (GtkSortListModel *self,
     return FALSE;
 
   self->sort_cb = g_idle_add (gtk_sort_list_model_sort_cb, self);
+  gdk_source_set_static_name_by_id (self->sort_cb, "[gtk] gtk_sort_list_model_sort_cb");
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PENDING]);
   return TRUE;
 }

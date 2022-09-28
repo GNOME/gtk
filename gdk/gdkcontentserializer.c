@@ -30,6 +30,7 @@
 #include "loaders/gdktiffprivate.h"
 #include "loaders/gdkjpegprivate.h"
 #include "gdkmemorytextureprivate.h"
+#include "gdkprivate.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <string.h>
@@ -360,12 +361,14 @@ gdk_content_serializer_return_success (GdkContentSerializer *serializer)
 {
   g_return_if_fail (GDK_IS_CONTENT_SERIALIZER (serializer));
   g_return_if_fail (!serializer->returned);
+  guint source_id;
 
   serializer->returned = TRUE;
-  g_idle_add_full (serializer->priority,
-                   gdk_content_serializer_emit_callback,
-                   serializer,
-                   g_object_unref);
+  source_id = g_idle_add_full (serializer->priority,
+                               gdk_content_serializer_emit_callback,
+                               serializer,
+                               g_object_unref);
+  gdk_source_set_static_name_by_id (source_id, "[gtk] gdk_content_serializer_emit_callback");
   /* NB: the idle will destroy our reference */
 }
 
