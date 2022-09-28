@@ -187,6 +187,7 @@ recompute_trash_state (GtkTrashMonitor *monitor)
   monitor->timeout_id = g_timeout_add_seconds (UPDATE_RATE_SECONDS,
                                                recompute_trash_state_cb,
                                                monitor);
+  gdk_source_set_static_name_by_id (monitor->timeout_id, "[gtk] recompute_trash_state_cb");
 
   g_object_unref (file);
 }

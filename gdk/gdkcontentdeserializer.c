@@ -25,6 +25,7 @@
 #include "filetransferportalprivate.h"
 #include "gdktexture.h"
 #include "gdkrgbaprivate.h"
+#include "gdkprivate.h"
 #include "loaders/gdkpngprivate.h"
 #include "loaders/gdktiffprivate.h"
 
@@ -354,12 +355,14 @@ gdk_content_deserializer_return_success (GdkContentDeserializer *deserializer)
 {
   g_return_if_fail (GDK_IS_CONTENT_DESERIALIZER (deserializer));
   g_return_if_fail (!deserializer->returned);
+  guint source_id;
 
   deserializer->returned = TRUE;
-  g_idle_add_full (deserializer->priority,
-                   gdk_content_deserializer_emit_callback,
-                   deserializer,
-                   g_object_unref);
+  source_id = g_idle_add_full (deserializer->priority,
+                               gdk_content_deserializer_emit_callback,
+                               deserializer,
+                               g_object_unref);
+  gdk_source_set_static_name_by_id (source_id, "[gtk] gdk_content_deserializer_emit_callback");
   /* NB: the idle will destroy our reference */
 }
 

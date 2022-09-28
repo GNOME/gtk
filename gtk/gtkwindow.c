@@ -6001,7 +6001,10 @@ gtk_window_set_focus_visible (GtkWindow *window,
     }
 
   if (priv->focus_visible)
-    priv->focus_visible_timeout = g_timeout_add_seconds (VISIBLE_FOCUS_DURATION, unset_focus_visible, window);
+    {
+      priv->focus_visible_timeout = g_timeout_add_seconds (VISIBLE_FOCUS_DURATION, unset_focus_visible, window);
+      gdk_source_set_static_name_by_id (priv->focus_visible_timeout, "[gtk] unset_focus_visible");
+    }
 
   if (changed)
     {
