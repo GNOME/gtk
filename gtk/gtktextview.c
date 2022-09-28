@@ -8485,7 +8485,6 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
   gtk_text_view_commit_text (text_view, str);
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
-  gtk_im_context_reset (context);
 }
 
 static void
@@ -8695,9 +8694,8 @@ gtk_text_view_delete_surrounding_handler (GtkIMContext  *context,
   gtk_text_iter_forward_chars (&start, offset);
   gtk_text_iter_forward_chars (&end, offset + n_chars);
 
-  if (gtk_text_buffer_delete_interactive (priv->buffer, &start, &end,
-                                          priv->editable))
-    gtk_im_context_reset (context);
+  gtk_text_buffer_delete_interactive (priv->buffer, &start, &end,
+                                      priv->editable);
 
   return TRUE;
 }
