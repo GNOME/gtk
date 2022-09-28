@@ -311,7 +311,7 @@ gtk_scale_notify (GObject    *object,
 
       g_free (values);
     }
-  else if (strcmp (pspec->name, "adjustment"))
+  else if (strcmp (pspec->name, "adjustment") == 0)
     {
       if (priv->value_widget)
         update_label_request (scale);
