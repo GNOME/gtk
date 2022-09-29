@@ -433,6 +433,7 @@ tiff_dep       = dependency(is_msvc_like ? 'tiff' : 'libtiff-4',
 jpeg_dep       = dependency(is_msvc_like ? 'jpeg' : 'libjpeg',
                             fallback: ['libjpeg-turbo', 'jpeg_dep'],
                             required: true)
+libheif_dep = dependency('libheif', required: false)
 
 epoxy_dep      = dependency('epoxy', version: epoxy_req,
                             fallback: ['libepoxy', 'libepoxy_dep'])
