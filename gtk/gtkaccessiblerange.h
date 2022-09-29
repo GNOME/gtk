@@ -30,7 +30,7 @@
 G_BEGIN_DECLS
 #define GTK_TYPE_ACCESSIBLE_RANGE (gtk_accessible_range_get_type())
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 G_DECLARE_INTERFACE (GtkAccessibleRange, gtk_accessible_range, GTK, ACCESSIBLE_RANGE, GtkAccessible)
 
 struct _GtkAccessibleRangeInterface
@@ -63,10 +63,10 @@ struct _GtkAccessibleRangeInterface
   gboolean (* set_current_value) (GtkAccessibleRange *self, double value);
 };
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 double gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_10
 gboolean gtk_accessible_range_set_current_value (GtkAccessibleRange *self, double value);
 
 G_END_DECLS
