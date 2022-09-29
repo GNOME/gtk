@@ -97,7 +97,7 @@ add_files (GDBusProxy  *proxy,
            AddFileData *afd)
 {
   GUnixFDList *fd_list;
-  GVariantBuilder fds;
+  GVariantBuilder fds, options;
   int i;
   char *key;
 
@@ -146,9 +146,10 @@ add_files (GDBusProxy  *proxy,
 
   key = (char *)g_object_get_data (G_OBJECT (afd->task), "key");
 
+  g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
   g_dbus_proxy_call_with_unix_fd_list (proxy,
                                        "AddFiles",
-                                       g_variant_new ("(sah)", key, &fds),
+                                       g_variant_new ("(saha{sv})", key, &fds, &options),
                                        0, -1,
                                        fd_list,
                                        NULL,
@@ -480,20 +481,36 @@ connection_closed (GDBusConnection *connection,
 }
 
 static void
-got_proxy (GObject *source,
-           GAsyncResult *result,
-           gpointer data)
+finish_registration (void)
 {
-  GError *error = NULL;
+  gdk_content_register_serializer (G_TYPE_FILE,
+                                   "application/vnd.portal.filetransfer",
+                                   portal_file_serializer,
+                                   NULL,
+                                   NULL);
 
-  file_transfer_proxy = g_dbus_proxy_new_for_bus_finish (result, &error);
-  if (!file_transfer_proxy)
-    {
-      g_message ("Failed to get file transfer portal: %s", error->message);
-      g_clear_error (&error);
-      return;
-    }
+  gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
+                                   "application/vnd.portal.filetransfer",
+                                   portal_file_serializer,
+                                   NULL,
+                                   NULL);
 
+  gdk_content_register_deserializer ("application/vnd.portal.filetransfer",
+                                     GDK_TYPE_FILE_LIST,
+                                     portal_file_deserializer,
+                                     NULL,
+                                     NULL);
+
+  gdk_content_register_deserializer ("application/vnd.portal.filetransfer",
+                                     G_TYPE_FILE,
+                                     portal_file_deserializer,
+                                     NULL,
+                                     NULL);
+
+  /* FIXME: I missed up and used the wrong mime type here when
+   * I implemented my own protocol. Keep these around for a while
+   * so we can interoperate with existing flatpaks using GTK 4.6
+   */
   gdk_content_register_serializer (G_TYPE_FILE,
                                    "application/vnd.portal.files",
                                    portal_file_serializer,
@@ -523,6 +540,21 @@ got_proxy (GObject *source,
                     "closed", G_CALLBACK (connection_closed), NULL);
 }
 
+static gboolean
+proxy_has_owner (GDBusProxy *proxy)
+{
+  char *owner;
+
+  owner = g_dbus_proxy_get_name_owner (proxy);
+  if (owner)
+    {
+      g_free (owner);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 void
 file_transfer_portal_register (void)
 {
@@ -531,7 +563,8 @@ file_transfer_portal_register (void)
   if (!called)
     {
       called = TRUE;
-      g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
+
+      file_transfer_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                 G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
                                 | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
                                 | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
@@ -540,8 +573,13 @@ file_transfer_portal_register (void)
                                 "/org/freedesktop/portal/documents",
                                 "org.freedesktop.portal.FileTransfer",
                                 NULL,
-                                got_proxy,
                                 NULL);
+
+      if (file_transfer_proxy && !proxy_has_owner (file_transfer_proxy))
+        g_clear_object (&file_transfer_proxy);
+
+      if (file_transfer_proxy)
+        finish_registration ();
     }
 }
 

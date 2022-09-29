@@ -1764,7 +1764,7 @@ gdk_key_event_matches (GdkEvent        *event,
   guint ev_keyval;
   int layout;
   int level;
-  GdkModifierType consumed_modifiers;
+  GdkModifierType ignored_modifiers;
   GdkModifierType shift_group_mask;
   gboolean group_mod_is_accel_mod = FALSE;
   const GdkModifierType mask = GDK_CONTROL_MASK |
@@ -1783,7 +1783,23 @@ gdk_key_event_matches (GdkEvent        *event,
   ev_keyval = self->translated[1].keyval;
   layout = self->translated[1].layout;
   level = self->translated[1].level;
-  consumed_modifiers = self->translated[1].consumed;
+
+  /*
+   * If a modifier is currently active (e.g. Shift is pressed) and was marked
+   * as consumed, we ignore it for the purposes of matching shortcuts.
+   * For example, when Ctrl+Shift+[plus/equals key] is translated into
+   * Ctrl+plus on a keyboard where Shift+equals is the plus sign, we want
+   * shortcuts for either <Control><Shift>plus or <Control>plus to match.
+   * (See https://bugzilla.gnome.org/show_bug.cgi?id=100439)
+   *
+   * If a modifier is *not* currently active, the X11 backend can sometimes
+   * mark it as consumed where the Wayland and Windows backends do not.
+   * In this case, we still want to pay attention to its state.
+   * For example, when Ctrl+x is translated into Ctrl+x, we only want to
+   * trigger shortcuts for <Control>x, not for <Control><Shift>x.
+   * (See https://gitlab.gnome.org/GNOME/gtk/-/issues/5095)
+   */
+  ignored_modifiers = (self->translated[1].consumed & state);
 
   /* if the group-toggling modifier is part of the default accel mod
    * mask, and it is active, disable it for matching
@@ -1795,7 +1811,7 @@ gdk_key_event_matches (GdkEvent        *event,
   if (mask & shift_group_mask)
     group_mod_is_accel_mod = TRUE;
 
-  if ((modifiers & ~consumed_modifiers & mask) == (state & ~consumed_modifiers & mask))
+  if ((modifiers & ~ignored_modifiers & mask) == (state & ~ignored_modifiers & mask))
     {
       /* modifier match */
       GdkKeymapKey *keys;
