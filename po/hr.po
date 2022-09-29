@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-08-23 11:49+0000\n"
-"PO-Revision-Date: 2022-08-28 16:44+0200\n"
+"POT-Creation-Date: 2022-09-29 10:26+0000\n"
+"PO-Revision-Date: 2022-09-29 14:02+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -2052,7 +2052,7 @@ msgstr "Rubovi papira"
 
 #: gtk/gtkentry.c:3743
 msgid "Insert Emoji"
-msgstr "Umetni smajli"
+msgstr "Umetni emotikoin"
 
 #: gtk/gtkfilechooserdialog.c:551
 msgid "_Name"
@@ -2120,7 +2120,7 @@ msgstr "Datoteka s tim nazivom već postoji"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:724
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6154 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6157 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1706 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2211,7 +2211,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ako obrišete stavku, biti će trajno izgubljena."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5659 gtk/gtktext.c:6086 gtk/gtktextview.c:8967
+#: gtk/gtklabel.c:5659 gtk/gtktext.c:6084 gtk/gtktextview.c:8958
 msgid "_Delete"
 msgstr "_Obriši"
 
@@ -2485,19 +2485,19 @@ msgstr "Varijante znaka"
 msgid "OpenGL context creation failed"
 msgstr "Neuspjelo stvaranje OpenGL sadržaja"
 
-#: gtk/gtklabel.c:5656 gtk/gtktext.c:6074 gtk/gtktextview.c:8955
+#: gtk/gtklabel.c:5656 gtk/gtktext.c:6072 gtk/gtktextview.c:8946
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6078 gtk/gtktextview.c:8959
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6076 gtk/gtktextview.c:8950
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtklabel.c:5658 gtk/gtktext.c:6082 gtk/gtktextview.c:8963
+#: gtk/gtklabel.c:5658 gtk/gtktext.c:6080 gtk/gtktextview.c:8954
 msgid "_Paste"
 msgstr "_Zalijepi"
 
-#: gtk/gtklabel.c:5664 gtk/gtktext.c:6095 gtk/gtktextview.c:8988
+#: gtk/gtklabel.c:5664 gtk/gtktext.c:6093 gtk/gtktextview.c:8979
 msgid "Select _All"
 msgstr "Odaberi _sve"
 
@@ -2607,7 +2607,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6155
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6158
 msgid "_OK"
 msgstr "_U redu"
 
@@ -2728,19 +2728,19 @@ msgstr "GTK ne može pronaći modul medija. Provjerite svoju instalaciju."
 msgid "Tab list"
 msgstr "Popis kartica"
 
-#: gtk/gtknotebook.c:3249
+#: gtk/gtknotebook.c:3250
 msgid "Previous tab"
 msgstr "Prijašnja kartica"
 
-#: gtk/gtknotebook.c:3253
+#: gtk/gtknotebook.c:3254
 msgid "Next tab"
 msgstr "Sljedeća kartica"
 
-#: gtk/gtknotebook.c:4073
+#: gtk/gtknotebook.c:4074
 msgid "Tab"
 msgstr "Kartica"
 
-#: gtk/gtknotebook.c:4371 gtk/gtknotebook.c:6579
+#: gtk/gtknotebook.c:4372 gtk/gtknotebook.c:6580
 #, c-format
 msgid "Page %u"
 msgstr "Stranica %u"
@@ -3475,19 +3475,24 @@ msgstr "Nema pronađenih rezultata"
 msgid "Try a different search"
 msgstr "Pokušaj drugačiju pretragu"
 
-#: gtk/gtkshow.c:177
+#: gtk/gtkshow.c:175
 msgid "Could not show link"
 msgstr "Nemoguće prikazati poveznicu"
 
-#: gtk/gtktext.c:6100 gtk/gtktextview.c:8993
-msgid "Insert _Emoji"
-msgstr "Umetni _smajli"
+#: gtk/gtkstacksidebar.c:155
+msgctxt "accessibility"
+msgid "Sidebar"
+msgstr "Bočna traka"
 
-#: gtk/gtktextview.c:8975
+#: gtk/gtktext.c:6098 gtk/gtktextview.c:8984
+msgid "Insert _Emoji"
+msgstr "Umetni _emotikoin"
+
+#: gtk/gtktextview.c:8966
 msgid "_Undo"
 msgstr "_Vrati"
 
-#: gtk/gtktextview.c:8979
+#: gtk/gtktextview.c:8970
 msgid "_Redo"
 msgstr "_Ponovi"
 
@@ -3514,12 +3519,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6142
+#: gtk/gtkwindow.c:6145
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Želite li koristiti GTK Inspektora?"
 
-#: gtk/gtkwindow.c:6144
+#: gtk/gtkwindow.c:6147
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3530,7 +3535,7 @@ msgstr ""
 "otkrivanje i promjenu unutrašnjosti bilo koje GTK aplikacije. Njegovo "
 "korištenje može uzrokovati rušenje ili prekid u radu aplikacije."
 
-#: gtk/gtkwindow.c:6149
+#: gtk/gtkwindow.c:6152
 msgid "Don’t show this message again"
 msgstr "Ne prikazuj više ovu poruku"
 
