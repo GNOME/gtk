@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-09-01 17:24+0000\n"
-"PO-Revision-Date: 2022-09-02 23:26+0200\n"
+"POT-Creation-Date: 2022-09-29 12:07+0000\n"
+"PO-Revision-Date: 2022-09-29 18:40+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -77,8 +77,6 @@ msgstr "Nem található tökéletes EGL konfiguráció"
 
 #: gdk/gdkdisplay.c:1631
 #, c-format
-#| msgid "EGL implementation is missing extension %2$s"
-#| msgid_plural "EGL implementation is missing %d extensions: %s"
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "Az EGL megvalósításból hiányzik a(z) %s kiegészítés"
@@ -2121,7 +2119,7 @@ msgstr "Már létezik egy ugyanilyen nevű fájl"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:724
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6154 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6157 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1706 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2212,7 +2210,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ha töröl egy elemet, akkor az véglegesen elvész."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5659 gtk/gtktext.c:6086 gtk/gtktextview.c:8967
+#: gtk/gtklabel.c:5659 gtk/gtktext.c:6084 gtk/gtktextview.c:8958
 msgid "_Delete"
 msgstr "_Törlés"
 
@@ -2488,19 +2486,19 @@ msgstr "Karakterváltozatok"
 msgid "OpenGL context creation failed"
 msgstr "Az OpenGL környezet létrehozása sikertelen"
 
-#: gtk/gtklabel.c:5656 gtk/gtktext.c:6074 gtk/gtktextview.c:8955
+#: gtk/gtklabel.c:5656 gtk/gtktext.c:6072 gtk/gtktextview.c:8946
 msgid "Cu_t"
 msgstr "_Kivágás"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6078 gtk/gtktextview.c:8959
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6076 gtk/gtktextview.c:8950
 msgid "_Copy"
 msgstr "_Másolás"
 
-#: gtk/gtklabel.c:5658 gtk/gtktext.c:6082 gtk/gtktextview.c:8963
+#: gtk/gtklabel.c:5658 gtk/gtktext.c:6080 gtk/gtktextview.c:8954
 msgid "_Paste"
 msgstr "_Beillesztés"
 
-#: gtk/gtklabel.c:5664 gtk/gtktext.c:6095 gtk/gtktextview.c:8988
+#: gtk/gtklabel.c:5664 gtk/gtktext.c:6093 gtk/gtktextview.c:8979
 msgid "Select _All"
 msgstr "Ö_sszes kijelölése"
 
@@ -2610,7 +2608,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6155
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6158
 msgid "_OK"
 msgstr "_OK"
 
@@ -3477,19 +3475,25 @@ msgstr "Nincs találat"
 msgid "Try a different search"
 msgstr "Próbáljon mást keresni"
 
-#: gtk/gtkshow.c:177
+#: gtk/gtkshow.c:175
 msgid "Could not show link"
 msgstr "Nem jeleníthető meg a hivatkozás"
 
-#: gtk/gtktext.c:6100 gtk/gtktextview.c:8993
+#: gtk/gtkstacksidebar.c:155
+#| msgid "Toggle Sidebar"
+msgctxt "accessibility"
+msgid "Sidebar"
+msgstr "Oldalsáv"
+
+#: gtk/gtktext.c:6098 gtk/gtktextview.c:8984
 msgid "Insert _Emoji"
 msgstr "_Emodzsi beszúrása"
 
-#: gtk/gtktextview.c:8975
+#: gtk/gtktextview.c:8966
 msgid "_Undo"
 msgstr "_Visszavonás"
 
-#: gtk/gtktextview.c:8979
+#: gtk/gtktextview.c:8970
 msgid "_Redo"
 msgstr "Mé_gis"
 
@@ -3516,12 +3520,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6142
+#: gtk/gtkwindow.c:6145
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Szeretné használni a GTK vizsgálót?"
 
-#: gtk/gtkwindow.c:6144
+#: gtk/gtkwindow.c:6147
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3532,7 +3536,7 @@ msgstr ""
 "alkalmazás belső működésének felfedezését és módosítását. A használata miatt "
 "az alkalmazás hibásan működhet vagy összeomolhat."
 
-#: gtk/gtkwindow.c:6149
+#: gtk/gtkwindow.c:6152
 msgid "Don’t show this message again"
 msgstr "Ne jelenjen meg többé ez az üzenet"
 
@@ -6005,7 +6009,6 @@ msgid "ROC 8k"
 msgstr "ROC 8k"
 
 #: gtk/ui/gtkaboutdialog.ui:62
-#| msgid "About %s"
 msgid "About"
 msgstr "Névjegy"
 
@@ -6018,17 +6021,14 @@ msgid "System"
 msgstr "Rendszer"
 
 #: gtk/ui/gtkappchooserdialog.ui:60
-#| msgid "Related Applications"
 msgid "_View All Applications"
 msgstr "Összes alkalmazás meg_tekintése"
 
 #: gtk/ui/gtkappchooserdialog.ui:66
-#| msgid "Other Applications"
 msgid "_Find New Applications"
 msgstr "Új alkalmazások _keresése"
 
 #: gtk/ui/gtkappchooserwidget.ui:100
-#| msgid "No applications found for “%s”."
 msgid "No applications found."
 msgstr "Nem találhatók alkalmazások."
 
@@ -6059,26 +6059,18 @@ msgid "Quit %s"
 msgstr "%s bezárása"
 
 #: gtk/ui/gtkassistant.ui:64
-#| msgctxt "print operation status"
-#| msgid "Finished"
 msgid "_Finish"
 msgstr "Be_fejezés"
 
 #: gtk/ui/gtkassistant.ui:75
-#| msgctxt "keyboard label"
-#| msgid "Back"
 msgid "_Back"
 msgstr "_Vissza"
 
 #: gtk/ui/gtkassistant.ui:86
-#| msgctxt "keyboard label"
-#| msgid "KP_Next"
 msgid "_Next"
 msgstr "_Következő"
 
 #: gtk/ui/gtkcolorchooserdialog.ui:4
-#| msgctxt "accessibility"
-#| msgid "Selects the color"
 msgid "Select a Color"
 msgstr "Válasszon színt"
 
@@ -6103,8 +6095,6 @@ msgid "Saturation and value"
 msgstr "Telítettség és érték"
 
 #: gtk/ui/gtkcoloreditor.ui:156
-#| msgctxt "paper size"
-#| msgid "A0"
 msgctxt "Color channel"
 msgid "A"
 msgstr "A"
@@ -6125,14 +6115,10 @@ msgid "V"
 msgstr "V"
 
 #: gtk/ui/gtkdropdown.ui:19
-#| msgctxt "font"
-#| msgid "None"
 msgid "(None)"
 msgstr "(Nincs)"
 
 #: gtk/ui/gtkdropdown.ui:68
-#| msgctxt "keyboard label"
-#| msgid "Search"
 msgid "Search…"
 msgstr "Keresés…"
 
@@ -6162,13 +6148,11 @@ msgid "Travel & Places"
 msgstr "Utazás és helyek"
 
 #: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
-#| msgid "Activate"
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "Tevékenységek"
 
 #: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
-#| msgid "Objects"
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Tárgyak"
@@ -6184,13 +6168,11 @@ msgid "Flags"
 msgstr "Zászlók"
 
 #: gtk/ui/gtkemojichooser.ui:230
-#| msgid "Recent"
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "Legutóbbi"
 
 #: gtk/ui/gtkfilechooserwidget.ui:64
-#| msgid "Created by"
 msgid "Create Folder"
 msgstr "Mappa létrehozása"
 
@@ -6203,13 +6185,10 @@ msgid "Folder Name"
 msgstr "Mappanév"
 
 #: gtk/ui/gtkfilechooserwidget.ui:404
-#| msgid "Created by"
 msgid "_Create"
 msgstr "_Létrehozás"
 
 #: gtk/ui/gtkfontchooserdialog.ui:4
-#| msgctxt "accessibility"
-#| msgid "Select"
 msgid "Select Font"
 msgstr "Betűkészletet kiválasztása"
 
@@ -6230,18 +6209,14 @@ msgid "Language"
 msgstr "Nyelv"
 
 #: gtk/ui/gtkfontchooserwidget.ui:188 gtk/ui/gtkfontchooserwidget.ui:324
-#| msgid "Pre_view"
 msgid "Preview text"
 msgstr "Szöveg előnézete"
 
 #: gtk/ui/gtkfontchooserwidget.ui:191 gtk/ui/gtkfontchooserwidget.ui:220
-#| msgctxt "sizegroup mode"
-#| msgid "Horizontal"
 msgid "horizontal"
 msgstr "vízszintes"
 
 #: gtk/ui/gtkfontchooserwidget.ui:270
-#| msgid "No Results Found"
 msgid "No Fonts Found"
 msgstr "Nem találhatók betűkészletek"
 
@@ -6250,12 +6225,10 @@ msgid "_Format for:"
 msgstr "_Formátum ehhez:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:51 gtk/ui/gtkprintunixdialog.ui:635
-#| msgid "Paper Size"
 msgid "_Paper size:"
 msgstr "_Papírméret:"
 
 #: gtk/ui/gtkpagesetupunixdialog.ui:86
-#| msgid "Presentation"
 msgid "_Orientation:"
 msgstr "_Tájolás:"
 
@@ -6276,7 +6249,6 @@ msgid "Reverse landscape"
 msgstr "Fordított fekvő"
 
 #: gtk/ui/gtkplacesview.ui:28
-#| msgid "Address"
 msgid "Server Addresses"
 msgstr "Kiszolgálócímek"
 
@@ -6286,28 +6258,23 @@ msgid ""
 msgstr "A kiszolgálócímek egy protokollelőtagból és egy címből állnak. Példák:"
 
 #: gtk/ui/gtkplacesview.ui:66
-#| msgid "File Transfer Protocol"
 msgid "Available Protocols"
 msgstr "Elérhető protokollok"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:118
-#| msgid "No printer found"
 msgid "No recent servers found"
 msgstr "Nem találhatók legutóbbi kiszolgálók"
 
 #: gtk/ui/gtkplacesview.ui:141
-#| msgid "Recent files"
 msgid "Recent Servers"
 msgstr "Legutóbbi kiszolgálók"
 
 #: gtk/ui/gtkplacesview.ui:221
-#| msgid "No Results Found"
 msgid "No results found"
 msgstr "Nincs találat"
 
 #: gtk/ui/gtkplacesview.ui:252
-#| msgid "_Connect Drive"
 msgid "Connect to _Server"
 msgstr "Kapcsolódás _kiszolgálóhoz"
 
@@ -6317,19 +6284,14 @@ msgstr "Adja meg a kiszolgáló címét…"
 
 #. this is the header for the printer status column in the print dialog
 #: gtk/ui/gtkprintunixdialog.ui:145
-#| msgctxt "accessibility"
-#| msgid "status"
 msgid "Status"
 msgstr "Állapot"
 
 #: gtk/ui/gtkprintunixdialog.ui:199
-#| msgctxt "accessibility"
-#| msgid "range"
 msgid "Range"
 msgstr "Tartomány"
 
 #: gtk/ui/gtkprintunixdialog.ui:212
-#| msgid "All sheets"
 msgid "_All Pages"
 msgstr "Össz_es oldal"
 
@@ -6338,8 +6300,6 @@ msgid "C_urrent Page"
 msgstr "_Jelenlegi oldal"
 
 #: gtk/ui/gtkprintunixdialog.ui:237
-#| msgctxt "accessibility"
-#| msgid "Select"
 msgid "Se_lection"
 msgstr "_Kijelölés"
 
@@ -6376,23 +6336,18 @@ msgid "General"
 msgstr "Általános"
 
 #: gtk/ui/gtkprintunixdialog.ui:408
-#| msgctxt "printing option"
-#| msgid "Two Sided"
 msgid "T_wo-sided:"
 msgstr "_Kétoldalas:"
 
 #: gtk/ui/gtkprintunixdialog.ui:430
-#| msgid "Pages per _sheet:"
 msgid "Pages per _side:"
 msgstr "Oldalak _laponként:"
 
 #: gtk/ui/gtkprintunixdialog.ui:454
-#| msgid "Page Ordering"
 msgid "Page or_dering:"
 msgstr "Oldal_sorrend:"
 
 #: gtk/ui/gtkprintunixdialog.ui:477
-#| msgid "Any Printer"
 msgid "_Only print:"
 msgstr "_Csak nyomtatás:"
 
@@ -6413,50 +6368,38 @@ msgid "Sc_ale:"
 msgstr "_Méretezés:"
 
 #: gtk/ui/gtkprintunixdialog.ui:554
-#| msgid "Paper Size"
 msgid "Paper"
 msgstr "Papír"
 
 #: gtk/ui/gtkprintunixdialog.ui:569
-#| msgctxt "printing option"
-#| msgid "Paper Type"
 msgid "Paper _type:"
 msgstr "Papír_típus:"
 
 #: gtk/ui/gtkprintunixdialog.ui:591
-#| msgctxt "printing option"
-#| msgid "Paper Source"
 msgid "Paper _source:"
 msgstr "Papír_forrás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:613
-#| msgctxt "printing option"
-#| msgid "Output Tray"
 msgid "Output t_ray:"
 msgstr "Kimeneti _tálca:"
 
 #: gtk/ui/gtkprintunixdialog.ui:658
-#| msgid "Presentation"
 msgid "Or_ientation:"
 msgstr "Tá_jolás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:732
-#| msgid "Show Details"
 msgid "Job Details"
 msgstr "Feladat részletei"
 
 #: gtk/ui/gtkprintunixdialog.ui:747
-#| msgid "Job Priority"
 msgid "Pri_ority:"
 msgstr "Pri_oritás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:768
-#| msgid "Billing Info"
 msgid "_Billing info:"
 msgstr "Fi_zetési információk:"
 
 #: gtk/ui/gtkprintunixdialog.ui:801
-#| msgid "Document"
 msgid "Print Document"
 msgstr "Dokumentum nyomtatása"
 
@@ -6495,15 +6438,11 @@ msgstr "Borítóoldal hozzáadása"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/ui/gtkprintunixdialog.ui:907
-#| msgctxt "printer option"
-#| msgid "Before"
 msgid "Be_fore:"
 msgstr "_Előtte:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
 #: gtk/ui/gtkprintunixdialog.ui:928
-#| msgctxt "printer option"
-#| msgid "After"
 msgid "_After:"
 msgstr "_Mögötte:"
 
@@ -6518,14 +6457,11 @@ msgstr "Képminőség"
 
 #. This will appear as a tab label in the print dialog.
 #: gtk/ui/gtkprintunixdialog.ui:1016
-#| msgid "Color: %s"
 msgid "Color"
 msgstr "Szín"
 
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
 #: gtk/ui/gtkprintunixdialog.ui:1045
-#| msgctxt "print operation status"
-#| msgid "Finished"
 msgid "Finishing"
 msgstr "Befejezés"
 
