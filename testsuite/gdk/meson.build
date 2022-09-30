@@ -10,6 +10,7 @@ tests = [
   { 'name': 'array' },
   { 'name': 'cairo' },
   { 'name': 'clipboard', 'parallel': false, 'suites': 'flaky' },
+  { 'name': 'colorstate' },
   { 'name': 'contentformats' },
   { 'name': 'contentserializer' },
   { 'name': 'cursor' },
