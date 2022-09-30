@@ -32,6 +32,9 @@ G_DEFINE_POINTER_TYPE (GdkToplevelSize, gdk_toplevel_size)
 #define UNCONFIGURED_WIDTH 400
 #define UNCONFIGURED_HEIGHT 300
 
+#define DEFAULT_BOUNDS_WIDTH INT_MAX
+#define DEFAULT_BOUNDS_HEIGHT INT_MAX
+
 void
 gdk_toplevel_size_init (GdkToplevelSize *size,
                         int              bounds_width,
@@ -68,8 +71,15 @@ gdk_toplevel_size_get_bounds (GdkToplevelSize *size,
   g_return_if_fail (bounds_width);
   g_return_if_fail (bounds_height);
 
-  *bounds_width = size->bounds_width;
-  *bounds_height = size->bounds_height;
+  if (size->bounds_width > 0)
+    *bounds_width = size->bounds_width;
+  else
+    *bounds_width = DEFAULT_BOUNDS_WIDTH;
+
+  if (size->bounds_height > 0)
+    *bounds_height = size->bounds_height;
+  else
+    *bounds_height = DEFAULT_BOUNDS_HEIGHT;
 }
 
 /**
