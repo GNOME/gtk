@@ -30,6 +30,13 @@
 
 G_BEGIN_DECLS
 
+typedef enum
+{
+  GDK_TITLEBAR_GESTURE_DOUBLE_CLICK   = 1,
+  GDK_TITLEBAR_GESTURE_RIGHT_CLICK    = 2,
+  GDK_TITLEBAR_GESTURE_MIDDLE_CLICK   = 3
+} GdkTitlebarGesture;
+
 #define GDK_TYPE_WINDOW_IMPL           (gdk_window_impl_get_type ())
 #define GDK_WINDOW_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL, GdkWindowImpl))
 #define GDK_WINDOW_IMPL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL, GdkWindowImplClass))
@@ -315,6 +322,9 @@ struct _GdkWindowImplClass
                                                const cairo_region_t *region);
   void               (* destroy_draw_context) (GdkWindow            *window,
                                                GdkDrawingContext    *context);
+
+  gboolean (* titlebar_gesture) (GdkWindow          *window,
+                                 GdkTitlebarGesture  gesture);
 };
 
 /* Interface Functions */
