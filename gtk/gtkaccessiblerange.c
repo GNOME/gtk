@@ -29,27 +29,22 @@
  * - `GTK_ACCESSIBLE_PROPERTY_VALUE_NOW`
  * - `GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT`
  *
- * For controls where a minimum increment makes no sense and which do not allow
- * setting the current value from the user, the default implementation of this
- * interface suffices.
- *
  * Since: 4.10
  */
 
 #include "config.h"
 
-#include "gtkaccessiblerange.h"
+#include "gtkaccessiblerangeprivate.h"
+
+#include "gtkaccessibleprivate.h"
+#include "gtkatcontextprivate.h"
+#include "gtkaccessiblevalueprivate.h"
 
 G_DEFINE_INTERFACE (GtkAccessibleRange, gtk_accessible_range, GTK_TYPE_ACCESSIBLE)
 
-static double
-gtk_accessible_range_default_get_minimum_increment (GtkAccessibleRange *accessible_range)
-{
-  return 0.0;
-}
-
 static gboolean
-gtk_accessible_range_default_set_current_value (GtkAccessibleRange *accessible_range, double value)
+gtk_accessible_range_default_set_current_value (GtkAccessibleRange *accessible_range,
+                                                double              value)
 {
   return FALSE;
 }
@@ -57,29 +52,10 @@ gtk_accessible_range_default_set_current_value (GtkAccessibleRange *accessible_r
 static void
 gtk_accessible_range_default_init (GtkAccessibleRangeInterface *iface)
 {
-  iface->get_minimum_increment = gtk_accessible_range_default_get_minimum_increment;
   iface->set_current_value = gtk_accessible_range_default_set_current_value;
 }
 
-/**
- * gtk_accessible_range_get_minimum_increment:
- * @self: a `GtkAccessibleRange`
- *
- * Returns the minimum increment which this `GtkAccessibleRange` supports.
- *
- * Returns: the minimum increment, or 0.0 if not overridden
- *
- * Since: 4.10
- */
-double
-gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self)
-{
-  g_return_val_if_fail (GTK_IS_ACCESSIBLE_RANGE (self), .0);
-
-  return GTK_ACCESSIBLE_RANGE_GET_IFACE (self)->get_minimum_increment (self);
-}
-
-/**
+/*< private >
  * gtk_accessible_range_set_current_value:
  * @self: a `GtkAccessibleRange`
  *
@@ -90,8 +66,6 @@ gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self)
  * may in some cases do nothing
  *
  * Returns: true if the call changed the value, and false otherwise
- *
- * Since: 4.10
  */
 gboolean
 gtk_accessible_range_set_current_value (GtkAccessibleRange *self, double value)

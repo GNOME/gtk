@@ -159,7 +159,8 @@ static gboolean gtk_scale_button_scroll_controller_scroll (GtkEventControllerScr
                                                            double                    dx,
                                                            double                    dy,
                                                            GtkScaleButton           *button);
-static void gtk_scale_button_accessible_range_init(GtkAccessibleRangeInterface *iface);
+
+static void     gtk_scale_button_accessible_range_init    (GtkAccessibleRangeInterface *iface);
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_WIDGET,
@@ -170,26 +171,19 @@ G_DEFINE_TYPE_WITH_CODE (GtkScaleButton, gtk_scale_button, GTK_TYPE_WIDGET,
 
 static guint signals[LAST_SIGNAL] = { 0, };
 
-static double
-gtk_scale_button_accessible_range_get_minimum_increment(GtkAccessibleRange *accessible_range)
-{
-  GtkScaleButton *button = GTK_SCALE_BUTTON (accessible_range);
-  return gtk_adjustment_get_minimum_increment (gtk_scale_button_get_adjustment (button));
-}
-
 static gboolean
-gtk_scale_button_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
+accessible_range_set_current_value (GtkAccessibleRange *accessible_range,
+                                    double              value)
 {
-  GtkScaleButton *button = GTK_SCALE_BUTTON (accessible_range);
-  gtk_scale_button_set_value (button, value);
+  gtk_scale_button_set_value (GTK_SCALE_BUTTON (accessible_range), value);
+
   return TRUE;
 }
 
 static void
-gtk_scale_button_accessible_range_init(GtkAccessibleRangeInterface *iface)
+gtk_scale_button_accessible_range_init (GtkAccessibleRangeInterface *iface)
 {
-  iface->get_minimum_increment = gtk_scale_button_accessible_range_get_minimum_increment;
-  iface->set_current_value = gtk_scale_button_accessible_range_set_current_value;
+  iface->set_current_value = accessible_range_set_current_value;
 }
 
 static void

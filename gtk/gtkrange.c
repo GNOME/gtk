@@ -440,26 +440,19 @@ gtk_range_class_init (GtkRangeClass *class)
   gtk_widget_class_set_css_name (widget_class, I_("range"));
 }
 
-static double
-gtk_range_accessible_range_get_minimum_increment (GtkAccessibleRange *accessible_range)
-{
-  GtkRange *range = GTK_RANGE (accessible_range);
-  return gtk_adjustment_get_minimum_increment (gtk_range_get_adjustment (range));
-}
-
 static gboolean
-gtk_range_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
+accessible_range_set_current_value (GtkAccessibleRange *accessible_range,
+                                    double              value)
 {
-  GtkRange *range = GTK_RANGE (accessible_range);
-  gtk_range_set_value (range, value);
+  gtk_range_set_value (GTK_RANGE (accessible_range), value);
+
   return TRUE;
 }
 
 static void
 gtk_range_accessible_range_init (GtkAccessibleRangeInterface *iface)
 {
-  iface->get_minimum_increment = gtk_range_accessible_range_get_minimum_increment;
-  iface->set_current_value = gtk_range_accessible_range_set_current_value;
+  iface->set_current_value = accessible_range_set_current_value;
 }
 
 static void

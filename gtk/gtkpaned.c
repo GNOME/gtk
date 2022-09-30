@@ -809,25 +809,18 @@ gtk_paned_buildable_iface_init (GtkBuildableIface *iface)
   iface->add_child = gtk_paned_buildable_add_child;
 }
 
-static double
-gtk_paned_accessible_range_get_minimum_increment (GtkAccessibleRange *accessible_range)
-{
-  return 1.0;
-}
-
 static gboolean
-gtk_paned_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
+accessible_range_set_current_value (GtkAccessibleRange *accessible_range,
+                                    double              value)
 {
-  GtkPaned *paned = GTK_PANED (accessible_range);
-  gtk_paned_set_position (paned, (int) value + 0.5);
+  gtk_paned_set_position (GTK_PANED (accessible_range), (int) value + 0.5);
   return TRUE;
 }
 
 static void
 gtk_paned_accessible_range_init (GtkAccessibleRangeInterface *iface)
 {
-  iface->get_minimum_increment = gtk_paned_accessible_range_get_minimum_increment;
-  iface->set_current_value = gtk_paned_accessible_range_set_current_value;
+  iface->set_current_value = accessible_range_set_current_value;
 }
 
 static gboolean

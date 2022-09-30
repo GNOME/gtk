@@ -318,8 +318,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkSpinButton, gtk_spin_button, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE,
                                                 gtk_spin_button_accessible_init)
-                                                G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE,
-                                                                       gtk_spin_button_accessible_range_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE,
+                                                gtk_spin_button_accessible_range_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE,
                                                 gtk_spin_button_editable_init)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
@@ -637,26 +637,18 @@ gtk_spin_button_accessible_init (GtkAccessibleInterface *iface)
   iface->get_platform_state = gtk_spin_button_accessible_get_platform_state;
 }
 
-static double
-gtk_spin_button_accessible_range_get_minimum_increment (GtkAccessibleRange *accessible_range)
-{
-  GtkSpinButton *button = GTK_SPIN_BUTTON (accessible_range);
-  return gtk_adjustment_get_minimum_increment (gtk_spin_button_get_adjustment (button));
-}
-
 static gboolean
-gtk_spin_button_accessible_range_set_current_value (GtkAccessibleRange *accessible_range, double value)
+accessible_range_set_current_value (GtkAccessibleRange *accessible_range,
+                                    double              value)
 {
-  GtkSpinButton *button = GTK_SPIN_BUTTON (accessible_range);
-  gtk_spin_button_set_value (button, value);
+  gtk_spin_button_set_value (GTK_SPIN_BUTTON (accessible_range), value);
   return TRUE;
 }
 
 static void
 gtk_spin_button_accessible_range_init (GtkAccessibleRangeInterface *iface)
 {
-  iface->get_minimum_increment = gtk_spin_button_accessible_range_get_minimum_increment;
-  iface->set_current_value = gtk_spin_button_accessible_range_set_current_value;
+  iface->set_current_value = accessible_range_set_current_value;
 }
 
 static void
