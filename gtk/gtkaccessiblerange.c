@@ -1,38 +1,34 @@
 /* gtkaccessiblerange.c: Accessible range interface
  *
- * Copyright © 2022 Red Hat Inc.
- * 
+ * SPDX-FileCopyrightText: 2022 Red Hat Inc.
  * SPDX-License-Identifier: LGPL-2.1-or-later
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
  * GtkAccessibleRange:
- * 
- * This interface describes range controls, e. g. controls which have a single
- * value which can optionally be changed by the user.
- * 
- * This interface is expected to be implemented by controls of the
- * %GTK_ACCESSIBLE_ROLE_METER, %GTK_ACCESSIBLE_ROLE_PROGRESS_BAR,
- * %GTK_ACCESSIBLE_ROLE_SCROLLBAR, %GTK_ACCESSIBLE_ROLE_SLIDER and %GTK_ACCESSIBLE_ROLE_SPIN_BUTTON
- * role. If that is not the case, a warning will be issued at runtime.
- * 
+ *
+ * This interface describes ranged controls, e.g. controls which have a single
+ * value within an allowed range and that can optionally be changed by the user.
+ *
+ * This interface is expected to be implemented by controls using the following
+ * roles:
+ *
+ * - `GTK_ACCESSIBLE_ROLE_METER`
+ * - `GTK_ACCESSIBLE_ROLE_PROGRESS_BAR`
+ * - `GTK_ACCESSIBLE_ROLE_SCROLLBAR`
+ * - `GTK_ACCESSIBLE_ROLE_SLIDER`
+ * - `GTK_ACCESSIBLE_ROLE_SPIN_BUTTON`
+ *
+ * If that is not the case, a warning will be issued at run time.
+ *
  * In addition to this interface, its implementors are expected to provide the
- * correct values for the following properties: %GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,
- * %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN and %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW.
- * 
+ * correct values for the following properties:
+ *
+ * - `GTK_ACCESSIBLE_PROPERTY_VALUE_MAX`
+ * - `GTK_ACCESSIBLE_PROPERTY_VALUE_MIN`
+ * - `GTK_ACCESSIBLE_PROPERTY_VALUE_NOW`
+ * - `GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT`
+ *
  * For controls where a minimum increment makes no sense and which do not allow
  * setting the current value from the user, the default implementation of this
  * interface suffices.
@@ -65,7 +61,7 @@ gtk_accessible_range_default_init (GtkAccessibleRangeInterface *iface)
   iface->set_current_value = gtk_accessible_range_default_set_current_value;
 }
 
- /*
+/**
  * gtk_accessible_range_get_minimum_increment:
  * @self: a `GtkAccessibleRange`
  *
@@ -83,15 +79,17 @@ gtk_accessible_range_get_minimum_increment (GtkAccessibleRange *self)
   return GTK_ACCESSIBLE_RANGE_GET_IFACE (self)->get_minimum_increment (self);
 }
 
- /*
+/**
  * gtk_accessible_range_set_current_value:
  * @self: a `GtkAccessibleRange`
  *
- * Sets the current value of this `GtkAccessibleRange` to @value.
+ * Sets the current value of this `GtkAccessibleRange` to the given value
+ *
  * Note that for some widgets implementing this interface, setting a value
- * through the accessibility API makes no sense, so calling this function may
- * in some cases do nothing.
- * @returns: %true if the call changed the value, %false otherwise
+ * through the accessibility API makes no sense, so calling this function
+ * may in some cases do nothing
+ *
+ * Returns: true if the call changed the value, and false otherwise
  *
  * Since: 4.10
  */
@@ -101,5 +99,6 @@ gtk_accessible_range_set_current_value (GtkAccessibleRange *self, double value)
   g_return_val_if_fail (GTK_IS_ACCESSIBLE_RANGE (self), FALSE);
 
   GtkAccessibleRangeInterface *iface = GTK_ACCESSIBLE_RANGE_GET_IFACE (self);
+
   return iface->set_current_value (self, value);
 }
