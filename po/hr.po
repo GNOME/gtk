@@ -5,19 +5,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-26 14:23+0000\n"
-"PO-Revision-Date: 2021-10-21 12:48+0200\n"
+"POT-Creation-Date: 2022-09-18 06:30+0000\n"
+"PO-Revision-Date: 2022-09-30 14:11+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "Repor4-Msgid-Bugs-To: \n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Launchpad-Export-Date: 2017-04-10 20:36+0000\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -453,7 +453,7 @@ msgstr "Suspenzija"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:204 gdk/wayland/gdkprimary-wayland.c:312
-#: gdk/win32/gdkdrop-win32.c:1099 gdk/win32/gdkdrop-win32.c:1144
+#: gdk/win32/gdkdrop-win32.c:1138 gdk/win32/gdkdrop-win32.c:1183
 #: gdk/x11/gdkclipboard-x11.c:763 gdk/x11/gdkdrop-x11.c:234
 msgid "No compatible transfer format found"
 msgstr "Nema pronađenog kompatibilnog formata za prijenos"
@@ -534,15 +534,15 @@ msgstr ""
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Nemoguće preuzimanje vlasništva međuspremnika. OpenClipboard() neuspio: 0x"
-"%lx."
+"Nemoguće preuzimanje vlasništva međuspremnika. OpenClipboard() neuspio: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:754
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
-"Nemoguće preuzimanje vlasništva međuspremnika. EmptyClipboard() neuspio: 0x"
-"%lx."
+"Nemoguće preuzimanje vlasništva međuspremnika. EmptyClipboard() neuspio: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:797
 #, c-format
@@ -621,46 +621,46 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
-"Nemoguće dobivanje podataka međuspremnika. GetClipboardData() neuspjelo: 0x"
-"%lx."
+"Nemoguće dobivanje podataka međuspremnika. GetClipboardData() neuspjelo: "
+"0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1030
+#: gdk/win32/gdkdrop-win32.c:1069
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
-"Nemoguće dobivanje povuci-i-ispusti podataka. GlobalLock(0x%p) neuspjelo: 0x"
-"%lx."
+"Nemoguće dobivanje povuci-i-ispusti podataka. GlobalLock(0x%p) neuspjelo: "
+"0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1039
+#: gdk/win32/gdkdrop-win32.c:1078
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
-"Nemoguće dobivanje povuci-i-ispusti podataka. GlobalSize(0x%p) neuspjelo: 0x"
-"%lx."
+"Nemoguće dobivanje povuci-i-ispusti podataka. GlobalSize(0x%p) neuspjelo: "
+"0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:1050
+#: gdk/win32/gdkdrop-win32.c:1089
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Nemoguće dobivanje povuci-i-ispusti podataka. Neuspjelo premješatanje %s "
 "bajta za pohranu podatka."
 
-#: gdk/win32/gdkdrop-win32.c:1118
+#: gdk/win32/gdkdrop-win32.c:1157
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "GDK površina 0x%p nije registrirana kao odredište ispuštanja"
 
-#: gdk/win32/gdkdrop-win32.c:1125
+#: gdk/win32/gdkdrop-win32.c:1164
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Ciljani zapis sadržaja 0x%p nema objekt podataka"
 
-#: gdk/win32/gdkdrop-win32.c:1163
+#: gdk/win32/gdkdrop-win32.c:1202
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) neuspjelo, vraćam 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1195
+#: gdk/win32/gdkdrop-win32.c:1234
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
@@ -1029,7 +1029,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:826 gtk/gtkshortcutlabel.c:100
+#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:100
 #: gtk/gtkshortcutlabel.c:136
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1040,7 +1040,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:845 gtk/gtkshortcutlabel.c:103
+#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:103
 #: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1051,7 +1051,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:864 gtk/gtkshortcutlabel.c:106
+#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:106
 #: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1062,7 +1062,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:882 gtk/gtkshortcutlabel.c:112
+#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:112
 #: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Super"
@@ -1073,7 +1073,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:896 gtk/gtkshortcutlabel.c:115
+#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:115
 #: gtk/gtkshortcutlabel.c:144
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1084,7 +1084,7 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:911 gtk/gtkshortcutlabel.c:109
+#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:109
 #: gtk/gtkshortcutlabel.c:146
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1094,17 +1094,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:931
+#: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "KP"
 
-#: gtk/gtkaccelgroup.c:938
+#: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: gtk/gtkaccelgroup.c:941 gtk/gtkshortcutlabel.c:171
+#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:171
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Obrnuta kosa crta"
@@ -1588,6 +1588,14 @@ msgstr "Element <%s> nije dopušten na najvišoj razini"
 msgid "Text may not appear inside <%s>"
 msgstr "Tekst se možda neće pojaviti unutar <%s>"
 
+#. Translate to calendar:week_start:0 if you want Sunday to be the
+#. * first day of the week to calendar:week_start:1 if you want Monday
+#. * to be the first day of the week, and so on.
+#.
+#: gtk/gtkcalendar.c:668
+msgid "calendar:week_start:0"
+msgstr "calendar:week_start:1"
+
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
 #. * Do *not* translate it to anything else, if it
@@ -1598,17 +1606,9 @@ msgstr "Tekst se možda neće pojaviti unutar <%s>"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:768
+#: gtk/gtkcalendar.c:819
 msgid "calendar:MY"
 msgstr "calendar:MY"
-
-#. Translate to calendar:week_start:0 if you want Sunday to be the
-#. * first day of the week to calendar:week_start:1 if you want Monday
-#. * to be the first day of the week, and so on.
-#.
-#: gtk/gtkcalendar.c:806
-msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
 
 #. Translators: This dictates how the year is displayed in
 #. * gtkcalendar widget.  See strftime() manual for the format.
@@ -1616,7 +1616,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:1402
+#: gtk/gtkcalendar.c:1406
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1631,7 +1631,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1439
+#: gtk/gtkcalendar.c:1443
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1645,7 +1645,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1503
+#: gtk/gtkcalendar.c:1507
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2011,7 +2011,7 @@ msgstr "Rubovi papira"
 
 #: gtk/gtkentry.c:3726
 msgid "Insert Emoji"
-msgstr "Umetni smajli"
+msgstr "Umetni emotikoin"
 
 #: gtk/gtkfilechooserdialog.c:551
 msgid "_Name"
@@ -2170,7 +2170,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ako obrišete stavku, biti će trajno izgubljena."
 
 #: gtk/gtkfilechooserwidget.c:1210 gtk/gtkfilechooserwidget.c:1826
-#: gtk/gtklabel.c:5483 gtk/gtktext.c:6060 gtk/gtktextview.c:8862
+#: gtk/gtklabel.c:5483 gtk/gtktext.c:6062 gtk/gtktextview.c:8898
 msgid "_Delete"
 msgstr "_Obriši"
 
@@ -2382,7 +2382,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Odaberi slova"
 
-#: gtk/gtkfontbutton.c:1348
+#: gtk/gtkfontbutton.c:1357
 msgctxt "font"
 msgid "None"
 msgstr "Nijedno"
@@ -2439,19 +2439,19 @@ msgstr "Varijanta znakova"
 msgid "OpenGL context creation failed"
 msgstr "Neuspjelo stvaranje OpenGL sadržaja"
 
-#: gtk/gtklabel.c:5480 gtk/gtktext.c:6048 gtk/gtktextview.c:8850
+#: gtk/gtklabel.c:5480 gtk/gtktext.c:6050 gtk/gtktextview.c:8886
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtklabel.c:5481 gtk/gtktext.c:6052 gtk/gtktextview.c:8854
+#: gtk/gtklabel.c:5481 gtk/gtktext.c:6054 gtk/gtktextview.c:8890
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtklabel.c:5482 gtk/gtktext.c:6056 gtk/gtktextview.c:8858
+#: gtk/gtklabel.c:5482 gtk/gtktext.c:6058 gtk/gtktextview.c:8894
 msgid "_Paste"
 msgstr "_Zalijepi"
 
-#: gtk/gtklabel.c:5488 gtk/gtktext.c:6069 gtk/gtktextview.c:8883
+#: gtk/gtklabel.c:5488 gtk/gtktext.c:6071 gtk/gtktextview.c:8919
 msgid "Select _All"
 msgstr "Odaberi _sve"
 
@@ -3433,15 +3433,15 @@ msgstr "Pokušaj drugačiju pretragu"
 msgid "Could not show link"
 msgstr "Nemoguće prikazati poveznicu"
 
-#: gtk/gtktext.c:6074 gtk/gtktextview.c:8888
+#: gtk/gtktext.c:6076 gtk/gtktextview.c:8924
 msgid "Insert _Emoji"
-msgstr "Umetni _smajli"
+msgstr "Umetni _emotikoin"
 
-#: gtk/gtktextview.c:8870
+#: gtk/gtktextview.c:8906
 msgid "_Undo"
 msgstr "_Vrati"
 
-#: gtk/gtktextview.c:8874
+#: gtk/gtktextview.c:8910
 msgid "_Redo"
 msgstr "_Ponovi"
 
@@ -6688,7 +6688,7 @@ msgstr "_Prikaži sve aplikacije"
 
 #: gtk/ui/gtkappchooserdialog.ui:66
 msgid "_Find New Applications"
-msgstr "_Pronađi nove aplikacije"
+msgstr "_Potraži nove aplikacije"
 
 #: gtk/ui/gtkappchooserwidget.ui:100
 msgid "No applications found."
@@ -7779,7 +7779,7 @@ msgstr ""
 "Naredbe:\n"
 "  validate     Provjera valjanosti datoteke\n"
 "  simplify     Pojednostavi datoteku\n"
-"  enumerate    Prikaži sve imenovane datoteke\n"
+"  enumerate    Prikaži sve navedene datoteke\n"
 "  preview      Prikaz datoteke\n"
 "\n"
 "Mogućnosti pojednostavljenja:\n"
@@ -7787,7 +7787,7 @@ msgstr ""
 "  --3to4       Pretvori iz GTK 3 u GTK 4\n"
 "\n"
 "Mogućnosti prikaza:\n"
-"  --id=ID      Prikaži samo imenovane datoteke\n"
+"  --id=ID      Prikaži samo navedene datoteke\n"
 "  --css=DATOTEKA   Koristi stil CSS datoteke\n"
 "\n"
 "Izvedite razne zadatke na GtkBuilder .ui datotekama.\n"
@@ -8895,8 +8895,8 @@ msgstr ""
 #~ msgstr "\"%s\" nije valjan naziv svojstva"
 
 #~ msgid ""
-#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s"
-#~ "\""
+#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute "
+#~ "\"%s\""
 #~ msgstr ""
 #~ "\"%s\" ne može biti pretvoren u vrijednost vrste \"%s\" za svojstvo \"%s\""
 
