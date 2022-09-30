@@ -1395,7 +1395,6 @@ configure_toplevel_geometry (GdkSurface *surface)
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkMonitor *monitor;
-  GdkRectangle monitor_geometry;
   int bounds_width, bounds_height;
   GdkToplevelSize size;
   GdkToplevelLayout *layout;
@@ -1403,10 +1402,20 @@ configure_toplevel_geometry (GdkSurface *surface)
   GdkSurfaceHints mask;
 
   monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-  gdk_monitor_get_geometry (monitor, &monitor_geometry);
-  g_object_unref (monitor);
-  bounds_width = monitor_geometry.width;
-  bounds_height = monitor_geometry.height;
+  if (monitor)
+    {
+      GdkRectangle monitor_geometry;
+
+      gdk_monitor_get_geometry (monitor, &monitor_geometry);
+      g_object_unref (monitor);
+      bounds_width = monitor_geometry.width;
+      bounds_height = monitor_geometry.height;
+    }
+  else
+    {
+      bounds_width = 0;
+      bounds_height = 0;
+    }
 
   gdk_toplevel_size_init (&size, bounds_width, bounds_height);
   gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
