@@ -42,7 +42,11 @@ textures_equal (GdkTexture *t1,  GdkTexture *t2)
 
   if (width != gdk_texture_get_width (t2))
     return FALSE;
+
   if (height != gdk_texture_get_height (t2))
+    return FALSE;
+
+  if (!gdk_color_state_equal (gdk_texture_get_color_state (t1), gdk_texture_get_color_state (t2)))
     return FALSE;
 
   d1 = g_malloc (width * height * 4);
