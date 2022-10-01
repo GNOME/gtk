@@ -1383,9 +1383,33 @@ gtk_window_titlebar_action (GtkWindow      *window,
                             guint           button,
                             gint            n_press)
 {
+  GdkTitlebarGesture gesture = 0;
+  GdkWindow *gdk_window;
   GtkSettings *settings;
   gchar *action = NULL;
   gboolean retval = TRUE;
+
+  switch (button)
+    {
+    case GDK_BUTTON_PRIMARY:
+      if (n_press == 2)
+        gesture = GDK_TITLEBAR_GESTURE_DOUBLE_CLICK;
+      break;
+    case GDK_BUTTON_MIDDLE:
+      gesture = GDK_TITLEBAR_GESTURE_MIDDLE_CLICK;
+      break;
+    case GDK_BUTTON_SECONDARY:
+      gesture = GDK_TITLEBAR_GESTURE_RIGHT_CLICK;
+      break;
+    }
+
+  gdk_window = _gtk_widget_get_window (GTK_WIDGET (window));
+  if (gesture &&
+      GDK_PRIVATE_CALL (gdk_window_titlebar_gesture (gdk_window, gesture)))
+    {
+      retval = TRUE;
+      goto out;
+    }
 
   settings = gtk_widget_get_settings (GTK_WIDGET (window));
   switch (button)
@@ -1432,6 +1456,7 @@ gtk_window_titlebar_action (GtkWindow      *window,
 
   g_free (action);
 
+out:
   return retval;
 }
 

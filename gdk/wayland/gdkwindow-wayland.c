@@ -4795,6 +4795,65 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
   return TRUE;
 }
 
+static gboolean
+translate_gesture (GdkTitlebarGesture         gesture,
+                   enum gtk_surface1_gesture *out_gesture)
+{
+  switch (gesture)
+    {
+    case GDK_TITLEBAR_GESTURE_DOUBLE_CLICK:
+      *out_gesture = GTK_SURFACE1_GESTURE_DOUBLE_CLICK;
+      break;
+
+    case GDK_TITLEBAR_GESTURE_RIGHT_CLICK:
+      *out_gesture = GTK_SURFACE1_GESTURE_RIGHT_CLICK;
+      break;
+
+    case GDK_TITLEBAR_GESTURE_MIDDLE_CLICK:
+      *out_gesture = GTK_SURFACE1_GESTURE_MIDDLE_CLICK;
+      break;
+
+    default:
+      g_warning ("Not handling unknown titlebar gesture %u", gesture);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+gdk_wayland_window_titlebar_gesture (GdkWindow          *window,
+                                     GdkTitlebarGesture  gesture)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
+  enum gtk_surface1_gesture gtk_gesture;
+  GdkSeat *seat;
+  struct wl_seat *wl_seat;
+  uint32_t serial;
+
+  if (!gtk_surface)
+    return FALSE;
+
+  if (gtk_surface1_get_version (gtk_surface) < GTK_SURFACE1_TITLEBAR_GESTURE_SINCE_VERSION)
+    return FALSE;
+
+  if (!translate_gesture (gesture, &gtk_gesture))
+    return FALSE;
+
+  seat = gdk_display_get_default_seat (gdk_window_get_display (window));
+  wl_seat = gdk_wayland_seat_get_wl_seat (seat);
+
+  serial = _gdk_wayland_seat_get_last_implicit_grab_serial (seat, NULL);
+
+  gtk_surface1_titlebar_gesture (impl->display_server.gtk_surface,
+                                 serial,
+                                 wl_seat,
+                                 gtk_gesture);
+
+  return TRUE;
+}
+
 static void
 _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
 {
@@ -4886,6 +4945,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->show_window_menu = gdk_wayland_window_show_window_menu;
   impl_class->create_gl_context = gdk_wayland_window_create_gl_context;
   impl_class->invalidate_for_new_frame = gdk_wayland_window_invalidate_for_new_frame;
+  impl_class->titlebar_gesture = gdk_wayland_window_titlebar_gesture;
 
   signals[COMMITTED] = g_signal_new ("committed",
                                      G_TYPE_FROM_CLASS (object_class),
