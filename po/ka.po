@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: ka\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2022-09-28 17:33+0000\n"
-"PO-Revision-Date: 2022-09-28 20:33+0200\n"
+"PO-Revision-Date: 2022-10-01 12:02+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -2371,7 +2371,7 @@ msgstr "კონტაქტები"
 
 #: gtk/gtkfilechooserwidget.c:4334
 msgid "Calendar"
-msgstr "კალენდერი"
+msgstr "კალენდარი"
 
 #: gtk/gtkfilechooserwidget.c:4335
 msgid "Document"
