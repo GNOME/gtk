@@ -56,6 +56,7 @@ endforeach
 internal_tests = [
   'image',
   'texture',
+  'color'
 ]
 
 foreach t : internal_tests
