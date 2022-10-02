@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-22 22:23+0000\n"
-"PO-Revision-Date: 2022-07-25 09:39+0200\n"
+"POT-Creation-Date: 2022-10-01 01:35+0000\n"
+"PO-Revision-Date: 2022-10-02 12:37+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: \n"
 "Language: ka\n"
@@ -105,7 +105,7 @@ msgstr "პროდუქტის ID"
 
 #: gdk/gdkdevice.c:289 gdk/gdkdevice.c:290
 msgid "Seat"
-msgstr ""
+msgstr "სავარძელი"
 
 #: gdk/gdkdevice.c:306 gdk/gdkdevice.c:307
 msgid "Number of concurrent touches"
@@ -219,7 +219,7 @@ msgstr ""
 #: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:638
 #: gtk/gtkprinter.c:121 gtk/gtkstack.c:516 gtk/gtktextmark.c:136
 msgid "Name"
-msgstr ""
+msgstr "სახელი"
 
 #: gtk/deprecated/gtkaction.c:244
 msgid "A unique name for the action."
@@ -261,7 +261,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkaction.c:342 gtk/deprecated/gtkstatusicon.c:279
 msgid "GIcon"
-msgstr ""
+msgstr "GIcon"
 
 #: gtk/deprecated/gtkaction.c:343 gtk/deprecated/gtkstatusicon.c:280
 #: gtk/gtkcellrendererpixbuf.c:282 gtk/gtkimage.c:360
@@ -330,7 +330,7 @@ msgstr ""
 #: gtk/deprecated/gtkaction.c:466 gtk/deprecated/gtkactiongroup.c:215
 #: gtk/gtkcellrenderer.c:308 gtk/gtkwidget.c:1159
 msgid "Sensitive"
-msgstr ""
+msgstr "მგრძნობიარე"
 
 #: gtk/deprecated/gtkaction.c:467
 msgid "Whether the action is enabled."
@@ -581,7 +581,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkfontsel.c:247 gtk/gtkfontchooser.c:90
 msgid "Preview text"
-msgstr ""
+msgstr "ტექსტის გადახედვა"
 
 #: gtk/deprecated/gtkfontsel.c:248 gtk/gtkfontchooser.c:91
 msgid "The text to display in order to demonstrate the selected font"
@@ -737,7 +737,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkradioaction.c:120
 msgid "The value"
-msgstr ""
+msgstr "მნიშვნელობა"
 
 #: gtk/deprecated/gtkradioaction.c:121
 msgid ""
@@ -748,7 +748,7 @@ msgstr ""
 #: gtk/deprecated/gtkradioaction.c:139 gtk/gtkradiobutton.c:184
 #: gtk/gtkradiomenuitem.c:424 gtk/gtkradiotoolbutton.c:83
 msgid "Group"
-msgstr ""
+msgstr "GROUP"
 
 #: gtk/deprecated/gtkradioaction.c:140
 msgid "The radio action whose group this action belongs to."
@@ -1056,7 +1056,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktrayicon-x11.c:168 gtk/gtkbox.c:350
 msgid "Padding"
-msgstr ""
+msgstr "შევსება"
 
 #: gtk/deprecated/gtktrayicon-x11.c:169
 msgid "Padding that should be put around icons in the tray"
@@ -1130,7 +1130,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:442
 msgid "License Type"
-msgstr ""
+msgstr "ლიცენზიის ტიპი"
 
 #: gtk/gtkaboutdialog.c:443
 msgid "The license type of the program"
@@ -1438,7 +1438,7 @@ msgstr ""
 
 #: gtk/gtkapplication.c:877
 msgid "Menubar"
-msgstr ""
+msgstr "მენიუს ზოლი"
 
 #: gtk/gtkapplication.c:878
 msgid "The GMenuModel for the menubar"
@@ -1446,7 +1446,7 @@ msgstr ""
 
 #: gtk/gtkapplication.c:884
 msgid "Active window"
-msgstr ""
+msgstr "აქტიური ფანჯარა"
 
 #: gtk/gtkapplication.c:885
 msgid "The window which most recently had focus"
@@ -2030,7 +2030,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:301
 msgid "visible"
-msgstr ""
+msgstr "ხილული"
 
 #: gtk/gtkcellrenderer.c:302
 msgid "Display the cell"
@@ -2245,7 +2245,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererprogress.c:180 gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
-msgstr ""
+msgstr "პულსი"
 
 #: gtk/gtkcellrendererprogress.c:181
 msgid ""
@@ -2299,7 +2299,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:767 gtk/gtkspinbutton.c:395
 msgid "Digits"
-msgstr ""
+msgstr "ციფრები"
 
 #: gtk/gtkcellrendererspin.c:144 gtk/gtkspinbutton.c:396
 msgid "The number of decimal places to display"
@@ -2392,7 +2392,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:861 gtk/gtktexttag.c:309
 #: gtk/gtktextview.c:826
 msgid "Editable"
-msgstr ""
+msgstr "ჩასწორებადი"
 
 #: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:310 gtk/gtktextview.c:827
 msgid "Whether the text can be modified by the user"
@@ -2422,7 +2422,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:385 gtk/gtkcellrenderertext.c:386
 #: gtk/gtktexttag.c:349
 msgid "Font style"
-msgstr ""
+msgstr "ფონტის სტილი"
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtkcellrenderertext.c:394
 #: gtk/gtktexttag.c:358
@@ -2432,7 +2432,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:401 gtk/gtkcellrenderertext.c:402
 #: gtk/gtktexttag.c:367
 msgid "Font weight"
-msgstr ""
+msgstr "ფონტის წონა"
 
 #: gtk/gtkcellrenderertext.c:409 gtk/gtkcellrenderertext.c:410
 #: gtk/gtktexttag.c:378
@@ -3062,7 +3062,7 @@ msgstr "ID"
 
 #: gtk/gtkcssnode.c:633
 msgid "Unique ID"
-msgstr ""
+msgstr "უნიკალური ID"
 
 #: gtk/gtkcssnode.c:643 gtk/gtkswitch.c:894
 msgid "State"
@@ -3578,7 +3578,7 @@ msgstr ""
 
 #: gtk/gtkentrycompletion.c:370 gtk/gtkiconview.c:445
 msgid "Text column"
-msgstr ""
+msgstr "ტექსტის სვეტი"
 
 #: gtk/gtkentrycompletion.c:371
 msgid "The column of the model containing the strings."
@@ -3860,7 +3860,7 @@ msgstr "სუბტიტრები"
 
 #: gtk/gtkfixed.c:156 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:260
 msgid "X position"
-msgstr ""
+msgstr "X მდებარეობა"
 
 #: gtk/gtkfixed.c:157 gtk/gtklayout.c:649
 msgid "X position of child widget"
@@ -3868,7 +3868,7 @@ msgstr ""
 
 #: gtk/gtkfixed.c:164 gtk/gtklayout.c:658
 msgid "Y position"
-msgstr ""
+msgstr "Y მდებარეობა"
 
 #: gtk/gtkfixed.c:165 gtk/gtklayout.c:659
 msgid "Y position of child widget"
@@ -3877,11 +3877,11 @@ msgstr ""
 #: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:408 gtk/gtklistbox.c:485
 #: gtk/gtktreeselection.c:131
 msgid "Selection mode"
-msgstr ""
+msgstr "მონიშვნის რეჟიმი"
 
 #: gtk/gtkflowbox.c:3823 gtk/gtkiconview.c:409 gtk/gtklistbox.c:486
 msgid "The selection mode"
-msgstr ""
+msgstr "მონიშვნის რეჟიმი"
 
 #: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:665 gtk/gtklistbox.c:493
 #: gtk/gtktreeview.c:1221
@@ -3963,7 +3963,7 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:572
 msgid "Show size"
-msgstr ""
+msgstr "ზომის ჩვენება"
 
 #: gtk/gtkfontbutton.c:573
 msgid "Whether selected font size is shown in the label"
@@ -4255,7 +4255,7 @@ msgstr ""
 
 #: gtk/gtkiconview.c:490
 msgid "Number of columns"
-msgstr ""
+msgstr "სვეტების რაოდენობა"
 
 #: gtk/gtkiconview.c:491
 msgid "Number of columns to display"
@@ -4275,7 +4275,7 @@ msgstr ""
 
 #: gtk/gtkiconview.c:540
 msgid "Row Spacing"
-msgstr ""
+msgstr "რიგების დაშორება"
 
 #: gtk/gtkiconview.c:541
 msgid "Space which is inserted between grid rows"
@@ -4283,7 +4283,7 @@ msgstr ""
 
 #: gtk/gtkiconview.c:556
 msgid "Column Spacing"
-msgstr ""
+msgstr "სვეტების დაშორება"
 
 #: gtk/gtkiconview.c:557
 msgid "Space which is inserted between grid columns"
@@ -4291,7 +4291,7 @@ msgstr ""
 
 #: gtk/gtkiconview.c:572
 msgid "Margin"
-msgstr ""
+msgstr "ზღვარი"
 
 #: gtk/gtkiconview.c:573
 msgid "Space which is inserted at the edges of the icon view"
@@ -4308,11 +4308,11 @@ msgstr ""
 
 #: gtk/gtkiconview.c:605 gtk/gtktreeview.c:1060 gtk/gtktreeviewcolumn.c:351
 msgid "Reorderable"
-msgstr ""
+msgstr "გადალაგებადი"
 
 #: gtk/gtkiconview.c:606 gtk/gtktreeview.c:1061
 msgid "View is reorderable"
-msgstr ""
+msgstr "ხედი გადალაგებადია"
 
 #: gtk/gtkiconview.c:613 gtk/gtktreeview.c:1205
 msgid "Tooltip Column"
@@ -4381,7 +4381,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:328
 msgid "Animation"
-msgstr ""
+msgstr "ანიმაცია"
 
 #: gtk/gtkimage.c:329
 msgid "GdkPixbufAnimation to display"
@@ -4413,7 +4413,7 @@ msgstr ""
 
 #: gtk/gtkinfobar.c:465 gtk/gtksearchbar.c:425
 msgid "Show Close Button"
-msgstr ""
+msgstr "დახურვის ღილაკის ჩვენება"
 
 #: gtk/gtkinfobar.c:466
 msgid "Whether to include a standard close button"
@@ -4725,7 +4725,7 @@ msgstr ""
 
 #: gtk/gtkmenubutton.c:486
 msgid "Popup"
-msgstr ""
+msgstr "მხტუნარა"
 
 #: gtk/gtkmenubutton.c:487
 msgid "The dropdown menu."
@@ -4951,7 +4951,7 @@ msgstr ""
 
 #: gtk/gtkmenuitem.c:761 gtk/gtkpopovermenu.c:376
 msgid "Submenu"
-msgstr ""
+msgstr "ქვემენიუ"
 
 #: gtk/gtkmenuitem.c:762
 msgid "The submenu attached to the menu item, or NULL if it has none"
@@ -5337,7 +5337,7 @@ msgstr ""
 
 #: gtk/gtkoverlay.c:788
 msgid "Pass Through"
-msgstr ""
+msgstr "გატარება"
 
 #: gtk/gtkoverlay.c:788
 msgid "Pass through input, does not affect main child"
@@ -5595,7 +5595,7 @@ msgstr ""
 
 #: gtk/gtkpopover.c:1739
 msgid "Relative to"
-msgstr ""
+msgstr "ორიენტრირი"
 
 #: gtk/gtkpopover.c:1740
 msgid "Widget the bubble window points to"
@@ -5651,7 +5651,7 @@ msgstr ""
 
 #: gtk/gtkprinter.c:128
 msgid "Backend"
-msgstr ""
+msgstr "უკანბოლო"
 
 #: gtk/gtkprinter.c:129
 msgid "Backend for the printer"
@@ -5793,7 +5793,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1147
 msgid "Job Name"
-msgstr ""
+msgstr "დავალების სახელი"
 
 #: gtk/gtkprintoperation.c:1148
 msgid "A string used for identifying the print job."
@@ -5965,7 +5965,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:309
 msgid "Show text"
-msgstr ""
+msgstr "ტექსტის ჩვენება"
 
 #: gtk/gtkprogressbar.c:310
 msgid "Whether the progress is shown as text."
@@ -6815,7 +6815,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:795
 msgid "Enable Animations"
-msgstr ""
+msgstr "ანიმაციების ჩართვა"
 
 #: gtk/gtksettings.c:796
 msgid "Whether to enable toolkit-wide animations."
@@ -7251,7 +7251,7 @@ msgstr ""
 
 #: gtk/gtkshortcutlabel.c:479 gtk/gtkshortcutsshortcut.c:537
 msgid "Accelerator"
-msgstr ""
+msgstr "ამაჩქარებელი"
 
 #: gtk/gtkshortcutlabel.c:491
 msgid "Disabled text"
@@ -7259,7 +7259,7 @@ msgstr "გათიშული ტექსტი"
 
 #: gtk/gtkshortcutsgroup.c:322
 msgid "View"
-msgstr ""
+msgstr "ნახვა"
 
 #: gtk/gtkshortcutsgroup.c:335 gtk/gtkshortcutsgroup.c:336
 #: gtk/gtkshortcutsshortcut.c:618 gtk/gtkshortcutsshortcut.c:619
@@ -7382,7 +7382,7 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:419
 msgid "Wrap"
-msgstr ""
+msgstr "შემოხვევა"
 
 #: gtk/gtkspinbutton.c:420
 msgid "Whether a spin button should wrap upon reaching its limits"
@@ -7527,7 +7527,7 @@ msgstr ""
 
 #: gtk/gtkstyleproperty.c:109
 msgid "Property name"
-msgstr ""
+msgstr "თვისების სახელი"
 
 #: gtk/gtkstyleproperty.c:110
 msgid "The name of the property"
@@ -7807,7 +7807,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:663
 msgid "Fallback"
-msgstr ""
+msgstr "გადართვა შეცდომის შემთხვევაში"
 
 #: gtk/gtktexttag.c:664
 msgid "Whether font fallback is enabled."
@@ -8039,7 +8039,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:1063
 msgid "Monospace"
-msgstr ""
+msgstr "ერთსიგანიანი"
 
 #: gtk/gtktextview.c:1064
 msgid "Whether to use a monospace font"
@@ -8263,7 +8263,7 @@ msgstr ""
 
 #: gtk/gtktoolpalette.c:1012
 msgid "Exclusive"
-msgstr ""
+msgstr "ექსკლუზიური"
 
 #: gtk/gtktoolpalette.c:1013
 msgid "Whether the item group should be the only expanded at a given time"
@@ -8372,7 +8372,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:1082
 msgid "Enable Search"
-msgstr ""
+msgstr "ძებნის ჩართვა"
 
 #: gtk/gtktreeview.c:1083
 msgid "View allows user to search through columns interactively"
@@ -8380,7 +8380,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:1089
 msgid "Search Column"
-msgstr ""
+msgstr "ძებნის სვეტი"
 
 #: gtk/gtktreeview.c:1090
 msgid "Model column to search through during interactive search"
@@ -8542,7 +8542,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:783
 msgid "Resizable"
-msgstr ""
+msgstr "შეცვლადი ზომით"
 
 #: gtk/gtktreeviewcolumn.c:254
 msgid "Column is user-resizable"
@@ -8558,7 +8558,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:284
 msgid "Sizing"
-msgstr ""
+msgstr "ზომების შეცვლა"
 
 #: gtk/gtktreeviewcolumn.c:285
 msgid "Resize mode of the column"
