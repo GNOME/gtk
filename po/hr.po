@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-09-29 16:43+0000\n"
-"PO-Revision-Date: 2022-09-30 14:03+0200\n"
+"POT-Creation-Date: 2022-10-01 14:57+0000\n"
+"PO-Revision-Date: 2022-10-02 16:04+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -1027,7 +1027,7 @@ msgstr "BSD 3-klauzula licence"
 
 #: gtk/gtkaboutdialog.c:140
 msgid "Apache License, Version 2.0"
-msgstr "Apache Licenca, inačica 2.0"
+msgstr "Apache licenca, inačica 2.0"
 
 #: gtk/gtkaboutdialog.c:141
 msgid "Mozilla Public License 2.0"
@@ -1035,7 +1035,7 @@ msgstr "Mozilla javna licenca 2.0"
 
 #: gtk/gtkaboutdialog.c:937
 msgid "Website"
-msgstr "Web stranica"
+msgstr "Web naslovnica"
 
 #: gtk/gtkaboutdialog.c:973 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
@@ -1044,11 +1044,11 @@ msgstr "O %s"
 
 #: gtk/gtkaboutdialog.c:2074
 msgid "Created by"
-msgstr "Stvorio"
+msgstr "Stvorili"
 
 #: gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
-msgstr "Dokumentirao"
+msgstr "Dokumentirali"
 
 #: gtk/gtkaboutdialog.c:2087
 msgid "Translated by"
@@ -1056,7 +1056,7 @@ msgstr "Preveli"
 
 #: gtk/gtkaboutdialog.c:2092
 msgid "Design by"
-msgstr "Dizajnirao"
+msgstr "Dizajnirali"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
