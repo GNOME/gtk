@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-09-29 12:14+0000\n"
-"PO-Revision-Date: 2022-09-29 14:15+0200\n"
+"POT-Creation-Date: 2022-10-02 10:38+0000\n"
+"PO-Revision-Date: 2022-10-02 16:36+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -655,15 +655,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Zatvori"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9320
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9345
 msgid "Minimize"
 msgstr "Smanji"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9329
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9354
 msgid "Maximize"
 msgstr "Uvećaj"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9286
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9311
 msgid "Restore"
 msgstr "Vrati"
 
@@ -1212,7 +1212,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12790 gtk/inspector/css-editor.c:201
+#: gtk/gtkwindow.c:12815 gtk/inspector/css-editor.c:201
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1261,7 +1261,7 @@ msgid "_Apply"
 msgstr "_Primijeni"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944
-#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12791
+#: gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12816
 msgid "_OK"
 msgstr "_U redu"
 
@@ -1491,7 +1491,7 @@ msgstr "BSD 3-klauzula licence"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "Apache License, Version 2.0"
-msgstr "Apache Licenca, inačica 2.0"
+msgstr "Apache licenca, inačica 2.0"
 
 #: gtk/gtkaboutdialog.c:131
 msgid "Mozilla Public License 2.0"
@@ -1516,7 +1516,7 @@ msgstr "Nemoguće prikazati poveznicu"
 
 #: gtk/gtkaboutdialog.c:1043
 msgid "Website"
-msgstr "Web stranica"
+msgstr "Web naslovnica"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/gtkaboutdialog.c:1093 gtk/ui/gtkapplication-quartz.ui:7
@@ -1526,11 +1526,11 @@ msgstr "O %s"
 
 #: gtk/gtkaboutdialog.c:2320
 msgid "Created by"
-msgstr "Stvorio"
+msgstr "Stvorili"
 
 #: gtk/gtkaboutdialog.c:2323
 msgid "Documented by"
-msgstr "Dokumentirao"
+msgstr "Dokumentirali"
 
 #: gtk/gtkaboutdialog.c:2333
 msgid "Translated by"
@@ -1538,7 +1538,7 @@ msgstr "Preveli"
 
 #: gtk/gtkaboutdialog.c:2338
 msgid "Artwork by"
-msgstr "Dizajn"
+msgstr "Grafika"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -2744,7 +2744,7 @@ msgstr "Neuspjelo stvaranje OpenGL sadržaja"
 msgid "Application menu"
 msgstr "Izbornik aplikacije"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9356
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9381
 msgid "Close"
 msgstr "Zatvori"
 
@@ -4025,24 +4025,24 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9304
+#: gtk/gtkwindow.c:9329
 msgid "Move"
 msgstr "Pomakni"
 
-#: gtk/gtkwindow.c:9312
+#: gtk/gtkwindow.c:9337
 msgid "Resize"
 msgstr "Promijeni veličinu"
 
-#: gtk/gtkwindow.c:9343
+#: gtk/gtkwindow.c:9368
 msgid "Always on Top"
 msgstr "Uvijek na vrhu"
 
-#: gtk/gtkwindow.c:12778
+#: gtk/gtkwindow.c:12803
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Želite li koristiti GTK+ Inspektora?"
 
-#: gtk/gtkwindow.c:12780
+#: gtk/gtkwindow.c:12805
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -4053,7 +4053,7 @@ msgstr ""
 "otkrivanje i promjenu unutrašnjosti bilo koje GTK+ aplikacije. Njegovo "
 "korištenje može uzrokovati rušenje ili prekid u radu aplikacije."
 
-#: gtk/gtkwindow.c:12785
+#: gtk/gtkwindow.c:12810
 msgid "Don't show this message again"
 msgstr "Ne prikazuj više ovu poruku"
 
