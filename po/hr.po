@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-09-26 16:01+0000\n"
-"PO-Revision-Date: 2022-09-26 21:29+0200\n"
+"POT-Creation-Date: 2022-10-01 12:58+0000\n"
+"PO-Revision-Date: 2022-10-02 16:02+0200\n"
 "Last-Translator: gogo <trebelnik2@gmail.com>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "Language: hr\n"
@@ -1035,7 +1035,7 @@ msgstr "Mozilla javna licenca 2.0"
 
 #: gtk/gtkaboutdialog.c:937
 msgid "Website"
-msgstr "Web stranica"
+msgstr "Web naslovnica"
 
 #: gtk/gtkaboutdialog.c:973 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
@@ -1044,11 +1044,11 @@ msgstr "O %s"
 
 #: gtk/gtkaboutdialog.c:2074
 msgid "Created by"
-msgstr "Stvorio"
+msgstr "Stvorili"
 
 #: gtk/gtkaboutdialog.c:2077
 msgid "Documented by"
-msgstr "Dokumentirao"
+msgstr "Dokumentirali"
 
 #: gtk/gtkaboutdialog.c:2087
 msgid "Translated by"
@@ -1056,7 +1056,7 @@ msgstr "Preveli"
 
 #: gtk/gtkaboutdialog.c:2092
 msgid "Design by"
-msgstr "Dizajnirao"
+msgstr "Dizajnirali"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -2125,7 +2125,7 @@ msgstr "Datoteka s tim nazivom već postoji"
 #: gtk/gtkmountoperation.c:608 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:637 gtk/gtkprinteroptionwidget.c:721
 #: gtk/gtkprintunixdialog.c:651 gtk/gtkprintunixdialog.c:807
-#: gtk/gtkwindow.c:6113 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6116 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1723 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2216,7 +2216,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ako obrišete stavku, biti će trajno izgubljena."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5652 gtk/gtktext.c:6051 gtk/gtktextview.c:8968
+#: gtk/gtklabel.c:5652 gtk/gtktext.c:6049 gtk/gtktextview.c:8966
 msgid "_Delete"
 msgstr "_Obriši"
 
@@ -2416,7 +2416,7 @@ msgstr "Ne možete pristupiti određenoj mapi."
 msgid "Could not send the search request"
 msgstr "Nemoguće slanje zahtjeva pretrage"
 
-#: gtk/gtkfilechooserwidget.c:6876
+#: gtk/gtkfilechooserwidget.c:6877
 msgid "Accessed"
 msgstr "Pristupljeno"
 
@@ -2508,19 +2508,19 @@ msgstr "Varijacije znaka"
 msgid "OpenGL context creation failed"
 msgstr "Neuspjelo stvaranje OpenGL sadržaja"
 
-#: gtk/gtklabel.c:5649 gtk/gtktext.c:6039 gtk/gtktextview.c:8956
+#: gtk/gtklabel.c:5649 gtk/gtktext.c:6037 gtk/gtktextview.c:8954
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtklabel.c:5650 gtk/gtktext.c:6043 gtk/gtktextview.c:8960
+#: gtk/gtklabel.c:5650 gtk/gtktext.c:6041 gtk/gtktextview.c:8958
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtklabel.c:5651 gtk/gtktext.c:6047 gtk/gtktextview.c:8964
+#: gtk/gtklabel.c:5651 gtk/gtktext.c:6045 gtk/gtktextview.c:8962
 msgid "_Paste"
 msgstr "_Zalijepi"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6060 gtk/gtktextview.c:8989
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6058 gtk/gtktextview.c:8987
 msgid "Select _All"
 msgstr "Odaberi _sve"
 
@@ -2630,7 +2630,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:638 gtk/gtkwindow.c:6114
+#: gtk/gtkprintbackend.c:638 gtk/gtkwindow.c:6117
 msgid "_OK"
 msgstr "_U redu"
 
@@ -3507,15 +3507,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Bočna traka"
 
-#: gtk/gtktext.c:6065 gtk/gtktextview.c:8994
+#: gtk/gtktext.c:6063 gtk/gtktextview.c:8992
 msgid "Insert _Emoji"
 msgstr "Umetni _emotikoin"
 
-#: gtk/gtktextview.c:8976
+#: gtk/gtktextview.c:8974
 msgid "_Undo"
 msgstr "_Vrati"
 
-#: gtk/gtktextview.c:8980
+#: gtk/gtktextview.c:8978
 msgid "_Redo"
 msgstr "_Ponovi"
 
@@ -3542,12 +3542,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6101
+#: gtk/gtkwindow.c:6104
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Želite li koristiti GTK Inspektora?"
 
-#: gtk/gtkwindow.c:6103
+#: gtk/gtkwindow.c:6106
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3558,7 +3558,7 @@ msgstr ""
 "otkrivanje i promjenu unutrašnjosti bilo koje GTK aplikacije. Njegovo "
 "korištenje može uzrokovati rušenje ili prekid u radu aplikacije."
 
-#: gtk/gtkwindow.c:6108
+#: gtk/gtkwindow.c:6111
 msgid "Don’t show this message again"
 msgstr "Ne prikazuj više ovu poruku"
 
@@ -6973,15 +6973,15 @@ msgstr "Datoteka"
 msgid "_Output format"
 msgstr "_Izlazni format"
 
-#: modules/printbackends/gtkprintbackendlpr.c:371
+#: modules/printbackends/gtkprintbackendlpr.c:372
 msgid "Print to LPR"
 msgstr "Ispiši do LPR"
 
-#: modules/printbackends/gtkprintbackendlpr.c:400
+#: modules/printbackends/gtkprintbackendlpr.c:401
 msgid "Pages Per Sheet"
 msgstr "Stranica po listu"
 
-#: modules/printbackends/gtkprintbackendlpr.c:406
+#: modules/printbackends/gtkprintbackendlpr.c:407
 msgid "Command Line"
 msgstr "Naredbeni redak"
 
