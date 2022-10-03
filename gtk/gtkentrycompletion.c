@@ -432,6 +432,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   completion->inline_selection = FALSE;
 
   completion->filter_model = NULL;
+  completion->insert_text_signal_group = NULL;
 }
 
 static gboolean
@@ -1354,13 +1355,12 @@ gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
 {
   int len;
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (completion->entry));
-  GtkEntryBuffer *buffer = gtk_text_get_buffer (text);
 
   if (completion->changed_id > 0)
     g_signal_handler_block (text, completion->changed_id);
 
-  if (completion->insert_text_id > 0)
-    g_signal_handler_block (buffer, completion->insert_text_id);
+  if (completion->insert_text_signal_group != NULL)
+    g_signal_group_block (completion->insert_text_signal_group);
 
   gtk_editable_set_text (GTK_EDITABLE (completion->entry), new_text);
 
@@ -1370,8 +1370,8 @@ gtk_entry_completion_insert_completion_text (GtkEntryCompletion *completion,
   if (completion->changed_id > 0)
     g_signal_handler_unblock (text, completion->changed_id);
 
-  if (completion->insert_text_id > 0)
-    g_signal_handler_unblock (buffer, completion->insert_text_id);
+  if (completion->insert_text_signal_group != NULL)
+    g_signal_group_unblock (completion->insert_text_signal_group);
 }
 
 static gboolean
@@ -1408,11 +1408,9 @@ gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
 
   gboolean done;
   char *prefix;
-  GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (completion->entry));
-  GtkEntryBuffer *buffer = gtk_text_get_buffer (text);
 
-  if (completion->insert_text_id > 0)
-    g_signal_handler_block (buffer, completion->insert_text_id);
+  if (completion->insert_text_signal_group != NULL)
+    g_signal_group_block (completion->insert_text_signal_group);
 
   prefix = gtk_entry_completion_compute_prefix (completion,
                                                 gtk_editable_get_text (GTK_EDITABLE (completion->entry)));
@@ -1424,8 +1422,8 @@ gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
       g_free (prefix);
     }
 
-  if (completion->insert_text_id > 0)
-    g_signal_handler_unblock (buffer, completion->insert_text_id);
+  if (completion->insert_text_signal_group != NULL)
+    g_signal_group_unblock (completion->insert_text_signal_group);
 }
 
 /**
@@ -2046,7 +2044,6 @@ connect_completion_signals (GtkEntryCompletion *completion)
 {
   GtkEventController *controller;
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (completion->entry));
-  GtkEntryBuffer *buffer = gtk_text_get_buffer (text);
 
   controller = completion->entry_key_controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_static_name (controller, "gtk-entry-completion");
@@ -2061,8 +2058,10 @@ connect_completion_signals (GtkEntryCompletion *completion)
   completion->changed_id =
     g_signal_connect (text, "changed", G_CALLBACK (gtk_entry_completion_changed), completion);
 
-  completion->insert_text_id =
-      g_signal_connect (buffer, "inserted-text", G_CALLBACK (completion_inserted_text_callback), completion);
+  completion->insert_text_signal_group = g_signal_group_new (GTK_TYPE_ENTRY_BUFFER);
+  g_signal_group_connect (completion->insert_text_signal_group, "inserted-text", G_CALLBACK (completion_inserted_text_callback), completion);
+  g_object_bind_property (text, "buffer", completion->insert_text_signal_group, "target", G_BINDING_SYNC_CREATE);
+
   g_signal_connect (text, "notify", G_CALLBACK (clear_completion_callback), completion);
    g_signal_connect_swapped (text, "activate", G_CALLBACK (accept_completion_callback), completion);
 }
@@ -2071,7 +2070,6 @@ static void
 disconnect_completion_signals (GtkEntryCompletion *completion)
 {
   GtkText *text = gtk_entry_get_text_widget (GTK_ENTRY (completion->entry));
-  GtkEntryBuffer *buffer = gtk_text_get_buffer (text);
 
   gtk_widget_remove_controller (GTK_WIDGET (text), completion->entry_key_controller);
   gtk_widget_remove_controller (GTK_WIDGET (text), completion->entry_focus_controller);
@@ -2082,12 +2080,9 @@ disconnect_completion_signals (GtkEntryCompletion *completion)
       g_signal_handler_disconnect (text, completion->changed_id);
       completion->changed_id = 0;
     }
-  if (completion->insert_text_id > 0 &&
-      g_signal_handler_is_connected (buffer, completion->insert_text_id))
-    {
-      g_signal_handler_disconnect (buffer, completion->insert_text_id);
-      completion->insert_text_id = 0;
-    }
+
+  g_clear_object (&completion->insert_text_signal_group);
+
   g_signal_handlers_disconnect_by_func (text, G_CALLBACK (clear_completion_callback), completion);
   g_signal_handlers_disconnect_by_func (text, G_CALLBACK (accept_completion_callback), completion);
 }
