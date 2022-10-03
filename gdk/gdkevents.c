@@ -258,6 +258,7 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
   GList *pending_motions = NULL;
   GdkWindow *pending_motion_window = NULL;
   GdkDevice *pending_motion_device = NULL;
+  gboolean uncompressed_motion = FALSE;
 
   /* If the last N events in the event queue are motion notify
    * events for the same window, drop all but the last */
@@ -282,10 +283,14 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
           pending_motion_device != event->event.motion.device)
         break;
 
-      if (!event->event.motion.window->event_compression)
-        break;
-
       pending_motion_window = event->event.motion.window;
+
+      if (!event->event.motion.window->event_compression)
+        {
+          uncompressed_motion = TRUE;
+          break;
+        }
+
       pending_motion_device = event->event.motion.device;
       pending_motions = tmp_list;
 
@@ -301,9 +306,10 @@ _gdk_event_queue_handle_motion_compression (GdkDisplay *display)
       pending_motions = next;
     }
 
-  if (pending_motions &&
-      pending_motions == display->queued_events &&
-      pending_motions == display->queued_tail)
+  if (uncompressed_motion ||
+      (pending_motions &&
+       pending_motions == display->queued_events &&
+       pending_motions == display->queued_tail))
     {
       GdkFrameClock *clock = gdk_window_get_frame_clock (pending_motion_window);
       if (clock) /* might be NULL if window was destroyed */
