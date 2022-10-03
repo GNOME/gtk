@@ -34,6 +34,9 @@
 
 #include <string.h>
 
+#define STRING_MIMETYPE "text/plain"
+#define UTF8_STRING_MIMETYPE "text/plain;charset=utf-8"
+
 typedef struct _SelectionBuffer SelectionBuffer;
 typedef struct _SelectionData SelectionData;
 typedef struct _StoredSelection StoredSelection;
@@ -1783,7 +1786,25 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
     {
       gchar *mimetype = gdk_atom_name (targets[i]);
 
-      wl_data_source_offer (data_source, mimetype);
+      if (selection == atoms[ATOM_PRIMARY])
+        {
+          if (g_strcmp0 (mimetype, "STRING") == 0)
+            zwp_primary_selection_source_v1_offer (data_source, STRING_MIMETYPE);
+          else if (g_strcmp0 (mimetype, "UTF8_STRING") == 0)
+            zwp_primary_selection_source_v1_offer (data_source, UTF8_STRING_MIMETYPE);
+
+          zwp_primary_selection_source_v1_offer (data_source, mimetype);
+        }
+      else
+        {
+          if (g_strcmp0 (mimetype, "STRING") == 0)
+            wl_data_source_offer (data_source, STRING_MIMETYPE);
+          else if (g_strcmp0 (mimetype, "UTF8_STRING") == 0)
+            wl_data_source_offer (data_source, UTF8_STRING_MIMETYPE);
+
+          wl_data_source_offer (data_source, mimetype);
+        }
+
       g_free (mimetype);
     }
 
