@@ -5,15 +5,15 @@
 # Данило Шеган <dsegan@gmx.net>, 2004–2005.
 # Милош Поповић <gpopac@gmail.com>, 2010–2017.
 # Марко М. Костић (Marko M. Kostić) <marko.m.kostic@gmail.com>, 2015.
-# Мирослав Николић <miroslavnikolić@rocketmail.com>, 2011–2022.
+# Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011–2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-07-02 19:43+0000\n"
-"PO-Revision-Date: 2022-07-03 04:17+0200\n"
-"Last-Translator: Мирослав Николић <miroslavnikolić@rocketmail.com>\n"
+"POT-Creation-Date: 2022-10-02 14:12+0000\n"
+"PO-Revision-Date: 2022-10-02 18:13+0200\n"
+"Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <српски <gnome-sr@googlegroups.org>>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,6 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : n"
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Project-Style: gnome\n"
-"X-Generator: Gtranslator 3.36.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -78,8 +77,6 @@ msgstr "Нисам нашао савршено ЕГЛ подешавање"
 
 #: gdk/gdkdisplay.c:1631
 #, c-format
-#| msgid "EGL implementation is missing extension %2$s"
-#| msgid_plural "EGL implementation is missing %d extensions: %s"
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "ЕГЛ примени недостаје проширење %2$d: %1$s"
@@ -572,7 +569,7 @@ msgstr "Читање података није успело у %d. реду"
 
 #: gdk/macos/gdkmacosclipboard.c:557 gdk/wayland/gdkclipboard-wayland.c:231
 #: gdk/wayland/gdkdrop-wayland.c:203 gdk/wayland/gdkprimary-wayland.c:313
-#: gdk/win32/gdkdrop-win32.c:1006 gdk/win32/gdkdrop-win32.c:1051
+#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
 #: gdk/x11/gdkclipboard-x11.c:791 gdk/x11/gdkdrop-x11.c:233
 msgid "No compatible transfer format found"
 msgstr "Нисам нашао сагласан формат преноса"
@@ -693,43 +690,43 @@ msgstr ""
 "Не могу да добавим податке оставе. Није успела функција "
 "„GetClipboardData()“: 0×%lx."
 
-#: gdk/win32/gdkdrop-win32.c:937
+#: gdk/win32/gdkdrop-win32.c:949
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Не могу да добавим ДнД податке. Није успела функција „GlobalLock(0×%p)“: 0×"
 "%lx."
 
-#: gdk/win32/gdkdrop-win32.c:946
+#: gdk/win32/gdkdrop-win32.c:958
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Не могу да добавим ДнД податке. Није успела функција „GlobalSize(0×%p)“: 0×"
 "%lx."
 
-#: gdk/win32/gdkdrop-win32.c:957
+#: gdk/win32/gdkdrop-win32.c:969
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Не могу да добавим ДнД податке. Нисам успео да доделим %s бајта за смештај "
 "података."
 
-#: gdk/win32/gdkdrop-win32.c:1025
+#: gdk/win32/gdkdrop-win32.c:1037
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Гдк површ 0×%p није регистрована као мета пуштања"
 
-#: gdk/win32/gdkdrop-win32.c:1032
+#: gdk/win32/gdkdrop-win32.c:1044
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Запис контекста мете 0×%p не садржи објекат података"
 
-#: gdk/win32/gdkdrop-win32.c:1070
+#: gdk/win32/gdkdrop-win32.c:1082
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "Није успела функција „IDataObject_GetData“ (0×%x), са резултатом 0×%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1102
+#: gdk/win32/gdkdrop-win32.c:1114
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
@@ -949,7 +946,7 @@ msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "Чисти садржај уноса"
 
-#: gtk/a11y/gtkatspiroot.c:255
+#: gtk/a11y/gtkatspiroot.c:256
 msgctxt "accessibility"
 msgid "application"
 msgstr "програм"
@@ -2134,7 +2131,7 @@ msgstr "Датотека са таквим називом већ постоји"
 #: gtk/gtkmountoperation.c:610 gtk/gtkpagesetupunixdialog.c:283
 #: gtk/gtkprintbackend.c:642 gtk/gtkprinteroptionwidget.c:724
 #: gtk/gtkprintunixdialog.c:667 gtk/gtkprintunixdialog.c:823
-#: gtk/gtkwindow.c:6154 gtk/inspector/css-editor.c:248
+#: gtk/gtkwindow.c:6157 gtk/inspector/css-editor.c:248
 #: gtk/inspector/recorder.c:1706 gtk/ui/gtkappchooserdialog.ui:45
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:33
 #: gtk/ui/gtkfontchooserdialog.ui:24
@@ -2227,7 +2224,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ако обришете ставку, она ће бити трајно изгубљена."
 
 #: gtk/gtkfilechooserwidget.c:1211 gtk/gtkfilechooserwidget.c:1827
-#: gtk/gtklabel.c:5659 gtk/gtktext.c:6077 gtk/gtktextview.c:8956
+#: gtk/gtklabel.c:5659 gtk/gtktext.c:6084 gtk/gtktextview.c:8958
 msgid "_Delete"
 msgstr "_Обриши"
 
@@ -2503,19 +2500,19 @@ msgstr "Варијанте знакова"
 msgid "OpenGL context creation failed"
 msgstr "Не могу да направим ОпенГЛ садржај"
 
-#: gtk/gtklabel.c:5656 gtk/gtktext.c:6065 gtk/gtktextview.c:8944
+#: gtk/gtklabel.c:5656 gtk/gtktext.c:6072 gtk/gtktextview.c:8946
 msgid "Cu_t"
 msgstr "_Исеци"
 
-#: gtk/gtklabel.c:5657 gtk/gtktext.c:6069 gtk/gtktextview.c:8948
+#: gtk/gtklabel.c:5657 gtk/gtktext.c:6076 gtk/gtktextview.c:8950
 msgid "_Copy"
 msgstr "У_множи"
 
-#: gtk/gtklabel.c:5658 gtk/gtktext.c:6073 gtk/gtktextview.c:8952
+#: gtk/gtklabel.c:5658 gtk/gtktext.c:6080 gtk/gtktextview.c:8954
 msgid "_Paste"
 msgstr "У_баци"
 
-#: gtk/gtklabel.c:5664 gtk/gtktext.c:6086 gtk/gtktextview.c:8977
+#: gtk/gtklabel.c:5664 gtk/gtktext.c:6093 gtk/gtktextview.c:8979
 msgid "Select _All"
 msgstr "Изабери _све"
 
@@ -2625,7 +2622,7 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmessagedialog.c:158 gtk/gtkmessagedialog.c:176
-#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6155
+#: gtk/gtkprintbackend.c:643 gtk/gtkwindow.c:6158
 msgid "_OK"
 msgstr "У _реду"
 
@@ -2746,19 +2743,19 @@ msgstr "Гтк не може да нађе модул медија. Провер
 msgid "Tab list"
 msgstr "Списак језичака"
 
-#: gtk/gtknotebook.c:3249
+#: gtk/gtknotebook.c:3250
 msgid "Previous tab"
 msgstr "Претходни језичак"
 
-#: gtk/gtknotebook.c:3253
+#: gtk/gtknotebook.c:3254
 msgid "Next tab"
 msgstr "Следећи језичак"
 
-#: gtk/gtknotebook.c:4073
+#: gtk/gtknotebook.c:4074
 msgid "Tab"
 msgstr "Језичак"
 
-#: gtk/gtknotebook.c:4371 gtk/gtknotebook.c:6579
+#: gtk/gtknotebook.c:4372 gtk/gtknotebook.c:6580
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -3324,42 +3321,42 @@ msgstr "Прикупљам податке о штампачу…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:2814
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5682
 msgid "Left to right, top to bottom"
 msgstr "С лева на десно, одозго на доле"
 
 #: gtk/gtkprintunixdialog.c:2814
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5682
 msgid "Left to right, bottom to top"
 msgstr "С лева на десно, одоздо на горе"
 
 #: gtk/gtkprintunixdialog.c:2815
-#: modules/printbackends/gtkprintbackendcups.c:5676
+#: modules/printbackends/gtkprintbackendcups.c:5683
 msgid "Right to left, top to bottom"
 msgstr "С десна на лево, одозго на доле"
 
 #: gtk/gtkprintunixdialog.c:2815
-#: modules/printbackends/gtkprintbackendcups.c:5676
+#: modules/printbackends/gtkprintbackendcups.c:5683
 msgid "Right to left, bottom to top"
 msgstr "С десна на лево, одоздо на горе"
 
 #: gtk/gtkprintunixdialog.c:2816
-#: modules/printbackends/gtkprintbackendcups.c:5677
+#: modules/printbackends/gtkprintbackendcups.c:5684
 msgid "Top to bottom, left to right"
 msgstr "Одозго на доле, с лева на десно"
 
 #: gtk/gtkprintunixdialog.c:2816
-#: modules/printbackends/gtkprintbackendcups.c:5677
+#: modules/printbackends/gtkprintbackendcups.c:5684
 msgid "Top to bottom, right to left"
 msgstr "Одозго на доле, с десна на лево"
 
 #: gtk/gtkprintunixdialog.c:2817
-#: modules/printbackends/gtkprintbackendcups.c:5678
+#: modules/printbackends/gtkprintbackendcups.c:5685
 msgid "Bottom to top, left to right"
 msgstr "Одоздо на горе, с лева на десно"
 
 #: gtk/gtkprintunixdialog.c:2817
-#: modules/printbackends/gtkprintbackendcups.c:5678
+#: modules/printbackends/gtkprintbackendcups.c:5685
 msgid "Bottom to top, right to left"
 msgstr "Одоздо на горе, с десна на лево"
 
@@ -3492,19 +3489,25 @@ msgstr "Нема резултата"
 msgid "Try a different search"
 msgstr "Покушајте другачију претрагу"
 
-#: gtk/gtkshow.c:177
+#: gtk/gtkshow.c:175
 msgid "Could not show link"
 msgstr "Не могу да прикажем везу"
 
-#: gtk/gtktext.c:6091 gtk/gtktextview.c:8982
+#: gtk/gtkstacksidebar.c:155
+#| msgid "Toggle Sidebar"
+msgctxt "accessibility"
+msgid "Sidebar"
+msgstr "Бочна површ"
+
+#: gtk/gtktext.c:6098 gtk/gtktextview.c:8984
 msgid "Insert _Emoji"
 msgstr "Уметни _емотивка"
 
-#: gtk/gtktextview.c:8964
+#: gtk/gtktextview.c:8966
 msgid "_Undo"
 msgstr "_Опозови"
 
-#: gtk/gtktextview.c:8968
+#: gtk/gtktextview.c:8970
 msgid "_Redo"
 msgstr "_Понови"
 
@@ -3531,12 +3534,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:6142
+#: gtk/gtkwindow.c:6145
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Да ли желите да користите Гтк Надзорника?"
 
-#: gtk/gtkwindow.c:6144
+#: gtk/gtkwindow.c:6147
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3547,7 +3550,7 @@ msgstr ""
 "истражујете и мењате унутрашњост било ког Гтк програма. Његово коришћење "
 "може довести до пада или урушавања програма."
 
-#: gtk/gtkwindow.c:6149
+#: gtk/gtkwindow.c:6152
 msgid "Don’t show this message again"
 msgstr "Више не приказуј ову поруку"
 
@@ -6666,241 +6669,241 @@ msgstr "Одбија послове"
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/gtkprintbackendcups.c:4612
-#: modules/printbackends/gtkprintbackendcups.c:4679
+#: modules/printbackends/gtkprintbackendcups.c:4619
+#: modules/printbackends/gtkprintbackendcups.c:4686
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Двострано"
 
-#: modules/printbackends/gtkprintbackendcups.c:4613
+#: modules/printbackends/gtkprintbackendcups.c:4620
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Врста папира"
 
-#: modules/printbackends/gtkprintbackendcups.c:4614
+#: modules/printbackends/gtkprintbackendcups.c:4621
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Извор папира"
 
-#: modules/printbackends/gtkprintbackendcups.c:4615
-#: modules/printbackends/gtkprintbackendcups.c:4680
+#: modules/printbackends/gtkprintbackendcups.c:4622
+#: modules/printbackends/gtkprintbackendcups.c:4687
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Прихватна фиока"
 
-#: modules/printbackends/gtkprintbackendcups.c:4616
+#: modules/printbackends/gtkprintbackendcups.c:4623
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Резолуција"
 
-#: modules/printbackends/gtkprintbackendcups.c:4617
+#: modules/printbackends/gtkprintbackendcups.c:4624
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Гост скрипт пред-филтрирање"
 
-#: modules/printbackends/gtkprintbackendcups.c:4626
+#: modules/printbackends/gtkprintbackendcups.c:4633
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Једнострано"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4628
+#: modules/printbackends/gtkprintbackendcups.c:4635
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "По дужој страни (стандардно)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4630
+#: modules/printbackends/gtkprintbackendcups.c:4637
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "По краћој страни (окренуто)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4632
-#: modules/printbackends/gtkprintbackendcups.c:4634
-#: modules/printbackends/gtkprintbackendcups.c:4642
+#: modules/printbackends/gtkprintbackendcups.c:4639
+#: modules/printbackends/gtkprintbackendcups.c:4641
+#: modules/printbackends/gtkprintbackendcups.c:4649
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Сам одреди"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4636
-#: modules/printbackends/gtkprintbackendcups.c:4638
-#: modules/printbackends/gtkprintbackendcups.c:4640
-#: modules/printbackends/gtkprintbackendcups.c:4644
+#: modules/printbackends/gtkprintbackendcups.c:4643
+#: modules/printbackends/gtkprintbackendcups.c:4645
+#: modules/printbackends/gtkprintbackendcups.c:4647
+#: modules/printbackends/gtkprintbackendcups.c:4651
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Подразумевано"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4646
+#: modules/printbackends/gtkprintbackendcups.c:4653
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Само угнеждени Гост скрипт словни ликови"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4648
+#: modules/printbackends/gtkprintbackendcups.c:4655
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Преведи у 1° ниво постскрипта"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4650
+#: modules/printbackends/gtkprintbackendcups.c:4657
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Преведи у 2° ниво постскрипта"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4652
+#: modules/printbackends/gtkprintbackendcups.c:4659
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Без пред-филтрирања"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4661
+#: modules/printbackends/gtkprintbackendcups.c:4668
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Додатна подешавања"
 
-#: modules/printbackends/gtkprintbackendcups.c:4688
+#: modules/printbackends/gtkprintbackendcups.c:4695
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Једнострано"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4690
+#: modules/printbackends/gtkprintbackendcups.c:4697
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "По дужој ивици (стандардно)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4692
+#: modules/printbackends/gtkprintbackendcups.c:4699
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "По краћој ивици (окренуто)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4695
+#: modules/printbackends/gtkprintbackendcups.c:4702
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Горња корпа"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4697
+#: modules/printbackends/gtkprintbackendcups.c:4704
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Средња корпа"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4699
+#: modules/printbackends/gtkprintbackendcups.c:4706
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Доња корпа"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4701
+#: modules/printbackends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Корпа са стране"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4703
+#: modules/printbackends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Лева корпа"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4705
+#: modules/printbackends/gtkprintbackendcups.c:4712
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Десна корпа"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4707
+#: modules/printbackends/gtkprintbackendcups.c:4714
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Корпа на средини"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4709
+#: modules/printbackends/gtkprintbackendcups.c:4716
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Задња корпа"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4711
+#: modules/printbackends/gtkprintbackendcups.c:4718
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Корпа на лицу"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4713
+#: modules/printbackends/gtkprintbackendcups.c:4720
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Корпа на наличју"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4715
+#: modules/printbackends/gtkprintbackendcups.c:4722
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Корпа велике запремине"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4737
+#: modules/printbackends/gtkprintbackendcups.c:4744
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Одлагач %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4741
+#: modules/printbackends/gtkprintbackendcups.c:4748
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Поштанско сандуче %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4745
+#: modules/printbackends/gtkprintbackendcups.c:4752
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Моје сандуче"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4749
+#: modules/printbackends/gtkprintbackendcups.c:4756
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Касета %d"
 
-#: modules/printbackends/gtkprintbackendcups.c:5226
+#: modules/printbackends/gtkprintbackendcups.c:5233
 msgid "Printer Default"
 msgstr "Подразумевано"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5670
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Urgent"
 msgstr "Хитно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5670
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "High"
 msgstr "Важно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5670
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Medium"
 msgstr "Средње"
 
-#: modules/printbackends/gtkprintbackendcups.c:5670
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Low"
 msgstr "Небитно"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5700
+#: modules/printbackends/gtkprintbackendcups.c:5707
 msgid "Job Priority"
 msgstr "Важност"
 
@@ -6908,44 +6911,44 @@ msgstr "Важност"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5711
+#: modules/printbackends/gtkprintbackendcups.c:5718
 msgid "Billing Info"
 msgstr "Фактурисање"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5735
+#: modules/printbackends/gtkprintbackendcups.c:5742
 msgctxt "cover page"
 msgid "None"
 msgstr "Ништа"
 
-#: modules/printbackends/gtkprintbackendcups.c:5736
+#: modules/printbackends/gtkprintbackendcups.c:5743
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Категорисано"
 
-#: modules/printbackends/gtkprintbackendcups.c:5737
+#: modules/printbackends/gtkprintbackendcups.c:5744
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Поверљиво"
 
-#: modules/printbackends/gtkprintbackendcups.c:5738
+#: modules/printbackends/gtkprintbackendcups.c:5745
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Тајно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5739
+#: modules/printbackends/gtkprintbackendcups.c:5746
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Обично"
 
-#: modules/printbackends/gtkprintbackendcups.c:5740
+#: modules/printbackends/gtkprintbackendcups.c:5747
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Строго поверљиво"
 
-#: modules/printbackends/gtkprintbackendcups.c:5741
+#: modules/printbackends/gtkprintbackendcups.c:5748
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Некатегорисано"
@@ -6953,7 +6956,7 @@ msgstr "Некатегорисано"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5753
+#: modules/printbackends/gtkprintbackendcups.c:5760
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Страна на листу"
@@ -6961,7 +6964,7 @@ msgstr "Страна на листу"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5770
+#: modules/printbackends/gtkprintbackendcups.c:5777
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Слагање страна"
@@ -6969,7 +6972,7 @@ msgstr "Слагање страна"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5812
+#: modules/printbackends/gtkprintbackendcups.c:5819
 msgctxt "printer option"
 msgid "Before"
 msgstr "Пре"
@@ -6977,7 +6980,7 @@ msgstr "Пре"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5827
+#: modules/printbackends/gtkprintbackendcups.c:5834
 msgctxt "printer option"
 msgid "After"
 msgstr "После"
@@ -6986,7 +6989,7 @@ msgstr "После"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5847
+#: modules/printbackends/gtkprintbackendcups.c:5854
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Закажи штампу"
@@ -6994,7 +6997,7 @@ msgstr "Закажи штампу"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5858
+#: modules/printbackends/gtkprintbackendcups.c:5865
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Штампај у"
@@ -7004,19 +7007,19 @@ msgstr "Штампај у"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5905
+#: modules/printbackends/gtkprintbackendcups.c:5912
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Произвољно %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:6016
+#: modules/printbackends/gtkprintbackendcups.c:6023
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Профил штампача"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:6023
+#: modules/printbackends/gtkprintbackendcups.c:6030
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Недоступно"
