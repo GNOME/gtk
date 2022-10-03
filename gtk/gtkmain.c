@@ -1186,6 +1186,11 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
   for (widget = new_target; widget; widget = _gtk_widget_get_parent (widget))
     gtk_widget_stack_append (&target_array, g_object_ref (widget));
 
+  if (old_target && new_target)
+    ancestor = gtk_widget_common_ancestor (old_target, new_target);
+  else
+    ancestor = NULL;
+
   crossing.direction = GTK_CROSSING_IN;
 
   seen_ancestor = FALSE;
