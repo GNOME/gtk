@@ -72,24 +72,7 @@
  * just add any child widget and not worry about the details.
  *
  * If [method@Gtk.ScrolledWindow.set_child] has added a `GtkViewport` for you,
- * you can remove both your added child widget from the `GtkViewport`, and the
- * `GtkViewport` from the `GtkScrolledWindow`, like this:
- *
- * ```c
- * GtkWidget *scrolled_window = gtk_scrolled_window_new ();
- * GtkWidget *child_widget = gtk_button_new ();
- *
- * // GtkButton is not a GtkScrollable, so GtkScrolledWindow will automatically
- * // add a GtkViewport.
- * gtk_box_append (GTK_BOX (scrolled_window), child_widget);
- *
- * // Either of these will result in child_widget being unparented:
- * gtk_box_remove (GTK_BOX (scrolled_window), child_widget);
- * // or
- * gtk_box_remove (GTK_BOX (scrolled_window),
- *                       gtk_bin_get_child (GTK_BIN (scrolled_window)));
- * ```
- *
+ * it will be automatically removed hen you unset the child.
  * Unless [property@Gtk.ScrolledWindow:hscrollbar-policy] and
  * [property@Gtk.ScrolledWindow:vscrollbar-policy] are %GTK_POLICY_NEVER or
  * %GTK_POLICY_EXTERNAL, `GtkScrolledWindow` adds internal `GtkScrollbar` widgets
