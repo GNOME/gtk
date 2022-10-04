@@ -52,6 +52,8 @@
 
 #include <glib.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 G_DEFINE_INTERFACE (GtkAppChooser, gtk_app_chooser, GTK_TYPE_WIDGET);
 
 static void
@@ -82,6 +84,8 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
  * shows applications.
  *
  * Returns: the content type of @self. Free with g_free()
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 char *
 gtk_app_chooser_get_content_type (GtkAppChooser *self)
@@ -105,6 +109,8 @@ gtk_app_chooser_get_content_type (GtkAppChooser *self)
  *
  * Returns: (nullable) (transfer full): a `GAppInfo` for the
  *   currently selected application
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GAppInfo *
 gtk_app_chooser_get_app_info (GtkAppChooser *self)
@@ -117,6 +123,8 @@ gtk_app_chooser_get_app_info (GtkAppChooser *self)
  * @self: a `GtkAppChooser`
  *
  * Reloads the list of applications.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_refresh (GtkAppChooser *self)

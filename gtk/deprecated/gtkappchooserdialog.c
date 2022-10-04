@@ -61,6 +61,8 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct _GtkAppChooserDialogClass   GtkAppChooserDialogClass;
 
 struct _GtkAppChooserDialog {
@@ -670,6 +672,8 @@ set_parent_and_flags (GtkWidget      *dialog,
  * The dialog will show applications that can open the file.
  *
  * Returns: a newly created `GtkAppChooserDialog`
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GtkWidget *
 gtk_app_chooser_dialog_new (GtkWindow      *parent,
@@ -700,6 +704,8 @@ gtk_app_chooser_dialog_new (GtkWindow      *parent,
  * The dialog will show applications that can open the content type.
  *
  * Returns: a newly created `GtkAppChooserDialog`
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GtkWidget *
 gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
@@ -726,6 +732,8 @@ gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
  * Returns the `GtkAppChooserWidget` of this dialog.
  *
  * Returns: (transfer none): the `GtkAppChooserWidget` of @self
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GtkWidget *
 gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)
@@ -743,6 +751,8 @@ gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)
  * Sets the text to display at the top of the dialog.
  *
  * If the heading is not set, the dialog displays a default text.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
@@ -777,6 +787,8 @@ gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
  *
  * Returns: (nullable): the text to display at the top of the dialog,
  *   or %NULL, in which case a default text is displayed
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 const char *
 gtk_app_chooser_dialog_get_heading (GtkAppChooserDialog *self)

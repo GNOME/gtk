@@ -1,5 +1,13 @@
-gtk_deprecated_sources = files([])
+gtk_deprecated_sources = [
+  'deprecated/gtkappchooser.c',
+  'deprecated/gtkappchooserbutton.c',
+  'deprecated/gtkappchooserdialog.c',
+  'deprecated/gtkappchooserwidget.c',
+]
 
-gtk_deprecated_headers = files([])
-
-install_headers(gtk_deprecated_headers, subdir: 'gtk-4.0/gtk/deprecated/')
+gtk_deprecated_headers = [
+  'deprecated/gtkappchooser.h',
+  'deprecated/gtkappchooserbutton.h',
+  'deprecated/gtkappchooserdialog.h',
+  'deprecated/gtkappchooserwidget.h',
+]

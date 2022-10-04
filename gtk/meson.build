@@ -159,10 +159,6 @@ gtk_public_sources = files([
   'gtkactionable.c',
   'gtkactionbar.c',
   'gtkadjustment.c',
-  'gtkappchooser.c',
-  'gtkappchooserbutton.c',
-  'gtkappchooserdialog.c',
-  'gtkappchooserwidget.c',
   'gtkapplication.c',
   'gtkapplicationwindow.c',
   'gtkaspectframe.c',
@@ -451,10 +447,6 @@ gtk_public_headers = files([
   'gtkactionable.h',
   'gtkactionbar.h',
   'gtkadjustment.h',
-  'gtkappchooser.h',
-  'gtkappchooserbutton.h',
-  'gtkappchooserdialog.h',
-  'gtkappchooserwidget.h',
   'gtkapplication.h',
   'gtkapplicationwindow.h',
   'gtkaspectframe.h',
@@ -704,6 +696,7 @@ gtk_public_headers = files([
 ])
 
 install_headers(gtk_public_headers, subdir: 'gtk-4.0/gtk/')
+install_headers(gtk_deprecated_headers, subdir: 'gtk-4.0/gtk/deprecated')
 
 gtk_sources = gtk_public_sources + gtk_private_sources
 

@@ -21,6 +21,8 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define CUSTOM_ITEM "custom-item"
 
 static GtkWidget *toplevel, *button, *box;

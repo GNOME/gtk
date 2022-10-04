@@ -43,21 +43,21 @@ typedef struct _GtkAppChooserDialog        GtkAppChooserDialog;
 GDK_AVAILABLE_IN_ALL
 GType         gtk_app_chooser_dialog_get_type             (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget *   gtk_app_chooser_dialog_new                  (GtkWindow           *parent,
                                                            GtkDialogFlags       flags,
                                                            GFile               *file);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget *   gtk_app_chooser_dialog_new_for_content_type (GtkWindow           *parent,
                                                            GtkDialogFlags       flags,
                                                            const char          *content_type);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget *   gtk_app_chooser_dialog_get_widget           (GtkAppChooserDialog *self);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_app_chooser_dialog_set_heading          (GtkAppChooserDialog *self,
                                                            const char          *heading);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 const char * gtk_app_chooser_dialog_get_heading          (GtkAppChooserDialog *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAppChooserDialog, g_object_unref)
