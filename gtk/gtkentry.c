@@ -845,11 +845,13 @@ gtk_entry_class_init (GtkEntryClass *class)
    * GtkEntry:completion: (attributes org.gtk.Property.get=gtk_entry_get_completion org.gtk.Property.set=gtk_entry_set_completion)
    *
    * The auxiliary completion object to use with the entry.
+   *
+   * Deprecated: 4.10: GtkEntryCompletion will be removed in GTK 5.
    */
   entry_props[PROP_COMPLETION] =
       g_param_spec_object ("completion", NULL, NULL,
                            GTK_TYPE_ENTRY_COMPLETION,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkEntry:input-purpose: (attributes org.gtk.Property.get=gtk_entry_get_input_purpose org.gtk.Property.set=gtk_entry_set_input_purpose)
@@ -1169,7 +1171,9 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_COMPLETION:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_entry_set_completion (entry, GTK_ENTRY_COMPLETION (g_value_get_object (value)));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
 
     case PROP_SHOW_EMOJI_ICON:
@@ -1329,7 +1333,9 @@ gtk_entry_get_property (GObject         *object,
       break;
 
     case PROP_COMPLETION:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       g_value_set_object (value, G_OBJECT (gtk_entry_get_completion (entry)));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
 
     case PROP_SHOW_EMOJI_ICON:
@@ -1427,7 +1433,9 @@ gtk_entry_dispose (GObject *object)
   gtk_entry_set_icon_from_paintable (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
   gtk_entry_set_icon_tooltip_markup (entry, GTK_ENTRY_ICON_SECONDARY, NULL);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_entry_set_completion (entry, NULL);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (priv->text)
     {
@@ -1780,11 +1788,13 @@ gtk_entry_size_allocate (GtkWidget *widget,
    */
   if (gtk_widget_get_realized (widget))
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       GtkEntryCompletion *completion;
 
       completion = gtk_entry_get_completion (entry);
       if (completion)
         _gtk_entry_completion_resize_popup (completion);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
 }
 
@@ -3191,6 +3201,8 @@ gtk_entry_query_tooltip (GtkWidget  *widget,
                                                                    tooltip);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * gtk_entry_set_completion: (attributes org.gtk.Method.set_property=completion)
  * @entry: A `GtkEntry`
@@ -3202,6 +3214,8 @@ gtk_entry_query_tooltip (GtkWidget  *widget,
  * All further configuration of the completion mechanism is
  * done on @completion using the `GtkEntryCompletion` API.
  * Completion is disabled if @completion is set to %NULL.
+ *
+ * Deprecated: 4.10: GtkEntryCompletion will be removed in GTK 5.
  */
 void
 gtk_entry_set_completion (GtkEntry           *entry,
@@ -3248,6 +3262,8 @@ gtk_entry_set_completion (GtkEntry           *entry,
  *
  * Returns: (nullable) (transfer none): The auxiliary
  *   completion object currently in use by @entry
+ *
+ * Deprecated: 4.10: GtkEntryCompletion will be removed in GTK 5.
  */
 GtkEntryCompletion *
 gtk_entry_get_completion (GtkEntry *entry)
@@ -3260,6 +3276,8 @@ gtk_entry_get_completion (GtkEntry *entry)
 
   return completion;
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 gtk_entry_ensure_progress_widget (GtkEntry *entry)

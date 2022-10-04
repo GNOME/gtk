@@ -37,7 +37,7 @@
 #include <gtk/gtkeditable.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkentrybuffer.h>
-#include <gtk/gtkentrycompletion.h>
+#include <gtk/deprecated/gtkentrycompletion.h>
 #include <gtk/gtkimage.h>
 
 
@@ -157,10 +157,10 @@ void       gtk_entry_set_alignment              (GtkEntry      *entry,
 GDK_AVAILABLE_IN_ALL
 float      gtk_entry_get_alignment              (GtkEntry      *entry);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void                gtk_entry_set_completion (GtkEntry           *entry,
                                               GtkEntryCompletion *completion);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkEntryCompletion *gtk_entry_get_completion (GtkEntry           *entry);
 
 /* Progress API

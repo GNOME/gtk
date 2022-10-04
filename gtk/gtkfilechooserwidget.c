@@ -4770,6 +4770,8 @@ update_chooser_entry (GtkFileChooserWidget *impl)
 
           if (change_entry && !impl->auto_selecting_first_row)
             {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
               GtkEntryCompletion *completion = gtk_entry_get_completion (GTK_ENTRY (impl->location_entry));
 
               if (completion)
@@ -4779,6 +4781,8 @@ update_chooser_entry (GtkFileChooserWidget *impl)
               g_signal_handlers_unblock_by_func (impl->location_entry, G_CALLBACK (location_entry_changed_cb), impl);
               if (completion)
                 gtk_entry_completion_set_popup_completion (completion, TRUE);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
               if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
                 _gtk_file_chooser_entry_select_filename (GTK_FILE_CHOOSER_ENTRY (impl->location_entry));
@@ -5125,12 +5129,16 @@ gtk_file_chooser_widget_set_current_name (GtkFileChooser *chooser,
 
   pending_select_files_free (impl);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   completion = gtk_entry_get_completion (GTK_ENTRY (impl->location_entry));
   gtk_entry_completion_set_popup_completion (completion, FALSE);
 
   gtk_editable_set_text (GTK_EDITABLE (impl->location_entry), name);
 
   gtk_entry_completion_set_popup_completion (completion, TRUE);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static char *

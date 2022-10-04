@@ -2934,11 +2934,17 @@ create_cursors (GtkWidget *widget)
       gtk_box_append (GTK_BOX (hbox), label);
 
       entry = gtk_entry_new ();
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       completion = gtk_entry_completion_new ();
       model = cursor_model ();
       gtk_entry_completion_set_model (completion, model);
       gtk_entry_completion_set_text_column (completion, 0);
       gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
       g_object_unref (model);
       gtk_widget_set_hexpand (entry, TRUE);
       gtk_box_append (GTK_BOX (hbox), entry);

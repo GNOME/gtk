@@ -3,6 +3,7 @@ gtk_deprecated_sources = [
   'deprecated/gtkappchooserbutton.c',
   'deprecated/gtkappchooserdialog.c',
   'deprecated/gtkappchooserwidget.c',
+  'deprecated/gtkentrycompletion.c',
 ]
 
 gtk_deprecated_headers = [
@@ -10,4 +11,5 @@ gtk_deprecated_headers = [
   'deprecated/gtkappchooserbutton.h',
   'deprecated/gtkappchooserdialog.h',
   'deprecated/gtkappchooserwidget.h',
+  'deprecated/gtkentrycompletion.h',
 ]

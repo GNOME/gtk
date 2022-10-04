@@ -8,6 +8,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* Creates a tree model containing the completions */
 static GtkTreeModel *
 create_completion_model (void)
