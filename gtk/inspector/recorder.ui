@@ -134,44 +134,16 @@
                               <object class="GtkScrolledWindow">
                                 <property name="propagate-natural-width">1</property>
                                 <child>
-                                  <object class="GtkTreeView" id="node_property_tree">
-                                    <property name="activate-on-single-click">1</property>
-                                    <signal name="row-activated" handler="node_property_activated"/>
+                                  <object class="GtkColumnView" id="node_property_tree">
                                     <child>
-                                      <object class="GtkTreeViewColumn">
+                                      <object class="GtkColumnViewColumn">
                                         <property name="title" translatable="yes">Property</property>
-                                        <child>
-                                          <object class="GtkCellRendererText">
-                                            <property name="yalign">0</property>
-                                          </object>
-                                          <attributes>
-                                            <attribute name="text">0</attribute>
-                                          </attributes>
-                                        </child>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkTreeViewColumn">
+                                      <object class="GtkColumnViewColumn">
                                         <property name="title" translatable="yes">Value</property>
-                                        <child>
-                                          <object class="GtkCellRendererText">
-                                            <property name="yalign">0</property>
-                                            <property name="wrap-mode">word</property>
-                                            <property name="max-width-chars">50</property>
-                                          </object>
-                                          <attributes>
-                                            <attribute name="text">1</attribute>
-                                          </attributes>
-                                        </child>
-                                        <child>
-                                          <object class="GtkCellRendererPixbuf">
-                                            <property name="xalign">0</property>
-                                          </object>
-                                          <attributes>
-                                            <attribute name="visible">2</attribute>
-                                            <attribute name="texture">3</attribute>
-                                          </attributes>
-                                        </child>
+                                        <property name="expand">1</property>
                                       </object>
                                     </child>
                                   </object>
@@ -201,34 +173,16 @@
                           <object class="GtkScrolledWindow">
                             <property name="propagate-natural-width">1</property>
                             <child>
-                              <object class="GtkTreeView" id="event_property_tree">
-                                <property name="activate-on-single-click">1</property>
+                              <object class="GtkColumnView" id="event_property_tree">
                                 <child>
-                                  <object class="GtkTreeViewColumn">
+                                  <object class="GtkColumnViewColumn">
                                     <property name="title" translatable="yes">Property</property>
-                                    <child>
-                                      <object class="GtkCellRendererText">
-                                        <property name="yalign">0</property>
-                                      </object>
-                                      <attributes>
-                                        <attribute name="text">0</attribute>
-                                      </attributes>
-                                    </child>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkTreeViewColumn">
+                                  <object class="GtkColumnViewColumn">
                                     <property name="title" translatable="yes">Value</property>
-                                    <child>
-                                      <object class="GtkCellRendererText">
-                                        <property name="yalign">0</property>
-                                        <property name="wrap-mode">word</property>
-                                        <property name="max-width-chars">50</property>
-                                      </object>
-                                      <attributes>
-                                        <attribute name="text">1</attribute>
-                                      </attributes>
-                                    </child>
+                                    <property name="expand">1</property>
                                   </object>
                                 </child>
                               </object>
