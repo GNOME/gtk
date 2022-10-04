@@ -59,6 +59,11 @@ gsk/gskrendernodeimpl.c
 gtk/a11y/gtkatspiaction.c
 gtk/a11y/gtkatspiroot.c
 gtk/css/gtkcssdataurl.c
+gtk/deprecated/gtkappchooserbutton.c
+gtk/deprecated/gtkappchooser.c
+gtk/deprecated/gtkappchooserdialog.c
+gtk/deprecated/gtkappchooserwidget.c
+gtk/deprecated/gtkentrycompletion.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
 gtk/gtkaccessible.c
@@ -66,10 +71,6 @@ gtk/gtkactionable.c
 gtk/gtkactionbar.c
 gtk/gtkactionmuxer.c
 gtk/gtkadjustment.c
-gtk/gtkappchooserbutton.c
-gtk/gtkappchooser.c
-gtk/gtkappchooserdialog.c
-gtk/gtkappchooserwidget.c
 gtk/gtkapplication.c
 gtk/gtkapplication-dbus.c
 gtk/gtkapplication-quartz.c
@@ -140,7 +141,6 @@ gtk/gtkemojichooser.c
 gtk/gtkemojicompletion.c
 gtk/gtkentrybuffer.c
 gtk/gtkentry.c
-gtk/gtkentrycompletion.c
 gtk/gtkeventcontroller.c
 gtk/gtkeventcontrollerfocus.c
 gtk/gtkeventcontrollerkey.c
