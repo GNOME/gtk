@@ -44,6 +44,8 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkAppChooserWidget:
  *
@@ -1112,6 +1114,8 @@ gtk_app_chooser_widget_iface_init (GtkAppChooserIface *iface)
  * that can handle content of the given type.
  *
  * Returns: a newly created `GtkAppChooserWidget`
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GtkWidget *
 gtk_app_chooser_widget_new (const char *content_type)
@@ -1128,6 +1132,8 @@ gtk_app_chooser_widget_new (const char *content_type)
  *
  * Sets whether the app chooser should show the default handler
  * for the content type in a separate section.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_widget_set_show_default (GtkAppChooserWidget *self,
@@ -1153,6 +1159,8 @@ gtk_app_chooser_widget_set_show_default (GtkAppChooserWidget *self,
  * for the content type in a separate section.
  *
  * Returns: the value of [property@Gtk.AppChooserWidget:show-default]
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 gboolean
 gtk_app_chooser_widget_get_show_default (GtkAppChooserWidget *self)
@@ -1169,6 +1177,8 @@ gtk_app_chooser_widget_get_show_default (GtkAppChooserWidget *self)
  *
  * Sets whether the app chooser should show recommended applications
  * for the content type in a separate section.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
@@ -1194,6 +1204,8 @@ gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
  * for the content type in a separate section.
  *
  * Returns: the value of [property@Gtk.AppChooserWidget:show-recommended]
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 gboolean
 gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self)
@@ -1210,6 +1222,8 @@ gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self)
  *
  * Sets whether the app chooser should show related applications
  * for the content type in a separate section.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_widget_set_show_fallback (GtkAppChooserWidget *self,
@@ -1235,6 +1249,8 @@ gtk_app_chooser_widget_set_show_fallback (GtkAppChooserWidget *self,
  * for the content type in a separate section.
  *
  * Returns: the value of [property@Gtk.AppChooserWidget:show-fallback]
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 gboolean
 gtk_app_chooser_widget_get_show_fallback (GtkAppChooserWidget *self)
@@ -1251,6 +1267,8 @@ gtk_app_chooser_widget_get_show_fallback (GtkAppChooserWidget *self)
  *
  * Sets whether the app chooser should show applications
  * which are unrelated to the content type.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_widget_set_show_other (GtkAppChooserWidget *self,
@@ -1276,6 +1294,8 @@ gtk_app_chooser_widget_set_show_other (GtkAppChooserWidget *self,
  * which are unrelated to the content type.
  *
  * Returns: the value of [property@Gtk.AppChooserWidget:show-other]
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 gboolean
 gtk_app_chooser_widget_get_show_other (GtkAppChooserWidget *self)
@@ -1292,6 +1312,8 @@ gtk_app_chooser_widget_get_show_other (GtkAppChooserWidget *self)
  *
  * Sets whether the app chooser should show all applications
  * in a flat list.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_widget_set_show_all (GtkAppChooserWidget *self,
@@ -1317,6 +1339,8 @@ gtk_app_chooser_widget_set_show_all (GtkAppChooserWidget *self,
  * in a flat list.
  *
  * Returns: the value of [property@Gtk.AppChooserWidget:show-all]
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 gboolean
 gtk_app_chooser_widget_get_show_all (GtkAppChooserWidget *self)
@@ -1333,6 +1357,8 @@ gtk_app_chooser_widget_get_show_all (GtkAppChooserWidget *self)
  *
  * Sets the text that is shown if there are not applications
  * that can handle the content type.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_widget_set_default_text (GtkAppChooserWidget *self,
@@ -1359,6 +1385,8 @@ gtk_app_chooser_widget_set_default_text (GtkAppChooserWidget *self,
  * that can handle the content type.
  *
  * Returns: (nullable): the value of [property@Gtk.AppChooserWidget:default-text]
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 const char *
 gtk_app_chooser_widget_get_default_text (GtkAppChooserWidget *self)

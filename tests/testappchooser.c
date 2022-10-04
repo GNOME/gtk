@@ -21,6 +21,8 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *toplevel;
 static GFile *file;
 static GtkWidget *grid, *file_l, *open;

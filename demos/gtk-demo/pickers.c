@@ -123,8 +123,14 @@ do_pickers (GtkWidget *do_widget)
     gtk_widget_set_halign (label, GTK_ALIGN_START);
     gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
     gtk_widget_set_hexpand (label, TRUE);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
     picker = gtk_app_chooser_button_new ("x-scheme-handler/mailto");
     gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (picker), TRUE);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
     gtk_grid_attach (GTK_GRID (table), label, 0, 3, 1, 1);
     gtk_grid_attach (GTK_GRID (table), picker, 1, 3, 1, 1);
   }

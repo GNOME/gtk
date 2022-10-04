@@ -67,6 +67,8 @@
 #include "gtkliststore.h"
 #include "gtkprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 enum {
   PROP_SHOW_DIALOG_ITEM = 1,
   PROP_SHOW_DEFAULT_ITEM,
@@ -883,6 +885,8 @@ real_insert_separator (GtkAppChooserButton *self,
  * that can handle content of the given type.
  *
  * Returns: a newly created `GtkAppChooserButton`
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 GtkWidget *
 gtk_app_chooser_button_new (const char *content_type)
@@ -900,6 +904,8 @@ gtk_app_chooser_button_new (const char *content_type)
  *
  * Appends a separator to the list of applications that is shown
  * in the popup.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_button_append_separator (GtkAppChooserButton *self)
@@ -928,6 +934,8 @@ gtk_app_chooser_button_append_separator (GtkAppChooserButton *self)
  * callback for the activation of a particular custom item in the list.
  *
  * See also [method@Gtk.AppChooserButton.append_separator].
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
@@ -955,6 +963,8 @@ gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
  *
  * Use [method@Gtk.AppChooser.refresh] to bring the selection
  * to its initial state.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
@@ -983,6 +993,8 @@ gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
  * for a `GtkAppChooserDialog`.
  *
  * Returns: the value of [property@Gtk.AppChooserButton:show-dialog-item]
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 gboolean
 gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
@@ -999,6 +1011,8 @@ gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
  *
  * Sets whether the dropdown menu of this button should show an
  * entry to trigger a `GtkAppChooserDialog`.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
@@ -1022,6 +1036,8 @@ gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
  * application at the top.
  *
  * Returns: the value of [property@Gtk.AppChooserButton:show-default-item]
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 gboolean
 gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self)
@@ -1038,6 +1054,8 @@ gtk_app_chooser_button_get_show_default_item (GtkAppChooserButton *self)
  *
  * Sets whether the dropdown menu of this button should show the
  * default application for the given content type at top.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
@@ -1063,6 +1081,8 @@ gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
  * Sets the text to display at the top of the dialog.
  *
  * If the heading is not set, the dialog displays a default text.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_button_set_heading (GtkAppChooserButton *self,
@@ -1084,6 +1104,8 @@ gtk_app_chooser_button_set_heading (GtkAppChooserButton *self,
  *
  * Returns: (nullable): the text to display at the top of the dialog,
  *   or %NULL, in which case a default text is displayed
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 const char *
 gtk_app_chooser_button_get_heading (GtkAppChooserButton *self)
@@ -1099,6 +1121,8 @@ gtk_app_chooser_button_get_heading (GtkAppChooserButton *self)
  * @modal: %TRUE to make the dialog modal
  *
  * Sets whether the dialog should be modal.
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 void
 gtk_app_chooser_button_set_modal (GtkAppChooserButton *self,
@@ -1121,6 +1145,8 @@ gtk_app_chooser_button_set_modal (GtkAppChooserButton *self,
  * Gets whether the dialog is modal.
  *
  * Returns: %TRUE if the dialog is modal
+ *
+ * Deprecated: 4.10: This widget will be removed in GTK 5
  */
 gboolean
 gtk_app_chooser_button_get_modal (GtkAppChooserButton *self)

@@ -41,11 +41,11 @@ typedef struct _GtkAppChooser GtkAppChooser;
 GDK_AVAILABLE_IN_ALL
 GType      gtk_app_chooser_get_type         (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GAppInfo * gtk_app_chooser_get_app_info     (GtkAppChooser *self);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 char *    gtk_app_chooser_get_content_type (GtkAppChooser *self);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void       gtk_app_chooser_refresh          (GtkAppChooser *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAppChooser, g_object_unref)

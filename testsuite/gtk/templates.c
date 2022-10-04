@@ -198,6 +198,8 @@ test_action_bar_basic (void)
   g_object_unref (g_object_ref_sink (widget));
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 test_app_chooser_widget_basic (void)
 {
@@ -226,6 +228,8 @@ test_app_chooser_dialog_basic (void)
     g_main_context_iteration (NULL,  TRUE);
   gtk_window_destroy (GTK_WINDOW (widget));
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 test_color_chooser_dialog_basic (void)

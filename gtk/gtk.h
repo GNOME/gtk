@@ -37,10 +37,10 @@
 #include <gtk/gtkactionable.h>
 #include <gtk/gtkactionbar.h>
 #include <gtk/gtkadjustment.h>
-#include <gtk/gtkappchooser.h>
-#include <gtk/gtkappchooserdialog.h>
-#include <gtk/gtkappchooserwidget.h>
-#include <gtk/gtkappchooserbutton.h>
+#include <gtk/deprecated/gtkappchooser.h>
+#include <gtk/deprecated/gtkappchooserdialog.h>
+#include <gtk/deprecated/gtkappchooserwidget.h>
+#include <gtk/deprecated/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkapplicationwindow.h>
 #include <gtk/gtkaspectframe.h>

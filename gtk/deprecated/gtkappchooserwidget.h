@@ -43,43 +43,43 @@ typedef struct _GtkAppChooserWidget        GtkAppChooserWidget;
 GDK_AVAILABLE_IN_ALL
 GType         gtk_app_chooser_widget_get_type             (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 GtkWidget *   gtk_app_chooser_widget_new                  (const char          *content_type);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_app_chooser_widget_set_show_default     (GtkAppChooserWidget *self,
                                                            gboolean             setting);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean      gtk_app_chooser_widget_get_show_default     (GtkAppChooserWidget *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
                                                            gboolean             setting);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean      gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_app_chooser_widget_set_show_fallback    (GtkAppChooserWidget *self,
                                                            gboolean             setting);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean      gtk_app_chooser_widget_get_show_fallback    (GtkAppChooserWidget *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_app_chooser_widget_set_show_other       (GtkAppChooserWidget *self,
                                                            gboolean             setting);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean      gtk_app_chooser_widget_get_show_other       (GtkAppChooserWidget *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_app_chooser_widget_set_show_all         (GtkAppChooserWidget *self,
                                                            gboolean             setting);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 gboolean      gtk_app_chooser_widget_get_show_all         (GtkAppChooserWidget *self);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 void          gtk_app_chooser_widget_set_default_text     (GtkAppChooserWidget *self,
                                                            const char          *text);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_10
 const char * gtk_app_chooser_widget_get_default_text     (GtkAppChooserWidget *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkAppChooserWidget, g_object_unref)
