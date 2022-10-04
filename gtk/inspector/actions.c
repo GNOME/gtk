@@ -40,6 +40,7 @@ struct _GtkInspectorActions
 {
   GtkWidget parent;
 
+  GtkWidget *swin;
   GtkWidget *list;
   GtkWidget *button;
 
@@ -446,6 +447,7 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/actions.ui");
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorActions, swin);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorActions, list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorActions, name);
   gtk_widget_class_bind_template_callback (widget_class, setup_name_cb);

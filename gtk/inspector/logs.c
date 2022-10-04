@@ -47,6 +47,7 @@ struct _GtkInspectorLogs
 {
   GtkWidget parent;
 
+  GtkWidget *box;
   GtkWidget *events;
   GtkWidget *misc;
   GtkWidget *dnd;
@@ -185,6 +186,7 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   object_class->dispose = dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/logs.ui");
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, events);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, misc);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, dnd);
